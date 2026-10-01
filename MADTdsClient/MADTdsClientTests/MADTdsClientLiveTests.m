@@ -29,9 +29,9 @@
 //  test that has to write creates and drops its own table, dbo.mad_tds_dml_probe, and
 //  drops it first so a re-run after an aborted test is self-healing.
 //
-//  Note on the port: -connect:andPassword:error: never calls DBSETLPORT, so freetds
-//  always dials its default port. The tests below can only use whatever port that
-//  turns out to be, which is 1433 here.
+//  Note on the port: this freetds build has no DBSETLPORT, so
+//  -connect:andPassword:error: passes the port in the server string it hands to
+//  dbopen() -- "host:port" -- which freetds parses. The tests below use 1433.
 //
 //  Note on connections: -runSQL:onDataTable:fieldKeys:process: closes the DBPROCESS it
 //  is handed, so a statement cannot be run twice on one connection. Every query in
@@ -340,45 +340,34 @@
 
 #pragma mark - DECIMAL / NUMERIC conversion
 
-// Every DECIMAL and NUMERIC column comes back as NSDecimalNumber.notANumber. The
-// server is not at fault: it returns 3.5, 1.00 and 123.456 for the expressions below.
+// DECIMAL and NUMERIC values survive the round trip with their sign and scale intact.
 //
-// The cause is in the SYBNUMERIC case in -runSQL:.... The separator-detection block
-// derives a "separator" by trimming decimal digits off both ends of the value string --
-// which for "3.5" leaves ".", for "-2.5" leaves "-2." and for "1.00" leaves "." -- then
-// only ever assigns the working copy of the string when that bogus separator differs
-// from the locale separator:
-//
-//     NSString *objectStr2 = nil;
-//     if (tdsDecimalSeperatorMatchesCocoaDecimalSeperator == NO) {
-//         objectStr2 = [objectStr stringByReplacingOccurrencesOfString:... ];
-//     }
-//     NSDecimalNumber *decimalNumber = [[NSDecimalNumber alloc] initWithString:objectStr2];
-//
-// Whenever no replacement is wanted objectStr2 stays nil, and -initWithString: on nil
-// yields notANumber rather than the original text. The value is simply lost.
-- (void)testSelectDecimalReturnsNotANumber {
+// The SYBNUMERIC case in -runSQL: used to derive a "separator" by trimming decimal
+// digits off both ends of the value string -- which for "3.5" leaves ".", for "-2.5"
+// leaves "-2." and for "1.00" leaves "." -- and then assigned the working copy of the
+// string only when that bogus separator differed from the locale separator. Whenever no
+// replacement was wanted the working copy stayed nil, and -initWithString: on nil
+// yields notANumber, so the value was simply lost. The negative case was worse: the
+// derived separator "-2." occurs inside the string being rewritten, so "-2.5" became
+// ".5" and was reported as 0.5 -- a plausible number that was silently wrong.
+- (void)testSelectDecimalReturnedValues {
 	[self requireServer];
 	MADDataTable *table = [self query:
 		@"SELECT CAST(3.5 AS DECIMAL(2,1)) AS pos, CAST(1 AS DECIMAL(10,2)) AS whole, "
 		 "CAST(123.456 AS DECIMAL(10,3)) AS frac"];
 
 	XCTAssertEqual([table numberOfColumns], 3u);
-	XCTAssertEqualObjects([table objectAtRow:0 column:0], [NSDecimalNumber notANumber]);
-	XCTAssertEqualObjects([table objectAtRow:0 column:1], [NSDecimalNumber notANumber]);
-	XCTAssertEqualObjects([table objectAtRow:0 column:2], [NSDecimalNumber notANumber]);
+	XCTAssertEqualObjects([table objectAtRow:0 column:0], [NSDecimalNumber decimalNumberWithString:@"3.5"]);
+	XCTAssertEqualObjects([table objectAtRow:0 column:1], [NSDecimalNumber decimalNumberWithString:@"1.00"]);
+	XCTAssertEqualObjects([table objectAtRow:0 column:2], [NSDecimalNumber decimalNumberWithString:@"123.456"]);
 }
 
-// The negative case does not even produce notANumber. Its bogus separator is the literal
-// "-2.", which occurs inside the value it is rewriting, so the replacement turns "-2.5"
-// into ".5" and reports 0.5 -- a plausible-looking number that is silently wrong. This
-// is the more dangerous half of the same defect.
-- (void)testSelectNegativeDecimalReturnsCorruptedValue {
+// The sign-bearing case the old separator search corrupted.
+- (void)testSelectNegativeDecimalKeepsItsSign {
 	[self requireServer];
 	MADDataTable *table = [self query:@"SELECT CAST(-2.5 AS DECIMAL(4,1)) AS neg"];
 
-	XCTAssertEqualObjects([table objectAtRow:0 column:0], @0.5,
-						  @"Characterizes the corruption: -2.5 is rewritten to .5");
+	XCTAssertEqualObjects([table objectAtRow:0 column:0], [NSDecimalNumber decimalNumberWithString:@"-2.5"]);
 }
 
 #pragma mark - Column metadata
@@ -417,10 +406,13 @@
 	XCTAssertEqualObjects([table objectAtRow:0 column:0], @12.34);
 }
 
-// The post-2005 date/time types are neither mapped by +dataTypeForNativeType: nor
-// rewritten the way DECIMAL and SMALLMONEY are, so they reach the switch in -runSQL:
-// with a type code no bind array was allocated for, and nothing calls dbbind for them.
-// This test pins the resulting column type.
+// The post-2005 date/time types now map to the date/time cases of MADDataType instead
+// of falling through to the String default.
+//
+// Only the column *type* is covered here. These type codes still have no bind array in
+// -runSQL: -- neither dbbind nor dbnullbind is called for them -- so the row conversion
+// hits its default branch and every value comes back [NSNull null]. Fetching the values
+// is a separate piece of work; this test pins the typing half.
 - (void)testSelectModernDateTimeTypes {
 	[self requireServer];
 	MADDataTable *table = [self query:
@@ -431,10 +423,10 @@
 
 	NSArray<NSString *> *keys = [table columnKeys];
 	XCTAssertEqual(keys.count, 4u);
-	for (NSString *key in keys) {
-		XCTAssertEqual(table.columns[key].type, MADDataTypeString,
-					   @"Column %@ was typed unexpectedly", key);
-	}
+	XCTAssertEqual(table.columns[keys[0]].type, MADDataTypeDate);
+	XCTAssertEqual(table.columns[keys[1]].type, MADDataTypeTime);
+	XCTAssertEqual(table.columns[keys[2]].type, MADDataTypeDateTime);
+	XCTAssertEqual(table.columns[keys[3]].type, MADDataTypeDateTime);
 }
 
 #pragma mark - Type conversion round trip
@@ -459,9 +451,7 @@
 	XCTAssertEqualObjects([table objectAtRow:0 column:3],  @5000000000);
 	XCTAssertEqualObjects([table objectAtRow:0 column:4],  @1.5);
 	XCTAssertEqualObjects([table objectAtRow:0 column:5],  @1.25);
-	// DECIMAL is the one type in this list that does not survive the round trip; see
-	// -testSelectDecimalReturnsNotANumber for the cause.
-	XCTAssertEqualObjects([table objectAtRow:0 column:6],  [NSDecimalNumber notANumber]);
+	XCTAssertEqualObjects([table objectAtRow:0 column:6],  [NSDecimalNumber decimalNumberWithString:@"123.456"]);
 	XCTAssertEqualObjects([table objectAtRow:0 column:7],  @12.34);
 	XCTAssertEqualObjects([table objectAtRow:0 column:8],  @"abc");
 	XCTAssertEqualObjects([table objectAtRow:0 column:9],  @"def");
@@ -663,10 +653,10 @@
 }
 
 // system_type_id for DECIMAL is 106 and for VARBINARY is 165. 106 is SYBDECIMAL in
-// sybdb, which has no case, and 165 is not a sybdb code at all, so both fall to the
-// default branch and are reported as strings. Unlike the query path, nothing rewrites
-// them here -- there is no SYBDECIMAL -> SYBNUMERIC step in -fieldsForTable:.
-- (void)testFieldsForTableMisreportsDecimalAndBinaryAsString {
+// sybdb, which had no case, and 165 is not a sybdb code at all, so both used to fall to
+// the default branch and were reported as strings. -fieldsForTable: now maps
+// system_type_id through its own table (+dataTypeForSystemTypeId:) instead.
+- (void)testFieldsForTableMapsDecimalAndBinary {
 	[self requireServer];
 	MADDatabaseSQLServer *db = [[MADDatabaseSQLServer alloc] init];
 
@@ -680,10 +670,10 @@
 	for (MADDatabaseField *field in fields) { byName[field.name] = field; }
 
 	XCTAssertNotNil(byName[@"Weight"], @"Expected a Weight column on SalesLT.Product");
-	XCTAssertEqual(byName[@"Weight"].fieldType, MADDataTypeString);
+	XCTAssertEqual(byName[@"Weight"].fieldType, MADDataTypeDecimal);
 
 	XCTAssertNotNil(byName[@"ThumbNailPhoto"], @"Expected a ThumbNailPhoto column");
-	XCTAssertEqual(byName[@"ThumbNailPhoto"].fieldType, MADDataTypeString);
+	XCTAssertEqual(byName[@"ThumbNailPhoto"].fieldType, MADDataTypeBlob);
 }
 
 @end

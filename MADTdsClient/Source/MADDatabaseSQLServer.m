@@ -159,7 +159,19 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 		case SYBDATETIMN:
 		case SYBDATETIME:
 		case SYBDATETIME4:
+		case SYBBIGDATETIME:
+		case SYBMSDATETIME2:
+		case SYBMSDATETIMEOFFSET:
 			result = MADDataTypeDateTime;
+			break;
+		case SYBDATE:
+		case SYBMSDATE:
+			result = MADDataTypeDate;
+			break;
+		case SYBTIME:
+		case SYBMSTIME:
+		case SYBBIGTIME:
+			result = MADDataTypeTime;
 			break;
 		case SYBCHAR:
 		case SYBVARCHAR:
@@ -181,12 +193,16 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 			break;
 		case SYBMONEY:
 		case SYBMONEYN:
+		case SYBMONEY4:
 		case SYBREAL:
 		case SYBFLT8:
 		case SYBFLTN:
 			result = MADDataTypeFloat;
 			break;
+		case SYBDECIMAL:
 		case SYBNUMERIC:
+			// DECIMAL and NUMERIC are the same type in SQL Server; only the latter
+			// used to be mapped, so the more common DECIMAL spelling became a string.
 			result = MADDataTypeDecimal;
 			break;
 		case SYBIMAGE:
@@ -200,6 +216,47 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 			break;
 	}
 	return result;
+}
+
+// Maps sys.columns.system_type_id -- SQL Server's built-in type ids -- onto MADDataType.
+// These ids are NOT the sybdb SYB* codes that +dataTypeForNativeType: takes. Several
+// coincide (48/52/56/61/62/127/34/35/99), which is why feeding a system_type_id to that
+// method appeared to work for some columns, but varchar/char/nvarchar/binary/varbinary
+// and the modern date types map to unrelated numbers and came out as strings.
++ (MADDataType)dataTypeForSystemTypeId:(NSInteger)systemTypeId {
+	switch (systemTypeId) {
+		case 48:  // tinyint
+		case 52:  // smallint
+		case 56:  // int
+		case 127: // bigint
+			return MADDataTypeInteger;
+		case 104: // bit
+			return MADDataTypeBit;
+		case 106: // decimal
+		case 108: // numeric
+			return MADDataTypeDecimal;
+		case 59:  // real
+		case 62:  // float
+		case 60:  // money
+		case 122: // smallmoney
+			return MADDataTypeFloat;
+		case 58:  // smalldatetime
+		case 61:  // datetime
+		case 42:  // datetime2
+		case 43:  // datetimeoffset
+			return MADDataTypeDateTime;
+		case 40:  // date
+			return MADDataTypeDate;
+		case 41:  // time
+			return MADDataTypeTime;
+		case 34:  // image
+		case 173: // binary
+		case 165: // varbinary
+		case 189: // timestamp / rowversion
+			return MADDataTypeBlob;
+		default:  // text, ntext, varchar, char, nvarchar, nchar, xml, sql_variant, ...
+			return MADDataTypeString;
+	}
 }
 
 - (void)dealloc {
@@ -328,7 +385,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	NSError * __autoreleasing dberror = nil;
 	MADDatabaseProcessSQLServer *dbconn = [self connectWithConnection:self.databaseConnection credentals:nil connectionError:&dberror];
 	if (dbconn) {
-		success = [self runQuery:query onProcess:dbconn withDataTable:dataTable withError: NULL];
+		success = [self runQuery:query onProcess:dbconn withDataTable:dataTable withError:error];
+	} else if (error != NULL) {
+		// A nil process means the connection failed; surface that rather than
+		// returning NO with the caller's error untouched.
+		*error = dberror;
 	}
 	return success;
 }
@@ -992,9 +1053,21 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										
 										NSString *decimalSeperatorSqlServer2 = nil;
 										if (cp == -1 && tdsDecimalSeperatorMatchesCocoaDecimalSeperatorResolved == NO) {
-											
+
+											// Find the decimal separator: the first character that is
+											// neither a digit nor a leading sign.  Trimming the digit set
+											// off both ends (the old approach) turned "-2.5" into "-.", so
+											// the replacement below rewrote -2.5 as .5.
 											NSCharacterSet *characterSet = [NSCharacterSet decimalDigitCharacterSet];
-											NSString *seperator = [objectStr stringByTrimmingCharactersInSet:characterSet];
+											NSString *seperator = @"";
+											for (NSUInteger i = 0; i < objectStr.length; i++) {
+												unichar c = [objectStr characterAtIndex:i];
+												if ((c == '-' || c == '+') && i == 0) continue;
+												if (![characterSet characterIsMember:c]) {
+													seperator = [NSString stringWithCharacters:&c length:1];
+													break;
+												}
+											}
 											switch (seperator.length) {
 												case 0: {
 													NSNumber *zero = @0;
@@ -1026,13 +1099,18 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 											}
 										}
 										
-										NSString *objectStr2 = nil;
-										
-										if (tdsDecimalSeperatorMatchesCocoaDecimalSeperator == NO) {
+										// Default to the string as returned.  It used to stay nil unless a
+										// separator substitution happened, so every integer-valued DECIMAL
+										// and every numeric whose separator already matched the locale was
+										// fed to NSDecimalNumber as nil (NaN).
+										NSString *objectStr2 = objectStr;
+
+										if (tdsDecimalSeperatorMatchesCocoaDecimalSeperator == NO &&
+											decimalSeperatorSqlServer2.length > 0) {
 											objectStr2 = [objectStr stringByReplacingOccurrencesOfString:decimalSeperatorSqlServer2 withString:decimalSeperator];
 										}
-										
-										NSDecimalNumber *decimalNumber = [[NSDecimalNumber alloc] initWithString:objectStr2];
+
+										NSDecimalNumber *decimalNumber = objectStr2 ? [[NSDecimalNumber alloc] initWithString:objectStr2] : nil;
 										if (decimalNumber) {
 											resultsForRow[fieldName] = decimalNumber;
 										} else {
@@ -1484,8 +1562,14 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 				localError = [NSError errorWithDomain:MADDomainTDS code:87635 userInfo:errorInfo]; // Assign to localError
 				rsuccess = NO;
 			}
+			// Ownership contract: -runSQL: closes the process it is given.  Callers were
+			// written against this -- MADOperationRefresh.m and
+			// -executeQuery:withDataTable:andError: each open one process, run one
+			// statement, and never close it themselves.  Removing this dbclose would leak
+			// a DBPROCESS per query.  Do not change without first giving those callers
+			// explicit ownership and a close of their own.
 			dbclose(dbconn);
-			
+
 		} else {
 			localError = [NSError errorWithDomain:MADDomainTDS // Assign to localError
 											 code:4379
@@ -1519,32 +1603,37 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 	DBPROCESS *dbconn = NULL;
 	BOOL connected = NO;
-	
+
+	// Callers may pass NULL for "I don't care"; route writes to a throwaway local then.
+	// This also means the flag checks below never dereference a NULL pointer, and the
+	// former `if (*error != NULL)` guard on the dbinit failure -- which was inverted and
+	// so silently dropped that failure -- is gone.
+	NSError * __autoreleasing localError = nil;
+	NSError * __autoreleasing *err = (error != NULL) ? error : &localError;
+	*err = nil;
+
 	LOGINREC *login;
 	char hostname[30];
 	size_t max_len = 30;
-	
-	
+
+
 	/* Init the DB library */
 	if (dbinit() == FAIL) {
 		NSString *message = @"Could not init db.";
 		NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-		if (*error != NULL) {
-			NSError *e = [NSError errorWithDomain:MADDomainTDS code:1 userInfo:errorInfo];
-			*error = e;
-		}
+		*err = [NSError errorWithDomain:MADDomainTDS code:1 userInfo:errorInfo];
 	}
 	dberrhandle(err_handler);
-	
-	if (*error == nil) {
+
+	if (*err == nil) {
 		login = dblogin();
 		if (login == FAIL) {
 			NSString *message = @"Could not initialize dblogin() structure.";
 			NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
-			*error = [NSError errorWithDomain:MADDomainTDS code:2 userInfo:errorInfo];
+			*err = [NSError errorWithDomain:MADDomainTDS code:2 userInfo:errorInfo];
 		}
-		
-		if (*error == nil) {
+
+		if (*err == nil) {
 			/* Initialize the login params in the structure */
 			const char *u = [username cStringUsingEncoding:NSUTF8StringEncoding];
 			const char *p = [password cStringUsingEncoding:NSUTF8StringEncoding];
@@ -1566,10 +1655,16 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 		//Call this if using Windows Login Authentation
 		//DBSETLSECURE(login);
 		
-		if (*error == nil) {
-		
-			NSString *IPAddress = [MADDatabaseSQLServer IPAddressForServer:self.databaseConnection.server];
-			char *s = (char *)[IPAddress cStringUsingEncoding:NSUTF8StringEncoding];
+		if (*err == nil) {
+
+			// This db-lib build has no DBSETLPORT, so the port travels in the server
+			// string dbopen takes ("host:port").  Resolve the host first, then append.
+			NSString *serverName = [MADDatabaseSQLServer IPAddressForServer:self.databaseConnection.server];
+			NSInteger port = self.databaseConnection.port;
+			if (port > 0) {
+				serverName = [NSString stringWithFormat:@"%@:%ld", serverName, (long)port];
+			}
+			char *s = (char *)[serverName cStringUsingEncoding:NSUTF8StringEncoding];
 			dbconn = dbopen(login, s);
 			if (dbconn == NULL) {
 				NSString *message;
@@ -1577,12 +1672,12 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 				message = [[NSString alloc] initWithFormat:@"Could not connect to DB Server: %s\n", s];
 				errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys: message, NSLocalizedDescriptionKey, nil];
-				*error = [NSError errorWithDomain:MADDomainTDS code:2 userInfo:errorInfo];
-				
+				*err = [NSError errorWithDomain:MADDomainTDS code:2 userInfo:errorInfo];
+
 			}
-			
+
 		}
-		connected = (*error == nil);
+		connected = (*err == nil);
 		
 		dbloginfree(login);
 	}
@@ -1602,8 +1697,13 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 		
 		NSError * __autoreleasing dberror = nil;
 		dbconn = [self connect:credentals.username andPassword:credentals.password error:&dberror];
-		error = &dberror;
-		if (error && dberror) {
+		if (dberror != nil) {
+			// Write through to the caller's pointee.  Rebinding `error` to the local
+			// instead (`error = &dberror`) left the caller's error nil, so a failed
+			// connection returned nil with no way to say why.
+			if (error != NULL) {
+				*error = dberror;
+			}
 			[self.errors insertObject:dberror atIndex:0];
 		} else {
 			dbwrap = [[MADDatabaseProcessSQLServer alloc] initWithProcess:dbconn];
@@ -1628,7 +1728,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 + (NSString *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
-	NSString *safeQueryField = [[NSString alloc] initWithFormat:@"[%@].[%@]", [tableName stringByReplacingOccurrencesOfString:@"." withString:@"."], fieldName];
+	// Split the table half on its dot so a schema-qualified name yields
+	// [schema].[table], not one bracket pair containing a dot -- T-SQL would read the
+	// latter as a table literally named "schema.table".  Dot-free aliases are unaffected.
+	NSString *safeTable = [self newSafeIdentifier:tableName];
+	NSString *safeQueryField = [[NSString alloc] initWithFormat:@"%@.[%@]", safeTable, fieldName];
 	return safeQueryField;
 }
 - (NSString *)queryKey:(NSString *)fieldName table:(NSString *)tableName {
@@ -1683,8 +1787,13 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 
 - (NSString *)sqlLimitClause:(NSUInteger)limit { return @""; }
 
+// Deliberately does not compose the base -sqlSampleDataForField:andTable: despite the
+// duplication.  The base implementation (MADAPI/Source/MADDatabase.m) hardcodes
+// "LIMIT 511;" into its format string and does not go through -sqlLimitClause, so SQL
+// Server's empty limit clause cannot neutralise it; composing would emit invalid T-SQL.
+// Hence the hand-built TOP 511 below.  Do not "deduplicate" these two methods.
 - (NSString *)sqlSampleDataForField:(NSString *)fieldName andTable:(NSString *)tableName {
-	
+
 	MADSafeQueryField *safeField = [self queryKey: fieldName table: tableName];
 	NSString *safeFieldAlias = [self fieldAliasForField: fieldName
 									  withSafeTableName: tableName];
@@ -1893,13 +2002,15 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 		
 		sqlReturnCode = dbsqlexec(dbconn);
 		
-		if (sqlReturnCode != SUCCEED && error == NULL) {
-			NSString *message = @"Sql Syntax Error";
-			NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
+		if (sqlReturnCode != SUCCEED) {
+			// Report the failure to the caller.  The old condition only ran when
+			// `error == NULL`, then dereferenced that very NULL in its NSAssert -- the
+			// app never saw a dbsqlexec failure, and Debug builds crashed instead.
 			if (error != NULL) {
+				NSString *message = @"Sql Syntax Error";
+				NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : message};
 				*error = [NSError errorWithDomain:MADDomainTDS code:3456 userInfo:errorInfo];
 			}
-			NSAssert(error == NULL, @"Syntax error fields for table: %@", *error);
 		}
 		
 		int numberOfColumns = dbnumcols(dbconn);
@@ -1961,7 +2072,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 					}
 					if (name != nil) {
 						MADDatabaseField *databaseField = [[MADDatabaseField alloc] initWithName:name];
-						databaseField.fieldTypeNative = [MADDatabaseSQLServer dataTypeForNativeType:typeBind];
+						// typeBind is sys.columns.system_type_id, not a sybdb type code, so it
+						// must go through the system-type mapping rather than
+						// +dataTypeForNativeType: (the two happen to agree for some ids,
+						// which is why the old code looked like it worked).
+						databaseField.fieldTypeNative = [MADDatabaseSQLServer dataTypeForSystemTypeId:typeBind];
 						databaseField.fieldType = databaseField.fieldTypeNative;
 						databaseField.width = (int64_t)lengthBind;
 						databaseField.decimals = (int16_t)scaleBind;
