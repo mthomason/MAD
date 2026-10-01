@@ -9,6 +9,8 @@
 //    * MADDatabaseSqlite3 open/connection lifecycle (databaseHandle, tableExist:,
 //      safe identifiers, identifier).
 //    * MADArrayCaching end-to-end (initialize, add, read, remove).
+//    * The write port: a bare <MADDataTableWriting> conformer with no MADDataTable
+//      behind it, filled by the driver's row loop.
 //
 
 #import <XCTest/XCTest.h>
@@ -21,6 +23,7 @@
 #import "MADDataTableSingleColumnEnumerator.h"
 
 #import <MADFoundation/MADCacheProtocol.h>
+#import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADAPI/MADQuery.h>
 
@@ -48,6 +51,77 @@
 - (NSString *)getSql:(NSError * __autoreleasing *)error {
 	return self.sql;
 }
+@end
+
+#pragma mark - The write port alone
+
+// Conforms to <MADDataTableWriting> and to nothing else: not a MADDataTable, so no
+// concrete MADDataTableFast behind it, and no cache delegate, so no .maddb file and
+// no [MADApplication AppDelegate].  Handing one of these to the driver is what proves
+// the driver is decoupled from the table class -- before Phase 1 it asked for a
+// MADDataTable, and with it everything above.
+@interface MADWritePortRecorder : NSObject <MADDataTableWriting>
+
+@property (nonatomic, strong) NSMutableArray <NSString *> *columnKeys;
+@property (nonatomic, strong) NSMutableDictionary <NSString *, MADDataColumn *> *columns;
+/// The rows the driver handed over, in the order it handed them over.
+@property (nonatomic, strong) NSMutableArray <NSDictionary <NSString *, id> *> *rows;
+/// Every port call, in order, so the call sequence itself can be asserted.
+@property (nonatomic, strong) NSMutableArray <NSString *> *callLog;
+@property (nonatomic, assign) NSUInteger beginBulkInsertCount;
+@property (nonatomic, assign) NSUInteger endBulkInsertCount;
+
+@end
+
+@implementation MADWritePortRecorder
+
+- (instancetype)init {
+	if (self = [super init]) {
+		_columnKeys = [[NSMutableArray alloc] init];
+		_columns = [[NSMutableDictionary alloc] init];
+		_rows = [[NSMutableArray alloc] init];
+		_callLog = [[NSMutableArray alloc] init];
+	}
+	return self;
+}
+
+- (void)removeAllObjects {
+	[self.callLog addObject:@"removeAllObjects"];
+	[self.columnKeys removeAllObjects];
+	[self.columns removeAllObjects];
+	[self.rows removeAllObjects];
+}
+
+- (void)addColumn:(MADDataColumn *)column {
+	[self.callLog addObject:@"addColumn:"];
+	self.columns[column.fieldName] = column;
+	[self.columnKeys addObject:column.fieldName];
+}
+
+- (bool)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error {
+	[self.callLog addObject:@"addRow:error:"];
+	return true;
+}
+
+- (void)addRowWithDataForFieldKeys:(NSDictionary<NSString *, id> *)row {
+	[self.callLog addObject:@"addRowWithDataForFieldKeys:"];
+	[self.rows addObject:row];
+}
+
+- (void)sortUsingDescriptors:(NSArray<NSSortDescriptor *> *)sortDescriptors {
+	[self.callLog addObject:@"sortUsingDescriptors:"];
+}
+
+- (void)beginBulkInsert {
+	self.beginBulkInsertCount++;
+	[self.callLog addObject:@"beginBulkInsert"];
+}
+
+- (void)endBulkInsert {
+	self.endBulkInsertCount++;
+	[self.callLog addObject:@"endBulkInsert"];
+}
+
 @end
 
 @interface MADDatabaseSqlite3DatabaseTests : XCTestCase
@@ -268,6 +342,48 @@
 	XCTAssertEqualObjects(row1[@"age"], @25);
 
 	XCTAssertNotNil([table columnKeyForColumnName:@"name"]);
+}
+
+- (void)testDriverFillsAWritePortWithNoDataTableBehindIt {
+	[self createPeopleTable];
+	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
+
+	MADWritePortRecorder *table = [[MADWritePortRecorder alloc] init];
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT name, age FROM people ORDER BY rowid"
+							  fieldKeys:@[@"name", @"age"]
+						   onConnection:nil
+						intoResultTable:table
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+
+	XCTAssertTrue(success, @"the driver refused a bare write port: %@", error);
+
+	// The five-call port, in the one order the drivers promise it in.
+	XCTAssertEqualObjects(table.callLog, (@[@"removeAllObjects",
+										   @"addColumn:", @"addColumn:",
+										   @"beginBulkInsert",
+										   @"addRowWithDataForFieldKeys:", @"addRowWithDataForFieldKeys:",
+										   @"endBulkInsert"]));
+	XCTAssertEqual(table.beginBulkInsertCount, (NSUInteger)1);
+	XCTAssertEqual(table.endBulkInsertCount, (NSUInteger)1);
+
+	XCTAssertEqualObjects(table.columnKeys, (@[@"name", @"age"]));
+	XCTAssertEqual(table.rows.count, (NSUInteger)2);
+	XCTAssertEqualObjects(table.rows[0][@"name"], @"alice");
+	XCTAssertEqualObjects(table.rows[0][@"age"], @30);
+	XCTAssertEqualObjects(table.rows[1][@"name"], @"bob");
+	XCTAssertEqualObjects(table.rows[1][@"age"], @25);
+
+	// Nothing on this path could have reached for a cache file.
+	NSArray <NSString *> *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.tempDirectory.path
+																					   error:NULL];
+	for (NSString *name in contents) {
+		XCTAssertFalse([name.pathExtension isEqualToString:@"maddb"],
+					   @"a .maddb cache file appeared: %@", name);
+	}
 }
 
 @end
