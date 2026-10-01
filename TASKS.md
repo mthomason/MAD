@@ -242,7 +242,8 @@ matrix would not let a target compile for macOS today.
 
 ## 7. The `mad` CLI — the headless path
 
-**Status:** In progress — `ROADMAP.md` Track 3.
+**Status:** Phase 1 done 2026-10-01. Next: close the surface, then make `inspect` describe the
+companion files. See `ROADMAP.md` Track 3.
 
 **The CLI does not ship.** The user's decision, 2026-10-01: *"the CLI isn't going to be shipped
 (least not now, it's only for our understanding of how the software works, and testing)."* It
@@ -253,18 +254,25 @@ it means `--credentials user:pass` may take a plaintext argument.
 way. `mad inspect` reads the container and the store as raw SQLite — no Core Data, no UI — which
 is the reader `MAD_FORMAT.md` §7 asks a second platform to be able to write.
 
-**Current step — Phase 1, the four runs.** No new code before these; each is an acceptance test
-and whatever breaks is the work.
+**Phase 1 — the four runs — done 2026-10-01, no code changed.** All four passed on both
+samples first time. `mad refresh` did **76 rows (London)** and **3503 rows (Music)**, and
+`mad export` wrote a 5-page and a 77-page PDF whose content was read back and checked. The
+headless path had never been exercised end to end before this.
 
-| # | Run | What it proves |
+| # | Run | What it proved |
 |---|---|---|
 | 1 | `mad inspect` on London and Music | the container and store read without Core Data |
 | 2 | `mad query` on both | the query model loads headlessly |
-| 3 | `mad refresh` on **London first**, then Music | the data path, end to end |
+| 3 | `mad refresh` on London, then Music | the data path, end to end |
 | 4 | `mad export --out` | a PDF produced from a headless run |
 
-London goes first in run 3: its driver is **Sqlite 3** over a local `chinook.sqlite3`, so no
-server sits in the path and a failure is the code's rather than the network's.
+London went first in run 3: its driver is **Sqlite 3** over a local `chinook.sqlite3`, so no
+server sat in the path and a failure would have been the code's rather than the network's.
+
+**Found while doing it:** a refresh rewrites only the cache files it needs and does not clear
+the cache directory, so the `{0, 0}` render-cache entries survived a refresh that rebuilt
+everything else. Whether that is a measurement cache behaving correctly or stale content is
+open — recorded as evidence in `MAD_FORMAT.md` §5.3 and §8.4, not resolved.
 
 Run with `CLI/build.sh --run <command> <document.mad>`; it wants a booted simulator, because it
 runs the tool through `xcrun simctl spawn booted`.

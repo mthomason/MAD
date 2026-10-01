@@ -205,7 +205,31 @@ second platform would have to guess at:
 1. **Nothing says what invalidates the render cache.** Its key is layout identifier
    plus page size; a document change that alters neither would, on the face of it,
    reuse a stale page. Whether something else invalidates it is not written down, and
-   `MAD_FORMAT.md` §8.4 records the question rather than answering it.
+   §8.4 records the question rather than answering it.
+
+   **Measured on 2026-10-01, and it narrows the question without settling it.** A
+   headless refresh and export were run against the London document at 15:22. In its
+   cache directory afterwards:
+
+   | File | Size | mtime |
+   |---|---|---|
+   | `<hash>.maddb` | 835,584 | 15:22 |
+   | `<hash>.mdcache` | 1,644 | 15:22 |
+   | `<layoutId>ih{612, 792}.madac` | 81,920 | 15:22 |
+   | `<layoutId>lh{612, 792}.madac` | 737,280 | 15:22 |
+   | `<layoutId>ih{0, 0}.madac` | 1,867,776 | **10:52** |
+   | `<layoutId>lh{0, 0}.madac` | 4,333,568 | **10:52** |
+
+   So a refresh does **not** clear the cache directory — it rewrites the files it needs
+   and leaves the rest. The `{612, 792}` entries (page geometry known, i.e. the real
+   render) were rewritten; the `{0, 0}` entries were not touched, and together they are
+   6.0 MB of the directory's 15 MB.
+
+   That is consistent with two different stories and does not choose between them: either
+   `{0, 0}` is a layout-measurement cache that legitimately does not depend on row data,
+   or it is stale content surviving a refresh. Telling them apart is the work §8.4 asks
+   for — but note the second story would mean the largest files in the cache directory
+   are the ones nothing regenerates.
 2. **Nothing says what may be deleted.** All three kinds are regenerable, so all three
    should be safe — but a 0-byte `.maddb` in a directory otherwise untouched shows the
    directory is created before it is filled, and nothing states whether such a

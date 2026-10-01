@@ -332,10 +332,31 @@ surface is two entries, both greppable as `"not implemented yet"`:
 that open a document and do the work. So §3.2 below is as much a description of what exists as
 a specification of what to build.
 
-### 3.1 Phase 1 — prove the path
+### 3.1 Phase 1 — prove the path — **done 2026-10-01**
 
-Four runs against the two shipping samples. Each is an acceptance test; whatever breaks is the
-work. **No new code before these.**
+**All four runs pass, on both samples, first time, with no code changed.** The headless path had
+never been exercised end to end before; it works.
+
+| # | Run | London | Music |
+|---|---|---|---|
+| 1 | `mad inspect` | 6 members, 41 sections, 25 elements | 6 members, 29 sections, 10 elements |
+| 2 | `mad query` | 6-table join, `WHERE "Customer0"."City" = 'London'` | 4-table join |
+| 3 | `mad refresh` | **76 rows, 0.02 s** | **3503 rows, 0.10 s** |
+| 4 | `mad export --out` | 5 pages, 43 KB | 77 pages, 354 KB |
+
+The London PDF was checked for content, not just for existing: it carries the real chinook
+data — *"Sales Report"*, customer Phil Hughes, invoice #335, R.E.M.'s *The Wrong Child* at
+$0.99. The text predicate is what makes this meaningful: run 2 emits
+`WHERE "Customer0"."City" = 'London'`, and run 3 is the first proof that a headless refresh
+executes it correctly. Both halves of the literal-quoting fix (`0c187aca3`) are confirmed live.
+
+**One false alarm, worth knowing about.** `file` reports Music's export as 8 pages where `mad`
+says 77. `mad` is right — the PDF has 77 `/Type /Page` objects and a root `/Count 77`; `file`
+takes one node's `/Count` out of 13 nested page-tree nodes. Do not use `file` to check page
+counts on these.
+
+Four runs against the two shipping samples. Each was an acceptance test; nothing broke. The
+runs as written, for the record:
 
 | # | Run | What it proves |
 |---|---|---|
