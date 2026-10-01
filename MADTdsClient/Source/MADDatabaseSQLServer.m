@@ -238,9 +238,15 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 			
 			MADDatabaseConnection *databaseConnection = blockSelf.databaseConnection;
 			NSError * __autoreleasing dberror = nil;
-			DBPROCESS *dbconn = (__bridge DBPROCESS *)([blockSelf connectWithConnection:databaseConnection
-																			 credentals:nil
-																		connectionError:&dberror]);
+			// -connectWithConnection:... hands back a MADDatabaseProcessSQLServer wrapping the
+			// DBPROCESS, not the DBPROCESS itself. The wrapper has to be unwrapped before any
+			// freetds call: dbcmd() on the wrapper reallocs an offset inside the object rather
+			// than the command buffer, which aborts the process inside tds_realloc.
+			MADDatabaseProcessSQLServer *dbwrapper =
+				[blockSelf connectWithConnection:databaseConnection
+									   credentals:nil
+								  connectionError:&dberror];
+			DBPROCESS *dbconn = [dbwrapper process];
 
 			if (dbconn && dberror == nil) {
 				
