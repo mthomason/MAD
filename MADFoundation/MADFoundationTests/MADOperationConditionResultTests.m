@@ -96,9 +96,8 @@
 
 	XCTAssertFalse(result.isSucceed);
 	XCTAssertEqual(result.error.code, (NSInteger)-82795);
-	// The domain is the name of the result class, not the condition -- the condition
-	// name travels in userInfo instead.
-	XCTAssertEqualObjects(result.error.domain, @"MADOperationConditionResult");
+	// The domain is a fixed constant; the condition name travels in userInfo.
+	XCTAssertEqualObjects(result.error.domain, @"MADOperationCondition");
 	XCTAssertEqualObjects(result.error.userInfo[NSLocalizedFailureReasonErrorKey], @"Not Satisfied");
 	XCTAssertEqualObjects(result.error.userInfo[NSLocalizedDescriptionKey],
 						  @"Condition 'SomeCondition' not Satisfied");

@@ -56,6 +56,7 @@
 }
 
 - (MADOperationConditionResult *)evaluateForOperation:(MADOperation *)operation {
+	NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__);
 	return nil;
 }
 

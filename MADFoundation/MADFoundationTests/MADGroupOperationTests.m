@@ -5,9 +5,9 @@
 //  Copyright © 2026 Michael Thomason. All rights reserved.
 //
 //  Coverage for MADGroupOperation's structural API: the lazily-created suspended
-//  internal queue and the finishing-operation/dependency wiring.  (A full run of
-//  a group is intentionally not exercised here; see BUGS.md for the error
-//  aggregation quirk in -operationDidFinish:withErrors:.)
+//  internal queue, the finishing-operation/dependency wiring, and the aggregated
+//  errors the group finishes with.  (A full run of a group is not exercised
+//  here, but the error path it uses is.)
 //
 
 #import <XCTest/XCTest.h>
@@ -44,6 +44,22 @@
 	XCTAssertEqual(group.finishingOperation.dependencies.count, (NSUInteger)2);
 	XCTAssertTrue([group.finishingOperation.dependencies containsObject:a]);
 	XCTAssertTrue([group.finishingOperation.dependencies containsObject:b]);
+}
+
+- (void)testFinishingWithSeveralErrorsKeepsThemSeparate {
+	// The group finishes through -finish: (which takes an array), not
+	// -finishWithError: (which would box the array as one bogus error).
+	MADGroupOperation *group = [[MADGroupOperation alloc] init];
+	NSError *first = [NSError errorWithDomain:@"test" code:1 userInfo:nil];
+	NSError *second = [NSError errorWithDomain:@"test" code:2 userInfo:nil];
+
+	[group finish:@[first, second]];
+
+	XCTAssertTrue(group.isFinished);
+	XCTAssertEqual(group.errors.count, (NSUInteger)2);
+	for (id error in group.errors) {
+		XCTAssertTrue([error isKindOfClass:[NSError class]]);
+	}
 }
 
 @end

@@ -63,9 +63,9 @@
 	XCTAssertEqualObjects(column.caption, @"name");
 	XCTAssertEqualObjects(column.fieldName, @"name");
 	XCTAssertEqual(column.type, MADDataTypeString);
-	// Quirk: the `length` parameter is stored as dataLength; the `dataLen`
-	// parameter is ignored.
-	XCTAssertEqual(column.dataLength, (int64_t)255);
+	// dataLength comes from the parameter of the matching name.  `number`,
+	// `indexOfType` and `length` are still unused.
+	XCTAssertEqual(column.dataLength, (int64_t)99);
 	XCTAssertEqual(column.dataPercision, (int32_t)10);
 	XCTAssertEqual(column.nativeType, (int16_t)22);
 }
@@ -80,20 +80,18 @@
 	XCTAssertEqualObjects([column objectAtIndex:1], @"b");
 }
 
-- (void)testAddRowsOffByOne {
-	// Known defect: addRows: uses `i <= count`, appending one more row than
-	// requested.  addRows:2 produces three default rows.
+- (void)testAddRowsAddsExactCount {
 	MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:@"c"];
 	[column addRows:2];
-	XCTAssertEqual([self plistColumn:column].count, (NSUInteger)3);
-	XCTAssertTrue((id)[column objectAtIndex:2] == [NSNull null]);
+	XCTAssertEqual([self plistColumn:column].count, (NSUInteger)2);
+	XCTAssertEqualObjects([column objectAtIndex:0], [NSNull null]);
+	XCTAssertEqualObjects([column objectAtIndex:1], [NSNull null]);
 }
 
-- (void)testAddRowsZeroAddsOneRow {
-	// Corollary of the same off-by-one: addRows:0 still appends one row.
+- (void)testAddRowsZeroAddsNoRows {
 	MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:@"c"];
 	[column addRows:0];
-	XCTAssertEqual([self plistColumn:column].count, (NSUInteger)1);
+	XCTAssertEqual([self plistColumn:column].count, (NSUInteger)0);
 }
 
 - (void)testRemoveAllObjects {
@@ -112,13 +110,19 @@
 	XCTAssertEqualObjects(plist[@"defaultValue"], @"~MTNull~");
 }
 
-- (void)testPlistRoundTripDoesNotRestoreNullDefault {
-	// Known defect: copyPlist turns NSNull into "~MTNull~", but initWithPlist:
-	// does not decode that sentinel back, so a plist round trip yields a string.
+- (void)testPlistRoundTripRestoresNullDefault {
+	// initWithPlist: decodes the "~MTNull~" sentinel back to NSNull, so the
+	// round trip is symmetric with copyPlist.
 	MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:@"c"];
 	MADDataColumn *decoded = [[MADDataColumn alloc] initWithPlist:[column copyPlist]];
-	XCTAssertEqualObjects(decoded.defaultValue, @"~MTNull~");
-	XCTAssertFalse([decoded.defaultValue isEqual:[NSNull null]]);
+	XCTAssertEqualObjects(decoded.defaultValue, [NSNull null]);
+}
+
+- (void)testPlistRoundTripPreservesNonNullDefault {
+	MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:@"c"];
+	column.defaultValue = @"fallback";
+	MADDataColumn *decoded = [[MADDataColumn alloc] initWithPlist:[column copyPlist]];
+	XCTAssertEqualObjects(decoded.defaultValue, @"fallback");
 }
 
 - (void)testPlistRoundTripPreservesColumnData {
@@ -155,9 +159,7 @@
 
 #pragma mark - NSCoding
 
-- (void)testCodingRoundTripLosesNotNullAndAutoIncrement {
-	// Known defect: initWithCoder: decodes primaryKey but never decodes notNull
-	// or autoIncrement, so those two flags are dropped on an encode/decode cycle.
+- (void)testCodingRoundTripPreservesNotNullAndAutoIncrement {
 	MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:@"c"];
 	column.primaryKey = YES;
 	column.notNull = YES;
@@ -174,8 +176,8 @@
 	XCTAssertEqualObjects(decoded.identifier, @"c");
 	XCTAssertEqual(decoded.type, MADDataTypeInteger);
 	XCTAssertTrue(decoded.primaryKey);
-	XCTAssertFalse(decoded.notNull);      // lost in round trip
-	XCTAssertFalse(decoded.autoIncrement); // lost in round trip
+	XCTAssertTrue(decoded.notNull);
+	XCTAssertTrue(decoded.autoIncrement);
 }
 
 @end

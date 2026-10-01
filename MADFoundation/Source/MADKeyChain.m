@@ -252,8 +252,10 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 		}
 	}
 	bool success = true;
-	if (deleteError != nil && *error != nil) {
-		*error = deleteError;
+	if (deleteError != nil) {
+		if (error != NULL) {
+			*error = deleteError;
+		}
 		success = false;
 	}
 	return success;

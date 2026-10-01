@@ -18,6 +18,10 @@
 #import <Foundation/NSException.h>
 #import <CoreFoundation/CFNumber.h>
 
+// Property lists cannot carry NSNull, so a null default is written as this
+// sentinel and must be read back as NSNull. Both sides use this constant.
+static NSString * const MADDataColumnNullSentinel = @"~MTNull~";
+
 @interface MADDataColumn ()
 
 	@property (nonatomic, copy, readwrite) NSString *identifier;
@@ -78,6 +82,8 @@
 		self.dataLength =           [decoder decodeIntegerForKey: [MADDataColumn keyDataLength]];
 		self.dataPercision =        [decoder decodeIntForKey: [MADDataColumn keyDataPercision]];
 		self.primaryKey =           [decoder decodeBoolForKey: [MADDataColumn keyIsPrimaryKey]];
+		self.notNull =              [decoder decodeBoolForKey: [MADDataColumn keyIsNotNull]];
+		self.autoIncrement =        [decoder decodeBoolForKey: [MADDataColumn keyIsAutoIncrement]];
 	}
 	return self;
 }
@@ -97,7 +103,7 @@
 		self.caption = name.copy;
 		self.fieldName = name.copy;
 		self.nativeType = nativeType;
-		self.dataLength = length;
+		self.dataLength = dataLength;
 		self.dataPercision = percision;
 	}
 	return self;
@@ -129,7 +135,8 @@
 		if (plist[[MADDataColumn keyColumn]] != nil) {
 			self.column = [[NSMutableArray alloc] initWithArray:columnImmutable];
 		}
-		self.defaultValue = [plist[[MADDataColumn keyDefaultValue]] copy];
+		id defaultValue = plist[[MADDataColumn keyDefaultValue]];
+		self.defaultValue = [defaultValue isEqual:MADDataColumnNullSentinel] ? [NSNull null] : [defaultValue copy];
 		self.caption = [plist[[MADDataColumn keyCaption]] copy];
 		self.type = ((NSNumber *)plist[[MADDataColumn keyColumnType]]).shortValue;
 		self.nativeType = ((NSNumber *)plist[[MADDataColumn keyNativeColumnType]]).shortValue;
@@ -169,7 +176,7 @@
 }
 
 - (void)addRows:(NSUInteger)count {
-	for (NSUInteger i = 0; i <= count; i++) {
+	for (NSUInteger i = 0; i < count; i++) {
 		[self.column addObject:self.defaultValue];
 	}
 }
@@ -181,7 +188,7 @@
 	plist[[MADDataColumn keyFieldName]] = [self.fieldName copy];
 	plist[[MADDataColumn keyIdentifier]] = [_identifier copy];
 	plist[[MADDataColumn keyColumn]] = [_column copy];
-	plist[[MADDataColumn keyDefaultValue]] = [_defaultValue isEqual:[NSNull null]] ? @"~MTNull~" : [_defaultValue copy];
+	plist[[MADDataColumn keyDefaultValue]] = [_defaultValue isEqual:[NSNull null]] ? MADDataColumnNullSentinel : [_defaultValue copy];
 	plist[[MADDataColumn keyCaption]] = [self.caption copy];
 	plist[[MADDataColumn keyColumnType]] = [[NSNumber alloc] initWithShort:_type];
 	plist[[MADDataColumn keyNativeColumnType]] = [[NSNumber alloc] initWithInteger:_nativeType];

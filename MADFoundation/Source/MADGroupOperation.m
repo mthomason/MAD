@@ -150,7 +150,9 @@
 		self.internalQueue.suspended = YES;
 		MADLogDebug("MADGroupOperation <%p:%@> internalQueue <%p:%@> suspended.",
 					self, self.name, self.internalQueue, self.internalQueue.name);
-		[self finishWithError:self.aggregatedErrors.copy];
+		// The group collects one error per failed sub-operation; -finish: takes
+		// the array. -finishWithError: would box the array as a single "error".
+		[self finish:self.aggregatedErrors.copy];
 	} else {
 		[self operationDidFinish:op withErrors:errs];
 	}

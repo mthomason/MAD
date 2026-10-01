@@ -326,13 +326,16 @@
 
 #pragma mark - MADOperationConditionTestConnection
 
-- (void)testTestConnectionBaseClassProducesNoResult {
+- (void)testTestConnectionBaseClassIsAbstract {
 	// MADOperationConditionTestConnection is an abstract middle class: only its two
-	// subclasses implement -evaluateForOperation:. The base returns nil, which violates
-	// the protocol's nonnull contract, but both concrete classes override it so no
-	// caller in the app sees it.
+	// subclasses implement -evaluateForOperation:. The base asserts rather than
+	// returning nil into the protocol's nonnull result.
 	MADOperationConditionTestConnection *condition = [[MADOperationConditionTestConnection alloc] init];
+#if defined(DEBUG) && DEBUG
+	XCTAssertThrows([condition evaluateForOperation:[[MADOperation alloc] init]]);
+#else
 	XCTAssertNil([condition evaluateForOperation:[[MADOperation alloc] init]]);
+#endif
 }
 
 - (void)testTestConnectionSuccessSucceedsWhenTheDependencySucceeded {

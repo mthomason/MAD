@@ -51,7 +51,7 @@ NSString * _Nonnull const MADOperationConditionKey = @"OperationCondition";
 
 + (nonnull instancetype)newOperationConditionResultFailedNotSatisfied:(nonnull NSString *)name {
 	MADLogDebug("MADOperationConditionResult: created 'failed' (not satisfied) for condition name: \"%@\"", name);
-	NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:-82795 userInfo:@{
+	NSError *error = [NSError errorWithDomain:@"MADOperationCondition" code:-82795 userInfo:@{
 		NSLocalizedFailureReasonErrorKey: @"Not Satisfied",
 		NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Condition '%@' not Satisfied", name],
 		MADOperationConditionKey: name

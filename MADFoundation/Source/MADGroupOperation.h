@@ -20,8 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) MADOperationQueue *internalQueue;
 @property (nonatomic, strong, nullable) NSBlockOperation *finishingOperation;
 
+- (void)addOperations:(NSArray <__kindof NSOperation *> *)operations;
 - (void)addOperations:(NSArray <__kindof NSOperation *> *)operations finishingOperation:(nullable NSBlockOperation *)finishingOperation;
-- (void)addOperation:(NSArray<__kindof NSOperation *> *)operation;
+- (void)addOperation:(NSOperation *)operation;
 - (void)aggregateError:(NSError *)error;
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray<NSError *> *)errors;
 
