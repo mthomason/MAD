@@ -95,6 +95,9 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 			NSLocalizedDescriptionKey : @"Connection is empty.",
 			NSLocalizedFailureReasonErrorKey : @"Connection Error"
 		}];
+		// Without this the caller sees a nil error for a nil connection and cannot
+		// tell the call apart from a successful one.
+		if (error != NULL) *error = errorFetch;
 	}
 	
 	if (errorFetch == nil) {
@@ -173,33 +176,52 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 			mf.fieldNames = fieldNameCollector;
 			mf.fields = fieldCollector;
 			
-			if (mysql_stmt_bind_result(myStatement,(MYSQL_BIND *)bindings)) {
+			// A statement that returns no result columns (INSERT, UPDATE, DELETE, CREATE,
+			// DROP ...) reports field_count == 0, and mysql_stmt_bind_result fails
+			// client-side when it is given nothing to bind. Calling it unconditionally
+			// meant the bind failed and mysql_stmt_execute was never reached, so no
+			// non-SELECT statement could be run at all.
+			int bindResult = 0;
+			if (myStatement->field_count > 0) {
+				bindResult = mysql_stmt_bind_result(myStatement,(MYSQL_BIND *)bindings);
+			}
+
+			if (bindResult) {
 				errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:3534];
+				// Report it: without this the caller sees no error and treats a failed
+				// bind as success.
+				if (error != NULL) *error = errorFetch;
 			} else {
-				
+
 				if (mysql_stmt_execute(myStatement)) {
 					errorFetch = [MysqlException errorWithConnection:connection domain:[self domain] andCode:4534];
-				} else {
-					
+					if (error != NULL) *error = errorFetch;
+				} else if (myStatement->field_count > 0) {
+					// Only a statement that produces a result set can be fetched.
+					// mysql_stmt_fetch on one that cannot returns an error rather than
+					// MYSQL_NO_DATA, which used to spin the row loop forever.
 					[self fetchResultsFromConnection:connection
 									   intoDataTable:dataTable
 									   withStatement:myStatement
 											   fetch:mf
 										 andBindings:bindings];
-					
-					for (NSUInteger x=0; x < myStatement->field_count;x++) {
-						free(bindings[x].buffer);
-						free(bindings[x].length);
-						free(bindings[x].error);
-						free(bindings[x].is_null);
-					}
-					free(bindings);
-					mysql_stmt_close(myStatement);
 				}
 			}
+
+			// Release the bindings and the statement on every path, not just the
+			// successful one. The binding buffers are heap-allocated and the statement
+			// is not owned by an autorelease pool, so the error paths leaked both.
+			for (NSUInteger x=0; x < myStatement->field_count;x++) {
+				free(bindings[x].buffer);
+				free(bindings[x].length);
+				free(bindings[x].error);
+				free(bindings[x].is_null);
+			}
+			free(bindings);
+			mysql_stmt_close(myStatement);
 		}
 	}
-	
+
 	return *dataTable;
 }
 
@@ -209,12 +231,17 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 							 fetch: (MysqlFetch *)mf
 					   andBindings: (MYSQL_BIND *)bindings  {
 	[*dataTable beginBulkInsert];
-	int fetchResults;
+	int fetchResults = 0;
 	NSUInteger rowCounter = 0;
-	
+
 	id <MADMySQLFetchProtocol> delegate = self.delegate;
-	
-	while ((fetchResults = [MysqlFetch fetchStatement:statement]) != MYSQL_NO_DATA) {
+
+	// 0 is an ordinary row and MYSQL_DATA_TRUNCATED is a row with a truncated column;
+	// both are worth converting. Anything else ends the loop -- MYSQL_NO_DATA, but also
+	// any fetch error. Testing only for MYSQL_NO_DATA spins forever on an error, which
+	// is exactly what mysql_stmt_fetch returns for a statement with no result set.
+	while ((fetchResults = [MysqlFetch fetchStatement:statement]) == 0 ||
+		   fetchResults == MYSQL_DATA_TRUNCATED) {
 		
 		if (delegate != nil) {
 			[delegate didFetchRow:rowCounter];
@@ -371,8 +398,8 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 							int *aValue = (int *)bindings[x].buffer;
 							NSNumber * __autoreleasing v = [[NSNumber alloc] initWithInt:*aValue];
 							dict[key] = v;
-						}
-							
+						} break;
+
 						case MYSQL_TYPE_DECIMAL:
 						case MYSQL_TYPE_DOUBLE:
 						{
@@ -623,10 +650,18 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 			binding.is_null= calloc(1,sizeof(bool));
 			break;
 		case MYSQL_TYPE_NULL:
+			// A column that is always NULL, such as the literal in "SELECT NULL". There
+			// is no buffer to read, but the server still writes the is_null flag, so the
+			// three out-parameters need real storage. They were left uninitialised here
+			// and the case fell through into the default assertion below.
 			binding.buffer_type = MYSQL_TYPE_NULL;
+			binding.buffer_length = 0;
 			binding.buffer = NULL;
-			
-			
+			binding.length = calloc(1,sizeof(unsigned long));
+			binding.error = calloc(1,sizeof(bool));
+			binding.is_null = calloc(1,sizeof(bool));
+			break;
+
 		default:
 			NSAssert(NO, @"No binding found for type %s.", mySQLTypeForType(binding.buffer_type));
 			binding.buffer_type = MYSQL_TYPE_NULL;

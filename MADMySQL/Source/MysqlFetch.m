@@ -59,6 +59,10 @@ char *mySQLTypeForType(enum enum_field_types type) {
 			return "MYSQL_TYPE_LONG";
 			break;
 
+		case MYSQL_TYPE_LONGLONG:
+			return "MYSQL_TYPE_LONGLONG";
+			break;
+
 		case MYSQL_TYPE_FLOAT:
 			return "MYSQL_TYPE_FLOAT";
 			break;
@@ -128,11 +132,11 @@ char *mySQLTypeForType(enum enum_field_types type) {
 			break;
 
 		case MYSQL_TYPE_MEDIUM_BLOB:
-			return "MYSQL_TYPE_DECIMAL";
+			return "MYSQL_TYPE_MEDIUM_BLOB";
 			break;
 
 		case MYSQL_TYPE_LONG_BLOB:
-			return "MYSQL_TYPE_DECIMAL";
+			return "MYSQL_TYPE_LONG_BLOB";
 			break;
 
 		case MYSQL_TYPE_BLOB:
