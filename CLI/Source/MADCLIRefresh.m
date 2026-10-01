@@ -9,14 +9,10 @@
 #import "MADCLIDocument.h"
 
 #import <MAD/MADocument.h>
+#import <MAD/MADQueryFull.h>
 #import <MADFoundation/MADCredential.h>
 
 MADCLIExitCode MADCLIRunRefresh(MADCLIInvocation *invocation) {
-
-	if (invocation.rows > 0) {
-		MADCLIError(@"--rows is not implemented yet.");
-		return MADCLIExitUsage;
-	}
 
 	MADCredential *credentials = nil;
 	if (invocation.credentials.length > 0) {
@@ -36,6 +32,14 @@ MADCLIExitCode MADCLIRunRefresh(MADCLIInvocation *invocation) {
 	if (cliDocument == nil) {
 		MADCLIError(@"%@", MADCLIDescriptionForError(error));
 		return MADCLIExitBadDocument;
+	}
+
+	// --rows caps the query, not the fetch.  The document builds its main query lazily
+	// and once, with the design-mode cap (50) or no cap at all; the CLI then overwrites
+	// that with the requested figure before the refresh runs, so the SQL carries a real
+	// LIMIT rather than fetching everything and discarding the surplus.
+	if (invocation.rows > 0) {
+		cliDocument.document.mainQuery.limitResults = (NSUInteger)invocation.rows;
 	}
 
 	MADCLIVerbose(invocation, @"Refreshing");

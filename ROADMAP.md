@@ -376,19 +376,60 @@ built.
 workaround — `CLI/build.sh`'s `REFRESH_SOURCES` reaches across the target boundary and compiles
 it today. Reorganising before the runs have said what shape the code wants is the wrong order.
 
-### 3.2 Phase 2 — close the surface
+### 3.2 Phase 2 — close the surface — **done 2026-10-01**
 
-`mad schema`, and `refresh --rows N`. Both small, both bounded by what already exists.
+`mad schema`, and `refresh --rows N`. Both landed and both are verified against the samples.
 
-### 3.3 Phase 3 — make the CLI the document's spec
+**`schema`** was the only stub verb (`MADCLIUnimplemented.m` held nothing else, and that file is
+now deleted). It reads the snapshot stored at creation time out of the store's own `Rptq`
+entities — `RptqDocument` → `RptqDatabase` → `RptqDatabaseSchemaTable` → `RptqDatabaseSchemaField`
+— and prints the driver, the tables sorted by name, and each table's fields with their display
+type and a `pk` marker. It needs no credentials and no database, because it is not a live read.
 
-`mad inspect` is container-only: it reports nothing about the companion cache files. Extending
-it to report them is what turns the CLI from a test harness into the thing that *defines* the
-document, and it is what makes Track 4.1 checkable rather than prose.
+```
+London.mad
+  schema 1   Sqlite 3
+  tables     11
+    Album (3 fields)
+      AlbumId  Integer  pk
+      Title  String
+      ArtistId  Integer
+    …
+```
 
-The success criterion for this track: **`mad inspect` can state everything `MAD_FORMAT.md`
-claims, from a file, without the app.** When that is true the format has a specification that
-can fail.
+**`--rows N`** caps the query rather than the fetch: it sets `MADQueryFull.limitResults` before
+the refresh runs, so the SQL carries a real `LIMIT N` instead of pulling every row and discarding
+the surplus. `refresh --rows 7` returns 7 rows; no flag returns the full 76 (London) / 3503
+(Music). The cap is the SQL limit, so the cached `.maddb` afterwards holds N rows — a refresh
+replaces the cache, it does not preview alongside it.
+
+### 3.3 Phase 3 — make the CLI the document's spec — **done 2026-10-01**
+
+`mad inspect` now reports the companion files, grouped by extension, with a per-kind description
+and a per-file listing under `--verbose`:
+
+```
+  cache       7308922102201200 (6 files, 402.7 KB)
+    madac 4 files  320.0 KB  rendered-page cache
+    maddb 1 file   80.0 KB   row data
+    mdcache 1 file   2.7 KB   virtual-table index
+```
+
+The directory is located with the app's own rule — `MADURLFactory
+newURLCacheFilesDirectoryForFilename:` — rather than re-derived, so the CLI cannot drift from the
+app's idea of where the cache lives. A subdirectory is skipped (a manual backup is not part of
+the footprint), and an un-refreshed document reports `cache none`.
+
+This is the first time the companion files have been *reported* rather than measured by hand, and
+it immediately makes Track 4.1 concrete: Music's cache is 15.0 MB and every byte of it is
+`.madac`; London's is 402.7 KB and 79% `.madac`. The two render-cache layout identifiers
+(`1138777405839048766` and Music's own `14013296909766`) are now visible side by side instead of
+inferred from a directory listing.
+
+The success criterion for this track — **`mad inspect` can state everything `MAD_FORMAT.md`
+claims, from a file, without the app** — is met for the container, the store, the members, the
+WAL/SHM and the companion files. The one claim `inspect` does not yet state is the store's
+*schema*, which is `schema`'s job, not `inspect`'s; the two together cover the document.
 
 ### 3.4 Housekeeping — move `MADOperationRefresh` into the `MAD` framework
 

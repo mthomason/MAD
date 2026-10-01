@@ -10,6 +10,8 @@
 #import "MADCLI.h"
 #import "MADCLIContainer.h"
 
+#import <MADFoundation/MADURLFactory.h>
+
 #import <sqlite3.h>
 
 static BOOL MADCLICountRows(NSURL *storeURL, NSString *table, unsigned long long *count) {
@@ -38,6 +40,86 @@ static NSString *MADCLIHumanBytes(unsigned long long bytes) {
 	if (bytes < 1024) return [NSString stringWithFormat: @"%llu bytes", bytes];
 	if (bytes < 1024 * 1024) return [NSString stringWithFormat: @"%.1f KB", bytes / 1024.0];
 	return [NSString stringWithFormat: @"%.1f MB", bytes / (1024.0 * 1024.0)];
+}
+
+/// The companion files, grouped by extension.  These are the document's on-disk
+/// footprint, regenerated on refresh and deliberately outside the archive --
+/// MAD_FORMAT.md section 5.  The three kinds are three extensions: .maddb (row
+/// data), .mdcache (the virtual-table index) and .madac (the rendered-page cache).
+static void MADCLIAppendCacheSummary(NSMutableString *out, NSURL *documentURL, BOOL verbose) {
+
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSString *filename = documentURL.lastPathComponent.stringByDeletingPathExtension;
+	NSURL *cacheDirectory = [MADURLFactory newURLCacheFilesDirectoryForFilename: filename];
+
+	BOOL isDirectory = NO;
+	if (![fileManager fileExistsAtPath: cacheDirectory.path isDirectory: &isDirectory] || !isDirectory) {
+		[out appendString: @"  cache       none (the document has not been refreshed here)\n"];
+		return;
+	}
+
+	NSArray <NSURL *> *files = [fileManager contentsOfDirectoryAtURL: cacheDirectory
+										  includingPropertiesForKeys: @[NSURLIsDirectoryKey]
+															 options: NSDirectoryEnumerationSkipsHiddenFiles
+															   error: NULL];
+
+	// The cache directory is flat in practice; a subdirectory is a manual artifact
+	// (a user-made backup), not part of the document's own footprint, so it is left
+	// out of the summary rather than reported as a zero-size file.
+	NSMutableArray <NSURL *> *regularFiles = [NSMutableArray array];
+	for (NSURL *file in files) {
+		NSNumber *isDirectory = nil;
+		[file getResourceValue: &isDirectory forKey: NSURLIsDirectoryKey error: NULL];
+		if (!isDirectory.boolValue) [regularFiles addObject: file];
+	}
+	files = regularFiles;
+
+	NSMutableDictionary <NSString *, NSMutableArray <NSURL *> *> *byExtension = [NSMutableDictionary dictionary];
+	for (NSURL *file in files) {
+		NSString *extension = file.pathExtension.length > 0 ? file.pathExtension : @"(none)";
+		NSMutableArray <NSURL *> *group = byExtension[extension];
+		if (group == nil) {
+			group = [NSMutableArray array];
+			byExtension[extension] = group;
+		}
+		[group addObject: file];
+	}
+
+	unsigned long long total = 0;
+	for (NSArray <NSURL *> *group in byExtension.allValues) {
+		for (NSURL *file in group) {
+			total += [[fileManager attributesOfItemAtPath: file.path error: NULL][NSFileSize] unsignedLongLongValue];
+		}
+	}
+
+	[out appendFormat: @"  cache       %@ (%lu files, %@)\n",
+		cacheDirectory.lastPathComponent, (unsigned long)files.count, MADCLIHumanBytes(total)];
+
+	for (NSString *extension in [byExtension.allKeys sortedArrayUsingSelector: @selector(compare:)]) {
+		NSArray <NSURL *> *group = byExtension[extension];
+
+		unsigned long long size = 0;
+		for (NSURL *file in group) {
+			size += [[fileManager attributesOfItemAtPath: file.path error: NULL][NSFileSize] unsignedLongLongValue];
+		}
+
+		NSString *kind;
+		if ([extension isEqualToString: @"maddb"]) kind = @"row data";
+		else if ([extension isEqualToString: @"mdcache"]) kind = @"virtual-table index";
+		else if ([extension isEqualToString: @"madac"]) kind = @"rendered-page cache";
+		else kind = @"";
+
+		[out appendFormat: @"    %-10@ %lu file%@  %@  %@\n",
+			extension, (unsigned long)group.count, group.count == 1 ? @" " : @"s", MADCLIHumanBytes(size), kind];
+
+		if (verbose) {
+			for (NSURL *file in group) {
+				unsigned long long fileSize =
+					[[fileManager attributesOfItemAtPath: file.path error: NULL][NSFileSize] unsignedLongLongValue];
+				[out appendFormat: @"      %@  %@\n", file.lastPathComponent, MADCLIHumanBytes(fileSize)];
+			}
+		}
+	}
 }
 
 MADCLIExitCode MADCLIRunInspect(MADCLIInvocation *invocation) {
@@ -108,6 +190,8 @@ MADCLIExitCode MADCLIRunInspect(MADCLIInvocation *invocation) {
 	if (gotSections && gotElements) {
 		[out appendFormat: @"  elements    %llu sections, %llu elements\n", sections, elements];
 	}
+
+	MADCLIAppendCacheSummary(out, invocation.documentURL, invocation.verbose);
 
 	fputs(out.UTF8String, stdout);
 	[container discard];

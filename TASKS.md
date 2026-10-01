@@ -242,8 +242,8 @@ matrix would not let a target compile for macOS today.
 
 ## 7. The `mad` CLI — the headless path
 
-**Status:** Phase 1 done 2026-10-01. Next: close the surface, then make `inspect` describe the
-companion files. See `ROADMAP.md` Track 3.
+**Status:** Phases 1–3 done 2026-10-01. Remaining: §3.4 housekeeping (move
+`MADOperationRefresh` into `MAD`). See `ROADMAP.md` Track 3.
 
 **The CLI does not ship.** The user's decision, 2026-10-01: *"the CLI isn't going to be shipped
 (least not now, it's only for our understanding of how the software works, and testing)."* It
@@ -277,8 +277,20 @@ open — recorded as evidence in `MAD_FORMAT.md` §5.3 and §8.4, not resolved.
 Run with `CLI/build.sh --run <command> <document.mad>`; it wants a booted simulator, because it
 runs the tool through `xcrun simctl spawn booted`.
 
-**Then:** `schema` (the only stub verb) and `refresh --rows N`; then extending `inspect` to
-report the companion cache files, which is what makes §8's work checkable.
+**Phase 2 — the surface — done 2026-10-01.** `mad schema` landed (the last stub verb;
+`MADCLIUnimplemented.m` is deleted) and prints the stored snapshot: driver, tables sorted by
+name, fields with type and a `pk` marker, no credentials needed. `refresh --rows N` landed and
+caps the query with a real SQL `LIMIT` rather than fetching everything and discarding: `--rows 7`
+returns 7 rows, no flag returns the full set. The cache afterwards holds the capped rows — a
+refresh replaces the cache, it does not preview beside it.
+
+**Phase 3 — `inspect` reports the companion files — done 2026-10-01.** `inspect` now lists the
+cache directory's files grouped by extension (`.maddb` row data, `.mdcache` index, `.madac`
+render cache) with sizes, and per-file under `--verbose`. The directory is found with the app's
+own `MADURLFactory` rule, so it cannot drift. Music's cache reads 15.0 MB and is entirely
+`.madac`; London's is 402.7 KB and 79% `.madac`. The two render-cache layout identifiers are
+now visible side by side — the `{0, 0}` vs `{612, 792}` question in `MAD_FORMAT.md` §5.3 is
+reportable instead of hand-measured.
 
 **Not first:** moving `MADOperationRefresh` into `MAD`. It is housekeeping with a working
 workaround — `CLI/build.sh`'s `REFRESH_SOURCES` compiles it across the target boundary today.

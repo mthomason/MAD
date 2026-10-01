@@ -76,9 +76,13 @@ on a v0 sample. It is also the verb that makes the format's hazards visible -- H
 
 ### `mad schema <doc.mad>`
 
-Prints the database schema captured in the document definition. Emits SQL `CREATE
-TABLE` compatible with the source database so the output can be piped into another
-tool.
+Prints the database schema captured in the document definition: the driver, the
+tables sorted by name, and each table's fields with their display type and a `pk`
+marker. It reads the snapshot stored at creation time, so it needs no credentials and
+no source database. (The original plan here was to emit SQL `CREATE TABLE`; the
+snapshot stores the `MADDataType` abstraction rather than each source dialect's type
+names, so a faithful `CREATE TABLE` needs a per-dialect mapping that does not exist
+yet. The readable listing is what the tool produces until then.)
 
 ### `mad query <doc.mad>`
 
