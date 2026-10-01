@@ -127,34 +127,46 @@ path**:
 | Project | Library reference | Path |
 |---|---|---|
 | `MAD` | libarchive | `../Compressor/library/libarchive/iOS/lib/libarchive.a` |
-| `MAD` | libsybdb | `../opt/lib/freetds/libsybdb.a` |
-| `MAD` | libct | `../opt/lib/freetds/libct.a` |
 | `MADMySQL` | libmysqlclient | `../Compressor/library/libmysqlclient/libmysqlclient.a` |
 | `MADMySQL` | libcrypto, libssl | `../Compressor/library/openssl/iOS/lib/*.a` |
 | `MADBarcodes` | libpng | `../Compressor/library/libpng/libpng.a` |
 | `MADTds` | libct, libsybdb | `../Compressor/library/freetds/iOS-arm64/lib/*.a` |
 | `MAD Designer` (app) | libcrypto, libssl | `Compressor/library/openssl/iOS/lib/*.a` |
 
-Three consequences, each verified:
+Three consequences, each verified. **(b)** and **(c)** were acted on in ROADMAP §2.1 on
+2026-10-01 and are described here as they stand now; **(a)** turned out to be the durable
+one.
 
-**(a) No `macosx` arm exists anywhere.** A repo-wide search for
-`LIBRARY_SEARCH_PATHS[sdk=macosx*]` returns nothing. Every SDK-conditional path in the
-project is `iphoneos*` or `iphonesimulator*`, and `SUPPORTED_PLATFORMS` is
-`"iphoneos iphonesimulator"` with `SUPPORTS_MACCATALYST = NO`. The macOS slices that
-exist are unreachable by construction.
+**(a) No `macosx` arm exists anywhere -- and an arm would not have been enough.**
+A repo-wide search for `LIBRARY_SEARCH_PATHS[sdk=macosx*]` returns nothing. Every
+SDK-conditional path in the project is `iphoneos*` or `iphonesimulator*`, and
+`SUPPORTED_PLATFORMS` is `"iphoneos iphonesimulator"` with `SUPPORTS_MACCATALYST = NO`.
 
-**(b) Three paths are dangling, and the link survives by accident.**
-`../opt/lib/freetds/` does not exist. Yet `libsybdb.a` and `libct.a` are *in* the `MAD`
-framework's Frameworks build phase. The link succeeds only because ld falls back to
-`LIBRARY_SEARCH_PATHS`, which for `MAD` contains
-`$(PROJECT_DIR)/../Compressor/library/freetds/iOS/lib`. The reference is a lie that
-resolves to an iOS slice.
+§2.1 established that adding the arms is not the fix. `LIBRARY_SEARCH_PATHS` is the one
+build setting that can be made SDK-conditional; `PBXFileReference.path` cannot. So **the
+path in the table above is what the linker is handed whatever the SDK**, and every one of
+them is an iOS slice: `libarchive/iOS/lib/libarchive.a` is `arm64 arm64e`,
+`freetds/iOS-arm64/lib/libct.a` is `arm64`, `openssl/iOS/lib/libssl.a` is `arm64 arm64e`.
+The macOS slices are unreachable by construction, and reaching them wants the XCFramework
+in §7 rather than a search path. `SUPPORTED_PLATFORMS` cannot be extended either:
+`MADFoundation/Source/MADApplication.h:13` imports `UIKit/UIApplication.h`, so no target
+compiles for macOS yet.
 
-**(c) Search paths name directories that do not exist.** `MADMySQL` sets
-`$(SRCROOT)/../Compressor/library/openssl/lib/iOS`; the real path is
-`openssl/iOS/lib`. `MAD Designer` lists `Compressor/library/libsybdb`, which was never
-created. Neither breaks the build -- the SDK-conditional arms happen to be correct --
-but they are noise that hides which path is load-bearing.
+**(b) The three dangling paths are gone.** `MAD`'s `libsybdb.a` and `libct.a` at
+`../opt/lib/freetds/`, and `Scrimpter`'s `MADDataStructures.framework` at
+`../MADDataStructures/build/Debug-iphoneos/`. They had linked anyway, because ld falls
+back to `LIBRARY_SEARCH_PATHS` -- for `MAD`,
+`$(PROJECT_DIR)/../Compressor/library/freetds/iOS/lib`. MAD's two were confirmed unneeded
+first with `nm -u` on the built framework.
+
+**(c) The search paths naming directories that do not exist are gone too.** `MADMySQL` set
+`$(SRCROOT)/../Compressor/library/openssl/lib/iOS`; the real path is `openssl/iOS/lib`. The
+MAD Viewer target listed five directories that were never created, among them
+`Compressor/library/libsybdb`. Neither broke the build -- the SDK-conditional arms happen
+to be correct -- but they were noise that hid which path was load-bearing.
+
+The bookkeeping for §2.1 -- including the MAD Viewer target, which has not built since
+`09e0e7b8d` -- is in `BUGS.md` under *Build wiring*.
 
 ### The sqlite3 compile flags (hazard H7)
 
@@ -271,7 +283,7 @@ is what makes this a format change rather than a build tweak.
 | zlib / macOS | no macOS slice exists; anything needing zlib on Mac cannot link |
 | mysqlclient / macOS | no macOS slice; `MADMySQL` cannot be built for Mac |
 | mysqlclient / iOS simulator (canonical path) | `libmysqlclient/libmysqlclient.a` is arm64-device-only; the simulator slices live under `iphonesimulator/` but are not the ones referenced |
-| everything / macOS wiring | slices exist but no `[sdk=macosx*]` search path consumes them |
+| everything / macOS wiring | slices exist, but the file references are iOS-slice paths that no `[sdk=macosx*]` search path can override -- see §3(a). Needs the XCFramework in §7. |
 
 **Stale, unreferenced, or ancient:**
 
@@ -366,16 +378,18 @@ be kept and compared until it is trusted. It should:
   the SHA of every slice. This is what makes "which flags built this" answerable -- the
   question §4 could only answer by disassembling.
 
-### 7.3 Reconcile Xcode
+### 7.3 Reconcile Xcode -- **done 2026-10-01; ROADMAP §2.1**
 
-- Replace hardcoded `iOS/lib` references with the XCFramework, or, as an intermediate
-  step, with `LIBRARY_SEARCH_PATHS[sdk=macosx*]` arms matching the existing
-  `iphoneos*` ones.
-- Delete the three dangling references (§3b) and the paths that name non-existent
-  directories (§3c). These are removals of *references*, not of libraries -- the
-  distinction matters under the standing constraint.
-- Extend `SUPPORTED_PLATFORMS` with `macosx` per target, and set a macOS deployment
-  target. This is Phase 2 of `MAD_CLI.md` §7.
+- **Done.** The three dangling references (§3b) and the paths naming non-existent
+  directories (§3c) are deleted. These were removals of *references*, not of libraries --
+  the distinction matters under the standing constraint.
+- **Struck.** "Replace hardcoded `iOS/lib` references with ... an intermediate
+  `LIBRARY_SEARCH_PATHS[sdk=macosx*]` arm" does not work: the hardcoded path lives in the
+  file reference, which cannot be made SDK-conditional, so the arm changes nothing the
+  linker is handed (§3a). Go straight to the XCFramework.
+- **Blocked.** `SUPPORTED_PLATFORMS` cannot be extended with `macosx` per target until the
+  UIKit decoupling in `MAD_CLI.md` §4.2 lands; `MADFoundation/Source/MADApplication.h:13`
+  imports `UIKit/UIApplication.h` today.
 
 ### 7.4 Then, and only then, prune
 

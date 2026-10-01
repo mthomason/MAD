@@ -35,7 +35,6 @@
 		4C1044D41956B57F00820EFE /* MTAstNodeArithmetic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1044D21956B57F00820EFE /* MTAstNodeArithmetic.m */; };
 		4C1044D71956B88400820EFE /* MTAstNodeUniaryMinus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1044D61956B88400820EFE /* MTAstNodeUniaryMinus.m */; };
 		4C1044D81956B88400820EFE /* MTAstNodeUniaryMinus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1044D61956B88400820EFE /* MTAstNodeUniaryMinus.m */; };
-		4C2C7B8F1BA92B0400C9CC5E /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2C7B8E1BA92B0400C9CC5E /* MADDataStructures.framework */; };
 		4C9E0FD2195203D80052AED6 /* MADSymbolTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD1195203D80052AED6 /* MADSymbolTable.m */; };
 		4C9E0FD51952041E0052AED6 /* MADSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD41952041E0052AED6 /* MADSymbol.m */; };
 		4C9E0FD8195204860052AED6 /* MADSymbolReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9E0FD7195204860052AED6 /* MADSymbolReference.m */; };
@@ -118,7 +117,6 @@
 		4C1044D21956B57F00820EFE /* MTAstNodeArithmetic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeArithmetic.m; sourceTree = "<group>"; };
 		4C1044D51956B88400820EFE /* MTAstNodeUniaryMinus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTAstNodeUniaryMinus.h; sourceTree = "<group>"; };
 		4C1044D61956B88400820EFE /* MTAstNodeUniaryMinus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTAstNodeUniaryMinus.m; sourceTree = "<group>"; };
-		4C2C7B8E1BA92B0400C9CC5E /* MADDataStructures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MADDataStructures.framework; path = "../MADDataStructures/build/Debug-iphoneos/MADDataStructures.framework"; sourceTree = "<group>"; };
 		4C9E0FD0195203D80052AED6 /* MADSymbolTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSymbolTable.h; sourceTree = "<group>"; };
 		4C9E0FD1195203D80052AED6 /* MADSymbolTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSymbolTable.m; sourceTree = "<group>"; };
 		4C9E0FD31952041E0052AED6 /* MADSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADSymbol.h; sourceTree = "<group>"; };
@@ -155,7 +153,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C2C7B8F1BA92B0400C9CC5E /* MADDataStructures.framework in Frameworks */,
 				4CF3C599194F80F600E5705B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,7 +278,6 @@
 		4CF3C597194F80F600E5705B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C2C7B8E1BA92B0400C9CC5E /* MADDataStructures.framework */,
 				4CF3C598194F80F600E5705B /* Foundation.framework */,
 			);
 			name = Frameworks;

@@ -1457,6 +1457,103 @@ header search path.
 
 ---
 
+## Build wiring (Xcode references)
+
+Found while doing ROADMAP §2.1. These are project-file defects, not source defects:
+a reference in a `.pbxproj` that names a path which does not exist, or a build
+setting that names a platform no target can build for.
+
+### Three library references named directories that were never created
+- **Status:** Fixed
+- **Where:** `MAD/MAD.xcodeproj/project.pbxproj` — `libct.a` and `libsybdb.a`, both
+  at `../opt/lib/freetds/`; `Scrimpter/Scrimpter.xcodeproj/project.pbxproj` —
+  `MADDataStructures.framework` at `../MADDataStructures/build/Debug-iphoneos/`
+- **Behavior:** all three paths are relative to the project directory, so they named
+  `MAD/../opt/lib/freetds/` and `Scrimpter/../MADDataStructures/build/…`. Neither
+  directory has ever existed in this checkout.
+- **Why it matters:** a dangling reference does not fail the build, so nothing surfaces
+  it. `ld` is handed a file that is not there, then finds the library anyway through
+  `LIBRARY_SEARCH_PATHS` — for MAD's two, the iOS slice in
+  `Compressor/library/freetds/iOS/lib`. The reference is a lie that reads as a real
+  dependency: it is what makes `MAD` look like it links freetds directly, when
+  `MADTds` is the framework that does.
+- **Now:** all three are gone — `PBXBuildFile`, `PBXFileReference`, Frameworks-phase
+  entry and group child. MAD's two are safe to remove because `nm -u` on the built
+  `MAD.framework/MAD` reports no `ct_`, `sybdb` or `tds` undefined symbols.
+  Scrimpter's is removed from a project outside the workspace with no shared scheme,
+  which could not already link: its `LIBRARY_SEARCH_PATHS` names a
+  `DerivedData/Reports-dojbzwnmytpjqefezxjmhftrkacg` that does not exist, and nothing
+  builds `MADDataStructures`. That Scrimpter's headers do
+  `#import <MADDataStructures/MADDataStructures.h>` is recorded here so the dependency
+  is not lost with the reference.
+- **Evidence:** `MAD Designer` builds; `MAD` 176 tests, 0 failures.
+
+### Five library search paths named directories that were never created
+- **Status:** Fixed
+- **Where:** `MADMySQL/MADMySQL.xcodeproj/project.pbxproj` (the unsuffixed
+  `LIBRARY_SEARCH_PATHS`, Debug and Release) and the MAD Viewer target in
+  `MADDesigner/MAD Designer.xcodeproj/project.pbxproj` (Debug and Release)
+- **Behavior:** MADMySQL's base value was
+  `$(SRCROOT)/../Compressor/library/openssl/lib/iOS`; the real layout is
+  `openssl/iOS/lib`, which the `[sdk=…]` arms already name correctly. The MAD Viewer
+  target listed five directories that do not exist — `library/libsybdb`,
+  `../libMySqlClientObjectiveC/build/Release-iphoneos`, `libMysqlClient/MysqlClient`,
+  `../CloudManager/build/Debug-iphoneos`, `../MAD/MAD/build/Debug-iphoneos` — and named
+  `$(PROJECT_DIR)` twice.
+- **Now:** the base is `""` in MADMySQL, matching the sibling frameworks; the viewer's
+  dead entries and the duplicate are gone. The link line the viewer target produces
+  now carries exactly the surviving entries: `Compressor/library`,
+  `library/libmysqlclient`, `library/libpng`, `library/openssl`, `MADDesigner`.
+- **Test:** `MADMySQL` 58 tests, 0 failures, and the app build links MADMySQL.
+
+### A macOS build cannot be wired from search paths alone
+- **Status:** Still open — this is ROADMAP §2.1's third bullet, and it cannot be done
+  as written
+- **Where:** every vendored `.a` reference, e.g. `MAD/MAD.xcodeproj`'s `libarchive.a`
+  at `../Compressor/library/libarchive/iOS/lib/libarchive.a`,
+  `MADTds/MADTds.xcodeproj`'s `libct.a` at `freetds/iOS-arm64/lib/`, and
+  `MADBarcodes/MADBarcodes.xcodeproj`'s `libpng.a` at `libpng/libpng.a`
+- **Behavior:** `LIBRARY_SEARCH_PATHS` is the only one of the two that can be made
+  SDK-conditional (the `[sdk=…]` arms). `PBXFileReference.path` cannot. A
+  `[sdk=macosx*]` search path would therefore still link the iOS slice the file
+  reference names, and `lipo -info` reports none of them as macOS:
+  `libarchive/iOS/lib/libarchive.a` is `arm64 arm64e`, `freetds/iOS-arm64/lib/libct.a`
+  is `arm64`, `openssl/iOS/lib/libssl.a` is `arm64 arm64e`. The linker refuses a file
+  built for another platform.
+- **The other half of the bullet is blocked too:** `SUPPORTED_PLATFORMS` cannot be
+  extended with `macosx` yet, because every framework sits on `MADFoundation` and
+  `MADFoundation/Source/MADApplication.h:13` imports `UIKit/UIApplication.h`. A probe
+  (`xcodebuild build … -destination 'platform=macOS' SUPPORTED_PLATFORMS=macosx`) fails
+  with `'UIKit/UIApplication.h' file not found`. Flipping the setting today would
+  advertise a platform no target can compile for.
+- **What it needs instead:** the macOS slices do exist on disk
+  (`freetds/macOS-arm64` and `macOS-x86_64`, `openssl/macOS`, `libpng/macosx`,
+  `bzip2/macOS`, `libarchive/macOS`), but reaching them wants either a second set of
+  per-SDK file references or — the answer `MAD_CLI.md` §4.2 and ROADMAP Track 2.3
+  already point at — one XCFramework artifact whose slice the toolchain picks. `zlib`
+  and `libmysqlclient` have no macOS slice at all (Track 2.2).
+
+### The MAD Viewer target has not linked since `09e0e7b8d`
+- **Status:** Still open
+- **Where:** the MAD Viewer target in
+  `MADDesigner/MAD Designer.xcodeproj/project.pbxproj`
+- **Behavior:** its build settings were left pointing into `MADStack/`, the directory
+  `09e0e7b8d` ("Project cleanup and reorganization") deleted —
+  `CODE_SIGN_ENTITLEMENTS` and `GCC_PREFIX_HEADER` at the Designer's old paths, and
+  `INFOPLIST_FILE = MADStack/MADViewer/info.plist`. The build stopped at
+  `ProcessProductPackaging` with *"Build input file cannot be found"*.
+- **Now:** those six settings (Debug and Release) point at the viewer's own files under
+  `Targets/MADViewer/`, which all exist, and the build reaches the link step.
+- **Still broken:** the link then fails on seven undefined classes — `MADApplication`,
+  `MADDesignerNavigationBar`, `MADNavigationControllerDesigner`,
+  `MADNavigationControllerViewer`, `MADSalesReceipt`, `MADThemeManager` and
+  `MADViewerNavigationBar`. They are the *Designer* target's own sources, and the
+  viewer target neither compiles them nor links a framework that contains them. What
+  the stand-alone viewer should be is a product decision, not a build-wiring repair,
+  so it is recorded rather than patched.
+
+---
+
 ## Already fixed (for reference)
 
 ### MADFoundation batch: ten defects, each caller-audited first

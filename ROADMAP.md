@@ -181,15 +181,51 @@ by construction: there are 10 `LIBRARY_SEARCH_PATHS[sdk=iphoneos*]` arms and 10
 the project files are all `CODE_SIGN_IDENTITY`, `PROVISIONING_PROFILE_SPECIFIER` and
 `DEVELOPMENT_TEAM` — signing boilerplate, not library paths.)
 
-### 2.1 Reconcile the Xcode references — cheap, and first
+§2.1 then clarified what "wiring" has to mean. The slices are not merely unreachable through a
+missing setting: the file references themselves are not SDK-conditional, so adding the
+`[sdk=macosx*]` arms would not have been enough to link them. See §2.1.
 
-- Delete the three dangling references, e.g. `MAD`'s `../opt/lib/freetds/`, which does not
-  exist and links only because `LIBRARY_SEARCH_PATHS` silently resolves it to an iOS slice.
-- Delete the search paths naming directories that were never created.
-- Add `[sdk=macosx*]` arms mirroring the iOS ones, and extend `SUPPORTED_PLATFORMS`.
+### 2.1 Reconcile the Xcode references — **done 2026-10-01, but the third bullet cannot be done as written**
+
+Two of the three bullets landed:
+
+- **Done.** The three dangling references are deleted — `MAD`'s `libct.a` and `libsybdb.a` at
+  `../opt/lib/freetds/`, and `Scrimpter`'s `MADDataStructures.framework` at
+  `../MADDataStructures/build/Debug-iphoneos/`. They linked anyway, because `ld` falls back to
+  `LIBRARY_SEARCH_PATHS`; MAD's two were confirmed unneeded first with `nm -u` on the built
+  framework.
+- **Done.** The search paths naming directories that were never created are deleted:
+  `MADMySQL`'s base value (`openssl/lib/iOS`, where the real path is `openssl/iOS/lib`) and the
+  MAD Viewer target's five dead entries and duplicated `$(PROJECT_DIR)`.
+- **Cannot be done as written.** Adding `[sdk=macosx*]` arms and extending `SUPPORTED_PLATFORMS`
+  does not work from here, for two independent reasons.
+
+  *The setting cannot be flipped.* Every framework sits on `MADFoundation`, and
+  `MADFoundation/Source/MADApplication.h:13` imports `UIKit/UIApplication.h`. A macOS probe
+  fails at that import. Flipping `SUPPORTED_PLATFORMS` would claim a platform no target can
+  compile for.
+
+  *The arms could not link even so.* `LIBRARY_SEARCH_PATHS` is SDK-conditional;
+  `PBXFileReference.path` is not. Every vendored `.a` reference names an iOS slice directly —
+  `libarchive/iOS/lib/libarchive.a` (`arm64 arm64e`), `freetds/iOS-arm64/lib/libct.a`
+  (`arm64`), `openssl/iOS/lib/libssl.a` (`arm64 arm64e`) — so a `[sdk=macosx*]` search path
+  would still hand the linker an iOS file.
+
+  What this needs is the XCFramework in §2.3, not a search path.
+
+**Found on the way:** the MAD Viewer target has not built since `09e0e7b8d`. Its
+`CODE_SIGN_ENTITLEMENTS`, `GCC_PREFIX_HEADER` and `INFOPLIST_FILE` all pointed into the
+`MADStack/` directory that commit deleted. They now point at the viewer's own files under
+`Targets/MADViewer/`, which carries the build as far as the link step — where it fails on seven
+classes belonging to the Designer target. What the stand-alone viewer should be is a product
+decision; recorded, not patched.
+
+Both are in `BUGS.md` under *Build wiring*.
 
 **This removes references, not libraries.** The standing constraint holds: nothing on disk is
 deleted until the replacement builds every combination.
+
+`MAD Designer` builds; `MAD` 176 tests, 0 failures; `MADMySQL` 58, 0 failures.
 
 ### 2.2 The two real builds
 

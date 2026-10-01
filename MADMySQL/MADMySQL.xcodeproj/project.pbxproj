@@ -3267,7 +3267,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../Compressor/library/openssl/lib/iOS";
+				LIBRARY_SEARCH_PATHS = "";
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"$(SRCROOT)/../Compressor/library/libmysqlclient/iphoneos/Debug/",
 					"$(SRCROOT)/../Compressor/library/openssl/iOS/lib",
@@ -3344,7 +3344,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../Compressor/library/openssl/lib/iOS";
+				LIBRARY_SEARCH_PATHS = "";
 				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"$(SRCROOT)/../Compressor/library/libmysqlclient/iphoneos/Release/",
 					"$(SRCROOT)/../Compressor/library/openssl/iOS/lib",
