@@ -68,7 +68,7 @@ Once this is complete, the user can go to the MAD Viewer screen and use the refr
 	* `MADBarcodes`: This is used for the barcode element.  `MADBarcodes` is currently unused and unmaintained.
 	* `MADFeedback`: This is a framework to allow user feedback.  `MADFeedback` is currently unused and unmaintained.
 
-The core app is in a file named `Report`.  It includes a folder called `MADStack` which holds much of the source code.
+The core app is in `MADDesigner`.  Its source is in `MADDesigner/Source`, and its targets -- the app itself, the stand-alone viewer, and the unit and UI test bundles -- are in `MADDesigner/Targets`.
 
 The code base also includes a custom scripting language in a file called `Scrimpter`, which was going to be used for adding formula elements to the project, but it is currently not used.
 

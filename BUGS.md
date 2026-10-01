@@ -704,7 +704,7 @@ it skips rather than fails when no server is reachable.
 
 ## MAD Designer (app)
 
-Covered by the hosted `MADDesignerUnitTests` bundle (70 tests across
+Covered by the hosted `MADDesignerUnitTests` bundle (68 tests across
 `MADDesignerUnitTests.m`, `MADAppLogicTests.m`, and
 `MADAppOperationConditionTests.m`). The bundle is hosted by
 `MAD Designer.app` (TEST_HOST/BUNDLE_LOADER), so it reaches the app's own source
@@ -854,6 +854,13 @@ header search path.
 - **Note:** Found during testing; the method now honors the column argument.
   Kept here as a record of the kind of bug this effort is meant to catch.
 
+### `MADDesignerTestConnection.m` was an empty template that still ran
+- **Status:** Fixed
+- **Where:** `MADDesigner/Targets/MADDesignerUnitTests/MADDesignerTestConnection.m`
+- **Note:** An untouched Xcode template -- an empty `-testExample` and an empty
+  `-testPerformanceExample` -- contributing two no-op tests to every run. The file
+  and its four `project.pbxproj` entries have been removed.
+
 ---
 
 ## Test infrastructure (not product bugs)
@@ -889,9 +896,3 @@ header search path.
   send in parentheses, or hoisting it into a local first, fixes it. Worth knowing
   because the messages the app's conditions take are often two-argument sends.
 
-### `MADDesignerTestConnection.m` is an empty template that still runs
-- **Where:** `MADDesigner/Targets/MADDesignerUnitTests/MADDesignerTestConnection.m`
-- **Behavior:** An untouched Xcode template: an empty `-testExample` and an empty
-  `-testPerformanceExample`, contributing two no-op tests to every run. Left in
-  place rather than deleted; it is harmless but should either be filled in or
-  removed.

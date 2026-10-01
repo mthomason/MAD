@@ -34,8 +34,6 @@ The project defines four targets:
         `MADPageViewAttributes`, and `MADDateFromTimeFormatter`.
     *   `MADAppOperationConditionTests.m` -- the app's `MADOperationCondition` classes and
         `MADMutualExclusiveCondition`.
-    *   `MADDesignerTestConnection.m` -- still the untouched Xcode template; it contributes
-        two no-op tests.
 *   **UI tests**: `MADDesigner/Targets/MADDesignerUITests`.
 *   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MAD Designer (app)` section. The
     faults found in this test target itself are under `## Test infrastructure`.
