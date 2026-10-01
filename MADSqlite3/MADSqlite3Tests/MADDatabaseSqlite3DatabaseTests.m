@@ -250,6 +250,44 @@
 	[cache finalizeDatabase];
 }
 
+// An empty cache must report zero and empty; -isEmpty was inverted (returned YES
+// when there were rows) and -count read a garbage value off a done statement.
+- (void)testArrayCachingIsEmptyAndCountForEmpty {
+	MADArrayCaching *cache = [self makeArrayCaching];
+
+	XCTAssertTrue([cache isEmpty], @"a fresh cache is empty");
+	XCTAssertEqual([cache count], (NSUInteger)0);
+
+	[cache addObject:@"alpha"];
+	XCTAssertFalse([cache isEmpty], @"a cache with a row is not empty");
+	XCTAssertEqual([cache count], (NSUInteger)1);
+
+	[cache addObject:@"bravo"];
+	XCTAssertEqual([cache count], (NSUInteger)2);
+
+	XCTAssertTrue([cache removeAllObjects]);
+	XCTAssertTrue([cache isEmpty]);
+	XCTAssertEqual([cache count], (NSUInteger)0);
+
+	[cache finalizeDatabase];
+}
+
+// The render cache is read repeatedly; a repeated read must return the cached object
+// rather than unarchive a fresh copy each time, and the object must round-trip.
+- (void)testArrayCachingRepeatedReadsReturnTheCachedObject {
+	MADArrayCaching *cache = [self makeArrayCaching];
+	[cache addObject:@"alpha"];
+	[cache addObject:@"bravo"];
+
+	XCTAssertEqualObjects([cache objectAtIndex:1], @"bravo");
+	XCTAssertEqualObjects([cache objectAtIndex:0], @"alpha");
+	XCTAssertEqualObjects([cache objectAtIndex:1], @"bravo");
+	XCTAssertEqual([cache objectAtIndex:1], [cache objectAtIndex:1],
+				   @"a repeated read returns the same cached instance");
+
+	[cache finalizeDatabase];
+}
+
 #pragma mark - Enumerators
 
 - (MADDataColumn *)makeColumnWithIdentifier:(NSString *)identifier type:(MADDataType)type {

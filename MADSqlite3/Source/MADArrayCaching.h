@@ -13,6 +13,14 @@
 
 @protocol MADCacheProtocol;
 
+// The on-disk format of a .madac file: a single table named "ac" with an integer
+// primary key "ci" (the element index) and a blob "ck" (the serialised element).
+// Shared with MADArrayCachingEnumerator so the two stay on the same format.
+extern NSString * const MTArrayCachedTableName;
+extern NSString * const MTArrayCachedColumnKey;
+extern NSString * const MTArrayCachedColumnValue;
+extern NSString * const MTArrayCachedExtension;
+
 typedef NS_ENUM(int16_t, MADArrayCachingState) {
 	MADArrayCachingStateUnknown = 0,
 	MADArrayCachingStateInital = 2,
@@ -38,6 +46,7 @@ static inline  NSString * _Nonnull NSStringFromMADArrayCachingState(MADArrayCach
 	@property (nonatomic, readonly, copy, nonnull) NSString * identifier;
 	@property (readonly) NSUInteger count;
 	@property (nonatomic, readonly, assign) MADArrayCachingState state;
+	@property (readonly) BOOL isEmpty;
 
 	- (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier
 								 cachedDelegate:(nonnull id <MADCacheProtocol>)cachedDelegate

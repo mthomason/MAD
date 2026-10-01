@@ -9,12 +9,8 @@
 #import "MADArrayCachingEnumerator.h"
 #import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
+#import <MADSqlite3/MADArrayCaching.h>
 #import "MADDatabaseConnectionSqlite3.h"
-
-NSString * const MTArrayCachedTableName = @"ac";
-NSString * const MTArrayCachedColumnKey = @"ci";
-NSString * const MTArrayCachedColumnValue = @"ck";
-NSString * const MTArrayCachedExtension = @"madac";
 
 @implementation MADArrayCachingEnumerator {
 	sqlite3_stmt *_statementEnumer;

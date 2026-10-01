@@ -705,6 +705,28 @@ wrong answer.
   `SQLITE_ENABLE_JSON1` was dropped as a no-op on 3.49, JSON having been part of the
   core since 3.38, and `-DNOMINMAX` as a Visual C++ artifact.
 
+### `MADArrayCaching -isEmpty` and `-count` were wrong for an empty cache
+- **Status:** Fixed
+- **Where:** `MADSqlite3/Source/MADArrayCaching.m`
+- **Behavior:** `-isEmpty` returned `_numberOfRows > 0` — YES when the cache had rows,
+  the inverse of its name. `-count` computed `max(ci) + 1`, but on an empty table the
+  `SELECT ci ORDER BY ci DESC LIMIT 1` returns `SQLITE_DONE` and
+  `sqlite3_column_int64` on a done statement reads garbage, so an empty cache reported
+  1 row instead of 0. Both are the render cache (`MADReportFormatter`'s `.madac`
+  stores), where `count` is read during layout.
+- **Why it mattered:** `-isEmpty` was dead code (no caller), a latent trap. `-count`
+  only misbehaved at the empty/edge case, which the normal add-then-read flow never
+  hit — but a fresh cache asked for its count before any add would have reported 1.
+- **Now:** `-isEmpty` is `_numberOfRows == 0` and exposed as a readonly property;
+  `-count` returns 0 on `SQLITE_DONE`. The dead `readDataAtIndex:` / `writeData:`
+  pair (raw-`NSData` leftovers with a type bug in `readDataAtIndex:`) was deleted, and
+  the duplicated `MTArrayCached*` constants were consolidated into
+  `MADArrayCaching.h`. The hot `objectAtIndex:` also gained a per-element memory cache
+  so repeated reads do not re-run the SQLite round-trip and the unarchive.
+- **Test:** `MADSqlite3Tests MADDatabaseSqlite3DatabaseTests
+  testArrayCachingIsEmptyAndCountForEmpty` and
+  `testArrayCachingRepeatedReadsReturnTheCachedObject`.
+
 ---
 
 ## MADMySQL

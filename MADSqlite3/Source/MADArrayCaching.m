@@ -26,13 +26,14 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSKeyedArchiver.h>
+#import <Foundation/NSNull.h>
 #import <os/log.h>
 
 static os_log_t caching_log;
-static NSString * const MTArrayCachedTableName = @"ac";
-static NSString * const MTArrayCachedColumnKey = @"ci";
-static NSString * const MTArrayCachedColumnValue = @"ck";
-static NSString * const MTArrayCachedExtension = @"madac";
+NSString * const MTArrayCachedTableName = @"ac";
+NSString * const MTArrayCachedColumnKey = @"ci";
+NSString * const MTArrayCachedColumnValue = @"ck";
+NSString * const MTArrayCachedExtension = @"madac";
 
 typedef NS_ENUM(short, MADObjectInitalized) {
 	MADObjectInitalizedYes = 2,
@@ -70,6 +71,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	sqlite3_stmt *_statementInsert;
 	sqlite3_stmt *_statementSelect;
 	sqlite3_stmt *_statementCount;
+	// Elements unarchived on first read, keyed by index, so a repeated read does not
+	// pay the SQLite round-trip and the unarchive again.  NSNull marks "read, but nil".
+	NSMutableDictionary <NSNumber *, id> *_cachedElements;
 }
 
 @dynamic url;
@@ -126,6 +130,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 		
 		_identifier = [identifier copy];
 		_cachedDelegate = cachedDelegate;
+		_cachedElements = [NSMutableDictionary dictionary];
 	}
 	return self;
 }
@@ -321,82 +326,41 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	++_numberOfRows;
 }
 
-- (void)writeData:(NSData *)data {
-	long long numberOfRows = _numberOfRows;
-	sqlite3_stmt *statementInsert = _statementInsert;
-	NSData *dataToWrite = data;
-	dispatch_async(self.archivingQueue, ^{
-		int bind_result = sqlite3_bind_int(statementInsert, 1, (int)numberOfRows);
-		NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
-		bind_result = sqlite3_bind_blob(statementInsert, 2, dataToWrite.bytes, (int)dataToWrite.length, SQLITE_STATIC);
-		NSAssert(bind_result == SQLITE_OK, @"Error: '%s'.", __PRETTY_FUNCTION__);
-		bind_result = sqlite3_step(statementInsert);
-		NSAssert((bind_result == SQLITE_OK) || (bind_result == SQLITE_ROW) || (bind_result == SQLITE_DONE), @"Error: '%s'.", __PRETTY_FUNCTION__);
-		if (bind_result == SQLITE_DONE) {
-			sqlite3_reset(statementInsert);
-			sqlite3_clear_bindings(statementInsert);
-		}
-	});
-	_hasNumberOfRows = MADObjectInitalizedYes;
-	_numberOfRows++;
-}
-
-- (NSData *)readDataAtIndex:(NSUInteger)index {
-	if (self.lastObjectSelected != nil && self.lastObjectSelected.index == index) {
-		return self.lastObjectSelected.object;
-	}
-
-	__block NSData *result = nil;
-	sqlite3_stmt *statementSelect = _statementSelect;
-	dispatch_sync(self.unarchiveQueue, ^{
-		sqlite3_bind_int(statementSelect, 1, (int)index);
-		
-		if (sqlite3_step(statementSelect) == SQLITE_ROW) {
-			const void *blob = sqlite3_column_blob(statementSelect, 0);
-			int bytes = sqlite3_column_bytes(statementSelect, 0);
-			result = [[NSData alloc] initWithBytes: blob
-											length: (NSUInteger)bytes];
-			sqlite3_reset(statementSelect);
-			sqlite3_clear_bindings(statementSelect);
-		}
-	});
-	
-	return result;
-}
-
 - (id)objectAtIndexedSubscript:(NSUInteger)index { return [self objectAtIndex: index]; }
 
 - (id)objectAtIndex:(NSUInteger)index {
 
-	//If they are asking for the last one, short circut
-	if (self.lastObjectSelected != nil) {
-		if (self.lastObjectSelected.index == index) {
-			return self.lastObjectSelected.object;
-		}
+	// The render cache is read many times a second during layout, and the disk read
+	// plus the unarchive dominate each access.  Serve every element from memory after
+	// its first read; NSNull marks an element that was read and came back nil.
+	NSNumber *key = @(index);
+	id cached = _cachedElements[key];
+	if (cached != nil) {
+		return cached == (id)[NSNull null] ? nil : cached;
 	}
 
 	__block id result = nil;
 	sqlite3_stmt *statementSelect = _statementSelect;
 	dispatch_sync(self.unarchiveQueue, ^{
-		//@autoreleasepool {
-			sqlite3_bind_int(statementSelect, 1, (int)index);
-			
-			if (sqlite3_step(statementSelect) == SQLITE_ROW) {
-				const void *blob = sqlite3_column_blob(statementSelect, 0);
-				int bytes = sqlite3_column_bytes(statementSelect, 0);
-				NSData *queryResult = [[NSData alloc] initWithBytes: blob
-															 length: (NSUInteger)bytes];
-				NSError *error = nil;
-				result = [NSKeyedUnarchiver unarchivedObjectOfClasses:self.types fromData:queryResult error:&error];
-				if (error != nil) {
-					os_log_error(caching_log, "NSKeyedArchiver Error: %@", error.localizedDescription);
-				}
+		sqlite3_bind_int(statementSelect, 1, (int)index);
+
+		if (sqlite3_step(statementSelect) == SQLITE_ROW) {
+			const void *blob = sqlite3_column_blob(statementSelect, 0);
+			int bytes = sqlite3_column_bytes(statementSelect, 0);
+			NSData *queryResult = [[NSData alloc] initWithBytes: blob
+														 length: (NSUInteger)bytes];
+			NSError *error = nil;
+			result = [NSKeyedUnarchiver unarchivedObjectOfClasses:self.types fromData:queryResult error:&error];
+			if (error != nil) {
+				os_log_error(caching_log, "NSKeyedArchiver Error: %@", error.localizedDescription);
 			}
-			sqlite3_clear_bindings(statementSelect);
-			sqlite3_reset(statementSelect);
-		//}
+		}
+		sqlite3_clear_bindings(statementSelect);
+		sqlite3_reset(statementSelect);
 	});
-	
+
+	_cachedElements[key] = result ?: (id)[NSNull null];
+
 	MADIndex *idx = [[MADIndex alloc] initWithIndex:index andObject:result];
 	self.lastObjectSelected = idx;
 
@@ -412,6 +376,7 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	_lastObjectSelected = nil;
 	_numberOfRows = 0;
 	_hasNumberOfRows = MADObjectInitalizedNotSets;
+	[_cachedElements removeAllObjects];
 	MADQuery *query = [[MADQueryCacheDeleteAllFromTable alloc] initWithTableName:MTArrayCachedTableName];
 	NSError *error = nil;
 	BOOL result = [self.database executeQuery:query withError:&error];
@@ -425,11 +390,15 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	if (_hasNumberOfRows != MADObjectInitalizedYes) {
 		sqlite_int64 count = 0;
 		sqlite3_stmt *stmt_count = _statementCount;
-		
+
 		int stepResult = sqlite3_step(stmt_count);
-		if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
+		if (stepResult == SQLITE_ROW) {
+			// ci is the element index (0-based), so the count is the largest index plus
+			// one.  An empty table returns SQLITE_DONE and has a count of zero.
 			count = sqlite3_column_int64(stmt_count, 0) + 1;
 			sqlite3_reset(stmt_count);
+		} else {
+			count = 0;
 		}
 		_hasNumberOfRows = MADObjectInitalizedYes;
 		_numberOfRows = count;
@@ -437,6 +406,6 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	return (NSUInteger)_numberOfRows;
 }
 
-- (BOOL)isEmpty { return _numberOfRows > 0; }
+- (BOOL)isEmpty { return _numberOfRows == 0; }
 
 @end

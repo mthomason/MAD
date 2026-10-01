@@ -14,11 +14,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString * const MTArrayCachedTableName;
-extern NSString * const MTArrayCachedColumnKey;
-extern NSString * const MTArrayCachedColumnValue;
-extern NSString * const MTArrayCachedExtension;
-
 @interface MADArrayCachingEnumerator : NSEnumerator
 <NSFastEnumeration>
 

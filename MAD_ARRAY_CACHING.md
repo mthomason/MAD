@@ -55,8 +55,9 @@ Then: `initializeDatabase` (open, create the table if absent), `addObject:` (app
   — an O(1) index probe, not a scan.
 - **Bulk inserts in a transaction.** `beginBulkInserts` / `endBulkInserts` wrap the appends, so
   a full render is one commit rather than one fsync per page.
-- **A last-read cache.** `lastObjectSelected` remembers the most recently read element, so the
-  common `nextObject` / adjacent-page access does not re-query.
+- **A per-element memory cache.** `objectAtIndex:` caches every element it unarchives (keyed by
+  index), so a repeated read — the renderer's normal pattern — is an `NSDictionary` lookup with
+  no SQLite round-trip and no unarchive. `lastObjectSelected` remains for `nextObject`.
 - **Two serial queues** (`archivingQueue`, `unarchiveQueue`) keep the single SQLite connection
   to one writer and one reader.
 
@@ -66,27 +67,34 @@ work the formatter would do anyway.
 
 ## Issues found
 
+Items 1–4 fixed 2026-10-01; items 5–6 remain open and are recorded rather than fixed (the
+enumerator is dead code, and the concurrency footgun is latent while the formatter is
+single-threaded).
+
 1. **`-isEmpty` is inverted.** `MADArrayCaching.m:440` is
    `return _numberOfRows > 0;` — it returns YES when the cache *has* rows. It is dead code
-   (no caller), so it is a latent trap, not a live bug.
+   (no caller), so it is a latent trap, not a live bug. **Fixed**, and exposed as a readonly
+   property.
 2. **`-count` returns 1 for an empty cache.** `MADArrayCaching.m:424-438` computes count as
    `max(ci) + 1`, but when the table is empty the `SELECT … ORDER BY ci DESC LIMIT 1` returns
    `SQLITE_DONE`, and `sqlite3_column_int64` on a done statement reads garbage; the result is 1
-   instead of 0.
+   instead of 0. **Fixed.**
 3. **`-readDataAtIndex:` and `-writeData:` are dead.** Not in the header, no callers. They are a
    leftover raw-`NSData` path superseded by `addObject:`. `readDataAtIndex:` also mixes types:
-   on a `lastObjectSelected` hit it returns the *unarchived* object, not `NSData`.
+   on a `lastObjectSelected` hit it returns the *unarchived* object, not `NSData`. **Deleted.**
 4. **The table/column constants are duplicated.** `MTArrayCachedTableName` / `…ColumnKey` /
    `…ColumnValue` / `…Extension` are declared `static` in `MADArrayCaching.m` and re-declared
-   global in `MADArrayCachingEnumerator.m`. One header should own them.
+   global in `MADArrayCachingEnumerator.m`. One header should own them. **Fixed** — the
+   `extern` declarations now live in `MADArrayCaching.h` with the definitions in
+   `MADArrayCaching.m`.
 5. **`MADArrayCachingEnumerator` is on the old unarchiver.** It calls the deprecated
    `unarchiveObjectWithData:` (non-secure) where `MADArrayCaching` uses
    `unarchivedObjectOfClasses:`. And its `nextObject` resets the statement after every step, so
    manual iteration never advances (fast enumeration via `countByEnumeratingWithState:` is
-   unaffected).
-6. **`_numberOfRows` is read outside the queue.** `addObject:` / `writeData:` read `_numberOfRows`
-   before the `dispatch_*`, so concurrent appends would collide on an index. The formatter calls
-   them single-threaded today, so it is latent.
+   unaffected). **Still open** — the class has no callers.
+6. **`_numberOfRows` is read outside the queue.** `addObject:` reads `_numberOfRows` before the
+   `dispatch_*`, so concurrent appends would collide on an index. The formatter calls them
+   single-threaded today, so it is latent. **Still open.**
 
 ## Suggested improvements
 
