@@ -4,12 +4,31 @@
 `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
 **Branch:** `refactor/mad-database-decouple`
 **Date:** 2026-10-01
-**Verification:** `xcodebuild test` — all 11 schemes, 807 tests, 0 failures; no warnings from any
+**Verification:** `xcodebuild test` — all 11 schemes, 809 tests, 0 failures; no warnings from any
 file in scope (the two `-Warc-repeated-use-of-weak` warnings in `MADDatabaseMySQL.m` are
-pre-existing and untouched). (798 at Revision 2; 804 at Revision 3.)
+pre-existing and untouched). (798 at Revision 2; 804 at Revision 3; 807 at Revision 4.)
 
 All `file:line` references below were read first-hand during this analysis, not inferred.
 
+> **Revision 5 — 2026-10-01.** Phases 3 and 5 are closed and Phase 1 step 7 is proven.
+> `-dropTable`, `-dropTableName:`, `-deleteAll` and `-vacuumCacheDb` now leave `rowCounter`
+> describing the file (§2.5), which was the whole of step 10/11; the three constants at risk
+> are covered by four new tests. Driving the sqlite row loop with a bare `<MADDataTableWriting>`
+> conformer — no `MADDataTable` behind it, no `.maddb` — is step 7 and is now a test
+> (`MADWritePortRecorder`). Step 14 is done: `MADDataTableLocation` is deleted. Steps 13 and 15
+> are evaluated rather than done, with reasons, in their entries below.
+>
+> Two live defects fell out of writing those tests, both now fixed. `-deleteAll` handed a
+> *string* to `-[MADQueryCacheDeleteAllFromTable initWithObject:]`, which subscripts it as the
+> parameters dictionary and raises on the first row — the method has no callers, which is why
+> nothing had ever hit it; it now uses `-initWithTableName:`. And `MTTableController` read
+> `datatable.count` as a page cursor on its failure path, where the table still holds the
+> previous page, so a failed fetch reported `hasMore = YES` and retried forever.
+>
+> The counter comments shifted `MADDataTableFast.m` by 13 lines from `-deleteAll` on, so every
+> `file:line` reference past that point was re-derived rather than adjusted; `MTTableController.m`
+> moved too, and its references were re-derived with it.
+>
 > **Revision 4 — 2026-10-01.** The MySQL obstacle of Revision 3 is gone. The column metadata
 > that `MysqlFetch+DataTable.m` reads mid-fetch is now declared by `<MADDataTableWriting>`
 > itself, so all three drivers — including `MADDatabaseMySQL`, `MADDatabase.m` and the
@@ -61,7 +80,7 @@ MADFoundation
         │       In-memory. Rows live in per-column MADDataColumn arrays plus a
         │       `sortIndex` NSMutableArray of row NSDictionaries.
         │
-        └── MADDataTableFast               MADSqlite3/Source/MADDataTableFast.m (1267 ln)
+        └── MADDataTableFast               MADSqlite3/Source/MADDataTableFast.m (1368 ln)
                 sqlite3-backed. Rows live in a `.maddb` file; the object holds two
                 MADDatabaseSqlite3 handles (one for writes, one for reads).
 
@@ -70,8 +89,9 @@ MADSqlite3 (private — NOT exported from the framework)
 └── MADDataTableSingleColumnEnumerator    149 ln — same, yields a single column (row-ids)
 
 MAD
-├── MADDataTable+Constructor              the ONLY place that maps type -> concrete class
-└── MADDataTableLocation                  NSCoding value object (row, column) — see §3.7
+└── MADDataTable+Constructor              the ONLY place that maps type -> concrete class
+                                            (`MADDataTableLocation`, the other class here at
+                                            Revision 4, was deleted — see §3.7)
 ```
 
 Verified export surface (from built `.framework/Headers`):
@@ -170,7 +190,7 @@ Three distinct read styles are in production use:
    `MADMySQL` uses `objectAtRow:i column:0` inside O(n) loops
    (`MADDatabaseMySQL.m:88-92, 118-122, 150-154, 187-189`) to read `SHOW TABLES` results.
    `MADQuerySampleDataTable.m:126` / `MADQuerySampleDataTableRange.m:131` call `objectAtRow:0`
-   once to read a width row. `MTTableController.m:281, 284, 389` uses `objectAtRow:` for paging.
+   once to read a width row. `MTTableController.m:281, 284, 393` uses `objectAtRow:` for paging.
 
 2. **Enumeration** — `-enumeratorForKeyObjectsSorted`.
    `MADocument.m:865-867` returns this as `enumeratorForReportData`, consumed by
@@ -178,7 +198,7 @@ Three distinct read styles are in production use:
 
 3. **Counts** — `-rowCounter` / `-count` / `-numberOfRows`.
    `MADocument.m:197` (`numberOfResults`), `MTTableController.m:249` (table size) and
-   `:375, :395, :440, :445` (page-cursor arithmetic).
+   `:377, :399, :449, :455` (page-cursor arithmetic).
 
 `MADReportFormatter` is the most forgiving consumer and the one that constrains the
 refactor least. Note `MADReportFormatter.m:463-472`:
@@ -212,11 +232,11 @@ extensions. `MADDataTableFast` has exactly one non-object ivar:
 }
 ```
 
-It is finalized in `-dealloc` (`:163-165`) and in `-endBulkInsert` (`:1321-1326`). The pattern
+It is finalized in `-dealloc` (`:163-165`) and in `-endBulkInsert` (`:1334-1339`). The pattern
 is correct but *was* fragile: `-endBulkInsert` used to null the statement **before** taking the
 barrier, so the teardown was outside the only window in which no insert is in flight.
 
-**Fixed (Revision 4).** The teardown now runs inside the barrier, at `:1324-1325`.
+**Fixed (Revision 4).** The teardown now runs inside the barrier, at `:1337-1338`.
 
 ### 2.2 Two sqlite connections over one file
 
@@ -299,8 +319,8 @@ I grepped the entire family for `dispatch_sync`, `dispatch_async`, `@synchronize
 `queueBulkAdd`:
 
 * Created three separate times — `initWithId:fromCache:` (`:186`), `initWithCoder:` (`:202`),
-  and `beginBulkInsert` (`:1309`) — each `dispatch_queue_create(..., SERIAL)`.
-* Used in exactly **two** places: `-endBulkInsert` (`:1321`) wraps the delegate call in
+  and `beginBulkInsert` (`:1322`) — each `dispatch_queue_create(..., SERIAL)`.
+* Used in exactly **two** places: `-endBulkInsert` (`:1334`) wraps the delegate call in
   `dispatch_barrier_sync`, and (since Revision 4) `-addRow:error:` enters it with
   `dispatch_sync`.
 * Before Revision 4 it was **never** used to serialize `-addRow:error:`.
@@ -330,9 +350,9 @@ pair per file) is untouched.
 ### 2.5 `rowCounter` is an independent counter, not a derived value
 
 `-insertRow:error:` increments `rowCounter` (`:532`) and **never consults sqlite**.
-`-numberOfRows` / `-count` return it directly (`:1209` / `:1203`), and `-removeAllObjects` zeroes it
-(`:683`). But `-dropTable` (`:796`), `-dropTableName:` (`:800`), `-deleteAll` (`:809`) and
-`-vacuumCacheDb` (`:789`) do **not** touch it.
+`-numberOfRows` / `-count` return it directly (`:1222` / `:1216`), and `-removeAllObjects` zeroes
+it (`:683`). But `-dropTable` (`:799`), `-dropTableName:` (`:804`), `-deleteAll` (`:818`) and
+`-vacuumCacheDb` (`:789`) did **not** touch it until Revision 5.
 
 The two sources of truth can therefore diverge:
 
@@ -341,40 +361,49 @@ The two sources of truth can therefore diverge:
   (`MADDataTable.m:305-306`) while the rows come from the sqlite file — they are rehydrated by
   two unrelated mechanisms.
 
-**Partly fixed (Revision 4).** The reload half is closed: `-loadWithPlist:` now ends with
+**Fixed (Revision 4) — the reload half.** `-loadWithPlist:` now ends with
 `self.rowCounter = [self recountRows];` (`:313`), where `-recountRows` (`:317-338`) asks the
 cache file for `SELECT COUNT(*)` and falls back to the plist's value only when the table does
 not exist yet. A counter inflated by the in-memory path can no longer survive a reload.
+`testFastTableReloadRecountsRowsFromCacheFile` pins that by loading a plist whose counter says
+99 over a file holding 3 rows.
 
-What is **not** fixed: the four methods above still leave a stale counter behind for the
-in-memory lifetime of the table, and `-recountRows` returns the counter unchanged when the
-sqlite handle is unavailable. Those are step 11 of the plan and remain open.
+**Fixed (Revision 5) — the in-memory half, which was step 10/11.** `-dropTable` (`:799`) and
+`-dropTableName:` (`:804`) now zero the counter, `-deleteAll` (`:818`) zeroes it, and
+`-vacuumCacheDb` (`:789`) deliberately does not, because VACUUM keeps every row — the source
+carries a comment saying so, since "why does this one *not* reset it" is exactly the question
+the next reader will have. `-dropTableName:` takes an arbitrary name, so it zeroes the counter
+only when the table that went away is this one; dropping a foreign table must not touch this
+count. `-numberOfRows` (`:1222`) and `-count` (`:1216`) still return the ivar rather than
+querying the file, which is the point — `-recountRows` is the reload path's check, not a
+per-read cost.
+
+`-removeAllObjects` (`:674`) hid the whole hazard, and still does: it is the only caller of all
+four, and it zeroes the counter itself (`:683`). That is exactly why this was worth closing
+rather than leaving — the hazard was one caller away from being live, `-count` is a page cursor
+to the app (§4.3), and the four private methods are one `git log -S` from being called from
+somewhere new. The Revision-4 note here called the drift "real in the code, but no caller can
+reach it today"; the caller audit still holds — `-deleteAll` has **no callers anywhere in the
+repository**, and `-dropTable` is reached only from `-removeAllObjects` — but the counter is now
+correct on every path rather than only because its one caller happens to tidy up afterwards.
+Four tests in `MADDataTableRegressionTests.m` drive each of the four directly.
 
 `MADDataTableVirtual` has the same shape (`:179`, `:193`, `:225`) but its counter and its
 `sortIndex` are mutated together, so it is consistent by construction.
 
-This is the state most at risk under a class-cluster refactor: `MTTableController.m:375, :395,
-:440, :445` treats `datatable.count` as a *page cursor* (`hasMore = (count == limit)`), so a
-counter that drifts from reality would corrupt paging.
+This is the state most at risk under a class-cluster refactor: `MTTableController.m` reads
+`datatable.count` at `:377` and `:399`, and derives `hasMore = (count == limit)` from it at
+`:455`, so a counter that drifts from reality would corrupt paging. Revision 5 makes that
+derivation total as well — an empty page no longer wraps `offset + count - 1` to `NSUIntegerMax`
+(`:380`, `:402`), and the failure path returns `completion(NO)` (`:449`) rather than reading a
+count that still describes the *previous* page.
 
-**Corrected:** the drift is real in the code, but no caller can reach it today. `-deleteAll`
-(`:809`) has **no callers anywhere in the repository**, and `-dropTable` (`:796`) is reached
-only from `-removeAllObjects` (`:674`), which zeroes `rowCounter` nine lines later (`:683`).
-No current path leaves the counter out of step with the file, so this is a hazard for a
-future caller rather than a live defect. The `-loadFromCacheWithUrl:` divergence, however,
-is real: the counter is rehydrated from the plist while the rows come from sqlite. Left for
-Phase 3, where the counter should be invalidated against the file rather than trusted.
-
-**Partly fixed (Revision 4).** The rehydration half is done: `-loadWithPlist:` now ends with
-`self.rowCounter = [self recountRows]`, and the new private `-recountRows` runs
-`SELECT COUNT(*) FROM t<tag>` against the select connection, falling back to the stored counter
-when the file cannot answer (no table yet, no handle). The counter and the rows can no longer
-disagree *after a reload*. `-numberOfRows` / `-count` still return the counter directly and the
-paths that never touch it (`-dropTable:`, `-deleteAll`, `-vacuumCacheDb`) are unchanged, so a
-counter that drifts *while populated* is still possible; that is the remainder of step 10/11,
-deliberately left because §4.3 ranks `MTTableController`'s paging the highest-risk consumer of
-`count`. `testFastTableReloadRecountsRowsFromCacheFile` pins the new behaviour by loading a
-plist whose counter says 99 over a file holding 3 rows.
+Writing those tests turned up a defect in `-deleteAll` that had nothing to do with the counter:
+it passed an `NSString` to `-[MADQueryCacheDeleteAllFromTable initWithObject:]`, which subscripts
+its argument as the parameters dictionary, so it raised `unrecognized selector` on the first
+row. `-initWithTableName:` is the initializer that takes a name and is the one
+`MADDatabaseSqlite3 -beginBulkInsert` already used. No caller ever hit it, because there is no
+caller.
 
 ### 2.6 Two unrelated persistence mechanisms
 
@@ -389,6 +418,32 @@ serializes *shape*, not *content*. `MADocument.m:413-414` derives `urlDataTableC
 writes `<tag>.maddb` (`:340-343`). Two file extensions, two formats, two owners, one logical
 table.
 
+**Evaluated (Revision 5) — step 15, which asked for a reconciliation. The framing is wrong, and
+that is the finding.** "The base plist is metadata-only" is true of the base class and false of
+the family: each subclass extends `-copyPlist` / `-loadWithPlist:` with exactly one extra key,
+and that key *is* its storage.
+
+| Class | Storage | Plist key that carries it |
+|---|---|---|
+| `MADDataTable` | none (abstract) | `name`, `columnKeys`, `columns`, `rowCounter` |
+| `MADDataTableVirtual` | `sortIndex`, an array of row dictionaries (`MADDataTableVirtual.m:106-109`, `:89-104`) | `keySortIndex` — the rows themselves |
+| `MADDataTableFast` | the `.maddb` file | `keyUrlFastCache`, `keyTag`, … — a *locator* for the rows |
+
+So rows already round-trip through the plist where the plist is the storage, and cannot where
+the storage is a sqlite file. Neither rename ("call it metadata") nor the alternative ("put rows
+in it") is right for the family as a whole; the base class is the metadata *both* subclasses
+share, and the mechanism is per-subclass by design. The two extensions are not a conflict
+either: `MADocument` writes `<tag>.mdcache` (the plist) next to `<tag>.maddb` (the rows), and
+`-loadFromCacheWithUrl:` reads the former to find the latter — provided the tag agrees, which
+it does, because `-filename` (`MADocument.m:1397-1399`) is `fileURL.lastPathComponent`
+`stringByDeletingPathExtension`, the same string init hashes for the tag.
+
+What is worth doing, and is not done here, is documentation rather than restructuring: name the
+two files in `MADocument`'s cache directory for what they are, and say in `MADDataTable.h` that
+`-copyPlist` returns the shared metadata and that a subclass with its own storage must extend
+it. That is a comment change with no behaviour to preserve, so it belongs in a docs pass, not
+here.
+
 ### 2.7 Enumerator lifetime
 
 `MADDataTableObjectEnumerator` holds its own `MADDatabaseSqlite3` + connection + prepared
@@ -400,7 +455,29 @@ Therefore:
 * Any table mutation that drops or rebuilds the table (`-removeAllObjects`, `-dropTable`)
   invalidates the live statement in an outstanding enumerator. Nothing guards this.
 * Each `-objectEnumerator` / `-enumeratorFor...` call allocates a **fresh connection** to the
-  same file (`:1126`, `:1145`, `:1173`, `:1189`). Enumerating twice opens sqlite twice.
+  same file (`:1139`, `:1158`, `:1186`, `:1202`). Enumerating twice opens sqlite twice.
+
+**Evaluated (Revision 5) — step 13, which asked for one shared connection pair per file. Not
+done, and the reason is in the lifetime, not the count.** The insert connection cannot be shared
+at all: `MADDatabaseSqlite3 -endBulkInsert` ends by closing it and nulling `_database`
+(`:794-795`), which is why `MADDataTableFast -removeAllObjects` reopens before it drops anything
+and why the four private mutations assert when driven directly (they are wrong to be driven
+directly — see the Revision 5 tests, which reopen first for exactly this reason). A shared
+"pair" would therefore have to be a shared *read* connection plus a per-cycle write connection,
+which is one handle saved, not two.
+
+And the saving is smaller than it looks: every connection here opens
+`SQLITE_OPEN_SHAREDCACHE` (`MADDatabaseSqlite3.m:220`), so the enumerators already share one
+page cache and one set of locks across the file. What each enumeration actually costs is an
+`sqlite3*` and a file descriptor — real, but not the duplicated-cache cost the step implies.
+
+Against that, sharing the read connection would *lose* something. Enumerators are held for the
+length of a report render (`MADReportFormatter.m:449-502`), and `-removeAllObjects` drops and
+rebuilds the table underneath them; today an outstanding enumerator owns its statement and its
+handle, so the two interfere only through the file. Handing them one shared handle would put
+that interaction inside a single connection, on a class whose reads carry no lock of their own.
+The scenario to design for is the one §2.7 already flags — a live enumerator across a table
+rebuild — and sharing connections makes it worse, not better. Left as-is deliberately.
 
 ---
 
@@ -419,16 +496,16 @@ see §4.2). The base class implements 18 of them and stubs 12:
 | `-addRowWithDataForFieldKeys:` | **assert** `:374` | override `:197` | override `:614` |
 | `-sortUsingDescriptors:` | **assert** `:378` | override `:208` | override `:634` |
 | `-removeAllObjects` | **assert** `:382` | override `:225` | override `:674` |
-| `-objectAtRow:column:` | **assert** `:386` | override `:159` | override `:821` |
-| `-objectAtRow:` | **assert** `:391` | override `:151` | override `:835` |
-| `-columnsEnumerator` | **assert** `:396` | override `:149` | override `:1110` |
-| `-objectEnumerator` | **assert** `:401` | override `:148` | override `:1114` |
-| `-beginBulkInsert` / `-endBulkInsert` | no-op `:408-409` | no-op `:236-238` | override `:1298`/`:1317` |
-| `-allObjects` | `return @[]` `:414-417` | override `:118` | override `:1196` |
-| `-objectAtRow:limit:` | `return @[]` `:419` | override `:220` | override `:1073` |
-| `-count` / `-numberOfColumns` / `-numberOfRows` | `0` `:420-422` | override `:122`, `:214`, `:216` | override `:1203`, `:1207`, `:1209` |
+| `-objectAtRow:column:` | **assert** `:386` | override `:159` | override `:834` |
+| `-objectAtRow:` | **assert** `:391` | override `:151` | override `:848` |
+| `-columnsEnumerator` | **assert** `:396` | override `:149` | override `:1123` |
+| `-objectEnumerator` | **assert** `:401` | override `:148` | override `:1127` |
+| `-beginBulkInsert` / `-endBulkInsert` | no-op `:408-409` | no-op `:236-238` | override `:1311`/`:1330` |
+| `-allObjects` | `return @[]` `:414-417` | override `:118` | override `:1209` |
+| `-objectAtRow:limit:` | `return @[]` `:419` | override `:220` | override `:1086` |
+| `-count` / `-numberOfColumns` / `-numberOfRows` | `0` `:420-422` | override `:122`, `:214`, `:216` | override `:1216`, `:1220`, `:1222` |
 | `-countByEnumeratingWithState:...` | `0` `:423-427` | override `:140` | inherits (0) |
-| `-enumeratorForAllObjectsSorted*`, `-objectsForGroupKeys:`, `-dataForRow:error:`, `-enumeratorForKeyObjectsSorted` | `NSAssert(NO, @"Not implemented")` `:327-350` | **also** `NSAssert(NO)` `:31-54` | implemented `:1021`, `:1135`, `:1159`, `:1180`; `-dataForRow:error:` `:928` |
+| `-enumeratorForAllObjectsSorted*`, `-objectsForGroupKeys:`, `-dataForRow:error:`, `-enumeratorForKeyObjectsSorted` | `NSAssert(NO, @"Not implemented")` `:327-350` | **also** `NSAssert(NO)` `:31-54` | implemented `:1034`, `:1148`, `:1172`, `:1193`; `-dataForRow:error:` `:941` |
 
 ### 3.2 Leak 1 — the base class cannot express "abstract"
 
@@ -480,7 +557,7 @@ are in this regression suite, and `MADDataTableRegressionTests.m` deliberately p
 `nil` in `testFastTableBulkInsertAllObjectsIsUnimplemented`. So the annotation was a trap
 laid for a future caller, not a live crash.
 
-**Fixed:** `MADDataTableFast -allObjects` (`:1196-1201`) now returns every row via
+**Fixed:** `MADDataTableFast -allObjects` (`:1209-1214`) now returns every row via
 `-objectAtRow:0 limit:numberOfRows`, and `@[]` for a table that has no columns, matching the
 `nonnull` declaration and `MADDataTableVirtual`'s existing behaviour (`:118-120`). The test
 that pinned the `nil` was replaced by two that assert the real contract.
@@ -499,7 +576,7 @@ The two implementations disagree on both the meaning of `row` and the storage co
 ```
 
 ```objc
-// MADDataTableFast.m:821-833 — reads the row dictionary, physical order
+// MADDataTableFast.m:834-846 — reads the row dictionary, physical order
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
 	NSDictionary *objForRow = [self objectAtRow:row];
 	if (objForRow == nil || column >= self.columnKeys.count) return nil;
@@ -530,7 +607,7 @@ false path. The corrected analysis follows.
 and the base implements it as `NSAssert(NO, @"Not implemented: %s")` + `return nil`
 (`MADDataTable.m:342-345`).
 
-* **`MADDataTableFast` does implement it**, at `MADDataTableFast.m:928-1002`:
+* **`MADDataTableFast` does implement it**, at `MADDataTableFast.m:941-1015`:
 
   ```objc
   - (NSDictionary <NSString *, MADResult *> *)dataForRow:(NSUInteger)cacheId
@@ -539,7 +616,7 @@ and the base implements it as `NSAssert(NO, @"Not implemented: %s")` + `return n
 
   It is a two-line signature, which is what the earlier revision misread: the selector wraps
   onto a second line, and the second line was taken for a separate `-dataForRow:column:`
-  overload. (The real `-dataForRow:column:error:` is a different method at `:853-919`.) The
+  overload. (The real `-dataForRow:column:error:` is a different method at `:866-932`.) The
   implementation is real, and the regression suite already covers it --
   `MADDataTableRegressionTests.m` `testFastTableDataForRowReturnsValues` and
   `testFastTableDataForRowCachesLastRow` both send the two-argument selector to a live
@@ -566,17 +643,17 @@ and reporting the out-of-range case through the error pointer.
 The `MADDataTableFast` implementation also had a genuine defect, now fixed: its
 `if (sqlite3_prepare == SQLITE_OK)` had **no `else`**, so a prepare failure returned `nil`
 without setting `*outError`, and the `-getSql:` error was discarded. Its sibling
-`-dataForRow:column:error:` (`:892-919`) handles both correctly. The SQL was also passed to
+`-dataForRow:column:error:` (`:905-932`) handles both correctly. The SQL was also passed to
 `sqlite3_mprintf` as the *format* string (`sqlite3_mprintf((char *) sql.UTF8String)`), which
 mangles or crashes on SQL containing `%`; it is now `sqlite3_mprintf("%s", ...)`, matching
-the sibling at `:888`. Eight further sites in `MADSqlite3` had the same defect; all are now
+the sibling at `:901`. Eight further sites in `MADSqlite3` had the same defect; all are now
 fixed — see §4.5.
 
 ### 3.6 Leak 5 — `MADDataTableFast` reaches into another class's private ivar
 
 `MADDataTableFast.m` accesses `MADDatabaseSqlite3`'s private ivar `_database` directly at
-fifteen sites — `:488`, `:538`, `:784`, `:793`, `:806`, `:817` (through `_databaseForInserts`)
-and `:892`, `:963`, `:1052`, `:1065`, `:1093`, `:1095`, `:1235`, `:1238`, `:1248` (through
+fifteen sites — `:488`, `:538`, `:784`, `:793`, `:810`, `:829` (through `_databaseForInserts`)
+and `:905`, `:976`, `:1065`, `:1078`, `:1106`, `:1108`, `:1248`, `:1251`, `:1261` (through
 `databaseForSelects`):
 
 ```objc
@@ -589,13 +666,20 @@ real sqlite file to do anything at all. It is also why the test target needed th
 `MADDataTable+Constructor` module import work: the class family is only usable from code that
 links both frameworks together.
 
-### 3.7 Leak 6 — dead public API
+### 3.7 Leak 6 — dead public API — **removed (Revision 5)**
 
-`MADDataTableLocation` (`MAD/Source/MADDataTableLocation.{h,m}`, 67 lines) is a
+`MADDataTableLocation` (`MAD/Source/MADDataTableLocation.{h,m}`, 67 lines) was a
 `(row, column)` value object with `NSCoding` and a `+newDataTableLocationForRow:inColumn:`
 factory. I grepped the whole codebase excluding its own implementation: **its only references
-are in the regression test file.** It is production-dead. It also adopts `NSCoding` but not
-`NSSecureCoding`, which the regression suite records as a contract.
+were in the regression test file.** It was production-dead. It also adopted `NSCoding` but not
+`NSSecureCoding`, which the regression suite recorded as a contract.
+
+Phase 5 step 14 offered a choice — wire it into a feature or delete it. It is deleted, because
+there was no feature it was waiting for: one commit in its whole history (`e702bb062`, the
+`MAD` framework reorganization), no caller, and nothing but its own three tests describing what
+it was for. A class kept alive only by its tests is a class the tests are paying for twice.
+The files, their two `.pbxproj` build entries and the three tests are gone with it; §3.7 stays
+as Leak 6 rather than being renumbered, so the numbering the rest of the report cites holds.
 
 ### 3.8 Leak 7 — the table reaches *back* into the write query
 
@@ -674,7 +758,7 @@ returns YES from a write I discarded" hazard from every driver.
    `MADDataTableRegressionTests.m` `testBaseTableAbstractOperationsAssert` for the contract.
 2. **Not needed — see §3.5.** The original text here said to implement
    `MADDataTableFast -dataForRow:error:` because it "currently asserts". It does not; the
-   method is implemented at `:928-1002`, and the earlier reading mistook a two-line signature
+   method is implemented at `:941-1015`, and the earlier reading mistook a two-line signature
    for a `column:` overload. The subclass that was genuinely missing the selector is
    `MADDataTableVirtual`, and it now implements it by delegating to `-objectAtRow:`.
 3. **Done.** `-allObjects` (§3.3) was a `nonnull` method returning `nil` on
@@ -682,9 +766,9 @@ returns YES from a write I discarded" hazard from every driver.
    `MADDataTableFast -dataForRow:error:` gained the missing `else` on its prepare check, and
    no longer discards the `-getSql:` error or passes SQL to `sqlite3_mprintf` as the format
    string.
-4. Re-verify against the existing regression suite (`MADDataTableRegressionTests.m`, 65 tests)
-   — it already pins instantiation, enumeration, concurrency, and the `MADDataTableLocation`
-   contract, so it will detect a mistake here.
+4. Re-verify against the existing regression suite (`MADDataTableRegressionTests.m`) — it
+   already pins instantiation, enumeration and concurrency, so it will detect a mistake here.
+   (It also pinned the `MADDataTableLocation` contract until Revision 5 deleted the class.)
 
 **Phase 1 — declare the protocols.**
 
@@ -760,8 +844,13 @@ returns YES from a write I discarded" hazard from every driver.
    §2.3. No such mock test has been written yet; it is the natural next step and the first
    thing Phase 2's injected cache directory makes cheaper.
    **Revision 4:** the hostless half is proven — `testFastTableInitWithCacheDirectoryNeedsNoDelegate`
-   builds a working physical table with a directory and no delegate. The mock-table half (driving
-   the sqlite row loop with a plain `<MADDataTableWriting>` conformer) is still unwritten.
+   builds a working physical table with a directory and no delegate.
+   **Revision 5: done, both halves.** `testDriverFillsAWritePortWithNoDataTableBehindIt`
+   (`MADSqlite3Tests/MADDatabaseSqlite3DatabaseTests.m`) hands the row loop a
+   `MADWritePortRecorder` — an `NSObject` conforming to `<MADDataTableWriting>` and nothing else,
+   so no `MADDataTable`, no `MADDataTableFast`, no cache delegate, no `.maddb` — and asserts the
+   five calls arrive in the promised order with both rows intact, failing if any `.maddb` file
+   appears. The mock is only expressible because the parameter is the protocol.
 
 **Phase 2 — remove the storage-location ambiguity. DONE (Revision 4).**
 8. ✅ Make `urlFastCache` stored, not computed (§2.3). Resolved once into `_urlFastCache`; a
@@ -774,14 +863,23 @@ returns YES from a write I discarded" hazard from every driver.
    with no delegate at all.
 
 **Phase 3 — make `rowCounter` derived.**
-10. ◐ Add a private `-recountRows` backed by `SELECT COUNT(*)`, and make `-numberOfRows`/`-count`
+10. ✅ Add a private `-recountRows` backed by `SELECT COUNT(*)`, and make `-numberOfRows`/`-count`
     use it (or invalidate against it) on `MADDataTableFast`. Keep the `rowCounter` property for
     archive compatibility, but stop treating it as the source of truth (§2.5).
     **Revision 4:** `-recountRows` exists and runs at the end of `-loadWithPlist:`, so a reloaded
-    table can no longer carry a counter that disagrees with its file. `-numberOfRows`/`-count`
-    still return the ivar, and drift while populated is still possible — see §2.5.
-11. ⬜ Audit `MTTableController.m:375/395/440/445` — paging must not read a counter that can drift
-    from the file.
+    table can no longer carry a counter that disagrees with its file.
+    **Revision 5:** the in-memory half is closed — the four mutations that never touched the
+    counter now leave it describing the file (§2.5). `-numberOfRows`/`-count` still return the
+    ivar by design; that is now the only reader, and `-recountRows` guards the reload.
+    Four tests cover the four methods.
+11. ✅ Audit `MTTableController.m` (was `:375/395/440/445`) — paging must not read a counter that
+    can drift from the file. **Done (Revision 5)**, and it cannot, once the counter is honest:
+    every fetch begins at `-removeAllObjects`, which clears the table and zeroes the counter, so
+    the count at completion measures the page just written and nothing else. Two defects at those
+    exact lines were found and fixed anyway. `offset + count - 1` wrapped to `NSUIntegerMax` on an
+    empty page at `:380`/`:402`; and the failure path at `:449` read the count from a table the
+    driver had *not* cleared (it clears only on success), so it measured the previous page, and a
+    failed fetch reported `hasMore = YES` and re-issued itself. A failed page now reports no more.
 
 **Phase 4 — fix concurrency.**
 12. ✅ Serialize `-addRow:error:` on `queueBulkAdd` (§2.4). The queue already exists and is already
@@ -789,21 +887,30 @@ returns YES from a write I discarded" hazard from every driver.
     Move the `sqlite3_finalize(_statementInsert)` in `-endBulkInsert` *inside* the
     barrier so the cached statement is only torn down when no `-addRow:` is in flight.
     **Done (Revision 4)** — the teardown is now the first thing inside the
-    `dispatch_barrier_sync` at `:1321`.
-13. Consider one shared connection pair per file rather than per table instance, since
-    `-objectEnumerator` currently opens a new connection on every call (§2.7).
+    `dispatch_barrier_sync` at `:1334`.
+13. **Evaluated and declined (Revision 5)** — one shared connection pair per file rather than per
+    table instance, since `-objectEnumerator` currently opens a new connection on every call
+    (§2.7). Sharing is not available for the write half (`-endBulkInsert` closes that handle) and
+    buys almost nothing for the read half (`SQLITE_OPEN_SHAREDCACHE` already shares the cache),
+    while making the live-enumerator-across-a-rebuild case worse rather than better. §2.7 has the
+    full argument.
 
 **Phase 5 — retire the dead surface.**
-14. Delete `MADDataTableLocation` (§3.7) and its three tests, or wire it into an actual feature.
-    It is currently public API with no production caller.
-15. Reconcile the two persistence mechanisms (§2.6) — either the base plist really is metadata-only
-    (then rename it and document it as such) or row data should round-trip through it.
+14. ✅ Delete `MADDataTableLocation` (§3.7) and its three tests, or wire it into an actual feature.
+    It is currently public API with no production caller. **Removed in Revision 5** — deleted
+    rather than wired, because it has one commit in its history and nothing but its own tests
+    describing it. The MAD target's Headers and Sources phases drop the two files with it.
+15. **Evaluated (Revision 5)** — reconcile the two persistence mechanisms (§2.6). The premise
+    does not hold for the family: the rows *do* round-trip through the plist where the plist is
+    the storage (`MADDataTableVirtual`'s `keySortIndex`), and cannot where it is a sqlite file
+    (`MADDataTableFast`'s `keyUrlFastCache`), so neither rename nor the alternative is right.
+    §2.6 records the per-subclass table and the documentation change that is left to make.
 
 ### 4.3 Breakage ranking for the current consumers
 
 | Consumer | Site | Risk under refactor |
 |---|---|---|
-| `MTTableController` | `:249, :281, :284, :375, :389, :395, :440, :445` | **High** — treats `count` as a page cursor; any change to `rowCounter` semantics breaks paging |
+| `MTTableController` | `:249, :281, :284, :377, :393, :399, :449, :455` | **High** — treats `count` as a page cursor; any change to `rowCounter` semantics breaks paging. Revision 5 made the derivation total — an empty page no longer underflows and a failed fetch no longer reads the previous page's count (§2.5) — but the coupling is unchanged |
 | `MADDatabaseMySQL` | `:88-92, :118-122, :150-154, :187-189` | **High** — O(n) `objectAtRow:i column:0`; per-subclass `row` semantics must be unified first |
 | `MADocument` | `:197` (`rowCounter`), `:865-867` (enumerator), `:874-919` (`dataForRow:error:`), `:1053-1072` | **High** — but only for the enumerator and `rowCounter`. Its `-dataForRow:error:` sends resolve to `MADDataTableFast`, which implements the selector, so the print/barcode path is sound (see §3.5) |
 | `MysqlFetch+DataTable` | `:301, :321` | **Medium** — mutates `column.type` mid-fetch behind `// FIXME: This is a hack.` (`:297`); the column dictionary must stay publicly mutable |
@@ -835,12 +942,12 @@ that were already correct:
 
 | File | Sites |
 |---|---|
-| `MADSqlite3/Source/MADDataTableFast.m` | `:1049`, `:1089`, `:1232` |
+| `MADSqlite3/Source/MADDataTableFast.m` | `:1062`, `:1102`, `:1245` |
 | `MADSqlite3/Source/MADDatabaseSqlite3.m` | `:301`, `:397`, `:875` |
 | `MADSqlite3/Source/MADDataTableObjectEnumerator.m` | `:69` |
 | `MADSqlite3/Source/MADDataTableSingleColumnEnumerator.m` | `:64` |
 
-The already-correct reference sites were `MADDataTableFast.m:548`, `:888` and `:960`, and
+The already-correct reference sites were `MADDataTableFast.m:548`, `:901` and `:973`, and
 `MADDatabaseSqlite3.m:459`. Every `sqlite3_mprintf` call in `MADSqlite3` now either uses a
 literal `"%s"` or a literal format string containing no conversions — `grep -n
 sqlite3_mprintf MADSqlite3/Source/*.m` returns fourteen calls and no variable format strings.
@@ -867,7 +974,6 @@ consequence of being wrong is silent corruption.
 | `MADSqlite3/Source/MADQueryCacheAddRow.m` | 152 |
 | `MADSqlite3/Source/MADDatabaseSqlite3.m` | 1346 |
 | `MAD/Source/MADDataTable+Constructor.h` / `.m` | 30 / 94 |
-| `MAD/Source/MADDataTableLocation.h` / `.m` | 24 / 67 |
 | `MAD/Source/MADocument.m`, `MADReportFormatter.m` | — |
 | `MADMySQL/Source/MADDatabaseMySQL.m`, `MysqlFetch+DataTable.{h,m}` | — |
 | `MADTdsClient/Source/MADDatabaseSQLServer.m` | — |
