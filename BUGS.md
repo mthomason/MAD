@@ -1056,6 +1056,49 @@ header search path.
   (Debug-gated, since `NSAssert` compiles out of Release) replaced
   `testBaseTableOperationsAreInert`, which had pinned the silent behaviour.
 
+### `MADDataTableFast -addRow:error:` was unprotected while a bulk insert ran
+- **Status:** Fixed
+- **Commit:** `470dfcab6`
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m`
+- **Behavior:** Under `-beginBulkInsert` the table reuses one cached
+  `_statementInsert` across every `-addRow:error:`, running
+  `sqlite3_bind_*` → `sqlite3_step` → `sqlite3_clear_bindings` →
+  `sqlite3_reset` on it. Nothing serialized those sequences, so two writers
+  racing on one table would interleave binds on the same statement and lose
+  rows. `SQLITE_OPEN_FULLMUTEX` does not help: the race is in the sequence, not
+  inside any single sqlite call. The class's one concurrency primitive,
+  `queueBulkAdd`, was used in a single place — `-endBulkInsert`'s barrier —
+  which made the teardown of `_statementInsert` race the inserts too.
+- **Now:** `-addRow:error:` runs the insert body under
+  `dispatch_sync(queueBulkAdd)`, and `-endBulkInsert` finalizes the cached
+  statement *inside* its `dispatch_barrier_sync`. On a serial queue the barrier
+  and the sync are mutually exclusive, which is all the mutual exclusion the
+  sequence needs. No caller had ever driven `-addRow:` from more than one
+  thread, so this was a hazard rather than a live loss.
+- **Test:** `MADDataTableRegressionTests.m` `testFastTableConcurrentWritersLoseNoRows`
+  (four writers from a concurrent queue, 100 rows in and 100 enumerated out).
+  The CONTRACT note on `testFastTableSerializedConcurrentWritesLoseNoRows` said
+  concurrent writers were unsupported; it now says the opposite.
+
+### A reloaded `MADDataTableFast` trusted a row counter that could be stale
+- **Status:** Fixed for the reload path; the in-memory path is still open
+- **Commit:** `470dfcab6`
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m`
+- **Behavior:** The plist carries `rowCounter` but no rows — the rows live in
+  the `.maddb` file — so `-loadWithPlist:` rehydrated the count from one source
+  and the data from another. A table whose counter had drifted from its file
+  came back reporting the drifted count. `-dropTable:`, `-deleteAll` and
+  `-vacuumCacheDb` all change the row count without touching the counter.
+- **Now:** `-loadWithPlist:` ends with `-recountRows`, which runs
+  `SELECT COUNT(*) FROM t<tag>` against the select connection and falls back to
+  the stored counter only when the file cannot answer (no table yet, or no
+  handle). `-numberOfRows` / `-count` still return the ivar, so a counter that
+  drifts *while populated* is still possible; `MTTableController` treats
+  `count` as a page cursor, so that side needs the caller audit recorded in
+  Phase 3 of the architecture report before it is changed.
+- **Test:** `MADDataTableRegressionTests.m` `testFastTableReloadRecountsRowsFromCacheFile`
+  (a plist claiming 99 rows over a file holding 3 now reports 3).
+
 ### `MADDesignerTestConnection.m` was an empty template that still ran
 - **Status:** Fixed
 - **Where:** `MADDesigner/Targets/MADDesignerUnitTests/MADDesignerTestConnection.m`
