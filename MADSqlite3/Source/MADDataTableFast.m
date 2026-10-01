@@ -863,9 +863,15 @@ static os_log_t mlog;
 	sqlite3_stmt *statement = NULL;
 	NSError *error = nil;
 	NSString *sql = [[query getSql:&error] copy];
-	
-	char *queryString = sqlite3_mprintf((char *) sql.UTF8String);
-	
+	if (sql == nil) {
+		if (outError != NULL) {
+			*outError = error;
+		}
+		return nil;
+	}
+
+	char *queryString = sqlite3_mprintf("%s", sql.UTF8String);
+
 	MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
 	int sqlite3_prepare = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1, &statement, NULL);
 	if (sqlite3_prepare == SQLITE_OK) {
@@ -890,8 +896,18 @@ static os_log_t mlog;
 			os_log_error(mlog, "[MADDataTableFast %p dataForRow:%lu] Error: %@", self, (unsigned long)cacheId, message);
 			result = [[NSDictionary alloc] init];
 		}
+	} else {
+		const char *sqlite3message = sqlite3_errstr(sqlite3_prepare);
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:NSStringFromClass([self class]) code:-782 userInfo:@{
+				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Error"),
+				NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3message encoding:NSUTF8StringEncoding]
+			}];
+		}
+		os_log_error(mlog, "[MADDataTableFast %p dataForRow:%lu] Prepare failed: %s",
+					 self, (unsigned long)cacheId, sqlite3message);
 	}
-	
+
 	sqlite3_finalize(statement);
 	sqlite3_free(queryString);
 	
@@ -1091,8 +1107,10 @@ static os_log_t mlog;
 }
 
 - (NSArray *)allObjects {
-	// FIXME: Implement this.
-	return nil;
+	if (self.columnKeys.count == 0) {
+		return @[];
+	}
+	return [self objectAtRow:0 limit:self.numberOfRows];
 }
 
 - (NSUInteger)count {

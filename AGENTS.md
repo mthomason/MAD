@@ -5,7 +5,7 @@
 _MAD Designer_ is a mobile analytic document designer.  _MAD Designer_ provides ad hoc query, reporting, and design.  It is business intelligence (BI) software.
 
 * It is built for iOS using Objective-C
-* It targets a minimum version of iOS 13
+* It targets a minimum version of iOS 15
 * It is built for iPhone, iPad, and My Mac (Designed for iPad)
 
 ## Project Overview
@@ -53,9 +53,8 @@ Once this is complete, the user can go to the MAD Viewer screen and use the refr
 ## Project Structure
 
 * This is a large and complex project that currently includes a main project and thirteen (13x) frameworks
-	* `MADFoundation`: A base framework that defines classes used by all other frameworks.  This framework does not include any other frameworks, except references to `Foundation.framework` and `UIKit.framework`.
+	* `MADFoundation`: A base framework that defines classes used by all other frameworks.  This framework does not include any other frameworks, except references to `Foundation.framework` and `UIKit.framework`.  It includes important classes that can be abstracted away, such as `MADOperation` and `MADKeyChain`.
 	* `MADAPI`: This framework only has a reference to `MADFoundation` and `MADCocoaExtensions`.
-	* `MADFoundation`: This framework includes important classes that can be abstracted away, such as `MADOperation` and `MADKeyChain`.
 	* `MAD`: This framework defines `MADDatabase`, which is subclassed by custom database types (e.g. MySQL or SQL Server).  It also defines other core types.
 	* `MADCocoaExtensions`: These are some core helper classes that are used all over the project.  It's useful classes, categories, and functions that are abstracted into this framework.
 	* `MADDataStructures`: This defines core data structures and algorithms. The data structures include a graph, tree, stack, and linked list.

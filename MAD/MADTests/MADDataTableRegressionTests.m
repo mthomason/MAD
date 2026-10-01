@@ -358,6 +358,35 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertNil([table objectAtRow:1000]);
 }
 
+/// CONTRACT: -dataForRow:error: addresses rows by position, exactly like
+/// -objectAtRow:, so the two access paths agree.  The base class asserts here,
+/// which is why this has to be implemented rather than inherited.
+- (void)testVirtualTableDataForRowReturnsTheRowAtThatIndex {
+	MADDataTableVirtual *table = [self newVirtualTableWithTag:1];
+	NSError *error = nil;
+	[table addRow:@[@"alice", @30] error:&error];
+	[table addRow:@[@"bob", @20] error:&error];
+
+	NSDictionary *first = [table dataForRow:0 error:&error];
+	XCTAssertNotNil(first);
+	XCTAssertNil(error);
+	XCTAssertEqualObjects(first[@"name"], @"alice");
+	XCTAssertEqualObjects([table dataForRow:1 error:&error][@"name"], @"bob");
+}
+
+/// CONTRACT: an out-of-range row id is reported through the error pointer, since
+/// nil alone cannot say whether the row is missing or the lookup failed.
+- (void)testVirtualTableDataForRowOutOfBoundsReportsAnError {
+	MADDataTableVirtual *table = [self newVirtualTableWithTag:1];
+	NSError *error = nil;
+	[table addRow:@[@"alice", @30] error:&error];
+
+	error = nil;
+	XCTAssertNil([table dataForRow:1000 error:&error]);
+	XCTAssertNotNil(error);
+	XCTAssertEqual(error.code, (NSInteger)8927);
+}
+
 /// CONTRACT: -addRow: indexes columnKeys directly, so a row wider than the column
 /// list raises NSRangeException instead of returning an error.
 - (void)testVirtualTableAddRowWiderThanColumnsRaises {
@@ -791,14 +820,26 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertEqual([[table objectEnumerator] allObjects].count, (NSUInteger)2);
 }
 
-- (void)testFastTableBulkInsertAllObjectsIsUnimplemented {
+/// CONTRACT: -allObjects returns every row as a dictionary, in the table's sort
+/// order -- the same shape MADDataTableVirtual already returned.
+- (void)testFastTableBulkInsertAllObjectsReturnsEveryRow {
 	MADDataTableFast *table = [self newFastTableWithTag:103];
 
-	[self bulkInsertRows:@[@[@"alice", @30]] intoTable:table];
+	[self bulkInsertRows:@[@[@"alice", @30], @[@"bob", @20]] intoTable:table];
 
-	// CONTRACT: -allObjects is still a FIXME in MADDataTableFast and returns nil
-	// even though rows exist.  Callers must use the enumerators instead.
-	XCTAssertNil([table allObjects]);
+	// The declaration is `nonnull NSArray *`, so this must never be nil.
+	NSArray *all = [table allObjects];
+	XCTAssertEqual(all.count, (NSUInteger)2);
+	XCTAssertEqualObjects(all[0][@"name"], @"alice");
+	XCTAssertEqualObjects(all[1][@"name"], @"bob");
+}
+
+/// CONTRACT: -allObjects on a table with no rows is an empty array, not nil.
+- (void)testFastTableAllObjectsIsEmptyWhenThereAreNoRows {
+	MADDataTableFast *table = [self newFastTableWithTag:113];
+
+	XCTAssertNotNil([table allObjects]);
+	XCTAssertEqualObjects([table allObjects], @[]);
 }
 
 - (void)testFastTableRowIdEnumeratorReturnsRowIds {

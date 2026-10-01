@@ -15,6 +15,8 @@
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSError.h>
 #import <MADFoundation/MADDataColumn.h>
 #import "madlog.h"
 
@@ -158,6 +160,20 @@
 	NSString *fieldKey = self.columnKeys[column];
 	MADDataColumn *dataInColumn = self.columns[fieldKey];
 	return [dataInColumn objectAtIndex:[self sortedIndexForIndex:row]];
+}
+
+/// In-memory rows are addressed by their position, so a row id is a row index.
+/// Delegates to -objectAtRow: so both access paths agree, and reports the
+/// out-of-range case that -objectAtRow: can only signal by returning nil.
+- (NSDictionary *)dataForRow:(NSUInteger)cacheId error:(NSError * __autoreleasing *)error {
+	NSDictionary *row = [self objectAtRow:cacheId];
+	if (row == nil && error != NULL) {
+		*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:8927 userInfo:@{
+			NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Error"),
+			NSLocalizedDescriptionKey: NSLocalizedString(@"Missing results", @"Missing results")
+		}];
+	}
+	return row;
 }
 
 - (bool)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error {
