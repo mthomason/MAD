@@ -61,15 +61,21 @@ same live tests. `SYBDATETIME4`'s base-date arithmetic is newly recorded as open
 `BUGS.md`, MADTdsClient, **Fixed**; tests `testSelectModernDateTimeTypes`,
 `testSelectModernDateTimeTypesNull`, `testSelectClassicDateTimeKeepsItsMonth` (live).
 
-### 1.2 The `MADDataTableFast` row counter — two documents disagree
+### 1.2 The `MADDataTableFast` row counter — two documents disagree — **done 2026-10-01**
 
-`BUGS.md` says the in-memory drift path is still open and needs an `MTTableController` page-cursor
-caller audit before it can change. The architecture report's Revision 5 says the in-memory half
-was fixed. One of them is stale. Read the caller, decide, and correct the document that is wrong.
+The two documents were `BUGS.md` and `BUGS.md`. The older entry, under *Already fixed (for
+reference)*, still read "Fixed for the reload path; the in-memory path is still open" and asked
+for the caller audit; the newer entry in the `MADSqlite3` section reads **Fixed** at `850c32f51`
+with four tests, and that is what the architecture report's Revision 5 is describing. So the
+report was right and the stale document was the older `BUGS.md` entry.
 
-Needs the caller audit in the architecture report's Phase 3. Same discipline as
-`bugs-may-be-load-bearing`: `MTTableController` treats `count` as a page cursor, so the audit
-comes first.
+The code settles it: `-dropTableName:` (`MADDataTableFast.m:887`) and `-deleteAll` (`:904`) zero
+the counter, `-vacuumCacheDb` (`:868`) deliberately does not, and `-removeAllObjects` (`:756`)
+does. `-numberOfRows` / `-count` returning the ivar rather than querying the file is the design —
+`-recountRows` is the reload path's check, not a per-read cost.
+
+Corrected the stale entry's status and `Now:` line to point at `850c32f51`, so the register no
+longer contradicts itself. No code changed; nothing was open.
 
 ### 1.3 The MySQL `MADDataTypeMySQL` mapping
 

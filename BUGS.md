@@ -1522,23 +1522,30 @@ header search path.
   concurrent writers were unsupported; it now says the opposite.
 
 ### A reloaded `MADDataTableFast` trusted a row counter that could be stale
-- **Status:** Fixed for the reload path; the in-memory path is still open
-- **Commit:** `470dfcab6`
+- **Status:** Fixed
+- **Commit:** `470dfcab6` (reload half); `850c32f51` (in-memory half)
 - **Where:** `MADSqlite3/Source/MADDataTableFast.m`
 - **Behavior:** The plist carries `rowCounter` but no rows — the rows live in
   the `.maddb` file — so `-loadWithPlist:` rehydrated the count from one source
   and the data from another. A table whose counter had drifted from its file
   came back reporting the drifted count. `-dropTable:`, `-deleteAll` and
   `-vacuumCacheDb` all change the row count without touching the counter.
-- **Now:** `-loadWithPlist:` ends with `-recountRows`, which runs
-  `SELECT COUNT(*) FROM t<tag>` against the select connection and falls back to
-  the stored counter only when the file cannot answer (no table yet, or no
-  handle). `-numberOfRows` / `-count` still return the ivar, so a counter that
-  drifts *while populated* is still possible; `MTTableController` treats
-  `count` as a page cursor, so that side needs the caller audit recorded in
-  Phase 3 of the architecture report before it is changed.
+- **Now:** the reload half landed first: `-loadWithPlist:` ends with
+  `-recountRows`, which runs `SELECT COUNT(*) FROM t<tag>` against the select
+  connection and falls back to the stored counter only when the file cannot
+  answer (no table yet, or no handle). The in-memory half followed in
+  `850c32f51` — `-dropTable`, `-dropTableName:` and `-deleteAll` zero the
+  counter, `-vacuumCacheDb` deliberately does not because VACUUM keeps every
+  row. `-numberOfRows` / `-count` still return the ivar rather than querying the
+  file: that is the design, not a remaining gap, since `-recountRows` is the
+  reload path's check and not a per-read cost. The caller audit that this entry
+  used to ask for is recorded in the `MADSqlite3` section above — `-deleteAll`
+  has no callers, `-dropTable` is reached only from `-removeAllObjects`, and
+  `MTTableController` treats `count` as a page cursor.
 - **Test:** `MADDataTableRegressionTests.m` `testFastTableReloadRecountsRowsFromCacheFile`
-  (a plist claiming 99 rows over a file holding 3 now reports 3).
+  (a plist claiming 99 rows over a file holding 3 now reports 3), plus
+  `testFastTableDropTableZeroesRowCount`, `testFastTableDropForeignTableKeepsRowCount`,
+  `testFastTableDeleteAllZeroesRowCount` and `testFastTableVacuumKeepsRowCount`.
 
 ### `MADDesignerTestConnection.m` was an empty template that still ran
 - **Status:** Fixed
