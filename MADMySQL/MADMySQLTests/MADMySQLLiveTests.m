@@ -590,9 +590,8 @@
 
 	MADDataColumn *medium = table.columns[[table columnKeys][1]];
 	XCTAssertEqual(medium.nativeType, (int16_t)MYSQL_TYPE_INT24);
-	// MEDIUMINT currently maps onto MADDataTypeInteger rather than the dedicated
-	// MADDataTypeInt24; see the note in MADMySQLTests.m.
-	XCTAssertEqual(medium.type, MADDataTypeInteger);
+	// MEDIUMINT maps onto its dedicated MADDataTypeInt24; see MADMySQLTests.m.
+	XCTAssertEqual(medium.type, MADDataTypeInt24);
 
 	MADDataColumn *decimal = table.columns[[table columnKeys][2]];
 	XCTAssertEqual(decimal.nativeType, (int16_t)MYSQL_TYPE_NEWDECIMAL);

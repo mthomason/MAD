@@ -136,9 +136,9 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 			// DECIMAL datatype handled by MYSQL_TYPE_NEWDECIMAL
 			// NUMERIC datatype handled by MYSQL_TYPE_NEWDECIMAL (note: NUMERIC is implemented as DECIMAL by MySQL)
 			//
-			// SMALLINT datatype not handled currently - exception will occur if used
-			// MEDIUMINT datatype not handled currently - exception will occur if used
-			// BIT datatype not handled currently - exception will occur if used
+			// SMALLINT datatype handled by MYSQL_TYPE_SHORT
+			// MEDIUMINT datatype handled by MYSQL_TYPE_INT24
+			// BIT datatype handled by MYSQL_TYPE_BIT
 			// Note: CHAR datatype isn't considered numeric and is handled by MYSQL_TYPE_STRING
 			
 			NSMutableArray *fieldNameCollector = [[NSMutableArray alloc] initWithCapacity:myStatement->field_count];

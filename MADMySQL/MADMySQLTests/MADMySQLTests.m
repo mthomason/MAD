@@ -51,10 +51,10 @@
 	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_SHORT],    MADDataTypeShort);
 	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_LONG],     MADDataTypeLong);
 	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_LONGLONG], MADDataTypeLongLong);
-	// NOTE: MYSQL_TYPE_INT24 (MEDIUMINT) collapses onto MADDataTypeInteger even though
-	// the enum has a dedicated MADDataTypeInt24. Kept as-is here to document the
-	// current behaviour; the live suite exercises the INT24 fetch path.
-	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_INT24],    MADDataTypeInteger);
+	// MYSQL_TYPE_INT24 (MEDIUMINT) maps to its own dedicated enum case, which every
+	// downstream consumer groups with MADDataTypeInteger. The live suite exercises the
+	// INT24 fetch path.
+	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_INT24],    MADDataTypeInt24);
 	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_BIT],      MADDataTypeBit);
 }
 

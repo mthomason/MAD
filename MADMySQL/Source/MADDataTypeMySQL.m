@@ -42,7 +42,11 @@
 			return MADDataTypeGeometry;
 			break;
 		case MYSQL_TYPE_INT24:
-			return MADDataTypeInteger;
+			// MEDIUMINT has a dedicated case in MADDataType; use it rather than
+			// collapsing onto MADDataTypeInteger.  Every consumer groups the two
+			// together (MADDatabaseField -isDataTypeNumeric, the sqlite3 bind switch,
+			// RptqDocumentElement value formatting), so this is behaviour-neutral.
+			return MADDataTypeInt24;
 			break;
 		case MYSQL_TYPE_LONG:
 			return MADDataTypeLong;
