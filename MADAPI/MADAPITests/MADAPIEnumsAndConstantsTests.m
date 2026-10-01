@@ -55,16 +55,12 @@
 	XCTAssertEqualObjects(NSStringFromMADQueryType(MADQueryTypeCacheIndexCreateTemplate), @"MADQueryTypeCacheIndexCreateTemplate");
 }
 
-- (void)testNSStringFromMADQueryTypeCacheIndexDropParametersDefect {
-	// Known defect: this case returns the wrong constant — @"MADQueryIndexDropParameters"
-	// instead of @"MADQueryTypeCacheIndexDropParameters".
-	XCTAssertEqualObjects(NSStringFromMADQueryType(MADQueryTypeCacheIndexDropParameters), @"MADQueryIndexDropParameters");
+- (void)testNSStringFromMADQueryTypeCacheIndexDropParameters {
+	XCTAssertEqualObjects(NSStringFromMADQueryType(MADQueryTypeCacheIndexDropParameters), @"MADQueryTypeCacheIndexDropParameters");
 }
 
-- (void)testNSStringFromMADQueryTypeSampleDataTableRangeFallsThrough {
-	// Known defect: MADQueryTypeSampleDataTableRange (28) has no case, so it falls
-	// through to the default "Unknown" label.
-	XCTAssertEqualObjects(NSStringFromMADQueryType(MADQueryTypeSampleDataTableRange), @"MADQueryTypeUnknown");
+- (void)testNSStringFromMADQueryTypeSampleDataTableRange {
+	XCTAssertEqualObjects(NSStringFromMADQueryType(MADQueryTypeSampleDataTableRange), @"MADQueryTypeSampleDataTableRange");
 }
 
 - (void)testNSStringFromMADQueryTypeUnhandledValueFallsThrough {

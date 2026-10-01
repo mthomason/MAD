@@ -52,12 +52,11 @@
 	XCTAssertEqual(binding.datatype, MADDataTypeNull);
 }
 
-- (void)testInitWithNullValueLeavesValueNil {
-	// Notable inconsistency: a nil value stores [NSNull null], but an explicit
-	// [NSNull null] value leaves `value` nil (though datatype is still Null).
+- (void)testInitWithNullValueStoresNSNull {
+	// A nil value and an explicit [NSNull null] now normalise to the same stored form.
 	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeString fieldIndex:0 value:[NSNull null]];
 	XCTAssertEqual(binding.datatype, MADDataTypeNull);
-	XCTAssertNil(binding.value);
+	XCTAssertEqualObjects(binding.value, [NSNull null]);
 }
 
 - (void)testInitWithUnknownDatatypeCoercesToString {

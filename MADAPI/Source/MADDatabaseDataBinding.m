@@ -150,11 +150,12 @@ static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {
 
 	if (self = [super init]) {
 		
-		if (value == nil) {
+		if (value == nil || [value isKindOfClass:[NSNull class]]) {
+			// Both "no value" spellings normalise to the same stored form. They used to
+			// differ (nil stored [NSNull null], an explicit NSNull left value nil), which
+			// was harmless only because the SQL bind path treats both as SQL NULL.
 			datatype = MADDataTypeNull;
 			self.value = [NSNull null];
-		} else if ([value isKindOfClass:[NSNull class]]) {
-			datatype = MADDataTypeNull;
 		} else {
 			datatype = DataTypeLimited(datatype);
 			if (datatype == MADDataTypeUnknown) {

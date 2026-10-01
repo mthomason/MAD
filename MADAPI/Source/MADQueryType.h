@@ -61,7 +61,7 @@ static inline NSString *NSStringFromMADQueryType(MADQueryType value) {
 		case MADQueryTypeCacheJournalModeOverride: return @"MADQueryTypeCacheJournalModeOverride";
 		case MADQueryTypeCacheJournalModeDefault: return @"MADQueryTypeCacheJournalModeDefault";
 		case MADQueryTypeCacheIndexCreateParameters: return @"MADQueryTypeCacheIndexCreateParameters";
-		case MADQueryTypeCacheIndexDropParameters: return @"MADQueryIndexDropParameters";
+		case MADQueryTypeCacheIndexDropParameters: return @"MADQueryTypeCacheIndexDropParameters";
 		case MADQueryTypeCacheSelectLimitOffset: return @"MADQueryTypeCacheSelectLimitOffset";
 		case MADQueryTypeCacheSelectRowId: return @"MADQueryTypeCacheSelectRowId";
 		case MADQueryTypeCacheSelectRowIds: return @"MADQueryTypeCacheSelectRowIds";
@@ -69,6 +69,7 @@ static inline NSString *NSStringFromMADQueryType(MADQueryType value) {
 		case MADQueryTypeCacheSelectItemsForGroupKeys: return @"MADQueryTypeCacheSelectItemsForGroupKeys";
 		case MADQueryTypeCacheAggregateFunction: return @"MADQueryTypeCacheAggregateFunction";
 		case MADQueryTypeCacheIndexCreateTemplate: return @"MADQueryTypeCacheIndexCreateTemplate";
+		case MADQueryTypeSampleDataTableRange: return @"MADQueryTypeSampleDataTableRange";
 		case MADQueryTypeUnknown: default: return @"MADQueryTypeUnknown";
 	}
 }
