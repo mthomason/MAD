@@ -4,8 +4,8 @@
 `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
 **Branch:** `refactor/mad-database-decouple`
 **Date:** 2026-09-30
-**Verification:** `xcodebuild test` — MAD 163, MADFoundation 116, MADSqlite3 63 tests, 0 failures
-(workspace total 799); no warnings from any file in scope.
+**Verification:** `xcodebuild test` — all 11 schemes, 798 tests, 0 failures; no warnings from any
+file in scope.
 
 All `file:line` references below were read first-hand during this analysis, not inferred.
 
@@ -15,6 +15,13 @@ All `file:line` references below were read first-hand during this analysis, not 
 > `-allObjects` "live bug" (no production caller) and the `rowCounter` drift framing (unreachable).
 > §4.5 is new. Corrected text is marked **Corrected** / **Fixed**; the original claims are left
 > visible where they were instructive. Three code fixes landed with this revision — see §3.5.
+>
+> **Revision 2 — 2026-09-30.** The eight `sqlite3_mprintf` format-string sites of §4.5 are now
+> fixed, and Phase 0 has landed: the unimplemented operations in `MADDataTable.m` assert instead
+> of failing silently (§3.2, §4.2). The §3.1 table and the appendix line counts were re-derived
+> against the changed files. Two errors in the previous revision were also corrected: the
+> workspace test total was stated as 799 and is 798, and §3.6 had cited four `_database` sites
+> where there are fifteen.
 
 ---
 
@@ -340,28 +347,45 @@ Therefore:
 
 | Declared in `MADDataTable.h` | Base impl (`MADDataTable.m`) | Virtual | Fast |
 |---|---|---|---|
-| `-addColumn:` | **no-op** `:358` | override `:112` | override `:369` |
-| `-addRow:error:` | **`return true`** `:359` | override `:179` | override `:442` |
-| `-addRowWithDataForFieldKeys:` | **no-op** `:360` | override `:197` | override `:527` |
-| `-sortUsingDescriptors:` | **no-op** `:361` | override `:208` | override `:547` |
-| `-removeAllObjects` | **no-op** `:362` | override `:225` | override `:587` |
-| `-objectAtRow:column:` | `return nil` `:363` | override `:159` | override `:734` |
-| `-objectAtRow:` | `return nil` `:364` | override `:151` | override `:748` |
-| `-columnsEnumerator` | `return nil` `:365` | override `:149` | override `:1023` |
-| `-objectEnumerator` | `return nil` `:366` | override `:148` | override `:1027` |
-| `-beginBulkInsert` / `-endBulkInsert` | **no-op** `:367-368` | no-op `:236-238` | override `:1211`/`:1230` |
-| `-allObjects` | `return @[]` `:370-373` | override `:118` | override `:1109` |
-| `-objectAtRow:limit:` | `return @[]` `:375` | override `:220` | override `:986` |
-| `-count` / `-numberOfColumns` / `-numberOfRows` | `0` `:376-378` | override `:122`, `:214`, `:216` | override `:1116`, `:1120`, `:1122` |
-| `-countByEnumeratingWithState:...` | `0` `:379-383` | override `:140` | inherits (0) |
+| `-addColumn:` | **assert** `:365` | override `:112` | override `:369` |
+| `-addRow:error:` | **assert** `:369` | override `:179` | override `:442` |
+| `-addRowWithDataForFieldKeys:` | **assert** `:374` | override `:197` | override `:527` |
+| `-sortUsingDescriptors:` | **assert** `:378` | override `:208` | override `:547` |
+| `-removeAllObjects` | **assert** `:382` | override `:225` | override `:587` |
+| `-objectAtRow:column:` | **assert** `:386` | override `:159` | override `:734` |
+| `-objectAtRow:` | **assert** `:391` | override `:151` | override `:748` |
+| `-columnsEnumerator` | **assert** `:396` | override `:149` | override `:1023` |
+| `-objectEnumerator` | **assert** `:401` | override `:148` | override `:1027` |
+| `-beginBulkInsert` / `-endBulkInsert` | no-op `:408-409` | no-op `:236-238` | override `:1211`/`:1230` |
+| `-allObjects` | `return @[]` `:414-417` | override `:118` | override `:1109` |
+| `-objectAtRow:limit:` | `return @[]` `:419` | override `:220` | override `:986` |
+| `-count` / `-numberOfColumns` / `-numberOfRows` | `0` `:420-422` | override `:122`, `:214`, `:216` | override `:1116`, `:1120`, `:1122` |
+| `-countByEnumeratingWithState:...` | `0` `:423-427` | override `:140` | inherits (0) |
 | `-enumeratorForAllObjectsSorted*`, `-objectsForGroupKeys:`, `-dataForRow:error:`, `-enumeratorForKeyObjectsSorted` | `NSAssert(NO, @"Not implemented")` `:327-350` | **also** `NSAssert(NO)` `:31-54` | implemented `:934`, `:1072`, `:1093`; `-dataForRow:error:` `:841`; rest `NSAssert(NO)` |
 
 ### 3.2 Leak 1 — the base class cannot express "abstract"
 
-Objective-C has no `abstract`. So the base returns **`YES` from `-addRow:error:`** and **`nil`
-from every reader**. A partially-implemented subclass, or a direct `MADDataTable` instance, will
-silently accept writes and report success, then read back nothing. Every one of these should
-assert (as the `NSAssert(NO)` group at `:327-350` correctly does) or be `@optional` in a protocol.
+Objective-C has no `abstract`. So the base used to return **`YES` from `-addRow:error:`** and
+**`nil` from every reader**. A partially-implemented subclass, or a direct `MADDataTable`
+instance, would silently accept writes and report success, then read back nothing.
+
+**Fixed (Phase 0).** The nine write/read operations that a storage subclass must override now
+open with `NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__)` (`MADDataTable.m:365`,
+`:369`, `:374`, `:378`, `:382`, `:386`, `:391`, `:396`, `:401`), matching the `:327-350` group.
+`-addRow:error:` returns `false` in Release rather than `true`, so even with assertions compiled
+out it no longer claims a row was stored.
+
+Two groups were deliberately **left** as silent defaults, because for them silence is correct:
+
+* `-beginBulkInsert` / `-endBulkInsert` (`:408-409`) — optional hooks. A subclass that does not
+  need bulk mode may legitimately inherit the no-op.
+* `-allObjects` (`:414-417`), `-objectAtRow:limit:` (`:419`), `-count` / `-numberOfColumns` /
+  `-numberOfRows` (`:420-422`) and `-countByEnumeratingWithState:...` (`:423-427`) — these
+  return `@[]` / `0`, which is the *truthful* answer for a table with no rows, and matches what
+  `MADDataTableVirtual` returns. Asserting on `-count` would turn a correct answer into a crash.
+
+The remaining half of this leak — expressing the split in the type system rather than by
+assertion — is Phase 1 (§4.2).
 
 ### 3.3 Leak 2 — a nullability contract that is already broken
 
@@ -478,9 +502,8 @@ without setting `*outError`, and the `-getSql:` error was discarded. Its sibling
 `-dataForRow:column:error:` (`:820-827`) handles both correctly. The SQL was also passed to
 `sqlite3_mprintf` as the *format* string (`sqlite3_mprintf((char *) sql.UTF8String)`), which
 mangles or crashes on SQL containing `%`; it is now `sqlite3_mprintf("%s", ...)`, matching
-the sibling at `:801`. **Eight other sites still pass a variable as the format string —
-three more in this file, three in `MADDatabaseSqlite3.m`, and one in each of the two
-enumerator classes — see §4.5.**
+the sibling at `:801`. Eight further sites in `MADSqlite3` had the same defect; all are now
+fixed — see §4.5.
 
 ### 3.6 Leak 5 — `MADDataTableFast` reaches into another class's private ivar
 
@@ -577,9 +600,11 @@ returns YES from a write I discarded" hazard from every driver.
 ### 4.2 Sequenced plan
 
 **Phase 0 — make the failure modes loud (no behaviour change).**
-1. Replace the silent stubs in `MADDataTable.m:358-368` and `:370-383` with
-   `NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__)`, matching the existing
-   `:327-350` style. This converts silent data loss into a caught defect.
+1. **Done**, with a narrower scope than first proposed. The nine operations a storage
+   subclass must override now assert (`MADDataTable.m:365-403`); the honest empty-table
+   answers and the optional bulk hooks were left as defaults, because for those the silent
+   value is the *correct* one. See §3.2 for the split and the reasoning, and
+   `MADDataTableRegressionTests.m` `testBaseTableAbstractOperationsAssert` for the contract.
 2. **Not needed — see §3.5.** The original text here said to implement
    `MADDataTableFast -dataForRow:error:` because it "currently asserts". It does not; the
    method is implemented at `:841-915`, and the earlier reading mistook a two-line signature
@@ -659,12 +684,14 @@ returns YES from a write I discarded" hazard from every driver.
 * **No class-name sniffing was introduced.** Preserve that: any new branch should be on a
   protocol or an enum, never on a class.
 
-### 4.5 Open item — SQL passed to `sqlite3_mprintf` as a format string
+### 4.5 SQL passed to `sqlite3_mprintf` as a format string
 
-Found while fixing §3.5, and **not** fixed: eight other call sites hand a variable to
-`sqlite3_mprintf` as the *format* string rather than as an argument. Any `%` in the SQL is
-then interpreted as a conversion, so a query containing one is mangled — or reads past the
-argument list and crashes.
+Found while fixing §3.5. Eight other call sites handed a variable to `sqlite3_mprintf` as the
+*format* string rather than as an argument. Any `%` in the SQL would then be read as a
+conversion, so a query containing one is mangled — or reads past the argument list and crashes.
+
+**Fixed.** All eight now pass a literal `"%s"` and the SQL as the argument, matching the sites
+that were already correct:
 
 | File | Sites |
 |---|---|
@@ -673,13 +700,16 @@ argument list and crashes.
 | `MADSqlite3/Source/MADDataTableObjectEnumerator.m` | `:69` |
 | `MADSqlite3/Source/MADDataTableSingleColumnEnumerator.m` | `:64` |
 
-The correct form already appears in the same files — `sqlite3_mprintf("%s", sql.UTF8String)`
-at `MADDataTableFast.m:461`, `:801` and `:873`, and `MADDatabaseSqlite3.m:459`. The fix is
-mechanical and each site is a one-line change, but it touches four files on the query path,
-so it is left as its own pass rather than folded into the contract fixes.
+The already-correct reference sites were `MADDataTableFast.m:461`, `:801` and `:873`, and
+`MADDatabaseSqlite3.m:459`. Every `sqlite3_mprintf` call in `MADSqlite3` now either uses a
+literal `"%s"` or a literal format string containing no conversions — `grep -n
+sqlite3_mprintf MADSqlite3/Source/*.m` returns fourteen calls and no variable format strings.
 
-Reachability is low: the SQL comes from the generated query builders, so a `%` would have to
-appear in a column or table name. It is a latent correctness bug, not a live one.
+Reachability was low: the SQL comes from the generated query builders, and a repo-wide search
+found no `LIKE` pattern that would introduce a `%`. Identifiers, however, come from the
+connected database's schema, so a `%` in a column or table name would have hit this. It was a
+latent correctness bug rather than a live one — fixed because the change is mechanical and the
+consequence of being wrong is silent corruption.
 
 ---
 
@@ -687,7 +717,7 @@ appear in a column or table name. It is a latent correctness bug, not a live one
 
 | File | Lines |
 |---|---|
-| `MADFoundation/Source/MADDataTable.h` / `.m` | 94 / 391 |
+| `MADFoundation/Source/MADDataTable.h` / `.m` | 94 / 435 |
 | `MADFoundation/Source/MADDataTableVirtual.h` / `.m` | 21 / 240 |
 | `MADFoundation/Source/MADDataTableType.h` | 17 |
 | `MADFoundation/Source/MADDataColumn.h`, `MADDataProtocol.h`, `MADCacheProtocol.h` | — |
@@ -695,7 +725,7 @@ appear in a column or table name. It is a latent correctness bug, not a live one
 | `MADSqlite3/Source/MADDataTableObjectEnumerator.m` | 173 |
 | `MADSqlite3/Source/MADDataTableSingleColumnEnumerator.m` | 149 |
 | `MADSqlite3/Source/MADQueryCacheAddRow.m` | 152 |
-| `MADSqlite3/Source/MADDatabaseSqlite3.m` | — |
+| `MADSqlite3/Source/MADDatabaseSqlite3.m` | 1346 |
 | `MAD/Source/MADDataTable+Constructor.h` / `.m` | 23 / 86 |
 | `MAD/Source/MADDataTableLocation.h` / `.m` | 24 / 67 |
 | `MAD/Source/MADocument.m`, `MADReportFormatter.m` | — |
@@ -703,4 +733,4 @@ appear in a column or table name. It is a latent correctness bug, not a live one
 | `MADTdsClient/Source/MADDatabaseSQLServer.m` | — |
 | `MADAPI/Source/MADDatabaseProtocol.h`, `MADQuery.h`, `MADDatabaseResultsProtocol.h` | — |
 | `MADDesigner/Source/MTTableController.m` | — |
-| `MAD/MADTests/MADDataTableRegressionTests.m` | 65 tests |
+| `MAD/MADTests/MADDataTableRegressionTests.m` | 66 tests |

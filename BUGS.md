@@ -72,13 +72,17 @@ Status key:
 - **Why it matters:** The new-document database-type picker likely iterates these
   arrays in lockstep; an off-by-one here can pick the wrong driver.
 
-### `MADDataTableFast -allObjects` unimplemented (FIXME)
-- **Status:** Investigate (known gap, not a regression)
+### `MADDataTableFast -allObjects` was unimplemented (FIXME)
+- **Status:** Fixed
+- **Commit:** `f25b53118`
 - **Where:** `MAD/MADTests/MADDataTableRegressionTests.m`
-- **Behavior:** Returns `nil` even when rows exist. Callers must use the
-  enumerators instead.
-- **Why it matters:** Low priority — the enumerators cover it, but any new code
-  that assumes `-allObjects` works will silently get nothing.
+- **Behavior:** Returned `nil` even when rows existed, from a method the header
+  declares `nonnull`. It now returns the rows via `-objectAtRow:limit:`, and
+  `@[]` for a table with no columns.
+- **Why it mattered:** No production caller existed, so the annotation was a trap
+  laid for the next one rather than a live crash. The test that pinned the `nil`
+  was replaced by `testFastTableBulkInsertAllObjectsReturnsEveryRow` and
+  `testFastTableAllObjectsIsEmptyWhenThereAreNoRows`.
 
 ### `digit_count_*_int`: `INT_MIN` collapsed onto `INT_MAX`
 - **Status:** Quirk
@@ -417,8 +421,12 @@ Status key:
 
 ## MADSqlite3
 
-No defects found. The `MADDataTypeUnknown → String`/`TEXT` coercions in
+No test-visible defects. The `MADDataTypeUnknown → String`/`TEXT` coercions in
 `MADDatabaseSqlite3` are intentional fallbacks and are covered by tests.
+
+One defect in this framework was found by inspection rather than by a test and is
+recorded under "Already fixed (for reference)": eight call sites passed a variable
+to `sqlite3_mprintf` as the format string.
 
 ---
 
@@ -853,6 +861,42 @@ header search path.
 - **Commit:** `f51be71ef`
 - **Note:** Found during testing; the method now honors the column argument.
   Kept here as a record of the kind of bug this effort is meant to catch.
+
+### `sqlite3_mprintf` was passed the SQL as its format string (8 sites)
+- **Status:** Fixed
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m`, `MADDatabaseSqlite3.m`,
+  `MADDataTableObjectEnumerator.m`, `MADDataTableSingleColumnEnumerator.m`
+- **Behavior:** `sqlite3_mprintf` treats its first argument as a *format*, so
+  passing SQL directly (`sqlite3_mprintf(sql.UTF8String)`) meant a `%` in that
+  SQL was read as a conversion. The function would then consume arguments that
+  were never passed and read whatever sat on the stack — mangling the statement
+  or crashing.
+- **Now:** every call passes a literal `"%s"` and the SQL as the argument.
+  `grep -n sqlite3_mprintf MADSqlite3/Source/*.m` shows fourteen calls, none
+  with a variable format string.
+- **Note:** Reachability was low — a `%` would have to appear in a column or
+  table name — but the failure mode was silent corruption. Found by inspection
+  while fixing the `-dataForRow:error:` contract, not by a test; there is no
+  regression test, because exercising it needs a schema identifier containing
+  `%`.
+
+### `MADDataTable` base class failed silently instead of trapping
+- **Status:** Fixed (Phase 0)
+- **Where:** `MADFoundation/Source/MADDataTable.m`
+- **Behavior:** The base class stubbed every row and column operation. Worst
+  case, `-addRow:error:` returned `YES` while discarding the row, so a storage
+  subclass that forgot an override lost data and reported success.
+- **Now:** the nine operations a concrete subclass must implement assert with
+  `NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__)`, matching the
+  existing unimplemented-enumerator group. `-addRow:error:` returns `false` in
+  Release rather than `YES`.
+- **Deliberately unchanged:** the optional bulk-insert hooks, and the read
+  answers that are *truthful* for an empty table (`-count` → `0`, `-allObjects`
+  → `@[]`, and friends). Asserting on those would turn a correct answer into a
+  crash. See §3.2 of the architecture report for the split.
+- **Test:** `MADDataTableRegressionTests.m` `testBaseTableAbstractOperationsAssert`
+  (Debug-gated, since `NSAssert` compiles out of Release) replaced
+  `testBaseTableOperationsAreInert`, which had pinned the silent behaviour.
 
 ### `MADDesignerTestConnection.m` was an empty template that still ran
 - **Status:** Fixed

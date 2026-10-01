@@ -959,7 +959,7 @@ static os_log_t mlog;
 		os_log_error(mlog, "%s SQL Error: %@", __PRETTY_FUNCTION__, error);
 	}
 	
-	char *queryString = sqlite3_mprintf(sql.UTF8String);
+	char *queryString = sqlite3_mprintf("%s", sql.UTF8String);
 	
 	MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
 	int sqlite3_prepare = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1, &statement, NULL);
@@ -999,7 +999,7 @@ static os_log_t mlog;
 		NSError *error = nil;
 		NSString *sql = [[query getSql:&error] copy];
 		const char *sqlc = sql.UTF8String;
-		char *queryString = sqlite3_mprintf((char *) sqlc);
+		char *queryString = sqlite3_mprintf("%s", sqlc);
 		
 		MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
 		
@@ -1142,7 +1142,7 @@ static os_log_t mlog;
 		os_log_error(mlog, "Error: %@", error);
 	}
 	const char *sqlc = sql.UTF8String;
-	char *queryString = sqlite3_mprintf((char *) sqlc);
+	char *queryString = sqlite3_mprintf("%s", sqlc);
 	MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
 	
 	BOOL success = sqlite3_prepare_v2(databaseForSelects->_database,

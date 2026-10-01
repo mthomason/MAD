@@ -66,7 +66,7 @@
 		if (!_empty) {
 			self->_statement = NULL;
 			NSString *sql = [query getSql:nil];
-			char *queryString = sqlite3_mprintf(sql.UTF8String);
+			char *queryString = sqlite3_mprintf("%s", sql.UTF8String);
 			sqlite3_prepare_v2(self.databaseForQuery->_database, queryString, -1, &_statement, NULL);
 			sqlite3_free(queryString);
 		}

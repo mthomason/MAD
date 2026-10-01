@@ -355,17 +355,61 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 	return result;
 }
 
-- (void)addColumn:(MADDataColumn *)column {}
-- (bool)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error { return true; }
-- (void)addRowWithDataForFieldKeys:(NSDictionary *)row {}
-- (void)sortUsingDescriptors:(NSArray *)sortDescriptors {}
-- (void)removeAllObjects {}
-- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column { return nil; }
-- (id)objectAtRow:(NSUInteger)row { return nil; }
-- (NSEnumerator *)columnsEnumerator { return nil; }
-- (NSEnumerator *)objectEnumerator { return nil; }
+#pragma mark Abstract row and column operations
+// These must be overridden by a concrete storage subclass.  Previously each one
+// failed silently -- -addRow:error: even returned true while discarding the row --
+// so a subclass that forgot an override lost data with no sign of trouble.  The
+// assertion turns that into a caught defect during development.  NSAssert compiles
+// out of Release, so the return value below is what a shipping build will use.
+
+- (void)addColumn:(MADDataColumn *)column {
+	NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__);
+}
+
+- (bool)addRow:(NSArray *)row error:(NSError * __autoreleasing *)error {
+	NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__);
+	return false;
+}
+
+- (void)addRowWithDataForFieldKeys:(NSDictionary *)row {
+	NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__);
+}
+
+- (void)sortUsingDescriptors:(NSArray *)sortDescriptors {
+	NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__);
+}
+
+- (void)removeAllObjects {
+	NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__);
+}
+
+- (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {
+	NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__);
+	return nil;
+}
+
+- (id)objectAtRow:(NSUInteger)row {
+	NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__);
+	return nil;
+}
+
+- (NSEnumerator *)columnsEnumerator {
+	NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__);
+	return nil;
+}
+
+- (NSEnumerator *)objectEnumerator {
+	NSAssert(NO, @"%s must be overridden", __PRETTY_FUNCTION__);
+	return nil;
+}
+
+// Optional hooks.  A no-op is the correct default for a subclass that does not
+// need bulk-insert optimization, so these stay silent on purpose.
 - (void)beginBulkInsert {}
 - (void)endBulkInsert {}
+
+// Empty-table answers.  These are truthful for a table with no rows and match what
+// MADDataTableVirtual returns, so they are defaults rather than unimplemented stubs.
 
 - (NSArray *)allObjects {
 	NSArray *all = [[NSArray alloc] init];

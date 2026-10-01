@@ -203,10 +203,10 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertEqual(table.tag, (NSUInteger)1234);
 }
 
-/// MADDataTable itself is the inert base of the hierarchy: every row/column
-/// operation is stubbed out to a default value.  A subclass that forgets to
-/// override one of these silently returns the same defaults.
-- (void)testBaseTableOperationsAreInert {
+/// MADDataTable itself is the inert base of the hierarchy.  The read answers
+/// below are truthful for a table with no rows, so they remain plain defaults
+/// rather than assertions.
+- (void)testBaseTableEmptyReadAnswers {
 	MADDataTable *table = [[MADDataTable alloc] initWithId:7];
 
 	XCTAssertEqual([table numberOfRows], (NSUInteger)0);
@@ -214,23 +214,44 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertEqual([table count], (NSUInteger)0);
 	XCTAssertEqualObjects([table allObjects], @[]);
 	XCTAssertEqualObjects([table objectAtRow:0 limit:10], @[]);
-	XCTAssertNil([table objectAtRow:0]);
-	XCTAssertNil([table objectAtRow:0 column:0]);
-	XCTAssertNil([table objectEnumerator]);
-	XCTAssertNil([table columnsEnumerator]);
 
-	// These are no-ops on the base class; they must not throw.
-	MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:@"name"];
-	[table addColumn:column];
-	NSError *error = nil;
-	XCTAssertTrue([table addRow:@[@"a"] error:&error]);
-	[table addRowWithDataForFieldKeys:@{@"name": @"a"}];
-	[table sortUsingDescriptors:@[]];
-	[table removeAllObjects];
+	// The bulk-insert hooks are optional and are deliberate no-ops; they must
+	// not throw, because a subclass need not implement bulk mode at all.
 	[table beginBulkInsert];
 	[table endBulkInsert];
 
 	XCTAssertEqual([table numberOfRows], (NSUInteger)0);
+}
+
+/// CONTRACT: the abstract row/column operations assert instead of failing
+/// silently.  Previously -addRow:error: returned true while discarding the row,
+/// so a storage subclass that forgot an override lost data with no sign of
+/// trouble.  NSAssert is compiled out of Release, so the throws are only
+/// meaningful in a Debug test run.
+- (void)testBaseTableAbstractOperationsAssert {
+	MADDataTable *table = [[MADDataTable alloc] initWithId:7];
+	MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier:@"name"];
+	NSError *error = nil;
+
+#if defined(DEBUG) && DEBUG
+	XCTAssertThrows([table addColumn:column]);
+	XCTAssertThrows([table addRow:@[@"a"] error:&error]);
+	XCTAssertThrows([table addRowWithDataForFieldKeys:@{@"name": @"a"}]);
+	XCTAssertThrows([table sortUsingDescriptors:@[]]);
+	XCTAssertThrows([table removeAllObjects]);
+	XCTAssertThrows([table objectAtRow:0 column:0]);
+	XCTAssertThrows([table objectAtRow:0]);
+	XCTAssertThrows([table columnsEnumerator]);
+	XCTAssertThrows([table objectEnumerator]);
+#else
+	// Release: the assertions are gone, so the methods fall through to their
+	// defaults.  -addRow:error: reports failure rather than claiming success.
+	XCTAssertFalse([table addRow:@[@"a"] error:&error]);
+	XCTAssertNil([table objectAtRow:0]);
+	XCTAssertNil([table objectAtRow:0 column:0]);
+	XCTAssertNil([table columnsEnumerator]);
+	XCTAssertNil([table objectEnumerator]);
+#endif
 }
 
 - (void)testBaseTableNewFilenameMDCacheUsesTag {

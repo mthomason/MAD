@@ -298,7 +298,7 @@ void sqliteLog(void *foo, const char* statement) {
 	BOOL success = NO;
 	sqlite3_stmt *statement;
 	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-	char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
+	char *sql = sqlite3_mprintf("%s", queryStart.UTF8String);
 
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
 		success = YES;
@@ -394,7 +394,7 @@ void sqliteLog(void *foo, const char* statement) {
 	if (queryString.length > 0) {
 		
 		sqlite3_stmt *statement = NULL;
-		char *sql = sqlite3_mprintf(queryString.UTF8String);
+		char *sql = sqlite3_mprintf("%s", queryString.UTF8String);
 		
 		if (statement == NULL) {
 			int prepare_result = sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
@@ -872,7 +872,7 @@ void sqliteLog(void *foo, const char* statement) {
 	NSMutableArray * __autoreleasing result = [[NSMutableArray alloc] init];
 	sqlite3_stmt *statement;
 	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-	char *sql = sqlite3_mprintf((char *) queryStart.UTF8String);
+	char *sql = sqlite3_mprintf("%s", queryStart.UTF8String);
 	int sqlite3_prepare_result = sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
 	if (sqlite3_prepare_result == SQLITE_OK) {
 		while (sqlite3_step(statement) == SQLITE_ROW) {
