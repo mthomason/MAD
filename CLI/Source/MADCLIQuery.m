@@ -18,7 +18,7 @@ MADCLIExitCode MADCLIRunQuery(MADCLIInvocation *invocation) {
 	NSError *error = nil;
 	MADCLIDocument *cliDocument = [MADCLIDocument documentWithURL: invocation.documentURL error: &error];
 	if (cliDocument == nil) {
-		MADCLIError(@"%@", error.localizedDescription);
+		MADCLIError(@"%@", MADCLIDescriptionForError(error));
 		return MADCLIExitBadDocument;
 	}
 
@@ -27,7 +27,7 @@ MADCLIExitCode MADCLIRunQuery(MADCLIInvocation *invocation) {
 					 copySQLWithManagedObjectContext: cliDocument.document.managedObjectContext
 											   error: &sqlError];
 	if (sql == nil) {
-		MADCLIError(@"the document's query produced no SQL: %@", sqlError.localizedDescription ?: @"no error given");
+		MADCLIError(@"the document's query produced no SQL: %@", MADCLIDescriptionForError(sqlError));
 		return MADCLIExitQueryFailed;
 	}
 

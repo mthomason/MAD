@@ -23,7 +23,15 @@
 
 #import <CoreData/NSManagedObjectContext.h>
 
+// The operation's own domain.  It used to borrow @"MADCache" for a missing
+// credential, which reads as a fault in the result cache rather than in the
+// credentials the caller never supplied.
+static NSString * const MADOperationRefreshErrorDomain = @"com.everydayapps.operation.refresh";
+
 static const short errCache = 2;
+static const short errMissingCredentials = 3;
+static const short errExecute = 4;
+static const short errNoDocument = 3842;
 
 @interface MADOperationRefresh ()
 @property (nonatomic, weak) MADocument *document;
@@ -47,8 +55,8 @@ static const short errCache = 2;
 	
 	MADocument *document = self.document;
 	if (!document) {
-		NSError *docNullError = [[NSError alloc] initWithDomain: @"com.everydayapps.operation.refresh"
-														   code: 3842
+		NSError *docNullError = [[NSError alloc] initWithDomain: MADOperationRefreshErrorDomain
+														   code: errNoDocument
 													   userInfo: nil];
 		[self finishWithError:docNullError];
 		return;
@@ -69,7 +77,16 @@ static const short errCache = 2;
 		}
 		
 		if (credientals == nil) {
-			NSError *error = [NSError errorWithDomain: @"MADCache" code: errCache + 1 userInfo: nil];
+			// This is a missing credential, not a cache fault: the database wants
+			// credentials and no dependency supplied any.  It used to report domain
+			// @"MADCache" with code errCache + 1, which points the reader at the
+			// result cache.  See BUGS.md.
+			NSError *error = [NSError errorWithDomain: MADOperationRefreshErrorDomain
+												 code: errMissingCredentials
+											 userInfo: @{
+				NSLocalizedDescriptionKey : NSLocalizedString(@"Credentials required", @"Credentials required"),
+				NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"The database requires credentials and none were supplied.", @"The database requires credentials and none were supplied.")
+			}];
 			[self finishWithError:error];
 			return;
 		}
@@ -113,7 +130,21 @@ static const short errCache = 2;
 	}
 
 	if (!success) {
-		NSError *error = eerror;
+		// eerror is the *connection* error, and it cannot be set here: the connection
+		// succeeded, or -connectWithConnection:credentals:connectionError: would have
+		// returned above.  Finishing with it completed the operation with an empty
+		// error list, so a query that failed was indistinguishable from one that
+		// succeeded -- and the cache still held the previous run's rows, which is
+		// what the caller saw.  executeError is what the driver reported.  See BUGS.md.
+		NSError *error = executeError;
+		if (error == nil) {
+			error = [NSError errorWithDomain: MADOperationRefreshErrorDomain
+										code: errExecute
+									userInfo: @{
+				NSLocalizedDescriptionKey : NSLocalizedString(@"The query failed", @"The query failed"),
+				NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"The database driver reported no error.", @"The database driver reported no error.")
+			}];
+		}
 		[self finishWithError:error];
 		return;
 	}

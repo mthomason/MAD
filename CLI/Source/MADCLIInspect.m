@@ -45,7 +45,7 @@ MADCLIExitCode MADCLIRunInspect(MADCLIInvocation *invocation) {
 	NSError *error = nil;
 	MADCLIContainer *container = [MADCLIContainer containerWithContentsOfURL: invocation.documentURL error: &error];
 	if (container == nil) {
-		MADCLIError(@"%@", error.localizedDescription);
+		MADCLIError(@"%@", MADCLIDescriptionForError(error));
 		return error.code == MADCLIExitBadDocument ? MADCLIExitBadDocument : MADCLIExitUsage;
 	}
 

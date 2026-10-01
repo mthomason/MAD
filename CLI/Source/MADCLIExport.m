@@ -40,7 +40,7 @@ MADCLIExitCode MADCLIRunExport(MADCLIInvocation *invocation) {
 	MADCLIVerbose(invocation, @"Opening %@", invocation.documentURL.lastPathComponent);
 	MADCLIDocument *cliDocument = [MADCLIDocument documentWithURL: invocation.documentURL error: &error];
 	if (cliDocument == nil) {
-		MADCLIError(@"%@", error.localizedDescription);
+		MADCLIError(@"%@", MADCLIDescriptionForError(error));
 		return MADCLIExitBadDocument;
 	}
 
@@ -48,13 +48,13 @@ MADCLIExitCode MADCLIRunExport(MADCLIInvocation *invocation) {
 	// none.  Export needs the row data, which means a refresh first.
 	MADCLIVerbose(invocation, @"Refreshing");
 	if (![cliDocument refreshWithCredentials: nil error: &error]) {
-		MADCLIError(@"refresh failed: %@", error.localizedDescription);
+		MADCLIError(@"refresh failed: %@", MADCLIDescriptionForError(error));
 		return MADCLIExitQueryFailed;
 	}
 
 	MADCLIVerbose(invocation, @"Rendering to %@", outURL.path);
 	if (![cliDocument writePDFToURL: outURL deterministic: invocation.deterministic error: &error]) {
-		MADCLIError(@"export failed: %@", error.localizedDescription);
+		MADCLIError(@"export failed: %@", MADCLIDescriptionForError(error));
 		return MADCLIExitExportFailed;
 	}
 

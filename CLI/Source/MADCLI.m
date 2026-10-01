@@ -186,3 +186,13 @@ void MADCLIError(NSString *format, ...) {
 	va_end(arguments);
 	fprintf(stderr, "%s\n", message.UTF8String);
 }
+
+NSString *MADCLIDescriptionForError(NSError *error) {
+	if (error == nil) return @"no error given";
+	NSString *description = error.localizedDescription;
+	NSString *reason = error.localizedFailureReason;
+	if (reason.length == 0 || [reason isEqualToString: description]) {
+		return description.length > 0 ? description : @"Error";
+	}
+	return [NSString stringWithFormat: @"%@: %@", description, reason];
+}

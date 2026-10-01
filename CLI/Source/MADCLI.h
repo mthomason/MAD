@@ -55,5 +55,10 @@ void MADCLILog(MADCLIInvocation *invocation, NSString *format, ...) NS_FORMAT_FU
 void MADCLIVerbose(MADCLIInvocation *invocation, NSString *format, ...) NS_FORMAT_FUNCTION(2, 3);
 void MADCLIError(NSString *format, ...) NS_FORMAT_FUNCTION(1, 2);
 
+/// An error's text for the terminal.  -localizedDescription alone is often just
+/// "Error"; the drivers put the database's own words in the failure reason, and
+/// printing only the description made a failed refresh read as a bare "Error".
+NSString *MADCLIDescriptionForError(NSError *error);
+
 /// Usage text, for stdout on --help and stderr on a usage error.
 NSString *MADCLIUsageString(void);

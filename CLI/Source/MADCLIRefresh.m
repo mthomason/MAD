@@ -34,14 +34,14 @@ MADCLIExitCode MADCLIRunRefresh(MADCLIInvocation *invocation) {
 	MADCLIVerbose(invocation, @"Opening %@", invocation.documentURL.lastPathComponent);
 	MADCLIDocument *cliDocument = [MADCLIDocument documentWithURL: invocation.documentURL error: &error];
 	if (cliDocument == nil) {
-		MADCLIError(@"%@", error.localizedDescription);
+		MADCLIError(@"%@", MADCLIDescriptionForError(error));
 		return MADCLIExitBadDocument;
 	}
 
 	MADCLIVerbose(invocation, @"Refreshing");
 	NSDate *started = [NSDate date];
 	if (![cliDocument refreshWithCredentials: credentials error: &error]) {
-		MADCLIError(@"refresh failed: %@", error.localizedDescription);
+		MADCLIError(@"refresh failed: %@", MADCLIDescriptionForError(error));
 		return MADCLIExitQueryFailed;
 	}
 	NSTimeInterval elapsed = -[started timeIntervalSinceNow];

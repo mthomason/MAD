@@ -959,8 +959,8 @@ files rather than imported, because `MADDesigner/Source` is not on the bundle's
 header search path.
 
 ### `MADOperationRefresh` reports the connection error in place of the execution error
-- **Status:** Confirmed
-- **Where:** `MADDesigner/Source/MADOperationRefresh.m:115-119`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/MADOperationRefresh.m`
 - **Behavior:** When `-executeSQL:fieldKeys:onConnection:intoResultTable:withError:`
   returns NO, the handler finishes with `NSError *error = eerror;`. `eerror` is the
   *connection* error from the `-connectWithConnection:credentals:connectionError:`
@@ -979,13 +979,23 @@ header search path.
   invisible in both cases and the real message only surfaced under instrumentation.
   Every failure between `-executeSQL:` and the cache is reported as success, and the
   cache makes the success look like it carries data.
-- **Related:** the credentials branch at `:71-75` raises domain `@"MADCache"` with
-  code `errCache + 1` for a *missing credential*, so a document whose database
-  needs credentials the caller did not supply reports "MADCache error 3" and reads
-  as a cache fault. Both are diagnosability defects in the same method, and both
-  cost time in the CLI work.
-- **Test:** none pins this yet; found by running `mad refresh`, which exits 0 on the
-  failure it cannot see.
+- **Related:** the credentials branch raised domain `@"MADCache"` with code
+  `errCache + 1` for a *missing credential*, so a document whose database needed
+  credentials the caller did not supply reported "MADCache error 3" and read as a
+  cache fault. Both were diagnosability defects in the same method, and both cost
+  time in the CLI work.
+- **Now:** the failure path finishes with `executeError`, and only builds its own
+  error — domain `com.everydayapps.operation.refresh`, code `errExecute` — when the
+  driver reported none. The credentials branch uses that domain with a new
+  `errMissingCredentials` code and carries a description saying what is missing.
+  The CLI's error output goes through `MADCLIDescriptionForError` (`CLI/Source/`),
+  which appends `-localizedFailureReason` because the drivers put the database's own
+  words there — without it the result was a bare "refresh failed: Error".
+- **Verified:** with `chinook.sqlite3` moved aside, `mad refresh London.mad` exited
+  0 with "refreshed 76 rows" under the old code (the stale cache's rows) and exits
+  4 with `refresh failed: Error: no such table: Customer` under this one.
+- **Test:** none; the repro needs a document whose query fails against a live
+  database, which the CLI does and the unit targets do not.
 
 ### `MTTableController` read a stale page count after a failed fetch
 - **Status:** Fixed
