@@ -371,10 +371,14 @@
 	NSUInteger offset = (self.maxKnownRow == NSIntegerMin) ? 0 : (NSUInteger)self.maxKnownRow + 1;
 	
 	[self fetchFromAPIWithOffset:offset limit:limit completion:^(BOOL hasMore) {
-		NSUInteger lower = offset;
-		NSUInteger upper = offset + self.datatable.count - 1;
-		self.minKnownRow = MIN(self.minKnownRow, (NSInteger)lower);
-		self.maxKnownRow = MAX(self.maxKnownRow, (NSInteger)upper);
+		// The fetch cleared the table before filling it, so count is this page alone
+		// and the page's last row sits at offset + count - 1.  An empty page has no
+		// last row, and computing one would wrap to NSUIntegerMax and poison maxKnownRow.
+		NSUInteger count = self.datatable.count;
+		self.minKnownRow = MIN(self.minKnownRow, (NSInteger)offset);
+		if (count > 0) {
+			self.maxKnownRow = MAX(self.maxKnownRow, (NSInteger)(offset + count - 1));
+		}
 		self.hasMoreData = hasMore;
 		self.isLoading = NO;
 		[self invalidateLayout];
@@ -391,10 +395,12 @@
 	self.isLoading = YES;
 	
 	[self fetchFromAPIWithOffset:alignedOffset limit:pageSize completion:^(BOOL hasMore) {
-		NSUInteger lower = alignedOffset;
-		NSUInteger upper = alignedOffset + self.datatable.count - 1;
-		self.minKnownRow = MIN(self.minKnownRow, (NSInteger)lower);
-		self.maxKnownRow = MAX(self.maxKnownRow, (NSInteger)upper);
+		// As in -fetchMoreRows: count is the page just written, never a running total.
+		NSUInteger count = self.datatable.count;
+		self.minKnownRow = MIN(self.minKnownRow, (NSInteger)alignedOffset);
+		if (count > 0) {
+			self.maxKnownRow = MAX(self.maxKnownRow, (NSInteger)(alignedOffset + count - 1));
+		}
 		self.hasMoreData = hasMore;
 		self.isLoading = NO;
 		[self invalidateLayout];
@@ -437,11 +443,15 @@
 						[MADKeyChain deleteKey:key];
 					}];
 				}
-				BOOL hasMore = (strongSelf.datatable.count == limit);
-				completion(hasMore);
+				// The query failed, so the table still holds the *previous* page and
+				// its count describes that page, not this one.  Reading it as a page
+				// cursor would keep hasMoreData YES and retry a query that just failed.
+				completion(NO);
 			});
 		} else {
 			dispatch_async(dispatch_get_main_queue(), ^{
+				// The driver clears the table before filling it, so a full page here
+				// means there is likely more; a short or empty page means the end.
 				BOOL hasMore = (strongSelf.datatable.count == limit);
 				completion(hasMore);
 			});
