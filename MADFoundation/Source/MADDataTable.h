@@ -37,11 +37,17 @@ typedef NS_ENUM(short, MADDataTableParameters) {
 // assertion (MADDataTable.m), so a subclass that forgets an override is caught in
 // Debug rather than silently discarding rows.
 
-/// Everything that mutates stored rows.
+/// Everything that mutates stored rows, plus the column metadata a writer needs in
+/// order to describe the rows it is about to write.  The metadata lives here rather
+/// than in a protocol of its own because the MySQL fetch is the only caller that
+/// reads it back, and it reads it *while writing*: on the first row it corrects a
+/// column's type from the value it actually received (MysqlFetch+DataTable.m).
 @protocol MADDataTableWriting <NSObject>
 @required
 - (void)removeAllObjects;
 - (void)addColumn:(nonnull MADDataColumn *)column;
+@property (nonatomic, strong, nonnull, readonly) NSMutableArray <NSString *> *columnKeys;
+@property (nonatomic, strong, nonnull, readonly) NSMutableDictionary <NSString *, MADDataColumn *> *columns;
 - (bool)addRow:(nonnull NSArray *)row error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 - (void)addRowWithDataForFieldKeys:(nonnull NSDictionary<NSString *, id> *)row;
 - (void)sortUsingDescriptors:(nonnull NSArray<NSSortDescriptor *> *)sortDescriptors;
