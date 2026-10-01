@@ -97,212 +97,49 @@ Status key:
 
 ## MADFoundation
 
-### `MADDataColumn -addRows:` is off by one (appends one extra row)
-- **Status:** Confirmed
-- **Where:** `MADFoundation/MADFoundationTests/MADDataColumnTests.m`
-- **Behavior:** `addRows:2` appends three default rows and `addRows:0` still
-  appends one. The loop uses `i <= count` instead of `i < count`.
-- **Why it matters:** Column sizing in the SQLite result cache will always be
-  one row too long; anything that indexes off `count` will read a phantom
-  trailing `NSNull`.
-
-### `MADDataColumn -initWithType:` ignores `dataLen:`
-- **Status:** Confirmed
-- **Where:** `MADFoundation/MADFoundationTests/MADDataColumnTests.m`
-- **Behavior:** `self.dataLength` is assigned from the `length:` parameter; the
-  `dataLen:` argument is silently discarded.
-- **Why it matters:** Callers that pass distinct data-length and display-length
-  values get the wrong value stored.
-
-### `MADDataColumn -copyPlist` / plist round-trip loses `NSNull`
-- **Status:** Confirmed (asymmetry)
-- **Where:** `MADFoundation/MADFoundationTests/MADDataColumnTests.m`
-- **Behavior:** `copyPlist` encodes a default `NSNull` cell as the literal string
-  `@"~MTNull~"`, but `initWithPlist:` does not convert that sentinel back to
-  `[NSNull null]`. A plist round-trip turns a `NULL` cell into the string
-  `@"~MTNull~"`.
-- **Why it matters:** SQLite `NULL`s cached as `NSNull` become the string
-  `"~MTNull~"` after a plist round-trip, corrupting report data.
-
-### `MADDataColumn` NSCoding loses `notNull` / `autoIncrement`
-- **Status:** Confirmed
-- **Where:** `MADFoundation/MADFoundationTests/MADDataColumnTests.m`
-- **Behavior:** `initWithCoder:` does not decode the `notNull` and
-  `autoIncrement` flags; they come back `NO` after an archive round-trip.
-- **Why it matters:** Any column metadata persisted via `NSCoding` drops its
-  nullability / auto-increment constraints.
-
-### `MADDataColumn -objectAtIndex:` returns `instancetype` instead of `id`
-- **Status:** Quirk
-- **Where:** `MADFoundation/Source/MADDataColumn.h`
-- **Behavior:** The method is typed `instancetype` (i.e. `MADDataColumn *`), so
-  comparing a cell against `[NSNull null]` (or any non-column object) needs a
-  cast and produces a distinct-pointer-type warning.
-- **Why it matters:** Cosmetic API smell; cells are arbitrary `id`, so the
-  signature should be `id`. Not a runtime defect.
-
-### `MADGroupOperation -addOperation:` header/impl type mismatch (and missing `-addOperations:`)
-- **Status:** Confirmed
-- **Where:** `MADFoundation/Source/MADGroupOperation.h` / `.m`
-- **Behavior:** The header declares `-addOperation:(NSArray *)operation` but the
-  implementation is `-addOperation:(NSOperation *)operation`. The single-argument
-  `-addOperations:` (which exists in the implementation) is missing from the
-  header entirely, so only `-addOperations:finishingOperation:` is publicly
-  callable.
-- **Why it matters:** The public API is misleading and hides a method that
-  callers would otherwise use.
-
-### `MADGroupOperation` finishes with an array passed to `-finishWithError:`
-- **Status:** Confirmed (inspection; not yet exercised at runtime)
-- **Where:** `MADFoundation/Source/MADGroupOperation.m` (delegate
-  `-operationQueue:operationDidFinish:withErrors:`)
-- **Behavior:** `[self finishWithError:self.aggregatedErrors.copy]` passes an
-  `NSArray<NSError *>` to `-finishWithError:`, which expects a single
-  `NSError *`. The array is copied and re-wrapped, collapsing the group's
-  multiple errors into one bogus "error" that is itself an array.
-- **Why it matters:** Error aggregation is the whole point of a group
-  operation; the aggregated errors are mis-reported.
-
 ### `MADOperation -willEnqueue` advances past `Pending` to `Ready`
-- **Status:** Confirmed
-- **Where:** `MADFoundation/MADFoundationTests/MADOperationTests.m`
+- **Status:** Quirk (documented; not a defect)
+- **Where:** `MADFoundation/Source/MADOperation.m:163-166`
 - **Behavior:** `-willEnqueue` sets `state = Pending`, but because `isReady` is a
-  KVO-dependent key of `state`, the `didChangeValueForKey:@"state"` notification
-  re-enters `-isReady`, which runs `-evaluateConditions` and advances a
-  dependency-free operation straight to `Ready`. The operation never observably
-  rests in `Pending`.
-- **Why it matters:** Any code (or future test) that inspects state right after
-  enqueueing will see `Ready` rather than `Pending`; the state machine skips a
-  transition.
-
-### `MADKeyChain -deleteSavedPasswordForKey:error:` mis-handles errors
-- **Status:** Confirmed (inspection; not covered by a test — keychain calls)
-- **Where:** `MADFoundation/Source/MADKeyChain.m`
-- **Behavior:** The guard is `if (deleteError != nil && *error != nil)`. This
-  dereferences `error` without a null check (crash if the caller passes `NULL`)
-  and, even when `error` is non-NULL, only reports the failure when `*error` was
-  already non-nil — so a deletion failure into a fresh `&err` is silently
-  swallowed and the method returns success.
-- **Why it matters:** Credential deletion failures are silently dropped, and the
-  legal `error:NULL` call site crashes.
-
-### `MADOperationConditionTestConnection` base class returns `nil` from `-evaluateForOperation:`
-- **Status:** Quirk
-- **Where:** `MADFoundation/Source/MADOperationConditionTestConnectionSuccess.m:58`
-- **Behavior:** The class is an abstract middle class — only
-  `MADOperationConditionTestConnectionSuccess` and
-  `MADOperationConditionTestConnectionFailuare` implement
-  `-evaluateForOperation:`; the base returns `nil`. That violates the protocol's
-  nonnull contract, and the inherited `-evaluateForOperation:completion:` would
-  pass that `nil` straight to the completion block.
-- **Why it matters:** Nothing in the app instantiates the base directly, so it is
-  latent rather than live — recorded so the `nil` is not mistaken for an
-  intentional "always satisfied" signal.
-- **Locked down by:** `testTestConnectionBaseClassProducesNoResult`.
-
-### `MADOperationConditionResult` factories put the result class name in the error domain
-- **Status:** Quirk
-- **Where:** `MADFoundation/Source/MADOperationConditionResult.m:54`
-- **Behavior:** `-newOperationConditionResultFailedNotSatisfied:` builds its error
-  with `domain:NSStringFromClass([self class])`, so a failure raised by
-  `MADOperationConditionHasResultStringResult` reports the domain
-  `MADOperationConditionHasResultStringResult`. The *condition* name travels in
-  `userInfo[MADOperationConditionKey]` instead.
-- **Why it matters:** Error domain is not a useful way to tell which condition
-  failed; code that switches on the domain rather than the userInfo key will be
-  misled.
-- **Locked down by:** `testFailedNotSatisfiedResultShape`.
+  KVO-dependent key of `state` (see `+keyPathsForValuesAffectingValueForKey:`),
+  the `didChangeValueForKey:@"state"` notification re-enters `-isReady`, which
+  runs `-evaluateConditions` and advances a dependency-free operation straight to
+  `Ready`. The operation never observably rests in `Pending`.
+- **Why it is not a defect:** That `isReady` → `state` mapping is exactly what
+  NSOperation dependency scheduling requires, so removing it is not an option.
+  Nothing outside `MADOperation.m` reads `.state`, which makes the skipped
+  transition unobservable. Called a defect in an earlier pass; kept here so the
+  next reader does not "fix" the mapping and break dependencies.
+- **Locked down by:** `MADOperationTests.m` `testWillEnqueueAdvancesPastPendingToReady`
+  (comment corrected to record this as intended).
 
 ---
 
 ## MADCocoaExtensions
 
-### `MADTextStyle -initWithBold:italic:underline:strikethrough:` scrambles its flags
-- **Status:** Confirmed
-- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADTextStyleTests.m`
-- **Behavior:** The initializer passes `(bold, strikethrough, italic, underline)`
-  to the struct maker, so `italic`/`underline`/`strikethrough` land in the wrong
-  properties. The individual setters are correct; only the initializer is broken.
-- **Why it matters:** Any text style created via this initializer gets the wrong
-  underline/strikethrough/italic attributes rendered.
-
-### `CGRectTopRight` / `CGRectBottomLeft` / `CGRectBottomRight` transpose X and Y
-- **Status:** Confirmed
-- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADGeometryExtrasTests.m`
-- **Behavior:** These inline helpers return transposed coordinates (e.g.
-  `CGRectTopRight` returns `(origin.y, origin.x + width)` instead of
-  `(origin.x + width, origin.y)`). The correctly-written `CGCorner*PointInRect`
-  variants exist alongside them.
-- **Why it matters:** Any caller using the `CGRect*` corner helpers gets the
-  wrong point (they only look right for a square rect anchored at `(0,0)`).
-
-### `CGCenterRect` computes the wrong center
-- **Status:** Confirmed
-- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADGeometryExtrasTests.m`
-- **Behavior:** `CGCenterRect` returns `((origin.x + size.width)/2,
-  (origin.y + size.height)/2)` instead of `origin + size/2`. It is only correct
-  when the origin is `(0,0)`. (`CGCenterOfRect` is the correct version.)
-- **Why it matters:** Centering a non-zero-origin rect via `CGCenterRect` lands
-  off-center.
-
-### `MADDirectionHorizontalDirectionOfPoint` reports the inverse direction
-- **Status:** Confirmed
-- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADDirectionTests.m`
-- **Behavior:** Moving from `p1` to a `p2` to the right returns `MADDirectionLeft`
-  (and moving left returns `MADDirectionRight`) — the Left/Right arms are swapped.
-- **Why it matters:** Callers resolving horizontal swipe/drag direction get the
-  opposite answer.
-
-### `MADDirectionVerticalDirectionOfPoint` compares X instead of Y
-- **Status:** Confirmed (copy-paste)
-- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADDirectionTests.m`
-- **Behavior:** The alignment guard uses `CGFloatCompare(p2.x, p1.x)`, so a purely
-  vertical segment (same X, different Y) reports `MADDirectionNoDirection`
-  instead of `Up`/`Down`.
-- **Why it matters:** Vertical movement is never classified as vertical.
-
-### `MADColorSocial +newBlueTwitter` returns a `UIColor`, not a `MADColorSocial`
-- **Status:** Confirmed
-- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADColorTests.m`
-- **Behavior:** The method is declared `instancetype` but returns
-  `newColorWitColors(...)`, a plain `UIColor`. Calling `.hexStringValue` (or any
-  `MADColor` API) on the result would fail.
-- **Why it matters:** The social-color API lies about its return type; the
-  classes appear unused, but any future caller will be misled.
-
-### `MTMath` file-size conversion uses integer division
-- **Status:** Confirmed (quirk)
-- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MTMathTests.m`
-- **Behavior:** Both `madSystemFileSizeToMB` and
-  `[MTMath newSystemFileSizeToMB:]` divide by `1000000` in integer arithmetic, so
-  fractional megabytes are truncated (`1500000` → `1.0`). It is also decimal
-  (×10⁶) rather than binary (×2²⁰).
-- **Why it matters:** File-size display loses precision and mismatches the
-  binary megabytes that `NSFileManager` typically reports.
-
 ### `CGRectAdjustForScale` shrinks regardless of zoom direction
-- **Status:** Investigate
-- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADGeometryExtrasTests.m`
+- **Status:** Quirk (load-bearing; do not "fix" one branch)
+- **Where:** `MADCocoaExtensions/Source/CGGeometry+Extras.h`
 - **Behavior:** For `zoomScale > 1` it multiplies by `1/zoomScale`; for
   `zoomScale < 1` it multiplies by `zoomScale`. Both paths shrink the rect.
-- **Why it matters:** If the intent is to scale by `zoomScale`, the zoom-in
-  branch is inverted; if the intent is to normalize out an applied scale, the
-  name is misleading. Needs a human judgment call.
-
-### `MADGeneralDirectionOfDegrees` falls through to `north` on exact boundaries
-- **Status:** Quirk
-- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADGeometryExtrasTests.m`
-- **Behavior:** Because the range checks use strict inequalities, exact boundary
-  angles (`0`, `30`, `60`, …) fall through to the default `north`.
-- **Why it matters:** Cosmetically wrong only at exact boundary values.
+- **Why it is intentional:** the two callers split the `zoomScale` domain between
+  them. `MADDesignerScrollView.m:30` calls it only on the `zoomScale < 1` path,
+  and `:146` only after forcing `zoomScale >= 1` at `:142-144`; the two results are
+  then compared with `CGRectContainsRect` at `:150`. Each therefore lands in the
+  branch that is correct for its case, and changing one branch without reworking
+  both call sites breaks that test — which is exactly what an earlier pass
+  suspected. Left as-is, with a comment above the function in the header.
+- **Locked down by:** `MADGeometryExtrasTests.m` `testAdjustForScale`.
 
 ### `newColorWitColors` misspells "With"
-- **Status:** Quirk
+- **Status:** Quirk (deferred)
 - **Where:** `MADCocoaExtensions/Source/MADColor.h`
 - **Behavior:** The public factory is named `newColorWitColors` (missing the
   "h"). A corrected `newColorWithColorsAlpha` variant already exists.
 - **Why it matters:** Cosmetic API typo, consistent with the `TypeCache` typo
-  noted under MADAPI.
+  noted under MADAPI. Deferred: the fix is an additive alias
+  (`+newColorWithColors:` forwarding to the misspelling) so no caller has to
+  change, and that is churn for a cosmetic gain.
 
 ---
 
@@ -855,6 +692,98 @@ header search path.
 ---
 
 ## Already fixed (for reference)
+
+### MADFoundation batch: ten defects, each caller-audited first
+- **Status:** Fixed
+- **Commit:** `39ffa249c` (also corrects two BUGS.md impact notes that were wrong)
+- **Where:** `MADFoundation/Source/MADDataColumn.{h,m}`, `MADGroupOperation.{h,m}`,
+  `MADKeyChain.m`, `MADOperationConditionResult.m`,
+  `MADOperationConditionTestConnectionSuccess.m`
+- **Behavior and fixes:**
+  - `MADDataColumn -addRows:` looped `i <= count`, adding one row too many.
+    **Now:** `i < count`. The old note said the SQLite result cache would be
+    "one row too long"; that was wrong — the method has **no production
+    caller**, so no phantom row ever existed.
+  - `MADDataColumn -initWithType:` stored the `length:` argument into
+    `dataLength`. **Now:** it stores `dataLen:`, matching the property name.
+    Inert today (the one caller never reads it back); `number:`,
+    `indexOfType:` and `length:` stay unused for the MADTdsClient pass.
+  - `MADDataColumn -initWithPlist:` did not decode the `@"~MTNull~"`
+    sentinel that `-copyPlist` writes. **Now:** a single named constant is
+    used by both sides and the sentinel decodes back to `[NSNull null]`.
+    The old note said this "corrupts report data"; also wrong — the sentinel
+    only ever touched `defaultValue`, which nothing reads, and row cells ride
+    under a separate `"column"` key and round-tripped intact.
+  - `MADDataColumn -initWithCoder:` encoded but never decoded `notNull` /
+    `autoIncrement`. **Now:** both are decoded.
+  - `MADDataColumn -objectAtIndex:` was declared `instancetype` in the
+    header while the implementation already returned `id`. **Now:** the
+    header says `id`.
+  - `MADGroupOperation -addOperation:` was declared taking `NSArray` but
+    implemented taking `NSOperation`; single-argument `-addOperations:` was
+    missing from the header. **Now:** both match the implementation and are
+    declared.
+  - `MADGroupOperation`'s delegate called
+    `-finishWithError:self.aggregatedErrors.copy`, passing an *array* where a
+    single `NSError *` was expected, re-wrapping it as one bogus "error" that
+    was itself an array. **Now:** it calls `-finish:`, which takes the array.
+    One-word fix — `-finish:` was already declared on `MADOperation`. Removes
+    a latent crash in `MADViewerController.m:925`, which sends
+    `-localizedDescription` to every element.
+  - `MADKeyChain -deleteSavedPasswordForKey:error:` guarded with
+    `if (deleteError != nil && *error != nil)`, dereferencing a `NULL` `error`
+    and silently swallowing failures into a fresh `&err`. **Now:** the
+    `NULL` case is legal and failures surface.
+  - `MADOperationConditionTestConnection` (abstract base) returned `nil` from
+    `-evaluateForOperation:`, violating the protocol's nonnull contract.
+    **Now:** it asserts (`NSAssert(NO, … must be overridden)`) and returns
+    `nil` in Release, matching the `MADDataTable` base.
+  - `MADOperationConditionResult` built errors with
+    `domain:NSStringFromClass([self class])`, putting the *result subclass*
+    name in the domain. **Now:** the fixed `@"MADOperationCondition"`; the
+    condition name still travels in `userInfo[MADOperationConditionKey]`.
+- **Test:** MADFoundation 116 → 118, 0 failures. The characterization tests
+  that pinned the buggy behaviour are flipped; `-finish:` gains the
+  regression guard it never had
+  (`MADGroupOperationTests.m` `testFinishingWithSeveralErrorsKeepsThemSeparate`).
+
+### MADCocoaExtensions batch: seven defects, one deliberate non-change
+- **Status:** Fixed
+- **Commit:** `86e9ecfb9` (also corrects a BUGS.md "unused" claim that was wrong)
+- **Where:** `MADCocoaExtensions/Source/CGGeometry+Extras.h`, `MADTextStyle.m`,
+  `MTMath.{h,m}`, `MADColorSocial.{h,m}`
+- **Behavior and fixes:**
+  - `CGRectBottomLeft` / `CGRectBottomRight` / `CGRectTopRight` returned
+    transposed points (right only for a square rect at `(0,0)`). **Now:**
+    the real corners, matching the `CGCorner*PointInRect` siblings.
+  - `CGCenterRect` returned `((x + w)/2, (y + h)/2)`. **Now:**
+    `origin + size/2`.
+  - `MADDirectionHorizontalDirectionOfPoint` had Left/Right swapped.
+    **Now:** the name's plain reading. No caller either way.
+  - `MADDirectionVerticalDirectionOfPoint` compared X instead of Y, so a
+    vertical segment reported `NoDirection`. **Now:** it compares Y.
+  - `MADGeneralDirectionOfDegrees` used strict inequalities, so exact
+    boundary angles (`0`, `30`, `60`, …) fell through to `north`. **Now:**
+    half-open octants.
+  - `MADTextStyle`'s initializer passed `(bold, strikethrough, italic,
+    underline)` to `MADLayoutTextStyleMake`, scrambling the flags.
+    **Now:** the struct maker's order. The setters were already correct.
+  - `MTMath`'s file-size conversion used integer division
+    (`1500000` → `1.0`). **Now:** divides by `1000000.0`. Kept decimal
+    megabytes — the house convention (`MADStandard`). The integer→double
+    promotion needs an explicit `(double)` cast or
+    `-Wimplicit-int-float-conversion` fires in every target that includes
+    the header.
+  - `MADColorSocial +newBlueTwitter` was declared `instancetype` but returns
+    `newColorWitColors(…)`, a plain `UIColor`. **Now:** declared `UIColor *`.
+    The old note said "the classes appear unused" — that was wrong: it
+    renders the Twitter button at `MADAttributedStringCommon.m:32`. The
+    genuinely unused `+newBlueLinkedIn` / `+newBlueFacebook` (never
+    declared, never called) are deleted.
+- **Deliberately not changed:** `CGRectAdjustForScale` — see the load-bearing
+  entry under MADCocoaExtensions above. Only a comment was added.
+- **Test:** MADCocoaExtensions 76, 0 failures. Every characterization test is
+  flipped to pin the corrected behaviour.
 
 ### `MADDataTableFast -objectAtRow:column:` ignored its `column` argument
 - **Status:** Fixed
