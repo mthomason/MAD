@@ -81,7 +81,7 @@
 		MysqlFetch *myFetch = [[MysqlFetch alloc] init];
 		NSString *identifier = @"v999";
 		MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
-		MADDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:&dataTableVirtual
+		MADDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:dataTableVirtual
 											   onConnection: conn error: &fetchError];
 		NSMutableArray <MADDatabaseTable *> *results = nil;
 		if (fetchError == nil) {
@@ -109,7 +109,7 @@
 	NSString *identifier = @"v999";
 	MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
 	MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
-											  dataTable: &dataTableVirtual
+											  dataTable: dataTableVirtual
 										   onConnection: conn
 										  extendedNames: YES
 												  error: &error];
@@ -136,7 +136,7 @@
 	NSString *identifier = @"v999";
 	MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
 	MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
-											  dataTable: &dataTableVirtual
+											  dataTable: dataTableVirtual
 										   onConnection: conn
 										  extendedNames: YES
 												  error: &errorFetch];
@@ -177,7 +177,7 @@
 	NSError *errorColumnMetaData = nil;
 	
 	MADDataTable *dataTable = [myFetch fetchWithCommand:command
-											  dataTable:&dataTableVirtual1
+											  dataTable:dataTableVirtual1
 										   onConnection:conn
 												  error:&errorShowColumns];
 	if (errorShowColumns == nil) {
@@ -200,7 +200,7 @@
 		NSString *command2 = [[NSString alloc] initWithFormat:formatSelectAll, safeTableName];
 		MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
 		MADDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2
-													dataTable:&dataTableVirtual2
+													dataTable:dataTableVirtual2
 												 onConnection:conn
 														error:&errorColumnMetaData];
 		if (errorColumnMetaData == nil) {
@@ -272,14 +272,17 @@
 	return success ? conn : nil;
 }
 
-- (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(MADDataTable *)dataTable
+// Narrowed to the write port like the other drivers.  MySQL's fetch does read the
+// table's column metadata back, but that metadata is declared by <MADDataTableWriting>
+// (MADDataTable.h), so the write port is all this class needs.
+- (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(id <MADDataTableWriting>)dataTable
 		 withError:(NSError * __autoreleasing *)error {
 	
 	MysqlFetch *myFetch = [[MysqlFetch alloc] init];
 	myFetch.delegate = self;
 	
 	NSError *fetchError = nil;
-	[myFetch fetchWithCommand: sql dataTable: &dataTable onConnection:dbconn extendedNames:YES error: &fetchError];
+	[myFetch fetchWithCommand: sql dataTable: dataTable onConnection:dbconn extendedNames:YES error: &fetchError];
 	
 	return fetchError == nil;
 }
@@ -300,7 +303,7 @@
 	return result;
 }
 
-- (BOOL)executeQuery:(MADQuery *)query withDataTable:(MADDataTable *)dataTable andError:(NSError * __autoreleasing *)error {
+- (BOOL)executeQuery:(MADQuery *)query withDataTable:(id <MADDataTableWriting>)dataTable andError:(NSError * __autoreleasing *)error {
 	BOOL result = NO;
 	id connectionSettings = self.databaseConnection;
 	NSError * __autoreleasing dberror = nil;
@@ -320,7 +323,7 @@
 		NSString *queryString = [query getSql:self error:&sqlError];
 		if (queryString != nil && queryString.length > 0 && sqlError == nil) {
 			[myFetch fetchWithCommand:queryString
-							 dataTable:&dataTable
+							 dataTable:dataTable
 						  onConnection:dbconn
 								 error:&sqlError];
 		}
@@ -375,7 +378,7 @@
 	NSString *identifier = @"v999";
 	MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
 	MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
-											 dataTable: &dataTableVirtual
+											 dataTable: dataTableVirtual
 										  onConnection: connection
 												 error: &error];
 	

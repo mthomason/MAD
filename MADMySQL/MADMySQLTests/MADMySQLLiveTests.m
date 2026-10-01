@@ -93,7 +93,7 @@
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *fetchError = nil;
 	MysqlFetch *fetch = [[MysqlFetch alloc] init];
-	[fetch fetchWithCommand:sql dataTable:&table onConnection:connection error:&fetchError];
+	[fetch fetchWithCommand:sql dataTable:table onConnection:connection error:&fetchError];
 	if (error != NULL) { *error = fetchError; }
 	return table;
 }
@@ -294,7 +294,7 @@
 	NSError *error = nil;
 	MysqlFetch *fetch = [[MysqlFetch alloc] init];
 	[fetch fetchWithCommand:@"SELECT emp_no FROM employees WHERE emp_no = 10001;"
-				  dataTable:&table
+				  dataTable:table
 			   onConnection:connection
 			  extendedNames:YES
 					  error:&error];
@@ -310,7 +310,7 @@
 	NSError *error = nil;
 	MysqlFetch *fetch = [[MysqlFetch alloc] init];
 	[fetch fetchWithCommand:@"SELECT emp_no FROM employees WHERE emp_no = 10001;"
-				  dataTable:&table
+				  dataTable:table
 			   onConnection:connection
 			  extendedNames:NO
 					  error:&error];
@@ -356,7 +356,7 @@
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *error = nil;
 	MysqlFetch *fetch = [[MysqlFetch alloc] init];
-	[fetch fetchWithCommand:@"SELECT 1;" dataTable:&table onConnection:nil error:&error];
+	[fetch fetchWithCommand:@"SELECT 1;" dataTable:table onConnection:nil error:&error];
 
 	XCTAssertNotNil(error);
 	XCTAssertEqual(error.code, 3492);
@@ -373,13 +373,13 @@
 	NSError *error = nil;
 
 	[fetch fetchWithCommand:@"SELECT emp_no FROM employees ORDER BY emp_no LIMIT 50;"
-				  dataTable:&table onConnection:connection error:&error];
+				  dataTable:table onConnection:connection error:&error];
 	XCTAssertNil(error);
 	XCTAssertEqual([table numberOfRows], 50u);
 
 	// Re-using the same table must not append; the fetch clears it first.
 	[fetch fetchWithCommand:@"SELECT emp_no FROM employees ORDER BY emp_no LIMIT 3;"
-				  dataTable:&table onConnection:connection error:&error];
+				  dataTable:table onConnection:connection error:&error];
 	XCTAssertNil(error);
 	XCTAssertEqual([table numberOfRows], 3u);
 	XCTAssertEqualObjects([table objectAtRow:0 column:0], @10001);
@@ -492,7 +492,7 @@
 	MADDataTable *scratch = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *statementError = nil;
 	MysqlFetch *runner = [[MysqlFetch alloc] init];
-	[runner fetchWithCommand:sql dataTable:&scratch onConnection:connection error:&statementError];
+	[runner fetchWithCommand:sql dataTable:scratch onConnection:connection error:&statementError];
 	if (error != NULL) { *error = statementError; }
 }
 

@@ -74,7 +74,7 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 }
 
 - (MADDataTable *)fetchWithCommand: (NSString *)command
-						dataTable: (MADDataTable * __autoreleasing *)dataTable
+						dataTable: (id <MADDataTableWriting>)dataTable
 					 onConnection: (MysqlConnection *)connection
 							error: (NSError * __autoreleasing *)error {
 	return [self fetchWithCommand:command dataTable:dataTable onConnection:connection extendedNames:YES error:error];
@@ -82,7 +82,7 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 
 
 - (MADDataTable *)fetchWithCommand: (NSString *)command
-						dataTable: (MADDataTable * __autoreleasing *)dataTable
+						dataTable: (id <MADDataTableWriting>)dataTable
 					 onConnection: (MysqlConnection *)connection
 					extendedNames: (BOOL)useExtendedNames
 							error: (NSError * __autoreleasing *)error {
@@ -145,7 +145,7 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 			NSMutableArray *fieldCollector = [[NSMutableArray alloc] initWithCapacity:myStatement->field_count];
 			NSMutableSet *sourceTables = [[NSMutableSet alloc] initWithCapacity:myStatement->field_count];
 			
-			[*dataTable removeAllObjects];
+			[dataTable removeAllObjects];
 			
 			for (NSUInteger x=0; x < myStatement->field_count;x++) {
 				
@@ -166,7 +166,7 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 				MADDataColumn *dataColumn;
 				dataColumn = [MysqlFetch dataColumnForFieldName: fieldName
 													 mySqlField: myStatement->fields[x]];
-				[*dataTable addColumn:dataColumn];
+				[dataTable addColumn:dataColumn];
 				
 				bindings[x] = [MysqlFetch bindDataForStatement: myStatement andField: x];
 				
@@ -222,15 +222,17 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 		}
 	}
 
-	return *dataTable;
+	// The caller handed the table in and gets the same object back; the work was done
+	// through its write port, so no out-parameter is needed.
+	return (MADDataTable *)dataTable;
 }
 
 - (void)fetchResultsFromConnection: (MysqlConnection *)connection
-					 intoDataTable: (MADDataTable * __autoreleasing *)dataTable
+					 intoDataTable: (id <MADDataTableWriting>)dataTable
 					 withStatement: (MYSQL_STMT *)statement
 							 fetch: (MysqlFetch *)mf
 					   andBindings: (MYSQL_BIND *)bindings  {
-	[*dataTable beginBulkInsert];
+	[dataTable beginBulkInsert];
 	int fetchResults = 0;
 	NSUInteger rowCounter = 0;
 
@@ -294,10 +296,10 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 										
 											// FIXME: This is a hack.
 											if (rowCounter == 0) {
-												
-												MADDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
+
+												MADDataColumn *column = dataTable.columns[dataTable.columnKeys[x]];
 												column.type = MADDataTypeString;
-											
+
 											}
 											
 											if (theDataString.length != 0) {
@@ -314,10 +316,10 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 										} else if ([theDataString isKindOfClass:[NSNumber class]]) {
 											
 											if (rowCounter == 0) {
-											
-												MADDataColumn *column = (*dataTable).columns[(*dataTable).columnKeys[x]];
+
+												MADDataColumn *column = dataTable.columns[dataTable.columnKeys[x]];
 												column.type = MADDataTypeInteger;
-												
+
 											}
 											
 											dict[key] = theDataString;
@@ -462,11 +464,11 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 				
 			}
 			
-			[*dataTable addRowWithDataForFieldKeys:dict];
+			[dataTable addRowWithDataForFieldKeys:dict];
 		}
 		rowCounter++;
 	}
-	[*dataTable endBulkInsert];
+	[dataTable endBulkInsert];
 }
 
 enum enum_field_types bufferTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
