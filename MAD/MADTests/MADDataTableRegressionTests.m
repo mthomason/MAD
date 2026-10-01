@@ -12,7 +12,7 @@
 //    MADFoundation : MADDataTable, MADDataTableType, MADDataTableVirtual
 //    MADSqlite3    : MADDataTableFast, MADDataTableSingleColumnEnumerator,
 //                    MADDataTableObjectEnumerator
-//    MAD           : MADDataTableLocation, MADDataTable+Constructor
+//    MAD           : MADDataTable+Constructor
 //
 //  Threading contract recorded here (see the "Threading" section at the bottom):
 //    * MADDataTable / MADDataTableVirtual keep their state in plain NSMutableArray /
@@ -48,7 +48,6 @@
 static NSString * const MADDataTableObjectEnumeratorClassName = @"MADDataTableObjectEnumerator";
 static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataTableSingleColumnEnumerator";
 
-#import "MADDataTableLocation.h"
 #import "MADDataTable+Constructor.h"
 
 #pragma mark - Test Doubles
@@ -622,55 +621,6 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertThrows([table enumeratorForKeyObjectsSorted]);
 	XCTAssertThrows([table objectsForGroupKeys:@[]]);
 #endif
-}
-
-#pragma mark - MADDataTableLocation
-
-- (void)testDataTableLocationFactoryAndDefaults {
-	MADDataTableLocation *location = [MADDataTableLocation newDataTableLocationForRow:3 inColumn:7];
-	XCTAssertNotNil(location);
-	XCTAssertEqual(location.row, (NSUInteger)3);
-	XCTAssertEqual(location.column, (NSUInteger)7);
-}
-
-- (void)testDataTableLocationCodingRoundTrip {
-	MADDataTableLocation *location = [MADDataTableLocation newDataTableLocationForRow:12 inColumn:34];
-
-	NSError *error = nil;
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:location
-									 requiringSecureCoding:NO
-													 error:&error];
-	XCTAssertNotNil(data);
-	XCTAssertNil(error);
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-	MADDataTableLocation *restored = [NSKeyedUnarchiver unarchiveTopLevelObjectWithData:data
-																				  error:&error];
-#pragma clang diagnostic pop
-	XCTAssertNotNil(restored);
-	XCTAssertNil(error);
-	XCTAssertEqual(restored.row, (NSUInteger)12);
-	XCTAssertEqual(restored.column, (NSUInteger)34);
-}
-
-/// CONTRACT: MADDataTableLocation adopts NSCoding but not NSSecureCoding, so the
-/// modern secure unarchiving entry point rejects it.  Archives written today can
-/// only be read back through the deprecated non-secure API.
-- (void)testDataTableLocationIsNotSecureCodable {
-	MADDataTableLocation *location = [MADDataTableLocation newDataTableLocationForRow:12 inColumn:34];
-
-	NSError *error = nil;
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:location
-									 requiringSecureCoding:NO
-													 error:&error];
-	XCTAssertNotNil(data);
-
-	MADDataTableLocation *restored = [NSKeyedUnarchiver unarchivedObjectOfClass:[MADDataTableLocation class]
-																	  fromData:data
-																		 error:&error];
-	XCTAssertNil(restored);
-	XCTAssertNotNil(error);
 }
 
 #pragma mark - MADDataTable+Constructor
