@@ -58,6 +58,20 @@
 	return [[NSString alloc] initWithFormat:@"`%@`", fieldOrTableName];
 }
 
+// Deliberately no -newSafeLiteral: override; this class inherits MADDatabase's, which
+// emits the ANSI '...' with the interior doubled.
+//
+// That change is not a regression: MySQL accepts '' inside a single-quoted literal, and the
+// double-quoted form it replaces was a string only because ANSI_QUOTES is off by default --
+// with it on, "London" was an identifier there too.
+//
+// It is not complete, though.  A backslash inside a MySQL literal is an escape character,
+// so a value like C:\temp is read as C:<tab>emp whatever the quoting; only
+// -[MysqlConnection mysqlEscapeString:] (a wrapper over mysql_real_escape_string) settles
+// that, because only the live connection knows the session's mode.  Building the SQL cannot
+// reach one: -executeQuery:withDataTable:andError: opens a connection, builds the SQL and
+// lets it go -- the connection is never kept on self, and this driver reconnects per query.
+// Recorded in BUGS.md; the escape belongs with whoever next touches that lifetime.
 + (NSError *)errorCouldNotGetCredientals {
 	return [NSError errorWithDomain:NSStringFromClass([self class])
 							   code:43421

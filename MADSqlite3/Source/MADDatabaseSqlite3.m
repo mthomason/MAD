@@ -50,6 +50,11 @@
 #import <dispatch/semaphore.h>
 #import <dispatch/object.h>
 
+// Double quotes wrap *names* here, and only names: SQLite reads them as identifiers, and
+// SQLITE_DQS=0 (Compressor/sqlite3.xcconfig) means it will not fall back to reading one as
+// a string when no such column exists.  Values do not come through these; they go through
+// -newSafeLiteral:, which this class inherits from MADDatabase -- single quotes with the
+// interior doubled, which is SQLite's own escaping.  There is deliberately no override.
 NSString * const MADDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MADDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
 NSString * const MADDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";

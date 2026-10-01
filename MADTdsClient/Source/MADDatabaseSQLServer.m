@@ -1755,6 +1755,16 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	return [MADDatabaseSQLServer newSafeIdentifier:fieldOrTableName];
 }
 
+// Overrides the base only for the N prefix.  A T-SQL literal without it is varchar, and the
+// server then reads a non-ASCII value through the database's collation; with N it is
+// nvarchar and the characters arrive intact.  The quoting itself is the base's -- T-SQL
+// doubles an interior quote and gives no meaning to a backslash.
+- (NSString *)newSafeLiteral:(NSString *)value {
+	if (value == nil) return @"NULL";
+	NSString *escaped = [value stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+	return [[NSString alloc] initWithFormat:@"N'%@'", escaped];
+}
+
 + (NSString *)bracketedIdentifierFromName:(NSString *)name {
 	NSArray<NSString *> *components = [name componentsSeparatedByString:@"."];
 	NSMutableArray<NSString *> *wrappedComponents = [NSMutableArray arrayWithCapacity:components.count];
@@ -1999,9 +2009,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	RETCODE sqlReturnCode = FAIL;
 	DBPROCESS *dbconn = [process process];
 	if (dbconn) {
+		// The name is a value here and goes through the literal quoter; an apostrophe in a
+		// table name used to close the literal early and leave the rest of the name as SQL.
 		NSString *queryFormat = @"SELECT name, system_type_id, max_length, precision, scale FROM "
-								@"sys.columns WHERE object_id = OBJECT_ID('%@')";
-		NSString *query = [[NSString alloc] initWithFormat:queryFormat, tableName];
+								@"sys.columns WHERE object_id = OBJECT_ID(%@)";
+		NSString *query = [[NSString alloc] initWithFormat:queryFormat, [self newSafeLiteral:tableName]];
 		dbcmd(dbconn, [query cStringUsingEncoding:NSStringEncodingConversionAllowLossy]);
 		
 		sqlReturnCode = dbsqlexec(dbconn);

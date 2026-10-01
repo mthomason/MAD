@@ -115,6 +115,25 @@
 	XCTAssertTrue([sql containsString:@"LIMIT 511;"]);
 }
 
+// The base emits the ANSI literal.  A value is single-quoted, and an interior quote is
+// doubled -- not backslash-escaped, and never wrapped in a double quote, which SQL reads as
+// a *name*.  Writing "London" is what made a text filter fail once SQLITE_DQS stopped
+// forgiving it.  See BUGS.md.
+- (void)testNewSafeLiteralQuotesAndEscapes {
+	MADDatabase *db = [[MADDatabase alloc] init];
+	XCTAssertEqualObjects([db newSafeLiteral:@"London"], @"'London'");
+	XCTAssertEqualObjects([db newSafeLiteral:@"O'Brien"], @"'O''Brien'");
+	XCTAssertEqualObjects([db newSafeLiteral:@"it''s"], @"'it''''s'");
+	XCTAssertEqualObjects([db newSafeLiteral:@""], @"''");
+}
+
+// nil is a value the caller did not set, and SQL spells that NULL.  Emitting '' instead
+// would silently ask for rows whose column is the empty string.
+- (void)testNewSafeLiteralNilIsNull {
+	MADDatabase *db = [[MADDatabase alloc] init];
+	XCTAssertEqualObjects([db newSafeLiteral:nil], @"NULL");
+}
+
 - (void)testSqlAggregateFunctions {
 	MADDatabase *db = [[MADDatabase alloc] init];
 	XCTAssertEqualObjects([db sqlAggregateFunctionLength], @"LENGTH");

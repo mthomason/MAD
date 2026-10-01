@@ -199,6 +199,23 @@ NSString * const MADSqlTextFromPart = @"\nFROM\n";
 	return result;
 }
 
+// The ANSI form: single quotes, with an interior quote doubled.  Every dialect this
+// framework ships accepts it, so it is the default rather than a fallback.
+//
+// The double quote is the point.  SQL reads a double-quoted token as a *name*, never as a
+// value, so a text filter written as "London" asks for a column called London.  SQLite used
+// to forgive that -- SQLITE_DQS defaults to on -- until Compressor/sqlite3.xcconfig pinned
+// SQLITE_DQS=0, and MySQL was reading them as strings only by its own default.  See BUGS.md.
+//
+// A value containing a backslash is not handled here and cannot be: MySQL treats one
+// inside a literal as an escape character, so only the connection's own
+// mysql_real_escape_string knows what the session makes of it.  See MADDatabaseMySQL.
+- (NSString *)newSafeLiteral:(NSString *)value {
+	if (value == nil) return @"NULL";
+	NSString *escaped = [value stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+	return [[NSString alloc] initWithFormat:@"'%@'", escaped];
+}
+
 - (NSString *)selectPart { return @"SELECT\n"; }
 - (NSString *)selectPartWithLimitedResults:(NSUInteger)limit { return @"SELECT\n"; }
 - (NSString *)sqlLimitClause { return [self sqlLimitClause:  NSUIntegerMax]; }

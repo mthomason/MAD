@@ -18,6 +18,11 @@
 	- (NSString *)newSafeIdentifier:(NSString *)fieldOrTableName;
 	- (NSString *)tableAliasForTable:(NSString *)tableName;
 
+	// Turns a value into a SQL literal, quoted and escaped for this dialect.  Its
+	// counterpart for names is -newSafeIdentifier:; a name and a value are quoted the
+	// same way but escaped differently, and only the dialect knows how.
+	- (NSString *)newSafeLiteral:(NSString *)value;
+
 	- (NSString *)selectPart;
 	- (NSString *)selectPartWithLimitedResults:(NSUInteger)limit;
 	- (NSString *)sqlLimitClause;

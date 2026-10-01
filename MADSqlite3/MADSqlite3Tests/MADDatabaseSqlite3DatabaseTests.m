@@ -311,6 +311,41 @@
 	XCTAssertEqualObjects(all[1], @"bob");
 }
 
+#pragma mark - Literal quoting
+
+// A text filter used to be written as "London" -- a double-quoted token, which SQLite reads
+// as a *column* name.  That survived only because SQLITE_DQS defaults to on;
+// Compressor/sqlite3.xcconfig pins it to 0, and the London sample then failed to refresh
+// with "no such column: London".  This puts a value containing a quote through a real query
+// in the build that ships, so a literal that is bare or double-quoted fails here instead of
+// in the app: either way the statement does not prepare and no row comes back.
+- (void)testNewSafeLiteralProducesAValueSQLiteWillRead {
+	sqlite3 *ddl = NULL;
+	sqlite3_open(self.databaseURL.path.UTF8String, &ddl);
+	sqlite3_exec(ddl, "CREATE TABLE people (name TEXT, age INTEGER);", NULL, NULL, NULL);
+	sqlite3_exec(ddl, "INSERT INTO people (name, age) VALUES ('O''Brien', 41);", NULL, NULL, NULL);
+	sqlite3_close(ddl);
+
+	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
+	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:self.databaseURL];
+
+	MADFixedSqlQuery *query = [[MADFixedSqlQuery alloc] init];
+	query.sql = [NSString stringWithFormat:@"SELECT name, age FROM people WHERE name = %@ ORDER BY rowid",
+				 [database newSafeLiteral:@"O'Brien"]];
+
+	MADDataTableObjectEnumerator *enumerator = [[MADDataTableObjectEnumerator alloc]
+		initWithDatabaseConnection:connection
+						   columns:@{@"name": [self makeColumnWithIdentifier:@"name" type:MADDataTypeString],
+									 @"age": [self makeColumnWithIdentifier:@"age" type:MADDataTypeInteger]}
+						columnKeys:@[@"name", @"age"]
+							 query:query];
+
+	NSArray *all = [enumerator allObjects];
+	XCTAssertEqual(all.count, (NSUInteger)1, @"the literal did not select the row it names: %@", query.sql);
+	XCTAssertEqualObjects(all[0][@"name"], @"O'Brien");
+	XCTAssertEqualObjects(all[0][@"age"], @41);
+}
+
 #pragma mark - MADDataTableFast
 
 - (void)testDataTableFastTableName {

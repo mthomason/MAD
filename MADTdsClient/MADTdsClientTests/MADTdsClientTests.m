@@ -320,6 +320,18 @@
 	XCTAssertFalse([sql containsString:@"DATALENGTH"], @"Got: %@", sql);
 }
 
+// The base emits a bare '...' literal; T-SQL wants the N prefix so the value is nvarchar
+// and a non-ASCII character is not put through the database's collation on the way in.  The
+// escaping itself is the base's -- T-SQL doubles an interior quote -- and this pins that the
+// override kept it rather than dropping it for a plain format.
+- (void)testNewSafeLiteralIsANvarcharLiteral {
+	MADDatabaseSQLServer *db = [[MADDatabaseSQLServer alloc] init];
+	XCTAssertEqualObjects([db newSafeLiteral:@"London"], @"N'London'");
+	XCTAssertEqualObjects([db newSafeLiteral:@"O'Brien"], @"N'O''Brien'");
+	XCTAssertEqualObjects([db newSafeLiteral:@"Ütrecht"], @"N'Ütrecht'");
+	XCTAssertEqualObjects([db newSafeLiteral:nil], @"NULL");
+}
+
 #pragma mark - MADDatabaseConnectionSQLServer
 
 - (void)testConnectionInitializationStoresProperties {

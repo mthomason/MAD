@@ -76,9 +76,15 @@
                 RptqQueryField *leftField = queryPredicate.hasLeftField;
                 MADDataType dataType = leftField.databaseSchemaField.dataType;
                 
+                // Despite the name, -rightFieldID holds the user's typed value, not an id.
+                // A number is already a valid SQL literal; anything else has to be quoted
+                // and escaped the way the database in use reads, which is what
+                // -newSafeLiteral: is for.  It used to be @"\"%@\"" -- a double quote, which
+                // SQL reads as a *name*: the filter read as a reference to a column called
+                // London.  See BUGS.md.
                 NSString *rightFieldID = queryPredicate.rightFieldID;
                 rightValue = [MADDatabaseField isNumeric:dataType] ? rightFieldID :
-                [[NSString alloc] initWithFormat: @"\"%@\"", rightFieldID];
+                [database newSafeLiteral: rightFieldID];
             }
             NSString *symbolForComparson = [queryPredicate symbolForComparson];
             [result appendFormat:@"\t(%@ %@ %@)", leftValue, symbolForComparson, rightValue];
