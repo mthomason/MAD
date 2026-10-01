@@ -115,8 +115,13 @@ scheme, so the command above does not reach them.
   tests that pin each one.
 * `TASKS.md` -- the engineering task queue: what is being worked, in order, with the
   context needed to start cold.
+* `ROADMAP.md` -- the plan: which register, queue and design document gets picked up next,
+  and in what order.
 * `MADDataTable_Architecture_Report.md` -- the `MADDataTable` class cluster across
   `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
+* `MAD_FORMAT.md` -- what a `.mad` document is, and what it should be.
+* `MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
+* `LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
 * `DEVELOPER.md` -- test database credentials and common build commands.
 * `TODO.md` -- the product wishlist: features and ideas.
 * `README.md` -- build notes and the export-compliance statement.
