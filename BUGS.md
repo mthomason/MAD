@@ -781,8 +781,8 @@ libmysqlclient; it skips rather than fails when no server is reachable.
 
 ## MADTdsClient
 
-Covered by an offline suite (`MADTdsClientTests.m`, 46 tests) plus a live suite
-(`MADTdsClientLiveTests.m`, 26 tests) that runs against the local SQL Server 2022
+Covered by an offline suite (`MADTdsClientTests.m`, 47 tests) plus a live suite
+(`MADTdsClientLiveTests.m`, 28 tests) that runs against the local SQL Server 2022
 instance in `DEVELOPER.md` (`127.0.0.1`, `sa`, `AdventureWorksLT2022`). The live
 suite is the only way to reach `-connect:andPassword:error:`,
 `-getTablesFromConnection:error:`, `-fieldsForTable:connection:error:` and
@@ -906,13 +906,59 @@ it skips rather than fails when no server is reachable.
   `SYBTIME`/`SYBMSTIME`/`SYBBIGTIME` are `MADDataTypeTime`; and
   `SYBBIGDATETIME`/`SYBMSDATETIME2`/`SYBMSDATETIMEOFFSET` are
   `MADDataTypeDateTime`.
-- **Still open:** the modern date/time codes have no bind array in `-runSQL:`,
-  so the row values are still `[NSNull null]`; only the column *type* is
-  corrected here. Fetching those values is a separate piece of work.
+- **Now (2026-10-01, values):** the modern codes carry their values too, and need
+  no bind array to do it. freetds keeps each one in the row buffer in a layout
+  only the type code explains, so the row conversion hands the buffer straight to
+  `dbanydatecrack()` together with the column's own type code; a NULL reads back
+  as a null pointer, the same signal the `SYBDATETIME` case already relied on.
+  This is the call freetds makes for itself when it prints such a column
+  (`src/dblib/dblib.c`, `dbspr1row`). Binding was the wrong shape: the bind
+  constants for these codes write a *converted* layout, not the one
+  `dbanydatecrack()` reads.
 - **Test:** `testDataTypeForNativeTypeMapsModernDateTimeFamily`,
   `testDataTypeForNativeTypeMapsNumericToDecimal` and
   `testDataTypeForNativeTypeMapsMoneyAndFloatingPointToFloat` in the offline
-  suite, and `testSelectModernDateTimeTypes` live.
+  suite, and `testSelectModernDateTimeTypes` (values) and
+  `testSelectModernDateTimeTypesNull` (NULLs) live.
+
+### Every SQL `DATETIME` reads back one month late
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1330` and `:1354`
+  (`case SYBDATETIME` and `case SYBDATETIMEN` in the row conversion)
+- **Behavior:** both cases did `comps.month = dateinfo.datemonth + 1`. The record
+  freetds fills in has *already* been shifted to the 1-based Microsoft month
+  before it is returned — `dblib_datecrack()` bumps `datemonth` when the
+  `DBPROCESS` is in MS mode, which this build is — so the extra `+ 1` counted
+  January twice. Measured against the live server:
+  `CAST('2020-01-15T13:45:00' AS DATETIME)` came back as February, and
+  `CAST('2020-12-15T13:45:00' AS DATETIME)` came back as **2021**-01-15.
+- **Why it matters:** every `DATETIME` and `SMALLDATETIME`-family value from SQL
+  Server was shifted a month, and a December value also moved a year, in a
+  shipping driver. Nothing downstream compensates: the shift is invisible in the
+  value and only shows when a report is compared with the database.
+- **Now:** both cases read `dateinfo.datemonth` as it arrives, with a comment
+  giving the reason. Found while fixing the post-2005 date/time values above,
+  which go through the same freetds record.
+- **Not changed:** `SYBDATETIME4` does not use the cracked record — it does its
+  own day/minute arithmetic — so it is unaffected. Its base date is another
+  matter; see the note below.
+- **Test:** `testSelectClassicDateTimeKeepsItsMonth` live, which pins January
+  staying January and December staying in its own year.
+
+### `SYBDATETIME4` counts its days from the wrong epoch
+- **Status:** Still open — recorded, not fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:432`
+  (`janFirst1990Components`, read at `:1295`)
+- **Behavior:** the variable is named for 1990 and its components are 1900-01-00,
+  but `DBDATETIME4.days` counts from **1900-01-01**, and day 0 must therefore be
+  1900-01-01 too. Building the base as 1900-01-**00** (i.e. 1899-12-31) makes
+  every `SMALLDATETIME` land one day early.
+- **Why it matters:** `SMALLDATETIME` columns are off by a day.
+- **Why it is not fixed here:** it is a different arithmetic path from the
+  cracked-record cases and it has not been measured against the server yet, so
+  the off-by-one is read from the code rather than observed. It wants its own
+  live test first — the same shape as
+  `testSelectClassicDateTimeKeepsItsMonth` — before the base date is changed.
 
 ### `-connectWithConnection:credentals:connectionError:` never reports its error
 - **Status:** Fixed

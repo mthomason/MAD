@@ -41,13 +41,25 @@ landed. What is left is execution.
 **Start here.** The defects are few, they are understood, and every one of them is testable
 today against the live servers.
 
-### 1.1 SQL Server loses every modern date/time value
+### 1.1 SQL Server loses every modern date/time value — **done 2026-10-01**
 
-`DATE`, `TIME`, `DATETIME2` and `DATETIMEOFFSET` come back as `[NSNull null]`. Only the column
-*type* was corrected; the values are still dropped. This is the worst remaining defect because
+`DATE`, `TIME`, `DATETIME2` and `DATETIMEOFFSET` came back as `[NSNull null]`. Only the column
+*type* had been corrected; the values were dropped. This was the worst remaining defect because
 it is silent data loss on a shipped driver.
 
-`BUGS.md`, MADTdsClient, `+dataTypeForNativeType:`, **Still open**.
+The values are now fetched. The fix is smaller than it looked: these type codes need **no bind
+array at all**. freetds keeps each value in the row buffer already decoded into its own internal
+layout, and `dbanydatecrack()` — handed that buffer plus the column's own type code — does the
+rest. Binding would have copied a *converted* layout somewhere else and then cracked the wrong
+thing.
+
+Doing this surfaced a second, older defect in the same freetds record: the classic `DATETIME`
+and `DATETIMEN` cases were adding a month that freetds had already applied, so every SQL
+`DATETIME` came back a month late and December came back a year late. That is fixed too, by the
+same live tests. `SYBDATETIME4`'s base-date arithmetic is newly recorded as open.
+
+`BUGS.md`, MADTdsClient, **Fixed**; tests `testSelectModernDateTimeTypes`,
+`testSelectModernDateTimeTypesNull`, `testSelectClassicDateTimeKeepsItsMonth` (live).
 
 ### 1.2 The `MADDataTableFast` row counter — two documents disagree
 

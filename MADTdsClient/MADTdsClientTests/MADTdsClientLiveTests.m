@@ -406,19 +406,28 @@
 	XCTAssertEqualObjects([table objectAtRow:0 column:0], @12.34);
 }
 
-// The post-2005 date/time types now map to the date/time cases of MADDataType instead
-// of falling through to the String default.
-//
-// Only the column *type* is covered here. These type codes still have no bind array in
-// -runSQL: -- neither dbbind nor dbnullbind is called for them -- so the row conversion
-// hits its default branch and every value comes back [NSNull null]. Fetching the values
-// is a separate piece of work; this test pins the typing half.
+// Reads a returned value back out as UTC calendar components, so the assertions below
+// can name what went into the query rather than an instant that shifts with the
+// runner's time zone. The driver builds its dates in GMT, so the reading is in GMT too.
+static NSDateComponents *MADUTCComponents(NSDate *date) {
+	NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+	calendar.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+	return [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay |
+								 NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond)
+					   fromDate:date];
+}
+
+// The post-2005 date/time types map to the date/time cases of MADDataType instead of
+// falling through to the String default, and now carry their values: the row conversion
+// hands the raw column buffer to dbanydatecrack(), which is told the column's own type
+// code and does the layout work itself. Nothing is bound for these types; freetds keeps
+// each value in the row buffer in a layout only the type code explains.
 - (void)testSelectModernDateTimeTypes {
 	[self requireServer];
 	MADDataTable *table = [self query:
 		@"SELECT CAST('2020-01-15' AS DATE) AS d, "
 		 "CAST('13:45:00' AS TIME) AS t, "
-		 "CAST('2020-01-15T13:45:00' AS DATETIME2) AS dt2, "
+		 "CAST('2020-12-31T13:45:00' AS DATETIME2) AS dt2, "
 		 "CAST('2020-01-15T13:45:00+00:00' AS DATETIMEOFFSET) AS dto"];
 
 	NSArray<NSString *> *keys = [table columnKeys];
@@ -427,6 +436,86 @@
 	XCTAssertEqual(table.columns[keys[1]].type, MADDataTypeTime);
 	XCTAssertEqual(table.columns[keys[2]].type, MADDataTypeDateTime);
 	XCTAssertEqual(table.columns[keys[3]].type, MADDataTypeDateTime);
+
+	XCTAssertEqual([table numberOfRows], 1u);
+
+	NSDate *date = [table objectAtRow:0 column:0];
+	XCTAssertTrue([date isKindOfClass:[NSDate class]], @"DATE came back as %@", date);
+	NSDateComponents *dateParts = MADUTCComponents(date);
+	XCTAssertEqual(dateParts.year, 2020);
+	XCTAssertEqual(dateParts.month, 1);
+	XCTAssertEqual(dateParts.day, 15);
+
+	// A bare TIME has no day of its own, so freetds cracks it onto its epoch day,
+	// 1900-01-01. Only the clock is meaningful here.
+	NSDate *time = [table objectAtRow:0 column:1];
+	XCTAssertTrue([time isKindOfClass:[NSDate class]], @"TIME came back as %@", time);
+	NSDateComponents *timeParts = MADUTCComponents(time);
+	XCTAssertEqual(timeParts.hour, 13);
+	XCTAssertEqual(timeParts.minute, 45);
+	XCTAssertEqual(timeParts.second, 0);
+
+	// December, not January: a month that is already its own successor catches an
+	// unwanted +1 that a January value would hide.
+	NSDate *dateTime2 = [table objectAtRow:0 column:2];
+	XCTAssertTrue([dateTime2 isKindOfClass:[NSDate class]], @"DATETIME2 came back as %@", dateTime2);
+	NSDateComponents *dateTime2Parts = MADUTCComponents(dateTime2);
+	XCTAssertEqual(dateTime2Parts.year, 2020);
+	XCTAssertEqual(dateTime2Parts.month, 12);
+	XCTAssertEqual(dateTime2Parts.day, 31);
+	XCTAssertEqual(dateTime2Parts.hour, 13);
+	XCTAssertEqual(dateTime2Parts.minute, 45);
+
+	// The offset is zero here, so this pins the value without committing to how a
+	// non-zero offset is folded.
+	NSDate *offset = [table objectAtRow:0 column:3];
+	XCTAssertTrue([offset isKindOfClass:[NSDate class]], @"DATETIMEOFFSET came back as %@", offset);
+	NSDateComponents *offsetParts = MADUTCComponents(offset);
+	XCTAssertEqual(offsetParts.year, 2020);
+	XCTAssertEqual(offsetParts.month, 1);
+	XCTAssertEqual(offsetParts.day, 15);
+	XCTAssertEqual(offsetParts.hour, 13);
+	XCTAssertEqual(offsetParts.minute, 45);
+}
+
+// The classic DATETIME and DATETIMN types go through dbdatecrack, not dbanydatecrack,
+// but both land in the same freetds record and so share its month convention.
+- (void)testSelectClassicDateTimeKeepsItsMonth {
+	[self requireServer];
+	MADDataTable *table = [self query:
+		@"SELECT CAST('2020-01-15T13:45:00' AS DATETIME) AS dt, "
+		 "CAST('2020-12-15T13:45:00' AS DATETIME) AS dt2"];
+
+	XCTAssertEqual([table numberOfRows], 1u);
+
+	NSDate *january = [table objectAtRow:0 column:0];
+	XCTAssertTrue([january isKindOfClass:[NSDate class]], @"DATETIME came back as %@", january);
+	NSDateComponents *januaryParts = MADUTCComponents(january);
+	XCTAssertEqual(januaryParts.year, 2020);
+	XCTAssertEqual(januaryParts.month, 1);
+	XCTAssertEqual(januaryParts.day, 15);
+
+	NSDate *december = [table objectAtRow:0 column:1];
+	XCTAssertTrue([december isKindOfClass:[NSDate class]], @"DATETIME came back as %@", december);
+	NSDateComponents *decemberParts = MADUTCComponents(december);
+	XCTAssertEqual(decemberParts.year, 2020);
+	XCTAssertEqual(decemberParts.month, 12);
+	XCTAssertEqual(decemberParts.day, 15);
+}
+
+// A NULL of any of these types must still read back as [NSNull null] rather than being
+// cracked out of a zero-length buffer.
+- (void)testSelectModernDateTimeTypesNull {
+	[self requireServer];
+	MADDataTable *table = [self query:
+		@"SELECT CAST(NULL AS DATE) AS d, "
+		 "CAST(NULL AS TIME) AS t, "
+		 "CAST(NULL AS DATETIME2) AS dt2"];
+
+	XCTAssertEqual([table numberOfRows], 1u);
+	XCTAssertEqualObjects([table objectAtRow:0 column:0], [NSNull null]);
+	XCTAssertEqualObjects([table objectAtRow:0 column:1], [NSNull null]);
+	XCTAssertEqualObjects([table objectAtRow:0 column:2], [NSNull null]);
 }
 
 #pragma mark - Type conversion round trip

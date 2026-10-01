@@ -171,12 +171,15 @@ The outcome split three ways:
   `MADDatabaseSQLServer -runSQL:onDataTable:fieldKeys:process:` closing the process it was
   handed, and `-sqlSampleDataForField:andTable:` bypassing the base class's clause builders.
 * **3 that needed the user's call**, all three decided: decimal-MB file sizes, the
-  year/month/week timer fallthrough, and the modern date/time values that are still
-  unfetched (types only).
+  year/month/week timer fallthrough, and the modern date/time values — which at the time
+  were typed but unfetched. The values were fetched on 2026-10-01 (Track 1.1 of
+  `ROADMAP.md`), and getting them uncovered a second defect in the same record: the
+  classic `DATETIME` cases had been adding a month that freetds had already added.
+  Both are recorded in `BUGS.md`; `SYBDATETIME4`'s base-date arithmetic is newly open.
 
 | Area | Open findings |
 |---|---|
-| `MADTdsClient` | 0 |
+| `MADTdsClient` | 1 — `SYBDATETIME4` counts its days from the wrong epoch |
 | MAD Designer (app) | 0 |
 | `MADMySQL` | 0 |
 | `MADFileManager` | 0 |

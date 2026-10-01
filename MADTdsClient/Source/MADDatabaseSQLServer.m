@@ -1327,7 +1327,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										dbdatecrack(dbconn, &dateinfo, sybDateTimeBind[indexOfType]);
 										NSDateComponents *comps = [[NSDateComponents alloc] init];
 										comps.year = dateinfo.dateyear;
-										comps.month = dateinfo.datemonth + 1;
+										// Already 1-based: freetds has applied its MSDBLIB
+										// bump by the time it returns.  Adding one here made
+										// every January read as February and pushed December
+										// into the following year.  See BUGS.md.
+										comps.month = dateinfo.datemonth;
 										comps.day = dateinfo.datedmonth;
 										comps.hour = dateinfo.datehour;
 										comps.minute = dateinfo.dateminute;
@@ -1351,7 +1355,9 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 										dbdatecrack(dbconn, &dateinfo, sybDateTimnBind[indexOfType]);
 										NSDateComponents *comps = [[NSDateComponents alloc] init];
 										comps.year = dateinfo.dateyear;
-										comps.month = dateinfo.datemonth + 1;
+										// 1-based already, for the same reason as the
+										// SYBDATETIME case above.  See BUGS.md.
+										comps.month = dateinfo.datemonth;
 										comps.day = dateinfo.datedmonth;
 										comps.hour = dateinfo.datehour;
 										comps.minute = dateinfo.dateminute;
@@ -1365,6 +1371,54 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 									break;
 								}
 									
+								case SYBDATE:
+								case SYBTIME:
+								case SYBMSDATE:
+								case SYBMSTIME:
+								case SYBMSDATETIME2:
+								case SYBMSDATETIMEOFFSET:
+								case SYBBIGDATETIME:
+								case SYBBIGTIME: {
+									// The post-2005 date/time types.  None of them is bound, on
+									// purpose: freetds keeps each column's value in the row buffer
+									// in its own internal layout, and dbanydatecrack() is handed
+									// that buffer plus the column's own type code, which is what
+									// tells it which layout to read.  Binding would only copy the
+									// bytes somewhere else first.  This is the same call freetds
+									// itself makes when it prints such a column (dblib.c, dbspr1row).
+									//
+									// A NULL value reads back as a null pointer, the same signal the
+									// SYBDATETIME case above relies on.
+									BYTE *rawValue = dbdata(dbconn, (int)(columnNumber + 1));
+									if (rawValue) {
+										DBDATEREC2 dateinfo;
+										if (dbanydatecrack(dbconn, &dateinfo, (int)[columnMetaData[MTDatabaseColumnTypeId] integerValue], rawValue) == SUCCEED) {
+											NSDateComponents *comps = [[NSDateComponents alloc] init];
+											comps.year = dateinfo.year;
+											// freetds has already shifted the month to the
+											// 1-based Microsoft convention by the time it
+											// returns (see the MSDBLIB bump in its
+											// dblib_datecrack), so read it as it comes.
+											comps.month = dateinfo.month;
+											comps.day = dateinfo.day;
+											comps.hour = dateinfo.hour;
+											comps.minute = dateinfo.minute;
+											comps.second = dateinfo.second;
+											// The cracked components are already in UTC --
+											// dbanydatecrack folds a DATETIMEOFFSET's offset into the
+											// time and returns the offset in minutes, not hours -- so
+											// the zone here is GMT, not derived from the column.
+											comps.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+											resultsForRow[fieldName] = [gregorian dateFromComponents:comps];
+										} else {
+											resultsForRow[fieldName] = [NSNull null]; // date/time could not be cracked
+										}
+									} else {
+										resultsForRow[fieldName] = [NSNull null]; // date/time NULL
+									}
+									break;
+								}
+					
 								case SYBBIT: {
 									if (sybBitBindNull && indexOfType < resultCountForType_SYBBIT && sybBitBindNull[indexOfType] != -1) {
 										NSNumber *object = @((BOOL)sybBitBind[indexOfType]);
