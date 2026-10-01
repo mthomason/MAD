@@ -131,34 +131,62 @@ Status key:
   mathematically general.
 
 ### `MADQueryPredicate` and `MADQueryCacheSelectGroupKeys` quote string literals with double quotes
-- **Status:** Confirmed
-- **Where:** `MAD/Source/MADQueryPredicate.m:81`,
-  `MAD/Source/MADQueryCacheSelectGroupKeys.m:55`
-- **Behavior:** A predicate's right-hand side is emitted as `"<value>"`:
+- **Status:** Fixed
+- **Commit:** `0c187aca3`
+- **Where:** `MAD/Source/MADQueryPredicate.m:80-88`. The hook is
+  `MADAPI/Source/MADDatabaseSQLProtocol.h` (`-newSafeLiteral:`), with the base
+  implementation in `MADAPI/Source/MADDatabase.m` and an override in
+  `MADTdsClient/Source/MADDatabaseSQLServer.m`. The group-key builder,
+  `MAD/Source/MADQueryCacheSelectGroupKeys.m:55`, still holds the old form — see
+  *Still open*.
+- **Behavior:** A predicate's right-hand side was emitted as `"<value>"`:
   `[[NSString alloc] initWithFormat: @"\"%@\"", rightFieldID]`, and the group-key
   builder writes `[sqlPredicate appendFormat:@"%@ = \"%@\"", left, right]`. Both
-  wrap a *value* in double quotes. Neither escapes it, and neither binds it. The
-  generated SQL reads `("Customer0"."City" = "London")`.
-- **Why it matters:** By the SQL standard a double-quoted token is an *identifier*,
+  wrapped a *value* in double quotes. Neither escaped it, and neither bound it. The
+  generated SQL read `("Customer0"."City" = "London")`.
+- **Why it mattered:** By the SQL standard a double-quoted token is an *identifier*,
   so these literals only ever worked because SQLite was forgiving about it.
   `SQLITE_DQS=0`, pinned today in `Compressor/sqlite3.xcconfig` (commit
-  `26ca18ff7`), turns that forgiveness off, and `sqlite3_prepare_v2` now fails with
+  `26ca18ff7`), turned that forgiveness off, and `sqlite3_prepare_v2` failed with
   *no such column: "London" — should this be a string literal in single-quotes?*.
-  Every filtered report refreshes zero rows. Measured on the sample documents,
-  `London.mad` goes from 0 rows to 76 when `DQS` is set back to 3 with nothing else
-  changed. This is the exact risk the `DQS=0` entry under `## MADSqlite3` set out to
+  Every filtered report refreshed zero rows. Measured on the sample documents,
+  `London.mad` went from 0 rows to 76 when `DQS` was set back to 3 with nothing else
+  changed. This was the exact risk the `DQS=0` entry under `## MADSqlite3` set out to
   consider and then dismissed.
-  Two consequences beyond SQLite. A value containing `'` or `"` is a syntax error
-  at best and an injection at worst, since nothing escapes. And SQL Server, whose
-  `QUOTED_IDENTIFIER` is ON by default, reads these same tokens as identifiers —
-  so `Document22.mad` (SQL Server, bracketed, AdventureWorksLT) fails the same way
-  the moment it carries a filter. MySQL is unaffected by default, reading `"…"` as
-  a string, which is why the defect hid in the one backend under test.
-- **Not fixed here:** the builder is shared by all three backends and each escapes
-  differently, so the fix is a per-dialect quoter rather than a quote swap.
-- **Test:** none pins this yet — the `MADSqlite3` suite passes because it never
-  refreshes a filtered document. It was found by running `mad refresh` over the
-  sample documents.
+  Two consequences beyond SQLite. A value containing `'` or `"` was a syntax error
+  at best and an injection at worst, since nothing escaped. And SQL Server, whose
+  `QUOTED_IDENTIFIER` is ON by default, read these same tokens as identifiers — so
+  `Document22.mad` (SQL Server, bracketed, AdventureWorksLT) would have failed the
+  same way the moment it carried a filter. MySQL was unaffected by default, reading
+  `"…"` as a string, which is why the defect hid in the one backend under test.
+- **Now:** The value goes through `-newSafeLiteral:`, which quotes and escapes it for
+  the database in use — declared on `MADDatabaseSQLProtocol` beside
+  `-newSafeIdentifier:`, implemented once on `MADDatabase` as the ANSI `'…'` with the
+  interior quote doubled, and overridden on `MADDatabaseSQLServer` to add T-SQL's `N`
+  prefix, without which a literal is varchar and a non-ASCII value goes through the
+  database's collation. SQLite and MySQL inherit the base rather than overriding: both
+  read an interior quote doubled, and neither gives a backslash a meaning inside a
+  literal, so the ANSI form is already what they escape to. `London.mad` refreshes 76
+  rows again and the emitted predicate reads `("Customer0"."City" = 'London')`. The
+  SQL Server schema lookup, which hand-quoted a table name into `OBJECT_ID('%@')`,
+  goes through the same hook; an apostrophe in a table name used to end the literal
+  early and leave the rest of the name as SQL.
+- **Still open:** `MAD/Source/MADQueryCacheSelectGroupKeys.m:55` keeps the old form.
+  It is unreachable — only `-initWithQueryType:MADQueryTypeCacheSelectGroupKeys`
+  builds it and no caller passes that type; the live group-key path is
+  `MADQuerySelectItemsForGroup`, whose `-whereClauseWithParameters:`
+  (`MADSqlite3/Source/MADQuery+Sqlite3.m`) binds `?`. Left alone rather than given the
+  protocol conformance it would need before it could build a literal at all.
+  Separately, a MySQL value containing a backslash is still misread: MySQL gives `\`
+  a meaning inside a literal, so only `mysql_real_escape_string` knows what the
+  session will make of it, and `MADDatabaseMySQL` opens its connection per query
+  without keeping it — the SQL builder cannot reach one. Recorded in that file.
+- **Test:** `MADAPITests testNewSafeLiteralQuotesAndEscapes` and
+  `testNewSafeLiteralNilIsNull`; `MADTdsClientTests testNewSafeLiteralIsANvarcharLiteral`;
+  and `MADSqlite3Tests testNewSafeLiteralProducesAValueSQLiteWillRead`, which puts a
+  value containing a quote through a real query against the shipped `DQS=0` build, so
+  a literal that is bare or double-quoted fails in the suite. That last one was
+  confirmed to fail against the old behaviour before it was kept.
 
 ### `MADocument -paperSize` reads the `_paper` ivar the lazy `-paper` accessor builds
 - **Status:** Confirmed
@@ -545,7 +573,9 @@ wrong answer.
   *value* in double quotes and neither binds, so this commit silently stopped every
   filtered report from refreshing. See the entry under `## MAD (framework)`. The check
   that catches it is `mad refresh` over the sample documents, and `London.mad` is the
-  case that shows it: 0 rows at `DQS=0`, 76 rows at `DQS=3`, nothing else changed.
+  case that shows it: 0 rows at `DQS=0`, 76 rows at `DQS=3`, nothing else changed. Both
+  quoting sites have since been fixed through `-newSafeLiteral:` (commit `0c187aca3`);
+  that entry records what changed and the one path deliberately left open.
 - **Also found, by compiling the list for the first time:**
   `SQLITE_OMIT_DECLTYPE` and `SQLITE_ENABLE_COLUMN_METADATA` are mutually exclusive —
   the amalgamation refuses both, *"Must not define both SQLITE_OMIT_DECLTYPE and
