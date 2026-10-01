@@ -172,7 +172,19 @@ depend on it. They are recorded correctly and changing them would break working 
 
 ## Track 2 — The build wiring
 
-Gates Tracks 3 and 4. This is `LIBRARIES.md` §7, minus the pruning.
+**§2.2 and §2.3 are deferred — the user's decision, 2026-10-01.** The macOS builds are not
+wanted yet ("we will build for MacOS later"), and the declarative build system is agreed to
+be important but not now ("we will also put off the declarative build system, though I
+believe it's important. This info should be stored in a plist or something"). Both are
+recorded in `TASKS.md` §6, so the deferral is a tracked intent rather than a dropped thread.
+
+The consequence for the rest of this file: **Track 2 no longer gates Track 3.** The claim
+in the original heading — "gates Tracks 3 and 4" — was written before `CLI/build.sh` had
+been read. Track 3 builds and runs entirely on iOS Simulator artifacts, so it needs none of
+this; §3 says why. If anything the dependency runs the other way: §4.2's decoupling is what
+a native macOS binary is actually waiting on.
+
+This is `LIBRARIES.md` §7, minus the pruning.
 
 **The finding is good news.** Five of the eight library rows need only *wiring*. macOS slices
 for bzip2, libarchive, openssl, libpng and freetds already exist on disk. They are unreachable
@@ -227,16 +239,30 @@ deleted until the replacement builds every combination.
 
 `MAD Designer` builds; `MAD` 176 tests, 0 failures; `MADMySQL` 58, 0 failures.
 
-### 2.2 The two real builds
+### 2.2 The two real builds — **deferred 2026-10-01**
 
 zlib/macOS and mysqlclient/macOS. Five rows are already built; these two are not.
 
-### 2.3 The declarative build system
+Deferred by the user's call, and nothing is waiting on them: the CLI runs on the iOS
+Simulator (§3), and a native macOS binary is blocked by §4.2's UIKit decoupling rather than
+by a missing archive.
+
+### 2.3 The declarative build system — **deferred 2026-10-01**
 
 `Compressor/matrix.conf`, `Compressor/build.sh`, per-library `manifest.json`, and an XCFramework
 as the single artifact Xcode links. Kept as a third entry point alongside the existing scripts
 until trusted. The `manifest.json` is what makes "which flags built this?" answerable — today
 that question can only be answered by disassembling the archive.
+
+Deferred by the user's call. Worth keeping from that exchange: the user's instinct was that
+"this info should be stored in a plist or something" — which is precisely what the
+`manifest.json` is, so the design as written already answers the concern that prompted it.
+When this resumes, the per-library manifest should be built **first**: it is what makes every
+other piece of the matrix checkable rather than merely runnable.
+
+The XCFramework is still the answer to §2.1's third bullet. That finding does not expire
+with the deferral — `PBXFileReference.path` names an iOS slice directly, so no search path
+can fix it whenever the macOS work is picked back up.
 
 ### 2.4 Prune last
 
@@ -249,11 +275,37 @@ artifacts. One commit per item, with the matrix diff in the message as evidence.
 
 `MAD_CLI.md` phases 3–6. Phases 0–2 are done.
 
+**Two things worth saying before the detail, because the plan above says otherwise.**
+
+*Track 2 does not gate this track.* `CLI/build.sh` builds `mad` for the **iOS Simulator**
+and runs it on the Mac through `xcrun simctl spawn`, so it links the existing frameworks and
+the existing iOS static libraries with nothing rebuilt for a second platform. The macOS
+slices of §2.2 and the XCFramework of §2.3 are only needed for a *native* macOS binary, and
+what blocks that is §4.2, not the build wiring.
+
+*The track is smaller than it reads.* `CLI/Source` is 1011 lines and the unimplemented
+surface is two entries, both visible as `"not implemented yet"`:
+
+- `schema` — the whole of `MADCLIUnimplemented.m` (15 lines).
+- `refresh --rows N` — rejected in `MADCLIRefresh.m:17`.
+
+`inspect` (115 lines), `query` (36), `refresh` (54) and `export` (66) are real
+implementations that open a document and do the work. So §3.2 and §3.4 below are as much a
+description of what exists as a specification of what to build. The honest remaining scope
+is **§3.1, the `schema` verb, `--rows`, and whatever the first end-to-end run against a real
+`.mad` turns up** — and that last item is the one that cannot be estimated from the source.
+
 ### 3.1 Move `MADOperationRefresh` into the `MAD` framework
 
 `MADDesigner/Source/MADOperationRefresh.m` — 131 lines, zero UIKit symbols, importing only
 `MADAPI`, `MADFoundation` and `MAD`. It is already the CLI's refresh verb; it is merely in the
 wrong target. The two `Reload` operations stay behind in the app.
+
+The workaround is visible in `CLI/build.sh`: its `REFRESH_SOURCES` list reaches across the
+target boundary and compiles `MADOperationRefresh.m` and the two `MADOperationRefreshInitial*`
+files straight out of `MADDesigner/Source`. So the CLI works today, which is why this item
+reads as housekeeping rather than a blocker — but the file is being built into a framework's
+client from outside the framework, and that only stays benign while nothing else wants it.
 
 ### 3.2 The `mad` target: `inspect`, `schema`, `query`
 
@@ -324,10 +376,14 @@ These block work rather than being work.
 
 ## Order
 
-1. **Track 1** — small, understood, testable today.
-2. **Track 2.1** — the reference reconciliation, because it is cheap and unblocks everything.
-3. **Track 2.2–2.4**, **Track 3**, **Track 4** — in that order, since each depends on the last.
-4. **Prune** — `LIBRARIES.md` §7.4, only once its gate is met.
+1. **Track 1** — done 2026-10-01.
+2. **Track 2.1** — done 2026-10-01; its third bullet moved to §2.3 and §4.2.
+3. **Track 3** — next, on the user's call. It does not wait for Track 2.
+4. **Track 4.2** — the decoupling, which is what a native macOS build is actually blocked
+   behind.
+5. **Track 2.2–2.4** — deferred 2026-10-01; resume when a macOS build is wanted, and build
+   the `manifest.json` first.
+6. **Prune** — `LIBRARIES.md` §7.4, only once its gate is met.
 
 ## Standing constraints
 

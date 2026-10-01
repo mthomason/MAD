@@ -195,3 +195,45 @@ produced: defects fixed, load-bearing behaviour documented instead of changed, a
 the offline suite or by reading the driver, not by a run against a real server. The
 `MADMySQL` and `MADTdsClient` live suites skip when no server is reachable, so a
 `scheme`-level green run does not mean the wire path was exercised.
+
+---
+
+## 6. Deferred by the user — the macOS library builds, and the declarative build system
+
+**Status:** Deferred 2026-10-01. Not blocked, not dropped: waiting on the user's call to
+resume, and recorded here so it is tracked intent rather than a thread that quietly ends.
+
+These are `ROADMAP.md` §2.2 and §2.3, deferred in one decision. The user's words:
+
+> *"let's skip section 2.2, The two real builds; we will build for MacOS later. We will also
+> put off the declarative build system, though I believe it's important. This info should be
+> stored in a plist or something, IDK. We need to keep track of them on some TODO list,
+> which previous ones probably haven't been maintained."*
+
+**What is deferred.**
+
+*   **`ROADMAP.md` §2.2 — the two remaining macOS builds.** zlib/macOS and
+    mysqlclient/macOS. Five of the eight library rows are already built; these two are not.
+    `LIBRARIES.md` §3 has the matrix.
+*   **`ROADMAP.md` §2.3 — the declarative build system.** `Compressor/matrix.conf`,
+    `Compressor/build.sh`, a per-library `manifest.json`, and an XCFramework as the single
+    artifact Xcode links. `LIBRARIES.md` §7.3 has the design.
+
+**Why deferring is safe right now.** Neither is on the path to anything the user is doing
+next. The `mad` CLI builds for the **iOS Simulator** and runs on the Mac through
+`xcrun simctl spawn`, so it links the existing iOS artifacts unchanged — the CLI track needs
+no macOS slice at all. And a *native* macOS binary is blocked by the UIKit imports in
+`MADFoundation` (`ROADMAP.md` §4.2), which is upstream of the build wiring: even a perfect
+matrix would not let a target compile for macOS today.
+
+**What must not be lost.**
+
+*   The user's "store it in a plist or something" is exactly what the `manifest.json` in
+    §2.3 is. The design already answers the concern that prompted the deferral, so it should
+    be read as confirming §2.3's shape rather than asking for a new one.
+*   `ROADMAP.md` §2.1's third bullet is **not** cancelled by this. Adding `[sdk=macosx*]`
+    search paths cannot work, because `PBXFileReference.path` names an iOS slice directly and
+    is not SDK-conditional. The XCFramework in §2.3 remains the answer, whenever macOS work
+    resumes.
+*   The standing constraint still holds: nothing in `Compressor/library` is deleted until a
+    replacement builds every combination. A deferral is not permission to prune.
