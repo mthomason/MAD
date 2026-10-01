@@ -464,28 +464,29 @@ are one change, and refresh constructs a driver through the registry instead of 
 `MAD_FORMAT.md` is the definition: what the format is today, measured from the two shipping
 samples; its hazards; and the normative target. This track is the work that document implies.
 
-### 4.1 The companion files are only half described
+### 4.1 The companion files — **now fully described**
 
-`MAD_FORMAT.md` §5 records two companion kinds — `.maddb` (the rows) and `.mdcache` (the
-virtual-table plist). A real cache directory holds **three**, and the undocumented one
-dominates:
+`MAD_FORMAT.md` §5 now covers all three companion kinds — `.maddb` (rows), `.mdcache` (the
+virtual-table schema plist) and `.madac` (the rendered-page cache, which is itself a SQLite
+database) — plus the cache directory as a unit: its `dataTableIdHash` naming, the measured
+sizes, and the design rationale for why it is deliberately large (§5.1). Two things that were
+open gaps are now answered, both by reading the code rather than guessing:
 
-| Kind | Written by | One real directory |
-|---|---|---|
-| `<hash>.maddb` | `MADDataTableFast` | 816 KB |
-| `<hash>.mdcache` | `MADDataTable` | 1.7 KB |
-| `<hash>{ih,lh}{612, 792}.madac` | `MADArrayCaching`, fed by `MADReportFormatter.m:179,:183` | **~15 MB** |
+- **The `.mdcache` schema** is the serialized result-table metadata (`MADDataTableFast
+  -copyPlist` / `-loadWithPlist:`): `name`, `columnKeys`, `columns` (a `MADDataColumn` plist
+  each), `rowCounter`, `sortDescriptors`, `bulkInsertLoop`. Documented in §5.3.
+- **The render cache is keyed by filename, not content.** `MADReportFormatter -layoutIdentifier`
+  returns `_filename.hash` (or the override), and `MADArrayCaching` reuses the SQLite file
+  whenever its table exists, with no version or content hash anywhere in the path. So editing a
+  document under the same filename does not invalidate its `.madac` pages. Recorded in §5.3 and
+  §8.4 as a confirmed mechanism with a still-open product decision ("should it?"), not as a
+  defect to fix unprompted — the user has said the cache is load-bearing and not the pressing
+  thing.
 
-`.madac` is the formatter's rendered-page cache, keyed by layout identifier and page size
-(`{612, 792}` is US Letter in points). Against a document under 80 KB, the render cache is
-around 200× the document.
+That was the whole of "understand what it is, and define what it will be" for the companion
+files. What remains for the document itself is §4.2's decisions and then §4.3's v1.
 
-§5 also never describes the cache **directory** as a unit: its `dataTableIdHash` naming, its
-lifecycle, or why 0-byte `.maddb` files sit in directories that were created and never
-populated. That is the part that matters — nothing currently says what may be deleted, what
-must be invalidated when a document changes, or what a second platform has to reproduce.
-
-### 4.2 The three decisions, which block v1
+### 4.2 The decisions, which block v1
 
 `MAD_FORMAT.md` §8. These are the user's calls, and the first is a genuine prerequisite for
 portability:
@@ -494,9 +495,7 @@ portability:
   and the definition it holds is a modest object graph.
 - Should the thumbnail be in the document, or is it regenerable like everything else?
 - Should `.mad` optionally carry the row cache, making a document openable offline elsewhere?
-
-Plus one raised by 4.1: **is the render cache invalidated when the document changes?** Nothing
-in `MAD_FORMAT.md` says so, and a stale page cache would be invisible.
+- Should content changes invalidate the render cache? (mechanism now known — §5.3)
 
 ### 4.3 `.mad` v1
 
@@ -565,7 +564,7 @@ These block work rather than being work.
 |---|---|---|
 | Which system owns the database password — the app's own keychain item, or the platform AutoFill / `kSecClassInternetPassword` path? | `TASKS.md` §1 | The double prompt is the symptom. `TASKS.md` §4 is blocked behind it. |
 | Does the `.mad` store stay Core Data? | `MAD_FORMAT.md` §8.1 | Called a prerequisite for Windows regardless of what the CLI does. Track 4.2. |
-| Is the render cache invalidated when the document changes? | Track 4.1 | A stale page cache would be invisible. |
+| Is the render cache invalidated when the document changes? | `MAD_FORMAT.md` §5.3, §8.4 | Mechanism is now known (keyed by filename, no content hash — so a stale page is served on edit). The open part is *should it* invalidate. |
 | Should the thumbnail and row cache live in the document? | `MAD_FORMAT.md` §8.2–8.3 | Decides whether every member of a `.mad` is authoritative. |
 | Is `.mad` v1 worth doing? | `MAD_FORMAT.md` §7 | It is compatible, but it is a format decision. |
 | What is the JSON export shape? | `MAD_CLI.md` §8.3 | Belongs in a schema, not a README. |

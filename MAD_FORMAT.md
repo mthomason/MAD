@@ -152,7 +152,7 @@ regenerable, and deliberately outside the archive. Three kinds of file are built
 |---|---|---|
 | `<hash>.maddb` | `MADDataTableFast` | the report's row data |
 | `<hash>.mdcache` | `MADDataTable` (`:354`) | a plist describing the virtual tables over that data |
-| `<hash>{ih,lh}{w, h}.madac` | `MADArrayCaching`, fed by `MADReportFormatter` (`:179`, `:183`) | rendered page content, keyed by layout identifier and page size |
+| `<hash>{ih,lh}{w, h}.madac` | `MADArrayCaching`, fed by `MADReportFormatter` (`:179`, `:183`) | rendered page content — a **SQLite** database, keyed by layout identifier and page size. `ih` is the report-*index* cache, `lh` the report-*layout* cache |
 
 All three live together in one directory per document, named by `dataTableIdHash`.
 `MADocument.m:286-300` builds the table from a directory supplied by
@@ -218,14 +218,18 @@ The cache could be compressed, but it is not the pressing thing to change.
 The directory is named and populated but not specified. Three gaps, each of which a
 second platform would have to guess at:
 
-1. **Nothing says what invalidates the render cache.** Its key is layout identifier
-   plus page size; a document change that alters neither would, on the face of it,
-   reuse a stale page. Whether something else invalidates it is not written down, and
-   §8.4 records the question rather than answering it.
+1. **The render cache is keyed by filename, not by content — confirmed 2026-10-01.**
+   `MADReportFormatter -layoutIdentifier` (`MADReportFormatter.m:186`) returns
+   `_overrideIdentifier ? _overrideIdentifier.hash : _filename.hash`. So the key is the
+   document's *name* plus the page size, and nothing in the load path checks content:
+   `MADArrayCaching -initializeDatabase` (`MADArrayCaching.m:141`) reuses the existing
+   SQLite file whenever its `ac` table is present, with no version, timestamp or content
+   hash anywhere in the key or the load. **Editing a document under the same filename
+   does not invalidate its `.madac` files** — a stale page is served until the files are
+   deleted or a different page size is rendered.
 
-   **Measured on 2026-10-01, and it narrows the question without settling it.** A
-   headless refresh and export were run against the London document at 15:22. In its
-   cache directory afterwards:
+   **Measured on 2026-10-01, consistent with that.** A headless refresh and export were
+   run against the London document at 15:22. In its cache directory afterwards:
 
    | File | Size | mtime |
    |---|---|---|
@@ -236,22 +240,26 @@ second platform would have to guess at:
    | `<layoutId>ih{0, 0}.madac` | 1,867,776 | **10:52** |
    | `<layoutId>lh{0, 0}.madac` | 4,333,568 | **10:52** |
 
-   So a refresh does **not** clear the cache directory — it rewrites the files it needs
-   and leaves the rest. The `{612, 792}` entries (page geometry known, i.e. the real
-   render) were rewritten; the `{0, 0}` entries were not touched, and together they are
-   6.0 MB of the directory's 15 MB.
-
-   That is consistent with two different stories and does not choose between them: either
-   `{0, 0}` is a layout-measurement cache that legitimately does not depend on row data,
-   or it is stale content surviving a refresh. Telling them apart is the work §8.4 asks
-   for — but note the second story would mean the largest files in the cache directory
-   are the ones nothing regenerates.
+   A refresh rewrites only the files it needs — the `{612, 792}` entries (US Letter, the
+   PDF's page geometry) — and leaves the rest. The `{0, 0}` entries were not touched, and
+   together they are 6.0 MB of the directory's 15 MB. `{0, 0}` is the page size before a
+   real geometry is known, so those two files are almost certainly a measurement pass;
+   they are also, under the filename-keyed scheme, never invalidated by anything short of
+   deletion.
 2. **Nothing says what may be deleted.** All three kinds are regenerable, so all three
    should be safe — but a 0-byte `.maddb` in a directory otherwise untouched shows the
    directory is created before it is filled, and nothing states whether such a
    directory is meaningful.
-3. **The `.mdcache` plist has no documented schema.** It is the only companion file
-   that is not self-describing.
+3. **The `.mdcache` plist schema.** Now known — it is the serialized schema of the result
+   table, written by `MADDataTableFast -copyPlist` and read by `-loadWithPlist:`. Top-level
+   keys: `name`, `columnKeys` (ordered array of `c<hash>` ids), `columns` (a dict keyed by
+   `c<hash>`, each a `MADDataColumn` plist: `caption`, `fieldName`, `identifier`, `type`,
+   `nativeType`, `dataLength`, `dataPercision`, `isPrimaryKey`, `isNotNull`,
+   `isAutoIncrement`, `defaultValue`), `rowCounter`, `sortDescriptors`, and the fast table's
+   `bulkInsertLoop`. `defaultValue` is the sentinel `~MTNull~`
+   (`MADDataColumnNullSentinel`, `MADDataColumn.m:23`). Note the two persistent quirks:
+   `dataPercision` is misspelled in the format, and the `~MTNull~` sentinel is a third null
+   marker distinct from the `"<null>"` / `"(null)"` family of `BUGS.md` Track 1.5.
 
 ---
 
@@ -341,10 +349,12 @@ absence of the magic.
 3. **Should `.mad` carry the row cache optionally?** A "packed" variant would make a
    document openable offline on a second device at the cost of size. Nothing does
    this today; it is raised because the name invites the expectation (§5).
-4. **Is the render cache invalidated when the document changes?** Raised by §5.3. Its
-   key is layout identity and page size, so a change to element *content* that leaves
-   both alone could reuse a stale page, and nothing in the code or this document says
-   either way. This needs answering before the companion files can be called defined.
+4. **Should content changes invalidate the render cache?** Now answered *mechanically*:
+   the `.madac` cache is keyed by filename and page size, with no content hash, so a
+   document edit under the same filename serves stale pages until the files are deleted
+   (§5.3). The open part is a product decision — *should* an edit invalidate it — and the
+   user's own framing is that the cache is load-bearing and not the pressing thing
+   (§5.1). So this is recorded, not being fixed now.
 
 ---
 
