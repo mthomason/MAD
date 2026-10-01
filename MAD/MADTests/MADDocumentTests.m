@@ -18,6 +18,10 @@
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/MADConstants.h>
+#import "MADArchiveManager.h"
+
+#import <string.h>
 
 @interface MADDocumentTests : XCTestCase
 @end
@@ -117,6 +121,56 @@
 
 	// A value that is there still formats.
 	XCTAssertEqualObjects([element formattedString: MADDataTypeString forValue: @"Group A"], @"Group A");
+}
+
+#pragma mark - Document format
+
+// The v1 header (MAD_FORMAT.md section 7.1) is written ahead of the bzip2 stream by
+// MADArchiveManager -archive: and stripped again by -unarchive.  A directory with one
+// file should round-trip, and the archive should begin with the magic and version.
+- (void)testArchiveRoundTripWritesAndStripsTheV1Header {
+
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSURL *temp = [NSURL fileURLWithPath: NSTemporaryDirectory() isDirectory: YES];
+
+	NSURL *source = [temp URLByAppendingPathComponent: [NSUUID UUID].UUIDString isDirectory: YES];
+	NSURL *destination = [temp URLByAppendingPathComponent: [NSUUID UUID].UUIDString isDirectory: YES];
+	NSURL *archive = [temp URLByAppendingPathComponent: [[NSUUID UUID].UUIDString stringByAppendingPathExtension: @"mad"]];
+	[fileManager createDirectoryAtURL: source withIntermediateDirectories: YES attributes: nil error: NULL];
+
+	NSString *body = @"round-trip";
+	[body writeToURL: [source URLByAppendingPathComponent: @"member.txt"]
+		  atomically: YES encoding: NSUTF8StringEncoding error: NULL];
+
+	MADArchiveManager *writer = [[MADArchiveManager alloc] initWithFileWrapperURL: source archiveURL: archive];
+	XCTAssertTrue([writer archive: YES], @"archive should succeed");
+
+	// The archive must open with the 8 magic bytes, then the two little-endian version
+	// words, then four flags bytes (all zero: the store is not checkpointed).
+	NSData *head = [NSData dataWithContentsOfURL: archive options: NSDataReadingMappedIfSafe error: NULL];
+	XCTAssertGreaterThanOrEqual(head.length, (NSUInteger)MADFileFormatHeaderLength, @"the header is present");
+	if (head.length >= MADFileFormatHeaderLength) {
+		const uint8_t *bytes = head.bytes;
+		XCTAssertEqual(memcmp(bytes, MADFileFormatMagic, 8), 0, @"the magic bytes match");
+		uint16_t major = (uint16_t)(bytes[8] | (bytes[9] << 8));
+		uint16_t minor = (uint16_t)(bytes[10] | (bytes[11] << 8));
+		XCTAssertEqual(major, MADFileFormatMajorVersion, @"the major version is 1");
+		XCTAssertEqual(minor, MADFileFormatMinorVersion, @"the minor version is 0");
+		XCTAssertTrue(bytes[12] == 0 && bytes[13] == 0 && bytes[14] == 0 && bytes[15] == 0,
+					  @"the flags are zero (not checkpointed)");
+	}
+
+	// Unarchive into a fresh directory; the member must come back verbatim.
+	MADArchiveManager *reader = [[MADArchiveManager alloc] initWithFileWrapperURL: destination archiveURL: archive];
+	XCTAssertTrue([reader unarchive], @"unarchive should succeed");
+
+	NSString *extracted = [NSString stringWithContentsOfURL: [destination URLByAppendingPathComponent: @"member.txt"]
+												  encoding: NSUTF8StringEncoding error: NULL];
+	XCTAssertEqualObjects(extracted, body, @"the member round-trips");
+
+	[fileManager removeItemAtURL: source error: NULL];
+	[fileManager removeItemAtURL: destination error: NULL];
+	[fileManager removeItemAtURL: archive error: NULL];
 }
 
 @end

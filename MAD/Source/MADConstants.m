@@ -11,3 +11,7 @@
 NSString * const MADFileExtentionMobleApplicationDocument           = @"mad";
 NSString * const MADFileExtentionMobleApplicationDocumentArchive    = @"mada";
 NSString * const MADTrademark                                       = @"MAD";
+
+const uint8_t MADFileFormatMagic[8] = { 'M', 'A', 'D', 'F', 'I', 'L', 'E', '\0' };
+const uint16_t MADFileFormatMajorVersion = 1;
+const uint16_t MADFileFormatMinorVersion = 0;

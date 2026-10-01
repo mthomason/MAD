@@ -25,8 +25,10 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSFileWrapper.h>
 #import <Foundation/NSFileCoordinator.h>
+#import <Foundation/NSUUID.h>
 
 #import <MADFileManager/MADFileUtilities.h>
+#import "MADConstants.h"
 #import "MADPathUtilities.h"
 #import "madtar.h"
 
@@ -41,6 +43,33 @@ int mad_path_is_relative(const char *);
 int mad_file_remove_if_exist(char *path) { return (access(path, F_OK) == 0) ? remove(path) : -1; }
 int mad_path_is_absolute(const char *path) { return strlen(path) > 1 && path[0] == '/' ? 1 : 0; }
 int mad_path_is_relative(const char *path) { return mad_path_is_absolute(path) ? 0 : 1; }
+
+// The v1 document header, per MAD_FORMAT.md section 7.1: 8 magic bytes, two
+// little-endian version words, then four flags bytes (bit 0 clear means the store
+// was not checkpointed).  It sits ahead of the bzip2 stream so a document is
+// identified by content, not by its extension.
+static NSData *MADFileFormatHeader(void) {
+	uint8_t bytes[MADFileFormatHeaderLength] = { 0 };
+	memcpy(bytes, MADFileFormatMagic, 8);
+	bytes[8]  = (uint8_t)(MADFileFormatMajorVersion & 0xFF);
+	bytes[9]  = (uint8_t)((MADFileFormatMajorVersion >> 8) & 0xFF);
+	bytes[10] = (uint8_t)(MADFileFormatMinorVersion & 0xFF);
+	bytes[11] = (uint8_t)((MADFileFormatMinorVersion >> 8) & 0xFF);
+	return [NSData dataWithBytes: bytes length: sizeof(bytes)];
+}
+
+// Write the header, then the archive body, into `archivePath`.
+static BOOL MADComposeV1Archive(const char *archivePath, const char *bodyPath) {
+	NSString *bodyFile = [NSString stringWithUTF8String: bodyPath];
+	NSData *body = bodyFile ? [NSData dataWithContentsOfFile: bodyFile] : nil;
+	if (body == nil) return NO;
+
+	NSMutableData *composed = [NSMutableData dataWithData: MADFileFormatHeader()];
+	[composed appendData: body];
+
+	NSString *archiveFile = [NSString stringWithUTF8String: archivePath];
+	return archiveFile ? [composed writeToFile: archiveFile atomically: NO] : NO;
+}
 
 size_t m_malloc(char **str, size_t len) {
 	size_t result = len * sizeof(char);
@@ -196,10 +225,21 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 		os_log_error(OS_LOG_DEFAULT, "Failed to backup file with %d.", r);
 	}
 
-	//2. Write archive.
-	if ((r = write_archive(archive_path, self.filewrapper)) < 0) {
+	// 2. Write the archive body to a sibling temp file, then compose the v1 header
+	// and the body into the document URL.  libarchive opens its own output, so the
+	// header cannot simply be written first and have libarchive append to it.
+	char *body_path;
+	size_t body_size = m_malloc(&body_path, strlen(archive_path) + 5);
+	strlcpy(body_path, archive_path, body_size);
+	strlcat(body_path, ".tmp", body_size);
+
+	if ((r = write_archive(body_path, self.filewrapper)) < 0) {
 		os_log_error(OS_LOG_DEFAULT, "Failed to archive file with %d.", r);
+	} else if (!MADComposeV1Archive(archive_path, body_path)) {
+		r = -1;
+		os_log_error(OS_LOG_DEFAULT, "Failed to write the document header.");
 	}
+	mad_file_remove_if_exist(body_path);
 	mad_file_remove_if_exist(backup_path);
 
 	success = r == ARCHIVE_OK;
@@ -213,6 +253,7 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	free(archive_path);
 	free(origin_path);
 	free(backup_path);
+	free(body_path);
 
 	if (!success) os_log_error(OS_LOG_DEFAULT, "Failed to write archive.");
 
@@ -220,20 +261,47 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 }
 
 - (BOOL)unarchive {
+	// A v1 document carries the 16-byte header ahead of the bzip2 stream; libarchive
+	// does not know about it, so hand the extractors a headerless copy when one is
+	// present.  A v0 document has no header and is extracted as-is.
+	NSURL *stripped = [self strippedArchiveURL];
+	NSURL *source = stripped ?: self.archive;
+
 	int success = 0;
 	@autoreleasepool {
-		success = [self unarchiveV8];
+		success = [self unarchiveV8FromURL: source];
 	}
 
 	if (success != 0) {
 		@autoreleasepool {
-			success = [self unvarchiveLegacy];
+			success = [self unarchiveLegacyFromURL: source];
 		}
+	}
+
+	if (stripped) {
+		[[NSFileManager defaultManager] removeItemAtURL: stripped error: NULL];
 	}
 	return success == 0;
 }
 
-- (int)unarchiveV8 {
+// Returns nil for a v0 document (no header), or a temporary headerless copy for a
+// v1 document, so the extractor sees a plain bzip2 tar.
+- (NSURL *)strippedArchiveURL {
+	NSData *data = [NSData dataWithContentsOfURL: self.archive
+										options: NSDataReadingMappedIfSafe
+										  error: NULL];
+	if (data.length < MADFileFormatHeaderLength) return nil;
+	if (memcmp(data.bytes, MADFileFormatMagic, 8) != 0) return nil;
+
+	NSData *body = [data subdataWithRange: NSMakeRange(MADFileFormatHeaderLength, data.length - MADFileFormatHeaderLength)];
+	NSURL *stripped = [NSURL fileURLWithPath:
+		[NSTemporaryDirectory() stringByAppendingPathComponent:
+			[NSString stringWithFormat: @"mad-stripped-%@.tar.bz2", NSUUID.UUID.UUIDString]]];
+	if (![body writeToURL: stripped atomically: YES]) return nil;
+	return stripped;
+}
+
+- (int)unarchiveV8FromURL:(NSURL *)sourceArchive {
 	__block int success = 0;
 	int r;
 	BOOL isDirectory, fileExist;
@@ -272,7 +340,7 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 			char *source = 0, *dest = 0, *filename = 0;
 			dest = strdup(destinationURL.fileSystemRepresentation);
 			filename = strdup(destinationLastPathComponent.fileSystemRepresentation);
-			source = strdup(_archive.fileSystemRepresentation);
+			source = strdup(sourceArchive.fileSystemRepresentation);
 			success = mad_extract(source, dest, filename);
 			if (dest != 0) free(dest);
 			if (filename != 0) free(filename);
@@ -282,11 +350,11 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	return success;
 }
 
-- (int)unvarchiveLegacy {
+- (int)unarchiveLegacyFromURL:(NSURL *)sourceArchive {
 	int success = 0;
 	//Test to see if it's it's not a compressed  archive
 	NSError * __autoreleasing errorReading = NULL;
-	NSData *data = [[NSData alloc] initWithContentsOfURL: _archive
+	NSData *data = [[NSData alloc] initWithContentsOfURL: sourceArchive
 												 options: NSDataReadingUncached
 												   error: &errorReading];
 	if (errorReading != nil) {
