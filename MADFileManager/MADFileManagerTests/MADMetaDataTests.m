@@ -134,12 +134,11 @@
 	XCTAssertEqual(meta.ubiquitousItemPercentUploaded, 100.0);
 }
 
-- (void)testLocalDownloadingStatusInconsistency {
-	// Defect: the status string reports "current", but the derived boolean
-	// hardcodes NO instead of deriving from the string. The two disagree.
+- (void)testLocalDownloadingStatusIsConsistent {
+	// The derived boolean now agrees with the status string.
 	MADMetaData *meta = [[MADMetaData alloc] initWithURL:_textFile];
 	XCTAssertEqualObjects(meta.ubiquitousItemDownloadingStatus, @"NSMetadataUbiquitousItemDownloadingStatusCurrent");
-	XCTAssertFalse(meta.isUbiquitousItemDownloadingStatusCurrent);
+	XCTAssertTrue(meta.isUbiquitousItemDownloadingStatusCurrent);
 }
 
 - (void)testLocalCopy {

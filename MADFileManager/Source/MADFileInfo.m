@@ -69,6 +69,11 @@ static const char * QueueFileInfo = "com.everydayapps.mad.fileinfo";
 
 }
 
+- (NSUInteger)hash {
+	// Must agree with -isEqual:, which compares absolute URLs.
+	return self.URL.absoluteURL.hash;
+}
+
 - (id)debugQuickLookObject {
 	NSMutableString *debug = [[NSMutableString alloc] init];
 	NSString *classname = NSStringFromClass([self class]);

@@ -108,13 +108,13 @@
 	return isUbiquitous;
 }
 
-- (NSData *)fileSystemFileCreationDate {
+- (NSDate *)fileSystemFileCreationDate {
 	id value = [_metadataItem valueForAttribute:NSMetadataItemFSCreationDateKey];
 	id date = [value copyWithZone:nil];
 	return date;
 }
 
-- (NSData *)fileSystemContentChangeDate {
+- (NSDate *)fileSystemContentChangeDate {
 	id value = [_metadataItem valueForAttribute:NSMetadataItemFSContentChangeDateKey];
 	id date = [value copyWithZone:nil];
 	return date;

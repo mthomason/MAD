@@ -95,12 +95,12 @@
 	return path;
 }
 
-- (NSData *)fileSystemFileCreationDate {
+- (NSDate *)fileSystemFileCreationDate {
 	id date = [_attributes[NSFileCreationDate] copyWithZone:nil];
 	return date;
 }
 
-- (NSData *)fileSystemContentChangeDate {
+- (NSDate *)fileSystemContentChangeDate {
 	id date = [_attributes[NSFileModificationDate] copyWithZone:nil];
 	return date;
 }
@@ -122,7 +122,11 @@
 - (BOOL)ubiquitousItemIsExternalDocument { return NO; }
 - (BOOL)isUbiquitousItemDownloadingStatusNotDownloaded { return NO; }
 - (BOOL)isUbiquitousItemDownloadingStatusDownloaded { return NO; }
-- (BOOL)isUbiquitousItemDownloadingStatusCurrent { return NO; }
+- (BOOL)isUbiquitousItemDownloadingStatusCurrent {
+	// A local item is always fully present, so this must agree with
+	// -ubiquitousItemDownloadingStatus above, which reports Current.
+	return [self.ubiquitousItemDownloadingStatus isEqualToString:NSMetadataUbiquitousItemDownloadingStatusCurrent];
+}
 - (double)ubiquitousItemPercentUploaded { return 100.0; }
 - (double)ubiquitousItemPercentDownloaded { return 100.0; }
 

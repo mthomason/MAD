@@ -36,6 +36,15 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
 
 @implementation MADMetaData
 
+// Both initialisers deliberately return a *different* object than self: the caller gets
+// the concrete subclass (Local for a URL, Cloud for a metadata item), and `self` is
+// discarded.  This reads like a defect, but every producer -- MADFilesController's
+// insert/remove/update paths and +newMetaDatumForMetadataItems: below -- depends on the
+// concrete subclass coming back; the base MADMetaData throws exceptionNotImplemented from
+// every accessor.  Do not "fix" this by initialising and returning self.  The real faults
+// here are only the ARC leak of the discarded allocation and the instancetype type-lie;
+// fixing those means a proper class cluster (+allocWithZone:), keeping the return value
+// identical.
 - (instancetype)initWithURL:(NSURL *)url {
 	id metadata = [[MADMetaDataLocal alloc] initWithURL:url];
 	return metadata;
@@ -57,9 +66,9 @@ NSException *exceptionNotImplemented(SEL thwoingSelector) {
 
 - (instancetype)copyWithZone:(NSZone *)zone { @throw exceptionNotImplemented(_cmd); }
 
-- (NSData *)fileSystemFileCreationDate { @throw exceptionNotImplemented(_cmd); }
+- (NSDate *)fileSystemFileCreationDate { @throw exceptionNotImplemented(_cmd); }
 
-- (NSData *)fileSystemContentChangeDate { @throw exceptionNotImplemented(_cmd); }
+- (NSDate *)fileSystemContentChangeDate { @throw exceptionNotImplemented(_cmd); }
 
 - (BOOL)isUbiquitous { @throw exceptionNotImplemented(_cmd); }
 

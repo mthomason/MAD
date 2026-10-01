@@ -73,14 +73,13 @@
 	XCTAssertNotEqualObjects(a, c);
 }
 
-- (void)testEqualObjectsHaveDifferentHashes {
-	// Defect: -isEqual: is overridden to compare URLs, but -hash is not. Two
-	// equal MADFileInfo instances therefore produce different hash values,
-	// which breaks their use as NSSet members / NSDictionary keys.
+- (void)testEqualObjectsHaveEqualHashes {
+	// -hash agrees with -isEqual: (both key on the absolute URL), so equal
+	// instances can be used as NSSet members / NSDictionary keys.
 	MADFileInfo *a = [[MADFileInfo alloc] initWithURL:_file];
 	MADFileInfo *b = [[MADFileInfo alloc] initWithURL:_file];
 	XCTAssertEqualObjects(a, b);
-	XCTAssertNotEqual(a.hash, b.hash);
+	XCTAssertEqual(a.hash, b.hash);
 }
 
 - (void)testFetchInfoCallsCompletion {
