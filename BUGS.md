@@ -275,6 +275,77 @@ Status key:
 
 ---
 
+## MADFileManager
+
+### `MADMetaData -fileSystemFileCreationDate` / `-fileSystemContentChangeDate` return `NSData` not `NSDate`
+- **Status:** Confirmed (type lie)
+- **Where:** `MADFileManager/Source/MADMetaData.m`, `MADMetaDataLocal.m`, `MADMetaDataCloud.m`
+- **Behavior:** The header declares both as `@property (readonly) NSDate *`, but the
+  accessor implementations are typed `- (NSData *)...`. The object that actually
+  comes back is an `NSDate` (copied out of the file attributes), so callers that
+  trust the compiler's `NSData` type will crash on methods like `-length`.
+- **Why it matters:** The compiler and runtime disagree about these two types; the
+  property/accessor mismatch is exactly the kind of thing that will bite once
+  file metadata is routed through the new manual-SQL cache.
+
+### `MADMetaDataLocal` downloading-status reports "current" but the derived flag says NO
+- **Status:** Confirmed (inconsistency)
+- **Where:** `MADFileManager/MADFileManagerTests/MADMetaDataTests.m`
+- **Behavior:** `-ubiquitousItemDownloadingStatus` returns
+  `NSMetadataUbiquitousItemDownloadingStatusCurrent`, yet
+  `-isUbiquitousItemDownloadingStatusCurrent` hardcodes `NO` instead of deriving
+  from that string. A local file simultaneously claims "current" and "not current".
+- **Why it matters:** Any UI keying off the status boolean (e.g. a "downloading"
+  spinner) will disagree with the status string.
+
+### `MADMetaData -initWithURL:` / `-initWithMetadataItem:` are self-replacing factories
+- **Status:** Investigate
+- **Where:** `MADFileManager/Source/MADMetaData.m`
+- **Behavior:** `-initWithURL:` never touches `self`; it allocates a fresh
+  `MADMetaDataLocal` and returns that. Same for `-initWithMetadataItem:` (returns
+  a `MADMetaDataCloud`). The caller's original `MADMetaData` allocation is dropped.
+- **Why it matters:** Works as a class-cluster-style factory, but under ARC the
+  original `self` is leaked and the `instancetype` signature lies about the
+  concrete class. Callers doing `[[MADMetaData alloc] initWithURL:]` get a
+  subclass back.
+
+### `MADFileInfo -isEqual:` has no matching `-hash` override
+- **Status:** Confirmed
+- **Where:** `MADFileManager/MADFileManagerTests/MADFileInfoTests.m`
+- **Behavior:** `-isEqual:` compares `URL.absoluteURL`, but `-hash` is left to
+  `NSObject`'s identity hash. Two `MADFileInfo` objects for the same file compare
+  equal yet hash differently.
+- **Why it matters:** Using `MADFileInfo` as an `NSSet` member or `NSDictionary`
+  key silently fails lookups/`containsObject:`.
+
+### `MADFileUtilities -removeContentsOfDirectory:` removes the directory itself
+- **Status:** Confirmed
+- **Where:** `MADFileManager/MADFileManagerTests/MADFileUtilitiesTests.m`
+- **Behavior:** The method removes each child and then removes the directory too,
+  despite the name promising to remove only the contents.
+- **Why it matters:** Callers expecting an empty directory left behind will find
+  the directory gone.
+
+### `MADFileUtilities` has several undeclared public-ish helpers
+- **Status:** Quirk
+- **Where:** `MADFileManager/Source/MADFileUtilities.m` (vs `.h`)
+- **Behavior:** `+createDirectoryForUrlIfItDoesNotExist:`,
+  `+contentsOfDirectory:withPathExtension:`, `+removeContentsOfDirectory:`,
+  `+removeCachedFileForDocumentUrl:` etc. are implemented but not declared in the
+  public header. The tests surface them via a test-only category.
+- **Why it matters:** Hidden API is easy to break silently; these are likely
+  intended to be either private or public but are currently neither clearly.
+
+### `MADMetaDataLocal` reports 100% uploaded/downloaded for a local file
+- **Status:** Quirk
+- **Where:** `MADFileManager/Source/MADMetaDataLocal.m`
+- **Behavior:** `-ubiquitousItemPercentUploaded` / `-ubiquitousItemPercentDownloaded`
+  return `100.0` for a non-ubiquitous local file.
+- **Why it matters:** Harmless if callers check `-isUbiquitous` first, but a
+  bare progress read on a local file shows a full bar rather than "N/A".
+
+---
+
 ## MADSqlite3
 
 No defects found. The `MADDataTypeUnknown → String`/`TEXT` coercions in
