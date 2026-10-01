@@ -91,6 +91,99 @@ Status key:
 
 ---
 
+## MADFoundation
+
+### `MADDataColumn -addRows:` is off by one (appends one extra row)
+- **Status:** Confirmed
+- **Where:** `MADFoundation/MADFoundationTests/MADDataColumnTests.m`
+- **Behavior:** `addRows:2` appends three default rows and `addRows:0` still
+  appends one. The loop uses `i <= count` instead of `i < count`.
+- **Why it matters:** Column sizing in the SQLite result cache will always be
+  one row too long; anything that indexes off `count` will read a phantom
+  trailing `NSNull`.
+
+### `MADDataColumn -initWithType:` ignores `dataLen:`
+- **Status:** Confirmed
+- **Where:** `MADFoundation/MADFoundationTests/MADDataColumnTests.m`
+- **Behavior:** `self.dataLength` is assigned from the `length:` parameter; the
+  `dataLen:` argument is silently discarded.
+- **Why it matters:** Callers that pass distinct data-length and display-length
+  values get the wrong value stored.
+
+### `MADDataColumn -copyPlist` / plist round-trip loses `NSNull`
+- **Status:** Confirmed (asymmetry)
+- **Where:** `MADFoundation/MADFoundationTests/MADDataColumnTests.m`
+- **Behavior:** `copyPlist` encodes a default `NSNull` cell as the literal string
+  `@"~MTNull~"`, but `initWithPlist:` does not convert that sentinel back to
+  `[NSNull null]`. A plist round-trip turns a `NULL` cell into the string
+  `@"~MTNull~"`.
+- **Why it matters:** SQLite `NULL`s cached as `NSNull` become the string
+  `"~MTNull~"` after a plist round-trip, corrupting report data.
+
+### `MADDataColumn` NSCoding loses `notNull` / `autoIncrement`
+- **Status:** Confirmed
+- **Where:** `MADFoundation/MADFoundationTests/MADDataColumnTests.m`
+- **Behavior:** `initWithCoder:` does not decode the `notNull` and
+  `autoIncrement` flags; they come back `NO` after an archive round-trip.
+- **Why it matters:** Any column metadata persisted via `NSCoding` drops its
+  nullability / auto-increment constraints.
+
+### `MADDataColumn -objectAtIndex:` returns `instancetype` instead of `id`
+- **Status:** Quirk
+- **Where:** `MADFoundation/Source/MADDataColumn.h`
+- **Behavior:** The method is typed `instancetype` (i.e. `MADDataColumn *`), so
+  comparing a cell against `[NSNull null]` (or any non-column object) needs a
+  cast and produces a distinct-pointer-type warning.
+- **Why it matters:** Cosmetic API smell; cells are arbitrary `id`, so the
+  signature should be `id`. Not a runtime defect.
+
+### `MADGroupOperation -addOperation:` header/impl type mismatch (and missing `-addOperations:`)
+- **Status:** Confirmed
+- **Where:** `MADFoundation/Source/MADGroupOperation.h` / `.m`
+- **Behavior:** The header declares `-addOperation:(NSArray *)operation` but the
+  implementation is `-addOperation:(NSOperation *)operation`. The single-argument
+  `-addOperations:` (which exists in the implementation) is missing from the
+  header entirely, so only `-addOperations:finishingOperation:` is publicly
+  callable.
+- **Why it matters:** The public API is misleading and hides a method that
+  callers would otherwise use.
+
+### `MADGroupOperation` finishes with an array passed to `-finishWithError:`
+- **Status:** Confirmed (inspection; not yet exercised at runtime)
+- **Where:** `MADFoundation/Source/MADGroupOperation.m` (delegate
+  `-operationQueue:operationDidFinish:withErrors:`)
+- **Behavior:** `[self finishWithError:self.aggregatedErrors.copy]` passes an
+  `NSArray<NSError *>` to `-finishWithError:`, which expects a single
+  `NSError *`. The array is copied and re-wrapped, collapsing the group's
+  multiple errors into one bogus "error" that is itself an array.
+- **Why it matters:** Error aggregation is the whole point of a group
+  operation; the aggregated errors are mis-reported.
+
+### `MADOperation -willEnqueue` advances past `Pending` to `Ready`
+- **Status:** Confirmed
+- **Where:** `MADFoundation/MADFoundationTests/MADOperationTests.m`
+- **Behavior:** `-willEnqueue` sets `state = Pending`, but because `isReady` is a
+  KVO-dependent key of `state`, the `didChangeValueForKey:@"state"` notification
+  re-enters `-isReady`, which runs `-evaluateConditions` and advances a
+  dependency-free operation straight to `Ready`. The operation never observably
+  rests in `Pending`.
+- **Why it matters:** Any code (or future test) that inspects state right after
+  enqueueing will see `Ready` rather than `Pending`; the state machine skips a
+  transition.
+
+### `MADKeyChain -deleteSavedPasswordForKey:error:` mis-handles errors
+- **Status:** Confirmed (inspection; not covered by a test — keychain calls)
+- **Where:** `MADFoundation/Source/MADKeyChain.m`
+- **Behavior:** The guard is `if (deleteError != nil && *error != nil)`. This
+  dereferences `error` without a null check (crash if the caller passes `NULL`)
+  and, even when `error` is non-NULL, only reports the failure when `*error` was
+  already non-nil — so a deletion failure into a fresh `&err` is silently
+  swallowed and the method returns success.
+- **Why it matters:** Credential deletion failures are silently dropped, and the
+  legal `error:NULL` call site crashes.
+
+---
+
 ## MADSqlite3
 
 No defects found. The `MADDataTypeUnknown → String`/`TEXT` coercions in
