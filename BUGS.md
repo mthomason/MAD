@@ -702,6 +702,105 @@ it skips rather than fails when no server is reachable.
 
 ---
 
+## MAD Designer (app)
+
+Covered by the hosted `MADDesignerUnitTests` bundle (37 tests across
+`MADDesignerUnitTests.m` and `MADAppLogicTests.m`). The bundle is hosted by
+`MAD Designer.app` (TEST_HOST/BUNDLE_LOADER), so it reaches the app's own source
+through the running executable; the app's classes are declared locally in the test
+files rather than imported, because `MADDesigner/Source` is not on the bundle's
+header search path.
+
+### `+[MADDateFromTimeFormatter timeIntervalForResolution:]` returns 0.1 seconds for a millisecond
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/NSDate+Extras.m:250`
+- **Behavior:** The `MTDateResolutionMillisecond` case returns `0.1`. A millisecond
+  is a thousandth of a second (`0.001`), so the value is 100x too large. The caller
+  at `MADViewerController.m:870` hands this straight to
+  `+[NSTimer scheduledTimerWithTimeInterval:]`, so a viewer refresh armed at
+  "millisecond" resolution runs at 10 Hz rather than 1000 Hz.
+
+### `+[MADDateFromTimeFormatter timeIntervalForResolution:]` has no case for year, month, or week
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/NSDate+Extras.m:253`
+- **Behavior:** The switch covers only Day, Hour, Minute, Second, and Millisecond.
+  Year, Month, and Week fall through to `default:` and return `86400.0` -- one day
+  -- so a caller asking for year resolution gets a timer that fires daily.
+  `-stringWithTimeIntervalSinceDate:` *does* report `MTDateResolutionYear`,
+  `MTDateResolutionMonth`, and `MTDateResolutionWeek`, so the two halves of the
+  class disagree about which resolutions exist.
+
+### `MADPageViewAttributes` decodes a missing cache date as 2001-01-01
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/MADPageViewAttributes.m:61` and `:84`
+- **Behavior:** `-encodeWithCoder:` writes
+  `_reportLastCacheDate.timeIntervalSinceReferenceDate`; messaging `nil` yields
+  `0.0`. `-initWithCoder:` reads it back with `-decodeDoubleForKey:` and builds
+  `[[NSDate alloc] initWithTimeIntervalSinceReferenceDate:]`, which cannot return
+  `nil`. "Never cached" therefore round-trips as the reference date, 2001-01-01
+  00:00:00 UTC, and a caller testing the property for `nil` will not see it. A
+  genuine 2001 date encodes to the same 0, so the two states are indistinguishable
+  afterwards.
+
+### `MADPageViewAttributes` narrows `zoomScaleInital` and `contentScaleFactor` to float
+- **Status:** Quirk
+- **Where:** `MADDesigner/Source/MADPageViewAttributes.m:53` and `:56`
+- **Behavior:** Both are `double` properties, encoded with `-initWithDouble:` and
+  decoded with `-.floatValue`, so only single precision survives a round trip.
+  Harmless for the values the app actually stores (zoom scales near 1.0), but the
+  coding round trip is not lossless.
+
+### `NSData (AES256)` encrypts with a NULL IV, so ciphertext is deterministic
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/NSData+AES256.m:35` and `:67`
+- **Behavior:** `CCCrypt` is called with a NULL IV, so every encryption under a
+  given key uses an all-zero IV. The same plaintext always produces the same
+  ciphertext, which leaks whether two stored values are equal. Fixing it means
+  generating a random IV and storing it alongside the ciphertext.
+
+### `NSData (AES256)` silently falls back to an all-zero key when the key is over 32 bytes
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/NSData+AES256.m:22` and `:54`
+- **Behavior:** The key is copied into a zeroed 33-byte buffer with
+  `-getCString:maxLength:encoding:` and the return value is discarded. A key whose
+  UTF-8 form does not fit fails the conversion and writes nothing, leaving the
+  buffer as the 32 zero bytes it was `bzero`'d to. Two completely different
+  over-long keys therefore produce identical ciphertext -- the key contributes
+  nothing. A key of 32 bytes or fewer is copied in and zero-padded, which is the
+  documented intent; the over-long case is not.
+
+### `NSData (Base64) +dataFromBase64String:` writes past its output buffer
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/NSData+Base64.m:76` and `:107`
+- **Behavior:** `NewBase64Decode` sizes the buffer as `(length / 4) * 3`, but the
+  store loop always writes 3 bytes per group, including the final partial group.
+  For a length that is not a multiple of 4 the last group writes up to 3 bytes past
+  the allocation: `@"YWJjY"` gets a 3-byte buffer and writes at offsets 3, 4 and 5.
+  The decoded value is still correct because the returned length is tracked
+  separately, so the overrun lands in malloc's slack and is invisible outside a
+  guard-malloc or ASan run. The test can only pin the decoded value.
+
+### `+[NSDateFormatter RFC_3339]` rejects RFC 3339 timestamps with a numeric offset
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/NSDateFormatter+RFC_3339.m:20`
+- **Behavior:** The format string ends in a literal `'Z'` rather than a timezone
+  token, so only the `Z` spelling of UTC is accepted. Because the locale is
+  `en_US_POSIX` the formatter is also strict, so `2020-01-15T13:45:00+02:00`
+  returns `nil` instead of being misread as UTC. RFC 3339 permits both spellings,
+  and a server timestamp using the offset form is silently dropped.
+
+### `MADFeature -initWithDictionary:` yields type 0 for a missing "type" key
+- **Status:** Investigate
+- **Where:** `MADDesigner/Source/MADFeature.m:52`
+- **Behavior:** Every key is read by subscripting and cast to `NSNumber` --
+  `((NSNumber *)dictionary[@"type"]).shortValue`. A missing or non-numeric entry
+  reads as `nil`, and messaging `nil` yields 0. Zero is not one of the two declared
+  `MADFeatureType` values (`NonConsumable` = 1, `Subscription` = 2), so a plist typo
+  produces a feature that is neither rather than an error. The method is deprecated
+  in favour of the designated initialiser, so this may be moot in practice.
+
+---
+
 ## Already fixed (for reference)
 
 ### `MADDataTableFast -objectAtRow:column:` ignored its `column` argument
@@ -718,3 +817,27 @@ it skips rather than fails when no server is reachable.
 - **Where:** `MAD/MADTests/MADTestReportFormatter.m`
 - **Behavior:** Disabled; cannot be revived until the Core Data model is added
   to a build phase. See `memory/madtestreportformatter-blocked.md`.
+
+### `MADDesignerUnitTests` was misconfigured and had not built in some time
+- **Where:** `MADDesigner/MAD Designer.xcodeproj/project.pbxproj`,
+  `MADDesigner/Targets/MADDesignerUnitTests/MADDesignerUnitTests.m`
+- **Behavior:** Four separate pre-existing faults, all now fixed:
+  - `IPHONEOS_DEPLOYMENT_TARGET` was `12.0` on both `MADDesignerUnitTests` and
+    `MADDesignerUITests`, below the 15.0 floor this toolchain supports.
+  - `INFOPLIST_FILE` pointed at `MADDesignerUnitTests/Info.plist`; the file is at
+    `Targets/MADDesignerUnitTests/Info.plist`.
+  - The unit-test target's Frameworks phase was empty. `BUNDLE_LOADER` resolves
+    undefined symbols against the host *executable* only, not against the dylibs
+    the app links, so `_OBJC_CLASS_$_MADQueryTest` and the other framework classes
+    the tests use had to be linked explicitly.
+  - The test file itself was the Xcode template plus a `testExample` that opened a
+    live RDS instance in `us-east-1` with hardcoded credentials, against APIs that
+    no longer exist. It was rewritten around the app's own helper categories and
+    framework consumption.
+
+### `MADDesignerTestConnection.m` is an empty template that still runs
+- **Where:** `MADDesigner/Targets/MADDesignerUnitTests/MADDesignerTestConnection.m`
+- **Behavior:** An untouched Xcode template: an empty `-testExample` and an empty
+  `-testPerformanceExample`, contributing two no-op tests to every run. Left in
+  place rather than deleted; it is harmless but should either be filled in or
+  removed.

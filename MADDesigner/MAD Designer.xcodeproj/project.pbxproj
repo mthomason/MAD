@@ -115,6 +115,12 @@
 		4C29161924AC75E300EC794B /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160A24AC75E300EC794B /* MADCocoaExtensions.framework */; };
 		4C29161A24AC75E300EC794B /* MADCocoaExtensions.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160A24AC75E300EC794B /* MADCocoaExtensions.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C29161B24AC75E300EC794B /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160B24AC75E300EC794B /* MADDataStructures.framework */; };
+		4C7E5A01000000000000A1 /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160724AC75E300EC794B /* MAD.framework */; };
+		4C7E5A02000000000000A1 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160824AC75E300EC794B /* MADAPI.framework */; };
+		4C7E5A03000000000000A1 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160A24AC75E300EC794B /* MADCocoaExtensions.framework */; };
+		4C7E5A04000000000000A1 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160B24AC75E300EC794B /* MADDataStructures.framework */; };
+		4C7E5A05000000000000A1 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160F24AC75E300EC794B /* MADFoundation.framework */; };
+		4C7E5A06000000000000A1 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161024AC75E300EC794B /* MADMySQL.framework */; };
 		4C29161C24AC75E300EC794B /* MADDataStructures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160B24AC75E300EC794B /* MADDataStructures.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C29161D24AC75E300EC794B /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160C24AC75E300EC794B /* MADExplorer.framework */; };
 		4C29161E24AC75E300EC794B /* MADExplorer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160C24AC75E300EC794B /* MADExplorer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -241,6 +247,7 @@
 		4C5478E91E5D7EC80043682E /* MADViewerNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5478E81E5D7EC80043682E /* MADViewerNavigationBar.m */; };
 		4C5B55E51C98CCBF005C19D9 /* MADDesignerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55E41C98CCBF005C19D9 /* MADDesignerUITests.m */; };
 		4C5B55F31C98CCD6005C19D9 /* MADDesignerUnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55F21C98CCD6005C19D9 /* MADDesignerUnitTests.m */; };
+		4C7E5A0700000000000000A1 /* MADAppLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7E5A0700000000000000B1 /* MADAppLogicTests.m */; };
 		4C5B55FB1C98CE6D005C19D9 /* MADDesignerTestConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55FA1C98CE6D005C19D9 /* MADDesignerTestConnection.m */; };
 		4C5B55FE1C98DD4D005C19D9 /* MADOperationPromptPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B55FD1C98DD4D005C19D9 /* MADOperationPromptPassword.m */; };
 		4C5B56011C98DD76005C19D9 /* MADOperationPromptCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B56001C98DD76005C19D9 /* MADOperationPromptCredentials.m */; };
@@ -867,6 +874,7 @@
 		4C5B55E61C98CCBF005C19D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C5B55F01C98CCD6005C19D9 /* MADDesignerUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADDesignerUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C5B55F21C98CCD6005C19D9 /* MADDesignerUnitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDesignerUnitTests.m; sourceTree = "<group>"; };
+		4C7E5A0700000000000000B1 /* MADAppLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADAppLogicTests.m; sourceTree = "<group>"; };
 		4C5B55F41C98CCD6005C19D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C5B55FA1C98CE6D005C19D9 /* MADDesignerTestConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerTestConnection.m; sourceTree = "<group>"; };
 		4C5B55FC1C98DD4D005C19D9 /* MADOperationPromptPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationPromptPassword.h; sourceTree = "<group>"; };
@@ -1196,6 +1204,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C7E5A01000000000000A1 /* MAD.framework in Frameworks */,
+				4C7E5A02000000000000A1 /* MADAPI.framework in Frameworks */,
+				4C7E5A03000000000000A1 /* MADCocoaExtensions.framework in Frameworks */,
+				4C7E5A04000000000000A1 /* MADDataStructures.framework in Frameworks */,
+				4C7E5A05000000000000A1 /* MADFoundation.framework in Frameworks */,
+				4C7E5A06000000000000A1 /* MADMySQL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1970,6 +1984,7 @@
 			children = (
 				4C5B55FA1C98CE6D005C19D9 /* MADDesignerTestConnection.m */,
 				4C5B55F21C98CCD6005C19D9 /* MADDesignerUnitTests.m */,
+				4C7E5A0700000000000000B1 /* MADAppLogicTests.m */,
 				4C5B55F41C98CCD6005C19D9 /* Info.plist */,
 			);
 			path = MADDesignerUnitTests;
@@ -2651,6 +2666,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C5B55F31C98CCD6005C19D9 /* MADDesignerUnitTests.m in Sources */,
+				4C7E5A0700000000000000A1 /* MADAppLogicTests.m in Sources */,
 				4C5B55FB1C98CE6D005C19D9 /* MADDesignerTestConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3051,8 +3067,8 @@
 				DEVELOPMENT_TEAM = D3C58YS54A;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = MADDesignerUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				INFOPLIST_FILE = Targets/MADDesignerUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3083,8 +3099,8 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = MADDesignerUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				INFOPLIST_FILE = Targets/MADDesignerUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3116,8 +3132,8 @@
 				DEVELOPMENT_TEAM = D3C58YS54A;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = MADDesignerUnitTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				INFOPLIST_FILE = Targets/MADDesignerUnitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3146,8 +3162,8 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				INFOPLIST_FILE = MADDesignerUnitTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				INFOPLIST_FILE = Targets/MADDesignerUnitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
