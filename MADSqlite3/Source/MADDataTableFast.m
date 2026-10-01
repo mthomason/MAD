@@ -610,25 +610,29 @@ static os_log_t mlog;
 	return result;
 }
 
-// FIXME: Maybe wrap in autorelease block.
+// A bulk insert reaches here once per row, and the insert path autoreleases per row -- the
+// binding statement does.  A caller that drains only at the end of its own loop holds the
+// whole result set instead of one row of it: at 200000 rows that measured 256 bytes per row,
+// about 49 MB, which is the footprint a large report gets killed for.  The pool belongs here
+// because this is the only place that knows a row has ended, and because the caller is a
+// generic row loop over a <MADDataTableWriting> with no reason to know it needs one.
 - (void)addRowWithDataForFieldKeys:(NSDictionary <NSString *, id> *)row {
-	//@autoreleasepool {
-	
-	NSArray <NSString *> *columnKeys = self.columnKeys;
-	NSMutableArray *rowData = [[NSMutableArray alloc] initWithCapacity:columnKeys.count];
-	for (NSString *columnDefKey in columnKeys) {
-		
-		MADDataColumn *columnDef = self.columns[columnDefKey];
-		id obj = row[columnDef.fieldName];
-		if (obj == nil) obj = [NSNull null];
-		[rowData addObject:obj];
-		
+	@autoreleasepool {
+
+		NSArray <NSString *> *columnKeys = self.columnKeys;
+		NSMutableArray *rowData = [[NSMutableArray alloc] initWithCapacity:columnKeys.count];
+		for (NSString *columnDefKey in columnKeys) {
+
+			MADDataColumn *columnDef = self.columns[columnDefKey];
+			id obj = row[columnDef.fieldName];
+			if (obj == nil) obj = [NSNull null];
+			[rowData addObject:obj];
+
+		}
+		NSError * __autoreleasing error = nil;
+		[self addRow:rowData error:&error];
+
 	}
-	NSError * __autoreleasing error = nil;
-	[self addRow:rowData error:&error];
-	
-	//}
-	
 }
 
 - (void)sortUsingDescriptors:(NSArray <NSSortDescriptor *> *)sortDescriptors {
