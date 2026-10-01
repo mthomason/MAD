@@ -333,7 +333,7 @@ whether to do it now — so it is queued directly behind Phase 1 rather than at 
 
 ## 9. The portable store migration
 
-**Status:** Decided 2026-10-01, not started. Needs its own plan before any code.
+**Status:** Decided 2026-10-01; plan written 2026-10-01 (`MAD_STORE_MIGRATION.md`). Not started.
 
 The `.mad` store moves from Core Data to a portable SQLite format of our own — this is the
 decision in `MAD_FORMAT.md` §8.1 and `ROADMAP.md` §4.2, and it is what removes the last Apple

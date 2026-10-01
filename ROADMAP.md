@@ -5,7 +5,8 @@ The plan for the next stretch of work on _MAD Designer_, and the order to take i
 This file is a **plan**, not a queue you act on. `BUGS.md` is the defect register, `TASKS.md`
 is the engineering queue, `TODO.md` is the product wishlist. This one says which of those, and
 which of the three design documents written on 2026-10-01, get picked up next and why in that
-order. Work starts here when the user asks for a track by name or number.
+order. `MAD_STORE_MIGRATION.md` (written the same day, once the store decision was made) is the
+plan for the portable store, which is its own track (§4.2 / `TASKS.md` §9). Work starts here when the user asks for a track by name or number.
 
 Written 2026-10-01 against `master` at `073bb2e24`; reordered the same day against `master` at
 `c6e5cab0f`, once the user settled what the core task is.

@@ -122,6 +122,8 @@ scheme, so the command above does not reach them.
 * `MAD_FORMAT.md` -- what a `.mad` document is, and what it should be.
 * `MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
 * `LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
+* `MAD_STORE_MIGRATION.md` -- the plan to move the `.mad` store off Core Data to a portable
+  SQLite schema of our own.
 * `DEVELOPER.md` -- test database credentials and common build commands.
 * `TODO.md` -- the product wishlist: features and ideas.
 * `README.md` -- build notes and the export-compliance statement.
