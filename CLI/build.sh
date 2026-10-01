@@ -1,0 +1,137 @@
+#!/bin/bash
+#
+#  build.sh -- build the `mad` command-line tool.
+#
+#  The tool is built for the iOS Simulator and run on the Mac through
+#  `xcrun simctl spawn`, which is what lets it link the existing frameworks and the
+#  existing static libraries without any of them being rebuilt for a second platform.
+#  See MAD_CLI.md section 4.
+#
+#  Usage:
+#    CLI/build.sh                     build the frameworks, then the tool
+#    CLI/build.sh --no-frameworks     build only the tool (fast; use while iterating)
+#    CLI/build.sh --run ...           build, then run the tool with the arguments given
+#
+#  The build directory is CLI/build, which is ignored by git.
+
+set -euo pipefail
+
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+readonly BUILD_DIR="${SCRIPT_DIR}/build"
+readonly DERIVED_DATA="${MAD_DERIVED_DATA:-${HOME}/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci}"
+readonly PRODUCTS="${DERIVED_DATA}/Build/Products/Debug-iphonesimulator"
+readonly OUTPUT="${BUILD_DIR}/mad"
+
+# The frameworks the tool links, in dependency order.  MADFoundation first is not
+# required by the linker, but keeping the list readable is worth something.
+readonly FRAMEWORKS=(
+	MADFoundation
+	MADCocoaExtensions
+	MADDataStructures
+	MADFileManager
+	MADSqlite3
+	MADAPI
+	MAD
+)
+
+# The Core Data model names these as value transformers for its transformable
+# attributes.  They live in the app target and register themselves in +load, so a
+# process that does not link them cannot decode a colour, an image or a locale out
+# of a document.  They are three small classes with no dependencies beyond UIKit.
+readonly TRANSFORMERS=(
+	"${REPO_ROOT}/MADDesigner/Source/MADColorTransformer.m"
+	"${REPO_ROOT}/MADDesigner/Source/MADLocaleTransformer.m"
+	"${REPO_ROOT}/MADDesigner/Resources/MADFileDefinition/MADPngImageTransformer.m"
+)
+
+# The refresh chain, compiled in from the application target.  MAD_CLI.md section 4.1
+# says these belong in the MAD framework; until they move, this is what keeps the CLI
+# and the application running the same code rather than two copies of it.
+readonly REFRESH_SOURCES=(
+	"${REPO_ROOT}/MADDesigner/Source/MADOperationRefresh.m"
+	"${REPO_ROOT}/MADDesigner/Source/MADOperationRefreshInitialize.m"
+	"${REPO_ROOT}/MADDesigner/Source/MADOperationRefreshInitalizeMainDataTable.m"
+)
+
+framework_flags() {
+	local framework
+	for framework in "${FRAMEWORKS[@]}"; do
+		printf -- '-framework %s ' "${framework}"
+	done
+}
+
+build_frameworks() {
+	echo "Building frameworks..."
+	xcodebuild build \
+		-workspace "${REPO_ROOT}/Reports.xcworkspace" \
+		-scheme "MAD Designer" \
+		-destination 'platform=iOS Simulator,name=iPhone 17' \
+		-derivedDataPath "${DERIVED_DATA}" \
+		-quiet
+}
+
+compile_tool() {
+	mkdir -p "${BUILD_DIR}"
+	echo "Compiling mad..."
+	# shellcheck disable=SC2046
+	xcrun --sdk iphonesimulator clang \
+		-fobjc-arc \
+		-g -O0 \
+		-target arm64-apple-ios15.0-simulator \
+		-DNS_BLOCK_ASSERTIONS=1 \
+		-I "${SCRIPT_DIR}/Source" \
+		-I "${REPO_ROOT}/MAD/Source" \
+		-I "${REPO_ROOT}/MADDesigner/Source" \
+		-I "${REPO_ROOT}/MADDesigner/Resources/MADFileDefinition" \
+		-F "${PRODUCTS}" \
+		$(framework_flags) \
+		-framework CoreData \
+		-framework CoreGraphics \
+		-framework UIKit \
+		-Wl,-rpath,"${PRODUCTS}" \
+		"${SCRIPT_DIR}"/Source/*.m \
+		"${TRANSFORMERS[@]}" \
+		"${REFRESH_SOURCES[@]}" \
+		-o "${OUTPUT}"
+
+	# UIManagedDocument finds its model with +mergedModelFromBundles:nil, which
+	# searches the main bundle.  For a plain executable the main bundle is the
+	# directory the binary lives in, so the compiled model has to sit beside it.
+	rm -rf "${BUILD_DIR}/MAD.momd"
+	cp -R "${PRODUCTS}/MAD Designer.app/MAD.momd" "${BUILD_DIR}/MAD.momd"
+
+	sign_tool
+}
+
+# The tool carries the application group entitlement for the same reason the app
+# does: MADDatabaseConnectionSqlite3 resolves the sample database through
+# -containerURLForSecurityApplicationGroupIdentifier:, which answers nil to a
+# process that does not claim the group and then trips an assert inside
+# MADURLFactory.  Ad-hoc signing is enough on the simulator, and it is what puts
+# the tool in the same container the application has already populated.
+sign_tool() {
+	codesign --force --sign - \
+		--entitlements "${SCRIPT_DIR}/mad.entitlements" \
+		"${OUTPUT}"
+}
+
+if [[ "${1:-}" == "--no-frameworks" ]]; then
+	shift
+	compile_tool
+else
+	build_frameworks
+	compile_tool
+fi
+
+if [[ "${1:-}" == "--run" ]]; then
+	shift
+	# A spawned process starts in the simulator's own home, so a relative path would
+	# resolve against that rather than the shell's directory.  Pass the real one
+	# through and let the tool join them; SIMCTL_CHILD_ is how simctl forwards an
+	# environment variable to the process it spawns.
+	exec env SIMCTL_CHILD_MAD_HOST_CWD="${PWD}" xcrun simctl spawn booted "${OUTPUT}" "$@"
+fi
+
+echo "Built ${OUTPUT}"
+echo "Run with: CLI/build.sh --run <command> <document.mad>"
