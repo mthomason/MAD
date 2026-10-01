@@ -431,6 +431,53 @@
 	XCTAssertEqualObjects(resolved.path, live.path);
 }
 
+// Reading a stale absolute URL is safe now, but writing one is how the staleness got
+// in: the path names the data container, and the container does not survive a
+// reinstall.  What is written is the file name alone.
+- (void)testCopyPlistStoresTheCacheFileNameNotAnAbsoluteUrl {
+	MADArrayCachingDirectoryDouble *delegate = [[MADArrayCachingDirectoryDouble alloc] init];
+	delegate.directory = self.tempDirectory;
+
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:7 fromCache:YES];
+	table.cacheDelegate = delegate;
+
+	NSString *stored = [table copyPlist][@"urlFastCache"];
+	XCTAssertEqualObjects(stored, @"7.maddb",
+						  @"the plist stored a path, which names the container as well as the file");
+	XCTAssertFalse([stored containsString: @"/"], @"a container path was written: %@", stored);
+	XCTAssertNil([NSURL URLWithString: stored].scheme, @"the stored value still parses as an absolute URL");
+}
+
+// The format fix in one test: a plist written against one cache directory resolves
+// against the directory in use when it is read, so the cache survives the container
+// that wrote it -- which is what an absolute URL could not do.
+- (void)testLoadWithPlistResolvesAStoredFileNameInTheDirectoryInUseNow {
+	NSURL *otherDirectory = [self.tempDirectory URLByAppendingPathComponent:@"other" isDirectory:YES];
+	[[NSFileManager defaultManager] createDirectoryAtURL: otherDirectory
+							 withIntermediateDirectories: YES
+											  attributes: nil
+												   error: NULL];
+
+	MADArrayCachingDirectoryDouble *wrote = [[MADArrayCachingDirectoryDouble alloc] init];
+	wrote.directory = otherDirectory;
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:7 fromCache:YES];
+	table.cacheDelegate = wrote;
+	NSDictionary *plist = [table copyPlist];
+	XCTAssertEqualObjects(plist[@"urlFastCache"], @"7.maddb");
+
+	MADArrayCachingDirectoryDouble *reading = [[MADArrayCachingDirectoryDouble alloc] init];
+	reading.directory = self.tempDirectory;
+	MADDataTableFast *reloaded = [[MADDataTableFast alloc] initWithId:7 fromCache:YES];
+	reloaded.cacheDelegate = reading;
+	NSError *error = nil;
+	XCTAssertTrue([reloaded loadWithPlist: plist error: &error], @"load failed: %@", error);
+
+	NSURL *resolved = [reloaded valueForKey: @"urlFastCache"];
+	NSURL *expected = [self.tempDirectory URLByAppendingPathComponent:@"7.maddb" isDirectory:NO];
+	XCTAssertEqualObjects(resolved.path, expected.path,
+						  @"the file name was not resolved against the cache directory in use");
+}
+
 - (void)testDriverFillsAWritePortWithNoDataTableBehindIt {
 	[self createPeopleTable];
 	MADDatabaseSqlite3 *database = [self makeOpenDatabase];

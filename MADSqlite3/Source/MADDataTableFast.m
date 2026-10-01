@@ -98,6 +98,15 @@ static os_log_t mlog;
 // counter when the file cannot answer (no table yet, or no connection).
 - (NSUInteger)recountRows;
 
+// The directory this table's cache file belongs in: whichever one the caller set,
+// else the cache delegate's, else the application group's cache directory.
+- (NSURL *)cacheDirectoryURL;
+// Turns what a cache plist or keyed archive stored into this table's cache URL.  A
+// file name is resolved against -cacheDirectoryURL; a legacy absolute URL is kept
+// only while the directory it names still exists.  nil asks -urlFastCache to build
+// one.  See the note in -loadWithPlist:error:.
+- (NSURL *)cacheUrlForStoredValue:(nullable NSString *)stored;
+
 @end
 
 @implementation MADDataTableFast {
@@ -203,8 +212,8 @@ static os_log_t mlog;
 		dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
 		self.queueBulkAdd = queue;
 		
-		NSString *absoluteString = [decoder decodeObjectForKey: [MADDataTableFast keyUrlFastCache]];
-		self.urlFastCache = [NSURL URLWithString:absoluteString];
+		NSString *storedCache = [decoder decodeObjectForKey: [MADDataTableFast keyUrlFastCache]];
+		self.urlFastCache = [self cacheUrlForStoredValue: storedCache];
 		
 		NSNumber *tag = [decoder decodeObjectForKey: [MADDataTableFast keyTag]];
 		self.tag = tag.unsignedIntegerValue;
@@ -223,8 +232,8 @@ static os_log_t mlog;
 - (void)encodeWithCoder:(NSCoder *)encoder {
 	[super encodeWithCoder:encoder];
 	
-	NSURL *url = [self.urlFastCache copy];
-	[encoder encodeObject: url.absoluteString forKey: [MADDataTableFast keyUrlFastCache]];
+	// The file name alone, never the absolute URL: see -copyPlist and BUGS.md.
+	[encoder encodeObject: self.urlFastCache.lastPathComponent forKey: [MADDataTableFast keyUrlFastCache]];
 	
 	NSNumber *objid = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
 	[encoder encodeObject: objid forKey: [MADDataTableFast keyTag]];
@@ -242,10 +251,15 @@ static os_log_t mlog;
 		os_log_error(mlog, "urlFastCache is nil.");
 	}
 	NSAssert(urlFastCache != nil, @"We need a url.");
-	NSString *absoluteString = urlFastCache.absoluteString;
-	NSAssert(absoluteString != nil, @"We need a path.");
-	NSString *urlFastCacheAbsolute = [[NSString alloc] initWithString: absoluteString];
-	plist[[MADDataTableFast keyUrlFastCache]] = urlFastCacheAbsolute;
+
+	// The file name alone.  An absolute URL also names the application's data
+	// container, whose UUID changes on reinstall, so a path written today points
+	// into a directory that may be gone by the time it is read -- which took the
+	// app down on the first document tap.  The container in use is what
+	// -cacheUrlForStoredValue: resolves the name against.  See BUGS.md.
+	NSString *filename = urlFastCache.lastPathComponent;
+	NSAssert(filename != nil, @"We need a path.");
+	plist[[MADDataTableFast keyUrlFastCache]] = [[NSString alloc] initWithString: filename];
 	
 	NSNumber *tag = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
 	plist[[MADDataTableFast keyTag]] = tag;
@@ -271,6 +285,19 @@ static os_log_t mlog;
 	return plist;
 }
 
+// The file a cache is read from sits beside the .maddb, so its directory is this
+// table's cache directory and is what a stored file name is resolved against.  That
+// is the container-independence the format fix is for: the name travels, the
+// container does not.  See -cacheUrlForStoredValue:.
+- (BOOL)loadFromCacheWithUrl:(NSURL *)url error:(NSError * __autoreleasing *)outError {
+	NSURL *directory = url.URLByDeletingLastPathComponent;
+	if (directory != nil && ![directory isEqual: self.cacheDirectory]) {
+		self.cacheDirectory = directory;
+		self.urlFastCache = nil;	// resolve again, from the directory just adopted
+	}
+	return [super loadFromCacheWithUrl: url error: outError];
+}
+
 - (BOOL)loadWithPlist:(nonnull NSDictionary *)plist error:(NSError * _Nullable __autoreleasing * _Nullable)outError {
 	NSError *plistError = nil;
 	BOOL loadSuperResult = [super loadWithPlist:plist error:&plistError];
@@ -284,23 +311,17 @@ static os_log_t mlog;
 	dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
 	self.queueBulkAdd = queue;
 	
-	// The stored URL is absolute, so it names the application's data container as
-	// well as the file.  That container's UUID is not stable: reinstalling the app
-	// or restoring a device gives it a new one, and the old directory disappears.
-	// The cache file then cannot be opened -- SQLITE_OPEN_CREATE cannot create a
-	// file inside a directory that does not exist -- so every document open asserts
-	// in -openDatabaseWithFlags: and the app dies on the first tap.  A URL whose
-	// directory is gone is therefore treated as absent, and -urlFastCache recomputes
-	// one under the container in use now.  -copyPlist still writes the absolute form;
-	// see BUGS.md for the format fix.
-	NSString *absoluteString = plist[[MADDataTableFast keyUrlFastCache]];
-	if (absoluteString.length > 0) {
-		NSURL *storedUrl = [NSURL URLWithString:absoluteString];
-		if (storedUrl != nil && ![[NSFileManager defaultManager] fileExistsAtPath: storedUrl.URLByDeletingLastPathComponent.path]) {
-			os_log_error(mlog, "[MADDataTableFast %p loadWithPlist] the cache directory %@ is gone; recomputing this cache's url for the container in use.", self, storedUrl.URLByDeletingLastPathComponent.path);
-			storedUrl = nil;
-		}
-		self.urlFastCache = storedUrl;	// nil asks -urlFastCache to build one
+	// What is stored is the file name, which -cacheUrlForStoredValue: resolves
+	// against the cache directory in use, so the cache outlives the data container
+	// it was written in.  A plist written by an older build still holds an absolute
+	// URL; that form is honoured only while the directory it names exists, because
+	// SQLITE_OPEN_CREATE cannot create a file inside a directory that is gone, and
+	// -openDatabaseWithFlags: asserts when the open fails.  A URL that cannot be
+	// used, and a name that cannot be resolved, are both left nil, which asks
+	// -urlFastCache to build one.  See BUGS.md.
+	NSString *storedCache = plist[[MADDataTableFast keyUrlFastCache]];
+	if (storedCache.length > 0) {
+		self.urlFastCache = [self cacheUrlForStoredValue: storedCache];
 	} else {
 		os_log_error(mlog, "[MADDataTableFast %p loadWithPlist] urlFastCache string from plist is nil.", self);
 	}
@@ -368,19 +389,52 @@ static os_log_t mlog;
 	return url;
 }
 
+// Whichever directory the caller supplied, else the cache delegate's, else the
+// application group's.  nil when none of them can answer, which leaves the caller
+// without a URL rather than with a wrong one.
+- (NSURL *)cacheDirectoryURL {
+	NSURL *cacheDirectory = self.cacheDirectory;
+	if (cacheDirectory != nil) {
+		return cacheDirectory;
+	}
+	if (self.cacheDelegate != nil) {
+		return [self.cacheDelegate cachedFilesDirectory].copy;
+	}
+	id <UIApplicationDelegate, MADApplicationProtocol> appDelegate = [MADApplication AppDelegate];
+	id groupIdentifier = [appDelegate groupIdentifier].copy;
+	return [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier: groupIdentifier];
+}
+
+- (NSURL *)cacheUrlForStoredValue:(NSString *)stored {
+	if (stored.length == 0) {
+		return nil;
+	}
+
+	// An absolute URL is the form older caches were written in.  It names the data
+	// container as well as the file, so it is only usable while that container --
+	// and therefore its directory -- is still there.
+	NSURL *url = [NSURL URLWithString: stored];
+	if (url.scheme.length > 0) {
+		NSURL *directory = url.URLByDeletingLastPathComponent;
+		if ([[NSFileManager defaultManager] fileExistsAtPath: directory.path]) {
+			return url;
+		}
+		os_log_error(mlog, "[MADDataTableFast %p] the cache directory %@ is gone; recomputing this cache's url for the container in use.", self, directory.path);
+		return nil;
+	}
+
+	// A file name, which is what this class writes now.  Anything else is not a
+	// path this can resolve and is treated as absent.
+	if ([stored containsString: @"/"]) {
+		os_log_error(mlog, "[MADDataTableFast %p] the stored cache url %@ names no file; recomputing this cache's url.", self, stored);
+		return nil;
+	}
+	return [[self cacheDirectoryURL] URLByAppendingPathComponent: stored isDirectory: NO];
+}
+
 - (NSURL *)newUrlFastCache {
 	NSString *filename = [[self filenameCacheMadDB] copy];
-	NSURL *cacheDirectory = self.cacheDirectory;
-
-	if (cacheDirectory == nil) {
-		if (self.cacheDelegate == nil) {
-			id <UIApplicationDelegate, MADApplicationProtocol> appDelegate = [MADApplication AppDelegate];
-			id groupIdentifier = [appDelegate groupIdentifier].copy;
-			cacheDirectory = [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
-		} else {
-			cacheDirectory = [self.cacheDelegate cachedFilesDirectory].copy;
-		}
-	}
+	NSURL *cacheDirectory = [self cacheDirectoryURL];
 	return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
 

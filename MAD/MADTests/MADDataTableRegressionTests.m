@@ -773,7 +773,10 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertEqualObjects(plist[@"rowCounter"], @3);
 	plist[@"rowCounter"] = @99;
 
-	MADDataTableFast *restored = [[MADDataTableFast alloc] initWithId:1001];
+	// The plist names the cache file but not its directory -- that is the format fix --
+	// so the reloaded table is told where its cache lives, as a caller loading from
+	// disk would be.
+	MADDataTableFast *restored = [[MADDataTableFast alloc] initWithId:1001 cacheDirectory:self.cacheDirectory];
 	NSError *loadError = nil;
 	XCTAssertTrue([restored loadWithPlist:plist error:&loadError], @"loadWithPlist failed: %@", loadError);
 

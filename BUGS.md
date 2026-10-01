@@ -459,10 +459,21 @@ wrong answer.
   the first reproduces the crash exactly: `*** Assertion failure in
   -[MADDatabaseSqlite3 openDatabaseWithFlags:] … (unable to open database file) for
   …/gone/gone.maddb.`
-- **Still open:** the format. `-copyPlist:`, `-encodeWithCoder:` and `-initWithCoder:`
-  should record something container-independent — the filename, or a path relative to
-  the cache root — instead of an absolute URL. Reading a stale URL is now safe; writing
-  one is still how the staleness gets in.
+- **Format, now fixed too:** `-copyPlist:` and `-encodeWithCoder:` wrote the absolute
+  URL, so reading a stale one was safe but writing one was still how the staleness got
+  in. They record the file name alone now — `<tag>.maddb` — and
+  `-cacheUrlForStoredValue:` resolves it against the cache directory in use when the
+  plist is read, which is `-cacheDirectoryURL:`: the caller's directory, else the cache
+  delegate's, else the application group's. A plist written by an older build still
+  holds the absolute form, and that is honoured only while the directory it names
+  exists, so existing caches are still read. `-initWithCoder:` goes through the same
+  helper. Verified by reading a cache plist the CLI wrote:
+  `"urlFastCache" => "7308922102201200.maddb"`.
+- **Tests:** `testCopyPlistStoresTheCacheFileNameNotAnAbsoluteUrl` and
+  `testLoadWithPlistResolvesAStoredFileNameInTheDirectoryInUseNow`, both in
+  `MADDatabaseSqlite3DatabaseTests.m`. The second writes a plist against one cache
+  directory and reads it against another, which is what an absolute URL could not
+  survive. Both were confirmed to fail against the old write before being kept.
 
 ### `MADDataTableFast` left its row counter stale after an in-memory drop or delete
 - **Status:** Fixed
