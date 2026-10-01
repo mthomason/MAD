@@ -328,3 +328,32 @@ against a shape that cannot hold them.
 about the seam, and today nobody has run refresh headlessly at all. Task 7 Phase 1 changes
 that. After it, this is quick and it does aid the core task, which is the user's own test for
 whether to do it now — so it is queued directly behind Phase 1 rather than at the back.
+
+---
+
+## 9. The portable store migration
+
+**Status:** Decided 2026-10-01, not started. Needs its own plan before any code.
+
+The `.mad` store moves from Core Data to a portable SQLite format of our own — this is the
+decision in `MAD_FORMAT.md` §8.1 and `ROADMAP.md` §4.2, and it is what removes the last Apple
+dependency (hazard H3) so a reader on another platform can open a document.
+
+The user's direction on how, verbatim in substance:
+
+> *"we are moving the store to a portable Sqlite3 file format. But, I thought we would continue
+> to use the auto generated headers... not auto gen them anymore, but just use them, and write
+> the code to insert and update the tables most ourselves for the Rptq stuff. Anyway, that's a
+> big project, and it's going to take some planning, because it has to convert reports, etc."*
+
+So: keep the generated `Rptq` headers as a fixed, hand-maintained contract (stop regenerating),
+and write the CRUD against a SQLite schema by hand. The hard part is not the schema — it is
+**converting existing documents**: every shipping `.mad` carries a Core Data store, and the
+migration must read one and write the other without losing a report.
+
+This is independent of v1 (`ROADMAP.md` §4.3, the magic header + checkpointed store): v1 is
+identification and a checkpoint, and neither cares what the store's schema is. Do not couple
+the two.
+
+Not to be started without the user asking for it by name, and only after a written plan that
+covers the conversion of the two shipping samples and the existing user reports.

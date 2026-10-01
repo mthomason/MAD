@@ -486,16 +486,22 @@ open gaps are now answered, both by reading the code rather than guessing:
 That was the whole of "understand what it is, and define what it will be" for the companion
 files. What remains for the document itself is §4.2's decisions and then §4.3's v1.
 
-### 4.2 The decisions, which block v1
+### 4.2 The decisions
 
-`MAD_FORMAT.md` §8. These are the user's calls, and the first is a genuine prerequisite for
-portability:
+`MAD_FORMAT.md` §8. The big one is now decided; the rest stay open.
 
-- **Does the store stay Core Data?** It is the last Apple dependency in the format (hazard H3),
-  and the definition it holds is a modest object graph.
-- Should the thumbnail be in the document, or is it regenerable like everything else?
-- Should `.mad` optionally carry the row cache, making a document openable offline elsewhere?
-- Should content changes invalidate the render cache? (mechanism now known — §5.3)
+- **Does the store stay Core Data? — decided 2026-10-01: no.** The store moves to a portable
+  SQLite file format of our own. The approach, in the user's words: keep using the auto-generated
+  `Rptq` headers as-is (stop regenerating them, just use them), and write the insert/update/read
+  code ourselves for the `Rptq` tables. This is a large migration — it must convert existing
+  reports, so it needs its own plan and is a track on its own, not part of v1. Recorded in
+  `TASKS.md` §9.
+- Should the thumbnail be in the document, or is it regenerable like everything else? — open,
+  minor.
+- Should `.mad` optionally carry the row cache, making a document openable offline elsewhere? —
+  open; a new variant can be added later without breaking v0/v1.
+- Should content changes invalidate the render cache? — mechanism now known (§5.3); the fix is
+  cheap when it is wanted, and it is not wanted yet.
 
 ### 4.3 `.mad` v1
 
@@ -504,8 +510,10 @@ checkpointed store, per `MAD_FORMAT.md` §7. Backwards-compatible by design: abs
 magic means legacy v0, so both shipping samples keep opening. It also pays for itself — the
 Music sample spends a third of its bytes on WAL.
 
-**Not to be started before 4.1 and 4.2.** The header is the easy part; the decisions are what
-make it correct.
+**v1 is independent of §4.2.** The header and the checkpoint are orthogonal to the store
+migration: the migration removes H3 later, while v1 is identification-by-content and a
+checkpoint, neither of which cares whether the store is Core Data or our own SQLite. So v1
+proceeds now, and the migration is its own track (`TASKS.md` §9).
 
 ---
 
@@ -563,7 +571,7 @@ These block work rather than being work.
 | Decision | Where | Why it blocks |
 |---|---|---|
 | Which system owns the database password — the app's own keychain item, or the platform AutoFill / `kSecClassInternetPassword` path? | `TASKS.md` §1 | The double prompt is the symptom. `TASKS.md` §4 is blocked behind it. |
-| Does the `.mad` store stay Core Data? | `MAD_FORMAT.md` §8.1 | Called a prerequisite for Windows regardless of what the CLI does. Track 4.2. |
+| Does the `.mad` store stay Core Data? | `MAD_FORMAT.md` §8.1 | **Decided 2026-10-01: no** — a portable SQLite format of our own, using the `Rptq` headers as-is with hand-written CRUD. Its own migration track, `TASKS.md` §9. |
 | Is the render cache invalidated when the document changes? | `MAD_FORMAT.md` §5.3, §8.4 | Mechanism is now known (keyed by filename, no content hash — so a stale page is served on edit). The open part is *should it* invalidate. |
 | Should the thumbnail and row cache live in the document? | `MAD_FORMAT.md` §8.2–8.3 | Decides whether every member of a `.mad` is authoritative. |
 | Is `.mad` v1 worth doing? | `MAD_FORMAT.md` §7 | It is compatible, but it is a format decision. |
