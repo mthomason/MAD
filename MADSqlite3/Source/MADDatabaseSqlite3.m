@@ -227,7 +227,11 @@ void sqliteLog(void *foo, const char* statement) {
 		const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
 		int sqlite3_open = sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL);
 		BOOL databaseOpen = sqlite3_open == SQLITE_OK;
-		NSAssert(databaseOpen, @"openDatabaseWithFlags failed (%s).", (char *)sqlite3_errmsg(_database));
+		// The path belongs in the message: SQLITE_CANTOPEN is what a stale or missing
+		// directory reports, and without the path the failure says only "unable to open
+		// database file" -- which names neither the file nor the reason.  See BUGS.md.
+		NSAssert(databaseOpen, @"openDatabaseWithFlags failed (%s) for %s.",
+				 (char *)sqlite3_errmsg(_database), path != NULL ? path : "(no path)");
 
 		if (databaseOpen) {
 			databaseOpen = sqlite3_extended_result_codes((struct sqlite3 *)_database, YES) == SQLITE_OK;

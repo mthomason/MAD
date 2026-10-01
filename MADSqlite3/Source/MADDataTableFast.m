@@ -60,6 +60,7 @@
 #import <Foundation/NSKeyValueCoding.h>
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSPathUtilities.h>
+#import <Foundation/NSFileManager.h>
 
 #import <os/log.h>
 #import <dispatch/dispatch.h>
@@ -283,9 +284,23 @@ static os_log_t mlog;
 	dispatch_queue_t queue = dispatch_queue_create(MADQueueBulkAdd, DISPATCH_QUEUE_SERIAL);
 	self.queueBulkAdd = queue;
 	
+	// The stored URL is absolute, so it names the application's data container as
+	// well as the file.  That container's UUID is not stable: reinstalling the app
+	// or restoring a device gives it a new one, and the old directory disappears.
+	// The cache file then cannot be opened -- SQLITE_OPEN_CREATE cannot create a
+	// file inside a directory that does not exist -- so every document open asserts
+	// in -openDatabaseWithFlags: and the app dies on the first tap.  A URL whose
+	// directory is gone is therefore treated as absent, and -urlFastCache recomputes
+	// one under the container in use now.  -copyPlist still writes the absolute form;
+	// see BUGS.md for the format fix.
 	NSString *absoluteString = plist[[MADDataTableFast keyUrlFastCache]];
 	if (absoluteString.length > 0) {
-		self.urlFastCache = [NSURL URLWithString:absoluteString];
+		NSURL *storedUrl = [NSURL URLWithString:absoluteString];
+		if (storedUrl != nil && ![[NSFileManager defaultManager] fileExistsAtPath: storedUrl.URLByDeletingLastPathComponent.path]) {
+			os_log_error(mlog, "[MADDataTableFast %p loadWithPlist] the cache directory %@ is gone; recomputing this cache's url for the container in use.", self, storedUrl.URLByDeletingLastPathComponent.path);
+			storedUrl = nil;
+		}
+		self.urlFastCache = storedUrl;	// nil asks -urlFastCache to build one
 	} else {
 		os_log_error(mlog, "[MADDataTableFast %p loadWithPlist] urlFastCache string from plist is nil.", self);
 	}

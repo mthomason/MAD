@@ -344,6 +344,58 @@
 	XCTAssertNotNil([table columnKeyForColumnName:@"name"]);
 }
 
+// The cache plist stores urls.urlFastCache as an absolute URL, so it names the
+// application's data container and not just the file.  A container does not survive a
+// reinstall, and the stored path then points into a directory that is gone.  Opening it
+// fails -- SQLITE_OPEN_CREATE cannot create a file where the directory does not exist --
+// and -openDatabaseWithFlags: asserts, which took the whole app down on the first
+// document tap.  A stale URL has to be discarded and recomputed for the container in use.
+- (void)testLoadWithPlistDiscardsACacheUrlWhoseDirectoryIsGone {
+	MADArrayCachingDirectoryDouble *delegate = [[MADArrayCachingDirectoryDouble alloc] init];
+	delegate.directory = self.tempDirectory;
+
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:7 fromCache:YES];
+	table.cacheDelegate = delegate;
+
+	NSMutableDictionary *plist = [[table copyPlist] mutableCopy];
+	// The directory this names is deliberately never created, which is what a container
+	// that has been replaced looks like from the file system's side.
+	NSString *gone = [self.tempDirectory.path stringByAppendingPathComponent:@"gone/gone.maddb"];
+	plist[@"urlFastCache"] = [[NSURL fileURLWithPath: gone] absoluteString];
+
+	MADDataTableFast *reloaded = [[MADDataTableFast alloc] initWithId:7 fromCache:YES];
+	reloaded.cacheDelegate = delegate;
+	NSError *error = nil;
+	XCTAssertTrue([reloaded loadWithPlist: plist error: &error], @"load failed: %@", error);
+
+	// -urlFastCache is private to the implementation, so reach it the way any other
+	// reader outside MADDataTableFast would have to.
+	NSURL *resolved = [reloaded valueForKey: @"urlFastCache"];
+	NSURL *expected = [self.tempDirectory URLByAppendingPathComponent:@"7.maddb" isDirectory:NO];
+	XCTAssertEqualObjects(resolved.path, expected.path,
+						  @"the reload kept a cache url whose directory does not exist");
+}
+
+- (void)testLoadWithPlistKeepsACacheUrlWhoseDirectoryIsPresent {
+	MADArrayCachingDirectoryDouble *delegate = [[MADArrayCachingDirectoryDouble alloc] init];
+	delegate.directory = self.tempDirectory;
+
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:7 fromCache:YES];
+	table.cacheDelegate = delegate;
+
+	NSMutableDictionary *plist = [[table copyPlist] mutableCopy];
+	NSURL *live = [self.tempDirectory URLByAppendingPathComponent:@"7.maddb" isDirectory:NO];
+	plist[@"urlFastCache"] = live.absoluteString;
+
+	MADDataTableFast *reloaded = [[MADDataTableFast alloc] initWithId:7 fromCache:YES];
+	reloaded.cacheDelegate = delegate;
+	NSError *error = nil;
+	XCTAssertTrue([reloaded loadWithPlist: plist error: &error], @"load failed: %@", error);
+
+	NSURL *resolved = [reloaded valueForKey: @"urlFastCache"];
+	XCTAssertEqualObjects(resolved.path, live.path);
+}
+
 - (void)testDriverFillsAWritePortWithNoDataTableBehindIt {
 	[self createPeopleTable];
 	MADDatabaseSqlite3 *database = [self makeOpenDatabase];

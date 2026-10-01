@@ -130,6 +130,53 @@ Status key:
 - **Why it matters:** Harmless today; note it only because the collapse is not
   mathematically general.
 
+### `MADQueryPredicate` and `MADQueryCacheSelectGroupKeys` quote string literals with double quotes
+- **Status:** Confirmed
+- **Where:** `MAD/Source/MADQueryPredicate.m:81`,
+  `MAD/Source/MADQueryCacheSelectGroupKeys.m:55`
+- **Behavior:** A predicate's right-hand side is emitted as `"<value>"`:
+  `[[NSString alloc] initWithFormat: @"\"%@\"", rightFieldID]`, and the group-key
+  builder writes `[sqlPredicate appendFormat:@"%@ = \"%@\"", left, right]`. Both
+  wrap a *value* in double quotes. Neither escapes it, and neither binds it. The
+  generated SQL reads `("Customer0"."City" = "London")`.
+- **Why it matters:** By the SQL standard a double-quoted token is an *identifier*,
+  so these literals only ever worked because SQLite was forgiving about it.
+  `SQLITE_DQS=0`, pinned today in `Compressor/sqlite3.xcconfig` (commit
+  `26ca18ff7`), turns that forgiveness off, and `sqlite3_prepare_v2` now fails with
+  *no such column: "London" — should this be a string literal in single-quotes?*.
+  Every filtered report refreshes zero rows. Measured on the sample documents,
+  `London.mad` goes from 0 rows to 76 when `DQS` is set back to 3 with nothing else
+  changed. This is the exact risk the `DQS=0` entry under `## MADSqlite3` set out to
+  consider and then dismissed.
+  Two consequences beyond SQLite. A value containing `'` or `"` is a syntax error
+  at best and an injection at worst, since nothing escapes. And SQL Server, whose
+  `QUOTED_IDENTIFIER` is ON by default, reads these same tokens as identifiers —
+  so `Document22.mad` (SQL Server, bracketed, AdventureWorksLT) fails the same way
+  the moment it carries a filter. MySQL is unaffected by default, reading `"…"` as
+  a string, which is why the defect hid in the one backend under test.
+- **Not fixed here:** the builder is shared by all three backends and each escapes
+  differently, so the fix is a per-dialect quoter rather than a quote swap.
+- **Test:** none pins this yet — the `MADSqlite3` suite passes because it never
+  refreshes a filtered document. It was found by running `mad refresh` over the
+  sample documents.
+
+### `MADocument -paperSize` reads the `_paper` ivar the lazy `-paper` accessor builds
+- **Status:** Confirmed
+- **Where:** `MAD/Source/MADocument.m:200-201`; the accessor is `:1121-1128`
+- **Behavior:** `- (CGSize)paperSize { return _paper.paperSize; }` reads the ivar
+  directly, but `_paper` stays nil until something calls the lazy `-paper` accessor,
+  which is what builds it from `activeDocumentModel.paperType`. Asked first,
+  `-paperSize` answers `{0, 0}`.
+- **Why it matters:** `-format` and `-formatContentChange` (`:212-218`) both hand
+  `self.paperSize` to the report formatter, and a zero layout size makes
+  `PrintableHeightForPage` negative, so the formatter starts a new page on every
+  row. The application never sees it because its viewer touches `paper` while
+  opening the document. A second caller — the CLI — produced 11602 pages for 3503
+  rows until it learned to ask for `document.paper` first.
+- **Worked around, not fixed:** `(void)document.paper;` at
+  `CLI/Source/MADCLIDocument.m:252`, with a comment pointing here. No test covers
+  it; the CLI's export path is the only thing that exercises it today.
+
 ---
 
 ## MADFoundation
@@ -341,7 +388,48 @@ format string. The first two below were found while writing the write-port test
 that proves the driver is decoupled from `MADDataTable`; the third was found by
 the ingest benchmark, which is also what measures it. The fourth was found while
 inventorying the static-library build for the CLI work, and is the only one here
-that changed a file the application writes.
+that changed a file the application writes. The fifth took the application down and
+was found from a crash log; it is the one entry here that is a crash rather than a
+wrong answer.
+
+### `MADDataTableFast` stored an absolute cache URL that a container change invalidates
+
+- **Status:** Fixed
+- **Commit:** `64d9f916d`
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:304` (`-loadWithPlist:`), written at
+  `:244` (`-copyPlist:`), `:226` (`-encodeWithCoder:`), `:206` (`-initWithCoder:`)
+- **Behavior:** The `.mdcache` plist records `urlFastCache` as an absolute URL —
+  `file:///…/Containers/Data/Application/<container-UUID>/Library/Caches/<tag>/<tag>.maddb`.
+  `-loadWithPlist:` adopted it verbatim, so the cache was opened at the path named by
+  the container that *wrote* the plist. An application's data-container UUID is not
+  stable: a reinstall or a device restore allocates a new one and deletes the old
+  directory. The stored URL then names a directory that does not exist, and
+  `sqlite3_open_v2` with `SQLITE_OPEN_CREATE` cannot create a file where the directory
+  is missing, so it returns `SQLITE_CANTOPEN`.
+- **Why it mattered:** This is a crash, not a mis-read. `-openDatabaseWithFlags:`
+  asserts on a failed open, and every document open reaches it —
+  `MADocument -initWithFileURL:andDatabaseConnection:` → `loadFromCacheWithUrl:` →
+  `-loadWithPlist:` → `-reopenDbConnection` → `-openDatabaseWithFlags:`. So the whole
+  application failed on the first tap in the file explorer, with nothing but
+  `openDatabaseWithFlags failed (unable to open database file).` Three distinct dead
+  container UUIDs were found across the four caches on the simulator this was diagnosed
+  from, so each reinstall had been re-arming it.
+- **Now:** `-loadWithPlist:` adopts the stored URL only when its directory still exists.
+  Otherwise it discards it, logs the missing directory, and lets `-urlFastCache`
+  recompute a path under the cache directory in use now. `-openDatabaseWithFlags:` also
+  names the path in its assert, which is what the original message withheld — the
+  failure says only "unable to open database file", which identifies neither the file
+  nor the reason.
+- **Test:** `testLoadWithPlistDiscardsACacheUrlWhoseDirectoryIsGone` and
+  `testLoadWithPlistKeepsACacheUrlWhoseDirectoryIsPresent` in
+  `MADSqlite3/MADSqlite3Tests/MADDatabaseSqlite3DatabaseTests.m`. With the guard removed,
+  the first reproduces the crash exactly: `*** Assertion failure in
+  -[MADDatabaseSqlite3 openDatabaseWithFlags:] … (unable to open database file) for
+  …/gone/gone.maddb.`
+- **Still open:** the format. `-copyPlist:`, `-encodeWithCoder:` and `-initWithCoder:`
+  should record something container-independent — the filename, or a path relative to
+  the cache root — instead of an absolute URL. Reading a stale URL is now safe; writing
+  one is still how the staleness gets in.
 
 ### `MADDataTableFast` left its row counter stale after an in-memory drop or delete
 - **Status:** Fixed
@@ -448,11 +536,16 @@ that changed a file the application writes.
   apart again. Rebuilt, the engine reports `DEFAULT_PAGE_SIZE=8192`, `DQS=0`,
   `ENABLE_FTS5`, `ENABLE_STAT4`, `TEMP_STORE=2` and `THREADSAFE=1`, and defines 599
   fts5 symbols where the guards above say it defined none.
-- **Test:** the `MADSqlite3` suite — 69 tests, 5 skipped, 0 failures — which is the
-  check that matters, because `DQS=0` is the option most likely to have broken working
-  SQL: it removes SQLite's habit of reading an unknown double-quoted token as a string
-  literal. The query builder quotes identifiers and binds values through `?`, so it was
-  already written the way `DQS=0` requires.
+- **Test:** the `MADSqlite3` suite — 69 tests, 5 skipped, 0 failures — which did *not*
+  cover the risk this option carried. `DQS=0` removes SQLite's habit of reading an
+  unknown double-quoted token as a string literal, and an earlier version of this entry
+  waved that through, claiming the query builder "quotes identifiers and binds values
+  through `?`, so it was already written the way `DQS=0` requires". **That claim was
+  wrong.** `MADQueryPredicate.m:81` and `MADQueryCacheSelectGroupKeys.m:55` each wrap a
+  *value* in double quotes and neither binds, so this commit silently stopped every
+  filtered report from refreshing. See the entry under `## MAD (framework)`. The check
+  that catches it is `mad refresh` over the sample documents, and `London.mad` is the
+  case that shows it: 0 rows at `DQS=0`, 76 rows at `DQS=3`, nothing else changed.
 - **Also found, by compiling the list for the first time:**
   `SQLITE_OMIT_DECLTYPE` and `SQLITE_ENABLE_COLUMN_METADATA` are mutually exclusive —
   the amalgamation refuses both, *"Must not define both SQLITE_OMIT_DECLTYPE and
@@ -829,6 +922,35 @@ Covered by the hosted `MADDesignerUnitTests` bundle (69 tests across
 through the running executable; the app's classes are declared locally in the test
 files rather than imported, because `MADDesigner/Source` is not on the bundle's
 header search path.
+
+### `MADOperationRefresh` reports the connection error in place of the execution error
+- **Status:** Confirmed
+- **Where:** `MADDesigner/Source/MADOperationRefresh.m:115-119`
+- **Behavior:** When `-executeSQL:fieldKeys:onConnection:intoResultTable:withError:`
+  returns NO, the handler finishes with `NSError *error = eerror;`. `eerror` is the
+  *connection* error from the `-connectWithConnection:credentals:connectionError:`
+  call at `:78-88`, which has already succeeded and is therefore still nil. The
+  `executeError` captured one line earlier at `:104` is logged at `:112` and then
+  dropped.
+- **Why it matters:** `-finishWithError:nil` completes the operation with an empty
+  error list, so a query that failed is indistinguishable from one that matched
+  nothing — and, worse, from one that succeeded. `-resetCache`
+  (`MAD/Source/MADocument.m:229-238`) *loads* the existing `.maddb` before this
+  operation runs, so `-numberOfResults` still answers with the previous run's rows
+  while the current query is failing, and those are the rows the caller sees.
+  Measured on `London.mad` at `SQLITE_DQS=0`: with its stale 76-row cache present,
+  `mad refresh` printed "refreshed 76 rows" and exited 0; with that cache moved
+  aside, the identical command printed "refreshed 0 rows". The prepare failure was
+  invisible in both cases and the real message only surfaced under instrumentation.
+  Every failure between `-executeSQL:` and the cache is reported as success, and the
+  cache makes the success look like it carries data.
+- **Related:** the credentials branch at `:71-75` raises domain `@"MADCache"` with
+  code `errCache + 1` for a *missing credential*, so a document whose database
+  needs credentials the caller did not supply reports "MADCache error 3" and reads
+  as a cache fault. Both are diagnosability defects in the same method, and both
+  cost time in the CLI work.
+- **Test:** none pins this yet; found by running `mad refresh`, which exits 0 on the
+  failure it cannot see.
 
 ### `MTTableController` read a stale page count after a failed fetch
 - **Status:** Fixed
