@@ -184,6 +184,97 @@ Status key:
 
 ---
 
+## MADCocoaExtensions
+
+### `MADTextStyle -initWithBold:italic:underline:strikethrough:` scrambles its flags
+- **Status:** Confirmed
+- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADTextStyleTests.m`
+- **Behavior:** The initializer passes `(bold, strikethrough, italic, underline)`
+  to the struct maker, so `italic`/`underline`/`strikethrough` land in the wrong
+  properties. The individual setters are correct; only the initializer is broken.
+- **Why it matters:** Any text style created via this initializer gets the wrong
+  underline/strikethrough/italic attributes rendered.
+
+### `CGRectTopRight` / `CGRectBottomLeft` / `CGRectBottomRight` transpose X and Y
+- **Status:** Confirmed
+- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADGeometryExtrasTests.m`
+- **Behavior:** These inline helpers return transposed coordinates (e.g.
+  `CGRectTopRight` returns `(origin.y, origin.x + width)` instead of
+  `(origin.x + width, origin.y)`). The correctly-written `CGCorner*PointInRect`
+  variants exist alongside them.
+- **Why it matters:** Any caller using the `CGRect*` corner helpers gets the
+  wrong point (they only look right for a square rect anchored at `(0,0)`).
+
+### `CGCenterRect` computes the wrong center
+- **Status:** Confirmed
+- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADGeometryExtrasTests.m`
+- **Behavior:** `CGCenterRect` returns `((origin.x + size.width)/2,
+  (origin.y + size.height)/2)` instead of `origin + size/2`. It is only correct
+  when the origin is `(0,0)`. (`CGCenterOfRect` is the correct version.)
+- **Why it matters:** Centering a non-zero-origin rect via `CGCenterRect` lands
+  off-center.
+
+### `MADDirectionHorizontalDirectionOfPoint` reports the inverse direction
+- **Status:** Confirmed
+- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADDirectionTests.m`
+- **Behavior:** Moving from `p1` to a `p2` to the right returns `MADDirectionLeft`
+  (and moving left returns `MADDirectionRight`) — the Left/Right arms are swapped.
+- **Why it matters:** Callers resolving horizontal swipe/drag direction get the
+  opposite answer.
+
+### `MADDirectionVerticalDirectionOfPoint` compares X instead of Y
+- **Status:** Confirmed (copy-paste)
+- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADDirectionTests.m`
+- **Behavior:** The alignment guard uses `CGFloatCompare(p2.x, p1.x)`, so a purely
+  vertical segment (same X, different Y) reports `MADDirectionNoDirection`
+  instead of `Up`/`Down`.
+- **Why it matters:** Vertical movement is never classified as vertical.
+
+### `MADColorSocial +newBlueTwitter` returns a `UIColor`, not a `MADColorSocial`
+- **Status:** Confirmed
+- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADColorTests.m`
+- **Behavior:** The method is declared `instancetype` but returns
+  `newColorWitColors(...)`, a plain `UIColor`. Calling `.hexStringValue` (or any
+  `MADColor` API) on the result would fail.
+- **Why it matters:** The social-color API lies about its return type; the
+  classes appear unused, but any future caller will be misled.
+
+### `MTMath` file-size conversion uses integer division
+- **Status:** Confirmed (quirk)
+- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MTMathTests.m`
+- **Behavior:** Both `madSystemFileSizeToMB` and
+  `[MTMath newSystemFileSizeToMB:]` divide by `1000000` in integer arithmetic, so
+  fractional megabytes are truncated (`1500000` → `1.0`). It is also decimal
+  (×10⁶) rather than binary (×2²⁰).
+- **Why it matters:** File-size display loses precision and mismatches the
+  binary megabytes that `NSFileManager` typically reports.
+
+### `CGRectAdjustForScale` shrinks regardless of zoom direction
+- **Status:** Investigate
+- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADGeometryExtrasTests.m`
+- **Behavior:** For `zoomScale > 1` it multiplies by `1/zoomScale`; for
+  `zoomScale < 1` it multiplies by `zoomScale`. Both paths shrink the rect.
+- **Why it matters:** If the intent is to scale by `zoomScale`, the zoom-in
+  branch is inverted; if the intent is to normalize out an applied scale, the
+  name is misleading. Needs a human judgment call.
+
+### `MADGeneralDirectionOfDegrees` falls through to `north` on exact boundaries
+- **Status:** Quirk
+- **Where:** `MADCocoaExtensions/MADCocoaExtensionsTests/MADGeometryExtrasTests.m`
+- **Behavior:** Because the range checks use strict inequalities, exact boundary
+  angles (`0`, `30`, `60`, …) fall through to the default `north`.
+- **Why it matters:** Cosmetically wrong only at exact boundary values.
+
+### `newColorWitColors` misspells "With"
+- **Status:** Quirk
+- **Where:** `MADCocoaExtensions/Source/MADColor.h`
+- **Behavior:** The public factory is named `newColorWitColors` (missing the
+  "h"). A corrected `newColorWithColorsAlpha` variant already exists.
+- **Why it matters:** Cosmetic API typo, consistent with the `TypeCache` typo
+  noted under MADAPI.
+
+---
+
 ## MADSqlite3
 
 No defects found. The `MADDataTypeUnknown → String`/`TEXT` coercions in

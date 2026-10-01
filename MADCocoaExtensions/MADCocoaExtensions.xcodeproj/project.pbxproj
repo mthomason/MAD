@@ -23,6 +23,16 @@
 		4C5205611BA7E1DC000E6A59 /* MADCocoaExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5205601BA7E1DC000E6A59 /* MADCocoaExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205681BA7E1DC000E6A59 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C52055D1BA7E1DC000E6A59 /* MADCocoaExtensions.framework */; };
 		4C52056D1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */; };
+		4CE1A10100000000000000A1 /* MADDirectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10100000000000000B1 /* MADDirectionTests.m */; };
+		4CE1A10200000000000000A1 /* MADGeometryExtrasTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10200000000000000B1 /* MADGeometryExtrasTests.m */; };
+		4CE1A10300000000000000A1 /* MADMathAlgebraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10300000000000000B1 /* MADMathAlgebraTests.m */; };
+		4CE1A10400000000000000A1 /* MADMarginTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10400000000000000B1 /* MADMarginTests.m */; };
+		4CE1A10500000000000000A1 /* MADPaddingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10500000000000000B1 /* MADPaddingTests.m */; };
+		4CE1A10600000000000000A1 /* MADBorderStyleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10600000000000000B1 /* MADBorderStyleTests.m */; };
+		4CE1A10700000000000000A1 /* MADTextStyleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10700000000000000B1 /* MADTextStyleTests.m */; };
+		4CE1A10800000000000000A1 /* MTMathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10800000000000000B1 /* MTMathTests.m */; };
+		4CE1A10900000000000000A1 /* NSNumberFormatterExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10900000000000000B1 /* NSNumberFormatterExtensionsTests.m */; };
+		4CE1A10A00000000000000A1 /* MADColorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10A00000000000000B1 /* MADColorTests.m */; };
 		4C5205A91BA7E2A2000E6A59 /* MacroVendColor.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */; };
 		4C5205AA1BA7E2A2000E6A59 /* MADColorSocial.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5205AB1BA7E2A2000E6A59 /* MADColorSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5205801BA7E2A2000E6A59 /* MADColorSocial.m */; };
@@ -87,6 +97,16 @@
 		4C5205621BA7E1DC000E6A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C5205671BA7E1DC000E6A59 /* MADCocoaExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADCocoaExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADCocoaExtensionsTests.m; sourceTree = "<group>"; };
+		4CE1A10100000000000000B1 /* MADDirectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDirectionTests.m; sourceTree = "<group>"; };
+		4CE1A10200000000000000B1 /* MADGeometryExtrasTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADGeometryExtrasTests.m; sourceTree = "<group>"; };
+		4CE1A10300000000000000B1 /* MADMathAlgebraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMathAlgebraTests.m; sourceTree = "<group>"; };
+		4CE1A10400000000000000B1 /* MADMarginTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMarginTests.m; sourceTree = "<group>"; };
+		4CE1A10500000000000000B1 /* MADPaddingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADPaddingTests.m; sourceTree = "<group>"; };
+		4CE1A10600000000000000B1 /* MADBorderStyleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADBorderStyleTests.m; sourceTree = "<group>"; };
+		4CE1A10700000000000000B1 /* MADTextStyleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTextStyleTests.m; sourceTree = "<group>"; };
+		4CE1A10800000000000000B1 /* MTMathTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTMathTests.m; sourceTree = "<group>"; };
+		4CE1A10900000000000000B1 /* NSNumberFormatterExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSNumberFormatterExtensionsTests.m; sourceTree = "<group>"; };
+		4CE1A10A00000000000000B1 /* MADColorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADColorTests.m; sourceTree = "<group>"; };
 		4C52056E1BA7E1DC000E6A59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacroVendColor.h; sourceTree = "<group>"; };
 		4C52057F1BA7E2A2000E6A59 /* MADColorSocial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADColorSocial.h; sourceTree = "<group>"; };
@@ -168,6 +188,16 @@
 			isa = PBXGroup;
 			children = (
 				4C52056C1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m */,
+				4CE1A10100000000000000B1 /* MADDirectionTests.m */,
+				4CE1A10200000000000000B1 /* MADGeometryExtrasTests.m */,
+				4CE1A10300000000000000B1 /* MADMathAlgebraTests.m */,
+				4CE1A10400000000000000B1 /* MADMarginTests.m */,
+				4CE1A10500000000000000B1 /* MADPaddingTests.m */,
+				4CE1A10600000000000000B1 /* MADBorderStyleTests.m */,
+				4CE1A10700000000000000B1 /* MADTextStyleTests.m */,
+				4CE1A10800000000000000B1 /* MTMathTests.m */,
+				4CE1A10900000000000000B1 /* NSNumberFormatterExtensionsTests.m */,
+				4CE1A10A00000000000000B1 /* MADColorTests.m */,
 				4C52056E1BA7E1DC000E6A59 /* Info.plist */,
 			);
 			path = MADCocoaExtensionsTests;
@@ -401,6 +431,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C52056D1BA7E1DC000E6A59 /* MADCocoaExtensionsTests.m in Sources */,
+				4CE1A10100000000000000A1 /* MADDirectionTests.m in Sources */,
+				4CE1A10200000000000000A1 /* MADGeometryExtrasTests.m in Sources */,
+				4CE1A10300000000000000A1 /* MADMathAlgebraTests.m in Sources */,
+				4CE1A10400000000000000A1 /* MADMarginTests.m in Sources */,
+				4CE1A10500000000000000A1 /* MADPaddingTests.m in Sources */,
+				4CE1A10600000000000000A1 /* MADBorderStyleTests.m in Sources */,
+				4CE1A10700000000000000A1 /* MADTextStyleTests.m in Sources */,
+				4CE1A10800000000000000A1 /* MTMathTests.m in Sources */,
+				4CE1A10900000000000000A1 /* NSNumberFormatterExtensionsTests.m in Sources */,
+				4CE1A10A00000000000000A1 /* MADColorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
