@@ -32,6 +32,7 @@
 		4C9372851BACE57300D6BD62 /* MADSaveFileProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C9372841BACE57300D6BD62 /* MADSaveFileProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA4D62D1D183DD400A1240C /* MADStandard.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4D62B1D183DD400A1240C /* MADStandard.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA4D62E1D183DD400A1240C /* MADStandard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4D62C1D183DD400A1240C /* MADStandard.mm */; };
+		4CE1B01000000000000000A1 /* MADStandardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1B01000000000000000B1 /* MADStandardTests.m */; };
 		4CB0DF4E24ACCA01002C7A95 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB0DF4D24ACCA01002C7A95 /* MADCocoaExtensions.framework */; };
 		4CC641521BA779ED00F3ECCE /* MADFileLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC641501BA779ED00F3ECCE /* MADFileLocationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC641531BA779ED00F3ECCE /* MADFileLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC641511BA779ED00F3ECCE /* MADFileLocationManager.m */; };
@@ -100,6 +101,7 @@
 		4CCB73551D1A281000D7AE84 /* MADLabelFileExplorerDocumentCellTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabelFileExplorerDocumentCellTitle.m; path = MADExplorer/MADLabelFileExplorerDocumentCellTitle.m; sourceTree = "<group>"; };
 		4CCB73581D1A283000D7AE84 /* MADLabelFileExplorerDocumentCellSubtitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADLabelFileExplorerDocumentCellSubtitle.h; path = MADExplorer/MADLabelFileExplorerDocumentCellSubtitle.h; sourceTree = "<group>"; };
 		4CCB73591D1A283000D7AE84 /* MADLabelFileExplorerDocumentCellSubtitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADLabelFileExplorerDocumentCellSubtitle.m; path = MADExplorer/MADLabelFileExplorerDocumentCellSubtitle.m; sourceTree = "<group>"; };
+		4CE1B01000000000000000B1 /* MADStandardTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADStandardTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				4C6700FA1BA20633001C9D5A /* MADExplorerTests.m */,
+				4CE1B01000000000000000B1 /* MADStandardTests.m */,
 				4C6700FC1BA20633001C9D5A /* Info.plist */,
 			);
 			path = MADExplorerTests;
@@ -376,6 +379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C6700FB1BA20633001C9D5A /* MADExplorerTests.m in Sources */,
+				4CE1B01000000000000000A1 /* MADStandardTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

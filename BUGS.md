@@ -346,6 +346,48 @@ Status key:
 
 ---
 
+## MADExplorer
+
+> MADExplorer is almost entirely UI (collection-view cells, data sources, view
+> controllers), which a logic test bundle cannot exercise. Its only non-UI logic
+> is `MADStandard`, the file-size formatter below.
+
+### `MADStandard -standardStringForFileSize:` uses decimal megabytes
+- **Status:** Confirmed (quirk)
+- **Where:** `MADExplorer/MADExplorerTests/MADStandardTests.m`
+- **Behavior:** The scale is `1000000.0` (decimal MB) rather than `1048576.0`
+  (binary MiB), so a `2^20`-byte file is reported as `1.049 MB` instead of
+  `1.000 MB`.
+- **Why it matters:** The number shown next to a file in the explorer won't match
+  the binary megabytes that Finder / `NSFileManager` report.
+
+### `MADStandard -standardStringForFileSize:` has dead code with a latent throw
+- **Status:** Investigate
+- **Where:** `MADExplorer/MADExplorer/MADStandard.mm`
+- **Behavior:** The guard `if (filesize_str.length() <= range_end) { filesize_str.append(zero, range_end); }`
+  is never taken for a `double` (the formatted string is always `dec_pos + 7`
+  chars while `range_end` is `dec_pos + 4`). If it ever did execute, the two-arg
+  `append(str, subpos)` overload would try to read the single-character `"0"` at
+  `subpos >= 4` and throw `std::out_of_range`.
+- **Why it matters:** Dead code that would crash if the input format ever changed;
+  worth deleting or fixing the append argument count.
+
+### `MADStandard -standardStringForFileSize:` has no byte/kB fallback
+- **Status:** Quirk
+- **Where:** `MADExplorer/MADExplorerTests/MADStandardTests.m`
+- **Behavior:** Any file under ~500 bytes formats as `0.000 MB`.
+- **Why it matters:** Tiny example reports/documents show `0.000 MB` in the
+  explorer rather than a byte or kilobyte figure.
+
+### `MADStandard` hides `+standardStringForDouble:` / `+standardStringForUnsignedLong:`
+- **Status:** Quirk
+- **Where:** `MADExplorer/MADExplorer/MADStandard.mm` (vs `MADStandard.h`)
+- **Behavior:** Both class methods are implemented but not declared in the public
+  header; the tests reach them via a test-only category.
+- **Why it matters:** Same hidden-API smell as the `MADFileUtilities` helpers.
+
+---
+
 ## MADSqlite3
 
 No defects found. The `MADDataTypeUnknown → String`/`TEXT` coercions in
