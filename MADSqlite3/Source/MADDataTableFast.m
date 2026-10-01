@@ -78,7 +78,10 @@ static os_log_t mlog;
 @property (nonatomic, readwrite, strong) MADQueryCacheAddRow *bulkInsertQuery;
 @property (nonatomic, readwrite, strong) NSMutableArray <MADDatabaseDataBinding *> *binaryBindings;
 
-@property (nonatomic, readwrite, strong) NSURL *urlFastCache;
+@property (nonatomic, readwrite, strong, nullable) NSURL *urlFastCache;
+// Set by -initWithId:cacheDirectory: when a caller (a test, say) supplies the cache
+// directory itself.  Until then the URL is resolved from the cache delegate.
+@property (nonatomic, readwrite, strong, nullable) NSURL *cacheDirectory;
 @property (nonatomic, readwrite, strong) NSMutableIndexSet *groupKeyIndexes;
 @property (nonatomic, readwrite, strong) MADIndex *lastDataForCacheId;
 
@@ -86,6 +89,13 @@ static os_log_t mlog;
 
 @property (nonatomic, readwrite, assign) BOOL bulkInsertLoop;
 @property (nonatomic, readwrite, assign) BOOL sortDescriptorsSet;
+
+// The row insert itself.  -addRow:error: runs this under queueBulkAdd so a running
+// bulk insert cannot race -endBulkInsert's teardown of the prepared statement.
+- (bool)insertRow:(NSArray<id> *)row error:(NSError * __autoreleasing *)error;
+// Asks the cache file how many rows it actually holds.  Falls back to the stored
+// counter when the file cannot answer (no table yet, or no connection).
+- (NSUInteger)recountRows;
 
 @end
 
@@ -158,6 +168,16 @@ static os_log_t mlog;
 
 - (instancetype)initWithId:(NSUInteger)objectId {
 	return [self initWithId:objectId fromCache:YES];
+}
+
+- (instancetype)initWithId:(NSUInteger)objectId cacheDirectory:(NSURL *)cacheDirectory {
+	if (self = [self initWithId:objectId fromCache:YES]) {
+		self.cacheDirectory = cacheDirectory;
+		if (cacheDirectory != nil) {
+			[self reopenDbConnection];
+		}
+	}
+	return self;
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId fromCache:(BOOL)fromCache {
@@ -286,9 +306,35 @@ static os_log_t mlog;
 	}
 
 	self.groupKeyIndexes = (groupKeysArray != nil) ? [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray] : [[NSMutableIndexSet alloc] init];
-	
+
 	[self reopenDbConnection];
+	// The plist carries the row counter but not the rows -- those live in the cache
+	// file.  Ask the file, so a counter that drifted from it cannot survive a reload.
+	self.rowCounter = [self recountRows];
 	return YES;
+}
+
+- (NSUInteger)recountRows {
+	MADDatabaseSqlite3 *database = self.databaseForSelects;
+	sqlite3 *handle = (database != nil) ? (sqlite3 *)database->_database : NULL;
+	if (handle == NULL) {
+		return self.rowCounter;
+	}
+
+	NSString *sql = [[NSString alloc] initWithFormat:@"SELECT COUNT(*) FROM %@;", [self tableName]];
+	sqlite3_stmt *statement = NULL;
+	if (sqlite3_prepare_v2(handle, sql.UTF8String, -1, &statement, NULL) != SQLITE_OK || statement == NULL) {
+		// No table yet -- a table that has never been populated.  The plist's value
+		// is all there is to go on.
+		return self.rowCounter;
+	}
+
+	NSUInteger rows = self.rowCounter;
+	if (sqlite3_step(statement) == SQLITE_ROW) {
+		rows = (NSUInteger)sqlite3_column_int64(statement, 0);
+	}
+	sqlite3_finalize(statement);
+	return rows;
 }
 
 - (NSString *)filenameCacheMadDB {
@@ -296,16 +342,29 @@ static os_log_t mlog;
 	return [tag stringByAppendingPathExtension:@"maddb"];
 }
 
+// Resolved once and then held: the app delegate is not cheap to ask on every read,
+// and the answer only changes when the cache delegate does.
 - (NSURL *)urlFastCache {
+	NSURL *url = _urlFastCache;
+	if (url == nil) {
+		url = [self newUrlFastCache];
+		_urlFastCache = url;
+	}
+	return url;
+}
+
+- (NSURL *)newUrlFastCache {
 	NSString *filename = [[self filenameCacheMadDB] copy];
-	NSURL *cacheDirectory;
-	
-	if (self.cacheDelegate == nil) {
-		id <UIApplicationDelegate, MADApplicationProtocol> appDelegate = [MADApplication AppDelegate];
-		id groupIdentifier = [appDelegate groupIdentifier].copy;
-		cacheDirectory = [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
-	} else {
-		cacheDirectory = [self.cacheDelegate cachedFilesDirectory].copy;
+	NSURL *cacheDirectory = self.cacheDirectory;
+
+	if (cacheDirectory == nil) {
+		if (self.cacheDelegate == nil) {
+			id <UIApplicationDelegate, MADApplicationProtocol> appDelegate = [MADApplication AppDelegate];
+			id groupIdentifier = [appDelegate groupIdentifier].copy;
+			cacheDirectory = [MADURLFactory newURLForLocalCacheDirectoryForGroupIdentifier:groupIdentifier];
+		} else {
+			cacheDirectory = [self.cacheDelegate cachedFilesDirectory].copy;
+		}
 	}
 	return [cacheDirectory URLByAppendingPathComponent:filename isDirectory:NO];
 }
@@ -316,6 +375,9 @@ static os_log_t mlog;
 }
 
 - (void)setCacheDelegate:(id<MADCacheProtocol>)cacheDelegate {
+	// The URL is resolved from the delegate's directory, so a new delegate means a
+	// new URL; drop the held one and let the next read resolve it again.
+	_urlFastCache = nil;
 	_cacheDelegate = cacheDelegate;
 	[self reopenDbConnection];
 }
@@ -440,6 +502,31 @@ static os_log_t mlog;
 }
 
 - (bool)addRow:(NSArray<id> *)row error:(NSError * __autoreleasing *)error {
+	__block bool result = true;
+	__block NSError *rowError = nil;
+	void (^insert)(void) = ^{
+		NSError *insertError = nil;
+		result = [self insertRow:row error:&insertError];
+		rowError = insertError;
+	};
+
+	// queueBulkAdd is nil only for a table that never finished initializing; anything
+	// constructed normally has one, so the insert is serialized against
+	// -endBulkInsert's barrier as a rule rather than an accident.
+	dispatch_queue_t queue = self.queueBulkAdd;
+	if (queue != nil) {
+		dispatch_sync(queue, insert);
+	} else {
+		insert();
+	}
+
+	if (rowError != nil && error != NULL) {
+		*error = rowError;
+	}
+	return result;
+}
+
+- (bool)insertRow:(NSArray<id> *)row error:(NSError * __autoreleasing *)error {
 	bool result = true;
 	_rowDataLastInserted = row;
 	self.rowCounter++;
@@ -1228,13 +1315,14 @@ static os_log_t mlog;
 /*! Call right after bulk insert of data. */
 
 - (void)endBulkInsert {
-	
-	sqlite3_finalize(_statementInsert);
-	_statementInsert = NULL;
-	
+
 	__block MADDataTableFast *myself = self;
 	__block BOOL internalBulkInsertLoop = _bulkInsertLoop;
 	dispatch_barrier_sync(self.queueBulkAdd, ^{
+		// The barrier is the only point at which no -addRow: is running, so the
+		// cached statement may only be torn down inside it.
+		sqlite3_finalize(myself->_statementInsert);
+		myself->_statementInsert = NULL;
 		internalBulkInsertLoop = NO;
 		[(MADDatabaseSqlite3 *)myself.databaseForInserts endBulkInsert];
 	});

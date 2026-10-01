@@ -49,15 +49,23 @@
 }
 
 + (instancetype)newDataTableOfType:(MADDataTableType)type withObjectID:(NSUInteger)objectID {
-	
+	return [self newDataTableOfType:type withObjectID:objectID cacheDirectory:nil];
+}
+
++ (instancetype)newDataTableOfType:(MADDataTableType)type
+					  withObjectID:(NSUInteger)objectID
+					cacheDirectory:(NSURL *)cacheDirectory {
+
 	__kindof MADDataTable *result = nil;
 	switch (type) {
 		case MADDataTableTypeVirtual: {
+			// A virtual table keeps its rows in memory and never caches, so the
+			// directory has nothing to say for it.
 			result = [[MADDataTableVirtual alloc] initWithId:objectID];
 			break;
 		}
 		case MADDataTableTypePhysical: {
-			result = [[MADDataTableFast alloc] initWithId:objectID];
+			result = [[MADDataTableFast alloc] initWithId:objectID cacheDirectory:cacheDirectory];
 			break;
 		}
 		default:

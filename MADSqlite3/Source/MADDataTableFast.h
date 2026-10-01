@@ -24,6 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) IBOutlet id <MADCacheProtocol> cacheDelegate;
 @property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
+/// The cache file lives in this directory.  Pass one when no cache delegate is
+/// available -- in a test, say -- and the table resolves its cache URL from it
+/// instead of reaching for the application delegate.  `nil` keeps the existing
+/// behaviour: the cache delegate's directory, or the app's local cache directory.
+- (instancetype)initWithId:(NSUInteger)objectId cacheDirectory:(nullable NSURL *)cacheDirectory;
+
 - (NSString *)tableName;
 - (nullable NSString *)columnKeyForColumnName:(NSString *)columnName;
 - (NSArray <NSDictionary <NSString *, MADResult *> *> *)whereClauseForGroupKeys:(NSArray <MADResult *> *)groupKeys;
