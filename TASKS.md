@@ -351,6 +351,12 @@ and write the CRUD against a SQLite schema by hand. The hard part is not the sch
 **converting existing documents**: every shipping `.mad` carries a Core Data store, and the
 migration must read one and write the other without losing a report.
 
+**A simplification that comes with it.** `MADocument` is a `UIManagedDocument`, so dropping
+Core Data drops the iCloud document machinery along with it. The user's note, 2026-10-01:
+*"with getting rid of Core Data we are also getting rid of iCloud stuff. That should simplify
+the application."* Fold that into the plan — the migration is also a de-iCloud-ing, and the
+document-open/save path gets simpler, not just more portable.
+
 This is independent of v1 (`ROADMAP.md` §4.3, the magic header + checkpointed store): v1 is
 identification and a checkpoint, and neither cares what the store's schema is. Do not couple
 the two.

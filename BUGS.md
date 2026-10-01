@@ -292,6 +292,28 @@ Status key:
   non-zero, agrees with `-paper`, and is the letter size. Confirmed to fail against
   the ivar read before it was kept.
 
+### `MADArchiveManager -archive:` deleted its backup before it could restore it
+- **Status:** Fixed
+- **Where:** `MAD/Source/MADArchiveManager.m`
+- **Behavior:** Two defects in the save path's failure recovery. The backup of the
+  previous archive (written beside it with a `~` suffix) was removed *before* the
+  code decided whether it needed it, and the restore guard was
+  `if (!success && access(backup_path, F_OK))` — `access` answers 0 when the file is
+  present, so the guard was true exactly when the backup did **not** exist. A write
+  that failed partway therefore could never restore the previous document; it left
+  the archive truncated or absent.
+- **Why it mattered:** A failed save is the one place a corruption bug is
+  unrecoverable, and the restore logic existed precisely to prevent it. Both defects
+  together made the restore a no-op.
+- **Now:** `mad_file_remove_if_exist(backup_path)` runs *after* the restore, and the
+  guard is `access(backup_path, F_OK) == 0`, so the previous archive is put back
+  when — and only when — a backup exists. A first save (no prior archive) produces no
+  backup, so the guard correctly skips the restore.
+- **Test:** the success path is pinned by
+  `MADDocumentTests testArchiveRoundTripWritesAndStripsTheV1Header`. The restore
+  path is verified by reasoning, not a fault-injected test: forcing `write_archive`
+  to fail in the harness is not worth the machinery.
+
 ---
 
 ## MADFoundation

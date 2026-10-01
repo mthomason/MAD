@@ -37,12 +37,14 @@ int backup_file(char *, char *);
 int write_archive(char *, NSURL *);
 int restore_backup(char *, char *, char *);
 int mad_file_remove_if_exist(char *);
-int mad_path_is_absolute(const char *);
-int mad_path_is_relative(const char *);
+// Left over from an earlier path-handling pass: nothing calls these two, so they are
+// parked as static and marked rather than left bare or deleted outright.
+static int mad_path_is_absolute(const char *) __attribute__((unused));
+static int mad_path_is_relative(const char *) __attribute__((unused));
 
 int mad_file_remove_if_exist(char *path) { return (access(path, F_OK) == 0) ? remove(path) : -1; }
-int mad_path_is_absolute(const char *path) { return strlen(path) > 1 && path[0] == '/' ? 1 : 0; }
-int mad_path_is_relative(const char *path) { return mad_path_is_absolute(path) ? 0 : 1; }
+static int mad_path_is_absolute(const char *path) { return strlen(path) > 1 && path[0] == '/' ? 1 : 0; }
+static int mad_path_is_relative(const char *path) { return mad_path_is_absolute(path) ? 0 : 1; }
 
 // The v1 document header, per MAD_FORMAT.md section 7.1: 8 magic bytes, two
 // little-endian version words, then four flags bytes (bit 0 clear means the store
@@ -220,7 +222,9 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	strlcpy(backup_path, archive_path, backup_size);
 	strlcat(backup_path, "~", backup_size);
 	
-	// 1. Remove backup.
+	// 1. Back up the current archive before overwriting it.  backup_file drops any
+	// stale backup, then copies the archive beside it with a "~" suffix; a first save
+	// has nothing to copy, so the backup simply does not exist yet.
 	if ((r = backup_file(archive_path, backup_path)) < 0) {
 		os_log_error(OS_LOG_DEFAULT, "Failed to backup file with %d.", r);
 	}
@@ -240,16 +244,19 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 		os_log_error(OS_LOG_DEFAULT, "Failed to write the document header.");
 	}
 	mad_file_remove_if_exist(body_path);
-	mad_file_remove_if_exist(backup_path);
 
 	success = r == ARCHIVE_OK;
 
-	// 3. Restore backup on failure.
-	if (!success && access(backup_path, F_OK)) {
+	// 3. Put the previous archive back on failure.  access() answers 0 when the file
+	// is present, which is what guards the restore -- a first save has no backup, and
+	// a stale backup must not be restored.  On success the backup is dropped instead.
+	if (!success && access(backup_path, F_OK) == 0) {
 		if (restore_backup(origin_path, backup_path, archive_path) < 0) {
 			os_log_error(OS_LOG_DEFAULT, "Error in restore_backup.");
 		}
 	}
+	mad_file_remove_if_exist(backup_path);
+
 	free(archive_path);
 	free(origin_path);
 	free(backup_path);
