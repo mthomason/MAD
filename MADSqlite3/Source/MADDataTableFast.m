@@ -791,9 +791,13 @@ static os_log_t mlog;
 	MADQuery *queryVacuum = [[MADQueryCacheVacuum alloc] init];
 	BOOL success = [self.databaseForInserts executeQuery:queryVacuum withError:&errorQuery];
 	NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database), __PRETTY_FUNCTION__);
+	// VACUUM rewrites the file but keeps every row, so the counter still describes it.
+	// Deliberately not zeroed: -removeAllObjects is the only caller that wants an empty
+	// table, and it zeroes the counter itself.
 }
 
 - (void)dropTable {
+	// Drops this table by name, so -dropTableName: zeroes the counter below.
 	[self dropTableName:[self tableName]];
 }
 
@@ -804,6 +808,11 @@ static os_log_t mlog;
 	success = [self.databaseForInserts executeQuery: queryDropTable
 										  withError: &errorQuery];
 	NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database), __PRETTY_FUNCTION__);
+	// Only zero the counter when the table that went away is this one.  The method
+	// takes any name, and dropping a foreign table must not touch this count.
+	if ([tableName isEqualToString:[self tableName]]) {
+		self.rowCounter = 0;
+	}
 }
 
 - (void)deleteAll {
@@ -811,11 +820,15 @@ static os_log_t mlog;
 	NSError * __autoreleasing errorQuery = NULL;
 	NSString *tableName = [self tableName];
 	MADQuery *queryDeleteAllFromTable;
-	queryDeleteAllFromTable = [[MADQueryCacheDeleteAllFromTable alloc] initWithObject:tableName];
+	// -initWithObject: expects the parameters dictionary and subscripts it, so passing
+	// the table name there raises on the first row; -initWithTableName: is the one that
+	// takes a name.  Same call the sqlite driver makes in -beginBulkInsert.
+	queryDeleteAllFromTable = [[MADQueryCacheDeleteAllFromTable alloc] initWithTableName:tableName];
 	success = [self.databaseForInserts executeQuery: queryDeleteAllFromTable
 										  withError: &errorQuery];
 	NSAssert(success, @"%s at %s", sqlite3_errmsg(_databaseForInserts->_database),
 			 __PRETTY_FUNCTION__);
+	self.rowCounter = 0;
 }
 
 - (id)objectAtRow:(NSUInteger)row column:(NSUInteger)column {

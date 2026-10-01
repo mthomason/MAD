@@ -89,6 +89,19 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 @implementation MADDataTableRegressionBareDelegate
 @end
 
+// MADDataTableFast keeps its cache-file mutations private, since -removeAllObjects
+// is the only caller.  Declare them so the row-counter tests can drive each one
+// directly and pin what it does to -count.
+@interface MADDataTableFast (TestCacheMutations)
+- (void)dropTable;
+- (void)dropTableName:(NSString *)tableName;
+- (void)deleteAll;
+- (void)vacuumCacheDb;
+// -endBulkInsert closes the inserts connection and nulls its handle, so anything that
+// sends SQL through it afterwards needs this first.  -removeAllObjects opens with it.
+- (void)reopenDbConnection;
+@end
+
 #pragma mark - Tests
 
 @interface MADDataTableRegressionTests : XCTestCase
@@ -817,6 +830,55 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertEqual([restored numberOfRows], (NSUInteger)3);
 	XCTAssertEqual([restored count], (NSUInteger)3);
 	XCTAssertEqual([restored rowCounter], (NSUInteger)3);
+}
+
+- (void)testFastTableDropTableZeroesRowCount {
+	MADDataTableFast *table = [self newFastTableWithTag:1101];
+	[self bulkInsertRows:@[@[@"alice", @30], @[@"bob", @20]] intoTable:table];
+	XCTAssertEqual([table count], (NSUInteger)2);
+
+	[table reopenDbConnection];
+	[table dropTable];
+
+	// The rows are gone from the file, so the counter must not outlive them: the app
+	// reads -count as a page cursor (hasMore = count == limit).
+	XCTAssertEqual([table count], (NSUInteger)0);
+	XCTAssertEqual([table numberOfRows], (NSUInteger)0);
+	XCTAssertEqual([table rowCounter], (NSUInteger)0);
+}
+
+- (void)testFastTableDropForeignTableKeepsRowCount {
+	MADDataTableFast *table = [self newFastTableWithTag:1102];
+	[self bulkInsertRows:@[@[@"alice", @30], @[@"bob", @20]] intoTable:table];
+
+	// -dropTableName: takes any name, and dropping a table that is not this one
+	// must leave this table's rows and count alone.
+	[table reopenDbConnection];
+	[table dropTableName:@"some_other_table"];
+
+	XCTAssertEqual([table count], (NSUInteger)2);
+}
+
+- (void)testFastTableDeleteAllZeroesRowCount {
+	MADDataTableFast *table = [self newFastTableWithTag:1103];
+	[self bulkInsertRows:@[@[@"alice", @30], @[@"bob", @20]] intoTable:table];
+
+	[table reopenDbConnection];
+	[table deleteAll];
+
+	XCTAssertEqual([table count], (NSUInteger)0);
+	XCTAssertEqual([table numberOfRows], (NSUInteger)0);
+}
+
+- (void)testFastTableVacuumKeepsRowCount {
+	MADDataTableFast *table = [self newFastTableWithTag:1104];
+	[self bulkInsertRows:@[@[@"alice", @30], @[@"bob", @20]] intoTable:table];
+
+	[table reopenDbConnection];
+	[table vacuumCacheDb];
+
+	// VACUUM rewrites the file but keeps every row, so it must not zero the counter.
+	XCTAssertEqual([table count], (NSUInteger)2);
 }
 
 - (void)testFastTableBulkInsertEnumeratesValues {
