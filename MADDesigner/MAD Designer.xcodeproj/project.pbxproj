@@ -640,7 +640,6 @@
 		4C26BA961BAF9B9B00456DC8 /* MTTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTitleView.m; sourceTree = "<group>"; };
 		4C26BAA31BAF9E8000456DC8 /* MADActivityReportPrintPreview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADActivityReportPrintPreview.h; sourceTree = "<group>"; };
 		4C26BAA41BAF9E8000456DC8 /* MADActivityReportPrintPreview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADActivityReportPrintPreview.m; sourceTree = "<group>"; };
-		4C274451306E743D0061BFC2 /* run.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = run.log; sourceTree = "<group>"; };
 		4C28DDE11E7085BF000BDA30 /* MADQueryVisualizationCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationCacheManager.h; sourceTree = "<group>"; };
 		4C28DDE21E7085BF000BDA30 /* MADQueryVisualizationCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationCacheManager.m; sourceTree = "<group>"; };
 		4C29160724AC75E300EC794B /* MAD.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MAD.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1907,7 +1906,6 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
-				4C274451306E743D0061BFC2 /* run.log */,
 				4C63B02E306AB71200FE4ECE /* MAD DesignerDebug.entitlements */,
 				4C296A7B2EA4CEF6007DB66E /* Resources */,
 				4C296A782EA4A160007DB66E /* Source */,
