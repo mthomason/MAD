@@ -252,14 +252,14 @@
 	XCTAssertEqual([representation elementCount], (NSUInteger)0);
 }
 
-- (void)testTextRepresentationCountsEnumerateKeysDefect {
-	// Known defect: -characterCount / -elementCount fast-enumerate the page map
-	// directly, which yields the NSNumber *keys* rather than the page values, so a
-	// non-empty representation raises an "unrecognized selector" exception.
+- (void)testTextRepresentationCountsSumPageValues {
+	// The counts sum the page *values*; enumerating the page map directly yielded the
+	// NSNumber keys and raised an unrecognized-selector exception.
 	MADReportTextRepresentation *representation = [[MADReportTextRepresentation alloc] init];
-	[representation setPage:[[MADFixedPageDouble alloc] initWithNumberOfSections:0] forPageIndex:0];
-	XCTAssertThrows([representation characterCount]);
-	XCTAssertThrows([representation elementCount]);
+	MADFixedPageDouble *page = [[MADFixedPageDouble alloc] initWithNumberOfSections:0];
+	[representation setPage:page forPageIndex:0];
+	XCTAssertEqual([representation characterCount], [page characterCount]);
+	XCTAssertEqual([representation elementCount], [page elementCount]);
 }
 
 #pragma mark - MADReportRow / MADReportRows

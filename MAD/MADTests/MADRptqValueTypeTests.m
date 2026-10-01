@@ -96,8 +96,7 @@
 	XCTAssertEqualObjects([RptqDirectionalAsymmetry keyTop], @"top");
 	XCTAssertEqualObjects([RptqDirectionalAsymmetry keyBottom], @"bottom");
 	XCTAssertEqualObjects([RptqDirectionalAsymmetry keyLeft], @"left");
-	// Known defect: keyRight delegates to keyLeft, returning @"left" instead of @"right".
-	XCTAssertEqualObjects([RptqDirectionalAsymmetry keyRight], @"left");
+	XCTAssertEqualObjects([RptqDirectionalAsymmetry keyRight], @"right");
 }
 
 #pragma mark - RptqRect frame composition

@@ -8,6 +8,7 @@
 
 #import "MADReportTextRepresentation.h"
 #import "MADReportPageRepresentation.h"
+#import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSValue.h>
 
@@ -60,9 +61,11 @@ typedef NSMutableDictionary <NSNumber *, __kindof MADReportPageRepresentation *>
 
 #pragma mark - MADTextRepresentationProtocol
 
+// `pages` is a dictionary keyed by page index, so the bare fast-enumeration yields the
+// NSNumber keys.  Iterate the values.
 - (NSUInteger)characterCount {
 	NSUInteger characterCount = 0;
-	for (MADReportPageRepresentation *page in self.pages) {
+	for (MADReportPageRepresentation *page in self.pages.allValues) {
 		characterCount += [page characterCount];
 	}
 	return characterCount;
@@ -70,7 +73,7 @@ typedef NSMutableDictionary <NSNumber *, __kindof MADReportPageRepresentation *>
 
 - (NSUInteger)elementCount {
 	NSUInteger elementCount = 0;
-	for (MADReportPageRepresentation *page in self.pages) {
+	for (MADReportPageRepresentation *page in self.pages.allValues) {
 		elementCount += [page elementCount];
 	}
 	return elementCount;

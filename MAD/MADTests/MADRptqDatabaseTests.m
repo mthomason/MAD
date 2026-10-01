@@ -72,16 +72,16 @@
 
 #pragma mark - Database-type identifier/name tables
 
-- (void)testDatabaseTypeReuseIdsAndNamesMismatch {
-	// Known defect: the reuse-id table has one more entry than the localized-name
-	// table (10 vs 9), so a "Microsoft SQL Server" name is missing from the names
-	// array and the two tables are misaligned past index 4.
+- (void)testDatabaseTypeReuseIdsAndNamesAlign {
+	// The two tables are index-aligned: entry N of the reuse-id table names the same
+	// database type as entry N of the localized-name table.
 	// (The macro expansion contains commas, so it must be captured in a variable
 	// before it can be passed to an XCTAssert macro.)
 	NSArray *reuseIds = MADDatabaseTypeReuseIds;
 	NSArray *names = MADDatabaseTypeNames;
+	XCTAssertEqual(reuseIds.count, names.count);
+	XCTAssertEqualObjects(names[5], @"Microsoft SQL Server");
 	XCTAssertEqual(reuseIds.count, (NSUInteger)10);
-	XCTAssertEqual(names.count, (NSUInteger)9);
 }
 
 @end

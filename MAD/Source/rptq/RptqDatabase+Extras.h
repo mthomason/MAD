@@ -15,7 +15,7 @@
 
 #define MADDatabaseTypeReuseIds [NSArray arrayWithObjects: @"MADDatabaseTypeSalesforceCom", @"MADDatabaseTypeDatabaseCom", @"MADDatabaseTypeMySQL", @"MADDatabaseTypeMicrosoftSqlAzure", @"MADDatabaseTypeAmazonSimpleDb", @"MADDatabaseTypeMicrosoftSqlServer", @"MADDatabaseTypeOracle", @"MADDatabaseTypeODBC", @"MADDatabaseTypeGooleAppEngine", @"MADDatabaseTypeNone", nil]
 
-#define MADDatabaseTypeNames [NSArray arrayWithObjects: @"Salesforce.com", @"Database.com", @"MySQL", @"Microsoft SQL Azure", @"Amazon Simple DB", @"Oracle", @"ODBC", @"Google App Engine", NSLocalizedString(@"None", @"None"), nil]
+#define MADDatabaseTypeNames [NSArray arrayWithObjects: @"Salesforce.com", @"Database.com", @"MySQL", @"Microsoft SQL Azure", @"Amazon Simple DB", @"Microsoft SQL Server", @"Oracle", @"ODBC", @"Google App Engine", NSLocalizedString(@"None", @"None"), nil]
 
 @interface RptqDatabase (Extras)
 
