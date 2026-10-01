@@ -4,167 +4,170 @@ This is the plan for moving the `.mad` document's store off Core Data and onto a
 schema of our own. It is the work behind `MAD_FORMAT.md` §8.1 and `ROADMAP.md` §4.2, and it is
 what removes hazard H3 — the last Apple dependency in the format.
 
-Written 2026-10-01, against `master` at `73468c6f4` (v1 header + checkpoint landed).
+Written 2026-10-01 against `master` at `73468c6f4`; revised the same day after reading the
+actual Core Data usage in the code, per the user's question *"does this really need core data
+style faulting?"* The answer, with evidence, is in §3.
 
 ---
 
-## 1. Why, in one paragraph
+## 1. The goal, in the user's own terms
 
-The store inside a `.mad` is a Core Data SQLite file. Core Data does not exist off Apple
-platforms, so the format cannot be called portable until the store is our own SQLite. Because
-`MADocument` is a `UIManagedDocument`, this also removes the iCloud document machinery — the
-user's note: *"with getting rid of Core Data we are also getting rid of iCloud stuff. That
-should simplify the application."* The migration is therefore a **de-iCloud-ing** and a
-**de-Core-Data-ing** in one, and the open/save path gets simpler, not just more portable.
+The core issue is **portability**. The store inside a `.mad` is a Core Data SQLite file, and
+Core Data does not exist off Apple platforms. Because `MADocument` is a `UIManagedDocument`,
+moving off Core Data also removes the iCloud document machinery, which simplifies the app.
 
-The user's direction on how: **keep the auto-generated `Rptq` headers as a fixed,
-hand-maintained contract, and write the insert/update/read code ourselves** against a SQLite
-schema.
+The user's mental model, which the code confirms: *"I just think of it as a simple database."*
+The migration keeps the auto-generated `Rptq` headers as a fixed, hand-maintained contract and
+writes the insert/update/read code ourselves.
 
 ---
 
-## 2. What the store is today
+## 2. What is actually stored
 
-The store is a plain SQLite file (`StoreContent/analyitics`) whose schema is Core Data's, not
-ours. It is read and written through `UIManagedDocument` (`MADocument`). Measured from the two
-shipping samples and the current model (`MAD 3.xcdatamodel`):
+Three things, no more. All of it is a *definition* — the row data lives in the `.maddb` cache
+and is not part of this store.
 
-- **32 entities**, all `Rptq`-prefixed. **24** have their own `Z_` table; **8** are the
-  `RptqDocumentElement` subclasses, which Core Data flattens into the single
-  `ZRPTQDOCUMENTELEMENT` table with a `Z_ENT` discriminator column (single-table inheritance).
-- **24 `Z_` tables** plus one join table (`Z_5INQUERY` for the many-to-many
-  `RptqDatabaseSchemaField.inQuery ↔ RptqQuery.hasFields`) and Core Data's own
-  `Z_METADATA` / `Z_MODELCACHE` / `Z_PRIMARYKEY`.
-- Every entity carries an `identifier` (`Integer 64`) — the app's logical id, present since the
-  first model, and the obvious stable key for a portable schema.
-- **Four transformable attributes** — the portability risk: `RptqDocumentElement`
-  `backgroundColor` / `foregroundColor` (`UIColor`), `RptqDocumentElementImage.image`
-  (`UIImage`), `RptqNumericFormat.locale` (`NSLocale`). These are archived by the
-  `MADColorTransformer` / `MADLocaleTransformer` / `MADPngImageTransformer` value transformers,
-  which today only exist because the app links them.
-- **Four ordered to-many relationships** — `RptqDatabaseSchemaTable.hasFields`,
-  `RptqDocumentSection.hasRows`, `RptqDocumentSectionRows.hasObjects`, and
-  `RptqQueryTable`'s ordered `inQueryTable`. Order is meaningful and must survive.
+| Part | Entities | How it gets there |
+|---|---|---|
+| **Schema** | `RptqDatabase`, `RptqDatabaseSchemaTable`, `RptqDatabaseSchemaField`, `RptqDatabaseCredentals` | Imported from the source database at document creation by `MADOperationCreateDocumentImportSchema`, reading `MADDatabaseTable` / `MADDatabaseField` and writing `Rptq` entities. **Reloadable** — the import is a bulk replace (drop the old tables/fields, write the new). |
+| **Query** | `RptqQuery`, `RptqQueryTable`, `RptqQueryField`, `RptqQueryLinks`, `RptqQueryGroup`, `RptqQueryPredicate`, `RptqQuerySort` | Built by the user in the MAD Query tab. |
+| **Layout** | `RptqDocument`, `RptqDocumentSection`, `RptqDocumentSectionRows`, `RptqDocumentElement` + 8 subclasses, plus value types (`RptqPoint`, `RptqRect`, `RptqSize`, `RptqAlignment`, `RptqBorder`, `RptqTextStyle`, `RptqNumericFormat`, `RptqDirectional*`) | Built by the user in the MAD Designer tab. |
 
-The object graph is a tree: `RptqDocument` → databases (schema snapshot) and sections; a
-database → tables → fields and → queries → query tables/fields/links/groups/predicates/sorts;
-a section → rows → elements. The `identifier` values are the join keys today and can be the
-foreign keys tomorrow.
+The graph is a tree keyed by the `identifier` (`Integer 64`) that every entity carries. The
+32 entities, the four ordered to-many relationships, the four transformable attributes, and
+the one many-to-many join table are as described in the model dump that follows this document's
+original version.
 
 ---
 
-## 3. What the store should be
+## 3. What the code actually uses Core Data for
 
-A SQLite schema of our own, with the same object graph, written and read by our code. The
-mapping is deliberately mechanical:
+This is the research that matters. It is a much smaller surface than "Core Data" sounds.
 
-- **One table per entity** (the 24 non-element entities), named without Core Data's `Z_` prefix,
-  keyed by the existing `identifier`. Scalar attributes become columns.
-- **The element hierarchy stays single-table.** `RptqDocumentElement` plus its eight subclasses
-  live in one `document_element` table with a `type` discriminator, exactly as Core Data already
-  flattens them. This is the lowest-risk choice because the conversion then has to do almost no
-  reshaping.
-- **Relationships become foreign keys.** A to-one relationship is a column holding the target's
-  `identifier`; a to-many relationship is the inverse FK on the child. The ordered to-many
-  relationships get an explicit `position` column.
-- **The many-to-many `inQuery`** keeps its join table (two `identifier` columns).
-- **Transformables become portable scalars.** `UIColor` → four `REAL` components or a hex
-  string; `NSLocale` → its identifier string; `UIImage` → PNG bytes (what
-  `MADPngImageTransformer` already produces). A non-Apple reader can ignore or re-interpret
-  these, but they must not be archived ObjC objects.
+**Fetch, mostly by identifier.** There are ~81 fetch/execute sites, but the dominant patterns
+are: fetch one object by `identifier` (`RptqDocumentElement
+-newDocumentElementWithIdentifier:fromObjectContext:`, `RptqDocumentSection
+-newDocumentSectionWithIdentifier:…`), and fetch the single root with `fetchLimit = 1`
+(`RptqDocument -newDocumentReadFromManagedObjectContext:`). This is a `SELECT … WHERE
+identifier = ?` — trivial in a plain SQLite store.
 
-This is not a redesign of the model. It is the same graph in a schema we own, which is what
-makes "convert existing documents" a mechanical problem rather than a semantic one.
+**Relationship traversal, which is faulting today.** Code such as `MADQueryFull.m:151-152`
+reads `document.hasDatabaseSchemas.anyObject` then `databaseSchema.hasQueries.anyObject`. That
+faults each relationship lazily. But the whole definition is under 80 KB, so **faulting is an
+implementation detail, not a requirement** — lazy loading at the granularity of the three parts
+(schema, query, layout) is more than enough, and the user's instinct not to load it all at once
+is the right one.
 
----
+**A small set of lifecycle hooks.** `-awakeFromInsert` / `-awakeFromFetch` in ~11 `Rptq+Extras`
+files assign `identifier` and defaults. `obtainPermanentIDsForObjects:` appears once. KVO
+(`-willChangeValueForKey:` on `identifier`) is used to fan out change notifications. All of
+these have plain equivalents.
 
-## 4. The hard parts, called out
+**Two real Core Data features to replace, both small:**
+- `NSFetchedResultsController` — used in `MADQueryBuilderAddTableViewController` and
+  `MTGraph+RptqQuery`. It provides sectioning + change tracking for a table view. A plain
+  store replaces this with a manual reload-on-change, which is what the app already does
+  elsewhere (`reloadData` is everywhere).
+- The `NSUndoManager` on the managed object context (§4).
 
-1. **The app's Core Data surface.** Roughly 110 files in `MAD/Source` and `MADDesigner/Source`
-   touch `NSManagedObjectContext`, `NSFetchRequest` or `NSManagedObject`, with ~158
-   fetch/insert sites. The `Rptq` classes are pure `@dynamic` `NSManagedObject` subclasses
-   today. "Keep the headers, write CRUD ourselves" means the interfaces stay and the backing
-   changes — which is the bulk of the work, not the schema.
+**Undo — the part the user flagged, and it is not a blocker.** All undo is in
+`MADDesignerLayout` and it is **manual, high-level undo**: every operation calls
+`[delegate.undoManager setActionName:…]` and
+`[delegate.undoManager registerUndoWithTarget:self handler:…]`, where the handler invokes the
+*inverse* high-level method (for example, `updateElements:setBold:` registers an undo that
+calls `updateElements:setBold:NO`). The inverse re-fetches by identifier and re-sets the
+property. So undo needs exactly three things, none of them Core Data: an `NSUndoManager`
+(a Foundation class), fetch-by-identifier, and set-a-property. It does **not** rely on Core
+Data's automatic change tracking — there are no `processPendingChanges` /
+`disableUndoRegistration` calls, and no automatic-undo reliance.
 
-2. **The element hierarchy's flattened columns.** Because Core Data already mangled colliding
-   subclass attribute names into `ZGROUPNUMBER` vs `ZGROUPNUMBER1` and `ZTEXT` vs `ZTEXT1` vs
-   `ZTEXT2`, the conversion must read the flattened table through the model metadata, not by
-   hand. The plan is to convert **through the existing model objects** (load with Core Data,
-   re-save to our store) rather than to hand-parse `Z_` tables, which avoids ever depending on
-   Core Data's name mangling.
-
-3. **`awakeFromInsert` / `awakeFromFetch` behavior.** Several `Rptq` classes set defaults or
-   required fields (`identifier`, group values) in `awakeFromInsert`. The replacement store must
-   reproduce those semantics, or the app will write rows without the fields it expects.
-
-4. **Faulting and change tracking.** The app assumes lazy relationship resolution and a save
-   that diffs changes. A hand-written store does not get these for free; the plan must decide
-   whether the new backing loads the whole graph on open (fine — the definition is small, the
-   row data is already in the `.maddb` cache) or reimplements a subset.
-
----
-
-## 5. The conversion
-
-Because the definition graph is small (both samples under 80 KB, and that is the whole document),
-the conversion strategy is **read with Core Data, write to our store**:
-
-1. Open a legacy `.mad` with the existing `MADocument` (Core Data) path.
-2. Walk the object graph (`activeDocumentModel` and its relationships), serialising each entity
-   to our SQLite schema, transformables included, ordered relationships in order.
-3. Write the new store beside the old one, then archive the new store as the `.mad`.
-
-This runs once per legacy document, on first open after the migration ships. The reader then
-opens only the new format; legacy v0/v1 documents without a converted store are converted on
-demand and re-saved. The two shipping samples are the fixtures that pin this conversion.
+**A clean domain layer already exists.** `MADModel*` (`MADModelDocument`, `MADModelDatabase`,
+`MADModelQuery`, `MADModelTable`, `MADModelField`, …) are plain `NSObject` subclasses that wrap
+the `Rptq` entities and expose the app's vocabulary — `databases`, `firstQuery`,
+`tableDictionary`. ~20 files use it; the rest reach `Rptq` directly. This is the seam: the
+migration re-points `MADModel*` (and the `Rptq` accessors) at our store, and the domain stays
+recognisably the same.
 
 ---
 
-## 6. Phasing
+## 4. What the store should be
 
-Each phase ends with the suite green and, where possible, a CLI check.
+A plain SQLite schema, one table per entity, keyed by `identifier`, with the object graph
+preserved as foreign keys and an order column on the ordered relationships. Transformables
+become portable scalars (`UIColor` → RGBA, `NSLocale` → identifier string, `UIImage` → PNG).
+The many-to-many `inQuery` keeps its join table.
 
-- **Phase A — the store, standalone.** Define the portable SQLite schema (entity tables, FK
-  columns, order columns, join table, transformable serialisation) and a reader/writer pair
-  that round-trips a `RptqDocument` graph. Proven headlessly: build a graph in memory, write it,
-  read it back, assert equality. No app integration yet.
-- **Phase B — the conversion.** The legacy-reader: open a Core Data `.mad`, serialise it to the
-  new store. Pinned by the two samples round-tripping through *convert → read → compare*.
+The difference from the first draft is the **loading model**: no per-relationship faulting. The
+reader fetches the three parts on demand — open the document, fetch the `RptqDocument` row and
+its section tree when the designer tab is shown, fetch the query when the query tab is shown,
+fetch the schema when needed. Each is one or two indexed `SELECT`s.
+
+---
+
+## 5. The hard parts, re-ranked
+
+1. **The app integration, not the schema.** Roughly 110 files touch `NSManagedObjectContext`
+   / `NSFetchRequest` / `NSManagedObject`, with ~158 fetch/insert sites. This is the bulk of
+   the work: replacing `@dynamic` Core Data properties and `NSFetchRequest` with our store.
+2. **Undo, but smaller than feared.** Keep `NSUndoManager`; keep `MADDesignerLayout`'s manual
+   handlers; provide fetch-by-id and set-property against our store. The undo *design* is
+   already right; only its data source changes.
+3. **The element hierarchy.** Core Data already flattens the 8 `RptqDocumentElement`
+   subclasses into one table with a `Z_ENT` discriminator and name-mangled columns
+   (`ZTEXT`/`ZTEXT1`, `ZGROUPNUMBER`/`ZGROUPNUMBER1`). The conversion must therefore go
+   **through the model objects** (load with Core Data, re-save to our store), never hand-parse
+   the `Z_` tables.
+4. **`NSFetchedResultsController`.** Two files; replace with manual reload, which the app
+   already does elsewhere.
+
+---
+
+## 6. The conversion
+
+Read a legacy `.mad` with the existing `MADocument` path, walk the object graph, and serialise
+it to our schema. This runs once per legacy document on first open after the migration ships,
+then re-saves in the new format. The two shipping samples (`London.mad`, `Music.mad`) are the
+fixtures that pin it.
+
+---
+
+## 7. Phasing
+
+- **Phase A — the store, standalone.** Define the SQLite schema and a reader/writer pair that
+  round-trips a `RptqDocument` graph. Proven headlessly: build a graph in memory, write it,
+  read it back, assert equality — including fetch-by-identifier and fetch-by-part.
+- **Phase B — the conversion.** Open a Core Data `.mad`, serialise to the new store. Pinned by
+  the two samples through *convert → read → compare*.
 - **Phase C — the app integration.** Replace the `Rptq` classes' Core Data backing with our
-  store, keeping the headers. This is the large one and is done incrementally, entity-family by
-  entity-family (schema, then query, then sections/elements), with the design/query/viewer tabs
-  as the acceptance tests.
-- **Phase D — remove Core Data.** Delete `UIManagedDocument` / `MADDocument`'s Core Data stack,
-  the value transformers, the `.xcdatamodel`, and the iCloud machinery. This is where the
-  "simplification" the user called out actually lands.
+  store, keeping the headers, entity-family by entity-family (schema, then query, then
+  sections/elements), and replace `NSFetchedResultsController` with reload-on-change. The
+  designer/query/viewer tabs are the acceptance tests, and undo is kept working throughout.
+- **Phase D — remove Core Data.** Delete `UIManagedDocument` / the Core Data stack, the value
+  transformers, the `.xcdatamodel`, and the iCloud machinery — where the simplification lands.
 
 **Not before Phase C:** moving `MADOperationRefresh` into `MAD` (`ROADMAP.md` §3.4) and the
-driver registry (`§5.1`). Both are entangled with the current object graph and are cheaper to
-cut once the store is ours.
+driver registry (`§5.1`); both get cheaper once the store is ours.
 
 ---
 
-## 7. Decisions the user has to make
+## 8. Decisions the user has to make
 
-- **Does the reader load the whole graph on open?** Recommended yes — the definition is tiny and
-  the row data already lives in `.maddb`. Loading whole removes faulting from scope entirely.
-- **Are the `Rptq` classes still `NSManagedObject` subclasses?** Recommended no — they become
-  plain objects backed by the store, keeping the property names. This is what "keep the headers"
-  means in practice, and it is the decision that commits the rest of the plan.
-- **Transformable wire formats.** Color as RGBA vs hex; image as PNG vs JPEG. Minor, but should
-  be pinned in the schema so a second platform reads them identically.
-
-These are the same kind of format decisions `MAD_FORMAT.md` §8 already tracks, and they belong
-in that register rather than being guessed.
+- **Do the `Rptq` classes stay `NSManagedObject` subclasses?** Recommended no — they become
+  plain objects backed by our store, keeping the property names and the `MADModel*` layer.
+  This is what "keep the headers, write the CRUD" means in practice, and it commits the rest.
+- **Loading granularity.** Recommended: fetch per part (schema/query/layout) on demand, not the
+  whole graph and not per-relationship. This matches the user's "I wouldn't load it all at
+  once."
+- **Transformable wire formats.** Color as RGBA vs hex; image as PNG vs JPEG. Pin them in the
+  schema so a second platform reads them identically.
 
 ---
 
-## 8. Standing constraints
+## 9. Standing constraints
 
-- The two shipping samples (`London.mad`, `Music.mad`) stay openable throughout; they are the
-  conversion fixtures.
+- The two shipping samples stay openable throughout; they are the conversion fixtures.
 - Nothing is deleted from `Compressor/library` as part of this.
 - `+[NSString stringWithFormat:]` stays out of tight loops; match the `initWithFormat:` /
   `appendFormat:` house style.
-- Behaviour-safe: the suite is the proof. The 110 Core Data files are a known mess the user has
-  explicitly said is worth tightening while we are in there.
+- Behaviour-safe: the suite is the proof. The ~110 Core Data files are the known mess the user
+  has said is worth tightening while we are in there.
