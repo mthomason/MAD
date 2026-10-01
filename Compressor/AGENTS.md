@@ -35,3 +35,4 @@ If you need to add a new third-party library to the project, you will need to cr
 ## Testing and Reports
 
 *   **Note**: the project ships no tests. `compressor.sh` is verified by building the libraries.
+*   **Tracking**: [`BUGS.md`](../BUGS.md) -- the defect register; [`TASKS.md`](../TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.

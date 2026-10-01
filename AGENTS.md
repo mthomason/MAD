@@ -100,12 +100,24 @@ scheme, so the command above does not reach them.
 
 * `BUGS.md` -- known defects, grouped by framework, with `file:line` references and the
   tests that pin each one.
+* `TASKS.md` -- the engineering task queue: what is being worked, in order, with the
+  context needed to start cold.
 * `MADDataTable_Architecture_Report.md` -- the `MADDataTable` class cluster across
   `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
 * `DEVELOPER.md` -- test database credentials and common build commands.
-* `TODO.md` -- the working backlog.
+* `TODO.md` -- the product wishlist: features and ideas.
 * `README.md` -- build notes and the export-compliance statement.
 * `APPSTORE.md` -- the App Store promotional text and description currently in use.
+
+## Tracking Files Are Maintained, Not Acted On
+
+`BUGS.md` and `TASKS.md` are **records, not instructions**. An agent may -- and should --
+keep them accurate: add an entry when new evidence appears, move a fixed defect to
+*Already fixed* with its commit hash, and re-status a task. What an agent must **not** do
+is start work because a file lists it. Entries there are picked up when the user asks for
+that task by name or number, never on the agent's own initiative.
+
+`TODO.md` is the user's own wishlist and is not for agents to edit.
 
 Every directory with an `AGENTS.md` also has a `CLAUDE.md` symlink to it, so the two names
 always name the same file.

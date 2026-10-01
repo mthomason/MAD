@@ -27,3 +27,4 @@ If you need to make changes to the FreeTDS library itself, you will need to modi
 ## Testing and Reports
 
 *   **Note**: the framework ships no tests of its own; it is exercised through `MADTdsClient`.
+*   **Tracking**: [`BUGS.md`](../BUGS.md) -- the defect register; [`TASKS.md`](../TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.

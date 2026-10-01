@@ -32,4 +32,5 @@ If you do decide to use this framework, you will need to familiarize yourself wi
 
 *   **Tests**: `MADBarcodes/MADBarcodesTests`. Run with
     `xcodebuild test -workspace Reports.xcworkspace -scheme None -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Tracking**: [`BUGS.md`](../BUGS.md) -- the defect register; [`TASKS.md`](../TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.
 *   **Note**: the test target is in the Xcode project but no shared scheme runs it.

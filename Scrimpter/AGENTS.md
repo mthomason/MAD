@@ -32,4 +32,5 @@ If you are tasked with maintaining or extending the Scrimpter language, you will
 
 *   **Tests**: `Scrimpter/ScrimpterTests`. Run with
     `xcodebuild test -workspace Reports.xcworkspace -scheme None -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Tracking**: [`BUGS.md`](../BUGS.md) -- the defect register; [`TASKS.md`](../TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.
 *   **Note**: the test target is in the Xcode project but no shared scheme runs it.

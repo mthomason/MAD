@@ -37,3 +37,4 @@ The project defines four targets:
 *   **UI tests**: `MADDesigner/Targets/MADDesignerUITests`.
 *   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MAD Designer (app)` section. The
     faults found in this test target itself are under `## Test infrastructure`.
+*   **Task queue**: [`TASKS.md`](../TASKS.md) -- maintain it, but do not start work from it.

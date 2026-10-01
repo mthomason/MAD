@@ -1,0 +1,176 @@
+# TASKS.md
+
+The engineering task queue for _MAD Designer_.
+
+> **Agents: maintain this file, do not act on it.** Add, re-status, and link tasks as
+> work proceeds, but do not start work on an entry just because it is listed here.
+> Pick up a task only when the user asks for that task by name or number.
+
+## How this relates to the other tracking files
+
+Three files track work, and they are deliberately different things:
+
+* `BUGS.md` — the **defect register**. Every confirmed wrong behaviour, with the test that
+  pins it. Evidence, not a queue.
+* `TODO.md` — the user's **product wishlist**. Features and ideas, written by hand.
+* `TASKS.md` — this file, the **engineering queue**. What is actively being worked, in
+  order, with enough context to start cold. Entries link to `BUGS.md` rather than
+  restating it.
+
+Status key: **Open** · **In progress** · **Blocked** · **Done**.
+
+---
+
+## 1. Keychain and credential flow — highest priority
+
+**Status:** Open — the user has asked to return to this.
+
+The user's words: *"It seems like this keychain flow is very important to getting right,
+or no one will ever use the software."* Saving a database password is what makes a
+document usable, so a broken prompt sequence blocks the whole product.
+
+**What goes wrong today.** On create-document, the app presents **two competing
+password prompts**:
+
+1. The app's own `MADOperationPromptPolarQuestion` alert — "Save to Keychain" Yes/No.
+2. The **system** Passwords-app sheet — "Update Password?" with *Not Now* / *Update* —
+   which appears **on top** of the app's alert.
+
+The user clicked *Update* on the system sheet, then *Yes* on the app's alert, and only
+then did the document get created. Saving and deleting a password is otherwise broken.
+
+**Where to look.**
+* `MADFoundation/Source/MADKeyChain.m` — the `SecItem*` wrapper. Note it was recently
+  fixed: `-deleteSavedPasswordForKey:error:` was swallowing failures and dereferencing a
+  `NULL` error out-parameter. Deletion failures now surface, which may be part of the
+  user-visible wonkiness.
+* `MADDesigner/Source/` — `MADOperationKeyChainPut`, `MADOperationKeyChainGet`,
+  `MADOperationKeyChainDeletePassword`, `MADOperationGetCredentials`, and the
+  `MADOperationConditionPolarQuestionAffirmative` condition that gates them.
+
+**Design question to settle with the user.** The duplicate prompt is almost certainly
+because the app writes its own keychain item *and* iOS offers its own credential storage
+for the same host. Decide which system owns the password:
+
+* use the platform's AutoFill/`kSecClassInternetPassword` path and delete the app's own
+  prompt, or
+* keep the app's private keychain item and suppress the system sheet.
+
+Do not guess which — this is a product decision.
+
+**Evidence:** `MADDesigner/run.log`, the `MADOperationKeyChainPut` / `KeyChainGet` /
+`KeyChainDeletePassword` / `GetCredentials` sequences around lines 380–570.
+
+**Also worth checking while here:** the log line
+
+```
+MADOperationCreateDocument Keychain keys generated.
+  MainKey (connStr):"(TDS)[localhost:localhost:1433]AdventureWorksLT2022"
+```
+
+names the host **twice** in one key. Confirm whether the connection-string formatter is
+emitting a duplicated host, because every keychain key is derived from that string — a
+wrong key means a saved password that can never be found again. Related: the accessor is
+spelled `-[MADDatabase credentalsWithConnection:]`.
+
+**Done when:** one prompt, save works, delete works, and the key round-trips identically
+between save and lookup. See task 4 for the tests that must cover it.
+
+---
+
+## 2. A SQL Server connection that reports success and failure at the same time
+
+**Status:** Open.
+
+The user could not create a report against SQL Server (`localhost:1433`,
+`AdventureWorksLT2022`, user `sa`) and **got no error**. The log shows why the two halves
+disagree — in the same run:
+
+```
+MADOperation <MADOperationDatabaseTestConnection> finish with 0 direct errors.
+MADOperation <MADOperationDatabaseTestConnection> finishing with no errors.
+...
+MADOperationConditionResult: created 'failed' (not satisfied) for condition name:
+    "MADOperationConditionTestConnectionSuccess"
+```
+
+So `-finish:` reports **no errors**, while the condition that consumes the operation
+reports **not satisfied**. The condition reads its dependency through the
+`MADOperationTestResults` protocol (`isSuccess` / `error`), not through the operation's
+error array — so the connection is never actually validated, and the operation's own
+completion says nothing about whether the connection worked.
+
+**Where to look.** `MADOperationDatabaseTestConnection` (in `MADDesigner/Source`), and
+`MADOperationConditionTestConnectionSuccess` in `MADFoundation/Source` — the latter was
+just changed to assert in the abstract base, so re-read it.
+
+**Open question:** whether the connection is attempted at all, or attempted and its
+result discarded. `MADTdsClient` is the layer that would do it.
+
+**Evidence:** `MADDesigner/run.log` lines 992–999 (operation reports success) against the
+`MADOperationConditionTestConnectionSuccess` failure that follows it.
+
+---
+
+## 3. Two fixes that need a human to confirm in the running app
+
+**Status:** Open.
+
+Both are already committed and unit-tested; only a live run can show they are right.
+
+* [ ] **Keychain** — open and create a document, and check that no spurious error alert
+      appears. (Overlaps task 1.)
+* [ ] **File size** — the document info screen should now read `1.5 MB`, not `1 MB`. The
+      `MTMath` conversion used integer division and truncated the fraction
+      (`BUGS.md`, Already fixed → MADCocoaExtensions batch).
+
+---
+
+## 4. Unit and UI test coverage for the keychain flow
+
+**Status:** Open — depends on the design decision in task 1.
+
+The keychain is the one part of the flow with **no unit test at all**: the existing
+`MADKeyChain` coverage stops at the wrapper, and
+`BUGS.md` recorded the delete bug as *"inspection; not covered by a test — keychain
+calls"*. That is not good enough for the path the whole product depends on.
+
+Needed:
+* Unit coverage for the `MADKeyChain` wrapper: add / read / update / delete, the
+  not-found path, and the `NULL` error out-parameter. A test keychain service (a unique
+  service string per run, deleted in teardown) keeps these off the developer's real
+  credentials.
+* Unit coverage for the credential operations — `MADOperationKeyChainPut` / `Get` /
+  `DeletePassword`, `MADOperationGetCredentials` — and for
+  `MADOperationConditionPolarQuestionAffirmative`.
+* **UI test** for the prompt sequence itself, so "two alerts appear" is caught rather
+  than discovered by hand. The app already has a `MADDesignerUITests` target.
+* A round-trip test that saves a password and reads it back **through the same
+  connection-string key** — this is what would have caught the
+  `[localhost:localhost:1433]` oddity in task 1.
+
+---
+
+## 5. Caller analysis for the remaining BUGS.md findings
+
+**Status:** In progress — 52 findings left.
+
+The MADFoundation and MADCocoaExtensions passes are done (17 fixed, 4 documented and
+left deliberately). The rest need the same treatment: **find every call site before
+changing anything**, because some "confirmed" behaviour is load-bearing — see the
+`CGRectAdjustForScale` case, where the two callers split the `zoomScale` domain between
+them and a naive fix breaks both.
+
+| Area | Open findings |
+|---|---|
+| `MADTdsClient` | 12 |
+| MAD Designer (app) | 12 |
+| `MADMySQL` | 9 |
+| `MADFileManager` | 7 |
+| `MAD` | 5 |
+| `MADExplorer` | 4 |
+| `MADAPI` | 3 |
+
+`MADSqlite3` has none open. Each finished area should end with the same three-part
+result the first pass produced: defects fixed, load-bearing behaviour documented instead
+of changed, and `BUGS.md` moved to *Already fixed* with the commit hash.

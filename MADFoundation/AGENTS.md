@@ -48,4 +48,5 @@ When working with any other framework in this project, it is highly likely that 
 *   **Tests**: `MADFoundation/MADFoundationTests`. Run with
     `xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
 *   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADFoundation` section.
+*   **Task queue**: [`TASKS.md`](../TASKS.md) -- maintain it, but do not start work from it.
 *   **Architecture**: [`MADDataTable_Architecture_Report.md`](../MADDataTable_Architecture_Report.md).

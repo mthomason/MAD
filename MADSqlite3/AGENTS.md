@@ -41,4 +41,5 @@ When performing multiple database operations that need to be treated as a single
 *   **Tests**: `MADSqlite3/MADSqlite3Tests`. Run with
     `xcodebuild test -workspace Reports.xcworkspace -scheme MADSqlite3 -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
 *   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADSqlite3` section.
+*   **Task queue**: [`TASKS.md`](../TASKS.md) -- maintain it, but do not start work from it.
 *   **Architecture**: [`MADDataTable_Architecture_Report.md`](../MADDataTable_Architecture_Report.md).

@@ -28,6 +28,7 @@ This framework serves as a good example of how to add support for a new database
 *   **Tests**: `MADTdsClient/MADTdsClientTests`. Run with
     `xcodebuild test -workspace Reports.xcworkspace -scheme MADTdsClient -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
 *   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADTdsClient` section.
+*   **Task queue**: [`TASKS.md`](../TASKS.md) -- maintain it, but do not start work from it.
 *   **Architecture**: [`MADDataTable_Architecture_Report.md`](../MADDataTable_Architecture_Report.md).
 *   **Live tests**: `MADTdsClientTests/MADTdsClientLiveTests.m` talks to a real SQL Server
     and skips when none is reachable. The credentials it expects are in
