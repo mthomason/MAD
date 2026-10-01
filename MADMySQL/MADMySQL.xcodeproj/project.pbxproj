@@ -11,6 +11,9 @@
 		4C00A3771F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3741F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m */; };
 		4C00A3781F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */; };
 		4C2915A224AC634900EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915A124AC634900EC794B /* MADFoundation.framework */; };
+		4CA100012000000000000001 /* MADMySQLLiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA100022000000000000002 /* MADMySQLLiveTests.m */; };
+		4CA100032000000000000003 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915A124AC634900EC794B /* MADFoundation.framework */; };
+		4CA100042000000000000004 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5D022724B8692D006D1A90 /* MADAPI.framework */; };
 		4C4EC1742DC93A40001DBEBE /* psi_mdl.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4EC0892DC93A40001DBEBE /* psi_mdl.h */; };
 		4C4EC1752DC93A40001DBEBE /* service_versions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4EC1492DC93A40001DBEBE /* service_versions.h */; };
 		4C4EC1762DC93A40001DBEBE /* psi_transaction.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4EC0412DC93A40001DBEBE /* psi_transaction.h */; };
@@ -1117,6 +1120,7 @@
 		4C7014971BACDC6800301713 /* MADMySQL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMySQL.h; sourceTree = "<group>"; };
 		4C70149E1BACDC6800301713 /* MADMySQLTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADMySQLTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7014A31BACDC6800301713 /* MADMySQLTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLTests.m; sourceTree = "<group>"; };
+		4CA100022000000000000002 /* MADMySQLLiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLLiveTests.m; sourceTree = "<group>"; };
 		4C7014A51BACDC6800301713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9372F71BAD244800D6BD62 /* MADDataTypeMySQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataTypeMySQL.h; sourceTree = "<group>"; };
 		4C9372F81BAD244800D6BD62 /* MADDataTypeMySQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDataTypeMySQL.m; sourceTree = "<group>"; };
@@ -1321,6 +1325,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C70149F1BACDC6800301713 /* MADMySQL.framework in Frameworks */,
+				4CA100032000000000000003 /* MADFoundation.framework in Frameworks */,
+				4CA100042000000000000004 /* MADAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2089,6 +2095,7 @@
 			isa = PBXGroup;
 			children = (
 				4C7014A31BACDC6800301713 /* MADMySQLTests.m */,
+				4CA100022000000000000002 /* MADMySQLLiveTests.m */,
 				4C7014A51BACDC6800301713 /* Info.plist */,
 			);
 			path = MADMySQLTests;
@@ -3065,6 +3072,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C7014A41BACDC6800301713 /* MADMySQLTests.m in Sources */,
+				4CA100012000000000000001 /* MADMySQLLiveTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3363,6 +3371,10 @@
 		4C7014AC1BACDC6800301713 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Source",
+					"$(SRCROOT)/../Compressor/library/libmysqlclient/include",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -3383,6 +3395,10 @@
 		4C7014AD1BACDC6800301713 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Source",
+					"$(SRCROOT)/../Compressor/library/libmysqlclient/include",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;

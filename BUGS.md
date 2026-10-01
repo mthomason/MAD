@@ -395,6 +395,105 @@ No defects found. The `MADDataTypeUnknown → String`/`TEXT` coercions in
 
 ---
 
+## MADMySQL
+
+Covered by an offline suite (`MADMySQLTests.m`) plus a live suite
+(`MADMySQLLiveTests.m`) that runs against the development instance in
+`DEVELOPER.md`. The live suite is the only way to reach `MysqlConnection`,
+`MysqlFetch` and `MysqlFetch+DataTable`, which are thin wrappers over
+libmysqlclient; it skips rather than fails when no server is reachable.
+
+### `MysqlFetch+DataTable`: no non-SELECT statement could ever execute
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`
+- **Behavior:** `mysql_stmt_bind_result` was called unconditionally. For any
+  statement with `field_count == 0` — every `INSERT`, `UPDATE`, `DELETE`,
+  `CREATE`, `DROP` — it fails client-side with code 3534, which aborted the call
+  before `mysql_stmt_execute` was reached. All DDL and DML through `MysqlFetch`
+  silently did nothing.
+- **Why it matters:** `MADDatabaseMySQL -executeSQL:...` and the
+  `MysqlInsert`/`MysqlUpdate`/`MysqlDelete`/`MysqlTruncate` builders all route
+  through this path, so the whole write side of the MySQL driver was dead.
+
+### `MysqlFetch+DataTable`: row loop spun forever on a fetch error
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`
+- **Behavior:** The row loop terminated only on `MYSQL_NO_DATA`. `mysql_stmt_fetch`
+  returns `1` (`stmt_read_row_no_result_set` → `set_stmt_error`) rather than
+  `MYSQL_NO_DATA` for a statement with no result set, so the loop never exited.
+  Found by stack-sampling a test run pinned at 98% CPU.
+- **Why it matters:** One bad statement hung the app thread with no error and no
+  way out. The loop now ends on any result that is neither a row nor a truncation.
+
+### `MysqlFetch+DataTable`: `MYSQL_TYPE_INT24` (MEDIUMINT) read 4 bytes as 8
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`, `-fetchResultsFromConnection:`
+- **Behavior:** The `MYSQL_TYPE_INT24` case had no `break` and fell through into
+  the `MYSQL_TYPE_DECIMAL`/`MYSQL_TYPE_DOUBLE` case, which re-read the 4-byte
+  `int` buffer as an 8-byte `double`. That is a heap over-read, and it overwrote
+  the correct value with a garbage one.
+- **Why it matters:** MEDIUMINT columns returned nonsense. Now covered live by a
+  round-trip through a probe table.
+
+### `MysqlFetch+DataTable`: bind and execute failures were never reported
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`, `-fetchWithCommand:...`
+- **Behavior:** Both failure branches built an `NSError` but never assigned it to
+  the caller's `*error` out-parameter, so a failed bind or execute was
+  indistinguishable from success. The nil-connection branch had the same problem.
+- **Why it matters:** This is what made the DDL bug above invisible for so long:
+  the statement did not run, and nothing said so.
+
+### `MysqlFetch+DataTable`: `MYSQL_TYPE_NULL` left its out-parameters uninitialized
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`, `-bindDataForStatement:andField:`
+- **Behavior:** The `MYSQL_TYPE_NULL` case set only `buffer_type` and `buffer`,
+  then fell through into `default:` and fired `NSAssert(NO, ...)`. The `length`,
+  `error` and `is_null` pointers were left as uninitialized stack garbage, and the
+  row loop dereferences `*bindings[x].is_null`.
+- **Why it matters:** `SELECT NULL` — a literal `NULL` in any ad hoc query —
+  asserted in debug builds and dereferenced a wild pointer in release.
+
+### `MysqlFetch+DataTable`: bindings and statement leaked on the error paths
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`, `-fetchWithCommand:...`
+- **Behavior:** The `free()` calls and `mysql_stmt_close` sat inside the
+  success-only branch, so a failed bind or execute leaked the `calloc`'d binding
+  buffers and the `MYSQL_STMT` on every call.
+- **Why it matters:** Leaks per failed statement. Became reachable once failing
+  DML was able to run at all.
+
+### `MysqlFetch`: `mySQLTypeForType` returned wrong names for three types
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MysqlFetch.m`
+- **Behavior:** `MYSQL_TYPE_MEDIUM_BLOB` and `MYSQL_TYPE_LONG_BLOB` both returned
+  `"MYSQL_TYPE_DECIMAL"` (copy-paste), and `MYSQL_TYPE_LONGLONG` had no case at
+  all and fell through to `"Unknown"`.
+- **Why it matters:** Diagnostics only, but this is the string in the
+  `NSAssert` message for unmapped types, so it actively misleads debugging.
+
+### `MADDataTypeMySQL` mapping is lossy for three types
+- **Status:** Investigate
+- **Where:** `MADMySQL/Source/MADDataTypeMySQL.m`
+- **Behavior:** `MYSQL_TYPE_TIME` maps to `MADDataTypeDateTime` (not the dedicated
+  `MADDataTypeTime`); `MYSQL_TYPE_NULL` maps to `MADDataTypeNumber` (not
+  `MADDataTypeNull`); `MYSQL_TYPE_INT24` maps to `MADDataTypeInteger` (not
+  `MADDataTypeInt24`). All three dedicated enum cases exist but are never
+  produced by this mapping.
+- **Why it matters:** A report designed against a TIME or MEDIUMINT column gets a
+  column type that does not describe it. Pinned by tests rather than changed,
+  since the enum is consumed across the app.
+
+### `MysqlFetch+DataTable` comment claims SMALLINT/MEDIUMINT/BIT are unsupported
+- **Status:** Quirk (stale comment)
+- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`
+- **Behavior:** The comment block above the binding loop says these types are
+  "not handled currently - exception will occur if used", but all three have
+  `bindDataForStatement:` cases and fetch cases and work correctly.
+- **Why it matters:** The comment discourages using types that are fine.
+
+---
+
 ## Already fixed (for reference)
 
 ### `MADDataTableFast -objectAtRow:column:` ignored its `column` argument
