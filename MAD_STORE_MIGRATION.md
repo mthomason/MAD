@@ -14,11 +14,18 @@ style faulting?"* The answer, with evidence, is in §3.
 
 The core issue is **portability**. The store inside a `.mad` is a Core Data SQLite file, and
 Core Data does not exist off Apple platforms. Because `MADocument` is a `UIManagedDocument`,
-moving off Core Data also removes the iCloud document machinery, which simplifies the app.
+moving off Core Data also removes the iCloud document machinery — and **stripping iCloud is an
+explicit part of this plan, not a side effect.** `MADDocument` drops `UIManagedDocument` for
+`UIDocument`, the iCloud/ubiquity container and file-coordination paths go away, and document
+sync is no longer offered.
 
 The user's mental model, which the code confirms: *"I just think of it as a simple database."*
 The migration keeps the auto-generated `Rptq` headers as a fixed, hand-maintained contract and
 writes the insert/update/read code ourselves.
+
+**The success criterion:** everything keeps working **except iCloud**. Local document
+open/save, the query and designer tools, the viewer, refresh/export, and the `.maddb` /
+`.mdcache` / `.madac` caches all behave as today; only the iCloud sync path is removed.
 
 ---
 
@@ -142,8 +149,10 @@ fixtures that pin it.
   store, keeping the headers, entity-family by entity-family (schema, then query, then
   sections/elements), and replace `NSFetchedResultsController` with reload-on-change. The
   designer/query/viewer tabs are the acceptance tests, and undo is kept working throughout.
-- **Phase D — remove Core Data.** Delete `UIManagedDocument` / the Core Data stack, the value
-  transformers, the `.xcdatamodel`, and the iCloud machinery — where the simplification lands.
+- **Phase D — remove Core Data and iCloud.** Delete `UIManagedDocument` / the Core Data stack,
+  the value transformers, the `.xcdatamodel`, and the iCloud machinery (`UIManagedDocument` →
+  `UIDocument`, ubiquity container, file coordination). This is where the de-iCloud-ing and the
+  simplification land, and it is the only behaviour the plan deliberately changes.
 
 **Not before Phase C:** moving `MADOperationRefresh` into `MAD` (`ROADMAP.md` §3.4) and the
 driver registry (`§5.1`); both get cheaper once the store is ours.
