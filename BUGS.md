@@ -337,8 +337,9 @@ The `MADDataTypeUnknown → String`/`TEXT` coercions in `MADDatabaseSqlite3` are
 intentional fallbacks and are covered by tests. One defect in this framework was
 found by inspection rather than by a test and is recorded under "Already fixed
 (for reference)": eight call sites passed a variable to `sqlite3_mprintf` as the
-format string. The two below were found while writing the write-port test that
-proves the driver is decoupled from `MADDataTable`.
+format string. The first two below were found while writing the write-port test
+that proves the driver is decoupled from `MADDataTable`; the third was found by
+the ingest benchmark, which is also what measures it.
 
 ### `MADDataTableFast` left its row counter stale after an in-memory drop or delete
 - **Status:** Fixed
@@ -381,6 +382,43 @@ proves the driver is decoupled from `MADDataTable`.
   raised on the first call from any future caller.
 - **Now:** `-initWithTableName:`.
 - **Test:** `testFastTableDeleteAllZeroesRowCount`.
+
+### The bulk-insert row loop held the whole result set in autoreleased memory
+- **Status:** Fixed
+- **Commit:** `94a8d2068`, `3fbfb800b`
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:618`,
+  `MADSqlite3/Source/MADQueryCacheAddRow.m:51`
+- **Behavior:** `-addRowWithDataForFieldKeys:` is the write port's per-row entry,
+  and the insert path below it autoreleases on every call — the binding
+  statement builds autoreleased objects per column. There was no pool at this
+  granularity: the method carried the author's
+  `// FIXME: Maybe wrap in autorelease block.` with the pool written out and
+  commented off at both ends, and no caller established one either, so the
+  objects survived until the caller's own loop ended. A second, independent
+  waste sat in the same path: `MADQueryCacheAddRow -update` runs once per row
+  and rebuilt the entire `INSERT INTO … VALUES (?, ?, …)` statement each time —
+  a string nothing reads after the first row's prepare — and replaced its
+  bindings array rather than emptying the one it had.
+- **Why it mattered:** A report is meant to hold hundreds of thousands of rows,
+  and this is the path that puts them in. The spike is transient rather than a
+  leak, but transient is enough: it is resident memory at the moment the process
+  is most loaded, which is the shape of a jetsam kill. Reached from
+  `MADDatabaseSqlite3.m:535`, the sqlite driver's own row loop, so every report
+  refresh paid it.
+- **Now:** `-addRowWithDataForFieldKeys:` opens an `@autoreleasepool` around the
+  row, and `-update` keeps its bindings array and builds `_sql` once, guarded on
+  `_sql == nil` the same way `_sqlColumnPart` beside it already was. The pool
+  belongs in the table rather than the caller because that is the only place
+  that knows a row has ended, and because the caller is a generic loop over a
+  `<MADDataTableWriting>` with no reason to know it needs one.
+- **Test:** `testIngestSpikeStaysBounded` in
+  `MADSqlite3/MADSqlite3Tests/MADDataTableFastBenchmarkTests.m`, which skips
+  unless built with `MAD_BENCH_ROWS`. At 200000 rows the spike fell from 49.1 MB
+  to 2.5 MB (256 → 13 bytes per row) and ingest from 1.156 s to 0.975 s; the
+  pool costs about 2%, within the run-to-run noise, so the path ends faster than
+  it started. `testRetainedFootprintDoesNotScaleWithRowCount` pins the separate
+  question of whether anything is held after the pool drains, and reports 0.0 MB
+  growth for a second table of 200000 more rows.
 
 ---
 
