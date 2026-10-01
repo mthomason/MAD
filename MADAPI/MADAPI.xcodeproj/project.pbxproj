@@ -46,6 +46,16 @@
 		4CF6AADA1F5526DE0061B0C6 /* MADDatabaseDataBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAD81F5526DE0061B0C6 /* MADDatabaseDataBinding.m */; };
 		4CF6AADF1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AADE1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AAE11F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAE01F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CDA7A0100000000000000D1 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7E24AE24A63872005098F2 /* MADFoundation.framework */; };
+		4CDA7A0200000000000000A1 /* MADAPIEnumsAndConstantsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0200000000000000B1 /* MADAPIEnumsAndConstantsTests.m */; };
+		4CDA7A0300000000000000A1 /* MADDatabaseFieldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0300000000000000B1 /* MADDatabaseFieldTests.m */; };
+		4CDA7A0400000000000000A1 /* MADDatabaseTableTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0400000000000000B1 /* MADDatabaseTableTests.m */; };
+		4CDA7A0500000000000000A1 /* MADDatabaseDataBindingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0500000000000000B1 /* MADDatabaseDataBindingTests.m */; };
+		4CDA7A0600000000000000A1 /* MADErrorContainerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0600000000000000B1 /* MADErrorContainerTests.m */; };
+		4CDA7A0700000000000000A1 /* MADDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0700000000000000B1 /* MADDatabaseTests.m */; };
+		4CDA7A0800000000000000A1 /* MADDatabaseConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0800000000000000B1 /* MADDatabaseConnectionTests.m */; };
+		4CDA7A0900000000000000A1 /* MADQueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0900000000000000B1 /* MADQueryTests.m */; };
+		4CDA7A0A00000000000000A1 /* MADNotificationDidReadRowsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0A00000000000000B1 /* MADNotificationDidReadRowsTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +112,15 @@
 		4CF6AAD81F5526DE0061B0C6 /* MADDatabaseDataBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseDataBinding.m; sourceTree = "<group>"; };
 		4CF6AADE1F552ACD0061B0C6 /* MADDatabaseCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseCacheProtocol.h; sourceTree = "<group>"; };
 		4CF6AAE01F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseConnectionsPropertiesURLProtocol.h; sourceTree = "<group>"; };
+		4CDA7A0200000000000000B1 /* MADAPIEnumsAndConstantsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADAPIEnumsAndConstantsTests.m; sourceTree = "<group>"; };
+		4CDA7A0300000000000000B1 /* MADDatabaseFieldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseFieldTests.m; sourceTree = "<group>"; };
+		4CDA7A0400000000000000B1 /* MADDatabaseTableTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseTableTests.m; sourceTree = "<group>"; };
+		4CDA7A0500000000000000B1 /* MADDatabaseDataBindingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseDataBindingTests.m; sourceTree = "<group>"; };
+		4CDA7A0600000000000000B1 /* MADErrorContainerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADErrorContainerTests.m; sourceTree = "<group>"; };
+		4CDA7A0700000000000000B1 /* MADDatabaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseTests.m; sourceTree = "<group>"; };
+		4CDA7A0800000000000000B1 /* MADDatabaseConnectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseConnectionTests.m; sourceTree = "<group>"; };
+		4CDA7A0900000000000000B1 /* MADQueryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryTests.m; sourceTree = "<group>"; };
+		4CDA7A0A00000000000000B1 /* MADNotificationDidReadRowsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADNotificationDidReadRowsTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CF6AAA91F5518BB0061B0C6 /* MADAPI.framework in Frameworks */,
+				4CDA7A0100000000000000D1 /* MADFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,6 +220,15 @@
 			isa = PBXGroup;
 			children = (
 				4CF6AAAD1F5518BB0061B0C6 /* MADAPITests.m */,
+				4CDA7A0200000000000000B1 /* MADAPIEnumsAndConstantsTests.m */,
+				4CDA7A0300000000000000B1 /* MADDatabaseFieldTests.m */,
+				4CDA7A0400000000000000B1 /* MADDatabaseTableTests.m */,
+				4CDA7A0500000000000000B1 /* MADDatabaseDataBindingTests.m */,
+				4CDA7A0600000000000000B1 /* MADErrorContainerTests.m */,
+				4CDA7A0700000000000000B1 /* MADDatabaseTests.m */,
+				4CDA7A0800000000000000B1 /* MADDatabaseConnectionTests.m */,
+				4CDA7A0900000000000000B1 /* MADQueryTests.m */,
+				4CDA7A0A00000000000000B1 /* MADNotificationDidReadRowsTests.m */,
 				4CF6AAAF1F5518BB0061B0C6 /* Info.plist */,
 			);
 			path = MADAPITests;
@@ -366,6 +395,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CF6AAAE1F5518BB0061B0C6 /* MADAPITests.m in Sources */,
+				4CDA7A0200000000000000A1 /* MADAPIEnumsAndConstantsTests.m in Sources */,
+				4CDA7A0300000000000000A1 /* MADDatabaseFieldTests.m in Sources */,
+				4CDA7A0400000000000000A1 /* MADDatabaseTableTests.m in Sources */,
+				4CDA7A0500000000000000A1 /* MADDatabaseDataBindingTests.m in Sources */,
+				4CDA7A0600000000000000A1 /* MADErrorContainerTests.m in Sources */,
+				4CDA7A0700000000000000A1 /* MADDatabaseTests.m in Sources */,
+				4CDA7A0800000000000000A1 /* MADDatabaseConnectionTests.m in Sources */,
+				4CDA7A0900000000000000A1 /* MADQueryTests.m in Sources */,
+				4CDA7A0A00000000000000A1 /* MADNotificationDidReadRowsTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
