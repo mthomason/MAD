@@ -112,10 +112,15 @@ scheme, so the command above does not reach them.
 ## Tracking Files Are Maintained, Not Acted On
 
 `BUGS.md` and `TASKS.md` are **records, not instructions**. An agent may -- and should --
-keep them accurate: add an entry when new evidence appears, move a fixed defect to
-*Already fixed* with its commit hash, and re-status a task. What an agent must **not** do
-is start work because a file lists it. Entries there are picked up when the user asks for
-that task by name or number, never on the agent's own initiative.
+keep them accurate: add an entry when new evidence appears, record a fix, and re-status a
+task. What an agent must **not** do is start work because a file lists it. Entries there
+are picked up when the user asks for that task by name or number, never on the agent's own
+initiative.
+
+`BUGS.md` uses two conventions for a fixed defect, and both are in use today: most
+sections mark it **Status: Fixed** in place with a `Now:` line saying what changed,
+while the oldest entries sit under *Already fixed (for reference)* with their commit
+hash. Match whatever the section you are editing already does rather than converting it.
 
 `TODO.md` is the user's own wishlist and is not for agents to edit.
 

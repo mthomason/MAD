@@ -17,60 +17,97 @@ Status key:
 ## MADAPI
 
 ### `MADDatabaseDataBinding`: `nil` vs `[NSNull null]` handled inconsistently
-- **Status:** Investigate (leaning Confirmed)
-- **Where:** `MADAPI/MADAPITests/MADDatabaseDataBindingTests.m`
+- **Status:** Fixed
+- **Where:** `MADAPI/Source/MADDatabaseDataBinding.m:153`
 - **Behavior:** Setting a `nil` value stores `[NSNull null]`, but setting an
   explicit `[NSNull null]` value leaves the stored value as `nil`. The two
   "no value" inputs should be treated identically.
-- **Why it matters:** This is in the SQL result-binding path. During the
-  Core Data → manual-SQL migration, database `NULL`s will flow through here, so
-  a wrong `NULL`/`NSNull` round-trip will surface as bad report data.
+- **Why it matters:** The asymmetry is real but was **harmless**, and the
+  earlier "bad report data" claim was wrong. The only production reader of
+  `.value` is `MADDatabaseSqlite3.m -bindStatement:withBindings:`, and both
+  inputs bind SQL NULL there: an explicit `[NSNull null]` is caught by the
+  `isEqual:` test at the top, and a `nil` falls through to `case MADDataTypeNull:`
+  (`MADDatabaseSqlite3.m:373`) → `sqlite3_bind_null`. No caller observes the
+  difference. Pinned by `MADDatabaseDataBindingTests.m:58-60`.
+- **Now:** the nil test and the `[NSNull null]` test share one branch, so both
+  store `[NSNull null]` with `datatype == MADDataTypeNull`.
+- **Test:** `testInitWithNullValueStoresNSNull` (renamed from
+  `testInitWithNullValueLeavesValueNil`).
 
 ### `NSStringFromMADQueryType`: "TypeCache" missing for `MADQueryTypeCacheIndexDropParameters`
-- **Status:** Confirmed (cosmetic)
-- **Where:** `MADAPI/MADAPITests/MADAPIEnumsAndConstantsTests.m`
+- **Status:** Fixed
+- **Where:** `MADAPI/Source/MADQueryType.h:64`
 - **Behavior:** `NSStringFromMADQueryType(MADQueryTypeCacheIndexDropParameters)`
   returns `@"MADQueryIndexDropParameters"` — the `TypeCache` segment is dropped.
 - **Why it matters:** Any UI that surfaces the query-type name (logs, debug
   views, future AI-generated-query display) will show the wrong string.
+- **Now:** it returns `@"MADQueryTypeCacheIndexDropParameters"`, matching the
+  sibling `...IndexCreateParameters` case directly above it. Pinned by
+  `testNSStringFromMADQueryTypeCacheIndexDropParameters` (renamed from
+  `testNSStringFromMADQueryTypeCacheIndexDropParametersDefect`).
 
 ### `NSStringFromMADQueryType`: `MADQueryTypeSampleDataTableRange` unmapped
-- **Status:** Confirmed
-- **Where:** `MADAPI/MADAPITests/MADAPIEnumsAndConstantsTests.m`
+- **Status:** Fixed
+- **Where:** `MADAPI/Source/MADQueryType.h:72`
 - **Behavior:** `MADQueryTypeSampleDataTableRange` (raw value 28) falls through
   the switch and returns `@"MADQueryTypeUnknown"`.
 - **Why it matters:** A whole query type is unnamed; anything keyed off the name
   (persistence, UI) will mislabel it.
+- **Now:** it has its own case and returns `@"MADQueryTypeSampleDataTableRange"`.
+  Pinned by `testNSStringFromMADQueryTypeSampleDataTableRange` (renamed from
+  `testNSStringFromMADQueryTypeSampleDataTableRangeFallsThrough`).
 
 ---
 
 ## MAD (framework)
 
 ### `MADReportTextRepresentation` `-characterCount` / `-elementCount` crash on non-empty input
-- **Status:** Confirmed (crashes)
-- **Where:** `MAD/MADTests/MADFormatterAndRepresentationTests.m`
+- **Status:** Fixed
+- **Where:** `MAD/Source/MADReportTextRepresentation.m:64` and `:76`
 - **Behavior:** Both methods fast-enumerate the page map directly, which yields
   the `NSNumber *` **keys** rather than the page values. A non-empty
   representation raises an "unrecognized selector" exception.
 - **Why it matters:** These are the text-export / character-count paths, which
   will be exercised by the text/JSON export work in TODO.md.
+- **Now:** both iterate `self.pages.allValues`, so each element is the
+  `MADReportPageRepresentation` the loop variable claims. The class also gained
+  the `#import <Foundation/NSArray.h>` it was reaching through a transitive
+  header for `-allValues`. `testTextRepresentationCountsSumPageValues` (renamed
+  from `testTextRepresentationCountsEnumerateKeysDefect`) asserts the counts
+  instead of asserting the throw.
 
 ### `RptqDirectionalAsymmetry +keyRight` returns `@"left"`
-- **Status:** Confirmed (copy-paste bug)
-- **Where:** `MAD/MADTests/MADRptqValueTypeTests.m`
+- **Status:** Fixed
+- **Where:** `MAD/Source/rptq/RptqDirectionalAsymmetry+Extras.m:18`
 - **Behavior:** `keyRight` delegates to `keyLeft`, returning `@"left"` instead of
   `@"right"`.
-- **Why it matters:** Any asymmetric padding/border on the right edge of a report
-  element will read/write the wrong key.
+- **Why it matters:** Blast radius is smaller than the earlier "read/write the
+  wrong key on the right edge" claim. All live right-edge access goes through the
+  real Core Data properties (`MADDesignerLayout.m:368,456,544`;
+  `RptqDocumentElement+Extras.m:751,769,792`), not these key builders. The six
+  collapsed builders are consumed only by
+  `+fetchRequestElementsInSectionDetailed:`, which has **no callers** — it would
+  put duplicate key paths into `propertiesToFetch`. So the defect is real but
+  currently unreachable. Pinned by `MADRptqValueTypeTests.m:99-100`.
+- **Now:** `keyRight` returns `[RptqDirectionalProperty keyRight]`, matching the
+  three sibling accessors that each return their own key.
+  `testDirectionalAsymmetryKeyConstants` now asserts `@"right"` where it used to
+  pin `@"left"`.
 
 ### `MADDatabaseTypeReuseIds` (10) vs `MADDatabaseTypeNames` (9) mismatch
-- **Status:** Confirmed
-- **Where:** `MAD/MADTests/MADRptqDatabaseTests.m`
+- **Status:** Fixed
+- **Where:** `MAD/Source/rptq/RptqDatabase+Extras.h:17`
 - **Behavior:** The reuse-id table has one more entry than the localized-name
   table, so "Microsoft SQL Server" is missing a name and the two tables are
   misaligned past index 4.
 - **Why it matters:** The new-document database-type picker likely iterates these
   arrays in lockstep; an off-by-one here can pick the wrong driver.
+- **Now:** `MADDatabaseTypeNames` has the missing `@"Microsoft SQL Server"` at
+  index 5, so both tables have ten entries and line up. Only "None" is wrapped in
+  `NSLocalizedString`; leaving the rest as literals is a translation task, not
+  part of this defect. `testDatabaseTypeReuseIdsAndNamesAlign` (renamed from
+  `testDatabaseTypeReuseIdsAndNamesMismatch`) asserts the two counts match and
+  pins index 5.
 
 ### `MADDataTableFast -allObjects` was unimplemented (FIXME)
 - **Status:** Fixed
@@ -146,7 +183,7 @@ Status key:
 ## MADFileManager
 
 ### `MADMetaData -fileSystemFileCreationDate` / `-fileSystemContentChangeDate` return `NSData` not `NSDate`
-- **Status:** Confirmed (type lie)
+- **Status:** Fixed (type lie)
 - **Where:** `MADFileManager/Source/MADMetaData.m`, `MADMetaDataLocal.m`, `MADMetaDataCloud.m`
 - **Behavior:** The header declares both as `@property (readonly) NSDate *`, but the
   accessor implementations are typed `- (NSData *)...`. The object that actually
@@ -155,19 +192,25 @@ Status key:
 - **Why it matters:** The compiler and runtime disagree about these two types; the
   property/accessor mismatch is exactly the kind of thing that will bite once
   file metadata is routed through the new manual-SQL cache.
+- **Now:** both subclass accessors and the base class's throwing stubs are typed
+  `- (NSDate *)...`, so the implementation agrees with the `NSDate *` property
+  in the header. The returned object is unchanged.
 
 ### `MADMetaDataLocal` downloading-status reports "current" but the derived flag says NO
-- **Status:** Confirmed (inconsistency)
-- **Where:** `MADFileManager/MADFileManagerTests/MADMetaDataTests.m`
+- **Status:** Fixed
+- **Where:** `MADFileManager/Source/MADMetaDataLocal.m:125`
 - **Behavior:** `-ubiquitousItemDownloadingStatus` returns
   `NSMetadataUbiquitousItemDownloadingStatusCurrent`, yet
   `-isUbiquitousItemDownloadingStatusCurrent` hardcodes `NO` instead of deriving
   from that string. A local file simultaneously claims "current" and "not current".
 - **Why it matters:** Any UI keying off the status boolean (e.g. a "downloading"
   spinner) will disagree with the status string.
+- **Now:** the boolean derives from `-ubiquitousItemDownloadingStatus`, so the two
+  agree. `testLocalDownloadingStatusIsConsistent` (renamed from
+  `testLocalDownloadingStatusInconsistency`) asserts it is YES.
 
 ### `MADMetaData -initWithURL:` / `-initWithMetadataItem:` are self-replacing factories
-- **Status:** Investigate
+- **Status:** Quirk (load-bearing — documented, not changed)
 - **Where:** `MADFileManager/Source/MADMetaData.m`
 - **Behavior:** `-initWithURL:` never touches `self`; it allocates a fresh
   `MADMetaDataLocal` and returns that. Same for `-initWithMetadataItem:` (returns
@@ -176,26 +219,43 @@ Status key:
   original `self` is leaked and the `instancetype` signature lies about the
   concrete class. Callers doing `[[MADMetaData alloc] initWithURL:]` get a
   subclass back.
+- **Caller analysis (2026-10-01): load-bearing — do not stop the replacement.**
+  Every `MADMetaData` producer depends on the concrete subclass coming back:
+  `MADFilesController.m` (`:311,318,325,370,381,396,411,428,439,580`) assigns the
+  result to `MADMetaData *` and uses it immediately, and
+  `+newMetaDatumForMetadataItems:` requires `MADMetaDataCloud`. The base class
+  throws `exceptionNotImplemented` from every accessor, so "initialise and return
+  `self`" breaks all of them. The genuine faults are only the ARC leak and the
+  type-lie; fixing those means a proper `+allocWithZone:` class cluster that keeps
+  the return value identical. An inline comment now records this at the source.
 
 ### `MADFileInfo -isEqual:` has no matching `-hash` override
-- **Status:** Confirmed
-- **Where:** `MADFileManager/MADFileManagerTests/MADFileInfoTests.m`
+- **Status:** Fixed
+- **Where:** `MADFileManager/Source/MADFileInfo.m:72`
 - **Behavior:** `-isEqual:` compares `URL.absoluteURL`, but `-hash` is left to
   `NSObject`'s identity hash. Two `MADFileInfo` objects for the same file compare
   equal yet hash differently.
 - **Why it matters:** Using `MADFileInfo` as an `NSSet` member or `NSDictionary`
   key silently fails lookups/`containsObject:`.
+- **Now:** `-hash` returns `self.URL.absoluteURL.hash`, the same key `-isEqual:`
+  compares. `testEqualObjectsHaveEqualHashes` (renamed from
+  `testEqualObjectsHaveDifferentHashes`) pins it.
 
 ### `MADFileUtilities -removeContentsOfDirectory:` removes the directory itself
-- **Status:** Confirmed
-- **Where:** `MADFileManager/MADFileManagerTests/MADFileUtilitiesTests.m`
+- **Status:** Quirk (load-bearing — documented, not changed)
+- **Where:** `MADFileManager/Source/MADFileUtilities.m:656`
 - **Behavior:** The method removes each child and then removes the directory too,
   despite the name promising to remove only the contents.
-- **Why it matters:** Callers expecting an empty directory left behind will find
-  the directory gone.
+- **Caller analysis (2026-10-01): load-bearing — do not stop the directory
+  removal.** The only production caller is
+  `+removeCachedFileForDocumentUrl:groupIdentifier:` (`.m:645`), which tears down a
+  document's whole local cache directory; leaving an empty directory behind is
+  exactly what it does not want. The method's name is what is wrong, not its
+  behaviour. An inline comment now records this at the source, and the test's
+  header comment points at it.
 
 ### `MADFileUtilities` has several undeclared public-ish helpers
-- **Status:** Quirk
+- **Status:** Quirk (left as is)
 - **Where:** `MADFileManager/Source/MADFileUtilities.m` (vs `.h`)
 - **Behavior:** `+createDirectoryForUrlIfItDoesNotExist:`,
   `+contentsOfDirectory:withPathExtension:`, `+removeContentsOfDirectory:`,
@@ -203,14 +263,22 @@ Status key:
   public header. The tests surface them via a test-only category.
 - **Why it matters:** Hidden API is easy to break silently; these are likely
   intended to be either private or public but are currently neither clearly.
+- **Left as is (2026-10-01).** Publishing them would widen the framework's public
+  surface for no caller's benefit, and making them formally private is a
+  declaration move with no behaviour change. The test-only category is the
+  deliberate bridge, and the test file's header comment says so.
 
 ### `MADMetaDataLocal` reports 100% uploaded/downloaded for a local file
-- **Status:** Quirk
-- **Where:** `MADFileManager/Source/MADMetaDataLocal.m`
+- **Status:** Quirk (left as is — the impact claim was wrong)
+- **Where:** `MADFileManager/Source/MADMetaDataLocal.m:130`
 - **Behavior:** `-ubiquitousItemPercentUploaded` / `-ubiquitousItemPercentDownloaded`
   return `100.0` for a non-ubiquitous local file.
-- **Why it matters:** Harmless if callers check `-isUbiquitous` first, but a
-  bare progress read on a local file shows a full bar rather than "N/A".
+- **Why it matters:** The earlier "shows a full bar rather than N/A" claim is not
+  true. The only production reader is
+  `MADCollectionViewCellDocument.m:387-390`, which pairs each percentage with a
+  guard — `isUploading` / `isDownloading`, both `NO` for a local item — and
+  `+updateProgressView:active:percent:` hides the view and zeroes its progress
+  when `active` is `NO` (`.m:60-64`). The value is never displayed.
 
 ---
 
@@ -221,7 +289,8 @@ Status key:
 > is `MADStandard`, the file-size formatter below.
 
 ### `MADStandard -standardStringForFileSize:` uses decimal megabytes
-- **Status:** Confirmed (quirk)
+- **Status:** Confirmed (quirk) — **left as is** (decimal MB is the house
+  convention; the live tests pin `1.049 MB` for 2^20 bytes)
 - **Where:** `MADExplorer/MADExplorerTests/MADStandardTests.m`
 - **Behavior:** The scale is `1000000.0` (decimal MB) rather than `1048576.0`
   (binary MiB), so a `2^20`-byte file is reported as `1.049 MB` instead of
@@ -230,7 +299,7 @@ Status key:
   the binary megabytes that Finder / `NSFileManager` report.
 
 ### `MADStandard -standardStringForFileSize:` has dead code with a latent throw
-- **Status:** Investigate
+- **Status:** Fixed
 - **Where:** `MADExplorer/MADExplorer/MADStandard.mm`
 - **Behavior:** The guard `if (filesize_str.length() <= range_end) { filesize_str.append(zero, range_end); }`
   is never taken for a `double` (the formatted string is always `dec_pos + 7`
@@ -239,20 +308,26 @@ Status key:
   `subpos >= 4` and throw `std::out_of_range`.
 - **Why it matters:** Dead code that would crash if the input format ever changed;
   worth deleting or fixing the append argument count.
+- **Now:** the guard pads to `range_end` with the `(count, char)` overload —
+  `append(range_end - filesize_str.length(), '0')` — so it does what it reads as
+  and cannot throw. The unused `zero` constant is gone.
 
 ### `MADStandard -standardStringForFileSize:` has no byte/kB fallback
-- **Status:** Quirk
+- **Status:** Quirk — **left as is** (a file under ~500 bytes shows `0.000 MB`,
+  pinned by `testTinyFileReportsZero`)
 - **Where:** `MADExplorer/MADExplorerTests/MADStandardTests.m`
 - **Behavior:** Any file under ~500 bytes formats as `0.000 MB`.
 - **Why it matters:** Tiny example reports/documents show `0.000 MB` in the
   explorer rather than a byte or kilobyte figure.
 
 ### `MADStandard` hides `+standardStringForDouble:` / `+standardStringForUnsignedLong:`
-- **Status:** Quirk
+- **Status:** Fixed
 - **Where:** `MADExplorer/MADExplorer/MADStandard.mm` (vs `MADStandard.h`)
 - **Behavior:** Both class methods are implemented but not declared in the public
   header; the tests reach them via a test-only category.
 - **Why it matters:** Same hidden-API smell as the `MADFileUtilities` helpers.
+- **Now:** both are declared in `MADStandard.h`, and
+  `MADStandardTests.m`'s test-only category is gone.
 
 ---
 
@@ -345,30 +420,42 @@ libmysqlclient; it skips rather than fails when no server is reachable.
   `NSAssert` message for unmapped types, so it actively misleads debugging.
 
 ### `MADDataTypeMySQL` mapping is lossy for three types
-- **Status:** Investigate
+- **Status:** Partly fixed (INT24); TIME and NULL intentionally left
 - **Where:** `MADMySQL/Source/MADDataTypeMySQL.m`
 - **Behavior:** `MYSQL_TYPE_TIME` maps to `MADDataTypeDateTime` (not the dedicated
   `MADDataTypeTime`); `MYSQL_TYPE_NULL` maps to `MADDataTypeNumber` (not
-  `MADDataTypeNull`); `MYSQL_TYPE_INT24` maps to `MADDataTypeInteger` (not
+  `MADDataTypeNull`); `MYSQL_TYPE_INT24` mapped to `MADDataTypeInteger` (not
   `MADDataTypeInt24`). All three dedicated enum cases exist but are never
   produced by this mapping.
-- **Why it matters:** A report designed against a TIME or MEDIUMINT column gets a
-  column type that does not describe it. Pinned by tests rather than changed,
-  since the enum is consumed across the app.
+- **Caller analysis (2026-10-01), and the split decision:**
+  - **INT24 — fixed.** Every consumer groups `MADDataTypeInt24` with
+    `MADDataTypeInteger` (`MADDatabaseField.m -isDataTypeNumeric`, the sqlite3 bind
+    switch, `RptqDocumentElement+Extras.m:1074` value formatting), so using the
+    dedicated case is behaviour-neutral and more accurate. Tests updated:
+    `MADMySQLTests.m`, `MADMySQLLiveTests.m:594`.
+  - **TIME — left as-is.** Correcting it would change how existing MySQL TIME
+    columns are rendered in reports: `RptqDocumentElement+Extras.m:1008-1076` uses
+    `timeformatter` for `MADDataTypeTime` but `dateTimeformatter` for
+    `MADDataTypeDateTime`. That is a user-visible output change, deferred.
+  - **NULL — left as-is.** Correcting it would change an all-NULL column's
+    formatting and would fail the pinning test. Deferred.
 
 ### `MysqlFetch+DataTable` comment claims SMALLINT/MEDIUMINT/BIT are unsupported
-- **Status:** Quirk (stale comment)
-- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m:139`
 - **Behavior:** The comment block above the binding loop says these types are
   "not handled currently - exception will occur if used", but all three have
   `bindDataForStatement:` cases and fetch cases and work correctly.
 - **Why it matters:** The comment discourages using types that are fine.
+- **Now:** the three lines name the binding each type actually goes through
+  (`MYSQL_TYPE_SHORT`, `MYSQL_TYPE_INT24`, `MYSQL_TYPE_BIT`), matching the
+  comment's own style for the entries above them.
 
 ---
 
 ## MADTdsClient
 
-Covered by an offline suite (`MADTdsClientTests.m`, 43 tests) plus a live suite
+Covered by an offline suite (`MADTdsClientTests.m`, 46 tests) plus a live suite
 (`MADTdsClientLiveTests.m`, 26 tests) that runs against the local SQL Server 2022
 instance in `DEVELOPER.md` (`127.0.0.1`, `sa`, `AdventureWorksLT2022`). The live
 suite is the only way to reach `-connect:andPassword:error:`,
@@ -391,7 +478,7 @@ it skips rather than fails when no server is reachable.
   the one place it is called.
 
 ### `-runSQL:onDataTable:fieldKeys:process:` closes the connection it was given
-- **Status:** Confirmed
+- **Status:** Quirk (load-bearing — documented, not changed)
 - **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1481`
 - **Behavior:** `dbclose(dbconn)` runs on every exit path, including the success
   path, on a `DBPROCESS` the caller opened. The read paths
@@ -410,10 +497,19 @@ it skips rather than fails when no server is reachable.
     one out.
   - Locked down by `testEachStatementNeedsItsOwnConnection`, which pins the
     one-statement-per-connection pattern the defect forces.
+- **Caller analysis (2026-10-01): load-bearing — do not remove the `dbclose`.**
+  Every caller was written assuming `-runSQL:` consumes the process it is
+  handed: `MADOperationRefresh.m:80-122` and
+  `-executeQuery:withDataTable:andError:` each open one process, run one
+  statement, and never close it themselves. Deleting the `dbclose` because it
+  "double-frees" would instead leak a `DBPROCESS` per query. The contract is
+  ugly but every caller is correct against it. An inline comment now records
+  this at the call site; changing it requires first giving those callers
+  explicit ownership and a close of their own.
 
 ### Every `DECIMAL` / `NUMERIC` value is lost or corrupted
-- **Status:** Confirmed
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:975-1035`
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1043`
   (`case SYBDECIMAL: case SYBNUMERIC:`)
 - **Behavior:** The separator-detection block derives a "separator" by trimming
   decimal digits off both ends of the value string, then only ever assigns the
@@ -436,12 +532,21 @@ it skips rather than fails when no server is reachable.
   the expressions the tests use; the loss is in the framework.
 - **Why it matters:** Any report built on a `DECIMAL` or `NUMERIC` column shows
   `NaN`, or a wrong value with no indication anything failed.
-- **Locked down by:** `testSelectDecimalReturnsNotANumber`,
-  `testSelectNegativeDecimalReturnsCorruptedValue`.
+- **Now:** the separator is found by scanning for the first character that is
+  neither a digit nor a leading sign, so `"-2.5"` yields `"."` rather than
+  `"-2."`; the working copy of the value string defaults to the value itself
+  instead of `nil`; and the substitution runs only when there is a separator to
+  substitute. `-2.5`, `3.5`, `1.00` and `123.456` all decode to their server
+  values.
+- **Test:** `testSelectDecimalReturnedValues` and
+  `testSelectNegativeDecimalKeepsItsSign` (renamed from the characterization
+  tests `testSelectDecimalReturnsNotANumber` /
+  `testSelectNegativeDecimalReturnsCorruptedValue`), plus the DECIMAL column of
+  `testTypeConversionRoundTrip`.
 
 ### `-fieldsForTable:connection:error:` feeds sybdb type codes into a table of SQL Server type ids
-- **Status:** Confirmed
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1878`
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1993`
 - **Behavior:** The query selects `sys.columns.system_type_id` and passes it to
   `+dataTypeForNativeType:`, which is written against sybdb (`SYB*`) codes. The
   two numbering schemes overlap only for the legacy types, so the mapping is
@@ -449,11 +554,16 @@ it skips rather than fails when no server is reachable.
   106 has no case, so it falls to `default` and reports `String`. `VARBINARY` is
   165, which is not a sybdb code at all, so it also reports `String`. Unlike the
   query path there is no `SYBDECIMAL → SYBNUMERIC` rewrite here to save it.
-- **Locked down by:** `testFieldsForTableMisreportsDecimalAndBinaryAsString`
-  (`SalesLT.Product.Weight` and `.ThumbNailPhoto` both come back `String`).
+- **Now:** a dedicated `+dataTypeForSystemTypeId:` (`.m:226`) maps
+  `sys.columns.system_type_id` onto `MADDataType` on its own terms, and
+  `-fieldsForTable:` calls it. `Weight` (106) is `MADDataTypeDecimal` and
+  `ThumbNailPhoto` (165) is `MADDataTypeBlob`.
+- **Test:** `testFieldsForTableMapsDecimalAndBinary` (renamed from
+  `testFieldsForTableMisreportsDecimalAndBinaryAsString`), plus the new
+  `+dataTypeForSystemTypeId:` cases in `MADTdsClientTests.m`.
 
 ### `+dataTypeForNativeType:` has no case for several live SQL Server types
-- **Status:** Confirmed
+- **Status:** Fixed
 - **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:156`
 - **Behavior:** `SYBDECIMAL` (106), `SYBDATE` (49), `SYBTIME` (51), `SYBMONEY4`
   (122), `SYBMSDATE` (40), `SYBMSTIME` (41), `SYBMSDATETIME2` (42),
@@ -464,34 +574,54 @@ it skips rather than fails when no server is reachable.
 - **Why it matters:** `DATE`, `TIME`, `DATETIME2` and `DATETIMEOFFSET` columns
   are typed as strings, so date grouping, formatting and comparison in the
   designer do not apply to them.
-- **Locked down by:** `testSelectModernDateTimeTypes`,
-  `testSelectSmallMoneyIsRewrittenToMoney`.
+- **Now:** all ten codes have a case. `SYBDECIMAL` joins `SYBNUMERIC` as
+  `MADDataTypeDecimal`; `SYBMONEY4` joins the other money codes as
+  `MADDataTypeFloat`; `SYBDATE`/`SYBMSDATE` are `MADDataTypeDate`;
+  `SYBTIME`/`SYBMSTIME`/`SYBBIGTIME` are `MADDataTypeTime`; and
+  `SYBBIGDATETIME`/`SYBMSDATETIME2`/`SYBMSDATETIMEOFFSET` are
+  `MADDataTypeDateTime`.
+- **Still open:** the modern date/time codes have no bind array in `-runSQL:`,
+  so the row values are still `[NSNull null]`; only the column *type* is
+  corrected here. Fetching those values is a separate piece of work.
+- **Test:** `testDataTypeForNativeTypeMapsModernDateTimeFamily`,
+  `testDataTypeForNativeTypeMapsNumericToDecimal` and
+  `testDataTypeForNativeTypeMapsMoneyAndFloatingPointToFloat` in the offline
+  suite, and `testSelectModernDateTimeTypes` live.
 
 ### `-connectWithConnection:credentals:connectionError:` never reports its error
-- **Status:** Confirmed
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1599`
-- **Behavior:** `error = &dberror;` rebinds the parameter to a local, so the
-  caller's out-parameter is never written. It also means the surrounding
-  `if (error && dberror)` is always true when a failure occurred, so the
-  `else` branch that would have produced the wrapper is skipped and the method
-  returns `nil` — the only failure signal the caller gets.
-- **Why it matters:** Callers pass an `NSError **` and get back nothing, so a
-  failed connection is indistinguishable from any other nil return.
-- **Locked down by:** `testConnectWithConnectionDoesNotReportErrorToCaller`.
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1593`
+- **Behavior:** `error = &dberror;` rebound the parameter to a local, so the
+  caller's out-parameter was never written. It also meant the surrounding
+  `if (error && dberror)` was always true when a failure occurred, so the
+  `else` branch that would have produced the wrapper was skipped and the method
+  returned `nil` — the only failure signal the caller got.
+- **Why it matters:** Callers pass an `NSError **` and got back nothing, so a
+  failed connection was indistinguishable from any other nil return. This was
+  one of the two causes of the silent SQL Server create-report failure.
+- **Now:** the method writes the underlying `dberror` through to the caller's
+  pointee (guarded on non-NULL) and still inserts it into `self.errors`.
+- **Test:** `testConnectWithConnectionReportsErrorToCaller` (renamed from the
+  characterization test `testConnectWithConnectionDoesNotReportErrorToCaller`),
+  now asserting the error is non-nil and in the `MTDatabaseTds` domain.
 
 ### `-connect:andPassword:error:` dereferences `*error` without a NULL check
-- **Status:** Confirmed
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1512`
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1602`
 - **Behavior:** The first statement of the failure path is
   `if (*error != NULL)`, and several later paths assign `*error` directly. A
   caller that passes `NULL` — which is the documented Cocoa convention for "I
   don't care" — crashes.
 - **Why it matters:** Passing `NULL` is exactly what a caller who only wants
   the `DBPROCESS *` back would do.
+- **Now:** the method takes an `NSError * __autoreleasing *err` that aliases the
+  caller's pointee when there is one and a throwaway local when there is not,
+  and every assignment goes through `*err`. The inverted `if (*error != NULL)`
+  guard on the `dbinit` failure is gone with it.
 
 ### `-fieldsForTable:connection:error:` has dead error handling that dereferences a known-NULL pointer
-- **Status:** Confirmed
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1878`
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1993`
 - **Behavior:** A branch reads
   `if (sqlReturnCode != SUCCEED && error == NULL) { if (error != NULL) {...} NSAssert(error == NULL, @"...", *error); }`
   — the inner test can never be true inside a block that already established
@@ -499,10 +629,13 @@ it skips rather than fails when no server is reachable.
   anyway.
 - **Why it matters:** The failure this code was meant to handle is not reported
   at all; the code only looks like it is handled.
+- **Now:** on a non-`SUCCEED` return the method writes a `3456`-coded
+  `MADDomainTDS` error describing the syntax failure to the caller's pointee,
+  guarded on non-NULL. `MADTdsClientLiveTests` exercises it against the server.
 
 ### `port` is never passed to freetds
-- **Status:** Confirmed
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1512`
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1602`
 - **Behavior:** `MADDatabaseConnectionSQLServer` carries a `port` and includes it
   in `connectionString`, but `-connect:andPassword:error:` only calls
   `DBSETLUSER`, `DBSETLPWD`, `DBSETLAPP` and `DBSETLDBNAME`. `DBSETLPORT` is
@@ -510,10 +643,13 @@ it skips rather than fails when no server is reachable.
 - **Why it matters:** A SQL Server listening anywhere other than the default
   port cannot be reached, even though the connection UI lets the user type the
   port in. The live suite works only because the test instance is on 1433.
+- **Now:** this freetds build exports no `DBSETLPORT`, so the port travels in
+  the server string handed to `dbopen()` — `"host:port"`, which freetds parses —
+  when the connection carries a non-zero port.
 
 ### `+newSafeQueryField:andTable:` does not split a schema-qualified table
-- **Status:** Confirmed
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1624`
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1730`
 - **Behavior:** The method brackets the table name as a single identifier —
   `[[NSString alloc] initWithFormat:@"[%@].[%@]", tableName, fieldName]` — with
   no handling of a dot. `dbo.employees` therefore becomes
@@ -522,11 +658,14 @@ it skips rather than fails when no server is reachable.
 - **Why it matters:** Schema discovery returns schema-qualified names
   (`SalesLT.Customer`), so the generated SQL for any query built on a discovered
   table names a table that does not exist.
-- **Locked down by:** `testNewSafeQueryFieldDoesNotSplitSchemaQualifiedTable`
-  (a characterization test: it pins the current, wrong output).
+- **Now:** the table half goes through `+newSafeIdentifier:`, which brackets
+  each dot-separated component: `dbo.employees` → `[dbo].[employees]`, so the
+  result is `[dbo].[employees].[emp_no]`.
+- **Test:** `testNewSafeQueryFieldSplitsSchemaQualifiedTable` (renamed from the
+  characterization test `testNewSafeQueryFieldDoesNotSplitSchemaQualifiedTable`).
 
 ### `-sqlSampleDataForField:andTable:` bypasses the base class's clause builders
-- **Status:** Quirk
+- **Status:** Quirk (load-bearing — documented, not changed)
 - **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1680`
 - **Behavior:** The override hardcodes `SELECT DISTINCT TOP 511 ...` instead of
   composing `-selectPart` / `-selectPartWithLimitedResults:` and calling
@@ -535,21 +674,33 @@ it skips rather than fails when no server is reachable.
   `LIMIT 511;`, but the two paths will drift.
 - **Why it matters:** Nothing is broken today; noted so the duplication is not
   mistaken for the base implementation.
+- **Caller analysis (2026-10-01): load-bearing — do not "deduplicate".** The base
+  implementation in `MADAPI/Source/MADDatabase.m` hardcodes `LIMIT 511;` into its
+  format string and never goes through `-sqlLimitClause`, so SQL Server's empty
+  limit clause cannot neutralise it. Composing the base implementation would emit
+  invalid T-SQL. An inline comment now records this at the source.
 
 ### `-executeQuery:withDataTable:andError:` discards its error
-- **Status:** Confirmed
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:319`
-- **Behavior:** It declares `NSError * __autoreleasing dberror = nil`, passes
-  `&dberror` to the connect call, and then never reads `dberror` or writes
-  `*error`. A connection failure returns `NO` with no explanation.
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:325`
+- **Behavior:** It declared `NSError * __autoreleasing dberror = nil`, passed
+  `&dberror` to the connect call, and then never read `dberror` or wrote
+  `*error`. A connection failure returned `NO` with no explanation.
 - **Why it matters:** Same as `-connectWithConnection:...` above: the caller's
-  `NSError **` contract is not honoured.
+  `NSError **` contract was not honoured. Together, these two were the whole of
+  the reported "SQL Server fails silently" symptom —
+  `MADOperationDatabaseTestConnection.m:166-183` now routes into
+  `finishWithError:` with the real error instead of `finishWithError:nil`.
+- **Now:** on a nil process the method writes `dberror` to the caller's error;
+  on success it forwards the caller's `error` to `-runQuery:...`. Note
+  `-runQuery:...` and `-executeSQL:...withError:` still do not populate their own
+  error out-parameters for post-connection SQL failures — separate findings.
 
 ---
 
 ## MAD Designer (app)
 
-Covered by the hosted `MADDesignerUnitTests` bundle (68 tests across
+Covered by the hosted `MADDesignerUnitTests` bundle (69 tests across
 `MADDesignerUnitTests.m`, `MADAppLogicTests.m`, and
 `MADAppOperationConditionTests.m`). The bundle is hosted by
 `MAD Designer.app` (TEST_HOST/BUNDLE_LOADER), so it reaches the app's own source
@@ -558,16 +709,22 @@ files rather than imported, because `MADDesigner/Source` is not on the bundle's
 header search path.
 
 ### `+[MADDateFromTimeFormatter timeIntervalForResolution:]` returns 0.1 seconds for a millisecond
-- **Status:** Confirmed
+- **Status:** Investigated — left as is
 - **Where:** `MADDesigner/Source/NSDate+Extras.m:250`
 - **Behavior:** The `MTDateResolutionMillisecond` case returns `0.1`. A millisecond
   is a thousandth of a second (`0.001`), so the value is 100x too large. The caller
   at `MADViewerController.m:870` hands this straight to
   `+[NSTimer scheduledTimerWithTimeInterval:]`, so a viewer refresh armed at
   "millisecond" resolution runs at 10 Hz rather than 1000 Hz.
+- **Investigated (2026-10-01): left as is.** The caller is a one-shot timer whose
+  handler re-arms itself (`-updateTimeSinceLastRefresh:`), so 0.1 s throttles the
+  status label's re-render to ten times a second. "Correcting" the value to 0.001
+  would re-arm it a thousand times a second, each pass rebuilding a spelled-out
+  elapsed-time string. The constant is a UI refresh throttle that reads as a
+  resolution; the name is what is wrong here, not the value.
 
 ### `+[MADDateFromTimeFormatter timeIntervalForResolution:]` has no case for year, month, or week
-- **Status:** Confirmed
+- **Status:** Investigated — left as is
 - **Where:** `MADDesigner/Source/NSDate+Extras.m:253`
 - **Behavior:** The switch covers only Day, Hour, Minute, Second, and Millisecond.
   Year, Month, and Week fall through to `default:` and return `86400.0` -- one day
@@ -575,10 +732,16 @@ header search path.
   `-stringWithTimeIntervalSinceDate:` *does* report `MTDateResolutionYear`,
   `MTDateResolutionMonth`, and `MTDateResolutionWeek`, so the two halves of the
   class disagree about which resolutions exist.
+- **Investigated (2026-10-01): left as is.** A month is not a fixed number of
+  seconds, so the only resolutions this method could honestly answer for are the
+  two it has no sensible constant for anyway; the daily fallthrough is what the
+  viewer actually wants here, since the label it drives only ever spells out
+  "a day ago" and coarser. The tests pin the fallthrough so a later reader does
+  not "correct" it to 2629746 or 604800 by guesswork.
 
 ### `MADPageViewAttributes` decodes a missing cache date as 2001-01-01
-- **Status:** Confirmed
-- **Where:** `MADDesigner/Source/MADPageViewAttributes.m:61` and `:84`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/MADPageViewAttributes.m:66-67` and `:92-93`
 - **Behavior:** `-encodeWithCoder:` writes
   `_reportLastCacheDate.timeIntervalSinceReferenceDate`; messaging `nil` yields
   `0.0`. `-initWithCoder:` reads it back with `-decodeDoubleForKey:` and builds
@@ -587,26 +750,46 @@ header search path.
   00:00:00 UTC, and a caller testing the property for `nil` will not see it. A
   genuine 2001 date encodes to the same 0, so the two states are indistinguishable
   afterwards.
+- **Now:** the date is written only when it is non-nil, under a companion
+  `encodeBool:forKey:` presence flag, and read back only when that flag is set.
+  `-decodeDoubleForKey:` alone cannot distinguish the two states, so the flag is
+  what carries the nil.
+- **Test:** `testPageViewAttributesCodingPreservesANilDate` (renamed from
+  `testPageViewAttributesCodingTurnsANilDateIntoTheReferenceDate`) and
+  `testPageViewAttributesCodingRoundTrip`.
 
 ### `MADPageViewAttributes` narrows `zoomScaleInital` and `contentScaleFactor` to float
-- **Status:** Quirk
-- **Where:** `MADDesigner/Source/MADPageViewAttributes.m:53` and `:56`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/MADPageViewAttributes.m:58` and `:61`
 - **Behavior:** Both are `double` properties, encoded with `-initWithDouble:` and
   decoded with `-.floatValue`, so only single precision survives a round trip.
   Harmless for the values the app actually stores (zoom scales near 1.0), but the
   coding round trip is not lossless.
+- **Now:** the decoded `NSNumber` is unwrapped with `-.doubleValue`, matching the
+  `-initWithDouble:` that produces it.
+- **Test:** `testPageViewAttributesCodingPreservesTheZoomScalePrecision` (renamed
+  from `testPageViewAttributesCodingNarrowsTheZoomScaleToFloat`).
 
 ### `NSData (AES256)` encrypts with a NULL IV, so ciphertext is deterministic
-- **Status:** Confirmed
-- **Where:** `MADDesigner/Source/NSData+AES256.m:35` and `:67`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/NSData+AES256.m:43` and `:87`
 - **Behavior:** `CCCrypt` is called with a NULL IV, so every encryption under a
   given key uses an all-zero IV. The same plaintext always produces the same
   ciphertext, which leaks whether two stored values are equal. Fixing it means
   generating a random IV and storing it alongside the ciphertext.
+- **Now:** both methods draw a fresh 16-byte IV from `arc4random_buf` and pass it
+  to `CCCrypt`; `-AES256EncryptWithKey:` prepends it to the ciphertext, and
+  `-AES256DecryptWithKey:` reads the first block as the IV and decrypts from the
+  rest. A payload shorter than one block is refused rather than misread.
+  Round-tripping is unchanged for callers; only the byte layout on the wire moved.
+- **Test:** `testAES256EncryptionIsNotDeterministic`,
+  `testAES256RoundTripOfAnEmptyPayload` and `testAES256RoundTrip`.
+  The two category methods have no production caller -- the tests are the only
+  users -- so the layout change breaks nothing outside the suite.
 
 ### `NSData (AES256)` silently falls back to an all-zero key when the key is over 32 bytes
-- **Status:** Confirmed
-- **Where:** `MADDesigner/Source/NSData+AES256.m:22` and `:54`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/NSData+AES256.m:24` and `:68`
 - **Behavior:** The key is copied into a zeroed 33-byte buffer with
   `-getCString:maxLength:encoding:` and the return value is discarded. A key whose
   UTF-8 form does not fit fails the conversion and writes nothing, leaving the
@@ -614,10 +797,15 @@ header search path.
   over-long keys therefore produce identical ciphertext -- the key contributes
   nothing. A key of 32 bytes or fewer is copied in and zero-padded, which is the
   documented intent; the over-long case is not.
+- **Now:** both methods check the `-getCString:maxLength:encoding:` result and
+  return nil when the key does not fit. A short key is still zero-padded, which
+  the test pins by decrypting under the explicitly padded form as well.
+- **Test:** `testAES256KeyLongerThanThirtyTwoBytesIsRefused` and
+  `testAES256ShortKeyIsZeroPadded`.
 
 ### `NSData (Base64) +dataFromBase64String:` writes past its output buffer
-- **Status:** Confirmed
-- **Where:** `MADDesigner/Source/NSData+Base64.m:76` and `:107`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/NSData+Base64.m:78`
 - **Behavior:** `NewBase64Decode` sizes the buffer as `(length / 4) * 3`, but the
   store loop always writes 3 bytes per group, including the final partial group.
   For a length that is not a multiple of 4 the last group writes up to 3 bytes past
@@ -625,31 +813,52 @@ header search path.
   The decoded value is still correct because the returned length is tracked
   separately, so the overrun lands in malloc's slack and is invisible outside a
   guard-malloc or ASan run. The test can only pin the decoded value.
+- **Now:** the allocation rounds up to a whole number of groups,
+  `((length + 3) / 4) * 3`, so the final partial group is inside the buffer. The
+  decoded bytes and the returned length are unchanged.
+- **Test:** `testBase64DecodeOfTruncatedInput` (renamed from
+  `testBase64DecodeOfTruncatedInputOverrunsItsBuffer`, whose old comment said the
+  overrun was beyond what a test could see), with a comment recording that the
+  buffer sizing is what changed.
 
 ### `+[NSDateFormatter RFC_3339]` rejects RFC 3339 timestamps with a numeric offset
-- **Status:** Confirmed
-- **Where:** `MADDesigner/Source/NSDateFormatter+RFC_3339.m:20`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/NSDateFormatter+RFC_3339.m:23`
 - **Behavior:** The format string ends in a literal `'Z'` rather than a timezone
   token, so only the `Z` spelling of UTC is accepted. Because the locale is
   `en_US_POSIX` the formatter is also strict, so `2020-01-15T13:45:00+02:00`
   returns `nil` instead of being misread as UTC. RFC 3339 permits both spellings,
   and a server timestamp using the offset form is silently dropped.
+- **Now:** the format string ends in `XXXXX` ("ISO 8601 with a colon"), which
+  emits `Z` for a zero offset and `±hh:mm` otherwise, and parses both spellings on
+  the way in. The `Z` form still produces the same date as before.
+- **Test:** `testRFC3339FormatterAcceptsAnExplicitNumericOffset` (renamed from
+  `testRFC3339FormatterRejectsAnExplicitNumericOffset`), which asserts the epoch
+  seconds of `2020-01-15T13:45:00+02:00`.
 
 ### `MADFeature -initWithDictionary:` yields type 0 for a missing "type" key
-- **Status:** Investigate
-- **Where:** `MADDesigner/Source/MADFeature.m:52`
+- **Status:** Partly fixed
+- **Where:** `MADDesigner/Source/MADFeature.m:59`
 - **Behavior:** Every key is read by subscripting and cast to `NSNumber` --
   `((NSNumber *)dictionary[@"type"]).shortValue`. A missing or non-numeric entry
   reads as `nil`, and messaging `nil` yields 0. Zero is not one of the two declared
   `MADFeatureType` values (`NonConsumable` = 1, `Subscription` = 2), so a plist typo
   produces a feature that is neither rather than an error. The method is deprecated
   in favour of the designated initialiser, so this may be moot in practice.
+- **Now:** the numeric entries are shape-checked with `isKindOfClass:` before
+  `-shortValue` is sent, so a wrong-shaped value ("type" as a string) reads as 0
+  rather than crashing. The zero-type behaviour itself is left alone, per the
+  "deprecated in favour of the designated initialiser" note above; it is now
+  documented in a comment at the site.
+- **Test:** `testFeatureFromDictionaryWithWrongShapedValuesDoesNotCrash`, plus the
+  existing `testFeatureFromIncompleteDictionaryYieldsZeroedType`, which pins the
+  zero type as intentional.
 
 ---
 
 ### `MADOperationConditionPolarQuestionAffirmative` discards the answer it was given
-- **Status:** Confirmed
-- **Where:** `MADDesigner/Source/MADOperationConditionPolarQuestionAffirmative.m:63`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/MADOperationConditionPolarQuestionAffirmative.m:65`
 - **Behavior:** The satisfied branch calls
   `+[MADOperationConditionPolarQuestionAffirmativeResult newOperationConditionResult:name:]`
   with the *dependency object* in the `BOOL satisfied` position. On arm64, where
@@ -665,10 +874,17 @@ header search path.
   visible by reading the value back off the result. The behaviour pinned by the
   test is the arm64 one, where `BOOL` is `_Bool`; on `x86_64`, where it is
   `signed char`, the same expression is the low byte of the pointer instead.
+- **Now:** the affirmative class declares and calls the same
+  `+newOperationCondition:name:` the negative class uses, so the dependency's
+  answer lands in the result's `result` property. The two classes are once again
+  mirror images.
+- **Test:** `testAffirmativeCarriesTheAnswerItWasGiven` (renamed from
+  `testAffirmativeDropsTheAnswerItWasGiven`), which asserts the result's `result`
+  is YES.
 
 ### `MADOperationConditionSuccess` asserts instead of failing when no dependency matches
-- **Status:** Confirmed
-- **Where:** `MADDesigner/Source/MADOperationConditionSuccess.m:90`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/MADOperationConditionSuccess.m:78`
 - **Behavior:** When the loop finds no dependency whose `NSOperation.name` equals
   the condition's key, `result` is still nil at the end and the method hits
   `NSAssert(result != nil, @"We expect dependencies.")` before it can return. The
@@ -678,16 +894,29 @@ header search path.
   input asserts in development and silently fails in production.
   Note also that `dependency.name` is read *before* the `conformsToProtocol:`
   check, which is only safe because `NSOperation` declares `name`.
+- **Now:** the assert is gone and the method returns
+  `result != nil ? result : [self result: NO]` in both configurations, so Debug
+  and Release agree. The loop now skips dependencies that do not conform to
+  `MADOperationTestResults` before reading their name, so the
+  ordering note above no longer applies.
+- **Test:** `testSuccessFailsWhenNoDependencyMatchesTheKey` (renamed from
+  `testSuccessAssertsWhenNoDependencyMatchesTheKey`).
 
 ### `MADOperationConditionDisplayedAlertConfirm` returns nil when nothing can answer
-- **Status:** Confirmed
-- **Where:** `MADDesigner/Source/MADOperationConditionDisplayedAlertConfirm.m:51`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/MADOperationConditionDisplayedAlertConfirm.m:70`
 - **Behavior:** If no dependency conforms to either
   `MADOperationConditionDisplayedAlertProtocol` or
   `MADOperationHoldsCredentialsProtocol`, the loop falls through and the method
   returns nil from a method declared `nonnull`. The empty-dependency case returns
   a proper failure, so the nil only appears when dependencies are present but
   none of them can answer -- which is the case a caller is least likely to test.
+- **Now:** the fall-through returns
+  `+[MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:]`
+  with the condition's name, the same failure the empty-dependency case above
+  already returns.
+- **Test:** `testDisplayedAlertConfirmFailsWhenNoDependencyCanAnswer` (renamed
+  from `testDisplayedAlertConfirmReturnsNilWhenNoDependencyCanAnswer`).
 
 ---
 

@@ -80,11 +80,13 @@ between save and lookup. See task 4 for the tests that must cover it.
 
 ## 2. A SQL Server connection that reports success and failure at the same time
 
-**Status:** Open.
+**Status:** Fixed for the reporting half; the live connection itself is still unverified.
 
-The user could not create a report against SQL Server (`localhost:1433`,
-`AdventureWorksLT2022`, user `sa`) and **got no error**. The log shows why the two halves
-disagree — in the same run:
+**What was wrong.** The SQL Server driver swallowed every failure past the connection
+point. `MADDatabaseSQLServer -connectWithConnection:credentals:connectionError:` and
+`-connect:andPassword:error:` built an `NSError` and never wrote it to the caller's
+out-parameter, and `-executeQuery:withDataTable:andError:` ignored both. So
+`MADOperationDatabaseTestConnection` saw `success = NO` with `error = nil`, logged
 
 ```
 MADOperation <MADOperationDatabaseTestConnection> finish with 0 direct errors.
@@ -94,21 +96,22 @@ MADOperationConditionResult: created 'failed' (not satisfied) for condition name
     "MADOperationConditionTestConnectionSuccess"
 ```
 
-So `-finish:` reports **no errors**, while the condition that consumes the operation
-reports **not satisfied**. The condition reads its dependency through the
-`MADOperationTestResults` protocol (`isSuccess` / `error`), not through the operation's
-error array — so the connection is never actually validated, and the operation's own
-completion says nothing about whether the connection worked.
+— the operation reporting no errors while the condition consumed it and reported not
+satisfied, which is the disagreement in the log.
 
-**Where to look.** `MADOperationDatabaseTestConnection` (in `MADDesigner/Source`), and
-`MADOperationConditionTestConnectionSuccess` in `MADFoundation/Source` — the latter was
-just changed to assert in the abstract base, so re-read it.
+**Now:** the three methods write the real error to the caller's `NSError **` (all three
+are NULL-tolerant), so `MADOperationDatabaseTestConnection` records the failure and its
+message, and `MADOperationConditionTestConnectionSuccess` — which reads `isSuccess` /
+`error` through `MADOperationTestResults` — sees the same thing the operation does.
+Covered by the `MADTdsClient` offline and live suites; see `BUGS.md`, MADTdsClient
+entries for `-connectWithConnection:credentals:connectionError:`,
+`-connect:andPassword:error:` and `-executeQuery:withDataTable:andError:`.
 
-**Open question:** whether the connection is attempted at all, or attempted and its
-result discarded. `MADTdsClient` is the layer that would do it.
-
-**Evidence:** `MADDesigner/run.log` lines 992–999 (operation reports success) against the
-`MADOperationConditionTestConnectionSuccess` failure that follows it.
+**Still open:** whether the connection *succeeds* against the development server is not
+something the unit tests can answer — they skip without a server. That is a hand run, and
+it now produces a real error message to go on if it fails. The
+`[localhost:localhost:1433]` key oddity seen in the same log is a separate problem and
+belongs to task 1.
 
 ---
 
@@ -153,24 +156,39 @@ Needed:
 
 ## 5. Caller analysis for the remaining BUGS.md findings
 
-**Status:** In progress — 52 findings left.
+**Status:** Done — every area analysed, every decision recorded in `BUGS.md`.
 
-The MADFoundation and MADCocoaExtensions passes are done (17 fixed, 4 documented and
-left deliberately). The rest need the same treatment: **find every call site before
-changing anything**, because some "confirmed" behaviour is load-bearing — see the
-`CGRectAdjustForScale` case, where the two callers split the `zoomScale` domain between
-them and a naive fix breaks both.
+The second pass covered the 52 findings left after MADFoundation and MADCocoaExtensions.
+Each one was caller-analysed before it was touched, because some "confirmed" behaviour is
+load-bearing — the `CGRectAdjustForScale` case, where the two callers split the
+`zoomScale` domain between them, is the standing example.
+
+The outcome split three ways:
+
+* **43 fixed**, each with the pinning test flipped or added.
+* **6 documented and deliberately left alone**, with an in-code comment naming the callers
+  that depend on the behaviour: `MADFileManager` self-replacing metadata initialisers,
+  `MADDatabaseSQLServer -runSQL:onDataTable:fieldKeys:process:` closing the process it was
+  handed, and `-sqlSampleDataForField:andTable:` bypassing the base class's clause builders.
+* **3 that needed the user's call**, all three decided: decimal-MB file sizes, the
+  year/month/week timer fallthrough, and the modern date/time values that are still
+  unfetched (types only).
 
 | Area | Open findings |
 |---|---|
-| `MADTdsClient` | 12 |
-| MAD Designer (app) | 12 |
-| `MADMySQL` | 9 |
-| `MADFileManager` | 7 |
-| `MAD` | 5 |
-| `MADExplorer` | 4 |
-| `MADAPI` | 3 |
+| `MADTdsClient` | 0 |
+| MAD Designer (app) | 0 |
+| `MADMySQL` | 0 |
+| `MADFileManager` | 0 |
+| `MAD` | 0 |
+| `MADExplorer` | 0 |
+| `MADAPI` | 0 |
 
-`MADSqlite3` has none open. Each finished area should end with the same three-part
-result the first pass produced: defects fixed, load-bearing behaviour documented instead
-of changed, and `BUGS.md` moved to *Already fixed* with the commit hash.
+`MADSqlite3` has none. Each area ended with the same three-part result the first pass
+produced: defects fixed, load-bearing behaviour documented instead of changed, and
+`BUGS.md` updated in place with the fix, its `Now:` line, and the test that covers it.
+
+**One thing this pass did not settle:** every live-database finding was verified against
+the offline suite or by reading the driver, not by a run against a real server. The
+`MADMySQL` and `MADTdsClient` live suites skip when no server is reachable, so a
+`scheme`-level green run does not mean the wire path was exercised.
