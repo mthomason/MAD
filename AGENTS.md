@@ -78,6 +78,19 @@ The codebase also includes static library build scrips in a file called `Compres
 * This project uses tabs for spacing.
 * This project uses limited comments where needed
 * This project is very complex, so fixes and changes should be made stratigicly to minimize side effects.
+* **Mark deliberately-unused code as unused with a clang attribute, at the declaration.**  Do
+  not silence the warning away from it, and do not leave the declaration bare.
+	* A file-static function nothing calls yet: `__attribute__((unused))`, as
+	  `MADFeedback/MADFeedback/MADFeedbackUncaughtExceptionHandler.m:91` does.
+	* An unused local: `__unused`, as `MADSqlite3/Source/MADDataTableFast.m:606` does.
+	* A non-functional initializer on a class that must not be built that way: `NS_UNAVAILABLE`
+	  in the header, as `MADFoundation/Source/MADCredential.h:20` does.
+	* An unused parameter: `__unused` on the parameter itself, so the signature stays honest
+	  to its caller.
+
+  Every framework target sets `GCC_WARN_UNUSED_FUNCTION` and `GCC_WARN_UNUSED_VARIABLE` to
+  `YES`.  The point of the attribute is that what the compiler still reports is genuinely
+  dead code rather than something parked on purpose -- an unmarked warning means delete it.
 
 ## Testing
 
