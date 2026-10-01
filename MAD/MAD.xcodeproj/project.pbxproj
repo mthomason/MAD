@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		4CDA7A0100000000000000A1 /* MADDataTableRegressionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0100000000000000B1 /* MADDataTableRegressionTests.m */; };
+		4CDA7A0300000000000000A1 /* MADCoreLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0300000000000000B1 /* MADCoreLogicTests.m */; };
+		4CDA7A0400000000000000A1 /* MADFormatterAndRepresentationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */; };
+		4CDA7A0500000000000000A1 /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0500000000000000B1 /* MAD.xcdatamodeld */; };
+		4CDA7A0600000000000000A1 /* MADCoreDataModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0600000000000000B1 /* MADCoreDataModelTests.m */; };
+		4CDA7A0700000000000000A1 /* MADRptqValueTypeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0700000000000000B1 /* MADRptqValueTypeTests.m */; };
+		4CDA7A0800000000000000A1 /* MADRptqDocumentSectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0800000000000000B1 /* MADRptqDocumentSectionTests.m */; };
+		4CDA7A0900000000000000A1 /* MADRptqQueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0900000000000000B1 /* MADRptqQueryTests.m */; };
+		4CDA7A0A00000000000000A1 /* MADRptqDatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0A00000000000000B1 /* MADRptqDatabaseTests.m */; };
 		4CDA7A0100000000000000A2 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E324AC72C000EC794B /* MADSqlite3.framework */; };
 		4CDA7A0100000000000000A3 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E124AC72C000EC794B /* MADFoundation.framework */; };
 		4CDA7A0100000000000000A4 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915DD24AC72C000EC794B /* MADAPI.framework */; };
@@ -548,6 +556,16 @@
 
 /* Begin PBXFileReference section */
 		4CDA7A0100000000000000B1 /* MADDataTableRegressionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataTableRegressionTests.m; sourceTree = "<group>"; };
+		4CDA7A0300000000000000B1 /* MADCoreLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADCoreLogicTests.m; sourceTree = "<group>"; };
+		4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFormatterAndRepresentationTests.m; sourceTree = "<group>"; };
+		4CDA7A0500000000000000B2 /* MAD 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 3.xcdatamodel"; sourceTree = "<group>"; };
+		4CDA7A0500000000000000B3 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
+		4CDA7A0500000000000000B4 /* MAD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MAD.xcdatamodel; sourceTree = "<group>"; };
+		4CDA7A0600000000000000B1 /* MADCoreDataModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADCoreDataModelTests.m; sourceTree = "<group>"; };
+		4CDA7A0700000000000000B1 /* MADRptqValueTypeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADRptqValueTypeTests.m; sourceTree = "<group>"; };
+		4CDA7A0800000000000000B1 /* MADRptqDocumentSectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADRptqDocumentSectionTests.m; sourceTree = "<group>"; };
+		4CDA7A0900000000000000B1 /* MADRptqQueryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADRptqQueryTests.m; sourceTree = "<group>"; };
+		4CDA7A0A00000000000000B1 /* MADRptqDatabaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADRptqDatabaseTests.m; sourceTree = "<group>"; };
 		4C00A3851F5A87ED00F6A6C1 /* MADPrintPageElement+Constructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADPrintPageElement+Constructor.h"; sourceTree = "<group>"; };
 		4C00A3861F5A87ED00F6A6C1 /* MADPrintPageElement+Constructor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADPrintPageElement+Constructor.m"; sourceTree = "<group>"; };
 		4C02F9D02E21B512009113B6 /* MADQuerySampleDataTableRange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADQuerySampleDataTableRange.h; sourceTree = "<group>"; };
@@ -1084,6 +1102,21 @@
 		4CFA87461E446E78002903B7 /* MADTableFieldIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTableFieldIdentifier.h; sourceTree = "<group>"; };
 		4CFA87481E446E94002903B7 /* MADTableFieldIdentifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTableFieldIdentifier.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin XCVersionGroup section */
+		4CDA7A0500000000000000B1 /* MAD.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4CDA7A0500000000000000B2 /* MAD 3.xcdatamodel */,
+				4CDA7A0500000000000000B3 /* MAD 2.xcdatamodel */,
+				4CDA7A0500000000000000B4 /* MAD.xcdatamodel */,
+			);
+			currentVersion = 4CDA7A0500000000000000B2 /* MAD 3.xcdatamodel */;
+			path = ../MADDesigner/Resources/MADFileDefinition/MAD.xcdatamodeld;
+			sourceTree = SOURCE_ROOT;
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4CF781401BADE5EA0050A67D /* Frameworks */ = {
@@ -1740,6 +1773,14 @@
 			children = (
 				4CF781531BADE5EA0050A67D /* MADTests.m */,
 				4CDA7A0100000000000000B1 /* MADDataTableRegressionTests.m */,
+				4CDA7A0300000000000000B1 /* MADCoreLogicTests.m */,
+				4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */,
+				4CDA7A0500000000000000B1 /* MAD.xcdatamodeld */,
+				4CDA7A0600000000000000B1 /* MADCoreDataModelTests.m */,
+				4CDA7A0700000000000000B1 /* MADRptqValueTypeTests.m */,
+				4CDA7A0800000000000000B1 /* MADRptqDocumentSectionTests.m */,
+				4CDA7A0900000000000000B1 /* MADRptqQueryTests.m */,
+				4CDA7A0A00000000000000B1 /* MADRptqDatabaseTests.m */,
 				4CF781551BADE5EA0050A67D /* Info.plist */,
 				4C37AD2F2E86D00F003C2B2C /* MADMock.h */,
 				4C37AD302E86D00F003C2B2C /* MADMock.m */,
@@ -2366,6 +2407,14 @@
 				4C37AD312E86D00F003C2B2C /* MADMock.m in Sources */,
 				4CF781541BADE5EA0050A67D /* MADTests.m in Sources */,
 				4CDA7A0100000000000000A1 /* MADDataTableRegressionTests.m in Sources */,
+				4CDA7A0300000000000000A1 /* MADCoreLogicTests.m in Sources */,
+				4CDA7A0400000000000000A1 /* MADFormatterAndRepresentationTests.m in Sources */,
+				4CDA7A0500000000000000A1 /* MAD.xcdatamodeld in Sources */,
+				4CDA7A0600000000000000A1 /* MADCoreDataModelTests.m in Sources */,
+				4CDA7A0700000000000000A1 /* MADRptqValueTypeTests.m in Sources */,
+				4CDA7A0800000000000000A1 /* MADRptqDocumentSectionTests.m in Sources */,
+				4CDA7A0900000000000000A1 /* MADRptqQueryTests.m in Sources */,
+				4CDA7A0A00000000000000A1 /* MADRptqDatabaseTests.m in Sources */,
 				4C37AD342E86D125003C2B2C /* MADTestReportFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
