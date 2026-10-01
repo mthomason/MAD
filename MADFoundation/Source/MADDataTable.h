@@ -25,7 +25,61 @@ typedef NS_ENUM(short, MADDataTableParameters) {
 	MADDataTableParametersNumberOfColumns,
 };
 
-@interface MADDataTable : NSObject <NSCoding, NSFastEnumeration>
+#pragma mark - Storage protocols
+
+// MADDataTable is a class cluster: the base class owns the metadata, the plist
+// shape and NSCoding, and each subclass owns the actual row storage.  These three
+// protocols are that split written down, so a driver can be handed "something I
+// can write rows into" without also being handed the ability to read them back --
+// which is what the SQL Server driver needs and all it needs.
+//
+// MADDataTable itself lists all three; it satisfies every @required member with an
+// assertion (MADDataTable.m), so a subclass that forgets an override is caught in
+// Debug rather than silently discarding rows.
+
+/// Everything that mutates stored rows.
+@protocol MADDataTableWriting <NSObject>
+@required
+- (void)removeAllObjects;
+- (void)addColumn:(nonnull MADDataColumn *)column;
+- (bool)addRow:(nonnull NSArray *)row error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+- (void)addRowWithDataForFieldKeys:(nonnull NSDictionary<NSString *, id> *)row;
+- (void)sortUsingDescriptors:(nonnull NSArray<NSSortDescriptor *> *)sortDescriptors;
+/// Optional: a subclass that does not need a bulk-insert fast path may ignore these.
+@optional
+- (void)beginBulkInsert;
+- (void)endBulkInsert;
+@end
+
+/// Random access to stored rows, and the row/column counts.
+@protocol MADDataTableReading <NSObject>
+@required
+- (nullable id)objectAtRow:(NSUInteger)row;
+- (nullable id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
+- (nonnull NSArray *)allObjects;
+- (nonnull NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit;
+- (nullable NSDictionary<NSString *, id> *)dataForRow:(NSUInteger)rowID error:(NSError * _Nullable __autoreleasing *_Nullable)error;
+- (NSUInteger)numberOfRows;
+- (NSUInteger)numberOfColumns;
+- (NSUInteger)count;
+@end
+
+/// Sequential access to stored rows.
+@protocol MADDataTableCursoring <NSObject>
+@required
+- (nonnull NSEnumerator<MADDataColumn *> *)columnsEnumerator;
+- (nonnull NSEnumerator *)objectEnumerator;
+/// Optional: these three are sqlite-only.  MADDataTableVirtual stores its rows in
+/// memory and has no sorted cursor or group-key lookup, so it cannot honour them.
+@optional
+- (nonnull NSEnumerator *)enumeratorForKeyObjectsSorted;
+- (nonnull NSEnumerator *)enumeratorForAllObjectsSorted;
+- (nonnull NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly;
+- (nonnull NSArray<NSDictionary *> *)objectsForGroupKeys:(nonnull NSArray<NSString *> *)groupKeys;
+@end
+
+@interface MADDataTable : NSObject <NSCoding, NSFastEnumeration,
+									MADDataTableWriting, MADDataTableReading, MADDataTableCursoring>
 
 #pragma mark - Properties
 
@@ -52,41 +106,10 @@ typedef NS_ENUM(short, MADDataTableParameters) {
 - (nonnull NSDictionary *)copyPlist;
 - (BOOL)loadWithPlist:(nonnull NSDictionary *)plist error:(NSError * _Nullable __autoreleasing * _Nullable)outError;
 
-#pragma mark - Row and Column Operations
-
-- (void)addColumn:(nonnull MADDataColumn *)column;
-- (bool)addRow:(nonnull NSArray *)row error:(NSError * _Nullable __autoreleasing * _Nullable)error;
-- (void)addRowWithDataForFieldKeys:(nonnull NSDictionary<NSString *, id> *)row;
-- (void)removeAllObjects;
-- (nullable id)objectAtRow:(NSUInteger)row column:(NSUInteger)column;
-- (nullable id)objectAtRow:(NSUInteger)row;
-- (void)sortUsingDescriptors:(nonnull NSArray<NSSortDescriptor *> *)sortDescriptors;
-
-#pragma mark - Bulk Operations
-
-- (void)beginBulkInsert;
-- (void)endBulkInsert;
-
-#pragma mark - Data Retrieval
-
-- (nonnull NSArray *)allObjects;
-- (nonnull NSArray *)objectAtRow:(NSUInteger)row limit:(NSUInteger)limit;
-- (nonnull NSArray<NSDictionary *> *)objectsForGroupKeys:(nonnull NSArray<NSString *> *)groupKeys;
-- (nullable NSDictionary<NSString *, id> *)dataForRow:(NSUInteger)rowID error:(NSError * _Nullable __autoreleasing *_Nullable)error;
-
-#pragma mark - Enumerators
-
-- (nonnull NSEnumerator<MADDataColumn *> *)columnsEnumerator;
-- (nonnull NSEnumerator *)objectEnumerator;
-- (nonnull NSEnumerator *)enumeratorForKeyObjectsSorted;
-- (nonnull NSEnumerator *)enumeratorForAllObjectsSorted;
-- (nonnull NSEnumerator *)enumeratorForAllObjectsSortedRowIdOnly;
-
 #pragma mark - Count and Metadata
+// The row/column accessors, the enumerators and the write port are declared by
+// <MADDataTableWriting>, <MADDataTableReading> and <MADDataTableCursoring> above.
 
-- (NSUInteger)numberOfRows;
-- (NSUInteger)numberOfColumns;
-- (NSUInteger)count;
 - (nonnull NSString *)newFilenameMDCache;
 
 @end

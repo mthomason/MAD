@@ -379,7 +379,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 	return [self executeQuery:query withDataTable:dataTable andError:error];
 }
 
-- (BOOL)executeQuery:(MADQuery *)query withDataTable:(MADDataTable *)dataTable
+// Narrowed to the write port: this driver hands the caller's table to -runSQL:,
+// which only ever fills it, and never reads a row or a count back.  The
+// MADDatabaseDataSource protocol still declares MADDataTable because
+// MADDatabaseMySQL cannot honour the narrower promise -- see that class.
+- (BOOL)executeQuery:(MADQuery *)query withDataTable:(id <MADDataTableWriting>)dataTable
 			andError:(NSError * __autoreleasing *)error {
 	BOOL success = NO;
 	NSError * __autoreleasing dberror = nil;
@@ -395,7 +399,7 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 - (BOOL)runQuery:(MADQuery *)query onProcess:(MADDatabaseProcessSQLServer *)process
-   withDataTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+   withDataTable:(id <MADDataTableWriting>)dataTable withError:(NSError * __autoreleasing *)error {
 	BOOL success = NO;
 	NSError * __autoreleasing sqlError = nil;
 	NSString *sql = [query getSql:self error:&sqlError];
@@ -410,11 +414,11 @@ int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dbe
 }
 
 - (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
-   intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error {
+   intoResultTable:(id <MADDataTableWriting>)dataTable withError:(NSError * __autoreleasing *)error {
 	return [self runSQL:sql onDataTable:dataTable fieldKeys:fieldKeys process:dbconn];
 }
 
-- (BOOL)runSQL:(NSString *)sql onDataTable:(MADDataTable *)datatable fieldKeys:(NSArray *)fieldKeys
+- (BOOL)runSQL:(NSString *)sql onDataTable:(id <MADDataTableWriting>)datatable fieldKeys:(NSArray *)fieldKeys
 	   process:(MADDatabaseProcessSQLServer *)process {
 	
 	BOOL rsuccess = NO;

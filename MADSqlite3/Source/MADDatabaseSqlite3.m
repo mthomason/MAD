@@ -424,7 +424,7 @@ void sqliteLog(void *foo, const char* statement) {
 - (BOOL)executeSQL:(NSString *)sql
 		 fieldKeys:(NSArray *)fieldKeys
 	  onConnection:(id)dbconn
-   intoResultTable:(MADDataTable *)dataTable
+   intoResultTable:(id <MADDataTableWriting>)dataTable
 		 withError:(NSError * __autoreleasing *)outError {
 	NSError *error = nil;
 	BOOL result = [self executeSQL: sql
@@ -447,7 +447,7 @@ void sqliteLog(void *foo, const char* statement) {
 - (BOOL)executeSQL:(NSString *)sql
 		 fieldKeys:(NSArray *)fieldKeys
 	  onConnection:(id)dbconn
-   intoResultTable:(MADDataTable *)dataTable
+   intoResultTable:(id <MADDataTableWriting>)dataTable
 	transactionSet:(BOOL)partOfTransactionSet
 	returnsResults:(BOOL)returnsResults
 	binaryBindings:(NSArray *)binaryBindings
@@ -575,7 +575,7 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (BOOL)executeQuery:(MADQuery <MADQueryDataBindingProtocol> *)query
-	   withDataTable:(__kindof MADDataTable *)dataTable
+	   withDataTable:(id <MADDataTableWriting>)dataTable
 			andError:(NSError * __autoreleasing *)error {
 	BOOL status = NO;
 	NSError *sqlError = NULL;

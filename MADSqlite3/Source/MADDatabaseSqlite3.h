@@ -11,6 +11,7 @@
 
 #import <MADAPI/MADAliases.h>
 #import <MADFoundation/MADDataType.h>
+#import <MADFoundation/MADDataTable.h>
 
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseCacheProtocol.h>
@@ -42,10 +43,13 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 + (NSString *)sortDescriptionForColumnType:(MADDataType)columnType
 								 ascending:(BOOL)ascending;
 
+// The table is narrowed to the write port: the row loop below fills it with
+// -removeAllObjects / -addColumn: / -addRowWithDataForFieldKeys: / -endBulkInsert
+// and reads nothing back, so a caller can hand over any <MADDataTableWriting>.
 - (BOOL)executeSQL: (NSString *)sql
 		 fieldKeys: (NSArray *)fieldKeys
 	  onConnection: (id)dbconn
-   intoResultTable: (MADDataTable *)dataTable
+   intoResultTable: (id <MADDataTableWriting>)dataTable
 	transactionSet: (BOOL)partOfTransactionSet
 	returnsResults: (BOOL)returnsResults
 	binaryBindings: (NSArray *)binaryBindings

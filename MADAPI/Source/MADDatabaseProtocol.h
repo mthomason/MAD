@@ -24,6 +24,12 @@
 - (id)connectWithConnection:(MADDatabaseConnection *)connection credentals:(MADCredential *)credentals
 			connectionError:(NSError * __autoreleasing *)error;
 
+// These stay typed MADDataTable rather than the narrower <MADDataTableWriting>.
+// MADDatabaseSQLServer and MADDatabaseSqlite3 only ever write, so their own
+// implementations do narrow to the write port, but MADDatabaseMySQL's fetch reads
+// column metadata back out of the table and corrects a column's type mid-row
+// (MysqlFetch+DataTable.m), so the protocol cannot promise less than the full
+// class until that path is redesigned.  See MADDataTable_Architecture_Report.md.
 - (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
    intoResultTable:(MADDataTable *)dataTable withError:(NSError * __autoreleasing *)error;
 
