@@ -76,6 +76,7 @@
 		4C3639F91D03B84E0077A506 /* MADImageThumbnail.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3639F71D03B84E0077A506 /* MADImageThumbnail.m */; };
 		4C37AD312E86D00F003C2B2C /* MADMock.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C37AD302E86D00F003C2B2C /* MADMock.m */; };
 		4C37AD342E86D125003C2B2C /* MADTestReportFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C37AD332E86D125003C2B2C /* MADTestReportFormatter.m */; };
+		4C37AD402E86D00F003C2B2C /* MADDocumentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C37AD412E86D00F003C2B2C /* MADDocumentTests.m */; };
 		4C401D241BAE3AF800BAE5FC /* MTPaper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CD81BAE3AF800BAE5FC /* MTPaper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401D251BAE3AF800BAE5FC /* MTPaper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401CD91BAE3AF800BAE5FC /* MTPaper.m */; };
 		4C401D261BAE3AF800BAE5FC /* MTPaperA0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401CDA1BAE3AF800BAE5FC /* MTPaperA0.h */; };
@@ -620,6 +621,7 @@
 		4C37AD2F2E86D00F003C2B2C /* MADMock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMock.h; sourceTree = "<group>"; };
 		4C37AD302E86D00F003C2B2C /* MADMock.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMock.m; sourceTree = "<group>"; };
 		4C37AD332E86D125003C2B2C /* MADTestReportFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTestReportFormatter.m; sourceTree = "<group>"; };
+		4C37AD412E86D00F003C2B2C /* MADDocumentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDocumentTests.m; sourceTree = "<group>"; };
 		4C3F85671E8E756B0003B67C /* MADModelType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADModelType.h; sourceTree = "<group>"; };
 		4C401CD81BAE3AF800BAE5FC /* MTPaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTPaper.h; sourceTree = "<group>"; };
 		4C401CD91BAE3AF800BAE5FC /* MTPaper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTPaper.m; sourceTree = "<group>"; };
@@ -1779,6 +1781,7 @@
 				4C37AD2F2E86D00F003C2B2C /* MADMock.h */,
 				4C37AD302E86D00F003C2B2C /* MADMock.m */,
 				4C37AD332E86D125003C2B2C /* MADTestReportFormatter.m */,
+				4C37AD412E86D00F003C2B2C /* MADDocumentTests.m */,
 			);
 			path = MADTests;
 			sourceTree = "<group>";
@@ -2397,6 +2400,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C37AD312E86D00F003C2B2C /* MADMock.m in Sources */,
+				4C37AD402E86D00F003C2B2C /* MADDocumentTests.m in Sources */,
 				4CF781541BADE5EA0050A67D /* MADTests.m in Sources */,
 				4CDA7A0100000000000000A1 /* MADDataTableRegressionTests.m in Sources */,
 				4CDA7A0300000000000000A1 /* MADCoreLogicTests.m in Sources */,

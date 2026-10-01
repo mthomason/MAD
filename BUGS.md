@@ -189,21 +189,26 @@ Status key:
   confirmed to fail against the old behaviour before it was kept.
 
 ### `MADocument -paperSize` reads the `_paper` ivar the lazy `-paper` accessor builds
-- **Status:** Confirmed
-- **Where:** `MAD/Source/MADocument.m:200-201`; the accessor is `:1121-1128`
-- **Behavior:** `- (CGSize)paperSize { return _paper.paperSize; }` reads the ivar
+- **Status:** Fixed
+- **Where:** `MAD/Source/MADocument.m`; the accessor is `-paper` in the same file
+- **Behavior:** `- (CGSize)paperSize { return _paper.paperSize; }` read the ivar
   directly, but `_paper` stays nil until something calls the lazy `-paper` accessor,
   which is what builds it from `activeDocumentModel.paperType`. Asked first,
-  `-paperSize` answers `{0, 0}`.
-- **Why it matters:** `-format` and `-formatContentChange` (`:212-218`) both hand
+  `-paperSize` answered `{0, 0}`.
+- **Why it matters:** `-format` and `-formatContentChange` both hand
   `self.paperSize` to the report formatter, and a zero layout size makes
   `PrintableHeightForPage` negative, so the formatter starts a new page on every
   row. The application never sees it because its viewer touches `paper` while
   opening the document. A second caller — the CLI — produced 11602 pages for 3503
   rows until it learned to ask for `document.paper` first.
-- **Worked around, not fixed:** `(void)document.paper;` at
-  `CLI/Source/MADCLIDocument.m:252`, with a comment pointing here. No test covers
-  it; the CLI's export path is the only thing that exercises it today.
+- **Now:** `-paperSize` reads `self.paper` instead of `_paper`, so it builds the
+  paper like any other caller. The CLI workaround — `(void)document.paper;` at
+  `CLI/Source/MADCLIDocument.m`, with a comment pointing here — is gone. Verified
+  with the CLI: Music, 3503 rows, went from 11602 pages to 77; London, 76 rows, 5.
+- **Test:** `MADTestsMADDocumentTests testPaperSizeBuildsThePaperItself`, which
+  gives a document a model whose `papersize` is letter and asserts `-paperSize` is
+  non-zero, agrees with `-paper`, and is the letter size. Confirmed to fail against
+  the ivar read before it was kept.
 
 ---
 

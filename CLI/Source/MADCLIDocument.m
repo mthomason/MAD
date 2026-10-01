@@ -242,15 +242,6 @@ static NSError *MADCLIDocumentError(NSString *message) {
 	// viewer has already reloaded; here nothing has.
 	[document prepareForQuery];
 
-	// -[MADocument paperSize] reads the _paper ivar rather than the lazy -paper
-	// accessor that builds it, so it answers {0, 0} until something else has asked
-	// for the paper.  The viewer asks on open; the CLI does not, and a zero layout
-	// size makes PrintableHeightForPage negative, so every row starts a new page --
-	// 3503 rows produced 11602 blank-looking pages before this line existed.
-	// Touching the accessor first is what the viewer does implicitly.  The ivar read
-	// is MADocument's defect, not the CLI's; see BUGS.md.
-	(void)document.paper;
-
 	MADReportFormatter *reportFormatter = document.reportFormatter;
 	reportFormatter.overrideIdentifier = @"madpreview";
 	reportFormatter.didRefresh = YES;

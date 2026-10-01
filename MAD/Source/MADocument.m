@@ -197,8 +197,13 @@ void madwarn(char *err,  const char *err2) { }
 	return _dataTable != nil ? _dataTable.rowCounter : 0;
 }
 
+// -paper, not _paper.  The ivar stays nil until the lazy -paper accessor builds it from
+// activeDocumentModel.paperType, so reading the ivar answered {0, 0} to whoever asked first.
+// A zero layout size makes PrintableHeightForPage negative and the formatter starts a new
+// page on every row -- 3503 rows produced 11602 pages for the CLI, which is the only caller
+// that asks before something else has touched -paper.  See BUGS.md.
 - (CGSize)paperSize {
-	return _paper.paperSize;
+	return self.paper.paperSize;
 }
 
 - (BOOL)didRefresh {
