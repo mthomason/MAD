@@ -186,26 +186,30 @@ The app target also sets `SQLITE_ENABLE_COLUMN_METADATA=1`
 (`MAD Designer.xcodeproj/project.pbxproj:2957`), which is inert for `sqlite3.c`, because
 the app target does not compile it.
 
-**Measured against the shipped binary**, not inferred. The framework's own compile-option
-table reports:
+**Measured against the built binary**, not inferred. SQLite compiles its own option
+table with `#ifdef` guards (`sqlite3.c:22411` and following), so the strings it reports
+are a truthful read of what was in effect:
 
 ```
-$ strings MADSqlite3.framework/MADSqlite3 | grep -x 'ENABLE_*\|DEFAULT_PAGE_SIZE=*'
+$ strings MADSqlite3.framework/MADSqlite3 | grep -x 'DEFAULT_PAGE_SIZE=.*\|ENABLE_.*'
 DEFAULT_PAGE_SIZE=4096
 ENABLE_COLUMN_METADATA
 ```
 
-and its symbol table has **no fts5 symbols at all**:
-
-```
-$ nm -gU MADSqlite3.framework/MADSqlite3 | grep -ci fts5
-0
-```
+No `ENABLE_FTS5` and no `ENABLE_STAT4`. Those two entries exist in the table only if
+their macros were defined when `sqlite3.c` was compiled, so their absence means neither
+feature's code was compiled in at all. Likewise `DQS=0` and `TEMP_STORE=2` are missing,
+so both took their `#ifndef` defaults.
 
 So the engine that writes every `.maddb` cache is built with a **4096-byte page size**
 where the script asks for 8192, and without FTS5 or STAT4. `SQLITE_DEFAULT_PAGE_SIZE`
 is an ordinary compile-time `#ifndef` (`sqlite3.c:14217-14219`), so it is genuinely 4096
 in the shipped product.
+
+> Use `nm`, not `nm -gU`, when counting symbols in a framework: `-U` restricts output to
+> *undefined* symbols, which reads 0 for a module that defines them itself. That mistake
+> was made once while writing this document. The finding above does not rest on it — the
+> option table is the evidence — but the corrected command is in §9.
 
 Why this matters beyond tidiness: **the page size is written into the database header.**
 A `.maddb` produced by a correctly-flagged build and one produced by this build are not
@@ -213,6 +217,43 @@ byte-identical files, and a future macOS or CLI build that *does* pass the scrip
 flags would produce caches the current app reads but did not write. The format is
 defined by accident. Fixing this belongs with the build system, which is why it is here
 and not in `MAD_FORMAT.md` alone.
+
+**Fixed.** The defines now live in one file -- `Compressor/sqlite3.xcconfig` -- which the
+`MADSqlite3` target names as its base configuration for both Debug and Release, and
+which `build_sqlite3.sh` reads for its own CFLAGS. Rebuilt and re-measured, the engine
+now reports:
+
+```
+$ strings MADSqlite3.framework/MADSqlite3 | grep -x 'DEFAULT_PAGE_SIZE=.*\|ENABLE_.*\|DQS=.*\|TEMP_STORE=.*'
+DEFAULT_PAGE_SIZE=8192
+DQS=0
+ENABLE_COLUMN_METADATA
+ENABLE_FTS5
+ENABLE_STAT4
+TEMP_STORE=2
+THREADSAFE=1
+```
+
+The rebuilt framework now defines **599** fts5 symbols, where the guards above mean it
+previously defined none. The full `MADSqlite3` suite passes (69 tests, 5 skipped, 0
+failures), so `DQS=0` did not break any generated SQL -- the query builder emits
+double-quoted *identifiers*, which it still allows, and binds every value through `?`
+placeholders.
+
+Two things surfaced only because the list was compiled for the first time:
+
+- **`SQLITE_OMIT_DECLTYPE` contradicts `SQLITE_ENABLE_COLUMN_METADATA`.** SQLite refuses
+  to build with both -- *"Must not define both SQLITE_OMIT_DECLTYPE and
+  SQLITE_ENABLE_COLUMN_METADATA"* -- because column metadata is built on
+  `sqlite3_column_decltype`. The script asked for both, which could never have worked,
+  and that is itself evidence the flags had not been in effect.
+- `SQLITE_ENABLE_JSON1` is a no-op on 3.49, since JSON became part of the core in 3.38,
+  and `-DNOMINMAX` is a Visual C++ artifact. Both dropped.
+
+Caches written before this change have 4096-byte pages and caches written after have
+8192. That is safe: SQLite reads the page size from the database header, so old caches
+still open. It is noted because it is the one user-visible consequence, and because it
+is what makes this a format change rather than a build tweak.
 
 > Two adjacent facts, kept separate on purpose: the `.mad` **store** reports SQLite
 > 3.43.2 (`MAD_FORMAT.md` §3) because Core Data writes it with the OS's SQLite. The
@@ -378,8 +419,8 @@ answer for "many enterprise databases", and the wrong answer for "just one more"
 find Compressor/library -name '*.a' -exec sh -c 'printf "%-60s %s\n" "$1" "$(lipo -archs "$1")"' _ {} \;
 
 # what the compiled sqlite actually is
-nm -gU MADSqlite3.framework/MADSqlite3 | grep -ci fts5
-strings MADSqlite3.framework/MADSqlite3 | grep -x 'DEFAULT_PAGE_SIZE=.*'
+nm MADSqlite3.framework/MADSqlite3 | grep -ci fts5
+strings MADSqlite3.framework/MADSqlite3 | grep -x 'DEFAULT_PAGE_SIZE=.*\|ENABLE_.*'
 
 # what each project points at, and which of those exist
 grep -rn 'LIBRARY_SEARCH_PATHS' --include='*.pbxproj' .

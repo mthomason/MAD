@@ -339,7 +339,9 @@ found by inspection rather than by a test and is recorded under "Already fixed
 (for reference)": eight call sites passed a variable to `sqlite3_mprintf` as the
 format string. The first two below were found while writing the write-port test
 that proves the driver is decoupled from `MADDataTable`; the third was found by
-the ingest benchmark, which is also what measures it.
+the ingest benchmark, which is also what measures it. The fourth was found while
+inventorying the static-library build for the CLI work, and is the only one here
+that changed a file the application writes.
 
 ### `MADDataTableFast` left its row counter stale after an in-memory drop or delete
 - **Status:** Fixed
@@ -419,6 +421,46 @@ the ingest benchmark, which is also what measures it.
   it started. `testRetainedFootprintDoesNotScaleWithRowCount` pins the separate
   question of whether anything is held after the pool drains, and reports 0.0 MB
   growth for a second table of 200000 more rows.
+
+### The SQLite engine was compiled with one of the twenty options the build script declared
+- **Status:** Fixed
+- **Commit:** `26ca18ff7`
+- **Where:** `Compressor/build_sqlite3.sh:25`,
+  `MADSqlite3/MADSqlite3.xcodeproj/project.pbxproj:571`, `:630`
+- **Behavior:** `build_sqlite3.sh` declared twenty compile options for SQLite — FTS5,
+  STAT4, column metadata, an 8192-byte page size, `DQS=0`, `TEMP_STORE=2` and so on —
+  but they were never applied to the engine that ships. `sqlite3.c` is not built into a
+  `.a`; it is a source file of the `MADSqlite3` target (`project.pbxproj:494`), and that
+  target passed exactly one define, `SQLITE_ENABLE_COLUMN_METADATA=1`. Every other
+  option fell back to the amalgamation's own `#ifndef` default.
+- **Why it mattered:** For one of them, because it changes the file on disk. SQLite
+  reports its options through a table built with `#ifdef` guards (`sqlite3.c:22411`), and
+  the built framework listed `DEFAULT_PAGE_SIZE=4096` and `ENABLE_COLUMN_METADATA` and
+  nothing else. Page size is recorded in the header of every database written, so the
+  engine writing every `.maddb` cache produced a different file than the build script
+  intended — and a second build (the macOS or CLI work, `LIBRARIES.md`) that *did*
+  honour the script would have written caches this app reads but never wrote. For the
+  rest, because the features were simply absent: FTS5 could never be used, its code
+  never having been compiled in.
+- **Now:** the options live in `Compressor/sqlite3.xcconfig`, named as the base
+  configuration of the `MADSqlite3` target's Debug and Release, and read by
+  `build_sqlite3.sh` for its own CFLAGS. One list, two consumers, so they cannot drift
+  apart again. Rebuilt, the engine reports `DEFAULT_PAGE_SIZE=8192`, `DQS=0`,
+  `ENABLE_FTS5`, `ENABLE_STAT4`, `TEMP_STORE=2` and `THREADSAFE=1`, and defines 599
+  fts5 symbols where the guards above say it defined none.
+- **Test:** the `MADSqlite3` suite — 69 tests, 5 skipped, 0 failures — which is the
+  check that matters, because `DQS=0` is the option most likely to have broken working
+  SQL: it removes SQLite's habit of reading an unknown double-quoted token as a string
+  literal. The query builder quotes identifiers and binds values through `?`, so it was
+  already written the way `DQS=0` requires.
+- **Also found, by compiling the list for the first time:**
+  `SQLITE_OMIT_DECLTYPE` and `SQLITE_ENABLE_COLUMN_METADATA` are mutually exclusive —
+  the amalgamation refuses both, *"Must not define both SQLITE_OMIT_DECLTYPE and
+  SQLITE_ENABLE_COLUMN_METADATA"*, since column metadata is built on
+  `sqlite3_column_decltype`. The script asked for both, which could never have built,
+  and that is itself evidence the flags had not been in effect.
+  `SQLITE_ENABLE_JSON1` was dropped as a no-op on 3.49, JSON having been part of the
+  core since 3.38, and `-DNOMINMAX` as a Visual C++ artifact.
 
 ---
 
