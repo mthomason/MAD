@@ -137,6 +137,20 @@
 	XCTAssertEqualObjects([db newSafeIdentifier:@"dept_emp"], @"`dept_emp`");
 }
 
+#pragma mark - Literal quoting
+
+// The complete escape needs the live session (see -newSafeLiteral:), and the live
+// suite covers that. This pins the path taken when there is none: the base's ANSI
+// quoting, which is what a preview that never connects gets. A backslash is NOT
+// escaped on that path, and this test says so out loud rather than leaving it implied.
+- (void)testNewSafeLiteralWithoutASessionFallsBackToAnsiQuoting {
+	MADDatabaseMySQL *db = [[MADDatabaseMySQL alloc] init];
+	XCTAssertEqualObjects([db newSafeLiteral:@"London"], @"'London'");
+	XCTAssertEqualObjects([db newSafeLiteral:@"O'Brien"], @"'O''Brien'");
+	XCTAssertEqualObjects([db newSafeLiteral:@"C:\\temp"], @"'C:\\temp'");
+	XCTAssertEqualObjects([db newSafeLiteral:nil], @"NULL");
+}
+
 #pragma mark - MADDatabaseMySQL identity
 
 - (void)testDriverMetadata {

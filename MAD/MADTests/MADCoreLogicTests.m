@@ -20,7 +20,12 @@
 #import <Foundation/NSComparisonPredicate.h>
 #include <limits.h>
 
+#import <MADAPI/MADQuery.h>
+#import <MADFoundation/MADDataColumn.h>
+#import <MADSqlite3/MADQuerySelectParameters.h>
+
 #import "madmath.h"
+#import "MADQueryCacheSelectGroupKeys.h"
 #import "MADAlignment.h"
 #import "MADSectionRepresentation.h"
 #import "MADTableFieldIdentifier.h"
@@ -301,6 +306,94 @@
 	XCTAssertEqualObjects(MNSJoinTypeLeftOuterJoin, @"MNSJoinTypeLeftOuterJoin");
 	XCTAssertEqualObjects(MNSJoinTypeRightOuterJoin, @"MNSJoinTypeRightOuterJoin");
 	XCTAssertEqualObjects(MNSJoinTypeFullOuterJoin, @"MNSJoinTypeFullOuterJoin");
+}
+
+#pragma mark - MADQueryCacheSelectGroupKeys
+
+// The parameters as -[MADQuery queryWithType:parameters:] passes them, which is where
+// this query is built.  The dictionary has to be assembled here rather than inline: an
+// @{} literal carries commas, and an XCTest macro would split its arguments on them.
+- (MADQueryCacheSelectGroupKeys *)groupKeysQueryWithPredicates:(NSArray <NSDictionary *> *)predicates {
+
+	MADDataColumn *column = [[MADDataColumn alloc] initWithIdentifier: @"Customer.City"];
+	column.type = MADDataTypeString;
+	column.nativeType = MADDataTypeString;
+
+	NSDictionary *parameters = @{
+		@(MADQuerySelectTableName)		: @"Customer",
+		@(MADQuerySelectFieldKeys)		: @[@"Customer.City"],
+		@(MADQuerySelectSortAccending)	: @YES,
+		@(MADQuerySelectColumns)		: @{ @"Customer.City" : column },
+		@(MADQuerySelectPredicates)		: predicates ?: @[]
+	};
+
+	return [[MADQueryCacheSelectGroupKeys alloc] initWithObject: parameters];
+}
+
+- (NSDictionary *)predicateOnCity:(id)value {
+	return @{ MADQueryKeyPredicateColumn: @"Customer.City",
+			  MADQueryKeyPredicateValue:  value };
+}
+
+// The defect this pins: the value was written as @"%@ = \"%@\"", and a SQL reader takes a
+// double-quoted token for a *name*.  The filter therefore asked for a column called
+// London.  Sqlite3 only forgave that while SQLITE_DQS was on, and that is now off.
+- (void)testGroupKeysQuotesTheValueAsALiteralNotAsAName {
+
+	NSArray *predicates = @[[self predicateOnCity: @"London"]];
+	MADQueryCacheSelectGroupKeys *query = [self groupKeysQueryWithPredicates: predicates];
+	NSString *sql = [query getSql: nil];
+
+	NSString *asName = @"= \"London\"";
+	NSString *asLiteral = @"= 'London'";
+
+	XCTAssertNotNil(sql);
+	XCTAssertFalse([sql containsString: asName],
+				   @"The value is still quoted as a name: %@", sql);
+	XCTAssertTrue([sql containsString: asLiteral],
+				  @"Expected a quoted literal in: %@", sql);
+}
+
+// The names are identifiers and stay in double quotes; what changed is only the value.
+- (void)testGroupKeysQuotesColumnAndTableAsIdentifiers {
+
+	NSArray *predicates = @[[self predicateOnCity: @"London"]];
+	MADQueryCacheSelectGroupKeys *query = [self groupKeysQueryWithPredicates: predicates];
+	NSString *sql = [query getSql: nil];
+
+	XCTAssertTrue([sql containsString: @"FROM \"Customer\""], @"%@", sql);
+	XCTAssertTrue([sql containsString: @"\"Customer.City\" = 'London'"], @"%@", sql);
+}
+
+// A statement with no predicates used to read "SELECT DISTINCT ... FROM \"Customer\"  WHERE
+// ORDER BY ...", which is a syntax error.  There is simply no clause now.
+- (void)testGroupKeysWithoutPredicatesLeavesOutTheWhereClause {
+
+	MADQueryCacheSelectGroupKeys *query = [self groupKeysQueryWithPredicates: @[]];
+	NSString *sql = [query getSql: nil];
+
+	XCTAssertFalse([sql containsString: @"WHERE"], @"%@", sql);
+	XCTAssertTrue([sql containsString: @"ORDER BY"], @"%@", sql);
+}
+
+// A NULL term is a SQL keyword, not a string, and must not be quoted.
+- (void)testGroupKeysWritesNullAsAKeyword {
+
+	NSArray *predicates = @[[self predicateOnCity: [NSNull null]]];
+	MADQueryCacheSelectGroupKeys *query = [self groupKeysQueryWithPredicates: predicates];
+	NSString *sql = [query getSql: nil];
+
+	XCTAssertTrue([sql containsString: @"\"Customer.City\" = NULL"], @"%@", sql);
+}
+
+// An apostrophe inside the value is escaped by the dialect, not left to end the literal.
+- (void)testGroupKeysEscapesAnApostropheInTheValue {
+
+	NSArray *predicates = @[[self predicateOnCity: @"O'Brien"]];
+	MADQueryCacheSelectGroupKeys *query = [self groupKeysQueryWithPredicates: predicates];
+	NSString *sql = [query getSql: nil];
+
+	XCTAssertTrue([sql containsString: @"= 'O''Brien'"], @"%@", sql);
 }
 
 @end

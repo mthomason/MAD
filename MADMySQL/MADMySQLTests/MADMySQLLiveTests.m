@@ -33,7 +33,10 @@
 #import <MADFoundation/MADDataTableVirtual.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADDataType.h>
+#import <MADFoundation/MADCredential.h>
 
+#import "MADDatabaseMySQL.h"
+#import "MADDatabaseConnectionMySql.h"
 #import "MysqlServer.h"
 #import "MysqlConnection.h"
 #import "MysqlFetch.h"
@@ -177,6 +180,83 @@
 	[self requireServer];
 	MysqlConnection *connection = [self openConnection];
 	XCTAssertNil([connection mysqlEscapeString:nil]);
+}
+
+#pragma mark - Literal quoting through a live session
+
+// The driver escapes string literals through the session it opened for the query
+// (-newSafeLiteral:), because a backslash is an escape character in a MySQL literal:
+// ANSI ''-doubling alone turns C:\temp into C:<TAB>emp.  These tests connect the way a
+// query does, ask the driver for the literal, and then have the server read it back --
+// the round trip is the assertion, since only the server's reading proves the escape.
+
+- (MADDatabaseMySQL *)openDatabase:(MysqlConnection * __autoreleasing *)outSocket {
+	MysqlServer *server = [[self class] testServer];
+	MADDatabaseConnectionMySql *settings =
+		[[MADDatabaseConnectionMySql alloc] initWithHost: server.host
+												database: server.schema
+												 andPort: server.port];
+	MADCredential *credential = [[MADCredential alloc] initWithUsername: server.user
+															andPassword: server.password];
+
+	MADDatabaseMySQL *database = [[MADDatabaseMySQL alloc] init];
+	database.databaseConnection = settings;
+
+	NSError *error = nil;
+	MysqlConnection *socket = [database connectWithConnection: settings
+													credentals: credential
+											   connectionError: &error];
+	XCTAssertNotNil(socket, @"Expected to connect to %@: %@", server.host, error);
+	if (outSocket != NULL) { *outSocket = socket; }
+	return socket != nil ? database : nil;
+}
+
+- (void)testNewSafeLiteralEscapesABackslashThroughTheLiveSession {
+	[self requireServer];
+	MysqlConnection *socket = nil;
+	MADDatabaseMySQL *database = [self openDatabase:&socket];
+	if (database == nil) return;
+
+	// The value is C:\temp; the text handed to the server has the backslash doubled.
+	NSString *value = @"C:\\temp";
+	NSString *literal = [database newSafeLiteral: value];
+	XCTAssertEqualObjects(literal, @"'C:\\\\temp'",
+						  @"The session should have doubled the backslash.");
+
+	NSError *error = nil;
+	MADDataTable *table = [self fetch:[NSString stringWithFormat:@"SELECT %@ AS `v`;", literal]
+						 onConnection: socket
+								error: &error];
+	XCTAssertNil(error, @"The server rejected the literal: %@", error);
+	XCTAssertEqualObjects([table objectAtRow:0 column:0], value);
+}
+
+- (void)testNewSafeLiteralEscapesAnApostropheThroughTheLiveSession {
+	[self requireServer];
+	MysqlConnection *socket = nil;
+	MADDatabaseMySQL *database = [self openDatabase:&socket];
+	if (database == nil) return;
+
+	NSString *value = @"O'Brien";
+	NSString *literal = [database newSafeLiteral: value];
+	XCTAssertEqualObjects(literal, @"'O\\'Brien'");
+
+	NSError *error = nil;
+	MADDataTable *table = [self fetch:[NSString stringWithFormat:@"SELECT %@ AS `v`;", literal]
+						 onConnection: socket
+								error: &error];
+	XCTAssertNil(error, @"The server rejected the literal: %@", error);
+	XCTAssertEqualObjects([table objectAtRow:0 column:0], value);
+}
+
+- (void)testNewSafeLiteralReportsNullWithoutASession {
+	[self requireServer];
+	MysqlConnection *socket = nil;
+	MADDatabaseMySQL *database = [self openDatabase:&socket];
+	if (database == nil) return;
+
+	// NULL is spelled without quotes, so it does not need the session at all.
+	XCTAssertEqualObjects([database newSafeLiteral:nil], @"NULL");
 }
 
 #pragma mark - Fetch: scalars and shapes

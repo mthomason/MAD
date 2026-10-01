@@ -135,10 +135,11 @@ Status key:
 - **Commit:** `0c187aca3`
 - **Where:** `MAD/Source/MADQueryPredicate.m:80-88`. The hook is
   `MADAPI/Source/MADDatabaseSQLProtocol.h` (`-newSafeLiteral:`), with the base
-  implementation in `MADAPI/Source/MADDatabase.m` and an override in
-  `MADTdsClient/Source/MADDatabaseSQLServer.m`. The group-key builder,
-  `MAD/Source/MADQueryCacheSelectGroupKeys.m:55`, still holds the old form — see
-  *Still open*.
+  implementation in `MADAPI/Source/MADDatabase.m` and overrides in
+  `MADTdsClient/Source/MADDatabaseSQLServer.m` and
+  `MADMySQL/Source/MADDatabaseMySQL.m`. The group-key builder,
+  `MAD/Source/MADQueryCacheSelectGroupKeys.m`, holds the old form in its history and
+  now goes through the same hook — see *Now, the two sites left open* below.
 - **Behavior:** A predicate's right-hand side was emitted as `"<value>"`:
   `[[NSString alloc] initWithFormat: @"\"%@\"", rightFieldID]`, and the group-key
   builder writes `[sqlPredicate appendFormat:@"%@ = \"%@\"", left, right]`. Both
@@ -171,22 +172,45 @@ Status key:
   SQL Server schema lookup, which hand-quoted a table name into `OBJECT_ID('%@')`,
   goes through the same hook; an apostrophe in a table name used to end the literal
   early and leave the rest of the name as SQL.
-- **Still open:** `MAD/Source/MADQueryCacheSelectGroupKeys.m:55` keeps the old form.
-  It is unreachable — only `-initWithQueryType:MADQueryTypeCacheSelectGroupKeys`
-  builds it and no caller passes that type; the live group-key path is
+- **Now, the two sites left open:** both are fixed.
+  `MADQueryCacheSelectGroupKeys` adopts `MADQueryDatabaseProtocol`, so
+  `-[MADQuery getSql:database:error:]` — the entry point every driver uses, including
+  `MADDatabaseSqlite3.m:591` — hands it the database it is about to run against. The
+  predicate is no longer assembled in the initializer, where no database existed yet;
+  `-whereClauseQuotedByDatabase:` quotes the column with `-newSafeIdentifier:` and the
+  value with `-newSafeLiteral:`, and the column and table names go through the same
+  dialect. With no database injected — the plain `-getSql:` entry point — it quotes
+  with a `MADDatabaseSqlite3`, because this query only ever runs against a document's
+  Sqlite3 cache; the sort description it builds is already Sqlite3's. The class is
+  still unreachable: only `-initWithQueryType:MADQueryTypeCacheSelectGroupKeys` builds
+  it and no caller passes that type, the live group-key path being
   `MADQuerySelectItemsForGroup`, whose `-whereClauseWithParameters:`
-  (`MADSqlite3/Source/MADQuery+Sqlite3.m`) binds `?`. Left alone rather than given the
-  protocol conformance it would need before it could build a literal at all.
-  Separately, a MySQL value containing a backslash is still misread: MySQL gives `\`
-  a meaning inside a literal, so only `mysql_real_escape_string` knows what the
-  session will make of it, and `MADDatabaseMySQL` opens its connection per query
-  without keeping it — the SQL builder cannot reach one. Recorded in that file.
+  (`MADSqlite3/Source/MADQuery+Sqlite3.m`) binds `?`. Two smaller defects fell out of
+  reading it closely. A statement with no predicates came out as
+  `… FROM "Customer"  WHERE  ORDER BY …`, a syntax error, and now has no clause at
+  all. And a `NULL` term was written `"<null>"` — `-appendFormat:` on an `NSNull` —
+  which is a literal string that matches nothing; it is the keyword now. (`NSNull` in
+  the cache is deliberate: a NULL read from a source database is stored as `NSNull`
+  rather than `nil`, so unwrapping a column value into an `NSObject` never faces a
+  nil. Not a defect, and not to be "fixed".)
+  The other is MySQL's backslash, which needed the live connection the driver was
+  not keeping. See the `## MADMySQL` entry *A backslash in a MySQL literal is an
+  escape character*.
 - **Test:** `MADAPITests testNewSafeLiteralQuotesAndEscapes` and
   `testNewSafeLiteralNilIsNull`; `MADTdsClientTests testNewSafeLiteralIsANvarcharLiteral`;
   and `MADSqlite3Tests testNewSafeLiteralProducesAValueSQLiteWillRead`, which puts a
   value containing a quote through a real query against the shipped `DQS=0` build, so
   a literal that is bare or double-quoted fails in the suite. That last one was
   confirmed to fail against the old behaviour before it was kept.
+  For the group-key builder, `MADTests MADCoreLogicTests`:
+  `testGroupKeysQuotesTheValueAsALiteralNotAsAName`,
+  `testGroupKeysQuotesColumnAndTableAsIdentifiers`,
+  `testGroupKeysWithoutPredicatesLeavesOutTheWhereClause`,
+  `testGroupKeysWritesNullAsAKeyword` and
+  `testGroupKeysEscapesAnApostropheInTheValue`. All five were run against
+  `MADQueryCacheSelectGroupKeys.m` as it stood in `c2be14442` and all five failed,
+  the old SQL printed in each failure — including `… FROM Customer  WHERE  ORDER BY
+  …` and `= "<null>"`.
 
 ### `MADocument -paperSize` reads the `_paper` ivar the lazy `-paper` accessor builds
 - **Status:** Fixed
@@ -711,6 +735,47 @@ libmysqlclient; it skips rather than fails when no server is reachable.
 - **Now:** the three lines name the binding each type actually goes through
   (`MYSQL_TYPE_SHORT`, `MYSQL_TYPE_INT24`, `MYSQL_TYPE_BIT`), matching the
   comment's own style for the entries above them.
+
+### A backslash in a MySQL literal is an escape character, so ANSI quoting alone is wrong
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MADDatabaseMySQL.m` (`-newSafeLiteral:`, and the
+  connection lifetime in `-connectWithConnection:credentals:connectionError:`,
+  `-executeSQL:fieldKeys:onConnection:intoResultTable:withError:`,
+  `-executeQuery:withDataTable:andError:`, `-getTables:` and `-closeConnection:`)
+- **Behavior:** `-newSafeLiteral:` inherited the base's ANSI quoting from `MADDatabase`
+  — `'…'` with the interior quote doubled — which is right for SQLite and for T-SQL but
+  not for MySQL, where a backslash inside a literal is an escape character. The value
+  `C:\temp` was written as `'C:\temp'` and read back by the server as `C:<TAB>emp`.
+  Measured, not reasoned about: the failure output of the test below prints
+  `("C:\temp") is not equal to ("C:	emp")` with the tab in it. The escape was recorded in
+  the `MADQueryPredicate` / `MADQueryCacheSelectGroupKeys` entry above and left open there
+  because the fix needed something this driver did not have.
+- **Why it matters:** `mysql_real_escape_string` is the only thing that knows what a given
+  session makes of a backslash, and it needs a live connection. This driver opened a
+  connection per query and let it go without ever keeping it on `self`, so by the time the
+  SQL builder ran `-newSafeLiteral:` there was nothing to ask. Every filter on a value
+  containing a backslash — a UNC path, a Windows path, a regular expression — silently
+  compared against a mangled string, and a value crafted to end its own literal had
+  nothing stopping it.
+- **Now:** the connection is held on `self` for as long as the query is being built and
+  run: `-connectWithConnection:credentals:connectionError:` keeps the session it opened,
+  and the query entry points that came through it let it go again — `-executeSQL:…`,
+  `-executeQuery:withDataTable:andError:`, `-getTables:` and `-closeConnection:`, each
+  guarded by `dbconn == self.liveConnection` so a connection the driver does not own is
+  never dropped. The driver still holds no idle connection; only the window between
+  opening and running changed. `-newSafeLiteral:` escapes through that session when it is
+  there, and falls back to the base when it is not (SQL built with no session open, such
+  as a preview that never connects), which is what the driver emitted before and is no
+  worse for such a value than it ever was. The handle is still freed by
+  `MysqlConnection -dealloc`: `mysql_init` is handed memory this side `calloc`'d, so the
+  client's `free_me` is false and `mysql_close` does not free it.
+- **Test:** `MADMySQLLiveTests testNewSafeLiteralEscapesABackslashThroughTheLiveSession`
+  and `testNewSafeLiteralEscapesAnApostropheThroughTheLiveSession`. Each connects the way
+  a query does, asks the driver for the literal and then has the server read it back —
+  `SELECT <literal> AS v` — because only the server's reading proves the escape. Both were
+  confirmed to fail against the old behaviour, printing the tab. The offline
+  `MADMySQLTests testNewSafeLiteralWithoutASessionFallsBackToAnsiQuoting` pins the
+  no-session path, backslash and all, so the limitation is stated rather than implied.
 
 ---
 

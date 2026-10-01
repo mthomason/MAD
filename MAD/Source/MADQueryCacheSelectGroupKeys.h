@@ -11,7 +11,10 @@
 
 #import <MADAPI/MADQuery.h>
 
-@interface MADQueryCacheSelectGroupKeys : MADQuery
+// Adopts MADQueryDatabaseProtocol so -[MADQuery getSql:database:error:] hands it the
+// database it is about to run against.  The predicate values have to be quoted the way
+// that database reads them, and it is the only way to learn which one that is.
+@interface MADQueryCacheSelectGroupKeys : MADQuery <MADQueryDatabaseProtocol>
 
 @end
 

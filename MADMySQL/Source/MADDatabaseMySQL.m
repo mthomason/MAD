@@ -38,6 +38,13 @@
 
 @property (nonatomic, strong) MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
 
+// Held only while a query is being built and run.  The SQL builder escapes string
+// literals through the session -- only it knows whether a backslash is an escape
+// character -- and the connection is dropped again as soon as the query that needed
+// it has finished, so this driver still holds no idle connection.  See
+// -newSafeLiteral:.
+@property (nonatomic, strong, nullable) MysqlConnection *liveConnection;
+
 @end
 
 @implementation MADDatabaseMySQL
@@ -58,20 +65,30 @@
 	return [[NSString alloc] initWithFormat:@"`%@`", fieldOrTableName];
 }
 
-// Deliberately no -newSafeLiteral: override; this class inherits MADDatabase's, which
-// emits the ANSI '...' with the interior doubled.
+// The base's ''-doubling is not enough here.  A backslash inside a MySQL string literal is
+// an escape character, so C:\temp is read back as C:<TAB>emp however the literal is quoted,
+// and mysql_real_escape_string is the only thing that knows which characters this session
+// treats that way.  The live connection is the one -connectWithConnection: holds for the
+// duration of the query, which is exactly the window -executeQuery:... and -executeSQL:...
+// build their SQL in.
 //
-// That change is not a regression: MySQL accepts '' inside a single-quoted literal, and the
-// double-quoted form it replaces was a string only because ANSI_QUOTES is off by default --
-// with it on, "London" was an identifier there too.
-//
-// It is not complete, though.  A backslash inside a MySQL literal is an escape character,
-// so a value like C:\temp is read as C:<tab>emp whatever the quoting; only
-// -[MysqlConnection mysqlEscapeString:] (a wrapper over mysql_real_escape_string) settles
-// that, because only the live connection knows the session's mode.  Building the SQL cannot
-// reach one: -executeQuery:withDataTable:andError: opens a connection, builds the SQL and
-// lets it go -- the connection is never kept on self, and this driver reconnects per query.
-// Recorded in BUGS.md; the escape belongs with whoever next touches that lifetime.
+// SQL built with no session open -- a preview that never connects -- falls back to the
+// base, which is what this driver emitted before; it is no worse for such a value than
+// it ever was.
+- (NSString *)newSafeLiteral:(NSString *)value {
+	if (value == nil) return @"NULL";
+	MysqlConnection *connection = self.liveConnection;
+	if (connection != nil) {
+		NSString *escaped = [connection mysqlEscapeString: value];
+		if (escaped != nil) {
+			return [[NSString alloc] initWithFormat:@"'%@'", escaped];
+		}
+		MADLogError("MADDatabaseMySQL: the session would not escape a literal; falling back to ANSI quoting.");
+	}
+	MADLogDebug("MADDatabaseMySQL: no live connection; quoting a literal without the session's escapes.");
+	return [super newSafeLiteral: value];
+}
+
 + (NSError *)errorCouldNotGetCredientals {
 	return [NSError errorWithDomain:NSStringFromClass([self class])
 							   code:43421
@@ -113,6 +130,8 @@
 	} else {
 		completion(NO, nil, nil);
 	}
+	// Held only for the duration of the fetch, like the query paths.
+	if (conn == self.liveConnection) self.liveConnection = nil;
 }
 
 - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion {
@@ -271,6 +290,10 @@
 		conn = [MysqlConnection connectToServer:serv error:&connError];
 		
 		success = (conn && connError == nil);
+		// Held, not owned: the SQL builder escapes literals through the session
+		// (-newSafeLiteral:), so it has to outlive the call that opened it.  It is let go
+		// again in -closeConnection: and at the end of the query that used it.
+		self.liveConnection = success ? conn : nil;
 		if (!success && error != NULL) {
 			*error = [connError copy];
 		}
@@ -297,7 +320,11 @@
 	
 	NSError *fetchError = nil;
 	[myFetch fetchWithCommand: sql dataTable: dataTable onConnection:dbconn extendedNames:YES error: &fetchError];
-	
+
+	// The SQL is built and has run, so the session this driver was holding for
+	// -newSafeLiteral: is no longer needed -- and this driver keeps no idle connection.
+	if (dbconn == self.liveConnection) self.liveConnection = nil;
+
 	return fetchError == nil;
 }
 
@@ -351,6 +378,9 @@
 		} else {
 			result = YES;
 		}
+		// -newSafeLiteral: had its session while [query getSql:error:] was building the
+		// text; the query is over now, so the connection is not kept.
+		if (dbconn == self.liveConnection) self.liveConnection = nil;
 	} else {
 		if (dberror != nil && error != NULL) {
 			*error = [dberror copy];
@@ -362,6 +392,10 @@
 - (NSString *)domain { return NSStringFromClass([self class]); }
 
 - (void)closeConnection:(id)process {
+	// Dropped before the close, so nothing can escape a literal through a session that is
+	// already shut.  The handle itself is freed by the connection's -dealloc: -mysql_init
+	// was handed memory this side allocated, so the client leaves freeing it to us.
+	if (process == self.liveConnection) self.liveConnection = nil;
 	mysql_close(((MysqlConnection *)process).connection);
 }
 
