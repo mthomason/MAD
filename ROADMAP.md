@@ -77,12 +77,23 @@ does. `-numberOfRows` / `-count` returning the ivar rather than querying the fil
 Corrected the stale entry's status and `Now:` line to point at `850c32f51`, so the register no
 longer contradicts itself. No code changed; nothing was open.
 
-### 1.3 The MySQL `MADDataTypeMySQL` mapping
+### 1.3 The MySQL `MADDataTypeMySQL` mapping — **done 2026-10-01**
 
-`MYSQL_TYPE_TIME` maps to `MADDataTypeDateTime` rather than `MADDataTypeTime`, and
-`MYSQL_TYPE_NULL` to `MADDataTypeNumber` rather than `MADDataTypeNull`. Both were deliberately
-deferred because correcting them is a user-visible output change. Make it a positive decision
-recorded in `BUGS.md` rather than a standing "deferred".
+Two mappings were a standing "deferred". Both are now decided and written down.
+
+`MYSQL_TYPE_TIME` **is corrected** to `MADDataTypeTime`. The mapping was live
+(`MADDatabaseMySQL.m:247`) and wrong in a way that showed: `MysqlFetch+DataTable.m:431` builds
+the value from hour/minute/second alone, so the `NSDate` carries the calendar's default date,
+and `dateTimeformatter` rendered "1/1/01, 1:45 PM" for a pure clock. `MADDataTypeTime` is not a
+dormant case — the SQL Server driver has produced it for years and its live suite asserts it —
+so the clock-only branch is already exercised. Test flipped: `MADMySQLTests.m`.
+
+`MYSQL_TYPE_NULL` **stays `MADDataTypeNumber`**, and now says why. `MADDataTypeNull` is the
+*binding* null (`MADDatabaseDataBinding` for null parameters, `MADQuery+Sqlite3.m`), not a
+column type, and it has no schema display case, so it would render as "Type 24". A NULL-typed
+column can never hold a value, so the mapping only picks a schema label and a formatting branch.
+
+`MADMySQL` suite: 58 tests, 0 failures.
 
 ### 1.4 Unblock `MADTestReportFormatter`
 

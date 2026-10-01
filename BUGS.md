@@ -705,25 +705,38 @@ libmysqlclient; it skips rather than fails when no server is reachable.
   `NSAssert` message for unmapped types, so it actively misleads debugging.
 
 ### `MADDataTypeMySQL` mapping is lossy for three types
-- **Status:** Partly fixed (INT24); TIME and NULL intentionally left
+- **Status:** Fixed (all three decided — two corrected, one kept on purpose)
 - **Where:** `MADMySQL/Source/MADDataTypeMySQL.m`
-- **Behavior:** `MYSQL_TYPE_TIME` maps to `MADDataTypeDateTime` (not the dedicated
+- **Behavior:** `MYSQL_TYPE_TIME` mapped to `MADDataTypeDateTime` (not the dedicated
   `MADDataTypeTime`); `MYSQL_TYPE_NULL` maps to `MADDataTypeNumber` (not
   `MADDataTypeNull`); `MYSQL_TYPE_INT24` mapped to `MADDataTypeInteger` (not
-  `MADDataTypeInt24`). All three dedicated enum cases exist but are never
-  produced by this mapping.
-- **Caller analysis (2026-10-01), and the split decision:**
-  - **INT24 — fixed.** Every consumer groups `MADDataTypeInt24` with
+  `MADDataTypeInt24`). All three dedicated enum cases exist.
+- **Caller analysis (2026-10-01), and the decision for each:**
+  - **INT24 — corrected.** Every consumer groups `MADDataTypeInt24` with
     `MADDataTypeInteger` (`MADDatabaseField.m -isDataTypeNumeric`, the sqlite3 bind
     switch, `RptqDocumentElement+Extras.m:1074` value formatting), so using the
     dedicated case is behaviour-neutral and more accurate. Tests updated:
     `MADMySQLTests.m`, `MADMySQLLiveTests.m:594`.
-  - **TIME — left as-is.** Correcting it would change how existing MySQL TIME
-    columns are rendered in reports: `RptqDocumentElement+Extras.m:1008-1076` uses
-    `timeformatter` for `MADDataTypeTime` but `dateTimeformatter` for
-    `MADDataTypeDateTime`. That is a user-visible output change, deferred.
-  - **NULL — left as-is.** Correcting it would change an all-NULL column's
-    formatting and would fail the pinning test. Deferred.
+  - **TIME — corrected.** `MYSQL_TYPE_TIME` now maps to `MADDataTypeTime`. The
+    mapping was reachable (`MADDatabaseMySQL.m:247` sets every schema field's
+    `fieldType` from it) and wrong in a way that showed: `MysqlFetch+DataTable.m:431`
+    builds the value from hour/minute/second alone, so the `NSDate` carries whatever
+    date the calendar defaults to, and `RptqDocumentElement+Extras.m:1008-1076`
+    rendered `MADDataTypeDateTime` through `dateTimeformatter` — a date part the value
+    never had. `MADDataTypeTime` is the live case, not a dormant one: the SQL Server
+    driver has produced it since long before this and its live suite asserts it
+    (`MADDatabaseSQLServer.m:174`, `:251`), so the clock-only branch is exercised.
+    The only user-visible change is that a MySQL TIME column now reads as a clock
+    rather than "1/1/01, 1:45 PM". Test updated: `MADMySQLTests.m`.
+  - **NULL — kept, on purpose.** `MYSQL_TYPE_NULL` stays `MADDataTypeNumber`.
+    `MADDataTypeNull` is not a column type at all: it is the *binding* null,
+    produced by `MADDatabaseDataBinding.m:141`/`:157` for a null parameter and
+    consumed by `MADQuery+Sqlite3.m:66`. It has no display case in
+    `RptqDatabaseSchemaField+Extras.m`, so a schema field carrying it renders as
+    "Type 24" (`MADRptqDatabaseTests.m:45`). A column whose native type is NULL can
+    never hold a value, so the mapping only chooses a schema label and a formatting
+    branch, and `MADDataTypeNull` would be wrong for both. This is a decision, not a
+    deferral. Pinned by `MADMySQLTests.m` `-testDataTypeForNativeTypeMapsNullToNumber`.
 
 ### `MysqlFetch+DataTable` comment claims SMALLINT/MEDIUMINT/BIT are unsupported
 - **Status:** Fixed

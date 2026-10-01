@@ -88,13 +88,15 @@
 	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_DATETIME],  MADDataTypeDateTime);
 	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_TIMESTAMP], MADDataTypeTimeStamp);
 	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_YEAR],      MADDataTypeYear);
-	// NOTE: TIME maps to MADDataTypeDateTime, not the dedicated MADDataTypeTime.
-	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_TIME],      MADDataTypeDateTime);
+	// TIME is the dedicated MADDataTypeTime: the fetch code puts only hour/minute/second
+	// into the NSDate, so a date-part formatter showed a date the value never had.
+	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_TIME],      MADDataTypeTime);
 }
 
 - (void)testDataTypeForNativeTypeMapsNullToNumber {
-	// NOTE: MYSQL_TYPE_NULL maps to MADDataTypeNumber rather than the dedicated
-	// MADDataTypeNull. Documented, not corrected.
+	// MYSQL_TYPE_NULL stays MADDataTypeNumber, deliberately. See BUGS.md, MADMySQL:
+	// MADDataTypeNull is the binding-null used for null parameters, not a column type,
+	// and it has no schema display case.
 	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_NULL], MADDataTypeNumber);
 }
 
