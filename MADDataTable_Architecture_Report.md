@@ -4,8 +4,8 @@
 `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
 **Branch:** `refactor/mad-database-decouple`
 **Date:** 2026-09-30
-**Verification:** `xcodebuild test` — all 11 schemes, 798 tests, 0 failures; no warnings from any
-file in scope.
+**Verification:** `xcodebuild test` — all 11 schemes, 804 tests, 0 failures; no warnings from any
+file in scope. (798 at Revision 2; the count moved with the tests added since.)
 
 All `file:line` references below were read first-hand during this analysis, not inferred.
 
@@ -15,6 +15,13 @@ All `file:line` references below were read first-hand during this analysis, not 
 > `-allObjects` "live bug" (no production caller) and the `rowCounter` drift framing (unreachable).
 > §4.5 is new. Corrected text is marked **Corrected** / **Fixed**; the original claims are left
 > visible where they were instructive. Three code fixes landed with this revision — see §3.5.
+>
+> **Revision 3 — 2026-10-01.** Phase 1 step 5 has landed: `<MADDataTableWriting>`,
+> `<MADDataTableReading>` and `<MADDataTableCursoring>` are declared in `MADDataTable.h` and the
+> class adopts all three. Step 6 landed for two drivers of three — `MADDatabaseSQLServer` and
+> `MADDatabaseSqlite3` are now write-port-typed. Step 6 **could not** land for `MADDatabaseMySQL`,
+> and step 5's "delete the now-redundant stub block" was declined; §4.2 records why for each.
+> The whole pass is additive: no behaviour changed, and all 11 schemes pass (804 tests).
 >
 > **Revision 2 — 2026-09-30.** The eight `sqlite3_mprintf` format-string sites of §4.5 are now
 > fixed, and Phase 0 has landed: the unimplemented operations in `MADDataTable.m` assert instead
@@ -620,14 +627,65 @@ returns YES from a write I discarded" hazard from every driver.
    contract, so it will detect a mistake here.
 
 **Phase 1 — declare the protocols.**
-5. Extract `<MADDataTableWriting>`, `<MADDataTableReading>`, `<MADDataTableCursoring>` from the
-   header. Mark the genuinely-optional ones `@optional` and delete the now-redundant stub block.
-6. Retarget the driver signatures:
-   `MADDatabaseSqlite3.m:427/450/578`, `MADDatabaseSQLServer.m:319/346/350`,
-   `MADDatabaseMySQL.m:275/303`, `MysqlFetch+DataTable.h:16-22`, and the
-   `MADDatabaseProtocol` declarations (`MADAPI/Source/MADDatabaseProtocol.h:28-31`).
-7. This step is what makes the family testable without an app: a mock conforming to
-   `<MADDataTableWriting>` can drive `MADDatabaseSqlite3`'s row loop with no file on disk.
+
+5. **Done — the stub block was deliberately kept.** The three protocols are declared in
+   `MADFoundation/Source/MADDataTable.h` above the `@interface`, which now reads
+   `MADDataTable : NSObject <NSCoding, NSFastEnumeration, MADDataTableWriting,
+   MADDataTableReading, MADDataTableCursoring>`, and the thirty flat method declarations that
+   used to sit in the `@interface` body are gone from it. The split is by axis: **Writing**
+   is the mutable surface (`removeAllObjects`, `addColumn:`, `addRow:error:`,
+   `addRowWithDataForFieldKeys:`, `sortUsingDescriptors:`, plus `@optional`
+   `beginBulkInsert`/`endBulkInsert`); **Reading** is random access and the counts;
+   **Cursoring** is enumeration, with the three sorted enumerators and
+   `objectsForGroupKeys:` `@optional` because `MADDataTableVirtual` genuinely cannot serve
+   them.
+
+   The plan's "delete the now-redundant stub block" was **not** carried out, because both
+   stub blocks are pinned contracts, not redundancy:
+   `testBaseTableAbstractOperationsAssert` requires the nine base-class asserting stubs to
+   exist and throw, and `testVirtualTableDoesNotImplementSortedEnumerators` asserts
+   `-respondsToSelector:` is **YES** for the four sqlite-only selectors on
+   `MADDataTableVirtual`. Deleting either would have turned a caught defect into an
+   unrecognised-selector crash and broken a test that exists specifically to prevent that.
+   `MADDataTable` satisfies the protocols' `@required` members by asserting, which is what
+   Phase 0 put there.
+
+6. **Partly done — two drivers of three, and the protocol declaration deliberately not
+   narrowed.** `MADDatabaseSqlite3` (`executeSQL:...intoResultTable:`,
+   `executeQuery:withDataTable:andError:`, `executeQuery:withError:`) and
+   `MADDatabaseSQLServer` (the same two, plus the private `-runQuery:onProcess:withDataTable:`
+   and `-runSQL:onDataTable:fieldKeys:process:`) now take `id <MADDataTableWriting>`. Both are
+   genuinely write-only: `grep` for what they send the table returns exactly the five-call port
+   and nothing else.
+
+   **`MADDatabaseMySQL` cannot be narrowed yet**, and neither can
+   `MADAPI/Source/MADDatabaseProtocol.h:28-31`. The obstacle is not in the driver — it is in
+   `MysqlFetch+DataTable.m`, which reads `(*dataTable).columns` and `.columnKeys` *while*
+   filling the table, to correct a column's type once it sees the first row
+   (`:298` and `:318`, under the existing `// FIXME: This is a hack.`). A write port that
+   does not expose the column metadata is therefore not sufficient for that path. Since
+   `MADDatabaseMySQL` conforms to `MADDatabaseDataSource` and must keep doing so, narrowing
+   the protocol would have made it promise something its own implementation cannot honour —
+   a remote crash for the next caller, not a compile error. Both declarations carry a comment
+   pointing here.
+
+   **The concrete unblock, found while checking this:** `MysqlFetch+DataTable.m` never
+   assigns through its `MADDataTable * __autoreleasing *` out-parameters —
+   `grep -n '\*dataTable *=' MADMySQL/Source/MysqlFetch+DataTable.m` returns nothing. The
+   pointer is an in-parameter the callers were never told about. Making it by-value
+   (`dataTable:(id <MADDataTableWriting>)dataTable`) removes the pointer-type problem
+   outright and lets the 11 call sites in `MADDatabaseMySQL.m` drop their `&`. That, plus
+   adding the column-metadata accessors to `<MADDataTableWriting>` or a fourth protocol,
+   is the whole of what remains for MySQL. It is deferred rather than bundled in because
+   §4.3 already ranks MySQL the highest-risk consumer, and the change is mechanical enough
+   to be reviewed on its own.
+
+7. **Now possible for sqlite, unproven for MySQL.** `MADDatabaseSqlite3`'s row loop can be
+   driven by any object conforming to `<MADDataTableWriting>` with no `.maddb` file and no
+   app delegate, since the parameter no longer implies the `MADDataTable` class — and,
+   through it, the `-urlFastCache` dependency on `[MADApplication AppDelegate]` described in
+   §2.3. No such mock test has been written yet; it is the natural next step and the first
+   thing Phase 2's injected cache directory makes cheaper.
 
 **Phase 2 — remove the storage-location ambiguity.**
 8. Make `urlFastCache` stored, not computed (§2.3). Resolve it once in the initializer (or in
@@ -717,7 +775,7 @@ consequence of being wrong is silent corruption.
 
 | File | Lines |
 |---|---|
-| `MADFoundation/Source/MADDataTable.h` / `.m` | 94 / 435 |
+| `MADFoundation/Source/MADDataTable.h` / `.m` | 117 / 435 |
 | `MADFoundation/Source/MADDataTableVirtual.h` / `.m` | 21 / 240 |
 | `MADFoundation/Source/MADDataTableType.h` | 17 |
 | `MADFoundation/Source/MADDataColumn.h`, `MADDataProtocol.h`, `MADCacheProtocol.h` | — |
