@@ -131,14 +131,24 @@ CG_INLINE MADReportPosition MADReportPositionMake(NSUInteger current, NSUInteger
 	XCTAssertTrue(feature.available);
 }
 
-// Every key is read with keyed subscripting and cast to NSNumber. A plist entry that is
-// missing or the wrong shape therefore reads as zero rather than being rejected, so a
-// feature with no "type" is typed 0 -- not one of the two declared MADFeatureType values.
+// Every key is read with keyed subscripting, so a plist entry that is missing reads as
+// zero rather than being rejected: a feature with no "type" is typed 0 -- not one of the
+// two declared MADFeatureType values. The numeric entries are now shape-checked first,
+// so a wrong-shaped value ("type" as a string) is treated the same way instead of
+// crashing on -shortValue.
 - (void)testFeatureFromIncompleteDictionaryYieldsZeroedType {
 	MADFeature *feature = [[MADFeature alloc] initWithDictionary:@{@"title" : @"Pro"}];
 
 	XCTAssertEqualObjects(feature.defaultTitle, @"Pro");
 	XCTAssertNil(feature.productID);
+	XCTAssertEqual(feature.type, (MADFeatureType)0);
+	XCTAssertFalse(feature.available);
+}
+
+- (void)testFeatureFromDictionaryWithWrongShapedValuesDoesNotCrash {
+	MADFeature *feature = [[MADFeature alloc] initWithDictionary:@{@"type" : @"subscription",
+																   @"available" : @"yes"}];
+
 	XCTAssertEqual(feature.type, (MADFeatureType)0);
 	XCTAssertFalse(feature.available);
 }
@@ -197,44 +207,42 @@ CG_INLINE MADReportPosition MADReportPositionMake(NSUInteger current, NSUInteger
 	XCTAssertEqualObjects([ciphertext AES256DecryptWithKey:key], plaintext);
 }
 
-// The IV argument to CCCrypt is NULL, which CommonCrypto treats as an all-zero IV, so
-// the same plaintext under the same key always produces the same ciphertext. The
-// encryption leaks whether two stored values are equal.
-- (void)testAES256EncryptionIsDeterministic {
+// A fresh random IV per message, stored in the first block of the ciphertext, so the
+// same plaintext under the same key no longer produces the same bytes. A NULL IV would
+// leak whether two stored values are equal.
+- (void)testAES256EncryptionIsNotDeterministic {
 	NSData *plaintext = [@"same input" dataUsingEncoding:NSUTF8StringEncoding];
 	NSString *key = @"0123456789abcdef0123456789abcdef";
 
-	XCTAssertEqualObjects([plaintext AES256EncryptWithKey:key],
-						  [plaintext AES256EncryptWithKey:key]);
+	NSData *first = [plaintext AES256EncryptWithKey:key];
+	NSData *second = [plaintext AES256EncryptWithKey:key];
+
+	XCTAssertNotEqualObjects(first, second);
+	// Both still decrypt to the same plaintext.
+	XCTAssertEqualObjects([first AES256DecryptWithKey:key], plaintext);
+	XCTAssertEqualObjects([second AES256DecryptWithKey:key], plaintext);
 }
 
-// The key is copied into a 32-byte zeroed buffer with -getCString:maxLength:encoding:,
-// which fails outright when the string does not fit. Nothing checks the return value, so
-// the buffer keeps the zeros it was filled with and the cipher runs on an all-zero key:
-// a key too long to fit is silently no key at all, and two unrelated long keys encrypt
-// identically.
-- (void)testAES256KeyLongerThanThirtyTwoBytesCollapsesToAnAllZeroKey {
+// The key is copied into a 32-byte buffer with -getCString:maxLength:encoding:, which
+// fails outright when the string does not fit. The return value is checked, so a key too
+// long to fit is refused rather than silently becoming an all-zero key.
+- (void)testAES256KeyLongerThanThirtyTwoBytesIsRefused {
 	NSData *plaintext = [@"payload" dataUsingEncoding:NSUTF8StringEncoding];
 
-	NSData *fromOneLongKey = [plaintext AES256EncryptWithKey:@"0123456789abcdef0123456789abcdefEXTRA"];
-	NSData *fromAnotherLongKey = [plaintext AES256EncryptWithKey:@"completely-different-key-material!"];
-	NSData *fromTheZeroKey = [plaintext AES256EncryptWithKey:[@"" stringByPaddingToLength:32
-																			   withString:@"\0"
-																		  startingAtIndex:0]];
-
-	XCTAssertEqualObjects(fromOneLongKey, fromAnotherLongKey);
-	XCTAssertEqualObjects(fromOneLongKey, fromTheZeroKey);
+	XCTAssertNil([plaintext AES256EncryptWithKey:@"0123456789abcdef0123456789abcdefEXTRA"]);
+	XCTAssertNil([plaintext AES256EncryptWithKey:@"completely-different-key-material!"]);
 }
 
-// A key shorter than 32 bytes is zero-padded, so the short key and its explicitly
-// zero-padded form agree too.
+// A key shorter than 32 bytes is zero-padded, so a value encrypted under the short key
+// decrypts under its explicitly zero-padded form.
 - (void)testAES256ShortKeyIsZeroPadded {
 	NSData *plaintext = [@"payload" dataUsingEncoding:NSUTF8StringEncoding];
 	NSString *shortKey = @"secret";
 	NSString *paddedKey = [shortKey stringByAppendingString:@"\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"];
 
-	XCTAssertEqualObjects([plaintext AES256EncryptWithKey:shortKey],
-						  [plaintext AES256EncryptWithKey:paddedKey]);
+	NSData *ciphertext = [plaintext AES256EncryptWithKey:shortKey];
+	XCTAssertEqualObjects([ciphertext AES256DecryptWithKey:paddedKey], plaintext);
+	XCTAssertEqualObjects([ciphertext AES256DecryptWithKey:shortKey], plaintext);
 }
 
 - (void)testAES256DecryptWithTheWrongKeyDoesNotReturnThePlaintext {
@@ -252,8 +260,8 @@ CG_INLINE MADReportPosition MADReportPositionMake(NSUInteger current, NSUInteger
 	NSData *encrypted = [[NSData data] AES256EncryptWithKey:@"0123456789abcdef0123456789abcdef"];
 	XCTAssertNotNil(encrypted);
 
-	// PKCS#7 always adds a full block of padding, so empty input encrypts to one block.
-	XCTAssertEqual(encrypted.length, (NSUInteger)16);
+	// One block of IV followed by one block of PKCS#7 padding for the empty payload.
+	XCTAssertEqual(encrypted.length, (NSUInteger)32);
 	XCTAssertEqualObjects([encrypted AES256DecryptWithKey:@"0123456789abcdef0123456789abcdef"],
 						  [NSData data]);
 }
@@ -306,11 +314,11 @@ CG_INLINE MADReportPosition MADReportPositionMake(NSUInteger current, NSUInteger
 							   attributes.reportLastCacheDate.timeIntervalSince1970, 1.0);
 }
 
-// A nil cache date is encoded as `nil.timeIntervalSinceReferenceDate`, which is 0, and
-// decoded with -initWithTimeIntervalSinceReferenceDate:, which cannot produce nil. The
-// date therefore comes back as the reference date -- 2001-01-01 -- rather than as "never
-// cached", and a caller that tests for nil will not see it.
-- (void)testPageViewAttributesCodingTurnsANilDateIntoTheReferenceDate {
+// A nil cache date stays nil across the round trip. The date was once encoded as
+// `nil.timeIntervalSinceReferenceDate` (0) and decoded with
+// -initWithTimeIntervalSinceReferenceDate:, which cannot produce nil, so "never cached"
+// came back as the reference date, 2001-01-01, and a caller testing for nil never saw it.
+- (void)testPageViewAttributesCodingPreservesANilDate {
 	MADPageViewAttributes *attributes =
 		[[MADPageViewAttributes alloc] initWithPosition:MADReportPositionMake(0, 1)
 												   size:CGSizeMake(10, 10)];
@@ -321,25 +329,25 @@ CG_INLINE MADReportPosition MADReportPositionMake(NSUInteger current, NSUInteger
 															 error:NULL];
 	MADPageViewAttributes *restored = [NSKeyedUnarchiver unarchiveObjectWithData:archived];
 
-	XCTAssertNotNil(restored.reportLastCacheDate);
-	XCTAssertEqualWithAccuracy(restored.reportLastCacheDate.timeIntervalSinceReferenceDate, 0.0, 0.001);
+	XCTAssertNil(restored.reportLastCacheDate);
 }
 
-// The zoom scale is written as a double but read back through -floatValue, so it only
-// survives to single precision.
-- (void)testPageViewAttributesCodingNarrowsTheZoomScaleToFloat {
+// The zoom scale and content scale factor are doubles on both sides of the archive; the
+// decoder used to read them back through -floatValue, keeping only single precision.
+- (void)testPageViewAttributesCodingPreservesTheZoomScalePrecision {
 	MADPageViewAttributes *attributes =
 		[[MADPageViewAttributes alloc] initWithPosition:MADReportPositionMake(0, 1)
 												   size:CGSizeMake(10, 10)];
 	attributes.zoomScaleInital = 1.23456789012345;
+	attributes.contentScaleFactor = 2.34567890123456;
 
 	NSData *archived = [NSKeyedArchiver archivedDataWithRootObject:attributes
 											 requiringSecureCoding:NO
 															 error:NULL];
 	MADPageViewAttributes *restored = [NSKeyedUnarchiver unarchiveObjectWithData:archived];
 
-	XCTAssertNotEqual(restored.zoomScaleInital, attributes.zoomScaleInital);
-	XCTAssertEqualWithAccuracy(restored.zoomScaleInital, attributes.zoomScaleInital, 0.000001);
+	XCTAssertEqual(restored.zoomScaleInital, attributes.zoomScaleInital);
+	XCTAssertEqual(restored.contentScaleFactor, attributes.contentScaleFactor);
 }
 
 - (void)testPageViewAttributesCopy {

@@ -190,14 +190,13 @@
 	XCTAssertEqualObjects(result.error.userInfo[MADOperationConditionKey], condition.name);
 }
 
-// The dependency answered yes, and the condition does report satisfied -- but the
-// answer itself never reaches the result. -evaluateForOperation: calls
-// `+newOperationConditionResult:name:` with the dependency object in the BOOL
-// position; on arm64, where BOOL is _Bool, the pointer converts to YES by way of
-// "not null" rather than by way of the answer, so a satisfied result comes back with
-// its own `result` property still at NO. The caller cannot tell which way the
-// question was answered.
-- (void)testAffirmativeDropsTheAnswerItWasGiven {
+// The dependency answered yes, and that answer reaches the result. -evaluateForOperation:
+// used to call `+newOperationConditionResult:name:` with the dependency object in the
+// BOOL position; on arm64, where BOOL is _Bool, the pointer converted to YES by way of
+// "not null" rather than by way of the answer, so a satisfied result came back with its
+// own `result` property still at NO. It now goes through the same factory the negative
+// condition uses.
+- (void)testAffirmativeCarriesTheAnswerItWasGiven {
 	MADAnswerStub *dependency = [[MADAnswerStub alloc] init];
 	dependency.identifier = 7;
 	dependency.result = YES;
@@ -211,7 +210,7 @@
 
 	XCTAssertTrue(result.isSucceed);
 	XCTAssertTrue([result isKindOfClass:[MADOperationConditionPolarQuestionAffirmativeResult class]]);
-	XCTAssertFalse(((MADOperationConditionPolarQuestionAffirmativeResult *)result).result);
+	XCTAssertTrue(((MADOperationConditionPolarQuestionAffirmativeResult *)result).result);
 }
 
 - (void)testAffirmativeWithANegativeAnswerFails {
@@ -487,17 +486,21 @@
 	XCTAssertFalse([condition evaluateForOperation:operation].isSucceed);
 }
 
-// A dependency that can answer neither way leaves the loop without setting a result,
-// and the method returns nil rather than a failed result -- despite the nonnull
-// return type.
-- (void)testDisplayedAlertConfirmReturnsNilWhenNoDependencyCanAnswer {
+// A dependency that can answer neither way leaves the loop without setting a result. The
+// method used to return nil from a nonnull method; it now reports the same failure the
+// empty-dependency case does.
+- (void)testDisplayedAlertConfirmFailsWhenNoDependencyCanAnswer {
 	MADOperation *operation = [[MADOperation alloc] init];
 	[operation addDependency:[[NSOperation alloc] init]];
 
 	MADOperationConditionDisplayedAlertConfirm *condition =
 		[[MADOperationConditionDisplayedAlertConfirm alloc] init];
 
-	XCTAssertNil([condition evaluateForOperation:operation]);
+	MADOperationConditionResult *result = [condition evaluateForOperation:operation];
+
+	XCTAssertNotNil(result);
+	XCTAssertFalse(result.isSucceed);
+	XCTAssertEqualObjects(result.error.userInfo[MADOperationConditionKey], condition.name);
 }
 
 #pragma mark - MADOperationConditionSuccess
@@ -566,13 +569,11 @@
 	XCTAssertFalse([condition evaluateForOperation:operation].isSucceed);
 }
 
-// When no dependency matches the key, the method still reaches
-// `NSAssert(result != nil, @"We expect dependencies.")` before it can fall back to a
-// failed result. Debug builds abort the caller instead of failing the condition; the
-// `result != nil ? result : [self result: NO]` fallback on the next line is therefore
-// unreachable there, and only Release builds -- which define NS_BLOCK_ASSERTIONS --
-// get the quiet failure.
-- (void)testSuccessAssertsWhenNoDependencyMatchesTheKey {
+// When no dependency matches the key, the condition fails quietly. It used to hit
+// `NSAssert(result != nil, @"We expect dependencies.")`, which aborted the caller in
+// Debug while Release -- which defines NS_BLOCK_ASSERTIONS -- fell through to the same
+// failure this test now asserts in both configurations.
+- (void)testSuccessFailsWhenNoDependencyMatchesTheKey {
 	MADTestResultStub *dependency = [[MADTestResultStub alloc] init];
 	dependency.name = @"SomeOtherOperation";
 	dependency.success = YES;
@@ -583,9 +584,10 @@
 	MADOperationConditionSuccess *condition =
 		[[MADOperationConditionSuccess alloc] initWithKey:@"SomeOperation"];
 
-	XCTAssertThrowsSpecificNamed([condition evaluateForOperation:operation],
-								 NSException,
-								 NSInternalInconsistencyException);
+	MADOperationConditionResult *result = [condition evaluateForOperation:operation];
+
+	XCTAssertFalse(result.isSucceed);
+	XCTAssertEqualObjects(result.error.userInfo[MADOperationConditionKey], condition.name);
 }
 
 @end

@@ -16,6 +16,11 @@ static NSString * const keySizeInital           = @"s";
 static NSString * const keyZoomScaleInital      = @"z";
 static NSString * const keyReportLastCacheDate  = @"r";
 static NSString * const keyContentScaleFactor   = @"f";
+// Presence flag for keyReportLastCacheDate. The date itself cannot carry "absent":
+// -decodeDoubleForKey: yields 0 for a missing key, and
+// -initWithTimeIntervalSinceReferenceDate: never returns nil, so "never cached" used to
+// come back as 2001-01-01. Archives written before this key existed decode as absent.
+static NSString * const keyHasReportLastCacheDate = @"R";
 
 @implementation MADPageViewAttributes
 
@@ -50,17 +55,19 @@ static NSString * const keyContentScaleFactor   = @"f";
 		_numberOfPages = numberOfPages.unsignedIntegerValue;
 
 		NSNumber *zoomScaleInital = [decoder decodeObjectForKey:keyZoomScaleInital];
-		_zoomScaleInital = zoomScaleInital.floatValue;
+		_zoomScaleInital = zoomScaleInital.doubleValue;
 
 		NSNumber *contentScaleFactor = [decoder decodeObjectForKey:keyContentScaleFactor];
-		_contentScaleFactor = contentScaleFactor.floatValue;
-		
+		_contentScaleFactor = contentScaleFactor.doubleValue;
+
 		_contentOffsetInital = [decoder decodeCGPointForKey:keyOffsetInital];
 		_contentSizeInital = [decoder decodeCGSizeForKey:keySizeInital];
 
-		NSTimeInterval reportLastCacheDate = [decoder decodeDoubleForKey:keyReportLastCacheDate];
-		_reportLastCacheDate = [[NSDate alloc] initWithTimeIntervalSinceReferenceDate:reportLastCacheDate];
-		
+		if ([decoder decodeBoolForKey:keyHasReportLastCacheDate]) {
+			NSTimeInterval reportLastCacheDate = [decoder decodeDoubleForKey:keyReportLastCacheDate];
+			_reportLastCacheDate = [[NSDate alloc] initWithTimeIntervalSinceReferenceDate:reportLastCacheDate];
+		}
+
 	}
 	return self;
 }
@@ -81,7 +88,10 @@ static NSString * const keyContentScaleFactor   = @"f";
 
 	[coder encodeCGPoint:_contentOffsetInital forKey:keyOffsetInital];
 	[coder encodeCGSize:_contentSizeInital forKey:keySizeInital];
-	[coder encodeDouble:_reportLastCacheDate.timeIntervalSinceReferenceDate forKey:keyReportLastCacheDate];
+	if (_reportLastCacheDate != nil) {
+		[coder encodeBool:YES forKey:keyHasReportLastCacheDate];
+		[coder encodeDouble:_reportLastCacheDate.timeIntervalSinceReferenceDate forKey:keyReportLastCacheDate];
+	}
 }
 
 - (instancetype)copyWithZone:(NSZone *)zone {

@@ -59,10 +59,11 @@
 	for (MADOperation *dependency in dependencies) {
 		if ([dependency conformsToProtocol:@protocol(MADOperationConditionPolarQuestionResultProtocol)] &&
 			dependency.identifier == self.tag) {
-			if (((NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency).result) {
-				result = [MADOperationConditionPolarQuestionAffirmativeResult newOperationConditionResult: dependency
-																									 name: self.name];
-			}
+			// Through the mirror of the negative condition's factory. The old call passed
+			// the dependency object where the factory expects a BOOL, so the result's own
+			// `result` property was left at NO after the condition reported satisfied.
+			result = [MADOperationConditionPolarQuestionAffirmativeResult newOperationCondition: (NSObject <MADOperationConditionPolarQuestionResultProtocol> *)dependency
+																						   name: self.name];
 			break;
 		}
 	}

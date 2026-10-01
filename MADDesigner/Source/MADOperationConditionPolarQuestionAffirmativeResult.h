@@ -20,6 +20,9 @@
 	<MADOperationConditionPolarQuestionResultProtocol>
 	@property (nonatomic, assign) BOOL result;
 
+	+ (instancetype)newOperationCondition:(NSObject <MADOperationConditionPolarQuestionResultProtocol> *)delegate
+									 name:(NSString *)name;
+
 @end
 
 @interface MADOperationConditionPolarQuestionNegativeResult : MADOperationConditionResult

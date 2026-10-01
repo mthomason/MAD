@@ -63,17 +63,18 @@
 	}
 	
 	for (MADOperation *dependency in dependencies) {
+		if (![dependency conformsToProtocol:@protocol(MADOperationTestResults)]) {
+			continue;
+		}
 		NSString *dependencyName = ((MADOperation <MADOperationTestResults> *) dependency).name;
-		if ([dependency conformsToProtocol:@protocol(MADOperationTestResults)] &&
-			dependencyName != nil &&
-			[_key isEqualToString: dependencyName]) {
+		if (dependencyName != nil && [_key isEqualToString: dependencyName]) {
 			result = [self result: ((NSObject <MADOperationTestResults> *)dependency).success];
 			break;
 		}
 	}
-	if (result == nil) {
-		NSAssert(result != nil, @"We expect dependencies.");
-	}
+	// No dependency matched: fail quietly. This used to be an NSAssert, which aborted
+	// the calling operation in Debug while Release, where NS_ASSERTIONS compiles out,
+	// fell through to the same failure the line below returns.
 	return result != nil ? result : [self result: NO];
 }
 

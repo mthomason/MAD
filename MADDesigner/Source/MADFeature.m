@@ -49,8 +49,15 @@
 	NSString *appleID = dictionary[@"apple-id"];
 	NSString *title = dictionary[@"title"];
 	NSString *description = dictionary[@"description"];
-	MADFeatureType type = ((NSNumber *)dictionary[@"type"]).shortValue;
-	BOOL available = ((NSNumber *)dictionary[@"available"]).boolValue;
+	// Read defensively. The entries used to be cast to NSNumber unconditionally, so a
+	// plist value of the wrong shape (a string, say) sent -shortValue to an NSString and
+	// crashed. A missing or non-numeric entry still reads as type 0, which is not one of
+	// the declared MADFeatureType values -- documented, not changed; this initialiser is
+	// deprecated in favour of the designated one.
+	id typeValue = dictionary[@"type"];
+	id availableValue = dictionary[@"available"];
+	MADFeatureType type = [typeValue isKindOfClass:[NSNumber class]] ? (MADFeatureType)[typeValue shortValue] : (MADFeatureType)0;
+	BOOL available = [availableValue isKindOfClass:[NSNumber class]] ? [availableValue boolValue] : NO;
 	
 	return [self initWithProductID:productID appleID:appleID title:title description:description type:type available:available];
 }

@@ -64,7 +64,10 @@
 			break;
 		}
 	}
-	return result;
+	// Dependencies exist but none of them can answer. This used to return nil from a
+	// method declared nonnull; the empty-dependency case above already reports the same
+	// failure properly.
+	return result != nil ? result : [MADOperationConditionResult newOperationConditionResultFailedNotSatisfied:self.name];
 }
 
 @end

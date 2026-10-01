@@ -80,18 +80,15 @@
 	XCTAssertEqual([NSData dataFromBase64String:@""].length, (NSUInteger)0);
 }
 
-// The decoder sizes its output buffer as `(length / 4) * 3` bytes, but the loop that
-// assembles each group always writes 3 bytes into it, including a trailing partial
-// group. A well-formed base64 string is always a multiple of 4 characters, so for those
-// the two line up; a truncated one is not, and the last group then writes up to 3 bytes
-// past the allocation. Five characters, for instance, get a 3-byte buffer and the
-// trailing character writes at offsets 3, 4 and 5.
-//
-// The overrun is never read back -- the returned NSData is built from the separately
-// tracked length, which is correct -- so it normally lands in malloc's slack and goes
-// unnoticed. That is why the test can only pin the decoded value and not the corruption;
-// the overflow is documented by inspection in BUGS.md.
-- (void)testBase64DecodeOfTruncatedInputOverrunsItsBuffer {
+// An encoded length that is not a multiple of 4 still decodes, and no longer writes past
+// the output buffer. The decoder used to size that buffer as `(length / 4) * 3` while
+// the store loop always wrote 3 bytes per group, so a five-character input got a 3-byte
+// buffer and the trailing character wrote at offsets 3, 4 and 5. The overrun landed in
+// malloc's slack -- the returned NSData is built from the separately tracked length, so
+// the decoded value was already correct -- which is why it needed inspection rather than
+// a test to find. The assertions below pin the value; the buffer sizing is checked by
+// reading NewBase64Decode.
+- (void)testBase64DecodeOfTruncatedInput {
 	NSData *decoded = [NSData dataFromBase64String:@"YWJjY"];
 
 	XCTAssertEqual(decoded.length, (NSUInteger)3);
@@ -114,16 +111,18 @@
 	XCTAssertEqualObjects([formatter stringFromDate:parsed], @"2020-01-15T13:45:00Z");
 }
 
-// The trailing Z is a literal in the format string, not a timezone token, so this
-// formatter only ever accepts the `Z` spelling of UTC. Because en_US_POSIX also makes
-// NSDateFormatter strict, the offset spelling fails outright instead of being silently
-// misread as UTC. RFC 3339 permits both, so a caller that feeds it a server timestamp
-// with a numeric offset gets nil.
-- (void)testRFC3339FormatterRejectsAnExplicitNumericOffset {
+// RFC 3339 permits both the `Z` spelling of UTC and a numeric offset. The format string
+// used to end in a literal 'Z', so only the former was accepted and a server timestamp
+// carrying an offset was silently dropped.
+- (void)testRFC3339FormatterAcceptsAnExplicitNumericOffset {
 	NSDateFormatter *formatter = [NSDateFormatter RFC_3339];
 
-	XCTAssertNil([formatter dateFromString:@"2020-01-15T13:45:00+02:00"]);
 	XCTAssertNotNil([formatter dateFromString:@"2020-01-15T13:45:00Z"]);
+
+	NSDate *offset = [formatter dateFromString:@"2020-01-15T13:45:00+02:00"];
+	XCTAssertNotNil(offset);
+	// 13:45 at +02:00 is 11:45 UTC.
+	XCTAssertEqualWithAccuracy(offset.timeIntervalSince1970, 1579088700.0, 0.5);
 }
 
 #pragma mark - Framework consumption: connections

@@ -72,7 +72,10 @@ void *NewBase64Decode(const char *inputBuffer, size_t length, size_t *outputLeng
 		length = strlen(inputBuffer);
 	}
 	
-	size_t outputBufferSize = (length / BASE64_UNIT_SIZE) * BINARY_UNIT_SIZE;
+	// Round up: the store loop below always writes BINARY_UNIT_SIZE bytes per group,
+	// including a final partial group, so sizing by length / BASE64_UNIT_SIZE overran
+	// the buffer by up to two bytes whenever the encoded length was not a multiple of 4.
+	size_t outputBufferSize = ((length + BASE64_UNIT_SIZE - 1) / BASE64_UNIT_SIZE) * BINARY_UNIT_SIZE;
 	unsigned char *outputBuffer = (unsigned char *)malloc(outputBufferSize);
 	
 	size_t i = 0;
