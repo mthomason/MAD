@@ -50,8 +50,14 @@ static NSString * const SqlDelimitorObject = @", %@";
 
 - (void)update {
 
-	NSMutableArray *binaryBindings = [[NSMutableArray alloc] init];
-	self.binaryBindings = binaryBindings;
+	// -update runs once per row of a bulk insert, so the array is kept and emptied rather
+	// than replaced: a fresh one per row is one more allocation in the row loop, and the
+	// removeAllObjects below already showed that reusing it was the intent.
+	NSMutableArray *binaryBindings = self.binaryBindings;
+	if (binaryBindings == nil) {
+		binaryBindings = [[NSMutableArray alloc] init];
+		self.binaryBindings = binaryBindings;
+	}
 
 	id <MADQueryParametersStandardProtocol,
 		MADQueryParametersColumnKeysProtocol,
@@ -65,10 +71,11 @@ static NSString * const SqlDelimitorObject = @", %@";
 		_sqlColumnPart = [[NSString alloc] initWithString:sqlColumnNames];
 	}
 
+	[binaryBindings removeAllObjects];
+
 	NSArray *rows = [delegate queryRowData];
 	if (rows == nil) return;
-	
-	[self.binaryBindings removeAllObjects];
+
 	NSUInteger columnKeysCount = columnKeys.count;
 
 	// The SQL below is built with "?" placeholders, so every column needs a
@@ -86,19 +93,25 @@ static NSString * const SqlDelimitorObject = @", %@";
 		[self.binaryBindings addObject: databinding];
 	}
 
-	char buf[(count_digits_ul(columnKeysCount) + 3) * columnKeysCount + 1];
-	buf[0] = '?';
-	buf[1] = '\0';
-	int buf_ptr = 1;
-	for (NSUInteger columnCounter = 0; columnCounter < columnKeysCount; columnCounter++) {
-		if (columnCounter > 0) {
-			strcat(buf, ", ?");
-			buf_ptr += 3;
+	// The statement is all "?" placeholders and the table and columns do not change under a
+	// running insert, so it is built once.  Rebuilding it per row allocated an identical
+	// string per row and threw it away: -insertRow: only reads it when it has to prepare,
+	// which is the first row and never again.
+	if (_sql == nil) {
+		char buf[(count_digits_ul(columnKeysCount) + 3) * columnKeysCount + 1];
+		buf[0] = '?';
+		buf[1] = '\0';
+		int buf_ptr = 1;
+		for (NSUInteger columnCounter = 0; columnCounter < columnKeysCount; columnCounter++) {
+			if (columnCounter > 0) {
+				strcat(buf, ", ?");
+				buf_ptr += 3;
+			}
+			buf_ptr = buf_ptr + ultoa((unsigned int)columnCounter + 1, (buf+buf_ptr));
 		}
-		buf_ptr = buf_ptr + ultoa((unsigned int)columnCounter + 1, (buf+buf_ptr));
+		char *ptr = buf;
+		_sql = [[NSString alloc] initWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%s)", [delegate queryTableName], _sqlColumnPart, ptr];
 	}
-	char *ptr = buf;
-	_sql = [[NSString alloc] initWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%s)", [delegate queryTableName], _sqlColumnPart, ptr];
 }
 
 - (NSString *)columnNamesForKeys:(NSArray <NSString *> *)columnKeys {
