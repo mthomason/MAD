@@ -395,7 +395,7 @@ wrong answer.
 ### `MADDataTableFast` stored an absolute cache URL that a container change invalidates
 
 - **Status:** Fixed
-- **Commit:** `64d9f916d`
+- **Commit:** `d8de8ece0`
 - **Where:** `MADSqlite3/Source/MADDataTableFast.m:304` (`-loadWithPlist:`), written at
   `:244` (`-copyPlist:`), `:226` (`-encodeWithCoder:`), `:206` (`-initWithCoder:`)
 - **Behavior:** The `.mdcache` plist records `urlFastCache` as an absolute URL —
