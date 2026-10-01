@@ -516,11 +516,17 @@ compose header + body) and strips it on open (detect `MADFILE\0`, extract from a
 copy). Both shipping samples stay v0 and open unchanged. Verified by a round-trip unit test and
 by reading a v1 copy through both the CLI container and the app's open path.
 
-**Part 2 — the checkpoint — next, on its own pass.** Folding the store's WAL into `analyitics`
-before archiving (flag bit 0 = 1, `meta.plist` `checkpointed` = true) opens the store's SQLite
-while Core Data still holds it; it wants a live-save test, not just the offline suite. The
-header's flag bit already permits "not checkpointed" as a valid v1 state, so part 1 is a
-complete, honest v1 on its own.
+**Part 2 — the checkpoint — done 2026-10-01.** `MADDatabaseSqlite3
++checkpointStoreAtURL:` folds the store's WAL into `analyitics` before archiving
+(`PRAGMA wal_checkpoint(TRUNCATE)`, returning whether it completed). `MADocument
+-writeContents:` calls it after the store save and sets `MADArchiveManager.checkpointed`, which
+sets flag bit 0. If the checkpoint cannot complete (Core Data still holds the store), the archive
+ships the WAL and the flag records `0`. The checkpoint status lives in the header flag, not in
+`meta.plist`, because the meta plist is written before the checkpoint runs — the flag is the
+authoritative record and is readable without decompressing.
+
+Pinned by `MADSqlite3Tests testCheckpointStoreAtURLFoldsTheWal` (a WAL-mode write is folded and
+the WAL reset to zero bytes) and `MADDocumentTests testArchiveHeaderRecordsTheCheckpointFlag`.
 
 **v1 is independent of §4.2.** The header and the checkpoint are orthogonal to the store
 migration: the migration removes H3 later, while v1 is identification-by-content and a

@@ -309,9 +309,11 @@ legacy v0 document (§7.4).
 
 ### 7.2 A checkpointed store
 
-`meta.plist` gains a member recording whether the store was checkpointed before
-archiving, and the writer checkpoints by default. The WAL and SHM members then become
-optional, and a reader that finds them must replay them rather than ignore them.
+The writer checkpoints the store's WAL before archiving, so the WAL and SHM members
+become optional and a reader that finds them must replay them rather than ignore them.
+The result is recorded in the header's flag bit 0 — **not** in `meta.plist`, which is
+written before the checkpoint runs, so the flag is the authoritative record and is
+readable without decompressing.
 
 This also shrinks documents: the `Music` sample spends a third of its bytes on a WAL
 that a checkpoint would fold into the main file.
@@ -320,9 +322,9 @@ that a checkpoint would fold into the main file.
 
 | Member | Required | Contents |
 |---|---|---|
-| `meta.plist` | yes | `generator`, `version`, `checkpointed` |
+| `meta.plist` | yes | `generator`, `version` |
 | `StoreContent/<name>` | yes | the document definition |
-| `StoreContent/<name>-wal` / `-shm` | no | present only when not checkpointed |
+| `StoreContent/<name>-wal` / `-shm` | no | present only when not checkpointed (header flag bit 0 = 0) |
 | `AdditionalContent/` | no | `thumbnail@2x.png` |
 
 ### 7.4 Compatibility

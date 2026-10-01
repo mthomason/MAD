@@ -173,4 +173,30 @@
 	[fileManager removeItemAtURL: archive error: NULL];
 }
 
+// The header's flag bit 0 records whether the store was checkpointed before archiving,
+// so a reader knows whether to expect a WAL.  The writer sets it from its
+// `checkpointed` property.
+- (void)testArchiveHeaderRecordsTheCheckpointFlag {
+
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSURL *temp = [NSURL fileURLWithPath: NSTemporaryDirectory() isDirectory: YES];
+	NSURL *source = [temp URLByAppendingPathComponent: [NSUUID UUID].UUIDString isDirectory: YES];
+	NSURL *archive = [temp URLByAppendingPathComponent: [[NSUUID UUID].UUIDString stringByAppendingPathExtension: @"mad"]];
+	[fileManager createDirectoryAtURL: source withIntermediateDirectories: YES attributes: nil error: NULL];
+	[@"x" writeToURL: [source URLByAppendingPathComponent: @"member.txt"]
+		 atomically: YES encoding: NSUTF8StringEncoding error: NULL];
+
+	MADArchiveManager *writer = [[MADArchiveManager alloc] initWithFileWrapperURL: source archiveURL: archive];
+	writer.checkpointed = YES;
+	XCTAssertTrue([writer archive: YES]);
+
+	NSData *head = [NSData dataWithContentsOfURL: archive options: NSDataReadingMappedIfSafe error: NULL];
+	const uint8_t *bytes = head.bytes;
+	XCTAssertEqual(bytes[12] & 0x01, 0x01, @"bit 0 records that the store was checkpointed");
+	XCTAssertTrue(bytes[13] == 0 && bytes[14] == 0 && bytes[15] == 0, @"the other flag bits are clear");
+
+	[fileManager removeItemAtURL: source error: NULL];
+	[fileManager removeItemAtURL: archive error: NULL];
+}
+
 @end

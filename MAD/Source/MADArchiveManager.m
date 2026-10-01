@@ -47,26 +47,27 @@ static int mad_path_is_absolute(const char *path) { return strlen(path) > 1 && p
 static int mad_path_is_relative(const char *path) { return mad_path_is_absolute(path) ? 0 : 1; }
 
 // The v1 document header, per MAD_FORMAT.md section 7.1: 8 magic bytes, two
-// little-endian version words, then four flags bytes (bit 0 clear means the store
-// was not checkpointed).  It sits ahead of the bzip2 stream so a document is
-// identified by content, not by its extension.
-static NSData *MADFileFormatHeader(void) {
+// little-endian version words, then four flags bytes (bit 0 records whether the store
+// was checkpointed).  It sits ahead of the bzip2 stream so a document is identified by
+// content, not by its extension.
+static NSData *MADFileFormatHeader(BOOL checkpointed) {
 	uint8_t bytes[MADFileFormatHeaderLength] = { 0 };
 	memcpy(bytes, MADFileFormatMagic, 8);
 	bytes[8]  = (uint8_t)(MADFileFormatMajorVersion & 0xFF);
 	bytes[9]  = (uint8_t)((MADFileFormatMajorVersion >> 8) & 0xFF);
 	bytes[10] = (uint8_t)(MADFileFormatMinorVersion & 0xFF);
 	bytes[11] = (uint8_t)((MADFileFormatMinorVersion >> 8) & 0xFF);
+	bytes[12] = (uint8_t)(checkpointed ? 1 : 0);
 	return [NSData dataWithBytes: bytes length: sizeof(bytes)];
 }
 
 // Write the header, then the archive body, into `archivePath`.
-static BOOL MADComposeV1Archive(const char *archivePath, const char *bodyPath) {
+static BOOL MADComposeV1Archive(const char *archivePath, const char *bodyPath, BOOL checkpointed) {
 	NSString *bodyFile = [NSString stringWithUTF8String: bodyPath];
 	NSData *body = bodyFile ? [NSData dataWithContentsOfFile: bodyFile] : nil;
 	if (body == nil) return NO;
 
-	NSMutableData *composed = [NSMutableData dataWithData: MADFileFormatHeader()];
+	NSMutableData *composed = [NSMutableData dataWithData: MADFileFormatHeader(checkpointed)];
 	[composed appendData: body];
 
 	NSString *archiveFile = [NSString stringWithUTF8String: archivePath];
@@ -239,7 +240,7 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 
 	if ((r = write_archive(body_path, self.filewrapper)) < 0) {
 		os_log_error(OS_LOG_DEFAULT, "Failed to archive file with %d.", r);
-	} else if (!MADComposeV1Archive(archive_path, body_path)) {
+	} else if (!MADComposeV1Archive(archive_path, body_path, self.checkpointed)) {
 		r = -1;
 		os_log_error(OS_LOG_DEFAULT, "Failed to write the document header.");
 	}

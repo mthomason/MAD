@@ -64,6 +64,13 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg);
 
 + (NSString *)sqlite3NativeType:(MADDataType)dataType;
 
+/// Folds a SQLite database's write-ahead log into the main file, so the file alone is
+/// complete.  Returns YES when the checkpoint completed and the WAL was reset; NO when
+/// the database is still held open by another connection and the WAL could not be reset
+/// (or when the file could not be opened at all).  Used by the document save path so a
+/// reader that extracts only the store sees everything.
++ (BOOL)checkpointStoreAtURL:(NSURL *)storeURL;
+
 @end
 
 #endif

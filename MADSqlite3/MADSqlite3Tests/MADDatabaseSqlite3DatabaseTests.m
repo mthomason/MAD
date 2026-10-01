@@ -520,4 +520,34 @@
 	}
 }
 
+#pragma mark - Checkpoint
+
+// The document save path folds a store's WAL before archiving so a reader that
+// extracts only the main file sees everything.  This pins the helper that does the
+// folding: a WAL-mode database with a committed write has a non-empty -wal side file,
+// and the checkpoint resets it while the writer's own connection stays open.
+- (void)testCheckpointStoreAtURLFoldsTheWal {
+
+	sqlite3 *database = NULL;
+	XCTAssertEqual(sqlite3_open_v2(self.databaseURL.fileSystemRepresentation, &database,
+								   SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL), SQLITE_OK);
+	XCTAssertEqual(sqlite3_exec(database, "PRAGMA journal_mode=WAL;", NULL, NULL, NULL), SQLITE_OK);
+	XCTAssertEqual(sqlite3_exec(database, "CREATE TABLE t (x INTEGER);", NULL, NULL, NULL), SQLITE_OK);
+	XCTAssertEqual(sqlite3_exec(database, "INSERT INTO t VALUES (1);", NULL, NULL, NULL), SQLITE_OK);
+
+	NSURL *walURL = [NSURL fileURLWithPath: [self.databaseURL.path stringByAppendingString: @"-wal"]];
+	unsigned long long before = [[[NSFileManager defaultManager] attributesOfItemAtPath: walURL.path
+																			   error: NULL][NSFileSize] unsignedLongLongValue];
+	XCTAssertGreaterThan(before, 0ULL, @"the write sits in the WAL before the checkpoint");
+
+	BOOL checkpointed = [MADDatabaseSqlite3 checkpointStoreAtURL: self.databaseURL];
+	XCTAssertTrue(checkpointed, @"the checkpoint completes while the writer is still open");
+
+	unsigned long long after = [[[NSFileManager defaultManager] attributesOfItemAtPath: walURL.path
+																			  error: NULL][NSFileSize] unsignedLongLongValue];
+	XCTAssertEqual(after, 0ULL, @"TRUNCATE resets the WAL to zero bytes");
+
+	sqlite3_close(database);
+}
+
 @end

@@ -1352,4 +1352,29 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 	return columnAffinity;
 }
 
++ (BOOL)checkpointStoreAtURL:(NSURL *)storeURL {
+	sqlite3 *database = NULL;
+	if (sqlite3_open_v2(storeURL.fileSystemRepresentation, &database,
+						SQLITE_OPEN_READWRITE, NULL) != SQLITE_OK) {
+		if (database) sqlite3_close(database);
+		return NO;
+	}
+
+	sqlite3_busy_timeout(database, 5000);
+
+	BOOL checkpointed = NO;
+	sqlite3_stmt *statement = NULL;
+	if (sqlite3_prepare_v2(database, "PRAGMA wal_checkpoint(TRUNCATE);", -1, &statement, NULL) == SQLITE_OK) {
+		// The result row's first column is 0 when the checkpoint completed and the WAL
+		// was reset; it is 1 when another connection still held the database.
+		if (sqlite3_step(statement) == SQLITE_ROW) {
+			checkpointed = (sqlite3_column_int(statement, 0) == 0);
+		}
+		sqlite3_finalize(statement);
+	}
+
+	sqlite3_close(database);
+	return checkpointed;
+}
+
 @end

@@ -84,6 +84,7 @@
 
 #import <MADSqlite3/MADArrayCaching.h>
 #import <MADSqlite3/MADDataTableFast.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
@@ -513,8 +514,15 @@ void madwarn(char *err,  const char *err2) { }
 		return NO;
 	}
 
+	// Fold the store's WAL into the main file before archiving, so a reader that
+	// extracts only the store sees everything.  If the checkpoint cannot complete
+	// (Core Data still holds the store), the archive ships the WAL and the header's
+	// flag bit records that it was not checkpointed.
+	BOOL checkpointed = [MADDatabaseSqlite3 checkpointStoreAtURL: self.copyPersistentStoreURL];
+
 	MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:self.urlGuts
 																			   archiveURL:self.fileURL];
+	archiveManager.checkpointed = checkpointed;
 	return [archiveManager archive:YES];
 }
 
