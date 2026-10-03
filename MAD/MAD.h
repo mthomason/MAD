@@ -109,3 +109,5 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADStoreGraph.h>
 #import <MAD/MADStore.h>
 #import <MAD/MADStoreConverter.h>
+#import <MAD/RptqObject.h>
+#import <MAD/RptqStoreContext.h>

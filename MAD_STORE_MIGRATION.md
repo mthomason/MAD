@@ -157,6 +157,10 @@ fixtures that pin it.
   store, keeping the headers, entity-family by entity-family (schema, then query, then
   sections/elements), and replace `NSFetchedResultsController` with reload-on-change. The
   designer/query/viewer tabs are the acceptance tests, and undo is kept working throughout.
+  *In progress.* The mechanism is designed in `MAD_STORE_PHASE_C.md` and its two core types
+  — `RptqObject` (the plain base) and `RptqStoreContext` (the store-backed context) — are
+  built and proven on the schema family by `RptqStoreContextTests`. The superclass swap and
+  the app's per-family usage migration follow.
 - **Phase D — remove Core Data and iCloud.** Delete `UIManagedDocument` / the Core Data stack,
   the value transformers, the `.xcdatamodel`, and the iCloud machinery (`UIManagedDocument` →
   `UIDocument`, ubiquity container, file coordination). This is where the de-iCloud-ing and the
