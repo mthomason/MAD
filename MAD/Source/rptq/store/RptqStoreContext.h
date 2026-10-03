@@ -57,6 +57,11 @@ NS_ASSUME_NONNULL_BEGIN
 				  value:(nullable id)value
 			   onObject:(RptqObject *)object;
 
+/// The incremental forms the generated `add<X>Object:` / `remove<X>Object:` accessors
+/// resolve to; each maintains the inverse like -setRelationship:… does.
+- (void)addObject:(id)member toRelationshipNamed:(NSString *)name onObject:(RptqObject *)object;
+- (void)removeObject:(id)member fromRelationshipNamed:(NSString *)name onObject:(RptqObject *)object;
+
 @end
 
 NS_ASSUME_NONNULL_END

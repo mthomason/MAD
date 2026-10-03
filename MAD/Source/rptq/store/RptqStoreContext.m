@@ -173,4 +173,52 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	}
 }
 
+- (void)addObject:(id)member toRelationshipNamed:(NSString *)name onObject:(RptqObject *)object {
+	MADStoreSchema *schema = [MADStoreSchema sharedSchema];
+	MADStoreEntity *entity = [schema entityNamed:object.entity];
+	MADStoreRelationship *relationship = [entity anyRelationshipNamed:name];
+	if (!relationship || !relationship.isToMany) return;
+
+	int64_t memberIdentifier = MADStoreIdentifierOfValue(member);
+	if (memberIdentifier == 0) return;
+	NSMutableArray<NSNumber *> *collection = [object.backingObject collectionForName:name];
+	if (![collection containsObject:@(memberIdentifier)]) [collection addObject:@(memberIdentifier)];
+
+	MADStoreEntity *destination = [schema entityNamed:relationship.destination];
+	MADStoreRelationship *inverse = [destination anyRelationshipNamed:relationship.inverse];
+	if (!inverse) return;
+	MADStoreObject *target = [self.graph objectForEntity:relationship.destination identifier:memberIdentifier];
+	if (!target) return;
+	if (inverse.isToMany) {
+		NSMutableArray<NSNumber *> *members = [target collectionForName:inverse.name];
+		if (![members containsObject:@(object.identifier)]) [members addObject:@(object.identifier)];
+	} else {
+		[target setReference:@(object.identifier) forName:inverse.name];
+	}
+}
+
+- (void)removeObject:(id)member fromRelationshipNamed:(NSString *)name onObject:(RptqObject *)object {
+	MADStoreSchema *schema = [MADStoreSchema sharedSchema];
+	MADStoreEntity *entity = [schema entityNamed:object.entity];
+	MADStoreRelationship *relationship = [entity anyRelationshipNamed:name];
+	if (!relationship || !relationship.isToMany) return;
+
+	int64_t memberIdentifier = MADStoreIdentifierOfValue(member);
+	NSMutableArray<NSNumber *> *collection = [object.backingObject existingCollectionForName:name];
+	[collection removeObject:@(memberIdentifier)];
+
+	MADStoreEntity *destination = [schema entityNamed:relationship.destination];
+	MADStoreRelationship *inverse = [destination anyRelationshipNamed:relationship.inverse];
+	if (!inverse) return;
+	MADStoreObject *target = [self.graph objectForEntity:relationship.destination identifier:memberIdentifier];
+	if (!target) return;
+	if (inverse.isToMany) {
+		NSMutableArray<NSNumber *> *members = [target collectionForName:inverse.name];
+		[members removeObject:@(object.identifier)];
+	} else {
+		[target setReference:nil forName:inverse.name];
+	}
+}
+
 @end
+

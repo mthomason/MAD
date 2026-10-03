@@ -19,6 +19,17 @@
 #import <MAD/MADStore.h>
 #import <MAD/MADStoreConverter.h>
 
+/// A stand-in for a swapped Rptq entity: the same @dynamic shape the real classes keep,
+/// over a RptqDatabase row, so the dynamic accessors are exercised end to end.
+@interface RptqDynamicAccessStub : RptqObject
+@property (nonatomic, copy) NSString *databaseDriverType;
+@property (nonatomic) int16_t databaseDriverTypeEnum;
+@end
+@implementation RptqDynamicAccessStub
+@dynamic databaseDriverType;
+@dynamic databaseDriverTypeEnum;
+@end
+
 @interface RptqStoreContextTests : XCTestCase
 @property (nonatomic, strong) NSURL *directory;
 @end
@@ -151,6 +162,23 @@
 	RptqObject *first = [reread objectForEntity:@"RptqDatabase" identifier:10];
 	RptqObject *second = [reread objectForEntity:@"RptqDatabase" identifier:10];
 	XCTAssertEqual(first, second);
+}
+
+/// The swapped classes keep @dynamic dot-syntax working: +resolveInstanceMethod: on the
+/// base installs typed getters and setters that read and write the backing row.
+- (void)testDynamicAccessorsServeDotSyntax {
+	RptqStoreContext *context = [self openContextAtPath:@"dynamic.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	MADStoreObject *backing = [MADStoreObject objectWithEntity:@"RptqDatabase" identifier:10];
+	RptqDynamicAccessStub *stub = [RptqDynamicAccessStub objectWithBackingObject:backing storeContext:context];
+
+	stub.databaseDriverType = @"Sqlite 3";
+	stub.databaseDriverTypeEnum = 2;
+
+	XCTAssertEqualObjects(stub.databaseDriverType, @"Sqlite 3");
+	XCTAssertEqual(stub.databaseDriverTypeEnum, (int16_t)2);
+	XCTAssertEqual(stub.identifier, (int64_t)10);
 }
 
 #pragma mark - A real document

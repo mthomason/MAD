@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// The context that owns this object; the route for faulting and saving.
 @property (nonatomic, weak, readonly) RptqStoreContext *storeContext;
 
-@property (nonatomic, readonly) int64_t identifier;
+@property (nonatomic, assign) int64_t identifier;
 @property (nonatomic, readonly, copy) NSString *entity;
 
 + (instancetype)objectWithBackingObject:(MADStoreObject *)backingObject
@@ -40,6 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// The generic hooks the Rptq headers' @dynamic properties resolve to.  A subclass
 /// declares `@property … databaseDriverType;` and these serve the getter and setter.
+/// The typed accessors themselves are installed by +resolveInstanceMethod: (see the
+/// .m), so a subclass keeps its @dynamic declarations unchanged and dot-syntax access
+/// keeps working exactly as it did under Core Data.
 - (nullable id)valueForUndefinedKey:(NSString *)key;
 - (void)setValue:(nullable id)value forUndefinedKey:(NSString *)key;
 
