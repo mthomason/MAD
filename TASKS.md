@@ -333,7 +333,10 @@ whether to do it now — so it is queued directly behind Phase 1 rather than at 
 
 ## 9. The portable store migration
 
-**Status:** Decided 2026-10-01; plan written 2026-10-01 (`MAD_STORE_MIGRATION.md`). Not started.
+**Status:** Phases A, B and C landed on `portable-store-phase-a` (2026-10-03) — the store, the
+legacy converter, and the app integration, with the document path, undo and dirty-tracking
+proven. `MAD_STORE_PHASE_C.md` §9 holds the review findings and what is outstanding; Phase D
+(removing Core Data and iCloud) has not started.
 
 The `.mad` store moves from Core Data to a portable SQLite format of our own — this is the
 decision in `MAD_FORMAT.md` §8.1 and `ROADMAP.md` §4.2, and it is what removes the last Apple

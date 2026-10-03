@@ -157,14 +157,36 @@ fixtures that pin it.
   store, keeping the headers, entity-family by entity-family (schema, then query, then
   sections/elements), and replace `NSFetchedResultsController` with reload-on-change. The
   designer/query/viewer tabs are the acceptance tests, and undo is kept working throughout.
-  *In progress.* The mechanism is designed in `MAD_STORE_PHASE_C.md` and its two core types
-  — `RptqObject` (the plain base) and `RptqStoreContext` (the store-backed context) — are
-  built and proven on the schema family by `RptqStoreContextTests`. The superclass swap and
-  the app's per-family usage migration follow.
+  *Landed 2026-10-03 in three milestones, each ending green* — the details are in
+  `MAD_STORE_PHASE_C.md` and the outstanding items in its §9.
+
+  - **(a) the swap and the document path.** All 33 `Rptq` classes are off `NSManagedObject`;
+    `MADocument`'s open/save run through the store (converting a legacy Core Data document on
+    open). MAD framework suite green.
+  - **(b) the app.** `MADDesigner` migrated — four `NSFetchedResultsController` users, not the
+    two the map predicted. Both suites green.
+  - **(c) the acceptance path.** The archive-level legacy round-trip, undo end to end, the
+    create-document chain against a Sqlite3 source, the three tabs exercised in the simulator,
+    and real dirty-tracking: `save:` early-returns when nothing changed, writes only dirty rows
+    otherwise. MAD framework 222 tests, MAD Designer 70 — measured on 2026-10-03.
+
+  Two findings delimit what is left. First, **not every element query works**: the plural
+  `objectsForEntity:` has no subentity fallback, so the four call sites that ask for
+  `RptqDocumentElement` and expect its subclasses get nothing — see §9.1 of
+  `MAD_STORE_PHASE_C.md`. Second, the tests that should have caught it agree with the bug
+  because they narrow the same way (§9, "the coverage lesson"). Remaining Phase C work is
+  those items plus the hardening that was deferred by name.
 - **Phase D — remove Core Data and iCloud.** Delete `UIManagedDocument` / the Core Data stack,
   the value transformers, the `.xcdatamodel`, and the iCloud machinery (`UIManagedDocument` →
   `UIDocument`, ubiquity container, file coordination). This is where the de-iCloud-ing and the
   simplification land, and it is the only behaviour the plan deliberately changes.
+
+  **One item Phase D must not miss:** milestone (c) compiled `MAD.momd` into the **MAD
+  framework** so that a legacy document can always find its model for conversion. That is
+  correct while legacy conversion exists and it must be removed when it stops — otherwise the
+  framework ships the Core Data model inside it, which is the opposite of what this migration
+  is for. The conversion itself (`MADStoreConverter`) is the other thing to retire at the same
+  point: once no shipping document is v0, legacy conversion is dead weight.
 
 **Not before Phase C:** moving `MADOperationRefresh` into `MAD` (`ROADMAP.md` §3.4) and the
 driver registry (`§5.1`); both get cheaper once the store is ours.
