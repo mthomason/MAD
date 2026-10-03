@@ -185,7 +185,28 @@ Status key:
   `dept_emp`, two elements).
 
 ### Page draws run one SQLite transaction per cell, so opening a large report pegs the CPU
-- **Status:** Still open -- found 2026-10-03, fix pending
+- **Status:** Fixed
+- **Now:** `MADDataTableFast` caches the prepared select per column
+  (`-selectStatementForColumn:database:error:`, keyed by column name; the SQL
+  is `WHERE rowid = ?` and each call binds, steps, resets, and clears
+  bindings, so one statement serves every row).  A `SQLITE_SCHEMA` step
+  re-prepares once and retries -- the prepare-per-call code never saw a stale
+  statement, and the cached one must not either -- and the cache is finalized
+  when the connection is reopened, a column is added, or the table is
+  deallocated.  `-beginReadTransaction` / `-commitReadTransaction` on the
+  select connection (never the writer) wrap
+  `MADPrintPageRenderer -drawPageAtIndex:withContext:inPageRect:` so a page's
+  cell reads share one transaction.  Measured: the app's open-time first-page
+  draw went from ~25 s at 100% CPU to ~2 s of CPU for launch, open, and the
+  draw together (process idle immediately after; verified in the iPhone 17
+  simulator via the launch hooks).  The CLI export is 58 s -> 52 s
+  (9,196,432 bytes / 9,475 pages unchanged); a 25 s sample of the export's
+  draw loop shows zero `sqlite3BtreeBeginTrans` and 255 of 10,151 samples in
+  the whole `dataForRow:column:` chain -- the remaining CLI time is the
+  store-context KVC draw path and Core Text glyph drawing, not this defect.
+  Four new `MADDataTableRegressionTests` pin repeated-read identity, fresh
+  values after an intervening write (same table and via a sibling table on
+  the same cache file), and reads after a table rebuild.
 - **Where:** `MADSqlite3/Source/MADDataTableFast.m:981`
   (`-dataForRow:column:error:` prepares a fresh statement and steps it exactly
   once, in autocommit, so every cell read runs an implicit

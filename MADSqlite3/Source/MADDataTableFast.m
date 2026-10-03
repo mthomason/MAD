@@ -111,6 +111,11 @@ static os_log_t mlog;
 
 @implementation MADDataTableFast {
 	sqlite3_stmt *_statementInsert;
+	// Prepared, parameterized select per column ("SELECT c<name> FROM t<tag> WHERE
+	// rowid = ?"), reused across -dataForRow:column:error: calls so a page draw pays
+	// one prepare per column instead of one per cell.  Finalized on dealloc and
+	// dropped whenever the connection or the table is rebuilt.
+	NSMutableDictionary<NSString *, NSValue *> *_selectStatementsByColumn;
 }
 
 + (void)initialize {
@@ -174,6 +179,7 @@ static os_log_t mlog;
 		sqlite3_finalize(_statementInsert);
 		_statementInsert = NULL;
 	}
+	[self invalidateSelectStatementCache];
 }
 
 - (instancetype)initWithId:(NSUInteger)objectId {
@@ -452,6 +458,9 @@ static os_log_t mlog;
 }
 
 - (void)reopenDbConnection {
+	// The prepared selects belong to the connection being replaced; drop them
+	// before the swap so they are finalized against a still-open database.
+	[self invalidateSelectStatementCache];
 	NSURL *urlFastCache = self.urlFastCache;
 	id <MADCacheProtocol> cacheDelegate = _cacheDelegate;
 	MADDatabaseConnection *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:urlFastCache];
@@ -538,7 +547,11 @@ static os_log_t mlog;
 	   columnName:(NSString *)columnName
 	  createTable:(BOOL)create
 		   unique:(BOOL)unique {
-	
+
+	// Creating or altering the table bumps its schema cookie, so any prepared
+	// select against it is stale from here on.
+	[self invalidateSelectStatementCache];
+
 	NSString *columnAffinity = [MADDatabaseSqlite3 sqlite3NativeType: column.type];
 	MADQueryCache *query = [[MADQueryCacheAddColumn alloc] initWithTableName: table
 																  columnName: columnName
@@ -940,7 +953,6 @@ static os_log_t mlog;
 					  column:(NSString *)columnKey
 					   error:(NSError * __autoreleasing *)error {
 	NSString *columnName = [self columnNameForIdentifier:columnKey];
-	NSArray<NSString *> *columnKeys = [[NSArray alloc] initWithObjects:columnName, nil];
 	if (![self.columnKeys containsObject:columnName]) {
 		os_log_error(mlog, "[MADDataTableFast %p dataForRow:%lu column:%@] Column not found", self, (unsigned long)rowID, columnKey);
 		if (error != NULL) {
@@ -951,57 +963,122 @@ static os_log_t mlog;
 		}
 		return nil;
 	}
-	
+
 	NSDictionary *result = nil;
-	NSString *tableName = [[self tableName] copy];
-	
-	NSNumber *keyRowId = [[NSNumber alloc] initWithShort:MADQuerySelectRowId];
-	NSNumber *keyFieldKey = [[NSNumber alloc] initWithShort:MADQuerySelectFieldKeys];
-	NSNumber *keyTableName = [[NSNumber alloc] initWithShort:MADQuerySelectTableName];
-	
-	NSNumber *cacheID = [[NSNumber alloc] initWithUnsignedInteger:rowID];
-	NSDictionary<NSNumber *, id> *options = [[NSDictionary alloc] initWithObjectsAndKeys:
-											 cacheID, keyRowId,
-											 columnKeys, keyFieldKey,
-											 tableName, keyTableName,
-											 nil];
-	MADQuery *query = [[MADQueryCacheSelectRowId alloc] initWithObject:options];
-	sqlite3_stmt *statement = NULL;
-	NSError * __autoreleasing errorSQL = nil;
-	NSString *sql = [[query getSql:&errorSQL] copy];
-	
-	const char *sqlUTF8String = [sql UTF8String];
-	char *queryString = sqlite3_mprintf("%s", sqlUTF8String);
-	
 	MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
-	
-	int sqlite3_prepare = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1, &statement, NULL);
-	if (sqlite3_prepare == SQLITE_OK) {
-		
-		int stepResult = sqlite3_step(statement);
-		if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
-			result = [self newCurrentObject:statement fieldKey:columnName];
-		} else {
-			if (error != NULL) {
-				*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:8927 userInfo:@{
-					NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Error"),
-					NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errstr(stepResult) encoding:NSUTF8StringEncoding]
-				}];
-			}
-			result = [[NSDictionary alloc] init];
+	sqlite3_stmt *statement = [self selectStatementForColumn:columnName
+													database:databaseForSelects
+													   error:error];
+	if (statement == NULL) {
+		return nil;
+	}
+
+	sqlite3_bind_int64(statement, 1, (sqlite3_int64)rowID);
+	int stepResult = sqlite3_step(statement);
+	if (stepResult == SQLITE_SCHEMA) {
+		// The table was rebuilt or extended under the cached statement.  The
+		// prepare-per-call code this replaced never saw a stale statement, so
+		// re-prepare once and retry to keep that behaviour.
+		[self dropSelectStatementForColumn:columnName];
+		statement = [self selectStatementForColumn:columnName
+										  database:databaseForSelects
+											 error:error];
+		if (statement == NULL) {
+			return nil;
 		}
+		sqlite3_bind_int64(statement, 1, (sqlite3_int64)rowID);
+		stepResult = sqlite3_step(statement);
+	}
+	if (stepResult == SQLITE_ROW || stepResult == SQLITE_DONE) {
+		result = [self newCurrentObject:statement fieldKey:columnName];
 	} else {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:8927 userInfo:@{
+				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Error"),
+				NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errstr(stepResult) encoding:NSUTF8StringEncoding]
+			}];
+		}
+		result = [[NSDictionary alloc] init];
+	}
+	sqlite3_reset(statement);
+	sqlite3_clear_bindings(statement);
+
+	return result;
+}
+
+/// The cached per-column select, prepared against the selects connection on the
+/// first read.  The SQL is parameterized ("WHERE rowid = ?") so one statement
+/// serves every row; the caller binds, steps, and resets.  Returns NULL after
+/// setting *error (code -782) when the statement cannot be prepared -- the same
+/// failure the prepare-per-call code reported.
+- (sqlite3_stmt *)selectStatementForColumn:(NSString *)columnName
+								  database:(MADDatabaseSqlite3 *)databaseForSelects
+									 error:(NSError * __autoreleasing *)error {
+	NSValue *cached = _selectStatementsByColumn[columnName];
+	sqlite3_stmt *statement = cached.pointerValue;
+	if (statement != NULL) {
+		return statement;
+	}
+
+	NSString *tableName = [self tableName];
+	NSString *sql = [[NSString alloc] initWithFormat:@"SELECT %@ FROM %@ WHERE rowid = ?", columnName, tableName];
+	char *queryString = sqlite3_mprintf("%s", sql.UTF8String);
+
+	int prepareResult = sqlite3_prepare_v2(databaseForSelects->_database, queryString, -1, &statement, NULL);
+	sqlite3_free(queryString);
+	if (prepareResult != SQLITE_OK) {
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:-782 userInfo:@{
 				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Error"),
-				NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errstr(sqlite3_prepare) encoding:NSUTF8StringEncoding]
+				NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errstr(prepareResult) encoding:NSUTF8StringEncoding]
 			}];
 		}
+		return NULL;
 	}
-	sqlite3_finalize(statement);
-	sqlite3_free(queryString);
-	
-	return result;
+
+	if (_selectStatementsByColumn == nil) {
+		_selectStatementsByColumn = [[NSMutableDictionary alloc] init];
+	}
+	_selectStatementsByColumn[columnName] = [NSValue valueWithPointer:statement];
+	return statement;
+}
+
+- (void)dropSelectStatementForColumn:(NSString *)columnName {
+	sqlite3_stmt *statement = _selectStatementsByColumn[columnName].pointerValue;
+	[_selectStatementsByColumn removeObjectForKey:columnName];
+	if (statement != NULL) {
+		sqlite3_finalize(statement);
+	}
+}
+
+- (void)invalidateSelectStatementCache {
+	NSMutableDictionary *cache = _selectStatementsByColumn;
+	_selectStatementsByColumn = nil;
+	for (NSValue *value in cache.allValues) {
+		sqlite3_finalize((sqlite3_stmt *)value.pointerValue);
+	}
+}
+
+- (void)beginReadTransaction {
+	sqlite3 *database = self.databaseForSelects->_database;
+	if (database == NULL) {
+		return;
+	}
+	int resultCode = sqlite3_exec(database, "BEGIN", NULL, NULL, NULL);
+	if (resultCode != SQLITE_OK) {
+		os_log_debug(mlog, "[MADDataTableFast %p beginReadTransaction] BEGIN failed: %s", self, sqlite3_errstr(resultCode));
+	}
+}
+
+- (void)commitReadTransaction {
+	sqlite3 *database = self.databaseForSelects->_database;
+	if (database == NULL) {
+		return;
+	}
+	int resultCode = sqlite3_exec(database, "COMMIT", NULL, NULL, NULL);
+	if (resultCode != SQLITE_OK) {
+		os_log_debug(mlog, "[MADDataTableFast %p commitReadTransaction] COMMIT failed: %s", self, sqlite3_errstr(resultCode));
+	}
 }
 
 // FIXME: Return error handler... remove credentals

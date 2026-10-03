@@ -998,6 +998,100 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertEqual(error.code, (NSInteger)8927);
 }
 
+/// CONTRACT: repeated -dataForRow:column:error: reads return identical results.
+/// The per-column select is prepared once and rebound per call; the cached
+/// statement must serve exactly what a fresh prepare would have.
+- (void)testFastTableDataForRowColumnRepeatedReadsReturnIdenticalResults {
+	MADDataTableFast *table = [self newFastTableWithTag:1140];
+
+	[self bulkInsertRows:@[@[@"alice", @30], @[@"bob", @20]] intoTable:table];
+
+	NSError *error = nil;
+	NSDictionary *first = [table dataForRow:1 column:@"name" error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(first);
+	XCTAssertEqualObjects(first[@"name"], @"alice");
+
+	for (NSUInteger index = 0; index < 5; index++) {
+		NSDictionary *again = [table dataForRow:1 column:@"name" error:&error];
+		XCTAssertNil(error);
+		XCTAssertEqualObjects(again, first);
+	}
+}
+
+/// CONTRACT: a column read after an intervening write returns the new value.  The
+/// bulk path reopens both connections and deletes all rows first, so the new row
+/// is rowid 1 again -- and the rebuilt table must be read correctly through the
+/// column cache, nothing stale.
+- (void)testFastTableDataForRowColumnReflectsInterveningWrite {
+	MADDataTableFast *table = [self newFastTableWithTag:1141];
+
+	[self bulkInsertRows:@[@[@"alice", @30]] intoTable:table];
+
+	NSError *error = nil;
+	NSDictionary *before = [table dataForRow:1 column:@"name" error:&error];
+	XCTAssertNil(error);
+	XCTAssertEqualObjects(before[@"name"], @"alice");
+
+	[self bulkInsertRows:@[@[@"zoe", @99]] intoTable:table];
+
+	NSDictionary *after = [table dataForRow:1 column:@"name" error:&error];
+	XCTAssertNil(error);
+	XCTAssertEqualObjects(after[@"name"], @"zoe");
+}
+
+/// CONTRACT: a cached column statement serves data written by another connection
+/// to the same cache file.  A second table on the same cache URL replaces the
+/// rows while the first table's prepared select is untouched; the first table's
+/// next read must see the replacement, not a stale row.
+- (void)testFastTableDataForRowColumnSeesWritesFromSiblingTable {
+	MADDataTableFast *reader = [self newFastTableWithTag:1143];
+
+	[self bulkInsertRows:@[@[@"alice", @30]] intoTable:reader];
+
+	NSError *error = nil;
+	NSDictionary *before = [reader dataForRow:1 column:@"name" error:&error];
+	XCTAssertNil(error);
+	XCTAssertEqualObjects(before[@"name"], @"alice");
+
+	MADDataTableFast *writer = [self newFastTableWithTag:1143];
+	[self bulkInsertRows:@[@[@"zoe", @99]] intoTable:writer];
+
+	NSDictionary *after = [reader dataForRow:1 column:@"name" error:&error];
+	XCTAssertNil(error);
+	XCTAssertEqualObjects(after[@"name"], @"zoe");
+}
+
+/// CONTRACT: a rebuilt table is still read correctly through the column cache.
+/// Dropping and recreating the table (a refresh replaces the rows) must not leave
+/// the cached select serving a stale schema.
+- (void)testFastTableDataForRowColumnSurvivesTableRebuild {
+	MADDataTableFast *table = [self newFastTableWithTag:1142];
+
+	[self bulkInsertRows:@[@[@"alice", @30]] intoTable:table];
+
+	NSError *error = nil;
+	NSDictionary *before = [table dataForRow:1 column:@"name" error:&error];
+	XCTAssertNil(error);
+	XCTAssertEqualObjects(before[@"name"], @"alice");
+
+	[table removeAllObjects];
+
+	MADDataColumn *name = [[MADDataColumn alloc] initWithIdentifier:@"name"];
+	name.type = MADDataTypeString;
+	[table addColumn:name];
+
+	MADDataColumn *age = [[MADDataColumn alloc] initWithIdentifier:@"age"];
+	age.type = MADDataTypeInteger;
+	[table addColumn:age];
+
+	[self bulkInsertRows:@[@[@"zoe", @99]] intoTable:table];
+
+	NSDictionary *after = [table dataForRow:1 column:@"name" error:&error];
+	XCTAssertNil(error);
+	XCTAssertEqualObjects(after[@"name"], @"zoe");
+}
+
 #pragma mark - MADDataTableFast: row access
 
 /// CONTRACT: -objectAtRow:limit: returns the cached rows and agrees with the

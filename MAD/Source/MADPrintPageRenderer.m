@@ -303,6 +303,12 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 		return;
 	}
 
+	// One read transaction for the whole page: every cell read would otherwise pay
+	// autocommit's journal begin/commit on its own.  See BUGS.md "Page draws run one
+	// SQLite transaction per cell".  Only the page-bound check above can return
+	// early, so the pair below stays balanced.
+	[self.datasource.dataTable beginReadTransaction];
+
 	CGFloat originY = pageRect.origin.y;
 	NSUInteger rowIndex = 0, offsetElement = 0, offsetCharacter = 0;
 	NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
@@ -348,7 +354,8 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	
 	
 	[self.textRepresentation setPage:pageRepresentation forPageIndex:pageIndex];
-	
+
+	[self.datasource.dataTable commitReadTransaction];
 }
 
 - (MADReportSectionRepresentation *)drawSection: (RptqDocumentSection *)documentSection

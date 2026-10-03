@@ -40,6 +40,13 @@ NS_ASSUME_NONNULL_BEGIN
 					  column:(NSString *)columnIdentifier
 					   error:(NSError * __autoreleasing *)error;
 
+/// A page draw wraps its cell reads in one read transaction on the selects
+/// connection so that each -dataForRow:column:error: call does not pay
+/// autocommit's journal begin/commit on its own.  The renderer's draw loop
+/// balances the pair; these never touch the inserts (writer) connection.
+- (void)beginReadTransaction;
+- (void)commitReadTransaction;
+
 @end
 
 NS_ASSUME_NONNULL_END
