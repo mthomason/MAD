@@ -84,6 +84,84 @@ Status key:
   count, so a lookup that silently returned nothing cannot pass.
 - **Found during the store migration.**
 
+### Opening a large report and refreshing spikes memory to ~8 GB and never renders a page
+- **Status:** Still open -- root cause found 2026-10-03, fix pending
+- **Where:** the app's open+refresh on the user's custom MySQL report: the
+  `employees` database, `departments` LEFT OUTER JOIN `dept_emp` -- about 331,603
+  detail rows, i.e. thousands of pages at ~45 rows a page.  Two elements.  The
+  document is a legacy v0 `.mad` (Core Data `analyitics` store, converts on open)
+  and was found in the iPhone 17 simulator's app group container as `Document.mad`.
+  London (five pages) and Music (3,503 rows / 77 pages) both work, so the defect
+  only bites at this report's scale.
+- **Behavior:** on the user's device, opening this report and refreshing makes the
+  print-page render do "all kinds of work": memory climbs to ~8 GB and the first
+  page never renders.  "It doesn't get to the rendering -- the processing never
+  finishes."  The symptom reads as "drawing the whole report instead of the visible
+  page", but the two-pass design itself is intact at moderate scale: the CLI export
+  of Music runs the same `MADReportFormatter` / `MADPrintPageRenderer` and finishes
+  77 pages in ~4 s at ~17 MB RSS.  What Music cannot exercise is the per-row and
+  per-page accumulation over 331k rows and ~7,000 pages -- the formatter's own
+  comment (`MADReportFormatter.m:454-459`) warns that even an "8k page report"
+  spikes 100 MB without the per-row autoreleasepool, and this report is an order of
+  magnitude beyond anything the samples reach.
+- **Reproduction:** the CLI now drives the user's actual document headlessly against
+  the live MySQL server: `CLI/build.sh --run refresh --credentials root:root
+  <copy-of-Document.mad>`, with `--rows N` to cap the query.  The CLI runs the same
+  refresh chain as the app (the `MADOperationRefresh*` sources are compiled in from
+  `MADDesigner`), so a headless failure here is the app's failure.
+- **What has been ruled out** (checked against `master`, before assigning):
+  - `MADReportFormatter.m`, `MADViewerController.m`, `MADRefreshOperationReload.m`,
+    `MADReportPageView.m` are zero-diff; `MADPrintPageRenderer.m` is a mechanical
+    4-line keying change; `MADArrayCaching.m` and `MADDataTableFast.m` still carry
+    the hot paths unchanged.
+  - Store lookups are not O(data): `objectForEntity:identifier:` is a registry
+    lookup (`RptqStoreContext.m:129-166`) and every `objectsForEntity:` call site
+    in the render/designer path is bounded by document-definition counts, not data
+    rows.
+  - Legacy conversion-on-open is one-time (`MADocument.m:515-544`), not per open.
+- **Root cause -- found 2026-10-03, fix pending.**  Every attribute read on a
+  store-backed object allocates.  `-[RptqObject valueForUndefinedKey:]`
+  (`MAD/Source/rptq/store/RptqObject.m:64-93`) resolves each key with
+  `MADStoreAttributeNamed` (a linear scan over `entity.allAttributes`) and then
+  `anyRelationshipNamed:` (a linear scan over `entity.allRelationships`), and
+  **both accessors build a fresh array on every call** --
+  `-[MADStoreEntity allAttributes]` /
+  `-[MADStoreEntity allRelationships]`
+  (`MAD/Source/rptq/store/MADStoreSchema.m:151-161`) flatten the inheritance
+  chain with `arrayByAddingObjectsFromArray:` on each invocation.  Under Core
+  Data the same reads were direct ivar/accessor hits; the store-backed property
+  layer turns each one into an entity lookup plus one or two array builds plus
+  per-name `isEqualToString:` scans.  The render path reads element geometry and
+  text styles per element per row per page, and the format path reads the same
+  per row -- so at this report's scale (331k rows x 9,475 pages) that is tens of
+  millions of reads, each allocating.  Reproduced headlessly on the user's own
+  document: a 4-second sample run at t=2s showed the process at 3.4 GB; `vmmap`
+  at peak showed 4.7 GB physical, 4.7 GB virtual in **Malloc Small** alone; and a
+  4 s `sample` showed 2,343 of 2,351 samples inside `drawPageAtIndex:` ->
+  `drawSection:` -> `RptqGetObject` -> `valueForUndefinedKey:` ->
+  `MADStoreAttributeNamed` -> `-[MADStoreEntity allAttributes]` ->
+  `arrayByAddingObjectsFromArray:`.  The CLI's render loop also has no per-page
+  autoreleasepool (`CLI/Source/MADCLIDocument.m:260-263`), so the garbage the
+  lookups produce accumulates across all 9,475 pages until the loop ends.  On the
+  device the same curve hits the memory limit (~8 GB) and the first page never
+  renders.
+- **Fix shape.**  Memoize the schema lookups: cache the flattened
+  `allAttributes` / `allRelationships` per entity (compute-once after the schema
+  is built), and replace the linear `MADStoreAttributeNamed` /
+  `anyRelationshipNamed:` scans in `RptqObject` with per-entity cached
+  name->descriptor dictionaries, so an attribute read is one dictionary hit and
+  allocates nothing.  Wrap the CLI's per-page render body in `@autoreleasepool`
+  so any residual garbage is bounded per page.  Behaviour must not change;
+  verify with the existing suites plus the headless export below, whose peak RSS
+  must come down from ~5.8 GB to a few hundred MB.
+- **Reproduction (the regression guard):** `CLI/build.sh --run export
+  --credentials root:root --out /tmp/employees.pdf <copy-of-Document.mad>` --
+  completes in ~83 s today at ~5.8 GB peak RSS, 9,475 pages / 9,196,432 bytes.
+  Music stays the control: 77 pages / ~4 s / ~17 MB RSS.  Needs the MySQL server
+  reachable; the document lives in the iPhone 17 simulator's app group container
+  as `Document.mad` (MySQL, `employees`, `departments` LEFT OUTER JOIN
+  `dept_emp`, two elements).
+
 ### A NULL read from a source database printed as the text `<null>`, or as the epoch
 - **Status:** Fixed
 - **Where:** the producer is
