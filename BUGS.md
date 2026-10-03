@@ -1578,6 +1578,40 @@ header search path.
 - **The rule this violated:** the shared store context is main-thread-owned;
   only its owning queue may touch it unless confinement is explicitly added.
 
+### The page-count updates never fire because the formatter instance is unstable
+- **Status:** Fixed
+- **Now:** the reload operation observes
+  `MADNotificationDidFormatPagesName` with `object:nil` instead of the
+  formatter instance, and re-asserts `didRefresh` on the formatter that is
+  about to format.  The document's formatter is not a stable instance:
+  `-activeDocumentModel` (reached through `-prepareForQuery`) calls
+  `-resetReportFormatter`, and the refresh's initialize step replaces it
+  with a fresh one, so an observation keyed to the instance could end up
+  listening to a formatter that is no longer the one that formats -- the
+  format ran, the pages were counted, and `reportFormatterDidFormatPage:`
+  was never called.  The same churn could lose the `didRefresh` flag the
+  refresh operation had set, after which a recreated formatter reloaded the
+  old layout from the index cache and the format was skipped entirely.
+  Verified with the launch hooks and the instrumented poster/observer: the
+  per-page deliveries now reach the reload operation and the page count
+  updates flow.
+- **Where:** `MAD/Source/MADDocument.m` (`-activeDocumentModel` ->
+  `-resetReportFormatter`), `MADDesigner/Source/MADOperationRefreshInitialize.m`
+  (replaces `document.reportFormatter`), `MADDesigner/Source/MADRefreshOperationReload.m`
+  (`-watchFormatter:` / `-ignoreFormatter:` / the format call).
+- **Behavior:** reported by the user: "`reportDocumentDidReadRows:` should be
+  called over-and-over as the report is refreshing, and
+  `reportFormatterDidFormatPage:` is supposed to be called as each page is
+  formatting... Now, it's never called during the formatting.  It does seem
+  like the formatting is happening, but the UI updates are not working like
+  they use to."  Both failure modes come from the formatter identity churn:
+  the observer keyed to the old instance misses every post (formatting
+  happens, updates do not), and the lost `didRefresh` skips the format
+  (stale page count, no posts at all).  Which one appears depends on where
+  the recreate lands relative to the watch and the refresh flag.
+- **The rule this violated:** notification observation must not depend on an
+  object identity the owning graph is free to replace.
+
 ### The open-time reload operation hides the refresh activity indicator
 - **Status:** Fixed
 - **Now:** the viewer's `operationDidFinish:` treated any

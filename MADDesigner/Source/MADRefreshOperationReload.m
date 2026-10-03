@@ -14,6 +14,7 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/MADNotificationDidFormatPage.h>
+#import <MAD/MADReportFormatter.h>
 
 @interface MADRefreshOperationReload ()
 
@@ -86,9 +87,16 @@ static void MADRefreshOperationReloadRunOnMain(dispatch_block_t block) {
 	if (indexDependencyRefresh == NSNotFound) {
 		[document format];
 	} else {
+		// The refresh operation set document.refreshed, which lands didRefresh on
+		// whatever formatter the document held at that moment.  The formatter is
+		// not a stable instance (-activeDocumentModel nils it on first access and
+		// the initialize step replaces it), so re-assert the flag on the formatter
+		// that is about to format -- otherwise a recreated formatter reloads the
+		// old layout from the index cache and the format is skipped entirely.
+		document.reportFormatter.didRefresh = YES;
 		[document formatContentChange];
 	}
-	
+
 	[self ignoreFormatter: document.reportFormatter];
 
 	if (self.cancelled) {
@@ -127,16 +135,25 @@ static void MADRefreshOperationReloadRunOnMain(dispatch_block_t block) {
 #pragma mark Report Notifications Setup
 
 - (void)watchFormatter:(MADReportFormatter *)formatter {
+	os_log_debug(OS_LOG_DEFAULT, "%s: watching formatter=%p", __PRETTY_FUNCTION__, formatter);
+	// Observe without an object filter.  The document's formatter is not a stable
+	// instance: -activeDocumentModel (reached through -prepareForQuery) calls
+	// -resetReportFormatter, and the refresh's initialize step replaces it with a
+	// fresh one, so a watch keyed to the instance can end up listening to a
+	// formatter that is no longer the one that formats -- the page-count updates
+	// then never arrive even though the format runs.  The reload operation only
+	// ever cares about its own document's format, so the unfiltered observation
+	// cannot pick up anything it should ignore.
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(reportFormatterDidFormatPage:)
 												 name: MADNotificationDidFormatPagesName
-											   object: formatter];
+											   object: nil];
 }
 
 - (void)ignoreFormatter:(MADReportFormatter *)formatter {
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: MADNotificationDidFormatPagesName
-												  object: formatter];
+												  object: nil];
 }
 
 #pragma mark -
@@ -144,6 +161,7 @@ static void MADRefreshOperationReloadRunOnMain(dispatch_block_t block) {
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {
 	NSNumber *pageNumber = sender.userInfo[MTDatabaseNumberOfPagesFormattedKey];
+	os_log_debug(OS_LOG_DEFAULT, "%s: page=%@", __PRETTY_FUNCTION__, pageNumber);
 	[self updateNumberOfPages: pageNumber.unsignedIntegerValue];
 }
 

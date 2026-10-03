@@ -13,6 +13,7 @@
 #import <Foundation/NSException.h>
 #import <dispatch/once.h>
 #import <math.h>
+#import <os/log.h>
 
 NSString * const MADNotificationDidFormatPagesName = @"MADNotificationDidFormatPages";
 NSString * const MTDatabaseNumberOfPagesFormattedKey = @"MTDatabaseNumberOfPagesFormattedKey";
@@ -71,6 +72,8 @@ static MADNotificationDidFormatPage *_sharedSingleton = nil;
 - (void)reportFormatter:(MADReportFormatter *)reportFormatter formattedPage:(NSUInteger)page {
 	if (page % _pageInterval == 0) {
 		if (page == 0) _pageInterval = _pageIntervalInital;
+		os_log_debug(OS_LOG_DEFAULT, "%s: formatter=%p page=%lu", __PRETTY_FUNCTION__,
+					 reportFormatter, (unsigned long)page);
 		NSDictionary <NSString *, NSNumber *> *parameters = [self parametersWithNumberOfPages:page];
 		NSNotification *notification = [NSNotification notificationWithName:MADNotificationDidFormatPagesName
 																	 object:reportFormatter userInfo:parameters];
