@@ -123,6 +123,55 @@ Status key:
   `("12/31/69, 7:00 PM") is not equal to ("")` for the datetime — the epoch in US
   Eastern, which is 1970-01-01 UTC.
 
+### `MADSectionLayout` computes no element height, so a report piles onto its first pages
+- **Status:** Still open -- found 2026-10-03, reproduced from the shipped samples
+- **Where:** `MAD/Source/MADSectionLayout.m:63-65` (the stub). Consumed by
+  `MAD/Source/MADReportFormatter.m:517`, `:522`, `:580-594`, `:626`.
+- **Behavior:** `-initWithObject:managedObjectContext:` used to set `_displayHeight`
+  to the **maximum calculated height of the section's elements** -- for each element,
+  `rect.origin.y + rect.size.height + margin.top + margin.bottom + padding.top +
+  padding.bottom + border.width.top + border.width.bottom`, computed by the Core Data
+  projection `RptqDocumentElement +fetchRequestSectionHeight:`. Note what the old code
+  did *not* do: `_displayHeight` started at zero and the section's own declared
+  `height` never entered it. The projection went with the store migration and was
+  replaced by `_displayHeight = _visibility ? _height : 0.0000f` -- the declared
+  height, a value the old code never used for this purpose. `displayHeight` is what
+  `MADReportFormatter` adds to `cumulativePageHeight` to place the next section and
+  decide page breaks, so sections now advance by the wrong amount and overlap.
+- **Why it matters:** Every rendered report is mispaginated, and a section whose
+  declared height is zero collapses entirely onto the page it starts on. Measured on
+  the London sample through the CLI: before the migration 5 pages / 43,177 bytes /
+  638 text strings; after, 3 pages / 40,547 bytes / 636. The two strings are the page
+  header, which now repeats on fewer pages; everything else is intact and piled onto
+  three pages instead of five. The user-visible report is "everything prints on the
+  first page".
+- **Reproduction:** `CLI/build.sh --run export --out /tmp/london.pdf
+  MADDesigner/Resources/Assets/Samples.xcassets/Reports/London.dataset/London.mad`
+  -- 5 pages before the migration, 3 after. The CLI goes through the same
+  `MADReportFormatter` the app does, so it is a headless check for the fix.
+- **Not yet fixed:** the comment at the stub says the declared height "stands in until
+  the sections/elements family lands (slice 3)". That family is what Phase C finished.
+  This is the only stub of its kind left in the tree.
+
+### `MADocument -managedObjectContext` returns a `RptqStoreContext` under a Core Data type
+- **Status:** Still open -- recorded 2026-10-03, not a live failure
+- **Where:** `MAD/Source/MADocument.m:1284-1286`
+- **Behavior:** `managedObjectContext` is inherited from `UIManagedDocument`, where it
+  is an `NSManagedObjectContext`. `MADocument` now overrides it to return
+  `self.storeContext`, an `RptqStoreContext` -- a different class that is deliberately
+  not an `NSManagedObjectContext` and does not answer Core Data's selectors. Forty-six
+  call sites reach `.managedObjectContext`; they work, because the object they get is
+  the store context, but every one of them is compiled against the wrong type and the
+  compiler can no longer check any of them. `CLI/Source/MADCLIQuery.m:27` warns on
+  exactly this -- it passes the value to a `RptqStoreContext *` parameter and the
+  compiler reports an incompatible pointer type.
+- **Why it matters:** It is a type lie that turns a future refactor into a runtime
+  crash (unrecognised selector) rather than a compile error. It also means
+  `UIManagedDocument`'s own machinery, if any of it calls `self.managedObjectContext`
+  internally, receives an object it cannot use.
+- **Not yet fixed:** belongs with Phase D, when `UIManagedDocument` goes and the
+  property can be renamed to `storeContext` at every call site.
+
 ### `MADSectionGroupLayout` segfaults on a group whose field has no query table
 - **Status:** Still open
 - **Where:** `MAD/Source/MADSectionGroupLayout.m:43`, `:46`, `:49`, `:58`
