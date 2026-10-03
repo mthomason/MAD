@@ -173,16 +173,21 @@
 }
 
 - (void)watchDatabase:(MADDatabase *)database {
+	// Observe without an object filter, as the reload operation observes the
+	// formatter: the document's database can be recreated (the open flow calls
+	// -updateDatabaseWithConnection:), and an observation keyed to the instance
+	// would miss the row-read posts from a replacement.  This operation only
+	// ever cares about its own document's streaming.
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(reportDocumentDidReadRows:)
 												 name: MADNotificationDidReadRowsName
-											   object: database];
+											   object: nil];
 }
 
 - (void)ignoreDatabase:(MADDatabase *)database {
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: MADNotificationDidReadRowsName
-												  object: database];
+												  object: nil];
 }
 
 - (void)operationDidFinish:(NSOperation *)operation withErrors:(NSArray<NSError *> *)errors {
