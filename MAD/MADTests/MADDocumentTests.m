@@ -34,6 +34,7 @@
 #import <MAD/RptqDocumentSectionRows.h>
 #import <MAD/MADModelDocument.h>
 #import <MAD/MADModelDatabase.h>
+#import <MAD/MADModelTable.h>
 #import <MAD/MADModelQuery.h>
 #import <MAD/MADConstants.h>
 #import "MADArchiveManager.h"
@@ -266,6 +267,50 @@
 					  @"the model layer found London's query");
 
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
+}
+
+#pragma mark - Model projections
+
+/// CONTRACT: the model projections sort by name, as the pre-migration fetches
+/// did.  The store keeps insertion order, so the sorts must come from the model
+/// layer: tables by name, fields by name within each table.
+- (void)testModelDatabaseSortsTablesAndFieldsByName {
+	RptqStoreContext *context = [self newTestContext];
+
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:3];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+
+	// Inserted out of name order on purpose.
+	RptqObject *zebra = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:1];
+	[zebra setValue:@"zebra" forKey:@"name"];
+	RptqObject *apple = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:2];
+	[apple setValue:@"apple" forKey:@"name"];
+
+	RptqObject *yankee = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:11];
+	[yankee setValue:@"yankee" forKey:@"name"];
+	RptqObject *alpha = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:12];
+	[alpha setValue:@"alpha" forKey:@"name"];
+	RptqObject *beta = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[beta setValue:@"beta" forKey:@"name"];
+	RptqObject *zulu = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:22];
+	[zulu setValue:@"zulu" forKey:@"name"];
+
+	[database setValue:@[ zebra, apple ] forKey:@"hasTables"];
+	[zebra setValue:@[ yankee, alpha ] forKey:@"hasFields"];
+	[apple setValue:@[ zulu, beta ] forKey:@"hasFields"];
+
+	XCTAssertTrue([context save:NULL]);
+
+	MADModelDatabase *model = [[MADModelDatabase alloc] initWithIdentifier:3 managedObjectContext:context];
+	NSArray *expectedTables = @[ @2, @1 ];
+	XCTAssertEqualObjects(model.tables.array, expectedTables, @"tables come back sorted by name");
+
+	NSArray *expectedZebraFields = @[ @12, @11 ];
+	XCTAssertEqualObjects(((MADModelTable *)model.tableDictionary[@1]).fieldIDs.array, expectedZebraFields,
+						  @"fields come back sorted by name");
+	NSArray *expectedAppleFields = @[ @21, @22 ];
+	XCTAssertEqualObjects(((MADModelTable *)model.tableDictionary[@2]).fieldIDs.array, expectedAppleFields,
+						  @"fields come back sorted by name");
 }
 
 #pragma mark - Undo

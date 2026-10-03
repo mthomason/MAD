@@ -121,7 +121,12 @@
 
 - (void)update {
 	RptqStoreContext *managedObjectContext = _managedObjectContext;
-	NSArray *schemaFields = [managedObjectContext objectsForEntity:NSStringFromClass([RptqDatabaseSchemaField class])];
+	// The pre-migration fetch sorted by name; the store keeps insertion order,
+	// so the sort is restored here.  See BUGS.md "The milestone-(a) model
+	// rewrites dropped the schema sort orders".
+	NSSortDescriptor *sortByFieldName = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+	NSArray *schemaFields = [[managedObjectContext objectsForEntity:NSStringFromClass([RptqDatabaseSchemaField class])]
+							 sortedArrayUsingDescriptors:@[ sortByFieldName ]];
 
 	NSMutableOrderedSet <NSNumber *> *fieldIDs = [[NSMutableOrderedSet alloc] init];
 	NSMutableDictionary <NSNumber *, MADModelField *> *fields = [[NSMutableDictionary alloc] init];

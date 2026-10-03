@@ -227,7 +227,12 @@ static os_log_t log_mad;
 - (void)updateTables {
 
 	RptqStoreContext *managedObjectContext = _managedObjectContext;
-	NSArray *schemaTables = [managedObjectContext objectsForEntity:NSStringFromClass([RptqDatabaseSchemaTable class])];
+	// The pre-migration fetch sorted by name; the store keeps insertion order,
+	// so the sort is restored here.  See BUGS.md "The milestone-(a) model
+	// rewrites dropped the schema sort orders".
+	NSSortDescriptor *sortByTableName = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+	NSArray *schemaTables = [[managedObjectContext objectsForEntity:NSStringFromClass([RptqDatabaseSchemaTable class])]
+							 sortedArrayUsingDescriptors:@[ sortByTableName ]];
 
 	NSMutableOrderedSet <NSNumber *> *tables = [[NSMutableOrderedSet alloc] init];
 	NSMutableDictionary <NSNumber *, MADModelTable *> *tableDictionary = [[NSMutableDictionary alloc] init];

@@ -285,7 +285,13 @@ Status key:
   store; allocation must be per table, not per entity.
 
 ### The milestone-(a) model rewrites dropped the schema sort orders
-- **Status:** Still open -- found 2026-10-03 in the milestone-(a) audit
+- **Status:** Fixed
+- **Now:** `MADModelTable -update` sorts the schema fields by `name`
+  ascending and `MADModelDatabase -updateTables` sorts the schema tables by
+  `name` ascending before building the model objects -- the same
+  `NSSortDescriptor initWithKey:ascending:` the pre-migration fetches used.
+  `MADDocumentTests testModelDatabaseSortsTablesAndFieldsByName` inserts
+  tables and fields out of name order and pins the projected orders (green).
 - **Where:** `MAD/Source/MADModelTable.m` (`-update`) and
   `MAD/Source/MADModelDatabase.m` (`-updateTables`)
 - **Behavior:** both projection fetches sorted by `name` ascending before the
