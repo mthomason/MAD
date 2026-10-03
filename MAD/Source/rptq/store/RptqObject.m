@@ -85,7 +85,12 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 
 	MADStoreAttribute *attribute = MADStoreAttributeNamed(entity, key);
 	if (attribute) {
+		// A set that does not change the value is not a change: it must not dirty the
+		// row, or an idle designer gesture would rewrite the store on every event.
+		id previous = [self.backingObject attributeValue:key];
+		if (previous == value || [previous isEqual:value]) return;
 		[self.backingObject setAttributeValue:value forName:key];
+		[self.storeContext markObjectChanged:self];
 		return;
 	}
 

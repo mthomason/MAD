@@ -126,6 +126,37 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 @implementation RptqDocumentElement (Extras)
 
 #pragma mark -
+#pragma mark Overrides
+
+// Core Data created the value satellites here and handed out identifier/dropIndex
+// pairs; the store context mints the identifier, so this re-creates the satellites
+// and keeps dropIndex auto-incrementing off the highest existing element.
+- (void)awakeFromInsert {
+	RptqStoreContext *context = self.storeContext;
+	if (self.margin == nil) {
+		self.margin = [context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
+	}
+	if (self.padding == nil) {
+		self.padding = [context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
+	}
+	if (self.rect == nil) {
+		self.rect = [context insertObjectForEntity:NSStringFromClass([RptqRect class]) identifier:0];
+	}
+	if (self.textStyle == nil) {
+		self.textStyle = [context insertObjectForEntity:NSStringFromClass([RptqTextStyle class]) identifier:0];
+	}
+
+	self.fontname = [MADFont defaultFamily];
+	self.fontsize = [MADFont defaultSize];
+
+	int64_t lastDropIndex = 0;
+	for (RptqDocumentElement *element in [context objectsForEntity:NSStringFromClass([RptqDocumentElement class])]) {
+		if (element.dropIndex > lastDropIndex) lastDropIndex = element.dropIndex;
+	}
+	self.dropIndex = lastDropIndex + 1;
+}
+
+#pragma mark -
 #pragma mark Static Helpers
 
 + (void)load {

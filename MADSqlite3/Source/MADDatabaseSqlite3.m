@@ -23,6 +23,7 @@
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseTable.h>
+#import <MADAPI/MADDatabaseField.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 #import <MADAPI/MADQuery.h>
@@ -282,7 +283,10 @@ void sqliteLog(void *foo, const char* statement) {
 				 credentals:(MADCredential *)credentals
 			connectionError:(NSError * __autoreleasing *)error {
 	[self openDatabase];
-	return nil;
+	// The open handle lives on the driver; the callers that take a connection
+	// object (the create-document chain among them) treat a nil return as a
+	// failed connection, so hand back the driver itself as the handle.
+	return self;
 }
 
 - (BOOL)tableExist:(NSString *)tablename {
@@ -879,19 +883,24 @@ void sqliteLog(void *foo, const char* statement) {
 									  connection: (id)process
 										   error: (NSError * __autoreleasing *)error {
 	NSMutableArray * __autoreleasing result = [[NSMutableArray alloc] init];
-	sqlite3_stmt *statement;
-	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
-	char *sql = sqlite3_mprintf("%s", queryStart.UTF8String);
-	int sqlite3_prepare_result = sqlite3_prepare_v2(_database, sql, -1, &statement, NULL);
-	if (sqlite3_prepare_result == SQLITE_OK) {
+	sqlite3_stmt *statement = NULL;
+	// table_info columns: cid, name, type, notnull, dflt_value, pk.
+	NSString *query = [[NSString alloc] initWithFormat:@"PRAGMA table_info(\"%@\");", tableName];
+	if (sqlite3_prepare_v2(_database, query.UTF8String, -1, &statement, NULL) == SQLITE_OK) {
 		while (sqlite3_step(statement) == SQLITE_ROW) {
-			
-			const char *resultString = (const char *)sqlite3_column_text(statement, 0);
-			NSString *readName = [[NSString alloc] initWithCString: resultString
-														   encoding: NSUTF8StringEncoding];
-			
-			MADDatabaseTable *databaseTable = [[MADDatabaseTable alloc] initWithTableName: readName];
-			[result addObject:databaseTable];
+
+			const char *nameText = (const char *)sqlite3_column_text(statement, 1);
+			if (nameText == NULL) continue;
+			MADDatabaseField *databaseField = [[MADDatabaseField alloc] initWithName:
+											   [[NSString alloc] initWithCString:nameText
+																		encoding:NSUTF8StringEncoding]];
+
+			const char *typeText = (const char *)sqlite3_column_text(statement, 2);
+			NSString *nativeType = typeText != NULL ?
+				[[NSString alloc] initWithCString:typeText encoding:NSUTF8StringEncoding] : @"";
+			databaseField.fieldType = [MADDatabaseSqlite3 dataTypeForNativeType:nativeType];
+			databaseField.primaryKey = sqlite3_column_int(statement, 5) != 0;
+			[result addObject:databaseField];
 		}
 	} else {
 		os_log_error(GetMadLog(), "Error: %s", sqlite3_errmsg(_database));
@@ -903,7 +912,6 @@ void sqliteLog(void *foo, const char* statement) {
 		}
 	}
 	sqlite3_finalize(statement);
-	sqlite3_free(sql);
 	return result;
 }
 

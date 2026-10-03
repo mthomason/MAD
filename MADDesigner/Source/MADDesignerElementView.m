@@ -283,10 +283,12 @@
 	RptqDocumentElement *documentObject = [managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:self.objectID];
 	[documentObject setSizeValue:size];
 
-	NSError *saveError = NULL;
-	[managedObjectContext save:&saveError];
-	if (saveError != nil) {
-		os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
+	if ([managedObjectContext hasChanges]) {
+		NSError *saveError = NULL;
+		[managedObjectContext save:&saveError];
+		if (saveError != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
+		}
 	}
 }
 

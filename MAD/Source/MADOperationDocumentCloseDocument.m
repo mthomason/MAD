@@ -33,7 +33,10 @@
 	}
 	
 	MADocument *doc = document;
-	if (doc.documentState & UIDocumentStateClosed) {
+	// UIDocument's state stays Closed after the portable-store save -- its own save
+	// machinery, which would clear the flag, is bypassed -- so treat a document with
+	// a live store as open and close it for real.
+	if ((doc.documentState & UIDocumentStateClosed) && doc.storeContext == nil) {
 		[self finish];
 	} else {
 		[MADocument close:doc completion:^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {

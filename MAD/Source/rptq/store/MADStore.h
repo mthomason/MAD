@@ -73,6 +73,15 @@ typedef NS_ENUM(NSInteger, MADStoreErrorCode) {
 - (BOOL)writeGraph:(MADStoreGraph *)graph error:(NSError **)error;
 - (BOOL)writeGraph:(MADStoreGraph *)graph replacingAll:(BOOL)replacingAll error:(NSError **)error;
 - (BOOL)writeObject:(MADStoreObject *)object error:(NSError **)error;
+
+/// The incremental save path: writes exactly the named rows -- plus the position
+/// and join-table rows their to-many edges produce -- and deletes the named rows,
+/// all in one transaction.  Rows not named are untouched, and a nil `objects`
+/// with an empty `deletedObjects` is a successful no-op.
+- (BOOL)writeObjects:(NSArray<MADStoreObject *> *)objects
+	 deletingObjects:(NSArray<MADStoreObject *> *)deletedObjects
+			   error:(NSError **)error;
+
 - (BOOL)deleteObjectForEntity:(NSString *)entity identifier:(int64_t)identifier error:(NSError **)error;
 - (BOOL)deleteAllObjectsWithError:(NSError **)error;
 

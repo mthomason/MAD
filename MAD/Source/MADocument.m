@@ -320,15 +320,20 @@ void madwarn(char *err,  const char *err2) { }
 			_database = [MADDatabase newDatabaseWithConnection: databaseConnection];
 		}
 		_database.delegate = self;
+		// These Core Data notifications are not posted by the portable store yet, and
+		// `object:` used to name the managed-object context -- which opened the store
+		// lazily during init, right before the create flow's cleanup deleted it out
+		// from under the open handle.  Register against nil until the store posts a
+		// change signal of its own.
 		[[NSNotificationCenter defaultCenter] addObserver: self
 												 selector: @selector(handleManagedObjectContextDidChange:)
 													 name: NSManagedObjectContextObjectsDidChangeNotification
-												   object: self.managedObjectContext];
-		
+												   object: nil];
+
 		[[NSNotificationCenter defaultCenter] addObserver: self
 												 selector: @selector(handleManagedObjectContextDidSave:)
 													 name: NSManagedObjectContextDidSaveNotification
-												   object: self.managedObjectContext];
+												   object: nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver: self
 												 selector: @selector(handleManagedObjectContextWillSave:)
@@ -382,19 +387,20 @@ void madwarn(char *err,  const char *err2) { }
 	NSURL *gutsUrl = strongDocument.urlGuts.copy;
 	
 	if (strongDocument != nil) {
+		void (^finishClose)(BOOL) = ^(BOOL successClose) {
+			if (completion != nil) {
+				completion(successClose, fileURL, gutsUrl);
+			}
+		};
 		if (![NSThread isMainThread]) {
 			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 				[strongDocument closeWithCompletionHandler:^(BOOL successClose) {
-					if (completion != nil) {
-						completion(successClose, fileURL, gutsUrl);
-					}
+					finishClose(successClose);
 				}];
 			}];
 		} else {
 			[strongDocument closeWithCompletionHandler:^(BOOL successClose) {
-				if (completion != nil) {
-					completion(successClose, fileURL, gutsUrl);
-				}
+				finishClose(successClose);
 			}];
 		}
 	} else {
@@ -506,7 +512,13 @@ void madwarn(char *err,  const char *err2) { }
 
 	if (![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path] &&
 		[[NSFileManager defaultManager] fileExistsAtPath:legacyStoreURL.path]) {
-		NSManagedObjectModel *model = self.madManagedObjectModel;
+		// The Rptq classes are no longer NSManagedObject subclasses, and Core Data
+		// refuses to instantiate them; read the legacy rows as plain NSManagedObjects
+		// on a mutable copy of the model, the way the converter does.
+		NSManagedObjectModel *model = [self.madManagedObjectModel copy];
+		for (NSEntityDescription *entity in model.entities) {
+			entity.managedObjectClassName = @"NSManagedObject";
+		}
 		NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
 		if (![coordinator addPersistentStoreWithType:NSSQLiteStoreType
 									   configuration:nil
@@ -555,6 +567,72 @@ void madwarn(char *err,  const char *err2) { }
 
 #pragma mark -
 #pragma mark Writing
+
+// UIManagedDocument's implementation of this drives the Core Data persistent store --
+// configure the coordinator, save the context, move the store files -- and returns
+// NO when that machinery has nothing to work with.  The document definition lives in
+// the portable store, so the save is just the store write and the archive.
+- (BOOL)writeContents:(id)contents
+			  toURL:(NSURL *)absoluteURL
+	forSaveOperation:(UIDocumentSaveOperation)saveOperation
+ originalContentsURL:(NSURL *)absoluteOriginalContentsURL
+			   error:(NSError * __autoreleasing *)outError {
+	return [self writeContents:contents
+				andAttributes:nil
+				  safelyToURL:absoluteURL
+			 forSaveOperation:saveOperation
+						error:outError];
+}
+
+// UIDocument's save machinery is built around the file-wrapper model and walks
+// Core Data code paths that no longer exist; the document's persistence is the
+// portable store plus the archive, so the save is that, directly.
+- (void)saveToURL:(NSURL *)url
+ forSaveOperation:(UIDocumentSaveOperation)saveOperation
+completionHandler:(void (^ __nullable)(BOOL))completionHandler {
+	NSError *error = nil;
+	BOOL success = [self writeContents:nil
+						andAttributes:nil
+						  safelyToURL:url
+					 forSaveOperation:saveOperation
+								error:&error];
+	if (success) {
+		// UIDocument's own save machinery records the write this way; without the
+		// modification date the document state stays Closed and the close flow
+		// treats it as already closed, skipping its save.
+		[self setFileModificationDate:[NSDate date]];
+		[self updateChangeCount:UIDocumentChangeCleared];
+	}
+	if (completionHandler != nil) completionHandler(success);
+}
+
+// UIDocument's close saves through its file-wrapper machinery, which the portable
+// store does not drive; save through the store-and-archive path first, then let
+// super perform the closing bookkeeping (state, autosave, file presentation).
+// The document's persistence is the portable store plus the archive; closing is
+// the final save (if anything changed), releasing the store, and reporting.  The
+// UIDocument machinery behind [super closeWithCompletionHandler:] deadlocks waiting
+// on its own file-access queue, which the store-backed document never uses.
+- (void)closeWithCompletionHandler:(void (^ __nullable)(BOOL))completionHandler {
+	BOOL success = YES;
+	if (self.hasUnsavedChanges) {
+		NSError *error = nil;
+		success = [self writeContents:nil
+						andAttributes:nil
+						  safelyToURL:self.fileURL
+					 forSaveOperation:UIDocumentSaveForOverwriting
+								error:&error];
+		if (!success) {
+			os_log_error(GetMadLog(), "Error saving before close: %s", error.localizedDescription.UTF8String);
+		} else {
+			[self setFileModificationDate:[NSDate date]];
+			[self updateChangeCount:UIDocumentChangeCleared];
+		}
+	}
+	[_storeContext.store close];
+	_storeContext = nil;
+	if (completionHandler != nil) completionHandler(success);
+}
 
 - (BOOL)writeContents:(id)contents
 		andAttributes:(NSDictionary *)additionalFileAttributes
@@ -1161,21 +1239,65 @@ void madwarn(char *err,  const char *err2) { }
 }
 
 - (RptqStoreContext *)storeContext {
-	if (_storeContext == nil) {
-		MADStore *store = [MADStore storeWithURL:[self portableStoreURL]];
-		NSError *error = nil;
-		if (![store openWithError:&error]) {
-			os_log_error(GetMadLog(), "Error opening the portable store: %s", error.localizedDescription.UTF8String);
-			return nil;
+	// UIDocument's save machinery and the create chain both reach this from
+	// background threads; one open per document.
+	@synchronized (self) {
+		if (_storeContext == nil) {
+			NSURL *storeURL = [self portableStoreURL];
+			// A new document has no guts directory yet; UIManagedDocument used to create
+			// its StoreContent directory when the persistent store came up, so the
+			// portable store creates its own before opening.
+			NSError *directoryError = nil;
+			if (![[NSFileManager defaultManager] createDirectoryAtURL:[storeURL URLByDeletingLastPathComponent]
+										  withIntermediateDirectories:YES
+														   attributes:nil
+																error:&directoryError]) {
+				os_log_error(GetMadLog(), "Error creating the portable store directory: %s", directoryError.localizedDescription.UTF8String);
+				return nil;
+			}
+			MADStore *store = [MADStore storeWithURL:storeURL];
+			NSError *error = nil;
+			if (![store openWithError:&error]) {
+				os_log_error(GetMadLog(), "Error opening the portable store: %s", error.localizedDescription.UTF8String);
+				return nil;
+			}
+			RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
+			if (![context loadAllWithError:&error]) {
+				os_log_error(GetMadLog(), "Error loading the portable store: %s", error.localizedDescription.UTF8String);
+				return nil;
+			}
+			_storeContext = context;
 		}
-		RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
-		if (![context loadAllWithError:&error]) {
-			os_log_error(GetMadLog(), "Error loading the portable store: %s", error.localizedDescription.UTF8String);
-			return nil;
-		}
-		_storeContext = context;
+		return _storeContext;
 	}
-	return _storeContext;
+}
+
+// The document definition now lives in the portable store, so the managed-object
+// context the designer protocol and the rest of the code ask for IS the store
+// context.  UIManagedDocument's own accessor would try to build a Core Data stack
+// here; overriding it with the same name keeps every `managedObjectContext` call
+// site in the app pointing at the store.
+- (RptqStoreContext *)managedObjectContext {
+	return self.storeContext;
+}
+
+// UIDocument's save machinery asks for the file wrapper here, and UIManagedDocument's
+// implementation walks a Core Data stack that no longer exists.  The portable store
+// is written by writeContents:andAttributes:safelyToURL:..., so there is nothing to
+// hand back.
+- (id)contentsForType:(NSString *)typeName error:(NSError * __autoreleasing *)outError {
+	return nil;
+}
+
+// UIDocument's undoManager is nil until someone sets one; the designer registers
+// every edit against it, so hand back a live manager and keep it across saves.
+- (NSUndoManager *)undoManager {
+	NSUndoManager *undoManager = [super undoManager];
+	if (undoManager == nil) {
+		undoManager = [[NSUndoManager alloc] init];
+		[super setUndoManager:undoManager];
+	}
+	return undoManager;
 }
 
 - (RptqDocument *)activeDocumentModel {
@@ -1397,7 +1519,18 @@ void madwarn(char *err,  const char *err2) { }
 #pragma mark Public
 
 - (void)archiveAndRemoveFileWrapper {
-	[MADFileUtilities removeFileAndArchiveAtURL:self.urlGuts];
+	// The store may already be open -- the observers registered in -init reach the
+	// store context lazily -- so close it before the removal; deleting a live
+	// database out from under an open sqlite handle makes every later save fail
+	// with SQLITE_READONLY.  The removal itself must be synchronous: the
+	// file-coordinated variant deletes on a coordination queue, and the create flow
+	// reopens the store immediately after this call, racing that queue's delete.
+	[_storeContext.store close];
+	_storeContext = nil;
+	// The synchronous, uncoordinated delete: the file-coordinated variant runs on a
+	// coordination queue and would race the store reopen the create flow performs
+	// right after this call.
+	[[NSFileManager defaultManager] removeItemAtURL:self.urlGuts error:NULL];
 }
 
 #pragma mark -

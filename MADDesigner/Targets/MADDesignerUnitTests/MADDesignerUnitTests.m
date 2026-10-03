@@ -37,6 +37,46 @@
 #import <MADMySQL/MADDatabaseMySQL.h>
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
 
+#import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
+#import <MAD/MADStore.h>
+#import <MAD/MADStoreGraph.h>
+#import <MAD/MADStoreObject.h>
+#import <MAD/RptqObject.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
+#import <MAD/MADOperationCreateDocumentCreateDocument.h>
+#import <MAD/MADOperationCreateDocumentFirstTimeSetup.h>
+#import <MAD/MADOperationCreateDocumentAddConnection.h>
+#import <MAD/MADOperationCreateDocumentImportSchema.h>
+#import <MAD/MADOperationDocumentCloseDocument.h>
+#import <MAD/MADOperationUniqueUrlForFilename.h>
+#import <MADFoundation/MADOperationQueue.h>
+#import <UIKit/NSDataAsset.h>
+
+// A fixed-URL stand-in for MADOperationUniqueUrlForFilename, so the chain can be
+// driven against a temp directory without the file explorer's URL machinery.
+@interface MADFixedURLOperation : NSOperation <MADOperationUniqueUrlForFilenameProtocol>
+@property (nonatomic, copy, readonly) NSURL *uniqueUrl;
+- (instancetype)initWithURL:(NSURL *)url;
+@end
+
+@implementation MADFixedURLOperation
+- (instancetype)initWithURL:(NSURL *)url {
+	if (self = [super init]) {
+		_uniqueUrl = url.copy;
+	}
+	return self;
+}
+@end
+
+// The initializer exists on the class but is not in its header; the app reaches it
+// through the group operation.  Declared locally so the test can build the chain the
+// same way.
+@interface MADOperationCreateDocumentFirstTimeSetup (MADDesignerUnitTestsChain)
+- (instancetype)initWithDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
+@end
+
 // App-source categories. Declared rather than imported because the app's Source
 // directory is not on this bundle's header search path; the implementations are in
 // the host app.
@@ -174,6 +214,83 @@
 	XCTAssertNil(query.database);
 	XCTAssertNotNil(sql);
 	XCTAssertTrue([sql containsString:@"(null)"], @"Got: %@", sql);
+}
+
+#pragma mark - The create-document chain, against the store
+
+// The chain the app runs when the user picks New Document: create the document from a
+// Sqlite3 connection (no server), import the schema, save, reopen, and assert the
+// schema is there.  Chinook is the sample database the app itself ships.
+- (void)testCreateDocumentChainImportsAChinookSchema {
+	NSDataAsset *chinookAsset = [[NSDataAsset alloc] initWithName:@"chinook"];
+	XCTAssertNotNil(chinookAsset, @"chinook.sqlite3 is not in the host app's assets");
+
+	NSURL *directory = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+						URLByAppendingPathComponent:NSUUID.UUID.UUIDString isDirectory:YES];
+	[[NSFileManager defaultManager] createDirectoryAtURL:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *databaseURL = [directory URLByAppendingPathComponent:@"chinook.sqlite3"];
+	NSURL *documentURL = [directory URLByAppendingPathComponent:
+						  [[NSUUID UUID].UUIDString stringByAppendingPathExtension:@"mad"]];
+	XCTAssertTrue([chinookAsset.data writeToURL:databaseURL options:NSDataWritingAtomic error:NULL]);
+
+	MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnectionForUrl:databaseURL];
+
+	MADFixedURLOperation *urlOperation = [[MADFixedURLOperation alloc] initWithURL:documentURL];
+	MADOperationCreateDocumentCreateDocument *createDocument = [[MADOperationCreateDocumentCreateDocument alloc] initWithDatabaseConnection:connection];
+	MADOperationCreateDocumentFirstTimeSetup *firstTimeSetup = [[MADOperationCreateDocumentFirstTimeSetup alloc] initWithDatabaseConnection:connection];
+	MADOperationCreateDocumentAddConnection *addConnection = [[MADOperationCreateDocumentAddConnection alloc] initWithDatabaseConnection:connection];
+	MADOperationCreateDocumentImportSchema *importSchema = [[MADOperationCreateDocumentImportSchema alloc] initWithDatabaseConnection:connection];
+	MADOperationDocumentCloseDocument *closeDocument = [[MADOperationDocumentCloseDocument alloc] init];
+
+	[createDocument addDependency:urlOperation];
+	[firstTimeSetup addDependency:createDocument];
+	[addConnection addDependency:firstTimeSetup];
+	// The import finds the document through a direct dependency, as in the app's
+	// group operation, and waits for the connection step.
+	[importSchema addDependency:createDocument];
+	[importSchema addDependency:addConnection];
+	[closeDocument addDependency:createDocument];
+	[closeDocument addDependency:importSchema];
+	// The ops are asynchronous and their save machinery hops through the main queue;
+	// blocking the main thread in waitUntilFinished: would deadlock, so wait on an
+	// expectation instead.
+	XCTestExpectation *finished = [self expectationWithDescription:@"create-document chain"];
+	closeDocument.completionBlock = ^{
+		[finished fulfill];
+	};
+
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation:urlOperation];
+	[queue addOperation:createDocument];
+	[queue addOperation:firstTimeSetup];
+	[queue addOperation:addConnection];
+	[queue addOperation:importSchema];
+	[queue addOperation:closeDocument];
+	[self waitForExpectations:@[ finished ] timeout:120];
+
+	MADocument *document = ((id <MADOperationCreateDocumentProtocol>)createDocument).document;
+	XCTAssertNotNil(document, @"the chain did not create the document");
+	XCTAssertEqual(createDocument.errors.count, (NSUInteger)0, @"create failed: %@", createDocument.errors.firstObject);
+	XCTAssertEqual(firstTimeSetup.errors.count, (NSUInteger)0, @"setup failed: %@", firstTimeSetup.errors.firstObject);
+	XCTAssertEqual(addConnection.errors.count, (NSUInteger)0, @"add-connection failed: %@", addConnection.errors.firstObject);
+	XCTAssertEqual(importSchema.errors.count, (NSUInteger)0, @"import failed: %@", importSchema.errors.firstObject);
+	XCTAssertEqual(closeDocument.errors.count, (NSUInteger)0, @"save-and-close failed: %@", closeDocument.errors.firstObject);
+	XCTAssertTrue(importSchema.success, @"the schema import did not report success");
+
+	// Reopen the document the chain saved and closed.
+	MADocument *reopened = [[MADocument alloc] initWithFileURL:documentURL];
+	NSError *error = nil;
+	XCTAssertTrue([reopened readFromURL:documentURL error:&error], @"reopening failed: %@", error);
+
+	NSArray *tables = [reopened.storeContext objectsForEntity:NSStringFromClass([RptqDatabaseSchemaTable class])];
+	XCTAssertEqual(tables.count, (NSUInteger)11, @"chinook's eleven tables must be in the imported schema: %@", tables);
+
+	NSArray *names = [tables valueForKey:@"name"];
+	XCTAssertTrue([names containsObject:@"Track"], @"the Track table is missing: %@", names);
+	XCTAssertTrue([names containsObject:@"PlaylistTrack"], @"the PlaylistTrack table is missing: %@", names);
+
+	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
 }
 
 @end

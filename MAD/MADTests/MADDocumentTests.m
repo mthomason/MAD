@@ -14,12 +14,15 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/MADStore.h>
+#import <MAD/MADStoreGraph.h>
 #import <MAD/RptqStoreContext.h>
 #import <MAD/MTPaper.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqTextStyle.h>
+#import <MAD/MADDesignerLayout.h>
 #import <MAD/MADConstants.h>
 #import "MADArchiveManager.h"
 
@@ -191,6 +194,87 @@
 
 	[fileManager removeItemAtURL: source error: NULL];
 	[fileManager removeItemAtURL: archive error: NULL];
+}
+
+#pragma mark - The document path: convert on open, save, reopen
+
+- (NSURL *)newTestDirectory {
+	NSURL *directory = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+						URLByAppendingPathComponent:NSUUID.UUID.UUIDString isDirectory:YES];
+	[[NSFileManager defaultManager] createDirectoryAtURL:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	return directory;
+}
+
+// A real user's document must convert on open and survive a save/reopen with nothing
+// lost: open the shipping London sample through MADDocument's own readFromURL:, save
+// it through writeContents: (write the portable store, archive a new .mad), reopen
+// that saved .mad, and compare the completed graphs.
+- (void)testLegacyLondonConvertsSavesAndReopensUnchanged {
+	NSURL *directory = [self newTestDirectory];
+	NSURL *sampleURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"London" withExtension:@"mad"];
+	XCTAssertNotNil(sampleURL, @"London.mad was not copied into the test bundle.");
+	NSURL *documentURL = [directory URLByAppendingPathComponent:@"London.mad"];
+
+	NSError *error = nil;
+	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
+	XCTAssertTrue([document readFromURL:sampleURL error:&error],
+				  @"opening the legacy document failed: %@", error);
+
+	MADStoreGraph *converted = [[document.storeContext.store allObjectsWithError:&error] graphByCompletingInverses];
+	XCTAssertNotNil(converted, @"reading the converted store failed: %@", error);
+	XCTAssertTrue(converted.count > 0, @"the converted document is empty");
+
+	// Save: the portable store is written and a new .mad is archived.
+	XCTAssertTrue([document writeContents:nil
+							andAttributes:nil
+							  safelyToURL:documentURL
+						 forSaveOperation:UIDocumentSaveForOverwriting
+									error:&error],
+				  @"saving the converted document failed: %@", error);
+
+	// Reopen the saved document from its own archive, as the next launch would.
+	MADocument *reopened = [[MADocument alloc] initWithFileURL:documentURL];
+	XCTAssertTrue([reopened readFromURL:documentURL error:&error],
+				  @"reopening the saved document failed: %@", error);
+	MADStoreGraph *reread = [[reopened.storeContext.store allObjectsWithError:&error] graphByCompletingInverses];
+	XCTAssertNotNil(reread, @"reading the reopened store failed: %@", error);
+
+	XCTAssertTrue([reread isEqualToGraph:converted],
+				  @"the document changed across a save and reopen");
+
+	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
+}
+
+#pragma mark - Undo
+
+// document.undoManager must be live, and a designer edit (updateElements:setBold: and
+// its inverse) must undo and redo against a real store-backed document.
+- (void)testDesignerBoldUndoesAndRedoesThroughTheDocument {
+	NSURL *documentURL = [[self newTestDirectory] URLByAppendingPathComponent:@"undo.mad"];
+	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
+
+	// The context is normally opened by readFromURL:; KVC it in the way the other
+	// store-less tests inject the model.
+	RptqStoreContext *context = [self newTestContext];
+	[document setValue:context forKey:@"storeContext"];
+
+	NSUndoManager *undoManager = document.undoManager;
+	XCTAssertNotNil(undoManager, @"document.undoManager is not live");
+	XCTAssertTrue(document.designerLayout.delegate == document,
+				  @"the designer layout's undo target is the document");
+
+	RptqDocumentElement *element = [context insertObjectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:0];
+	XCTAssertNotNil(element.textStyle, @"awakeFromInsert must create the satellites");
+	XCTAssertTrue([context save:NULL]);
+
+	[document.designerLayout updateElements:[NSSet setWithObject:@(element.identifier)] setBold:YES];
+	XCTAssertTrue(element.textStyle.bold, @"the edit applied");
+
+	[undoManager undo];
+	XCTAssertFalse(element.textStyle.bold, @"undo must clear the bold");
+
+	[undoManager redo];
+	XCTAssertTrue(element.textStyle.bold, @"redo must restore the bold");
 }
 
 @end

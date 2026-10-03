@@ -20,6 +20,7 @@
 #import "madlog.h"
 
 #import <MAD/MADConstants.h>
+#import <MADFoundation/MADURLFactory.h>
 #import <MADDataStructures/MADVectorBool.h>
 
 #import <Foundation/NSString.h>
@@ -170,6 +171,35 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 			});
 		}
 	}];
+
+	// UI-test hook: "-UITestOpenSample London" opens the named sample from the app
+	// group's documents the way the explorer's own open does, and
+	// "-UITestSelectTab Designer" selects a tab of the opened document.  The
+	// arguments are never present in production launches.
+	NSArray *arguments = NSProcessInfo.processInfo.arguments;
+	NSUInteger sampleIndex = [arguments indexOfObject:@"-UITestOpenSample"];
+	if (sampleIndex != NSNotFound && arguments.count > sampleIndex + 1) {
+		NSString *sampleName = arguments[sampleIndex + 1];
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			NSURL *directory = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:[AppDelegate groupIdentifier]];
+			NSURL *url = [[directory URLByAppendingPathComponent:sampleName]
+						  URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
+			[self application:application OpenURL:url options:@{}];
+		});
+	}
+	NSUInteger tabIndex = [arguments indexOfObject:@"-UITestSelectTab"];
+	if (tabIndex != NSNotFound && arguments.count > tabIndex + 1) {
+		NSString *tabName = arguments[tabIndex + 1];
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(9.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+			if ([navController.topViewController isKindOfClass:[MADTabBarController class]]) {
+				MADTabBarController *tabBarController = (MADTabBarController *)navController.topViewController;
+				if ([tabName isEqualToString:@"Designer"]) tabBarController.selectedIndex = 1;
+				else if ([tabName isEqualToString:@"Viewer"]) tabBarController.selectedIndex = 2;
+				else tabBarController.selectedIndex = 0;
+			}
+		});
+	}
 	return YES;
 }
 

@@ -262,4 +262,135 @@
 	XCTAssertTrue([[reread graphByCompletingInverses] isEqualToGraph:[loaded graphByCompletingInverses]]);
 }
 
+#pragma mark - Dirty tracking
+
+/// Builds a small schema family -- the same rows the import flow builds -- and
+/// leaves it saved, so the dirty-tracking tests start from a clean store.
+- (RptqStoreContext *)savedContextAtPath:(NSString *)name {
+	RptqStoreContext *context = [self openContextAtPath:name];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *customers = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[customers setValue:@"customers" forKey:@"name"];
+	RptqObject *invoices = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:12];
+	[invoices setValue:@"invoices" forKey:@"name"];
+	[database setValue:@[ customers, invoices ] forKey:@"hasTables"];
+
+	RptqObject *idField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[idField setValue:@"id" forKey:@"name"];
+	RptqObject *nameField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[nameField setValue:@"name" forKey:@"name"];
+	[customers setValue:@[ idField, nameField ] forKey:@"hasFields"];
+
+	XCTAssertTrue([context save:NULL]);
+	XCTAssertFalse(context.hasChanges, @"a saved context is clean");
+	return context;
+}
+
+- (void)testHasChangesTracksInsertEditAndSave {
+	RptqStoreContext *context = [self openContextAtPath:@"dirty.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+	XCTAssertFalse(context.hasChanges, @"a freshly loaded context has no changes");
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	XCTAssertTrue(context.hasChanges, @"an insert is a change");
+
+	XCTAssertTrue([context save:NULL]);
+	XCTAssertFalse(context.hasChanges, @"a save clears the change set");
+
+	[database setValue:@"Changed driver" forKey:@"databaseDriverType"];
+	XCTAssertTrue(context.hasChanges, @"an attribute set is a change");
+	XCTAssertTrue([context save:NULL]);
+	XCTAssertFalse(context.hasChanges, @"a save clears the change set");
+}
+
+- (void)testSettingTheSameValueDoesNotDirtyTheRow {
+	RptqStoreContext *context = [self savedContextAtPath:@"same-value.sqlite"];
+	RptqObject *customers = [context objectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+
+	[customers setValue:@"customers" forKey:@"name"]; // Already the value.
+	XCTAssertFalse(context.hasChanges, @"setting the same value is not a change");
+
+	[customers setValue:@"renamed" forKey:@"name"];
+	XCTAssertTrue(context.hasChanges, @"setting a new value is a change");
+}
+
+- (void)testACleanSaveLeavesTheStoreFileUntouched {
+	RptqStoreContext *context = [self savedContextAtPath:@"clean-save.sqlite"];
+	NSURL *storeURL = context.store.url;
+
+	NSDate *before = [[NSFileManager defaultManager] attributesOfItemAtPath:storeURL.path error:NULL][NSFileModificationDate];
+	[NSThread sleepForTimeInterval:1.1]; // The modification date has 1-second granularity.
+	XCTAssertTrue([context save:NULL]);
+	NSDate *after = [[NSFileManager defaultManager] attributesOfItemAtPath:storeURL.path error:NULL][NSFileModificationDate];
+
+	XCTAssertEqualObjects(before, after, @"a clean save must not touch the store file");
+}
+
+- (void)testOnePropertyChangeWritesOnlyThatRow {
+	RptqStoreContext *context = [self savedContextAtPath:@"one-row.sqlite"];
+
+	// The row before the edit, and everything the store holds.
+	RptqObject *invoices = [context objectForEntity:@"RptqDatabaseSchemaTable" identifier:12];
+	MADStoreGraph *expected = [context.store allObjectsWithError:NULL];
+
+	[invoices setValue:@"invoices-renamed" forKey:@"name"];
+	XCTAssertTrue([context save:NULL]);
+
+	MADStoreGraph *actual = [context.store allObjectsWithError:NULL];
+	for (MADStoreObject *row in [actual allObjects]) {
+		MADStoreObject *before = [expected objectForEntity:row.entity identifier:row.identifier];
+		XCTAssertNotNil(before, @"%@ %lld appeared out of nowhere", row.entity, (long long)row.identifier);
+		if (row.identifier == 12 && [row.entity isEqualToString:@"RptqDatabaseSchemaTable"]) {
+			XCTAssertEqualObjects([row attributeValue:@"name"], @"invoices-renamed");
+		} else {
+			XCTAssertTrue([row isEqualToObject:before], @"%@ %lld changed but should not have",
+						  row.entity, (long long)row.identifier);
+		}
+	}
+}
+
+- (void)testAnOrderedToManyReorderIsWrittenIncrementally {
+	RptqStoreContext *context = [self savedContextAtPath:@"ordered.sqlite"];
+	RptqObject *customers = [context objectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+
+	// Reverse the ordered field list on the owning side; the context maintains the
+	// inverses, and the positions land on the field rows.
+	[customers setValue:@[ [context objectForEntity:@"RptqDatabaseSchemaField" identifier:21],
+						   [context objectForEntity:@"RptqDatabaseSchemaField" identifier:20] ]
+				forKey:@"hasFields"];
+	XCTAssertTrue([context save:NULL]);
+
+	// A fresh read must come back in the new order.
+	RptqStoreContext *reread = [self openContextAtPath:@"ordered.sqlite"];
+	XCTAssertTrue([reread loadAllWithError:NULL]);
+	NSOrderedSet *readBack = [[reread objectForEntity:@"RptqDatabaseSchemaTable" identifier:11] valueForKey:@"hasFields"];
+	NSArray *identifiers = [readBack.array valueForKey:@"identifier"];
+	XCTAssertEqualObjects(identifiers, (@[ @21, @20 ]), @"the reorder did not survive the incremental save");
+}
+
+- (void)testDeleteIsPendingUntilSave {
+	RptqStoreContext *context = [self savedContextAtPath:@"delete.sqlite"];
+	RptqObject *invoices = [context objectForEntity:@"RptqDatabaseSchemaTable" identifier:12];
+
+	XCTAssertTrue([context deleteObject:invoices error:NULL]);
+	XCTAssertTrue(context.hasChanges, @"a pending delete is a change");
+
+	// Pending: the row is still in the file until the save commits.
+	XCTAssertNotNil([context.store objectForEntity:@"RptqDatabaseSchemaTable" identifier:12 error:NULL]);
+
+	XCTAssertTrue([context save:NULL]);
+	XCTAssertFalse(context.hasChanges, @"the save commits the delete");
+	XCTAssertNil([context.store objectForEntity:@"RptqDatabaseSchemaTable" identifier:12 error:NULL],
+				 @"the deleted row is gone after the save");
+	XCTAssertNil([context objectForEntity:@"RptqDatabaseSchemaTable" identifier:12],
+				 @"the deleted row left the context's graph");
+}
+
 @end

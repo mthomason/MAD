@@ -2966,7 +2966,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 									withDropPoint: locationInSection
 							 managedObjectContext: context];
 					
-					{ // Save unconditionally: the store context tracks no changes yet.
+					if ([context hasChanges]) {
 						NSError *saveError = NULL;
 						BOOL saved = [context save:&saveError];
 						if (!saved && saveError != nil) {
@@ -2983,7 +2983,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 					RptqDocumentSection *docSection = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
 																						  fromObjectContext:context];
 					docSection.height = [sectionView intrinsicContentSize].height;
-					{ // Save unconditionally: the store context tracks no changes yet.
+					if ([context hasChanges]) {
 						NSError *saveError = NULL;
 						BOOL saved = [context save:&saveError];
 						if (!saved && saveError != nil) {
@@ -3329,7 +3329,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 
 - (IBAction)actionDone:(id)sender {
 	__strong MADocument *document = self.document;
-	{ // Save unconditionally: the store context tracks no changes yet.
+	if ([document.storeContext hasChanges]) {
 		NSError *saveError = NULL;
 		[document.storeContext save:&saveError];
 		if (saveError != nil) {
@@ -3378,7 +3378,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	[self deselectAllElementsAnimated:YES];
 	__strong MADocument *document = self.document;
-	{ // Save unconditionally: the store context tracks no changes yet.
+	if ([document.storeContext hasChanges]) {
 		NSError *saveError = NULL;
 		[document.storeContext save:&saveError];
 		if (saveError != nil) {

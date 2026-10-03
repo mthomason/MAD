@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) MADStore *store;
 @property (nonatomic, assign, readonly, getter=isLoaded) BOOL loaded;
 
+/// Any unsaved insert, attribute set, relationship set, or deletion.
+@property (nonatomic, assign, readonly) BOOL hasChanges;
+
 #pragma mark Loading
 
 /// Loads the whole document definition.  Part loads are the app's normal shape; the
@@ -45,6 +48,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// A new, dirty object.  A non-positive identifier is minted past the highest the
 /// entity already holds, matching how the store allocates surrogates.
 - (RptqObject *)insertObjectForEntity:(NSString *)entity identifier:(int64_t)identifier;
+
+/// The row is new or one of its values changed; the next -save: writes it.  Called
+/// by RptqObject's accessors; a caller only reaches for it directly when it has
+/// changed a row behind the accessors' back.
+- (void)markObjectChanged:(RptqObject *)object;
 
 - (BOOL)save:(NSError **)error;
 - (BOOL)deleteObject:(RptqObject *)object error:(NSError **)error;

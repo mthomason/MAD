@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MADStoreGraph : NSObject
 
 - (void)addObject:(MADStoreObject *)object;
+- (void)removeObjectForEntity:(NSString *)entity identifier:(int64_t)identifier;
 - (nullable MADStoreObject *)objectForEntity:(NSString *)entity identifier:(int64_t)identifier;
 - (MADStoreObject *)objectForEntity:(NSString *)entity
 						 identifier:(int64_t)identifier

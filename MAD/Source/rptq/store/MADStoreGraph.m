@@ -35,6 +35,10 @@
 	byIdentifier[@(object.identifier)] = object;
 }
 
+- (void)removeObjectForEntity:(NSString *)entity identifier:(int64_t)identifier {
+	[self.objects[entity] removeObjectForKey:@(identifier)];
+}
+
 - (MADStoreObject *)objectForEntity:(NSString *)entity identifier:(int64_t)identifier {
 	MADStoreObject *object = self.objects[entity][@(identifier)];
 	if (object) return object;

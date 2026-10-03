@@ -376,7 +376,9 @@
 		4CB98DBB1F43F0A00043B583 /* MADOperationCreateDocumentAddConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DA91F43F0A00043B583 /* MADOperationCreateDocumentAddConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB98DBC1F43F0A00043B583 /* MADOperationCreateDocumentAddConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DAA1F43F0A00043B583 /* MADOperationCreateDocumentAddConnection.m */; };
 		4CB98DBD1F43F0A00043B583 /* MADOperationCreateDocumentImportSchema.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DAB1F43F0A00043B583 /* MADOperationCreateDocumentImportSchema.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CB99DBE1F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DB31F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB98DBE1F43F0A00043B583 /* MADOperationCreateDocumentImportSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DAC1F43F0A00043B583 /* MADOperationCreateDocumentImportSchema.m */; };
+		4CB99DBF1F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DB41F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.m */; };
 		4CB98DBF1F43F0A00043B583 /* MADOperationBackgroundTaskBegin.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DAD1F43F0A00043B583 /* MADOperationBackgroundTaskBegin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB98DC01F43F0A00043B583 /* MADOperationBackgroundTaskBegin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DAE1F43F0A00043B583 /* MADOperationBackgroundTaskBegin.m */; };
 		4CB98DC11F43F0A00043B583 /* MADOperationBackgroundTaskEnd.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DAF1F43F0A00043B583 /* MADOperationBackgroundTaskEnd.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1892,6 +1894,7 @@
 				4CD79FAF1EC862840093B2CE /* RptqDirectionalAsymmetry.h in Headers */,
 				4C85A1281E3F322600545E94 /* RptqDocumentElementGroupKey+Extras.h in Headers */,
 				4CB98DBD1F43F0A00043B583 /* MADOperationCreateDocumentImportSchema.h in Headers */,
+				4CB99DBE1F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.h in Headers */,
 				4CC281F81BADE80500775B72 /* MADActivityProtocol.h in Headers */,
 				4CF6AA351F5454FF0061B0C6 /* MADDatabaseConnection+Constructor.h in Headers */,
 				4CC2847D1BADE9B000775B72 /* RptqDocumentElementFormula+Extras.h in Headers */,
@@ -2248,6 +2251,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CDA7A0500000000000000A1 /* MAD.xcdatamodeld in Sources */,
 				4CA7C41122EA44B3800470112 /* MADStore.m in Sources */,
 				4CA7C41142EA44B3800470114 /* MADStoreSchema.m in Sources */,
 				4CA7C41162EA44B3800470116 /* MADStoreObject.m in Sources */,
@@ -2396,6 +2400,7 @@
 				4C401DF81BAE3BDA00BAE5FC /* MADQueryTest.m in Sources */,
 				4C401D3D1BAE3AF800BAE5FC /* MTPaperB0.m in Sources */,
 				4CB98DBE1F43F0A00043B583 /* MADOperationCreateDocumentImportSchema.m in Sources */,
+				4CB99DBF1F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.m in Sources */,
 				4CA3548E1D20DB900072BD38 /* MADReportSectionEnumerator.m in Sources */,
 				4CC282661BADE81E00775B72 /* MADDataFormatter.m in Sources */,
 				4CC982831F4BB99600E0496A /* MADDesignerLayout.m in Sources */,

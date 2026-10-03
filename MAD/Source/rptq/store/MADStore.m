@@ -774,6 +774,145 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	return [self writeGraph:graph error:error];
 }
 
+#pragma mark - Incremental writing
+
+/// Deletes the named row's half of every join table its entity participates in, so
+/// a deleted row cannot leave join rows behind the full rewrite never produced.
+- (BOOL)deleteJoinRowsForObject:(MADStoreObject *)object error:(NSError **)error {
+	MADStoreEntity *entity = [self.schema entityNamed:object.entity];
+	MADStoreEntity *owner = entity.isSubentity ? [self.schema entityForTable:entity.table] : entity;
+	for (MADStoreRelationship *relationship in owner.allRelationships) {
+		if (!relationship.joinTable) continue;
+		NSString *sql = [[NSString alloc] initWithFormat:@"DELETE FROM \"%@\" WHERE \"%@\" = ?;",
+						 relationship.joinTable, relationship.joinColumn];
+		sqlite3_stmt *statement = NULL;
+		if (sqlite3_prepare_v2(self.database, sql.UTF8String, -1, &statement, NULL) != SQLITE_OK) {
+			if (error) *error = MADStoreSQLiteError(self.database, @"Could not prepare the join delete");
+			return NO;
+		}
+		sqlite3_bind_int64(statement, 1, object.identifier);
+		int result = sqlite3_step(statement);
+		sqlite3_finalize(statement);
+		if (result != SQLITE_DONE) {
+			if (error) *error = MADStoreSQLiteError(self.database, @"Could not delete the join rows");
+			return NO;
+		}
+	}
+	return YES;
+}
+
+/// Sets each member's `position` column from the parent's ordered edge list, for
+/// the named parents only; other parents' members keep their positions.
+- (BOOL)writePositionsForObjects:(NSArray<MADStoreObject *> *)parents error:(NSError **)error {
+	for (MADStoreObject *parent in parents) {
+		MADStoreEntity *entity = [self.schema entityNamed:parent.entity];
+		MADStoreEntity *owner = entity.isSubentity ? [self.schema entityForTable:entity.table] : entity;
+		for (MADStoreRelationship *relationship in owner.allRelationships) {
+			if (!relationship.isToMany || !relationship.isOrdered) continue;
+			MADStoreEntity *childEntity = [self.schema entityNamed:relationship.destination];
+			NSString *sql = [[NSString alloc] initWithFormat:@"UPDATE \"%@\" SET \"%@\" = ? WHERE \"identifier\" = ?;",
+							 childEntity.table, MADStorePositionColumn];
+			sqlite3_stmt *statement = NULL;
+			if (sqlite3_prepare_v2(self.database, sql.UTF8String, -1, &statement, NULL) != SQLITE_OK) {
+				if (error) *error = MADStoreSQLiteError(self.database, @"Could not prepare the ordering");
+				return NO;
+			}
+			NSArray<NSNumber *> *members = [parent existingCollectionForName:relationship.name];
+			for (NSUInteger index = 0; index < members.count; index++) {
+				sqlite3_reset(statement);
+				sqlite3_bind_int64(statement, 1, (sqlite3_int64)index);
+				sqlite3_bind_int64(statement, 2, members[index].longLongValue);
+				if (sqlite3_step(statement) != SQLITE_DONE) {
+					if (error) *error = MADStoreSQLiteError(self.database, @"Could not order a relationship");
+					sqlite3_finalize(statement);
+					return NO;
+				}
+			}
+			sqlite3_finalize(statement);
+		}
+	}
+	return YES;
+}
+
+/// Rebuilds the named rows' half of every join table they participate in.  Each
+/// object rewrites its own rows (INSERT OR IGNORE collapses the two halves), and
+/// an object that holds no members ends with no rows.
+- (BOOL)writeJoinRowsForObjects:(NSArray<MADStoreObject *> *)objects error:(NSError **)error {
+	for (MADStoreObject *object in objects) {
+		MADStoreEntity *entity = [self.schema entityNamed:object.entity];
+		MADStoreEntity *owner = entity.isSubentity ? [self.schema entityForTable:entity.table] : entity;
+		for (MADStoreRelationship *relationship in owner.allRelationships) {
+			if (!relationship.joinTable) continue;
+			if (![self deleteJoinRowsForObject:object error:error]) return NO;
+
+			NSArray<NSNumber *> *members = [object existingCollectionForName:relationship.name];
+			if (members.count == 0) continue;
+			MADStoreEntity *destination = [self.schema entityNamed:relationship.destination];
+			MADStoreRelationship *inverse = [destination anyRelationshipNamed:relationship.inverse];
+			if (!inverse) continue;
+
+			NSString *sql = [[NSString alloc] initWithFormat:@"INSERT OR IGNORE INTO \"%@\" (\"%@\", \"%@\") VALUES (?, ?);",
+							 relationship.joinTable, relationship.joinColumn, inverse.joinColumn];
+			sqlite3_stmt *statement = NULL;
+			if (sqlite3_prepare_v2(self.database, sql.UTF8String, -1, &statement, NULL) != SQLITE_OK) {
+				if (error) *error = MADStoreSQLiteError(self.database, @"Could not prepare the join table write");
+				return NO;
+			}
+			for (NSNumber *member in members) {
+				sqlite3_reset(statement);
+				sqlite3_bind_int64(statement, 1, object.identifier);
+				sqlite3_bind_int64(statement, 2, member.longLongValue);
+				if (sqlite3_step(statement) != SQLITE_DONE) {
+					if (error) *error = MADStoreSQLiteError(self.database, @"Could not write a join row");
+					sqlite3_finalize(statement);
+					return NO;
+				}
+			}
+			sqlite3_finalize(statement);
+		}
+	}
+	return YES;
+}
+
+- (BOOL)writeObjects:(NSArray<MADStoreObject *> *)objects
+	 deletingObjects:(NSArray<MADStoreObject *> *)deletedObjects
+			   error:(NSError **)error {
+	if (!self.open) {
+		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");
+		return NO;
+	}
+	if (objects.count == 0 && deletedObjects.count == 0) return YES;
+
+	// Resolve the identifiers the model does not supply before anything is written,
+	// so the rows land under the keys the reader will look them up by.
+	MADStoreGraph *graph = [MADStoreGraph new];
+	for (MADStoreObject *object in objects) [graph addObject:object];
+	MADStoreGraph *resolved = [self graphByAssigningSurrogates:graph error:error];
+	if (!resolved) return NO;
+
+	if (![self beginTransactionWithError:error]) return NO;
+	for (MADStoreObject *deleted in deletedObjects) {
+		if (![self deleteObjectForEntity:deleted.entity identifier:deleted.identifier error:error] ||
+			![self deleteJoinRowsForObject:deleted error:error]) {
+			[self rollbackTransaction];
+			return NO;
+		}
+	}
+	for (MADStoreObject *object in [resolved allObjects]) {
+		if (![self writeRowForObject:object error:error]) {
+			[self rollbackTransaction];
+			return NO;
+		}
+	}
+	if (![self writePositionsForObjects:resolved.allObjects error:error] ||
+		![self writeJoinRowsForObjects:resolved.allObjects error:error] ||
+		![self commitTransactionWithError:error]) {
+		[self rollbackTransaction];
+		return NO;
+	}
+	return YES;
+}
+
 - (BOOL)deleteObjectForEntity:(NSString *)entityName identifier:(int64_t)identifier error:(NSError **)error {
 	if (!self.open) {
 		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");

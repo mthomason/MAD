@@ -529,6 +529,33 @@ that changed a file the application writes. The fifth took the application down 
 was found from a crash log; it is the one entry here that is a crash rather than a
 wrong answer.
 
+### `fieldsForTable:` ran the tables query and returned tables as fields
+- **Status:** Fixed
+- **Where:** `MADSqlite3/Source/MADDatabaseSqlite3.m` (`-fieldsForTable:connection:error:`)
+- **Behavior:** The method ran the same `sqlite_master` query as
+  `-getTablesFromConnection:`, wrapped each row in a `MADDatabaseTable`, and
+  returned those as the field list.  The schema-import chain sent the result
+  straight into `RptqDatabaseSchemaField` factories, which crashed sending
+  `fieldType` to a `MADDatabaseTable`.
+- **Now:** the method runs `PRAGMA table_info("…")`, builds a `MADDatabaseField`
+  per column, and maps the declared type through `+dataTypeForNativeType:` with
+  the primary-key flag from the `pk` column.  Found and fixed by the
+  create-document chain test (`testCreateDocumentChainImportsAChinookSchema`),
+  which imports all eleven Chinook tables.
+- **Found during the store migration.**
+
+### `connectWithConnection:credentals:connectionError:` returned nil after connecting
+- **Status:** Fixed
+- **Where:** `MADSqlite3/Source/MADDatabaseSqlite3.m` (`-connectWithConnection:credentals:connectionError:`)
+- **Behavior:** The driver opened the database and returned nil.  The create
+  chain treats a nil connection object as a failed connection, so schema import
+  aborted with "Failed to establish database connection for schema import (nil
+  connection object)."
+- **Now:** the driver returns itself as the handle; the callers that take a
+  connection object pass it back to the table and field readers, which ignore
+  it.  Found and fixed by the create-document chain test.
+- **Found during the store migration.**
+
 ### `MADDataTableFast` stored an absolute cache URL that a container change invalidates
 
 - **Status:** Fixed
@@ -1522,17 +1549,41 @@ header search path.
 - **Found during the store migration; not investigated.**
 
 ### Saves run unconditionally now, and each rewrites the whole store
-- **Status:** Still open
+- **Status:** Fixed
 - **Where:** `MADDesigner/Source/MADDesignerViewController.m` (the bare
   `{ // Save unconditionally … }` blocks, e.g. `:2969`, `:2986`, `:3332`, `:3381`)
   and `MADDesigner/Source/MADDesignerElementView.m:286-292`
-- **Behavior:** `RptqStoreContext` has no `hasChanges`, so every former
+- **Behavior:** `RptqStoreContext` had no `hasChanges`, so every former
   `if ([context hasChanges])` guard was mechanically replaced with an
-  unconditional save, and `-save:` is `writeGraph:replacingAll:YES` -- a full
-  store rewrite. The pinch, pan, insert, and delete paths in the designer now
-  rewrite the entire store per gesture event, where Core Data saved only dirty
-  objects. Correct, but the per-event cost is new; real dirty-tracking belongs to
-  a later milestone.
+  unconditional save, and `-save:` was `writeGraph:replacingAll:YES` -- a full
+  store rewrite. The pinch, pan, insert, and delete paths in the designer
+  rewrote the entire store per gesture event, where Core Data saved only dirty
+  objects.
+- **Now:** `RptqStoreContext` tracks dirty objects -- every attribute set (a set
+  to the same value is not a change), every relationship set on either end of
+  the edge, every insert, and deletions as pending rows -- and `-save:` writes
+  only the dirty rows, plus the position and join-table rows their to-many
+  edges produce, in one transaction; a clean save does not touch the file.  The
+  designer's guards are real `if ([context hasChanges])` checks again, so a
+  no-op pan saves nothing.  Pinned by `testHasChangesTracksInsertEditAndSave`,
+  `testSettingTheSameValueDoesNotDirtyTheRow`,
+  `testACleanSaveLeavesTheStoreFileUntouched`,
+  `testOnePropertyChangeWritesOnlyThatRow`,
+  `testAnOrderedToManyReorderIsWrittenIncrementally`, and
+  `testDeleteIsPendingUntilSave` in `RptqStoreContextTests`.
+
+### The explorer lists no documents, and the Query tab lists no tables
+- **Status:** Still open
+- **Where:** `MADDesigner/Source/MADExplorerController.m` (the file list) and
+  `MADDesigner/Source/MADQueryViewController.m` / `MADQueryViewDataSource.m`
+  (the query table list)
+- **Behavior:** Running the app in the simulator (milestone (c) item 4), the
+  explorer's list stays empty even with `London.mad` and `Music.mad` present in
+  the app group's `Documents/` directory, and after opening London through the
+  document-type URL the MAD Query tab renders with no tables, while the MAD
+  Designer canvas and the MAD Viewer report page render the document correctly.
+  The Query tab's list is the load-then-reload migration of the
+  fetched-results controller; why it comes back empty was not chased down.
 - **Found during the store migration; not investigated.**
 
 ### Query group, link, and predicate lists load every row in the store
@@ -1857,6 +1908,17 @@ setting that names a platform no target can build for.
 ---
 
 ## Test infrastructure (not product bugs)
+
+### The XCUITest runner sees an empty accessibility tree for the app
+- **Status:** Still open
+- **Where:** `MADDesigner/Targets/MADDesignerUITests`
+- **Behavior:** Every XCUITest query against the running app -- down to
+  `app.debugDescription` -- reports no elements at all, so no UI assertion can
+  pass in this environment.  The simulator exercise (open a sample, walk the
+  three tabs) is instead driven with the app's launch arguments (see
+  `AppDelegate.m`: `-UITestOpenSample`, `-UITestSelectTab`) and verified by
+  screenshot.  `MADDesignerUITests.m` documents this and is intentionally empty.
+- **Found during the store migration; not investigated.**
 
 ### `MADTestReportFormatter` was blocked, and the reason recorded was wrong
 - **Status:** Fixed
