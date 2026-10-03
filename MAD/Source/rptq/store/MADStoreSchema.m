@@ -98,6 +98,12 @@ NSString * const MADStoreIdentifierColumnSuffix = @"_identifier";
 // the description the descriptors hand it.
 @property (nonatomic, assign) BOOL hasModelIdentifier;
 @property (nonatomic, assign) BOOL hasPositionColumn;
+// Memoized flattened arrays and name indexes, warmed once at the end of schema
+// construction; the descriptors are immutable after that, so these never change.
+@property (nonatomic, strong) NSArray<MADStoreAttribute *> *flattenedAttributes;
+@property (nonatomic, strong) NSArray<MADStoreRelationship *> *flattenedRelationships;
+@property (nonatomic, strong) NSDictionary<NSString *, MADStoreAttribute *> *attributesByName;
+@property (nonatomic, strong) NSDictionary<NSString *, MADStoreRelationship *> *relationshipsByName;
 @end
 
 @implementation MADStoreEntity
@@ -141,23 +147,75 @@ NSString * const MADStoreIdentifierColumnSuffix = @"_identifier";
 	return nil;
 }
 
-- (MADStoreRelationship *)anyRelationshipNamed:(NSString *)name {
-	for (MADStoreRelationship *relationship in self.allRelationships) {
-		if ([relationship.name isEqualToString:name]) return relationship;
+- (void)buildNameIndexes {
+	NSMutableDictionary<NSString *, MADStoreAttribute *> *attributesByName =
+		[NSMutableDictionary dictionaryWithCapacity:self.flattenedAttributes.count];
+	for (MADStoreAttribute *attribute in self.flattenedAttributes) {
+		// First-match wins, the same order -allAttributes walks: an ancestor's
+		// attribute comes first, so it shadows a subentity's of the same name.
+		if (attributesByName[attribute.name] == nil) attributesByName[attribute.name] = attribute;
 	}
-	return nil;
+	self.attributesByName = attributesByName;
+
+	NSMutableDictionary<NSString *, MADStoreRelationship *> *relationshipsByName =
+		[NSMutableDictionary dictionaryWithCapacity:self.flattenedRelationships.count];
+	for (MADStoreRelationship *relationship in self.flattenedRelationships) {
+		if (relationshipsByName[relationship.name] == nil) relationshipsByName[relationship.name] = relationship;
+	}
+	self.relationshipsByName = relationshipsByName;
+}
+
+// The lazy path -- sharedSchema is complete by the time anything outside the
+// schema's own init can ask, so the recursion is safe.  The init warms every
+// entity at the end anyway, so this only runs for a schema built before that.
+- (void)warmLookupsLazily {
+	if (self.flattenedAttributes != nil) return;
+	if (!self.parentName) {
+		self.flattenedAttributes = self.attributes;
+		self.flattenedRelationships = self.relationships;
+	} else {
+		MADStoreEntity *parent = [[MADStoreSchema sharedSchema] entityNamed:self.parentName];
+		[parent warmLookupsLazily];
+		self.flattenedAttributes = [parent.flattenedAttributes arrayByAddingObjectsFromArray:self.attributes];
+		self.flattenedRelationships = [parent.flattenedRelationships arrayByAddingObjectsFromArray:self.relationships];
+	}
+	[self buildNameIndexes];
+}
+
+// The init's form: the parent chain walks the local name dictionary, because
+// +sharedSchema is still inside its dispatch_once and cannot be re-entered.
+- (void)warmLookupsWithNames:(NSDictionary<NSString *, MADStoreEntity *> *)byName {
+	if (self.flattenedAttributes != nil) return;
+	if (!self.parentName) {
+		self.flattenedAttributes = self.attributes;
+		self.flattenedRelationships = self.relationships;
+	} else {
+		MADStoreEntity *parent = byName[self.parentName];
+		[parent warmLookupsWithNames:byName];
+		self.flattenedAttributes = [parent.flattenedAttributes arrayByAddingObjectsFromArray:self.attributes];
+		self.flattenedRelationships = [parent.flattenedRelationships arrayByAddingObjectsFromArray:self.relationships];
+	}
+	[self buildNameIndexes];
+}
+
+- (MADStoreAttribute *)anyAttributeNamed:(NSString *)name {
+	[self warmLookupsLazily];
+	return self.attributesByName[name];
+}
+
+- (MADStoreRelationship *)anyRelationshipNamed:(NSString *)name {
+	[self warmLookupsLazily];
+	return self.relationshipsByName[name];
 }
 
 - (NSArray<MADStoreAttribute *> *)allAttributes {
-	if (!self.parentName) return self.attributes;
-	MADStoreEntity *parent = [[MADStoreSchema sharedSchema] entityNamed:self.parentName];
-	return [parent.allAttributes arrayByAddingObjectsFromArray:self.attributes];
+	[self warmLookupsLazily];
+	return self.flattenedAttributes;
 }
 
 - (NSArray<MADStoreRelationship *> *)allRelationships {
-	if (!self.parentName) return self.relationships;
-	MADStoreEntity *parent = [[MADStoreSchema sharedSchema] entityNamed:self.parentName];
-	return [parent.allRelationships arrayByAddingObjectsFromArray:self.relationships];
+	[self warmLookupsLazily];
+	return self.flattenedRelationships;
 }
 
 - (NSString *)description {
@@ -706,6 +764,12 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 	NSMutableDictionary<NSString *, MADStoreEntity *> *byTable = [NSMutableDictionary dictionaryWithCapacity:tables.count];
 	for (MADStoreEntity *table in tables) byTable[table.name] = table;
 	self.byTable = byTable;
+
+	// Warm every entity's flattened arrays and name indexes now, so the first
+	// property read cannot race and the render path never allocates a lookup.
+	for (MADStoreEntity *entity in all) {
+		[entity warmLookupsWithNames:byName];
+	}
 
 	return self;
 }

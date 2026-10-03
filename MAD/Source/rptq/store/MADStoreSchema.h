@@ -139,6 +139,9 @@ FOUNDATION_EXPORT NSString * const MADStoreIdentifierColumnSuffix;
 @property (nonatomic, assign, readonly, getter=isSubentity) BOOL subentity;
 
 - (nullable MADStoreAttribute *)attributeNamed:(NSString *)name;
+/// Looks in this entity's attributes and its ancestors', for a subentity; the
+/// memoized O(1) form the property layer uses.
+- (nullable MADStoreAttribute *)anyAttributeNamed:(NSString *)name;
 /// Looks in this entity's own relationships only.
 - (nullable MADStoreRelationship *)relationshipNamed:(NSString *)name;
 /// Looks in this entity's relationships and its ancestors', for a subentity.

@@ -55,10 +55,9 @@
 #pragma mark - Generic KVC
 
 static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSString *name) {
-	for (MADStoreAttribute *attribute in entity.allAttributes) {
-		if ([attribute.name isEqualToString:name]) return attribute;
-	}
-	return nil;
+	// The entity's memoized name index; this is the render hot path and must not
+	// allocate or scan.
+	return [entity anyAttributeNamed:name];
 }
 
 - (id)valueForUndefinedKey:(NSString *)key {

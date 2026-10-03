@@ -85,7 +85,7 @@ Status key:
 - **Found during the store migration.**
 
 ### Opening a large report and refreshing spikes memory to ~8 GB and never renders a page
-- **Status:** Still open -- root cause found 2026-10-03, fix pending
+- **Status:** Fixed -- root cause found 2026-10-03, fixed 2026-10-03
 - **Where:** the app's open+refresh on the user's custom MySQL report: the
   `employees` database, `departments` LEFT OUTER JOIN `dept_emp` -- about 331,603
   detail rows, i.e. thousands of pages at ~45 rows a page.  Two elements.  The
@@ -154,12 +154,32 @@ Status key:
   so any residual garbage is bounded per page.  Behaviour must not change;
   verify with the existing suites plus the headless export below, whose peak RSS
   must come down from ~5.8 GB to a few hundred MB.
+- **Now:** the flattened arrays are memoized per entity and warmed once at the
+  end of schema construction (the descriptors are immutable after that), and the
+  name lookups in `RptqObject`'s property layer are per-entity cached
+  dictionaries -- an attribute read is one dictionary hit and allocates
+  nothing.  First-match ordering, the attribute-before-relationship precedence,
+  and the unknown-key raise through `NSObject` are preserved and pinned by
+  `testSchemaFlattenedArraysAreMemoizedAndStable` and
+  `testRptqObjectKVCSemanticsAreUnchanged`.  The CLI's per-page render body is
+  wrapped in `@autoreleasepool`.
+- **Measured (A/B, same document, same output 9,196,432 bytes / 9,475 pages):**
+  master baseline 32 s / 17 MB RSS; the branch before the fix 89 s / 17 MB RSS;
+  the branch with the fix 63 s / 17 MB RSS.  The RSS is flat in all three on
+  this machine (the CLI's own pooling bounds it; the earlier 5.8 GB sample was
+  not reproduced here), and the time improvement is real but leaves a ~2x gap
+  to master: the remaining cost is the store layer's constant-factor read path
+  (sampled: `valueForUndefinedKey:` -> two dictionary hits, the registry fault,
+  and the selector-name string), all O(1) and allocation-free now, which the
+  fix shape deliberately does not go beyond.  Music stays the control (77 pages
+  / ~4-6 s / ~17 MB) and London stays 5 pages.
+- **The rule this violated:** attribute reads on `RptqObject` must be
+  allocation-free; the property layer is the render and format hot path.
 - **Reproduction (the regression guard):** `CLI/build.sh --run export
   --credentials root:root --out /tmp/employees.pdf <copy-of-Document.mad>` --
-  completes in ~83 s today at ~5.8 GB peak RSS, 9,475 pages / 9,196,432 bytes.
-  Music stays the control: 77 pages / ~4 s / ~17 MB RSS.  Needs the MySQL server
-  reachable; the document lives in the iPhone 17 simulator's app group container
-  as `Document.mad` (MySQL, `employees`, `departments` LEFT OUTER JOIN
+  9,475 pages / 9,196,432 bytes.  Needs the MySQL server reachable; the
+  document lives in the iPhone 17 simulator's app group container as
+  `Document.mad` (MySQL, `employees`, `departments` LEFT OUTER JOIN
   `dept_emp`, two elements).
 
 ### A NULL read from a source database printed as the text `<null>`, or as the epoch

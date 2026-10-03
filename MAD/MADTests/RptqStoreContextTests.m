@@ -311,6 +311,87 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:observer];
 }
 
+#pragma mark - Schema lookup memoization
+
+// The flattened arrays and name indexes are warmed once at schema construction and
+// never rebuilt; the render path depends on that -- a fresh array per call is what
+// blew the large-report export up to gigabytes.
+- (void)testSchemaFlattenedArraysAreMemoizedAndStable {
+	MADStoreSchema *schema = [MADStoreSchema sharedSchema];
+	for (MADStoreEntity *entity in schema.entities) {
+		NSArray *attributes = entity.allAttributes;
+		NSArray *relationships = entity.allRelationships;
+
+		// Repeat calls return the same object -- the memoization, not just equal
+		// content -- so the property layer allocates nothing per read.
+		XCTAssertTrue(entity.allAttributes == attributes, @"%@ allAttributes reallocates", entity.name);
+		XCTAssertTrue(entity.allRelationships == relationships, @"%@ allRelationships reallocates", entity.name);
+
+		// The content is the ancestors' followed by the entity's own, and the name
+		// indexes agree with the flattened arrays.
+		if (entity.parentName != nil) {
+			MADStoreEntity *parent = [schema entityNamed:entity.parentName];
+			// A subentity may declare no attributes of its own (the chart kind), so
+			// equality with the parent is legal; the tail check pins the rest.
+			XCTAssertGreaterThanOrEqual(attributes.count, parent.allAttributes.count,
+										@"%@ must flatten its ancestors' attributes", entity.name);
+			NSArray *own = entity.attributes;
+			XCTAssertEqualObjects([attributes subarrayWithRange:NSMakeRange(attributes.count - own.count, own.count)],
+								  own, @"%@ ends with its own attributes", entity.name);
+		} else {
+			XCTAssertTrue(attributes == entity.attributes, @"a table owner's allAttributes is its own list");
+		}
+		for (MADStoreAttribute *attribute in attributes) {
+			XCTAssertTrue([entity anyAttributeNamed:attribute.name] == attribute,
+						  @"%@ %@ misses in the name index", entity.name, attribute.name);
+		}
+		for (MADStoreRelationship *relationship in relationships) {
+			XCTAssertTrue([entity anyRelationshipNamed:relationship.name] == relationship,
+						  @"%@ %@ misses in the name index", entity.name, relationship.name);
+		}
+	}
+}
+
+#pragma mark - RptqObject KVC semantics
+
+// The property layer's behaviour must not change with the memoized lookups: reads,
+// setter dirty-marking, unknown-key raising, and subclass-inherited attributes all
+// behave exactly as before.
+- (void)testRptqObjectKVCSemanticsAreUnchanged {
+	RptqStoreContext *context = [self openContextAtPath:@"kvc.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:50];
+	[table setValue:@"customers" forKey:@"name"];
+	XCTAssertEqualObjects([table valueForKey:@"name"], @"customers", @"an attribute read");
+	XCTAssertTrue([context save:NULL]);
+	XCTAssertFalse(context.hasChanges);
+
+	[table setValue:@"renamed" forKey:@"name"];
+	XCTAssertEqualObjects([table valueForKey:@"name"], @"renamed");
+	XCTAssertTrue(context.hasChanges, @"an attribute set marks the row dirty");
+
+	// A set to the same value is not a change.
+	[table setValue:@"renamed" forKey:@"name"];
+	XCTAssertTrue(context.hasChanges);
+
+	// An unknown key still raises through NSObject.
+	XCTAssertThrows([table valueForKey:@"noSuchKeyAtAll"]);
+	XCTAssertThrows([table setValue:@1 forKey:@"noSuchKeyAtAll"]);
+
+	// A subentity reads the base element's attributes through the flattened index.
+	RptqObject *label = [context insertObjectForEntity:@"RptqDocumentElementLabel" identifier:60];
+	[label setValue:@2 forKey:@"type"];
+	XCTAssertEqualObjects([label valueForKey:@"type"], @2, @"a subclass reads an inherited attribute");
+
+	// A to-many relationship read returns the member objects.
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:70];
+	[database setValue:@[ table ] forKey:@"hasTables"];
+	NSSet *tables = [database valueForKey:@"hasTables"];
+	XCTAssertEqual(tables.count, (NSUInteger)1);
+	XCTAssertTrue([tables containsObject:table], @"a to-many read faults the member");
+}
+
 #pragma mark - Subentity lookups
 
 // Rows are keyed by their concrete kind (RptqDocumentElementLabel), so a query for

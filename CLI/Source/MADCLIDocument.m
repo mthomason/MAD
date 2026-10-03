@@ -258,8 +258,10 @@ static NSError *MADCLIDocumentError(NSString *message) {
 
 	UIGraphicsBeginPDFContextToFile(url.path, letterRect, options);
 	for (NSUInteger page = 0; page < reportFormatter.numberOfPages; page++) {
-		UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
-		[renderer drawPageAtIndex: (NSInteger)page inRect: trimBox];
+		@autoreleasepool {
+			UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
+			[renderer drawPageAtIndex: (NSInteger)page inRect: trimBox];
+		}
 	}
 	UIGraphicsEndPDFContext();
 
