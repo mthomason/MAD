@@ -143,8 +143,16 @@ fixtures that pin it.
 - **Phase A — the store, standalone.** Define the SQLite schema and a reader/writer pair that
   round-trips a `RptqDocument` graph. Proven headlessly: build a graph in memory, write it,
   read it back, assert equality — including fetch-by-identifier and fetch-by-part.
+  *Done:* `MAD/Source/rptq/store/`, with `MADStoreTests`.
 - **Phase B — the conversion.** Open a Core Data `.mad`, serialise to the new store. Pinned by
   the two samples through *convert → read → compare*.
+  *Done:* `MADStoreConverter` — the one file in the store family that imports Core Data. It
+  walks the model objects (never Core Data's `Z_` tables) with `MADStoreSchema` driving the
+  attribute and edge lists, so the two cannot drift, and mints identifiers for the ten entities
+  the model gives none to. Pinned by `MADStoreConverterTests`, which converts both shipping
+  samples and compares the graphs, and counts every row against Core Data as well. One
+  discrepancy is carried deliberately: the model calls the credential's key `dbkey` and the
+  store calls it `key`, and the converter renames it rather than changing either side.
 - **Phase C — the app integration.** Replace the `Rptq` classes' Core Data backing with our
   store, keeping the headers, entity-family by entity-family (schema, then query, then
   sections/elements), and replace `NSFetchedResultsController` with reload-on-change. The
