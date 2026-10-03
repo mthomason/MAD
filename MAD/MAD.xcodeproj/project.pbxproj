@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4CA7C41112EA44B3800470111 /* MADStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA7C4112EA44B3800470011 /* MADStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA7C41122EA44B3800470112 /* MADStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C4122EA44B3800470012 /* MADStore.m */; };
+		4CA7C41132EA44B3800470113 /* MADStoreSchema.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA7C4132EA44B3800470013 /* MADStoreSchema.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA7C41142EA44B3800470114 /* MADStoreSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C4142EA44B3800470014 /* MADStoreSchema.m */; };
+		4CA7C41152EA44B3800470115 /* MADStoreObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA7C4152EA44B3800470015 /* MADStoreObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA7C41162EA44B3800470116 /* MADStoreObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C4162EA44B3800470016 /* MADStoreObject.m */; };
+		4CA7C41172EA44B3800470117 /* MADStoreGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA7C4172EA44B3800470017 /* MADStoreGraph.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA7C41182EA44B3800470118 /* MADStoreGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C4182EA44B3800470018 /* MADStoreGraph.m */; };
+		4CA7C41402EA44B3800470140 /* MADStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C4402EA44B3800470040 /* MADStoreTests.m */; };
+		4CA7C41502EA44B3800470150 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA7C4502EA44B3800470050 /* libsqlite3.tbd */; };
 		4CDA7A0100000000000000A1 /* MADDataTableRegressionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0100000000000000B1 /* MADDataTableRegressionTests.m */; };
 		4CDA7A0300000000000000A1 /* MADCoreLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0300000000000000B1 /* MADCoreLogicTests.m */; };
 		4CDA7A0400000000000000A1 /* MADFormatterAndRepresentationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */; };
@@ -552,6 +562,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4CA7C4112EA44B3800470011 /* MADStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStore.h; sourceTree = "<group>"; };
+		4CA7C4122EA44B3800470012 /* MADStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStore.m; sourceTree = "<group>"; };
+		4CA7C4132EA44B3800470013 /* MADStoreSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreSchema.h; sourceTree = "<group>"; };
+		4CA7C4142EA44B3800470014 /* MADStoreSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreSchema.m; sourceTree = "<group>"; };
+		4CA7C4152EA44B3800470015 /* MADStoreObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreObject.h; sourceTree = "<group>"; };
+		4CA7C4162EA44B3800470016 /* MADStoreObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreObject.m; sourceTree = "<group>"; };
+		4CA7C4172EA44B3800470017 /* MADStoreGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreGraph.h; sourceTree = "<group>"; };
+		4CA7C4182EA44B3800470018 /* MADStoreGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreGraph.m; sourceTree = "<group>"; };
+		4CA7C4402EA44B3800470040 /* MADStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreTests.m; sourceTree = "<group>"; };
+		4CA7C4502EA44B3800470050 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		4CDA7A0100000000000000B1 /* MADDataTableRegressionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataTableRegressionTests.m; sourceTree = "<group>"; };
 		4CDA7A0300000000000000B1 /* MADCoreLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADCoreLogicTests.m; sourceTree = "<group>"; };
 		4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFormatterAndRepresentationTests.m; sourceTree = "<group>"; };
@@ -1125,6 +1145,7 @@
 				4C2915E924AC72C000EC794B /* MADCocoaExtensions.framework in Frameworks */,
 				4C4EC7302DC9A67D001DBEBE /* MADFileManager.framework in Frameworks */,
 				4C2915F124AC72C000EC794B /* MADSqlite3.framework in Frameworks */,
+				4CA7C41502EA44B3800470150 /* libsqlite3.tbd in Frameworks */,
 				4C2915F324AC72C000EC794B /* MADTdsClient.framework in Frameworks */,
 				4C2915ED24AC72C000EC794B /* MADFoundation.framework in Frameworks */,
 				4C2915E724AC72C000EC794B /* MADBarcodes.framework in Frameworks */,
@@ -1471,6 +1492,7 @@
 			isa = PBXGroup;
 			children = (
 				4CA7C3112EA44B7B00475743 /* autogen */,
+				4CA7C3122EA44B9000475743 /* store */,
 				4CC284331BADE98F00775B72 /* rptq.h */,
 				4CC284441BADE98F00775B72 /* RptqDocumentElementFactory.h */,
 				4CC2843A1BADE98F00775B72 /* RptqDocument+Extras.h */,
@@ -1544,6 +1566,21 @@
 				4C35E2741EC9E9600090D1BF /* RptqPoint+Extras.m */,
 			);
 			path = rptq;
+			sourceTree = "<group>";
+		};
+		4CA7C3122EA44B9000475743 /* store */ = {
+			isa = PBXGroup;
+			children = (
+				4CA7C4112EA44B3800470011 /* MADStore.h */,
+				4CA7C4122EA44B3800470012 /* MADStore.m */,
+				4CA7C4132EA44B3800470013 /* MADStoreSchema.h */,
+				4CA7C4142EA44B3800470014 /* MADStoreSchema.m */,
+				4CA7C4152EA44B3800470015 /* MADStoreObject.h */,
+				4CA7C4162EA44B3800470016 /* MADStoreObject.m */,
+				4CA7C4172EA44B3800470017 /* MADStoreGraph.h */,
+				4CA7C4182EA44B3800470018 /* MADStoreGraph.m */,
+			);
+			path = store;
 			sourceTree = "<group>";
 		};
 		4CA7C3112EA44B7B00475743 /* autogen */ = {
@@ -1774,6 +1811,7 @@
 				4C37AD302E86D00F003C2B2C /* MADMock.m */,
 				4C37AD332E86D125003C2B2C /* MADTestReportFormatter.m */,
 				4C37AD412E86D00F003C2B2C /* MADDocumentTests.m */,
+				4CA7C4402EA44B3800470040 /* MADStoreTests.m */,
 			);
 			path = MADTests;
 			sourceTree = "<group>";
@@ -1785,6 +1823,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CA7C41112EA44B3800470111 /* MADStore.h in Headers */,
+				4CA7C41132EA44B3800470113 /* MADStoreSchema.h in Headers */,
+				4CA7C41152EA44B3800470115 /* MADStoreObject.h in Headers */,
+				4CA7C41172EA44B3800470117 /* MADStoreGraph.h in Headers */,
 				4CEFDD091CF5AC7C0092C148 /* MADQueryCacheVacuumParameters.h in Headers */,
 				4C41238D1E275F8100DF891B /* RptqDatabaseCredentals+MADDatabaseConnection.h in Headers */,
 				4C59398B1E3EF7E400582271 /* RptqDocumentElementLabelLink.h in Headers */,
@@ -2171,6 +2213,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CA7C41122EA44B3800470112 /* MADStore.m in Sources */,
+				4CA7C41142EA44B3800470114 /* MADStoreSchema.m in Sources */,
+				4CA7C41162EA44B3800470116 /* MADStoreObject.m in Sources */,
+				4CA7C41182EA44B3800470118 /* MADStoreGraph.m in Sources */,
 				4C401D551BAE3AF800BAE5FC /* MTPaperC1.m in Sources */,
 				4C401DEE1BAE3BD900BAE5FC /* MADQueryFull.m in Sources */,
 				4C401D6B1BAE3AF800BAE5FC /* MTPaperGovernmentLetter.m in Sources */,
@@ -2391,6 +2437,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CA7C41402EA44B3800470140 /* MADStoreTests.m in Sources */,
 				4C37AD312E86D00F003C2B2C /* MADMock.m in Sources */,
 				4C37AD402E86D00F003C2B2C /* MADDocumentTests.m in Sources */,
 				4CF781541BADE5EA0050A67D /* MADTests.m in Sources */,
