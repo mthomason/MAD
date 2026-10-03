@@ -15,6 +15,7 @@
 #import "MADPngImageTransformer.h"
 #import "MADExplorerController.h"
 #import "MADTabBarController.h"
+#import "MADViewerController.h"
 #import "MADNavigationController.h"
 #import "Constants.h"
 #import "madlog.h"
@@ -59,6 +60,18 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 #else
 	return @"group.everydayapps.mad";
 #endif
+}
+
+// The app is scene-based; the AppDelegate's window is never set.  The UI-test
+// hooks reach the window through the first connected scene instead.
+- (UIWindow *)firstSceneWindow {
+	for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
+		if ([scene.delegate conformsToProtocol:@protocol(UIWindowSceneDelegate)]) {
+			UIWindow *window = ((id<UIWindowSceneDelegate>)scene.delegate).window;
+			if (window != nil) return window;
+		}
+	}
+	return nil;
 }
 
 + (NSString *)ubiquityIdentifier {
@@ -181,24 +194,69 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 	NSUInteger sampleIndex = [arguments indexOfObject:@"-UITestOpenSample"];
 	if (sampleIndex != NSNotFound && arguments.count > sampleIndex + 1) {
 		NSString *sampleName = arguments[sampleIndex + 1];
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-			NSURL *directory = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:[AppDelegate groupIdentifier]];
-			NSURL *url = [[directory URLByAppendingPathComponent:sampleName]
-						  URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
-			[self application:application OpenURL:url options:@{}];
+		// The window's root controller is not set for several seconds after a fresh
+		// launch, so poll until it exists rather than racing a fixed delay.
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			__block NSUInteger attempts = 0;
+			__block void (^tryOpen)(void);
+			tryOpen = ^{
+				UINavigationController *navController = (UINavigationController *)[self firstSceneWindow].rootViewController;
+				if (navController == nil && attempts++ < 30) {
+					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), tryOpen);
+					return;
+				}
+				NSLog(@"[UITestHook] open '%@': root=%@ top=%@", sampleName,
+					  NSStringFromClass([self firstSceneWindow].rootViewController.class),
+					  NSStringFromClass(navController.topViewController.class));
+				NSURL *directory = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:[AppDelegate groupIdentifier]];
+				NSURL *url = [[directory URLByAppendingPathComponent:sampleName]
+							  URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
+				[self application:application OpenURL:url options:@{}];
+			};
+			tryOpen();
 		});
 	}
 	NSUInteger tabIndex = [arguments indexOfObject:@"-UITestSelectTab"];
 	if (tabIndex != NSNotFound && arguments.count > tabIndex + 1) {
 		NSString *tabName = arguments[tabIndex + 1];
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(9.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-			UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+			UINavigationController *navController = (UINavigationController *)[self firstSceneWindow].rootViewController;
 			if ([navController.topViewController isKindOfClass:[MADTabBarController class]]) {
 				MADTabBarController *tabBarController = (MADTabBarController *)navController.topViewController;
 				if ([tabName isEqualToString:@"Designer"]) tabBarController.selectedIndex = 1;
 				else if ([tabName isEqualToString:@"Viewer"]) tabBarController.selectedIndex = 2;
 				else tabBarController.selectedIndex = 0;
 			}
+		});
+	}
+	// UI-test hook: "-UITestRefresh" selects the Viewer tab and taps its refresh
+	// button, so a refresh can be driven headlessly.  Debug builds only.
+	if ([arguments containsObject:@"-UITestRefresh"]) {
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			__block NSUInteger attempts = 0;
+			__block void (^tryRefresh)(void);
+			tryRefresh = ^{
+				UINavigationController *navController = (UINavigationController *)[self firstSceneWindow].rootViewController;
+				NSLog(@"[UITestHook] refresh attempt %lu: top=%@", (unsigned long)attempts,
+					  NSStringFromClass(navController.topViewController.class));
+				if ([navController.topViewController isKindOfClass:[MADTabBarController class]]) {
+					MADTabBarController *tabBarController = (MADTabBarController *)navController.topViewController;
+					tabBarController.selectedIndex = 2;
+					UIViewController *viewerNav = tabBarController.viewControllers[2];
+					if ([viewerNav isKindOfClass:[UINavigationController class]]) {
+						UIViewController *top = ((UINavigationController *)viewerNav).topViewController;
+						if ([top isKindOfClass:[MADViewerController class]]) {
+							NSLog(@"[UITestHook] firing refresh:");
+							[(MADViewerController *)top refresh:nil];
+							return;
+						}
+					}
+				}
+				if (attempts++ < 90) {
+					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), tryRefresh);
+				}
+			};
+			tryRefresh();
 		});
 	}
 #endif
@@ -225,7 +283,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 			options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
 	if (!url.isFileURL) return NO;
 	
-	UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+	UINavigationController *navController = (UINavigationController *)[self firstSceneWindow].rootViewController;
 	if ([navController.topViewController isKindOfClass:[MADExplorerController class]]) {
 		MADExplorerController *filesController = (MADExplorerController *)navController.topViewController;
 		[filesController openDocumentAtURL:url completion:nil];
