@@ -249,7 +249,17 @@ Status key:
   during the peg (the stacks above are from exactly that).
 
 ### `insertObjectForEntity:` mints identifiers per entity, not per table
-- **Status:** Still open -- found 2026-10-03 in the milestone-(a) audit
+- **Status:** Fixed
+- **Now:** `RptqStoreContext -insertObjectForEntity:identifier:` mints over
+  the table's owner entity -- `descriptor.parentName` when the requested
+  entity is a subentity sharing a parent's table, the requested entity itself
+  otherwise -- whose `objectsForEntity:` table fallback returns every kind in
+  the table, so a new `RptqDocumentElementLabel` is numbered past the last
+  row of any element kind.  Two regression tests in
+  `RptqStoreContextTests`: a label holding identifier 5 followed by a chart
+  inserting with 0 returns a chart identifier greater than 5 (and not equal
+  to 5), and an owner-entity insert (`RptqDatabaseSchemaField`) still mints
+  past its own table's maximum.  Both suites green.
 - **Where:** `MAD/Source/rptq/store/RptqStoreContext.m:183-188` -- when the
   identifier is 0, the new identifier is max-over-the-requested-entity plus
   one.  The nine `RptqDocumentElement*` kinds share one table with

@@ -181,8 +181,15 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	NSAssert(descriptor != nil, @"inserting an entity the store has no descriptor for: %@", entity);
 
 	if (identifier <= 0) {
+		// Identifiers are unique per table, not per entity: the nine document
+		// element kinds share RptqDocumentElement's table.  Mint over the
+		// table's owner entity -- the graph's objectsForEntity: fallback returns
+		// every kind in the table -- so a subentity insert never collides with
+		// a sibling kind already there.  See BUGS.md "insertObjectForEntity:
+		// mints identifiers per entity, not per table".
+		NSString *mintingEntity = descriptor.parentName != nil ? descriptor.parentName : entity;
 		int64_t highest = 0;
-		for (MADStoreObject *row in [self.graph objectsForEntity:entity]) {
+		for (MADStoreObject *row in [self.graph objectsForEntity:mintingEntity]) {
 			if (row.identifier > highest) highest = row.identifier;
 		}
 		identifier = highest + 1;

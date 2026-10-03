@@ -425,6 +425,40 @@
 	XCTAssertEqual(rows.count, (NSUInteger)2, @"the graph's plural lookup has the table fallback");
 }
 
+#pragma mark - Identifier minting
+
+/// CONTRACT: minting happens per table, not per entity.  The element kinds share
+/// RptqDocumentElement's table, so a kind inserting with identifier 0 while a
+/// sibling kind already holds 5 must come back past 5 -- minting over the
+/// requested kind alone would collide with the row already in the table.
+- (void)testSubentityInsertMintsPastSiblingKindsInTheSharedTable {
+	RptqStoreContext *context = [self openContextAtPath:@"mint-subentity.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *label = [context insertObjectForEntity:@"RptqDocumentElementLabel" identifier:5];
+	XCTAssertNotNil(label);
+
+	RptqObject *chart = [context insertObjectForEntity:@"RptqDocumentElementChart" identifier:0];
+	XCTAssertNotNil(chart);
+	XCTAssertGreaterThan(chart.identifier, (int64_t)5);
+	XCTAssertNotEqual(chart.identifier, label.identifier);
+}
+
+/// CONTRACT: an entity that owns its table still mints past its own table's
+/// maximum, as it always did.
+- (void)testOwnerEntityInsertStillMintsPastItsTableMaximum {
+	RptqStoreContext *context = [self openContextAtPath:@"mint-owner.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *first = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:7];
+	XCTAssertNotNil(first);
+
+	RptqObject *second = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:0];
+	XCTAssertNotNil(second);
+	XCTAssertGreaterThan(second.identifier, (int64_t)7);
+	XCTAssertNotEqual(second.identifier, first.identifier);
+}
+
 #pragma mark - Dirty tracking
 
 /// Builds a small schema family -- the same rows the import flow builds -- and
