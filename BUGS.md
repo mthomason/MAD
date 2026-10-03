@@ -124,7 +124,7 @@ Status key:
   Eastern, which is 1970-01-01 UTC.
 
 ### `MADSectionLayout` computes no element height, so a report piles onto its first pages
-- **Status:** Still open -- found 2026-10-03, reproduced from the shipped samples
+- **Status:** Fixed -- found 2026-10-03, reproduced from the shipped samples
 - **Where:** `MAD/Source/MADSectionLayout.m:63-65` (the stub). Consumed by
   `MAD/Source/MADReportFormatter.m:517`, `:522`, `:580-594`, `:626`.
 - **Behavior:** `-initWithObject:managedObjectContext:` used to set `_displayHeight`
@@ -149,9 +149,19 @@ Status key:
   MADDesigner/Resources/Assets/Samples.xcassets/Reports/London.dataset/London.mad`
   -- 5 pages before the migration, 3 after. The CLI goes through the same
   `MADReportFormatter` the app does, so it is a headless check for the fix.
-- **Not yet fixed:** the comment at the stub says the declared height "stands in until
-  the sections/elements family lands (slice 3)". That family is what Phase C finished.
-  This is the only stub of its kind left in the tree.
+- **Now:** the computation is restored against the store in the same initialiser: the
+  section resolves through `objectForEntity:@"RptqDocumentSection" identifier:`, its
+  elements are walked over `hasRows` / `hasObjects`, and `_displayHeight` is the
+  maximum of `rect.origin.y + rect.size.height + margin.top + margin.bottom +
+  padding.top + padding.bottom + border.width.top + border.width.bottom`, where a
+  missing edge contributes 0; an invisible section is 0 exactly as before.  The stub
+  and its "stands in until" comment are gone.  The London export is 5 pages / 43,177
+  bytes again.  Pinned by `testSectionDisplayHeightIsTheMaximumElementCalculatedHeight`
+  (the sum, the maximum over a shorter element, and an element with every optional
+  edge absent) and by the CLI export itself.  Along the way the element
+  `awakeFromInsert` gained the four satellites the Core Data version created but the
+  store version had dropped (alignment, border, dropPoint, numericFormat), which the
+  test's border edge immediately exposed.
 
 ### `MADocument -managedObjectContext` returns a `RptqStoreContext` under a Core Data type
 - **Status:** Still open -- recorded 2026-10-03, not a live failure

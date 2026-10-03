@@ -23,6 +23,15 @@
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqTextStyle.h>
 #import <MAD/MADDesignerLayout.h>
+#import <MAD/MADSectionLayout.h>
+#import <MAD/RptqRect.h>
+#import <MAD/RptqPoint.h>
+#import <MAD/RptqSize.h>
+#import <MAD/RptqDirectionalAsymmetry.h>
+#import <MAD/RptqBorder.h>
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/RptqDocumentSectionRows.h>
 #import <MAD/MADModelDocument.h>
 #import <MAD/MADModelDatabase.h>
 #import <MAD/MADModelQuery.h>
@@ -329,6 +338,56 @@
 				   @"the close released the store");
 	XCTAssertFalse([[NSFileCoordinator filePresenters] containsObject:document],
 				   @"the closed document holds no file presenter");
+}
+
+// The section's displayHeight is the maximum calculated height of its elements --
+// rect.origin.y + rect.size.height, plus the margin, padding and border edges --
+// never the section's declared height.  MADReportFormatter places sections and
+// decides page breaks from it, so the whole pagination depends on this value.
+- (void)testSectionDisplayHeightIsTheMaximumElementCalculatedHeight {
+	RptqStoreContext *context = [self newTestContext];
+	RptqDocumentSection *section = [context insertObjectForEntity:@"RptqDocumentSection" identifier:100];
+	RptqDocumentSectionRows *row = [context insertObjectForEntity:@"RptqDocumentSectionRows" identifier:0];
+	[section setValue:[NSOrderedSet orderedSetWithObject:row] forKey:@"hasRows"];
+
+	// The tall element: 10 + 20, margin 1+2, padding 3+4, border 5+6 = 51.
+	RptqDocumentElement *tall = [context insertObjectForEntity:@"RptqDocumentElement" identifier:200];
+	tall.rect.origin.y = 10;
+	tall.rect.size.height = 20;
+	tall.margin.top = 1;
+	tall.margin.bottom = 2;
+	tall.padding.top = 3;
+	tall.padding.bottom = 4;
+	tall.border.width.top = 5;
+	tall.border.width.bottom = 6;
+
+	// A shorter second element: the maximum must win, not the last row.
+	RptqDocumentElement *shortElement = [context insertObjectForEntity:@"RptqDocumentElement" identifier:201];
+	shortElement.rect.origin.y = 1;
+	shortElement.rect.size.height = 1;
+
+	// An element with every optional edge absent contributes 0, it must not crash.
+	RptqDocumentElement *bareElement = [context insertObjectForEntity:@"RptqDocumentElement" identifier:202];
+	[bareElement setValue:nil forKey:@"rect"];
+	[bareElement setValue:nil forKey:@"margin"];
+	[bareElement setValue:nil forKey:@"padding"];
+	[bareElement setValue:nil forKey:@"border"];
+
+	[row setValue:[NSOrderedSet orderedSetWithObjects:tall, shortElement, bareElement, nil] forKey:@"hasObjects"];
+
+	NSDictionary *projection = @{
+		NSStringFromSelector(@selector(identifier)): @100,
+		[RptqDocumentSection keyPathHeight]: @99, // Declared height must not matter.
+		[RptqDocumentSection keyPathNumberOfRows]: @1,
+		[RptqDocumentSection keyPathType]: @0,
+		[RptqDocumentSection keyPathVisibility]: @YES,
+		[RptqDocumentSection keyPathWrappingStyle]: @0,
+	};
+
+	MADSectionLayout *layout = [[MADSectionLayout alloc] initWithObject:projection
+												  managedObjectContext:context];
+	XCTAssertEqualWithAccuracy(layout.displayHeight, 51.0f, 0.001f,
+							   @"displayHeight is the maximum calculated element height, not the declared height");
 }
 
 @end

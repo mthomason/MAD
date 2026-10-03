@@ -133,8 +133,20 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 // and keeps dropIndex auto-incrementing off the highest existing element.
 - (void)awakeFromInsert {
 	RptqStoreContext *context = self.storeContext;
+	if (self.alignment == nil) {
+		self.alignment = [context insertObjectForEntity:NSStringFromClass([RptqAlignment class]) identifier:0];
+	}
+	if (self.border == nil) {
+		self.border = [context insertObjectForEntity:NSStringFromClass([RptqBorder class]) identifier:0];
+	}
+	if (self.dropPoint == nil) {
+		self.dropPoint = [context insertObjectForEntity:NSStringFromClass([RptqPoint class]) identifier:0];
+	}
 	if (self.margin == nil) {
 		self.margin = [context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
+	}
+	if (self.numericFormat == nil) {
+		self.numericFormat = [context insertObjectForEntity:NSStringFromClass([RptqNumericFormat class]) identifier:0];
 	}
 	if (self.padding == nil) {
 		self.padding = [context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
