@@ -107,3 +107,65 @@ with Core Data relationships reaching into plain objects.
 
 This checkpoint delivers the two types, the routing, and the schema family proven against
 the store, before any of the app's query or sections/elements code moves.
+
+---
+
+## 8. Remaining: the swap and the consumer migration (slice 2)
+
+The mechanism above is landed and green (213 tests). The next slice is the superclass swap
+plus the consumer migration, and it is the whole of the remaining Phase C work. This is the
+map, recorded so the slice resumes cold.
+
+### 8.1 The swap (mechanical, scripted)
+
+Thirty-three autogen entities. Twenty-four declare `: NSManagedObject`; the nine
+`RptqDocumentElement*` subclasses declare `: RptqDocumentElement` and inherit the change.
+
+- In each `autogen/*.h`: replace the two `#import <CoreData/NSManagedObject.h>` /
+  `#import <CoreData/NSFetchRequest.h>` lines with `#import "RptqObject.h"`; change
+  `: NSManagedObject` to `: RptqObject`; drop every `+ (NSFetchRequest…) fetchRequest…`
+  declaration.
+- In each `autogen/*.m`: drop the `+fetchRequest` body (keep the `@dynamic` list). Two
+  files carry hand-added Core Data methods to strip instead: `RptqQuery.m`
+  (`fetchRequestTableCount:objectContext:`, called from
+  `MADDesigner/Source/MADQueryViewDataSource.m:125`) and the header declaration in
+  `RptqQuery.h`.
+- `@dynamic` stays; `+resolveInstanceMethod:` on `RptqObject` serves the accessors (see §2).
+
+### 8.2 The consumer surface (~65 files)
+
+- **Extras** (`MAD/Source/rptq/*+Extras.{h,m}`): factory methods
+  (`new…FactoryForManagedObjectContext:`), `awakeFromInsert` (identifier autoincrement —
+  now `insertObjectForEntity:identifier:0`), `NSFetchRequest` projection helpers (delete —
+  their callers read the store directly), and `objectWithID:` / `[obj managedObjectContext]`
+  sites. All take `NSManagedObjectContext *` → `RptqStoreContext *`.
+- **`RptqDataHelper`**: `nextIdentifierForClass:managedObjectContext:` is superseded by
+  `insertObjectForEntity:identifier:0`; keep the class or fold it away.
+- **`MADModel*`** (`MADModelDatabase/Table/Field/Document/Query/QueryTable/QueryLink`): the
+  `__weak NSManagedObjectContext *` ivar becomes `RptqStoreContext *`; every
+  `NSFetchRequest` + `NSExpressionDescription` projection becomes an `objectsForEntity:` +
+  attribute read (e.g. `MADModelDatabase.updateTables` already wants only
+  `{identifier, name, queryable}`).
+- **`MADocument`**: open = unarchive + load the portable store through `RptqStoreContext`
+  (run `MADStoreConverter` first when the store is still Core Data); save = write the store
+  instead of `[super writeContents:]`. `activeDocumentModel` reads the root from the context.
+- **Operations** (`MADOperationCreateDocument*`): the private `NSManagedObjectContext` with a
+  `parentContext` becomes a `RptqStoreContext` over the store; `storeDatabaseConnectionDefination:`
+  and `storeTablesAndFieldsForTables:` (in `RptqDocument+Extras.m`) are the schema write path.
+- **MAD query/report sources** (`MADQueryFull`, `MADQuerySelectExpression*`,
+  `MADReportFormatter`, `MADSectionLayout`, `MADSectionsLayout`, `MADReportSection`,
+  `MADQueryActiveQueryFields`, …): fetch/insert sites.
+- **MADDesigner** (~22 files, `MADQuery*` controllers, designer element views, barcodes,
+  `MTGraph+RptqQuery`): the two `NSFetchedResultsController` uses
+  (`MADQueryBuilderAddTableViewController`, `MTGraph+RptqQuery`) become load + reload.
+- **Tests**: `MADCoreDataModelTests` (model-loading) largely survives; `MADRptqDatabaseTests`,
+  `MADRptqDocumentSectionTests`, `MADRptqQueryTests`, `MADRptqValueTypeTests` build objects
+  through Core Data and must switch to `RptqStoreContext` + `insertObjectForEntity:`.
+
+### 8.3 The write/read vocabulary (already built)
+
+`insertObjectForEntity:identifier:` (mints when 0), `objectForEntity:identifier:`,
+`objectsForEntity:`, `loadPart:`/`loadAllWithError:`, `save:`, `deleteObject:error:`,
+`setRelationship:value:onObject:` + `addObject:toRelationshipNamed:onObject:` /
+`removeObject:fromRelationshipNamed:onObject:` (inverse-maintaining), and `@dynamic`
+dot-syntax via `+resolveInstanceMethod:`.
