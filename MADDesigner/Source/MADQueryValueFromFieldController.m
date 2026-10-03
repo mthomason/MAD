@@ -153,15 +153,17 @@
 																							 object: schemaField];
 
 	self.querySampleDataField = querySampleDataField;
-	
+
+	// The store context is main-queue-owned, so resolve the field's credentials
+	// here and hand the block only plain values.  See BUGS.md "The refresh path
+	// reads the shared store context from operation-queue threads".
+	RptqDatabaseCredentals *userCredentals = schemaField.inTable.inDatabase.ownedByUser;
+	MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnection:userCredentals];
+
 	MADQueryValueFromFieldController * __weak weakself2 = self;
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
 		__strong MADQueryValueFromFieldController *strongself2 = weakself2;
-		RptqDatabaseSchemaField *field = [strongself2.document.storeContext objectForEntity:NSStringFromClass([RptqDatabaseSchemaField class]) identifier:strongself2.schemaFieldObjectId];
-		RptqDatabaseCredentals *userCredentals = field.inTable.inDatabase.ownedByUser;
-		
-		MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnection:userCredentals];
-		
+
 		MADDatabase *database = [MADDatabase newDatabaseWithConnection:databaseConnection];
 		if ([strongself2.querySampleDataField conformsToProtocol:@protocol(MADDatabaseResultsProtocol)]) {
 			database.delegate = ((NSObject <MADDatabaseResultsProtocol> *)strongself2.querySampleDataField);

@@ -1506,7 +1506,28 @@ files rather than imported, because `MADDesigner/Source` is not on the bundle's
 header search path.
 
 ### The refresh path reads the shared store context from operation-queue threads
-- **Status:** Still open -- found 2026-10-03 in the milestone-(b) audit
+- **Status:** Fixed
+- **Now:** store reads on the refresh path are marshalled onto the main queue
+  (inline when already there), the store's owning queue.  In
+  `MADOperationRefresh -execute` the SQL build and the field-key read run on
+  main and only the built string and key array cross back to the operation
+  thread.  In `MADOperationRefreshInitialize -execute` the document-graph
+  reads and the sort run on main and only the resolved query crosses back.
+  `MADQueryValueFromFieldController -loadPickerView` resolves the schema field
+  and its credentials (building the database connection) on main before
+  dispatching, so the global-queue block holds only plain values.  Of the
+  create-document operations, `MADOperationCreateDocumentFirstTimeSetup`
+  marshals its insert-and-save to main; `MADOperationCreateDocumentImportSchema`
+  is deliberately left on its operation thread -- the whole point of the
+  operation is a network-bound schema import whose store writes would block
+  the UI for the import's duration, and the store is otherwise quiescent
+  during document creation.  `MADQuerySampleDataField -getSql:` still reads
+  the schema field's `name`/`inTable.name` from inside the driver while the
+  sample-data query executes on that same global queue; those attributes are
+  immutable during the fetch, but it is the one residual off-main store read
+  on this path.  Chosen main-queue marshalling rather than a dedicated serial
+  store queue because the store is already documented as main-thread-owned and
+  the operations' store work is small.  No locking was added to any accessor.
 - **Where:** `MADDesigner/Source/MADOperationRefresh.m:104-118` and
   `MADDesigner/Source/MADOperationRefreshInitialize.m:64-99` (the two live
   ones), plus the same pattern in `MADQueryValueFromFieldController.m:157-159`

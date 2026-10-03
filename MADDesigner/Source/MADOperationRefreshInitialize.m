@@ -37,6 +37,15 @@
 
 @end
 
+// The portable store context is main-queue-owned.  Marshal store reads onto
+// the main queue (inline when already there) rather than taking a lock in
+// every accessor.  See BUGS.md "The refresh path reads the shared store
+// context from operation-queue threads".
+static void MADOperationRefreshInitializeRunOnMain(dispatch_block_t block) {
+	if ([NSThread isMainThread]) block();
+	else dispatch_sync(dispatch_get_main_queue(), block);
+}
+
 @implementation MADOperationRefreshInitialize
 
 - (void)dealloc {}
@@ -63,42 +72,44 @@
 			break;
 		}
 	}
-	
-	RptqStoreContext *private = doc.storeContext;
 	MADocument *document = doc;
-	RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	
+	// The document-graph reads and the sort (which reads the query's sort
+	// descriptors) run on main; only the resolved query crosses back to this
+	// operation thread.
+	__block RptqQuery *rptqQuery = nil;
+	MADOperationRefreshInitializeRunOnMain(^{
+		RptqStoreContext *private = doc.storeContext;
+		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
 		if (rptqDocument == nil) {
-			rptqDocument = [RptqDocument newDocumentForManagedObjectContext: document.storeContext];
+			rptqDocument = [RptqDocument newDocumentForManagedObjectContext: private];
 		}
-		
-		RptqDatabase *rptqDatabase;
-		RptqQuery *rptqQuery;
-		
+
+		RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
+		rptqQuery = rptqDatabase.hasQueries.anyObject;
+
 		if (document.database == nil) {
-			RptqDatabaseCredentals *rptqUser;
-			MADDatabaseConnection *databaseConnection;
-			MADDatabase *database;
-			rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
-			rptqQuery = rptqDatabase.hasQueries.anyObject;
-			rptqUser = rptqQuery.inDatabase.ownedByUser;
-			databaseConnection = [MADDatabaseConnection newDatabaseConnection:rptqUser];
+			RptqDatabaseCredentals *rptqUser = rptqQuery.inDatabase.ownedByUser;
+			MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnection:rptqUser];
 			[document updateDatabaseWithConnection:databaseConnection];
-			database = [MADDatabase newDatabaseWithConnection:databaseConnection];
 		}
-		document.database.delegate = (id <MADDatabaseResultsProtocol>)doc;
+
 		if (rptqDatabase == nil || rptqQuery == nil) {
 			rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
 			rptqQuery = rptqDatabase.hasQueries.anyObject;
 		}
 		[document dataTableSort:rptqQuery];
-		[document resetSectionLayoutManagers];
-		MADReportFormatter *formatter = [MADReportFormatter newReportFormatterWithLayout: document
-																				 options: MADReportFormatterOptionsNone];
-		
+	});
+
+	document.database.delegate = (id <MADDatabaseResultsProtocol>)doc;
+	[document resetSectionLayoutManagers];
+	MADReportFormatter *formatter = [MADReportFormatter newReportFormatterWithLayout: document
+																			 options: MADReportFormatterOptionsNone];
+
 	document.reportFormatter = formatter;
 
 	[self finish];
-	
+
 }
 
 @end

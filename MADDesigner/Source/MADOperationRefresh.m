@@ -33,6 +33,15 @@ static const short errMissingCredentials = 3;
 static const short errExecute = 4;
 static const short errNoDocument = 3842;
 
+// The portable store context is main-queue-owned.  Marshal store reads onto
+// the main queue (inline when already there) rather than taking a lock in
+// every accessor.  See BUGS.md "The refresh path reads the shared store
+// context from operation-queue threads".
+static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
+	if ([NSThread isMainThread]) block();
+	else dispatch_sync(dispatch_get_main_queue(), block);
+}
+
 @interface MADOperationRefresh ()
 @property (nonatomic, weak) MADocument *document;
 @end
@@ -104,22 +113,26 @@ static const short errNoDocument = 3842;
 		return;
 	}
 
-	RptqStoreContext *private = document.storeContext;
-	
+	// The SQL build walks the whole query graph, so it runs on main with the
+	// rest of the store reads; only the built string and the field keys cross
+	// back to this operation thread.
 	__block NSString *queryString = nil;
-	MADQueryFull *query = document.mainQuery;
-	{
+	__block NSArray *fieldKeys = nil;
+	MADOperationRefreshRunOnMain(^{
+		RptqStoreContext *private = document.storeContext;
+		MADQueryFull *query = document.mainQuery;
 		NSError *sqlError = nil;
 		queryString = [query copySQLWithManagedObjectContext: private error: &sqlError];
 		if (sqlError != nil) {
 			os_log_error(OS_LOG_DEFAULT, "Error: %@", sqlError);
 		}
-	}
+		fieldKeys = query.fieldKeys;
+	});
 	[document dataTableSetDataDelegate:document];
 
 	NSError *executeError = nil;
 	BOOL success = [document.database executeSQL: queryString
-									   fieldKeys: query.fieldKeys
+									   fieldKeys: fieldKeys
 									onConnection: dbconn
 								 intoResultTable: (MADDataTable *)document.dataTable
 									   withError: &executeError];

@@ -29,6 +29,15 @@
 
 @end
 
+// The portable store context is main-queue-owned.  Marshal store reads onto
+// the main queue (inline when already there) rather than taking a lock in
+// every accessor.  See BUGS.md "The refresh path reads the shared store
+// context from operation-queue threads".
+static void MADOperationCreateDocumentFirstTimeSetupRunOnMain(dispatch_block_t block) {
+	if ([NSThread isMainThread]) block();
+	else dispatch_sync(dispatch_get_main_queue(), block);
+}
+
 @implementation MADOperationCreateDocumentFirstTimeSetup
 
 - (void)dealloc { }
@@ -61,12 +70,17 @@
 	
 	if (self.cancelled) return [self finish];
 
-	RptqStoreContext *context = document.storeContext;
-	BOOL success = [RptqDocument newDocumentForManagedObjectContext: context] != nil;
-	NSError *error = nil;
-	success = success && [context save:&error];
-	if (!success && error != nil) {
-		os_log_error(OS_LOG_DEFAULT, "Error saving the portable store: %@", error.localizedDescription);
+	// Creating the document object and saving is small enough to marshal onto
+	// main rather than lock the store's accessors.
+	__block BOOL success = NO;
+	__block NSError *saveError = nil;
+	MADOperationCreateDocumentFirstTimeSetupRunOnMain(^{
+		RptqStoreContext *context = document.storeContext;
+		success = [RptqDocument newDocumentForManagedObjectContext: context] != nil;
+		success = success && [context save:&saveError];
+	});
+	if (!success && saveError != nil) {
+		os_log_error(OS_LOG_DEFAULT, "Error saving the portable store: %@", saveError.localizedDescription);
 	}
 	[document updateChangeCount: UIDocumentChangeDone];
 
