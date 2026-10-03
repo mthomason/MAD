@@ -1549,26 +1549,31 @@ header search path.
 - **Test:** `testDisplayedAlertConfirmFailsWhenNoDependencyCanAnswer` (renamed
   from `testDisplayedAlertConfirmReturnsNilWhenNoDependencyCanAnswer`).
 
-### Change and save notifications from the store are dormant
+### The document status signalling is inert at both ends
 - **Status:** Still open
-- **Where:** `MADDesigner/Source/MADDesignerViewController.m:1164`
+- **Where:** `MAD/Source/MADocument.m:892-915` (the three
+  `handleManagedObjectContext…` handlers and the `MADDocumentState` flags they
+  write); `MADDesigner/Source/MADDesignerViewController.m:1164`
   (`-managedObjectContextDidChange:`), `:1260` (`-managedObjectContextDidSave:`),
   `:3257` (`-addObservers`); `MADDesigner/Source/MADQueryViewController.m:1243`
   (`-managedObjectContextDidChange:`), `:1255-1266` (`-ingnoreManagedObjectContextChanges:`
   and `-observeManagedObjectContextChanges:`)
-- **Behavior:** Both controllers still register for
-  `NSManagedObjectContextObjectsDidChangeNotification` and
-  `NSManagedObjectContextDidSaveNotification` against the document's
-  `RptqStoreContext`, but the store context never posts them. Everything those
-  handlers do -- live element-view updates (font, size, position), the undo button
-  state, query-table tracking -- is dormant until a later milestone wires the
-  store to a change signal. `MADDesignerViewController.m` carries a private
-  `changedValues` shim on `RptqObject` that returns *every* attribute, not the
-  actually-changed keys, so the handlers stay correct if they are ever delivered.
+- **Behavior:** The status signalling is inert at **both** ends, not merely
+  dormant pending a store signal.  Nothing can fire it -- `RptqStoreContext`
+  posts no change notification -- and nothing consumes it either: a repo-wide
+  grep shows no code reads `MADDocumentState.needsSave` or
+  `.contextChagned`; the handlers write flags nothing uses.  The designer and
+  query controllers likewise register for Core Data notifications the store
+  never posts.  `MADDesignerViewController.m` carries a private `changedValues`
+  shim on `RptqObject` that returns *every* attribute, not the actually-changed
+  keys, so the handlers stay correct if they are ever delivered.
   `MADQueryViewController.m`'s `_suspendAutomaticTrackingOfChangesInManagedObjectContext`
   toggles nothing for the same reason, and its handler body was reduced to a
-  no-op. The observer method name `ingnoreManagedObjectContextChanges:` also
+  no-op.  The observer method name `ingnoreManagedObjectContextChanges:` also
   carries a long-standing typo.
+- **The milestone-(d) item is now a decision, not a reflex:** wire the
+  signalling end to end (post from `RptqStoreContext`, read `needsSave` where it
+  matters) **or** delete the flags and the handlers.
 - **Found during the store migration; not investigated.**
 
 ### Saves run unconditionally now, and each rewrites the whole store

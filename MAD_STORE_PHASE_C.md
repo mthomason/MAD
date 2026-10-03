@@ -180,81 +180,60 @@ dot-syntax via `+resolveInstanceMethod:`.
 Milestones (a), (b) and (c) landed and were reviewed against their committed diffs. What was
 verified good is in §9.4; what follows is outstanding, in the order it should be worked.
 
-### 9.1 `objectsForEntity:` misses subentity rows
+### 9.1 `objectsForEntity:` misses subentity rows — DONE
 
-Element rows are keyed in the graph by their **concrete kind** (`RptqDocumentElementLabel`),
-which is what the converter writes (`MADStoreConverter.m:232`, from `object.entity.name`). The
-**singular** lookup has an explicit table fallback for exactly this reason
-(`MADStoreGraph.m:45-59`, documented in `MADStoreGraph.h`). The **plural** lookup does not —
-`MADStoreGraph.m:71` returns `self.objects[entity]` by exact name, and
-`RptqStoreContext.m:102` iterates it. So `objectsForEntity:@"RptqDocumentElement"` returns only
-rows whose kind is exactly the base entity, which is none of them.
+Fixed in commit `3a949dcd1`: the plural graph lookup and the registry lookup now carry the
+same table fallback the singular lookup has, restricted to the table's **owner** entity (a
+base-entity query returns every kind that shares the table; a query for one kind stays exact).
+`allObjects` is a direct identifier-sorted walk so the fallback cannot double-count and the
+writer's row order stays stable. The converter test's reference fetch now sets
+`includesSubentities` for table-owning entities, its total counts each row once under its own
+kind, and `testBaseEntityQueryReturnsRowsOfMixedKinds` pins a mixed-kind base-entity query by
+count — a lookup that silently returned nothing cannot pass. All four live sites recover
+(dropIndex scan, `nextDropIndexForSection:`, both `delete*RelatedToTable:` cleanups).
 
-Four live sites depend on it returning the base entity **and its subclasses**:
+### 9.2 The coverage lesson — DONE
 
-| Site | Consequence |
-|---|---|
-| `RptqDocumentElement+Extras.m:153` (in `awakeFromInsert`) | the `dropIndex` scan finds nothing, so every new element is given `dropIndex` 1 — z-order and stacking collide |
-| `RptqDocumentSection+Extras.m:456` (`nextDropIndexForSection:`) | always 0 |
-| `MADocument.m:1288` (`deleteAggregateFieldRelatedToTable:`) | aggregates are never deleted when a query table is removed |
-| `MADocument.m:1307` (`deleteDatafieldsRelatedToTable:`) | same — data-field elements are orphaned against a removed table |
-
-**Fix:** give the plural lookup the same table fallback the singular one has, so a query for a
-table-owning entity returns every row whose entity resolves to that table.
-
-### 9.2 The coverage lesson
-
-`MADStoreConverterTests.m:136` builds its Core Data reference fetch with
-`includesSubentities = NO` — the *same* narrowing the broken lookup has. Both sides count "rows
-whose entity is exactly this name", both return zero for the base element, and
-`testEveryLegacyRowIsWritten` passes. Its own header comment says the counts "come from Core
-Data itself, so a walk that quietly skips a relationship … shows up here rather than passing
-because both sides of the comparison made the same omission" — and the test *does* make the same
-omission, in the entity dimension rather than the row dimension.
-
-This is the general hazard, not a one-off: **a reference implementation that shares the code's
-blind spot cannot falsify it.** Two habits follow. When a test compares against a reference,
-the reference must be asked a *different* question than the code asks (here:
-`includesSubentities = YES` for a table-owning entity). And when a new lookup is added, it needs
-a test that would fail if the lookup silently returned nothing — the singular lookup's fallback
-was tested, the plural one's absence was not.
+Applied: the reference implementation now asks a different question than the code
+(`includesSubentities = YES` for table-owning entities, exact counts for the total), and the
+new lookup has a count-based test that fails on an empty result. See 9.1.
 
 ### 9.3 The rest of the outstanding list
 
-- **`RptqObject` identity.** No `-isEqual:`/`-hash:` (NSManagedObject gave objectID equality),
-  and `RptqStoreContext.m:80` keys its registry by the **requested** entity name — so the same
-  row reached as `RptqDocumentElement` and as `RptqDocumentElementLabel` faults into two
-  instances. A concrete consequence: `-save:` clears deleted rows from the registry with
-  `self.registry[row.entity]`, which misses an entry stored under a different requested name,
-  leaving a deleted object faultable. Key the registry on the row's own entity, and/or
-  implement `-isEqual:`/`-hash:` on (entity, identifier).
-- **Non-optional attribute defaults are filled at write time** (`MADStore.m`, the post-loop in
-  `writeRowForObject:`). It is `O(attributes × columns)` per row on the save path, and it
-  invents `@""` for text, which is not distinguishable from an intentionally-empty string. Core
-  Data applied defaults at insert; `insertObjectForEntity:` is the equivalent place.
-- **Notifications registered with `object: nil`** (`MADocument.m:331`, `:336`) and the handlers
-  do not filter by context (`:892`, `:898`), so any Core Data context in the process — a legacy
-  conversion in another open document, for instance — marks *every* open document
-  `needsSave`. Filter on the document's own context, or scope to the converter's.
-  `handleManagedObjectContextWillSave:` (`:903`) is registered against `object: self`, so it
-  can never fire.
-- **`closeWithCompletionHandler:` bypasses `[super …]`** (`MADocument.m`), because the
-  superclass path deadlocks on its own file-access queue. That is a real deadlock and skipping
-  super is a legitimate response, but it also skips UIDocument's file-presenter and state
-  bookkeeping. Worth confirming the document still reaches `UIDocumentStateClosed` and releases
-  its file presenter; if not, the eventual `UIDocument` conversion in Phase D inherits the
-  problem.
-- **`objectsForEntity:` sorts and allocates on every call** (`MADStoreGraph.m:74`), and
-  `MADQueryViewDataSource.m:119,499,511,526,543` calls it per accessor. Small N today; memoize
-  per load if it profiles.
-- **`layoutHeight` dropped** from the `MADSectionsLayout` projection (the old fetch had it,
-  `RptqDocumentSection+Extras.m:348,351`). Every consumer was traced — `MADSectionLayout` and
-  `MADSectionGroupLayout` read identifier, type, height, numberOfRows, visibility,
-  wrappingStyle and the `inGroup*` keys — so it appears benign. Confirm, or restore it.
-- **Test scaffolding in the shipping app.** `AppDelegate.m` gained `-UITestOpenSample` and
-  `-UITestSelectTab` hooks with hard-coded `dispatch_after` delays. Inert in production (the
-  arguments are never present), but it is test-only code in the app target; wrap it in
-  `#if DEBUG` or retire it when the UI tests can run.
+- **`RptqObject` identity — DONE.** `-isEqual:`/`-hash:` on (entity, identifier), and the
+  registry keys on the row's own entity with the same owner-table fallback on lookup. A row
+  reached by two names faults once, and `-save:`'s deletion clearing finds the entry under
+  `row.entity`.
+- **Non-optional attribute defaults are filled at write time — DONE.** The fill moved to
+  `insertObjectForEntity:`, the way Core Data applied defaults at insert; `writeRowForObject:`
+  no longer invents values, and a row that somehow lacks one fails the NOT NULL constraint
+  loudly. The save path lost the `O(attributes × columns)` per-row fill.
+- **Notifications registered with `object: nil` — DONE, with an open decision.** The handlers
+  now filter on the document's own store context, and `handleManagedObjectContextWillSave:` is
+  registered against nil like its siblings. **But the signalling is inert at both ends, for a
+  second reason beyond the scoping:** a repo-wide grep shows nothing reads
+  `MADDocumentState.needsSave` or `.contextChagned`, and `RptqStoreContext` posts no change
+  notification, so the handlers cannot fire either. The milestone-(d) item is now a
+  **decision, not a reflex:** wire the signalling end to end (post from `RptqStoreContext`,
+  read `needsSave` where it matters) **or** delete the flags and the handlers. Recorded in
+  `BUGS.md` ("The document status signalling is inert at both ends").
+- **`closeWithCompletionHandler:` bypasses `[super …]` — CONFIRMED AND PINNED, with a
+  transitional contract.** `testCloseReachesClosedStateAndReleasesTheFilePresenter` pins what
+  the bypass means today: the store-backed document never registers a file presenter
+  (UIDocument's presenter bookkeeping lives in its open/save machinery, which the portable
+  store does not drive), and `documentState` is `UIDocumentStateClosed` **from init and never
+  leaves it** — so `UIDocumentStateChangedNotification` never fires, `MADocument.m:915`'s
+  `UIDocumentStateNormal` case is dead, `MADDesignerViewController.m:961`'s
+  `documentStateChanged` and `UIManagedDocument+Extras.m:43`'s "must be closed" assertion are
+  both moot. That is an **acceptable transitional contract**: Phase D restores correct state
+  when the document moves onto `UIDocument`, and the pinned test is the record.
+- **`objectsForEntity:` sorts and allocates on every call — OPEN, low priority.** Not
+  memoized: nothing has profiled it hot. Memoize per load if it ever profiles.
+- **`layoutHeight` dropped from the `MADSectionsLayout` projection — CONFIRMED SAFE.** The
+  model attribute and its setters remain (`RptqDocument+Extras.m:291,336`); no projection
+  consumer reads it.
+- **Test scaffolding in the shipping app — DONE.** The `-UITestOpenSample` /
+  `-UITestSelectTab` hooks are wrapped in `#if DEBUG`.
 - **`MAD.momd` is now compiled into the MAD framework** so legacy conversion can always find its
   model. Correct while conversion exists; **must be removed in Phase D**, together with
   `MADStoreConverter` once no shipping document is v0. Recorded in `MAD_STORE_MIGRATION.md` §7.
