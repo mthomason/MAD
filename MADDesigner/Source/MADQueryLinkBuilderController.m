@@ -233,7 +233,7 @@
 }
 
 - (BOOL)secondFieldSet {
-	return self.secondFieldID != 0 && self.firstFieldID == self.secondFieldID == NO;
+	return self.secondFieldID != 0 && self.firstFieldID != self.secondFieldID;
 }
 
 - (void)updateRightLabelState {
