@@ -135,16 +135,18 @@ Status key:
   text styles per element per row per page, and the format path reads the same
   per row -- so at this report's scale (331k rows x 9,475 pages) that is tens of
   millions of reads, each allocating.  Reproduced headlessly on the user's own
-  document: a 4-second sample run at t=2s showed the process at 3.4 GB; `vmmap`
-  at peak showed 4.7 GB physical, 4.7 GB virtual in **Malloc Small** alone; and a
-  4 s `sample` showed 2,343 of 2,351 samples inside `drawPageAtIndex:` ->
-  `drawSection:` -> `RptqGetObject` -> `valueForUndefinedKey:` ->
-  `MADStoreAttributeNamed` -> `-[MADStoreEntity allAttributes]` ->
-  `arrayByAddingObjectsFromArray:`.  The CLI's render loop also has no per-page
-  autoreleasepool (`CLI/Source/MADCLIDocument.m:260-263`), so the garbage the
-  lookups produce accumulates across all 9,475 pages until the loop ends.  On the
-  device the same curve hits the memory limit (~8 GB) and the first page never
-  renders.
+  document: a 4 s `sample` of an export showed 2,343 of 2,351 samples inside
+  `drawPageAtIndex:` -> `drawSection:` -> `RptqGetObject` ->
+  `valueForUndefinedKey:` -> `MADStoreAttributeNamed` ->
+  `-[MADStoreEntity allAttributes]` -> `arrayByAddingObjectsFromArray:`, with
+  the bulk of the footprint in **Malloc Small**.  (A first measurement's
+  absolute peak of ~5.8 GB is not trusted -- overlapping orphaned exports were
+  running concurrently -- and the flat ~17 MB RSS in the A/B below is the
+  honest single-process number; the stacks, not the absolute figure, are the
+  evidence.)  The CLI's render loop also has no per-page autoreleasepool
+  (`CLI/Source/MADCLIDocument.m:260-263`), so the garbage the lookups produce
+  accumulates across all 9,475 pages until the loop ends.  On the device the
+  same curve hits the memory limit (~8 GB) and the first page never renders.
 - **Fix shape.**  Memoize the schema lookups: cache the flattened
   `allAttributes` / `allRelationships` per entity (compute-once after the schema
   is built), and replace the linear `MADStoreAttributeNamed` /
@@ -181,6 +183,49 @@ Status key:
   document lives in the iPhone 17 simulator's app group container as
   `Document.mad` (MySQL, `employees`, `departments` LEFT OUTER JOIN
   `dept_emp`, two elements).
+
+### Page draws run one SQLite transaction per cell, so opening a large report pegs the CPU
+- **Status:** Still open -- found 2026-10-03, fix pending
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:981`
+  (`-dataForRow:column:error:` prepares a fresh statement and steps it exactly
+  once, in autocommit, so every cell read runs an implicit
+  begin/journal-stat/lock/commit).  The caller is per cell:
+  `MAD/Source/MADPrintPageElement.m:80-84`
+  (`MADPrintPageElementTextDynamic -initWithDefinition:` asks the datasource
+  for the row value every time the element is instantiated -- dynamic,
+  data-bound elements have no value baked into the layout cache), reached
+  from `MADReportPageView -drawRect:` on the main thread.
+- **Behavior:** opening the user's large report in the app pegs the CPU at
+  100% for ~25 s drawing a single page at ~900 MB RSS, before any refresh --
+  reproduced in the simulator and sampled: all 2,908 samples inside one
+  `drawRect:` -> `drawPageAtIndex:` -> `drawSection:` ->
+  `newDocumentObject:` -> `dataForRow:column:error:` -> `sqlite3_step` ->
+  `sqlite3BtreeBeginTrans` -> `lockBtree` -> per-cell journal `stat()` /
+  `fcntl()` locks.  The viewer redraws the last page after every refresh, so
+  the same storm is the "everything freezes when you hit refresh" symptom, and
+  it is why a five-page report looks fine while this one does not: the cost
+  scales with cells drawn, not with anything the small samples exercise.
+- **Pre-existing or new?** The call pattern is zero-diff against `master`
+  (the renderer and `MADDataTableFast` are unchanged), so master's app pays
+  the same per-cell transaction; this report's scale (9,475 pages, two
+  dynamic fields, 331k rows) was never opened in the old app, so there is no
+  "worked before" measurement at this size.  Either way it is a live defect
+  now: the design's purpose is fast page scanning from the hidden Sqlite3
+  cache, and one transaction per cell defeats it.
+- **Fix shape.**  Make the per-cell read cheap in the two places the storm
+  lives, changing no results: (1) cache the prepared select statement per
+  column in `MADDataTableFast` (prepare once; bind, step, reset per call),
+  and (2) wrap each page draw in one read transaction on the select
+  connection (begin before the draw, commit after) so the per-cell implicit
+  transactions collapse into one.  The CLI export exercises the same
+  `drawPageAtIndex:` path, so its wall time (59 s after the lookup fix) is
+  the regression guard and should drop substantially.
+- **The rule this violated:** the render path must not run one SQLite
+  transaction per cell; page draws are the app's hottest loop.
+- **Reproduction:** install the DEBUG app in the iPhone 17 simulator, launch
+  with `-UITestOpenSample Document -UITestSelectTab Viewer`, and watch the
+  main thread draw the last page at 100% CPU; or `sample` the app process
+  during the peg (the stacks above are from exactly that).
 
 ### A NULL read from a source database printed as the text `<null>`, or as the epoch
 - **Status:** Fixed
