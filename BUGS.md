@@ -1529,21 +1529,27 @@ header search path.
   main and only the built string and key array cross back to the operation
   thread.  In `MADOperationRefreshInitialize -execute` the document-graph
   reads and the sort run on main and only the resolved query crosses back.
-  `MADQueryValueFromFieldController -loadPickerView` resolves the schema field
-  and its credentials (building the database connection) on main before
-  dispatching, so the global-queue block holds only plain values.  Of the
-  create-document operations, `MADOperationCreateDocumentFirstTimeSetup`
-  marshals its insert-and-save to main; `MADOperationCreateDocumentImportSchema`
-  is deliberately left on its operation thread -- the whole point of the
-  operation is a network-bound schema import whose store writes would block
-  the UI for the import's duration, and the store is otherwise quiescent
-  during document creation.  `MADQuerySampleDataField -getSql:` still reads
-  the schema field's `name`/`inTable.name` from inside the driver while the
-  sample-data query executes on that same global queue; those attributes are
-  immutable during the fetch, but it is the one residual off-main store read
-  on this path.  Chosen main-queue marshalling rather than a dedicated serial
-  store queue because the store is already documented as main-thread-owned and
-  the operations' store work is small.  No locking was added to any accessor.
+  `MADRefreshOperationReload -execute` now marshals `prepareForQuery`
+  (whose sort-descriptor walk reads the store) onto main as well; the
+  format's own layout-part reads still run on the operation thread -- they
+  are what keep the per-page UI updates flowing during the page count, and
+  the layout part is quiescent during a refresh (the open flow writes only
+  the query part).  `MADQueryValueFromFieldController -loadPickerView`
+  resolves the schema field and its credentials (building the database
+  connection) on main before dispatching, so the global-queue block holds
+  only plain values.  Of the create-document operations,
+  `MADOperationCreateDocumentFirstTimeSetup` marshals its insert-and-save to
+  main; `MADOperationCreateDocumentImportSchema` is deliberately left on its
+  operation thread -- the whole point of the operation is a network-bound
+  schema import whose store writes would block the UI for the import's
+  duration, and the store is otherwise quiescent during document creation.
+  `MADQuerySampleDataField -getSql:` still reads the schema field's
+  `name`/`inTable.name` from inside the driver while the sample-data query
+  executes on that same global queue; those attributes are immutable during
+  the fetch, but it is the one residual off-main store read on this path.
+  Chosen main-queue marshalling rather than a dedicated serial store queue
+  because the store is already documented as main-thread-owned and the
+  operations' store work is small.  No locking was added to any accessor.
 - **Where:** `MADDesigner/Source/MADOperationRefresh.m:104-118` and
   `MADDesigner/Source/MADOperationRefreshInitialize.m:64-99` (the two live
   ones), plus the same pattern in `MADQueryValueFromFieldController.m:157-159`
@@ -1571,6 +1577,35 @@ header search path.
   the main thread and pass plain values into the block.
 - **The rule this violated:** the shared store context is main-thread-owned;
   only its owning queue may touch it unless confinement is explicitly added.
+
+### The open-time reload operation hides the refresh activity indicator
+- **Status:** Fixed
+- **Now:** the viewer's `operationDidFinish:` treated any
+  `MADRefreshOperationReload` finish as reload-complete and flipped the
+  display back to active.  The reload the viewer enqueues in
+  `viewDidAppear:` is exactly that class, so when its finish landed while a
+  user-initiated refresh was in flight, the activity indicator went dark
+  mid-refresh (whether the indicator appeared at all depended on which
+  operation finished last).  The callback now skips the display update for a
+  `MADRefreshOperationReload` while `_refreshing` is set; the refresh group
+  (a `MADOperationRefreshReload`) still updates the display through the
+  first branch.  Verified with the launch hooks and the instrumented
+  formatter gate: refresh -> format runs -> per-page updates flow -> final
+  page count lands.
+- **Where:** `MADDesigner/Source/MADViewerController.m`
+  (`-operationDidFinish:`) and the reload enqueued in `-viewDidAppear:`.
+- **Behavior:** reported by the user: "the app doesn't always display the
+  refresh activity indicator," and after a refresh the reload's page-count
+  updates were not displayed.  The refresh chain itself was completing --
+  the instrumented formatter gate shows `formatDocument` running and the
+  final count landing -- but the open-time reload's late finish could mask
+  the indicator, and the whole format now completes in 1-3 s (the
+  pre-migration Core Data version took long enough that the page count was
+  visibly "analyzing the backing store").  The A/B against the pre-fix HEAD
+  (`fff8d7dff`) shows identical end state, so this is a store-migration
+  regression, not one of the four fixes' doing.
+- **The rule this violated:** the activity indicator belongs to the refresh
+  in flight; an unrelated operation's completion must not clear it.
 
 ### The value picker offers `NULL` as a value, and it is not SQL NULL
 - **Status:** Still open

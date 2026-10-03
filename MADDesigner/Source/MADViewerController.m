@@ -945,12 +945,18 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	}
 	
 	self.pageSlider.enabled = YES;
-	
-	if ([operation isKindOfClass:[MADOperationRefreshReload class]] ||
-		[operation isKindOfClass:[MADRefreshOperationReload class]]) {
-		
+
+	// The open-time reload operation (viewDidAppear:) is a MADRefreshOperationReload
+	// and finishes through this same callback.  When the user has already started a
+	// refresh, its finish must not flip the display back to active -- that hides the
+	// refresh activity indicator mid-refresh.  The refresh group (a
+	// MADOperationRefreshReload) still updates the display through the first branch.
+	BOOL reloadDisplayUpdate = [operation isKindOfClass:[MADOperationRefreshReload class]] ||
+		([operation isKindOfClass:[MADRefreshOperationReload class]] && !_refreshing);
+	if (reloadDisplayUpdate) {
+
 		_lastCacheDate = nil;
-		
+
 		__weak MADViewerController *weakSelf = self;
 		void (^updateUIBlock)(void) = ^{
 			__strong MADViewerController *strongSelf = weakSelf;
@@ -960,7 +966,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 				[strongSelf setDisplayActive];
 			}
 		};
-		
+
 		if ([NSThread isMainThread]) {
 			updateUIBlock();
 		} else {

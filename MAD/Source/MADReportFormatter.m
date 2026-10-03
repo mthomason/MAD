@@ -51,6 +51,8 @@
 #import <CoreData/NSPropertyDescription.h>
 #import <CoreData/NSEntityDescription.h>
 
+#import <os/log.h>
+
 #import <UIKit/UIPrintInteractionController.h>
 
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch(void);
@@ -367,7 +369,12 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 - (BOOL)needsFormat {
 	id <MADReportFormatterDataSource> datasource = self.datasource;
 	NSAssert(datasource != nil, @"We need a datatable way before here");
-	return self.didRefresh || (self.reportIndexes.count > 0 && self.reportLayout.count > 0) == NO || ![datasource cacheExist];
+	BOOL didRefresh = self.didRefresh;
+	BOOL cachesEmpty = (self.reportIndexes.count > 0 && self.reportLayout.count > 0) == NO;
+	BOOL cacheMissing = ![datasource cacheExist];
+	os_log_debug(OS_LOG_DEFAULT, "%s: didRefresh=%d cachesEmpty=%d cacheMissing=%d",
+				 __PRETTY_FUNCTION__, didRefresh, cachesEmpty, cacheMissing);
+	return didRefresh || cachesEmpty || cacheMissing;
 }
 
 - (void)format:(CGSize)printableSize {
@@ -375,12 +382,16 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 }
 
 - (void)format:(CGSize)printableSize contentChanged:(BOOL)contextChanged {
-	
+
 	if (contextChanged == NO || self.needsFormat) {
 		@synchronized(self) {
 			[self setLayoutSize:printableSize];
 			[self loadLayoutAndIndexesFromCache];
-			if (self.needsFormat) {
+			BOOL needsFormatNow = self.needsFormat;
+			os_log_debug(OS_LOG_DEFAULT, "%s: contextChanged=%d needsFormatNow=%d -> %@",
+						 __PRETTY_FUNCTION__, contextChanged, needsFormatNow,
+						 needsFormatNow ? @"formatDocument" : @"SKIP (no format)");
+			if (needsFormatNow) {
 				if (contextChanged) {
 					[self dropIndexes];
 				}
@@ -407,10 +418,11 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 }
 
 - (void)formatDocument {
-	
+
+	os_log_debug(OS_LOG_DEFAULT, "%s: BEGIN", __PRETTY_FUNCTION__);
 	MADocument *layout = _layout;
 	self.sections = nil;
-	
+
 	[layout resetSectionLayoutManagers];
 	
 	[self.machineState reset];
@@ -433,9 +445,10 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 	
 	[self.reportLayout endBulkInserts];
 	[self.reportIndexes endBulkInserts];
-	
+
 	[self cleanupTemporaryIndexes];
-	
+	os_log_debug(OS_LOG_DEFAULT, "%s: END pageCounter=%lu", __PRETTY_FUNCTION__,
+				 (unsigned long)self.machineState.pageCounter);
 }
 
 - (void)formatDocumentAddDetail {

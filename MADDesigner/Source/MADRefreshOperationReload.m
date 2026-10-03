@@ -26,6 +26,15 @@
 
 @implementation MADRefreshOperationReload
 
+// The portable store context is main-queue-owned.  Marshal store reads onto
+// the main queue (inline when already there) rather than taking a lock in
+// every accessor.  See BUGS.md "The refresh path reads the shared store
+// context from operation-queue threads".
+static void MADRefreshOperationReloadRunOnMain(dispatch_block_t block) {
+	if ([NSThread isMainThread]) block();
+	else dispatch_sync(dispatch_get_main_queue(), block);
+}
+
 - (instancetype)initWithDocument: (MADocument *)document
 				  viewController: (NSObject <MADOperationRefreshReloadProtocol> *)viewController {
 	if (self = [super init]) {
@@ -57,9 +66,14 @@
 	
 	
 	if (self.cancelled) return [self finish];
-	
-	[document prepareForQuery];
-	
+
+	// -readCurrentSortDescriptors walks the store (document -> query -> sort
+	// descriptors), so it runs on main like the rest of the refresh path's
+	// store reads.
+	MADRefreshOperationReloadRunOnMain(^{
+		[document prepareForQuery];
+	});
+
 	if (self.cancelled) {
 		return [self finish];
 	}
@@ -76,11 +90,15 @@
 	}
 	
 	[self ignoreFormatter: document.reportFormatter];
-	
+
 	if (self.cancelled) {
+		os_log_debug(OS_LOG_DEFAULT, "%s: CANCELLED after format -- finishing without the UI updates",
+					 __PRETTY_FUNCTION__);
 		return [self finish];
 	}
-	
+
+	os_log_debug(OS_LOG_DEFAULT, "%s: format done, dispatching updatePages/finishReload",
+				 __PRETTY_FUNCTION__);
 	MADRefreshOperationReload * __strong sself = weakself;
 	if (sself) {
 		dispatch_async(dispatch_get_main_queue(), ^{
@@ -89,9 +107,9 @@
 			[viewController operation:nil finishReload:document];
 		});
 	}
-	
+
 	document.refreshed = NO;
-	
+
 	[self finish];
 }
 

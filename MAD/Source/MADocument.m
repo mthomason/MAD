@@ -217,6 +217,8 @@ void madwarn(char *err,  const char *err2) { }
 }
 
 - (void)setRefreshed:(BOOL)refreshed {
+	os_log_debug(OS_LOG_DEFAULT, "%s: refreshed=%d formatter=%p",
+				 __PRETTY_FUNCTION__, refreshed, _reportFormatter);
 	_reportFormatter.didRefresh = refreshed;
 }
 
