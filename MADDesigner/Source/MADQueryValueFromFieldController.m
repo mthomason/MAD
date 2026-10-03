@@ -34,7 +34,6 @@
 #import <UIKit/UIWindow.h>
 #import <UIKit/UITableView.h>
 #import <UIKit/UIPickerView.h>
-#import <CoreData/NSManagedObjectContext.h>
 
 @interface MADQueryValueFromFieldController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -147,7 +146,7 @@
 - (void)loadPickerView {
 
 	RptqDatabaseSchemaField *schemaField;
-	schemaField = [_document.managedObjectContext objectWithID: _schemaFieldObjectId];
+	schemaField = [_document.storeContext objectForEntity:NSStringFromClass([RptqDatabaseSchemaField class]) identifier:_schemaFieldObjectId];
 
 	MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
 	querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
@@ -158,7 +157,7 @@
 	MADQueryValueFromFieldController * __weak weakself2 = self;
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
 		__strong MADQueryValueFromFieldController *strongself2 = weakself2;
-		RptqDatabaseSchemaField *field = [strongself2.document.managedObjectContext objectWithID: strongself2.schemaFieldObjectId];
+		RptqDatabaseSchemaField *field = [strongself2.document.storeContext objectForEntity:NSStringFromClass([RptqDatabaseSchemaField class]) identifier:strongself2.schemaFieldObjectId];
 		RptqDatabaseCredentals *userCredentals = field.inTable.inDatabase.ownedByUser;
 		
 		MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnection:userCredentals];

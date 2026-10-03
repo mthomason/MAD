@@ -20,7 +20,7 @@
 
 - (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol, MADQueryDatabaseRangeProtocol> *)query
 					 database:(MADDatabase *)database
-					  tableID:(NSManagedObjectID *)tableID;
+					  tableID:(int64_t)tableID;
 - (NSUInteger)rowCount;
 - (NSUInteger)columnCount;
 

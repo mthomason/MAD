@@ -25,10 +25,6 @@
 #import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSMapTable.h>
 
-#import <CoreData/NSExpressionDescription.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSFetchRequest.h>
 
 @interface MADQueryVisualizationModel()
 

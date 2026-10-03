@@ -7,7 +7,6 @@
 //
 
 #import "MADDesignerElementBarcodeView.h"
-#import <CoreData/NSManagedObjectContext.h>
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MADBarcodes/MTBarcode.h>
 #import <MADCocoaExtensions/MADColor.h>
@@ -16,7 +15,7 @@
 
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
-	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
+	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:self.objectID];
 	[self.displayObject loadSampleData];
 	//MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
 	//((MTBarcode *)self.displayObject).forgroundColor = color;

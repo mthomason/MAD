@@ -64,7 +64,6 @@
 #import <UIKit/UIToolbar.h>
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIViewControllerTransitioning.h>
-#import <CoreData/CoreData.h>
 
 static NSString * const MADImageBarButtonItemMadViewer8 = @"UIBarButtonItemMadViewer8";
 static NSString * const MADStoryboardIDViewerController = @"MADIdentifierStoryboardViewerViewController";

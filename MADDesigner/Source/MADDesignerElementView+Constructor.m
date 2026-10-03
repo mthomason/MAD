@@ -7,6 +7,7 @@
 //
 
 #import "MADDesignerElementView+Constructor.h"
+#import <MAD/RptqStoreContext.h>
 #import "MADDesignerElementTextView.h"
 #import "MADDesignerElementBarcodeView.h"
 #import "MADDesignerElementImageView.h"
@@ -16,8 +17,8 @@
 
 @interface MADDesignerElementView ()
 
-	@property (nonatomic, readwrite, weak) NSManagedObjectContext *managedObjectContext;
-	@property (nonatomic, readwrite, copy) NSManagedObjectID *objectID;
+	@property (nonatomic, readwrite, weak) RptqStoreContext *managedObjectContext;
+	@property (nonatomic, readwrite, assign) int64_t objectID;
 
 @end
 
@@ -43,10 +44,10 @@
 	if (elementView) {
 		
 		elementView.identifier = documentObject.identifier;
-		elementView.objectID = documentObject.objectID.copy;
+		elementView.objectID = documentObject.identifier;
 		[elementView updateWithElement:documentObject];
 		
-		elementView.managedObjectContext = documentObject.managedObjectContext;
+		elementView.managedObjectContext = documentObject.storeContext;
 		UIGestureRecognizer *tap = [MADTapGestureRecognizer newTapGestureRecognizerTapWithTarget: tapGestureDelegate
 																						  action: selector
 																						delegate: tapGestureDelegate];

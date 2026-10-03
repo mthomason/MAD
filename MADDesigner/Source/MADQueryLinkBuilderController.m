@@ -12,7 +12,6 @@
 
 #import "MADQueryLinkBuilderController.h"
 
-#import <CoreData/NSManagedObjectContext.h>
 
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UINavigationController.h>
@@ -20,6 +19,7 @@
 #import <UIKit/UILabel.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
@@ -37,11 +37,11 @@
 
 @interface MADQueryLinkBuilderController ()
 
-	@property (nonatomic, strong) NSManagedObjectID /* RptqQueryTable */ *firstTableID;
-	@property (nonatomic, strong) NSManagedObjectID /* RptqQueryTable */ *secondTableID;
+	@property (nonatomic, assign) int64_t /* RptqQueryTable */firstTableID;
+	@property (nonatomic, assign) int64_t /* RptqQueryTable */secondTableID;
 
-	@property (nonatomic, strong) NSManagedObjectID /* RptqQueryField */ *firstFieldID;
-	@property (nonatomic, strong) NSManagedObjectID /* RptqQueryField */ *secondFieldID;
+	@property (nonatomic, assign) int64_t /* RptqQueryField */firstFieldID;
+	@property (nonatomic, assign) int64_t /* RptqQueryField */secondFieldID;
 
 	@property (nonatomic, strong) IBOutlet UILabel *labelRightField;
 
@@ -105,13 +105,13 @@
 		queryLinkDelegate = self.queryLinkDelegate;
 		
 		MADocument *document = self.document;
-		NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
+		RptqStoreContext *managedObjectContext = document.storeContext;
 		
 		
 		
 		RptqQueryLinks *link;
-		RptqQueryField *firstField = [managedObjectContext objectWithID:self.firstFieldID];
-		RptqQueryField *secondField = [managedObjectContext objectWithID:self.secondFieldID];
+		RptqQueryField *firstField = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.firstFieldID];
+		RptqQueryField *secondField = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.secondFieldID];
 		link = [RptqQueryLinks newQueryLinksWithLeftField: firstField
 											   rightField: secondField
 												 joinType: self.linkType
@@ -119,7 +119,7 @@
 		[document.activeDocumentModel addQueryLink: link];
 		[document saveContext];
 
-		[queryLinkDelegate viewController: self addedQueryLink: link.objectID];
+		[queryLinkDelegate viewController: self addedQueryLink: link.identifier];
 	} else {
 		[self cancel: sender];
 	}
@@ -137,10 +137,10 @@
 }
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-									withFieldID: (NSManagedObjectID *)fieldID {
+									withFieldID: (int64_t)fieldID {
 	
-	NSManagedObjectContext *context = self.document.managedObjectContext;
-	RptqQueryField *queryField = [context objectWithID: fieldID];
+	RptqStoreContext *context = self.document.storeContext;
+	RptqQueryField *queryField = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
 	
 	[self.navigationController popToViewController: self animated: YES];
 	
@@ -150,8 +150,8 @@
 		case MADLinkLeft: {
 
 			self.tableViewCellTableFieldOne.detailTextLabel.text = tableFieldName.localizedLowercaseString;
-			self.firstTableID = queryTable.objectID;
-			self.firstFieldID = queryField.objectID;
+			self.firstTableID = queryTable.identifier;
+			self.firstFieldID = queryField.identifier;
 			
 			[self updateRightLabelState];
 
@@ -165,8 +165,8 @@
 		}
 		case MADLinkRight: {
 			self.tableViewCellTableFieldTwo.detailTextLabel.text = tableFieldName.localizedLowercaseString;
-			self.secondTableID = queryTable.objectID;
-			self.secondFieldID = queryField.objectID;
+			self.secondTableID = queryTable.identifier;
+			self.secondFieldID = queryField.identifier;
 			break;
 		}
 		default:
@@ -197,16 +197,16 @@
 }
 
 - (void)setupFieldController:(MADQueryChooseFieldController *)controller
-				excludeTable:(NSManagedObjectID *)excludeTableID {
+				excludeTable:(int64_t)excludeTableID {
 	if (controller == nil) return;
 	
 	MADocument *document = self.document;
 	controller.delegate = self;
 	controller.document = document;
 
-	if (excludeTableID != nil) {
-		NSManagedObjectContext *moc = document.managedObjectContext;
-		RptqQueryTable *excludeTable = [moc objectWithID:excludeTableID];
+	if (excludeTableID != 0) {
+		RptqStoreContext *moc = document.storeContext;
+		RptqQueryTable *excludeTable = [moc objectForEntity:NSStringFromClass([RptqQueryTable class]) identifier:excludeTableID];
 		NSString *alias = [excludeTable.alias copy];
 		NSArray <NSString *> *excludeTables = alias != nil ?
 										[[NSArray alloc] initWithObjects:alias, nil] :
@@ -229,11 +229,11 @@
 }
 
 - (BOOL)firstFieldSet {
-	return self.firstFieldID != nil;
+	return self.firstFieldID != 0;
 }
 
 - (BOOL)secondFieldSet {
-	return self.secondFieldID != nil && [self.firstFieldID isEqual:self.secondFieldID] == NO;
+	return self.secondFieldID != 0 && self.firstFieldID == self.secondFieldID == NO;
 }
 
 - (void)updateRightLabelState {

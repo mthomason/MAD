@@ -42,7 +42,6 @@
 #import <UIKit/UIActivityIndicatorView.h>
 #import <UIKit/NSStringDrawing.h>
 
-#import <CoreData/NSManagedObjectID.h>
 
 @interface MADTableController () <UICollectionViewDataSource, MADTableLayoutDelegate, MADDatabaseResultsProtocol>
 
@@ -76,7 +75,7 @@
 
 - (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol, MADQueryDatabaseRangeProtocol> *)query
 					 database:(MADDatabase *)database
-					  tableID:(NSManagedObjectID *)tableID {
+					  tableID:(int64_t)tableID {
 	
 	NSUInteger rowCount = 0;
 	NSUInteger columnCount = 0;
@@ -89,7 +88,7 @@
 		
 		MADDataTable *datatable = [MADDataTable newDataTableWithDefinition:@{
 			@(MADDataTableParametersType) : @(MADDataTableTypeVirtual),
-			@(MADDataTableParametersIdentifier) : @(tableID.URIRepresentation.absoluteString.hash)
+			@(MADDataTableParametersIdentifier) : @(tableID)
 		}];
 		self.datatable = datatable;
 		

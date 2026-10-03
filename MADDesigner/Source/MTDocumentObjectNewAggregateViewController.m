@@ -27,7 +27,6 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UILabel.h>
-#import <CoreData/NSManagedObjectID.h>
 
 @interface MTDocumentObjectNewAggregateViewController () <MADAggregateFunctionsViewControllerDelegate, MADGroupByViewControllerDelegate, MADQueryChooseFieldProtocol>
 
@@ -40,9 +39,9 @@
 #pragma mark - MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-									withFieldID: (NSManagedObjectID *)fieldID {
-	self.fieldObjectID = fieldID.copy;
-	RptqQueryField *field = [self.document.managedObjectContext objectWithID: fieldID];
+									withFieldID: (int64_t)fieldID {
+	self.fieldObjectID = fieldID;
+	RptqQueryField *field = [self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
 	self.tableViewCellAggregateInput.detailTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Field: %@", @"Field: %@"), [field display]];
 	[self updateDisplay];
 	[self.navigationController popViewControllerAnimated:YES];
@@ -168,10 +167,10 @@
 	} else if ([action.identifier isEqualToString:@"MTSegueAggregateFieldSave"]) {
 		
 		MADQueryChooseFieldController *dynamicFieldController = action.sourceViewController;
-		self.fieldObjectID = dynamicFieldController.queryFieldID.copy;
+		self.fieldObjectID = dynamicFieldController.queryFieldID;
 		
 		NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
-		RptqQueryField *queryField = [self.document.managedObjectContext objectWithID:self.fieldObjectID];
+		RptqQueryField *queryField = [self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.fieldObjectID];
 		NSString *display = [queryField display];
 		NSString *detailtext = [[NSString alloc] initWithFormat:formatString, display];
 		_tableViewCellAggregateInput.detailTextLabel.text = detailtext;
@@ -220,12 +219,12 @@
 												   groupType: self.aggregateGroupByType
 												 groupNumber: self.groupTypeSectionNumber];
 	}
-	self.navigationItem.rightBarButtonItem.enabled = self.fieldObjectID != nil;
+	self.navigationItem.rightBarButtonItem.enabled = self.fieldObjectID != 0;
 }
 
 - (void)updateField {
-	if (self.fieldObjectID != nil) {
-		RptqQueryField *fieldObject = [self.document.managedObjectContext objectWithID:self.fieldObjectID];
+	if (self.fieldObjectID != 0) {
+		RptqQueryField *fieldObject = [self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.fieldObjectID];
 		self.tableViewCellAggregateInput.detailTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Field: %@", @"Field: %@"), [fieldObject display]];
 	}
 }
@@ -301,7 +300,7 @@
 	self.aggregateFunctionType = aggregateDocumentObject.functionType;
 	self.aggregateGroupByType = aggregateDocumentObject.groupType;
 	self.groupTypeSectionNumber = aggregateDocumentObject.groupNumber;
-	self.fieldObjectID = aggregateDocumentObject.aggregateField.objectID.copy;
+	self.fieldObjectID = aggregateDocumentObject.aggregateField.identifier;
 	self.editmode = YES;
 }
 - (IBAction)save:(id)sender {

@@ -13,10 +13,10 @@
 
 @protocol MADViewControllerBarcodeDelegate
 
-    - (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID
+    - (void)didUpdateBarcodeWithObjectID:(int64_t)barcodeObjectID
                            barcodeObject:(MTBarcode *)barcode
-                            withFieldOne:(NSManagedObjectID /* RptqQueryField */ *)fieldOne
-                             andFieldTwo:(NSManagedObjectID /* RptqQueryField */ *)fieldTwo;
+                            withFieldOne:(int64_t /* RptqQueryField */)fieldOne
+                             andFieldTwo:(int64_t /* RptqQueryField */)fieldTwo;
 
 @end
 

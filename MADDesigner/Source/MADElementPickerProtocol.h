@@ -21,7 +21,7 @@
 - (void)insertDocumentObjectDataField:(RptqQueryField *)field;
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
 											   inputType:(MTAggregateFunctionInputType)inputType
-											 inputObject:(NSManagedObjectID *)inputObject
+											 inputObject:(int64_t)inputObject
 											   groupType:(MTAggregateGroupByType)groupType
 											 groupNumber:(NSNumber *)groupNumber;
 

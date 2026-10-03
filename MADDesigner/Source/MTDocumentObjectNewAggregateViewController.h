@@ -24,7 +24,7 @@
 
 	- (void)didUpdateggregateFunctionWithType:(MTAggregateFunctionType)functionType
 									inputType:(MTAggregateFunctionInputType)inputType
-								  inputObject:(NSManagedObjectID *)objectID
+								  inputObject:(int64_t)objectID
 									groupType:(MTAggregateGroupByType)groupType
 								  groupNumber:(int32_t)groupNumber;
 
@@ -42,7 +42,7 @@
 	@property (nonatomic, assign) MTAggregateFunctionType aggregateFunctionType;
 	@property (nonatomic, assign) MTAggregateGroupByType aggregateGroupByType;
 	@property (nonatomic, assign) int32_t groupTypeSectionNumber;
-	@property (nonatomic, copy) NSManagedObjectID *fieldObjectID;
+	@property (nonatomic, assign) int64_t fieldObjectID;
 
 	@property (nonatomic, assign) BOOL editmode;
 

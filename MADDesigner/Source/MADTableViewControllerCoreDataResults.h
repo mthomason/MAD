@@ -9,12 +9,14 @@
 #ifndef Reports_MADTableViewControllerCoreDataResults_h
 #define Reports_MADTableViewControllerCoreDataResults_h
 
-#import <CoreData/NSFetchedResultsController.h>
 #import <UIKit/UITableViewController.h>
 
-@interface MADTableViewControllerCoreDataResults : UITableViewController <NSFetchedResultsControllerDelegate>
+// Was an NSFetchedResultsController-backed table controller.  The store has no live
+// query, so it now holds a plain array that subclasses fill and reloads on change
+// (MAD_STORE_PHASE_C.md §6).
+@interface MADTableViewControllerCoreDataResults : UITableViewController
 
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSArray *results;
 @property (nonatomic, assign) BOOL suspendAutomaticTrackingOfChangesInManagedObjectContext;
 
 - (void)performFetch;

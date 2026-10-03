@@ -7,7 +7,6 @@
 //
 
 #import "MADDesignerElementTextView.h"
-#import <CoreData/NSManagedObjectContext.h>
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/NSParagraphStyle.h>
 #import <MAD/UIFontDescriptor+MADAdditions.h>
@@ -35,7 +34,7 @@
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
-	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
+	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:self.objectID];
 	[self.displayObject drawWithRect: [element innerRect]
 							 options: NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
 							 context: nil];

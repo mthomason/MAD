@@ -59,6 +59,7 @@
 #import <MADFoundation/MADStringUtilities.h>
 
 #import <MAD/MADReportSection.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADocument.h>
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MADSectionLayoutAttributes.h>
@@ -102,11 +103,24 @@
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/UIPopoverPresentationController.h>
 
-#import <CoreData/NSEntityDescription.h>
 #import <CoreData/NSManagedObjectContext.h>
+#import <MAD/RptqObject.h>
 
 #import <math.h>
 #import <asl.h>
+
+// The portable store has no per-object change tracking yet; the change-notification
+// handlers below are dormant until a later milestone wires them.  Treat every attribute
+// as changed so they stay correct if they are ever delivered.
+@interface RptqObject (MADDesignerViewControllerChangeShim)
+- (NSDictionary<NSString *, id> *)changedValues;
+@end
+
+@implementation RptqObject (MADDesignerViewControllerChangeShim)
+- (NSDictionary<NSString *, id> *)changedValues {
+	return self.backingObject.values;
+}
+@end
 
 typedef NS_ENUM(NSUInteger, MTToolboxType) {
 	MTToolboxTypeElement = 2,
@@ -177,7 +191,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 @property (nonatomic, copy) NSNumber *objectIdEditBarcode;     //Never set a value... never used????
 @property (nonatomic, copy) NSNumber *objectIdEditImage;
 @property (nonatomic, copy) NSNumber *barcodeToEditObjectID;
-@property (nonatomic, copy) NSManagedObjectID *aggregateToEditObjectID;
+@property (nonatomic, assign) int64_t aggregateToEditObjectID;
 
 @property (nonatomic, weak) UIGestureRecognizer *strayTouchGesture;
 @property (nonatomic, weak) UILabel *lastSelectedLabel;
@@ -541,7 +555,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	[self.view addSubview:self.statusLabelZoomScale];
 	[self updateDisplayDetailZoomValue];
 	
-	MADReportSectionsDataSource *datasource = [[MADReportSectionsDataSource alloc] initWithManagedObjectContext:maDocument.managedObjectContext];
+	MADReportSectionsDataSource *datasource = [[MADReportSectionsDataSource alloc] initWithManagedObjectContext:maDocument.storeContext];
 	datasource.eventDelegate = self;
 	[datasource refreshData];
 	self.reportSectionDatasource = datasource;
@@ -965,11 +979,9 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		  newPageAfter:(BOOL)newPageAfter {
 	
 	NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
-	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
-	private.parentContext = self.document.managedObjectContext;
-	[private performBlock:^{
-		
-		RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: private];
+	RptqStoreContext *private = self.document.storeContext;
+
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: private];
 		RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
 		RptqQuery *query =  database.hasQueries.anyObject;
 		
@@ -977,47 +989,39 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 															  withNumberOfGroups: query.hasQueryGroups.count];
 		
 		[section setProducesFormFeed: newPageAfter];
-		if ([private hasChanges]) {
-			NSError *error = NULL;
-			BOOL saved = [private save:&error];
-			if (!saved && error != nil) {
-				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
-			}
+		NSError *error = NULL;
+		BOOL saved = [private save:&error];
+		if (!saved && error != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
 		}
-	}];
-	
+
 }
 
 - (void)sectionLayoutDidUpdateVisibility:(BOOL)isVisible {
 	
 	NSInteger selectedSectionNumber = self.lastSelectedSectionControlPanel;
-	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	private.parentContext = self.document.managedObjectContext;
+	RptqStoreContext *private = self.document.storeContext;
 	NSDictionary <NSNumber *, MADDesignerSectionView *> *sectionViews = self.view.scroller.container.sectionViews;
-	[private performBlock:^{
-		
-		RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: private];
+
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: private];
 		RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
 		RptqQuery *query =  database.hasQueries.anyObject;
 		
 		RptqDocumentSection *section = [document documentSectionForSelectedIndex: (NSUInteger)selectedSectionNumber
 															  withNumberOfGroups: query.hasQueryGroups.count];
 		section.visibility = [NSNumber numberWithBool:isVisible];
-		
+
 		NSNumber *key = @(section.identifier);
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			MADDesignerSectionView *documentSectionView = sectionViews[key];
 			documentSectionView.visible = isVisible;
 		}];
-		
-		if ([private hasChanges]) {
-			NSError *error = NULL;
-			BOOL saved = [private save:&error];
-			if (!saved && error != nil) {
-				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
-			}
+
+		NSError *error = NULL;
+		BOOL saved = [private save:&error];
+		if (!saved && error != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
 		}
-	}];
 }
 
 //FIXME: Unused... used to allow user to change the height of the sections.
@@ -1031,26 +1035,16 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	UICollectionView *documentSectionView = [self getSectionViewForSectionID: section.identifier];
 	CGSize collectionViewContentSize = [documentSectionView.collectionViewLayout collectionViewContentSize];
 	[section setInterfaceHeight: collectionViewContentSize.height];
-	
-	if ([section.managedObjectContext hasChanges]) {
-		NSError *error = NULL;
-		BOOL saved = [section.managedObjectContext save:&error];
-		if (!saved && error != nil) {
-			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
-		}
-	}
-	
+
 	UICollectionView *collectionView = self.view.scroller.container.sectionViews[@(section.identifier)];
 	[collectionView.backgroundView setNeedsDisplay];
 	[documentSectionView.collectionViewLayout invalidateLayout];
 	[section setInterfaceHeight: collectionViewContentSize.height];
-	
-	if ([section.managedObjectContext hasChanges]) {
-		NSError *error = NULL;
-		BOOL saved = [section.managedObjectContext save:&error];
-		if (!saved && error != nil) {
-			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
-		}
+
+	NSError *error = NULL;
+	BOOL saved = [section.storeContext save:&error];
+	if (!saved && error != nil) {
+		os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
 	}
 	
 	[self.view setNeedsUpdateConstraints];
@@ -1074,8 +1068,8 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		// No change... do nothing
 	} else if ((int64_t)numberOfRows > section.numberOfRows) {
 		
-		RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDocumentSectionRows class])
-																				inManagedObjectContext: doc.managedObjectContext];
+		RptqDocumentSectionRows *newRowToAppend = (RptqDocumentSectionRows *)[doc.storeContext insertObjectForEntity:NSStringFromClass([RptqDocumentSectionRows class])
+																										   identifier: 0];
 		NSArray *hasRowsArray = section.hasRows.array;
 		NSMutableOrderedSet *hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
 		[[NSMutableOrderedSet alloc] init];
@@ -1098,17 +1092,15 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	}
 	
 	section.numberOfRows = numberOfRows;
-	NSManagedObjectID *sectionKey = section.objectID.copy;
+	NSNumber *sectionKey = @(section.identifier);
 	UICollectionView *collectionView = self.view.scroller.container.sectionViews[sectionKey];
 	MADDesignerSectionBackground *backgroundView = (MADDesignerSectionBackground *)collectionView.backgroundView;
 	[backgroundView setNumberOfRowsInBackground:numberOfRows];
 	
-	if ([doc.managedObjectContext hasChanges]) {
-		NSError *error = NULL;
-		[doc.managedObjectContext save:&error];
-		if (error != nil) {
-			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
-		}
+	NSError *error = NULL;
+	[doc.storeContext save:&error];
+	if (error != nil) {
+		os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
 	}
 	[doc updateChangeCount:UIDocumentChangeDone];
 	[doc autosaveWithCompletionHandler:^(BOOL success) {
@@ -1177,7 +1169,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 	NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
 	
-	for (NSManagedObject *updatedObject in updatedObjects) {
+	for (RptqObject *updatedObject in updatedObjects) {
 		if ([updatedObject isKindOfClass:[RptqTextStyle class]]) {
 			RptqTextStyle *updatedTextStyle = (RptqTextStyle *)updatedObject;
 			if (updatedTextStyle.inElement != nil) {
@@ -1271,7 +1263,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		os_log_info(GetDesignerLog(), "No updated objects in context save notification.");
 		return;
 	}
-	for (NSManagedObject *object in updatedObjects) {
+	for (RptqObject *object in updatedObjects) {
 		if ([object isKindOfClass:[RptqDocumentElement class]]) {
 			MADDesignerElementView *elementView = [self elementViewForManagedObject:(RptqDocumentElement *)object];
 			[elementView updateForManagedObjectContent:notification.object];
@@ -1481,7 +1473,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 - (MADPrintPageElementType)objectTypeRepresentedByCell:(MADCellElement *)cell {
 	RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: cell.identifier
-																	   fromObjectContext: _document.managedObjectContext];
+																	   fromObjectContext: _document.storeContext];
 	return element.type;
 }
 
@@ -1495,13 +1487,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 - (void)editDocumentObjectRepresentedByCell:(MADCellElement *)cell {
 	
-	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+	RptqStoreContext *private = self.document.storeContext;
 	int64_t elementID = cell.identifier;
-	private.parentContext = self.document.managedObjectContext;
-	
-	[private performBlock:^{
-		
-		RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: elementID
+
+	RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: elementID
 																				  fromObjectContext: private];
 		RptqDocumentSection *inSection = documentObject.inSectionRow.inSection;
 		int64_t sectionID = inSection.identifier;
@@ -1511,8 +1500,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 			MADDesignerSectionView *designerSectionView = [self getSectionViewForSectionID:sectionID];
 			int64_t designerSectionViewID = designerSectionView.identifier;
 			
-			[private performBlock:^{
-				RptqDocumentSection *section = [RptqDocumentSection newDocumentSectionWithIdentifier: designerSectionViewID
+			RptqDocumentSection *section = [RptqDocumentSection newDocumentSectionWithIdentifier: designerSectionViewID
 																				   fromObjectContext: private];
 				BOOL found = NO;
 				
@@ -1539,7 +1527,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 								dispatch_async(dispatch_get_main_queue(), ^{
 									NSNumber *objectID  = @(objectToEdit.identifier);
 									[self editDocumentObjectAggregateWithID: objectID
-																   objectID: objectToEdit.objectID];
+																   objectID: objectToEdit.identifier];
 								});
 								break;
 							}
@@ -1582,20 +1570,17 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 						}
 					}
 				}
-			}];
-			
+
 		});
-		
-	}];
-	
+
 }
 
 #pragma mark MADCellElement Helpers
 
 - (void)editDocumentObjectAggregateWithID:(NSNumber *)identifier
-								 objectID:(NSManagedObjectID *)objectID {
+								 objectID:(int64_t)objectID {
 	
-	self.aggregateToEditObjectID = objectID.copy;
+	self.aggregateToEditObjectID = objectID;
 	_editAggregate = YES;
 	
 	__weak MADDesignerViewController *weakself = self;
@@ -1610,7 +1595,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 		[MADThemeManager applyAppearanceToNavigationController:navigation traitCollection:self.traitCollection];
 		
 		MADocument *document = strongself.document;
-		RptqDocumentElementAggregate *aggregateToEdit = [document.managedObjectContext objectWithID:objectID];
+		RptqDocumentElementAggregate *aggregateToEdit = (RptqDocumentElementAggregate *)[document.storeContext objectForEntity:NSStringFromClass([RptqDocumentElementAggregate class]) identifier:objectID];
 		
 		MTDocumentObjectNewAggregateViewController *aggregateViewController = navigation.viewControllers.firstObject;
 		aggregateViewController.document = document;
@@ -1659,7 +1644,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 		barcodeViewController.delegate = strongself;
 		barcodeViewController.preferredContentSize = sizePopoverFonts();
 		barcodeViewController.modalPresentationStyle = UIModalPresentationPopover;
-		barcodeViewController.bartcodeToEditObjectID = objectID.copy;
+		barcodeViewController.bartcodeToEditObjectID = objectID.longLongValue;
 		
 		UIPopoverPresentationController *popoverController = barcodeViewController.popoverPresentationController;
 		popoverController.delegate = strongself;
@@ -1695,7 +1680,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 }
 
 - (void)editDocumentObjectImage:(RptqDocumentElement *)object {
-	self.objectIdEditImage = object.objectID.copy;
+	self.objectIdEditImage = @(object.identifier);
 }
 
 - (void)editDocumentObjectLabelDynamic:(RptqDocumentElement *)object {
@@ -1735,8 +1720,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 		textField.clearButtonMode = UITextFieldViewModeAlways;
 	}];
 	
-	NSManagedObjectContext *context = object.managedObjectContext;
-	NSManagedObjectID *objectID = [object.objectID copy];
+	RptqStoreContext *context = object.storeContext;
+	int64_t objectID = object.identifier;
 
 	__weak MADDesignerViewController *weakSelf = self;
 	[alert addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Change", @"Change")
@@ -1745,22 +1730,17 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 		__strong MADDesignerViewController *strongSelf = weakSelf;
 		if (!strongSelf) return;
 
-		NSError *fetchError = nil;
-		RptqDocumentElementLabel *label = [context existingObjectWithID:objectID error:&fetchError];
-		if (fetchError != nil) {
-			os_log_error(GetDesignerLog(), "%s: %@", __PRETTY_FUNCTION__, fetchError);
-		} else if (label && !fetchError) {
+		RptqDocumentElementLabel *label = (RptqDocumentElementLabel *)[context objectForEntity:NSStringFromClass([RptqDocumentElementLabel class]) identifier:objectID];
+		if (label != nil) {
 			label.text = [alert.textFields.firstObject.text copy];
-			if ([context hasChanges]) {
-				NSError *saveError = nil;
-				if (![context save:&saveError]) {
-					os_log_error(GetDesignerLog(), "%s: Error saving context %@", __PRETTY_FUNCTION__, saveError);
-				} else {
-					MADDesignerElementView *elementView = [strongSelf elementViewForManagedObject:label];
-					if (elementView) {
-						[elementView updateWithElement:label];
-						[elementView setNeedsDisplay];
-					}
+			NSError *saveError = nil;
+			if (![context save:&saveError]) {
+				os_log_error(GetDesignerLog(), "%s: Error saving context %@", __PRETTY_FUNCTION__, saveError);
+			} else {
+				MADDesignerElementView *elementView = [strongSelf elementViewForManagedObject:label];
+				if (elementView) {
+					[elementView updateWithElement:label];
+					[elementView setNeedsDisplay];
 				}
 			}
 		} else {
@@ -1778,28 +1758,22 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 #pragma mark -
 #pragma mark - MADViewControllerBarcodeDelegate
 
-- (void)didUpdateBarcodeWithObjectID:(NSManagedObjectID *)barcodeObjectID
+- (void)didUpdateBarcodeWithObjectID:(int64_t)barcodeObjectID
 					   barcodeObject:(MTBarcode *)barcode
-						withFieldOne:(NSManagedObjectID /* RptqQueryField */ *)fieldOne
-						 andFieldTwo:(NSManagedObjectID /* RptqQueryField */ *)fieldTwo {
+						withFieldOne:(int64_t /* RptqQueryField */)fieldOne
+						 andFieldTwo:(int64_t /* RptqQueryField */)fieldTwo {
 	
-	UIManagedDocument *document = self.document;
-	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	private.parentContext = document.managedObjectContext;
-	
-	NSManagedObjectID *barcodeToEditObjectID = barcodeObjectID.copy;
-	[private performBlock:^{
-		
-		RptqDocumentElementBarcode *barcodeToEdit = [private objectWithID:barcodeToEditObjectID];
-		[barcodeToEdit updateWithBarcode: barcode field1ID: fieldOne field2ID: fieldTwo];
-		if ([private hasChanges]) {
-			NSError *error = NULL;
-			[private save:&error];
-			if (error != nil) {
-				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
-			}
-		}
-	}];
+	MADocument *document = self.document;
+	RptqStoreContext *private = document.storeContext;
+	int64_t barcodeToEditObjectID = barcodeObjectID;
+
+	RptqDocumentElementBarcode *barcodeToEdit = (RptqDocumentElementBarcode *)[private objectForEntity:NSStringFromClass([RptqDocumentElementBarcode class]) identifier:barcodeToEditObjectID];
+	[barcodeToEdit updateWithBarcode: barcode field1ID: fieldOne field2ID: fieldTwo];
+	NSError *error = NULL;
+	[private save:&error];
+	if (error != nil) {
+		os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
+	}
 	[document updateChangeCount: UIDocumentChangeDone];
 }
 
@@ -1808,11 +1782,11 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 - (void)didUpdateggregateFunctionWithType: (MTAggregateFunctionType)functionType
 								inputType: (MTAggregateFunctionInputType)inputType
-							  inputObject: (NSManagedObjectID *)objectID
+							  inputObject: (int64_t)objectID
 								groupType: (MTAggregateGroupByType)groupType
 							  groupNumber: (int32_t)groupNumber {
-	UIManagedDocument *document = self.document;
-	RptqDocumentElementAggregate *aggregateToEdit = [document.managedObjectContext objectWithID: self.aggregateToEditObjectID];
+	MADocument *document = self.document;
+	RptqDocumentElementAggregate *aggregateToEdit = (RptqDocumentElementAggregate *)[document.storeContext objectForEntity:NSStringFromClass([RptqDocumentElementAggregate class]) identifier: self.aggregateToEditObjectID];
 	[aggregateToEdit updateAggregateFunctionWithFunctionType: functionType
 												   inputType: MTAggregateFunctionInputTypeField
 												   groupType: groupType
@@ -1825,19 +1799,17 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 #pragma mark - MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-									withFieldID: (NSManagedObjectID *)fieldID {
+									withFieldID: (int64_t)fieldID {
 	
-	NSManagedObjectContext *context = self.document.managedObjectContext;
-	RptqQueryField *field = [context objectWithID: fieldID];
+	RptqStoreContext *context = self.document.storeContext;
+	RptqQueryField *field = (RptqQueryField *)[context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier: fieldID];
 	RptqDocumentElementLabelDataField *documentObject = [RptqDocumentElementLabelDataField newDocumentElementWithIdentifier: field.identifier
 																										  fromObjectContext: context];
 	documentObject.referencesQueryField = field;
-	if ([documentObject.managedObjectContext hasChanges]) {
-		NSError *error = NULL;
-		BOOL saved = [documentObject.managedObjectContext save:&error];
-		if (!saved && error != nil) {
-			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
-		}
+	NSError *error = NULL;
+	BOOL saved = [documentObject.storeContext save:&error];
+	if (!saved && error != nil) {
+		os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
 	}
 }
 
@@ -1866,7 +1838,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	
 	
 	RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID
-																			  fromObjectContext: document.managedObjectContext];
+																			  fromObjectContext: document.storeContext];
 
 	CGFloat contextScale = self.view.scroller.zoomScale * self.view.scroller.traitCollection.displayScale;
 	NSString *resuseId = [MADCellElement reuseIdentifier];
@@ -2135,7 +2107,7 @@ didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
 	[self setDisplayActive];
 	[self insertDocumentObjectWithDefination: @{
 		MTDocumentObjectDefinationType: [NSNumber numberWithShort:MADPrintPageElementTypeLabelDynamic],
-		MTDocumentObjectDefinationObject: field.objectID,
+		MTDocumentObjectDefinationObject: @(field.identifier),
 	}];
 	self.hidesStatusBar = NO;
 	[self dismissViewControllerAnimated:YES completion:nil];
@@ -2143,7 +2115,7 @@ didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
 
 - (void)insertDocumentObjectNewAggregateFunctionWithType:(MTAggregateFunctionType)functionType
 											   inputType:(MTAggregateFunctionInputType)inputType
-											 inputObject:(NSManagedObjectID *)inputObject
+											 inputObject:(int64_t)inputObject
 											   groupType:(MTAggregateGroupByType)groupType
 											 groupNumber:(NSNumber *)groupNumber {
 	[self setDisplayActive];
@@ -2151,7 +2123,7 @@ didEndDisplayingSupplementaryView:(UICollectionReusableView *)view
 		MTDocumentObjectDefinationAggregateType: [NSNumber numberWithShort: functionType],
 		MTDocumentObjectDefinationAggregatePivotNumber: groupNumber,
 		MTDocumentObjectDefinationAggregatePivotType: [NSNumber numberWithShort: groupType],
-		MTDocumentObjectDefinationAggregateObjectId: inputObject,
+		MTDocumentObjectDefinationAggregateObjectId: @(inputObject),
 		MTDocumentObjectDefinationAggregateFunctionInputType: [NSNumber numberWithShort: inputType],
 	};
 	
@@ -2232,7 +2204,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	MADocument *document = self.document;
 	NSNumber *identifier = @(collectionView.identifier);
 	MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[identifier];
-	NSManagedObjectContext *objectContext = document.managedObjectContext;
+	RptqStoreContext *objectContext = document.storeContext;
 	for (MADSectionLayoutAttributes *attributes in layoutManager.items.allValues) {
 		RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: attributes.objectID
 																				  fromObjectContext: objectContext];
@@ -2282,7 +2254,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	
 	MADDesignerElementView *piece = ((MADDesignerElementView *)gestureRecognizer.view);
 	RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: piece.identifier
-																	   fromObjectContext: _document.managedObjectContext];
+																	   fromObjectContext: _document.storeContext];
 	
 	CGSize currentSize = element.sizeContentView; // Get the current size from the model
 	
@@ -2324,12 +2296,10 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	}
 	
 	gestureRecognizer.scale = 1.0; // Reset scale for continuous gestures
-	if ([element.managedObjectContext hasChanges]) {
-		NSError *error = nil;
-		BOOL saved = [element.managedObjectContext save:&error];
-		if (!saved && error != nil) {
-			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
-		}
+	NSError *error = nil;
+	BOOL saved = [element.storeContext save:&error];
+	if (!saved && error != nil) {
+		os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
 	}
 }
 
@@ -2440,7 +2410,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 }
 
 - (void)saveDynamicLabel:(MADQueryChooseFieldController *)viewController {
-	NSManagedObjectID *objectID = [viewController.queryFieldID copy];
+	NSNumber *objectID = @(viewController.queryFieldID);
 	NSNumber *keyDynamic = [[NSNumber alloc] initWithShort: MADPrintPageElementTypeLabelDynamic];
 	NSDictionary *definations = [[NSDictionary alloc] initWithObjectsAndKeys: keyDynamic, MTDocumentObjectDefinationType, objectID, MTDocumentObjectDefinationObject, nil];
 	
@@ -2450,11 +2420,11 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 
 - (void)saveAggregateLabel:(MTDocumentObjectNewAggregateViewController *)viewController {
 	
-	if (_editAggregate && _aggregateToEditObjectID != nil) {
+	if (_editAggregate && _aggregateToEditObjectID != 0) {
 		
 		if (viewController.fieldObjectID != nil) {
-			UIManagedDocument *document = self.document;
-			RptqDocumentElementAggregate *aggregateToEdit = [document.managedObjectContext objectWithID: _aggregateToEditObjectID];
+			MADocument *document = self.document;
+			RptqDocumentElementAggregate *aggregateToEdit = (RptqDocumentElementAggregate *)[document.storeContext objectForEntity:NSStringFromClass([RptqDocumentElementAggregate class]) identifier: _aggregateToEditObjectID];
 			[aggregateToEdit updateAggregateFunctionWithFunctionType: viewController.aggregateFunctionType
 														   inputType: MTAggregateFunctionInputTypeField
 														   groupType: viewController.aggregateGroupByType
@@ -2481,10 +2451,10 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 - (void)saveBarcodeLabel:(MTViewControllerBarcode *)viewController {
 	
 	if (_objectIdEditBarcode  != nil) {
-		UIManagedDocument *document = self.document;
+		MADocument *document = self.document;
 		MTBarcode *barcode = viewController.barcode;
 		
-		NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
+		RptqStoreContext *managedObjectContext = document.storeContext;
 		RptqDocumentElementBarcode *object = [RptqDocumentElementBarcode newDocumentElementWithIdentifier: _objectIdEditBarcode.longLongValue
 																						fromObjectContext: managedObjectContext];
 		[object updateWithBarcode: barcode
@@ -2500,14 +2470,14 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		defination[MTDocumentObjectDefinationType] = type;
 		defination[MTDocumentObjectDefinationObject] = viewController.barcode;
 		
-		NSManagedObjectID *queryField1ID = viewController.queryField1ID;
-		if (queryField1ID != nil) {
-			defination[MTDocumentObjectDefinationField1] = [queryField1ID copy];
+		int64_t queryField1ID = viewController.queryField1ID;
+		if (queryField1ID != 0) {
+			defination[MTDocumentObjectDefinationField1] = @(queryField1ID);
 		}
-		
-		NSManagedObjectID *queryField2ID = viewController.queryField2ID;
-		if (queryField2ID != nil) {
-			defination[MTDocumentObjectDefinationField2] = [queryField2ID copy];
+
+		int64_t queryField2ID = viewController.queryField2ID;
+		if (queryField2ID != 0) {
+			defination[MTDocumentObjectDefinationField2] = @(queryField2ID);
 		}
 		[self insertDocumentObjectWithDefination: defination];
 		
@@ -2636,7 +2606,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	NSNumber *identifier = [[NSNumber alloc] initWithLongLong:collectionView.identifier];
 	MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[identifier];
 	
-	NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
+	RptqStoreContext *managedObjectContext = document.storeContext;
 	
 	__weak MADDesignerViewController *weakSelf = self;
 	__block CGRect newElementFrame = CGRectZero;
@@ -2652,16 +2622,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		
 		RptqDocumentElement *element = [bgRptqDocument addDocumentObject: documentObjectDefination
 													managedObjectContext: managedObjectContext];
-		
-		NSArray *objects = [[NSArray alloc] initWithObjects:element, nil];
-		
-		NSError *error = nil;
-		BOOL objtainedPermanentIDs = [managedObjectContext obtainPermanentIDsForObjects: objects
-																				  error: &error];
-		if (!objtainedPermanentIDs && error != nil) {
-			os_log_error(GetDesignerLog(), "Error getting permanent IDs: %@" , error.localizedDescription);
-		}
-		
+
 		NSIndexPath *path = [NSIndexPath indexPathForItem: (NSInteger)layoutManager.items.count
 												inSection: 0];
 		newElementPath = path;
@@ -2679,14 +2640,12 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		
 		[collectionView insertItemsAtIndexPaths: indexPathsInserted];
 		
-		if ([managedObjectContext hasChanges]) {
-			NSError *saveError = nil;
-			BOOL saved = [managedObjectContext save:&saveError];
-			if (!saved && saveError != nil) {
-				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
-			}
+		NSError *saveError = nil;
+		BOOL saved = [managedObjectContext save:&saveError];
+		if (!saved && saveError != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
 		}
-		
+
 		layoutAttribute.objectID = element.identifier;
 		[layoutManager addItem:layoutAttribute];
 		[layoutManager layout];
@@ -2738,15 +2697,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	NSNumber *objectId = @(cell.identifier);
 	
 	MADocument *document = _document;
-	NSFetchRequest <__kindof RptqDocumentElement *> *fetchElement = [RptqDocumentElement fetchRequestElement:cell.identifier];
-	NSError *error = nil;
-	NSArray *elements = [document.managedObjectContext executeFetchRequest: fetchElement
-																	 error: &error];
-	if (error != nil) {
-		os_log_error(GetDesignerLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
-	}
-	
-	__kindof RptqDocumentElement *element = elements.firstObject;
+	__kindof RptqDocumentElement *element = [document.storeContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:cellIdentifier];
 	MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:element.inSectionRow.inSection];
 	
 	NSNumber *sectionIdentifier = [[NSNumber alloc] initWithLongLong:sectionView.identifier];
@@ -2771,14 +2722,12 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		[strongSelf redrawAllElementViewsInCollectionView:sectionView];
 		MADocument *doc = strongSelf.document;
 		RptqDocumentElement *elementB = [RptqDocumentElement newDocumentElementWithIdentifier:cellIdentifier
-																			fromObjectContext:doc.managedObjectContext];
-		[doc.managedObjectContext deleteObject:elementB];
-		if ([doc.managedObjectContext hasChanges]) {
-			NSError *saveError = NULL;
-			BOOL saved = [doc.managedObjectContext save:&saveError];
-			if (!saved && saveError != nil) {
-				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
-			}
+																			fromObjectContext:doc.storeContext];
+		[doc.storeContext deleteObject:elementB error:NULL];
+		NSError *saveError = NULL;
+		BOOL saved = [doc.storeContext save:&saveError];
+		if (!saved && saveError != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
 		}
 	}];
 }
@@ -2821,14 +2770,12 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		_sectionSettingsVisible = NO;
 		[self dismissViewControllerAnimated: YES completion: nil];
 		[self.view.scroller.container removeBorderFromAllSectionViews];
-		
+
 		__strong MADocument *document = self.document;
-		if ([document.managedObjectContext hasChanges]) {
-			NSError *saveError = nil;
-			BOOL saved = [document.managedObjectContext save:&saveError];
-			if (!saved && saveError != nil) {
-				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
-			}
+		NSError *saveError = nil;
+		BOOL saved = [document.storeContext save:&saveError];
+		if (!saved && saveError != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
 		}
 	}
 }
@@ -2838,14 +2785,12 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		_toolboxVisible = NO;
 		[self dismissViewControllerAnimated: YES completion: nil];
 		[self deselectAllElementsAnimated:YES];
-		
+
 		__strong MADocument *document = self.document;
-		if ([document.managedObjectContext hasChanges]) {
-			NSError *saveError = nil;
-			BOOL saved = [document.managedObjectContext save:&saveError];
-			if (!saved && saveError != nil) {
-				os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
-			}
+		NSError *saveError = nil;
+		BOOL saved = [document.storeContext save:&saveError];
+		if (!saved && saveError != nil) {
+			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
 		}
 	}
 }
@@ -2880,15 +2825,11 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	
 	int64_t pieceID = piece.identifier;
 	
-	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	private.parentContext = _document.managedObjectContext;
-	
-	__weak MADDesignerViewController *weakself = self;
-	[private performBlockAndWait:^{
-		MADDesignerViewController *strongself = weakself;
-		if (!strongself) return;
-		
-		RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: pieceID
+	RptqStoreContext *private = _document.storeContext;
+
+	MADDesignerViewController *strongself = self;
+
+	RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: pieceID
 																				  fromObjectContext: private];
 		NSNumber *sectionIdentifier = @(documentObject.inSectionRow.inSection.identifier);
 		
@@ -2939,7 +2880,6 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 				completion();
 			}];
 		}];
-	}];
 }
 
 - (void)endPanPieceWithGesture:(UIPanGestureRecognizer *)gesture {
@@ -2991,11 +2931,9 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	if (sectionView != nil) {
 		
 		NSNumber *sectionViewObjectIdTag = @(sectionView.identifier);
-		NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-		private.parentContext = self.document.managedObjectContext;
-		[private performBlockAndWait:^{
-			
-			RptqDocumentSection *documentSection = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
+		RptqStoreContext *private = self.document.storeContext;
+
+		RptqDocumentSection *documentSection = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
 																					   fromObjectContext:private];
 			NSNumber *documentSectionKey = @(documentSection.identifier);
 			CGFloat documentSectionHeight = documentSection.height;
@@ -3013,7 +2951,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 					MADSectionLayoutAttributes *la = [MADSectionLayoutAttributes layoutAttributesForCellWithIndexPath:path];
 					la.objectID = pieceIdentifier;
 					
-					NSManagedObjectContext *context = self.document.managedObjectContext;
+					RptqStoreContext *context = self.document.storeContext;
 					RptqDocumentSection *docSection = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
 																						  fromObjectContext:context];
 					RptqDocumentElement *docObj = [RptqDocumentElement newDocumentElementWithIdentifier: pieceIdentifier
@@ -3028,7 +2966,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 									withDropPoint: locationInSection
 							 managedObjectContext: context];
 					
-					if ([context hasChanges]) {
+					{ // Save unconditionally: the store context tracks no changes yet.
 						NSError *saveError = NULL;
 						BOOL saved = [context save:&saveError];
 						if (!saved && saveError != nil) {
@@ -3041,11 +2979,11 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 						[self.view setNeedsUpdateConstraints];
 					}
 				} completion:^() {
-					NSManagedObjectContext *context = self.document.managedObjectContext;
+					RptqStoreContext *context = self.document.storeContext;
 					RptqDocumentSection *docSection = [RptqDocumentSection newDocumentSectionWithIdentifier:sectionViewObjectIdTag.longLongValue
 																						  fromObjectContext:context];
 					docSection.height = [sectionView intrinsicContentSize].height;
-					if ([context hasChanges]) {
+					{ // Save unconditionally: the store context tracks no changes yet.
 						NSError *saveError = NULL;
 						BOOL saved = [context save:&saveError];
 						if (!saved && saveError != nil) {
@@ -3056,7 +2994,6 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 					[self.view setNeedsLayout];
 				}];
 			}];
-		}];
 	}
 	[self setScrollersEnabled: YES];
 	[piece setNeedsDisplay];
@@ -3078,18 +3015,14 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 
 - (void)relayoutSectionView:(MADDesignerSectionView *)documentSectionView {
 	
-	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	private.parentContext = self.document.managedObjectContext;
-	
+	RptqStoreContext *private = self.document.storeContext;
 	int64_t objectIdentifier = documentSectionView.identifier;
-	__block CGFloat height;
-	
-	[private performBlockAndWait:^{
-		RptqDocumentSection *documentSection = [RptqDocumentSection newDocumentSectionWithIdentifier: objectIdentifier
+	CGFloat height;
+
+	RptqDocumentSection *documentSection = [RptqDocumentSection newDocumentSectionWithIdentifier: objectIdentifier
 																				   fromObjectContext: private];
-		height = documentSection.height;
-	}];
-	
+	height = documentSection.height;
+
 	NSNumber *objectID = @(objectIdentifier);
 	[self.view.scroller.container updateSection:objectID height:height];
 	[self.view setNeedsUpdateConstraints];
@@ -3326,12 +3259,12 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(managedObjectContextDidChange:)
 												 name: NSManagedObjectContextObjectsDidChangeNotification
-											   object: document.managedObjectContext];
+											   object: document.storeContext];
 	
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(managedObjectContextDidSave:)
 												 name: NSManagedObjectContextDidSaveNotification
-											   object: document.managedObjectContext];
+											   object: document.storeContext];
 	
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(willHideMenuNotification:)
@@ -3364,11 +3297,11 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	MADocument *document = self.document;
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: NSManagedObjectContextObjectsDidChangeNotification
-												  object: document.managedObjectContext];
+												  object: document.storeContext];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: NSManagedObjectContextDidSaveNotification
-												  object: document.managedObjectContext];
+												  object: document.storeContext];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: UIMenuControllerWillHideMenuNotification
@@ -3396,9 +3329,9 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 
 - (IBAction)actionDone:(id)sender {
 	__strong MADocument *document = self.document;
-	if ([document.managedObjectContext hasChanges]) {
+	{ // Save unconditionally: the store context tracks no changes yet.
 		NSError *saveError = NULL;
-		[document.managedObjectContext save:&saveError];
+		[document.storeContext save:&saveError];
 		if (saveError != nil) {
 			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
 		}
@@ -3445,9 +3378,9 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	MADLogDebug("%s", __PRETTY_FUNCTION__);
 	[self deselectAllElementsAnimated:YES];
 	__strong MADocument *document = self.document;
-	if ([document.managedObjectContext hasChanges]) {
+	{ // Save unconditionally: the store context tracks no changes yet.
 		NSError *saveError = NULL;
-		[document.managedObjectContext save:&saveError];
+		[document.storeContext save:&saveError];
 		if (saveError != nil) {
 			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
 		}

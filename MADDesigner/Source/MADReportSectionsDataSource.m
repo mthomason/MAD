@@ -11,12 +11,12 @@
 #import "MADDesignerSectionView.h"
 #import "MADDesignerSectionLabel.h"
 #import <MAD/MADSectionsLayout.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADSectionLayout.h>
-#import <CoreData/NSManagedObjectContext.h>
 
 @interface MADReportSectionsDataSource ()
 
-	@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+	@property (nonatomic, strong) RptqStoreContext *managedObjectContext;
 	@property (nonatomic, strong) MADSectionsLayout *sectionsLayout;
 
 @end
@@ -30,7 +30,7 @@
 	_eventDelegate = nil;
 }
 
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (instancetype)initWithManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 	if (self = [super init]) {
 		_managedObjectContext = managedObjectContext;
 		_needsRefresh = YES;

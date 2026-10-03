@@ -22,7 +22,7 @@
 @property (nonatomic, weak) id <MADQueryChooseFieldProtocol> delegate;
 @property (nonatomic, weak) MADocument *document;
 
-@property (nonatomic, strong) NSManagedObjectID *queryFieldID;
+@property (nonatomic, assign) int64_t queryFieldID;
 @property (nonatomic, strong) NSArray <NSString *> *excludeTables;
 
 + (instancetype)newQueryBuilderChooseFieldViewController;

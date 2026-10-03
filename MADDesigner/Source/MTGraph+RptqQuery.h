@@ -10,14 +10,15 @@
 #define MAD_Designer_MTGraph_RptqQuery_h
 
 #import <MADDataStructures/MTGraph.h>
+#import <MAD/RptqStoreContext.h>
 
-@class RptqQuery, MADModelQuery, NSManagedObjectID, NSManagedObjectContext;
+@class RptqQuery, MADModelQuery, RptqStoreContext;
 
 @interface MTGraph (RptqQuery)
 
 	- (instancetype)initWithQuery:(RptqQuery *)query;
 	- (instancetype)initWtthQueryID:(MADModelQuery *)query;
-	- (instancetype)initWithQueryID:(NSManagedObjectID *)queryID managedObjectContext:(NSManagedObjectContext *)context;
+	- (instancetype)initWithQueryID:(int64_t)queryID managedObjectContext:(RptqStoreContext *)context;
 
 @end
 

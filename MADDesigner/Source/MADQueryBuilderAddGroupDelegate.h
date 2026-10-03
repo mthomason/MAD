@@ -11,7 +11,7 @@
 
 @protocol MADQueryBuilderAddGroupDelegate
 	- (void)viewController:(UIViewController *)viewController
-	addedGroupOnQueryField:(NSManagedObjectID *)queryFieldID
+	addedGroupOnQueryField:(int64_t)queryFieldID
 			  andSortOrder:(MADSortOrder)sortOrder;
 	- (void)viewControllerDidCancel:(id)sender;
 @end

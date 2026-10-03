@@ -18,7 +18,7 @@
 @property (nonatomic, assign) int64_t identifier;
 @property (readonly, nonatomic, copy) NSNumber *key;
 @optional
-@property (nonatomic, readonly, copy) NSManagedObjectID *objectID;
+@property (nonatomic, readonly, assign) int64_t objectID;
 @end
 
 #endif

@@ -17,11 +17,11 @@
 #import <MADFoundation/MADCredential.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MADQueryFull.h>
 
-#import <CoreData/NSManagedObjectContext.h>
 
 // The operation's own domain.  It used to borrow @"MADCache" for a missing
 // credential, which reads as a fault in the result cache rather than in the
@@ -104,18 +104,17 @@ static const short errNoDocument = 3842;
 		return;
 	}
 
-	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType: NSPrivateQueueConcurrencyType];
-	private.parentContext = document.managedObjectContext;
+	RptqStoreContext *private = document.storeContext;
 	
 	__block NSString *queryString = nil;
 	MADQueryFull *query = document.mainQuery;
-	[private performBlockAndWait:^{
+	{
 		NSError *sqlError = nil;
 		queryString = [query copySQLWithManagedObjectContext: private error: &sqlError];
 		if (sqlError != nil) {
 			os_log_error(OS_LOG_DEFAULT, "Error: %@", sqlError);
 		}
-	}];
+	}
 	[document dataTableSetDataDelegate:document];
 
 	NSError *executeError = nil;

@@ -251,7 +251,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 #pragma mark - UITableViewControllerChooseFieldDelegate
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-									withFieldID: (NSManagedObjectID *)fieldID {
+									withFieldID: (int64_t)fieldID {
 	
 	switch (controller.view.tag) {
 			
@@ -264,7 +264,7 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 			
 		case MADViewTagFieldOrFormulaSelector: {
 			
-			RptqQueryField *field = (RptqQueryField *)[self.document.managedObjectContext objectWithID:fieldID];
+			RptqQueryField *field = (RptqQueryField *)[self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
 			NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
 			id display = [field display];
 			id detailtext = [[NSString alloc] initWithFormat:formatString, display];

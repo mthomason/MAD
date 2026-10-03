@@ -12,8 +12,6 @@
 #import <UIKit/UITableViewController.h>
 #import <UIKit/UITableView.h>
 
-#import <CoreData/NSFetchedResultsController.h>
-
 #import <MAD/MADAggregateFunctionGroupByType.h>
 
 extern NSString * const MADGroupByViewControllerIdentifier;
@@ -22,7 +20,7 @@ extern NSString * const MADGroupByViewControllerIdentifier;
 
 @class MADocument;
 
-@interface MADGroupByViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate>
+@interface MADGroupByViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, weak) id <MADGroupByViewControllerDelegate> delegate;
 @property (nonatomic, weak) MADocument *document;

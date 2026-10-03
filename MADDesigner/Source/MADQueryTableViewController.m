@@ -14,8 +14,6 @@
 
 #import <QuartzCore/CALayer.h>
 
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectID.h>
 
 #import <UIKit/UIView.h>
 #import <UIKit/UIStoryboard.h>

@@ -13,7 +13,6 @@
 #import "MTViewControllerBarcodeOptions.h"
 #import "MADViewControllerBarcodeOptionsDelegate.h"
 
-#import <CoreData/NSManagedObjectContext.h>
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/NSAttributedString.h>
@@ -43,6 +42,7 @@
 #import <MADAPI/MADDatabase.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabase+Constructor.h>
@@ -824,10 +824,10 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
 #pragma mark - MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-                                    withFieldID: (NSManagedObjectID *)fieldID {
-    
-    NSManagedObjectContext *context = self.document.managedObjectContext;
-    RptqQueryField *field = [context objectWithID: fieldID];
+                                    withFieldID: (int64_t)fieldID {
+
+    RptqStoreContext *context = self.document.storeContext;
+    RptqQueryField *field = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
 
     [self.navigationController popViewControllerAnimated:YES];
     

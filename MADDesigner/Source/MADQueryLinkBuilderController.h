@@ -20,7 +20,7 @@
 
 @protocol MADQueryBuilderLinkBuilderDelegate
 	- (void)viewController:(MADQueryLinkBuilderController *)controller
-			addedQueryLink:(NSManagedObjectID *)linkID;
+			addedQueryLink:(int64_t)linkID;
 @end
 
 @interface MADQueryLinkBuilderController : UITableViewController <UITableViewDataSource, UITableViewDelegate, MADQueryBuilderAddLinkJoinTypeDelegate, MADQueryChooseFieldProtocol>

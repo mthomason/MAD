@@ -23,6 +23,7 @@
 #import <MADCocoaExtensions/MADViewHelpers.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADFont.h>
 #import <MAD/MADAlignment.h>
 #import <MAD/RptqRect.h>
@@ -44,7 +45,6 @@
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UINibDeclarations.h>
 #import <QuartzCore/CALayer.h>
-#import <CoreData/NSManagedObjectContext.h>
 #import <asl.h>
 
 static const CGFloat CornerRadius = 6.6666f;
@@ -449,7 +449,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 		RptqDocumentElement *documentObject;
 		
 		CGSize size;
-		NSManagedObjectContext *context = self.document.managedObjectContext;
+		RptqStoreContext *context = self.document.storeContext;
 		for (objectId in userSelectedObjectIDs) {
 			
 			documentObject = [RptqDocumentElement newDocumentElementWithIdentifier:objectId.longLongValue
@@ -913,7 +913,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 		destination.clearsBackground = self.clearsBackground;
 		NSNumber *identifier = [self.userSelectedObjectIDs anyObject];
 		RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier:identifier.longLongValue
-																		   fromObjectContext:_document.managedObjectContext];
+																		   fromObjectContext:_document.storeContext];
 		[destination setFamilyName:element.fontname];
 	}
 }

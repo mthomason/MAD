@@ -7,7 +7,6 @@
 //
 
 #import "MADQueryVisualizationSchemaPresentationController.h"
-#import <CoreData/NSManagedObjectID.h>
 #import "MADHierarchicalDisplayModel.h"
 
 @interface MADQueryVisualizationSchemaPresentationController ()

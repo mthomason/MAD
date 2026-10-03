@@ -35,6 +35,7 @@
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADModelDocument.h>
 #import <MAD/MADModelDatabase.h>
 #import <MAD/MADModelQuery.h>
@@ -311,7 +312,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	[super viewWillAppear:animated];
 	
 	MADocument *document = self.document;
-	NSManagedObjectContext *managedObjectContext = document.documentModel.managedObjectContext;
+	RptqStoreContext *managedObjectContext = document.documentModel.managedObjectContext;
 	MADModelQuery *firstQuery = document.documentModel.firstQuery;
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(deleteQueryLink:)
@@ -354,7 +355,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	[super viewWillDisappear:animated];
 	[self clearScreen];
 
-	NSManagedObjectContext *managedObjectContext = self.document.documentModel.managedObjectContext;
+	RptqStoreContext *managedObjectContext = self.document.documentModel.managedObjectContext;
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: NSManagedObjectContextWillSaveNotification
 												  object: managedObjectContext];

@@ -13,7 +13,6 @@
 
 #import "MADQueryBuilderAddGroupViewController.h"
 
-#import <CoreData/NSManagedObjectContext.h>
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIBarButtonItem.h>
@@ -22,6 +21,7 @@
 #import <UIKit/UINavigationBar.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryField+Extras.h>
@@ -36,7 +36,7 @@ static NSString * const TextDecending = @"Decending";
 static NSString * const TextDefault = @"Default";
 
 @interface MADQueryBuilderAddGroupViewController ()
-@property (nonatomic, copy) NSManagedObjectID *fieldId;
+@property (nonatomic, assign) int64_t fieldId;
 @end
 
 @implementation MADQueryBuilderAddGroupViewController
@@ -88,16 +88,16 @@ static NSString * const TextDefault = @"Default";
 #pragma mark MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-									withFieldID: (NSManagedObjectID *)fieldID {
-	if (fieldID == nil) return;
-	
-	NSManagedObjectContext *context = self.document.managedObjectContext;
-	RptqQueryField *queryField = [context objectWithID: fieldID];
-	
+									withFieldID: (int64_t)fieldID {
+	if (fieldID == 0) return;
+
+	RptqStoreContext *context = self.document.storeContext;
+	RptqQueryField *queryField = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
+
 	[self.navigationController popToViewController:self animated:YES];
 
 	NSString *fieldName = [queryField tableFieldKey];
-	self.fieldId = [queryField.objectID copy];
+	self.fieldId = queryField.identifier;
 	self.fieldName = [fieldName copy];
 	self.tableViewCellField.detailTextLabel.text = queryField.display.lowercaseString;
 

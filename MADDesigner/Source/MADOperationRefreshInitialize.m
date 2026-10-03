@@ -16,6 +16,7 @@
 #import <MADFoundation/MADDataTable.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADReportFormatter.h>
 #import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MADQueryFull.h>
@@ -28,8 +29,6 @@
 #import <MAD/RptqDocumentSectionEnumerator.h>
 #import <MAD/RptqDatabaseCredentals+Extras.h>
 
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectID.h>
 
 @interface MADOperationRefreshInitialize ()
 
@@ -65,16 +64,11 @@
 		}
 	}
 	
-	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	private.parentContext = doc.managedObjectContext;
-	
-	MADocument * __weak wdocument = doc;
-	[private performBlockAndWait:^{
-		
-		MADocument *document = wdocument;
-		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: document.managedObjectContext];
+	RptqStoreContext *private = doc.storeContext;
+	MADocument *document = doc;
+	RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
 		if (rptqDocument == nil) {
-			rptqDocument = [RptqDocument newDocumentForManagedObjectContext: document.managedObjectContext];
+			rptqDocument = [RptqDocument newDocumentForManagedObjectContext: document.storeContext];
 		}
 		
 		RptqDatabase *rptqDatabase;
@@ -101,10 +95,8 @@
 		MADReportFormatter *formatter = [MADReportFormatter newReportFormatterWithLayout: document
 																				 options: MADReportFormatterOptionsNone];
 		
-		document.reportFormatter = formatter;
-		
-	}];
-	
+	document.reportFormatter = formatter;
+
 	[self finish];
 	
 }

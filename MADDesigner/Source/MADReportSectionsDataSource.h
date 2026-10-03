@@ -10,6 +10,7 @@
 #define MAD_MADReportSectionsDataSource_h
 
 #import "MADReportSectionDataSourceProtocol.h"
+#import <MAD/RptqStoreContext.h>
 
 @class NSManagedObjectContext;
 
@@ -21,7 +22,7 @@
 												UICollectionViewDelegate,
 												UICollectionViewDataSource> eventDelegate;
 
-	- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (instancetype)initWithManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 	- (void)refreshData;
 
 @end

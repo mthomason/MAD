@@ -13,8 +13,6 @@
 #import "MTViewControllerBarcode.h"
 #import "MADViewControllerBarcodeDelegate.h"
 
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
 
 #import <UIKit/UIStoryboard.h>
 #import <UIKit/UINavigationController.h>
@@ -31,6 +29,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqQueryField+Extras.h>
@@ -163,10 +162,10 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
     if (self.editmode) {
         self.barButtonItemSave.enabled = YES;
-        NSManagedObjectContext *moc = self.document.managedObjectContext;
-        if (self.queryField1ID != nil) {
+        RptqStoreContext *moc = self.document.storeContext;
+        if (self.queryField1ID != 0) {
 
-            RptqQueryField *queryField1 = [moc objectWithID: self.queryField1ID];
+            RptqQueryField *queryField1 = [moc objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.queryField1ID];
             MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
             RptqDatabaseSchemaField *databaseSchemaField1 = queryField1.databaseSchemaField;
             querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
@@ -213,11 +212,11 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
             }
         }
         
-        if (self.queryField2ID != nil) {
+        if (self.queryField2ID != 0) {
             
             RptqQueryField *queryField2;
             MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
-            queryField2 = [moc objectWithID: self.queryField2ID];
+            queryField2 = [moc objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.queryField2ID];
             querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                                                      object: queryField2.databaseSchemaField];
             querySampleDataField.database.delegate = self;
@@ -277,8 +276,8 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     }
 }
 
-+ (MADDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
-    return [MADDataTable newDataTableForIdentifier:[objectID URIRepresentation].absoluteString];
++ (MADDataTable *)newDataTableForMangedObject:(int64_t)objectID {
+    return [MADDataTable newDataTableForIdentifier:[[NSString alloc] initWithFormat:@"%lld", objectID]];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -308,22 +307,22 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
                                     andFieldTwo: self.queryField2ID];
 }
 
-- (void)didSetField1ID:(NSManagedObjectID *)fieldID {
-    if (fieldID != nil) {
+- (void)didSetField1ID:(int64_t)fieldID {
+    if (fieldID != 0) {
         [self.barButtonItemSave setEnabled:YES];
     }
-    self.queryField1ID = fieldID.copy;
+    self.queryField1ID = fieldID;
 }
 
-- (void)didSetField2ID:(NSManagedObjectID *)fieldID {
-    self.queryField2ID = fieldID.copy;
+- (void)didSetField2ID:(int64_t)fieldID {
+    self.queryField2ID = fieldID;
 }
 
-- (NSManagedObjectID *)barcodeQueryField1 {
+- (int64_t)barcodeQueryField1 {
     return self.queryField1ID;
 }
 
-- (NSManagedObjectID *)barcodeQueryField2 {
+- (int64_t)barcodeQueryField2 {
     return self.queryField2ID;
 }
 
@@ -333,14 +332,14 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     barcode = [MTBarcode newBarcode:barcodeDocumentObject];
     self.barcode = barcode;
     
-    self.queryField1ID = barcodeDocumentObject.referencesField1.copy;
-    self.queryField2ID = barcodeDocumentObject.referencesField2.copy;
+    self.queryField1ID = barcodeDocumentObject.referencesField1.identifier;
+    self.queryField2ID = barcodeDocumentObject.referencesField2.identifier;
     
     self.editmode = YES;
 
 }
 
-- (void)setBarcodeObjectIDToEdit:(NSManagedObjectID *)objectID {
+- (void)setBarcodeObjectIDToEdit:(int64_t)objectID {
     
 }
 

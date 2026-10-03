@@ -14,6 +14,7 @@
 #import <MADAPI/MADDatabaseField.h>
 #import <MADFoundation/MADDataType.h>
 #import <MAD/RptqAlignment.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqNumericFormat.h>
 #import <MAD/MADocument.h>
 #import <MAD/RptqDocumentElement.h>
@@ -30,8 +31,6 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/NSAttributedString.h>
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSManagedObjectContext.h>
 
 @interface MADToolboxFormatViewController () <UITableViewDelegate, MADToolboxControllerProtocol>
 
@@ -96,7 +95,7 @@
 	NSMutableSet <NSNumber *> *keepers = [[NSMutableSet alloc] init];
 	for (NSNumber *objectID in objectIDs) {
 		RptqDocumentElementLabelDataField *documentObject = [RptqDocumentElementLabelDataField newDocumentElementWithIdentifier: objectID.longLongValue
-																											  fromObjectContext: _document.managedObjectContext];
+																											  fromObjectContext: _document.storeContext];
 		MADDataType dataType = documentObject.referencesQueryField.databaseSchemaField.dataType;
 		BOOL isNumeric = [MADDatabaseField isNumeric:dataType];
 		if (isNumeric) {
@@ -134,7 +133,7 @@
 		for (NSNumber *identifier in userSelectedObjectIDs) {
 			
 			RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
-																			   fromObjectContext: document.managedObjectContext];
+																			   fromObjectContext: document.storeContext];
 			if (element.numericFormat.enabled) {
 				accessoryType = UITableViewCellAccessoryCheckmark;
 			}
@@ -144,7 +143,7 @@
 		
 		if ((self.userSelectedObjectIDs).count == 1) {
 			RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: [userSelectedObjectIDs.anyObject longLongValue]
-																			   fromObjectContext: document.managedObjectContext];
+																			   fromObjectContext: document.storeContext];
 			(self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:element.numericFormat.decimalCount];
 			(self.stepperNumberOfDecimals).value = element.numericFormat.decimalCount;
 			
@@ -155,7 +154,7 @@
 			NSUInteger counter = 0;
 			for (NSNumber *identifier in self.userSelectedObjectIDs) {
 				RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
-																				   fromObjectContext: document.managedObjectContext];
+																				   fromObjectContext: document.storeContext];
 				if (counter > 0) {
 #warning Don't think BOOL allTheSame ever becomes "YES"
 					if (lastInteger == element.numericFormat.decimalCount && allTheSame) {  /// WTF: How does this work?  Don't think it ever gets in here!
@@ -193,13 +192,13 @@
 		(self.labelNumberOfDecimals).attributedText =
 		[self decimalsStringForNumberOfDecimals:(NSInteger)[valueThatChanged floatValue]];
 		
-		NSManagedObjectContext *context = self.document.managedObjectContext;
+		RptqStoreContext *context = self.document.storeContext;
 		for (NSNumber *identifier in self.userSelectedObjectIDs) {
 			RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
 																					  fromObjectContext: context];
 			documentObject.numericFormat.decimalCount = [valueThatChanged integerValue];
 			NSError *error = NULL;
-			BOOL saved = [documentObject.managedObjectContext save:&error];
+			BOOL saved = [documentObject.storeContext save:&error];
 			if (!saved && error != nil) {
 				os_log_error(GetDesignerLog(), "%s Error saving managed object context.", __PRETTY_FUNCTION__);
 			}
@@ -233,14 +232,14 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
 	if (indexPath.row == 1 && indexPath.section == 0) {
-		NSManagedObjectContext *context = self.document.managedObjectContext;
+		RptqStoreContext *context = self.document.storeContext;
 		for (NSNumber *identifier in self.userSelectedObjectIDs) {
 			RptqDocumentElement *documentObject = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
 																					  fromObjectContext: context];
 			documentObject.numericFormat.enabled = !documentObject.numericFormat.enabled;
 			(self.tableViewCellCurrency).accessoryType = documentObject.numericFormat.enabled ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
 			NSError *error = NULL;
-			BOOL saved = [documentObject.managedObjectContext save:&error];
+			BOOL saved = [documentObject.storeContext save:&error];
 			if (!saved) {
 				os_log_error(GetDesignerLog(), "%s Error saving managed object context.", __PRETTY_FUNCTION__);
 				if (error != nil) {

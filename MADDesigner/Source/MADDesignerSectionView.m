@@ -23,7 +23,6 @@
 #import <UIKit/UIAccessibilityConstants.h>
 #import <UIKit/UIGestureRecognizer.h>
 #import <QuartzCore/CALayer.h>
-#import <CoreData/NSManagedObjectID.h>
 
 static inline UIColor *backgroundColor(BOOL selected, BOOL visible) {
 	if (!selected && !visible) {

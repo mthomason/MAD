@@ -54,8 +54,8 @@
     - (void)barcodePDF417DidSetFormat:(NSInteger)format;
     - (void)barcodePDF417DidSetErrorCorrection:(NSInteger)errorCorrection;
 
-    - (void)didSetField1ID:(NSManagedObjectID *)fieldID;
-    - (void)didSetField2ID:(NSManagedObjectID *)fieldID;
+    - (void)didSetField1ID:(int64_t)fieldID;
+    - (void)didSetField2ID:(int64_t)fieldID;
 
     - (RptqQueryField *)barcodeQueryField1;
     - (RptqQueryField *)barcodeQueryField2;

@@ -1499,6 +1499,69 @@ header search path.
 - **Test:** `testDisplayedAlertConfirmFailsWhenNoDependencyCanAnswer` (renamed
   from `testDisplayedAlertConfirmReturnsNilWhenNoDependencyCanAnswer`).
 
+### Change and save notifications from the store are dormant
+- **Status:** Still open
+- **Where:** `MADDesigner/Source/MADDesignerViewController.m:1164`
+  (`-managedObjectContextDidChange:`), `:1260` (`-managedObjectContextDidSave:`),
+  `:3257` (`-addObservers`); `MADDesigner/Source/MADQueryViewController.m:1243`
+  (`-managedObjectContextDidChange:`), `:1255-1266` (`-ingnoreManagedObjectContextChanges:`
+  and `-observeManagedObjectContextChanges:`)
+- **Behavior:** Both controllers still register for
+  `NSManagedObjectContextObjectsDidChangeNotification` and
+  `NSManagedObjectContextDidSaveNotification` against the document's
+  `RptqStoreContext`, but the store context never posts them. Everything those
+  handlers do -- live element-view updates (font, size, position), the undo button
+  state, query-table tracking -- is dormant until a later milestone wires the
+  store to a change signal. `MADDesignerViewController.m` carries a private
+  `changedValues` shim on `RptqObject` that returns *every* attribute, not the
+  actually-changed keys, so the handlers stay correct if they are ever delivered.
+  `MADQueryViewController.m`'s `_suspendAutomaticTrackingOfChangesInManagedObjectContext`
+  toggles nothing for the same reason, and its handler body was reduced to a
+  no-op. The observer method name `ingnoreManagedObjectContextChanges:` also
+  carries a long-standing typo.
+- **Found during the store migration; not investigated.**
+
+### Saves run unconditionally now, and each rewrites the whole store
+- **Status:** Still open
+- **Where:** `MADDesigner/Source/MADDesignerViewController.m` (the bare
+  `{ // Save unconditionally … }` blocks, e.g. `:2969`, `:2986`, `:3332`, `:3381`)
+  and `MADDesigner/Source/MADDesignerElementView.m:286-292`
+- **Behavior:** `RptqStoreContext` has no `hasChanges`, so every former
+  `if ([context hasChanges])` guard was mechanically replaced with an
+  unconditional save, and `-save:` is `writeGraph:replacingAll:YES` -- a full
+  store rewrite. The pinch, pan, insert, and delete paths in the designer now
+  rewrite the entire store per gesture event, where Core Data saved only dirty
+  objects. Correct, but the per-event cost is new; real dirty-tracking belongs to
+  a later milestone.
+- **Found during the store migration; not investigated.**
+
+### Query group, link, and predicate lists load every row in the store
+- **Status:** Still open
+- **Where:** `MADDesigner/Source/MADQueryViewDataSource.m` (the
+  `queryLinksController`, `queryGroupsController`, and `queryPredicatesController`
+  getters); `MADDesigner/Source/MTGroupByViewController.m` (`-viewDidLoad`)
+- **Behavior:** Only `queryTablesController` filters rows by the open query
+  (`table.inQuery.identifier != query.identifier`). The link, group, and
+  predicate lists fetch every row of their entity and sort them. That is correct
+  only while a document has one query; a second query's links, groups, and
+  predicates would all appear in the first query's lists. The pre-migration
+  fetched-results controllers had the same shape (no predicate on the fetch), so
+  this is preserved behavior, not a new regression.
+- **Found during the store migration; not investigated.**
+
+### The choose-field list used to fetch a single field; it now fetches all of them
+- **Status:** Still open
+- **Where:** `MADDesigner/Source/MADQueryChooseFieldController.m:149`
+  (`-sections`)
+- **Behavior:** The pre-migration controller built its sectioned
+  fetched-results controller from `[RptqQueryField fetchRequestFields:1]` -- a
+  fetch limited to one row -- so the picker showed at most one field. The
+  store-backed getter fetches every `RptqQueryField` and groups them by table
+  alias, so the picker now shows the full field list. Which shape is right was
+  not investigated; the migration preserved the *visible* behavior of a list
+  grouped by alias, not the one-row limit.
+- **Found during the store migration; not investigated.**
+
 ---
 
 ## Build wiring (Xcode references)

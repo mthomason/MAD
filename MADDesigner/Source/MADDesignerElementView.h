@@ -11,6 +11,7 @@
 
 #import "MADManagedObjectViewProtocol.h"
 #import <MAD/MADDocumentObjectType.h>
+#import <MAD/RptqStoreContext.h>
 #import <UIKit/UIView.h>
 
 
@@ -37,14 +38,14 @@
 @end
 
 @interface MADDesignerElementView : UIView <MADDesignerElementViewProtocol, MADManagedObjectViewProtocol, MADViewAnimationProtocol>
-@property (nonatomic, readonly, weak) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, readonly, weak) RptqStoreContext *managedObjectContext;
 @property (nonatomic, strong) id displayObject;
 @property (nonatomic, readonly, copy) NSString *textRepresentation;
 
 - (void)setWobbleRunning:(BOOL)running;
 - (void)flash:(void (^)(BOOL finished))completion;
 
-- (void)updateForManagedObjectContent:(NSManagedObjectContext *)context;
+- (void)updateForManagedObjectContent:(RptqStoreContext *)context;
 - (void)updateWithElement:(RptqDocumentElement *)element;
 - (void)handleGesturePanResizeHandle:(UIPanGestureRecognizer *)gestureRecognizer;
 

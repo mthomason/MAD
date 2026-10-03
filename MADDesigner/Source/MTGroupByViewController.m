@@ -13,8 +13,6 @@
 #import "MTGroupByViewController.h"
 #import "MADGroupByViewControllerDelegate.h"
 
-#import <CoreData/NSManagedObjectContext.h>
-
 #import <UIKit/UITableView.h>
 #import <UIKit/UICollectionView.h>
 #import <UIKit/UINavigationController.h>
@@ -25,13 +23,14 @@
 #import <MADCocoaExtensions/MADLabelTitle.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqQueryGroup+Extras.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 
 NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewControllerIdentifier";
 
 @interface MADGroupByViewController ()
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsControllerGroups;
+@property (nonatomic, strong) NSArray <RptqQueryGroup *> *results;
 @end
 
 @implementation MADGroupByViewController
@@ -41,38 +40,21 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 
 	self.navigationItem.leftItemsSupplementBackButton = YES;
 	self.navigationItem.hidesBackButton = NO;
-	
+
 	MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
 	titleView.text = NSLocalizedString(@"Group By", @"Title of form that allows you to choose an item to group other items by...");
 	self.navigationItem.titleView = titleView;
-	
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-	NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(weight))
-														   ascending:YES];
-	request.sortDescriptors = [NSArray arrayWithObjects:sort, nil];
-	
-	NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-																		  managedObjectContext: self.document.managedObjectContext
-																			sectionNameKeyPath: nil
-																					 cacheName: nil];
-	frc.delegate = self;
-	self.fetchedResultsControllerGroups = frc;
-	
-	NSError *error = nil;
-	BOOL fetchResult = [self.fetchedResultsControllerGroups performFetch:&error];
-	if (!fetchResult && error != nil) {
-		[NSError presentError: error onViewController: self completion: nil];
-	}
-	frc = nil;
 
+	// The group list was an NSFetchedResultsController; the store has no live query,
+	// so the rows are fetched once and sorted by hand.  The list cannot change while
+	// this picker is on screen.
+	NSArray *groups = [self.document.storeContext objectsForEntity:NSStringFromClass([RptqQueryGroup class])];
+	self.results = [groups sortedArrayUsingDescriptors:
+					@[[NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(weight)) ascending:YES]]];
 }
 
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
-}
-
-- (NSIndexPath *)updatedIndexPath:(NSIndexPath *)indexPath {
-	return [NSIndexPath indexPathForRow:indexPath.row - 2 inSection:indexPath.section];
 }
 
 - (void)setGroupType:(MTAggregateGroupByType)groupType {
@@ -195,14 +177,11 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 #pragma mark - Table View Datasource Protocol
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return (NSInteger)self.fetchedResultsControllerGroups.sections.count;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section {
-	id <NSFetchedResultsSectionInfo> sectionInfo;
-	sectionInfo = _fetchedResultsControllerGroups.sections[(NSUInteger)section];
-	NSInteger numberOfRows = ((NSInteger)sectionInfo.numberOfObjects) + 2;
-	return numberOfRows;
+	return (NSInteger)self.results.count + 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -227,7 +206,7 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 			break;
 		
 		default: {
-			RptqQueryGroup *queryGroup = [self.fetchedResultsControllerGroups objectAtIndexPath:[self updatedIndexPath:indexPath]];
+			RptqQueryGroup *queryGroup = self.results[(NSUInteger)indexPath.row - 2];
 			NSString *fieldNameNice = [queryGroup fieldNameNice];
 			NSInteger groupLevel = [queryGroup location];
 			(cell.textLabel).text = fieldNameNice == nil ?
@@ -246,18 +225,16 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	id <NSFetchedResultsSectionInfo> sectionInfo = _fetchedResultsControllerGroups.sections[(NSUInteger)section];
-	NSString *title = sectionInfo.name.copy;
-	return title;
+	return nil;
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-	return _fetchedResultsControllerGroups.sectionIndexTitles;
+	return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title
 																		atIndex:(NSInteger)index {
-	return [_fetchedResultsControllerGroups sectionForSectionIndexTitle:title atIndex:index];
+	return 0;
 }
 
 @end

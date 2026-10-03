@@ -15,7 +15,7 @@
 
 @interface MADTableViewCellQueryLink : MTAutoLayoutTableViewCell
 
-	@property (nonatomic, copy) NSManagedObjectID *linkID;
+	@property (nonatomic, assign) int64_t linkID;
 
 	@property (nonatomic, weak) IBOutlet UILabel *labelTableLeft;
 	@property (nonatomic, weak) IBOutlet UILabel *labelTableRight;

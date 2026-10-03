@@ -16,7 +16,6 @@
 #import <Foundation/NSValue.h>
 #import <Foundation/NSURL.h>
 #import <UIKit/UIGeometry.h>
-#import <CoreData/NSManagedObjectID.h>
 
 static NSString *keyScrollViewContentOffset  = @"1";
 static NSString *keyScrollViewZoomScale      = @"2";

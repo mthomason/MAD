@@ -11,38 +11,51 @@
 #endif
 
 #import "MADQueryBuilderAddTableViewController.h"
+#import <MAD/RptqStoreContext.h>
 #import "madlog.h"
 
+#import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDatabaseSchemaTable+Extras.h>
+#import <MAD/MADModel.h>
 
-#import <CoreData/NSFetchedResultsController.h>
-#import <CoreData/NSExpressionDescription.h>
 #import <UIKit/UILabel.h>
 
 @implementation MADQueryBuilderAddTableViewController
 
-@synthesize fetchedResultsController = _fetchedResultsController;
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(reloadTables)
+												 name:MADNotificationQueryTableInsert
+											   object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(reloadTables)
+												 name:MADNotificationQueryTableDelete
+											   object:nil];
+	[self reloadTables];
+}
 
-- (NSFetchedResultsController *)fetchedResultsController {
-	NSManagedObjectContext *managedObjectContext;
-	if (_fetchedResultsController == nil &&
-		((managedObjectContext = _managedObjectContext)) != nil) {
-		
-		NSFetchRequest *request = [RptqDatabaseSchemaTable fetchRequestSortTables];
-		NSFetchedResultsController *controller = [[NSFetchedResultsController alloc] initWithFetchRequest: request
-																					 managedObjectContext: managedObjectContext
-																					   sectionNameKeyPath: nil
-																								cacheName: nil];
-
-		NSError *error = nil;
-		[controller performFetch:&error];
-		if (error != nil) {
-			os_log_error(GetDesignerLog(), "Error: %@ (%@)", error.localizedDescription, error.localizedFailureReason);
+- (void)reloadTables {
+	// The store has no live query, so the rows are fetched and held; the table reloads
+	// when the model posts its insert/delete notifications (MAD_STORE_PHASE_C.md §6).
+	NSArray *tables = [self.managedObjectContext objectsForEntity:NSStringFromClass([RptqDatabaseSchemaTable class])];
+	if (self.excludeResults.count > 0) {
+		NSMutableSet *excluded = [NSMutableSet setWithArray:self.excludeResults];
+		NSMutableArray *filtered = [NSMutableArray arrayWithCapacity:tables.count];
+		for (RptqDatabaseSchemaTable *table in tables) {
+			if ([excluded containsObject:table.name]) continue;
+			[filtered addObject:table];
 		}
-		controller.delegate = self;
-		_fetchedResultsController = controller;
+		tables = filtered;
 	}
-	return _fetchedResultsController;
+	tables = [tables sortedArrayUsingComparator:^NSComparisonResult(RptqDatabaseSchemaTable *a, RptqDatabaseSchemaTable *b) {
+		return [a.name compare:b.name];
+	}];
+	self.results = tables;
+}
+
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Actions
@@ -56,11 +69,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"MADIdentifierTableViewCellAddTable";
-	static NSString *keyName;
-	if (keyName == nil) keyName = NSStringFromSelector(@selector(name));
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifier];
-	RptqDatabaseSchemaTable *result = [self.fetchedResultsController objectAtIndexPath: indexPath];
-	cell.textLabel.text = [result.name copy];
+	RptqDatabaseSchemaTable *result = self.results[(NSUInteger)indexPath.row];
+	cell.textLabel.text = result.name.copy;
 	return cell;
 }
 
@@ -69,8 +80,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-	NSManagedObject *result = [self.fetchedResultsController objectAtIndexPath: indexPath];
-	[self.delegate viewController: self addedQueryTableWithID: result.objectID];
+	RptqDatabaseSchemaTable *result = self.results[(NSUInteger)indexPath.row];
+	[self.delegate viewController: self addedQueryTableWithID: result.identifier];
 }
 
 @end

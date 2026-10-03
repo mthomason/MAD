@@ -44,8 +44,8 @@ typedef NS_ENUM(NSUInteger, MNSPredicatePart) {
 
 @property (nonatomic, copy)     NSString *leftValue;
 @property (nonatomic, copy)     NSString *rightValue;
-@property (nonatomic, strong)   NSManagedObjectID /* RptqQueryField */ *fieldLeftID;
-@property (nonatomic, strong)   NSManagedObjectID /* RptqQueryField */ *fieldRightID;
+@property (nonatomic, assign)   int64_t /* RptqQueryField */fieldLeftID;
+@property (nonatomic, assign)   int64_t /* RptqQueryField */fieldRightID;
 
 - (IBAction)save:(id)sender;
 - (IBAction)cancel:(id)sender;

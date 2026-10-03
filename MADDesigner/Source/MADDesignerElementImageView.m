@@ -7,7 +7,6 @@
 //
 
 #import "MADDesignerElementImageView.h"
-#import <CoreData/NSManagedObjectContext.h>
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <UIKit/UIImage.h>
 #import <MAD/RptqDocumentElementImage.h>
@@ -16,7 +15,7 @@
 
 - (void)drawRect:(CGRect)rect {
 	[super drawRect:rect];
-	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
+	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:self.objectID];
 	[(UIImage *)self.displayObject drawInRect:[element innerRect]];
 }
 

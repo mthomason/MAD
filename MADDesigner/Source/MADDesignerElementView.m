@@ -21,6 +21,7 @@
 
 #import <MAD/RptqRect+Extras.h>
 #import <MAD/RptqAlignment.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqTextStyle.h>
 #import <MAD/RptqSize.h>
 #import <MAD/RptqBorder.h>
@@ -36,8 +37,6 @@
 #import <UIKit/NSParagraphStyle.h>
 #import <UIKit/UIGraphics.h>
 
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
 #import <CoreGraphics/CGContext.h>
 
 #import <QuartzCore/CALayer.h>
@@ -52,8 +51,8 @@
 @interface MADDesignerElementView () <MADElementCanvasDelegate, UIGestureRecognizerDelegate>
 
 	@property (nonatomic, readwrite, strong) MADResizeHandles *resizeHandles;
-	@property (nonatomic, readwrite, weak) NSManagedObjectContext *managedObjectContext;
-	@property (nonatomic, readwrite, copy) NSManagedObjectID *objectID;
+	@property (nonatomic, readwrite, weak) RptqStoreContext *managedObjectContext;
+	@property (nonatomic, readwrite, assign) int64_t objectID;
 	@property (nonatomic, readwrite, copy) NSString *textRepresentation;
 
 @end
@@ -118,7 +117,7 @@
 	static const CGFloat kDashedLinesLength[]   = {4.0, 2.0};
 	static size_t const kDashedCount            = (2.0);
 	
-	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectWithID:self.objectID];
+	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:self.objectID];
 	
 	UIColor *tintColor = [UIColor blackColor];
 	
@@ -280,16 +279,14 @@
 
 - (void)resize:(CGSize)size {
 
-	NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-	RptqDocumentElement *documentObject = [managedObjectContext objectWithID:self.objectID];
+	RptqStoreContext *managedObjectContext = self.managedObjectContext;
+	RptqDocumentElement *documentObject = [managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:self.objectID];
 	[documentObject setSizeValue:size];
 
-	if ([managedObjectContext hasChanges]) {
-		NSError *saveError = NULL;
-		[managedObjectContext save:&saveError];
-		if (saveError != nil) {
-			os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
-		}
+	NSError *saveError = NULL;
+	[managedObjectContext save:&saveError];
+	if (saveError != nil) {
+		os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, saveError);
 	}
 }
 
@@ -329,8 +326,8 @@
 #pragma mark -
 #pragma mark Event Handlers
 
-- (void)updateForManagedObjectContent:(NSManagedObjectContext *)context {
-	RptqDocumentElement *element = (RptqDocumentElement *)[context objectWithID:self.objectID];
+- (void)updateForManagedObjectContent:(RptqStoreContext *)context {
+	RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:self.objectID];
 	[self updateWithElement:element];
 	self.managedObjectContext = context;
 }

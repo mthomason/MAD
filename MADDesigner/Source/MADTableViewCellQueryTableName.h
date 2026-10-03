@@ -15,7 +15,7 @@
 
 @interface MADTableViewCellQueryTableName : UITableViewCell
 
-	@property (nonatomic, copy) NSManagedObjectID *tableID;
+	@property (nonatomic, assign) int64_t tableID;
 
 	+ (CGFloat)defaultHeight;
 

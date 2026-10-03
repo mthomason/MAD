@@ -25,16 +25,16 @@
 @property (nonatomic, weak) id <MADViewControllerBarcodeDelegate> delegate;
 @property (nonatomic, weak) MADocument *document;
 
-@property (nonatomic, strong, readwrite) NSManagedObjectID *queryField1ID;
-@property (nonatomic, strong, readwrite) NSManagedObjectID *queryField2ID;
+@property (nonatomic, assign, readwrite) int64_t queryField1ID;
+@property (nonatomic, assign, readwrite) int64_t queryField2ID;
 @property (nonatomic, strong, readwrite) MTBarcode *barcode;
 @property (nonatomic, strong, readonly) MTViewControllerBarcodeOptions *optionsViewController;
 
 @property (nonatomic, assign) BOOL editmode;
 
-@property (nonatomic, copy) NSManagedObjectID *bartcodeToEditObjectID;
-@property (nonatomic, copy) NSManagedObjectID *queryField1ObjectID;
-@property (nonatomic, copy) NSManagedObjectID *queryField2ObjectID;
+@property (nonatomic, assign) int64_t bartcodeToEditObjectID;
+@property (nonatomic, assign) int64_t queryField1ObjectID;
+@property (nonatomic, assign) int64_t queryField2ObjectID;
 
 + (instancetype)newViewControllerBarcode;
 

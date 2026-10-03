@@ -19,7 +19,7 @@
 
 @property (nonatomic, weak) id <MADQueryValueFromFieldControllerDelegate> enterStringDelegate;
 @property (nonatomic, weak) MADocument *document;
-@property (nonatomic, copy) NSManagedObjectID *schemaFieldObjectId;
+@property (nonatomic, assign) int64_t schemaFieldObjectId;
 
 @end
 

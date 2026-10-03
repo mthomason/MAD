@@ -14,8 +14,6 @@
 #import "MADQueryBuilderAddPredicateDelegate.h"
 #import "MADTableViewControllerOpperatorsDelegate.h"
 
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UINavigationBar.h>
@@ -26,6 +24,7 @@
 #import "MADQueryValueFromFieldController.h"
 
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
@@ -120,11 +119,11 @@ static os_log_t mad_log;
 		
 		} else if ([segue.destinationViewController isKindOfClass: [MADQueryValueFromFieldController class]]) {
 
-			RptqQueryField *leftField = [self.document.managedObjectContext objectWithID:self.fieldLeftID];
+			RptqQueryField *leftField = [self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.fieldLeftID];
 			MADQueryValueFromFieldController *destinationViewController = segue.destinationViewController;
 			destinationViewController.enterStringDelegate = self;
 			destinationViewController.document = document;
-			destinationViewController.schemaFieldObjectId = [leftField.databaseSchemaField.objectID copy];
+			destinationViewController.schemaFieldObjectId = leftField.databaseSchemaField.identifier;
 		}
 	}
 }
@@ -135,7 +134,7 @@ static os_log_t mad_log;
 	
 	RptqQueryPredicate *queryPredicate = nil;
 	MADocument *document = self.document;
-	NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
+	RptqStoreContext *managedObjectContext = document.storeContext;
 	
 	NSError *error = nil;
 	if (self.leftValue == nil) {
@@ -194,12 +193,12 @@ static os_log_t mad_log;
 	NSString *userInput = [userString copy];
 	if (_currentlyEditingPart == MNSPredicateLeft) {
 		self.leftValue = userInput;
-		self.fieldLeftID = nil;
+		self.fieldLeftID = 0;
 		_tableViewCellLeftSide.detailTextLabel.text = userInput.lowercaseString;
 		
 	} else if (_currentlyEditingPart == MNSPredicateRight) {
 		self.rightValue = userInput;
-		self.fieldRightID = nil;
+		self.fieldRightID = 0;
 		_tableViewCellRightSide.detailTextLabel.text = userInput.lowercaseString;
 		
 	}
@@ -207,24 +206,24 @@ static os_log_t mad_log;
 }
 
 - (void)tableViewControllerChooseFieldDidFinish:(MADQueryChooseFieldController *)controller
-									withFieldID:(NSManagedObjectID *)fieldID {
+									withFieldID:(int64_t)fieldID {
 	
-	NSManagedObjectContext *context = self.document.managedObjectContext;
-	RptqQueryField *queryField = [context objectWithID: fieldID];
+	RptqStoreContext *context = self.document.storeContext;
+	RptqQueryField *queryField = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
 	
 	UITableViewCell *tableViewCellRightSide = _tableViewCellRightSide;
 	[self.navigationController popToViewController:self animated:YES];
 	if (_currentlyEditingPart == MNSPredicateLeft) {
 		self.leftValue = nil;
-		self.fieldLeftID = [fieldID copy];
+		self.fieldLeftID = fieldID;
 		_tableViewCellLeftSide.detailTextLabel.text = queryField.display;
 		
 	} else if (_currentlyEditingPart == MNSPredicateRight) {
 		self.rightValue = nil;
-		self.fieldRightID = [fieldID copy];
+		self.fieldRightID = fieldID;
 		tableViewCellRightSide.detailTextLabel.text = queryField.display;
 	}
-	tableViewCellRightSide.userInteractionEnabled = (self.fieldLeftID == nil);
+	tableViewCellRightSide.userInteractionEnabled = (self.fieldLeftID == 0);
 }
 
 - (void)uITableViewControllerOpperatorsDidSelectOperator:(MADPredicateOperator)operatorType {

@@ -10,6 +10,7 @@
 #define MAD_Designer_MADQueryViewControllerLayoutSection_h
 
 #import "MADIdentifierQueryViewSections.h"
+#import <MAD/RptqStoreContext.h>
 #import <UIKit/UITableView.h>
 
 @class NSArray <__covariant ObjectType>, NSSet <__covariant ObjectType>,
@@ -26,17 +27,17 @@ typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
 
 @property (nonatomic, weak) id <MADQueryViewControllerDatasourceProtocol> datasoruce;
 
-@property (readonly, nonatomic, weak) NSManagedObjectContext *managedObjectContext;
-@property (readonly, nonatomic, strong) NSFetchedResultsController *queryTablesController;
-@property (readonly, nonatomic, strong) NSFetchedResultsController *queryLinksController;
-@property (readonly, nonatomic, strong) NSFetchedResultsController *queryGroupsController;
-@property (readonly, nonatomic, strong) NSFetchedResultsController *queryPredicatesController;
+@property (readonly, nonatomic, weak) RptqStoreContext *managedObjectContext;
+@property (readonly, nonatomic, strong) NSArray *queryTablesController;
+@property (readonly, nonatomic, strong) NSArray *queryLinksController;
+@property (readonly, nonatomic, strong) NSArray *queryGroupsController;
+@property (readonly, nonatomic, strong) NSArray *queryPredicatesController;
 
 @property (nonatomic, readonly, assign) short count;
 @property (nonatomic, readonly, strong) NSArray <__kindof MADQueryViewSectionDelegate *> *sections;
 
 - (instancetype)initWithQueryID: (NSNumber *)queryID
-		   managedObjectContext: (NSManagedObjectContext *)managedObjectContext
+		   managedObjectContext: (RptqStoreContext *)managedObjectContext
 			   reportingEnabled: (BOOL)reportingEnabled
 			handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCel;
 

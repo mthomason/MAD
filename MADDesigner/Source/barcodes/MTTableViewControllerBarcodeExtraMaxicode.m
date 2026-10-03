@@ -22,6 +22,7 @@
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADKeyChain.h>
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabase+Constructor.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
@@ -35,8 +36,6 @@
 #import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UINavigationController.h>
 
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectID.h>
 
 @interface MTTableViewControllerBarcodeExtraMaxicode ()
 @property (nonatomic, strong) MADDataTable *dataTableSampleData;
@@ -63,15 +62,15 @@
 #pragma mark - MADQueryChooseFieldProtocol
 
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
-									withFieldID: (NSManagedObjectID *)fieldID {
+									withFieldID: (int64_t)fieldID {
 	
-	NSManagedObjectContext *context = self.document.managedObjectContext;
-	RptqQueryField *field = [context objectWithID: fieldID];
-	
+	RptqStoreContext *context = self.document.storeContext;
+	RptqQueryField *field = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
+
 	[self.navigationController popViewControllerAnimated:YES];
-	
+
 	RptqDatabaseSchemaField *schemaField = field.databaseSchemaField;
-	MADDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.objectID];
+	MADDataTable *dataTable = [MTTableViewControllerBarcodeExtraMaxicode newDataTableForMangedObject:schemaField.identifier];
 	self.dataTableSampleData = dataTable;
 	MADQuery <MADQueryDatabaseProtocol> *querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
 																																	object: schemaField];
@@ -98,8 +97,8 @@
 	}
 }
 
-+ (MADDataTable *)newDataTableForMangedObject:(NSManagedObjectID *)objectID {
-	NSUInteger hash = objectID.URIRepresentation.absoluteString.hash;
++ (MADDataTable *)newDataTableForMangedObject:(int64_t)objectID {
+	NSUInteger hash = (NSUInteger)objectID;
 	NSDictionary *options = @{
 		@(MADDataTableParametersType) : @(MADDataTableTypeVirtual),
 		@(MADDataTableParametersIdentifier) : @(hash)
