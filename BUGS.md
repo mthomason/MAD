@@ -1447,6 +1447,36 @@ through the running executable; the app's classes are declared locally in the te
 files rather than imported, because `MADDesigner/Source` is not on the bundle's
 header search path.
 
+### The refresh path reads the shared store context from operation-queue threads
+- **Status:** Still open -- found 2026-10-03 in the milestone-(b) audit
+- **Where:** `MADDesigner/Source/MADOperationRefresh.m:104-118` and
+  `MADDesigner/Source/MADOperationRefreshInitialize.m:64-99` (the two live
+  ones), plus the same pattern in `MADQueryValueFromFieldController.m:157-159`
+  (a global GCD queue).  The other former `performBlock:` sites
+  (`MADDesignerViewController`, `MADQueryViewController` delete/add flows) now
+  run inline on the main thread, which changes timing but is thread-safe.
+- **Behavior:** the milestone-(b) mapping replaced each private
+  `NSManagedObjectContext` + `performBlockAndWait:` with a direct read of the
+  shared `document.storeContext` on the operation's own thread.  Core Data's
+  queue confinement is gone, and `RptqStoreContext` / `MADStoreGraph` keep
+  plain mutable collections (registry, dirty sets, graph rows) with no
+  synchronization.  A refresh therefore mutates and iterates those collections
+  on a background thread while the main thread reads them continuously --
+  a data race that can fault objects twice, lose registry entries, or corrupt
+  iteration.  The Phase C design (MAD_STORE_PHASE_C.md §2-3) specified the
+  single shared context but never addressed queue confinement, so this is a
+  design gap, not a mechanical slip.
+- **Fix shape.**  Restore confinement on the refresh path without touching the
+  hot paths: the store reads the refresh operations perform are small (SQL
+  generation and layout setup), so marshalling them onto the main queue (or a
+  single serial store queue that owns all context access) is the right
+  restore; a lock inside every `RptqStoreContext` accessor is not (it taxes the
+  render/formatter hot path the store was rebuilt to serve).  The
+  `MADQueryValueFromFieldController` global-queue read should read the field on
+  the main thread and pass plain values into the block.
+- **The rule this violated:** the shared store context is main-thread-owned;
+  only its owning queue may touch it unless confinement is explicitly added.
+
 ### The value picker offers `NULL` as a value, and it is not SQL NULL
 - **Status:** Still open
 - **Where:** `MADDesigner/Source/MADQueryValueFromFieldController.m:269-270`
