@@ -6,6 +6,7 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
+#import "RptqStoreContext.h"
 #import "RptqDirectionalProperty+Extras.h"
 
 @implementation RptqDirectionalProperty (Extras)

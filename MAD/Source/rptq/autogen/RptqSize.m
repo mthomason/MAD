@@ -14,9 +14,6 @@
 
 @implementation RptqSize (CoreDataProperties)
 
-+ (NSFetchRequest<RptqSize *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqSize"];
-}
 
 @dynamic width;
 @dynamic height;

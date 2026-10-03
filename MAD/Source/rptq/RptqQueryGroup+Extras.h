@@ -10,6 +10,7 @@
 #define Reports_RptqQueryGroup_Extras_h
 
 #import <MAD/RptqQueryGroup.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADSortOrder.h>
 
 @class RptqQueryField;
@@ -17,16 +18,16 @@
 @interface RptqQueryGroup (Extras)
 
 	+ (instancetype)newQueryGroupQueryWithSortOrder:(MADSortOrder)sortOrder
-							andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+							andManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 	+ (NSString *)keyPathHasField;
 	+ (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query;
-	+ (NSUInteger)numberOfGroupsForQueryID:(NSManagedObjectID *)objectID
-					  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	+ (NSUInteger)numberOfGroupsForQueryID:(int64_t)objectID
+					  managedObjectContext:(RptqStoreContext *)managedObjectContext;
 	- (NSString *)fieldNameNice;
 	- (NSString *)fieldNameQuery;
 	- (NSString *)sortDisplayNice;
-	- (int16_t)lastWeightWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (int16_t)lastWeightWithManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 	- (NSInteger)location;
 
 @end

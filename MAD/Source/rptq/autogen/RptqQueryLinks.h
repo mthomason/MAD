@@ -9,20 +9,17 @@
 #ifndef MAD_RptqQueryLinks_NSManagedObject_h
 #define MAD_RptqQueryLinks_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqQuery, RptqQueryField;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqQueryLinks : NSManagedObject
+@interface RptqQueryLinks : RptqObject
 
 @end
 
 @interface RptqQueryLinks (CoreDataProperties)
-
-+ (NSFetchRequest<RptqQueryLinks *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSString *fieldLeftID;
 @property (nullable, nonatomic, copy) NSString *fieldRightID;

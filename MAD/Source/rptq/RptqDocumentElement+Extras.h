@@ -10,6 +10,7 @@
 #define Reports_RptqDocumentElement_Extras_h
 
 #import <MAD/RptqDocumentElement.h>
+#import <MAD/RptqStoreContext.h>
 
 #import <CoreGraphics/CGGeometry.h>
 
@@ -40,10 +41,7 @@ extern NSString * const MTDocumentObjectDefinationField2;
 	@property (readonly) CGRect frame;
 
 	+ (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
-								   fromObjectContext:(NSManagedObjectContext *)context;
-
-	+ (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier;
-	+ (NSFetchRequest <NSDictionary *> *)fetchRequestSectionHeight:(NSManagedObjectID *)sectionID;
+								   fromObjectContext:(RptqStoreContext *)context;
 
 	+ (void)removeDocumentObject:(RptqDocumentElement *)documentObject
 			   fromParentSection:(RptqDocumentSection *)section

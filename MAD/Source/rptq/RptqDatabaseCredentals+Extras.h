@@ -9,15 +9,14 @@
 #ifndef Reports_RptqUserCredentals_Extras_h
 #define Reports_RptqUserCredentals_Extras_h
 
-#import <CoreData/NSFetchRequest.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 #import <MAD/RptqDatabaseCredentals.h>
+#import <MAD/RptqStoreContext.h>
 
 @interface RptqDatabaseCredentals (Extras) <MADConnectionsPropertiesProtocol>
 
-+ (instancetype)newDatabaseCredental:(NSManagedObjectContext *)objectContext;
-+ (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)objectContext;
-+ (NSFetchRequest<RptqDatabaseCredentals *> *)fetchRequest;
++ (instancetype)newDatabaseCredental:(RptqStoreContext *)objectContext;
++ (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(RptqStoreContext *)objectContext;
 - (NSString *)databaseSchemaName;
 
 @end

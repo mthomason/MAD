@@ -12,6 +12,7 @@
 #import <MADAPI/MADDatabaseType.h>
 
 #import <MAD/MADModel.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADModelDataProtocol.h>
 
 @class MADModelTable, MADModelQuery, NSOrderedSet<__covariant ObjectType>;
@@ -21,7 +22,7 @@
 
 	- (instancetype)initWithIdentifier:(int64_t)identifier
 					  queryIdentifier:(int64_t)queryIdentifier
-				managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+				managedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 	@property (nonatomic, readonly, strong)     NSOrderedSet <NSNumber *> *tables;
 	@property (nonatomic, readonly, strong)     NSDictionary <NSNumber *, MADModelTable *> *tableDictionary;

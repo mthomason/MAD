@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDocument+Extras.h"
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows.h"
@@ -47,10 +48,6 @@
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-
 #import <UIKit/UIImage.h>
 
 static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger);
@@ -73,51 +70,32 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 
 #pragma mark - Static
 
-+ (void)deleteExistingDocuments:(NSManagedObjectContext *)context {
-	NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: rptqDocumentName];
-	
-	NSError *error = nil;
-	NSArray *documents = [context executeFetchRequest:request error:&error];
-	if (error != nil) {
-		os_log_error(GetMadLog(), "Failed to fetch existing documents: %{public}@", error);
-	} else if (documents.count > 0) {
-		for (RptqDocument *document in documents) {
-			[context deleteObject:document];
-		}
++ (void)deleteExistingDocuments:(RptqStoreContext *)context {
+	NSArray *documents = [context objectsForEntity:NSStringFromClass([RptqDocument class])];
+	for (RptqDocument *document in documents) {
+		[context deleteObject:document error:NULL];
+	}
+	if (documents.count > 0) {
+		NSError *error = nil;
 		if (![context save:&error]) {
 			os_log_error(GetMadLog(), "Failed to save after document deletion: %{public}@", error);
 		}
 	}
-	
-	if (!error) {
-		if (documents && documents.count > 0) {
-			for (RptqDocument *document in documents) {
-				[context deleteObject:document];
-			}
-		}
-	}
 }
 
-+ (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)context {
++ (instancetype)newDocumentForManagedObjectContext:(RptqStoreContext *)context {
 	NSAssert(context != nil, @"Context must not be nil");
 	
 	[self deleteExistingDocuments:context];
 	
 	NSString *rptqDocumentName = NSStringFromClass([RptqDocument class]);
-	NSEntityDescription *entityDescription = [NSEntityDescription entityForName: rptqDocumentName
-														 inManagedObjectContext: context];
-	NSAssert(entityDescription != nil, @"Failed to get entity description for %@", rptqDocumentName);
-	
-	RptqDocument *document = [[RptqDocument alloc] initWithEntity: entityDescription insertIntoManagedObjectContext: context];
+	RptqDocument *document = [context insertObjectForEntity:rptqDocumentName identifier:1];
 	NSAssert(document != nil, @"Failed to create new document");
-	
-	RptqDocumentSection*(^createSection)(NSManagedObjectContext *, int64_t, NSString *) =
-	^RptqDocumentSection*(NSManagedObjectContext *ctx, int64_t identifier, NSString *sectionClass) {
-		RptqDocumentSection *section = [NSEntityDescription insertNewObjectForEntityForName:sectionClass
-																	 inManagedObjectContext:ctx];
+
+	RptqDocumentSection*(^createSection)(RptqStoreContext *, int64_t, NSString *) =
+	^RptqDocumentSection*(RptqStoreContext *ctx, int64_t identifier, NSString *sectionClass) {
+		RptqDocumentSection *section = [ctx insertObjectForEntity:sectionClass identifier:identifier];
 		NSAssert(section != nil, @"Failed to create section");
-		section.identifier = identifier;
 		return section;
 	};
 
@@ -130,36 +108,31 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 	document.hasPageFooterSection = createSection(context, 4, docSection);
 	document.hasDetailSection = createSection(context, 5, docSection);
 
-	RptqDocumentSectionRows *headerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-																	   inManagedObjectContext: context];
+	RptqDocumentSectionRows *headerRow = [context insertObjectForEntity:rptqDocumentSectionRows identifier:0];
 	NSAssert(headerRow != nil, @"Failed to create section row.");
 	NSOrderedSet <RptqDocumentSectionRows *> *hasRows1 = [[NSOrderedSet alloc] initWithObject: headerRow];
 	document.hasReportHeaderSection.hasRows = hasRows1;
 	headerRow.inSection = document.hasReportHeaderSection;
 
-	RptqDocumentSectionRows *footerRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-																	   inManagedObjectContext: context];
+	RptqDocumentSectionRows *footerRow = [context insertObjectForEntity:rptqDocumentSectionRows identifier:0];
 	NSAssert(footerRow != nil, @"Failed to create section row.");
 	NSOrderedSet <RptqDocumentSectionRows *> *hasRows2 = [[NSOrderedSet alloc] initWithObject: footerRow];
 	document.hasReportFooterSection.hasRows = hasRows2;
 	footerRow.inSection = document.hasReportFooterSection;
 
-	RptqDocumentSectionRows *pageHeaderRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-																		   inManagedObjectContext: context];
+	RptqDocumentSectionRows *pageHeaderRow = [context insertObjectForEntity:rptqDocumentSectionRows identifier:0];
 	NSAssert(pageHeaderRow != nil, @"Failed to create section row.");
 	NSOrderedSet <RptqDocumentSectionRows *> *hasRows3 = [[NSOrderedSet alloc] initWithObject: pageHeaderRow];
 	document.hasPageHeaderSection.hasRows = hasRows3;
 	pageHeaderRow.inSection = document.hasPageHeaderSection;
 
-	RptqDocumentSectionRows *pageFooterRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-																		   inManagedObjectContext: context];
+	RptqDocumentSectionRows *pageFooterRow = [context insertObjectForEntity:rptqDocumentSectionRows identifier:0];
 	NSAssert(pageFooterRow != nil, @"Failed to create section row.");
 	NSOrderedSet <RptqDocumentSectionRows *> *hasRows4 = [[NSOrderedSet alloc] initWithObject: pageFooterRow];
 	document.hasPageFooterSection.hasRows = hasRows4;
 	pageFooterRow.inSection = document.hasPageFooterSection;
 
-	RptqDocumentSectionRows *detailSectionRow = [NSEntityDescription insertNewObjectForEntityForName: rptqDocumentSectionRows
-																			  inManagedObjectContext: context];
+	RptqDocumentSectionRows *detailSectionRow = [context insertObjectForEntity:rptqDocumentSectionRows identifier:0];
 	NSAssert(detailSectionRow != nil, @"Failed to create section row.");
 	NSOrderedSet <RptqDocumentSectionRows *> *hasRows5 = [[NSOrderedSet alloc] initWithObject: detailSectionRow];
 	document.hasDetailSection.hasRows = hasRows5;
@@ -183,55 +156,18 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 	document.hasPageFooterSection.visibility = YES;
 	document.hasDetailSection.visibility = YES;
 
-	NSError *error1 = nil;
-	if (![document.hasReportHeaderSection validateForUpdate: &error1]) {
-		if (error1 != nil) {
-			os_log_error(GetMadLog(), "%s: %@", __PRETTY_FUNCTION__, error1);
-		}
-	}
-	
-	NSError *error2 = nil;
-	if (![document.hasDetailSection validateForUpdate: &error2]) {
-		if (error2 != nil) {
-			os_log_error(GetMadLog(), "%s: %@", __PRETTY_FUNCTION__, error2);
-		}
-	}
-	
-	NSError *error3 = nil;
-	if (![document validateForUpdate: &error3]) {
-		if (error3 != nil) {
-			os_log_error(GetMadLog(), "%s: %@", __PRETTY_FUNCTION__, error3);
-		}
-	}
-	
 	return document;
 }
 
-+ (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext {
++ (instancetype)newDocumentReadFromManagedObjectContext:(RptqStoreContext *)objectContext {
 	NSAssert(objectContext != nil, @"Context must not be nil");
 
-	NSFetchRequest *docFetchRequest = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocument class])];
-	docFetchRequest.fetchLimit = 1;
-
-	NSError *error = nil;
-	NSArray *documents = [objectContext executeFetchRequest:docFetchRequest error:&error];
-	if (error != nil) {
-		os_log_error(GetMadLog(), "Failed to fetch document: %{public}@", error);
-		NSAssert(NO, @"Failed to fetch document: %@", error);
-	}
+	NSArray *documents = [objectContext objectsForEntity:NSStringFromClass([RptqDocument class])];
 	NSAssert(documents.count > 0, @"No documents found");
 	return documents.lastObject;
 }
 
 #pragma mark - Overrides
-
-- (void)willTurnIntoFault {
-	[super willTurnIntoFault];
-}
-
-- (void)didTurnIntoFault {
-	[super didTurnIntoFault];
-}
 
 - (void)willChangeValueForKey:(NSString *)inKey
 			  withSetMutation:(NSKeyValueSetMutationKind)inMutationKind
@@ -239,16 +175,6 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 	[super willChangeValueForKey: inKey
 				 withSetMutation: inMutationKind
 					usingObjects: inObjects];
-}
-
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	self.identifier = 1;
-	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-		[[NSNotificationCenter defaultCenter] willChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class] managedObjectContext:self.managedObjectContext];
-		[[NSNotificationCenter defaultCenter] didChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-	}
 }
 
 - (RptqQuery *)mainQuery {
@@ -376,10 +302,9 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 		
 	} else if (numberOfRows > section.numberOfRows) {
 		
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+		RptqStoreContext *managedObjectContext = self.storeContext;
 		NSString *entityNameSectionRows = NSStringFromClass([RptqDocumentSectionRows class]);
-		RptqDocumentSectionRows *newRowToAppend = [NSEntityDescription insertNewObjectForEntityForName: entityNameSectionRows
-																				inManagedObjectContext: managedObjectContext];
+		RptqDocumentSectionRows *newRowToAppend = [managedObjectContext insertObjectForEntity:entityNameSectionRows identifier:0];
 		NSArray *hasRowsArray = section.hasRows.array;
 		NSMutableOrderedSet *hasRows = hasRowsArray != nil ? [[NSMutableOrderedSet alloc] initWithArray: hasRowsArray] :
 															 [[NSMutableOrderedSet alloc] init];
@@ -433,7 +358,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 }
 
 - (void)storeDatabaseConnectionDefination:(MADDatabase *)database
-				  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+				  forManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 
 	int64_t cid = (int64_t)self.hasDatabaseSchemas.count + 1;
 	RptqDatabase *rptqDB = [RptqDatabase newDatabaseFactoryForManagedObjectContext: managedObjectContext
@@ -483,8 +408,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 	
 	rptqDB.ownedByUser = credentals;
 	NSString *rptqQueryId = NSStringFromClass([RptqQuery class]);
-	RptqQuery *newQuery = [NSEntityDescription insertNewObjectForEntityForName: rptqQueryId
-														inManagedObjectContext: managedObjectContext];
+	RptqQuery *newQuery = [managedObjectContext insertObjectForEntity:rptqQueryId identifier:0];
 	[rptqDB addHasQueriesObject:newQuery];
 	
 	
@@ -496,7 +420,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 
 - (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables
 									   fieldsByTable:(NSDictionary *)fieldsByTable
-							 andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+							 andManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 	
 	MADErrorContainer * __autoreleasing errorContainer = [[MADErrorContainer alloc] init];
 	for (MADDatabaseTable *table in tables) {
@@ -524,7 +448,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 			
 			BOOL success = NO;
 			NSError *saveError = nil;
-			if (!(success = [rptqTable.managedObjectContext save:&saveError])) {
+			if (!(success = [rptqTable.storeContext save:&saveError])) {
 				os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %@", saveError);
 			}
 
@@ -554,32 +478,26 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 	
 }
 
-- (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination managedObjectContext:(RptqStoreContext *)managedObjectContext {
 	
 	NSNumber *objectTypeObj = defination[MTDocumentObjectDefinationType];
 	MADPrintPageElementType objectType = (MADPrintPageElementType)objectTypeObj.unsignedIntegerValue;
 	
 	RptqDocumentElement *reportObject;
-	NSEntityDescription *entityDescriptionDocumentObjectSubtype = nil;
-	
 	// Initialize elementSize with the default for non-image elements
 	CGSize elementSize = CGSizeMake(75.0f, 22.0f);
 	
 	switch (objectType) {
 		case MADPrintPageElementTypeLabelDynamic: {
 			
-			NSManagedObjectID *fieldObjectID;
+			int64_t fieldObjectID;
 			RptqQueryField *field;
 			
-			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementLabelDataField class])
-																 inManagedObjectContext: managedObjectContext];
-			
-			fieldObjectID = defination[MTDocumentObjectDefinationObject];
-			field = (RptqQueryField *)[managedObjectContext objectWithID:fieldObjectID];
+			fieldObjectID = [defination[MTDocumentObjectDefinationObject] longLongValue];
+			field = (RptqQueryField *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldObjectID];
 			
 			
-			reportObject = [[RptqDocumentElementLabelDataField alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-													  insertIntoManagedObjectContext: managedObjectContext];
+			reportObject = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentElementLabelDataField class]) identifier:0];
 			
 			((RptqDocumentElementLabelDataField *)reportObject).referencesQueryField = field;
 			
@@ -591,13 +509,9 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 		}
 		case MADPrintPageElementTypeLabelStatic: {
 			
-			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementLabel class])
-																 inManagedObjectContext: managedObjectContext];
-			
 			NSString *labelText = defination[MTDocumentObjectDefinationObject];
 			
-			reportObject = [[RptqDocumentElementLabel alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-											 insertIntoManagedObjectContext: managedObjectContext];
+			reportObject = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentElementLabel class]) identifier:0];
 			
 			((RptqDocumentElementLabel *)reportObject).text = labelText;
 			
@@ -607,20 +521,16 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 		}
 		case MADPrintPageElementTypeAggregate: {
 			
-			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementAggregate class])
-																 inManagedObjectContext: managedObjectContext];
-			
 			NSDictionary *aggregateOptions = defination[MTDocumentObjectDefinationObject];
 			// Gives "CoreData: warning: Sort descriptor key "identifier" may refer to a modelled property or an expression; the modelled property will be used."
-			reportObject = [[RptqDocumentElementAggregate alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-												 insertIntoManagedObjectContext: managedObjectContext]; // Changed self.managedObjectContext to managedObjectContext for consistency
+			reportObject = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentElementAggregate class]) identifier:0]; // Changed self.managedObjectContext to managedObjectContext for consistency
 			
 			NSNumber *functionInputType = aggregateOptions[MTDocumentObjectDefinationAggregateFunctionInputType];
 			((RptqDocumentElementAggregate *)reportObject).groupNumber = [aggregateOptions[MTDocumentObjectDefinationAggregatePivotNumber] intValue];
 			((RptqDocumentElementAggregate *)reportObject).groupType = [aggregateOptions[MTDocumentObjectDefinationAggregatePivotType] shortValue];
 			((RptqDocumentElementAggregate *)reportObject).functionType = [aggregateOptions[MTDocumentObjectDefinationAggregateType] shortValue];
 			
-			NSManagedObjectID *objectId = aggregateOptions[MTDocumentObjectDefinationAggregateObjectId];
+			int64_t objectId = [aggregateOptions[MTDocumentObjectDefinationAggregateObjectId] longLongValue];
 			
 			switch ((MTAggregateFunctionInputType)functionInputType.integerValue) {
 				case MTAggregateFunctionInputTypeField: {
@@ -631,7 +541,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 					break;
 				}
 				case MTAggregateFunctionInputTypeFormula: {
-					RptqDocumentElementFormula *formula = [managedObjectContext objectWithID: objectId];
+					RptqDocumentElementFormula *formula = [managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:objectId];
 					[((RptqDocumentElementAggregate *)reportObject) setAggregateField:nil];
 					((RptqDocumentElementAggregate *)reportObject).aggregateFunction = formula;
 					break;
@@ -646,13 +556,9 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 		}
 		case MADPrintPageElementTypeImage: {
 			
-			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementImage class])
-																 inManagedObjectContext: managedObjectContext];
-			
 			UIImage *image = defination[MTDocumentObjectDefinationObject];
 			
-			reportObject = [[RptqDocumentElementImage alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-											 insertIntoManagedObjectContext: managedObjectContext];
+			reportObject = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentElementImage class]) identifier:0];
 			((RptqDocumentElementImage *)reportObject).image = image; // This sets the original image data and sizeValue to image.size
 			
 			// Calculate initial size to maintain aspect ratio, with a max width of 75pt
@@ -675,18 +581,15 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 			break;
 		}
 		case MADPrintPageElementTypeWhtiespace: {
-			entityDescriptionDocumentObjectSubtype = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElement class])
-																 inManagedObjectContext: managedObjectContext];
-			reportObject = [[RptqDocumentElement alloc] initWithEntity: entityDescriptionDocumentObjectSubtype
-										insertIntoManagedObjectContext: managedObjectContext];
+			reportObject = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:0];
 			reportObject.type = MADPrintPageElementTypeWhtiespace;
 			break;
 		}
 		case MADPrintPageElementTypeBarcode: {
 			
 			MTBarcode *barcode = defination[MTDocumentObjectDefinationObject];
-			NSManagedObjectID *field1ObjectId = defination[MTDocumentObjectDefinationField1];
-			NSManagedObjectID *field2ObjectId = defination[MTDocumentObjectDefinationField2];
+			int64_t field1ObjectId = [defination[MTDocumentObjectDefinationField1] longLongValue];
+			int64_t field2ObjectId = [defination[MTDocumentObjectDefinationField2] longLongValue];
 			RptqQueryField *field1 = [RptqQueryField queryFieldForObjectID: field1ObjectId managedObjectContext: managedObjectContext];
 			RptqQueryField *field2 = [RptqQueryField queryFieldForObjectID: field2ObjectId managedObjectContext: managedObjectContext];
 			reportObject = [RptqDocumentElementBarcode barcodeWithMtBarcode: barcode

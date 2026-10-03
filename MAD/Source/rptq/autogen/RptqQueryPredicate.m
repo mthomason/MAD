@@ -15,9 +15,6 @@
 
 @implementation RptqQueryPredicate (CoreDataProperties)
 
-+ (NSFetchRequest<RptqQueryPredicate *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqQueryPredicate"];
-}
 
 @dynamic comparson;
 @dynamic leftFieldID;

@@ -73,7 +73,12 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	MADStoreObject *row = [self.graph objectForEntity:entity identifier:identifier];
 	if (!row) return nil;
 
-	cached = [RptqObject objectWithBackingObject:row storeContext:self];
+	// The row's entity is its concrete kind -- RptqDocumentElementLabel, not the table
+	// it shares.  Fault the matching Rptq subclass so callers get the real class back,
+	// falling back to the base for any entity the model names but no class implements.
+	Class objectClass = NSClassFromString(row.entity);
+	if (![objectClass isSubclassOfClass:[RptqObject class]]) objectClass = [RptqObject class];
+	cached = [objectClass objectWithBackingObject:row storeContext:self];
 	NSMutableDictionary<NSNumber *, RptqObject *> *byIdentifier = self.registry[entity];
 	if (!byIdentifier) {
 		byIdentifier = [NSMutableDictionary dictionary];
@@ -110,6 +115,7 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	[self.graph addObject:row];
 	RptqObject *object = [self objectForEntity:entity identifier:identifier];
 	NSAssert(object != nil, @"an inserted row must fault back into the context");
+	[object awakeFromInsert];
 	return object;
 }
 

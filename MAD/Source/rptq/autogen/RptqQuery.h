@@ -9,23 +9,18 @@
 #ifndef MAD_RptqQuery_NSManagedObject_h
 #define MAD_RptqQuery_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDatabase, RptqDatabaseSchemaField, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate,
        RptqQuerySort, RptqQueryTable;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqQuery : NSManagedObject
+@interface RptqQuery : RptqObject
 
 @end
 
 @interface RptqQuery (CoreDataProperties)
-
-+ (NSFetchRequest<RptqQuery *> *)fetchRequest;
-+ (NSFetchRequest *)fetchRequestTableCount:(NSNumber *)queryIdentifier
-                             objectContext:(NSManagedObjectContext *)context;
 
 @property (nullable, nonatomic, copy) NSString *cachedText;
 @property (nonatomic) int64_t identifier;

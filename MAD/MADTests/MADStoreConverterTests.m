@@ -385,7 +385,11 @@
 /// on it.  What lands in the store has to be four Real columns, PNG bytes and an
 /// identifier string -- not an archive.
 - (void)testTransformableValuesBecomePortableScalars {
-	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:self.model];
+	NSManagedObjectModel *model = [self.model copy];
+	for (NSEntityDescription *entity in model.entities) {
+		entity.managedObjectClassName = @"NSManagedObject";
+	}
+	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
 	NSError *error = nil;
 	XCTAssertNotNil([coordinator addPersistentStoreWithType:NSInMemoryStoreType
 											  configuration:nil

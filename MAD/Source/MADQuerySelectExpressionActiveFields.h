@@ -10,6 +10,7 @@
 #define Reports_MTQuery_MADQuerySelectExpressionActiveFields_h
 
 #import "MADQuerySelectExpression.h"
+#import <MAD/RptqStoreContext.h>
 
 @class RptqDatabaseSchemaField, NSString,
        NSMutableDictionary<KeyType, ObjectType>, NSMutableArray<ObjectType>;
@@ -17,7 +18,7 @@
 @interface MADQuerySelectExpressionActiveFields : MADQuerySelectExpression
 
     - (instancetype)initWithDatabase:(MADDatabase *)database
-             forManagedObjectContext:(NSManagedObjectContext *)context;
+             forManagedObjectContext:(RptqStoreContext *)context;
 
     @property (nonatomic, readonly, strong) NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields;
     @property (nonatomic, readonly, strong) NSMutableArray <NSString *> *fieldKeys;

@@ -14,9 +14,6 @@
 
 @implementation RptqDocumentElementLabelLink (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDocumentElementLabelLink *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementLabelLink"];
-}
 
 @dynamic text;
 @dynamic url;

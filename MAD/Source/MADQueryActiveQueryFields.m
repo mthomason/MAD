@@ -7,6 +7,7 @@
 //
 
 #import "MADQueryActiveQueryFields.h"
+#import <MAD/RptqStoreContext.h>
 #import "madlog.h"
 
 #import <CoreData/NSManagedObjectContext.h>
@@ -25,7 +26,7 @@
 
 @implementation MADQueryActiveQueryFields
 
-- (instancetype)initWithContext:(NSManagedObjectContext *)context {
+- (instancetype)initWithContext:(RptqStoreContext *)context {
 	
 	if (self = [super init]) {
 		NSArray *objects;
@@ -99,15 +100,8 @@
 	return self;
 }
 
-- (NSArray *)objectOfType:(Class)managedObjectType inContext:(NSManagedObjectContext *)context {
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass(managedObjectType)];
-	fetchRequest.predicate = [NSPredicate predicateWithValue:YES];
-	NSError *error = nil;
-	NSArray *objects = [context executeFetchRequest:fetchRequest error:&error];
-	if (error != nil) {
-		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
-	}
-	return objects;
+- (NSArray *)objectOfType:(Class)managedObjectType inContext:(RptqStoreContext *)context {
+	return [context objectsForEntity:NSStringFromClass(managedObjectType)];
 }
 
 @end

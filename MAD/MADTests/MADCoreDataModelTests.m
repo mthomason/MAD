@@ -14,6 +14,8 @@
 #import <CoreData/CoreData.h>
 
 #import <MAD/RptqDocument.h>
+#import <MAD/MADStore.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/MADocumentSectionType.h>
@@ -32,21 +34,15 @@
 	return [[NSManagedObjectModel alloc] initWithContentsOfURL:momdURL];
 }
 
-- (NSManagedObjectContext *)inMemoryContext {
-	NSManagedObjectModel *model = [self modelFromTestBundle];
-	XCTAssertNotNil(model);
-
-	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+- (RptqStoreContext *)inMemoryContext {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *url = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"test.sqlite"]];
+	MADStore *store = [MADStore storeWithURL:url];
 	NSError *error = nil;
-	[coordinator addPersistentStoreWithType:NSInMemoryStoreType
-							  configuration:nil
-										URL:nil
-									options:nil
-									  error:&error];
-	XCTAssertNil(error);
-
-	NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-	context.persistentStoreCoordinator = coordinator;
+	XCTAssertTrue([store openWithError:&error], @"open failed: %@", error);
+	RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
+	XCTAssertTrue([context loadAllWithError:&error], @"load failed: %@", error);
 	return context;
 }
 
@@ -77,20 +73,19 @@
 #pragma mark - Entity insertion
 
 - (void)testInsertRptqDocumentFromEntityName {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 
-	RptqDocument *document = [NSEntityDescription insertNewObjectForEntityForName:@"RptqDocument"
-														   inManagedObjectContext:context];
+	RptqDocument *document = [context insertObjectForEntity:@"RptqDocument" identifier:0];
 	XCTAssertNotNil(document);
 	XCTAssertTrue([document isKindOfClass:[RptqDocument class]]);
-	// awakeFromInsert seeds identifier = 1 on a root context.
+	// The store mints identifier = 1 for the first document.
 	XCTAssertEqual(document.identifier, (int64_t)1);
 }
 
 #pragma mark - Document factory
 
 - (void)testNewDocumentFactoryBuildsSections {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 
 	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
 	XCTAssertNotNil(document);
@@ -110,7 +105,7 @@
 }
 
 - (void)testNewDocumentFactorySectionIdentifiersAndRows {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 
 	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
 

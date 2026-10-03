@@ -15,6 +15,8 @@
 #import <MADFoundation/MADDataType.h>
 
 #import <MAD/RptqDatabase.h>
+#import <MAD/MADStore.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqDatabase+Extras.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
@@ -49,15 +51,15 @@
 }
 
 - (void)testSchemaFieldFieldTypeDisplay {
-	NSManagedObjectModel *model = [[NSManagedObjectModel alloc] initWithContentsOfURL:
-		[[NSBundle bundleForClass:[self class]] URLForResource:@"MAD" withExtension:@"momd"]];
-	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-	[coordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:nil];
-	NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-	context.persistentStoreCoordinator = coordinator;
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *url = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"test.sqlite"]];
+	MADStore *store = [MADStore storeWithURL:url];
+	[store openWithError:NULL];
+	RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
+	[context loadAllWithError:NULL];
 
-	RptqDatabaseSchemaField *field = [NSEntityDescription insertNewObjectForEntityForName:@"RptqDatabaseSchemaField"
-																 inManagedObjectContext:context];
+	RptqDatabaseSchemaField *field = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:0];
 	field.dataType = MADDataTypeString;
 	XCTAssertEqualObjects([field fieldTypeDisplay], @"String");
 }

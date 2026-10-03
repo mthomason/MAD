@@ -9,20 +9,17 @@
 #ifndef MAD_RptqDatabase_NSManagedObject_h
 #define MAD_RptqDatabase_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDatabaseSchemaTable, RptqDocument, RptqQuery, RptqDatabaseCredentals;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqDatabase : NSManagedObject
+@interface RptqDatabase : RptqObject
 
 @end
 
 @interface RptqDatabase (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDatabase *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSString *databaseDriverType;
 @property (nonatomic) int16_t databaseDriverTypeEnum;

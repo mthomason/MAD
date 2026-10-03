@@ -9,20 +9,17 @@
 #ifndef MAD_RptqDirectionalProperty_h
 #define MAD_RptqDirectionalProperty_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class RptqBorder;
 
-@interface RptqDirectionalProperty : NSManagedObject
+@interface RptqDirectionalProperty : RptqObject
 
 @end
 
 @interface RptqDirectionalProperty (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDirectionalProperty *> *)fetchRequest;
 
 @property (nonatomic) int16_t top;
 @property (nonatomic) int16_t bottom;

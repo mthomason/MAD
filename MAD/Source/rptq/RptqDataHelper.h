@@ -11,12 +11,8 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSManagedObjectContext;
-
 @interface RptqDataHelper : NSObject
 
-	+ (int64_t)nextIdentifierForClass:(Class)class
-		managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
 	+ (void)cleanup;
 
 @end

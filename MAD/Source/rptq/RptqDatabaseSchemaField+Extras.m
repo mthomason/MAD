@@ -10,13 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 
 #import <Foundation/NSBundle.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
 
 #import <MADFoundation/MADStringUtilities.h>
 
@@ -30,50 +27,16 @@
 
 #pragma mark - Overrides
 
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-		[[NSNotificationCenter defaultCenter] willChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-											managedObjectContext:self.managedObjectContext];
-		[[NSNotificationCenter defaultCenter] didChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-	}
-}
 
-- (void)awakeFromFetch {
-	[super awakeFromFetch];
-}
 
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-	[super awakeFromSnapshotEvents:flag];
-	switch (flag) {
-		case NSSnapshotEventMergePolicy:
-			break;
-		case NSSnapshotEventRefresh:
-			break;
-		case NSSnapshotEventRollback:
-			break;
-		case NSSnapshotEventUndoDeletion:
-			break;
-		case NSSnapshotEventUndoInsertion:
-			break;
-		case NSSnapshotEventUndoUpdate:
-			break;
-		default:
-			break;
-	}
-}
+
 
 #pragma mark - Static
 
-+ (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
++ (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(RptqStoreContext *)objectContext
 															andField:(MADDatabaseField *)field {
 	
-	NSString *entityName = NSStringFromClass([RptqDatabaseSchemaField class]);
-	NSEntityDescription *fieldEntity = [NSEntityDescription entityForName: entityName inManagedObjectContext: objectContext];
-
-	RptqDatabaseSchemaField *rptqField = [[self alloc] initWithEntity: fieldEntity
-									   insertIntoManagedObjectContext: objectContext];
+	RptqDatabaseSchemaField *rptqField = [objectContext insertObjectForEntity:NSStringFromClass([RptqDatabaseSchemaField class]) identifier:0];
 	rptqField.name = field.name.copy;
 	rptqField.dataType = field.fieldType;
 	rptqField.dataTypeNative = field.fieldTypeNative;
@@ -84,9 +47,10 @@
 	return rptqField;
 }
 
-+ (instancetype)managedObjectForObjectID:(NSManagedObjectID *)objectID
-	   andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	return (RptqDatabaseSchemaField *)[managedObjectContext objectWithID:objectID];
++ (instancetype)managedObjectForObjectID:(int64_t)objectID
+	   andManagedObjectContext:(RptqStoreContext *)managedObjectContext {
+	return (RptqDatabaseSchemaField *)[managedObjectContext objectForEntity:NSStringFromClass([RptqDatabaseSchemaField class])
+															   identifier:objectID];
 }
 
 - (NSString *)display {

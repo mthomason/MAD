@@ -15,6 +15,7 @@
 #import <MADFoundation/MADCacheProtocol.h>
 
 #import <MAD/MADPrintPageRendererDataSource.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADSortOrder.h>
 #import <MAD/MADReportFormatterDataSourceProtocol.h>
 
@@ -23,7 +24,7 @@
 
 @protocol MADActivityProtocol, MADocumentDelegate;
 
-@class MADDesignerQuery, MADDesignerLayout, MADDesignerViewer, NSManagedObjectID, RptqDocument, MADDatabaseConnection, MADModelDocument, MADocumentState, MADSectionLayoutManager, MADQueryFull, MTPaper, RptqQuery;
+@class MADDesignerQuery, MADDesignerLayout, MADDesignerViewer, NSManagedObjectID, RptqDocument, MADDatabaseConnection, MADModelDocument, MADocumentState, MADSectionLayoutManager, MADQueryFull, MTPaper, RptqQuery, RptqStoreContext;
 
 
 extern NSString * const MADMimeType;
@@ -41,6 +42,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
 @property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
 @property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
+@property (readonly, nonatomic, strong)     RptqStoreContext *storeContext;
 @property (readonly, nonatomic, strong)     MTPaper *paper;
 @property (readonly, nonatomic)             NSUInteger numberOfPages;
 @property (readonly, nonatomic)             NSUInteger numberOfResults;
@@ -75,19 +77,19 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender;
 
-- (void)addQueryGroupWithQueryField:(NSManagedObjectID *)queryFieldObjectID
+- (void)addQueryGroupWithQueryField:(int64_t)queryFieldObjectID
 						  andSortOrder:(MADSortOrder)sortOrder;
 
 - (void)removeDocumentObjectWithObjectID:(int64_t)objectID;
 
-- (void)deleteDatafieldsRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
-								inContent:(NSManagedObjectContext *)context;
+- (void)deleteDatafieldsRelatedToTable:(int64_t)deleatedTableObjectId
+								inContent:(RptqStoreContext *)context;
 
-- (void)deleteAggregateFieldRelatedToTable:(NSManagedObjectID *)deleatedTableObjectId
-									inContent:(NSManagedObjectContext *)context;
+- (void)deleteAggregateFieldRelatedToTable:(int64_t)deleatedTableObjectId
+									inContent:(RptqStoreContext *)context;
 
-- (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID
-		 fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (void)removeGroupWitObjectID:(int64_t)groupID
+		 fromManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 - (NSDictionary <NSNumber *, NSNumber *> *)layoutHeightsBySectionKey;
 

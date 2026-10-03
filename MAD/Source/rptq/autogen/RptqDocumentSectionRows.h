@@ -9,20 +9,17 @@
 #ifndef MAD_RptqDocumentSectionRows_NSManagedObject_h
 #define MAD_RptqDocumentSectionRows_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDocumentElement, RptqDocumentSection;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqDocumentSectionRows : NSManagedObject
+@interface RptqDocumentSectionRows : RptqObject
 
 @end
 
 @interface RptqDocumentSectionRows (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDocumentSectionRows *> *)fetchRequest;
 
 @property (nonatomic) double layoutHeight;
 @property (nonatomic) int32_t rowNumber;

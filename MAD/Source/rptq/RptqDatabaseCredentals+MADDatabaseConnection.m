@@ -6,6 +6,7 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
+#import "RptqStoreContext.h"
 #import "RptqDatabaseCredentals+MADDatabaseConnection.h"
 #import <Foundation/NSString.h>
 #import "MADDatabaseConnection+Constructor.h"

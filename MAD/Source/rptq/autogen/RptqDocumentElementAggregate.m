@@ -15,9 +15,6 @@
 
 @implementation RptqDocumentElementAggregate (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDocumentElementAggregate *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementAggregate"];
-}
 
 @dynamic groupNumber;
 @dynamic groupType;

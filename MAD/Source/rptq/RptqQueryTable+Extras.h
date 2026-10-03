@@ -10,19 +10,20 @@
 #define Reports_RptqQueryTable_Extras_h
 
 #import <MAD/RptqQueryTable.h>
+#import <MAD/RptqStoreContext.h>
 #import <MADDataStructures/MTProtocolCompare.h>
 
-@class NSManagedObjectID, RptqDocument, RptqDatabase, RptqDatabaseSchemaTable;
+@class RptqDocument, RptqDatabase, RptqDatabaseSchemaTable;
 
 @interface RptqQueryTable (Extras)
 	<MTProtocolCompare>
 
 	+ (instancetype)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
 									   database:(RptqDatabase *)database
-						forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+						forManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 
-	+ (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID
-					  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	+ (instancetype)queryTableWithObjectID:(int64_t)objectID
+					  managedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 	+ (NSString *)keyPathAlias;
 	+ (NSString *)keyPathDropIndex;

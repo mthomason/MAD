@@ -10,13 +10,9 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDocumentSection+Extras.h"
 #import "madlog.h"
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSExpressionDescription.h>
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSIndexPath.h>
@@ -244,248 +240,22 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 	return result;
 }
 
-+ (NSFetchRequest <RptqDocumentSection *> *)fetchRequestSectionWithIdentifier:(int64_t)identifier {
-	NSFetchRequest *request;
-	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:identifier];
-	request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
-	request.predicate = predicate;
-	request.fetchLimit = 1;
-	request.resultType = NSManagedObjectResultType;
-	request.includesSubentities = YES;
-	request.includesPropertyValues = YES;
-	return request;
-}
 
-+ (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSectionIDs {
-	NSUInteger expressionCount = 4;
-	NSExpressionDescription *expressionDescription[expressionCount];
-	NSPredicate *predicate;
-	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier)),
-			 *keyPathType = [self keyPathType],
-			 *keyPathInGroupWeight = [self keyPathInGroupWeight],
-			 *keyPathInReportHeader = [self keyPathInReportHeader],
-			 *keyPathInReportFooter = [self keyPathInReportFooter],
-			 *keyPathInPageHeader = [self keyPathInPageHeader],
-			 *keyPathInPageFooter = [self keyPathInPageFooter],
-			 *keyPathInReport = [self keyPathInReport],
-			 *keyPathInGroup = [self keyPathInGroup],
-			 *keySelf = NSStringFromSelector(@selector(self));
-	
-	NSPredicate *predicateReportHeaderNotNull = [NSPredicate newPredicateProperyNotNull:keyPathInReportHeader];
-	NSPredicate *predicateReportFooterNotNull = [NSPredicate newPredicateProperyNotNull:keyPathInReportFooter];
-	NSPredicate *predicatePageHeaderNotNull = [NSPredicate newPredicateProperyNotNull:keyPathInPageHeader];
-	NSPredicate *predicatePageFooterNotNull = [NSPredicate newPredicateProperyNotNull:keyPathInPageFooter];
-	NSPredicate *predicateInGroup = [NSPredicate newPredicateProperyNotNull:keyPathInGroup];
-	NSPredicate *predicateInReport = [NSPredicate newPredicateProperyNotNull:keyPathInReport];
-	
-	NSArray <NSPredicate *> *predicates;
-	predicates = [[NSArray alloc] initWithObjects: predicateReportHeaderNotNull,
-				  predicateReportFooterNotNull, predicatePageHeaderNotNull,
-				  predicatePageFooterNotNull, predicateInGroup, predicateInReport, nil];
-	predicate = [NSCompoundPredicate orPredicateWithSubpredicates:predicates];
-	
-	NSString *keys[] = {
-		keySelf,
-		keyIdentifier,
-		keyPathType,
-		keyPathInGroupWeight,
-	};
-	
-	NSExpression *expressions[] = {
-		[NSExpression expressionForEvaluatedObject],
-		[NSExpression expressionForKeyPath: keyIdentifier],
-		[NSExpression expressionForKeyPath: keyPathType],
-		[NSExpression expressionForKeyPath: keyPathInGroupWeight],
-	};
-	
-	NSAttributeType types[] = {
-		NSObjectIDAttributeType,
-		NSInteger64AttributeType,
-		NSInteger16AttributeType,
-		NSInteger16AttributeType,
-	};
-	
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		expressionDescription[i] = [[NSExpressionDescription alloc] init];
-		expressionDescription[i].name = keys[i].copy;
-		expressionDescription[i].expression = expressions[i];
-		expressionDescription[i].expressionResultType = types[i];
-	}
-	
-	NSString *entityName = NSStringFromClass([self class]);
-	
-	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
-	request.predicate = predicate;
-	
-	NSArray *propertiesToFetch;
-	propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
-												   count: (NSUInteger)expressionCount];
-	
-	request.propertiesToFetch = propertiesToFetch;
-	request.resultType = NSDictionaryResultType;
-		
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		expressionDescription[i] = nil;
-		keys[i] = nil;
-		expressions[i] = nil;
-	}
-	
-	return request;
-}
 
-+ (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSections {
-	
-	NSUInteger expressionCount = 20;
-	NSExpressionDescription *expressionDescription[expressionCount];
-	NSPredicate *predicate;
 
-	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier)),
-			 *keyPathNumberOfRows = [self keyPathNumberOfRows],
-			 *keyPathType = [self keyPathType],
-			 *keyPathWrappingStyle = [self keyPathWrappingStyle],
-			 *keyPathVisibility = [self keyPathVisibility],
-			 *keyPathHeight = [self keyPathHeight],
-			 *keyPathLayoutHeight = [self keyPathLayoutHeight],
-			 *keyPathInGroupHasFieldInQueryTableAlias = [self keyPathInGroupHasFieldInQueryTableAlias],
-			 *keyPathInGroupHasFieldDatabaseSchemaFieldName = [self keyPathInGroupHasFieldDatabaseSchemaFieldName],
-			 *keyPathInGroupWeight = [self keyPathInGroupWeight],
-			 *keyPathInGroupSort = [self keyPathInGroupSort],
-			 *keyPathInReportHeader = [self keyPathInReportHeader],
-			 *keyPathInReportFooter = [self keyPathInReportFooter],
-			 *keyPathInPageHeader = [self keyPathInPageHeader],
-			 *keyPathInPageFooter = [self keyPathInPageFooter],
-			 *keyPathInReport = [self keyPathInReport],
-			 *keyPathInGroup = [self keyPathInGroup],
-			 *keyPathInGroupHasFieldDatabaseSchemaFieldDataType = [self keyPathInGroupHasFieldDatabaseSchemaFieldDataType],
-			 *keyPathInGroupHasFieldInQueryTableDropIndex = [self keyPathInGroupHasFieldInQueryTableDropIndex],
-			 *keySelf = NSStringFromSelector(@selector(self));
 
-	NSPredicate *predicateReportHeaderNotNull = [NSPredicate newPredicateProperyNotNull:keyPathInReportHeader];
-	NSPredicate *predicateReportFooterNotNull = [NSPredicate newPredicateProperyNotNull:keyPathInReportFooter];
-	NSPredicate *predicatePageHeaderNotNull = [NSPredicate newPredicateProperyNotNull:keyPathInPageHeader];
-	NSPredicate *predicatePageFooterNotNull = [NSPredicate newPredicateProperyNotNull:keyPathInPageFooter];
-	NSPredicate *predicateInGroup = [NSPredicate newPredicateProperyNotNull:keyPathInGroup];
-	NSPredicate *predicateInReport = [NSPredicate newPredicateProperyNotNull:keyPathInReport];
-	
-	NSArray <NSPredicate *> *predicates = [[NSArray alloc] initWithObjects:
-										   predicateReportHeaderNotNull,
-										   predicateReportFooterNotNull,
-										   predicatePageHeaderNotNull,
-										   predicatePageFooterNotNull,
-										   predicateInGroup, predicateInReport, nil];
-	predicate = [NSCompoundPredicate orPredicateWithSubpredicates:predicates];
-	
-	NSString *keys[] = {
-		keySelf,
-		keyIdentifier,
-		keyPathNumberOfRows,
-		keyPathType,
-		keyPathWrappingStyle,
-		keyPathVisibility,
-		keyPathHeight,
-		keyPathLayoutHeight,
-		keyPathInGroupHasFieldInQueryTableAlias,
-		keyPathInGroupHasFieldDatabaseSchemaFieldName,
-		keyPathInGroupWeight,
-		keyPathInGroupSort,
-		keyPathInReportHeader,
-		keyPathInReportFooter,
-		keyPathInPageHeader,
-		keyPathInPageFooter,
-		keyPathInGroup,
-		keyPathInReport,
-		keyPathInGroupHasFieldDatabaseSchemaFieldDataType,
-		keyPathInGroupHasFieldInQueryTableDropIndex,
-	};
 
-	NSExpression *expressions[] = {
-		[NSExpression expressionForEvaluatedObject],
-		[NSExpression expressionForKeyPath: keyIdentifier],
-		[NSExpression expressionForKeyPath: keyPathNumberOfRows],
-		[NSExpression expressionForKeyPath: keyPathType],
-		[NSExpression expressionForKeyPath: keyPathWrappingStyle],
-		[NSExpression expressionForKeyPath: keyPathVisibility],
-		[NSExpression expressionForKeyPath: keyPathHeight],
-		[NSExpression expressionForKeyPath: keyPathLayoutHeight],
-		[NSExpression expressionForKeyPath: keyPathInGroupHasFieldInQueryTableAlias],
-		[NSExpression expressionForKeyPath: keyPathInGroupHasFieldDatabaseSchemaFieldName],
-		[NSExpression expressionForKeyPath: keyPathInGroupWeight],
-		[NSExpression expressionForKeyPath: keyPathInGroupSort],
-		[NSExpression expressionForKeyPath: keyPathInReportHeader],
-		[NSExpression expressionForKeyPath: keyPathInReportFooter],
-		[NSExpression expressionForKeyPath: keyPathInPageHeader],
-		[NSExpression expressionForKeyPath: keyPathInPageFooter],
-		[NSExpression expressionForKeyPath: keyPathInGroup],
-		[NSExpression expressionForKeyPath: keyPathInReport],
-		[NSExpression expressionForKeyPath: keyPathInGroupHasFieldDatabaseSchemaFieldDataType],
-		[NSExpression expressionForKeyPath: keyPathInGroupHasFieldInQueryTableDropIndex],
-	};
-	
-	NSAttributeType types[] = {
-		NSObjectIDAttributeType,
-		NSInteger64AttributeType,
-		NSInteger32AttributeType,
-		NSInteger16AttributeType,
-		NSInteger16AttributeType,
-		NSBooleanAttributeType,
-		NSDoubleAttributeType,
-		NSDoubleAttributeType,
-		NSStringAttributeType,
-		NSStringAttributeType,
-		NSInteger16AttributeType,
-		NSInteger16AttributeType,
-		NSObjectIDAttributeType,
-		NSObjectIDAttributeType,
-		NSObjectIDAttributeType,
-		NSObjectIDAttributeType,
-		NSObjectIDAttributeType,
-		NSObjectIDAttributeType,
-		NSInteger16AttributeType,
-		NSInteger64AttributeType,
-	};
-	
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		expressionDescription[i] = [[NSExpressionDescription alloc] init];
-		expressionDescription[i].name = keys[i].copy;
-		expressionDescription[i].expression = expressions[i];
-		expressionDescription[i].expressionResultType = types[i];
-	}
-		
-	NSString *entityName = NSStringFromClass([self class]);
-	
-	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: entityName];
-	request.predicate = predicate;
-	
-	NSArray *propertiesToFetch;
-	propertiesToFetch = [[NSArray alloc] initWithObjects: expressionDescription
-												   count: (NSUInteger)expressionCount];
-	
-	request.propertiesToFetch = propertiesToFetch;
-	request.resultType = NSDictionaryResultType;
-	
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		expressionDescription[i] = nil;
-		keys[i] = nil;
-		expressions[i] = nil;
-	}
-	
-	return request;
-}
 
 + (instancetype)newDocumentSectionWithIdentifier:(int64_t)identifier
-							   fromObjectContext:(NSManagedObjectContext *)context {
-	NSFetchRequest <RptqDocumentSection *> *fetchRequet = [self fetchRequestSectionWithIdentifier: identifier];
-	NSError *error = nil;
-	NSArray <RptqDocumentSection *> *results = [context executeFetchRequest:fetchRequet error:&error];
-	if (error != nil) {
-		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
-	}
-	return [results firstObject];
+							   fromObjectContext:(RptqStoreContext *)context {
+	return (RptqDocumentSection *)[context objectForEntity:NSStringFromClass([RptqDocumentSection class])
+												identifier:identifier];
 }
 
-+ (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objectID
-					inManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	return (RptqDocumentSection *)[managedObjectContext objectWithID:objectID];
++ (instancetype)documentSectionForObjectID:(int64_t)objectID
+					inManagedObjectContext:(RptqStoreContext *)managedObjectContext {
+	return (RptqDocumentSection *)[managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentSection class])
+														   identifier:objectID];
 }
 
 
@@ -630,7 +400,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 	RptqDocumentSection *sec;
 	NSInteger result = 0;
 	for (sec in enumerator) {
-		if ([section.objectID isEqual:sec.objectID]) break;
+		if (section.identifier == sec.identifier) break;
 		result++;
 	}
 	return result;
@@ -639,39 +409,9 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 #pragma mark -
 #pragma mark Overrides
 
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-		[[NSNotificationCenter defaultCenter] willChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-											managedObjectContext:self.managedObjectContext];
-		[[NSNotificationCenter defaultCenter] didChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-	}
-}
 
-- (void)awakeFromFetch {
-	[super awakeFromFetch];
-}
 
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-	[super awakeFromSnapshotEvents:flag];
-	switch (flag) {
-		case NSSnapshotEventMergePolicy:
-			break;
-		case NSSnapshotEventRefresh:
-			break;
-		case NSSnapshotEventRollback:
-			break;
-		case NSSnapshotEventUndoDeletion:
-			break;
-		case NSSnapshotEventUndoInsertion:
-			break;
-		case NSSnapshotEventUndoUpdate:
-			break;
-		default:
-			break;
-	}
-}
+
 
 - (BOOL)producesFormFeed {
 	return (self.wrappingStyle) == RptqDocumentSectionWrappingStyleNewPageAfter;
@@ -711,28 +451,18 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 	}
 }
 
-- (int64_t)nextDropIndexForSection:(NSManagedObjectContext *)managedObjectContext {
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDocumentElement class])];
-	request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(dropIndex)) ascending: NO]];
-	request.fetchLimit = 1;
-
+- (int64_t)nextDropIndexForSection:(RptqStoreContext *)managedObjectContext {
 	int64_t dropIndex = 0;
-	NSError *error = nil;
-	NSArray *fetchResults = [managedObjectContext executeFetchRequest: request error: &error];
-	if (error != nil) {
-		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
-	} else {
-		RptqDocumentElement *lastObject = fetchResults.lastObject;
-		if (lastObject.objectID.isTemporaryID == NO) {
-			dropIndex = lastObject.dropIndex + 1;
-		}
+	NSArray *elements = [managedObjectContext objectsForEntity:NSStringFromClass([RptqDocumentElement class])];
+	for (RptqDocumentElement *element in elements) {
+		if (element.dropIndex + 1 > dropIndex) dropIndex = element.dropIndex + 1;
 	}
 	return dropIndex;
 }
 
 - (void)addDocumentObject: (RptqDocumentElement *)documentObject
 			withDropPoint: (CGPoint)origin
-	 managedObjectContext: (NSManagedObjectContext *)managedObjectContext {
+	 managedObjectContext: (RptqStoreContext *)managedObjectContext {
 	
 	[documentObject setOriginPoint: origin];
 	
@@ -829,14 +559,10 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 }
 
 + (instancetype)newDocumentSectionOfType:(MADDocumentSectionType)type
-				 forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+				 forManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 
-	NSEntityDescription *entity;
-	entity = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentSection class])
-						 inManagedObjectContext: managedObjectContext];
-
-	RptqDocumentSection *section = [[self alloc] initWithEntity: entity
-								 insertIntoManagedObjectContext: managedObjectContext];
+	RptqDocumentSection *section = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentSection class])
+																  identifier:0];
 	section.visibility = YES;
 	section.type = type;
 	

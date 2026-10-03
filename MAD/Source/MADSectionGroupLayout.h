@@ -10,6 +10,7 @@
 #define MAD_MADSectionGroupLayout_h
 
 #import <MADSectionLayout.h>
+#import <MAD/RptqStoreContext.h>
 #import <MADSortOrder.h>
 
 @class NSSortDescriptor;
@@ -22,7 +23,7 @@
 	@property (nonatomic, copy) NSString * (^safeIdentifier)(NSString *);
 
 	- (instancetype)initWithObject:(NSDictionary *)object
-			  managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+			  managedObjectContext:(RptqStoreContext *)managedObjectContext
 					safeIdentifier:(NSString * (^)(NSString *))safeIdentifier;
 
 	- (NSSortDescriptor *)sortDescriptor;

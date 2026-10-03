@@ -14,9 +14,6 @@
 
 @implementation RptqPoint (CoreDataProperties)
 
-+ (NSFetchRequest<RptqPoint *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqPoint"];
-}
 
 @dynamic x;
 @dynamic y;

@@ -9,20 +9,17 @@
 #ifndef MAD_RptqAlignment_h
 #define MAD_RptqAlignment_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class RptqDocumentElement;
 
-@interface RptqAlignment : NSManagedObject
+@interface RptqAlignment : RptqObject
 
 @end
 
 @interface RptqAlignment (CoreDataProperties)
-
-+ (NSFetchRequest<RptqAlignment *> *)fetchRequest;
 
 @property (nonatomic) int16_t horizontal;
 @property (nonatomic) int16_t vertical;

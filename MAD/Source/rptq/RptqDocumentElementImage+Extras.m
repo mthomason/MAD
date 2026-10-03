@@ -10,15 +10,12 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDocumentElementImage+Extras.h"
 
 #import <CoreFoundation/CFNumber.h>
 
 #import <Foundation/NSSortDescriptor.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
 
 #import "RptqDocument.h"
 #import "RptqDocumentElement+Extras.h"
@@ -35,9 +32,9 @@
 
 #pragma mark - RptqDocumentElementFactory
 
-+ (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId
-					fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	NSManagedObject *result = [managedObjectContext objectWithID:objectId];
++ (instancetype)getElementForObjectID:(int64_t)objectId
+					fromObjectContext:(RptqStoreContext *)managedObjectContext {
+	RptqObject *result = [managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:objectId];
 	return (RptqDocumentElementImage *)result;
 }
 

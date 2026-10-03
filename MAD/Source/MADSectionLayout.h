@@ -11,6 +11,7 @@
 
 #import <objc/NSObject.h>
 #import <MAD/MADocumentSectionType.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqDocumentSectionWrappingStyle.h>
 
 @class NSManagedObjectID, NSManagedObjectContext, NSNumber, NSDictionary;
@@ -30,7 +31,7 @@
 	@property (nonatomic, copy) NSNumber *identifierObject;
 
 	- (instancetype)initWithObject:(NSDictionary *)object
-			  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+			  managedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 	- (NSString *)localizedDisplay;
 

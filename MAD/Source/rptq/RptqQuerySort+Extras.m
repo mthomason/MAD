@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqQuerySort+Extras.h"
 
 #import <CoreFoundation/CFNumber.h>
@@ -17,22 +18,11 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
 
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-
 #import "RptqDataHelper.h"
 
 @implementation RptqQuerySort (Extras)
 
 #pragma mark - Overrides
-
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-											managedObjectContext:self.managedObjectContext];
-	}
-}
 
 - (id)debugQuickLookObject {
 	NSMutableString *description = [[NSMutableString alloc] init];

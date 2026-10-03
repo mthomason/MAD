@@ -108,10 +108,10 @@
 
 	RptqObject *readDocument = [reread objectForEntity:@"RptqDocument" identifier:1];
 	XCTAssertNotNil(readDocument);
-	NSArray *databases = [readDocument valueForKey:@"hasDatabaseSchemas"];
+	NSSet *databases = [readDocument valueForKey:@"hasDatabaseSchemas"];
 	XCTAssertEqual(databases.count, (NSUInteger)1);
 
-	RptqObject *readDatabase = databases.firstObject;
+	RptqObject *readDatabase = databases.anyObject;
 	XCTAssertEqual(readDatabase.identifier, (int64_t)10);
 	XCTAssertEqualObjects([readDatabase valueForKey:@"databaseDriverType"], @"Sqlite 3");
 	XCTAssertEqualObjects([readDatabase valueForKey:@"databaseDriverTypeEnum"], @2);
@@ -125,7 +125,7 @@
 	XCTAssertEqual(credentialDatabase.identifier, readDatabase.identifier);
 	XCTAssertEqualObjects([readCredential valueForKey:@"dbname"], @"chinook.sqlite3");
 
-	NSArray *tables = [readDatabase valueForKey:@"hasTables"];
+	NSSet *tables = [readDatabase valueForKey:@"hasTables"];
 	XCTAssertEqual(tables.count, (NSUInteger)2);
 
 	RptqObject *readCustomers = nil;
@@ -137,7 +137,7 @@
 	XCTAssertNotNil(readCustomers);
 	XCTAssertEqualObjects([readCustomers valueForKey:@"queryable"], @YES);
 
-	NSArray *fields = [readCustomers valueForKey:@"hasFields"];
+	NSOrderedSet *fields = [readCustomers valueForKey:@"hasFields"];
 	XCTAssertEqual(fields.count, (NSUInteger)3);
 	XCTAssertEqualObjects([fields[0] valueForKey:@"name"], @"id");
 	XCTAssertEqualObjects([fields[1] valueForKey:@"name"], @"name");
@@ -207,7 +207,7 @@
 	XCTAssertEqual([context objectsForEntity:@"RptqDatabaseSchemaField"].count, (NSUInteger)64);
 
 	RptqObject *database = [context objectsForEntity:@"RptqDatabase"].firstObject;
-	NSArray *tables = [database valueForKey:@"hasTables"];
+	NSSet *tables = [database valueForKey:@"hasTables"];
 	XCTAssertEqual(tables.count, (NSUInteger)11);
 
 	NSUInteger fields = 0;
@@ -217,6 +217,49 @@
 		fields += [[table valueForKey:@"hasFields"] count];
 	}
 	XCTAssertEqual(fields, (NSUInteger)64);
+}
+
+#pragma mark - The document path
+
+/// The characterization pin for the MADDocument open/save rewire: a legacy Core Data
+/// document is converted to the portable store on open, the store is written out again,
+/// and reopening it hands back the same graph.
+- (void)testDocumentPathConvertsSavesAndReopensUnchanged {
+	NSURL *momdURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"MAD" withExtension:@"momd"];
+	NSManagedObjectModel *model = [[NSManagedObjectModel alloc] initWithContentsOfURL:momdURL];
+	NSURL *sampleURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"London" withExtension:@"mad"];
+	NSURL *firstURL = [self.directory URLByAppendingPathComponent:@"document.sqlite"];
+
+	NSError *error = nil;
+	// Convert-on-open: the legacy store becomes the portable one.
+	MADStoreGraph *original = [MADStoreConverter convertDocumentAtURL:sampleURL
+														  toStoreAtURL:firstURL
+																 model:model
+																 error:&error];
+	XCTAssertNotNil(original, @"conversion failed: %@", error);
+
+	// Save: write the loaded graph out to a fresh store, the way MADDocument writes on
+	// save rather than round-tripping the converter's in-memory graph.
+	MADStore *first = [MADStore storeWithURL:firstURL];
+	XCTAssertTrue([first openWithError:&error], @"open failed: %@", error);
+	MADStoreGraph *loaded = [first allObjectsWithError:&error];
+	XCTAssertNotNil(loaded, @"read failed: %@", error);
+
+	NSURL *secondURL = [self.directory URLByAppendingPathComponent:@"document-resaved.sqlite"];
+	MADStore *second = [MADStore storeWithURL:secondURL];
+	XCTAssertTrue([second openWithError:&error], @"open failed: %@", error);
+	XCTAssertTrue([second writeGraph:loaded replacingAll:YES error:&error], @"write failed: %@", error);
+	[second close];
+	[first close];
+
+	// Reopen and compare.
+	MADStore *reopened = [MADStore storeWithURL:secondURL];
+	XCTAssertTrue([reopened openWithError:&error], @"open failed: %@", error);
+	MADStoreGraph *reread = [reopened allObjectsWithError:&error];
+	XCTAssertNotNil(reread, @"read failed: %@", error);
+	[reopened close];
+
+	XCTAssertTrue([[reread graphByCompletingInverses] isEqualToGraph:[loaded graphByCompletingInverses]]);
 }
 
 @end

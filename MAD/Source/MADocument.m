@@ -11,11 +11,15 @@
 #endif
 
 #import "MADocument.h"
+#import <MAD/RptqStoreContext.h>
 #import "MADModel.h"
 #import "MADModelDocument.h"
 #import "MADModelDatabase.h"
 #import "MADImageThumbnail.h"
 #import "MADArchiveManager.h"
+#import "MADStore.h"
+#import "MADStoreConverter.h"
+#import "RptqStoreContext.h"
 #import "MADNotificationFileUpdate.h"
 #import "RptqDataHelper.h"
 #import "MADDesignerViewer.h"
@@ -152,6 +156,7 @@ void madwarn(char *err,  const char *err2) { }
 @property (readwrite, nonatomic, strong) MADReportFormatter *printingReportFormatter;
 
 @property (nonatomic, readwrite, strong) RptqDocument *activeDocumentModel;
+@property (nonatomic, readwrite, strong) RptqStoreContext *storeContext;
 @property (nonatomic, readwrite, strong) NSManagedObjectModel *madManagedObjectModel;
 
 @property (nonatomic, readwrite, strong) NSMutableDictionary *extraInformation;
@@ -404,7 +409,7 @@ void madwarn(char *err,  const char *err2) { }
 - (MADModelDocument *)documentModel {
 	if (!_documentModel) {
 		MADModelDocument *documentModel;
-		documentModel = [[MADModelDocument alloc] initWithContext:self.managedObjectContext];
+		documentModel = [[MADModelDocument alloc] initWithContext:self.storeContext];
 		_documentModel = documentModel;
 	}
 	return _documentModel;
@@ -452,6 +457,17 @@ void madwarn(char *err,  const char *err2) { }
 	};
 }
 
+- (NSManagedObjectModel *)madManagedObjectModel {
+	if (_madManagedObjectModel == nil) {
+		NSURL *url = [[NSBundle mainBundle] URLForResource:MADManagedObjectModelName
+											 withExtension:MADManagedObjectModelExtention];
+		if (!url) url = [[NSBundle bundleForClass:[self class]] URLForResource:MADManagedObjectModelName
+																 withExtension:MADManagedObjectModelExtention];
+		_madManagedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:url];
+	}
+	return _madManagedObjectModel;
+}
+
 #pragma mark -
 #pragma mark Reading
 
@@ -461,7 +477,7 @@ void madwarn(char *err,  const char *err2) { }
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
-	__block BOOL success = NO;
+	BOOL success = NO;
 	if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
 		MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
 																				   archiveURL: url];
@@ -470,15 +486,55 @@ void madwarn(char *err,  const char *err2) { }
 			os_log_error(GetMadLog(), "%s: Document unarchive failed.", __PRETTY_FUNCTION__);
 		}
 	}
-	
-	/// 2. Read the unarchived file.  It's currently a Core Data file.
-	NSError *error = NULL;
-	success = success ? [super readFromURL:_urlGuts error:&error] : NO;
-	if (error && outError != NULL) { // Check if outError is not NULL before dereferencing
-		*outError = error;
+
+	// The document definition lives in the portable store; a legacy document still holds
+	// a Core Data store, which is converted to the portable form on first open.
+	if (success) {
+		NSError *error = nil;
+		success = [self openPortableStoreWithError:&error];
+		if (error && outError != NULL) {
+			*outError = error;
+		}
 	}
 	return success;
-	
+}
+
+- (BOOL)openPortableStoreWithError:(NSError **)error {
+	NSURL *storeURL = [self portableStoreURL];
+	NSURL *legacyStoreURL = [[_urlGuts URLByAppendingPathComponent:@"StoreContent" isDirectory:YES]
+							 URLByAppendingPathComponent:@"analyitics"];
+
+	if (![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path] &&
+		[[NSFileManager defaultManager] fileExistsAtPath:legacyStoreURL.path]) {
+		NSManagedObjectModel *model = self.madManagedObjectModel;
+		NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+		if (![coordinator addPersistentStoreWithType:NSSQLiteStoreType
+									   configuration:nil
+												 URL:legacyStoreURL
+											 options:[self persistentStoreOptions]
+											   error:error]) {
+			return NO;
+		}
+		NSManagedObjectContext *legacyContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+		legacyContext.persistentStoreCoordinator = coordinator;
+
+		MADStoreGraph *graph = [MADStoreConverter graphForManagedObjectContext:legacyContext error:error];
+		if (!graph) return NO;
+
+		MADStore *store = [MADStore storeWithURL:storeURL];
+		if (![store openWithError:error]) return NO;
+		BOOL written = [store writeGraph:graph replacingAll:YES error:error];
+		[store close];
+		if (!written) return NO;
+		[coordinator removePersistentStore:coordinator.persistentStores.firstObject error:NULL];
+	}
+
+	MADStore *store = [MADStore storeWithURL:storeURL];
+	if (![store openWithError:error]) return NO;
+	RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
+	if (![context loadAllWithError:error]) return NO;
+	self.storeContext = context;
+	return YES;
 }
 
 #pragma mark -
@@ -506,23 +562,16 @@ void madwarn(char *err,  const char *err2) { }
 	 forSaveOperation:(UIDocumentSaveOperation)saveOperation
 				error:(NSError * __autoreleasing *)outError {
 	NSError *error = nil;
-	if (![super writeContents:contents andAttributes:additionalFileAttributes
-				  safelyToURL:self.urlGuts forSaveOperation:saveOperation error:&error]) {
+	if (![self.storeContext save:&error]) {
 		if (outError != nil) {
 			*outError = error.copy;
 		}
 		return NO;
 	}
 
-	// Fold the store's WAL into the main file before archiving, so a reader that
-	// extracts only the store sees everything.  If the checkpoint cannot complete
-	// (Core Data still holds the store), the archive ships the WAL and the header's
-	// flag bit records that it was not checkpointed.
-	BOOL checkpointed = [MADDatabaseSqlite3 checkpointStoreAtURL: self.copyPersistentStoreURL];
-
 	MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:self.urlGuts
 																			   archiveURL:self.fileURL];
-	archiveManager.checkpointed = checkpointed;
+	archiveManager.checkpointed = YES;
 	return [archiveManager archive:YES];
 }
 
@@ -693,28 +742,25 @@ void madwarn(char *err,  const char *err2) { }
 #pragma mark -
 #pragma mark Query Building
 
-- (void)addQueryGroupWithQueryField: (NSManagedObjectID *)queryFieldObjectID
+- (void)addQueryGroupWithQueryField: (int64_t)queryFieldObjectID
 					   andSortOrder: (MADSortOrder)sortOrder; {
 
-	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	private.parentContext = self.managedObjectContext;
-
-	[private performBlockAndWait: ^{
+	RptqStoreContext *context = self.storeContext;
 		
-		RptqQueryField *queryField = [private objectWithID:queryFieldObjectID];
-		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: private];
+		RptqQueryField *queryField = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:queryFieldObjectID];
+		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: context];
 		
 		
 		RptqQueryGroup *queryGroup = [RptqQueryGroup newQueryGroupQueryWithSortOrder: sortOrder
-															 andManagedObjectContext: private];
+															 andManagedObjectContext: context];
 		
 		queryGroup.hasField = queryField;   //Retain cycle
 		
 		//Create group header (contains a retain cycle)
 		RptqDocumentSection *headerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupHeader
-																   forManagedObjectContext: private];
+																   forManagedObjectContext: context];
 
-		RptqDocumentSectionRows *headerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:private];
+		RptqDocumentSectionRows *headerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:context];
 		headerSectionRow.inSection = headerSection;
 		
 		NSMutableOrderedSet *headerSectionRows = [[NSMutableOrderedSet alloc] initWithObject: headerSectionRow];
@@ -725,9 +771,9 @@ void madwarn(char *err,  const char *err2) { }
 		//Create group footer (contains a retain cycle)
 		RptqDocumentSection *footerSection;
 		footerSection = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupFooter
-											  forManagedObjectContext: private];
+											  forManagedObjectContext: context];
 		RptqDocumentSectionRows *footerSectionRow;
-		footerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext: private];
+		footerSectionRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext: context];
 		footerSectionRow.inSection = footerSection;
 		
 		NSMutableOrderedSet *footerSectionRows;
@@ -753,42 +799,11 @@ void madwarn(char *err,  const char *err2) { }
 		[query addHasQueryGroupsObject: queryGroup];
 
 		NSError *error = NULL;
-		BOOL saved = [private save:&error];
+		BOOL saved = [context save:&error];
 		if (!saved && error != nil) {
 			os_log_error(GetMadLog(), "Error saving managed object: %@", error);
 		}
 		
-		RptqQueryField *groupByField = queryGroup.hasField;
-		if (groupByField) {
-			[private refreshObject:groupByField mergeChanges:NO];
-		}
-		[private refreshObject:queryGroup mergeChanges:NO];
-		
-		RptqDocumentSection *header;
-		if ((header = headerSectionRow.inSection)) {
-			[private refreshObject:header mergeChanges:NO];
-		}
-		
-		RptqDocumentSection *footer;
-		if ((footer = footerSectionRow.inSection)) {
-			[private refreshObject:footer mergeChanges:NO];
-		}
-		
-		[private refreshObject:headerSectionRow mergeChanges:NO];
-		[private refreshObject:footerSectionRow mergeChanges:NO];
-		[private refreshObject:headerSection mergeChanges:NO];
-		[private refreshObject:footerSection mergeChanges:NO];
-		
-		[private refreshObject:query mergeChanges:NO];
-		[private refreshObject:database mergeChanges:NO];
-		[private refreshObject:queryGroup mergeChanges:NO];
-		[private refreshObject:rptqDocument mergeChanges:NO];
-		[private refreshObject:queryField mergeChanges:NO];
-
-		[headerSectionRows removeAllObjects];
-		[footerSectionRows removeAllObjects];
-
-	}];
 	[self updateChangeCount: UIDocumentChangeDone];
 	[self autosaveWithCompletionHandler:^(BOOL success) { }];
 }
@@ -1122,12 +1137,9 @@ void madwarn(char *err,  const char *err2) { }
 }
 
 - (void)saveContext {
-	NSError *error;
-	if (self.managedObjectContext != nil) {
-		if ((self.managedObjectContext).hasChanges && ![self.managedObjectContext save:&error]) {
-			os_log_error(GetMadLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
-			[self.managedObjectContext save:nil];
-		}
+	NSError *error = nil;
+	if (self.storeContext != nil && ![self.storeContext save:&error]) {
+		os_log_error(GetMadLog(), "Error saving the portable store: %s", error.localizedDescription.UTF8String);
 	}
 }
 
@@ -1144,19 +1156,41 @@ void madwarn(char *err,  const char *err2) { }
 	self.paper = nil;
 }
 
+- (NSURL *)portableStoreURL {
+	return [_urlGuts URLByAppendingPathComponent:@"StoreContent/store.sqlite"];
+}
+
+- (RptqStoreContext *)storeContext {
+	if (_storeContext == nil) {
+		MADStore *store = [MADStore storeWithURL:[self portableStoreURL]];
+		NSError *error = nil;
+		if (![store openWithError:&error]) {
+			os_log_error(GetMadLog(), "Error opening the portable store: %s", error.localizedDescription.UTF8String);
+			return nil;
+		}
+		RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
+		if (![context loadAllWithError:&error]) {
+			os_log_error(GetMadLog(), "Error loading the portable store: %s", error.localizedDescription.UTF8String);
+			return nil;
+		}
+		_storeContext = context;
+	}
+	return _storeContext;
+}
+
 - (RptqDocument *)activeDocumentModel {
 
 	if (_activeDocumentModel == nil) {
-		
-		RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: self.managedObjectContext];
-		
+
+		RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: self.storeContext];
+
 		[self resetPaper];
 		[self resetMainQuery];
 		[self resetSectionLayoutManagers];
 		[self resetReportFormatter];
-		
+
 		_activeDocumentModel = document;
-		
+
 	}
 	return _activeDocumentModel;
 }
@@ -1180,101 +1214,67 @@ void madwarn(char *err,  const char *err2) { }
 
 - (void)removeDocumentObjectWithObjectID:(int64_t)objectID {
 
-	NSManagedObjectContext *private;
-	private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	private.parentContext = self.managedObjectContext;
-	[private performBlockAndWait: ^{
+	RptqStoreContext *context = self.storeContext;
+	RptqDocumentElement *element;
+	element = [RptqDocumentElement newDocumentElementWithIdentifier:objectID
+												  fromObjectContext:context];
+	RptqDocumentSection *parentSection = element.inSectionRow.inSection;
+	MADSectionLayoutManager *layoutManager;
+	NSNumber *key = @(parentSection.identifier);
+	layoutManager = self.sectionLayoutManagers[key];
+	[RptqDocumentElement removeDocumentObject: element
+							fromParentSection: parentSection
+							withLayoutManager: layoutManager];
 
-		RptqDocumentElement *element;
-		element = [RptqDocumentElement newDocumentElementWithIdentifier:objectID
-													  fromObjectContext:private];
-		RptqDocumentSection *parentSection = element.inSectionRow.inSection;
-		MADSectionLayoutManager *layoutManager;
-		NSNumber *key = @(parentSection.identifier);
-		layoutManager = self.sectionLayoutManagers[key];
-		[RptqDocumentElement removeDocumentObject: element
-								fromParentSection: parentSection
-								withLayoutManager: layoutManager];
-
-		NSError *error = NULL;
-		BOOL saved = [private save:&error];
-		if (!saved && error != nil) {
-			os_log_error(GetMadLog(), "Error saving managed object: %@", error);
-		}
-	}];
+	NSError *error = NULL;
+	BOOL saved = [context save:&error];
+	if (!saved && error != nil) {
+		os_log_error(GetMadLog(), "Error saving managed object: %@", error);
+	}
 	[self updateChangeCount: UIDocumentChangeDone];
 
 }
 
-- (void)deleteAggregateFieldRelatedToTable: (NSManagedObjectID *)deleatedTableObjectID
-								 inContent: (NSManagedObjectContext *)managedObjectContext {
-	NSString *entityName = NSStringFromClass([RptqDocumentElement class]);
-	NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:entityName];
-	NSString *keyInQueryTable, *keyInQueryTableRel;
-	
-	keyInQueryTableRel = NSStringFromSelector(@selector(inQueryTable));
-	
-	keyInQueryTable = [MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(aggregateField))];
-	keyInQueryTable = [keyInQueryTable stringByAppendingString:keyInQueryTableRel];
-	
-	NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID
-															   atKeyPath: keyInQueryTable];
-
-	fetchReqest.predicate = predicate;
-	NSError *fetchError = nil;
-	NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest error:&fetchError];
-	if (fetchError != nil) {
-		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, fetchError);
-	} else {
-		for (RptqDocumentElement *documentObject in objectsToDelete) {
-			RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
-			MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
-			[RptqDocumentElement removeDocumentObject:documentObject
-									fromParentSection:parentSection
-									withLayoutManager:layoutManager];
-			[managedObjectContext deleteObject:documentObject];
-		}
+- (void)deleteAggregateFieldRelatedToTable: (int64_t)deleatedTableObjectID
+								 inContent: (RptqStoreContext *)managedObjectContext {
+	NSArray *objectsToDelete = [managedObjectContext objectsForEntity:NSStringFromClass([RptqDocumentElement class])];
+	for (RptqDocumentElement *documentObject in objectsToDelete) {
+		if (![documentObject isKindOfClass:[RptqDocumentElementAggregate class]]) continue;
+		if (((RptqDocumentElementAggregate *)documentObject).aggregateField.inQueryTable.identifier != deleatedTableObjectID) continue;
+		RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
+		MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
+		[RptqDocumentElement removeDocumentObject:documentObject
+								fromParentSection:parentSection
+								withLayoutManager:layoutManager];
+		[managedObjectContext deleteObject:documentObject error:NULL];
 	}
 }
 
-- (void)deleteDatafieldsRelatedToTable: (NSManagedObjectID *)deleatedTableObjectID
-							 inContent: (NSManagedObjectContext *)managedObjectContext {
-	NSFetchRequest *fetchReqest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDocumentElement class])];
-	NSString *keyInQueryTable = [[MADStringUtilities stringByAppendingPeriod: NSStringFromSelector(@selector(referencesQueryField))] stringByAppendingString:NSStringFromSelector(@selector(inQueryTable))];
-	
-	fetchReqest.predicate = [NSPredicate newPredicateObjectWithObjectID: deleatedTableObjectID
-															  atKeyPath: keyInQueryTable];
-	NSError *fetchError = nil;
-	NSArray *objectsToDelete = [managedObjectContext executeFetchRequest:fetchReqest
-																   error:&fetchError];
-	if (fetchError != nil) {
-		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, fetchError);
-	} else {
-		
-		
-		for (RptqDocumentElement *documentObject in objectsToDelete) {
-			RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
-
-			NSNumber *key = @(parentSection.identifier);
-			MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[key];
-			[RptqDocumentElement removeDocumentObject: documentObject
-									fromParentSection: parentSection
-									withLayoutManager: layoutManager];
-			[managedObjectContext deleteObject:documentObject];
-		}
+- (void)deleteDatafieldsRelatedToTable: (int64_t)deleatedTableObjectID
+							 inContent: (RptqStoreContext *)managedObjectContext {
+	NSArray *objectsToDelete = [managedObjectContext objectsForEntity:NSStringFromClass([RptqDocumentElement class])];
+	for (RptqDocumentElement *documentObject in objectsToDelete) {
+		if (![documentObject isKindOfClass:[RptqDocumentElementLabelDataField class]]) continue;
+		if (((RptqDocumentElementLabelDataField *)documentObject).referencesQueryField.inQueryTable.identifier != deleatedTableObjectID) continue;
+		RptqDocumentSection *parentSection = documentObject.inSectionRow.inSection;
+		MADSectionLayoutManager *layoutManager = self.sectionLayoutManagers[@(parentSection.identifier)];
+		[RptqDocumentElement removeDocumentObject: documentObject
+								fromParentSection: parentSection
+								withLayoutManager: layoutManager];
+		[managedObjectContext deleteObject:documentObject error:NULL];
 	}
 }
 
-- (void)removeGroupWitObjectID:(NSManagedObjectID *)groupID
-	  fromManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (void)removeGroupWitObjectID:(int64_t)groupID
+	  fromManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 	
-	//NSManagedObjectContext *private;
+	//RptqStoreContext *context;
 	// = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	//private.parentContext = managedObjectContext;
+	//context.parentContext = managedObjectContext;
 	
-	//[private performBlockAndWait: ^{
+	//[context performBlockAndWait: ^{
 	
-	RptqQueryGroup *group = [managedObjectContext objectWithID:groupID];
+	RptqQueryGroup *group = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryGroup class]) identifier:groupID];
 	if (group != nil) {
 		RptqQuery *query = group.inQuery;
 		
@@ -1289,7 +1289,7 @@ void madwarn(char *err,  const char *err2) { }
 		[group removeHasSectionObject: section0];
 		[group removeHasSectionObject: section1];
 		
-		[query.managedObjectContext deleteObject: group];
+		[query.storeContext deleteObject: group error:NULL];
 		[query removeHasQueryGroupsObject: group];
 		
 		NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(weight))
@@ -1390,11 +1390,7 @@ void madwarn(char *err,  const char *err2) { }
 }
 
 - (NSURL *)copyPersistentStoreURL {
-	NSPersistentStoreCoordinator *persistentStoreCoordinator =
-		self.managedObjectContext.persistentStoreCoordinator;
-	NSPersistentStore *persistentStore = persistentStoreCoordinator.persistentStores.lastObject;
-	NSURL *storeURL = [persistentStoreCoordinator URLForPersistentStore:persistentStore];
-	return storeURL.copy;
+	return self.portableStoreURL;
 }
 
 #pragma mark -

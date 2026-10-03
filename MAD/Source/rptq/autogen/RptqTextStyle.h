@@ -9,20 +9,17 @@
 #ifndef MAD_RptqTextStyle_h
 #define MAD_RptqTextStyle_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class RptqDocumentElement;
 
-@interface RptqTextStyle : NSManagedObject
+@interface RptqTextStyle : RptqObject
 
 @end
 
 @interface RptqTextStyle (CoreDataProperties)
-
-+ (NSFetchRequest<RptqTextStyle *> *)fetchRequest;
 
 @property (nonatomic) BOOL strikethrough;
 @property (nonatomic) BOOL underline;

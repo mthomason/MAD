@@ -23,8 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RptqDocumentElementAggregate (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDocumentElementAggregate *> *)fetchRequest;
-
 @property (nonatomic) int32_t groupNumber;
 @property (nonatomic) MTAggregateGroupByType groupType;
 @property (nonatomic) MTAggregateFunctionType functionType;

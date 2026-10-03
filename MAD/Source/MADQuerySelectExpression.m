@@ -7,6 +7,7 @@
 //
 
 #import "MADQuerySelectExpression.h"
+#import <MAD/RptqStoreContext.h>
 #import "MADQuerySelectExpressionAllFields.h"
 #import "MADQuerySelectExpressionActiveFields.h"
 
@@ -26,7 +27,7 @@
 - (instancetype)initWithDatabase:(MADDatabase *)database
 						  tables:(NSArray <MTPair *> *)tables
 		   usingOnlyActiveFields:(BOOL)onlyActiveFields
-		 forManagedObjectContext:(NSManagedObjectContext *)context {
+		 forManagedObjectContext:(RptqStoreContext *)context {
 
 	__kindof MADQuerySelectExpression *result = onlyActiveFields ?
 		[[MADQuerySelectExpressionActiveFields alloc] initWithDatabase:database forManagedObjectContext:context]:

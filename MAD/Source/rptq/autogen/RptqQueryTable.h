@@ -9,20 +9,17 @@
 #ifndef MAD_RptqQueryTable_NSManagedObject_h
 #define MAD_RptqQueryTable_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDatabaseSchemaTable, RptqQuery, RptqQueryField;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqQueryTable : NSManagedObject
+@interface RptqQueryTable : RptqObject
 
 @end
 
 @interface RptqQueryTable (CoreDataProperties)
-
-+ (NSFetchRequest<RptqQueryTable *> *)fetchRequest;
 
 @property (nullable, nonatomic, copy) NSString *alias;
 @property (nonatomic) int64_t dropIndex;

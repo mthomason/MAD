@@ -14,9 +14,6 @@
 
 @implementation RptqAlignment (CoreDataProperties)
 
-+ (NSFetchRequest<RptqAlignment *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqAlignment"];
-}
 
 @dynamic horizontal;
 @dynamic vertical;

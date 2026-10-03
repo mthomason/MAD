@@ -13,6 +13,8 @@
 #import <CoreData/CoreData.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/MADStore.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MTPaper.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
@@ -33,31 +35,24 @@
 // The model is loaded from the test bundle the way MADCoreDataModelTests does it:
 // MADMock's own helper looks for Reports.momd in the framework bundle, where it is
 // not compiled.
-- (NSManagedObjectContext *)newTestContext {
-
-	NSURL *momdURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"MAD"
-															 withExtension:@"momd"];
-	XCTAssertNotNil(momdURL, @"MAD.momd was not compiled into the test bundle.");
-
-	NSManagedObjectModel *model = [[NSManagedObjectModel alloc] initWithContentsOfURL:momdURL];
-	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-	[coordinator addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:NULL];
-
-	NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-	context.persistentStoreCoordinator = coordinator;
+- (RptqStoreContext *)newTestContext {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *url = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"test.sqlite"]];
+	MADStore *store = [MADStore storeWithURL:url];
+	NSError *error = nil;
+	XCTAssertTrue([store openWithError:&error], @"open failed: %@", error);
+	RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
+	XCTAssertTrue([context loadAllWithError:&error], @"load failed: %@", error);
 	return context;
 }
 
-// The caller keeps the context alive.  A managed object does not retain the context
-// it is inserted into, so one built and dropped inside this helper leaves the
-// document with no context at all.
+// The caller keeps the context alive.  A store-backed object holds its context
+// weakly, so one built and dropped inside this helper leaves the document with no
+// context at all.
 - (RptqDocument *)newDocumentModelOfType:(MTPaperType)paperType
-							   inContext:(NSManagedObjectContext *)context {
-
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"RptqDocument"
-											 inManagedObjectContext:context];
-	RptqDocument *document = (RptqDocument *)[[NSManagedObject alloc] initWithEntity:entity
-													 insertIntoManagedObjectContext:context];
+							   inContext:(RptqStoreContext *)context {
+	RptqDocument *document = [context insertObjectForEntity:@"RptqDocument" identifier:0];
 	document.papersize = paperType;
 	return document;
 }
@@ -78,7 +73,7 @@
 
 	// -activeDocumentModel is readonly from outside the class, and its getter reads
 	// the ivar this accessor had wrongly consulted, so the model goes in by KVC.
-	NSManagedObjectContext *context = [self newTestContext];
+	RptqStoreContext *context = [self newTestContext];
 	[document setValue: [self newDocumentModelOfType: MTPaperTypeLetter
 										   inContext: context]
 				forKey: @"activeDocumentModel"];
@@ -106,10 +101,9 @@
 // parentheses: a different string, so the guard never fired.
 - (void)testFormattedStringRendersNullAsEmpty {
 
-	NSManagedObjectContext *context = [self newTestContext];
+	RptqStoreContext *context = [self newTestContext];
 	RptqDocumentElement *element =
-		[NSEntityDescription insertNewObjectForEntityForName: @"RptqDocumentElement"
-									  inManagedObjectContext: context];
+		[context insertObjectForEntity:@"RptqDocumentElement" identifier:0];
 
 	XCTAssertEqualObjects([element formattedString: MADDataTypeString forValue: [NSNull null]], @"");
 	XCTAssertEqualObjects([element formattedString: MADDataTypeInteger forValue: [NSNull null]], @"");

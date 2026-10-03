@@ -17,9 +17,6 @@
 
 @implementation RptqBorder (CoreDataProperties)
 
-+ (NSFetchRequest<RptqBorder *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqBorder"];
-}
 
 @dynamic width;
 @dynamic style;

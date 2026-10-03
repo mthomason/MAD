@@ -49,7 +49,7 @@
 		NSAssert([object isKindOfClass:[RptqDatabaseSchemaField class]],
 				 @"MADQuerySampleDataField expects RptqDatabaseSchemaField.");
 		
-		NSString *identifier = ((NSManagedObject *)object).objectID.URIRepresentation.absoluteString;
+		NSString *identifier = [[NSString alloc] initWithFormat:@"%lld", ((RptqDatabaseSchemaField *)object).identifier];
 		MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier:identifier];
 		self.dataTable = dataTable;
 		self.queryObject = object;

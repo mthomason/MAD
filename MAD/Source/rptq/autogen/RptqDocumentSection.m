@@ -17,9 +17,6 @@
 
 @implementation RptqDocumentSection (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDocumentSection *> *)fetchRequest {
-	return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentSection"];
-}
 
 @dynamic identifier;
 @dynamic type;

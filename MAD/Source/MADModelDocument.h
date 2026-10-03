@@ -10,13 +10,14 @@
 #define MADModelDocument_h
 
 #import <MAD/MADModel.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADModelDataProtocol.h>
 
 @class MADModelDatabase, MADModelQuery, NSOrderedSet<__covariant ObjectType>;
 
 @interface MADModelDocument : MADModel <MADModelIDProtocol, MADModelDataProtocol>
 
-- (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext;
+- (instancetype)initWithContext:(RptqStoreContext *)managedObjectContext;
 
 @property (nonatomic, readonly, strong) NSOrderedSet <MADModelDatabase *> *databases;
 @property (nonatomic, readonly, weak) MADModelDatabase *firstDatabase;

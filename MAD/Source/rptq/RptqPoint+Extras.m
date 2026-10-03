@@ -6,6 +6,7 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
+#import "RptqStoreContext.h"
 #import "RptqPoint+Extras.h"
 
 @implementation RptqPoint (Extras)

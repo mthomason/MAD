@@ -13,6 +13,8 @@
 #import <CoreData/CoreData.h>
 
 #import <MAD/RptqDocumentSection.h>
+#import <MAD/MADStore.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqDocumentSection+Extras.h>
 #import <MAD/RptqDocumentSectionWrappingStyle.h>
 #import <MAD/MADocumentSectionType.h>
@@ -32,30 +34,20 @@
 
 #pragma mark - Helpers
 
-- (NSManagedObjectModel *)modelFromTestBundle {
-	NSURL *momdURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"MAD"
-															 withExtension:@"momd"];
-	return [[NSManagedObjectModel alloc] initWithContentsOfURL:momdURL];
-}
-
-- (NSManagedObjectContext *)inMemoryContext {
-	NSManagedObjectModel *model = [self modelFromTestBundle];
-	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+- (RptqStoreContext *)inMemoryContext {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *url = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"test.sqlite"]];
+	MADStore *store = [MADStore storeWithURL:url];
 	NSError *error = nil;
-	[coordinator addPersistentStoreWithType:NSInMemoryStoreType
-							  configuration:nil
-										URL:nil
-									options:nil
-									  error:&error];
-	XCTAssertNil(error);
-
-	NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-	context.persistentStoreCoordinator = coordinator;
+	XCTAssertTrue([store openWithError:&error], @"open failed: %@", error);
+	RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
+	XCTAssertTrue([context loadAllWithError:&error], @"load failed: %@", error);
 	return context;
 }
 
 - (RptqDocumentSection *)sectionOfType:(MADDocumentSectionType)type
-							 inContext:(NSManagedObjectContext *)context {
+							 inContext:(RptqStoreContext *)context {
 	return [RptqDocumentSection newDocumentSectionOfType:type forManagedObjectContext:context];
 }
 
@@ -121,7 +113,7 @@
 #pragma mark - Section factory and type
 
 - (void)testNewDocumentSectionOfType {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqDocumentSection *section = [self sectionOfType:MADDocumentSectionTypeBody inContext:context];
 
 	XCTAssertNotNil(section);
@@ -133,13 +125,13 @@
 #pragma mark - Form feed (wrapping style)
 
 - (void)testProducesFormFeedDefaultsNo {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqDocumentSection *section = [self sectionOfType:MADDocumentSectionTypeBody inContext:context];
 	XCTAssertFalse([section producesFormFeed]);
 }
 
 - (void)testSetProducesFormFeed {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqDocumentSection *section = [self sectionOfType:MADDocumentSectionTypeBody inContext:context];
 
 	[section setProducesFormFeed:YES];
@@ -154,7 +146,7 @@
 #pragma mark - Localized display name
 
 - (void)testLocalizedDisplayName {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	XCTAssertEqualObjects([[self sectionOfType:MADDocumentSectionTypeReportHeader inContext:context] localizedDisplayName], @"Report Header");
 	XCTAssertEqualObjects([[self sectionOfType:MADDocumentSectionTypePageHeader inContext:context] localizedDisplayName], @"Page Header");
 	XCTAssertEqualObjects([[self sectionOfType:MADDocumentSectionTypeBody inContext:context] localizedDisplayName], @"Report Detail");
@@ -165,7 +157,7 @@
 #pragma mark - Header/footer section lookup
 
 - (void)testHeaderAndFooterSectionInSections {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqDocumentSection *header = [self sectionOfType:MADDocumentSectionTypeGroupHeader inContext:context];
 	RptqDocumentSection *footer = [self sectionOfType:MADDocumentSectionTypeGroupFooter inContext:context];
 	RptqDocumentSection *body = [self sectionOfType:MADDocumentSectionTypeBody inContext:context];
@@ -177,7 +169,7 @@
 }
 
 - (void)testHeaderSectionInSectionsWithoutHeaderReturnsNil {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqDocumentSection *body = [self sectionOfType:MADDocumentSectionTypeBody inContext:context];
 	NSSet *sections = [NSSet setWithObject:body];
 	XCTAssertNil([RptqDocumentSection headerSectionInSections:sections]);

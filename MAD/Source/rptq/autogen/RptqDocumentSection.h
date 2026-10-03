@@ -9,20 +9,17 @@
 #ifndef MAD_RptqDocumentSection_NSManagedObject_h
 #define MAD_RptqDocumentSection_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDocument, RptqDocumentSectionRows, RptqQueryGroup;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqDocumentSection : NSManagedObject
+@interface RptqDocumentSection : RptqObject
 
 @end
 
 @interface RptqDocumentSection (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDocumentSection *> *)fetchRequest;
 
 @property (nonatomic) int64_t identifier;
 @property (nonatomic) int32_t numberOfRows;

@@ -10,10 +10,11 @@
 #define Reports_RptqDocumentSectionRows_Extras_h
 
 #import "RptqDocumentSectionRows.h"
+#import <MAD/RptqStoreContext.h>
 
 @interface RptqDocumentSectionRows (Extras)
 
-	+ (instancetype)newDocumentSectionRowsForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	+ (instancetype)newDocumentSectionRowsForManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 	- (void)addHasObjectsObjectFixed:(RptqDocumentElement *)value;
 	- (void)removeHasObjectsObjectFixed:(RptqDocumentElement *)value;

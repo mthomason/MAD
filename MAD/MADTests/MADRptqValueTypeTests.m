@@ -14,6 +14,8 @@
 #import <CoreData/CoreData.h>
 
 #import <MAD/RptqPoint.h>
+#import <MAD/MADStore.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqRect.h>
 #import <MAD/RptqSize.h>
 #import <MAD/RptqBorder.h>
@@ -37,30 +39,20 @@
 
 #pragma mark - Helpers
 
-- (NSManagedObjectModel *)modelFromTestBundle {
-	NSURL *momdURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"MAD"
-															 withExtension:@"momd"];
-	return [[NSManagedObjectModel alloc] initWithContentsOfURL:momdURL];
-}
-
-- (NSManagedObjectContext *)inMemoryContext {
-	NSManagedObjectModel *model = [self modelFromTestBundle];
-	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+- (RptqStoreContext *)inMemoryContext {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *url = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"test.sqlite"]];
+	MADStore *store = [MADStore storeWithURL:url];
 	NSError *error = nil;
-	[coordinator addPersistentStoreWithType:NSInMemoryStoreType
-							  configuration:nil
-										URL:nil
-									options:nil
-									  error:&error];
-	XCTAssertNil(error);
-
-	NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-	context.persistentStoreCoordinator = coordinator;
+	XCTAssertTrue([store openWithError:&error], @"open failed: %@", error);
+	RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
+	XCTAssertTrue([context loadAllWithError:&error], @"load failed: %@", error);
 	return context;
 }
 
-- (id)insertEntityNamed:(NSString *)name inContext:(NSManagedObjectContext *)context {
-	return [NSEntityDescription insertNewObjectForEntityForName:name inManagedObjectContext:context];
+- (id)insertEntityNamed:(NSString *)name inContext:(RptqStoreContext *)context {
+	return [context insertObjectForEntity:name identifier:0];
 }
 
 #pragma mark - Key-path constants
@@ -102,7 +94,7 @@
 #pragma mark - RptqRect frame composition
 
 - (void)testRectAwakeFromInsertCreatesOriginAndSize {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqRect *rect = [self insertEntityNamed:@"RptqRect" inContext:context];
 
 	XCTAssertNotNil(rect.origin);
@@ -112,7 +104,7 @@
 }
 
 - (void)testRectFrameComposition {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqRect *rect = [self insertEntityNamed:@"RptqRect" inContext:context];
 
 	rect.origin.x = 1.5f;
@@ -130,7 +122,7 @@
 #pragma mark - RptqBorder composition
 
 - (void)testBorderAwakeFromInsertCreatesWidthAndStyle {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqBorder *border = [self insertEntityNamed:@"RptqBorder" inContext:context];
 
 	XCTAssertNotNil(border.width);
@@ -142,7 +134,7 @@
 #pragma mark - Scalar property value types
 
 - (void)testAlignmentProperties {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqAlignment *alignment = [self insertEntityNamed:@"RptqAlignment" inContext:context];
 
 	alignment.horizontal = 1;
@@ -152,7 +144,7 @@
 }
 
 - (void)testTextStyleProperties {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqTextStyle *style = [self insertEntityNamed:@"RptqTextStyle" inContext:context];
 
 	style.bold = YES;
@@ -167,7 +159,7 @@
 }
 
 - (void)testNumericFormatProperties {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqNumericFormat *format = [self insertEntityNamed:@"RptqNumericFormat" inContext:context];
 
 	format.enabled = YES;
@@ -180,7 +172,7 @@
 }
 
 - (void)testDirectionalPropertyScalars {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqDirectionalProperty *property = [self insertEntityNamed:@"RptqDirectionalProperty" inContext:context];
 
 	property.top = 1;
@@ -195,7 +187,7 @@
 }
 
 - (void)testDirectionalAsymmetryScalars {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 	RptqDirectionalAsymmetry *asymmetry = [self insertEntityNamed:@"RptqDirectionalAsymmetry" inContext:context];
 
 	asymmetry.top = 1.5f;

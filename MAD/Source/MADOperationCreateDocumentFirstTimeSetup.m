@@ -13,6 +13,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqDocument+extras.h>
 #import <MAD/RptqDatabase+extras.h>
 #import <MAD/RptqQuery+extras.h>
@@ -60,24 +61,13 @@
 	
 	if (self.cancelled) return [self finish];
 
-	NSManagedObjectContext *private = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	private.parentContext = document.managedObjectContext;
-	[private performBlockAndWait:^{
-		BOOL success = [RptqDocument newDocumentForManagedObjectContext: private] != nil;
-		if (success) {
-			NSError *error = nil;
-			success = [private save:&error];
-			if (!success && error != nil) {
-				os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %@", error.localizedDescription);
-			}
-		} else {
-			NSError *error = nil;
-			success = [private save:&error];
-			if (!success && error != nil) {
-				os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %@", error.localizedDescription);
-			}
-		}
-	}];
+	RptqStoreContext *context = document.storeContext;
+	BOOL success = [RptqDocument newDocumentForManagedObjectContext: context] != nil;
+	NSError *error = nil;
+	success = success && [context save:&error];
+	if (!success && error != nil) {
+		os_log_error(OS_LOG_DEFAULT, "Error saving the portable store: %@", error.localizedDescription);
+	}
 	[document updateChangeCount: UIDocumentChangeDone];
 
 	[self finish];

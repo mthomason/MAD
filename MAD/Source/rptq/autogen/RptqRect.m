@@ -17,9 +17,6 @@
 
 @implementation RptqRect (CoreDataProperties)
 
-+ (NSFetchRequest<RptqRect *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqRect"];
-}
 
 @dynamic origin;
 @dynamic size;

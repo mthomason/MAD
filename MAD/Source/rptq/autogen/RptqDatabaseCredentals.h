@@ -9,14 +9,13 @@
 #ifndef MAD_RptqDatabaseCredentals_h
 #define MAD_RptqDatabaseCredentals_h
 
-#import <CoreData/NSManagedObject.h>
-//#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDatabase;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqDatabaseCredentals : NSManagedObject
+@interface RptqDatabaseCredentals : RptqObject
 
 @end
 

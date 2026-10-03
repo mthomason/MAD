@@ -14,9 +14,6 @@
 
 @implementation RptqDocumentElement (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDocumentElement *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElement"];
-}
 
 @dynamic backgroundColor;
 @dynamic dropIndex;

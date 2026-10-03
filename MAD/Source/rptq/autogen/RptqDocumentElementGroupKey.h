@@ -10,8 +10,6 @@
 #define MAD_RptqDocumentElementGroupKey_RptqDocumentElement_h
 
 #import "RptqDocumentElement.h"
-#import <CoreData/NSFetchRequest.h>
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RptqDocumentElementGroupKey : RptqDocumentElement
@@ -19,8 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface RptqDocumentElementGroupKey (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDocumentElementGroupKey *> *)fetchRequest;
 
 @property (nonatomic) int16_t groupNumber;
 

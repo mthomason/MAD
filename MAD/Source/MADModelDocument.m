@@ -7,6 +7,7 @@
 //
 
 #import "MADModelDocument.h"
+#import <MAD/RptqStoreContext.h>
 #import "MADModelDatabase.h"
 #import "MADModelQuery.h"
 
@@ -32,7 +33,7 @@ static NSString *keyIDQuery = @"IQ";
 static NSString *keyIDDocument = @"IO";
 
 @interface MADModelDocument ()
-	- (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext;
+	- (instancetype)initWithContext:(RptqStoreContext *)managedObjectContext;
 	@property (nonatomic, readwrite, strong) NSMutableOrderedSet <MADModelDatabase *> *databases;
 @end
 
@@ -42,7 +43,7 @@ static NSString *keyIDDocument = @"IO";
 @implementation MADModelDocument {
 @protected
 	NSOperationQueue *_objectContextQueue;
-	NSManagedObjectContext * __weak _managedObjectContext;
+	RptqStoreContext * __weak _managedObjectContext;
 	id <NSObject> _observeChangeNotification;
 	id <NSObject> _observeWillSaveNotification;
 	id <NSObject> _observeDidSaveNotification;
@@ -71,7 +72,7 @@ static NSString *keyIDDocument = @"IO";
 	return self;
 }
 
-- (instancetype)initWithContext:(NSManagedObjectContext *)managedObjectContext {
+- (instancetype)initWithContext:(RptqStoreContext *)managedObjectContext {
 	if (self = [self initWithIdentifier: -1 managedObjectContext:managedObjectContext]) {
 		
 	}
@@ -79,7 +80,7 @@ static NSString *keyIDDocument = @"IO";
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier
-			  managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+			  managedObjectContext:(RptqStoreContext *)managedObjectContext {
 	if (self = [super initWithIdentifier:identifier]) {
 		_managedObjectContext = managedObjectContext;
 		
@@ -95,7 +96,7 @@ static NSString *keyIDDocument = @"IO";
 			NSSet *deletedObjects, *updatedObjects, *insertedObjects, *invalidatedObjects;
 
 			NSString *keyManagedObjectContext;
-			NSManagedObjectContext *objectContext;
+			RptqStoreContext *objectContext;
 			
 			keyManagedObjectContext = NSStringFromSelector(@selector(managedObjectContext));
 			objectContext = [note.userInfo objectForKey:keyManagedObjectContext];
@@ -262,17 +263,19 @@ static NSString *keyIDDocument = @"IO";
 // of the software only use one database and query.
 
 - (void)updateDocumentDatabaseQuery {
-	
-	NSManagedObjectContext *managedObjectContext = _managedObjectContext;
-	NSFetchRequest *request = [MADModelDocument fetchRequestDocDBQueryIDs];
-	
-	NSError *error = nil;
-	NSArray <NSDictionary *> *results = [managedObjectContext executeFetchRequest:request error:&error];
-	if (error != nil) {
-		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
+
+	RptqStoreContext *managedObjectContext = _managedObjectContext;
+	NSArray *queries = [managedObjectContext objectsForEntity:NSStringFromClass([RptqQuery class])];
+
+	NSMutableArray *results = [NSMutableArray arrayWithCapacity:queries.count];
+	for (RptqQuery *query in queries) {
+		[results addObject:@{
+			keyIDQuery: @(query.identifier),
+			keyIDDatabase: @(query.inDatabase.identifier),
+			keyIDDocument: @(query.inDatabase.ownedByQueryAsStaticResource.identifier),
+		}];
 	}
-	
-	//NSAssert(results.count > 0, @"We expect results.");
+
 	if (results.count == 0) return;
 	
 	NSMutableOrderedSet <MADModelDatabase *> *databases = [[NSMutableOrderedSet <MADModelDatabase *> alloc] initWithCapacity:results.count];

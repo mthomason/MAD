@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDocumentElementAggregate+Extras.h"
 
 #import <os/log.h>
@@ -18,10 +19,6 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
 
 #import "RptqDocument.h"
 #import "RptqDocumentElement+Extras.h"
@@ -51,11 +48,12 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 
 #pragma mark - Overrides
 
-+ (instancetype)getElementForObjectID: (NSManagedObjectID *)objectId
-					fromObjectContext: (NSManagedObjectContext *)managedObjectContext {
-	NSManagedObject *result = [managedObjectContext objectWithID:objectId];
++ (instancetype)getElementForObjectID: (int64_t)objectId
+					fromObjectContext: (RptqStoreContext *)managedObjectContext {
+	RptqObject *result = [managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class])
+												   identifier:objectId];
 	if (!result) {
-		os_log_error(rptq_log, "Error loading object with ID: %@", objectId);
+		os_log_error(rptq_log, "Error loading object with ID: %lld", objectId);
 	}
 	return (RptqDocumentElementAggregate *)result;
 }
@@ -136,16 +134,17 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 - (void)updateAggregateFunctionWithFunctionType:(MTAggregateFunctionType)functionType
 									  inputType:(MTAggregateFunctionInputType)inputType
 									  groupType:(MTAggregateGroupByType)groupType
-							  aggregateObjectID:(NSManagedObjectID *)aggregateObjectID  //RptqQueryField or MTAggregateFunctionInputTypeFormula
+							  aggregateObjectID:(int64_t)aggregateObjectID  //RptqQueryField or MTAggregateFunctionInputTypeFormula
 									groupNumber:(int32_t)groupNumber {
 	
 	self.functionType = functionType;
 	self.groupNumber = groupNumber;
 	self.groupType = groupType;
 	
-	NSManagedObject *aggregateObject = [self.managedObjectContext objectWithID:aggregateObjectID];
+	RptqObject *aggregateObject = [self.storeContext objectForEntity:NSStringFromClass([RptqDocumentElement class])
+														 identifier:aggregateObjectID];
 	if (!aggregateObject) {
-		os_log_error(rptq_log, "Error loading aggregate object with ID: %@", aggregateObjectID);
+		os_log_error(rptq_log, "Error loading aggregate object with ID: %lld", aggregateObjectID);
 	}
 	switch (inputType) {
 		case MTAggregateFunctionInputTypeField: {
@@ -163,7 +162,7 @@ NSString * const MTAggregateTypeKeyGroupNumber = @"MTAggregateTypeKeyGroupNumber
 	}
 	
 	NSError * __autoreleasing saveError = nil;
-	if (![self.managedObjectContext save:&saveError]) {
+	if (![self.storeContext save:&saveError]) {
 		os_log_error(rptq_log, "Error saving managed object: %s", saveError.localizedDescription.UTF8String);
 	}
 	

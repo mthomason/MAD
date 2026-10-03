@@ -10,6 +10,7 @@
 #define Reports_RptqQuery_Extras_h
 
 #import <MAD/RptqQuery.h>
+#import <MAD/RptqStoreContext.h>
 
 @class RptqDocument, MADDatabase, RptqDocumentSection, RptqDatabaseSchemaTable;
 
@@ -19,8 +20,8 @@
 	- (NSArray <RptqQueryGroup *> *)sortedQueryGroups;
 	- (NSArray *)sortDescriptorsForDatabase:(MADDatabase *)database;
 	- (NSUInteger)sectionCount;
-	+ (NSUInteger)sectionCountFectch:(NSManagedObjectID *)queryObjectID
-				managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	+ (NSUInteger)sectionCountFectch:(int64_t)queryObjectID
+				managedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 @end
 

@@ -10,15 +10,16 @@
 #define Reports_RptqDocumentSectionEnumerator_h
 
 #import <Foundation/NSEnumerator.h>
+#import <MAD/RptqStoreContext.h>
 
-@class NSManagedObjectID, NSManagedObjectContext, RptqDocument, NSArray;
+@class NSManagedObjectContext, RptqDocument, NSArray;
 
 @interface RptqDocumentSectionTypeEnumerator : NSEnumerator
 
 	@property (nonatomic, assign) NSUInteger current;
 
-	- (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
-			   managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+	- (instancetype)initWithQueryID:(int64_t)queryID
+			   managedObjectContext:(RptqStoreContext *)managedObjectContext;
 	- (NSArray *)allObjects;
 	- (id)nextObject;
 	- (NSUInteger)count;

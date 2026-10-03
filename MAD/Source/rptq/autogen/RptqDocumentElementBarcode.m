@@ -14,9 +14,6 @@
 
 @implementation RptqDocumentElementBarcode (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDocumentElementBarcode *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementBarcode"];
-}
 
 @dynamic add2dComponent;
 @dynamic barcodeType;

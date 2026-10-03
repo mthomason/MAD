@@ -10,10 +10,11 @@
 #define Reports_RptqDocument_Extras_h
 
 #import <MAD/RptqDocument.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADReportSectionRepresentation.h>
 #import <MAD/MTPaper.h>
 
-@class NSManagedObjectContext, MADDatabase, MADErrorContainer, RptqDocumentElement, RptqQuery,
+@class MADDatabase, MADErrorContainer, RptqDocumentElement, RptqQuery,
 	   RptqQueryPredicate, RptqQueryLinks;
 
 @interface RptqDocument (Extras)
@@ -22,8 +23,8 @@
 
 	@property (readonly)RptqQuery *mainQuery;
 
-	+ (instancetype)newDocumentForManagedObjectContext:(NSManagedObjectContext *)objectContext;
-	+ (instancetype)newDocumentReadFromManagedObjectContext:(NSManagedObjectContext *)objectContext;
+	+ (instancetype)newDocumentForManagedObjectContext:(RptqStoreContext *)objectContext;
+	+ (instancetype)newDocumentReadFromManagedObjectContext:(RptqStoreContext *)objectContext;
 
 	- (RptqDocumentSection *)documentSectionForType:(MADDocumentSectionType)type
 										   andLevel:(NSUInteger)level;
@@ -31,10 +32,10 @@
 										  withNumberOfGroups:(NSUInteger)numberOfGroups;
 										  
 	- (void)storeDatabaseConnectionDefination:(MADDatabase *)database
-					  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+					  forManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 	- (MADErrorContainer *)storeTablesAndFieldsForTables:(NSArray *)tables
 										   fieldsByTable:(NSDictionary *)fieldsByTable
-								 andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+								 andManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 	
 	- (void)setNewPageAfter:(BOOL)newPageAfter forSectionAtRow:(NSUInteger)sectionRow;
 	- (void)setNumberOfRows:(int32_t)numberOfRows forSectionAtRow:(NSUInteger)sectionRow;
@@ -44,7 +45,7 @@
 	- (void)addQueryLink:(RptqQueryLinks *)queryLink;
 	- (void)addPredicate:(RptqQueryPredicate *)predicate;
 	- (RptqDocumentElement *)addDocumentObject:(NSDictionary *)defination
-						  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+						  managedObjectContext:(RptqStoreContext *)managedObjectContext;
 	- (BOOL)newPageAfterSectionAtRow:(NSUInteger)sectionRow;
 
 	- (MTPaperType)paperType;

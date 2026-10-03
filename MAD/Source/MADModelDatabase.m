@@ -7,6 +7,7 @@
 //
 
 #import "MADModelDatabase.h"
+#import <MAD/RptqStoreContext.h>
 
 #import <Foundation/NSException.h>
 #import <Foundation/NSExpression.h>
@@ -27,6 +28,7 @@
 
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
+#import "RptqDatabaseCredentals.h"
 #import "RptqDatabaseSchemaTable.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQuery.h"
@@ -39,10 +41,10 @@ static os_log_t log_mad;
 
 @interface MADModelDatabase ()
 	- (instancetype)initWithIdentifier:(int64_t)identifier
-				  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+				  managedObjectContext:(RptqStoreContext *)managedObjectContext;
 	- (instancetype)initWithIdentifier:(int64_t)identifier
 					   queryIdentifier:(int64_t)queryIdentifier
-				  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+				  managedObjectContext:(RptqStoreContext *)managedObjectContext;
 @end
 
 #pragma mark -
@@ -54,7 +56,7 @@ static os_log_t log_mad;
 	NSString *_driverName;
 	NSString *_driverID;
 	NSString *_driverDBName;
-	NSManagedObjectContext * __weak _managedObjectContext;
+	RptqStoreContext * __weak _managedObjectContext;
 	NSMutableOrderedSet <NSNumber *> *_tables;
 	NSMutableDictionary <NSNumber *, MADModelTable *> *_tableDictionary;
 	NSOrderedSet <MADModelQuery *> *_queries;
@@ -80,12 +82,12 @@ static os_log_t log_mad;
 	_managedObjectContext = nil;
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
+- (RptqStoreContext *)managedObjectContext {
 	return _managedObjectContext;
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier
-			  managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+			  managedObjectContext:(RptqStoreContext *)managedObjectContext {
 	if (self = [super initWithIdentifier:identifier]) {
 		_driverName = nil;
 		_driverType = MADDatabaseTypeNotSet;
@@ -96,7 +98,7 @@ static os_log_t log_mad;
 
 - (instancetype)initWithIdentifier:(int64_t)identifier
 				   queryIdentifier:(int64_t)queryIdentifier
-			  managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+			  managedObjectContext:(RptqStoreContext *)managedObjectContext {
 	
 	if (self = [super initWithIdentifier:identifier]) {
 		_driverName = nil;
@@ -158,64 +160,26 @@ static os_log_t log_mad;
 - (MADDatabaseType)driverType {
 	
 	if (_driverType == MADDatabaseTypeNotSet) {
-	
-		NSArray <NSDictionary *> *results;
-		
-		NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDriverType: self.identifier];
-		
-		NSError *error = nil;
-		results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-		if (error != nil) {
-			os_log_error(log_mad, "Failed to fetch: %{public}@", error);
-		}
-		if (results.count > 0) {
-			NSDictionary *firstResult = results[0];
-			NSString *key = [RptqDatabase keyDatabaseDriverType];
-			NSNumber *driverTypeWrapper = firstResult[key];
-			_driverType = driverTypeWrapper.shortValue;
-		}
+		RptqDatabase *database = [self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
+		if (database) _driverType = (MADDatabaseType)database.databaseDriverTypeEnum;
 	}
 	return _driverType;
 }
 
 - (NSString *)schemaName {
-	
+
 	if (!_driverDBName) {
-		NSArray <NSDictionary *> *results;
-		
-		NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDatabaseName:self.identifier];
-		
-		NSError *error = nil;
-		results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-		if (error != nil) {
-			os_log_error(log_mad, "Failed to fetch: %{public}@", error);
-		}
-		if (results.count > 0) {
-			NSDictionary *resultSet = results[0];
-			NSString *key = [RptqDatabase keyOwnedByUserDatabaseName];
-			NSString *driverName = resultSet[key];
-			_driverDBName = driverName.copy;
-		}
+		RptqDatabase *database = [self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
+		_driverDBName = database.ownedByUser.dbname.copy;
 	}
 	return _driverDBName;
 }
 
 - (NSString *)driverID {
-	
+
 	if (!_driverID) {
-		NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDatabaseDriverID:self.identifier];
-		
-		NSError *error = nil;
-		NSArray <NSDictionary *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-		if (error != nil) {
-			os_log_error(log_mad, "Failed to fetch: %{public}@", error);
-		}
-		if (results.count > 0) {
-			NSDictionary *resultSet = results[0];
-			NSString *key = [RptqDatabase keyOwnedByUserDriverID];
-			NSString *driverName = resultSet[key];
-			_driverID = driverName.copy;
-		}
+		RptqDatabase *database = [self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
+		_driverID = database.ownedByUser.driverID.copy;
 	}
 	return _driverID;
 }
@@ -223,25 +187,16 @@ static os_log_t log_mad;
 - (NSString *)driverName {
 
 	if (!_driverName) {
-		NSFetchRequest *fetchRequest = [RptqDatabase fetchRequestDriverName:self.identifier];
-		NSError *error = nil;
-		NSArray <NSDictionary *> *results = [_managedObjectContext executeFetchRequest:fetchRequest error:&error];
-		if (error != nil) {
-			os_log_error(log_mad, "Failed to fetch: %{public}@", error);
-		}
-		if (results.count > 0) {
-			NSDictionary *resultSet = results[0];
-			NSString *driverName = [resultSet objectForKey:[RptqDatabase keyOwnedByUserDatabaseName]];
-			_driverName = driverName.copy;
-		}
+		RptqDatabase *database = [self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
+		_driverName = database.ownedByUser.dbname.copy;
 	}
 	return _driverName;
  /*
-	
+
 	NSString *databaseType = database.ownedByUser.driverID.copy;
 	RptqDatabaseCredentals *user = database.ownedByUser;
 	NSString * schemaName = [user databaseSchemaName].copy;
-	
+
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		NSString *TextFormatConnection = @"You are connecting to %1$@"
 		@" datasource named %2$@.";
@@ -271,61 +226,19 @@ static os_log_t log_mad;
 
 - (void)updateTables {
 
-	NSManagedObjectContext *managedObjectContext = _managedObjectContext;
-	
-	void (^setupExpressionWithType)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) = ^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression, NSAttributeType type) {
-		expressionDescription.name = name.copy;
-		expressionDescription.expression = expression;
-		expressionDescription.expressionResultType = type;
-	};
-	
-	NSUInteger expressionCount = 3;
-	NSMutableArray <NSExpressionDescription *> *expressionDescriptionArray = [[NSMutableArray alloc] initWithCapacity:expressionCount];
-	
-	NSString *inDbKey = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inDatabase))] stringByAppendingString:NSStringFromSelector(@selector(identifier))];
-	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier atKeyPath:inDbKey];
-	
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		NSExpressionDescription *ed = [[NSExpressionDescription alloc] init];
-		[expressionDescriptionArray addObject:ed];
-	}
-	
-	NSFetchRequest *fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDatabaseSchemaTable class])];
-	
-	NSExpression *expressionForSelf = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
-	NSExpression *expresssionForQueryable = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(queryable))];
-	NSExpression *expressionForName = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(name))];
-	
-	setupExpressionWithType(expressionDescriptionArray[0], NSStringFromSelector(@selector(identifier)), expressionForSelf, NSInteger64AttributeType);
-	setupExpressionWithType(expressionDescriptionArray[1], NSStringFromSelector(@selector(queryable)), expresssionForQueryable, NSBooleanAttributeType);
-	setupExpressionWithType(expressionDescriptionArray[2], NSStringFromSelector(@selector(name)), expressionForName, NSStringAttributeType);
-	
-	fetchQueryTable.propertiesToFetch = expressionDescriptionArray;
-	fetchQueryTable.resultType = NSDictionaryResultType;
-	fetchQueryTable.predicate = predicate;
-	
-	NSSortDescriptor *sortByTableName = [[NSSortDescriptor alloc] initWithKey:NSStringFromSelector(@selector(name)) ascending:YES];
-	fetchQueryTable.sortDescriptors = @[sortByTableName];
-	
-	NSError *fetchError = nil;
-	NSArray <NSDictionary *> *results = [managedObjectContext executeFetchRequest:fetchQueryTable error:&fetchError];
-	if (fetchError != nil) {
-		os_log_error(log_mad, "Failed to fetch right field: %{public}@", fetchError);
-	}
+	RptqStoreContext *managedObjectContext = _managedObjectContext;
+	NSArray *schemaTables = [managedObjectContext objectsForEntity:NSStringFromClass([RptqDatabaseSchemaTable class])];
 
 	NSMutableOrderedSet <NSNumber *> *tables = [[NSMutableOrderedSet alloc] init];
 	NSMutableDictionary <NSNumber *, MADModelTable *> *tableDictionary = [[NSMutableDictionary alloc] init];
-	
-	for (NSDictionary *tableData in results) {
-		
-		NSNumber *schemaTableIdentifier = tableData[NSStringFromSelector(@selector(identifier))];
-		NSString *schemaTableName = tableData[NSStringFromSelector(@selector(name))];
-		NSNumber *schemaTableQuerable = tableData[NSStringFromSelector(@selector(queryable))];
-		
-		MADModelTable *table = [[MADModelTable alloc] initWithIdentifier: schemaTableIdentifier.longLongValue
+
+	for (RptqDatabaseSchemaTable *schemaTable in schemaTables) {
+		if (schemaTable.inDatabase.identifier != self.identifier) continue;
+		NSNumber *schemaTableIdentifier = @(schemaTable.identifier);
+		MADModelTable *table = [[MADModelTable alloc] initWithIdentifier: schemaTable.identifier
 													managedObjectContext: managedObjectContext
-																	name: schemaTableName
-															   queryable: schemaTableQuerable.boolValue];
+																	name: schemaTable.name
+															   queryable: schemaTable.queryable];
 		[tables addObject:schemaTableIdentifier];
 		[tableDictionary setObject:table forKey:schemaTableIdentifier];
 	}
@@ -335,37 +248,15 @@ static os_log_t log_mad;
 }
 
 - (void)updateQueries {
-	NSExpressionDescription *expressionDescription = [[NSExpressionDescription alloc] init];
-	expressionDescription.name = NSStringFromSelector(@selector(identifier));
-	expressionDescription.expression = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
-	expressionDescription.expressionResultType = NSInteger64AttributeType;
-
-	NSString *keyPath = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inDatabase))] stringByAppendingString:NSStringFromSelector(@selector(identifier))];
-
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
-	
-	NSPredicate *predicate = [NSPredicate newPredicateObjectWithIdentifier:self.identifier atKeyPath:keyPath];
-	request.predicate = predicate;
-	request.resultType = NSDictionaryResultType;
-	request.includesSubentities = NO;
-	request.includesPropertyValues = NO;
-	
-	NSError *error = nil;
-	NSManagedObjectContext *managedObjectContext = _managedObjectContext;
-	NSArray <NSDictionary <NSString *, NSNumber *> *> *result = [managedObjectContext executeFetchRequest:request error:&error];
-	if (error != nil) {
-		os_log_error(log_mad, "Failed to fetch: %{public}@", error);
-	}
+	RptqStoreContext *managedObjectContext = _managedObjectContext;
+	NSArray *queriesForDatabase = [managedObjectContext objectsForEntity:NSStringFromClass([RptqQuery class])];
 
 	NSMutableOrderedSet <MADModelQuery *> *queries = [[NSMutableOrderedSet <MADModelQuery *> alloc] init];
-	NSUInteger i = 0;
-	for (NSDictionary <NSString *, NSNumber *> *objid in result) {
-		NSNumber *identifer = objid[NSStringFromSelector(@selector(identifier))];
-		MADModelQuery *queryObjectID = [[MADModelQuery alloc] initWithIdentifier: identifer.longLongValue
+	for (RptqQuery *query in queriesForDatabase) {
+		if (query.inDatabase.identifier != self.identifier) continue;
+		MADModelQuery *queryObjectID = [[MADModelQuery alloc] initWithIdentifier: query.identifier
 															managedObjectContext: managedObjectContext];
 		[queries addObject: queryObjectID];
-		queryObjectID = nil;
-		i++;
 	}
 	_queries = queries;
 }

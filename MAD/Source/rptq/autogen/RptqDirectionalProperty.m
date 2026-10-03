@@ -14,9 +14,6 @@
 
 @implementation RptqDirectionalProperty (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDirectionalProperty *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDirectionalProperty"];
-}
 
 @dynamic top;
 @dynamic bottom;

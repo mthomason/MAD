@@ -67,14 +67,14 @@
 // MADocument *, which is not a MADocument at all -- hence the unrecognized -filename.
 @interface MADTestReportFormatterDocument : MADocument
 
-@property (nonatomic, strong) NSManagedObjectContext *testManagedObjectContext;
+@property (nonatomic, strong) RptqStoreContext *testManagedObjectContext;
 @property (nonatomic, strong) RptqDocument *testActiveDocumentModel;
 
 @end
 
 @implementation MADTestReportFormatterDocument
 
-- (NSManagedObjectContext *)managedObjectContext { return self.testManagedObjectContext; }
+- (RptqStoreContext *)managedObjectContext { return self.testManagedObjectContext; }
 - (RptqDocument *)activeDocumentModel { return self.testActiveDocumentModel; }
 
 // The base implementation builds a real MADDatabase from the document's schemas; this test
@@ -89,7 +89,7 @@
 
 @interface TestMADReportFormatter : XCTestCase <MADReportFormatterDataSource, MADCacheProtocol>
 
-@property (nonatomic, strong) NSManagedObjectContext *moc;
+@property (nonatomic, strong) RptqStoreContext *moc;
 @property (nonatomic, strong) MADDataTableVirtual *testDataTable;
 @property (nonatomic, strong) RptqDocument *testDocument;
 @property (nonatomic, strong) MADTestReportFormatterDocument *document;
@@ -102,25 +102,14 @@
 - (void)setUp {
 	[super setUp];
 
-	// 1. Set up in-memory Core Data stack.
-	// The test bundle, not the framework's: MAD.xcdatamodeld is compiled into this
-	// target's Sources phase, so MAD.momd lives here and nowhere else.
-	NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-	NSURL *modelURL = [bundle URLForResource:@"MAD" withExtension:@"momd"];
-	NSManagedObjectModel *model = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
-	NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-	[psc addPersistentStoreWithType:NSInMemoryStoreType configuration:nil URL:nil options:nil error:NULL];
-
-	// Two contexts, the way MADocument has them: UIManagedDocument's is a child of the
-	// store's.  That layering is not cosmetic here -- every Rptq class assigns its
-	// required `identifier` from -awakeFromInsert, and that override is guarded by
-	// `self.managedObjectContext.parentContext`, so a flat context leaves every new
-	// object with a nil identifier and the save fails validation.
-	NSManagedObjectContext *parentContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-	parentContext.persistentStoreCoordinator = psc;
-
-	self.moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-	self.moc.parentContext = parentContext;
+	// 1. Set up a store-backed context.
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *storeURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"test.sqlite"]];
+	MADStore *store = [MADStore storeWithURL:storeURL];
+	XCTAssertTrue([store openWithError:NULL], @"open failed");
+	self.moc = [RptqStoreContext contextWithStore:store];
+	XCTAssertTrue([self.moc loadAllWithError:NULL], @"load failed");
 
 	// 2. Create Mock Data Table
 	self.testDataTable = [[MADDataTableVirtual alloc] initWithId:1];
@@ -183,7 +172,7 @@
 	[self.testDataTable addRowWithDataForFieldKeys:@{sortKey: @"Group B", @"value": @5, MADIdentifierROWID: @5}];
 
 	// Create Sort Object
-	RptqQuerySort *sort = [NSEntityDescription insertNewObjectForEntityForName:@"RptqQuerySort" inManagedObjectContext:self.moc];
+	RptqQuerySort *sort = [self.moc insertObjectForEntity:@"RptqQuerySort" identifier:0];
 	sort.hasField = queryField;
 	sort.ascending = YES;
 
@@ -213,7 +202,7 @@
 	RptqDocumentSectionRows *row = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:self.moc];
 	row.inSection = groupFooter;
 
-	RptqDocumentElementAggregate *element = [NSEntityDescription insertNewObjectForEntityForName:@"RptqDocumentElementAggregate" inManagedObjectContext:self.moc];
+	RptqDocumentElementAggregate *element = [self.moc insertObjectForEntity:@"RptqDocumentElementAggregate" identifier:0];
 	element.type = MADPrintPageElementTypeAggregate;
 	[row addHasObjectsObject:element];
 
@@ -227,7 +216,6 @@
 	// never sees unsaved inserts -- without this the layout builds with no sections at all.
 	NSError *saveError = nil;
 	XCTAssertTrue([self.moc save:&saveError], @"Could not save the test context: %@", saveError);
-	XCTAssertTrue([self.moc.parentContext save:&saveError], @"Could not save the store context: %@", saveError);
 
 	// 4. Setup the Report Formatter
 	NSURL *url = [NSURL fileURLWithPath:

@@ -7,13 +7,14 @@
 //
 
 #import "MADQueryFullTableEnumerator.h"
+#import <MAD/RptqStoreContext.h>
 #import "RptqDocument.h"
 #import <CoreData/NSManagedObjectContext.h>
 #import <CoreData/NSManagedObjectID.h>
 
 @interface MADQueryFullTableEnumerator ()
 
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) RptqStoreContext *managedObjectContext;
 @property (nonatomic, assign) int64_t documentObjectIdentifier;
 
 @end
@@ -23,7 +24,7 @@
 - (instancetype)initWithDocument:(RptqDocument *)document {
 	if (self = [super init]) {
 		_documentObjectIdentifier = document.identifier;
-		self.managedObjectContext = document.managedObjectContext;
+		self.managedObjectContext = document.storeContext;
 		
 	}
 	return self;

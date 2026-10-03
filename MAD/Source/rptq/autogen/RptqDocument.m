@@ -15,9 +15,6 @@
 
 @implementation RptqDocument (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDocument *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocument"];
-}
 
 @dynamic identifier;
 @dynamic papersize;

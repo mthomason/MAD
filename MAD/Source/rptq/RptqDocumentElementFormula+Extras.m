@@ -10,16 +10,13 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDocumentElementFormula+Extras.h"
 
 #import <CoreFoundation/CFNumber.h>
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
 
 #import "RptqDocument.h"
 #import "RptqDocumentElement.h"
@@ -40,26 +37,22 @@
 + (RptqDocumentElement *)addDocumentObject:(NSDictionary *)documentObjectDefination
 								toDocument:(RptqDocument *)document {
 
-	NSManagedObjectContext *managedObjectContext = document.managedObjectContext;
-	
-	NSEntityDescription *edFormula;
-	edFormula = [NSEntityDescription entityForName: NSStringFromClass([RptqDocumentElementFormula class])
-							inManagedObjectContext: managedObjectContext];
-	
+	RptqStoreContext *managedObjectContext = document.storeContext;
+
 	NSString *formulaText = documentObjectDefination[MTDocumentObjectDefinationObject];
-	
+
 	RptqDocumentElementFormula *element;
-	element = [[RptqDocumentElementFormula alloc] initWithEntity: edFormula
-								  insertIntoManagedObjectContext: managedObjectContext];
-	
+	element = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentElementFormula class])
+											  identifier:0];
+
 	element.source = formulaText;
 	element.type = MADPrintPageElementTypeFormula;
-	
+
 	NSMutableOrderedSet <RptqDocumentElement *> *hasObjects;
 	hasObjects = [document.hasDetailSection.hasRows[0] hasObjects].mutableCopy;
 	[hasObjects insertObject:element atIndex:0];
 	[document.hasDetailSection.hasRows[0] setHasObjects:hasObjects];
-	
+
 	return element;
 }
 

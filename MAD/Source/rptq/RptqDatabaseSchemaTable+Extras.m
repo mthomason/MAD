@@ -10,16 +10,13 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDatabaseSchemaTable+Extras.h"
 
 #import <CoreFoundation/CFNumber.h>
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
 
 #import <MADAPI/MADDatabaseTable.h>
 
@@ -40,71 +37,30 @@
 
 #pragma mark - Overrides
 
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-		[[NSNotificationCenter defaultCenter] willChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-											managedObjectContext:self.managedObjectContext];
-		[[NSNotificationCenter defaultCenter] didChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-	}
-}
 
-- (void)awakeFromFetch {
-	[super awakeFromFetch];
-}
 
-- (void)awakeFromSnapshotEvents:(NSSnapshotEventType)flag {
-	[super awakeFromSnapshotEvents:flag];
-	switch (flag) {
-		case NSSnapshotEventMergePolicy:
-			break;
-		case NSSnapshotEventRefresh:
-			break;
-		case NSSnapshotEventRollback:
-			break;
-		case NSSnapshotEventUndoDeletion:
-			break;
-		case NSSnapshotEventUndoInsertion:
-			break;
-		case NSSnapshotEventUndoUpdate:
-			break;
-		default:
-			break;
-	}
-}
+
 
 #pragma mark - Static
 
-+ (NSFetchRequest<RptqDatabaseSchemaTable *> *)fetchRequestSortTables {
-	NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(name))
-														   ascending: YES];
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqDatabaseSchemaTable class])];
-	request.resultType = NSManagedObjectResultType;
-	request.sortDescriptors = [[NSArray alloc] initWithObjects:sort, nil];
-	return request;
-}
 
-+ (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+
++ (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(RptqStoreContext *)managedObjectContext
 																name:(NSString *)name
 														andQueryable:(BOOL)queryable {
 	
-	NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([self class])
-												   inManagedObjectContext: managedObjectContext];
-	RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity: tableEntity
-									   insertIntoManagedObjectContext: managedObjectContext];
+	RptqDatabaseSchemaTable *rptqTable = [managedObjectContext insertObjectForEntity:NSStringFromClass([self class])
+																		 identifier:0];
 	rptqTable.name = name.copy;
 	rptqTable.queryable = queryable;
-	
+
 	return rptqTable;
 }
 
-+ (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
++ (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(RptqStoreContext *)objectContext
 															andTable:(MADDatabaseTable *)table {
-	
-	NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([self class])
-												   inManagedObjectContext: objectContext];
-	RptqDatabaseSchemaTable *rptqTable = [[self alloc] initWithEntity:tableEntity insertIntoManagedObjectContext:objectContext];
+
+	RptqDatabaseSchemaTable *rptqTable = [objectContext insertObjectForEntity:NSStringFromClass([self class]) identifier:0];
 	rptqTable.name = table.name.copy;
 	rptqTable.queryable = table.queryable;
 	return rptqTable;

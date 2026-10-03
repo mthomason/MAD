@@ -7,6 +7,7 @@
 //
 
 #import "MADReportSection.h"
+#import <MAD/RptqStoreContext.h>
 
 #import "RptqDocument.h"
 #import "RptqDocumentSection.h"
@@ -24,7 +25,7 @@
 @property (nonatomic, readwrite, strong) MADSectionLayoutManager *layoutManager;
 
 @property (nonatomic, readwrite, strong) NSNumber *objectID;
-@property (nonatomic, readwrite, assign) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, readwrite, assign) RptqStoreContext *managedObjectContext;
 
 @property (nonatomic, readwrite, strong, getter=hasReportRows) MADReportRows *reportRows;
 @property (nonatomic, readwrite, strong) RptqDocumentSection *documentSection;
@@ -92,7 +93,7 @@
 	
 	if (instance) {
 		instance.objectID = @(reportSection.identifier);
-		instance.managedObjectContext = reportSection.managedObjectContext;
+		instance.managedObjectContext = reportSection.storeContext;
 		instance.documentSection = reportSection;
 	}
 	

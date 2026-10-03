@@ -7,6 +7,7 @@
 //
 
 #import "MADModel.h"
+#import <MAD/RptqStoreContext.h>
 #import <CoreFoundation/CFTree.h>
 
 #import <Foundation/NSCompoundPredicate.h>
@@ -32,7 +33,7 @@ NSString * const MADKeyQuery = @"MADKeyQuery";
 @implementation MADModel
 	@dynamic identifier;
 
-+ (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext {
++ (instancetype)newModelDocument:(RptqStoreContext *)managedObjectContext {
 	return [[MADModelDocument alloc] initWithContext:managedObjectContext];
 }
 

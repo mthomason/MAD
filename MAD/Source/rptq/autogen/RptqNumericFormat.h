@@ -9,20 +9,17 @@
 #ifndef MAD_RptqNumericFormat_h
 #define MAD_RptqNumericFormat_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class NSLocale, RptqDocumentElement;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqNumericFormat : NSManagedObject
+@interface RptqNumericFormat : RptqObject
 
 @end
 
 @interface RptqNumericFormat (CoreDataProperties)
-
-+ (NSFetchRequest<RptqNumericFormat *> *)fetchRequest;
 
 @property (nullable, nonatomic, retain) NSLocale *locale;
 @property (nonatomic) BOOL enabled;

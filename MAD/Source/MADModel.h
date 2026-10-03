@@ -12,6 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <Foundation/NSValue.h>
 #import <MAD/MADModelIDProtocol.h>
+#import <MAD/RptqStoreContext.h>
 
 @class NSManagedObjectContext;
 
@@ -35,7 +36,7 @@ extern NSString * const MADKeyQueryLinkRightTableID;
 	int64_t _uid;
 }
 
-	+ (instancetype)newModelDocument:(NSManagedObjectContext *)managedObjectContext;
+	+ (instancetype)newModelDocument:(RptqStoreContext *)managedObjectContext;
 	- (instancetype)initWithIdentifier:(int64_t)identifier NS_DESIGNATED_INITIALIZER;
 
 	- (NSNumber *)objectID;

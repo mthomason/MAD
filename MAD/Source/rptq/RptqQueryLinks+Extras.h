@@ -10,6 +10,7 @@
 #define Reports_RptqQueryLinks_Extras_h
 
 #import <MAD/RptqQueryLinks.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADQueryLinkType.h>
 #import <MADDataStructures/MTProtocolLog.h>
 
@@ -20,7 +21,7 @@
 	+ (instancetype)newQueryLinksWithLeftField:(RptqQueryField *)fieldLeft
 									rightField:(RptqQueryField *)fieldRight
 									  joinType:(MADLinkType)joinType
-						  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+						  managedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 	- (NSString *)linkDescription;
 

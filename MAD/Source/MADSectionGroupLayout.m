@@ -7,6 +7,7 @@
 //
 
 #import "MADSectionGroupLayout.h"
+#import <MAD/RptqStoreContext.h>
 #import <CoreFoundation/CFNumber.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
@@ -27,7 +28,7 @@
 }
 
 - (instancetype)initWithObject:(NSDictionary *)object
-		  managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+		  managedObjectContext:(RptqStoreContext *)managedObjectContext
 				safeIdentifier:(NSString * (^)(NSString *))safeIdentifier {
 	if (self = [super initWithObject: object managedObjectContext: managedObjectContext]) {
 		

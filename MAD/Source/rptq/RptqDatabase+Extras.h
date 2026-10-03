@@ -12,6 +12,7 @@
 #import <MADAPI/MADDatabaseType.h>
 
 #import <MAD/RptqDatabase.h>
+#import <MAD/RptqStoreContext.h>
 
 #define MADDatabaseTypeReuseIds [NSArray arrayWithObjects: @"MADDatabaseTypeSalesforceCom", @"MADDatabaseTypeDatabaseCom", @"MADDatabaseTypeMySQL", @"MADDatabaseTypeMicrosoftSqlAzure", @"MADDatabaseTypeAmazonSimpleDb", @"MADDatabaseTypeMicrosoftSqlServer", @"MADDatabaseTypeOracle", @"MADDatabaseTypeODBC", @"MADDatabaseTypeGooleAppEngine", @"MADDatabaseTypeNone", nil]
 
@@ -22,14 +23,10 @@
 	+ (NSString *)keyOwnedByUserDriverID;
 	+ (NSString *)keyOwnedByUserDatabaseName;
 	+ (NSString *)keyDatabaseDriverType;
-	+ (NSFetchRequest *)fetchRequestDatabaseDriverID:(int64_t)identifier;
-	+ (NSFetchRequest *)fetchRequestDatabaseName:(int64_t)identifier;
-	+ (NSFetchRequest *)fetchRequestDriverName:(int64_t)identifier;
-	+ (NSFetchRequest *)fetchRequestDriverType:(int64_t)identifier;
 	+ (RptqDatabase *)databaseForDocument:(RptqDocument *)document
 						  andConnecitonId:(int64_t)connectionId;
 
-	+ (instancetype)newDatabaseFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+	+ (instancetype)newDatabaseFactoryForManagedObjectContext:(RptqStoreContext *)objectContext
 												   driverType:(NSString *)driverIdentifier
 												 connectionId:(int64_t)connectionId;
 

@@ -10,16 +10,13 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDocumentElementLabelLink+Extras.h"
 
 #import <CoreFoundation/CFNumber.h>
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSSortDescriptor.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
 
 #import "RptqDocumentElement.h"
 #import "RptqDocumentElement+Extras.h"

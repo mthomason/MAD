@@ -17,9 +17,6 @@
 
 @implementation RptqDatabase (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDatabase *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDatabase"];
-}
 
 @dynamic databaseDriverType;
 @dynamic databaseDriverTypeEnum;

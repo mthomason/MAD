@@ -14,9 +14,6 @@
 
 @implementation RptqTextStyle (CoreDataProperties)
 
-+ (NSFetchRequest<RptqTextStyle *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqTextStyle"];
-}
 
 @dynamic strikethrough;
 @dynamic underline;

@@ -9,20 +9,17 @@
 #ifndef MAD_RptqDocument_h
 #define MAD_RptqDocument_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDatabase, RptqDocumentSection;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqDocument : NSManagedObject
+@interface RptqDocument : RptqObject
 
 @end
 
 @interface RptqDocument (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDocument *> *)fetchRequest;
 
 @property (nonatomic) int64_t identifier;
 @property (nonatomic) int16_t papersize;

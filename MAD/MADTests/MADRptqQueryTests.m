@@ -17,6 +17,8 @@
 #import <MAD/MADSQLJoinType.h>
 
 #import <MAD/RptqQueryPredicate.h>
+#import <MAD/MADStore.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/RptqQueryPredicate+Extras.h>
 #import <MAD/RptqQueryLinks+Extras.h>
 #import <MAD/RptqQueryField+Extras.h>
@@ -30,25 +32,15 @@
 
 #pragma mark - Helpers
 
-- (NSManagedObjectModel *)modelFromTestBundle {
-	NSURL *momdURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"MAD"
-															 withExtension:@"momd"];
-	return [[NSManagedObjectModel alloc] initWithContentsOfURL:momdURL];
-}
-
-- (NSManagedObjectContext *)inMemoryContext {
-	NSManagedObjectModel *model = [self modelFromTestBundle];
-	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+- (RptqStoreContext *)inMemoryContext {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *url = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"test.sqlite"]];
+	MADStore *store = [MADStore storeWithURL:url];
 	NSError *error = nil;
-	[coordinator addPersistentStoreWithType:NSInMemoryStoreType
-							  configuration:nil
-										URL:nil
-									options:nil
-									  error:&error];
-	XCTAssertNil(error);
-
-	NSManagedObjectContext *context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-	context.persistentStoreCoordinator = coordinator;
+	XCTAssertTrue([store openWithError:&error], @"open failed: %@", error);
+	RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
+	XCTAssertTrue([context loadAllWithError:&error], @"load failed: %@", error);
 	return context;
 }
 
@@ -91,7 +83,7 @@
 #pragma mark - Comparison operators (RptqQueryPredicate)
 
 - (void)testPredicateSymbolForComparson {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 
 	NSDictionary *expected = @{
 		@(MADPredicateOperatorEqual): @"=",
@@ -103,15 +95,14 @@
 	};
 
 	[expected enumerateKeysAndObjectsUsingBlock:^(NSNumber *op, NSString *symbol, BOOL *stop) {
-		RptqQueryPredicate *predicate = [NSEntityDescription insertNewObjectForEntityForName:@"RptqQueryPredicate"
-																	 inManagedObjectContext:context];
+		RptqQueryPredicate *predicate = [context insertObjectForEntity:@"RptqQueryPredicate" identifier:0];
 		predicate.comparson = (int16_t)op.integerValue;
 		XCTAssertEqualObjects([predicate symbolForComparson], symbol);
 	}];
 }
 
 - (void)testPredicateSymbolForDisplay {
-	NSManagedObjectContext *context = [self inMemoryContext];
+	RptqStoreContext *context = [self inMemoryContext];
 
 	NSDictionary *expected = @{
 		@(MADPredicateOperatorEqual): @"==",
@@ -123,8 +114,7 @@
 	};
 
 	[expected enumerateKeysAndObjectsUsingBlock:^(NSNumber *op, NSString *symbol, BOOL *stop) {
-		RptqQueryPredicate *predicate = [NSEntityDescription insertNewObjectForEntityForName:@"RptqQueryPredicate"
-																	 inManagedObjectContext:context];
+		RptqQueryPredicate *predicate = [context insertObjectForEntity:@"RptqQueryPredicate" identifier:0];
 		predicate.comparson = (int16_t)op.integerValue;
 		XCTAssertEqualObjects([predicate symbolForDisplay], symbol);
 	}];

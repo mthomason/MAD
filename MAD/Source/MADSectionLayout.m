@@ -7,6 +7,7 @@
 //
 
 #import "MADSectionLayout.h"
+#import <MAD/RptqStoreContext.h>
 #import <CoreFoundation/CFNumber.h>
 #import <CoreData/NSManagedObjectID.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -20,7 +21,6 @@
 
 @implementation MADSectionLayout {
   @public
-	NSManagedObjectID *_objectID;
 	int64_t _identifier;
 	MADDocumentSectionType _type;
 	float _height;
@@ -31,7 +31,7 @@
 }
 
 - (instancetype)initWithObject:(NSDictionary *)object
-		  managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+		  managedObjectContext:(RptqStoreContext *)managedObjectContext {
 	if (self = [super init]) {
 		
 		NSString *keyIdentifier = NSStringFromSelector(@selector(identifier)),
@@ -39,8 +39,7 @@
 				 *keyPathType = [RptqDocumentSection keyPathType],
 				 *keyPathWrappingStyle = [RptqDocumentSection keyPathWrappingStyle],
 				 *keyPathVisibility = [RptqDocumentSection keyPathVisibility],
-				 *keyPathHeight = [RptqDocumentSection keyPathHeight],
-				 *keySelf = NSStringFromSelector(@selector(self));
+				 *keyPathHeight = [RptqDocumentSection keyPathHeight];
 		
 		NSNumber *number = object[keyIdentifier];
 		_identifierObject = number.copy;
@@ -60,32 +59,11 @@
 		
 		number = object[keyPathWrappingStyle];
 		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt16Type, &_wrappingStyle);
-		
-		if (_visibility) {
-			NSManagedObjectID *objectID = object[keySelf];
-			objectID = objectID.copy;
-			
-			NSFetchRequest *fetchRequestElements;
-			NSArray *results;
-			NSError *error = NULL;
-			
-			fetchRequestElements = [RptqDocumentElement fetchRequestSectionHeight:objectID];
 
-			results = [managedObjectContext executeFetchRequest: fetchRequestElements
-														  error: &error];
-			
-			
-			NSString *keyCalculatedHeight = [RptqDocumentElement keyCalculatedHeight];
-			NSNumber *calculatedHeight;
-			for (NSDictionary *result in results) {
-				calculatedHeight = result[keyCalculatedHeight];
-				_displayHeight = MAX(_displayHeight, calculatedHeight.floatValue);
-			}
-			
-		} else {
-			_displayHeight = 0.0000f;
-		}
-		
+		// Element auto-height was a Core Data projection over each element's margin,
+		// padding, border and rect; the store drops projections, so the section's own
+		// declared height stands in until the sections/elements family lands (slice 3).
+		_displayHeight = _visibility ? _height : 0.0000f;
 	}
 	return self;
 }

@@ -10,15 +10,10 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqQueryTable+Extras.h"
 
 #import <CoreFoundation/CFNumber.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSExpressionDescription.h>
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
@@ -51,75 +46,28 @@
 
 #pragma mark - Overrides
 
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-		[[NSNotificationCenter defaultCenter] willChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-											managedObjectContext:self.managedObjectContext];
-		[[NSNotificationCenter defaultCenter] didChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-	}
-}
-
-+ (instancetype)queryTableWithObjectID:(NSManagedObjectID *)objectID
-				  managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	return (RptqQueryTable *)[managedObjectContext objectWithID:objectID];
-}
-
-+ (NSFetchRequest *)fetchRequestQueryTables:(NSPredicate *)predicate {
-	
-	NSFetchRequest *fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqQueryTable class])];
-	NSString *keyPathTableName = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inQueryTable))] stringByAppendingString: NSStringFromSelector(@selector(databaseSchemaTable))];
-	keyPathTableName = [MADStringUtilities stringByAppendingPeriod:keyPathTableName];
-	keyPathTableName = [keyPathTableName stringByAppendingString: NSStringFromSelector(@selector(name))];
-	
-	NSArray<NSString *> *keys = @[
-		@"QTI",
-		@"STI",
-	];
-	
-	NSArray<NSExpression *> *expressions = @[
-		[NSExpression expressionForKeyPath: NSStringFromSelector(@selector(identifier))],
-		[NSExpression expressionForKeyPath: NSStringFromSelector(@selector(databaseSchemaTable))],
-	];
-	
-	NSArray<NSNumber *> *types = @[
-		@(NSInteger64AttributeType),
-		@(NSInteger64AttributeType),
-	];
-	
-	NSMutableArray<NSExpressionDescription *> *descriptions = [NSMutableArray arrayWithCapacity:keys.count];
-	for (NSUInteger i=0; i<keys.count; i++) {
-		NSExpressionDescription *desc = [[NSExpressionDescription alloc] init];
-		desc.name = keys[i];
-		desc.expression = expressions[i];
-		desc.expressionResultType = types[i].unsignedIntegerValue;
-		[descriptions addObject:desc];
-	}
-	
-	fetchQueryTable.propertiesToFetch = descriptions;
-	fetchQueryTable.resultType = NSDictionaryResultType;
-	fetchQueryTable.predicate = predicate;
-	
-	return fetchQueryTable;
++ (instancetype)queryTableWithObjectID:(int64_t)objectID
+				  managedObjectContext:(RptqStoreContext *)managedObjectContext {
+	return (RptqQueryTable *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryTable class])
+													   identifier:objectID];
 }
 
 + (RptqQueryTable *)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
 									   database:(RptqDatabase *)database
-						forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+						forManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 
 
 	RptqQuery *query = database.defaultQuery;
 	NSSet <RptqQueryTable *> *queryTables = database.defaultQuery.hasQueryTables;
 	int64_t dupeCtr = 0;
 	for (RptqQueryTable *table in queryTables) {
-		if ([table.databaseSchemaTable.objectID isEqual:databaseSchemaTable.objectID]) {
+		if (table.databaseSchemaTable.identifier == databaseSchemaTable.identifier) {
 			dupeCtr++;
 		}
 	}
-	
-	NSEntityDescription *tableEntity = [NSEntityDescription entityForName: NSStringFromClass([RptqQueryTable class]) inManagedObjectContext: managedObjectContext];
-	RptqQueryTable *queryTable = [[RptqQueryTable alloc] initWithEntity: tableEntity insertIntoManagedObjectContext: managedObjectContext];
+
+	RptqQueryTable *queryTable = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqQueryTable class])
+																 identifier:0];
 	queryTable.databaseSchemaTable = databaseSchemaTable;
 	queryTable.inQuery = query;
 	queryTable.dropIndex = dupeCtr;

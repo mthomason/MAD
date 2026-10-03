@@ -290,6 +290,17 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 		return nil;
 	}
 
+	// The converter reads rows through NSManagedObject, not the Rptq subclasses: the
+	// swap off NSManagedObject has already happened, and Core Data refuses to
+	// instantiate an entity whose class is no longer an NSManagedObject subclass.
+	// A compiled .momd is immutable, so work on a mutable copy before pointing every
+	// entity at the generic class.
+	NSManagedObjectModel *mutableModel = [model copy];
+	for (NSEntityDescription *entity in mutableModel.entities) {
+		entity.managedObjectClassName = @"NSManagedObject";
+	}
+	model = mutableModel;
+
 	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
 	if (![coordinator addPersistentStoreWithType:NSSQLiteStoreType
 								   configuration:nil

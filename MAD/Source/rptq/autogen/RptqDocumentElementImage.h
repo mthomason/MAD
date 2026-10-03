@@ -21,8 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RptqDocumentElementImage (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDocumentElementImage *> *)fetchRequest;
-
 @property (nullable, nonatomic, retain) UIImage *image;
 
 @end

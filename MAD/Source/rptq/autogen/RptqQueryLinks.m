@@ -15,9 +15,6 @@
 
 @implementation RptqQueryLinks (CoreDataProperties)
 
-+ (NSFetchRequest<RptqQueryLinks *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqQueryLinks"];
-}
 
 @dynamic identifier;
 @dynamic type;

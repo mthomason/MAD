@@ -9,20 +9,17 @@
 #ifndef MAD_RptqDatabaseSchemaTable_NSManagedObject_h
 #define MAD_RptqDatabaseSchemaTable_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDatabase, RptqDatabaseSchemaField, RptqQueryTable;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqDatabaseSchemaTable : NSManagedObject
+@interface RptqDatabaseSchemaTable : RptqObject
 
 @end
 
 @interface RptqDatabaseSchemaTable (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDatabaseSchemaTable *> *)fetchRequest;
 
 @property (nonatomic) int64_t identifier;
 @property (nonatomic) BOOL queryable;

@@ -16,9 +16,6 @@
 
 @implementation RptqDatabaseSchemaTable (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDatabaseSchemaTable *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDatabaseSchemaTable"];
-}
 
 @dynamic identifier;
 @dynamic name;

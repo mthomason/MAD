@@ -9,20 +9,17 @@
 #ifndef MAD_RptqQueryGroup_NSManagedObject_h
 #define MAD_RptqQueryGroup_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDocumentSection, RptqQuery, RptqQueryField;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqQueryGroup : NSManagedObject
+@interface RptqQueryGroup : RptqObject
 
 @end
 
 @interface RptqQueryGroup (CoreDataProperties)
-
-+ (NSFetchRequest<RptqQueryGroup *> *)fetchRequest;
 
 @property (nonatomic) int64_t identifier;
 @property (nonatomic) int16_t sort;

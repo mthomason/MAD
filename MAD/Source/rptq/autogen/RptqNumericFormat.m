@@ -14,9 +14,6 @@
 
 @implementation RptqNumericFormat (CoreDataProperties)
 
-+ (NSFetchRequest<RptqNumericFormat *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqNumericFormat"];
-}
 
 @dynamic locale;
 @dynamic enabled;

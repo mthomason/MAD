@@ -10,6 +10,7 @@
 #define MADModelQuery_h
 
 #import <MAD/MADModel.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADModelDataProtocol.h>
 
 
@@ -27,7 +28,7 @@
 - (instancetype)initWithIdentifier:(int64_t)identifier
 						  database:(MADModelDatabase *)database;
 - (instancetype)initWithIdentifier:(int64_t)identifier
-			  managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+			  managedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 - (NSSet <NSNumber *> *)tablesInLinks;
 - (NSSet <NSNumber *> *)orphanedQueryTables;
@@ -36,7 +37,7 @@
 - (void)deleteQueryLinkID:(NSNumber *)queryLink;
 - (void)deleteQueryTableID:(NSNumber *)queryTable;
 - (void)insertQueryTableID:(NSNumber *)queryTableID;
-- (void)insertQueryTableID:(NSNumber *)queryTableID managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+- (void)insertQueryTableID:(NSNumber *)queryTableID managedObjectContext:(RptqStoreContext *)managedObjectContext;
 - (void)insertQueryLinkID:(NSNumber *)queryLinkID;
 - (NSSet <NSNumber /*MADModelQueryLink*/ *> *)linksForQueryTable:(int64_t)queryTableID;
 

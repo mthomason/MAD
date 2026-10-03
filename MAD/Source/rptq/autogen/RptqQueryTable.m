@@ -16,9 +16,6 @@
 
 @implementation RptqQueryTable (CoreDataProperties)
 
-+ (NSFetchRequest<RptqQueryTable *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqQueryTable"];
-}
 
 @dynamic alias;
 @dynamic dropIndex;

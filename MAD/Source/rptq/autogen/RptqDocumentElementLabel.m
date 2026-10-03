@@ -14,9 +14,6 @@
 
 @implementation RptqDocumentElementLabel (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDocumentElementLabel *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDocumentElementLabel"];
-}
 
 @dynamic text;
 

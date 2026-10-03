@@ -22,6 +22,7 @@
 #import <MADFoundation/MADNotificationProgress.h>
 
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADocument.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
@@ -162,15 +163,14 @@
 
 	BOOL __block operationSuccess = NO;
 	NSError __block *operationError = nil;
-	NSManagedObjectContext *privateMOC = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	privateMOC.parentContext = document.managedObjectContext;
-	MADLogDebug("MADOperationCreateDocumentImportSchema <%p:%@> Created private MOC <%p> with parent MOC <%p>",
-				self, self.name, privateMOC, document.managedObjectContext);
-	
+	RptqStoreContext *privateMOC = document.storeContext;
+	MADLogDebug("MADOperationCreateDocumentImportSchema <%p:%@> using store context <%p>",
+				self, self.name, privateMOC);
+
 	//MADocument * __weak weakdoc = document;
 	MADOperationCreateDocumentImportSchema * __weak weakself = self;
-	
-	[privateMOC performBlockAndWait:^{
+
+	^{
 		MADOperationCreateDocumentImportSchema *strongSelf = weakself;
 		if (!strongSelf || strongSelf.isCancelled) {
 			MADLogDebug("MADOperationCreateDocumentImportSchema <%p:%@> (in privateMOC block) self is nil or operation cancelled. Aborting.",
@@ -304,7 +304,7 @@
 			operationError = [saveError copy];
 		}
 
-	}];
+	}();
 	
 	MADLogDebug("MADOperationCreateDocumentImportSchema <%p:%@> (after privateMOC block) Finalizing. Operation success state: %s",
 				self, self.name, operationSuccess ? "YES" : "NO");

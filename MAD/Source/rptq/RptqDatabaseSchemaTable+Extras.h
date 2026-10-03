@@ -10,23 +10,22 @@
 #define Reports_RptqDatabaseSchemaTable_Extras_h
 
 #import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqStoreContext.h>
 #import <MADDataStructures/MTProtocolLog.h>
 
 @class MADDatabaseTable;
 
 @interface RptqDatabaseSchemaTable (Extras) <MTProtocolLog>
 
-	+ (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+	+ (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(RptqStoreContext *)objectContext
 																	name:(NSString *)name
 															andQueryable:(BOOL)queryable;
 
-	+ (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(NSManagedObjectContext *)objectContext
+	+ (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(RptqStoreContext *)objectContext
 																andTable:(MADDatabaseTable *)table;
 
 	+ (RptqDatabaseSchemaTable *)databaseSchemaTableForDatabase:(RptqDatabase *)database andTableName:(NSString *)name;
 
-
-	+ (NSFetchRequest<RptqDatabaseSchemaTable *> *)fetchRequestSortTables;
 
 @end
 

@@ -38,6 +38,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)objectWithBackingObject:(MADStoreObject *)backingObject
 						   storeContext:(RptqStoreContext *)storeContext;
 
+/// Called by the store context after a row is inserted, so a subclass can auto-create
+/// its value satellites the way Core Data's awakeFromInsert used to (e.g. a rect
+/// creating its origin and size).
+- (void)awakeFromInsert;
+
 /// The generic hooks the Rptq headers' @dynamic properties resolve to.  A subclass
 /// declares `@property … databaseDriverType;` and these serve the getter and setter.
 /// The typed accessors themselves are installed by +resolveInstanceMethod: (see the

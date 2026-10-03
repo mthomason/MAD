@@ -16,9 +16,6 @@
 
 @implementation RptqDatabaseSchemaField (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDatabaseSchemaField *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDatabaseSchemaField"];
-}
 
 @dynamic dataType;
 @dynamic dataTypeNative;

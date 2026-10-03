@@ -9,21 +9,18 @@
 #ifndef MAD_RptqDocumentElement_NSManagedObject_h
 #define MAD_RptqDocumentElement_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDocumentSectionRows, RptqPoint, RptqDirectionalAsymmetry, RptqRect,
        RptqBorder, RptqTextStyle, RptqAlignment, RptqNumericFormat, UIColor;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqDocumentElement : NSManagedObject
+@interface RptqDocumentElement : RptqObject
 
 @end
 
 @interface RptqDocumentElement (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDocumentElement *> *)fetchRequest;
 
 @property (nonatomic) int64_t identifier;
 @property (nonatomic) int16_t type;

@@ -7,6 +7,7 @@
 //
 
 #import "MADQuerySelectExpressionActiveFields.h"
+#import <MAD/RptqStoreContext.h>
 #import <CoreData/NSManagedObjectContext.h>
 
 #import <MADDataStructures/MTPair.h>
@@ -31,7 +32,7 @@
 @implementation MADQuerySelectExpressionActiveFields
 
 - (instancetype)initWithDatabase:(MADDatabase *)database
-         forManagedObjectContext:(NSManagedObjectContext *)context {
+         forManagedObjectContext:(RptqStoreContext *)context {
 
     if (self = [super init]) {
         

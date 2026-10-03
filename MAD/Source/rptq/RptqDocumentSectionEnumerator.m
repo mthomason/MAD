@@ -11,6 +11,7 @@
 #endif
 
 #import "RptqDocumentSectionEnumerator.h"
+#import <MAD/RptqStoreContext.h>
 #import "RptqDocument+Extras.h"
 #import "RptqDatabase.h"
 #import "RptqQuery+Extras.h"
@@ -28,8 +29,8 @@
 	NSUInteger _current;
 }
 
-- (instancetype)initWithQueryID:(NSManagedObjectID *)queryID
-		   managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+- (instancetype)initWithQueryID:(int64_t)queryID
+		   managedObjectContext:(RptqStoreContext *)managedObjectContext {
 	if (self = [super init]) {
 		_total = [RptqQuery sectionCountFectch:queryID managedObjectContext:managedObjectContext];
 		_current = 0;

@@ -66,7 +66,7 @@
 				 @"MADQuerySampleDataTable expects RptqDatabaseSchemaTable.");
 
 		RptqDatabaseSchemaTable *obj = object;
-		MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier: obj.objectID.URIRepresentation.absoluteString];
+		MADDataTable *dataTable = [MADDataTable newDataTableForIdentifier: [[NSString alloc] initWithFormat:@"%lld", obj.identifier]];
 		self.dataTableMaxFieldLength = dataTable;
 		self.queryObject = object;
 

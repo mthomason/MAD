@@ -7,6 +7,7 @@
 //
 
 #import "MADQuerySelectExpressionAllFields.h"
+#import <MAD/RptqStoreContext.h>
 #import "MADQueryActiveQueryFields.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqQueryTable+Extras.h"
@@ -27,7 +28,7 @@
 
 - (instancetype)initWithDatabase:(MADDatabase *)database
 						  tables:(NSArray <MTPair *> *)tables
-		 forManagedObjectContext:(NSManagedObjectContext *)context {
+		 forManagedObjectContext:(RptqStoreContext *)context {
 	
 	if (self = [super init]) {
 		
@@ -36,9 +37,9 @@
 		NSUInteger tableCounter = 0;
 		for (MTPair *pair in tables) {
 			MTVertex *queryTable = pair.former;
-			NSManagedObjectID *objectID = queryTable.object;
-			
-			RptqQueryTable *table = [context objectWithID:objectID];
+			int64_t objectID = [queryTable.object longLongValue];
+
+			RptqQueryTable *table = [context objectForEntity:NSStringFromClass([RptqQueryTable class]) identifier:objectID];
 			NSAssert(table != nil, @"Expect a table.");
 			if (table != nil) {
 				if (tableCounter != 0) [result appendString:@",\n"];

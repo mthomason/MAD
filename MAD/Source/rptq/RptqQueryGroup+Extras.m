@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDatabaseSchemaField.h"
 
@@ -36,23 +37,14 @@
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSComparisonPredicate.h>
 
-#import <CoreData/NSPropertyMapping.h>
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-
 @implementation RptqQueryGroup (Extras)
 
 + (instancetype)newQueryGroupQueryWithSortOrder:(MADSortOrder)sortOrder
-						andManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+						andManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 
-	NSEntityDescription *entityDescriptionQueryGroup;
-	entityDescriptionQueryGroup= [NSEntityDescription entityForName: NSStringFromClass([RptqQueryGroup class])
-											 inManagedObjectContext: managedObjectContext];
-	
-	RptqQueryGroup *queryGroup = [[self alloc] initWithEntity: entityDescriptionQueryGroup
-							   insertIntoManagedObjectContext: managedObjectContext];
-	
+	RptqQueryGroup *queryGroup = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqQueryGroup class])
+																 identifier:0];
+
 	queryGroup.sort = sortOrder;
 	queryGroup.weight = [queryGroup lastWeightWithManagedObjectContext:managedObjectContext] + 1;
 
@@ -67,71 +59,37 @@
 #pragma mark -
 #pragma mark Overrides
 
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-											managedObjectContext:self.managedObjectContext];
-	}
-}
-
 #pragma mark -
 #pragma mark Static
 
-+ (NSUInteger)numberOfGroupsForQueryID:(NSManagedObjectID *)objectID
-				  managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-	
-	//NSExpression *predicateExpression[2];
-	//NSString *keyInQuery = NSStringFromSelector(@selector(inQuery));
-	//predicateExpression[0] = [NSExpression expressionForKeyPath: keyInQuery];
-	//predicateExpression[1] = [NSExpression expressionForConstantValue: objectID];
-	
-	//NSPredicate *predicate;
-	//predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
-	//                                               rightExpression: predicateExpression[1]
-	//                                                      modifier: NSDirectPredicateModifier
-	//                                                          type: NSEqualToPredicateOperatorType
-	//                                                       options: 0];
++ (NSUInteger)numberOfGroupsForQueryID:(int64_t)objectID
+				  managedObjectContext:(RptqStoreContext *)managedObjectContext {
+	NSArray *groups = [managedObjectContext objectsForEntity:NSStringFromClass([RptqQueryGroup class])];
+	NSUInteger result = 0;
+	for (RptqQueryGroup *group in groups) {
+		if (group.inQuery.identifier == objectID) result++;
+	}
+	return result;
 
-	//request.predicate = predicate;
-	NSError *error = nil;
-	NSUInteger result = [managedObjectContext countForFetchRequest:request error:&error];
-	return result == NSNotFound ? 0 : result;
-	
 }
 
 + (NSUInteger)numberOfGroupsForQuery:(RptqQuery *)query {
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"inQuery == %@", query.objectID];
-	request.predicate = predicate;
-	NSError *error = nil;
-	NSUInteger result = [query.managedObjectContext countForFetchRequest:request error:&error];
-	return (error) ? 0 : result;
+	NSArray *groups = [query.storeContext objectsForEntity:NSStringFromClass([RptqQueryGroup class])];
+	NSUInteger result = 0;
+	for (RptqQueryGroup *group in groups) {
+		if (group.inQuery.identifier == query.identifier) result++;
+	}
+	return result;
 }
 
 #pragma mark -
 #pragma mark Member functions
 
-- (int16_t)lastWeightWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	
-	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqQueryGroup class])];
-	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"weight"
-																   ascending: NO];
-	id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-	request.sortDescriptors = sortDescriptors;
-	request.fetchLimit = 1;
-
-	NSError *error = nil;
-	NSArray *queryGroupLast = [managedObjectContext executeFetchRequest: request error: &error];
-	if (error != nil) {
-		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
-	}
-	
+- (int16_t)lastWeightWithManagedObjectContext:(RptqStoreContext *)managedObjectContext {
+	NSArray *groups = [managedObjectContext objectsForEntity:NSStringFromClass([RptqQueryGroup class])];
 	int16_t weight = 0;
-	if (queryGroupLast.count > 0) {
-		RptqQueryGroup *lastGroup = queryGroupLast[0];
-		weight = lastGroup.weight;
+	for (RptqQueryGroup *group in groups) {
+		if (group.weight > weight) weight = group.weight;
 	}
 	return weight;
 }
@@ -166,7 +124,7 @@
 	RptqQueryGroup *queryGroup;
 	NSInteger location = 0;
 	for (queryGroup in sortedQueryGroups) {
-		if ([queryGroup.objectID isEqual:self.objectID]) {
+		if (queryGroup.identifier == self.identifier) {
 			break;
 		}
 		location++;

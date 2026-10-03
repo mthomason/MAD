@@ -10,8 +10,6 @@
 #define MAD_RptqDocumentElementFormula_RptqDocumentElement_h
 
 #import "RptqDocumentElement.h"
-#import <CoreData/NSFetchRequest.h>
-
 @class RptqDocumentElementAggregate;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -21,8 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface RptqDocumentElementFormula (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDocumentElementFormula *> *)fetchRequest;
 
 @property (nonatomic) int16_t functionScope;
 @property (nonatomic) int16_t functionType;

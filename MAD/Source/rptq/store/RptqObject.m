@@ -25,6 +25,8 @@
 - (void)setIdentifier:(int64_t)identifier { self.backingObject.identifier = identifier; }
 - (NSString *)entity { return self.backingObject.entity; }
 
+- (void)awakeFromInsert { }
+
 #pragma mark - Copying
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -54,14 +56,16 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 	if (relationship) {
 		if (relationship.isToMany) {
 			NSArray<NSNumber *> *identifiers = [self.backingObject existingCollectionForName:key];
-			if (identifiers.count == 0) return @[];
 			NSMutableArray<RptqObject *> *members = [NSMutableArray arrayWithCapacity:identifiers.count];
 			for (NSNumber *identifier in identifiers) {
 				RptqObject *member = [self.storeContext objectForEntity:relationship.destination
 														   identifier:identifier.longLongValue];
 				if (member) [members addObject:member];
 			}
-			return members;
+			// The declared property type is an ordered or unordered set, so hand back the
+			// matching collection rather than a bare array.
+			if (relationship.isOrdered) return [NSOrderedSet orderedSetWithArray:members];
+			return [NSSet setWithArray:members];
 		}
 		NSNumber *identifier = [self.backingObject referenceForName:key];
 		if (!identifier) return nil;

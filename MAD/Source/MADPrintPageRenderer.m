@@ -185,14 +185,14 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 
 - (NSDictionary <NSString *, id> *)fontAttributes:(MADDocumentObjectDataReference *)dataRef {
 	__kindof RptqDocumentElement *item = dataRef.item;
-	MADElementStylizedText *attt = self.fontDescriptors[item.objectID];
+	MADElementStylizedText *attt = self.fontDescriptors[@(item.identifier)];
 	if (attt == nil) {
 		attt = [[MADElementStylizedText alloc] initWithFontName: item.fontname
 													   fontSize: item.fontsize
 													  textStyle: item.textStyle
 											horizontalAlignment: item.alignment.horizontal];
 		
-		self.fontDescriptors[item.objectID] = attt;
+		self.fontDescriptors[@(item.identifier)] = attt;
 	}
 	return attt.fontAttributes;
 }

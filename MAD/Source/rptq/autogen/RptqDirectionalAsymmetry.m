@@ -14,9 +14,6 @@
 
 @implementation RptqDirectionalAsymmetry (CoreDataProperties)
 
-+ (NSFetchRequest<RptqDirectionalAsymmetry *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqDirectionalAsymmetry"];
-}
 
 @dynamic top;
 @dynamic bottom;

@@ -9,20 +9,17 @@
 #ifndef MAD_RptqDirectionalAsymmetry_h
 #define MAD_RptqDirectionalAsymmetry_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDocumentElement, RptqBorder;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqDirectionalAsymmetry : NSManagedObject
+@interface RptqDirectionalAsymmetry : RptqObject
 
 @end
 
 @interface RptqDirectionalAsymmetry (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDirectionalAsymmetry *> *)fetchRequest;
 
 @property (nonatomic) float top;
 @property (nonatomic) float bottom;

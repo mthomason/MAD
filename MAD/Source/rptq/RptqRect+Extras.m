@@ -6,11 +6,11 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
+#import "RptqStoreContext.h"
 #import "RptqRect+Extras.h"
 #import "RptqPoint.h"
 #import "RptqSize.h"
 #import "madlog.h"
-#import <CoreData/NSEntityDescription.h>
 #import <CoreGraphics/CGGeometry.h>
 
 @implementation RptqRect (Extras)
@@ -27,19 +27,12 @@ static NSString *keySize = nil;
 + (NSString *)keySize { return keySize; }
 
 - (void)awakeFromInsert {
-	[super awakeFromInsert];
-	NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-	if (managedObjectContext == nil) {
-		os_log_error(OS_LOG_DEFAULT, "%s: Managed object context is nil", __PRETTY_FUNCTION__);
-		return;
-	}
+	RptqStoreContext *context = self.storeContext;
 	if (self.origin == nil) {
-		self.origin = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqPoint class])
-													inManagedObjectContext: managedObjectContext];
+		self.origin = [context insertObjectForEntity:NSStringFromClass([RptqPoint class]) identifier:0];
 	}
 	if (self.size == nil) {
-		self.size = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqSize class])
-												  inManagedObjectContext: managedObjectContext];
+		self.size = [context insertObjectForEntity:NSStringFromClass([RptqSize class]) identifier:0];
 	}
 }
 

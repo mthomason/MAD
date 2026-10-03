@@ -10,6 +10,7 @@
 #define MAD_MADSectionsLayout_h
 
 #import <objc/NSObject.h>
+#import <MAD/RptqStoreContext.h>
 
 @class MADSectionLayout, MADSectionGroupLayout, NSSortDescriptor, NSManagedObjectContext, NSNumber,
 	NSArray<__covariant ObjectType>, NSDictionary<__covariant KeyType, __covariant ObjectType>;
@@ -27,7 +28,7 @@
 	@property (nonatomic, readonly, strong) NSArray <NSSortDescriptor *> *groupSortDescriptors;
 	@property (nonatomic, readonly, assign) NSUInteger count;
 
-	- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+	- (instancetype)initWithManagedObjectContext:(RptqStoreContext *)managedObjectContext
 								   databaseClass:(Class)databaseClass;
 	- (MADSectionLayout *)sectionLayoutAtIndex:(NSUInteger)index;
 

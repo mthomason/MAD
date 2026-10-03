@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDatabaseCredentals+Extras.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqDataHelper.h"
@@ -23,27 +24,11 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-
 @implementation RptqDatabaseCredentals (Extras)
 
-+ (NSFetchRequest<RptqDatabaseCredentals *> *)fetchRequest {
-	return [[NSFetchRequest alloc] initWithEntityName:@"RptqDatabaseCredentals"];
-}
+
 
 #pragma mark - Overrides
-
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-		[[NSNotificationCenter defaultCenter] willChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-											managedObjectContext:self.managedObjectContext];
-		[[NSNotificationCenter defaultCenter] didChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-	}
-}
 
 - (NSString *)database {
 	return self.dbname;
@@ -90,23 +75,16 @@
 
 #pragma mark - Static
 
-+ (instancetype)newDatabaseCredental:(NSManagedObjectContext *)objectContext {
-	NSEntityDescription *ed = [NSEntityDescription entityForName: NSStringFromClass([self class])
-										  inManagedObjectContext: objectContext];
-	id userCredentals = [[self alloc] initWithEntity:ed insertIntoManagedObjectContext:objectContext];
-	return userCredentals;
++ (instancetype)newDatabaseCredental:(RptqStoreContext *)objectContext {
+	return (RptqDatabaseCredentals *)[objectContext insertObjectForEntity:NSStringFromClass([self class])
+															  identifier:0];
 }
 
-+ (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(NSManagedObjectContext *)context {
-	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([RptqDatabaseCredentals class])];
-	request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey: NSStringFromSelector(@selector(driverID))
-															  ascending: YES]];
-	NSError *error = nil;
-	NSArray *fetchResults = [context executeFetchRequest:request error:&error];
-	if (error) {
-		os_log_error(GetMadLog(), "%s Error fetching RptqDatabaseCredentals: %@", __PRETTY_FUNCTION__, error);
-	}
-	return [[NSArray <RptqDatabaseCredentals *> alloc] initWithArray:fetchResults];
++ (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(RptqStoreContext *)context {
+	NSArray *credentals = [context objectsForEntity:NSStringFromClass([RptqDatabaseCredentals class])];
+	return [credentals sortedArrayUsingComparator:^NSComparisonResult(RptqDatabaseCredentals *a, RptqDatabaseCredentals *b) {
+		return [a.driverID compare:b.driverID];
+	}];
 }
 
 + (NSString *)driverIDMySQL {

@@ -10,16 +10,14 @@
 #define Reports_RptqQueryField_Extras_h
 
 #import <MAD/RptqQueryField.h>
+#import <MAD/RptqStoreContext.h>
 #import <MADDataStructures/MTProtocolLog.h>
 
 @interface RptqQueryField (Extras) <MTProtocolLog>
 
-	+ (instancetype)newQueryField:(NSManagedObjectContext *)managedObjectContext;
-	+ (instancetype)queryFieldForObjectID:(NSManagedObjectID *)objectID
-					 managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
-
-	+ (NSFetchRequest<NSDictionary *> *)fetchRequestFieldKeys:(int64_t)identifier;
-	+ (NSFetchRequest *)fetchRequestFields:(int64_t)identifier;
+	+ (instancetype)newQueryField:(RptqStoreContext *)managedObjectContext;
+	+ (instancetype)queryFieldForObjectID:(int64_t)objectID
+					 managedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 	- (NSString *)display;
 	- (NSString *)tableFieldKey;

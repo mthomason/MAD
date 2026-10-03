@@ -9,22 +9,19 @@
 #ifndef MAD_RptqPoint_h
 #define MAD_RptqPoint_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class RptqDocumentElement, RptqRect;
 
-@interface RptqPoint : NSManagedObject
+@interface RptqPoint : RptqObject
 
 @end
 
 @interface RptqPoint (CoreDataProperties)
 
-    + (NSFetchRequest<RptqPoint *> *)fetchRequest;
-
-    @property (nonatomic) float x;
+        @property (nonatomic) float x;
     @property (nonatomic) float y;
     @property (nullable, nonatomic, retain) RptqDocumentElement *inElement;
     @property (nullable, nonatomic, retain) RptqRect *inRect;

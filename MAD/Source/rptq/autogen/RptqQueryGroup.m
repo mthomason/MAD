@@ -16,9 +16,6 @@
 
 @implementation RptqQueryGroup (CoreDataProperties)
 
-+ (NSFetchRequest<RptqQueryGroup *> *)fetchRequest {
-    return [[NSFetchRequest alloc] initWithEntityName:@"RptqQueryGroup"];
-}
 
 @dynamic identifier;
 @dynamic sort;

@@ -9,20 +9,17 @@
 #ifndef MAD_RptqQueryField_h
 #define MAD_RptqQueryField_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqDatabaseSchemaField, RptqDocumentElementAggregate, RptqDocumentElementBarcode, RptqDocumentElementLabelDataField, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqQueryField : NSManagedObject
+@interface RptqQueryField : RptqObject
 
 @end
 
 @interface RptqQueryField (CoreDataProperties)
-
-+ (NSFetchRequest<RptqQueryField *> *)fetchRequest;
 
 @property (nonatomic) int64_t identifier;
 @property (nullable, nonatomic, retain) RptqDatabaseSchemaField *databaseSchemaField;

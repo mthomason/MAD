@@ -10,8 +10,6 @@
 #define MAD_RptqDocumentElementBarcode_RptqDocumentElement_h
 
 #import <MAD/RptqDocumentElement.h>
-#import <CoreData/NSFetchRequest.h>
-
 @class RptqQueryField;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -21,8 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface RptqDocumentElementBarcode (CoreDataProperties)
-
-+ (NSFetchRequest<RptqDocumentElementBarcode *> *)fetchRequest;
 
 @property (nonatomic) BOOL add2dComponent;
 @property (nonatomic) BOOL humanReadable;

@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqQueryLinks+Extras.h"
 
 #import "RptqDocument.h"
@@ -23,8 +24,6 @@
 #import "RptqQueryTable+Extras.h"
 #import "MADSQLJoinType.h"
 
-#import <CoreData/CoreData.h>
-
 @implementation RptqQueryLinks (Extras)
 
 #pragma mark -
@@ -33,14 +32,10 @@
 + (instancetype)newQueryLinksWithLeftField:(RptqQueryField *)fieldLeft
 								rightField:(RptqQueryField *)fieldRight
 								  joinType:(MADLinkType)joinType
-					  managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+					  managedObjectContext:(RptqStoreContext *)managedObjectContext {
 	
 	NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
-	NSEntityDescription *rqtEd = [NSEntityDescription entityForName: entityName
-											 inManagedObjectContext: managedObjectContext];
-	
-	RptqQueryLinks *queryLinks = [[self alloc] initWithEntity: rqtEd
-							   insertIntoManagedObjectContext: managedObjectContext];
+	RptqQueryLinks *queryLinks = [managedObjectContext insertObjectForEntity:entityName identifier:0];
 	
 	queryLinks.hasLeftField     = fieldLeft;
 	queryLinks.hasRightField    = fieldRight;
@@ -100,18 +95,8 @@
 #pragma mark Overrides
 
 - (BOOL)isConnectedToTable:(RptqQueryTable *)table {
-	return ([self.hasLeftField.inQueryTable.objectID isEqual: table.objectID] ||
-			[self.hasRightField.inQueryTable.objectID isEqual: table.objectID]);
-}
-
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-		[[NSNotificationCenter defaultCenter] willChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-											managedObjectContext:self.managedObjectContext];
-		[[NSNotificationCenter defaultCenter] didChangeValueForKey:NSStringFromSelector(@selector(identifier))];
-	}
+	return (self.hasLeftField.inQueryTable.identifier == table.identifier ||
+			self.hasRightField.inQueryTable.identifier == table.identifier);
 }
 
 - (NSString *)linkDescription {

@@ -9,20 +9,17 @@
 #ifndef MAD_RptqQueryPredicate_NSManagedObject_h
 #define MAD_RptqQueryPredicate_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqQuery, RptqQueryField;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqQueryPredicate : NSManagedObject
+@interface RptqQueryPredicate : RptqObject
 
 @end
 
 @interface RptqQueryPredicate (CoreDataProperties)
-
-+ (NSFetchRequest<RptqQueryPredicate *> *)fetchRequest;
 
 @property (nonatomic) int16_t comparson;
 @property (nonatomic) int64_t identifier;

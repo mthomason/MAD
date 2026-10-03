@@ -10,6 +10,7 @@
 #define Reports_MTQueryFull_h
 
 #import <MADAPI/MADQuery.h>
+#import <MAD/RptqStoreContext.h>
 
 @class NSManagedObjectID, NSManagedObjectContext, RptqQuery;
 
@@ -17,11 +18,11 @@
 
 - (instancetype)initWithQuery:(RptqQuery *)query andQueryLimit:(NSUInteger)queryLimit;
 
-- (NSString *)copySQLWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (NSString *)copySQLWithManagedObjectContext:(RptqStoreContext *)managedObjectContext
 										error:(NSError * __autoreleasing *)error;
 
 - (NSString *)SQLOnlyActiveFields:(BOOL)onlyActiveFields
-			 managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+			 managedObjectContext:(RptqStoreContext *)managedObjectContext
 							error:(NSError **)error;
 
 @property (nonatomic, assign) NSUInteger limitResults;

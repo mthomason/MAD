@@ -10,6 +10,7 @@
 #define Reports_MTQuery_MADQuerySelectExpression_h
 
 #import <Foundation/NSObject.h>
+#import <MAD/RptqStoreContext.h>
 
 @class MADDatabase, NSManagedObjectContext;
 
@@ -18,7 +19,7 @@
     - (instancetype)initWithDatabase:(MADDatabase *)database
                               tables:(NSArray *)tables
                usingOnlyActiveFields:(BOOL)onlyActiveFields
-             forManagedObjectContext:(NSManagedObjectContext *)context;
+             forManagedObjectContext:(RptqStoreContext *)context;
 
     @property (nonatomic, readwrite, strong) NSString *sql;
 

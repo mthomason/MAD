@@ -550,6 +550,30 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 		[values addObject:object.values[name] ?: [NSNull null]];
 	}
 
+	// A non-optional attribute that the object never set still has to land in the
+	// column: Core Data gave it a model default, and the store's columns are NOT NULL.
+	// Write the scalar zero/empty default rather than a NULL the column refuses.
+	for (MADStoreAttribute *attribute in entity.allAttributes) {
+		if (attribute.optional || [attribute.name isEqualToString:@"identifier"]) continue;
+		BOOL already = NO;
+		for (MADStoreColumn *column in columns) {
+			if ([column.name isEqualToString:attribute.name]) { already = YES; break; }
+		}
+		if (already) continue;
+		MADStoreColumn *column = [MADStoreColumn new];
+		column.name = attribute.name;
+		column.type = attribute.type;
+		[columns addObject:column];
+		id defaultValue = nil;
+		switch (attribute.type) {
+			case MADStoreValueTypeInteger: defaultValue = @0; break;
+			case MADStoreValueTypeReal: defaultValue = @0.0; break;
+			case MADStoreValueTypeText: defaultValue = @""; break;
+			case MADStoreValueTypeBlob: defaultValue = [NSNull null]; break;
+		}
+		[values addObject:defaultValue ?: [NSNull null]];
+	}
+
 	for (MADStoreRelationship *relationship in entity.allRelationships) {
 		if (relationship.isToMany || !relationship.ownsForeignKey) continue;
 		NSNumber *target = [object referenceForName:relationship.name];

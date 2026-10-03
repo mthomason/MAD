@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDocumentElementLabelDataField+Extras.h"
 #import "RptqDocumentElement+Extras.h"
 #import "RptqDocumentSection+Extras.h"
@@ -22,19 +23,15 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSSortDescriptor.h>
 
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-
 @implementation RptqDocumentElementLabelDataField (Extras)
 
 #pragma mark - Overrides
 
 #pragma mark - RptqDocumentElementFactory
 
-+ (instancetype)getElementForObjectID:(NSManagedObjectID *)objectId
-					fromObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	NSManagedObject *result = [managedObjectContext objectWithID:objectId];
++ (instancetype)getElementForObjectID:(int64_t)objectId
+					fromObjectContext:(RptqStoreContext *)managedObjectContext {
+	RptqObject *result = [managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:objectId];
 	NSAssert(result != nil, @"Could not get managed object.");
 	return (RptqDocumentElementLabelDataField *)result;
 }

@@ -11,6 +11,7 @@
 
 #import <CoreGraphics/CGGeometry.h>
 #import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADocumentSectionType.h>
 
 @class RptqQuery, RptqDocumentElement, NSIndexPath;
@@ -18,16 +19,13 @@
 @interface RptqDocumentSection (Extras)
 
 	+ (instancetype)newDocumentSectionWithIdentifier:(int64_t)identifier
-								   fromObjectContext:(NSManagedObjectContext *)context;
+								   fromObjectContext:(RptqStoreContext *)context;
 
 	+ (instancetype)newDocumentSectionOfType:(MADDocumentSectionType)type
-					 forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+					 forManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 
-	+ (instancetype)documentSectionForObjectID:(NSManagedObjectID *)objid
-						inManagedObjectContext:(NSManagedObjectContext *)moc;
-
-	+ (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSectionIDs;
-	+ (NSFetchRequest <NSDictionary *> *)fetchRequestDocumentSections;
+	+ (instancetype)documentSectionForObjectID:(int64_t)objid
+						inManagedObjectContext:(RptqStoreContext *)moc;
 
 	+ (NSString *)keyPathInReportHeader;
 	+ (NSString *)keyPathInReportFooter;
@@ -66,7 +64,7 @@
 	- (void)addHasRowsFixed:(RptqDocumentSectionRows *)value;
 	- (void)removeHasRowsFixed:(RptqDocumentSectionRows *)value;
 	- (void)addDocumentObject:(RptqDocumentElement *)documentObject withDropPoint:(CGPoint)origin
-		 managedObjectContext:(NSManagedObjectContext *)managedObjectContext;
+		 managedObjectContext:(RptqStoreContext *)managedObjectContext;
 
 	- (void)setInterfaceHeight:(double)height;
 	- (void)setProducesFormFeed:(BOOL)producesFormFeed;

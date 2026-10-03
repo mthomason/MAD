@@ -7,6 +7,7 @@
 //
 
 #import "MADModelTable.h"
+#import <MAD/RptqStoreContext.h>
 #import "madlog.h"
 
 #import <Foundation/NSComparisonPredicate.h>
@@ -60,7 +61,7 @@
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier
-			  managedObjectContext:(NSManagedObjectContext *)context {
+			  managedObjectContext:(RptqStoreContext *)context {
 	if (self = [self initWithIdentifier:identifier
 				   managedObjectContext:context
 								   name:nil
@@ -71,7 +72,7 @@
 }
 
 - (instancetype)initWithIdentifier:(int64_t)identifier
-			  managedObjectContext:(NSManagedObjectContext *)context
+			  managedObjectContext:(RptqStoreContext *)context
 							  name:(NSString *)name
 						 queryable:(BOOL)queryable {
 	if (self = [super initWithIdentifier:identifier]) {
@@ -119,125 +120,26 @@
 }
 
 - (void)update {
-	NSManagedObjectContext *managedObjectContext = _managedObjectContext;
-	
-	NSError * __autoreleasing error = NULL;
-	NSArray <NSDictionary *> *results;
-	NSFetchRequest *fetchQueryTable;
-	NSUInteger expressionCount;
-	
-	void (^setupExpressionWithType)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) =
-	^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression, NSAttributeType type) {
-		expressionDescription.name = name.copy;
-		expressionDescription.expression = expression;
-		expressionDescription.expressionResultType = type;
-	};
-		
-	expressionCount = 7;
-	NSExpressionDescription *expressionDescription[expressionCount];
-	
-	NSString *keyName, *keyPrimaryKey, *keyDataType, *keyDataTypeNative, *keyDecimals, *keyWidth,
-			 *keyIdentifier, *keyInTableIdentifier;
-	
-	keyName = NSStringFromSelector(@selector(name));
-	keyPrimaryKey = NSStringFromSelector(@selector(primaryKey));
-	keyDataType = NSStringFromSelector(@selector(dataType));
-	keyDataTypeNative = NSStringFromSelector(@selector(dataTypeNative));
-	keyDecimals = NSStringFromSelector(@selector(decimals));
-	keyWidth = NSStringFromSelector(@selector(width));
-	keyIdentifier = NSStringFromSelector(@selector(identifier));
-	keyInTableIdentifier = NSStringFromSelector(@selector(inTable));
-	keyInTableIdentifier = [MADStringUtilities stringByAppendingPeriod: keyInTableIdentifier];
-	keyInTableIdentifier = [keyInTableIdentifier stringByAppendingString:keyIdentifier];
+	RptqStoreContext *managedObjectContext = _managedObjectContext;
+	NSArray *schemaFields = [managedObjectContext objectsForEntity:NSStringFromClass([RptqDatabaseSchemaField class])];
 
-	
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		expressionDescription[i] = [[NSExpressionDescription alloc] init];
-	}
-	
-	fetchQueryTable = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass([RptqDatabaseSchemaField class])];
-	
-	NSExpression *expressionForName =           [NSExpression expressionForKeyPath:keyName],
-				 *expressionForPrimaryKey =     [NSExpression expressionForKeyPath:keyPrimaryKey],
-				 *expresssionForDataType =      [NSExpression expressionForKeyPath:keyDataType],
-				 *expressionForDataTypeNative = [NSExpression expressionForKeyPath:keyDataTypeNative],
-				 *expressionForDecimals =       [NSExpression expressionForKeyPath:keyDecimals],
-				 *expressionForWidth =          [NSExpression expressionForKeyPath:keyWidth],
-				 *expressionForIdentifier =     [NSExpression expressionForKeyPath:keyIdentifier];
-	
-	setupExpressionWithType(expressionDescription[0], keyName, expressionForName, NSStringAttributeType);
-	setupExpressionWithType(expressionDescription[1], keyPrimaryKey, expressionForPrimaryKey, NSBooleanAttributeType);
-	setupExpressionWithType(expressionDescription[2], keyDataType, expresssionForDataType, NSInteger16AttributeType);
-	setupExpressionWithType(expressionDescription[3], keyDataTypeNative, expressionForDataTypeNative, NSInteger16AttributeType);
-	setupExpressionWithType(expressionDescription[4], keyDecimals, expressionForDecimals, NSInteger16AttributeType);
-	setupExpressionWithType(expressionDescription[5], keyWidth, expressionForWidth, NSInteger64AttributeType);
-	setupExpressionWithType(expressionDescription[6], keyIdentifier, expressionForIdentifier, NSInteger64AttributeType);
-
-	NSArray <NSExpressionDescription *> *propertiesToFetch  = [[NSArray alloc] initWithObjects: expressionDescription
-																						 count: expressionCount];
-	fetchQueryTable.propertiesToFetch = propertiesToFetch;
-	fetchQueryTable.resultType = NSDictionaryResultType;
-	
-	NSExpression *predicateExpression[2];
-	
-	NSNumber *identifierObject = @(self.identifier);
-	predicateExpression[0] = [NSExpression expressionForKeyPath: keyInTableIdentifier];
-	predicateExpression[1] = [NSExpression expressionForConstantValue: identifierObject];
-	
-	NSPredicate *predicate = [NSComparisonPredicate predicateWithLeftExpression: predicateExpression[0]
-																rightExpression: predicateExpression[1]
-																	   modifier: NSDirectPredicateModifier
-																		   type: NSEqualToPredicateOperatorType
-																		options: 0];
-
-	fetchQueryTable.predicate = predicate;
-	
-	NSSortDescriptor *sortByFieldName = [[NSSortDescriptor alloc] initWithKey: keyName
-																	ascending: YES];
-	NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortByFieldName, nil];
-	fetchQueryTable.sortDescriptors = sortDescriptors;
-
-	results = [managedObjectContext executeFetchRequest:fetchQueryTable error:&error];
-	if (error != nil) {
-		os_log_error(GetMadLog(), "%s Error fetching: %@", __PRETTY_FUNCTION__, error);
-	}
-	
 	NSMutableOrderedSet <NSNumber *> *fieldIDs = [[NSMutableOrderedSet alloc] init];
 	NSMutableDictionary <NSNumber *, MADModelField *> *fields = [[NSMutableDictionary alloc] init];
-	
-	NSDictionary *result;
-	NSNumber *primaryKey, *dataType, *dataTypeNative, *decimals, *width, *identifier;
-	NSString *name;
 
-	MADModelField *field;
-	for (result in results) {
-		primaryKey = [result objectForKey:keyPrimaryKey];
-		dataType = [result objectForKey:keyDataType];
-		dataTypeNative = [result objectForKey:keyDataTypeNative];
-		decimals = [result objectForKey:keyDecimals];
-		width = [result objectForKey:keyWidth];
-		name = [result objectForKey:keyName];
-		identifier = [result objectForKey:keyIdentifier];
-		field = [[MADModelField alloc] initWithIdentifier: identifier.longLongValue
-											 isPrimaryKey: primaryKey.boolValue
-												 dataType: dataType.shortValue
-										   dataTypeNative: dataTypeNative.shortValue
-												 decimals: decimals.shortValue
-													width: width.longLongValue
-													 name: name];
-		[fieldIDs addObject:identifier];
-		[fields setObject:field forKey:identifier];
-		
+	for (RptqDatabaseSchemaField *schemaField in schemaFields) {
+		if (schemaField.inTable.identifier != self.identifier) continue;
+		MADModelField *field = [[MADModelField alloc] initWithIdentifier: schemaField.identifier
+														   isPrimaryKey: schemaField.primaryKey
+															   dataType: schemaField.dataType
+														 dataTypeNative: schemaField.dataTypeNative
+															   decimals: schemaField.decimals
+																  width: schemaField.width
+																   name: schemaField.name];
+		[fieldIDs addObject:@(schemaField.identifier)];
+		[fields setObject:field forKey:@(schemaField.identifier)];
 	}
 	_fields = fields;
 	_fieldIDs = fieldIDs;
-	
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		expressionDescription[i] = nil;
-	}
-	predicateExpression[0] = nil;
-	predicateExpression[1] = nil;
-
 }
 
 /*- (id)debugQuickLookObject {

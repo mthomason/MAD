@@ -7,6 +7,7 @@
 //
 
 #import "MADSectionsLayout.h"
+#import <MAD/RptqStoreContext.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSSortDescriptor.h>
@@ -16,6 +17,10 @@
 #import <MADAPI/MADDatabase.h>
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
+#import "RptqQueryGroup.h"
+#import "RptqQueryField.h"
+#import "RptqQueryTable.h"
+#import "RptqDatabaseSchemaField.h"
 #import "MADSectionLayout.h"
 #import "MADSectionGroupLayout.h"
 #import "NSPredicate+Creators.h"
@@ -39,16 +44,39 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
 
 @implementation MADSectionsLayout
 
-- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (instancetype)initWithManagedObjectContext:(RptqStoreContext *)managedObjectContext
                                databaseClass:(Class)databaseClass {
     if (self = [super init]) {
-        NSFetchRequest *fetchRequestDocumentSections;
-        fetchRequestDocumentSections = [RptqDocumentSection fetchRequestDocumentSections];
-        
-        NSError *error = nil;
-        NSArray <NSDictionary *> *documentSections;
-        documentSections = [managedObjectContext executeFetchRequest: fetchRequestDocumentSections
-                                                               error: &error];
+        NSArray <RptqDocumentSection *> *sections = [managedObjectContext objectsForEntity:NSStringFromClass([RptqDocumentSection class])];
+        NSMutableArray <NSDictionary *> *documentSections = [NSMutableArray arrayWithCapacity:sections.count];
+        for (RptqDocumentSection *section in sections) {
+            NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+            dictionary[NSStringFromSelector(@selector(identifier))] = @(section.identifier);
+            dictionary[[RptqDocumentSection keyPathNumberOfRows]] = @(section.numberOfRows);
+            dictionary[[RptqDocumentSection keyPathType]] = @(section.type);
+            dictionary[[RptqDocumentSection keyPathVisibility]] = @(section.visibility);
+            dictionary[[RptqDocumentSection keyPathWrappingStyle]] = @(section.wrappingStyle);
+            dictionary[[RptqDocumentSection keyPathHeight]] = @(section.height);
+            if (section.inReportReportHeader) dictionary[[RptqDocumentSection keyPathInReportHeader]] = section.inReportReportHeader;
+            if (section.inReportReportFooter) dictionary[[RptqDocumentSection keyPathInReportFooter]] = section.inReportReportFooter;
+            if (section.inReportPageHeader) dictionary[[RptqDocumentSection keyPathInPageHeader]] = section.inReportPageHeader;
+            if (section.inReportPageFooter) dictionary[[RptqDocumentSection keyPathInPageFooter]] = section.inReportPageFooter;
+            if (section.inReport) dictionary[[RptqDocumentSection keyPathInReport]] = section.inReport;
+            if (section.inGroup) {
+                dictionary[[RptqDocumentSection keyPathInGroup]] = section.inGroup;
+                RptqQueryGroup *group = section.inGroup;
+                RptqQueryField *field = group.hasField;
+                dictionary[[RptqDocumentSection keyPathInGroupSort]] = @(group.sort);
+                dictionary[[RptqDocumentSection keyPathInGroupWeight]] = @(group.weight);
+                if (field) {
+                    dictionary[[RptqDocumentSection keyPathInGroupHasFieldDatabaseSchemaFieldName]] = field.databaseSchemaField.name;
+                    dictionary[[RptqDocumentSection keyPathInGroupHasFieldInQueryTableAlias]] = field.inQueryTable.alias;
+                    dictionary[[RptqDocumentSection keyPathInGroupHasFieldInQueryTableDropIndex]] = @(field.inQueryTable.dropIndex);
+                    dictionary[[RptqDocumentSection keyPathInGroupHasFieldDatabaseSchemaFieldDataType]] = @(field.databaseSchemaField.dataType);
+                }
+            }
+            [documentSections addObject:dictionary];
+        }
 
         NSString *keyPath = [RptqDocumentSection keyPathInReportHeader];
         

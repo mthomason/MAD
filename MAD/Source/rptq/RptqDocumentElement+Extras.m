@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDocumentElement+Extras.h"
 
 #import "MADAlignment.h"
@@ -47,11 +48,6 @@
 
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/UIGeometry.h>
-
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSExpressionDescription.h>
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
 
 #import <Foundation/NSNumberFormatter.h>
 #import <Foundation/NSSortDescriptor.h>
@@ -140,17 +136,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 + (instancetype)newDocumentElementWithIdentifier:(int64_t)identifier
-							   fromObjectContext:(NSManagedObjectContext *)context {
-	NSFetchRequest <__kindof RptqDocumentElement *> *fetchRequet = [self fetchRequestElement: identifier];
-	NSError *error = nil;
-	NSArray <RptqDocumentElement *> *elements  = [context executeFetchRequest: fetchRequet error: &error];
-	if (error != nil) {
-		os_log_error(rptq_log, "Failed to fetch element with ID %lld: %{public}@", identifier, error.localizedDescription);
-	}
-	if (!elements.count) {
-		os_log_debug(rptq_log, "No element found with ID %lld", identifier);
-	}
-	return elements.firstObject;
+							   fromObjectContext:(RptqStoreContext *)context {
+	return (RptqDocumentElement *)[context objectForEntity:NSStringFromClass([RptqDocumentElement class])
+												identifier:identifier];
 }
 
 + (void)removeDocumentObject:(RptqDocumentElement *)documentObject
@@ -393,66 +381,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	return key;
 }
 
-+ (NSFetchRequest <__kindof RptqDocumentElement *> *)fetchRequestElement:(int64_t)identifier {
-	NSExpression *left = [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))];
-	NSExpression *right = [NSExpression expressionForConstantValue:@(identifier)];
-	NSPredicate *predicate = [NSComparisonPredicate predicateWithLeftExpression: left
-												   rightExpression: right
-														  modifier: NSDirectPredicateModifier
-															  type: NSEqualToPredicateOperatorType
-														   options: 0];
-	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
-	request.predicate = predicate;
-	request.fetchLimit = 1;
-	request.resultType = NSManagedObjectResultType;
-	request.includesSubentities = YES;
-	request.includesPropertyValues = YES;
-	return request;
-}
 
-+ (NSFetchRequest <NSDictionary *> *)fetchRequestSectionHeight:(NSManagedObjectID *)sectionID {
 
-	NSPredicate *predicate = [self comparisonPredicateInSection:sectionID];
-	NSExpression *addBorder = [NSExpression expressionForFunction: @"add:to:" arguments: @[
-		[NSExpression expressionForKeyPath:[self keyBorderWidthTop]],
-		[NSExpression expressionForKeyPath:[self keyBorderWidthBottom]]
-	]];
 
-	NSExpression *addPadding = [NSExpression expressionForFunction: @"add:to:" arguments: @[
-		[NSExpression expressionForKeyPath:[self keyPaddingTop]],
-		[NSExpression expressionForKeyPath:[self keyPaddingBottom]]
-	]];
-
-	NSExpression *addMargin = [NSExpression expressionForFunction: @"add:to:" arguments: @[
-		[NSExpression expressionForKeyPath:[self keyMarginTop]],
-		[NSExpression expressionForKeyPath:[self keyMarginBottom]]
-	]];
-
-	NSExpression *addRect = [NSExpression expressionForFunction: @"add:to:" arguments: @[
-		[NSExpression expressionForKeyPath:[self keyRectOriginY]],
-		[NSExpression expressionForKeyPath:[self keyRectSizeHeight]]
-	]];
-
-	NSExpression *addMarginRect = [NSExpression expressionForFunction: @"add:to:" arguments: @[addMargin, addRect]];
-	NSExpression *addPaddingBorder = [NSExpression expressionForFunction: @"add:to:" arguments: @[addPadding, addBorder]];
-	
-	NSExpressionDescription *expressionSum = [[NSExpressionDescription alloc] init];
-	expressionSum.name = [self keyCalculatedHeight];
-	expressionSum.expression = [NSExpression expressionForFunction: @"add:to:" arguments: @[addMarginRect, addPaddingBorder]];
-	expressionSum.expressionResultType = NSFloatAttributeType;
-/*
-	NSExpressionDescription *expressionMax = [[NSExpressionDescription alloc] init];
-	expressionMax.name = @"keyMax";
-	expressionMax.expression = [NSExpression expressionForFunction:@"max:" arguments:@[[self keyCalculatedHeight]]];
-	expressionMax.expressionResultType = NSFloatAttributeType;
-*/
-	
-	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
-	request.predicate = predicate;
-	request.resultType = NSDictionaryResultType;
-	request.propertiesToFetch = @[expressionSum];
-	return request;
-}
 
 /*
 			 //Sample code for fetchRequestElementsInSection
@@ -489,89 +420,15 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
  */
 
-+ (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSection:(NSManagedObjectID *)sectionID {
 
-	NSPredicate *predicate = [self comparisonPredicateInSection:sectionID];
 
-	NSExpressionDescription *expressionSelf = [[NSExpressionDescription alloc] init];
-	expressionSelf.name = NSStringFromSelector(@selector(self));
-	expressionSelf.expression = [NSExpression expressionForEvaluatedObject];
-	expressionSelf.expressionResultType = NSObjectIDAttributeType;
 
-	predicate = [self comparisonPredicateInSection:sectionID];
-	
-	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([self class])];
-	request.predicate = predicate;
-	request.resultType = NSDictionaryResultType;
-	
-	NSString *keyBorderWidthTop = [self keyBorderWidthTop];
-	NSString *keyBorderWidthBottom = [self keyBorderWidthBottom];
-	NSString *keyPaddingTop = [self keyPaddingTop];
-	NSString *keyPaddingBottom = [self keyPaddingBottom];
-	NSString *keyMarginTop = [self keyMarginTop];
-	NSString *keyMarginBottom = [self keyMarginBottom];
-	NSString *keyRectOriginY = [self keyRectOriginY];
-	NSString *keyRectSizeHeight = [self keyRectSizeHeight];
-	
-	request.propertiesToFetch = @[expressionSelf, keyBorderWidthTop, keyBorderWidthBottom, keyPaddingTop, keyPaddingBottom, keyMarginTop, keyMarginBottom, keyRectOriginY, keyRectSizeHeight];
-	
-	return request;
-}
 
-+ (NSFetchRequest <NSDictionary *> *)fetchRequestElementsInSectionDetailed:(NSManagedObjectID *)sectionID {
-	NSFetchRequest *request;
-	NSPredicate *predicate = [self comparisonPredicateInSection:sectionID];
-	
-	NSString *keySelf = NSStringFromSelector(@selector(self));
-	
-	NSExpressionDescription *expressionSelf = [[NSExpressionDescription alloc] init];
-	expressionSelf.name = keySelf;
-	expressionSelf.expression = [NSExpression expressionForEvaluatedObject];
-	expressionSelf.expressionResultType = NSObjectIDAttributeType;
-	
-	NSString *entityName = NSStringFromClass([self class]);
-	request = [[NSFetchRequest alloc] initWithEntityName: entityName];
-	request.predicate = predicate;
-	request.resultType = NSDictionaryResultType;
-	
-	NSString *keyBorderWidthTop = [self keyBorderWidthTop];
-	NSString *keyBorderWidthBottom = [self keyBorderWidthBottom];
-	NSString *keyBorderWidthLeft = [self keyBorderWidthLeft];
-	NSString *keyBorderWidthRight = [self keyBorderWidthRight];
-	NSString *keyPaddingTop = [self keyPaddingTop];
-	NSString *keyPaddingBottom = [self keyPaddingBottom];
-	NSString *keyPaddingLeft = [self keyPaddingLeft];
-	NSString *keyPaddingRight = [self keyPaddingRight];
-	NSString *keyMarginTop = [self keyMarginTop];
-	NSString *keyMarginBottom = [self keyMarginBottom];
-	NSString *keyMarginLeft = [self keyMarginLeft];
-	NSString *keyMarginRight = [self keyMarginRight];
-	NSString *keyRectOriginY = [self keyRectOriginY];
-	NSString *keyRectOriginX = [self keyRectOriginX];
-	NSString *keyRectSizeHeight = [self keyRectSizeHeight];
-	NSString *keyRectSizeWidth = [self keyRectSizeWidth];
-	NSString *keyRowNumber = [self keyRowNumber];
-	
-	NSArray *propertiesToFetch = [[NSArray alloc] initWithObjects: expressionSelf,
-								  keyBorderWidthTop, keyBorderWidthBottom,
-								  keyBorderWidthLeft, keyBorderWidthRight,
-								  keyPaddingTop, keyPaddingBottom,
-								  keyPaddingLeft, keyPaddingRight,
-								  keyMarginTop, keyMarginBottom,
-								  keyMarginLeft, keyMarginRight,
-								  keyRectOriginX, keyRectOriginY,
-								  keyRectSizeHeight, keyRectSizeWidth,
-								  keyRowNumber, nil];
-	request.propertiesToFetch = propertiesToFetch;
-	
-	return request;
-}
-
-+ (NSPredicate *)comparisonPredicateInSection:(NSManagedObjectID *)sectionID {
++ (NSPredicate *)comparisonPredicateInSection:(int64_t)sectionID {
 	NSString *keyInSection = [self keyInSection];
 	NSExpression *left, *right;
 	left = [NSExpression expressionForKeyPath:keyInSection];
-	right = [NSExpression expressionForConstantValue:sectionID];
+	right = [NSExpression expressionForConstantValue:@(sectionID)];
 	return [NSComparisonPredicate predicateWithLeftExpression: left
 											  rightExpression: right
 													 modifier: NSDirectPredicateModifier
@@ -581,131 +438,6 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 
 #pragma mark -
 #pragma mark Overrides
-
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	
-	// MARK: Auto increment row counter
-	NSFetchRequest *request;
-	NSString *entityNameSelf = NSStringFromClass([RptqDocumentElement class]);
-	NSString *key = NSStringFromSelector(@selector(identifier));
-	
-	request = [[NSFetchRequest alloc] initWithEntityName: entityNameSelf];
-
-	NSSortDescriptor *sortDescriptor;
-	sortDescriptor = [[NSSortDescriptor alloc] initWithKey: key ascending: NO];
-	
-	id sortDescriptors = [[NSArray alloc] initWithObjects: sortDescriptor, nil];
-	request.sortDescriptors = sortDescriptors;
-	request.fetchLimit = 1;
-	NSString *keyDropIndex = NSStringFromSelector(@selector(dropIndex));
-	NSString *keyIdentifier = NSStringFromSelector(@selector(identifier));
-	
-	NSExpressionDescription *edIdentifier, *edLastObject;
-	edIdentifier = [[NSExpressionDescription alloc] init];
-	edIdentifier.name = keyIdentifier;
-	edIdentifier.expression = [NSExpression expressionForKeyPath:keyIdentifier];
-	edIdentifier.expressionResultType = NSInteger64AttributeType;
-
-	edLastObject = [[NSExpressionDescription alloc] init];
-	edLastObject.name = keyDropIndex;
-	edLastObject.expression = [NSExpression expressionForKeyPath:keyDropIndex];
-	edLastObject.expressionResultType = NSInteger64AttributeType;
-
-	request.propertiesToFetch = @[edIdentifier, edLastObject];
-	request.resultType = NSDictionaryResultType;
-
-	NSError *error = nil;
-	NSArray <NSDictionary *> *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-	
-	if (error != nil) {
-		os_log_error(rptq_log, "Error: %@", error);
-	}
-	
-	if (self.alignment == nil) {
-		NSString *name = NSStringFromClass([RptqAlignment class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.alignment = [NSEntityDescription insertNewObjectForEntityForName:name
-													   inManagedObjectContext:managedObjectContext];
-	}
-	if (self.border == nil) {
-		NSString *name = NSStringFromClass([RptqBorder class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.border = [NSEntityDescription insertNewObjectForEntityForName:name
-													inManagedObjectContext:managedObjectContext];
-	}
-	if (self.dropPoint == nil) {
-		NSString *name = NSStringFromClass([RptqPoint class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.dropPoint = [NSEntityDescription insertNewObjectForEntityForName:name
-													   inManagedObjectContext:managedObjectContext];
-	}
-	
-	if (self.margin == nil) {
-		NSString *name = NSStringFromClass([RptqDirectionalAsymmetry class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.margin = [NSEntityDescription insertNewObjectForEntityForName:name
-													   inManagedObjectContext:managedObjectContext];
-	}
-	
-	if (self.numericFormat == nil) {
-		NSString *name = NSStringFromClass([RptqNumericFormat class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.numericFormat = [NSEntityDescription insertNewObjectForEntityForName:name
-													   inManagedObjectContext:managedObjectContext];
-	}
-	if (self.padding == nil) {
-		NSString *name = NSStringFromClass([RptqDirectionalAsymmetry class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.padding = [NSEntityDescription insertNewObjectForEntityForName:name
-													   inManagedObjectContext:managedObjectContext];
-	}
-	if (self.rect == nil) {
-		NSString *name = NSStringFromClass([RptqRect class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.rect = [NSEntityDescription insertNewObjectForEntityForName:name
-													   inManagedObjectContext:managedObjectContext];
-	}
-	if (self.textStyle == nil) {
-		NSString *name = NSStringFromClass([RptqTextStyle class]);
-		NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-		self.textStyle = [NSEntityDescription insertNewObjectForEntityForName:name
-													   inManagedObjectContext:managedObjectContext];
-		//self.updated = YES;
-	}
-	
-	int64_t idNumber = 0;
-	int64_t lastDropIndex = 0;
-	if (fetchResults.count) {
-
-		NSDictionary <NSString *, NSNumber *> *lastObject = fetchResults.lastObject;
-
-		
-		CFNumberGetValue((__bridge CFNumberRef)(lastObject[keyIdentifier]), kCFNumberSInt64Type, &idNumber);
-		CFNumberGetValue((__bridge CFNumberRef)(lastObject[keyDropIndex]), kCFNumberSInt64Type, &lastDropIndex);
-
-		idNumber++;
-		lastDropIndex++;
-	}
-	
-	self.fontname = [MADFont defaultFamily];
-	self.fontsize = [MADFont defaultSize];
-	self.identifier = idNumber;
-	self.dropIndex = lastDropIndex;
-	
-}
-
-- (BOOL)validateForInsert:(NSError * __autoreleasing *)error {
-	BOOL success;
-	NSError * __autoreleasing errorValidation = nil;
-	if (!(success = [super validateForInsert:&errorValidation])) {
-		if (error != NULL) { // Check if error is not NULL before dereferencing
-			*error = errorValidation.copy; // Copy the error to outError
-		}
-		os_log_error(rptq_log, "Error: %s", errorValidation.localizedDescription.UTF8String);
-	}
-	return success;
-}
 
 - (void)setSizeWidth:(float)width {
 	self.rect.size.width = width;

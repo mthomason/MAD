@@ -9,20 +9,17 @@
 #ifndef MAD_RptqQuerySort_NSManagedObject_h
 #define MAD_RptqQuerySort_NSManagedObject_h
 
-#import <CoreData/NSManagedObject.h>
-#import <CoreData/NSFetchRequest.h>
+#import "RptqObject.h"
 
 @class RptqQuery, RptqQueryField;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RptqQuerySort : NSManagedObject
+@interface RptqQuerySort : RptqObject
 
 @end
 
 @interface RptqQuerySort (CoreDataProperties)
-
-+ (NSFetchRequest<RptqQuerySort *> *)fetchRequest;
 
 @property (nonatomic) int64_t identifier;
 @property (nonatomic) BOOL ascending;

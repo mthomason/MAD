@@ -10,6 +10,7 @@
 #define MADModelTable_h
 
 #import <MAD/MADModel.h>
+#import <MAD/RptqStoreContext.h>
 #import <MAD/MADModelDataProtocol.h>
 
 @class NSOrderedSet<__covariant ObjectType>, NSDictionary<KeyType, ObjectType>, MADModelDatabase,
@@ -19,7 +20,7 @@
 	<MADModelIDProtocol, MADModelDataProtocol>
 
 	- (instancetype)initWithIdentifier:(int64_t)identifier
-				  managedObjectContext:(NSManagedObjectContext *)context
+				  managedObjectContext:(RptqStoreContext *)context
 								  name:(NSString *)name
 							 queryable:(BOOL)queryable NS_DESIGNATED_INITIALIZER;
 

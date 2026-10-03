@@ -10,6 +10,7 @@
 #define Reports_MTQuery_MADQuerySelectExpressionAllFields_h
 
 #import "MADQuerySelectExpression.h"
+#import <MAD/RptqStoreContext.h>
 
 @class MTPair;
 
@@ -17,7 +18,7 @@
 
     - (instancetype)initWithDatabase:(MADDatabase *)database
                               tables:(NSArray <MTPair *> *)tables
-             forManagedObjectContext:(NSManagedObjectContext *)context;
+             forManagedObjectContext:(RptqStoreContext *)context;
 
 @end
 

@@ -10,6 +10,7 @@
 #define Reports_MADQueryActiveQueryFields_h
 
 #import <Foundation/NSObject.h>
+#import <MAD/RptqStoreContext.h>
 
 @class NSManagedObjectContext, RptqQueryField, NSSet <__covariant ObjectType>;
 
@@ -21,7 +22,7 @@
 
 @interface MADQueryActiveQueryFields : NSObject
 
-- (instancetype)initWithContext:(NSManagedObjectContext *)context;
+- (instancetype)initWithContext:(RptqStoreContext *)context;
 
 @property (nonatomic, strong) NSSet <RptqQueryField *> *queryFields;
 

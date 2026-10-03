@@ -6,13 +6,12 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
+#import "RptqStoreContext.h"
 #import "RptqBorder+Extras.h"
 #import "RptqDirectionalAsymmetry.h"
 #import "RptqDirectionalProperty.h"
 
 #import <Foundation/NSException.h>
-#import <CoreData/NSEntityDescription.h>
-
 @implementation RptqBorder (Extras)
 
 static NSString *keyWidth = nil;
@@ -27,16 +26,12 @@ static NSString *keyStyle = nil;
 + (NSString *)keyStyle { return keyStyle; }
 
 - (void)awakeFromInsert {
-	[super awakeFromInsert];
-	NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-	NSAssert(managedObjectContext != nil, @"Managed object context is nil");
+	RptqStoreContext *context = self.storeContext;
 	if (self.width == nil) {
-		self.width = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDirectionalAsymmetry class])
-												   inManagedObjectContext: managedObjectContext];
+		self.width = [context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
 	}
 	if (self.style == nil) {
-		self.style = [NSEntityDescription insertNewObjectForEntityForName: NSStringFromClass([RptqDirectionalProperty class])
-												   inManagedObjectContext: managedObjectContext];
+		self.style = [context insertObjectForEntity:NSStringFromClass([RptqDirectionalProperty class]) identifier:0];
 	}
 }
 

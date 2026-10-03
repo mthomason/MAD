@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqQuery+Extras.h"
 
 #import <Foundation/NSException.h>
@@ -17,10 +18,6 @@
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
 
 #import <MADFoundation/MADStringUtilities.h>
 
@@ -73,32 +70,19 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 	return [key isEqualToString:NSStringFromSelector(@selector(hasQueryGroups))];
 }
 
-+ (NSUInteger)sectionCountFectch:(NSManagedObjectID *)queryObjectID
-			managedObjectContext:(NSManagedObjectContext *)managedObjectContext {
-	
-	NSString *keyPath = NSStringFromSelector(@selector(inQuery));
-	NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID:queryObjectID
-															   atKeyPath:keyPath];
-	NSString *entityName = NSStringFromClass([RptqQueryGroup class]);
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: entityName];
-	request.predicate = predicate;
-	request.includesSubentities = NO;
-	request.includesPropertyValues = NO;
-	NSError * __autoreleasing *error = NULL;
-	NSUInteger count = [managedObjectContext countForFetchRequest:request error:error];
++ (NSUInteger)sectionCountFectch:(int64_t)queryObjectID
+			managedObjectContext:(RptqStoreContext *)managedObjectContext {
+
+	NSArray *groups = [managedObjectContext objectsForEntity:NSStringFromClass([RptqQueryGroup class])];
+	NSUInteger count = 0;
+	for (RptqQueryGroup *group in groups) {
+		if (group.inQuery.identifier == queryObjectID) count++;
+	}
 	return MADSectionCountWithGroupCount(count);
 }
 
 #pragma mark -
 #pragma mark Overrides
-
-- (void)awakeFromInsert {
-	[super awakeFromInsert];
-	if (self.managedObjectContext.parentContext && self.identifier <= 0) {
-		self.identifier = [RptqDataHelper nextIdentifierForClass:[self class]
-											managedObjectContext:self.managedObjectContext];
-	}
-}
 
 - (NSUInteger)sectionCount { return MADSectionCountWithGroupCount(self.hasQueryGroups.count); }
 

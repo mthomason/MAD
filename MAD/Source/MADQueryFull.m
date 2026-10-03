@@ -11,6 +11,7 @@
 #endif
 
 #import "MADQueryFull.h"
+#import <MAD/RptqStoreContext.h>
 
 #import <CoreData/NSFetchRequest.h>
 #import <CoreData/NSManagedObjectContext.h>
@@ -80,7 +81,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 @interface MADQueryFull ()
 
 @property (nonatomic, strong) id queryObject;
-@property (nonatomic, copy) NSManagedObjectID *objectID;
+@property (nonatomic, copy) NSNumber *objectID;
 
 @end
 
@@ -105,14 +106,14 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 		NSMutableDictionary *fieldInfo = [[NSMutableDictionary alloc] init];
 		self.fields = fieldInfo;
 		
-		_objectID = query.objectID.copy;
+		_objectID = @(query.identifier);
 		_limitResults = queryLimit;
 		
 		NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 		[defaultCenter addObserver: self
 						  selector: @selector(handleManagedObjectContextDidChange:)
 							  name: NSManagedObjectContextObjectsDidChangeNotification
-							object: query.managedObjectContext];
+							object: query.storeContext];
 	}
 	return self;
 }
@@ -133,7 +134,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	return result;
 }
 
-- (NSString *)copySQLWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext
+- (NSString *)copySQLWithManagedObjectContext:(RptqStoreContext *)managedObjectContext
 										error:(NSError * __autoreleasing *)error {
 	//[super getSql:error];
 	NSString *activeFields;
@@ -144,7 +145,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 }
 
 - (NSString *)SQLOnlyActiveFields: (BOOL)onlyActiveFields
-			 managedObjectContext: (NSManagedObjectContext *)managedObjectContext
+			 managedObjectContext: (RptqStoreContext *)managedObjectContext
 							error: (NSError * __autoreleasing *)error {
 	
 	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:managedObjectContext];
@@ -176,7 +177,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	//Add a vertex to the graph for each table.
 	for (RptqDatabaseSchemaTable *table in hasTables) {
 		//@autoreleasepool {
-		[graph addVertexWithObject: table.objectID];
+		[graph addVertexWithObject: @(table.identifier)];
 		//}
 	}
 	
@@ -187,12 +188,12 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	MTVertex *origin, *destination;
 	for (RptqQueryLinks *queryLink in hasQueryLinks) {
 		
-		origin =        [graph vertexForObject: queryLink.hasLeftField.inQueryTable.objectID];
-		destination =   [graph vertexForObject: queryLink.hasRightField.inQueryTable.objectID];
+		origin =        [graph vertexForObject: @(queryLink.hasLeftField.inQueryTable.identifier)];
+		destination =   [graph vertexForObject: @(queryLink.hasRightField.inQueryTable.identifier)];
 		
 		[graph addEdgeWithOrigin: origin
 					 destination: destination
-						  object: queryLink.objectID
+						  object: @(queryLink.identifier)
 					   andWeight: weight];
 	}
 	
@@ -277,7 +278,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 
 - (NSString *)sqlTableReferenceWithTables:(NSArray <MTVertex *> *)tables
 								linkDepth:(NSNumber * __autoreleasing *)linkDepth
-				  forManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
+				  forManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 	
 	NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
 	
@@ -287,7 +288,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	for (MTVertex *vertexTable in tables) {
 		if (vertexTable) {
 			
-			NSManagedObjectID *objectID = vertexTable.object;
+			int64_t objectID = [vertexTable.object longLongValue];
 			RptqQueryTable *table = [RptqQueryTable queryTableWithObjectID:objectID
 													  managedObjectContext:managedObjectContext];
 			
@@ -331,8 +332,8 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 						
 						vertexTableDestination.properties.algorithmColor = MTColorGray;
 						
-						NSManagedObjectID *queryLinkID = edge.object;
-						RptqQueryLinks *queryLink = [managedObjectContext objectWithID:queryLinkID];
+						int64_t queryLinkID = [edge.object longLongValue];
+						RptqQueryLinks *queryLink = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryLinks class]) identifier:queryLinkID];
 						
 						
 						if (queryLink) {
@@ -435,7 +436,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	
 	BOOL queryChanged = NO;
 	
-	BOOL (^queryObjectInSet)(NSSet <NSManagedObjectContext *> *) = ^(NSSet <NSManagedObjectContext *> *changes){
+	BOOL (^queryObjectInSet)(NSSet <RptqStoreContext *> *) = ^(NSSet <RptqStoreContext *> *changes){
 		for (id change in changes) {
 			if (isKindOfRptqQuery(change)) {
 				return YES;

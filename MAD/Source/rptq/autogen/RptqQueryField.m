@@ -22,9 +22,6 @@
 
 @implementation RptqQueryField (CoreDataProperties)
 
-+ (NSFetchRequest<RptqQueryField *> *)fetchRequest {
-	return [[NSFetchRequest alloc] initWithEntityName:@"RptqQueryField"];
-}
 
 @dynamic identifier;
 @dynamic databaseSchemaField;

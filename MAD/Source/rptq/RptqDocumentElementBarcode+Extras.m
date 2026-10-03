@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#import "RptqStoreContext.h"
 #import "RptqDocumentElementBarcode+Extras.h"
 
 #import "RptqDocumentElement+Extras.h"
@@ -20,10 +21,6 @@
 #import <MADFoundation/MADDataType.h>
 #import <MADBarcodes/MADBarcodes.h>
 #import <MADBarcodes/MADBarcodeType.h>
-
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
 
 #import <os/log.h>
 
@@ -46,11 +43,11 @@
 }
 
 - (void)updateWithBarcode: (MTBarcode *)barcode
-				 field1ID: (NSManagedObjectID *)field1ID
-				 field2ID: (NSManagedObjectID *)field2ID {
+				 field1ID: (int64_t)field1ID
+				 field2ID: (int64_t)field2ID {
 
-	RptqQueryField *field1 = [self.managedObjectContext objectWithID:field1ID];
-	RptqQueryField *field2 = [self.managedObjectContext objectWithID:field2ID];
+	RptqQueryField *field1 = [self.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field1ID];
+	RptqQueryField *field2 = [self.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field2ID];
 	
 	self.add2dComponent =       @(barcode.has2dComponent);
 	self.barcodeBorderStyle =   barcode.barcodeBorderStyle;
@@ -68,7 +65,7 @@
 	self.referencesField2 =     field2;
 	BOOL success = NO;
 	NSError * __autoreleasing saveError = nil;
-	if (!(success = [self.managedObjectContext save:&saveError])) {
+	if (!(success = [self.storeContext save:&saveError])) {
 		os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %@", saveError.localizedDescription);
 	}
 }
@@ -82,13 +79,9 @@
 	if (queryFieldOne != nil) {
 	
 		NSString *className = NSStringFromClass([RptqDocumentElementBarcode class]);
-		NSEntityDescription *entityDescription;
-		NSManagedObjectContext *objectContext = queryFieldOne.managedObjectContext;
-		entityDescription = [NSEntityDescription entityForName: className
-										inManagedObjectContext: objectContext];
-		
-		reportObject = [[RptqDocumentElementBarcode alloc] initWithEntity: entityDescription
-										  insertIntoManagedObjectContext: objectContext];
+		RptqStoreContext *objectContext = queryFieldOne.storeContext;
+
+		reportObject = [objectContext insertObjectForEntity:className identifier:0];
 		reportObject.add2dComponent = barcode.has2dComponentEnabled;
 		reportObject.barcodeBorderStyle = barcode.barcodeBorderStyle;
 		reportObject.barcodeBorderWidth = barcode.barcodeBorderWidth;
