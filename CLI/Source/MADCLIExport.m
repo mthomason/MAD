@@ -10,6 +10,8 @@
 #import "MADCLI.h"
 #import "MADCLIDocument.h"
 
+#import <MADFoundation/MADCredential.h>
+
 MADCLIExitCode MADCLIRunExport(MADCLIInvocation *invocation) {
 
 	NSString *format = invocation.format.length > 0 ? invocation.format.lowercaseString : @"pdf";
@@ -45,9 +47,22 @@ MADCLIExitCode MADCLIRunExport(MADCLIInvocation *invocation) {
 	}
 
 	// The cache is derived and lives outside the document, so a fresh checkout has
-	// none.  Export needs the row data, which means a refresh first.
+	// none.  Export needs the row data, which means a refresh first.  A spawned CLI
+	// cannot see the keychain items the app stored (different access group), so the
+	// credentials come from --credentials, the way the refresh verb takes them.
+	MADCredential *credentials = nil;
+	if (invocation.credentials.length > 0) {
+		NSRange colon = [invocation.credentials rangeOfString: @":"];
+		if (colon.location == NSNotFound) {
+			MADCLIError(@"--credentials wants user:password.");
+			return MADCLIExitUsage;
+		}
+		credentials = [[MADCredential alloc]
+					   initWithUsername: [invocation.credentials substringToIndex: colon.location]
+						   andPassword: [invocation.credentials substringFromIndex: colon.location + 1]];
+	}
 	MADCLIVerbose(invocation, @"Refreshing");
-	if (![cliDocument refreshWithCredentials: nil error: &error]) {
+	if (![cliDocument refreshWithCredentials: credentials error: &error]) {
 		MADCLIError(@"refresh failed: %@", MADCLIDescriptionForError(error));
 		return MADCLIExitQueryFailed;
 	}
