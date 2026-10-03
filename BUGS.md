@@ -1571,10 +1571,17 @@ header search path.
   toggles nothing for the same reason, and its handler body was reduced to a
   no-op.  The observer method name `ingnoreManagedObjectContextChanges:` also
   carries a long-standing typo.
-- **The milestone-(d) item is now a decision, not a reflex:** wire the
-  signalling end to end (post from `RptqStoreContext`, read `needsSave` where it
-  matters) **or** delete the flags and the handlers.
-- **Found during the store migration; not investigated.**
+- **Now (milestone d):** the signal end is wired.  `RptqStoreContext` posts
+  `NSManagedObjectContextObjectsDidChangeNotification` (object = the context,
+  `NSInsertedObjectsKey` / `NSUpdatedObjectsKey` / `NSDeletedObjectsKey`),
+  coalesced to one post per run-loop turn, from `insertObjectForEntity:`,
+  `markObjectChanged:`, `deleteObject:`, and after `save:`.  The designer's
+  undo-button/element-refresh handler and the query controller's list tracking
+  consume it again, and `MADModelDocument` / `MADQueryFull` receive it.  The
+  remaining decision narrows to the flags themselves: `MADDocumentState.
+  needsSave` and `.contextChagned` still have no readers -- wire a consumer or
+  delete them.
+- **Found during the store migration.**
 
 ### Saves run unconditionally now, and each rewrites the whole store
 - **Status:** Fixed
@@ -1601,47 +1608,53 @@ header search path.
   `testDeleteIsPendingUntilSave` in `RptqStoreContextTests`.
 
 ### The explorer lists no documents, and the Query tab lists no tables
-- **Status:** Still open
+- **Status:** Fixed
 - **Where:** `MADDesigner/Source/MADExplorerController.m` (the file list) and
   `MADDesigner/Source/MADQueryViewController.m` / `MADQueryViewDataSource.m`
   (the query table list)
-- **Behavior:** Running the app in the simulator (milestone (c) item 4), the
-  explorer's list stays empty even with `London.mad` and `Music.mad` present in
-  the app group's `Documents/` directory, and after opening London through the
-  document-type URL the MAD Query tab renders with no tables, while the MAD
-  Designer canvas and the MAD Viewer report page render the document correctly.
-  The store side of the Query tab has since been ruled out headlessly: the
-  reopened store holds London's `RptqQueryTable` rows and the model layer finds
-  the database and query, so the empty tab is a UI-layer or reload-timing
-  problem, not a lookup asking for a name the rows are not keyed under.
-- **Found during the store migration; not investigated.**
+- **Behavior:** In the simulator the explorer's list stayed empty even with
+  `London.mad` and `Music.mad` in the app group's `Documents/` directory, and
+  the MAD Query tab rendered with no tables after opening London.
+- **Now:** The Query tab was the gutted change-notification handler: once
+  `RptqStoreContext` posts `NSManagedObjectContextObjectsDidChangeNotification`
+  (milestone (d)'s change signal), the restored handler reloads the query lists
+  and the tab shows the tables, links, groups, and predicate sections.  The
+  explorer was not a store defect at all: its list is gated on the first-launch
+  storage-option bootstrap, and in the headless simulator the option stays
+  unset (no one can tap the prompt), leaving the explorer unconfigured.  With
+  the storage option seeded to local, the explorer lists London and Music.
+- **Found during the store migration.**
 
 ### Query group, link, and predicate lists load every row in the store
-- **Status:** Still open
+- **Status:** Fixed
 - **Where:** `MADDesigner/Source/MADQueryViewDataSource.m` (the
   `queryLinksController`, `queryGroupsController`, and `queryPredicatesController`
   getters); `MADDesigner/Source/MTGroupByViewController.m` (`-viewDidLoad`)
-- **Behavior:** Only `queryTablesController` filters rows by the open query
-  (`table.inQuery.identifier != query.identifier`). The link, group, and
-  predicate lists fetch every row of their entity and sort them. That is correct
-  only while a document has one query; a second query's links, groups, and
-  predicates would all appear in the first query's lists. The pre-migration
-  fetched-results controllers had the same shape (no predicate on the fetch), so
-  this is preserved behavior, not a new regression.
-- **Found during the store migration; not investigated.**
+- **Behavior:** Only `queryTablesController` filtered rows by the open query;
+  the link, group, and predicate lists fetched every row of their entity, so a
+  second query's rows would appear in the first query's lists.  The
+  pre-migration fetched-results controllers had the same shape, so this was
+  preserved behavior rather than a new regression.
+- **Now:** the data source stores the query identifier and each list filters to
+  it (links by `hasLeftField.inQueryTable.inQuery.identifier`, groups and
+  predicates by `inQuery.identifier`); the group-by picker scopes to the
+  document's default query; and the restored change-notification handler resets
+  all four lists when any query row changes.
+- **Found during the store migration.**
 
 ### The choose-field list used to fetch a single field; it now fetches all of them
-- **Status:** Still open
-- **Where:** `MADDesigner/Source/MADQueryChooseFieldController.m:149`
+- **Status:** Fixed
+- **Where:** `MADDesigner/Source/MADQueryChooseFieldController.m`
   (`-sections`)
 - **Behavior:** The pre-migration controller built its sectioned
   fetched-results controller from `[RptqQueryField fetchRequestFields:1]` -- a
-  fetch limited to one row -- so the picker showed at most one field. The
+  fetch limited to one row -- so the picker showed at most one field.  The
   store-backed getter fetches every `RptqQueryField` and groups them by table
-  alias, so the picker now shows the full field list. Which shape is right was
-  not investigated; the migration preserved the *visible* behavior of a list
-  grouped by alias, not the one-row limit.
-- **Found during the store migration; not investigated.**
+  alias.
+- **Now:** the all-fields shape is confirmed right -- a field picker showing one
+  row was the bug -- and the list honors the presenter's `excludeTables` (the
+  link builder excludes the table being linked, by alias).
+- **Found during the store migration.**
 
 ---
 

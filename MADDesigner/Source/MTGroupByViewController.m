@@ -24,6 +24,10 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/RptqStoreContext.h>
+#import <MAD/RptqObject.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDatabase+Extras.h>
+#import <MAD/RptqQuery.h>
 #import <MAD/RptqQueryGroup+Extras.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>
 
@@ -46,9 +50,12 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 	self.navigationItem.titleView = titleView;
 
 	// The group list was an NSFetchedResultsController; the store has no live query,
-	// so the rows are fetched once and sorted by hand.  The list cannot change while
-	// this picker is on screen.
+	// so the rows are fetched once, scoped to the open query, and sorted by hand.
+	// The list cannot change while this picker is on screen.
+	int64_t queryID = [self.document activeDocumentModel].defaultDatabase.defaultQuery.identifier;
 	NSArray *groups = [self.document.storeContext objectsForEntity:NSStringFromClass([RptqQueryGroup class])];
+	groups = [groups filteredArrayUsingPredicate:
+			  [NSPredicate predicateWithFormat:@"inQuery.identifier == %lld", queryID]];
 	self.results = [groups sortedArrayUsingDescriptors:
 					@[[NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(weight)) ascending:YES]]];
 }

@@ -208,14 +208,16 @@ new lookup has a count-based test that fails on an empty result. See 9.1.
   `insertObjectForEntity:`, the way Core Data applied defaults at insert; `writeRowForObject:`
   no longer invents values, and a row that somehow lacks one fails the NOT NULL constraint
   loudly. The save path lost the `O(attributes × columns)` per-row fill.
-- **Notifications registered with `object: nil` — DONE, with an open decision.** The handlers
-  now filter on the document's own store context, and `handleManagedObjectContextWillSave:` is
-  registered against nil like its siblings. **But the signalling is inert at both ends, for a
-  second reason beyond the scoping:** a repo-wide grep shows nothing reads
-  `MADDocumentState.needsSave` or `.contextChagned`, and `RptqStoreContext` posts no change
-  notification, so the handlers cannot fire either. The milestone-(d) item is now a
-  **decision, not a reflex:** wire the signalling end to end (post from `RptqStoreContext`,
-  read `needsSave` where it matters) **or** delete the flags and the handlers. Recorded in
+- **Notifications registered with `object: nil` — DONE, and the signal is wired (milestone d).**
+  The handlers filter on the document's own store context, and
+  `handleManagedObjectContextWillSave:` is registered against nil like its siblings.
+  `RptqStoreContext` now posts `NSManagedObjectContextObjectsDidChangeNotification` (object =
+  the context, the Core Data userInfo keys), coalesced to one post per run-loop turn, fired
+  from insert, mark-object-changed, delete, and after save.  The designer's undo-button and
+  element-refresh handler and the query controller's list tracking consume it again (the Query
+  tab's tables, links, groups, and predicates lists repopulate), and `MADModelDocument` /
+  `MADQueryFull` receive it.  **Remaining decision:** `MADDocumentState.needsSave` and
+  `.contextChagned` still have no readers -- wire a consumer or delete the flags.  Recorded in
   `BUGS.md` ("The document status signalling is inert at both ends").
 - **`closeWithCompletionHandler:` bypasses `[super …]` — CONFIRMED AND PINNED, with a
   transitional contract.** `testCloseReachesClosedStateAndReleasesTheFilePresenter` pins what

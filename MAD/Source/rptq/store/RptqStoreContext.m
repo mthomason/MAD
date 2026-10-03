@@ -10,11 +10,22 @@
 #import "MADStoreSchema.h"
 #import "MADStoreGraph.h"
 
+// The change notification mirrors Core Data's contract -- the same name, the same
+// userInfo keys, object = this context -- so the seven observers registered
+// against NSManagedObjectContextObjectsDidChangeNotification keep working.
+#import <CoreData/NSManagedObjectContext.h>
+
 @interface RptqStoreContext ()
 @property (nonatomic, strong, readwrite) MADStoreGraph *graph;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, RptqObject *> *> *registry;
 @property (nonatomic, strong) NSMutableSet<RptqObject *> *dirtyObjects;
 @property (nonatomic, strong) NSMutableArray<MADStoreObject *> *deletedObjects;
+// Accumulated since the last post, so a gesture that sets many properties posts
+// one notification instead of one per setter.
+@property (nonatomic, strong) NSMutableSet<RptqObject *> *pendingInserted;
+@property (nonatomic, strong) NSMutableSet<RptqObject *> *pendingUpdated;
+@property (nonatomic, strong) NSMutableSet<RptqObject *> *pendingDeleted;
+@property (nonatomic, assign) BOOL postScheduled;
 @end
 
 static int64_t MADStoreIdentifierOfValue(id value) {
@@ -45,6 +56,9 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	context->_registry = [NSMutableDictionary dictionary];
 	context->_dirtyObjects = [NSMutableSet set];
 	context->_deletedObjects = [NSMutableArray array];
+	context->_pendingInserted = [NSMutableSet set];
+	context->_pendingUpdated = [NSMutableSet set];
+	context->_pendingDeleted = [NSMutableSet set];
 	return context;
 }
 
@@ -52,6 +66,35 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 
 /// Any unsaved insert, attribute set, relationship set, or deletion.
 - (BOOL)hasChanges { return self.dirtyObjects.count > 0 || self.deletedObjects.count > 0; }
+
+#pragma mark - Change notification
+
+- (void)scheduleChangeNotificationPost {
+	@synchronized (self) {
+		if (self.postScheduled) return;
+		self.postScheduled = YES;
+	}
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self postChangeNotification];
+	});
+}
+
+- (void)postChangeNotification {
+	NSMutableDictionary<NSString *, NSSet<RptqObject *> *> *userInfo = [NSMutableDictionary dictionary];
+	@synchronized (self) {
+		self.postScheduled = NO;
+		if (self.pendingInserted.count > 0) userInfo[NSInsertedObjectsKey] = self.pendingInserted.copy;
+		if (self.pendingUpdated.count > 0) userInfo[NSUpdatedObjectsKey] = self.pendingUpdated.copy;
+		if (self.pendingDeleted.count > 0) userInfo[NSDeletedObjectsKey] = self.pendingDeleted.copy;
+		[self.pendingInserted removeAllObjects];
+		[self.pendingUpdated removeAllObjects];
+		[self.pendingDeleted removeAllObjects];
+	}
+	if (userInfo.count == 0) return;
+	[[NSNotificationCenter defaultCenter] postNotificationName:NSManagedObjectContextObjectsDidChangeNotification
+														object:self
+													  userInfo:userInfo];
+}
 
 #pragma mark - Loading
 
@@ -62,6 +105,9 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	[self.registry removeAllObjects];
 	[self.dirtyObjects removeAllObjects];
 	[self.deletedObjects removeAllObjects];
+	[self.pendingInserted removeAllObjects];
+	[self.pendingUpdated removeAllObjects];
+	[self.pendingDeleted removeAllObjects];
 	return YES;
 }
 
@@ -72,6 +118,9 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	[self.registry removeAllObjects];
 	[self.dirtyObjects removeAllObjects];
 	[self.deletedObjects removeAllObjects];
+	[self.pendingInserted removeAllObjects];
+	[self.pendingUpdated removeAllObjects];
+	[self.pendingDeleted removeAllObjects];
 	return YES;
 }
 
@@ -159,12 +208,21 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	NSAssert(object != nil, @"an inserted row must fault back into the context");
 	[object awakeFromInsert];
 	[self.dirtyObjects addObject:object];
+	@synchronized (self) {
+		[self.pendingInserted addObject:object];
+	}
+	[self scheduleChangeNotificationPost];
 	return object;
 }
 
 /// The row is new or one of its values changed; the next save writes it.
 - (void)markObjectChanged:(RptqObject *)object {
-	if (object) [self.dirtyObjects addObject:object];
+	if (!object) return;
+	[self.dirtyObjects addObject:object];
+	@synchronized (self) {
+		[self.pendingUpdated addObject:object];
+	}
+	[self scheduleChangeNotificationPost];
 }
 
 - (BOOL)save:(NSError **)error {
@@ -185,6 +243,8 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	// The store may have assigned surrogate identifiers to rows whose entity has no
 	// model identifier; re-key the registry so those rows fault under their new keys.
 	[self rekeyRegistry];
+	// The accumulated changes post on the next main-queue turn; a save does not
+	// post its own, so a batch that inserts and saves still yields one notification.
 	return YES;
 }
 
@@ -218,6 +278,12 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	if (![self.deletedObjects containsObject:object.backingObject]) {
 		[self.deletedObjects addObject:object.backingObject];
 	}
+	@synchronized (self) {
+		[self.pendingInserted removeObject:object];
+		[self.pendingUpdated removeObject:object];
+		[self.pendingDeleted addObject:object];
+	}
+	[self scheduleChangeNotificationPost];
 	return YES;
 }
 

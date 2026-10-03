@@ -147,10 +147,16 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 }
 
 // The field list was an NSFetchedResultsController grouped by inQueryTable.alias; the
-// store has no live query, so the fields are fetched and grouped by hand.
+// store has no live query, so the fields are fetched and grouped by hand, skipping
+// the tables the presenter asked to exclude (the link builder excludes the table
+// being linked, by its alias).
 - (NSArray <NSArray <RptqQueryField *> *> *)sections {
 	if (_sections == nil) {
 		NSArray *fields = [self.document.storeContext objectsForEntity:NSStringFromClass([RptqQueryField class])];
+		if (self.excludeTables.count > 0) {
+			fields = [fields filteredArrayUsingPredicate:
+					  [NSPredicate predicateWithFormat:@"NOT (inQueryTable.alias IN %@)", self.excludeTables]];
+		}
 		fields = [fields sortedArrayUsingComparator:^NSComparisonResult(RptqQueryField *a, RptqQueryField *b) {
 			NSComparisonResult byAlias = [a.inQueryTable.alias compare:b.inQueryTable.alias];
 			if (byAlias != NSOrderedSame) return byAlias;

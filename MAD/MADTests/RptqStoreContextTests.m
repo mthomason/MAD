@@ -262,6 +262,55 @@
 	XCTAssertTrue([[reread graphByCompletingInverses] isEqualToGraph:[loaded graphByCompletingInverses]]);
 }
 
+#pragma mark - Change notification
+
+// The context mirrors Core Data's change notification -- same name, object = the
+// context, NSInsertedObjectsKey / NSUpdatedObjectsKey / NSDeletedObjectsKey --
+// coalesced to one post per run-loop turn, so a gesture that sets many properties
+// cannot storm the observers.
+- (void)testChangeNotificationPostsCoalescedWithCoreDataKeys {
+	RptqStoreContext *context = [self openContextAtPath:@"notify.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	XCTestExpectation *posted = [self expectationWithDescription:@"change notification"];
+	__block NSUInteger postCount = 0;
+	__block NSNotification *received = nil;
+	id observer = [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification
+																	object:context
+																	 queue:[NSOperationQueue mainQueue]
+																 usingBlock:^(NSNotification *note) {
+		postCount++;
+		received = note;
+		[posted fulfill];
+	}];
+
+	// Many changes inside one turn: one notification for all of them.
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:0];
+	[table setValue:@"one" forKey:@"name"];
+	[table setValue:@"two" forKey:@"name"];
+	[table setValue:@"three" forKey:@"name"];
+	RptqObject *second = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:0];
+	[context deleteObject:second error:NULL];
+
+	[self waitForExpectations:@[ posted ] timeout:5];
+
+	NSSet *inserted = received.userInfo[NSInsertedObjectsKey];
+	NSSet *updated = received.userInfo[NSUpdatedObjectsKey];
+	NSSet *deleted = received.userInfo[NSDeletedObjectsKey];
+	XCTAssertNotNil(inserted, @"the notification carries the Core Data userInfo keys");
+	XCTAssertTrue([inserted containsObject:table], @"the inserted row is in NSInsertedObjectsKey");
+	XCTAssertTrue([updated containsObject:table], @"the changed row is in NSUpdatedObjectsKey");
+	XCTAssertTrue([deleted containsObject:second], @"the deleted row is in NSDeletedObjectsKey");
+	XCTAssertFalse([inserted containsObject:second], @"a deleted insert leaves the inserted set");
+
+	// A turn passes; the post count must still be one -- the burst coalesced.
+	[NSThread sleepForTimeInterval:0.1];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+	XCTAssertEqual(postCount, (NSUInteger)1, @"one run-loop turn, one notification");
+
+	[[NSNotificationCenter defaultCenter] removeObserver:observer];
+}
+
 #pragma mark - Subentity lookups
 
 // Rows are keyed by their concrete kind (RptqDocumentElementLabel), so a query for

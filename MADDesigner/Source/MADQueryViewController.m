@@ -1241,15 +1241,46 @@ BOOL storeEnabled(void) {
 #pragma mark NSManagedObjectContext Notifications
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
-	
+	if (_suspendAutomaticTrackingOfChangesInManagedObjectContext) return;
+
 	NSDictionary *userInfo = notification.userInfo;
-	NSSet *updatedObjects = userInfo[NSUpdatedObjectsKey];
-	
-	for (id updatedObject in updatedObjects) {
-		// The portable store posts no change notifications yet; the query-table
-		// tracking that used to react here is restored in a later milestone.
-		if (![updatedObject isKindOfClass:[RptqQuery class]]) continue;
+	NSSet *inserted = userInfo[NSInsertedObjectsKey];
+	NSSet *deleted = userInfo[NSDeletedObjectsKey];
+	NSSet *updated = userInfo[NSUpdatedObjectsKey];
+
+	// The query lists track the query's tables, links, groups, and predicates: a
+	// change to any of them reloads every list.
+	BOOL queryChanged = NO;
+	NSArray *trackedClasses = @[
+		[RptqQueryTable class], [RptqQueryLinks class], [RptqQueryGroup class],
+		[RptqQueryPredicate class], [RptqQuery class]
+	];
+	for (id object in inserted) {
+		for (Class tracked in trackedClasses) {
+			if ([object isKindOfClass:tracked]) { queryChanged = YES; break; }
+		}
+		if (queryChanged) break;
 	}
+	if (!queryChanged) {
+		for (id object in deleted) {
+			for (Class tracked in trackedClasses) {
+				if ([object isKindOfClass:tracked]) { queryChanged = YES; break; }
+			}
+			if (queryChanged) break;
+		}
+	}
+	if (!queryChanged) {
+		for (id object in updated) {
+			for (Class tracked in trackedClasses) {
+				if ([object isKindOfClass:tracked]) { queryChanged = YES; break; }
+			}
+			if (queryChanged) break;
+		}
+	}
+	if (!queryChanged) return;
+
+	[self.queryViewDataSource performFetchAll];
+	[self.tableView reloadData];
 }
 
 - (void)ingnoreManagedObjectContextChanges:(RptqStoreContext *)context {

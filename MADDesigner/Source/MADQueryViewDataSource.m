@@ -85,6 +85,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 @implementation MADQueryViewDataSource {
 	BOOL _reportingEnabled;
 	NSUInteger _numberOfTables;
+	int64_t _queryID;
 }
 
 - (void)dealloc {
@@ -115,6 +116,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 			   reportingEnabled: (BOOL)reportingEnabled
 			handleConfigureCell: (MADQueryViewCellConfigureHandler)handleConfigureCell {
 	if (self = [super init]) {
+
+		_queryID = queryID.longLongValue;
 
 		NSArray *tables = [managedObjectContext objectsForEntity:NSStringFromClass([RptqQueryTable class])];
 		NSUInteger numberOfTables = 0;
@@ -497,6 +500,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 	if (_queryLinksController == nil) {
 		RptqStoreContext *context = self.datasoruce.document.storeContext;
 		NSArray *links = [context objectsForEntity:NSStringFromClass([RptqQueryLinks class])];
+		links = [links filteredArrayUsingPredicate:
+				 [NSPredicate predicateWithFormat:@"hasLeftField.inQueryTable.inQuery.identifier == %lld", _queryID]];
 		links = [links sortedArrayUsingComparator:^NSComparisonResult(RptqQueryLinks *a, RptqQueryLinks *b) {
 			return [a.tableLeftID compare:b.tableLeftID];
 		}];
@@ -509,6 +514,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 	if (_queryGroupsController == nil) {
 		RptqStoreContext *context = self.datasoruce.document.storeContext;
 		NSArray *groups = [context objectsForEntity:NSStringFromClass([RptqQueryGroup class])];
+		groups = [groups filteredArrayUsingPredicate:
+				  [NSPredicate predicateWithFormat:@"inQuery.identifier == %lld", _queryID]];
 		groups = [groups sortedArrayUsingComparator:^NSComparisonResult(RptqQueryGroup *a, RptqQueryGroup *b) {
 			if (a.weight < b.weight) return NSOrderedAscending;
 			if (a.weight > b.weight) return NSOrderedDescending;
@@ -541,6 +548,8 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 	if (_queryPredicatesController == nil) {
 		RptqStoreContext *context = self.datasoruce.document.storeContext;
 		NSArray *predicates = [context objectsForEntity:NSStringFromClass([RptqQueryPredicate class])];
+		predicates = [predicates filteredArrayUsingPredicate:
+					  [NSPredicate predicateWithFormat:@"inQuery.identifier == %lld", _queryID]];
 		predicates = [predicates sortedArrayUsingComparator:^NSComparisonResult(RptqQueryPredicate *a, RptqQueryPredicate *b) {
 			return [a.leftFieldID compare:b.leftFieldID];
 		}];
