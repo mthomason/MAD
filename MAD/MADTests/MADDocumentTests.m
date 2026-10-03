@@ -23,6 +23,9 @@
 #import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqTextStyle.h>
 #import <MAD/MADDesignerLayout.h>
+#import <MAD/MADModelDocument.h>
+#import <MAD/MADModelDatabase.h>
+#import <MAD/MADModelQuery.h>
 #import <MAD/MADConstants.h>
 #import "MADArchiveManager.h"
 
@@ -242,6 +245,17 @@
 	XCTAssertTrue([reread isEqualToGraph:converted],
 				  @"the document changed across a save and reopen");
 
+	// The MAD Query tab's list is fed by the model layer over these lookups; pin
+	// the same path headlessly so an empty tab means a UI-layer problem, not a
+	// store lookup returning nothing.
+	XCTAssertGreaterThan([reopened.storeContext objectsForEntity:@"RptqQueryTable"].count, (NSUInteger)0,
+						 @"London's query tables are in the reopened store");
+	NSOrderedSet *databases = reopened.documentModel.databases;
+	XCTAssertNotNil(databases.firstObject, @"the model layer found London's database");
+	MADModelQuery *firstQuery = ((MADModelDatabase *)databases.firstObject).queries.firstObject;
+	XCTAssertNotEqual(firstQuery.identifier, (int64_t)0,
+					  @"the model layer found London's query");
+
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
 }
 
@@ -275,6 +289,46 @@
 
 	[undoManager redo];
 	XCTAssertTrue(element.textStyle.bold, @"redo must restore the bold");
+}
+
+// The store-backed close bypasses UIDocument's own machinery (it deadlocks), so pin
+// the contract Phase D would inherit: the document never registers a file presenter
+// (UIDocument's presenter bookkeeping lives in its open/save machinery, which the
+// portable store does not drive), it never leaves UIDocumentStateClosed, and the
+// close releases the store.
+- (void)testCloseReachesClosedStateAndReleasesTheFilePresenter {
+	NSURL *documentURL = [[self newTestDirectory] URLByAppendingPathComponent:@"close.mad"];
+	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
+	RptqStoreContext *context = [self newTestContext];
+	[document setValue:context forKey:@"storeContext"];
+
+	XCTAssertFalse([[NSFileCoordinator filePresenters] containsObject:document],
+				   @"the store-backed document must not register a file presenter");
+	XCTAssertEqual(document.documentState, UIDocumentStateClosed,
+				   @"the document reports UIDocumentStateClosed throughout its life");
+
+	NSError *error = nil;
+	XCTAssertTrue([document writeContents:nil
+							andAttributes:nil
+							  safelyToURL:documentURL
+						 forSaveOperation:UIDocumentSaveForCreating
+									error:&error], @"save failed: %@", error);
+	XCTAssertFalse([[NSFileCoordinator filePresenters] containsObject:document],
+				   @"saving through the portable store path registers no presenter");
+
+	XCTestExpectation *closed = [self expectationWithDescription:@"close"];
+	[document closeWithCompletionHandler:^(BOOL success) {
+		XCTAssertTrue(success);
+		[closed fulfill];
+	}];
+	[self waitForExpectations:@[ closed ] timeout:10];
+
+	XCTAssertEqual(document.documentState, UIDocumentStateClosed,
+				   @"the closed document still reports UIDocumentStateClosed");
+	XCTAssertFalse(context.store.isOpen,
+				   @"the close released the store");
+	XCTAssertFalse([[NSFileCoordinator filePresenters] containsObject:document],
+				   @"the closed document holds no file presenter");
 }
 
 @end

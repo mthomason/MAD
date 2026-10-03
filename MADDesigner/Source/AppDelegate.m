@@ -172,10 +172,11 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 		}
 	}];
 
+#if DEBUG
 	// UI-test hook: "-UITestOpenSample London" opens the named sample from the app
 	// group's documents the way the explorer's own open does, and
-	// "-UITestSelectTab Designer" selects a tab of the opened document.  The
-	// arguments are never present in production launches.
+	// "-UITestSelectTab Designer" selects a tab of the opened document.  Debug
+	// builds only.
 	NSArray *arguments = NSProcessInfo.processInfo.arguments;
 	NSUInteger sampleIndex = [arguments indexOfObject:@"-UITestOpenSample"];
 	if (sampleIndex != NSNotFound && arguments.count > sampleIndex + 1) {
@@ -200,6 +201,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 			}
 		});
 	}
+#endif
 	return YES;
 }
 

@@ -133,11 +133,29 @@
 - (NSArray<NSManagedObject *> *)objectsForEntityNamed:(NSString *)name
 											  context:(NSManagedObjectContext *)context {
 	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:name];
-	request.includesSubentities = NO;
+	// The converter writes each row under its concrete kind, so a table-owning
+	// entity's rows live under its subentity names (RptqDocumentElementLabel, not
+	// RptqDocumentElement).  The reference must ask the question the plural store
+	// lookup answers -- the base entity and its subclasses -- or both sides agree
+	// at zero and a lookup regression passes unnoticed.
+	NSEntityDescription *description = self.model.entitiesByName[name];
+	request.includesSubentities = description.subentities.count > 0;
 	NSError *error = nil;
 	NSArray<NSManagedObject *> *objects = [context executeFetchRequest:request error:&error];
 	XCTAssertNotNil(objects, @"fetching %@ failed: %@", name, error);
 	return objects ?: @[];
+}
+
+// The exact count -- subentities NOT included -- so the total over all entities
+// counts each row once, under its own kind.
+- (NSUInteger)exactCountForEntityNamed:(NSString *)name
+							   context:(NSManagedObjectContext *)context {
+	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:name];
+	request.includesSubentities = NO;
+	NSError *error = nil;
+	NSUInteger count = [context countForFetchRequest:request error:&error];
+	XCTAssertNil(error, @"counting %@ failed: %@", name, error);
+	return count;
 }
 
 #pragma mark - The acceptance test
@@ -186,7 +204,9 @@
 			NSUInteger expected = [self objectsForEntityNamed:entity.name context:context].count;
 			NSUInteger actual = [read objectsForEntity:entity.name].count;
 			XCTAssertEqual(actual, expected, @"%@ row count in %@", entity.name, sample);
-			total += actual;
+			// The total must count each row once, under its own kind; the inclusive
+			// fetch above already counts subclass rows under their table owner.
+			total += [self exactCountForEntityNamed:entity.name context:context];
 		}
 		XCTAssertEqual(read.count, total, @"%@ has rows outside the entity list", sample);
 		XCTAssertGreaterThan(total, (NSUInteger)400, @"%@ looks empty", sample);

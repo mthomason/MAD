@@ -27,6 +27,22 @@
 
 - (void)awakeFromInsert { }
 
+#pragma mark - Identity
+
+// NSManagedObject gave objectID equality; the store-backed object is the same row
+// when its entity and identifier agree.  The entity here is the row's own kind,
+// which is stable however the row was reached.
+- (BOOL)isEqual:(id)object {
+	if (self == object) return YES;
+	if (![object isKindOfClass:[RptqObject class]]) return NO;
+	RptqObject *other = object;
+	return self.identifier == other.identifier && [self.entity isEqualToString:other.entity];
+}
+
+- (NSUInteger)hash {
+	return (NSUInteger)self.identifier ^ self.entity.hash;
+}
+
 #pragma mark - Copying
 
 - (id)copyWithZone:(NSZone *)zone {

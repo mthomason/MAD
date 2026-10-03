@@ -323,8 +323,10 @@ void madwarn(char *err,  const char *err2) { }
 		// These Core Data notifications are not posted by the portable store yet, and
 		// `object:` used to name the managed-object context -- which opened the store
 		// lazily during init, right before the create flow's cleanup deleted it out
-		// from under the open handle.  Register against nil until the store posts a
-		// change signal of its own.
+		// from under the open handle.  Register against nil and let the handlers
+		// filter on the document's own store context, so a Core Data context in
+		// another part of the process (a legacy conversion, say) cannot mark this
+		// document dirty.
 		[[NSNotificationCenter defaultCenter] addObserver: self
 												 selector: @selector(handleManagedObjectContextDidChange:)
 													 name: NSManagedObjectContextObjectsDidChangeNotification
@@ -334,11 +336,11 @@ void madwarn(char *err,  const char *err2) { }
 												 selector: @selector(handleManagedObjectContextDidSave:)
 													 name: NSManagedObjectContextDidSaveNotification
 												   object: nil];
-		
+
 		[[NSNotificationCenter defaultCenter] addObserver: self
 												 selector: @selector(handleManagedObjectContextWillSave:)
 													 name: NSManagedObjectContextWillSaveNotification
-												   object: self];
+												   object: nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver: self
 												 selector: @selector(handleDocumentStateChanged:)
@@ -890,17 +892,19 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 #pragma mark NSManagedObjectContext Notifications
 
 - (void)handleManagedObjectContextDidChange:(NSNotification *)notification {
-	//NSSet *updated = notification.userInfo[NSUpdatedObjectsKey];
+	if (notification.object != self.storeContext) return;
 	self.documentStatus.needsSave = YES;
 	self.documentStatus.contextChagned = YES;
 }
 
 - (void)handleManagedObjectContextDidSave:(NSNotification *)notification {
+	if (notification.object != self.storeContext) return;
 	self.documentStatus.saveInProgress = NO;
 	self.documentStatus.needsSave = NO;
 }
 
 - (void)handleManagedObjectContextWillSave:(NSNotification *)notification {
+	if (notification.object != self.storeContext) return;
 	self.documentStatus.saveInProgress = YES;
 }
 

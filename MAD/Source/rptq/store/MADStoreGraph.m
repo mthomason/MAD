@@ -69,9 +69,26 @@
 }
 
 - (NSArray<MADStoreObject *> *)objectsForEntity:(NSString *)entity {
-	NSMutableDictionary<NSNumber *, MADStoreObject *> *byIdentifier = self.objects[entity];
-	if (!byIdentifier) return @[];
-	return [byIdentifier.allValues sortedArrayUsingComparator:^NSComparisonResult(MADStoreObject *a, MADStoreObject *b) {
+	NSMutableArray<MADStoreObject *> *objects = [NSMutableArray array];
+	NSMutableDictionary<NSNumber *, MADStoreObject *> *exact = self.objects[entity];
+	if (exact) [objects addObjectsFromArray:exact.allValues];
+	// The same table fallback the singular lookup has, for the table's OWNER only:
+	// rows carry their concrete kind (RptqDocumentElementLabel), and a query for
+	// the owning base entity must return every row of the table, while a query for
+	// one kind returns exactly that kind.
+	MADStoreEntity *named = [[MADStoreSchema sharedSchema] entityNamed:entity];
+	BOOL ownsTable = named != nil && [[MADStoreSchema sharedSchema] entityForTable:named.table] == named;
+	if (ownsTable) {
+		for (NSString *name in self.objects) {
+			if ([name isEqualToString:entity]) continue;
+			MADStoreEntity *candidate = [[MADStoreSchema sharedSchema] entityNamed:name];
+			if (![candidate.table isEqualToString:named.table]) continue;
+			[objects addObjectsFromArray:self.objects[name].allValues];
+		}
+	}
+	if (objects.count == 0) return @[];
+	// Identifier order is not meaningful across kinds, but a stable order is.
+	return [objects sortedArrayUsingComparator:^NSComparisonResult(MADStoreObject *a, MADStoreObject *b) {
 		if (a.identifier < b.identifier) return NSOrderedAscending;
 		if (a.identifier > b.identifier) return NSOrderedDescending;
 		return NSOrderedSame;
@@ -79,10 +96,18 @@
 }
 
 - (NSArray<MADStoreObject *> *)allObjects {
+	// A direct walk of the storage, not -objectsForEntity:, whose table fallback
+	// would return each shared-table row once per kind.  Sorted per kind by
+	// identifier, which is also the writer's row order.
 	NSMutableArray<MADStoreObject *> *all = [NSMutableArray array];
 	NSArray<NSString *> *names = [self.objects.allKeys sortedArrayUsingSelector:@selector(compare:)];
 	for (NSString *name in names) {
-		[all addObjectsFromArray:[self objectsForEntity:name]];
+		NSArray<MADStoreObject *> *sorted = [self.objects[name].allValues sortedArrayUsingComparator:^NSComparisonResult(MADStoreObject *a, MADStoreObject *b) {
+			if (a.identifier < b.identifier) return NSOrderedAscending;
+			if (a.identifier > b.identifier) return NSOrderedDescending;
+			return NSOrderedSame;
+		}];
+		[all addObjectsFromArray:sorted];
 	}
 	return all;
 }

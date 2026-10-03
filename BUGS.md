@@ -61,6 +61,29 @@ Status key:
 
 ## MAD (framework)
 
+### `objectsForEntity:` missed every subentity row
+- **Status:** Fixed
+- **Where:** `MAD/Source/rptq/store/MADStoreGraph.m` (`-objectsForEntity:`) and
+  the registry lookup in `MAD/Source/rptq/store/RptqStoreContext.m`
+- **Behavior:** Rows are keyed in the graph by their concrete kind
+  (`RptqDocumentElementLabel`), and the singular lookup had a table fallback for
+  exactly that while the plural lookup returned only rows keyed under the exact
+  requested name.  `objectsForEntity:@"RptqDocumentElement"` therefore returned
+  nothing, and four live sites suffered: the element `awakeFromInsert` dropIndex
+  scan found no rows (every new element got dropIndex 1, so z-order collided),
+  `nextDropIndexForSection:` always answered 0, and the two
+  `delete*RelatedToTable:` cleanups never deleted anything.  The converter test
+  that should have caught it shared the blind spot -- its reference fetch set
+  `includesSubentities = NO`.
+- **Now:** both lookups apply the table fallback when the requested entity owns
+  its table, so a base-entity query returns rows of every kind that shares the
+  table while a query for one kind stays exact.  The converter test's reference
+  fetch includes subentities for table-owning entities, its total counts each
+  row once under its own kind, and
+  `testBaseEntityQueryReturnsRowsOfMixedKinds` pins the mixed-kind query with a
+  count, so a lookup that silently returned nothing cannot pass.
+- **Found during the store migration.**
+
 ### A NULL read from a source database printed as the text `<null>`, or as the epoch
 - **Status:** Fixed
 - **Where:** the producer is
@@ -1582,8 +1605,10 @@ header search path.
   the app group's `Documents/` directory, and after opening London through the
   document-type URL the MAD Query tab renders with no tables, while the MAD
   Designer canvas and the MAD Viewer report page render the document correctly.
-  The Query tab's list is the load-then-reload migration of the
-  fetched-results controller; why it comes back empty was not chased down.
+  The store side of the Query tab has since been ruled out headlessly: the
+  reopened store holds London's `RptqQueryTable` rows and the model layer finds
+  the database and query, so the empty tab is a UI-layer or reload-timing
+  problem, not a lookup asking for a name the rows are not keyed under.
 - **Found during the store migration; not investigated.**
 
 ### Query group, link, and predicate lists load every row in the store

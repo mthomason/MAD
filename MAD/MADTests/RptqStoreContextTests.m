@@ -262,6 +262,39 @@
 	XCTAssertTrue([[reread graphByCompletingInverses] isEqualToGraph:[loaded graphByCompletingInverses]]);
 }
 
+#pragma mark - Subentity lookups
+
+// Rows are keyed by their concrete kind (RptqDocumentElementLabel), so a query for
+// the table-owning base entity must return rows of every kind that shares the
+// table.  This is the test that fails if the plural lookup ever narrows to exact
+// names again: it asserts a count, not just non-emptiness, so a lookup that
+// silently returned nothing cannot pass.
+- (void)testBaseEntityQueryReturnsRowsOfMixedKinds {
+	RptqStoreContext *context = [self openContextAtPath:@"subentities.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *base = [context insertObjectForEntity:@"RptqDocumentElement" identifier:1];
+	RptqObject *label = [context insertObjectForEntity:@"RptqDocumentElementLabel" identifier:2];
+	XCTAssertEqualObjects(base.entity, @"RptqDocumentElement");
+	XCTAssertEqualObjects(label.entity, @"RptqDocumentElementLabel");
+	XCTAssertTrue([context save:NULL]);
+
+	// A fresh context is a real read from disk, where the rows are keyed by their
+	// stored kind.
+	RptqStoreContext *reread = [self openContextAtPath:@"subentities.sqlite"];
+	XCTAssertTrue([reread loadAllWithError:NULL]);
+
+	NSArray *elements = [reread objectsForEntity:@"RptqDocumentElement"];
+	XCTAssertEqual(elements.count, (NSUInteger)2,
+				   @"the base-entity query must return the label row too");
+	NSArray *identifiers = [[elements valueForKey:@"identifier"] sortedArrayUsingSelector:@selector(compare:)];
+	XCTAssertEqualObjects(identifiers, (@[ @1, @2 ]));
+
+	// The graph-level lookup the context iterates has the same fallback.
+	NSArray *rows = [[reread.store allObjectsWithError:NULL] objectsForEntity:@"RptqDocumentElement"];
+	XCTAssertEqual(rows.count, (NSUInteger)2, @"the graph's plural lookup has the table fallback");
+}
+
 #pragma mark - Dirty tracking
 
 /// Builds a small schema family -- the same rows the import flow builds -- and

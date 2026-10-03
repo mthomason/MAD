@@ -79,6 +79,21 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 
 - (RptqObject *)objectForEntity:(NSString *)entity identifier:(int64_t)identifier {
 	RptqObject *cached = self.registry[entity][@(identifier)];
+	if (!cached) {
+		// A request may name the table-owning base entity while the row is cached
+		// under its concrete kind; the same owner-table fallback the graph has.
+		MADStoreEntity *named = [[MADStoreSchema sharedSchema] entityNamed:entity];
+		BOOL ownsTable = named != nil && [[MADStoreSchema sharedSchema] entityForTable:named.table] == named;
+		if (ownsTable) {
+			for (NSString *name in self.registry) {
+				if ([name isEqualToString:entity]) continue;
+				MADStoreEntity *candidate = [[MADStoreSchema sharedSchema] entityNamed:name];
+				if (![candidate.table isEqualToString:named.table]) continue;
+				cached = self.registry[name][@(identifier)];
+				if (cached) break;
+			}
+		}
+	}
 	if (cached) return cached;
 
 	MADStoreObject *row = [self.graph objectForEntity:entity identifier:identifier];
@@ -90,10 +105,12 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	Class objectClass = NSClassFromString(row.entity);
 	if (![objectClass isSubclassOfClass:[RptqObject class]]) objectClass = [RptqObject class];
 	cached = [objectClass objectWithBackingObject:row storeContext:self];
-	NSMutableDictionary<NSNumber *, RptqObject *> *byIdentifier = self.registry[entity];
+	// The registry is keyed on the row's own entity, so a row reached by any name
+	// caches once and -save:'s deletion clearing finds the entry under row.entity.
+	NSMutableDictionary<NSNumber *, RptqObject *> *byIdentifier = self.registry[row.entity];
 	if (!byIdentifier) {
 		byIdentifier = [NSMutableDictionary dictionary];
-		self.registry[entity] = byIdentifier;
+		self.registry[row.entity] = byIdentifier;
 	}
 	byIdentifier[@(identifier)] = cached;
 	return cached;
@@ -123,6 +140,20 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	}
 
 	MADStoreObject *row = [MADStoreObject objectWithEntity:entity identifier:identifier];
+	// Core Data applied model defaults at insert; the store's columns are NOT NULL,
+	// so the same scalar zero/empty defaults land here rather than at write time.
+	for (MADStoreAttribute *attribute in descriptor.allAttributes) {
+		if (attribute.optional || [attribute.name isEqualToString:@"identifier"]) continue;
+		if ([row attributeValue:attribute.name] != nil) continue;
+		id defaultValue = nil;
+		switch (attribute.type) {
+			case MADStoreValueTypeInteger: defaultValue = @0; break;
+			case MADStoreValueTypeReal: defaultValue = @0.0; break;
+			case MADStoreValueTypeText: defaultValue = @""; break;
+			case MADStoreValueTypeBlob: break; // Absence is NULL, which BLOB allows.
+		}
+		if (defaultValue != nil) [row setAttributeValue:defaultValue forName:attribute.name];
+	}
 	[self.graph addObject:row];
 	RptqObject *object = [self objectForEntity:entity identifier:identifier];
 	NSAssert(object != nil, @"an inserted row must fault back into the context");
