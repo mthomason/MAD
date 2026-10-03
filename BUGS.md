@@ -227,6 +227,43 @@ Status key:
   main thread draw the last page at 100% CPU; or `sample` the app process
   during the peg (the stacks above are from exactly that).
 
+### `insertObjectForEntity:` mints identifiers per entity, not per table
+- **Status:** Still open -- found 2026-10-03 in the milestone-(a) audit
+- **Where:** `MAD/Source/rptq/store/RptqStoreContext.m:183-188` -- when the
+  identifier is 0, the new identifier is max-over-the-requested-entity plus
+  one.  The nine `RptqDocumentElement*` kinds share one table with
+  `identifier INTEGER PRIMARY KEY` (`MADStoreSchema.m:841`), and the
+  factories insert with the concrete kind name, so a new
+  `RptqDocumentElementLabel` is numbered past the last *label* only.  If any
+  other kind already holds the next integer (the legacy store was one table
+  for the whole hierarchy, so converted identifiers interleave kinds), the
+  minted identifier collides with a live row -- and the table-wide primary
+  key turns the collision into a failed write or a replaced row.
+- **Why it changed:** under Core Data `identifier` was an indexed attribute
+  with per-class fetch semantics (duplicates across kinds were legal and
+  harmless); the portable store made it the table key, and the milestone-(a)
+  minting (`RptqDataHelper nextIdentifierForClass:`'s replacement) did not
+  pick up the new constraint.
+- **Fix shape.**  Mint over the table owner: when the requested entity does
+  not own its table, compute the maximum over
+  `objectsForEntity:` of the *owner* entity (whose table fallback returns
+  every kind that shares the table), then add one.  Add a regression test: a
+  context holding a text field with identifier 5 inserts a new label with
+  identifier 0 and the label's identifier must be greater than 5.
+- **The rule this violated:** identifiers are table keys in the portable
+  store; allocation must be per table, not per entity.
+
+### The milestone-(a) model rewrites dropped the schema sort orders
+- **Status:** Still open -- found 2026-10-03 in the milestone-(a) audit
+- **Where:** `MAD/Source/MADModelTable.m` (`-update`) and
+  `MAD/Source/MADModelDatabase.m` (`-updateTables`)
+- **Behavior:** both projection fetches sorted by `name` ascending before the
+  migration; the store rewrites keep insertion order.  The model's field and
+  table orderings feed the sample-data tables and the SQL/schema display
+  paths, so the visible order can change even though nothing else did.
+- **Fix shape.**  Restore the sorts -- one comparator each -- before building
+  the model objects.
+
 ### A NULL read from a source database printed as the text `<null>`, or as the epoch
 - **Status:** Fixed
 - **Where:** the producer is
