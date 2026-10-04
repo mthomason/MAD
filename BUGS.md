@@ -2141,6 +2141,23 @@ setting that names a platform no target can build for.
 - **Evidence:** `xcodebuild -list -workspace Reports.xcworkspace` lists all 18
   schemes from a relocated copy of the tree.
 
+### CLI/build.sh named a machine-specific DerivedData directory
+- **Status:** Fixed
+- **Where:** `CLI/build.sh:22`
+- **Behavior:** the DerivedData default was
+  `${HOME}/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci`,
+  a per-machine hash Xcode generated once on this machine. On any other checkout the
+  script builds the frameworks and then looks for the products in a directory that
+  does not exist.
+- **Why it matters:** a fresh-clone `CLI/build.sh` could not find the frameworks it
+  just built — the same portability failure the workspace fix above addresses, in the
+  other build entry point.
+- **Now:** the default is a project-local `${REPO_ROOT}/.cli-deriveddata`, passed to
+  `xcodebuild -derivedDataPath`, and `.gitignore` carries it. `MAD_DERIVED_DATA`
+  still overrides, as before.
+- **Evidence:** `CLI/build.sh` builds from a clean tree and `CLI/build.sh --run
+  inspect` runs.
+
 ### A macOS build cannot be wired from search paths alone
 - **Status:** Still open — this is ROADMAP §2.1's third bullet, and it cannot be done
   as written

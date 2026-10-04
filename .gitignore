@@ -9,6 +9,9 @@ TEST-DB-INFO.md
 .DS_Store
 .graffle
 
+# The CLI's project-local DerivedData (CLI/build.sh)
+.cli-deriveddata/
+
 Compressor/src/
 Compressor/build_temp/
 Compressor/bin/iPhoneSimulator-i386.sdk/
