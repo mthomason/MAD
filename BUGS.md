@@ -2158,6 +2158,28 @@ setting that names a platform no target can build for.
 - **Evidence:** `CLI/build.sh` builds from a clean tree and `CLI/build.sh --run
   inspect` runs.
 
+### MADMySQL linked every build with a stray `-v`
+- **Status:** Fixed
+- **Where:** `MADMySQL/MADMySQL.xcodeproj/project.pbxproj` — the project-level Debug
+  and Release `OTHER_LDFLAGS`
+- **Behavior:** `OTHER_LDFLAGS = ("-lc++", "-v")` — every link of the framework and
+  its tests ran the linker in verbose mode, burying the real link output.
+- **Now:** `"-lc++"` alone.
+- **Evidence:** `MADMySQL` 58 tests, 0 failures, with a quiet link line.
+
+### The app target defined SQLITE_ENABLE_COLUMN_METADATA for nothing
+- **Status:** Fixed
+- **Where:** `MADDesigner/MAD Designer.xcodeproj/project.pbxproj` — the `MAD Designer`
+  target's `GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS`, Debug and Release
+- **Behavior:** `SQLITE_ENABLE_COLUMN_METADATA=1` sat in the app's defines, where it
+  is inert: the app compiles no `sqlite3.c` — the amalgamation is compiled by the
+  `MADSqlite3` target, whose options come from `Compressor/sqlite3.xcconfig`. It read
+  like a second home for SQLite flags, which is exactly the two-consumers mistake the
+  H7 fix removed.
+- **Now:** gone. The app's SQLite behavior is whatever `MADSqlite3` was built with,
+  as it should be.
+- **Evidence:** `MAD Designer` builds; `MADSqlite3` 69 tests, 0 failures.
+
 ### A macOS build cannot be wired from search paths alone
 - **Status:** Still open — this is ROADMAP §2.1's third bullet, and it cannot be done
   as written
