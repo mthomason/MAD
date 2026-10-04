@@ -780,6 +780,27 @@ Status key:
 
 ---
 
+
+### MADDataTable's cache loader dereferenced a null error pointer
+- **Status:** Fixed
+- **Now:** both writes to `outError` in `-loadFromCacheWithUrl:error:` are guarded with
+  `if (outError)`, matching the three other failure paths in the same method that already
+  checked it.  A caller passing NULL -- the convention the parameter's `_Nullable`
+  annotation invites -- now gets NO back instead of a null dereference.
+- **Where:** `MADFoundation/Source/MADDataTable.m:150` (file-missing path) and `:187`
+  (payload-failure path).
+- **Why it changed:** `xcodebuild analyze` reported both sites under `osx.cocoa.NSError`
+  ("Potential null dereference.  According to coding standards in 'Creating and Returning
+  NSError Objects' the parameter may be null").  A sweep of MADFoundation found exactly
+  these two unguarded writes in the module; `MADDataTableVirtual.m:95` and
+  `MADKeyChain.m:257` already guard.
+- **Locked down by:** `MADDataTableRegressionTests`
+  `testBaseTableLoadFromCacheWithMissingFileAndNullErrorReturnsNo` and
+  `testBaseTableLoadFromCacheWithInvalidPlistAndNullErrorReturnsNo`.  Both crashed the
+  test process before the change (verified) and pass after it, and the existing
+  `testBaseTableLoadFromCacheWithMissingFileReturnsError` (asserting error code -215) and
+  `testBaseTableLoadFromCacheWithNilUrlThrows` still pass -- 76 tests green in the class.
+
 ## MADCocoaExtensions
 
 ### `CGRectAdjustForScale` shrinks regardless of zoom direction

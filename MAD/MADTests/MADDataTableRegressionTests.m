@@ -283,6 +283,33 @@ static NSString * const MADDataTableSingleColumnEnumeratorClassName = @"MADDataT
 	XCTAssertEqual(error.code, (NSInteger)-215);
 }
 
+/// CONTRACT: the error parameter is optional.  The method's other failure paths
+/// already guard `if (outError)`, so a caller that passes NULL must get NO back
+/// for a missing file rather than a dereference of the null pointer.
+- (void)testBaseTableLoadFromCacheWithMissingFileAndNullErrorReturnsNo {
+	MADDataTable *table = [[MADDataTable alloc] initWithId:1];
+	NSURL *missing = [self.cacheDirectory URLByAppendingPathComponent:@"does-not-exist.mdcache"];
+
+	BOOL loaded = [table loadFromCacheWithUrl:missing error:NULL];
+
+	XCTAssertFalse(loaded);
+}
+
+/// CONTRACT: same for the payload-failure path.  A file that parses as a property
+/// list but is not a table payload makes loadWithPlist: fail, and that failure
+/// must survive a NULL error parameter too.
+- (void)testBaseTableLoadFromCacheWithInvalidPlistAndNullErrorReturnsNo {
+	NSURL *url = [self.cacheDirectory URLByAppendingPathComponent:@"not-a-table.mdcache"];
+	NSDictionary *plist = @{@"not": @"a table payload"};
+	XCTAssertTrue([plist writeToURL:url atomically:YES]);
+
+	MADDataTable *table = [[MADDataTable alloc] initWithId:1];
+
+	BOOL loaded = [table loadFromCacheWithUrl:url error:NULL];
+
+	XCTAssertFalse(loaded);
+}
+
 /// CONTRACT: a nil URL is a programmer error - the implementation @throws rather
 /// than returning NO.  It throws an NSError object rather than an NSException,
 /// which is unusual but is the current behaviour.

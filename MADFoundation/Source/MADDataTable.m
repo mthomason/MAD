@@ -145,11 +145,13 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 	BOOL isFileDirectory = NO;
 	BOOL fileExistAtPath = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isFileDirectory];
 	if (!path || !fileExistAtPath) {
-		NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"File does not exist.",
-								   NSURLErrorKey: url ?: [NSNull null]};
-		*outError = [NSError errorWithDomain:NSStringFromClass([MADDataTable class])
-										code:-215
-									userInfo:userInfo];
+		if (outError) {
+			NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"File does not exist.",
+									   NSURLErrorKey: url ?: [NSNull null]};
+			*outError = [NSError errorWithDomain:NSStringFromClass([MADDataTable class])
+											code:-215
+										userInfo:userInfo];
+		}
 		return NO;
 	}
 	
@@ -184,7 +186,9 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 	NSError *loadPlistError = nil;
 	BOOL loadPlist = [self loadWithPlist:plist error:&loadPlistError];
 	if (loadPlistError != nil) {
-		*outError = [loadPlistError copy];
+		if (outError) {
+			*outError = [loadPlistError copy];
+		}
 		os_log_error(GetFoundationLog(), "Plist: %@ Error: %@", plist, loadPlistError);
 	}
 	return loadPlist;
