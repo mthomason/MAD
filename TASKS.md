@@ -421,3 +421,44 @@ the two.
 
 Not to be started without the user asking for it by name, and only after a written plan that
 covers the conversion of the two shipping samples and the existing user reports.
+
+---
+
+## 10. Third-party licence compliance
+
+**Status:** Open — the plan is written and one item is done. The register is
+`THIRD_PARTY_LICENSES.md` and the plan is `LICENSE_COMPLIANCE_PLAN.md`; read those
+first, this entry is only the queue. Done so far: the miniz copyright headers were
+corrected (2026-10-04).
+
+The review found one blocker, three components with no licence grant at all, and a set of
+notice obligations the app does not currently meet (it ships no attributions).
+
+**Blocker — needs an owner decision, not an agent.** `libmysqlclient` 8.4.10 is GPLv2,
+and the Universal FOSS Exception covers only software that is itself FOSS. _MAD Designer_
+is proprietary, so shipping the MySQL client library as configured obliges us to release
+the app's source under the GPLv2. The options are: buy an Oracle commercial licence,
+replace the client with MariaDB Connector/C (LGPL-2.0-or-later, same C API — all 27
+`mysql_*` entry points `MADMySQL` uses are in its surface), or drop MySQL support.
+Linking it dynamically does **not** help; GPL copyleft is indifferent to the link mode.
+Do not submit a build until this is resolved. `LICENSE_COMPLIANCE_PLAN.md` §3 is the
+step-by-step for the MariaDB route.
+
+**Unlicensed code that must be resolved.** Three committed components carry "all rights
+reserved" and no grant: the Karl Kraft MySQL connector (`MADMySQL/Source/`, 30 files), and
+`NSData+AES256` (`MADDesigner/Source/`, a pastie snippet with no author), and
+`NSOperation+Advanced` (`MADFoundation/Source/`, two small methods, upstream
+`kas-kad/AdvancedNSOperations` has no LICENSE file). All three are rewrites rather than
+negotiations. On the connector specifically: the original distribution (examined
+2026-10-04, then deleted) carries no grant either — a public blog post is not a
+dedication to the public domain — and since the MariaDB swap means touching that layer
+anyway, the plan rewrites it as first-party code (plan §3 A3).
+
+**Mechanical compliance work, once the above is decided.** Add an Acknowledgements surface
+and commit the licence texts; FreeTDS needs its LGPL notices, a marked modified `sybdb.h`
+and a written relink offer (elect LGPL-3.0 — it links OpenSSL 3, and Apache-2.0 is not
+compatible with the v2 terms); add the OFL text for FontAwesome and the readme for
+CarbonBlock. The miniz headers were corrected on 2026-10-04.
+
+Do not start any of this without the user asking for it by name — the blocker in
+particular is a business decision, not an engineering task.
