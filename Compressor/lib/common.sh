@@ -204,15 +204,28 @@ install_headers_from() {
 	cp -R "${src}" "${install}/include"
 }
 
+# xcframework slice dir -> matrix platform name.
+slice_platform() {
+	case "$1" in
+		*-simulator) echo simulator ;;
+		macos-*) echo macosx ;;
+		ios-*) echo ios ;;
+		*) die "unrecognized slice dir: $1" ;;
+	esac
+}
+
 # finish_library <libname...>
 #
 # Assembles the final artifacts from the per-platform installs: the
-# xcframework, the canonical include dir and the manifest.
+# xcframework, the canonical include dir and the manifest.  Slices for
+# platforms not in this run are preserved from the existing xcframework,
+# so building one platform does not drop the others.
 finish_library() {
 	local libnames=("$@")
 	[[ ${#libnames[@]} -gt 0 ]] || die "finish_library: no library names given"
 
-	local platform xcargs=() first_headers="" lib
+	local xcfw="${LIBRARY_DIR}/${LIB}.xcframework"
+	local platform xcargs=() first_headers="" lib slice
 	for platform in ${PLATFORMS}; do
 		local install
 		install="$(platform_install_dir "${platform}")"
@@ -231,6 +244,23 @@ finish_library() {
 		done
 	done
 
+	# Carry over the existing xcframework's slices for platforms this run
+	# does not build, so per-platform rebuilds do not drop the others.
+	for platform in ios simulator macosx; do
+		case " ${PLATFORMS} " in
+			*" ${platform} "*) continue ;;
+		esac
+		for slice in "${xcfw}"/*/; do
+			[[ -d "${slice}" ]] || continue
+			[[ "$(slice_platform "$(basename "${slice}")")" == "${platform}" ]] || continue
+			for lib in "${libnames[@]}"; do
+				[[ -f "${slice}${lib}" ]] || continue
+				xcargs+=(-library "${slice}${lib}" -headers "${slice}Headers")
+			done
+			break
+		done
+	done
+
 	# Canonical include dir: one platform's headers, the same for every
 	# consumer regardless of SDK.
 	local include_dir="${LIBRARY_DIR}/${LIB}/include"
@@ -238,7 +268,6 @@ finish_library() {
 	mkdir -p "${include_dir}"
 	cp -R "$(platform_install_dir "${first_headers}")/include/"* "${include_dir}/"
 
-	local xcfw="${LIBRARY_DIR}/${LIB}.xcframework"
 	rm -rf "${xcfw}"
 	log "creating ${xcfw}"
 	xcodebuild -create-xcframework "${xcargs[@]}" -output "${xcfw}" \
@@ -263,6 +292,19 @@ write_manifest() {
 		[[ "${first}" == "1" ]] || slice_entries+=$',\n'
 		first=0
 		slice_entries+="    \"${platform}\": { \"archs\": \"$(platform_archs "${platform}")\", \"sha256\": \"${sha}\" }"
+	done
+	# Preserve the slice entries of platforms this run did not build.
+	local old_archs old_sha
+	for platform in ios simulator macosx; do
+		case " ${PLATFORMS} " in
+			*" ${platform} "*) continue ;;
+		esac
+		old_archs="$(plutil -extract "slices.${platform}.archs" raw "${manifest}" 2>/dev/null || true)"
+		old_sha="$(plutil -extract "slices.${platform}.sha256" raw "${manifest}" 2>/dev/null || true)"
+		[[ -n "${old_archs}" && -n "${old_sha}" ]] || continue
+		[[ "${first}" == "1" ]] || slice_entries+=$',\n'
+		first=0
+		slice_entries+="    \"${platform}\": { \"archs\": \"${old_archs}\", \"sha256\": \"${old_sha}\" }"
 	done
 
 	local flags_escaped

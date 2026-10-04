@@ -189,16 +189,6 @@ build_lib() {
 	fi
 }
 
-# xcframework slice dir -> matrix platform name.
-slice_platform() {
-	case "$1" in
-		*-simulator) echo simulator ;;
-		macos-*) echo macosx ;;
-		ios-*) echo ios ;;
-		*) die "unrecognized slice dir: $1" ;;
-	esac
-}
-
 # Portable build lock (flock is not on macOS).  Serializes the bootstrap when
 # several Xcode targets run ensure phases in parallel.  A lock whose owner is
 # dead, or that is older than 12 hours, is broken.

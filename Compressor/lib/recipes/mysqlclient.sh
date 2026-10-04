@@ -48,7 +48,21 @@ EOF
 
 # --- Stage A: native host tools + generated files (macosx arm64) ---
 if [[ ! -f "${NATIVE}/include/mysqld_error.h" ]]; then
-	[[ -d "${NATIVE_OPENSSL}/lib" ]] || die "openssl macosx install missing -- run: build.sh --platforms macosx openssl"
+	# The native stage needs a macOS openssl slice; build it inline if this
+	# run's platforms did not.  The child gets the openssl matrix row, not
+	# this recipe's environment, and finish_library preserves the other
+	# slices, so this does not disturb them.
+	if [[ ! -d "${NATIVE_OPENSSL}/lib" ]]; then
+		log "building the openssl macosx slice for the native stage"
+		row="$(grep -E '^openssl[[:space:]]' "${COMPRESSOR_DIR}/matrix.conf" | head -1)"
+		[[ -n "${row}" ]] || die "no openssl row in matrix.conf"
+		read -r _ v sha url ios sim mac minios minmac _ <<< "${row}"
+		LIB=openssl VERSION="${v}" SHA256="${sha}" URL="${url}" \
+			ARCHS_IOS="${ios//,/ }" ARCHS_SIM="${sim//,/ }" ARCHS_MAC="${mac//,/ }" \
+			MIN_IOS="${minios}" MIN_MAC="${minmac}" PLATFORMS=macosx \
+			bash "${COMPRESSOR_DIR}/lib/recipes/openssl.sh"
+	fi
+	[[ -d "${NATIVE_OPENSSL}/lib" ]] || die "openssl macosx install missing"
 	log "stage A: native tools build (${NATIVE})"
 	rm -rf "${NATIVE}"
 	mkdir -p "${NATIVE}"
