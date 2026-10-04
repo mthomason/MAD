@@ -273,23 +273,23 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 		
 		[sself.delegateQueue addOperationWithBlock:^{
 
-			MADFilesController *sself = weakSelf;
-			id <MADFilesControllerDelegate> delegate = sself.delegate;
+			MADFilesController *strongSelf = weakSelf;
+			id <MADFilesControllerDelegate> delegate = strongSelf.delegate;
 
 			SEL willChangeContent = @selector(filesControllerWillChangeContent:);
 			if ([delegate respondsToSelector:willChangeContent]) {
-				[delegate filesControllerWillChangeContent:sself];
+				[delegate filesControllerWillChangeContent:strongSelf];
 			}
 			
 			SEL didUpdateFileInfo = @selector(filesController:didUpdateFileInfo:atIndex:);
 			if ([delegate respondsToSelector:didUpdateFileInfo]) {
-				[delegate filesController:sself didUpdateFileInfo:fileInfo
+				[delegate filesController:strongSelf didUpdateFileInfo:fileInfo
 								  atIndex:indexOfFileInfo];
 			}
 			
 			SEL didChangeContent = @selector(filesControllerDidChangeContent:completion:);
 			if ([delegate respondsToSelector: didChangeContent]) {
-				[delegate filesControllerDidChangeContent:sself
+				[delegate filesControllerDidChangeContent:strongSelf
 											   completion:^(BOOL __unused success, NSError *__unused error) { }];
 			}
 		}];

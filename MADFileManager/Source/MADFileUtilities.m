@@ -27,6 +27,17 @@ static NSString * const MADPathComponentAppSupport = @"Application Support";
 static NSString * const MADPathComponentTemporary  = @"Temporary";
 static NSString * const MADPathComponentData       = @"Data";
 
+/// Nothing calls these three yet.  They are declared here rather than in the public
+/// header so the framework's API surface stays honest, and the attribute records that
+/// leaving them unused is deliberate (AGENTS.md, code style guidance).
+@interface MADFileUtilities ()
++ (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl __attribute__((unused));
++ (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId __attribute__((unused));
++ (void)readObjectOfClass:(Class)cls
+				  fromURL:(NSURL *)url
+			   completion:(void (^)(id object, NSError *error))completion __attribute__((unused));
+@end
+
 @implementation MADFileUtilities
 
 + (void)deleteCoreDataFilesAtDirectory:(NSURL *)destinationUrl {
@@ -76,9 +87,9 @@ static NSString * const MADPathComponentData       = @"Data";
 									 byAccessor: ^(NSURL *newURL) {
 			
 			NSError *errorCreateNew = nil;
-			NSString *path = newURL.path;
+			NSString *directoryPath = newURL.path;
 
-			[[NSFileManager defaultManager] createDirectoryAtPath: path
+			[[NSFileManager defaultManager] createDirectoryAtPath: directoryPath
 									  withIntermediateDirectories: YES attributes: nil
 															error: &errorCreateNew];
 			
@@ -502,11 +513,11 @@ static NSString * const MADPathComponentData       = @"Data";
 		if (success) {
 			NSDictionary <NSString *, NSNumber *> *fileAttributes;
 			fileAttributes = @{ NSFileExtensionHidden : @YES };
-			NSString *path = replacing.URL.path;
-			if (path) {
+			NSString *destinationPath = replacing.URL.path;
+			if (destinationPath) {
 				NSError *setAttributesError = nil;
 				[fileManager setAttributes:fileAttributes
-							  ofItemAtPath:path
+							  ofItemAtPath:destinationPath
 									 error:&setAttributesError];
 				if (setAttributesError != nil) {
 					os_log_error(OS_LOG_DEFAULT, "%s: Error setting file attributes: %@", __PRETTY_FUNCTION__, setAttributesError);
