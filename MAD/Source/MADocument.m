@@ -18,7 +18,7 @@
 #import "MADImageThumbnail.h"
 #import "MADArchiveManager.h"
 #import "MADStore.h"
-#import "MADStoreConverter.h"
+#import "MADLegacyStoreConversion.h"
 #import "RptqStoreContext.h"
 #import "MADNotificationFileUpdate.h"
 #import "RptqDataHelper.h"
@@ -94,12 +94,6 @@
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
 #import <Foundation/NSEnumerator.h>
-#import <CoreData/NSManagedObjectModel.h>
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSPersistentStoreCoordinator.h>
-#import <CoreData/CoreDataErrors.h>
-#import <CoreData/NSManagedObjectID.h>
 
 #import <UIKit/UIPrintPaper.h>
 
@@ -129,15 +123,6 @@ static NSString * const MADDocumentInfoKeyGenerator				= @"generator";
 
 static NSString * const MADDocumentTypeUtiMad					= @"com.everydayapps.productivity.mad";
 
-static NSString * const MADManagedObjectModelName						= @"MAD";
-static NSString * const MADManagedObjectModelExtention					= @"momd";
-
-#if MAD_DESIGNER == 1 || MAD_TEST == 1
-  NSString * const MADUbiquitousPeerToken = @"MADDESIGNER";
-#elif MAD_VIEWER == 1
-  NSString * const MADUbiquitousPeerToken = "MADVIEWER";
-#endif
-
 static inline NSRange MADRangeToGroup(int64_t);
 void fail(char *, const char *, int);
 void msg(const char *);
@@ -157,7 +142,6 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 
 @property (nonatomic, readwrite, strong) RptqDocument *activeDocumentModel;
 @property (nonatomic, readwrite, strong) RptqStoreContext *storeContext;
-@property (nonatomic, readwrite, strong) NSManagedObjectModel *madManagedObjectModel;
 
 @property (nonatomic, readwrite, strong) NSMutableDictionary *extraInformation;
 @property (nonatomic, readwrite, strong) UIImage *thumbnail;
@@ -236,7 +220,6 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 - (void)dealloc {
 	[RptqDataHelper cleanup];
 	_thumbnail = nil;
-	_madManagedObjectModel = nil;
 }
 
 - (void)resetCache {
@@ -259,15 +242,15 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 - (void)removeObservers {
 	
 	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: NSManagedObjectContextObjectsDidChangeNotification
+													name: RptqStoreContextObjectsDidChangeNotification
 												  object: self.managedObjectContext];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: NSManagedObjectContextDidSaveNotification
+													name: RptqStoreContextDidSaveNotification
 												  object: self.managedObjectContext];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: NSManagedObjectContextWillSaveNotification
+													name: RptqStoreContextWillSaveNotification
 												  object: self];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver: self
@@ -331,17 +314,17 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 		// document dirty.
 		[[NSNotificationCenter defaultCenter] addObserver: self
 												 selector: @selector(handleManagedObjectContextDidChange:)
-													 name: NSManagedObjectContextObjectsDidChangeNotification
+													 name: RptqStoreContextObjectsDidChangeNotification
 												   object: nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver: self
 												 selector: @selector(handleManagedObjectContextDidSave:)
-													 name: NSManagedObjectContextDidSaveNotification
+													 name: RptqStoreContextDidSaveNotification
 												   object: nil];
 
 		[[NSNotificationCenter defaultCenter] addObserver: self
 												 selector: @selector(handleManagedObjectContextWillSave:)
-													 name: NSManagedObjectContextWillSaveNotification
+													 name: RptqStoreContextWillSaveNotification
 												   object: nil];
 		
 		[[NSNotificationCenter defaultCenter] addObserver: self
@@ -460,30 +443,17 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	return layoutHeights;
 }
 
-- (NSDictionary *)persistentStoreOptions {
-	return @{
-		NSInferMappingModelAutomaticallyOption: @YES,
-		NSMigratePersistentStoresAutomaticallyOption: @YES
-	};
-}
-
-- (NSManagedObjectModel *)madManagedObjectModel {
-	if (_madManagedObjectModel == nil) {
-		NSURL *url = [[NSBundle mainBundle] URLForResource:MADManagedObjectModelName
-											 withExtension:MADManagedObjectModelExtention];
-		if (!url) url = [[NSBundle bundleForClass:[self class]] URLForResource:MADManagedObjectModelName
-																 withExtension:MADManagedObjectModelExtention];
-		_madManagedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:url];
-	}
-	return _madManagedObjectModel;
-}
-
 #pragma mark -
 #pragma mark Reading
 
 /// Reading MADocument has the following steps:
-/// 1. Unarchive the MAD file; it's a zip file (tar.bz2 maybe).
-/// 2. Read the unarchived file.  It's currently a Core Data file.
+/// 1. Unarchive the MAD file; it's a bzip2 tar.
+/// 2. Read the document definition: the portable store, converting a legacy Core Data
+///    store on first open.
+/// 3. Read the metadata beside it (meta.plist and the thumbnail).
+///
+/// UIDocument calls this from -openWithCompletionHandler:, which is how the app and
+/// the CLI open a document.
 
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * __autoreleasing *)outError {
 
@@ -502,49 +472,45 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	if (success) {
 		NSError *error = nil;
 		success = [self openPortableStoreWithError:&error];
-		if (error && outError != NULL) {
+		if (success) [self readDocumentMetadata];
+		if (!success && error != nil && outError != NULL) {
 			*outError = error;
 		}
 	}
 	return success;
 }
 
+/// The metadata UIDocument does not know about: the thumbnail, and the small
+/// version/generator plist UIManagedDocument used to read as "additional content".
+- (void)readDocumentMetadata {
+
+	NSData *imageData = nil;
+	NSString *thumbnailPath = self.thumbnailURL.path;
+	if (thumbnailPath != nil && [[NSFileManager defaultManager] fileExistsAtPath:thumbnailPath]) {
+		imageData = [NSData dataWithContentsOfURL:self.thumbnailURL
+										  options:NSDataReadingUncached
+											error:NULL];
+	}
+	if (imageData != nil) {
+		self.extraInformation[@"thumbnail@2x.png"] = [UIImage imageWithData:imageData];
+	}
+
+	NSDictionary *metadata = [[NSDictionary alloc] initWithContentsOfURL:self.urlMetaPlaylist];
+	NSString *generator = metadata[MADDocumentInfoKeyGenerator];
+	NSNumber *version = metadata[MADDocumentInfoKeyVersion];
+	self.extraInformation[MADDocumentInfoKeyGenerator] = generator ?: @"MAD Designer";
+	self.extraInformation[MADDocumentInfoKeyVersion] = version ?: @1.0;
+}
+
 - (BOOL)openPortableStoreWithError:(NSError * __autoreleasing *)error {
 	NSURL *storeURL = [self portableStoreURL];
-	NSURL *legacyStoreURL = [[_urlGuts URLByAppendingPathComponent:@"StoreContent" isDirectory:YES]
-							 URLByAppendingPathComponent:@"analyitics"];
+	NSURL *legacyStoreURL = [[_urlGuts URLByAppendingPathComponent:MADLegacyStoreDirectory isDirectory:YES]
+							 URLByAppendingPathComponent:MADLegacyStoreName];
 
 	if (![[NSFileManager defaultManager] fileExistsAtPath:(NSString *)storeURL.path] &&
 		[[NSFileManager defaultManager] fileExistsAtPath:(NSString *)legacyStoreURL.path]) {
-		// The Rptq classes are no longer NSManagedObject subclasses, and Core Data
-		// refuses to instantiate them; read the legacy rows as plain NSManagedObjects
-		// on a mutable copy of the model, the way the converter does.
-		NSManagedObjectModel *model = [self.madManagedObjectModel copy];
-		for (NSEntityDescription *entity in model.entities) {
-			entity.managedObjectClassName = @"NSManagedObject";
-		}
-		NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-		if (![coordinator addPersistentStoreWithType:NSSQLiteStoreType
-									   configuration:nil
-												 URL:legacyStoreURL
-											 options:[self persistentStoreOptions]
-											   error:error]) {
+		if (![self convertLegacyStoreAtURL:legacyStoreURL toStoreAtURL:storeURL error:error]) {
 			return NO;
-		}
-		NSManagedObjectContext *legacyContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-		legacyContext.persistentStoreCoordinator = coordinator;
-
-		MADStoreGraph *graph = [MADStoreConverter graphForManagedObjectContext:legacyContext error:error];
-		if (!graph) return NO;
-
-		MADStore *store = [MADStore storeWithURL:storeURL];
-		if (![store openWithError:error]) return NO;
-		BOOL written = [store writeGraph:graph replacingAll:YES error:error];
-		[store close];
-		if (!written) return NO;
-		NSPersistentStore *legacyStore = coordinator.persistentStores.firstObject;
-		if (legacyStore != nil) {
-			[coordinator removePersistentStore:legacyStore error:NULL];
 		}
 	}
 
@@ -556,6 +522,47 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	return YES;
 }
 
+/// Converts the legacy store through the registered converter -- Core Data lives
+/// outside this framework (MAD_LINUX.md), so the converter is looked up rather than
+/// linked.  A build with no converter (the headless engine) reports that plainly.
+/// Once the portable store is written the legacy store files are removed from the
+/// guts directory, so a document saved afterwards no longer carries Core Data.
+- (BOOL)convertLegacyStoreAtURL:(NSURL *)legacyStoreURL
+				   toStoreAtURL:(NSURL *)storeURL
+						  error:(NSError * __autoreleasing *)error {
+	id<MADDocumentLegacyStoreConverting> converter = [MADLegacyStoreConversion converter];
+	if (converter == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:MADLegacyStoreConversionErrorDomain
+										 code:MADLegacyStoreConversionErrorConverterUnavailable
+									 userInfo:@{ NSLocalizedDescriptionKey:
+										@"This document was written before the portable store and no legacy converter is available in this build." }];
+		}
+		return NO;
+	}
+	if (![converter convertLegacyStoreAtURL:legacyStoreURL toStoreAtURL:storeURL error:error]) {
+		return NO;
+	}
+	[self removeLegacyStoreFilesAtURL:legacyStoreURL];
+	return YES;
+}
+
+/// The legacy store's SQLite file and its journal siblings.  The directory itself is
+/// left in place; it is the same StoreContent directory the portable store lives in.
+- (void)removeLegacyStoreFilesAtURL:(NSURL *)legacyStoreURL {
+	NSString *storePath = legacyStoreURL.path;
+	if (storePath == nil) return;
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSArray<NSString *> *paths = @[ storePath,
+									[storePath stringByAppendingString:@"-wal"],
+									[storePath stringByAppendingString:@"-shm"] ];
+	for (NSString *path in paths) {
+		if ([fileManager fileExistsAtPath:path]) {
+			[fileManager removeItemAtPath:path error:NULL];
+		}
+	}
+}
+
 #pragma mark -
 #pragma mark Error handling
 
@@ -564,7 +571,9 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	
 	os_log_error(GetMadLog(), "MADocument Error (Show UI %s): %s\n\t%s", userInteractionPermitted ? "YES" : "NO", error.localizedFailureReason.UTF8String, error.localizedDescription.UTF8String);
 
-	NSArray *detailErrors = [error.userInfo objectForKey:NSDetailedErrorsKey];
+	// NSDetailedErrorsKey is Core Data's; the framework no longer links it, and the
+	// key is just this string.  Errors that do not carry it simply log nothing more.
+	NSArray *detailErrors = [error.userInfo objectForKey:@"NSDetailedErrors"];
 	if (detailErrors.count > 0) {
 		for (NSError *detailError in detailErrors) {
 			os_log_error(GetMadLog(), "  Error: %@\n\t%@", detailError.localizedFailureReason, detailError.localizedDescription);
@@ -575,34 +584,33 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 #pragma mark -
 #pragma mark Writing
 
-// UIManagedDocument's implementation of this drives the Core Data persistent store --
-// configure the coordinator, save the context, move the store files -- and returns
-// NO when that machinery has nothing to work with.  The document definition lives in
-// the portable store, so the save is just the store write and the archive.
-- (BOOL)writeContents:(id)contents
+// UIDocument's file-wrapper save is replaced by the store-and-archive path: the
+// document definition lives in the portable store, and everything else in the guts
+// directory.  `contents` is the file-wrapper contents UIDocument's machinery would
+// carry, which the portable store does not have; it is ignored, and the store write
+// below is the save.
+- (BOOL)writeContents:(id)__unused contents
 			  toURL:(NSURL *)absoluteURL
-	forSaveOperation:(UIDocumentSaveOperation)saveOperation
- originalContentsURL:(NSURL *)absoluteOriginalContentsURL
+	forSaveOperation:(UIDocumentSaveOperation)__unused saveOperation
+ originalContentsURL:(NSURL *)__unused absoluteOriginalContentsURL
 			   error:(NSError * __autoreleasing *)outError {
-	return [self writeContents:contents
-				andAttributes:nil
-				  safelyToURL:absoluteURL
-			 forSaveOperation:saveOperation
-						error:outError];
+	return [self writeStoreAndArchiveWithError:outError];
 }
 
-// UIDocument's save machinery is built around the file-wrapper model and walks
-// Core Data code paths that no longer exist; the document's persistence is the
-// portable store plus the archive, so the save is that, directly.
-- (void)saveToURL:(NSURL *)url
- forSaveOperation:(UIDocumentSaveOperation)saveOperation
+- (BOOL)writeContents:(id)__unused contents
+		andAttributes:(NSDictionary *)__unused additionalFileAttributes
+		  safelyToURL:(NSURL *)__unused url
+	 forSaveOperation:(UIDocumentSaveOperation)__unused saveOperation
+				error:(NSError * __autoreleasing *)outError {
+	return [self writeStoreAndArchiveWithError:outError];
+}
+
+// UIDocument's save machinery is built around the file-wrapper model; the document's
+// persistence is the portable store plus the archive, so the save is that, directly.
+- (void)saveToURL:(NSURL *)__unused url
+ forSaveOperation:(UIDocumentSaveOperation)__unused saveOperation
 completionHandler:(void (^ __nullable)(BOOL))completionHandler {
-	NSError *error = nil;
-	BOOL success = [self writeContents:nil
-						andAttributes:nil
-						  safelyToURL:url
-					 forSaveOperation:saveOperation
-								error:&error];
+	BOOL success = [self writeStoreAndArchiveWithError:NULL];
 	if (success) {
 		// UIDocument's own save machinery records the write this way; without the
 		// modification date the document state stays Closed and the close flow
@@ -613,24 +621,18 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	if (completionHandler != nil) completionHandler(success);
 }
 
-// UIDocument's close saves through its file-wrapper machinery, which the portable
-// store does not drive; save through the store-and-archive path first, then let
-// super perform the closing bookkeeping (state, autosave, file presentation).
-// The document's persistence is the portable store plus the archive; closing is
-// the final save (if anything changed), releasing the store, and reporting.  The
-// UIDocument machinery behind [super closeWithCompletionHandler:] deadlocks waiting
-// on its own file-access queue, which the store-backed document never uses.
+// Closing is the final save (if anything changed), releasing the store, and then
+// UIDocument's own bookkeeping: the state transitions, the autosave timer and the
+// file presenter UIDocument registers while open.  The document's persistence is the
+// portable store plus the archive, so the save is done here rather than through
+// UIDocument's file-wrapper machinery.
 - (void)closeWithCompletionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	BOOL success = YES;
 	if (self.hasUnsavedChanges) {
 		NSError *error = nil;
-		success = [self writeContents:nil
-						andAttributes:nil
-						  safelyToURL:self.fileURL
-					 forSaveOperation:UIDocumentSaveForOverwriting
-								error:&error];
+		success = [self writeStoreAndArchiveWithError:&error];
 		if (!success) {
-			os_log_error(GetMadLog(), "Error saving before close: %s", error.localizedDescription.UTF8String);
+			os_log_error(GetMadLog(), "Error saving before close: %s", (error.localizedDescription ?: @"unknown error").UTF8String);
 		} else {
 			[self setFileModificationDate:[NSDate date]];
 			[self updateChangeCount:UIDocumentChangeCleared];
@@ -638,14 +640,24 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	}
 	[_storeContext.store close];
 	_storeContext = nil;
-	if (completionHandler != nil) completionHandler(success);
+
+	// A document that was never opened through UIDocument (or is already closed) has
+	// no file presenter to release and no state to move, and UIDocument's close
+	// machinery does not call back for it.  Report the close directly; the state is
+	// already Closed.
+	if (self.documentState == UIDocumentStateClosed) {
+		if (completionHandler != nil) completionHandler(success);
+		return;
+	}
+
+	[super closeWithCompletionHandler:^(BOOL superSuccess) {
+		if (completionHandler != nil) completionHandler(success && superSuccess);
+	}];
 }
 
-- (BOOL)writeContents:(id)contents
-		andAttributes:(NSDictionary *)additionalFileAttributes
-		  safelyToURL:(NSURL *)url
-	 forSaveOperation:(UIDocumentSaveOperation)saveOperation
-				error:(NSError * __autoreleasing *)outError {
+/// The document's one write: save the store context, write the metadata plist, and
+/// archive the guts directory over the document file.
+- (BOOL)writeStoreAndArchiveWithError:(NSError * __autoreleasing *)outError {
 	NSError *error = nil;
 	if (![self.storeContext save:&error]) {
 		if (outError != nil) {
@@ -654,16 +666,39 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 		return NO;
 	}
 
+	[self writeDocumentMetadata];
+
 	MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:self.urlGuts
-																			   archiveURL:self.fileURL];
+																		   archiveURL:self.fileURL];
 	archiveManager.checkpointed = YES;
 	return [archiveManager archive:YES];
+}
+
+/// The version/generator plist that lives beside the store in the guts directory.
+/// UIManagedDocument wrote this through -writeAdditionalContent:…; now the document
+/// writes it as part of the save.  A failed write is logged and does not fail the
+/// save, matching the old path's behaviour.
+- (void)writeDocumentMetadata {
+
+	if (self.extraInformation == nil) {
+		self.extraInformation = [[NSMutableDictionary alloc] initWithCapacity:3];
+	}
+	NSNumber *version = self.extraInformation[MADDocumentInfoKeyVersion] ?: @1.0;
+	NSString *generator = self.extraInformation[MADDocumentInfoKeyGenerator] ?: @"MAD Designer";
+	self.extraInformation[MADDocumentInfoKeyVersion] = version;
+	self.extraInformation[MADDocumentInfoKeyGenerator] = generator;
+
+	NSDictionary<NSString *, id> *metadata = @{ MADDocumentInfoKeyVersion: version,
+												MADDocumentInfoKeyGenerator: generator };
+	if (![metadata writeToURL:_urlMetaPlaylist atomically:NO]) {
+		os_log_error(GetMadLog(), "Write to %@ failed", _urlMetaPlaylist);
+	}
 }
 
 - (NSDictionary *)fileAttributesToWriteToURL: (NSURL *)url
 							forSaveOperation: (UIDocumentSaveOperation)saveOperation
 									   error: (NSError * __autoreleasing *)outError {
-	id fileAttributes;
+	NSDictionary *fileAttributes;
 	if (self.thumbnail != nil) {
 		UIImage *thumbnail = self.thumbnail.copy;
 		// NSThumbnail1024x1024SizeKey / NSURLThumbnailDictionaryKey are deprecated in
@@ -713,96 +748,6 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 		_database.delegate = self;
 	}
 }
-
-#pragma mark -
-#pragma mark UIManagedDocument Overrides
-
-- (BOOL)readAdditionalContentFromURL:(NSURL *)absoluteURL
-							   error:(NSError * __autoreleasing *)error {
-
-	NSError *readError = nil;
-
-	NSData *imageData = nil;
-	NSURL *thumbnailURL = [self thumbnailURL];
-	NSString *path = thumbnailURL.path;
-	if (path) {
-		if ([[NSFileManager defaultManager] fileExistsAtPath: path]) {
-			imageData = [NSData dataWithContentsOfURL: thumbnailURL
-											  options: NSDataReadingUncached
-												error: &readError];
-		}
-	}
-	
-	if (imageData != nil) {
-		self.extraInformation[@"thumbnail@2x.png"] = [UIImage imageWithData:imageData];
-	}
-	
-	NSDictionary *dicionary = [[NSDictionary alloc] initWithContentsOfURL:self.urlMetaPlaylist];
-	NSString *infoKeyGenerator = dicionary[MADDocumentInfoKeyGenerator];
-	NSString *lastGenerator = infoKeyGenerator.copy;
-	NSNumber *lastVersion = ((NSNumber *)dicionary[MADDocumentInfoKeyVersion]).copy;
-	
-	if (lastGenerator == nil) {
-		lastGenerator = @"MAD Designer";
-	}
-	
-	if (lastVersion == nil) {
-		NSNumber *lastDocVersoin = [[NSNumber alloc] initWithDouble:1.0];
-		lastVersion = lastDocVersoin;
-	}
-	
-	self.extraInformation[MADDocumentInfoKeyGenerator] = lastGenerator;
-	self.extraInformation[MADDocumentInfoKeyVersion] = lastVersion;
-	
-	return YES;
-}
-
-- (id)additionalContentForURL:(NSURL *)absoluteURL error:(NSError * __autoreleasing *)error {
-
-	if (self.extraInformation == nil) {
-		NSMutableDictionary *extraInfo = [[NSMutableDictionary alloc] initWithCapacity:3];
-		self.extraInformation = extraInfo;
-	}
-	NSNumber *dataVersion = [[NSNumber alloc] initWithDouble:1.0];
-	self.extraInformation[MADDocumentInfoKeyVersion] = dataVersion;
-	self.extraInformation[MADDocumentInfoKeyGenerator] = @"MAD Designer";
-	return self.extraInformation;
-}
-
-- (BOOL)writeAdditionalContent:(id)content
-						 toURL:(NSURL *)absoluteURL
-		   originalContentsURL:(NSURL *)absoluteOriginalContentsURL
-						 error:(NSError * __autoreleasing *)error {
-	
-	BOOL writeAdditionalContent = NO; // Initialize to NO by default
-
-	if (content == [NSNull null] || self.documentStatus.isSuspended) {
-		// If content is NSNull or the document is suspended, do not write additional content
-		writeAdditionalContent = NO;
-	} else if (content != nil) {
-		// If content is not nil, write additional content
-		writeAdditionalContent = YES;
-
-		// Safely retrieve version and generator from the content dictionary
-		id version = content[MADDocumentInfoKeyVersion];
-		id generator = content[MADDocumentInfoKeyGenerator];
-
-		// Create a dictionary with version and generator information
-		NSDictionary<NSString *, id> *additionalContent = [[NSDictionary alloc] initWithObjectsAndKeys:
-			version, MADDocumentInfoKeyVersion,
-			generator, MADDocumentInfoKeyGenerator,
-			nil]; // Sentinel to mark the end of the key-value pairs
-
-		// Write the additional content to the specified URL
-		if (![additionalContent writeToURL:_urlMetaPlaylist atomically:NO]) {
-			NSLog(@"Write to %@ failed", _urlMetaPlaylist);
-		}
-	}
-
-	return writeAdditionalContent;
-}
-
-+ (NSString *)persistentStoreName { return @"analyitics"; }
 
 #pragma mark -
 #pragma mark UIPrintInteractionControllerDelegate

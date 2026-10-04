@@ -14,7 +14,7 @@
 #import <MADFileManager/MADFileUtilities.h>
 #import <MAD/MADOperationUniqueUrlForFilename.h>
 #import <MAD/MADocument.h>
-#import <MAD/UIManagedDocument+Extras.h>
+#import <MAD/UIDocument+Extras.h>
 #import <MAD/MADOperationCreateDocumentCreateDocument.h>
 #import <MADFoundation/MADOperationTestResults.h>
 #import "madlog.h"

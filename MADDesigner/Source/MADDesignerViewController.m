@@ -1115,7 +1115,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 #pragma mark -
-#pragma mark NSManagedObjectContextObjectsDidChangeNotification
+#pragma mark RptqStoreContextObjectsDidChangeNotification
 
 - (void)updateForChangesToDocumentElement:(RptqDocumentElement *)documentObject {
 	MADocument *doc = self.document;
@@ -1167,7 +1167,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	undoButton.enabled = document.undoManager.canUndo;
 	undoButton.title = document.undoManager.undoMenuItemTitle.copy;
 	
-	NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
+	NSSet *updatedObjects = notification.userInfo[RptqStoreContextUpdatedObjectsKey];
 	
 	for (RptqObject *updatedObject in updatedObjects) {
 		if ([updatedObject isKindOfClass:[RptqTextStyle class]]) {
@@ -1255,10 +1255,10 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 #pragma mark -
-#pragma mark NSManagedObjectContextDidSaveNotification
+#pragma mark RptqStoreContextDidSaveNotification
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
-	NSSet *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
+	NSSet *updatedObjects = notification.userInfo[RptqStoreContextUpdatedObjectsKey];
 	if (updatedObjects == nil) {
 		os_log_info(GetDesignerLog(), "No updated objects in context save notification.");
 		return;
@@ -3258,12 +3258,12 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	MADocument *document = self.document;
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(managedObjectContextDidChange:)
-												 name: NSManagedObjectContextObjectsDidChangeNotification
+												 name: RptqStoreContextObjectsDidChangeNotification
 											   object: document.storeContext];
 	
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(managedObjectContextDidSave:)
-												 name: NSManagedObjectContextDidSaveNotification
+												 name: RptqStoreContextDidSaveNotification
 											   object: document.storeContext];
 	
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -3296,11 +3296,11 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	
 	MADocument *document = self.document;
 	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: NSManagedObjectContextObjectsDidChangeNotification
+													name: RptqStoreContextObjectsDidChangeNotification
 												  object: document.storeContext];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: NSManagedObjectContextDidSaveNotification
+													name: RptqStoreContextDidSaveNotification
 												  object: document.storeContext];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver: self

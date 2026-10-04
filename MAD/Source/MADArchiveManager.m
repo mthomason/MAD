@@ -24,7 +24,6 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSFileWrapper.h>
-#import <Foundation/NSFileCoordinator.h>
 #import <Foundation/NSUUID.h>
 
 #import <MADFileManager/MADFileUtilities.h>

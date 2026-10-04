@@ -100,7 +100,7 @@ static NSString *keyIDDocument = @"IO";
 			
 			keyManagedObjectContext = NSStringFromSelector(@selector(managedObjectContext));
 			objectContext = [note.userInfo objectForKey:keyManagedObjectContext];
-			insertedObjects = [note.userInfo objectForKey:NSInsertedObjectsKey];
+			insertedObjects = [note.userInfo objectForKey:RptqStoreContextInsertedObjectsKey];
 			[insertedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull __unused stop) {
 				
 				if ([obj isKindOfClass:[RptqQueryLinks class]]) {
@@ -122,7 +122,7 @@ static NSString *keyIDDocument = @"IO";
 			}];
 
 			
-			updatedObjects = [note.userInfo objectForKey:NSUpdatedObjectsKey];
+			updatedObjects = [note.userInfo objectForKey:RptqStoreContextUpdatedObjectsKey];
 			[updatedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull __unused stop) {
 				
 				if ([obj isKindOfClass:[RptqQueryLinks class]]) {
@@ -139,7 +139,7 @@ static NSString *keyIDDocument = @"IO";
 				
 			}];
 			
-			deletedObjects = [note.userInfo objectForKey:NSDeletedObjectsKey];
+			deletedObjects = [note.userInfo objectForKey:RptqStoreContextDeletedObjectsKey];
 			[deletedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull __unused stop) {
 				
 				if ([obj isKindOfClass:[RptqQueryLinks class]]) {
@@ -166,18 +166,18 @@ static NSString *keyIDDocument = @"IO";
 			
 		};
 		NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-		_observeChangeNotification = [notificationCenter addObserverForName:NSManagedObjectContextObjectsDidChangeNotification
+		_observeChangeNotification = [notificationCenter addObserverForName:RptqStoreContextObjectsDidChangeNotification
 																	 object:managedObjectContext
 																	  queue:_objectContextQueue
 																 usingBlock:blockChange];
 		
-		_observeWillSaveNotification = [notificationCenter addObserverForName:NSManagedObjectContextWillSaveNotification
+		_observeWillSaveNotification = [notificationCenter addObserverForName:RptqStoreContextWillSaveNotification
 																	   object:managedObjectContext
 																		queue:_objectContextQueue
 																   usingBlock:^(NSNotification * _Nonnull note) {
 			os_log_debug(OS_LOG_DEFAULT, "%@: %@", NSStringFromClass(note.class), note);
 		}];
-		_observeDidSaveNotification = [notificationCenter addObserverForName:NSManagedObjectContextDidSaveNotification
+		_observeDidSaveNotification = [notificationCenter addObserverForName:RptqStoreContextDidSaveNotification
 																	  object:managedObjectContext
 																	   queue:_objectContextQueue
 																  usingBlock:^(NSNotification * _Nonnull note) {

@@ -1,11 +1,13 @@
 //
 //  MADStoreConverter.h
-//  MAD
+//  MAD Designer
 //
 //  Copyright © 2026 Everyday Apps LLC. All rights reserved.
 //
-//  The bridge from a legacy Core Data `.mad` to the portable store.  This is the one
-//  file in the store family that imports Core Data: MADStore, MADStoreSchema,
+//  The bridge from a legacy Core Data `.mad` to the portable store.  It lives in the
+//  application target, not the MAD framework: the framework is the headless engine's
+//  base and must not link Core Data (MAD_LINUX.md), so it reaches the converter
+//  through MADLegacyStoreConversion's registry instead.  MADStore, MADStoreSchema,
 //  MADStoreObject and MADStoreGraph neither know nor care where a graph came from.
 //
 //  The walk is driven by MADStoreSchema rather than by hand-written code per entity,
@@ -38,6 +40,7 @@ typedef NS_ENUM(NSInteger, MADStoreConverterErrorCode) {
 	MADStoreConverterErrorUnarchive = 1,
 	MADStoreConverterErrorStoreFileMissing,
 	MADStoreConverterErrorUnknownEntity,
+	MADStoreConverterErrorModelMissing,
 };
 
 @interface MADStoreConverter : NSObject
@@ -58,6 +61,16 @@ typedef NS_ENUM(NSInteger, MADStoreConverterErrorCode) {
 /// once both have been through -graphByCompletingInverses.
 + (nullable MADStoreGraph *)graphForManagedObjectContext:(NSManagedObjectContext *)context
 												   error:(NSError * __autoreleasing *)error;
+
+/// The conversion at the store level, for a caller that already extracted the
+/// document and owns both locations: open the legacy store at `legacyStoreURL`,
+/// serialise its graph, and write the portable store at `storeURL`.  The document's
+/// open path calls this through MADLegacyStoreConversion, inside its own guts
+/// directory; the two URL arguments are plain files.
++ (nullable MADStoreGraph *)convertLegacyStoreAtURL:(NSURL *)legacyStoreURL
+										toStoreAtURL:(NSURL *)storeURL
+											   model:(NSManagedObjectModel *)model
+											   error:(NSError * __autoreleasing *)error;
 
 /// The whole bridge: open the legacy `.mad` at `documentURL`, serialise its graph,
 /// and write the portable store at `storeURL`.  `model` is the Core Data model the

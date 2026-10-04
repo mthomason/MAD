@@ -21,6 +21,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// The change-tracking notifications the store context posts.  The names and the
+/// userInfo keys (`RptqStoreContextInsertedObjectsKey` and friends) mirror the Core Data
+/// notifications the app's view controllers were written against, but the symbols
+/// are ours: the framework must not link Core Data (MAD_LINUX.md).  The change
+/// notification is coalesced to one post per run-loop turn.
+FOUNDATION_EXPORT NSNotificationName const RptqStoreContextObjectsDidChangeNotification;
+FOUNDATION_EXPORT NSNotificationName const RptqStoreContextWillSaveNotification;
+FOUNDATION_EXPORT NSNotificationName const RptqStoreContextDidSaveNotification;
+
+FOUNDATION_EXPORT NSString * const RptqStoreContextInsertedObjectsKey;
+FOUNDATION_EXPORT NSString * const RptqStoreContextUpdatedObjectsKey;
+FOUNDATION_EXPORT NSString * const RptqStoreContextDeletedObjectsKey;
+
 @interface RptqStoreContext : NSObject
 
 + (instancetype)contextWithStore:(MADStore *)store;

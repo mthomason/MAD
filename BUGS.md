@@ -2550,6 +2550,12 @@ setting that names a platform no target can build for.
   viewer target neither compiles them nor links a framework that contains them. What
   the stand-alone viewer should be is a product decision, not a build-wiring repair,
   so it is recorded rather than patched.
+- **When the viewer is repaired (2026-10-04):** it opens `.mad` documents, so it will
+  need the legacy-store conversion sources the app and CLI compile —
+  `MADDesigner/Source/MADStoreLegacy/MADStoreConverter.m` and
+  `MADStoreLegacyConverter.m` — and its framework search paths must reach
+  `MAD.framework`'s headers, which today they do not. Until then the converter is
+  compiled into the Designer target and the CLI only.
 
 ---
 

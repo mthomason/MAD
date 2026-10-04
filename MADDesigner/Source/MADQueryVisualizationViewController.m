@@ -336,12 +336,12 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(managedObjectContextWillSave:)
-												 name: NSManagedObjectContextWillSaveNotification
+												 name: RptqStoreContextWillSaveNotification
 											   object: managedObjectContext];
 	
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(managedObjectContextDidSave:)
-												 name: NSManagedObjectContextDidSaveNotification
+												 name: RptqStoreContextDidSaveNotification
 											   object: managedObjectContext];
 }
 
@@ -357,10 +357,10 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 	RptqStoreContext *managedObjectContext = self.document.documentModel.managedObjectContext;
 	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: NSManagedObjectContextWillSaveNotification
+													name: RptqStoreContextWillSaveNotification
 												  object: managedObjectContext];
 	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: NSManagedObjectContextDidSaveNotification
+													name: RptqStoreContextDidSaveNotification
 												  object: managedObjectContext];
 }
 
@@ -443,17 +443,17 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 
 - (void)managedObjectContextWillSave:(NSNotification *)notification {
 /*
-	NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
-	NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
-	NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
+	NSArray *insertedObjects = notification.userInfo[RptqStoreContextInsertedObjectsKey];
+	NSArray *updatedObjects = notification.userInfo[RptqStoreContextUpdatedObjectsKey];
+	NSArray *deletedObjects = notification.userInfo[RptqStoreContextDeletedObjectsKey];
 */
 }
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
 	/*
-	NSArray *insertedObjects = notification.userInfo[NSInsertedObjectsKey];
-	NSArray *updatedObjects = notification.userInfo[NSUpdatedObjectsKey];
-	NSArray *deletedObjects = notification.userInfo[NSDeletedObjectsKey];
+	NSArray *insertedObjects = notification.userInfo[RptqStoreContextInsertedObjectsKey];
+	NSArray *updatedObjects = notification.userInfo[RptqStoreContextUpdatedObjectsKey];
+	NSArray *deletedObjects = notification.userInfo[RptqStoreContextDeletedObjectsKey];
 	
 	RptqQuery *updatedQuery = nil;
 	BOOL needsLayout = NO;

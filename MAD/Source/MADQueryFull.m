@@ -112,7 +112,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 		NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 		[defaultCenter addObserver: self
 						  selector: @selector(handleManagedObjectContextDidChange:)
-							  name: NSManagedObjectContextObjectsDidChangeNotification
+							  name: RptqStoreContextObjectsDidChangeNotification
 							object: query.storeContext];
 	}
 	return self;
@@ -446,14 +446,14 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	};
 
 	NSSet *changes;
-	changes = notification.userInfo[NSUpdatedObjectsKey];
+	changes = notification.userInfo[RptqStoreContextUpdatedObjectsKey];
 	queryChanged = queryObjectInSet(changes);
 	if (!queryChanged) {
-		changes = notification.userInfo[NSDeletedObjectsKey];
+		changes = notification.userInfo[RptqStoreContextDeletedObjectsKey];
 		queryChanged = queryObjectInSet(changes);
 	}
 	if (!queryChanged) {
-		changes = notification.userInfo[NSInsertedObjectsKey];
+		changes = notification.userInfo[RptqStoreContextInsertedObjectsKey];
 		queryChanged = queryObjectInSet(changes);
 	}
 	if (queryChanged) {

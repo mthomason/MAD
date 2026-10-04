@@ -6,23 +6,20 @@
 //
 
 #import "MADStoreConverter.h"
-#import "MADStore.h"
-#import "MADStoreSchema.h"
-#import "MADArchiveManager.h"
+#import <MAD/MADStore.h>
+#import <MAD/MADStoreSchema.h>
+#import <MAD/MADStoreGraph.h>
+#import <MAD/MADStoreObject.h>
+#import <MAD/MADLegacyStoreConversion.h>
+#import <MAD/MADArchiveManager.h>
 
-#import "MADConstants.h"
+#import <MAD/MADConstants.h>
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIKit.h>
 #import <string.h>
 
 NSString * const MADStoreConverterErrorDomain = @"MADStoreConverterErrorDomain";
-
-/// The persistent store inside a legacy archive.  It is named by
-/// +[MADocument persistentStoreName], which is also where the misspelling comes from;
-/// it is spelled that way on disk, in every document ever written.
-static NSString * const MADStoreLegacyStoreName = @"analyitics";
-static NSString * const MADStoreLegacyStoreDirectory = @"StoreContent";
 
 static NSError *MADStoreConverterError(MADStoreConverterErrorCode code, NSString *message) {
 	return [NSError errorWithDomain:MADStoreConverterErrorDomain
@@ -251,10 +248,9 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 	return head.length >= 3 && bytes[0] == 'B' && bytes[1] == 'Z' && bytes[2] == 'h';
 }
 
-+ (NSManagedObjectContext *)legacyContextForDocumentAtURL:(NSURL *)documentURL
-											 extractedTo:(NSURL *)directory
-												   model:(NSManagedObjectModel *)model
-												   error:(NSError * __autoreleasing *)error {
++ (NSURL *)legacyStoreURLForDocumentAtURL:(NSURL *)documentURL
+							  extractedTo:(NSURL *)directory
+									error:(NSError * __autoreleasing *)error {
 	if (!MADStoreLooksLikeADocument(documentURL)) {
 		if (error) {
 			*error = MADStoreConverterError(MADStoreConverterErrorUnarchive,
@@ -279,32 +275,38 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 		return nil;
 	}
 
-	NSURL *storeFile = [[directory URLByAppendingPathComponent:MADStoreLegacyStoreDirectory isDirectory:YES]
-						URLByAppendingPathComponent:MADStoreLegacyStoreName isDirectory:NO];
+	NSURL *storeFile = [[directory URLByAppendingPathComponent:MADLegacyStoreDirectory isDirectory:YES]
+						URLByAppendingPathComponent:MADLegacyStoreName isDirectory:NO];
 	if (![[NSFileManager defaultManager] fileExistsAtPath:(NSString *)storeFile.path]) {
 		if (error) {
 			*error = MADStoreConverterError(MADStoreConverterErrorStoreFileMissing,
 											[[NSString alloc] initWithFormat:@"%@ has no %@/%@",
-											 documentURL.lastPathComponent, MADStoreLegacyStoreDirectory, MADStoreLegacyStoreName]);
+											 documentURL.lastPathComponent, MADLegacyStoreDirectory, MADLegacyStoreName]);
 		}
 		return nil;
 	}
+	return storeFile;
+}
 
-	// The converter reads rows through NSManagedObject, not the Rptq subclasses: the
-	// swap off NSManagedObject has already happened, and Core Data refuses to
-	// instantiate an entity whose class is no longer an NSManagedObject subclass.
-	// A compiled .momd is immutable, so work on a mutable copy before pointing every
-	// entity at the generic class.
+/// Open the legacy store at `storeURL` as a context of plain NSManagedObjects.
+///
+/// The converter reads rows through NSManagedObject, not the Rptq subclasses: the
+/// swap off NSManagedObject has already happened, and Core Data refuses to
+/// instantiate an entity whose class is no longer an NSManagedObject subclass.
+/// A compiled .momd is immutable, so work on a mutable copy before pointing every
+/// entity at the generic class.
++ (NSManagedObjectContext *)legacyContextForStoreAtURL:(NSURL *)storeURL
+												 model:(NSManagedObjectModel *)model
+												 error:(NSError * __autoreleasing *)error {
 	NSManagedObjectModel *mutableModel = [model copy];
 	for (NSEntityDescription *entity in mutableModel.entities) {
 		entity.managedObjectClassName = @"NSManagedObject";
 	}
-	model = mutableModel;
 
-	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+	NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mutableModel];
 	if (![coordinator addPersistentStoreWithType:NSSQLiteStoreType
 								   configuration:nil
-											 URL:storeFile
+											 URL:storeURL
 										 options:@{ NSMigratePersistentStoresAutomaticallyOption: @YES,
 													NSInferMappingModelAutomaticallyOption: @YES }
 										   error:error]) {
@@ -316,6 +318,42 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 	return context;
 }
 
++ (NSManagedObjectContext *)legacyContextForDocumentAtURL:(NSURL *)documentURL
+											 extractedTo:(NSURL *)directory
+												   model:(NSManagedObjectModel *)model
+												   error:(NSError * __autoreleasing *)error {
+	NSURL *storeFile = [self legacyStoreURLForDocumentAtURL:documentURL
+												extractedTo:directory
+													  error:error];
+	if (!storeFile) return nil;
+	return [self legacyContextForStoreAtURL:storeFile model:model error:error];
+}
+
++ (MADStoreGraph *)convertLegacyStoreAtURL:(NSURL *)legacyStoreURL
+							  toStoreAtURL:(NSURL *)storeURL
+									 model:(NSManagedObjectModel *)model
+									 error:(NSError * __autoreleasing *)error {
+	NSManagedObjectContext *context = [self legacyContextForStoreAtURL:legacyStoreURL model:model error:error];
+	if (!context) return nil;
+
+	MADStoreGraph *graph = [self graphForManagedObjectContext:context error:error];
+
+	// Let go of the legacy store before writing the portable one: the two never need
+	// to be open at the same time, and closing releases the journal files.
+	NSPersistentStore *legacyStore = context.persistentStoreCoordinator.persistentStores.firstObject;
+	if (legacyStore != nil) {
+		[context.persistentStoreCoordinator removePersistentStore:legacyStore error:NULL];
+	}
+	context.persistentStoreCoordinator = nil;
+	if (!graph) return nil;
+
+	MADStore *store = [MADStore storeWithURL:storeURL];
+	if (![store openWithError:error]) return nil;
+	if (![store writeGraph:graph replacingAll:YES error:error]) return nil;
+	[store close];
+	return graph;
+}
+
 + (MADStoreGraph *)convertDocumentAtURL:(NSURL *)documentURL
 						   toStoreAtURL:(NSURL *)storeURL
 								  model:(NSManagedObjectModel *)model
@@ -325,28 +363,14 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 			[[NSString alloc] initWithFormat:@"mad-convert-%@", NSUUID.UUID.UUIDString]]
 				   isDirectory:YES];
 
-	NSManagedObjectContext *context = [self legacyContextForDocumentAtURL:documentURL
-															 extractedTo:guts
-																   model:model
-																   error:error];
-	if (!context) return nil;
-
-	MADStoreGraph *graph = [self graphForManagedObjectContext:context error:error];
-
-	// Let go of the extracted copy: the store is written from the graph, and the
-	// archive is only needed while the context is open.
-	NSPersistentStore *legacyStore = context.persistentStoreCoordinator.persistentStores.firstObject;
-	if (legacyStore != nil) {
-		[context.persistentStoreCoordinator removePersistentStore:legacyStore error:NULL];
-	}
-	context.persistentStoreCoordinator = nil;
+	NSURL *storeFile = [self legacyStoreURLForDocumentAtURL:documentURL
+												extractedTo:guts
+													  error:error];
+	MADStoreGraph *graph = storeFile ? [self convertLegacyStoreAtURL:storeFile
+														 toStoreAtURL:storeURL
+																model:model
+																error:error] : nil;
 	[[NSFileManager defaultManager] removeItemAtURL:guts error:NULL];
-	if (!graph) return nil;
-
-	MADStore *store = [MADStore storeWithURL:storeURL];
-	if (![store openWithError:error]) return nil;
-	if (![store writeGraph:graph replacingAll:YES error:error]) return nil;
-	[store close];
 	return graph;
 }
 

@@ -56,6 +56,15 @@ readonly REFRESH_SOURCES=(
 	"${REPO_ROOT}/MADDesigner/Source/MADOperationRefreshInitalizeMainDataTable.m"
 )
 
+# The legacy store converter, compiled in from the application target for the same
+# reason: the MAD framework no longer links Core Data (MAD_LINUX.md), so a process
+# that must open a pre-portable-store document carries the converter itself.  The
+# shipping samples are legacy documents, so the CLI needs it.
+readonly LEGACY_SOURCES=(
+	"${REPO_ROOT}/MADDesigner/Source/MADStoreLegacy/MADStoreConverter.m"
+	"${REPO_ROOT}/MADDesigner/Source/MADStoreLegacy/MADStoreLegacyConverter.m"
+)
+
 framework_flags() {
 	local framework
 	for framework in "${FRAMEWORKS[@]}"; do
@@ -85,6 +94,7 @@ compile_tool() {
 		-I "${SCRIPT_DIR}/Source" \
 		-I "${REPO_ROOT}/MAD/Source" \
 		-I "${REPO_ROOT}/MADDesigner/Source" \
+		-I "${REPO_ROOT}/MADDesigner/Source/MADStoreLegacy" \
 		-I "${REPO_ROOT}/MADDesigner/Resources/MADFileDefinition" \
 		-F "${PRODUCTS}" \
 		$(framework_flags) \
@@ -95,6 +105,7 @@ compile_tool() {
 		"${SCRIPT_DIR}"/Source/*.m \
 		"${TRANSFORMERS[@]}" \
 		"${REFRESH_SOURCES[@]}" \
+		"${LEGACY_SOURCES[@]}" \
 		-o "${OUTPUT}"
 
 	# UIManagedDocument finds its model with +mergedModelFromBundles:nil, which

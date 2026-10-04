@@ -114,8 +114,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 	BOOL isDir1;
 	NSString *path = fileUrl.path;
 	while ([[NSFileManager defaultManager] fileExistsAtPath: path
-												isDirectory: &isDir1] ||
-			 [[NSFileManager defaultManager] isUbiquitousItemAtURL:fileUrl]) {
+												isDirectory: &isDir1]) {
 		
 			NSString *maybe = [desiredFileHandle stringByAppendingFormat:@" %ld", (long)ctr];
 			NSURL *baseUrlFormatted = [directory URLByAppendingPathComponent: maybe];

@@ -10,10 +10,17 @@
 #import "MADStoreSchema.h"
 #import "MADStoreGraph.h"
 
-// The change notification mirrors Core Data's contract -- the same name, the same
-// userInfo keys, object = this context -- so the seven observers registered
-// against NSManagedObjectContextObjectsDidChangeNotification keep working.
-#import <CoreData/NSManagedObjectContext.h>
+// The change notification mirrors Core Data's contract -- the same userInfo keys,
+// object = this context -- under our own name (RptqStoreContext.h), so the
+// observers the view controllers register keep working without the framework
+// linking Core Data.
+NSNotificationName const RptqStoreContextObjectsDidChangeNotification = @"RptqStoreContextObjectsDidChangeNotification";
+NSNotificationName const RptqStoreContextWillSaveNotification = @"RptqStoreContextWillSaveNotification";
+NSNotificationName const RptqStoreContextDidSaveNotification = @"RptqStoreContextDidSaveNotification";
+
+NSString * const RptqStoreContextInsertedObjectsKey = @"RptqStoreContextInsertedObjects";
+NSString * const RptqStoreContextUpdatedObjectsKey = @"RptqStoreContextUpdatedObjects";
+NSString * const RptqStoreContextDeletedObjectsKey = @"RptqStoreContextDeletedObjects";
 
 @interface RptqStoreContext ()
 @property (nonatomic, strong, readwrite) MADStoreGraph *graph;
@@ -83,15 +90,15 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	NSMutableDictionary<NSString *, NSSet<RptqObject *> *> *userInfo = [NSMutableDictionary dictionary];
 	@synchronized (self) {
 		self.postScheduled = NO;
-		if (self.pendingInserted.count > 0) userInfo[NSInsertedObjectsKey] = self.pendingInserted.copy;
-		if (self.pendingUpdated.count > 0) userInfo[NSUpdatedObjectsKey] = self.pendingUpdated.copy;
-		if (self.pendingDeleted.count > 0) userInfo[NSDeletedObjectsKey] = self.pendingDeleted.copy;
+		if (self.pendingInserted.count > 0) userInfo[RptqStoreContextInsertedObjectsKey] = self.pendingInserted.copy;
+		if (self.pendingUpdated.count > 0) userInfo[RptqStoreContextUpdatedObjectsKey] = self.pendingUpdated.copy;
+		if (self.pendingDeleted.count > 0) userInfo[RptqStoreContextDeletedObjectsKey] = self.pendingDeleted.copy;
 		[self.pendingInserted removeAllObjects];
 		[self.pendingUpdated removeAllObjects];
 		[self.pendingDeleted removeAllObjects];
 	}
 	if (userInfo.count == 0) return;
-	[[NSNotificationCenter defaultCenter] postNotificationName:NSManagedObjectContextObjectsDidChangeNotification
+	[[NSNotificationCenter defaultCenter] postNotificationName:RptqStoreContextObjectsDidChangeNotification
 														object:self
 													  userInfo:userInfo];
 }

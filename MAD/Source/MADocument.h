@@ -19,12 +19,12 @@
 #import <MAD/MADSortOrder.h>
 #import <MAD/MADReportFormatterDataSourceProtocol.h>
 
-#import <UIKit/UIManagedDocument.h>
+#import <UIKit/UIDocument.h>
 #import <UIKit/UIPrintInteractionController.h>
 
 @protocol MADActivityProtocol, MADocumentDelegate;
 
-@class MADDesignerQuery, MADDesignerLayout, MADDesignerViewer, NSManagedObjectID, RptqDocument, MADDatabaseConnection, MADModelDocument, MADocumentState, MADSectionLayoutManager, MADQueryFull, MTPaper, RptqQuery, RptqStoreContext;
+@class MADDesignerQuery, MADDesignerLayout, MADDesignerViewer, RptqDocument, MADDatabaseConnection, MADModelDocument, MADocumentState, MADSectionLayoutManager, MADQueryFull, MTPaper, RptqQuery, RptqStoreContext;
 
 
 extern NSString * const MADMimeType;
@@ -34,7 +34,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 - (void)setStatusText:(NSString *)statusText;
 @end
 
-@interface MADocument : UIManagedDocument <UIPrintInteractionControllerDelegate, MADDataProtocol, MADCacheProtocol, MADReportFormatterDataSource, MADPrintPageRendererDataSourceProtocol>
+@interface MADocument : UIDocument <UIPrintInteractionControllerDelegate, MADDataProtocol, MADCacheProtocol, MADReportFormatterDataSource, MADPrintPageRendererDataSourceProtocol>
 
 @property (nonatomic, readonly, strong) MADDesignerQuery *designerQuery;
 @property (nonatomic, readonly, strong) MADDesignerLayout *designerLayout;
@@ -43,6 +43,10 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 @property (readonly, nonatomic, strong)     MADModelDocument *documentModel;
 @property (readonly, nonatomic, strong)     RptqDocument *activeDocumentModel;
 @property (readonly, nonatomic, strong)     RptqStoreContext *storeContext;
+// The name the app and the formatter have always used for "the context that owns
+// this document's objects".  Under Core Data it was inherited from UIManagedDocument;
+// now it is the store context, and the same property.
+@property (readonly, nonatomic, strong)     RptqStoreContext *managedObjectContext;
 @property (readonly, nonatomic, strong)	 MTPaper *paper;
 @property (readonly, nonatomic)             NSUInteger numberOfPages;
 @property (readonly, nonatomic)             NSUInteger numberOfResults;

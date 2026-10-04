@@ -17,7 +17,7 @@
 #import <CoreData/CoreData.h>
 #import <UIKit/UIKit.h>
 
-#import <MAD/MADStoreConverter.h>
+#import "MADStoreConverter.h"
 #import <MAD/MADStore.h>
 #import <MAD/MADStoreGraph.h>
 #import <MAD/MADStoreObject.h>

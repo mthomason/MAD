@@ -5,8 +5,8 @@
 //  Copyright © 2026 Michael Thomason. All rights reserved.
 //
 //  Coverage for the accessors MADocument builds lazily.  A MADocument is a
-//  UIManagedDocument, so these exercise only the state that does not need a
-//  database connection or a store on disk.
+//  UIDocument, so these exercise only the state that does not need a database
+//  connection or a store on disk.
 //
 
 #import <XCTest/XCTest.h>
@@ -269,6 +269,97 @@
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
 }
 
+// The point of the store migration is that a `.mad` holds no Core Data.  A legacy
+// document converts on open, and the conversion removes the legacy store files from
+// the guts directory, so a save afterwards archives a document whose StoreContent is
+// only the portable store.
+- (void)testConvertedDocumentSavesWithoutTheCoreDataStore {
+
+	NSURL *directory = [self newTestDirectory];
+	NSURL *sampleURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"London" withExtension:@"mad"];
+	XCTAssertNotNil(sampleURL, @"London.mad was not copied into the test bundle.");
+	NSURL *documentURL = [directory URLByAppendingPathComponent:@"London.mad"];
+
+	NSError *error = nil;
+	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
+	XCTAssertTrue([document readFromURL:sampleURL error:&error], @"converting London failed: %@", error);
+	XCTAssertTrue([document writeContents:nil
+							andAttributes:nil
+							  safelyToURL:documentURL
+						 forSaveOperation:UIDocumentSaveForCreating
+									error:&error],
+				  @"saving the converted document failed: %@", error);
+
+	// Unarchive the saved document the way an open would and look at what it carries.
+	NSURL *extracted = [self newTestDirectory];
+	MADArchiveManager *reader = [[MADArchiveManager alloc] initWithFileWrapperURL:extracted archiveURL:documentURL];
+	XCTAssertTrue([reader unarchive], @"the saved document must unarchive");
+
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSString *storeDirectory = [[extracted URLByAppendingPathComponent:@"StoreContent" isDirectory:YES] path];
+	XCTAssertTrue([fileManager fileExistsAtPath:[storeDirectory stringByAppendingPathComponent:@"store.sqlite"]],
+				  @"the portable store must be in the saved document");
+	XCTAssertFalse([fileManager fileExistsAtPath:[storeDirectory stringByAppendingPathComponent:@"analyitics"]],
+				   @"the legacy Core Data store must not survive into the saved document");
+
+	[fileManager removeItemAtURL:directory error:NULL];
+	[fileManager removeItemAtURL:extracted error:NULL];
+}
+
+#pragma mark - The UIDocument state machine
+
+// The app opens documents through UIDocument's own machinery, so the state machine
+// must actually turn: -openWithCompletionHandler: moves the document to Normal and
+// registers its file presenter, -closeWithCompletionHandler: saves, releases the
+// store, and returns it to Closed.  The document's persistence is the portable store,
+// not a file wrapper; this pins that the superclass bookkeeping still runs around it.
+- (void)testOpenAndCloseMoveThroughTheUIDocumentStateMachine {
+
+	NSURL *documentURL = [[self newTestDirectory] URLByAppendingPathComponent:@"lifecycle.mad"];
+
+	// Build the fixture on disk through the same save path the app uses: the
+	// document's own store context, so the definition lands inside the archive.
+	MADocument *writer = [[MADocument alloc] initWithFileURL:documentURL];
+	RptqStoreContext *context = writer.storeContext;
+	XCTAssertNotNil(context, @"the writer's store context did not open");
+	RptqDocument *model = [context insertObjectForEntity:@"RptqDocument" identifier:0];
+	model.papersize = MTPaperTypeLetter;
+	XCTAssertTrue([context save:NULL]);
+	NSError *error = nil;
+	XCTAssertTrue([writer writeContents:nil
+						  andAttributes:nil
+							safelyToURL:documentURL
+					   forSaveOperation:UIDocumentSaveForCreating
+								  error:&error],
+				  @"the fixture document did not save: %@", error);
+
+	// Open it the way the app does.
+	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
+	XCTestExpectation *opened = [self expectationWithDescription:@"open"];
+	[document openWithCompletionHandler:^(BOOL success) {
+		XCTAssertTrue(success, @"opening the saved document failed");
+		[opened fulfill];
+	}];
+	[self waitForExpectations:@[ opened ] timeout:20];
+	XCTAssertEqual(document.documentState, UIDocumentStateNormal,
+				   @"an open document reports UIDocumentStateNormal");
+	XCTAssertNotNil(document.storeContext, @"an open document has a live store context");
+
+	// Close it the way the app does.
+	XCTestExpectation *closed = [self expectationWithDescription:@"close"];
+	[document closeWithCompletionHandler:^(BOOL success) {
+		XCTAssertTrue(success, @"closing the open document failed");
+		[closed fulfill];
+	}];
+	[self waitForExpectations:@[ closed ] timeout:20];
+	XCTAssertEqual(document.documentState, UIDocumentStateClosed,
+				   @"a closed document reports UIDocumentStateClosed");
+	XCTAssertFalse([[NSFileCoordinator filePresenters] containsObject:document],
+				   @"the close released the document's file presenter");
+
+	[[NSFileManager defaultManager] removeItemAtURL:documentURL.URLByDeletingLastPathComponent error:NULL];
+}
+
 #pragma mark - Model projections
 
 /// CONTRACT: the model projections sort by name, as the pre-migration fetches
@@ -345,11 +436,11 @@
 	XCTAssertTrue(element.textStyle.bold, @"redo must restore the bold");
 }
 
-// The store-backed close bypasses UIDocument's own machinery (it deadlocks), so pin
-// the contract Phase D would inherit: the document never registers a file presenter
-// (UIDocument's presenter bookkeeping lives in its open/save machinery, which the
-// portable store does not drive), it never leaves UIDocumentStateClosed, and the
-// close releases the store.
+// A document that was never opened through UIDocument -- the shape the test harness
+// builds, with the store context injected by KVC -- sits in UIDocumentStateClosed
+// from init, registers no file presenter, and releases its store on close.  The
+// opened lifecycle is pinned separately by
+// testOpenAndCloseMoveThroughTheUIDocumentStateMachine.
 - (void)testCloseReachesClosedStateAndReleasesTheFilePresenter {
 	NSURL *documentURL = [[self newTestDirectory] URLByAppendingPathComponent:@"close.mad"];
 	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];

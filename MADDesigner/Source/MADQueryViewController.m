@@ -1244,9 +1244,9 @@ BOOL storeEnabled(void) {
 	if (_suspendAutomaticTrackingOfChangesInManagedObjectContext) return;
 
 	NSDictionary *userInfo = notification.userInfo;
-	NSSet *inserted = userInfo[NSInsertedObjectsKey];
-	NSSet *deleted = userInfo[NSDeletedObjectsKey];
-	NSSet *updated = userInfo[NSUpdatedObjectsKey];
+	NSSet *inserted = userInfo[RptqStoreContextInsertedObjectsKey];
+	NSSet *deleted = userInfo[RptqStoreContextDeletedObjectsKey];
+	NSSet *updated = userInfo[RptqStoreContextUpdatedObjectsKey];
 
 	// The query lists track the query's tables, links, groups, and predicates: a
 	// change to any of them reloads every list.
@@ -1285,14 +1285,14 @@ BOOL storeEnabled(void) {
 
 - (void)ingnoreManagedObjectContextChanges:(RptqStoreContext *)context {
 	[[NSNotificationCenter defaultCenter] removeObserver: self
-													name: NSManagedObjectContextObjectsDidChangeNotification
+													name: RptqStoreContextObjectsDidChangeNotification
 												  object: context];
 }
 
 - (void)observeManagedObjectContextChanges:(RptqStoreContext *)context {
 	[[NSNotificationCenter defaultCenter] addObserver: self
 											 selector: @selector(managedObjectContextDidChange:)
-												 name: NSManagedObjectContextObjectsDidChangeNotification
+												 name: RptqStoreContextObjectsDidChangeNotification
 											   object: context];
 }
 

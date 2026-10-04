@@ -17,7 +17,7 @@
 #import <MAD/RptqObject.h>
 #import <MAD/RptqStoreContext.h>
 #import <MAD/MADStore.h>
-#import <MAD/MADStoreConverter.h>
+#import "MADStoreConverter.h"
 
 /// A stand-in for a swapped Rptq entity: the same @dynamic shape the real classes keep,
 /// over a RptqDatabase row, so the dynamic accessors are exercised end to end.
@@ -265,7 +265,7 @@
 #pragma mark - Change notification
 
 // The context mirrors Core Data's change notification -- same name, object = the
-// context, NSInsertedObjectsKey / NSUpdatedObjectsKey / NSDeletedObjectsKey --
+// context, RptqStoreContextInsertedObjectsKey / RptqStoreContextUpdatedObjectsKey / RptqStoreContextDeletedObjectsKey --
 // coalesced to one post per run-loop turn, so a gesture that sets many properties
 // cannot storm the observers.
 - (void)testChangeNotificationPostsCoalescedWithCoreDataKeys {
@@ -275,7 +275,7 @@
 	XCTestExpectation *posted = [self expectationWithDescription:@"change notification"];
 	__block NSUInteger postCount = 0;
 	__block NSNotification *received = nil;
-	id observer = [[NSNotificationCenter defaultCenter] addObserverForName:NSManagedObjectContextObjectsDidChangeNotification
+	id observer = [[NSNotificationCenter defaultCenter] addObserverForName:RptqStoreContextObjectsDidChangeNotification
 																	object:context
 																	 queue:[NSOperationQueue mainQueue]
 																 usingBlock:^(NSNotification *note) {
@@ -294,13 +294,13 @@
 
 	[self waitForExpectations:@[ posted ] timeout:5];
 
-	NSSet *inserted = received.userInfo[NSInsertedObjectsKey];
-	NSSet *updated = received.userInfo[NSUpdatedObjectsKey];
-	NSSet *deleted = received.userInfo[NSDeletedObjectsKey];
+	NSSet *inserted = received.userInfo[RptqStoreContextInsertedObjectsKey];
+	NSSet *updated = received.userInfo[RptqStoreContextUpdatedObjectsKey];
+	NSSet *deleted = received.userInfo[RptqStoreContextDeletedObjectsKey];
 	XCTAssertNotNil(inserted, @"the notification carries the Core Data userInfo keys");
-	XCTAssertTrue([inserted containsObject:table], @"the inserted row is in NSInsertedObjectsKey");
-	XCTAssertTrue([updated containsObject:table], @"the changed row is in NSUpdatedObjectsKey");
-	XCTAssertTrue([deleted containsObject:second], @"the deleted row is in NSDeletedObjectsKey");
+	XCTAssertTrue([inserted containsObject:table], @"the inserted row is in RptqStoreContextInsertedObjectsKey");
+	XCTAssertTrue([updated containsObject:table], @"the changed row is in RptqStoreContextUpdatedObjectsKey");
+	XCTAssertTrue([deleted containsObject:second], @"the deleted row is in RptqStoreContextDeletedObjectsKey");
 	XCTAssertFalse([inserted containsObject:second], @"a deleted insert leaves the inserted set");
 
 	// A turn passes; the post count must still be one -- the burst coalesced.
