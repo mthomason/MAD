@@ -1131,7 +1131,9 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 								}
 								case SYBREAL: {
 									if (sybRealBindNull && (NSUInteger)indexOfType < resultCountForType_SYBREAL && sybRealBindNull[indexOfType] != -1) {
-										NSNumber *object = [[NSNumber alloc] initWithFloat:sybRealBind[indexOfType]];
+										// The bind buffer is double, so keep the full value rather than
+										// narrowing it to float on the way into the NSNumber.
+										NSNumber *object = [[NSNumber alloc] initWithDouble:sybRealBind[indexOfType]];
 										resultsForRow[fieldName] = object;
 									} else {
 										resultsForRow[fieldName] = [NSNull null]; // Real NULL
@@ -1141,7 +1143,8 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 								case SYBFLTN: {
 									if (sybFltNBindNull && (NSUInteger)indexOfType < resultCountForType_SYBFLTN && sybFltNBindNull[indexOfType] != -1) {
 										// FIXED: Used sybFltNBind instead of sybRealBind
-										NSNumber *object = [[NSNumber alloc] initWithFloat:sybFltNBind[indexOfType]];
+										// SYBFLTN can carry an 8-byte value, so keep the double.
+										NSNumber *object = [[NSNumber alloc] initWithDouble:sybFltNBind[indexOfType]];
 										resultsForRow[fieldName] = object;
 									} else {
 										resultsForRow[fieldName] = [NSNull null]; // Float N NULL

@@ -1409,6 +1409,37 @@ libmysqlclient; it skips rather than fails when no server is reachable.
 
 ---
 
+
+## MADTds
+
+### MADTds publishes FreeTDS's headers as-is, so one quoted include remains
+- **Status:** Not ours -- the header is third-party; recorded rather than changed.
+- **What:** `sybdb.h`, shipped from `Compressor/library/freetds/include/`, includes
+  `tds_sysdep_public.h` with a double-quoted include (`:31`), which
+  `-Wquoted-include-in-framework-header` reports because MADTds republishes the header as
+  part of its public module.  Every first-party public header was converted to
+  angle-bracket includes in the warning sweep; this one was left because the file is
+  FreeTDS's, and `THIRD_PARTY_LICENSES.md` already records that the shipped copy is
+  modified -- which carries its own LGPL notice obligation.
+- **If it should ever go:** patch the copy the Compressor recipe installs for the
+  framework, leaving the build copy untouched.  That is a licence-notice change, not a
+  warning fix.
+- **Where:** `Compressor/library/freetds/include/sybdb.h:31`.
+
+### MADTds's build carries an unsandboxed-script advisory
+- **Status:** Intentional -- documented; it cannot be fixed without breaking Compressor.
+- **What:** Xcode warns "tasks in 'Copy Headers' are delayed by unsandboxed script
+  phases; set ENABLE_USER_SCRIPT_SANDBOXING=YES".  Every project with a Compressor
+  "Ensure Libraries" phase carries it.  Sandboxing is off deliberately: the phase runs
+  `Compressor/build.sh`, which writes into `Compressor/library/`, outside any script
+  sandbox.
+- **Note:** the companion warning -- "will be run during every build because it does not
+  specify any outputs" -- was cleared by marking those phases `alwaysOutOfDate`.  The
+  script is a manifest check that is meant to run every build, and it skips rebuilding
+  when the libraries are current, so this documents intent rather than changing it.
+- **Where:** the six projects with the phase: MAD, MADBarcodes, MADMySQL, MADSqlite3,
+  MADTds, MAD Designer.
+
 ## MADTdsClient
 
 Covered by an offline suite (`MADTdsClientTests.m`, 47 tests) plus a live suite
@@ -1719,6 +1750,24 @@ it skips rather than fails when no server is reachable.
 - **Evidence:** `xcodebuild analyze` reports `-Wincompatible-pointer-types` on both
   `dbdatecrack` calls; the two are the only remaining instances of that diagnostic in
   the workspace.
+
+
+### REAL and FLTN result values were narrowed through float before the NSNumber
+- **Status:** Fixed -- though the narrowing is not observable with SQL Server's own types.
+- **What:** the `SYBREAL` and `SYBFLTN` cases of the result-building switch built their
+  `NSNumber` with `initWithFloat:` from a `double` bind buffer; the compiler reported it as
+  an implicit precision-losing conversion.  Both now use `initWithDouble:`, matching the
+  `SYBFLT8` case next to them, which boxes the double directly.
+- **Why it is safe:** a `SYBREAL` value is a 4-byte float by definition, so it is exactly
+  representable either way, and SQL Server sends `FLOAT` as `SYBFLT8` (already correct).
+  The change removes the narrowing for the case where `SYBFLTN` carries an 8-byte value --
+  which a Sybase server can do -- not for any value today's server produces.
+- **Evidence that nothing changed for SQL Server:** the live suite was run against the
+  old `initWithFloat:` code and the new code and passes identically both ways.
+- **Locked down by:** `MADTdsClientLiveTests -testSelectFloatKeepsDoublePrecision`, which
+  guards the 8-byte FLOAT path; its comment records that the SYBREAL/SYBFLTN cases cannot
+  be told apart by any value, so no test can discriminate them.
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1131-1150`.
 
 ## MAD Designer (app)
 

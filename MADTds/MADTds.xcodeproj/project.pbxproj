@@ -227,6 +227,7 @@
 
 /* Begin PBXShellScriptBuildPhase section */
 		4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */ = {
+			alwaysOutOfDate = 1;
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (

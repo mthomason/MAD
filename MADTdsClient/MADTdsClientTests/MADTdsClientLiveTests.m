@@ -546,6 +546,24 @@ static NSDateComponents *MADUTCComponents(NSDate *date) {
 	XCTAssertEqualObjects([table objectAtRow:0 column:9],  @"def");
 }
 
+/// A FLOAT column carries an 8-byte value, and the fetch path must not narrow it
+/// to float on the way into the NSNumber.  0.1 has no exact float representation,
+/// so a narrowing round-trip would land on 0.10000000149011612 instead.
+///
+/// Scope note: this exercises the SYBFLT8 case.  The SYBREAL and SYBFLTN cases
+/// cannot be told apart by any value -- a 4-byte REAL is float-exact by definition,
+/// and SQL Server sends FLOAT as FLT8 -- so this test guards the 8-byte path rather
+/// than discriminating those two cases.
+- (void)testSelectFloatKeepsDoublePrecision {
+	[self requireServer];
+	MADDataTable *table = [self query:@"SELECT CAST(0.1 AS FLOAT) AS f"];
+
+	NSNumber *value = [table objectAtRow:0 column:0];
+	XCTAssertEqualWithAccuracy([value doubleValue], 0.1, 1e-15);
+	XCTAssertGreaterThan(fabs([value doubleValue] - (double)(float)0.1), 1e-12,
+						 @"the FLOAT value was narrowed to float precision");
+}
+
 #pragma mark - Real table data
 
 - (void)testSelectKnownCustomerRow {
