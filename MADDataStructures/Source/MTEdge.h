@@ -9,9 +9,9 @@
 #ifndef MAD_DataStructures_MTEdge_h
 #define MAD_DataStructures_MTEdge_h
 
-#import "MTObject.h"
-#import "MTProtocolLog.h"
-#import "MTProtocolCompare.h"
+#import <MADDataStructures/MTObject.h>
+#import <MADDataStructures/MTProtocolLog.h>
+#import <MADDataStructures/MTProtocolCompare.h>
 
 #ifndef NS_DESIGNATED_INITIALIZER
   #if __has_attribute(objc_designated_initializer)

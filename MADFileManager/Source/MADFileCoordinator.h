@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObject.h>
 #import <MADFileManager/MADAppStorageOption.h>
-#import "MADFileCoordinatorProtocol.h"
+#import <MADFileManager/MADFileCoordinatorProtocol.h>
 
 @interface MADFileCoordinator : NSObject <MADFileCoordinatorProtocol>
 

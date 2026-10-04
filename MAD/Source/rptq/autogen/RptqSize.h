@@ -9,7 +9,7 @@
 #ifndef MAD_RptqSize_h
 #define MAD_RptqSize_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

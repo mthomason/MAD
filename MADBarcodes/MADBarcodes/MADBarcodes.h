@@ -41,3 +41,10 @@ FOUNDATION_EXPORT const unsigned char MADBarcodesVersionString[];
 #import <MADBarcodes/MTBarcodeMicroPdf417Iso24728.h>
 #import <MADBarcodes/MTBarcodeChannelCode.h>
 #import <MADBarcodes/MTBarcodeCode39Extended.h>
+
+// Remaining public headers, so the module umbrella is complete.
+// (-Wincomplete-umbrella; keep in sync with the Public headers phase.)
+#import <MADBarcodes/MADBarcodeBorderStyle.h>
+#import <MADBarcodes/MADBarcodeSizingMode.h>
+#import <MADBarcodes/pngconf.h>
+#import <MADBarcodes/pnglibconf.h>

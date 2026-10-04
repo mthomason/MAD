@@ -21,3 +21,14 @@ FOUNDATION_EXPORT const unsigned char MADExplorerVersionString[];
 #import <MADExplorer/MADFileLocationManager.h>
 #import <MADExplorer/MADExplorerViewDelegate.h>
 #import <MADExplorer/MADSaveFileProtocol.h>
+
+// Remaining public headers, so the module umbrella is complete.
+// (-Wincomplete-umbrella; keep in sync with the Public headers phase.)
+#import <MADExplorer/MADDocumentCellProtocol.h>
+#import <MADExplorer/MADDocumentManagerProtocol.h>
+#import <MADExplorer/MADExplorerDataSource.h>
+#import <MADExplorer/MADExplorerProtocol.h>
+#import <MADExplorer/MADExplorerView.h>
+#import <MADExplorer/MADLabelFileExplorerDocumentCellTitle.h>
+#import <MADExplorer/MADStandard.h>
+#import <MADExplorer/MADThumbnailView.h>

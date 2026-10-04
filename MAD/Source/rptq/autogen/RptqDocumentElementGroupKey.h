@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocumentElementGroupKey_RptqDocumentElement_h
 #define MAD_RptqDocumentElementGroupKey_RptqDocumentElement_h
 
-#import "RptqDocumentElement.h"
+#import <MAD/RptqDocumentElement.h>
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RptqDocumentElementGroupKey : RptqDocumentElement

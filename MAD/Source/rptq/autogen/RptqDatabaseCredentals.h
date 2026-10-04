@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDatabaseCredentals_h
 #define MAD_RptqDatabaseCredentals_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 @class RptqDatabase;
 

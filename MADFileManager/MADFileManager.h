@@ -24,3 +24,9 @@ FOUNDATION_EXPORT const unsigned char MADFileManagerVersionString[];
 #import <MADFileManager/MADFileLocationManagerDelegate.h>
 #import <MADFileManager/MADFilesControllerDelegate.h>
 #import <MADFileManager/MADStorageState.h>
+
+// Remaining public headers, so the module umbrella is complete.
+// (-Wincomplete-umbrella; keep in sync with the Public headers phase.)
+#import <MADFileManager/MADAppStorageOption.h>
+#import <MADFileManager/MADFileCoordinator.h>
+#import <MADFileManager/MADFileCoordinatorProtocol.h>

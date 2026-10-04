@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentElementLabel_Extras_h
 #define Reports_RptqDocumentElementLabel_Extras_h
 
-#import "RptqDocumentElementLabel.h"
+#import <MAD/RptqDocumentElementLabel.h>
 
 @interface RptqDocumentElementLabel (Extras)
 

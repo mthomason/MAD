@@ -9,7 +9,7 @@
 #ifndef Reports_RptqQuerySort_Extras_h
 #define Reports_RptqQuerySort_Extras_h
 
-#import "RptqQuerySort.h"
+#import <MAD/RptqQuerySort.h>
 
 @interface RptqQuerySort (Extras)
 

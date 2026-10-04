@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocument_h
 #define MAD_RptqDocument_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 @class RptqDatabase, RptqDocumentSection;
 

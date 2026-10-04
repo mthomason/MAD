@@ -15,7 +15,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MADStore.h"
+#import <MAD/MADStore.h>
 
 @class MADStoreGraph, RptqObject;
 

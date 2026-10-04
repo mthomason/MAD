@@ -9,7 +9,7 @@
 #ifndef Reports_RptqDocumentSectionRows_Extras_h
 #define Reports_RptqDocumentSectionRows_Extras_h
 
-#import "RptqDocumentSectionRows.h"
+#import <MAD/RptqDocumentSectionRows.h>
 #import <MAD/RptqStoreContext.h>
 
 @interface RptqDocumentSectionRows (Extras)

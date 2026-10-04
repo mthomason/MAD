@@ -9,7 +9,7 @@
 #ifndef MAD_RptqBorder_h
 #define MAD_RptqBorder_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 @class RptqDirectionalAsymmetry, RptqDirectionalProperty, RptqDocumentElement;
 

@@ -28,7 +28,7 @@
 #import <CoreData/CoreData.h>
 #import <Foundation/Foundation.h>
 
-#import "MADStoreGraph.h"
+#import <MAD/MADStoreGraph.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

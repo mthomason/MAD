@@ -9,7 +9,7 @@
 #ifndef MAD_RptqNumericFormat_h
 #define MAD_RptqNumericFormat_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 @class NSLocale, RptqDocumentElement;
 

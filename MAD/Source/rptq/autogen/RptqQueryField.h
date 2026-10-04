@@ -9,7 +9,7 @@
 #ifndef MAD_RptqQueryField_h
 #define MAD_RptqQueryField_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 @class RptqDatabaseSchemaField, RptqDocumentElementAggregate, RptqDocumentElementBarcode, RptqDocumentElementLabelDataField, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate, RptqQuerySort, RptqQueryTable;
 

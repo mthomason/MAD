@@ -18,7 +18,7 @@
 #define MAD_MADStoreGraph_h
 
 #import <Foundation/Foundation.h>
-#import "MADStoreObject.h"
+#import <MAD/MADStoreObject.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

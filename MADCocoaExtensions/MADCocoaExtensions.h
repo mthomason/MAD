@@ -36,3 +36,10 @@ FOUNDATION_EXPORT const unsigned char MADCocoaExtensionsVersionString[];
 #import <MADCocoaExtensions/MADPadding.h>
 #import <MADCocoaExtensions/MADBorderStyle.h>
 #import <MADCocoaExtensions/MADTextStyle.h>
+
+// Remaining public headers, so the module umbrella is complete.
+// (-Wincomplete-umbrella; keep in sync with the Public headers phase.)
+#import <MADCocoaExtensions/MADColor.h>
+#import <MADCocoaExtensions/MADCompassDirection.h>
+#import <MADCocoaExtensions/MADLineSegment.h>
+#import <MADCocoaExtensions/MADMathAlgebra.h>

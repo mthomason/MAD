@@ -9,9 +9,9 @@
 #ifndef MAD_DataStructures_MTStack_h
 #define MAD_DataStructures_MTStack_h
 
-#import "MTObject.h"
+#import <MADDataStructures/MTObject.h>
 #import <Foundation/NSEnumerator.h>
-#import "MTProtocolLog.h"
+#import <MADDataStructures/MTProtocolLog.h>
 
 @interface MTStack : NSObject <NSFastEnumeration, MTProtocolLog>
 

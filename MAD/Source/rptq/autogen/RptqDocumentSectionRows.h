@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocumentSectionRows_NSManagedObject_h
 #define MAD_RptqDocumentSectionRows_NSManagedObject_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 @class RptqDocumentElement, RptqDocumentSection;
 

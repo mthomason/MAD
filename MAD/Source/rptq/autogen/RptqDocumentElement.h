@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocumentElement_NSManagedObject_h
 #define MAD_RptqDocumentElement_NSManagedObject_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 @class RptqDocumentSectionRows, RptqPoint, RptqDirectionalAsymmetry, RptqRect,
        RptqBorder, RptqTextStyle, RptqAlignment, RptqNumericFormat, UIColor;

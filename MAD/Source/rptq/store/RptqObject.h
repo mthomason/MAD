@@ -19,7 +19,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MADStoreObject.h"
+#import <MAD/MADStoreObject.h>
 
 @class RptqStoreContext;
 

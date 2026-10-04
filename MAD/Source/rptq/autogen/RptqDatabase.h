@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDatabase_NSManagedObject_h
 #define MAD_RptqDatabase_NSManagedObject_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 @class RptqDatabaseSchemaTable, RptqDocument, RptqQuery, RptqDatabaseCredentals;
 

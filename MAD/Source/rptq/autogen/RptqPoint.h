@@ -9,7 +9,7 @@
 #ifndef MAD_RptqPoint_h
 #define MAD_RptqPoint_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

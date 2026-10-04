@@ -9,7 +9,7 @@
 #ifndef MAD_RptqRect_h
 #define MAD_RptqRect_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 @class RptqPoint, RptqSize, RptqDocumentElement;
 

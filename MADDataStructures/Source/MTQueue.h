@@ -11,7 +11,7 @@
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSEnumerator.h>
-#import "MTProtocolLog.h"
+#import <MADDataStructures/MTProtocolLog.h>
 
 #ifndef NS_DESIGNATED_INITIALIZER
   #if __has_attribute(objc_designated_initializer)

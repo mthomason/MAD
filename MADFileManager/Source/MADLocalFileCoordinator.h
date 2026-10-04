@@ -9,7 +9,7 @@
 #ifndef MADDesigner_MADLocalFileCoordinator_h
 #define MADDesigner_MADLocalFileCoordinator_h
 
-#import "MADFileCoordinator.h"
+#import <MADFileManager/MADFileCoordinator.h>
 
 @interface MADLocalFileCoordinator : NSObject <MADFileCoordinatorProtocol>
 

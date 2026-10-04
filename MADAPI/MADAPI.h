@@ -38,3 +38,8 @@ FOUNDATION_EXPORT const unsigned char MADAPIVersionString[];
 #import <MADAPI/MADErrorContainer.h>
 
 #import <MADAPI/MADAliases.h>
+
+// Remaining public headers, so the module umbrella is complete.
+// (-Wincomplete-umbrella; keep in sync with the Public headers phase.)
+#import <MADAPI/MADDatabaseSQLProtocol.h>
+#import <MADAPI/MADPluginProtocol.h>

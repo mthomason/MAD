@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDirectionalProperty_h
 #define MAD_RptqDirectionalProperty_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

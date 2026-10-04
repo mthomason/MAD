@@ -9,7 +9,7 @@
 #ifndef MAD_RptqAlignment_h
 #define MAD_RptqAlignment_h
 
-#import "RptqObject.h"
+#import <MAD/RptqObject.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

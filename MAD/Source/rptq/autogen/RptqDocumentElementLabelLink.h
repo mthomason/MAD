@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocumentElementLabelLink_h
 #define MAD_RptqDocumentElementLabelLink_h
 
-#import "RptqDocumentElement.h"
+#import <MAD/RptqDocumentElement.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

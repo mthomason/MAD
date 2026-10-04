@@ -9,7 +9,7 @@
 #ifndef MAD_RptqDocumentElementFormula_RptqDocumentElement_h
 #define MAD_RptqDocumentElementFormula_RptqDocumentElement_h
 
-#import "RptqDocumentElement.h"
+#import <MAD/RptqDocumentElement.h>
 @class RptqDocumentElementAggregate;
 
 NS_ASSUME_NONNULL_BEGIN
