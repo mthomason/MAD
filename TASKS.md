@@ -198,19 +198,31 @@ the offline suite or by reading the driver, not by a run against a real server. 
 
 ---
 
-## 6. Deferred by the user — the macOS library builds, and the declarative build system
+## 6. The macOS library builds and the declarative build system
 
-**Status:** Deferred 2026-10-01. Not blocked, not dropped: waiting on the user's call to
-resume, and recorded here so it is tracked intent rather than a thread that quietly ends.
+**Status:** In progress since 2026-10-04 (resumed by the user as the Compressor rework;
+was deferred 2026-10-01). Progress:
 
-These are `ROADMAP.md` §2.2 and §2.3, deferred in one decision. The user's words:
+- [x] Phase 0 — portability micro-fixes: workspace absolute path, `CLI/build.sh`
+      DerivedData hash, MADMySQL stray `-v`, inert app `SQLITE_ENABLE_COLUMN_METADATA`.
+- [x] Phase 1 — `matrix.conf` + `build.sh` + `lib/recipes/` written; verified green:
+      sqlite3, zlib, openssl (ios+sim+macosx), bzip2, libpng, libarchive, zint.
+- [ ] Phase 1 — freetds, mysqlclient (the two hard recipes; in flight).
+- [ ] Phase 2 — Xcode rewiring to the xcframeworks + ensure phases.
+- [ ] Phase 3 — full verification incl. the fresh-clone simulation.
+- [ ] Phase 4 — remaining macOS slices (zlib, mysqlclient, and every other lib's mac row).
+- [ ] Phase 5 — version updates, one library per commit.
+- [ ] Phase 6 — prune the old scripts and legacy `Compressor/library` trees.
+- [ ] Phase 7 — untrack the vendored artifacts (final step, after everything is proven).
+
+The user's earlier words, for context:
 
 > *"let's skip section 2.2, The two real builds; we will build for MacOS later. We will also
 > put off the declarative build system, though I believe it's important. This info should be
 > stored in a plist or something, IDK. We need to keep track of them on some TODO list,
 > which previous ones probably haven't been maintained."*
 
-**What is deferred.**
+**What this covers.**
 
 *   **`ROADMAP.md` §2.2 — the two remaining macOS builds.** zlib/macOS and
     mysqlclient/macOS. Five of the eight library rows are already built; these two are not.

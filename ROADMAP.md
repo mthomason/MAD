@@ -270,26 +270,27 @@ Both are in `BUGS.md` under *Build wiring*.
 **This removes references, not libraries.** The standing constraint holds: nothing on disk is
 deleted until the replacement builds every combination.
 
-### 2.2 The two real builds — **deferred 2026-10-01**
+### 2.2 The two real builds — **in progress since 2026-10-04**
 
 zlib/macOS and mysqlclient/macOS. Five rows are already built; these two are not.
 
-Deferred by the user's call, and nothing is waiting on them: the CLI runs on the iOS
-Simulator (Track 3), and a native macOS binary is blocked by Track 5.1's UIKit decoupling
-rather than by a missing archive.
+Resumed by the user as part of the Compressor rework: the new matrix builds every
+platform for every library, so these two rows arrive with Phase 4 (the openssl/macosx
+slice already builds, because the mysqlclient recipe's native host-tools stage needs it).
 
-### 2.3 The declarative build system — **deferred 2026-10-01**
+### 2.3 The declarative build system — **in progress since 2026-10-04**
 
 `Compressor/matrix.conf`, `Compressor/build.sh`, per-library `manifest.json`, and an XCFramework
 as the single artifact Xcode links. Kept as a third entry point alongside the existing scripts
 until trusted. The `manifest.json` is what makes "which flags built this?" answerable — today
 that question can only be answered by disassembling the archive.
 
-Deferred by the user's call. Worth keeping from that exchange: the user's instinct was that
+Resumed by the user as part of the Compressor rework; `TASKS.md` §6 carries the phase
+checklist. Worth keeping from the deferral exchange: the user's instinct was that
 "this info should be stored in a plist or something" — which is precisely what the
 `manifest.json` is, so the design as written already answers the concern that prompted it.
-When this resumes, the per-library manifest should be built **first**: it is what makes every
-other piece of the matrix checkable rather than merely runnable.
+The per-library manifest was built **first**: it is what makes every other piece of the
+matrix checkable rather than merely runnable.
 
 The XCFramework is still the answer to §2.1's third bullet. That finding does not expire with
 the deferral — `PBXFileReference.path` names an iOS slice directly, so no search path can fix
