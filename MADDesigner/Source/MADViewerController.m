@@ -307,6 +307,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	
 	buttonRefresh.enabled = YES;
 	buttonDone.enabled = YES;
+	self.barButtonItemRefresh = buttonRefresh;
 
 	[self.tabBarController.navigationItem setRightBarButtonItem: buttonRefresh animated: YES];
 	[self.tabBarController.navigationItem setLeftBarButtonItem: buttonDone animated: YES];
@@ -537,14 +538,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	self.barButtonItemActivity.enabled = YES;
 	_refreshing = NO;
 	_updatingOfTimerIsPaused = NO;
-	
+
 	UIBarButtonItem *buttonRefresh = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemRefresh
 																				   target: self
 																				   action: @selector(refresh:)];
 	[MADThemeManager applyAppearanceToBarButtonItem:buttonRefresh traitCollection:self.traitCollection];
 	buttonRefresh.enabled = YES;
-	[self.navigationItem setRightBarButtonItem: buttonRefresh
-									  animated: YES];
+	self.barButtonItemRefresh = buttonRefresh;
+	[self.tabBarController.navigationItem setRightBarButtonItem: buttonRefresh
+													  animated: YES];
 }
 
 - (void)setDisplayInactive {
@@ -554,7 +556,12 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	self.barButtonItemActivity.enabled = NO;
 	_refreshing = YES;
 	_updatingOfTimerIsPaused = NO;
-	
+
+	// The refresh button is replaced by the indicator for the whole run, so it
+	// cannot be tapped again mid-refresh; the stored button is disabled as well
+	// for the moment before the swap lands.
+	self.barButtonItemRefresh.enabled = NO;
+
 	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
 	activityIndicator.hidden = NO;
 	activityIndicator.hidesWhenStopped = NO;
@@ -562,8 +569,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 
 	UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
 	[activityIndicator startAnimating];
-	[self.navigationItem setRightBarButtonItem: barButtonItem
-									  animated: YES];
+	[self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem
+													  animated: YES];
 }
 
 - (void)setPageingEnabled:(BOOL)enabled {
@@ -996,6 +1003,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 }
 
 - (void)operation:(MADOperation *)operation updatePages:(NSUInteger)numberOfPages {
+	os_log_debug(OS_LOG_DEFAULT, "%s: pages=%lu thread=%@ labelStatus=%p operation=%p",
+				 __PRETTY_FUNCTION__, (unsigned long)numberOfPages,
+				 NSThread.currentThread.description, self.labelStatus, operation);
 	if ([operation isKindOfClass:[MADRefreshOperationReload class]]) {
 		self.pageSlider.numberOfPages = numberOfPages;
 	}

@@ -8,6 +8,7 @@
 
 #import "MADLabelStatus.h"
 #import <UIKit/NSAttributedString.h>
+#import <os/log.h>
 
 static NSString * const MADTextReadRecords      = @"\nRead %@ records.";
 static NSString * const MADTextFormattingPage   = @"\nFormatting page %@.";
@@ -66,6 +67,9 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 }
 
 - (void)updatePageStatus:(MADReportPosition)reportPosition {
+	os_log_debug(OS_LOG_DEFAULT, "%s: currentPage=%ld totalPages=%ld thread=%@ label=%p",
+				 __PRETTY_FUNCTION__, (long)reportPosition.currentPage,
+				 (long)reportPosition.totalPages, NSThread.currentThread.description, self);
 	// Perform string formatting off main thread
 	NSString *localizedPageOfPages;
 	if (reportPosition.totalPages == 0) {
@@ -75,7 +79,7 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 		NSString *end = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.totalPages) numberStyle:NSNumberFormatterDecimalStyle];
 		localizedPageOfPages = [NSString stringWithFormat:NSLocalizedString(MADTextPageXofY, MADTextPageXofY), start, end];
 	}
-	
+
 	__weak MADLabelStatus *weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[weakSelf updateStatusWithPageNumber:localizedPageOfPages];
@@ -123,6 +127,8 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 }
 
 - (void)updateStatusWithPageNumber:(NSString *)message {
+	os_log_debug(OS_LOG_DEFAULT, "%s: message='%@' thread=%@ label=%p",
+				 __PRETTY_FUNCTION__, message, NSThread.currentThread.description, self);
 	[self safelyUpdateAttributedString:self.statusMessage3
 						  withNewString:message
 							attributes:self.lightAttributes];
