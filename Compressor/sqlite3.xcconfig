@@ -4,12 +4,11 @@
 //
 //  The single place the SQLite compile-time options are written down.
 //
-//  Two consumers read this file, and they must not disagree:
-//
-//    * MADSqlite3 -- compiles Compressor/library/sqlite3/sqlite3.c as a
-//      target source file, and is the only target that does.
-//    * Compressor/build_sqlite3.sh -- regenerates the amalgamation, and
-//      reads SQLITE_DEFINES below rather than keeping its own list.
+//  One consumer reads this file: the sqlite3 recipe
+//  (Compressor/lib/recipes/sqlite3.sh), which generates the amalgamation
+//  and compiles it into libsqlite3.a per slice with these defines.  The
+//  MADSqlite3 target links that archive from sqlite3.xcframework, so the
+//  flags reach the engine through exactly one path.
 //
 //  Why this file exists: the target used to pass one define while the
 //  script declared twenty, so the engine writing every .maddb cache was

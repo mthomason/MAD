@@ -1033,7 +1033,18 @@ wrong answer.
   apart again. Rebuilt, the engine reports `DEFAULT_PAGE_SIZE=8192`, `DQS=0`,
   `ENABLE_FTS5`, `ENABLE_STAT4`, `TEMP_STORE=2` and `THREADSAFE=1`, and defines 599
   fts5 symbols where the guards above say it defined none.
-- **Test:** the `MADSqlite3` suite — 69 tests, 5 skipped, 0 failures — which did *not*
+- **Then (Compressor rework, 2026-10-04):** the two consumers became one. The
+  sqlite3 recipe (`Compressor/lib/recipes/sqlite3.sh`) generates the amalgamation
+  and compiles `libsqlite3.a` per slice with these defines, and `MADSqlite3` links
+  that archive from `sqlite3.xcframework` — the target no longer compiles `sqlite3.c`
+  and no longer names the xcconfig as its base configuration, so the two lists
+  *cannot* disagree again. Verified against the rebuilt framework: the
+  compile-option strings are all present and `sqlite3Fts5Init` is linked. The
+  fts5 *symbol count* dropped from 599 to 336 because the archive is compiled
+  `-Os` (the old count was a Debug `-O0` binary; at `-Os` the optimizer inlines
+  away most of fts5's static functions) — the presence check is now the init
+  symbol plus the option strings, not the count.
+- **Test:** the `MADSqlite3` suite — 77 tests, 5 skipped, 0 failures — which did *not*
   cover the risk this option carried. `DQS=0` removes SQLite's habit of reading an
   unknown double-quoted token as a string literal, and an earlier version of this entry
   waved that through, claiming the query builder "quotes identifiers and binds values
@@ -2126,9 +2137,63 @@ setting that names a platform no target can build for.
   `library/libmysqlclient`, `library/libpng`, `library/openssl`, `MADDesigner`.
 - **Test:** `MADMySQL` 58 tests, 0 failures, and the app build links MADMySQL.
 
+### The workspace pinned MADTds with an absolute path
+- **Status:** Fixed
+- **Where:** `Reports.xcworkspace/contents.xcworkspacedata:44`
+- **Behavior:** the MADTds `FileRef` was
+  `location = "group:/Users/michael/Desktop/Reports/MADTds/MADTds.xcodeproj"` — the
+  only absolute path in the workspace; every other project uses the portable
+  `group:<name>` form. Moving the tree leaves a stale reference and the workspace
+  drops MADTds.
+- **Why it matters:** it makes the workspace machine-specific, so it is the first
+  failure in the "move the source tree" portability test the Compressor rework sets
+  out to pass.
+- **Now:** `location = "group:MADTds/MADTds.xcodeproj"`, matching every other entry.
+- **Evidence:** `xcodebuild -list -workspace Reports.xcworkspace` lists all 18
+  schemes from a relocated copy of the tree.
+
+### CLI/build.sh named a machine-specific DerivedData directory
+- **Status:** Fixed
+- **Where:** `CLI/build.sh:22`
+- **Behavior:** the DerivedData default was
+  `${HOME}/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci`,
+  a per-machine hash Xcode generated once on this machine. On any other checkout the
+  script builds the frameworks and then looks for the products in a directory that
+  does not exist.
+- **Why it matters:** a fresh-clone `CLI/build.sh` could not find the frameworks it
+  just built — the same portability failure the workspace fix above addresses, in the
+  other build entry point.
+- **Now:** the default is a project-local `${REPO_ROOT}/.cli-deriveddata`, passed to
+  `xcodebuild -derivedDataPath`, and `.gitignore` carries it. `MAD_DERIVED_DATA`
+  still overrides, as before.
+- **Evidence:** `CLI/build.sh` builds from a clean tree and `CLI/build.sh --run
+  inspect` runs.
+
+### MADMySQL linked every build with a stray `-v`
+- **Status:** Fixed
+- **Where:** `MADMySQL/MADMySQL.xcodeproj/project.pbxproj` — the project-level Debug
+  and Release `OTHER_LDFLAGS`
+- **Behavior:** `OTHER_LDFLAGS = ("-lc++", "-v")` — every link of the framework and
+  its tests ran the linker in verbose mode, burying the real link output.
+- **Now:** `"-lc++"` alone.
+- **Evidence:** `MADMySQL` 58 tests, 0 failures, with a quiet link line.
+
+### The app target defined SQLITE_ENABLE_COLUMN_METADATA for nothing
+- **Status:** Fixed
+- **Where:** `MADDesigner/MAD Designer.xcodeproj/project.pbxproj` — the `MAD Designer`
+  target's `GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS`, Debug and Release
+- **Behavior:** `SQLITE_ENABLE_COLUMN_METADATA=1` sat in the app's defines, where it
+  is inert: the app compiles no `sqlite3.c` — the amalgamation is compiled by the
+  `MADSqlite3` target, whose options come from `Compressor/sqlite3.xcconfig`. It read
+  like a second home for SQLite flags, which is exactly the two-consumers mistake the
+  H7 fix removed.
+- **Now:** gone. The app's SQLite behavior is whatever `MADSqlite3` was built with,
+  as it should be.
+- **Evidence:** `MAD Designer` builds; `MADSqlite3` 72 tests pass, 5 skipped, 0
+  failures.
+
 ### A macOS build cannot be wired from search paths alone
-- **Status:** Still open — this is ROADMAP §2.1's third bullet, and it cannot be done
-  as written
+- **Status:** Fixed — by the Compressor rework's XCFramework rewiring
 - **Where:** every vendored `.a` reference, e.g. `MAD/MAD.xcodeproj`'s `libarchive.a`
   at `../Compressor/library/libarchive/iOS/lib/libarchive.a`,
   `MADTds/MADTds.xcodeproj`'s `libct.a` at `freetds/iOS-arm64/lib/`, and
@@ -2140,18 +2205,20 @@ setting that names a platform no target can build for.
   `libarchive/iOS/lib/libarchive.a` is `arm64 arm64e`, `freetds/iOS-arm64/lib/libct.a`
   is `arm64`, `openssl/iOS/lib/libssl.a` is `arm64 arm64e`. The linker refuses a file
   built for another platform.
-- **The other half of the bullet is blocked too:** `SUPPORTED_PLATFORMS` cannot be
-  extended with `macosx` yet, because every framework sits on `MADFoundation` and
+- **Now:** every consumer target links an XCFramework, not a `.a` path, so the
+  toolchain picks the slice for the platform being built and there is nothing to make
+  SDK-conditional. The SDK-conditional search-path arms are deleted everywhere
+  (the MAD Viewer target's legacy list and Scrimpter — outside the workspace — are
+  the only survivors, unchanged). The matrix also builds macOS slices for every
+  library, so `zlib/macOS` and `mysqlclient/macOS` now exist (Track 2.2's two
+  missing rows).
+- **Still blocked, and it stays so:** `SUPPORTED_PLATFORMS` cannot be extended with
+  `macosx` yet, because every framework sits on `MADFoundation` and
   `MADFoundation/Source/MADApplication.h:13` imports `UIKit/UIApplication.h`. A probe
   (`xcodebuild build … -destination 'platform=macOS' SUPPORTED_PLATFORMS=macosx`) fails
   with `'UIKit/UIApplication.h' file not found`. Flipping the setting today would
-  advertise a platform no target can compile for.
-- **What it needs instead:** the macOS slices do exist on disk
-  (`freetds/macOS-arm64` and `macOS-x86_64`, `openssl/macOS`, `libpng/macosx`,
-  `bzip2/macOS`, `libarchive/macOS`), but reaching them wants either a second set of
-  per-SDK file references or — the answer `MAD_CLI.md` §4.2 and ROADMAP Track 2.3
-  already point at — one XCFramework artifact whose slice the toolchain picks. `zlib`
-  and `libmysqlclient` have no macOS slice at all (Track 2.2).
+  advertise a platform no target can compile for. The XCFrameworks are ready for the
+  day that decoupling lands; nothing here unblocks the app-side macOS work.
 
 ### The MAD Viewer target has not linked since `09e0e7b8d`
 - **Status:** Still open

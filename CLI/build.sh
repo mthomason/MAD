@@ -19,7 +19,9 @@ set -euo pipefail
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 readonly BUILD_DIR="${SCRIPT_DIR}/build"
-readonly DERIVED_DATA="${MAD_DERIVED_DATA:-${HOME}/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci}"
+# A project-local DerivedData instead of Xcode's default: the default name carries a
+# per-machine hash, so a fresh checkout could not find the frameworks it just built.
+readonly DERIVED_DATA="${MAD_DERIVED_DATA:-${REPO_ROOT}/.cli-deriveddata}"
 readonly PRODUCTS="${DERIVED_DATA}/Build/Products/Debug-iphonesimulator"
 readonly OUTPUT="${BUILD_DIR}/mad"
 

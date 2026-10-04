@@ -41,7 +41,7 @@
          location = "group:MADSqlite3/MADSqlite3.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:/Users/michael/Desktop/Reports/MADTds/MADTds.xcodeproj">
+         location = "group:MADTds/MADTds.xcodeproj">
       </FileRef>
       <FileRef
          location = "group:MADTdsClient/MADTdsClient.xcodeproj">

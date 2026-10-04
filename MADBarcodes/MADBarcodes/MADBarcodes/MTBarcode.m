@@ -510,25 +510,25 @@ typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
         int success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
         NSString *errorMessage = nil;
         switch (success) {
-            case WARN_INVALID_OPTION:
+            case ZINT_WARN_INVALID_OPTION:
                 errorMessage = NSLocalizedString(@"Warning: Invalid Option.", @"Warning: Invalid Option.");
                 break;
-            case ERROR_TOO_LONG:
+            case ZINT_ERROR_TOO_LONG:
                 errorMessage = NSLocalizedString(@"Barcode error: To long.", @"Barcode error: To long.");
                 break;
-            case ERROR_INVALID_DATA:
+            case ZINT_ERROR_INVALID_DATA:
                 errorMessage = NSLocalizedString(@"Barcode error: Invalid data.", @"Barcode error: Invalid data.");
                 break;
-            case ERROR_INVALID_CHECK:
+            case ZINT_ERROR_INVALID_CHECK:
                 errorMessage = NSLocalizedString(@"Barcode error: Invalid check.", @"Barcode error: Invalid check.");
                 break;
-            case ERROR_ENCODING_PROBLEM:
+            case ZINT_ERROR_ENCODING_PROBLEM:
                 errorMessage = NSLocalizedString(@"Barcode error: Encoding problem.", @"Barcode error: Encoding problem.");
                 break;
-            case ERROR_FILE_ACCESS:
+            case ZINT_ERROR_FILE_ACCESS:
                 errorMessage = NSLocalizedString(@"Barcode error: File access.", @"Barcode error: File access.");
                 break;
-            case ERROR_MEMORY:
+            case ZINT_ERROR_MEMORY:
                 errorMessage = NSLocalizedString(@"Barcode error: Memory error.", @"Barcode error: Memory error.");
                 break;
             default:

@@ -149,7 +149,9 @@
 		4C4754511CF4099600BC9E02 /* MADDocumentProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C4EC6D52DC98A3D001DBEBE /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4EC6D42DC98A3D001DBEBE /* libxml2.2.tbd */; };
 		4C4EC6D92DC98F9C001DBEBE /* liblzma.5.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4EC6D82DC98F9C001DBEBE /* liblzma.5.tbd */; };
-		4C4EC6DB2DC9975A001DBEBE /* libarchive.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4EC6DA2DC9975A001DBEBE /* libarchive.a */; };
+		4CDA7B0500000000000000B2 /* libarchive.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0500000000000000B1 /* libarchive.xcframework */; };
+		4CDA7B0600000000000000B2 /* bzip2.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0600000000000000B1 /* bzip2.xcframework */; };
+		4CDA7B0700000000000000B2 /* zlib.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0700000000000000B1 /* zlib.xcframework */; };
 		4C4EC7052DC997D7001DBEBE /* archive_cryptor_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4EC6E32DC997D7001DBEBE /* archive_cryptor_private.h */; };
 		4C4EC7062DC997D7001DBEBE /* archive_windows.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4EC6FD2DC997D7001DBEBE /* archive_windows.h */; };
 		4C4EC7072DC997D7001DBEBE /* archive_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4EC6F62DC997D7001DBEBE /* archive_private.h */; };
@@ -641,10 +643,11 @@
 		4C47544C1CF3672500BC9E02 /* MADAggregateFunctionInputType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAggregateFunctionInputType.h; sourceTree = "<group>"; };
 		4C47544E1CF3673700BC9E02 /* MADAggregateFunctionGroupByType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADAggregateFunctionGroupByType.h; sourceTree = "<group>"; };
 		4C4754501CF4099600BC9E02 /* MADDocumentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentProtocol.h; sourceTree = "<group>"; };
-		4C4EC6CD2DC95EE9001DBEBE /* libarchive.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libarchive.2.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.4.sdk/usr/lib/libarchive.2.tbd; sourceTree = DEVELOPER_DIR; };
-		4C4EC6D42DC98A3D001DBEBE /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.4.sdk/usr/lib/libxml2.2.tbd; sourceTree = DEVELOPER_DIR; };
-		4C4EC6D82DC98F9C001DBEBE /* liblzma.5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = liblzma.5.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.4.sdk/usr/lib/liblzma.5.tbd; sourceTree = DEVELOPER_DIR; };
-		4C4EC6DA2DC9975A001DBEBE /* libarchive.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive.a; path = ../Compressor/library/libarchive/iOS/lib/libarchive.a; sourceTree = "<group>"; };
+		4C4EC6D42DC98A3D001DBEBE /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		4C4EC6D82DC98F9C001DBEBE /* liblzma.5.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = liblzma.5.tbd; path = usr/lib/liblzma.5.tbd; sourceTree = SDKROOT; };
+		4CDA7B0500000000000000B1 /* libarchive.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libarchive.xcframework; path = ../Compressor/library/libarchive.xcframework; sourceTree = "<group>"; };
+		4CDA7B0600000000000000B1 /* bzip2.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = bzip2.xcframework; path = ../Compressor/library/bzip2.xcframework; sourceTree = "<group>"; };
+		4CDA7B0700000000000000B1 /* zlib.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = zlib.xcframework; path = ../Compressor/library/zlib.xcframework; sourceTree = "<group>"; };
 		4C4EC6DD2DC997D7001DBEBE /* archive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archive.h; sourceTree = "<group>"; };
 		4C4EC6DE2DC997D7001DBEBE /* archive_acl_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archive_acl_private.h; sourceTree = "<group>"; };
 		4C4EC6DF2DC997D7001DBEBE /* archive_blake2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archive_blake2.h; sourceTree = "<group>"; };
@@ -1013,7 +1016,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C4EC6DB2DC9975A001DBEBE /* libarchive.a in Frameworks */,
+				4CDA7B0500000000000000B2 /* libarchive.xcframework in Frameworks */,
+				4CDA7B0600000000000000B2 /* bzip2.xcframework in Frameworks */,
+				4CDA7B0700000000000000B2 /* zlib.xcframework in Frameworks */,
 				4C4EC6D92DC98F9C001DBEBE /* liblzma.5.tbd in Frameworks */,
 				4C4EC6D52DC98A3D001DBEBE /* libxml2.2.tbd in Frameworks */,
 				4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */,
@@ -1099,7 +1104,7 @@
 				4C4EC7032DC997D7001DBEBE /* filter_fork.h */,
 			);
 			name = include;
-			path = ../Compressor/library/libarchive/iOS/include;
+			path = ../Compressor/library/libarchive/include;
 			sourceTree = SOURCE_ROOT;
 		};
 		4CA7C30F2EA445F900475743 /* Source */ = {
@@ -1559,11 +1564,12 @@
 			isa = PBXGroup;
 			children = (
 				4C4EC72F2DC9A67D001DBEBE /* MADFileManager.framework */,
+				4CDA7B0500000000000000B1 /* libarchive.xcframework */,
+				4CDA7B0600000000000000B1 /* bzip2.xcframework */,
+				4CDA7B0700000000000000B1 /* zlib.xcframework */,
 				4C4EC6DC2DC9979C001DBEBE /* libarchive */,
-				4C4EC6DA2DC9975A001DBEBE /* libarchive.a */,
 				4C4EC6D82DC98F9C001DBEBE /* liblzma.5.tbd */,
 				4C4EC6D42DC98A3D001DBEBE /* libxml2.2.tbd */,
-				4C4EC6CD2DC95EE9001DBEBE /* libarchive.2.tbd */,
 				4C2915DD24AC72C000EC794B /* MADAPI.framework */,
 				4C2915DE24AC72C000EC794B /* MADBarcodes.framework */,
 				4C2915DF24AC72C000EC794B /* MADCocoaExtensions.framework */,
@@ -1903,6 +1909,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4CF781581BADE5EA0050A67D /* Build configuration list for PBXNativeTarget "MAD" */;
 			buildPhases = (
+				4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */,
 				4CF7813F1BADE5EA0050A67D /* Sources */,
 				4CF781401BADE5EA0050A67D /* Frameworks */,
 				4CF781411BADE5EA0050A67D /* Headers */,
@@ -1989,6 +1996,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Ensure Libraries (Compressor)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -euo pipefail\n\"${SRCROOT}/../Compressor/build.sh\" --platforms ios,simulator libarchive\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4CF7813F1BADE5EA0050A67D /* Sources */ = {
@@ -2336,6 +2360,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
@@ -2374,10 +2399,6 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Compressor/library/freetds/iOS/lib",
-					"$(PROJECT_DIR)/../Compressor/library/libpng",
-				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad;
@@ -2398,6 +2419,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
@@ -2438,10 +2460,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Compressor/library/freetds/iOS/lib",
-					"$(PROJECT_DIR)/../Compressor/library/libpng",
 				);
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";

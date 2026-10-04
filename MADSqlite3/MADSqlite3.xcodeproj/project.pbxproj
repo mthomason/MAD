@@ -65,8 +65,8 @@
 		4C2D78611F56F636005415F7 /* MADDatabaseConnectionSqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D785F1F56F636005415F7 /* MADDatabaseConnectionSqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D78621F56F636005415F7 /* MADDatabaseConnectionSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D78601F56F636005415F7 /* MADDatabaseConnectionSqlite3.m */; };
 		4C3D207C2DCD092300F40CE5 /* MADArrayCachingEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3D207A2DCD092300F40CE5 /* MADArrayCachingEnumerator.h */; };
-		4C4B4B8C2DE31A050035A316 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B4B8B2DE31A050035A316 /* sqlite3.c */; settings = {COMPILER_FLAGS = "-Wno-ambiguous-macro -Wno-#warnings -Wno-unreachable-code -Wno-sign-conversion -Wno-shorten-64-to-32 -Wno-implicit-int -Wno-pointer-sign -Wno-comma -Xanalyzer -analyzer-disable-all-checks"; }; };
 		4C4B4B8D2DE31A050035A316 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4B4B8A2DE31A050035A316 /* sqlite3.h */; };
+		4CDA7B0500000000000000B2 /* sqlite3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0500000000000000B1 /* sqlite3.xcframework */; };
 		4C92A49F2DD7EA2D008171A9 /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C92A49E2DD7EA2D008171A9 /* madlog.m */; };
 		4C92A4A02DD7EA2D008171A9 /* madlog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C92A49D2DD7EA2D008171A9 /* madlog.h */; };
 		4CA7C3082EA4395500475743 /* MADDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C3072EA4395500475743 /* MADDatabaseSqlite3.m */; };
@@ -155,8 +155,8 @@
 		4C2D78601F56F636005415F7 /* MADDatabaseConnectionSqlite3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseConnectionSqlite3.m; sourceTree = "<group>"; };
 		4C3D207A2DCD092300F40CE5 /* MADArrayCachingEnumerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADArrayCachingEnumerator.h; sourceTree = "<group>"; };
 		4C3D207B2DCD092300F40CE5 /* MADArrayCachingEnumerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADArrayCachingEnumerator.m; sourceTree = "<group>"; };
-		4C4B4B8A2DE31A050035A316 /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../Compressor/library/sqlite3/sqlite3.h; sourceTree = SOURCE_ROOT; };
-		4C4B4B8B2DE31A050035A316 /* sqlite3.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../Compressor/library/sqlite3/sqlite3.c; sourceTree = SOURCE_ROOT; };
+		4C4B4B8A2DE31A050035A316 /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../Compressor/library/sqlite3/include/sqlite3.h; sourceTree = SOURCE_ROOT; };
+		4CDA7B0500000000000000B1 /* sqlite3.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = sqlite3.xcframework; path = ../Compressor/library/sqlite3.xcframework; sourceTree = SOURCE_ROOT; };
 		4C92A49D2DD7EA2D008171A9 /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
 		4C92A49E2DD7EA2D008171A9 /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
 		4CA7C3062EA4395500475743 /* MADDatabaseSqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDatabaseSqlite3.h; sourceTree = "<group>"; };
@@ -171,7 +171,6 @@
 		4CDA7B0300000000000000B1 /* MADDataTableFastBenchmarkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataTableFastBenchmarkTests.m; sourceTree = "<group>"; };
 		4CDD44AE2DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDataTableSingleColumnEnumerator.h; sourceTree = "<group>"; };
 		4CDD44AF2DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataTableSingleColumnEnumerator.m; sourceTree = "<group>"; };
-		4CFA57C02EA0A10000D1E001 /* sqlite3.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = sqlite3.xcconfig; path = ../Compressor/sqlite3.xcconfig; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +178,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CDA7B0500000000000000B2 /* sqlite3.xcframework in Frameworks */,
 				4C29159824AC61D900EC794B /* MADFoundation.framework in Frameworks */,
 				4C29159F24AC61F600EC794B /* MADAPI.framework in Frameworks */,
 				4C29159C24AC61E500EC794B /* MADDataStructures.framework in Frameworks */,
@@ -203,7 +203,6 @@
 				4CA7C30E2EA43EF100475743 /* Resources */,
 				4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */,
 				4CBF04402E85191A00812022 /* AGENTS.md */,
-				4CFA57C02EA0A10000D1E001 /* sqlite3.xcconfig */,
 				4C11F1511BA9008D00EC2C58 /* MADSqlite3Tests */,
 				4C2D77ED1F56CF3F005415F7 /* Frameworks */,
 				4C11F1441BA9008D00EC2C58 /* Products */,
@@ -234,6 +233,7 @@
 		4C2D77ED1F56CF3F005415F7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CDA7B0500000000000000B1 /* sqlite3.xcframework */,
 				4C29159E24AC61F600EC794B /* MADAPI.framework */,
 				4C29159B24AC61E500EC794B /* MADDataStructures.framework */,
 				4C29159724AC61D900EC794B /* MADFoundation.framework */,
@@ -315,7 +315,6 @@
 			isa = PBXGroup;
 			children = (
 				4C4B4B8A2DE31A050035A316 /* sqlite3.h */,
-				4C4B4B8B2DE31A050035A316 /* sqlite3.c */,
 			);
 			path = sqlite3;
 			sourceTree = "<group>";
@@ -382,6 +381,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C11F1571BA9008D00EC2C58 /* Build configuration list for PBXNativeTarget "MADSqlite3" */;
 			buildPhases = (
+				4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */,
 				4C11F13E1BA9008D00EC2C58 /* Sources */,
 				4C11F13F1BA9008D00EC2C58 /* Frameworks */,
 				4C11F1401BA9008D00EC2C58 /* Headers */,
@@ -469,6 +469,23 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Ensure Libraries (Compressor)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -euo pipefail\n\"${SRCROOT}/../Compressor/build.sh\" --platforms ios,simulator sqlite3\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4C11F13E1BA9008D00EC2C58 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -493,7 +510,6 @@
 				4C2D78561F56F29B005415F7 /* MADQueryParameters.m in Sources */,
 				4C2D78401F56EF41005415F7 /* MADQueryCacheIndexCreateParameters.m in Sources */,
 				4C2D782E1F56ED4C005415F7 /* MADQueryCacheSelectLimitOffset.m in Sources */,
-				4C4B4B8C2DE31A050035A316 /* sqlite3.c in Sources */,
 				4C2D78321F56ED4C005415F7 /* MADQueryCacheVacuum.m in Sources */,
 				4C2D78011F56D01A005415F7 /* MADQueryCacheEndTransaction.m in Sources */,
 				4C2D78031F56D01A005415F7 /* MADQueryCacheJournalModeOverride.m in Sources */,
@@ -529,7 +545,6 @@
 /* Begin XCBuildConfiguration section */
 		4C11F1551BA9008D00EC2C58 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4CFA57C02EA0A10000D1E001 /* sqlite3.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -593,7 +608,6 @@
 		};
 		4C11F1561BA9008D00EC2C58 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4CFA57C02EA0A10000D1E001 /* sqlite3.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -660,6 +674,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -699,6 +714,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;

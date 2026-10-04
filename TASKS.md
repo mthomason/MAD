@@ -198,19 +198,74 @@ the offline suite or by reading the driver, not by a run against a real server. 
 
 ---
 
-## 6. Deferred by the user — the macOS library builds, and the declarative build system
+## 6. The macOS library builds and the declarative build system
 
-**Status:** Deferred 2026-10-01. Not blocked, not dropped: waiting on the user's call to
-resume, and recorded here so it is tracked intent rather than a thread that quietly ends.
+**Status:** In progress since 2026-10-04 (resumed by the user as the Compressor rework;
+was deferred 2026-10-01). Progress:
 
-These are `ROADMAP.md` §2.2 and §2.3, deferred in one decision. The user's words:
+- [x] Phase 0 — portability micro-fixes: workspace absolute path, `CLI/build.sh`
+      DerivedData hash, MADMySQL stray `-v`, inert app `SQLITE_ENABLE_COLUMN_METADATA`.
+- [x] Phase 1 — `matrix.conf` + `build.sh` + `lib/recipes/` written and verified
+      green for all nine libraries at their baseline versions (sqlite3 3.49.2,
+      zlib 1.3.1, openssl 3.5.0 with macosx too, bzip2 1.0.8, libpng 1.6.47,
+      libarchive 3.7.8, freetds 1.4.26, mysqlclient 8.0.42, zint 2.4.2).
+      mysqlclient took a two-stage design: a native macosx-arm64 build produces
+      the host tools and generated files; the cross builds seed those and run
+      the tools from the native stage. `build.sh --verify --all` is green.
+- [x] Phase 2 — Xcode rewiring to the xcframeworks + ensure phases. All eight
+      steps landed one commit per project: MADSqlite3 (links sqlite3.xcframework,
+      sqlite3.c no longer a target source, the xcconfig's only consumer is the
+      recipe), MAD (libarchive + bzip2 + zlib xcframeworks; the wrong system
+      libarchive.2.tbd ref is gone), MADMySQL (mysqlclient + openssl; the
+      hardcoded Debug/ search paths are gone with the arms), MADTds (freetds +
+      openssl), MADTdsClient (search-path cleanup), MADBarcodes (libpng + zlib,
+      then the vendored Zint tree replaced by zint.xcframework with zint.h kept
+      Public), and the app (openssl). Every target gained an Ensure Libraries
+      phase pinned to ios,simulator. Suites: MADSqlite3 77/0, MAD 238/0,
+      MADMySQL 58/0 (live server tests ran and passed), MADTdsClient 75/0;
+      MADBarcodes and MADTds build; the app builds for simulator and device.
+- [x] Phase 3 — full verification. All twelve suites green (MADSqlite3 77/0,
+      MAD 238/0, MADMySQL 58/0 live, MADTdsClient 75/0, MADFoundation 118/0,
+      MADAPI 78/0, MADDataStructures 72/0, MADCocoaExtensions 76/0, MADExplorer
+      9/0, MADFileManager 31/0; MADBarcodes/MADTds build), the app builds for
+      simulator and device, `--verify --all` is green, and the **fresh-clone
+      simulation passes**: `git archive HEAD` to a new path, workspace loads,
+      `Compressor/build.sh --all` bootstraps all nine libraries from downloads,
+      and `MAD Designer` builds for device from the bootstrapped artifacts.
+      The simulation caught two real bugs, both fixed: the mysqlclient native
+      stage needs the openssl macosx slice, which an ios+simulator bootstrap
+      never built (the recipe now builds it inline from the matrix row), and
+      per-platform rebuilds dropped the other platforms' slices (finish_library
+      now preserves them, creating into a temp xcframework and swapping).
+- [x] Phase 4 — macOS slices for every library (the matrix builds all three
+      platforms; `--verify --all` across ios+simulator+macosx).
+- [x] Phase 5 — version updates, one library per commit: zlib 1.3.2, libpng
+      1.6.59, freetds 1.4.27 (75 tests), sqlite3 3.53.3 (D1 gate + 77 tests;
+      the bump forced dropping --disable-tcl and touching vdbe.c/parse.y so
+      the stale checked-in opcodes regenerate), openssl 3.5.9 LTS,
+      mysqlclient 8.4.10 LTS (live server tests pass on the 8.4 client; 8.4
+      bundles boost in-tree and dropped libevent, so the recipe's boost
+      flags and libevent seeds retired), libarchive 3.8.9, zint 2.16.0
+      (cmake recipe; the wrapper needed exactly the ZINT_ error-code
+      renames; MADBarcodes builds, MAD 238 tests). bzip2 stays 1.0.8 --
+      still the newest release.
+- [x] Phase 6 — prune complete: the eleven old scripts and their navigator
+      references, and all 1,797 tracked legacy artifact files (`.a` binaries,
+      per-platform trees, per-platform include dirs, the tracked sqlite3
+      amalgamation). Compressor/AGENTS.md is rewritten for the new system.
+      Post-prune, the app builds and MADMySQL's 58 tests pass.
+- [x] Phase 7 — untracked: zero files remain tracked under
+      Compressor/library. The fresh-clone simulation re-run is the proof of
+      this state (in flight at the time of writing).
+
+The user's earlier words, for context:
 
 > *"let's skip section 2.2, The two real builds; we will build for MacOS later. We will also
 > put off the declarative build system, though I believe it's important. This info should be
 > stored in a plist or something, IDK. We need to keep track of them on some TODO list,
 > which previous ones probably haven't been maintained."*
 
-**What is deferred.**
+**What this covers.**
 
 *   **`ROADMAP.md` §2.2 — the two remaining macOS builds.** zlib/macOS and
     mysqlclient/macOS. Five of the eight library rows are already built; these two are not.
