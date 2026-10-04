@@ -230,7 +230,7 @@ the two (it carries `gettext`, `libffi` and `sqlite3` build outputs the desktop 
 is not answerable from here and does not need to be — but it is why the desktop copy should not
 be deleted without asking.
 
-### 2.1 Reconcile the Xcode references — **done 2026-10-01, but the third bullet cannot be done as written**
+### 2.1 Reconcile the Xcode references — **done 2026-10-01; the third bullet is done 2026-10-04 by the XCFramework rewiring**
 
 Two of the three bullets landed:
 
@@ -242,21 +242,14 @@ Two of the three bullets landed:
 - **Done.** The search paths naming directories that were never created are deleted:
   `MADMySQL`'s base value (`openssl/lib/iOS`, where the real path is `openssl/iOS/lib`) and the
   MAD Viewer target's five dead entries and duplicated `$(PROJECT_DIR)`.
-- **Cannot be done as written.** Adding `[sdk=macosx*]` arms and extending `SUPPORTED_PLATFORMS`
-  does not work from here, for two independent reasons.
-
-  *The setting cannot be flipped.* Every framework sits on `MADFoundation`, and
-  `MADFoundation/Source/MADApplication.h:13` imports `UIKit/UIApplication.h`. A macOS probe
-  fails at that import. Flipping `SUPPORTED_PLATFORMS` would claim a platform no target can
-  compile for.
-
-  *The arms could not link even so.* `LIBRARY_SEARCH_PATHS` is SDK-conditional;
-  `PBXFileReference.path` is not. Every vendored `.a` reference names an iOS slice directly —
-  `libarchive/iOS/lib/libarchive.a` (`arm64 arm64e`), `freetds/iOS-arm64/lib/libct.a`
-  (`arm64`), `openssl/iOS/lib/libssl.a` (`arm64 arm64e`) — so a `[sdk=macosx*]` search path
-  would still hand the linker an iOS file.
-
-  What this needs is the XCFramework in §2.3, not a search path.
+- **Done 2026-10-04.** The third bullet could not be done as written — `[sdk=macosx*]` arms and
+  `SUPPORTED_PLATFORMS` do not work from here, for two independent reasons: every framework sits
+  on `MADFoundation`, whose `MADApplication.h:13` imports UIKit, and
+  `PBXFileReference.path` is not SDK-conditional, so the arms would still hand the linker an
+  iOS file. The Compressor rework closed it the way this section said it should: every consumer
+  now links an XCFramework whose slice the toolchain picks, the SDK-conditional search-path arms
+  are deleted everywhere, and the matrix builds macOS slices for every library. The
+  `SUPPORTED_PLATFORMS`/UIKit half remains blocked, as noted in `BUGS.md`.
 
 **Found on the way:** the MAD Viewer target has not built since `09e0e7b8d`. Its
 `CODE_SIGN_ENTITLEMENTS`, `GCC_PREFIX_HEADER` and `INFOPLIST_FILE` all pointed into the
