@@ -121,21 +121,6 @@ static void MADRefreshOperationReloadRunOnMain(dispatch_block_t block) {
 	[self finish];
 }
 
-- (void)updateNumberOfPages:(NSUInteger)numberOfPages {
-	os_log_debug(OS_LOG_DEFAULT, "%s: pages=%lu thread=%@", __PRETTY_FUNCTION__,
-				 (unsigned long)numberOfPages, NSThread.currentThread.description);
-	MADRefreshOperationReload * __weak weakself = self;
-	dispatch_async(dispatch_get_main_queue(), ^{
-		MADRefreshOperationReload * __strong sself = weakself;
-		os_log_debug(OS_LOG_DEFAULT, "%s: block pages=%lu thread=%@ self=%p viewController=%p",
-					 __PRETTY_FUNCTION__, (unsigned long)numberOfPages,
-					 NSThread.currentThread.description, sself, sself.viewController);
-		if (sself) {
-			[sself.viewController operation:sself updatePages:numberOfPages];
-		}
-	});
-}
-
 #pragma mark -
 #pragma mark Report Notifications Setup
 
@@ -167,7 +152,8 @@ static void MADRefreshOperationReloadRunOnMain(dispatch_block_t block) {
 - (void)reportFormatterDidFormatPage:(NSNotification *)sender {
 	NSNumber *pageNumber = sender.userInfo[MTDatabaseNumberOfPagesFormattedKey];
 	os_log_debug(OS_LOG_DEFAULT, "%s: page=%@", __PRETTY_FUNCTION__, pageNumber);
-	[self updateNumberOfPages: pageNumber.unsignedIntegerValue];
+	// Only the formatting progress line updates per post; the page position is
+	// set once, with the final count, by the dispatch at the end of -execute.
 	[self updateFormattingPage: sender];
 }
 

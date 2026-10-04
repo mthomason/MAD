@@ -89,10 +89,14 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 - (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs {
 	NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs numberStyle:NSNumberFormatterDecimalStyle];
 	NSString *readRecords = [NSString stringWithFormat:NSLocalizedString(MADTextFormattingPage, MADTextFormattingPage), decimalString];
-	
+
 	__weak MADLabelStatus *weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[weakSelf updateStatusWithRecordsRead:readRecords];
+		// The formatting progress and the final page position share the third
+		// line: while pages format it counts up here, and the final
+		// -updatePageStatus: replaces it with the page position.  The records
+		// count keeps its own line, so the formatting never stomps it.
+		[weakSelf updateStatusWithFormattingPage:readRecords];
 	});
 }
 
@@ -122,6 +126,14 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 
 - (void)updateStatusWithRecordsRead:(NSString *)message {
 	[self safelyUpdateAttributedString:self.statusMessage2
+						  withNewString:message
+							attributes:self.lightAttributes];
+}
+
+- (void)updateStatusWithFormattingPage:(NSString *)message {
+	os_log_debug(OS_LOG_DEFAULT, "%s: message='%@' thread=%@ label=%p",
+				 __PRETTY_FUNCTION__, message, NSThread.currentThread.description, self);
+	[self safelyUpdateAttributedString:self.statusMessage3
 						  withNewString:message
 							attributes:self.lightAttributes];
 }
