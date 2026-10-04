@@ -120,6 +120,10 @@ scheme, so the command above does not reach them.
 * `MADDataTable_Architecture_Report.md` -- the `MADDataTable` class cluster across
   `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
 * `MAD_FORMAT.md` -- what a `.mad` document is, and what it should be.
+* `MAD_FUTURE.md` -- the vision: the `.mad` as a data object, the hidden file types as
+  products, the web clone, AI, and the money.
+* `MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
+  Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
 * `MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
 * `LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
 * `THIRD_PARTY_LICENSES.md` -- every third-party component in the app, how it is linked, its

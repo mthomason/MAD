@@ -17,7 +17,9 @@ Core Data does not exist off Apple platforms. Because `MADocument` is a `UIManag
 moving off Core Data also removes the iCloud document machinery — and **stripping iCloud is an
 explicit part of this plan, not a side effect.** `MADDocument` drops `UIManagedDocument` for
 `UIDocument`, the iCloud/ubiquity container and file-coordination paths go away, and document
-sync is no longer offered.
+sync is no longer offered. Old documents are not stranded by this: the user reaches them
+through the iOS Files app and opens them with the app, which converts them on open — the
+iCloud machinery is not needed to retrieve them.
 
 The user's mental model, which the code confirms: *"I just think of it as a simple database."*
 The migration keeps the auto-generated `Rptq` headers as a fixed, hand-maintained contract and
@@ -187,6 +189,14 @@ fixtures that pin it.
   framework ships the Core Data model inside it, which is the opposite of what this migration
   is for. The conversion itself (`MADStoreConverter`) is the other thing to retire at the same
   point: once no shipping document is v0, legacy conversion is dead weight.
+
+  **Second item Phase D must not miss: the iCloud era's documents convert on open.** Users
+  with old reports — there are likely few — reach them through the iOS Files app and hand
+  them to the app, which converts them on open through `MADStoreConverter`, the same path as
+  any other legacy document. The iCloud machinery itself (ubiquity container, file
+  coordination, sync) is not needed to retrieve those documents, so deleting it strands
+  nothing. The only requirement is that conversion on open stays in place while legacy
+  documents exist — which the first item above already covers.
 
 **Not before Phase C:** moving `MADOperationRefresh` into `MAD` (`ROADMAP.md` §3.4) and the
 driver registry (`§5.1`); both get cheaper once the store is ours.
