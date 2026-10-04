@@ -653,6 +653,75 @@ Status key:
 - **Follow-up:** decide whether the app wants a thumbnail extension; if not, the code can
   go entirely and the pragma with it.
 
+
+### MADSectionLayout reads CFNumbers at the wrong widths, corrupting adjacent ivars
+- **Status:** Open -- found by the analyzer; could not be fixed blind, so it is recorded.
+- **What:** `MAD/Source/MADSectionLayout.m` fills its ivars with `CFNumberGetValue` but
+  passes widths that do not match the destinations.  `:55` writes a `double` (8 bytes)
+  into `float _height` (4 bytes), and `:61` writes `SInt64` (8 bytes) into
+  `MADDocumentSectionType _type`, which is an `int16_t` (`MADDocumentSectionType.h:20`).
+  Each call therefore overwrites the storage after its target -- `:55`'s high half lands
+  in `_groupLevel`, and `:61`'s high half lands in `_height` -- and neither `_height` nor
+  `_groupLevel` is ever assigned again in the file, so the corrupted values stand.
+- **Why it is not fixed here:** the ivars are read as the layout's height and grouping;
+  correcting the widths changes what those reads return (today `_height` is effectively
+  zero), which would visibly change report layout.  That is a behaviour decision, not a
+  warning fix.
+- **Where:** `MAD/Source/MADSectionLayout.m:52-67`.
+- **Evidence:** `xcodebuild analyze`, `osx.coreFoundation.CFNumber`: "a CFNumber object
+  that represents a 64-bit integer is used to initialize a 16-bit integer; 48 bits of the
+  CFNumber value will overwrite adjacent storage".
+
+
+### MADocument calls writeContents: with nil contents
+- **Status:** Open -- documented; deliberate under the portable store, but it violates the
+  inherited contract.
+- **What:** `saveToURL:forSaveOperation:completionHandler:` passes `nil` for both the
+  contents and the attributes (`:598`, and again at `:624`) to
+  `-writeContents:andAttributes:safelyToURL:forSaveOperation:error:`, whose parameters are
+  declared non-null.  The override of `contentsForType:error:` returns nil on purpose
+  because the portable store writes itself, so the call is consistent with the design --
+  but the compiler is right that the API's own contract is being broken.
+- **Follow-up:** if the save path is ever revisited, either funnel the write through a
+  method whose signature admits nil or make the intent explicit at the call.
+- **Where:** `MAD/Source/MADocument.m:594-630`.
+
+
+### MADReportFormatter compares untyped values through id
+- **Status:** Open -- documented; the dynamic dispatch is intentional but unchecked.
+- **What:** `MADReportFormatter.m:219` and `:222` send `compare:` to a value held as `id`
+  while several classes declare that selector with different argument types, so the
+  compiler cannot bind it (`-Wstrict-selector-match`).  If the values being sorted are not
+  all the same class -- the formatter sorts query results, which mix numbers and strings --
+  the wrong implementation can be invoked, or none at all.
+- **Where:** `MAD/Source/MADReportFormatter.m:210-225`.
+
+
+### UIManagedDocument's resetPersistentStore is declared but never implemented
+- **Status:** Open -- documented, no live caller.
+- **What:** `-resetPersistentStore` is declared on the `UIManagedDocument (Extras)`
+  category (`UIManagedDocument+Extras.h:16`) and has no implementation; the only reference
+  in the implementation file is the commented-out call at `:45`.  Any future call would be
+  an `unrecognized selector` crash.
+- **Where:** `MAD/Source/UIManagedDocument+Extras.h:16`, `UIManagedDocument+Extras.m:45`.
+
+
+### MADModelQuery can insert a nil table into its dictionary
+- **Status:** Open -- documented; the analyzer flags it as a nil-object risk.
+- **What:** `[_tables setObject:queryTable forKey:qtidn]` (`:301`) assumes `queryTable` was
+  built earlier in the loop (`:289`), but the assignment only happens when
+  `resultCounter == 0`, so a path that reaches `:301` with an unset `queryTable` sends nil
+  to `setObject:forKey:`, which throws.
+- **Where:** `MAD/Source/MADModelQuery.m:285-302`.
+- **Evidence:** `osx.cocoa.NilArg` from `xcodebuild analyze`.
+
+
+### MysqlFetch passes an uninitialized value to a function
+- **Status:** Open -- documented from the analyzer run.
+- **What:** `core.CallAndMessage` reports that the first argument of a function call at
+  `MysqlFetch+DataTable.m:668` is uninitialized on some paths.
+- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m:668`.
+
 ## MADFoundation
 
 ### `MADOperation -willEnqueue` advances past `Pending` to `Ready`
@@ -1103,6 +1172,18 @@ wrong answer.
   `testArrayCachingRepeatedReadsReturnTheCachedObject`.
 
 ---
+
+
+## MADBarcodes
+
+### MTBarcode's type-name dictionary has a duplicate key
+- **Status:** Open -- documented; one label is unreachable.
+- **What:** The dictionary literal built in `MTBarcode.m` uses both
+  `@(MTBarcodeTypeEan14)` (`:693`) and `@BARCODE_EAN14` (`:719`); the enum aliases the zint
+  macro, so both box the value 72 and the second entry silently replaces the first --
+  "Code 128 (EAN-14)" can never be returned.
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcode.m:693,719`.
+- **Evidence:** `-Wobjc-dictionary-duplicate-keys`.
 
 ## MADMySQL
 
@@ -2141,6 +2222,53 @@ header search path.
 - **Where:** `MADDesigner/Source/MADVerificationController.m:475-489`.
 - **Reproduction:** the analyzer reports both the deprecation and the leak on every
   `xcodebuild analyze` of the app scheme.
+
+
+### The barcode delegate's query-field accessors disagree with their declarations
+- **Status:** Open -- found by the warning sweep; the mismatch is real and reachable.
+- **What:** The `MADViewControllerBarcodeOptionsDelegate` protocol declares
+  `- (RptqQueryField *)barcodeQueryField1;` and `:2`
+  (`MADViewControllerBarcodeOptionsDelegate.h:60-61`), but `MTViewControllerBarcode`
+  implements both returning `int64_t` (`MTViewControllerBarcode.m:321`, `:325`).  The
+  caller `MTViewControllerBarcodeOptions.m:347` then messages the result
+  (`[[delegate barcodeQueryField1] toStringHumanReadable]`), so an integer is treated as an
+  object pointer -- a crash whenever that cell is populated.  The same file resolves the
+  identifiers to `RptqQueryField` objects itself at `:168` and `:219`, which is what the
+  protocol's callers appear to expect.
+- **Why it is documented rather than fixed:** the correct shape depends on intent -- return
+  the looked-up field object, or change the protocol and both call sites to the identifier.
+  Both are real options and neither is a compile-fix.
+- **Where:** `MADDesigner/Source/barcodes/MTViewControllerBarcode.m:321-327`,
+  `MADViewControllerBarcodeOptionsDelegate.h:60-61`,
+  `MTViewControllerBarcodeOptions.m:347,516`.
+- **Evidence:** `-Wmismatched-return-types` on both implementations.
+
+
+### AppDelegate's retry blocks capture themselves
+- **Status:** Open -- documented; a leak rather than a crash.
+- **What:** `tryOpen` and `tryRefresh` are `__block` blocks that reschedule themselves with
+  `dispatch_after` (`AppDelegate.m:205`, `:256`), so each block retains itself until the
+  retry chain ends.  These are the UI-test launch hooks; the cycle ends when the chain
+  stops, but while retries are failing the block and everything it captures stay alive.
+- **Where:** `MADDesigner/Source/AppDelegate.m:200-260`.
+
+
+### An assertion formats an integer with %@
+- **Status:** Open -- documented; debug-only.
+- **What:** `MADQueryViewController.m:605` asserts
+  `NSAssert(objectToDelete != nil, @"Need a non-nil value for %@", tableID)` where
+  `tableID` is an `int64_t`; `%@` expects an object.  `NSAssert` is compiled out of
+  Release builds, so this only bites in Debug, where the formatter will treat the integer
+  as a pointer.
+- **Where:** `MADDesigner/Source/MADQueryViewController.m:605`.
+
+
+### MADToolboxStyleViewController passes an uninitialized value to a setter
+- **Status:** Open -- documented from the analyzer run.
+- **What:** `core.CallAndMessage` reports that the argument to a property setter at
+  `MADToolboxStyleViewController.m:609` is uninitialized -- the value can be read before
+  any assignment on some paths.
+- **Where:** `MADDesigner/Source/MADToolboxStyleViewController.m:609`.
 
 ## Build wiring (Xcode references)
 
