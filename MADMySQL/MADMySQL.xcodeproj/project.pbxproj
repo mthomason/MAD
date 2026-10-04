@@ -2047,7 +2047,7 @@
 				4C4EC15D2DC93A40001DBEBE /* welcome_copyright_notice.h */,
 			);
 			name = include;
-			path = ../Compressor/library/libmysqlclient/include;
+			path = ../Compressor/library/mysqlclient/include;
 			sourceTree = SOURCE_ROOT;
 		};
 		4C54AFA51D8C4B3900FE8B73 /* Frameworks */ = {
@@ -3270,7 +3270,7 @@
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../Compressor/library/libmysqlclient/include\"",
+					"\"$(SRCROOT)/../Compressor/library/mysqlclient/include\"",
 					"\"$(SRCROOT)/../Compressor/library/openssl/include\"",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -3340,7 +3340,7 @@
 				GCC_WARN_SIGN_COMPARE = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../Compressor/library/libmysqlclient/include\"",
+					"\"$(SRCROOT)/../Compressor/library/mysqlclient/include\"",
 					"\"$(SRCROOT)/../Compressor/library/openssl/include\"",
 				);
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -3371,7 +3371,7 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Source",
-					"$(SRCROOT)/../Compressor/library/libmysqlclient/include",
+					"$(SRCROOT)/../Compressor/library/mysqlclient/include",
 				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -3395,7 +3395,7 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Source",
-					"$(SRCROOT)/../Compressor/library/libmysqlclient/include",
+					"$(SRCROOT)/../Compressor/library/mysqlclient/include",
 				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
