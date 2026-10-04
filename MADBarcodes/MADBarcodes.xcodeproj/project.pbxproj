@@ -10,41 +10,7 @@
 		4C13096E1BA8068B0022665F /* MADBarcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13096D1BA8068B0022665F /* MADBarcodes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1309751BA8068B0022665F /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C13096A1BA8068B0022665F /* MADBarcodes.framework */; };
 		4C13097A1BA8068B0022665F /* MADBarcodesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309791BA8068B0022665F /* MADBarcodesTests.m */; };
-		4C130A3C1BA8075B0022665F /* 2of5.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309851BA8075B0022665F /* 2of5.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A3D1BA8075B0022665F /* auspost.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309861BA8075B0022665F /* auspost.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A3E1BA8075B0022665F /* aztec.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309871BA8075B0022665F /* aztec.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A3F1BA8075B0022665F /* aztec.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309881BA8075B0022665F /* aztec.h */; };
-		4C130A401BA8075B0022665F /* Barcodes-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309891BA8075B0022665F /* Barcodes-Prefix.pch */; };
-		4C130A411BA8075B0022665F /* code.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13098A1BA8075B0022665F /* code.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A421BA8075B0022665F /* code1.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13098B1BA8075B0022665F /* code1.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A431BA8075B0022665F /* code1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13098C1BA8075B0022665F /* code1.h */; };
-		4C130A441BA8075B0022665F /* code16k.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13098D1BA8075B0022665F /* code16k.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A451BA8075B0022665F /* code49.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13098E1BA8075B0022665F /* code49.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A461BA8075B0022665F /* code49.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13098F1BA8075B0022665F /* code49.h */; };
-		4C130A471BA8075B0022665F /* code128.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309901BA8075B0022665F /* code128.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A481BA8075B0022665F /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309911BA8075B0022665F /* common.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A491BA8075B0022665F /* common.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309921BA8075B0022665F /* common.h */; };
-		4C130A4A1BA8075B0022665F /* composite.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309931BA8075B0022665F /* composite.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A4B1BA8075B0022665F /* composite.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309941BA8075B0022665F /* composite.h */; };
-		4C130A4D1BA8075B0022665F /* dllversion.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309961BA8075B0022665F /* dllversion.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A4E1BA8075B0022665F /* dmatrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309971BA8075B0022665F /* dmatrix.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A4F1BA8075B0022665F /* dmatrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309981BA8075B0022665F /* dmatrix.h */; };
-		4C130A501BA8075B0022665F /* font.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309991BA8075B0022665F /* font.h */; };
-		4C130A511BA8075B0022665F /* gb2312.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13099A1BA8075B0022665F /* gb2312.h */; };
-		4C130A521BA8075B0022665F /* gridmtx.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13099B1BA8075B0022665F /* gridmtx.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A531BA8075B0022665F /* gridmtx.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13099C1BA8075B0022665F /* gridmtx.h */; };
-		4C130A541BA8075B0022665F /* gs1.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13099D1BA8075B0022665F /* gs1.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A551BA8075B0022665F /* gs1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13099E1BA8075B0022665F /* gs1.h */; };
-		4C130A561BA8075B0022665F /* imail.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C13099F1BA8075B0022665F /* imail.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A571BA8075B0022665F /* large.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309A01BA8075B0022665F /* large.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A581BA8075B0022665F /* large.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A11BA8075B0022665F /* large.h */; };
-		4C130A591BA8075B0022665F /* library.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309A21BA8075B0022665F /* library.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
 		4C130A5A1BA8075B0022665F /* MADBarcodeType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A31BA8075B0022665F /* MADBarcodeType.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C130A5B1BA8075B0022665F /* maxicode.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309A41BA8075B0022665F /* maxicode.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A5C1BA8075B0022665F /* maxicode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A51BA8075B0022665F /* maxicode.h */; };
-		4C130A5D1BA8075B0022665F /* maxipng.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A61BA8075B0022665F /* maxipng.h */; };
-		4C130A5E1BA8075B0022665F /* medical.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309A71BA8075B0022665F /* medical.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130A5F1BA8075B0022665F /* ms_stdint.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A81BA8075B0022665F /* ms_stdint.h */; };
 		4C130A601BA8075B0022665F /* MTBarcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A91BA8075B0022665F /* MTBarcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130A611BA8075B0022665F /* MTBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309AA1BA8075B0022665F /* MTBarcode.m */; };
 		4C130A621BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309AB1BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.h */; };
@@ -172,29 +138,13 @@
 		4C130ADC1BA8075B0022665F /* MTBarcodeUspsIntelligentMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A251BA8075B0022665F /* MTBarcodeUspsIntelligentMail.m */; };
 		4C130ADD1BA8075B0022665F /* MTBarcodeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A261BA8075B0022665F /* MTBarcodeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130ADE1BA8075B0022665F /* MTBarcodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A271BA8075B0022665F /* MTBarcodeView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		4C130ADF1BA8075B0022665F /* pdf417.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A281BA8075B0022665F /* pdf417.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AE01BA8075B0022665F /* pdf417.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A291BA8075B0022665F /* pdf417.h */; };
-		4C130AE11BA8075B0022665F /* plessey.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A2A1BA8075B0022665F /* plessey.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AE21BA8075B0022665F /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A2B1BA8075B0022665F /* png.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AE31BA8075B0022665F /* postal.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A2C1BA8075B0022665F /* postal.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AE41BA8075B0022665F /* ps.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A2D1BA8075B0022665F /* ps.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AE51BA8075B0022665F /* qr.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A2E1BA8075B0022665F /* qr.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AE61BA8075B0022665F /* qr.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A2F1BA8075B0022665F /* qr.h */; };
-		4C130AE71BA8075B0022665F /* reedsol.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A301BA8075B0022665F /* reedsol.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AE81BA8075B0022665F /* reedsol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A311BA8075B0022665F /* reedsol.h */; };
-		4C130AE91BA8075B0022665F /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A321BA8075B0022665F /* render.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AEA1BA8075B0022665F /* rss.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A331BA8075B0022665F /* rss.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AEB1BA8075B0022665F /* rss.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A341BA8075B0022665F /* rss.h */; };
-		4C130AEC1BA8075B0022665F /* sjis.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A351BA8075B0022665F /* sjis.h */; };
-		4C130AED1BA8075B0022665F /* svg.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A361BA8075B0022665F /* svg.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AEE1BA8075B0022665F /* telepen.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A371BA8075B0022665F /* telepen.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
-		4C130AEF1BA8075B0022665F /* upcean.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C130A381BA8075B0022665F /* upcean.c */; settings = {COMPILER_FLAGS = "-Xanalyzer -analyzer-disable-all-checks -w"; }; };
 		4C130AF01BA8075B0022665F /* zint.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A391BA8075B0022665F /* zint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B121BA80C1A0022665F /* Foundation.framework */; };
 		4C1CC25624C5E23D0027A454 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1CC25524C5E23D0027A454 /* CoreServices.framework */; };
 		4C29160424AC74FA00EC794B /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160324AC74FA00EC794B /* MADCocoaExtensions.framework */; };
 		4CDA7B0500000000000000B2 /* libpng.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0500000000000000B1 /* libpng.xcframework */; };
 		4CDA7B0600000000000000B2 /* zlib.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0600000000000000B1 /* zlib.xcframework */; };
+		4CDA7B0700000000000000B2 /* zint.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0700000000000000B1 /* zint.xcframework */; };
 		4CA8B2F62DD5E4CA001E27B3 /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA8B2F22DD5E4CA001E27B3 /* png.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA8B2F72DD5E4CA001E27B3 /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA8B2EF2DD5E4CA001E27B3 /* pngconf.h */; };
 		4CA8B2F82DD5E4CA001E27B3 /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA8B2F32DD5E4CA001E27B3 /* pngconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -222,42 +172,7 @@
 		4C1309741BA8068B0022665F /* MADBarcodesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADBarcodesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C1309791BA8068B0022665F /* MADBarcodesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADBarcodesTests.m; sourceTree = "<group>"; };
 		4C13097B1BA8068B0022665F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4C1309851BA8075B0022665F /* 2of5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = 2of5.c; path = MADBarcodes/2of5.c; sourceTree = "<group>"; };
-		4C1309861BA8075B0022665F /* auspost.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = auspost.c; path = MADBarcodes/auspost.c; sourceTree = "<group>"; };
-		4C1309871BA8075B0022665F /* aztec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = aztec.c; path = MADBarcodes/aztec.c; sourceTree = "<group>"; };
-		4C1309881BA8075B0022665F /* aztec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aztec.h; path = MADBarcodes/aztec.h; sourceTree = "<group>"; };
-		4C1309891BA8075B0022665F /* Barcodes-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Barcodes-Prefix.pch"; path = "MADBarcodes/Barcodes-Prefix.pch"; sourceTree = "<group>"; };
-		4C13098A1BA8075B0022665F /* code.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = code.c; path = MADBarcodes/code.c; sourceTree = "<group>"; };
-		4C13098B1BA8075B0022665F /* code1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = code1.c; path = MADBarcodes/code1.c; sourceTree = "<group>"; };
-		4C13098C1BA8075B0022665F /* code1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = code1.h; path = MADBarcodes/code1.h; sourceTree = "<group>"; };
-		4C13098D1BA8075B0022665F /* code16k.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = code16k.c; path = MADBarcodes/code16k.c; sourceTree = "<group>"; };
-		4C13098E1BA8075B0022665F /* code49.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = code49.c; path = MADBarcodes/code49.c; sourceTree = "<group>"; };
-		4C13098F1BA8075B0022665F /* code49.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = code49.h; path = MADBarcodes/code49.h; sourceTree = "<group>"; };
-		4C1309901BA8075B0022665F /* code128.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = code128.c; path = MADBarcodes/code128.c; sourceTree = "<group>"; };
-		4C1309911BA8075B0022665F /* common.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = common.c; path = MADBarcodes/common.c; sourceTree = "<group>"; };
-		4C1309921BA8075B0022665F /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = MADBarcodes/common.h; sourceTree = "<group>"; };
-		4C1309931BA8075B0022665F /* composite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = composite.c; path = MADBarcodes/composite.c; sourceTree = "<group>"; };
-		4C1309941BA8075B0022665F /* composite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = composite.h; path = MADBarcodes/composite.h; sourceTree = "<group>"; };
-		4C1309951BA8075B0022665F /* DEVELOPER */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = DEVELOPER; path = MADBarcodes/DEVELOPER; sourceTree = "<group>"; };
-		4C1309961BA8075B0022665F /* dllversion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dllversion.c; path = MADBarcodes/dllversion.c; sourceTree = "<group>"; };
-		4C1309971BA8075B0022665F /* dmatrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dmatrix.c; path = MADBarcodes/dmatrix.c; sourceTree = "<group>"; };
-		4C1309981BA8075B0022665F /* dmatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dmatrix.h; path = MADBarcodes/dmatrix.h; sourceTree = "<group>"; };
-		4C1309991BA8075B0022665F /* font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = font.h; path = MADBarcodes/font.h; sourceTree = "<group>"; };
-		4C13099A1BA8075B0022665F /* gb2312.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gb2312.h; path = MADBarcodes/gb2312.h; sourceTree = "<group>"; };
-		4C13099B1BA8075B0022665F /* gridmtx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gridmtx.c; path = MADBarcodes/gridmtx.c; sourceTree = "<group>"; };
-		4C13099C1BA8075B0022665F /* gridmtx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gridmtx.h; path = MADBarcodes/gridmtx.h; sourceTree = "<group>"; };
-		4C13099D1BA8075B0022665F /* gs1.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = gs1.c; path = MADBarcodes/gs1.c; sourceTree = "<group>"; };
-		4C13099E1BA8075B0022665F /* gs1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gs1.h; path = MADBarcodes/gs1.h; sourceTree = "<group>"; };
-		4C13099F1BA8075B0022665F /* imail.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = imail.c; path = MADBarcodes/imail.c; sourceTree = "<group>"; };
-		4C1309A01BA8075B0022665F /* large.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = large.c; path = MADBarcodes/large.c; sourceTree = "<group>"; };
-		4C1309A11BA8075B0022665F /* large.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = large.h; path = MADBarcodes/large.h; sourceTree = "<group>"; };
-		4C1309A21BA8075B0022665F /* library.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = library.c; path = MADBarcodes/library.c; sourceTree = "<group>"; };
 		4C1309A31BA8075B0022665F /* MADBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeType.h; path = MADBarcodes/MADBarcodeType.h; sourceTree = "<group>"; };
-		4C1309A41BA8075B0022665F /* maxicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = maxicode.c; path = MADBarcodes/maxicode.c; sourceTree = "<group>"; };
-		4C1309A51BA8075B0022665F /* maxicode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = maxicode.h; path = MADBarcodes/maxicode.h; sourceTree = "<group>"; };
-		4C1309A61BA8075B0022665F /* maxipng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = maxipng.h; path = MADBarcodes/maxipng.h; sourceTree = "<group>"; };
-		4C1309A71BA8075B0022665F /* medical.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = medical.c; path = MADBarcodes/medical.c; sourceTree = "<group>"; };
-		4C1309A81BA8075B0022665F /* ms_stdint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ms_stdint.h; path = MADBarcodes/ms_stdint.h; sourceTree = "<group>"; };
 		4C1309A91BA8075B0022665F /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcode.h; path = MADBarcodes/MTBarcode.h; sourceTree = "<group>"; };
 		4C1309AA1BA8075B0022665F /* MTBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcode.m; path = MADBarcodes/MTBarcode.m; sourceTree = "<group>"; };
 		4C1309AB1BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeAusPostStandardCustomer.h; path = MADBarcodes/MTBarcodeAusPostStandardCustomer.h; sourceTree = "<group>"; };
@@ -385,24 +300,7 @@
 		4C130A251BA8075B0022665F /* MTBarcodeUspsIntelligentMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeUspsIntelligentMail.m; path = MADBarcodes/MTBarcodeUspsIntelligentMail.m; sourceTree = "<group>"; };
 		4C130A261BA8075B0022665F /* MTBarcodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcodeView.h; path = MADBarcodes/MTBarcodeView.h; sourceTree = "<group>"; };
 		4C130A271BA8075B0022665F /* MTBarcodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTBarcodeView.m; path = MADBarcodes/MTBarcodeView.m; sourceTree = "<group>"; };
-		4C130A281BA8075B0022665F /* pdf417.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pdf417.c; path = MADBarcodes/pdf417.c; sourceTree = "<group>"; };
-		4C130A291BA8075B0022665F /* pdf417.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pdf417.h; path = MADBarcodes/pdf417.h; sourceTree = "<group>"; };
-		4C130A2A1BA8075B0022665F /* plessey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = plessey.c; path = MADBarcodes/plessey.c; sourceTree = "<group>"; };
-		4C130A2B1BA8075B0022665F /* png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = png.c; path = MADBarcodes/png.c; sourceTree = "<group>"; };
-		4C130A2C1BA8075B0022665F /* postal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = postal.c; path = MADBarcodes/postal.c; sourceTree = "<group>"; };
-		4C130A2D1BA8075B0022665F /* ps.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ps.c; path = MADBarcodes/ps.c; sourceTree = "<group>"; };
-		4C130A2E1BA8075B0022665F /* qr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = qr.c; path = MADBarcodes/qr.c; sourceTree = "<group>"; };
-		4C130A2F1BA8075B0022665F /* qr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = qr.h; path = MADBarcodes/qr.h; sourceTree = "<group>"; };
-		4C130A301BA8075B0022665F /* reedsol.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = reedsol.c; path = MADBarcodes/reedsol.c; sourceTree = "<group>"; };
-		4C130A311BA8075B0022665F /* reedsol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reedsol.h; path = MADBarcodes/reedsol.h; sourceTree = "<group>"; };
-		4C130A321BA8075B0022665F /* render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = render.c; path = MADBarcodes/render.c; sourceTree = "<group>"; };
-		4C130A331BA8075B0022665F /* rss.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rss.c; path = MADBarcodes/rss.c; sourceTree = "<group>"; };
-		4C130A341BA8075B0022665F /* rss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rss.h; path = MADBarcodes/rss.h; sourceTree = "<group>"; };
-		4C130A351BA8075B0022665F /* sjis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sjis.h; path = MADBarcodes/sjis.h; sourceTree = "<group>"; };
-		4C130A361BA8075B0022665F /* svg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = svg.c; path = MADBarcodes/svg.c; sourceTree = "<group>"; };
-		4C130A371BA8075B0022665F /* telepen.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = telepen.c; path = MADBarcodes/telepen.c; sourceTree = "<group>"; };
-		4C130A381BA8075B0022665F /* upcean.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = upcean.c; path = MADBarcodes/upcean.c; sourceTree = "<group>"; };
-		4C130A391BA8075B0022665F /* zint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zint.h; path = MADBarcodes/zint.h; sourceTree = "<group>"; };
+		4C130A391BA8075B0022665F /* zint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zint.h; path = ../Compressor/library/zint/include/zint.h; sourceTree = SOURCE_ROOT; };
 		4C130AF41BA807FE0022665F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C130B121BA80C1A0022665F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4C1CC25524C5E23D0027A454 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
@@ -411,6 +309,7 @@
 		4C29160324AC74FA00EC794B /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CDA7B0500000000000000B1 /* libpng.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libpng.xcframework; path = ../Compressor/library/libpng.xcframework; sourceTree = "<group>"; };
 		4CDA7B0600000000000000B1 /* zlib.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = zlib.xcframework; path = ../Compressor/library/zlib.xcframework; sourceTree = "<group>"; };
+		4CDA7B0700000000000000B1 /* zint.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = zint.xcframework; path = ../Compressor/library/zint.xcframework; sourceTree = "<group>"; };
 		4CA8B2EE2DD5E4CA001E27B3 /* png.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
 		4CA8B2EF2DD5E4CA001E27B3 /* pngconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
 		4CA8B2F02DD5E4CA001E27B3 /* pnglibconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
@@ -430,6 +329,7 @@
 			files = (
 				4CDA7B0500000000000000B2 /* libpng.xcframework in Frameworks */,
 				4CDA7B0600000000000000B2 /* zlib.xcframework in Frameworks */,
+				4CDA7B0700000000000000B2 /* zint.xcframework in Frameworks */,
 				4C29160424AC74FA00EC794B /* MADCocoaExtensions.framework in Frameworks */,
 				4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */,
 				4C1CC25624C5E23D0027A454 /* CoreServices.framework in Frameworks */,
@@ -629,59 +529,7 @@
 		4C130AF31BA807840022665F /* zint */ = {
 			isa = PBXGroup;
 			children = (
-				4C130A281BA8075B0022665F /* pdf417.c */,
-				4C130A291BA8075B0022665F /* pdf417.h */,
-				4C130A2A1BA8075B0022665F /* plessey.c */,
-				4C130A2B1BA8075B0022665F /* png.c */,
-				4C130A2C1BA8075B0022665F /* postal.c */,
-				4C130A2D1BA8075B0022665F /* ps.c */,
-				4C130A2E1BA8075B0022665F /* qr.c */,
-				4C130A2F1BA8075B0022665F /* qr.h */,
-				4C130A301BA8075B0022665F /* reedsol.c */,
-				4C130A311BA8075B0022665F /* reedsol.h */,
-				4C130A321BA8075B0022665F /* render.c */,
-				4C130A331BA8075B0022665F /* rss.c */,
-				4C130A341BA8075B0022665F /* rss.h */,
-				4C130A351BA8075B0022665F /* sjis.h */,
-				4C130A361BA8075B0022665F /* svg.c */,
-				4C130A371BA8075B0022665F /* telepen.c */,
-				4C130A381BA8075B0022665F /* upcean.c */,
 				4C130A391BA8075B0022665F /* zint.h */,
-				4C1309A41BA8075B0022665F /* maxicode.c */,
-				4C1309A51BA8075B0022665F /* maxicode.h */,
-				4C1309A61BA8075B0022665F /* maxipng.h */,
-				4C1309A71BA8075B0022665F /* medical.c */,
-				4C1309A81BA8075B0022665F /* ms_stdint.h */,
-				4C1309851BA8075B0022665F /* 2of5.c */,
-				4C1309861BA8075B0022665F /* auspost.c */,
-				4C1309881BA8075B0022665F /* aztec.h */,
-				4C1309871BA8075B0022665F /* aztec.c */,
-				4C1309891BA8075B0022665F /* Barcodes-Prefix.pch */,
-				4C13098A1BA8075B0022665F /* code.c */,
-				4C13098C1BA8075B0022665F /* code1.h */,
-				4C13098B1BA8075B0022665F /* code1.c */,
-				4C13098D1BA8075B0022665F /* code16k.c */,
-				4C13098F1BA8075B0022665F /* code49.h */,
-				4C13098E1BA8075B0022665F /* code49.c */,
-				4C1309901BA8075B0022665F /* code128.c */,
-				4C1309921BA8075B0022665F /* common.h */,
-				4C1309911BA8075B0022665F /* common.c */,
-				4C1309941BA8075B0022665F /* composite.h */,
-				4C1309931BA8075B0022665F /* composite.c */,
-				4C1309951BA8075B0022665F /* DEVELOPER */,
-				4C1309961BA8075B0022665F /* dllversion.c */,
-				4C1309981BA8075B0022665F /* dmatrix.h */,
-				4C1309971BA8075B0022665F /* dmatrix.c */,
-				4C1309991BA8075B0022665F /* font.h */,
-				4C13099A1BA8075B0022665F /* gb2312.h */,
-				4C13099B1BA8075B0022665F /* gridmtx.c */,
-				4C13099C1BA8075B0022665F /* gridmtx.h */,
-				4C13099D1BA8075B0022665F /* gs1.c */,
-				4C13099E1BA8075B0022665F /* gs1.h */,
-				4C13099F1BA8075B0022665F /* imail.c */,
-				4C1309A01BA8075B0022665F /* large.c */,
-				4C1309A11BA8075B0022665F /* large.h */,
-				4C1309A21BA8075B0022665F /* library.c */,
 			);
 			name = zint;
 			sourceTree = "<group>";
@@ -708,6 +556,7 @@
 			children = (
 				4CDA7B0500000000000000B1 /* libpng.xcframework */,
 				4CDA7B0600000000000000B1 /* zlib.xcframework */,
+				4CDA7B0700000000000000B1 /* zint.xcframework */,
 				4C1CC25524C5E23D0027A454 /* CoreServices.framework */,
 				4C29160324AC74FA00EC794B /* MADCocoaExtensions.framework */,
 				4C2915FC24AC74AB00EC794B /* Foundation.framework */,
@@ -776,12 +625,10 @@
 				4C130AAA1BA8075B0022665F /* MTBarcodeGridMatrix.h in Headers */,
 				4C130A921BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.h in Headers */,
 				4C130AF01BA8075B0022665F /* zint.h in Headers */,
-				4C130A4F1BA8075B0022665F /* dmatrix.h in Headers */,
 				4C130ADB1BA8075B0022665F /* MTBarcodeUspsIntelligentMail.h in Headers */,
 				4C130A981BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.h in Headers */,
 				4CF46DD51CF3184600D93406 /* MADBarcodeBorderStyle.h in Headers */,
 				4C130A9E1BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.h in Headers */,
-				4C130A531BA8075B0022665F /* gridmtx.h in Headers */,
 				4C130AB21BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.h in Headers */,
 				4C130A881BA8075B0022665F /* MTBarcodeCode93.h in Headers */,
 				4C130ACF1BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.h in Headers */,
@@ -789,35 +636,22 @@
 				4C130AD71BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.h in Headers */,
 				4C130A901BA8075B0022665F /* MTBarcodeDatabarExpanded.h in Headers */,
 				4C130AC41BA8075B0022665F /* MTBarcodePharmacode2Track.h in Headers */,
-				4C130A5D1BA8075B0022665F /* maxipng.h in Headers */,
 				4C130AD51BA8075B0022665F /* MTBarcodeUkPlessey.h in Headers */,
-				4C130AEB1BA8075B0022665F /* rss.h in Headers */,
-				4C130A3F1BA8075B0022665F /* aztec.h in Headers */,
 				4C130AD91BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.h in Headers */,
-				4C130A501BA8075B0022665F /* font.h in Headers */,
 				4C130A701BA8075B0022665F /* MTBarcodeCodabar.h in Headers */,
 				4C130AC81BA8075B0022665F /* MTBarcodePlanet.h in Headers */,
 				4C130A741BA8075B0022665F /* MTBarcodeCode2of5Iata.h in Headers */,
 				4C130A681BA8075B0022665F /* MTBarcodeAusRoute.h in Headers */,
 				4C130A861BA8075B0022665F /* MTBarcodeCode49.h in Headers */,
-				4C130A5C1BA8075B0022665F /* maxicode.h in Headers */,
 				4C130AA01BA8075B0022665F /* MTBarcodeDutchPostKix.h in Headers */,
 				4C130A761BA8075B0022665F /* MTBarcodeCode2of5Industrial.h in Headers */,
 				4C130AA61BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.h in Headers */,
-				4C130A491BA8075B0022665F /* common.h in Headers */,
 				4C130A781BA8075B0022665F /* MTBarcodeCode2of5Interleaved.h in Headers */,
-				4C130A431BA8075B0022665F /* code1.h in Headers */,
-				4C130A551BA8075B0022665F /* gs1.h in Headers */,
 				4C130A8A1BA8075B0022665F /* MTBarcodeCode128Iso15417.h in Headers */,
 				4C130A7A1BA8075B0022665F /* MTBarcodeCode2of5Matrix.h in Headers */,
 				4C130AA81BA8075B0022665F /* MTBarcodeFlattermarken.h in Headers */,
 				4C130A941BA8075B0022665F /* MTBarcodeDatabarLimited.h in Headers */,
 				4C130A801BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.h in Headers */,
-				4C130AEC1BA8075B0022665F /* sjis.h in Headers */,
-				4C130A461BA8075B0022665F /* code49.h in Headers */,
-				4C130AE81BA8075B0022665F /* reedsol.h in Headers */,
-				4C130A4B1BA8075B0022665F /* composite.h in Headers */,
-				4C130A401BA8075B0022665F /* Barcodes-Prefix.pch in Headers */,
 				4C130AA41BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.h in Headers */,
 				4C130AD31BA8075B0022665F /* MTBarcodeTelepenNumeric.h in Headers */,
 				4C130AAC1BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.h in Headers */,
@@ -826,8 +660,6 @@
 				4C130A7C1BA8075B0022665F /* MTBarcodeCode11.h in Headers */,
 				4C130AC21BA8075B0022665F /* MTBarcodePharmacode.h in Headers */,
 				4C130A9C1BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.h in Headers */,
-				4C130AE01BA8075B0022665F /* pdf417.h in Headers */,
-				4C130AE61BA8075B0022665F /* qr.h in Headers */,
 				4C130AC61BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.h in Headers */,
 				4C130A8E1BA8075B0022665F /* MTBarcodeDatabar.h in Headers */,
 				4C130A6C1BA8075B0022665F /* MTBarcodeAztecRunes.h in Headers */,
@@ -841,13 +673,10 @@
 				4C130AA21BA8075B0022665F /* MTBarcodeEan14.h in Headers */,
 				4C130AAE1BA8075B0022665F /* MTBarcodeItf14.h in Headers */,
 				4C130A661BA8075B0022665F /* MTBarcodeAusreply.h in Headers */,
-				4C130A5F1BA8075B0022665F /* ms_stdint.h in Headers */,
 				4C130A721BA8075B0022665F /* MTBarcodeCode2of5DataLogic.h in Headers */,
 				4C130AB01BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.h in Headers */,
 				4C130A641BA8075B0022665F /* MTBarcodeAusreDirect.h in Headers */,
-				4C130A511BA8075B0022665F /* gb2312.h in Headers */,
 				4C130A621BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.h in Headers */,
-				4C130A581BA8075B0022665F /* large.h in Headers */,
 				4C130AD11BA8075B0022665F /* MTBarcodeTelepen.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -959,7 +788,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "set -euo pipefail\n\"${SRCROOT}/../Compressor/build.sh\" --platforms ios,simulator libpng\n";
+			shellScript = "set -euo pipefail\n\"${SRCROOT}/../Compressor/build.sh\" --platforms ios,simulator zint\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -968,97 +797,66 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C130A521BA8075B0022665F /* gridmtx.c in Sources */,
 				4C130ABF1BA8075B0022665F /* MTBarcodeNve18.m in Sources */,
-				4C130A5E1BA8075B0022665F /* medical.c in Sources */,
-				4C130A591BA8075B0022665F /* library.c in Sources */,
 				4C130A651BA8075B0022665F /* MTBarcodeAusreDirect.m in Sources */,
 				4C130A671BA8075B0022665F /* MTBarcodeAusreply.m in Sources */,
 				4C130AC51BA8075B0022665F /* MTBarcodePharmacode2Track.m in Sources */,
-				4C130A471BA8075B0022665F /* code128.c in Sources */,
-				4C130A3E1BA8075B0022665F /* aztec.c in Sources */,
 				4C130ADC1BA8075B0022665F /* MTBarcodeUspsIntelligentMail.m in Sources */,
 				4C130A851BA8075B0022665F /* MTBarcodeCode39Iso16388.m in Sources */,
 				4C130A871BA8075B0022665F /* MTBarcodeCode49.m in Sources */,
 				4C130AC31BA8075B0022665F /* MTBarcodePharmacode.m in Sources */,
-				4C130AE91BA8075B0022665F /* render.c in Sources */,
 				4C130AA31BA8075B0022665F /* MTBarcodeEan14.m in Sources */,
 				4C130AC11BA8075B0022665F /* MTBarcodePdf417Iso15438.m in Sources */,
 				4C130AAB1BA8075B0022665F /* MTBarcodeGridMatrix.m in Sources */,
 				4C130A771BA8075B0022665F /* MTBarcodeCode2of5Industrial.m in Sources */,
-				4C130AED1BA8075B0022665F /* svg.c in Sources */,
 				4C130A691BA8075B0022665F /* MTBarcodeAusRoute.m in Sources */,
 				4C130AC91BA8075B0022665F /* MTBarcodePlanet.m in Sources */,
 				4C130A9F1BA8075B0022665F /* MTBarcodeDeutschePostLeitcode.m in Sources */,
-				4C130A571BA8075B0022665F /* large.c in Sources */,
-				4C130AEF1BA8075B0022665F /* upcean.c in Sources */,
 				4C130AC71BA8075B0022665F /* MTBarcodePharmaZentralnummerPzn.m in Sources */,
 				4C130A891BA8075B0022665F /* MTBarcodeCode93.m in Sources */,
-				4C130AE11BA8075B0022665F /* plessey.c in Sources */,
 				4C130A6D1BA8075B0022665F /* MTBarcodeAztecRunes.m in Sources */,
-				4C130A3C1BA8075B0022665F /* 2of5.c in Sources */,
 				4C130A9B1BA8075B0022665F /* MTBarcodeDataMatrixIso16022.m in Sources */,
-				4C130ADF1BA8075B0022665F /* pdf417.c in Sources */,
 				4C130ADE1BA8075B0022665F /* MTBarcodeView.m in Sources */,
 				4C130A971BA8075B0022665F /* MTBarcodeDatabarStacked.m in Sources */,
 				4C130A8D1BA8075B0022665F /* MTBarcodeCodeOne.m in Sources */,
 				4C130A611BA8075B0022665F /* MTBarcode.m in Sources */,
-				4C130AE31BA8075B0022665F /* postal.c in Sources */,
 				4C130A6B1BA8075B0022665F /* MTBarcodeAztec.m in Sources */,
 				4C130A991BA8075B0022665F /* MTBarcodeDatabarStackedOmnidirectional.m in Sources */,
-				4C130A4A1BA8075B0022665F /* composite.c in Sources */,
 				4C130AD41BA8075B0022665F /* MTBarcodeTelepenNumeric.m in Sources */,
 				4C130AD21BA8075B0022665F /* MTBarcodeTelepen.m in Sources */,
-				4C130AEA1BA8075B0022665F /* rss.c in Sources */,
-				4C130A481BA8075B0022665F /* common.c in Sources */,
 				4C130A8F1BA8075B0022665F /* MTBarcodeDatabar.m in Sources */,
 				4C130AA71BA8075B0022665F /* MTBarcodeFacingIdentificationMarkFim.m in Sources */,
-				4C130A421BA8075B0022665F /* code1.c in Sources */,
 				4C130AD61BA8075B0022665F /* MTBarcodeUkPlessey.m in Sources */,
 				4C130A631BA8075B0022665F /* MTBarcodeAusPostStandardCustomer.m in Sources */,
 				4C130A751BA8075B0022665F /* MTBarcodeCode2of5Iata.m in Sources */,
 				4C130AD01BA8075B0022665F /* MTBarcodeRoyalMail4StateBarcode.m in Sources */,
 				4C130ADA1BA8075B0022665F /* MTBarcodeUniversalProductCodeUpce.m in Sources */,
-				4C130A441BA8075B0022665F /* code16k.c in Sources */,
 				4C130A831BA8075B0022665F /* MTBarcodeCode39Extended.m in Sources */,
 				4C130AD81BA8075B0022665F /* MTBarcodeUniversalProductCodeUpca.m in Sources */,
 				4C130A951BA8075B0022665F /* MTBarcodeDatabarLimited.m in Sources */,
 				4C130A791BA8075B0022665F /* MTBarcodeCode2of5Interleaved.m in Sources */,
-				4C130A4E1BA8075B0022665F /* dmatrix.c in Sources */,
 				4C130AA11BA8075B0022665F /* MTBarcodeDutchPostKix.m in Sources */,
 				4C130A9D1BA8075B0022665F /* MTBarcodeDeutschePostIdentcode.m in Sources */,
-				4C130A541BA8075B0022665F /* gs1.c in Sources */,
-				4C130AEE1BA8075B0022665F /* telepen.c in Sources */,
-				4C130A451BA8075B0022665F /* code49.c in Sources */,
 				4C130A811BA8075B0022665F /* MTBarcodeCode32ItalianPharmacode.m in Sources */,
 				4C130AAD1BA8075B0022665F /* MTBarcodeInternationalStandardBookNumberIsbn.m in Sources */,
-				4C130AE71BA8075B0022665F /* reedsol.c in Sources */,
 				4C130ACB1BA8075B0022665F /* MTBarcodePostnet.m in Sources */,
 				4C130A7D1BA8075B0022665F /* MTBarcodeCode11.m in Sources */,
-				4C130AE21BA8075B0022665F /* png.c in Sources */,
 				4C130A731BA8075B0022665F /* MTBarcodeCode2of5DataLogic.m in Sources */,
 				4C130AB91BA8075B0022665F /* MTBarcodeMicroPdf417Iso24728.m in Sources */,
-				4C130AE51BA8075B0022665F /* qr.c in Sources */,
-				4C130A5B1BA8075B0022665F /* maxicode.c in Sources */,
 				4C130A711BA8075B0022665F /* MTBarcodeCodabar.m in Sources */,
-				4C130A411BA8075B0022665F /* code.c in Sources */,
 				4C130A7B1BA8075B0022665F /* MTBarcodeCode2of5Matrix.m in Sources */,
 				4C130AB71BA8075B0022665F /* MTBarcodeMaxicodeIso16023.m in Sources */,
 				4C130A6F1BA8075B0022665F /* MTBarcodeChannelCode.m in Sources */,
 				4C130A911BA8075B0022665F /* MTBarcodeDatabarExpanded.m in Sources */,
-				4C130A561BA8075B0022665F /* imail.c in Sources */,
 				4C130A8B1BA8075B0022665F /* MTBarcodeCode128Iso15417.m in Sources */,
 				4C130ACE1BA8075B0022665F /* MTBarcodeQrCodeIso18004.m in Sources */,
 				4C130AB11BA8075B0022665F /* MTBarcodeJapanesePostalBarcode.m in Sources */,
 				4C130AB31BA8075B0022665F /* MTBarcodeKoreanPostalBarcode.m in Sources */,
-				4C130AE41BA8075B0022665F /* ps.c in Sources */,
 				4C130A931BA8075B0022665F /* MTBarcodeDatabarExpandedStacked.m in Sources */,
 				4C130ABD1BA8075B0022665F /* MTBarcodeMsiPlessey.m in Sources */,
-				4C130A4D1BA8075B0022665F /* dllversion.c in Sources */,
 				4C130AA91BA8075B0022665F /* MTBarcodeFlattermarken.m in Sources */,
 				4C130AB51BA8075B0022665F /* MTBarcodeLogmars.m in Sources */,
 				4C130AA51BA8075B0022665F /* MTBarcodeEuropeanArticleNumberEan.m in Sources */,
-				4C130A3D1BA8075B0022665F /* auspost.c in Sources */,
 				4C130AAF1BA8075B0022665F /* MTBarcodeItf14.m in Sources */,
 				4C130A7F1BA8075B0022665F /* MTBarcodeCode16k.m in Sources */,
 				4C130ABB1BA8075B0022665F /* MTBarcodeMicroQrCode.m in Sources */,
@@ -1220,7 +1018,10 @@
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/libpng/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../Compressor/library/libpng/include\"",
+					"\"$(SRCROOT)/../Compressor/library/zint/include\"",
+				);
 				INFOPLIST_FILE = MADBarcodes/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1268,7 +1069,10 @@
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/libpng/include\"";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../Compressor/library/libpng/include\"",
+					"\"$(SRCROOT)/../Compressor/library/zint/include\"",
+				);
 				INFOPLIST_FILE = MADBarcodes/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
