@@ -268,10 +268,15 @@ finish_library() {
 	mkdir -p "${include_dir}"
 	cp -R "$(platform_install_dir "${first_headers}")/include/"* "${include_dir}/"
 
-	rm -rf "${xcfw}"
+	# Create into a temp output and swap, so preserved slice paths into the
+	# existing xcframework stay valid through the creation.
+	local tmp_xcfw="${LIBRARY_DIR}/.${LIB}.new.xcframework"
+	rm -rf "${tmp_xcfw}"
 	log "creating ${xcfw}"
-	xcodebuild -create-xcframework "${xcargs[@]}" -output "${xcfw}" \
+	xcodebuild -create-xcframework "${xcargs[@]}" -output "${tmp_xcfw}" \
 		|| die "xcodebuild -create-xcframework failed"
+	rm -rf "${xcfw}"
+	mv "${tmp_xcfw}" "${xcfw}"
 
 	write_manifest "${first_headers}" "${libnames[@]}"
 	log "${LIB} ready: ${xcfw}"

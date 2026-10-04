@@ -27,6 +27,7 @@ Compressor/build/freetds/
 # the final untracking step; these patterns cover only the new artifacts.)
 Compressor/media/
 Compressor/library/*.xcframework/
+Compressor/library/.*.new.xcframework/
 Compressor/library/manifests/
 Compressor/library/*/include/
 
