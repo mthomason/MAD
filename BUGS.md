@@ -1560,6 +1560,26 @@ it skips rather than fails when no server is reachable.
 
 ---
 
+
+### dbdatecrack is called with the sybase DBDATETIME under a microsoft DBDATEREC name
+- **Status:** Open -- found by the warning sweep, documented rather than changed.
+- **What:** `MADTdsClient/Source/MADDatabaseSQLServer.m` copies each `SYBDATETIME` /
+  `SYBDATETIMN` value into a malloc'd buffer and passes it to `dbdatecrack`
+  (`:1327`, `:1355`).  FreeTDS types the buffer as `struct tds_sybase_dbdaterec *`
+  while the call's third parameter is `DBDATEREC *`, which this build aliases to
+  `struct tds_microsoft_dbdaterec *`; the compiler reports the mismatch on both
+  calls.  The surrounding local (`dateinfo`, `:1323`) is declared with the sybase
+  struct as well.
+- **Why it is not changed here:** the FreeTDS sybase/microsoft struct duality decides
+  the layout of the data `dbdatecrack` reads, so the correct form depends on which
+  compatibility mode the vendored FreeTDS was built with -- a driver-correctness
+  question, not a cast to add mechanically.  The code carries `// CORRECTED:` notes
+  from an earlier pass, so the area is already sensitive.
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1320-1360`.
+- **Evidence:** `xcodebuild analyze` reports `-Wincompatible-pointer-types` on both
+  `dbdatecrack` calls; the two are the only remaining instances of that diagnostic in
+  the workspace.
+
 ## MAD Designer (app)
 
 Covered by the hosted `MADDesignerUnitTests` bundle (69 tests across
