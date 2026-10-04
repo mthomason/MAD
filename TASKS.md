@@ -205,9 +205,13 @@ was deferred 2026-10-01). Progress:
 
 - [x] Phase 0 — portability micro-fixes: workspace absolute path, `CLI/build.sh`
       DerivedData hash, MADMySQL stray `-v`, inert app `SQLITE_ENABLE_COLUMN_METADATA`.
-- [x] Phase 1 — `matrix.conf` + `build.sh` + `lib/recipes/` written; verified green:
-      sqlite3, zlib, openssl (ios+sim+macosx), bzip2, libpng, libarchive, zint.
-- [ ] Phase 1 — freetds, mysqlclient (the two hard recipes; in flight).
+- [x] Phase 1 — `matrix.conf` + `build.sh` + `lib/recipes/` written and verified
+      green for all nine libraries at their baseline versions (sqlite3 3.49.2,
+      zlib 1.3.1, openssl 3.5.0 with macosx too, bzip2 1.0.8, libpng 1.6.47,
+      libarchive 3.7.8, freetds 1.4.26, mysqlclient 8.0.42, zint 2.4.2).
+      mysqlclient took a two-stage design: a native macosx-arm64 build produces
+      the host tools and generated files; the cross builds seed those and run
+      the tools from the native stage. `build.sh --verify --all` is green.
 - [ ] Phase 2 — Xcode rewiring to the xcframeworks + ensure phases.
 - [ ] Phase 3 — full verification incl. the fresh-clone simulation.
 - [ ] Phase 4 — remaining macOS slices (zlib, mysqlclient, and every other lib's mac row).

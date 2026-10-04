@@ -28,6 +28,24 @@ BOOST_DIR="${SRC_ROOT}/boost"
 NATIVE="${BUILD_DIR}/${LIB}/native"
 NATIVE_OPENSSL="${BUILD_DIR}/openssl/macosx/install"
 
+# Cross-compiling preset: cmake refuses unseeded try_run() probes in cross
+# mode, which is what we want -- every run-based configure check below is
+# answered explicitly with the value iOS actually has, and any probe a
+# future mysql version adds will fail loudly instead of guessing.
+CROSS_PRESET="${BUILD_DIR}/${LIB}/cross-preset.cmake"
+cat > "${CROSS_PRESET}" <<'EOF'
+set(HAVE_SUPPORTED_CLANG_VERSION_EXITCODE "0" CACHE STRING "")
+set(HAVE_SUPPORTED_CLANG_VERSION_EXITCODE__TRYRUN_OUTPUT "" CACHE STRING "")
+set(HAVE_CLOCK_GETTIME_EXITCODE "0" CACHE STRING "")
+set(HAVE_CLOCK_GETTIME_EXITCODE__TRYRUN_OUTPUT "" CACHE STRING "")
+set(HAVE_CLOCK_REALTIME_EXITCODE "0" CACHE STRING "")
+set(HAVE_CLOCK_REALTIME_EXITCODE__TRYRUN_OUTPUT "" CACHE STRING "")
+set(TEST_RUN_RESULT "0" CACHE STRING "")
+set(TEST_RUN_RESULT__TRYRUN_OUTPUT "2.1.11-stable" CACHE STRING "")
+set(TEST_RUN_RESULT__TRYRUN_OUTPUT_STDOUT "2.1.11-stable" CACHE STRING "")
+set(TEST_RUN_RESULT__TRYRUN_OUTPUT_STDERR "" CACHE STRING "")
+EOF
+
 # --- Stage A: native host tools + generated files (macosx arm64) ---
 if [[ ! -f "${NATIVE}/include/mysqld_error.h" ]]; then
 	[[ -d "${NATIVE_OPENSSL}/lib" ]] || die "openssl macosx install missing -- run: build.sh --platforms macosx openssl"
@@ -56,6 +74,17 @@ if [[ ! -f "${NATIVE}/include/mysqld_error.h" ]]; then
 	[[ -f "${NATIVE}/include/mysqld_error.h" ]] || die "stage A: generated headers missing"
 fi
 
+# Point the host-tool custom commands at the native-stage executables.
+# Make rebuilds the cross-built tool targets (harmless) and then runs these
+# commands -- the native binaries regenerate byte-identical files, where the
+# cross-built ones could never run on the host.
+sed -i '' "s|COMMAND uca9dump|COMMAND ${NATIVE}/runtime_output_directory/uca9dump|g" \
+	"${SRC_ROOT}/strings/CMakeLists.txt"
+sed -i '' "s|COMMAND comp_err |COMMAND ${NATIVE}/runtime_output_directory/comp_err |g" \
+	"${SRC_ROOT}/utilities/CMakeLists.txt"
+sed -i '' "s|COMMAND comp_client_err |COMMAND ${NATIVE}/runtime_output_directory/comp_client_err |g" \
+	"${SRC_ROOT}/utilities/CMakeLists.txt"
+
 # --- Stage B: cross builds, seeded from the native stage ---
 HEADERS_READY=0
 for platform in ${PLATFORMS}; do
@@ -71,6 +100,7 @@ for platform in ${PLATFORMS}; do
 			cd "${outdir}"
 			cmake "${SRC_ROOT}" \
 				-G "Unix Makefiles" \
+				-C "${CROSS_PRESET}" \
 				-DCMAKE_SYSTEM_NAME=Darwin \
 				-DCMAKE_CROSSCOMPILING=1 \
 				-DCMAKE_OSX_SYSROOT="${sdk_path}" \
