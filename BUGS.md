@@ -2126,6 +2126,21 @@ setting that names a platform no target can build for.
   `library/libmysqlclient`, `library/libpng`, `library/openssl`, `MADDesigner`.
 - **Test:** `MADMySQL` 58 tests, 0 failures, and the app build links MADMySQL.
 
+### The workspace pinned MADTds with an absolute path
+- **Status:** Fixed
+- **Where:** `Reports.xcworkspace/contents.xcworkspacedata:44`
+- **Behavior:** the MADTds `FileRef` was
+  `location = "group:/Users/michael/Desktop/Reports/MADTds/MADTds.xcodeproj"` — the
+  only absolute path in the workspace; every other project uses the portable
+  `group:<name>` form. Moving the tree leaves a stale reference and the workspace
+  drops MADTds.
+- **Why it matters:** it makes the workspace machine-specific, so it is the first
+  failure in the "move the source tree" portability test the Compressor rework sets
+  out to pass.
+- **Now:** `location = "group:MADTds/MADTds.xcodeproj"`, matching every other entry.
+- **Evidence:** `xcodebuild -list -workspace Reports.xcworkspace` lists all 18
+  schemes from a relocated copy of the tree.
+
 ### A macOS build cannot be wired from search paths alone
 - **Status:** Still open — this is ROADMAP §2.1's third bullet, and it cannot be done
   as written
