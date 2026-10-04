@@ -2,37 +2,60 @@
 
 ## Project Description
 
-The `Compressor` project is a collection of shell scripts that are used to build the various third-party static libraries that are required by the _MAD Designer_ application. This project is essential for ensuring that all dependencies are built with the correct configurations and for the correct architectures.
-
-## Key Features
-
-*   **Automated Builds**: The project provides a set of scripts that automate the process of building the third-party libraries.
-*   **Dependency Management**: It manages the dependencies between the various libraries, ensuring that they are built in the correct order.
-*   **Architecture Support**: The scripts are configured to build the libraries for the required architectures (e.g., arm64, x86_64).
+The `Compressor` project builds the third-party static libraries the _MAD Designer_
+application links (SQLite, zlib, OpenSSL, bzip2, libpng, libarchive, FreeTDS,
+mysqlclient, zint). Nothing third-party is committed: sources are downloaded on
+demand and built by recipes, and the artifacts are xcframeworks plus canonical
+include dirs, all gitignored.
 
 ## Core Components
 
-The `Compressor` project consists of a number of shell scripts, each of which is responsible for building a specific library. The main scripts are:
-
-*   **`compressor.sh`**: This is the main script that is used to run all the other build scripts. It ensures that the libraries are built in the correct order and with the correct configurations.
-*   **`build_archive.sh`**: This script builds the `archive` library.
-*   **`build_bzip2.sh`**: This script builds the `bzip2` library.
-*   **`build_mysqlclient.sh`**: This script builds the `mysqlclient` library.
-*   **`build_openssl.sh`**: This script builds the `openssl` library.
-*   **`build_png.sh`**: This script builds the `png` library.
-*   **`build_sqlite3.sh`**: This script builds the `sqlite3` library.
-*   **`build_tds.sh`**: This script builds the `tds` library (FreeTDS).
-*   **`build_zlib.sh`**: This script builds the `zlib` library.
+*   **`matrix.conf`** -- the single place a library's version, source URL, sha256,
+    platforms, architectures, deployment targets and dependencies are written
+    down. One row per library.
+*   **`build.sh`** -- the driver. `build.sh <lib>…` ensures each library
+    (dependencies first; a fast no-op when the manifest is fresh);
+    `--all`; `--rebuild` forces only the named libraries; `--verify` checks
+    artifacts against the matrix and manifests (version, source hash, slice
+    architectures, embedded version strings, per-library checks in
+    `lib/verify/`); `--platforms ios,simulator,macosx` limits the platforms.
+*   **`lib/common.sh`** -- shared helpers: the content-addressed download cache,
+    per-arch compile helpers, lipo, xcframework creation (preserving slices for
+    platforms a run does not build), manifest writing, and the build lock.
+*   **`lib/recipes/<lib>.sh`** -- one recipe per library. A recipe downloads the
+    pinned source, builds per arch, lipos per platform, and calls
+    `finish_library`, which creates `library/<lib>.xcframework`, installs
+    `library/<lib>/include` and writes `library/manifests/<lib>.json`.
+*   **`sqlite3.xcconfig`** -- the single place SQLite compile options live; the
+    sqlite3 recipe is its only consumer. The options pin the `.maddb` cache
+    format -- treat changes as format decisions.
+*   **`lib/verify/<lib>.sh`** -- optional per-library artifact checks run by
+    `--verify` (sqlite3's compile-option and FTS5 gate lives here; zint's
+    `SKIP_VERSION_STRING` override).
 
 ## Usage Guidelines
 
-To build all the third-party libraries, you can run the `compressor.sh` script. This will build all the libraries in the correct order and place them in the appropriate directories.
+First run on a fresh checkout (network required): `build.sh --all --platforms
+ios,simulator`. Xcode builds then no-op through their "Ensure Libraries"
+phases; see `LIBRARIES.md` and `DEVELOPER.md` for the day-to-day commands and
+the version-bump procedure.
 
-If you need to rebuild a specific library, you can run its corresponding build script (e.g., `build_openssl.sh`). However, be aware that some libraries have dependencies on other libraries, so it is generally recommended to run the main `compressor.sh` script to ensure that all dependencies are up-to-date.
+To add a new third-party library: add its row to `matrix.conf`, write
+`lib/recipes/<lib>.sh` following the existing recipes (the sqlite3 recipe is
+the simplest model), and add the xcframework + ensure phase to the consuming
+Xcode target.
 
-If you need to add a new third-party library to the project, you will need to create a new build script for it and add it to the `compressor.sh` script. Your new script should follow the same pattern as the existing scripts, ensuring that it builds the library for the correct architectures and places the output in the appropriate directory.
+**Version bumps carry per-recipe knowledge.** The mysqlclient recipe (host
+tools, cross preset answers), the freetds recipe (installed-header patch) and
+the zint recipe (cmake flags) all encode assumptions about the pinned version
+-- `LIBRARIES.md` section 1 lists them. When a version bumps, re-check those.
 
 ## Testing and Reports
 
-*   **Note**: the project ships no tests. `compressor.sh` is verified by building the libraries.
-*   **Tracking**: [`BUGS.md`](../BUGS.md) -- the defect register; [`TASKS.md`](../TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.
+*   **Note**: the project ships no test suite of its own. `build.sh --verify
+    --all` is its verification, and the consuming frameworks' suites are the
+    functional proof.
+*   **Tracking**: [`BUGS.md`](../BUGS.md) -- the defect register;
+    [`TASKS.md`](../TASKS.md) -- the engineering queue. Maintain them, but do
+    not start work from them.
+*   **Design document**: [`LIBRARIES.md`](../LIBRARIES.md).
