@@ -181,8 +181,9 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 	[seen removeAllObjects];
 	for (MADStoreRelationship *relationship in relationships) {
 		if (!relationship.ownsForeignKey) continue;
-		if ([seen containsObject:relationship.column]) continue;
-		[seen addObject:relationship.column];
+		NSString *seenColumn = relationship.column;
+		if (seenColumn == nil || [seen containsObject:seenColumn]) continue;
+		[seen addObject:seenColumn];
 		MADStoreColumn *column = [MADStoreColumn new];
 		column.name = relationship.column;
 		column.type = MADStoreValueTypeInteger;
@@ -342,8 +343,9 @@ static id MADStoreReadColumn(sqlite3_stmt *statement, int index, MADStoreValueTy
 	NSMutableSet<NSString *> *read = [NSMutableSet set];
 	for (MADStoreEntity *entity in self.schema.entities) {
 		for (MADStoreRelationship *relationship in entity.relationships) {
-			if (!relationship.joinTable || [read containsObject:relationship.joinTable]) continue;
-			[read addObject:relationship.joinTable];
+			NSString *readJoinTable = relationship.joinTable;
+			if (readJoinTable == nil || [read containsObject:readJoinTable]) continue;
+			[read addObject:readJoinTable];
 
 			MADStoreEntity *destination = [self.schema entityNamed:relationship.destination];
 			MADStoreRelationship *inverse = [destination anyRelationshipNamed:relationship.inverse];
@@ -434,7 +436,8 @@ static id MADStoreReadColumn(sqlite3_stmt *statement, int index, MADStoreValueTy
 		}
 		if ([seen containsObject:entity.table]) continue;
 		[seen addObject:entity.table];
-		[tables addObject:[self.schema entityForTable:entity.table]];
+		MADStoreEntity *tableEntity = [self.schema entityForTable:entity.table];
+		if (tableEntity != nil) [tables addObject:tableEntity];
 	}
 
 	MADStoreGraph *graph = [MADStoreGraph new];
@@ -634,8 +637,9 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	NSMutableSet<NSString *> *cleared = [NSMutableSet set];
 	for (MADStoreEntity *entity in self.schema.entities) {
 		for (MADStoreRelationship *relationship in entity.relationships) {
-			if (!relationship.joinTable || [cleared containsObject:relationship.joinTable]) continue;
-			[cleared addObject:relationship.joinTable];
+			NSString *clearedJoinTable = relationship.joinTable;
+			if (clearedJoinTable == nil || [cleared containsObject:clearedJoinTable]) continue;
+			[cleared addObject:clearedJoinTable];
 			if (![self execute:[[NSString alloc] initWithFormat:@"DELETE FROM \"%@\";", relationship.joinTable]
 						error:error]) {
 				return NO;

@@ -255,7 +255,7 @@ void sqliteLog(void *foo, const char* statement) {
 		} else {
 			NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:4832 userInfo:@{
 				NSLocalizedDescriptionKey: NSLocalizedString(@"Connect Failed", @"Connect Failed"),
-				NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding],
+				NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding] ?: @"",
 			}];
 			os_log_error(GetMadLog(), "Error: %@", error);
 		}
@@ -580,7 +580,7 @@ void sqliteLog(void *foo, const char* statement) {
 	if (!success && resultError != NULL) *resultError = [NSError errorWithDomain:NSStringFromClass([self class])
 																			code:4784 userInfo:@{
 		NSLocalizedDescriptionKey: NSLocalizedString(@"Error", @"Error"),
-		NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding],
+		NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding] ?: @"",
 	}];
 
 	sqlite3_free(csql);
@@ -908,7 +908,7 @@ void sqliteLog(void *foo, const char* statement) {
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:4784 userInfo:@{
 				NSLocalizedDescriptionKey: NSLocalizedString(@"Error", @"Error"),
-				NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding],
+				NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding] ?: @"",
 			}];
 		}
 	}

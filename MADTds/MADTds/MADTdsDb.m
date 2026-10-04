@@ -140,10 +140,15 @@ static os_log_t db_log;
 			for (int col = 1; col <= numColumns; col++) {
 				char *columnName = dbcolname(self.dbProcess, col);
 				char *value = (char *)dbdata(self.dbProcess, col);
+				// A NULL or non-UTF-8 column name would make the dictionary key nil,
+				// which throws; skip the column instead.
+				if (columnName == NULL) continue;
+				NSString *columnKey = [NSString stringWithUTF8String:columnName];
+				if (columnKey == nil) continue;
 				if (value) {
-					row[[NSString stringWithUTF8String:columnName]] = [NSString stringWithUTF8String:value];
+					row[columnKey] = [NSString stringWithUTF8String:value];
 				} else {
-					row[[NSString stringWithUTF8String:columnName]] = [NSNull null];
+					row[columnKey] = [NSNull null];
 				}
 			}
 			[results addObject:row];

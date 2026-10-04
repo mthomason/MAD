@@ -49,7 +49,7 @@
 		tables = filtered;
 	}
 	tables = [tables sortedArrayUsingComparator:^NSComparisonResult(RptqDatabaseSchemaTable *a, RptqDatabaseSchemaTable *b) {
-		return [a.name compare:b.name];
+		return [(a.name ?: @"") compare:(b.name ?: @"")];
 	}];
 	self.results = tables;
 }

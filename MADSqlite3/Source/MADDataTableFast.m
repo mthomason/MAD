@@ -655,7 +655,7 @@ static os_log_t mlog;
 			if (error != NULL) {
 				*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:3239 userInfo:@{
 					NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Error"),
-					NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errmsg(sqlite_database) encoding:NSUTF8StringEncoding]
+					NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errmsg(sqlite_database) encoding:NSUTF8StringEncoding] ?: @""
 				}];
 				result = false;
 			}
@@ -666,7 +666,7 @@ static os_log_t mlog;
 			if (error != NULL) {
 				*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:3240 userInfo:@{
 					NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error Clear Bindings", @"Error Clear Bindings"),
-					NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errmsg(sqlite_database) encoding:NSUTF8StringEncoding]
+					NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errmsg(sqlite_database) encoding:NSUTF8StringEncoding] ?: @""
 				}];
 				result = false;
 			}
@@ -676,7 +676,7 @@ static os_log_t mlog;
 			if (error != NULL) {
 				*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:3240 userInfo:@{
 					NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error Reset", @"Error Reset"),
-					NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errmsg(sqlite_database) encoding:NSUTF8StringEncoding]
+					NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errmsg(sqlite_database) encoding:NSUTF8StringEncoding] ?: @""
 				}];
 				result = false;
 			}
@@ -995,7 +995,7 @@ static os_log_t mlog;
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:8927 userInfo:@{
 				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Error"),
-				NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errstr(stepResult) encoding:NSUTF8StringEncoding]
+				NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errstr(stepResult) encoding:NSUTF8StringEncoding] ?: @""
 			}];
 		}
 		result = [[NSDictionary alloc] init];
@@ -1030,7 +1030,7 @@ static os_log_t mlog;
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:-782 userInfo:@{
 				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Error"),
-				NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errstr(prepareResult) encoding:NSUTF8StringEncoding]
+				NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3_errstr(prepareResult) encoding:NSUTF8StringEncoding] ?: @""
 			}];
 		}
 		return NULL;
@@ -1140,7 +1140,7 @@ static os_log_t mlog;
 			if (outError != NULL) {
 				*outError = [NSError errorWithDomain:NSStringFromClass([self class]) code:-782 userInfo:@{
 					NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Error"),
-					NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3message encoding:NSUTF8StringEncoding]
+					NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3message encoding:NSUTF8StringEncoding] ?: @""
 				}];
 			}
 			os_log_error(mlog, "[MADDataTableFast %p dataForRow:%lu] Error: %@", self, (unsigned long)cacheId, message);
@@ -1151,7 +1151,7 @@ static os_log_t mlog;
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain:NSStringFromClass([self class]) code:-782 userInfo:@{
 				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Error"),
-				NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3message encoding:NSUTF8StringEncoding]
+				NSLocalizedDescriptionKey: [NSString stringWithCString:sqlite3message encoding:NSUTF8StringEncoding] ?: @""
 			}];
 		}
 		os_log_error(mlog, "[MADDataTableFast %p dataForRow:%lu] Prepare failed: %s",

@@ -83,7 +83,7 @@
 + (NSArray <RptqDatabaseCredentals *> *)newDatabaseCredentals:(RptqStoreContext *)context {
 	NSArray *credentals = [context objectsForEntity:NSStringFromClass([RptqDatabaseCredentals class])];
 	return [credentals sortedArrayUsingComparator:^NSComparisonResult(RptqDatabaseCredentals *a, RptqDatabaseCredentals *b) {
-		return [a.driverID compare:b.driverID];
+		return [(a.driverID ?: @"") compare:(b.driverID ?: @"")];
 	}];
 }
 

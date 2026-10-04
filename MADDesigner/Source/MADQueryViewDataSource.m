@@ -503,7 +503,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 		links = [links filteredArrayUsingPredicate:
 				 [NSPredicate predicateWithFormat:@"hasLeftField.inQueryTable.inQuery.identifier == %lld", _queryID]];
 		links = [links sortedArrayUsingComparator:^NSComparisonResult(RptqQueryLinks *a, RptqQueryLinks *b) {
-			return [a.tableLeftID compare:b.tableLeftID];
+			return [(a.tableLeftID ?: @"") compare:(b.tableLeftID ?: @"")];
 		}];
 		_queryLinksController = links;
 	}
@@ -538,7 +538,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 			[filtered addObject:table];
 		}
 		[filtered sortUsingComparator:^NSComparisonResult(RptqQueryTable *a, RptqQueryTable *b) {
-			return [a.alias compare:b.alias];
+			return [(a.alias ?: @"") compare:(b.alias ?: @"")];
 		}];
 		_queryTablesController = filtered;
 	}
@@ -552,7 +552,7 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 		predicates = [predicates filteredArrayUsingPredicate:
 					  [NSPredicate predicateWithFormat:@"inQuery.identifier == %lld", _queryID]];
 		predicates = [predicates sortedArrayUsingComparator:^NSComparisonResult(RptqQueryPredicate *a, RptqQueryPredicate *b) {
-			return [a.leftFieldID compare:b.leftFieldID];
+			return [(a.leftFieldID ?: @"") compare:(b.leftFieldID ?: @"")];
 		}];
 		_queryPredicatesController = predicates;
 	}

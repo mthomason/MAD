@@ -83,7 +83,8 @@
 			if ([name isEqualToString:entity]) continue;
 			MADStoreEntity *candidate = [[MADStoreSchema sharedSchema] entityNamed:name];
 			if (![candidate.table isEqualToString:named.table]) continue;
-			[objects addObjectsFromArray:self.objects[name].allValues];
+			NSArray *valuesForName = self.objects[name].allValues;
+			if (valuesForName != nil) [objects addObjectsFromArray:valuesForName];
 		}
 	}
 	if (objects.count == 0) return @[];

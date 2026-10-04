@@ -874,8 +874,9 @@ static NSString *MADStoreColumnDefinition(MADStoreAttribute *attribute, BOOL for
 			// Many-to-many relationships store their edges in a join table, emitted
 			// after every table; a derived to-one stores its foreign key on the far side.
 			if (!relationship.ownsForeignKey) continue;
-			if ([emittedColumns containsObject:relationship.column]) continue;
-			[emittedColumns addObject:relationship.column];
+			NSString *emittedColumn = relationship.column;
+			if (emittedColumn == nil || [emittedColumns containsObject:emittedColumn]) continue;
+			[emittedColumns addObject:emittedColumn];
 			MADStoreEntity *destination = self.byName[relationship.destination];
 			[columns addObject:[[NSString alloc] initWithFormat:@"\t\"%@\" INTEGER REFERENCES \"%@\" (\"identifier\")",
 								relationship.column, destination.table ?: destination.name]];
@@ -892,8 +893,9 @@ static NSString *MADStoreColumnDefinition(MADStoreAttribute *attribute, BOOL for
 		}
 		NSMutableSet<NSString *> *indexed = [NSMutableSet set];
 		for (MADStoreRelationship *relationship in relationships) {
-			if (!relationship.ownsForeignKey || [indexed containsObject:relationship.column]) continue;
-			[indexed addObject:relationship.column];
+			NSString *indexedColumn = relationship.column;
+			if (!relationship.ownsForeignKey || indexedColumn == nil || [indexed containsObject:indexedColumn]) continue;
+			[indexed addObject:indexedColumn];
 			[sql appendFormat:@"CREATE INDEX IF NOT EXISTS \"idx_%@_%@\" ON \"%@\" (\"%@\");\n",
 				table.name, relationship.column, table.name, relationship.column];
 		}

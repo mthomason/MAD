@@ -160,7 +160,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 		fields = [fields sortedArrayUsingComparator:^NSComparisonResult(RptqQueryField *a, RptqQueryField *b) {
 			NSComparisonResult byAlias = [a.inQueryTable.alias compare:b.inQueryTable.alias];
 			if (byAlias != NSOrderedSame) return byAlias;
-			return [a.databaseSchemaField.name compare:b.databaseSchemaField.name];
+			return [(a.databaseSchemaField.name ?: @"") compare:(b.databaseSchemaField.name ?: @"")];
 		}];
 		NSMutableArray *sections = [NSMutableArray array];
 		NSString *currentAlias = nil;
