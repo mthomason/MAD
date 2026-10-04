@@ -61,6 +61,7 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 }
 
 - (id)valueForUndefinedKey:(NSString *)key {
+	RptqStoreContext * storeContext = self.storeContext;
 	MADStoreEntity *entity = [[MADStoreSchema sharedSchema] entityNamed:self.entity];
 	if (!entity) return [super valueForUndefinedKey:key];
 
@@ -73,7 +74,7 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 			NSArray<NSNumber *> *identifiers = [self.backingObject existingCollectionForName:key];
 			NSMutableArray<RptqObject *> *members = [NSMutableArray arrayWithCapacity:identifiers.count];
 			for (NSNumber *identifier in identifiers) {
-				RptqObject *member = [self.storeContext objectForEntity:relationship.destination
+				RptqObject *member = [storeContext objectForEntity:relationship.destination
 														   identifier:identifier.longLongValue];
 				if (member) [members addObject:member];
 			}
@@ -84,7 +85,7 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 		}
 		NSNumber *identifier = [self.backingObject referenceForName:key];
 		if (!identifier) return nil;
-		return [self.storeContext objectForEntity:relationship.destination
+		return [storeContext objectForEntity:relationship.destination
 									  identifier:identifier.longLongValue];
 	}
 
@@ -92,6 +93,7 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+	RptqStoreContext * storeContext = self.storeContext;
 	MADStoreEntity *entity = [[MADStoreSchema sharedSchema] entityNamed:self.entity];
 	if (!entity) {
 		[super setValue:value forUndefinedKey:key];
@@ -105,13 +107,13 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 		id previous = [self.backingObject attributeValue:key];
 		if (previous == value || [previous isEqual:value]) return;
 		[self.backingObject setAttributeValue:value forName:key];
-		[self.storeContext markObjectChanged:self];
+		[storeContext markObjectChanged:self];
 		return;
 	}
 
 	MADStoreRelationship *relationship = [entity anyRelationshipNamed:key];
 	if (relationship) {
-		[self.storeContext setRelationship:key value:value onObject:self];
+		[storeContext setRelationship:key value:value onObject:self];
 		return;
 	}
 

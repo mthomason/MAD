@@ -638,6 +638,21 @@ Status key:
 
 ---
 
+
+### The document thumbnail uses the deprecated QuickLook file-attribute keys
+- **Status:** Open -- kept deliberately, behind a scoped pragma.
+- **What:** `MAD/Source/MADocument.m -fileAttributesToWriteToURL:forSaveOperation:error:`
+  writes the document's thumbnail with `NSThumbnail1024x1024SizeKey` and
+  `NSURLThumbnailDictionaryKey` (`:667`, `:671`), both deprecated in iOS 15 in favour of
+  QuickLookThumbnailing.
+- **Why it is not changed here:** there is no drop-in replacement.  The modern route is a
+  QuickLook thumbnail extension target that renders the icon on demand; deleting this
+  code without it would silently drop the custom document icon.  The build warning is
+  suppressed locally with a `#pragma clang diagnostic` pair and a pointer to this entry.
+- **Where:** `MAD/Source/MADocument.m:661-676`.
+- **Follow-up:** decide whether the app wants a thumbnail extension; if not, the code can
+  go entirely and the pragma with it.
+
 ## MADFoundation
 
 ### `MADOperation -willEnqueue` advances past `Pending` to `Ready`
@@ -2087,6 +2102,25 @@ header search path.
 - **Found during the store migration.**
 
 ---
+
+
+### The receipt check uses the deprecated SHA-1 verify API, and leaks its key on failure
+- **Status:** Open -- found by the warning sweep, documented rather than changed.
+- **What:** `MADDesigner/Source/MADVerificationController.m` validates the App Store
+  receipt with `SecTrustCopyPublicKey` (`:482`, deprecated in iOS 14) and
+  `SecKeyRawVerify` with `kSecPaddingPKCS1SHA1` (`:484`, deprecated in iOS 15), over a
+  SHA-1 digest of the receipt (`CC_SHA1_*`, `:475-480`).  Separately, the analyzer's
+  `osx.cocoa.RetainCount` check reports that `receipt_signing_key` (`:482`) leaks on the
+  failure path: the `__Require` macros jump straight to `outLabel`, and the `CFRelease`
+  at `:489` is only reached when verification succeeds.
+- **Why it is not changed here:** swapping `SecKeyRawVerify`/PKCS1SHA1 for
+  `SecKeyVerifySignature` with `kSecKeyAlgorithmRSASignatureMessagePKCS1v15SHA256`
+  changes which signatures the app accepts -- a security decision, not a warning fix.
+  The leak is mechanical in comparison: drop the `CFRelease` at `:489` (the success path
+  falls through to `outLabel`) and release there instead.
+- **Where:** `MADDesigner/Source/MADVerificationController.m:475-489`.
+- **Reproduction:** the analyzer reports both the deprecation and the leak on every
+  `xcodebuild analyze` of the app scheme.
 
 ## Build wiring (Xcode references)
 

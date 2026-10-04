@@ -156,7 +156,7 @@ static const NSUInteger MADBenchMaxSpikeBytesPerRow = 2048;
 
 /// The app's refresh path, minus the app: a driver row loop handed nothing but a write
 /// port.  The whole five-call port is the driver's to send, so nothing is seeded here.
-- (MADDataTableFast *)ingestRowsIntoTableId:(NSUInteger)tableId error:(NSError **)error {
+- (MADDataTableFast *)ingestRowsIntoTableId:(NSUInteger)tableId error:(NSError * __autoreleasing *)error {
 	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:self.sourceURL];
 	MADDatabaseSqlite3 *source = [[MADDatabaseSqlite3 alloc] init];
 	source.databaseConnection = connection;

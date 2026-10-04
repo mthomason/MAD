@@ -117,7 +117,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	@property (nonatomic, assign) CGRect accessibilityCurrentPageRect;
 	@property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
 	@property (nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-	@property (readwrite, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
+	@property (readwrite, nonatomic, strong) NSMutableDictionary <NSNumber *, MADElementStylizedText *> *fontDescriptors;
 
 @end
 
@@ -142,8 +142,8 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	}
 }
 
-#pragma -
-#pragma Helpers Drawing
+#pragma mark -
+#pragma mark Helpers Drawing
 
 + (void)drawWhiteCanvas:(CGContextRef)ctx pageRect:(CGRect)pageRect {
 	[[UIColor whiteColor] setFill];
@@ -153,28 +153,28 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	CGPathRelease(path);
 }
 
-#pragma -
-#pragma NSObject
+#pragma mark -
+#pragma mark NSObject
 
 - (void)dealloc { }
 
-#pragma -
-#pragma Constructors
+#pragma mark -
+#pragma mark Constructors
 
 - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource {
 	if (self = [super init]) {
 		self.datasource = datasource;
 		_accessibilityCacheNeedsUpdate = NO;
 		
-		NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors = [[NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *>alloc] init];
+		NSMutableDictionary <NSNumber *, MADElementStylizedText *> *fontDescriptors = [[NSMutableDictionary <NSNumber *, MADElementStylizedText *>alloc] init];
 		self.fontDescriptors = fontDescriptors;
 
 	}
 	return self;
 }
 
-#pragma -
-#pragma Propery Overrides
+#pragma mark -
+#pragma mark Propery Overrides
 
 - (MADReportTextRepresentation *)textRepresentation {
 	if (_textRepresentation == nil) {
@@ -197,8 +197,8 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	return attt.fontAttributes;
 }
 
-#pragma -
-#pragma Drawing Helpers
+#pragma mark -
+#pragma mark Drawing Helpers
 
 + (UIColor *)backgroundColorForDocumentSectionType:(MADDocumentSectionType)type {
 	switch (type) {
@@ -283,8 +283,8 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 
 }
 
-#pragma -
-#pragma Drawing loop
+#pragma mark -
+#pragma mark Drawing loop
 
 - (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect
 					   withTransparentBackground:(BOOL)transparentBackground {
@@ -297,8 +297,9 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 - (void)drawPageAtIndex:(NSUInteger)pageIndex
 			withContext:(CGContextRef)ctx
 			 inPageRect:(CGRect)pageRect {
+	NSObject <MADPrintPageRendererDataSourceProtocol> * datasource = self.datasource;
 
-	MADReportFormatter *reportFormatter = self.datasource.reportFormatter;
+	MADReportFormatter *reportFormatter = datasource.reportFormatter;
 	if (pageIndex >= reportFormatter.numberOfPages) {
 		return;
 	}
@@ -307,7 +308,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	// autocommit's journal begin/commit on its own.  See BUGS.md "Page draws run one
 	// SQLite transaction per cell".  Only the page-bound check above can return
 	// early, so the pair below stays balanced.
-	[self.datasource.dataTable beginReadTransaction];
+	[datasource.dataTable beginReadTransaction];
 
 	CGFloat originY = pageRect.origin.y;
 	NSUInteger rowIndex = 0, offsetElement = 0, offsetCharacter = 0;
@@ -355,7 +356,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	
 	[self.textRepresentation setPage:pageRepresentation forPageIndex:pageIndex];
 
-	[self.datasource.dataTable commitReadTransaction];
+	[datasource.dataTable commitReadTransaction];
 }
 
 - (MADReportSectionRepresentation *)drawSection: (RptqDocumentSection *)documentSection

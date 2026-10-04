@@ -17,7 +17,7 @@
 
 @dynamic didRefresh;
 
-- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol> *)query {
+- (instancetype)initWithQuery:(MADQuery <MADQueryDatabaseProtocol, MADQueryDatabaseRangeProtocol> *)query {
 	if (self = [super initWithQuery:query]) {
 
 		self.query = query;

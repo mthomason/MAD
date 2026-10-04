@@ -409,7 +409,9 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 		if (layout != nil) {
 			MADDatabase *database = layout.database;
 			MADSectionsLayout *sections;
-			sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: layout.managedObjectContext
+			// MADocument returns its store context from -managedObjectContext (the override is
+			// in MADocument.m), so the inherited UIDocument type is the wrong one at this call.
+			sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: (RptqStoreContext *)layout.managedObjectContext
 																 databaseClass: [database class]];
 			_sections = sections;
 		}

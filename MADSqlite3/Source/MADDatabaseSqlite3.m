@@ -617,13 +617,14 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (BOOL)executeQuery:(MADQuery *)query withError:(NSError * __autoreleasing *)error {
+	id <MADDatabaseResultsProtocol> delegate = self.delegate;
 
 	MADDataTable *dataTable = nil;
 	if ([query conformsToProtocol:@protocol(MADQueryDataTableProtocol)] &&
 		((MADQuery <MADQueryDataTableProtocol> *)query).dataTable != nil) {
 		dataTable = ((MADQuery <MADQueryDataTableProtocol> *)query).dataTable;
-	} else if ([self.delegate respondsToSelector:@selector(dataTableForQuery:)]) {
-		dataTable = [self.delegate dataTableForQuery:query];
+	} else if ([delegate respondsToSelector:@selector(dataTableForQuery:)]) {
+		dataTable = [delegate dataTableForQuery:query];
 	}
 
 	return [self executeQuery:query withDataTable:dataTable andError:error];

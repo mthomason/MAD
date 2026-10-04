@@ -52,27 +52,27 @@ typedef NS_ENUM(NSInteger, MADStoreErrorCode) {
 @property (nonatomic, strong, readonly) MADStoreSchema *schema;
 
 /// Opens the file, creating the schema when it is not there yet.
-- (BOOL)openWithError:(NSError **)error;
+- (BOOL)openWithError:(NSError * __autoreleasing *)error;
 - (void)close;
 
 #pragma mark Reading
 
 - (nullable MADStoreObject *)objectForEntity:(NSString *)entity
 								  identifier:(int64_t)identifier
-									   error:(NSError **)error;
+									   error:(NSError * __autoreleasing *)error;
 
-- (NSArray<MADStoreObject *> *)objectsForEntity:(NSString *)entity error:(NSError **)error;
+- (NSArray<MADStoreObject *> *)objectsForEntity:(NSString *)entity error:(NSError * __autoreleasing *)error;
 
 - (nullable MADStoreGraph *)graphForEntityNames:(NSArray<NSString *> *)entityNames
-										  error:(NSError **)error;
-- (nullable MADStoreGraph *)graphForPart:(MADStorePart)part error:(NSError **)error;
-- (nullable MADStoreGraph *)allObjectsWithError:(NSError **)error;
+										  error:(NSError * __autoreleasing *)error;
+- (nullable MADStoreGraph *)graphForPart:(MADStorePart)part error:(NSError * __autoreleasing *)error;
+- (nullable MADStoreGraph *)allObjectsWithError:(NSError * __autoreleasing *)error;
 
 #pragma mark Writing
 
-- (BOOL)writeGraph:(MADStoreGraph *)graph error:(NSError **)error;
-- (BOOL)writeGraph:(MADStoreGraph *)graph replacingAll:(BOOL)replacingAll error:(NSError **)error;
-- (BOOL)writeObject:(MADStoreObject *)object error:(NSError **)error;
+- (BOOL)writeGraph:(MADStoreGraph *)graph error:(NSError * __autoreleasing *)error;
+- (BOOL)writeGraph:(MADStoreGraph *)graph replacingAll:(BOOL)replacingAll error:(NSError * __autoreleasing *)error;
+- (BOOL)writeObject:(MADStoreObject *)object error:(NSError * __autoreleasing *)error;
 
 /// The incremental save path: writes exactly the named rows -- plus the position
 /// and join-table rows their to-many edges produce -- and deletes the named rows,
@@ -80,10 +80,10 @@ typedef NS_ENUM(NSInteger, MADStoreErrorCode) {
 /// with an empty `deletedObjects` is a successful no-op.
 - (BOOL)writeObjects:(NSArray<MADStoreObject *> *)objects
 	 deletingObjects:(NSArray<MADStoreObject *> *)deletedObjects
-			   error:(NSError **)error;
+			   error:(NSError * __autoreleasing *)error;
 
-- (BOOL)deleteObjectForEntity:(NSString *)entity identifier:(int64_t)identifier error:(NSError **)error;
-- (BOOL)deleteAllObjectsWithError:(NSError **)error;
+- (BOOL)deleteObjectForEntity:(NSString *)entity identifier:(int64_t)identifier error:(NSError * __autoreleasing *)error;
+- (BOOL)deleteAllObjectsWithError:(NSError * __autoreleasing *)error;
 
 @end
 

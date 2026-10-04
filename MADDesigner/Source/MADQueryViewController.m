@@ -623,7 +623,7 @@ BOOL storeEnabled(void) {
 		RptqDatabase *rptqDatabase = rptqDocument.hasDatabaseSchemas.anyObject;
 		RptqQuery *rptqQuery = rptqDatabase.hasQueries.anyObject;
 		RptqQueryGroup *groupToRemove = [rptqQuery queryGroupForIndex:(NSUInteger)indexPath.row];
-		[self.document removeGroupWitObjectID:groupToRemove.identifier fromManagedObjectContext:private];
+		[document removeGroupWitObjectID:groupToRemove.identifier fromManagedObjectContext:private];
 		
 		NSError *error = nil;
 		BOOL successSave = [private save:&error];

@@ -527,9 +527,10 @@ short numberOfSectionsForQueryTableCount(NSUInteger queryTableCount, BOOL report
 }
 
 - (NSArray *)queryTablesController {
+	id <MADQueryViewControllerDatasourceProtocol> datasoruce = self.datasoruce;
 	if (_queryTablesController == nil) {
-		RptqStoreContext *context = self.datasoruce.document.storeContext;
-		MADModelQuery *query = self.datasoruce.document.documentModel.firstQuery;
+		RptqStoreContext *context = datasoruce.document.storeContext;
+		MADModelQuery *query = datasoruce.document.documentModel.firstQuery;
 		NSArray *tables = [context objectsForEntity:NSStringFromClass([RptqQueryTable class])];
 		NSMutableArray *filtered = [NSMutableArray arrayWithCapacity:tables.count];
 		for (RptqQueryTable *table in tables) {

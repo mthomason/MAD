@@ -35,8 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Loads the whole document definition.  Part loads are the app's normal shape; the
 /// whole-graph load is here for the conversion fixtures.
-- (BOOL)loadAllWithError:(NSError **)error;
-- (BOOL)loadPart:(MADStorePart)part error:(NSError **)error;
+- (BOOL)loadAllWithError:(NSError * __autoreleasing *)error;
+- (BOOL)loadPart:(MADStorePart)part error:(NSError * __autoreleasing *)error;
 
 #pragma mark Reading (faulting)
 
@@ -54,8 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// changed a row behind the accessors' back.
 - (void)markObjectChanged:(RptqObject *)object;
 
-- (BOOL)save:(NSError **)error;
-- (BOOL)deleteObject:(RptqObject *)object error:(NSError **)error;
+- (BOOL)save:(NSError * __autoreleasing *)error;
+- (BOOL)deleteObject:(RptqObject *)object error:(NSError * __autoreleasing *)error;
 
 #pragma mark Relationships
 

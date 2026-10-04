@@ -18,7 +18,7 @@
 
 // Required overrides from NSPersistentStore
 
-+ (NSDictionary *)metadataForPersistentStoreWithURL:(NSURL*)url error:(NSError **)error;
++ (NSDictionary *)metadataForPersistentStoreWithURL:(NSURL*)url error:(NSError * __autoreleasing *)error;
 
 - (NSString *)type;
 - (NSString *)identifier;
@@ -26,8 +26,8 @@
 
 // Required overrides from NSAtomicStore
 
-- (BOOL)load:(NSError **)error;
-- (BOOL)save:(NSError **)error;
+- (BOOL)load:(NSError * __autoreleasing *)error;
+- (BOOL)save:(NSError * __autoreleasing *)error;
 
 - (id)newReferenceObjectForManagedObject:(NSManagedObject*)managedObject;
 - (NSAtomicStoreCacheNode *)newCacheNodeForManagedObject:(NSManagedObject *)managedObject;
@@ -41,7 +41,7 @@
 
 - (BOOL)createStubAndGenerateMetadata;
 - (BOOL)readFile;
-- (BOOL)processObjects:(NSError **)error;
+- (BOOL)processObjects:(NSError * __autoreleasing *)error;
 - (NSSet *)getExternalRepresentations;
 - (NSDictionary *)getPropertyCacheDataForKVCCompliantObject:(id)somethingRespondingToValueForKey;
 

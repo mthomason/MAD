@@ -51,13 +51,13 @@ typedef NS_ENUM(NSInteger, MADStoreConverterErrorCode) {
 + (nullable NSManagedObjectContext *)legacyContextForDocumentAtURL:(NSURL *)documentURL
 													   extractedTo:(NSURL *)directory
 															 model:(NSManagedObjectModel *)model
-															 error:(NSError **)error;
+															 error:(NSError * __autoreleasing *)error;
 
 /// Serialises every row of a legacy Core Data document into a portable store graph.
 /// The graph is the reader's canonical shape, so the two compare with -isEqualToGraph:
 /// once both have been through -graphByCompletingInverses.
 + (nullable MADStoreGraph *)graphForManagedObjectContext:(NSManagedObjectContext *)context
-												   error:(NSError **)error;
+												   error:(NSError * __autoreleasing *)error;
 
 /// The whole bridge: open the legacy `.mad` at `documentURL`, serialise its graph,
 /// and write the portable store at `storeURL`.  `model` is the Core Data model the
@@ -66,7 +66,7 @@ typedef NS_ENUM(NSInteger, MADStoreConverterErrorCode) {
 + (nullable MADStoreGraph *)convertDocumentAtURL:(NSURL *)documentURL
 									 toStoreAtURL:(NSURL *)storeURL
 											model:(NSManagedObjectModel *)model
-											error:(NSError **)error;
+											error:(NSError * __autoreleasing *)error;
 
 @end
 

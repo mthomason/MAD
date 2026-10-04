@@ -66,12 +66,12 @@ static os_log_t mad_log;
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	_tableViewCellRightSide.userInteractionEnabled = (_fieldLeftID == nil) == NO;
+	_tableViewCellRightSide.userInteractionEnabled = (_fieldLeftID == 0) == NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	_tableViewCellRightSide.userInteractionEnabled = (_fieldLeftID == nil) == NO;
+	_tableViewCellRightSide.userInteractionEnabled = (_fieldLeftID == 0) == NO;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

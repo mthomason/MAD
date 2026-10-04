@@ -619,7 +619,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	if (!tableID) return;
 	
 	[MADGestureRecognizerAnchorPoint adjustAnchorPointForGestureRecognizer:gestureRecognizer];
-	UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
+	UIWindow *window = self.view.window;
 	CGPoint pointInView = [window convertPoint: [gestureRecognizer locationInView:window]
 										toView: self.contentView];
 	NSDictionary <NSString *, NSLayoutConstraint *> *constraints = [self.constraints objectForKey: @(tableID)];

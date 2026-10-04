@@ -40,6 +40,7 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 @implementation MADGroupByViewController
 
 - (void)viewDidLoad {
+	MADocument * document = self.document;
 	[super viewDidLoad];
 
 	self.navigationItem.leftItemsSupplementBackButton = YES;
@@ -52,8 +53,8 @@ NSString * const MADGroupByViewControllerIdentifier = @"MADGroupByViewController
 	// The group list was an NSFetchedResultsController; the store has no live query,
 	// so the rows are fetched once, scoped to the open query, and sorted by hand.
 	// The list cannot change while this picker is on screen.
-	int64_t queryID = [self.document activeDocumentModel].defaultDatabase.defaultQuery.identifier;
-	NSArray *groups = [self.document.storeContext objectsForEntity:NSStringFromClass([RptqQueryGroup class])];
+	int64_t queryID = [document activeDocumentModel].defaultDatabase.defaultQuery.identifier;
+	NSArray *groups = [document.storeContext objectsForEntity:NSStringFromClass([RptqQueryGroup class])];
 	groups = [groups filteredArrayUsingPredicate:
 			  [NSPredicate predicateWithFormat:@"inQuery.identifier == %lld", queryID]];
 	self.results = [groups sortedArrayUsingDescriptors:

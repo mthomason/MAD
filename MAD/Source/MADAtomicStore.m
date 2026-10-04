@@ -89,7 +89,7 @@ NSString *MyAtomicStoreSubclassDomain = @"MADAtomicStore"; //__nameof(MADAtomic)
 	return YES;
 }
 
-+ (NSDictionary *)metadataForPersistentStoreWithURL:(NSURL*)url error:(NSError **)error {
++ (NSDictionary *)metadataForPersistentStoreWithURL:(NSURL*)url error:(NSError * __autoreleasing *)error {
 	NSData *storeContents = nil;
 	
 	@try {
@@ -129,7 +129,7 @@ NSString *MyAtomicStoreSubclassDomain = @"MADAtomicStore"; //__nameof(MADAtomic)
  
  Try to set metadata
  */
-+ (BOOL)setMetadata:(NSDictionary *)metadata forPersistentStoreWithURL:(NSURL*)url error:(NSError **)error {
++ (BOOL)setMetadata:(NSDictionary *)metadata forPersistentStoreWithURL:(NSURL*)url error:(NSError * __autoreleasing *)error {
 	NSData *storeContents = nil;
 	
 	@try {
@@ -233,7 +233,7 @@ NSString *MyAtomicStoreSubclassDomain = @"MADAtomicStore"; //__nameof(MADAtomic)
  
  Load the objects; the metadata was loaded earlier
  */
-- (BOOL)load:(NSError **)error {
+- (BOOL)load:(NSError * __autoreleasing *)error {
 	if (nil != temp_objects) {
 		NSError *localError = nil;
 		BOOL success = [self processObjects:&localError];
@@ -256,7 +256,7 @@ NSString *MyAtomicStoreSubclassDomain = @"MADAtomicStore"; //__nameof(MADAtomic)
  use standard archiving to save the metadata and the external representations
  of the objects to disk
  */
-- (BOOL)save:(NSError **)error {
+- (BOOL)save:(NSError * __autoreleasing *)error {
 	if ([self isReadOnly]) {
 		if (nil != error) {
 			*error = [NSError errorWithDomain:MyAtomicStoreSubclassDomain code:31 userInfo:nil];
@@ -354,7 +354,7 @@ NSString *MyAtomicStoreSubclassDomain = @"MADAtomicStore"; //__nameof(MADAtomic)
  Go through the external representation array and create cache nodes for the
  represented objects
  */
-- (BOOL)processObjects:(NSError **)error {
+- (BOOL)processObjects:(NSError * __autoreleasing *)error {
 	if (nil == temp_objects) {
 		// This is a new store
 		return YES;

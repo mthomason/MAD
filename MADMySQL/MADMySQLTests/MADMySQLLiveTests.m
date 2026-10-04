@@ -92,7 +92,7 @@
 	return connection;
 }
 
-- (MADDataTable *)fetch:(NSString *)sql onConnection:(MysqlConnection *)connection error:(NSError **)error {
+- (MADDataTable *)fetch:(NSString *)sql onConnection:(MysqlConnection *)connection error:(NSError * __autoreleasing *)error {
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *fetchError = nil;
 	MysqlFetch *fetch = [[MysqlFetch alloc] init];
@@ -568,7 +568,7 @@
 // Runs a statement that returns no rows (DDL/DML) through the same prepared-statement
 // path the fetches use, so the probe table below is built exactly the way the app
 // would see it.
-- (void)runStatement:(NSString *)sql onConnection:(MysqlConnection *)connection error:(NSError **)error {
+- (void)runStatement:(NSString *)sql onConnection:(MysqlConnection *)connection error:(NSError * __autoreleasing *)error {
 	MADDataTable *scratch = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *statementError = nil;
 	MysqlFetch *runner = [[MysqlFetch alloc] init];

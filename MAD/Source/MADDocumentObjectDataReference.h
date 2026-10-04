@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MADDocumentObjectDataReference : NSObject <NSCopying>
 
 @property (readonly, nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
-@property (readonly, nonatomic, strong) NSMutableDictionary <NSManagedObjectID *, MADElementStylizedText *> *fontDescriptors;
+@property (readonly, nonatomic, strong) NSMutableDictionary <NSNumber *, MADElementStylizedText *> *fontDescriptors;
 @property (readwrite, nonatomic, weak) __kindof RptqDocumentElement *item;
 @property (readonly, nonatomic, assign) MADPrintPageElementType type;
 @property (readwrite, nonatomic, assign) NSUInteger pageIndex;

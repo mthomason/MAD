@@ -98,7 +98,7 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 
 #pragma mark - Loading
 
-- (BOOL)loadAllWithError:(NSError **)error {
+- (BOOL)loadAllWithError:(NSError * __autoreleasing *)error {
 	MADStoreGraph *graph = [self.store allObjectsWithError:error];
 	if (!graph) return NO;
 	self.graph = graph;
@@ -111,7 +111,7 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	return YES;
 }
 
-- (BOOL)loadPart:(MADStorePart)part error:(NSError **)error {
+- (BOOL)loadPart:(MADStorePart)part error:(NSError * __autoreleasing *)error {
 	MADStoreGraph *graph = [self.store graphForPart:part error:error];
 	if (!graph) return NO;
 	self.graph = graph;
@@ -232,7 +232,7 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	[self scheduleChangeNotificationPost];
 }
 
-- (BOOL)save:(NSError **)error {
+- (BOOL)save:(NSError * __autoreleasing *)error {
 	if (!self.hasChanges) return YES; // A clean save must not touch the file.
 
 	NSArray<MADStoreObject *> *dirty = [self dirtyBackingObjects];
@@ -276,7 +276,7 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	}
 }
 
-- (BOOL)deleteObject:(RptqObject *)object error:(NSError **)error {
+- (BOOL)deleteObject:(RptqObject *)object error:(NSError * __autoreleasing *)error {
 	// Deletion is pending, as in Core Data: the row stays readable until the next
 	// save commits the delete.  The object leaves the registry now so it cannot be
 	// faulted again, and any unsaved edit to it is dropped with it.

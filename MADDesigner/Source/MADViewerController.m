@@ -1003,14 +1003,15 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 }
 
 - (void)operation:(MADOperation *)operation updatePages:(NSUInteger)numberOfPages {
+	MADLabelStatus * labelStatus = self.labelStatus;
 	os_log_debug(OS_LOG_DEFAULT, "%s: pages=%lu thread=%@ labelStatus=%p operation=%p",
 				 __PRETTY_FUNCTION__, (unsigned long)numberOfPages,
-				 NSThread.currentThread.description, self.labelStatus, operation);
+				 NSThread.currentThread.description, labelStatus, operation);
 	if ([operation isKindOfClass:[MADRefreshOperationReload class]]) {
 		self.pageSlider.numberOfPages = numberOfPages;
 	}
 	_currentLocation.totalPages = numberOfPages;
-	[self.labelStatus updatePageStatus: _currentLocation];
+	[labelStatus updatePageStatus: _currentLocation];
 }
 
 #pragma mark -

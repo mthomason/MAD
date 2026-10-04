@@ -142,7 +142,7 @@ static NSString * const TextDefault = @"Default";
 }
 
 - (IBAction)save:(id)sender {
-	if (self.fieldId != nil) {
+	if (self.fieldId != 0) {
 		[self.delegate viewController: self addedGroupOnQueryField: self.fieldId andSortOrder: self.sortOrder];
 	}
 }
@@ -151,7 +151,7 @@ static NSString * const TextDefault = @"Default";
 #pragma mark Helpers
 
 - (void)updateSaveButtonState {
-	self.navigationItem.rightBarButtonItem.enabled = [self fieldId] != nil;
+	self.navigationItem.rightBarButtonItem.enabled = [self fieldId] != 0;
 }
 
 @end

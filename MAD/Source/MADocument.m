@@ -509,7 +509,7 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	return success;
 }
 
-- (BOOL)openPortableStoreWithError:(NSError **)error {
+- (BOOL)openPortableStoreWithError:(NSError * __autoreleasing *)error {
 	NSURL *storeURL = [self portableStoreURL];
 	NSURL *legacyStoreURL = [[_urlGuts URLByAppendingPathComponent:@"StoreContent" isDirectory:YES]
 							 URLByAppendingPathComponent:@"analyitics"];
@@ -663,12 +663,20 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	id fileAttributes;
 	if (self.thumbnail != nil) {
 		UIImage *thumbnail = self.thumbnail.copy;
+		// NSThumbnail1024x1024SizeKey / NSURLThumbnailDictionaryKey are deprecated in
+		// iOS 15; the replacement is a QuickLook thumbnail extension, which is a new
+		// target rather than a substitution, so the attribute-based thumbnail is kept
+		// for now.  See BUGS.md "The document thumbnail uses the deprecated QuickLook
+		// file-attribute keys".
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 		NSDictionary *thumbnails = [[NSDictionary alloc] initWithObjectsAndKeys:
 									thumbnail, NSThumbnail1024x1024SizeKey, nil];
 		thumbnail = nil;
-		
+
 		fileAttributes = [[NSDictionary alloc] initWithObjectsAndKeys:
 								thumbnails, NSURLThumbnailDictionaryKey, nil];
+#pragma clang diagnostic pop
 	} else {
 		fileAttributes = @{};
 	}

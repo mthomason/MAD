@@ -23,7 +23,7 @@
 
 - (NSString *)SQLOnlyActiveFields:(BOOL)onlyActiveFields
 			 managedObjectContext:(RptqStoreContext *)managedObjectContext
-							error:(NSError **)error;
+							error:(NSError * __autoreleasing *)error;
 
 @property (nonatomic, assign) NSUInteger limitResults;
 

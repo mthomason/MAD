@@ -197,7 +197,7 @@ MADStoreIdentifiersForRows(NSArray<NSManagedObject *> *rows, MADStoreSchema *sch
 
 @implementation MADStoreConverter
 
-+ (MADStoreGraph *)graphForManagedObjectContext:(NSManagedObjectContext *)context error:(NSError **)error {
++ (MADStoreGraph *)graphForManagedObjectContext:(NSManagedObjectContext *)context error:(NSError * __autoreleasing *)error {
 	MADStoreSchema *schema = [MADStoreSchema sharedSchema];
 
 	// One fetch per table.  Fetching a table owner returns its subentities' rows as
@@ -254,7 +254,7 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 + (NSManagedObjectContext *)legacyContextForDocumentAtURL:(NSURL *)documentURL
 											 extractedTo:(NSURL *)directory
 												   model:(NSManagedObjectModel *)model
-												   error:(NSError **)error {
+												   error:(NSError * __autoreleasing *)error {
 	if (!MADStoreLooksLikeADocument(documentURL)) {
 		if (error) {
 			*error = MADStoreConverterError(MADStoreConverterErrorUnarchive,
@@ -319,7 +319,7 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 + (MADStoreGraph *)convertDocumentAtURL:(NSURL *)documentURL
 						   toStoreAtURL:(NSURL *)storeURL
 								  model:(NSManagedObjectModel *)model
-								  error:(NSError **)error {
+								  error:(NSError * __autoreleasing *)error {
 	NSURL *guts = [NSURL fileURLWithPath:
 		[NSTemporaryDirectory() stringByAppendingPathComponent:
 			[[NSString alloc] initWithFormat:@"mad-convert-%@", NSUUID.UUID.UUIDString]]

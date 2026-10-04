@@ -45,9 +45,10 @@
 - (void)updateWithBarcode: (MTBarcode *)barcode
 				 field1ID: (int64_t)field1ID
 				 field2ID: (int64_t)field2ID {
+	RptqStoreContext * storeContext = self.storeContext;
 
-	RptqQueryField *field1 = (RptqQueryField *)[self.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field1ID];
-	RptqQueryField *field2 = (RptqQueryField *)[self.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field2ID];
+	RptqQueryField *field1 = (RptqQueryField *)[storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field1ID];
+	RptqQueryField *field2 = (RptqQueryField *)[storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field2ID];
 	
 	self.add2dComponent =       @(barcode.has2dComponent);
 	self.barcodeBorderStyle =   barcode.barcodeBorderStyle;
@@ -65,7 +66,7 @@
 	self.referencesField2 =     field2;
 	BOOL success = NO;
 	NSError * __autoreleasing saveError = nil;
-	if (!(success = [self.storeContext save:&saveError])) {
+	if (!(success = [storeContext save:&saveError])) {
 		os_log_error(OS_LOG_DEFAULT, "Error saving managed object: %@", saveError.localizedDescription);
 	}
 }

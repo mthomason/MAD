@@ -58,16 +58,16 @@
 // Declared in MADDatabaseSQLServer.m but not in any published header. Declaring them
 // here reaches the live paths without widening the framework's public API.
 @interface MADDatabaseSQLServer (MADTdsClientLiveTestsInternal)
-- (void *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError **)error;
+- (void *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError * __autoreleasing *)error;
 - (id)connectWithConnection:(MADDatabaseConnection *)connection
 				 credentals:(MADCredential *)credentals
-			connectionError:(NSError **)error;
+			connectionError:(NSError * __autoreleasing *)error;
 - (void)closeConnection:(id)process;
 - (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)process
-													error:(NSError **)outError;
+													error:(NSError * __autoreleasing *)outError;
 - (NSArray <MADDatabaseField *> *)fieldsForTable:(NSString *)tableName
 									 connection:(id)process
-										  error:(NSError **)error;
+										  error:(NSError * __autoreleasing *)error;
 - (BOOL)runSQL:(NSString *)sql
    onDataTable:(MADDataTable *)datatable
 	 fieldKeys:(NSArray *)fieldKeys

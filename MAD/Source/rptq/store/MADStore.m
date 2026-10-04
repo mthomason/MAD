@@ -73,7 +73,7 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 
 #pragma mark - Opening
 
-- (BOOL)openWithError:(NSError **)error {
+- (BOOL)openWithError:(NSError * __autoreleasing *)error {
 	if (self.open) return YES;
 
 	sqlite3 *database = NULL;
@@ -109,7 +109,7 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 	self.open = NO;
 }
 
-- (BOOL)execute:(NSString *)sql error:(NSError **)error {
+- (BOOL)execute:(NSString *)sql error:(NSError * __autoreleasing *)error {
 	char *message = NULL;
 	int result = sqlite3_exec(self.database, sql.UTF8String, NULL, NULL, &message);
 	if (result == SQLITE_OK) return YES;
@@ -123,11 +123,11 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 
 #pragma mark - Transactions
 
-- (BOOL)beginTransactionWithError:(NSError **)error {
+- (BOOL)beginTransactionWithError:(NSError * __autoreleasing *)error {
 	return [self execute:@"BEGIN IMMEDIATE TRANSACTION;" error:error];
 }
 
-- (BOOL)commitTransactionWithError:(NSError **)error {
+- (BOOL)commitTransactionWithError:(NSError * __autoreleasing *)error {
 	return [self execute:@"COMMIT;" error:error];
 }
 
@@ -229,7 +229,7 @@ static id MADStoreReadColumn(sqlite3_stmt *statement, int index, MADStoreValueTy
 								   where:(nullable NSString *)where
 								bindings:(NSArray *)bindings
 							   positions:(MADStorePositions *)positions
-								   error:(NSError **)error {
+								   error:(NSError * __autoreleasing *)error {
 	NSArray<MADStoreColumn *> *columns = [self columnsForTable:table];
 
 	NSMutableArray<NSString *> *names = [NSMutableArray arrayWithCapacity:columns.count];
@@ -294,7 +294,7 @@ static id MADStoreReadColumn(sqlite3_stmt *statement, int index, MADStoreValueTy
 
 - (MADStoreObject *)objectForEntity:(NSString *)entityName
 						 identifier:(int64_t)identifier
-							  error:(NSError **)error {
+							  error:(NSError * __autoreleasing *)error {
 	if (!self.open) {
 		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");
 		return nil;
@@ -318,7 +318,7 @@ static id MADStoreReadColumn(sqlite3_stmt *statement, int index, MADStoreValueTy
 	return objects.firstObject;
 }
 
-- (NSArray<MADStoreObject *> *)objectsForEntity:(NSString *)entityName error:(NSError **)error {
+- (NSArray<MADStoreObject *> *)objectsForEntity:(NSString *)entityName error:(NSError * __autoreleasing *)error {
 	if (!self.open) {
 		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");
 		return @[];
@@ -338,7 +338,7 @@ static id MADStoreReadColumn(sqlite3_stmt *statement, int index, MADStoreValueTy
 /// Many-to-many edges live in a join table and nowhere else, so they have to be
 /// read back separately.  Both ends are filled, and an edge whose other end is not
 /// in the graph is dropped -- a part loaded on its own legitimately dangles.
-- (void)readJoinTablesIntoGraph:(MADStoreGraph *)graph error:(NSError **)error {
+- (void)readJoinTablesIntoGraph:(MADStoreGraph *)graph error:(NSError * __autoreleasing *)error {
 	NSMutableSet<NSString *> *read = [NSMutableSet set];
 	for (MADStoreEntity *entity in self.schema.entities) {
 		for (MADStoreRelationship *relationship in entity.relationships) {
@@ -418,7 +418,7 @@ static id MADStoreReadColumn(sqlite3_stmt *statement, int index, MADStoreValueTy
 	}
 }
 
-- (MADStoreGraph *)graphForEntityNames:(NSArray<NSString *> *)entityNames error:(NSError **)error {
+- (MADStoreGraph *)graphForEntityNames:(NSArray<NSString *> *)entityNames error:(NSError * __autoreleasing *)error {
 	if (!self.open) {
 		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");
 		return nil;
@@ -449,7 +449,7 @@ static id MADStoreReadColumn(sqlite3_stmt *statement, int index, MADStoreValueTy
 	return [graph graphByCompletingInverses];
 }
 
-- (MADStoreGraph *)graphForPart:(MADStorePart)part error:(NSError **)error {
+- (MADStoreGraph *)graphForPart:(MADStorePart)part error:(NSError * __autoreleasing *)error {
 	NSMutableArray<NSString *> *names = [NSMutableArray array];
 	for (MADStoreEntity *table in self.schema.tables) {
 		if ([self.schema entityName:table.name belongsToPart:part]) [names addObject:table.name];
@@ -457,7 +457,7 @@ static id MADStoreReadColumn(sqlite3_stmt *statement, int index, MADStoreValueTy
 	return [self graphForEntityNames:names error:error];
 }
 
-- (MADStoreGraph *)allObjectsWithError:(NSError **)error {
+- (MADStoreGraph *)allObjectsWithError:(NSError * __autoreleasing *)error {
 	NSMutableArray<NSString *> *names = [NSMutableArray arrayWithCapacity:self.schema.tables.count];
 	for (MADStoreEntity *table in self.schema.tables) [names addObject:table.name];
 	return [self graphForEntityNames:names error:error];
@@ -485,7 +485,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 
 /// The identifier a satellite row is keyed by.  The model gives those entities no
 /// identifier, so the store hands out the next one past whatever the table holds.
-- (int64_t)nextIdentifierForTable:(NSString *)table error:(NSError **)error {
+- (int64_t)nextIdentifierForTable:(NSString *)table error:(NSError * __autoreleasing *)error {
 	NSString *sql = [[NSString alloc] initWithFormat:@"SELECT MAX(\"identifier\") FROM \"%@\";", table];
 	sqlite3_stmt *statement = NULL;
 	if (sqlite3_prepare_v2(self.database, sql.UTF8String, -1, &statement, NULL) != SQLITE_OK) {
@@ -498,7 +498,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	return maximum + 1;
 }
 
-- (BOOL)writeRowForObject:(MADStoreObject *)object error:(NSError **)error {
+- (BOOL)writeRowForObject:(MADStoreObject *)object error:(NSError * __autoreleasing *)error {
 	MADStoreEntity *entity = [self.schema entityNamed:object.entity];
 	if (!entity) {
 		if (error) *error = MADStoreError(MADStoreErrorUnknownEntity, object.entity);
@@ -599,7 +599,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	return result == SQLITE_DONE;
 }
 
-- (BOOL)writePositionsForGraph:(MADStoreGraph *)graph error:(NSError **)error {
+- (BOOL)writePositionsForGraph:(MADStoreGraph *)graph error:(NSError * __autoreleasing *)error {
 	for (MADStoreEntity *table in self.schema.tables) {
 		for (MADStoreRelationship *relationship in table.allRelationships) {
 			if (!relationship.isToMany || !relationship.isOrdered) continue;
@@ -630,7 +630,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	return YES;
 }
 
-- (BOOL)writeJoinTablesForGraph:(MADStoreGraph *)graph error:(NSError **)error {
+- (BOOL)writeJoinTablesForGraph:(MADStoreGraph *)graph error:(NSError * __autoreleasing *)error {
 	NSMutableSet<NSString *> *cleared = [NSMutableSet set];
 	for (MADStoreEntity *entity in self.schema.entities) {
 		for (MADStoreRelationship *relationship in entity.relationships) {
@@ -678,7 +678,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	return YES;
 }
 
-- (MADStoreGraph *)graphByAssigningSurrogates:(MADStoreGraph *)graph error:(NSError **)error {
+- (MADStoreGraph *)graphByAssigningSurrogates:(MADStoreGraph *)graph error:(NSError * __autoreleasing *)error {
 	MADStoreGraph *resolved = [MADStoreGraph new];
 	NSMutableDictionary<NSString *, NSNumber *> *nextIdentifier = [NSMutableDictionary dictionary];
 	for (MADStoreObject *object in [graph allObjects]) {
@@ -694,7 +694,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	return resolved;
 }
 
-- (BOOL)deleteAllInTransactionWithError:(NSError **)error {
+- (BOOL)deleteAllInTransactionWithError:(NSError * __autoreleasing *)error {
 	for (MADStoreEntity *table in self.schema.tables) {
 		if (![self execute:[[NSString alloc] initWithFormat:@"DELETE FROM \"%@\";", table.name] error:error]) {
 			return NO;
@@ -712,11 +712,11 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	return YES;
 }
 
-- (BOOL)writeGraph:(MADStoreGraph *)graph error:(NSError **)error {
+- (BOOL)writeGraph:(MADStoreGraph *)graph error:(NSError * __autoreleasing *)error {
 	return [self writeGraph:graph replacingAll:NO error:error];
 }
 
-- (BOOL)writeGraph:(MADStoreGraph *)graph replacingAll:(BOOL)replacingAll error:(NSError **)error {
+- (BOOL)writeGraph:(MADStoreGraph *)graph replacingAll:(BOOL)replacingAll error:(NSError * __autoreleasing *)error {
 	if (!self.open) {
 		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");
 		return NO;
@@ -749,7 +749,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	return YES;
 }
 
-- (BOOL)writeObject:(MADStoreObject *)object error:(NSError **)error {
+- (BOOL)writeObject:(MADStoreObject *)object error:(NSError * __autoreleasing *)error {
 	MADStoreGraph *graph = [MADStoreGraph new];
 	[graph addObject:object];
 	return [self writeGraph:graph error:error];
@@ -759,7 +759,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 
 /// Deletes the named row's half of every join table its entity participates in, so
 /// a deleted row cannot leave join rows behind the full rewrite never produced.
-- (BOOL)deleteJoinRowsForObject:(MADStoreObject *)object error:(NSError **)error {
+- (BOOL)deleteJoinRowsForObject:(MADStoreObject *)object error:(NSError * __autoreleasing *)error {
 	MADStoreEntity *entity = [self.schema entityNamed:object.entity];
 	MADStoreEntity *owner = entity.isSubentity ? [self.schema entityForTable:entity.table] : entity;
 	for (MADStoreRelationship *relationship in owner.allRelationships) {
@@ -784,7 +784,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 
 /// Sets each member's `position` column from the parent's ordered edge list, for
 /// the named parents only; other parents' members keep their positions.
-- (BOOL)writePositionsForObjects:(NSArray<MADStoreObject *> *)parents error:(NSError **)error {
+- (BOOL)writePositionsForObjects:(NSArray<MADStoreObject *> *)parents error:(NSError * __autoreleasing *)error {
 	for (MADStoreObject *parent in parents) {
 		MADStoreEntity *entity = [self.schema entityNamed:parent.entity];
 		MADStoreEntity *owner = entity.isSubentity ? [self.schema entityForTable:entity.table] : entity;
@@ -818,7 +818,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 /// Rebuilds the named rows' half of every join table they participate in.  Each
 /// object rewrites its own rows (INSERT OR IGNORE collapses the two halves), and
 /// an object that holds no members ends with no rows.
-- (BOOL)writeJoinRowsForObjects:(NSArray<MADStoreObject *> *)objects error:(NSError **)error {
+- (BOOL)writeJoinRowsForObjects:(NSArray<MADStoreObject *> *)objects error:(NSError * __autoreleasing *)error {
 	for (MADStoreObject *object in objects) {
 		MADStoreEntity *entity = [self.schema entityNamed:object.entity];
 		MADStoreEntity *owner = entity.isSubentity ? [self.schema entityForTable:entity.table] : entity;
@@ -857,7 +857,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 
 - (BOOL)writeObjects:(NSArray<MADStoreObject *> *)objects
 	 deletingObjects:(NSArray<MADStoreObject *> *)deletedObjects
-			   error:(NSError **)error {
+			   error:(NSError * __autoreleasing *)error {
 	if (!self.open) {
 		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");
 		return NO;
@@ -894,7 +894,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	return YES;
 }
 
-- (BOOL)deleteObjectForEntity:(NSString *)entityName identifier:(int64_t)identifier error:(NSError **)error {
+- (BOOL)deleteObjectForEntity:(NSString *)entityName identifier:(int64_t)identifier error:(NSError * __autoreleasing *)error {
 	if (!self.open) {
 		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");
 		return NO;
@@ -926,7 +926,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	return YES;
 }
 
-- (BOOL)deleteAllObjectsWithError:(NSError **)error {
+- (BOOL)deleteAllObjectsWithError:(NSError * __autoreleasing *)error {
 	if (!self.open) {
 		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");
 		return NO;

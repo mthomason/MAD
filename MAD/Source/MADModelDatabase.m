@@ -218,10 +218,7 @@ static os_log_t log_mad;
 }
 
 /**
- @brief Fetches RptqQueryField <Name, Identifier> for all query tables.
- @param None
- @returns
- @abstract
+ @brief Rebuilds the model's table list from the store's schema tables, sorted by name.
 */
 
 - (void)updateTables {

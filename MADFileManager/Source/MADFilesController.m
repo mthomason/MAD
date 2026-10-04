@@ -451,9 +451,10 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
  * implementation performs the updates and determines where each of these URLs were located so that
  * the controller can forward the new / removed / updated indexes as well.
  *
- * @param insertedURLs The \c NSURL instances that are newly tracked.
- * @param removedURLs The \c NSURL instances that have just been untracked.
- * @param updatedURLs The \c NSURL instances that have had their underlying model updated.
+ * @param inserts The \c NSURL instances that are newly tracked.
+ * @param removes The \c NSURL instances that have just been untracked.
+ * @param updates The \c NSURL instances that have had their underlying model updated.
+ * @param completion Called when the updates have been applied; \c success is \c NO on failure.
  */
 - (void)processContentChangesWithInsertedMetaDatum:(NSArray *)inserts
 								  removedMetaDatum:(NSArray *)removes

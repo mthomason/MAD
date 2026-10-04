@@ -30,7 +30,7 @@
 	 * Initializes an \c MADAppLaunchContext instance with the color and
 	 *      URL designated by the lister:// URL.
 	 *
-	 * \param listerURL
+	 * \param fileURL
 	 * The URL adhering to the lister:// scheme providing the file URL and list color to launch to.
 	 */
 	- (instancetype)initWithFileURL:(NSURL *)fileURL;

@@ -2422,7 +2422,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	
 	if (_editAggregate && _aggregateToEditObjectID != 0) {
 		
-		if (viewController.fieldObjectID != nil) {
+		if (viewController.fieldObjectID != 0) {
 			MADocument *document = self.document;
 			RptqDocumentElementAggregate *aggregateToEdit = (RptqDocumentElementAggregate *)[document.storeContext objectForEntity:NSStringFromClass([RptqDocumentElementAggregate class]) identifier: _aggregateToEditObjectID];
 			[aggregateToEdit updateAggregateFunctionWithFunctionType: viewController.aggregateFunctionType
@@ -2434,7 +2434,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		}
 		
 	} else {
-		if (viewController.fieldObjectID != nil) {
+		if (viewController.fieldObjectID != 0) {
 			
 			NSNumber *groupNumber = [[NSNumber alloc] initWithInteger:viewController.groupTypeSectionNumber];
 			[self insertDocumentObjectNewAggregateFunctionWithType: viewController.aggregateFunctionType

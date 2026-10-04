@@ -47,7 +47,7 @@
 + (NSString *)bracketedIdentifierFromName:(NSString *)name;
 + (NSString *)IPAddressForServer:(NSString *)server;
 - (NSString *)shortAliasFromQualifiedTable:(NSString *)qualifiedName;
-- (void *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError **)error;
+- (void *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError * __autoreleasing *)error;
 @end
 
 @interface MADTdsClientTests : XCTestCase

@@ -53,7 +53,7 @@ static os_log_t rptq_log;
 										andRightFieldID:(int64_t)rightFieldID
 								forManagedObjectContext:(RptqStoreContext *)managedObjectContext
 												  error:(NSError * __autoreleasing *)error {
-	if (leftFieldID == nil || rightFieldID == nil) {
+	if (leftFieldID == 0 || rightFieldID == 0) {
 		os_log_error(rptq_log, "%s Missing field.", __PRETTY_FUNCTION__);
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:[self domain] code:2340 userInfo:@{
@@ -92,7 +92,7 @@ static os_log_t rptq_log;
 										  andRightValue:(NSString *)rightUserValue
 								forManagedObjectContext:(RptqStoreContext *)managedObjectContext
 												  error:(NSError * __autoreleasing *)error {
-	if (leftFieldID == nil || rightUserValue == nil) {
+	if (leftFieldID == 0 || rightUserValue == nil) {
 		NSString *message = @"Missing field or value.";
 		os_log_error(rptq_log, "%{public}@", message);
 		if (error != NULL) {
@@ -150,7 +150,7 @@ static os_log_t rptq_log;
 									  andRightFieldID:(int64_t)rightFieldID
 							  forManagedObjectContext:(RptqStoreContext *)managedObjectContext
 												error:(NSError * __autoreleasing *)error {
-	if (leftUserValue == nil || rightFieldID == nil) {
+	if (leftUserValue == nil || rightFieldID == 0) {
 		NSString *message = @"Missing value or field.";
 		os_log_error(rptq_log, "%{public}@", message);
 		if (error != NULL) {

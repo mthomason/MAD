@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setPropertyCacheData:(NSDictionary *)dictionary;
 
-- (bool)resolvePropertyValues:(NSError **)error;
+- (bool)resolvePropertyValues:(NSError * __autoreleasing *)error;
 
 @end
 
