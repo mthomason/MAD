@@ -190,7 +190,8 @@ NSString * const MADStoreIdentifierColumnSuffix = @"_identifier";
 		self.flattenedAttributes = self.attributes;
 		self.flattenedRelationships = self.relationships;
 	} else {
-		MADStoreEntity *parent = byName[self.parentName];
+		NSString *parentName = self.parentName;
+		MADStoreEntity *parent = byName[parentName];
 		[parent warmLookupsWithNames:byName];
 		self.flattenedAttributes = [parent.flattenedAttributes arrayByAddingObjectsFromArray:self.attributes];
 		self.flattenedRelationships = [parent.flattenedRelationships arrayByAddingObjectsFromArray:self.relationships];
@@ -693,8 +694,9 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 	// share it.
 	NSMutableArray<MADStoreEntity *> *tables = [NSMutableArray array];
 	for (MADStoreEntity *entity in all) {
-		if (entity.parentName) {
-			MADStoreEntity *parent = byName[entity.parentName];
+		NSString *parentName = entity.parentName;
+		if (parentName) {
+			MADStoreEntity *parent = byName[parentName];
 			NSAssert(parent != nil, @"Subentity %@ names an unknown parent %@", entity.name, entity.parentName);
 			entity.table = parent.table ?: parent.name;
 		} else {
@@ -717,7 +719,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 	// rows take a store-assigned surrogate.
 	for (MADStoreEntity *entity in all) {
 		BOOL hasIdentifier = NO;
-		for (MADStoreEntity *walk = entity; walk && !hasIdentifier; walk = walk.parentName ? byName[walk.parentName] : nil) {
+		for (MADStoreEntity *walk = entity; walk && !hasIdentifier; walk = walk.parentName ? byName[(NSString *)walk.parentName] : nil) {
 			for (MADStoreAttribute *attribute in walk.attributes) {
 				if ([attribute.name isEqualToString:@"identifier"]) { hasIdentifier = YES; break; }
 			}
@@ -733,14 +735,14 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 		while (entity) {
 			MADStoreRelationship *found = [entity relationshipNamed:name];
 			if (found) return found;
-			entity = entity.parentName ? byName[entity.parentName] : nil;
+			entity = entity.parentName ? byName[(NSString *)entity.parentName] : nil;
 		}
 		return nil;
 	};
 	NSMutableArray<MADStoreRelationship *> *(^relationshipsOf)(MADStoreEntity *) =
 	^NSMutableArray<MADStoreRelationship *> *(MADStoreEntity *entity) {
 		NSMutableArray<MADStoreRelationship *> *result = [NSMutableArray array];
-		for (MADStoreEntity *walk = entity; walk; walk = walk.parentName ? byName[walk.parentName] : nil) {
+		for (MADStoreEntity *walk = entity; walk; walk = walk.parentName ? byName[(NSString *)walk.parentName] : nil) {
 			[result addObjectsFromArray:walk.relationships];
 		}
 		return result;
@@ -912,9 +914,10 @@ static NSString *MADStoreColumnDefinition(MADStoreAttribute *attribute, BOOL for
 	NSMutableDictionary<NSString *, NSMutableArray<MADStoreRelationship *> *> *joinTables = [NSMutableDictionary dictionary];
 	for (MADStoreEntity *entity in self.entities) {
 		for (MADStoreRelationship *relationship in entity.relationships) {
-			if (!relationship.joinTable) continue;
-			NSMutableArray *sides = joinTables[relationship.joinTable];
-			if (!sides) { sides = [NSMutableArray array]; joinTables[relationship.joinTable] = sides; }
+			NSString *joinTable = relationship.joinTable;
+			if (joinTable == nil) continue;
+			NSMutableArray *sides = joinTables[joinTable];
+			if (!sides) { sides = [NSMutableArray array]; joinTables[joinTable] = sides; }
 			[sides addObject:relationship];
 		}
 	}

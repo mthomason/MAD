@@ -814,9 +814,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 			} else {
 				NSTimeInterval t = 0;
 				if ([value isKindOfClass:[NSString class]]) {
-					t = ((NSString *)value).longLongValue;
+					t = (NSTimeInterval)((NSString *)value).longLongValue;
 				} else if ([value isKindOfClass:[NSNumber class]]) {
-					t = [value longLongValue];
+					t = (NSTimeInterval)[value longLongValue];
 				}
 				d = [NSDate dateWithTimeIntervalSince1970:t];
 			}

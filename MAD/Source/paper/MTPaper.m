@@ -231,7 +231,7 @@ static inline BOOL MTPaperTypeIsKnown(MTPaperType papertype) {
 
 @interface MTPaper ()
 
-	- (instancetype)init NS_DESIGNATED_INITIALIZER;
+	- (instancetype)init;
 
 @end
 

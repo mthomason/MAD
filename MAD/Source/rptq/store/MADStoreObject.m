@@ -89,7 +89,7 @@
 }
 
 - (NSUInteger)hash {
-	return (NSUInteger)(self.identifier ^ self.entity.hash);
+	return (NSUInteger)self.identifier ^ self.entity.hash;
 }
 
 - (NSString *)description {

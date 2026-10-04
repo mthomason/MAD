@@ -724,16 +724,18 @@ Status key:
 
 
 ### The installed accessor blocks re-read a weak store context
-- **Status:** Open -- documented; the warning is correct but its suggested fix is wrong here.
-- **What:** `RptqObject.m` installs four accessor blocks with
-  `imp_implementationWithBlock` (`:234`, `:238`, `:242`, `:246`) that each read the weak
-  `storeContext` property.  `-Warc-repeated-use-of-weak` asks for the value to be read
-  once into a strong local, but these blocks run long after the method returns, so
-  capturing the context strongly would tie its lifetime to the object's -- and the object
-  is owned by that context, so the "fix" would create a retain cycle where there is
-  currently none.  The property is intentionally weak (`RptqObject.h:33`).
-- **Where:** `MAD/Source/rptq/store/RptqObject.m:234-246`.
-
+- **Status:** Fixed
+- **Now:** the four accessor blocks in `RptqObject.m` read the weak `storeContext` once
+  into a strong local at the top of the block, and the block parameter that used to be
+  named `self` is `target` (it shadowed the enclosing class method's `self`).  The
+  to-many accessors therefore touch the weak property once per call instead of once per
+  member, and the four `-Wshadow` findings are gone with the same edit.
+- **Why the local is safe here:** the strong local lives for the block's *invocation*
+  only; it is not captured by the stored block, so nothing gains a reference that
+  outlives the call.  An earlier version of this entry claimed hoisting would create a
+  retain cycle -- that is true only of a strong capture taken at *install* time, which
+  this is not.
+- **Where:** `MAD/Source/rptq/store/RptqObject.m:233-254`.
 
 ### The nullability analyzer reports nil crossing nonnull boundaries
 - **Status:** Open -- documented from the analyzer run; each site is a crash risk if its
@@ -759,6 +761,17 @@ Status key:
   Callers that trust the declaration will not nil-check.
 - **Where:** `MADSqlite3/Source/MADDataTableFast.m:964,973,987,1280,1416`.
 - **Evidence:** `nullability.NullReturnedFromNonnull` in `xcodebuild analyze`.
+
+
+### The store's per-column read loop relies on schema names being non-nil
+- **Status:** Invariant, not a defect -- recorded so the next reader knows.
+- **What:** `MADStore.m`'s row loop passes `column.attribute.name` (and
+  `column.relationship.name`) to `setAttributeValue:forName:`, whose implementation does
+  `self.values[name] = value`.  A nil key throws, but the schema always names its
+  attributes, so the call sites carry an explicit `(NSString *)` cast rather than a
+  guard: this is the per-column, per-row loop that fills every document, and a branch
+  there buys nothing when a nil name would mean a malformed schema.
+- **Where:** `MAD/Source/rptq/store/MADStore.m:273-278`.
 
 ## MADFoundation
 

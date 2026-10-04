@@ -180,7 +180,8 @@ static char RptqPropertyType(objc_property_t property) {
 
 	NSString *setterKey = RptqKeyFromSetter(selector);
 	if (setterKey) {
-		objc_property_t setterProperty = class_getProperty(self, setterKey.UTF8String);
+		// setterKey is non-nil here and a valid string always yields a UTF8String.
+		objc_property_t setterProperty = class_getProperty(self, (const char *)setterKey.UTF8String);
 		if (setterProperty) {
 			switch (RptqPropertyType(setterProperty)) {
 				case 'q': class_addMethod(self, selector, (IMP)RptqSetInt64,  "v@:q"); return YES;
@@ -232,20 +233,24 @@ static NSString *RptqLowercaseFirst(NSString *string) {
 	IMP implementation = NULL;
 	const char *encoding = "v@:@";
 	if (appends && !takesSet) {
-		implementation = imp_implementationWithBlock(^(RptqObject *self, id object) {
-			[self.storeContext addObject:object toRelationshipNamed:key onObject:self];
+		implementation = imp_implementationWithBlock(^(RptqObject *target, id object) {
+			[target.storeContext addObject:object toRelationshipNamed:key onObject:target];
 		});
 	} else if (removes && !takesSet) {
-		implementation = imp_implementationWithBlock(^(RptqObject *self, id object) {
-			[self.storeContext removeObject:object fromRelationshipNamed:key onObject:self];
+		implementation = imp_implementationWithBlock(^(RptqObject *target, id object) {
+			[target.storeContext removeObject:object fromRelationshipNamed:key onObject:target];
 		});
 	} else if (appends && takesSet) {
-		implementation = imp_implementationWithBlock(^(RptqObject *self, id collection) {
-			for (id member in collection) [self.storeContext addObject:member toRelationshipNamed:key onObject:self];
+		implementation = imp_implementationWithBlock(^(RptqObject *target, id collection) {
+			// Read the weak store once: it cannot vanish between members, and this is
+			// the accessor path, so the extra weak loads would be their own cost.
+			RptqStoreContext *storeContext = target.storeContext;
+			for (id member in collection) [storeContext addObject:member toRelationshipNamed:key onObject:target];
 		});
 	} else if (removes && takesSet) {
-		implementation = imp_implementationWithBlock(^(RptqObject *self, id collection) {
-			for (id member in collection) [self.storeContext removeObject:member fromRelationshipNamed:key onObject:self];
+		implementation = imp_implementationWithBlock(^(RptqObject *target, id collection) {
+			RptqStoreContext *storeContext = target.storeContext;
+			for (id member in collection) [storeContext removeObject:member fromRelationshipNamed:key onObject:target];
 		});
 	}
 

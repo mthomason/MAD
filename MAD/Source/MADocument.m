@@ -514,8 +514,8 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	NSURL *legacyStoreURL = [[_urlGuts URLByAppendingPathComponent:@"StoreContent" isDirectory:YES]
 							 URLByAppendingPathComponent:@"analyitics"];
 
-	if (![[NSFileManager defaultManager] fileExistsAtPath:storeURL.path] &&
-		[[NSFileManager defaultManager] fileExistsAtPath:legacyStoreURL.path]) {
+	if (![[NSFileManager defaultManager] fileExistsAtPath:(NSString *)storeURL.path] &&
+		[[NSFileManager defaultManager] fileExistsAtPath:(NSString *)legacyStoreURL.path]) {
 		// The Rptq classes are no longer NSManagedObject subclasses, and Core Data
 		// refuses to instantiate them; read the legacy rows as plain NSManagedObjects
 		// on a mutable copy of the model, the way the converter does.
@@ -542,7 +542,10 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 		BOOL written = [store writeGraph:graph replacingAll:YES error:error];
 		[store close];
 		if (!written) return NO;
-		[coordinator removePersistentStore:coordinator.persistentStores.firstObject error:NULL];
+		NSPersistentStore *legacyStore = coordinator.persistentStores.firstObject;
+		if (legacyStore != nil) {
+			[coordinator removePersistentStore:legacyStore error:NULL];
+		}
 	}
 
 	MADStore *store = [MADStore storeWithURL:storeURL];
@@ -1262,7 +1265,8 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 			// its StoreContent directory when the persistent store came up, so the
 			// portable store creates its own before opening.
 			NSError *directoryError = nil;
-			if (![[NSFileManager defaultManager] createDirectoryAtURL:[storeURL URLByDeletingLastPathComponent]
+			NSURL *storeDirectory = [storeURL URLByDeletingLastPathComponent];
+			if (![[NSFileManager defaultManager] createDirectoryAtURL:(NSURL *)storeDirectory
 										  withIntermediateDirectories:YES
 														   attributes:nil
 																error:&directoryError]) {

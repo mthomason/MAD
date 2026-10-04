@@ -162,7 +162,7 @@ FOUNDATION_EXPORT NSString * const MADStoreIdentifierColumnSuffix;
 /// One descriptor per table -- the entities that are not subentities.
 @property (nonatomic, copy, readonly) NSArray<MADStoreEntity *> *tables;
 
-- (nullable MADStoreEntity *)entityNamed:(NSString *)name;
+- (nullable MADStoreEntity *)entityNamed:(nullable NSString *)name;
 - (nullable MADStoreEntity *)entityForTable:(NSString *)table;
 - (BOOL)entityName:(NSString *)name belongsToPart:(MADStorePart)part;
 

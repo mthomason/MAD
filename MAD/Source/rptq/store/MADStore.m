@@ -272,9 +272,11 @@ static id MADStoreReadColumn(sqlite3_stmt *statement, int index, MADStoreValueTy
 			id value = MADStoreReadColumn(statement, (int)index, column.type);
 			if (!value) continue;
 			if (column.attribute) {
-				[object setAttributeValue:value forName:column.attribute.name];
+				// The schema always names its attributes; a nil here would be a broken
+				// schema, and setAttributeValue: would throw on the nil key either way.
+				[object setAttributeValue:value forName:(NSString *)column.attribute.name];
 			} else if (column.relationship) {
-				[object setReference:value forName:column.relationship.name];
+				[object setReference:value forName:(NSString *)column.relationship.name];
 			} else if ([column.name isEqualToString:MADStorePositionColumn]) {
 				// Keyed by name and identifier rather than by the object: the graph
 				// goes on to fill in edges, and a dictionary keyed by value equality

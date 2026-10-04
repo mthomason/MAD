@@ -146,9 +146,9 @@ static void MADStoreWriteRelationships(NSManagedObject *object,
 			// (entity, identifier) order.  Writing it in that order too means the
 			// round trip lands back on the same array.
 			members = [members sortedArrayUsingComparator:^NSComparisonResult(NSManagedObject *a, NSManagedObject *b) {
-				NSComparisonResult byEntity = [a.entity.name compare:b.entity.name];
+				NSComparisonResult byEntity = [(a.entity.name ?: @"") compare:(b.entity.name ?: @"")];
 				if (byEntity != NSOrderedSame) return byEntity;
-				return [identifiers[a.objectID] compare:identifiers[b.objectID]];
+				return [(identifiers[a.objectID] ?: @0) compare:(identifiers[b.objectID] ?: @0)];
 			}];
 		}
 		// An edge with no members is no edge: the reader leaves the collection out
@@ -243,7 +243,7 @@ MADStoreIdentifiersForRows(NSArray<NSManagedObject *> *rows, MADStoreSchema *sch
 /// asserts rather than returning on anything else, and a file that is not a document
 /// is an error the caller should get back, not a crash.
 static BOOL MADStoreLooksLikeADocument(NSURL *url) {
-	NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:url.path];
+	NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:(NSString *)url.path];
 	NSData *head = [handle readDataOfLength:MADFileFormatHeaderLength];
 	[handle closeFile];
 	if (head.length >= 8 && memcmp(head.bytes, MADFileFormatMagic, 8) == 0) return YES;
@@ -281,7 +281,7 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 
 	NSURL *storeFile = [[directory URLByAppendingPathComponent:MADStoreLegacyStoreDirectory isDirectory:YES]
 						URLByAppendingPathComponent:MADStoreLegacyStoreName isDirectory:NO];
-	if (![[NSFileManager defaultManager] fileExistsAtPath:storeFile.path]) {
+	if (![[NSFileManager defaultManager] fileExistsAtPath:(NSString *)storeFile.path]) {
 		if (error) {
 			*error = MADStoreConverterError(MADStoreConverterErrorStoreFileMissing,
 											[[NSString alloc] initWithFormat:@"%@ has no %@/%@",
@@ -335,8 +335,10 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 
 	// Let go of the extracted copy: the store is written from the graph, and the
 	// archive is only needed while the context is open.
-	[context.persistentStoreCoordinator removePersistentStore:context.persistentStoreCoordinator.persistentStores.firstObject
-														error:NULL];
+	NSPersistentStore *legacyStore = context.persistentStoreCoordinator.persistentStores.firstObject;
+	if (legacyStore != nil) {
+		[context.persistentStoreCoordinator removePersistentStore:legacyStore error:NULL];
+	}
 	context.persistentStoreCoordinator = nil;
 	[[NSFileManager defaultManager] removeItemAtURL:guts error:NULL];
 	if (!graph) return nil;
