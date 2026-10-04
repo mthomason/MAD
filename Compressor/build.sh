@@ -254,24 +254,31 @@ verify_lib() {
 		[[ "${found}" == "1" ]] || { echo "FAIL ${lib}: no ${platform} slice"; failures=1; }
 	done
 
+	# Optional per-library checks (version strings, feature flags).  Sourced
+	# first so they can set SKIP_VERSION_STRING for libraries whose version
+	# is not embedded in the archive (zint's ZINT_VERSION macro is only used
+	# by its frontend).
+	local skip_version_string=0
+	if [[ -f "${COMPRESSOR_DIR}/lib/verify/${lib}.sh" ]]; then
+		export PLATFORMS
+		# shellcheck source=/dev/null
+		. "${COMPRESSOR_DIR}/lib/verify/${lib}.sh" || { echo "FAIL ${lib}: extra checks failed"; failures=1; }
+		skip_version_string="${SKIP_VERSION_STRING:-0}"
+	fi
+
 	# Every library embeds its version string somewhere; check it against
 	# the matrix row.
 	local first_lib version_count
 	first_lib="$(ls "${xcfw}"/*/lib*.a 2>/dev/null | head -1)"
 	if [[ -n "${first_lib}" ]]; then
 		version_count="$(strings "${first_lib}" | grep -c "$(matrix_get "${lib}" version)" || true)"
-		[[ "${version_count}" -ge 1 ]] \
-			|| { echo "FAIL ${lib}: version string $(matrix_get "${lib}" version) missing"; failures=1; }
+		if [[ "${skip_version_string}" != "1" && "${version_count}" -lt 1 ]]; then
+			echo "FAIL ${lib}: version string $(matrix_get "${lib}" version) missing"
+			failures=1
+		fi
 	else
 		echo "FAIL ${lib}: no library in ${xcfw}"
 		failures=1
-	fi
-
-	# Optional per-library checks (version strings, feature flags).
-	if [[ -f "${COMPRESSOR_DIR}/lib/verify/${lib}.sh" ]]; then
-		export PLATFORMS
-		# shellcheck source=/dev/null
-		. "${COMPRESSOR_DIR}/lib/verify/${lib}.sh" || { echo "FAIL ${lib}: extra checks failed"; failures=1; }
 	fi
 
 	[[ "${failures}" == "0" ]] && echo "OK ${lib} $(matrix_get "${lib}" version)"
