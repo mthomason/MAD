@@ -1033,7 +1033,18 @@ wrong answer.
   apart again. Rebuilt, the engine reports `DEFAULT_PAGE_SIZE=8192`, `DQS=0`,
   `ENABLE_FTS5`, `ENABLE_STAT4`, `TEMP_STORE=2` and `THREADSAFE=1`, and defines 599
   fts5 symbols where the guards above say it defined none.
-- **Test:** the `MADSqlite3` suite — 69 tests, 5 skipped, 0 failures — which did *not*
+- **Then (Compressor rework, 2026-10-04):** the two consumers became one. The
+  sqlite3 recipe (`Compressor/lib/recipes/sqlite3.sh`) generates the amalgamation
+  and compiles `libsqlite3.a` per slice with these defines, and `MADSqlite3` links
+  that archive from `sqlite3.xcframework` — the target no longer compiles `sqlite3.c`
+  and no longer names the xcconfig as its base configuration, so the two lists
+  *cannot* disagree again. Verified against the rebuilt framework: the
+  compile-option strings are all present and `sqlite3Fts5Init` is linked. The
+  fts5 *symbol count* dropped from 599 to 336 because the archive is compiled
+  `-Os` (the old count was a Debug `-O0` binary; at `-Os` the optimizer inlines
+  away most of fts5's static functions) — the presence check is now the init
+  symbol plus the option strings, not the count.
+- **Test:** the `MADSqlite3` suite — 77 tests, 5 skipped, 0 failures — which did *not*
   cover the risk this option carried. `DQS=0` removes SQLite's habit of reading an
   unknown double-quoted token as a string literal, and an earlier version of this entry
   waved that through, claiming the query builder "quotes identifiers and binds values
