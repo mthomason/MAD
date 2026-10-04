@@ -15,8 +15,8 @@
 @implementation MTPaperA5
 
 - (instancetype)init {
-    if (self = [super init]) { }
-    return self;
+	if (self = [super init]) { }
+	return self;
 }
 
 - (CGSize)paperSize { return [MTPaperA5 size]; }
