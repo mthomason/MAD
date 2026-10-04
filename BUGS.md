@@ -722,6 +722,18 @@ Status key:
   `MysqlFetch+DataTable.m:668` is uninitialized on some paths.
 - **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m:668`.
 
+
+### The installed accessor blocks re-read a weak store context
+- **Status:** Open -- documented; the warning is correct but its suggested fix is wrong here.
+- **What:** `RptqObject.m` installs four accessor blocks with
+  `imp_implementationWithBlock` (`:234`, `:238`, `:242`, `:246`) that each read the weak
+  `storeContext` property.  `-Warc-repeated-use-of-weak` asks for the value to be read
+  once into a strong local, but these blocks run long after the method returns, so
+  capturing the context strongly would tie its lifetime to the object's -- and the object
+  is owned by that context, so the "fix" would create a retain cycle where there is
+  currently none.  The property is intentionally weak (`RptqObject.h:33`).
+- **Where:** `MAD/Source/rptq/store/RptqObject.m:234-246`.
+
 ## MADFoundation
 
 ### `MADOperation -willEnqueue` advances past `Pending` to `Ready`
