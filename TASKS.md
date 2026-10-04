@@ -239,7 +239,16 @@ was deferred 2026-10-01). Progress:
       now preserves them, creating into a temp xcframework and swapping).
 - [x] Phase 4 — macOS slices for every library (the matrix builds all three
       platforms; `--verify --all` across ios+simulator+macosx).
-- [ ] Phase 5 — version updates, one library per commit.
+- [x] Phase 5 — version updates, one library per commit: zlib 1.3.2, libpng
+      1.6.59, freetds 1.4.27 (75 tests), sqlite3 3.53.3 (D1 gate + 77 tests;
+      the bump forced dropping --disable-tcl and touching vdbe.c/parse.y so
+      the stale checked-in opcodes regenerate), openssl 3.5.9 LTS,
+      mysqlclient 8.4.10 LTS (live server tests pass on the 8.4 client; 8.4
+      bundles boost in-tree and dropped libevent, so the recipe's boost
+      flags and libevent seeds retired), libarchive 3.8.9, zint 2.16.0
+      (cmake recipe; the wrapper needed exactly the ZINT_ error-code
+      renames; MADBarcodes builds, MAD 238 tests). bzip2 stays 1.0.8 --
+      still the newest release.
 - [ ] Phase 6 — prune the old scripts and legacy `Compressor/library` trees.
 - [ ] Phase 7 — untrack the vendored artifacts (final step, after everything is proven).
 
