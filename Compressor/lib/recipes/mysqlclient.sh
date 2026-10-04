@@ -22,8 +22,10 @@ MANIFEST_FLAGS="cmake: WITHOUT_SERVER=ON BUILD_SHARED_LIBS=OFF WITH_ZLIB/ZSTD=bu
 
 fetch_source "${URL}" "${SHA256}"
 
-BOOST_DIR="${SRC_ROOT}/boost"
-[[ -d "${BOOST_DIR}" ]] || die "no bundled boost in source (expected boost/)"
+# 8.4 bundles boost inside the source tree (extra/boost/boost_1_84_0) and
+# its cmake uses it unconditionally -- there is no WITH_BOOST to point.
+BOOST_DIR="${SRC_ROOT}/extra/boost/boost_1_84_0"
+[[ -d "${BOOST_DIR}/boost" ]] || die "no bundled boost in source (expected extra/boost/boost_1_84_0)"
 
 NATIVE="${BUILD_DIR}/${LIB}/native"
 NATIVE_OPENSSL="${BUILD_DIR}/openssl/macosx/install"
@@ -40,10 +42,9 @@ set(HAVE_CLOCK_GETTIME_EXITCODE "0" CACHE STRING "")
 set(HAVE_CLOCK_GETTIME_EXITCODE__TRYRUN_OUTPUT "" CACHE STRING "")
 set(HAVE_CLOCK_REALTIME_EXITCODE "0" CACHE STRING "")
 set(HAVE_CLOCK_REALTIME_EXITCODE__TRYRUN_OUTPUT "" CACHE STRING "")
-set(TEST_RUN_RESULT "0" CACHE STRING "")
-set(TEST_RUN_RESULT__TRYRUN_OUTPUT "2.1.11-stable" CACHE STRING "")
-set(TEST_RUN_RESULT__TRYRUN_OUTPUT_STDOUT "2.1.11-stable" CACHE STRING "")
-set(TEST_RUN_RESULT__TRYRUN_OUTPUT_STDERR "" CACHE STRING "")
+# 8.0 bundled libevent and its TRY_RUN version probe needed the
+# TEST_RUN_RESULT seeds below; 8.4 dropped libevent entirely, so any
+# new run-based probe a future version adds will fail loudly here.
 EOF
 
 # --- Stage A: native host tools + generated files (macosx arm64) ---
@@ -72,7 +73,6 @@ if [[ ! -f "${NATIVE}/include/mysqld_error.h" ]]; then
 			-G "Unix Makefiles" \
 			-DWITHOUT_SERVER=ON \
 			-DBUILD_SHARED_LIBS=OFF \
-			-DWITH_BOOST="${BOOST_DIR}" \
 			-DOPENSSL_ROOT_DIR="${NATIVE_OPENSSL}" \
 			-DOPENSSL_INCLUDE_DIR="${NATIVE_OPENSSL}/include" \
 			-DOPENSSL_CRYPTO_LIBRARY="${NATIVE_OPENSSL}/lib/libcrypto.a" \
@@ -124,7 +124,6 @@ for platform in ${PLATFORMS}; do
 				-DCMAKE_CXX_COMPILER="$(xcrun --sdk "${sdk}" --find clang++)" \
 				-DWITHOUT_SERVER=ON \
 				-DBUILD_SHARED_LIBS=OFF \
-				-DWITH_BOOST="${BOOST_DIR}" \
 				-DOPENSSL_ROOT_DIR="${openssl_install}" \
 				-DOPENSSL_INCLUDE_DIR="${openssl_install}/include" \
 				-DOPENSSL_CRYPTO_LIBRARY="${openssl_install}/lib/libcrypto.a" \
