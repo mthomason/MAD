@@ -224,8 +224,21 @@ was deferred 2026-10-01). Progress:
       phase pinned to ios,simulator. Suites: MADSqlite3 77/0, MAD 238/0,
       MADMySQL 58/0 (live server tests ran and passed), MADTdsClient 75/0;
       MADBarcodes and MADTds build; the app builds for simulator and device.
-- [ ] Phase 3 — full verification incl. the fresh-clone simulation.
-- [ ] Phase 4 — remaining macOS slices (zlib, mysqlclient, and every other lib's mac row).
+- [x] Phase 3 — full verification. All twelve suites green (MADSqlite3 77/0,
+      MAD 238/0, MADMySQL 58/0 live, MADTdsClient 75/0, MADFoundation 118/0,
+      MADAPI 78/0, MADDataStructures 72/0, MADCocoaExtensions 76/0, MADExplorer
+      9/0, MADFileManager 31/0; MADBarcodes/MADTds build), the app builds for
+      simulator and device, `--verify --all` is green, and the **fresh-clone
+      simulation passes**: `git archive HEAD` to a new path, workspace loads,
+      `Compressor/build.sh --all` bootstraps all nine libraries from downloads,
+      and `MAD Designer` builds for device from the bootstrapped artifacts.
+      The simulation caught two real bugs, both fixed: the mysqlclient native
+      stage needs the openssl macosx slice, which an ios+simulator bootstrap
+      never built (the recipe now builds it inline from the matrix row), and
+      per-platform rebuilds dropped the other platforms' slices (finish_library
+      now preserves them, creating into a temp xcframework and swapping).
+- [x] Phase 4 — macOS slices for every library (the matrix builds all three
+      platforms; `--verify --all` across ios+simulator+macosx).
 - [ ] Phase 5 — version updates, one library per commit.
 - [ ] Phase 6 — prune the old scripts and legacy `Compressor/library` trees.
 - [ ] Phase 7 — untrack the vendored artifacts (final step, after everything is proven).
