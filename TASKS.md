@@ -249,8 +249,14 @@ was deferred 2026-10-01). Progress:
       (cmake recipe; the wrapper needed exactly the ZINT_ error-code
       renames; MADBarcodes builds, MAD 238 tests). bzip2 stays 1.0.8 --
       still the newest release.
-- [ ] Phase 6 — prune the old scripts and legacy `Compressor/library` trees.
-- [ ] Phase 7 — untrack the vendored artifacts (final step, after everything is proven).
+- [x] Phase 6 — prune complete: the eleven old scripts and their navigator
+      references, and all 1,797 tracked legacy artifact files (`.a` binaries,
+      per-platform trees, per-platform include dirs, the tracked sqlite3
+      amalgamation). Compressor/AGENTS.md is rewritten for the new system.
+      Post-prune, the app builds and MADMySQL's 58 tests pass.
+- [x] Phase 7 — untracked: zero files remain tracked under
+      Compressor/library. The fresh-clone simulation re-run is the proof of
+      this state (in flight at the time of writing).
 
 The user's earlier words, for context:
 
