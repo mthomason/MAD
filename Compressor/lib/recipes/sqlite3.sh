@@ -35,11 +35,21 @@ MANIFEST_FLAGS="defines: ${SQLITE_DEFINES}; opt: -Os"
 fetch_source "${URL}" "${SHA256}"
 
 # Amalgamation generation is platform-independent; run it once on the host.
+# TCL must stay enabled: the Makefile regenerates opcodes.h from vdbe.c
+# through the bundled jimsh, and since 3.50 the checked-in opcodes files
+# in the source zip are stale (vdbe.c references opcodes they do not
+# define), so --disable-tcl produces an amalgamation that cannot compile.
 AMALG_DIR="${BUILD_DIR}/${LIB}/amalgamation"
 mkdir -p "${AMALG_DIR}"
+# Zip extraction leaves the generated files (opcodes.h, parse.h) with
+# mtimes newer than their inputs, so make would skip regenerating them --
+# and the checked-in copies can be stale (3.53.3's opcodes.h predates its
+# vdbe.c).  Touching the inputs forces the regeneration the release's own
+# amalgamation was built with.
+touch "${SRC_ROOT}/src/vdbe.c" "${SRC_ROOT}/src/parse.y"
 (
 	cd "${AMALG_DIR}"
-	"${SRC_ROOT}/configure" --disable-tcl >/dev/null
+	"${SRC_ROOT}/configure" >/dev/null
 	make sqlite3.c >/dev/null
 )
 [[ -f "${AMALG_DIR}/sqlite3.c" && -f "${AMALG_DIR}/sqlite3.h" ]] \
