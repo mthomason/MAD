@@ -34,7 +34,7 @@
 	if (error != nil) {
 		MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
 		MADOperationPromptError *operationErrorDisplay = [[MADOperationPromptError alloc] initWithError:error viewController:self];
-		MADBlockOperation *finish = [[MADBlockOperation alloc] initWithBlock:^(OperationCompletionBlock completionBlock) {
+		MADBlockOperation *finish = [[MADBlockOperation alloc] initWithBlock:^(OperationCompletionBlock __unused completionBlock) {
 			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 				[self dismissViewControllerAnimated:YES completion:nil];
 			}];
@@ -115,7 +115,7 @@
 	NSURL *eda = [NSURL URLWithString: @"https://everydayapps.com"];
 	[[UIApplication sharedApplication] openURL:eda
 									   options:@{}
-							 completionHandler:^(BOOL success) {
+							 completionHandler:^(BOOL __unused success) {
 	}];
 }
 
@@ -123,7 +123,7 @@
 	NSURL *eda = [NSURL URLWithString: @"https://twitter.com/EverydayApps"];
 	[[UIApplication sharedApplication] openURL:eda
 									   options:@{}
-							 completionHandler:^(BOOL success) { }];
+							 completionHandler:^(BOOL __unused success) { }];
 }
 
 - (void)actionEmailUs {

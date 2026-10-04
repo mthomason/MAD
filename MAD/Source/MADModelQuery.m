@@ -306,7 +306,7 @@ static NSDictionary *MADStoreProjectionForQueryLink(RptqQueryLinks *link) {
 
 - (NSSet <NSNumber /*MADModelQueryLink*/ *> *)linksForQueryTable:(int64_t)queryTableID {
 	NSMutableSet *results = [[NSMutableSet alloc] initWithCapacity:self.links.count];
-	[self.links enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, MADModelQueryLink * _Nonnull obj, BOOL * _Nonnull stop) {
+	[self.links enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull __unused key, MADModelQueryLink * _Nonnull obj, BOOL * _Nonnull __unused stop) {
 		if ([obj isAdjacentToQueryTable:queryTableID]) {
 			[results addObject:obj.objectID];
 		}

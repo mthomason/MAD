@@ -119,7 +119,7 @@
 	
 	UIAlertController *alertController = self.alertController;
 
-	void (^ __nullable actionContinue)(UIAlertAction *action) = ^(UIAlertAction *action) {
+	void (^ __nullable actionContinue)(UIAlertAction *action) = ^(UIAlertAction *__unused action) {
 		MADCredential *c = [[MADCredential alloc] initWithUsername: ((UITextField *)alertController.textFields.firstObject).text
 													   andPassword: ((UITextField *)[alertController.textFields objectAtIndex:1]).text];
 		self.credential = c;
@@ -127,7 +127,7 @@
 		[self finish];
 	};
 	
-	void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *action) {
+	void (^ __nullable actionCancel)(UIAlertAction *action) = ^(UIAlertAction *__unused action) {
 		self.source = MADCredentialSourceNone;
 		[self finish];
 	};
@@ -171,7 +171,7 @@
 
 	UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
 															style: UIAlertActionStyleDefault
-														  handler: ^(UIAlertAction *action) {
+														  handler: ^(UIAlertAction *__unused action) {
 		MADCredential *c = [[MADCredential alloc] initWithUsername: username
 													   andPassword: ((UITextField *)alertController.textFields.firstObject).text];
 		self.credential = c;
@@ -181,7 +181,7 @@
 	
 	UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
 																style: UIAlertActionStyleCancel
-															  handler: ^(UIAlertAction *action) {
+															  handler: ^(UIAlertAction *__unused action) {
 		self.credential = nil;
 		self.source = MADCredentialSourceNone;
 		[self finish];

@@ -23,7 +23,7 @@
 	
 	UIAlertAction *confirm = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
 													  style: UIAlertActionStyleDefault
-													handler: ^(UIAlertAction *action) {
+													handler: ^(UIAlertAction *__unused action) {
 		UIAlertController *controller = alert;
 		NSString *text = [((UITextField *)controller.textFields.firstObject).text copy];
 		handlerContinue(text);
@@ -31,7 +31,7 @@
 	
 	UIAlertAction *cancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
 													 style: UIAlertActionStyleCancel
-												   handler: ^(UIAlertAction *action) {
+												   handler: ^(UIAlertAction *__unused action) {
 		handlerCancel();
 	}];
 	[alert addAction:confirm];

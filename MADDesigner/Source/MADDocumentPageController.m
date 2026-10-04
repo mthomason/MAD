@@ -226,7 +226,7 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 	CGPoint nextContentOffset = CGPointMake((size.width != documentScroller.contentSize.width)?(size.width - documentScroller.contentSize.width) / 2.0 : 0.0,
 											currentContentOffset.y);
 	
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		
 		UIEdgeInsets safeAreaInsets;
 		MADViewSafeAreaInserts(self.view, &safeAreaInsets);
@@ -237,7 +237,7 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 		documentScroller.contentOffset = nextContentOffset;
 		documentScroller.bounds = MADRectOfSize(size);
 		
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		
 		MADocument *document = self.document;
 		documentScroller.maximumZoomScale = MaximumZoomScaleForPaper(document.paper.paperSize, documentScroller.bounds.size, PageEdgeInsetMargin);

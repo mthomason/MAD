@@ -192,14 +192,14 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
                 
                 [NSError presentError: error
                      onViewController: weakself2
-                           completion: ^(BOOL presentErrorSuccess) {
+                           completion: ^(BOOL __unused presentErrorSuccess) {
                                
                                UIAlertController *alertController;
                                NSString *key;
                                
                                key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
                                
-                               alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
+                               alertController = [MADAlertController removeCredentials:^(UIAlertAction *__unused action) {
                                    [MADKeyChain deleteKey:key];
                                } cancel:nil];
                                
@@ -242,11 +242,11 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
                 
                 [NSError presentError: error
                      onViewController: weakself
-                           completion:^(BOOL presentErrorSuccess) {
+                           completion:^(BOOL __unused presentErrorSuccess) {
                                MTViewControllerBarcode *strongself2 = weakself;
 
                                NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
-                               UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
+                               UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *__unused action) {
                                    [MADKeyChain deleteKey:key];
                                } cancel:nil];
                                [strongself2 presentViewController:alertController animated:YES

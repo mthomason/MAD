@@ -177,7 +177,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 									forName:NSStringFromClass([MADPngImageTransformer class])];
 	
 	[[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionSound | UNAuthorizationOptionBadge)
-						  completionHandler:^(BOOL granted, NSError * _Nullable error) {
+						  completionHandler:^(BOOL granted, NSError * _Nullable __unused error) {
 		if (granted) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[application registerForRemoteNotifications];

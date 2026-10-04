@@ -74,11 +74,11 @@ static inline CGRect CGRectSafeInset(CGRect rect, CGFloat insetX, CGFloat insetY
 		return leftToRight ? CGPointMake(r.origin.x + r.size.width, r.origin.y + r.size.height) :
 		CGPointMake(r.origin.x, r.origin.y + r.size.height);
 	};
-	CGPoint (^originTangentPoint)(BOOL, CGRect) = ^CGPoint(BOOL leftToRight, CGRect r) {
+	CGPoint (^originTangentPoint)(BOOL, CGRect) = ^CGPoint(BOOL leftToRight, CGRect __unused r) {
 		return leftToRight ? CGPointMake(rect.origin.x, rect.origin.y + rect.size.height) :
 		CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
 	};
-	CGPoint (^destinationTangentPoint)(BOOL, CGRect) = ^CGPoint(BOOL leftToRight, CGRect r) {
+	CGPoint (^destinationTangentPoint)(BOOL, CGRect) = ^CGPoint(BOOL leftToRight, CGRect __unused r) {
 		return leftToRight ? CGPointMake(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height) : rect.origin;
 	};
 	

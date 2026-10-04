@@ -52,7 +52,7 @@
 	
 	switch (source) {
 		case MADCredentialSourceCredentialPrompt: {
-			[self promptToSave:^(UIAlertAction *action) {
+			[self promptToSave:^(UIAlertAction *__unused action) {
 				OSStatus status = [MADKeyChain saveUsername: self.credential.username andPassword: self.credential.password forKey: self.key];
 				if (status == errSecSuccess) {
 					[self finish];
@@ -66,7 +66,7 @@
 		case MADCredentialSourcePasswordPrompt: {
 			
 			
-			[self promptToSave:^(UIAlertAction *action) {
+			[self promptToSave:^(UIAlertAction *__unused action) {
 				OSStatus status = [MADKeyChain savePassword: self.credential.password forKey: self.key];
 				if (status == errSecSuccess) {
 					[self finish];
@@ -100,7 +100,7 @@
 
 	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
 														   style: UIAlertActionStyleCancel
-														 handler: ^(UIAlertAction *action) { }];
+														 handler: ^(UIAlertAction *__unused action) { }];
 
 	[alertController addAction:alertActionContinue];
 	[alertController addAction:actionCancel];

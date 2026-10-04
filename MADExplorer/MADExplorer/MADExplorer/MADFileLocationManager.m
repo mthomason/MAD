@@ -42,7 +42,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 		
 		UIAlertAction *localOption = [UIAlertAction actionWithTitle:NSLocalizedString(@"Local Only", @"Local Only")
 															  style:UIAlertActionStyleDefault
-															handler:^(UIAlertAction * _Nonnull action) {
+															handler:^(UIAlertAction * _Nonnull __unused action) {
 			if (handlerLocal) handlerLocal();
 		}];
 		[storageController addAction:localOption];
@@ -51,7 +51,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 	if (handlerCloud) {
 		UIAlertAction *cloudOption = [UIAlertAction actionWithTitle:NSLocalizedString(@"iCloud", @"iCloud")
 															  style:UIAlertActionStyleDefault
-															handler:^(UIAlertAction * _Nonnull action) {
+															handler:^(UIAlertAction * _Nonnull __unused action) {
 			if (handlerCloud) handlerCloud();
 		}];
 		[storageController addAction:cloudOption];
@@ -220,7 +220,7 @@ static UIAlertController *MADCreateAlertControllerPromptStorage(void (^handlerLo
 			}
 		}];
 		
-	} completion:^(BOOL cloudAvailable, NSURL *documents, NSURL *data) {
+	} completion:^(BOOL cloudAvailable, NSURL *__unused documents, NSURL *__unused data) {
 		
 		__strong MADFileLocationManager *sself = weakself;
 		if (sself != nil) {

@@ -27,7 +27,7 @@ typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 		NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtURL: fileURL
 																 includingPropertiesForKeys: properties
 																					options: NSDirectoryEnumerationSkipsHiddenFiles
-																			   errorHandler: ^BOOL(NSURL *url, NSError *error) {
+																			   errorHandler: ^BOOL(NSURL *__unused url, NSError *__unused error) {
 																				   return YES;
 																			   }];
 		for (NSURL *file in enumerator) {

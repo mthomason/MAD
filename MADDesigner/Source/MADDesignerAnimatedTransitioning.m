@@ -63,7 +63,7 @@
 									  fromFrame.size.height * offset.dy);
 		toView.frame = toFrame;
 		
-	} completion:^(BOOL finished) {
+	} completion:^(BOOL __unused finished) {
 		BOOL wasCancelled = [transitionContext transitionWasCancelled];
 		// When we complete, tell the transition context
 		// passing along the BOOL that indicates whether the transition

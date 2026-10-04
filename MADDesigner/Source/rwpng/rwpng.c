@@ -127,7 +127,7 @@ static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t leng
 	write_state->bytes_written += length;
 }
 
-static void user_flush_data(png_structp png_ptr)
+static void user_flush_data(png_structp __unused png_ptr)
 {
 	// libpng never calls this :(
 }
@@ -585,11 +585,11 @@ pngquant_error rwpng_write_image24(FILE *outfile, const png24_image *mainprog_pt
 }
 
 
-static void rwpng_warning_stderr_handler(png_structp png_ptr, png_const_charp msg) {
+static void rwpng_warning_stderr_handler(png_structp __unused png_ptr, png_const_charp msg) {
 	fprintf(stderr, "  %s\n", msg);
 }
 
-static void rwpng_warning_silent_handler(png_structp png_ptr, png_const_charp msg) {
+static void rwpng_warning_silent_handler(png_structp __unused png_ptr, png_const_charp __unused msg) {
 }
 
 static void rwpng_error_handler(png_structp png_ptr, png_const_charp msg)

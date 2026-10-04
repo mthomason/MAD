@@ -174,7 +174,7 @@ static os_log_t mad_log;
 	if (queryPredicate != nil && error == nil) {
 		[document.activeDocumentModel addPredicate:queryPredicate];
 		[document saveContext];
-		[document autosaveWithCompletionHandler:^(BOOL success) { }];
+		[document autosaveWithCompletionHandler:^(BOOL __unused success) { }];
 		[self.queryPredicateDelegate tableViewControllerSchemaAddPredicateDidAddPredicate:queryPredicate];
 	} else {
 		[NSError presentError:error onViewController:self completion:nil];

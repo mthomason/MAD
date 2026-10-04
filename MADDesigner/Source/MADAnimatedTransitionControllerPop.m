@@ -45,7 +45,7 @@
 					 animations:^{
 		fromViewController.view.frame = finalFrameForFromVC;
 		toViewController.view.frame = finalFrameForToVC;
-	} completion:^(BOOL finished) {
+	} completion:^(BOOL __unused finished) {
 		BOOL wasCancelled = [context transitionWasCancelled];
 		if (!wasCancelled) {
 			// Only remove fromViewController's view if the transition was not cancelled.

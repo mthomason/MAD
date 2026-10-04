@@ -104,7 +104,7 @@
 		
 		UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
 																style: UIAlertActionStyleDefault
-															  handler: ^(UIAlertAction *action) {
+															  handler: ^(UIAlertAction *__unused action) {
 			MADOperationPromptCredentials *strongself = weakself;
 			UIAlertController *strongAlertController = weakAlertController;
 			username = [((UITextField *)strongAlertController.textFields.firstObject).text copy];
@@ -134,7 +134,7 @@
 
 		UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
 																	style: UIAlertActionStyleCancel
-																  handler: ^(UIAlertAction *action) {
+																  handler: ^(UIAlertAction *__unused action) {
 			MADOperationPromptCredentials *strongself = weakself;
 			password = nil; username = nil;
 			success = NO;
@@ -185,7 +185,7 @@
 		UIViewController *viewController = self.viewController;
 		viewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
 		[viewController  presentViewController: alertController animated: YES completion:^{
-			[weakAlertController.textFields enumerateObjectsUsingBlock:^(UITextField * _Nonnull textField, NSUInteger idx, BOOL * _Nonnull stop) {
+			[weakAlertController.textFields enumerateObjectsUsingBlock:^(UITextField * _Nonnull textField, NSUInteger __unused idx, BOOL * _Nonnull __unused stop) {
 				((UILabel *)textField.leftView).textColor = textField.isFirstResponder ? [UIColor darkGrayColor] : [UIColor lightGrayColor];
 				[textField.leftView setNeedsDisplay];
 			}];

@@ -306,7 +306,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 	
 	void (^ __weak weakQueryUpdateHandler)(void) = _firstQueryUpdateHandler;
 	
-	void (^handleDidUpdateCompletion)(BOOL, NSError *) = ^(BOOL success, NSError *error) {
+	void (^handleDidUpdateCompletion)(BOOL, NSError *) = ^(BOOL __unused success, NSError *__unused error) {
 		[wmetadataQuery enableUpdates];
 		void (^firstQueryUpdateHandler)(void) = weakQueryUpdateHandler;
 		if (firstQueryUpdateHandler) {
@@ -337,7 +337,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 	NSArray *updated  = [MADMetaData newMetaDatumForMetadataItems:updatedMetadata];
 
 	NSMetadataQuery * __weak metadataQuery = self.metadataQuery;
-	void (^handleContentUpdated)(BOOL success, NSError *error) = ^(BOOL success, NSError *error) {
+	void (^handleContentUpdated)(BOOL success, NSError *error) = ^(BOOL __unused success, NSError *__unused error) {
 		[metadataQuery enableUpdates];
 	};
 	[self.delegate fileCoordinatorDidUpdateContentsWithInsertedMetaDatum: inserted

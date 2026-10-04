@@ -121,7 +121,7 @@
 }
 
 - (NSArray <MADFeature *> *)availableFeatures {
-	NSPredicate *available = [NSPredicate predicateWithBlock:^BOOL(MADFeature *feature, NSDictionary *bindings) {
+	NSPredicate *available = [NSPredicate predicateWithBlock:^BOOL(MADFeature *feature, NSDictionary *__unused bindings) {
 		return feature.available;
 	}];
 	return [self.features filteredArrayUsingPredicate:available];
@@ -137,7 +137,7 @@
 }
 
 - (MADFeature *)featureForProductID:(NSString *)productID {
-	NSPredicate *product = [NSPredicate predicateWithBlock:^BOOL(MADFeature *feature, NSDictionary *bindings) {
+	NSPredicate *product = [NSPredicate predicateWithBlock:^BOOL(MADFeature *feature, NSDictionary *__unused bindings) {
 		return [feature.productID isEqualToString:productID];
 	}];
 	return [[self.features filteredArrayUsingPredicate:product] firstObject];

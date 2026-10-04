@@ -147,9 +147,9 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 	return NSMakeRange(0, (NSUInteger)groupNumber + 1);
 }
 
-void fail(char *err, const char *err2, int n) { }
-void msg(const char *err) { }
-void madwarn(char *err,  const char *err2) { }
+void fail(char *__unused err, const char *__unused err2, int __unused n) { }
+void msg(const char *__unused err) { }
+void madwarn(char *__unused err,  const char *__unused err2) { }
 
 @interface MADocument () <MADReportFormatterDataSource, MADCacheProtocol, MADDatabaseResultsProtocol, MADocumentDesignerProtocol>
 
@@ -453,7 +453,7 @@ void madwarn(char *err,  const char *err2) { }
 
 - (NSDictionary <NSNumber *, NSNumber *> *)layoutHeightsBySectionKey {
 	NSMutableDictionary *layoutHeights = [[NSMutableDictionary alloc] initWithCapacity:self.sectionLayoutManagers.count];
-	[self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock: ^(NSNumber *key, MADSectionLayoutManager *manager, BOOL *stop) {
+	[self.sectionLayoutManagers enumerateKeysAndObjectsUsingBlock: ^(NSNumber *key, MADSectionLayoutManager *manager, BOOL *__unused stop) {
 		layoutHeights[key] = @(manager.size.height);
 		
 	}];
@@ -887,7 +887,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 		}
 		
 	[self updateChangeCount: UIDocumentChangeDone];
-	[self autosaveWithCompletionHandler:^(BOOL success) { }];
+	[self autosaveWithCompletionHandler:^(BOOL __unused success) { }];
 }
 
 #pragma mark -

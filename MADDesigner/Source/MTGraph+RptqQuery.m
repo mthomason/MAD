@@ -40,7 +40,7 @@
 	if (self = [self init]) {
 		
 		[query.queryTableIDs  enumerateObjectsUsingBlock:^(NSNumber * _Nonnull tableID,
-														   NSUInteger idx, BOOL * _Nonnull stop) {
+														   NSUInteger __unused idx, BOOL * _Nonnull __unused stop) {
 			[self addVertexWithObject: tableID];
 		}];
 		

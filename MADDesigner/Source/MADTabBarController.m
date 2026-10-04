@@ -110,15 +110,15 @@
 	void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
 	
 	if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-		transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) {
+		transition = ^(id<UIViewControllerTransitionCoordinatorContext>__unused context) {
 			[self.view setNeedsDisplay];
 		};
 	} else {
-		transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) { };
+		transition = ^(id<UIViewControllerTransitionCoordinatorContext>__unused context) { };
 	}
 	
 	UIView *toView = [coordinator viewForKey:UITransitionContextToViewKey];
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull __unused context) {
 		[toView setNeedsDisplay];
 	} completion: nil];
 	
@@ -230,7 +230,7 @@
 	[UIView animateWithDuration:transitionDuration animations:^{
 		fromView.frame = CGRectOffset(fromFrame, fromFrame.size.width * offset.dx, fromFrame.size.height * offset.dy);
 		toView.frame = toFrame;
-	} completion:^(BOOL finished) {
+	} completion:^(BOOL __unused finished) {
 		BOOL wasCancelled = [transitionContext transitionWasCancelled];
 		[transitionContext completeTransition:!wasCancelled];
 	}];

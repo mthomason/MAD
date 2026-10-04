@@ -305,7 +305,7 @@ typedef struct _ColumnWidth {
 
 + (CGFloat)sumArrayOfFloats:(NSArray *)array {
 	__block CGFloat sum = 0.0000f;
-	block_enumerateObjectsUsingBlock blockSumFloats = ^(id obj, NSUInteger idx, BOOL *stop) {
+	block_enumerateObjectsUsingBlock blockSumFloats = ^(id obj, NSUInteger __unused idx, BOOL *__unused stop) {
 		sum += [obj floatValue];
 	};
 	[array enumerateObjectsUsingBlock:blockSumFloats];

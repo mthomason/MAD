@@ -500,7 +500,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	}
 
 	__weak MADExplorerController *weakself = self;
-	void (^actionConfirm)(UIAlertAction *action) = ^(UIAlertAction *action) {
+	void (^actionConfirm)(UIAlertAction *action) = ^(UIAlertAction *__unused action) {
 		__strong MADExplorerController *sself = weakself;
 		[sself.fileExplorerDataSource updateCloudPreferences];
 	};
@@ -548,7 +548,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		collectionView = nil;
 	};
 	
-	void (^batchCompletion)(BOOL finished) = ^(BOOL finished) {
+	void (^batchCompletion)(BOOL finished) = ^(BOOL __unused finished) {
 		if (self.isEditing) {
 			for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
 				cell.wobbling = YES;
@@ -608,10 +608,10 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	   withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 	
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull __unused context) {
 		[self.collectionView setNeedsDisplay];
 		[self.navigationItem.titleView sizeToFit];
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull __unused context) {
 		[self.collectionView.collectionViewLayout invalidateLayout];
 		if (self.isEditing) {
 			for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
@@ -632,9 +632,9 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 			  withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
 	[super willTransitionToTraitCollection: newCollection
 				 withTransitionCoordinator: coordinator];
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		[self.collectionView.backgroundView setNeedsDisplay];
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		[self.collectionView.collectionViewLayout invalidateLayout];
 	}];
 
@@ -685,7 +685,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (void)mailComposeController:(MFMailComposeViewController *)controller
 		  didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
 	
-	[NSError presentError: error onViewController: self completion:^(BOOL success) {
+	[NSError presentError: error onViewController: self completion:^(BOOL __unused success) {
 		[self dismissViewControllerAnimated:YES completion:nil];
 	}];
 }
@@ -859,7 +859,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		UINavigationController *navController = (UINavigationController *)[UIApplication sharedApplication].safeKeyWindow.rootViewController;
 		[navController popToRootViewControllerAnimated:YES];
 		
-		UIAlertController *signedOutController = [MADExplorerController alertNotifyCloudSignOut:^(UIAlertAction *action) {
+		UIAlertController *signedOutController = [MADExplorerController alertNotifyCloudSignOut:^(UIAlertAction *__unused action) {
 			[self.fileExplorerDataSource updateCloudPreferences];
 		}];
 		
@@ -1388,7 +1388,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 					strongSelf.navigationItem.titleView.alpha = 0.0;
 					strongSelf.navigationItem.titleView = searchViewHolder;
 				}
-			} completion:^(BOOL finished) {
+			} completion:^(BOOL __unused finished) {
 				__strong MADExplorerController *strongSelf = weakSelf;
 				if (strongSelf) {
 					if (strongSelf.searchBar.isFirstResponder == NO) {
@@ -1558,8 +1558,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	activityViewController.popoverPresentationController.delegate = self;
 
 	MADExplorerController * __weak weakself = self;
-	activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed,
-														  NSArray *returnedItems, NSError *activityError) {
+	activityViewController.completionWithItemsHandler = ^(NSString *__unused activityType, BOOL __unused completed,
+														  NSArray *__unused returnedItems, NSError *__unused activityError) {
 	
 		for (UITableViewCell *cell in weakself.collectionView.visibleCells) {
 			cell.selected = NO;
@@ -1574,13 +1574,13 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 	NSArray *selectedItems = self.collectionView.indexPathsForSelectedItems;
 	UIAlertController *alertController = [MADAlertController newAlertControllerDeleteItems:selectedItems.count
-																				   confirm:^(UIAlertAction *action) {
+																				   confirm:^(UIAlertAction *__unused action) {
 		
 		for (NSIndexPath *selectedItem in selectedItems) {
 			[self.fileExplorerDataSource removeItemAtIndex:(NSUInteger)selectedItem.item];
 		}
 		
-	} cancel:^(UIAlertAction *action) { }];
+	} cancel:^(UIAlertAction *__unused action) { }];
 	
 	if ([sender isKindOfClass:[UIBarButtonItem class]]) {
 		alertController.popoverPresentationController.barButtonItem = sender;
@@ -1622,7 +1622,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		textField.delegate = self;
 	};
 	
-	void (^handleConfermation)(UIAlertAction *action, NSString *text) = ^(UIAlertAction *action, NSString *text) {
+	void (^handleConfermation)(UIAlertAction *action, NSString *text) = ^(UIAlertAction *__unused action, NSString *text) {
 		NSString *name = [self.class safeFilenameWithDesiredFilename:text];
 		BOOL shortcircut = NO;
 		
@@ -1658,7 +1658,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 			
 			MADExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
 			
-			void (^closeCompletion)(BOOL, NSURL *, NSURL *) = ^(BOOL successClose, NSURL *fileURL, NSURL *cleanupURL) {
+			void (^closeCompletion)(BOOL, NSURL *, NSURL *) = ^(BOOL successClose, NSURL *__unused fileURL, NSURL *__unused cleanupURL) {
 				if (successClose)
 					[fileExplorerDataSource rename:text
 								itemAtIndex:(NSUInteger)indexPath.item];
@@ -1697,7 +1697,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	
 	if (documentReport.documentState != UIDocumentStateClosed) {
 		
-		void (^handleCloseDocumentCompletion)(BOOL, NSURL *, NSURL *) = ^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
+		void (^handleCloseDocumentCompletion)(BOOL, NSURL *, NSURL *) = ^(BOOL success, NSURL *__unused fileURL, NSURL *__unused cleanupURL) {
 			if (success) { [self actionEmail:cell]; }
 		};
 		[MADocument close: documentReport completion:handleCloseDocumentCompletion];

@@ -67,7 +67,7 @@ static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary <NSNu
 	return counter ? counters[key].unsignedIntegerValue : 0;
 }
 
-int err_handler(DBPROCESS *dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr) {
+int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr) {
 
 	int result = INT_CANCEL;
 

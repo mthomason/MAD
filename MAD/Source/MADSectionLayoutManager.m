@@ -205,7 +205,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 	NSIndexPath *pathToRemvoe = itemToRemove.indexPath;
 	
 	[self.items enumerateKeysAndObjectsUsingBlock:
-										^(id key, MADSectionLayoutAttributes *obj, BOOL *stop) {
+										^(id __unused key, MADSectionLayoutAttributes *obj, BOOL *__unused stop) {
 		
 		if ([obj.indexPath indexAtPosition:MADIndexPathOffsetItem] >=
 			[pathToRemvoe indexAtPosition:MADIndexPathOffsetItem]) {
@@ -247,7 +247,7 @@ const NSUInteger MADIndexPathOffsetRow = MADIndexPathOffsetItem;
 	NSIndexPath *pathToRemvoe = item.indexPath;
 	
 	[self.items enumerateKeysAndObjectsUsingBlock:
-											^(id key, MADSectionLayoutAttributes *obj, BOOL *stop) {
+											^(id __unused key, MADSectionLayoutAttributes *obj, BOOL *__unused stop) {
 		if ([obj.indexPath indexAtPosition:MADIndexPathOffsetItem] >=
 			[pathToRemvoe indexAtPosition:MADIndexPathOffsetItem]) {
 			

@@ -213,7 +213,7 @@ typedef void (^MADBlockConfigureDocumentCell)(MADCollectionViewCellDocument *, N
 	[self.delegate documentManagerDidChangeContent: inserts
 										   removes: removes
 										   updates: updates
-										completion: ^(BOOL success, NSError *error) {
+										completion: ^(BOOL __unused success, NSError *__unused error) {
 		[inserts removeAllObjects];
 		[removes removeAllObjects];
 		[updates removeAllObjects];

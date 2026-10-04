@@ -41,9 +41,9 @@
 	__weak MADOperationQueue *weakSelf = self;
 
 	// Set up a block delegate to handle operation lifecycle events
-	MADBlockObserver *delegate = [[MADBlockObserver alloc] initWithStartHandler:^(MADOperation *oper) {
+	MADBlockObserver *delegate = [[MADBlockObserver alloc] initWithStartHandler:^(MADOperation *__unused oper) {
 		//os_log_info(GetFoundationLog(), "Starting operation %@", oper.name);
-	} produceHandler:^(MADOperation *oper, NSOperation *newOp) {
+	} produceHandler:^(MADOperation *__unused oper, NSOperation *newOp) {
 		__strong MADOperationQueue *sself = weakSelf;
 		if (sself) {
 			[sself addOperation:newOp];
@@ -117,7 +117,7 @@
 
 		MADBlockObserver *observer = [[MADBlockObserver alloc] initWithStartHandler:nil
 																	produceHandler:nil
-																	 finishHandler:^(MADOperation *oper, NSArray<NSError *> *errors) {
+																	 finishHandler:^(MADOperation *oper, NSArray<NSError *> *__unused errors) {
 			[exclusivityController removeOperation:oper categories:concurrencyCategories];
 		}];
 

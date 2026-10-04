@@ -40,7 +40,7 @@
 	}
 
 	MADOperation * __weak weakself = self;
-	[MADocument close:document completion:^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
+	[MADocument close:document completion:^(BOOL success, NSURL *__unused fileURL, NSURL *__unused cleanupURL) {
 		MADOperation *strongself = weakself;
 		if (!strongself) return;
 		if (success) {

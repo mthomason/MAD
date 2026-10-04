@@ -139,10 +139,10 @@
 		
 	} else {
 		
-		[self.labelsShowWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		[self.labelsShowWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger __unused idx, BOOL *__unused stop) {
 			[obj setHidden: YES];
 		}];
-		[self.labelsHideWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		[self.labelsHideWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger __unused idx, BOOL *__unused stop) {
 			[obj setHidden: NO];
 		}];
 		
@@ -233,19 +233,19 @@
 														  dateStyle:NSDateFormatterLongStyle
 														  timeStyle:NSDateFormatterNoStyle];
 	self.labelDesignerValueExpires.text = dateString;
-	[self.labelsShowWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+	[self.labelsShowWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger __unused idx, BOOL *__unused stop) {
 		[obj setHidden: NO];
 	}];
-	[self.labelsHideWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+	[self.labelsHideWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger __unused idx, BOOL *__unused stop) {
 		[obj setHidden: YES];
 	}];
 }
 
 - (void)hideLicensingDetails {
-	[self.labelsShowWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+	[self.labelsShowWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger __unused idx, BOOL *__unused stop) {
 		[obj setHidden: YES];
 	}];
-	[self.labelsHideWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+	[self.labelsHideWhenActivated enumerateObjectsUsingBlock:^(id obj, NSUInteger __unused idx, BOOL *__unused stop) {
 		[obj setHidden: NO];
 	}];
 }
@@ -315,7 +315,7 @@
 	[self indicateStartUpdating];
 	
 	NSArray *products = [MADStoreKitController sharedObject].products;
-	NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(SKProduct * evaluatedObject, NSDictionary *bindings) {
+	NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(SKProduct * evaluatedObject, NSDictionary *__unused bindings) {
 		return [evaluatedObject.productIdentifier isEqualToString:identifier];
 	}];
 	NSArray *productArray = [products filteredArrayUsingPredicate:predicate];

@@ -103,7 +103,7 @@
 	__block NSArray *indexPaths = [[NSArray alloc] init];
 	NSInteger sectionIndex = 0;
 	for (NSIndexSet *set in _selected) {
-		[set enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+		[set enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull __unused stop) {
 			NSIndexPath *path = [NSIndexPath indexPathForItem:(NSInteger)idx inSection:sectionIndex];
 			indexPaths = [indexPaths arrayByAddingObject:path];
 		}];
@@ -116,7 +116,7 @@
 	__block NSArray *indexPaths = [[NSArray alloc] init];
 	NSInteger sectionIndex = 0;
 	for (NSIndexSet *set in _highlighted) {
-		[set enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+		[set enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull __unused stop) {
 			NSIndexPath *path = [NSIndexPath indexPathForItem:(NSInteger)idx
 													inSection:sectionIndex];
 			indexPaths = [indexPaths arrayByAddingObject:path];
@@ -339,7 +339,7 @@
 	if (allowSelection) {
 		NSInteger section = 0;
 		for (NSMutableIndexSet *selectedSections in self.selected) {
-			[selectedSections enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+			[selectedSections enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull __unused stop) {
 				NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(NSInteger)idx inSection:section];
 				MADCollectionViewCellDocument *cell = (MADCollectionViewCellDocument *)[collectionView cellForItemAtIndexPath:indexPath];
 				if (cell != nil) {
@@ -367,7 +367,7 @@
 			shouldDeselect = YES;
 			[_selected[section] removeAllIndexes];
 			__weak MADExplorerViewDelegate *weakself = self;
-			[[delegate fileExplorerView].indexPathsForSelectedItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+			[[delegate fileExplorerView].indexPathsForSelectedItems enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull obj, NSUInteger __unused idx, BOOL * _Nonnull __unused stop) {
 				__strong MADExplorerViewDelegate *sself = weakself;
 				if (sself) {
 					[sself.selected[section] addIndex:(NSUInteger)obj.row];

@@ -41,11 +41,11 @@
 - (UIContextMenuConfiguration *)contextMenuInteraction:(UIContextMenuInteraction *)interaction configurationForMenuAtLocation:(CGPoint)location {
 	return [UIContextMenuConfiguration configurationWithIdentifier:nil
 												   previewProvider:nil
-													actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
+													actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull __unused suggestedActions) {
 		UIAction *edit = [UIAction actionWithTitle:@"Edit"
 											 image:[UIImage systemImageNamed:@"pencil"]
 										identifier:nil
-										   handler:^(__kindof UIAction * _Nonnull action) {
+										   handler:^(__kindof UIAction * _Nonnull __unused action) {
 			NSObject <MADCellElementDelegate> *delegate = self.delegate;
 			if ([delegate respondsToSelector:@selector(editDocumentObjectRepresentedByCell:)]) {
 					[delegate editDocumentObjectRepresentedByCell:self];
@@ -54,7 +54,7 @@
 		UIAction *delete = [UIAction actionWithTitle:@"Delete"
 											   image:[UIImage systemImageNamed:@"trash"]
 										  identifier:nil
-											 handler:^(__kindof UIAction * _Nonnull action) {
+											 handler:^(__kindof UIAction * _Nonnull __unused action) {
 			NSObject <MADCellElementDelegate> *delegate = self.delegate;
 			if ([delegate respondsToSelector:@selector(deleteDocumentObjectRepresentedByCell:)]) {
 					[delegate deleteDocumentObjectRepresentedByCell:self];
@@ -63,7 +63,7 @@
 		UIAction *format = [UIAction actionWithTitle:@"Format"
 											   image:[UIImage systemImageNamed:@"paintbrush"]
 										  identifier:nil
-											 handler:^(__kindof UIAction * _Nonnull action) {
+											 handler:^(__kindof UIAction * _Nonnull __unused action) {
 			NSObject <MADCellElementDelegate> *delegate = self.delegate;
 			if ([delegate respondsToSelector:@selector(formatDocumentObjectRepresentedByCell:)]) {
 					[delegate formatDocumentObjectRepresentedByCell:self];
@@ -78,7 +78,7 @@
 	NSArray *menuMenuItems = menu.menuItems.count > 0 ? menu.menuItems : [[NSArray alloc] init];
 	NSMutableArray <UIMenuItem *> *menuItems = [[NSMutableArray alloc] initWithArray: menuMenuItems];
 	
-	NSUInteger indexOfActions = [menuItems indexOfObjectPassingTest:^BOOL(UIMenuItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+	NSUInteger indexOfActions = [menuItems indexOfObjectPassingTest:^BOOL(UIMenuItem * _Nonnull obj, NSUInteger __unused idx, BOOL * _Nonnull __unused stop) {
 		return obj.action == @selector(edit:);
 	}];
 
@@ -88,7 +88,7 @@
 		[menuItems addObject:menuItemEdit];
 	}
 	
-	indexOfActions = [menuItems indexOfObjectPassingTest:^BOOL(UIMenuItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+	indexOfActions = [menuItems indexOfObjectPassingTest:^BOOL(UIMenuItem * _Nonnull obj, NSUInteger __unused idx, BOOL * _Nonnull __unused stop) {
 		return obj.action == @selector(format:);
 	}];
 

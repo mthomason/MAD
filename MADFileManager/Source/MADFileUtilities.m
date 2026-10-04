@@ -43,7 +43,7 @@ static NSString * const MADPathComponentData       = @"Data";
 	if (exists) {
 		if (isDirectory) {
 			
-			BOOL(^ErrorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *url, NSError *error) {
+			BOOL(^ErrorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *__unused url, NSError *error) {
 				NSAssert(error != nil, @"%s : %@",__PRETTY_FUNCTION__, error);
 				return YES;
 			};
@@ -318,7 +318,7 @@ static NSString * const MADPathComponentData       = @"Data";
 	  completion:(void (^)(NSURL *, NSError *))completion {
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
 		[self moveFileAtURL:source toUrl:destination
-				   completion:^(NSURL *result, NSError *error) {
+				   completion:^(NSURL *__unused result, NSError *error) {
 			if (completion != nil) completion(destination, error);
 		}];
 		
@@ -403,7 +403,7 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)removeFilesAtURL:(NSURL *)url {
-	BOOL (^errorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *errorUrl, NSError *error) {
+	BOOL (^errorHandler)(NSURL *, NSError *) = ^BOOL(NSURL *__unused errorUrl, NSError *__unused error) {
 		//NSLog(@"Error %@", error);
 		return YES;
 	};

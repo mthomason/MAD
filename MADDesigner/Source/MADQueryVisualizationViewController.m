@@ -243,7 +243,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		[self didMoveFieldRect: subviewController animated: YES];
 	}
 	
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull __unused context) {
 		[self.view setNeedsDisplay];
 	} completion:nil];
 	
@@ -803,7 +803,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 		for (MADQueryTableViewController *viewController in viewControllers) {
 			[viewController.view setAlpha:1.0];
 		}
-	} completion:^(BOOL finished) {
+	} completion:^(BOOL __unused finished) {
 		__strong MADQueryVisualizationViewController *sself = weakself;
 		if (sself) {
 			for (MADQueryTableViewController *viewController in viewControllers) {
@@ -845,7 +845,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 	if (animated) {
 		[UIView animateWithDuration:0.5 animations: ^{
 			[viewController.view setAlpha:1.0];
-		} completion:^(BOOL finished) {
+		} completion:^(BOOL __unused finished) {
 			[viewController endAppearanceTransition];
 			[viewController didMoveToParentViewController:self];
 			completion();

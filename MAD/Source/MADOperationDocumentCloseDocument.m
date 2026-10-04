@@ -39,7 +39,7 @@
 	if ((doc.documentState & UIDocumentStateClosed) && doc.storeContext == nil) {
 		[self finish];
 	} else {
-		[MADocument close:doc completion:^(BOOL success, NSURL *fileURL, NSURL *cleanupURL) {
+		[MADocument close:doc completion:^(BOOL success, NSURL *__unused fileURL, NSURL *__unused cleanupURL) {
 			if (success) {
 				[self finish];
 			} else {

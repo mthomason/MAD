@@ -70,7 +70,7 @@ static MADVerificationController *sharedSingleton;
 		if ([self freeForCharterMemembers:productID]) {
 			result = YES;
 		} else {
-			NSPredicate *p = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *evaluatedObject, NSDictionary *bindings) {
+			NSPredicate *p = [NSPredicate predicateWithBlock:^BOOL(NSDictionary *evaluatedObject, NSDictionary *__unused bindings) {
 				return [evaluatedObject[@"product-id"] isEqualToString:productID];
 			}];
 			NSArray *inAppPurchases = self.receipt.inAppPurchases;
@@ -122,7 +122,7 @@ static MADVerificationController *sharedSingleton;
 			[[NSFileManager defaultManager] removeItemAtURL:receiptUrl error:&error];
 			
 			MADVerificationController * __weak weakself = self;
-			[self refreshReceipt:^(BOOL refreshReceiptSuccess, NSError *refreshReceiptError) {
+			[self refreshReceipt:^(BOOL refreshReceiptSuccess, NSError *__unused refreshReceiptError) {
 				MADVerificationController *strongself = weakself;
 				if (strongself && refreshReceiptSuccess) [strongself reloadReceipt];
 			}];
@@ -130,7 +130,7 @@ static MADVerificationController *sharedSingleton;
 	} else {
 		// No receipt!!! Download it from APPL!
 		MADVerificationController * __weak weakself = self;
-		[self refreshReceipt:^(BOOL success, NSError *error) {
+		[self refreshReceipt:^(BOOL success, NSError *__unused error) {
 			MADVerificationController *strongself = weakself;
 			if (success && strongself) [strongself reloadReceipt];
 		}];
@@ -527,12 +527,12 @@ outLabel:
 	[result appendFormat:@"Valid\t%@\n", self.modernReceiptIsValid ? @"YES" : @"NO"];
 	[result appendFormat:@"Process\t%@\n", self.modernReceiptProcess ? @"YES" : @"NO"];
 	[result appendFormat:@"Expires\t%@\n", self.modernReceiptProcessExperationDate];
-	[self.receiptData enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+	[self.receiptData enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *__unused stop) {
 		
 		[result appendFormat:@"%@\t\t\t%@", key, obj];
 		if ([obj isKindOfClass:[NSDictionary class]]) {
 			
-			[obj enumerateKeysAndObjectsUsingBlock:^(id key1, id obj1, BOOL *stop1) {
+			[obj enumerateKeysAndObjectsUsingBlock:^(id key1, id obj1, BOOL *__unused stop1) {
 				[result appendFormat:@"\t%@\t\t%@", key1, obj1];
 			}];
 			

@@ -124,7 +124,7 @@ static NSString * const TextYes = @"Dismiss";
 	
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle: title
 													   style: UIAlertActionStyleDefault
-													 handler: ^(UIAlertAction * _Nonnull action) {
+													 handler: ^(UIAlertAction * _Nonnull __unused action) {
 		MADOperationPromptError *strongself = weakSelf;
 		strongself.result = YES;
 		strongself.alertDisplayed = YES;

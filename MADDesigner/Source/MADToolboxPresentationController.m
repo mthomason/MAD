@@ -114,7 +114,7 @@
 	[containerView insertSubview:self.dimmingView atIndex:0];
 	if (presentedViewController.transitionCoordinator) {
 		
-		[presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+		[presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 			self.dimmingView.alpha = 1.0;
 		} completion:nil];
 		
@@ -128,7 +128,7 @@
 
 	if (self.presentedViewController.transitionCoordinator) {
 		__weak MADToolboxPresentationController *weakself = self;
-		[self.presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+		[self.presentedViewController.transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 			__strong MADToolboxPresentationController *sself = weakself;
 			if (sself) {
 				sself.dimmingView.alpha = 0.0;

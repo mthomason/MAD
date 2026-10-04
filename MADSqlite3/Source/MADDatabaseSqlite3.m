@@ -64,7 +64,7 @@ BOOL Sqlite3StepResultOK(int result) {
 	return (result == SQLITE_OK) || (result == SQLITE_ROW) || (result == SQLITE_DONE);
 }
 
-int compare_string_utf8_localized_asc_collation(void *data, int len1, const void *arg1, int len2, const void *arg2) {
+int compare_string_utf8_localized_asc_collation(void *__unused data, int len1, const void *arg1, int len2, const void *arg2) {
 	id str1 = [[NSString alloc] initWithBytesNoCopy:(void *)arg1 length:(NSUInteger)abs(len1) encoding:NSUTF8StringEncoding freeWhenDone:NO];
 	id str2 = [[NSString alloc] initWithBytesNoCopy:(void *)arg2 length:(NSUInteger)abs(len2) encoding:NSUTF8StringEncoding freeWhenDone:NO];
 	return (int)(str2 != nil ? [str1 localizedCaseInsensitiveCompare: str2] : NSOrderedDescending);
@@ -748,7 +748,7 @@ void sqliteLog(void *foo, const char* statement) {
 	NSAssert(wal == SQLITE_OK, @"sqlite3_wal_checkpoint_v2 returned %d at %s.", wal, __PRETTY_FUNCTION__);
 
 	dispatch_semaphore_t s0 = dispatch_semaphore_create(0);
-	[self getTables:^(BOOL success, NSError *error, NSArray *tables) {
+	[self getTables:^(BOOL __unused success, NSError *__unused error, NSArray *tables) {
 		
 		MADQuery *dropTable;
 		BOOL successQuery = NO;

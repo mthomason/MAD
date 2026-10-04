@@ -170,7 +170,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 	void (^calculateVerticalBuffer)(NSLayoutConstraint *, NSUInteger, BOOL *);
 	void (^calculateLabelHeight)(NSLayoutConstraint *, NSUInteger, BOOL *);
 	
-	calculateBorder = ^(NSLayoutConstraint *constraint, NSUInteger idx, BOOL *stop) {
+	calculateBorder = ^(NSLayoutConstraint *constraint, NSUInteger __unused idx, BOOL *__unused stop) {
 		if (zoomscale != 0) {
 			constraint.constant = constraint.constant > 0 ? MTReportDesignerBorderPaddingSides / zoomscale :
 														   -MTReportDesignerBorderPaddingSides / zoomscale;
@@ -179,12 +179,12 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 		}
 	};
 	
-	calculateVerticalBuffer = ^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
+	calculateVerticalBuffer = ^(NSLayoutConstraint * constraint, NSUInteger __unused idx, BOOL *__unused stop) {
 		constraint.constant = constraint.constant > 0 ? MTReportDesignerBufferPaddingVertical :
 													   -MTReportDesignerBufferPaddingVertical;
 	};
 	
-	calculateLabelHeight = ^(NSLayoutConstraint * constraint, NSUInteger idx, BOOL *stop) {
+	calculateLabelHeight = ^(NSLayoutConstraint * constraint, NSUInteger __unused idx, BOOL *__unused stop) {
 		constraint.constant = MTReportDesignerSectionLabelHeight / zoomscale;
 	};
 	
@@ -612,12 +612,12 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 
 - (void)removeBorderFromSections {
 	//Remove border from the section views
-	[_sectionLabels enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionLabel *view, BOOL *stop) {
+	[_sectionLabels enumerateKeysAndObjectsUsingBlock:^(id __unused key, MADDesignerSectionLabel *view, BOOL *__unused stop) {
 		[view normalView];
 	}];
 	
 	//Remove border from the section views
-	[_sectionViews enumerateKeysAndObjectsUsingBlock:^(id key, MADDesignerSectionView *view, BOOL *stop) {
+	[_sectionViews enumerateKeysAndObjectsUsingBlock:^(id __unused key, MADDesignerSectionView *view, BOOL *__unused stop) {
 		view.selected = NO;
 	}];
 }

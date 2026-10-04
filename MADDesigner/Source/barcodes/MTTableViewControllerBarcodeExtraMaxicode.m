@@ -90,7 +90,7 @@
 	} else {
 		MTTableViewControllerBarcodeExtraMaxicode * __weak wself = self;
 		[NSError presentError: error onViewController: wself
-				   completion:^(BOOL presentErrorSuccess) {
+				   completion:^(BOOL __unused presentErrorSuccess) {
 			NSString *key = [NSString stringWithString:querySampleDataField.database.databaseConnection.connectionString];
 			[MADKeyChain deleteKey:key];
 		}];

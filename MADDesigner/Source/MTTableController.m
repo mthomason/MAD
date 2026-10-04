@@ -438,7 +438,7 @@
 					NSString *key = [strongSelf.query.database.databaseConnection.connectionString copy];
 					[NSError presentError:errorPerformQuery
 						 onViewController:strongSelf
-							   completion:^(BOOL s){
+							   completion:^(BOOL __unused s){
 						[MADKeyChain deleteKey:key];
 					}];
 				}

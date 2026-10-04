@@ -53,11 +53,11 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	NSRange range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
 	NSArray <__kindof NSError *> *remaningErrors = [errors subarrayWithRange:range];
 
-	MADBlockAlertDidFinish handleAlertDidFinish = ^(UIAlertAction *action) {
+	MADBlockAlertDidFinish handleAlertDidFinish = ^(UIAlertAction *__unused action) {
 
 		if (remaningErrors.count > 0) {
 			
-			MADBlockCompletionStatus alertCompleted = ^(BOOL success) { completion(YES); };
+			MADBlockCompletionStatus alertCompleted = ^(BOOL __unused success) { completion(YES); };
 			[MADConnectionViewController viewController:viewController
 										  displayErrors:remaningErrors
 											 completion:alertCompleted];
@@ -179,7 +179,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	[UIView animateWithDuration:0.4000f animations:^{
 		viewControllerTo.view.alpha = 1.0000f;
 		[transitionContext.containerView addSubview:viewControllerTo.view];
-	} completion:^(BOOL finished) {
+	} completion:^(BOOL __unused finished) {
 		[transitionContext completeTransition:![transitionContext transitionWasCancelled]];
 	}];
 }
@@ -221,7 +221,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 
 - (void)displayErrors:(NSArray <__kindof NSError *> *)errors
   forConnectionString:(NSString *)connectionString {
-	[MADConnectionViewController viewController: self displayErrors: errors completion: ^(BOOL success) {
+	[MADConnectionViewController viewController: self displayErrors: errors completion: ^(BOOL __unused success) {
 		[MADKeyChain deleteKey:connectionString];
 	}];
 }

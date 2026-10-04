@@ -93,7 +93,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 	
 	MADOperationQueue *operationQueue = [[MADOperationQueue alloc] init];
 	MADOperationPromptError *operationErrorDisplay = [[MADOperationPromptError alloc] initWithError:error viewController:self];
-	MADBlockOperation *finish = [[MADBlockOperation alloc] initWithBlock:^(OperationCompletionBlock completionBlock) {
+	MADBlockOperation *finish = [[MADBlockOperation alloc] initWithBlock:^(OperationCompletionBlock __unused completionBlock) {
 		[self dismissViewControllerAnimated:YES completion:nil];
 	}];
 	[operationErrorDisplay addDependency:finish];

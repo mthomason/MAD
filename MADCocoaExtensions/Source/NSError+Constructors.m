@@ -48,7 +48,7 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 
 	UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
 												 style: UIAlertActionStyleDefault
-											   handler: ^(UIAlertAction *action) {
+											   handler: ^(UIAlertAction *__unused action) {
 		if (completion != nil) completion(YES);
 	}];
 	[alert addAction:ok];

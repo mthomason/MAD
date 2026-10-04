@@ -198,8 +198,8 @@
 			if ([NSThread isMainThread]) {
 				UIViewController * __weak weak1 = strongself2;
 				
-				[NSError presentError:error onViewController:weak1 completion:^(BOOL presentErrorSuccess) {
-					   UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
+				[NSError presentError:error onViewController:weak1 completion:^(BOOL __unused presentErrorSuccess) {
+					   UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *__unused action) {
 								   [MADKeyChain deleteKey:key];
 					   } cancel:nil];
 					   [weak1 presentViewController:alertController animated:YES
@@ -216,9 +216,9 @@
 				
 					[NSError presentError: serror
 						 onViewController: weak1
-							   completion:^(BOOL presentErrorSuccess) {
+							   completion:^(BOOL __unused presentErrorSuccess) {
 							   
-								   UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
+								   UIAlertController *alertController = [MADAlertController removeCredentials:^(UIAlertAction *__unused action) {
 									   [MADKeyChain deleteKey:key];
 								   } cancel:nil];
 								   [weak1 presentViewController:alertController animated:YES completion:nil];

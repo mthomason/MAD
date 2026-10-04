@@ -65,7 +65,7 @@ static NSString * const TextNo = @"No";
 	MADOperationPromptPolarQuestion * __weak weakSelf = self;
 	UIAlertAction *actionOK = [UIAlertAction actionWithTitle: TextYes
 													   style: UIAlertActionStyleDefault
-													 handler: ^(UIAlertAction * _Nonnull action) {
+													 handler: ^(UIAlertAction * _Nonnull __unused action) {
 		MADOperationPromptPolarQuestion * __strong sself = weakSelf;
 		sself.result = YES;
 		sself.alertDisplayed = YES;
@@ -74,7 +74,7 @@ static NSString * const TextNo = @"No";
 	
 	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: TextNo
 														   style: UIAlertActionStyleCancel
-														 handler: ^(UIAlertAction * _Nonnull action) {
+														 handler: ^(UIAlertAction * _Nonnull __unused action) {
 		MADOperationPromptPolarQuestion * __strong sself = weakSelf;
 		sself.result = NO;
 		sself.alertDisplayed = YES;

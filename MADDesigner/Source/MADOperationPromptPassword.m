@@ -118,7 +118,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 	UIAlertController * __weak weakAlertController = alertController;
 	UIAlertAction *actionAlertOK = [UIAlertAction actionWithTitle: ok
 															style: UIAlertActionStyleDefault
-														  handler: ^(UIAlertAction *action) {
+														  handler: ^(UIAlertAction *__unused action) {
 		UIAlertController *strongAlertController = weakAlertController;
 		MADOperationPromptPassword *sself = weakself;
 		sself.alertDisplayed = YES;
@@ -136,7 +136,7 @@ static NSString * const MADButtonContinue              = @"Continue";
 	
 	UIAlertAction *actionAlertCancel = [UIAlertAction actionWithTitle: cancel
 																style: UIAlertActionStyleCancel
-															  handler: ^(UIAlertAction *action) {
+															  handler: ^(UIAlertAction *__unused action) {
 		UIAlertController *strongAlertController = weakAlertController;
 		MADOperationPromptPassword *sself = weakself;
 		sself.alertDisplayed = YES;

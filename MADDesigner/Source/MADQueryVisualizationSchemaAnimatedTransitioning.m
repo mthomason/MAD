@@ -52,7 +52,7 @@
 		viewControllerFrom.view.bounds = CGRectZero;
 		viewControllerFrom.view.center = center;
 		viewControllerFrom.view.transform = MADAffineTransformSwing();
-	} completion:^(BOOL finished) {
+	} completion:^(BOOL __unused finished) {
 		[transitionContext completeTransition:![transitionContext transitionWasCancelled]];
 	}];
 }

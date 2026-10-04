@@ -277,7 +277,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 				  completion: nil];
 	
 	NSUInteger statusLabelIndex;
-	statusLabelIndex = [self.toolbarItems indexOfObjectPassingTest:^BOOL(__kindof UIBarButtonItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+	statusLabelIndex = [self.toolbarItems indexOfObjectPassingTest:^BOOL(__kindof UIBarButtonItem * _Nonnull obj, NSUInteger __unused idx, BOOL * _Nonnull __unused stop) {
 		return [obj.customView isKindOfClass:[MADLabelStatus class]];
 	}];
 	
@@ -380,7 +380,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	NSTimeInterval transitionDuration = [self transitionDuration:transitionContext];
 	[UIView animateWithDuration:transitionDuration animations:^{
 		self.pageSlider.alpha = 1.0f;
-	} completion:^(BOOL finished) {
+	} completion:^(BOOL __unused finished) {
 		[transitionContext completeTransition:![transitionContext transitionWasCancelled]];
 	}];
 }
@@ -390,8 +390,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 
 - (void)willTransitionToTraitCollection: (UITraitCollection *)newCollection withTransitionCoordinator: (id<UIViewControllerTransitionCoordinator>)coordinator {
 	[super willTransitionToTraitCollection: newCollection withTransitionCoordinator: coordinator];
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) { }];
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) { }];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -404,11 +404,11 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		[self.navigationController.toolbar setNeedsLayout];
 		[self.navigationItem.titleView sizeToFit];
 		[self.pageSlider setNeedsLayout];
-	} completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	} completion:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		[self.navigationController.toolbar setNeedsLayout];
 		[self.navigationItem.titleView sizeToFit];
 		[self.pageSlider setNeedsLayout];
@@ -575,14 +575,14 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 
 - (void)setPageingEnabled:(BOOL)enabled {
 	NSArray *gestureRecognizers = self.gestureRecognizers;
-	[gestureRecognizers enumerateObjectsUsingBlock:^(UIGestureRecognizer * _Nonnull gestureRecognizer, NSUInteger idx, BOOL * _Nonnull stop) {
+	[gestureRecognizers enumerateObjectsUsingBlock:^(UIGestureRecognizer * _Nonnull gestureRecognizer, NSUInteger __unused idx, BOOL * _Nonnull __unused stop) {
 		gestureRecognizer.enabled = enabled;
 	}];
 }
 
 - (void)setTabBarItemsEnabled:(BOOL)enabled {
 	NSArray <UITabBarItem *> *tabBarItems = self.tabBarController.tabBar.items;
-	[tabBarItems enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(UITabBarItem * _Nonnull tabBarItem, NSUInteger idx, BOOL * _Nonnull stop) {
+	[tabBarItems enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(UITabBarItem * _Nonnull tabBarItem, NSUInteger __unused idx, BOOL * _Nonnull __unused stop) {
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{ tabBarItem.enabled = enabled; }];
 	}];
 }
@@ -610,7 +610,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	MADViewerController * __weak weakself = self;
 
 	activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed,
-														  NSArray *returnedItems, NSError *activityError) {
+														  NSArray *__unused returnedItems, NSError *__unused activityError) {
 		MADViewerController *sself = weakself;
 		sself.pageSlider.enabled = YES;
 		sself->_activityExporting = NO;
@@ -629,7 +629,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 							
 							[MADViewerController setNavigationBarAppearanceHighlighted];
 							MADViewerController * __weak weakself2 = sself;
-							[[UIPrintInteractionController sharedPrintController] presentAnimated:YES completionHandler:^(UIPrintInteractionController *printInteractionController, BOOL animatinCompleted, NSError *error) {
+							[[UIPrintInteractionController sharedPrintController] presentAnimated:YES completionHandler:^(UIPrintInteractionController *__unused printInteractionController, BOOL animatinCompleted, NSError *__unused error) {
 								 
 								 if (animatinCompleted) {
 									 MADViewerController *sself2 = weakself2;
@@ -1038,7 +1038,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 				MADViewerController * __weak weakself2 = sself;
 				[sharedController presentFromBarButtonItem: sself.barButtonItemActivity
 												  animated: YES
-										 completionHandler: ^(UIPrintInteractionController *pic, BOOL completed, NSError *error) {
+										 completionHandler: ^(UIPrintInteractionController *__unused pic, BOOL __unused completed, NSError *__unused error) {
 					MADViewerController *sself2 = weakself2;
 					sself2.pageSlider.enabled = YES;
 					[sself2.tabBarController enableTabBarItems];

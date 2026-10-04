@@ -225,7 +225,7 @@
 					 animations: ^{
 		[tabBarController setNeedsStatusBarAppearanceUpdate];
 		weakNavController.view.frame = finalFrame;
-	} completion: ^(BOOL finished) {
+	} completion: ^(BOOL __unused finished) {
 		[designer.view setNeedsLayout];
 		if (isToolboxVisible == NO) {
 			[weakNavController.view removeFromSuperview];

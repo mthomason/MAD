@@ -873,14 +873,14 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
         
         [NSError presentError: error
              onViewController: self
-                   completion:^(BOOL presentErrorSuccess) {
+                   completion:^(BOOL __unused presentErrorSuccess) {
                    
                        MTViewControllerBarcodeOptions *strongself;
                        UIAlertController *alertController;
                        
                        strongself = weakself;
                        
-                       alertController = [MADAlertController removeCredentials:^(UIAlertAction *action) {
+                       alertController = [MADAlertController removeCredentials:^(UIAlertAction *__unused action) {
                            [MADKeyChain deleteKey:connectionString];
                        } cancel:nil];
                        

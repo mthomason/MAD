@@ -80,7 +80,7 @@ static void MADRefreshOperationReloadRunOnMain(dispatch_block_t block) {
 	}
 	
 	[self watchFormatter: document.reportFormatter];
-	NSUInteger indexDependencyRefresh = [self.dependencies indexOfObjectPassingTest:^BOOL(NSOperation * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+	NSUInteger indexDependencyRefresh = [self.dependencies indexOfObjectPassingTest:^BOOL(NSOperation * _Nonnull obj, NSUInteger __unused idx, BOOL * _Nonnull __unused stop) {
 		return [obj isKindOfClass:[MADOperationRefresh class]];
 	}];
 	

@@ -60,7 +60,7 @@
 	}];
 	UICollectionViewLayoutAttributes *tallest = [sorted lastObject];
 	CGFloat tallestOriginY = tallest.frame.origin.y;
-	[sameLineAttributes enumerateObjectsUsingBlock:^(UICollectionViewLayoutAttributes *attribute, NSUInteger idx, BOOL *stop) {
+	[sameLineAttributes enumerateObjectsUsingBlock:^(UICollectionViewLayoutAttributes *attribute, NSUInteger __unused idx, BOOL *__unused stop) {
 		attribute.frame = CGRectOffset(attribute.frame, 0.0, tallestOriginY - attribute.frame.origin.y);
 	}];
 }

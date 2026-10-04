@@ -101,7 +101,7 @@ static NSString *keyIDDocument = @"IO";
 			keyManagedObjectContext = NSStringFromSelector(@selector(managedObjectContext));
 			objectContext = [note.userInfo objectForKey:keyManagedObjectContext];
 			insertedObjects = [note.userInfo objectForKey:NSInsertedObjectsKey];
-			[insertedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+			[insertedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull __unused stop) {
 				
 				if ([obj isKindOfClass:[RptqQueryLinks class]]) {
 					__strong MADModelDocument *sself = wself;
@@ -123,7 +123,7 @@ static NSString *keyIDDocument = @"IO";
 
 			
 			updatedObjects = [note.userInfo objectForKey:NSUpdatedObjectsKey];
-			[updatedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+			[updatedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull __unused stop) {
 				
 				if ([obj isKindOfClass:[RptqQueryLinks class]]) {
 					//typeof(self) sself = wself;
@@ -140,7 +140,7 @@ static NSString *keyIDDocument = @"IO";
 			}];
 			
 			deletedObjects = [note.userInfo objectForKey:NSDeletedObjectsKey];
-			[deletedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop) {
+			[deletedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull __unused stop) {
 				
 				if ([obj isKindOfClass:[RptqQueryLinks class]]) {
 					__strong MADModelDocument *sself = wself;

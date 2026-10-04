@@ -286,7 +286,7 @@
 - (void)presentationTransitionWillBegin {
 	id <UIViewControllerTransitionCoordinator> transitionCoordinator = [[self presentingViewController] transitionCoordinator];
 	[self.view setAlpha:0.0];
-	[transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	[transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		[self.view setAlpha:1.0];
 	} completion:nil];
 }

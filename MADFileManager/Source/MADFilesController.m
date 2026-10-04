@@ -210,7 +210,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 		[self processContentChangesWithInsertedMetaDatum: inserted
 										removedMetaDatum: removed
 										updatedMetaDatum: updated
-											  completion: ^(BOOL success, NSError *error) {
+											  completion: ^(BOOL __unused success, NSError *__unused error) {
 											  
 		}];
 		
@@ -290,7 +290,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 			SEL didChangeContent = @selector(filesControllerDidChangeContent:completion:);
 			if ([delegate respondsToSelector: didChangeContent]) {
 				[delegate filesControllerDidChangeContent:sself
-											   completion:^(BOOL success, NSError *error) { }];
+											   completion:^(BOOL __unused success, NSError *__unused error) { }];
 			}
 		}];
 	});
@@ -333,7 +333,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 	[self processContentChangesWithInsertedMetaDatum: insertedMetaDatum
 									removedMetaDatum: removedMetaDatum
 									updatedMetaDatum: updatedMetaDatum
-										  completion: ^(BOOL success, NSError *error) { }];
+										  completion: ^(BOOL __unused success, NSError *__unused error) { }];
 }
 
 - (void)fileCoordinatorDidUpdateContentsWithInsertedMetaDatum:(NSArray *)insertedMetaDatum
@@ -562,7 +562,7 @@ NSComparisonResult (^sortComparator)(MADMetaData *, MADMetaData *) = ^NSComparis
 		}
 		
 		if ([delegate respondsToSelector:@selector(filesControllerDidChangeContent:completion:)]) {
-			void (^handleCompletion)(BOOL, NSError *) = ^(BOOL success, NSError *error) { };
+			void (^handleCompletion)(BOOL, NSError *) = ^(BOOL __unused success, NSError *__unused error) { };
 			[delegate filesControllerDidChangeContent: sself
 										   completion: handleCompletion];
 			if (completion != nil) completion(YES, nil);

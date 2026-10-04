@@ -124,7 +124,7 @@
 
 #pragma mark - Inverses
 
-static MADStoreRelationship *MADStoreInverseOf(MADStoreEntity *entity, MADStoreRelationship *relationship) {
+static MADStoreRelationship *MADStoreInverseOf(MADStoreEntity *__unused entity, MADStoreRelationship *relationship) {
 	MADStoreEntity *destination = [[MADStoreSchema sharedSchema] entityNamed:relationship.destination];
 	return [destination anyRelationshipNamed:relationship.inverse];
 }

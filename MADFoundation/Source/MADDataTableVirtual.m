@@ -124,7 +124,7 @@
 - (NSUInteger)sortedIndexForIndex:(NSUInteger)index {
 	NSUInteger sortedIndex;
 	if ((self.sortDescriptors).count > 0) {
-		sortedIndex = [self.sortIndex indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+		sortedIndex = [self.sortIndex indexOfObjectPassingTest:^BOOL(id obj, NSUInteger __unused idx, BOOL *stop) {
 			if ([obj[@"~rowid~"] unsignedIntegerValue] == index) {
 				*stop = YES;
 				return YES;

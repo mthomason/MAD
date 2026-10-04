@@ -741,13 +741,13 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 	
 	void (^transition)(id<UIViewControllerTransitionCoordinatorContext>);
 	if (!CGSizeEqualToSize(size, self.view.bounds.size)) {
-		transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) {
+		transition = ^(id<UIViewControllerTransitionCoordinatorContext>__unused context) {
 			[self.view setNeedsDisplay];
 		};
 	} else {
-		transition = ^(id<UIViewControllerTransitionCoordinatorContext>context) { };
+		transition = ^(id<UIViewControllerTransitionCoordinatorContext>__unused context) { };
 	}
-	[coordinator animateAlongsideTransition: transition completion: ^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	[coordinator animateAlongsideTransition: transition completion: ^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		[self adjustContextOffsetForOpenPopover];
 		[self.view setNeedsUpdateConstraints];
 	}];
@@ -1103,7 +1103,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 		os_log_error(GetDesignerLog(), "%s: Error saving managed object context. %@", __PRETTY_FUNCTION__, error);
 	}
 	[doc updateChangeCount:UIDocumentChangeDone];
-	[doc autosaveWithCompletionHandler:^(BOOL success) {
+	[doc autosaveWithCompletionHandler:^(BOOL __unused success) {
 		if (insertNewSection) {
 			NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:(NSUInteger)numberOfRows - 1];
 			[documentSectionView insertSections:indexSet];
@@ -1726,7 +1726,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	__weak MADDesignerViewController *weakSelf = self;
 	[alert addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Change", @"Change")
 											  style: UIAlertActionStyleDefault
-											handler: ^(UIAlertAction *action) {
+											handler: ^(UIAlertAction *__unused action) {
 		__strong MADDesignerViewController *strongSelf = weakSelf;
 		if (!strongSelf) return;
 
@@ -1828,7 +1828,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 	MADSectionLayoutManager *layoutManager = document.sectionLayoutManagers[@(collectionView.identifier)];
 	
 	__block MADSectionLayoutAttributes *attributes;
-	[layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key, MADSectionLayoutAttributes *object, BOOL *stop) {
+	[layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id __unused key, MADSectionLayoutAttributes *object, BOOL *stop) {
 		if (object.indexPath.section == indexPath.section &&
 			object.indexPath.row == indexPath.row) {
 			attributes = object;
@@ -2219,7 +2219,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	NSNumber *identifier = @(collectionView.identifier);
 	MADSectionLayoutManager *layoutManager = self.document.sectionLayoutManagers[identifier];
 	__block MADSectionLayoutAttributes *item;
-	[layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id key,
+	[layoutManager.items enumerateKeysAndObjectsUsingBlock:^(id __unused key,
 															 MADSectionLayoutAttributes *object,
 															 BOOL *stop) {
 		if (object.indexPath.item == indexPath.item &&
@@ -2650,7 +2650,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 		[layoutManager addItem:layoutAttribute];
 		[layoutManager layout];
 		
-	} completion:^(BOOL finished) {
+	} completion:^(BOOL __unused finished) {
 		/* // Below is slop trying to get it to flash.  Doesn't work.
 		if (finished) {
 			__strong typeof(self) strongSelf = weakSelf;

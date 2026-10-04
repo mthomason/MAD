@@ -128,7 +128,7 @@
 
 - (IBAction)actionRefresh:(id)sender {
 	MADReceiptViewController __weak *weakself = self;
-	[[MADVerificationController sharedInstance] refreshReceipt:^(BOOL success, NSError *error) {
+	[[MADVerificationController sharedInstance] refreshReceipt:^(BOOL __unused success, NSError *error) {
 		MADReceiptViewController *strongself = weakself;
 		if (error != nil) {
 			UIAlertController *alert = [MADAlertController newAlertControllerError:error];

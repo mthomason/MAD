@@ -332,7 +332,7 @@ BOOL storeEnabled(void) {
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
 	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		self.view.frame = self.navigationController.view.bounds;
 	} completion:nil];
 
@@ -495,7 +495,7 @@ BOOL storeEnabled(void) {
 		NSMutableSet *hasQueryTables = rptqQuery.hasQueryTables.mutableCopy;
 		
 		__block id objectToDelete = nil;
-		[hasQueryTables enumerateObjectsUsingBlock:^(RptqQueryTable * _Nonnull hasTable, BOOL * _Nonnull stop) {
+		[hasQueryTables enumerateObjectsUsingBlock:^(RptqQueryTable * _Nonnull hasTable, BOOL * _Nonnull __unused stop) {
 			if (table.identifier == hasTable.identifier) {
 				objectToDelete = hasTable;
 			}
@@ -503,7 +503,7 @@ BOOL storeEnabled(void) {
 		
 		__block short ctr = 0;
 		NSMutableIndexSet *indexSetSections = [[NSMutableIndexSet alloc] init];
-		[indexSetSectionsOld enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+		[indexSetSectionsOld enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull __unused stop) {
 			if ([indexSetSectionsOldM containsIndex:idx]) {
 				[indexSetSections addIndex:(NSUInteger)ctr];
 			}
@@ -591,7 +591,7 @@ BOOL storeEnabled(void) {
 		}
 	[self observeManagedObjectContextChanges:document.storeContext];
 	[document updateChangeCount: UIDocumentChangeDone];
-	[document autosaveWithCompletionHandler:^(BOOL successAutosave) { }];
+	[document autosaveWithCompletionHandler:^(BOOL __unused successAutosave) { }];
 }
 
 - (void)deleteQueryLinksFromTableView: (UITableView *)tableView
@@ -611,7 +611,7 @@ BOOL storeEnabled(void) {
 			os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		}
 	[document updateChangeCount: UIDocumentChangeDone];
-	[document autosaveWithCompletionHandler:^(BOOL successAutosave) { }];
+	[document autosaveWithCompletionHandler:^(BOOL __unused successAutosave) { }];
 }
 
 - (void)deleteQueryGroupFromTableView: (UITableView *)tableView
@@ -631,7 +631,7 @@ BOOL storeEnabled(void) {
 			os_log_error(GetDesignerLog(), "Error saving managed object: %s", error.localizedDescription.UTF8String);
 		}
 	[document updateChangeCount: UIDocumentChangeDone];
-	[document autosaveWithCompletionHandler:^(BOOL successAutosave) { }];
+	[document autosaveWithCompletionHandler:^(BOOL __unused successAutosave) { }];
 }
 
 - (void)deleteQueryPredicateFromTableView: (UITableView *)tableView
@@ -648,7 +648,7 @@ BOOL storeEnabled(void) {
 		os_log_error(GetDesignerLog(), "Error saving managed object context: %@", error);
 	}
 	[document updateChangeCount: UIDocumentChangeDone];
-	[document autosaveWithCompletionHandler:^(BOOL successAutosave) { }];
+	[document autosaveWithCompletionHandler:^(BOOL __unused successAutosave) { }];
 }
 
 #pragma mark -
@@ -725,7 +725,7 @@ BOOL storeEnabled(void) {
 	[indexesToAdd removeIndexes:oldQueryLayout.sectionTypesIndexs];
 	__block short ctr = 0;
 	NSMutableIndexSet *indexSetSections = [[NSMutableIndexSet alloc] init];
-	[newQueryLayout.sectionTypesIndexs enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+	[newQueryLayout.sectionTypesIndexs enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull __unused stop) {
 		if ([indexesToAdd containsIndex:idx]) {
 			[indexSetSections addIndex:(NSUInteger)ctr];
 		}
@@ -780,7 +780,7 @@ BOOL storeEnabled(void) {
 		} else {
 			[self.queryViewDataSource numberOfTablesChanged: numberOfTables];
 			[self.queryViewDataSource performFetchTables];
-			NSUInteger tableIndex = [self.queryViewDataSource.queryTablesController indexOfObjectPassingTest:^BOOL(RptqQueryTable *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+			NSUInteger tableIndex = [self.queryViewDataSource.queryTablesController indexOfObjectPassingTest:^BOOL(RptqQueryTable *  _Nonnull obj, NSUInteger __unused idx, BOOL * _Nonnull __unused stop) {
 				return newQueryTable.identifier == obj.identifier;
 			}];
 
@@ -795,7 +795,7 @@ BOOL storeEnabled(void) {
 		[newQueryFields removeAllObjects];
 
 	[document updateChangeCount: UIDocumentChangeDone];
-	[document autosaveWithCompletionHandler:^(BOOL success) {
+	[document autosaveWithCompletionHandler:^(BOOL __unused success) {
 		[self.queryViewDataSource performFetchTables];
 	}];
 	_suspendAutomaticTrackingOfChangesInManagedObjectContext = NO;
@@ -1331,7 +1331,7 @@ BOOL storeEnabled(void) {
 	
 	// Fade in the dimming view during the transition.
 	[self.tableView.backgroundView setAlpha:0.0];
-	[transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+	[transitionCoordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		 [self.tableView.backgroundView setAlpha:1.0];
 	 } completion:nil];
 }
@@ -1505,7 +1505,7 @@ BOOL storeEnabled(void) {
 		
 		//fromView.frame = CGRectMake(fromFrameFinal.origin.x - fromFrameFinal.size.width, fromFrameFinal.origin.y, fromFrameFinal.size.width, fromFrameFinal.size.height);
 		//toView.frame = toFrameFinal;
-	} completion:^(BOOL finished) {
+	} completion:^(BOOL __unused finished) {
 		
 		BOOL wasCancelled = [transitionContext transitionWasCancelled];
 		if (!wasCancelled) {

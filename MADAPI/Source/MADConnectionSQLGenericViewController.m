@@ -99,11 +99,11 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	range = NSMakeRange(0, errors.count > 0 ? errors.count - 1 : 0);
 	remaningErrors = [errors subarrayWithRange:range];
 
-	handleAlertDidFinish = ^(UIAlertAction *action) {
+	handleAlertDidFinish = ^(UIAlertAction *__unused action) {
 
 		if (remaningErrors.count > 0) {
 			
-			MADBlockCompletionStatus alertCompleted = ^(BOOL success) { completion(YES); };
+			MADBlockCompletionStatus alertCompleted = ^(BOOL __unused success) { completion(YES); };
 			[self viewController:viewController
 				   displayErrors:remaningErrors
 					  completion:alertCompleted];
@@ -246,7 +246,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	[UIView animateWithDuration:0.4 animations:^{
 		viewControllerTo.view.alpha = 1.0;
 		[transitionContext.containerView addSubview:viewControllerTo.view];
-	} completion:^(BOOL finished) {
+	} completion:^(BOOL __unused finished) {
 		[transitionContext completeTransition:![transitionContext transitionWasCancelled]];
 	}];
 }
@@ -288,7 +288,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 
 - (void)displayErrors:(NSArray <__kindof NSError *> *)errors
   forConnectionString:(NSString *)connectionString {
-	[[self class] viewController: self displayErrors: errors completion: ^(BOOL success) {
+	[[self class] viewController: self displayErrors: errors completion: ^(BOOL __unused success) {
 		[MADKeyChain deleteKey:connectionString];
 	}];
 }
