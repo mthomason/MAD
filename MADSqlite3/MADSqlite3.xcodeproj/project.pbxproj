@@ -11,9 +11,6 @@
 		4C11F1471BA9008D00EC2C58 /* MADSqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C11F1461BA9008D00EC2C58 /* MADSqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C11F14E1BA9008D00EC2C58 /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C11F1431BA9008D00EC2C58 /* MADSqlite3.framework */; };
 		4C11F1531BA9008D00EC2C58 /* MADSqlite3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C11F1521BA9008D00EC2C58 /* MADSqlite3Tests.m */; };
-		4CDA7B0100000000000000B2 /* MADDatabaseSqlite3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7B0100000000000000B1 /* MADDatabaseSqlite3Tests.m */; };
-		4CDA7B0200000000000000B2 /* MADDatabaseSqlite3DatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7B0200000000000000B1 /* MADDatabaseSqlite3DatabaseTests.m */; };
-		4CDA7B0300000000000000B2 /* MADDataTableFastBenchmarkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7B0300000000000000B1 /* MADDataTableFastBenchmarkTests.m */; };
 		4C29159824AC61D900EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159724AC61D900EC794B /* MADFoundation.framework */; };
 		4C29159C24AC61E500EC794B /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159B24AC61E500EC794B /* MADDataStructures.framework */; };
 		4C29159F24AC61F600EC794B /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29159E24AC61F600EC794B /* MADAPI.framework */; };
@@ -78,6 +75,9 @@
 		4CA7C30D2EA439A700475743 /* MADArrayCaching.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA7C30A2EA439A700475743 /* MADArrayCaching.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB5D9171F57A02000CC2E8E /* MADQueryCacheSelectRowId.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB5D9151F57A02000CC2E8E /* MADQueryCacheSelectRowId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB5D9181F57A02000CC2E8E /* MADQueryCacheSelectRowId.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB5D9161F57A02000CC2E8E /* MADQueryCacheSelectRowId.m */; };
+		4CDA7B0100000000000000B2 /* MADDatabaseSqlite3Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7B0100000000000000B1 /* MADDatabaseSqlite3Tests.m */; };
+		4CDA7B0200000000000000B2 /* MADDatabaseSqlite3DatabaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7B0200000000000000B1 /* MADDatabaseSqlite3DatabaseTests.m */; };
+		4CDA7B0300000000000000B2 /* MADDataTableFastBenchmarkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7B0300000000000000B1 /* MADDataTableFastBenchmarkTests.m */; };
 		4CDD44B02DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CDD44AE2DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.h */; };
 		4CDD44B12DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDD44AF2DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.m */; };
 /* End PBXBuildFile section */
@@ -99,9 +99,6 @@
 		4C11F1481BA9008D00EC2C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C11F14D1BA9008D00EC2C58 /* MADSqlite3Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADSqlite3Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C11F1521BA9008D00EC2C58 /* MADSqlite3Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADSqlite3Tests.m; sourceTree = "<group>"; };
-		4CDA7B0100000000000000B1 /* MADDatabaseSqlite3Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseSqlite3Tests.m; sourceTree = "<group>"; };
-		4CDA7B0200000000000000B1 /* MADDatabaseSqlite3DatabaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseSqlite3DatabaseTests.m; sourceTree = "<group>"; };
-		4CDA7B0300000000000000B1 /* MADDataTableFastBenchmarkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataTableFastBenchmarkTests.m; sourceTree = "<group>"; };
 		4C11F1541BA9008D00EC2C58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C29159724AC61D900EC794B /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C29159B24AC61E500EC794B /* MADDataStructures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADDataStructures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -169,9 +166,12 @@
 		4CB5D9151F57A02000CC2E8E /* MADQueryCacheSelectRowId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryCacheSelectRowId.h; sourceTree = "<group>"; };
 		4CB5D9161F57A02000CC2E8E /* MADQueryCacheSelectRowId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryCacheSelectRowId.m; sourceTree = "<group>"; };
 		4CBF04402E85191A00812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
-		4CFA57C02EA0A10000D1E001 /* sqlite3.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = sqlite3.xcconfig; path = ../Compressor/sqlite3.xcconfig; sourceTree = SOURCE_ROOT; };
+		4CDA7B0100000000000000B1 /* MADDatabaseSqlite3Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseSqlite3Tests.m; sourceTree = "<group>"; };
+		4CDA7B0200000000000000B1 /* MADDatabaseSqlite3DatabaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseSqlite3DatabaseTests.m; sourceTree = "<group>"; };
+		4CDA7B0300000000000000B1 /* MADDataTableFastBenchmarkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataTableFastBenchmarkTests.m; sourceTree = "<group>"; };
 		4CDD44AE2DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDataTableSingleColumnEnumerator.h; sourceTree = "<group>"; };
 		4CDD44AF2DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataTableSingleColumnEnumerator.m; sourceTree = "<group>"; };
+		4CFA57C02EA0A10000D1E001 /* sqlite3.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = sqlite3.xcconfig; path = ../Compressor/sqlite3.xcconfig; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,8 +254,8 @@
 				4C2D78431F56EFBD005415F7 /* MADQueryCacheSelectLimitOffsetParamaters.h */,
 				4C2D78391F56EF41005415F7 /* MADQueryCacheAddRowParameters.h */,
 				4C2D783A1F56EF41005415F7 /* MADQueryCacheIndexCreateParameters.h */,
-				4C2D783B1F56EF41005415F7 /* MADQueryCacheIndexCreateParameters.m */,
 				4C2D783C1F56EF41005415F7 /* MADQueryCacheIndexDropParameters.h */,
+				4C2D783B1F56EF41005415F7 /* MADQueryCacheIndexCreateParameters.m */,
 				4C2D785B1F56F4F0005415F7 /* MADDataTableObjectEnumerator.h */,
 				4C2D785C1F56F4F0005415F7 /* MADDataTableObjectEnumerator.m */,
 				4CDD44AE2DCDC06400A0525A /* MADDataTableSingleColumnEnumerator.h */,

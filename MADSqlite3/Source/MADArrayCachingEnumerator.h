@@ -6,6 +6,14 @@
 //  Copyright © 2025 Everyday Apps LLC. All rights reserved.
 //
 
+/*
+ 
+ This file currently is included in `MADSqlite3`, but the `.m` file has no target membership, meaning
+ the header points to no code.  I believe this was related to `MADArrayCaching`; that is, I believe this is the
+ fast enumerator for it, and I believe it is unfinished, but I'm not sure.  This should be investigated.
+ 
+ */
+
 #ifndef MADSqite3_MADArrayCachingEnumerator_h
 #define MADSqite3_MADArrayCachingEnumerator_h
 
@@ -14,8 +22,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MADArrayCachingEnumerator : NSEnumerator
-<NSFastEnumeration>
+@interface MADArrayCachingEnumerator : NSEnumerator <NSFastEnumeration>
 
 	- (instancetype)initWithURL:(NSURL *)url;
 	@property (nonatomic, retain) NSURL *url;
