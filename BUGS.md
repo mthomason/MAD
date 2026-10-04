@@ -2178,7 +2178,8 @@ setting that names a platform no target can build for.
   H7 fix removed.
 - **Now:** gone. The app's SQLite behavior is whatever `MADSqlite3` was built with,
   as it should be.
-- **Evidence:** `MAD Designer` builds; `MADSqlite3` 69 tests, 0 failures.
+- **Evidence:** `MAD Designer` builds; `MADSqlite3` 72 tests pass, 5 skipped, 0
+  failures.
 
 ### A macOS build cannot be wired from search paths alone
 - **Status:** Still open — this is ROADMAP §2.1's third bullet, and it cannot be done
