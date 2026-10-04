@@ -31,6 +31,7 @@ for platform in ${PLATFORMS}; do
 				xcrun --sdk "${sdk}" clang -c "${src}" \
 					-o "${outdir}/objects/${src%.c}.o" \
 					-w -Os \
+					-DZINT_VERSION=\"${VERSION}\" \
 					$(arch_cflags "${platform}" "${arch}") \
 					-I. -I"${libpng_install}/include"
 			done

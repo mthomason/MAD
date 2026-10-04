@@ -42,6 +42,9 @@ if [[ ! -f "${NATIVE}/include/mysqld_error.h" ]]; then
 			-DBUILD_SHARED_LIBS=OFF \
 			-DWITH_BOOST="${BOOST_DIR}" \
 			-DOPENSSL_ROOT_DIR="${NATIVE_OPENSSL}" \
+			-DOPENSSL_INCLUDE_DIR="${NATIVE_OPENSSL}/include" \
+			-DOPENSSL_CRYPTO_LIBRARY="${NATIVE_OPENSSL}/lib/libcrypto.a" \
+			-DOPENSSL_SSL_LIBRARY="${NATIVE_OPENSSL}/lib/libssl.a" \
 			-DWITH_ZLIB=bundled \
 			-DWITH_ZSTD=bundled \
 			-DWITH_UNIT_TESTS=OFF \
@@ -69,6 +72,7 @@ for platform in ${PLATFORMS}; do
 			cmake "${SRC_ROOT}" \
 				-G "Unix Makefiles" \
 				-DCMAKE_SYSTEM_NAME=Darwin \
+				-DCMAKE_CROSSCOMPILING=1 \
 				-DCMAKE_OSX_SYSROOT="${sdk_path}" \
 				-DCMAKE_OSX_ARCHITECTURES="${arch}" \
 				-DCMAKE_OSX_DEPLOYMENT_TARGET="$(platform_min_version "${platform}")" \
@@ -78,12 +82,17 @@ for platform in ${PLATFORMS}; do
 				-DBUILD_SHARED_LIBS=OFF \
 				-DWITH_BOOST="${BOOST_DIR}" \
 				-DOPENSSL_ROOT_DIR="${openssl_install}" \
+				-DOPENSSL_INCLUDE_DIR="${openssl_install}/include" \
+				-DOPENSSL_CRYPTO_LIBRARY="${openssl_install}/lib/libcrypto.a" \
+				-DOPENSSL_SSL_LIBRARY="${openssl_install}/lib/libssl.a" \
 				-DWITH_SSL=system \
 				-DWITH_ZLIB=bundled \
 				-DWITH_ZSTD=bundled \
 				-DWITH_UNIT_TESTS=OFF \
 				-DWITH_SASL=OFF \
-				-DWITH_LDAP=OFF > cmake.log 2>&1
+				-DWITH_LDAP=OFF \
+				-DCURSES_INCLUDE_PATH="$(xcrun --sdk macosx --show-sdk-path)/usr/include" \
+				-DCURSES_LIBRARY="$(xcrun --sdk macosx --show-sdk-path)/usr/lib/libncurses.tbd" > cmake.log 2>&1
 
 			# Seed the generated files from the native stage so make never
 			# runs the cross-built tools.
