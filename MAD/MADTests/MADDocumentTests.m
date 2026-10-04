@@ -96,7 +96,7 @@
 
 	CGSize paperSize = document.paperSize;
 	CGSize expected = document.paper.paperSize;
-	CGSize letter = [MTPaper sizeLetter];
+	CGSize letter = [MTPaper sizeForType: MTPaperTypeLetter];
 
 	XCTAssertFalse(CGSizeEqualToSize(paperSize, CGSizeZero),
 				   @"-paperSize answered {0, 0}; it did not build the paper");

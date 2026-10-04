@@ -228,7 +228,7 @@ static NSError *MADCLIDocumentError(NSString *message) {
 - (BOOL)writePDFToURL:(NSURL *)url deterministic:(BOOL)deterministic error:(NSError **)error {
 
 	MADocument *document = self.document;
-	CGRect letterRect = [MTPaper rectLetter];
+	CGRect letterRect = [[MTPaper alloc] initWithType: MTPaperTypeLetter].bounds;
 	NSDictionary *options = @{ (__bridge NSString *)kCGPDFContextCreator: @"MAD® Designer" };
 
 	// The reload the viewer runs after a refresh, which the CLI has no view controller

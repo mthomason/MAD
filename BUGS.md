@@ -591,6 +591,29 @@ Status key:
   non-zero, agrees with `-paper`, and is the letter size. Confirmed to fail against
   the ivar read before it was kept.
 
+### `MTPaper -initWithType:` returned class objects for Legal and Government papers
+- **Status:** Fixed
+- **Where:** `MAD/Source/paper/MTPaper.m`; the `MTPaperLegal`,
+  `MTPaperGovernemntLetter`, and `MTPaperGovernemntLegal` branches of the factory
+- **Behavior:** `result = [MTPaperLegal init]` (and the two Government siblings)
+  sent `init` to the class object instead of `[[MTPaperLegal alloc] init]`, so the
+  factory returned the class itself. A document whose paper is Legal,
+  Government-Letter, or Government-Legal then stored that class in `MADocument
+  -paper`, and the first `-paperSize` read crashed with an unrecognized selector.
+  (The correctly-spelled `MTPaperGovernmentLetter` and `MTPaperGovernmentLegal`
+  interfaces in the subclass headers were never implemented at all — the `.m`
+  files implemented the misspelled names.)
+- **Why it matters:** a `.mad` document set to one of those three paper types
+  could not be opened.
+- **Now:** `MTPaper` is a single class with a static size table.
+  `-initWithType:` stores a validated type and answers the Letter size for unknown
+  types. The Legal/Government branches, the misspelled classes, and the 72
+  boilerplate subclass files are gone; all 37 persisted paper types still answer
+  their original sizes through `+sizeForType:`.
+- **Test:** `MADTests MTPaperTests testEveryKnownTypeBuildsItsPaperAndSize`, which
+  pins the size of every persisted paper type, and
+  `testUnknownTypeFallsBackToLetter`.
+
 ### `MADArchiveManager -archive:` deleted its backup before it could restore it
 - **Status:** Fixed
 - **Where:** `MAD/Source/MADArchiveManager.m`

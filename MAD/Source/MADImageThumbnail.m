@@ -33,7 +33,7 @@ __attribute__((unused)) static inline CGFloat cornerRadiusForHorizontalSizeClass
 @implementation MADImageThumbnail
 
 + (instancetype)newImageThumbnailWithRenderer:(MADPrintPageRenderer *)printPageRenderer {
-	id thumbnail = [self newImageThumbnailWithRect: imageSizeForPaperSize([MTPaper sizeLetter])
+	id thumbnail = [self newImageThumbnailWithRect: imageSizeForPaperSize([MTPaper sizeForType: MTPaperTypeLetter])
 											  size: MADFloat_1024
 										zoomEffect: NO
 									  squareEffect: YES
@@ -46,7 +46,7 @@ __attribute__((unused)) static inline CGFloat cornerRadiusForHorizontalSizeClass
 + (instancetype)newImageThumbnailWithDocument:(MADocument *)document {
 
 	MADPrintPageRenderer *printPageRenderer = [[MADPrintPageRenderer alloc] initWithDataSource:document];
-	id thumbnail = [self newImageThumbnailWithRect: imageSizeForPaperSize([MTPaper sizeLetter])
+	id thumbnail = [self newImageThumbnailWithRect: imageSizeForPaperSize([MTPaper sizeForType: MTPaperTypeLetter])
 											  size: MADFloat_1024
 										zoomEffect: NO
 									  squareEffect: YES

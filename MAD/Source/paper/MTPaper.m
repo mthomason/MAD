@@ -11,43 +11,6 @@
 #endif
 
 #import "MTPaper.h"
-#import "MTPaperLegal.h"
-#import "MTPaperLetter.h"
-#import "MTPaperGovernmentLegal.h"
-#import "MTPaperGovernmentLetter.h"
-#import "MTPaperA0.h"
-#import "MTPaperA1.h"
-#import "MTPaperA2.h"
-#import "MTPaperA3.h"
-#import "MTPaperA4.h"
-#import "MTPaperA5.h"
-#import "MTPaperA6.h"
-#import "MTPaperA7.h"
-#import "MTPaperA8.h"
-#import "MTPaperA9.h"
-#import "MTPaperA10.h"
-#import "MTPaperB0.h"
-#import "MTPaperB1.h"
-#import "MTPaperB2.h"
-#import "MTPaperB3.h"
-#import "MTPaperB4.h"
-#import "MTPaperB5.h"
-#import "MTPaperB6.h"
-#import "MTPaperB7.h"
-#import "MTPaperB8.h"
-#import "MTPaperB9.h"
-#import "MTPaperB10.h"
-#import "MTPaperC0.h"
-#import "MTPaperC1.h"
-#import "MTPaperC2.h"
-#import "MTPaperC3.h"
-#import "MTPaperC4.h"
-#import "MTPaperC5.h"
-#import "MTPaperC6.h"
-#import "MTPaperC7.h"
-#import "MTPaperC8.h"
-#import "MTPaperC9.h"
-#import "MTPaperC10.h"
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 
@@ -55,14 +18,9 @@ static inline CGRect CGRectBoundsForSize(CGSize size) {
 	return CGRectMake(CGPointZero.x, CGPointZero.y, size.width, size.height);
 }
 
-static inline CGRect CGRectPaperLetter(void) {
-	return CGRectBoundsForSize(CGSizePaperLetter());
-}
-
 static inline CGSize CGSizePaperLetter(void) {
 	return CGSizeMake(fCGPointsForInches(8.5000f), fCGPointsForInches(11.0000f));
 }
-
 
 static inline CGSize CGSizePaperGovernmentLetter(void) {
 	return CGSizeMake(fCGPointsForInches(8.5000f), fCGPointsForInches(10.5000f));
@@ -116,6 +74,161 @@ static inline CGSize CGSizePaperA10(void) {
 	return CGSizeMake(CGFloatPointsForMillimeters(26.0000f), CGFloatPointsForMillimeters(37.0000f));
 }
 
+static inline CGSize CGSizePaperB0(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(1000.0000f), CGFloatPointsForMillimeters(1414.0000f));
+}
+
+static inline CGSize CGSizePaperB1(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(707.0000f), CGFloatPointsForMillimeters(1000.0000f));
+}
+
+static inline CGSize CGSizePaperB2(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(500.0000f), CGFloatPointsForMillimeters(707.0000f));
+}
+
+static inline CGSize CGSizePaperB3(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(353.0000f), CGFloatPointsForMillimeters(500.0000f));
+}
+
+static inline CGSize CGSizePaperB4(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(250.0000f), CGFloatPointsForMillimeters(353.0000f));
+}
+
+static inline CGSize CGSizePaperB5(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(176.0000f), CGFloatPointsForMillimeters(250.0000f));
+}
+
+static inline CGSize CGSizePaperB6(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(125.0000f), CGFloatPointsForMillimeters(176.0000f));
+}
+
+static inline CGSize CGSizePaperB7(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(88.0000f), CGFloatPointsForMillimeters(125.0000f));
+}
+
+static inline CGSize CGSizePaperB8(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(62.0000f), CGFloatPointsForMillimeters(88.0000f));
+}
+
+static inline CGSize CGSizePaperB9(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(44.0000f), CGFloatPointsForMillimeters(62.0000f));
+}
+
+static inline CGSize CGSizePaperB10(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(31.0000f), CGFloatPointsForMillimeters(44.0000f));
+}
+
+static inline CGSize CGSizePaperC0(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(917.0000f), CGFloatPointsForMillimeters(1297.0000f));
+}
+
+static inline CGSize CGSizePaperC1(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(648.0000f), CGFloatPointsForMillimeters(917.0000f));
+}
+
+static inline CGSize CGSizePaperC2(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(458.0000f), CGFloatPointsForMillimeters(648.0000f));
+}
+
+static inline CGSize CGSizePaperC3(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(324.0000f), CGFloatPointsForMillimeters(458.0000f));
+}
+
+static inline CGSize CGSizePaperC4(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(229.0000f), CGFloatPointsForMillimeters(324.0000f));
+}
+
+static inline CGSize CGSizePaperC5(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(162.0000f), CGFloatPointsForMillimeters(229.0000f));
+}
+
+static inline CGSize CGSizePaperC6(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(114.0000f), CGFloatPointsForMillimeters(162.0000f));
+}
+
+static inline CGSize CGSizePaperC7(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(81.0000f), CGFloatPointsForMillimeters(114.0000f));
+}
+
+static inline CGSize CGSizePaperC8(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(57.0000f), CGFloatPointsForMillimeters(81.0000f));
+}
+
+static inline CGSize CGSizePaperC9(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(40.0000f), CGFloatPointsForMillimeters(57.0000f));
+}
+
+static inline CGSize CGSizePaperC10(void) {
+	return CGSizeMake(CGFloatPointsForMillimeters(28.0000f), CGFloatPointsForMillimeters(40.0000f));
+}
+
+// The sizes a paper type answers.  The values are the DMPAPER-style ids that
+// .mad documents persist, so the enum itself must not move; this table maps
+// each one to its size function, in enum order.
+typedef struct {
+	MTPaperType paperType;
+	CGSize (*sizeFunction)(void);
+} MTPaperSizeEntry;
+
+static const MTPaperSizeEntry kMTPaperSizeTable[] = {
+	{ MTPaperTypeLetter,		   CGSizePaperLetter },
+	{ MTPaperTypeGovernmentLetter, CGSizePaperGovernmentLetter },
+	// Government legal prints at legal size, and always has.
+	{ MTPaperTypeGovernmentLegal,  CGSizePaperLegal },
+	{ MTPaperTypeLegal,			   CGSizePaperLegal },
+	{ MTPaperTypeA0,			   CGSizePaperA0 },
+	{ MTPaperTypeA1,			   CGSizePaperA1 },
+	{ MTPaperTypeA2,			   CGSizePaperA2 },
+	{ MTPaperTypeA3,			   CGSizePaperA3 },
+	{ MTPaperTypeA4,			   CGSizePaperA4 },
+	{ MTPaperTypeA5,			   CGSizePaperA5 },
+	{ MTPaperTypeA6,			   CGSizePaperA6 },
+	{ MTPaperTypeA7,			   CGSizePaperA7 },
+	{ MTPaperTypeA8,			   CGSizePaperA8 },
+	{ MTPaperTypeA9,			   CGSizePaperA9 },
+	{ MTPaperTypeA10,			   CGSizePaperA10 },
+	{ MTPaperTypeB0,			   CGSizePaperB0 },
+	{ MTPaperTypeB1,			   CGSizePaperB1 },
+	{ MTPaperTypeB2,			   CGSizePaperB2 },
+	{ MTPaperTypeB3,			   CGSizePaperB3 },
+	{ MTPaperTypeB4,			   CGSizePaperB4 },
+	{ MTPaperTypeB5,			   CGSizePaperB5 },
+	{ MTPaperTypeB6,			   CGSizePaperB6 },
+	{ MTPaperTypeB7,			   CGSizePaperB7 },
+	{ MTPaperTypeB8,			   CGSizePaperB8 },
+	{ MTPaperTypeB9,			   CGSizePaperB9 },
+	{ MTPaperTypeB10,			   CGSizePaperB10 },
+	{ MTPaperTypeC0,			   CGSizePaperC0 },
+	{ MTPaperTypeC1,			   CGSizePaperC1 },
+	{ MTPaperTypeC2,			   CGSizePaperC2 },
+	{ MTPaperTypeC3,			   CGSizePaperC3 },
+	{ MTPaperTypeC4,			   CGSizePaperC4 },
+	{ MTPaperTypeC5,			   CGSizePaperC5 },
+	{ MTPaperTypeC6,			   CGSizePaperC6 },
+	{ MTPaperTypeC7,			   CGSizePaperC7 },
+	{ MTPaperTypeC8,			   CGSizePaperC8 },
+	{ MTPaperTypeC9,			   CGSizePaperC9 },
+	{ MTPaperTypeC10,			   CGSizePaperC10 },
+};
+
+static inline CGSize MTPaperSizeForType(MTPaperType papertype) {
+	for (NSUInteger i = 0; i < sizeof(kMTPaperSizeTable) / sizeof(kMTPaperSizeTable[0]); ++i) {
+		if (kMTPaperSizeTable[i].paperType == papertype) {
+			return kMTPaperSizeTable[i].sizeFunction();
+		}
+	}
+	return CGSizePaperLetter();
+}
+
+static inline BOOL MTPaperTypeIsKnown(MTPaperType papertype) {
+	for (NSUInteger i = 0; i < sizeof(kMTPaperSizeTable) / sizeof(kMTPaperSizeTable[0]); ++i) {
+		if (kMTPaperSizeTable[i].paperType == papertype) {
+			return YES;
+		}
+	}
+	return NO;
+}
+
 @interface MTPaper ()
 
 	- (instancetype)init NS_DESIGNATED_INITIALIZER;
@@ -125,304 +238,26 @@ static inline CGSize CGSizePaperA10(void) {
 @implementation MTPaper
 
 - (instancetype)init {
-	if (self = [super init]) { }
-	return self;
+	return [self initWithType:MTPaperTypeLetter];
 }
 
-+ (CGSize)size {
-	return [MTPaperLetter size];
-}
-
-+ (MTPaperType)type {
-	return MTPaperTypeLetter;
++ (CGSize)sizeForType:(MTPaperType)papertype {
+	return MTPaperSizeForType(papertype);
 }
 
 - (instancetype)initWithType:(MTPaperType)papertype {
-	MTPaper *result = nil;
-	switch (papertype) {
-		
-		case MTPaperTypeLetter:
-			result = [[MTPaperLetter alloc] init];
-			break;
-
-		case MTPaperTypeLegal:
-			result = [MTPaperLegal init];
-			break;
-
-		case MTPaperTypeGovernmentLetter:
-			result = [MTPaperGovernemntLetter init];
-			break;
-
-		case MTPaperTypeGovernmentLegal:
-			result = [MTPaperGovernemntLegal init];
-			break;
-
-		case MTPaperTypeA0:
-			result = [[MTPaperA0 alloc] init];
-			break;
-
-		case MTPaperTypeA1:
-			result = [[MTPaperA1 alloc] init];
-			break;
-
-		case MTPaperTypeA2:
-			result = [[MTPaperA2 alloc] init];
-			break;
-
-		case MTPaperTypeA3:
-			result = [[MTPaperA3 alloc] init];
-			break;
-
-		case MTPaperTypeA4:
-			result = [[MTPaperA4 alloc] init];
-			break;
-
-		case MTPaperTypeA5:
-			result = [[MTPaperA5 alloc] init];
-			break;
-
-		case MTPaperTypeA6:
-			result = [[MTPaperA6 alloc] init];
-			break;
-
-		case MTPaperTypeA7:
-			result = [[MTPaperA7 alloc] init];
-			break;
-
-		case MTPaperTypeA8:
-			result = [[MTPaperA8 alloc] init];
-			break;
-
-		case MTPaperTypeA9:
-			result = [[MTPaperA9 alloc] init];
-			break;
-
-		case MTPaperTypeA10:
-			result = [[MTPaperA10 alloc] init];
-			break;
-
-		case MTPaperTypeB0:
-			result = [[MTPaperB0 alloc] init];
-			break;
-			
-		case MTPaperTypeB1:
-			result = [[MTPaperB1 alloc] init];
-			break;
-			
-		case MTPaperTypeB2:
-			result = [[MTPaperB2 alloc] init];
-			break;
-			
-		case MTPaperTypeB3:
-			result = [[MTPaperB3 alloc] init];
-			break;
-			
-		case MTPaperTypeB4:
-			result = [[MTPaperB4 alloc] init];
-			break;
-			
-		case MTPaperTypeB5:
-			result = [[MTPaperB5 alloc] init];
-			break;
-			
-		case MTPaperTypeB6:
-			result = [[MTPaperB6 alloc] init];
-			break;
-			
-		case MTPaperTypeB7:
-			result = [[MTPaperB7 alloc] init];
-			break;
-			
-		case MTPaperTypeB8:
-			result = [[MTPaperB8 alloc] init];
-			break;
-			
-		case MTPaperTypeB9:
-			result = [[MTPaperB9 alloc] init];
-			break;
-			
-		case MTPaperTypeB10:
-			result = [[MTPaperB10 alloc] init];
-			break;
-
-		case MTPaperTypeC0:
-			result = [[MTPaperC0 alloc] init];
-			break;
-			
-		case MTPaperTypeC1:
-			result = [[MTPaperC1 alloc] init];
-			break;
-			
-		case MTPaperTypeC2:
-			result = [[MTPaperC2 alloc] init];
-			break;
-			
-		case MTPaperTypeC3:
-			result = [[MTPaperC3 alloc] init];
-			break;
-			
-		case MTPaperTypeC4:
-			result = [[MTPaperC4 alloc] init];
-			break;
-			
-		case MTPaperTypeC5:
-			result = [[MTPaperC5 alloc] init];
-			break;
-			
-		case MTPaperTypeC6:
-			result = [[MTPaperC6 alloc] init];
-			break;
-			
-		case MTPaperTypeC7:
-			result = [[MTPaperC7 alloc] init];
-			break;
-			
-		case MTPaperTypeC8:
-			result = [[MTPaperC8 alloc] init];
-			break;
-			
-		case MTPaperTypeC9:
-			result = [[MTPaperC9 alloc] init];
-			break;
-			
-		case MTPaperTypeC10:
-			result = [[MTPaperC10 alloc] init];
-			break;
-
-		default:
-			result = [[MTPaperLetter alloc] init];
-			break;
+	if (self = [super init]) {
+		_paperType = MTPaperTypeIsKnown(papertype) ? papertype : MTPaperTypeLetter;
 	}
-	
-	return result;
+	return self;
 }
 
-- (CGRect)bounds { return [MTPaper boundsForSize:self.paperSize]; }
-
-+ (CGRect)boundsForSize:(CGSize)size {
-	return CGRectBoundsForSize(size);
+- (CGSize)paperSize {
+	return MTPaperSizeForType(self.paperType);
 }
 
-+ (CGRect)rectLetter {
-	return [self boundsForSize:[MTPaper sizeLetter]];
-}
-
-+ (CGRect)rectGovernemntLetter {
-	return [self boundsForSize:[MTPaper sizeGovernmentLetter]];
-}
-
-+ (CGRect)rectGovernmentLegal {
-	return [self boundsForSize:[MTPaper sizeLegal]];
-}
-
-+ (CGSize)sizeGovernmentLegal {
-	return [self rectGovernmentLegal].size;
-}
-
-+ (CGSize)sizeLetter {
-	return CGSizePaperLetter();
-}
-
-+ (CGSize)sizeGovernmentLetter  { return CGSizePaperGovernmentLetter(); }
-+ (CGSize)sizeLegal			 { return CGSizePaperLegal(); }
-+ (CGSize)sizeA0				{ return CGSizePaperA0(); }
-+ (CGSize)sizeA1				{ return CGSizePaperA1(); }
-+ (CGSize)sizeA2				{ return CGSizePaperA2(); }
-+ (CGSize)sizeA3				{ return CGSizePaperA3(); }
-+ (CGSize)sizeA4				{ return CGSizePaperA4(); }
-+ (CGSize)sizeA5				{ return CGSizePaperA5(); }
-+ (CGSize)sizeA6				{ return CGSizePaperA6(); }
-+ (CGSize)sizeA7				{ return CGSizePaperA7(); }
-+ (CGSize)sizeA8				{ return CGSizePaperA8(); }
-+ (CGSize)sizeA9				{ return CGSizePaperA9(); }
-+ (CGSize)sizeA10			   { return CGSizePaperA10(); }
-
-+ (CGSize)sizeB0 {
-	return CGSizeMake(CGFloatPointsForMillimeters(1000.0000f), CGFloatPointsForMillimeters(1414.0000f));
-}
-
-+ (CGSize)sizeB1 {
-	return CGSizeMake(CGFloatPointsForMillimeters(707.0000f), CGFloatPointsForMillimeters(1000.0000f));
-}
-
-+ (CGSize)sizeB2 {
-	return CGSizeMake(CGFloatPointsForMillimeters(500.0000f), CGFloatPointsForMillimeters(707.0000f));
-}
-
-+ (CGSize)sizeB3 {
-	return CGSizeMake(CGFloatPointsForMillimeters(353.0000f), CGFloatPointsForMillimeters(500.0000f));
-}
-
-+ (CGSize)sizeB4 {
-	return CGSizeMake(CGFloatPointsForMillimeters(250.0000f), CGFloatPointsForMillimeters(353.0000f));
-}
-
-+ (CGSize)sizeB5 {
-	return CGSizeMake(CGFloatPointsForMillimeters(176.0000f), CGFloatPointsForMillimeters(250.0000f));
-}
-
-+ (CGSize)sizeB6 {
-	return CGSizeMake(CGFloatPointsForMillimeters(125.0000f), CGFloatPointsForMillimeters(176.0000f));
-}
-
-+ (CGSize)sizeB7 {
-	return CGSizeMake(CGFloatPointsForMillimeters(88.0000f), CGFloatPointsForMillimeters(125.0000f));
-}
-
-+ (CGSize)sizeB8 {
-	return CGSizeMake(CGFloatPointsForMillimeters(62.0000f), CGFloatPointsForMillimeters(88.0000f));
-}
-
-+ (CGSize)sizeB9 {
-	return CGSizeMake(CGFloatPointsForMillimeters(44.0000f), CGFloatPointsForMillimeters(62.0000f));
-}
-
-+ (CGSize)sizeB10 {
-	return CGSizeMake(CGFloatPointsForMillimeters(31.0000f), CGFloatPointsForMillimeters(44.0000f));
-}
-
-+ (CGSize)sizeC0 {
-	return CGSizeMake(CGFloatPointsForMillimeters(917.0000f), CGFloatPointsForMillimeters(1297.0000f));
-}
-
-+ (CGSize)sizeC1 {
-	return CGSizeMake(CGFloatPointsForMillimeters(648.0000f), CGFloatPointsForMillimeters(917.0000f));
-}
-
-+ (CGSize)sizeC2 {
-	return CGSizeMake(CGFloatPointsForMillimeters(458.0000f), CGFloatPointsForMillimeters(648.0000f));
-}
-
-+ (CGSize)sizeC3 {
-	return CGSizeMake(CGFloatPointsForMillimeters(324.0000f), CGFloatPointsForMillimeters(458.0000f));
-}
-
-+ (CGSize)sizeC4 {
-	return CGSizeMake(CGFloatPointsForMillimeters(229.0000f), CGFloatPointsForMillimeters(324.0000f));
-}
-
-+ (CGSize)sizeC5 {
-	return CGSizeMake(CGFloatPointsForMillimeters(162.0000f), CGFloatPointsForMillimeters(229.0000f));
-}
-
-+ (CGSize)sizeC6 {
-	return CGSizeMake(CGFloatPointsForMillimeters(114.0000f), CGFloatPointsForMillimeters(162.0000f));
-}
-
-+ (CGSize)sizeC7 {
-	return CGSizeMake(CGFloatPointsForMillimeters(81.0000f), CGFloatPointsForMillimeters(114.0000f));
-}
-
-+ (CGSize)sizeC8 {
-	return CGSizeMake(CGFloatPointsForMillimeters(57.0000f), CGFloatPointsForMillimeters(81.0000f));
-}
-
-+ (CGSize)sizeC9 {
-	return CGSizeMake(CGFloatPointsForMillimeters(40.0000f), CGFloatPointsForMillimeters(57.0000f));
-}
-
-+ (CGSize)sizeC10 {
-	return CGSizeMake(CGFloatPointsForMillimeters(28.0000f), CGFloatPointsForMillimeters(40.0000f));
+- (CGRect)bounds {
+	return CGRectBoundsForSize(self.paperSize);
 }
 
 @end
