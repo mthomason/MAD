@@ -212,7 +212,18 @@ was deferred 2026-10-01). Progress:
       mysqlclient took a two-stage design: a native macosx-arm64 build produces
       the host tools and generated files; the cross builds seed those and run
       the tools from the native stage. `build.sh --verify --all` is green.
-- [ ] Phase 2 — Xcode rewiring to the xcframeworks + ensure phases.
+- [x] Phase 2 — Xcode rewiring to the xcframeworks + ensure phases. All eight
+      steps landed one commit per project: MADSqlite3 (links sqlite3.xcframework,
+      sqlite3.c no longer a target source, the xcconfig's only consumer is the
+      recipe), MAD (libarchive + bzip2 + zlib xcframeworks; the wrong system
+      libarchive.2.tbd ref is gone), MADMySQL (mysqlclient + openssl; the
+      hardcoded Debug/ search paths are gone with the arms), MADTds (freetds +
+      openssl), MADTdsClient (search-path cleanup), MADBarcodes (libpng + zlib,
+      then the vendored Zint tree replaced by zint.xcframework with zint.h kept
+      Public), and the app (openssl). Every target gained an Ensure Libraries
+      phase pinned to ios,simulator. Suites: MADSqlite3 77/0, MAD 238/0,
+      MADMySQL 58/0 (live server tests ran and passed), MADTdsClient 75/0;
+      MADBarcodes and MADTds build; the app builds for simulator and device.
 - [ ] Phase 3 — full verification incl. the fresh-clone simulation.
 - [ ] Phase 4 — remaining macOS slices (zlib, mysqlclient, and every other lib's mac row).
 - [ ] Phase 5 — version updates, one library per commit.

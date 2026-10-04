@@ -2193,8 +2193,7 @@ setting that names a platform no target can build for.
   failures.
 
 ### A macOS build cannot be wired from search paths alone
-- **Status:** Still open — this is ROADMAP §2.1's third bullet, and it cannot be done
-  as written
+- **Status:** Fixed — by the Compressor rework's XCFramework rewiring
 - **Where:** every vendored `.a` reference, e.g. `MAD/MAD.xcodeproj`'s `libarchive.a`
   at `../Compressor/library/libarchive/iOS/lib/libarchive.a`,
   `MADTds/MADTds.xcodeproj`'s `libct.a` at `freetds/iOS-arm64/lib/`, and
@@ -2206,18 +2205,20 @@ setting that names a platform no target can build for.
   `libarchive/iOS/lib/libarchive.a` is `arm64 arm64e`, `freetds/iOS-arm64/lib/libct.a`
   is `arm64`, `openssl/iOS/lib/libssl.a` is `arm64 arm64e`. The linker refuses a file
   built for another platform.
-- **The other half of the bullet is blocked too:** `SUPPORTED_PLATFORMS` cannot be
-  extended with `macosx` yet, because every framework sits on `MADFoundation` and
+- **Now:** every consumer target links an XCFramework, not a `.a` path, so the
+  toolchain picks the slice for the platform being built and there is nothing to make
+  SDK-conditional. The SDK-conditional search-path arms are deleted everywhere
+  (the MAD Viewer target's legacy list and Scrimpter — outside the workspace — are
+  the only survivors, unchanged). The matrix also builds macOS slices for every
+  library, so `zlib/macOS` and `mysqlclient/macOS` now exist (Track 2.2's two
+  missing rows).
+- **Still blocked, and it stays so:** `SUPPORTED_PLATFORMS` cannot be extended with
+  `macosx` yet, because every framework sits on `MADFoundation` and
   `MADFoundation/Source/MADApplication.h:13` imports `UIKit/UIApplication.h`. A probe
   (`xcodebuild build … -destination 'platform=macOS' SUPPORTED_PLATFORMS=macosx`) fails
   with `'UIKit/UIApplication.h' file not found`. Flipping the setting today would
-  advertise a platform no target can compile for.
-- **What it needs instead:** the macOS slices do exist on disk
-  (`freetds/macOS-arm64` and `macOS-x86_64`, `openssl/macOS`, `libpng/macosx`,
-  `bzip2/macOS`, `libarchive/macOS`), but reaching them wants either a second set of
-  per-SDK file references or — the answer `MAD_CLI.md` §4.2 and ROADMAP Track 2.3
-  already point at — one XCFramework artifact whose slice the toolchain picks. `zlib`
-  and `libmysqlclient` have no macOS slice at all (Track 2.2).
+  advertise a platform no target can compile for. The XCFrameworks are ready for the
+  day that decoupling lands; nothing here unblocks the app-side macOS work.
 
 ### The MAD Viewer target has not linked since `09e0e7b8d`
 - **Status:** Still open
