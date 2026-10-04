@@ -22,6 +22,14 @@ Compressor/library/libmysqlclient-old
 Compressor/source
 Compressor/build/freetds/
 
+# Compressor artifacts -- built on demand by Compressor/build.sh, never
+# committed.  (The legacy tracked trees under Compressor/library stay until
+# the final untracking step; these patterns cover only the new artifacts.)
+Compressor/media/
+Compressor/library/*.xcframework/
+Compressor/library/manifests/
+Compressor/library/*/include/
+
 3rdPartyProjects/ColorPicker/
 opt/bld/
 StaticLibraries/
