@@ -639,7 +639,7 @@ BOOL storeEnabled(void) {
 	MADocument *document = self.document;
 	MADTableViewCellQueryPredicate *cell = (MADTableViewCellQueryPredicate *)[tableView cellForRowAtIndexPath:indexPath];
 	int64_t objid = cell.predicateID;
-	RptqQueryPredicate *predicate = [document.storeContext objectForEntity:NSStringFromClass([RptqQueryPredicate class]) identifier:objid];
+	RptqQueryPredicate *predicate = (RptqQueryPredicate *)[document.storeContext objectForEntity:NSStringFromClass([RptqQueryPredicate class]) identifier:objid];
 	[document.storeContext deleteObject:predicate error:NULL];
 
 	NSError *error = nil;
@@ -1156,7 +1156,7 @@ BOOL storeEnabled(void) {
 
 - (void)queryViewDelegate:(MADQueryViewDelegate *)delegate handleUserRequestedSampleDataForTableAtIndex:(NSInteger)index {
 
-	NSArray <RptqDatabase *> *results = [self.queryViewDataSource.managedObjectContext objectsForEntity:NSStringFromClass([RptqDatabase class])];
+	NSArray <RptqDatabase *> *results = (NSArray<RptqDatabase *> *)[self.queryViewDataSource.managedObjectContext objectsForEntity:NSStringFromClass([RptqDatabase class])];
 	if (results.count == 0) {
 		os_log_error(GetDesignerLog(), "%s Error fetching NSArray <RptqDatabase *>: no rows", __PRETTY_FUNCTION__);
 	}

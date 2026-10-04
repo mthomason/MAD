@@ -36,7 +36,7 @@
 + (instancetype)newDatabaseSchemaFieldFactoryForManagedObjectContext:(RptqStoreContext *)objectContext
 															andField:(MADDatabaseField *)field {
 	
-	RptqDatabaseSchemaField *rptqField = [objectContext insertObjectForEntity:NSStringFromClass([RptqDatabaseSchemaField class]) identifier:0];
+	RptqDatabaseSchemaField *rptqField = (RptqDatabaseSchemaField *)[objectContext insertObjectForEntity:NSStringFromClass([RptqDatabaseSchemaField class]) identifier:0];
 	rptqField.name = field.name.copy;
 	rptqField.dataType = field.fieldType;
 	rptqField.dataTypeNative = field.fieldTypeNative;

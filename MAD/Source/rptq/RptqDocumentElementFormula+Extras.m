@@ -42,7 +42,7 @@
 	NSString *formulaText = documentObjectDefination[MTDocumentObjectDefinationObject];
 
 	RptqDocumentElementFormula *element;
-	element = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentElementFormula class])
+	element = (RptqDocumentElementFormula *)[managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentElementFormula class])
 											  identifier:0];
 
 	element.source = formulaText;

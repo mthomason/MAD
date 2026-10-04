@@ -49,7 +49,7 @@
 																name:(NSString *)name
 														andQueryable:(BOOL)queryable {
 	
-	RptqDatabaseSchemaTable *rptqTable = [managedObjectContext insertObjectForEntity:NSStringFromClass([self class])
+	RptqDatabaseSchemaTable *rptqTable = (RptqDatabaseSchemaTable *)[managedObjectContext insertObjectForEntity:NSStringFromClass([self class])
 																		 identifier:0];
 	rptqTable.name = name.copy;
 	rptqTable.queryable = queryable;
@@ -60,7 +60,7 @@
 + (instancetype)newDatabaseSchemaTableFactoryForManagedObjectContext:(RptqStoreContext *)objectContext
 															andTable:(MADDatabaseTable *)table {
 
-	RptqDatabaseSchemaTable *rptqTable = [objectContext insertObjectForEntity:NSStringFromClass([self class]) identifier:0];
+	RptqDatabaseSchemaTable *rptqTable = (RptqDatabaseSchemaTable *)[objectContext insertObjectForEntity:NSStringFromClass([self class]) identifier:0];
 	rptqTable.name = table.name.copy;
 	rptqTable.queryable = table.queryable;
 	return rptqTable;

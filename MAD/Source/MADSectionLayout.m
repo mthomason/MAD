@@ -76,7 +76,7 @@
 		// This is what MADReportFormatter advances cumulativePageHeight by, so it
 		// must come from the elements, not from the section's declared height.
 		if (_visibility) {
-			RptqDocumentSection *section = [managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentSection class])
+			RptqDocumentSection *section = (RptqDocumentSection *)[managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentSection class])
 																	  identifier:_identifier];
 			for (RptqDocumentSectionRows *row in section.hasRows) {
 				for (RptqDocumentElement *element in row.hasObjects) {

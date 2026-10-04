@@ -41,7 +41,7 @@
 - (void)tableViewControllerChooseFieldDidFinish: (MADQueryChooseFieldController *)controller
 									withFieldID: (int64_t)fieldID {
 	self.fieldObjectID = fieldID;
-	RptqQueryField *field = [self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
+	RptqQueryField *field = (RptqQueryField *)[self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
 	self.tableViewCellAggregateInput.detailTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Field: %@", @"Field: %@"), [field display]];
 	[self updateDisplay];
 	[self.navigationController popViewControllerAnimated:YES];
@@ -170,7 +170,7 @@
 		self.fieldObjectID = dynamicFieldController.queryFieldID;
 		
 		NSString *formatString = NSLocalizedString(@"Field: %@", @"Field: %@");
-		RptqQueryField *queryField = [self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.fieldObjectID];
+		RptqQueryField *queryField = (RptqQueryField *)[self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.fieldObjectID];
 		NSString *display = [queryField display];
 		NSString *detailtext = [[NSString alloc] initWithFormat:formatString, display];
 		_tableViewCellAggregateInput.detailTextLabel.text = detailtext;
@@ -224,7 +224,7 @@
 
 - (void)updateField {
 	if (self.fieldObjectID != 0) {
-		RptqQueryField *fieldObject = [self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.fieldObjectID];
+		RptqQueryField *fieldObject = (RptqQueryField *)[self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.fieldObjectID];
 		self.tableViewCellAggregateInput.detailTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Field: %@", @"Field: %@"), [fieldObject display]];
 	}
 }

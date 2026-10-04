@@ -333,7 +333,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 						vertexTableDestination.properties.algorithmColor = MTColorGray;
 						
 						int64_t queryLinkID = [edge.object longLongValue];
-						RptqQueryLinks *queryLink = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryLinks class]) identifier:queryLinkID];
+						RptqQueryLinks *queryLink = (RptqQueryLinks *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryLinks class]) identifier:queryLinkID];
 						
 						
 						if (queryLink) {

@@ -77,7 +77,7 @@ static os_log_t rptq_log;
 + (instancetype)newDatabaseFactoryForManagedObjectContext:(RptqStoreContext *)objectContext
 											   driverType:(NSString *)driverIdentifier
 											 connectionId:(int64_t)identifier NS_RETURNS_RETAINED {
-	RptqDatabase *database = [objectContext insertObjectForEntity:NSStringFromClass([self class]) identifier:identifier];
+	RptqDatabase *database = (RptqDatabase *)[objectContext insertObjectForEntity:NSStringFromClass([self class]) identifier:identifier];
 	database.databaseDriverType = [driverIdentifier copy];
 	return database;
 }

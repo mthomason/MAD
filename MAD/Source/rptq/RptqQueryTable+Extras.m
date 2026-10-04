@@ -66,7 +66,7 @@
 		}
 	}
 
-	RptqQueryTable *queryTable = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqQueryTable class])
+	RptqQueryTable *queryTable = (RptqQueryTable *)[managedObjectContext insertObjectForEntity:NSStringFromClass([RptqQueryTable class])
 																 identifier:0];
 	queryTable.databaseSchemaTable = databaseSchemaTable;
 	queryTable.inQuery = query;

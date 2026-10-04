@@ -827,7 +827,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                                     withFieldID: (int64_t)fieldID {
 
     RptqStoreContext *context = self.document.storeContext;
-    RptqQueryField *field = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
+    RptqQueryField *field = (RptqQueryField *)[context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
 
     [self.navigationController popViewControllerAnimated:YES];
     

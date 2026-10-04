@@ -453,7 +453,7 @@ static NSDictionary *MADStoreProjectionForQueryLink(RptqQueryLinks *link) {
 	MADModelQueryLink *link;
 	if ((link = [_links objectForKey:queryLinkID])) return;
 
-	RptqQueryLinks *queryLinkObject = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryLinks class]) identifier:queryLinkID.longLongValue];
+	RptqQueryLinks *queryLinkObject = (RptqQueryLinks *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryLinks class]) identifier:queryLinkID.longLongValue];
 	NSMutableArray *results = [NSMutableArray array];
 	if (queryLinkObject) [results addObject:MADStoreProjectionForQueryLink(queryLinkObject)];
 	[self insertLinksFromFetchRequestResults:results];
@@ -475,7 +475,7 @@ static NSDictionary *MADStoreProjectionForQueryLink(RptqQueryLinks *link) {
 	
 	if (link != nil) return;
 
-	RptqQueryLinks *queryLinkObject = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryLinks class]) identifier:queryLinkID.longLongValue];
+	RptqQueryLinks *queryLinkObject = (RptqQueryLinks *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryLinks class]) identifier:queryLinkID.longLongValue];
 	NSMutableArray *results = [NSMutableArray array];
 	if (queryLinkObject) [results addObject:MADStoreProjectionForQueryLink(queryLinkObject)];
 	[self insertLinksFromFetchRequestResults:results];

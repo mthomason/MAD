@@ -165,7 +165,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
         RptqStoreContext *moc = self.document.storeContext;
         if (self.queryField1ID != 0) {
 
-            RptqQueryField *queryField1 = [moc objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.queryField1ID];
+            RptqQueryField *queryField1 = (RptqQueryField *)[moc objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.queryField1ID];
             MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
             RptqDatabaseSchemaField *databaseSchemaField1 = queryField1.databaseSchemaField;
             querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
@@ -216,7 +216,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
             
             RptqQueryField *queryField2;
             MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
-            queryField2 = [moc objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.queryField2ID];
+            queryField2 = (RptqQueryField *)[moc objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.queryField2ID];
             querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField
                                                                                                      object: queryField2.databaseSchemaField];
             querySampleDataField.database.delegate = self;

@@ -35,7 +35,7 @@
 					  managedObjectContext:(RptqStoreContext *)managedObjectContext {
 	
 	NSString *entityName = NSStringFromClass([RptqQueryLinks class]);
-	RptqQueryLinks *queryLinks = [managedObjectContext insertObjectForEntity:entityName identifier:0];
+	RptqQueryLinks *queryLinks = (RptqQueryLinks *)[managedObjectContext insertObjectForEntity:entityName identifier:0];
 	
 	queryLinks.hasLeftField     = fieldLeft;
 	queryLinks.hasRightField    = fieldRight;

@@ -92,7 +92,7 @@ static NSString * const TextDefault = @"Default";
 	if (fieldID == 0) return;
 
 	RptqStoreContext *context = self.document.storeContext;
-	RptqQueryField *queryField = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
+	RptqQueryField *queryField = (RptqQueryField *)[context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
 
 	[self.navigationController popToViewController:self animated:YES];
 

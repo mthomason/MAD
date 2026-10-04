@@ -119,7 +119,7 @@ static os_log_t mad_log;
 		
 		} else if ([segue.destinationViewController isKindOfClass: [MADQueryValueFromFieldController class]]) {
 
-			RptqQueryField *leftField = [self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.fieldLeftID];
+			RptqQueryField *leftField = (RptqQueryField *)[self.document.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.fieldLeftID];
 			MADQueryValueFromFieldController *destinationViewController = segue.destinationViewController;
 			destinationViewController.enterStringDelegate = self;
 			destinationViewController.document = document;
@@ -209,7 +209,7 @@ static os_log_t mad_log;
 									withFieldID:(int64_t)fieldID {
 	
 	RptqStoreContext *context = self.document.storeContext;
-	RptqQueryField *queryField = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
+	RptqQueryField *queryField = (RptqQueryField *)[context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
 	
 	UITableViewCell *tableViewCellRightSide = _tableViewCellRightSide;
 	[self.navigationController popToViewController:self animated:YES];

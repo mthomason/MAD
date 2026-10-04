@@ -146,7 +146,7 @@
 - (void)loadPickerView {
 
 	RptqDatabaseSchemaField *schemaField;
-	schemaField = [_document.storeContext objectForEntity:NSStringFromClass([RptqDatabaseSchemaField class]) identifier:_schemaFieldObjectId];
+	schemaField = (RptqDatabaseSchemaField *)[_document.storeContext objectForEntity:NSStringFromClass([RptqDatabaseSchemaField class]) identifier:_schemaFieldObjectId];
 
 	MADQuery <MADQueryDatabaseProtocol> *querySampleDataField;
 	querySampleDataField = (MADQuery <MADQueryDatabaseProtocol> *)[[MADQuery alloc] initWithQueryType: MADQueryTypeSampleDataField

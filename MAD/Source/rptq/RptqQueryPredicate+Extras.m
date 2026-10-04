@@ -65,14 +65,14 @@ static os_log_t rptq_log;
 	}
 	
 	NSError *fetchError = nil;
-	RptqQueryField *leftField = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:leftFieldID];
+	RptqQueryField *leftField = (RptqQueryField *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:leftFieldID];
 	if (fetchError) {
 		os_log_error(rptq_log, "Failed to fetch left field: %{public}@", fetchError);
 		if (error != NULL) *error = fetchError;
 		return nil;
 	}
 	
-	RptqQueryField *rightField = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:rightFieldID];
+	RptqQueryField *rightField = (RptqQueryField *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:rightFieldID];
 	if (fetchError) {
 		os_log_error(rptq_log, "Failed to fetch right field: %{public}@", fetchError);
 		if (error != NULL) *error = fetchError;
@@ -105,7 +105,7 @@ static os_log_t rptq_log;
 	}
 	
 	NSError *fetchError = nil;
-	RptqQueryField *leftField = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:leftFieldID];
+	RptqQueryField *leftField = (RptqQueryField *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:leftFieldID];
 	if (fetchError) {
 		os_log_error(rptq_log, "Failed to fetch left field: %{public}@", fetchError);
 		if (error != NULL) *error = fetchError;
@@ -163,7 +163,7 @@ static os_log_t rptq_log;
 	}
 	
 	NSError *fetchError = nil;
-	RptqQueryField *rightField = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:rightFieldID];
+	RptqQueryField *rightField = (RptqQueryField *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:rightFieldID];
 	if (fetchError) {
 		os_log_error(rptq_log, "Failed to fetch right field: %{public}@", fetchError);
 		if (error != NULL) *error = fetchError;
@@ -187,7 +187,7 @@ static os_log_t rptq_log;
 							   leftValue:(NSString *)leftValue
 							  rightValue:(NSString *)rightValue
 								operator:(MADPredicateOperator)operator {
-	RptqQueryPredicate *predicate = [context insertObjectForEntity:NSStringFromClass([self class]) identifier:0];
+	RptqQueryPredicate *predicate = (RptqQueryPredicate *)[context insertObjectForEntity:NSStringFromClass([self class]) identifier:0];
 	predicate.hasLeftField = leftField;
 	predicate.hasRightField = rightField;
 	predicate.leftFieldID = leftValue ? leftValue.copy : nil;

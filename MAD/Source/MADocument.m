@@ -829,7 +829,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 
 	RptqStoreContext *context = self.storeContext;
 		
-		RptqQueryField *queryField = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:queryFieldObjectID];
+		RptqQueryField *queryField = (RptqQueryField *)[context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:queryFieldObjectID];
 		RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: context];
 		
 		
@@ -1402,7 +1402,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	
 	//[context performBlockAndWait: ^{
 	
-	RptqQueryGroup *group = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryGroup class]) identifier:groupID];
+	RptqQueryGroup *group = (RptqQueryGroup *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryGroup class]) identifier:groupID];
 	if (group != nil) {
 		RptqQuery *query = group.inQuery;
 		

@@ -29,10 +29,10 @@ static NSString *keySize = nil;
 - (void)awakeFromInsert {
 	RptqStoreContext *context = self.storeContext;
 	if (self.origin == nil) {
-		self.origin = [context insertObjectForEntity:NSStringFromClass([RptqPoint class]) identifier:0];
+		self.origin = (RptqPoint *)[context insertObjectForEntity:NSStringFromClass([RptqPoint class]) identifier:0];
 	}
 	if (self.size == nil) {
-		self.size = [context insertObjectForEntity:NSStringFromClass([RptqSize class]) identifier:0];
+		self.size = (RptqSize *)[context insertObjectForEntity:NSStringFromClass([RptqSize class]) identifier:0];
 	}
 }
 

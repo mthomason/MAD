@@ -390,7 +390,7 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	if (!relationship || !relationship.isToMany) return;
 
 	int64_t memberIdentifier = MADStoreIdentifierOfValue(member);
-	NSMutableArray<NSNumber *> *collection = [object.backingObject existingCollectionForName:name];
+	NSMutableArray<NSNumber *> *collection = (NSMutableArray<NSNumber *> *)[object.backingObject existingCollectionForName:name];
 	[collection removeObject:@(memberIdentifier)];
 	[self.dirtyObjects addObject:object];
 

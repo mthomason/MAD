@@ -39,7 +39,7 @@
 			MTVertex *queryTable = pair.former;
 			int64_t objectID = [queryTable.object longLongValue];
 
-			RptqQueryTable *table = [context objectForEntity:NSStringFromClass([RptqQueryTable class]) identifier:objectID];
+			RptqQueryTable *table = (RptqQueryTable *)[context objectForEntity:NSStringFromClass([RptqQueryTable class]) identifier:objectID];
 			NSAssert(table != nil, @"Expect a table.");
 			if (table != nil) {
 				if (tableCounter != 0) [result appendString:@",\n"];

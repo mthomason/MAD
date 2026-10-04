@@ -561,7 +561,7 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 + (instancetype)newDocumentSectionOfType:(MADDocumentSectionType)type
 				 forManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 
-	RptqDocumentSection *section = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentSection class])
+	RptqDocumentSection *section = (RptqDocumentSection *)[managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentSection class])
 																  identifier:0];
 	section.visibility = YES;
 	section.type = type;

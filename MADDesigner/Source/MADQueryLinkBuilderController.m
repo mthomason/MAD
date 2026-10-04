@@ -110,8 +110,8 @@
 		
 		
 		RptqQueryLinks *link;
-		RptqQueryField *firstField = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.firstFieldID];
-		RptqQueryField *secondField = [managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.secondFieldID];
+		RptqQueryField *firstField = (RptqQueryField *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.firstFieldID];
+		RptqQueryField *secondField = (RptqQueryField *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:self.secondFieldID];
 		link = [RptqQueryLinks newQueryLinksWithLeftField: firstField
 											   rightField: secondField
 												 joinType: self.linkType
@@ -140,7 +140,7 @@
 									withFieldID: (int64_t)fieldID {
 	
 	RptqStoreContext *context = self.document.storeContext;
-	RptqQueryField *queryField = [context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
+	RptqQueryField *queryField = (RptqQueryField *)[context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:fieldID];
 	
 	[self.navigationController popToViewController: self animated: YES];
 	
@@ -206,7 +206,7 @@
 
 	if (excludeTableID != 0) {
 		RptqStoreContext *moc = document.storeContext;
-		RptqQueryTable *excludeTable = [moc objectForEntity:NSStringFromClass([RptqQueryTable class]) identifier:excludeTableID];
+		RptqQueryTable *excludeTable = (RptqQueryTable *)[moc objectForEntity:NSStringFromClass([RptqQueryTable class]) identifier:excludeTableID];
 		NSString *alias = [excludeTable.alias copy];
 		NSArray <NSString *> *excludeTables = alias != nil ?
 										[[NSArray alloc] initWithObjects:alias, nil] :

@@ -47,7 +47,7 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
 - (instancetype)initWithManagedObjectContext:(RptqStoreContext *)managedObjectContext
                                databaseClass:(Class)databaseClass {
     if (self = [super init]) {
-        NSArray <RptqDocumentSection *> *sections = [managedObjectContext objectsForEntity:NSStringFromClass([RptqDocumentSection class])];
+        NSArray <RptqDocumentSection *> *sections = (NSArray<RptqDocumentSection *> *)[managedObjectContext objectsForEntity:NSStringFromClass([RptqDocumentSection class])];
         NSMutableArray <NSDictionary *> *documentSections = [NSMutableArray arrayWithCapacity:sections.count];
         for (RptqDocumentSection *section in sections) {
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];

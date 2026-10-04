@@ -46,8 +46,8 @@
 				 field1ID: (int64_t)field1ID
 				 field2ID: (int64_t)field2ID {
 
-	RptqQueryField *field1 = [self.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field1ID];
-	RptqQueryField *field2 = [self.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field2ID];
+	RptqQueryField *field1 = (RptqQueryField *)[self.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field1ID];
+	RptqQueryField *field2 = (RptqQueryField *)[self.storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field2ID];
 	
 	self.add2dComponent =       @(barcode.has2dComponent);
 	self.barcodeBorderStyle =   barcode.barcodeBorderStyle;
@@ -81,7 +81,7 @@
 		NSString *className = NSStringFromClass([RptqDocumentElementBarcode class]);
 		RptqStoreContext *objectContext = queryFieldOne.storeContext;
 
-		reportObject = [objectContext insertObjectForEntity:className identifier:0];
+		reportObject = (RptqDocumentElementBarcode *)[objectContext insertObjectForEntity:className identifier:0];
 		reportObject.add2dComponent = barcode.has2dComponentEnabled;
 		reportObject.barcodeBorderStyle = barcode.barcodeBorderStyle;
 		reportObject.barcodeBorderWidth = barcode.barcodeBorderWidth;

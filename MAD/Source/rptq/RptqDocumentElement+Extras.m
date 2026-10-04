@@ -134,28 +134,28 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 - (void)awakeFromInsert {
 	RptqStoreContext *context = self.storeContext;
 	if (self.alignment == nil) {
-		self.alignment = [context insertObjectForEntity:NSStringFromClass([RptqAlignment class]) identifier:0];
+		self.alignment = (RptqAlignment *)[context insertObjectForEntity:NSStringFromClass([RptqAlignment class]) identifier:0];
 	}
 	if (self.border == nil) {
-		self.border = [context insertObjectForEntity:NSStringFromClass([RptqBorder class]) identifier:0];
+		self.border = (RptqBorder *)[context insertObjectForEntity:NSStringFromClass([RptqBorder class]) identifier:0];
 	}
 	if (self.dropPoint == nil) {
-		self.dropPoint = [context insertObjectForEntity:NSStringFromClass([RptqPoint class]) identifier:0];
+		self.dropPoint = (RptqPoint *)[context insertObjectForEntity:NSStringFromClass([RptqPoint class]) identifier:0];
 	}
 	if (self.margin == nil) {
-		self.margin = [context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
+		self.margin = (RptqDirectionalAsymmetry *)[context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
 	}
 	if (self.numericFormat == nil) {
-		self.numericFormat = [context insertObjectForEntity:NSStringFromClass([RptqNumericFormat class]) identifier:0];
+		self.numericFormat = (RptqNumericFormat *)[context insertObjectForEntity:NSStringFromClass([RptqNumericFormat class]) identifier:0];
 	}
 	if (self.padding == nil) {
-		self.padding = [context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
+		self.padding = (RptqDirectionalAsymmetry *)[context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
 	}
 	if (self.rect == nil) {
-		self.rect = [context insertObjectForEntity:NSStringFromClass([RptqRect class]) identifier:0];
+		self.rect = (RptqRect *)[context insertObjectForEntity:NSStringFromClass([RptqRect class]) identifier:0];
 	}
 	if (self.textStyle == nil) {
-		self.textStyle = [context insertObjectForEntity:NSStringFromClass([RptqTextStyle class]) identifier:0];
+		self.textStyle = (RptqTextStyle *)[context insertObjectForEntity:NSStringFromClass([RptqTextStyle class]) identifier:0];
 	}
 
 	self.fontname = [MADFont defaultFamily];

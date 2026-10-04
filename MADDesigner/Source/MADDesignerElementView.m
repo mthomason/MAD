@@ -280,7 +280,7 @@
 - (void)resize:(CGSize)size {
 
 	RptqStoreContext *managedObjectContext = self.managedObjectContext;
-	RptqDocumentElement *documentObject = [managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:self.objectID];
+	RptqDocumentElement *documentObject = (RptqDocumentElement *)[managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:self.objectID];
 	[documentObject setSizeValue:size];
 
 	if ([managedObjectContext hasChanges]) {

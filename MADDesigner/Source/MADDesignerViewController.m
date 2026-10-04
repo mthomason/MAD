@@ -2697,7 +2697,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	NSNumber *objectId = @(cell.identifier);
 	
 	MADocument *document = _document;
-	__kindof RptqDocumentElement *element = [document.storeContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:cellIdentifier];
+	__kindof RptqDocumentElement *element = (__kindof RptqDocumentElement *)[document.storeContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:cellIdentifier];
 	MADDesignerSectionView *sectionView = [self getSectionViewForDocumentSection:element.inSectionRow.inSection];
 	
 	NSNumber *sectionIdentifier = [[NSNumber alloc] initWithLongLong:sectionView.identifier];

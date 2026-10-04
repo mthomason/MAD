@@ -160,7 +160,7 @@ static os_log_t log_mad;
 - (MADDatabaseType)driverType {
 	
 	if (_driverType == MADDatabaseTypeNotSet) {
-		RptqDatabase *database = [self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
+		RptqDatabase *database = (RptqDatabase *)[self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
 		if (database) _driverType = (MADDatabaseType)database.databaseDriverTypeEnum;
 	}
 	return _driverType;
@@ -169,7 +169,7 @@ static os_log_t log_mad;
 - (NSString *)schemaName {
 
 	if (!_driverDBName) {
-		RptqDatabase *database = [self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
+		RptqDatabase *database = (RptqDatabase *)[self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
 		_driverDBName = database.ownedByUser.dbname.copy;
 	}
 	return _driverDBName;
@@ -178,7 +178,7 @@ static os_log_t log_mad;
 - (NSString *)driverID {
 
 	if (!_driverID) {
-		RptqDatabase *database = [self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
+		RptqDatabase *database = (RptqDatabase *)[self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
 		_driverID = database.ownedByUser.driverID.copy;
 	}
 	return _driverID;
@@ -187,7 +187,7 @@ static os_log_t log_mad;
 - (NSString *)driverName {
 
 	if (!_driverName) {
-		RptqDatabase *database = [self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
+		RptqDatabase *database = (RptqDatabase *)[self.managedObjectContext objectForEntity:NSStringFromClass([RptqDatabase class]) identifier:self.identifier];
 		_driverName = database.ownedByUser.dbname.copy;
 	}
 	return _driverName;

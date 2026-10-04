@@ -28,10 +28,10 @@ static NSString *keyStyle = nil;
 - (void)awakeFromInsert {
 	RptqStoreContext *context = self.storeContext;
 	if (self.width == nil) {
-		self.width = [context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
+		self.width = (RptqDirectionalAsymmetry *)[context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
 	}
 	if (self.style == nil) {
-		self.style = [context insertObjectForEntity:NSStringFromClass([RptqDirectionalProperty class]) identifier:0];
+		self.style = (RptqDirectionalProperty *)[context insertObjectForEntity:NSStringFromClass([RptqDirectionalProperty class]) identifier:0];
 	}
 }
 

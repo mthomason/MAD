@@ -42,7 +42,7 @@
 + (instancetype)newQueryGroupQueryWithSortOrder:(MADSortOrder)sortOrder
 						andManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 
-	RptqQueryGroup *queryGroup = [managedObjectContext insertObjectForEntity:NSStringFromClass([RptqQueryGroup class])
+	RptqQueryGroup *queryGroup = (RptqQueryGroup *)[managedObjectContext insertObjectForEntity:NSStringFromClass([RptqQueryGroup class])
 																 identifier:0];
 
 	queryGroup.sort = sortOrder;
