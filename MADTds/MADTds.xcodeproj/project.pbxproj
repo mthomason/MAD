@@ -10,12 +10,10 @@
 		4C4EC72E2DC99AE5001DBEBE /* libiconv.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4EC72D2DC99AE5001DBEBE /* libiconv.2.tbd */; };
 		4C6894EF2CF0F88E00BD38DF /* MADTdsDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6894EE2CF0F88E00BD38DF /* MADTdsDb.m */; };
 		4C6894F22CF0F8D400BD38DF /* MADTdsDb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C7C38012DF612D0008BCFA6 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7C37FF2DF612CF008BCFA6 /* libssl.a */; };
-		4C7C38022DF612D0008BCFA6 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7C38002DF612D0008BCFA6 /* libcrypto.a */; };
+		4CDA7B0600000000000000B2 /* openssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0600000000000000B1 /* openssl.xcframework */; };
 		4CCABCDE2CF0B75A008EC875 /* MADTds.docc in Sources */ = {isa = PBXBuildFile; fileRef = 4CCABCDD2CF0B75A008EC875 /* MADTds.docc */; };
 		4CCABCDF2CF0B75A008EC875 /* MADTds.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCABCDC2CF0B75A008EC875 /* MADTds.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CCF93992DD5EC2A00E8BA0F /* libct.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCF93972DD5EC2A00E8BA0F /* libct.a */; };
-		4CCF939A2DD5EC2A00E8BA0F /* libsybdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CCF93982DD5EC2A00E8BA0F /* libsybdb.a */; };
+		4CDA7B0500000000000000B2 /* freetds.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0500000000000000B1 /* freetds.xcframework */; };
 		4CCF93A82DD5ED4C00E8BA0F /* cspublic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCF939D2DD5ED4C00E8BA0F /* cspublic.h */; };
 		4CCF93A92DD5ED4C00E8BA0F /* ctpublic.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCF939F2DD5ED4C00E8BA0F /* ctpublic.h */; };
 		4CCF93AA2DD5ED4C00E8BA0F /* cstypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCF939E2DD5ED4C00E8BA0F /* cstypes.h */; };
@@ -35,14 +33,12 @@
 		4C6894EE2CF0F88E00BD38DF /* MADTdsDb.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTdsDb.m; sourceTree = "<group>"; };
 		4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTdsDb.h; sourceTree = "<group>"; };
 		4C6895162CF1F95000BD38DF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		4C7C37FF2DF612CF008BCFA6 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../Compressor/library/openssl/iOS/lib/libssl.a; sourceTree = "<group>"; };
-		4C7C38002DF612D0008BCFA6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../Compressor/library/openssl/iOS/lib/libcrypto.a; sourceTree = "<group>"; };
+		4CDA7B0600000000000000B1 /* openssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = openssl.xcframework; path = ../Compressor/library/openssl.xcframework; sourceTree = "<group>"; };
 		4CBF04412E85194500812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CCABCD92CF0B75A008EC875 /* MADTds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADTds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CCABCDC2CF0B75A008EC875 /* MADTds.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADTds.h; sourceTree = "<group>"; };
 		4CCABCDD2CF0B75A008EC875 /* MADTds.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = MADTds.docc; sourceTree = "<group>"; };
-		4CCF93972DD5EC2A00E8BA0F /* libct.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libct.a; path = "../Compressor/library/freetds/iOS-arm64/lib/libct.a"; sourceTree = "<group>"; };
-		4CCF93982DD5EC2A00E8BA0F /* libsybdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsybdb.a; path = "../Compressor/library/freetds/iOS-arm64/lib/libsybdb.a"; sourceTree = "<group>"; };
+		4CDA7B0500000000000000B1 /* freetds.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = freetds.xcframework; path = ../Compressor/library/freetds.xcframework; sourceTree = "<group>"; };
 		4CCF939C2DD5ED4C00E8BA0F /* bkpublic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bkpublic.h; sourceTree = "<group>"; };
 		4CCF939D2DD5ED4C00E8BA0F /* cspublic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cspublic.h; sourceTree = "<group>"; };
 		4CCF939E2DD5ED4C00E8BA0F /* cstypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cstypes.h; sourceTree = "<group>"; };
@@ -62,10 +58,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C7C38012DF612D0008BCFA6 /* libssl.a in Frameworks */,
-				4C7C38022DF612D0008BCFA6 /* libcrypto.a in Frameworks */,
-				4CCF93992DD5EC2A00E8BA0F /* libct.a in Frameworks */,
-				4CCF939A2DD5EC2A00E8BA0F /* libsybdb.a in Frameworks */,
+				4CDA7B0500000000000000B2 /* freetds.xcframework in Frameworks */,
+				4CDA7B0600000000000000B2 /* openssl.xcframework in Frameworks */,
 				4C4EC72E2DC99AE5001DBEBE /* libiconv.2.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,11 +70,9 @@
 		4C68950F2CF0FCFC00BD38DF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C7C38002DF612D0008BCFA6 /* libcrypto.a */,
-				4C7C37FF2DF612CF008BCFA6 /* libssl.a */,
+				4CDA7B0500000000000000B1 /* freetds.xcframework */,
+				4CDA7B0600000000000000B1 /* openssl.xcframework */,
 				4CCF939B2DD5ED0F00E8BA0F /* freetds */,
-				4CCF93972DD5EC2A00E8BA0F /* libct.a */,
-				4CCF93982DD5EC2A00E8BA0F /* libsybdb.a */,
 				4C4EC72D2DC99AE5001DBEBE /* libiconv.2.tbd */,
 			);
 			name = Frameworks;
@@ -141,7 +133,7 @@
 				4CCF93A62DD5ED4C00E8BA0F /* tds_sysdep_public.h */,
 			);
 			name = include;
-			path = ../Compressor/library/freetds/iOS/include;
+			path = ../Compressor/library/freetds/include;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
@@ -174,6 +166,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4CCABCE22CF0B75A008EC875 /* Build configuration list for PBXNativeTarget "MADTds" */;
 			buildPhases = (
+				4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */,
 				4CCABCD42CF0B75A008EC875 /* Headers */,
 				4CCABCD52CF0B75A008EC875 /* Sources */,
 				4CCABCD62CF0B75A008EC875 /* Frameworks */,
@@ -231,6 +224,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Ensure Libraries (Compressor)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -euo pipefail\n\"${SRCROOT}/../Compressor/build.sh\" --platforms ios,simulator freetds\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4CCABCD52CF0B75A008EC875 /* Sources */ = {
@@ -364,6 +374,7 @@
 		4CCABCE32CF0B75A008EC875 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -371,7 +382,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GENERATE_INFOPLIST_FILE = YES;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/iOS/include\"";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/include\"";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -380,14 +391,6 @@
 					"@loader_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
-					"$(SRCROOT)/../Compressor/library/freetds/iOS/lib",
-					"$(SRCROOT)/../Compressor/library/openssl/iOS/lib",
-				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"$(SRCROOT)/../Compressor/library/freetds/iOS-simulator/lib",
-					"$(SRCROOT)/../Compressor/library/openssl/iOS-simulator/lib",
-				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.madtds;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -403,6 +406,7 @@
 		4CCABCE42CF0B75A008EC875 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
@@ -416,7 +420,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GENERATE_INFOPLIST_FILE = YES;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/iOS/include\"";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/openssl/include\"";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -425,14 +429,6 @@
 					"@loader_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = (
-					"$(SRCROOT)/../Compressor/library/freetds/iOS/lib",
-					"$(SRCROOT)/../Compressor/library/openssl/iOS/lib",
-				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"$(SRCROOT)/../Compressor/library/freetds/iOS-simulator/lib",
-					"$(SRCROOT)/../Compressor/library/openssl/iOS-simulator/lib",
-				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.madtds;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";

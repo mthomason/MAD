@@ -162,7 +162,13 @@ build_lib() {
 	local lib="$1"
 	export_lib_env "${lib}"
 
-	if [[ "${REBUILD}" == "0" ]] && is_fresh "${lib}"; then
+	# --rebuild forces only the named libraries; dependencies get the
+	# normal fresh check, so iterating on one recipe does not rebuild its
+	# whole dependency chain every time.
+	local force=0 explicit_key="EXPLICIT_${lib}"
+	[[ "${REBUILD}" == "1" && -n "${!explicit_key:-}" ]] && force=1
+
+	if [[ "${force}" == "0" ]] && is_fresh "${lib}"; then
 		log "${lib} $(matrix_get "${lib}" version) is fresh"
 		return 0
 	fi
@@ -300,6 +306,9 @@ main() {
 
 	acquire_lock
 	local lib failures=0
+	for lib in "${LIBS[@]}"; do
+		printf -v "EXPLICIT_${lib}" "1"
+	done
 	resolve_order "${LIBS[@]}"
 	for lib in "${ORDER[@]}"; do
 		build_lib "${lib}" || { echo "FAIL ${lib}"; failures=1; }

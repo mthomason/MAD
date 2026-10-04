@@ -63,6 +63,14 @@ for platform in ${PLATFORMS}; do
 				--with-openssl="${openssl_install}"
 			make -j"$(sysctl -n hw.ncpu)"
 			make install
+			# The shipped headers, not the sources, carry one local
+			# modification: BOOL is commented out of sybdb.h because
+			# Objective-C already typedefs it, so the redefinition fails
+			# the framework build.  The library itself must keep the
+			# typedef -- dblib's C sources use BOOL -- which is why the
+			# legacy tree patched the header copies after building.
+			sed -i '' 's/^typedef int BOOL;$/\/\/typedef int BOOL;/' \
+				"${outdir}/install/include/sybdb.h"
 		)
 		cp "${outdir}/install/lib/libct.a" "${outdir}/libct.a"
 		cp "${outdir}/install/lib/libsybdb.a" "${outdir}/libsybdb.a"
