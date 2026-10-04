@@ -15,12 +15,6 @@ TEST-DB-INFO.md
 Compressor/src/
 Compressor/build_temp/
 Compressor/bin/iPhoneSimulator-i386.sdk/
-Compressor/library/libpng-old/
-Compressor/src/libpng-1.6.37/
-Compressor/freetds-1.4.26/
-Compressor/library/libmysqlclient-old
-Compressor/source
-Compressor/build/freetds/
 
 # Compressor artifacts -- built on demand by Compressor/build.sh, never
 # committed.  (The legacy tracked trees under Compressor/library stay until
