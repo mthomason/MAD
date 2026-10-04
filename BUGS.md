@@ -734,6 +734,32 @@ Status key:
   currently none.  The property is intentionally weak (`RptqObject.h:33`).
 - **Where:** `MAD/Source/rptq/store/RptqObject.m:234-246`.
 
+
+### The nullability analyzer reports nil crossing nonnull boundaries
+- **Status:** Open -- documented from the analyzer run; each site is a crash risk if its
+  value is ever nil.
+- **What:** `xcodebuild analyze` reports fourteen sites where nil crosses a boundary the
+  declarations call non-null.  The return sites (the method promises non-nil and then
+  `return nil` on a guard path): `MADDocumentObjectDataReference.m:219,225,231,243,253,258`,
+  `MADocument.m:978`, `MADStoreGraph.m:65`.  The argument sites (a possibly-nil value
+  passed to a non-null parameter): `MADModelQuery.m:462,483` (a nil table into a
+  dictionary), `MADPrintPageElement.m:222`, `RptqDocument+Extras.m:610`
+  (`[hasObjects insertObject:reportObject atIndex:0]` with a possibly-nil object).
+- **Note:** `MADocument.m:598,624` appear here too and are covered by the
+  `writeContents:` entry above.
+- **Where:** the file:line list above.
+- **Evidence:** `nullability.NullReturnedFromNonnull` and
+  `nullability.NullPassedToNonnull` in `xcodebuild analyze`.
+
+
+### MADDataTableFast returns nil from methods declared non-null
+- **Status:** Open -- documented from the analyzer run.
+- **What:** Five `return nil` / possibly-nil returns sit on paths of methods the
+  declarations say always return a value: `:964`, `:973`, `:987`, `:1280`, `:1416`.
+  Callers that trust the declaration will not nil-check.
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:964,973,987,1280,1416`.
+- **Evidence:** `nullability.NullReturnedFromNonnull` in `xcodebuild analyze`.
+
 ## MADFoundation
 
 ### `MADOperation -willEnqueue` advances past `Pending` to `Ready`
@@ -2281,6 +2307,15 @@ header search path.
   `MADToolboxStyleViewController.m:609` is uninitialized -- the value can be read before
   any assignment on some paths.
 - **Where:** `MADDesigner/Source/MADToolboxStyleViewController.m:609`.
+
+
+### The app passes possibly-nil values to non-null parameters
+- **Status:** Open -- documented from the analyzer run.
+- **What:** Three argument sites where a value that can be nil reaches a parameter the
+  declarations call non-null: `AppDelegate.m:210`, `MADQueryBuilderSplitViewController.m:151`,
+  `MADQueryChooseFieldController.m:169`.
+- **Where:** the file:line list above.
+- **Evidence:** `nullability.NullPassedToNonnull` in `xcodebuild analyze`.
 
 ## Build wiring (Xcode references)
 
