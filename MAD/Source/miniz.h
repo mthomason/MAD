@@ -1,9 +1,12 @@
 //
-//  madmini.h
+//  miniz.h
 //  MAD Designer
 //
-//  Created by Michael Thomason on 5/13/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Vendored into MAD Designer by Michael Thomason on 5/13/16.
+//
+//  The original file is miniz.h, the public interface to miniz v1.15 by
+//  Rich Geldreich <richgel99@gmail.com> - public domain, released under
+//  the "unlicense" statement reproduced at the end of miniz.c.
 //
 
 #ifndef miniz_h

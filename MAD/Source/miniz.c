@@ -2,8 +2,13 @@
 //  miniz.c
 //  MAD Designer
 //
-//  Created by Michael Thomason on 5/13/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Vendored into MAD Designer by Michael Thomason on 5/13/16.
+//
+//  The original file is miniz.c v1.15 - public domain deflate/inflate,
+//  zlib-subset, ZIP reading/writing/appending, PNG writing - by
+//  Rich Geldreich <richgel99@gmail.com>, last updated Oct. 13, 2013.
+//  It is released into the public domain; see the "unlicense" statement
+//  at the end of this file.
 //
 
 #include "miniz.h"
