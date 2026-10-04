@@ -192,9 +192,9 @@
 		4C130AF01BA8075B0022665F /* zint.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C130A391BA8075B0022665F /* zint.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C130B121BA80C1A0022665F /* Foundation.framework */; };
 		4C1CC25624C5E23D0027A454 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1CC25524C5E23D0027A454 /* CoreServices.framework */; };
-		4C2915FE24AC74AB00EC794B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915FD24AC74AB00EC794B /* libz.tbd */; };
 		4C29160424AC74FA00EC794B /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160324AC74FA00EC794B /* MADCocoaExtensions.framework */; };
-		4CA8B2ED2DD5E193001E27B3 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8B2EC2DD5E193001E27B3 /* libpng.a */; };
+		4CDA7B0500000000000000B2 /* libpng.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0500000000000000B1 /* libpng.xcframework */; };
+		4CDA7B0600000000000000B2 /* zlib.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0600000000000000B1 /* zlib.xcframework */; };
 		4CA8B2F62DD5E4CA001E27B3 /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA8B2F22DD5E4CA001E27B3 /* png.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA8B2F72DD5E4CA001E27B3 /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA8B2EF2DD5E4CA001E27B3 /* pngconf.h */; };
 		4CA8B2F82DD5E4CA001E27B3 /* pngconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA8B2F32DD5E4CA001E27B3 /* pngconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -405,13 +405,12 @@
 		4C130A391BA8075B0022665F /* zint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = zint.h; path = MADBarcodes/zint.h; sourceTree = "<group>"; };
 		4C130AF41BA807FE0022665F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C130B121BA80C1A0022665F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		4C130B141BA80D240022665F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4C1CC25524C5E23D0027A454 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
 		4C2915FB24AC74AA00EC794B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C2915FC24AC74AB00EC794B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		4C2915FD24AC74AB00EC794B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4C29160324AC74FA00EC794B /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4CA8B2EC2DD5E193001E27B3 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../Compressor/library/libpng/libpng.a; sourceTree = "<group>"; };
+		4CDA7B0500000000000000B1 /* libpng.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libpng.xcframework; path = ../Compressor/library/libpng.xcframework; sourceTree = "<group>"; };
+		4CDA7B0600000000000000B1 /* zlib.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = zlib.xcframework; path = ../Compressor/library/zlib.xcframework; sourceTree = "<group>"; };
 		4CA8B2EE2DD5E4CA001E27B3 /* png.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
 		4CA8B2EF2DD5E4CA001E27B3 /* pngconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
 		4CA8B2F02DD5E4CA001E27B3 /* pnglibconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
@@ -429,8 +428,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CA8B2ED2DD5E193001E27B3 /* libpng.a in Frameworks */,
-				4C2915FE24AC74AB00EC794B /* libz.tbd in Frameworks */,
+				4CDA7B0500000000000000B2 /* libpng.xcframework in Frameworks */,
+				4CDA7B0600000000000000B2 /* zlib.xcframework in Frameworks */,
 				4C29160424AC74FA00EC794B /* MADCocoaExtensions.framework in Frameworks */,
 				4C130B131BA80C1A0022665F /* Foundation.framework in Frameworks */,
 				4C1CC25624C5E23D0027A454 /* CoreServices.framework in Frameworks */,
@@ -698,7 +697,6 @@
 		4C130B091BA808970022665F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4C130B141BA80D240022665F /* libz.tbd */,
 				4C130B121BA80C1A0022665F /* Foundation.framework */,
 				4C130AF41BA807FE0022665F /* MobileCoreServices.framework */,
 			);
@@ -708,10 +706,10 @@
 		4C865D871DA525610057678C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4CA8B2EC2DD5E193001E27B3 /* libpng.a */,
+				4CDA7B0500000000000000B1 /* libpng.xcframework */,
+				4CDA7B0600000000000000B1 /* zlib.xcframework */,
 				4C1CC25524C5E23D0027A454 /* CoreServices.framework */,
 				4C29160324AC74FA00EC794B /* MADCocoaExtensions.framework */,
-				4C2915FD24AC74AB00EC794B /* libz.tbd */,
 				4C2915FC24AC74AB00EC794B /* Foundation.framework */,
 				4C2915FB24AC74AA00EC794B /* MobileCoreServices.framework */,
 				4C865D8A1DA525780057678C /* png */,
@@ -746,7 +744,7 @@
 				4CA8B2F42DD5E4CA001E27B3 /* pnglibconf.h */,
 			);
 			name = include;
-			path = ../Compressor/library/libpng/iphoneos/arm64/include;
+			path = ../Compressor/library/libpng/include;
 			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
@@ -861,6 +859,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4C13097E1BA8068C0022665F /* Build configuration list for PBXNativeTarget "MADBarcodes" */;
 			buildPhases = (
+				4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */,
 				4C1309651BA8068B0022665F /* Sources */,
 				4C1309661BA8068B0022665F /* Frameworks */,
 				4C1309671BA8068B0022665F /* Headers */,
@@ -946,6 +945,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Ensure Libraries (Compressor)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -euo pipefail\n\"${SRCROOT}/../Compressor/build.sh\" --platforms ios,simulator libpng\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4C1309651BA8068B0022665F /* Sources */ = {
@@ -1183,6 +1199,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -1203,7 +1220,7 @@
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/libpng/iphoneos/arm64/include\"";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/libpng/include\"";
 				INFOPLIST_FILE = MADBarcodes/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1211,8 +1228,6 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/../Compressor/library/libpng/iphoneos\"";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/../Compressor/library/libpng/iphonesimulator\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.barcodes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1228,6 +1243,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
@@ -1252,7 +1268,7 @@
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_SHADOW = YES;
 				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/libpng/iphoneos/arm64/include\"";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../Compressor/library/libpng/include\"";
 				INFOPLIST_FILE = MADBarcodes/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1260,8 +1276,6 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/../Compressor/library/libpng/iphoneos\"";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/../Compressor/library/libpng/iphonesimulator\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.barcodes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
