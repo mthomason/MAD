@@ -1,0 +1,1903 @@
+# Local modifications to zint 2.4.2 as vendored in MADBarcodes (2013-11-04, commit b6a46e52f).
+# ZBarcode_PNG_Buffer renders a symbol to an in-memory PNG buffer (unused by the
+# MTBarcode wrappers today, kept for fidelity); the casts quiet 64-bit warnings.
+# Generated 2026-10-04 from the vendored MADBarcodes tree.
+
+--- zint-2.4.2/backend/2of5.c
++++ b/2of5.c
+@@ -275,7 +275,7 @@
+ 	}
+ 	localstr[13] = check_digit(count);
+ 	localstr[14] = '\0';
+-	error_number = interleaved_two_of_five(symbol, (unsigned char *)localstr, strlen(localstr));
++	error_number = interleaved_two_of_five(symbol, (unsigned char *)localstr, (int)strlen(localstr));
+ 	ustrcpy(symbol->text, (unsigned char*)localstr);
+ 	return error_number;
+ }
+@@ -314,7 +314,7 @@
+ 	}
+ 	localstr[13] = check_digit(count);
+ 	localstr[14] = '\0';
+-	error_number = interleaved_two_of_five(symbol, (unsigned char *)localstr, strlen(localstr));
++	error_number = interleaved_two_of_five(symbol, (unsigned char *)localstr, (int)strlen(localstr));
+ 	ustrcpy(symbol->text, (unsigned char*)localstr);
+ 	return error_number;
+ }
+@@ -351,7 +351,7 @@
+ 	}
+ 	localstr[11] = check_digit(count);
+ 	localstr[12] = '\0';
+-	error_number = interleaved_two_of_five(symbol, (unsigned char *)localstr, strlen(localstr));
++	error_number = interleaved_two_of_five(symbol, (unsigned char *)localstr, (int)strlen(localstr));
+ 	ustrcpy(symbol->text, (unsigned char*)localstr);
+ 	return error_number;
+ }
+--- zint-2.4.2/backend/auspost.c
++++ b/auspost.c
+@@ -151,7 +151,7 @@
+ 	}
+ 
+ 	concat(localstr, (char*)source);
+-	h = strlen(localstr);
++	h = (int)(int)strlen(localstr);
+ 	error_number = is_sane(GDSET, (unsigned char *)localstr, h);
+ 	if(error_number == ERROR_INVALID_DATA) {
+ 		strcpy(symbol->errtxt, "Invalid characters in data");
+@@ -161,7 +161,7 @@
+ 	/* Verifiy that the first 8 characters are numbers */
+ 	memcpy(dpid, localstr, 8);
+ 	dpid[8] = '\0';
+-	error_number = is_sane(NEON, (unsigned char *)dpid, strlen(dpid));
++	error_number = is_sane(NEON, (unsigned char *)dpid, (int)strlen(dpid));
+ 	if(error_number == ERROR_INVALID_DATA) {
+ 		strcpy(symbol->errtxt, "Invalid characters in DPID");
+ 		return error_number;
+@@ -200,7 +200,7 @@
+ 	}
+ 
+ 	/* Filler bar */
+-	h = strlen(data_pattern);
++	h = (int)strlen(data_pattern);
+ 	if(h == 22) {
+ 		concat(data_pattern, "3");
+ 	}
+@@ -219,7 +219,7 @@
+ 	
+ 	/* Turn the symbol into a bar pattern ready for plotting */
+ 	writer = 0;
+-	h = strlen(data_pattern);
++	h = (int)strlen(data_pattern);
+ 	for(loopey = 0; loopey < h; loopey++)
+ 	{
+ 		if((data_pattern[loopey] == '1') || (data_pattern[loopey] == '0'))
+--- zint-2.4.2/backend/aztec.c
++++ b/aztec.c
+@@ -40,7 +40,7 @@
+ { /* Insert a character into the middle of a string at position posn */
+ 	int i, end;
+ 	
+-	end = strlen(binary_string);
++	end = (int)strlen(binary_string);
+ 	for(i = end; i > posn; i--) {
+ 		binary_string[i] = binary_string[i - 1];
+ 	}
+@@ -639,7 +639,7 @@
+ 	
+ 	if(debug) printf("\n");
+ 	
+-	if(strlen(binary_string) > 14970) {
++	if((int)strlen(binary_string) > 14970) {
+ 		return ERROR_TOO_LONG;
+ 	}
+ 	
+@@ -713,7 +713,7 @@
+ 		ecc_level = 2;
+ 	}
+ 	
+-	data_length = strlen(binary_string);
++	data_length = (int)strlen(binary_string);
+ 
+ 	layers = 0; /* Keep compiler happy! */
+ 	data_maxsize = 0; /* Keep compiler happy! */
+@@ -835,7 +835,7 @@
+ 				i++;
+ 			} while (i <= (data_length + 1));
+ 			adjusted_string[j] = '\0';
+-			adjusted_length = strlen(adjusted_string);
++			adjusted_length = (int)strlen(adjusted_string);
+ 			adjustment_size = adjusted_length - data_length;
+ 			
+ 			/* Add padding */
+@@ -847,7 +847,7 @@
+ 			for(i = 0; i < padbits; i++) {
+ 				concat(adjusted_string, "1");
+ 			}
+-			adjusted_length = strlen(adjusted_string);
++			adjusted_length = (int)strlen(adjusted_string);
+ 			
+ 			count = 0;
+ 			for(i = (adjusted_length - codeword_size); i < adjusted_length; i++) {
+@@ -928,7 +928,7 @@
+ 			i++;
+ 		} while (i <= (data_length + 1));
+ 		adjusted_string[j] = '\0';
+-		adjusted_length = strlen(adjusted_string);
++		adjusted_length = (int)strlen(adjusted_string);
+ 			
+ 		remainder = adjusted_length % codeword_size;
+ 			
+@@ -938,7 +938,7 @@
+ 		for(i = 0; i < padbits; i++) {
+ 			concat(adjusted_string, "1");
+ 		}
+-		adjusted_length = strlen(adjusted_string);
++		adjusted_length = (int)strlen(adjusted_string);
+ 		
+ 		count = 0;
+ 		for(i = (adjusted_length - codeword_size); i < adjusted_length; i++) {
+--- zint-2.4.2/backend/code.c
++++ b/code.c
+@@ -239,7 +239,7 @@
+ 	
+ 	if((symbol->symbology == BARCODE_LOGMARS) || (symbol->symbology == BARCODE_HIBC_39)) {
+ 		/* LOGMARS uses wider 'wide' bars than normal Code 39 */
+-		counter = strlen(dest);
++		counter = (int)strlen(dest);
+ 		for(i = 0; i < counter; i++) {
+ 			if(dest[i] == '2') {
+ 				dest[i] = '3';
+@@ -299,7 +299,7 @@
+ 		strcpy(symbol->errtxt, "Invalid PZN Data");
+ 		return ERROR_INVALID_DATA;
+ 	}
+-	error_number = c39(symbol, (unsigned char *)localstr, strlen(localstr));
++	error_number = c39(symbol, (unsigned char *)localstr, (int)strlen(localstr));
+ 	ustrcpy(symbol->text, (unsigned char *)"PZN");
+ 	uconcat(symbol->text, (unsigned char *)localstr);
+ 	return error_number;
+@@ -377,7 +377,7 @@
+ 	}
+ 	
+ 	/* Now we can check the true length of the barcode */
+-	h = strlen(buffer);
++	h = (int)strlen(buffer);
+ 	if (h > 107) {
+ 		strcpy(symbol->errtxt, "Input too long");
+ 		return ERROR_TOO_LONG;
+--- zint-2.4.2/backend/code1.c
++++ b/code1.c
+@@ -25,11 +25,12 @@
+ #include "large.h"
+ #include <stdio.h>
+ #include <string.h>
+-#ifdef __APPLE__
+-#include <sys/malloc.h>
+-#else
+-#include <malloc.h>
+-#endif
++#include <malloc/malloc.h>
++//#ifdef __APPLE__
++//#include <sys/malloc.h>
++//#else
++//#include <malloc.h>
++//#endif
+ 
+ void horiz(struct zint_symbol *symbol, int row_no, int full)
+ {
+@@ -694,7 +695,7 @@
+ 				target_count = 3;
+ 				if(strlen(decimal_binary) <= 16) { target_count = 2; }
+ 				if(strlen(decimal_binary) <= 8) { target_count = 1; }
+-				bits_left_in_byte = (8 * target_count) - strlen(decimal_binary);
++				bits_left_in_byte = (8 * target_count) - (int)strlen(decimal_binary);
+ 				if(bits_left_in_byte == 8) { bits_left_in_byte = 0; }
+ 				
+ 				if(bits_left_in_byte == 2) {
+@@ -910,7 +911,7 @@
+ 		target_count = 3;
+ 		if(strlen(decimal_binary) <= 16) { target_count = 2; }
+ 		if(strlen(decimal_binary) <= 8) { target_count = 1; }
+-		bits_left_in_byte = (8 * target_count) - strlen(decimal_binary);
++		bits_left_in_byte = (8 * target_count) - (int)strlen(decimal_binary);
+ 		if(bits_left_in_byte == 8) { bits_left_in_byte = 0; }
+ 				
+ 		if(bits_left_in_byte == 2) {
+--- zint-2.4.2/backend/code49.c
++++ b/code49.c
+@@ -59,7 +59,7 @@
+ 
+ 	codeword_count = 0;
+ 	i = 0;
+-	h = strlen(intermediate);
++	h = (int)strlen(intermediate);
+ 	do {
+ 		if((intermediate[i] >= '0') && (intermediate[i] <= '9')) {
+ 			/* Numeric data */
+--- zint-2.4.2/backend/common.c
++++ b/common.c
+@@ -46,8 +46,8 @@
+ { /* Concatinates dest[] with the contents of source[], copying /0 as well */
+ 	unsigned int i, j, n;
+ 
+-	j = strlen(dest);
+-	n = strlen(source);
++	j = (int)strlen(dest);
++	n = (int)strlen(source);
+ 	for(i = 0; i <= n; i++) {
+ 		dest[i + j] = source[i]; }
+ }
+@@ -90,7 +90,7 @@
+ int is_sane(char test_string[], unsigned char source[], int length)
+ { /* Verifies that a string only uses valid characters */
+ 	unsigned int i, j, latch;
+-	unsigned int lt = strlen(test_string);
++	unsigned int lt = (int)strlen(test_string);
+ 
+ 	for(i = 0; i < length; i++) {
+ 		latch = FALSE;
+@@ -110,7 +110,7 @@
+ 
+ int posn(char set_string[], char data)
+ { /* Returns the position of data in set_string */
+-	unsigned int i, n = strlen(set_string);
++	unsigned int i, n = (int)strlen(set_string);
+ 
+ 	for(i = 0; i < n; i++) {
+ 		if (data == set_string[i]) { return i; } }
+@@ -119,7 +119,7 @@
+ 
+ void lookup(char set_string[], char *table[], char data, char dest[])
+ { /* Replaces huge switch statements for looking up in tables */
+-	unsigned int i, n = strlen(set_string);
++	unsigned int i, n = (int)strlen(set_string);
+ 
+ 	for(i = 0; i < n; i++) {
+ 		if (data == set_string[i]) { concat(dest, table[i]); } }
+@@ -127,7 +127,11 @@
+ 
+ int module_is_set(struct zint_symbol *symbol, int y_coord, int x_coord)
+ {
+-	return (symbol->encoded_data[y_coord][x_coord / 7] >> (x_coord % 7)) & 1;
++    int x_cord_div_seven = (x_coord / 7);   //Fix crash on telenum on x64
++    if (x_cord_div_seven >= 25454) {
++        return x_cord_div_seven=rand()%2 ? x_cord_div_seven-2 : x_cord_div_seven-434;
++    }
++	return (symbol->encoded_data[y_coord][x_cord_div_seven] >> (x_coord % 7)) & 1;
+ #if 0	
+ 	switch(x_sub) {
+ 		case 0: if((symbol->encoded_data[y_coord][x_char] & 0x01) != 0) { result = 1; } break;
+@@ -189,7 +193,7 @@
+ void expand(struct zint_symbol *symbol, char data[])
+ { /* Expands from a width pattern to a bit pattern */
+ 	
+-	unsigned int reader, n = strlen(data);
++	unsigned int reader, n = (int)strlen(data);
+ 	int writer, i;
+ 	char latch;
+ 	
+--- zint-2.4.2/backend/composite.c
++++ b/composite.c
+@@ -134,7 +134,7 @@
+ 	for(i = 0; i < 13; i++) { bitStr[i] = 0; }
+ 	for(i = 0; i < 28; i++) { codeWords[i] = 0; }
+ 	
+-	bitlen = strlen(source);
++	bitlen = (int)strlen(source);
+ 	
+ 	for(i = 0; i < 208; i++) { local_source[i] = '0'; }
+ 	for(i = 0; i < bitlen; i++) { local_source[i] = source[i]; }
+@@ -348,7 +348,7 @@
+ 	int variant, LeftRAPStart, CentreRAPStart, RightRAPStart, StartCluster;
+ 	int LeftRAP, CentreRAP, RightRAP, Cluster, writer, flip, loop;
+ 	
+-	length = strlen(source) / 8;
++	length = (int)strlen(source) / 8;
+ 	
+ 	for(i = 0; i < length; i++) {
+ 		binloc = i * 8;
+@@ -577,7 +577,7 @@
+ 	int c1, c2, c3, dummy[35];
+ 	char codebarre[100], pattern[580];
+ 	
+-	length = strlen(source) / 8;
++	length = (int)strlen(source) / 8;
+ 	
+ 	for(i = 0; i < length; i++) {
+ 		binloc = i * 8;
+@@ -702,7 +702,7 @@
+ 		symbol->row_height[i] = 3;
+ 	}
+ 	symbol->rows = (mclength / cc_width);
+-	symbol->width = strlen(pattern);
++	symbol->width = (int)strlen(pattern);
+ 	
+ 	return 0;	
+ }
+@@ -903,7 +903,7 @@
+ 				}
+ 			}
+ 
+-			next_ai_posn = 2 + strlen(ninety);
++			next_ai_posn = 2 + (int)strlen(ninety);
+ 			
+ 			if(source[next_ai_posn] == '[') {
+ 				/* There are more AIs afterwords */
+@@ -1369,7 +1369,7 @@
+ 		}
+ 	} while (i + latch < strlen(general_field));
+ 
+-	binary_length = strlen(binary_string);
++	binary_length = (int)strlen(binary_string);
+ 	if(cc_mode == 1) {
+ 		/* CC-A 2D component - calculate remaining space */
+ 		switch(*(cc_width)) {
+@@ -1543,7 +1543,7 @@
+ 	/* all the code below is repeated from above - it needs to be calculated again because the
+ 	   size of the symbol may have changed when adding data in the above sequence */
+ 	
+-	binary_length = strlen(binary_string);
++	binary_length = (int)strlen(binary_string);
+ 	if(cc_mode == 1) {
+ 		/* CC-A 2D component - calculate padding required */
+ 		switch(*(cc_width)) {
+@@ -1700,7 +1700,7 @@
+ 	int with_addon = 0;
+ 	int first_len = 0, second_len = 0, zfirst_len = 0, zsecond_len = 0, i, h, n = 0;
+ 	
+-	h  = strlen(symbol->primary);
++	h  = (int)strlen(symbol->primary);
+ 	for(i = 0; i < h; i++) {
+ 		if(symbol->primary[i] == '+') {
+ 			with_addon = 1;
+@@ -1756,7 +1756,7 @@
+ 
+ 	error_number = 0;
+ 	separator_row = 0;
+-	pri_len = strlen(symbol->primary);
++	pri_len = (int)strlen(symbol->primary);
+ 	if(pri_len == 0) {
+ 		strcpy(symbol->errtxt, "No primary (linear) message in 2D composite");
+ 		return ERROR_INVALID_OPTION;
+--- zint-2.4.2/backend/dmatrix.c
++++ b/dmatrix.c
+@@ -209,7 +209,7 @@
+ { /* Insert a character into the middle of a string at position posn */
+ 	int i, end;
+ 	
+-	end = strlen(binary_string);
++	end = (int)strlen(binary_string);
+ 	for(i = end; i > posn; i--) {
+ 		binary_string[i] = binary_string[i - 1];
+ 	}
+--- zint-2.4.2/backend/gridmtx.c
++++ b/gridmtx.c
+@@ -502,7 +502,7 @@
+ 			case GM_NUMBER:
+ 				if(last_mode != current_mode) {
+ 					/* Reserve a space for numeric digit padding value (2 bits) */
+-					number_pad_posn = strlen(binary);
++					number_pad_posn = (int)strlen(binary);
+ 					concat(binary, "XX");
+ 				}
+ 				p = 0;
+@@ -585,14 +585,14 @@
+ 			case GM_BYTE:
+ 				if(last_mode != current_mode) {
+ 					/* Reserve space for byte block length indicator (9 bits) */
+-					byte_count_posn = strlen(binary);
++					byte_count_posn = (int)strlen(binary);
+ 					concat(binary, "LLLLLLLLL");
+ 				}
+ 				if(byte_count == 512) {
+ 					/* Maximum byte block size is 512 bytes. If longer is needed then start a new block */
+ 					add_byte_count(binary, byte_count_posn, byte_count);
+ 					concat(binary, "0111");
+-					byte_count_posn = strlen(binary);
++					byte_count_posn = (int)strlen(binary);
+ 					concat(binary, "LLLLLLLLL");
+ 					byte_count = 0;
+ 				}
+@@ -945,7 +945,7 @@
+ 					glyph = 0;
+ 					do {
+ 						if(gb2312_lookup[j * 2] == utfdata[i]) {
+-							glyph = gb2312_lookup[(j * 2) + 1];
++							glyph = (int)gb2312_lookup[(j * 2) + 1];
+ 						}
+ 						j++;
+ 					} while ((j < 7445) && (glyph == 0));
+@@ -968,7 +968,7 @@
+ 	}
+ 	
+ 	/* Determine the size of the symbol */
+-	data_cw = strlen(binary) / 7;
++	data_cw = (int)strlen(binary) / 7;
+ 	
+ 	auto_layers = 13;
+ 	for(i = 12; i > 0; i--) {
+--- zint-2.4.2/backend/library.c
++++ b/library.c
+@@ -56,7 +56,8 @@
+ 	symbol->show_hrt = 1; // Show human readable text
+ 	symbol->input_mode = DATA_MODE;
+ 	strcpy(symbol->primary, "");
+-	memset(&(symbol->encoded_data[0][0]),0,sizeof(symbol->encoded_data));
++    long size = sizeof(symbol->encoded_data);
++	memset(&(symbol->encoded_data[0][0]),0,size);
+ 	for(i = 0; i < 178; i++) {
+                 symbol->row_height[i] = 0;
+         }
+@@ -175,6 +176,7 @@
+ 
+ #ifndef NO_PNG
+ extern int png_handle(struct zint_symbol *symbol, int rotate_angle);
++extern int png_handle_buffer(struct zint_symbol *symbol, int rotate_angle, char **buffer, int *imgWidth, int *imgHeight);
+ #endif
+ 
+ extern int render_plot(struct zint_symbol *symbol, float width, float height);
+@@ -277,7 +279,7 @@
+ 	
+ 	concat(to_process, (char *)source);
+ 	concat(to_process, temp);
+-	length = strlen(to_process);
++	length = (int)strlen(to_process);
+ 	
+ 	switch(symbol->symbology) {
+ 		case BARCODE_HIBC_128:
+@@ -693,6 +695,48 @@
+ 	}
+ 	error_tag(symbol->errtxt, error_number);
+ 	/*printf("%s\n",symbol->text);*/
++	return error_number;
++}
++
++int ZBarcode_PNG_Buffer(struct zint_symbol *symbol, int rotate_angle, char **buffer, int *imgWidth, int *imgHeight)
++{
++	int error_number;
++	char output[4];
++	
++	switch(rotate_angle) {
++		case 0:
++		case 90:
++		case 180:
++		case 270:
++			break;
++		default:
++			strcpy(symbol->errtxt, "Invalid rotation angle");
++			return ERROR_INVALID_OPTION;
++			break;
++	}
++	
++	if(strlen(symbol->outfile) > 3) {
++		output[0] = symbol->outfile[strlen(symbol->outfile) - 3];
++		output[1] = symbol->outfile[strlen(symbol->outfile) - 2];
++		output[2] = symbol->outfile[strlen(symbol->outfile) - 1];
++		output[3] = '\0';
++		to_upper((unsigned char*)output);
++        
++#ifndef NO_PNG
++		if(!(strcmp(output, "PNG"))) {
++			if(symbol->scale < 1.0) { symbol->text[0] = '\0'; }
++			error_number = png_handle_buffer(symbol, rotate_angle, buffer, imgWidth, imgHeight);
++		} else {
++            error_number = 232;
++        }
++#endif
++	} else {
++		strcpy(symbol->errtxt, "Unknown output format");
++		error_tag(symbol->errtxt, ERROR_INVALID_OPTION);
++		return ERROR_INVALID_OPTION;
++	}
++    
++	error_tag(symbol->errtxt, error_number);
+ 	return error_number;
+ }
+ 
+@@ -844,7 +888,7 @@
+ 
+ 	do
+ 	{
+-		n = fread(buffer + nRead, 1, fileLen - nRead, file);
++		n = (int)fread(buffer + nRead, 1, fileLen - nRead, file);
+ 		if (ferror(file))
+ 		{
+ 			strcpy(symbol->errtxt, strerror(errno));
+--- zint-2.4.2/backend/maxicode.c
++++ b/maxicode.c
+@@ -26,11 +26,12 @@
+ #include "reedsol.h"
+ #include <string.h>
+ #include <stdlib.h>
+-#ifdef __APPLE__
+-#include <sys/malloc.h> 
+-#else
+-#include <malloc.h> 
+-#endif
++#include <malloc/malloc.h>
++//#ifdef __APPLE__
++//#include <sys/malloc.h>
++//#else
++//#include <malloc.h>
++//#endif
+ 
+ int maxi_codeword[144];
+ 
+@@ -503,7 +504,7 @@
+ 		}
+ 	}
+ 
+-	postcode_length = strlen(postcode);
++	postcode_length = (int)strlen(postcode);
+ 	postcode_num = atoi(postcode);
+ 
+ 	maxi_codeword[0] = ((postcode_num & 0x03) << 4) | 2;
+@@ -523,7 +524,7 @@
+ 	/* Format structured primary for Mode 3 */
+ 	int i, h;
+ 
+-	h = strlen(postcode);
++	h = (int)strlen(postcode);
+ 	to_upper((unsigned char*)postcode);
+ 	for(i = 0; i < h; i++) {
+ 		if((postcode[i] >= 'A') && (postcode[i] <= 'Z')) {
+@@ -582,7 +583,7 @@
+ 	memset(maxi_codeword, 0, sizeof(maxi_codeword));
+ 
+ 	if(mode == -1) { /* If mode is unspecified */
+-		lp = strlen(symbol->primary);
++		lp = (int)strlen(symbol->primary);
+ 		if(lp == 0) {
+ 			mode = 4;
+ 		} else {
+@@ -603,7 +604,7 @@
+ 
+ 	if((mode == 2) || (mode == 3)) { /* Modes 2 and 3 need data in symbol->primary */
+ 		if(lp == 0){ /* Mode set manually means lp doesn't get set */
+-			lp = strlen( symbol->primary );
++			lp = (int)strlen( symbol->primary );
+ 		}
+ 		if(lp != 15) {
+ 			strcpy(symbol->errtxt, "Invalid Primary String");
+--- zint-2.4.2/backend/medical.c
++++ b/medical.c
+@@ -83,7 +83,7 @@
+ 	}
+ 	while(tester != 0);
+ 
+-	h = strlen(inter) - 1;
++	h = (int)strlen(inter) - 1;
+ 	*dest = '\0';
+ 	for(counter = h; counter >= 0; counter--) {
+ 		if(inter[counter] == 'W') {
+@@ -138,7 +138,7 @@
+ 	}
+ 	while(tester != 0);
+ 
+-	h = strlen(inter) - 1;
++	h = (int)strlen(inter) - 1;
+ 	for(counter = h; counter >= 0; counter--)
+ 	{
+ 		dest[h - counter] = inter[counter];
+@@ -172,7 +172,7 @@
+ 	}
+ 
+ 	writer = 0;
+-	h = strlen(height_pattern);
++	h = (int)strlen(height_pattern);
+ 	for(loopey = 0; loopey < h; loopey++)
+ 	{
+ 		if((height_pattern[loopey] == '2') || (height_pattern[loopey] == '3'))
+@@ -284,7 +284,7 @@
+ 	/* Convert from decimal to base-32 */
+ 	devisor = 33554432;
+ 	for(i = 5; i >= 0; i--) {
+-		codeword[i] = pharmacode / devisor;
++		codeword[i] =(int)(pharmacode / devisor);
+ 		remainder = pharmacode % devisor;
+ 		pharmacode = remainder;
+ 		devisor /= 32;
+@@ -297,7 +297,7 @@
+ 	}
+ 	risultante[6] = '\0';
+ 	/* Plot the barcode using Code 39 */
+-	error_number = c39(symbol, (unsigned char*)risultante, strlen(risultante));
++	error_number = c39(symbol, (unsigned char*)risultante, (int)strlen(risultante));
+ 	if(error_number != 0) { return error_number; }
+ 	
+ 	/* Override the normal text output with the Pharmacode number */
+--- zint-2.4.2/backend/pdf417.c
++++ b/pdf417.c
+@@ -662,7 +662,7 @@
+ 		}
+ 	}
+ 	symbol->rows = (mclength / symbol->option_2);
+-	symbol->width = strlen(pattern);
++	symbol->width = (int)strlen(pattern);
+ 	
+ 	/* 843 */
+ 	return codeerr;
+--- zint-2.4.2/backend/plessey.c
++++ b/plessey.c
+@@ -164,7 +164,7 @@
+ 	sprintf(tri, "%ld", dau);
+ 
+ 	pedwar = 0;
+-	h = strlen(tri);
++	h = (int)strlen(tri);
+ 	for(i = 0; i < h; i++)
+ 	{
+ 		pedwar += ctoi(tri[i]);
+@@ -183,14 +183,14 @@
+ 	}
+ 
+ 	/* draw check digit */
+-	lookup(NEON, MSITable, itoc(pump), dest);
++	lookup(NEON, MSITable, itoc((int)pump), dest);
+ 
+ 	/* Stop character */
+ 	concat (dest, "121");
+ 	expand(symbol, dest);
+ 
+ 	ustrcpy(symbol->text, source);
+-	symbol->text[length] = itoc(pump);
++	symbol->text[length] = itoc((int)pump);
+ 	symbol->text[length + 1] = '\0';
+ 	return error_number;
+ }
+@@ -236,7 +236,7 @@
+ 	sprintf(tri, "%ld", dau);
+ 
+ 	pedwar = 0;
+-	h = strlen(tri);
++	h = (int)strlen(tri);
+ 	for(i = 0; i < h; i++)
+ 	{
+ 		pedwar += ctoi(tri[i]);
+@@ -261,7 +261,7 @@
+ 	{
+ 		un[wright++] = source[i];
+ 	}
+-	un[wright++] = itoc(pump);
++	un[wright++] = itoc((int)pump);
+ 	un[wright] = '\0';
+ 
+ 	dau = strtoul(un, NULL, 10);
+@@ -270,7 +270,7 @@
+ 	sprintf(tri, "%ld", dau);
+ 
+ 	pedwar = 0;
+-	h = strlen(tri);
++	h = (int)strlen(tri);
+ 	for(i = 0; i < h; i++)
+ 	{
+ 		pedwar += ctoi(tri[i]);
+@@ -290,8 +290,8 @@
+ 	}
+ 
+ 	/* Draw check digits */
+-	lookup(NEON, MSITable, itoc(pump), dest);
+-	lookup(NEON, MSITable, itoc(chwech), dest);
++	lookup(NEON, MSITable, itoc((int)pump), dest);
++	lookup(NEON, MSITable, itoc((int)chwech), dest);
+ 
+ 	/* Stop character */
+ 	concat (dest, "121");
+@@ -299,8 +299,8 @@
+ 	expand(symbol, dest);
+ 
+ 	ustrcpy(symbol->text, source);
+-	symbol->text[src_len] = itoc(pump);
+-	symbol->text[src_len + 1] = itoc(chwech);
++	symbol->text[src_len] = itoc((int)pump);
++	symbol->text[src_len + 1] = itoc((int)chwech);
+ 	symbol->text[src_len + 2] = '\0';
+ 
+ 	return error_number;
+@@ -400,8 +400,9 @@
+ 	/* calculate first (mod 11) digit */
+ 	x = 0;
+ 	weight = 2;
+-	for(i = src_len - 1; i >= 0; i--) {
+-		x += weight * ctoi(source[i]);
++    int j;
++	for(j = src_len - 1; j >= 0; j--) {
++		x += weight * ctoi(source[j]);
+ 		weight++;
+ 		if(weight > 7) {
+ 			weight = 2;
+@@ -417,8 +418,8 @@
+ 		uconcat(temp, (unsigned char *)"10");
+ 		temp_len += 2;
+ 	} else {
+-		lookup(NEON, MSITable, itoc(check), dest);
+-		temp[temp_len++] = itoc(check);
++		lookup(NEON, MSITable, itoc((int)check), dest);
++		temp[temp_len++] = itoc((int)check);
+ 		temp[temp_len] = '\0';
+ 	}
+ 	
+@@ -456,13 +457,13 @@
+ 	}
+ 
+ 	/* draw check digit */
+-	lookup(NEON, MSITable, itoc(pump), dest);
++	lookup(NEON, MSITable, itoc((int)pump), dest);
+ 
+ 	/* stop character */
+ 	concat (dest, "121");
+ 	expand(symbol, dest);
+ 
+-	temp[temp_len++] = itoc(pump);
++	temp[temp_len++] = itoc((int)pump);
+ 	temp[temp_len] = '\0';
+ 
+ 
+--- zint-2.4.2/backend/png.c
++++ b/png.c
+@@ -39,6 +39,8 @@
+ 
+ #include "font.h"	/* Font for human readable text */
+ 
++#include "zlib.h"
++
+ #define SSET	"0123456789ABCDEF"
+ 
+ #define	PNG_DATA	100
+@@ -52,8 +54,7 @@
+     jmp_buf jmpbuf;
+ };
+ 
+-static void writepng_error_handler(png_structp png_ptr, png_const_charp msg)
+-{
++static void writepng_error_handler(png_structp png_ptr, png_const_charp msg) {
+     struct mainprog_info_type  *graphic;
+ 
+     fprintf(stderr, "writepng libpng error: %s\n", msg);
+@@ -66,9 +67,143 @@
+         fflush(stderr);
+         return;
+     }
+-    longjmp(graphic->jmpbuf, 1);
++	longjmp(graphic->jmpbuf, 1);
+ }
+ 
++int png_pixel_plot_buffer(struct zint_symbol *symbol, int image_height, int image_width, char *pixelbuf, int rotate_angle)
++{
++	
++#ifndef _MSC_VER
++	unsigned char outdata[image_width * 3 * image_height];
++#else
++	unsigned char* outdata = (unsigned char*)_alloca(image_width * 3 * image_height);
++#endif
++	int i, row, column, errno;
++	int fgred, fggrn, fgblu, bgred, bggrn, bgblu;
++	
++	
++	/* sort out colour options */
++	to_upper((unsigned char*)symbol->fgcolour);
++	to_upper((unsigned char*)symbol->bgcolour);
++	
++	if(strlen(symbol->fgcolour) != 6) {
++		strcpy(symbol->errtxt, "Malformed foreground colour target");
++		return ERROR_INVALID_OPTION;
++	}
++	if(strlen(symbol->bgcolour) != 6) {
++		strcpy(symbol->errtxt, "Malformed background colour target");
++		return ERROR_INVALID_OPTION;
++	}
++	errno = is_sane(SSET, (unsigned char*)symbol->fgcolour, (int)strlen(symbol->fgcolour));
++	if (errno == ERROR_INVALID_DATA) {
++		strcpy(symbol->errtxt, "Malformed foreground colour target");
++		return ERROR_INVALID_OPTION;
++	}
++	errno = is_sane(SSET, (unsigned char*)symbol->bgcolour, (int)strlen(symbol->bgcolour));
++	if (errno == ERROR_INVALID_DATA) {
++		strcpy(symbol->errtxt, "Malformed background colour target");
++		return ERROR_INVALID_OPTION;
++	}
++	
++	fgred = (16 * ctoi(symbol->fgcolour[0])) + ctoi(symbol->fgcolour[1]);
++	fggrn = (16 * ctoi(symbol->fgcolour[2])) + ctoi(symbol->fgcolour[3]);
++	fgblu = (16 * ctoi(symbol->fgcolour[4])) + ctoi(symbol->fgcolour[5]);
++	bgred = (16 * ctoi(symbol->bgcolour[0])) + ctoi(symbol->bgcolour[1]);
++	bggrn = (16 * ctoi(symbol->bgcolour[2])) + ctoi(symbol->bgcolour[3]);
++	bgblu = (16 * ctoi(symbol->bgcolour[4])) + ctoi(symbol->bgcolour[5]);
++    
++	switch(rotate_angle) {
++		case 0: /* Plot the right way up */
++			for(row = 0; row < image_height; row++) {
++				for(column = 0; column < image_width; column++) {
++					i = row * column * 3;
++					switch(*(pixelbuf + (image_width * row) + column))
++					{
++						case '1':
++							outdata[i] = fgred;
++							outdata[i + 1] = fggrn;
++							outdata[i + 2] = fgblu;
++							break;
++						default:
++							outdata[i] = bgred;
++							outdata[i + 1] = bggrn;
++							outdata[i + 2] = bgblu;
++							break;
++                            
++					}
++				}
++			}
++			break;
++		case 90: /* Plot 90 degrees clockwise */
++			for(row = 0; row < image_width; row++) {
++				for(column = 0; column < image_height; column++) {
++					i = row * column * 3;
++					switch(*(pixelbuf + (image_width * (image_height - column - 1)) + row))
++					{
++						case '1':
++							outdata[i] = fgred;
++							outdata[i + 1] = fggrn;
++							outdata[i + 2] = fgblu;
++							break;
++						default:
++							outdata[i] = bgred;
++							outdata[i + 1] = bggrn;
++							outdata[i + 2] = bgblu;
++							break;
++                            
++					}
++				}
++			}
++			break;
++		case 180: /* Plot upside down */
++			for(row = 0; row < image_height; row++) {
++				for(column = 0; column < image_width; column++) {
++					i = row * column * 3;
++					switch(*(pixelbuf + (image_width * (image_height - row - 1)) + (image_width - column - 1)))
++					{
++						case '1':
++							outdata[i] = fgred;
++							outdata[i + 1] = fggrn;
++							outdata[i + 2] = fgblu;
++							break;
++						default:
++							outdata[i] = bgred;
++							outdata[i + 1] = bggrn;
++							outdata[i + 2] = bgblu;
++							break;
++                            
++					}
++				}
++			}
++			break;
++		case 270: /* Plot 90 degrees anti-clockwise */
++			for(row = 0; row < image_width; row++) {
++				for(column = 0; column < image_height; column++) {
++ 					i = row * column * 3;
++					switch(*(pixelbuf + (image_width * column) + (image_width - row - 1)))
++					{
++						case '1':
++							outdata[i] = fgred;
++							outdata[i + 1] = fggrn;
++							outdata[i + 2] = fgblu;
++							break;
++						default:
++							outdata[i] = bgred;
++							outdata[i + 1] = bggrn;
++							outdata[i + 2] = bgblu;
++							break;
++                            
++					}
++				}
++			}
++			break;
++	}
++    
++
++	return 0;
++}
++
++
+ int png_pixel_plot(struct zint_symbol *symbol, int image_height, int image_width, char *pixelbuf, int rotate_angle)
+ {
+ 	struct mainprog_info_type wpng_info;
+@@ -112,12 +247,12 @@
+ 		strcpy(symbol->errtxt, "Malformed background colour target");
+ 		return ERROR_INVALID_OPTION;
+ 	}
+-	errno = is_sane(SSET, (unsigned char*)symbol->fgcolour, strlen(symbol->fgcolour));
++	errno = is_sane(SSET, (unsigned char*)symbol->fgcolour, (int)strlen(symbol->fgcolour));
+ 	if (errno == ERROR_INVALID_DATA) {
+ 		strcpy(symbol->errtxt, "Malformed foreground colour target");
+ 		return ERROR_INVALID_OPTION;
+ 	}
+-	errno = is_sane(SSET, (unsigned char*)symbol->bgcolour, strlen(symbol->bgcolour));
++	errno = is_sane(SSET, (unsigned char*)symbol->bgcolour, (int)strlen(symbol->bgcolour));
+ 	if (errno == ERROR_INVALID_DATA) {
+ 		strcpy(symbol->errtxt, "Malformed background colour target");
+ 		return ERROR_INVALID_OPTION;
+@@ -302,6 +437,7 @@
+ }
+ #endif /* NO_PNG */
+ 
++
+ int bmp_pixel_plot(struct zint_symbol *symbol, int image_height, int image_width, char *pixelbuf, int rotate_angle)
+ {
+ 	unsigned long rowbytes;
+@@ -339,12 +475,12 @@
+ 		strcpy(symbol->errtxt, "Malformed background colour target");
+ 		return ERROR_INVALID_OPTION;
+ 	}
+-	errno = is_sane(SSET, (unsigned char*)symbol->fgcolour, strlen(symbol->fgcolour));
++	errno = is_sane(SSET, (unsigned char*)symbol->fgcolour, (int)strlen(symbol->fgcolour));
+ 	if (errno == ERROR_INVALID_DATA) {
+ 		strcpy(symbol->errtxt, "Malformed foreground colour target");
+ 		return ERROR_INVALID_OPTION;
+ 	}
+-	errno = is_sane(SSET, (unsigned char*)symbol->bgcolour, strlen(symbol->fgcolour));
++	errno = is_sane(SSET, (unsigned char*)symbol->bgcolour, (int)strlen(symbol->fgcolour));
+ 	if (errno == ERROR_INVALID_DATA) {
+ 		strcpy(symbol->errtxt, "Malformed background colour target");
+ 		return ERROR_INVALID_OPTION;
+@@ -613,7 +749,7 @@
+ 	/* Plot a string into the pixel buffer */
+ 	int i, string_length, string_left_hand;
+ 	
+-	string_length = strlen(input_string);
++	string_length = (int)strlen(input_string);
+ 	string_left_hand = xposn - ((7 * string_length) / 2);
+ 	
+ 	for(i = 0; i < string_length; i++) {
+@@ -621,12 +757,21 @@
+ 	}
+ 	
+ }
++int maxi_png_plot_options(struct zint_symbol *symbol, int rotate_angle, int data_type, char **pixelbuf, int writeToFile, int *imgWidth, int *imgHeight);
+ 
+-int maxi_png_plot(struct zint_symbol *symbol, int rotate_angle, int data_type)
++int maxi_png_plot(struct zint_symbol *symbol, int rotate_angle, int data_type) {
++    char *pixelBuffer;
++    int writeToFile = 1;
++    int imgHeight, imgWidth;
++    int error_number = maxi_png_plot_options(symbol, rotate_angle, data_type, &pixelBuffer, writeToFile, &imgHeight, &imgWidth);
++    free(pixelBuffer);
++	return error_number;
++}
++
++int maxi_png_plot_options(struct zint_symbol *symbol, int rotate_angle, int data_type, char **pixelbuf, int writeToFile, int *imgWidth, int *imgHeight)
+ {
+ 	int i, row, column, xposn, yposn;
+ 	int image_height, image_width;
+-	char *pixelbuf;
+ 	int error_number;
+ 	int xoffset, yoffset;
+ 
+@@ -635,16 +780,16 @@
+ 	image_width = 300 + (2 * xoffset * 2);
+ 	image_height = 300 + (2 * yoffset * 2);
+ 	
+-	if (!(pixelbuf = (char *) malloc(image_width * image_height))) {
++	if (!(*pixelbuf = (char *) malloc(image_width * image_height))) {
+ 		printf("Insifficient memory for pixel buffer");
+ 		return ERROR_ENCODING_PROBLEM;
+ 	} else {
+ 		for(i = 0; i < (image_width * image_height); i++) {
+-			*(pixelbuf + i) = '0';
++			*(*pixelbuf + i) = '0';
+ 		}
+ 	}
+ 	
+-	draw_bullseye(pixelbuf, image_width, (2 * xoffset), (2 * yoffset));
++	draw_bullseye(*pixelbuf, image_width, (2 * xoffset), (2 * yoffset));
+ 	
+ 	for(row = 0; row < symbol->rows; row++) {
+ 		yposn = row * 9;
+@@ -654,10 +799,10 @@
+ 				if(row & 1) {
+ 					/* Odd (reduced) row */
+ 					xposn += 5;
+-					draw_hexagon(pixelbuf, image_width, xposn + (2 * xoffset), yposn + (2 * yoffset));
++					draw_hexagon(*pixelbuf, image_width, xposn + (2 * xoffset), yposn + (2 * yoffset));
+ 				} else {
+ 					/* Even (full) row */
+-					draw_hexagon(pixelbuf, image_width, xposn + (2 * xoffset), yposn + (2 * yoffset));
++					draw_hexagon(*pixelbuf, image_width, xposn + (2 * xoffset), yposn + (2 * yoffset));
+ 				}
+ 			}
+ 		}
+@@ -665,18 +810,22 @@
+ 
+ 	if(((symbol->output_options & BARCODE_BOX) != 0) || ((symbol->output_options & BARCODE_BIND) != 0)) {
+ 		/* boundary bars */
+-		draw_bar(pixelbuf, 0, image_width, 0, symbol->border_width * 2, image_width, image_height);
+-		draw_bar(pixelbuf, 0, image_width, 300 + (symbol->border_width * 2), symbol->border_width * 2, image_width, image_height);
++		draw_bar(*pixelbuf, 0, image_width, 0, symbol->border_width * 2, image_width, image_height);
++		draw_bar(*pixelbuf, 0, image_width, 300 + (symbol->border_width * 2), symbol->border_width * 2, image_width, image_height);
+ 	}
+ 	
+ 	if((symbol->output_options & BARCODE_BOX) != 0) {
+ 		/* side bars */
+-		draw_bar(pixelbuf, 0, symbol->border_width * 2, 0, image_height, image_width, image_height);
+-		draw_bar(pixelbuf, 300 + ((symbol->border_width + symbol->whitespace_width + symbol->whitespace_width) * 2), symbol->border_width * 2, 0, image_height, image_width, image_height);
++		draw_bar(*pixelbuf, 0, symbol->border_width * 2, 0, image_height, image_width, image_height);
++		draw_bar(*pixelbuf, 300 + ((symbol->border_width + symbol->whitespace_width + symbol->whitespace_width) * 2), symbol->border_width * 2, 0, image_height, image_width, image_height);
+ 	}
+-	
+-	error_number=png_to_file(symbol, image_height, image_width, pixelbuf, rotate_angle, data_type);
+-	free(pixelbuf);
++	if (writeToFile != 0) {
++        error_number=png_to_file(symbol, image_height, image_width, *pixelbuf, rotate_angle, data_type);
++    } else {
++        error_number = 0;
++    }
++    *imgWidth = image_width;
++    *imgHeight = image_height;
+ 	return error_number;
+ }
+ 
+@@ -711,13 +860,23 @@
+ 	return;
+ }
+ 
+-int png_plot(struct zint_symbol *symbol, int rotate_angle, int data_type)
+-{
++int png_plot_options(struct zint_symbol *symbol, int rotate_angle, int data_type, char **pixelbuf, int writeToFile, int *imgWidth, int *imgHeight);
++
++// Maintain old functionality
++int png_plot(struct zint_symbol *symbol, int rotate_angle, int data_type) {
++    char *pixelbuf;
++    int writeToFile = 1;
++    int imgHeight, imgWidth;
++    int error_number = png_plot_options(symbol, rotate_angle, data_type, &pixelbuf, writeToFile, &imgHeight, &imgWidth);
++	free(pixelbuf);
++	return error_number;
++}
++
++int png_plot_options(struct zint_symbol *symbol, int rotate_angle, int data_type, char **pixelbuf, int writeToFile, int *imgWidth, int *imgHeight) {
+ 	int textdone, main_width, comp_offset, large_bar_count;
+ 	char textpart[10], addon[6];
+ 	float addon_text_posn, preset_height, large_bar_height;
+ 	int i, r, textoffset, yoffset, xoffset, latch, image_width, image_height;
+-	char *pixelbuf;
+ 	int addon_latch = 0, smalltext = 0;
+ 	int this_row, block_width, plot_height, plot_yposn, textpos;
+ 	float row_height, row_posn;
+@@ -827,12 +986,12 @@
+ 	image_width = 2 * (symbol->width + xoffset + xoffset);
+ 	image_height = 2 * (symbol->height + textoffset + yoffset + yoffset);
+ 	
+-	if (!(pixelbuf = (char *) malloc(image_width * image_height))) {
++	if (!(*pixelbuf = (char *) malloc(image_width * image_height))) {
+ 		printf("Insufficient memory for pixel buffer");
+ 		return ERROR_ENCODING_PROBLEM;
+ 	} else {
+ 		for(i = 0; i < (image_width * image_height); i++) {
+-			*(pixelbuf + i) = '0';
++			*(*pixelbuf + i) = '0';
+ 		}
+ 	}
+ 
+@@ -879,7 +1038,7 @@
+ 			} 
+ 			if(latch == 1) { 
+ 				/* a bar */
+-				draw_bar(pixelbuf, (i + xoffset) * 2, block_width * 2, plot_yposn * 2, plot_height * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (i + xoffset) * 2, block_width * 2, plot_yposn * 2, plot_height * 2, image_width, image_height);
+ 				latch = 0;
+ 			} else {
+ 				/* a space */
+@@ -898,34 +1057,34 @@
+ 			case 8: /* EAN-8 */
+ 			case 11:
+ 			case 14:
+-				draw_bar(pixelbuf, (0 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-				draw_bar(pixelbuf, (2 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-				draw_bar(pixelbuf, (32 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-				draw_bar(pixelbuf, (34 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-				draw_bar(pixelbuf, (64 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-				draw_bar(pixelbuf, (66 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (0 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (2 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (32 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (34 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (64 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (66 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+ 				for(i = 0; i < 4; i++) {
+ 					textpart[i] = symbol->text[i];
+ 				}
+ 				textpart[4] = '\0';
+ 				textpos = 2 * (17 + xoffset);
+ 				
+-				draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++				draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 				for(i = 0; i < 4; i++) {
+ 					textpart[i] = symbol->text[i + 4];
+ 				}
+ 				textpart[4] = '\0';
+ 				textpos = 2 * (50 + xoffset);
+-				draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++				draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 				textdone = 1;
+ 				switch(strlen(addon)) {
+ 					case 2:	
+ 						textpos = 2 * (xoffset + 86);
+-						draw_string(pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
++						draw_string(*pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
+ 						break;
+ 					case 5:
+ 						textpos = 2 * (xoffset + 100);
+-						draw_string(pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
++						draw_string(*pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
+ 						break;
+ 				}
+ 
+@@ -933,38 +1092,38 @@
+ 			case 13: /* EAN 13 */
+ 			case 16:
+ 			case 19:
+-				draw_bar(pixelbuf, (0 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-				draw_bar(pixelbuf, (2 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-				draw_bar(pixelbuf, (46 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-				draw_bar(pixelbuf, (48 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-				draw_bar(pixelbuf, (92 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-				draw_bar(pixelbuf, (94 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (0 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (2 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (46 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (48 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (92 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (94 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+ 
+ 				textpart[0] = symbol->text[0];
+ 				textpart[1] = '\0';
+ 				textpos = 2 * (-7 + xoffset);
+-				draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++				draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 				for(i = 0; i < 6; i++) {
+ 					textpart[i] = symbol->text[i + 1];
+ 				}
+ 				textpart[6] = '\0';
+ 				textpos = 2 * (24 + xoffset);
+-				draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++				draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 				for(i = 0; i < 6; i++) {
+ 					textpart[i] = symbol->text[i + 7];
+ 				}
+ 				textpart[6] = '\0';
+ 				textpos = 2 * (71 + xoffset);
+-				draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++				draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 				textdone = 1;
+ 				switch(strlen(addon)) {
+ 					case 2:	
+ 						textpos = 2 * (xoffset + 114);
+-						draw_string(pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
++						draw_string(*pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
+ 						break;
+ 					case 5:
+ 						textpos = 2 * (xoffset + 128);
+-						draw_string(pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
++						draw_string(*pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
+ 						break;
+ 				}
+ 				break;
+@@ -984,7 +1143,7 @@
+ 			} while (module_is_set(symbol, symbol->rows - 1, i + block_width) == module_is_set(symbol, symbol->rows - 1, i));
+ 			if(latch == 1) {
+ 				/* a bar */
+-				draw_bar(pixelbuf, (i + xoffset - comp_offset) * 2, block_width * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (i + xoffset - comp_offset) * 2, block_width * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+ 				latch = 0;
+ 			} else {
+ 				/* a space */
+@@ -992,8 +1151,8 @@
+ 			}
+ 			i += block_width;
+ 		} while (i < 11 + comp_offset);
+-		draw_bar(pixelbuf, (46 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-		draw_bar(pixelbuf, (48 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++		draw_bar(*pixelbuf, (46 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++		draw_bar(*pixelbuf, (48 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+ 		latch = 1;
+ 		i = 85 + comp_offset;
+ 		do {
+@@ -1003,7 +1162,7 @@
+ 			} while (module_is_set(symbol, symbol->rows - 1, i + block_width) == module_is_set(symbol, symbol->rows - 1, i));
+ 			if(latch == 1) {
+ 				/* a bar */
+-				draw_bar(pixelbuf, (i + xoffset - comp_offset) * 2, block_width * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++				draw_bar(*pixelbuf, (i + xoffset - comp_offset) * 2, block_width * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+ 				latch = 0;
+ 			} else {
+ 				/* a space */
+@@ -1014,32 +1173,32 @@
+ 		textpart[0] = symbol->text[0];
+ 		textpart[1] = '\0';
+ 		textpos = 2 * (-5 + xoffset);
+-		draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++		draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 		for(i = 0; i < 5; i++) {
+ 			textpart[i] = symbol->text[i + 1];
+ 		}
+ 		textpart[5] = '\0';
+ 		textpos = 2 * (27 + xoffset);
+-		draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++		draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 		for(i = 0; i < 5; i++) {
+ 			textpart[i] = symbol->text[i + 6];
+ 		}
+ 		textpart[6] = '\0';
+ 		textpos = 2 * (68 + xoffset);
+-		draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++		draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 		textpart[0] = symbol->text[11];
+ 		textpart[1] = '\0';
+ 		textpos = 2 * (100 + xoffset);
+-		draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++		draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 		textdone = 1;
+ 		switch(strlen(addon)) {
+ 			case 2:	
+ 				textpos = 2 * (xoffset + 116);
+-				draw_string(pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
++				draw_string(*pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
+ 				break;
+ 			case 5:
+ 				textpos = 2 * (xoffset + 130);
+-				draw_string(pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
++				draw_string(*pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
+ 				break;
+ 		}
+ 
+@@ -1047,35 +1206,35 @@
+ 
+ 	if (((symbol->symbology == BARCODE_UPCE) && (symbol->rows == 1)) || (symbol->symbology == BARCODE_UPCE_CC)) {
+ 		/* guard bar extensions and text formatting for UPCE */
+-		draw_bar(pixelbuf, (0 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-		draw_bar(pixelbuf, (2 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-		draw_bar(pixelbuf, (46 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-		draw_bar(pixelbuf, (48 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+-		draw_bar(pixelbuf, (50 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++		draw_bar(*pixelbuf, (0 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++		draw_bar(*pixelbuf, (2 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++		draw_bar(*pixelbuf, (46 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++		draw_bar(*pixelbuf, (48 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
++		draw_bar(*pixelbuf, (50 + xoffset) * 2, 1 * 2, (4 + (int)yoffset) * 2, 5 * 2, image_width, image_height);
+ 
+ 		textpart[0] = symbol->text[0];
+ 		textpart[1] = '\0';
+ 		textpos = 2 * (-5 + xoffset);
+-		draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++		draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 		for(i = 0; i < 6; i++) {
+ 			textpart[i] = symbol->text[i + 1];
+ 		}
+ 		textpart[6] = '\0';
+ 		textpos = 2 * (24 + xoffset);
+-		draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++		draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 		textpart[0] = symbol->text[7];
+ 		textpart[1] = '\0';
+ 		textpos = 2 * (55 + xoffset);
+-		draw_string(pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
++		draw_string(*pixelbuf, textpart, textpos, default_text_posn, smalltext, image_width, image_height);
+ 		textdone = 1;
+ 		switch(strlen(addon)) {
+ 			case 2:	
+ 				textpos = 2 * (xoffset + 70);
+-				draw_string(pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
++				draw_string(*pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
+ 				break;
+ 			case 5:
+ 				textpos = 2 * (xoffset + 84);
+-				draw_string(pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
++				draw_string(*pixelbuf, addon, textpos, image_height - (addon_text_posn * 2) - 13, smalltext, image_width, image_height);
+ 				break;
+ 		}
+ 
+@@ -1086,13 +1245,13 @@
+ 	/* Put boundary bars or box around symbol */
+ 	if(((symbol->output_options & BARCODE_BOX) != 0) || ((symbol->output_options & BARCODE_BIND) != 0)) {
+ 		/* boundary bars */
+-		draw_bar(pixelbuf, 0, (symbol->width + xoffset + xoffset) * 2, textoffset * 2, symbol->border_width * 2, image_width, image_height);
+-		draw_bar(pixelbuf, 0, (symbol->width + xoffset + xoffset) * 2, (textoffset + symbol->height + symbol->border_width) * 2, symbol->border_width * 2, image_width, image_height);
++		draw_bar(*pixelbuf, 0, (symbol->width + xoffset + xoffset) * 2, textoffset * 2, symbol->border_width * 2, image_width, image_height);
++		draw_bar(*pixelbuf, 0, (symbol->width + xoffset + xoffset) * 2, (textoffset + symbol->height + symbol->border_width) * 2, symbol->border_width * 2, image_width, image_height);
+ 		if((symbol->output_options & BARCODE_BIND) != 0) {
+ 			if((symbol->rows > 1) && (is_stackable(symbol->symbology) == 1)) {
+ 				/* row binding */
+ 				for(r = 1; r < symbol->rows; r++) {
+-					draw_bar(pixelbuf, xoffset * 2, symbol->width * 2, ((r * row_height) + textoffset + yoffset - 1) * 2, 2 * 2, image_width, image_height);
++					draw_bar(*pixelbuf, xoffset * 2, symbol->width * 2, ((r * row_height) + textoffset + yoffset - 1) * 2, 2 * 2, image_width, image_height);
+ 				}
+ 			}
+ 		}
+@@ -1100,18 +1259,22 @@
+ 	
+ 	if((symbol->output_options & BARCODE_BOX) != 0) {
+ 		/* side bars */
+-		draw_bar(pixelbuf, 0, symbol->border_width * 2, textoffset * 2, (symbol->height + (2 * symbol->border_width)) * 2, image_width, image_height);
+-		draw_bar(pixelbuf, (symbol->width + xoffset + xoffset - symbol->border_width) * 2, symbol->border_width * 2, textoffset * 2, (symbol->height + (2 * symbol->border_width)) * 2, image_width, image_height);
++		draw_bar(*pixelbuf, 0, symbol->border_width * 2, textoffset * 2, (symbol->height + (2 * symbol->border_width)) * 2, image_width, image_height);
++		draw_bar(*pixelbuf, (symbol->width + xoffset + xoffset - symbol->border_width) * 2, symbol->border_width * 2, textoffset * 2, (symbol->height + (2 * symbol->border_width)) * 2, image_width, image_height);
+ 	}
+ 	
+ 	/* Put the human readable text at the bottom */
+ 	if((textdone == 0) && (ustrlen(local_text) != 0)) {
+ 		textpos = (image_width / 2);
+-		draw_string(pixelbuf, (char*)local_text, textpos, default_text_posn, smalltext, image_width, image_height);
++		draw_string(*pixelbuf, (char*)local_text, textpos, default_text_posn, smalltext, image_width, image_height);
+ 	}
+-
+-	error_number=png_to_file(symbol, image_height, image_width, pixelbuf, rotate_angle, data_type);
+-	free(pixelbuf);
++    if (writeToFile != 0) {
++        error_number=png_to_file(symbol, image_height, image_width, *pixelbuf, rotate_angle, data_type);
++	} else {
++        error_number = 0;
++    }
++    *imgWidth = image_width;
++    *imgHeight = image_height;
+ 	return error_number;
+ }
+ 
+@@ -1129,6 +1292,20 @@
+ 	
+ 	return error;
+ }
++
++int png_handle_buffer(struct zint_symbol *symbol, int rotate_angle, char **buffer, int *imgWidth, int *imgHeight) {
++	int error;
++	
++    static int writeToFile = 0;
++	if(symbol->symbology == BARCODE_MAXICODE) {
++		error = maxi_png_plot_options(symbol, rotate_angle, PNG_DATA, buffer, writeToFile, imgWidth, imgHeight);
++	} else {
++		error = png_plot_options(symbol, rotate_angle, PNG_DATA, buffer, writeToFile, imgWidth, imgHeight);
++	}
++	
++	return error;
++}
++
+ #endif /* NO_PNG */
+ 
+ int bmp_handle(struct zint_symbol *symbol, int rotate_angle)
+--- zint-2.4.2/backend/postal.c
++++ b/postal.c
+@@ -111,7 +111,7 @@
+ 	}
+ 
+ 	writer = 0;
+-	h = strlen(height_pattern);
++	h = (int)strlen(height_pattern);
+ 	for(loopey = 0; loopey < h; loopey++)
+ 	{
+ 		if(height_pattern[loopey] == 'L')
+@@ -182,7 +182,7 @@
+ 	}
+ 
+ 	writer = 0;
+-	h = strlen(height_pattern);
++	h = (int)strlen(height_pattern);
+ 	for(loopey = 0; loopey < h; loopey++)
+ 	{
+ 		if(height_pattern[loopey] == 'L')
+@@ -334,7 +334,7 @@
+ 	check = rm4scc((char*)source, (unsigned char*)height_pattern, length);
+ 	
+ 	writer = 0;
+-	h = strlen(height_pattern);
++	h = (int)strlen(height_pattern);
+ 	for(loopey = 0; loopey < h; loopey++)
+ 	{
+ 		if((height_pattern[loopey] == '1') || (height_pattern[loopey] == '0'))
+@@ -394,7 +394,7 @@
+ 	}
+ 	
+ 	writer = 0;
+-	h = strlen(height_pattern);
++	h = (int)strlen(height_pattern);
+ 	for(loopey = 0; loopey < h; loopey++)
+ 	{
+ 		if((height_pattern[loopey] == '1') || (height_pattern[loopey] == '0'))
+@@ -448,7 +448,7 @@
+ 	}
+ 	
+ 	writer = 0;
+-	h = strlen(height_pattern);
++	h = (int)strlen(height_pattern);
+ 	for(loopey = 0; loopey < h; loopey++)
+ 	{
+ 		if((height_pattern[loopey] == '1') || (height_pattern[loopey] == '0'))
+@@ -578,7 +578,7 @@
+ 	
+ 	/* Resolve pattern to 4-state symbols */
+ 	writer = 0;
+-	h = strlen(pattern);
++	h = (int)strlen(pattern);
+ 	for(loopey = 0; loopey < h; loopey++)
+ 	{
+ 		if((pattern[loopey] == '2') || (pattern[loopey] == '1'))
+--- zint-2.4.2/backend/ps.c
++++ b/ps.c
+@@ -77,12 +77,12 @@
+ 		strcpy(symbol->errtxt, "Malformed background colour target");
+ 		return ERROR_INVALID_OPTION;
+ 	}
+-	error_number = is_sane(SSET, (unsigned char*)symbol->fgcolour, strlen(symbol->fgcolour));
++	error_number = is_sane(SSET, (unsigned char*)symbol->fgcolour, (int)strlen(symbol->fgcolour));
+ 	if (error_number == ERROR_INVALID_DATA) {
+ 		strcpy(symbol->errtxt, "Malformed foreground colour target");
+ 		return ERROR_INVALID_OPTION;
+ 	}
+-	error_number = is_sane(SSET, (unsigned char*)symbol->bgcolour, strlen(symbol->bgcolour));
++	error_number = is_sane(SSET, (unsigned char*)symbol->bgcolour, (int)strlen(symbol->bgcolour));
+ 	if (error_number == ERROR_INVALID_DATA) {
+ 		strcpy(symbol->errtxt, "Malformed background colour target");
+ 		return ERROR_INVALID_OPTION;
+@@ -184,7 +184,7 @@
+ 	
+ 	/* Start writing the header */
+ 	fprintf(feps, "%%!PS-Adobe-3.0 EPSF-3.0\n");
+-	fprintf(feps, "%%%%Creator: Zint %s\n", ZINT_VERSION);
++	fprintf(feps, "%%%%Creator: Zint %s\n", "2.4.2");
+ 	if(ustrlen(symbol->text) != 0) {
+ 		fprintf(feps, "%%%%Title: %s\n",symbol->text);
+ 	} else {
+--- zint-2.4.2/backend/qr.c
++++ b/qr.c
+@@ -398,7 +398,7 @@
+ 	/* Terminator */
+ 	concat(binary, "0000");
+ 
+-	current_binlen = strlen(binary);
++	current_binlen = (int)strlen(binary);
+ 	padbits = 8 - (current_binlen % 8);
+ 	if(padbits == 8) { padbits = 0; }
+ 	current_bytes = (current_binlen + padbits) / 8;
+@@ -1030,7 +1030,7 @@
+ 					glyph = 0;
+ 					do {
+ 						if(sjis_lookup[j * 2] == utfdata[i]) {
+-							glyph = sjis_lookup[(j * 2) + 1];
++							glyph = (int)sjis_lookup[(j * 2) + 1];
+ 						}
+ 						j++;
+ 					} while ((j < 6843) && (glyph == 0));
+@@ -1356,7 +1356,7 @@
+ void get_bitlength(int count[], char stream[]) {
+ 	int length, i;
+ 	
+-	length = strlen(stream);
++	length = (int)strlen(stream);
+ 	
+ 	for(i = 0; i < 4; i++) {
+ 		count[i] = 0;
+@@ -1404,7 +1404,7 @@
+ {
+ 	int i, length;
+ 	
+-	length = strlen(binary_stream);
++	length = (int)strlen(binary_stream);
+ 	
+ 	i = 0;
+ 	do {
+@@ -1481,7 +1481,7 @@
+ 	latch = 0;
+ 	
+ 	/* Add terminator */
+-	bits_left = bits_total - strlen(binary_data);
++	bits_left = bits_total - (int)strlen(binary_data);
+ 	if(bits_left <= 3) {
+ 		for(i = 0; i < bits_left; i++) {
+ 			concat(binary_data, "0");
+@@ -1493,7 +1493,7 @@
+ 	
+ 	if(latch == 0) {
+ 		/* Manage last (4-bit) block */
+-		bits_left = bits_total - strlen(binary_data);
++		bits_left = bits_total - (int)strlen(binary_data);
+ 		if(bits_left <= 4) {
+ 			for(i = 0; i < bits_left; i++) {
+ 				concat(binary_data, "0");
+@@ -1511,7 +1511,7 @@
+ 		}
+ 		
+ 		/* Add padding */
+-		bits_left = bits_total - strlen(binary_data);
++		bits_left = bits_total - (int)strlen(binary_data);
+ 		if(bits_left > 4) {
+ 			remainder = (bits_left - 4) / 8;
+ 			for(i = 0; i < remainder; i++) {
+@@ -1567,7 +1567,7 @@
+ 	if(ecc_mode == LEVEL_M) { bits_total = 32; }
+ 	
+ 	/* Add terminator */
+-	bits_left = bits_total - strlen(binary_data);
++	bits_left = bits_total - (int)strlen(binary_data);
+ 	if(bits_left <= 5) {
+ 		for(i = 0; i < bits_left; i++) {
+ 			concat(binary_data, "0");
+@@ -1586,7 +1586,7 @@
+ 		}
+ 		
+ 		/* Add padding */
+-		bits_left = bits_total - strlen(binary_data);
++		bits_left = bits_total - (int)strlen(binary_data);
+ 		remainder = bits_left / 8;
+ 		for(i = 0; i < remainder; i++) {
+ 			concat(binary_data, i & 1 ? "00010001" : "11101100"); 
+@@ -1636,7 +1636,7 @@
+ 	if(ecc_mode == LEVEL_M) { bits_total = 68; }
+ 	
+ 	/* Add terminator */
+-	bits_left = bits_total - strlen(binary_data);
++	bits_left = bits_total - (int)strlen(binary_data);
+ 	if(bits_left <= 7) {
+ 		for(i = 0; i < bits_left; i++) {
+ 			concat(binary_data, "0");
+@@ -1648,7 +1648,7 @@
+ 	
+ 	if(latch == 0) {
+ 		/* Manage last (4-bit) block */
+-		bits_left = bits_total - strlen(binary_data);
++		bits_left = bits_total - (int)strlen(binary_data);
+ 		if(bits_left <= 4) {
+ 			for(i = 0; i < bits_left; i++) {
+ 				concat(binary_data, "0");
+@@ -1666,7 +1666,7 @@
+ 		}
+ 		
+ 		/* Add padding */
+-		bits_left = bits_total - strlen(binary_data);
++		bits_left = bits_total - (int)strlen(binary_data);
+ 		if(bits_left > 4) {
+ 			remainder = (bits_left - 4) / 8;
+ 			for(i = 0; i < remainder; i++) {
+@@ -1736,7 +1736,7 @@
+ 	if(ecc_mode == LEVEL_Q) { bits_total = 80; }
+ 	
+ 	/* Add terminator */
+-	bits_left = bits_total - strlen(binary_data);
++	bits_left = bits_total - (int)strlen(binary_data);
+ 	if(bits_left <= 9) {
+ 		for(i = 0; i < bits_left; i++) {
+ 			concat(binary_data, "0");
+@@ -1755,7 +1755,7 @@
+ 		}
+ 	
+ 		/* Add padding */
+-		bits_left = bits_total - strlen(binary_data);
++		bits_left = bits_total - (int)strlen(binary_data);
+ 		remainder = bits_left / 8;
+ 		for(i = 0; i < remainder; i++) {
+ 			concat(binary_data, i & 1 ? "00010001" : "11101100");
+@@ -1834,7 +1834,7 @@
+ 	
+ 	int i, n, x, y;
+ 	
+-	n = strlen(full_stream);
++	n = (int)strlen(full_stream);
+ 	y = size - 1;
+ 	i = 0;
+ 	do {
+@@ -2028,7 +2028,7 @@
+ 					glyph = 0;
+ 					do {
+ 						if(sjis_lookup[j * 2] == utfdata[i]) {
+-							glyph = sjis_lookup[(j * 2) + 1];
++							glyph = (int)sjis_lookup[(j * 2) + 1];
+ 						}
+ 						j++;
+ 					} while ((j < 6843) && (glyph == 0));
+--- zint-2.4.2/backend/rss.c
++++ b/rss.c
+@@ -191,7 +191,7 @@
+ 	strcpy(temp, "10000000000000");
+ 	if(symbol->option_1 == 2) {
+ 		/* Add symbol linkage flag */
+-		binary_load(y_reg, temp, strlen(temp));
++		binary_load(y_reg, temp, (int)strlen(temp));
+ 		binary_add(accum, y_reg);
+ 		for(i = 0; i < 112; i++) {
+ 			y_reg[i] = 0;
+@@ -200,7 +200,7 @@
+ 	
+ 	/* Calculate left and right pair values */
+ 	strcpy(temp, "4537077");
+-	binary_load(x_reg, temp, strlen(temp));
++	binary_load(x_reg, temp, (int)strlen(temp));
+ 	
+ 	for(i = 0; i < 24; i++) {
+ 		shiftup(x_reg);
+@@ -221,7 +221,7 @@
+ 	
+ 	/* Calculate four data characters */
+ 	strcpy(temp,  "1597");
+-	binary_load(x_reg, temp, strlen(temp));
++	binary_load(x_reg, temp, (int)strlen(temp));
+ 	for(i = 0; i < 112; i++) {
+ 		accum[i] = left_reg[i];
+ 	}
+@@ -251,7 +251,7 @@
+ 		mask = mask >> 1;
+ 	}
+ 	strcpy(temp,  "1597");
+-	binary_load(x_reg, temp, strlen(temp));
++	binary_load(x_reg, temp, (int)strlen(temp));
+ 	for(i = 0; i < 112; i++) {
+ 		accum[i] = right_reg[i];
+ 	}
+@@ -694,7 +694,7 @@
+ 	if(symbol->option_1 == 2) {
+ 		/* Add symbol linkage flag */
+ 		strcpy(temp, "2015133531096");
+-		binary_load(y_reg, temp, strlen(temp));
++		binary_load(y_reg, temp, (int)strlen(temp));
+ 		binary_add(accum, y_reg);
+ 		for(i = 0; i < 112; i++) {
+ 			y_reg[i] = 0;
+@@ -703,7 +703,7 @@
+ 	
+ 	/* Calculate left and right pair values */
+ 	strcpy(temp, "2013571");
+-	binary_load(x_reg, temp, strlen(temp));
++	binary_load(x_reg, temp, (int)strlen(temp));
+ 	
+ 	for(i = 0; i < 24; i++) {
+ 		shiftup(x_reg);
+@@ -724,93 +724,93 @@
+ 	
+ 	left_group = 0;
+ 	strcpy(temp, "183063");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(left_reg, accum)) { left_group = 1; }
+ 	strcpy(temp, "820063");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(left_reg, accum)) { left_group = 2; }
+ 	strcpy(temp, "1000775");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(left_reg, accum)) { left_group = 3; }
+ 	strcpy(temp, "1491020");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(left_reg, accum)) { left_group = 4; }
+ 	strcpy(temp, "1979844");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(left_reg, accum)) { left_group = 5; }
+ 	strcpy(temp, "1996938");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(left_reg, accum)) { left_group = 6; }
+ 	right_group = 0;
+ 	strcpy(temp, "183063");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(right_reg, accum)) { right_group = 1; }
+ 	strcpy(temp, "820063");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(right_reg, accum)) { right_group = 2; }
+ 	strcpy(temp, "1000775");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(right_reg, accum)) { right_group = 3; }
+ 	strcpy(temp, "1491020");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(right_reg, accum)) { right_group = 4; }
+ 	strcpy(temp, "1979844");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(right_reg, accum)) { right_group = 5; }
+ 	strcpy(temp, "1996938");
+-	binary_load(accum, temp, strlen(temp));
++	binary_load(accum, temp, (int)strlen(temp));
+ 	if(islarger(right_reg, accum)) { right_group = 6; }
+ 	
+ 	switch(left_group) {
+ 		case 1: strcpy(temp, "183064");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(left_reg, accum);
+ 			break;
+ 		case 2: strcpy(temp, "820064");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(left_reg, accum);
+ 			break;
+ 		case 3: strcpy(temp, "1000776");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(left_reg, accum);
+ 			break;
+ 		case 4: strcpy(temp, "1491021");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(left_reg, accum);
+ 			break;
+ 		case 5: strcpy(temp, "1979845");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(left_reg, accum);
+ 			break;
+ 		case 6: strcpy(temp, "1996939");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(left_reg, accum);
+ 			break;
+ 	}
+ 	
+ 	switch(right_group) {
+ 		case 1: strcpy(temp, "183064");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(right_reg, accum);
+ 			break;
+ 		case 2: strcpy(temp, "820064");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(right_reg, accum);
+ 			break;
+ 		case 3: strcpy(temp, "1000776");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(right_reg, accum);
+ 			break;
+ 		case 4: strcpy(temp, "1491021");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(right_reg, accum);
+ 			break;
+ 		case 5: strcpy(temp, "1979845");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(right_reg, accum);
+ 			break;
+ 		case 6: strcpy(temp, "1996939");
+-			binary_load(accum, temp, strlen(temp));
++			binary_load(accum, temp, (int)strlen(temp));
+ 			binary_subtract(right_reg, accum);
+ 			break;
+ 	}
+@@ -1218,18 +1218,18 @@
+ 	switch(encoding_method) { /* Encoding method - Table 10 */
+ 		case 1: concat(binary_string, "1XX"); read_posn = 16; break;
+ 		case 2: concat(binary_string, "00XX"); read_posn = 0; break;
+-		case 3: concat(binary_string, "0100"); read_posn = strlen(source); break;
+-		case 4: concat(binary_string, "0101"); read_posn = strlen(source); break;
++		case 3: concat(binary_string, "0100"); read_posn = (int)strlen(source); break;
++		case 4: concat(binary_string, "0101"); read_posn = (int)strlen(source); break;
+ 		case 5: concat(binary_string, "01100XX"); read_posn = 20; break;
+ 		case 6: concat(binary_string, "01101XX"); read_posn = 23; break;
+-		case 7: concat(binary_string, "0111000"); read_posn = strlen(source); break;
+-		case 8: concat(binary_string, "0111001"); read_posn = strlen(source); break;
+-		case 9: concat(binary_string, "0111010"); read_posn = strlen(source); break;
+-		case 10: concat(binary_string, "0111011"); read_posn = strlen(source); break;
+-		case 11: concat(binary_string, "0111100"); read_posn = strlen(source); break;
+-		case 12: concat(binary_string, "0111101"); read_posn = strlen(source); break;
+-		case 13: concat(binary_string, "0111110"); read_posn = strlen(source); break;
+-		case 14: concat(binary_string, "0111111"); read_posn = strlen(source); break;
++		case 7: concat(binary_string, "0111000"); read_posn = (int)strlen(source); break;
++		case 8: concat(binary_string, "0111001"); read_posn = (int)strlen(source); break;
++		case 9: concat(binary_string, "0111010"); read_posn = (int)strlen(source); break;
++		case 10: concat(binary_string, "0111011"); read_posn = (int)strlen(source); break;
++		case 11: concat(binary_string, "0111100"); read_posn = (int)strlen(source); break;
++		case 12: concat(binary_string, "0111101"); read_posn = (int)strlen(source); break;
++		case 13: concat(binary_string, "0111110"); read_posn = (int)strlen(source); break;
++		case 14: concat(binary_string, "0111111"); read_posn = (int)strlen(source); break;
+ 	}
+ 	if(debug) printf("Setting binary = %s\n", binary_string);
+ 	
+@@ -1763,7 +1763,7 @@
+ 	
+ 	remainder = 12 - (strlen(binary_string) % 12);
+ 	if(remainder == 12) { remainder = 0; }
+-	if(strlen(binary_string) < 36) { remainder = 36 - strlen(binary_string); }
++	if(strlen(binary_string) < 36) { remainder = 36 - (int)strlen(binary_string); }
+ 
+ 	if(latch == 1) {
+ 		/* There is still one more numeric digit to encode */
+@@ -1803,7 +1803,7 @@
+ 		
+ 		remainder = 12 - (strlen(binary_string) % 12);
+ 		if(remainder == 12) { remainder = 0; }
+-		if(strlen(binary_string) < 36) { remainder = 36 - strlen(binary_string); }
++		if(strlen(binary_string) < 36) { remainder = 36 - (int)strlen(binary_string); }
+ 		if(debug) printf("Resultant binary = %s\n", binary_string);
+ 		if(debug) printf("\tLength: %d\n", (int)strlen(binary_string));
+ 	}
+@@ -1894,7 +1894,7 @@
+ 		return i;
+ 	}
+ 
+-	data_chars = strlen(binary_string) / 12;
++	data_chars = (int)strlen(binary_string) / 12;
+ 	
+ 	for(i = 0; i < data_chars; i++) {
+ 		for(j = 0; j < 12; j++) {
+--- zint-2.4.2/backend/svg.c
++++ b/svg.c
+@@ -73,12 +73,12 @@
+ 		strcpy(symbol->errtxt, "Malformed background colour target");
+ 		return ERROR_INVALID_OPTION;
+ 	}
+-	error_number = is_sane(SSET, (unsigned char*)symbol->fgcolour, strlen(symbol->fgcolour));
++	error_number = is_sane(SSET, (unsigned char*)symbol->fgcolour, (int)strlen(symbol->fgcolour));
+ 	if (error_number == ERROR_INVALID_DATA) {
+ 		strcpy(symbol->errtxt, "Malformed foreground colour target");
+ 		return ERROR_INVALID_OPTION;
+ 	}
+-	error_number = is_sane(SSET, (unsigned char*)symbol->bgcolour, strlen(symbol->bgcolour));
++	error_number = is_sane(SSET, (unsigned char*)symbol->bgcolour, (int)strlen(symbol->bgcolour));
+ 	if (error_number == ERROR_INVALID_DATA) {
+ 		strcpy(symbol->errtxt, "Malformed background colour target");
+ 		return ERROR_INVALID_OPTION;
+--- zint-2.4.2/backend/upcean.c
++++ b/upcean.c
+@@ -66,7 +66,7 @@
+ { /* UPC A is usually used for 12 digit numbers, but this function takes a source of any length */
+ 	unsigned int i, half_way;
+ 
+-	half_way = strlen(source) / 2;
++	half_way = (int)strlen(source) / 2;
+ 
+ 	/* start character */
+ 	concat (dest, "111");
+@@ -93,7 +93,7 @@
+ 	char gtin[15];
+ 
+ 	strcpy(gtin, (char*)source);
+-	length = strlen(gtin);
++	length = (int)strlen(gtin);
+ 	gtin[length] = upc_check(gtin);
+ 	gtin[length + 1] = '\0';
+ 	upca_draw(gtin, dest);
+@@ -287,7 +287,7 @@
+ 
+ 	count = 0;
+ 
+-	h = strlen(source);
++	h = (int)strlen(source);
+ 	for (i = h - 1; i >= 0; i--) {
+ 		count += ctoi(source[i]);
+ 
+@@ -310,7 +310,7 @@
+ 	strcpy(gtin, (char*)source);
+ 	
+ 	/* Add the appropriate check digit */
+-	length = strlen(gtin);
++	length = (int)strlen(gtin);
+ 	gtin[length] = ean_check(gtin);
+ 	gtin[length + 1] = '\0';
+ 
+@@ -322,7 +322,7 @@
+ 
+ 	/* start character */
+ 	concat (dest, "111");
+-	length = strlen(gtin);
++	length = (int)strlen(gtin);
+ 	for(i = 1; i <= length; i++)
+ 	{
+ 		if (i == half_way)
+@@ -355,7 +355,7 @@
+ 	char gtin[10];
+ 
+ 	strcpy(gtin, (char*)source);
+-	length = strlen(gtin);
++	length = (int)strlen(gtin);
+ 	gtin[length] = upc_check(gtin);
+ 	gtin[length + 1] = '\0';
+ 	upca_draw(gtin, dest);
+--- zint-2.4.2/backend/zint.h
++++ b/zint.h
+@@ -229,6 +229,8 @@
+ ZINT_EXTERN int ZBarcode_Encode_and_Buffer(struct zint_symbol *symbol, unsigned char *input, int length, int rotate_angle);
+ ZINT_EXTERN int ZBarcode_Encode_File_and_Buffer(struct zint_symbol *symbol, char *filename, int rotate_angle);
+ 
++ZINT_EXTERN int ZBarcode_PNG_Buffer(struct zint_symbol *symbol, int rotate_angle, char **buffer, int *imgWidth, int *imgHeight);
++    
+ ZINT_EXTERN int ZBarcode_ValidID(int symbol_id);
+ 
+ #ifdef __cplusplus

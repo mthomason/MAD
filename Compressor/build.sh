@@ -172,7 +172,11 @@ build_lib() {
 	fi
 
 	export PLATFORMS
-	bash "${COMPRESSOR_DIR}/lib/recipes/${lib}.sh"
+	# Note: this function is called under `|| { …; }` in main(), which
+	# disables set -e for everything inside it -- so failures must be made
+	# loud here by hand, not left to the shell.
+	bash "${COMPRESSOR_DIR}/lib/recipes/${lib}.sh" \
+		|| { echo "FAIL ${lib}: recipe exited $?"; return 1; }
 
 	if [[ "$(matrix_get "${lib}" sha)" == "-" ]]; then
 		log "NOTE: sha256 for ${lib} is unpinned; pin the hash from the log above in matrix.conf"

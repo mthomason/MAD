@@ -70,9 +70,10 @@ platform_min_version() {
 	esac
 }
 
-# Base CFLAGS for one arch of one platform: arch, sysroot, deployment target.
-arch_cflags() {
-	local platform="$1" arch="$2"
+# Sysroot + deployment-target flags for one platform (no -arch: configure
+# probes want the arch in CC and the sysroot in CFLAGS).
+sysroot_flags() {
+	local platform="$1"
 	local sdk flag
 	sdk="$(xcrun --sdk "$(platform_sdk "${platform}")" --show-sdk-path)"
 	case "${platform}" in
@@ -80,7 +81,12 @@ arch_cflags() {
 		simulator) flag="-mios-simulator-version-min=$(platform_min_version "${platform}")" ;;
 		macosx) flag="-mmacosx-version-min=$(platform_min_version "${platform}")" ;;
 	esac
-	echo "-arch ${arch} -isysroot ${sdk} ${flag}"
+	echo "-isysroot ${sdk} ${flag}"
+}
+
+# Base CFLAGS for one arch of one platform: arch, sysroot, deployment target.
+arch_cflags() {
+	echo "-arch $2 $(sysroot_flags "$1")"
 }
 
 arch_build_dir() {
@@ -131,13 +137,13 @@ fetch_source() {
 
 	log "extracting ${target}"
 	rm -rf "${srcroot}"
-	mkdir -p "${srcroot}"
+	mkdir -p "${srcroot}/.extract"
 
 	case "${target}" in
-		*.zip) unzip -q "${target}" -d "${srcroot}/.extract" ;;
-		*.tar.gz | *.tgz) tar -xzf "${target}" -C "${srcroot}/.extract" ;;
-		*.tar.bz2) tar -xjf "${target}" -C "${srcroot}/.extract" ;;
-		*.tar.xz) tar -xJf "${target}" -C "${srcroot}/.extract" ;;
+		*.zip) unzip -q "${target}" -d "${srcroot}/.extract" || die "extract failed: ${target}" ;;
+		*.tar.gz | *.tgz) tar -xzf "${target}" -C "${srcroot}/.extract" || die "extract failed: ${target}" ;;
+		*.tar.bz2) tar -xjf "${target}" -C "${srcroot}/.extract" || die "extract failed: ${target}" ;;
+		*.tar.xz) tar -xJf "${target}" -C "${srcroot}/.extract" || die "extract failed: ${target}" ;;
 		*) die "unknown archive type: ${target}" ;;
 	esac
 
@@ -217,11 +223,11 @@ finish_library() {
 			first_headers="${platform}"
 		fi
 
+		# No -platform hints: this Xcode's -create-xcframework infers each
+		# slice's platform from the library's Mach-O load commands, which
+		# the per-platform -m*-version-min flags set correctly.
 		for lib in "${libnames[@]}"; do
 			xcargs+=(-library "${install}/lib/${lib}" -headers "${install}/include")
-			case "${platform}" in
-				macosx) xcargs+=(-platform macos) ;;
-			esac
 		done
 	done
 
