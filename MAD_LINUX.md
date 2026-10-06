@@ -397,9 +397,11 @@ both platforms and the needs dropped to 3. The mechanism is written up in
 `Linux/README.md` alongside the excluded files and the smaller shims
 (`NSOperation.name`, `qualityOfService`, `NSDataWritingFileProtection*`,
 `QOS_CLASS_DEFAULT`, app-group containers). The file-level exclusions Phase A anticipated turned out to be exactly
-the four §4 files (`BDHost`, `MADApplication`, `MADKeyChain`, `MADURLFactory`); what
-Phase C inherits in exchange is the self-contained-header cleanup that the Linux
-prelude (`Linux/Compat/MADCompat.h`) currently papers over.
+the four §4 files (`BDHost`, `MADApplication`, `MADKeyChain`, `MADURLFactory`); the
+self-contained-header cleanup the prelude used to paper over is done (2026-10-06):
+every header and source in the Linux build imports what it uses, and
+`Linux/Compat/MADCompat.h` is down to the one real platform gap, `NSOperation`'s
+`name` property.
 
 ---
 

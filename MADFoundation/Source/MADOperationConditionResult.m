@@ -15,6 +15,7 @@
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSKeyValueCoding.h>
 #import <Foundation/NSError.h>
+#import <dispatch/dispatch.h>
 
 NSString * _Nonnull const MADOperationConditionKey = @"OperationCondition";
 

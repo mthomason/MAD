@@ -32,6 +32,11 @@
 #ifndef MADTestSupport_h
 #define MADTestSupport_h
 
+// The harness's own imports: the ported tests use Foundation and dispatch
+// throughout and Testing.h brings neither.
+#import <Foundation/Foundation.h>
+#import <dispatch/dispatch.h>
+
 #import "Testing.h"
 
 static unsigned gMadTestChecks __attribute__((unused)) = 0;

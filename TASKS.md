@@ -518,8 +518,11 @@ go/no-go.
   into MADFoundation's single `madlog.h`/`madlog.m`, with per-target
   `MADLOG_ACCESSOR` routing; the other frameworks' remaining Phase C work is
   their direct `os_log_*(Get*Log(), ...)` call sites (§12);
-* MADFoundation's headers are not self-contained — the Linux build paper over that
-  with `Compat/MADCompat.h`, and making them self-contained is Phase C cleanup;
+* ~~MADFoundation's headers are not self-contained — the Linux build paper over
+  that with `Compat/MADCompat.h`~~ — done 2026-10-06: every header and source in
+  the Linux build imports what it uses (verified by compiling each as a
+  one-line translation unit with only the `NSOperation name` shim as prelude),
+  and `MADCompat.h` is that shim alone;
 * the licence-register entries for the toolchain components (§10 above).
 
 Not to be started without the user asking for it by name.

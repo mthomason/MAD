@@ -20,15 +20,57 @@ the environment; nothing here ships in the app and no CI consumes it yet
     `--in-image configure|build|test|probe` steps the Dockerfile and CMD call.
 *   **`lib/common.sh`**, **`lib/toolchain.sh`** -- fetch/build helpers and the
     per-component build knowledge, again mirroring Compressor.
-*   **`CMakeLists.txt`** + **`cmake/MADFoundationSources.cmake`** -- the subset
-    list (with per-file reasons), the include shim, whole-archive linking and
-    the ctest wiring.
+*   **`CMakeLists.txt`** + **`cmake/MADLinuxFramework.cmake`** -- the build:
+    the toolchain flags, the include shim, the prelude, and the one recipe
+    (`mad_make_include_shim`, `mad_add_framework`, `mad_add_test`) every
+    framework is added through. The per-framework source list lives beside it
+    (`cmake/MADFoundationSources.cmake`, with per-file exclusion reasons).
 *   **`Compat/`** -- the Linux-only shims: `MADCompat.h` (the force-included
-    prelude) and `NSOperation+Name.h/.m` (the `name` property GNUstep lacks).
-*   **`Tests/`** -- `MADTestSupport.h` (the GNUstep `Testing.h` glue),
-    `ToolchainProbe.m` (the environment probe and its report), and the ported
-    MADFoundation suites.
+    prelude, now only the `NSOperation+Name.h` shim) and
+    `NSOperation+Name.h/.m` (the `name` property GNUstep lacks).
+*   **`Tests/`** -- the ported MADFoundation suites and `ToolchainProbe.m` (the
+    environment probe and its report). `Tests/Support/MADTestSupport.h` is the
+    GNUstep `Testing.h` glue, shared by every framework's suites.
 *   **`build/`** -- CMake output; gitignored by the repo's `build/` pattern.
+
+## Adding the next framework
+
+The recipe MADFoundation was built with, in the order it was done:
+
+1.  **Source list.** `cmake/<Name>Sources.cmake` sets `<NAME>_SOURCES`: the
+    implementation files the framework needs on Linux, grouped, with every
+    excluded file named and a one-line reason (the shape of
+    `MADFoundationSources.cmake`). Keep it in step with `MAD_LINUX.md` §4.
+2.  **Include shim and library.** `mad_make_include_shim(<Name> <source-dir>)`,
+    then `mad_add_framework(<library> <SOURCES_VAR> <test> ...)`. The function
+    adds the compat prelude, builds the library ARC, and links the tests
+    whole-archive (Apple's `-ObjC`) so categories survive the static archive.
+3.  **Tests.** Port the framework's Xcode suite into `Tests/`, one stand-alone
+    executable per suite, and pass the names to `mad_add_framework`; ctest and
+    `build.sh`'s MADTEST/NEED summary follow from that. `MADTestSupport.h`
+    carries the Foundation and dispatch imports the suites use.
+4.  **Self-contained headers.** The prelude supplies only the `NSOperation`
+    `name` shim, so every header and source must import what it uses. The
+    check: compile each header as a one-line translation unit with only that
+    shim as prelude, and repeat for the sources -- every failure names a
+    missing import. Inside the toolchain image, with the repo mounted at
+    `/repo`:
+
+        SRC=/repo/MADFoundation/Source
+        mkdir -p /tmp/audit/shim && ln -sfn "$SRC" /tmp/audit/shim/MADFoundation
+        clang $(gnustep-config --objc-flags) -fobjc-arc -fsyntax-only \
+            -I /tmp/audit/shim -I /repo/Linux/Compat \
+            -include NSOperation+Name.h \
+            -D__unused=__attribute__\(\(unused\)\) tu.m
+
+    where `tu.m` is `#import <MADFoundation/Foo.h>` for a header, or the
+    source file itself. Only the files Phase C excludes may fail.
+5.  **Verify.** `./Linux/build.sh` from the repo root: image builds, subset
+    compiles and links, every test executable passes. A GNUstep divergence is
+    either fixed, recorded as a `MAD_NEED` with a reason, or asserted
+    per-platform with a comment -- never silently skipped. The known
+    divergences are listed in [`README.md`](README.md); the iOS simulator suite
+    is the regression gate for any platform guard the port adds.
 
 ## Conventions and hazards
 
@@ -41,9 +83,6 @@ the environment; nothing here ships in the app and no CI consumes it yet
     from under them otherwise).
 *   The library links whole-archive: categories in a static archive are
     otherwise dropped, the way Apple's `-ObjC` prevents.
-*   A GNUstep divergence is either fixed, recorded as a `MAD_NEED` with a
-    reason, or asserted per-platform with a comment — never silently skipped.
-    The known divergences are listed in [`README.md`](README.md).
 *   `toolchain.conf` component names must be valid shell identifiers
     (underscores, not dashes) — they become shell variable and function names.
 *   When a component's build needs a new flag, change `lib/toolchain.sh` (the

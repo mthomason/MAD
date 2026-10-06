@@ -58,10 +58,11 @@ implement), and the umbrella `MADFoundation.h`.
 
 The Linux build supplies three things without touching the framework's structure:
 an include shim so the 108 `<MADFoundation/…>` self-imports resolve; a prelude
-header (`Compat/MADCompat.h`) that force-includes Foundation, dispatch and an
-`NSOperation` `name` category (Apple has the property, GNUstep does not); and
-whole-archive linking, Apple's `-ObjC`, without which the framework's categories
-are silently dropped from the static archive.
+header (`Compat/MADCompat.h`) that now carries only the `NSOperation` `name`
+category (Apple has the property, GNUstep does not) — the framework's headers
+and sources import what they use; and whole-archive linking, Apple's `-ObjC`,
+without which the framework's categories are silently dropped from the static
+archive.
 
 The framework itself gained six small platform guards (all `#if __APPLE__` or
 `TARGET_OS_MACCATALYST || TARGET_OS_IOS`, Apple paths textually unchanged):

@@ -13,6 +13,8 @@
 #import "MADDataTable.h"
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSValue.h>
 #import <Foundation/NSNull.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSCoder.h>

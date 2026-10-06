@@ -11,6 +11,8 @@
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSOperation.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSError.h>
 
 @class MADOperation, MADOperationQueue;
 

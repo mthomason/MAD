@@ -8,20 +8,15 @@
 //  force-includes this one header -- a single -include, because CMake
 //  de-duplicates repeated ones).
 //
-//  It supplies what Apple's toolchain gave the sources implicitly:
-//    * Foundation and dispatch, which the framework's headers only import
-//      piecemeal (Apple's Foundation re-exported the rest);
-//    * NSOperation's `name` property, which GNUstep does not have.
-//
-//  Making the framework's headers self-contained is Phase C cleanup; until
-//  then, this is what the Linux translation units see first.
+//  It is now only the real platform gap: NSOperation's `name` property, which
+//  GNUstep does not have.  The Foundation and dispatch imports it used to
+//  carry are gone: MADFoundation's headers and sources import what they use
+//  (see Linux/AGENTS.md for the check that keeps them that way).
 //
 
 #ifndef MADCompat_h
 #define MADCompat_h
 
-#import <Foundation/Foundation.h>
-#import <dispatch/dispatch.h>
 #import "NSOperation+Name.h"
 
 #endif /* MADCompat_h */

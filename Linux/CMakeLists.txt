@@ -6,6 +6,10 @@
 #  symlinked include shim makes the framework's <MADFoundation/...>
 #  self-imports resolve without touching the sources.
 #
+#  The per-framework pattern -- library, groups, tests -- lives in
+#  cmake/MADLinuxFramework.cmake; Linux/AGENTS.md writes down how to add the
+#  next framework.
+#
 #  Driven by Linux/build.sh; not meant to be configured on macOS, where the
 #  frameworks build with Xcode.
 #
@@ -54,11 +58,10 @@ set(CMAKE_OBJC_FLAGS "${_gnustep_objc_flags}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/lib -lobjc")
 enable_language(OBJC)
 
-# The sources lean on Apple's Foundation transitively providing Foundation
-# types (NSError, NSNumber...) and dispatch_*, and on NSOperation's `name`;
-# Compat/MADCompat.h is the one header that supplies all three, force-included
-# ahead of every Objective-C translation unit (one -include: CMake drops
-# duplicate flags).  Two more flags:
+# The framework's headers import what they use, so the prelude now carries a
+# single thing: NSOperation's missing `name` property (Compat/MADCompat.h),
+# force-included ahead of every Objective-C translation unit (one -include:
+# CMake drops duplicate flags).  Two more flags:
 #   __unused is Darwin's <sys/cdefs.h> spelling the framework uses by
 #   convention; glibc does not define it.
 #   -Wno-format-security: the MADLog shim boxes the call site's C string
@@ -77,25 +80,9 @@ set(MAD_COMPAT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Compat")
 
 # The framework imports itself as <MADFoundation/Foo.h> in 100+ places; a
 # symlinked directory named MADFoundation on the include path satisfies that
-# without a source edit.
+# without a source edit.  mad_make_include_shim adds one per framework.
 set(SHIM_DIR "${CMAKE_BINARY_DIR}/shim")
 file(MAKE_DIRECTORY "${SHIM_DIR}")
-if (NOT EXISTS "${SHIM_DIR}/MADFoundation")
-	file(CREATE_LINK "${SOURCE_DIR}" "${SHIM_DIR}/MADFoundation" SYMBOLIC)
-endif()
-
-include(cmake/MADFoundationSources.cmake)
-
-add_library(madfoundation STATIC
-	${MADFOUNDATION_SOURCES}
-	"${MAD_COMPAT_DIR}/NSOperation+Name.m")
-target_include_directories(madfoundation PUBLIC "${SHIM_DIR}" PRIVATE "${MAD_COMPAT_DIR}")
-target_compile_definitions(madfoundation PRIVATE $<$<CONFIG:Debug>:DEBUG=1>)
-target_compile_options(madfoundation PRIVATE
-	-Wall
-	$<$<COMPILE_LANGUAGE:OBJC>:-fobjc-arc>
-	${MAD_OBJC_PRELUDE})
-target_link_libraries(madfoundation PUBLIC ${GNUSTEP_BASE_LIBS} -ldispatch)
 
 enable_testing()
 
@@ -104,24 +91,26 @@ if (NOT EXISTS "${TESTING_INCLUDE}/Testing.h")
 	message(FATAL_ERROR "Testing.h not found under ${TESTING_INCLUDE}")
 endif()
 
-# One executable per ported MADFoundationTests file.  GNUstep's Testing.h is
-# manual-retain-release, so the tests compile without ARC while the library
-# stays ARC -- a per-translation-unit matter, not an ABI one.
-function(mad_test name)
-	add_executable(${name} "Tests/${name}.m")
-	target_include_directories(${name} PRIVATE
-		"${SHIM_DIR}" "${MAD_COMPAT_DIR}" "${TESTING_INCLUDE}" "${CMAKE_CURRENT_SOURCE_DIR}/Tests")
-	target_compile_options(${name} PRIVATE
-		-Wall
-		$<$<COMPILE_LANGUAGE:OBJC>:-fno-objc-arc>
-		${MAD_OBJC_PRELUDE})
-	# WHOLE_ARCHIVE is Apple's -ObjC: the framework's categories
-	# (NSData+Comparison, NSOperation+Advanced, the NSOperation name shim) and
-	# any unreferenced class would otherwise be dropped from the static
-	# archive before the runtime ever sees them.
-	target_link_libraries(${name} PRIVATE "$<LINK_LIBRARY:WHOLE_ARCHIVE,madfoundation>")
-	add_test(NAME ${name} COMMAND ${name})
-endfunction()
+include(cmake/MADLinuxFramework.cmake)
+
+include(cmake/MADFoundationSources.cmake)
+mad_make_include_shim(MADFoundation "${SOURCE_DIR}")
+mad_add_framework(madfoundation MADFOUNDATION_SOURCES
+	MADProgressTests
+	MADStringUtilitiesTests
+	NSDataComparisonTests
+	MADDataTypeTests
+	MADBlockOperationTests
+	MADGroupOperationTests
+	MADOperationQueueTests
+	MADNotificationProgressTests
+	MADExclusivityControllerTests
+	MADOperationTests
+	MADOperationConditionTests
+	MADOperationConditionResultTests
+	MADDataColumnTests
+	MADCredentialTests
+)
 
 # The probe is ARC (proving the ARC environment is the point) and links the
 # library for its link-check block.  It is a report, not a unit test.
@@ -133,18 +122,3 @@ target_compile_options(ToolchainProbe PRIVATE
 	${MAD_OBJC_PRELUDE})
 target_link_libraries(ToolchainProbe PRIVATE "$<LINK_LIBRARY:WHOLE_ARCHIVE,madfoundation>")
 add_test(NAME ToolchainProbe COMMAND ToolchainProbe)
-
-mad_test(MADProgressTests)
-mad_test(MADStringUtilitiesTests)
-mad_test(NSDataComparisonTests)
-mad_test(MADDataTypeTests)
-mad_test(MADBlockOperationTests)
-mad_test(MADGroupOperationTests)
-mad_test(MADOperationQueueTests)
-mad_test(MADNotificationProgressTests)
-mad_test(MADExclusivityControllerTests)
-mad_test(MADOperationTests)
-mad_test(MADOperationConditionTests)
-mad_test(MADOperationConditionResultTests)
-mad_test(MADDataColumnTests)
-mad_test(MADCredentialTests)

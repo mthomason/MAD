@@ -10,6 +10,7 @@
 #define MAD_Designer_NSOperation_Advanced_h
 
 #import <Foundation/NSOperation.h>
+#import <Foundation/NSArray.h>
 
 @interface NSOperation (Advanced)
 

@@ -10,6 +10,8 @@
 #define MAD_Designer_MADOperation_h
 
 #import <Foundation/NSOperation.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSError.h>
 
 @class NSMutableArray<ObjectType>;
 

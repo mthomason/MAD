@@ -9,6 +9,7 @@
 
 #if !__APPLE__
 #import "NSOperation+Name.h"
+#import <Foundation/NSString.h>
 #import <objc/runtime.h>
 
 @implementation NSOperation (MADCompatName)

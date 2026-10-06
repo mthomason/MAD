@@ -9,6 +9,7 @@
 #import "MADOperationConditionTestConnectionSuccess.h"
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSException.h>
 #import <Foundation/NSOperation.h>
 
 #import <MADFoundation/MADOperation.h>

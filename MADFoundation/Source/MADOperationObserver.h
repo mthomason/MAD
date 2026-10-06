@@ -9,6 +9,9 @@
 #ifndef MAD_Designer_MADOperationObserver_h
 #define MAD_Designer_MADOperationObserver_h
 
+#import <Foundation/NSObject.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSError.h>
 @class NSOperation, MADOperation;
 
 @protocol MADOperationObserver <NSObject>

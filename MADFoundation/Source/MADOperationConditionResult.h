@@ -11,6 +11,8 @@
 
 #import <MADFoundation/MADOperationCondition.h>
 #import <Foundation/NSObject.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSError.h>
 
 @class MADOperation, MADOperationCondition;
 

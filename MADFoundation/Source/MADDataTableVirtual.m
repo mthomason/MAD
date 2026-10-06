@@ -12,6 +12,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSNull.h>
 #import <Foundation/NSArray.h>
+#import <Foundation/NSValue.h>
 #import <Foundation/NSIndexSet.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSDictionary.h>

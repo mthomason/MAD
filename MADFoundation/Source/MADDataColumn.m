@@ -12,6 +12,7 @@
 
 #import "MADDataColumn.h"
 #import <Foundation/NSArray.h>
+#import <Foundation/NSValue.h>
 #import <Foundation/NSCoder.h>
 #import <Foundation/NSNull.h>
 #import <Foundation/NSDictionary.h>

@@ -8,6 +8,9 @@
 
 #import "MADExclusivityController.h"
 #import <MADFoundation/MADOperation.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSException.h>
+#import <dispatch/dispatch.h>
 
 static MADExclusivityController *_sharedInstance;
 

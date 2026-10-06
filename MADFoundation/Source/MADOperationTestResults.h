@@ -10,6 +10,7 @@
 #define MADOperationTestResults_h
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSError.h>
 
 @protocol MADOperationTestResults <NSObject>
 

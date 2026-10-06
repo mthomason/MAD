@@ -14,6 +14,7 @@
 #import <Foundation/NSOperation.h>
 #import <math.h>
 #import "MADProgress.h"
+#import <dispatch/dispatch.h>
 
 NSString * const MADNotificationProgressIdentifier = @"MADProgressNotification";
 NSString * const MADNotificationProgressKey = @"p";
