@@ -12,7 +12,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSString.h>
-#import <Foundation/NSNULL.h>
+#import <Foundation/NSNull.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSCalendar.h>
 #import <Foundation/NSBundle.h>
@@ -22,6 +22,7 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSDecimalNumber.h>
 #import <Foundation/NSTimeZone.h>
+#import <Foundation/NSCharacterSet.h>
 
 #import <MADFoundation/BDHost.h>
 #import <MADFoundation/MADDataTable.h>
@@ -38,9 +39,7 @@
 #import <MADTds/tds_sysdep_public.h>
 #import <MADTds/sybdb.h>
 
-#import <dispatch/time.h>
-#import <dispatch/queue.h>
-#import <dispatch/semaphore.h>
+#import <dispatch/dispatch.h>
 
 //#import <sybdb.h>
 #import <string.h>

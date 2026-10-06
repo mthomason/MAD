@@ -28,8 +28,10 @@
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 #import <MADAPI/MADQuery.h>
 
+#if __APPLE__
 #import <CoreFoundation/CFString.h>
 #import <CoreFoundation/CFData.h>
+#endif
 
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
@@ -41,13 +43,14 @@
 #import <Foundation/NSNull.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSCalendar.h>
+#import <Foundation/NSValue.h>
 
 #import <string.h>
 #import <stdlib.h>
 #import <stdio.h>
 
-#import <dispatch/time.h>
-#import <dispatch/semaphore.h>
+#import <dispatch/dispatch.h>
+#import <dispatch/dispatch.h>
 #import <dispatch/object.h>
 
 // Double quotes wrap *names* here, and only names: SQLite reads them as identifiers, and

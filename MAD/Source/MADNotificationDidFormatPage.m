@@ -11,7 +11,7 @@
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSValue.h>
 #import <Foundation/NSException.h>
-#import <dispatch/once.h>
+#import <dispatch/dispatch.h>
 #import <math.h>
 #import <MADFoundation/madlog.h>
 

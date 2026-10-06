@@ -9,6 +9,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSValue.h>
 
 #import <MADAPI/MADQueryType.h>
 #import "MADQueryCacheSelectRowIds.h"

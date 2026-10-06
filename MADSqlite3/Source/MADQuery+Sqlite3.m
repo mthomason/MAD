@@ -14,6 +14,7 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSNull.h>
+#import <Foundation/NSValue.h>
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADAPI/MADDatabaseDataBinding.h>

@@ -42,6 +42,7 @@
 static unsigned gMadTestChecks __attribute__((unused)) = 0;
 static unsigned gMadTestFailures __attribute__((unused)) = 0;
 static unsigned gMadTestNeeds __attribute__((unused)) = 0;
+static unsigned gMadTestSkips __attribute__((unused)) = 0;
 static unsigned gMadTestSetFailures __attribute__((unused)) = 0;
 
 // END_SET reports a set ended by an exception (or by a SkipSet skip, which
@@ -113,6 +114,19 @@ static void madTestSetEnded(const char *setName, BOOL completed, double duration
 		} \
 	} while (0)
 
+// XCTSkipIf: the environment cannot run this test right now -- the live
+// database suites skip when no server is reachable, the same contract the
+// Xcode schemes have.  Unlike MAD_NEED this is not a platform gap, so it is
+// counted on its own line and never as a need.
+#define MAD_SKIP(condition, message) \
+	do { \
+		if (condition) { \
+			gMadTestSkips++; \
+			fprintf(stderr, "SKIP: %s\n", [(message) UTF8String]); \
+			return; \
+		} \
+	} while (0)
+
 // Runs the run loop until *flag is YES or the timeout elapses -- the XCTest
 // waitForExpectations replacement, for tests whose completion comes back on a
 // dispatch queue or the main thread.
@@ -138,7 +152,7 @@ static int MADTestMain(const char *suite, const MADTestEntry *tests, size_t coun
 		END_SET(tests[i].name)
 	}
 	unsigned failed = gMadTestFailures + gMadTestSetFailures;
-	printf("MADTEST %s tests=%zu needs=%u failed=%u\n", suite, count, gMadTestNeeds, failed);
+	printf("MADTEST %s tests=%zu needs=%u skips=%u failed=%u\n", suite, count, gMadTestNeeds, gMadTestSkips, failed);
 	if (failed > 0) {
 		printf("FAIL %s: %u failure(s)\n", suite, failed);
 		return 1;

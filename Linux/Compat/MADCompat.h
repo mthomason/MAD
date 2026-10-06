@@ -22,6 +22,7 @@
 #import "NSFileManager+Ubiquity.h"
 #import "NSFileCoordinator+Presenter.h"
 #import "NSURL+SecurityScope.h"
+#import "NSURL+FileSystem.h"
 #import "NSData+ReadingOptions.h"
 #import "NSKeyedUnarchiver+TopLevel.h"
 #import "NSCoder+TopLevel.h"
@@ -30,5 +31,22 @@
 // GNUstep has no MacTypes.h.  Only the one the frameworks reach for, and only
 // off Apple, so Apple's own definition is never shadowed.
 typedef double Float64;
+
+// Apple's Foundation defines this ARC attribute for methods returning a
+// pointer into an object's insides; GNUstep's does not.  The declaration it
+// marks here returns a void *, so the attribute's autorelease elision does
+// not apply either way.
+#ifndef NS_RETURNS_INNER_POINTER
+#define NS_RETURNS_INNER_POINTER
+#endif
+
+// The double-underscore nullability spellings come from Apple's headers;
+// GNUstep's do not carry them.  clang understands the single-underscore forms.
+#ifndef __nullable
+#define __nullable _Nullable
+#endif
+#ifndef __nonnull
+#define __nonnull _Nonnull
+#endif
 
 #endif /* MADCompat_h */

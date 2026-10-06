@@ -92,6 +92,7 @@ set(MAD_COMPAT_SOURCES
 	"${MAD_COMPAT_DIR}/NSFileManager+Ubiquity.m"
 	"${MAD_COMPAT_DIR}/NSFileCoordinator+Presenter.m"
 	"${MAD_COMPAT_DIR}/NSURL+SecurityScope.m"
+	"${MAD_COMPAT_DIR}/NSURL+FileSystem.m"
 	"${MAD_COMPAT_DIR}/NSData+ReadingOptions.m"
 	"${MAD_COMPAT_DIR}/NSKeyedUnarchiver+TopLevel.m"
 	"${MAD_COMPAT_DIR}/NSCoder+TopLevel.m")
@@ -101,6 +102,15 @@ set(MAD_COMPAT_SOURCES
 # without a source edit.  mad_make_include_shim adds one per framework.
 set(SHIM_DIR "${CMAKE_BINARY_DIR}/shim")
 file(MAKE_DIRECTORY "${SHIM_DIR}")
+
+# The C libraries the frameworks link are built by Linux/lib/libraries.sh
+# into /usr/local, the image's prefix (MAD_LINUX.md §7).
+set(SQLITE3_INCLUDE_DIR "/usr/local/include")
+find_library(SQLITE3_LIBRARY sqlite3 REQUIRED)
+set(FREETDS_INCLUDE_DIR "/usr/local/include")
+find_library(FREETDS_LIBRARY sybdb REQUIRED)
+find_library(OPENSSL_SSL_LIBRARY ssl REQUIRED)
+find_library(OPENSSL_CRYPTO_LIBRARY crypto REQUIRED)
 
 enable_testing()
 
@@ -194,6 +204,55 @@ mad_add_framework(madapi MADAPI_SOURCES
 	MADQueryTests
 )
 target_link_libraries(madapi PUBLIC madfoundation madcocoaextensions)
+
+set(SOURCE_DIR "${REPO_ROOT}/MADSqlite3/Source")
+include(cmake/MADSqlite3Sources.cmake)
+mad_make_include_shim(MADSqlite3 "${SOURCE_DIR}")
+# The framework imports the SQLite header as <MADSqlite3/sqlite3.h> -- the
+# Xcode target keeps the Compressor-built header Public under that name.  The
+# libraries layer installs the amalgamation header in the image, so a second
+# shim directory exposes it under the same path.
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/sqlite3-shim/MADSqlite3")
+file(CREATE_LINK "${SQLITE3_INCLUDE_DIR}/sqlite3.h"
+	"${CMAKE_BINARY_DIR}/sqlite3-shim/MADSqlite3/sqlite3.h" SYMBOLIC)
+mad_add_framework(madsqlite3 MADSQLITE3_SOURCES
+	MADDatabaseSqlite3DatabaseTests
+	MADDatabaseSqlite3Tests
+	MADDataTableFastBenchmarkTests
+)
+target_include_directories(madsqlite3 PUBLIC "${CMAKE_BINARY_DIR}/sqlite3-shim")
+target_link_libraries(madsqlite3 PUBLIC madfoundation madapi maddatastructures ${SQLITE3_LIBRARY})
+
+set(SOURCE_DIR "${REPO_ROOT}/MADTds/MADTds")
+include(cmake/MADTdsSources.cmake)
+mad_make_include_shim(MADTds "${SOURCE_DIR}")
+# The framework exposes freetds' sybdb.h as <MADTds/sybdb.h>; the libraries
+# layer installs it, and a second shim directory puts it under that name.
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/sybdb-shim/MADTds")
+file(CREATE_LINK "${FREETDS_INCLUDE_DIR}/sybdb.h"
+	"${CMAKE_BINARY_DIR}/sybdb-shim/MADTds/sybdb.h" SYMBOLIC)
+file(CREATE_LINK "${FREETDS_INCLUDE_DIR}/tds_sysdep_public.h"
+	"${CMAKE_BINARY_DIR}/sybdb-shim/MADTds/tds_sysdep_public.h" SYMBOLIC)
+mad_add_framework(madtds MADTDS_SOURCES
+)
+target_include_directories(madtds PUBLIC "${CMAKE_BINARY_DIR}/sybdb-shim")
+target_link_libraries(madtds PUBLIC madfoundation
+	${FREETDS_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+
+set(SOURCE_DIR "${REPO_ROOT}/MADTdsClient/Source")
+include(cmake/MADTdsClientSources.cmake)
+mad_make_include_shim(MADTdsClient "${SOURCE_DIR}")
+# The umbrella header sits one level above Source/ in this framework, so a
+# second shim directory carries it under the <MADTdsClient/...> name.
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/umbrella-shim/MADTdsClient")
+file(CREATE_LINK "${REPO_ROOT}/MADTdsClient/MADTdsClient.h"
+	"${CMAKE_BINARY_DIR}/umbrella-shim/MADTdsClient/MADTdsClient.h" SYMBOLIC)
+mad_add_framework(madtdsclient MADTDSCLIENT_SOURCES
+	MADTdsClientTests
+	MADTdsClientLiveTests
+)
+target_include_directories(madtdsclient PUBLIC "${CMAKE_BINARY_DIR}/umbrella-shim")
+target_link_libraries(madtdsclient PUBLIC madtds madapi madcocoaextensions madfoundation)
 
 # The probe is ARC (proving the ARC environment is the point) and links the
 # library for its link-check block.  It is a report, not a unit test.

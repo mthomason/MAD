@@ -6,8 +6,10 @@
 #    toolchain-base  Ubuntu 24.04 plus the distro clang and GNUstep's
 #                    dependencies; sets the compiler environment
 #    toolchain       libobjc2, libdispatch, gnustep-make and gnustep-base,
-#                    built from the pins in Linux/toolchain.conf
-#    build           the repo copied in and the MADFoundation subset compiled;
+#                    built from the pins in Linux/toolchain.conf, then the C
+#                    libraries the frameworks link, built from the pins in
+#                    Linux/libraries.conf
+#    build           the repo copied in and the frameworks compiled;
 #                    `docker run <image>` runs the Linux tests
 #
 #  Build through Linux/build.sh, not by hand -- it resolves the docker CLI and
@@ -27,6 +29,7 @@ RUN apt-get update \
 		libbsd-dev \
 		libffi-dev libxml2-dev libxslt1-dev libgnutls28-dev zlib1g-dev \
 		libavahi-client-dev libicu-dev tzdata libcurl4-openssl-dev \
+		libncurses-dev libtirpc-dev \
 	&& rm -rf /var/lib/apt/lists/*
 
 # The toolchain lives in /usr/local, like GNUstep's Linux guide says.
@@ -41,13 +44,19 @@ ENV CC=clang \
 FROM toolchain-base AS toolchain
 
 COPY Linux/toolchain.conf /opt/madlinux/toolchain.conf
+COPY Linux/libraries.conf /opt/madlinux/libraries.conf
 COPY Linux/lib/ /opt/madlinux/lib/
+# The SQLite option list stays in its one place: the recipe and this build
+# both read Compressor/sqlite3.xcconfig.
+COPY Compressor/sqlite3.xcconfig /opt/madlinux/sqlite3.xcconfig
 
 # Fetch and build are separate layers on purpose: the fetch layer survives a
 # build failure, so fixing a GNUstep step never re-downloads.  Both layers are
-# invalidated only by toolchain.conf or lib/, never by repo source edits.
+# invalidated only by the conf files or lib/, never by repo source edits.
 RUN bash /opt/madlinux/lib/toolchain.sh --fetch
 RUN bash /opt/madlinux/lib/toolchain.sh --build
+RUN bash /opt/madlinux/lib/libraries.sh --fetch
+RUN bash /opt/madlinux/lib/libraries.sh --build
 
 FROM toolchain AS build
 

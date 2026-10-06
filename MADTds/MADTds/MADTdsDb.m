@@ -12,6 +12,7 @@
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSNull.h>
+#import <Foundation/NSNotification.h>
 
 #import <MADFoundation/madlog.h>
 

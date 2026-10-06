@@ -220,9 +220,17 @@ static NSString * const MADPathComponentData       = @"Data";
 		}
 		
 		NSError *archiveError = nil;
+#if __APPLE__
 		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object
 											 requiringSecureCoding:YES
 															 error:&archiveError];
+#else
+		// GNUstep has no secure coding and the strict archive is nil; the
+		// permissive archive is the same coder without the hardening.
+		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object
+											 requiringSecureCoding:NO
+															 error:&archiveError];
+#endif
 		if (archiveError != nil) {
 			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving object: %@", __PRETTY_FUNCTION__, archiveError);
 			if (completion != nil) completion(archiveError);
@@ -276,7 +284,13 @@ static NSString * const MADPathComponentData       = @"Data";
 		
 		NSNumber *zero = @0;
 		NSError *archiveError = nil;
+#if __APPLE__
 		NSData *serializedListData = [NSKeyedArchiver archivedDataWithRootObject:zero requiringSecureCoding:YES error:&archiveError];
+#else
+		// GNUstep has no secure coding and the strict archive is nil; the
+		// permissive archive is the same coder without the hardening.
+		NSData *serializedListData = [NSKeyedArchiver archivedDataWithRootObject:zero requiringSecureCoding:NO error:&archiveError];
+#endif
 		if (archiveError != nil) {
 			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving object: %@", __PRETTY_FUNCTION__, archiveError);
 			completion(archiveError);

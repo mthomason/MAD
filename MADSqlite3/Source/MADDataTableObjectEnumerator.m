@@ -17,6 +17,7 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSKeyValueCoding.h>
+#import <Foundation/NSValue.h>
 
 #import <MADFoundation/MADDataColumn.h>
 
