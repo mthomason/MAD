@@ -131,13 +131,10 @@
 }
 
 - (void)testWillEnqueueAdvancesPastPendingToReady {
-	// Not a defect: -willEnqueue sets state to Pending, but because -isReady is a
-	// KVO-dependent key of "state" (see +keyPathsForValuesAffectingValueForKey:), the
-	// didChangeValueForKey:@"state" notification re-enters -isReady, which runs
-	// -evaluateConditions on a dependency-free operation and advances it straight to
-	// Ready. That mapping is what NSOperation dependency scheduling needs, so it stays;
-	// nothing outside MADOperation.m reads .state, so the skipped Pending is
-	// unobservable. This pins the observable end state.
+	// -willEnqueue drives the advance explicitly (Pending, then condition
+	// evaluation for a dependency-free operation) rather than leaning on the
+	// KVO dependent-key side effect, which cost GNUstep's NSOperationQueue its
+	// "isReady" observation.  This pins the observable end state.
 	MADOperation *op = [[MADOperation alloc] init];
 	[op willEnqueue];
 	XCTAssertEqual(op.state, MADOperationStateReady);

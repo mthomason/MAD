@@ -48,27 +48,16 @@ static void testAddMADOperationNotifiesDelegate(void) {
 
 	MADQueueRunOperation *op = [[MADQueueRunOperation alloc] init];
 
-	// GNUstep divergence: its NSOperationQueue removes its "isReady" KVO
-	// observation every time the notification fires, and MADOperation's state
-	// machine notifies isReady more than once (Pending -> EvaluatingConditions
-	// -> Ready) where Apple's notifies once -- so GNUstep's second removal
-	// raises NSInvalidArgumentException and the operation never runs.  The
-	// divergence is recorded as a counted need (see the Phase B status in
-	// MAD_LINUX.md), never hidden.
-	@try {
-		[queue addOperation:op];
+	[queue addOperation:op];
 
-		MAD_PASS(delegate.willAddCalled, "the delegate was told an operation will be added");
+	MAD_PASS(delegate.willAddCalled, "the delegate was told an operation will be added");
 
-		NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:5.0];
-		while (!delegate.didFinishCalled && [deadline timeIntervalSinceNow] > 0) {
-			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
-									 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
-		}
-		MAD_PASS(delegate.didFinishCalled, "the delegate was told the operation finished");
-	} @catch (NSException *e) {
-		MAD_NEED(NO, @"GNUstep's NSOperationQueue removes its isReady observation twice; MADOperation's state machine notifies isReady more than once (Apple does once) and GNUstep raises on the second removal");
+	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:5.0];
+	while (!delegate.didFinishCalled && [deadline timeIntervalSinceNow] > 0) {
+		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+								 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
 	}
+	MAD_PASS(delegate.didFinishCalled, "the delegate was told the operation finished");
 }
 
 static void testAddStandardOperationNotifiesDelegate(void) {

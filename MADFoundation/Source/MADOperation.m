@@ -133,39 +133,75 @@ static NSString * const MADOperatorSelectorState        = @"state";
 		return;
 	}
 	
-	// Use will/didChangeValueForKey for KVO compliance on 'state'
-	// These must be called OUTSIDE the lock if they can trigger arbitrary code (observers)
-	// that might try to re-lock. However, NSOperation's KVO is usually about notifying
-	// the OperationQueue, which is designed to handle it.
-	// For now, assuming current lock scope is fine as per original code.
-	// A safer pattern is unlock-notify-relock if KVO observers are complex.
-	// But given it's a recursive lock, direct re-entrancy is safe.
-	
+	// isReady, isExecuting and isFinished all derive from the state, and the
+	// operation queue watches them by KVO.  Announce only the ones whose value
+	// actually changes across the transition: GNUstep's NSOperationQueue removes
+	// its "isReady" observation on every notification it receives, so a
+	// notification that carries no change (Pending -> EvaluatingConditions,
+	// say) costs it the observation and the operation never runs.  The
+	// will/did pairs must stay inside the lock: the recursive mutex lets a
+	// synchronously-notified observer re-enter the operation on this thread.
+	BOOL wasReady = [self readyValueForState:oldState];
+	BOOL wasExecuting = (oldState == MADOperationStateExecuting);
+	BOOL wasFinished = (oldState == MADOperationStateFinished);
+	BOOL isReadyNow = [self readyValueForState:newState];
+	BOOL isExecutingNow = (newState == MADOperationStateExecuting);
+	BOOL isFinishedNow = (newState == MADOperationStateFinished);
+
 	MADLogDebug("MADOperation <%p:%@> state changing: %@ -> %@",
 				self, self.name, NSStringFromMADOperationState(oldState), NSStringFromMADOperationState(newState));
-	
+
+	if (wasReady != isReadyNow) [self willChangeValueForKey:MADOperatorSelectorIsReady];
+	if (wasExecuting != isExecutingNow) [self willChangeValueForKey:MADOperatorSelectorIsExecuting];
+	if (wasFinished != isFinishedNow) [self willChangeValueForKey:MADOperatorSelectorIsFinished];
 	[self willChangeValueForKey:MADOperatorSelectorState];
 	_state = newState;
 	[self didChangeValueForKey:MADOperatorSelectorState];
-	
+	if (wasReady != isReadyNow) [self didChangeValueForKey:MADOperatorSelectorIsReady];
+	if (wasExecuting != isExecutingNow) [self didChangeValueForKey:MADOperatorSelectorIsExecuting];
+	if (wasFinished != isFinishedNow) [self didChangeValueForKey:MADOperatorSelectorIsFinished];
+
 	pthread_mutex_unlock(&_stateLock);
 }
 
-// use the KVO mechanism to indicate that changes to "state" affect other properties as well
-+ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
-	NSArray *keys = [[NSArray alloc] initWithObjects: MADOperatorSelectorIsReady,
-					 MADOperatorSelectorIsExecuting,
-					 MADOperatorSelectorIsFinished, nil];
-	if ([keys containsObject:key]) {
-		NSSet *result = [[NSSet alloc] initWithObjects:MADOperatorSelectorState, nil];
-		return result;
+// The value -isReady reports from a given state.  Side-effect free: -setState:
+// calls it mid-transition to decide which KVO notifications the transition owes.
+// Pending reports YES only when cancelled -- ready to be finished, not executed.
+- (BOOL)readyValueForState:(MADOperationState)state {
+	switch (state) {
+		case MADOperationStateInitialized:
+		case MADOperationStatePending:
+			return self.isCancelled;
+		case MADOperationStateReady:
+			return YES;
+		default:
+			return NO;
 	}
-	return [super keyPathsForValuesAffectingValueForKey:key];
 }
 
 - (void)willEnqueue {
 	MADLogDebug("MADOperation <%p:%@> willEnqueue.", self, self.name);
 	self.state = MADOperationStatePending;
+	// Drive the advance explicitly while the queue is not yet observing: the
+	// old dependent-key side effect fired "isReady" from inside the queue's own
+	// readiness check, which cost GNUstep's queue its observation.
+	[self evaluateConditionsIfReady];
+}
+
+// Advance a pending operation whose dependencies are satisfied into condition
+// evaluation.  Also reached from -isReady, because a dependency can finish
+// after enqueue (on GNUstep the dependency's isReady notification is what wakes
+// the queue, and the operation's state machine has to catch up with it).
+- (void)evaluateConditionsIfReady {
+	if (self.state != MADOperationStatePending) return;
+	if (self.isCancelled) {
+		self.state = MADOperationStateReady;
+		return;
+	}
+	if ([super isReady]) { // Check dependencies
+		MADLogDebug("MADOperation <%p:%@> dependencies satisfied, evaluating conditions.", self, self.name);
+		[self evaluateConditions];
+	}
 }
 
 + (NSString *)descriptionForState:(MADOperationState)state {
@@ -182,44 +218,12 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
 - (BOOL)isReady {
-	// This method can be called frequently. Verbose logging here should be conditional or very lightweight.
-	MADOperationState currentState = self.state; // Accesses property, which locks/unlocks
-	BOOL currentIsCancelled = self.isCancelled; // Accesses super, presumably safe
-	
-	// MADLogDebug("MADOperation <%p:%@> isReady? Current state: %@, Cancelled: %s",
-	// 			self, self.name, NSStringFromMADOperationState(currentState), currentIsCancelled ? "YES" : "NO");
-	
-	switch (currentState) {
-		case MADOperationStateInitialized:
-			return currentIsCancelled; // If cancelled before pending, it can be considered "ready" to finish.
-			
-		case MADOperationStatePending:
-			if (currentIsCancelled) {
-				MADLogDebug("MADOperation <%p:%@> isReady: YES (pending but cancelled)", self, self.name);
-				return YES;
-			}
-			if ([super isReady]) { // Check dependencies
-				MADLogDebug("MADOperation <%p:%@> isReady: Super is ready, evaluating conditions.", self, self.name);
-				[self evaluateConditions]; // This will transition state internally
-				// State might have changed to EvaluatingConditions, then to Ready.
-				// Re-check self.state after evaluateConditions (which is async).
-				// This logic is tricky: isReady should be synchronous. evaluateConditions is async.
-				// NSOperationQueue polls isReady. If evaluateConditions is async,
-				// isReady might return NO, then YES later once conditions pass.
-				// The current implementation relies on evaluateConditions synchronously changing state if all conditions are synchronous,
-				// or eventually changing it. The `self.state == MADOperationStateReady` check after
-				// `evaluateConditions` implies an expectation of synchronous change or that `evaluateConditions`
-				// is called to *initiate* the check, and the queue will poll again.
-				return self.state == MADOperationStateReady;
-			}
-			return NO; // Dependencies not met
-			
-		case MADOperationStateReady:
-			return YES; // Explicitly ready (or super.isReady || self.isCancelled if super matters here)
-			
-		default:
-			return NO; // Not in a ready-able state (Executing, Finishing, Finished)
+	MADOperationState currentState = self.state;
+	if (currentState == MADOperationStatePending) {
+		[self evaluateConditionsIfReady];
+		currentState = self.state;
 	}
+	return [self readyValueForState:currentState];
 }
 
 - (BOOL)isExecuting {return self.state == MADOperationStateExecuting; }
@@ -247,9 +251,15 @@ static NSString * const MADOperatorSelectorState        = @"state";
 }
 
 - (void)evaluateConditions {
-	// NSAssert is a form of self-documentation and debug check.
-	//NSAssert(self.state == MADOperationStatePending && !self.isCancelled, @"evaluateConditions() was called out-of-order");
-	
+	// Pending is the only state this may be entered from, and the guard matters:
+	// two threads can race in through -isReady (a queue polls while the owner
+	// touches the operation), and evaluating twice would run every condition twice.
+	if (self.state != MADOperationStatePending) {
+		MADLogDebug("MADOperation <%p:%@> evaluateConditions: state is %@, not Pending. Ignored.",
+					self, self.name, NSStringFromMADOperationState(self.state));
+		return;
+	}
+
 	MADLogDebug("MADOperation <%p:%@> evaluateConditions: changing state to EvaluatingConditions.", self, self.name);
 	self.state = MADOperationStateEvaluatingConditions;
 	
@@ -275,17 +285,12 @@ static NSString * const MADOperatorSelectorState        = @"state";
 						strongSelf, strongSelf.name);
 		}
 		
-		// Only transition to Ready if not cancelled AFTER conditions evaluated.
+		// A cancelled operation still reaches Ready: -start sees the cancellation
+		// and finishes it, and -isReady already reports YES while cancelled.
 		if (strongSelf.isCancelled) {
 			MADLogDebug("MADOperation <%p:%@> conditions evaluated, but operation is now cancelled. Will transition to finish.", strongSelf, strongSelf.name);
-			// The isReady logic or start logic should handle this by moving to finish.
-			// Setting state to Ready might be okay, as a cancelled op that's "Ready" will just finish quickly.
-			// However, if it's cancelled, perhaps it should go straight to Finishing/Finished.
-			// For now, follow original logic of setting to Ready.
-			strongSelf.state = MADOperationStateReady; // Or perhaps a specific "CancelledAfterConditions" state if needed.
-		} else {
-			strongSelf.state = MADOperationStateReady;
 		}
+		strongSelf.state = MADOperationStateReady;
 	}];
 }
 

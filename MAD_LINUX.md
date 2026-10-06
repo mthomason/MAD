@@ -387,12 +387,16 @@ descriptors, streams and keyed archiving on the permissive path all pass. Two ga
 are recorded, not hidden: GNUstep's archiver has no secure-coding support
 (`requiringSecureCoding:YES` returns nil; the permissive path round trips), and
 GNUstep's `NSOperationQueue` removes its `isReady` observation on every
-notification while MADOperation's state machine produces more than one — the second
-removal raises, so a MADOperation cannot currently be enqueued on Linux. That is
-the item to settle before Phase D's refresh path can run; `Linux/README.md` writes
-it up alongside the excluded files and the smaller shims (`NSOperation.name`,
-`qualityOfService`, `NSDataWritingFileProtection*`, `QOS_CLASS_DEFAULT`, app-group
-containers). The file-level exclusions Phase A anticipated turned out to be exactly
+notification while MADOperation's state machine used to notify `isReady` more
+than once per enqueue — the second removal raised, so a MADOperation could not
+be enqueued on Linux. That is settled (2026-10-06, branch `linux-port`):
+MADOperation drives the state advance explicitly from `-willEnqueue` and sends
+KVO for `isReady`/`isExecuting`/`isFinished` only on real value changes, so the
+queue sees one notification, as on Apple; the Linux tests assert it plainly on
+both platforms and the needs dropped to 3. The mechanism is written up in
+`Linux/README.md` alongside the excluded files and the smaller shims
+(`NSOperation.name`, `qualityOfService`, `NSDataWritingFileProtection*`,
+`QOS_CLASS_DEFAULT`, app-group containers). The file-level exclusions Phase A anticipated turned out to be exactly
 the four §4 files (`BDHost`, `MADApplication`, `MADKeyChain`, `MADURLFactory`); what
 Phase C inherits in exchange is the self-contained-header cleanup that the Linux
 prelude (`Linux/Compat/MADCompat.h`) currently papers over.

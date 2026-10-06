@@ -495,14 +495,17 @@ recorded needs and the probe's 10 report items. `./Linux/build.sh` is the entry
 point; the iOS suite (118 tests, 0 failures) is the regression gate for the six
 small platform guards the build required.
 
-**The finding that matters.** GNUstep's `NSOperationQueue` removes its `isReady`
-KVO observation on every notification, and MADOperation's state machine notifies
-`isReady` more than once per enqueue (`Pending` → `EvaluatingConditions` →
-`Ready`) where Apple's notifies once. The second removal raises
-`NSInvalidArgumentException` and the operation never runs, so adding a MADOperation
-to a queue currently fails on Linux — which is on the Phase D refresh path.
-Recorded (not silenced) as counted needs in `MADOperationTests` and
-`MADOperationQueueTests`; the mechanism is written up in `Linux/README.md`.
+**The finding that mattered — settled 2026-10-06.** GNUstep's `NSOperationQueue`
+removes its `isReady` KVO observation on every notification, and MADOperation's
+state machine used to notify `isReady` more than once per enqueue (`Pending` →
+`EvaluatingConditions` → `Ready`) where Apple's notifies once; the second removal
+raised `NSInvalidArgumentException` and the operation never ran, which put the
+Phase D refresh path at risk. MADOperation now drives the advance explicitly from
+`-willEnqueue` and sends `isReady`/`isExecuting`/`isFinished` KVO only on real
+value changes, so the queue sees one notification, as Apple's does. The Linux
+tests assert the queue paths plainly on both platforms and the counted needs
+dropped from 5 to 3 (the probe's archiving/app-group items and the credential
+secure-coding item remain). The mechanism is written up in `Linux/README.md`.
 
 **Not proved by this phase, deliberately:** the four excluded files (`BDHost`,
 `MADApplication`, `MADKeyChain`, `MADURLFactory`), the CLI, the other frameworks and

@@ -126,27 +126,13 @@ static void testFinishIsIdempotent(void) {
 }
 
 static void testWillEnqueueAdvancesPastPendingToReady(void) {
-	// Not a defect: -willEnqueue sets state to Pending, but because -isReady is a
-	// KVO-dependent key of "state" (see +keyPathsForValuesAffectingValueForKey:), the
-	// didChangeValueForKey:@"state" notification re-enters -isReady, which runs
-	// -evaluateConditions on a dependency-free operation and advances it straight to
-	// Ready. That mapping is what NSOperation dependency scheduling needs, so it stays;
-	// nothing outside MADOperation.m reads .state, so the skipped Pending is
-	// unobservable. This pins the observable end state.
+	// -willEnqueue drives the advance explicitly: Pending, then condition
+	// evaluation for a dependency-free operation, so it is Ready before the
+	// queue starts observing -- the point of the fix for GNUstep's queue.
 	MADOperation *op = [[MADOperation alloc] init];
 	[op willEnqueue];
-#if __APPLE__
 	MAD_PASS(op.state == MADOperationStateReady, "state is Ready");
-#else
-	// GNUstep does not consult the dependent key on that notification, so the
-	// advance happens on the first -isReady query instead -- which is exactly
-	// what a queue does when it schedules the operation, so the observable
-	// behaviour through the queue is the same.  See the Phase B status in
-	// MAD_LINUX.md.
-	MAD_PASS(op.state == MADOperationStatePending, "state stays Pending until isReady is queried");
-	MAD_PASS(op.isReady, "the first isReady query is YES");
-	MAD_PASS(op.state == MADOperationStateReady, "the query advanced it to Ready");
-#endif
+	MAD_PASS(op.isReady, "isReady");
 }
 
 #pragma mark - End-to-end run
@@ -155,26 +141,16 @@ static void testRunToCompletion(void) {
 	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
 	MADRunOperation *op = [[MADRunOperation alloc] init];
 
-	// GNUstep divergence: adding a MADOperation to a queue raises there --
-	// GNUstep's NSOperationQueue removes its "isReady" observation every time
-	// the notification fires, and MADOperation's state machine notifies isReady
-	// more than once (Pending -> EvaluatingConditions -> Ready) where Apple's
-	// notifies once.  Recorded as a counted need; see the Phase B status in
-	// MAD_LINUX.md.
-	@try {
-		[queue addOperation:op];
+	[queue addOperation:op];
 
-		NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:5.0];
-		while (!op.isFinished && [deadline timeIntervalSinceNow] > 0) {
-			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
-									 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
-		}
-
-		MAD_PASS(op.isFinished, "operation finished");
-		MAD_PASS(op.state == MADOperationStateFinished, "state is Finished");
-	} @catch (NSException *e) {
-		MAD_NEED(NO, @"GNUstep's NSOperationQueue removes its isReady observation twice; MADOperation's state machine notifies isReady more than once (Apple does once) and GNUstep raises on the second removal");
+	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:5.0];
+	while (!op.isFinished && [deadline timeIntervalSinceNow] > 0) {
+		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+								 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
 	}
+
+	MAD_PASS(op.isFinished, "operation finished");
+	MAD_PASS(op.state == MADOperationStateFinished, "state is Finished");
 }
 
 MAD_TEST_MAIN("MADOperationTests",

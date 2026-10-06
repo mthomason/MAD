@@ -75,14 +75,20 @@ proof those are behaviour-neutral: 118 tests, 0 failures.
 
 ## GNUstep divergences the probe and tests found
 
-* **NSOperationQueue and KVO — the one that matters.** GNUstep's
-  `NSOperationQueue` removes its `"isReady"` observation every time the
-  notification fires; MADOperation's state machine produces more than one
-  `isReady` notification per enqueue (`Pending` → `EvaluatingConditions` →
-  `Ready`) where Apple's produces one. The second removal raises
-  `NSInvalidArgumentException` and the operation never runs. Recorded as counted
-  needs in `MADOperationTests`/`MADOperationQueueTests`; nothing is silenced.
-  This blocks the Phase D refresh path until it is understood and settled.
+* **NSOperationQueue and KVO — found here, fixed in MADOperation.** GNUstep's
+  `NSOperationQueue` removes its `"isReady"` observation on every notification
+  it receives, and it checks `isReady` once more after registering that
+  observation. MADOperation used to advance its state machine from inside
+  `-isReady` itself (through the KVO dependent keys of `state`), so the first
+  readiness check fired the notification the queue was waiting for, and the
+  second call then removed an observation that was already gone —
+  `NSInvalidArgumentException`, and the operation never ran. MADOperation now
+  drives the advance explicitly (`-willEnqueue` starts condition evaluation)
+  and sends `will`/`didChangeValueForKey:` for `isReady`, `isExecuting` and
+  `isFinished` only when each value actually changes, so the queue sees one
+  `isReady` notification per enqueue, the way Apple's does. The Linux tests
+  assert this plainly on both platforms; nothing is silenced, and the Phase D
+  refresh path is no longer blocked by it.
 * **Secure-coding archiving is absent.** `archivedDataWithRootObject:
   requiringSecureCoding:YES` returns nil with no error;
   `requiringSecureCoding:NO` plus the classic `unarchiveObjectWithData:` round
