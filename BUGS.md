@@ -965,6 +965,46 @@ Status key:
   `testBaseTableLoadFromCacheWithMissingFileReturnsError` (asserting error code -215) and
   `testBaseTableLoadFromCacheWithNilUrlThrows` still pass -- 76 tests green in the class.
 
+### `MADDataTable`'s caching pair throws an NSError object, not an NSException
+- **Status:** Confirmed (left as is -- no changed functionality)
+- **Where:** `MADFoundation/Source/MADDataTable.m:139` (`-loadFromCacheWithUrl:error:`,
+  code -213) and `:201` (`-cacheWithUrl:error:`, code -22)
+- **Behavior:** Both nil-URL guards `@throw` the `NSError` object itself.  The other
+  failure paths in the same methods return `NO` with the error handed back through the
+  out-parameter.
+- **Why it matters:** `@catch (NSException *)` -- the only shape the codebase writes --
+  does not catch it, so a caller passing nil (nullable per the signature) gets an untyped
+  object thrown past it.  The same shape as the MADAPI connection view controllers'
+  `@throw NSInternalInconsistencyException;`.
+- **Test:** `MADDataTableBaseTests testCacheWithNilUrlThrowsTheErrorObject` and
+  `testLoadFromCacheWithNilUrlThrowsTheErrorObject`, which catch `id` and assert the
+  thrown object's class, code and domain.
+
+### `BDHost +addressForHostname:` crashes when the name resolves to no IPv4 address
+- **Status:** Confirmed (latent -- no IPv6-only resolution in the test environment)
+- **Where:** `MADFoundation/Source/BDHost.m:27`
+- **Behavior:** The guard is `addresses.class > 0 ? addresses[0] : nil`.  `[NSArray class]`
+  is never 0, so the test only rejects nil; `+addressesForHostname:` answers an *empty*
+  array for a name that resolves to IPv6 only (it filters everything that is not
+  `AF_INET`), and subscripting element 0 of an empty array throws `NSRangeException`.
+- **Why it matters:** An IPv6-only hostname -- the normal case on some networks -- takes
+  the connection screen down instead of reporting a lookup failure.
+- **Test:** none, deliberately: no IPv6-only fixture resolves deterministically in an
+  offline simulator.  The non-empty path is pinned by `BDHostTests
+  testLocalhostResolvesToLoopback`.
+
+### `BDHost +ipAddresses` / `+ethernetAddresses` are unchecked walks of `getifaddrs()`
+- **Status:** Quirk (dead code -- left as is)
+- **Where:** `MADFoundation/Source/BDHost.m:117`, `:140`
+- **Behavior:** Both iterate the interface list and read `ifa_addr->sa_family` without
+  checking `ifa_addr` for NULL; an interface without an address dereferences NULL.  Both
+  methods are also declared in no header and called from nowhere in the tree (checked
+  across every framework and the app).
+- **Why it matters:** Dead code that crashes on a well-formed input is best wired up or
+  deleted; both are changes, so it is recorded instead.
+- **Test:** none -- the unchecked walk is exactly why the suite does not call them;
+  `BDHostTests`' header records that.
+
 ## MADCocoaExtensions
 
 ### `CGRectAdjustForScale` shrinks regardless of zoom direction
