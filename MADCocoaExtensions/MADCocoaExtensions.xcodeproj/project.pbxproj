@@ -36,6 +36,7 @@
 		4CE1A10F00000000000000A1 /* UIApplicationHelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10F00000000000000B1 /* UIApplicationHelpersTests.m */; };
 		4CE1A11000000000000000A1 /* MFMailComposeExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A11000000000000000B1 /* MFMailComposeExtensionsTests.m */; };
 		4CE1A11100000000000000A1 /* MADViewHelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A11100000000000000B1 /* MADViewHelpersTests.m */; };
+		4CE1A11200000000000000A1 /* NSErrorConstructorsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A11200000000000000B1 /* NSErrorConstructorsTests.m */; };
 		4CE1A10700000000000000A1 /* MADTextStyleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10700000000000000B1 /* MADTextStyleTests.m */; };
 		4CE1A10800000000000000A1 /* MTMathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10800000000000000B1 /* MTMathTests.m */; };
 		4CE1A10900000000000000A1 /* NSNumberFormatterExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10900000000000000B1 /* NSNumberFormatterExtensionsTests.m */; };
@@ -117,6 +118,7 @@
 		4CE1A10F00000000000000B1 /* UIApplicationHelpersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIApplicationHelpersTests.m; sourceTree = "<group>"; };
 		4CE1A11000000000000000B1 /* MFMailComposeExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MFMailComposeExtensionsTests.m; sourceTree = "<group>"; };
 		4CE1A11100000000000000B1 /* MADViewHelpersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADViewHelpersTests.m; sourceTree = "<group>"; };
+		4CE1A11200000000000000B1 /* NSErrorConstructorsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSErrorConstructorsTests.m; sourceTree = "<group>"; };
 		4CE1A10700000000000000B1 /* MADTextStyleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTextStyleTests.m; sourceTree = "<group>"; };
 		4CE1A10800000000000000B1 /* MTMathTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTMathTests.m; sourceTree = "<group>"; };
 		4CE1A10900000000000000B1 /* NSNumberFormatterExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSNumberFormatterExtensionsTests.m; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 				4CE1A10F00000000000000B1 /* UIApplicationHelpersTests.m */,
 				4CE1A11000000000000000B1 /* MFMailComposeExtensionsTests.m */,
 				4CE1A11100000000000000B1 /* MADViewHelpersTests.m */,
+				4CE1A11200000000000000B1 /* NSErrorConstructorsTests.m */,
 				4CE1A10700000000000000B1 /* MADTextStyleTests.m */,
 				4CE1A10800000000000000B1 /* MTMathTests.m */,
 				4CE1A10900000000000000B1 /* NSNumberFormatterExtensionsTests.m */,
@@ -465,6 +468,7 @@
 				4CE1A10F00000000000000A1 /* UIApplicationHelpersTests.m in Sources */,
 				4CE1A11000000000000000A1 /* MFMailComposeExtensionsTests.m in Sources */,
 				4CE1A11100000000000000A1 /* MADViewHelpersTests.m in Sources */,
+				4CE1A11200000000000000A1 /* NSErrorConstructorsTests.m in Sources */,
 				4CE1A10700000000000000A1 /* MADTextStyleTests.m in Sources */,
 				4CE1A10800000000000000A1 /* MTMathTests.m in Sources */,
 				4CE1A10900000000000000A1 /* NSNumberFormatterExtensionsTests.m in Sources */,
