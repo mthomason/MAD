@@ -7,7 +7,7 @@
 //
 
 #import "MADDimmingView.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import "MADDesignerSectionView.h"
 
 @implementation MADDimmingView

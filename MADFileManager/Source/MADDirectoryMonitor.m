@@ -8,7 +8,7 @@
 
 #import "MADDirectoryMonitor.h"
 #import "MADDirectoryMonitorProtocol.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <Foundation/NSURL.h>
 #import <sys/unistd.h>

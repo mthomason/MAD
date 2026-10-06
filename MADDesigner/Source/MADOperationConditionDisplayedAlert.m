@@ -11,7 +11,7 @@
 #import <MADFoundation/MADOperationConditionResult.h>
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 @interface MADOperationConditionDisplayedAlert ()
 

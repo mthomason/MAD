@@ -12,7 +12,7 @@
 #import "MADDirectoryMonitor.h"
 #import "MADFileUtilities.h"
 #import "MADDirectoryMonitorProtocol.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADURLFactory.h>
 

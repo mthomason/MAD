@@ -11,7 +11,7 @@
 #import "MADButtonTwitter.h"
 #import "MADAttributedStringCommon.h"
 #import "MADOperationPromptError.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADCocoaExtensions/MFMailComposeViewController+MADExtensions.h>
 #import <MADCocoaExtensions/MADAlertController.h>

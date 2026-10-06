@@ -120,5 +120,7 @@ moment an image ships; `TASKS.md` §10 carries the flag.
 ## What this does not do yet
 
 Phases C–F of `MAD_LINUX.md`: the rest of the §4 shim list (the CF sites,
-CFNetwork, the remaining `madlog.h` copies), the CLI on Linux (the Phase D
-checkpoint), export formats, the Compressor Linux driver and the CI row.
+CFNetwork, the other frameworks' `os_log`-based call sites — the nine `madlog`
+copies themselves are consolidated into MADFoundation's single pair as of
+2026-10-06, before Phase C), the CLI on Linux (the Phase D checkpoint), export
+formats, the Compressor Linux driver and the CI row.

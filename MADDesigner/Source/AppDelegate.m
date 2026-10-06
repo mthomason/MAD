@@ -18,7 +18,7 @@
 #import "MADViewerController.h"
 #import "MADNavigationController.h"
 #import "Constants.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/MADConstants.h>
 #import <MADFoundation/MADURLFactory.h>

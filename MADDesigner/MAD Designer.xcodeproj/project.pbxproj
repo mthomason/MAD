@@ -298,7 +298,7 @@
 		4C8DE2861BAFB11800AD1111 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2831BAFB11800AD1111 /* MADCreateDocument.storyboard */; };
 		4C8DE2871BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2841BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard */; };
 		4C8DE2951BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */; };
-		4C92A4A32DD7F820008171A9 /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C92A4A22DD7F820008171A9 /* madlog.m */; };
+
 		4C994F0A1BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */; };
 		4C994F111BDCA3A90058627A /* MADDesignerSectionLayoutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F31BAF14A500456DC8 /* MADDesignerSectionLayoutController.m */; };
 		4C994F391BE082730058627A /* MADLabelStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C994F381BE082730058627A /* MADLabelStatus.m */; };
@@ -970,8 +970,7 @@
 		4C8DE2841BAFB11800AD1111 /* MADDesignerObjectSelector.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADDesignerObjectSelector.storyboard; sourceTree = "<group>"; };
 		4C8DE2901BAFB2CA00AD1111 /* MAD Designer.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "MAD Designer.entitlements"; sourceTree = "<group>"; };
 		4C8DE2941BAFCE5E00AD1111 /* MADBarcodeDesigner.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADBarcodeDesigner.storyboard; sourceTree = "<group>"; };
-		4C92A4A12DD7F820008171A9 /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
-		4C92A4A22DD7F820008171A9 /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
+
 		4C994F081BDC3B440058627A /* MADDocumentObjectCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentObjectCollectionViewCell.h; sourceTree = "<group>"; };
 		4C994F091BDC3B440058627A /* MADDocumentObjectCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentObjectCollectionViewCell.m; sourceTree = "<group>"; };
 		4C994F371BE082730058627A /* MADLabelStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADLabelStatus.h; sourceTree = "<group>"; };
@@ -1233,8 +1232,7 @@
 				4C401EEA1BAE61F700BAE5FC /* AppDelegate.m */,
 				4C3AEF242E8D9C5F00C48F77 /* SceneDelegate.h */,
 				4C3AEF252E8D9C5F00C48F77 /* SceneDelegate.m */,
-				4C92A4A12DD7F820008171A9 /* madlog.h */,
-				4C92A4A22DD7F820008171A9 /* madlog.m */,
+
 				4C26BA881BAF9B3000456DC8 /* objcmad.h */,
 				4C26BA871BAF9B3000456DC8 /* objcmad.c */,
 				4C8780B42DD6D296003FD36D /* Constants.h */,
@@ -2626,7 +2624,7 @@
 				4C26B9D11BAF123A00456DC8 /* MADToolboxViewController.m in Sources */,
 				4CA97B522DEA09EA00542EE2 /* MADDynamicTableView.m in Sources */,
 				4CFEE8121BB7A22800AFAA0A /* MADQueryAddLinkJoinTypeController.m in Sources */,
-				4C92A4A32DD7F820008171A9 /* madlog.m in Sources */,
+
 				4C401FC41BAE8AD500BAE5FC /* MTTableViewControllerBarcodeExtraPdf417Iso24728.m in Sources */,
 				4C40204C1BAE92F200BAE5FC /* MADButtonTwitter.m in Sources */,
 				4C5C0DC51C9D01E100826BC2 /* MADOperationConditionPolarQuestionAffirmativeResult.m in Sources */,
@@ -2969,6 +2967,9 @@
 		4C384E4914B29789007B4F48 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetDesignerLog",
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -3015,6 +3016,9 @@
 		4C384E4A14B29789007B4F48 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetDesignerLog",
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;

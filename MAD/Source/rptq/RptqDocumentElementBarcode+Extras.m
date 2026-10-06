@@ -22,7 +22,7 @@
 #import <MADBarcodes/MADBarcodes.h>
 #import <MADBarcodes/MADBarcodeType.h>
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 @implementation RptqDocumentElementBarcode (Extras)
 

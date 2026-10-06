@@ -9,7 +9,7 @@
 #import "MADImageTransformer.h"
 #import <UIKit/UIImage.h>
 //#import <Foundation/NSKeyedUnarchiver.h> // For fallback unarchiving
-#import <os/log.h> // For logging
+#import <MADFoundation/madlog.h>
 
 @implementation MADImageTransformer
 

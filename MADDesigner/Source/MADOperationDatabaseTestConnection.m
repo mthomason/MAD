@@ -7,7 +7,7 @@
 //
 
 #import "MADOperationDatabaseTestConnection.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/MADDataTable.h>

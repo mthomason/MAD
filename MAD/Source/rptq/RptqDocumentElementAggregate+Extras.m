@@ -13,7 +13,7 @@
 #import "RptqStoreContext.h"
 #import "RptqDocumentElementAggregate+Extras.h"
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 #import <CoreFoundation/CFNumber.h>
 
 #import <Foundation/NSSortDescriptor.h>
@@ -26,7 +26,6 @@
 #import "RptqQueryField+Extras.h"
 
 #import "RptqDataHelper.h"
-#import <os/log.h>
 
 static os_log_t rptq_log;
 

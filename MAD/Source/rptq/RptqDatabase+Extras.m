@@ -24,7 +24,7 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSExpression.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 static os_log_t rptq_log;
 

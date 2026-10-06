@@ -19,7 +19,7 @@
 #import <MAD/RptqQuery+extras.h>
 #import <MAD/RptqDocumentSection.h>
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 @interface MADOperationCreateDocumentFirstTimeSetup ()
 

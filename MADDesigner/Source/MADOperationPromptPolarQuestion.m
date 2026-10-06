@@ -8,7 +8,7 @@
 
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADMutualExclusive.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import <UIKit/UIAlertController.h>
 
 static NSString * const TextYes = @"Yes";

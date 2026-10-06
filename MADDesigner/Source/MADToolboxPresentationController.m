@@ -10,7 +10,7 @@
 #import "MADDesignerViewController.h"
 #import "MADDimmingView.h"
 #import "MADViewControllerProtocol.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import <UIKit/UIGestureRecognizer.h>
 #import <UIKit/UITapGestureRecognizer.h>
 #import <UIKit/UISwipeGestureRecognizer.h>

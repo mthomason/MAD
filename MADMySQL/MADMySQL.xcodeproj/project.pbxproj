@@ -639,8 +639,7 @@
 		4CF860532DD0AAC400FCA47D /* crypto.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF85F5D2DD0AAA800FCA47D /* crypto.h */; };
 		4CF860542DD0AAC400FCA47D /* asyncerr.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF85F402DD0AAA800FCA47D /* asyncerr.h */; };
 		4CF860552DD0AAC400FCA47D /* cmac.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF85F4A2DD0AAA800FCA47D /* cmac.h */; };
-		4CFBD9E82DED0B3F00CEEE18 /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFBD9E72DED0B3F00CEEE18 /* madlog.m */; };
-		4CFBD9E92DED0B3F00CEEE18 /* madlog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CFBD9E62DED0B3F00CEEE18 /* madlog.h */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1299,8 +1298,7 @@
 		4CF85FC42DD0AAA800FCA47D /* x509err.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = x509err.h; sourceTree = "<group>"; };
 		4CF85FC52DD0AAA800FCA47D /* x509v3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = x509v3.h; sourceTree = "<group>"; };
 		4CF85FC62DD0AAA800FCA47D /* x509v3err.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = x509v3err.h; sourceTree = "<group>"; };
-		4CFBD9E62DED0B3F00CEEE18 /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
-		4CFBD9E72DED0B3F00CEEE18 /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
+
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2117,8 +2115,7 @@
 				4C00A3741F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m */,
 				4C9372F71BAD244800D6BD62 /* MADDataTypeMySQL.h */,
 				4C9372F81BAD244800D6BD62 /* MADDataTypeMySQL.m */,
-				4CFBD9E62DED0B3F00CEEE18 /* madlog.h */,
-				4CFBD9E72DED0B3F00CEEE18 /* madlog.m */,
+
 				4C9373CD1BAD2A8300D6BD62 /* MysqlConnection.h */,
 				4C9373D31BAD2A8300D6BD62 /* MysqlConnection.m */,
 				4C9373CC1BAD2A8300D6BD62 /* MysqlCommitException.h */,
@@ -2590,7 +2587,7 @@
 				4C4EC26B2DC93A40001DBEBE /* dh_ecdh_config.h in Headers */,
 				4C4EC26C2DC93A40001DBEBE /* my_base.h in Headers */,
 				4C4EC26D2DC93A40001DBEBE /* service_mysql_alloc.h in Headers */,
-				4CFBD9E92DED0B3F00CEEE18 /* madlog.h in Headers */,
+
 				4C4EC26E2DC93A40001DBEBE /* mysql_runtime_error.h in Headers */,
 				4C4EC26F2DC93A40001DBEBE /* service_rpl_transaction_write_set.h in Headers */,
 				4C4EC2702DC93A40001DBEBE /* plugin_query_rewrite.h in Headers */,
@@ -3064,7 +3061,7 @@
 				4C9374001BAD2A8300D6BD62 /* MysqlLiteral.m in Sources */,
 				4C9373FE1BAD2A8300D6BD62 /* MysqlException.m in Sources */,
 				4C9373EB1BAD2A8300D6BD62 /* MysqlFetch.m in Sources */,
-				4CFBD9E82DED0B3F00CEEE18 /* madlog.m in Sources */,
+
 				4C9373FF1BAD2A8300D6BD62 /* MysqlIndex.m in Sources */,
 				4C9374031BAD2A8300D6BD62 /* MysqlUpdate.m in Sources */,
 				4C9374021BAD2A8300D6BD62 /* MysqlServer.m in Sources */,
@@ -3287,6 +3284,9 @@
 		4C7014A91BACDC6800301713 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetMySqlLog",
+				);
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -3335,6 +3335,9 @@
 		4C7014AA1BACDC6800301713 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetMySqlLog",
+				);
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;

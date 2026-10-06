@@ -33,7 +33,7 @@
 #import "MADSectionsLayout.h"
 #import "MADSectionLayout.h"
 #import "MADSectionGroupLayout.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADAliases.h>
 #import <MADAPI/MADDatabase.h>
@@ -46,7 +46,6 @@
 #import <MADSqlite3/MADArrayCaching.h>
 
 
-#import <os/log.h>
 
 #import <UIKit/UIPrintInteractionController.h>
 

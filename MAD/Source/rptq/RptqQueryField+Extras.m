@@ -17,7 +17,7 @@
 	#import <objc/runtime.h>
 #endif
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 #import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSExpression.h>

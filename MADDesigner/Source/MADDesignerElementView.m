@@ -13,7 +13,7 @@
 #import "MADResizeHandleView.h"
 #import "UITapGestureRecognizer+Designer.h"
 #import "MADThemeManager.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>

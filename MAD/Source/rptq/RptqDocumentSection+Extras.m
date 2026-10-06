@@ -12,7 +12,7 @@
 
 #import "RptqStoreContext.h"
 #import "RptqDocumentSection+Extras.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSIndexPath.h>

@@ -35,7 +35,7 @@
 #import <UIKit/UILabel.h>
 #import <UIKit/UIProgressView.h>
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 typedef void (^MADBlockAlertDidFinish)(UIAlertAction *);
 typedef void (^MADBlockCompletionStatus)(BOOL);

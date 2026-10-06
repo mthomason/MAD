@@ -8,7 +8,7 @@
 
 #import "MADToolboxFormatViewController.h"
 #import "MADToolboxControllerProtocol.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseField.h>

@@ -13,7 +13,7 @@
 #import <Foundation/NSException.h>
 #import <dispatch/once.h>
 #import <math.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 NSString * const MADNotificationDidFormatPagesName = @"MADNotificationDidFormatPages";
 NSString * const MTDatabaseNumberOfPagesFormattedKey = @"MTDatabaseNumberOfPagesFormattedKey";

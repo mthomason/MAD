@@ -16,7 +16,7 @@
 #import "RptqQuery.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryTable.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADStringUtilities.h>
 

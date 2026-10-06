@@ -7,7 +7,7 @@
 //
 
 #import "MTGraph+RptqQuery.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqStoreContext.h>

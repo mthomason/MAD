@@ -62,7 +62,7 @@
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSFileManager.h>
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 #import <dispatch/dispatch.h>
 #import <stdio.h>
 

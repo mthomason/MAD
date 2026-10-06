@@ -17,7 +17,7 @@
 #import "MADTabBarController.h"
 #import "MADDocumentScroller.h"
 #import "MADPageViewAttributes.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADCocoaExtensions/MADViewHelpers.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>

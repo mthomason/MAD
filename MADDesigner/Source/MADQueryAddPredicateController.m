@@ -35,7 +35,7 @@
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MADCocoaExtensions/NSError+Constructors.h>
 #import "MADTableViewControllerOpperators.h"
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 static os_log_t mad_log;
 

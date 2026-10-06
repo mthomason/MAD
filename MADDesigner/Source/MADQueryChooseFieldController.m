@@ -13,7 +13,7 @@
 #import "MADQueryChooseFieldController.h"
 #import "MADQueryChooseFieldProtocol.h"
 #import "MADDatabaseTableSectionHeaderView.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>

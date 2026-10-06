@@ -17,7 +17,7 @@
 #import "MADOperationPromptError.h"
 #import "MADAttributedStringCommon.h"
 #import "MADThemeManager.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MAD/MADConstants.h>
 #import <MADFoundation/MADApplication.h>

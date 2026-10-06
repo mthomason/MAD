@@ -32,7 +32,7 @@
 #import "RptqDocumentElementBarcode+Extras.h"
 #import "RptqDocumentElementFormula+Extras.h"
 #import "RptqDataHelper.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>

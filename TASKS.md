@@ -513,8 +513,11 @@ drivers, export formats, CI and shipping. Phase D's data-path checkpoint remains
 go/no-go.
 
 **Follow-ups this created:**
-* the eight other `madlog.h` copies each need the same platform branch when their
-  frameworks reach Linux;
+* ~~the eight other `madlog.h` copies each need the same platform branch when their
+  frameworks reach Linux~~ — done 2026-10-06: all nine copies are consolidated
+  into MADFoundation's single `madlog.h`/`madlog.m`, with per-target
+  `MADLOG_ACCESSOR` routing; the other frameworks' remaining Phase C work is
+  their direct `os_log_*(Get*Log(), ...)` call sites (§12);
 * MADFoundation's headers are not self-contained — the Linux build paper over that
   with `Compat/MADCompat.h`, and making them self-contained is Phase C cleanup;
 * the licence-register entries for the toolchain components (§10 above).

@@ -7,7 +7,7 @@
 //
 
 #import "MADFileUtilities.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import <MADFoundation/MADURLFactory.h>
 
 #import <Foundation/NSException.h>
@@ -19,7 +19,6 @@
 #import <Foundation/NSOperation.h>
 #import <Foundation/NSFileWrapper.h>
 
-#import <os/log.h>
 
 static NSString * const MADPathComponentDocuments  = @"Documents";
 static NSString * const MADPathComponentCache      = @"Cache";

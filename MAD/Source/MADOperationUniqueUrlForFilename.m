@@ -7,7 +7,7 @@
 //
 
 #import "MADOperationUniqueUrlForFilename.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADURLFactory.h>
 

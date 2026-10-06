@@ -13,8 +13,7 @@
 		4C2669402E76FF380073FD97 /* MADStorageState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C26693D2E76FF380073FD97 /* MADStorageState.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2915C724AC6D2000EC794B /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915C524AC6D2000EC794B /* MADCocoaExtensions.framework */; };
 		4C2915C924AC6D2000EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915C624AC6D2000EC794B /* MADFoundation.framework */; };
-		4C3AEF222E8D4A9700C48F77 /* madlog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3AEF202E8D4A9700C48F77 /* madlog.h */; };
-		4C3AEF232E8D4A9700C48F77 /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3AEF212E8D4A9700C48F77 /* madlog.m */; };
+
 		4C4144181CCDF68A0050BAF6 /* MADFileCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4144171CCDF68A0050BAF6 /* MADFileCoordinator.m */; };
 		4C41DA801BA22C5700FF63EC /* MADMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C41DA6B1BA22C5700FF63EC /* MADMetaData.m */; };
 		4C41DA811BA22C5700FF63EC /* MADMetaData.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C41DA6C1BA22C5700FF63EC /* MADMetaData.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -66,8 +65,7 @@
 		4C26693E2E76FF380073FD97 /* MADStorageState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADStorageState.m; sourceTree = "<group>"; };
 		4C2915C524AC6D2000EC794B /* MADCocoaExtensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADCocoaExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2915C624AC6D2000EC794B /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C3AEF202E8D4A9700C48F77 /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
-		4C3AEF212E8D4A9700C48F77 /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
+
 		4C4144171CCDF68A0050BAF6 /* MADFileCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADFileCoordinator.m; sourceTree = "<group>"; };
 		4C41DA6B1BA22C5700FF63EC /* MADMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMetaData.m; sourceTree = "<group>"; };
 		4C41DA6C1BA22C5700FF63EC /* MADMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMetaData.h; sourceTree = "<group>"; };
@@ -177,8 +175,7 @@
 		4CA7C3162EA44FB100475743 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4C3AEF202E8D4A9700C48F77 /* madlog.h */,
-				4C3AEF212E8D4A9700C48F77 /* madlog.m */,
+
 				4C4F12911D0FAEE90002294E /* MADFileLocationManagerDelegate.h */,
 				4C4754541CF4178E00BC9E02 /* MADFilesControllerDelegate.h */,
 				4C21E3FA1CFDFA0D008E7B48 /* MADFileCoordinatorDelegate.h */,
@@ -229,7 +226,7 @@
 				4C41DA861BA22C5700FF63EC /* MADFileUtilities.h in Headers */,
 				4CCB73621D1ADE6A00D7AE84 /* MADMetaDataLocal.h in Headers */,
 				4C4754551CF4178E00BC9E02 /* MADFilesControllerDelegate.h in Headers */,
-				4C3AEF222E8D4A9700C48F77 /* madlog.h in Headers */,
+
 				4CCB735E1D1ADE6000D7AE84 /* MADMetaDataCloud.h in Headers */,
 				4C21E3FB1CFDFA0D008E7B48 /* MADFileCoordinatorDelegate.h in Headers */,
 				4C41DA8D1BA22C5700FF63EC /* MADCloudFileCoordinator.h in Headers */,
@@ -349,7 +346,7 @@
 				4C41DA831BA22C5700FF63EC /* MADFileInfo.m in Sources */,
 				4CCB73631D1ADE6A00D7AE84 /* MADMetaDataLocal.m in Sources */,
 				4C41DA8C1BA22C5700FF63EC /* MADLocalFileCoordinator.m in Sources */,
-				4C3AEF232E8D4A9700C48F77 /* madlog.m in Sources */,
+
 				4C41DA851BA22C5700FF63EC /* MADFilesController.m in Sources */,
 				4C41DA801BA22C5700FF63EC /* MADMetaData.m in Sources */,
 				4C41DA8E1BA22C5700FF63EC /* MADCloudFileCoordinator.m in Sources */,
@@ -555,6 +552,9 @@
 		4C6701241BA20684001C9D5A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetFileManagerLog",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -586,6 +586,9 @@
 		4C6701251BA20684001C9D5A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetFileManagerLog",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";

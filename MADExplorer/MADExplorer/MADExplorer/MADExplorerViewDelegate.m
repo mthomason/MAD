@@ -16,7 +16,7 @@
 
 #import "MADStandard.h"
 #import "MADExplorerCellTitle.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADCocoaExtensions/MTMath.h>
 #import <MADCocoaExtensions/NSNumberFormatter+MADExtensions.h>

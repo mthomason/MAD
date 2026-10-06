@@ -11,7 +11,7 @@
 #endif
 
 #import "MADDatabase.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADCredential.h>

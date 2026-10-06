@@ -14,7 +14,7 @@
 #import "MADPageStatusView.h"
 #import "MADReportPageViewProtocol.h"
 #import "MADTextPosition.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/miniz.h>
 #import <MAD/MADNotificationFileUpdate.h>

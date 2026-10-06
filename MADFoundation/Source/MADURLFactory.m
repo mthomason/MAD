@@ -18,7 +18,7 @@
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSFileManager.h>
 #import <UIKit/UIScreen.h>
-#import <os/log.h>
+#import "madlog.h"
 
 static NSString * const MADPathComponentData       = @"Data";
 static NSString * const MADPathComponentDocuments  = @"Documents";

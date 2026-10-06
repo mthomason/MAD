@@ -27,7 +27,7 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSNull.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 static os_log_t caching_log;
 NSString * const MTArrayCachedTableName = @"ac";

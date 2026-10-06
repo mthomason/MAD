@@ -16,7 +16,7 @@
 #import <fcntl.h>
 #import <errno.h>
 #import <libgen.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 #import <stdlib.h>
 
 #import <Foundation/NSURL.h>

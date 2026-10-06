@@ -13,7 +13,7 @@
 #import "MysqlFetchField.h"
 #import "MADDataTypeMySQL.h"
 #import "MysqlFetch+DataTable.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADCredential.h>

@@ -12,7 +12,7 @@
 
 #import "MADQueryBuilderAddTableViewController.h"
 #import <MAD/RptqStoreContext.h>
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDatabaseSchemaTable+Extras.h>

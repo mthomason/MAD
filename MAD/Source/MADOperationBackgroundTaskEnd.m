@@ -8,7 +8,7 @@
 
 #import "MADOperationBackgroundTaskEnd.h"
 #import "MADOperationBackgroundTaskBegin.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 @implementation MADOperationBackgroundTaskEnd
 

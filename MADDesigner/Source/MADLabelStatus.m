@@ -8,7 +8,7 @@
 
 #import "MADLabelStatus.h"
 #import <UIKit/NSAttributedString.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 static NSString * const MADTextReadRecords      = @"\nRead %@ records.";
 static NSString * const MADTextRefreshing       = @"\nRefreshing…";

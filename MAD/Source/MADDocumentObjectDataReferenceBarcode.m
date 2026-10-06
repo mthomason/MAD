@@ -14,7 +14,7 @@
 #import "RptqQueryField.h"
 #import "RptqDatabaseSchemaField.h"
 #import "MADPrintPageRendererDataSource.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabase.h>
 

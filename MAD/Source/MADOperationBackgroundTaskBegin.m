@@ -7,7 +7,7 @@
 //
 
 #import "MADOperationBackgroundTaskBegin.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 //#import <UIKit/UIApplication.h>
 

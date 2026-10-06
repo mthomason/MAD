@@ -69,7 +69,7 @@
 #import "MADDatabase+Constructor.h"
 #import "MADQuery+Extras.h"
 #import "miniz.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/MADDataTable.h>

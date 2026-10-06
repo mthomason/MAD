@@ -21,7 +21,7 @@
 #import <Foundation/NSDate.h>
 #import <Foundation/NSSet.h>
 #import <string.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 static inline MADDataType DataTypeLimited(MADDataType);
 static inline MADDataType DataTypeLimited(MADDataType expandedDataType) {

@@ -14,7 +14,10 @@
 #import "MADNavigationControllerToolbox.h"
 #import "MADTransparentPresentationController.h"
 #import "MADThemeManager.h"
-#import "madlog.h"
+// Deliberately the system header, not <MADFoundation/madlog.h>: this file logs
+// with OS_LOG_DEFAULT and is compiled by the stand-alone MAD Viewer target,
+// which links no MAD frameworks.
+#import <os/log.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 

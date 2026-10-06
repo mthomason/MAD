@@ -28,7 +28,7 @@
 #import <Foundation/NSDateFormatter.h>
 #import <Foundation/NSCalendar.h>
 #import <string.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 #ifndef __OBJC_GC__
 #define BLOB_DEFAULT_SIZE 10000

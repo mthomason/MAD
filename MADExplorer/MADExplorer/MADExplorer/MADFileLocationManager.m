@@ -7,7 +7,7 @@
 //
 
 #import "MADFileLocationManager.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADApplication.h>
 #import <MADCocoaExtensions/MADAlertController.h>
@@ -22,7 +22,6 @@
 #import <UIKit/UIViewController.h>
 #import <UIKit/UIAlertController.h>
 
-#import <os/log.h>
 
 static NSString * const MADAppConfigurationUserDefaultsUbiquityToken      = @"MADAppConfigurationUserDefaultsUbiquityToken";
 static NSString * const MADAppConfigurationUserDefaultsStorageOption      = @"MADAppConfigurationUserDefaultsStorageOption";

@@ -8,7 +8,7 @@
 
 #import "MADModelQuery.h"
 #import <MAD/RptqStoreContext.h>
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <CoreFoundation/CFNumber.h>
 

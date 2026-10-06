@@ -14,7 +14,7 @@
 #import "MADTableLayout.h"
 #import "MTTableCellHeader.h"
 #import "MTTableCell.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>

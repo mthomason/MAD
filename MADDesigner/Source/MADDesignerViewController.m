@@ -50,7 +50,7 @@
 #import "MADReportSectionDelegateProtocol.h"
 #import "MADReportSectionsDataSource.h"
 #import "MADThemeManager.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADCocoaExtensions/MADResizeAspect.h>
 #import <MADCocoaExtensions/MADMathAlgebra.h>

@@ -59,7 +59,7 @@
 
 #import <asl.h>
 #import <math.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 static os_log_t rptq_log;
 

@@ -17,7 +17,7 @@
 #import <assert.h>
 #import <copyfile.h>
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 #import "archive.h"
 #import "archive_entry.h"

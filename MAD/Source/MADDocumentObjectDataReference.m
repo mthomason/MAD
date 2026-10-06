@@ -28,7 +28,7 @@
 #import "MADDocumentObjectType.h"
 #import "MADPrintPageRendererDataSource.h"
 #import "MADDocumentObjectDataReferenceBarcode.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabase.h>
 #import <MADSqlite3/MADDataTableFast.h>

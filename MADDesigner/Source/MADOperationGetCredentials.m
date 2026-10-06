@@ -23,7 +23,7 @@
 #import "MADOperationPromptCredentials.h"
 #import "MADOperationPromptPassword.h"
 #import "MADOperationConditionDisplayedAlert.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 static NSString * const TextSaveToKeyChain = @"Save to KeyChain";
 static NSString * const TextSaveToKeyChainMessage = @"Would you like to save your username and password?";

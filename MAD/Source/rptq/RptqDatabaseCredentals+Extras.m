@@ -15,7 +15,7 @@
 #import "RptqDatabase+Extras.h"
 #import "RptqDataHelper.h"
 #import "MADDatabaseConnection+Constructor.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabaseType.h>
 #import <MADAPI/MADDatabaseConnection.h>

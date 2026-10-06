@@ -8,7 +8,7 @@
 
 #import "MADQueryVisualizationModel.h"
 #import "MTGraph+RptqQuery.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/MADModel.h>
 #import <MAD/MADModelQuery.h>

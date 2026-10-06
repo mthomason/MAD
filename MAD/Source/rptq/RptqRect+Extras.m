@@ -10,7 +10,7 @@
 #import "RptqRect+Extras.h"
 #import "RptqPoint.h"
 #import "RptqSize.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import <CoreGraphics/CGGeometry.h>
 
 @implementation RptqRect (Extras)
