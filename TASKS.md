@@ -587,13 +587,25 @@ frameworks.
 
 **The tests.** Every ported suite is one ctest executable under
 `Linux/Tests/`, written to the `Testing.h` conventions in `Linux/AGENTS.md`.
-The suites that need a live database skip (never fail) when none is reachable;
-`MADTdsClientLiveTests` was run against the SQL Server 2022 container from
-inside the Linux image — 29/29, 169 checks — so the freetds wire path is
-exercised, not just compiled. One new GNUstep divergence is pinned in the
-ported tests rather than papered over: `-localizedCaseInsensitiveCompare:` is
-case-sensitive on GNUstep, so the SQLite collation MADSqlite3 registers orders
-differently (§Linux/README.md).
+59 executables run under ctest, all passing, with 6 recorded needs — the
+counter and each need are argued in `Linux/README.md`. The suites that need a
+live database skip (never fail) when none is reachable; `MADTdsClientLiveTests`
+was run against the SQL Server 2022 container from inside the Linux image —
+29/29, 169 checks — so the freetds wire path is exercised, not just compiled.
+MAD's eight suites are ported too (186 tests over the data table, the portable
+store, the rptq object layer, the query and the document section), and running
+them found three more GNUstep divergences, all fixed or shimmed and written
+down in `Linux/README.md`: BOOL's runtime encoding (`'C'` here, `'c'` on
+Apple — registered per-platform in `RptqObject`), `class_getProperty()` not
+walking superclasses (an explicit walk in `RptqObject`), and the stub
+`+propertyListWithStream:options:format:error:` (a Compat category, which lets
+MADDataTable's `-loadFromCacheWithUrl:` be asserted instead of parked as a
+need). Three needs remain for Apple-only machinery — Core Data, the compiled
+model, `MADocument`, the converter — recorded in the tests that cannot run.
+One divergence stays pinned rather than fixed:
+`-localizedCaseInsensitiveCompare:` is case-sensitive on GNUstep, so the
+SQLite collation MADSqlite3 registers orders differently (asserted per-platform
+in `MADDatabaseSqlite3Tests`).
 
 **Exclusions that remain, and where they are recorded:** `MADKeyChain` and
 the umbrella (MADFoundation), the cloud coordinator (MADFileManager), the ten

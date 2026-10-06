@@ -137,6 +137,17 @@ green on the simulator, and the `MAD Designer` workspace builds.
   created on Linux orders its text differently from one created on Apple.
   Pinned per-platform in `Linux/Tests/MADDatabaseSqlite3Tests.m` rather than
   papered over.
+* **BOOL's runtime encoding, and `class_getProperty` inheritance — found by
+  MAD's rptq suites, fixed in RptqObject.** The runtime compares an installed
+  accessor's type encoding against the compiled call site's, and BOOL is
+  `unsigned char` (`'C'`) on GNUstep where Apple uses `signed char` (`'c'`),
+  so `RptqObject`'s dynamically-installed bool accessors now register a
+  per-platform encoding (`MAD_RPTQ_BOOL_TYPE`). And GNUstep's
+  `class_getProperty()` looks at the class itself only, where Apple's walks
+  the superclass chain — so an inherited property (a label's `alignment`) fell
+  through to the generic object arm; `RptqPropertyNamed` does the walk on both
+  platforms. The failure mode was a silently wrong value, not a crash, so both
+  are pinned by the ported suites.
 * **dispatch objects are plain C pointers** (`os/object.h` declines ObjC
   support outside Darwin, and refuses `OS_OBJECT_USE_OBJC=1` outright — the
   libdispatch build comments say so), so ARC cannot own one: every
@@ -149,7 +160,11 @@ green on the simulator, and the `MAD Designer` workspace builds.
   NSFileCoordinator, NSURL's security-scoped access and
   `-fileSystemRepresentation`, NSData's `-options:error:` readers and their
   constants, `-decodeTopLevelObjectOfClasses:forKey:error:` on NSCoder,
-  `-registerUndoWithTarget:handler:` on NSUndoManager, NSValue's `CG*Value`
+  `-registerUndoWithTarget:handler:` on NSUndoManager,
+  `+propertyListWithStream:options:format:error:` (a stub returning nil, the
+  stream never read — the Compat category reads the stream and defers to
+  `+propertyListWithData:`; with it, MADDataTable's `-loadFromCacheWithUrl:`
+  runs on Linux and is asserted on both platforms), NSValue's `CG*Value`
   spellings, the `CF_ENUM`/`CFAvailability` macros, the CFNumber extraction
   calls (a compat `CoreFoundation/CFNumber.h`), `copyfile(3)` in POSIX,
   `htonll`, the MacTypes scalars (`Float64`, `SInt32`…`UInt64`, `Boolean`),
@@ -166,6 +181,28 @@ green on the simulator, and the `MAD Designer` workspace builds.
   descriptors, streams, NSDecimalNumber, NSCalendar and keyed archiving on
   the permissive path. The full report is what `--probe` prints; its 19 core
   checks gate the exit code, its 10 report items do not.
+
+## The need count, and why it is 6
+
+The Phase B image reported 3 needs; the finished Phase C image reports 6, and
+the three new ones each come from MAD's suites landing on Apple-only
+machinery. They are needs, not skips, deliberately: the check cannot run
+without a resource Linux does not have, and the need says so out loud where a
+skip would hide it.
+
+* **The three that were already there.** The toolchain probe's strict-archiving
+  check (`requiringSecureCoding:YES` returns nil, above) and its app-group
+  check (`containerURLForSecurityApplicationGroupIdentifier:` is absent), plus
+  MADCredentialTests' conditional one on the same strict-archiving gap.
+* **MADStoreTests** — the model-fidelity check needs Core Data and the
+  compiled `MAD.momd`, both Apple-only.
+* **RptqStoreContextTests, twice** — the converted-sample fixture needs
+  `MADStoreConverter`, Core Data and `London.mad`, and the document path needs
+  `MADocument` and `MADStoreConverter` (Phase D's to settle).
+
+The live-database suites skip (never fail) when no server is reachable — the
+same contract the Xcode schemes have — and the SQLite benchmarks skip at their
+default scale; skips are counted separately and are not needs.
 
 ## The live database suites run here
 

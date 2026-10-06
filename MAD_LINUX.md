@@ -408,19 +408,25 @@ longer a spike: all ten headless frameworks of §3's table compile and link
 inside the image — MADFoundation 26 of 27 files, MADDataStructures 17,
 MADFileManager 10 of 11, MADCocoaExtensions 7 of 17, MADAPI 8 of 11,
 MADSqlite3 26, MADTds 1, MADTdsClient 4 of 5, MADMySQL 18 of 19, MAD 150 of
-181 — and their suites run under ctest. A libraries layer
-(`Linux/libraries.conf`, `Linux/lib/libraries.sh`) builds sqlite3, openssl,
-freetds, zlib, bzip2, libarchive and mysqlclient natively into the image
-(§7's C libraries; nothing ships). The long-tail items went the way §4
+181 — and their suites run under ctest: 59 executables, all green, with 6
+recorded needs, each being Apple-only machinery (Core Data, the compiled
+model, `MADocument`, the converter) named in `Linux/README.md`. A libraries
+layer (`Linux/libraries.conf`, `Linux/lib/libraries.sh`) builds sqlite3,
+openssl, freetds, zlib, bzip2, libarchive and mysqlclient natively into the
+image (§7's C libraries; nothing ships). The long-tail items went the way §4
 predicted — the `asl.h`/`vm_param.h` imports were vestigial, `copyfile(3)`
 became POSIX, `CFHost` became `getaddrinfo`, the CF sites became a
 `CFNumberGetValue` shim — and the UIKit/CoreGraphics tail is excluded
 file-by-file with reasons, not ported (§5.2's disposition; `MADocument`, a
 UIDocument, and `MADReportFormatter` wait for Phase D, which is the CLI's
-problem as much as the platform's). The one new divergence the ported tests
-pinned rather than hid: GNUstep's `-localizedCaseInsensitiveCompare:` is
-case-sensitive, so MADSqlite3's registered collation orders text differently
-than on Apple. The live `MADTdsClientLiveTests` suite runs green from inside
+problem as much as the platform's). MAD's suites found three more divergences,
+all fixed or shimmed and written down in `Linux/README.md`: the runtime's BOOL
+encoding (`'C'` off Apple), `class_getProperty()`'s missing superclass walk
+(both fixed in `RptqObject`), and a stub `+propertyListWithStream:`
+(shimmed). One divergence stays pinned rather than fixed: GNUstep's
+`-localizedCaseInsensitiveCompare:` is case-sensitive, so MADSqlite3's
+registered collation orders text differently than on Apple. The live
+`MADTdsClientLiveTests` suite runs green from inside
 the image against the SQL Server container (29/29), so the driver path is
 exercised on Linux, not just compiled. Phase D — the CLI and the data-path
 verbs — is the next step and the go/no-go.
