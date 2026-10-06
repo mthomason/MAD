@@ -14,6 +14,12 @@
 #import "RptqDocumentSection+Extras.h"
 #import <MADFoundation/madlog.h>
 
+#if __APPLE__
+// NSIndexPath's item/section additions are UIKit's on Apple (reached through
+// UICollectionView.h); GNUstep's Foundation carries them itself.
+#import <UIKit/UICollectionView.h>
+#endif
+
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSIndexPath.h>
 #import <Foundation/NSBundle.h>

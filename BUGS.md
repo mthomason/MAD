@@ -809,6 +809,31 @@ Status key:
   `testBaseTableLoadFromCacheWithMissingFileReturnsError` (asserting error code -215) and
   `testBaseTableLoadFromCacheWithNilUrlThrows` still pass -- 76 tests green in the class.
 
+### `MADOperationConditionResultTests`: the async-path assertion raced the dispatch_group
+
+- **Status:** Fixed
+- **Where:** `MADFoundation/MADFoundationTests/MADOperationConditionResultTests.m`,
+  `-testCompletionIsNotCalledBeforeTheMethodReturnsForTheAsyncPath` (formerly the
+  `XCTAssertFalse(calledBack, ...)` at :265).
+- **Behavior:** the test called `evaluateConditions:` with a condition that reports
+  on the spot, then asserted on the very next line that the completion had not run.
+  A condition that reports immediately leaves the dispatch_group empty during the
+  loop, so `dispatch_group_notify` enqueues its block to a global concurrent queue
+  before the method returns -- another core can run it in that window.  Reliably
+  green on a quiet machine; it failed twice under the Linux image's parallel
+  `ctest` load (59 executables on a saturated VM), where the caller is descheduled
+  right after the notify.
+- **Now:** not weakened but made deterministic: the stub condition can defer its
+  report (`defersCompletion` / `-reportDeferredCompletion`), so the "not yet
+  called" observation happens while the condition is provably still outstanding
+  -- and the test then waits for the completion it previously never observed.
+  The same change is in the Linux port
+  (`Linux/Tests/MADOperationConditionResultTests.m`), which is where the flake
+  was measured.
+- **Locked down by:** the same test; a 60-run loop of the Linux executable and
+  eight parallel full-suite passes with zero failures (measured 2026-10-06), and
+  MADFoundation 118/118 on the simulator.
+
 ## MADCocoaExtensions
 
 ### `CGRectAdjustForScale` shrinks regardless of zoom direction

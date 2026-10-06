@@ -25,9 +25,18 @@
 @property (nonatomic, copy) NSString *conditionName;
 @property (nonatomic, assign) BOOL satisfied;
 @property (nonatomic, assign) BOOL completesAsynchronously;
+// When set, -evaluateForOperation:completion: holds the completion until
+// -reportDeferredCompletion is called, so a test can observe the state while a
+// condition is still outstanding; "read immediately after the call returns"
+// would otherwise race the dispatch_group's worker under load.
+@property (nonatomic, assign) BOOL defersCompletion;
+- (void)reportDeferredCompletion;
 @end
 
-@implementation MADStubCondition
+@implementation MADStubCondition {
+	void (^_deferredCompletion)(MADOperationConditionResult *);
+	MADOperation *_deferredOperation;
+}
 
 - (instancetype)init {
 	if (self = [super init]) {
@@ -48,11 +57,26 @@
 
 - (void)evaluateForOperation:(MADOperation *)operation
 				  completion:(void (^)(MADOperationConditionResult *))completion {
+	if (self.defersCompletion) {
+		_deferredOperation = operation;
+		_deferredCompletion = [completion copy];
+		return;
+	}
 	if (self.completesAsynchronously) {
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 			completion([self evaluateForOperation:operation]);
 		});
 	} else {
+		completion([self evaluateForOperation:operation]);
+	}
+}
+
+- (void)reportDeferredCompletion {
+	void (^completion)(MADOperationConditionResult *) = _deferredCompletion;
+	MADOperation *operation = _deferredOperation;
+	_deferredCompletion = nil;
+	_deferredOperation = nil;
+	if (completion != NULL) {
 		completion([self evaluateForOperation:operation]);
 	}
 }
@@ -250,8 +274,11 @@ static void testCancelledOperationAddsACancellationError(void) {
 
 static void testCompletionIsNotCalledBeforeTheMethodReturnsForTheAsyncPath(void) {
 	// The general path is asynchronous: a caller that reads the result immediately
-	// after -evaluateConditions:... returns would still see nothing.
+	// after -evaluateConditions:... returns would still see nothing.  The
+	// condition is held open so the observation is deterministic -- with one that
+	// reports on the spot, the assertion races the dispatch_group's worker.
 	MADStubCondition *condition = [[MADStubCondition alloc] init];
+	condition.defersCompletion = YES;
 	MADOperation *operation = [[MADOperation alloc] init];
 	__block BOOL calledBack = NO;
 
@@ -262,6 +289,8 @@ static void testCompletionIsNotCalledBeforeTheMethodReturnsForTheAsyncPath(void)
 	}];
 
 	MAD_PASS(!calledBack, "the non-empty path completes from a dispatch_group");
+	[condition reportDeferredCompletion];
+	MAD_PASS(MADWaitForFlag(&calledBack, 5.0), "the completion arrives once the condition reports");
 }
 
 MAD_TEST_MAIN("MADOperationConditionResultTests",

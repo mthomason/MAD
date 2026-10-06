@@ -23,9 +23,18 @@
 @property (nonatomic, copy) NSString *conditionName;
 @property (nonatomic, assign) BOOL satisfied;
 @property (nonatomic, assign) BOOL completesAsynchronously;
+// When set, -evaluateForOperation:completion: holds the completion until
+// -reportDeferredCompletion is called, so a test can observe the state while a
+// condition is still outstanding; "read immediately after the call returns"
+// would otherwise race the dispatch_group's worker under load.
+@property (nonatomic, assign) BOOL defersCompletion;
+- (void)reportDeferredCompletion;
 @end
 
-@implementation MADStubCondition
+@implementation MADStubCondition {
+	void (^_deferredCompletion)(MADOperationConditionResult *);
+	MADOperation *_deferredOperation;
+}
 
 - (instancetype)init {
 	if (self = [super init]) {
@@ -46,11 +55,26 @@
 
 - (void)evaluateForOperation:(MADOperation *)operation
 				  completion:(void (^)(MADOperationConditionResult *))completion {
+	if (self.defersCompletion) {
+		_deferredOperation = operation;
+		_deferredCompletion = [completion copy];
+		return;
+	}
 	if (self.completesAsynchronously) {
 		dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
 			completion([self evaluateForOperation:operation]);
 		});
 	} else {
+		completion([self evaluateForOperation:operation]);
+	}
+}
+
+- (void)reportDeferredCompletion {
+	void (^completion)(MADOperationConditionResult *) = _deferredCompletion;
+	MADOperation *operation = _deferredOperation;
+	_deferredCompletion = nil;
+	_deferredOperation = nil;
+	if (completion != NULL) {
 		completion([self evaluateForOperation:operation]);
 	}
 }
@@ -251,18 +275,25 @@
 
 - (void)testCompletionIsNotCalledBeforeTheMethodReturnsForTheAsyncPath {
 	// The general path is asynchronous: a caller that reads the result immediately
-	// after -evaluateConditions:... returns would still see nothing.
+	// after -evaluateConditions:... returns would still see nothing.  The
+	// condition is held open so the observation is deterministic -- with one that
+	// reports on the spot, the assertion races the dispatch_group's worker.
 	MADStubCondition *condition = [[MADStubCondition alloc] init];
+	condition.defersCompletion = YES;
 	MADOperation *operation = [[MADOperation alloc] init];
 	__block BOOL calledBack = NO;
+	XCTestExpectation *expectation = [self expectationWithDescription:@"conditions"];
 
 	[MADOperationConditionResult evaluateConditions:@[condition]
 										  operation:operation
 										 completion:^(NSArray<NSError *> *failures) {
 		calledBack = YES;
+		[expectation fulfill];
 	}];
 
 	XCTAssertFalse(calledBack, @"The non-empty path completes from a dispatch_group");
+	[condition reportDeferredCompletion];
+	[self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 @end
