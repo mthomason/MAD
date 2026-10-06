@@ -97,7 +97,8 @@ set(MAD_COMPAT_SOURCES
 	"${MAD_COMPAT_DIR}/NSKeyedUnarchiver+TopLevel.m"
 	"${MAD_COMPAT_DIR}/NSCoder+TopLevel.m"
 	"${MAD_COMPAT_DIR}/NSUndoManager+Handler.m"
-	"${MAD_COMPAT_DIR}/NSValue+Geometry.m")
+	"${MAD_COMPAT_DIR}/NSValue+Geometry.m"
+	"${MAD_COMPAT_DIR}/NSPropertyListSerialization+Stream.m")
 
 # The framework imports itself as <MADFoundation/Foo.h> in 100+ places; a
 # symlinked directory named MADFoundation on the include path satisfies that
@@ -278,6 +279,14 @@ foreach (_mad_header IN LISTS _mad_headers)
 	file(CREATE_LINK "${_mad_header}" "${SHIM_DIR}/MAD/${_mad_header_name}" SYMBOLIC)
 endforeach()
 mad_add_framework(mad MAD_SOURCES
+	MADCoreLogicTests
+	MADDataTableRegressionTests
+	MADRptqDatabaseTests
+	MADRptqDocumentSectionTests
+	MADRptqQueryTests
+	MADRptqValueTypeTests
+	MADStoreTests
+	RptqStoreContextTests
 )
 # The framework's own quoted imports reach across its subdirectories, the way
 # the Xcode target's header search paths do.

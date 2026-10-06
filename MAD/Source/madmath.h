@@ -9,6 +9,7 @@
 #ifndef madmath_h
 #define madmath_h
 
+#include <stdint.h>
 #include <stdio.h>
 #include <limits.h>
 

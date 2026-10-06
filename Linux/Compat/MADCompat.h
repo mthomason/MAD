@@ -28,6 +28,7 @@
 #import "NSCoder+TopLevel.h"
 #import "NSUndoManager+Handler.h"
 #import "NSValue+Geometry.h"
+#import "NSPropertyListSerialization+Stream.h"
 
 // Apple's MacTypes.h carries the legacy scalar names the layout and driver
 // classes use; GNUstep has no MacTypes.h.  The ones the frameworks reach for,

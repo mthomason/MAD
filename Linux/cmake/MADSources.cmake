@@ -17,6 +17,7 @@
 #     MADOperationBackgroundTaskBegin.m  UIApplication background tasks
 #     MADOperationBackgroundTaskEnd.m    (no suspension concept headless)
 #     MADPrintPageElement.m             the print-side element base (UIImage)
+#     MADPrintPageElement+Constructor.m its factory; MADPrintPageRenderer was the only caller
 #     MADPrintPageElementBarcode.m      barcode printing (MADBarcodes)
 #     MADPrintPageRenderer.m            UIPrintPageRenderer: the PDF seam
 #     MADSectionLayoutAttributes.m      UICollectionViewLayoutAttributes
@@ -48,6 +49,7 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/MADAlignment.m"
 	"${SOURCE_DIR}/MADArchiveManager.m"
 	"${SOURCE_DIR}/MADConstants.m"
+	"${SOURCE_DIR}/madmath.c"
 	"${SOURCE_DIR}/MADCurrencyFormatter.m"
 	"${SOURCE_DIR}/MADDataFormatter.m"
 	"${SOURCE_DIR}/MADDataTable+Constructor.m"
@@ -75,7 +77,6 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/MADPageOptions.m"
 	"${SOURCE_DIR}/MADParameters+QueryCacheAggregate.m"
 	"${SOURCE_DIR}/MADPathUtilities.m"
-	"${SOURCE_DIR}/MADPrintPageElement+Constructor.m"
 	"${SOURCE_DIR}/MADQuery+Extras.m"
 	"${SOURCE_DIR}/MADQueryActiveQueryFields.m"
 	"${SOURCE_DIR}/MADQueryCacheAggregateFunction.m"
