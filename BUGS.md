@@ -1005,6 +1005,36 @@ Status key:
 - **Test:** none -- the unchecked walk is exactly why the suite does not call them;
   `BDHostTests`' header records that.
 
+### `MADDataTableVirtual -addRow:error:` lets a short row desynchronize the two views
+- **Status:** Quirk (hazard -- documented, not changed)
+- **Where:** `MADFoundation/Source/MADDataTableVirtual.m:179-195`
+- **Behavior:** The method walks the supplied array positionally and stops when the
+  array runs out.  A row shorter than the column list therefore stores the row
+  dictionary with only the supplied keys, appends only those values to the column
+  objects, and still increments the row counter and appends to the index.  The row
+  view and the column view then describe different rows: `-objectAtRow:column:` for
+  the missing column indexes an empty `MADDataColumn`, which asserts in Debug
+  (`MADDataColumn.m:170`) and reads out of bounds in Release.
+- **Why it matters:** Nothing in the app calls `-addRow:error:` with short rows --
+  `-addRowWithDataForFieldKeys:`, the path the drivers use, pads missing values with
+  `@""` -- so this is latent.  It is the kind of latent that surfaces the first time
+  a driver writes a ragged row.
+- **Test:** `MADDataTableVirtualTests testShortRowLeavesTheColumnViewDesynchronized`
+  pins the stored state; the empty-column read is not exercised because it asserts.
+
+### `MADDataTableVirtual` has undeclared implementation selectors
+- **Status:** Quirk (left as is)
+- **Where:** `MADFoundation/Source/MADDataTableVirtual.m` (vs `MADDataTableVirtual.h`)
+- **Behavior:** `-objectAtIndex:` (`:147`) and `-sortedIndexForIndex:` (`:124`) are
+  implemented but declared in no header; the declared surface only carries
+  `-objectAtIndexedSubscript:`.  `+keySortIndex` is likewise internal.
+- **Why it matters:** Hidden API is easy to break silently; none of it is called from
+  outside the class today.  Same shape as `MADFileUtilities`' undeclared helpers and
+  `MADQueryCacheIndexCreateTemplate -parameterCount`, both recorded elsewhere in this
+  file.
+- **Test:** `MADDataTableVirtualTests testObjectAtIndexAndSubscriptAgree`, through the
+  test-only category bridge the suite already uses.
+
 ## MADCocoaExtensions
 
 ### `CGRectAdjustForScale` shrinks regardless of zoom direction
