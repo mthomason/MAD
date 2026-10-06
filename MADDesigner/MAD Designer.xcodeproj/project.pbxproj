@@ -274,6 +274,7 @@
 		4C7E5A06000000000000A1 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161024AC75E300EC794B /* MADMySQL.framework */; };
 		4C7E5A0700000000000000A1 /* MADAppLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7E5A0700000000000000B1 /* MADAppLogicTests.m */; };
 		4C7E5A0700000000000000A2 /* MADAppOperationConditionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7E5A0700000000000000B2 /* MADAppOperationConditionTests.m */; };
+		4C7E5A0700000000000000A3 /* MADStatusLabelRefreshTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7E5A0700000000000000B3 /* MADStatusLabelRefreshTests.m */; };
 		4C8780B32DD6D266003FD36D /* MADDocumentCreationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8780B22DD6D266003FD36D /* MADDocumentCreationManager.m */; };
 		4C8780B62DD6D296003FD36D /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8780B52DD6D296003FD36D /* Constants.m */; };
 		4C88A3451E6691ED009F8BFE /* MADPageStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88A3441E6691ED009F8BFE /* MADPageStatusView.m */; };
@@ -924,6 +925,7 @@
 		4C780CE81BC7691B0097B974 /* MADQueryVisualizationSchemaPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaPresentationController.m; sourceTree = "<group>"; };
 		4C7E5A0700000000000000B1 /* MADAppLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADAppLogicTests.m; sourceTree = "<group>"; };
 		4C7E5A0700000000000000B2 /* MADAppOperationConditionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADAppOperationConditionTests.m; sourceTree = "<group>"; };
+		4C7E5A0700000000000000B3 /* MADStatusLabelRefreshTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADStatusLabelRefreshTests.m; sourceTree = "<group>"; };
 		4C8780B12DD6D266003FD36D /* MADDocumentCreationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDocumentCreationManager.h; sourceTree = "<group>"; };
 		4C8780B22DD6D266003FD36D /* MADDocumentCreationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDocumentCreationManager.m; sourceTree = "<group>"; };
 		4C8780B42DD6D296003FD36D /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -1980,6 +1982,7 @@
 				4C5B55F21C98CCD6005C19D9 /* MADDesignerUnitTests.m */,
 				4C7E5A0700000000000000B1 /* MADAppLogicTests.m */,
 				4C7E5A0700000000000000B2 /* MADAppOperationConditionTests.m */,
+				4C7E5A0700000000000000B3 /* MADStatusLabelRefreshTests.m */,
 				4C5B55F41C98CCD6005C19D9 /* Info.plist */,
 			);
 			path = MADDesignerUnitTests;
@@ -2680,6 +2683,7 @@
 				4C5B55F31C98CCD6005C19D9 /* MADDesignerUnitTests.m in Sources */,
 				4C7E5A0700000000000000A1 /* MADAppLogicTests.m in Sources */,
 				4C7E5A0700000000000000A2 /* MADAppOperationConditionTests.m in Sources */,
+				4C7E5A0700000000000000A3 /* MADStatusLabelRefreshTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

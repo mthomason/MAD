@@ -311,7 +311,17 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 
 	[self.tabBarController.navigationItem setRightBarButtonItem: buttonRefresh animated: YES];
 	[self.tabBarController.navigationItem setLeftBarButtonItem: buttonDone animated: YES];
-	
+
+	// The reload below formats the report, and on a large document that takes a couple
+	// of seconds.  The refresh button has nothing to do until it finishes -- and a
+	// refresh started mid-format would set a second format going against the same
+	// document -- so it is disabled for the run.  The reload's -finishReload: restores
+	// it through -setDisplayActive; registering the observer gives the finish a second
+	// path through -operationDidFinish:, whose !_refreshing branch was written for this
+	// operation but never reached because nothing ever registered it.
+	buttonRefresh.enabled = NO;
+	[self.labelStatus updateRefreshStarted];
+	[reload addObserver:self];
 	[self.refreshQueue addOperation:reload];
 
 }
@@ -665,8 +675,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	if (_refreshing == NO) {
 		_startedRefresh = YES;
 		_refreshing = YES;
-		
+
 		[self setDisplayInactive];
+
+		// The run's first phase, on screen from the tap: the read can take seconds on a
+		// large report and the page line would otherwise still show the last run's page
+		// position until the format announces itself.
+		[self.labelStatus updateRefreshStarted];
 		
 		MADocument *document = self.document;
 		MADOperationRefreshReload *refresh = [[MADOperationRefreshReload alloc] initWithDocument: document
@@ -924,6 +939,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		for (NSError *error in errors) {
 			os_log_error(GetDesignerLog(), "Error: %@", error);
 		}
+
+		// A run that failed never reaches -updatePages:, so the line would otherwise sit
+		// on the "Refreshing…"/"Formatting…" phase it was told when the run began.
+		[self.labelStatus updatePageStatus: _currentLocation];
 		
 		// Define block to present error alerts
 		void (^presentErrorsBlock)(void) = ^{
@@ -993,6 +1012,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 - (void)operation:(MADOperation *)operation didFormatPage:(NSNotification *)sender {
 	NSNumber *pageNumber = sender.userInfo[MTDatabaseNumberOfPagesFormattedKey];
 	[self.labelStatus updateRecordsReadStatusWithNumberOfPagesFormatted:pageNumber];
+}
+
+- (void)operationDidBeginFormatting:(MADOperation *)__unused operation {
+	[self.labelStatus updateFormattingStarted];
 }
 
 - (void)operation:(MADOperation *)operation updateRecordsRead:(NSUInteger)records {

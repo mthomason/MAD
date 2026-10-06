@@ -11,6 +11,8 @@
 #import <os/log.h>
 
 static NSString * const MADTextReadRecords      = @"\nRead %@ records.";
+static NSString * const MADTextRefreshing       = @"\nRefreshing…";
+static NSString * const MADTextFormatting       = @"\nFormatting…";
 static NSString * const MADTextFormattingPage   = @"\nFormatting page %@.";
 static NSString * const MADTextPageXofY         = @"\nPage %1@ of %2@ pages.";
 static NSString * const MADTextNothingToDisplay = @"\nNothing to display.";
@@ -83,6 +85,22 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 	__weak MADLabelStatus *weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[weakSelf updateStatusWithPageNumber:localizedPageOfPages];
+	});
+}
+
+- (void)updateRefreshStarted {
+	NSString *refreshing = NSLocalizedString(MADTextRefreshing, MADTextRefreshing);
+	__weak MADLabelStatus *weakSelf = self;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[weakSelf updateStatusWithFormattingPage:refreshing];
+	});
+}
+
+- (void)updateFormattingStarted {
+	NSString *formatting = NSLocalizedString(MADTextFormatting, MADTextFormatting);
+	__weak MADLabelStatus *weakSelf = self;
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[weakSelf updateStatusWithFormattingPage:formatting];
 	});
 }
 

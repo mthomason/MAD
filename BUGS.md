@@ -1784,13 +1784,13 @@ it skips rather than fails when no server is reachable.
 
 ## MAD Designer (app)
 
-Covered by the hosted `MADDesignerUnitTests` bundle (69 tests across
-`MADDesignerUnitTests.m`, `MADAppLogicTests.m`, and
-`MADAppOperationConditionTests.m`). The bundle is hosted by
-`MAD Designer.app` (TEST_HOST/BUNDLE_LOADER), so it reaches the app's own source
-through the running executable; the app's classes are declared locally in the test
-files rather than imported, because `MADDesigner/Source` is not on the bundle's
-header search path.
+Covered by the hosted `MADDesignerUnitTests` bundle (74 tests across
+`MADDesignerUnitTests.m`, `MADAppLogicTests.m`,
+`MADAppOperationConditionTests.m`, and `MADStatusLabelRefreshTests.m`). The bundle
+is hosted by `MAD Designer.app` (TEST_HOST/BUNDLE_LOADER), so it reaches the app's
+own source through the running executable; the app's classes are declared locally
+in the test files rather than imported, because `MADDesigner/Source` is not on the
+bundle's header search path.
 
 ### The refresh path reads the shared store context from operation-queue threads
 - **Status:** Fixed
@@ -1911,6 +1911,64 @@ header search path.
   regression, not one of the four fixes' doing.
 - **The rule this violated:** the activity indicator belongs to the refresh
   in flight; an unrelated operation's completion must not clear it.
+
+### The "Formatting page N." status message was set but never shown
+- **Status:** Fixed -- pending the user's check of the running app
+- **Where:** `MADDesigner/Source/MADRefreshOperationReload.m` (the delivery
+  path), `MADDesigner/Source/MADViewerController.m` (`-operation:didFormatPage:`
+  and the reload enqueued in `-viewDidAppear:`),
+  `MADDesigner/Source/MADLabelStatus.m` (`-updateFormattingStarted:`),
+  `MADDesigner/Source/MADOperationRefreshReloadProtocol.h`.
+- **Behavior:** reported by the user: during a refresh and during the open-time
+  reload, `MADNotificationDidFormatPagesName` posts over and over and the final
+  page count lands correctly, but the screen showed nothing changing for the
+  2-3 s the format takes.  The label's text was being set (see the test), so
+  what was wrong was when and how often the label was told.
+- **Now:** the status line tells the run's phases instead of waiting on the
+  formatter's posts.
+  * The refresh's first phase is announced from the viewer at the start of the
+    run (`-refresh:` and the open-time reload): the line reads "Refreshing…".
+    The read can take seconds on a large report, and that window used to show
+    the previous run's page position.
+  * `-operationDidBeginFormatting:` (new protocol method) is sent before the
+    format starts and puts "Formatting…" on the line; the page posts refine it
+    from there.
+  * The formatting progress is coalesced.  Only the newest page is kept,
+    deliveries are floored at 10 Hz -- the rate the status label already
+    re-renders at -- and the newest page that never got out is flushed just
+    ahead of the page position in the same dispatch, so the position is still
+    the label's last word.  For the 9,212-page sample (1,321 posts) the label
+    now gets ~6 deliveries instead of 1,322; the records path coalesces the
+    same way in `MADOperationRefreshReload -updateNumberOfRecords:`.
+  * The open-time reload (`-viewDidAppear:`) disables the refresh button for
+    its run and registers the viewer as its observer -- the branch
+    `-operationDidFinish:` always had for that operation (`!_refreshing`) and
+    never reached because nothing registered it.  A refresh started
+    mid-format would have set a second format going against the same document.
+    The button was already disabled for a user-started refresh by the
+    indicator swap.
+- **Verified in the running app:** launched headlessly with the app's own hooks
+  (`-UITestOpenSample Music -UITestRefresh`) and streamed at debug level.  The
+  full chain runs in the app -- posts, delivery, label write -- and with the
+  format stretched to a few seconds for observation the label was traced
+  through `-drawTextInRect:` drawing "Formatting…", then a rising
+  "Formatting page N." every ~100 ms, then "Page 1 of 77 pages."  What the
+  samples cannot show is the reported gap: their whole format is 40-80 ms, so
+  the phase is a sub-frame event there -- which is why the line, not the
+  screen, was where the fault had to be found.
+- **Test:** `MADStatusLabelRefreshTests` (new) drives the real operation, the
+  real notification singleton and a real label; it records every string the
+  label is handed, renders the label's pixels to prove it draws, and pins both
+  phase messages, the coalesced delivery count, the flush order and the final
+  page position.  Run with
+  `-only-testing:MADDesignerUnitTests/MADStatusLabelRefreshTests`.
+- **Also worth knowing:** `MADViewerController -reportFormatterDidFormatPage:`
+  and `-reportDocumentDidReadRows:` duplicate the reload operation's handlers
+  but have no registrar -- the reload operation is the only observer of the
+  format post -- so breakpoints there never fire during a refresh, and the log
+  lines that do fire are the operation's.
+- **Found during:** the user's report on the status label; the test is new
+  infrastructure for this path, which had no coverage.
 
 ### The value picker offers `NULL` as a value, and it is not SQL NULL
 - **Status:** Still open

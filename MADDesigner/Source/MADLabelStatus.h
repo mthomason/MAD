@@ -16,6 +16,10 @@
 
 	- (void)updateRecordsReadStatusWithNumberOfPagesFormatted:(NSNumber *)numberOfRecs;
 	- (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs;
+	/// The refresh phase, from the moment the run starts.
+	- (void)updateRefreshStarted;
+	/// The formatting phase, before the first page number is known.
+	- (void)updateFormattingStarted;
 
 	- (void)updatePageStatus:(MADReportPosition)reportPosition;
 	- (void)updateStatusWithTime:(NSString *)timeMessage;

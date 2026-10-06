@@ -20,6 +20,10 @@
 - (void)operation:(MADOperation *)operation finishReload:(MADocument *)document;
 - (void)operation:(MADOperation *)operation didReadRows:(NSNotification *)sender;
 - (void)operation:(MADOperation *)operation didFormatPage:(NSNotification *)sender;
+// Sent once, before the format starts.  The first page post can be seconds away -- the
+// formatter fetches its layout and rows first -- and the viewer owes the user a status
+// line for that whole window.
+- (void)operationDidBeginFormatting:(MADOperation *)operation;
 
 @end
 
