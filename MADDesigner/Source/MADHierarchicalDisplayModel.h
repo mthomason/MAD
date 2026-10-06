@@ -12,7 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
-@class MADHierarchicalChildViewDefination, MADOperation, NSManagedObjectID;
+@class MADHierarchicalChildViewDefination, MADOperation;
 
 @interface MADHierarchicalDisplayModel : NSObject <NSSecureCoding>
 

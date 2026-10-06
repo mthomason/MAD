@@ -58,7 +58,7 @@
 
 #pragma mark - Test double
 
-// MADReportFormatter takes a MADocument -- a UIManagedDocument -- and reads exactly four
+// MADReportFormatter takes a MADocument -- a UIDocument -- and reads exactly four
 // things from it: -filename, the class of -database, -managedObjectContext, and
 // -resetSectionLayoutManagers.  It cannot be opened for real here: -openWithCompletionHandler:
 // goes through MADocument -readFromURL:error:, which unarchives a .mad produced by the app's

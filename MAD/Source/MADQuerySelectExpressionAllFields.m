@@ -19,7 +19,6 @@
 
 #import <MADFoundation/MADStringUtilities.h>
 
-#import <CoreData/NSManagedObjectContext.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSEnumerator.h>
 #import <Foundation/NSException.h>

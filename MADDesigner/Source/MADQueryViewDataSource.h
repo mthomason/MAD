@@ -14,8 +14,7 @@
 #import <UIKit/UITableView.h>
 
 @class NSArray <__covariant ObjectType>, NSSet <__covariant ObjectType>,
-	   NSNumber, NSFetchedResultsController, NSIndexPath, NSIndexSet, NSManagedObjectID,
-	   NSManagedObjectContext, UITableViewCell, MADocument, MADQueryViewSectionDelegate;
+	   NSNumber, UITableViewCell, MADocument, MADQueryViewSectionDelegate;
 
 typedef void (^MADQueryViewCellConfigureHandler)(UITableViewCell *,
 												 MADIdentifierQueryViewSections,

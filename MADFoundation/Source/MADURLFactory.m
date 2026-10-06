@@ -289,11 +289,6 @@ static NSURL *urlForCacheDirectory;
 												isDirectory:NO];
 }
 
-+ (NSURL *)newURLForCloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID {
-	NSURL *cloudDirectory = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:ubiquityID];
-	return [cloudDirectory URLByAppendingPathComponent:MADPathComponentDocuments];
-}
-
 + (NSURL *)newURLLocalDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier {
 	return [self newURLForLocalDirectoryForGroupIdentifier: groupIdentifier
 											 pathComponent: MADPathComponentDocuments

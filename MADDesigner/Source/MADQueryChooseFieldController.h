@@ -15,7 +15,7 @@
 
 @protocol MADQueryChooseFieldProtocol;
 
-@class NSManagedObjectID, MADQueryChooseFieldController, MADocument;
+@class MADQueryChooseFieldController, MADocument;
 
 @interface MADQueryChooseFieldController : UITableViewController <UITableViewDataSource, UITableViewDelegate, MADSectionHeaderViewDelegate, MADUnwindProtocol>
 

@@ -23,11 +23,7 @@
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSOperation.h>
 #import <CoreFoundation/CFNumber.h>
-#import <CoreData/CoreData.h>
 
-static NSString *keyDatabase = @"DA";
-static NSString *keyQuery = @"QU";
-static NSString *keyDocument = @"DO";
 static NSString *keyIDDatabase = @"ID";
 static NSString *keyIDQuery = @"IQ";
 static NSString *keyIDDocument = @"IO";
@@ -93,13 +89,8 @@ static NSString *keyIDDocument = @"IO";
 			//id keys = note.userInfo.keyEnumerator;
 			//id objects = note.userInfo.objectEnumerator;
 			
-			NSSet *deletedObjects, *updatedObjects, *insertedObjects, *invalidatedObjects;
+			NSSet *deletedObjects, *updatedObjects, *insertedObjects;
 
-			NSString *keyManagedObjectContext;
-			RptqStoreContext *objectContext;
-			
-			keyManagedObjectContext = NSStringFromSelector(@selector(managedObjectContext));
-			objectContext = [note.userInfo objectForKey:keyManagedObjectContext];
 			insertedObjects = [note.userInfo objectForKey:RptqStoreContextInsertedObjectsKey];
 			[insertedObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull __unused stop) {
 				
@@ -128,13 +119,11 @@ static NSString *keyIDDocument = @"IO";
 				if ([obj isKindOfClass:[RptqQueryLinks class]]) {
 					//typeof(self) sself = wself;
 					//MADModelQuery *query = sself.firstQuery;
-					//[query deleteQueryLinkID:((NSManagedObject *)obj).objectID];
 				}
 				
 				if ([obj isKindOfClass:[RptqQueryTable class]]) {
 					//typeof(self) sself = wself;
 					//MADModelQuery *query = sself.firstQuery;
-					//[query deleteQueryTableID:((NSManagedObject *)obj).objectID];
 				}
 				
 			}];
@@ -161,9 +150,7 @@ static NSString *keyIDDocument = @"IO";
 				}
 				
 			}];
-			
-			invalidatedObjects = [note.userInfo objectForKey:NSInvalidatedObjectsKey];
-			
+
 		};
 		NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 		_observeChangeNotification = [notificationCenter addObserverForName:RptqStoreContextObjectsDidChangeNotification
@@ -211,52 +198,6 @@ static NSString *keyIDDocument = @"IO";
 	@autoreleasepool {
 		[self updateDocumentDatabaseQuery];
 	}
-}
-
-// MARK: Fetch request <RptqDocument::ObjectID>.
-
-+ (NSFetchRequest <NSManagedObjectID *> *)fetchRequestObjectID {
-	NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName: NSStringFromClass([RptqDocument class])];
-	request.fetchLimit = 1;
-	request.resultType = NSManagedObjectIDResultType;
-	request.includesSubentities = NO;
-	request.includesPropertyValues = NO;
-	return request;
-}
-
-// MARK: Fetch request <RptqDocument::ObjectID, RptqDatabase::ObjectID, RptqQuery::ObjectID>.
-
-+ (NSFetchRequest <NSDictionary <NSString *, __kindof NSObject *> *> *)fetchRequestDocDBQueryIDs {
-	void (^initExpression)(NSExpressionDescription *, NSString *, NSExpression *, NSAttributeType) = ^void(NSExpressionDescription *expressionDescription, NSString *name, NSExpression *expression, NSAttributeType type) {
-		expressionDescription.name = [name copy];
-		expressionDescription.expression = [expression copy];
-		expressionDescription.expressionResultType = type;
-	};
-	
-	NSUInteger expressionCount = 6;
-	NSMutableArray <NSExpressionDescription *> *expressionDescriptions = [[NSMutableArray alloc] initWithCapacity:expressionCount];
-	
-	for (NSUInteger i=0; i<expressionCount; i++) {
-		NSExpressionDescription *description = [[NSExpressionDescription alloc] init];
-		[expressionDescriptions addObject: description];
-	}
-	
-	
-	NSString *inDocument = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inDatabase))] stringByAppendingString: NSStringFromSelector(@selector(ownedByQueryAsStaticResource))];
-	NSString *inDBID = [[MADStringUtilities stringByAppendingPeriod:NSStringFromSelector(@selector(inDatabase))] stringByAppendingString:NSStringFromSelector(@selector(identifier))];
-	NSString *inDocID = [[MADStringUtilities stringByAppendingPeriod:inDocument] stringByAppendingString:NSStringFromSelector(@selector(identifier))];
-	
-	initExpression(expressionDescriptions[0], keyDatabase, [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(inDatabase))], NSObjectIDAttributeType);
-	initExpression(expressionDescriptions[1], keyDocument, [NSExpression expressionForKeyPath:inDocument], NSObjectIDAttributeType);
-	initExpression(expressionDescriptions[2], keyQuery, [NSExpression expressionForEvaluatedObject], NSObjectIDAttributeType);
-	initExpression(expressionDescriptions[3], keyIDDatabase, [NSExpression expressionForKeyPath:inDBID], NSInteger64AttributeType);
-	initExpression(expressionDescriptions[4], keyIDQuery, [NSExpression expressionForKeyPath:NSStringFromSelector(@selector(identifier))], NSInteger64AttributeType);
-	initExpression(expressionDescriptions[5], keyIDDocument, [NSExpression expressionForKeyPath:inDocID], NSInteger64AttributeType);
-	
-	NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName: NSStringFromClass([RptqQuery class])];
-	request.resultType = NSDictionaryResultType;
-	request.propertiesToFetch = expressionDescriptions;
-	return request;
 }
 
 //Load all the databases and queries for this document.  This is because current versions

@@ -25,7 +25,6 @@
 
 #import <Foundation/NSException.h>
 #import <Foundation/NSURL.h>
-#import <CoreData/NSManagedObjectID.h>
 
 @interface MADQuerySampleDataField ()
 

@@ -12,7 +12,7 @@
 #import <Foundation/NSEnumerator.h>
 #import <MAD/RptqStoreContext.h>
 
-@class NSManagedObjectContext, RptqDocument, NSArray;
+@class RptqDocument, NSArray;
 
 @interface RptqDocumentSectionTypeEnumerator : NSEnumerator
 

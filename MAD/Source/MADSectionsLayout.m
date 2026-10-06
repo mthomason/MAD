@@ -13,7 +13,6 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSBundle.h>
-#import <CoreData/NSManagedObjectContext.h>
 #import <MADAPI/MADDatabase.h>
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"

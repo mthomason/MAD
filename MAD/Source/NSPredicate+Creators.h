@@ -11,7 +11,7 @@
 
 #import <Foundation/NSPredicate.h>
 
-@class NSManagedObjectID, NSExpression;
+@class NSExpression;
 
 @interface NSPredicate (Creators)
 
@@ -20,9 +20,6 @@
 									   atKeyPath:(NSString *)keyPath;
 + (instancetype)newPredicateObjectWithNumber:(NSNumber *)identifier
 							   andExpression:(NSExpression *)expression;
-+ (instancetype)newPredicateObjectWithObjectID:(NSManagedObjectID *)objectID;
-+ (instancetype)newPredicateObjectWithObjectID:(NSManagedObjectID *)objectID
-									 atKeyPath:(NSString *)keyPath;
 
 + (instancetype)newPredicateProperyNotNull:(NSString *)keyPath;
 

@@ -10,8 +10,6 @@
 #import <MAD/RptqStoreContext.h>
 #import "madlog.h"
 
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSFetchRequest.h>
 #import <Foundation/NSPredicate.h>
 
 #import "MADDocumentObjectType.h"

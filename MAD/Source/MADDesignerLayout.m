@@ -7,7 +7,6 @@
 //
 
 #import "MADDesignerLayout.h"
-#import <CoreData/NSManagedObject.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSUndoManager.h>
 #import "MADocumentDesignerProtocol.h"
@@ -20,7 +19,6 @@
 #import "RptqDirectionalAsymmetry.h"
 #import "RptqBorder.h"
 
-@class NSManagedObjectContext;
 
 @implementation MADDesignerLayout
 

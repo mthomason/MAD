@@ -11,7 +11,7 @@
 
 #import <UIKit/UICollectionViewController.h>
 
-@class MADDataFormatter, MADDatabase, MADQuery, NSManagedObjectID;
+@class MADDataFormatter, MADDatabase, MADQuery;
 @protocol MADQueryDatabaseProtocol, MADQueryDatabaseRangeProtocol;
 
 @interface MADTableController : UICollectionViewController

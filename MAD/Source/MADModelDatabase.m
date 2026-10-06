@@ -16,9 +16,6 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSSortDescriptor.h>
 
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSExpressionDescription.h>
 
 #import <MADFoundation/MADStringUtilities.h>
 

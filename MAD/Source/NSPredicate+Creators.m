@@ -43,23 +43,6 @@
 }
 
 
-+ (instancetype)newPredicateObjectWithObjectID:(NSManagedObjectID *)objectID {
-	return [NSComparisonPredicate predicateWithLeftExpression: [NSExpression expressionForEvaluatedObject]
-											  rightExpression: [NSExpression expressionForConstantValue: objectID]
-													 modifier: NSDirectPredicateModifier
-														 type: NSEqualToPredicateOperatorType
-													  options: 0];
-}
-
-+ (instancetype)newPredicateObjectWithObjectID:(NSManagedObjectID *)objectID
-									 atKeyPath:(NSString *)keyPath {
-	return [NSComparisonPredicate predicateWithLeftExpression: [NSExpression expressionForConstantValue: keyPath]
-											  rightExpression: [NSExpression expressionForConstantValue: objectID]
-													 modifier: NSDirectPredicateModifier
-														 type: NSEqualToPredicateOperatorType
-													  options: 0];
-}
-
 + (instancetype)newPredicateProperyNotNull:(NSString *)keyPath {
 	return [NSComparisonPredicate predicateWithLeftExpression: [NSExpression expressionForKeyPath:keyPath]
 											  rightExpression: [NSExpression expressionForConstantValue:nil]

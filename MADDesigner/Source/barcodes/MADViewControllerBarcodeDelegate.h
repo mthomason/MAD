@@ -9,7 +9,7 @@
 #ifndef MADViewControllerBarcodeDelegate_h
 #define MADViewControllerBarcodeDelegate_h
 
-@class NSManagedObjectID, MTBarcode, RptqQueryField;
+@class MTBarcode, RptqQueryField;
 
 @protocol MADViewControllerBarcodeDelegate
 

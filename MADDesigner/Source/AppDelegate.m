@@ -270,9 +270,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (void)applicationDidEnterBackground:(UIApplication *)application { }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-	[[NSUbiquitousKeyValueStore defaultStore] synchronize];
-}
+- (void)applicationWillEnterForeground:(UIApplication *)application { }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 	// FIXME: ... close open applications by calling delegate method from openFileViewController.

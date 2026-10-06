@@ -190,6 +190,15 @@ fixtures that pin it.
   is for. The conversion itself (`MADStoreConverter`) is the other thing to retire at the same
   point: once no shipping document is v0, legacy conversion is dead weight.
 
+  **Landed 2026-10-04, with one deliberate divergence (`2bf9af919` and its follow-up).** The
+  model left the MAD framework — the app bundle and the test bundle carry it, which is where
+  conversion lives — and `MADStoreConverter` moved with it to
+  `MADDesigner/Source/MADStoreLegacy/`, reached through `MADLegacyStoreConversion` (a protocol
+  registry the framework owns, so no framework references app code). **Conversion was kept, by
+  user decision:** iCloud-era documents still reach users through the Files app, and retiring
+  the converter would strand them. The "retire it once no shipping document is v0" note above
+  therefore does not apply yet; it is taken up again when no shipping document is v0.
+
   **Second item Phase D must not miss: the iCloud era's documents convert on open.** Users
   with old reports — there are likely few — reach them through the iOS Files app and hand
   them to the app, which converts them on open through `MADStoreConverter`, the same path as

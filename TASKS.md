@@ -390,8 +390,15 @@ whether to do it now — so it is queued directly behind Phase 1 rather than at 
 
 **Status:** Phases A, B and C landed on `portable-store-phase-a` (2026-10-03) — the store, the
 legacy converter, and the app integration, with the document path, undo and dirty-tracking
-proven. `MAD_STORE_PHASE_C.md` §9 holds the review findings and what is outstanding; Phase D
-(removing Core Data and iCloud) has not started.
+proven. Phase D is most of the way in: `MADocument` is a `UIDocument`, the legacy converter
+lives in the application target behind `MADLegacyStoreConversion`, the compiled `.momd` is out
+of the MAD framework, a converted document prunes its Core Data files before saving, and the
+framework/MADDesigner sweep removed the remaining Core Data imports, types and dead code
+(`2bf9af919` and its follow-up). Kept by decision: the value transformers, the explorer's
+cloud pane, the iCloud entitlements/`Info.plist` container, and `MADocumentState` (reserved for
+a future cloud-status feature). `MAD_STORE_PHASE_C.md` §9 holds the review findings;
+`MAD_LINUX.md` Phase A is the tracker for the remainder — nothing blocks Linux on Core Data
+now, so what is left there is the iCloud/entitlement cleanup the user has deferred.
 
 The `.mad` store moves from Core Data to a portable SQLite format of our own — this is the
 decision in `MAD_FORMAT.md` §8.1 and `ROADMAP.md` §4.2, and it is what removes the last Apple

@@ -16,7 +16,7 @@
 
 @protocol MADQueryVisualizationSchemaDelegate;
 
-@class UITableView, MADocument, MTSchemaFieldCell, NSManagedObjectID, UITableView;
+@class UITableView, MADocument, MTSchemaFieldCell, UITableView;
 
 extern const CGFloat MADSchemaViewDefaultWidth;
 extern const CGFloat MADSchemaViewDefaultHeight;

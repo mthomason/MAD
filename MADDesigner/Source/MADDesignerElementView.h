@@ -16,7 +16,7 @@
 
 
 @protocol UIGestureRecognizerDelegate;
-@class UIPanGestureRecognizer, NSManagedObjectContext, MADDesignerElementView, RptqDocumentElement;
+@class UIPanGestureRecognizer, MADDesignerElementView, RptqDocumentElement;
 
 @protocol MADDesignerElementViewDataSource <NSObject>
 @required

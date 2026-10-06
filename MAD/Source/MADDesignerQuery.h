@@ -11,7 +11,6 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSManagedObjectContext;
 @protocol MADocumentDesignerProtocol;
 
 @interface MADDesignerQuery : NSObject

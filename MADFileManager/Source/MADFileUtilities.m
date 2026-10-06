@@ -109,13 +109,18 @@ static NSString * const MADPathComponentData       = @"Data";
 	}
 }
 
++ (NSURL *)newURLForCloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID {
+	NSURL *cloudDirectory = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:ubiquityID];
+	return [cloudDirectory URLByAppendingPathComponent:MADPathComponentDocuments];
+}
+
 + (void)migrateLocalFiles:(NSString *)groupID toCloud:(NSString *)ubiquityID
 				extension:(NSString *)extension {
-	
+
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0ul), ^{
 
 		// Note the call to -URLForUbiquityContainerIdentifier: should be on a background queue.
-		NSURL *documentsDirectoryURL = [MADURLFactory newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityID];
+		NSURL *documentsDirectoryURL = [MADFileUtilities newURLForCloudDocumentsDirectoryForUbiquityID:ubiquityID];
 		NSURL *documentsDirectoryLocal = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:groupID];
 		
 		NSArray <NSURL *> *urls = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: documentsDirectoryLocal

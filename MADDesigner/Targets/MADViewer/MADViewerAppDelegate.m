@@ -148,10 +148,6 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver: self
-                                                    name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification
-                                                  object: nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: NSUbiquityIdentityDidChangeNotification
                                                   object: nil];
 }
@@ -234,9 +230,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (void)applicationDidEnterBackground:(UIApplication *)application { }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    [[NSUbiquitousKeyValueStore defaultStore] synchronize];
-}
+- (void)applicationWillEnterForeground:(UIApplication *)application { }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Fix me... close open applications by calling delegate method from openFileViewController.
@@ -315,10 +309,6 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
     [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-- (void)handleNotificationKeyValueStoreDidChange:(NSNotification *)notification {
-
 }
 
 #pragma mark - Convenience

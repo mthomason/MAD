@@ -35,7 +35,6 @@
 #import <Foundation/NSNull.h>
 #import <Foundation/NSError.h>
 
-#import <CoreData/NSManagedObjectID.h>
 
 @interface MADQuerySampleDataTable () <MADDatabaseResultsProtocol>
 

@@ -18,7 +18,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol MADPrintPageRendererDataSourceProtocol, MTBarcodeProtocol;
-@class RptqDocumentElement, NSManagedObjectID, MADDocumentObjectDataReference, MADElementStylizedText, NSMutableDictionary<KeyType, ObjectType>, UIImage;
+@class RptqDocumentElement, MADDocumentObjectDataReference, MADElementStylizedText, NSMutableDictionary<KeyType, ObjectType>, UIImage;
 
 @protocol MADDocumentObjectDataReferenceProtocol <NSObject>
 @required

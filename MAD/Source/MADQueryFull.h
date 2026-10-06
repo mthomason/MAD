@@ -12,7 +12,7 @@
 #import <MADAPI/MADQuery.h>
 #import <MAD/RptqStoreContext.h>
 
-@class NSManagedObjectID, NSManagedObjectContext, RptqQuery;
+@class RptqQuery;
 
 @interface MADQueryFull : MADQuery <MADQueryFieldKeysProtocol, MADQueryDataDelegateProtocol>
 

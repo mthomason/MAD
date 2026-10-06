@@ -13,7 +13,7 @@
 #import <MAD/MADAggregateFunctionGroupByType.h>
 #import <MAD/MADAggregateFunctionType.h>
 
-@class RptqDocumentElementFormula, RptqQueryField, NSFetchRequest;
+@class RptqDocumentElementFormula, RptqQueryField;
 
 NS_ASSUME_NONNULL_BEGIN
 

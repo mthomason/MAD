@@ -45,11 +45,6 @@
 
 #import <MADSqlite3/MADArrayCaching.h>
 
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSManagedObjectModel.h>
-#import <CoreData/NSPropertyDescription.h>
-#import <CoreData/NSEntityDescription.h>
 
 #import <os/log.h>
 
@@ -105,14 +100,6 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 		self.dataDelegate = layout;
 		self.datasource = layout;
 		self.layout = layout;
-		
-		/*for (NSString *entityName in layout.managedObjectModel.entitiesByName) {
-		 NSEntityDescription *entityDescription = layout.managedObjectModel.entitiesByName[entityName];
-		 NSLog(@"%@\n%@\n\n", entityName, entityDescription);
-		 for (NSPropertyDescription *propertyDescription in entityDescription.properties) {
-		 NSLog(@"Property: %@", propertyDescription);
-		 }
-		 }*/
 		
 		_filename = layout.filename.copy;
 		

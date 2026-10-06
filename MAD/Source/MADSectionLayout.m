@@ -9,8 +9,6 @@
 #import "MADSectionLayout.h"
 #import <MAD/RptqStoreContext.h>
 #import <CoreFoundation/CFNumber.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSException.h>
 #import "MADocumentSectionType.h"

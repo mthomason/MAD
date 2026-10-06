@@ -17,8 +17,6 @@
 #import "MADSectionLayoutManager.h"
 
 #import <Foundation/NSBundle.h>
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
 
 @interface MADReportSection ()
 
@@ -92,7 +90,6 @@
 	}
 	
 	if (instance) {
-		instance.objectID = @(reportSection.identifier);
 		instance.managedObjectContext = reportSection.storeContext;
 		instance.documentSection = reportSection;
 	}

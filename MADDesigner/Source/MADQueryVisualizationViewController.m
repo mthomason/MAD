@@ -61,7 +61,6 @@
 #import <UIKit/UIAttachmentBehavior.h>
 */
 
-#import <CoreData/NSManagedObjectContext.h>
 #import <QuartzCore/CALayer.h>
 
 typedef void(^MTBlockResultVoid)(void);
@@ -439,7 +438,7 @@ static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCo
 */
 
 #pragma mark -
-#pragma mark NSManagedObjectContext Observer
+#pragma mark Store Context Observer
 
 - (void)managedObjectContextWillSave:(NSNotification *)notification {
 /*

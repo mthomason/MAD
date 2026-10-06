@@ -10,21 +10,6 @@
 #define MAD_MADTableFieldIdentifier_h
 
 #import <Foundation/NSObject.h>
-
-@class NSManagedObjectID;
-
-@interface MADTableFieldReference : NSObject
-
-- (instancetype)initWithTableID:(NSManagedObjectID *)tableID
-					 andFieldID:(NSManagedObjectID *)fieldID NS_DESIGNATED_INITIALIZER;
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
-
-@property (readonly, nonatomic, copy) NSManagedObjectID *tableID;
-@property (readonly, nonatomic, copy) NSManagedObjectID *fieldID;
-
-@end
-
 @interface MADTableFieldIdentifier : NSObject
 
 - (instancetype)initWithTableID:(int64_t)tableID

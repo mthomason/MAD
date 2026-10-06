@@ -8,7 +8,6 @@
 
 #import "MADTableFieldIdentifier.h"
 
-#import <CoreData/NSManagedObjectID.h>
 #import <Foundation/NSValue.h>
 
 @implementation MADTableFieldIdentifier {
@@ -49,25 +48,6 @@
 
 - (NSNumber *)fieldObjectID {
 	return @(_fieldID);
-}
-
-@end
-
-@implementation MADTableFieldReference
-
-- (instancetype)init {
-	if (self = [self initWithTableID:nil andFieldID:nil]) {
-	}
-	return self;
-}
-
-- (instancetype)initWithTableID:(NSManagedObjectID *)tableID
-					 andFieldID:(NSManagedObjectID *)fieldID {
-	if (self = [super init]) {
-		_tableID = tableID.copy;
-		_fieldID = fieldID.copy;
-	}
-	return self;
 }
 
 @end

@@ -9,7 +9,7 @@
 #ifndef MAD_MADocumentDesignerProtocol_h
 #define MAD_MADocumentDesignerProtocol_h
 
-@class NSUndoManager, NSManagedObjectContext, RptqStoreContext;
+@class NSUndoManager, RptqStoreContext;
 @protocol MADocumentDesignerProtocol <NSObject>
 
 @property (strong, null_resettable) NSUndoManager *undoManager;

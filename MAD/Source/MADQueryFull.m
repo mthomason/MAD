@@ -13,10 +13,6 @@
 #import "MADQueryFull.h"
 #import <MAD/RptqStoreContext.h>
 
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSEntityDescription.h>
-#import <CoreData/NSManagedObjectID.h>
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>

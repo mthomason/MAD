@@ -40,7 +40,6 @@
 #import "MADThemeManager.h"
 #import "madlog.h"
 
-#import <CoreData/NSManagedObjectContext.h>
 #import <MADAPI/MADQuery.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
@@ -1238,7 +1237,7 @@ BOOL storeEnabled(void) {
 
 #pragma mark -
 #pragma mark Notifications
-#pragma mark NSManagedObjectContext Notifications
+#pragma mark Store Context Notifications
 
 - (void)managedObjectContextDidChange:(NSNotification *)notification {
 	if (_suspendAutomaticTrackingOfChangesInManagedObjectContext) return;

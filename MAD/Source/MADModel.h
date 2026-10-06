@@ -14,7 +14,6 @@
 #import <MAD/MADModelIDProtocol.h>
 #import <MAD/RptqStoreContext.h>
 
-@class NSManagedObjectContext;
 
 extern NSString * const MADNotificationQueryTableInsert;
 extern NSString * const MADNotificationQueryTableDelete;

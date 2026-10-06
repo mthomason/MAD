@@ -8,7 +8,6 @@
 
 #import "MADQuerySelectExpressionActiveFields.h"
 #import <MAD/RptqStoreContext.h>
-#import <CoreData/NSManagedObjectContext.h>
 
 #import <MADDataStructures/MTPair.h>
 #import <MADDataStructures/MTVertex.h>

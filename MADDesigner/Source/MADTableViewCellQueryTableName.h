@@ -11,7 +11,6 @@
 
 #import <UIKit/UITableViewCell.h>
 
-@class NSManagedObjectID;
 
 @interface MADTableViewCellQueryTableName : UITableViewCell
 

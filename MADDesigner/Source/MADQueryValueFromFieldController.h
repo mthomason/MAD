@@ -13,7 +13,7 @@
 
 @protocol MADQueryValueFromFieldControllerDelegate;
 
-@class NSManagedObjectID, MADocument;
+@class MADocument;
 
 @interface MADQueryValueFromFieldController : UIViewController
 

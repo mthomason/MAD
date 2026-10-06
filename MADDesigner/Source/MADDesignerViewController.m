@@ -103,7 +103,6 @@
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/UIPopoverPresentationController.h>
 
-#import <CoreData/NSManagedObjectContext.h>
 #import <MAD/RptqObject.h>
 
 #import <math.h>
@@ -1115,7 +1114,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 #pragma mark -
-#pragma mark RptqStoreContextObjectsDidChangeNotification
+#pragma mark Store Context Notifications
 
 - (void)updateForChangesToDocumentElement:(RptqDocumentElement *)documentObject {
 	MADocument *doc = self.document;
@@ -1255,7 +1254,7 @@ static const inline CGSize sizePopoverFonts(void) { return CGSizeMake(MADDefault
 }
 
 #pragma mark -
-#pragma mark RptqStoreContextDidSaveNotification
+#pragma mark Store Context Did Save
 
 - (void)managedObjectContextDidSave:(NSNotification *)notification {
 	NSSet *updatedObjects = notification.userInfo[RptqStoreContextUpdatedObjectsKey];

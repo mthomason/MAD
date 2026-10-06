@@ -8,8 +8,6 @@
 
 #import "MADModelQueryTable.h"
 
-#import <CoreData/NSFetchRequest.h>
-#import <CoreData/NSExpressionDescription.h>
 
 #import <Foundation/NSOrderedSet.h>
 #import <Foundation/NSDictionary.h>

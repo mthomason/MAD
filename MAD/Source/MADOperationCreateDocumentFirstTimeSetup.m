@@ -20,7 +20,6 @@
 #import <MAD/RptqDocumentSection.h>
 
 #import <os/log.h>
-#import <CoreData/NSManagedObjectContext.h>
 
 @interface MADOperationCreateDocumentFirstTimeSetup ()
 

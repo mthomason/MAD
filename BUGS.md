@@ -381,23 +381,16 @@ Status key:
   test's border edge immediately exposed.
 
 ### `MADocument -managedObjectContext` returns a `RptqStoreContext` under a Core Data type
-- **Status:** Still open -- recorded 2026-10-03, not a live failure
-- **Where:** `MAD/Source/MADocument.m:1284-1286`
-- **Behavior:** `managedObjectContext` is inherited from `UIManagedDocument`, where it
-  is an `NSManagedObjectContext`. `MADocument` now overrides it to return
-  `self.storeContext`, an `RptqStoreContext` -- a different class that is deliberately
-  not an `NSManagedObjectContext` and does not answer Core Data's selectors. Forty-six
-  call sites reach `.managedObjectContext`; they work, because the object they get is
-  the store context, but every one of them is compiled against the wrong type and the
-  compiler can no longer check any of them. `CLI/Source/MADCLIQuery.m:27` warns on
-  exactly this -- it passes the value to a `RptqStoreContext *` parameter and the
-  compiler reports an incompatible pointer type.
-- **Why it matters:** It is a type lie that turns a future refactor into a runtime
-  crash (unrecognised selector) rather than a compile error. It also means
-  `UIManagedDocument`'s own machinery, if any of it calls `self.managedObjectContext`
-  internally, receives an object it cannot use.
-- **Not yet fixed:** belongs with Phase D, when `UIManagedDocument` goes and the
-  property can be renamed to `storeContext` at every call site.
+- **Status:** Fixed — 2026-10-06, in Phase D.
+- **Where:** `MAD/Source/MADocument.h` (`managedObjectContext` is declared there as
+  `RptqStoreContext *`, next to `storeContext`, which it returns).
+- **Behavior:** `managedObjectContext` used to be inherited from `UIManagedDocument`
+  as an `NSManagedObjectContext` while the override returned the store context — a
+  type lie the compiler could not check.  Now the superclass is `UIDocument`, which
+  has no such property: `MADocument` declares the property itself as
+  `RptqStoreContext *` and returns `self.storeContext`, so every call site compiles
+  against the real type (the `CLI/Source/MADCLIQuery.m` incompatible-pointer warning
+  is gone with it).
 
 ### `MADSectionGroupLayout` segfaults on a group whose field has no query table
 - **Status:** Still open
@@ -698,12 +691,14 @@ Status key:
 
 
 ### UIManagedDocument's resetPersistentStore is declared but never implemented
-- **Status:** Open -- documented, no live caller.
-- **What:** `-resetPersistentStore` is declared on the `UIManagedDocument (Extras)`
-  category (`UIManagedDocument+Extras.h:16`) and has no implementation; the only reference
-  in the implementation file is the commented-out call at `:45`.  Any future call would be
+- **Status:** Fixed — 2026-10-06, in Phase D.  The declaration was removed with the
+  category's rename to `UIDocument (Extras)` (`UIDocument+Extras.h`); there is no
+  `resetPersistentStore` anywhere in the tree now, so the unrecognized-selector risk
+  is gone.
+- **What:** `-resetPersistentStore` was declared on the `UIManagedDocument (Extras)`
+  category (`UIManagedDocument+Extras.h:16`) with no implementation; the only reference
+  in the implementation file was a commented-out call.  Any future call would have been
   an `unrecognized selector` crash.
-- **Where:** `MAD/Source/UIManagedDocument+Extras.h:16`, `UIManagedDocument+Extras.m:45`.
 
 
 ### MADModelQuery can insert a nil table into its dictionary
@@ -2275,14 +2270,16 @@ bundle's header search path.
   from `testDisplayedAlertConfirmReturnsNilWhenNoDependencyCanAnswer`).
 
 ### The document status signalling is inert at both ends
-- **Status:** Still open
-- **Where:** `MAD/Source/MADocument.m:892-915` (the three
-  `handleManagedObjectContext…` handlers and the `MADDocumentState` flags they
-  write); `MADDesigner/Source/MADDesignerViewController.m:1164`
-  (`-managedObjectContextDidChange:`), `:1260` (`-managedObjectContextDidSave:`),
-  `:3257` (`-addObservers`); `MADDesigner/Source/MADQueryViewController.m:1243`
-  (`-managedObjectContextDidChange:`), `:1255-1266` (`-ingnoreManagedObjectContextChanges:`
-  and `-observeManagedObjectContextChanges:`)
+- **Status:** Resolved — 2026-10-06.  The signal end is wired (milestone d, below); the
+  flag end is a **decision, not a defect**: `MADDocumentState.needsSave` and
+  `.contextChagned` are kept deliberately as the reserved home of the planned
+  cloud-status feature.  Nothing reads them today; nothing should delete them as dead
+  code.
+- **Where:** `MAD/Source/MADocument.m` (the `handleManagedObjectContext…` handlers and
+  the `MADDocumentState` flags they write); `MADDesigner/Source/MADDesignerViewController.m`
+  (`-managedObjectContextDidChange:`, `-managedObjectContextDidSave:`, `-addObservers`);
+  `MADDesigner/Source/MADQueryViewController.m` (`-managedObjectContextDidChange:`,
+  `-ingnoreManagedObjectContextChanges:` and `-observeManagedObjectContextChanges:`)
 - **Behavior:** The status signalling is inert at **both** ends, not merely
   dormant pending a store signal.  Nothing can fire it -- `RptqStoreContext`
   posts no change notification -- and nothing consumes it either: a repo-wide
@@ -2297,15 +2294,14 @@ bundle's header search path.
   no-op.  The observer method name `ingnoreManagedObjectContextChanges:` also
   carries a long-standing typo.
 - **Now (milestone d):** the signal end is wired.  `RptqStoreContext` posts
-  `NSManagedObjectContextObjectsDidChangeNotification` (object = the context,
-  `NSInsertedObjectsKey` / `NSUpdatedObjectsKey` / `NSDeletedObjectsKey`),
-  coalesced to one post per run-loop turn, from `insertObjectForEntity:`,
-  `markObjectChanged:`, `deleteObject:`, and after `save:`.  The designer's
-  undo-button/element-refresh handler and the query controller's list tracking
-  consume it again, and `MADModelDocument` / `MADQueryFull` receive it.  The
-  remaining decision narrows to the flags themselves: `MADDocumentState.
-  needsSave` and `.contextChagned` still have no readers -- wire a consumer or
-  delete them.
+  `RptqStoreContextObjectsDidChangeNotification` (object = the context, the same
+  userInfo keys under `RptqStoreContext*` names since Phase D), coalesced to one post
+  per run-loop turn, from `insertObjectForEntity:`, `markObjectChanged:`,
+  `deleteObject:`, and after `save:`.  The designer's undo-button/element-refresh
+  handler and the query controller's list tracking consume it again, and
+  `MADModelDocument` / `MADQueryFull` receive it.  The remaining decision narrowed to
+  the flags themselves and was made on 2026-10-06: keep `MADDocumentState.needsSave`
+  and `.contextChagned` for the future cloud-status feature.
 - **Found during the store migration.**
 
 ### Saves run unconditionally now, and each rewrites the whole store

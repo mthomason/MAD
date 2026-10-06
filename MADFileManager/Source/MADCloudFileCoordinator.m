@@ -72,7 +72,7 @@ NSString * const MADNotificationCloudActivityCompleted  = @"MADNotificationCloud
 		dispatch_barrier_async(self.documentsDirectoryQueue, ^{
 			MADCloudFileCoordinator *sself = wself;
 			sself->_documentsDirectory =
-				[MADURLFactory newURLForCloudDocumentsDirectoryForUbiquityID: identifier];
+				[MADFileUtilities newURLForCloudDocumentsDirectoryForUbiquityID: identifier];
 		});
 	}
 	

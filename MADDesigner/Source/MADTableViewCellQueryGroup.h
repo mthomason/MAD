@@ -11,7 +11,7 @@
 
 #import "MTAutoLayoutTableViewCell.h"
 
-@class NSManagedObjectID, UILabel;
+@class UILabel;
 
 @interface MADTableViewCellQueryGroup : MTAutoLayoutTableViewCell
 

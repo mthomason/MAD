@@ -11,7 +11,6 @@
 
 #import <Foundation/NSObject.h>
 
-@class NSManagedObjectID;
 
 @protocol MADManagedObjectViewProtocol <NSObject>
 @required

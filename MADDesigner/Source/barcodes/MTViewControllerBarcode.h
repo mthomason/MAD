@@ -18,7 +18,7 @@
 
 @protocol MADViewControllerBarcodeDelegate;
 
-@class RptqDocumentElementBarcode, NSManagedObjectID;
+@class RptqDocumentElementBarcode;
 
 @interface MTViewControllerBarcode : UIViewController <MTViewControllerBarcodeOptionsDelegate, MADUnwindProtocol>
 

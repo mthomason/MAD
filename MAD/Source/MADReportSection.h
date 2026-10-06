@@ -13,7 +13,7 @@
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGBase.h>
 
-@class MADReportRows, MADSectionLayoutManager, NSManagedObjectID, NSManagedObjectContext, RptqDocumentSection;
+@class MADReportRows, MADSectionLayoutManager, RptqDocumentSection;
 
 @interface MADReportSection : NSObject
 

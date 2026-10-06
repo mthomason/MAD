@@ -27,7 +27,6 @@
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 
-#import <CoreData/NSManagedObjectContext.h>
 
 @interface MADOperationCreateDocumentImportSchema ()
 

@@ -212,7 +212,7 @@
 	XCTAssertEqual(decoded.detailRowId, (NSUInteger)99);
 }
 
-#pragma mark - MADTableFieldIdentifier / MADTableFieldReference
+#pragma mark - MADTableFieldIdentifier
 
 - (void)testTableFieldIdentifier {
 	MADTableFieldIdentifier *identifier = [[MADTableFieldIdentifier alloc] initWithTableID:10 andFieldID:20];
@@ -220,12 +220,6 @@
 	XCTAssertEqual(identifier.fieldID, (int64_t)20);
 	XCTAssertEqualObjects(identifier.tableObjectID, @10);
 	XCTAssertEqualObjects(identifier.fieldObjectID, @20);
-}
-
-- (void)testTableFieldReferenceAcceptsNil {
-	MADTableFieldReference *reference = [[MADTableFieldReference alloc] initWithTableID:nil andFieldID:nil];
-	XCTAssertNil(reference.tableID);
-	XCTAssertNil(reference.fieldID);
 }
 
 #pragma mark - NSPredicate+Creators
@@ -249,26 +243,6 @@
 - (void)testPredicatePropertyNotNull {
 	NSPredicate *predicate = [NSPredicate newPredicateProperyNotNull:@"name"];
 	XCTAssertEqualObjects(predicate.predicateFormat, @"name != nil");
-}
-
-- (void)testPredicateWithObjectID {
-	NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID:nil];
-	XCTAssertTrue([predicate isKindOfClass:[NSComparisonPredicate class]]);
-	NSComparisonPredicate *comparison = (NSComparisonPredicate *)predicate;
-	XCTAssertEqual(comparison.predicateOperatorType, NSEqualToPredicateOperatorType);
-	XCTAssertEqual(comparison.leftExpression.expressionType, NSEvaluatedObjectExpressionType);
-	XCTAssertEqual(comparison.rightExpression.expressionType, NSConstantValueExpressionType);
-}
-
-- (void)testPredicateWithObjectIDAtKeyPath {
-	NSPredicate *predicate = [NSPredicate newPredicateObjectWithObjectID:nil atKeyPath:@"foo"];
-	XCTAssertTrue([predicate isKindOfClass:[NSComparisonPredicate class]]);
-	NSComparisonPredicate *comparison = (NSComparisonPredicate *)predicate;
-	XCTAssertEqual(comparison.predicateOperatorType, NSEqualToPredicateOperatorType);
-	// The keyPath is captured as a constant, not as a key-path expression.
-	XCTAssertEqual(comparison.leftExpression.expressionType, NSConstantValueExpressionType);
-	XCTAssertEqualObjects(comparison.leftExpression.constantValue, @"foo");
-	XCTAssertEqual(comparison.rightExpression.expressionType, NSConstantValueExpressionType);
 }
 
 #pragma mark - Enum / string-constant value contracts

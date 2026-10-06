@@ -23,10 +23,6 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSURL.h>
 
-#import <CoreData/NSManagedObjectID.h>
-#import <CoreData/NSManagedObjectContext.h>
-#import <CoreData/NSExpressionDescription.h>
-#import <CoreData/NSFetchRequest.h>
 
 #import <MADFoundation/MADStringUtilities.h>
 
@@ -183,17 +179,6 @@ static NSDictionary *MADStoreProjectionForQueryLink(RptqQueryLinks *link) {
 	}
 	return _links;
 }
-
-/*- (NSSet <MADTableFieldReference *> *)tableFieldReferencesInLinks {
-	NSEnumerator <MADModelQueryLink *> *links = _links.objectEnumerator;
-	MADModelQueryLink *link;
-	NSSet *tablesInLinks;
-	tablesInLinks = [[NSMutableSet alloc] initWithCapacity:_links.count * 2];
-	for (link in links) {
-		tablesInLinks = [tablesInLinks setByAddingObjectsFromSet: link.tableFieldReferences];
-	}
-	return tablesInLinks;
-}*/
 
 - (NSSet <NSNumber *> *)tablesInLinks {
 	NSEnumerator <MADModelQueryLink *> *links = _links.objectEnumerator;
@@ -524,28 +509,5 @@ static NSDictionary *MADStoreProjectionForQueryLink(RptqQueryLinks *link) {
 	[_queryTableIDs removeObject:queryTable];
 	[_tables removeObjectForKey:queryTable];
 }
-
-/*- (NSString *)debugDescription {
-	NSString *debugDescription;
-	debugDescription = self.objectID.URIRepresentation.pathComponents.count == 3 ?
-							[[NSString alloc] initWithFormat:@"%@ <%@::%@> [%@, %@]",
-												NSStringFromClass([self class]),
-												self.objectID.URIRepresentation.pathComponents[1],
-												self.objectID.URIRepresentation.pathComponents[2],
-												_tables,
-												_links] :
-							self.debugDescription;
-	return debugDescription;
-}
-
-- (id)debugQuickLookObject {
-	NSMutableString *debug = [[NSMutableString alloc] init];
-	[debug appendFormat:@"%@", NSStringFromClass([self class]).uppercaseString];
-	[debug appendFormat:@"ID:\t%@\n", self.objectID];
-	[debug appendFormat:@"Tables:\t%@", _tables];
-	[debug appendFormat:@"Tables:\t%@", _tableSchemas];
-	[debug appendFormat:@"Links:\t%@", _links];
-	return debug;
-}*/
 
 @end

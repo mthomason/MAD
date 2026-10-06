@@ -103,17 +103,6 @@
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 
-/*
- {
-	additionalContent =     {
-		generator = "MAD Designer";
-		"thumbnail.png" = "<UIImage: 0x1fea0b10>";
-		version = 1;
-	};
-	fileType = "com.everydayapps.productivity.mad";
-	parentContext = "<NSManagedObjectContext: 0xffffffff>";
- }
- */
 
 NSString * const MADMimeType									= @"application/vnd.everydayapps.mad";
 NSString * const MADDocumentInfoKeyThumbnail					= @"thumbnail";
@@ -847,7 +836,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 }
 
 #pragma mark -
-#pragma mark NSManagedObjectContext Notifications
+#pragma mark Store Context Notifications
 
 - (void)handleManagedObjectContextDidChange:(NSNotification *)notification {
 	if (notification.object != self.storeContext) return;
@@ -1353,11 +1342,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 - (void)removeGroupWitObjectID:(int64_t)groupID
 	  fromManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 	
-	//RptqStoreContext *context;
-	// = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-	//context.parentContext = managedObjectContext;
 	
-	//[context performBlockAndWait: ^{
 	
 	RptqQueryGroup *group = (RptqQueryGroup *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryGroup class]) identifier:groupID];
 	if (group != nil) {

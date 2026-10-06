@@ -14,7 +14,7 @@
 #import <MAD/RptqStoreContext.h>
 #import <MAD/RptqDocumentSectionWrappingStyle.h>
 
-@class NSManagedObjectID, NSManagedObjectContext, NSNumber, NSDictionary;
+@class NSNumber, NSDictionary;
 
 @interface MADSectionLayout : NSObject
 
@@ -27,7 +27,6 @@
 	@property (nonatomic, assign, getter=isVisible) BOOL visibility;
 	@property (nonatomic, assign) RptqDocumentSectionWrappingStyle wrappingStyle;
 	@property (nonatomic, assign, readonly) BOOL producesFormFeed;
-	@property (nonatomic, copy) NSManagedObjectID *objectID;
 	@property (nonatomic, copy) NSNumber *identifierObject;
 
 	- (instancetype)initWithObject:(NSDictionary *)object

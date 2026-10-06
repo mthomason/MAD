@@ -211,24 +211,21 @@ new lookup has a count-based test that fails on an empty result. See 9.1.
 - **Notifications registered with `object: nil` — DONE, and the signal is wired (milestone d).**
   The handlers filter on the document's own store context, and
   `handleManagedObjectContextWillSave:` is registered against nil like its siblings.
-  `RptqStoreContext` now posts `NSManagedObjectContextObjectsDidChangeNotification` (object =
-  the context, the Core Data userInfo keys), coalesced to one post per run-loop turn, fired
-  from insert, mark-object-changed, delete, and after save.  The designer's undo-button and
-  element-refresh handler and the query controller's list tracking consume it again (the Query
-  tab's tables, links, groups, and predicates lists repopulate), and `MADModelDocument` /
-  `MADQueryFull` receive it.  **Remaining decision:** `MADDocumentState.needsSave` and
-  `.contextChagned` still have no readers -- wire a consumer or delete the flags.  Recorded in
-  `BUGS.md` ("The document status signalling is inert at both ends").
-- **`closeWithCompletionHandler:` bypasses `[super …]` — CONFIRMED AND PINNED, with a
-  transitional contract.** `testCloseReachesClosedStateAndReleasesTheFilePresenter` pins what
-  the bypass means today: the store-backed document never registers a file presenter
-  (UIDocument's presenter bookkeeping lives in its open/save machinery, which the portable
-  store does not drive), and `documentState` is `UIDocumentStateClosed` **from init and never
-  leaves it** — so `UIDocumentStateChangedNotification` never fires, `MADocument.m:915`'s
-  `UIDocumentStateNormal` case is dead, `MADDesignerViewController.m:961`'s
-  `documentStateChanged` and `UIManagedDocument+Extras.m:43`'s "must be closed" assertion are
-  both moot. That is an **acceptable transitional contract**: Phase D restores correct state
-  when the document moves onto `UIDocument`, and the pinned test is the record.
+  `RptqStoreContext` posts its own change notification (object = the context, mirroring the
+  Core Data userInfo keys under `RptqStoreContext*` names since Phase D), coalesced to one post
+  per run-loop turn, fired from insert, mark-object-changed, delete, and after save.  The
+  designer's undo-button and element-refresh handler and the query controller's list tracking
+  consume it again (the Query tab's tables, links, groups, and predicates lists repopulate),
+  and `MADModelDocument` / `MADQueryFull` receive it.  **Decision (2026-10-06):**
+  `MADDocumentState.needsSave` / `.contextChagned` stay — user call: they are reserved for a
+  future cloud-status feature; nothing reads them today, and `BUGS.md` records that.
+- **`closeWithCompletionHandler:` bypasses `[super …]` — RESOLVED by Phase D.** The document
+  moved onto `UIDocument` and open/close run through the state machine again: `open` reports
+  `UIDocumentStateNormal` with its file presenter registered, `close` saves, releases the store,
+  returns to `UIDocumentStateClosed` and unregisters the presenter.  A never-opened document is
+  still handled explicitly (UIDocument's close does not call back for it).  Pinned by
+  `testOpenAndCloseMoveThroughTheUIDocumentStateMachine` plus the original
+  `testCloseReachesClosedStateAndReleasesTheFilePresenter`.
 - **`objectsForEntity:` sorts and allocates on every call — OPEN, low priority.** Not
   memoized: nothing has profiled it hot. Memoize per load if it ever profiles.
 - **`layoutHeight` dropped from the `MADSectionsLayout` projection — CONFIRMED SAFE.** The
@@ -236,9 +233,13 @@ new lookup has a count-based test that fails on an empty result. See 9.1.
   consumer reads it.
 - **Test scaffolding in the shipping app — DONE.** The `-UITestOpenSample` /
   `-UITestSelectTab` hooks are wrapped in `#if DEBUG`.
-- **`MAD.momd` is now compiled into the MAD framework** so legacy conversion can always find its
-  model. Correct while conversion exists; **must be removed in Phase D**, together with
-  `MADStoreConverter` once no shipping document is v0. Recorded in `MAD_STORE_MIGRATION.md` §7.
+- **`MAD.momd` was compiled into the MAD framework** so legacy conversion could always find its
+  model. **Done in Phase D, with the decision recorded:** the model left the framework (the app
+  bundle and the test bundle carry it now, which is where conversion lives), and
+  `MADStoreConverter` moved to `MADDesigner/Source/MADStoreLegacy/`, reached through
+  `MADLegacyStoreConversion`. Conversion is kept deliberately — user decision, 2026-10-04: users
+  open iCloud-era documents and they must convert — so the "retire it once no shipping document
+  is v0" note in `MAD_STORE_MIGRATION.md` §7 is superseded; see that document's Phase D text.
 
 ### 9.4 Verified good
 
@@ -249,6 +250,12 @@ new lookup has a count-based test that fails on an empty result. See 9.1.
   `objectWithID`, `existingObjectWithID`, `insertNewObjectForEntityForName`, `registeredObjects`,
   `refreshObject:mergeChanges:`, `deleteCacheWithName`) was swept across MAD and MADDesigner:
   the only hits are a commented-out block and `MADStoreConverter`, which is allowed to.
+  **Phase D took this to the finish (2026-10-06):** the converter and its `NSManagedObject`/
+  `NSFetchRequest` code moved to the app target, the vestigial imports, `@class` forward
+  declarations, dead fetch-request projections (`MADModelDocument`, `MADModelQueryLink`,
+  `NSPredicate+Creators`'s object-ID variants), the `MADTableFieldReference` twin and the
+  `MADSectionLayout.objectID` property are gone, and `MAD`/`MADDesigner` compile with no
+  Core Data import outside `MADDesigner/Source/MADStoreLegacy/` and the test bundles.
 - **The removed `awakeFromInsert` bodies were identifier-assignment only**, which
   `insertObjectForEntity:` now performs — no behavioural loss.
 - **The two Sqlite3 driver fixes are genuine.** `connectWithConnection:` really did open the

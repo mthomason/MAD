@@ -18,7 +18,7 @@
 
 #import "MADUnwindProtocol.h"
 
-@class NSManagedObject, NSManagedObjectID, MADocument, RptqQueryField, RptqDocumentElementAggregate;
+@class MADocument, RptqQueryField, RptqDocumentElementAggregate;
 
 @protocol MTViewControllerAggregateDelegate
 

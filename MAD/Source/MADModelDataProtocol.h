@@ -9,7 +9,6 @@
 #ifndef MADModelDataProtocol_h
 #define MADModelDataProtocol_h
 
-@class NSManagedObjectContext;
 
 @protocol MADModelDataProtocol <NSObject>
 

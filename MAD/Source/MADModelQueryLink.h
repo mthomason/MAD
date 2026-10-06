@@ -11,13 +11,11 @@
 
 #import <MAD/MADModel.h>
 
-@class MADModelQuery, MADTableFieldReference, MADTableFieldIdentifier, NSPredicate, NSFetchRequest, NSNumber, NSSet<__covariant ObjectType>, RptqQueryLinks;
+@class MADModelQuery, MADTableFieldIdentifier, NSNumber, NSSet<__covariant ObjectType>, RptqQueryLinks;
 
 @interface MADModelQueryLink : MADModel <MADModelIDProtocol>
 
 @property (nonatomic, weak) MADModelQuery *inQuery;
-@property (nonatomic, readonly, strong) MADTableFieldReference *leftFieldReference;
-@property (nonatomic, readonly, strong) MADTableFieldReference *rightFieldReference;
 @property (nonatomic, readonly, strong) MADTableFieldIdentifier *leftFieldIdentifier;
 @property (nonatomic, readonly, strong) MADTableFieldIdentifier *rightFieldIdentifier;
 
@@ -31,7 +29,6 @@
 @property (nonatomic, readonly) int64_t leftFieldID;
 @property (nonatomic, readonly) int64_t rightFieldID;
 
-+ (NSFetchRequest *)fetchRequest:(NSPredicate *)predicate;
 
 - (instancetype)initWithIdentifier:(int64_t)identifier
 					   leftFieldID:(int64_t)leftFieldID
@@ -41,8 +38,6 @@
 - (instancetype)initWithRptqQueryLink:(RptqQueryLinks *)queryLink;
 
 - (BOOL)isAdjacentToQueryTable:(int64_t)queryTableID;
-
-//- (NSSet <MADTableFieldReference *> *)tableFieldReferences;
 - (NSSet <NSNumber *> *)tables;
 
 @end

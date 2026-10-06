@@ -357,6 +357,15 @@ Ordering rationale: A is owned work, B is cheap and de-risks everything, C is
 enumerable, and D is the honest go/no-go. Nothing in E or F is needed to *answer*
 the question; they are needed only to *ship*.
 
+**Phase A status (2026-10-06).** Core Data is out of the MAD framework: `MADocument` is a
+`UIDocument`, the legacy converter and the compiled model live in the application target
+behind `MADLegacyStoreConversion`, a converted document prunes its Core Data files, and the
+framework/MADDesigner sweep removed the remaining imports, types and dead code. The value
+transformers, the explorer's cloud pane, and the iCloud entitlements are kept by user
+decision — they are app-side, so they do not block the headless build; the file manager's
+cloud code stays where it is, unused (per the user: not needed for headless mode). What
+remains before B is whatever §4 file-level exclusions the toolchain spike proves necessary.
+
 ---
 
 ## 10. Decisions for the user

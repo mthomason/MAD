@@ -46,7 +46,6 @@
 + (NSURL *)newURLForLocalDataDirectory;
 + (NSURL *)newURLForLocalApplicationSupportDirectory;
 
-+ (NSURL *)newURLForCloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
 + (NSURL *)newURLLocalDocumentsDirectoryForGroupIdentifier:(NSString *)groupIdentifier;
 
 + (NSURL *)newURLForLocalDataDirectoryForGroupIdentifier:(NSString *)groupIdentifier;

@@ -8,7 +8,6 @@
 
 #import "MADModelQueryField.h"
 
-#import <CoreData/NSManagedObjectID.h>
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>

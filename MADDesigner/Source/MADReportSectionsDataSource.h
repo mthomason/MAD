@@ -12,7 +12,6 @@
 #import "MADReportSectionDataSourceProtocol.h"
 #import <MAD/RptqStoreContext.h>
 
-@class NSManagedObjectContext;
 
 @protocol UICollectionViewDelegate, UICollectionViewDataSource, MADDesignerSectionLayoutLiquidDelegate;
 

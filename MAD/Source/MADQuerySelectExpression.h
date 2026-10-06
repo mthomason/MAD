@@ -12,7 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <MAD/RptqStoreContext.h>
 
-@class MADDatabase, NSManagedObjectContext;
+@class MADDatabase;
 
 @interface MADQuerySelectExpression : NSObject
 
