@@ -28,6 +28,25 @@
 @synthesize database = _database;
 @end
 
+// A query that fails the way a driver's parser would: it sets the error and still
+// returns whatever SQL it managed to build.
+@interface MADFailingQuery : MADQuery
+@property (nonatomic, assign) BOOL sawNullErrorPointer;
+@end
+
+@implementation MADFailingQuery
+
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
+	if (error == NULL) {
+		self.sawNullErrorPointer = YES;
+		return @"";
+	}
+	*error = [NSError errorWithDomain:@"MADTestQuery" code:7 userInfo:nil];
+	return @"SELECT partial";
+}
+
+@end
+
 @interface MADQueryTests : XCTestCase
 @end
 
@@ -100,6 +119,46 @@
 
 	XCTAssertEqual(query.database, database);
 	XCTAssertNil(error);
+}
+
+#pragma mark - Error propagation
+
+- (void)testGetSqlWithDatabasePropagatesSubclassError {
+	MADFailingQuery *query = [[MADFailingQuery alloc] initWithObject:nil];
+
+	NSError *error = nil;
+	NSString *sql = [query getSql:nil error:&error];
+
+	// The SQL a failing build managed to produce is still handed back.
+	XCTAssertEqualObjects(sql, @"SELECT partial");
+	XCTAssertNotNil(error);
+	XCTAssertEqual(error.code, 7);
+	XCTAssertEqualObjects(error.domain, @"MADTestQuery");
+}
+
+- (void)testGetSqlWithDatabaseToleratesNullErrorPointer {
+	MADFailingQuery *query = [[MADFailingQuery alloc] initWithObject:nil];
+
+	// The two-argument form always hands its callee a local error pointer, so the
+	// failure is dropped on the floor rather than crashing.
+	XCTAssertEqualObjects([query getSql:nil error:NULL], @"SELECT partial");
+}
+
+- (void)testGetSqlToleratesNullErrorPointer {
+	MADFailingQuery *query = [[MADFailingQuery alloc] initWithObject:nil];
+
+	// A direct caller of the one-argument form may pass NULL; the callee must check.
+	XCTAssertNoThrow([query getSql:NULL]);
+	XCTAssertTrue(query.sawNullErrorPointer);
+}
+
+#pragma mark - Field keys without the protocol
+
+- (void)testFieldKeyForIndexWithoutFieldKeysProtocol {
+	// The base class does not adopt MADQueryFieldKeysProtocol, so there is nothing to
+	// resolve against.
+	MADQuery *query = [[MADQuery alloc] initWithObject:nil];
+	XCTAssertNil([query fieldKeyForIndex:0]);
 }
 
 @end

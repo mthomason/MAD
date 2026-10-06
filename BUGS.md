@@ -57,6 +57,61 @@ Status key:
   Pinned by `testNSStringFromMADQueryTypeSampleDataTableRange` (renamed from
   `testNSStringFromMADQueryTypeSampleDataTableRangeFallsThrough`).
 
+### `MADConnectionViewController` / `MADConnectionSQLGenericViewController` `-databaseConnection` throws an NSString
+- **Status:** Confirmed (left as is — no changed functionality)
+- **Where:** `MADAPI/Source/MADConnectionViewController.m:279`,
+  `MADAPI/Source/MADConnectionSQLGenericViewController.m:353`
+- **Behavior:** The override point is implemented as `@throw NSInternalInconsistencyException;`,
+  which throws the *name constant* — an `NSString` — rather than an `NSException`.
+  Every "subclass me" method on `MADDatabase` builds a real
+  `[NSException exceptionWithName:NSInternalInconsistencyException reason:... userInfo:nil]`
+  from the same constant; these two do not.
+- **Why it matters:** A `@catch (NSException *e)` — the only shape anything in this
+  codebase writes — does not catch it; the throw surfaces as an unknown exception
+  object. Only the abstract-method misuse path hits it, so the blast radius is small,
+  but the inconsistency is real.
+- **Test:** `MADConnectionViewControllerTests testDatabaseConnectionThrowsOnBaseClass`
+  and `testDatabaseConnectionThrowsOnSQLGenericClass` catch `id` and assert the thrown
+  object is the name constant.
+
+### `MADDatabase` is NSCoding-only, so secure archiving rejects it
+- **Status:** Quirk (latent — nothing archives a `MADDatabase`)
+- **Where:** `MADAPI/Source/MADDatabase.h:32`, `MADAPI/Source/MADDatabase.m:50-63`
+- **Behavior:** The class declares `NSCoding`, not `NSSecureCoding`, and does not
+  implement `+supportsSecureCoding`. `+[NSKeyedArchiver archivedDataWithRootObject:requiringSecureCoding:YES
+  error:]` therefore returns `nil` with an error. Its `-initWithCoder:` also uses the
+  non-secure `-decodeObjectForKey:`, so even the modern class-matching decode APIs
+  (`-decodeObjectOfClass:forKey:`) refuse it. Round-tripping works only through the
+  classic path (`[[NSKeyedArchiver alloc] initRequiringSecureCoding:NO]` and an
+  unarchiver with `requiresSecureCoding = NO`, which is *not* the default for
+  `-initForReadingFromData:error:`).
+- **Why it matters:** If a caller ever reaches for the secure APIs — the enforced
+  default in recent SDKs — archiving fails at runtime with a nil result. Nothing in
+  the app or frameworks archives a `MADDatabase` today (checked: the only
+  `NSKeyedArchiver` users archive caches and query-visualization payloads), so this
+  is latent.
+- **Test:** `MADDatabaseTests testInsecureNSCodingRoundTrip` and
+  `testSecureArchivingIsUnsupported`.
+
+### `MADDatabaseConnection` subclasses do not survive the base class's `NSCopying` / `NSCoding`
+- **Status:** Quirk (latent — nothing archives a connection; subclasses override `-copyWithZone:`)
+- **Where:** `MADAPI/Source/MADDatabaseConnection.m:34-62`
+- **Behavior:** `-initWithCoder:` / `-encodeWithCoder:` / `-copyWithZone:` read and write
+  the base class's *own* ivars. A concrete subclass cannot see those ivars (they are
+  synthesized in the base `.m`, not declared in the header) and therefore shadows each
+  one with its own storage — `MADDatabaseConnectionMySql` does exactly this with
+  `@synthesize databaseType = _databaseType;`. The base's accessors are never consulted,
+  so a copied or archived connection reads back with `MADDatabaseTypeUnknown`, a nil
+  connection string, `requiresCredentials == NO` and a nil identifier.
+  `MADDatabaseConnectionMySql` works around the copy half by overriding
+  `-copyWithZone:` with a real initializer; nothing overrides the coding half.
+- **Why it matters:** Any future persistence of a connection object — or of a
+  `MADDatabase` that encodes its `databaseConnection` — silently loses the connection's
+  state. Latent today: no archive of either type exists in the app or frameworks.
+- **Test:** `MADDatabaseConnectionTests testSubclassCopyDoesNotCarrySubclassState` and
+  `testSubclassNSCodingDoesNotCarrySubclassState`, which pin the lossy result so a fix
+  will be visible.
+
 ---
 
 ## MAD (framework)
@@ -767,6 +822,107 @@ Status key:
   guard: this is the per-column, per-row loop that fills every document, and a branch
   there buys nothing when a nil name would mean a malformed schema.
 - **Where:** `MAD/Source/rptq/store/MADStore.m:273-278`.
+
+### `MADReportSectionRowsRepresentation` declares `itemCount` but implements `isItemCount`
+- **Status:** Confirmed (latent -- nothing reads either accessor)
+- **Where:** `MAD/Source/MADReportSectionRowsRepresentation.h:20`,
+  `MAD/Source/MADReportSectionRowsRepresentation.m:50`
+- **Behavior:** The header declares `@property (nonatomic, readonly) NSUInteger itemCount;`.
+  The implementation never implements that getter; it implements
+  `- (NSUInteger)isItemCount` instead.  The declared property is therefore
+  auto-synthesised against an `_itemCount` ivar nothing writes, so `-itemCount` returns
+  0 however many lines the container holds, while `-isItemCount` returns the real count.
+- **Why it matters:** A caller using the declared API silently sees an empty container.
+  No production code reads either selector today (checked: `itemCount` appears only in
+  the declaration), so the defect is latent.  The honest fix is to either rename the
+  implementation or declare the property `getter=isItemCount` -- a one-line change left
+  for a deliberate decision.
+- **Test:** `MADReportSectionRepresentationTests testDeclaredItemCountGetterReadsZero`,
+  which asserts the declared getter reads 0 and the implemented one reads 2, via the
+  test-only bridge the suite already uses for undeclared implementation selectors.
+
+### `RptqQueryTable -isEqualTo:` compares every non-nil table as equal
+- **Status:** Confirmed (latent -- conforms to MTProtocolCompare, but no production caller)
+- **Where:** `MAD/Source/rptq/RptqQueryTable+Extras.m:97`
+- **Behavior:** The first clause is `if ([sender isEqual:sender]) return YES;` -- a
+  tautology -- so any non-nil argument compares equal.  The fallback branch is
+  unreachable and, if it were reached, compares two uninitialised `NSNumber` locals
+  (nil under ARC), yielding `NO`.  The method therefore answers "equal" for every
+  non-nil pair and "not equal" only for nil.
+- **Why it matters:** Anything treating query tables as graph nodes would see every
+  table as the same node.  Today `MADQueryFull`'s graph wraps `NSNumber` identifiers
+  (`MADQueryFull.m:176-193`), and `MTVertex`/`MTEdge` equality is by
+  `uniqueIdForStructure`, so nothing reaches this method -- checked across MAD,
+  MADDataStructures, and MADDesigner.
+- **Test:** `MADRptqQueryTests testQueryTableIsEqualToIsDegenerate`.
+
+### `MADReportFormatterCache` is in no target's Sources build phase
+- **Status:** Quirk (dead file -- left as is)
+- **Where:** `MAD/Source/MADReportFormatterCache.m`
+- **Behavior:** The file sits in the MAD project group and its header is in the Headers
+  phase, but the `.m` appears in no `Sources` build phase, so the class is in no binary.
+  Nothing in the tree references it (checked: the only reference is this test suite,
+  which cannot link it).
+- **Why it matters:** It looks like a live size-keyed layout cache, so a reader could
+  "use" a class that does not exist at link time.  Either wiring it into the framework
+  or deleting the file is the real fix; both are project changes, deferred.
+- **Test:** none possible -- `MADQuerySimpleTypesTests` records why the class is not
+  covered.
+
+### `MADQueryCacheIndexCreateTemplate -parameterCount` is declared nowhere and called nowhere
+- **Status:** Quirk (dead code -- left as is)
+- **Where:** `MAD/Source/MADQueryCacheIndexCreateTemplate.m:54`
+- **Behavior:** `-parameterCount` (`_groupCount * 2 + 2`) is implemented, but no header
+  declares it and no code in the tree calls it.  The class's own `-getSql:` template
+  emits the same number of `?` placeholders, so the count is presumably meant for the
+  statement binder, which today must count placeholders itself (or not at all).
+  The class is also absent from the `MADQuery (Extras)` factory switch -- callers
+  construct it directly.
+- **Why it matters:** Low; it is internal bookkeeping with no consumer.  Recorded so a
+  future binder work does not reinvent it without noticing the existing convention.
+- **Test:** `MADQuerySimpleTypesTests testIndexCreateTemplateWithGroupCount` and
+  `testIndexCreateTemplateWithZeroGroupCount`, through the test-only bridge.
+
+### `MADQueryFull` treats its `error` out-parameter as an input, and drops the sort error
+- **Status:** Confirmed (latent -- no test; both paths need inputs the app does not produce yet)
+- **Where:** `MAD/Source/MADQueryFull.m:206`, `:260`
+- **Behavior:** Three related contracts are broken in
+  `-SQLOnlyActiveFields:managedObjectContext:error:`:
+  1. `if (*error != NULL)` at `:206` reads the caller's out-parameter as if it were an
+     incoming value.  A caller who passes an `NSError **` whose pointee is not nil
+     (garbage from an uninitialised local, or a reused variable) takes the "bad
+     conditions" branch and gets empty SQL for a perfectly good query.  The topological
+     sort's own error is written to the local `sortError` and never read, so a circular
+     query -- the one thing that branch exists for -- is silently ignored and the
+     generator proceeds.
+  2. The same `*error` read crashes outright when the caller passes `NULL`, which both
+     this method and `-copySQLWithManagedObjectContext:error:` accept as nullable.  The
+     crash happens on every call, before any SQL is built.
+  3. The "no active fields" branch writes `*error = ...` (code 5774) at `:260` without
+     checking `error != NULL`, a second unguarded write on the same parameter.
+- **Why it matters:** Contract violations a caller can trip with ordinary C habits;
+  none have bitten yet because the app always passes a live `NSError **` and
+  (presumably) never builds a cyclic query.  Fixing means NULL-checking the parameter
+  and reading `sortError` in the guard -- a deliberate behaviour change left for the
+  queue.
+- **Test:** The non-nil error path is pinned by `MADQueryFullTests
+  testNoActiveFieldsReportsError` (code 5774, domain `MADQuery`); the NULL and cyclic
+  paths are deliberately untested because both currently crash or emit garbage.
+
+### `MADElementStylizedText` accepts a nullable font name that crashes when nil
+- **Status:** Confirmed (latent -- callers always pass a font name)
+- **Where:** `MAD/Source/MADElementStylizedText.h:21`,
+  `MAD/Source/UIFontDescriptor+MADAdditions.m:21-25`
+- **Behavior:** `-initWithFontName:fontSize:textStyle:horizontalAlignment:` annotates
+  `fontname` (and its return value) nullable, but it hands the name straight to
+  `UIFontDescriptorFamilyAttribute` in a dictionary literal.  A nil name throws
+  `NSInvalidArgumentException` from `+[NSDictionary dictionaryWithObjects:forKeys:count:]`
+  rather than returning nil.
+- **Why it matters:** The annotation promises a graceful nil; the caller gets a crash.
+  Every current caller passes a name, so it is latent.  Either the annotation or the
+  nil handling has to give.
+- **Test:** `MADElementStylizedTextTests testNilFontNameThrows` pins the current
+  throw.
 
 ## MADFoundation
 

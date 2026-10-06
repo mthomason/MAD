@@ -15,6 +15,59 @@
 
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADNotificationDidReadRows.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADFoundation/MADCredential.h>
+
+// -newDatabaseWithConnection: is implemented on the base class but declared nowhere
+// public; this test-only category is the deliberate bridge.
+@interface MADDatabase (TestFactory)
++ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection;
+@end
+
+#pragma mark - Test doubles
+
+// A delegate that implements the optional credential lookup, standing in for the
+// application object that vends keychain credentials to a database.
+@interface MADTestCredentialDelegate : NSObject <MADDatabaseResultsProtocol>
+@property (nonatomic, strong) MADCredential *credential;
+@property (nonatomic, copy) NSString *lastKey;
+@end
+
+@implementation MADTestCredentialDelegate
+- (MADCredential *)getCredentialsForKey:(NSString *)key {
+	self.lastKey = key;
+	return self.credential;
+}
+@end
+
+// A delegate that does not implement the optional lookup at all.
+@interface MADTestSilentDelegate : NSObject <MADDatabaseResultsProtocol>
+@end
+
+@implementation MADTestSilentDelegate
+@end
+
+// The smallest concrete connection: the base class throws from every property, so
+// anything that reads a connection asks a subclass.  Mirrors MADDatabaseConnectionMySql.
+@interface MADTestCredentialConnection : MADDatabaseConnection
+@property (nonatomic, copy) NSString *connectionString;
+@end
+
+@implementation MADTestCredentialConnection
+@synthesize connectionString = _connectionString;
+
+- (MADDatabaseType)databaseType { return MADDatabaseTypeSample1; }
+- (BOOL)requiresCredentials { return YES; }
+- (NSString *)identifier { return [[self class] Identifier]; }
++ (NSString *)Identifier { return @"MADTestCredentialConnection"; }
+
+- (instancetype)copyWithZone:(NSZone *)zone {
+	MADTestCredentialConnection *copy = [[[self class] allocWithZone:zone] init];
+	copy.connectionString = self.connectionString;
+	return copy;
+}
+
+@end
 
 @interface MADDatabaseTests : XCTestCase
 @end
@@ -180,6 +233,137 @@
 
 	XCTAssertEqualObjects(capturedRow, @7);
 	XCTAssertEqual(capturedObject, db);
+}
+
+#pragma mark - Credential lookup
+
+- (void)testCredentalsWithConnectionCopiesFromRespondingDelegate {
+	MADTestCredentialDelegate *delegate = [[MADTestCredentialDelegate alloc] init];
+	MADCredential *credential = [[MADCredential alloc] initWithUsername:@"alice" andPassword:@"hunter2"];
+	delegate.credential = credential;
+
+	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
+	connection.connectionString = @"(MADTestCredentialConnection)[host:3306]db";
+
+	MADDatabase *db = [[MADDatabase alloc] init];
+	db.delegate = delegate;
+
+	MADCredential *received = [db credentalsWithConnection:connection];
+
+	XCTAssertNotNil(received);
+	XCTAssertEqualObjects(received.username, @"alice");
+	XCTAssertEqualObjects(received.password, @"hunter2");
+	// The connection string is the key the lookup is made under.
+	XCTAssertEqualObjects(delegate.lastKey, @"(MADTestCredentialConnection)[host:3306]db");
+	// The delegate keeps ownership of its credential; the caller receives a copy.
+	XCTAssertNotEqual(received, credential);
+}
+
+- (void)testCredentalsWithConnectionReturnsNilWhenDelegateDoesNotRespond {
+	MADTestSilentDelegate *delegate = [[MADTestSilentDelegate alloc] init];
+	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
+	connection.connectionString = @"(MADTestCredentialConnection)[host:3306]db";
+
+	MADDatabase *db = [[MADDatabase alloc] init];
+	db.delegate = delegate;
+
+	XCTAssertNil([db credentalsWithConnection:connection]);
+}
+
+- (void)testCredentalsWithConnectionReturnsNilWhenDelegateHasNoCredential {
+	MADTestCredentialDelegate *delegate = [[MADTestCredentialDelegate alloc] init];
+	delegate.credential = nil;
+
+	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
+	connection.connectionString = @"(MADTestCredentialConnection)[host:3306]db";
+
+	MADDatabase *db = [[MADDatabase alloc] init];
+	db.delegate = delegate;
+
+	XCTAssertNil([db credentalsWithConnection:connection]);
+}
+
+#pragma mark - Factory
+
+- (void)testNewDatabaseWithConnectionReturnsInstanceOfReceiver {
+	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
+	MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
+
+	XCTAssertNotNil(db);
+	XCTAssertEqualObjects(NSStringFromClass([db class]), NSStringFromClass([MADDatabase class]));
+	// The base factory ignores the connection; subclasses that care override it.
+	XCTAssertNil(db.databaseConnection);
+}
+
+#pragma mark - NSCopying
+
+- (void)testCopyPreservesState {
+	MADDatabase *db = [[MADDatabase alloc] init];
+	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
+	connection.connectionString = @"(MADTestCredentialConnection)[host:3306]db";
+	db.databaseConnection = connection;
+	[db.errors addObject:[NSError errorWithDomain:@"com.example.tests" code:9 userInfo:nil]];
+	[db setValue:@YES forKey:@"isLicensedUser"];
+
+	MADDatabase *copy = [db copy];
+
+	XCTAssertNotEqual(copy, db);
+	XCTAssertTrue(copy.isLicensedUser);
+	XCTAssertEqual(copy.errors.count, (NSUInteger)1);
+	// The errors array is a distinct mutable array, not the original.
+	XCTAssertNotEqual(copy.errors, db.errors);
+	// The connection is copied, not shared.
+	XCTAssertNotEqual(copy.databaseConnection, db.databaseConnection);
+	XCTAssertEqualObjects(copy.databaseConnection.connectionString, @"(MADTestCredentialConnection)[host:3306]db");
+}
+
+#pragma mark - NSCoding
+
+// MADDatabase conforms to NSCoding, not NSSecureCoding, and its -initWithCoder: uses the
+// non-secure -decodeObjectForKey:.  It is therefore only archivable through the
+// insecure path.  Documented in BUGS.md ("MADDatabase is NSCoding-only").
+- (void)testInsecureNSCodingRoundTrip {
+	MADDatabase *db = [[MADDatabase alloc] init];
+	[db.errors addObject:[NSError errorWithDomain:@"com.example.tests" code:9 userInfo:nil]];
+	[db setValue:@YES forKey:@"isLicensedUser"];
+
+	NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initRequiringSecureCoding:NO];
+	[archiver encodeObject:db forKey:NSKeyedArchiveRootObjectKey];
+	NSData *data = archiver.encodedData;
+	XCTAssertNotNil(data);
+
+	NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:NULL];
+	// -initForReadingFromData:error: defaults to requiring secure coding, and MADDatabase
+	// is NSCoding-only; the classic decode path is the only one it can satisfy.
+	unarchiver.requiresSecureCoding = NO;
+	MADDatabase *decoded = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+	[unarchiver finishDecoding];
+
+	XCTAssertNotNil(decoded);
+	XCTAssertTrue(decoded.isLicensedUser);
+	XCTAssertEqual(decoded.errors.count, (NSUInteger)1);
+	XCTAssertNil(decoded.databaseConnection);
+}
+
+- (void)testSecureArchivingIsUnsupported {
+	MADDatabase *db = [[MADDatabase alloc] init];
+	NSError *error = nil;
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:db requiringSecureCoding:YES error:&error];
+
+	XCTAssertNil(data);
+	XCTAssertNotNil(error);
+}
+
+#pragma mark - Literal escaping limits
+
+// The base class escapes only the quote character.  A backslash is deliberately left
+// alone: whether it escapes the following character depends on the session's
+// NO_BACKSLASH_ESCAPES setting, which only the dialect's connection object knows.  See
+// MADDatabaseSQLProtocol.h and BUGS.md.
+- (void)testNewSafeLiteralLeavesBackslashUntouched {
+	MADDatabase *db = [[MADDatabase alloc] init];
+	XCTAssertEqualObjects([db newSafeLiteral:@"a\\b"], @"'a\\b'");
+	XCTAssertEqualObjects([db newSafeLiteral:@"a\\'b"], @"'a\\''b'");
 }
 
 @end
