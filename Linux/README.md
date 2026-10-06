@@ -24,8 +24,12 @@ Docker Desktop's CLI is not on `PATH` by default; `build.sh` finds it at
 credential helper beside it) on `PATH` for the run. The first build takes
 15–25 minutes (the toolchain stage) and produces a ~2.5 GB image; later runs
 are cached — only the source layer rebuilds. The `--platform linux/amd64`
-cross-check was last run end to end in Phase B (2026-10-06): the toolchain
-builds under emulation and the run matches native arm64.
+cross-check was last run end to end for Phase C (2026-10-06): the whole image
+builds under emulation (the amd64 toolchain stage came from the Phase B
+cache; the libraries and the subset rebuild), and the run matches native
+arm64 — 59 executables, 6 needs, 10 report items. Run it under its own tag
+(`MAD_LINUX_IMAGE=mad-linux:phase-b-amd64 ./Linux/build.sh --platform
+linux/amd64`) so the native image is not replaced.
 
 ## Pins
 
