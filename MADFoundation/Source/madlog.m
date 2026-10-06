@@ -99,8 +99,60 @@ os_log_t GetTdsLog(void) {
 }
 
 #else
+// The accessors exist off Apple only so the call sites that store a handle
+// (`os_log_t log = GetMadLog();`) still compile: every one is a no-op, and
+// MADLogEmit below is what actually logs.  The categories the Apple branch
+// gives each accessor have no Linux equivalent here.
+#define MAD_LOG_NOOP_ACCESSOR(name) \
+	os_log_t name(void) { return NULL; }
+MAD_LOG_NOOP_ACCESSOR(GetFoundationLog)
+MAD_LOG_NOOP_ACCESSOR(GetMadLog)
+MAD_LOG_NOOP_ACCESSOR(GetSqlite3Log)
+MAD_LOG_NOOP_ACCESSOR(GetApiLog)
+MAD_LOG_NOOP_ACCESSOR(GetFileManagerLog)
+MAD_LOG_NOOP_ACCESSOR(GetMadExtLog)
+MAD_LOG_NOOP_ACCESSOR(GetMySqlLog)
+MAD_LOG_NOOP_ACCESSOR(GetDesignerLog)
+MAD_LOG_NOOP_ACCESSOR(GetExplorerLog)
+MAD_LOG_NOOP_ACCESSOR(GetTdsLog)
+#undef MAD_LOG_NOOP_ACCESSOR
+
+// Strip os_log's privacy annotations -- "%{public}@", "%{private}d", any
+// "%{...}" group -- because GNUstep's formatter would print the braces
+// literally.  A "%%" escape is not a specifier, so "{...}" after it stays.
+NSString *MADLogFormat(NSString *format) {
+	if ([format rangeOfString:@"%{"].location == NSNotFound) {
+		return format;
+	}
+	NSMutableString *stripped = [format mutableCopy];
+	NSUInteger i = 0;
+	while (i < stripped.length) {
+		unichar c = [stripped characterAtIndex:i];
+		if (c != '%') {
+			i++;
+			continue;
+		}
+		if (++i >= stripped.length) {
+			break;
+		}
+		unichar next = [stripped characterAtIndex:i];
+		if (next == '%') {
+			i++;
+		} else if (next == '{') {
+			NSRange close = [stripped rangeOfString:@"}" options:0 range:NSMakeRange(i, stripped.length - i)];
+			if (close.location == NSNotFound) {
+				break;	// malformed; leave the remainder alone
+			}
+			[stripped deleteCharactersInRange:NSMakeRange(i, close.location - i + 1)];
+		}
+	}
+	return stripped;
+}
+
 void MADLogEmit(int priority, NSString *message) {
-	fprintf(stderr, "[MADFoundation] %s\n", message.UTF8String);
+	static const char *names[] = { "emergency", "alert", "critical", "error", "warning", "notice", "info", "debug" };
+	const char *name = (priority >= LOG_EMERG && priority <= LOG_DEBUG) ? names[priority] : "log";
+	fprintf(stderr, "[%s] %s\n", name, message.UTF8String);
 	syslog(priority, "%s", message.UTF8String);
 }
 #endif

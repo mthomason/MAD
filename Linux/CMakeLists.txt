@@ -96,6 +96,7 @@ include(cmake/MADLinuxFramework.cmake)
 include(cmake/MADFoundationSources.cmake)
 mad_make_include_shim(MADFoundation "${SOURCE_DIR}")
 mad_add_framework(madfoundation MADFOUNDATION_SOURCES
+	madlogTests
 	MADProgressTests
 	MADStringUtilitiesTests
 	NSDataComparisonTests
