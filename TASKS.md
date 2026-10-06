@@ -493,7 +493,9 @@ implementation files plus `madlib.c` against GNUstep, and runs 15 test executabl
 (14 ported suites and the toolchain probe) inside the container: all pass, with 5
 recorded needs and the probe's 10 report items. `./Linux/build.sh` is the entry
 point; the iOS suite (118 tests, 0 failures) is the regression gate for the six
-small platform guards the build required.
+small platform guards the build required. The amd64 cross-check ran end to end on
+an arm64 machine (2026-10-06): the toolchain builds under emulation and the run is
+15/15 with the same 3 needs and 10 report items.
 
 **The finding that mattered — settled 2026-10-06.** GNUstep's `NSOperationQueue`
 removes its `isReady` KVO observation on every notification, and MADOperation's

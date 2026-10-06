@@ -27,6 +27,10 @@ helper beside it) on `PATH` for the run. The first build takes roughly 15–25
 minutes and produces a ~2.5 GB image; later runs are cached — only the source
 layer rebuilds.
 
+The amd64 cross-check ran end to end on an arm64 machine (2026-10-06):
+`build.sh --platform linux/amd64` builds the whole toolchain under emulation and
+the run is 15/15, with the same 3 needs and 10 report items as native arm64.
+
 ## Pins
 
 `toolchain.conf` is the single place a component's version, source and hash is
