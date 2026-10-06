@@ -8,15 +8,20 @@
 //  force-includes this one header -- a single -include, because CMake
 //  de-duplicates repeated ones).
 //
-//  It is now only the real platform gap: NSOperation's `name` property, which
-//  GNUstep does not have.  The Foundation and dispatch imports it used to
-//  carry are gone: MADFoundation's headers and sources import what they use
-//  (see Linux/AGENTS.md for the check that keeps them that way).
+//  It carries the real platform gaps: NSOperation's `name` property and the
+//  NSFileManager ubiquity methods, neither of which GNUstep has.  The
+//  Foundation and dispatch imports it used to carry are gone: the frameworks'
+//  headers and sources import what they use (see Linux/AGENTS.md for the
+//  check that keeps them that way).
 //
 
 #ifndef MADCompat_h
 #define MADCompat_h
 
 #import "NSOperation+Name.h"
+#import "NSFileManager+Ubiquity.h"
+#import "NSFileCoordinator+Presenter.h"
+#import "NSURL+SecurityScope.h"
+#import "NSData+ReadingOptions.h"
 
 #endif /* MADCompat_h */

@@ -38,7 +38,13 @@ static const char *QueueFileInfoID = "com.everydayapps.mad.designer.queue.file.i
 @interface MADFilesController () <MADFileCoordinatorDelegate>
 
 	@property (nonatomic, strong)   NSMutableArray *fileMetaDatum;
+#if __APPLE__
 	@property (nonatomic, strong)   dispatch_queue_t fileMetaDataQueue;
+#else
+	// Dispatch objects are plain C pointers off Apple (os/object.h declines
+	// ObjC support outside Darwin), so ARC cannot own one.
+	@property (nonatomic, assign)   dispatch_queue_t fileMetaDataQueue;
+#endif
 	@property (nonatomic, strong)   NSOperationQueue *delegateQueue;
 
 @end

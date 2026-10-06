@@ -9,7 +9,7 @@
 #ifndef MADFileManager_MADStorageState_h
 #define MADFileManager_MADStorageState_h
 
-#import <objc/NSObject.h>
+#import <Foundation/NSObject.h>
 #import <MADFileManager/MADAppStorageOption.h>
 
 @interface MADStorageState : NSObject

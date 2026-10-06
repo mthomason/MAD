@@ -31,7 +31,7 @@ endfunction()
 function(mad_add_framework library sources_var)
 	add_library(${library} STATIC
 		${${sources_var}}
-		"${MAD_COMPAT_DIR}/NSOperation+Name.m")
+		${MAD_COMPAT_SOURCES})
 	target_include_directories(${library} PUBLIC "${SHIM_DIR}" PRIVATE "${MAD_COMPAT_DIR}")
 	target_compile_definitions(${library} PRIVATE $<$<CONFIG:Debug>:DEBUG=1>)
 	target_compile_options(${library} PRIVATE

@@ -7,7 +7,9 @@
 //
 #import "MADFileCoordinator.h"
 #import "MADLocalFileCoordinator.h"
+#if __APPLE__
 #import "MADCloudFileCoordinator.h"
+#endif
 #import <MADFileManager/MADAppStorageOption.h>
 
 #import <Foundation/NSURL.h>
@@ -48,9 +50,17 @@
 																	  identifier: identifier
 														 firstQueryUpdateHandler: firstQueryHandler];
 	}  else {
+#if __APPLE__
 		fileCoordinator = [[MADCloudFileCoordinator alloc] initWithPathExtension: pathExtension
 																	  identifier: identifier
 														 firstQueryUpdateHandler: firstQueryHandler];
+#else
+		// The cloud coordinator is its NSMetadataQuery and does not come over;
+		// asking for cloud storage off Apple is a programming error.
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException
+									   reason:@"Cloud storage is not available off Apple."
+									 userInfo:nil];
+#endif
 	}
 	return fileCoordinator;
 }
@@ -60,6 +70,7 @@
 											 identifier: (NSString *)identifier
 									  firstQueryHandler: (void (^)(void))firstQueryHandler {
 	id fileCoordinator;
+#if __APPLE__
 	fileCoordinator = storageOption != MADAppStorageCloud ?
 				[[MADLocalFileCoordinator alloc] initWithLastPathComponent: lastPathComponent
 																identifier: identifier
@@ -67,6 +78,18 @@
 				[[MADCloudFileCoordinator alloc] initWithLastPathComponent: lastPathComponent
 																identifier: identifier
 												   firstQueryUpdateHandler: firstQueryHandler];
+#else
+	if (storageOption == MADAppStorageCloud) {
+		// The cloud coordinator is its NSMetadataQuery and does not come over;
+		// asking for cloud storage off Apple is a programming error.
+		@throw [NSException exceptionWithName:NSInternalInconsistencyException
+									   reason:@"Cloud storage is not available off Apple."
+									 userInfo:nil];
+	}
+	fileCoordinator = [[MADLocalFileCoordinator alloc] initWithLastPathComponent: lastPathComponent
+																	  identifier: identifier
+														 firstQueryUpdateHandler: firstQueryHandler];
+#endif
 	return fileCoordinator;
 }
 

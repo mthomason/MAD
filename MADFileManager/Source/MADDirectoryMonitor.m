@@ -14,14 +14,24 @@
 #import <sys/unistd.h>
 #import <sys/fcntl.h>
 #import <dispatch/dispatch.h>
+#if !__APPLE__
+#include <sys/inotify.h>
+#endif
 
 const char * MADQueueFileSystemWatcher = "com.everydayapps.mad.filesystem.watcher";
 static const int NotListening = -1;
 
 @interface MADDirectoryMonitor ()
 	@property (nonatomic, copy)     NSURL *URL;
+#if __APPLE__
 	@property (nonatomic, strong)   dispatch_queue_t directoryMonitorQueue;
 	@property (nonatomic, strong)   dispatch_source_t directoryMonitorSource;
+#else
+	// Dispatch objects are plain C pointers off Apple (os/object.h declines
+	// ObjC support outside Darwin), so ARC cannot own them.
+	@property (nonatomic, assign)   dispatch_queue_t directoryMonitorQueue;
+	@property (nonatomic, assign)   dispatch_source_t directoryMonitorSource;
+#endif
 @end
 
 @implementation MADDirectoryMonitor {
@@ -45,30 +55,52 @@ static const int NotListening = -1;
 - (void)startMonitoring {
 
 	if (self.directoryMonitorSource == nil && _fileDescriptor == NotListening) {
-	
+
 		const char *path = [self.URL.path cStringUsingEncoding:NSUTF8StringEncoding];
+#if __APPLE__
 		_fileDescriptor = open(path, O_EVTONLY);
+#else
+		// Darwin watches a directory through kqueue (DISPATCH_SOURCE_TYPE_VNODE,
+		// O_EVTONLY); Linux's equivalent is an inotify descriptor drained by a
+		// dispatch read source.  Closing the descriptor removes the watch.
+		_fileDescriptor = inotify_init1(IN_NONBLOCK);
+#endif
 
 		if (_fileDescriptor < 0) return;
-		
-		id directoryMonitorQueue = dispatch_queue_create(MADQueueFileSystemWatcher,
-														 DISPATCH_QUEUE_CONCURRENT);
+
+		dispatch_queue_t directoryMonitorQueue = dispatch_queue_create(MADQueueFileSystemWatcher,
+																	   DISPATCH_QUEUE_CONCURRENT);
 		self.directoryMonitorQueue = directoryMonitorQueue;
-		
+
+#if __APPLE__
 		unsigned long mask = DISPATCH_VNODE_DELETE | DISPATCH_VNODE_EXTEND |
 							 DISPATCH_VNODE_RENAME | DISPATCH_VNODE_ATTRIB | DISPATCH_VNODE_WRITE;
-		
-		id directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
-														   (uintptr_t)_fileDescriptor,
-														   mask,
-														   self.directoryMonitorQueue);
+
+		dispatch_source_t directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE,
+																		  (uintptr_t)_fileDescriptor,
+																		  mask,
+																		  self.directoryMonitorQueue);
+#else
+		uint32_t mask = IN_CREATE | IN_DELETE | IN_MOVED_FROM | IN_MOVED_TO |
+						IN_ATTRIB | IN_MODIFY | IN_DELETE_SELF | IN_CLOSE_WRITE;
+		if (inotify_add_watch(_fileDescriptor, path, mask) < 0) {
+			close(_fileDescriptor);
+			_fileDescriptor = NotListening;
+			return;
+		}
+		dispatch_source_t directoryMonitorSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ,
+																		  (uintptr_t)_fileDescriptor,
+																		  0,
+																		  self.directoryMonitorQueue);
+#endif
 		self.directoryMonitorSource = directoryMonitorSource;
-		
+
 		MADDirectoryMonitor __weak *weakself = self;
 
 		dispatch_source_set_event_handler(self.directoryMonitorSource, ^{
-			
+
 			MADDirectoryMonitor *sself = weakself;
+#if __APPLE__
 			dispatch_source_proc_flags_t flags = dispatch_source_get_data(sself.directoryMonitorSource);
 			switch (flags) {
 				case DISPATCH_VNODE_DELETE:
@@ -90,10 +122,18 @@ static const int NotListening = -1;
 					os_log_debug(GetFileManagerLog(), "Untracked event.");
 					break;
 			}
+#else
+			// Drain the queued inotify events; the read source is level-triggered,
+			// so one read of the whole buffer is enough to re-arm it.
+			char buffer[4096] __attribute__((aligned(__alignof__(struct inotify_event))));
+			ssize_t length = read(sself->_fileDescriptor, buffer, sizeof(buffer));
+			if (length <= 0) return;
+			os_log_debug(GetFileManagerLog(), "inotify event.");
+#endif
 			[sself.delegate directoryMonitorDidObserveChange:sself];
-			
+
 		});
-		
+
 		dispatch_source_set_cancel_handler(self.directoryMonitorSource, ^{
 			MADDirectoryMonitor *sself = weakself;
 			close(sself->_fileDescriptor);

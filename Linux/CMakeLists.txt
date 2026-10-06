@@ -84,9 +84,15 @@ set(MAD_OBJC_PRELUDE
 	"-Wno-format-security"
 	"-Wno-unused-command-line-argument")
 
-# Shims the Linux build supplies without touching the framework: currently
-# NSOperation's missing `name` property.  See Compat/.
+# Shims the Linux build supplies without touching the framework: NSOperation's
+# missing `name` property and the NSFileManager ubiquity methods.  See Compat/.
 set(MAD_COMPAT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Compat")
+set(MAD_COMPAT_SOURCES
+	"${MAD_COMPAT_DIR}/NSOperation+Name.m"
+	"${MAD_COMPAT_DIR}/NSFileManager+Ubiquity.m"
+	"${MAD_COMPAT_DIR}/NSFileCoordinator+Presenter.m"
+	"${MAD_COMPAT_DIR}/NSURL+SecurityScope.m"
+	"${MAD_COMPAT_DIR}/NSData+ReadingOptions.m")
 
 # The framework imports itself as <MADFoundation/Foo.h> in 100+ places; a
 # symlinked directory named MADFoundation on the include path satisfies that
@@ -140,6 +146,20 @@ mad_add_framework(maddatastructures MADDATASTRUCTURES_SOURCES
 	MTQueueTests
 	MTStackTests
 )
+
+set(SOURCE_DIR "${REPO_ROOT}/MADFileManager/Source")
+include(cmake/MADFileManagerSources.cmake)
+mad_make_include_shim(MADFileManager "${SOURCE_DIR}")
+mad_add_framework(madfilemanager MADFILEMANAGER_SOURCES
+	MADAppStorageOptionTests
+	MADFileInfoTests
+	MADFileUtilitiesTests
+	MADMetaDataTests
+	MADStorageStateTests
+)
+# MADFileManager sits on MADFoundation (MADURLFactory, madlog), as it does on
+# Apple; the framework's tests reach MADFoundation's objects through this link.
+target_link_libraries(madfilemanager PUBLIC madfoundation)
 
 # The probe is ARC (proving the ARC environment is the point) and links the
 # library for its link-check block.  It is a report, not a unit test.

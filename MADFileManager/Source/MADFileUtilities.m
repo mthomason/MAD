@@ -17,7 +17,9 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSOperation.h>
+#import <Foundation/NSValue.h>
 #import <Foundation/NSFileWrapper.h>
+#import <dispatch/dispatch.h>
 
 
 static NSString * const MADPathComponentDocuments  = @"Documents";
@@ -100,9 +102,15 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId {
+#if __APPLE__
 	NSArray *defaultListURLs = [[NSBundle mainBundle] URLsForResourcesWithExtension: fileExtension
 																	   subdirectory: @""];
-	
+#else
+	// GNUstep's NSBundle has no -URLsForResourcesWithExtension:subdirectory:,
+	// and the headless engine has no bundled sample files to copy.
+	NSArray *defaultListURLs = @[];
+#endif
+
 	for (NSURL *url in defaultListURLs) {
 		[self copyURLToDocumentsDirectoryIfNotExist:url groupId:groupId];
 	}
