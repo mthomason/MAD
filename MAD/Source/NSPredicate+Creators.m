@@ -10,6 +10,7 @@
 #import <MAD/MADModelIDProtocol.h>
 #import <Foundation/NSExpression.h>
 #import <Foundation/NSComparisonPredicate.h>
+#import <Foundation/NSValue.h>
 
 @implementation NSPredicate (Creators)
 

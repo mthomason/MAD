@@ -40,13 +40,14 @@
 #import "RptqDirectionalProperty+Extras.h"
 
 #import "MADSectionLayoutManager.h"
-#import "RptqDocumentElementBarcode+Extras.h"
 
 #import "MADCurrencyFormatter.h"
 
 #import <MADFoundation/MADStringUtilities.h>
 
+#if __APPLE__
 #import <UIKit/UIFontDescriptor.h>
+#endif
 #import <UIKit/UIGeometry.h>
 
 #import <Foundation/NSNumberFormatter.h>
@@ -57,7 +58,6 @@
 #import <Foundation/NSValue.h>
 #import <Foundation/NSData.h>
 
-#import <asl.h>
 #import <math.h>
 #import <MADFoundation/madlog.h>
 
@@ -955,6 +955,9 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	}
 }
 
+#if __APPLE__
+// The renderer's path: only MADPrintPageRenderer (not in the Linux
+// build) asks for one, and UIFontDescriptor is UIKit's.
 - (UIFontDescriptor *)fontDescriptor {
 	UIFontDescriptorSymbolicTraits traits = 0;
 	if (self.textStyle.italic) traits     |= UIFontDescriptorTraitItalic;
@@ -969,6 +972,8 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	return [[UIFontDescriptor alloc] initWithFontAttributes:fontAttributes];
 }
 
+
+#endif
 
 - (id)debugQuickLookObject {
 	NSMutableString *description = [[NSMutableString alloc] init];

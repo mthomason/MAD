@@ -9,6 +9,7 @@
 #import "MADQueryCacheIndexCreateTemplate.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSValue.h>
 
 #import "MADCacheIndexType.h"
 #import <MADAPI/MADQueryType.h>

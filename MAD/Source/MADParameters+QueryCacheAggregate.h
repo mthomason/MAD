@@ -13,6 +13,7 @@
 #import "MADAggregateFunctionType.h"
 #import <MADAPI/MADAliases.h>
 #import <Foundation/NSObject.h>
+#import <Foundation/NSValue.h>
 
 @class MADDataTableFast;
 

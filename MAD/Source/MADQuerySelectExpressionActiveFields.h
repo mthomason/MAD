@@ -13,7 +13,7 @@
 #import <MAD/RptqStoreContext.h>
 
 @class RptqDatabaseSchemaField, NSString,
-       NSMutableDictionary<KeyType, ObjectType>, NSMutableArray<ObjectType>;
+       NSMutableDictionary, NSMutableArray<ObjectType>;
 
 @interface MADQuerySelectExpressionActiveFields : MADQuerySelectExpression
 

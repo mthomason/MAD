@@ -9,6 +9,10 @@
 #ifndef MADAggregateFunctionGroupByType_h
 #define MADAggregateFunctionGroupByType_h
 
+#import <stdint.h>
+#import <CoreFoundation/CFAvailability.h>
+#import <Foundation/NSString.h>
+
 typedef CF_ENUM(int16_t, MTAggregateGroupByType) {
 	MTAggregateGroupByUnknown = 0,
 	MTAggregateGroupByTypePage = 2,

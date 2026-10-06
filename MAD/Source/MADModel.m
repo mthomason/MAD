@@ -8,7 +8,6 @@
 
 #import "MADModel.h"
 #import <MAD/RptqStoreContext.h>
-#import <CoreFoundation/CFTree.h>
 
 #import <Foundation/NSCompoundPredicate.h>
 #import "MADModelDocument.h"

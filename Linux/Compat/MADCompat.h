@@ -26,11 +26,22 @@
 #import "NSData+ReadingOptions.h"
 #import "NSKeyedUnarchiver+TopLevel.h"
 #import "NSCoder+TopLevel.h"
+#import "NSUndoManager+Handler.h"
+#import "NSValue+Geometry.h"
 
-// Apple's MacTypes.h carries the legacy scalar names the layout classes use;
-// GNUstep has no MacTypes.h.  Only the one the frameworks reach for, and only
-// off Apple, so Apple's own definition is never shadowed.
+// Apple's MacTypes.h carries the legacy scalar names the layout and driver
+// classes use; GNUstep has no MacTypes.h.  The ones the frameworks reach for,
+// and only off Apple, so Apple's own definitions are never shadowed.
 typedef double Float64;
+typedef signed char SInt8;
+typedef short SInt16;
+typedef int SInt32;
+typedef long long SInt64;
+typedef unsigned char UInt8;
+typedef unsigned short UInt16;
+typedef unsigned int UInt32;
+typedef unsigned long long UInt64;
+typedef unsigned char Boolean;
 
 // Apple's Foundation defines this ARC attribute for methods returning a
 // pointer into an object's insides; GNUstep's does not.  The declaration it
@@ -47,6 +58,18 @@ typedef double Float64;
 #endif
 #ifndef __nonnull
 #define __nonnull _Nonnull
+#endif
+
+// 64-bit byte-order conversion is a BSD extension Apple's headers carry and
+// glibc spells differently.  Only the two the frameworks call.
+#if !__APPLE__
+#include <endian.h>
+#ifndef htonll
+#define htonll(x) htobe64(x)
+#endif
+#ifndef ntohll
+#define ntohll(x) be64toh(x)
+#endif
 #endif
 
 #endif /* MADCompat_h */

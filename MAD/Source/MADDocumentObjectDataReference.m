@@ -21,13 +21,17 @@
 #import "RptqQueryTable+Extras.h"
 #import "RptqDatabaseSchemaField+Extras.h"
 #import "RptqDocumentElement+Extras.h"
+#if __APPLE__
 #import "RptqDocumentElementBarcode+Extras.h"
+#endif
 #import "MADElementStylizedText.h"
 #import "MADAggregateFunctionGroupByType.h"
 #import "MADAggregateFunctionType.h"
 #import "MADDocumentObjectType.h"
 #import "MADPrintPageRendererDataSource.h"
+#if __APPLE__
 #import "MADDocumentObjectDataReferenceBarcode.h"
+#endif
 #import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabase.h>
@@ -93,6 +97,7 @@
 																					  item:element
 																					itemID:itemID];
 			break;
+#if __APPLE__
 		case MADPrintPageElementTypeBarcode:
 			result = [[MADDocumentObjectDataReferenceBarcode alloc] initWithDataSource:datasource
 																			  delegate:delegate
@@ -100,6 +105,12 @@
 																				  item:element
 																				itemID:itemID];
 			break;
+#else
+		case MADPrintPageElementTypeBarcode:
+			// MADBarcodes is not in the Linux build; there is no reference to
+			// build for a barcode element.  The default arm answers.
+			os_log_error(OS_LOG_DEFAULT, "A barcode data reference was requested: MADBarcodes is not built on this platform.");
+#endif
 		case MADPrintPageElementTypeWhtiespace:
 		default:
 			result = [[self alloc] initWithDataSource:datasource delegate:delegate

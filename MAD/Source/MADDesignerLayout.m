@@ -156,8 +156,10 @@
 
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setFontsize:(double)fontsize {
 	id <MADocumentDesignerProtocol> delegate = _delegate;
-	NSString *actionName = NSLocalizedString(underline ? @"Font Size" : @"Font Size",
-											 underline ? @"Font Size" : @"Font Size");
+	// Was a copy-paste of the underline method: both branches are the same
+	// string, and "underline" only resolved because an Apple header leaks an
+	// enum constant by that name.
+	NSString *actionName = NSLocalizedString(@"Font Size", @"Font Size");
 	NSNumber *identifier;
 	RptqDocumentElement *element;
 	double previousFontsize = 0.0;

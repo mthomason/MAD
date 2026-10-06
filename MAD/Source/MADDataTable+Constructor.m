@@ -10,6 +10,7 @@
 
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSValue.h>
 
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/MADDataTableVirtual.h>

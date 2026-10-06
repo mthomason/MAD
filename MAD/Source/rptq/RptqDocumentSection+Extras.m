@@ -23,7 +23,6 @@
 
 #import <MADFoundation/MADStringUtilities.h>
 
-#import <UIKit/UICollectionView.h>
 
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentSectionEnumerator.h"

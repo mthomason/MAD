@@ -19,6 +19,14 @@
 	return [self dataWithContentsOfURL:url];
 }
 
+- (instancetype)initWithContentsOfURL:(NSURL *)url
+							  options:(NSUInteger)readOptionsMask
+								error:(NSError **)errorPtr {
+	(void)readOptionsMask;
+	if (errorPtr != NULL) *errorPtr = nil;
+	return [self initWithContentsOfURL:url];
+}
+
 @end
 
 #endif /* !__APPLE__ */

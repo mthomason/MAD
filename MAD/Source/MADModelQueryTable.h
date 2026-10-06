@@ -12,7 +12,7 @@
 #import <MAD/MADModel.h>
 
 @class MADModelDatabase, MADModelQuery, MADModelQueryField, NSPredicate,
-		NSMutableDictionary<KeyType, ObjectType>, NSMutableOrderedSet<ObjectType>;
+		NSMutableDictionary, NSMutableOrderedSet<ObjectType>;
 
 @interface MADModelQueryTable : MADModel <MADModelIDProtocol>
 

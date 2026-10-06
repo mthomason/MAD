@@ -16,9 +16,22 @@
 #if !__APPLE__
 #import <Foundation/NSData.h>
 
+// GNUstep has neither the options type nor its constants; the values are
+// Apple's, and the shimmed reader ignores them.
+typedef NSUInteger NSDataReadingOptions;
+enum {
+	NSDataReadingMappedIfSafe = 1UL << 0,
+	NSDataReadingUncached = 1UL << 1,
+	NSDataReadingMappedAlways = 1UL << 3
+};
+
 @interface NSData (MADCompatReadingOptions)
 
 + (instancetype)dataWithContentsOfURL:(NSURL *)url
+							  options:(NSUInteger)readOptionsMask
+								error:(NSError **)errorPtr;
+
+- (instancetype)initWithContentsOfURL:(NSURL *)url
 							  options:(NSUInteger)readOptionsMask
 								error:(NSError **)errorPtr;
 

@@ -112,6 +112,75 @@ build_freetds() { # src
 	ldconfig
 }
 
+build_zlib() { # src
+	(
+		cd "$1"
+		./configure --prefix="${PREFIX}" --static
+		make -j"${JOBS}"
+		make install
+	)
+	ldconfig
+}
+
+build_bzip2() { # src
+	(
+		cd "$1"
+		# bzip2 has no configure; its Makefile hardcodes gcc (which the image
+		# deliberately does not have), takes the prefix, and needs -fPIC for
+		# the archive to be linkable into shared objects later.
+		make -j"${JOBS}" CC=clang CFLAGS="-O2 -fPIC -Wall"
+		make install PREFIX="${PREFIX}"
+	)
+	ldconfig
+}
+
+build_libarchive() { # src
+	(
+		cd "$1"
+		# The frameworks' archive path needs the common formats; openssl not
+		# required (libarchive's own crypto is off by default), zlib and bzip2
+		# are already installed beside it -- -L/-I point configure at them,
+		# since /usr/local is not searched by the compiler driver here.
+		# The command-line tools are not built: nothing uses them.
+		LDFLAGS="-L${PREFIX}/lib" CPPFLAGS="-I${PREFIX}/include" \
+		./configure --prefix="${PREFIX}" --without-xml2 --without-expat \
+			--without-lz4 --without-zstd --without-lzma --without-lzo2 \
+			--disable-bsdtar --disable-bsdcat --disable-bsdcpio --disable-bsdunzip \
+			--enable-static --disable-shared
+		make -j"${JOBS}"
+		make install
+	)
+	ldconfig
+}
+
+build_mysqlclient() { # src
+	local bld="$1/build-linux"
+	mkdir -p "${bld}"
+	# The option set mirrors Compressor/lib/recipes/mysqlclient.sh's preset:
+	# the client library only (WITHOUT_SERVER=ON), bundled zlib/zstd, the
+	# openssl built above, no SASL/LDAP, static.  mysqlclient is GPL with the
+	# FOSS exception and nothing here ships -- LICENSE_COMPLIANCE_PLAN.md
+	# carries that decision (MAD_LINUX.md §7).
+	(
+		cd "${bld}"
+		cmake "$1" \
+			-DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DWITHOUT_SERVER=ON \
+			-DBUILD_SHARED_LIBS=OFF \
+			-DWITH_SSL=system \
+			-DOPENSSL_ROOT_DIR="${PREFIX}" -DOPENSSL_INCLUDE_DIR="${PREFIX}/include" \
+			-DOPENSSL_CRYPTO_LIBRARY="${PREFIX}/lib/libcrypto.a" \
+			-DOPENSSL_SSL_LIBRARY="${PREFIX}/lib/libssl.a" \
+			-DWITH_ZLIB=bundled -DWITH_ZSTD=bundled \
+			-DWITH_UNIT_TESTS=OFF -DWITH_SASL=OFF -DWITH_LDAP=OFF -DWITH_CURL=none \
+			-DINSTALL_STATIC_LIBRARIES=ON -DINSTALL_LIBDIR=lib -DINSTALL_INCLUDEDIR=include
+		make -j"${JOBS}" mysqlclient
+		make install
+	)
+	ldconfig
+}
+
 fetch_all() {
 	require_cmd curl git tar
 	conf_read

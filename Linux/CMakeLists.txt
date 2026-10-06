@@ -95,7 +95,9 @@ set(MAD_COMPAT_SOURCES
 	"${MAD_COMPAT_DIR}/NSURL+FileSystem.m"
 	"${MAD_COMPAT_DIR}/NSData+ReadingOptions.m"
 	"${MAD_COMPAT_DIR}/NSKeyedUnarchiver+TopLevel.m"
-	"${MAD_COMPAT_DIR}/NSCoder+TopLevel.m")
+	"${MAD_COMPAT_DIR}/NSCoder+TopLevel.m"
+	"${MAD_COMPAT_DIR}/NSUndoManager+Handler.m"
+	"${MAD_COMPAT_DIR}/NSValue+Geometry.m")
 
 # The framework imports itself as <MADFoundation/Foo.h> in 100+ places; a
 # symlinked directory named MADFoundation on the include path satisfies that
@@ -111,6 +113,10 @@ set(FREETDS_INCLUDE_DIR "/usr/local/include")
 find_library(FREETDS_LIBRARY sybdb REQUIRED)
 find_library(OPENSSL_SSL_LIBRARY ssl REQUIRED)
 find_library(OPENSSL_CRYPTO_LIBRARY crypto REQUIRED)
+find_library(MYSQL_LIBRARY mysqlclient REQUIRED)
+find_library(ARCHIVE_LIBRARY archive REQUIRED)
+find_library(ZLIB_LIBRARY z REQUIRED)
+find_library(BZIP2_LIBRARY bz2 REQUIRED)
 
 enable_testing()
 
@@ -251,6 +257,42 @@ mad_add_framework(madtdsclient MADTDSCLIENT_SOURCES
 	MADTdsClientTests
 	MADTdsClientLiveTests
 )
+
+set(SOURCE_DIR "${REPO_ROOT}/MADMySQL/Source")
+include(cmake/MADMySQLSources.cmake)
+mad_make_include_shim(MADMySQL "${SOURCE_DIR}")
+mad_add_framework(madmysql MADMYSQL_SOURCES
+)
+target_link_libraries(madmysql PUBLIC madfoundation madapi ${MYSQL_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+
+set(SOURCE_DIR "${REPO_ROOT}/MAD/Source")
+include(cmake/MADSources.cmake)
+# MAD exposes its headers flattened as <MAD/Foo.h> -- the Xcode target copies
+# them into one framework header dir -- so the shim is a directory of symlinks,
+# not the single symlink the other frameworks use.
+file(MAKE_DIRECTORY "${SHIM_DIR}/MAD")
+file(GLOB _mad_headers "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/rptq/*.h"
+	"${SOURCE_DIR}/rptq/autogen/*.h" "${SOURCE_DIR}/rptq/store/*.h" "${SOURCE_DIR}/paper/*.h")
+foreach (_mad_header IN LISTS _mad_headers)
+	get_filename_component(_mad_header_name "${_mad_header}" NAME)
+	file(CREATE_LINK "${_mad_header}" "${SHIM_DIR}/MAD/${_mad_header_name}" SYMBOLIC)
+endforeach()
+mad_add_framework(mad MAD_SOURCES
+)
+# The framework's own quoted imports reach across its subdirectories, the way
+# the Xcode target's header search paths do.
+target_include_directories(mad PRIVATE
+	"${SOURCE_DIR}" "${SOURCE_DIR}/rptq" "${SOURCE_DIR}/rptq/autogen"
+	"${SOURCE_DIR}/rptq/store" "${SOURCE_DIR}/paper")
+target_include_directories(mad PUBLIC
+	"${CMAKE_BINARY_DIR}/sqlite3-shim" "${CMAKE_BINARY_DIR}/sybdb-shim"
+	"${CMAKE_BINARY_DIR}/umbrella-shim")
+target_compile_options(mad PRIVATE -I/usr/include/libxml2)
+target_link_libraries(mad PUBLIC
+	madfoundation madapi madcocoaextensions maddatastructures madfilemanager
+	madsqlite3 madmysql madtdsclient madtds
+	${SQLITE3_LIBRARY} ${FREETDS_LIBRARY} ${MYSQL_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY}
+	${ARCHIVE_LIBRARY} ${ZLIB_LIBRARY} ${BZIP2_LIBRARY})
 target_include_directories(madtdsclient PUBLIC "${CMAKE_BINARY_DIR}/umbrella-shim")
 target_link_libraries(madtdsclient PUBLIC madtds madapi madcocoaextensions madfoundation)
 

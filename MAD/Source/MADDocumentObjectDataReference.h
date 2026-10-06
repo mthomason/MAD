@@ -10,6 +10,7 @@
 #define MAD_MADDocumentObjectDataReference_h
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSValue.h>
 #import <MADFoundation/MADDataType.h>
 #import <MAD/MADDocumentObjectType.h>
 #import <MAD/MADAggregateFunctionGroupByType.h>
@@ -18,7 +19,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol MADPrintPageRendererDataSourceProtocol, MTBarcodeProtocol;
-@class RptqDocumentElement, MADDocumentObjectDataReference, MADElementStylizedText, NSMutableDictionary<KeyType, ObjectType>, UIImage;
+@class RptqDocumentElement, MADDocumentObjectDataReference, MADElementStylizedText, NSMutableDictionary, UIImage;
 
 @protocol MADDocumentObjectDataReferenceProtocol <NSObject>
 @required

@@ -82,7 +82,11 @@ static NSString *keyIDDocument = @"IO";
 		
 		NSOperationQueue *objectContextQueue;
 		objectContextQueue = [[NSOperationQueue alloc] init];
+#if __APPLE__
 		objectContextQueue.qualityOfService = NSOperationQualityOfServiceUserInitiated;
+#endif
+		// NSOperationQueue's qualityOfService is Apple-only; nothing off Apple
+		// schedules against it (MADOperation's accessors are guarded the same).
 		
 		__weak MADModelDocument *wself = self;
 		void (^blockChange)(NSNotification *) = ^(NSNotification *note) {
