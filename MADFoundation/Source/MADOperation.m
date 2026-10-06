@@ -18,9 +18,10 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSError.h>
 
+#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
 #import <UIKit/UIApplication.h>	// Wish I didn't have to import UIApplication here, but it's really the cleanest way.
+#endif
 
-#import <os/log.h>
 #import <pthread.h>
 
 static NSString * const MADOperatorSelectorIsReady      = @"isReady";
@@ -32,7 +33,9 @@ static NSString * const MADOperatorSelectorState        = @"state";
 @property (nonatomic, strong) NSMutableArray <NSError *> *internalErrors;
 @property (nonatomic, strong) NSMutableArray <NSError *> *errors;
 @property (atomic, assign) BOOL hasFinishedAlready;
+#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
+#endif
 // _state is defined in @implementation block
 @end
 
@@ -221,11 +224,15 @@ static NSString * const MADOperatorSelectorState        = @"state";
 
 - (BOOL)isExecuting {return self.state == MADOperationStateExecuting; }
 - (BOOL)isFinished { return self.state == MADOperationStateFinished; }
+#if __APPLE__
 - (BOOL)userInitiated { return self.qualityOfService == NSQualityOfServiceUserInitiated; }
 - (void)setUserInitiated:(BOOL)newValue {
 	NSAssert(self.state < MADOperationStateExecuting, @"Cannot modify userInitiated after execution has begun.");
 	self.qualityOfService = newValue ? NSQualityOfServiceUserInitiated : NSQualityOfServiceDefault;
 }
+#endif
+// NSOperation's qualityOfService is Apple-only and nothing off Apple calls
+// userInitiated; Phase C decides whether GNUstep needs an emulation.
 
 - (BOOL)canTransitionToState:(MADOperationState)target {
 	return (target == MADOperationStatePending               && self.state == MADOperationStateInitialized)
@@ -547,21 +554,27 @@ static NSString * const MADOperatorSelectorState        = @"state";
 #pragma mark Background Task Management
 
 - (void)beginBackgroundTask {
+#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
 	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithName:[self name] expirationHandler:^{
 		// The OS is about to kill the app. We must end our task.
 		MADLogError("Background time expired for operation: %@", [self name]);
 		[self endBackgroundTask];
 	}];
 	MADLogInfo("Background task started for operation: %@", [self name]);
+#endif
+	// Off Apple platforms there is no background-task API to call; the
+	// operations simply run to completion.
 }
 
 - (void)endBackgroundTask {
+#if TARGET_OS_MACCATALYST || TARGET_OS_IOS
 	// This check prevents us from trying to end an invalid task.
 	if (self.backgroundTaskIdentifier != UIBackgroundTaskInvalid) {
 		MADLogInfo("Ending background task for operation: %@", [self name]);
 		[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
 		self.backgroundTaskIdentifier = UIBackgroundTaskInvalid;
 	}
+#endif
 }
 
 @end

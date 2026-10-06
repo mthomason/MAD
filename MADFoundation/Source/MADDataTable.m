@@ -26,7 +26,6 @@
 #import <Foundation/NSEnumerator.h>
 #import <MADFoundation/MADDataColumn.h>
 #import "madlog.h"
-#import <os/log.h>
 
 NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorDomain";
 
@@ -161,7 +160,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 		if (outError) {
 			*outError = [inputStream.streamError copy];
 		}
-		os_log_error(GetFoundationLog(), "Stream error while opening file at path: %@", path);
+		MADLogError("Stream error while opening file at path: %@", path);
 		return NO;
 	}
 	
@@ -177,7 +176,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 																 code:-2
 															 userInfo:@{NSLocalizedDescriptionKey: @"Failed to deserialize property list."}];
 		}
-		os_log_error(GetFoundationLog(), "Failed to deserialize plist from cache at path: %@, error: %@", path, plistError);
+		MADLogError("Failed to deserialize plist from cache at path: %@, error: %@", path, plistError);
 		return NO;
 	}
 	
@@ -189,7 +188,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 		if (outError) {
 			*outError = [loadPlistError copy];
 		}
-		os_log_error(GetFoundationLog(), "Plist: %@ Error: %@", plist, loadPlistError);
+		MADLogError("Plist: %@ Error: %@", plist, loadPlistError);
 	}
 	return loadPlist;
 }
@@ -214,8 +213,17 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 
 	NSError *errorWriting = NULL;
 
+#if __APPLE__
+	NSDataWritingOptions writeOptions = (NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen);
+#else
+	// File protection is an iOS concept with no GNUstep equivalent -- and
+	// GNUstep has no NSDataWritingOptions typedef either; a plain atomic write
+	// is the portable spelling of the same intent.
+	NSUInteger writeOptions = NSDataWritingAtomic;
+#endif
+
 	BOOL success = [cache writeToURL: url
-							 options: (NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen)
+							 options: writeOptions
 							   error: &errorWriting];
 
 	NSAssert((!success || errorWriting == NULL), @"%s %@", __PRETTY_FUNCTION__, errorWriting);
@@ -294,14 +302,14 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 	for (NSString *key in columnKeys) {
 		NSDictionary *columnPlist = columnsPlist[key];
 		if (![columnPlist isKindOfClass:[NSDictionary class]]) {
-			os_log_error(GetFoundationLog(), "Column plist for key %@ is invalid or missing", key);
+			MADLogError("Column plist for key %@ is invalid or missing", key);
 			continue;
 		}
 		MADDataColumn *column = [[MADDataColumn alloc] initWithPlist: columnPlist];
 		if (column) {
 			self.columns[key] = column;
 		} else {
-			os_log_error(GetFoundationLog(), "Failed to initialize column from plist for key %@", key);
+			MADLogError("Failed to initialize column from plist for key %@", key);
 		}
 	}
 	self.columnKeys = columnKeys;

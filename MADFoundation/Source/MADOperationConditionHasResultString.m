@@ -14,7 +14,6 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSArray.h>
-#import <os/log.h>
 
 @interface MADOperationConditionHasResultString ()
 

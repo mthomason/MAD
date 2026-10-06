@@ -7,6 +7,8 @@
 //
 
 #import "madlog.h"
+
+#if __APPLE__
 #import <Foundation/NSObjCRuntime.h>
 #import <os/log.h>
 
@@ -24,3 +26,9 @@ os_log_t GetFoundationLog(void) {
 	});
 	return gMADFoundationLog;
 }
+#else
+void MADLogEmit(int priority, NSString *message) {
+	fprintf(stderr, "[MADFoundation] %s\n", message.UTF8String);
+	syslog(priority, "%s", message.UTF8String);
+}
+#endif

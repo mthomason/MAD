@@ -131,7 +131,14 @@ NSString * _Nonnull const MADOperationConditionKey = @"OperationCondition";
 		}];
 	}
 	
-	dispatch_group_notify(conditionGroup, dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
+#if __APPLE__
+	dispatch_queue_t conditionQueue = dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0);
+#else
+	// QOS_CLASS_DEFAULT comes from Apple's <sys/qos.h>, which GNUstep does not
+	// have; the classic priority spelling is the same queue.
+	dispatch_queue_t conditionQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+#endif
+	dispatch_group_notify(conditionGroup, conditionQueue, ^{
 		MADLogDebug("MADOperationConditionResult: Op <%p:%@> all %lu conditions finished evaluation phase.",
 					operation, operation.name, (unsigned long)conditions.count);
 		

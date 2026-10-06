@@ -366,6 +366,37 @@ decision — they are app-side, so they do not block the headless build; the fil
 cloud code stays where it is, unused (per the user: not needed for headless mode). What
 remains before B is whatever §4 file-level exclusions the toolchain spike proves necessary.
 
+**Phase B status (2026-10-06).** The toolchain spike is green on branch
+`linux-phase-b`: `Linux/` builds one Docker image — Ubuntu 24.04 with the distro
+clang 18 (the "from source" requirement in §6 is about GNUstep being built against
+libobjc2, not about LLVM), plus source-built libobjc2 2.3, libdispatch 6.1.3,
+gnustep-make 2.9.3 and gnustep-base 1.31.1, pinned in `Linux/toolchain.conf` —
+compiles 23 of MADFoundation's 27 implementation files and `madlib.c` against
+GNUstep, and runs 15 test executables (14 ported suites and a toolchain probe)
+inside it: all pass, with 5 recorded needs and 10 probe report items.
+`./Linux/build.sh` is the entry point; the iOS suite stayed green (118 tests) as
+the proof that the six small platform guards the work required are behaviour-neutral
+on Apple.
+
+The probe retires most of §5.3's risk list for the Foundation the engine actually
+uses: ARC and weak zeroing, blocks, exceptions, `@synchronized`, KVO (manual and
+dependent keys), `NSOperation` state-machine KVO, `NSPredicate
+predicateWithFormat:@"error != nil"` (MAD's exact predicate), dispatch including
+the main queue draining under a plain executable, JSON, dates, plists, sort
+descriptors, streams and keyed archiving on the permissive path all pass. Two gaps
+are recorded, not hidden: GNUstep's archiver has no secure-coding support
+(`requiringSecureCoding:YES` returns nil; the permissive path round trips), and
+GNUstep's `NSOperationQueue` removes its `isReady` observation on every
+notification while MADOperation's state machine produces more than one — the second
+removal raises, so a MADOperation cannot currently be enqueued on Linux. That is
+the item to settle before Phase D's refresh path can run; `Linux/README.md` writes
+it up alongside the excluded files and the smaller shims (`NSOperation.name`,
+`qualityOfService`, `NSDataWritingFileProtection*`, `QOS_CLASS_DEFAULT`, app-group
+containers). The file-level exclusions Phase A anticipated turned out to be exactly
+the four §4 files (`BDHost`, `MADApplication`, `MADKeyChain`, `MADURLFactory`); what
+Phase C inherits in exchange is the self-contained-header cleanup that the Linux
+prelude (`Linux/Compat/MADCompat.h`) currently papers over.
+
 ---
 
 ## 10. Decisions for the user

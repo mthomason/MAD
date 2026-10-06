@@ -467,5 +467,53 @@ and a written relink offer (elect LGPL-3.0 — it links OpenSSL 3, and Apache-2.
 compatible with the v2 terms); add the OFL text for FontAwesome and the readme for
 CarbonBlock. The miniz headers were corrected on 2026-10-04.
 
+**Linux toolchain, flagged 2026-10-06 (see §11).** The Phase B image builds on
+libobjc2 (MIT), libdispatch (Apache-2.0 with the Swift runtime exception), GNUstep
+Make (GPL-3.0-or-later) and GNUstep Base (LGPL-2.1-or-later), and compiles
+gnustep-make's GPL-3.0 `Testing.h` into its test binaries. Nothing is linked into
+the app and no image ships yet, so no register entry is due; when one does
+(Phase F), GNUstep Base slots into Workstream B's mechanism and the rest need
+entries of their own. `Linux/README.md` §Licences carries the detail.
+
 Do not start any of this without the user asking for it by name — the blocker in
 particular is a business decision, not an engineering task.
+
+---
+
+## 11. The Linux toolchain (MAD_LINUX.md Phase B)
+
+**Status:** Done 2026-10-06 on branch `linux-phase-b` — the spike is green, and
+Phase C is the next step. Two of Phase C's inputs come from this work: the GNUstep
+divergences recorded in `Linux/README.md`, and the shim list being that much shorter.
+
+**What landed.** `Linux/` builds one Docker image — Ubuntu 24.04, distro clang 18,
+source-built libobjc2 2.3, libdispatch 6.1.3, gnustep-make 2.9.3 and gnustep-base
+1.31.1, all pinned in `Linux/toolchain.conf` — compiles 23 of the 27 MADFoundation
+implementation files plus `madlib.c` against GNUstep, and runs 15 test executables
+(14 ported suites and the toolchain probe) inside the container: all pass, with 5
+recorded needs and the probe's 10 report items. `./Linux/build.sh` is the entry
+point; the iOS suite (118 tests, 0 failures) is the regression gate for the six
+small platform guards the build required.
+
+**The finding that matters.** GNUstep's `NSOperationQueue` removes its `isReady`
+KVO observation on every notification, and MADOperation's state machine notifies
+`isReady` more than once per enqueue (`Pending` → `EvaluatingConditions` →
+`Ready`) where Apple's notifies once. The second removal raises
+`NSInvalidArgumentException` and the operation never runs, so adding a MADOperation
+to a queue currently fails on Linux — which is on the Phase D refresh path.
+Recorded (not silenced) as counted needs in `MADOperationTests` and
+`MADOperationQueueTests`; the mechanism is written up in `Linux/README.md`.
+
+**Not proved by this phase, deliberately:** the four excluded files (`BDHost`,
+`MADApplication`, `MADKeyChain`, `MADURLFactory`), the CLI, the other frameworks and
+drivers, export formats, CI and shipping. Phase D's data-path checkpoint remains the
+go/no-go.
+
+**Follow-ups this created:**
+* the eight other `madlog.h` copies each need the same platform branch when their
+  frameworks reach Linux;
+* MADFoundation's headers are not self-contained — the Linux build paper over that
+  with `Compat/MADCompat.h`, and making them self-contained is Phase C cleanup;
+* the licence-register entries for the toolchain components (§10 above).
+
+Not to be started without the user asking for it by name.

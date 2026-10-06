@@ -16,7 +16,9 @@
 #import <Foundation/NSNull.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSException.h>
+#if __APPLE__
 #import <CoreFoundation/CFNumber.h>
+#endif
 
 // Property lists cannot carry NSNull, so a null default is written as this
 // sentinel and must be read back as NSNull. Both sides use this constant.
@@ -196,6 +198,7 @@ static NSString * const MADDataColumnNullSentinel = @"~MTNull~";
 	plist[[MADDataColumn keyIsNotNull]] = [[NSNumber alloc] initWithBool:_notNull];
 	plist[[MADDataColumn keyIsAutoIncrement]] = [[NSNumber alloc] initWithBool:_autoIncrement];
 
+#if __APPLE__
 	CFNumberRef dataLen = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt64Type, &_dataLength);
 	plist[[MADDataColumn keyDataLength]] = (__bridge id _Nullable)(dataLen);
 	CFRelease(dataLen);
@@ -203,6 +206,12 @@ static NSString * const MADDataColumnNullSentinel = @"~MTNull~";
 	CFNumberRef dataPer = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type, &_dataPercision);
 	plist[[MADDataColumn keyDataPercision]] = (__bridge id _Nullable)(dataPer);
 	CFRelease(dataPer);
+#else
+	// No CoreFoundation on GNUstep; a boxed number holds the same value and
+	// serializes to the same plist the CFNumber produces on Apple.
+	plist[[MADDataColumn keyDataLength]] = @(_dataLength);
+	plist[[MADDataColumn keyDataPercision]] = @(_dataPercision);
+#endif
 
 	return plist;
 }

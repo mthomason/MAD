@@ -18,10 +18,10 @@
 - (instancetype)initWithUsername:(NSString *)username andPassword:(NSString *)password {
 	if (self = [super init]) {
 		if (!username || username.length <= 0) {
-			os_log_info(GetFoundationLog(), "%s Username is nil or empty.", __PRETTY_FUNCTION__);
+			MADLogInfo("%s Username is nil or empty.", __PRETTY_FUNCTION__);
 		}
 		if (!password || password.length <= 0) {
-			os_log_info(GetFoundationLog(), "%s Password is nil or empty.", __PRETTY_FUNCTION__);
+			MADLogInfo("%s Password is nil or empty.", __PRETTY_FUNCTION__);
 		}
 		_username = [username copy];
 		_password = [password copy];

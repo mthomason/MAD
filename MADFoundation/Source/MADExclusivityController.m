@@ -7,7 +7,6 @@
 //
 
 #import "MADExclusivityController.h"
-#import <os/log.h>
 #import <MADFoundation/MADOperation.h>
 
 static MADExclusivityController *_sharedInstance;
@@ -92,7 +91,14 @@ static MADExclusivityController *_sharedInstance;
 
 - (nonnull id)debugQuicklookObject {
 	NSString *title = [[NSString alloc] initWithFormat:@"%@ (%lu)\n", NSStringFromClass(self.class), (unsigned long)_operations.count];
+#if __APPLE__
 	return [[title stringByAppendingString:@"\n\tSerial queue: "] stringByAppendingString:_serialQueue.description];
+#else
+	// GNUstep builds libdispatch without Objective-C dispatch objects, so the
+	// queue has no description on Linux; its label is the portable equivalent.
+	NSString *label = [NSString stringWithUTF8String:dispatch_queue_get_label(_serialQueue)];
+	return [[title stringByAppendingString:@"\n\tSerial queue: "] stringByAppendingString:label];
+#endif
 }
 
 @end

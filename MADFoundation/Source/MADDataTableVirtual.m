@@ -90,7 +90,7 @@
 	NSError *loadWithPlistError = nil;
 	BOOL loadWithPlist = [super loadWithPlist:plist error:&loadWithPlistError];
 	if (loadWithPlistError != nil) {
-		os_log_error(GetFoundationLog(), "Error loading plist: %@", loadWithPlistError);
+		MADLogError("Error loading plist: %@", loadWithPlistError);
 		if (outError) {
 			*outError = [loadWithPlistError copy];
 		}
