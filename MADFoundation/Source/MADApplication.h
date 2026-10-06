@@ -10,7 +10,14 @@
 #define MAD_MADFoundation_MADApplication_h
 
 #import <Foundation/NSObject.h>
+
+#if __APPLE__
 #import <UIKit/UIApplication.h>
+#else
+// No UIKit off Apple; the protocol qualifier is what the signatures below
+// need, and MADApplicationProtocol supplies the methods actually messaged.
+@protocol UIApplicationDelegate;
+#endif
 
 @protocol MADApplicationProtocol;
 

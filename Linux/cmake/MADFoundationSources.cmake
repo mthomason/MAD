@@ -1,24 +1,23 @@
-# The MADFoundation subset Phase B compiles and links on Linux (MAD_LINUX.md
-# §9): 23 of the framework's 27 implementation files, plus madlib.c.
+# The MADFoundation subset the Linux build compiles (MAD_LINUX.md §9): 26 of
+# the framework's 27 implementation files, plus madlib.c.
 #
-# The four excluded files and why:
-#   BDHost.m             CFNetwork/CFHost reverse DNS; the getaddrinfo rewrite
-#                        is Phase C (§4)
-#   MADApplication.m/.h  UIKit/AppKit delegate access; Phase C's AppKit guard.
-#                        The umbrella MADFoundation.h imports it, so the Linux
-#                        build never uses the umbrella either
+# The one excluded file and why:
 #   MADKeyChain.m        Security.framework SecItem*; §4 excludes it -- the
-#                        refresh path never reads the keychain
-#   MADURLFactory.m      app-group containers: MADApplication.h, plus
-#                        -containerURLForSecurityApplicationGroupIdentifier:
-#                        which GNUstep does not implement; Phase C
+#                        refresh path never reads the keychain, the credential
+#                        comes from an operation dependency, and the CLI takes
+#                        --credentials
 #
-# The first group compiles unmodified; the second needs the madlog/os_log
-# shim, the third the guarded CFNumber branch.  Keep the groups in step with
-# MAD_LINUX.md §4 and the Phase B status paragraph.
+# The umbrella MADFoundation.h stays out with it: it imports MADKeyChain.h.
+#
+# BDHost, MADApplication and MADURLFactory came in with the Phase C work
+# (2026-10-06): BDHost's CFHost lookups are getaddrinfo/getnameinfo behind
+# __APPLE__, MADApplication's AppDelegate returns nil in the headless engine,
+# and MADURLFactory's UIScreen and app-group-container sites have Linux
+# branches (the group path falls back to the per-user directories).  Keep the
+# groups in step with MAD_LINUX.md §4 and this directory's README.
 
 set(MADFOUNDATION_SOURCES
-	# Foundation-only today
+	# Foundation-only
 	"${SOURCE_DIR}/MADDataType.m"
 	"${SOURCE_DIR}/MADNotificationProgress.m"
 	"${SOURCE_DIR}/MADProgress.m"
@@ -27,6 +26,9 @@ set(MADFOUNDATION_SOURCES
 	"${SOURCE_DIR}/NSOperation+Advanced.m"
 	"${SOURCE_DIR}/MADOperationConditionHasResultStringResult.m"
 	"${SOURCE_DIR}/MADOperationConditionTestConnectionSuccess.m"
+	"${SOURCE_DIR}/BDHost.m"
+	"${SOURCE_DIR}/MADApplication.m"
+	"${SOURCE_DIR}/MADURLFactory.m"
 	"${SOURCE_DIR}/madlib.c"
 
 	# need the madlog/os_log shim

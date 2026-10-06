@@ -15,6 +15,10 @@
 #endif
 
 #import <Foundation/NSThread.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSString.h>
 #import <MADFoundation/MADApplicationProtocol.h>
 
 @implementation MADApplication
@@ -29,10 +33,15 @@ static NSString * const MADApplicationIdMadViewer                           = @"
 		appDelegate = [UIApplication sharedApplication].delegate;
 		#elif TARGET_OS_OSX
 		appDelegate = [NSApplication sharedApplication].delegate;
-		#else
+		#elif __APPLE__
 		@throw [NSException exceptionWithName:NSInternalInconsistencyException
 									   reason:@"Unsupported platform."
 									 userInfo:nil];
+		#else
+		// The headless engine has no application object; a caller that wanted
+		// the delegate's group identifier gets nil, and MADURLFactory's
+		// group-container path falls back to the per-user directories.
+		appDelegate = nil;
 		#endif
 	} else {
 		@throw [NSException exceptionWithName:NSInternalInconsistencyException
