@@ -1061,6 +1061,27 @@ Status key:
   (`+newColorWithColors:` forwarding to the misspelling) so no caller has to
   change, and that is churn for a cosmetic gain.
 
+### `MADColorEverydayApps` header colors bypass the 8-bit-to-unit conversion
+- **Status:** Confirmed (pinned as-is -- no changed functionality)
+- **Where:** `MADCocoaExtensions/Source/UIColor+EverydayApps.m:30`
+  (`-newColorHeaderColor`) and `:40` (`-blueHeaderSecondaryColor`)
+- **Behavior:** Every other palette member builds its color through
+  `newColorWitColors` / `newColorWithColorsAlpha`, which divide the 8-bit triple by
+  255.  The light-mode branches of these two dynamic colors instead call
+  `+[UIColor colorWithRed:green:blue:alpha:]` with the raw 8-bit numbers
+  (2, 108, 182 and 13, 158, 215).  That initializer expects 0-1; the components are
+  stored as given -- an extended-range sRGB color -- so the intended blue is not
+  what the color carries, and at draw time Core Animation clamps the out-of-range
+  components to white.
+- **Why it matters:** In light mode the header tint renders as a 20%-alpha white
+  veil instead of the blue.  `blueHeaderSecondaryColor` has the same arithmetic
+  but an alpha of 0, so it is invisible either way.  The fix is dividing by 255,
+  as every sibling does.
+- **Test:** `MADColorEverydayAppsTests testHeaderColorLightModeComponentsAreOutOfRange`
+  and `testBlueHeaderSecondaryLightModeComponentsAreOutOfRange`, which pin the
+  stored 2/108/182 and 13/158/215 components; every other palette member is pinned
+  at unit scale.
+
 ---
 
 ## MADFileManager

@@ -29,6 +29,13 @@
 		4CE1A10400000000000000A1 /* MADMarginTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10400000000000000B1 /* MADMarginTests.m */; };
 		4CE1A10500000000000000A1 /* MADPaddingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10500000000000000B1 /* MADPaddingTests.m */; };
 		4CE1A10600000000000000A1 /* MADBorderStyleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10600000000000000B1 /* MADBorderStyleTests.m */; };
+		4CE1A10B00000000000000A1 /* MADColorEverydayAppsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10B00000000000000B1 /* MADColorEverydayAppsTests.m */; };
+		4CE1A10C00000000000000A1 /* MADLabelTitleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10C00000000000000B1 /* MADLabelTitleTests.m */; };
+		4CE1A10D00000000000000A1 /* MADTextFieldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10D00000000000000B1 /* MADTextFieldTests.m */; };
+		4CE1A10E00000000000000A1 /* MADAlertControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10E00000000000000B1 /* MADAlertControllerTests.m */; };
+		4CE1A10F00000000000000A1 /* UIApplicationHelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10F00000000000000B1 /* UIApplicationHelpersTests.m */; };
+		4CE1A11000000000000000A1 /* MFMailComposeExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A11000000000000000B1 /* MFMailComposeExtensionsTests.m */; };
+		4CE1A11100000000000000A1 /* MADViewHelpersTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A11100000000000000B1 /* MADViewHelpersTests.m */; };
 		4CE1A10700000000000000A1 /* MADTextStyleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10700000000000000B1 /* MADTextStyleTests.m */; };
 		4CE1A10800000000000000A1 /* MTMathTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10800000000000000B1 /* MTMathTests.m */; };
 		4CE1A10900000000000000A1 /* NSNumberFormatterExtensionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE1A10900000000000000B1 /* NSNumberFormatterExtensionsTests.m */; };
@@ -103,6 +110,13 @@
 		4CE1A10400000000000000B1 /* MADMarginTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMarginTests.m; sourceTree = "<group>"; };
 		4CE1A10500000000000000B1 /* MADPaddingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADPaddingTests.m; sourceTree = "<group>"; };
 		4CE1A10600000000000000B1 /* MADBorderStyleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADBorderStyleTests.m; sourceTree = "<group>"; };
+		4CE1A10B00000000000000B1 /* MADColorEverydayAppsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADColorEverydayAppsTests.m; sourceTree = "<group>"; };
+		4CE1A10C00000000000000B1 /* MADLabelTitleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADLabelTitleTests.m; sourceTree = "<group>"; };
+		4CE1A10D00000000000000B1 /* MADTextFieldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTextFieldTests.m; sourceTree = "<group>"; };
+		4CE1A10E00000000000000B1 /* MADAlertControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADAlertControllerTests.m; sourceTree = "<group>"; };
+		4CE1A10F00000000000000B1 /* UIApplicationHelpersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIApplicationHelpersTests.m; sourceTree = "<group>"; };
+		4CE1A11000000000000000B1 /* MFMailComposeExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MFMailComposeExtensionsTests.m; sourceTree = "<group>"; };
+		4CE1A11100000000000000B1 /* MADViewHelpersTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADViewHelpersTests.m; sourceTree = "<group>"; };
 		4CE1A10700000000000000B1 /* MADTextStyleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTextStyleTests.m; sourceTree = "<group>"; };
 		4CE1A10800000000000000B1 /* MTMathTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTMathTests.m; sourceTree = "<group>"; };
 		4CE1A10900000000000000B1 /* NSNumberFormatterExtensionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSNumberFormatterExtensionsTests.m; sourceTree = "<group>"; };
@@ -194,6 +208,13 @@
 				4CE1A10400000000000000B1 /* MADMarginTests.m */,
 				4CE1A10500000000000000B1 /* MADPaddingTests.m */,
 				4CE1A10600000000000000B1 /* MADBorderStyleTests.m */,
+				4CE1A10B00000000000000B1 /* MADColorEverydayAppsTests.m */,
+				4CE1A10C00000000000000B1 /* MADLabelTitleTests.m */,
+				4CE1A10D00000000000000B1 /* MADTextFieldTests.m */,
+				4CE1A10E00000000000000B1 /* MADAlertControllerTests.m */,
+				4CE1A10F00000000000000B1 /* UIApplicationHelpersTests.m */,
+				4CE1A11000000000000000B1 /* MFMailComposeExtensionsTests.m */,
+				4CE1A11100000000000000B1 /* MADViewHelpersTests.m */,
 				4CE1A10700000000000000B1 /* MADTextStyleTests.m */,
 				4CE1A10800000000000000B1 /* MTMathTests.m */,
 				4CE1A10900000000000000B1 /* NSNumberFormatterExtensionsTests.m */,
@@ -437,6 +458,13 @@
 				4CE1A10400000000000000A1 /* MADMarginTests.m in Sources */,
 				4CE1A10500000000000000A1 /* MADPaddingTests.m in Sources */,
 				4CE1A10600000000000000A1 /* MADBorderStyleTests.m in Sources */,
+				4CE1A10B00000000000000A1 /* MADColorEverydayAppsTests.m in Sources */,
+				4CE1A10C00000000000000A1 /* MADLabelTitleTests.m in Sources */,
+				4CE1A10D00000000000000A1 /* MADTextFieldTests.m in Sources */,
+				4CE1A10E00000000000000A1 /* MADAlertControllerTests.m in Sources */,
+				4CE1A10F00000000000000A1 /* UIApplicationHelpersTests.m in Sources */,
+				4CE1A11000000000000000A1 /* MFMailComposeExtensionsTests.m in Sources */,
+				4CE1A11100000000000000A1 /* MADViewHelpersTests.m in Sources */,
 				4CE1A10700000000000000A1 /* MADTextStyleTests.m in Sources */,
 				4CE1A10800000000000000A1 /* MTMathTests.m in Sources */,
 				4CE1A10900000000000000A1 /* NSNumberFormatterExtensionsTests.m in Sources */,
