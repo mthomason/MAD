@@ -23,7 +23,11 @@ endfunction()
 # mad_add_framework(<library-target> <sources-variable> [<test> ...])
 # Builds the framework's source list (plus the compat prelude's shim) as a
 # static library, ARC on, whole-archive at the test link so categories survive,
-# and registers each named test file with ctest.
+# and registers each named test file with ctest.  A framework with C++ files
+# (MADDataStructures) puts them in the source list as .mm; the language is
+# enabled in Linux/CMakeLists.txt, and a file that must not be ARC (the
+# framework says so itself) is given -fno-objc-arc with
+# set_source_files_properties beside its mad_add_framework call.
 function(mad_add_framework library sources_var)
 	add_library(${library} STATIC
 		${${sources_var}}
@@ -32,7 +36,7 @@ function(mad_add_framework library sources_var)
 	target_compile_definitions(${library} PRIVATE $<$<CONFIG:Debug>:DEBUG=1>)
 	target_compile_options(${library} PRIVATE
 		-Wall
-		$<$<COMPILE_LANGUAGE:OBJC>:-fobjc-arc>
+		$<$<COMPILE_LANGUAGE:OBJC,OBJCXX>:-fobjc-arc>
 		${MAD_OBJC_PRELUDE})
 	target_link_libraries(${library} PUBLIC ${GNUSTEP_BASE_LIBS} -ldispatch)
 

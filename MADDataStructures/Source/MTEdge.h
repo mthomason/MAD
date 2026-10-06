@@ -12,6 +12,7 @@
 #import <MADDataStructures/MTObject.h>
 #import <MADDataStructures/MTProtocolLog.h>
 #import <MADDataStructures/MTProtocolCompare.h>
+#import <Foundation/NSValue.h>
 
 #ifndef NS_DESIGNATED_INITIALIZER
   #if __has_attribute(objc_designated_initializer)

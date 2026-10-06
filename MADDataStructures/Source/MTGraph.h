@@ -10,6 +10,10 @@
 #define MAD_MTGraph_MTObject_h
 
 #import <MADDataStructures/MTObject.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSSet.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSValue.h>
 
 @class MTVertex, MTEdge, MTLinkedList;
 

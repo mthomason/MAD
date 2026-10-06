@@ -9,6 +9,10 @@
 #ifndef MAD_DataStructures_MTProtocolLog_h
 #define MAD_DataStructures_MTProtocolLog_h
 
+#import <Foundation/NSObject.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSAttributedString.h>
+
 @protocol MTProtocolLog <NSObject>
 @required
 

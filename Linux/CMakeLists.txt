@@ -23,7 +23,6 @@ project(MADFoundationLinux LANGUAGES C)
 set(CMAKE_C_STANDARD 17)	# mirrors the Xcode GCC_C_LANGUAGE_STANDARD = gnu17
 
 set(REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/..")
-set(SOURCE_DIR "${REPO_ROOT}/MADFoundation/Source")
 
 find_program(GNUSTEP_CONFIG gnustep-config REQUIRED)
 
@@ -51,12 +50,23 @@ endif()
 # a semicolon-joined list would reach the compiler probe as one argument.
 string(REPLACE ";" " " _gnustep_objc_flags "${GNUSTEP_OBJC_FLAGS}")
 set(CMAKE_OBJC_FLAGS "${_gnustep_objc_flags}")
+# MADDataStructures is Objective-C++ wherever the Xcode target's files are
+# .mm; the same GNUstep flags apply, with the C++ dialect Xcode sets.
+set(CMAKE_OBJCXX_FLAGS "${_gnustep_objc_flags} -std=gnu++20")
 # The compiler probe links a trivial Objective-C program, so libobjc2 has to
 # be on that link line; the executable linker flags are the hook that reaches
 # it.  The -L is required because ld.lld does not search /usr/local/lib by
 # default the way gnustep-config's -L does for real targets.
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/lib -lobjc")
+#
+# -lgnustep-base goes first on purpose: libobjc2 exports a weak
+# objc_enumerationMutation() that prints and abort()s, and GNUstep Base
+# exports the real one (it raises NSGenericException, as Apple does).  The
+# dynamic linker binds the first library on the line that defines the symbol,
+# so putting Base before libobjc2 here is what keeps a mutation during fast
+# enumeration catchable, the way the MADDataStructures tests expect.
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L/usr/local/lib -lgnustep-base -lobjc")
 enable_language(OBJC)
+enable_language(OBJCXX)
 
 # The framework's headers import what they use, so the prelude now carries a
 # single thing: NSOperation's missing `name` property (Compat/MADCompat.h),
@@ -68,8 +78,8 @@ enable_language(OBJC)
 #   literal with @(fmt), which the check cannot see through; every call site
 #   passes a literal.
 set(MAD_OBJC_PRELUDE
-	"$<$<COMPILE_LANGUAGE:OBJC>:-include>"
-	"$<$<COMPILE_LANGUAGE:OBJC>:MADCompat.h>"
+	"$<$<COMPILE_LANGUAGE:OBJC,OBJCXX>:-include>"
+	"$<$<COMPILE_LANGUAGE:OBJC,OBJCXX>:MADCompat.h>"
 	"-D__unused=__attribute__((unused))"
 	"-Wno-format-security"
 	"-Wno-unused-command-line-argument")
@@ -93,6 +103,7 @@ endif()
 
 include(cmake/MADLinuxFramework.cmake)
 
+set(SOURCE_DIR "${REPO_ROOT}/MADFoundation/Source")
 include(cmake/MADFoundationSources.cmake)
 mad_make_include_shim(MADFoundation "${SOURCE_DIR}")
 mad_add_framework(madfoundation MADFOUNDATION_SOURCES
@@ -111,6 +122,23 @@ mad_add_framework(madfoundation MADFOUNDATION_SOURCES
 	MADOperationConditionResultTests
 	MADDataColumnTests
 	MADCredentialTests
+)
+
+set(SOURCE_DIR "${REPO_ROOT}/MADDataStructures/Source")
+include(cmake/MADDataStructuresSources.cmake)
+mad_make_include_shim(MADDataStructures "${SOURCE_DIR}")
+# MADVectorBool.mm says so itself: it is manual-retain-release, as the Xcode
+# target's per-file -fno-objc-arc flag has it.
+set_source_files_properties("${SOURCE_DIR}/MADVectorBool.mm"
+	PROPERTIES COMPILE_OPTIONS "-fno-objc-arc")
+mad_add_framework(maddatastructures MADDATASTRUCTURES_SOURCES
+	MADDataStructuresTests
+	MADMapStringsTests
+	MADVectorBoolTests
+	MTGraphTests
+	MTLinkedListTests
+	MTQueueTests
+	MTStackTests
 )
 
 # The probe is ARC (proving the ARC environment is the point) and links the
