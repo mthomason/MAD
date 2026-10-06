@@ -533,51 +533,82 @@ Not to be started without the user asking for it by name.
 
 ## 12. Linux Phase C — the §4 shim list
 
-**Status:** Open, and smaller than `MAD_LINUX.md` §4's 2026-10-04 table: the
-pre-Phase-C work on branch `linux-port` (§11) cleared three rows before Phase C
-started. Not to be started without the user asking for it by name.
+**Status:** Done 2026-10-06 on branch `linux-port`. All ten headless
+frameworks compile and link inside the Linux image, their suites run under
+ctest, and the remaining exclusions are named with reasons in each
+`Linux/cmake/<Name>Sources.cmake`. Phase D — the CLI/data-path checkpoint —
+is the next step and has not been started.
 
-**The audit, re-run 2026-10-06** (files matching the pattern, `*.m`/`*.h`/`*.c`,
-`.xcodeproj` excluded):
+**The audit, re-run 2026-10-06 before the work and again at the end** (files
+matching the pattern, `*.m`/`*.h`/`*.c`, `.xcodeproj` excluded). Before:
+`asl.h` MAD 2; `copyfile.h` MAD 2; `vm_param` MAD 1; `CFNetwork`/`CFHost`
+MADFoundation 1; `os/log.h` MADFoundation 1 (the intended Apple branch);
+`CoreFoundation` MADFoundation 2, MAD 18, MADSqlite3 1; `UIKit` MADFoundation
+4, MADCocoaExtensions 12, MADAPI 3, MAD 29; `CoreGraphics` MADCocoaExtensions
+3, MAD 14; `AppKit` MADFoundation 1. The app side (MADDesigner/MADExplorer) is
+out of scope by §3's table; the stand-alone MAD Viewer target's
+`MADNavigationController.m` keeps its own `<os/log.h>` — it links no MAD
+frameworks.
 
-| Shim | Frameworks |
-|---|---|
-| `asl.h` | MAD 2 |
-| `copyfile.h` | MAD 2 |
-| `vm_param` | MAD 1 |
-| `CFNetwork` / `CFHost` | MADFoundation 1 (`BDHost.m`) |
-| `os/log.h` | MADFoundation 1 (`madlog.h` itself — the intended Apple branch) |
-| `CoreFoundation` | MADFoundation 2, MAD 18, MADSqlite3 1 |
-| `UIKit` | MADFoundation 4, MADCocoaExtensions 12, MADAPI 3, MAD 29 |
-| `CoreGraphics` | MADCocoaExtensions 3, MAD 14 |
-| `AppKit` | MADFoundation 1 (`MADApplication.m`) |
+**What landed, framework by framework** (all on `linux-port`):
 
-The app side (MADDesigner: 312 UIKit, 13 CoreGraphics, 3 `asl.h`; MADExplorer: 19
-UIKit) is out of scope by §3's table — the UI stays on Apple platforms. One
-deliberate exception inside it: `MADDesigner/Source/MADNavigationController.m`
-imports `<os/log.h>` because it logs with `OS_LOG_DEFAULT` and is compiled by the
-stand-alone MAD Viewer target, which links no MAD frameworks.
+* **The logging layer.** `madlog.h`'s non-Apple branch supplies `os_log_t`,
+  `OS_LOG_DEFAULT`, `os_log_create` and the five `os_log_*` functions as
+  macros over `MADLogEmit`, so every framework's Apple-spelled call site
+  compiles unchanged; the accessors exist as no-op handles, and
+  `MADLogFormat` strips the `%{public}` annotations GNUstep would print
+  literally. Swept for `os_log_*` outside the header: none remain.
+* **MADFoundation.** `BDHost` (`getaddrinfo`/`getnameinfo` behind `__APPLE__`,
+  AF_PACKET for the ethernet walk), `MADApplication` (nil `AppDelegate`
+  headless; the header forward-declares `UIApplicationDelegate`),
+  `MADURLFactory` (no screen; the app-group path falls back to the per-user
+  directories). `MADKeyChain` stays out (§4) and the umbrella with it. 26 of
+  27 files.
+* **MADDataStructures** (all 17), **MADFileManager** (10 of 11; the cloud
+  coordinator out per §4, the directory monitor ported over inotify),
+  **MADCocoaExtensions** (7 of 17: the ten UI files out), **MADAPI** (8 of 11:
+  the connection view controllers out), **MADSqlite3** (all 26),
+  **MADTds** (1), **MADTdsClient** (4 of 5), **MADMySQL** (18 of 19).
+* **MAD** (150 of 181). The §4 items: the `asl.h` and `vm_param.h` imports
+  were vestigial and went; `copyfile(3)` is answered in POSIX
+  (`Compat/MADCompatFileCopy.h`); the CoreFoundation sites are the
+  `CFNumberGetValue` extraction calls, answered by a compat
+  `CoreFoundation/CFNumber.h`. The 31 exclusions group as: the UI tail
+  (§5.2), `MADocument` + the operations that build/close one (Phase D's),
+  the keychain operations (§4), and the MADBarcodes-backed element files
+  (§3: unused; the element *type* stays in the model and the two creation
+  paths log-and-skip it off Apple).
+* **The libraries layer.** `Linux/libraries.conf` + `lib/libraries.sh` build
+  sqlite3 3.53.3 (the released amalgamation, compiled with the option list in
+  `Compressor/sqlite3.xcconfig`), openssl 3.5.9, freetds 1.4.27, zlib 1.3.2,
+  bzip2 1.0.8, libarchive 3.8.9 and mysqlclient 8.4.10 into the image's
+  `/usr/local`. Nothing ships; the GPL question is
+  `LICENSE_COMPLIANCE_PLAN.md`'s (§10).
 
-**Already cleared by the pre-Phase-C work (§11):**
-* the eight extra `madlog.h` copies, and with them every framework's direct
-  `<os/log.h>` import (MADAPI 4, MADFileManager 2, MADSqlite3 4, MADMySQL 2,
-  MADTds 1) — what remains is the one header's Apple branch, above;
-* MADFoundation's non-self-contained headers — the Linux prelude is down to the
-  `NSOperation` `name` shim, and every header and source in the closure imports
-  what it uses;
-* the MADOperation/`NSOperationQueue` KVO blocker to the Phase D refresh path.
+**The tests.** Every ported suite is one ctest executable under
+`Linux/Tests/`, written to the `Testing.h` conventions in `Linux/AGENTS.md`.
+The suites that need a live database skip (never fail) when none is reachable;
+`MADTdsClientLiveTests` was run against the SQL Server 2022 container from
+inside the Linux image — 29/29, 169 checks — so the freetds wire path is
+exercised, not just compiled. One new GNUstep divergence is pinned in the
+ported tests rather than papered over: `-localizedCaseInsensitiveCompare:` is
+case-sensitive on GNUstep, so the SQLite collation MADSqlite3 registers orders
+differently (§Linux/README.md).
 
-**What Phase C still owns** (the §4 disposition table, still accurate):
-`getaddrinfo` for BDHost; the asl/copyfile/vm_param swaps in MAD; the CoreFoundation
-sites (GNUstep equivalents — CoreBase is immature, do not rely on it); the
-UIKit/CoreGraphics tail in MAD, MADCocoaExtensions and MADAPI; the AppKit branch in
-`MADApplication.m`; the two `#if`-guarded one-liners (`UIScreen` in MADURLFactory,
-the background task in `MADOperation.m`); plus the frameworks' `os_log_*(Get*Log(),
-...)` call sites as each reaches Linux.
+**Exclusions that remain, and where they are recorded:** `MADKeyChain` and
+the umbrella (MADFoundation), the cloud coordinator (MADFileManager), the ten
+UI files (MADCocoaExtensions), three view controllers (MADAPI), one
+(MADTdsClient), one (MADMySQL), and MAD's 31 — each named with its reason in
+the framework's `cmake/<Name>Sources.cmake`. `MADExplorer`, `MADBarcodes`,
+`MADFeedback` and `Scrimpter` are not built at all (§3's table).
 
 **Follow-ups carried forward:**
 * the driver registry (`ROADMAP.md` §5.1) — it breaks the `MAD` ↔ drivers cycle
   and is what lets a Linux build link drivers as plugins; `MADOperationRefresh`
   does not move into `MAD` until it exists (§7);
-* the toolchain components' licence-register entries (§10) — Phase F work, at the
-  moment an image ships.
+* `MADocument` and `MADReportFormatter` — the CLI's export path reaches both
+  (they are UIDocument-facing); the framework's own reading path
+  (`MADCLIContainer`) does not. Phase D's to settle, together with the CLI’s
+  own build on Linux;
+* the toolchain and library components' licence-register entries (§10) — Phase
+  F work, at the moment an image ships.
