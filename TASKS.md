@@ -482,7 +482,7 @@ particular is a business decision, not an engineering task.
 
 ## 11. The Linux toolchain (MAD_LINUX.md Phase B)
 
-**Status:** Done 2026-10-06 on branch `linux-phase-b` — the spike is green, and
+**Status:** Done 2026-10-06 on branch `linux-port` (renamed from `linux-phase-b`) — the spike is green, and
 Phase C is the next step. Two of Phase C's inputs come from this work: the GNUstep
 divergences recorded in `Linux/README.md`, and the shim list being that much shorter.
 
@@ -526,3 +526,56 @@ go/no-go.
 * the licence-register entries for the toolchain components (§10 above).
 
 Not to be started without the user asking for it by name.
+
+---
+
+## 12. Linux Phase C — the §4 shim list
+
+**Status:** Open, and smaller than `MAD_LINUX.md` §4's 2026-10-04 table: the
+pre-Phase-C work on branch `linux-port` (§11) cleared three rows before Phase C
+started. Not to be started without the user asking for it by name.
+
+**The audit, re-run 2026-10-06** (files matching the pattern, `*.m`/`*.h`/`*.c`,
+`.xcodeproj` excluded):
+
+| Shim | Frameworks |
+|---|---|
+| `asl.h` | MAD 2 |
+| `copyfile.h` | MAD 2 |
+| `vm_param` | MAD 1 |
+| `CFNetwork` / `CFHost` | MADFoundation 1 (`BDHost.m`) |
+| `os/log.h` | MADFoundation 1 (`madlog.h` itself — the intended Apple branch) |
+| `CoreFoundation` | MADFoundation 2, MAD 18, MADSqlite3 1 |
+| `UIKit` | MADFoundation 4, MADCocoaExtensions 12, MADAPI 3, MAD 29 |
+| `CoreGraphics` | MADCocoaExtensions 3, MAD 14 |
+| `AppKit` | MADFoundation 1 (`MADApplication.m`) |
+
+The app side (MADDesigner: 312 UIKit, 13 CoreGraphics, 3 `asl.h`; MADExplorer: 19
+UIKit) is out of scope by §3's table — the UI stays on Apple platforms. One
+deliberate exception inside it: `MADDesigner/Source/MADNavigationController.m`
+imports `<os/log.h>` because it logs with `OS_LOG_DEFAULT` and is compiled by the
+stand-alone MAD Viewer target, which links no MAD frameworks.
+
+**Already cleared by the pre-Phase-C work (§11):**
+* the eight extra `madlog.h` copies, and with them every framework's direct
+  `<os/log.h>` import (MADAPI 4, MADFileManager 2, MADSqlite3 4, MADMySQL 2,
+  MADTds 1) — what remains is the one header's Apple branch, above;
+* MADFoundation's non-self-contained headers — the Linux prelude is down to the
+  `NSOperation` `name` shim, and every header and source in the closure imports
+  what it uses;
+* the MADOperation/`NSOperationQueue` KVO blocker to the Phase D refresh path.
+
+**What Phase C still owns** (the §4 disposition table, still accurate):
+`getaddrinfo` for BDHost; the asl/copyfile/vm_param swaps in MAD; the CoreFoundation
+sites (GNUstep equivalents — CoreBase is immature, do not rely on it); the
+UIKit/CoreGraphics tail in MAD, MADCocoaExtensions and MADAPI; the AppKit branch in
+`MADApplication.m`; the two `#if`-guarded one-liners (`UIScreen` in MADURLFactory,
+the background task in `MADOperation.m`); plus the frameworks' `os_log_*(Get*Log(),
+...)` call sites as each reaches Linux.
+
+**Follow-ups carried forward:**
+* the driver registry (`ROADMAP.md` §5.1) — it breaks the `MAD` ↔ drivers cycle
+  and is what lets a Linux build link drivers as plugins; `MADOperationRefresh`
+  does not move into `MAD` until it exists (§7);
+* the toolchain components' licence-register entries (§10) — Phase F work, at the
+  moment an image ships.

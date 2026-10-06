@@ -367,7 +367,7 @@ cloud code stays where it is, unused (per the user: not needed for headless mode
 remains before B is whatever §4 file-level exclusions the toolchain spike proves necessary.
 
 **Phase B status (2026-10-06).** The toolchain spike is green on branch
-`linux-phase-b`: `Linux/` builds one Docker image — Ubuntu 24.04 with the distro
+`linux-port`: `Linux/` builds one Docker image — Ubuntu 24.04 with the distro
 clang 18 (the "from source" requirement in §6 is about GNUstep being built against
 libobjc2, not about LLVM), plus source-built libobjc2 2.3, libdispatch 6.1.3,
 gnustep-make 2.9.3 and gnustep-base 1.31.1, pinned in `Linux/toolchain.conf` —
