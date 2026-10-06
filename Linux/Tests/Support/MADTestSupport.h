@@ -80,6 +80,27 @@ static void madTestSetEnded(const char *setName, BOOL completed, double duration
 		} \
 	} while (0)
 
+// XCTAssertThrowsSpecificNamed: the expression throws, and the exception
+// carries exactly this name.
+#define MAD_THROWS_NAMED(expression, expectedName, message) \
+	do { \
+		BOOL _madThrew = NO; \
+		@try { (void)(expression); } \
+		@catch (NSException *_madException) { \
+			_madThrew = [_madException.name isEqualToString:(expectedName)]; \
+		} \
+		MAD_PASS(_madThrew, message); \
+	} while (0)
+
+// XCTAssertNoThrow: the expression does not throw.
+#define MAD_NO_THROW(expression, message) \
+	do { \
+		BOOL _madThrew = NO; \
+		@try { (void)(expression); } \
+		@catch (NSException *_madException) { _madThrew = YES; } \
+		MAD_PASS(!_madThrew, message); \
+	} while (0)
+
 // A need the platform cannot meet: counted, printed, and never a failure.
 // Takes an NSString literal (not a printf format).  Leaves the test function
 // early, so every test function must return void.

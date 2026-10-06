@@ -20,6 +20,7 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSDate.h>
 #import <Foundation/NSSet.h>
+#import <Foundation/NSValue.h>
 #import <string.h>
 #import <MADFoundation/madlog.h>
 

@@ -15,7 +15,7 @@
 #import <Foundation/NSDate.h>
 #import <Foundation/NSException.h>
 
-#import <dispatch/once.h>
+#import <dispatch/dispatch.h>
 #import <math.h>
 
 NSString * const MADNotificationDidReadRowsName = @"MADNotificationDidReadRows";

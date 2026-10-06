@@ -93,7 +93,8 @@ set(MAD_COMPAT_SOURCES
 	"${MAD_COMPAT_DIR}/NSFileCoordinator+Presenter.m"
 	"${MAD_COMPAT_DIR}/NSURL+SecurityScope.m"
 	"${MAD_COMPAT_DIR}/NSData+ReadingOptions.m"
-	"${MAD_COMPAT_DIR}/NSKeyedUnarchiver+TopLevel.m")
+	"${MAD_COMPAT_DIR}/NSKeyedUnarchiver+TopLevel.m"
+	"${MAD_COMPAT_DIR}/NSCoder+TopLevel.m")
 
 # The framework imports itself as <MADFoundation/Foo.h> in 100+ places; a
 # symlinked directory named MADFoundation on the include path satisfies that
@@ -177,6 +178,22 @@ mad_add_framework(madcocoaextensions MADCOCOAEXTENSIONS_SOURCES
 	NSNumberFormatterExtensionsTests
 )
 target_link_libraries(madcocoaextensions PUBLIC madfoundation)
+
+set(SOURCE_DIR "${REPO_ROOT}/MADAPI/Source")
+include(cmake/MADAPISources.cmake)
+mad_make_include_shim(MADAPI "${SOURCE_DIR}")
+mad_add_framework(madapi MADAPI_SOURCES
+	MADAPIEnumsAndConstantsTests
+	MADDatabaseConnectionTests
+	MADDatabaseDataBindingTests
+	MADDatabaseFieldTests
+	MADDatabaseTableTests
+	MADDatabaseTests
+	MADErrorContainerTests
+	MADNotificationDidReadRowsTests
+	MADQueryTests
+)
+target_link_libraries(madapi PUBLIC madfoundation madcocoaextensions)
 
 # The probe is ARC (proving the ARC environment is the point) and links the
 # library for its link-check block.  It is a report, not a unit test.

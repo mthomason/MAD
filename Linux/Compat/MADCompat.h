@@ -24,6 +24,7 @@
 #import "NSURL+SecurityScope.h"
 #import "NSData+ReadingOptions.h"
 #import "NSKeyedUnarchiver+TopLevel.h"
+#import "NSCoder+TopLevel.h"
 
 // Apple's MacTypes.h carries the legacy scalar names the layout classes use;
 // GNUstep has no MacTypes.h.  Only the one the frameworks reach for, and only
