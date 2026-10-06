@@ -92,7 +92,8 @@ set(MAD_COMPAT_SOURCES
 	"${MAD_COMPAT_DIR}/NSFileManager+Ubiquity.m"
 	"${MAD_COMPAT_DIR}/NSFileCoordinator+Presenter.m"
 	"${MAD_COMPAT_DIR}/NSURL+SecurityScope.m"
-	"${MAD_COMPAT_DIR}/NSData+ReadingOptions.m")
+	"${MAD_COMPAT_DIR}/NSData+ReadingOptions.m"
+	"${MAD_COMPAT_DIR}/NSKeyedUnarchiver+TopLevel.m")
 
 # The framework imports itself as <MADFoundation/Foo.h> in 100+ places; a
 # symlinked directory named MADFoundation on the include path satisfies that
@@ -160,6 +161,22 @@ mad_add_framework(madfilemanager MADFILEMANAGER_SOURCES
 # MADFileManager sits on MADFoundation (MADURLFactory, madlog), as it does on
 # Apple; the framework's tests reach MADFoundation's objects through this link.
 target_link_libraries(madfilemanager PUBLIC madfoundation)
+
+set(SOURCE_DIR "${REPO_ROOT}/MADCocoaExtensions/Source")
+include(cmake/MADCocoaExtensionsSources.cmake)
+mad_make_include_shim(MADCocoaExtensions "${SOURCE_DIR}")
+mad_add_framework(madcocoaextensions MADCOCOAEXTENSIONS_SOURCES
+	MADBorderStyleTests
+	MADDirectionTests
+	MADGeometryExtrasTests
+	MADMarginTests
+	MADMathAlgebraTests
+	MADPaddingTests
+	MADTextStyleTests
+	MTMathTests
+	NSNumberFormatterExtensionsTests
+)
+target_link_libraries(madcocoaextensions PUBLIC madfoundation)
 
 # The probe is ARC (proving the ARC environment is the point) and links the
 # library for its link-check block.  It is a report, not a unit test.

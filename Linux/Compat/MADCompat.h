@@ -23,5 +23,11 @@
 #import "NSFileCoordinator+Presenter.h"
 #import "NSURL+SecurityScope.h"
 #import "NSData+ReadingOptions.h"
+#import "NSKeyedUnarchiver+TopLevel.h"
+
+// Apple's MacTypes.h carries the legacy scalar names the layout classes use;
+// GNUstep has no MacTypes.h.  Only the one the frameworks reach for, and only
+// off Apple, so Apple's own definition is never shadowed.
+typedef double Float64;
 
 #endif /* MADCompat_h */

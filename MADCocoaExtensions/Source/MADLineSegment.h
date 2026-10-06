@@ -9,6 +9,8 @@
 #ifndef MADLineSegment_h
 #define MADLineSegment_h
 
+#import <CoreGraphics/CGGeometry.h>
+
 struct MADLineSegment {
 	CGPoint start;
 	CGPoint end;

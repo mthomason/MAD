@@ -72,7 +72,9 @@ static void testFetchInfoCallsCompletion(void) {
 	[info fetchInfoWithCompletionHandler:^{
 		called = YES;
 	}];
-	MAD_PASS(MADWaitForFlag(&called, 5.0), "the fetch completion is called");
+	// Generous: the fetch is a dispatch hop, but a cold image running every
+	// suite in parallel has been seen to miss a five-second deadline once.
+	MAD_PASS(MADWaitForFlag(&called, 30.0), "the fetch completion is called");
 }
 
 MAD_TEST_MAIN("MADFileInfoTests",
