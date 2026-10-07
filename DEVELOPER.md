@@ -35,6 +35,45 @@ Test passwords are (it's a never on test server):
 MySQL: 127.0.0.1, root, root, employees
 SQL Server: 192.168.1.224, test, test, AdventureWorks2022
 
+## MySQL Test Database (Docker)
+
+`MADMySQL/TestDatabase/mysql-test-db.sh` runs the server the live MySQL tests
+talk to, in Docker, so those tests do not depend on whatever MySQL happens to
+be installed on the Mac. It is pinned end to end by
+`MADMySQL/TestDatabase/db.conf`: the server image by tag **and** digest
+(MySQL 8.4 LTS — the same line as the mysqlclient the app links), the data by
+the `datacharmer/test_db` commit and the archive's sha256. After loading, the
+dataset is checked against its own upstream row counts and per-table SHA-1
+checksums, so "the same sample database every time" is verified rather than
+assumed.
+
+```
+MADMySQL/TestDatabase/mysql-test-db.sh up       # start; load the data if needed (default)
+MADMySQL/TestDatabase/mysql-test-db.sh status   # container, port, and what is loaded
+MADMySQL/TestDatabase/mysql-test-db.sh verify   # re-run the upstream checksums
+MADMySQL/TestDatabase/mysql-test-db.sh down     # stop (the volume keeps the data)
+MADMySQL/TestDatabase/mysql-test-db.sh reset    # remove the container and its volume
+```
+
+The MADMySQL scheme calls `up` from the test action's pre-action and `down`
+from its post-action, so the server exists only while that scheme's tests run.
+The first `up` pulls ~600 MB of image and imports ~168 MB of SQL (a few
+minutes); every later `up` takes seconds, and the import is skipped unless the
+pins in `db.conf` changed or the volume was reset.
+
+The container publishes **127.0.0.1:3306**, which is what the tests connect to,
+so it needs that port free. A stock MySQL install runs as `_mysql` and will not
+show up in `lsof` — if `up` reports the port busy, either stop that server or
+publish this one elsewhere and point the tests at it:
+
+```
+MAD_TESTDB_PORT=13306 MADMySQL/TestDatabase/mysql-test-db.sh up
+MAD_MYSQL_TEST_PORT=13306 xcodebuild test -workspace Reports.xcworkspace -scheme MADMySQL ...
+```
+
+None of this is fatal to a test run: when no database can be provisioned, the
+live tests skip, exactly as they do on a machine with no MySQL at all.
+
 ## Common Commands
 
 The following command was used to create the app preview for iOS.
