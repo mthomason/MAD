@@ -1683,6 +1683,75 @@ wrong answer.
   testArrayCachingIsEmptyAndCountForEmpty` and
   `testArrayCachingRepeatedReadsReturnTheCachedObject`.
 
+### `MADDataTableFast`'s read transactions crash without a selects database
+- **Status:** Confirmed (found by a test that made the call)
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:1062-1082`
+- **Behavior:** `-beginReadTransaction` and `-commitReadTransaction` guard on
+  `self.databaseForSelects->_database == NULL`, but a table built without a cache
+  directory or cache delegate has `databaseForSelects == nil`: the ivar read through
+  the nil object crashes before the handle guard is reached.  Constructing such a table
+  and calling the pair took the test process down; the test now pins only the
+  precondition (`databaseForSelects` is nil).
+- **Why it matters:** The renderer's draw loop calls the pair around every page draw;
+  any fast table that reaches a draw without a cache directory takes the app down.
+- **Test:** `MADDataTableFastSelectTests testReadTransactionsWithoutASelectsDatabaseAreNotSafe`
+  (precondition only -- the call itself is the crash).
+
+### `MADDatabaseSqlite3 +databaseResultValueCast:…` frees sqlite's own text pointer
+- **Status:** Confirmed (latent -- no callers in-tree)
+- **Where:** `MADSqlite3/Source/MADDatabaseSqlite3.m:1288` and `:1313`
+  (`free((char *)text)` on the pointer `sqlite3_column_text` returned)
+- **Behavior:** The pointer sqlite3 hands back belongs to the statement and stays valid
+  only until the next step/reset/finalize; freeing it corrupts the allocator (and
+  sqlite's own buffer bookkeeping) rather than doing anything useful.  The untyped
+  sibling `+databaseResultValue:columnNumber:` -- the hot path -- does not free.
+- **Why it matters:** The method is public but has no callers today, so this is latent;
+  the first caller that reads a text column through it gets heap corruption.
+- **Test:** none for the text-family branches, deliberately: the failure mode is memory
+  corruption.  `MADDatabaseSqlite3ResultValueTests` covers the numeric, blob and
+  null/unknown branches, which are safe.
+
+### `MADDatabaseResultValue` is a dead near-copy of MADDatabaseSqlite3's factories
+- **Status:** Quirk (dead code -- left as is)
+- **Where:** `MADSqlite3/Source/MADDatabaseResultValue.m` (in no target's Sources
+  phase), versus `MADDatabaseSqlite3.m:1206-1319`
+- **Behavior:** The file implements the same two result-value factories as the live
+  MADDatabaseSqlite3 class methods (minus the stray `free`), but it is in no target, so
+  the class is in no binary -- a test that imports the header fails at link with
+  "Undefined symbol: _OBJC_CLASS_$_MADDatabaseResultValue" (verified).  Its
+  `-copyWithZone:` also throws unconditionally while the header advertises
+  `<NSCopying>`.
+- **Why it matters:** A reader can pick the dead file as the place to fix result
+  reading and watch their fix never link; the two copies have already drifted (the
+  `free`).  Deleting one and keeping the other is the real fix.
+- **Test:** none possible -- the class is not linked.  `MADDatabaseSqlite3ResultValueTests`
+  covers the live copies.
+
+### `MADDataTableFast -whereClauseForGroupKeys:` indexes past the sort descriptors
+- **Status:** Confirmed (latent)
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:1167-1182`
+- **Behavior:** The loop walks the group keys and reads `self.sortDescriptors[i]` at the
+  same index; with fewer sort descriptors than group keys it walks off the end of the
+  array and raises `NSRangeException`.  The pairing is also purely positional -- the
+  group keys' values are matched to descriptors by index, not by any key lookup.
+- **Why it matters:** The call comes from the group-key cache path
+  (`-objectsForGroupKeys:`), where the two arrays are built from different sources; a
+  mismatch is a crash rather than an empty clause.
+- **Test:** `MADDataTableFastSelectTests testFewerSortDescriptorsThanGroupKeysRaises`
+  (and the positional-pairing behavior by
+  `testGroupKeysProducePositionalColumnValuePairs`).
+
+### `MADArrayCachingEnumerator` is in no target
+- **Status:** Quirk (dead file -- left as is)
+- **Where:** `MADSqlite3/Source/MADArrayCachingEnumerator.m` (in no Sources phase; the
+  header says so itself)
+- **Behavior:** The header is in the project and declares an `NSEnumerator` over a cache
+  URL; the implementation is not compiled anywhere, so the class is in no binary and
+  cannot be linked against.  The header's comment calls it unfinished and asks for
+  investigation.
+- **Test:** none possible -- like `MADDatabaseResultValue`, the class does not exist at
+  link time.  Verified with `MADArrayCachingEnumerator.m in Sources` == 0.
+
 ---
 
 
