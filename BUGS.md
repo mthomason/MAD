@@ -1697,6 +1697,78 @@ wrong answer.
 - **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcode.m:693,719`.
 - **Evidence:** `-Wobjc-dictionary-duplicate-keys`.
 
+### Two symbology classes initialize with another class's type
+- **Status:** Confirmed (latent -- nothing in-tree builds either symbology today)
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcodeQrCodeIso18004.m` (init and
+  `+type` both return `MTBarcodeTypeOneCode`) and
+  `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcodeCode128Iso15417.m:145-161`
+  (`MTBarcodeCode128Ean128`'s init assigns `[MTBarcodeCode128Hibc type]` -- HIBC Code
+  128 -- while its `+type` says `MTBarcodeTypeEAN128`)
+- **Behavior:** `+[MTBarcode newBarcodeWithType:MTBarcodeTypeQrcode]` builds an
+  `MTBarcodeQrCodeIso18004` whose `barcodeType` is `MTBarcodeTypeOneCode`; the factory's
+  `MTBarcodeTypeEAN128` case builds an `MTBarcodeCode128Ean128` whose `barcodeType` is
+  `MTBarcodeTypeHibc128`.  `-drawInRect:` passes the instance's type straight to
+  `barcode->symbology`, so each object draws a symbol other than the one it is named
+  for -- QR code → USPS Intelligent Mail, GS1-128 → HIBC Code 128.
+- **Why it matters:** Any feature that asks for a QR code or a GS1-128 barcode gets the
+  wrong symbology and the wrong payload validation.  The exhaustive factory matrix found
+  the second one; the other 63 mapped types round-trip correctly.
+- **Test:** `MTBarcodeSymbologyTests testQrCodeClassClaimsTheOneCodeType` and
+  `testEan128ClassClaimsTheHibcType`, with
+  `testEveryMappedTypeRoundTripsExceptTheTwoKnownMismatches` covering the rest.
+
+### `MTBarcodeInternationalStandardBookNumberIsbn +type` calls itself
+- **Status:** Confirmed (latent -- no caller in-tree)
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcodeInternationalStandardBookNumberIsbn.m`
+- **Behavior:** The class method's body is
+  `return [MTBarcodeInternationalStandardBookNumberIsbn type];` -- itself, so any call
+  recurses until the stack is exhausted.  The initializer is fine (it assigns
+  `MTBarcodeTypeIsbnX` directly), so the factory path works; only the class-method
+  accessor is a trap.
+- **Why it matters:** A generic caller enumerating symbology classes for their `+type`
+  (the obvious way to build a picker) takes the process down on the ISBN entry.
+- **Test:** `MTBarcodeSymbologyTests testIsbnClassInitializesToItsOwnType` exercises the
+  factory path only; `+type` is deliberately not called.
+
+### `MTBarcode`'s NSCoding round trip loses everything
+- **Status:** Quirk (broken by construction -- left as is)
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcode.m:376-408`
+- **Behavior:** `-encodeWithCoder:` writes every property under the same empty key
+  (`@""`), so only the last value survives in the archive; `-initWithCoder:` ignores the
+  decoder entirely and just calls `[super init]`.  A decoded barcode is therefore a
+  default instance of the right class -- not even the subclass's `-init` defaults apply,
+  because `[super init]` skips them.  The class conforms to `NSCoding`, not
+  `NSSecureCoding`, so secure archiving rejects it outright.
+- **Why it matters:** Nothing archives a barcode today, so this is latent; it would bite
+  the first time one is persisted.
+- **Test:** `MTBarcodeTests testNSCodingRoundTripLosesTheState`.
+
+### `MTBarcode -drawInRect:` copies user input into `primary[128]` unchecked
+- **Status:** Confirmed (crash/memory-corruption risk -- no test)
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcode.m:492`
+  (`strcpy(barcode->primary, primaryData)`), against
+  `Compressor/library/zint/include/zint.h:121` (`char primary[128]`)
+- **Behavior:** When `has2dComponentEnabled` is on, the user's second input is copied
+  with `strcpy` into zint's fixed 128-byte `primary` buffer -- no length check ahead of
+  it, unlike the main payload which goes through `ZBarcode_Encode_and_Buffer`'s
+  length-taking API.
+- **Why it matters:** A primary-data string of 128 bytes or more overruns the struct.
+  Not exercised in tests: the failure mode is memory corruption, not an assertion.
+- **Test:** none, deliberately.
+
+### `MTBarcodeView` is the framework's one manual-retain-release file
+- **Status:** Quirk (left as is)
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcodeView.m` (compiled with
+  `-fno-objc-arc`), `MTBarcodeViewTests`
+- **Behavior:** The project is ARC, but this one file keeps a `-dealloc` that releases
+  `_barcode` and calls `[super dealloc]`, so it must stay `-fno-objc-arc`.  Its
+  `-initWithFrame:` asserts "Don't you dare!", and `UIView -init` forwards there, so the
+  view is only constructible from a storyboard (`-initWithCoder:`); a logic test cannot
+  build one, which is why `MTBarcodeViewTests` pins the constructor contract and the
+  property's declared storage instead of behaviour.
+- **Test:** `MTBarcodeViewTests testProgrammaticConstructionIsRefused` and
+  `testBarcodePropertyIsAnInstanceOfMTBarcode`.
+
 ## MADMySQL
 
 Covered by an offline suite (`MADMySQLTests.m`) plus a live suite
