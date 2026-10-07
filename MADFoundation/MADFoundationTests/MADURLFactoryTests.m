@@ -8,13 +8,14 @@
 //  uses (documents, caches, application support, temporaries, thumbnails), plus the
 //  two uniqueness routines that avoid clobbering an existing file.
 //
-//  Deliberately NOT covered: the group-container paths
+//  The group-container paths
 //  (newURLLocalDocumentsDirectoryForGroupIdentifier: and friends,
-//  newURLLocalDocumentWithName:extention:fileGroup:, newURLApplicationSupportFile:...).
-//  They require a real App Group entitlement, which this logic-test bundle does not
-//  carry: containerURLForSecurityApplicationGroupIdentifier: answers nil and the
-//  factory's NSAssert fires.  The same is true of
-//  +newURLForLocalDirectoryForGroupIdentifier:pathComponent:alternativeSelector:.
+//  newURLLocalDocumentWithName:extention:fileGroup:, newURLApplicationSupportFile:...)
+//  depend on the App Group container, which may or may not exist for this bundle --
+//  the simulator sometimes hands one back without entitlements.  The test for them
+//  therefore branches on the container being available: with one, the factory's
+//  directory is created under it; without one, the factory's NSAssert fires.  Both
+//  outcomes are asserted rather than skipped.
 //
 //  The directory-creating factories are exercised against the simulator's real
 //  Library directory; everything they create is removed in -tearDown.
@@ -24,6 +25,7 @@
 
 #import <UIKit/UIScreen.h>
 
+#import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADURLFactory.h>
 
 @interface MADURLFactoryTests : XCTestCase
@@ -100,6 +102,32 @@
 
 	XCTAssertNotNil(url);
 	XCTAssertTrue([url.path hasSuffix:@"Documents"]);
+}
+
+#pragma mark - Group container
+
+- (void)testDocumentsDirectoryForGroupIdentifier {
+	NSString *group = [MADApplication groupIdentifier];
+	NSURL *container = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:group];
+
+	if (container == nil) {
+		// No App Group container for this bundle: the factory's assertion is the
+		// contract, and the document-name helper goes through the same path.
+		XCTAssertThrows([MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:group]);
+		XCTAssertThrows([MADURLFactory newURLLocalDocumentWithName:@"Report" extention:@"mad" fileGroup:group]);
+		return;
+	}
+
+	NSURL *documents = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:group];
+	XCTAssertTrue([documents.path hasPrefix:container.path]);
+	XCTAssertEqualObjects(documents.lastPathComponent, @"Documents");
+	BOOL isDirectory = NO;
+	XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:documents.path isDirectory:&isDirectory]);
+	XCTAssertTrue(isDirectory);
+
+	NSURL *document = [MADURLFactory newURLLocalDocumentWithName:@"Report" extention:@"mad" fileGroup:group];
+	XCTAssertEqualObjects(document.lastPathComponent, @"Report.mad");
+	XCTAssertEqualObjects(document.URLByDeletingLastPathComponent.path, documents.path);
 }
 
 #pragma mark - Cache subdirectories

@@ -823,6 +823,204 @@ Status key:
   there buys nothing when a nil name would mean a malformed schema.
 - **Where:** `MAD/Source/rptq/store/MADStore.m:273-278`.
 
+### `MADOperationCreateDocumentAddConnection` reports success without a document
+- **Status:** Confirmed (latent -- only reached when the queue is mis-wired)
+- **Where:** `MAD/Source/MADOperationCreateDocumentAddConnection.m:38-58`
+- **Behavior:** `-execute` scans its dependencies for a
+  `MADOperationCreateDocumentProtocol`, leaves `document` nil when none matches, sends
+  `[document activeDocumentModel]` (a message to nil, so a no-op), then sets
+  `self.success = YES` and finishes -- no error, no document.  Its siblings
+  (`MADOperationCreateDocumentImportSchema`, `...SaveAndCloseNewDocument`) finish with
+  an error in the same situation, and `MADOperationCreateDocumentFirstTimeSetup` trips
+  `RptqDocument`'s nil-context `NSAssert` instead, so the family has three different
+  answers to the same missing dependency.
+- **Why it matters:** `success` is the only signal the queued consumer gets; a queue
+  assembled in the wrong order reports "connection added" for work that never happened.
+- **Test:** `MADOperationCreateDocumentAddConnectionTests
+  testExecuteWithoutADocumentDependencyStillReportsSuccess`.
+
+### `MADOperationKeyChainDeletePassword`'s `success` never leaves NO
+- **Status:** Confirmed (latent -- nothing reads the property in-tree today)
+- **Where:** `MAD/Source/MADOperationKeyChainDeletePassword.m:19,36-50`
+- **Behavior:** The initializer sets `_success = NO`, and `-execute` never assigns it:
+  a delete MADKeyChain reports as clean still finishes with `success == NO`.  The error
+  path is also silent -- a failed delete carries the error through
+  `-finishWithError:` but leaves the flag at NO too, so the two outcomes are
+  indistinguishable from the property.
+- **Why it matters:** Any future consumer that reads `success` instead of checking
+  `errors` will treat every successful delete as a failure.
+- **Test:** `MADOperationKeyChainDeletePasswordTests
+  testExecuteWithAMissingKeyFinishesWithoutError`.
+
+### `MADOperationDeleteFile`'s dependency scan is order-dependent and can coordinate a nil URL
+- **Status:** Confirmed (latent)
+- **Where:** `MAD/Source/MADOperationDeleteFile.m:34-60`
+- **Behavior:** Two separate hazards in the same loop:
+  1. The scan `break`s as soon as it sees a `MADOperationCreateDocumentProtocol`
+     dependency, so a `MADOperationTestResults` dependency that happens to appear later
+     in `-dependencies` (whose order is undefined) is never consulted: `deleteFile`
+     stays NO and the failed create's file is left on disk, even though a unique URL
+     was reserved for it.
+  2. When `deleteFile` is YES but no `MADOperationUniqueUrlForFilenameProtocol`
+     dependency was seen, the local `fileURL` is nil and is handed to
+     `MADFileUtilities -removeFileAtURL:completion:`, which passes it to
+     `NSFileAccessIntent`/`NSFileCoordinator` -- a likely invalid-argument crash.
+- **Why it matters:** The order-dependent path is unreachable deterministically, and
+  the nil-URL path crashes rather than failing the operation.  Fixing means splitting
+  the loop (collect all three) and guarding the URL.
+- **Test:** `MADOperationDeleteFileTests` pins the three deterministic paths
+  (`testExecuteWithFailingResultsDeletesTheFile`,
+  `testExecuteWithSuccessfulResultsLeavesTheFile`,
+  `testExecuteWithOnlyADocumentDependencyDoesNotDelete`); the order-dependent
+  combination and the nil-URL path are deliberately not exercised -- the first cannot
+  be pinned, the second would take the test process down.
+
+### `MADOperationDocumentCloseDocument` treats "no document" as a successful close
+- **Status:** Quirk (hazard -- documented, not changed)
+- **Where:** `MAD/Source/MADOperationDocumentCloseDocument.m:30-52`
+- **Behavior:** With no `MADOperationCreateDocumentProtocol` dependency, `doc` is nil;
+  `(doc.documentState & UIDocumentStateClosed)` is 0 and `doc.storeContext == nil` is
+  true, so the guard falls through to `[MADocument close:nil completion:]`, which reads
+  nil as "already closed" and reports success.  Nothing distinguishes closing a
+  document from having none -- the same shape as the AddConnection entry above.
+- **Test:** `MADOperationDocumentCloseDocumentTests
+  testExecuteWithoutDependencyFinishes`.
+
+### Image elements do not survive a save
+- **Status:** Confirmed (live defect)
+- **Where:** `MAD/Source/rptq/RptqDocument+Extras.m:559-562` (the factory assigns a
+  `UIImage`), `MAD/Source/rptq/store/MADStoreSchema.m:563-565` (the attribute is a
+  `BlobOpt`), `MAD/Source/rptq/store/MADStore.m:483-485` (the Blob binder accepts only
+  `NSData` and otherwise binds `NULL`), `MADStore.m:217-220` (reads come back as
+  `NSData`).
+- **Behavior:** `RptqDocumentElementImage.image` is declared `UIImage *` and the
+  factory stores one, but the store's Blob column binds bytes only for `NSData`; a
+  `UIImage` therefore writes SQL NULL and the value is gone on the next open (a read
+  would hand back `NSData` if anything had been written).  The store-open/again round
+  trip in the test is the whole bug: in-memory the image is there, after save/reopen it
+  is nil.
+- **Why it matters:** An inserted picture silently disappears from the document the
+  next time it is opened -- the one place a report can carry a logo.  The fix is a
+  transform at the attribute boundary (PNG data in, UIImage out).
+- **Test:** `MADDocumentObjectDataReferenceImageTests testImageDoesNotSurviveSaveAndReopen`
+  (and the in-memory half by `testImageIsTheElementImageWhileInMemory`).
+
+### `MADReportSection -identifier` recurses forever when its section is unwired
+- **Status:** Confirmed (latent)
+- **Where:** `MAD/Source/MADReportSection.m:109-120` (`-documentSection`) and
+  `:122` (`-identifier`)
+- **Behavior:** `-identifier` reads `self.documentSection.identifier`.  The lazy
+  `-documentSection` getter, when `_documentSection` is nil, builds one with
+  `newDocumentSectionWithIdentifier:self.identifier` -- which re-enters `-identifier`
+  before the getter can store anything: unbounded recursion (stack overflow), not a
+  nil answer.  `-type`, `-height`, `-isVisible` go through the same getter and would
+  recurse the same way on an unwired section.  Related: `+initWithReportSection:`
+  returns nil for `MADDocumentSectionTypeUnknown` (the switch's default leaves the
+  strong local zero-initialised), so an unknown row is silently dropped rather than
+  surfaced.
+- **Test:** none -- exercising the recursion would take the process down; recorded
+  from reading.  The Unknown-type nil is pinned by
+  `MADReportSectionTests testInitWithAnUnknownTypeReturnsNil` (added with this entry).
+
+### `MADImageThumbnail` draws page 1, so a one-page document's thumbnail is blank
+- **Status:** Confirmed (live defect)
+- **Where:** `MAD/Source/MADImageThumbnail.m:102`
+- **Behavior:** The renderer-based path calls
+  `[printPageRenderer drawPageAtIndex:1 inRect:rect withTransparentBackground:YES]`.
+  `MADPrintPageRenderer`'s page loop is zero-based (`drawPageAtIndex:withContext:`), so
+  index 1 is the *second* page; for a one-page report the bounds check answers no and
+  the thumbnail is the blank white canvas.  The comment in the sibling draw code calls
+  this "the first page is never drawn", so the off-by-one looks deliberate for
+  multi-page reports and wrong for the cover.
+- **Why it matters:** The document browser shows empty thumbnails for single-page
+  reports.  Related quirk: the factory methods are declared on `MADImageThumbnail` (a
+  `UIImage` subclass) with an `instancetype` return, but the object built is a plain
+  `UIImage` -- callers that trust the static type would be wrong about the class.
+- **Test:** `MADImageThumbnailTests
+  testRendererThumbnailIsASquareLetterPageAndDrawsPageOne` (pins the page index and the
+  plain-`UIImage` result).
+
+### `MADPrintPageRenderer` ignores `withTransparentBackground:`
+- **Status:** Confirmed (live defect)
+- **Where:** `MAD/Source/MADPrintPageRenderer.m:289-295`
+- **Behavior:** `-drawPageAtIndex:inRect:withTransparentBackground:` never reads the
+  flag; it always paints the opaque white canvas and then draws the page.  The header
+  documents the parameter as "draws a transparent background instead of white", and
+  `MADImageThumbnail` calls it with `YES` expecting transparency.
+- **Why it matters:** Any caller asking for a transparent page gets an opaque white
+  one; the parameter is a lie.
+- **Test:** `MADPrintPageRendererTests testDrawPageDrawsTheWhiteCanvasEvenWithTransparentBackground`.
+
+### `RptqDocumentSectionEnumerator`'s two enumerators disagree with their own counts
+- **Status:** Confirmed (latent -- the enumerators have no callers in-tree)
+- **Where:** `MAD/Source/rptq/RptqDocumentSectionEnumerator.m:58-61` (the type
+  enumerator's `-nextObject`) and `:102-106` (the row enumerator's)
+- **Behavior:** The *type* enumerator pre-increments the row
+  (`getSectionTypeforRow:++_current`), so the first call skips row 0 (the report
+  header) and no call ever terminates -- past the last row it keeps answering
+  `GroupFooter`.  The *row* enumerator ignores its `_total`: with no query it answers
+  row 0 anyway (a `MADReportSection` that does not exist), and it never ends either.
+- **Why it matters:** Both are `NSFastEnumeration` sources; anything that iterates one
+  gets an endless stream with the first row missing (or a phantom row).
+- **Test:** `RptqDocumentSectionEnumeratorTests
+  testTypeEnumeratorNextObjectSkipsRowZeroAndHasNoEnd` and
+  `testNextObjectIgnoresTheCountWhenThereIsNoQuery`.
+
+### `MADQueryFullTableEnumerator` overrides no enumeration method
+- **Status:** Quirk (dead class -- left as is)
+- **Where:** `MAD/Source/MADQueryFullTableEnumerator.m`
+- **Behavior:** It subclasses `NSEnumerator` and stores a document identifier and
+  context, but never overrides `-nextObject`; enumerating it raises
+  `NSInvalidArgumentException` from `NSEnumerator`'s abstract implementation.  Nothing
+  in the tree instantiates it.
+- **Test:** `MADQueryFullTableEnumeratorTests
+  testNextObjectIsStillNSEnumeratorsAbstractImplementation`, which pins the inherited
+  IMP rather than calling it.
+
+### `MADModelQueryTable -addField:schemaField:` never wires the field's query table
+- **Status:** Quirk (documented, not changed)
+- **Where:** `MAD/Source/MADModelQueryTable.m:92-105`
+- **Behavior:** The field is registered in the table's dictionary under its identifier,
+  but its `inQueryTable` back-reference is never set (nothing in the class's own
+  initialiser sets it either), so every `MADModelQueryField` reports a nil query table.
+- **Why it matters:** Low today -- nothing reads the back-reference -- but it makes the
+  registration one-directional and surprises the next reader.
+- **Test:** `MADModelQueryTableTests testAddFieldRegistersTheFieldUnderItsIdentifier`.
+
+### `MADDocumentObjectDataReference -copyWithZone:` drops the delegate
+- **Status:** Quirk (documented, not changed)
+- **Where:** `MAD/Source/MADDocumentObjectDataReference.m:134-144`
+- **Behavior:** The copy carries item, page, row and the weak datasource but not the
+  delegate, so `-fontAttributes` on a copy is always nil (it is built from the
+  delegate).  Note the delegate is a strong property here while the datasource is weak.
+- **Test:** `MADDocumentObjectDataReferenceTests
+  testCopyCarriesItemAndIndexesButNotTheDelegate`.
+
+### `MADSectionLayoutAttributes +movePlacedItem:` teleports an isolated item to the origin
+- **Status:** Confirmed (live defect)
+- **Where:** `MAD/Source/MADSectionLayoutAttributes.m:62-82`
+- **Behavior:** The candidate drop point starts as `CGPointZero` with its distance
+  measured from the item's own origin, so when there is no *other* item to snap
+  against, the loop never replaces the candidate and the item's frame is set to
+  `(0, 0, w, h)` -- the origin, not a nearby valid point.  An item that was already
+  somewhere sensible is yanked to the top-left the first time layout runs while it is
+  alone.
+- **Test:** `MADSectionLayoutAttributesTests testPlaceItemWithNoOtherItemsSnapsToTheOrigin`
+  (characterization) and `testPlaceItemSnapsToTheNearestOtherCorner` (the
+  with-neighbours half).
+
+### `MADSectionLayoutManager -removeItemWithID:` corrupts indexes for an unknown ID
+- **Status:** Confirmed (latent)
+- **Where:** `MAD/Source/MADSectionLayoutManager.m:244-263`
+- **Behavior:** The lookup for an ID not in `items` answers nil, `pathToRemvoe` is nil,
+  and `[nil indexAtPosition:]` reads 0 -- so the "shift later items down" comparison
+  passes for *every* item, each index is decremented, the item at index 0 underflows to
+  `NSUIntegerMax`, and nothing is removed.  The manager is left with corrupt
+  index-paths; `NSIndexPath` tolerates the huge value, so the corruption surfaces later
+  (or crashes downstream) rather than in the call.
+- **Test:** `MADSectionLayoutManagerTests
+  testRemoveWithAnUnknownIDLeavesEveryIndexDecremented`.
+
 ### `MADReportSectionRowsRepresentation` declares `itemCount` but implements `isItemCount`
 - **Status:** Confirmed (latent -- nothing reads either accessor)
 - **Where:** `MAD/Source/MADReportSectionRowsRepresentation.h:20`,
