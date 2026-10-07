@@ -1382,6 +1382,204 @@ Status key:
   `+updateProgressView:active:percent:` hides the view and zeroes its progress
   when `active` is `NO` (`.m:60-64`). The value is never displayed.
 
+### `MADFilesController -setFileCoordinator:` hands URLs where metadata is expected — crash
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADFilesController.m:193-220` (the offending
+  value at `:204`, the hand-over at `:208-212`)
+- **Behavior:** Swapping coordinators reads the tracked list as
+  `allURLs = [self.fileMetaDatum valueForKey:@"URL"]` — an array of `NSURL` — and
+  then passes it straight in as `removedMetaDatum:`. Everything downstream of
+  `-processContentChangesWithInsertedMetaDatum:removedMetaDatum:updatedMetaDatum:completion:`
+  treats that argument as `MADMetaData`, and the first thing it does is build
+  `[NSPredicate predicateWithFormat:@"URL in %@.URL", …]` and filter with it
+  (`.m:474-478`). `NSURL` has no `URL` key, so the predicate raises
+  `NSUnknownKeyException`.
+- **Why it matters:** The raise happens on the delegate operation queue, so it is
+  uncaught and takes the process down. It fires on any coordinator swap while at
+  least one file is tracked (an empty list filters to nothing and survives).
+  `-setFileCoordinator:` is called by the app's file-location manager when the
+  storage setting changes; an empty list may be why this has not been seen.
+- **Pinned by:** `MADFilesControllerTests`
+  `-testSettingANewCoordinatorStopsTheOldOneAndStartsTheNewOne`, which can only
+  exercise the empty case — the populated case terminates the test process. The
+  test's header comment records it.
+- **Fix sketch:** map the URLs to `MADMetaData` first
+  (`-fileInfosByMappingURLs:` already exists at `.m:584`), or have the method take
+  the tracked objects directly.
+
+### `MADLocalFileCoordinator -removeFileAtURL:` reports the removal as an update
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADLocalFileCoordinator.m:112-119`
+- **Behavior:** The success branch builds `removes = @[URL]` and then calls
+  `fileCoordinatorDidUpdateContentsWithInsertedURLs: removedURLs:updates
+  updatedURLs:removes` — the `removes` and `updates` arrays are swapped. The
+  delegate is told the file was *updated*, and `removedURLs` stays empty. The
+  file is deleted either way.
+- **Why it matters:** `MADFilesController` trusts the buckets: a removal reported
+  as an update looks up the still-tracked entry and rewrites it in place
+  (`.m:530-549`) instead of untracking it, so a file deleted through the
+  coordinator stays in the browser list until a refresh notices a file-system
+  difference. The same swapped call exists in
+  `MADCloudFileCoordinator -createURLWithName:` (`.m:214-221`), where both arrays
+  are empty and the inversion is inert.
+- **Pinned by:** `MADLocalFileCoordinatorTests
+  -testRemoveReportsTheURLAsUpdatedNotRemoved`.
+
+### `MADLocalFileCoordinator -documentsDirectory` has no setter
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADLocalFileCoordinator.m:38` (`@dynamic`)
+  against `MADFileCoordinatorProtocol.h:18-19` (`readwrite, copy`)
+- **Behavior:** The class declares the property `@dynamic` and implements only
+  `-documentsDirectory` (`.m:206-209`). The setter the protocol promises is never
+  provided, so `-setDocumentsDirectory:` raises `NSInvalidArgumentException`
+  ("unrecognized selector") at the call site.
+- **Why it matters:** The protocol is the only contract a caller sees; code that
+  holds an `id <MADFileCoordinatorProtocol>` is entitled to write the property and
+  will crash instead. `MADFilesController` only reads it today, and the app's
+  writes go through the reader-side accessors, which is why it has not surfaced.
+- **Pinned by:** `MADLocalFileCoordinatorTests -testDocumentsDirectoryHasNoSetter`
+  (`-respondsToSelector:` plus the throwing call).
+
+### `MADFilesController` accepts and ignores `sortComparator`
+- **Status:** Quirk (left as is)
+- **Where:** `MADFileManager/Source/MADFilesController.m:154-174`
+- **Behavior:** `-initWithFileCoordinator:delegateQueue:sortComparator:` never
+  stores or calls the block. Both class factories pass a file-static
+  `sortComparator` (`.m:53`), and the controller's own ordering is
+  `finderSortWithLocale` by `fileSystemName` (`.m:495-501`).
+- **Why it matters:** A caller passing a comparator gets no warning and no effect;
+  the parameter is a lie in the initializer's signature. The finder ordering is
+  what the browser actually wants, so the block is dead weight rather than a wrong
+  result.
+- **Pinned by:** `MADFilesControllerTests -testTheSortComparatorArgumentIsIgnored`
+  (a comparator that would keep the reverse order makes no difference).
+
+### `MADFilesController` gates the renaming failure on the removing callback
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADFilesController.m:405-416`
+- **Behavior:** `-fileCoordinatorDidFailRenamingFileAtURL:withError:` puts
+  `@selector(filesController:didFailRemovingFileInfo:withError:)` in the
+  `respondsToSelector:` check but sends
+  `filesController:didFailRenamingFileInfo:withError:`. A delegate that implements
+  only the renaming callback — the natural choice — never hears about a rename
+  failure; one that implements only the removing callback gets the renaming
+  failure anyway.
+- **Why it matters:** A failed rename is silent for the expected delegate shape.
+- **Pinned by:** `MADFilesControllerTests
+  -testRenamingFailureIsGatedOnTheRemovingCallback`.
+
+### `+[MADFilesController getFileStorageLocationsForUbiquityIdentifier:…]` crosses its two URLs
+- **Status:** Open (latent; found by test 2026-10-06)
+- **Where:** `MADFileManager/Source/MADFilesController.m:136-137`
+- **Behavior:** The completion block's parameters are `(cloudAvailable,
+  documents, data)`, but the non-cloud branch answers
+  `documents = [MADURLFactory newURLForLocalDataDirectoryForGroupIdentifier:…]`
+  (the **Data** directory) and
+  `data = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:…]`
+  (the **Documents** directory).
+- **Why it matters:** Latent today only because the sole caller —
+  `MADFileLocationManager -setupFileStorageLocationsForCloud`
+  (`MADExplorer/…/MADFileLocationManager.m:223`) — declares both as `__unused`. The
+  first caller that trusts the labels gets the wrong directory.
+- **Pinned by:** `MADFilesControllerTests
+  -testStorageLocationsWithoutCloudAnswerLocalDirectories`.
+
+### `MADLocalFileCoordinator` drops the removal when the last matching file goes away
+- **Status:** Quirk (left as is — the guard predates the tests)
+- **Where:** `MADFileManager/Source/MADLocalFileCoordinator.m:251`
+- **Behavior:** `-processChangeToLocalDocumentsDirectory` wraps the whole
+  insert/remove comparison in `if (localListURLs.count > 0)`. With no matching
+  files left in the directory, no delegate callback is sent at all — not even for
+  the removals that just happened. The coordinator also leaves
+  `currentLocalContents` at its old value in that case.
+- **Why it matters:** A browser that empties the document store this way is told
+  nothing; the next refresh with any file present reports the removals then. It is
+  the mirror of the `removeFileAtURL:` swap above: removals are the fragile path.
+- **Pinned by:** `MADLocalFileCoordinatorTests
+  -testRefreshIsSilentWhenTheLastMatchingFileIsGone`.
+
+### `MADDirectoryMonitor`'s cancel handler dereferences a nil owner — SIGSEGV on dealloc
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADDirectoryMonitor.m:99-104`
+- **Behavior:** Both handlers load their owner weakly
+  (`MADDirectoryMonitor __weak *weakself = self;` at `.m:70`) and then use it
+  without a nil check.  The cancel handler does it with **direct ivar access**:
+
+  ```objc
+  dispatch_source_set_cancel_handler(self.directoryMonitorSource, ^{
+      MADDirectoryMonitor *sself = weakself;
+      close(sself->_fileDescriptor);          // *(int *)((void *)0 + 8)
+      sself->_fileDescriptor = NotListening;
+      sself.directoryMonitorSource = nil;
+  });
+  ```
+
+  A message send to nil is harmless; `->` on nil is a load/store at address
+  `offset` and faults.  `_fileDescriptor` sits at offset 8, which is exactly the
+  fault address reported.
+- **Why it matters:** A monitor that is released with its source still live (or
+  still cancelling) crashes in the cancel handler after the owner is gone:
+  `dispatch_source_cancel` → cancel callout → `sself->_fileDescriptor` →
+  `EXC_BAD_ACCESS (SIGSEGV) KERN_INVALID_ADDRESS at 0x8`.  There is no way for
+  the caller to avoid it other than keeping the monitor alive until the cancel
+  handler has run, which no caller does.  The same missing guard leaves the
+  event handler one weak-load away from `dispatch_source_get_data(NULL)`.
+- **Fix sketch:** the cancel handler is the last user of the monitor, so it can
+  capture `self` **strongly** — the handler already sets
+  `directoryMonitorSource = nil`, which breaks the source→block→self→source
+  cycle on the one and only cancel.  (A bare `if (sself == nil) return;` would
+  stop the fault but leak the descriptor, which is why the handler exists.)
+- **Pinned by:** the crash report above; `MADDirectoryMonitorTests` works around
+  it everywhere (each monitor is stopped and the run loop drained before the
+  test releases it — `-stopAndDrain:` and `-tearDown`).
+
+### `MADCloudFileCoordinator -init…` writes `_documentsDirectory` through a weak self — SIGSEGV
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADCloudFileCoordinator.m:74-79`
+- **Behavior:** The initializer resolves the iCloud Documents directory
+  asynchronously and assigns it with direct ivar access:
+
+  ```objc
+  MADCloudFileCoordinator __weak *wself = self;
+  dispatch_barrier_async(self.documentsDirectoryQueue, ^{
+      MADCloudFileCoordinator *sself = wself;
+      sself->_documentsDirectory =            // objc_storeStrong(&nil->_documentsDirectory, …)
+          [MADFileUtilities newURLForCloudDocumentsDirectoryForUbiquityID: identifier];
+  });
+  ```
+
+  There is no nil check, and the assignment is an ARC store through
+  `&sself->_documentsDirectory`.
+- **Why it matters:** Any `MADCloudFileCoordinator` that is released before the
+  queued barrier block runs crashes on that block: `EXC_BAD_ACCESS (SIGSEGV)
+  KERN_INVALID_ADDRESS at 0x10` in
+  `__80-[MADCloudFileCoordinator initWithPredicate:identifier:firstQueryUpdateHandler:]_block_invoke`.
+  Building a cloud coordinator and letting it deallocate promptly — which is what
+  the factory does for any short-lived caller — is enough.  The coordinator is
+  normally retained by `MADFilesController` for the life of the browser, which
+  hides it.
+- **Fix sketch:** `if (sself == nil) return;`, or capture `self` strongly in the
+  init block (the block is a one-shot assignment; there is no cycle to keep).
+- **Pinned by:** the crash report above.  `MADCloudFileCoordinatorTests`,
+  `MADFileCoordinatorTests`, and `MADFilesControllerTests` all keep every cloud
+  coordinator alive and drain `documentsDirectoryQueue` before releasing it
+  (`-tearDown`), which is the workaround, not the fix.
+
+### `MADDirectoryMonitor`'s cancel handler dereferences a nil owner — SIGSEGV on dealloc
+- **Status:** Quirk (left as is — logging and a silent no-op only)
+- **Where:** `MADFileManager/Source/MADDirectoryMonitor.m:52`, `:73-96`
+- **Behavior:** (1) `-startMonitoring` on a path that cannot be opened
+  (`open(2)` fails, `.m:52`) returns without a source or an error — the monitor
+  silently never observes anything. (2) The event handler switches on the raw
+  `dispatch_source_get_data` bitmask, so an event carrying more than one flag
+  (`WRITE|EXTEND`, common) falls through to `default` and logs "Untracked event."
+  The delegate is still called.
+- **Why it matters:** (1) is a setup error that will look like "the browser does
+  not refresh"; (2) only costs a misleading log line.
+- **Pinned by:** `MADDirectoryMonitorTests`
+  `-testStartMonitoringAMissingDirectoryIsANoOp` and
+  `-testObservesAChangeInTheMonitoredDirectory`.
+
 ---
 
 ## MADExplorer
