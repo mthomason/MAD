@@ -343,4 +343,34 @@
 	XCTAssertNil([MysqlConnection connectToServers:candidates]);
 }
 
+#pragma mark - MysqlConnection without a server behind it
+
+// -[MysqlConnection init] is not how the app builds connections (the factories
+// answer nil when the server cannot be reached), but it produces the state
+// these tests need: an object whose handle is NULL.  Reading from it is safe;
+// the mutating session commands are not (see BUGS.md).
+
+- (void)testErrorAccessorsOnAConnectionWithoutAServer {
+	MysqlConnection *connection = [[MysqlConnection alloc] init];
+
+	// The client library checks for a NULL handle, so the "why did it not
+	// connect?" accessors answer instead of faulting.
+	XCTAssertEqual([connection errorNumber], (unsigned int)0);
+	const char *text = [connection errorText];
+	XCTAssertTrue(text != NULL);
+	XCTAssertEqualObjects([NSString stringWithUTF8String:text], @"");
+}
+
+- (void)testTransactionsFlagStartsOff {
+	MysqlConnection *connection = [[MysqlConnection alloc] init];
+	XCTAssertFalse(connection.transactionsEnabled);
+}
+
+- (void)testDescriptionOfAConnectionWithoutAServer {
+	MysqlConnection *connection = [[MysqlConnection alloc] init];
+
+	NSString *description = [connection description];
+	XCTAssertTrue([description containsString:@"NO"], @"Expected the disconnected state in: %@", description);
+}
+
 @end

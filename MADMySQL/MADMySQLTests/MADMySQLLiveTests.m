@@ -41,6 +41,15 @@
 #import "MysqlConnection.h"
 #import "MysqlFetch.h"
 #import "MysqlFetch+DataTable.h"
+#import "MysqlInsert.h"
+#import "MysqlUpdate.h"
+#import "MysqlDelete.h"
+#import "MysqlTruncate.h"
+#import "MysqlIndex.h"
+#import "MysqlException.h"
+#import "MysqlCommitException.h"
+#import "MysqlRollbackException.h"
+#import "NSString+MysqlEscape.h"
 
 #import <mysql.h>
 
@@ -684,6 +693,355 @@
 	MADDataColumn *date = table.columns[[table columnKeys][4]];
 	XCTAssertEqual(date.nativeType, (int16_t)MYSQL_TYPE_DATE);
 	XCTAssertEqual(date.type, MADDataTypeDate);
+}
+
+#pragma mark - DML: scratch tables
+
+// The write-side classes (MysqlInsert, MysqlUpdate, MysqlDelete,
+// MysqlTruncate) are the app's DML path and can only be exercised against a
+// server.  Every test here works on a scratch table that is created and
+// dropped inside the test, so the employees dataset is never written to.
+
+- (void)createScratchTableNamed:(NSString *)name onConnection:(MysqlConnection *)connection {
+	NSError *error = nil;
+	[self runStatement:[[NSString alloc] initWithFormat:@"DROP TABLE IF EXISTS %@;", name]
+		  onConnection:connection
+				 error:&error];
+	XCTAssertNil(error, @"DROP IF EXISTS failed: %@", error);
+
+	[self runStatement:[[NSString alloc] initWithFormat:
+						@"CREATE TABLE %@ (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, "
+						"label VARCHAR(32) NOT NULL, note VARCHAR(32) NULL, payload BLOB NULL);", name]
+		  onConnection:connection
+				 error:&error];
+	XCTAssertNil(error, @"CREATE failed: %@", error);
+}
+
+- (void)dropScratchTableNamed:(NSString *)name onConnection:(MysqlConnection *)connection {
+	NSError *error = nil;
+	[self runStatement:[[NSString alloc] initWithFormat:@"DROP TABLE %@;", name]
+		  onConnection:connection
+				 error:&error];
+	XCTAssertNil(error, @"DROP failed: %@", error);
+}
+
+- (NSObject *)scalar:(NSString *)sql onConnection:(MysqlConnection *)connection {
+	NSError *error = nil;
+	MADDataTable *table = [self fetch:sql onConnection:connection error:&error];
+	XCTAssertNil(error, @"%@ failed: %@", sql, error);
+	return [table objectAtRow:0 column:0];
+}
+
+- (NSObject *)countOfTable:(NSString *)table onConnection:(MysqlConnection *)connection {
+	return [self scalar:[[NSString alloc] initWithFormat:@"SELECT COUNT(*) AS `n` FROM %@;", table]
+		   onConnection:connection];
+}
+
+#pragma mark - MysqlInsert
+
+- (void)testInsertWritesARowAndReportsTheNewId {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	[self createScratchTableNamed:@"mad_scratch_insert" onConnection:connection];
+
+	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	insert.table = @"mad_scratch_insert";
+	insert.rowData = @{@"label": @"alpha"};
+	[insert execute];
+
+	XCTAssertEqualObjects(insert.affectedRows, @1);
+	XCTAssertEqualObjects(insert.rowid, @1, @"AUTO_INCREMENT starts at 1");
+	XCTAssertEqualObjects([self scalar:@"SELECT label FROM mad_scratch_insert;" onConnection:connection],
+						  @"alpha");
+
+	[self dropScratchTableNamed:@"mad_scratch_insert" onConnection:connection];
+}
+
+- (void)testInsertBindsNullsAndBlobs {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	[self createScratchTableNamed:@"mad_scratch_blob" onConnection:connection];
+
+	NSData *payload = [NSData dataWithBytes:"\x01\x02\x03" length:3];
+	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	insert.table = @"mad_scratch_blob";
+	insert.rowData = @{@"label": @"blob", @"note": [NSNull null], @"payload": payload};
+	[insert execute];
+
+	XCTAssertEqualObjects([self scalar:@"SELECT note IS NULL FROM mad_scratch_blob;" onConnection:connection], @1);
+	XCTAssertEqualObjects([self scalar:@"SELECT LENGTH(payload) FROM mad_scratch_blob;" onConnection:connection], @3);
+	XCTAssertEqualObjects([self scalar:@"SELECT HEX(payload) FROM mad_scratch_blob;" onConnection:connection], @"010203");
+
+	[self dropScratchTableNamed:@"mad_scratch_blob" onConnection:connection];
+}
+
+- (void)testInsertRejectsADuplicateKeyUnlessToldToIgnoreIt {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	[self createScratchTableNamed:@"mad_scratch_dupe" onConnection:connection];
+
+	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	insert.table = @"mad_scratch_dupe";
+	insert.rowData = @{@"id": @1, @"label": @"first"};
+	[insert execute];
+
+	// The second insert collides on the primary key and raises.
+	insert.rowData = @{@"id": @1, @"label": @"second"};
+	XCTAssertThrowsSpecificNamed([insert execute], MysqlException, @"MysqlException");
+
+	// With the flag set the same collision is swallowed and the row stands.
+	insert.ignoreDuplicateErrors = YES;
+	XCTAssertNoThrow([insert execute]);
+	// BUGS.md: the ignored statement still failed, and -affectedRows is read
+	// straight off mysql_affected_rows, which answers (my_ulonglong)-1 for a
+	// failed statement -- so the count is ULONG_MAX rather than 0.
+	XCTAssertEqual(insert.affectedRows.unsignedLongLongValue, ULLONG_MAX);
+	XCTAssertEqualObjects([self countOfTable:@"mad_scratch_dupe" onConnection:connection], @1);
+	XCTAssertEqualObjects([self scalar:@"SELECT label FROM mad_scratch_dupe;" onConnection:connection], @"first");
+
+	[self dropScratchTableNamed:@"mad_scratch_dupe" onConnection:connection];
+}
+
+#pragma mark - MysqlUpdate
+
+- (void)testUpdateChangesOnlyTheQualifiedRows {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	[self createScratchTableNamed:@"mad_scratch_update" onConnection:connection];
+
+	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	insert.table = @"mad_scratch_update";
+	insert.rowData = @{@"label": @"alpha"};
+	[insert execute];
+	insert.rowData = @{@"label": @"alpha"};
+	[insert execute];
+
+	MysqlUpdate *update = [MysqlUpdate updateWithConnection:connection];
+	update.table = @"mad_scratch_update";
+	update.rowData = @{@"label": @"beta"};
+	update.qualifier = @{@"id": @1};
+	[update execute];
+
+	XCTAssertEqualObjects(update.affectedRows, @1);
+	XCTAssertEqualObjects([self scalar:@"SELECT label FROM mad_scratch_update WHERE id = 1;" onConnection:connection],
+						  @"beta");
+	XCTAssertEqualObjects([self scalar:@"SELECT label FROM mad_scratch_update WHERE id = 2;" onConnection:connection],
+						  @"alpha");
+
+	[self dropScratchTableNamed:@"mad_scratch_update" onConnection:connection];
+}
+
+- (void)testUpdateQualifierHandlesStringsAndNulls {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	[self createScratchTableNamed:@"mad_scratch_qual" onConnection:connection];
+
+	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	insert.table = @"mad_scratch_qual";
+	insert.rowData = @{@"label": @"alpha"};
+	[insert execute];
+
+	// String qualifiers are escaped and quoted, NSNull becomes "is null".
+	MysqlUpdate *update = [MysqlUpdate updateWithConnection:connection];
+	update.table = @"mad_scratch_qual";
+	update.rowData = @{@"note": @"quoted"};
+	update.qualifier = @{@"label": @"alpha"};
+	[update execute];
+	XCTAssertEqualObjects(update.affectedRows, @1);
+
+	update.rowData = @{@"note": [NSNull null]};
+	update.qualifier = @{@"note": @"quoted"};
+	[update execute];
+	XCTAssertEqualObjects(update.affectedRows, @1);
+	XCTAssertEqualObjects([self scalar:@"SELECT note IS NULL FROM mad_scratch_qual;" onConnection:connection], @1);
+
+	[self dropScratchTableNamed:@"mad_scratch_qual" onConnection:connection];
+}
+
+- (void)testUpdateWithoutAQualifierRaisesAnInvalidArgumentException {
+	// BUGS.md: a nil qualifier leaves the WHERE-clause buffer empty, and
+	// -execute then deletes four characters off the front of it.  The class
+	// documents "you must qualify an update" but never gets to say so.
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	[self createScratchTableNamed:@"mad_scratch_noqual" onConnection:connection];
+
+	MysqlUpdate *update = [MysqlUpdate updateWithConnection:connection];
+	update.table = @"mad_scratch_noqual";
+	update.rowData = @{@"label": @"beta"};
+
+	XCTAssertThrowsSpecificNamed([update execute], NSException, NSInvalidArgumentException);
+
+	[self dropScratchTableNamed:@"mad_scratch_noqual" onConnection:connection];
+}
+
+#pragma mark - MysqlDelete
+
+- (void)testDeleteRemovesTheQualifiedRows {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	[self createScratchTableNamed:@"mad_scratch_delete" onConnection:connection];
+
+	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	insert.table = @"mad_scratch_delete";
+	for (NSString *label in @[@"alpha", @"beta", @"alpha"]) {
+		insert.rowData = @{@"label": label};
+		[insert execute];
+	}
+	XCTAssertEqualObjects([self countOfTable:@"mad_scratch_delete" onConnection:connection], @3);
+
+	MysqlDelete *delete = [MysqlDelete deleteWithConnection:connection];
+	delete.tableName = @"mad_scratch_delete";
+	delete.qualifier = @"label='alpha'";
+	[delete execute];
+
+	XCTAssertEqualObjects(delete.affectedRows, @2);
+	XCTAssertEqualObjects([self countOfTable:@"mad_scratch_delete" onConnection:connection], @1);
+	XCTAssertEqualObjects([self scalar:@"SELECT label FROM mad_scratch_delete;" onConnection:connection], @"beta");
+
+	[self dropScratchTableNamed:@"mad_scratch_delete" onConnection:connection];
+}
+
+- (void)testDeleteWithARubbishQualifierRaises {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	[self createScratchTableNamed:@"mad_scratch_badqual" onConnection:connection];
+
+	MysqlDelete *delete = [MysqlDelete deleteWithConnection:connection];
+	delete.tableName = @"mad_scratch_badqual";
+	delete.qualifier = @"no_such_column = 1";
+
+	XCTAssertThrowsSpecificNamed([delete execute], MysqlException, @"MysqlException");
+
+	[self dropScratchTableNamed:@"mad_scratch_badqual" onConnection:connection];
+}
+
+#pragma mark - MysqlTruncate
+
+- (void)testTruncateEmptiesATable {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	[self createScratchTableNamed:@"mad_scratch_truncate" onConnection:connection];
+
+	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	insert.table = @"mad_scratch_truncate";
+	insert.rowData = @{@"label": @"alpha"};
+	[insert execute];
+	insert.rowData = @{@"label": @"beta"};
+	[insert execute];
+	XCTAssertEqualObjects([self countOfTable:@"mad_scratch_truncate" onConnection:connection], @2);
+
+	MysqlTruncate *truncate = [MysqlTruncate truncateWithConnection:connection
+														   forTable:@"mad_scratch_truncate"];
+	XCTAssertNoThrow([truncate execute]);
+
+	XCTAssertEqualObjects([self countOfTable:@"mad_scratch_truncate" onConnection:connection], @0);
+
+	[self dropScratchTableNamed:@"mad_scratch_truncate" onConnection:connection];
+}
+
+#pragma mark - MysqlIndex
+
+- (void)testIndexFactoryKeepsALiveConnection {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+
+	XCTAssertEqual([MysqlIndex indexWithConnection:connection].connection, connection);
+}
+
+#pragma mark - Transactions
+
+- (void)testRollbackDiscardsAndCommitKeeps {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	[self createScratchTableNamed:@"mad_scratch_tx" onConnection:connection];
+
+	XCTAssertFalse(connection.transactionsEnabled);
+	[connection enableTransactions];
+	XCTAssertTrue(connection.transactionsEnabled);
+
+	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	insert.table = @"mad_scratch_tx";
+	insert.rowData = @{@"label": @"rolled-back"};
+	[insert execute];
+	XCTAssertEqualObjects([self countOfTable:@"mad_scratch_tx" onConnection:connection], @1,
+						  @"The row is visible inside its own transaction");
+
+	[connection rollbackTransaction];
+	XCTAssertEqualObjects([self countOfTable:@"mad_scratch_tx" onConnection:connection], @0);
+
+	insert.rowData = @{@"label": @"kept"};
+	[insert execute];
+	[connection commitTransaction];
+	XCTAssertEqualObjects([self countOfTable:@"mad_scratch_tx" onConnection:connection], @1);
+
+	[connection disableTransactions];
+	XCTAssertFalse(connection.transactionsEnabled);
+
+	[self dropScratchTableNamed:@"mad_scratch_tx" onConnection:connection];
+}
+
+#pragma mark - Session settings and error reporting
+
+- (void)testEnableStrictSqlTurnsOnTheMode {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+
+	XCTAssertNoThrow([connection enableStrictSql]);
+
+	NSString *mode = (NSString *)[self scalar:@"SELECT @@sql_mode AS `m`;" onConnection:connection];
+	XCTAssertTrue([[mode uppercaseString] containsString:@"STRICT_ALL_TABLES"], @"sql_mode was: %@", mode);
+}
+
+- (void)testTriggerTogglesSetAndClearTheSessionFlag {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+
+	XCTAssertNoThrow([connection disableTriggers]);
+	XCTAssertEqualObjects([self scalar:@"SELECT @DISABLE_TRIGGERS AS `v`;" onConnection:connection], @1);
+
+	XCTAssertNoThrow([connection enableTriggers]);
+	XCTAssertEqualObjects([self scalar:@"SELECT @DISABLE_TRIGGERS AS `v`;" onConnection:connection],
+						  [NSNull null]);
+}
+
+- (void)testErrorNumberAndErrorTextReportTheLastFailure {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+	NSError *error = nil;
+
+	[self fetch:@"SELECT * FROM mad_no_such_table;" onConnection:connection error:&error];
+	XCTAssertNotNil(error);
+
+	XCTAssertNotEqual([connection errorNumber], (unsigned int)0);
+	const char *text = [connection errorText];
+	XCTAssertTrue(text != NULL);
+	XCTAssertTrue([[NSString stringWithUTF8String:text] containsString:@"mad_no_such_table"],
+				  @"errorText was: %s", text);
+}
+
+- (void)testErrorWithConnectionDescribesTheServerState {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+
+	NSError *error = [MysqlException errorWithConnection:connection domain:@"MADMySQLTests" andCode:7];
+
+	XCTAssertEqualObjects(error.domain, @"MADMySQLTests");
+	XCTAssertEqual(error.code, 7);
+	XCTAssertEqualObjects(error.userInfo[NSLocalizedFailureReasonErrorKey], @"Executing Error");
+	XCTAssertTrue([error.localizedDescription hasPrefix:@"MySQL says"], @"was: %@", error.localizedDescription);
+}
+
+#pragma mark - Escaping through the connection
+
+- (void)testEscapeInConnectionMatchesTheConnectionHelper {
+	[self requireServer];
+	MysqlConnection *connection = [self openConnection];
+
+	// The NSString category and the connection's own helper are two entry
+	// points to mysql_real_escape_string; they must agree.
+	XCTAssertEqualObjects([@"O'Brien" mysqlEscapeInConnection:connection],
+						  [connection mysqlEscapeString:@"O'Brien"]);
 }
 
 @end

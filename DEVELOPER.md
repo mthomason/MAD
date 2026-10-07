@@ -63,13 +63,20 @@ pins in `db.conf` changed or the volume was reset.
 
 The container publishes **127.0.0.1:3306**, which is what the tests connect to,
 so it needs that port free. A stock MySQL install runs as `_mysql` and will not
-show up in `lsof` — if `up` reports the port busy, either stop that server or
-publish this one elsewhere and point the tests at it:
+show up in `lsof` — if `up` reports the port busy, either stop that server (then
+the container owns 3306 and nothing else is needed), or move both halves to
+another port: publish the container with `MAD_TESTDB_PORT=<port>` and add
+`MAD_MYSQL_TEST_PORT=<port>` to the MADMySQL scheme's **Test** action
+environment variables (Xcode: Edit Scheme → Test → Arguments → Environment
+Variables). The scheme sets `shouldUseLaunchSchemeArgsEnv = NO` so that the
+Test action's own environment is the one the test process gets.
 
-```
-MAD_TESTDB_PORT=13306 MADMySQL/TestDatabase/mysql-test-db.sh up
-MAD_MYSQL_TEST_PORT=13306 xcodebuild test -workspace Reports.xcworkspace -scheme MADMySQL ...
-```
+**`xcodebuild` cannot pass these through the shell.** A shell environment
+variable does not reach the test process, and neither does a `SIMCTL_CHILD_`
+prefix — both were measured, not assumed, so `MAD_MYSQL_TEST_PORT=13306
+xcodebuild test …` silently runs against 3306 instead. The scheme's
+environment is the only way in. (This applies to the `MAD_TDS_TEST_*` variables
+in the `MADTdsClient` suite too.)
 
 None of this is fatal to a test run: when no database can be provisioned, the
 live tests skip, exactly as they do on a machine with no MySQL at all.

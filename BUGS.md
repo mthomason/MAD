@@ -2199,6 +2199,75 @@ libmysqlclient; it skips rather than fails when no server is reachable.
   `MADMySQLTests testNewSafeLiteralWithoutASessionFallsBackToAnsiQuoting` pins the
   no-session path, backslash and all, so the limitation is stated rather than implied.
 
+### `MysqlUpdate -execute` raises an out-of-bounds string exception instead of its own error
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADMySQL/Source/MysqlUpdate.m:70` (the column list) and `:130` (the qualifier)
+- **Behavior:** Both buffers are built with a leading separator and then trimmed with
+  `deleteCharactersInRange:NSMakeRange(0, 2)` / `NSMakeRange(0, 4)`.  Nothing forces
+  either buffer to have that many characters:
+
+  - no `rowData` (or an empty dictionary) → the column list is still empty → the
+    two-character delete raises `NSInvalidArgumentException` ("Range or index out of
+    bounds");
+  - `rowData` but no `qualifier` → the WHERE clause is still empty → the four-character
+    delete raises the same way.
+
+  The class intends to report "table must be specified" (it does, for a missing table)
+  and needs the equivalent for a missing qualifier, but neither guard is reached.
+- **Why it matters:** An update built without a qualifier is the classic "forgot the
+  WHERE clause" mistake; instead of a diagnostic it takes the process down with an
+  exception that names `__NSCFString`, not the caller's mistake.  (Losing the qualifier
+  *silently* would be worse — the error is the point.)
+- **Test:** `MysqlUpdateTests testExecuteWithoutRowDataRaisesAnInvalidArgumentException`
+  and `testExecuteWithAnEmptyRowDataDictionaryRaisesTheSameWay` (offline), plus
+  `MADMySQLLiveTests testUpdateWithoutAQualifierRaisesAnInvalidArgumentException` — the
+  live one because the row-data path escapes through the session before it reaches the
+  qualifier delete, so it cannot be reproduced without a server.
+
+### `MysqlConnection`'s transaction toggles crash on a connection with no handle
+- **Status:** Confirmed (latent -- no caller builds such a connection)
+- **Where:** `MADMySQL/Source/MysqlConnection.m:214-232` (`enableTransactions`,
+  `disableTransactions`, and the commit/rollback pair beside them)
+- **Behavior:** These call `mysql_autocommit(_connection, 0)` / `mysql_commit` /
+  `mysql_rollback` without checking the handle.  `mysql_autocommit` dereferences it, so
+  `[[MysqlConnection alloc] init]` followed by `-enableTransactions` crashes the process
+  (verified: the test process died at that call, with no exception to catch).
+- **Why it matters:** Only latent.  Every production path gets its connection from
+  `+connectToServer:…`, which answers `nil` rather than a handle-less object, and no
+  in-tree caller invokes the transaction methods yet — they are API for the query cache
+  and the portable store.  The trap is that the class is `init`-able and looks usable;
+  note that the neighbouring accessors (`-errorNumber`, `-errorText`) *are* NULL-safe,
+  which is what makes the omission look inconsistent rather than deliberate.
+- **Test:** `MADMySQLTests testErrorAccessorsOnAConnectionWithoutAServer` and
+  `testTransactionsFlagStartsOff` pin the safe half.  The crash itself is not asserted —
+  it terminates the test process, so there is nothing to catch.
+
+### `MysqlInsert -execute` reports `ULONG_MAX` rows for a duplicate it ignored
+- **Status:** Quirk (left as is)
+- **Where:** `MADMySQL/Source/MysqlInsert.m:139-142`
+- **Behavior:** With `ignoreDuplicateErrors` set, a failed `mysql_stmt_execute` is
+  swallowed and the code goes straight on to read `mysql_affected_rows`, which answers
+  `(my_ulonglong)-1` for a statement that did not run.  `affectedRows` therefore comes
+  back as 18446744073709551615 rather than 0.
+- **Why it matters:** The flag exists so an insert can be "fire and forget"; a caller
+  that logs or accumulates `affectedRows` will add a number larger than the row count of
+  the universe.  No in-tree caller reads it after an ignored duplicate.
+- **Test:** `MADMySQLLiveTests testInsertRejectsADuplicateKeyUnlessToldToIgnoreIt`
+  asserts the value exactly, so a future fix to 0 fails the test rather than passing
+  silently.
+
+### `MysqlTruncate`'s factories skip the nil-connection check the other DML classes make
+- **Status:** Quirk (left as is)
+- **Where:** `MADMySQL/Source/MysqlTruncate.m:22-33` against `MysqlInsert.m:27-33`,
+  `MysqlUpdate.m:26-32`, `MysqlDelete.m:25-31`
+- **Behavior:** `MysqlInsert`, `MysqlUpdate` and `MysqlDelete` all raise
+  `MysqlException` from their factories when handed a nil connection; the two truncate
+  factories do not, and hand back an object that fails at `-execute` instead.
+- **Why it matters:** A caller that checks for a raise (or relies on the factory to
+  refuse) gets an object rather than a diagnosis.  Harmless today — nothing in-tree
+  passes nil — but the four classes should behave the same way.
+- **Test:** `MysqlTruncateTests testFactoryAcceptsANilConnection`.
+
 ---
 
 

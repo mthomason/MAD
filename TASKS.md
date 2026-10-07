@@ -181,8 +181,8 @@ The outcome split three ways:
 |---|---|
 | `MADTdsClient` | 1 — `SYBDATETIME4` counts its days from the wrong epoch |
 | MAD Designer (app) | 0 |
-| `MADMySQL` | 0 |
-| `MADFileManager` | 0 |
+| `MADMySQL` | 4 — `MysqlUpdate`'s out-of-bounds delete, `MysqlConnection`'s handle-less transaction crash, `MysqlInsert`'s `ULONG_MAX` row count, `MysqlTruncate`'s missing factory guard |
+| `MADFileManager` | 8 — two live crashes (`MADCloudFileCoordinator` init, `MADDirectoryMonitor` cancel) plus the `-setFileCoordinator:` URL/metadata mix-up and five lesser records |
 | `MAD` | 0 |
 | `MADExplorer` | 0 |
 | `MADAPI` | 0 |
@@ -191,10 +191,13 @@ The outcome split three ways:
 produced: defects fixed, load-bearing behaviour documented instead of changed, and
 `BUGS.md` updated in place with the fix, its `Now:` line, and the test that covers it.
 
-**One thing this pass did not settle:** every live-database finding was verified against
-the offline suite or by reading the driver, not by a run against a real server. The
-`MADMySQL` and `MADTdsClient` live suites skip when no server is reachable, so a
-`scheme`-level green run does not mean the wire path was exercised.
+**The MySQL half of this caveat is now closed.** `MADMySQL/TestDatabase/mysql-test-db.sh`
+builds the live-test server in Docker from a pinned image and a checksum-verified copy of
+the standard `employees` dataset, and the scheme starts it for the test action. The
+`MADMySQL` suite runs 119 tests, 0 skipped, against that server (verified against the
+container on a non-default port — the scheme environment carries the port, because
+`xcodebuild` does not forward shell variables to the test process). `MADTdsClient` still
+has the old caveat: its live findings were verified offline or by reading the driver.
 
 ---
 
