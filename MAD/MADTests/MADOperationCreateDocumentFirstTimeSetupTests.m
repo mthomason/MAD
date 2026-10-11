@@ -102,8 +102,11 @@
 
 - (void)testCancelledExecuteFinishesWithoutTouchingTheDocument {
 	NSURL *directory = [self newTemporaryDirectory];
+	// The store is keyed by document name in the host's shared tmp; the unique
+	// fixture directory goes into the name so the store starts empty.
 	MADocument *document = [[MADocument alloc] initWithFileURL:
-							[directory URLByAppendingPathComponent:@"first-time.mad"]];
+							[directory URLByAppendingPathComponent:
+							 [NSString stringWithFormat:@"first-time-%@.mad", directory.lastPathComponent]]];
 
 	MADFirstTimeSetupTestDependency *dependency = [[MADFirstTimeSetupTestDependency alloc] init];
 	dependency.document = document;
@@ -123,8 +126,11 @@
 
 - (void)testExecuteCreatesAndSavesTheDocumentModel {
 	NSURL *directory = [self newTemporaryDirectory];
+	// The store is keyed by document name in the host's shared tmp; the unique
+	// fixture directory goes into the name so the store starts empty.
 	MADocument *document = [[MADocument alloc] initWithFileURL:
-							[directory URLByAppendingPathComponent:@"first-time.mad"]];
+							[directory URLByAppendingPathComponent:
+							 [NSString stringWithFormat:@"first-time-%@.mad", directory.lastPathComponent]]];
 
 	MADFirstTimeSetupTestDependency *dependency = [[MADFirstTimeSetupTestDependency alloc] init];
 	dependency.document = document;

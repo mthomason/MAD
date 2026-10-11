@@ -315,7 +315,11 @@
 // not a file wrapper; this pins that the superclass bookkeeping still runs around it.
 - (void)testOpenAndCloseMoveThroughTheUIDocumentStateMachine {
 
-	NSURL *documentURL = [[self newTestDirectory] URLByAppendingPathComponent:@"lifecycle.mad"];
+	// The store is keyed by document name in the host's shared tmp; the unique
+	// fixture directory goes into the name so the store starts empty.
+	NSURL *directory = [self newTestDirectory];
+	NSURL *documentURL = [directory URLByAppendingPathComponent:
+						  [NSString stringWithFormat:@"lifecycle-%@.mad", directory.lastPathComponent]];
 
 	// Build the fixture on disk through the same save path the app uses: the
 	// document's own store context, so the definition lands inside the archive.
@@ -409,7 +413,9 @@
 // document.undoManager must be live, and a designer edit (updateElements:setBold: and
 // its inverse) must undo and redo against a real store-backed document.
 - (void)testDesignerBoldUndoesAndRedoesThroughTheDocument {
-	NSURL *documentURL = [[self newTestDirectory] URLByAppendingPathComponent:@"undo.mad"];
+	NSURL *directory = [self newTestDirectory];
+	NSURL *documentURL = [directory URLByAppendingPathComponent:
+						  [NSString stringWithFormat:@"undo-%@.mad", directory.lastPathComponent]];
 	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
 
 	// The context is normally opened by readFromURL:; KVC it in the way the other
@@ -442,7 +448,9 @@
 // opened lifecycle is pinned separately by
 // testOpenAndCloseMoveThroughTheUIDocumentStateMachine.
 - (void)testCloseReachesClosedStateAndReleasesTheFilePresenter {
-	NSURL *documentURL = [[self newTestDirectory] URLByAppendingPathComponent:@"close.mad"];
+	NSURL *directory = [self newTestDirectory];
+	NSURL *documentURL = [directory URLByAppendingPathComponent:
+						  [NSString stringWithFormat:@"close-%@.mad", directory.lastPathComponent]];
 	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
 	RptqStoreContext *context = [self newTestContext];
 	[document setValue:context forKey:@"storeContext"];

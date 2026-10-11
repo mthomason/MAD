@@ -191,7 +191,10 @@
 	// The `break` at the document branch means a document dependency by itself
 	// never sets deleteFile, so nothing is deleted.
 	NSURL *directory = [self newTemporaryDirectory];
-	NSURL *documentURL = [directory URLByAppendingPathComponent:@"document.mad"];
+	// The store is keyed by document name in the host's shared tmp; the unique
+	// fixture directory goes into the name so the store starts empty.
+	NSURL *documentURL = [directory URLByAppendingPathComponent:
+						  [NSString stringWithFormat:@"document-%@.mad", directory.lastPathComponent]];
 	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
 	[[NSFileManager defaultManager] createFileAtPath:documentURL.path contents:[NSData data] attributes:nil];
 

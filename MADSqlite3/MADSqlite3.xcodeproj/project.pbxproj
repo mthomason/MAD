@@ -721,6 +721,7 @@
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"MADLOG_ACCESSOR=GetSqlite3Log",
+					"$(inherited)",
 				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -755,6 +756,7 @@
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"MADLOG_ACCESSOR=GetSqlite3Log",
+					"$(inherited)",
 				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;

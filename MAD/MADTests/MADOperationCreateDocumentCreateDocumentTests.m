@@ -153,7 +153,10 @@
 
 - (void)testExecuteWithFileUrlCreatesAndSavesTheDocument {
 	NSURL *directory = [self newTemporaryDirectory];
-	NSURL *url = [directory URLByAppendingPathComponent:@"created.mad"];
+	// The store is keyed by document name in the host's shared tmp; the unique
+	// fixture directory goes into the name so the store starts empty.
+	NSURL *url = [directory URLByAppendingPathComponent:
+				  [NSString stringWithFormat:@"created-%@.mad", directory.lastPathComponent]];
 
 	MADOperationCreateDocumentCreateDocument *operation;
 	operation = [[MADOperationCreateDocumentCreateDocument alloc] initWithFileUrl:url];
@@ -197,7 +200,8 @@
 
 - (void)testExecuteCancelledFinishesWithoutCreatingTheDocument {
 	NSURL *directory = [self newTemporaryDirectory];
-	NSURL *url = [directory URLByAppendingPathComponent:@"cancelled.mad"];
+	NSURL *url = [directory URLByAppendingPathComponent:
+				  [NSString stringWithFormat:@"cancelled-%@.mad", directory.lastPathComponent]];
 
 	MADOperationCreateDocumentCreateDocument *operation;
 	operation = [[MADOperationCreateDocumentCreateDocument alloc] initWithFileUrl:url];
