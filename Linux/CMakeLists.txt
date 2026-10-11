@@ -147,6 +147,15 @@ mad_add_framework(madfoundation MADFOUNDATION_SOURCES
 	MADOperationConditionResultTests
 	MADDataColumnTests
 	MADCredentialTests
+	BDHostTests
+	MADApplicationTests
+	MADBlockObserverTests
+	MADDataTableBaseTests
+	MADDataTableVirtualTests
+	MADOperationBooleanAndTests
+	MADURLFactoryTests
+	NSOperationAdvancedTests
+	madlibTests
 )
 
 set(SOURCE_DIR "${REPO_ROOT}/MADDataStructures/Source")
@@ -171,8 +180,10 @@ include(cmake/MADFileManagerSources.cmake)
 mad_make_include_shim(MADFileManager "${SOURCE_DIR}")
 mad_add_framework(madfilemanager MADFILEMANAGER_SOURCES
 	MADAppStorageOptionTests
+	MADDirectoryMonitorTests
 	MADFileInfoTests
 	MADFileUtilitiesTests
+	MADLocalFileCoordinatorTests
 	MADMetaDataTests
 	MADStorageStateTests
 )
@@ -224,8 +235,10 @@ file(CREATE_LINK "${SQLITE3_INCLUDE_DIR}/sqlite3.h"
 	"${CMAKE_BINARY_DIR}/sqlite3-shim/MADSqlite3/sqlite3.h" SYMBOLIC)
 mad_add_framework(madsqlite3 MADSQLITE3_SOURCES
 	MADDatabaseSqlite3DatabaseTests
+	MADDatabaseSqlite3ResultValueTests
 	MADDatabaseSqlite3Tests
 	MADDataTableFastBenchmarkTests
+	MADDataTableFastSelectTests
 )
 target_include_directories(madsqlite3 PUBLIC "${CMAKE_BINARY_DIR}/sqlite3-shim")
 target_link_libraries(madsqlite3 PUBLIC madfoundation madapi maddatastructures ${SQLITE3_LIBRARY})
@@ -263,6 +276,15 @@ set(SOURCE_DIR "${REPO_ROOT}/MADMySQL/Source")
 include(cmake/MADMySQLSources.cmake)
 mad_make_include_shim(MADMySQL "${SOURCE_DIR}")
 mad_add_framework(madmysql MADMYSQL_SOURCES
+	MADMySQLLiveTests
+	MADMySQLTests
+	MysqlDeleteTests
+	MysqlExceptionTests
+	MysqlFetchFieldTests
+	MysqlInsertTests
+	MysqlSupportTypesTests
+	MysqlTruncateTests
+	MysqlUpdateTests
 )
 target_link_libraries(madmysql PUBLIC madfoundation madapi ${MYSQL_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
@@ -281,11 +303,44 @@ endforeach()
 mad_add_framework(mad MAD_SOURCES
 	MADCoreLogicTests
 	MADDataTableRegressionTests
+	MADDesignerQueryTests
+	MADDesignerViewerTests
+	MADDocumentObjectDataReferenceTests
+	MADDocumentObjectDataReferenceAggregateTests
+	MADDocumentObjectDataReferenceImageTests
+	MADDocumentObjectDataReferenceLabelDynamicTests
+	MADDocumentObjectDataReferenceLabelStaticTests
+	MADFontTests
+	MADLegacyStoreConversionTests
+	MADModelQueryFieldTests
+	MADModelQueryTableTests
+	MADNotificationAndOperationTests
+	MADOperationHoldsProtocolsTests
+	MADPageOptionsTests
+	MADQueryCacheAggregateFunctionTests
+	MADQueryDefinitionTests
+	MADQueryFullTests
+	MADQueryPredicateTests
+	MADQuerySampleDataTests
+	MADQuerySelectExpressionTests
+	MADQueryTestTests
+	MADQueryFullTableEnumeratorTests
+	MADQueryMaxFieldLengthTests
+	MADQuerySimpleTypesTests
+	MADReportSectionEnumeratorTests
+	MADReportSectionRepresentationTests
+	MADReportSectionTests
 	MADRptqDatabaseTests
 	MADRptqDocumentSectionTests
 	MADRptqQueryTests
 	MADRptqValueTypeTests
+	MADSchemaFieldSelectorModelTests
 	MADStoreTests
+	RptqDataHelperTests
+	RptqDocumentElementFormulaTests
+	RptqDocumentElementGroupKeyTests
+	RptqDocumentElementLabelLinkTests
+	RptqDocumentSectionEnumeratorTests
 	RptqStoreContextTests
 )
 # The framework's own quoted imports reach across its subdirectories, the way
@@ -302,6 +357,15 @@ target_link_libraries(mad PUBLIC
 	madsqlite3 madmysql madtdsclient madtds
 	${SQLITE3_LIBRARY} ${FREETDS_LIBRARY} ${MYSQL_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY}
 	${ARCHIVE_LIBRARY} ${ZLIB_LIBRARY} ${BZIP2_LIBRARY})
+# MAD's SQL assembly (MADQueryCacheAggregateFunction and the query-cache classes)
+# sends -whereClauseWithRowIds: / -whereClauseWithParameters:, which MADSqlite3's
+# MADQuery+Sqlite3 category implements.  A category is reached by message send,
+# not by symbol, so the linker drops its archive member -- whole-archiving
+# libmadsqlite3.a would keep it but defines the compat objects every framework
+# archive embeds a second time.  Compiling the one category into this archive
+# instead puts it behind the whole-archive the tests already use; its only
+# external need, MADDatabaseSqlite3, is pulled from libmadsqlite3.a by symbol.
+target_sources(mad PRIVATE "${REPO_ROOT}/MADSqlite3/Source/MADQuery+Sqlite3.m")
 target_include_directories(madtdsclient PUBLIC "${CMAKE_BINARY_DIR}/umbrella-shim")
 target_link_libraries(madtdsclient PUBLIC madtds madapi madcocoaextensions madfoundation)
 

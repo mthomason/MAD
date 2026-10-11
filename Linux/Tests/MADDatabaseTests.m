@@ -10,6 +10,59 @@
 #import "MADTestSupport.h"
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADNotificationDidReadRows.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADFoundation/MADCredential.h>
+
+// -newDatabaseWithConnection: is implemented on the base class but declared nowhere
+// public; this test-only category is the deliberate bridge.
+@interface MADDatabase (TestFactory)
++ (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection;
+@end
+
+#pragma mark - Test doubles
+
+// A delegate that implements the optional credential lookup, standing in for the
+// application object that vends keychain credentials to a database.
+@interface MADTestCredentialDelegate : NSObject <MADDatabaseResultsProtocol>
+@property (nonatomic, strong) MADCredential *credential;
+@property (nonatomic, copy) NSString *lastKey;
+@end
+
+@implementation MADTestCredentialDelegate
+- (MADCredential *)getCredentialsForKey:(NSString *)key {
+	self.lastKey = key;
+	return self.credential;
+}
+@end
+
+// A delegate that does not implement the optional lookup at all.
+@interface MADTestSilentDelegate : NSObject <MADDatabaseResultsProtocol>
+@end
+
+@implementation MADTestSilentDelegate
+@end
+
+// The smallest concrete connection: the base class throws from every property, so
+// anything that reads a connection asks a subclass.  Mirrors MADDatabaseConnectionMySql.
+@interface MADTestCredentialConnection : MADDatabaseConnection
+@property (nonatomic, copy) NSString *connectionString;
+@end
+
+@implementation MADTestCredentialConnection
+@synthesize connectionString = _connectionString;
+
+- (MADDatabaseType)databaseType { return MADDatabaseTypeSample1; }
+- (BOOL)requiresCredentials { return YES; }
+- (NSString *)identifier { return [[self class] Identifier]; }
++ (NSString *)Identifier { return @"MADTestCredentialConnection"; }
+
+- (instancetype)copyWithZone:(NSZone *)zone {
+	MADTestCredentialConnection *copy = [[[self class] allocWithZone:zone] init];
+	copy.connectionString = self.connectionString;
+	return copy;
+}
+
+@end
 
 #pragma mark - Class-level defaults
 
@@ -174,6 +227,151 @@ static void testReadRowPostsNotification(void) {
 	MAD_PASS(capturedObject == db, "the notification's object is the database");
 }
 
+#pragma mark - Credential lookup
+
+static void testCredentalsWithConnectionCopiesFromRespondingDelegate(void) {
+	MADTestCredentialDelegate *delegate = [[MADTestCredentialDelegate alloc] init];
+	MADCredential *credential = [[MADCredential alloc] initWithUsername:@"alice" andPassword:@"hunter2"];
+	delegate.credential = credential;
+
+	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
+	connection.connectionString = @"(MADTestCredentialConnection)[host:3306]db";
+
+	MADDatabase *db = [[MADDatabase alloc] init];
+	db.delegate = delegate;
+
+	MADCredential *received = [db credentalsWithConnection:connection];
+
+	MAD_PASS(received != nil, "the credential comes back");
+	MAD_PASS_EQUAL(received.username, @"alice", "the username");
+	MAD_PASS_EQUAL(received.password, @"hunter2", "the password");
+	// The connection string is the key the lookup is made under.
+	MAD_PASS_EQUAL(delegate.lastKey, @"(MADTestCredentialConnection)[host:3306]db", "the connection string is the lookup key");
+	// The delegate keeps ownership of its credential; the caller receives a copy.
+	MAD_PASS(received != credential, "the caller receives a copy");
+}
+
+static void testCredentalsWithConnectionReturnsNilWhenDelegateDoesNotRespond(void) {
+	MADTestSilentDelegate *delegate = [[MADTestSilentDelegate alloc] init];
+	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
+	connection.connectionString = @"(MADTestCredentialConnection)[host:3306]db";
+
+	MADDatabase *db = [[MADDatabase alloc] init];
+	db.delegate = delegate;
+
+	MAD_PASS([db credentalsWithConnection:connection] == nil, "a silent delegate yields no credential");
+}
+
+static void testCredentalsWithConnectionReturnsNilWhenDelegateHasNoCredential(void) {
+	MADTestCredentialDelegate *delegate = [[MADTestCredentialDelegate alloc] init];
+	delegate.credential = nil;
+
+	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
+	connection.connectionString = @"(MADTestCredentialConnection)[host:3306]db";
+
+	MADDatabase *db = [[MADDatabase alloc] init];
+	db.delegate = delegate;
+
+	MAD_PASS([db credentalsWithConnection:connection] == nil, "a delegate with no credential yields none");
+}
+
+#pragma mark - Factory
+
+static void testNewDatabaseWithConnectionReturnsInstanceOfReceiver(void) {
+	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
+	MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
+
+	MAD_PASS(db != nil, "the factory builds an instance");
+	MAD_PASS_EQUAL(NSStringFromClass([db class]), NSStringFromClass([MADDatabase class]), "the instance is the receiver class");
+	// The base factory ignores the connection; subclasses that care override it.
+	MAD_PASS(db.databaseConnection == nil, "the base factory ignores the connection");
+}
+
+#pragma mark - NSCopying
+
+static void testCopyPreservesState(void) {
+	MADDatabase *db = [[MADDatabase alloc] init];
+	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
+	connection.connectionString = @"(MADTestCredentialConnection)[host:3306]db";
+	db.databaseConnection = connection;
+	[db.errors addObject:[NSError errorWithDomain:@"com.example.tests" code:9 userInfo:nil]];
+	[db setValue:@YES forKey:@"isLicensedUser"];
+
+	MADDatabase *copy = [db copy];
+
+	MAD_PASS(copy != db, "the copy is a different object");
+	MAD_PASS(copy.isLicensedUser, "the licensed flag survives");
+	MAD_PASS(copy.errors.count == (NSUInteger)1, "the errors survive");
+	// The errors array is a distinct mutable array, not the original.
+	MAD_PASS(copy.errors != db.errors, "the errors array is distinct");
+	// The connection is copied, not shared.
+	MAD_PASS(copy.databaseConnection != db.databaseConnection, "the connection is copied");
+	MAD_PASS_EQUAL(copy.databaseConnection.connectionString, @"(MADTestCredentialConnection)[host:3306]db", "the connection string survives");
+}
+
+#pragma mark - NSCoding
+
+// MADDatabase conforms to NSCoding, not NSSecureCoding, and its -initWithCoder: uses the
+// non-secure -decodeObjectForKey:.  It is therefore only archivable through the
+// insecure path.  Documented in BUGS.md ("MADDatabase is NSCoding-only").
+static void testInsecureNSCodingRoundTrip(void) {
+	MADDatabase *db = [[MADDatabase alloc] init];
+	[db.errors addObject:[NSError errorWithDomain:@"com.example.tests" code:9 userInfo:nil]];
+	[db setValue:@YES forKey:@"isLicensedUser"];
+
+#if __APPLE__
+	NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initRequiringSecureCoding:NO];
+	[archiver encodeObject:db forKey:NSKeyedArchiveRootObjectKey];
+	NSData *data = archiver.encodedData;
+	MAD_PASS(data != nil, "the insecure archive has bytes");
+
+	NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:NULL];
+	// -initForReadingFromData:error: defaults to requiring secure coding, and MADDatabase
+	// is NSCoding-only; the classic decode path is the only one it can satisfy.
+	unarchiver.requiresSecureCoding = NO;
+	MADDatabase *decoded = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+	[unarchiver finishDecoding];
+#else
+	// GNUstep's NSKeyedArchiver has no instance API (-initRequiringSecureCoding:,
+	// -encodedData) and its unarchiver no -initForReadingFromData:error:, so the same
+	// insecure coder is reached through the class entry points -- the path the framework
+	// ships on this platform.
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:db requiringSecureCoding:NO error:NULL];
+	MAD_PASS(data != nil, "the insecure archive has bytes");
+	MADDatabase *decoded = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+#endif
+	MAD_PASS(decoded != nil, "the database round trips");
+	MAD_PASS(decoded.isLicensedUser, "the licensed flag survives the round trip");
+	MAD_PASS(decoded.errors.count == (NSUInteger)1, "the errors survive the round trip");
+	MAD_PASS(decoded.databaseConnection == nil, "the connection does not survive");
+}
+
+static void testSecureArchivingIsUnsupported(void) {
+	MADDatabase *db = [[MADDatabase alloc] init];
+	NSError *error = nil;
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:db requiringSecureCoding:YES error:&error];
+
+	MAD_PASS(data == nil, "the strict archive is refused");
+#if __APPLE__
+	MAD_PASS(error != nil, "the refusal carries an error");
+#else
+	// GNUstep's strict archiver answers nil with no error (Linux/README.md).
+	MAD_PASS(error == nil, "GNUstep refuses without an error");
+#endif
+}
+
+#pragma mark - Literal escaping limits
+
+// The base class escapes only the quote character.  A backslash is deliberately left
+// alone: whether it escapes the following character depends on the session's
+// NO_BACKSLASH_ESCAPES setting, which only the dialect's connection object knows.  See
+// MADDatabaseSQLProtocol.h and BUGS.md.
+static void testNewSafeLiteralLeavesBackslashUntouched(void) {
+	MADDatabase *db = [[MADDatabase alloc] init];
+	MAD_PASS_EQUAL([db newSafeLiteral:@"a\\b"], @"'a\\b'", "a backslash is left alone");
+	MAD_PASS_EQUAL([db newSafeLiteral:@"a\\'b"], @"'a\\''b'", "a backslash before a quote stays as written");
+}
+
 MAD_TEST_MAIN("MADDatabaseTests",
 	MAD_TEST(testClassLevelDefaults),
 	MAD_TEST(testInstanceIdentifier),
@@ -196,4 +394,12 @@ MAD_TEST_MAIN("MADDatabaseTests",
 	MAD_TEST(testSqlAggregateFunctions),
 	MAD_TEST(testAbstractMethodsThrow),
 	MAD_TEST(testInertStubsReturnDefaults),
-	MAD_TEST(testReadRowPostsNotification));
+	MAD_TEST(testReadRowPostsNotification),
+	MAD_TEST(testCredentalsWithConnectionCopiesFromRespondingDelegate),
+	MAD_TEST(testCredentalsWithConnectionReturnsNilWhenDelegateDoesNotRespond),
+	MAD_TEST(testCredentalsWithConnectionReturnsNilWhenDelegateHasNoCredential),
+	MAD_TEST(testNewDatabaseWithConnectionReturnsInstanceOfReceiver),
+	MAD_TEST(testCopyPreservesState),
+	MAD_TEST(testInsecureNSCodingRoundTrip),
+	MAD_TEST(testSecureArchivingIsUnsupported),
+	MAD_TEST(testNewSafeLiteralLeavesBackslashUntouched));

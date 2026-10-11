@@ -5,12 +5,13 @@
 //  The Linux side of madlog.h: the os_log_* shims the frameworks' call sites
 //  reach Linux through.  There is no Apple counterpart to port -- on Apple
 //  these are os_log's own functions -- so everything here is new platform
-//  behaviour and is pinned directly.
+//  behaviour and is pinned directly, plus the two cases the Xcode
+//  madlogTests.m pins about the accessors (added with the master merge).
 //
 //  GNUstep's NSString formatting prints an os_log privacy annotation
 //  ("%{public}@") literally, so MADLogFormat strips it; the first test group
 //  is that stripper, the second is the macro path that keeps Apple's spelling
-//  compiling and emitting.
+//  compiling and emitting, and the third is the handle accessors.
 //
 
 #import "MADTestSupport.h"
@@ -52,6 +53,18 @@ static void testFormattingThroughTheShim(void) {
 	MAD_PASS_EQUAL(string, @"value: 7", "the stripped format formats normally");
 }
 
+static void testFoundationLogIsCreated(void) {
+	// The Xcode case pins a real os_log handle (not nil, not OS_LOG_DISABLED);
+	// the Linux shim's accessors are no-op handles by design (madlog.m), so the
+	// platform's equivalent assertion is the one the shim contract makes:
+	// GetFoundationLog() answers the no-op handle.
+	MAD_PASS(GetFoundationLog() == NULL, "the Linux shim's handle is the no-op handle");
+}
+
+static void testFoundationLogIsStableAcrossCalls(void) {
+	MAD_PASS(GetFoundationLog() == GetFoundationLog(), "the handle is stable across calls");
+}
+
 static void testHandleTypeAndConstants(void) {
 	os_log_t created = os_log_create("com.mad", "tests");
 	MAD_PASS(created == NULL, "os_log_create is the no-op handle");
@@ -82,5 +95,7 @@ MAD_TEST_MAIN("madlogTests",
 	MAD_TEST(testPercentEscapeIsNotAnAnnotation),
 	MAD_TEST(testMalformedAnnotationIsLeftAlone),
 	MAD_TEST(testFormattingThroughTheShim),
+	MAD_TEST(testFoundationLogIsCreated),
+	MAD_TEST(testFoundationLogIsStableAcrossCalls),
 	MAD_TEST(testHandleTypeAndConstants),
 	MAD_TEST(testOsLogCallsCompileAndEmit));

@@ -25,6 +25,25 @@
 @synthesize database = _database;
 @end
 
+// A query that fails the way a driver's parser would: it sets the error and still
+// returns whatever SQL it managed to build.
+@interface MADFailingQuery : MADQuery
+@property (nonatomic, assign) BOOL sawNullErrorPointer;
+@end
+
+@implementation MADFailingQuery
+
+- (NSString *)getSql:(NSError * __autoreleasing *)error {
+	if (error == NULL) {
+		self.sawNullErrorPointer = YES;
+		return @"";
+	}
+	*error = [NSError errorWithDomain:@"MADTestQuery" code:7 userInfo:nil];
+	return @"SELECT partial";
+}
+
+@end
+
 #pragma mark - Base-class defaults
 
 static void testBaseDefaults(void) {
@@ -94,6 +113,46 @@ static void testGetSqlWithDatabaseSetsDatabase(void) {
 	MAD_PASS(error == nil, "no error from the injecting getSql");
 }
 
+#pragma mark - Error propagation
+
+static void testGetSqlWithDatabasePropagatesSubclassError(void) {
+	MADFailingQuery *query = [[MADFailingQuery alloc] initWithObject:nil];
+
+	NSError *error = nil;
+	NSString *sql = [query getSql:nil error:&error];
+
+	// The SQL a failing build managed to produce is still handed back.
+	MAD_PASS_EQUAL(sql, @"SELECT partial", "the partial SQL is handed back");
+	MAD_PASS(error != nil, "the error is propagated");
+	MAD_PASS(error.code == 7, "the error code survives");
+	MAD_PASS_EQUAL(error.domain, @"MADTestQuery", "the error domain survives");
+}
+
+static void testGetSqlWithDatabaseToleratesNullErrorPointer(void) {
+	MADFailingQuery *query = [[MADFailingQuery alloc] initWithObject:nil];
+
+	// The two-argument form always hands its callee a local error pointer, so the
+	// failure is dropped on the floor rather than crashing.
+	MAD_PASS_EQUAL([query getSql:nil error:NULL], @"SELECT partial", "a NULL error pointer is tolerated");
+}
+
+static void testGetSqlToleratesNullErrorPointer(void) {
+	MADFailingQuery *query = [[MADFailingQuery alloc] initWithObject:nil];
+
+	// A direct caller of the one-argument form may pass NULL; the callee must check.
+	MAD_NO_THROW([query getSql:NULL], "a NULL error pointer does not throw");
+	MAD_PASS(query.sawNullErrorPointer, "the callee saw the NULL pointer");
+}
+
+#pragma mark - Field keys without the protocol
+
+static void testFieldKeyForIndexWithoutFieldKeysProtocol(void) {
+	// The base class does not adopt MADQueryFieldKeysProtocol, so there is nothing to
+	// resolve against.
+	MADQuery *query = [[MADQuery alloc] initWithObject:nil];
+	MAD_PASS([query fieldKeyForIndex:0] == nil, "the base class resolves nothing");
+}
+
 MAD_TEST_MAIN("MADQueryTests",
 	MAD_TEST(testBaseDefaults),
 	MAD_TEST(testGetSqlReturnsEmptyString),
@@ -101,4 +160,8 @@ MAD_TEST_MAIN("MADQueryTests",
 	MAD_TEST(testFieldKeyForIndex),
 	MAD_TEST(testFieldKeyForIndexWithNilFieldKeys),
 	MAD_TEST(testGetSqlClearsFieldsAndKeys),
-	MAD_TEST(testGetSqlWithDatabaseSetsDatabase));
+	MAD_TEST(testGetSqlWithDatabaseSetsDatabase),
+	MAD_TEST(testGetSqlWithDatabasePropagatesSubclassError),
+	MAD_TEST(testGetSqlWithDatabaseToleratesNullErrorPointer),
+	MAD_TEST(testGetSqlToleratesNullErrorPointer),
+	MAD_TEST(testFieldKeyForIndexWithoutFieldKeysProtocol));

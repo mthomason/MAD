@@ -156,6 +156,21 @@ static void testQueryGroupKeyPathHasField(void) {
 	MAD_PASS_EQUAL([RptqQueryGroup keyPathHasField], @"hasField", "the has-field key path");
 }
 
+#pragma mark - Query table equality (MTProtocolCompare)
+
+// RptqQueryTable conforms to MTProtocolCompare, but its -isEqualTo: is degenerate: the
+// first clause is the tautology [sender isEqual:sender], so any non-nil argument
+// compares equal, and the fallback branch compares two nil NSNumbers.  Documented in
+// BUGS.md; no production caller reaches it today.
+static void testQueryTableIsEqualToIsDegenerate(void) {
+	RptqStoreContext *context = inMemoryContext();
+	RptqQueryTable *first = (RptqQueryTable *)[context insertObjectForEntity:@"RptqQueryTable" identifier:1];
+	RptqQueryTable *second = (RptqQueryTable *)[context insertObjectForEntity:@"RptqQueryTable" identifier:2];
+
+	MAD_PASS([first isEqualTo:second], "any non-nil argument compares equal (pinned defect)");
+	MAD_PASS(![first isEqualTo:nil], "nil does not compare equal");
+}
+
 MAD_TEST_MAIN("MADRptqQueryTests",
 	MAD_TEST(testQueryLinksReuseIdForLinkType),
 	MAD_TEST(testQueryLinksLocalizedNameForLinkType),
@@ -165,4 +180,5 @@ MAD_TEST_MAIN("MADRptqQueryTests",
 	MAD_TEST(testQueryFieldKeyConstants),
 	MAD_TEST(testQueryTableKeyConstants),
 	MAD_TEST(testQueryTableAliasForSchemaTableName),
-	MAD_TEST(testQueryGroupKeyPathHasField));
+	MAD_TEST(testQueryGroupKeyPathHasField),
+	MAD_TEST(testQueryTableIsEqualToIsDegenerate));

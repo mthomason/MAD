@@ -243,7 +243,10 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 + (NSURL *)newURLForLocalDocumentsDirectory {
 	NSArray *documentsDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *firstObject = documentsDirectories.firstObject;
-	NSURL *url = [[NSURL alloc] initWithString:firstObject];
+	// A path makes a file URL, not a scheme-less one: GNUstep's file APIs
+	// (-contentsOfDirectoryAtURL:, -writeToURL:) quietly do nothing with the
+	// latter (measured 2026-10-10), and file:// is the honest answer either way.
+	NSURL *url = [NSURL fileURLWithPath:firstObject isDirectory:YES];
 	return url;
 }
 

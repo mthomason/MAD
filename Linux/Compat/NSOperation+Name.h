@@ -4,12 +4,15 @@
 //
 //  Copyright © 2026 Michael Thomason. All rights reserved.
 //
-//  Apple's NSOperation carries a `name` property (iOS 4+/macOS 10.6+) and a
-//  `cancelled` one spelling the same thing as -isCancelled; GNUstep's has
-//  neither, and the MAD operation classes set and read both throughout.  This
+//  Apple's NSOperation carries a `name` property (iOS 4+/macOS 10.6+), a
+//  `cancelled` one spelling the same thing as -isCancelled, and an
+//  `asynchronous` one spelling the same thing as -isConcurrent (Apple renamed
+//  it in macOS 10.6/iOS 4); GNUstep's has none of them, and the MAD operation
+//  classes set and read the first two and override the third throughout.  This
 //  category supplies them on non-Apple platforms only -- associated-object
-//  storage for the name, no queue integration (GNUstep has none to integrate
-//  with).  It reaches the Linux build's Objective-C translation units through
+//  storage for the name, and the old -isConcurrent name answering what the
+//  class says about -isAsynchronous (GNUstep's own always answers NO).  It
+//  reaches the Linux build's Objective-C translation units through
 //  MADCompat.h; nothing on Apple sees it.
 //
 
@@ -22,6 +25,7 @@
 @interface NSOperation (MADCompatName)
 @property (nullable, copy) NSString *name;
 @property (readonly, getter=isCancelled) BOOL cancelled;
+@property (readonly, getter=isAsynchronous) BOOL asynchronous;
 @end
 
 #endif /* !__APPLE__ */

@@ -176,6 +176,11 @@ static inline UIEdgeInsets UIEdgeInsetsMake(CGFloat top, CGFloat left, CGFloat b
 	return insets;
 }
 
+static inline BOOL UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsets insets1, UIEdgeInsets insets2) {
+	return insets1.top == insets2.top && insets1.left == insets2.left
+		&& insets1.bottom == insets2.bottom && insets1.right == insets2.right;
+}
+
 static inline CGRect UIEdgeInsetsInsetRect(CGRect rect, UIEdgeInsets insets) {
 	return CGRectMake(rect.origin.x + insets.left,
 					  rect.origin.y + insets.top,
