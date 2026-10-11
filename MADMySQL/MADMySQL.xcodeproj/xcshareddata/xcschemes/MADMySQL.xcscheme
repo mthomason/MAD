@@ -27,8 +27,26 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldUseLaunchSchemeArgsEnv = "NO"
       shouldAutocreateTestPlan = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Start the MySQL test database"
+               scriptText = "SCRIPT=&quot;${SRCROOT}/TestDatabase/mysql-test-db.sh&quot;&#10;[ -x &quot;$SCRIPT&quot; ] || SCRIPT=&quot;$(dirname &quot;${WORKSPACE_PATH:-$PWD}&quot;)/MADMySQL/TestDatabase/mysql-test-db.sh&quot;&#10;if [ -x &quot;$SCRIPT&quot; ]; then&#10;  &quot;$SCRIPT&quot; up || echo &quot;note: the MySQL test database did not start; the live tests skip, or use whatever already answers on 3306.&quot;&#10;else&#10;  echo &quot;note: mysql-test-db.sh not found (SRCROOT=${SRCROOT}); the live tests skip without a server on 3306.&quot;&#10;fi&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "4C7014931BACDC6800301713"
+                     BuildableName = "MADMySQL.framework"
+                     BlueprintName = "MADMySQL"
+                     ReferencedContainer = "container:MADMySQL.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -41,6 +59,24 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Stop the MySQL test database"
+               scriptText = "SCRIPT=&quot;${SRCROOT}/TestDatabase/mysql-test-db.sh&quot;&#10;[ -x &quot;$SCRIPT&quot; ] || SCRIPT=&quot;$(dirname &quot;${WORKSPACE_PATH:-$PWD}&quot;)/MADMySQL/TestDatabase/mysql-test-db.sh&quot;&#10;if [ -x &quot;$SCRIPT&quot; ]; then&#10;  &quot;$SCRIPT&quot; down || true&#10;fi&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "4C7014931BACDC6800301713"
+                     BuildableName = "MADMySQL.framework"
+                     BlueprintName = "MADMySQL"
+                     ReferencedContainer = "container:MADMySQL.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

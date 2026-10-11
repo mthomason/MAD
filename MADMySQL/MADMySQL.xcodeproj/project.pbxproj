@@ -12,6 +12,14 @@
 		4C00A3781F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */; };
 		4C2915A224AC634900EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915A124AC634900EC794B /* MADFoundation.framework */; };
 		4CA100012000000000000001 /* MADMySQLLiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA100022000000000000002 /* MADMySQLLiveTests.m */; };
+		4CA1000520000000000000A1 /* MysqlInsertTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000520000000000000B1 /* MysqlInsertTests.m */; };
+		4CA1000620000000000000A1 /* MysqlUpdateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000620000000000000B1 /* MysqlUpdateTests.m */; };
+		4CA1000720000000000000A1 /* MysqlDeleteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000720000000000000B1 /* MysqlDeleteTests.m */; };
+		4CA1000820000000000000A1 /* MysqlTruncateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000820000000000000B1 /* MysqlTruncateTests.m */; };
+		4CA1000920000000000000A1 /* MysqlSupportTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000920000000000000B1 /* MysqlSupportTypesTests.m */; };
+		4CA1000A20000000000000A1 /* MysqlFetchFieldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000A20000000000000B1 /* MysqlFetchFieldTests.m */; };
+		4CA1000B20000000000000A1 /* MysqlExceptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000B20000000000000B1 /* MysqlExceptionTests.m */; };
+		4CA1000C20000000000000A1 /* MADMySQLConnectionViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000C20000000000000B1 /* MADMySQLConnectionViewControllerTests.m */; };
 		4CA100032000000000000003 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915A124AC634900EC794B /* MADFoundation.framework */; };
 		4CA100042000000000000004 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5D022724B8692D006D1A90 /* MADAPI.framework */; };
 		4C4EC1742DC93A40001DBEBE /* psi_mdl.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4EC0892DC93A40001DBEBE /* psi_mdl.h */; };
@@ -1119,6 +1127,14 @@
 		4C70149E1BACDC6800301713 /* MADMySQLTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADMySQLTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7014A31BACDC6800301713 /* MADMySQLTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLTests.m; sourceTree = "<group>"; };
 		4CA100022000000000000002 /* MADMySQLLiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLLiveTests.m; sourceTree = "<group>"; };
+		4CA1000520000000000000B1 /* MysqlInsertTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MysqlInsertTests.m; sourceTree = "<group>"; };
+		4CA1000620000000000000B1 /* MysqlUpdateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MysqlUpdateTests.m; sourceTree = "<group>"; };
+		4CA1000720000000000000B1 /* MysqlDeleteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MysqlDeleteTests.m; sourceTree = "<group>"; };
+		4CA1000820000000000000B1 /* MysqlTruncateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MysqlTruncateTests.m; sourceTree = "<group>"; };
+		4CA1000920000000000000B1 /* MysqlSupportTypesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MysqlSupportTypesTests.m; sourceTree = "<group>"; };
+		4CA1000A20000000000000B1 /* MysqlFetchFieldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MysqlFetchFieldTests.m; sourceTree = "<group>"; };
+		4CA1000B20000000000000B1 /* MysqlExceptionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MysqlExceptionTests.m; sourceTree = "<group>"; };
+		4CA1000C20000000000000B1 /* MADMySQLConnectionViewControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLConnectionViewControllerTests.m; sourceTree = "<group>"; };
 		4C7014A51BACDC6800301713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9372F71BAD244800D6BD62 /* MADDataTypeMySQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataTypeMySQL.h; sourceTree = "<group>"; };
 		4C9372F81BAD244800D6BD62 /* MADDataTypeMySQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDataTypeMySQL.m; sourceTree = "<group>"; };
@@ -2090,6 +2106,14 @@
 			children = (
 				4C7014A31BACDC6800301713 /* MADMySQLTests.m */,
 				4CA100022000000000000002 /* MADMySQLLiveTests.m */,
+				4CA1000520000000000000B1 /* MysqlInsertTests.m */,
+				4CA1000620000000000000B1 /* MysqlUpdateTests.m */,
+				4CA1000720000000000000B1 /* MysqlDeleteTests.m */,
+				4CA1000820000000000000B1 /* MysqlTruncateTests.m */,
+				4CA1000920000000000000B1 /* MysqlSupportTypesTests.m */,
+				4CA1000A20000000000000B1 /* MysqlFetchFieldTests.m */,
+				4CA1000B20000000000000B1 /* MysqlExceptionTests.m */,
+				4CA1000C20000000000000B1 /* MADMySQLConnectionViewControllerTests.m */,
 				4C7014A51BACDC6800301713 /* Info.plist */,
 			);
 			path = MADMySQLTests;
@@ -3085,6 +3109,14 @@
 			files = (
 				4C7014A41BACDC6800301713 /* MADMySQLTests.m in Sources */,
 				4CA100012000000000000001 /* MADMySQLLiveTests.m in Sources */,
+				4CA1000520000000000000A1 /* MysqlInsertTests.m in Sources */,
+				4CA1000620000000000000A1 /* MysqlUpdateTests.m in Sources */,
+				4CA1000720000000000000A1 /* MysqlDeleteTests.m in Sources */,
+				4CA1000820000000000000A1 /* MysqlTruncateTests.m in Sources */,
+				4CA1000920000000000000A1 /* MysqlSupportTypesTests.m in Sources */,
+				4CA1000A20000000000000A1 /* MysqlFetchFieldTests.m in Sources */,
+				4CA1000B20000000000000A1 /* MysqlExceptionTests.m in Sources */,
+				4CA1000C20000000000000A1 /* MADMySQLConnectionViewControllerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

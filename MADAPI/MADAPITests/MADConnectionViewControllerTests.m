@@ -1,0 +1,137 @@
+//
+//  MADConnectionViewControllerTests.m
+//  MADAPITests
+//
+//  Copyright © 2026 Michael Thomason. All rights reserved.
+//
+//  Tier 3 coverage for the two connection view controllers.  The screens themselves
+//  are storyboard-driven and their flows present alerts, so what is pinned here is the
+//  deterministic contract both classes share: -databaseConnection is an override point
+//  that throws on the abstract class, the transition-animator role they play for their
+//  presenting controller, and the nil tolerance of the IB action helpers.  Properties
+//  backing the storyboard (textFieldPort, textFields) are nil in a bare instance, which
+//  is exactly the state the helpers must survive.
+//
+
+#import <XCTest/XCTest.h>
+
+#import <MADAPI/MADConnectionViewController.h>
+#import <MADAPI/MADConnectionSQLGenericViewController.h>
+
+// The exit-handler actions are wired in the storyboard and declared only in the
+// implementation file; this test-only category is the deliberate bridge (same pattern
+// as MADFileUtilitiesTests).
+@interface MADConnectionSQLGenericViewController (TestActions)
+- (IBAction)hostDidEndOnExit:(id)sender;
+- (IBAction)portDidEndOnExit:(id)sender;
+@end
+
+@interface MADConnectionViewControllerTests : XCTestCase
+@end
+
+@implementation MADConnectionViewControllerTests
+
+#pragma mark - Abstract override point
+
+// Both classes implement the override point as `@throw NSInternalInconsistencyException;`
+// -- which throws the *name constant* (an NSString), not an NSException.  Documented in
+// BUGS.md ("...-databaseConnection throws an NSString").  The tests catch `id` because a
+// `@catch (NSException *)` would not catch it.
+
+- (void)testDatabaseConnectionThrowsOnBaseClass {
+	MADConnectionViewController *controller = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
+	@try {
+		[controller databaseConnection];
+		XCTFail(@"Expected -databaseConnection to throw");
+	} @catch (id thrown) {
+		XCTAssertEqualObjects(thrown, NSInternalInconsistencyException);
+	}
+}
+
+- (void)testDatabaseConnectionThrowsOnSQLGenericClass {
+	MADConnectionSQLGenericViewController *controller = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
+	@try {
+		[controller databaseConnection];
+		XCTFail(@"Expected -databaseConnection to throw");
+	} @catch (id thrown) {
+		XCTAssertEqualObjects(thrown, NSInternalInconsistencyException);
+	}
+}
+
+#pragma mark - Transition animator
+
+// Both classes play the animator role for the controller they present, declared via
+// private extensions; the public protocols are the visible half of that contract.
+
+- (void)testTransitionDuration {
+	MADConnectionViewController *base = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
+	id <UIViewControllerAnimatedTransitioning> baseAnimator = (id <UIViewControllerAnimatedTransitioning>)base;
+	XCTAssertEqual([baseAnimator transitionDuration:nil], 0.4);
+
+	MADConnectionSQLGenericViewController *sql = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
+	id <UIViewControllerAnimatedTransitioning> sqlAnimator = (id <UIViewControllerAnimatedTransitioning>)sql;
+	XCTAssertEqual([sqlAnimator transitionDuration:nil], 0.4);
+}
+
+- (void)testPresentedControllerAnimatorIsSelf {
+	MADConnectionViewController *base = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
+	id <UIViewControllerTransitioningDelegate> baseDelegate = (id <UIViewControllerTransitioningDelegate>)base;
+	id baseAnimator = [baseDelegate animationControllerForPresentedController:nil
+														 presentingController:nil
+															 sourceController:nil];
+	XCTAssertEqual(baseAnimator, base);
+
+	MADConnectionSQLGenericViewController *sql = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
+	id <UIViewControllerTransitioningDelegate> sqlDelegate = (id <UIViewControllerTransitioningDelegate>)sql;
+	id sqlAnimator = [sqlDelegate animationControllerForPresentedController:nil
+														presentingController:nil
+															sourceController:nil];
+	XCTAssertEqual(sqlAnimator, sql);
+}
+
+- (void)testDismissedControllerAnimatorIsNil {
+	MADConnectionViewController *base = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
+	id <UIViewControllerTransitioningDelegate> baseDelegate = (id <UIViewControllerTransitioningDelegate>)base;
+	XCTAssertNil([baseDelegate animationControllerForDismissedController:nil]);
+
+	MADConnectionSQLGenericViewController *sql = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
+	id <UIViewControllerTransitioningDelegate> sqlDelegate = (id <UIViewControllerTransitioningDelegate>)sql;
+	XCTAssertNil([sqlDelegate animationControllerForDismissedController:nil]);
+}
+
+- (void)testInteractiveTransitionControllersAreNil {
+	MADConnectionViewController *base = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
+	id <UIViewControllerTransitioningDelegate> baseDelegate = (id <UIViewControllerTransitioningDelegate>)base;
+	XCTAssertNil([baseDelegate interactionControllerForDismissal:nil]);
+	XCTAssertNil([baseDelegate interactionControllerForPresentation:nil]);
+
+	MADConnectionSQLGenericViewController *sql = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
+	id <UIViewControllerTransitioningDelegate> sqlDelegate = (id <UIViewControllerTransitioningDelegate>)sql;
+	XCTAssertNil([sqlDelegate interactionControllerForDismissal:nil]);
+	XCTAssertNil([sqlDelegate interactionControllerForPresentation:nil]);
+}
+
+#pragma mark - IB action helpers tolerate an unloaded storyboard
+
+- (void)testHostDidEndOnExitWithNilPortDoesNotThrow {
+	// textFieldPort is a storyboard outlet; with it nil the focus hand-off is skipped.
+	MADConnectionSQLGenericViewController *controller = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
+	XCTAssertNoThrow([controller hostDidEndOnExit:nil]);
+}
+
+- (void)testPortDidEndOnExitWithNilPortDoesNotThrow {
+	MADConnectionSQLGenericViewController *controller = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
+	XCTAssertNoThrow([controller portDidEndOnExit:nil]);
+}
+
+- (void)testEnableAndDisableTextFieldsWithoutOutletsDoesNotThrow {
+	MADConnectionViewController *base = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
+	XCTAssertNoThrow([base disableTextFields]);
+	XCTAssertNoThrow([base enableTextFields]);
+
+	MADConnectionSQLGenericViewController *sql = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
+	XCTAssertNoThrow([sql disableTextFields]);
+	XCTAssertNoThrow([sql enableTextFields]);
+}
+
+@end

@@ -10,6 +10,9 @@
 		4C13096E1BA8068B0022665F /* MADBarcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13096D1BA8068B0022665F /* MADBarcodes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1309751BA8068B0022665F /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C13096A1BA8068B0022665F /* MADBarcodes.framework */; };
 		4C13097A1BA8068B0022665F /* MADBarcodesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309791BA8068B0022665F /* MADBarcodesTests.m */; };
+		4CDB7C1000000000000000A1 /* MTBarcodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7C1000000000000000B1 /* MTBarcodeTests.m */; };
+		4CDB7C1100000000000000A1 /* MTBarcodeSymbologyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7C1100000000000000B1 /* MTBarcodeSymbologyTests.m */; };
+		4CDB7C1200000000000000A1 /* MTBarcodeViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7C1200000000000000B1 /* MTBarcodeViewTests.m */; };
 		4C130A5A1BA8075B0022665F /* MADBarcodeType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A31BA8075B0022665F /* MADBarcodeType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130A601BA8075B0022665F /* MTBarcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A91BA8075B0022665F /* MTBarcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130A611BA8075B0022665F /* MTBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309AA1BA8075B0022665F /* MTBarcode.m */; };
@@ -171,6 +174,9 @@
 		4C13096F1BA8068B0022665F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C1309741BA8068B0022665F /* MADBarcodesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADBarcodesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C1309791BA8068B0022665F /* MADBarcodesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADBarcodesTests.m; sourceTree = "<group>"; };
+		4CDB7C1000000000000000B1 /* MTBarcodeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeTests.m; sourceTree = "<group>"; };
+		4CDB7C1100000000000000B1 /* MTBarcodeSymbologyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeSymbologyTests.m; sourceTree = "<group>"; };
+		4CDB7C1200000000000000B1 /* MTBarcodeViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTBarcodeViewTests.m; sourceTree = "<group>"; };
 		4C13097B1BA8068B0022665F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C1309A31BA8075B0022665F /* MADBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeType.h; path = MADBarcodes/MADBarcodeType.h; sourceTree = "<group>"; };
 		4C1309A91BA8075B0022665F /* MTBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTBarcode.h; path = MADBarcodes/MTBarcode.h; sourceTree = "<group>"; };
@@ -382,6 +388,9 @@
 			isa = PBXGroup;
 			children = (
 				4C1309791BA8068B0022665F /* MADBarcodesTests.m */,
+				4CDB7C1000000000000000B1 /* MTBarcodeTests.m */,
+				4CDB7C1100000000000000B1 /* MTBarcodeSymbologyTests.m */,
+				4CDB7C1200000000000000B1 /* MTBarcodeViewTests.m */,
 				4C13097B1BA8068B0022665F /* Info.plist */,
 			);
 			path = MADBarcodesTests;
@@ -869,6 +878,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C13097A1BA8068B0022665F /* MADBarcodesTests.m in Sources */,
+				4CDB7C1000000000000000A1 /* MTBarcodeTests.m in Sources */,
+				4CDB7C1100000000000000A1 /* MTBarcodeSymbologyTests.m in Sources */,
+				4CDB7C1200000000000000A1 /* MTBarcodeViewTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

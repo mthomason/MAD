@@ -47,4 +47,17 @@
 	XCTAssertEqualObjects([MADStringUtilities stringByAppendingKeyPath:@"bar" toString:nil], @".bar");
 }
 
+- (void)testAppendPeriodToPeriod {
+	XCTAssertEqualObjects([MADStringUtilities stringByAppendingPeriod:@"."], @".");
+}
+
+- (void)testAppendKeyPathDoesNotDoubleThePeriod {
+	// The receiver already ends in a period; only the key path is appended.
+	XCTAssertEqualObjects([MADStringUtilities stringByAppendingKeyPath:@"bar" toString:@"foo."], @"foo.bar");
+}
+
+- (void)testAppendMultiComponentKeyPath {
+	XCTAssertEqualObjects([MADStringUtilities stringByAppendingKeyPath:@"bar.baz" toString:@"foo"], @"foo.bar.baz");
+}
+
 @end

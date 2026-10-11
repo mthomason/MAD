@@ -1,0 +1,42 @@
+//
+//  UIApplicationHelpersTests.m
+//  MADCocoaExtensionsTests
+//
+//  Copyright © 2026 Michael Thomason. All rights reserved.
+//
+//  Coverage for UIApplication (Helpers).  This is a logic-test bundle, so there is no
+//  application scene: the window lookup has nothing to find, and the pins record that
+//  the helpers stay nil-safe instead of trapping without an app.
+//
+//  -requestBackgroundTask is not exercised: it begins a real background task, which
+//  needs a running application.
+//
+
+#import <XCTest/XCTest.h>
+
+#import <UIKit/UIApplication.h>
+#import <UIKit/UIWindow.h>
+
+#import <MADCocoaExtensions/UIApplication+Helpers.h>
+
+@interface UIApplicationHelpersTests : XCTestCase
+@end
+
+@implementation UIApplicationHelpersTests
+
+- (void)testVersionMatchesTheMainBundle {
+	NSString *version = [UIApplication version];
+	NSString *bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+
+	XCTAssertEqualObjects(version, bundleVersion);
+}
+
+- (void)testSafeKeyWindowWithoutASceneIsNil {
+	XCTAssertNil([UIApplication sharedApplication].safeKeyWindow);
+}
+
+- (void)testTopViewControllerWithoutAWindowIsNil {
+	XCTAssertNil([UIApplication topViewController]);
+}
+
+@end

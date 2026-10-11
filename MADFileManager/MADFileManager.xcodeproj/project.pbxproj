@@ -41,6 +41,12 @@
 		4C670B0300000000000000A1 /* MADMetaDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C670B0300000000000000B1 /* MADMetaDataTests.m */; };
 		4C670B0400000000000000A1 /* MADFileInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C670B0400000000000000B1 /* MADFileInfoTests.m */; };
 		4C670B0500000000000000A1 /* MADFileUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C670B0500000000000000B1 /* MADFileUtilitiesTests.m */; };
+		4C670B0600000000000000A1 /* MADDirectoryMonitorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C670B0600000000000000B1 /* MADDirectoryMonitorTests.m */; };
+		4C670B0700000000000000A1 /* MADFileCoordinatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C670B0700000000000000B1 /* MADFileCoordinatorTests.m */; };
+		4C670B0800000000000000A1 /* MADLocalFileCoordinatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C670B0800000000000000B1 /* MADLocalFileCoordinatorTests.m */; };
+		4C670B0900000000000000A1 /* MADFilesControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C670B0900000000000000B1 /* MADFilesControllerTests.m */; };
+		4C670B0A00000000000000A1 /* MADCloudFileCoordinatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C670B0A00000000000000B1 /* MADCloudFileCoordinatorTests.m */; };
+		4C670B0B00000000000000A1 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915C624AC6D2000EC794B /* MADFoundation.framework */; };
 		4CCB735E1D1ADE6000D7AE84 /* MADMetaDataCloud.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCB735C1D1ADE6000D7AE84 /* MADMetaDataCloud.h */; };
 		4CCB735F1D1ADE6000D7AE84 /* MADMetaDataCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CCB735D1D1ADE6000D7AE84 /* MADMetaDataCloud.m */; };
 		4CCB73621D1ADE6A00D7AE84 /* MADMetaDataLocal.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CCB73601D1ADE6A00D7AE84 /* MADMetaDataLocal.h */; };
@@ -96,6 +102,11 @@
 		4C670B0300000000000000B1 /* MADMetaDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMetaDataTests.m; sourceTree = "<group>"; };
 		4C670B0400000000000000B1 /* MADFileInfoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFileInfoTests.m; sourceTree = "<group>"; };
 		4C670B0500000000000000B1 /* MADFileUtilitiesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFileUtilitiesTests.m; sourceTree = "<group>"; };
+		4C670B0600000000000000B1 /* MADDirectoryMonitorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDirectoryMonitorTests.m; sourceTree = "<group>"; };
+		4C670B0700000000000000B1 /* MADFileCoordinatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFileCoordinatorTests.m; sourceTree = "<group>"; };
+		4C670B0800000000000000B1 /* MADLocalFileCoordinatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADLocalFileCoordinatorTests.m; sourceTree = "<group>"; };
+		4C670B0900000000000000B1 /* MADFilesControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFilesControllerTests.m; sourceTree = "<group>"; };
+		4C670B0A00000000000000B1 /* MADCloudFileCoordinatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADCloudFileCoordinatorTests.m; sourceTree = "<group>"; };
 		4CBF043D2E85188300812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CCB735C1D1ADE6000D7AE84 /* MADMetaDataCloud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMetaDataCloud.h; sourceTree = "<group>"; };
 		4CCB735D1D1ADE6000D7AE84 /* MADMetaDataCloud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMetaDataCloud.m; sourceTree = "<group>"; };
@@ -120,6 +131,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C67011A1BA20684001C9D5A /* MADFileManager.framework in Frameworks */,
+				4C670B0B00000000000000A1 /* MADFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,6 +179,11 @@
 				4C670B0300000000000000B1 /* MADMetaDataTests.m */,
 				4C670B0400000000000000B1 /* MADFileInfoTests.m */,
 				4C670B0500000000000000B1 /* MADFileUtilitiesTests.m */,
+				4C670B0600000000000000B1 /* MADDirectoryMonitorTests.m */,
+				4C670B0700000000000000B1 /* MADFileCoordinatorTests.m */,
+				4C670B0800000000000000B1 /* MADLocalFileCoordinatorTests.m */,
+				4C670B0900000000000000B1 /* MADFilesControllerTests.m */,
+				4C670B0A00000000000000B1 /* MADCloudFileCoordinatorTests.m */,
 				4C6701201BA20684001C9D5A /* Info.plist */,
 			);
 			path = MADFileManagerTests;
@@ -368,6 +385,11 @@
 				4C670B0300000000000000A1 /* MADMetaDataTests.m in Sources */,
 				4C670B0400000000000000A1 /* MADFileInfoTests.m in Sources */,
 				4C670B0500000000000000A1 /* MADFileUtilitiesTests.m in Sources */,
+				4C670B0600000000000000A1 /* MADDirectoryMonitorTests.m in Sources */,
+				4C670B0700000000000000A1 /* MADFileCoordinatorTests.m in Sources */,
+				4C670B0800000000000000A1 /* MADLocalFileCoordinatorTests.m in Sources */,
+				4C670B0900000000000000A1 /* MADFilesControllerTests.m in Sources */,
+				4C670B0A00000000000000A1 /* MADCloudFileCoordinatorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

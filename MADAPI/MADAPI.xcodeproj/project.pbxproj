@@ -55,6 +55,7 @@
 		4CDA7A0800000000000000A1 /* MADDatabaseConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0800000000000000B1 /* MADDatabaseConnectionTests.m */; };
 		4CDA7A0900000000000000A1 /* MADQueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0900000000000000B1 /* MADQueryTests.m */; };
 		4CDA7A0A00000000000000A1 /* MADNotificationDidReadRowsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0A00000000000000B1 /* MADNotificationDidReadRowsTests.m */; };
+		4CDA7A0B00000000000000A1 /* MADConnectionViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0B00000000000000B1 /* MADConnectionViewControllerTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +120,7 @@
 		4CDA7A0800000000000000B1 /* MADDatabaseConnectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseConnectionTests.m; sourceTree = "<group>"; };
 		4CDA7A0900000000000000B1 /* MADQueryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryTests.m; sourceTree = "<group>"; };
 		4CDA7A0A00000000000000B1 /* MADNotificationDidReadRowsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADNotificationDidReadRowsTests.m; sourceTree = "<group>"; };
+		4CDA7A0B00000000000000B1 /* MADConnectionViewControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADConnectionViewControllerTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,6 +228,7 @@
 				4CDA7A0800000000000000B1 /* MADDatabaseConnectionTests.m */,
 				4CDA7A0900000000000000B1 /* MADQueryTests.m */,
 				4CDA7A0A00000000000000B1 /* MADNotificationDidReadRowsTests.m */,
+				4CDA7A0B00000000000000B1 /* MADConnectionViewControllerTests.m */,
 				4CF6AAAF1F5518BB0061B0C6 /* Info.plist */,
 			);
 			path = MADAPITests;
@@ -401,6 +404,7 @@
 				4CDA7A0800000000000000A1 /* MADDatabaseConnectionTests.m in Sources */,
 				4CDA7A0900000000000000A1 /* MADQueryTests.m in Sources */,
 				4CDA7A0A00000000000000A1 /* MADNotificationDidReadRowsTests.m in Sources */,
+				4CDA7A0B00000000000000A1 /* MADConnectionViewControllerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

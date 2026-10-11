@@ -31,6 +31,64 @@
 		4CA7C41502EA44B3800470150 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA7C4502EA44B3800470050 /* libsqlite3.tbd */; };
 		4CDA7A0100000000000000A1 /* MADDataTableRegressionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0100000000000000B1 /* MADDataTableRegressionTests.m */; };
 		4CDA7A0300000000000000A1 /* MADCoreLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0300000000000000B1 /* MADCoreLogicTests.m */; };
+		4CDA7A0B00000000000000A1 /* MADQuerySimpleTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0B00000000000000B1 /* MADQuerySimpleTypesTests.m */; };
+		4CDA7A0C00000000000000A1 /* MADPathAndLaunchContextTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0C00000000000000B1 /* MADPathAndLaunchContextTests.m */; };
+		4CDA7A0D00000000000000A1 /* MADModelValueTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0D00000000000000B1 /* MADModelValueTypesTests.m */; };
+		4CDA7A0E00000000000000A1 /* MADQueryPredicateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0E00000000000000B1 /* MADQueryPredicateTests.m */; };
+		4CDA7A0F00000000000000A1 /* MADQueryCacheAggregateFunctionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0F00000000000000B1 /* MADQueryCacheAggregateFunctionTests.m */; };
+		4CDA7A1000000000000000A1 /* MADReportSectionRepresentationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1000000000000000B1 /* MADReportSectionRepresentationTests.m */; };
+		4CDA7A1100000000000000A1 /* MADNotificationAndOperationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1100000000000000B1 /* MADNotificationAndOperationTests.m */; };
+		4CDA7A1200000000000000A1 /* MADQuerySelectExpressionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1200000000000000B1 /* MADQuerySelectExpressionTests.m */; };
+		4CDA7A1300000000000000A1 /* MADQueryFullTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1300000000000000B1 /* MADQueryFullTests.m */; };
+		4CDA7A1500000000000000A1 /* MADQueryTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1500000000000000B1 /* MADQueryTestTests.m */; };
+		4CDA7A1600000000000000A1 /* MADQuerySampleDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1600000000000000B1 /* MADQuerySampleDataTests.m */; };
+		4CDA7A1700000000000000A1 /* MADQueryMaxFieldLengthTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1700000000000000B1 /* MADQueryMaxFieldLengthTests.m */; };
+		4CDA7A1800000000000000A1 /* MADOperationBackgroundTaskBeginTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1800000000000000B1 /* MADOperationBackgroundTaskBeginTests.m */; };
+		4CDA7A1900000000000000A1 /* MADOperationBackgroundTaskEndTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1900000000000000B1 /* MADOperationBackgroundTaskEndTests.m */; };
+		4CDA7A1A00000000000000A1 /* MADOperationCreateDocumentAddConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1A00000000000000B1 /* MADOperationCreateDocumentAddConnectionTests.m */; };
+		4CDA7A1B00000000000000A1 /* MADOperationCreateDocumentCreateDocumentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1B00000000000000B1 /* MADOperationCreateDocumentCreateDocumentTests.m */; };
+		4CDA7A1C00000000000000A1 /* MADOperationCreateDocumentFirstTimeSetupTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1C00000000000000B1 /* MADOperationCreateDocumentFirstTimeSetupTests.m */; };
+		4CDA7A1D00000000000000A1 /* MADOperationCreateDocumentSaveAndCloseNewDocumentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1D00000000000000B1 /* MADOperationCreateDocumentSaveAndCloseNewDocumentTests.m */; };
+		4CDA7A1E00000000000000A1 /* MADOperationDeleteFileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1E00000000000000B1 /* MADOperationDeleteFileTests.m */; };
+		4CDA7A1F00000000000000A1 /* MADOperationDocumentCloseDocumentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1F00000000000000B1 /* MADOperationDocumentCloseDocumentTests.m */; };
+		4CDA7A2000000000000000A1 /* MADOperationHoldsProtocolsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2000000000000000B1 /* MADOperationHoldsProtocolsTests.m */; };
+		4CDA7A2100000000000000A1 /* MADOperationKeyChainDeletePasswordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2100000000000000B1 /* MADOperationKeyChainDeletePasswordTests.m */; };
+		4CDA7A2200000000000000A1 /* MADOperationKeyChainGetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2200000000000000B1 /* MADOperationKeyChainGetTests.m */; };
+		4CDA7A2300000000000000A1 /* MADOperationKeyChainPutTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2300000000000000B1 /* MADOperationKeyChainPutTests.m */; };
+		4CDA7A2400000000000000A1 /* MADActivityIndicatorLabelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2400000000000000B1 /* MADActivityIndicatorLabelTests.m */; };
+		4CDA7A2500000000000000A1 /* MADActivityIndicatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2500000000000000B1 /* MADActivityIndicatorTests.m */; };
+		4CDA7A2600000000000000A1 /* MADActivityItemProviderPdfTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2600000000000000B1 /* MADActivityItemProviderPdfTests.m */; };
+		4CDA7A2700000000000000A1 /* MADDesignerQueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2700000000000000B1 /* MADDesignerQueryTests.m */; };
+		4CDA7A2800000000000000A1 /* MADDesignerViewerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2800000000000000B1 /* MADDesignerViewerTests.m */; };
+		4CDA7A2900000000000000A1 /* MADDocumentObjectDataReferenceAggregateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2900000000000000B1 /* MADDocumentObjectDataReferenceAggregateTests.m */; };
+		4CDA7A2A00000000000000A1 /* MADDocumentObjectDataReferenceBarcodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2A00000000000000B1 /* MADDocumentObjectDataReferenceBarcodeTests.m */; };
+		4CDA7A2B00000000000000A1 /* MADDocumentObjectDataReferenceImageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2B00000000000000B1 /* MADDocumentObjectDataReferenceImageTests.m */; };
+		4CDA7A2C00000000000000A1 /* MADDocumentObjectDataReferenceLabelDynamicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2C00000000000000B1 /* MADDocumentObjectDataReferenceLabelDynamicTests.m */; };
+		4CDA7A2D00000000000000A1 /* MADDocumentObjectDataReferenceLabelStaticTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2D00000000000000B1 /* MADDocumentObjectDataReferenceLabelStaticTests.m */; };
+		4CDA7A2E00000000000000A1 /* MADDocumentObjectDataReferenceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2E00000000000000B1 /* MADDocumentObjectDataReferenceTests.m */; };
+		4CDA7A2F00000000000000A1 /* MADFontTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A2F00000000000000B1 /* MADFontTests.m */; };
+		4CDA7A3000000000000000A1 /* MADFontsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3000000000000000B1 /* MADFontsTests.m */; };
+		4CDA7A3100000000000000A1 /* MADImageThumbnailTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3100000000000000B1 /* MADImageThumbnailTests.m */; };
+		4CDA7A3200000000000000A1 /* MADLegacyStoreConversionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3200000000000000B1 /* MADLegacyStoreConversionTests.m */; };
+		4CDA7A3300000000000000A1 /* MADModelQueryFieldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3300000000000000B1 /* MADModelQueryFieldTests.m */; };
+		4CDA7A3400000000000000A1 /* MADModelQueryTableTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3400000000000000B1 /* MADModelQueryTableTests.m */; };
+		4CDA7A3500000000000000A1 /* MADPageOptionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3500000000000000B1 /* MADPageOptionsTests.m */; };
+		4CDA7A3600000000000000A1 /* MADPrintPageElementBarcodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3600000000000000B1 /* MADPrintPageElementBarcodeTests.m */; };
+		4CDA7A3700000000000000A1 /* MADPrintPageElementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3700000000000000B1 /* MADPrintPageElementTests.m */; };
+		4CDA7A3800000000000000A1 /* MADPrintPageRendererTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3800000000000000B1 /* MADPrintPageRendererTests.m */; };
+		4CDA7A3900000000000000A1 /* MADQueryDefinitionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3900000000000000B1 /* MADQueryDefinitionTests.m */; };
+		4CDA7A3A00000000000000A1 /* MADQueryFullTableEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3A00000000000000B1 /* MADQueryFullTableEnumeratorTests.m */; };
+		4CDA7A3B00000000000000A1 /* MADReportSectionEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3B00000000000000B1 /* MADReportSectionEnumeratorTests.m */; };
+		4CDA7A3C00000000000000A1 /* MADReportSectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3C00000000000000B1 /* MADReportSectionTests.m */; };
+		4CDA7A3D00000000000000A1 /* MADSchemaFieldSelectorModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3D00000000000000B1 /* MADSchemaFieldSelectorModelTests.m */; };
+		4CDA7A3E00000000000000A1 /* MADSectionLayoutAttributesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3E00000000000000B1 /* MADSectionLayoutAttributesTests.m */; };
+		4CDA7A3F00000000000000A1 /* MADSectionLayoutManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A3F00000000000000B1 /* MADSectionLayoutManagerTests.m */; };
+		4CDA7A4000000000000000A1 /* RptqDataHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A4000000000000000B1 /* RptqDataHelperTests.m */; };
+		4CDA7A4100000000000000A1 /* RptqDocumentElementFormulaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A4100000000000000B1 /* RptqDocumentElementFormulaTests.m */; };
+		4CDA7A4200000000000000A1 /* RptqDocumentElementGroupKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A4200000000000000B1 /* RptqDocumentElementGroupKeyTests.m */; };
+		4CDA7A4300000000000000A1 /* RptqDocumentElementLabelLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A4300000000000000B1 /* RptqDocumentElementLabelLinkTests.m */; };
+		4CDA7A4400000000000000A1 /* RptqDocumentSectionEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A4400000000000000B1 /* RptqDocumentSectionEnumeratorTests.m */; };
+		4CDA7A1400000000000000A1 /* MADElementStylizedTextTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1400000000000000B1 /* MADElementStylizedTextTests.m */; };
 		4CDA7A0400000000000000A1 /* MADFormatterAndRepresentationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */; };
 		4CDA7A0500000000000000A1 /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0500000000000000B1 /* MAD.xcdatamodeld */; };
 		4CDA7A0600000000000000A1 /* MADCoreDataModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0600000000000000B1 /* MADCoreDataModelTests.m */; };
@@ -527,6 +585,64 @@
 		4CA7C4502EA44B3800470050 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		4CDA7A0100000000000000B1 /* MADDataTableRegressionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataTableRegressionTests.m; sourceTree = "<group>"; };
 		4CDA7A0300000000000000B1 /* MADCoreLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADCoreLogicTests.m; sourceTree = "<group>"; };
+		4CDA7A0B00000000000000B1 /* MADQuerySimpleTypesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQuerySimpleTypesTests.m; sourceTree = "<group>"; };
+		4CDA7A0C00000000000000B1 /* MADPathAndLaunchContextTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADPathAndLaunchContextTests.m; sourceTree = "<group>"; };
+		4CDA7A0D00000000000000B1 /* MADModelValueTypesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADModelValueTypesTests.m; sourceTree = "<group>"; };
+		4CDA7A0E00000000000000B1 /* MADQueryPredicateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryPredicateTests.m; sourceTree = "<group>"; };
+		4CDA7A0F00000000000000B1 /* MADQueryCacheAggregateFunctionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryCacheAggregateFunctionTests.m; sourceTree = "<group>"; };
+		4CDA7A1000000000000000B1 /* MADReportSectionRepresentationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADReportSectionRepresentationTests.m; sourceTree = "<group>"; };
+		4CDA7A1100000000000000B1 /* MADNotificationAndOperationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADNotificationAndOperationTests.m; sourceTree = "<group>"; };
+		4CDA7A1200000000000000B1 /* MADQuerySelectExpressionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQuerySelectExpressionTests.m; sourceTree = "<group>"; };
+		4CDA7A1300000000000000B1 /* MADQueryFullTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryFullTests.m; sourceTree = "<group>"; };
+		4CDA7A1500000000000000B1 /* MADQueryTestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryTestTests.m; sourceTree = "<group>"; };
+		4CDA7A1600000000000000B1 /* MADQuerySampleDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQuerySampleDataTests.m; sourceTree = "<group>"; };
+		4CDA7A1700000000000000B1 /* MADQueryMaxFieldLengthTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryMaxFieldLengthTests.m; sourceTree = "<group>"; };
+		4CDA7A1800000000000000B1 /* MADOperationBackgroundTaskBeginTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationBackgroundTaskBeginTests.m; sourceTree = "<group>"; };
+		4CDA7A1900000000000000B1 /* MADOperationBackgroundTaskEndTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationBackgroundTaskEndTests.m; sourceTree = "<group>"; };
+		4CDA7A1A00000000000000B1 /* MADOperationCreateDocumentAddConnectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationCreateDocumentAddConnectionTests.m; sourceTree = "<group>"; };
+		4CDA7A1B00000000000000B1 /* MADOperationCreateDocumentCreateDocumentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationCreateDocumentCreateDocumentTests.m; sourceTree = "<group>"; };
+		4CDA7A1C00000000000000B1 /* MADOperationCreateDocumentFirstTimeSetupTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationCreateDocumentFirstTimeSetupTests.m; sourceTree = "<group>"; };
+		4CDA7A1D00000000000000B1 /* MADOperationCreateDocumentSaveAndCloseNewDocumentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationCreateDocumentSaveAndCloseNewDocumentTests.m; sourceTree = "<group>"; };
+		4CDA7A1E00000000000000B1 /* MADOperationDeleteFileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationDeleteFileTests.m; sourceTree = "<group>"; };
+		4CDA7A1F00000000000000B1 /* MADOperationDocumentCloseDocumentTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationDocumentCloseDocumentTests.m; sourceTree = "<group>"; };
+		4CDA7A2000000000000000B1 /* MADOperationHoldsProtocolsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationHoldsProtocolsTests.m; sourceTree = "<group>"; };
+		4CDA7A2100000000000000B1 /* MADOperationKeyChainDeletePasswordTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationKeyChainDeletePasswordTests.m; sourceTree = "<group>"; };
+		4CDA7A2200000000000000B1 /* MADOperationKeyChainGetTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationKeyChainGetTests.m; sourceTree = "<group>"; };
+		4CDA7A2300000000000000B1 /* MADOperationKeyChainPutTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationKeyChainPutTests.m; sourceTree = "<group>"; };
+		4CDA7A2400000000000000B1 /* MADActivityIndicatorLabelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADActivityIndicatorLabelTests.m; sourceTree = "<group>"; };
+		4CDA7A2500000000000000B1 /* MADActivityIndicatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADActivityIndicatorTests.m; sourceTree = "<group>"; };
+		4CDA7A2600000000000000B1 /* MADActivityItemProviderPdfTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADActivityItemProviderPdfTests.m; sourceTree = "<group>"; };
+		4CDA7A2700000000000000B1 /* MADDesignerQueryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDesignerQueryTests.m; sourceTree = "<group>"; };
+		4CDA7A2800000000000000B1 /* MADDesignerViewerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDesignerViewerTests.m; sourceTree = "<group>"; };
+		4CDA7A2900000000000000B1 /* MADDocumentObjectDataReferenceAggregateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDocumentObjectDataReferenceAggregateTests.m; sourceTree = "<group>"; };
+		4CDA7A2A00000000000000B1 /* MADDocumentObjectDataReferenceBarcodeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDocumentObjectDataReferenceBarcodeTests.m; sourceTree = "<group>"; };
+		4CDA7A2B00000000000000B1 /* MADDocumentObjectDataReferenceImageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDocumentObjectDataReferenceImageTests.m; sourceTree = "<group>"; };
+		4CDA7A2C00000000000000B1 /* MADDocumentObjectDataReferenceLabelDynamicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDocumentObjectDataReferenceLabelDynamicTests.m; sourceTree = "<group>"; };
+		4CDA7A2D00000000000000B1 /* MADDocumentObjectDataReferenceLabelStaticTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDocumentObjectDataReferenceLabelStaticTests.m; sourceTree = "<group>"; };
+		4CDA7A2E00000000000000B1 /* MADDocumentObjectDataReferenceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDocumentObjectDataReferenceTests.m; sourceTree = "<group>"; };
+		4CDA7A2F00000000000000B1 /* MADFontTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFontTests.m; sourceTree = "<group>"; };
+		4CDA7A3000000000000000B1 /* MADFontsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFontsTests.m; sourceTree = "<group>"; };
+		4CDA7A3100000000000000B1 /* MADImageThumbnailTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADImageThumbnailTests.m; sourceTree = "<group>"; };
+		4CDA7A3200000000000000B1 /* MADLegacyStoreConversionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADLegacyStoreConversionTests.m; sourceTree = "<group>"; };
+		4CDA7A3300000000000000B1 /* MADModelQueryFieldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADModelQueryFieldTests.m; sourceTree = "<group>"; };
+		4CDA7A3400000000000000B1 /* MADModelQueryTableTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADModelQueryTableTests.m; sourceTree = "<group>"; };
+		4CDA7A3500000000000000B1 /* MADPageOptionsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADPageOptionsTests.m; sourceTree = "<group>"; };
+		4CDA7A3600000000000000B1 /* MADPrintPageElementBarcodeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADPrintPageElementBarcodeTests.m; sourceTree = "<group>"; };
+		4CDA7A3700000000000000B1 /* MADPrintPageElementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADPrintPageElementTests.m; sourceTree = "<group>"; };
+		4CDA7A3800000000000000B1 /* MADPrintPageRendererTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADPrintPageRendererTests.m; sourceTree = "<group>"; };
+		4CDA7A3900000000000000B1 /* MADQueryDefinitionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryDefinitionTests.m; sourceTree = "<group>"; };
+		4CDA7A3A00000000000000B1 /* MADQueryFullTableEnumeratorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryFullTableEnumeratorTests.m; sourceTree = "<group>"; };
+		4CDA7A3B00000000000000B1 /* MADReportSectionEnumeratorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADReportSectionEnumeratorTests.m; sourceTree = "<group>"; };
+		4CDA7A3C00000000000000B1 /* MADReportSectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADReportSectionTests.m; sourceTree = "<group>"; };
+		4CDA7A3D00000000000000B1 /* MADSchemaFieldSelectorModelTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADSchemaFieldSelectorModelTests.m; sourceTree = "<group>"; };
+		4CDA7A3E00000000000000B1 /* MADSectionLayoutAttributesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADSectionLayoutAttributesTests.m; sourceTree = "<group>"; };
+		4CDA7A3F00000000000000B1 /* MADSectionLayoutManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADSectionLayoutManagerTests.m; sourceTree = "<group>"; };
+		4CDA7A4000000000000000B1 /* RptqDataHelperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RptqDataHelperTests.m; sourceTree = "<group>"; };
+		4CDA7A4100000000000000B1 /* RptqDocumentElementFormulaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentElementFormulaTests.m; sourceTree = "<group>"; };
+		4CDA7A4200000000000000B1 /* RptqDocumentElementGroupKeyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentElementGroupKeyTests.m; sourceTree = "<group>"; };
+		4CDA7A4300000000000000B1 /* RptqDocumentElementLabelLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentElementLabelLinkTests.m; sourceTree = "<group>"; };
+		4CDA7A4400000000000000B1 /* RptqDocumentSectionEnumeratorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSectionEnumeratorTests.m; sourceTree = "<group>"; };
+		4CDA7A1400000000000000B1 /* MADElementStylizedTextTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADElementStylizedTextTests.m; sourceTree = "<group>"; };
 		4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFormatterAndRepresentationTests.m; sourceTree = "<group>"; };
 		4CDA7A0500000000000000B2 /* MAD 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 3.xcdatamodel"; sourceTree = "<group>"; };
 		4CDA7A0500000000000000B3 /* MAD 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -1605,6 +1721,64 @@
 				4CF781531BADE5EA0050A67D /* MADTests.m */,
 				4CDA7A0100000000000000B1 /* MADDataTableRegressionTests.m */,
 				4CDA7A0300000000000000B1 /* MADCoreLogicTests.m */,
+				4CDA7A0B00000000000000B1 /* MADQuerySimpleTypesTests.m */,
+				4CDA7A0C00000000000000B1 /* MADPathAndLaunchContextTests.m */,
+				4CDA7A0D00000000000000B1 /* MADModelValueTypesTests.m */,
+				4CDA7A0E00000000000000B1 /* MADQueryPredicateTests.m */,
+				4CDA7A0F00000000000000B1 /* MADQueryCacheAggregateFunctionTests.m */,
+				4CDA7A1000000000000000B1 /* MADReportSectionRepresentationTests.m */,
+				4CDA7A1100000000000000B1 /* MADNotificationAndOperationTests.m */,
+				4CDA7A1200000000000000B1 /* MADQuerySelectExpressionTests.m */,
+				4CDA7A1300000000000000B1 /* MADQueryFullTests.m */,
+				4CDA7A1500000000000000B1 /* MADQueryTestTests.m */,
+				4CDA7A1600000000000000B1 /* MADQuerySampleDataTests.m */,
+				4CDA7A1700000000000000B1 /* MADQueryMaxFieldLengthTests.m */,
+				4CDA7A1800000000000000B1 /* MADOperationBackgroundTaskBeginTests.m */,
+				4CDA7A1900000000000000B1 /* MADOperationBackgroundTaskEndTests.m */,
+				4CDA7A1A00000000000000B1 /* MADOperationCreateDocumentAddConnectionTests.m */,
+				4CDA7A1B00000000000000B1 /* MADOperationCreateDocumentCreateDocumentTests.m */,
+				4CDA7A1C00000000000000B1 /* MADOperationCreateDocumentFirstTimeSetupTests.m */,
+				4CDA7A1D00000000000000B1 /* MADOperationCreateDocumentSaveAndCloseNewDocumentTests.m */,
+				4CDA7A1E00000000000000B1 /* MADOperationDeleteFileTests.m */,
+				4CDA7A1F00000000000000B1 /* MADOperationDocumentCloseDocumentTests.m */,
+				4CDA7A2000000000000000B1 /* MADOperationHoldsProtocolsTests.m */,
+				4CDA7A2100000000000000B1 /* MADOperationKeyChainDeletePasswordTests.m */,
+				4CDA7A2200000000000000B1 /* MADOperationKeyChainGetTests.m */,
+				4CDA7A2300000000000000B1 /* MADOperationKeyChainPutTests.m */,
+				4CDA7A2400000000000000B1 /* MADActivityIndicatorLabelTests.m */,
+				4CDA7A2500000000000000B1 /* MADActivityIndicatorTests.m */,
+				4CDA7A2600000000000000B1 /* MADActivityItemProviderPdfTests.m */,
+				4CDA7A2700000000000000B1 /* MADDesignerQueryTests.m */,
+				4CDA7A2800000000000000B1 /* MADDesignerViewerTests.m */,
+				4CDA7A2900000000000000B1 /* MADDocumentObjectDataReferenceAggregateTests.m */,
+				4CDA7A2A00000000000000B1 /* MADDocumentObjectDataReferenceBarcodeTests.m */,
+				4CDA7A2B00000000000000B1 /* MADDocumentObjectDataReferenceImageTests.m */,
+				4CDA7A2C00000000000000B1 /* MADDocumentObjectDataReferenceLabelDynamicTests.m */,
+				4CDA7A2D00000000000000B1 /* MADDocumentObjectDataReferenceLabelStaticTests.m */,
+				4CDA7A2E00000000000000B1 /* MADDocumentObjectDataReferenceTests.m */,
+				4CDA7A2F00000000000000B1 /* MADFontTests.m */,
+				4CDA7A3000000000000000B1 /* MADFontsTests.m */,
+				4CDA7A3100000000000000B1 /* MADImageThumbnailTests.m */,
+				4CDA7A3200000000000000B1 /* MADLegacyStoreConversionTests.m */,
+				4CDA7A3300000000000000B1 /* MADModelQueryFieldTests.m */,
+				4CDA7A3400000000000000B1 /* MADModelQueryTableTests.m */,
+				4CDA7A3500000000000000B1 /* MADPageOptionsTests.m */,
+				4CDA7A3600000000000000B1 /* MADPrintPageElementBarcodeTests.m */,
+				4CDA7A3700000000000000B1 /* MADPrintPageElementTests.m */,
+				4CDA7A3800000000000000B1 /* MADPrintPageRendererTests.m */,
+				4CDA7A3900000000000000B1 /* MADQueryDefinitionTests.m */,
+				4CDA7A3A00000000000000B1 /* MADQueryFullTableEnumeratorTests.m */,
+				4CDA7A3B00000000000000B1 /* MADReportSectionEnumeratorTests.m */,
+				4CDA7A3C00000000000000B1 /* MADReportSectionTests.m */,
+				4CDA7A3D00000000000000B1 /* MADSchemaFieldSelectorModelTests.m */,
+				4CDA7A3E00000000000000B1 /* MADSectionLayoutAttributesTests.m */,
+				4CDA7A3F00000000000000B1 /* MADSectionLayoutManagerTests.m */,
+				4CDA7A4000000000000000B1 /* RptqDataHelperTests.m */,
+				4CDA7A4100000000000000B1 /* RptqDocumentElementFormulaTests.m */,
+				4CDA7A4200000000000000B1 /* RptqDocumentElementGroupKeyTests.m */,
+				4CDA7A4300000000000000B1 /* RptqDocumentElementLabelLinkTests.m */,
+				4CDA7A4400000000000000B1 /* RptqDocumentSectionEnumeratorTests.m */,
+				4CDA7A1400000000000000B1 /* MADElementStylizedTextTests.m */,
 				4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */,
 				4CDA7A0500000000000000B1 /* MAD.xcdatamodeld */,
 				4CDA7A0600000000000000B1 /* MADCoreDataModelTests.m */,
@@ -2213,6 +2387,64 @@
 				4CF781541BADE5EA0050A67D /* MADTests.m in Sources */,
 				4CDA7A0100000000000000A1 /* MADDataTableRegressionTests.m in Sources */,
 				4CDA7A0300000000000000A1 /* MADCoreLogicTests.m in Sources */,
+				4CDA7A0B00000000000000A1 /* MADQuerySimpleTypesTests.m in Sources */,
+				4CDA7A0C00000000000000A1 /* MADPathAndLaunchContextTests.m in Sources */,
+				4CDA7A0D00000000000000A1 /* MADModelValueTypesTests.m in Sources */,
+				4CDA7A0E00000000000000A1 /* MADQueryPredicateTests.m in Sources */,
+				4CDA7A0F00000000000000A1 /* MADQueryCacheAggregateFunctionTests.m in Sources */,
+				4CDA7A1000000000000000A1 /* MADReportSectionRepresentationTests.m in Sources */,
+				4CDA7A1100000000000000A1 /* MADNotificationAndOperationTests.m in Sources */,
+				4CDA7A1200000000000000A1 /* MADQuerySelectExpressionTests.m in Sources */,
+				4CDA7A1300000000000000A1 /* MADQueryFullTests.m in Sources */,
+				4CDA7A1500000000000000A1 /* MADQueryTestTests.m in Sources */,
+				4CDA7A1600000000000000A1 /* MADQuerySampleDataTests.m in Sources */,
+				4CDA7A1700000000000000A1 /* MADQueryMaxFieldLengthTests.m in Sources */,
+				4CDA7A1800000000000000A1 /* MADOperationBackgroundTaskBeginTests.m in Sources */,
+				4CDA7A1900000000000000A1 /* MADOperationBackgroundTaskEndTests.m in Sources */,
+				4CDA7A1A00000000000000A1 /* MADOperationCreateDocumentAddConnectionTests.m in Sources */,
+				4CDA7A1B00000000000000A1 /* MADOperationCreateDocumentCreateDocumentTests.m in Sources */,
+				4CDA7A1C00000000000000A1 /* MADOperationCreateDocumentFirstTimeSetupTests.m in Sources */,
+				4CDA7A1D00000000000000A1 /* MADOperationCreateDocumentSaveAndCloseNewDocumentTests.m in Sources */,
+				4CDA7A1E00000000000000A1 /* MADOperationDeleteFileTests.m in Sources */,
+				4CDA7A1F00000000000000A1 /* MADOperationDocumentCloseDocumentTests.m in Sources */,
+				4CDA7A2000000000000000A1 /* MADOperationHoldsProtocolsTests.m in Sources */,
+				4CDA7A2100000000000000A1 /* MADOperationKeyChainDeletePasswordTests.m in Sources */,
+				4CDA7A2200000000000000A1 /* MADOperationKeyChainGetTests.m in Sources */,
+				4CDA7A2300000000000000A1 /* MADOperationKeyChainPutTests.m in Sources */,
+				4CDA7A2400000000000000A1 /* MADActivityIndicatorLabelTests.m in Sources */,
+				4CDA7A2500000000000000A1 /* MADActivityIndicatorTests.m in Sources */,
+				4CDA7A2600000000000000A1 /* MADActivityItemProviderPdfTests.m in Sources */,
+				4CDA7A2700000000000000A1 /* MADDesignerQueryTests.m in Sources */,
+				4CDA7A2800000000000000A1 /* MADDesignerViewerTests.m in Sources */,
+				4CDA7A2900000000000000A1 /* MADDocumentObjectDataReferenceAggregateTests.m in Sources */,
+				4CDA7A2A00000000000000A1 /* MADDocumentObjectDataReferenceBarcodeTests.m in Sources */,
+				4CDA7A2B00000000000000A1 /* MADDocumentObjectDataReferenceImageTests.m in Sources */,
+				4CDA7A2C00000000000000A1 /* MADDocumentObjectDataReferenceLabelDynamicTests.m in Sources */,
+				4CDA7A2D00000000000000A1 /* MADDocumentObjectDataReferenceLabelStaticTests.m in Sources */,
+				4CDA7A2E00000000000000A1 /* MADDocumentObjectDataReferenceTests.m in Sources */,
+				4CDA7A2F00000000000000A1 /* MADFontTests.m in Sources */,
+				4CDA7A3000000000000000A1 /* MADFontsTests.m in Sources */,
+				4CDA7A3100000000000000A1 /* MADImageThumbnailTests.m in Sources */,
+				4CDA7A3200000000000000A1 /* MADLegacyStoreConversionTests.m in Sources */,
+				4CDA7A3300000000000000A1 /* MADModelQueryFieldTests.m in Sources */,
+				4CDA7A3400000000000000A1 /* MADModelQueryTableTests.m in Sources */,
+				4CDA7A3500000000000000A1 /* MADPageOptionsTests.m in Sources */,
+				4CDA7A3600000000000000A1 /* MADPrintPageElementBarcodeTests.m in Sources */,
+				4CDA7A3700000000000000A1 /* MADPrintPageElementTests.m in Sources */,
+				4CDA7A3800000000000000A1 /* MADPrintPageRendererTests.m in Sources */,
+				4CDA7A3900000000000000A1 /* MADQueryDefinitionTests.m in Sources */,
+				4CDA7A3A00000000000000A1 /* MADQueryFullTableEnumeratorTests.m in Sources */,
+				4CDA7A3B00000000000000A1 /* MADReportSectionEnumeratorTests.m in Sources */,
+				4CDA7A3C00000000000000A1 /* MADReportSectionTests.m in Sources */,
+				4CDA7A3D00000000000000A1 /* MADSchemaFieldSelectorModelTests.m in Sources */,
+				4CDA7A3E00000000000000A1 /* MADSectionLayoutAttributesTests.m in Sources */,
+				4CDA7A3F00000000000000A1 /* MADSectionLayoutManagerTests.m in Sources */,
+				4CDA7A4000000000000000A1 /* RptqDataHelperTests.m in Sources */,
+				4CDA7A4100000000000000A1 /* RptqDocumentElementFormulaTests.m in Sources */,
+				4CDA7A4200000000000000A1 /* RptqDocumentElementGroupKeyTests.m in Sources */,
+				4CDA7A4300000000000000A1 /* RptqDocumentElementLabelLinkTests.m in Sources */,
+				4CDA7A4400000000000000A1 /* RptqDocumentSectionEnumeratorTests.m in Sources */,
+				4CDA7A1400000000000000A1 /* MADElementStylizedTextTests.m in Sources */,
 				4CDA7A0400000000000000A1 /* MADFormatterAndRepresentationTests.m in Sources */,
 				4CDA7A0500000000000000A1 /* MAD.xcdatamodeld in Sources */,
 				4CDA7A0600000000000000A1 /* MADCoreDataModelTests.m in Sources */,

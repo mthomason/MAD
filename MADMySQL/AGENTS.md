@@ -33,3 +33,8 @@ This framework, along with `MADTdsClient`, serves as a good example of how to ad
     [`DEVELOPER.md`](../DEVELOPER.md); override them with the `MAD_MYSQL_TEST_*`
     environment variables. Use `127.0.0.1`, not `localhost` -- libmysqlclient reads
     `localhost` as a request for a Unix socket, which the Simulator does not have.
+    `TestDatabase/mysql-test-db.sh` provides that server in Docker -- a pinned
+    image and a checksum-verified copy of the standard `employees` dataset --
+    and the scheme starts it before the tests and stops it after. See
+    [`DEVELOPER.md`](../DEVELOPER.md) for the commands and the port conflict
+    rules.

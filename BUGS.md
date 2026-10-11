@@ -57,6 +57,61 @@ Status key:
   Pinned by `testNSStringFromMADQueryTypeSampleDataTableRange` (renamed from
   `testNSStringFromMADQueryTypeSampleDataTableRangeFallsThrough`).
 
+### `MADConnectionViewController` / `MADConnectionSQLGenericViewController` `-databaseConnection` throws an NSString
+- **Status:** Confirmed (left as is — no changed functionality)
+- **Where:** `MADAPI/Source/MADConnectionViewController.m:279`,
+  `MADAPI/Source/MADConnectionSQLGenericViewController.m:353`
+- **Behavior:** The override point is implemented as `@throw NSInternalInconsistencyException;`,
+  which throws the *name constant* — an `NSString` — rather than an `NSException`.
+  Every "subclass me" method on `MADDatabase` builds a real
+  `[NSException exceptionWithName:NSInternalInconsistencyException reason:... userInfo:nil]`
+  from the same constant; these two do not.
+- **Why it matters:** A `@catch (NSException *e)` — the only shape anything in this
+  codebase writes — does not catch it; the throw surfaces as an unknown exception
+  object. Only the abstract-method misuse path hits it, so the blast radius is small,
+  but the inconsistency is real.
+- **Test:** `MADConnectionViewControllerTests testDatabaseConnectionThrowsOnBaseClass`
+  and `testDatabaseConnectionThrowsOnSQLGenericClass` catch `id` and assert the thrown
+  object is the name constant.
+
+### `MADDatabase` is NSCoding-only, so secure archiving rejects it
+- **Status:** Quirk (latent — nothing archives a `MADDatabase`)
+- **Where:** `MADAPI/Source/MADDatabase.h:32`, `MADAPI/Source/MADDatabase.m:50-63`
+- **Behavior:** The class declares `NSCoding`, not `NSSecureCoding`, and does not
+  implement `+supportsSecureCoding`. `+[NSKeyedArchiver archivedDataWithRootObject:requiringSecureCoding:YES
+  error:]` therefore returns `nil` with an error. Its `-initWithCoder:` also uses the
+  non-secure `-decodeObjectForKey:`, so even the modern class-matching decode APIs
+  (`-decodeObjectOfClass:forKey:`) refuse it. Round-tripping works only through the
+  classic path (`[[NSKeyedArchiver alloc] initRequiringSecureCoding:NO]` and an
+  unarchiver with `requiresSecureCoding = NO`, which is *not* the default for
+  `-initForReadingFromData:error:`).
+- **Why it matters:** If a caller ever reaches for the secure APIs — the enforced
+  default in recent SDKs — archiving fails at runtime with a nil result. Nothing in
+  the app or frameworks archives a `MADDatabase` today (checked: the only
+  `NSKeyedArchiver` users archive caches and query-visualization payloads), so this
+  is latent.
+- **Test:** `MADDatabaseTests testInsecureNSCodingRoundTrip` and
+  `testSecureArchivingIsUnsupported`.
+
+### `MADDatabaseConnection` subclasses do not survive the base class's `NSCopying` / `NSCoding`
+- **Status:** Quirk (latent — nothing archives a connection; subclasses override `-copyWithZone:`)
+- **Where:** `MADAPI/Source/MADDatabaseConnection.m:34-62`
+- **Behavior:** `-initWithCoder:` / `-encodeWithCoder:` / `-copyWithZone:` read and write
+  the base class's *own* ivars. A concrete subclass cannot see those ivars (they are
+  synthesized in the base `.m`, not declared in the header) and therefore shadows each
+  one with its own storage — `MADDatabaseConnectionMySql` does exactly this with
+  `@synthesize databaseType = _databaseType;`. The base's accessors are never consulted,
+  so a copied or archived connection reads back with `MADDatabaseTypeUnknown`, a nil
+  connection string, `requiresCredentials == NO` and a nil identifier.
+  `MADDatabaseConnectionMySql` works around the copy half by overriding
+  `-copyWithZone:` with a real initializer; nothing overrides the coding half.
+- **Why it matters:** Any future persistence of a connection object — or of a
+  `MADDatabase` that encodes its `databaseConnection` — silently loses the connection's
+  state. Latent today: no archive of either type exists in the app or frameworks.
+- **Test:** `MADDatabaseConnectionTests testSubclassCopyDoesNotCarrySubclassState` and
+  `testSubclassNSCodingDoesNotCarrySubclassState`, which pin the lossy result so a fix
+  will be visible.
+
 ---
 
 ## MAD (framework)
@@ -768,6 +823,305 @@ Status key:
   there buys nothing when a nil name would mean a malformed schema.
 - **Where:** `MAD/Source/rptq/store/MADStore.m:273-278`.
 
+### `MADOperationCreateDocumentAddConnection` reports success without a document
+- **Status:** Confirmed (latent -- only reached when the queue is mis-wired)
+- **Where:** `MAD/Source/MADOperationCreateDocumentAddConnection.m:38-58`
+- **Behavior:** `-execute` scans its dependencies for a
+  `MADOperationCreateDocumentProtocol`, leaves `document` nil when none matches, sends
+  `[document activeDocumentModel]` (a message to nil, so a no-op), then sets
+  `self.success = YES` and finishes -- no error, no document.  Its siblings
+  (`MADOperationCreateDocumentImportSchema`, `...SaveAndCloseNewDocument`) finish with
+  an error in the same situation, and `MADOperationCreateDocumentFirstTimeSetup` trips
+  `RptqDocument`'s nil-context `NSAssert` instead, so the family has three different
+  answers to the same missing dependency.
+- **Why it matters:** `success` is the only signal the queued consumer gets; a queue
+  assembled in the wrong order reports "connection added" for work that never happened.
+- **Test:** `MADOperationCreateDocumentAddConnectionTests
+  testExecuteWithoutADocumentDependencyStillReportsSuccess`.
+
+### `MADOperationKeyChainDeletePassword`'s `success` never leaves NO
+- **Status:** Confirmed (latent -- nothing reads the property in-tree today)
+- **Where:** `MAD/Source/MADOperationKeyChainDeletePassword.m:19,36-50`
+- **Behavior:** The initializer sets `_success = NO`, and `-execute` never assigns it:
+  a delete MADKeyChain reports as clean still finishes with `success == NO`.  The error
+  path is also silent -- a failed delete carries the error through
+  `-finishWithError:` but leaves the flag at NO too, so the two outcomes are
+  indistinguishable from the property.
+- **Why it matters:** Any future consumer that reads `success` instead of checking
+  `errors` will treat every successful delete as a failure.
+- **Test:** `MADOperationKeyChainDeletePasswordTests
+  testExecuteWithAMissingKeyFinishesWithoutError`.
+
+### `MADOperationDeleteFile`'s dependency scan is order-dependent and can coordinate a nil URL
+- **Status:** Confirmed (latent)
+- **Where:** `MAD/Source/MADOperationDeleteFile.m:34-60`
+- **Behavior:** Two separate hazards in the same loop:
+  1. The scan `break`s as soon as it sees a `MADOperationCreateDocumentProtocol`
+     dependency, so a `MADOperationTestResults` dependency that happens to appear later
+     in `-dependencies` (whose order is undefined) is never consulted: `deleteFile`
+     stays NO and the failed create's file is left on disk, even though a unique URL
+     was reserved for it.
+  2. When `deleteFile` is YES but no `MADOperationUniqueUrlForFilenameProtocol`
+     dependency was seen, the local `fileURL` is nil and is handed to
+     `MADFileUtilities -removeFileAtURL:completion:`, which passes it to
+     `NSFileAccessIntent`/`NSFileCoordinator` -- a likely invalid-argument crash.
+- **Why it matters:** The order-dependent path is unreachable deterministically, and
+  the nil-URL path crashes rather than failing the operation.  Fixing means splitting
+  the loop (collect all three) and guarding the URL.
+- **Test:** `MADOperationDeleteFileTests` pins the three deterministic paths
+  (`testExecuteWithFailingResultsDeletesTheFile`,
+  `testExecuteWithSuccessfulResultsLeavesTheFile`,
+  `testExecuteWithOnlyADocumentDependencyDoesNotDelete`); the order-dependent
+  combination and the nil-URL path are deliberately not exercised -- the first cannot
+  be pinned, the second would take the test process down.
+
+### `MADOperationDocumentCloseDocument` treats "no document" as a successful close
+- **Status:** Quirk (hazard -- documented, not changed)
+- **Where:** `MAD/Source/MADOperationDocumentCloseDocument.m:30-52`
+- **Behavior:** With no `MADOperationCreateDocumentProtocol` dependency, `doc` is nil;
+  `(doc.documentState & UIDocumentStateClosed)` is 0 and `doc.storeContext == nil` is
+  true, so the guard falls through to `[MADocument close:nil completion:]`, which reads
+  nil as "already closed" and reports success.  Nothing distinguishes closing a
+  document from having none -- the same shape as the AddConnection entry above.
+- **Test:** `MADOperationDocumentCloseDocumentTests
+  testExecuteWithoutDependencyFinishes`.
+
+### Image elements do not survive a save
+- **Status:** Confirmed (live defect)
+- **Where:** `MAD/Source/rptq/RptqDocument+Extras.m:559-562` (the factory assigns a
+  `UIImage`), `MAD/Source/rptq/store/MADStoreSchema.m:563-565` (the attribute is a
+  `BlobOpt`), `MAD/Source/rptq/store/MADStore.m:483-485` (the Blob binder accepts only
+  `NSData` and otherwise binds `NULL`), `MADStore.m:217-220` (reads come back as
+  `NSData`).
+- **Behavior:** `RptqDocumentElementImage.image` is declared `UIImage *` and the
+  factory stores one, but the store's Blob column binds bytes only for `NSData`; a
+  `UIImage` therefore writes SQL NULL and the value is gone on the next open (a read
+  would hand back `NSData` if anything had been written).  The store-open/again round
+  trip in the test is the whole bug: in-memory the image is there, after save/reopen it
+  is nil.
+- **Why it matters:** An inserted picture silently disappears from the document the
+  next time it is opened -- the one place a report can carry a logo.  The fix is a
+  transform at the attribute boundary (PNG data in, UIImage out).
+- **Test:** `MADDocumentObjectDataReferenceImageTests testImageDoesNotSurviveSaveAndReopen`
+  (and the in-memory half by `testImageIsTheElementImageWhileInMemory`).
+
+### `MADReportSection -identifier` recurses forever when its section is unwired
+- **Status:** Confirmed (latent)
+- **Where:** `MAD/Source/MADReportSection.m:109-120` (`-documentSection`) and
+  `:122` (`-identifier`)
+- **Behavior:** `-identifier` reads `self.documentSection.identifier`.  The lazy
+  `-documentSection` getter, when `_documentSection` is nil, builds one with
+  `newDocumentSectionWithIdentifier:self.identifier` -- which re-enters `-identifier`
+  before the getter can store anything: unbounded recursion (stack overflow), not a
+  nil answer.  `-type`, `-height`, `-isVisible` go through the same getter and would
+  recurse the same way on an unwired section.  Related: `+initWithReportSection:`
+  returns nil for `MADDocumentSectionTypeUnknown` (the switch's default leaves the
+  strong local zero-initialised), so an unknown row is silently dropped rather than
+  surfaced.
+- **Test:** none -- exercising the recursion would take the process down; recorded
+  from reading.  The Unknown-type nil is pinned by
+  `MADReportSectionTests testInitWithAnUnknownTypeReturnsNil` (added with this entry).
+
+### `MADImageThumbnail` draws page 1, so a one-page document's thumbnail is blank
+- **Status:** Confirmed (live defect)
+- **Where:** `MAD/Source/MADImageThumbnail.m:102`
+- **Behavior:** The renderer-based path calls
+  `[printPageRenderer drawPageAtIndex:1 inRect:rect withTransparentBackground:YES]`.
+  `MADPrintPageRenderer`'s page loop is zero-based (`drawPageAtIndex:withContext:`), so
+  index 1 is the *second* page; for a one-page report the bounds check answers no and
+  the thumbnail is the blank white canvas.  The comment in the sibling draw code calls
+  this "the first page is never drawn", so the off-by-one looks deliberate for
+  multi-page reports and wrong for the cover.
+- **Why it matters:** The document browser shows empty thumbnails for single-page
+  reports.  Related quirk: the factory methods are declared on `MADImageThumbnail` (a
+  `UIImage` subclass) with an `instancetype` return, but the object built is a plain
+  `UIImage` -- callers that trust the static type would be wrong about the class.
+- **Test:** `MADImageThumbnailTests
+  testRendererThumbnailIsASquareLetterPageAndDrawsPageOne` (pins the page index and the
+  plain-`UIImage` result).
+
+### `MADPrintPageRenderer` ignores `withTransparentBackground:`
+- **Status:** Confirmed (live defect)
+- **Where:** `MAD/Source/MADPrintPageRenderer.m:289-295`
+- **Behavior:** `-drawPageAtIndex:inRect:withTransparentBackground:` never reads the
+  flag; it always paints the opaque white canvas and then draws the page.  The header
+  documents the parameter as "draws a transparent background instead of white", and
+  `MADImageThumbnail` calls it with `YES` expecting transparency.
+- **Why it matters:** Any caller asking for a transparent page gets an opaque white
+  one; the parameter is a lie.
+- **Test:** `MADPrintPageRendererTests testDrawPageDrawsTheWhiteCanvasEvenWithTransparentBackground`.
+
+### `RptqDocumentSectionEnumerator`'s two enumerators disagree with their own counts
+- **Status:** Confirmed (latent -- the enumerators have no callers in-tree)
+- **Where:** `MAD/Source/rptq/RptqDocumentSectionEnumerator.m:58-61` (the type
+  enumerator's `-nextObject`) and `:102-106` (the row enumerator's)
+- **Behavior:** The *type* enumerator pre-increments the row
+  (`getSectionTypeforRow:++_current`), so the first call skips row 0 (the report
+  header) and no call ever terminates -- past the last row it keeps answering
+  `GroupFooter`.  The *row* enumerator ignores its `_total`: with no query it answers
+  row 0 anyway (a `MADReportSection` that does not exist), and it never ends either.
+- **Why it matters:** Both are `NSFastEnumeration` sources; anything that iterates one
+  gets an endless stream with the first row missing (or a phantom row).
+- **Test:** `RptqDocumentSectionEnumeratorTests
+  testTypeEnumeratorNextObjectSkipsRowZeroAndHasNoEnd` and
+  `testNextObjectIgnoresTheCountWhenThereIsNoQuery`.
+
+### `MADQueryFullTableEnumerator` overrides no enumeration method
+- **Status:** Quirk (dead class -- left as is)
+- **Where:** `MAD/Source/MADQueryFullTableEnumerator.m`
+- **Behavior:** It subclasses `NSEnumerator` and stores a document identifier and
+  context, but never overrides `-nextObject`; enumerating it raises
+  `NSInvalidArgumentException` from `NSEnumerator`'s abstract implementation.  Nothing
+  in the tree instantiates it.
+- **Test:** `MADQueryFullTableEnumeratorTests
+  testNextObjectIsStillNSEnumeratorsAbstractImplementation`, which pins the inherited
+  IMP rather than calling it.
+
+### `MADModelQueryTable -addField:schemaField:` never wires the field's query table
+- **Status:** Quirk (documented, not changed)
+- **Where:** `MAD/Source/MADModelQueryTable.m:92-105`
+- **Behavior:** The field is registered in the table's dictionary under its identifier,
+  but its `inQueryTable` back-reference is never set (nothing in the class's own
+  initialiser sets it either), so every `MADModelQueryField` reports a nil query table.
+- **Why it matters:** Low today -- nothing reads the back-reference -- but it makes the
+  registration one-directional and surprises the next reader.
+- **Test:** `MADModelQueryTableTests testAddFieldRegistersTheFieldUnderItsIdentifier`.
+
+### `MADDocumentObjectDataReference -copyWithZone:` drops the delegate
+- **Status:** Quirk (documented, not changed)
+- **Where:** `MAD/Source/MADDocumentObjectDataReference.m:134-144`
+- **Behavior:** The copy carries item, page, row and the weak datasource but not the
+  delegate, so `-fontAttributes` on a copy is always nil (it is built from the
+  delegate).  Note the delegate is a strong property here while the datasource is weak.
+- **Test:** `MADDocumentObjectDataReferenceTests
+  testCopyCarriesItemAndIndexesButNotTheDelegate`.
+
+### `MADSectionLayoutAttributes +movePlacedItem:` teleports an isolated item to the origin
+- **Status:** Confirmed (live defect)
+- **Where:** `MAD/Source/MADSectionLayoutAttributes.m:62-82`
+- **Behavior:** The candidate drop point starts as `CGPointZero` with its distance
+  measured from the item's own origin, so when there is no *other* item to snap
+  against, the loop never replaces the candidate and the item's frame is set to
+  `(0, 0, w, h)` -- the origin, not a nearby valid point.  An item that was already
+  somewhere sensible is yanked to the top-left the first time layout runs while it is
+  alone.
+- **Test:** `MADSectionLayoutAttributesTests testPlaceItemWithNoOtherItemsSnapsToTheOrigin`
+  (characterization) and `testPlaceItemSnapsToTheNearestOtherCorner` (the
+  with-neighbours half).
+
+### `MADSectionLayoutManager -removeItemWithID:` corrupts indexes for an unknown ID
+- **Status:** Confirmed (latent)
+- **Where:** `MAD/Source/MADSectionLayoutManager.m:244-263`
+- **Behavior:** The lookup for an ID not in `items` answers nil, `pathToRemvoe` is nil,
+  and `[nil indexAtPosition:]` reads 0 -- so the "shift later items down" comparison
+  passes for *every* item, each index is decremented, the item at index 0 underflows to
+  `NSUIntegerMax`, and nothing is removed.  The manager is left with corrupt
+  index-paths; `NSIndexPath` tolerates the huge value, so the corruption surfaces later
+  (or crashes downstream) rather than in the call.
+- **Test:** `MADSectionLayoutManagerTests
+  testRemoveWithAnUnknownIDLeavesEveryIndexDecremented`.
+
+### `MADReportSectionRowsRepresentation` declares `itemCount` but implements `isItemCount`
+- **Status:** Confirmed (latent -- nothing reads either accessor)
+- **Where:** `MAD/Source/MADReportSectionRowsRepresentation.h:20`,
+  `MAD/Source/MADReportSectionRowsRepresentation.m:50`
+- **Behavior:** The header declares `@property (nonatomic, readonly) NSUInteger itemCount;`.
+  The implementation never implements that getter; it implements
+  `- (NSUInteger)isItemCount` instead.  The declared property is therefore
+  auto-synthesised against an `_itemCount` ivar nothing writes, so `-itemCount` returns
+  0 however many lines the container holds, while `-isItemCount` returns the real count.
+- **Why it matters:** A caller using the declared API silently sees an empty container.
+  No production code reads either selector today (checked: `itemCount` appears only in
+  the declaration), so the defect is latent.  The honest fix is to either rename the
+  implementation or declare the property `getter=isItemCount` -- a one-line change left
+  for a deliberate decision.
+- **Test:** `MADReportSectionRepresentationTests testDeclaredItemCountGetterReadsZero`,
+  which asserts the declared getter reads 0 and the implemented one reads 2, via the
+  test-only bridge the suite already uses for undeclared implementation selectors.
+
+### `RptqQueryTable -isEqualTo:` compares every non-nil table as equal
+- **Status:** Confirmed (latent -- conforms to MTProtocolCompare, but no production caller)
+- **Where:** `MAD/Source/rptq/RptqQueryTable+Extras.m:97`
+- **Behavior:** The first clause is `if ([sender isEqual:sender]) return YES;` -- a
+  tautology -- so any non-nil argument compares equal.  The fallback branch is
+  unreachable and, if it were reached, compares two uninitialised `NSNumber` locals
+  (nil under ARC), yielding `NO`.  The method therefore answers "equal" for every
+  non-nil pair and "not equal" only for nil.
+- **Why it matters:** Anything treating query tables as graph nodes would see every
+  table as the same node.  Today `MADQueryFull`'s graph wraps `NSNumber` identifiers
+  (`MADQueryFull.m:176-193`), and `MTVertex`/`MTEdge` equality is by
+  `uniqueIdForStructure`, so nothing reaches this method -- checked across MAD,
+  MADDataStructures, and MADDesigner.
+- **Test:** `MADRptqQueryTests testQueryTableIsEqualToIsDegenerate`.
+
+### `MADReportFormatterCache` is in no target's Sources build phase
+- **Status:** Quirk (dead file -- left as is)
+- **Where:** `MAD/Source/MADReportFormatterCache.m`
+- **Behavior:** The file sits in the MAD project group and its header is in the Headers
+  phase, but the `.m` appears in no `Sources` build phase, so the class is in no binary.
+  Nothing in the tree references it (checked: the only reference is this test suite,
+  which cannot link it).
+- **Why it matters:** It looks like a live size-keyed layout cache, so a reader could
+  "use" a class that does not exist at link time.  Either wiring it into the framework
+  or deleting the file is the real fix; both are project changes, deferred.
+- **Test:** none possible -- `MADQuerySimpleTypesTests` records why the class is not
+  covered.
+
+### `MADQueryCacheIndexCreateTemplate -parameterCount` is declared nowhere and called nowhere
+- **Status:** Quirk (dead code -- left as is)
+- **Where:** `MAD/Source/MADQueryCacheIndexCreateTemplate.m:54`
+- **Behavior:** `-parameterCount` (`_groupCount * 2 + 2`) is implemented, but no header
+  declares it and no code in the tree calls it.  The class's own `-getSql:` template
+  emits the same number of `?` placeholders, so the count is presumably meant for the
+  statement binder, which today must count placeholders itself (or not at all).
+  The class is also absent from the `MADQuery (Extras)` factory switch -- callers
+  construct it directly.
+- **Why it matters:** Low; it is internal bookkeeping with no consumer.  Recorded so a
+  future binder work does not reinvent it without noticing the existing convention.
+- **Test:** `MADQuerySimpleTypesTests testIndexCreateTemplateWithGroupCount` and
+  `testIndexCreateTemplateWithZeroGroupCount`, through the test-only bridge.
+
+### `MADQueryFull` treats its `error` out-parameter as an input, and drops the sort error
+- **Status:** Confirmed (latent -- no test; both paths need inputs the app does not produce yet)
+- **Where:** `MAD/Source/MADQueryFull.m:206`, `:260`
+- **Behavior:** Three related contracts are broken in
+  `-SQLOnlyActiveFields:managedObjectContext:error:`:
+  1. `if (*error != NULL)` at `:206` reads the caller's out-parameter as if it were an
+     incoming value.  A caller who passes an `NSError **` whose pointee is not nil
+     (garbage from an uninitialised local, or a reused variable) takes the "bad
+     conditions" branch and gets empty SQL for a perfectly good query.  The topological
+     sort's own error is written to the local `sortError` and never read, so a circular
+     query -- the one thing that branch exists for -- is silently ignored and the
+     generator proceeds.
+  2. The same `*error` read crashes outright when the caller passes `NULL`, which both
+     this method and `-copySQLWithManagedObjectContext:error:` accept as nullable.  The
+     crash happens on every call, before any SQL is built.
+  3. The "no active fields" branch writes `*error = ...` (code 5774) at `:260` without
+     checking `error != NULL`, a second unguarded write on the same parameter.
+- **Why it matters:** Contract violations a caller can trip with ordinary C habits;
+  none have bitten yet because the app always passes a live `NSError **` and
+  (presumably) never builds a cyclic query.  Fixing means NULL-checking the parameter
+  and reading `sortError` in the guard -- a deliberate behaviour change left for the
+  queue.
+- **Test:** The non-nil error path is pinned by `MADQueryFullTests
+  testNoActiveFieldsReportsError` (code 5774, domain `MADQuery`); the NULL and cyclic
+  paths are deliberately untested because both currently crash or emit garbage.
+
+### `MADElementStylizedText` accepts a nullable font name that crashes when nil
+- **Status:** Confirmed (latent -- callers always pass a font name)
+- **Where:** `MAD/Source/MADElementStylizedText.h:21`,
+  `MAD/Source/UIFontDescriptor+MADAdditions.m:21-25`
+- **Behavior:** `-initWithFontName:fontSize:textStyle:horizontalAlignment:` annotates
+  `fontname` (and its return value) nullable, but it hands the name straight to
+  `UIFontDescriptorFamilyAttribute` in a dictionary literal.  A nil name throws
+  `NSInvalidArgumentException` from `+[NSDictionary dictionaryWithObjects:forKeys:count:]`
+  rather than returning nil.
+- **Why it matters:** The annotation promises a graceful nil; the caller gets a crash.
+  Every current caller passes a name, so it is latent.  Either the annotation or the
+  nil handling has to give.
+- **Test:** `MADElementStylizedTextTests testNilFontNameThrows` pins the current
+  throw.
+
 ## MADFoundation
 
 ### `MADOperation -willEnqueue` advances past `Pending` to `Ready`
@@ -809,6 +1163,75 @@ Status key:
   `testBaseTableLoadFromCacheWithMissingFileReturnsError` (asserting error code -215) and
   `testBaseTableLoadFromCacheWithNilUrlThrows` still pass -- 76 tests green in the class.
 
+### `MADDataTable`'s caching pair throws an NSError object, not an NSException
+- **Status:** Confirmed (left as is -- no changed functionality)
+- **Where:** `MADFoundation/Source/MADDataTable.m:139` (`-loadFromCacheWithUrl:error:`,
+  code -213) and `:201` (`-cacheWithUrl:error:`, code -22)
+- **Behavior:** Both nil-URL guards `@throw` the `NSError` object itself.  The other
+  failure paths in the same methods return `NO` with the error handed back through the
+  out-parameter.
+- **Why it matters:** `@catch (NSException *)` -- the only shape the codebase writes --
+  does not catch it, so a caller passing nil (nullable per the signature) gets an untyped
+  object thrown past it.  The same shape as the MADAPI connection view controllers'
+  `@throw NSInternalInconsistencyException;`.
+- **Test:** `MADDataTableBaseTests testCacheWithNilUrlThrowsTheErrorObject` and
+  `testLoadFromCacheWithNilUrlThrowsTheErrorObject`, which catch `id` and assert the
+  thrown object's class, code and domain.
+
+### `BDHost +addressForHostname:` crashes when the name resolves to no IPv4 address
+- **Status:** Confirmed (latent -- no IPv6-only resolution in the test environment)
+- **Where:** `MADFoundation/Source/BDHost.m:27`
+- **Behavior:** The guard is `addresses.class > 0 ? addresses[0] : nil`.  `[NSArray class]`
+  is never 0, so the test only rejects nil; `+addressesForHostname:` answers an *empty*
+  array for a name that resolves to IPv6 only (it filters everything that is not
+  `AF_INET`), and subscripting element 0 of an empty array throws `NSRangeException`.
+- **Why it matters:** An IPv6-only hostname -- the normal case on some networks -- takes
+  the connection screen down instead of reporting a lookup failure.
+- **Test:** none, deliberately: no IPv6-only fixture resolves deterministically in an
+  offline simulator.  The non-empty path is pinned by `BDHostTests
+  testLocalhostResolvesToLoopback`.
+
+### `BDHost +ipAddresses` / `+ethernetAddresses` are unchecked walks of `getifaddrs()`
+- **Status:** Quirk (dead code -- left as is)
+- **Where:** `MADFoundation/Source/BDHost.m:117`, `:140`
+- **Behavior:** Both iterate the interface list and read `ifa_addr->sa_family` without
+  checking `ifa_addr` for NULL; an interface without an address dereferences NULL.  Both
+  methods are also declared in no header and called from nowhere in the tree (checked
+  across every framework and the app).
+- **Why it matters:** Dead code that crashes on a well-formed input is best wired up or
+  deleted; both are changes, so it is recorded instead.
+- **Test:** none -- the unchecked walk is exactly why the suite does not call them;
+  `BDHostTests`' header records that.
+
+### `MADDataTableVirtual -addRow:error:` lets a short row desynchronize the two views
+- **Status:** Quirk (hazard -- documented, not changed)
+- **Where:** `MADFoundation/Source/MADDataTableVirtual.m:179-195`
+- **Behavior:** The method walks the supplied array positionally and stops when the
+  array runs out.  A row shorter than the column list therefore stores the row
+  dictionary with only the supplied keys, appends only those values to the column
+  objects, and still increments the row counter and appends to the index.  The row
+  view and the column view then describe different rows: `-objectAtRow:column:` for
+  the missing column indexes an empty `MADDataColumn`, which asserts in Debug
+  (`MADDataColumn.m:170`) and reads out of bounds in Release.
+- **Why it matters:** Nothing in the app calls `-addRow:error:` with short rows --
+  `-addRowWithDataForFieldKeys:`, the path the drivers use, pads missing values with
+  `@""` -- so this is latent.  It is the kind of latent that surfaces the first time
+  a driver writes a ragged row.
+- **Test:** `MADDataTableVirtualTests testShortRowLeavesTheColumnViewDesynchronized`
+  pins the stored state; the empty-column read is not exercised because it asserts.
+
+### `MADDataTableVirtual` has undeclared implementation selectors
+- **Status:** Quirk (left as is)
+- **Where:** `MADFoundation/Source/MADDataTableVirtual.m` (vs `MADDataTableVirtual.h`)
+- **Behavior:** `-objectAtIndex:` (`:147`) and `-sortedIndexForIndex:` (`:124`) are
+  implemented but declared in no header; the declared surface only carries
+  `-objectAtIndexedSubscript:`.  `+keySortIndex` is likewise internal.
+- **Why it matters:** Hidden API is easy to break silently; none of it is called from
+  outside the class today.  Same shape as `MADFileUtilities`' undeclared helpers and
+  `MADQueryCacheIndexCreateTemplate -parameterCount`, both recorded elsewhere in this
+  file.
+- **Test:** `MADDataTableVirtualTests testObjectAtIndexAndSubscriptAgree`, through the
+  test-only category bridge the suite already uses.
 ### `MADOperationConditionResultTests`: the async-path assertion raced the dispatch_group
 
 - **Status:** Fixed
@@ -859,6 +1282,27 @@ Status key:
   noted under MADAPI. Deferred: the fix is an additive alias
   (`+newColorWithColors:` forwarding to the misspelling) so no caller has to
   change, and that is churn for a cosmetic gain.
+
+### `MADColorEverydayApps` header colors bypass the 8-bit-to-unit conversion
+- **Status:** Confirmed (pinned as-is -- no changed functionality)
+- **Where:** `MADCocoaExtensions/Source/UIColor+EverydayApps.m:30`
+  (`-newColorHeaderColor`) and `:40` (`-blueHeaderSecondaryColor`)
+- **Behavior:** Every other palette member builds its color through
+  `newColorWitColors` / `newColorWithColorsAlpha`, which divide the 8-bit triple by
+  255.  The light-mode branches of these two dynamic colors instead call
+  `+[UIColor colorWithRed:green:blue:alpha:]` with the raw 8-bit numbers
+  (2, 108, 182 and 13, 158, 215).  That initializer expects 0-1; the components are
+  stored as given -- an extended-range sRGB color -- so the intended blue is not
+  what the color carries, and at draw time Core Animation clamps the out-of-range
+  components to white.
+- **Why it matters:** In light mode the header tint renders as a 20%-alpha white
+  veil instead of the blue.  `blueHeaderSecondaryColor` has the same arithmetic
+  but an alpha of 0, so it is invisible either way.  The fix is dividing by 255,
+  as every sibling does.
+- **Test:** `MADColorEverydayAppsTests testHeaderColorLightModeComponentsAreOutOfRange`
+  and `testBlueHeaderSecondaryLightModeComponentsAreOutOfRange`, which pin the
+  stored 2/108/182 and 13/158/215 components; every other palette member is pinned
+  at unit scale.
 
 ---
 
@@ -961,6 +1405,204 @@ Status key:
   guard — `isUploading` / `isDownloading`, both `NO` for a local item — and
   `+updateProgressView:active:percent:` hides the view and zeroes its progress
   when `active` is `NO` (`.m:60-64`). The value is never displayed.
+
+### `MADFilesController -setFileCoordinator:` hands URLs where metadata is expected — crash
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADFilesController.m:193-220` (the offending
+  value at `:204`, the hand-over at `:208-212`)
+- **Behavior:** Swapping coordinators reads the tracked list as
+  `allURLs = [self.fileMetaDatum valueForKey:@"URL"]` — an array of `NSURL` — and
+  then passes it straight in as `removedMetaDatum:`. Everything downstream of
+  `-processContentChangesWithInsertedMetaDatum:removedMetaDatum:updatedMetaDatum:completion:`
+  treats that argument as `MADMetaData`, and the first thing it does is build
+  `[NSPredicate predicateWithFormat:@"URL in %@.URL", …]` and filter with it
+  (`.m:474-478`). `NSURL` has no `URL` key, so the predicate raises
+  `NSUnknownKeyException`.
+- **Why it matters:** The raise happens on the delegate operation queue, so it is
+  uncaught and takes the process down. It fires on any coordinator swap while at
+  least one file is tracked (an empty list filters to nothing and survives).
+  `-setFileCoordinator:` is called by the app's file-location manager when the
+  storage setting changes; an empty list may be why this has not been seen.
+- **Pinned by:** `MADFilesControllerTests`
+  `-testSettingANewCoordinatorStopsTheOldOneAndStartsTheNewOne`, which can only
+  exercise the empty case — the populated case terminates the test process. The
+  test's header comment records it.
+- **Fix sketch:** map the URLs to `MADMetaData` first
+  (`-fileInfosByMappingURLs:` already exists at `.m:584`), or have the method take
+  the tracked objects directly.
+
+### `MADLocalFileCoordinator -removeFileAtURL:` reports the removal as an update
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADLocalFileCoordinator.m:112-119`
+- **Behavior:** The success branch builds `removes = @[URL]` and then calls
+  `fileCoordinatorDidUpdateContentsWithInsertedURLs: removedURLs:updates
+  updatedURLs:removes` — the `removes` and `updates` arrays are swapped. The
+  delegate is told the file was *updated*, and `removedURLs` stays empty. The
+  file is deleted either way.
+- **Why it matters:** `MADFilesController` trusts the buckets: a removal reported
+  as an update looks up the still-tracked entry and rewrites it in place
+  (`.m:530-549`) instead of untracking it, so a file deleted through the
+  coordinator stays in the browser list until a refresh notices a file-system
+  difference. The same swapped call exists in
+  `MADCloudFileCoordinator -createURLWithName:` (`.m:214-221`), where both arrays
+  are empty and the inversion is inert.
+- **Pinned by:** `MADLocalFileCoordinatorTests
+  -testRemoveReportsTheURLAsUpdatedNotRemoved`.
+
+### `MADLocalFileCoordinator -documentsDirectory` has no setter
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADLocalFileCoordinator.m:38` (`@dynamic`)
+  against `MADFileCoordinatorProtocol.h:18-19` (`readwrite, copy`)
+- **Behavior:** The class declares the property `@dynamic` and implements only
+  `-documentsDirectory` (`.m:206-209`). The setter the protocol promises is never
+  provided, so `-setDocumentsDirectory:` raises `NSInvalidArgumentException`
+  ("unrecognized selector") at the call site.
+- **Why it matters:** The protocol is the only contract a caller sees; code that
+  holds an `id <MADFileCoordinatorProtocol>` is entitled to write the property and
+  will crash instead. `MADFilesController` only reads it today, and the app's
+  writes go through the reader-side accessors, which is why it has not surfaced.
+- **Pinned by:** `MADLocalFileCoordinatorTests -testDocumentsDirectoryHasNoSetter`
+  (`-respondsToSelector:` plus the throwing call).
+
+### `MADFilesController` accepts and ignores `sortComparator`
+- **Status:** Quirk (left as is)
+- **Where:** `MADFileManager/Source/MADFilesController.m:154-174`
+- **Behavior:** `-initWithFileCoordinator:delegateQueue:sortComparator:` never
+  stores or calls the block. Both class factories pass a file-static
+  `sortComparator` (`.m:53`), and the controller's own ordering is
+  `finderSortWithLocale` by `fileSystemName` (`.m:495-501`).
+- **Why it matters:** A caller passing a comparator gets no warning and no effect;
+  the parameter is a lie in the initializer's signature. The finder ordering is
+  what the browser actually wants, so the block is dead weight rather than a wrong
+  result.
+- **Pinned by:** `MADFilesControllerTests -testTheSortComparatorArgumentIsIgnored`
+  (a comparator that would keep the reverse order makes no difference).
+
+### `MADFilesController` gates the renaming failure on the removing callback
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADFilesController.m:405-416`
+- **Behavior:** `-fileCoordinatorDidFailRenamingFileAtURL:withError:` puts
+  `@selector(filesController:didFailRemovingFileInfo:withError:)` in the
+  `respondsToSelector:` check but sends
+  `filesController:didFailRenamingFileInfo:withError:`. A delegate that implements
+  only the renaming callback — the natural choice — never hears about a rename
+  failure; one that implements only the removing callback gets the renaming
+  failure anyway.
+- **Why it matters:** A failed rename is silent for the expected delegate shape.
+- **Pinned by:** `MADFilesControllerTests
+  -testRenamingFailureIsGatedOnTheRemovingCallback`.
+
+### `+[MADFilesController getFileStorageLocationsForUbiquityIdentifier:…]` crosses its two URLs
+- **Status:** Open (latent; found by test 2026-10-06)
+- **Where:** `MADFileManager/Source/MADFilesController.m:136-137`
+- **Behavior:** The completion block's parameters are `(cloudAvailable,
+  documents, data)`, but the non-cloud branch answers
+  `documents = [MADURLFactory newURLForLocalDataDirectoryForGroupIdentifier:…]`
+  (the **Data** directory) and
+  `data = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:…]`
+  (the **Documents** directory).
+- **Why it matters:** Latent today only because the sole caller —
+  `MADFileLocationManager -setupFileStorageLocationsForCloud`
+  (`MADExplorer/…/MADFileLocationManager.m:223`) — declares both as `__unused`. The
+  first caller that trusts the labels gets the wrong directory.
+- **Pinned by:** `MADFilesControllerTests
+  -testStorageLocationsWithoutCloudAnswerLocalDirectories`.
+
+### `MADLocalFileCoordinator` drops the removal when the last matching file goes away
+- **Status:** Quirk (left as is — the guard predates the tests)
+- **Where:** `MADFileManager/Source/MADLocalFileCoordinator.m:251`
+- **Behavior:** `-processChangeToLocalDocumentsDirectory` wraps the whole
+  insert/remove comparison in `if (localListURLs.count > 0)`. With no matching
+  files left in the directory, no delegate callback is sent at all — not even for
+  the removals that just happened. The coordinator also leaves
+  `currentLocalContents` at its old value in that case.
+- **Why it matters:** A browser that empties the document store this way is told
+  nothing; the next refresh with any file present reports the removals then. It is
+  the mirror of the `removeFileAtURL:` swap above: removals are the fragile path.
+- **Pinned by:** `MADLocalFileCoordinatorTests
+  -testRefreshIsSilentWhenTheLastMatchingFileIsGone`.
+
+### `MADDirectoryMonitor`'s cancel handler dereferences a nil owner — SIGSEGV on dealloc
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADDirectoryMonitor.m:99-104`
+- **Behavior:** Both handlers load their owner weakly
+  (`MADDirectoryMonitor __weak *weakself = self;` at `.m:70`) and then use it
+  without a nil check.  The cancel handler does it with **direct ivar access**:
+
+  ```objc
+  dispatch_source_set_cancel_handler(self.directoryMonitorSource, ^{
+      MADDirectoryMonitor *sself = weakself;
+      close(sself->_fileDescriptor);          // *(int *)((void *)0 + 8)
+      sself->_fileDescriptor = NotListening;
+      sself.directoryMonitorSource = nil;
+  });
+  ```
+
+  A message send to nil is harmless; `->` on nil is a load/store at address
+  `offset` and faults.  `_fileDescriptor` sits at offset 8, which is exactly the
+  fault address reported.
+- **Why it matters:** A monitor that is released with its source still live (or
+  still cancelling) crashes in the cancel handler after the owner is gone:
+  `dispatch_source_cancel` → cancel callout → `sself->_fileDescriptor` →
+  `EXC_BAD_ACCESS (SIGSEGV) KERN_INVALID_ADDRESS at 0x8`.  There is no way for
+  the caller to avoid it other than keeping the monitor alive until the cancel
+  handler has run, which no caller does.  The same missing guard leaves the
+  event handler one weak-load away from `dispatch_source_get_data(NULL)`.
+- **Fix sketch:** the cancel handler is the last user of the monitor, so it can
+  capture `self` **strongly** — the handler already sets
+  `directoryMonitorSource = nil`, which breaks the source→block→self→source
+  cycle on the one and only cancel.  (A bare `if (sself == nil) return;` would
+  stop the fault but leak the descriptor, which is why the handler exists.)
+- **Pinned by:** the crash report above; `MADDirectoryMonitorTests` works around
+  it everywhere (each monitor is stopped and the run loop drained before the
+  test releases it — `-stopAndDrain:` and `-tearDown`).
+
+### `MADCloudFileCoordinator -init…` writes `_documentsDirectory` through a weak self — SIGSEGV
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADFileManager/Source/MADCloudFileCoordinator.m:74-79`
+- **Behavior:** The initializer resolves the iCloud Documents directory
+  asynchronously and assigns it with direct ivar access:
+
+  ```objc
+  MADCloudFileCoordinator __weak *wself = self;
+  dispatch_barrier_async(self.documentsDirectoryQueue, ^{
+      MADCloudFileCoordinator *sself = wself;
+      sself->_documentsDirectory =            // objc_storeStrong(&nil->_documentsDirectory, …)
+          [MADFileUtilities newURLForCloudDocumentsDirectoryForUbiquityID: identifier];
+  });
+  ```
+
+  There is no nil check, and the assignment is an ARC store through
+  `&sself->_documentsDirectory`.
+- **Why it matters:** Any `MADCloudFileCoordinator` that is released before the
+  queued barrier block runs crashes on that block: `EXC_BAD_ACCESS (SIGSEGV)
+  KERN_INVALID_ADDRESS at 0x10` in
+  `__80-[MADCloudFileCoordinator initWithPredicate:identifier:firstQueryUpdateHandler:]_block_invoke`.
+  Building a cloud coordinator and letting it deallocate promptly — which is what
+  the factory does for any short-lived caller — is enough.  The coordinator is
+  normally retained by `MADFilesController` for the life of the browser, which
+  hides it.
+- **Fix sketch:** `if (sself == nil) return;`, or capture `self` strongly in the
+  init block (the block is a one-shot assignment; there is no cycle to keep).
+- **Pinned by:** the crash report above.  `MADCloudFileCoordinatorTests`,
+  `MADFileCoordinatorTests`, and `MADFilesControllerTests` all keep every cloud
+  coordinator alive and drain `documentsDirectoryQueue` before releasing it
+  (`-tearDown`), which is the workaround, not the fix.
+
+### `MADDirectoryMonitor`'s cancel handler dereferences a nil owner — SIGSEGV on dealloc
+- **Status:** Quirk (left as is — logging and a silent no-op only)
+- **Where:** `MADFileManager/Source/MADDirectoryMonitor.m:52`, `:73-96`
+- **Behavior:** (1) `-startMonitoring` on a path that cannot be opened
+  (`open(2)` fails, `.m:52`) returns without a source or an error — the monitor
+  silently never observes anything. (2) The event handler switches on the raw
+  `dispatch_source_get_data` bitmask, so an event carrying more than one flag
+  (`WRITE|EXTEND`, common) falls through to `default` and logs "Untracked event."
+  The delegate is still called.
+- **Why it matters:** (1) is a setup error that will look like "the browser does
+  not refresh"; (2) only costs a misleading log line.
+- **Pinned by:** `MADDirectoryMonitorTests`
+  `-testStartMonitoringAMissingDirectoryIsANoOp` and
+  `-testObservesAChangeInTheMonitoredDirectory`.
 
 ---
 
@@ -1263,6 +1905,75 @@ wrong answer.
   testArrayCachingIsEmptyAndCountForEmpty` and
   `testArrayCachingRepeatedReadsReturnTheCachedObject`.
 
+### `MADDataTableFast`'s read transactions crash without a selects database
+- **Status:** Confirmed (found by a test that made the call)
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:1062-1082`
+- **Behavior:** `-beginReadTransaction` and `-commitReadTransaction` guard on
+  `self.databaseForSelects->_database == NULL`, but a table built without a cache
+  directory or cache delegate has `databaseForSelects == nil`: the ivar read through
+  the nil object crashes before the handle guard is reached.  Constructing such a table
+  and calling the pair took the test process down; the test now pins only the
+  precondition (`databaseForSelects` is nil).
+- **Why it matters:** The renderer's draw loop calls the pair around every page draw;
+  any fast table that reaches a draw without a cache directory takes the app down.
+- **Test:** `MADDataTableFastSelectTests testReadTransactionsWithoutASelectsDatabaseAreNotSafe`
+  (precondition only -- the call itself is the crash).
+
+### `MADDatabaseSqlite3 +databaseResultValueCast:…` frees sqlite's own text pointer
+- **Status:** Confirmed (latent -- no callers in-tree)
+- **Where:** `MADSqlite3/Source/MADDatabaseSqlite3.m:1288` and `:1313`
+  (`free((char *)text)` on the pointer `sqlite3_column_text` returned)
+- **Behavior:** The pointer sqlite3 hands back belongs to the statement and stays valid
+  only until the next step/reset/finalize; freeing it corrupts the allocator (and
+  sqlite's own buffer bookkeeping) rather than doing anything useful.  The untyped
+  sibling `+databaseResultValue:columnNumber:` -- the hot path -- does not free.
+- **Why it matters:** The method is public but has no callers today, so this is latent;
+  the first caller that reads a text column through it gets heap corruption.
+- **Test:** none for the text-family branches, deliberately: the failure mode is memory
+  corruption.  `MADDatabaseSqlite3ResultValueTests` covers the numeric, blob and
+  null/unknown branches, which are safe.
+
+### `MADDatabaseResultValue` is a dead near-copy of MADDatabaseSqlite3's factories
+- **Status:** Quirk (dead code -- left as is)
+- **Where:** `MADSqlite3/Source/MADDatabaseResultValue.m` (in no target's Sources
+  phase), versus `MADDatabaseSqlite3.m:1206-1319`
+- **Behavior:** The file implements the same two result-value factories as the live
+  MADDatabaseSqlite3 class methods (minus the stray `free`), but it is in no target, so
+  the class is in no binary -- a test that imports the header fails at link with
+  "Undefined symbol: _OBJC_CLASS_$_MADDatabaseResultValue" (verified).  Its
+  `-copyWithZone:` also throws unconditionally while the header advertises
+  `<NSCopying>`.
+- **Why it matters:** A reader can pick the dead file as the place to fix result
+  reading and watch their fix never link; the two copies have already drifted (the
+  `free`).  Deleting one and keeping the other is the real fix.
+- **Test:** none possible -- the class is not linked.  `MADDatabaseSqlite3ResultValueTests`
+  covers the live copies.
+
+### `MADDataTableFast -whereClauseForGroupKeys:` indexes past the sort descriptors
+- **Status:** Confirmed (latent)
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:1167-1182`
+- **Behavior:** The loop walks the group keys and reads `self.sortDescriptors[i]` at the
+  same index; with fewer sort descriptors than group keys it walks off the end of the
+  array and raises `NSRangeException`.  The pairing is also purely positional -- the
+  group keys' values are matched to descriptors by index, not by any key lookup.
+- **Why it matters:** The call comes from the group-key cache path
+  (`-objectsForGroupKeys:`), where the two arrays are built from different sources; a
+  mismatch is a crash rather than an empty clause.
+- **Test:** `MADDataTableFastSelectTests testFewerSortDescriptorsThanGroupKeysRaises`
+  (and the positional-pairing behavior by
+  `testGroupKeysProducePositionalColumnValuePairs`).
+
+### `MADArrayCachingEnumerator` is in no target
+- **Status:** Quirk (dead file -- left as is)
+- **Where:** `MADSqlite3/Source/MADArrayCachingEnumerator.m` (in no Sources phase; the
+  header says so itself)
+- **Behavior:** The header is in the project and declares an `NSEnumerator` over a cache
+  URL; the implementation is not compiled anywhere, so the class is in no binary and
+  cannot be linked against.  The header's comment calls it unfinished and asks for
+  investigation.
+- **Test:** none possible -- like `MADDatabaseResultValue`, the class does not exist at
+  link time.  Verified with `MADArrayCachingEnumerator.m in Sources` == 0.
+
 ---
 
 
@@ -1276,6 +1987,78 @@ wrong answer.
   "Code 128 (EAN-14)" can never be returned.
 - **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcode.m:693,719`.
 - **Evidence:** `-Wobjc-dictionary-duplicate-keys`.
+
+### Two symbology classes initialize with another class's type
+- **Status:** Confirmed (latent -- nothing in-tree builds either symbology today)
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcodeQrCodeIso18004.m` (init and
+  `+type` both return `MTBarcodeTypeOneCode`) and
+  `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcodeCode128Iso15417.m:145-161`
+  (`MTBarcodeCode128Ean128`'s init assigns `[MTBarcodeCode128Hibc type]` -- HIBC Code
+  128 -- while its `+type` says `MTBarcodeTypeEAN128`)
+- **Behavior:** `+[MTBarcode newBarcodeWithType:MTBarcodeTypeQrcode]` builds an
+  `MTBarcodeQrCodeIso18004` whose `barcodeType` is `MTBarcodeTypeOneCode`; the factory's
+  `MTBarcodeTypeEAN128` case builds an `MTBarcodeCode128Ean128` whose `barcodeType` is
+  `MTBarcodeTypeHibc128`.  `-drawInRect:` passes the instance's type straight to
+  `barcode->symbology`, so each object draws a symbol other than the one it is named
+  for -- QR code → USPS Intelligent Mail, GS1-128 → HIBC Code 128.
+- **Why it matters:** Any feature that asks for a QR code or a GS1-128 barcode gets the
+  wrong symbology and the wrong payload validation.  The exhaustive factory matrix found
+  the second one; the other 63 mapped types round-trip correctly.
+- **Test:** `MTBarcodeSymbologyTests testQrCodeClassClaimsTheOneCodeType` and
+  `testEan128ClassClaimsTheHibcType`, with
+  `testEveryMappedTypeRoundTripsExceptTheTwoKnownMismatches` covering the rest.
+
+### `MTBarcodeInternationalStandardBookNumberIsbn +type` calls itself
+- **Status:** Confirmed (latent -- no caller in-tree)
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcodeInternationalStandardBookNumberIsbn.m`
+- **Behavior:** The class method's body is
+  `return [MTBarcodeInternationalStandardBookNumberIsbn type];` -- itself, so any call
+  recurses until the stack is exhausted.  The initializer is fine (it assigns
+  `MTBarcodeTypeIsbnX` directly), so the factory path works; only the class-method
+  accessor is a trap.
+- **Why it matters:** A generic caller enumerating symbology classes for their `+type`
+  (the obvious way to build a picker) takes the process down on the ISBN entry.
+- **Test:** `MTBarcodeSymbologyTests testIsbnClassInitializesToItsOwnType` exercises the
+  factory path only; `+type` is deliberately not called.
+
+### `MTBarcode`'s NSCoding round trip loses everything
+- **Status:** Quirk (broken by construction -- left as is)
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcode.m:376-408`
+- **Behavior:** `-encodeWithCoder:` writes every property under the same empty key
+  (`@""`), so only the last value survives in the archive; `-initWithCoder:` ignores the
+  decoder entirely and just calls `[super init]`.  A decoded barcode is therefore a
+  default instance of the right class -- not even the subclass's `-init` defaults apply,
+  because `[super init]` skips them.  The class conforms to `NSCoding`, not
+  `NSSecureCoding`, so secure archiving rejects it outright.
+- **Why it matters:** Nothing archives a barcode today, so this is latent; it would bite
+  the first time one is persisted.
+- **Test:** `MTBarcodeTests testNSCodingRoundTripLosesTheState`.
+
+### `MTBarcode -drawInRect:` copies user input into `primary[128]` unchecked
+- **Status:** Confirmed (crash/memory-corruption risk -- no test)
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcode.m:492`
+  (`strcpy(barcode->primary, primaryData)`), against
+  `Compressor/library/zint/include/zint.h:121` (`char primary[128]`)
+- **Behavior:** When `has2dComponentEnabled` is on, the user's second input is copied
+  with `strcpy` into zint's fixed 128-byte `primary` buffer -- no length check ahead of
+  it, unlike the main payload which goes through `ZBarcode_Encode_and_Buffer`'s
+  length-taking API.
+- **Why it matters:** A primary-data string of 128 bytes or more overruns the struct.
+  Not exercised in tests: the failure mode is memory corruption, not an assertion.
+- **Test:** none, deliberately.
+
+### `MTBarcodeView` is the framework's one manual-retain-release file
+- **Status:** Quirk (left as is)
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MTBarcodeView.m` (compiled with
+  `-fno-objc-arc`), `MTBarcodeViewTests`
+- **Behavior:** The project is ARC, but this one file keeps a `-dealloc` that releases
+  `_barcode` and calls `[super dealloc]`, so it must stay `-fno-objc-arc`.  Its
+  `-initWithFrame:` asserts "Don't you dare!", and `UIView -init` forwards there, so the
+  view is only constructible from a storyboard (`-initWithCoder:`); a logic test cannot
+  build one, which is why `MTBarcodeViewTests` pins the constructor contract and the
+  property's declared storage instead of behaviour.
+- **Test:** `MTBarcodeViewTests testProgrammaticConstructionIsRefused` and
+  `testBarcodePropertyIsAnInstanceOfMTBarcode`.
 
 ## MADMySQL
 
@@ -1439,6 +2222,75 @@ libmysqlclient; it skips rather than fails when no server is reachable.
   confirmed to fail against the old behaviour, printing the tab. The offline
   `MADMySQLTests testNewSafeLiteralWithoutASessionFallsBackToAnsiQuoting` pins the
   no-session path, backslash and all, so the limitation is stated rather than implied.
+
+### `MysqlUpdate -execute` raises an out-of-bounds string exception instead of its own error
+- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Where:** `MADMySQL/Source/MysqlUpdate.m:70` (the column list) and `:130` (the qualifier)
+- **Behavior:** Both buffers are built with a leading separator and then trimmed with
+  `deleteCharactersInRange:NSMakeRange(0, 2)` / `NSMakeRange(0, 4)`.  Nothing forces
+  either buffer to have that many characters:
+
+  - no `rowData` (or an empty dictionary) → the column list is still empty → the
+    two-character delete raises `NSInvalidArgumentException` ("Range or index out of
+    bounds");
+  - `rowData` but no `qualifier` → the WHERE clause is still empty → the four-character
+    delete raises the same way.
+
+  The class intends to report "table must be specified" (it does, for a missing table)
+  and needs the equivalent for a missing qualifier, but neither guard is reached.
+- **Why it matters:** An update built without a qualifier is the classic "forgot the
+  WHERE clause" mistake; instead of a diagnostic it takes the process down with an
+  exception that names `__NSCFString`, not the caller's mistake.  (Losing the qualifier
+  *silently* would be worse — the error is the point.)
+- **Test:** `MysqlUpdateTests testExecuteWithoutRowDataRaisesAnInvalidArgumentException`
+  and `testExecuteWithAnEmptyRowDataDictionaryRaisesTheSameWay` (offline), plus
+  `MADMySQLLiveTests testUpdateWithoutAQualifierRaisesAnInvalidArgumentException` — the
+  live one because the row-data path escapes through the session before it reaches the
+  qualifier delete, so it cannot be reproduced without a server.
+
+### `MysqlConnection`'s transaction toggles crash on a connection with no handle
+- **Status:** Confirmed (latent -- no caller builds such a connection)
+- **Where:** `MADMySQL/Source/MysqlConnection.m:214-232` (`enableTransactions`,
+  `disableTransactions`, and the commit/rollback pair beside them)
+- **Behavior:** These call `mysql_autocommit(_connection, 0)` / `mysql_commit` /
+  `mysql_rollback` without checking the handle.  `mysql_autocommit` dereferences it, so
+  `[[MysqlConnection alloc] init]` followed by `-enableTransactions` crashes the process
+  (verified: the test process died at that call, with no exception to catch).
+- **Why it matters:** Only latent.  Every production path gets its connection from
+  `+connectToServer:…`, which answers `nil` rather than a handle-less object, and no
+  in-tree caller invokes the transaction methods yet — they are API for the query cache
+  and the portable store.  The trap is that the class is `init`-able and looks usable;
+  note that the neighbouring accessors (`-errorNumber`, `-errorText`) *are* NULL-safe,
+  which is what makes the omission look inconsistent rather than deliberate.
+- **Test:** `MADMySQLTests testErrorAccessorsOnAConnectionWithoutAServer` and
+  `testTransactionsFlagStartsOff` pin the safe half.  The crash itself is not asserted —
+  it terminates the test process, so there is nothing to catch.
+
+### `MysqlInsert -execute` reports `ULONG_MAX` rows for a duplicate it ignored
+- **Status:** Quirk (left as is)
+- **Where:** `MADMySQL/Source/MysqlInsert.m:139-142`
+- **Behavior:** With `ignoreDuplicateErrors` set, a failed `mysql_stmt_execute` is
+  swallowed and the code goes straight on to read `mysql_affected_rows`, which answers
+  `(my_ulonglong)-1` for a statement that did not run.  `affectedRows` therefore comes
+  back as 18446744073709551615 rather than 0.
+- **Why it matters:** The flag exists so an insert can be "fire and forget"; a caller
+  that logs or accumulates `affectedRows` will add a number larger than the row count of
+  the universe.  No in-tree caller reads it after an ignored duplicate.
+- **Test:** `MADMySQLLiveTests testInsertRejectsADuplicateKeyUnlessToldToIgnoreIt`
+  asserts the value exactly, so a future fix to 0 fails the test rather than passing
+  silently.
+
+### `MysqlTruncate`'s factories skip the nil-connection check the other DML classes make
+- **Status:** Quirk (left as is)
+- **Where:** `MADMySQL/Source/MysqlTruncate.m:22-33` against `MysqlInsert.m:27-33`,
+  `MysqlUpdate.m:26-32`, `MysqlDelete.m:25-31`
+- **Behavior:** `MysqlInsert`, `MysqlUpdate` and `MysqlDelete` all raise
+  `MysqlException` from their factories when handed a nil connection; the two truncate
+  factories do not, and hand back an object that fails at `-execute` instead.
+- **Why it matters:** A caller that checks for a raise (or relies on the factory to
+  refuse) gets an object rather than a diagnosis.  Harmless today — nothing in-tree
+  passes nil — but the four classes should behave the same way.
+- **Test:** `MysqlTruncateTests testFactoryAcceptsANilConnection`.
 
 ---
 
