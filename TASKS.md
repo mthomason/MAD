@@ -590,11 +590,16 @@ frameworks.
 
 **The tests.** Every ported suite is one ctest executable under
 `Linux/Tests/`, written to the `Testing.h` conventions in `Linux/AGENTS.md`.
-59 executables run under ctest, all passing, with 6 recorded needs — the
-counter and each need are argued in `Linux/README.md`. The suites that need a
-live database skip (never fail) when none is reachable; `MADTdsClientLiveTests`
-was run against the SQL Server 2022 container from inside the Linux image —
-29/29, 169 checks — so the freetds wire path is exercised, not just compiled.
+114 executables (1098 tests) run under ctest, all passing, with 6 recorded
+needs — the counter and each need are argued in `Linux/README.md`. The
+coverage master merged on 2026-10-10 (~100 Xcode test files across MAD,
+MADFoundation, MADAPI, MADCocoaExtensions, MADFileManager, MADSqlite3 and
+MADMySQL, plus the MySQL test-database Docker infra) is ported in full: 55
+new executables, suite for suite. The suites that need a live database skip
+(never fail) when none is reachable; `MADTdsClientLiveTests` was run against
+the SQL Server 2022 container from inside the Linux image — 29/29, 169 checks
+— and `MADMySQLLiveTests` against the host's MySQL (44/44, 309 checks), so
+the wire paths are exercised, not just compiled.
 MAD's eight suites are ported too (186 tests over the data table, the portable
 store, the rptq object layer, the query and the document section), and running
 them found three more GNUstep divergences, all fixed or shimmed and written
@@ -603,8 +608,17 @@ Apple — registered per-platform in `RptqObject`), `class_getProperty()` not
 walking superclasses (an explicit walk in `RptqObject`), and the stub
 `+propertyListWithStream:options:format:error:` (a Compat category, which lets
 MADDataTable's `-loadFromCacheWithUrl:` be asserted instead of parked as a
-need). Three needs remain for Apple-only machinery — Core Data, the compiled
-model, `MADocument`, the converter — recorded in the tests that cannot run.
+need). The merge-and-port round added more: the framework targets' dropped
+`$(inherited)` (DEBUG was dead in every Apple framework target — fixed in the
+ten projects) and MAD's non-hermetic document fixtures (both recorded in
+`BUGS.md`); on the Linux side `NSOperation.asynchronous`/`-isConcurrent` (a
+Compat category — without it a finishing async operation raised out of
+`-dealloc`), the faulting `-coordinateAccessWithIntents:` (a Compat category),
+scheme-less URLs from `MADURLFactory` (now `+fileURLWithPath:`), and
+MADQuery+Sqlite3's category being dropped by the linker (compiled into
+`libmad.a` via `target_sources`). Six needs remain for Apple-only machinery —
+Core Data, the compiled model, `MADocument`, the converter — recorded in the
+tests that cannot run.
 One divergence stays pinned rather than fixed:
 `-localizedCaseInsensitiveCompare:` is case-sensitive on GNUstep, so the
 SQLite collation MADSqlite3 registers orders differently (asserted per-platform

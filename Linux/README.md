@@ -6,7 +6,10 @@ subset); Phase C is the §4 shim list, and this directory is where it lands.
 The build now compiles **all ten headless frameworks** — every framework in
 MAD_LINUX.md §3's table except the UI-only ones (`MADExplorer`, `MADBarcodes`,
 `MADFeedback`, `Scrimpter`, the app) — and runs their suites inside the
-container. Nothing here ships in the app; the CLI is Phase D's checkpoint.
+container: 114 test executables, 1098 tests, 6 recorded needs. The test
+coverage master merged on 2026-10-10 (~100 Xcode test files) is ported in
+full, suite for suite. Nothing here ships in the app; the CLI is Phase D's
+checkpoint.
 
 ## Running it
 
@@ -24,10 +27,11 @@ Docker Desktop's CLI is not on `PATH` by default; `build.sh` finds it at
 credential helper beside it) on `PATH` for the run. The first build takes
 15–25 minutes (the toolchain stage) and produces a ~2.5 GB image; later runs
 are cached — only the source layer rebuilds. The `--platform linux/amd64`
-cross-check was last run end to end for Phase C (2026-10-06): the whole image
-builds under emulation (the amd64 toolchain stage came from the Phase B
-cache; the libraries and the subset rebuild), and the run matches native
-arm64 — 59 executables, 6 needs, 10 report items. Run it under its own tag
+cross-check was last run end to end after the merged coverage landed
+(2026-10-11): the whole image builds under emulation (the amd64 toolchain
+stage and libraries came from the earlier cache; the subset, the 55 new
+suites included, rebuilt), and the run matches native arm64 exactly — 114
+executables, 1098 tests, 6 needs, 10 report items. Run it under its own tag
 (`MAD_LINUX_IMAGE=mad-linux:phase-b-amd64 ./Linux/build.sh --platform
 linux/amd64`) so the native image is not replaced.
 
@@ -96,6 +100,11 @@ sources:
   macros or typedefs (see the list below);
 * whole-archive linking, Apple's `-ObjC`, without which the frameworks'
   categories are silently dropped from the static archives;
+* one category compiled into `libmad.a` (`target_sources` in
+  `Linux/CMakeLists.txt`): MADQuery+Sqlite3's `-whereClauseWithRowIds:` /
+  `-whereClauseWithParameters:` are reached by message send, so the linker
+  drops the archive member, and whole-archiving `libmadsqlite3.a` would
+  duplicate the compat objects every framework archive already embeds;
 * `-lgnustep-base` before `-lobjc` on the link line: libobjc2 exports a weak
   `objc_enumerationMutation()` that aborts and GNUstep Base exports the real
   one that raises, and the first library on the line wins.
@@ -152,16 +161,31 @@ green on the simulator, and the `MAD Designer` workspace builds.
   through to the generic object arm; `RptqPropertyNamed` does the walk on both
   platforms. The failure mode was a silently wrong value, not a crash, so both
   are pinned by the ported suites.
+* **GNUstep's file APIs refuse scheme-less URLs — found by MADFileManager's
+  ported tests, fixed in MADURLFactory.** `-contentsOfDirectoryAtURL:` and
+  `-writeToURL:` quietly do nothing for a URL that carries no `file://`
+  scheme (measured 2026-10-11), and `+newURLForLocalDocumentsDirectory`
+  built its URL with `-initWithString:` from a path — which Apple tolerates.
+  It now uses `+fileURLWithPath:`, the honest answer on both platforms; that
+  plus the coordinator shim below turned five parked needs into five
+  passing tests (`MADLocalFileCoordinatorTests`, 12 tests, 0 needs).
 * **dispatch objects are plain C pointers** (`os/object.h` declines ObjC
   support outside Darwin, and refuses `OS_OBJECT_USE_OBJC=1` outright — the
   libdispatch build comments say so), so ARC cannot own one: every
   `strong`/`copy` dispatch property is `assign` off Apple, commented in
   place. Queues are created once and live for the process; nothing releases
   them.
-* **Smaller gaps, shimmed or guarded:** `NSOperation.name` and
-  `NSOperation.cancelled`, the NSFileManager ubiquity methods (no iCloud off
+* **Smaller gaps, shimmed or guarded:** `NSOperation.name`,
+  `NSOperation.cancelled` and `NSOperation.asynchronous` (GNUstep keeps only
+  the old `-isConcurrent` spelling, as a stub that always answers NO — its
+  own bookkeeping consults it, and without the Compat category answering
+  `[self isAsynchronous]` a finishing async operation raised out of
+  `-dealloc`), the NSFileManager ubiquity methods (no iCloud off
   Apple; every answer is the empty one), `-initWithFilePresenter:` on
-  NSFileCoordinator, NSURL's security-scoped access and
+  NSFileCoordinator, `-coordinateAccessWithIntents:queue:byAccessor:`
+  (GNUstep's implementation faults when it runs the accessor — SIGSEGV,
+  measured; the Compat category calls the accessor on the given queue, there
+  being nothing to coordinate with off Apple), NSURL's security-scoped access and
   `-fileSystemRepresentation`, NSData's `-options:error:` readers and their
   constants, `-decodeTopLevelObjectOfClasses:forKey:error:` on NSCoder,
   `-registerUndoWithTarget:handler:` on NSUndoManager,

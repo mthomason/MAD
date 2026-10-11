@@ -408,9 +408,15 @@ longer a spike: all ten headless frameworks of §3's table compile and link
 inside the image — MADFoundation 26 of 27 files, MADDataStructures 17,
 MADFileManager 10 of 11, MADCocoaExtensions 7 of 17, MADAPI 8 of 11,
 MADSqlite3 26, MADTds 1, MADTdsClient 4 of 5, MADMySQL 18 of 19, MAD 150 of
-181 — and their suites run under ctest: 59 executables, all green, with 6
-recorded needs, each being Apple-only machinery (Core Data, the compiled
-model, `MADocument`, the converter) named in `Linux/README.md`. A libraries
+181 — and their suites run under ctest: 114 executables (1098 tests), all
+green, with 6 recorded needs, each being Apple-only machinery (Core Data, the
+compiled model, `MADocument`, the converter) named in `Linux/README.md`. The
+coverage master merged on 2026-10-10 (~100 Xcode test files) is ported in
+full — 55 new executables, suite for suite — and the merge found two Apple-side
+defects, both fixed and in `BUGS.md`: the framework targets had dropped
+`$(inherited)` from their preprocessor defines (DEBUG was dead in every
+framework Debug build), and MAD's document fixtures shared one store across
+runs. A libraries
 layer (`Linux/libraries.conf`, `Linux/lib/libraries.sh`) builds sqlite3,
 openssl, freetds, zlib, bzip2, libarchive and mysqlclient natively into the
 image (§7's C libraries; nothing ships). The long-tail items went the way §4
@@ -423,7 +429,12 @@ problem as much as the platform's). MAD's suites found three more divergences,
 all fixed or shimmed and written down in `Linux/README.md`: the runtime's BOOL
 encoding (`'C'` off Apple), `class_getProperty()`'s missing superclass walk
 (both fixed in `RptqObject`), and a stub `+propertyListWithStream:`
-(shimmed). One divergence stays pinned rather than fixed: GNUstep's
+(shimmed). The test-coverage port added three more, likewise fixed or shimmed:
+`NSOperation.asynchronous`/`-isConcurrent` (a Compat category — without it a
+finishing async operation raised out of `-dealloc`), `-coordinateAccessWithIntents:`
+(its GNUstep implementation faults; the Compat category calls the accessor on
+the queue), and scheme-less URLs from `MADURLFactory` (now
+`+fileURLWithPath:`, which un-parked five coordinator tests). One divergence stays pinned rather than fixed: GNUstep's
 `-localizedCaseInsensitiveCompare:` is case-sensitive, so MADSqlite3's
 registered collation orders text differently than on Apple. The live
 `MADTdsClientLiveTests` suite runs green from inside
