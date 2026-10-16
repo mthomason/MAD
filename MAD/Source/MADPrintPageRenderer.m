@@ -290,7 +290,9 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 					   withTransparentBackground:(BOOL)transparentBackground {
 
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
-	[MADPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
+	// The header's contract: a transparent page is the page's own drawing over
+	// whatever the caller's context already holds, with no white canvas behind it.
+	if (!transparentBackground) [MADPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
 	[self drawPageAtIndex: index withContext: ctx inPageRect: pageRect];
 }
 

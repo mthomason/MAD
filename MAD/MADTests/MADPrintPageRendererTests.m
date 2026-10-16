@@ -18,10 +18,8 @@
 //      the canvas.
 //    * the section-type colour map, both the class method and the fill helper.
 //    * +textRepresentation is cached, and -debugQuickLookObject is that same object.
-//
-//  One defect is pinned here: -drawPageAtIndex:inRect:withTransparentBackground:
-//  ignores its transparentBackground argument -- the white canvas is always drawn.
-//  The header's contract (and MADImageThumbnail, which passes YES) expects otherwise.
+//    * the transparentBackground argument: the white canvas is drawn only when it is
+//      NO, which is what the header's contract (and MADImageThumbnail's YES) asks.
 //
 
 #import <XCTest/XCTest.h>
@@ -262,19 +260,36 @@ typedef struct {
 	[self assertPixelIsWhite:pixel];
 }
 
-- (void)testDrawPageDrawsTheWhiteCanvasEvenWithTransparentBackground {
+- (void)testDrawPageWithAnOpaqueBackgroundDrawsTheWhiteCanvas {
 	MADRendererTestSource *source = [[MADRendererTestSource alloc] init];
 	MADPrintPageRenderer *renderer = [[MADPrintPageRenderer alloc] initWithDataSource:source];
 
-	// Characterization of the defect: the transparentBackground argument is not read,
-	// so the canvas is opaque white even though YES was asked for.
+	MADRendererTestPixel pixel = [self pixelAfterDrawing:^ {
+		[renderer drawPageAtIndex:0
+						   inRect:CGRectMake(0.0, 0.0, 1.0, 1.0)
+		 withTransparentBackground:NO];
+	}];
+
+	[self assertPixelIsWhite:pixel];
+}
+
+- (void)testDrawPageWithATransparentBackgroundDrawsNoCanvas {
+	MADRendererTestSource *source = [[MADRendererTestSource alloc] init];
+	MADPrintPageRenderer *renderer = [[MADPrintPageRenderer alloc] initWithDataSource:source];
+
+	// The header's contract: with transparency asked for, the page is the page's own
+	// drawing -- here none, the source has no formatter -- over nothing.  The context
+	// began cleared, so a canvas drawn anyway would leave white behind.
 	MADRendererTestPixel pixel = [self pixelAfterDrawing:^ {
 		[renderer drawPageAtIndex:0
 						   inRect:CGRectMake(0.0, 0.0, 1.0, 1.0)
 		 withTransparentBackground:YES];
 	}];
 
-	[self assertPixelIsWhite:pixel];
+	XCTAssertEqual(pixel.red, 0);
+	XCTAssertEqual(pixel.green, 0);
+	XCTAssertEqual(pixel.blue, 0);
+	XCTAssertEqual(pixel.alpha, 0);
 }
 
 - (void)testDrawPagePastTheEndDrawsOnlyTheCanvas {

@@ -98,8 +98,10 @@ __attribute__((unused)) static inline CGFloat cornerRadiusForHorizontalSizeClass
 	@autoreleasepool {
 
 		CGContextSaveGState(context);
-		
-		[printPageRenderer drawPageAtIndex:1 inRect:rect withTransparentBackground:YES];
+
+		// Page one, so a single-page document has a cover and not a blank canvas; the
+		// renderer's page loop is zero-based.
+		[printPageRenderer drawPageAtIndex:0 inRect:rect withTransparentBackground:YES];
 		
 		CGContextRestoreGState(context);
 		

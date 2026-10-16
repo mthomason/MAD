@@ -939,9 +939,9 @@ Status key:
   `MADReportSectionTests testInitWithAnUnknownTypeReturnsNil` (added with this entry).
 
 ### `MADImageThumbnail` draws page 1, so a one-page document's thumbnail is blank
-- **Status:** Confirmed (live defect)
+- **Status:** Fixed
 - **Where:** `MAD/Source/MADImageThumbnail.m:102`
-- **Behavior:** The renderer-based path calls
+- **Behavior:** The renderer-based path called
   `[printPageRenderer drawPageAtIndex:1 inRect:rect withTransparentBackground:YES]`.
   `MADPrintPageRenderer`'s page loop is zero-based (`drawPageAtIndex:withContext:`), so
   index 1 is the *second* page; for a one-page report the bounds check answers no and
@@ -952,12 +952,19 @@ Status key:
   reports.  Related quirk: the factory methods are declared on `MADImageThumbnail` (a
   `UIImage` subclass) with an `instancetype` return, but the object built is a plain
   `UIImage` -- callers that trust the static type would be wrong about the class.
-- **Test:** `MADImageThumbnailTests
-  testRendererThumbnailIsASquareLetterPageAndDrawsPageOne` (pins the page index and the
-  plain-`UIImage` result).
+- **Now:** the renderer path asks for page index 0 -- the report's first page -- so a
+  single-page document's cover is the page itself and a multi-page document's cover is
+  its opening page.  The transparent canvas behind it is real now too, see the
+  `MADPrintPageRenderer` entry below.
+- **Locked down by:** `MADImageThumbnailTests
+  testRendererThumbnailIsASquareLetterPageAndDrawsPageOne` (its index assertion moved
+  from 1 to 0), `testAOnePageDocumentsThumbnailIsNotBlank` -- a paged test renderer
+  that bounds-checks the way the real one does, drawing a valid page and nothing at or
+  past the page count; it failed before the fix -- and
+  `testAMultiPageDocumentsThumbnailShowsTheFirstPage` for the other direction.
 
 ### `MADPrintPageRenderer` ignores `withTransparentBackground:`
-- **Status:** Confirmed (live defect)
+- **Status:** Fixed
 - **Where:** `MAD/Source/MADPrintPageRenderer.m:289-295`
 - **Behavior:** `-drawPageAtIndex:inRect:withTransparentBackground:` never reads the
   flag; it always paints the opaque white canvas and then draws the page.  The header
@@ -965,7 +972,13 @@ Status key:
   `MADImageThumbnail` calls it with `YES` expecting transparency.
 - **Why it matters:** Any caller asking for a transparent page gets an opaque white
   one; the parameter is a lie.
-- **Test:** `MADPrintPageRendererTests testDrawPageDrawsTheWhiteCanvasEvenWithTransparentBackground`.
+- **Now:** the flag is read -- the white canvas is drawn only when a transparent
+  background was not asked for, so the page's own drawing stands alone over the
+  caller's context.
+- **Locked down by:** `MADPrintPageRendererTests
+  testDrawPageWithATransparentBackgroundDrawsNoCanvas` (failed before the fix: the
+  cleared pixel came back opaque white) and `testDrawPageWithAnOpaqueBackgroundDrawsTheWhiteCanvas`,
+  which replaces `testDrawPageDrawsTheWhiteCanvasEvenWithTransparentBackground`.
 
 ### `RptqDocumentSectionEnumerator`'s two enumerators disagree with their own counts
 - **Status:** Confirmed (latent -- the enumerators have no callers in-tree)

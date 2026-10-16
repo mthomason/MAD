@@ -14,9 +14,10 @@
 //      scale -- the crop takes a point-sized rectangle out of a pixel-sized image,
 //      which is why the crop is scale-independent but also why it never covers more
 //      than the top-left 612 x 792 pixels.
-//    * It asks the renderer for page index 1 -- the *second* page of the report --
-//      so a single-page document's thumbnail is a blank canvas.  This is pinned as a
-//      defect in BUGS.md, not fixed.  The recording renderer below asserts the index.
+//    * It asks the renderer for page index 0 -- the report's first page -- so a
+//      single-page document has a cover and not a blank canvas.  The recording
+//      renderer below asserts the index; the paged renderer proves a one-page
+//      document's thumbnail carries the drawing.
 //    * +newImageThumbnailWithRect:...: ignores the `size` argument unless zoomEffect
 //      is set; the non-zoom crop is the rect itself.
 //
@@ -104,6 +105,26 @@
 
 @end
 
+// A renderer that draws the way the real one bounds-checks: a valid page fills with
+// colour, a page at or past the count draws nothing.
+@interface MADThumbnailPagedRenderer : MADPrintPageRenderer
+
+@property (nonatomic, assign) NSUInteger pageCount;
+
+@end
+
+@implementation MADThumbnailPagedRenderer
+
+- (void)drawPageAtIndex:(NSUInteger)index
+					 inRect:(CGRect)pageRect
+	withTransparentBackground:(BOOL)transparentBackground {
+	if (index >= self.pageCount) return;
+	[[UIColor blueColor] setFill];
+	UIRectFill(pageRect);
+}
+
+@end
+
 #pragma mark - Tests
 
 @interface MADImageThumbnailTests : XCTestCase
@@ -124,6 +145,29 @@
 	return image;
 }
 
+// The centre pixel of the image, colour-tested: the squared thumbnail puts the page's
+// middle at its middle, so a page that drew reaches the centre and a blank cover does
+// not.
+- (BOOL)imageIsBlueAtItsCenter:(UIImage *)image {
+	CGImageRef cgImage = image.CGImage;
+	if (!cgImage) return NO;
+	size_t x = CGImageGetWidth(cgImage) / 2, y = CGImageGetHeight(cgImage) / 2;
+	CGImageRef onePixel = CGImageCreateWithImageInRect(cgImage, CGRectMake(x, y, 1, 1));
+	if (!onePixel) return NO;
+	unsigned char bytes[4] = { 0, 0, 0, 0 };
+	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+	CGContextRef ctx = CGBitmapContextCreate(bytes, 1, 1, 8, 4, space, kCGImageAlphaPremultipliedLast);
+	CGColorSpaceRelease(space);
+	if (!ctx) {
+		CGImageRelease(onePixel);
+		return NO;
+	}
+	CGContextDrawImage(ctx, CGRectMake(0.0, 0.0, 1.0, 1.0), onePixel);
+	CGContextRelease(ctx);
+	CGImageRelease(onePixel);
+	return bytes[2] > 200 && bytes[0] < 50;
+}
+
 #pragma mark - newImageThumbnailWithRenderer:
 
 - (void)testRendererThumbnailIsASquareLetterPageAndDrawsPageOne {
@@ -141,9 +185,30 @@
 	// The renderer was asked for the Letter page rect ...
 	XCTAssertTrue(renderer.didDrawPage);
 	XCTAssertTrue(CGRectEqualToRect(renderer.lastDrawnRect, CGRectMake(0.0, 0.0, 612.0, 792.0)));
-	// ... and for page index 1, not 0: the first page of a report is never drawn.
-	// This is the page-index defect recorded in BUGS.md.
-	XCTAssertEqual(renderer.lastDrawnPageIndex, (NSUInteger)1);
+	// ... and for page index 0: the report's first page.
+	XCTAssertEqual(renderer.lastDrawnPageIndex, (NSUInteger)0);
+}
+
+- (void)testAOnePageDocumentsThumbnailIsNotBlank {
+	MADThumbnailPagedRenderer *renderer = [[MADThumbnailPagedRenderer alloc] initWithDataSource:[[MADThumbnailTestSource alloc] init]];
+	renderer.pageCount = 1;
+
+	MADImageThumbnail *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:renderer];
+
+	// The one page the renderer has is the page the thumbnail asked for, so the
+	// drawing reaches the cover; asking for index 1 left it blank.
+	XCTAssertNotNil(thumbnail);
+	XCTAssertTrue([self imageIsBlueAtItsCenter:thumbnail]);
+}
+
+- (void)testAMultiPageDocumentsThumbnailShowsTheFirstPage {
+	MADThumbnailPagedRenderer *renderer = [[MADThumbnailPagedRenderer alloc] initWithDataSource:[[MADThumbnailTestSource alloc] init]];
+	renderer.pageCount = 5;
+
+	MADImageThumbnail *thumbnail = [MADImageThumbnail newImageThumbnailWithRenderer:renderer];
+
+	XCTAssertNotNil(thumbnail);
+	XCTAssertTrue([self imageIsBlueAtItsCenter:thumbnail]);
 }
 
 - (void)testRendererThumbnailWithARealRendererIsStillAValidImage {
