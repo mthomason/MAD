@@ -80,26 +80,32 @@
 	XCTAssertEqualObjects([table whereClauseForGroupKeys:@[]], @[]);
 }
 
-- (void)testFewerSortDescriptorsThanGroupKeysRaises {
-	// BUGS.md: the loop indexes sortDescriptors by the group-key index, so one sort
-	// descriptor with two group keys walks off the end of the array.
+- (void)testFewerSortDescriptorsThanGroupKeysClipsToTheDescriptors {
+	// BUGS.md: the loop used to index sortDescriptors by the group-key index and walk
+	// off the end of the array.  A group key whose position has no descriptor cannot
+	// be named, so its pair is left out (and logged) rather than raised.
 	MADDataTableFast *table = [self fastTable];
 	table.columnKeys = [@[@"a"] mutableCopy];
 	table.sortDescriptors = [@[[NSSortDescriptor sortDescriptorWithKey:@"a" ascending:YES]] mutableCopy];
 
-	XCTAssertThrows(([table whereClauseForGroupKeys:@[@"A", @"B"]]));
+	NSArray<NSDictionary *> *clause = [table whereClauseForGroupKeys:@[@"A", @"B"]];
+
+	XCTAssertEqual(clause.count, (NSUInteger)1);
+	XCTAssertEqualObjects(clause[0][MADQueryKeyPredicateColumn], @"a");
+	XCTAssertEqualObjects(clause[0][MADQueryKeyPredicateValue], @"A");
 }
 
 #pragma mark - Read transactions
 
-- (void)testReadTransactionsWithoutASelectsDatabaseAreNotSafe {
-	// BUGS.md: a delegate-less table has no selects database at all.  The pair guards
-	// on the *handle* being NULL (self.databaseForSelects->_database), so with a nil
-	// database the ivar read crashes before the guard can run -- this was found by a
-	// test that made exactly this call.  Only the precondition is pinned here.
+- (void)testReadTransactionsWithoutASelectsDatabaseAreANoOp {
+	// BUGS.md: a delegate-less table has no selects database at all.  The pair used to
+	// read self.databaseForSelects->_database and crash on the nil object before its
+	// handle guard could run; with nothing to begin or commit, the calls are no-ops.
 	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:123 fromCache:YES];
 
 	XCTAssertNil(table.databaseForSelects);
+	XCTAssertNoThrow([table beginReadTransaction]);
+	XCTAssertNoThrow([table commitReadTransaction]);
 }
 
 - (void)testReadTransactionsOnADirectoryBackedTable {
@@ -121,6 +127,17 @@
 
 	XCTAssertTrue([result isKindOfClass:[NSNumber class]]);
 	XCTAssertEqualObjects(result, @255);
+}
+
+- (void)testRunSelectQueryYieldsNilWhenTheQueryHasNoRow {
+	// The nullable return the header now admits: a query that steps to no row answers
+	// nil, not an error object and not a crash.
+	MADDataTableFast *table = [self fastTable];
+	MADFlatSelectQuery *query = [[MADFlatSelectQuery alloc] initWithObject:nil];
+	query.sql = @"SELECT 1 FROM (SELECT 1) WHERE 0";
+	query.binaryBindings = [NSMutableArray array];
+
+	XCTAssertNil([table runSelectQuery:query]);
 }
 
 @end

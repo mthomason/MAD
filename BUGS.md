@@ -805,12 +805,31 @@ Status key:
 
 
 ### MADDataTableFast returns nil from methods declared non-null
-- **Status:** Open -- documented from the analyzer run.
-- **What:** Five `return nil` / possibly-nil returns sit on paths of methods the
-  declarations say always return a value: `:964`, `:973`, `:987`, `:1280`, `:1416`.
+- **Status:** Fixed
+- **What:** Five `return nil` / possibly-nil returns sat on paths of methods the
+  declarations said always return a value: `:964`, `:973`, `:987`, `:1280`, `:1416`.
   Callers that trust the declaration will not nil-check.
 - **Where:** `MADSqlite3/Source/MADDataTableFast.m:964,973,987,1280,1416`.
 - **Evidence:** `nullability.NullReturnedFromNonnull` in `xcodebuild analyze`.
+- **Now:** the declarations admit what the code does, and no behaviour changed.
+  `-dataForRow:column:error:` and `-runSelectQuery:` are nullable in
+  `MADDataTableFast.h` -- the first matches the base protocol's nullable
+  `-dataForRow:error:`, the second answers nil for a query that yields no row.  The
+  `objectEnumerator` finding was the odd one: the Fast table answers nil when it has no
+  columns *and* the abstract base answers nil in Release, so the untrue declaration was
+  `MADDataTableCursoring`'s `nonnull` -- `MADFoundation/Source/MADDataTable.h` now
+  declares it nullable, which is what both implementations have always done.  The
+  property `databaseForSelects` is nullable too (a delegate-less table has none).
+  MADDataTableFast's own header re-declares `objectEnumerator` nullable so the Fast
+  call sites see it.
+- **Locked down by:** the analyzer, re-run with its cached results removed: zero
+  findings in MADDataTableFast.m where there were five.  A declaration change has no
+  runtime failure to pin; the nil each declaration now admits is pinned where it is
+  reachable -- `MADDataTableRegressionTests testFastTableDataForRowWithUnknownColumnReturnsError`
+  and `MADDataTableFastSelectTests testRunSelectQueryYieldsNilWhenTheQueryHasNoRow`
+  (which passes both before and after: it documents the behaviour the header now
+  states) -- and `testFastTableObjectEnumeratorIsNilWithoutColumns` keeps pinning the
+  enumerator.
 
 
 ### The store's per-column read loop relies on schema names being non-nil
@@ -1993,7 +2012,7 @@ wrong answer.
   `testArrayCachingRepeatedReadsReturnTheCachedObject`.
 
 ### `MADDataTableFast`'s read transactions crash without a selects database
-- **Status:** Confirmed (found by a test that made the call)
+- **Status:** Fixed
 - **Where:** `MADSqlite3/Source/MADDataTableFast.m:1062-1082`
 - **Behavior:** `-beginReadTransaction` and `-commitReadTransaction` guard on
   `self.databaseForSelects->_database == NULL`, but a table built without a cache
@@ -2003,8 +2022,20 @@ wrong answer.
   precondition (`databaseForSelects` is nil).
 - **Why it matters:** The renderer's draw loop calls the pair around every page draw;
   any fast table that reaches a draw without a cache directory takes the app down.
-- **Test:** `MADDataTableFastSelectTests testReadTransactionsWithoutASelectsDatabaseAreNotSafe`
-  (precondition only -- the call itself is the crash).
+- **Now:** both methods read `self.databaseForSelects` once and return when it -- or its
+  handle -- is nil: a table with no selects connection has nothing to begin or commit,
+  so the pair is a no-op there.  The property is declared nullable in the header, which
+  it always was in fact.
+- **Locked down by:** `MADDataTableFastSelectTests
+  testReadTransactionsWithoutASelectsDatabaseAreANoOp` (renamed from
+  `testReadTransactionsWithoutASelectsDatabaseAreNotSafe`, which could pin only the
+  precondition because the call itself was the crash).  Against the old code the call
+  still takes the test process down -- the run reports "Restarting after unexpected
+  exit, crash, or test timeout" -- and passes against the fix.
+- **Noted, not changed:** the sibling select paths (`-selectStatementForColumn:`,
+  `-objectsForGroupKeys:`, `-runSelectQuery:`, `:1044`, `:1250`, `:1433`) dereference
+  `databaseForSelects->_database` the same way, but each needs a selects connection to
+  do anything at all, so none is reached on a table that has none.
 
 ### `MADDatabaseSqlite3 +databaseResultValueCast:…` frees sqlite's own text pointer
 - **Status:** Confirmed (latent -- no callers in-tree)
@@ -2037,7 +2068,7 @@ wrong answer.
   covers the live copies.
 
 ### `MADDataTableFast -whereClauseForGroupKeys:` indexes past the sort descriptors
-- **Status:** Confirmed (latent)
+- **Status:** Fixed
 - **Where:** `MADSqlite3/Source/MADDataTableFast.m:1167-1182`
 - **Behavior:** The loop walks the group keys and reads `self.sortDescriptors[i]` at the
   same index; with fewer sort descriptors than group keys it walks off the end of the
@@ -2046,9 +2077,15 @@ wrong answer.
 - **Why it matters:** The call comes from the group-key cache path
   (`-objectsForGroupKeys:`), where the two arrays are built from different sources; a
   mismatch is a crash rather than an empty clause.
-- **Test:** `MADDataTableFastSelectTests testFewerSortDescriptorsThanGroupKeysRaises`
-  (and the positional-pairing behavior by
-  `testGroupKeysProducePositionalColumnValuePairs`).
+- **Now:** the loop is bounded by `MIN(groupKeys.count, self.sortDescriptors.count)`:
+  a group key at a position with no descriptor cannot be named -- the descriptor *is*
+  the column -- so its pair is left out and the shortfall is logged rather than walked
+  off the end.  The pairs that can be built are the same ones the old loop built.
+- **Locked down by:** `MADDataTableFastSelectTests
+  testFewerSortDescriptorsThanGroupKeysClipsToTheDescriptors` (renamed from
+  `testFewerSortDescriptorsThanGroupKeysRaises`; against the old code it fails with the
+  `NSRangeException` the entry describes) and
+  `testGroupKeysProducePositionalColumnValuePairs`, unchanged.
 
 ### `MADArrayCachingEnumerator` is in no target
 - **Status:** Quirk (dead file -- left as is)

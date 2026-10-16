@@ -74,7 +74,10 @@ typedef NS_ENUM(short, MADDataTableParameters) {
 @protocol MADDataTableCursoring <NSObject>
 @required
 - (nonnull NSEnumerator<MADDataColumn *> *)columnsEnumerator;
-- (nonnull NSEnumerator *)objectEnumerator;
+/// Nil when the table cannot answer one: the abstract base in Release, or
+/// MADDataTableFast with no columns -- both answer nil rather than an empty
+/// enumerator, so callers must nil-check.
+- (nullable NSEnumerator *)objectEnumerator;
 /// Optional: these three are sqlite-only.  MADDataTableVirtual stores its rows in
 /// memory and has no sorted cursor or group-key lookup, so it cannot honour them.
 @optional

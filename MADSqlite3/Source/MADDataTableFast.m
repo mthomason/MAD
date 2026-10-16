@@ -1077,7 +1077,13 @@ static os_log_t mlog;
 }
 
 - (void)beginReadTransaction {
-	sqlite3 *database = self.databaseForSelects->_database;
+	// A table with no cache directory or delegate has no selects connection at all;
+	// there is nothing to begin, so the pair is a no-op rather than a crash.
+	MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
+	if (databaseForSelects == nil) {
+		return;
+	}
+	sqlite3 *database = databaseForSelects->_database;
 	if (database == NULL) {
 		return;
 	}
@@ -1088,7 +1094,11 @@ static os_log_t mlog;
 }
 
 - (void)commitReadTransaction {
-	sqlite3 *database = self.databaseForSelects->_database;
+	MADDatabaseSqlite3 *databaseForSelects = self.databaseForSelects;
+	if (databaseForSelects == nil) {
+		return;
+	}
+	sqlite3 *database = databaseForSelects->_database;
 	if (database == NULL) {
 		return;
 	}
@@ -1186,8 +1196,16 @@ static os_log_t mlog;
 		return @[];
 	}
 	[self setupGroupKeyIndexes];
-	NSMutableArray <NSDictionary <NSString *, MADResult *> *> *whereClause = [[NSMutableArray alloc] initWithCapacity:groupKeys.count];
-	for (NSUInteger i = 0; i < groupKeys.count; i++) {
+	// The pairing is positional: the descriptor names the column a group key's value
+	// filters on.  A key with no descriptor at its index cannot be named, so it is
+	// left out and reported rather than walked off the end of the array.
+	NSUInteger pairCount = MIN(groupKeys.count, self.sortDescriptors.count);
+	if (pairCount < groupKeys.count) {
+		os_log_error(mlog, "[MADDataTableFast %p whereClauseForGroupKeys:] %lu group keys but %lu sort descriptors; the tail is unmatched.",
+					 self, (unsigned long)groupKeys.count, (unsigned long)self.sortDescriptors.count);
+	}
+	NSMutableArray <NSDictionary <NSString *, MADResult *> *> *whereClause = [[NSMutableArray alloc] initWithCapacity:pairCount];
+	for (NSUInteger i = 0; i < pairCount; i++) {
 		NSString *groupKeyName = [self.sortDescriptors[i].key copy];
 		NSString *gk = [((NSString *)groupKeys[i]) copy];
 		NSDictionary <NSString *, MADResult *> *whereStatement = [[NSDictionary alloc] initWithObjectsAndKeys:

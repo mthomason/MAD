@@ -86,31 +86,37 @@ static void testEmptyGroupKeysProduceAnEmptyClause(void) {
 	MADSelectRemoveTempDirectory(directory);
 }
 
-static void testFewerSortDescriptorsThanGroupKeysRaises(void) {
-	// BUGS.md: the loop indexes sortDescriptors by the group-key index, so one sort
-	// descriptor with two group keys walks off the end of the array.
+static void testFewerSortDescriptorsThanGroupKeysClipsToTheDescriptors(void) {
+	// BUGS.md: the loop used to index sortDescriptors by the group-key index and walk
+	// off the end of the array.  A group key whose position has no descriptor cannot
+	// be named, so its pair is left out (and logged) rather than raised.
 	NSURL *directory = MADSelectMakeTempDirectory();
 	MADDataTableFast *table = MADSelectFastTable(directory);
 	table.columnKeys = [@[@"a"] mutableCopy];
 	table.sortDescriptors = [@[[NSSortDescriptor sortDescriptorWithKey:@"a" ascending:YES]] mutableCopy];
 
 	NSArray *groupKeys = @[@"A", @"B"];
-	MAD_THROWS_NAMED([table whereClauseForGroupKeys:groupKeys], NSRangeException, "the over-index raises");
+	NSArray<NSDictionary *> *clause = [table whereClauseForGroupKeys:groupKeys];
+
+	MAD_PASS(clause.count == (NSUInteger)1, "only the pair the descriptor can name is built");
+	MAD_PASS_EQUAL(clause[0][MADQueryKeyPredicateColumn], @"a", "the named column");
+	MAD_PASS_EQUAL(clause[0][MADQueryKeyPredicateValue], @"A", "the paired value");
 
 	MADSelectRemoveTempDirectory(directory);
 }
 
 #pragma mark - Read transactions
 
-static void testReadTransactionsWithoutASelectsDatabaseAreNotSafe(void) {
-	// BUGS.md: a delegate-less table has no selects database at all.  The pair guards
-	// on the *handle* being NULL (self.databaseForSelects->_database), so with a nil
-	// database the ivar read crashes before the guard can run -- this was found by a
-	// test that made exactly this call.  Only the precondition is pinned here.
+static void testReadTransactionsWithoutASelectsDatabaseAreANoOp(void) {
+	// BUGS.md: a delegate-less table has no selects database at all.  The pair used to
+	// read self.databaseForSelects->_database and crash on the nil object before its
+	// handle guard could run; with nothing to begin or commit, the calls are no-ops.
 	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:123 fromCache:YES];
 	MAD_PASS(table != nil, "the table exists");
 
 	MAD_PASS(table.databaseForSelects == nil, "a delegate-less table has no selects database");
+	MAD_NO_THROW([table beginReadTransaction], "beginning with no selects database is a no-op");
+	MAD_NO_THROW([table commitReadTransaction], "committing with no selects database is a no-op");
 }
 
 static void testReadTransactionsOnADirectoryBackedTable(void) {
@@ -140,10 +146,25 @@ static void testRunSelectQueryReturnsTheFirstColumnsValue(void) {
 	MADSelectRemoveTempDirectory(directory);
 }
 
+static void testRunSelectQueryYieldsNilWhenTheQueryHasNoRow(void) {
+	// The nullable return the header now admits: a query that steps to no row answers
+	// nil, not an error object and not a crash.
+	NSURL *directory = MADSelectMakeTempDirectory();
+	MADDataTableFast *table = MADSelectFastTable(directory);
+	MADFlatSelectQuery *query = [[MADFlatSelectQuery alloc] initWithObject:nil];
+	query.sql = @"SELECT 1 FROM (SELECT 1) WHERE 0";
+	query.binaryBindings = [NSMutableArray array];
+
+	MAD_PASS([table runSelectQuery:query] == nil, "a query with no row answers nil");
+
+	MADSelectRemoveTempDirectory(directory);
+}
+
 MAD_TEST_MAIN("MADDataTableFastSelectTests",
 	MAD_TEST(testGroupKeysProducePositionalColumnValuePairs),
 	MAD_TEST(testEmptyGroupKeysProduceAnEmptyClause),
-	MAD_TEST(testFewerSortDescriptorsThanGroupKeysRaises),
-	MAD_TEST(testReadTransactionsWithoutASelectsDatabaseAreNotSafe),
+	MAD_TEST(testFewerSortDescriptorsThanGroupKeysClipsToTheDescriptors),
+	MAD_TEST(testReadTransactionsWithoutASelectsDatabaseAreANoOp),
 	MAD_TEST(testReadTransactionsOnADirectoryBackedTable),
-	MAD_TEST(testRunSelectQueryReturnsTheFirstColumnsValue));
+	MAD_TEST(testRunSelectQueryReturnsTheFirstColumnsValue),
+	MAD_TEST(testRunSelectQueryYieldsNilWhenTheQueryHasNoRow));
