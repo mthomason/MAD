@@ -28,6 +28,30 @@
 
 @end
 
+// The column alias a field is written as: "Table0"."Field".
+static NSString *MADActiveFieldAlias(MADDatabase *database, RptqQueryField *queryField) {
+	NSString *tableName = [queryField.inQueryTable queryAlias];
+	MADSafeQueryField *safeTableName = [database newSafeIdentifier: tableName];
+	NSString *tableAlias = [MADStringUtilities stringByAppendingPeriod: safeTableName];
+	MADSafeQueryField *fieldName = [database newSafeIdentifier: queryField.databaseSchemaField.name];
+	return [tableAlias stringByAppendingString: fieldName];
+}
+
+// The set's enumeration order is hash order, and hash order is not stable -- not
+// across runs and not across platforms (BUGS.md: "the SELECT list's order is set
+// order").  The order is defined here instead, once, as the column alias the list is
+// written in, so the generated SQL, the row cache and every export share it.
+// -compare: rather than a localized comparison, because GNUstep's localized
+// comparison is case-sensitive (Linux/README.md) and this order must not be.
+static NSArray <RptqQueryField *> *MADActiveFieldsInOrder(MADDatabase *database, NSSet <RptqQueryField *> *queryFields) {
+	return [queryFields.allObjects sortedArrayUsingComparator: ^NSComparisonResult(RptqQueryField *a, RptqQueryField *b) {
+		NSComparisonResult ordered = [MADActiveFieldAlias(database, a) compare: MADActiveFieldAlias(database, b)];
+		// Two query fields can name one schema field and so share an alias; the
+		// identifier is the document's own order and keeps the sort total.
+		return ordered != NSOrderedSame ? ordered : [@(a.identifier) compare: @(b.identifier)];
+	}];
+}
+
 @implementation MADQuerySelectExpressionActiveFields
 
 - (instancetype)initWithDatabase:(MADDatabase *)database
@@ -39,32 +63,26 @@
         MADQueryActiveQueryFields *activeQueryFields;
         activeQueryFields = [[MADQueryActiveQueryFields alloc] initWithContext:context];
 
-        NSSet <RptqQueryField *> *rptqQueryFields = activeQueryFields.queryFields;
+        NSArray <RptqQueryField *> *rptqQueryFields = MADActiveFieldsInOrder(database, activeQueryFields.queryFields);
         NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields;
         NSMutableArray <NSString *> *fieldKeys;
 
         fields = [[NSMutableDictionary alloc] initWithCapacity:rptqQueryFields.count];
         fieldKeys = [[NSMutableArray alloc] initWithCapacity:rptqQueryFields.count];
-        
+
         NSUInteger fieldCounter = 0;
         for (RptqQueryField *queryField in rptqQueryFields) {
-            
+
             RptqDatabaseSchemaField *field = queryField.databaseSchemaField;
             if (fieldCounter != 0)  [result appendString:@",\n"];
-            
-            NSString *tableName = [queryField.inQueryTable queryAlias];
-            MADSafeQueryField *safeTableName = [database newSafeIdentifier:tableName];
-            
-			NSString *tableAlias = [MADStringUtilities stringByAppendingPeriod:safeTableName];
-            MADSafeQueryField *fieldName = [database newSafeIdentifier: field.name];
-            
-            NSString *fieldAlias = [tableAlias stringByAppendingString:fieldName];
+
+            NSString *fieldAlias = MADActiveFieldAlias(database, queryField);
             [result appendString: @"\t"];
             [result appendString: fieldAlias];
-            
+
             fields[fieldAlias] = field;
             [fieldKeys addObject:fieldAlias];
-            
+
             fieldCounter++;
         }
         if (fieldCounter > 0) {

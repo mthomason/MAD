@@ -23,6 +23,19 @@
 #import <Foundation/NSEnumerator.h>
 #import <Foundation/NSException.h>
 
+// A table's fields are a set, so its enumeration order is hash order -- not stable
+// across runs or platforms.  Same reasoning and same order as the active-fields list
+// (MADQuerySelectExpressionActiveFields.m): the field name decides, the identifier
+// breaks a tie between two query fields naming one schema field.
+static NSArray <RptqQueryField *> *MADAllFieldsInOrder(MADDatabase *database, NSSet <RptqQueryField *> *queryFields) {
+	return [queryFields.allObjects sortedArrayUsingComparator: ^NSComparisonResult(RptqQueryField *a, RptqQueryField *b) {
+		NSString *left = [database newSafeIdentifier: a.databaseSchemaField.name];
+		NSString *right = [database newSafeIdentifier: b.databaseSchemaField.name];
+		NSComparisonResult ordered = [left compare: right];
+		return ordered != NSOrderedSame ? ordered : [@(a.identifier) compare: @(b.identifier)];
+	}];
+}
+
 @implementation MADQuerySelectExpressionAllFields
 
 - (instancetype)initWithDatabase:(MADDatabase *)database
@@ -48,7 +61,7 @@
 				NSString *tableAlias = [MADStringUtilities stringByAppendingPeriod:safeTableName];
 
 				NSUInteger fieldCounter = 0;
-				NSEnumerator <RptqQueryField *> *hasQueryFields = table.hasQueryFields.objectEnumerator;
+				NSArray <RptqQueryField *> *hasQueryFields = MADAllFieldsInOrder(database, table.hasQueryFields);
 				for (RptqQueryField *queryField in hasQueryFields) {
 					if (fieldCounter != 0)  [result appendString:@",\n"];
 					MADSafeQueryField *safeFieldName = [database newSafeIdentifier:queryField.databaseSchemaField.name];

@@ -117,36 +117,45 @@ Status key:
 ## MAD (framework)
 
 ### `MADQueryActiveQueryFields`: the SELECT list's order is set order, and set order is not stable
-- **Status:** Quirk (hazard -- documented, not changed; the fix is a policy decision)
-- **Where:** `MAD/Source/MADQueryActiveQueryFields.m:36,95` (the `NSSet` accumulator
-  and `self.queryFields = queryFields`), read by
-  `MAD/Source/MADQuerySelectExpressionActiveFields.m`
+- **Status:** Fixed
+- **Where:** `MAD/Source/MADQuerySelectExpressionActiveFields.m` (`MADActiveFieldAlias`
+  and `MADActiveFieldsInOrder`), read by
+  `MAD/Source/MADQuerySelectExpressionAllFields.m` (`MADAllFieldsInOrder`)
 - **Behavior:** The active fields are collected into an `NSMutableSet`, so the SELECT
-  list's column order is hash order. `RptqObject -hash` is `identifier ^ entity.hash`
-  (`MAD/Source/rptq/store/RptqObject.m:42`), which makes the order look deterministic
-  per build -- but it is not: measured 2026-10-16, **two documents built by the same
-  fixture in one process enumerate the same two fields in different orders**, and
-  Apple and GNUstep disagree as well (the same `.mad` gives a different order under
-  the Linux `mad query` than under the simulator's). The *fields* are always the
-  right ones; only the order moves. The row cache inherits it twice over: its columns
-  are the field keys in this order, and each column is *named* `c<hash-of-fieldName>`
-  (`MADSqlite3/Source/MADDataTableFast.m`), so the hashes differ per platform too.
-- **Why it matters:** Any byte-comparison of `mad query` output, or of a `.maddb`
-  cache, across platforms (or across runs) sees a difference that is not in the data --
-  which is exactly the comparison `MAD_LINUX.md` §9 Phase D asks for, and what a JSON
-  or CSV export would otherwise inherit. The refreshed **rows** are identical once
-  columns are matched by field name (verified on the London fixture: 21 columns, 76
-  rows, every value equal).
-- **Test:** `testActiveFieldsSelectListContentComesFromTheSet` in both
-  `MAD/MADTests/MADQuerySelectExpressionTests.m` and its Linux port: inserts the same
-  two fields in both orders and asserts the same field set and the same SELECT lines,
-  so a future *content* change is caught. The order itself is deliberately left
-  unpinned -- it is the thing that must not be promised.
-- **What a fix would decide:** a defined order (query-field identifier? the order the
-  designer added them? the schema snapshot's order?) is part of the JSON export shape,
-  `MAD_LINUX.md` §10.1 / `MAD_CLI.md` §8.3, which is the user's call. Sorting here
-  would change Apple's generated SQL and the on-disk cache's column order, which is
-  why it was not done as a drive-by.
+  list's column order was hash order. `RptqObject -hash` is
+  `identifier ^ entity.hash` (`MAD/Source/rptq/store/RptqObject.m:42`), which makes
+  the order look deterministic per build -- but it was not: measured 2026-10-16,
+  **two documents built by the same fixture in one process enumerate the same two
+  fields in different orders**, and Apple and GNUstep disagreed as well (the same
+  `.mad` gave a different order under the Linux `mad query` than under the
+  simulator's). The *fields* were always the right ones; only the order moved. The
+  row cache inherited it: its columns are the field keys in this order.
+- **Why it mattered:** Any byte-comparison of `mad query` output, or of a `.maddb`
+  cache, across platforms (or across runs) saw a difference that was not in the data --
+  exactly the comparison `MAD_LINUX.md` §9 Phase D asks for, and what a JSON or CSV
+  export would otherwise have inherited. The refreshed **rows** were always identical
+  once columns were matched by field name (verified on the London fixture: 21 columns,
+  76 rows, every value equal).
+- **Now:** the order is defined as the column alias (`Customer0.City`), compared with
+  `-compare:` so Apple and GNUstep agree. `MADQueryActiveQueryFields` still collects
+  into an `NSSet` -- a set is the right structure for "which fields are active" -- and
+  the two builders that emit SQL sort it: `MADQuerySelectExpressionActiveFields` by
+  alias, `MADQuerySelectExpressionAllFields` by field name within each table. The row
+  cache inherits the order (its `c<hash-of-fieldName>` column *names* were already
+  per-field-name and platform-stable). The change is Apple-visible: the same fields
+  appear in a new order in the generated SQL, so a cache refreshed before the change
+  and one refreshed after it order their columns differently -- the data is the same,
+  the order is not.
+- **Test:** `testActiveFieldsSelectListIsOrderedByColumnAlias` and
+  `testAllFieldsSelectListIsOrderedByFieldName` in both
+  `MAD/MADTests/MADQuerySelectExpressionTests.m` and its Linux port: each builds the
+  same fields in both creation orders and asserts one list.
+  `testActiveFieldsSelectListContentComesFromTheSet` stays as the content guard, so a
+  future *content* change is caught separately from an order change.
+- **What was decided:** the user chose the alias order (2026-10-16) over the schema
+  snapshot's order, the query-field identifier order, and an export-only order, so
+  that the generated SQL, the row cache and every export share one defined order on
+  both platforms. Recorded in `MAD_CLI.md` §8 (the JSON export shape).
 
 ### The same document does not produce the same `.mad` on Linux and on Apple — and on Linux it cannot be written at all
 - **Status:** Confirmed (pinned as characterisation; not fixed -- a fix is a design

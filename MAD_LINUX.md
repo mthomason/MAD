@@ -478,9 +478,12 @@ Two things had to be settled to get there, both recorded in `Linux/README.md`:
 The GNUstep divergences the CLI added: the directory enumerator
 (`-enumeratorAtURL:…` yields URLs with the containing directory stripped —
 measured, and the CLI's member list uses `-subpathsAtPath:` instead), and the
-SELECT-list column order, which is set order and therefore differs from Apple's
-(same fields, same rows; noted in `Linux/README.md`, and part of the JSON export
-shape decision, §10.1).
+SELECT-list column order, which was set order and therefore differed from Apple's
+(same fields, same rows; noted in `Linux/README.md`). **Settled 2026-10-16**, with
+the JSON export shape decision (§10.1 below): the order is defined as the column
+alias in both SQL builders, so the generated SQL, the row cache and every export
+agree on both platforms (BUGS.md, the SELECT-list entry; the order tests in
+`Linux/Tests/MADQuerySelectExpressionTests.m`).
 
 ---
 

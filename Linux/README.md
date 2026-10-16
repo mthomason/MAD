@@ -348,13 +348,17 @@ checkpoint as a test — open, schema, query, driver resolution, refresh, 76 row
 so it fails in CI rather than in a hand-run.
 
 **Two differences worth knowing, both found here.** The SELECT list's column order
-is *set* order (`MADQueryActiveQueryFields` accumulates into an `NSSet`), so the
-same document produces a different order on Apple and on GNUstep — the same
-fields, different order; the cache's *data* is identical once compared by field
-name, and the cache's `c<hash>` column names are hash-derived, so they differ per
-platform too. Making the order deterministic would change Apple's SQL, so it is
-left as it is and recorded here; it belongs with the JSON export shape decision
-(`MAD_LINUX.md` §10.1).
+was *set* order (`MADQueryActiveQueryFields` accumulates into an `NSSet`), so the
+same document produced a different order on Apple and on GNUstep — the same fields,
+different order; the cache's *data* is identical once compared by field name, and the
+cache's `c<hash>` column names are hash-derived, so they differed per platform too.
+**Settled 2026-10-16 (the JSON export shape decision, `MAD_LINUX.md` §10.1):** the
+order is now defined as the column alias, sorted with `-compare:`, in both SQL
+builders, so the generated SQL, the row cache and every export agree on both
+platforms (BUGS.md, the SELECT-list entry; the order tests in
+`Linux/Tests/MADQuerySelectExpressionTests.m`). A cache refreshed before the change
+orders its columns differently from one refreshed after it — the same data, a new
+order — so refresh once before comparing caches across that date.
 
 ## What this does not do yet
 

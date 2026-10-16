@@ -171,12 +171,13 @@
 	XCTAssertEqualObjects(select.fields[@"Invoice0.Name"], field.databaseSchemaField);
 }
 
-// The SELECT list's order is NSSet enumeration order, and that order is not stable:
-// not insertion order, not platform order, and -- measured on Linux -- not even the
-// same between two documents built by the same fixture in one process.  BUGS.md
-// records it (the row cache and `mad query` inherit it).  What is pinned here is the
-// part that must not vary: the *content* of the list, whichever order the fields were
-// created in and whichever order the set happens to enumerate.
+// The SELECT list's order used to be NSSet enumeration order, and that order is not
+// stable: not insertion order, not platform order, and -- measured on Linux -- not
+// even the same between two documents built by the same fixture in one process.
+// BUGS.md recorded it; the order is now defined as the column alias, so the generated
+// SQL, the row cache and every export agree (the order test below).  What is pinned
+// here is the part that must not vary: the *content* of the list, whichever order the
+// fields were created in and whichever order the set happens to enumerate.
 - (void)testActiveFieldsSelectListContentComesFromTheSet {
 	NSSet *firstFields = nil;
 	NSSet *secondFields = nil;
@@ -224,6 +225,36 @@
 	XCTAssertEqualObjects(firstLines, secondLines, @"the same SELECT list, whichever order they were created in");
 }
 
+// The order itself: the column alias decides, so the list reads the same whichever
+// order the fields were created in -- and the same on Apple and on GNUstep.
+- (void)testActiveFieldsSelectListIsOrderedByColumnAlias {
+	NSArray <NSString *> *expectedFieldKeys = @[ @"Invoice0.Alpha", @"Invoice0.Zulu" ];
+	NSString *expectedSQL = @"\tInvoice0.Alpha,\n\tInvoice0.Zulu";
+
+	for (NSNumber *reversed in @[ @NO, @YES ]) {
+		RptqStoreContext *context = [self inMemoryContext];
+		RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+		NSArray <NSString *> *names = reversed.boolValue ? @[ @"Zulu", @"Alpha" ] : @[ @"Alpha", @"Zulu" ];
+
+		for (NSString *name in names) {
+			RptqQueryField *field = [self queryFieldNamed:name type:MADDataTypeString tableName:@"Invoice"
+												  context:context document:document];
+			// The element is what makes a field active.
+			RptqDocumentElementLabelDataField *label = [context insertObjectForEntity:
+														NSStringFromClass([RptqDocumentElementLabelDataField class])
+																		  identifier:0];
+			label.referencesQueryField = field;
+		}
+
+		MADQuerySelectExpressionActiveFields *select;
+		select = [[MADQuerySelectExpressionActiveFields alloc] initWithDatabase:[MADMock mockDatabase]
+													   forManagedObjectContext:context];
+
+		XCTAssertEqualObjects(select.fieldKeys, expectedFieldKeys, @"ordered by column alias");
+		XCTAssertEqualObjects(select.sql, expectedSQL, @"ordered by column alias");
+	}
+}
+
 - (void)testActiveFieldsSelectListIsEmptyWithoutActiveFields {
 	RptqStoreContext *context = [self inMemoryContext];
 
@@ -264,6 +295,28 @@
 	XCTAssertTrue([sql containsString:@"\tInvoice0.Name"]);
 	XCTAssertTrue([sql containsString:@"\tInvoice0.Amount"]);
 	XCTAssertTrue([sql containsString:@",\n"]);
+}
+
+// The table's fields are a set, so the order used to be hash order; the field name
+// decides now (testAllFieldsSelectListIsOrderedByFieldName in the Linux suite is the
+// same assertion).
+- (void)testAllFieldsSelectListIsOrderedByFieldName {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+	RptqQueryField *name = [self queryFieldNamed:@"Name" type:MADDataTypeString tableName:@"Invoice" context:context document:document];
+	RptqQueryTable *table = name.inQueryTable;
+	RptqQueryField *amount = [self queryFieldNamed:@"Amount" type:MADDataTypeDecimal tableName:@"Invoice" context:context document:document];
+	amount.inQueryTable = table;
+
+	MTVertex *vertex = [[MTVertex alloc] initWithID:table.identifier andObject:@(table.identifier)];
+	MTPair *pair = [[MTPair alloc] initWithFormer:vertex andLatter:nil];
+
+	MADQuerySelectExpressionAllFields *select;
+	select = [[MADQuerySelectExpressionAllFields alloc] initWithDatabase:[MADMock mockDatabase]
+																 tables:@[ pair ]
+											   forManagedObjectContext:context];
+
+	XCTAssertEqualObjects(select.sql, @"\tInvoice0.Amount,\n\tInvoice0.Name");
 }
 
 #pragma mark - MADQuerySelectExpression dispatcher

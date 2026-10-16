@@ -165,12 +165,13 @@ static void testActiveFieldsSelectList(void) {
 	MAD_PASS_EQUAL(select.fields[@"Invoice0.Name"], field.databaseSchemaField, "the field maps back to its schema field");
 }
 
-// The SELECT list's order is NSSet enumeration order, and that order is not stable:
-// not insertion order, not platform order, and -- measured here -- not even the same
-// between two documents built by the same fixture in one process.  BUGS.md records it
-// (the row cache and `mad query` inherit it).  What is pinned here is the part that
-// must not vary: the *content* of the list, whichever order the fields were created
-// in and whichever order the set happens to enumerate.
+// The SELECT list's order used to be NSSet enumeration order, and that order is not
+// stable: not insertion order, not platform order, and -- measured here -- not even
+// the same between two documents built by the same fixture in one process.  BUGS.md
+// recorded it; the order is now defined as the column alias, so the generated SQL,
+// the row cache and every export agree (the order tests below).  What is pinned here
+// is the part that must not vary: the *content* of the list, whichever order the
+// fields were created in and whichever order the set happens to enumerate.
 static void testActiveFieldsSelectListContentComesFromTheSet(void) {
 	NSSet *firstFields = nil;
 	NSSet *secondFields = nil;
@@ -218,6 +219,35 @@ static void testActiveFieldsSelectListContentComesFromTheSet(void) {
 	MAD_PASS_EQUAL(firstLines, secondLines, "the same SELECT list, whichever order they were created in");
 }
 
+// The order itself: the column alias decides, so the list reads the same whichever
+// order the fields were created in -- and the same here as on Apple.
+static void testActiveFieldsSelectListIsOrderedByColumnAlias(void) {
+	NSArray <NSString *> *expectedFieldKeys = @[ @"Invoice0.Alpha", @"Invoice0.Zulu" ];
+	NSString *expectedSQL = @"\tInvoice0.Alpha,\n\tInvoice0.Zulu";
+
+	for (NSNumber *reversed in @[ @NO, @YES ]) {
+		RptqStoreContext *context = inMemoryContext();
+		RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+		NSArray <NSString *> *names = reversed.boolValue ? @[ @"Zulu", @"Alpha" ] : @[ @"Alpha", @"Zulu" ];
+
+		for (NSString *name in names) {
+			RptqQueryField *field = queryFieldNamed(name, MADDataTypeString, @"Invoice", context, document);
+			// The element is what makes a field active.
+			RptqDocumentElementLabelDataField *label =
+				(RptqDocumentElementLabelDataField *)[context insertObjectForEntity:
+													  NSStringFromClass([RptqDocumentElementLabelDataField class]) identifier: 0];
+			label.referencesQueryField = field;
+		}
+
+		MADQuerySelectExpressionActiveFields *select;
+		select = [[MADQuerySelectExpressionActiveFields alloc] initWithDatabase: [MADMock mockDatabase]
+													   forManagedObjectContext: context];
+
+		MAD_PASS_EQUAL(select.fieldKeys, expectedFieldKeys, "the field keys are ordered by column alias");
+		MAD_PASS_EQUAL(select.sql, expectedSQL, "the SELECT list is ordered by column alias");
+	}
+}
+
 static void testActiveFieldsSelectListIsEmptyWithoutActiveFields(void) {
 	RptqStoreContext *context = inMemoryContext();
 
@@ -260,6 +290,27 @@ static void testAllFieldsSelectList(void) {
 	MAD_PASS([sql containsString:@",\n"], "the fields are comma-separated");
 }
 
+// The table's fields are a set, so the order used to be hash order; the field name
+// decides now.
+static void testAllFieldsSelectListIsOrderedByFieldName(void) {
+	RptqStoreContext *context = inMemoryContext();
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+	RptqQueryField *name = queryFieldNamed(@"Name", MADDataTypeString, @"Invoice", context, document);
+	RptqQueryTable *table = name.inQueryTable;
+	RptqQueryField *amount = queryFieldNamed(@"Amount", MADDataTypeDecimal, @"Invoice", context, document);
+	amount.inQueryTable = table;
+
+	MTVertex *vertex = [[MTVertex alloc] initWithID:table.identifier andObject:@(table.identifier)];
+	MTPair *pair = [[MTPair alloc] initWithFormer:vertex andLatter:nil];
+
+	MADQuerySelectExpressionAllFields *select;
+	select = [[MADQuerySelectExpressionAllFields alloc] initWithDatabase: [MADMock mockDatabase]
+																 tables: @[ pair ]
+											   forManagedObjectContext: context];
+
+	MAD_PASS_EQUAL(select.sql, @"\tInvoice0.Amount,\n\tInvoice0.Name", "the fields are ordered by name");
+}
+
 #pragma mark - MADQuerySelectExpression dispatcher
 
 static void testDispatcherChoosesImplementation(void) {
@@ -287,6 +338,8 @@ MAD_TEST_MAIN("MADQuerySelectExpressionTests",
 	MAD_TEST(testActiveQueryFieldsCollectsElementReferences),
 	MAD_TEST(testActiveFieldsSelectList),
 	MAD_TEST(testActiveFieldsSelectListContentComesFromTheSet),
+	MAD_TEST(testActiveFieldsSelectListIsOrderedByColumnAlias),
 	MAD_TEST(testActiveFieldsSelectListIsEmptyWithoutActiveFields),
 	MAD_TEST(testAllFieldsSelectList),
+	MAD_TEST(testAllFieldsSelectListIsOrderedByFieldName),
 	MAD_TEST(testDispatcherChoosesImplementation));
