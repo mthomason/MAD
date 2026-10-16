@@ -1122,6 +1122,33 @@ Status key:
 - **Test:** `MADElementStylizedTextTests testNilFontNameThrows` pins the current
   throw.
 
+### MAD's document fixtures shared one store across test runs
+
+- **Status:** Fixed (tests); the underlying name-keying noted below
+- **Where:** `MAD/MADTests/MADOperationCreateDocument*Tests.m`,
+  `MADOperationDocumentCloseDocumentTests.m`, `MADOperationDeleteFileTests.m`,
+  `MADDocumentTests.m` -- fixtures created documents with fixed names
+  (`add-connection.mad`, `first-time.mad`, `open.mad`, ...).
+- **Behavior:** a document's guts -- and the store inside them -- resolve to
+  `<home>/tmp/<name>.mada` (`MADURLFactory
+  +newURLDocumentArchiveForFileURL:extension:`), which the device shares and
+  keeps between runs; the fixture's unique temp directory never enters the
+  path.  So the second run of the suite opened the first run's store and
+  `insertObjectForEntity:@"RptqDocument" identifier:1` threw "already in the
+  graph".  Measured 2026-10-10: three such failures on the second run of the
+  merged suite, a different single failure on the third (after clearing only
+  two leftovers), none on the first.
+- **Now:** each fixture document's name carries its fixture directory's UUID,
+  so every fixture resolves to a fresh store; reopen flows reuse the one URL
+  and still find what the first document wrote.
+- **Noted (product level, not changed here):** two documents with the same
+  file name in different folders resolve to the same guts directory while
+  open.  The import path guards against duplicates
+  (`MADURLFactory +newURLWithUniqueFilenameForURL:`), which is why this is
+  recorded rather than worked around in the product.
+- **Locked down by:** two consecutive MAD scheme runs, 547/547 each, with the
+  old leftovers still on the simulator.
+
 ## MADFoundation
 
 ### `MADOperation -willEnqueue` advances past `Pending` to `Ready`
@@ -1232,6 +1259,54 @@ Status key:
   file.
 - **Test:** `MADDataTableVirtualTests testObjectAtIndexAndSubscriptAgree`, through the
   test-only category bridge the suite already uses.
+### `MADOperationConditionResultTests`: the async-path assertion raced the dispatch_group
+
+- **Status:** Fixed
+- **Where:** `MADFoundation/MADFoundationTests/MADOperationConditionResultTests.m`,
+  `-testCompletionIsNotCalledBeforeTheMethodReturnsForTheAsyncPath` (formerly the
+  `XCTAssertFalse(calledBack, ...)` at :265).
+- **Behavior:** the test called `evaluateConditions:` with a condition that reports
+  on the spot, then asserted on the very next line that the completion had not run.
+  A condition that reports immediately leaves the dispatch_group empty during the
+  loop, so `dispatch_group_notify` enqueues its block to a global concurrent queue
+  before the method returns -- another core can run it in that window.  Reliably
+  green on a quiet machine; it failed twice under the Linux image's parallel
+  `ctest` load (59 executables on a saturated VM), where the caller is descheduled
+  right after the notify.
+- **Now:** not weakened but made deterministic: the stub condition can defer its
+  report (`defersCompletion` / `-reportDeferredCompletion`), so the "not yet
+  called" observation happens while the condition is provably still outstanding
+  -- and the test then waits for the completion it previously never observed.
+  The same change is in the Linux port
+  (`Linux/Tests/MADOperationConditionResultTests.m`), which is where the flake
+  was measured.
+- **Locked down by:** the same test; a 60-run loop of the Linux executable and
+  eight parallel full-suite passes with zero failures (measured 2026-10-06), and
+  MADFoundation 118/118 on the simulator.
+
+### Framework targets dropped `$(inherited)`, so `DEBUG` never reached framework code
+
+- **Status:** Fixed
+- **Where:** the `GCC_PREPROCESSOR_DEFINITIONS` of every target that sets
+  `MADLOG_ACCESSOR` -- `MADFoundation`, `MAD`, `MADAPI`, `MADCocoaExtensions`,
+  `MADFileManager`, `MADSqlite3`, `MADMySQL`, `MADTds`, `MADExplorer`, and the
+  `MAD Designer` app target.
+- **Behavior:** each target's list was exactly `MADLOG_ACCESSOR=<accessor>`
+  with no `$(inherited)`, so the project-level `DEBUG=1` was overridden away.
+  Every `#if DEBUG` in framework code was therefore dead in Debug builds:
+  `MADApplication +groupIdentifier` never answered the `.local` group,
+  `MADLogDebug` was always the no-op arm (`madlog.h`), and
+  `MADMySQL/Source/MysqlFetch.m`'s `#ifdef DEBUG` block never compiled.
+- **Now:** `"$(inherited)"` added after the accessor in each list (Debug and
+  Release, ten projects).  `-showBuildSettings` now resolves to
+  `MADLOG_ACCESSOR=... DEBUG=1` for the framework and app targets.
+- **Why it matters:** the group identity decides which shared container a
+  Debug build uses, and the failure is silent -- a plausible-looking value
+  from the wrong branch.
+- **Locked down by:** `MADApplicationTests
+  testGroupIdentifierMatchesBuildConfiguration` (which caught it, on the
+  second run of the merged suite), and the eight framework schemes + the app
+  build re-run green afterwards.
 
 ## MADCocoaExtensions
 

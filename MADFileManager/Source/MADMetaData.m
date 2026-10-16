@@ -8,11 +8,12 @@
 
 #import "MADMetaData.h"
 #import <Foundation/NSURL.h>
+#import <Foundation/NSArray.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSMetadataAttributes.h>
 #import <Foundation/NSMetadata.h>
 #import <Foundation/NSException.h>
-#import <MobileCoreServices/UTType.h>
+#import <Foundation/NSValue.h>
 #import <sys/stat.h>
 #import "MADMetaDataLocal.h"
 #import "MADMetaDataCloud.h"

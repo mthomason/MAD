@@ -73,6 +73,8 @@ The code base also includes a custom scripting language in a file called `Scrimp
 
 The codebase also includes static library build scrips in a file called `Compressor`.  This is used to build the static libraries used by the project.  This is a very important part of the project.
 
+The codebase also includes `Linux`, the Phase B toolchain spike (`MAD_LINUX.md` §9): a Docker image that builds libobjc2 and GNUstep from pinned sources, compiles a `MADFoundation` subset against them, and runs the Linux tests.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
+
 ## Code Style Guidance
 
 * This project uses tabs for spacing.
@@ -124,6 +126,8 @@ scheme, so the command above does not reach them.
   products, the web clone, AI, and the money.
 * `MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
   Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
+* `Linux/README.md` -- the Phase B spike directory: the image, the compiled subset,
+  the GNUstep divergences the tests found, and the licences.
 * `MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
 * `LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
 * `THIRD_PARTY_LICENSES.md` -- every third-party component in the app, how it is linked, its

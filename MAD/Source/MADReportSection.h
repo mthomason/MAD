@@ -25,7 +25,11 @@
 @property (nonatomic, readonly) NSInteger identifier;
 
 @property (nonatomic, readonly, strong, getter=hasReportRows) MADReportRows *reportRows;
+#if __APPLE__
+// The section's layout is the designer's; MADSectionLayoutManager is not in
+// the Linux build (MADocument was its only client).
 @property (nonatomic, readonly, strong) MADSectionLayoutManager *layoutManager;
+#endif
 
 @property (nonatomic, readonly, getter=isVisible) BOOL visible;
 @property (nonatomic, readonly) CGFloat height;

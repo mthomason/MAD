@@ -31,7 +31,7 @@
 #import "MADQueryCacheJournalModeDefault.h"
 #import "MADQueryCacheSelectGroupKeys.h"
 #import "MADQueryCacheAggregateFunction.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 @implementation MADQuery (Extras)
 

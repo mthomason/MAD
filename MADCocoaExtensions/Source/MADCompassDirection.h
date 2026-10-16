@@ -9,6 +9,9 @@
 #ifndef MADCompassDirection_h
 #define MADCompassDirection_h
 
+#import <Foundation/NSObjCRuntime.h>
+#import <CoreGraphics/CGGeometry.h>
+
 typedef NS_ENUM(NSUInteger, MADCompassDirection) {
 	north = 1,
 	south,

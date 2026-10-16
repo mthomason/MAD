@@ -8,7 +8,7 @@
 
 #import "MADQueryCacheAggregateFunctionParamaters.h"
 #import "MADParameters+QueryCacheAggregate.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADSqlite3/MADDataTableFast.h>
 

@@ -9,7 +9,7 @@
 #import "MADPrintPageElement.h"
 #import "MADDocumentObjectDataReference.h"
 #import "MADPrintPageRendererDataSource.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <Foundation/NSString.h>
 #import <UIKit/UIImage.h>

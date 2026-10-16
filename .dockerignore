@@ -1,0 +1,18 @@
+# Build-context hygiene for the Linux image (Linux/Dockerfile).
+#
+# The working tree is ~13 GB, almost all of it generated: Compressor's build
+# trees and download cache (10.6 GB), the CLI's DerivedData (840 MB) and .git
+# (683 MB).  The Linux build needs the framework sources and Linux/ itself, so
+# everything below is excluded from the context.  Keep this list in step with
+# the big generated directories; see LIBRARIES.md for what Compressor writes
+# where.
+.git
+.cli-deriveddata
+.idea
+.DS_Store
+**/xcuserdata*
+Compressor/build
+Compressor/src
+Compressor/library
+Compressor/media
+Linux/build

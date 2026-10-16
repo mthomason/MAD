@@ -21,7 +21,7 @@
 #import <MADSqlite3/sqlite3.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 @interface MADDataTableSingleColumnEnumerator ()
 

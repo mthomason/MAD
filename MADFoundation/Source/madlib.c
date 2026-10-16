@@ -9,6 +9,7 @@
 #import "madlib.h"
 #import <stdlib.h>
 #import <stdio.h>
+#import <string.h>
 #import <strings.h>
 
 unsigned long count_digits_ul(unsigned long i) {

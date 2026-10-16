@@ -8,7 +8,7 @@
 
 #import "MADOperationPromptCredentials.h"
 #import "MADMutualExclusive.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADCocoaExtensions/MADTextField.h>
 #import <MADFoundation/MADKeyChain.h>

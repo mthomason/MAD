@@ -10,6 +10,7 @@
 #define MAD_Designer_MADBlockOperation_h
 
 #import <MADFoundation/MADOperation.h>
+#import <dispatch/dispatch.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

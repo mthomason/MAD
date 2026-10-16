@@ -156,6 +156,28 @@ static void RptqSetBool  (id self, SEL _cmd, BOOL value)     { [self setValue:@(
 static void RptqSetDouble(id self, SEL _cmd, double value)   { [self setValue:@(value) forUndefinedKey:RptqKeyFromSetter(_cmd)]; }
 static void RptqSetFloat (id self, SEL _cmd, float value)    { [self setValue:@(value) forUndefinedKey:RptqKeyFromSetter(_cmd)]; }
 
+// The runtime compares an installed accessor's encoding against the compiled
+// call site's, and BOOL is signed char on Apple, unsigned char on GNUstep --
+// so the encoding the bool accessors register is per-platform.
+#if __APPLE__
+#define MAD_RPTQ_BOOL_TYPE "c"
+#else
+#define MAD_RPTQ_BOOL_TYPE "C"
+#endif
+
+// GNUstep's class_getProperty() looks only at the class itself; Apple's walks
+// the superclass chain.  Inherited attributes (a label's `alignment`, say) are
+// reached by direct message sends throughout the store, so the walk is done
+// here for both platforms.
+static objc_property_t RptqPropertyNamed(Class cls, const char *name) {
+	objc_property_t property = NULL;
+	for (Class current = cls; current != Nil; current = class_getSuperclass(current)) {
+		property = class_getProperty(current, name);
+		if (property) break;
+	}
+	return property;
+}
+
 static char RptqPropertyType(objc_property_t property) {
 	const char *attributes = property_getAttributes(property);
 	if (!attributes || attributes[0] != 'T') return '@';
@@ -164,14 +186,16 @@ static char RptqPropertyType(objc_property_t property) {
 
 + (BOOL)resolveInstanceMethod:(SEL)selector {
 	const char *name = sel_getName(selector);
-	objc_property_t property = class_getProperty(self, name);
+	objc_property_t property = RptqPropertyNamed(self, name);
 	if (property) {
 		switch (RptqPropertyType(property)) {
 			case 'q': class_addMethod(self, selector, (IMP)RptqGetInt64,  "q@:"); return YES;
 			case 'i': class_addMethod(self, selector, (IMP)RptqGetInt32,  "i@:"); return YES;
 			case 's': class_addMethod(self, selector, (IMP)RptqGetInt16,  "s@:"); return YES;
 			case 'c':
-			case 'B': class_addMethod(self, selector, (IMP)RptqGetBool,   "c@:"); return YES;
+			// GNUstep encodes BOOL as 'C' (unsigned char) where Apple uses 'c'.
+			case 'C':
+			case 'B': class_addMethod(self, selector, (IMP)RptqGetBool,   MAD_RPTQ_BOOL_TYPE "@:"); return YES;
 			case 'd': class_addMethod(self, selector, (IMP)RptqGetDouble, "d@:"); return YES;
 			case 'f': class_addMethod(self, selector, (IMP)RptqGetFloat,  "f@:"); return YES;
 			default:  class_addMethod(self, selector, (IMP)RptqGetObject, "@@:"); return YES;
@@ -181,14 +205,15 @@ static char RptqPropertyType(objc_property_t property) {
 	NSString *setterKey = RptqKeyFromSetter(selector);
 	if (setterKey) {
 		// setterKey is non-nil here and a valid string always yields a UTF8String.
-		objc_property_t setterProperty = class_getProperty(self, (const char *)setterKey.UTF8String);
+		objc_property_t setterProperty = RptqPropertyNamed(self, (const char *)setterKey.UTF8String);
 		if (setterProperty) {
 			switch (RptqPropertyType(setterProperty)) {
 				case 'q': class_addMethod(self, selector, (IMP)RptqSetInt64,  "v@:q"); return YES;
 				case 'i': class_addMethod(self, selector, (IMP)RptqSetInt32,  "v@:i"); return YES;
 				case 's': class_addMethod(self, selector, (IMP)RptqSetInt16,  "v@:s"); return YES;
 				case 'c':
-				case 'B': class_addMethod(self, selector, (IMP)RptqSetBool,   "v@:c"); return YES;
+				case 'C':
+				case 'B': class_addMethod(self, selector, (IMP)RptqSetBool,   "v@:" MAD_RPTQ_BOOL_TYPE); return YES;
 				case 'd': class_addMethod(self, selector, (IMP)RptqSetDouble, "v@:d"); return YES;
 				case 'f': class_addMethod(self, selector, (IMP)RptqSetFloat,  "v@:f"); return YES;
 				default:  class_addMethod(self, selector, (IMP)RptqSetObject, "v@:@"); return YES;

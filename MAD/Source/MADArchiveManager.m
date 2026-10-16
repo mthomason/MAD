@@ -11,12 +11,16 @@
 #import <stdlib.h>
 #import <string.h>
 #import <stdio.h>
+#if __APPLE__
 #import <copyfile.h>
+#else
+#import <MADCompatFileCopy.h>
+#endif
 #import <unistd.h>
 #import <fcntl.h>
 #import <errno.h>
 #import <libgen.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 #import <stdlib.h>
 
 #import <Foundation/NSURL.h>
@@ -25,6 +29,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSFileWrapper.h>
 #import <Foundation/NSUUID.h>
+#import <Foundation/NSError.h>
 
 #import <MADFileManager/MADFileUtilities.h>
 #import "MADConstants.h"
@@ -105,9 +110,14 @@ int backup_file(char *path_origin, char *path_destination) {
 				os_log_error(OS_LOG_DEFAULT, "Error removing file: %s\n\t%d: %s)", path_destination, errno, strerror(errno));
 		
 		// 3. Copy file to backup location... that is, create the backup.
+#if __APPLE__
 		if (copyfile(path_origin_basename, path_destination, NULL,
 						  COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
 						  COPYFILE_COPY_XATTR) < 0)
+#else
+		// POSIX copyfile, single file (Compat/MADCompatFileCopy.h).
+		if (MADCompatCopyFile(path_origin_basename, path_destination) < 0)
+#endif
 			os_log_error(OS_LOG_DEFAULT, "Error: Copyfile %s.\n\tGot %d: %s.\n\t\n\tStore is migration directory?", path_origin, errno, strerror(errno));
 	}
 	
@@ -131,7 +141,8 @@ int write_archive(char *outname, NSURL *filewrapper) {
 		os_log_error(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
 	}
 	
-	NSDirectoryEnumerator <NSURL *> * sourceDirectoryEnumerator =
+	/* GNUstep's NSDirectoryEnumerator is not a parameterized class. */
+	NSDirectoryEnumerator * sourceDirectoryEnumerator =
 	[[NSFileManager defaultManager] enumeratorAtURL: filewrapper
 						 includingPropertiesForKeys: nil
 											options: NSDirectoryEnumerationSkipsHiddenFiles
@@ -174,9 +185,13 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 		if ((r = access(backup_path, F_OK)) < 0) {
 			os_log_error(OS_LOG_DEFAULT, "Can't access file that we want to backup.\n\t%s", backup_path);
 		} else {
+#if __APPLE__
 			if ((r = copyfile(backup_path, backup_name, NULL,
 							  COPYFILE_SECURITY | COPYFILE_ALL | COPYFILE_COPY_DATA |
 							  COPYFILE_COPY_XATTR | COPYFILE_DATA)) < 0)
+#else
+			if ((r = MADCompatCopyFile(backup_path, backup_name)) < 0)
+#endif
 				os_log_error(OS_LOG_DEFAULT, "Copyfile %s error %d - %s", backup_name, errno, strerror(errno));
 			
 		}

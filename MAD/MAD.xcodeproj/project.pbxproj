@@ -465,8 +465,7 @@
 		4CC284A11BADE9F800775B72 /* RptqDatabaseCredentals+Extras.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC284691BADE98F00775B72 /* RptqDatabaseCredentals+Extras.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CC284A21BADE9FB00775B72 /* RptqDatabaseCredentals+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC2846A1BADE98F00775B72 /* RptqDatabaseCredentals+Extras.m */; };
 		4CC284C41BADEBA500775B72 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC284C31BADEBA500775B72 /* CoreText.framework */; };
-		4CC5F80C2DD7089E0069D146 /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC5F80B2DD7089E0069D146 /* madlog.m */; };
-		4CC5F80D2DD7089E0069D146 /* madlog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC5F80A2DD7089E0069D146 /* madlog.h */; };
+
 		4CC9827A1F4BB96600E0496A /* MADDesignerQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC982781F4BB96600E0496A /* MADDesignerQuery.h */; };
 		4CC9827B1F4BB96600E0496A /* MADDesignerQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC982791F4BB96600E0496A /* MADDesignerQuery.m */; };
 		4CC9827E1F4BB98300E0496A /* MADDesignerViewer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CC9827C1F4BB98300E0496A /* MADDesignerViewer.h */; };
@@ -1022,8 +1021,7 @@
 		4CC284691BADE98F00775B72 /* RptqDatabaseCredentals+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RptqDatabaseCredentals+Extras.h"; sourceTree = "<group>"; };
 		4CC2846A1BADE98F00775B72 /* RptqDatabaseCredentals+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RptqDatabaseCredentals+Extras.m"; sourceTree = "<group>"; };
 		4CC284C31BADEBA500775B72 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		4CC5F80A2DD7089E0069D146 /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
-		4CC5F80B2DD7089E0069D146 /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
+
 		4CC982781F4BB96600E0496A /* MADDesignerQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerQuery.h; sourceTree = "<group>"; };
 		4CC982791F4BB96600E0496A /* MADDesignerQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerQuery.m; sourceTree = "<group>"; };
 		4CC9827C1F4BB98300E0496A /* MADDesignerViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerViewer.h; sourceTree = "<group>"; };
@@ -1254,8 +1252,7 @@
 				4C9A35AE1CEDF57C0048B71E /* madtar.m */,
 				4C82C9891CF21A3E00F244F6 /* madpng.h */,
 				4C82C9881CF21A3E00F244F6 /* madpng.c */,
-				4CC5F80A2DD7089E0069D146 /* madlog.h */,
-				4CC5F80B2DD7089E0069D146 /* madlog.m */,
+
 				4C3F85671E8E756B0003B67C /* MADModelType.h */,
 				4C875F871E349FA40086C506 /* MADModel.h */,
 				4C875F881E349FA40086C506 /* MADModel.m */,
@@ -1990,7 +1987,7 @@
 				4C9A35B11CEDF57C0048B71E /* madtar.h in Headers */,
 				4C4F12701D0A634D0002294E /* MADQueryPredicate.h in Headers */,
 				4CC982821F4BB99600E0496A /* MADDesignerLayout.h in Headers */,
-				4CC5F80D2DD7089E0069D146 /* madlog.h in Headers */,
+
 				4CB98DC31F43F0A00043B583 /* MADOperationUniqueUrlForFilename.h in Headers */,
 				4C5939C31E3EF7E400582271 /* RptqDatabaseSchemaTable.h in Headers */,
 				4C4F12781D0A70A90002294E /* MADQuerySelectExpression.h in Headers */,
@@ -2360,7 +2357,7 @@
 				4C3080E21D053EB800A7D597 /* UIFontDescriptor+MADAdditions.m in Sources */,
 				4C9FB2771D031E8B00A1B291 /* MADParameters+QueryCacheAggregate.m in Sources */,
 				4CB98DCA1F43F0A00043B583 /* MADOperationCreateDocumentFirstTimeSetup.m in Sources */,
-				4CC5F80C2DD7089E0069D146 /* madlog.m in Sources */,
+
 				4C5939CC1E3EF7E400582271 /* RptqQueryPredicate.m in Sources */,
 				4CC2849C1BADE9EF00775B72 /* RptqQuerySort+Extras.m in Sources */,
 				4CC2849A1BADE9EB00775B72 /* RptqQueryPredicate+Extras.m in Sources */,
@@ -2642,6 +2639,10 @@
 		4CF781591BADE5EA0050A67D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetMadLog",
+					"$(inherited)",
+				);
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -2680,6 +2681,10 @@
 		4CF7815A1BADE5EA0050A67D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetMadLog",
+					"$(inherited)",
+				);
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;

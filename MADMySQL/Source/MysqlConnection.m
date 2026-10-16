@@ -14,7 +14,7 @@
 #import "MysqlServer.h"
 #import "MysqlCommitException.h"
 #import "MysqlRollbackException.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <mysql.h>
 

@@ -10,7 +10,7 @@
 
 #import "MADOperationRefreshReloadProtocol.h"
 #import "MADOperationRefresh.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MADNotificationDidFormatPage.h>

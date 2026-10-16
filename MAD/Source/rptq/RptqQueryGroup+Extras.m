@@ -29,7 +29,7 @@
 #import "RptqQuery+Extras.h"
 
 #import "RptqDataHelper.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSPredicate.h>

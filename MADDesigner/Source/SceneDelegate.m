@@ -10,7 +10,7 @@
 #import "MADTabBarController.h"
 #import "MADNavigationController.h"
 #import "MADExplorerController.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 @implementation SceneDelegate
 

@@ -11,6 +11,7 @@
 
 #import <Foundation/NSObjCRuntime.h>
 #import <Foundation/NSRange.h>
+#import <Foundation/NSValue.h>
 #import <stdlib.h>
 
 static inline NSUInteger madRandomNumberBetween(NSUInteger from, NSUInteger to);

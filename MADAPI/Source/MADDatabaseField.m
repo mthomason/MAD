@@ -17,7 +17,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSCoder.h>
 #import <string.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 static inline BOOL isDataTypeNumeric(MADDataType);
 static inline BOOL isDataTypeNumeric(MADDataType type) {

@@ -11,6 +11,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSArray.h>
 #import <Foundation/NSNull.h>
+#import <Foundation/NSValue.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 #import <MADSqlite3/MADQuerySelectParameters.h>

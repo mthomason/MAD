@@ -8,7 +8,7 @@
 
 #import "MADOperationRefresh.h"
 #import "MADOperationRefreshInitialize.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabase.h>

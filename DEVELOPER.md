@@ -29,6 +29,34 @@ run the consuming framework's test suite plus `--verify`. One library per commit
 The mysqlclient, freetds and zint recipes carry per-version knowledge — see the
 notes in `LIBRARIES.md` §1 before bumping those.
 
+## Building on Linux (Phase B spike)
+
+The Linux toolchain spike lives in `Linux/` and is driven by one script — see
+`Linux/README.md` and `MAD_LINUX.md` §9. It needs Docker; Docker Desktop's CLI is
+not on `PATH` by default and the script finds it.
+
+```
+./Linux/build.sh              build the image, run the Linux tests
+./Linux/build.sh --test       run the tests in the existing image
+./Linux/build.sh --probe      the toolchain/Foundation report only
+./Linux/build.sh --shell      interactive shell in the build image
+./Linux/build.sh --rebuild    cold rebuild (~15-25 minutes)
+```
+
+Nothing built there ships: it compiles a MADFoundation subset against GNUstep
+and runs ported versions of the framework's tests plus a toolchain probe. The
+GNUstep divergences it found are listed in `Linux/README.md`.
+
+The iOS regression gate for the platform guards those builds required:
+
+```
+xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
+	-destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.5'
+```
+
+(The `OS=` qualifier is needed when several simulator runtimes are installed and
+the newest one has no device of that name.)
+
 ## Test Database Passwords
 
 Test passwords are (it's a never on test server):

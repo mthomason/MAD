@@ -1,4 +1,5 @@
 //
+#import <Foundation/NSException.h>
 //  MADDataTableFast.m
 //  MAD
 //
@@ -20,6 +21,9 @@
 #import <MADFoundation/MADDataColumn.h>
 
 #import <MADDataStructures/MADIndex.h>
+#import <Foundation/NSIndexSet.h>
+#import <Foundation/NSValue.h>
+#import <dispatch/dispatch.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
@@ -61,8 +65,9 @@
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSFileManager.h>
+#import <Foundation/NSValue.h>
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 #import <dispatch/dispatch.h>
 #import <stdio.h>
 
@@ -71,7 +76,13 @@ static os_log_t mlog;
 
 @interface MADDataTableFast () <MADQueryParametersStandardProtocol, MADQueryParametersColumnKeysProtocol, MADQueryParametersColumnMetaProtocol, MADQueryParametersColumnDataProtocol>
 
+#if __APPLE__
 @property (nonatomic, readwrite, strong) dispatch_queue_t queueBulkAdd;
+#else
+// Dispatch objects are plain C pointers off Apple (os/object.h declines ObjC
+// support outside Darwin), so ARC cannot own one.
+@property (nonatomic, readwrite, assign) dispatch_queue_t queueBulkAdd;
+#endif
 
 @property (nonatomic, readwrite, strong) MADDatabaseSqlite3 *databaseForInserts;
 @property (nonatomic, readwrite, strong) MADDatabaseSqlite3 *databaseForSelects;
@@ -275,7 +286,13 @@ static os_log_t mlog;
 	
 	if (self.groupKeyIndexes != nil) {
 		NSError *error = nil;
+#if __APPLE__
 		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.groupKeyIndexes requiringSecureCoding:YES error:&error];
+#else
+		// GNUstep has no secure coding and the strict archive is nil; the
+		// permissive archive is the same coder without the hardening.
+		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.groupKeyIndexes requiringSecureCoding:NO error:&error];
+#endif
 		if (error != nil) {
 			os_log_error(mlog, "%s: NSKeyedArchiver Error: %@", __PRETTY_FUNCTION__, error);
 		} else if (data) {

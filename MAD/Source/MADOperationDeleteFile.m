@@ -17,7 +17,7 @@
 #import <MAD/UIDocument+Extras.h>
 #import <MAD/MADOperationCreateDocumentCreateDocument.h>
 #import <MADFoundation/MADOperationTestResults.h>
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 @implementation MADOperationDeleteFile
 

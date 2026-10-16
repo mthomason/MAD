@@ -14,7 +14,7 @@
 #import <MAD/MADModelDataProtocol.h>
 
 
-@class MADModelDatabase, MADModelQueryTable, MADModelQueryLink, MADModelTable, RptqQueryTable, RptqQueryLinks, NSOrderedSet<__covariant ObjectType>, NSMutableDictionary<KeyType, ObjectType>, NSSet<__covariant ObjectType>;
+@class MADModelDatabase, MADModelQueryTable, MADModelQueryLink, MADModelTable, RptqQueryTable, RptqQueryLinks, NSOrderedSet<__covariant ObjectType>, NSMutableDictionary, NSSet<__covariant ObjectType>;
 
 @interface MADModelQuery : MADModel <MADModelIDProtocol, MADModelDataProtocol>
 

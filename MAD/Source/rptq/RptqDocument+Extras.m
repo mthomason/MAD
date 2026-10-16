@@ -29,10 +29,12 @@
 #import "RptqDocumentElementLabelDataField.h"
 #import "RptqDocumentElementLabelLink.h"
 #import "RptqDocumentElementAggregate+Extras.h"
+#if __APPLE__
 #import "RptqDocumentElementBarcode+Extras.h"
+#endif
 #import "RptqDocumentElementFormula+Extras.h"
 #import "RptqDataHelper.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
@@ -48,7 +50,9 @@
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 
+#if __APPLE__
 #import <UIKit/UIImage.h>
+#endif
 
 static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger);
 static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger, NSUInteger);
@@ -554,6 +558,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 			
 			break;
 		}
+#if __APPLE__
 		case MADPrintPageElementTypeImage: {
 			
 			UIImage *image = defination[MTDocumentObjectDefinationObject];
@@ -580,11 +585,19 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 			
 			break;
 		}
+#else
+		case MADPrintPageElementTypeImage:
+			// An image element is created from a UIImage, which is UIKit's;
+			// the designer does this and the Linux build does not.
+			os_log_error(OS_LOG_DEFAULT, "An image element was skipped: UIImage is not available on this platform.");
+			break;
+#endif
 		case MADPrintPageElementTypeWhtiespace: {
 			reportObject = (RptqDocumentElement *)[managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:0];
 			reportObject.type = MADPrintPageElementTypeWhtiespace;
 			break;
 		}
+#if __APPLE__
 		case MADPrintPageElementTypeBarcode: {
 			
 			MTBarcode *barcode = defination[MTDocumentObjectDefinationObject];
@@ -599,6 +612,14 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 			
 			break;
 		}
+#else
+		case MADPrintPageElementTypeBarcode:
+			// MADBarcodes is not in the Linux build (its base class is a
+			// CoreGraphics renderer), so a barcode element cannot be built
+			// here; it is dropped rather than silently mistyped.
+			os_log_error(OS_LOG_DEFAULT, "A barcode element was skipped: MADBarcodes is not built on this platform.");
+			break;
+#endif
 		default:
 			break;
 	}

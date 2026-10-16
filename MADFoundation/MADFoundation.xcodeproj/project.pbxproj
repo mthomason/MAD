@@ -12,7 +12,7 @@
 		4C1E54E31E5639B900E3FAF0 /* MADDataTableType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1E54E21E5639B900E3FAF0 /* MADDataTableType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D78581F56F34B005415F7 /* madlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D78571F56F34B005415F7 /* madlib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D785A1F56F36C005415F7 /* madlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D78591F56F36C005415F7 /* madlib.c */; };
-		4C4C28782DD68D5F00DB8538 /* madlog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4C28772DD68D5F00DB8538 /* madlog.h */; };
+		4C4C28782DD68D5F00DB8538 /* madlog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4C28772DD68D5F00DB8538 /* madlog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C4C287A2DD68E5D00DB8538 /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4C28792DD68E5D00DB8538 /* madlog.m */; };
 		4C4F06271F57BD5200E09E54 /* MADDataTableVirtual.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F06251F57BD5200E09E54 /* MADDataTableVirtual.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C4F06281F57BD5200E09E54 /* MADDataTableVirtual.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F06261F57BD5200E09E54 /* MADDataTableVirtual.m */; };
@@ -777,6 +777,10 @@
 		4C9372AF1BACFC9200D6BD62 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetFoundationLog",
+					"$(inherited)",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -813,6 +817,10 @@
 		4C9372B01BACFC9200D6BD62 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetFoundationLog",
+					"$(inherited)",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";

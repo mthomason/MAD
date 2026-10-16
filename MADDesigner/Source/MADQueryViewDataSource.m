@@ -14,7 +14,7 @@
 
 #import "MADQueryViewSectionDelegate.h"
 #import "MADQueryViewDatasourceProtocol.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/RptqStoreContext.h>

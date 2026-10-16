@@ -12,8 +12,7 @@
 		4C401E3F1BAE42DD00BAE5FC /* MADOpenDocumentManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C401E401BAE42DD00BAE5FC /* MADOpenDocumentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */; };
 		4C4754571CF41A6500BC9E02 /* MADExplorerProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4754561CF41A6500BC9E02 /* MADExplorerProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C4B4B932DE379DA0035A316 /* madlog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4B4B912DE379DA0035A316 /* madlog.h */; };
-		4C4B4B942DE379DA0035A316 /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B4B922DE379DA0035A316 /* madlog.m */; };
+
 		4C5989A21DAA320B007A568B /* MADExplorerViewDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C5989A01DAA320B007A568B /* MADExplorerViewDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C5989A31DAA320B007A568B /* MADExplorerViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5989A11DAA320B007A568B /* MADExplorerViewDelegate.m */; };
 		4C6700EF1BA20633001C9D5A /* MADExplorer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6700EE1BA20633001C9D5A /* MADExplorer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -63,8 +62,7 @@
 		4C401E3D1BAE42DD00BAE5FC /* MADOpenDocumentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADOpenDocumentManager.h; path = MADExplorer/MADOpenDocumentManager.h; sourceTree = "<group>"; };
 		4C401E3E1BAE42DD00BAE5FC /* MADOpenDocumentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADOpenDocumentManager.m; path = MADExplorer/MADOpenDocumentManager.m; sourceTree = "<group>"; };
 		4C4754561CF41A6500BC9E02 /* MADExplorerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerProtocol.h; path = MADExplorer/MADExplorerProtocol.h; sourceTree = "<group>"; };
-		4C4B4B912DE379DA0035A316 /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = madlog.h; path = MADExplorer/madlog.h; sourceTree = "<group>"; };
-		4C4B4B922DE379DA0035A316 /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = madlog.m; path = MADExplorer/madlog.m; sourceTree = "<group>"; };
+
 		4C5989A01DAA320B007A568B /* MADExplorerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADExplorerViewDelegate.h; path = MADExplorer/MADExplorerViewDelegate.h; sourceTree = "<group>"; };
 		4C5989A11DAA320B007A568B /* MADExplorerViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADExplorerViewDelegate.m; path = MADExplorer/MADExplorerViewDelegate.m; sourceTree = "<group>"; };
 		4C6700EB1BA20633001C9D5A /* MADExplorer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADExplorer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,8 +170,7 @@
 		4C6700ED1BA20633001C9D5A /* MADExplorer */ = {
 			isa = PBXGroup;
 			children = (
-				4C4B4B912DE379DA0035A316 /* madlog.h */,
-				4C4B4B922DE379DA0035A316 /* madlog.m */,
+
 				4C341A541E52EE4F00315364 /* Protocols */,
 				4CFC60B21E530FD900EC577E /* Cell */,
 				4C6700EE1BA20633001C9D5A /* MADExplorer.h */,
@@ -245,7 +242,7 @@
 				4CA4D62D1D183DD400A1240C /* MADStandard.h in Headers */,
 				4CCB73561D1A281000D7AE84 /* MADLabelFileExplorerDocumentCellTitle.h in Headers */,
 				4C7CB49F1E53041000B461B6 /* MADDocumentManagerProtocol.h in Headers */,
-				4C4B4B932DE379DA0035A316 /* madlog.h in Headers */,
+
 				4C1F93D1201A3E9500BDDC70 /* MADExplorerCellTitle.h in Headers */,
 				4CC641521BA779ED00F3ECCE /* MADFileLocationManager.h in Headers */,
 				4C4754571CF41A6500BC9E02 /* MADExplorerProtocol.h in Headers */,
@@ -364,7 +361,7 @@
 				4CC641731BA77D6100F3ECCE /* MADBackgroundViewSelected.m in Sources */,
 				4C7CB4A41E53052A00B461B6 /* MADExplorerDataSource.m in Sources */,
 				4CA4D62E1D183DD400A1240C /* MADStandard.mm in Sources */,
-				4C4B4B942DE379DA0035A316 /* madlog.m in Sources */,
+
 				4CC641531BA779ED00F3ECCE /* MADFileLocationManager.m in Sources */,
 				4C401E401BAE42DD00BAE5FC /* MADOpenDocumentManager.m in Sources */,
 				4C1F93D2201A3E9500BDDC70 /* MADExplorerCellTitle.m in Sources */,
@@ -564,6 +561,10 @@
 		4C6701001BA20633001C9D5A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetExplorerLog",
+					"$(inherited)",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -593,6 +594,10 @@
 		4C6701011BA20633001C9D5A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetExplorerLog",
+					"$(inherited)",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";

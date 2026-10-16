@@ -8,7 +8,7 @@
 
 #import "MADQueryActiveQueryFields.h"
 #import <MAD/RptqStoreContext.h>
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <Foundation/NSPredicate.h>
 

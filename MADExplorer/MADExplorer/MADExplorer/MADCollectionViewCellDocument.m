@@ -34,7 +34,7 @@
 #import <UIKit/UIActivityIndicatorView.h>
 
 #import <QuartzCore/CALayer.h>
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 #define degreesToRadians(x) (M_PI * (x) / 180.0)
 static const CGFloat MTAnimationRotateDeg = 6.0;

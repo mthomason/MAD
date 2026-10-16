@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21047298DB99DF5F761B239F /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 993DCFD42DA83B45A0B2DEC1 /* MADFoundation.framework */; };
 		4C17AE221E427CBA0056A0EA /* MADMargin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE211E427CBA0056A0EA /* MADMargin.m */; };
 		4C17AE241E427D6B0056A0EA /* MADPadding.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE231E427D6B0056A0EA /* MADPadding.m */; };
 		4C17AE261E427EBB0056A0EA /* MADBorderStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C17AE251E427EBB0056A0EA /* MADBorderStyle.m */; };
@@ -71,8 +72,7 @@
 		4C6F35171E40D8D200F4744F /* MADTextStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6F35161E40D8D200F4744F /* MADTextStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C7AEBAB21CC0DD700849874 /* MADColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2480B91C8BFA340058E6B4 /* MADColor.m */; };
 		4CB8EE041E1A225000193295 /* MADAlertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C52058A1BA7E2A2000E6A59 /* MADAlertController.m */; };
-		4CD807C72E145CCD00BE420E /* madlog.h in Sources */ = {isa = PBXBuildFile; fileRef = 4CD807C62E145CCD00BE420E /* madlog.h */; };
-		4CD807C92E145D0800BE420E /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD807C82E145D0800BE420E /* madlog.m */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +86,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		993DCFD42DA83B45A0B2DEC1 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C17AE211E427CBA0056A0EA /* MADMargin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMargin.m; sourceTree = "<group>"; };
 		4C17AE231E427D6B0056A0EA /* MADPadding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPadding.m; sourceTree = "<group>"; };
 		4C17AE251E427EBB0056A0EA /* MADBorderStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADBorderStyle.m; sourceTree = "<group>"; };
@@ -154,8 +155,7 @@
 		4C6F35141E40D6D400F4744F /* MADPadding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPadding.h; sourceTree = "<group>"; };
 		4C6F35161E40D8D200F4744F /* MADTextStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTextStyle.h; sourceTree = "<group>"; };
 		4CBF04382E8517CE00812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
-		4CD807C62E145CCD00BE420E /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
-		4CD807C82E145D0800BE420E /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
+
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +163,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21047298DB99DF5F761B239F /* MADFoundation.framework in Frameworks */,
 				4C5205D11BA7E308000E6A59 /* CFNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -246,8 +247,7 @@
 		4CA7C31B2EA4543400475743 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4CD807C62E145CCD00BE420E /* madlog.h */,
-				4CD807C82E145D0800BE420E /* madlog.m */,
+
 				4C5767431E1CB62B00611F37 /* MADAlertControllerAlertRemovedProtocol.h */,
 				4C52057E1BA7E2A2000E6A59 /* MacroVendColor.h */,
 				4C3622B41CF343D9002B8649 /* MADCompassDirection.h */,
@@ -434,14 +434,14 @@
 				4C17AE261E427EBB0056A0EA /* MADBorderStyle.m in Sources */,
 				4CB8EE041E1A225000193295 /* MADAlertController.m in Sources */,
 				4C5205C21BA7E2A2000E6A59 /* UIApplication+Helpers.m in Sources */,
-				4CD807C72E145CCD00BE420E /* madlog.h in Sources */,
+
 				4C5205B81BA7E2A2000E6A59 /* CGGeometry+Extras.m in Sources */,
 				4C6C09E31F5D0DFF00EDA039 /* MADLabelTitle.m in Sources */,
 				4C5205BD1BA7E2A2000E6A59 /* UIColor+EverydayApps.m in Sources */,
 				4C5767471E1CB68500611F37 /* MADTextField.m in Sources */,
 				4C5205BA1BA7E2A2000E6A59 /* NSError+Constructors.m in Sources */,
 				4C5205AD1BA7E2A2000E6A59 /* NSNumberFormatter+MADExtensions.m in Sources */,
-				4CD807C92E145D0800BE420E /* madlog.m in Sources */,
+
 				4C5205CD1BA7E2A2000E6A59 /* MTMath.m in Sources */,
 				4C1CC25C24C624EE0027A454 /* MADViewHelpers.m in Sources */,
 				4C17AE221E427CBA0056A0EA /* MADMargin.m in Sources */,
@@ -659,6 +659,10 @@
 		4C5205721BA7E1DC000E6A59 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetMadExtLog",
+					"$(inherited)",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -690,6 +694,10 @@
 		4C5205731BA7E1DC000E6A59 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetMadExtLog",
+					"$(inherited)",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";

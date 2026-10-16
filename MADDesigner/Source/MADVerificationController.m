@@ -10,7 +10,7 @@
 #import "ReceiptAttribute.h"
 #import "MADSalesReceipt.h"
 #import "MTStoreKitController+NonRenewableLicensing.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADApplicationProtocol.h>
 #import <MADFoundation/MADApplication.h>

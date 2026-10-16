@@ -14,6 +14,7 @@
 
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSValue.h>
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADDataType.h>

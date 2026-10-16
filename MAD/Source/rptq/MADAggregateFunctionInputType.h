@@ -9,6 +9,10 @@
 #ifndef MADAggregateFunctionInputType_h
 #define MADAggregateFunctionInputType_h
 
+#import <stdint.h>
+#import <CoreFoundation/CFAvailability.h>
+#import <Foundation/NSString.h>
+
 typedef CF_ENUM(short, MTAggregateFunctionInputType) {
 	MTAggregateFunctionInputTypeField = 0,
 	MTAggregateFunctionInputTypeFormula

@@ -10,9 +10,10 @@
 #define Reports_MADReportDesignerSectionLayoutAttributes_h
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSValue.h>
 #import <CoreGraphics/CGGeometry.h>
 
-@class NSMutableDictionary <KeyType, ObjectType>,
+@class NSMutableDictionary,
 		MADSectionLayoutAttributes, RptqDocumentSection;
 
 @interface MADSectionLayoutManager : NSObject

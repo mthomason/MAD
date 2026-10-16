@@ -15,9 +15,13 @@
 #import <stdbool.h>
 #import <errno.h>
 #import <assert.h>
+#if __APPLE__
 #import <copyfile.h>
+#else
+#import <MADCompatFileCopy.h>
+#endif
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 #import "archive.h"
 #import "archive_entry.h"
@@ -163,8 +167,12 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
 	switch (source_status.st_mode) {
 		case S_IFDIR: {
 			os_log_debug(OS_LOG_DEFAULT, "Source file is a directory.  Going to try to copy it.");
+#if __APPLE__
 			if (copyfile(source, dest, NULL,
 						 COPYFILE_RECURSIVE | COPYFILE_ALL | COPYFILE_COPY_DATA | COPYFILE_COPY_XATTR) < 0) {
+#else
+			if (MADCompatCopyPath(source, dest) < 0) {
+#endif
 				os_log_debug(OS_LOG_DEFAULT, "Error (%d): %s\n\tFailed to copy directory %s to %s.", errno, strerror(errno), source, dest);
 				return ARCHIVE_FAILED;
 			} else {
@@ -326,8 +334,14 @@ void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st)
 	archive_entry_set_dev(*e, (*st).st_dev);
 	archive_entry_set_mode(*e, (*st).st_mode);
 	archive_entry_set_nlink(*e, (*st).st_nlink);
+#if __APPLE__
 	archive_entry_set_mtime(*e, (*st).st_mtimespec.tv_sec, (*st).st_mtimespec.tv_nsec);
 	archive_entry_set_birthtime(*e, (*st).st_birthtimespec.tv_sec, (*st).st_birthtimespec.tv_nsec);
+#else
+	/* Darwin spells the modified time st_mtimespec; POSIX st_mtim, and has no
+	   birth time to hand over. */
+	archive_entry_set_mtime(*e, (*st).st_mtim.tv_sec, (*st).st_mtim.tv_nsec);
+#endif
 	
 	if (S_ISREG((*st).st_mode)) {
 		archive_entry_set_filetype(*e, AE_IFREG);

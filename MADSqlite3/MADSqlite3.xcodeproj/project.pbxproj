@@ -67,8 +67,7 @@
 		4C3D207C2DCD092300F40CE5 /* MADArrayCachingEnumerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3D207A2DCD092300F40CE5 /* MADArrayCachingEnumerator.h */; };
 		4C4B4B8D2DE31A050035A316 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4B4B8A2DE31A050035A316 /* sqlite3.h */; };
 		4CDA7B0500000000000000B2 /* sqlite3.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0500000000000000B1 /* sqlite3.xcframework */; };
-		4C92A49F2DD7EA2D008171A9 /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C92A49E2DD7EA2D008171A9 /* madlog.m */; };
-		4C92A4A02DD7EA2D008171A9 /* madlog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C92A49D2DD7EA2D008171A9 /* madlog.h */; };
+
 		4CA7C3082EA4395500475743 /* MADDatabaseSqlite3.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C3072EA4395500475743 /* MADDatabaseSqlite3.m */; };
 		4CA7C3092EA4395500475743 /* MADDatabaseSqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA7C3062EA4395500475743 /* MADDatabaseSqlite3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA7C30C2EA439A700475743 /* MADArrayCaching.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C30B2EA439A700475743 /* MADArrayCaching.m */; };
@@ -159,8 +158,7 @@
 		4C3D207B2DCD092300F40CE5 /* MADArrayCachingEnumerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADArrayCachingEnumerator.m; sourceTree = "<group>"; };
 		4C4B4B8A2DE31A050035A316 /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = ../Compressor/library/sqlite3/include/sqlite3.h; sourceTree = SOURCE_ROOT; };
 		4CDA7B0500000000000000B1 /* sqlite3.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = sqlite3.xcframework; path = ../Compressor/library/sqlite3.xcframework; sourceTree = SOURCE_ROOT; };
-		4C92A49D2DD7EA2D008171A9 /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
-		4C92A49E2DD7EA2D008171A9 /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
+
 		4CA7C3062EA4395500475743 /* MADDatabaseSqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADDatabaseSqlite3.h; sourceTree = "<group>"; };
 		4CA7C3072EA4395500475743 /* MADDatabaseSqlite3.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseSqlite3.m; sourceTree = "<group>"; };
 		4CA7C30A2EA439A700475743 /* MADArrayCaching.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADArrayCaching.h; sourceTree = "<group>"; };
@@ -310,8 +308,7 @@
 				4C2D78221F56ED4C005415F7 /* MADQuerySelectItemsForGroup.m */,
 				4C3D207A2DCD092300F40CE5 /* MADArrayCachingEnumerator.h */,
 				4C3D207B2DCD092300F40CE5 /* MADArrayCachingEnumerator.m */,
-				4C92A49D2DD7EA2D008171A9 /* madlog.h */,
-				4C92A49E2DD7EA2D008171A9 /* madlog.m */,
+
 				4CA7C3052EA4390300475743 /* sqlite3 */,
 			);
 			path = Source;
@@ -361,7 +358,7 @@
 				4C11F1471BA9008D00EC2C58 /* MADSqlite3.h in Headers */,
 				4C2D78251F56ED4C005415F7 /* MADQueryCacheAddRow.h in Headers */,
 				4C2D78611F56F636005415F7 /* MADDatabaseConnectionSqlite3.h in Headers */,
-				4C92A4A02DD7EA2D008171A9 /* madlog.h in Headers */,
+
 				4C2D78271F56ED4C005415F7 /* MADQueryCacheDropTable.h in Headers */,
 				4C2D78001F56D01A005415F7 /* MADQueryCacheEndTransaction.h in Headers */,
 				4C2D78371F56ED8A005415F7 /* MADDataTableFast.h in Headers */,
@@ -499,7 +496,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C2D78301F56ED4C005415F7 /* MADQueryCacheSelectRowIds.m in Sources */,
-				4C92A49F2DD7EA2D008171A9 /* madlog.m in Sources */,
+
 				4CA7C30C2EA439A700475743 /* MADArrayCaching.m in Sources */,
 				4C2D78621F56F636005415F7 /* MADDatabaseConnectionSqlite3.m in Sources */,
 				4C2D78341F56ED4C005415F7 /* MADQuerySelectItemsForGroup.m in Sources */,
@@ -722,6 +719,10 @@
 		4C11F1581BA9008D00EC2C58 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetSqlite3Log",
+					"$(inherited)",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -753,6 +754,10 @@
 		4C11F1591BA9008D00EC2C58 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetSqlite3Log",
+					"$(inherited)",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";

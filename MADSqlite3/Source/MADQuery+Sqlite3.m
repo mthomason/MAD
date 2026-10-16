@@ -14,12 +14,13 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSNull.h>
+#import <Foundation/NSValue.h>
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
 
 #import <MADSqlite3/MADDatabaseSqlite3.h>   //FIXME: Should only be included in Cache subset
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 @implementation MADQuery (Sqlite3)
 
 - (NSString *)orderByClauseWithSortDescriptors:(NSArray <NSSortDescriptor *> *)sortDescriptors {
@@ -102,7 +103,7 @@
 	if ([self conformsToProtocol:@protocol(MADQueryColumnsProtocol)]) {
 		column = ((id <MADQueryColumnsProtocol>)self).columns[columnHandle];
 	} else {
-		os_log_error(GetMadLog(), "No column handle for: %@", columnHandle);
+		os_log_error(GetSqlite3Log(), "No column handle for: %@", columnHandle);
 	}
 	return column != nil ? column.type : 0;
 }

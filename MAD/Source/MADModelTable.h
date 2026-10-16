@@ -13,7 +13,7 @@
 #import <MAD/RptqStoreContext.h>
 #import <MAD/MADModelDataProtocol.h>
 
-@class NSOrderedSet<__covariant ObjectType>, NSDictionary<KeyType, ObjectType>, MADModelDatabase,
+@class NSOrderedSet<__covariant ObjectType>, NSDictionary, MADModelDatabase,
 	   MADModelField;
 
 @interface MADModelTable : MADModel

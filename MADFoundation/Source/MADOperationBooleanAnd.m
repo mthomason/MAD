@@ -13,7 +13,6 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
-#import <os/log.h>
 
 @interface MADOperationBooleanAnd ()
 

@@ -7,7 +7,7 @@
 //
 
 #import "MADOperationInstallSampleDatabase.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/MADConstants.h>
 #import <MADFoundation/MADApplication.h>

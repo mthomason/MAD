@@ -8,7 +8,7 @@
 
 #import "MADOperationDocumentCloseDocument.h"
 #import "MADOperationCreateDocumentCreateDocument.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/MADocument.h>
 

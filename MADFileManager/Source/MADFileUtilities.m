@@ -7,7 +7,7 @@
 //
 
 #import "MADFileUtilities.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import <MADFoundation/MADURLFactory.h>
 
 #import <Foundation/NSException.h>
@@ -17,9 +17,10 @@
 #import <Foundation/NSData.h>
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSOperation.h>
+#import <Foundation/NSValue.h>
 #import <Foundation/NSFileWrapper.h>
+#import <dispatch/dispatch.h>
 
-#import <os/log.h>
 
 static NSString * const MADPathComponentDocuments  = @"Documents";
 static NSString * const MADPathComponentCache      = @"Cache";
@@ -101,9 +102,15 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)copyInitialFiles:(NSString *)fileExtension groupId:(NSString *)groupId {
+#if __APPLE__
 	NSArray *defaultListURLs = [[NSBundle mainBundle] URLsForResourcesWithExtension: fileExtension
 																	   subdirectory: @""];
-	
+#else
+	// GNUstep's NSBundle has no -URLsForResourcesWithExtension:subdirectory:,
+	// and the headless engine has no bundled sample files to copy.
+	NSArray *defaultListURLs = @[];
+#endif
+
 	for (NSURL *url in defaultListURLs) {
 		[self copyURLToDocumentsDirectoryIfNotExist:url groupId:groupId];
 	}
@@ -213,9 +220,17 @@ static NSString * const MADPathComponentData       = @"Data";
 		}
 		
 		NSError *archiveError = nil;
+#if __APPLE__
 		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object
 											 requiringSecureCoding:YES
 															 error:&archiveError];
+#else
+		// GNUstep has no secure coding and the strict archive is nil; the
+		// permissive archive is the same coder without the hardening.
+		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object
+											 requiringSecureCoding:NO
+															 error:&archiveError];
+#endif
 		if (archiveError != nil) {
 			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving object: %@", __PRETTY_FUNCTION__, archiveError);
 			if (completion != nil) completion(archiveError);
@@ -269,7 +284,13 @@ static NSString * const MADPathComponentData       = @"Data";
 		
 		NSNumber *zero = @0;
 		NSError *archiveError = nil;
+#if __APPLE__
 		NSData *serializedListData = [NSKeyedArchiver archivedDataWithRootObject:zero requiringSecureCoding:YES error:&archiveError];
+#else
+		// GNUstep has no secure coding and the strict archive is nil; the
+		// permissive archive is the same coder without the hardening.
+		NSData *serializedListData = [NSKeyedArchiver archivedDataWithRootObject:zero requiringSecureCoding:NO error:&archiveError];
+#endif
 		if (archiveError != nil) {
 			os_log_error(OS_LOG_DEFAULT, "%s: Error archiving object: %@", __PRETTY_FUNCTION__, archiveError);
 			completion(archiveError);

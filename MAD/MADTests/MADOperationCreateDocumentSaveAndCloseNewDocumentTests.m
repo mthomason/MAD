@@ -93,8 +93,11 @@
 
 - (void)testExecuteWithDocumentDependencyClosesAndFinishes {
 	NSURL *directory = [self newTemporaryDirectory];
+	// The store is keyed by document name in the host's shared tmp; the unique
+	// fixture directory goes into the name so the store starts empty.
 	MADocument *document = [[MADocument alloc] initWithFileURL:
-							[directory URLByAppendingPathComponent:@"save-and-close.mad"]];
+							[directory URLByAppendingPathComponent:
+							 [NSString stringWithFormat:@"save-and-close-%@.mad", directory.lastPathComponent]]];
 	XCTAssertEqual(document.documentState, UIDocumentStateClosed);
 
 	MADSaveAndCloseTestDependency *dependency = [[MADSaveAndCloseTestDependency alloc] init];

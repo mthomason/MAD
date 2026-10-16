@@ -7,7 +7,7 @@
 //
 
 #import "MADOperationKeyChainDeletePassword.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADKeyChain.h>
 

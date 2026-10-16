@@ -7,7 +7,7 @@
 //
 
 #import "MADOperationCreateDocumentSaveAndCloseNewDocument.h"
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 #import <MAD/MADocument.h>
 #import "MADOperationCreateDocumentCreateDocument.h"
 

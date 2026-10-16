@@ -10,7 +10,7 @@
 #import "MADDocumentObjectDataReference.h"
 #import "MADDocumentObjectDataReferenceBarcode.h"
 #import "MADPrintPageRendererDataSource.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADBarcodes/MTBarcode.h>
 

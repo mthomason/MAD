@@ -8,7 +8,7 @@
 
 #import "MADOperationPromptError.h"
 #import "MADMutualExclusive.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADOperationPromptErrorProtocol.h>
 

@@ -7,7 +7,10 @@
 //
 
 #import "MADDataTypeMySQL.h"
-#import <MADFoundation/MADFoundation.h>
+// The umbrella would pull MADKeyChain (Security.framework) in; the two
+// headers below are what this file uses.
+#import <MADFoundation/MADDataType.h>
+#import <MADFoundation/MADDataColumn.h>
 #import <mysql.h>
 
 @implementation MADDataTypeMySQL

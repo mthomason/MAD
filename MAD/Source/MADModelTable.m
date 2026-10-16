@@ -8,7 +8,7 @@
 
 #import "MADModelTable.h"
 #import <MAD/RptqStoreContext.h>
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <Foundation/NSComparisonPredicate.h>
 #import <Foundation/NSException.h>

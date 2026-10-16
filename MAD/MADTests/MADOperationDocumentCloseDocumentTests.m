@@ -86,8 +86,11 @@
 
 - (void)testExecuteWithADocumentThatWasNeverOpenedFinishes {
 	NSURL *directory = [self newTemporaryDirectory];
+	// The store is keyed by document name in the host's shared tmp; the unique
+	// fixture directory goes into the name so the store starts empty.
 	MADocument *document = [[MADocument alloc] initWithFileURL:
-							 [directory URLByAppendingPathComponent:@"closed.mad"]];
+							 [directory URLByAppendingPathComponent:
+							  [NSString stringWithFormat:@"closed-%@.mad", directory.lastPathComponent]]];
 	XCTAssertEqual(document.documentState, UIDocumentStateClosed);
 
 	MADCloseDocumentTestDependency *dependency = [[MADCloseDocumentTestDependency alloc] init];
@@ -106,7 +109,8 @@
 - (void)testCancelledExecuteFinishesWithoutClosing {
 	NSURL *directory = [self newTemporaryDirectory];
 	MADocument *document = [[MADocument alloc] initWithFileURL:
-							 [directory URLByAppendingPathComponent:@"cancelled.mad"]];
+							 [directory URLByAppendingPathComponent:
+							  [NSString stringWithFormat:@"cancelled-%@.mad", directory.lastPathComponent]]];
 
 	MADCloseDocumentTestDependency *dependency = [[MADCloseDocumentTestDependency alloc] init];
 	dependency.document = document;
@@ -124,7 +128,8 @@
 
 - (void)testExecuteClosesAnOpenDocument {
 	NSURL *directory = [self newTemporaryDirectory];
-	NSURL *documentURL = [directory URLByAppendingPathComponent:@"open.mad"];
+	NSURL *documentURL = [directory URLByAppendingPathComponent:
+						  [NSString stringWithFormat:@"open-%@.mad", directory.lastPathComponent]];
 
 	// Fixture: write a document through the document's own save path, the way
 	// MADDocumentTests does, so the open below finds a real .mad.

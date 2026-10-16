@@ -13,6 +13,7 @@
 #import "MADQueryCacheIndexDrop.h"
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSValue.h>
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabase.h>
 #import "MADQueryCacheIndexDropParameters.h"

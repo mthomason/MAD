@@ -7,7 +7,7 @@
 //
 
 #import "MADQueryCacheAggregateFunction.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADQueryType.h>
 #import <MAD/RptqDocumentElementAggregate+Extras.h>

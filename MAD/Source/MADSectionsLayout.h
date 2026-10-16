@@ -13,7 +13,7 @@
 #import <MAD/RptqStoreContext.h>
 
 @class MADSectionLayout, MADSectionGroupLayout, NSSortDescriptor, NSNumber,
-	NSArray<__covariant ObjectType>, NSDictionary<__covariant KeyType, __covariant ObjectType>;
+	NSArray<__covariant ObjectType>, NSDictionary;
 
 @interface MADSectionsLayout : NSObject
 

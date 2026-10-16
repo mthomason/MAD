@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB9084AF28A46CE96CE974BB /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8A326CD971A0D9D30B4E239 /* MADFoundation.framework */; };
 		4C4EC72E2DC99AE5001DBEBE /* libiconv.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C4EC72D2DC99AE5001DBEBE /* libiconv.2.tbd */; };
 		4C6894EF2CF0F88E00BD38DF /* MADTdsDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6894EE2CF0F88E00BD38DF /* MADTdsDb.m */; };
 		4C6894F22CF0F8D400BD38DF /* MADTdsDb.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E8A326CD971A0D9D30B4E239 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C4EC72D2DC99AE5001DBEBE /* libiconv.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.4.sdk/usr/lib/libiconv.2.tbd; sourceTree = DEVELOPER_DIR; };
 		4C6894EE2CF0F88E00BD38DF /* MADTdsDb.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTdsDb.m; sourceTree = "<group>"; };
 		4C6894F12CF0F8D400BD38DF /* MADTdsDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADTdsDb.h; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB9084AF28A46CE96CE974BB /* MADFoundation.framework in Frameworks */,
 				4CDA7B0500000000000000B2 /* freetds.xcframework in Frameworks */,
 				4CDA7B0600000000000000B2 /* openssl.xcframework in Frameworks */,
 				4C4EC72E2DC99AE5001DBEBE /* libiconv.2.tbd in Frameworks */,
@@ -421,6 +424,10 @@
 		4CCABCE32CF0B75A008EC875 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetTdsLog",
+					"$(inherited)",
+				);
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -453,6 +460,10 @@
 		4CCABCE42CF0B75A008EC875 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetTdsLog",
+					"$(inherited)",
+				);
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";

@@ -69,7 +69,7 @@
 #import "MADDatabase+Constructor.h"
 #import "MADQuery+Extras.h"
 #import "miniz.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADDataTableType.h>
 #import <MADFoundation/MADDataTable.h>
@@ -98,8 +98,6 @@
 #import <UIKit/UIPrintPaper.h>
 
 #import <setjmp.h>
-#import <asl.h>
-#import <mach/machine/vm_param.h>
 
 typedef void (^MTCompletionHandlerSuccess)(BOOL success);
 

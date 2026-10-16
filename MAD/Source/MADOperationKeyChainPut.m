@@ -7,7 +7,7 @@
 //
 
 #import "MADOperationKeyChainPut.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADKeyChain.h>

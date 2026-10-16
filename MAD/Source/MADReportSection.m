@@ -14,13 +14,17 @@
 #import "RptqDocumentSection+Extras.h"
 #import "RptqQueryGroup+Extras.h"
 
+#if __APPLE__
 #import "MADSectionLayoutManager.h"
+#endif
 
 #import <Foundation/NSBundle.h>
 
 @interface MADReportSection ()
 
+#if __APPLE__
 @property (nonatomic, readwrite, strong) MADSectionLayoutManager *layoutManager;
+#endif
 
 @property (nonatomic, readwrite, strong) NSNumber *objectID;
 @property (nonatomic, readwrite, assign) RptqStoreContext *managedObjectContext;
@@ -97,6 +101,7 @@
 	return instance;
 }
 
+#if __APPLE__
 - (MADSectionLayoutManager *)layoutManager {
 	if (_layoutManager == nil) {
 		MADSectionLayoutManager *layoutManager;
@@ -105,6 +110,7 @@
 	}
 	return _layoutManager;
 }
+#endif
 
 - (RptqDocumentSection *)documentSection {
 	if (_documentSection == nil) {

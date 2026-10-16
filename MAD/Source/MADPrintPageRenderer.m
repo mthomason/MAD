@@ -68,7 +68,7 @@
 #import <UIKit/UIInterface.h>
 #import <UIKit/NSParagraphStyle.h>
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 static os_log_t log_print;
 

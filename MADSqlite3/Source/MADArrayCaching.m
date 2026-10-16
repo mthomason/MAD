@@ -27,7 +27,10 @@
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSKeyedArchiver.h>
 #import <Foundation/NSNull.h>
-#import <os/log.h>
+#import <Foundation/NSValue.h>
+#import <Foundation/NSError.h>
+#import <dispatch/dispatch.h>
+#import <MADFoundation/madlog.h>
 
 static os_log_t caching_log;
 NSString * const MTArrayCachedTableName = @"ac";
@@ -54,8 +57,15 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	@property (nonatomic, retain) NSSet <Class> *types;
 
 	@property (nonatomic, copy, readwrite) NSString *identifier;
+#if __APPLE__
 	@property (nonatomic, copy, readwrite) dispatch_queue_t archivingQueue;
 	@property (nonatomic, copy, readwrite) dispatch_queue_t unarchiveQueue;
+#else
+	// Dispatch objects are plain C pointers off Apple (os/object.h declines
+	// ObjC support outside Darwin), so ARC cannot own one.
+	@property (nonatomic, assign, readwrite) dispatch_queue_t archivingQueue;
+	@property (nonatomic, assign, readwrite) dispatch_queue_t unarchiveQueue;
+#endif
 
 	@property (nonatomic, strong, readwrite) MADIndex *lastObjectSelected;
 
@@ -307,7 +317,15 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 	dispatch_sync(self.archivingQueue, ^{
 		//NSData *data = [NSKeyedArchiver archivedDataWithRootObject:objectToAdd];
 		NSError *error = nil;
+#if __APPLE__
 		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:objectToAdd requiringSecureCoding:YES error:&error];
+#else
+		// GNUstep has no secure coding: the strict archive is nil and the cache
+		// could store nothing.  The permissive archive is the same coder without
+		// the hardening, which is what the .madac cache needs to function off
+		// Apple (the toolchain probe records the gap).
+		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:objectToAdd requiringSecureCoding:NO error:&error];
+#endif
 		if (error != nil) {
 			os_log_error(caching_log, "NSKeyedArchiver Error: %@", error.localizedDescription);
 		}

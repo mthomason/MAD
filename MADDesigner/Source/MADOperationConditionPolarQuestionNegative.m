@@ -9,7 +9,7 @@
 #import "MADOperationConditionPolarQuestionNegative.h"
 #import "MADOperationPromptPolarQuestion.h"
 #import "MADOperationConditionPolarQuestionAffirmativeResult.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADOperationConditionResult.h>
 

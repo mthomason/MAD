@@ -7,7 +7,7 @@
 //
 
 #import "MADOperationConditionSuccess.h"
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 #import <Foundation/NSOperation.h>
 #import <Foundation/NSArray.h>
 #import <MADFoundation/MADOperation.h>

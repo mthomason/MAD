@@ -9,7 +9,8 @@
 #ifndef MAD_MADMetaDataLocal_h
 #define MAD_MADMetaDataLocal_h
 
-#import <MADFileManager/MADFileManager.h>
+#import <MADFileManager/MADMetaData.h>
+#import <Foundation/NSURL.h>
 
 @interface MADMetaDataLocal : MADMetaData
 

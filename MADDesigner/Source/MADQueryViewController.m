@@ -38,7 +38,7 @@
 #import "MADQueryViewDatasourceProtocol.h"
 #import "MADOperationGetCredentials.h"
 #import "MADThemeManager.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADQuery.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>

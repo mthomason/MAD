@@ -9,13 +9,20 @@
 #import "MADFileInfo.h"
 #import "MADFileUtilities.h"
 #import <Foundation/NSURL.h>
+#import <Foundation/NSString.h>
 #import <Foundation/NSFileManager.h>
 #import <dispatch/dispatch.h>
 
 static const char * QueueFileInfo = "com.everydayapps.mad.fileinfo";
 
 @interface MADFileInfo ()
+#if __APPLE__
 	@property (nonatomic, strong, readonly) dispatch_queue_t fetchQueue;
+#else
+	// Dispatch objects are plain C pointers off Apple (os/object.h declines
+	// ObjC support outside Darwin), so ARC cannot own one.
+	@property (nonatomic, assign, readonly) dispatch_queue_t fetchQueue;
+#endif
 @end
 
 @implementation MADFileInfo {

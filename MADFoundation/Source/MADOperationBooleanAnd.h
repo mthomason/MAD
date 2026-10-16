@@ -10,6 +10,7 @@
 #define MAD_Designer_MADOperationBooleanAnd_h
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSArray.h>
 #import <MADFoundation/MADOperationCondition.h>
 
 @interface MADOperationBooleanAnd : NSObject

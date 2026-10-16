@@ -31,7 +31,7 @@
 #import "MADColorTransformer.h"
 #import "MADLocaleTransformer.h"
 #import "MADThemeManager.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/MADNotificationFileUpdate.h>
 

@@ -17,8 +17,13 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSFileManager.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSURL.h>
+#import <dispatch/dispatch.h>
+#if __APPLE__
 #import <UIKit/UIScreen.h>
-#import <os/log.h>
+#endif
+#import "madlog.h"
 
 static NSString * const MADPathComponentData       = @"Data";
 static NSString * const MADPathComponentDocuments  = @"Documents";
@@ -29,7 +34,13 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 @implementation MADURLFactory
 
 + (BOOL)isRetinaDisplay {
+#if __APPLE__
 	return [UIScreen mainScreen].scale > 1.0;
+#else
+	// No screen to ask off Apple; the @2x thumbnail name is what the Apple
+	// targets write, so the headless build reads the same file.
+	return YES;
+#endif
 }
 
 + (NSString *)filenameID:(NSUInteger)tag {
@@ -94,12 +105,19 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 }
 
 + (NSURL *)newURLSharedApplicationGroupContainer:(NSString *)groupIdentifier {
+#if __APPLE__
 	NSURL *url = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:groupIdentifier];
 	NSAssert(url != nil, @"The shared application group container is unavailable. "
 								  @"Check your entitlements and provisioning profiles for "
 								  @"this target. Details on proper setup can be found in the "
 								  @"PDFs referenced from the README.");
 	return url;
+#else
+	// No app-group containers off Apple; nil is this method's "unavailable"
+	// answer on the platform that has none.
+	(void)groupIdentifier;
+	return nil;
+#endif
 }
 
 
@@ -161,18 +179,18 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 + (NSURL *)newURLForLocalDirectoryForGroupIdentifier:(NSString *)groupID
 									   pathComponent:(NSString *)pathComponent
 								 alternativeSelector:(SEL)alternativeSelector {
-
+#if __APPLE__
 	NSURL *groupUrl = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier: groupID];
 	NSAssert(groupUrl != nil, @"containerURLForSecurityApplicationGroupIdentifier returned nil "
 							  @"for %@.  Maybe the fucking entitlment file is missing?!?!", groupID);
-	
+
 	NSURL *cacheURL = [groupUrl URLByAppendingPathComponent: pathComponent isDirectory: YES];
 	BOOL isDirectory = NO;
 	BOOL success = NO;
 	NSString *path = cacheURL.path;
 	if (path != nil && path.length > 0) {
 		success = [[NSFileManager defaultManager] fileExistsAtPath:path  isDirectory: &isDirectory];
-		
+
 		if (!success) {
 			NSError *error = nil;
 			success = [[NSFileManager defaultManager] createDirectoryAtURL: cacheURL
@@ -185,6 +203,13 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 		}
 	}
 	return success ? cacheURL : [self newURLForURLSelector:alternativeSelector];
+#else
+	// No app-group containers off Apple, so the per-user directory the Apple
+	// path falls back to is the only answer here.
+	(void)groupID;
+	(void)pathComponent;
+	return [self newURLForURLSelector:alternativeSelector];
+#endif
 }
 
 + (NSURL *)newURLForURLSelector:(SEL)selector {
@@ -218,7 +243,10 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 + (NSURL *)newURLForLocalDocumentsDirectory {
 	NSArray *documentsDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *firstObject = documentsDirectories.firstObject;
-	NSURL *url = [[NSURL alloc] initWithString:firstObject];
+	// A path makes a file URL, not a scheme-less one: GNUstep's file APIs
+	// (-contentsOfDirectoryAtURL:, -writeToURL:) quietly do nothing with the
+	// latter (measured 2026-10-10), and file:// is the honest answer either way.
+	NSURL *url = [NSURL fileURLWithPath:firstObject isDirectory:YES];
 	return url;
 }
 

@@ -9,7 +9,7 @@
 #import "MADDocumentCreationManager.h"
 #import "MADOperationCreateDocument.h"
 #import "MADDocumentCreationManagerProtocol.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADOperationObserver.h>
 #import <MADFoundation/MADOperationQueue.h>

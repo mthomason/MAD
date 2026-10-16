@@ -14,7 +14,7 @@
 #import "MADHierarchicalChildViewDefination.h"
 #import "MADOperationArchiveData.h"
 #import "MADCacheManager.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADDataStructures/MTVertex.h>
 #import <MADDataStructures/MTLinkedList.h>

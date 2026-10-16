@@ -8,7 +8,7 @@
 
 #import "MADFeatures.h"
 #import "MADFeature.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSArray.h>

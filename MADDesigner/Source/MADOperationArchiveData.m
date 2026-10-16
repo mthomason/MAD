@@ -7,7 +7,7 @@
 //
 
 #import "MADOperationArchiveData.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSException.h>

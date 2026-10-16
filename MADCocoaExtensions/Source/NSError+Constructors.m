@@ -11,7 +11,7 @@
 #endif
 
 #import "NSError+Constructors.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import "UIApplication+Helpers.h"
 
 #import <UIKit/UIAlertController.h>

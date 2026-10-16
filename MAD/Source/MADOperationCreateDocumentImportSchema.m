@@ -8,7 +8,7 @@
 
 #import "MADOperationCreateDocumentImportSchema.h"
 #import "MADOperationCreateDocumentCreateDocument.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADAPI/MADDatabaseConnection.h>

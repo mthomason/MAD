@@ -8,7 +8,7 @@
 
 #import "MADOperationConditionDisplayedAlertConfirm.h"
 #import "MADOperationConditionDisplayedAlert.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationConditionResult.h>

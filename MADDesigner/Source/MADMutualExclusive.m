@@ -15,7 +15,7 @@
 
 #import <MADFoundation/MADOperationConditionResult.h>
 
-#import <os/log.h>
+#import <MADFoundation/madlog.h>
 
 @interface MADMutualExclusiveCondition()
 

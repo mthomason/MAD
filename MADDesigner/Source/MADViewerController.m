@@ -26,7 +26,7 @@
 #import "UIViewController+tabBarItem.h"
 #import "NSDate+Extras.h"
 #import "MADThemeManager.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADViewControllerStandardProtocol.h>
 #import <MADFoundation/MADDataTable.h>

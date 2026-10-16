@@ -366,6 +366,82 @@ decision — they are app-side, so they do not block the headless build; the fil
 cloud code stays where it is, unused (per the user: not needed for headless mode). What
 remains before B is whatever §4 file-level exclusions the toolchain spike proves necessary.
 
+**Phase B status (2026-10-06).** The toolchain spike is green on branch
+`linux-port`: `Linux/` builds one Docker image — Ubuntu 24.04 with the distro
+clang 18 (the "from source" requirement in §6 is about GNUstep being built against
+libobjc2, not about LLVM), plus source-built libobjc2 2.3, libdispatch 6.1.3,
+gnustep-make 2.9.3 and gnustep-base 1.31.1, pinned in `Linux/toolchain.conf` —
+compiles 23 of MADFoundation's 27 implementation files and `madlib.c` against
+GNUstep, and runs 15 test executables (14 ported suites and a toolchain probe)
+inside it: all pass, with 5 recorded needs and 10 probe report items.
+`./Linux/build.sh` is the entry point; the iOS suite stayed green (118 tests) as
+the proof that the six small platform guards the work required are behaviour-neutral
+on Apple.
+
+The probe retires most of §5.3's risk list for the Foundation the engine actually
+uses: ARC and weak zeroing, blocks, exceptions, `@synchronized`, KVO (manual and
+dependent keys), `NSOperation` state-machine KVO, `NSPredicate
+predicateWithFormat:@"error != nil"` (MAD's exact predicate), dispatch including
+the main queue draining under a plain executable, JSON, dates, plists, sort
+descriptors, streams and keyed archiving on the permissive path all pass. Two gaps
+are recorded, not hidden: GNUstep's archiver has no secure-coding support
+(`requiringSecureCoding:YES` returns nil; the permissive path round trips), and
+GNUstep's `NSOperationQueue` removes its `isReady` observation on every
+notification while MADOperation's state machine used to notify `isReady` more
+than once per enqueue — the second removal raised, so a MADOperation could not
+be enqueued on Linux. That is settled (2026-10-06, branch `linux-port`):
+MADOperation drives the state advance explicitly from `-willEnqueue` and sends
+KVO for `isReady`/`isExecuting`/`isFinished` only on real value changes, so the
+queue sees one notification, as on Apple; the Linux tests assert it plainly on
+both platforms and the needs dropped to 3. The mechanism is written up in
+`Linux/README.md` alongside the excluded files and the smaller shims
+(`NSOperation.name`, `qualityOfService`, `NSDataWritingFileProtection*`,
+`QOS_CLASS_DEFAULT`, app-group containers). The file-level exclusions Phase A anticipated turned out to be exactly
+the four §4 files (`BDHost`, `MADApplication`, `MADKeyChain`, `MADURLFactory`); the
+self-contained-header cleanup the prelude used to paper over is done (2026-10-06):
+every header and source in the Linux build imports what it uses, and
+`Linux/Compat/MADCompat.h` is down to the one real platform gap, `NSOperation`'s
+`name` property.
+
+**Phase C status (2026-10-06).** The §4 shim list is cleared and the build is no
+longer a spike: all ten headless frameworks of §3's table compile and link
+inside the image — MADFoundation 26 of 27 files, MADDataStructures 17,
+MADFileManager 10 of 11, MADCocoaExtensions 7 of 17, MADAPI 8 of 11,
+MADSqlite3 26, MADTds 1, MADTdsClient 4 of 5, MADMySQL 18 of 19, MAD 150 of
+181 — and their suites run under ctest: 114 executables (1098 tests), all
+green, with 6 recorded needs, each being Apple-only machinery (Core Data, the
+compiled model, `MADocument`, the converter) named in `Linux/README.md`. The
+coverage master merged on 2026-10-10 (~100 Xcode test files) is ported in
+full — 55 new executables, suite for suite — and the merge found two Apple-side
+defects, both fixed and in `BUGS.md`: the framework targets had dropped
+`$(inherited)` from their preprocessor defines (DEBUG was dead in every
+framework Debug build), and MAD's document fixtures shared one store across
+runs. A libraries
+layer (`Linux/libraries.conf`, `Linux/lib/libraries.sh`) builds sqlite3,
+openssl, freetds, zlib, bzip2, libarchive and mysqlclient natively into the
+image (§7's C libraries; nothing ships). The long-tail items went the way §4
+predicted — the `asl.h`/`vm_param.h` imports were vestigial, `copyfile(3)`
+became POSIX, `CFHost` became `getaddrinfo`, the CF sites became a
+`CFNumberGetValue` shim — and the UIKit/CoreGraphics tail is excluded
+file-by-file with reasons, not ported (§5.2's disposition; `MADocument`, a
+UIDocument, and `MADReportFormatter` wait for Phase D, which is the CLI's
+problem as much as the platform's). MAD's suites found three more divergences,
+all fixed or shimmed and written down in `Linux/README.md`: the runtime's BOOL
+encoding (`'C'` off Apple), `class_getProperty()`'s missing superclass walk
+(both fixed in `RptqObject`), and a stub `+propertyListWithStream:`
+(shimmed). The test-coverage port added three more, likewise fixed or shimmed:
+`NSOperation.asynchronous`/`-isConcurrent` (a Compat category — without it a
+finishing async operation raised out of `-dealloc`), `-coordinateAccessWithIntents:`
+(its GNUstep implementation faults; the Compat category calls the accessor on
+the queue), and scheme-less URLs from `MADURLFactory` (now
+`+fileURLWithPath:`, which un-parked five coordinator tests). One divergence stays pinned rather than fixed: GNUstep's
+`-localizedCaseInsensitiveCompare:` is case-sensitive, so MADSqlite3's
+registered collation orders text differently than on Apple. The live
+`MADTdsClientLiveTests` suite runs green from inside
+the image against the SQL Server container (29/29), so the driver path is
+exercised on Linux, not just compiled. Phase D — the CLI and the data-path
+verbs — is the next step and the go/no-go.
+
 ---
 
 ## 10. Decisions for the user

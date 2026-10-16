@@ -12,6 +12,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSValue.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 

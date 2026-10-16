@@ -13,6 +13,7 @@
 #import "MADQueryCacheDeleteAllFromTable.h"
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSValue.h>
 #import <MADAPI/MADQueryType.h>
 #import "MADQueryCacheDeleteAllFromTableParameters.h"
 

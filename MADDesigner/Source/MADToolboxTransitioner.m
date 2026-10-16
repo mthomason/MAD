@@ -9,7 +9,7 @@
 #import "MADToolboxTransitioner.h"
 #import "MADToolboxPresentationController.h"
 #import "MADViewControllerProtocol.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UITabBarController.h>

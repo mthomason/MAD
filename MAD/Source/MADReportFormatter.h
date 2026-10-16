@@ -21,7 +21,7 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
 
 @protocol MADReportFormatterDataSource, MADDataProtocol, MADCacheProtocol;
 
-@class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions, MADArrayCaching <ObjectType>;
+@class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions, MADArrayCaching<__covariant ObjectType>;
 
 @interface MADReportFormatter : MADTableFormatter
 

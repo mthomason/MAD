@@ -8,10 +8,14 @@
 
 #import "MADMetaDataLocal.h"
 #import <Foundation/NSURL.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSValue.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSMetadataAttributes.h>
+#if __APPLE__
 #import <MobileCoreServices/UTType.h>
 #import <UniformTypeIdentifiers/UTType.h>
+#endif
 
 @interface MADMetaDataLocal ()
 
@@ -85,9 +89,14 @@
 	if (!pathExtension || pathExtension.length == 0) {
 		return nil;
 	}
-	
+
+#if __APPLE__
 	UTType *type = [UTType typeWithFilenameExtension:pathExtension];
 	return type.identifier;
+#else
+	// There is no UTI database off Apple, so there is no type to report.
+	return nil;
+#endif
 }
 
 - (NSString *)ubiquitousItemContainerDisplayName {

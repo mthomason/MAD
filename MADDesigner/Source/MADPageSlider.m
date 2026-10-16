@@ -9,7 +9,7 @@
 #import "MADPageSlider.h"
 #import "MADSliderPageVertical.h"
 #import "MADLabelPageSlider.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 #import <MADCocoaExtensions/MADViewHelpers.h>
 #import <UIKit/UILabel.h>

@@ -10,6 +10,8 @@
 #define MAD_Designer_MADExclusivityController_h
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSArray.h>
+#import <Foundation/NSString.h>
 
 @class MADOperation;
 

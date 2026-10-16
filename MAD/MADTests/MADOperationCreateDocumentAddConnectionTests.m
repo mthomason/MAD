@@ -74,7 +74,12 @@
 // A document whose store is open and holds the RptqDocument row that
 // -activeDocumentModel reads back.
 - (MADocument *)newDocumentWithModelInDirectory:(NSURL *)directory {
-	NSURL *url = [directory URLByAppendingPathComponent:@"add-connection.mad"];
+	// The document's guts -- and the store inside them -- are keyed by document
+	// name in the host's shared tmp, so a fixed name opens whatever a previous
+	// run left behind.  The fixture directory is unique per test; carry that
+	// into the name so each run gets a fresh store.
+	NSURL *url = [directory URLByAppendingPathComponent:
+				  [NSString stringWithFormat:@"add-connection-%@.mad", directory.lastPathComponent]];
 	MADocument *document = [[MADocument alloc] initWithFileURL:url];
 
 	RptqStoreContext *context = document.storeContext;

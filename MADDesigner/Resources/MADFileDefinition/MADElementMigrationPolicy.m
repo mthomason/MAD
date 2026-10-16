@@ -7,7 +7,7 @@
 //
 
 #import "MADElementMigrationPolicy.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqBorder.h>

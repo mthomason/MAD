@@ -11,7 +11,7 @@
 #import "MADNavigationController.h"
 #import "MADViewControllerDocumentProtocol.h"
 #import "MADThemeManager.h"
-#import "madlog.h"
+#import <MADFoundation/madlog.h>
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 

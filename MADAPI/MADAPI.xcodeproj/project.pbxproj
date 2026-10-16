@@ -13,8 +13,7 @@
 		4C2D77E81F569EEB005415F7 /* MADQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2D77E61F569EEB005415F7 /* MADQuery.m */; };
 		4C2D780B1F56D4EA005415F7 /* MADQueryType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D780A1F56D4EA005415F7 /* MADQueryType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2D78641F56F6A4005415F7 /* MADConnectionsPropertiesProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2D78631F56F6A4005415F7 /* MADConnectionsPropertiesProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4C63C8482DED1D7C00A366BC /* madlog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C63C8472DED1D7C00A366BC /* madlog.m */; };
-		4C63C8492DED1D7C00A366BC /* madlog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C63C8462DED1D7C00A366BC /* madlog.h */; };
+
 		4C6C09C01F5C50A200EDA039 /* MADDatabaseSQLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09BF1F5C50A200EDA039 /* MADDatabaseSQLProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09C21F5C514A00EDA039 /* MADPluginProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09C11F5C510C00EDA039 /* MADPluginProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C6C09F11F5D29D100EDA039 /* MADViewControllerStandardProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C6C09F01F5D29D100EDA039 /* MADViewControllerStandardProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -74,8 +73,7 @@
 		4C2D77E61F569EEB005415F7 /* MADQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQuery.m; sourceTree = "<group>"; };
 		4C2D780A1F56D4EA005415F7 /* MADQueryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryType.h; sourceTree = "<group>"; };
 		4C2D78631F56F6A4005415F7 /* MADConnectionsPropertiesProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADConnectionsPropertiesProtocol.h; sourceTree = "<group>"; };
-		4C63C8462DED1D7C00A366BC /* madlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = madlog.h; sourceTree = "<group>"; };
-		4C63C8472DED1D7C00A366BC /* madlog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlog.m; sourceTree = "<group>"; };
+
 		4C6C09BF1F5C50A200EDA039 /* MADDatabaseSQLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseSQLProtocol.h; sourceTree = "<group>"; };
 		4C6C09C11F5C510C00EDA039 /* MADPluginProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADPluginProtocol.h; sourceTree = "<group>"; };
 		4C6C09F01F5D29D100EDA039 /* MADViewControllerStandardProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewControllerStandardProtocol.h; sourceTree = "<group>"; };
@@ -150,8 +148,7 @@
 		4CA7C3182EA4535700475743 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4C63C8462DED1D7C00A366BC /* madlog.h */,
-				4C63C8472DED1D7C00A366BC /* madlog.m */,
+
 				4CAA659D2DDD10760016006E /* MADAliases.h */,
 				4C6C0A061F5D329700EDA039 /* MADConnectionViewController.h */,
 				4C6C0A071F5D329700EDA039 /* MADConnectionViewController.m */,
@@ -254,7 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C6C0A001F5D2F6000EDA039 /* MADErrorContainer.h in Headers */,
-				4C63C8492DED1D7C00A366BC /* madlog.h in Headers */,
+
 				4C2D77E71F569EEB005415F7 /* MADQuery.h in Headers */,
 				4CF6AACD1F5524BF0061B0C6 /* MADDatabase.h in Headers */,
 				4C2D780B1F56D4EA005415F7 /* MADQueryType.h in Headers */,
@@ -386,7 +383,7 @@
 				4CF6AADA1F5526DE0061B0C6 /* MADDatabaseDataBinding.m in Sources */,
 				4CF6AACE1F5524BF0061B0C6 /* MADDatabase.m in Sources */,
 				4C6C0A011F5D2F6000EDA039 /* MADErrorContainer.m in Sources */,
-				4C63C8482DED1D7C00A366BC /* madlog.m in Sources */,
+
 				4C2D77E81F569EEB005415F7 /* MADQuery.m in Sources */,
 				4C6C0A091F5D329700EDA039 /* MADConnectionViewController.m in Sources */,
 				4CF6AAC81F55204A0061B0C6 /* MADDatabaseConnection.m in Sources */,
@@ -593,6 +590,10 @@
 		4CF6AAB41F5518BB0061B0C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetApiLog",
+					"$(inherited)",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
@@ -626,6 +627,10 @@
 		4CF6AAB51F5518BB0061B0C6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetApiLog",
+					"$(inherited)",
+				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";

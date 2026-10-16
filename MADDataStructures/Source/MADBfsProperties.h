@@ -10,6 +10,7 @@
 #define MAD_DataStructures_MADBfsProperties_h
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSValue.h>
 #import "MADAlgorithmColor.h"
 
 @class MTVertex;
