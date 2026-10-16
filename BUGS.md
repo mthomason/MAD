@@ -837,7 +837,10 @@ Status key:
   declares it nullable, which is what both implementations have always done.  The
   property `databaseForSelects` is nullable too (a delegate-less table has none).
   MADDataTableFast's own header re-declares `objectEnumerator` nullable so the Fast
-  call sites see it.
+  call sites see it.  The sibling `-columnsEnumerator` carries the same untrue `nonnull`
+  in the protocol and the same nil-on-the-abstract-path in the base class; it was left
+  as it is -- no MADDataTableFast path answers nil for it -- so the next reader knows
+  it was seen, not missed.
 - **Locked down by:** the analyzer, re-run with its cached results removed: zero
   findings in MADDataTableFast.m where there were five.  A declaration change has no
   runtime failure to pin; the nil each declaration now admits is pinned where it is
