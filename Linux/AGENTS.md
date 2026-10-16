@@ -98,7 +98,20 @@ The recipe MADFoundation was built with, in the order it was done:
     `retain` explicitly (the ARC-compiled library balances its own copies out
     from under them otherwise).
 *   The library links whole-archive: categories in a static archive are
-    otherwise dropped, the way Apple's `-ObjC` prevents.
+    otherwise dropped, the way Apple's `-ObjC` prevents.  One file is the
+    exception, compiled into `libmad.a` through `target_sources` because
+    whole-archiving `libmadsqlite3.a` would duplicate the compat objects every
+    framework archive embeds (see `CMakeLists.txt`).
+*   Iterating on one test in the existing image, without rebuilding it: mount
+    the repo and a persistent build dir, then build just the target --
+    `docker run --rm -v "$PWD":/repo -v /tmp/x-build:/build -w /tmp
+    mad-linux:phase-b bash -c 'cmake -S /repo/Linux -B /build
+    -DCMAKE_BUILD_TYPE=Debug && cmake --build /build --target <Test>
+    -j"$(nproc)" && /build/<Test>'` (the Docker CLI lives at
+    `/Applications/Docker.app/Contents/Resources/bin` when it is not on
+    `PATH`).  `./Linux/build.sh` remains the canonical gate: the image copies
+    the sources at build time, so `--test` alone re-runs the old binaries, and
+    an edit only reaches the image through a rebuild.
 *   The C libraries are built into `/usr/local` by `lib/libraries.sh`; a new
     dependency means a pin in `libraries.conf` and a `build_<name>` function
     there, not an edit to the Dockerfile.

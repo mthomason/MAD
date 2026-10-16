@@ -10,7 +10,7 @@ _MAD Designer_ is a mobile analytic document designer.  _MAD Designer_ provides 
 
 ## Project Overview
 
-_MAD Designer_ is a Core Data application that defines a `.mad` file type, which is a `UIManagedDocument` type.
+_MAD Designer_ defines a `.mad` file type.  A document's definition lives in a portable SQLite store of our own (`MAD_STORE_MIGRATION.md`, `MAD_FORMAT.md`); the MAD framework does not link Core Data — Core Data survives only to convert legacy documents, in the application target (`MADDesigner/Source/MADStoreLegacy/`).
 
 It is BI software, and currently support access to MySQL and SQL Server databases.  It also uses Sqlite3 for example reports and internal data tables.
 
@@ -73,7 +73,7 @@ The code base also includes a custom scripting language in a file called `Scrimp
 
 The codebase also includes static library build scrips in a file called `Compressor`.  This is used to build the static libraries used by the project.  This is a very important part of the project.
 
-The codebase also includes `Linux`, the Phase B toolchain spike (`MAD_LINUX.md` §9): a Docker image that builds libobjc2 and GNUstep from pinned sources, compiles a `MADFoundation` subset against them, and runs the Linux tests.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
+The codebase also includes `Linux`, the headless engine's build (`MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all ten headless frameworks against them, and runs their ported suites — 114 executables, 1098 tests (`./Linux/build.sh`).  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
 
 ## Code Style Guidance
 
@@ -108,8 +108,13 @@ not reachable, so the suite still passes on a machine without a server. The cred
 they expect are in `DEVELOPER.md`, and each can be overridden with a `MAD_MYSQL_TEST_*` or
 `MAD_TDS_TEST_*` environment variable.
 
-`MADBarcodes`, `MADFeedback`, `MADTds`, `Scrimpter`, and `Compressor` expose no shared test
+`MADFeedback`, `MADTds`, `Scrimpter`, and `Compressor` expose no shared test
 scheme, so the command above does not reach them.
+
+A change to a file the Linux build compiles (see `Linux/cmake/<Name>Sources.cmake`)
+has a second gate: `./Linux/build.sh` from the repo root must stay green. The iOS
+schemes remain the arbiter of Apple behaviour; the Linux suite is the arbiter of
+the headless side.
 
 ## Related Documents
 
@@ -126,8 +131,8 @@ scheme, so the command above does not reach them.
   products, the web clone, AI, and the money.
 * `MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
   Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
-* `Linux/README.md` -- the Phase B spike directory: the image, the compiled subset,
-  the GNUstep divergences the tests found, and the licences.
+* `Linux/README.md` -- the Linux build: the image, the ten frameworks and their
+  suites, the GNUstep divergences the tests found, and the licences.
 * `MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
 * `LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
 * `THIRD_PARTY_LICENSES.md` -- every third-party component in the app, how it is linked, its
