@@ -485,7 +485,7 @@ particular is a business decision, not an engineering task.
 
 ## 11. The Linux toolchain (MAD_LINUX.md Phase B)
 
-**Status:** Done 2026-10-06 on branch `linux-port` (renamed from `linux-phase-b`) — the spike is green, and
+**Status:** Done 2026-10-06 on `linux-port` (renamed from `linux-phase-b`; merged to `master` 2026-10-16, `524e0d86e`) — the spike is green, and
 Phase C is the next step. Two of Phase C's inputs come from this work: the GNUstep
 divergences recorded in `Linux/README.md`, and the shim list being that much shorter.
 
@@ -536,7 +536,8 @@ Not to be started without the user asking for it by name.
 
 ## 12. Linux Phase C — the §4 shim list
 
-**Status:** Done 2026-10-06 on branch `linux-port`. All ten headless
+**Status:** Done 2026-10-06 on `linux-port`, merged to `master` 2026-10-16
+(`524e0d86e`). All ten headless
 frameworks compile and link inside the Linux image, their suites run under
 ctest, and the remaining exclusions are named with reasons in each
 `Linux/cmake/<Name>Sources.cmake`. Phase D — the CLI/data-path checkpoint —
@@ -553,7 +554,7 @@ out of scope by §3's table; the stand-alone MAD Viewer target's
 `MADNavigationController.m` keeps its own `<os/log.h>` — it links no MAD
 frameworks.
 
-**What landed, framework by framework** (all on `linux-port`):
+**What landed, framework by framework** (all on `linux-port`, now `master`):
 
 * **The logging layer.** `madlog.h`'s non-Apple branch supplies `os_log_t`,
   `OS_LOG_DEFAULT`, `os_log_create` and the five `os_log_*` functions as

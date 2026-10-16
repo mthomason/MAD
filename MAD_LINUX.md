@@ -366,8 +366,9 @@ decision — they are app-side, so they do not block the headless build; the fil
 cloud code stays where it is, unused (per the user: not needed for headless mode). What
 remains before B is whatever §4 file-level exclusions the toolchain spike proves necessary.
 
-**Phase B status (2026-10-06).** The toolchain spike is green on branch
-`linux-port`: `Linux/` builds one Docker image — Ubuntu 24.04 with the distro
+**Phase B status (2026-10-06).** The toolchain spike is green on the
+`linux-port` branch, merged to `master` 2026-10-16 (`524e0d86e`):
+`Linux/` builds one Docker image — Ubuntu 24.04 with the distro
 clang 18 (the "from source" requirement in §6 is about GNUstep being built against
 libobjc2, not about LLVM), plus source-built libobjc2 2.3, libdispatch 6.1.3,
 gnustep-make 2.9.3 and gnustep-base 1.31.1, pinned in `Linux/toolchain.conf` —
@@ -389,7 +390,7 @@ are recorded, not hidden: GNUstep's archiver has no secure-coding support
 GNUstep's `NSOperationQueue` removes its `isReady` observation on every
 notification while MADOperation's state machine used to notify `isReady` more
 than once per enqueue — the second removal raised, so a MADOperation could not
-be enqueued on Linux. That is settled (2026-10-06, branch `linux-port`):
+be enqueued on Linux. That is settled (2026-10-06, `linux-port`, now in `master`):
 MADOperation drives the state advance explicitly from `-willEnqueue` and sends
 KVO for `isReady`/`isExecuting`/`isFinished` only on real value changes, so the
 queue sees one notification, as on Apple; the Linux tests assert it plainly on
