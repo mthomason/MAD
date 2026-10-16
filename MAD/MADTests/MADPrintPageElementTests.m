@@ -32,6 +32,8 @@
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/NSAttributedString.h>
+#import <CoreGraphics/CGContext.h>
+#import <CoreGraphics/CGImage.h>
 
 #import "MADDocumentObjectDataReference.h"
 #import "MADDocumentObjectType.h"
@@ -279,6 +281,25 @@
 	return context;
 }
 
+// The two images are the same picture when both redraw to the same pixels in one
+// common format.  PNG bytes are not stable across a decode/re-encode, so comparing
+// the encodings would fail on the encoding, not the picture.
+- (NSData *)redrawnPixelsOfImage:(UIImage *)image {
+	CGImageRef cgImage = image.CGImage;
+	if (!cgImage) return nil;
+	size_t width = CGImageGetWidth(cgImage), height = CGImageGetHeight(cgImage);
+	if (width == 0 || height == 0) return nil;
+	NSMutableData *pixels = [NSMutableData dataWithLength:width * height * 4];
+	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+	CGContextRef context = CGBitmapContextCreate(pixels.mutableBytes, width, height, 8, width * 4, space,
+												 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+	CGColorSpaceRelease(space);
+	if (!context) return nil;
+	CGContextDrawImage(context, CGRectMake(0, 0, width, height), cgImage);
+	CGContextRelease(context);
+	return pixels;
+}
+
 - (MADDocumentObjectDataReference *)referenceForElement:(__kindof RptqDocumentElement *)element
 												dataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)dataSource {
 	MADDocumentObjectDataReference *reference;
@@ -443,8 +464,12 @@
 
 	MADPrintPageElement *drawingObject = [MADPrintPageElement newDocumentObject:reference];
 	XCTAssertEqualObjects(NSStringFromClass([drawingObject class]), @"MADPrintPageElementImage");
-	// The element holds the rendered image in its own (private) property.
-	XCTAssertEqual([drawingObject valueForKey:@"image"], image);
+	// The element adopts the definition's picture.  The image reaches it through the
+	// store's PNG wire format, so it is the same picture, not the same object.
+	id adopted = [drawingObject valueForKey:@"image"];
+	XCTAssertTrue([adopted isKindOfClass:[UIImage class]]);
+	XCTAssertTrue(CGSizeEqualToSize(((UIImage *)adopted).size, image.size));
+	XCTAssertEqualObjects([self redrawnPixelsOfImage:adopted], [self redrawnPixelsOfImage:image]);
 
 	UIGraphicsBeginImageContextWithOptions(CGSizeMake(4.0, 4.0), NO, 1.0);
 	[drawingObject drawInRect:CGRectMake(0.0, 0.0, 4.0, 4.0)];

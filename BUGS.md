@@ -887,7 +887,7 @@ Status key:
   testExecuteWithoutDependencyFinishes`.
 
 ### Image elements do not survive a save
-- **Status:** Confirmed (live defect)
+- **Status:** Fixed
 - **Where:** `MAD/Source/rptq/RptqDocument+Extras.m:559-562` (the factory assigns a
   `UIImage`), `MAD/Source/rptq/store/MADStoreSchema.m:563-565` (the attribute is a
   `BlobOpt`), `MAD/Source/rptq/store/MADStore.m:483-485` (the Blob binder accepts only
@@ -902,8 +902,24 @@ Status key:
 - **Why it matters:** An inserted picture silently disappears from the document the
   next time it is opened -- the one place a report can carry a logo.  The fix is a
   transform at the attribute boundary (PNG data in, UIImage out).
-- **Test:** `MADDocumentObjectDataReferenceImageTests testImageDoesNotSurviveSaveAndReopen`
-  (and the in-memory half by `testImageIsTheElementImageWhileInMemory`).
+- **Now:** `RptqDocumentElementImage (Extras)` implements `-image` / `-setImage:` at the
+  attribute boundary.  The setter writes `UIImagePNGRepresentation` bytes -- the wire
+  format the legacy converter already pins (`MADStorePNGData`, and
+  `MADStoreConverterTests` checks the bytes) -- and the getter answers
+  `[UIImage imageWithData:]` for the bytes the store hands back.  The store's Blob
+  binder and reader are unchanged, and a value already in memory as `NSData` reads back
+  as a picture either way.  Apple only (`#if __APPLE__`): UIImage is UIKit's, and the
+  factory refuses to build an image element off Apple.
+- **Locked down by:** `MADDocumentObjectDataReferenceImageTests`:
+  `testImageSurvivesSaveAndReopen` (replaces `testImageDoesNotSurviveSaveAndReopen`,
+  which pinned the loss), `testTheStoredBlobIsTheImagesPNGData` (the backing attribute
+  carries the PNG bytes, not the image or NULL) and `testImageIsTheElementImageWhileInMemory`
+  (updated in step: the element hands back the same picture, not the same object).
+  `MADPrintPageElementTests testImageElementAdoptsTheDefinitionImage` was updated for
+  the same reason -- its identity assertion became a pixel-equality one.  Both new
+  tests were confirmed to fail against the old code.  The Linux port pins the
+  platform-neutral half: `Linux/Tests/MADDocumentObjectDataReferenceImageTests.m
+  testImageDataSurvivesSaveAndReopen` (renamed from `testImageDoesNotSurviveSaveAndReopen`).
 
 ### `MADReportSection -identifier` recurses forever when its section is unwired
 - **Status:** Confirmed (latent)

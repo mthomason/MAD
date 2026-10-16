@@ -6,19 +6,18 @@
 //  MADDocumentObjectDataReferenceImage, the handle over an image element -- it
 //  simply hands back the element's `image`.
 //
-//  The file also pins the image's journey through the portable store, and that
-//  journey is lossy: the element declares `UIImage *image`
-//  (RptqDocumentElementImage.h) and the designer assigns a UIImage, but the
-//  store's Blob column only binds NSData (MADStore.m, MADStoreBindColumn) and
-//  writes NULL for anything else, while a read hands back NSData.  So the image
-//  survives in memory and is gone after save/load.  The last test pins today's
-//  behaviour and will need updating when the defect is fixed.
+//  The file also pins the image's journey through the portable store.  The
+//  element declares `UIImage *image` (RptqDocumentElementImage.h) and the
+//  store's Blob column holds image bytes (MADStore.m's binder and reader; the
+//  legacy converter writes PNG).  The UIImage half of the transform is Apple
+//  only -- RptqDocumentElementImage (Extras) codes and decodes it there,
+//  because UIImage is UIKit's -- so what this port pins is the wire format:
+//  image bytes stored under the attribute survive a save and reopen.
 //
 //  UIImage does not exist off Apple (no UIGraphics either), so the fixture's
-//  one-pixel UIImage is a plain-object stand-in.  Its only relevant property is
-//  that it is not NSData, which is exactly what the Blob column asks, so the
-//  stand-in makes the same save/load journey the UIImage does; the assertions
-//  are the Xcode ones unchanged.
+//  one-pixel UIImage is a plain-object stand-in and the persistence test
+//  carries the bytes themselves; the assertions are the Xcode ones where the
+//  two platforms agree.
 //
 
 #import "MADTestSupport.h"
@@ -112,14 +111,16 @@ static void testImageIsTheElementImageWhileInMemory(void) {
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:nil];
 }
 
-static void testImageDoesNotSurviveSaveAndReopen(void) {
+static void testImageDataSurvivesSaveAndReopen(void) {
+	// The wire format is the image bytes; off Apple there is no UIImage to transform,
+	// so the bytes themselves are what the element carries and what must come back.
 	NSURL *directory = makeTempDirectory();
 	RptqStoreContext *context = openContextAtPath(directory, @"persistence.sqlite");
 	MAD_PASS([context loadAllWithError:NULL], "the context loads");
-	MADTestImageStandIn *image = [[MADTestImageStandIn alloc] init];
+	NSData *data = [@"PNG-ish bytes" dataUsingEncoding:NSUTF8StringEncoding];
 	RptqDocumentElementImage *element = (RptqDocumentElementImage *)[context insertObjectForEntity:@"RptqDocumentElementImage" identifier:0];
 	element.type = MADPrintPageElementTypeImage;
-	element.image = (UIImage *)image;
+	element.image = (UIImage *)data;
 	int64_t elementIdentifier = element.identifier;
 
 	NSError *error = nil;
@@ -131,9 +132,7 @@ static void testImageDoesNotSurviveSaveAndReopen(void) {
 																					  identifier:elementIdentifier];
 
 	MAD_PASS(readElement != nil, "the element is read back");
-	// The Blob column was written NULL because a UIImage is not NSData.  This is the
-	// current, lossy behaviour: an image element's picture is gone after save/load.
-	MAD_PASS(readElement.image == nil, "the image does not survive the save and reopen");
+	MAD_PASS_EQUAL(readElement.image, data, "the image bytes survive the save and reopen");
 
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:nil];
 }
@@ -142,4 +141,4 @@ MAD_TEST_MAIN("MADDocumentObjectDataReferenceImageTests",
 	MAD_TEST(testFactoryReturnsImageReference),
 	MAD_TEST(testImageIsNilWhenTheElementHasNone),
 	MAD_TEST(testImageIsTheElementImageWhileInMemory),
-	MAD_TEST(testImageDoesNotSurviveSaveAndReopen));
+	MAD_TEST(testImageDataSurvivesSaveAndReopen));

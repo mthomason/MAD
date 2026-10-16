@@ -7,19 +7,19 @@
 //  Characterization coverage for MADDocumentObjectDataReferenceImage: the handle over an
 //  image element.  It simply hands back the element's `image`.
 //
-//  This file also pins the image's journey through the portable store, and that journey
-//  is lossy: the element declares `UIImage *image` (RptqDocumentElementImage.h) and the
-//  designer assigns a UIImage (RptqDocument+Extras.m, addDocumentObject:...), but the
-//  store's Blob column only binds NSData (MADStore.m, MADStoreBindColumn) and writes NULL
-//  for anything else, while a read hands back NSData.  So the image survives in memory
-//  and is gone after save/load.  Reported in the test report, not fixed; the last test
-//  below pins today's behaviour and will need updating when the defect is fixed.
+//  This file also pins the image's journey through the portable store.  The element
+//  declares `UIImage *image` (RptqDocumentElementImage.h) and the designer assigns a
+//  UIImage (RptqDocument+Extras.m, addDocumentObject:...), while the store's Blob column
+//  holds PNG bytes (MADStore.m's binder and reader; the legacy converter writes the same
+//  form).  RptqDocumentElementImage (Extras) converts between the two at the attribute
+//  boundary, so the picture set in memory is the picture read back after a reopen.
 //
 
 #import <XCTest/XCTest.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIColor.h>
+#import <CoreGraphics/CGContext.h>
 
 #import "MADDocumentObjectDataReference.h"
 #import "MADStore.h"
@@ -67,6 +67,25 @@
 	return image;
 }
 
+// The two images are the same picture when both redraw to the same pixels in one
+// common format.  PNG bytes are not stable across a decode/re-encode, so comparing
+// the encodings would fail on the encoding, not the picture.
+- (NSData *)redrawnPixelsOfImage:(UIImage *)image {
+	CGImageRef cgImage = image.CGImage;
+	if (!cgImage) return nil;
+	size_t width = CGImageGetWidth(cgImage), height = CGImageGetHeight(cgImage);
+	if (width == 0 || height == 0) return nil;
+	NSMutableData *pixels = [NSMutableData dataWithLength:width * height * 4];
+	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+	CGContextRef context = CGBitmapContextCreate(pixels.mutableBytes, width, height, 8, width * 4, space,
+												 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+	CGColorSpaceRelease(space);
+	if (!context) return nil;
+	CGContextDrawImage(context, CGRectMake(0, 0, width, height), cgImage);
+	CGContextRelease(context);
+	return pixels;
+}
+
 - (MADDocumentObjectDataReferenceImage *)referenceForElement:(RptqDocumentElementImage *)element {
 	return (MADDocumentObjectDataReferenceImage *)[MADDocumentObjectDataReference newDocumentObjectDataReference:nil
 																										 delegate:nil
@@ -110,10 +129,28 @@
 
 	MADDocumentObjectDataReferenceImage *reference = [self referenceForElement:element];
 
-	XCTAssertEqualObjects(reference.image, image);
+	// The setter stores the picture as PNG bytes and the getter decodes them, so the
+	// element hands back the same picture, not the same object.
+	XCTAssertTrue([reference.image isKindOfClass:[UIImage class]]);
+	XCTAssertEqualObjects([self redrawnPixelsOfImage:reference.image], [self redrawnPixelsOfImage:image]);
 }
 
-- (void)testImageDoesNotSurviveSaveAndReopen {
+- (void)testTheStoredBlobIsTheImagesPNGData {
+	RptqStoreContext *context = [self openContextAtPath:@"wireformat.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+	UIImage *image = [self onePixelImage];
+	RptqDocumentElementImage *element = (RptqDocumentElementImage *)[context insertObjectForEntity:@"RptqDocumentElementImage" identifier:0];
+	element.type = MADPrintPageElementTypeImage;
+	element.image = image;
+
+	// The store's wire format for the attribute: what a save would bind and a read
+	// would hand back is the PNG encoding of the image, not the image or NULL.
+	NSData *stored = [element.backingObject attributeValue:@"image"];
+	XCTAssertTrue([stored isKindOfClass:[NSData class]]);
+	XCTAssertEqualObjects(stored, UIImagePNGRepresentation(image));
+}
+
+- (void)testImageSurvivesSaveAndReopen {
 	RptqStoreContext *context = [self openContextAtPath:@"persistence.sqlite"];
 	XCTAssertTrue([context loadAllWithError:NULL]);
 	UIImage *image = [self onePixelImage];
@@ -131,9 +168,9 @@
 																					  identifier:elementIdentifier];
 
 	XCTAssertNotNil(readElement);
-	// The Blob column was written NULL because a UIImage is not NSData.  This is the
-	// current, lossy behaviour: an image element's picture is gone after save/load.
-	XCTAssertNil(readElement.image);
+	// The picture set before the save is the picture the reopened document hands back.
+	XCTAssertTrue([readElement.image isKindOfClass:[UIImage class]]);
+	XCTAssertEqualObjects([self redrawnPixelsOfImage:readElement.image], [self redrawnPixelsOfImage:image]);
 }
 
 @end
