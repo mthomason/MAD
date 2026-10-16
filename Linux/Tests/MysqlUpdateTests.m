@@ -3,17 +3,15 @@
 //  Linux/Tests
 //
 //  Ported from MADMySQLTests/MysqlUpdateTests.m: offline coverage for
-//  MysqlUpdate.  Past the table guard, -execute builds its statement and
-//  escapes every key through the live session, so the writing paths live in
-//  MADMySQLLiveTests.m -- including the nil-qualifier crash, which only
-//  reproduces once the session can escape.
+//  MysqlUpdate.  Past the guards, -execute builds its statement and escapes
+//  every key through the live session, so the writing paths live in
+//  MADMySQLLiveTests.m; the three guards -- table, row data and qualifier --
+//  raise before any session call and are covered here.
 //
-//  The empty-rowData crash is the pinned defect (BUGS.md): with no rows to
-//  set, the column list is still empty when -execute deletes its leading ", ",
-//  so NSMakeRange(0, 2) is out of bounds before any MySQL call.  Apple's
-//  __NSCFString raises NSInvalidArgumentException for that edit; GNUstep's
-//  NSMutableString raises NSRangeException for the same one.  The defect, not
-//  the Foundation spelling, is what is pinned here.
+//  The empty-rowData and empty-qualifier range errors were the pinned defects
+//  (BUGS.md): the leading ", " and "AND " trims ran against empty buffers, so
+//  the intended diagnostics never ran.  Both now raise MysqlException before
+//  any buffer is built.
 //
 
 #import "MADTestSupport.h"
@@ -21,12 +19,6 @@
 #import <MADMySQL/MysqlUpdate.h>
 #import <MADMySQL/MysqlConnection.h>
 #import <MADMySQL/MysqlException.h>
-
-#if __APPLE__
-#define MAD_UPDATE_RANGE_EXCEPTION NSInvalidArgumentException
-#else
-#define MAD_UPDATE_RANGE_EXCEPTION NSRangeException
-#endif
 
 // A connection object with no server behind it: its handle is NULL. Nothing
 // here reaches a MySQL call.
@@ -69,17 +61,26 @@ static void testExecuteWithoutATableRaises(void) {
 	MAD_PASS(raised, "an update with no table raises");
 }
 
-static void testExecuteWithoutRowDataRaisesARangeError(void) {
-	// BUGS.md: with no rows to set, the column list is still empty when
-	// -execute deletes its leading ", ", so the intended "empty update" error
-	// never runs.  The range edit against the empty mutable string raises
-	// (see the note at the top of the file for the platform spelling).
+static void testExecuteWithoutRowDataRaisesTheUpdatesOwnError(void) {
+	// BUGS.md: with no rows to set, the column list was still empty when
+	// -execute deleted its leading ", ", so the range edit raised before the
+	// intended diagnostic could run.
 	MysqlUpdate *update = [MysqlUpdate updateWithConnection:connectionWithoutAServer()];
 	update.table = @"mad_scratch";
 	update.qualifier = @{@"id": @1};
 
-	MAD_THROWS_NAMED([update execute], MAD_UPDATE_RANGE_EXCEPTION,
-					 "an update with no rowData raises the range error");
+	BOOL raised = NO;
+	@try {
+		[update execute];
+	} @catch (MysqlException *exception) {
+		raised = YES;
+		MAD_PASS_EQUAL(exception.reason, @"row data must be specified to perform an update",
+					   "the reason names the missing row data");
+		// Like the table guard, this one passes a nil connection, so there is no
+		// connection in the userInfo.
+		MAD_PASS(exception.userInfo == nil, "the guard carries no connection");
+	}
+	MAD_PASS(raised, "an update with no row data raises the update's own error");
 }
 
 static void testExecuteWithAnEmptyRowDataDictionaryRaisesTheSameWay(void) {
@@ -88,13 +89,34 @@ static void testExecuteWithAnEmptyRowDataDictionaryRaisesTheSameWay(void) {
 	update.rowData = @{};
 	update.qualifier = @{@"id": @1};
 
-	MAD_THROWS_NAMED([update execute], MAD_UPDATE_RANGE_EXCEPTION,
-					 "an empty rowData dictionary raises the range error");
+	MAD_THROWS_NAMED([update execute], @"MysqlException",
+					 "an empty rowData dictionary raises the update's own error");
+}
+
+static void testExecuteWithoutAQualifierRaisesTheUpdatesOwnError(void) {
+	// BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and the
+	// four-character delete raised rather than telling the caller to qualify
+	// the update.
+	MysqlUpdate *update = [MysqlUpdate updateWithConnection:connectionWithoutAServer()];
+	update.table = @"mad_scratch";
+	update.rowData = @{@"label": @"beta"};
+
+	BOOL raised = NO;
+	@try {
+		[update execute];
+	} @catch (MysqlException *exception) {
+		raised = YES;
+		MAD_PASS_EQUAL(exception.reason, @"a qualifier must be specified to perform an update",
+					   "the reason names the missing qualifier");
+		MAD_PASS(exception.userInfo == nil, "the guard carries no connection");
+	}
+	MAD_PASS(raised, "an update with no qualifier raises the update's own error");
 }
 
 MAD_TEST_MAIN("MysqlUpdateTests",
 	MAD_TEST(testFactoryRejectsANilConnection),
 	MAD_TEST(testFactoryStoresTheConnectionAndStartsEmpty),
 	MAD_TEST(testExecuteWithoutATableRaises),
-	MAD_TEST(testExecuteWithoutRowDataRaisesARangeError),
-	MAD_TEST(testExecuteWithAnEmptyRowDataDictionaryRaisesTheSameWay));
+	MAD_TEST(testExecuteWithoutRowDataRaisesTheUpdatesOwnError),
+	MAD_TEST(testExecuteWithAnEmptyRowDataDictionaryRaisesTheSameWay),
+	MAD_TEST(testExecuteWithoutAQualifierRaisesTheUpdatesOwnError));

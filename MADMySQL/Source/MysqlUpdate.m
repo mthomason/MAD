@@ -40,7 +40,17 @@
 	if (!_table) {
 		[MysqlException raiseConnection:nil withFormat:@"table must be specified to perform an update"];
 	}
-	
+	// The column list and the WHERE clause are each trimmed of their leading
+	// separator below, so both need at least one entry before the trim can run --
+	// and a missing qualifier is the "forgot the WHERE clause" mistake the caller
+	// needs told about, not silently applied to every row.
+	if (_rowData.count == 0) {
+		[MysqlException raiseConnection:nil withFormat:@"row data must be specified to perform an update"];
+	}
+	if (_qualifier.count == 0) {
+		[MysqlException raiseConnection:nil withFormat:@"a qualifier must be specified to perform an update"];
+	}
+
 	NSMutableString *cmd = [NSMutableString stringWithFormat:@"UPDATE %@ set ", _table];
 	NSMutableString *columnPairs = [NSMutableString new];
 	

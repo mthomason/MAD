@@ -858,10 +858,11 @@
 	[self dropScratchTableNamed:@"mad_scratch_qual" onConnection:connection];
 }
 
-- (void)testUpdateWithoutAQualifierRaisesAnInvalidArgumentException {
-	// BUGS.md: a nil qualifier leaves the WHERE-clause buffer empty, and
-	// -execute then deletes four characters off the front of it.  The class
-	// documents "you must qualify an update" but never gets to say so.
+- (void)testUpdateWithoutAQualifierRaisesTheUpdatesOwnError {
+	// BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and -execute
+	// deleted four characters off the front of it instead of telling the caller
+	// to qualify the update.  The guard runs before any session call, so the
+	// offline suite covers it too; this keeps the live connection in the loop.
 	[self requireServer];
 	MysqlConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_noqual" onConnection:connection];
@@ -870,7 +871,13 @@
 	update.table = @"mad_scratch_noqual";
 	update.rowData = @{@"label": @"beta"};
 
-	XCTAssertThrowsSpecificNamed([update execute], NSException, NSInvalidArgumentException);
+	@try {
+		[update execute];
+		XCTFail(@"An update with no qualifier must raise");
+	} @catch (MysqlException *exception) {
+		XCTAssertEqualObjects(exception.reason, @"a qualifier must be specified to perform an update");
+		XCTAssertNil(exception.userInfo);
+	}
 
 	[self dropScratchTableNamed:@"mad_scratch_noqual" onConnection:connection];
 }

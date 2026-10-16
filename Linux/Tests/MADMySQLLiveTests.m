@@ -59,17 +59,6 @@
 #import <mysql.h>
 #import <limits.h>
 
-// The frame for the platforms' different spellings of the empty-mutable-string
-// range error: Apple's __NSCFString raises NSInvalidArgumentException for an
-// out-of-bounds edit; GNUstep's NSMutableString raises NSRangeException for the
-// same one.  The defect (BUGS.md: an unqualified update crashes in the range
-// edit before its own guard runs) is what the assertion pins.
-#if __APPLE__
-#define MAD_UPDATE_RANGE_EXCEPTION NSInvalidArgumentException
-#else
-#define MAD_UPDATE_RANGE_EXCEPTION NSRangeException
-#endif
-
 #pragma mark - Fixtures
 
 static NSDictionary<NSString *, NSString *> *testSettings(void) {
@@ -859,10 +848,11 @@ static void testUpdateQualifierHandlesStringsAndNulls(void) {
 	dropScratchTable(@"mad_scratch_qual", connection);
 }
 
-static void testUpdateWithoutAQualifierRaisesARangeError(void) {
-	// BUGS.md: a nil qualifier leaves the WHERE-clause buffer empty, and
-	// -execute then deletes four characters off the front of it.  The class
-	// documents "you must qualify an update" but never gets to say so.
+static void testUpdateWithoutAQualifierRaisesTheUpdatesOwnError(void) {
+	// BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and -execute
+	// deleted four characters off the front of it instead of telling the caller
+	// to qualify the update.  The guard runs before any session call, so the
+	// offline suite covers it too; this keeps the live connection in the loop.
 	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
 	MysqlConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_noqual", connection);
@@ -871,8 +861,16 @@ static void testUpdateWithoutAQualifierRaisesARangeError(void) {
 	update.table = @"mad_scratch_noqual";
 	update.rowData = @{@"label": @"beta"};
 
-	MAD_THROWS_NAMED([update execute], MAD_UPDATE_RANGE_EXCEPTION,
-					 "an unqualified update raises the range error");
+	BOOL raised = NO;
+	@try {
+		[update execute];
+	} @catch (MysqlException *exception) {
+		raised = YES;
+		MAD_PASS_EQUAL(exception.reason, @"a qualifier must be specified to perform an update",
+					   "the reason names the missing qualifier");
+		MAD_PASS(exception.userInfo == nil, "the guard carries no connection");
+	}
+	MAD_PASS(raised, "an unqualified update raises the update's own error");
 
 	dropScratchTable(@"mad_scratch_noqual", connection);
 }
@@ -1085,7 +1083,7 @@ MAD_TEST_MAIN("MADMySQLLiveTests",
 	MAD_TEST(testInsertRejectsADuplicateKeyUnlessToldToIgnoreIt),
 	MAD_TEST(testUpdateChangesOnlyTheQualifiedRows),
 	MAD_TEST(testUpdateQualifierHandlesStringsAndNulls),
-	MAD_TEST(testUpdateWithoutAQualifierRaisesARangeError),
+	MAD_TEST(testUpdateWithoutAQualifierRaisesTheUpdatesOwnError),
 	MAD_TEST(testDeleteRemovesTheQualifiedRows),
 	MAD_TEST(testDeleteWithARubbishQualifierRaises),
 	MAD_TEST(testTruncateEmptiesATable),

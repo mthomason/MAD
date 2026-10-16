@@ -722,17 +722,25 @@ Status key:
 
 
 ### MADocument calls writeContents: with nil contents
-- **Status:** Open -- documented; deliberate under the portable store, but it violates the
-  inherited contract.
-- **What:** `saveToURL:forSaveOperation:completionHandler:` passes `nil` for both the
+- **Status:** Fixed — 2026-10-04, in Phase D (`2bf9af919`), before this pass looked at it.
+- **What:** `saveToURL:forSaveOperation:completionHandler:` passed `nil` for both the
   contents and the attributes (`:598`, and again at `:624`) to
   `-writeContents:andAttributes:safelyToURL:forSaveOperation:error:`, whose parameters are
   declared non-null.  The override of `contentsForType:error:` returns nil on purpose
-  because the portable store writes itself, so the call is consistent with the design --
-  but the compiler is right that the API's own contract is being broken.
-- **Follow-up:** if the save path is ever revisited, either funnel the write through a
-  method whose signature admits nil or make the intent explicit at the call.
+  because the portable store writes itself, so the call was consistent with the design --
+  but the compiler was right that the API's own contract was being broken.
+- **Now:** the save path no longer calls `-writeContents:andAttributes:safelyToURL:…` at
+  all: `-saveToURL:forSaveOperation:completionHandler:` and
+  `-closeWithCompletionHandler:` call `-writeStoreAndArchiveWithError:` directly.  The
+  two `writeContents:` overrides -- which ignore their contents and return that same
+  store write -- remain for UIDocument's own machinery, which calls them with the
+  file-wrapper contents it built.  The analyzer's two
+  `nullability.NullPassedToNonnull` findings at those sites are gone with the calls.
 - **Where:** `MAD/Source/MADocument.m:594-630`.
+- **Locked down by:** nothing to pin -- the defect was the nil the production path
+  passed, and the path no longer exists.  The tests that call `-writeContents:` with nil
+  directly (`MADDocumentTests`, `MADOperationDocumentCloseDocumentTests`) exercise the
+  override itself, whose `id` parameter has no header annotation of its own.
 
 
 ### MADReportFormatter compares untyped values through id
@@ -757,13 +765,21 @@ Status key:
 
 
 ### MADModelQuery can insert a nil table into its dictionary
-- **Status:** Open -- documented; the analyzer flags it as a nil-object risk.
+- **Status:** Fixed
 - **What:** `[_tables setObject:queryTable forKey:qtidn]` (`:301`) assumes `queryTable` was
   built earlier in the loop (`:289`), but the assignment only happens when
   `resultCounter == 0`, so a path that reaches `:301` with an unset `queryTable` sends nil
   to `setObject:forKey:`, which throws.
 - **Where:** `MAD/Source/MADModelQuery.m:285-302`.
 - **Evidence:** `osx.cocoa.NilArg` from `xcodebuild analyze`.
+- **Now:** a table id whose projection filter matches no rows is skipped before anything
+  is built, so the registration is never reached with an unset `queryTable` (and no stale
+  identifier joins `_queryTableIDs` either).
+- **Locked down by:** `xcodebuild analyze` on the MAD scheme, re-run with the edited file:
+  zero `osx.cocoa.NilArg` findings in MADModelQuery.m where there was one.  No runtime
+  test can reach the path: the ordered set of table ids is derived from the same
+  projections the filter walks, so every id it holds matches at least one row today --
+  which is also why the analyzer could only warn.
 
 
 ### MysqlFetch passes an uninitialized value to a function
@@ -797,8 +813,8 @@ Status key:
   passed to a non-null parameter): `MADModelQuery.m:462,483` (a nil table into a
   dictionary), `MADPrintPageElement.m:222`, `RptqDocument+Extras.m:610`
   (`[hasObjects insertObject:reportObject atIndex:0]` with a possibly-nil object).
-- **Note:** `MADocument.m:598,624` appear here too and are covered by the
-  `writeContents:` entry above.
+- **Note:** `MADocument.m:598,624` used to appear here too, covered by the
+  `writeContents:` entry above; those two are gone with that entry's fix.
 - **Where:** the file:line list above.
 - **Evidence:** `nullability.NullReturnedFromNonnull` and
   `nullability.NullPassedToNonnull` in `xcodebuild analyze`.
@@ -2355,7 +2371,7 @@ libmysqlclient; it skips rather than fails when no server is reachable.
   no-session path, backslash and all, so the limitation is stated rather than implied.
 
 ### `MysqlUpdate -execute` raises an out-of-bounds string exception instead of its own error
-- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Status:** Fixed
 - **Where:** `MADMySQL/Source/MysqlUpdate.m:70` (the column list) and `:130` (the qualifier)
 - **Behavior:** Both buffers are built with a leading separator and then trimmed with
   `deleteCharactersInRange:NSMakeRange(0, 2)` / `NSMakeRange(0, 4)`.  Nothing forces
@@ -2373,11 +2389,23 @@ libmysqlclient; it skips rather than fails when no server is reachable.
   WHERE clause" mistake; instead of a diagnostic it takes the process down with an
   exception that names `__NSCFString`, not the caller's mistake.  (Losing the qualifier
   *silently* would be worse — the error is the point.)
-- **Test:** `MysqlUpdateTests testExecuteWithoutRowDataRaisesAnInvalidArgumentException`
-  and `testExecuteWithAnEmptyRowDataDictionaryRaisesTheSameWay` (offline), plus
-  `MADMySQLLiveTests testUpdateWithoutAQualifierRaisesAnInvalidArgumentException` — the
-  live one because the row-data path escapes through the session before it reaches the
-  qualifier delete, so it cannot be reproduced without a server.
+- **Now:** `-execute` guards both before either buffer is built: no row data and no
+  qualifier each raise the class's own `MysqlException` -- *row data must be specified
+  to perform an update* and *a qualifier must be specified to perform an update* -- in
+  the same nil-connection form as the table guard beside them.  The two trims are
+  therefore always at least as long as what they delete, and the "forgot the WHERE
+  clause" update is refused with a diagnostic instead of an `__NSCFString` range
+  exception.
+- **Locked down by:** `MysqlUpdateTests testExecuteWithoutRowDataRaisesTheUpdatesOwnError`
+  (renamed from `testExecuteWithoutRowDataRaisesAnInvalidArgumentException`) and
+  `testExecuteWithAnEmptyRowDataDictionaryRaisesTheSameWay`, both confirmed failing
+  against the old code, plus the new
+  `testExecuteWithoutAQualifierRaisesTheUpdatesOwnError`, whose uncaught
+  `NSInvalidArgumentException` also fails the old code.  The live
+  `MADMySQLLiveTests testUpdateWithoutAQualifierRaisesTheUpdatesOwnError`
+  (renamed) runs the same guard against a real server -- it now raises before the
+  session call the old crash needed, but it keeps the live connection in the loop.
+  Both Linux ports carry the same tests.
 
 ### `MysqlConnection`'s transaction toggles crash on a connection with no handle
 - **Status:** Confirmed (latent -- no caller builds such a connection)
