@@ -374,6 +374,12 @@
 		4CB98DC21F43F0A00043B583 /* MADOperationBackgroundTaskEnd.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DB01F43F0A00043B583 /* MADOperationBackgroundTaskEnd.m */; };
 		4CB98DC31F43F0A00043B583 /* MADOperationUniqueUrlForFilename.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DB11F43F0A00043B583 /* MADOperationUniqueUrlForFilename.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB98DC41F43F0A00043B583 /* MADOperationUniqueUrlForFilename.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DB21F43F0A00043B583 /* MADOperationUniqueUrlForFilename.m */; };
+		4C0DB0A1000000000000D007 /* MADOperationRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D001 /* MADOperationRefresh.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C0DB0A1000000000000D00A /* MADOperationRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D002 /* MADOperationRefresh.m */; };
+		4C0DB0A1000000000000D008 /* MADOperationRefreshInitialize.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D003 /* MADOperationRefreshInitialize.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C0DB0A1000000000000D00B /* MADOperationRefreshInitialize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D004 /* MADOperationRefreshInitialize.m */; };
+		4C0DB0A1000000000000D009 /* MADOperationRefreshInitalizeMainDataTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D005 /* MADOperationRefreshInitalizeMainDataTable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C0DB0A1000000000000D00C /* MADOperationRefreshInitalizeMainDataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D006 /* MADOperationRefreshInitalizeMainDataTable.m */; };
 		4CB98DC71F43F0A00043B583 /* MADOperationDocumentCloseDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DB51F43F0A00043B583 /* MADOperationDocumentCloseDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CB98DC81F43F0A00043B583 /* MADOperationDocumentCloseDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB98DB61F43F0A00043B583 /* MADOperationDocumentCloseDocument.m */; };
 		4CB98DC91F43F0A00043B583 /* MADOperationCreateDocumentFirstTimeSetup.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CB98DB71F43F0A00043B583 /* MADOperationCreateDocumentFirstTimeSetup.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -928,6 +934,12 @@
 		4CB98DB01F43F0A00043B583 /* MADOperationBackgroundTaskEnd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationBackgroundTaskEnd.m; sourceTree = "<group>"; };
 		4CB98DB11F43F0A00043B583 /* MADOperationUniqueUrlForFilename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationUniqueUrlForFilename.h; sourceTree = "<group>"; };
 		4CB98DB21F43F0A00043B583 /* MADOperationUniqueUrlForFilename.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationUniqueUrlForFilename.m; sourceTree = "<group>"; };
+		4C0DB0A1000000000000D001 /* MADOperationRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefresh.h; sourceTree = "<group>"; };
+		4C0DB0A1000000000000D002 /* MADOperationRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationRefresh.m; sourceTree = "<group>"; };
+		4C0DB0A1000000000000D003 /* MADOperationRefreshInitialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshInitialize.h; sourceTree = "<group>"; };
+		4C0DB0A1000000000000D004 /* MADOperationRefreshInitialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationRefreshInitialize.m; sourceTree = "<group>"; };
+		4C0DB0A1000000000000D005 /* MADOperationRefreshInitalizeMainDataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshInitalizeMainDataTable.h; sourceTree = "<group>"; };
+		4C0DB0A1000000000000D006 /* MADOperationRefreshInitalizeMainDataTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationRefreshInitalizeMainDataTable.m; sourceTree = "<group>"; };
 		4CB98DB31F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationCreateDocumentSaveAndCloseNewDocument.h; sourceTree = "<group>"; };
 		4CB98DB41F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationCreateDocumentSaveAndCloseNewDocument.m; sourceTree = "<group>"; };
 		4CB98DB51F43F0A00043B583 /* MADOperationDocumentCloseDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationDocumentCloseDocument.h; sourceTree = "<group>"; };
@@ -1469,6 +1481,12 @@
 				4CB98DB01F43F0A00043B583 /* MADOperationBackgroundTaskEnd.m */,
 				4CB98DB11F43F0A00043B583 /* MADOperationUniqueUrlForFilename.h */,
 				4CB98DB21F43F0A00043B583 /* MADOperationUniqueUrlForFilename.m */,
+				4C0DB0A1000000000000D001 /* MADOperationRefresh.h */,
+				4C0DB0A1000000000000D002 /* MADOperationRefresh.m */,
+				4C0DB0A1000000000000D003 /* MADOperationRefreshInitialize.h */,
+				4C0DB0A1000000000000D004 /* MADOperationRefreshInitialize.m */,
+				4C0DB0A1000000000000D005 /* MADOperationRefreshInitalizeMainDataTable.h */,
+				4C0DB0A1000000000000D006 /* MADOperationRefreshInitalizeMainDataTable.m */,
 				4CB98DB31F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.h */,
 				4CB98DB41F43F0A00043B583 /* MADOperationCreateDocumentSaveAndCloseNewDocument.m */,
 				4CB98DB51F43F0A00043B583 /* MADOperationDocumentCloseDocument.h */,
@@ -1975,6 +1993,9 @@
 				4C7C00D51EE28B0D00E7A5B1 /* MADModelDataProtocol.h in Headers */,
 				4CF46DD31CF2FC9800D93406 /* MADQueryLinkType.h in Headers */,
 				4C5939DF1E3EF7E400582271 /* RptqDocument.h in Headers */,
+				4C0DB0A1000000000000D007 /* MADOperationRefresh.h in Headers */,
+				4C0DB0A1000000000000D008 /* MADOperationRefreshInitialize.h in Headers */,
+				4C0DB0A1000000000000D009 /* MADOperationRefreshInitalizeMainDataTable.h in Headers */,
 				4C401DEF1BAE3BD900BAE5FC /* MADQueryMaxFieldLength.h in Headers */,
 				4CC1C6FE1CFDED57006F1546 /* MADAppLaunchContext.h in Headers */,
 				4CC284951BADE9E000775B72 /* RptqQueryGroup+Extras.h in Headers */,
@@ -2205,6 +2226,9 @@
 				4CA7C4282EA44B3800470028 /* RptqStoreContext.m in Sources */,
 				4C401DEE1BAE3BD900BAE5FC /* MADQueryFull.m in Sources */,
 				4CB98DC41F43F0A00043B583 /* MADOperationUniqueUrlForFilename.m in Sources */,
+				4C0DB0A1000000000000D00A /* MADOperationRefresh.m in Sources */,
+				4C0DB0A1000000000000D00B /* MADOperationRefreshInitialize.m in Sources */,
+				4C0DB0A1000000000000D00C /* MADOperationRefreshInitalizeMainDataTable.m in Sources */,
 				4C7044F71E2ED880001F2C7A /* MADQueryCacheIndexCreateTemplate.m in Sources */,
 				4CC284711BADE99B00775B72 /* RptqDatabaseSchemaTable+Extras.m in Sources */,
 				4C4F12571D091D4D0002294E /* UIDocument+Extras.m in Sources */,

@@ -34,6 +34,12 @@
 #     MADOperationCreateDocument*.m       five operations that build one
 #     MADOperationDeleteFile.m            file management on a document
 #     MADOperationDocumentCloseDocument.m closes one
+#     MADOperationRefresh.m               the refresh chain: typed to MADocument,
+#     MADOperationRefreshInitialize.m     and the Initialize one builds the
+#     MADOperationRefreshInitalizeMainDataTable.m  report formatter and section
+#       layout managers.  They moved here from the application target
+#       (ROADMAP.md §3.4) and compile with it once Phase D's headless document
+#       path exists; the drivers they construct go through the registry.
 #
 #   The keychain (§4): MADOperationKeyChain{Get,Put,DeletePassword}.m --
 #   the refresh path takes credentials from an operation dependency, never

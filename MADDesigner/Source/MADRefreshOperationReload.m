@@ -9,7 +9,7 @@
 #import "MADRefreshOperationReload.h"
 
 #import "MADOperationRefreshReloadProtocol.h"
-#import "MADOperationRefresh.h"
+#import <MAD/MADOperationRefresh.h>
 #import <MADFoundation/madlog.h>
 
 #import <MAD/MADocument.h>

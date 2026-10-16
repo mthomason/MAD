@@ -54,14 +54,9 @@ readonly TRANSFORMERS=(
 	"${REPO_ROOT}/MADDesigner/Resources/MADFileDefinition/MADPngImageTransformer.m"
 )
 
-# The refresh chain, compiled in from the application target.  MAD_CLI.md section 4.1
-# says these belong in the MAD framework; until they move, this is what keeps the CLI
-# and the application running the same code rather than two copies of it.
-readonly REFRESH_SOURCES=(
-	"${REPO_ROOT}/MADDesigner/Source/MADOperationRefresh.m"
-	"${REPO_ROOT}/MADDesigner/Source/MADOperationRefreshInitialize.m"
-	"${REPO_ROOT}/MADDesigner/Source/MADOperationRefreshInitalizeMainDataTable.m"
-)
+# The refresh chain used to be compiled in from the application target; it lives in
+# the MAD framework now (MAD_CLI.md section 4.1, ROADMAP.md §3.4), so the tool takes
+# it from -framework MAD like the rest.
 
 # The legacy store converter, compiled in from the application target for the same
 # reason: the MAD framework no longer links Core Data (MAD_LINUX.md), so a process
@@ -111,7 +106,6 @@ compile_tool() {
 		-Wl,-rpath,"${PRODUCTS}" \
 		"${SCRIPT_DIR}"/Source/*.m \
 		"${TRANSFORMERS[@]}" \
-		"${REFRESH_SOURCES[@]}" \
 		"${LEGACY_SOURCES[@]}" \
 		-o "${OUTPUT}"
 

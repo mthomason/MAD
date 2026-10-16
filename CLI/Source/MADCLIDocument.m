@@ -6,12 +6,12 @@
 #import "MADCLIDocument.h"
 #import "MADCLI.h"
 
-// The refresh chain.  These live in the application target; the CLI compiles them in
-// rather than copying them, so the two cannot drift.  MAD_CLI.md section 4.1 says
-// they belong in the MAD framework, and they will move there.
-#import "MADOperationRefresh.h"
-#import "MADOperationRefreshInitialize.h"
-#import "MADOperationRefreshInitalizeMainDataTable.h"
+// The refresh chain.  It lives in the MAD framework (it used to be compiled in from
+// the application target), so the CLI and the application run the same code by
+// linking it rather than by copying it.  MAD_CLI.md section 4.1, ROADMAP.md §3.4.
+#import <MAD/MADOperationRefresh.h>
+#import <MAD/MADOperationRefreshInitialize.h>
+#import <MAD/MADOperationRefreshInitalizeMainDataTable.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MADConstants.h>

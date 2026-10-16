@@ -8,9 +8,9 @@
 
 #import "MADOperationRefreshReload.h"
 #import "MADOperationGetCredentials.h"
-#import "MADOperationRefreshInitalizeMainDataTable.h"
-#import "MADOperationRefreshInitialize.h"
-#import "MADOperationRefresh.h"
+#import <MAD/MADOperationRefreshInitalizeMainDataTable.h>
+#import <MAD/MADOperationRefreshInitialize.h>
+#import <MAD/MADOperationRefresh.h>
 #import "MADRefreshOperationReload.h"
 #import "MADOperationRefreshReloadProtocol.h"
 #import <MADFoundation/madlog.h>
