@@ -1629,7 +1629,7 @@ Status key:
   -testRefreshIsSilentWhenTheLastMatchingFileIsGone`.
 
 ### `MADDirectoryMonitor`'s cancel handler dereferences a nil owner — SIGSEGV on dealloc
-- **Status:** Open (found by test 2026-10-06; not fixed)
+- **Status:** Fixed
 - **Where:** `MADFileManager/Source/MADDirectoryMonitor.m:99-104`
 - **Behavior:** Both handlers load their owner weakly
   (`MADDirectoryMonitor __weak *weakself = self;` at `.m:70`) and then use it
@@ -1654,14 +1654,21 @@ Status key:
   the caller to avoid it other than keeping the monitor alive until the cancel
   handler has run, which no caller does.  The same missing guard leaves the
   event handler one weak-load away from `dispatch_source_get_data(NULL)`.
-- **Fix sketch:** the cancel handler is the last user of the monitor, so it can
-  capture `self` **strongly** — the handler already sets
-  `directoryMonitorSource = nil`, which breaks the source→block→self→source
-  cycle on the one and only cancel.  (A bare `if (sself == nil) return;` would
-  stop the fault but leak the descriptor, which is why the handler exists.)
-- **Pinned by:** the crash report above; `MADDirectoryMonitorTests` works around
-  it everywhere (each monitor is stopped and the run loop drained before the
-  test releases it — `-stopAndDrain:` and `-tearDown`).
+- **Now:** the cancel handler captures the owner **strongly** and closes the descriptor
+  through it; the `directoryMonitorSource = nil` on its last line is what breaks the
+  source→block→self→source cycle, on its one and only run, so the monitor is released by
+  the handler instead of faulting in it.  The event handler keeps its weak load — a
+  strong capture there would hold the monitor for the whole life of the source — and
+  nil-checks it, since the same missing guard left it one weak-load away from
+  `dispatch_source_get_data(NULL)` (and, off Apple, from the same direct ivar read).
+- **Locked down by:** `MADDirectoryMonitorTests
+  testReleasingAMonitorWithACancelPendingDoesNotCrash`, on both platforms.  It suspends
+  the monitor's queue so the cancel handler cannot have run before the monitor is
+  released, releases it, then resumes the queue: the old code faults there (the iOS run
+  reports "Restarting after unexpected exit, crash, or test timeout" with zero tests
+  executed), and with the fix the test also asserts the monitor really was released, so
+  a fix that leaked the owner would fail too.  (The stop-and-drain in the other tests
+  is no longer load-bearing; it is left as it was.)
 
 ### `MADCloudFileCoordinator -init…` writes `_documentsDirectory` through a weak self — SIGSEGV
 - **Status:** Open (found by test 2026-10-06; not fixed)

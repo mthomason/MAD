@@ -13,12 +13,13 @@
 //  exist opens no descriptor and silently refuses to start -- that is the
 //  current contract, not an error path.
 //
-//  Every monitor here is stopped and drained before it is released.  The
-//  source's cancel handler loads its owner through a weak reference and then
-//  dereferences it directly, so releasing a monitor with a cancel still pending
-//  segfaults in the handler (SIGSEGV at 0x8 in
-//  -[MADDirectoryMonitor startMonitoring]_block_invoke.2).  See BUGS.md; the
-//  stop-and-drain is the workaround, not the fix.
+//  The source's cancel handler used to load its owner through a weak reference
+//  and dereference it, so releasing a monitor with a cancel still pending
+//  segfaulted in the handler (SIGSEGV at 0x8 in
+//  -[MADDirectoryMonitor startMonitoring]_block_invoke.2).  The handler now holds
+//  the monitor for its one and only run, which the last test below exercises --
+//  holding the queue so the handler cannot have run first; see BUGS.md.  The
+//  other monitors here are still stopped and drained before release.
 //
 
 #import <XCTest/XCTest.h>
@@ -43,6 +44,23 @@
 
 - (void)directoryMonitorDidObserveChange:(MADDirectoryMonitor *)directoryMonitor {
 	self.changeCount++;
+}
+
+@end
+
+#pragma mark - Lifetime spy
+
+static BOOL MADSpyMonitorDeallocated = NO;
+
+// Records that the monitor really was released: a fix that kept the cancel
+// handler's owner alive forever would leak it, and the flag would stay NO.
+@interface MADLifetimeSpyMonitor : MADDirectoryMonitor
+@end
+
+@implementation MADLifetimeSpyMonitor
+
+- (void)dealloc {
+	MADSpyMonitorDeallocated = YES;
 }
 
 @end
@@ -163,6 +181,27 @@
 	}
 
 	XCTAssertGreaterThan(delegate.changeCount, (NSUInteger)0);
+}
+
+- (void)testReleasingAMonitorWithACancelPendingDoesNotCrash {
+	// BUGS.md: with the cancel pending, the handler used to dereference a nil owner.
+	// The source's queue is held down so the handler cannot have run before the
+	// monitor is released, then let go: the handler runs with nothing else retaining
+	// the monitor.  Against the old code the process faults here; with the fix the
+	// handler is the monitor's last owner and releases it when it finishes.
+	MADSpyMonitorDeallocated = NO;
+	MADLifetimeSpyMonitor *monitor = [[MADLifetimeSpyMonitor alloc] initWithURL:self.directory];
+	[monitor startMonitoring];
+	dispatch_queue_t queue = [monitor valueForKey:@"directoryMonitorQueue"];
+	XCTAssertNotNil(queue);
+
+	dispatch_suspend(queue);
+	[monitor stopMonitoring];
+	monitor = nil;
+	dispatch_resume(queue);
+
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.25]];
+	XCTAssertTrue(MADSpyMonitorDeallocated);
 }
 
 - (void)testStoppedMonitorStopsObserving {

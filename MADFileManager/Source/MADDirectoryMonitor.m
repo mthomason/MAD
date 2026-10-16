@@ -100,6 +100,10 @@ static const int NotListening = -1;
 		dispatch_source_set_event_handler(self.directoryMonitorSource, ^{
 
 			MADDirectoryMonitor *sself = weakself;
+			// A monitor released with its source still live leaves the handler nothing
+			// to observe; the message sends below would survive nil, but the direct
+			// reads would not.
+			if (sself == nil) return;
 #if __APPLE__
 			dispatch_source_proc_flags_t flags = dispatch_source_get_data(sself.directoryMonitorSource);
 			switch (flags) {
@@ -135,10 +139,13 @@ static const int NotListening = -1;
 		});
 
 		dispatch_source_set_cancel_handler(self.directoryMonitorSource, ^{
-			MADDirectoryMonitor *sself = weakself;
-			close(sself->_fileDescriptor);
-			sself->_fileDescriptor = NotListening;
-			sself.directoryMonitorSource = nil;
+			// The cancel handler is the monitor's last user, and it closes the descriptor
+			// the owner holds -- so it captures the owner strongly, not weakly.  The nil
+			// assignment below is what breaks the source -> block -> self -> source cycle,
+			// on this one and only run.
+			close(self->_fileDescriptor);
+			self->_fileDescriptor = NotListening;
+			self.directoryMonitorSource = nil;
 		});
 		dispatch_resume(self.directoryMonitorSource);
 	}

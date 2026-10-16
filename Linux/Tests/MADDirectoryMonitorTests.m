@@ -12,11 +12,12 @@
 //  pointer-typed state ("Unable to find value for key"), so Linux reads the
 //  synthesized ivar through the runtime instead (MADMonitorSourcePointer).
 //
-//  Every monitor here is stopped and drained before it is released.  The
-//  source's cancel handler loads its owner through a weak reference and then
-//  dereferences it directly, so releasing a monitor with a cancel still pending
-//  segfaults in the handler.  See BUGS.md; the stop-and-drain is the
-//  workaround, not the fix.
+//  The source's cancel handler used to load its owner through a weak reference
+//  and dereference it, so releasing a monitor with a cancel still pending
+//  segfaulted in the handler.  The handler now holds the monitor for its one and
+//  only run, which the last test below exercises -- holding the queue so the
+//  handler cannot have run first; see BUGS.md.  The other monitors here are
+//  still stopped and drained before release.
 //
 
 #import "MADTestSupport.h"
@@ -45,6 +46,24 @@
 
 @end
 
+#pragma mark - Lifetime spy
+
+static BOOL MADSpyMonitorDeallocated = NO;
+
+// Records that the monitor really was released: a fix that kept the cancel
+// handler's owner alive forever would leak it, and the flag would stay NO.
+@interface MADLifetimeSpyMonitor : MADDirectoryMonitor
+@end
+
+@implementation MADLifetimeSpyMonitor
+
+- (void)dealloc {
+	MADSpyMonitorDeallocated = YES;
+	[super dealloc];
+}
+
+@end
+
 #pragma mark - Fixture helpers
 
 static NSURL *MADMonitorMakeTempDirectory(void) {
@@ -59,13 +78,19 @@ static void MADMonitorRemoveTempDirectory(NSURL *directory) {
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
 }
 
-// Cancelling a source is asynchronous.  The cancel handler reads its owner
-// through a weak reference and dereferences it without a nil check, so a
-// monitor released before the handler runs crashes the process (BUGS.md).
-// Stopping here and letting the queue drain keeps the owner alive long enough.
+// Cancelling a source is asynchronous, so stopping here and letting the queue
+// drain releases nothing until the handler has run.
 static void MADMonitorStopAndDrain(MADDirectoryMonitor *monitor) {
 	[monitor stopMonitoring];
 	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.25]];
+}
+
+// The queue is a plain C pointer off Apple, so GNUstep's KVC refuses it; read
+// the synthesized ivar through the runtime, as MADMonitorSourcePointer does.
+static const void *MADMonitorQueuePointer(MADDirectoryMonitor *monitor) {
+	Ivar ivar = class_getInstanceVariable([MADDirectoryMonitor class], "_directoryMonitorQueue");
+	return ivar == NULL ? NULL
+		: *(void *const *)((const char *)(__bridge const void *)monitor + ivar_getOffset(ivar));
 }
 
 // On Apple the source is an object and KVC answers it (nil before it is
@@ -200,10 +225,35 @@ static void testStoppedMonitorStopsObserving(void) {
 	MADMonitorRemoveTempDirectory(directory);
 }
 
+static void testReleasingAMonitorWithACancelPendingDoesNotCrash(void) {
+	// BUGS.md: with the cancel pending, the handler used to dereference a nil owner.
+	// The source's queue is held down so the handler cannot have run before the
+	// monitor is released, then let go: the handler runs with nothing else retaining
+	// the monitor.  Against the old code the process faults here; with the fix the
+	// handler is the monitor's last owner and releases it when it finishes.
+	MADSpyMonitorDeallocated = NO;
+	NSURL *directory = MADMonitorMakeTempDirectory();
+	MADLifetimeSpyMonitor *monitor = [[MADLifetimeSpyMonitor alloc] initWithURL:directory];
+	[monitor startMonitoring];
+	dispatch_queue_t queue = (dispatch_queue_t)MADMonitorQueuePointer(monitor);
+	MAD_PASS(queue != NULL, "the source's queue exists");
+
+	dispatch_suspend(queue);
+	[monitor stopMonitoring];
+	[monitor release];
+	dispatch_resume(queue);
+
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.25]];
+	MAD_PASS(MADSpyMonitorDeallocated, "the monitor is released only by its cancel handler");
+
+	MADMonitorRemoveTempDirectory(directory);
+}
+
 MAD_TEST_MAIN("MADDirectoryMonitorTests",
 	MAD_TEST(testInitStoresTheURLAndReportsNoDescriptor),
 	MAD_TEST(testStartMonitoringAMissingDirectoryIsANoOp),
 	MAD_TEST(testStartingTwiceKeepsOneSource),
 	MAD_TEST(testStopMonitoringWithoutStartingIsSafe),
 	MAD_TEST(testObservesAChangeInTheMonitoredDirectory),
-	MAD_TEST(testStoppedMonitorStopsObserving));
+	MAD_TEST(testStoppedMonitorStopsObserving),
+	MAD_TEST(testReleasingAMonitorWithACancelPendingDoesNotCrash));
