@@ -259,7 +259,10 @@ static NSDictionary *MADStoreProjectionForQueryLink(RptqQueryLinks *link) {
 																			   type: NSEqualToPredicateOperatorType
 																			options: 0];
 				fresults = [results filteredArrayUsingPredicate:predicateTable];
-				
+				// No rows for this table id: there is nothing to build, and the
+				// registration below would send a nil table to the dictionary.
+				if (fresults.count == 0) continue;
+
 				NSUInteger resultCounter = 0;
 				MADModelQueryTable *queryTable;
 				for (filteredResult in fresults) {
