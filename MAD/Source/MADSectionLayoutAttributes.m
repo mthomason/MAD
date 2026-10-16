@@ -61,12 +61,14 @@
 
 + (void)movePlacedItem:(MADSectionLayoutAttributes *)placedItem
 	 intersectingItems:(NSArray <MADSectionLayoutAttributes *> *)allItems {
-	
+
 	CGPoint dropPoint = CGPointZero;
 	double distance = MADDistance(placedItem.frame.origin, dropPoint);
+	BOOL hasOtherItem = NO;
 	for (MADSectionLayoutAttributes *item in allItems) {
 		if (placedItem.objectID != item.objectID) {
-			
+			hasOtherItem = YES;
+
 			NSArray *array = [item copyDropPoints];
 			for (NSValue *v in array) {
 				double tmpDistance = MADDistance(placedItem.frame.origin, v.CGPointValue);
@@ -74,10 +76,13 @@
 					dropPoint = v.CGPointValue;
 					distance = tmpDistance;
 				}
-			
+
 			}
 		}
 	}
+	// With no other item to snap against, the origin is not a drop point: the item
+	// stays where it was placed.
+	if (!hasOtherItem) return;
 	placedItem.frame = CGRectMake(dropPoint.x, dropPoint.y, placedItem.frame.size.width, placedItem.frame.size.height);
 }
 

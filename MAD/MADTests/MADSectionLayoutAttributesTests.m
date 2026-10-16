@@ -11,10 +11,10 @@
 //
 //    * -validDropPoint:givenPlacedItems: does not skip the receiver, so a drop that
 //      coincides with the receiver's own frame is reported as invalid.
-//    * -placeItemGivenAttributes: only ever considers {CGPointZero} plus the corners
-//      of the *other* items, and starts measuring from the distance to CGPointZero --
-//      so with no other items it snaps the item to the origin, and a far corner never
-//      wins over the origin.
+//    * -placeItemGivenAttributes: considers {CGPointZero} plus the corners of the
+//      *other* items, measuring from the distance to CGPointZero -- so a far corner
+//      never wins over the origin.  With no other item at all there is nothing to
+//      snap to and the item stays where it was placed.
 //    * -moveOnScreen only corrects negative origins; items beyond the right or bottom
 //      edge are left alone.
 //
@@ -159,19 +159,20 @@
 
 #pragma mark - placeItemGivenAttributes:
 
-- (void)testPlaceItemWithNoOtherItemsSnapsToTheOrigin {
+- (void)testPlaceItemWithNoOtherItemsStaysWhereItWas {
 	MADSectionLayoutAttributes *item = [self attributeWithID:1 frame:CGRectMake(10.0, 10.0, 20.0, 20.0)];
 
-	// Characterization of the quirk: the candidate set is only the origin plus the
-	// corners of other items, so with none the item lands on CGPointZero.
+	// Nothing to snap against: the origin is not a drop point, so an item that was
+	// already somewhere sensible stays there.  (It used to be yanked to CGPointZero.)
 	[item placeItemGivenAttributes:@[]];
-	XCTAssertTrue(CGRectEqualToRect(item.frame, CGRectMake(0.0, 0.0, 20.0, 20.0)));
+	XCTAssertTrue(CGRectEqualToRect(item.frame, CGRectMake(10.0, 10.0, 20.0, 20.0)));
 
+	// The item itself is not a thing to snap against either.
 	MADSectionLayoutAttributes *again = [self attributeWithID:2 frame:CGRectMake(10.0, 10.0, 20.0, 20.0)];
 	MADSectionLayoutAttributes *sameObject = [self attributeWithID:2 frame:CGRectMake(80.0, 80.0, 5.0, 5.0)];
 	NSArray <MADSectionLayoutAttributes *> *onlySelf = @[ sameObject ];
 	[again placeItemGivenAttributes:onlySelf];
-	XCTAssertTrue(CGRectEqualToRect(again.frame, CGRectMake(0.0, 0.0, 20.0, 20.0)));
+	XCTAssertTrue(CGRectEqualToRect(again.frame, CGRectMake(10.0, 10.0, 20.0, 20.0)));
 }
 
 - (void)testPlaceItemSnapsToTheNearestOtherCorner {

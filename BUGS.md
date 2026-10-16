@@ -1026,17 +1026,24 @@ Status key:
   testCopyCarriesItemAndIndexesButNotTheDelegate`.
 
 ### `MADSectionLayoutAttributes +movePlacedItem:` teleports an isolated item to the origin
-- **Status:** Confirmed (live defect)
+- **Status:** Fixed
 - **Where:** `MAD/Source/MADSectionLayoutAttributes.m:62-82`
-- **Behavior:** The candidate drop point starts as `CGPointZero` with its distance
+- **Behavior:** The candidate drop point started as `CGPointZero` with its distance
   measured from the item's own origin, so when there is no *other* item to snap
   against, the loop never replaces the candidate and the item's frame is set to
   `(0, 0, w, h)` -- the origin, not a nearby valid point.  An item that was already
   somewhere sensible is yanked to the top-left the first time layout runs while it is
   alone.
-- **Test:** `MADSectionLayoutAttributesTests testPlaceItemWithNoOtherItemsSnapsToTheOrigin`
-  (characterization) and `testPlaceItemSnapsToTheNearestOtherCorner` (the
-  with-neighbours half).
+- **Now:** the loop records whether there was another item to snap against at all, and
+  with none the item keeps the frame it had.  In the with-neighbours case the search
+  is unchanged: the origin is still the floor a far corner must beat, which is the
+  shape the neighbouring tests pin.
+- **Locked down by:** `MADSectionLayoutAttributesTests
+  testPlaceItemWithNoOtherItemsStaysWhereItWas` (renamed from
+  `testPlaceItemWithNoOtherItemsSnapsToTheOrigin`, which pinned the teleport), both
+  halves of it confirmed failing before the fix;
+  `testPlaceItemSnapsToTheNearestOtherCorner` and
+  `testPlaceItemPrefersTheOriginOverADistantCorner` still pass unchanged.
 
 ### `MADSectionLayoutManager -removeItemWithID:` corrupts indexes for an unknown ID
 - **Status:** Confirmed (latent)
