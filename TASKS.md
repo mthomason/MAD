@@ -350,11 +350,13 @@ own `MADURLFactory` rule, so it cannot drift. Music's cache reads 15.0 MB and is
 now visible side by side — the `{0, 0}` vs `{612, 792}` question in `MAD_FORMAT.md` §5.3 is
 reportable instead of hand-measured.
 
-**Not first:** moving `MADOperationRefresh` into `MAD`. The refresh chain reaches
-`MADDatabase+Constructor`, which imports all three drivers, so the move re-asserts the
-`MAD`↔drivers cycle that `ROADMAP.md` §5.1 exists to cut. Do it together with the driver
-registry, not before. Until then `CLI/build.sh`'s `REFRESH_SOURCES` compiles it across the
-target boundary and it works.
+**Done 2026-10-16, with the driver registry.** `MADOperationRefresh`,
+`MADOperationRefreshInitialize` and `MADOperationRefreshInitalizeMainDataTable` moved from
+the application target into `MAD` (`e0741a187`), in one change with
+`MADDatabaseDriverRegistry`: the constructor looks a driver up by `MADDatabaseType`
+(`61991e85f`) instead of importing MySQL and TDS, so the refresh chain no longer re-asserts
+the cycle. `CLI/build.sh`'s `REFRESH_SOURCES` is gone; the CLI takes the chain from
+`-framework MAD`.
 
 ---
 
@@ -541,7 +543,12 @@ Not to be started without the user asking for it by name.
 frameworks compile and link inside the Linux image, their suites run under
 ctest, and the remaining exclusions are named with reasons in each
 `Linux/cmake/<Name>Sources.cmake`. Phase D — the CLI/data-path checkpoint —
-is the next step and has not been started.
+landed 2026-10-16 and is written up in `Linux/README.md` and `MAD_LINUX.md` §9:
+`mad` builds and runs in the image, `inspect`/`schema`/`query`/`refresh` are
+green against the fixtures in `CLI/Fixtures/` and against live MySQL and SQL
+Server, 117 executables (1153 tests) pass under ctest, and the document
+question is settled with `MADDocumentDataProtocol` + `MADHeadlessDocument`
+(user's choice, 2026-10-16).
 
 **The audit, re-run 2026-10-06 before the work and again at the end** (files
 matching the pattern, `*.m`/`*.h`/`*.c`, `.xcodeproj` excluded). Before:
@@ -633,12 +640,14 @@ the framework's `cmake/<Name>Sources.cmake`. `MADExplorer`, `MADBarcodes`,
 `MADFeedback` and `Scrimpter` are not built at all (§3's table).
 
 **Follow-ups carried forward:**
-* the driver registry (`ROADMAP.md` §5.1) — it breaks the `MAD` ↔ drivers cycle
-  and is what lets a Linux build link drivers as plugins; `MADOperationRefresh`
-  does not move into `MAD` until it exists (§7);
-* `MADocument` and `MADReportFormatter` — the CLI's export path reaches both
-  (they are UIDocument-facing); the framework's own reading path
-  (`MADCLIContainer`) does not. Phase D's to settle, together with the CLI’s
-  own build on Linux;
+* ~~the driver registry (`ROADMAP.md` §5.1)~~ — done 2026-10-16 (`61991e85f`):
+  `MADDatabaseDriverRegistry` registers the drivers, the constructor looks them
+  up, and the Linux build whole-archives the driver archives so their categories
+  and `+load`s survive the static link;
+* ~~`MADocument` and `MADReportFormatter`~~ — settled 2026-10-16 by the user's
+  choice of a headless document path: `MADDocumentDataProtocol` is the data
+  half, `MADHeadlessDocument` implements it, `MADocument` conforms unchanged, and
+  the refresh chain runs against either. `MADReportFormatter` stays Apple-only
+  and so does `mad export` (§8);
 * the toolchain and library components' licence-register entries (§10) — Phase
   F work, at the moment an image ships.

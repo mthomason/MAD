@@ -11,7 +11,7 @@
 #import "MADCLI.h"
 #import "MADCLIDocument.h"
 
-#import <MAD/MADocument.h>
+#import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseSchemaTable.h>

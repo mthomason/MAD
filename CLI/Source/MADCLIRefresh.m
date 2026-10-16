@@ -8,7 +8,7 @@
 #import "MADCLI.h"
 #import "MADCLIDocument.h"
 
-#import <MAD/MADocument.h>
+#import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADQueryFull.h>
 #import <MADFoundation/MADCredential.h>
 

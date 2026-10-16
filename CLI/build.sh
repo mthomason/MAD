@@ -11,6 +11,7 @@
 #    CLI/build.sh                     build the frameworks, then the tool
 #    CLI/build.sh --no-frameworks     build only the tool (fast; use while iterating)
 #    CLI/build.sh --run ...           build, then run the tool with the arguments given
+#    CLI/build.sh --make-fixture ...   run Fixtures/MADFixtureMaker (Fixtures/README.md)
 #
 #  The build directory is CLI/build, which is ignored by git.
 
@@ -24,6 +25,7 @@ readonly BUILD_DIR="${SCRIPT_DIR}/build"
 readonly DERIVED_DATA="${MAD_DERIVED_DATA:-${REPO_ROOT}/.cli-deriveddata}"
 readonly PRODUCTS="${DERIVED_DATA}/Build/Products/Debug-iphonesimulator"
 readonly OUTPUT="${BUILD_DIR}/mad"
+readonly FIXTURE_OUTPUT="${BUILD_DIR}/mad-fixture-maker"
 
 # The frameworks the tool links, in dependency order.  MADFoundation first is not
 # required by the linker, but keeping the list readable is worth something.
@@ -129,6 +131,45 @@ sign_tool() {
 		--entitlements "${SCRIPT_DIR}/mad.entitlements" \
 		"${OUTPUT}"
 }
+
+# The fixture maker: the same compile, with Fixtures/MADFixtureMaker.m in place of
+# Source/main.m.  It opens and saves a document (the app's own path), which is how
+# a legacy sample becomes a portable fixture the Linux CLI can read -- see
+# Fixtures/README.md.
+compile_fixture_maker() {
+	mkdir -p "${BUILD_DIR}"
+	echo "Compiling mad-fixture-maker..."
+	xcrun --sdk iphonesimulator clang \
+		-fobjc-arc \
+		-g -O0 \
+		-target arm64-apple-ios15.0-simulator \
+		-DNS_BLOCK_ASSERTIONS=1 \
+		-I "${SCRIPT_DIR}/Source" \
+		-I "${REPO_ROOT}/MAD/Source" \
+		-I "${REPO_ROOT}/MADDesigner/Source" \
+		-I "${REPO_ROOT}/MADDesigner/Source/MADStoreLegacy" \
+		-I "${REPO_ROOT}/MADDesigner/Resources/MADFileDefinition" \
+		-F "${PRODUCTS}" \
+		$(framework_flags) \
+		-framework CoreData \
+		-framework CoreGraphics \
+		-framework UIKit \
+		-Wl,-rpath,"${PRODUCTS}" \
+		"${SCRIPT_DIR}/Fixtures/MADFixtureMaker.m" \
+		"${TRANSFORMERS[@]}" \
+		"${LEGACY_SOURCES[@]}" \
+		-o "${FIXTURE_OUTPUT}"
+
+	rm -rf "${BUILD_DIR}/MAD.momd"
+	cp -R "${PRODUCTS}/MAD Designer.app/MAD.momd" "${BUILD_DIR}/MAD.momd"
+}
+
+if [[ "${1:-}" == "--make-fixture" ]]; then
+	shift
+	build_frameworks
+	compile_fixture_maker
+	exec env SIMCTL_CHILD_MAD_HOST_CWD="${PWD}" xcrun simctl spawn booted "${FIXTURE_OUTPUT}" "$@"
+fi
 
 if [[ "${1:-}" == "--no-frameworks" ]]; then
 	shift

@@ -24,6 +24,15 @@ MADCLIExitCode MADCLIRunExport(MADCLIInvocation *invocation) {
 		return MADCLIExitUsage;
 	}
 
+#if !__APPLE__
+	// PDF is a Core Graphics context drawn by a UIPrintPageRenderer; neither exists
+	// off Apple, and the renderer decision (cairo/libharu, HTML/SVG first, or
+	// macOS-side workers) is Phase E's to take (MAD_LINUX.md §5.2).  Saying so is
+	// better than refreshing data for a page that cannot be drawn.
+	MADCLIError(@"export: --format pdf is not available in this build; the renderer is Apple-only (MAD_LINUX.md §5.2).");
+	return MADCLIExitExportFailed;
+#else
+
 	NSURL *outURL = [NSURL fileURLWithPath: MADCLIResolveArgumentPath(invocation.outPath)];
 
 	// CGPDFContext will not create the directory, and it fails in a way that reads as
@@ -78,4 +87,5 @@ MADCLIExitCode MADCLIRunExport(MADCLIInvocation *invocation) {
 			  attributes[NSFileSize] ?: @"?", (unsigned long)cliDocument.pageCount);
 
 	return MADCLIExitSuccess;
+#endif
 }

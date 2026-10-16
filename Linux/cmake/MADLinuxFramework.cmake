@@ -21,7 +21,7 @@ function(mad_make_include_shim framework source_dir)
 endfunction()
 
 # mad_add_framework(<library-target> <sources-variable> [<test> ...])
-# Builds the framework's source list (plus the compat prelude's shim) as a
+# Builds the framework's source list (plus the compat prelude's headers) as a
 # static library, ARC on, whole-archive at the test link so categories survive,
 # and registers each named test file with ctest.  A framework with C++ files
 # (MADDataStructures) puts them in the source list as .mm; the language is
@@ -30,8 +30,7 @@ endfunction()
 # set_source_files_properties beside its mad_add_framework call.
 function(mad_add_framework library sources_var)
 	add_library(${library} STATIC
-		${${sources_var}}
-		${MAD_COMPAT_SOURCES})
+		${${sources_var}})
 	target_include_directories(${library} PUBLIC "${SHIM_DIR}" PRIVATE "${MAD_COMPAT_DIR}")
 	target_compile_definitions(${library} PRIVATE $<$<CONFIG:Debug>:DEBUG=1>)
 	target_compile_options(${library} PRIVATE
@@ -52,7 +51,9 @@ endfunction()
 # Apple's -ObjC: the framework's categories (NSData+Comparison,
 # NSOperation+Advanced, the NSOperation name shim) and any unreferenced class
 # would otherwise be dropped from the static archive before the runtime sees
-# them.
+# them.  madcompat -- the compat shims, one archive of their own -- is whole-
+# archived for the same reason: every shim is a category or a category's
+# client, reached by message send.
 function(mad_add_test name library)
 	add_executable(${name} "Tests/${name}.m")
 	target_include_directories(${name} PRIVATE
@@ -62,6 +63,8 @@ function(mad_add_test name library)
 		-Wall
 		$<$<COMPILE_LANGUAGE:OBJC>:-fno-objc-arc>
 		${MAD_OBJC_PRELUDE})
-	target_link_libraries(${name} PRIVATE "$<LINK_LIBRARY:WHOLE_ARCHIVE,${library}>")
+	target_link_libraries(${name} PRIVATE
+		"$<LINK_LIBRARY:WHOLE_ARCHIVE,${library}>"
+		"$<LINK_LIBRARY:WHOLE_ARCHIVE,madcompat>")
 	add_test(NAME ${name} COMMAND ${name})
 endfunction()

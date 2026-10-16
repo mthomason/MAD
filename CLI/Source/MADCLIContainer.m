@@ -6,14 +6,15 @@
 #import "MADCLIContainer.h"
 #import "MADCLI.h"	// for the exit codes the errors carry
 
-// Not a public framework header, so the build adds MAD/Source to the include path
-// rather than the CLI copying the archive code.  Reusing the app's archiver is the
-// point: two implementations of the container would be two things to keep in step.
-#import "MADArchiveManager.h"
+// Reusing the app's archiver is the point: two implementations of the container
+// would be two things to keep in step.  MADArchiveManager is a public MAD header,
+// so this resolves on both platforms without an extra include path.
+#import <MAD/MADArchiveManager.h>
 
 static NSString * const MADCLIMetaPlistName		= @"meta.plist";
 static NSString * const MADCLIStoreDirectory	= @"StoreContent";
 static NSString * const MADCLIStoreName			= @"analyitics";	// misspelled on disk; see MAD_FORMAT.md section 2
+static NSString * const MADCLIPortableStoreName	= @"store.sqlite";	// MAD_DocumentStore's name for it
 static NSString * const MADCLIAdditionalContent	= @"AdditionalContent";
 
 static const char MADCLIMagic[8] = { 'M', 'A', 'D', 'F', 'I', 'L', 'E', '\0' };
@@ -136,20 +137,47 @@ NSString *MADCLISQLiteVersionString(uint32_t versionNumber) {
 #pragma mark - Members
 
 - (NSURL *)storeURL {
-	return [[self.gutsURL URLByAppendingPathComponent: MADCLIStoreDirectory isDirectory: YES]
-			URLByAppendingPathComponent: MADCLIStoreName];
+	NSURL *directory = [self.gutsURL URLByAppendingPathComponent: MADCLIStoreDirectory isDirectory: YES];
+	NSURL *portable = [directory URLByAppendingPathComponent: MADCLIPortableStoreName];
+	if ([[NSFileManager defaultManager] fileExistsAtPath: portable.path]) {
+		return portable;
+	}
+	NSURL *legacy = [directory URLByAppendingPathComponent: MADCLIStoreName];
+	if ([[NSFileManager defaultManager] fileExistsAtPath: legacy.path]) {
+		return legacy;
+	}
+	return nil;
+}
+
+- (MADCLIContainerStoreKind)storeKind {
+	NSURL *directory = [self.gutsURL URLByAppendingPathComponent: MADCLIStoreDirectory isDirectory: YES];
+	if ([[NSFileManager defaultManager] fileExistsAtPath:
+		 [directory URLByAppendingPathComponent: MADCLIPortableStoreName].path]) {
+		return MADCLIContainerStoreKindPortable;
+	}
+	if ([[NSFileManager defaultManager] fileExistsAtPath:
+		 [directory URLByAppendingPathComponent: MADCLIStoreName].path]) {
+		return MADCLIContainerStoreKindLegacyCoreData;
+	}
+	return MADCLIContainerStoreKindNone;
+}
+
+// The journal siblings are named after whichever store is there: analyitics-wal
+// for a legacy Core Data document, store.sqlite-wal for a portable one.
+- (NSURL *)journalURLWithSuffix:(NSString *)suffix {
+	NSURL *store = self.storeURL;
+	if (store == nil) return nil;
+	NSURL *url = [store.URLByDeletingLastPathComponent
+				  URLByAppendingPathComponent: [store.lastPathComponent stringByAppendingString: suffix]];
+	return [[NSFileManager defaultManager] fileExistsAtPath: url.path] ? url : nil;
 }
 
 - (NSURL *)walURL {
-	NSURL *url = [self.storeURL.URLByDeletingLastPathComponent
-				  URLByAppendingPathComponent: [MADCLIStoreName stringByAppendingString: @"-wal"]];
-	return [[NSFileManager defaultManager] fileExistsAtPath: url.path] ? url : nil;
+	return [self journalURLWithSuffix: @"-wal"];
 }
 
 - (NSURL *)shmURL {
-	NSURL *url = [self.storeURL.URLByDeletingLastPathComponent
-				  URLByAppendingPathComponent: [MADCLIStoreName stringByAppendingString: @"-shm"]];
-	return [[NSFileManager defaultManager] fileExistsAtPath: url.path] ? url : nil;
+	return [self journalURLWithSuffix: @"-shm"];
 }
 
 - (NSURL *)additionalContentURL {
@@ -162,22 +190,13 @@ NSString *MADCLISQLiteVersionString(uint32_t versionNumber) {
 }
 
 - (NSArray <NSString *> *)memberPaths {
+	// -subpathsAtPath: rather than -enumeratorAtURL:...: GNUstep's directory
+	// enumerator drops the containing directory from the URLs it yields (measured
+	// 2026-10-16 -- file:///repo/.../London.dataset yields file:///Contents.json),
+	// and the relative paths are what this list is made of anyway.  Both platforms
+	// answer the same thing here.  See Linux/README.md.
 	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSURL *guts = self.gutsURL;
-	NSDirectoryEnumerator <NSURL *> *enumerator =
-		[fileManager enumeratorAtURL: guts
-		  includingPropertiesForKeys: nil
-							 options: 0
-						errorHandler: ^BOOL(NSURL *url, NSError *error) { return YES; }];
-
-	NSMutableArray <NSString *> *paths = [NSMutableArray array];
-	NSString *prefix = [guts.path stringByAppendingString: @"/"];
-	for (NSURL *url in enumerator) {
-		NSString *path = url.path;
-		if ([path hasPrefix: prefix]) {
-			[paths addObject: [path substringFromIndex: prefix.length]];
-		}
-	}
+	NSArray <NSString *> *paths = [fileManager subpathsAtPath: self.gutsURL.path];
 	return [paths sortedArrayUsingSelector: @selector(compare:)];
 }
 
@@ -188,7 +207,10 @@ NSString *MADCLISQLiteVersionString(uint32_t versionNumber) {
 	MADCLISQLiteHeader result;
 	memset(&result, 0, sizeof(result));
 
-	NSData *data = [NSData dataWithContentsOfURL: self.storeURL
+	NSURL *storeURL = self.storeURL;
+	if (storeURL == nil) return result;
+
+	NSData *data = [NSData dataWithContentsOfURL: storeURL
 										 options: NSDataReadingMappedIfSafe
 										   error: NULL];
 	if (data.length < 100) return result;

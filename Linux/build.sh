@@ -1,10 +1,10 @@
 #!/bin/bash
 #
-#  build.sh -- the Linux entry point (MAD_LINUX.md Phase B).
+#  build.sh -- the Linux entry point (MAD_LINUX.md §9).
 #
-#  Builds the toolchain image, compiles the MADFoundation subset and runs the
-#  Linux tests inside it.  This is the command a CI job will call later; the
-#  image is the deliverable, nothing here ships in the app.
+#  Builds the toolchain image, compiles the ten headless frameworks and the `mad`
+#  CLI inside it, and runs the Linux tests.  This is the command a CI job will
+#  call later; the image is the deliverable, nothing here ships in the app.
 #
 #  Usage:
 #    build.sh                 build the image, run the tests

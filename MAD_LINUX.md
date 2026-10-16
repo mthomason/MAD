@@ -443,6 +443,45 @@ the image against the SQL Server container (29/29), so the driver path is
 exercised on Linux, not just compiled. Phase D — the CLI and the data-path
 verbs — is the next step and the go/no-go.
 
+**Phase D status (2026-10-16).** The checkpoint is met: `mad` builds inside the
+image from `CLI/Source` (the same sources the iOS-Simulator tool is built from),
+links the ten frameworks, and runs the data path there. `inspect` reports both a
+legacy v0 sample and a portable v1 fixture; `schema` and `query` produce the same
+answers as the Mac's tool (byte-identical for `schema`); `refresh` fills the row
+cache on the Sqlite3 sample and is byte-identical to the Mac's cache when compared
+by field name (76 rows, 21 columns); and against live servers from inside the
+image, `mad refresh` pulled 50 rows from MySQL 8.4 (`employees`, a prepared-
+statement fetch) and 20 from SQL Server 2022 (`AdventureWorksLT2022`, over
+freetds). The live suites agree — `MADMySQLLiveTests` 44/44 and
+`MADTdsClientLiveTests` 29/29 in the same image — and the ctest run is 117
+executables, 1153 tests, 6 needs, all green.
+
+Two things had to be settled to get there, both recorded in `Linux/README.md`:
+
+1. **The document question (§5.1, §9 Phase D).** `MADocument` is a `UIDocument`,
+   so it cannot come along. The user's choice (2026-10-16) was a headless document
+   path, not a `UIDocument` shim in `Compat` and not a split of `MADocument`: the
+   data half of a document is now a protocol, `MADDocumentDataProtocol`, which
+   `MADocument` conforms to (every member was already one of its accessors) and
+   `MADHeadlessDocument` implements over the same `MADDocumentStore` the app's
+   document uses. The refresh chain — moved into `MAD` with the driver registry
+   (`ROADMAP.md` §3.4, §5.1) — takes the protocol, so both platforms run the same
+   `MADOperationRefresh`; its one render-side branch is `#if __APPLE__`, and
+   `mad export` (PDF, Core Graphics) stays on Apple, which is §5.2's staging.
+2. **The driver registry (§3, §5.1).** The constructor no longer imports MySQL
+   and TDS: each driver registers itself in `+load` and the constructor looks it up
+   by type. On Linux the driver archives are whole-archived, because a driver's
+   work is reached through *categories* and a category is a message send the
+   linker cannot see — the CLI aborted on MySQL until that was fixed (§ the
+   compat-archive note in `Linux/README.md`).
+
+The GNUstep divergences the CLI added: the directory enumerator
+(`-enumeratorAtURL:…` yields URLs with the containing directory stripped —
+measured, and the CLI's member list uses `-subpathsAtPath:` instead), and the
+SELECT-list column order, which is set order and therefore differs from Apple's
+(same fields, same rows; noted in `Linux/README.md`, and part of the JSON export
+shape decision, §10.1).
+
 ---
 
 ## 10. Decisions for the user

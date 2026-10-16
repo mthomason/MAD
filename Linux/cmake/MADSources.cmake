@@ -25,21 +25,17 @@
 #     UIDocument+Extras.m               UIDocument category
 #     UIFontDescriptor+MADAdditions.m   UIFontDescriptor category
 #
-#     MADReportFormatter.m              takes MADocument (UIDocument)
+#     MADReportFormatter.m              takes MADocument (UIDocument): the render half
 #
-#   The document class and its operations -- Phase D's to settle.
-#   MADocument is a UIDocument; the CLI's own document reading is
-#   MADCLIDocument/MADCLIContainer, and the store path underneath is here.
+#   The document class, and the operations that build, close or delete one --
+#   Phase D settles the rest.  MADocument is a UIDocument, so it stays out; the
+#   headless reader that replaces it for the data path is here instead
+#   (MADHeadlessDocument, on MADDocumentDataProtocol -- which the refresh chain
+#   in MADOperationRefresh* runs against, and which is now in this build).
 #     MADocument.m                        UIDocument subclass
 #     MADOperationCreateDocument*.m       five operations that build one
 #     MADOperationDeleteFile.m            file management on a document
 #     MADOperationDocumentCloseDocument.m closes one
-#     MADOperationRefresh.m               the refresh chain: typed to MADocument,
-#     MADOperationRefreshInitialize.m     and the Initialize one builds the
-#     MADOperationRefreshInitalizeMainDataTable.m  report formatter and section
-#       layout managers.  They moved here from the application target
-#       (ROADMAP.md §3.4) and compile with it once Phase D's headless document
-#       path exists; the drivers they construct go through the registry.
 #
 #   The keychain (§4): MADOperationKeyChain{Get,Put,DeletePassword}.m --
 #   the refresh path takes credentials from an operation dependency, never
@@ -59,6 +55,8 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/MADCurrencyFormatter.m"
 	"${SOURCE_DIR}/MADDataFormatter.m"
 	"${SOURCE_DIR}/MADDataTable+Constructor.m"
+	"${SOURCE_DIR}/MADDocumentStore.m"
+	"${SOURCE_DIR}/MADHeadlessDocument.m"
 	"${SOURCE_DIR}/MADDatabase+Constructor.m"
 	"${SOURCE_DIR}/MADDatabaseConnection+Constructor.m"
 	"${SOURCE_DIR}/MADDatabaseField+Constructor.m"
@@ -79,6 +77,9 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/model/MADModelTable.m"
 	"${SOURCE_DIR}/MADNotificationDidFormatPage.m"
 	"${SOURCE_DIR}/MADNotificationFileUpdate.m"
+	"${SOURCE_DIR}/MADOperationRefresh.m"
+	"${SOURCE_DIR}/MADOperationRefreshInitialize.m"
+	"${SOURCE_DIR}/MADOperationRefreshInitalizeMainDataTable.m"
 	"${SOURCE_DIR}/MADOperationUniqueUrlForFilename.m"
 	"${SOURCE_DIR}/MADPageOptions.m"
 	"${SOURCE_DIR}/MADParameters+QueryCacheAggregate.m"

@@ -122,20 +122,37 @@ The constructor used to import the drivers, which is the `MAD` ↔ drivers cycle
 driver's connection class conforms to `MADDatabaseDriver` and registers itself in
 `+load`, and `MADDatabase+Constructor` / `MADDatabaseConnection+Constructor` look a
 driver up by `MADDatabaseType` instead of naming one. Which drivers a process has
-is therefore a matter of what it *links*, and the Linux build states that twice:
+is therefore a matter of what it *links*.
 
-* the `mad` target still links `madmysql`/`madtdsclient` (and `madsqlite3`), and
-* `Compat/MADDriverLinkage.m`, compiled into `libmad.a` through `target_sources`,
-  names the three connection classes. A static archive is searched, not loaded:
-  without that reference the linker would drop each driver's object file and its
-  `+load` would never run, so this file *is* the Linux half of the mechanism.
-  `MADDatabaseDriverDispatchTests` pins it (the three drivers answer in a process
-  that links `libmad`, and the constructor builds their connections and databases).
+On Apple the host links the driver frameworks — the app and the CLI name MADMySQL
+and MADTdsClient, and `MAD.framework` no longer does, so its test bundle names them
+too. On Linux the driver archives are **whole-archived** from the `mad` target
+(`$<LINK_LIBRARY:WHOLE_ARCHIVE,…>`, which propagates to every consumer): a static
+archive is searched, not loaded, so a member nothing references — a driver's
+`+load`, or a category — is dropped otherwise. That is not a nicety; it is what
+made `mad refresh` over MySQL abort before it was fixed (§ the category below).
+`MADDatabaseDriverDispatchTests` pins the registry, and
+`Linux/Tests/MADHeadlessDocumentTests.m` drives the whole chain.
 
-On Apple the host links the driver frameworks instead — the app and the CLI name
-MADMySQL and MADTdsClient; `MAD.framework` no longer does, so its test bundle names
-them too. Adding a driver means a link entry in `Linux/CMakeLists.txt`, a line in
-`MADDriverLinkage.m`, and nothing in `MAD`.
+Adding a driver means a link entry in `Linux/CMakeLists.txt` and nothing in `MAD`.
+
+## The compat shims are an archive of their own — and why
+
+Every framework archive used to embed `Compat/*.m`. That made whole-archiving two
+of them a duplicate-symbol error, which is why exactly one category
+(`MADQuery+Sqlite3`) had been compiled into `libmad.a` by hand. The CLI found the
+cost of that arrangement: `mad refresh` against live MySQL **aborted** (SIGABRT,
+no diagnostic) because `MysqlFetch (DataTable)` — the method that runs the
+prepared statement — was a category reached by message send, so the linker had
+never pulled its object file in. `nm` showed `.objc_category_MysqlFetchDataTable`
+present in the MySQL test binary and absent from the CLI's.
+
+`madcompat` is now its own static library, whole-archived by every executable
+(`mad_add_test`, `ToolchainProbe`, `mad-cli`), and the framework archives are
+pure, so the driver archives can be whole-archived like any other code. The
+per-file `target_sources` hack is gone. The general rule this leaves: **a
+framework archive is only safe to link if it is whole-archived**; anything less
+and its categories are silently absent at runtime.
 
 ## GNUstep divergences the probe and tests found
 
@@ -281,10 +298,63 @@ LICENSE_COMPLIANCE_PLAN.md exists to settle before anything ships, and
 nothing here does. Register entries are Phase F work, at the moment an image
 ships; `TASKS.md` §10 carries the flag.
 
+## The CLI runs here — Phase D
+
+`mad` is built by this CMakeLists from `CLI/Source` (the same sources
+`CLI/build.sh` builds for the iOS Simulator), links the ten frameworks
+whole-archive, and runs in the image:
+
+	/build/mad inspect <document.mad>
+	/build/mad schema  <document.mad>
+	/build/mad query   <document.mad>
+	/build/mad refresh --credentials user:pass <document.mad>
+
+`export` is the one verb that is not here: PDF is a Core Graphics context drawn by
+a `UIPrintPageRenderer`, so it stays on Apple and says so (`MAD_LINUX.md` §5.2;
+the renderer decision is Phase E's).
+
+**How the document class was settled.** `MADocument` is a `UIDocument`, so it
+cannot come along, and `MADCLIDocument` used to be built on it. The data half of
+a document is now a protocol — `MADDocumentDataProtocol` — which `MADocument`
+conforms to (unchanged behaviour; every member was already one of its accessors)
+and `MADHeadlessDocument` implements: it opens the container and the portable
+store with `MADDocumentStore` (the store layout MADocument uses too, so the two
+cannot disagree about it), compiles the query, builds the driver-backed database
+through the registry, and holds the row table. The refresh chain takes the
+protocol, so Apple and Linux run the *same* `MADOperationRefresh` — only its one
+render-side branch (the report formatter and the section layout managers) is
+`#if __APPLE__`. The user chose this shape on 2026-10-16 over a `UIDocument` shim
+in Compat and over splitting `MADocument` itself.
+
+**The checkpoint, from inside the image** (Docker Desktop; the documents are in
+`CLI/Fixtures/`, and their host name `mac` resolves here to the Mac):
+
+| Run | Result |
+|---|---|
+| `mad inspect` on `London.mad` (the legacy sample) | v0, 6 members, store + WAL + SHM reported |
+| `mad inspect` on `London.portable.mad` | v1, 4 members, `StoreContent/store.sqlite (portable)`, 41 sections / 25 elements |
+| `mad schema` on the two portable fixtures | identical to the Mac's output, byte for byte |
+| `mad query` on the same | the same field set as the Mac; the *order* differs (below) |
+| `mad refresh` on `London.portable.mad` | 76 rows, and the row cache is identical to the Mac's (21 columns by name, 76 rows, every value equal) |
+| `mad refresh --rows 50 --credentials root:root` on `MySQL.employees.mad` | 50 rows from live MySQL 8.4 (prepared-statement fetch, database `employees`) |
+| `mad refresh --rows 20 --credentials sa:Root1@Root2` on `TDS.AdventureWorksLT2022.mad` | 20 rows from live SQL Server 2022 (freetds, `AdventureWorksLT2022`) |
+
+The live suites agree: `MADMySQLLiveTests` 44/44 and `MADTdsClientLiveTests` 29/29
+from the same image. `Linux/Tests/MADHeadlessDocumentTests.m` is the same
+checkpoint as a test — open, schema, query, driver resolution, refresh, 76 rows —
+so it fails in CI rather than in a hand-run.
+
+**Two differences worth knowing, both found here.** The SELECT list's column order
+is *set* order (`MADQueryActiveQueryFields` accumulates into an `NSSet`), so the
+same document produces a different order on Apple and on GNUstep — the same
+fields, different order; the cache's *data* is identical once compared by field
+name, and the cache's `c<hash>` column names are hash-derived, so they differ per
+platform too. Making the order deterministic would change Apple's SQL, so it is
+left as it is and recorded here; it belongs with the JSON export shape decision
+(`MAD_LINUX.md` §10.1).
+
 ## What this does not do yet
 
-Phase D — the CLI on Linux, which is the data-path checkpoint — and Phase E
-(the export formats). `MADocument`, the UIDocument subclass the CLI's export
-path reaches through `MADReportFormatter`, is the piece Phase D has to settle;
-the framework's own reading path (MADCLIContainer) does not use it. The
-Compressor Linux driver, the CI row and the deployable image are Phase F.
+Phase E (the export formats: JSON/CSV first, then HTML/SVG, then the PDF
+decision) and Phase F (the Compressor Linux driver, the CI row and the deployable
+image).

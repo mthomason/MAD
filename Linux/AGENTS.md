@@ -34,10 +34,10 @@ checkpoint, and no CI consumes it yet (Phase F does that).
     also holds `CoreGraphics/` (the CG geometry functions), `CoreFoundation/`
     (`CFNumber.h`, `CFAvailability.h`), `objc/NSObject.h` and
     `UIKit/UIGeometry.h` -- directory shims so the frameworks' Apple imports
-    resolve unchanged -- and `MADDriverLinkage.m`, the one file that names the
-    database drivers the build links (a static archive is searched, not loaded,
-    so nothing else would pull their `+load` in; see README.md and
-    `ROADMAP.md` §5.1).
+    resolve unchanged. The shims compile into **`madcompat`**, one static
+    library of their own, whole-archived by every executable; they used to be
+    copied into each framework archive, which made whole-archiving two archives
+    a duplicate-symbol error and cost the CLI a missing category (README.md).
 *   **`Tests/`** -- the ported suites, one stand-alone executable per Xcode
     test file, plus `ToolchainProbe.m` (the environment probe and its report).
     `Tests/Support/MADTestSupport.h` is the GNUstep `Testing.h` glue, shared
@@ -101,10 +101,12 @@ The recipe MADFoundation was built with, in the order it was done:
     `retain` explicitly (the ARC-compiled library balances its own copies out
     from under them otherwise).
 *   The library links whole-archive: categories in a static archive are
-    otherwise dropped, the way Apple's `-ObjC` prevents.  One file is the
-    exception, compiled into `libmad.a` through `target_sources` because
-    whole-archiving `libmadsqlite3.a` would duplicate the compat objects every
-    framework archive embeds (see `CMakeLists.txt`).
+    otherwise dropped, the way Apple's `-ObjC` prevents.  The driver archives
+    are whole-archived from `mad` for the same reason -- a driver's work is its
+    categories -- and the compat shims are one archive (`madcompat`) shared by
+    every executable.  A framework archive that is *not* whole-archived links
+    silently without its categories; that is not a warning, it is a crash at
+    the first message send (see README.md).
 *   Iterating on one test in the existing image, without rebuilding it: mount
     the repo and a persistent build dir, then build just the target --
     `docker run --rm -v "$PWD":/repo -v /tmp/x-build:/build -w /tmp
@@ -118,6 +120,13 @@ The recipe MADFoundation was built with, in the order it was done:
 *   The C libraries are built into `/usr/local` by `lib/libraries.sh`; a new
     dependency means a pin in `libraries.conf` and a `build_<name>` function
     there, not an edit to the Dockerfile.
+*   **Header imports must match the file's case exactly.**  The Mac's filesystem
+    is case-insensitive, the image's is not: `#import <MAD/RptqDocument+extras.h>`
+    compiles here and is a fatal error there (`MADOperationRefreshInitialize.m`
+    was written that way in the app target for years).  When a file moves into
+    this build, check its imports; the check is a script away — list each
+    framework's header names, compare every `<Framework/Name>` import against
+    them, and any near-miss is the bug.
 *   `Compat/` is the only place a platform gap may be answered without a
     framework edit. A gap that needs a source guard instead is `#if __APPLE__`
     (never a `TARGET_OS_*` spelling GNUstep does not define), with a comment

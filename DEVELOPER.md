@@ -29,7 +29,7 @@ run the consuming framework's test suite plus `--verify`. One library per commit
 The mysqlclient, freetds and zint recipes carry per-version knowledge — see the
 notes in `LIBRARIES.md` §1 before bumping those.
 
-## Building on Linux (Phase B spike)
+## Building on Linux (Phases B–D)
 
 The Linux toolchain spike lives in `Linux/` and is driven by one script — see
 `Linux/README.md` and `MAD_LINUX.md` §9. It needs Docker; Docker Desktop's CLI is
@@ -43,9 +43,12 @@ not on `PATH` by default and the script finds it.
 ./Linux/build.sh --rebuild    cold rebuild (~15-25 minutes)
 ```
 
-Nothing built there ships: it compiles a MADFoundation subset against GNUstep
-and runs ported versions of the framework's tests plus a toolchain probe. The
-GNUstep divergences it found are listed in `Linux/README.md`.
+Nothing built there ships: it compiles the ten headless frameworks against
+GNUstep, runs ported versions of their tests plus a toolchain probe, and builds
+the `mad` CLI beside them — `inspect`, `schema`, `query` and `refresh` run inside
+the image, `export` (PDF) is Apple-only. The GNUstep divergences it found are
+listed in `Linux/README.md`, which also carries the Phase D checkpoint's runs and
+the fixtures they use (`CLI/Fixtures/`).
 
 The iOS regression gate for the platform guards those builds required:
 

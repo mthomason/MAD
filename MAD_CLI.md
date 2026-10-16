@@ -213,6 +213,17 @@ UIKit, plus the CLI target itself. Mechanically this is `SUPPORTED_PLATFORMS` ex
 with `macosx`, the per-SDK library search paths from `LIBRARIES.md` §6, and the three
 file-level exclusions above.
 
+**Done on Linux, 2026-10-16** (`MAD_LINUX.md` §9 Phase D), and done this way: the
+headless target is the ten frameworks compiled by `Linux/CMakeLists.txt` against
+GNUstep, and the CLI is a target beside them. The piece §4.1 assigned to the `MAD`
+framework — the refresh chain — moved there, and the piece it did not anticipate —
+`MADocument`, a `UIDocument`, on which `MADCLIDocument` was built — is answered by
+`MADHeadlessDocument` behind `MADDocumentDataProtocol`: the same data half, with no
+document lifecycle and nothing to render. `inspect`, `schema`, `query` and `refresh`
+are the same sources on both platforms; `export` is PDF and stays on Apple (§5.2,
+§9's staging). A macOS target is still Track 5.1's, but it now has the seam and the
+document class it was missing.
+
 ---
 
 ## 5. Design

@@ -155,11 +155,15 @@ MADCLIExitCode MADCLIRunInspect(MADCLIInvocation *invocation) {
 	}
 
 	MADCLISQLiteHeader header = [container storeHeader];
-	if (!header.present) {
+	if (container.storeURL == nil) {
+		[out appendFormat: @"  store       none\n"];
+	} else if (!header.present) {
 		[out appendFormat: @"  store       NOT A SQLITE DATABASE\n"];
 	} else {
-		[out appendFormat: @"  store       StoreContent/analyitics (SQLite %@, %u pages, %u-byte pages)\n",
-			MADCLISQLiteVersionString(header.sqliteVersion), header.pageCount, header.pageSize];
+		[out appendFormat: @"  store       %@ (SQLite %@, %u pages, %u-byte pages, %@)\n",
+			[NSString stringWithFormat: @"StoreContent/%@", container.storeURL.lastPathComponent],
+			MADCLISQLiteVersionString(header.sqliteVersion), header.pageCount, header.pageSize,
+			container.storeKind == MADCLIContainerStoreKindPortable ? @"portable" : @"legacy Core Data"];
 	}
 
 	NSURL *wal = container.walURL;
@@ -181,12 +185,13 @@ MADCLIExitCode MADCLIRunInspect(MADCLIInvocation *invocation) {
 	[out appendFormat: @"  thumbnail   %@\n",
 		[fileManager fileExistsAtPath: thumbnail.path] ? @"present" : @"none"];
 
-	// Counts come straight out of the store's own tables.  This is the part of the
-	// format MAD_FORMAT.md section 8.1 calls tied to Core Data, so it is the part
-	// most likely to need revisiting; the rest of this verb does not depend on it.
+	// Counts come straight out of the store's own tables, whose names say which store
+	// it is: a legacy Core Data document writes them Z-prefixed, the portable store
+	// (MAD_STORE_MIGRATION.md) uses the entity names as they are.
+	BOOL portable = container.storeKind == MADCLIContainerStoreKindPortable;
 	unsigned long long sections = 0, elements = 0;
-	BOOL gotSections = MADCLICountRows(container.storeURL, @"ZRPTQDOCUMENTSECTION", &sections);
-	BOOL gotElements = MADCLICountRows(container.storeURL, @"ZRPTQDOCUMENTELEMENT", &elements);
+	BOOL gotSections = MADCLICountRows(container.storeURL, portable ? @"RptqDocumentSection" : @"ZRPTQDOCUMENTSECTION", &sections);
+	BOOL gotElements = MADCLICountRows(container.storeURL, portable ? @"RptqDocumentElement" : @"ZRPTQDOCUMENTELEMENT", &elements);
 	if (gotSections && gotElements) {
 		[out appendFormat: @"  elements    %llu sections, %llu elements\n", sections, elements];
 	}

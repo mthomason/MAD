@@ -10,7 +10,7 @@
 #import "MADCLI.h"
 #import "MADCLIDocument.h"
 
-#import <MAD/MADocument.h>
+#import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADQueryFull.h>
 
 MADCLIExitCode MADCLIRunQuery(MADCLIInvocation *invocation) {
@@ -24,7 +24,7 @@ MADCLIExitCode MADCLIRunQuery(MADCLIInvocation *invocation) {
 
 	NSError *sqlError = nil;
 	NSString *sql = [cliDocument.document.mainQuery
-					 copySQLWithManagedObjectContext: cliDocument.document.managedObjectContext
+					 copySQLWithManagedObjectContext: cliDocument.document.storeContext
 											   error: &sqlError];
 	if (sql == nil) {
 		MADCLIError(@"the document's query produced no SQL: %@", MADCLIDescriptionForError(sqlError));

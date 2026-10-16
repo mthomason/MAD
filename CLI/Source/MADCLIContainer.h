@@ -24,6 +24,15 @@ typedef struct {
 	BOOL		writeVersionWAL;	// file format write version == 2
 } MADCLISQLiteHeader;
 
+/// Which store the document's definition is in.  A document written before the
+/// portable store (MAD_STORE_MIGRATION.md) holds a Core Data SQLite file named
+/// `analyitics`; one written since holds the portable store, `store.sqlite`.
+typedef NS_ENUM(NSInteger, MADCLIContainerStoreKind) {
+	MADCLIContainerStoreKindNone = 0,
+	MADCLIContainerStoreKindPortable,
+	MADCLIContainerStoreKindLegacyCoreData,
+};
+
 @interface MADCLIContainer : NSObject
 
 /// Unarchives `url` into a private temporary directory.  Nothing is written
@@ -36,7 +45,10 @@ typedef struct {
 @property (readonly, nonatomic, copy) NSURL *gutsURL;
 @property (readonly, nonatomic, copy) NSDictionary *meta;
 
-@property (readonly, nonatomic, copy) NSURL *storeURL;			// StoreContent/analyitics
+/// The definition store inside the guts: StoreContent/store.sqlite when the
+/// document is portable, StoreContent/analyitics when it is a legacy Core Data one.
+@property (readonly, nonatomic, copy) NSURL *storeURL;			// may be nil
+@property (readonly, nonatomic) MADCLIContainerStoreKind storeKind;
 @property (readonly, nonatomic, copy) NSURL *walURL;			// may be nil
 @property (readonly, nonatomic, copy) NSURL *shmURL;			// may be nil
 @property (readonly, nonatomic, copy) NSURL *additionalContentURL;	// may be nil

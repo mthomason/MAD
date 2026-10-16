@@ -128,6 +128,21 @@ endif()
 
 include(cmake/MADLinuxFramework.cmake)
 
+# The compat shims are one archive of their own.  Every framework archive used to
+# embed them, which made whole-archiving two archives a duplicate-symbol error --
+# and whole-archiving is the only way a category reached by message send survives
+# the static link (Apple's -ObjC).  Now the shims are linked once, whole-archive,
+# by each executable, and the framework archives are pure: a category in a driver
+# can be whole-archived like any other code.  (Found by the CLI: mad refresh over
+# MySQL aborted because .objc_category_MysqlFetchDataTable was never linked in.)
+add_library(madcompat STATIC ${MAD_COMPAT_SOURCES})
+target_include_directories(madcompat PUBLIC "${SHIM_DIR}" "${MAD_COMPAT_DIR}")
+target_compile_options(madcompat PRIVATE
+	-Wall
+	$<$<COMPILE_LANGUAGE:OBJC,OBJCXX>:-fobjc-arc>
+	${MAD_OBJC_PRELUDE})
+target_link_libraries(madcompat PUBLIC ${GNUSTEP_BASE_LIBS} -ldispatch)
+
 set(SOURCE_DIR "${REPO_ROOT}/MADFoundation/Source")
 include(cmake/MADFoundationSources.cmake)
 mad_make_include_shim(MADFoundation "${SOURCE_DIR}")
@@ -305,6 +320,7 @@ endforeach()
 mad_add_framework(mad MAD_SOURCES
 	MADCoreLogicTests
 	MADDatabaseDriverDispatchTests
+	MADHeadlessDocumentTests
 	MADDataTableRegressionTests
 	MADDesignerQueryTests
 	MADDesignerViewerTests
@@ -355,25 +371,20 @@ target_include_directories(mad PUBLIC
 	"${CMAKE_BINARY_DIR}/sqlite3-shim" "${CMAKE_BINARY_DIR}/sybdb-shim"
 	"${CMAKE_BINARY_DIR}/umbrella-shim")
 target_compile_options(mad PRIVATE -I/usr/include/libxml2)
+# The driver archives are whole-archived, not merely linked: a driver's work is
+# reached through its categories (MysqlFetch+DataTable, MADQuery+Sqlite3), and a
+# category is a message send -- no symbol -- so the linker drops its member
+# unless the archive is whole.  The expression propagates to every consumer of
+# mad, the way a category in a framework survives on Apple only with -ObjC.
+# MADTds is not in the list: it is freetds' wrapper with no categories, madtdsclient
+# already names it, and whole-archiving it collides with freetds' own err_handler.
 target_link_libraries(mad PUBLIC
 	madfoundation madapi madcocoaextensions maddatastructures madfilemanager
-	madsqlite3 madmysql madtdsclient madtds
+	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madsqlite3>"
+	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madmysql>"
+	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madtdsclient>"
 	${SQLITE3_LIBRARY} ${FREETDS_LIBRARY} ${MYSQL_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY}
 	${ARCHIVE_LIBRARY} ${ZLIB_LIBRARY} ${BZIP2_LIBRARY})
-# MAD's SQL assembly (MADQueryCacheAggregateFunction and the query-cache classes)
-# sends -whereClauseWithRowIds: / -whereClauseWithParameters:, which MADSqlite3's
-# MADQuery+Sqlite3 category implements.  A category is reached by message send,
-# not by symbol, so the linker drops its archive member -- whole-archiving
-# libmadsqlite3.a would keep it but defines the compat objects every framework
-# archive embeds a second time.  Compiling the one category into this archive
-# instead puts it behind the whole-archive the tests already use; its only
-# external need, MADDatabaseSqlite3, is pulled from libmadsqlite3.a by symbol.
-target_sources(mad PRIVATE "${REPO_ROOT}/MADSqlite3/Source/MADQuery+Sqlite3.m")
-# The drivers the Linux build links, named once so the static linker pulls them in
-# and their +load registers them (ROADMAP.md §5.1): the framework sources no longer
-# refer to a driver class, and an archive member nothing references is dropped.
-# See Compat/MADDriverLinkage.m.
-target_sources(mad PRIVATE "${MAD_COMPAT_DIR}/MADDriverLinkage.m")
 target_include_directories(madtdsclient PUBLIC "${CMAKE_BINARY_DIR}/umbrella-shim")
 target_link_libraries(madtdsclient PUBLIC madtds madapi madcocoaextensions madfoundation)
 
@@ -385,5 +396,42 @@ target_compile_options(ToolchainProbe PRIVATE
 	-Wall
 	$<$<COMPILE_LANGUAGE:OBJC>:-fobjc-arc>
 	${MAD_OBJC_PRELUDE})
-target_link_libraries(ToolchainProbe PRIVATE "$<LINK_LIBRARY:WHOLE_ARCHIVE,madfoundation>")
+target_link_libraries(ToolchainProbe PRIVATE
+	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madfoundation>"
+	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madcompat>")
 add_test(NAME ToolchainProbe COMMAND ToolchainProbe)
+
+# ---------------------------------------------------------------------------
+# `mad` -- the CLI (MAD_CLI.md).  The same sources build for the iOS Simulator
+# through CLI/build.sh; this is the Linux half, and the Phase D checkpoint's
+# subject.  inspect/schema/query/refresh are the verbs here; export is PDF and
+# stays on Apple (MAD_LINUX.md §5.2).
+#
+# The target is named mad-cli because `mad` is the framework library; the
+# binary is mad, the same name CLI/build.sh writes on the Mac.
+# ---------------------------------------------------------------------------
+set(CLI_SOURCE_DIR "${REPO_ROOT}/CLI/Source")
+add_executable(mad-cli
+	"${CLI_SOURCE_DIR}/main.m"
+	"${CLI_SOURCE_DIR}/MADCLI.m"
+	"${CLI_SOURCE_DIR}/MADCLIContainer.m"
+	"${CLI_SOURCE_DIR}/MADCLIDocument.m"
+	"${CLI_SOURCE_DIR}/MADCLIInspect.m"
+	"${CLI_SOURCE_DIR}/MADCLIQuery.m"
+	"${CLI_SOURCE_DIR}/MADCLIRefresh.m"
+	"${CLI_SOURCE_DIR}/MADCLISchema.m"
+	"${CLI_SOURCE_DIR}/MADCLIExport.m")
+set_target_properties(mad-cli PROPERTIES OUTPUT_NAME mad)
+# The framework library is whole-archived for the same reason the tests do it:
+# categories (MADQuery+Sqlite3, the Rptq +Extras families) are reached by message
+# send, so the linker would otherwise drop their archive members.  It also carries
+# MADDriverLinkage, which is what registers the drivers.
+target_include_directories(mad-cli PRIVATE "${SHIM_DIR}" "${MAD_COMPAT_DIR}")
+target_compile_options(mad-cli PRIVATE
+	-Wall
+	$<$<COMPILE_LANGUAGE:OBJC>:-fobjc-arc>
+	${MAD_OBJC_PRELUDE})
+target_link_libraries(mad-cli PRIVATE
+	"$<LINK_LIBRARY:WHOLE_ARCHIVE,mad>"
+	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madcompat>"
+	${SQLITE3_LIBRARY})
