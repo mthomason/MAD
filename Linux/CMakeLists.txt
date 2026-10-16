@@ -318,6 +318,7 @@ foreach (_mad_header IN LISTS _mad_headers)
 	file(CREATE_LINK "${_mad_header}" "${SHIM_DIR}/MAD/${_mad_header_name}" SYMBOLIC)
 endforeach()
 mad_add_framework(mad MAD_SOURCES
+	MADArchiveManagerTests
 	MADCoreLogicTests
 	MADDatabaseDriverDispatchTests
 	MADHeadlessDocumentTests

@@ -148,6 +148,59 @@ Status key:
   would change Apple's generated SQL and the on-disk cache's column order, which is
   why it was not done as a drive-by.
 
+### The same document does not produce the same `.mad` on Linux and on Apple — and on Linux it cannot be written at all
+- **Status:** Confirmed (pinned as characterisation; not fixed -- a fix is a design
+  decision, and the Linux writer does not run yet)
+- **Where:** `MAD/Source/madtar.m:332-338` (uid, gid, mode and mtime written into each
+  tar header from the member's `stat`), `MAD/Source/MADArchiveManager.m:146` (the member
+  walk) and `:155-160` (the walk-up loop), against `MAD_FORMAT.md` §7 (the normative
+  format) and §9 (verification).  The Linux half has no writer at all:
+  `MADHeadlessDocument` never saves and the CLI has no write verb.
+- **Behavior:** Measured 2026-10-16. On one platform, two saves of a document whose
+  members did not change produce **different bytes**: the member contents are identical
+  (`store.sqlite` and `meta.plist` compare equal byte for byte) and the archive differs,
+  because each tar header carries the member's mtime -- the fixture pair made minutes
+  apart differ by one byte in size and by the mtime/checksum fields of every directory
+  header.  Cross-platform the inputs that differ are wider: mtime, the filesystem's
+  **uid/gid/mode**, the **member order** (the walk is `-enumeratorAtURL:...`, whose order
+  is the enumerator's), and anything the SQLite writer decides for itself (the store
+  *was* byte-identical across two saves here, so that layer is the least of it).
+  **On Linux the writer does not finish at all**: `-write_archive:` walks each
+  enumerated URL up to the directory being archived
+  (`while (![baseUrl.lastPathComponent isEqualToString:directoryToArchiveFileName])`),
+  and GNUstep's `-enumeratorAtURL:...` yields URLs with the containing directory
+  stripped (the entry below), so the loop reaches `/`, stays there and allocates an
+  `NSURL` a turn.  A 512 MB container killed the process (SIGKILL); a 30 s timeout
+  simply elapsed.
+- **Why it matters:** The user's requirement, 2026-10-16: *"I'd also, if possible, like
+  Linux and iOS to produce the same exact MAD file."*  It is also what makes `.mad` a
+  *format* rather than a dump: `MAD_FORMAT.md` §7 defines the container, and
+  `MAD_CLI.md` §6.1's first round-trip fixture ("unpack, repack, assert the member list
+  and each member's bytes are unchanged") is the test that would hold it -- it does not
+  exist yet, which is why this is pinned by characterisation instead.  The `mad export
+  --deterministic` flag (`MADCLIPinPDFMetadata`) is the same idea already applied to
+  PDFs: pin what the clock and the filesystem stamp in.
+- **What a fix takes, in order:**
+  1. **Make the Linux writer terminate** -- the walk-up loop needs to stop at the
+     archived root regardless of what the enumerator yields (the same
+     `-subpathsAtPath:`-style correction the CLI's member list uses), which is also the
+     per-platform branch the writer needs.  Nothing writes an archive on Linux today, so
+     this is a precondition, not a live defect.
+  2. **Pin the archive's inputs** -- a reproducible mode: a fixed mtime (or the
+     document's own version) rather than the file's, fixed uid/gid (or none), and a
+     sorted member order.  `-archive:` could take a flag, as `-checkpointed` already
+     does, so ordinary saves keep today's metadata.
+  3. **Then the cross-platform comparison** -- a fixture written on each platform and
+     byte-compared, which is `MAD_CLI.md` §6.1 extended across the boundary, and the
+     acceptance layer `MAD_LINUX.md` §8 describes.
+- **Test:** `MADDocumentTests/testArchiveIsNotReproducibleFromUnchangedMembers` (Apple)
+  saves the same member twice with different timestamps and asserts the archives
+  differ -- characterisation, so it fails the day a reproducible writer lands, which is
+  the signal to delete it and re-status this entry.
+  `Linux/Tests/MADArchiveManagerTests.m` unpacks a checked-in v1 fixture (green on
+  Linux) and carries the two writer tests as **needed** tests naming this entry, so the
+  day the writer works they run without being touched.
+
 ### `objectsForEntity:` missed every subentity row
 - **Status:** Fixed
 - **Where:** `MAD/Source/rptq/store/MADStoreGraph.m` (`-objectsForEntity:`) and

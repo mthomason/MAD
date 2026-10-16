@@ -209,6 +209,49 @@
 	[fileManager removeItemAtURL: archive error: NULL];
 }
 
+// The archive is not reproducible from unchanged members: the tar headers carry each
+// member's stat -- uid, gid, mode and mtime (madtar.m:332-338) -- so the same document
+// saved twice differs by those bytes, and an archive written on Linux cannot match one
+// written here.  BUGS.md records it as the reason "the same .mad on both platforms" is
+// not possible today, and as characterisation this test *fails* the day a reproducible
+// writer lands -- which is the signal to delete it and re-status the entry.
+- (void)testArchiveIsNotReproducibleFromUnchangedMembers {
+
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSURL *temp = [NSURL fileURLWithPath: NSTemporaryDirectory() isDirectory: YES];
+	NSURL *source = [temp URLByAppendingPathComponent: [NSUUID UUID].UUIDString isDirectory: YES];
+	NSURL *firstURL = [temp URLByAppendingPathComponent: [[NSUUID UUID].UUIDString stringByAppendingPathExtension: @"mad"]];
+	NSURL *secondURL = [temp URLByAppendingPathComponent: [[NSUUID UUID].UUIDString stringByAppendingPathExtension: @"mad"]];
+	[fileManager createDirectoryAtURL: source withIntermediateDirectories: YES attributes: nil error: NULL];
+	[@"member" writeToURL: [source URLByAppendingPathComponent: @"member.txt"]
+			   atomically: YES encoding: NSUTF8StringEncoding error: NULL];
+
+	// Only the timestamps differ between the two archives: same member, same bytes,
+	// same writer.  The member's own date is what enters the tar header -- the root
+	// directory is not itself a member.
+	NSURL *memberURL = [source URLByAppendingPathComponent: @"member.txt"];
+	[fileManager setAttributes: @{ NSFileModificationDate: [NSDate dateWithTimeIntervalSince1970: 1000000000] }
+				   ofItemAtPath: memberURL.path error: NULL];
+	MADArchiveManager *first = [[MADArchiveManager alloc] initWithFileWrapperURL: source archiveURL: firstURL];
+	XCTAssertTrue([first archive: YES], @"the first archive is written");
+
+	[fileManager setAttributes: @{ NSFileModificationDate: [NSDate dateWithTimeIntervalSince1970: 1100000000] }
+				   ofItemAtPath: memberURL.path error: NULL];
+	MADArchiveManager *second = [[MADArchiveManager alloc] initWithFileWrapperURL: source archiveURL: secondURL];
+	XCTAssertTrue([second archive: YES], @"the second archive is written");
+
+	NSData *firstBytes = [NSData dataWithContentsOfURL: firstURL];
+	NSData *secondBytes = [NSData dataWithContentsOfURL: secondURL];
+	XCTAssertGreaterThan(firstBytes.length, (NSUInteger)0);
+	XCTAssertGreaterThan(secondBytes.length, (NSUInteger)0);
+	XCTAssertFalse([firstBytes isEqualToData: secondBytes],
+				   @"the archive carries the members' mtimes, so it is not reproducible (BUGS.md)");
+
+	[fileManager removeItemAtURL: source error: NULL];
+	[fileManager removeItemAtURL: firstURL error: NULL];
+	[fileManager removeItemAtURL: secondURL error: NULL];
+}
+
 #pragma mark - The document path: convert on open, save, reopen
 
 - (NSURL *)newTestDirectory {

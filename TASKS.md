@@ -362,7 +362,22 @@ the cycle. `CLI/build.sh`'s `REFRESH_SOURCES` is gone; the CLI takes the chain f
 
 ## 8. Export formats — the third extensibility seam
 
-**Status:** Open. Do not start before task 7's Phase 1.
+**Status:** Open — and this is the next task (`ROADMAP.md` Track 5.2, `MAD_LINUX.md` §9
+Phase E). It needs two decisions from the user before code: **the JSON export shape**
+(`MAD_CLI.md` §8.3, `MAD_LINUX.md` §10.1) and **the renderer staging** (§10.2, HTML/SVG
+before PDF). Both should be put as options with a recommendation, not guessed.
+
+Two things landed since this entry was written and belong to it: the driver registry
+(`ROADMAP.md` §5.1, `61991e85f`) — the seam shape this task mirrors — and the CLI
+running on Linux (`040d162c9`), which is where the first new formats should be proved,
+since `--format json`/`csv` are pure Foundation and PDF is not.
+
+**The byte-identical `.mad`** (the user's requirement, 2026-10-16) is the other half of
+this work as the queue now stands: `BUGS.md` records that the archive is not
+reproducible and that the Linux writer cannot even terminate. Its fix is a
+reproducible-writer mode plus the round-trip fixture, which is also the acceptance layer
+`MAD_CLI.md` §6 asks for — decide its shape with the user, since it defines `.mad` v1
+(`MAD_FORMAT.md` §7).
 
 The project's synopsis promises that a developer can add an **export format** without editing
 the core, alongside new database types and new document element types. That promise has no
