@@ -171,6 +171,59 @@
 	XCTAssertEqualObjects(select.fields[@"Invoice0.Name"], field.databaseSchemaField);
 }
 
+// The SELECT list's order is NSSet enumeration order, and that order is not stable:
+// not insertion order, not platform order, and -- measured on Linux -- not even the
+// same between two documents built by the same fixture in one process.  BUGS.md
+// records it (the row cache and `mad query` inherit it).  What is pinned here is the
+// part that must not vary: the *content* of the list, whichever order the fields were
+// created in and whichever order the set happens to enumerate.
+- (void)testActiveFieldsSelectListContentComesFromTheSet {
+	NSSet *firstFields = nil;
+	NSSet *secondFields = nil;
+	NSSet *firstLines = nil;
+	NSSet *secondLines = nil;
+
+	for (NSNumber *reversed in @[ @NO, @YES ]) {
+		RptqStoreContext *context = [self inMemoryContext];
+		RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+		NSArray <NSString *> *names = reversed.boolValue ? @[ @"Zulu", @"Alpha" ] : @[ @"Alpha", @"Zulu" ];
+
+		NSMutableArray <RptqQueryField *> *fields = [NSMutableArray array];
+		for (NSString *name in names) {
+			[fields addObject: [self queryFieldNamed:name type:MADDataTypeString tableName:@"Invoice"
+											 context:context document:document]];
+		}
+		for (RptqQueryField *field in fields) {
+			// The element is what makes a field active.
+			RptqDocumentElementLabelDataField *label = [context insertObjectForEntity:
+														NSStringFromClass([RptqDocumentElementLabelDataField class])
+																		  identifier:0];
+			label.referencesQueryField = field;
+		}
+
+		MADQuerySelectExpressionActiveFields *select;
+		select = [[MADQuerySelectExpressionActiveFields alloc] initWithDatabase:[MADMock mockDatabase]
+													  forManagedObjectContext:context];
+
+		XCTAssertEqual(select.fieldKeys.count, (NSUInteger)2);
+		NSSet *expectedFields = [NSSet setWithArray:@[ @"Invoice0.Alpha", @"Invoice0.Zulu" ]];
+		NSSet *listedFields = [NSSet setWithArray:select.fieldKeys];
+		XCTAssertEqualObjects(listedFields, expectedFields, @"the list holds both fields and only them");
+
+		NSSet *lines = [NSSet setWithArray:[select.sql componentsSeparatedByString:@",\n"]];
+		if (reversed.boolValue) {
+			secondFields = listedFields;
+			secondLines = lines;
+		} else {
+			firstFields = listedFields;
+			firstLines = lines;
+		}
+	}
+
+	XCTAssertEqualObjects(firstFields, secondFields, @"the same fields, whichever order they were created in");
+	XCTAssertEqualObjects(firstLines, secondLines, @"the same SELECT list, whichever order they were created in");
+}
+
 - (void)testActiveFieldsSelectListIsEmptyWithoutActiveFields {
 	RptqStoreContext *context = [self inMemoryContext];
 

@@ -116,6 +116,38 @@ Status key:
 
 ## MAD (framework)
 
+### `MADQueryActiveQueryFields`: the SELECT list's order is set order, and set order is not stable
+- **Status:** Quirk (hazard -- documented, not changed; the fix is a policy decision)
+- **Where:** `MAD/Source/MADQueryActiveQueryFields.m:36,95` (the `NSSet` accumulator
+  and `self.queryFields = queryFields`), read by
+  `MAD/Source/MADQuerySelectExpressionActiveFields.m`
+- **Behavior:** The active fields are collected into an `NSMutableSet`, so the SELECT
+  list's column order is hash order. `RptqObject -hash` is `identifier ^ entity.hash`
+  (`MAD/Source/rptq/store/RptqObject.m:42`), which makes the order look deterministic
+  per build -- but it is not: measured 2026-10-16, **two documents built by the same
+  fixture in one process enumerate the same two fields in different orders**, and
+  Apple and GNUstep disagree as well (the same `.mad` gives a different order under
+  the Linux `mad query` than under the simulator's). The *fields* are always the
+  right ones; only the order moves. The row cache inherits it twice over: its columns
+  are the field keys in this order, and each column is *named* `c<hash-of-fieldName>`
+  (`MADSqlite3/Source/MADDataTableFast.m`), so the hashes differ per platform too.
+- **Why it matters:** Any byte-comparison of `mad query` output, or of a `.maddb`
+  cache, across platforms (or across runs) sees a difference that is not in the data --
+  which is exactly the comparison `MAD_LINUX.md` §9 Phase D asks for, and what a JSON
+  or CSV export would otherwise inherit. The refreshed **rows** are identical once
+  columns are matched by field name (verified on the London fixture: 21 columns, 76
+  rows, every value equal).
+- **Test:** `testActiveFieldsSelectListContentComesFromTheSet` in both
+  `MAD/MADTests/MADQuerySelectExpressionTests.m` and its Linux port: inserts the same
+  two fields in both orders and asserts the same field set and the same SELECT lines,
+  so a future *content* change is caught. The order itself is deliberately left
+  unpinned -- it is the thing that must not be promised.
+- **What a fix would decide:** a defined order (query-field identifier? the order the
+  designer added them? the schema snapshot's order?) is part of the JSON export shape,
+  `MAD_LINUX.md` §10.1 / `MAD_CLI.md` §8.3, which is the user's call. Sorting here
+  would change Apple's generated SQL and the on-disk cache's column order, which is
+  why it was not done as a drive-by.
+
 ### `objectsForEntity:` missed every subentity row
 - **Status:** Fixed
 - **Where:** `MAD/Source/rptq/store/MADStoreGraph.m` (`-objectsForEntity:`) and
@@ -3492,6 +3524,87 @@ bundle's header search path.
   `MADQueryChooseFieldController.m:169`.
 - **Where:** the file:line list above.
 - **Evidence:** `nullability.NullPassedToNonnull` in `xcodebuild analyze`.
+
+## Linux build
+
+### `mad refresh` over MySQL aborted: a category is not a symbol, so the linker dropped it
+- **Status:** Fixed
+- **Where:** the arrangement in `Linux/CMakeLists.txt:138,381-384` and
+  `Linux/cmake/MADLinuxFramework.cmake`; the failure showed in
+  `CLI/Source/MADCLIDocument.m`'s refresh chain
+- **Behavior:** The first `mad refresh` against live MySQL from inside the Linux image
+  died with SIGABRT and no diagnostic, after `executeSQL:` had been entered and before
+  the fetch. `MysqlFetch (DataTable)` -- `-fetchWithCommand:dataTable:onConnection:
+  extendedNames:error:`, the only path that runs a prepared statement -- is a
+  *category*, and a category is reached by message send, which leaves no symbol for
+  the linker to resolve; libmadmysql.a was linked normally, so its member was never
+  pulled in. `nm` showed `.objc_category_MysqlFetchDataTable` present in the MySQL
+  test binary and absent from the CLI's; `instancesRespondToSelector:` was false at
+  runtime, and the unrecognized selector ended in `abort()`.
+- **Why it matters:** The same failure waits for every category in any framework
+  archive that is not whole-archived. The build had known about the shape (one file,
+  `MADQuery+Sqlite3.m`, was compiled into `libmad.a` by hand for exactly this reason)
+  but the reason -- a category is invisible to the linker -- was not written down, so
+  each new category was a new landmine.
+- **Now:** `Linux/Compat/*` is its own static library, `madcompat`
+  (`Linux/CMakeLists.txt:138`), whole-archived by every executable, so framework
+  archives are pure and can themselves be whole-archived: the `mad` target
+  whole-archives `madsqlite3`, `madmysql` and `madtdsclient` (and MADTds is
+  deliberately left out -- it has no categories and whole-archiving it collides with
+  freetds' `err_handler`). The per-file `target_sources` hack is gone. `Linux/README.md`
+  has the story; `Linux/AGENTS.md` states the rule.
+- **Test:** `Linux/Tests/MADDatabaseDriverDispatchTests.m`
+  (`testTheDriversCategoriesAreLinked`) asserts at runtime that `MysqlFetch` still
+  answers its `DataTable` selector and that `MADQuery` still answers
+  `-whereClauseWithRowIds:` / `-whereClauseWithParameters:` -- the two categories the
+  data path needs. It fails the moment an archive stops being whole-archived.
+
+### GNUstep's `-enumeratorAtURL:…` yields URLs with the containing directory stripped
+- **Status:** Quirk (platform; worked around at the one call site that depends on it)
+- **Where:** measured in `Linux/Tests/ToolchainProbe.m` (report item
+  `directory-enumeration-url-form`) and worked around in
+  `CLI/Source/MADCLIContainer.m:192` (`-memberPaths`)
+- **Behavior:** On GNUstep 1.31.1, `-enumeratorAtURL:includingPropertiesForKeys:
+  options:errorHandler:` yields child URLs *without* the directory that was
+  enumerated: enumerating `file:///repo/…/London.dataset` yields
+  `file:///Contents.json`, which resolved against the process's working directory
+  (`/src/Contents.json` in the image). `-contentsOfDirectoryAtURL:`,
+  `-enumeratorAtPath:` and `-subpathsAtPath:` are all correct, and
+  `-URLByAppendingPathComponent:` is correct -- it is the URL-form enumerator alone.
+  Apple's is correct, so this is a GNUstep defect, not ours.
+- **Why it matters:** `mad inspect` listed **0 members** for a document whose files
+  were plainly there (the store header and the element counts, which do not enumerate,
+  were right). Framework call sites exist too (`MADArchiveManager.m:146`,
+  `MADFileUtilities.m:64,448`, `UIDocument+Extras.m:23`) -- their suites pass, because
+  none of them depends on the enumerator's URLs carrying the directory, so they were
+  left alone rather than churned.
+- **Now:** the CLI's member list uses `-subpathsAtPath:` (relative paths are what the
+  list is made of anyway), which is correct on both platforms. The probe reports the
+  GNUstep behaviour as a NEED, so a GNUstep release that fixes it shows up in
+  `--probe` rather than going unnoticed.
+- **Test:** the probe's report item (counted, never fatal).
+
+### Three `Rptq…+extras.h` imports were spelled in the wrong case, which only a case-sensitive filesystem can see
+- **Status:** Fixed
+- **Where:** `MAD/Source/MADOperationRefreshInitialize.m:34-36` (fixed in `a17d802be`),
+  `MAD/Source/MADOperationCreateDocumentFirstTimeSetup.m` (the same three, fixed
+  preventively)
+- **Behavior:** The imports read `<MAD/RptqDocument+extras.h>`,
+  `<MAD/RptqDatabase+extras.h>` and `<MAD/RptqQuery+extras.h>`; the headers are
+  `RptqDocument+Extras.h`, `RptqDatabase+Extras.h`, `RptqQuery+Extras.h`. The Mac's
+  filesystem is case-insensitive, so the app target compiled them for years and the
+  simulator CLI compiled them too. The Linux image copies the sources onto ext4 and
+  *refuses* them: the image build failed with a fatal error on the moved file.
+- **Why it matters:** It is a class of defect, not an instance: any import whose case
+  disagrees with the file resolves here and nowhere else, and nothing on the Mac can
+  see it. The audit that finds them all is written down in `Linux/AGENTS.md`
+  (compare every `<Framework/Header>` import against the directory listing for exact
+  case).
+- **Now:** all three spell the headers the way they are spelled on disk. The first was
+  found by the image build; the second file is not in the Linux build yet (it is one of
+  the create-document operations) and was corrected because it would have failed the
+  same way the day it joins.
+- **Test:** the Linux image build (the fix's own regression test).
 
 ## Build wiring (Xcode references)
 

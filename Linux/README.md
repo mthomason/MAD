@@ -6,10 +6,10 @@ subset); Phase C is the §4 shim list, and this directory is where it lands.
 The build now compiles **all ten headless frameworks** — every framework in
 MAD_LINUX.md §3's table except the UI-only ones (`MADExplorer`, `MADBarcodes`,
 `MADFeedback`, `Scrimpter`, the app) — and runs their suites inside the
-container: 114 test executables, 1098 tests, 6 recorded needs. The test
+container: 117 test executables, 1153 tests, 6 recorded needs. The test
 coverage master merged on 2026-10-10 (~100 Xcode test files) is ported in
-full, suite for suite. Nothing here ships in the app; the CLI is Phase D's
-checkpoint.
+full, suite for suite. Nothing here ships in the app; the CLI — Phase D's
+checkpoint — builds and runs here too (see "The CLI runs here" below).
 
 ## Running it
 
@@ -28,12 +28,14 @@ credential helper beside it) on `PATH` for the run. The first build takes
 15–25 minutes (the toolchain stage) and produces a ~2.5 GB image; later runs
 are cached — only the source layer rebuilds. The `--platform linux/amd64`
 cross-check was last run end to end after the merged coverage landed
-(2026-10-11): the whole image builds under emulation (the amd64 toolchain
-stage and libraries came from the earlier cache; the subset, the 55 new
-suites included, rebuilt), and the run matches native arm64 exactly — 114
-executables, 1098 tests, 6 needs, 10 report items. Run it under its own tag
-(`MAD_LINUX_IMAGE=mad-linux:phase-b-amd64 ./Linux/build.sh --platform
-linux/amd64`) so the native image is not replaced.
+(2026-10-11, before Phase D): the whole image builds under emulation (the
+amd64 toolchain stage and libraries came from the earlier cache; the subset,
+the 55 new suites included, rebuilt), and the run matched native arm64
+exactly — 114 executables, 1098 tests, 6 needs, 10 report items, the counts
+of that day. It has not been re-run since Phase D added its three suites and
+the CLI, so re-run it before trusting the emulated image. Run it under its
+own tag (`MAD_LINUX_IMAGE=mad-linux:phase-b-amd64 ./Linux/build.sh
+--platform linux/amd64`) so the native image is not replaced.
 
 ## Pins
 
@@ -247,7 +249,8 @@ and its categories are silently absent at runtime.
   draining under a plain executable, JSON, UUID, dates, plists, sort
   descriptors, streams, NSDecimalNumber, NSCalendar and keyed archiving on
   the permissive path. The full report is what `--probe` prints; its 19 core
-  checks gate the exit code, its 10 report items do not.
+  checks gate the exit code, its 12 report items do not (the CLI's run added
+  `directory-enumeration` and `directory-enumeration-url-form`).
 
 ## The need count, and why it is 6
 

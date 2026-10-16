@@ -425,6 +425,35 @@ static void MADProbeReportChecks(void) {
 		MADProbeReportItem("plist-binary", NO, MADProbeExceptionDetail(e));
 	}
 
+	// Directory enumeration by URL.  GNUstep's -enumeratorAtURL:... yields URLs with
+	// the containing directory stripped -- file:///repo/.../London.dataset comes back
+	// as file:///Contents.json -- which is why the CLI's member list uses
+	// -subpathsAtPath: instead (measured 2026-10-16; BUGS.md).  The path-based
+	// enumerators are correct, and this item checks that they still are.
+	@try {
+		NSString *directory = NSTemporaryDirectory();
+		NSString *file = [directory stringByAppendingPathComponent: @"mad-probe-enumeration.txt"];
+		[[NSFileManager defaultManager] createFileAtPath: file contents: [NSData data] attributes: nil];
+		NSArray <NSString *> *subpaths = [[NSFileManager defaultManager] subpathsAtPath: directory];
+		NSURL *byURL = nil;
+		NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager]
+											 enumeratorAtURL: [NSURL fileURLWithPath: directory]
+											 includingPropertiesForKeys: nil options: 0 errorHandler: NULL];
+		for (NSURL *url in enumerator) {
+			if ([url.lastPathComponent isEqualToString: @"mad-probe-enumeration.txt"]) byURL = url;
+		}
+		BOOL pathFormOK = [subpaths containsObject: @"mad-probe-enumeration.txt"];
+		BOOL urlFormWhole = byURL != nil && [byURL.path isEqualToString: file];
+		MADProbeReportItem("directory-enumeration", pathFormOK,
+						   @"-subpathsAtPath: did not list a file it had just written");
+		MADProbeReportItem("directory-enumeration-url-form", urlFormWhole,
+						   @"-enumeratorAtURL: yields URLs with the containing directory stripped;"
+						   @" the CLI uses -subpathsAtPath: for its member list (BUGS.md)");
+		[[NSFileManager defaultManager] removeItemAtPath: file error: NULL];
+	} @catch (NSException *e) {
+		MADProbeReportItem("directory-enumeration", NO, MADProbeExceptionDetail(e));
+	}
+
 	// App-group containers -- why MADURLFactory is not in the subset.
 	MADProbeReportItem("app-groups",
 					   [[NSFileManager defaultManager] respondsToSelector:@selector(containerURLForSecurityApplicationGroupIdentifier:)],

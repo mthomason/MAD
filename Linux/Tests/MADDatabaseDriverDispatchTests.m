@@ -61,6 +61,26 @@ static void testTheLinkedDriversRegisterThemselves(void) {
 	MAD_PASS([MADDatabaseDriverRegistry driverClassForType: MADDatabaseTypeSqlite3] == [MADDatabaseConnectionSqlite3 class], "Sqlite3 registered");
 }
 
+// A driver's work is reached by *message send* through its categories, which the
+// static linker has no reason to pull in unless the archive is whole-archived
+// (Linux/CMakeLists.txt).  The CLI aborted on live MySQL the day that was not true --
+// .objc_category_MysqlFetchDataTable was simply absent -- so the categories the data
+// path needs are asserted here, where the arrangement is under test.  See BUGS.md.
+static void testTheDriversCategoriesAreLinked(void) {
+	Class fetch = NSClassFromString(@"MysqlFetch");
+	MAD_NEED(fetch != Nil, @"MysqlFetch is not linked in");
+	if (fetch == Nil) return;
+	MAD_PASS([fetch instancesRespondToSelector:
+			  NSSelectorFromString(@"fetchWithCommand:dataTable:onConnection:extendedNames:error:")],
+			 "the MySQL fetch category survived the link");
+
+	Class query = NSClassFromString(@"MADQuery");
+	MAD_PASS([query instancesRespondToSelector: NSSelectorFromString(@"whereClauseWithRowIds:")],
+			 "the Sqlite3 query category survived the link");
+	MAD_PASS([query instancesRespondToSelector: NSSelectorFromString(@"whereClauseWithParameters:")],
+			 "the other half of the Sqlite3 query category is there too");
+}
+
 static void testIdentifierIsTheStoredDriverName(void) {
 	// These strings are in every .mad ever written as driverID, so they are pinned.
 	MAD_PASS_EQUAL([MADDatabaseConnection Identifier: MADDatabaseTypeMySQL], @"MySQL", "MySQL's stored identifier");
@@ -122,6 +142,7 @@ static void testDatabaseConstructionForTdsAndSqlite3(void) {
 
 MAD_TEST_MAIN("MADDatabaseDriverDispatchTests",
 	MAD_TEST(testTheLinkedDriversRegisterThemselves),
+	MAD_TEST(testTheDriversCategoriesAreLinked),
 	MAD_TEST(testIdentifierIsTheStoredDriverName),
 	MAD_TEST(testCredentialConstructionDispatchesToTheDriver),
 	MAD_TEST(testHostPortConstructionDispatchesToTheDriver),

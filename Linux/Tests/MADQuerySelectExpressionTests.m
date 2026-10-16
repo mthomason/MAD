@@ -165,6 +165,59 @@ static void testActiveFieldsSelectList(void) {
 	MAD_PASS_EQUAL(select.fields[@"Invoice0.Name"], field.databaseSchemaField, "the field maps back to its schema field");
 }
 
+// The SELECT list's order is NSSet enumeration order, and that order is not stable:
+// not insertion order, not platform order, and -- measured here -- not even the same
+// between two documents built by the same fixture in one process.  BUGS.md records it
+// (the row cache and `mad query` inherit it).  What is pinned here is the part that
+// must not vary: the *content* of the list, whichever order the fields were created
+// in and whichever order the set happens to enumerate.
+static void testActiveFieldsSelectListContentComesFromTheSet(void) {
+	NSSet *firstFields = nil;
+	NSSet *secondFields = nil;
+	NSSet *firstLines = nil;
+	NSSet *secondLines = nil;
+
+	for (NSNumber *reversed in @[ @NO, @YES ]) {
+		RptqStoreContext *context = inMemoryContext();
+		RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+		NSArray <NSString *> *names = reversed.boolValue ? @[ @"Zulu", @"Alpha" ] : @[ @"Alpha", @"Zulu" ];
+
+		NSMutableArray <RptqQueryField *> *fields = [NSMutableArray array];
+		for (NSString *name in names) {
+			[fields addObject: queryFieldNamed(name, MADDataTypeString, @"Invoice", context, document)];
+		}
+		for (RptqQueryField *field in fields) {
+			// The element is what makes a field active.
+			RptqDocumentElementLabelDataField *label =
+				(RptqDocumentElementLabelDataField *)[context insertObjectForEntity:
+													  NSStringFromClass([RptqDocumentElementLabelDataField class]) identifier: 0];
+			label.referencesQueryField = field;
+		}
+
+		MADQuerySelectExpressionActiveFields *select;
+		select = [[MADQuerySelectExpressionActiveFields alloc] initWithDatabase: [MADMock mockDatabase]
+													   forManagedObjectContext: context];
+
+		MAD_PASS(select.fieldKeys.count == 2, "both active fields are in the list");
+		// Hoisted: a comma inside @[...] splits a macro's arguments (Linux/AGENTS.md).
+		NSSet *expectedFields = [NSSet setWithArray: @[ @"Invoice0.Alpha", @"Invoice0.Zulu" ]];
+		NSSet *listedFields = [NSSet setWithArray: select.fieldKeys];
+		MAD_PASS([listedFields isEqualToSet: expectedFields], "the list holds both fields and only them");
+
+		NSSet *lines = [NSSet setWithArray: [select.sql componentsSeparatedByString: @",\n"]];
+		if (reversed.boolValue) {
+			secondFields = listedFields;
+			secondLines = lines;
+		} else {
+			firstFields = listedFields;
+			firstLines = lines;
+		}
+	}
+
+	MAD_PASS_EQUAL(firstFields, secondFields, "the same fields, whichever order they were created in");
+	MAD_PASS_EQUAL(firstLines, secondLines, "the same SELECT list, whichever order they were created in");
+}
+
 static void testActiveFieldsSelectListIsEmptyWithoutActiveFields(void) {
 	RptqStoreContext *context = inMemoryContext();
 
@@ -233,6 +286,7 @@ MAD_TEST_MAIN("MADQuerySelectExpressionTests",
 	MAD_TEST(testActiveQueryFieldsCollectsReferencedFieldsOnce),
 	MAD_TEST(testActiveQueryFieldsCollectsElementReferences),
 	MAD_TEST(testActiveFieldsSelectList),
+	MAD_TEST(testActiveFieldsSelectListContentComesFromTheSet),
 	MAD_TEST(testActiveFieldsSelectListIsEmptyWithoutActiveFields),
 	MAD_TEST(testAllFieldsSelectList),
 	MAD_TEST(testDispatcherChoosesImplementation));
