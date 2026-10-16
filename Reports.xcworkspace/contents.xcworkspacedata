@@ -65,4 +65,37 @@
    <FileRef
       location = "group:TODO.md">
    </FileRef>
+   <FileRef
+      location = "group:BUGS.md">
+   </FileRef>
+   <FileRef
+      location = "group:LIBRARIES.md">
+   </FileRef>
+   <FileRef
+      location = "group:MAD_ARRAY_CACHING.md">
+   </FileRef>
+   <FileRef
+      location = "group:MAD_CLI.md">
+   </FileRef>
+   <FileRef
+      location = "group:MAD_FORMAT.md">
+   </FileRef>
+   <FileRef
+      location = "group:MAD_LINUX.md">
+   </FileRef>
+   <FileRef
+      location = "group:MADModel_Layer.md">
+   </FileRef>
+   <FileRef
+      location = "group:MIGRATION_KICKOFF.md">
+   </FileRef>
+   <FileRef
+      location = "group:ROADMAP.md">
+   </FileRef>
+   <FileRef
+      location = "group:TASKS.md">
+   </FileRef>
+   <FileRef
+      location = "group:TEST-DB-INFO.md">
+   </FileRef>
 </Workspace>
