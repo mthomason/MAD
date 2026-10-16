@@ -126,6 +126,9 @@ the headless side.
   and in what order.
 * `MADDataTable_Architecture_Report.md` -- the `MADDataTable` class cluster across
   `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
+* `MADModel_Layer.md` -- the `MADModel*` read-model over the `Rptq` entities: what each
+  class is, how it is populated and kept current, who reads it, and the refactoring
+  candidates.
 * `MAD_FORMAT.md` -- what a `.mad` document is, and what it should be.
 * `MAD_FUTURE.md` -- the vision: the `.mad` as a data object, the hidden file types as
   products, the web clone, AI, and the money.
