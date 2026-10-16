@@ -5,6 +5,10 @@
 //  Created by Michael on 2/3/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  One schema field, keyed by the RptqDatabaseSchemaField row's identifier: name,
+//  data type and the width/decimals metadata.  Built by MADModelTable -update.
+//  The `inTable` back-pointer is declared but never assigned (MADModel_Layer.md §6).
+//
 
 #ifndef MAD_MADModelField_h
 #define MAD_MADModelField_h

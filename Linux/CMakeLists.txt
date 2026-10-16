@@ -294,8 +294,9 @@ include(cmake/MADSources.cmake)
 # them into one framework header dir -- so the shim is a directory of symlinks,
 # not the single symlink the other frameworks use.
 file(MAKE_DIRECTORY "${SHIM_DIR}/MAD")
-file(GLOB _mad_headers "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/rptq/*.h"
-	"${SOURCE_DIR}/rptq/autogen/*.h" "${SOURCE_DIR}/rptq/store/*.h" "${SOURCE_DIR}/paper/*.h")
+file(GLOB _mad_headers "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/model/*.h"
+	"${SOURCE_DIR}/rptq/*.h" "${SOURCE_DIR}/rptq/autogen/*.h" "${SOURCE_DIR}/rptq/store/*.h"
+	"${SOURCE_DIR}/paper/*.h")
 foreach (_mad_header IN LISTS _mad_headers)
 	get_filename_component(_mad_header_name "${_mad_header}" NAME)
 	file(CREATE_LINK "${_mad_header}" "${SHIM_DIR}/MAD/${_mad_header_name}" SYMBOLIC)
@@ -346,8 +347,8 @@ mad_add_framework(mad MAD_SOURCES
 # The framework's own quoted imports reach across its subdirectories, the way
 # the Xcode target's header search paths do.
 target_include_directories(mad PRIVATE
-	"${SOURCE_DIR}" "${SOURCE_DIR}/rptq" "${SOURCE_DIR}/rptq/autogen"
-	"${SOURCE_DIR}/rptq/store" "${SOURCE_DIR}/paper")
+	"${SOURCE_DIR}" "${SOURCE_DIR}/model" "${SOURCE_DIR}/rptq"
+	"${SOURCE_DIR}/rptq/autogen" "${SOURCE_DIR}/rptq/store" "${SOURCE_DIR}/paper")
 target_include_directories(mad PUBLIC
 	"${CMAKE_BINARY_DIR}/sqlite3-shim" "${CMAKE_BINARY_DIR}/sybdb-shim"
 	"${CMAKE_BINARY_DIR}/umbrella-shim")

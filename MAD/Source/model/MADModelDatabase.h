@@ -5,6 +5,10 @@
 //  Created by Michael on 2/3/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  The connection, its schema and its queries, keyed by the RptqDatabase row's
+//  identifier.  "Database" here means the connection plus its schema plus a query;
+//  today a document has exactly one, hence the document's `firstDatabase`.
+//
 
 #ifndef MADModelDatabase_h
 #define MADModelDatabase_h

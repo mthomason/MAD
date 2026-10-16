@@ -5,6 +5,11 @@
 //  Created by Michael on 2/3/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  One query, keyed by the RptqQuery row's identifier: which tables it uses
+//  (MADModelQueryTable), how they join (MADModelQueryLink), and the insert/delete
+//  methods that keep the model in step with store writes and re-post the
+//  MADNotification... events the query visualization observes.
+//
 
 #ifndef MADModelQuery_h
 #define MADModelQuery_h

@@ -5,6 +5,10 @@
 //  Created by Michael on 2/3/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  One field of a query table, keyed by the RptqQueryField row's identifier.  It
+//  carries two ids -- the schema table and the schema field -- and resolves the
+//  real metadata through the database (see -schemaField).
+//
 
 #ifndef MAD_MADModelQueryField_h
 #define MAD_MADModelQueryField_h

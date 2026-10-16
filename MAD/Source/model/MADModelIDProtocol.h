@@ -5,6 +5,8 @@
 //  Created by Michael on 6/3/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  Identity for the read-model: an int64 identifier that is the store row's own.
+//
 
 #ifndef MADModelIDProtocol_h
 #define MADModelIDProtocol_h

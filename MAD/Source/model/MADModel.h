@@ -5,6 +5,11 @@
 //  Created by Michael on 1/22/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  The base of the document read-model: identity only.  A model object's
+//  `identifier` is the store row's identifier, which is the glue between this layer
+//  and the Rptq entities.  The layer is a read-only view the designer's query UI
+//  binds to; write through Rptq.  See MADModel_Layer.md at the repo root.
+//
 
 #ifndef Reports_MADModel_h
 #define Reports_MADModel_h

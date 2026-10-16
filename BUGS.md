@@ -347,8 +347,8 @@ Status key:
   `NSSortDescriptor initWithKey:ascending:` the pre-migration fetches used.
   `MADDocumentTests testModelDatabaseSortsTablesAndFieldsByName` inserts
   tables and fields out of name order and pins the projected orders (green).
-- **Where:** `MAD/Source/MADModelTable.m` (`-update`) and
-  `MAD/Source/MADModelDatabase.m` (`-updateTables`)
+- **Where:** `MAD/Source/model/MADModelTable.m` (`-update`) and
+  `MAD/Source/model/MADModelDatabase.m` (`-updateTables`)
 - **Behavior:** both projection fetches sorted by `name` ascending before the
   migration; the store rewrites keep insertion order.  The model's field and
   table orderings feed the sample-data tables and the SQL/schema display
@@ -770,7 +770,7 @@ Status key:
   built earlier in the loop (`:289`), but the assignment only happens when
   `resultCounter == 0`, so a path that reaches `:301` with an unset `queryTable` sends nil
   to `setObject:forKey:`, which throws.
-- **Where:** `MAD/Source/MADModelQuery.m:285-302`.
+- **Where:** `MAD/Source/model/MADModelQuery.m:285-302`.
 - **Evidence:** `osx.cocoa.NilArg` from `xcodebuild analyze`.
 - **Now:** a table id whose projection filter matches no rows is skipped before anything
   is built, so the registration is never reached with an unset `queryTable` (and no stale
@@ -1046,7 +1046,7 @@ Status key:
 
 ### `MADModelQueryTable -addField:schemaField:` never wires the field's query table
 - **Status:** Quirk (documented, not changed)
-- **Where:** `MAD/Source/MADModelQueryTable.m:92-105`
+- **Where:** `MAD/Source/model/MADModelQueryTable.m:92-105`
 - **Behavior:** The field is registered in the table's dictionary under its identifier,
   but its `inQueryTable` back-reference is never set (nothing in the class's own
   initialiser sets it either), so every `MADModelQueryField` reports a nil query table.

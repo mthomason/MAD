@@ -5,6 +5,9 @@
 //  Created by Michael on 2/3/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  A table id and a field id boxed as one value -- the endpoint type of
+//  MADModelQueryLink.
+//
 
 #ifndef MAD_MADTableFieldIdentifier_h
 #define MAD_MADTableFieldIdentifier_h

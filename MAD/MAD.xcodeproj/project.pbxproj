@@ -1220,9 +1220,40 @@
 			path = ../Compressor/library/libarchive/include;
 			sourceTree = SOURCE_ROOT;
 		};
+		4CA7C3142EA6F00000475743 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				4C875F871E349FA40086C506 /* MADModel.h */,
+				4C875F881E349FA40086C506 /* MADModel.m */,
+				4CD85D091E444D97005DA2AF /* MADModelDatabase.h */,
+				4CD85D0B1E444DA2005DA2AF /* MADModelDatabase.m */,
+				4C7C00D41EE28B0D00E7A5B1 /* MADModelDataProtocol.h */,
+				4CD85D051E444D73005DA2AF /* MADModelDocument.h */,
+				4CD85D071E444D85005DA2AF /* MADModelDocument.m */,
+				4CD85D111E444DD7005DA2AF /* MADModelField.h */,
+				4CD85D131E444DE7005DA2AF /* MADModelField.m */,
+				4C7C00D21EE28AFD00E7A5B1 /* MADModelIDProtocol.h */,
+				4CD85D151E445A77005DA2AF /* MADModelQuery.h */,
+				4CD85D171E445A80005DA2AF /* MADModelQuery.m */,
+				4CFA87401E446A17002903B7 /* MADModelQueryField.h */,
+				4CFA873E1E4469FC002903B7 /* MADModelQueryField.m */,
+				4CFA87421E446B88002903B7 /* MADModelQueryLink.h */,
+				4CFA87441E446B96002903B7 /* MADModelQueryLink.m */,
+				4CFA873A1E446910002903B7 /* MADModelQueryTable.h */,
+				4CFA873C1E44691C002903B7 /* MADModelQueryTable.m */,
+				4CD85D0D1E444DB5005DA2AF /* MADModelTable.h */,
+				4CD85D0F1E444DC1005DA2AF /* MADModelTable.m */,
+				4C3F85671E8E756B0003B67C /* MADModelType.h */,
+				4CFA87461E446E78002903B7 /* MADTableFieldIdentifier.h */,
+				4CFA87481E446E94002903B7 /* MADTableFieldIdentifier.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		4CA7C30F2EA445F900475743 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4CA7C3142EA6F00000475743 /* model */,
 				4CA7C3122EA44BA900475743 /* paper */,
 				4CA7C3102EA44B3800475743 /* rptq */,
 				4C8278BE1DB76E19005313F5 /* MADNotificationProtocol.h */,
@@ -1253,29 +1284,6 @@
 				4C82C9891CF21A3E00F244F6 /* madpng.h */,
 				4C82C9881CF21A3E00F244F6 /* madpng.c */,
 
-				4C3F85671E8E756B0003B67C /* MADModelType.h */,
-				4C875F871E349FA40086C506 /* MADModel.h */,
-				4C875F881E349FA40086C506 /* MADModel.m */,
-				4CD85D051E444D73005DA2AF /* MADModelDocument.h */,
-				4CD85D071E444D85005DA2AF /* MADModelDocument.m */,
-				4CD85D091E444D97005DA2AF /* MADModelDatabase.h */,
-				4CD85D0B1E444DA2005DA2AF /* MADModelDatabase.m */,
-				4CD85D0D1E444DB5005DA2AF /* MADModelTable.h */,
-				4CD85D0F1E444DC1005DA2AF /* MADModelTable.m */,
-				4CD85D111E444DD7005DA2AF /* MADModelField.h */,
-				4CD85D131E444DE7005DA2AF /* MADModelField.m */,
-				4CD85D151E445A77005DA2AF /* MADModelQuery.h */,
-				4CD85D171E445A80005DA2AF /* MADModelQuery.m */,
-				4CFA873A1E446910002903B7 /* MADModelQueryTable.h */,
-				4CFA873C1E44691C002903B7 /* MADModelQueryTable.m */,
-				4CFA87401E446A17002903B7 /* MADModelQueryField.h */,
-				4CFA873E1E4469FC002903B7 /* MADModelQueryField.m */,
-				4CFA87421E446B88002903B7 /* MADModelQueryLink.h */,
-				4CFA87441E446B96002903B7 /* MADModelQueryLink.m */,
-				4CFA87461E446E78002903B7 /* MADTableFieldIdentifier.h */,
-				4CFA87481E446E94002903B7 /* MADTableFieldIdentifier.m */,
-				4C7C00D21EE28AFD00E7A5B1 /* MADModelIDProtocol.h */,
-				4C7C00D41EE28B0D00E7A5B1 /* MADModelDataProtocol.h */,
 				4CC982841F4BBF2800E0496A /* MADocumentDesignerProtocol.h */,
 				4C401E441BAE4D8C00BAE5FC /* MADocument.h */,
 				4C401E451BAE4D8C00BAE5FC /* MADocument.m */,

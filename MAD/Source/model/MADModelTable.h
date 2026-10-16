@@ -5,6 +5,10 @@
 //  Created by Michael on 2/3/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  One schema table, keyed by the RptqDatabaseSchemaTable row's identifier: its
+//  name and, lazily, its fields (sorted by name).  The schema-side counterpart of
+//  MADModelQueryTable; read by the query tab's schema browser.
+//
 
 #ifndef MADModelTable_h
 #define MADModelTable_h

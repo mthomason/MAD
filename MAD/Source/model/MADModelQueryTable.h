@@ -5,6 +5,10 @@
 //  Created by Michael on 2/3/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  One table pulled into a query, keyed by the RptqQueryTable row's identifier:
+//  the schema table it stands for, its drop index, and its selected fields
+//  (MADModelQueryField).  -alias is the SQL-facing name: "Customer", "Customer0", ...
+//
 
 #ifndef MADModelQueryTable_h
 #define MADModelQueryTable_h

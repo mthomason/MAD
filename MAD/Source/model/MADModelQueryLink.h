@@ -5,6 +5,10 @@
 //  Created by Michael on 2/3/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  One join in a query, keyed by the RptqQueryLinks row's identifier: the
+//  table+field pair at each end (MADTableFieldIdentifier).  These are the graph
+//  edges of the query visualization.
+//
 
 #ifndef MAD_MADModelQueryLink_h
 #define MAD_MADModelQueryLink_h

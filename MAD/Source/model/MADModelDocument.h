@@ -5,6 +5,12 @@
 //  Created by Michael on 2/3/17.
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
+//  The root of the read-model: one per open document, built lazily by
+//  -MADocument.documentModel over the store context.  Owns the databases and
+//  queries, and observes the store's change notifications so query-graph changes
+//  arrive as the MADNotification... postings the designer subscribes to.
+//  See MADModel_Layer.md at the repo root.
+//
 
 #ifndef MADModelDocument_h
 #define MADModelDocument_h
