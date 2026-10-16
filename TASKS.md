@@ -362,10 +362,24 @@ the cycle. `CLI/build.sh`'s `REFRESH_SOURCES` is gone; the CLI takes the chain f
 
 ## 8. Export formats — the third extensibility seam
 
-**Status:** Open — and this is the next task (`ROADMAP.md` Track 5.2, `MAD_LINUX.md` §9
-Phase E). It needs two decisions from the user before code: **the JSON export shape**
-(`MAD_CLI.md` §8.3, `MAD_LINUX.md` §10.1) and **the renderer staging** (§10.2, HTML/SVG
-before PDF). Both should be put as options with a recommendation, not guessed.
+**Status:** The seam and the Foundation formats landed 2026-10-16 (`2c0e6df6c`,
+`c97ded85c`); the byte-identical `.mad` half is still open.  It needed two decisions
+from the user before code — **the JSON export shape** (`MAD_CLI.md` §8.3,
+`MAD_LINUX.md` §10.1) and **the renderer staging** (§10.2, HTML/SVG before PDF) — plus
+two more the work raised: how `json-report` reaches the rendered report, and whether
+`pdf` moves onto the seam now.  All four were put as options with a recommendation and
+answered 2026-10-16: both JSON shapes with the report half as its own format (`json` +
+`json-report`); the SELECT list's order defined as the column alias; HTML/SVG next and
+PDF last; `pdf` stays the CLI's arm until the HTML step; and, for the byte-identity
+work, an opt-in reproducible mode on `-archive:` landing after the formats.
+
+**What landed** (`ROADMAP.md` §5.2, `MAD_LINUX.md` §9 Phase E): `<MADReportExporting>`
+and `MADReportExporterRegistry` in the driver registry's shape; `MADReportExportSource`
+and `MADReportExportWriter` as the one read and the one write; `text`, `csv`, `json`
+(both platforms, byte-identical output on both — digests in `Linux/README.md`) and
+`json-report` (Apple; built from the page renderer's walk, now split from its draw).
+**What remains:** HTML/SVG and the render half's move to Linux (which brings
+`json-report` there), `pdf` onto the seam, and the `.mad` writer's reproducible mode.
 
 Two things landed since this entry was written and belong to it: the driver registry
 (`ROADMAP.md` §5.1, `61991e85f`) — the seam shape this task mirrors — and the CLI

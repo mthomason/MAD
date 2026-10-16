@@ -58,6 +58,10 @@
 
 - (NSUInteger)numberOfRows { return self.rows.count; }
 
+- (NSArray <__kindof MADReportSectionRowsRepresentation *> *)allRows {
+	return self.rows.copy;
+}
+
 #pragma mark - MADTextRepresentationProtocol
 
 - (NSUInteger)characterCount {

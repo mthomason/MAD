@@ -299,11 +299,21 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 - (void)drawPageAtIndex:(NSUInteger)pageIndex
 			withContext:(CGContextRef)ctx
 			 inPageRect:(CGRect)pageRect {
+	[self buildPageAtIndex: pageIndex context: ctx inPageRect: pageRect];
+}
+
+// The walk, and the drawing when there is a context to draw into.  The page is built
+// from the data either way -- a section's elements carry their resolved text in the
+// drawing objects they build -- so a caller that only wants the structure passes NULL
+// and reads what comes back (MADPrintPageRenderer.h; MAD_LINUX.md §9 Phase E).
+- (MADReportPageRepresentation *)buildPageAtIndex:(NSUInteger)pageIndex
+										  context:(CGContextRef)ctx
+									   inPageRect:(CGRect)pageRect {
 	NSObject <MADPrintPageRendererDataSourceProtocol> * datasource = self.datasource;
 
 	MADReportFormatter *reportFormatter = datasource.reportFormatter;
 	if (pageIndex >= reportFormatter.numberOfPages) {
-		return;
+		return nil;
 	}
 
 	// One read transaction for the whole page: every cell read would otherwise pay
@@ -334,16 +344,17 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 			readGroupCounter++;
 		}
 		
-		MADReportSectionRepresentation *sectionRepresentation = [self drawSection: documentSection
-																		   inRect: rect
-																		 pageRect: pageRect
-																	  pageSection: pageSection
-																		 document: document
-																		pageIndex: pageIndex
-																		  ofPages: reportFormatter.numberOfPages
-																		   offset: originY
-																	offsetElement: offsetElement
-																  offsetCharacter: offsetCharacter];
+		MADReportSectionRepresentation *sectionRepresentation = [self buildSection: documentSection
+																			inRect: rect
+																		  pageRect: pageRect
+																	   pageSection: pageSection
+																		  document: document
+																		 pageIndex: pageIndex
+																		   ofPages: reportFormatter.numberOfPages
+																			offset: originY
+																	 offsetElement: offsetElement
+																   offsetCharacter: offsetCharacter
+																		   context: ctx];
 
 		[pageRepresentation addSection:sectionRepresentation];
 		
@@ -359,21 +370,25 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	[self.textRepresentation setPage:pageRepresentation forPageIndex:pageIndex];
 
 	[datasource.dataTable commitReadTransaction];
+
+	return pageRepresentation;
 }
 
-- (MADReportSectionRepresentation *)drawSection: (RptqDocumentSection *)documentSection
-										 inRect: (CGRect)rect
-									   pageRect: (CGRect)pageRect
-									pageSection: (MADSectionRepresentation *)pageSection
-									   document: (RptqDocument *)document
-									  pageIndex: (NSUInteger)pageIndex
-										ofPages: (NSUInteger)numberOfPages
-										 offset: (CGFloat)originY
-								  offsetElement: (NSUInteger)offsetElement
-								offsetCharacter: (NSUInteger)offsetCharacter {
+- (MADReportSectionRepresentation *)buildSection: (RptqDocumentSection *)documentSection
+										  inRect: (CGRect)rect
+										pageRect: (CGRect)pageRect
+									 pageSection: (MADSectionRepresentation *)pageSection
+										document: (RptqDocument *)document
+									   pageIndex: (NSUInteger)pageIndex
+										 ofPages: (NSUInteger)numberOfPages
+										  offset: (CGFloat)originY
+								   offsetElement: (NSUInteger)offsetElement
+								 offsetCharacter: (NSUInteger)offsetCharacter
+										 context: (CGContextRef)ctx {
 
 	MADReportSectionRepresentation * _Nonnull sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:1];
 	sectionRepresentation.type = pageSection.sectionType;
+	sectionRepresentation.groupLevel = pageSection.groupLevel;
 	sectionRepresentation.elementOffset = offsetElement;
 	sectionRepresentation.visibility = documentSection.visibility;
 	
@@ -394,7 +409,11 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 				
 				__kindof MADPrintPageElement *drawingObject = [MADPrintPageElement newDocumentObject:dataReference];
 
-				[drawingObject drawInRect:ElementBounds(item.frame, rect.origin)];
+				// The element is built either way -- its text is resolved in its
+				// initializer -- and drawn only when there is a page to draw on.
+				if (ctx != NULL) {
+					[drawingObject drawInRect:ElementBounds(item.frame, rect.origin)];
+				}
 				
 				MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
 																											 type: item.documentObjectType

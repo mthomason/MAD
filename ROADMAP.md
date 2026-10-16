@@ -557,9 +557,12 @@ usage text names whatever the build links. `text`, `csv` and `json` are pure Fou
 and run on both platforms; `mad export --format json` is the data contract of
 `MAD_DATA_OBJECT.md` §6, `MAD_CLI.md` §8.3 now answers the shape question, and the
 three formats write **byte-identical output on Apple and Linux** for the London fixture
-(digests compared, `Linux/README.md` § the CLI). Next, in this order: `json-report`'s
-report member, then HTML (with the render half's move to Linux), then the PDF decision
-(`MAD_LINUX.md` §10.2: the user chose HTML first, PDF last). `pdf` itself is still the
+(digests compared, `Linux/README.md` § the CLI), and `json-report` — the same schema
+with the rendered report as an extra member — landed with them on Apple, built from
+the page renderer's own walk (now split from its draw) so it cannot drift from what a
+PDF shows. Next, in this order: HTML (with the render half's move to Linux, which also
+brings `json-report` there), then the PDF decision (`MAD_LINUX.md` §10.2: the user
+chose HTML first, PDF last). `pdf` itself is still the
 CLI's own arm — an exporter needs a render-half protocol, which is the HTML step's work
 — and the columns the formats carry are the query's own, in the alias order the SELECT
 list now defines (`BUGS.md`).

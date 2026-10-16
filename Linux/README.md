@@ -331,9 +331,11 @@ refreshed first, `sha256sum` on each side):
 `Linux/Tests/MADReportExporterTests.m` is the same check as a test: it refreshes the
 fixture and asserts each export's FNV-1a checksum against the Mac's bytes (plus the
 shape and a few values), so a spelling that drifts between GNUstep and Apple fails
-here. `json-report`'s report member is the agreed next format, and it needs the render
-half (`MADReportFormatter`), which is still Apple-only — it registers everywhere and
-says why it cannot run here (`MAD_CLI.md` §3).
+here. `json-report` is the same schema with the rendered report as an extra member; it
+needs the render half (`MADReportFormatter` and the page renderer), which is still
+Apple-only — it registers everywhere and says why it cannot run here
+(`MAD_CLI.md` §3), and `Linux/Tests/MADReportExporterTests.m` asserts that it fails
+rather than silently writing the data half.
 
 **How the document class was settled.** `MADocument` is a `UIDocument`, so it
 cannot come along, and `MADCLIDocument` used to be built on it. The data half of

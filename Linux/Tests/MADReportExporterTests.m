@@ -23,6 +23,7 @@
 #import <MAD/MADReportExporting.h>
 #import <MAD/MADReportExporterCSV.h>
 #import <MAD/MADReportExporterJSON.h>
+#import <MAD/MADReportExporterJSONReport.h>
 #import <MAD/MADReportExporterRegistry.h>
 #import <MAD/MADReportExporterText.h>
 #import <MAD/MADReportExportSource.h>
@@ -155,10 +156,37 @@ static void testTheFormatsAreRegistered(void) {
 	MAD_PASS([names containsObject: @"csv"], "csv is registered");
 	MAD_PASS([names containsObject: @"json"], "json is registered");
 
+	MAD_PASS([names containsObject: @"json-report"], "json-report is registered");
 	MAD_PASS_EQUAL([MADReportExporterRegistry exporterClassForFormat: @"JSON"], [MADReportExporterJSON class],
 				   "the lookup is case-insensitive");
 	MAD_PASS([MADReportExporterRegistry exporterClassForFormat: @"yaml"] == Nil,
 			 "an unregistered format answers Nil");
+}
+
+// The report member needs the render half, which this build does not compile: the
+// format registers anyway -- so the CLI can name it and say why -- and answers for
+// itself rather than silently writing the data half under its name.
+static void testTheReportFormatIsRegisteredAndSaysWhyItCannotRun(void) {
+	Class <MADReportExporting> exporterClass = [MADReportExporterRegistry exporterClassForFormat: @"json-report"];
+	MAD_PASS(exporterClass != Nil, "the report format is registered here, not hidden from the format list");
+	MAD_PASS(![exporterClass isAvailable], "this build cannot produce it");
+	MAD_PASS([exporterClass unavailableReason].length > 0, "it says why (the render half is Apple-only)");
+	MAD_NEED([exporterClass unavailableReason] != nil, @"the reason string is missing");
+	MAD_PASS([[exporterClass unavailableReason] rangeOfString: @"render half"].location != NSNotFound,
+			 "the reason names the render half");
+
+	if (!MADExporterFixtureIsThere()) return;
+	MADHeadlessDocument *document = MADExporterDocument();
+	MAD_NEED(document != nil, @"could not open the London fixture");
+	MAD_NEED(document.numberOfResults == 76, @"the fixture did not refresh (76 rows expected)");
+
+	NSURL *url = MADExporterOutputURL(@"london.report.json");
+	id <MADReportExporting> exporter = [[(Class)exporterClass alloc] init];
+	NSError *error = nil;
+	MAD_PASS(![exporter exportDocument: document toURL: url options: MADReportExportOptionsNone error: &error],
+			 "an export that cannot run fails rather than writing the data half");
+	MAD_PASS(error != nil, "and it says why");
+	MAD_PASS(![[NSFileManager defaultManager] fileExistsAtPath: url.path], "nothing was written");
 }
 
 #pragma mark - The formats
@@ -239,6 +267,7 @@ static void testDatesAreISO8601InUTC(void) {
 
 MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testTheFormatsAreRegistered),
+	MAD_TEST(testTheReportFormatIsRegisteredAndSaysWhyItCannotRun),
 	MAD_TEST(testNumbersAreSpelledInOneRoundTripForm),
 	MAD_TEST(testDatesAreISO8601InUTC),
 	MAD_TEST(testTheTextExportIsATableOfTheRows),

@@ -168,6 +168,7 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADReportExporting.h>
 #import <MAD/MADReportExporterCSV.h>
 #import <MAD/MADReportExporterJSON.h>
+#import <MAD/MADReportExporterJSONReport.h>
 #import <MAD/MADReportExporterRegistry.h>
 #import <MAD/MADReportExporterText.h>
 #import <MAD/MADReportExportSource.h>
@@ -182,6 +183,7 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADSortOrder.h>
 #import <MAD/MADTableFieldIdentifier.h>
 #import <MAD/MADTableFormatter.h>
+#import <MAD/MADDocumentRenderProtocol.h>
 #import <MAD/MADocumentSectionType.h>
 #import <MAD/RptqAlignment.h>
 #import <MAD/RptqBorder.h>

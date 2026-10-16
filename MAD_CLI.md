@@ -132,19 +132,21 @@ The formats are the export seam's (§5.3): each is a class registered with
 | `text` | the rows as a fixed-width table | both platforms |
 | `csv` | the rows as RFC 4180 CSV | both platforms |
 | `json` | the schema and the rows as JSON (§8.3) | both platforms |
-| `json-report` | `json` plus the rendered report's sections | where the render half runs (Apple today) |
+| `json-report` | `json` plus the rendered report's sections | where the render half is (Apple today; Linux says why not) |
 
 `--out` is optional for the Foundation formats -- absent, or `-`, writes the standard
 output -- and required for `pdf`. The Foundation formats write the same bytes on Apple
 and on Linux for the same document (`Linux/README.md`; the two platforms' exports of
 the London fixture compare equal by digest).
 
-**`json-report` is the agreed next format** (`MAD_LINUX.md` §10.1, §9 Phase E): one
-schema, with the report's own sections and aggregates as a member the data-only
-formats do not carry -- useful for testing and for a renderer. It needs the render
-half (`MADReportFormatter`), which the Linux build excludes today; it registers
-everywhere and reports why it cannot run there until that half is ported with the
-HTML step.
+**`json-report`** (`MAD_LINUX.md` §10.1, §9 Phase E) is the same schema with the
+rendered report as a `report` member: pages, each page's sections in draw order (type,
+group level, visibility), each section's rows, and each line's element kind, frame and
+resolved text. It is what testing and a renderer read, and it is the renderer's own
+structure -- the page walk with nothing drawn -- so it cannot drift from what a PDF
+shows. It needs the render half (`MADReportFormatter`, the page renderer), which the
+Linux build excludes today; it registers everywhere and reports why it cannot run
+there (`json` is the data half and works).
 
 Rendering to PDF goes through `MADPrintPageRenderer`; the share-sheet wrapper
 `MADActivityItemProviderPdf` is its other caller, and `MADActivityItemProviderDelegate.h`
@@ -283,14 +285,13 @@ and the CLI asks for one by name. `text`, `csv` and `json` are the framework's o
 formats cannot disagree about what a document is; and `MADReportExportWriter` is the one
 place bytes reach a file or the standard output.
 
-Two things are deliberately not on the seam yet, and both wait for the render half's own
-protocol (the HTML step, `MAD_LINUX.md` §9 Phase E):
+`json-report` is on the seam too, built on the render half's first protocol
+(`MADDocumentRenderProtocol`: a document that can ready its rows, format and hand over
+its formatter). One format is deliberately not on it yet:
 
 * **`pdf`** is still the CLI's own arm, because it draws through `MADocument` +
-  `MADPrintPageRenderer`, and the render-half protocol that would let an exporter be
-  handed "a document that can render" is the same one HTML needs.
-* **`json-report`** registers and reports why it cannot run where the render half is
-  absent, rather than being hidden from the format list.
+  `MADPrintPageRenderer` and needs the render-half protocol to reach an exporter; it
+  becomes one with the HTML step (`MAD_LINUX.md` §10.2).
 
 ### 5.4 Credentials
 
@@ -354,10 +355,10 @@ connection.
    yet.
 3. **What is the JSON export shape? — answered 2026-10-16: both, the report half as
    its own format.** `--format json` is the data contract, `--format json-report`
-   adds the rendered report's sections and aggregates as an extra member. The shape
-   is in `MADReportExporterJSON.h`, implemented by `MADReportExporterJSON` (the data
-   half, both platforms) and `MADReportExporterJSONReport` (the report member, where
-   the render half runs). Its columns are the query's own, in the order the SELECT
+   adds the rendered report as an extra member. The shape is in
+   `MADReportExporterJSON.h`, implemented by `MADReportExporterJSON` (the data half,
+   both platforms) and `MADReportExporterJSONReport` (the report member, where the
+   render half is). Its columns are the query's own, in the order the SELECT
    list defines -- the column alias, sorted (`BUGS.md`, the SELECT-list entry) --
    and a value keeps its JSON type: numbers are numbers, NULL is `null`, dates are
    ISO 8601 and binary is base64.

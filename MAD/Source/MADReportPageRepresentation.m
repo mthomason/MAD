@@ -50,6 +50,10 @@ typedef NSMutableArray <__kindof MADReportSectionRepresentation *> MADReportSect
 	return self.sections.count;
 }
 
+- (NSArray <__kindof MADReportSectionRepresentation *> *)allSections {
+	return self.sections.copy;
+}
+
 #pragma mark - MADTextRepresentationProtocol
 
 - (NSUInteger)characterCount {

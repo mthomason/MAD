@@ -19,6 +19,7 @@
 #import <MAD/MADSortOrder.h>
 #import <MAD/MADReportFormatterDataSourceProtocol.h>
 #import <MAD/MADDocumentDataProtocol.h>
+#import <MAD/MADDocumentRenderProtocol.h>
 
 #import <UIKit/UIDocument.h>
 #import <UIKit/UIPrintInteractionController.h>
@@ -35,7 +36,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 - (void)setStatusText:(NSString *)statusText;
 @end
 
-@interface MADocument : UIDocument <UIPrintInteractionControllerDelegate, MADDataProtocol, MADCacheProtocol, MADReportFormatterDataSource, MADPrintPageRendererDataSourceProtocol, MADDocumentDataProtocol>
+@interface MADocument : UIDocument <UIPrintInteractionControllerDelegate, MADDataProtocol, MADCacheProtocol, MADReportFormatterDataSource, MADPrintPageRendererDataSourceProtocol, MADDocumentDataProtocol, MADDocumentRenderProtocol>
 
 @property (nonatomic, readonly, strong) MADDesignerQuery *designerQuery;
 @property (nonatomic, readonly, strong) MADDesignerLayout *designerLayout;

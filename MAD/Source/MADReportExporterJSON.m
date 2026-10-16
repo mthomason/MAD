@@ -70,7 +70,7 @@ static NSString * const MADReportExporterJSONFormat = @"mad.report/1";
 	NSMutableString *json = [[NSMutableString alloc] init];
 	[json appendString: @"{\n"];
 	[self appendEntriesToJSON: json source: source];
-	[json appendString: @"}\n"];
+	[json appendString: @"\n}\n"];
 
 	return [MADReportExportWriter writeString: json toURL: url error: error];
 }
@@ -136,8 +136,6 @@ static NSString * const MADReportExporterJSONFormat = @"mad.report/1";
 		[json appendString: @" }"];
 	}
 	if (wroteRow) [json appendString: @"\n  ]"]; else [json appendString: @"]"];
-
-	[json appendString: @"\n"];
 }
 
 #pragma mark - JSON spelling

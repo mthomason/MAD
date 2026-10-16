@@ -496,12 +496,17 @@ section of `Linux/README.md`; `Linux/Tests/MADReportExporterTests.m` pins the sa
 bytes with an FNV-1a checksum). The JSON shape is decided (§10.1): `json` is the data
 contract — the query's columns in alias order, the rows, the SQL, the driver — and
 `json-report` is the same document with the rendered report's sections as an extra
-member, the user's choice on 2026-10-16 (it needs the render half, so it registers
-everywhere and reports why it cannot run here yet). The remaining half of Phase E —
-`json-report`'s report member and HTML/SVG — is the render half's move to Linux,
-which the user's renderer decision (HTML/SVG next, PDF last, §10.2) puts on the HTML
-step. `pdf` is still the CLI's own arm; an exporter needs a render-half protocol,
-which is that same step's work.
+member, the user's choice on 2026-10-16: pages, sections in draw order, and each
+line's kind, frame and resolved text, built from the renderer's own page walk with
+nothing drawn — so it cannot drift from what a PDF shows. It needs the render half,
+so it registers everywhere and reports why it cannot run here. That walk is
+`MADPrintPageRenderer -buildPageAtIndex:context:inPageRect:`, which takes a nullable
+context: the PDF path passes its own and draws as before, and json-report passes NULL;
+the render half's first protocol, `MADDocumentRenderProtocol`, is what the format asks
+the document for. The remaining half of Phase E — the report member on Linux and
+HTML/SVG — is the render half's move to Linux, which the user's renderer decision
+(HTML/SVG next, PDF last, §10.2) puts on the HTML step. `pdf` is still the CLI's own
+arm; it becomes an exporter with that same step.
 
 ---
 

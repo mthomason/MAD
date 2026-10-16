@@ -22,6 +22,10 @@
 	- (nonnull instancetype)initWithNumberOfSections:(NSUInteger)numberOfSections NS_DESIGNATED_INITIALIZER;
 	- (void)addSection:(nonnull MADReportSectionRepresentation *)section;
 
+	/// The sections in page order: what a reader of the representation walks, and what
+	/// the json-report member serializes (MADReportExporterJSONReport.h).
+	- (nonnull NSArray <__kindof MADReportSectionRepresentation *> *)allSections;
+
 @end
 
 #endif

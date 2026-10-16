@@ -393,6 +393,9 @@
 		4C0DB0A1000000000000F10B /* MADReportExporterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F00B /* MADReportExporterText.m */; };
 		4C0DB0A1000000000000F10C /* MADReportExporterCSV.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F00C /* MADReportExporterCSV.m */; };
 		4C0DB0A1000000000000F10D /* MADReportExporterJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F00D /* MADReportExporterJSON.m */; };
+	4C0DB0A1000000000000F10E /* MADReportExporterJSONReport.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F00E /* MADReportExporterJSONReport.h */; settings = {ATTRIBUTES = (Public, ); }; };
+	4C0DB0A1000000000000F10F /* MADReportExporterJSONReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F00F /* MADReportExporterJSONReport.m */; };
+	4C0DB0A1000000000000F110 /* MADDocumentRenderProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F010 /* MADDocumentRenderProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C0DB0A1000000000000D007 /* MADOperationRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D001 /* MADOperationRefresh.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C0DB0A1000000000000D00A /* MADOperationRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D002 /* MADOperationRefresh.m */; };
 		4C0DB0A1000000000000D008 /* MADOperationRefreshInitialize.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D003 /* MADOperationRefreshInitialize.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -972,6 +975,9 @@
 		4C0DB0A1000000000000F00B /* MADReportExporterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportExporterText.m; sourceTree = "<group>"; };
 		4C0DB0A1000000000000F00C /* MADReportExporterCSV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportExporterCSV.m; sourceTree = "<group>"; };
 		4C0DB0A1000000000000F00D /* MADReportExporterJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportExporterJSON.m; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F00E /* MADReportExporterJSONReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportExporterJSONReport.h; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F00F /* MADReportExporterJSONReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportExporterJSONReport.m; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F010 /* MADDocumentRenderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentRenderProtocol.h; sourceTree = "<group>"; };
 		4C0DB0A1000000000000D001 /* MADOperationRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefresh.h; sourceTree = "<group>"; };
 		4C0DB0A1000000000000D002 /* MADOperationRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationRefresh.m; sourceTree = "<group>"; };
 		4C0DB0A1000000000000D003 /* MADOperationRefreshInitialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefreshInitialize.h; sourceTree = "<group>"; };
@@ -1537,6 +1543,9 @@
 				4C0DB0A1000000000000F00B /* MADReportExporterText.m */,
 				4C0DB0A1000000000000F00C /* MADReportExporterCSV.m */,
 				4C0DB0A1000000000000F00D /* MADReportExporterJSON.m */,
+				4C0DB0A1000000000000F00E /* MADReportExporterJSONReport.h */,
+				4C0DB0A1000000000000F00F /* MADReportExporterJSONReport.m */,
+				4C0DB0A1000000000000F010 /* MADDocumentRenderProtocol.h */,
 				4C0DB0A1000000000000D001 /* MADOperationRefresh.h */,
 				4C0DB0A1000000000000D002 /* MADOperationRefresh.m */,
 				4C0DB0A1000000000000D003 /* MADOperationRefreshInitialize.h */,
@@ -2060,6 +2069,8 @@
 				4C0DB0A1000000000000F105 /* MADReportExporterText.h in Headers */,
 				4C0DB0A1000000000000F106 /* MADReportExporterCSV.h in Headers */,
 				4C0DB0A1000000000000F107 /* MADReportExporterJSON.h in Headers */,
+				4C0DB0A1000000000000F10E /* MADReportExporterJSONReport.h in Headers */,
+				4C0DB0A1000000000000F110 /* MADDocumentRenderProtocol.h in Headers */,
 				4C0DB0A1000000000000D007 /* MADOperationRefresh.h in Headers */,
 				4C0DB0A1000000000000D008 /* MADOperationRefreshInitialize.h in Headers */,
 				4C0DB0A1000000000000D009 /* MADOperationRefreshInitalizeMainDataTable.h in Headers */,
@@ -2301,6 +2312,7 @@
 				4C0DB0A1000000000000F10B /* MADReportExporterText.m in Sources */,
 				4C0DB0A1000000000000F10C /* MADReportExporterCSV.m in Sources */,
 				4C0DB0A1000000000000F10D /* MADReportExporterJSON.m in Sources */,
+				4C0DB0A1000000000000F10F /* MADReportExporterJSONReport.m in Sources */,
 				4C0DB0A1000000000000D00A /* MADOperationRefresh.m in Sources */,
 				4C0DB0A1000000000000D00B /* MADOperationRefreshInitialize.m in Sources */,
 				4C0DB0A1000000000000D00C /* MADOperationRefreshInitalizeMainDataTable.m in Sources */,

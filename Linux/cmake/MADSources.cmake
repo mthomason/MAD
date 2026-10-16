@@ -110,6 +110,7 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/MADQueryTest.m"
 	"${SOURCE_DIR}/MADReportExporterCSV.m"
 	"${SOURCE_DIR}/MADReportExporterJSON.m"
+	"${SOURCE_DIR}/MADReportExporterJSONReport.m"
 	"${SOURCE_DIR}/MADReportExporterRegistry.m"
 	"${SOURCE_DIR}/MADReportExporterText.m"
 	"${SOURCE_DIR}/MADReportExportSource.m"

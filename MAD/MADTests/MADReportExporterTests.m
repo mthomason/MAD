@@ -16,6 +16,7 @@
 #import <MAD/MADReportExporting.h>
 #import <MAD/MADReportExporterCSV.h>
 #import <MAD/MADReportExporterJSON.h>
+#import <MAD/MADReportExporterJSONReport.h>
 #import <MAD/MADReportExporterRegistry.h>
 #import <MAD/MADReportExporterText.h>
 #import <MAD/MADReportExportSource.h>
@@ -84,6 +85,20 @@
 	XCTAssertEqual([MADReportExporterRegistry exporterClassForFormat: @"test-format"], [MADTestReportExporter class]);
 	XCTAssertTrue([[MADReportExporterRegistry registeredExporterClasses] containsObject: [MADTestReportExporter class]]);
 	XCTAssertNoThrow([MADReportExporterRegistry registerExporterClass: [MADTestReportExporter class]]);
+}
+
+- (void)testTheReportFormatIsRegisteredAndAnswersForThisPlatform {
+	Class <MADReportExporting> exporterClass = [MADReportExporterRegistry exporterClassForFormat: @"json-report"];
+	XCTAssertEqual(exporterClass, [MADReportExporterJSONReport class]);
+	XCTAssertEqualObjects([exporterClass fileExtension], @"json", @"the report member rides in the json shape");
+	XCTAssertTrue([exporterClass isKindOfClass: [NSObject class]]);
+	XCTAssertTrue([MADReportExporterJSONReport isSubclassOfClass: [MADReportExporterJSON class]],
+				  @"the report format is the json format plus one member");
+
+	// The render half is Apple's, so this build answers yes and gives no reason --
+	// the Linux port of this suite asserts the opposite, with the reason.
+	XCTAssertTrue([exporterClass isAvailable]);
+	XCTAssertNil([exporterClass unavailableReason]);
 }
 
 - (void)testASecondExporterForOneNameRaises {

@@ -43,9 +43,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MADReportExporterJSON : NSObject <MADReportExporting>
 
-/// The members of the top-level object, in the order the schema lists them, each
-/// followed by a comma except the last, at one level of indentation.  A subclass that
-/// adds a member of its own calls super and appends its own.
+/// The members of the top-level object, in the order the schema lists them, at one
+/// level of indentation, each but the first *preceded* by its comma -- so the entry
+/// list never ends on a comma and a subclass appending a member of its own writes
+/// ",,\n  \"name\": ..." after calling super.
 - (void)appendEntriesToJSON:(NSMutableString *)json
                      source:(MADReportExportSource *)source;
 
