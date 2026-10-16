@@ -16,7 +16,7 @@
 
 #import <MADFoundation/MADCredential.h>
 
-#import <MAD/MADocument.h>
+#import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/RptqStoreContext.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
@@ -43,12 +43,12 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 }
 
 @interface MADOperationRefresh ()
-@property (nonatomic, weak) MADocument *document;
+@property (nonatomic, weak) id <MADDocumentDataProtocol> document;
 @end
 
 @implementation MADOperationRefresh
 
-- (instancetype)initWithDocument:(MADocument *)document {
+- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document {
 	if (self = [super init]) {
 		_document = document;
 	}
@@ -62,7 +62,7 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 		return [self finish];
 	}
 	
-	MADocument *document = self.document;
+	id <MADDocumentDataProtocol> document = self.document;
 	if (!document) {
 		NSError *docNullError = [[NSError alloc] initWithDomain: MADOperationRefreshErrorDomain
 														   code: errNoDocument

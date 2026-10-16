@@ -11,16 +11,16 @@
 
 #import <MADFoundation/MADOperation.h>
 
-@class MADocument;
+#import <MAD/MADDocumentDataProtocol.h>
 
 @protocol MADOperationRefreshInitializeMainDataTableProtocol <NSObject>
-	@property (readonly, nonatomic, weak) MADocument *document;
+	@property (readonly, nonatomic, weak) id <MADDocumentDataProtocol> document;
 @end
 
 @interface MADOperationRefreshInitializeMainDataTable : MADOperation
 	<MADOperationRefreshInitializeMainDataTableProtocol>
 
-	- (instancetype)initWithDocument:(MADocument *)document;
+	- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document;
 
 @end
 

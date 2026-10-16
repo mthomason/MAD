@@ -7,19 +7,19 @@
 //
 
 #import "MADOperationRefreshInitalizeMainDataTable.h"
-#import <MAD/MADocument.h>
+#import <MAD/MADDocumentDataProtocol.h>
 #import <MADFoundation/madlog.h>
 
 @interface MADOperationRefreshInitializeMainDataTable ()
 
-	@property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, weak) id <MADDocumentDataProtocol> document;
 	@property (nonatomic, assign) BOOL success;
 
 @end
 
 @implementation MADOperationRefreshInitializeMainDataTable
 
-- (instancetype)initWithDocument:(MADocument *)document {
+- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document {
 	if (self = [super init]) {
 		_document = document;
 		_success = NO;

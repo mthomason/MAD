@@ -14,9 +14,9 @@
 
 #import <MAD/MADocument.h>
 #import <MAD/RptqStoreContext.h>
-#import <MAD/RptqDocument+extras.h>
-#import <MAD/RptqDatabase+extras.h>
-#import <MAD/RptqQuery+extras.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDatabase+Extras.h>
+#import <MAD/RptqQuery+Extras.h>
 #import <MAD/RptqDocumentSection.h>
 
 #import <MADFoundation/madlog.h>

@@ -15,16 +15,25 @@
 
 #import <MADFoundation/MADDataTable.h>
 
-#import <MAD/MADocument.h>
+#import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/RptqStoreContext.h>
-#import <MAD/MADReportFormatter.h>
-#import <MAD/MADSectionLayoutManager.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/MADDatabase+Constructor.h>
 
-#import <MAD/RptqDocument+extras.h>
-#import <MAD/RptqDatabase+extras.h>
-#import <MAD/RptqQuery+extras.h>
+#if __APPLE__
+// The rendering side of a document, which only a MADocument has: the report
+// formatter that draws the report and the section layout managers that measure it.
+// MADReportFormatter, MADSectionLayoutManager and MADocument are all excluded from
+// the Linux build (MAD_LINUX.md §9 Phase D), so this is the one branch of the
+// refresh chain that does not compile there -- and a headless document has nothing
+// to render, so the branch is skipped rather than stubbed.
+#import <MAD/MADocument.h>
+#import <MAD/MADReportFormatter.h>
+#endif
+
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDatabase+Extras.h>
+#import <MAD/RptqQuery+Extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSectionEnumerator.h>
 #import <MAD/RptqDatabaseCredentals+Extras.h>
@@ -32,7 +41,7 @@
 
 @interface MADOperationRefreshInitialize ()
 
-	@property (nonatomic, weak) MADocument *document;
+	@property (nonatomic, weak) id <MADDocumentDataProtocol> document;
 	@property (nonatomic, assign) BOOL success;
 
 @end
@@ -50,7 +59,7 @@ static void MADOperationRefreshInitializeRunOnMain(dispatch_block_t block) {
 
 - (void)dealloc {}
 
-- (instancetype)initWithDocument:(MADocument *)document {
+- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document {
 	if (self = [super init]) {
 		_document = document;
 		_success = NO;
@@ -65,14 +74,14 @@ static void MADOperationRefreshInitializeRunOnMain(dispatch_block_t block) {
 		return [self finish];
 	}
 	
-	MADocument *doc = _document;
+	id <MADDocumentDataProtocol> doc = _document;
 	for (NSOperation *dependency in self.dependencies) {
 		if ([dependency conformsToProtocol:@protocol(MADOperationRefreshInitializeMainDataTableProtocol)]) {
 			doc = ((id <MADOperationRefreshInitializeMainDataTableProtocol>)dependency).document;
 			break;
 		}
 	}
-	MADocument *document = doc;
+	id <MADDocumentDataProtocol> document = doc;
 	
 	// The document-graph reads and the sort (which reads the query's sort
 	// descriptors) run on main; only the resolved query crosses back to this
@@ -102,11 +111,18 @@ static void MADOperationRefreshInitializeRunOnMain(dispatch_block_t block) {
 	});
 
 	document.database.delegate = (id <MADDatabaseResultsProtocol>)doc;
-	[document resetSectionLayoutManagers];
-	MADReportFormatter *formatter = [MADReportFormatter newReportFormatterWithLayout: document
-																			 options: MADReportFormatterOptionsNone];
 
-	document.reportFormatter = formatter;
+#if __APPLE__
+	// A document that renders gets its formatter here, before the refresh runs:
+	// MADOperationRefresh sets -refreshed on the way out and MADocument keeps that
+	// flag on the formatter.  A headless document keeps its own.
+	if ([doc isKindOfClass: [MADocument class]]) {
+		MADocument *layout = (MADocument *)doc;
+		[layout resetSectionLayoutManagers];
+		layout.reportFormatter = [MADReportFormatter newReportFormatterWithLayout: layout
+																		 options: MADReportFormatterOptionsNone];
+	}
+#endif
 
 	[self finish];
 

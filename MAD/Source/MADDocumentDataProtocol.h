@@ -56,6 +56,11 @@
 /// getter is spelled -didRefresh because that is what the app asks.
 @property (nonatomic, readwrite, getter=didRefresh) BOOL refreshed;
 
+/// The app caps a designer's query so the editor shows a preview of the data; a
+/// headless caller has no editor, but the cap is the query's LIMIT and nothing
+/// else, so the flag means the same thing to either.
+@property (nonatomic, readwrite) BOOL limitResultsDesignMode;
+
 /// Connects to a different source database.
 - (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection;
 

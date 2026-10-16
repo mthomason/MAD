@@ -17,8 +17,7 @@
 #import "MADModelDatabase.h"
 #import "MADImageThumbnail.h"
 #import "MADArchiveManager.h"
-#import "MADStore.h"
-#import "MADLegacyStoreConversion.h"
+#import "MADDocumentStore.h"
 #import "RptqStoreContext.h"
 #import "MADNotificationFileUpdate.h"
 #import "RptqDataHelper.h"
@@ -143,8 +142,9 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 @property (nonatomic, readwrite, strong) MTPaper *paper;
 
 @property (nonatomic, readwrite, copy) NSURL *urlDataTableCache;
-@property (nonatomic, readwrite, copy) NSURL *urlGuts;
-@property (nonatomic, readwrite, copy) NSURL *urlMetaPlaylist;
+// Where this document's files are (the guts, the store inside them, the cache): the
+// same layout MADHeadlessDocument uses, stated once in MADDocumentStore.
+@property (nonatomic, readwrite, strong) MADDocumentStore *documentStore;
 
 @property (nonatomic, readwrite, strong) MADDesignerQuery *designerQuery;
 @property (nonatomic, readwrite, strong) MADDesignerLayout *designerLayout;
@@ -262,9 +262,7 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	if (self = [super initWithFileURL:url]) {
 		
 		_autosaveEnabled = YES;
-		_urlGuts = [MADURLFactory newURLDocumentArchiveForFileURL: url
-														extension: MADFileExtentionMobleApplicationDocumentArchive];
-		_urlMetaPlaylist = [_urlGuts URLByAppendingPathComponent: @"meta.plist"];
+		_documentStore = [MADDocumentStore storeForDocumentURL: url];
 		
 		NSUInteger dataTableIdHash = self.fileURL.lastPathComponent.stringByDeletingPathExtension.hash;
 		
@@ -411,11 +409,19 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 													  isDirectory: NO];
 }
 
+- (NSURL *)urlGuts {
+	return self.documentStore.gutsURL;
+}
+
+- (NSURL *)urlMetaPlaylist {
+	return self.documentStore.metadataURL;
+}
+
 #pragma mark -
 #pragma mark MADCacheProtocol
 
 - (NSURL *)cachedFilesDirectory {
-	return [MADURLFactory newURLCacheFilesDirectoryForFilename:self.filename];
+	return self.documentStore.cacheDirectory;
 }
 
 #pragma mark -
@@ -446,7 +452,7 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 
 	BOOL success = NO;
 	if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
-		MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: _urlGuts
+		MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
 																				   archiveURL: url];
 		success = [archiveManager unarchive];
 		if (!success) {
@@ -490,64 +496,7 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 }
 
 - (BOOL)openPortableStoreWithError:(NSError * __autoreleasing *)error {
-	NSURL *storeURL = [self portableStoreURL];
-	NSURL *legacyStoreURL = [[_urlGuts URLByAppendingPathComponent:MADLegacyStoreDirectory isDirectory:YES]
-							 URLByAppendingPathComponent:MADLegacyStoreName];
-
-	if (![[NSFileManager defaultManager] fileExistsAtPath:(NSString *)storeURL.path] &&
-		[[NSFileManager defaultManager] fileExistsAtPath:(NSString *)legacyStoreURL.path]) {
-		if (![self convertLegacyStoreAtURL:legacyStoreURL toStoreAtURL:storeURL error:error]) {
-			return NO;
-		}
-	}
-
-	MADStore *store = [MADStore storeWithURL:storeURL];
-	if (![store openWithError:error]) return NO;
-	RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
-	if (![context loadAllWithError:error]) return NO;
-	self.storeContext = context;
-	return YES;
-}
-
-/// Converts the legacy store through the registered converter -- Core Data lives
-/// outside this framework (MAD_LINUX.md), so the converter is looked up rather than
-/// linked.  A build with no converter (the headless engine) reports that plainly.
-/// Once the portable store is written the legacy store files are removed from the
-/// guts directory, so a document saved afterwards no longer carries Core Data.
-- (BOOL)convertLegacyStoreAtURL:(NSURL *)legacyStoreURL
-				   toStoreAtURL:(NSURL *)storeURL
-						  error:(NSError * __autoreleasing *)error {
-	id<MADDocumentLegacyStoreConverting> converter = [MADLegacyStoreConversion converter];
-	if (converter == nil) {
-		if (error != NULL) {
-			*error = [NSError errorWithDomain:MADLegacyStoreConversionErrorDomain
-										 code:MADLegacyStoreConversionErrorConverterUnavailable
-									 userInfo:@{ NSLocalizedDescriptionKey:
-										@"This document was written before the portable store and no legacy converter is available in this build." }];
-		}
-		return NO;
-	}
-	if (![converter convertLegacyStoreAtURL:legacyStoreURL toStoreAtURL:storeURL error:error]) {
-		return NO;
-	}
-	[self removeLegacyStoreFilesAtURL:legacyStoreURL];
-	return YES;
-}
-
-/// The legacy store's SQLite file and its journal siblings.  The directory itself is
-/// left in place; it is the same StoreContent directory the portable store lives in.
-- (void)removeLegacyStoreFilesAtURL:(NSURL *)legacyStoreURL {
-	NSString *storePath = legacyStoreURL.path;
-	if (storePath == nil) return;
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSArray<NSString *> *paths = @[ storePath,
-									[storePath stringByAppendingString:@"-wal"],
-									[storePath stringByAppendingString:@"-shm"] ];
-	for (NSString *path in paths) {
-		if ([fileManager fileExistsAtPath:path]) {
-			[fileManager removeItemAtPath:path error:NULL];
-		}
-	}
+	return [self.documentStore openWithError: error];
 }
 
 #pragma mark -
@@ -625,8 +574,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 			[self updateChangeCount:UIDocumentChangeCleared];
 		}
 	}
-	[_storeContext.store close];
-	_storeContext = nil;
+	[self.documentStore close];
 
 	// A document that was never opened through UIDocument (or is already closed) has
 	// no file presenter to release and no state to move, and UIDocument's close
@@ -677,8 +625,8 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 
 	NSDictionary<NSString *, id> *metadata = @{ MADDocumentInfoKeyVersion: version,
 												MADDocumentInfoKeyGenerator: generator };
-	if (![metadata writeToURL:_urlMetaPlaylist atomically:NO]) {
-		os_log_error(GetMadLog(), "Write to %@ failed", _urlMetaPlaylist);
+	if (![metadata writeToURL: self.urlMetaPlaylist atomically:NO]) {
+		os_log_error(GetMadLog(), "Write to %@ failed", self.urlMetaPlaylist);
 	}
 }
 
@@ -1184,49 +1132,24 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 }
 
 - (NSURL *)portableStoreURL {
-	return [_urlGuts URLByAppendingPathComponent:@"StoreContent/store.sqlite"];
+	return self.documentStore.portableStoreURL;
 }
 
 - (RptqStoreContext *)storeContext {
 	// UIDocument's save machinery and the create chain both reach this from
-	// background threads; one open per document.
-	@synchronized (self) {
-		if (_storeContext == nil) {
-			NSURL *storeURL = [self portableStoreURL];
-			// A new document has no guts directory yet; UIManagedDocument used to create
-			// its StoreContent directory when the persistent store came up, so the
-			// portable store creates its own before opening.
-			NSError *directoryError = nil;
-			NSURL *storeDirectory = [storeURL URLByDeletingLastPathComponent];
-			if (![[NSFileManager defaultManager] createDirectoryAtURL:(NSURL *)storeDirectory
-										  withIntermediateDirectories:YES
-														   attributes:nil
-																error:&directoryError]) {
-				os_log_error(GetMadLog(), "Error creating the portable store directory: %s", directoryError.localizedDescription.UTF8String);
-				return nil;
-			}
-			MADStore *store = [MADStore storeWithURL:storeURL];
-			NSError *error = nil;
-			if (![store openWithError:&error]) {
-				os_log_error(GetMadLog(), "Error opening the portable store: %s", error.localizedDescription.UTF8String);
-				return nil;
-			}
-			RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
-			if (![context loadAllWithError:&error]) {
-				os_log_error(GetMadLog(), "Error loading the portable store: %s", error.localizedDescription.UTF8String);
-				return nil;
-			}
-			_storeContext = context;
-		}
-		return _storeContext;
-	}
+	// background threads, and a new document has no guts directory until the store
+	// creates one -- MADDocumentStore owns both of those facts.
+	[self.documentStore openWithError: NULL];
+	return self.documentStore.context;
 }
 
-// The document definition now lives in the portable store, so the managed-object
-// context the designer protocol and the rest of the code ask for IS the store
-// context.  UIManagedDocument's own accessor would try to build a Core Data stack
-// here; overriding it with the same name keeps every `managedObjectContext` call
-// site in the app pointing at the store.
+/// The context is MADDocumentStore's.  A caller that hands one over -- the test
+/// harness injects one, nothing in the app does -- replaces it wholesale, which is
+/// what the KVC this responds to has always meant.
+- (void)setStoreContext:(RptqStoreContext *)storeContext {
+	self.documentStore.context = storeContext;
+}
+
 - (RptqStoreContext *)managedObjectContext {
 	return self.storeContext;
 }
@@ -1471,8 +1394,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	// with SQLITE_READONLY.  The removal itself must be synchronous: the
 	// file-coordinated variant deletes on a coordination queue, and the create flow
 	// reopens the store immediately after this call, racing that queue's delete.
-	[_storeContext.store close];
-	_storeContext = nil;
+	[self.documentStore close];
 	// The synchronous, uncoordinated delete: the file-coordinated variant runs on a
 	// coordination queue and would race the store reopen the create flow performs
 	// right after this call.

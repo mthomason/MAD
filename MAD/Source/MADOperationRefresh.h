@@ -11,11 +11,11 @@
 
 #import <MADFoundation/MADOperation.h>
 
-@class MADocument;
+#import <MAD/MADDocumentDataProtocol.h>
 
 @interface MADOperationRefresh : MADOperation
 
-	- (instancetype)initWithDocument:(MADocument *)document;
+	- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document;
 
 @end
 

@@ -28,7 +28,6 @@ static NSString * const MADDocumentStoreFileName			= @"store.sqlite";
 @property (nonatomic, copy, readwrite) NSURL *documentURL;
 @property (nonatomic, copy, readwrite) NSURL *gutsURL;
 @property (nonatomic, copy, readwrite) NSURL *metadataURL;
-@property (nonatomic, strong, readwrite) RptqStoreContext *context;
 @end
 
 @implementation MADDocumentStore
@@ -103,6 +102,13 @@ static NSString * const MADDocumentStoreFileName			= @"store.sqlite";
 
 		self.context = context;
 		return YES;
+	}
+}
+
+- (void)close {
+	@synchronized (self) {
+		[self.context.store close];
+		self.context = nil;
 	}
 }
 

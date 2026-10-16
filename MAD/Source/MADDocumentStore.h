@@ -43,13 +43,19 @@ NS_ASSUME_NONNULL_BEGIN
 /// cache.  Named for the document, via MADURLFactory, as the app has always named it.
 @property (readonly, nonatomic, copy) NSURL *cacheDirectory;
 
-/// The opened store, nil until -openWithError: has answered YES.
-@property (readonly, nonatomic, strong, nullable) RptqStoreContext *context;
+/// The opened store, nil until -openWithError: has answered YES.  Settable so a
+/// caller that already has one -- the tests, which inject a context instead of
+/// unarchiving a document -- can hand it over; the app always lets -openWithError:
+/// do it.
+@property (nonatomic, strong, nullable) RptqStoreContext *context;
 
 /// Creates the store directory, converts a legacy store when the portable one is
 /// absent and a legacy one is present, opens the portable store and loads its
 /// object graph.  Idempotent: a second call answers the first call's result.
 - (BOOL)openWithError:(NSError * _Nullable __autoreleasing *)error;
+
+/// Closes the store and drops the context; the next -openWithError: opens it again.
+- (void)close;
 
 @end
 
