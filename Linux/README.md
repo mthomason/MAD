@@ -316,6 +316,25 @@ whole-archive, and runs in the image:
 a `UIPrintPageRenderer`, so it stays on Apple and says so (`MAD_LINUX.md` §5.2;
 the renderer decision is Phase E's).
 
+**`export` grew its Foundation formats here (Phase E, 2026-10-16).** The export seam
+(`MADReportExporting` + `MADReportExporterRegistry`, `MAD_CLI.md` §5.3) is in `mad`, so
+`text`, `csv` and `json` run in the image and write the same bytes as the Mac's tool.
+The comparison, run for the record on the London fixture (`CLI/Fixtures/London.portable.mad`,
+refreshed first, `sha256sum` on each side):
+
+| format | bytes | sha256 (identical on both platforms) |
+|---|---|---|
+| `json` | 64595 | `b5e75234a9819dca4c1edf170833f342f7a7986008a99a8af4483e4c1048a859` |
+| `csv` | 12538 | `394382cacbc74b88a3e352f0f19026d0bee0e9f3f80d06962b616c27f15ea185` |
+| `text` | 40441 | `b3f3954ed88656847cab2fe24ac57ce2ba6dd786dc010be4a2fef45f592d538c` |
+
+`Linux/Tests/MADReportExporterTests.m` is the same check as a test: it refreshes the
+fixture and asserts each export's FNV-1a checksum against the Mac's bytes (plus the
+shape and a few values), so a spelling that drifts between GNUstep and Apple fails
+here. `json-report`'s report member is the agreed next format, and it needs the render
+half (`MADReportFormatter`), which is still Apple-only — it registers everywhere and
+says why it cannot run here (`MAD_CLI.md` §3).
+
 **How the document class was settled.** `MADocument` is a `UIDocument`, so it
 cannot come along, and `MADCLIDocument` used to be built on it. The data half of
 a document is now a protocol — `MADDocumentDataProtocol` — which `MADocument`
@@ -362,6 +381,7 @@ order — so refresh once before comparing caches across that date.
 
 ## What this does not do yet
 
-Phase E (the export formats: JSON/CSV first, then HTML/SVG, then the PDF
-decision) and Phase F (the Compressor Linux driver, the CI row and the deployable
-image).
+Phase E's remaining half — `json-report`'s report member and HTML/SVG, both of which
+need the render half (`MADReportFormatter`) ported here, which the user's 2026-10-16
+renderer decision put on the HTML step — and Phase F (the Compressor Linux driver, the
+CI row and the deployable image).

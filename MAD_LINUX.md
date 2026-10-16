@@ -485,13 +485,44 @@ alias in both SQL builders, so the generated SQL, the row cache and every export
 agree on both platforms (BUGS.md, the SELECT-list entry; the order tests in
 `Linux/Tests/MADQuerySelectExpressionTests.m`).
 
+**Phase E status (2026-10-16, first half).** The export seam is real and the
+Foundation formats run here. `MADReportExporting` + `MADReportExporterRegistry` are
+the driver registry's shape (an implementation protocol, `+load` registration, a
+lookup by name), and `mad export` picks a format through them, so a new format is a
+new class (`MAD_CLI.md` §5.3, ROADMAP.md §5.2). `text`, `csv` and `json` are pure
+Foundation and produce **byte-identical output on Linux and on Apple** for the London
+fixture — measured with `sha256sum` on the Mac's tool and the image's (§ the CLI
+section of `Linux/README.md`; `Linux/Tests/MADReportExporterTests.m` pins the same
+bytes with an FNV-1a checksum). The JSON shape is decided (§10.1): `json` is the data
+contract — the query's columns in alias order, the rows, the SQL, the driver — and
+`json-report` is the same document with the rendered report's sections as an extra
+member, the user's choice on 2026-10-16 (it needs the render half, so it registers
+everywhere and reports why it cannot run here yet). The remaining half of Phase E —
+`json-report`'s report member and HTML/SVG — is the render half's move to Linux,
+which the user's renderer decision (HTML/SVG next, PDF last, §10.2) puts on the HTML
+step. `pdf` is still the CLI's own arm; an exporter needs a render-half protocol,
+which is that same step's work.
+
 ---
 
 ## 10. Decisions for the user
 
 1. **The JSON export shape** (`MAD_CLI.md` §8.3, `MAD_FUTURE.md` §10.5) — this is
    the Python contract; decide it first, because everything in §2 hangs off it.
+   **Decided 2026-10-16: both, the report half as its own format.** `--format json`
+   is the data contract — an envelope (format id, document/driver, the SQL, the row
+   count), `columns` (key, name, table, type), and `rows` as one object per row with
+   JSON-typed values — and `--format json-report` is that document plus a `report`
+   member (the rendered sections). With it, the SELECT list's order is defined as the
+   column alias, sorted, so the generated SQL, the row cache and every export agree on
+   both platforms (BUGS.md, the SELECT-list entry — previously set order). The data
+   half is built (`MADReportExporterJSON`, both platforms); the report member waits
+   for the render half.
 2. **Renderer staging** — HTML/SVG first, PDF last, or macOS-side PDF workers?
+   **Decided 2026-10-16: HTML/SVG next, PDF last.** No Linux PDF renderer and no
+   macOS-side workers: the HTML step is also where the render half
+   (`MADReportFormatter`) moves to Linux, which `json-report` and testing want too.
+   `pdf` stays the CLI's Apple-side arm until then.
 3. **mysqlclient → MariaDB Connector/C timing** — the GPL blocker gates any shipped
    binary; the replacement is already named in `LICENSE_COMPLIANCE_PLAN.md`.
 4. **Toolchain policy** — source-built clang/libobjc2/GNUstep (needed for ARC) is a

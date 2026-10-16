@@ -5,6 +5,8 @@
 
 #import "MADCLI.h"
 
+#import <MAD/MADReportExporterRegistry.h>
+
 static NSString * const MADCLICommandInspect	= @"inspect";
 static NSString * const MADCLICommandSchema		= @"schema";
 static NSString * const MADCLICommandQuery		= @"query";
@@ -133,7 +135,16 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 }
 
 NSString *MADCLIUsageString(void) {
-	return @"mad -- MAD Designer command line\n"
+	// The format list is the export seam's, so a format added as a new class appears
+	// here without this string being edited (MADReportExporterRegistry.h).
+	NSMutableArray <NSString *> *formats = [NSMutableArray arrayWithObject: @"pdf"];
+	for (NSString *name in [MADReportExporterRegistry registeredFormatNames]) {
+		[formats addObject: name];
+	}
+
+	NSMutableString *usage = [[NSMutableString alloc] init];
+	[usage appendFormat:
+			@"mad -- MAD Designer command line\n"
 			"\n"
 			"  mad <command> [options] <document.mad>\n"
 			"\n"
@@ -145,18 +156,21 @@ NSString *MADCLIUsageString(void) {
 			"  export    render the report and write it out\n"
 			"\n"
 			"Options:\n"
-			"  --format <name>          output format (export: pdf)\n"
-			"  --out <path>             output path; default stdout\n"
-			"  --credentials user:pass  source-database credentials\n"
-			"  --no-keychain            never read the keychain\n"
-			"  --deterministic          pin the export's dates and identifier, so two\n"
-			"                           runs over unchanged data are byte-identical\n"
-			"  --rows N                 stop after N rows (refresh)\n"
-			"  --verbose                log the data path at each stage\n"
-			"  --quiet                  suppress everything but the result\n"
-			"\n"
-			"Exit codes: 0 success, 1 usage, 2 bad document, 3 database unreachable,\n"
-			"            4 query failed, 5 export failed\n";
+			"  --format <name>          output format (export: %@)\n"
+			"  --out <path>             output path; '-' or absent is stdout\n",
+			[formats componentsJoinedByString: @", "]];
+	[usage appendString:
+			@"  --credentials user:pass  source-database credentials\n"
+			@"  --no-keychain            never read the keychain\n"
+			@"  --deterministic          pin the export's dates and identifier, so two\n"
+			@"                           runs over unchanged data are byte-identical\n"
+			@"  --rows N                 stop after N rows (refresh)\n"
+			@"  --verbose                log the data path at each stage\n"
+			@"  --quiet                  suppress everything but the result\n"
+			@"\n"
+			@"Exit codes: 0 success, 1 usage, 2 bad document, 3 database unreachable,\n"
+			@"            4 query failed, 5 export failed\n"];
+	return usage;
 }
 
 #pragma mark - Logging

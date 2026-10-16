@@ -119,17 +119,38 @@ server without pulling a million rows, and because the benchmark in
 Renders the report and writes it out.
 
 ```
-$ mad export London.mad --format pdf --out London.pdf
+$ mad export London.mad --format pdf  --out London.pdf
+$ mad export London.mad --format json --out -          # to the standard output
 ```
 
-**`--format pdf` is the only format that exists today.** Rendering goes through
-`MADPrintPageRenderer`; the share-sheet wrapper `MADActivityItemProviderPdf` is the
-only current caller, and `MADActivityItemProviderDelegate.h` is the protocol it talks
-to. All three already live in the `MAD` framework rather than the app -- so the export
-seam exists and is in the right place. What it is not is **headless**: PDF rendering is
-UIKit's `UIPrintPageRenderer`. `--format json` and `--format csv` are new work, and
-being pure Foundation they are also the formats a CLI can produce on any platform, which
-is the reason §5.3 asks for a protocol rather than a switch with one arm.
+The formats are the export seam's (§5.3): each is a class registered with
+`MADReportExporterRegistry`, and the usage text names whatever the build has.
+
+| format | writes | where it runs |
+|---|---|---|
+| `pdf` | the rendered report (pages, drawn) | Apple: UIKit's `UIPrintPageRenderer`, Core Graphics |
+| `text` | the rows as a fixed-width table | both platforms |
+| `csv` | the rows as RFC 4180 CSV | both platforms |
+| `json` | the schema and the rows as JSON (§8.3) | both platforms |
+| `json-report` | `json` plus the rendered report's sections | where the render half runs (Apple today) |
+
+`--out` is optional for the Foundation formats -- absent, or `-`, writes the standard
+output -- and required for `pdf`. The Foundation formats write the same bytes on Apple
+and on Linux for the same document (`Linux/README.md`; the two platforms' exports of
+the London fixture compare equal by digest).
+
+**`json-report` is the agreed next format** (`MAD_LINUX.md` §10.1, §9 Phase E): one
+schema, with the report's own sections and aggregates as a member the data-only
+formats do not carry -- useful for testing and for a renderer. It needs the render
+half (`MADReportFormatter`), which the Linux build excludes today; it registers
+everywhere and reports why it cannot run there until that half is ported with the
+HTML step.
+
+Rendering to PDF goes through `MADPrintPageRenderer`; the share-sheet wrapper
+`MADActivityItemProviderPdf` is its other caller, and `MADActivityItemProviderDelegate.h`
+is the protocol it talks to. All three live in the `MAD` framework rather than the
+app. What PDF is not is **headless**: it is UIKit's `UIPrintPageRenderer`, which is why
+it is the one format still implemented on the CLI's side (see §5.3).
 
 ### Global options
 
@@ -252,6 +273,25 @@ document export formats (e.g. export to PDF and JSON)". Define
 `<MADReportExporting>` with one method and register implementations, so `--format json`
 is a new class rather than a new branch in a switch.
 
+**Done 2026-10-16**, in the shape §5.1's driver registry already has: `MADReportExporting.h` is the
+protocol (a format's name, extension, whether it needs `--out`, whether this build can
+produce it, and one export method), `MADReportExporterRegistry` is the lookup, and each
+exporter registers itself in `+load` -- so which formats a process has is what it links,
+and the CLI asks for one by name. `text`, `csv` and `json` are the framework's own
+(`MADReportExporterText/CSV/JSON`, pure Foundation, both platforms);
+`MADReportExportSource` is the one place a document is read as columns and rows, so the
+formats cannot disagree about what a document is; and `MADReportExportWriter` is the one
+place bytes reach a file or the standard output.
+
+Two things are deliberately not on the seam yet, and both wait for the render half's own
+protocol (the HTML step, `MAD_LINUX.md` §9 Phase E):
+
+* **`pdf`** is still the CLI's own arm, because it draws through `MADocument` +
+  `MADPrintPageRenderer`, and the render-half protocol that would let an exporter be
+  handed "a document that can render" is the same one HTML needs.
+* **`json-report`** registers and reports why it cannot run where the render half is
+  absent, rather than being hidden from the format list.
+
 ### 5.4 Credentials
 
 The CLI must never prompt. It takes `--credentials`, or reads the keychain the
@@ -312,5 +352,12 @@ connection.
 2. **Should `mad` accept the row cache from an external file?** A packed `.mad`
    (§8.3 of the format document) would make offline export possible. Nothing needs it
    yet.
-3. **What is the JSON export shape?** One object per row, or the report's own
-   sections and aggregates? The answer belongs in a schema, not in a README.
+3. **What is the JSON export shape? — answered 2026-10-16: both, the report half as
+   its own format.** `--format json` is the data contract, `--format json-report`
+   adds the rendered report's sections and aggregates as an extra member. The shape
+   is in `MADReportExporterJSON.h`, implemented by `MADReportExporterJSON` (the data
+   half, both platforms) and `MADReportExporterJSONReport` (the report member, where
+   the render half runs). Its columns are the query's own, in the order the SELECT
+   list defines -- the column alias, sorted (`BUGS.md`, the SELECT-list entry) --
+   and a value keeps its JSON type: numbers are numbers, NULL is `null`, dates are
+   ISO 8601 and binary is base64.

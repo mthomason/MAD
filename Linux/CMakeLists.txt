@@ -347,6 +347,7 @@ mad_add_framework(mad MAD_SOURCES
 	MADQueryFullTableEnumeratorTests
 	MADQueryMaxFieldLengthTests
 	MADQuerySimpleTypesTests
+	MADReportExporterTests
 	MADReportSectionEnumeratorTests
 	MADReportSectionRepresentationTests
 	MADReportSectionTests

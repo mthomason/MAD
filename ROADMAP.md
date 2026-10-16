@@ -550,9 +550,24 @@ target compiles for macOS today.
 
 ### 5.2 Export formats
 
-`mad export` has one arm: PDF, behind a string comparison in `MADCLIExport.m`. `MAD_CLI.md` §5.3
-asks for a `<MADReportExporting>` protocol so `--format json` is a *new class* rather than a new
-branch — the same shape as 5.1's driver registry, which is why the two belong in one track.
+**Landed 2026-10-16, in the roadmap's own order: the seam, then text, then JSON and
+CSV.** `<MADReportExporting>` + `MADReportExporterRegistry` are the driver registry's
+shape (§5.1) — a format registers itself in `+load` and the CLI looks it up by name; the
+usage text names whatever the build links. `text`, `csv` and `json` are pure Foundation
+and run on both platforms; `mad export --format json` is the data contract of
+`MAD_DATA_OBJECT.md` §6, `MAD_CLI.md` §8.3 now answers the shape question, and the
+three formats write **byte-identical output on Apple and Linux** for the London fixture
+(digests compared, `Linux/README.md` § the CLI). Next, in this order: `json-report`'s
+report member, then HTML (with the render half's move to Linux), then the PDF decision
+(`MAD_LINUX.md` §10.2: the user chose HTML first, PDF last). `pdf` itself is still the
+CLI's own arm — an exporter needs a render-half protocol, which is the HTML step's work
+— and the columns the formats carry are the query's own, in the alias order the SELECT
+list now defines (`BUGS.md`).
+
+`mad export` used to have one arm: PDF, behind a string comparison in `MADCLIExport.m`.
+`MAD_CLI.md` §5.3 asks for a `<MADReportExporting>` protocol so `--format json` is a
+*new class* rather than a new branch — the same shape as 5.1's driver registry, which is
+why the two belong in one track.
 
 The user's framing, 2026-10-01:
 
@@ -588,7 +603,9 @@ These block work rather than being work.
 | Is the render cache invalidated when the document changes? | `MAD_FORMAT.md` §5.3, §8.4 | Mechanism is now known (keyed by filename, no content hash — so a stale page is served on edit). The open part is *should it* invalidate. |
 | Should the thumbnail and row cache live in the document? | `MAD_FORMAT.md` §8.2–8.3 | Decides whether every member of a `.mad` is authoritative. |
 | Is `.mad` v1 worth doing? | `MAD_FORMAT.md` §7 | It is compatible, but it is a format decision. |
-| What is the JSON export shape? | `MAD_CLI.md` §8.3 | Belongs in a schema, not a README. |
+| What is the JSON export shape? | `MAD_CLI.md` §8.3 | **Decided 2026-10-16: both, the report half as its own format** — `json` is the data contract (schema + rows), `json-report` adds the rendered report's sections. The SELECT list's order is the column alias, sorted, so SQL/cache/exports agree on both platforms. |
+| Which renderer, and in what order? | `MAD_LINUX.md` §10.2 | **Decided 2026-10-16: HTML/SVG next, PDF last** — no Linux PDF renderer, no macOS-side workers; the HTML step is also where the render half moves to Linux. |
+| Is the byte-identical `.mad` a writer mode, and when? | `BUGS.md` (the `.mad` byte-identity entry) | **Decided 2026-10-16: an opt-in reproducible mode on `-archive:` (like `-checkpointed:`), landing after the export formats** — fixed mtime, fixed uid/gid, sorted member walk; ordinary saves keep today's metadata. |
 
 Struck: *"Does `mad` ship, or is it a developer tool?"* — settled 2026-10-01; it is a developer
 tool, for now.

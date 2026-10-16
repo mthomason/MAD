@@ -165,6 +165,13 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADPrintPageRendererDataSource.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/MADQueryLinkType.h>
+#import <MAD/MADReportExporting.h>
+#import <MAD/MADReportExporterCSV.h>
+#import <MAD/MADReportExporterJSON.h>
+#import <MAD/MADReportExporterRegistry.h>
+#import <MAD/MADReportExporterText.h>
+#import <MAD/MADReportExportSource.h>
+#import <MAD/MADReportExportWriter.h>
 #import <MAD/MADReportFormatterDataSourceProtocol.h>
 #import <MAD/MADReportSection.h>
 #import <MAD/MADReportTextRepresentation.h>
