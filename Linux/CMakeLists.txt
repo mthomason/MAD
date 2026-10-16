@@ -422,7 +422,8 @@ add_executable(mad-cli
 	"${CLI_SOURCE_DIR}/MADCLIQuery.m"
 	"${CLI_SOURCE_DIR}/MADCLIRefresh.m"
 	"${CLI_SOURCE_DIR}/MADCLISchema.m"
-	"${CLI_SOURCE_DIR}/MADCLIExport.m")
+	"${CLI_SOURCE_DIR}/MADCLIExport.m"
+	"${CLI_SOURCE_DIR}/MADCLIWrite.m")
 set_target_properties(mad-cli PROPERTIES OUTPUT_NAME mad)
 # The framework library is whole-archived for the same reason the tests do it:
 # categories (MADQuery+Sqlite3, the Rptq +Extras families) are reached by message

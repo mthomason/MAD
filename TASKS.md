@@ -362,8 +362,11 @@ the cycle. `CLI/build.sh`'s `REFRESH_SOURCES` is gone; the CLI takes the chain f
 
 ## 8. Export formats — the third extensibility seam
 
-**Status:** The seam and the Foundation formats landed 2026-10-16 (`2c0e6df6c`,
-`c97ded85c`); the byte-identical `.mad` half is still open.  It needed two decisions
+**Status:** Done 2026-10-16, both halves — the seam and the Foundation formats
+(`2c0e6df6c`, `c97ded85c`, `55e386700`), and the byte-identical `.mad` writer
+(`mad write`, the reproducible mode, the cross-platform comparison).  The one piece
+left in this section is a Linux writer that creates a *store* rather than re-archiving
+one: the comparison covers the container today.  It needed two decisions
 from the user before code — **the JSON export shape** (`MAD_CLI.md` §8.3,
 `MAD_LINUX.md` §10.1) and **the renderer staging** (§10.2, HTML/SVG before PDF) — plus
 two more the work raised: how `json-report` reaches the rendered report, and whether

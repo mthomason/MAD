@@ -12,6 +12,7 @@ static NSString * const MADCLICommandSchema		= @"schema";
 static NSString * const MADCLICommandQuery		= @"query";
 static NSString * const MADCLICommandRefresh	= @"refresh";
 static NSString * const MADCLICommandExport		= @"export";
+static NSString * const MADCLICommandWrite		= @"write";
 
 static NSError *MADCLIUsageError(NSString *message) {
 	return [NSError errorWithDomain: @"MADCLI"
@@ -58,6 +59,8 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 			invocation.noKeychain = YES;
 		} else if ([argument isEqualToString: @"--deterministic"]) {
 			invocation.deterministic = YES;
+		} else if ([argument isEqualToString: @"--reproducible"]) {
+			invocation.reproducible = YES;
 		} else if ([argument hasPrefix: @"--"]) {
 
 			// Every remaining option takes a value.  A missing value is a usage error
@@ -124,7 +127,7 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		known = [NSSet setWithObjects: MADCLICommandInspect, MADCLICommandSchema, MADCLICommandQuery,
-									   MADCLICommandRefresh, MADCLICommandExport, nil];
+									   MADCLICommandRefresh, MADCLICommandExport, MADCLICommandWrite, nil];
 	});
 	if (![known containsObject: invocation.command]) {
 		if (error) *error = MADCLIUsageError([NSString stringWithFormat: @"Unknown command '%@'.", invocation.command]);
@@ -154,6 +157,7 @@ NSString *MADCLIUsageString(void) {
 			"  query     print the SQL the document's query generates\n"
 			"  refresh   run the query and fill the row cache\n"
 			"  export    render the report and write it out\n"
+			"  write     write the document out as a .mad (a copy; --out is required)\n"
 			"\n"
 			"Options:\n"
 			"  --format <name>          output format (export: %@)\n"
@@ -164,6 +168,9 @@ NSString *MADCLIUsageString(void) {
 			@"  --no-keychain            never read the keychain\n"
 			@"  --deterministic          pin the export's dates and identifier, so two\n"
 			@"                           runs over unchanged data are byte-identical\n"
+			@"  --reproducible           pin the .mad archive's inputs -- time, ownership,\n"
+			@"                           member order -- so the same document writes the\n"
+			@"                           same bytes anywhere (write)\n"
 			@"  --rows N                 stop after N rows (refresh)\n"
 			@"  --verbose                log the data path at each stage\n"
 			@"  --quiet                  suppress everything but the result\n"

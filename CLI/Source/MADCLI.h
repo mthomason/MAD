@@ -20,13 +20,14 @@ typedef NS_ENUM(int, MADCLIExitCode) {
 /// The parsed command line.  One instance per run; nothing here touches a document.
 @interface MADCLIInvocation : NSObject
 
-@property (nonatomic, copy)   NSString *command;		// inspect, schema, query, refresh, export
+@property (nonatomic, copy)   NSString *command;		// inspect, schema, query, refresh, export, write
 @property (nonatomic, copy)   NSString *documentPath;	// the .mad file
 @property (nonatomic, copy)   NSString *format;			// --format
 @property (nonatomic, copy)   NSString *outPath;		// --out
 @property (nonatomic, copy)   NSString *credentials;	// --credentials user:pass
 @property (nonatomic, assign) BOOL noKeychain;			// --no-keychain
 @property (nonatomic, assign) BOOL deterministic;		// --deterministic
+@property (nonatomic, assign) BOOL reproducible;		// --reproducible (write)
 @property (nonatomic, assign) BOOL verbose;				// --verbose
 @property (nonatomic, assign) BOOL quiet;				// --quiet
 @property (nonatomic, assign) NSInteger rows;			// --rows N, 0 means all
@@ -48,6 +49,7 @@ MADCLIExitCode MADCLIRunSchema(MADCLIInvocation *invocation);
 MADCLIExitCode MADCLIRunQuery(MADCLIInvocation *invocation);
 MADCLIExitCode MADCLIRunRefresh(MADCLIInvocation *invocation);
 MADCLIExitCode MADCLIRunExport(MADCLIInvocation *invocation);
+MADCLIExitCode MADCLIRunWrite(MADCLIInvocation *invocation);
 
 /// Logging that respects --quiet and --verbose.  Always to stderr, so stdout is
 /// the result and nothing else.

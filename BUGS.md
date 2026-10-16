@@ -158,13 +158,13 @@ Status key:
   both platforms. Recorded in `MAD_CLI.md` §8 (the JSON export shape).
 
 ### The same document does not produce the same `.mad` on Linux and on Apple — and on Linux it cannot be written at all
-- **Status:** Confirmed (pinned as characterisation; not fixed -- a fix is a design
-  decision, and the Linux writer does not run yet)
-- **Where:** `MAD/Source/madtar.m:332-338` (uid, gid, mode and mtime written into each
-  tar header from the member's `stat`), `MAD/Source/MADArchiveManager.m:146` (the member
-  walk) and `:155-160` (the walk-up loop), against `MAD_FORMAT.md` §7 (the normative
-  format) and §9 (verification).  The Linux half has no writer at all:
-  `MADHeadlessDocument` never saves and the CLI has no write verb.
+- **Status:** Fixed (2026-10-16): the Linux writer terminates, a reproducible mode pins
+  the archive's inputs, and the two platforms' bytes are equal and pinned by tests.
+- **Where:** `MAD/Source/MADArchiveManager.m` (`-write_archive:`, the member walk, and
+  `backup_file`), `MAD/Source/madtar.m` (`mad_archive_entry_set_attributes`,
+  `mad_archive_write_file`), `MAD/Source/MADHeadlessDocument.m`
+  (`-writeToURL:reproducible:error:`), against `MAD_FORMAT.md` §7 (the normative
+  format) and §9 (verification).
 - **Behavior:** Measured 2026-10-16. On one platform, two saves of a document whose
   members did not change produce **different bytes**: the member contents are identical
   (`store.sqlite` and `meta.plist` compare equal byte for byte) and the archive differs,
@@ -189,26 +189,42 @@ Status key:
   exist yet, which is why this is pinned by characterisation instead.  The `mad export
   --deterministic` flag (`MADCLIPinPDFMetadata`) is the same idea already applied to
   PDFs: pin what the clock and the filesystem stamp in.
-- **What a fix takes, in order:**
-  1. **Make the Linux writer terminate** -- the walk-up loop needs to stop at the
-     archived root regardless of what the enumerator yields (the same
-     `-subpathsAtPath:`-style correction the CLI's member list uses), which is also the
-     per-platform branch the writer needs.  Nothing writes an archive on Linux today, so
-     this is a precondition, not a live defect.
-  2. **Pin the archive's inputs** -- a reproducible mode: a fixed mtime (or the
-     document's own version) rather than the file's, fixed uid/gid (or none), and a
-     sorted member order.  `-archive:` could take a flag, as `-checkpointed` already
-     does, so ordinary saves keep today's metadata.
-  3. **Then the cross-platform comparison** -- a fixture written on each platform and
-     byte-compared, which is `MAD_CLI.md` §6.1 extended across the boundary, and the
-     acceptance layer `MAD_LINUX.md` §8 describes.
-- **Test:** `MADDocumentTests/testArchiveIsNotReproducibleFromUnchangedMembers` (Apple)
-  saves the same member twice with different timestamps and asserts the archives
-  differ -- characterisation, so it fails the day a reproducible writer lands, which is
-  the signal to delete it and re-status this entry.
-  `Linux/Tests/MADArchiveManagerTests.m` unpacks a checked-in v1 fixture (green on
-  Linux) and carries the two writer tests as **needed** tests naming this entry, so the
-  day the writer works they run without being touched.
+- **What the fix took, in the order this entry asked for it:**
+  1. **The Linux writer terminates.**  The walk-up loop is gone: the members are read
+     with `-subpathsAtPath:` and named by their paths relative to the archived
+     directory, so the walk cannot run away on either platform (the same correction the
+     CLI's member list carries, `BUGS.md`'s enumerator entry).
+  2. **The archive's inputs are pinned, in a mode.**  `MADArchiveManager.reproducible`
+     (set before `-archive:`, as `-checkpointed` is) gives every tar member uid/gid 0,
+     the fixed time `MADArchiveReproducibleModificationTime` (2001-01-12T00:00:00Z, the
+     instant the PDF export pins its dates to) and nanosecond 0, and sorts the member
+     walk; no birth time is written.  Ordinary saves are untouched and still record the
+     filesystem's metadata.
+  3. **The comparison runs, and passes.**  The same document written on the Mac and in
+     the Linux image is the same file:
+     `mad write CLI/Fixtures/London.portable.mad --out … --reproducible` gives 16,243
+     bytes and sha256 `22dd3123ea1efe059f298fe39aa54aa3c7dd89aba33cf15870b55b309f9d1848`
+     on both.  What that covers is the container: the members are the same bytes on
+     both sides because they are the fixture's.  A future writer that *creates* a store
+     rather than re-archiving one extends the same comparison to the store layer; the
+     assumption there (SQLite is portable, our writes are identical) is untested today.
+- **One defect the fix turned up.**  `backup_file` passes its argument to `dirname(3)`
+  and `basename(3)`, which are allowed to modify what they are given -- glibc's do and
+  Apple's do not.  On Linux the caller's archive path was left truncated at its last
+  slash, so the composed document was written over its own directory ("Open (/tmp/out)
+  failed - Is a directory") rather than the file.  Each call now gets its own copy.
+  Nothing had noticed because on Linux the writer never got that far, and on Apple the
+  buffer survives.
+- **Test:** `Linux/Tests/MADArchiveManagerTests.m` (5 tests, 0 needs) is the coverage:
+  the round trip (`MAD_CLI.md` §6.1: unpack, repack, unpack, and the member list and
+  every member's bytes are unchanged), the ordinary mode's characterisation (an aged
+  member changes the bytes), the reproducible mode (two writes are one file, and the
+  bytes equal the Mac's -- an FNV-1a checksum of the whole document), and the document
+  path (`MADHeadlessDocument -writeToURL:reproducible:error:` writes a copy and leaves
+  the source untouched).  On Apple,
+  `MADDocumentTests/testArchiveIsNotReproducibleFromUnchangedMembers` keeps pinning
+  that the *ordinary* mode is not reproducible -- still true, because the mode is
+  opt-in -- and `testArchiveIsReproducibleWithTheModeOn` pins the mode itself.
 
 ### `objectsForEntity:` missed every subentity row
 - **Status:** Fixed

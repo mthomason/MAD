@@ -510,6 +510,20 @@ arm; it becomes an exporter with that same step.
 
 ---
 
+**Phase E status (2026-10-16, second half: the writer).** The `.mad` writer runs on
+Linux and both platforms write the same bytes.  `MADArchiveManager.reproducible` is the
+opt-in mode the user chose (fixed time 2001-01-12T00:00:00Z, uid/gid 0, sorted member
+walk; ordinary saves keep the filesystem's metadata), `MADHeadlessDocument` grew
+`-writeToURL:reproducible:error:` (the app's save without the UIDocument parts), and
+`mad write` is the verb that reaches it on both platforms.  Measured: the London
+fixture written on the Mac and in the image is the same 16,243-byte file, sha256
+`22dd3123…`; `Linux/Tests/MADArchiveManagerTests.m` pins the bytes, the round trip and
+the mode.  Two Linux-only defects were in the way and are fixed (`BUGS.md`, the
+byte-identity entry): the walk that never terminated, and `dirname(3)`/`basename(3)`
+truncating the caller's archive path on glibc.  What the comparison covers is the
+container: the members are the fixture's own bytes.  A Linux writer that *creates* a
+store extends it to the store layer.
+
 ## 10. Decisions for the user
 
 1. **The JSON export shape** (`MAD_CLI.md` §8.3, `MAD_FUTURE.md` §10.5) — this is

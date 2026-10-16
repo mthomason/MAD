@@ -38,7 +38,7 @@
 
 size_t m_malloc(char **str, size_t len);
 int backup_file(char *, char *);
-int write_archive(char *, NSURL *);
+int write_archive(char *, NSURL *, int);
 int restore_backup(char *, char *, char *);
 int mad_file_remove_if_exist(char *);
 // Left over from an earlier path-handling pass: nothing calls these two, so they are
@@ -94,10 +94,18 @@ size_t m_malloc(char **str, size_t len) {
 // 2. If a previous backup exist, delete it.
 // 3. Copy file to backup location... that is, create the backup.
 int backup_file(char *path_origin, char *path_destination) {
-	
+
 	int r;
-	char *path_origin_dirname = dirname(path_origin);
-	char *path_origin_basename = basename(path_origin);
+	// dirname(3) and basename(3) may modify their argument, and glibc's do: the
+	// caller's path is used again after this returns, and a path truncated at its last
+	// slash made the composed document write over its own directory -- measured on
+	// Linux as "Open (/tmp/out) failed - Is a directory", and it cost a write that
+	// Apple's implementations, which leave the buffer alone, never noticed (BUGS.md,
+	// the .mad byte-identity entry).
+	char *directory_copy = strdup(path_origin);
+	char *name_copy = strdup(path_origin);
+	char *path_origin_dirname = dirname(directory_copy);
+	char *path_origin_basename = basename(name_copy);
 	if ((r = chdir(path_origin_dirname)) < 0) {
 		os_log_error(OS_LOG_DEFAULT, "Error: Change directory returned %d. Error (%d): %s", r, errno, strerror(errno));
 	} else {
@@ -120,13 +128,26 @@ int backup_file(char *path_origin, char *path_destination) {
 #endif
 			os_log_error(OS_LOG_DEFAULT, "Error: Copyfile %s.\n\tGot %d: %s.\n\t\n\tStore is migration directory?", path_origin, errno, strerror(errno));
 	}
-	
+
+	free(directory_copy);
+	free(name_copy);
+
 	return r;
 }
 
-int write_archive(char *outname, NSURL *filewrapper) {
+// The old walk skipped hidden members (NSDirectoryEnumerationSkipsHiddenFiles) and
+// this one keeps that: MAD_FORMAT.md §6 H4 records that a hidden member is dropped
+// silently, which is a hazard to be decided, not a behaviour to change by rewriting
+// the walk.
+static int mad_path_is_hidden(NSString *relativePath) {
+	for (NSString *component in relativePath.pathComponents) {
+		if ([component hasPrefix: @"."]) return 1;
+	}
+	return 0;
+}
+
+int write_archive(char *outname, NSURL *filewrapper, int reproducible) {
 	int r = 0;
-	NSString *directoryToArchiveFileName = filewrapper.lastPathComponent;
 	struct archive *archive = archive_write_new();
 	
 	if (archive_write_set_format_pax_restricted(archive) != ARCHIVE_OK) {
@@ -140,33 +161,35 @@ int write_archive(char *outname, NSURL *filewrapper) {
 	if ((r = archive_write_open_filename(archive, outname)) != ARCHIVE_OK) {
 		os_log_error(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
 	}
-	
-	/* GNUstep's NSDirectoryEnumerator is not a parameterized class. */
-	NSDirectoryEnumerator * sourceDirectoryEnumerator =
-	[[NSFileManager defaultManager] enumeratorAtURL: filewrapper
-						 includingPropertiesForKeys: nil
-											options: NSDirectoryEnumerationSkipsHiddenFiles
-									   errorHandler: ^BOOL(NSURL * _Nonnull url, NSError * _Nonnull error) {
-		os_log_error(OS_LOG_DEFAULT, "Error: %s\n\t%s", error.localizedDescription.UTF8String, url.absoluteString.UTF8String);
-		return YES;
-	}];
-	NSURL *source_filepath, *baseUrl;
-	NSString *source_path_relative;
-	int archive_status;
-	for (source_filepath in sourceDirectoryEnumerator) {
-		
-		baseUrl = source_filepath.copy;
-		while (![baseUrl.lastPathComponent isEqualToString:directoryToArchiveFileName]) {
-			baseUrl = baseUrl.URLByDeletingLastPathComponent;
+
+	// The members are the files below the directory, named by their paths relative to
+	// it, and they are read with -subpathsAtPath: rather than a URL enumerator:
+	// GNUstep's -enumeratorAtURL: yields URLs with the containing directory stripped,
+	// which is what used to send the old walk-up loop to "/" and never let it return
+	// (BUGS.md, the byte-identity entry; Linux/README.md).
+	NSString *basePath = filewrapper.path;
+	NSMutableArray <NSString *> *relativePaths = [NSMutableArray array];
+	for (NSString *relativePath in [[NSFileManager defaultManager] subpathsAtPath: basePath]) {
+		if (!mad_path_is_hidden(relativePath)) {
+			[relativePaths addObject: relativePath];
 		}
-		source_path_relative = [MADPathUtilities stringWithPath:source_filepath.path
-													 relativeTo:baseUrl.path];
-		
-		char *source_filepath_fsr = strdup(source_filepath.fileSystemRepresentation);
-		char *source_path_relative_fsr = strdup(source_path_relative.fileSystemRepresentation);
-		
+	}
+
+	// A reproducible archive walks its members in one order.  The enumerator's is the
+	// filesystem's, and two filesystems do not have to agree on it.
+	if (reproducible) {
+		[relativePaths sortUsingSelector: @selector(compare:)];
+	}
+
+	int archive_status;
+	for (NSString *relativePath in relativePaths) {
+		NSString *absolutePath = [basePath stringByAppendingPathComponent: relativePath];
+
+		char *source_filepath_fsr = strdup(absolutePath.fileSystemRepresentation);
+		char *source_path_relative_fsr = strdup(relativePath.fileSystemRepresentation);
+
 		if ((archive_status = mad_archive_write_file(archive, source_filepath_fsr,
-													 source_path_relative_fsr)) < 0) {
+													 source_path_relative_fsr, reproducible)) < 0) {
 			os_log_error(OS_LOG_DEFAULT, "Error %d in archive.", archive_status);
 		}
 		free(source_path_relative_fsr); free(source_filepath_fsr);
@@ -252,7 +275,7 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	strlcpy(body_path, archive_path, body_size);
 	strlcat(body_path, ".tmp", body_size);
 
-	if ((r = write_archive(body_path, self.filewrapper)) < 0) {
+	if ((r = write_archive(body_path, self.filewrapper, self.reproducible)) < 0) {
 		os_log_error(OS_LOG_DEFAULT, "Failed to archive file with %d.", r);
 	} else if (!MADComposeV1Archive(archive_path, body_path, self.checkpointed)) {
 		r = -1;

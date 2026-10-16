@@ -381,6 +381,41 @@ platforms (BUGS.md, the SELECT-list entry; the order tests in
 orders its columns differently from one refreshed after it — the same data, a new
 order — so refresh once before comparing caches across that date.
 
+## The writer runs here, and the two platforms agree
+
+Phase E's other half (`MAD_LINUX.md` §9; the user's requirement, 2026-10-16): the `.mad`
+writer works on Linux and produces the **same bytes** as the Mac's for the same
+document.  `mad write <doc.mad> --out <copy.mad> [--reproducible]` is the surface, and
+the document is opened headlessly on both platforms, so both sides run the same writer.
+
+Measured on the London fixture (`CLI/Fixtures/London.portable.mad`):
+
+	$ mad write London.portable.mad --out copy.mad --reproducible
+	16243 bytes, sha256 22dd3123ea1efe059f298fe39aa54aa3c7dd89aba33cf15870b55b309f9d1848
+	                                     (identical on the Mac and in this image)
+
+`--reproducible` pins uid/gid 0, the fixed time 2001-01-12T00:00:00Z and a sorted member
+walk; an ordinary write keeps the members' real metadata, so it differs between runs
+and platforms by design.
+
+Two things had to be fixed for the writer to run here, both recorded in `BUGS.md`
+(the `.mad` byte-identity entry):
+
+* `-write_archive:` walked each enumerated URL *up to* the archived directory, and
+  GNUstep's `-enumeratorAtURL:` strips the containing directory, so the loop never
+  arrived.  The members are read with `-subpathsAtPath:` now, the way the CLI's member
+  list already was.
+* `backup_file` handed its path to `dirname(3)`/`basename(3)`, which glibc is allowed to
+  modify and does: the caller's archive path came back truncated at its last slash, so
+  the composed document was written over its own directory (`Open (…) failed - Is a
+  directory`).  Apple's implementations leave the buffer alone, which is why only Linux
+  saw it.
+
+`Linux/Tests/MADArchiveManagerTests.m` is the coverage (5 tests, 0 needs): the round
+trip (`MAD_CLI.md` §6.1), the ordinary mode's characterisation, the reproducible mode --
+including an FNV-1a checksum of the whole document against the Mac's bytes -- and the
+document path, which writes a copy and leaves the source untouched.
+
 ## What this does not do yet
 
 Phase E's remaining half — `json-report`'s report member and HTML/SVG, both of which

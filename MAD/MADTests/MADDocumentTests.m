@@ -245,7 +245,46 @@
 	XCTAssertGreaterThan(firstBytes.length, (NSUInteger)0);
 	XCTAssertGreaterThan(secondBytes.length, (NSUInteger)0);
 	XCTAssertFalse([firstBytes isEqualToData: secondBytes],
-				   @"the archive carries the members' mtimes, so it is not reproducible (BUGS.md)");
+				   @"an ordinary archive carries the members' mtimes, so it is not reproducible (BUGS.md)");
+
+	[fileManager removeItemAtURL: source error: NULL];
+	[fileManager removeItemAtURL: firstURL error: NULL];
+	[fileManager removeItemAtURL: secondURL error: NULL];
+}
+
+// The opt-in mode is what makes the byte-identity requirement hold: the same members,
+// written twice -- on either platform -- are the same file.  The Linux suite pins the
+// bytes themselves against the Mac's (Linux/Tests/MADArchiveManagerTests.m); this is
+// the mode's own contract, on this platform.
+- (void)testArchiveIsReproducibleWithTheModeOn {
+
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSURL *temp = [NSURL fileURLWithPath: NSTemporaryDirectory() isDirectory: YES];
+	NSURL *source = [temp URLByAppendingPathComponent: [NSUUID UUID].UUIDString isDirectory: YES];
+	NSURL *firstURL = [temp URLByAppendingPathComponent: [[NSUUID UUID].UUIDString stringByAppendingPathExtension: @"mad"]];
+	NSURL *secondURL = [temp URLByAppendingPathComponent: [[NSUUID UUID].UUIDString stringByAppendingPathExtension: @"mad"]];
+	[fileManager createDirectoryAtURL: source withIntermediateDirectories: YES attributes: nil error: NULL];
+	[@"member" writeToURL: [source URLByAppendingPathComponent: @"member.txt"]
+			   atomically: YES encoding: NSUTF8StringEncoding error: NULL];
+
+	NSURL *memberURL = [source URLByAppendingPathComponent: @"member.txt"];
+
+	for (NSNumber *date in @[ @1000000000, @1100000000 ]) {
+		[fileManager setAttributes: @{ NSFileModificationDate: [NSDate dateWithTimeIntervalSince1970: date.doubleValue] }
+					  ofItemAtPath: memberURL.path error: NULL];
+
+		MADArchiveManager *writer = [[MADArchiveManager alloc]
+									 initWithFileWrapperURL: source
+												 archiveURL: date.doubleValue == 1000000000 ? firstURL : secondURL];
+		writer.reproducible = YES;
+		XCTAssertTrue([writer archive: YES], @"the reproducible archive is written");
+	}
+
+	NSData *firstBytes = [NSData dataWithContentsOfURL: firstURL];
+	NSData *secondBytes = [NSData dataWithContentsOfURL: secondURL];
+	XCTAssertGreaterThan(firstBytes.length, (NSUInteger)0);
+	XCTAssertEqualObjects(firstBytes, secondBytes,
+						  @"a reproducible archive ignores the members' times, so the two are one file");
 
 	[fileManager removeItemAtURL: source error: NULL];
 	[fileManager removeItemAtURL: firstURL error: NULL];

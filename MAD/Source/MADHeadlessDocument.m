@@ -37,6 +37,7 @@
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/madlog.h>
 #import <MADSqlite3/MADDataTableFast.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSURL.h>
@@ -102,6 +103,56 @@
 		return NO;
 	}
 	return [self.documentStore openWithError: error];
+}
+
+#pragma mark - Writing
+
+- (BOOL)writeToURL:(NSURL *)url reproducible:(BOOL)reproducible error:(NSError * __autoreleasing *)outError {
+
+	RptqStoreContext *context = self.storeContext;
+	if (context == nil) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain: @"MADHeadlessDocument"
+											code: 3
+										userInfo: @{ NSLocalizedDescriptionKey: @"The document is not open; nothing to write." }];
+		}
+		return NO;
+	}
+
+	// The store as it stands.  A document that was only read has nothing dirty, so
+	// this writes nothing -- the same call the app's save makes.
+	NSError *storeError = nil;
+	if (![context save: &storeError]) {
+		if (outError != NULL) {
+			*outError = storeError;
+		}
+		return NO;
+	}
+
+	// The portable store runs journal_mode = DELETE (MADStore.m), so its guts carry no
+	// WAL and the checkpoint flag is honestly 1; a guts that does carry one -- nothing
+	// writes one today -- gets a real checkpoint attempt and records what happened.
+	BOOL checkpointed = YES;
+	NSString *storePath = self.documentStore.portableStoreURL.path;
+	if (storePath != nil &&
+		[[NSFileManager defaultManager] fileExistsAtPath: [storePath stringByAppendingString: @"-wal"]]) {
+		checkpointed = [MADDatabaseSqlite3 checkpointStoreAtURL: self.documentStore.portableStoreURL];
+	}
+
+	MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.documentStore.gutsURL
+																		   archiveURL: url];
+	archiveManager.checkpointed = checkpointed;
+	archiveManager.reproducible = reproducible;
+	if (![archiveManager archive: YES]) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain: @"MADHeadlessDocument"
+											code: 4
+										userInfo: @{ NSLocalizedDescriptionKey:
+						 [NSString stringWithFormat: @"Could not write %@.", url.lastPathComponent] }];
+		}
+		return NO;
+	}
+	return YES;
 }
 
 #pragma mark - The definition

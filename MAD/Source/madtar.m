@@ -327,21 +327,34 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
 	return r;
 }
 
-void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st) {
-	
-	archive_entry_set_gid(*e, (*st).st_gid);
-	archive_entry_set_uid(*e, (*st).st_uid);
-	archive_entry_set_dev(*e, (*st).st_dev);
-	archive_entry_set_mode(*e, (*st).st_mode);
-	archive_entry_set_nlink(*e, (*st).st_nlink);
+void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st, int reproducible) {
+
+	// A reproducible member carries none of what the machine put in it -- owner,
+	// group, device, links, modification time -- just its path and its bytes, so the
+	// same members make the same archive on any machine and on either platform
+	// (BUGS.md, the .mad byte-identity entry).
+	if (reproducible) {
+		archive_entry_set_uid(*e, 0);
+		archive_entry_set_gid(*e, 0);
+		archive_entry_set_dev(*e, 0);
+		archive_entry_set_nlink(*e, 1);
+		archive_entry_set_mode(*e, (*st).st_mode);
+		archive_entry_set_mtime(*e, MADArchiveReproducibleModificationTime, 0);
+	} else {
+		archive_entry_set_gid(*e, (*st).st_gid);
+		archive_entry_set_uid(*e, (*st).st_uid);
+		archive_entry_set_dev(*e, (*st).st_dev);
+		archive_entry_set_mode(*e, (*st).st_mode);
+		archive_entry_set_nlink(*e, (*st).st_nlink);
 #if __APPLE__
-	archive_entry_set_mtime(*e, (*st).st_mtimespec.tv_sec, (*st).st_mtimespec.tv_nsec);
-	archive_entry_set_birthtime(*e, (*st).st_birthtimespec.tv_sec, (*st).st_birthtimespec.tv_nsec);
+		archive_entry_set_mtime(*e, (*st).st_mtimespec.tv_sec, (*st).st_mtimespec.tv_nsec);
+		archive_entry_set_birthtime(*e, (*st).st_birthtimespec.tv_sec, (*st).st_birthtimespec.tv_nsec);
 #else
-	/* Darwin spells the modified time st_mtimespec; POSIX st_mtim, and has no
-	   birth time to hand over. */
-	archive_entry_set_mtime(*e, (*st).st_mtim.tv_sec, (*st).st_mtim.tv_nsec);
+		/* Darwin spells the modified time st_mtimespec; POSIX st_mtim, and has no
+		   birth time to hand over. */
+		archive_entry_set_mtime(*e, (*st).st_mtim.tv_sec, (*st).st_mtim.tv_nsec);
 #endif
+	}
 	
 	if (S_ISREG((*st).st_mode)) {
 		archive_entry_set_filetype(*e, AE_IFREG);
@@ -369,7 +382,7 @@ void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st)
 	}
 }
 
-int mad_archive_write_file(struct archive *archive, const char *filename, const char *relativePath) {
+int mad_archive_write_file(struct archive *archive, const char *filename, const char *relativePath, int reproducible) {
 	
 	int fd = 0, status = 0;
 	ssize_t len;
@@ -385,7 +398,7 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
 		entry = archive_entry_new2(archive);
 		archive_entry_copy_stat(entry, &st);
 		archive_entry_set_pathname(entry, relativePath);
-		mad_archive_entry_set_attributes(&entry, &st);
+		mad_archive_entry_set_attributes(&entry, &st, reproducible);
 		if ((status = archive_write_header(archive, entry)) != ARCHIVE_OK) {
 			os_log_error(OS_LOG_DEFAULT, "Error: archive_write_header() returned %d.", status);
 		}
@@ -397,7 +410,11 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
 			while ((len = read(fd, buff, BUFF_SIZE)) > 0) {
 				w_size = archive_write_data(archive, buff, (size_t)len);
 				if (w_size < 0) {
-					os_log_error(OS_LOG_DEFAULT, "Error: archive_write_data() returned %ld.", w_size);
+					// The library's own words, not just the code: -30 (ARCHIVE_FATAL)
+					// arrives from the filter, and which filter said what is the whole
+					// diagnosis.
+					os_log_error(OS_LOG_DEFAULT, "Error: archive_write_data() returned %ld: %s.",
+								 w_size, archive_error_string(archive) ?: "no error string");
 				}
 			}
 			

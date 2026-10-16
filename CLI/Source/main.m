@@ -33,6 +33,7 @@ int main(int argc, const char *argv[]) {
 		if ([invocation.command isEqualToString: @"query"])		return MADCLIRunQuery(invocation);
 		if ([invocation.command isEqualToString: @"refresh"])	return MADCLIRunRefresh(invocation);
 		if ([invocation.command isEqualToString: @"export"])		return MADCLIRunExport(invocation);
+		if ([invocation.command isEqualToString: @"write"])		return MADCLIRunWrite(invocation);
 
 		return MADCLIExitUsage;
 	}

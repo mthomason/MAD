@@ -154,6 +154,28 @@ is the protocol it talks to. All three live in the `MAD` framework rather than t
 app. What PDF is not is **headless**: it is UIKit's `UIPrintPageRenderer`, which is why
 it is the one format still implemented on the CLI's side (see §5.3).
 
+### `mad write <doc.mad> --out <copy.mad>`
+
+Writes the document out as a `.mad` -- a *copy*: the guts directory the document was
+read into, archived again with the v1 header.  It does not edit the document it read,
+and the CLI still does not design documents (§1); what this verb is for is the
+byte-identity requirement -- the same document written on two platforms must be the
+same file -- and §6.1's round-trip fixture, which needs a writer a script can run.
+
+```
+$ mad write London.portable.mad --out copy.mad --reproducible
+wrote /tmp/copy.mad (16243 bytes, reproducible)
+```
+
+`--reproducible` pins what the clock and the filesystem would otherwise stamp into the
+archive: a fixed modification time (2001-01-12T00:00:00Z, the instant the PDF export
+pins its dates to), owner and group 0, and a sorted member walk
+(`MADArchiveManager.reproducible`).  Without it an ordinary save is written, with the
+members' real metadata.  The document is opened headlessly on both platforms
+(`MADHeadlessDocument`), so the two sides of the comparison run the same writer, and
+the same document writes the same bytes there (16,243 bytes on the London fixture,
+`Linux/README.md`).
+
 ### Global options
 
 | Option | Meaning |
@@ -164,6 +186,8 @@ it is the one format still implemented on the CLI's side (see §5.3).
 | `--no-keychain` | never touch the keychain |
 | `--format <name>` | output format |
 | `--out <path>` | output path; default stdout |
+| `--deterministic` | pin the export's dates and identifier, so two runs over unchanged data are byte-identical |
+| `--reproducible` | pin the `.mad` archive's inputs -- time, ownership, member order (`write`) |
 
 ### Exit codes
 
@@ -307,7 +331,10 @@ The format and the CLI are pinned by **round-trip fixtures**, not by prose:
 
 1. **Container fidelity.** Unpack `Music.mad` and `London.mad`, repack them, and
    assert the member list and each member's bytes are unchanged. This pins
-   `MAD_FORMAT.md` §2 and catches H4 (hidden files) immediately.
+   `MAD_FORMAT.md` §2 and catches H4 (hidden files) immediately.  **Landed
+   2026-10-16** as `Linux/Tests/MADArchiveManagerTests.m`'s round trip -- `mad write`
+   writes the container on both platforms now -- with the reproducible mode's bytes
+   pinned against the Mac's.
 2. **v0 readability.** `mad inspect` on both shipping samples must succeed and report
    the values in `MAD_FORMAT.md` §2 -- including the un-checkpointed WAL, which is the
    assertion that proves the WAL hazard is being reported rather than ignored.
