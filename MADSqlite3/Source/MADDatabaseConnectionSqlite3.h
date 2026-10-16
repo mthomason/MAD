@@ -11,8 +11,9 @@
 
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
+#import <MADAPI/MADDatabaseDriverRegistry.h>
 
-@interface MADDatabaseConnectionSqlite3 : MADDatabaseConnection <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, MADDatabaseConnectionsPropertiesURL, NSCopying>
+@interface MADDatabaseConnectionSqlite3 : MADDatabaseConnection <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, MADDatabaseConnectionsPropertiesURL, MADDatabaseDriver, NSCopying>
 
 - (instancetype)initWithUrl:(NSURL *)url;
 

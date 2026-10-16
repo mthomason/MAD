@@ -32,6 +32,9 @@
 		4CF6AABE1F5519280061B0C6 /* MADDatabaseType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AABC1F5519280061B0C6 /* MADDatabaseType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AAC01F551A5B0061B0C6 /* MADNotificationDidReadRows.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AABF1F551A5B0061B0C6 /* MADNotificationDidReadRows.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AAC21F551AAB0061B0C6 /* MADNotificationDidReadRows.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAC11F551AAB0061B0C6 /* MADNotificationDidReadRows.m */; };
+		4C0DB0A1000000000000A003 /* MADDatabaseDriverRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000A001 /* MADDatabaseDriverRegistry.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C0DB0A1000000000000A006 /* MADDatabaseDriverRegistryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000A005 /* MADDatabaseDriverRegistryTests.m */; };
+		4C0DB0A1000000000000A004 /* MADDatabaseDriverRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000A002 /* MADDatabaseDriverRegistry.m */; };
 		4CF6AAC71F55204A0061B0C6 /* MADDatabaseConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAC51F55204A0061B0C6 /* MADDatabaseConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CF6AAC81F55204A0061B0C6 /* MADDatabaseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF6AAC61F55204A0061B0C6 /* MADDatabaseConnection.m */; };
 		4CF6AACA1F5524050061B0C6 /* MADDatabaseProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CF6AAC91F5524050061B0C6 /* MADDatabaseProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -98,6 +101,9 @@
 		4CF6AABC1F5519280061B0C6 /* MADDatabaseType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseType.h; sourceTree = "<group>"; };
 		4CF6AABF1F551A5B0061B0C6 /* MADNotificationDidReadRows.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNotificationDidReadRows.h; sourceTree = "<group>"; };
 		4CF6AAC11F551AAB0061B0C6 /* MADNotificationDidReadRows.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNotificationDidReadRows.m; sourceTree = "<group>"; };
+		4C0DB0A1000000000000A001 /* MADDatabaseDriverRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseDriverRegistry.h; sourceTree = "<group>"; };
+		4C0DB0A1000000000000A002 /* MADDatabaseDriverRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseDriverRegistry.m; sourceTree = "<group>"; };
+		4C0DB0A1000000000000A005 /* MADDatabaseDriverRegistryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseDriverRegistryTests.m; sourceTree = "<group>"; };
 		4CF6AAC51F55204A0061B0C6 /* MADDatabaseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseConnection.h; sourceTree = "<group>"; };
 		4CF6AAC61F55204A0061B0C6 /* MADDatabaseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseConnection.m; sourceTree = "<group>"; };
 		4CF6AAC91F5524050061B0C6 /* MADDatabaseProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseProtocol.h; sourceTree = "<group>"; };
@@ -178,6 +184,8 @@
 				4CF6AABF1F551A5B0061B0C6 /* MADNotificationDidReadRows.h */,
 				4CF6AAC11F551AAB0061B0C6 /* MADNotificationDidReadRows.m */,
 				4CF6AAE01F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h */,
+				4C0DB0A1000000000000A001 /* MADDatabaseDriverRegistry.h */,
+				4C0DB0A1000000000000A002 /* MADDatabaseDriverRegistry.m */,
 				4CF6AAC51F55204A0061B0C6 /* MADDatabaseConnection.h */,
 				4CF6AAC61F55204A0061B0C6 /* MADDatabaseConnection.m */,
 			);
@@ -229,6 +237,7 @@
 				4CDA7A0900000000000000B1 /* MADQueryTests.m */,
 				4CDA7A0A00000000000000B1 /* MADNotificationDidReadRowsTests.m */,
 				4CDA7A0B00000000000000B1 /* MADConnectionViewControllerTests.m */,
+				4C0DB0A1000000000000A005 /* MADDatabaseDriverRegistryTests.m */,
 				4CF6AAAF1F5518BB0061B0C6 /* Info.plist */,
 			);
 			path = MADAPITests;
@@ -271,6 +280,7 @@
 				4C6C0A081F5D329700EDA039 /* MADConnectionViewController.h in Headers */,
 				4CF6AAD51F5526A00061B0C6 /* MADDatabaseTable.h in Headers */,
 				4CF6AAC71F55204A0061B0C6 /* MADDatabaseConnection.h in Headers */,
+				4C0DB0A1000000000000A003 /* MADDatabaseDriverRegistry.h in Headers */,
 				4CAA659E2DDD10760016006E /* MADAliases.h in Headers */,
 				4CF6AAE11F552D640061B0C6 /* MADDatabaseConnectionsPropertiesURLProtocol.h in Headers */,
 			);
@@ -387,6 +397,7 @@
 				4C2D77E81F569EEB005415F7 /* MADQuery.m in Sources */,
 				4C6C0A091F5D329700EDA039 /* MADConnectionViewController.m in Sources */,
 				4CF6AAC81F55204A0061B0C6 /* MADDatabaseConnection.m in Sources */,
+				4C0DB0A1000000000000A004 /* MADDatabaseDriverRegistry.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +416,7 @@
 				4CDA7A0900000000000000A1 /* MADQueryTests.m in Sources */,
 				4CDA7A0A00000000000000A1 /* MADNotificationDidReadRowsTests.m in Sources */,
 				4CDA7A0B00000000000000A1 /* MADConnectionViewControllerTests.m in Sources */,
+				4C0DB0A1000000000000A006 /* MADDatabaseDriverRegistryTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

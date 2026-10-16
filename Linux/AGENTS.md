@@ -34,7 +34,10 @@ checkpoint, and no CI consumes it yet (Phase F does that).
     also holds `CoreGraphics/` (the CG geometry functions), `CoreFoundation/`
     (`CFNumber.h`, `CFAvailability.h`), `objc/NSObject.h` and
     `UIKit/UIGeometry.h` -- directory shims so the frameworks' Apple imports
-    resolve unchanged.
+    resolve unchanged -- and `MADDriverLinkage.m`, the one file that names the
+    database drivers the build links (a static archive is searched, not loaded,
+    so nothing else would pull their `+load` in; see README.md and
+    `ROADMAP.md` §5.1).
 *   **`Tests/`** -- the ported suites, one stand-alone executable per Xcode
     test file, plus `ToolchainProbe.m` (the environment probe and its report).
     `Tests/Support/MADTestSupport.h` is the GNUstep `Testing.h` glue, shared

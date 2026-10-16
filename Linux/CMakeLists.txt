@@ -212,6 +212,7 @@ include(cmake/MADAPISources.cmake)
 mad_make_include_shim(MADAPI "${SOURCE_DIR}")
 mad_add_framework(madapi MADAPI_SOURCES
 	MADAPIEnumsAndConstantsTests
+	MADDatabaseDriverRegistryTests
 	MADDatabaseConnectionTests
 	MADDatabaseDataBindingTests
 	MADDatabaseFieldTests
@@ -303,6 +304,7 @@ foreach (_mad_header IN LISTS _mad_headers)
 endforeach()
 mad_add_framework(mad MAD_SOURCES
 	MADCoreLogicTests
+	MADDatabaseDriverDispatchTests
 	MADDataTableRegressionTests
 	MADDesignerQueryTests
 	MADDesignerViewerTests
@@ -367,6 +369,11 @@ target_link_libraries(mad PUBLIC
 # instead puts it behind the whole-archive the tests already use; its only
 # external need, MADDatabaseSqlite3, is pulled from libmadsqlite3.a by symbol.
 target_sources(mad PRIVATE "${REPO_ROOT}/MADSqlite3/Source/MADQuery+Sqlite3.m")
+# The drivers the Linux build links, named once so the static linker pulls them in
+# and their +load registers them (ROADMAP.md §5.1): the framework sources no longer
+# refer to a driver class, and an archive member nothing references is dropped.
+# See Compat/MADDriverLinkage.m.
+target_sources(mad PRIVATE "${MAD_COMPAT_DIR}/MADDriverLinkage.m")
 target_include_directories(madtdsclient PUBLIC "${CMAKE_BINARY_DIR}/umbrella-shim")
 target_link_libraries(madtdsclient PUBLIC madtds madapi madcocoaextensions madfoundation)
 

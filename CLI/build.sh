@@ -27,6 +27,11 @@ readonly OUTPUT="${BUILD_DIR}/mad"
 
 # The frameworks the tool links, in dependency order.  MADFoundation first is not
 # required by the linker, but keeping the list readable is worth something.
+#
+# The drivers are named here because the framework no longer imports them: a driver
+# registers itself when something links it (MADDatabaseDriverRegistry.h, ROADMAP.md
+# §5.1), so the tool links the ones it runs queries against.  Sqlite3 comes in with
+# MAD, which still links it for MADDataTableFast; MySQL and TDS do not.
 readonly FRAMEWORKS=(
 	MADFoundation
 	MADCocoaExtensions
@@ -35,6 +40,8 @@ readonly FRAMEWORKS=(
 	MADSqlite3
 	MADAPI
 	MAD
+	MADMySQL
+	MADTdsClient
 )
 
 # The Core Data model names these as value transformers for its transformable

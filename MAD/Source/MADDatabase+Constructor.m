@@ -6,53 +6,33 @@
 //  Copyright © 2017 Michael Thomason. All rights reserved.
 //
 
-#define INCLUDE_MYSQL 1
-
 #import "MADDatabase+Constructor.h"
 #import <MADAPI/MADDatabaseConnection.h>
-#import <MADSqlite3/MADDatabaseSqlite3.h>
-#import <MADMySQL/MADDatabaseMySQL.h>
-#import <MADTdsClient/MADDatabaseSQLServer.h>
+#import <MADAPI/MADDatabaseDriverRegistry.h>
 
-@class MADDatabaseSqlite3;
+@implementation MADDatabase (Constructor)
 
-@implementation MADDatabase (Comparson)
-
+// The driver is looked up, not imported: which drivers a process has is a matter
+// of what it links, and the registry is what a driver says there
+// (MADDatabaseDriverRegistry.h; ROADMAP.md §5.1).  A type with no registered
+// driver builds nothing, the way the old switch's default did -- but the driver
+// being absent is now a link fact rather than a compile error here.
 + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {
-	
-	id result = nil;
-	
-	switch (connection.databaseType) {
-		case MADDatabaseTypeSqlite3:
-			result = [[MADDatabaseSqlite3 alloc] init];
-			
-			break;
-			
-		case MADDatabaseTypeTDS:
-			result = [[MADDatabaseSQLServer alloc] init];
-			
-			break;
-#ifdef INCLUDE_MYSQL
-		case MADDatabaseTypeMySQL:
-			result = [[MADDatabaseMySQL alloc] init];
-			
-			break;
-#endif
-		default:
-			break;
-	}
-	
-	[result setDatabaseConnection:connection];
-	
-	if ([result respondsToSelector:@selector(openDatabase)]) {
+
+	Class <MADDatabaseDriver> driver = [MADDatabaseDriverRegistry driverClassForType: connection.databaseType];
+	MADDatabase *result = [[[driver databaseClass] alloc] init];
+
+	[result setDatabaseConnection: connection];
+
+	if ([result respondsToSelector: @selector(openDatabase)]) {
 		[result openDatabase];
 	}
-	
+
 	return result;
 }
 
 - (void)openDatabase {
-	
+
 }
 
 @end

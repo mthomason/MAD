@@ -43,6 +43,7 @@
 		4CDA7A1500000000000000A1 /* MADQueryTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1500000000000000B1 /* MADQueryTestTests.m */; };
 		4CDA7A1600000000000000A1 /* MADQuerySampleDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1600000000000000B1 /* MADQuerySampleDataTests.m */; };
 		4CDA7A1700000000000000A1 /* MADQueryMaxFieldLengthTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1700000000000000B1 /* MADQueryMaxFieldLengthTests.m */; };
+		4C0DB0A1000000000000C002 /* MADDatabaseDriverDispatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000C001 /* MADDatabaseDriverDispatchTests.m */; };
 		4CDA7A1800000000000000A1 /* MADOperationBackgroundTaskBeginTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1800000000000000B1 /* MADOperationBackgroundTaskBeginTests.m */; };
 		4CDA7A1900000000000000A1 /* MADOperationBackgroundTaskEndTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1900000000000000B1 /* MADOperationBackgroundTaskEndTests.m */; };
 		4CDA7A1A00000000000000A1 /* MADOperationCreateDocumentAddConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1A00000000000000B1 /* MADOperationCreateDocumentAddConnectionTests.m */; };
@@ -129,9 +130,9 @@
 		4C2915E924AC72C000EC794B /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915DF24AC72C000EC794B /* MADCocoaExtensions.framework */; };
 		4C2915EB24AC72C000EC794B /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E024AC72C000EC794B /* MADDataStructures.framework */; };
 		4C2915ED24AC72C000EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E124AC72C000EC794B /* MADFoundation.framework */; };
-		4C2915EF24AC72C000EC794B /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E224AC72C000EC794B /* MADMySQL.framework */; };
+		4C0DB0A1000000000000B001 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E224AC72C000EC794B /* MADMySQL.framework */; };
+		4C0DB0A1000000000000B002 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E424AC72C000EC794B /* MADTdsClient.framework */; };
 		4C2915F124AC72C000EC794B /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E324AC72C000EC794B /* MADSqlite3.framework */; };
-		4C2915F324AC72C000EC794B /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E424AC72C000EC794B /* MADTdsClient.framework */; };
 		4C3002481E2B8F0000B3E224 /* MADActivityIndicatorLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */; };
 		4C3002491E2B8F0000B3E224 /* MADActivityIndicatorLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3002471E2B8F0000B3E224 /* MADActivityIndicatorLabel.m */; };
 		4C3080E11D053EB800A7D597 /* UIFontDescriptor+MADAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3080DF1D053EB800A7D597 /* UIFontDescriptor+MADAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -597,6 +598,7 @@
 		4CDA7A1500000000000000B1 /* MADQueryTestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryTestTests.m; sourceTree = "<group>"; };
 		4CDA7A1600000000000000B1 /* MADQuerySampleDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQuerySampleDataTests.m; sourceTree = "<group>"; };
 		4CDA7A1700000000000000B1 /* MADQueryMaxFieldLengthTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADQueryMaxFieldLengthTests.m; sourceTree = "<group>"; };
+		4C0DB0A1000000000000C001 /* MADDatabaseDriverDispatchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseDriverDispatchTests.m; sourceTree = "<group>"; };
 		4CDA7A1800000000000000B1 /* MADOperationBackgroundTaskBeginTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationBackgroundTaskBeginTests.m; sourceTree = "<group>"; };
 		4CDA7A1900000000000000B1 /* MADOperationBackgroundTaskEndTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationBackgroundTaskEndTests.m; sourceTree = "<group>"; };
 		4CDA7A1A00000000000000B1 /* MADOperationCreateDocumentAddConnectionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADOperationCreateDocumentAddConnectionTests.m; sourceTree = "<group>"; };
@@ -1140,10 +1142,8 @@
 				4C4EC7302DC9A67D001DBEBE /* MADFileManager.framework in Frameworks */,
 				4C2915F124AC72C000EC794B /* MADSqlite3.framework in Frameworks */,
 				4CA7C41502EA44B3800470150 /* libsqlite3.tbd in Frameworks */,
-				4C2915F324AC72C000EC794B /* MADTdsClient.framework in Frameworks */,
 				4C2915ED24AC72C000EC794B /* MADFoundation.framework in Frameworks */,
 				4C2915E724AC72C000EC794B /* MADBarcodes.framework in Frameworks */,
-				4C2915EF24AC72C000EC794B /* MADMySQL.framework in Frameworks */,
 				4C2915EB24AC72C000EC794B /* MADDataStructures.framework in Frameworks */,
 				4C00A3651F57DBE800F6A6C1 /* libiconv.2.tbd in Frameworks */,
 				4C5259331D894AA200FEF1A1 /* libxml2.tbd in Frameworks */,
@@ -1155,6 +1155,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CF7814F1BADE5EA0050A67D /* MAD.framework in Frameworks */,
+				4C0DB0A1000000000000B001 /* MADMySQL.framework in Frameworks */,
+				4C0DB0A1000000000000B002 /* MADTdsClient.framework in Frameworks */,
 				4CDA7A0100000000000000A2 /* MADSqlite3.framework in Frameworks */,
 				4CDA7A0100000000000000A3 /* MADFoundation.framework in Frameworks */,
 				4CDA7A0100000000000000A4 /* MADAPI.framework in Frameworks */,
@@ -1741,6 +1743,7 @@
 				4CDA7A1500000000000000B1 /* MADQueryTestTests.m */,
 				4CDA7A1600000000000000B1 /* MADQuerySampleDataTests.m */,
 				4CDA7A1700000000000000B1 /* MADQueryMaxFieldLengthTests.m */,
+				4C0DB0A1000000000000C001 /* MADDatabaseDriverDispatchTests.m */,
 				4CDA7A1800000000000000B1 /* MADOperationBackgroundTaskBeginTests.m */,
 				4CDA7A1900000000000000B1 /* MADOperationBackgroundTaskEndTests.m */,
 				4CDA7A1A00000000000000B1 /* MADOperationCreateDocumentAddConnectionTests.m */,
@@ -2407,6 +2410,7 @@
 				4CDA7A1500000000000000A1 /* MADQueryTestTests.m in Sources */,
 				4CDA7A1600000000000000A1 /* MADQuerySampleDataTests.m in Sources */,
 				4CDA7A1700000000000000A1 /* MADQueryMaxFieldLengthTests.m in Sources */,
+				4C0DB0A1000000000000C002 /* MADDatabaseDriverDispatchTests.m in Sources */,
 				4CDA7A1800000000000000A1 /* MADOperationBackgroundTaskBeginTests.m in Sources */,
 				4CDA7A1900000000000000A1 /* MADOperationBackgroundTaskEndTests.m in Sources */,
 				4CDA7A1A00000000000000A1 /* MADOperationCreateDocumentAddConnectionTests.m in Sources */,

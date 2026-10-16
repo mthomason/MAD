@@ -10,9 +10,10 @@
 #define Reports_MTDatabaseConnectionMySql_h
 
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseDriverRegistry.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
-@interface MADDatabaseConnectionMySql : MADDatabaseConnection <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, MADConnectionsPropertiesProtocol, NSCopying>
+@interface MADDatabaseConnectionMySql : MADDatabaseConnection <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, MADConnectionsPropertiesProtocol, MADDatabaseDriver, NSCopying>
 
 - (instancetype)initWithHost:(NSString *)host
 					database:(NSString *)database

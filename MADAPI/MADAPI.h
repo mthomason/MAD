@@ -43,3 +43,4 @@ FOUNDATION_EXPORT const unsigned char MADAPIVersionString[];
 // (-Wincomplete-umbrella; keep in sync with the Public headers phase.)
 #import <MADAPI/MADDatabaseSQLProtocol.h>
 #import <MADAPI/MADPluginProtocol.h>
+#import <MADAPI/MADDatabaseDriverRegistry.h>

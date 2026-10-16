@@ -11,9 +11,30 @@
 #endif
 
 #import "MADDatabaseConnectionMySql.h"
+#import "MADDatabaseMySQL.h"
 #import <Foundation/NSCharacterSet.h>
 
 @implementation MADDatabaseConnectionMySql
+
+// A linked driver is a registered driver: the constructor learns MySQL is here
+// from this, not from an import (MADDatabaseDriverRegistry.h).
++ (void)load {
+	[MADDatabaseDriverRegistry registerDriverClass: self];
+}
+
++ (MADDatabaseType)databaseType {
+	return MADDatabaseTypeMySQL;
+}
+
++ (Class)databaseClass {
+	return [MADDatabaseMySQL class];
+}
+
++ (instancetype)newDatabaseConnectionWithHost:(NSString *)host
+									 database:(NSString *)database
+										 port:(NSInteger)port {
+	return [[self alloc] initWithHost: host database: database andPort: port];
+}
 
 @synthesize database = _database;
 @synthesize server = _server;

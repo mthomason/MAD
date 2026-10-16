@@ -115,6 +115,28 @@ they are behaviour-neutral: MADFoundation, MADDataStructures, MADFileManager,
 MADCocoaExtensions, MADAPI, MADSqlite3, MADMySQL, MADTdsClient and MAD are all
 green on the simulator, and the `MAD Designer` workspace builds.
 
+## The drivers are registered, not imported
+
+The constructor used to import the drivers, which is the `MAD` ↔ drivers cycle
+(`ROADMAP.md` §5.1). `MADDatabaseDriverRegistry` (`MADAPI`) is the seam now: each
+driver's connection class conforms to `MADDatabaseDriver` and registers itself in
+`+load`, and `MADDatabase+Constructor` / `MADDatabaseConnection+Constructor` look a
+driver up by `MADDatabaseType` instead of naming one. Which drivers a process has
+is therefore a matter of what it *links*, and the Linux build states that twice:
+
+* the `mad` target still links `madmysql`/`madtdsclient` (and `madsqlite3`), and
+* `Compat/MADDriverLinkage.m`, compiled into `libmad.a` through `target_sources`,
+  names the three connection classes. A static archive is searched, not loaded:
+  without that reference the linker would drop each driver's object file and its
+  `+load` would never run, so this file *is* the Linux half of the mechanism.
+  `MADDatabaseDriverDispatchTests` pins it (the three drivers answer in a process
+  that links `libmad`, and the constructor builds their connections and databases).
+
+On Apple the host links the driver frameworks instead — the app and the CLI name
+MADMySQL and MADTdsClient; `MAD.framework` no longer does, so its test bundle names
+them too. Adding a driver means a link entry in `Linux/CMakeLists.txt`, a line in
+`MADDriverLinkage.m`, and nothing in `MAD`.
+
 ## GNUstep divergences the probe and tests found
 
 * **NSOperationQueue and KVO — found here, fixed in MADOperation.** GNUstep's

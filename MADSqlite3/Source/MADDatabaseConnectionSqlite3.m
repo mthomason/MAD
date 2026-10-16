@@ -11,6 +11,7 @@
 #endif
 
 #import "MADDatabaseConnectionSqlite3.h"
+#import "MADDatabaseSqlite3.h"
 #import <Foundation/NSURL.h>
 
 #import <MADFoundation/MADURLFactory.h>
@@ -20,6 +21,32 @@
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 @implementation MADDatabaseConnectionSqlite3
+
+// A linked driver is a registered driver: the constructor learns Sqlite3 is here
+// from this, not from an import (MADDatabaseDriverRegistry.h).
++ (void)load {
+	[MADDatabaseDriverRegistry registerDriverClass: self];
+}
+
++ (MADDatabaseType)databaseType {
+	return MADDatabaseTypeSqlite3;
+}
+
++ (Class)databaseClass {
+	return [MADDatabaseSqlite3 class];
+}
+
++ (instancetype)newDatabaseConnectionWithHost:(NSString *)host
+									 database:(NSString *)database
+										 port:(NSInteger)port {
+	// A file-backed driver has no host to dial; the type-based constructor built an
+	// empty connection for this type, and it still does.
+	return [[self alloc] initWithUrl: nil];
+}
+
++ (instancetype)newDatabaseConnectionWithURL:(NSURL *)url {
+	return [[self alloc] initWithUrl: url];
+}
 
 @synthesize databaseUrl = _databaseUrl;
 @synthesize connectionString = _connectionString;

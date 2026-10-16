@@ -16,6 +16,7 @@
 set(MADAPI_SOURCES
 	"${SOURCE_DIR}/MADDatabase.m"
 	"${SOURCE_DIR}/MADDatabaseConnection.m"
+	"${SOURCE_DIR}/MADDatabaseDriverRegistry.m"
 	"${SOURCE_DIR}/MADDatabaseDataBinding.m"
 	"${SOURCE_DIR}/MADDatabaseField.m"
 	"${SOURCE_DIR}/MADDatabaseTable.m"
