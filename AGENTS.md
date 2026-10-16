@@ -132,6 +132,10 @@ the headless side.
 * `MAD_FORMAT.md` -- what a `.mad` document is, and what it should be.
 * `MAD_FUTURE.md` -- the vision: the `.mad` as a data object, the hidden file types as
   products, the web clone, AI, and the money.
+* `MAD_DATA_OBJECT.md` -- the design of the data object itself: a report's definition,
+  schema and result set as one contract, how each piece is represented in the code today,
+  what formalizing it takes in phases, and the multi-source/subreport composition
+  documented but deliberately not built.
 * `MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
   Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
 * `Linux/README.md` -- the Linux build: the image, the ten frameworks and their

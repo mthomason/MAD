@@ -49,6 +49,11 @@ That single change — making the hidden cache a named, versionable, addressable
 is the load-bearing idea this document is organized around. Everything else (web,
 cloud, AI, money) is a consequence of it.
 
+The design that makes this concrete — the data object's contract, the code it maps to
+today, and what formalizing it takes, in phases — is `MAD_DATA_OBJECT.md` (written
+2026-10-16). Where this file is the vision, that one is the design; its §7 is the
+engineering version of this section.
+
 ---
 
 ## 2. What the file type really is, and what the hidden types become

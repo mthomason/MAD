@@ -78,6 +78,9 @@
       location = "group:MAD_CLI.md">
    </FileRef>
    <FileRef
+      location = "group:MAD_DATA_OBJECT.md">
+   </FileRef>
+   <FileRef
       location = "group:MAD_FORMAT.md">
    </FileRef>
    <FileRef
