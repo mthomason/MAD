@@ -96,8 +96,15 @@ static const CGFloat PageCounterBuffer = 10.0;
 
 			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 				NSData *pngImage = UIImagePNGRepresentation(thumbnail);
+				if (pngImage == nil) {
+					os_log_error(GetDesignerLog(), "Could not encode the thumbnail for %@; keeping any existing file.", thumbnailURL);
+					return;
+				}
 				NSError *error = nil;
-				BOOL wroteToUrl = [pngImage writeToURL:thumbnailURL options:NSDataWritingFileProtectionNone error:&error];
+				// Atomic: the explorer may be reading the same path while the
+				// refresh rewrites it, and a half-written PNG decodes as blank.
+				NSDataWritingOptions options = NSDataWritingAtomic | NSDataWritingFileProtectionNone;
+				BOOL wroteToUrl = [pngImage writeToURL:thumbnailURL options:options error:&error];
 				if (error != nil) {
 					os_log_error(GetDesignerLog(), "Error: %@", error);
 				} else {

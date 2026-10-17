@@ -9,6 +9,9 @@
 #import "MADThumbnailView.h"
 #import <UIKit/UIImage.h>
 #import <MADFileManager/MADMetaData.h>
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSDate.h>
 
 static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 
@@ -57,24 +60,35 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 - (void)setImageSyncFromPath:(NSString *)path { }
 
 - (void)setThumbnailPath:(NSString *)path {
-	
-	if (_thumbnailAbsolutePath == nil || ![_thumbnailAbsolutePath isEqualToString: path]) {
 
-		_thumbnailAbsolutePath = [path copy];
-		NSString *thumbnailPath = [path copy];
-		
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-			
-			UIImage *thumbnail = [[UIImage alloc] initWithContentsOfFile:thumbnailPath];
-			if (!thumbnail) {
-				thumbnail = [UIImage imageNamed:MADImageBlank];
-			}
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				self.image = thumbnail;
-				[self setNeedsDisplay];
-			});
-		});
+	// The thumbnail URL is stable for a document, but the file behind it is
+	// rewritten by the viewer's page view.  Comparing the path alone skipped
+	// that rewrite and left the cell showing its old (often blank) image; the
+	// modification date is what tells the two writes apart.
+	NSDictionary <NSFileAttributeKey, id> *attributes = nil;
+	if (path != nil) {
+		attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:NULL];
 	}
+	NSDate *modificationDate = attributes[NSFileModificationDate];
+	BOOL samePath = (_thumbnailAbsolutePath != nil && [_thumbnailAbsolutePath isEqualToString:path]);
+	BOOL sameDate = (modificationDate != nil && [self.lastChangeDate isEqual:modificationDate]);
+	if (samePath && sameDate) return;
+
+	_thumbnailAbsolutePath = [path copy];
+	self.lastChangeDate = modificationDate;
+	NSString *thumbnailPath = [path copy];
+
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+
+		UIImage *thumbnail = [[UIImage alloc] initWithContentsOfFile:thumbnailPath];
+		if (!thumbnail) {
+			thumbnail = [UIImage imageNamed:MADImageBlank];
+		}
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			self.image = thumbnail;
+			[self setNeedsDisplay];
+		});
+	});
 }
 
 - (void)setThumbnailURL:(NSURL *)URL {
