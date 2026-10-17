@@ -387,6 +387,13 @@ target_link_libraries(mad PUBLIC
 	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madtdsclient>"
 	${SQLITE3_LIBRARY} ${FREETDS_LIBRARY} ${MYSQL_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY}
 	${ARCHIVE_LIBRARY} ${ZLIB_LIBRARY} ${BZIP2_LIBRARY})
+# Both suites install chinook.sqlite3 into the same per-user Application
+# Support directory and refresh the same London fixture into the same cache
+# directory.  ctest runs test binaries in parallel, and the pair raced there
+# (an intermittent "MADHeadlessDocumentTests failed", 2026-10-17), so they take
+# turns.  The rest of the suite stays parallel.
+set_tests_properties(MADHeadlessDocumentTests MADReportExporterTests
+	PROPERTIES RESOURCE_LOCK mad-london-fixture)
 target_include_directories(madtdsclient PUBLIC "${CMAKE_BINARY_DIR}/umbrella-shim")
 target_link_libraries(madtdsclient PUBLIC madtds madapi madcocoaextensions madfoundation)
 
@@ -425,6 +432,9 @@ add_executable(mad-cli
 	"${CLI_SOURCE_DIR}/MADCLIExport.m"
 	"${CLI_SOURCE_DIR}/MADCLIWrite.m")
 set_target_properties(mad-cli PROPERTIES OUTPUT_NAME mad)
+# The binary's stable path: the runtime stage copies /usr/local/bin/mad, so the
+# CLI is not a build-tree resident.  `cmake --install` writes it (Linux/Dockerfile).
+install(TARGETS mad-cli RUNTIME DESTINATION bin)
 # The framework library is whole-archived for the same reason the tests do it:
 # categories (MADQuery+Sqlite3, the Rptq +Extras families) are reached by message
 # send, so the linker would otherwise drop their archive members.  It also carries

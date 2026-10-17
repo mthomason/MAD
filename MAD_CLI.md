@@ -337,6 +337,32 @@ The CLI must never prompt. It takes `--credentials`, or reads the keychain the
 application wrote, or fails with exit code 3. `--no-keychain` exists so that a test
 run cannot read or write a developer's real credentials.
 
+### 5.5 Running it: the Linux image
+
+`Linux/build.sh --runtime` builds `mad-cli:latest`, a runtime-only layer with the
+CLI on PATH, the shared libraries it links, and the Sqlite3 sample database — no
+compiler, sources or test binaries (283 MB on disk; `Linux/README.md` has the
+contents). A document is mounted, not stored:
+
+	docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro mad-cli:latest \
+		mad inspect /docs/London.portable.mad
+	docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro mad-cli:latest \
+		mad refresh /docs/MySQL.employees.mad --credentials root:root --rows 50
+
+A Sqlite3 document resolves its stored database name against the per-user
+Application Support directory, which is
+`/root/GNUstep/Library/ApplicationSupport` in the image; `chinook.sqlite3` is
+there, so the London and Music fixtures refresh without setup. The row cache
+lives under the same home and is per-container; every export refreshes the
+document itself, so a cache does not need to persist between runs.
+`mad-cli` is not published, and there is no CI (the user's decisions,
+2026-10-17).
+
+`Linux/build.sh --verify` rebuilds the image and runs the repeatable check: all
+six verbs on the fixtures, every format's pinned digest, `pdf`'s refusal, the
+writer's bytes and the exit codes (`Linux/verify-cli.sh`; `--live` adds the two
+live databases).
+
 ---
 
 ## 6. Testing

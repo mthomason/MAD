@@ -63,4 +63,72 @@ FROM toolchain AS build
 WORKDIR /src
 COPY . /src
 RUN bash Linux/build.sh --in-image build
+# The CMake install rule puts the binary at a stable path (/usr/local/bin/mad),
+# so the runtime stage does not reach into the build tree.
+RUN cmake --install /src/Linux/build
 CMD ["bash", "Linux/build.sh", "--in-image", "test"]
+
+# ---------------------------------------------------------------------------
+# runtime -- the CLI deliverable: `mad` on PATH, the shared libraries it links,
+# GNUstep's runtime directories, and the Sqlite3 sample database.  The compiler,
+# the sources and the 119 test binaries stay in the stages above.
+#
+# Built and run locally (`Linux/build.sh --runtime` / `--verify`); it is not
+# published.  mysqlclient is GPLv2, and *distributing* this image would make
+# LICENSE_COMPLIANCE_PLAN.md §2's obligation real -- publication is the user's
+# decision (TASKS.md §10), not a build step.
+# ---------------------------------------------------------------------------
+FROM ubuntu:24.04 AS runtime
+
+ENV DEBIAN_FRONTEND=noninteractive \
+	LANG=C.UTF-8 \
+	LD_LIBRARY_PATH=/usr/local/lib
+
+# The runtime half of toolchain-base's package list: what GNUstep Base and
+# mysqlclient link, without clang, cmake, git or the -dev packages.
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends \
+		ca-certificates libavahi-client3 libcurl4 libffi8 libgmp10 \
+		libgnutls30 libicu74 libsasl2-2 libssl3 libstdc++6 libxml2 \
+		libxslt1.1 tzdata zlib1g \
+	&& rm -rf /var/lib/apt/lists/*
+
+# The toolchain stage installs everything into /usr/local.  Only the shared
+# objects move; the static archives and headers stay behind.
+COPY --from=toolchain /usr/local/lib/libgnustep-base.so.1.31.1 /usr/local/lib/
+COPY --from=toolchain /usr/local/lib/libobjc.so.4.6 /usr/local/lib/
+COPY --from=toolchain /usr/local/lib/libdispatch.so /usr/local/lib/
+COPY --from=toolchain /usr/local/lib/libBlocksRuntime.so /usr/local/lib/
+COPY --from=toolchain /usr/local/lib/libmysqlclient.so.24.0.10 /usr/local/lib/
+COPY --from=toolchain /usr/local/lib/GNUstep /usr/local/lib/GNUstep
+COPY --from=toolchain /usr/local/etc/GNUstep /usr/local/etc/GNUstep
+COPY --from=toolchain /usr/local/share/GNUstep /usr/local/share/GNUstep
+# mysqlclient resolves its error messages and charset tables against the
+# prefix it was built with.
+COPY --from=toolchain /usr/local/share/english /usr/local/share/english
+COPY --from=toolchain /usr/local/share/charsets /usr/local/share/charsets
+
+COPY --from=build /usr/local/bin/mad /usr/local/bin/mad
+
+# A Sqlite3 document stores a bare database name, and the engine resolves it
+# against the per-user Application Support directory -- $HOME/GNUstep/Library/
+# ApplicationSupport off Apple.  Baking chinook.sqlite3 in makes the checked-in
+# London and Music documents refresh without extra setup.
+COPY --from=build \
+	/src/MADDesigner/Resources/Assets/Samples.xcassets/Data/chinook.dataset/chinook.sqlite3 \
+	/root/GNUstep/Library/ApplicationSupport/chinook.sqlite3
+
+# The sonames the binary names (DT_NEEDED) as links to the versioned files --
+# COPY would dereference them -- then ldconfig, so the objects resolve without
+# the ENV above.  `mad help` is the build-time link check: a missing shared
+# object fails this RUN.
+RUN ln -s libgnustep-base.so.1.31.1 /usr/local/lib/libgnustep-base.so.1.31 \
+	&& ln -s libmysqlclient.so.24.0.10 /usr/local/lib/libmysqlclient.so.24 \
+	&& ldconfig \
+	&& mad help >/dev/null
+
+WORKDIR /work
+
+# No ENTRYPOINT, so the command reads the way MAD_CLI.md writes it:
+#   docker run --rm -v "$PWD/docs":/docs mad-cli:latest mad inspect /docs/x.mad
+CMD ["mad"]

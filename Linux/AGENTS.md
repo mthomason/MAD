@@ -6,22 +6,33 @@ The headless engine's Linux build (see [`../MAD_LINUX.md`](../MAD_LINUX.md) §9 
 this directory's [`README.md`](README.md)). One Docker image builds libobjc2,
 libdispatch, GNUstep and the C libraries the frameworks link from pinned
 sources on Ubuntu 24.04, compiles all ten headless frameworks against them,
-and runs their suites. Nothing here ships in the app, the CLI is Phase D's
-checkpoint, and no CI consumes it yet (Phase F does that).
+and runs their suites. Nothing here ships in the app; the CLI is Phase D's
+checkpoint, and Phase F's runtime image (`mad-cli:latest`) is how it is run.
+There is no CI by the user's decision (2026-10-17); `./Linux/build.sh
+--verify` is the repeatable check instead.
 
 ## Layout
 
-*   **`Dockerfile`** -- three stages: `toolchain-base` (Ubuntu + apt + compiler
+*   **`Dockerfile`** -- four stages: `toolchain-base` (Ubuntu + apt + compiler
     environment), `toolchain` (the four source builds from `toolchain.conf`,
     then the C libraries from `libraries.conf`), `build` (the repo compiled by
-    `CMakeLists.txt`; `docker run` runs ctest).
+    `CMakeLists.txt`; `docker run` runs ctest), and `runtime` (the CLI
+    deliverable: `mad` on PATH, the libraries it links, and the Sqlite3 sample
+    database -- no compiler or sources; README.md "The runtime image").  The
+    runtime stage is the last one, so a hand-run `docker build` needs
+    `--target build` for the build image.
 *   **`toolchain.conf`** -- the toolchain pins, Compressor-`matrix.conf` style.
     The single place a component's version, source and hash lives.
 *   **`libraries.conf`** + **`lib/libraries.sh`** -- the same for the C
     libraries the frameworks link (sqlite3, openssl, freetds, zlib, bzip2,
     libarchive, mysqlclient), built natively into `/usr/local`.
-*   **`build.sh`** -- the entry point. Host modes, plus the internal
+*   **`build.sh`** -- the entry point. Host modes (`--test`, `--runtime`,
+    `--verify`, `--probe`, ...), plus the internal
     `--in-image configure|build|test|probe` steps the Dockerfile and CMD call.
+*   **`verify-cli.sh`** -- runs inside the runtime image (`--verify`): the
+    six verbs, every export format's digest, `pdf`'s refusal, the writer's
+    bytes, the exit codes, and a check that the image has no build tooling.
+    `--live` adds the MySQL and TDS refreshes.
 *   **`lib/common.sh`**, **`lib/toolchain.sh`** -- fetch/build helpers and the
     per-component build knowledge, again mirroring Compressor.
 *   **`CMakeLists.txt`** + **`cmake/MADLinuxFramework.cmake`** -- the build:
@@ -120,6 +131,12 @@ The recipe MADFoundation was built with, in the order it was done:
 *   The C libraries are built into `/usr/local` by `lib/libraries.sh`; a new
     dependency means a pin in `libraries.conf` and a `build_<name>` function
     there, not an edit to the Dockerfile.
+*   ctest runs the test binaries in parallel and they share one per-user state
+    directory (GNUstep takes the home from passwd, so `HOME` cannot isolate
+    them).  Two suites that install the same sample database or refresh the
+    same fixture need a `RESOURCE_LOCK` (see `MADHeadlessDocumentTests` and
+    `MADReportExporterTests` in `CMakeLists.txt`).  Without it the pair races
+    intermittently.
 *   **Header imports must match the file's case exactly.**  The Mac's filesystem
     is case-insensitive, the image's is not: `#import <MAD/RptqDocument+extras.h>`
     compiles here and is a fatal error there (`MADOperationRefreshInitialize.m`

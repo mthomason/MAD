@@ -6,15 +6,18 @@ subset); Phase C is the §4 shim list, and this directory is where it lands.
 The build now compiles **all ten headless frameworks** — every framework in
 MAD_LINUX.md §3's table except the UI-only ones (`MADExplorer`, `MADBarcodes`,
 `MADFeedback`, `Scrimpter`, the app) — and runs their suites inside the
-container: 117 test executables, 1153 tests, 6 recorded needs. The test
+container: 119 test executables, 1,136 tests, 7 recorded needs. The test
 coverage master merged on 2026-10-10 (~100 Xcode test files) is ported in
 full, suite for suite. Nothing here ships in the app; the CLI — Phase D's
-checkpoint — builds and runs here too (see "The CLI runs here" below).
+checkpoint — builds and runs here too (see "The CLI runs here" below), and
+Phase F's runtime image runs it as a deliverable ("The runtime image" below).
 
 ## Running it
 
 	./Linux/build.sh              build the image, run the tests, exit with the result
 	./Linux/build.sh --test       run the tests in the existing image
+	./Linux/build.sh --runtime    build the runtime image (mad-cli:latest)
+	./Linux/build.sh --verify     build the runtime image, then verify the CLI in it
 	./Linux/build.sh --probe      run only the toolchain probe, with its report
 	./Linux/build.sh --info       print clang and gnustep-config from the image
 	./Linux/build.sh --shell      interactive shell in the build image
@@ -311,8 +314,10 @@ GNUstep Base is LGPL-2.1-or-later; gnustep-make is GPL-3.0-or-later, and its
 exist only inside this build image. The C libraries carry their own licences
 (THIRD_PARTY_LICENSES.md); mysqlclient's GPL is the one
 LICENSE_COMPLIANCE_PLAN.md exists to settle before anything ships, and
-nothing here does. Register entries are Phase F work, at the moment an image
-ships; `TASKS.md` §10 carries the flag.
+nothing here does.  The runtime image (above) contains mysqlclient, but it is
+built and run locally and is not published, so no register entry is due yet;
+if that changes, GNUstep Base and mysqlclient both need one (`TASKS.md` §10
+carries the flag).
 
 ## The CLI runs here — Phase D
 
@@ -462,11 +467,90 @@ every frame, font, font size, trait, alignment, text run and page box, and the m
 (the finding that made them differ, and its fix, are above and in `BUGS.md`).
 `Linux/Tests/MADReportExporterTests.m` pins the three checksums.
 
+## The runtime image — the CLI deliverable (Phase F)
+
+Phase F's deliverable is a container that runs the CLI, not a build tree a
+developer has to remember the path to. `./Linux/build.sh --runtime` builds it
+from the same Dockerfile (the `runtime` stage, downstream of `build`), tagged
+`mad-cli:latest`:
+
+	docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro mad-cli:latest \
+		mad inspect /docs/London.portable.mad
+
+The image carries:
+
+* `/usr/local/bin/mad`, the CMake install rule's stable path (the binary is no
+  longer reachable only at `Linux/build/mad`);
+* the shared objects the binary links — GNUstep Base, libobjc2, libdispatch,
+  libBlocksRuntime and mysqlclient — plus GNUstep's runtime directories and
+  config. The other C libraries (sqlite3, freetds, openssl, zlib, bzip2,
+  libarchive) are static and are already inside the binary;
+* mysqlclient's error messages and charset tables (`/usr/local/share/english`,
+  `/usr/local/share/charsets`);
+* `chinook.sqlite3` at `/root/GNUstep/Library/ApplicationSupport/`, where a
+  Sqlite3 document's bare database name resolves. A document stores the name,
+  not a path, so this one file is what lets the checked-in London and Music
+  fixtures refresh without extra setup.
+
+It leaves behind the compiler, cmake, git, the sources, the 119 test binaries,
+and the static archives and headers: the final stage is `ubuntu:24.04` plus
+the runtime libraries from apt, not the toolchain image. It is **283 MB on
+disk (66.5 MB compressed)**; the build image is 6.65 GB.
+
+Every verb runs the same way:
+
+	docker run --rm -v "$PWD/docs":/docs mad-cli:latest mad schema /docs/x.mad
+	docker run --rm -v "$PWD/docs":/docs -v "$PWD/out":/out mad-cli:latest \
+		mad export /docs/x.mad --format html --out /out/x.html
+	docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro mad-cli:latest \
+		mad refresh /docs/MySQL.employees.mad --credentials root:root --rows 50
+
+The live fixtures name the server `mac` (`CLI/Fixtures/README.md`); from the
+container that resolves to the Mac through Docker Desktop. The refresh cache
+is written under `/root/GNUstep/Library/Caches` inside the container, so it
+does not survive `--rm`; `export` refreshes the document itself, so that is
+not a problem. Add a volume if a cache should persist between runs. The image
+runs as root; a `--user` run needs the sample database (and any document) in
+that user's own Application Support directory.
+
+**`--verify` is the repeatable check.** It rebuilds the runtime image and runs
+`Linux/verify-cli.sh` in it with the repository mounted read-only: the six
+verbs, every export format against its pinned digest, `pdf`'s refusal, the
+`--reproducible` writer's bytes, the exit codes, and the image's own shape (no
+clang, cmake, git or build tree). 30 checks; it exits non-zero on any failure.
+
+	./Linux/build.sh --verify
+	...
+	MADVERIFY 30 passed, 0 failed
+
+`--live` adds the MySQL and TDS refreshes (50 and 20 rows); it needs the two
+containers from `CLI/Fixtures/README.md`:
+
+	docker run --rm -v "$PWD":/repo:ro mad-cli:latest \
+		bash /repo/Linux/verify-cli.sh --live
+
+**Not published, and no CI.** The image is built and run locally; there is no
+registry push and no GitHub Actions job (the user's decision, 2026-10-17: this
+is a proof of concept and a repeatable test, not a product release yet). The
+GPL note below is therefore still prospective — nothing is distributed.
+
+**A Dockerfile hazard, written down because it bit the first build.** The
+runtime stage is the Dockerfile's last stage, so `docker build` with no
+`--target` now produces the runtime image. `build.sh` passes `--target build`
+for the build image and `--target toolchain` for the toolchain cache; a
+hand-run build should do the same.
+
 ## What this does not do yet
 
 The Linux PDF writer — **deferred 2026-10-17, blocked on the user's research; do not
 start it without their decision.**  `MAD_PDF_LINUX.md` is the handoff file (what
 exists, what is missing, the candidate stacks with licences, the open questions, the
 acceptance test); `MAD_LINUX.md` §10.2 records the reasoning.  Until it lands, a PDF
-on Linux is a browser printing `--format html`.  Phase F (the Compressor Linux driver,
-the CI row, the deployable image) is unblocked and is the recorded next step.
+on Linux is a browser printing `--format html`.
+
+Phase F's other parts, as of 2026-10-17: the **runtime image** and its **repeatable
+verification** are done (the section above), and the **CI row was dropped on the
+user's decision** — no GitHub Actions, because the Linux port is a proof of concept
+for testing, not a product release.  The **Compressor Linux driver** is not done and
+is not needed for the CLI: the image already builds the C libraries natively
+(`libraries.conf` + `lib/libraries.sh`).  Ask before starting it.

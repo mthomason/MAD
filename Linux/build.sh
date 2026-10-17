@@ -3,18 +3,22 @@
 #  build.sh -- the Linux entry point (MAD_LINUX.md §9).
 #
 #  Builds the toolchain image, compiles the ten headless frameworks and the `mad`
-#  CLI inside it, and runs the Linux tests.  This is the command a CI job will
-#  call later; the image is the deliverable, nothing here ships in the app.
+#  CLI inside it, and runs the Linux tests.  The runtime image is the CLI
+#  deliverable: `mad` on PATH, the libraries it links, and the Sqlite3 sample
+#  database -- no compiler, sources or test binaries.  `--verify` runs the CLI
+#  end to end against the checked-in fixtures and their pinned digests.
 #
 #  Usage:
-#    build.sh                 build the image, run the tests
-#    build.sh --test          run the tests in the existing image
+#    build.sh                 build the build image, run the tests
+#    build.sh --test          run the tests in the existing build image
+#    build.sh --runtime       build the runtime image (mad-cli:latest)
+#    build.sh --verify        build the runtime image, then verify the CLI in it
 #    build.sh --probe         run only the toolchain probe, with its report
 #    build.sh --info          print clang and gnustep-config from the image
 #    build.sh --shell         interactive shell in the build image
 #    build.sh --toolchain     build only the toolchain image (the cache base)
-#    build.sh --rebuild       rebuild the image without cache
-#    build.sh --clean         remove both images
+#    build.sh --rebuild       rebuild the images without cache
+#    build.sh --clean         remove the build, toolchain and runtime images
 #    build.sh --platform P    docker --platform (default: native)
 #    build.sh --in-image S    internal: configure | build | test | probe
 #
@@ -29,6 +33,7 @@ REPO_ROOT="$(cd "${LINUX_DIR}/.." && pwd)"
 
 IMAGE="${MAD_LINUX_IMAGE:-mad-linux:phase-b}"
 TOOLCHAIN_IMAGE="${MAD_LINUX_TOOLCHAIN_IMAGE:-mad-linux-toolchain:1}"
+RUNTIME_IMAGE="${MAD_LINUX_RUNTIME_IMAGE:-mad-cli:latest}"
 BUILD_DIR="${LINUX_DIR}/build"
 
 MODE=all
@@ -36,7 +41,7 @@ REBUILD=0
 PLATFORM="${MAD_LINUX_PLATFORM:-}"
 
 usage() { # -> prints the header comment
-	sed -n '2,26p' "$0" | sed 's/^# \{0,1\}//'
+	sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
 }
 
 setup_docker_path() { # put Docker Desktop's bundle on PATH when the CLI is elsewhere
@@ -57,7 +62,9 @@ docker_bin() { # -> echoes the docker command to use
 build_image() { # build the build-stage image
 	local db args=()
 	db="$(docker_bin)"
-	args=(build -f "${LINUX_DIR}/Dockerfile")
+	# --target build is required: the runtime stage is the Dockerfile's last
+	# stage, so without it the default target would be the CLI deliverable.
+	args=(build -f "${LINUX_DIR}/Dockerfile" --target build)
 	if [[ "${REBUILD}" == "1" ]]; then args+=(--no-cache); fi
 	if [[ -n "${PLATFORM}" ]]; then args+=(--platform "${PLATFORM}"); fi
 	log "build ${IMAGE} (build stage)"
@@ -72,6 +79,29 @@ build_toolchain_image() { # build the toolchain-stage image only
 	if [[ -n "${PLATFORM}" ]]; then args+=(--platform "${PLATFORM}"); fi
 	log "build ${TOOLCHAIN_IMAGE} (toolchain stage)"
 	( cd "${REPO_ROOT}" && "${db}" "${args[@]}" -t "${TOOLCHAIN_IMAGE}" . )
+}
+
+build_runtime_image() { # build the runtime stage: the `mad` deliverable
+	local db args=()
+	db="$(docker_bin)"
+	args=(build -f "${LINUX_DIR}/Dockerfile" --target runtime)
+	if [[ "${REBUILD}" == "1" ]]; then args+=(--no-cache); fi
+	if [[ -n "${PLATFORM}" ]]; then args+=(--platform "${PLATFORM}"); fi
+	log "build ${RUNTIME_IMAGE} (runtime stage)"
+	( cd "${REPO_ROOT}" && "${db}" "${args[@]}" -t "${RUNTIME_IMAGE}" . )
+}
+
+run_verify() { # build the runtime image, then run the CLI end-to-end checks in it
+	local db args=()
+	db="$(docker_bin)"
+	build_runtime_image
+	log "verify ${RUNTIME_IMAGE}"
+	args=(run --rm)
+	if [[ -n "${PLATFORM}" ]]; then args+=(--platform "${PLATFORM}"); fi
+	# The repo is mounted read-only: the verification writes only to /tmp.
+	"${db}" "${args[@]}" --entrypoint bash \
+		-v "${REPO_ROOT}:/repo:ro" \
+		"${RUNTIME_IMAGE}" /repo/Linux/verify-cli.sh
 }
 
 run_image() { # [command...] -> docker run --rm IMAGE command...
@@ -90,10 +120,10 @@ run_shell() { # interactive shell in the build image
 	"${db}" "${args[@]}" "${IMAGE}" bash
 }
 
-clean_images() { # remove both images
+clean_images() { # remove the build, toolchain and runtime images
 	local db
 	db="$(docker_bin)"
-	"${db}" image rm -f "${IMAGE}" "${TOOLCHAIN_IMAGE}" || true
+	"${db}" image rm -f "${IMAGE}" "${TOOLCHAIN_IMAGE}" "${RUNTIME_IMAGE}" || true
 	echo "OK linux-phase-b: images removed"
 }
 
@@ -136,6 +166,8 @@ parse_args() {
 	while [[ $# -gt 0 ]]; do
 		case "$1" in
 			--test) MODE=test ;;
+			--runtime) MODE=runtime ;;
+			--verify) MODE=verify ;;
 			--probe) MODE=probe ;;
 			--info) MODE=info ;;
 			--shell) MODE=shell ;;
@@ -170,6 +202,8 @@ main() {
 			run_image
 			;;
 		test) run_image ;;
+		runtime) build_runtime_image ;;
+		verify) run_verify ;;
 		probe) run_image bash Linux/build.sh --in-image probe ;;
 		info)
 			run_image sh -c 'clang --version | head -1; echo; gnustep-config --objc-flags; echo; gnustep-config --base-libs'
