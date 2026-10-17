@@ -57,6 +57,51 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### `MADSectionGroupLayout` segfaults on a group whose field has no query table
+- **Status:** Fixed 2026-10-17.
+- **Where:** `MAD/Source/MADSectionGroupLayout.m:43`, `:46`, `:49`, `:58`
+- **Behavior:** The initialiser lifts the group's `sort`, `weight` and
+  `hasField.databaseSchemaField.dataType`, and the field's
+  `inQueryTable.dropIndex`, straight out of the dictionary-result row and pushes
+  each through `CFNumberGetValue`. A nil value is a NULL `CFNumberRef`, which
+  `CFNumberGetValue` does not test for: the process dies with SIGSEGV instead of
+  raising. Reached whenever a group's field is not backed by a `RptqQueryTable` --
+  a document whose group field is not in a table the query selects.
+- **Why it matters:** It is a hard crash in the formatter on data read back from a
+  `.mad`, not an assertion or a wrong number. Found by `MADTestReportFormatter`:
+  an incompletely-wired fixture took down the test host rather than failing a
+  test, and the crash log was the only diagnosis.
+- **Not yet fixed:** the fixture now wires the table, so the test passes without
+  reaching it. Nobody has decided what the layout *should* do with a group it
+  cannot place -- skip it, or default the four numbers and let it render
+  mis-keyed. That is a behaviour decision, not a one-line guard.
+- **Correction (2026-10-17):** after the portable-store migration, the nil
+  `CFNumberRef` is reached only when `RptqQueryGroup.hasField` itself is nil
+  (`MADSectionsLayout.m` then omits both number keys). A field that exists but has
+  no `inQueryTable` no longer crashes there: `@(field.inQueryTable.dropIndex)` is
+  `@0`, and the layout silently rendered the whole report as one group under a
+  `"(null)"` key. Both states are invalid data: the add-group screen keeps Done
+  disabled until a field is chosen
+  (`MADQueryBuilderAddGroupViewController.m:145-154`), and
+  `MADocument -addQueryGroupWithQueryField:` takes a field id, so the UI cannot
+  persist either one; a legacy, converted, or hand-edited document can.
+- **Now:** a group whose key cannot be derived is refused. The initialiser reads
+  each number only when present and records whether the group resolved;
+  `MADSectionGroupLayout -sortDescriptor` raises `NSInvalidArgumentException`
+  naming the section, and `RptqQuery -sortDescriptorsForDatabase:` raises naming
+  the query group before it can build a `"(null)"` key. Both log with
+  `os_log_error` first. Construction itself does not raise:
+  `MADReportSectionsDataSource.m` builds the same layout for the designer, which
+  now labels the broken group `missing grouping field` instead of crashing in
+  `-safeSortKey`. The invariant is written up in `MAD_DATA_OBJECT.md` section 3.1.
+- **Test:** `testGroupWithoutFieldRaisesWhenFormatted`,
+  `testGroupFieldWithoutQueryTableRaisesWhenFormatted`,
+  `testDesignerDisplayOfGroupWithoutFieldDoesNotThrow`,
+  `testQuerySortDescriptorsRejectGroupWithoutField`,
+  `testQuerySortDescriptorsRejectGroupFieldWithoutQueryTable`
+  (`MAD/MADTests/MADTestReportFormatter.m`).
+- **Commit:** `3fcd388d2`.
+
 ### Rendered currency depended on the machine, not on the document
 - **Status:** Fixed 2026-10-17.
 - **Where:** `MAD/Source/rptq/RptqDocumentElement+Extras.m` (`-formattedString:forValue:`

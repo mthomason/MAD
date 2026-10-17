@@ -84,25 +84,6 @@ Status key:
 
 ## MAD (framework)
 
-### `MADSectionGroupLayout` segfaults on a group whose field has no query table
-- **Status:** Still open
-- **Where:** `MAD/Source/MADSectionGroupLayout.m:43`, `:46`, `:49`, `:58`
-- **Behavior:** The initialiser lifts the group's `sort`, `weight` and
-  `hasField.databaseSchemaField.dataType`, and the field's
-  `inQueryTable.dropIndex`, straight out of the dictionary-result row and pushes
-  each through `CFNumberGetValue`. A nil value is a NULL `CFNumberRef`, which
-  `CFNumberGetValue` does not test for: the process dies with SIGSEGV instead of
-  raising. Reached whenever a group's field is not backed by a `RptqQueryTable` --
-  a document whose group field is not in a table the query selects.
-- **Why it matters:** It is a hard crash in the formatter on data read back from a
-  `.mad`, not an assertion or a wrong number. Found by `MADTestReportFormatter`:
-  an incompletely-wired fixture took down the test host rather than failing a
-  test, and the crash log was the only diagnosis.
-- **Not yet fixed:** the fixture now wires the table, so the test passes without
-  reaching it. Nobody has decided what the layout *should* do with a group it
-  cannot place -- skip it, or default the four numbers and let it render
-  mis-keyed. That is a behaviour decision, not a one-line guard.
-
 ### `digit_count_*_int`: `INT_MIN` collapsed onto `INT_MAX`
 - **Status:** Quirk
 - **Where:** `MAD/MADTests/MADCoreLogicTests.m`
@@ -479,6 +460,7 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADSectionGroupLayout` segfaults on a group whose field has no query table
 - Rendered currency depended on the machine, not on the document
 - `MADQueryActiveQueryFields`: the SELECT list's order is set order, and set order is not stable
 - The same document does not produce the same `.mad` on Linux and on Apple — and on Linux it cannot be written at all
