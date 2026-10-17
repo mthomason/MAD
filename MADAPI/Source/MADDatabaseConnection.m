@@ -33,7 +33,7 @@
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
 	if (self = [super init]) {
-		_databaseType = [decoder decodeIntegerForKey:NSStringFromSelector(@selector(databaseType))];	// This gives warning: Implicit conversion loses integer precision: 'NSInteger' (aka 'long') to 'MADDatabaseType' (aka 'enum MADDatabaseType')
+		_databaseType = (MADDatabaseType)[decoder decodeIntegerForKey:NSStringFromSelector(@selector(databaseType))];
 		_connectionString = [decoder decodeObjectOfClass:[NSString class] forKey:NSStringFromSelector(@selector(connectionString))];
 		_requiresCredentials = [decoder decodeBoolForKey:NSStringFromSelector(@selector(requiresCredentials))];
 		_identifier = [decoder decodeObjectOfClass:[NSString class] forKey:NSStringFromSelector(@selector(identifier))];

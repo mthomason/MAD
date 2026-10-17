@@ -66,49 +66,52 @@
 - (void)testTransitionDuration {
 	MADConnectionViewController *base = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
 	id <UIViewControllerAnimatedTransitioning> baseAnimator = (id <UIViewControllerAnimatedTransitioning>)base;
-	XCTAssertEqual([baseAnimator transitionDuration:nil], 0.4);
+	XCTAssertEqual([baseAnimator transitionDuration:(id <UIViewControllerContextTransitioning>)base], 0.4);
 
 	MADConnectionSQLGenericViewController *sql = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
 	id <UIViewControllerAnimatedTransitioning> sqlAnimator = (id <UIViewControllerAnimatedTransitioning>)sql;
-	XCTAssertEqual([sqlAnimator transitionDuration:nil], 0.4);
+	XCTAssertEqual([sqlAnimator transitionDuration:(id <UIViewControllerContextTransitioning>)sql], 0.4);
 }
 
 - (void)testPresentedControllerAnimatorIsSelf {
 	MADConnectionViewController *base = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
 	id <UIViewControllerTransitioningDelegate> baseDelegate = (id <UIViewControllerTransitioningDelegate>)base;
-	id baseAnimator = [baseDelegate animationControllerForPresentedController:nil
-														 presentingController:nil
-															 sourceController:nil];
+	// The delegate ignores these arguments; real controllers keep the nonnull contract.
+	id baseAnimator = [baseDelegate animationControllerForPresentedController:base
+														 presentingController:base
+															 sourceController:base];
 	XCTAssertEqual(baseAnimator, base);
 
 	MADConnectionSQLGenericViewController *sql = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
 	id <UIViewControllerTransitioningDelegate> sqlDelegate = (id <UIViewControllerTransitioningDelegate>)sql;
-	id sqlAnimator = [sqlDelegate animationControllerForPresentedController:nil
-														presentingController:nil
-															sourceController:nil];
+	id sqlAnimator = [sqlDelegate animationControllerForPresentedController:sql
+														presentingController:sql
+															sourceController:sql];
 	XCTAssertEqual(sqlAnimator, sql);
 }
 
 - (void)testDismissedControllerAnimatorIsNil {
 	MADConnectionViewController *base = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
 	id <UIViewControllerTransitioningDelegate> baseDelegate = (id <UIViewControllerTransitioningDelegate>)base;
-	XCTAssertNil([baseDelegate animationControllerForDismissedController:nil]);
+	XCTAssertNil([baseDelegate animationControllerForDismissedController:base]);
 
 	MADConnectionSQLGenericViewController *sql = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
 	id <UIViewControllerTransitioningDelegate> sqlDelegate = (id <UIViewControllerTransitioningDelegate>)sql;
-	XCTAssertNil([sqlDelegate animationControllerForDismissedController:nil]);
+	XCTAssertNil([sqlDelegate animationControllerForDismissedController:sql]);
 }
 
 - (void)testInteractiveTransitionControllersAreNil {
 	MADConnectionViewController *base = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
 	id <UIViewControllerTransitioningDelegate> baseDelegate = (id <UIViewControllerTransitioningDelegate>)base;
-	XCTAssertNil([baseDelegate interactionControllerForDismissal:nil]);
-	XCTAssertNil([baseDelegate interactionControllerForPresentation:nil]);
+	id <UIViewControllerAnimatedTransitioning> baseAnimator = (id <UIViewControllerAnimatedTransitioning>)base;
+	XCTAssertNil([baseDelegate interactionControllerForDismissal:baseAnimator]);
+	XCTAssertNil([baseDelegate interactionControllerForPresentation:baseAnimator]);
 
 	MADConnectionSQLGenericViewController *sql = [[MADConnectionSQLGenericViewController alloc] initWithNibName:nil bundle:nil];
 	id <UIViewControllerTransitioningDelegate> sqlDelegate = (id <UIViewControllerTransitioningDelegate>)sql;
-	XCTAssertNil([sqlDelegate interactionControllerForDismissal:nil]);
-	XCTAssertNil([sqlDelegate interactionControllerForPresentation:nil]);
+	id <UIViewControllerAnimatedTransitioning> sqlAnimator = (id <UIViewControllerAnimatedTransitioning>)sql;
+	XCTAssertNil([sqlDelegate interactionControllerForDismissal:sqlAnimator]);
+	XCTAssertNil([sqlDelegate interactionControllerForPresentation:sqlAnimator]);
 }
 
 #pragma mark - IB action helpers tolerate an unloaded storyboard
