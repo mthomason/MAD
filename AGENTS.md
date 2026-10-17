@@ -118,8 +118,9 @@ the headless side.
 
 ## Related Documents
 
-* `BUGS.md` -- known defects, grouped by framework, with `file:line` references and the
-  tests that pin each one.
+* `BUGS.md` -- the open defects and recorded quirks, grouped by framework, with
+  `file:line` references and the tests that pin each one; fixed entries are archived in
+  `BUGS_FIXED.md`.
 * `TASKS.md` -- the engineering task queue: what is being worked, in order, with the
   context needed to start cold.
 * `ROADMAP.md` -- the plan: which register, queue and design document gets picked up next,
@@ -161,10 +162,13 @@ task. What an agent must **not** do is start work because a file lists it. Entri
 are picked up when the user asks for that task by name or number, never on the agent's own
 initiative.
 
-`BUGS.md` uses two conventions for a fixed defect, and both are in use today: most
-sections mark it **Status: Fixed** in place with a `Now:` line saying what changed,
-while the oldest entries sit under *Already fixed (for reference)* with their commit
-hash. Match whatever the section you are editing already does rather than converting it.
+`BUGS.md` is the **open** record: what is still wrong, still suspicious, or deliberately
+left as it is. When a defect is fixed, the entry moves -- full text, its `Now:` line, its
+test and any commit hash, verbatim -- to `BUGS_FIXED.md`, and a one-line index entry
+stays under the same framework heading in `BUGS.md`, so a reference to "BUGS.md, the X
+entry" still lands. The older entries under *Already fixed (for reference)* live there
+too. Archiving is a move, never a rewrite. A partly fixed entry stays in `BUGS.md`
+until the rest of it is closed.
 
 `TODO.md` is the user's own wishlist and is not for agents to edit.
 

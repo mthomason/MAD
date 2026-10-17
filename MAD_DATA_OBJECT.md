@@ -337,8 +337,8 @@ and I don't know if the CLI is the best way to do that."*
 
 The honest answer, as the artifacts stand:
 
-- **The CLI is a client of the engine, not the engine.** Its four verbs —
-  `inspect`, `schema`, `query`, `refresh`, `export` — are sample call sites of the call chain
+- **The CLI is a client of the engine, not the engine.** Its six verbs —
+  `inspect`, `schema`, `query`, `refresh`, `export`, `write` — are sample call sites of the call chain
   in §3: open the container, read the store, generate SQL, execute into a table, render. What
   a webserver needs is the same chain behind a stable entry point; a subprocess is one
   binding of that chain (the shape `MAD_LINUX.md` §2 sketches: `mad --format json` as a
@@ -346,9 +346,10 @@ The honest answer, as the artifacts stand:
 - **The entry point is the missing piece, and it is named.** There is no UIKit-free
   top-level class today that opens a `.mad`, runs the query, and returns rows: on Apple,
   `MADocument` is a `UIDocument`; the CLI's `MADCLIDocument` is headless in *behaviour* but
-  imports UIKit and waits on the run loop; on Linux, `MADocument` and `MADReportFormatter` are
-  excluded from the build. This is exactly what `MAD_LINUX.md` §9 Phase D has to settle, and
-  why it is called the go/no-go. The contract of §4 is what such an entry point would expose:
+  waits on the run loop for that UIDocument.  (Phase D settled the headless side:
+  `MADHeadlessDocument` is the entry point on Linux, and since Phase E it carries the render
+  half too — `MADDocumentRenderProtocol`, `MADReportPageBuilder` — so `mad export` runs
+  there.  `MAD_LINUX.md` §9.)  The contract of §4 is what such an entry point would expose:
   open → list data objects → describe → execute → (schema, rows).
 - **The wire format is one decision, not three.** Schema + rows as JSON is the same shape as
   the JSON export (`MAD_CLI.md` §8.3, `ROADMAP.md` decisions table) and the structured output
@@ -362,11 +363,11 @@ The honest answer, as the artifacts stand:
 
 The measured facts behind "this is cheap once the contract exists": the data path is already
 headless — SQL generation, the store, `MADDataTableFast`, and all three drivers compile on
-Linux today, with 114 test executables and 1098 tests green (`Linux/README.md`). The CLI
-itself is *not* there yet (it builds for the iOS Simulator and runs via `xcrun simctl spawn`;
-no `mad` binary exists in the Linux image). So the ordering that follows is the contract
-first, entry point second, front-ends third — and it makes "CLI or webserver?" a question
-with a two-line answer instead of an architectural fork.
+Linux today, with 119 test executables and 1,136 tests green (`Linux/README.md`), and since
+Phase D the CLI builds and runs in that image (`inspect`, `schema`, `query`, `refresh`,
+`export`, `write`). So the ordering that follows is the contract first, entry point second,
+front-ends third — and it makes "CLI or webserver?" a question with a two-line answer
+instead of an architectural fork.
 
 ## 7. What it would take — in phases, on the existing tracks
 
