@@ -50,6 +50,7 @@
 #endif
 #import <UIKit/UIGeometry.h>
 
+#import <Foundation/NSDictionary.h>
 #import <Foundation/NSNumberFormatter.h>
 #import <Foundation/NSSortDescriptor.h>
 #import <Foundation/NSBundle.h>
@@ -75,7 +76,45 @@ NSString * const MTDocumentObjectDefinationAggregateFunctionInputType = @"MTDocu
 NSString * const MTDocumentObjectDefinationField1 = @"MTDocumentObjectDefinationField1";
 NSString * const MTDocumentObjectDefinationField2 = @"MTDocumentObjectDefinationField2";
 
-static NSNumberFormatter *currencyNumberFormatter;
+// The report's own locale comes first: the numeric format stores the locale the
+// report was designed in ("en_US" in the store's text column), and the rendered text
+// is part of the report rather than of the machine that renders it.  It used to take
+// [NSLocale currentLocale] unconditionally, which made the same document render
+// "$0.99" on Apple and "$ 1" in a process running under the C locale -- the Linux
+// image, for one (BUGS.md, the rendered-text locale entry).
+static NSLocale *MADNumericFormatLocale(RptqNumericFormat *format) {
+	id locale = format.locale;
+	if ([locale isKindOfClass: [NSLocale class]]) return locale;
+	if ([locale isKindOfClass: [NSString class]] && [locale length] > 0) {
+		return [NSLocale localeWithLocaleIdentifier: locale];
+	}
+	return [NSLocale currentLocale];
+}
+
+// One formatter per locale and precision: the currency style is locale's, and two
+// elements in one document may not share one.  The fraction digits are the document's
+// own -- the numeric format's decimalCount -- because the locale's default is not the
+// same everywhere: GNUstep's currency style renders no fraction digits for any locale
+// (measured: en_US gives "$1" where Apple gives "$0.99"), so leaving it to the locale
+// makes the same report render differently on the two platforms (BUGS.md).
+static NSNumberFormatter *MADCurrencyNumberFormatter(NSLocale *locale, NSInteger decimalCount) {
+	static NSMutableDictionary <NSString *, NSNumberFormatter *> *formatters;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		formatters = [[NSMutableDictionary alloc] init];
+	});
+	NSString *key = [[NSString alloc] initWithFormat: @"%@|%ld", locale.localeIdentifier ?: @"", (long)decimalCount];
+	NSNumberFormatter *formatter = formatters[key];
+	if (formatter == nil) {
+		formatter = [[NSNumberFormatter alloc] init];
+		formatter.locale = locale;
+		formatter.numberStyle = NSNumberFormatterCurrencyStyle;
+		formatter.minimumFractionDigits = decimalCount;
+		formatter.maximumFractionDigits = decimalCount;
+		formatters[key] = formatter;
+	}
+	return formatter;
+}
 
 //
 //             Box model refresher
@@ -861,12 +900,10 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 			if ([value isKindOfClass:[NSNumber class]]) {
 				
 				if (((MADCurrencyFormatter *)self.numericFormat).enabled) {
-					if (!currencyNumberFormatter) {
-						currencyNumberFormatter = [[NSNumberFormatter alloc] init];
-						currencyNumberFormatter.locale = [NSLocale currentLocale];
-						currencyNumberFormatter.numberStyle = NSNumberFormatterCurrencyStyle;
-					}
-					result = [currencyNumberFormatter stringFromNumber:value];
+					MADCurrencyFormatter *numericFormat = (MADCurrencyFormatter *)self.numericFormat;
+					NSNumberFormatter *formatter = MADCurrencyNumberFormatter(MADNumericFormatLocale(self.numericFormat),
+																			  numericFormat.decimalCount);
+					result = [formatter stringFromNumber:value];
 				} else {
 					NSMutableString *format;
 					format = [[NSMutableString alloc] initWithString:@"%."];

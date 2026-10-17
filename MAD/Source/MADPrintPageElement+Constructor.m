@@ -9,7 +9,9 @@
 #import "MADPrintPageElement+Constructor.h"
 #import "MADDocumentObjectDataReference.h"
 
+#if __APPLE__
 #import "MADPrintPageElementBarcode.h"
+#endif
 
 #import <Foundation/NSException.h>
 
@@ -26,7 +28,14 @@
 			break;
 			
 		case MADPrintPageElementTypeBarcode:
+#if __APPLE__
 			return [[MADPrintPageElementBarcode alloc] initWithDefinition:definition];
+#else
+			// MADBarcodes is Apple-only (MADSources.cmake).  The element's line still
+			// reaches the walk -- its type and frame do not need a drawing object --
+			// but there is nothing to resolve text from, so the walk records it bare.
+			return nil;
+#endif
 			break;
 			
 		case MADPrintPageElementTypeLabelDynamic:

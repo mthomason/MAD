@@ -22,8 +22,11 @@
 #import <MAD/MADOperationRefreshInitalizeMainDataTable.h>
 #import <MAD/MADReportExporting.h>
 #import <MAD/MADReportExporterCSV.h>
+#import <MAD/MADReportExporterHTML.h>
+#import <MAD/MADReportExporterHTMLFlow.h>
 #import <MAD/MADReportExporterJSON.h>
 #import <MAD/MADReportExporterJSONReport.h>
+#import <MAD/MADReportExporterPDF.h>
 #import <MAD/MADReportExporterRegistry.h>
 #import <MAD/MADReportExporterText.h>
 #import <MAD/MADReportExportSource.h>
@@ -163,28 +166,40 @@ static void testTheFormatsAreRegistered(void) {
 			 "an unregistered format answers Nil");
 }
 
-// The report member needs the render half, which this build does not compile: the
-// format registers anyway -- so the CLI can name it and say why -- and answers for
-// itself rather than silently writing the data half under its name.
-static void testTheReportFormatIsRegisteredAndSaysWhyItCannotRun(void) {
-	Class <MADReportExporting> exporterClass = [MADReportExporterRegistry exporterClassForFormat: @"json-report"];
-	MAD_PASS(exporterClass != Nil, "the report format is registered here, not hidden from the format list");
+// The render half is in this build now (MAD_LINUX.md §9 Phase E): the formats that
+// need it -- json-report, html, html-flow -- run here, on the same page walk the
+// PDF draws from on Apple.
+static void testTheRenderSideFormatsRegisterHere(void) {
+	MAD_PASS([MADReportExporterRegistry exporterClassForFormat: @"json-report"] != Nil, "json-report is registered");
+	MAD_PASS([MADReportExporterRegistry exporterClassForFormat: @"html"] != Nil, "html is registered");
+	MAD_PASS([MADReportExporterRegistry exporterClassForFormat: @"html-flow"] != Nil, "html-flow is registered");
+
+	MAD_PASS([MADReportExporterJSONReport isAvailable], "the render half is compiled here, so json-report runs");
+	MAD_PASS([MADReportExporterHTML isAvailable], "and the facsimile runs");
+	MAD_PASS([MADReportExporterHTMLFlow isAvailable], "and the reflowable one runs");
+}
+
+// PDF is the one format that is not: it is Core Graphics drawn by the Apple-only page
+// renderer.  It registers anyway -- the format list names it on both platforms -- and
+// says why (MAD_LINUX.md §10.2: the Linux writer is the next step).
+static void testThePDFFormatSaysWhyItCannotRun(void) {
+	Class <MADReportExporting> exporterClass = [MADReportExporterRegistry exporterClassForFormat: @"pdf"];
+	MAD_PASS(exporterClass != Nil, "pdf is registered here, not hidden from the format list");
 	MAD_PASS(![exporterClass isAvailable], "this build cannot produce it");
-	MAD_PASS([exporterClass unavailableReason].length > 0, "it says why (the render half is Apple-only)");
+	MAD_PASS([exporterClass unavailableReason].length > 0, "it says why");
 	MAD_NEED([exporterClass unavailableReason] != nil, @"the reason string is missing");
-	MAD_PASS([[exporterClass unavailableReason] rangeOfString: @"render half"].location != NSNotFound,
-			 "the reason names the render half");
+	MAD_PASS([exporterClass requiresOutputPath], "pdf needs --out, on every platform");
+	MAD_PASS_EQUAL([exporterClass fileExtension], @"pdf", "and it is a .pdf");
 
 	if (!MADExporterFixtureIsThere()) return;
 	MADHeadlessDocument *document = MADExporterDocument();
 	MAD_NEED(document != nil, @"could not open the London fixture");
-	MAD_NEED(document.numberOfResults == 76, @"the fixture did not refresh (76 rows expected)");
 
-	NSURL *url = MADExporterOutputURL(@"london.report.json");
+	NSURL *url = MADExporterOutputURL(@"london.pdf");
 	id <MADReportExporting> exporter = [[(Class)exporterClass alloc] init];
 	NSError *error = nil;
 	MAD_PASS(![exporter exportDocument: document toURL: url options: MADReportExportOptionsNone error: &error],
-			 "an export that cannot run fails rather than writing the data half");
+			 "an export that cannot run fails rather than writing something");
 	MAD_PASS(error != nil, "and it says why");
 	MAD_PASS(![[NSFileManager defaultManager] fileExistsAtPath: url.path], "nothing was written");
 }
@@ -250,6 +265,86 @@ static void testTheJSONExportIsTheSchemaAndTheRows(void) {
 				   "the json export's bytes are the ones the Mac writes (see this file's header)");
 }
 
+static void testTheJSONReportAddsTheRenderedReport(void) {
+	MAD_EXPORTER_REQUIRE_FIXTURE();
+	NSData *data = MADExporterOutput([MADReportExporterJSONReport class], @"london.report.json");
+	if (data == nil) return;
+	NSString *json = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+
+	// The data half is the json format's, and the report member follows it.
+	MAD_PASS([json hasPrefix: @"{\n  \"format\": \"mad.report/1\","], "the schema is named first");
+	MAD_PASS([json rangeOfString: @"\"rows\": ["].location != NSNotFound, "the rows are the data half's");
+	MAD_PASS([json rangeOfString: @"\"report\": {\n    \"pages\": [\n"].location != NSNotFound,
+			 "the report member holds the pages");
+	MAD_PASS([json rangeOfString: @"\"type\": \"ReportHeader\""].location != NSNotFound,
+			 "a section carries its type");
+	MAD_PASS([json rangeOfString: @"\"kind\": \"LabelStatic\", \"frame\": ["].location != NSNotFound,
+			 "a line carries its element kind and where it sits on the page");
+	MAD_PASS([json rangeOfString: @"\"text\": \"Sales Report\""].location != NSNotFound,
+			 "and its resolved text");
+	// The frames are page coordinates: the trim box's 1pt origin, not the section's 0.
+	MAD_PASS([json rangeOfString: @"\"frame\": [1, 1, 170, 29]" ].location != NSNotFound,
+			 "the first line sits at the page's trim corner, where the PDF draws it");
+	// The render side's own bytes.  Unlike text/csv/json these are not the Mac's
+	// bytes: GNUstep's currency style puts a space between the symbol and the number
+	// ("$ 0.99" where Apple writes "$0.99"), which is 180 bytes in this file and is
+	// recorded in BUGS.md and Linux/README.md.  Everything but the currency values is
+	// byte-identical to the Mac's (measured by diffing the two).
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x45BCFCED6E0151BBULL),
+				   "the report member's bytes here are pinned (see the currency note)");
+}
+
+static void testTheHTMExportIsAFacsimileOfThePages(void) {
+	MAD_EXPORTER_REQUIRE_FIXTURE();
+	NSData *data = MADExporterOutput([MADReportExporterHTML class], @"london.html");
+	if (data == nil) return;
+	NSString *html = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+
+	MAD_PASS([html hasPrefix: @"<!doctype html>\n<html lang=\"en\">\n"], "it is an HTML file");
+	MAD_PASS([html rangeOfString: @"<title>London.portable</title>"].location != NSNotFound, "titled for the document");
+	// One CSS page box per walked page, at the PDF's own page size.
+	MAD_PASS([html rangeOfString: @"@page { size: 612pt 792pt; margin: 0 }"].location != NSNotFound,
+			 "the printed page is the PDF's page");
+	NSUInteger pages = 0;
+	for (NSString *piece in [html componentsSeparatedByString: @"<div class=\"page\""]) pages++;
+	MAD_PASS(pages - 1 == 5, "five page boxes for the five the walk lays out");
+	MAD_PASS([html rangeOfString: @"data-kind=\"LabelStatic\" style=\"left:1pt; top:1pt; width:170pt; height:29pt;" ].location != NSNotFound,
+			 "an element is a box at its walked frame");
+	MAD_PASS([html rangeOfString: @"font-family:'Verdana', sans-serif; font-size:22pt; font-weight:bold"].location != NSNotFound,
+			 "styled with the element's own font, size and traits");
+	MAD_PASS([html rangeOfString: @"Sales Report"].location != NSNotFound, "and it carries the report's text");
+	MAD_PASS([html rangeOfString: @"white-space: pre; overflow: hidden; text-overflow: ellipsis"].location != NSNotFound,
+			 "one line, clipped with an ellipsis: the renderer's own line-break rule");
+	MAD_PASS([html hasSuffix: @"</body>\n</html>\n"], "and it closes");
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x4797EB4D0291B2B9ULL),
+				   "the facsimile's bytes here are pinned (see the currency note above)");
+}
+
+static void testTheHTMLFlowExportIsTheSectionsAndRows(void) {
+	MAD_EXPORTER_REQUIRE_FIXTURE();
+	NSData *data = MADExporterOutput([MADReportExporterHTMLFlow class], @"london.flow.html");
+	if (data == nil) return;
+	NSString *html = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+
+	MAD_PASS([html rangeOfString: @"<section data-type=\"ReportHeader\" data-visible=\"true\">"].location != NSNotFound,
+			 "a section is a section");
+	MAD_PASS([html rangeOfString: @"<section data-type=\"Body\" data-visible=\"true\">"].location != NSNotFound,
+			 "the detail rows are one");
+	MAD_PASS([html rangeOfString: @"<tr><td class=\"s"].location != NSNotFound, "a row is a table row");
+	MAD_PASS([html rangeOfString: @"data-kind=\"LabelDynamic\""].location != NSNotFound, "a cell says what kind of element it is");
+	MAD_PASS([html rangeOfString: @"Blue Rythm Fantasy"].location != NSNotFound, "and carries the data");
+	// The page furniture is emitted once, not once per page.
+	NSUInteger headers = 0;
+	for (NSString *piece in [html componentsSeparatedByString: @"data-type=\"PageHeader\""]) headers++;
+	MAD_PASS(headers - 1 == 1, "the page header appears once, not five times");
+	// A style table rather than an inline style per cell.
+	MAD_PASS([html rangeOfString: @".s1 { font-family:"].location != NSNotFound, "the styles are a class table");
+	MAD_PASS([html rangeOfString: @"<section data-type=\"GroupFooter\" data-group-level=\"0\" data-visible=\"false\">"].location != NSNotFound,
+			 "an invisible section is named and left empty");
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0xDD1B5192B1082E57ULL),
+				   "the reflowable file's bytes here are pinned (see the currency note above)");
+}
+
 #pragma mark - The value presentations, shared by the formats
 
 static void testNumbersAreSpelledInOneRoundTripForm(void) {
@@ -267,9 +362,13 @@ static void testDatesAreISO8601InUTC(void) {
 
 MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testTheFormatsAreRegistered),
-	MAD_TEST(testTheReportFormatIsRegisteredAndSaysWhyItCannotRun),
+	MAD_TEST(testTheRenderSideFormatsRegisterHere),
+	MAD_TEST(testThePDFFormatSaysWhyItCannotRun),
 	MAD_TEST(testNumbersAreSpelledInOneRoundTripForm),
 	MAD_TEST(testDatesAreISO8601InUTC),
 	MAD_TEST(testTheTextExportIsATableOfTheRows),
 	MAD_TEST(testTheCSVExportIsTheRowsAndTheColumnKeys),
-	MAD_TEST(testTheJSONExportIsTheSchemaAndTheRows));
+	MAD_TEST(testTheJSONExportIsTheSchemaAndTheRows),
+	MAD_TEST(testTheJSONReportAddsTheRenderedReport),
+	MAD_TEST(testTheHTMExportIsAFacsimileOfThePages),
+	MAD_TEST(testTheHTMLFlowExportIsTheSectionsAndRows));

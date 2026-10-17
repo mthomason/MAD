@@ -27,7 +27,7 @@
 #import <MAD/MADPrintPageRendererDataSource.h>
 
 @class MADPrintPageElement, MADReportPageRepresentation;
-@protocol MADDocumentObjectDataReferenceProtocol;
+@protocol MADDocumentObjectDataReferenceProtocol, MADDocumentRenderProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,6 +36,20 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void (^MADReportPageElementDrawBlock)(__kindof MADPrintPageElement *element, CGRect frame);
 
 @interface MADReportPageBuilder : NSObject
+
+/// The page every render-side format lays out on: US Letter, and the 1pt trim the
+/// CLI's PDF export has always drawn inside.  One definition, so the PDF, json-report
+/// and the HTML formats agree about where a page ends and an element sits.
++ (CGRect)pageBounds;
++ (CGRect)pageTrimBox;
+
+/// The sequence every render-side format runs before it reads a page: ready the rows,
+/// size the formatter to the page and the printable rect, lay the report out.  It is
+/// MADCLIDocument's PDF preparation, in one place (MAD_LINUX.md §9 Phase E).
++ (void)prepareDocumentForRender:(id <MADDocumentRenderProtocol>)document;
+
+/// A builder over a document, prepared as above.
++ (instancetype)builderForDocument:(id <MADDocumentRenderProtocol>)document;
 
 - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)dataSource;
 

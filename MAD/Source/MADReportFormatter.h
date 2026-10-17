@@ -26,7 +26,13 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
 
 @protocol MADReportFormatterDataSource, MADDataProtocol, MADCacheProtocol, MADDocumentRenderProtocol;
 
-@class RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions, MADArrayCaching<__covariant ObjectType>;
+// One declaration, and matching the class's own: Apple tolerates the same class
+// forward-declared both bare and parameterized in one @class, and a forward
+// declaration that disagrees with MADArrayCaching's variance about covariance,
+// while GNUstep's clang calls the second an error (the formatter is in the Linux
+// build now).
+@class RptqDocumentSection, RptqDocument, MADPageOptions;
+@class MADArrayCaching<ObjectType>;
 
 @interface MADReportFormatter : MADTableFormatter
 

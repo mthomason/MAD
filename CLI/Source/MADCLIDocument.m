@@ -22,113 +22,12 @@
 #import <MADFoundation/MADCredential.h>
 
 #if __APPLE__
-// The app's document class, and the rendering it alone carries: MADocument is a
-// UIDocument, and the formatter, the renderer and Core Graphics' PDF context are the
-// export verb's (MAD_LINUX.md §5.2).  Headless, the data path is a
-// MADHeadlessDocument instead -- same protocol, no UIDocument, nothing to render.
+// The app's document class.  MADocument is a UIDocument, so a process with no run
+// loop gets a MADHeadlessDocument instead -- the same data half and the same render
+// half, on the protocols the refresh chain and the exporters take.
 #import <MAD/MADocument.h>
-#import <MAD/MADPrintPageRenderer.h>
-#import <MAD/MADReportFormatter.h>
-#import <MAD/MADPageOptions.h>
-#import <MAD/MTPaper.h>
-#import <MADFoundation/MADDataTable.h>
-#import <MADSqlite3/MADDataTableFast.h>
-#import <UIKit/UIGraphics.h>
 #else
 #import <MAD/MADHeadlessDocument.h>
-#endif
-
-#if __APPLE__
-
-static inline CGRect MADCLIPdfTrimBox(CGRect rect) {
-	return UIEdgeInsetsInsetRect(rect, UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0));
-}
-
-#pragma mark - Deterministic PDF metadata
-
-static NSUInteger MADCLIFindBytes(const uint8_t *bytes, NSUInteger length, NSUInteger from, const char *needle) {
-	NSUInteger needleLength = strlen(needle);
-	if (needleLength == 0 || length < needleLength) return NSNotFound;
-	for (NSUInteger i = from; i + needleLength <= length; i++) {
-		if (memcmp(bytes + i, needle, needleLength) == 0) return i;
-	}
-	return NSNotFound;
-}
-
-static NSUInteger MADCLIFindBytesLast(const uint8_t *bytes, NSUInteger length, const char *needle) {
-	NSUInteger needleLength = strlen(needle);
-	if (needleLength == 0 || length < needleLength) return NSNotFound;
-	for (NSUInteger i = length - needleLength + 1; i-- > 0; ) {
-		if (memcmp(bytes + i, needle, needleLength) == 0) return i;
-	}
-	return NSNotFound;
-}
-
-static NSUInteger MADCLISkipToByte(const uint8_t *bytes, NSUInteger length, NSUInteger from, uint8_t byte) {
-	for (NSUInteger i = from; i < length; i++) {
-		if (bytes[i] == byte) return i;
-	}
-	return NSNotFound;
-}
-
-/// Core Graphics takes /CreationDate and /ModDate from the clock and derives the
-/// trailer /ID from them, so two exports of a report that has not changed differ in
-/// a handful of bytes at the end and nowhere else.  That is exactly enough to defeat
-/// the byte-for-byte comparison this tool exists to make, so --deterministic pins
-/// all three to constants.
-///
-/// Every replacement is the same length as what it replaces -- the date digits are
-/// always fourteen, and the identifiers keep whatever width PDF gave them -- so the
-/// cross-reference offsets in the last table stay correct and the file is still a
-/// valid PDF.
-static void MADCLIPinPDFMetadata(NSURL *url) {
-
-	NSMutableData *data = [NSMutableData dataWithContentsOfURL: url];
-	if (data == nil) return;
-
-	uint8_t *bytes = data.mutableBytes;
-	NSUInteger length = data.length;
-
-	// A PDF does not require a key and its value to share a line, and Core Graphics
-	// does not put them on one: it writes "/CreationDate" and leaves the string for
-	// the next line.  So find the key, then the value, rather than one literal.
-	static const char *dateKeys[] = { "/CreationDate", "/ModDate" };
-	static const char *pinned  = "20010112000000";		// 2001-01-12 00:00:00, the PDF epoch
-	for (NSUInteger key = 0; key < 2; key++) {
-		NSUInteger at = MADCLIFindBytesLast(bytes, length, dateKeys[key]);
-		if (at == NSNotFound) continue;
-		NSUInteger string = MADCLIFindBytes(bytes, length, at, "(D:");
-		if (string == NSNotFound) continue;
-		NSUInteger digits = string + strlen("(D:");
-		if (digits + strlen(pinned) > length) continue;
-		// Only a full date is replaced; a partial one would change the file's length.
-		BOOL full = YES;
-		for (NSUInteger i = 0; i < strlen(pinned); i++) {
-			if (!isdigit(bytes[digits + i])) { full = NO; break; }
-		}
-		if (full) memcpy(bytes + digits, pinned, strlen(pinned));
-	}
-
-	NSUInteger identifier = MADCLIFindBytesLast(bytes, length, "/ID");
-	NSUInteger bracket = identifier == NSNotFound ? NSNotFound : MADCLISkipToByte(bytes, length, identifier, '[');
-	if (bracket != NSNotFound) {
-		static const char *alphabet = "0123456789abcdef";
-		NSUInteger cursor = bracket;
-		for (NSUInteger string = 0; string < 2; string++) {
-			NSUInteger open = MADCLISkipToByte(bytes, length, cursor, '<');
-			if (open == NSNotFound) break;
-			NSUInteger close = MADCLISkipToByte(bytes, length, open + 1, '>');
-			if (close == NSNotFound) break;
-			for (NSUInteger i = open + 1; i < close; i++) {
-				bytes[i] = (uint8_t)alphabet[(i - open - 1) % 16];
-			}
-			cursor = close + 1;
-		}
-	}
-
-	[data writeToURL: url atomically: YES];
-}
-
 #endif
 
 #if __APPLE__
@@ -136,7 +35,6 @@ static NSError *MADCLIDocumentError(NSString *message) {
 	return [NSError errorWithDomain: @"MADCLI" code: MADCLIExitBadDocument
 						   userInfo: @{ NSLocalizedDescriptionKey: message }];
 }
-
 #endif
 
 /// Stands in for MADOperationGetCredentials, which is a view controller.  The CLI
@@ -156,7 +54,6 @@ static NSError *MADCLIDocumentError(NSString *message) {
 
 @interface MADCLIDocument ()
 @property (nonatomic, strong) id <MADDocumentDataProtocol> document;
-@property (nonatomic, assign) NSUInteger pageCount;
 @end
 
 @implementation MADCLIDocument
@@ -249,63 +146,5 @@ static NSError *MADCLIDocumentError(NSString *message) {
 	}
 	return YES;
 }
-
-#pragma mark - Export
-
-#if __APPLE__
-- (BOOL)writePDFToURL:(NSURL *)url deterministic:(BOOL)deterministic error:(NSError **)error {
-
-	// On Apple the document this CLI opened IS a MADocument -- that is what the
-	// formatter and the renderer are built around.
-	MADocument *document = (MADocument *)self.document;
-	CGRect letterRect = [[MTPaper alloc] initWithType: MTPaperTypeLetter].bounds;
-	NSDictionary *options = @{ (__bridge NSString *)kCGPDFContextCreator: @"MAD® Designer" };
-
-	// The reload the viewer runs after a refresh, which the CLI has no view controller
-	// to run for it: sort the rows, then lay the report out.
-	//
-	// MADPrintPageRenderer draws from document.reportFormatter -- not from the
-	// separate formatter MADActivityItemProviderPdf builds alongside it -- so it is
-	// the document's own formatter that has to be formatted.  Building a second one,
-	// as the application does, leaves the one being drawn from unformatted and every
-	// page comes out empty.  The application gets away with it only because its
-	// viewer has already reloaded; here nothing has.
-	[document prepareForQuery];
-
-	MADReportFormatter *reportFormatter = document.reportFormatter;
-	reportFormatter.overrideIdentifier = @"madpreview";
-	reportFormatter.didRefresh = YES;
-	reportFormatter.layoutSize = letterRect.size;
-	[reportFormatter setMarginUsingPrintableRect: MADCLIPdfTrimBox(letterRect)];
-	[document format];
-
-	self.pageCount = reportFormatter.numberOfPages;
-
-	MADPrintPageRenderer *renderer = [[MADPrintPageRenderer alloc] initWithDataSource: document];
-
-	CGRect trimBox = MADCLIPdfTrimBox(letterRect);
-	NSDictionary *boxInfo = @{ (__bridge NSString *)kCGPDFContextTrimBox: [NSValue valueWithCGRect: trimBox] };
-
-	UIGraphicsBeginPDFContextToFile(url.path, letterRect, options);
-	for (NSUInteger page = 0; page < reportFormatter.numberOfPages; page++) {
-		@autoreleasepool {
-			UIGraphicsBeginPDFPageWithInfo(letterRect, boxInfo);
-			[renderer drawPageAtIndex: (NSInteger)page inRect: trimBox];
-		}
-	}
-	UIGraphicsEndPDFContext();
-
-	if (deterministic) {
-		MADCLIPinPDFMetadata(url);
-	}
-
-	if (![[NSFileManager defaultManager] fileExistsAtPath: url.path]) {
-		if (error) *error = [NSError errorWithDomain: @"MADCLI" code: MADCLIExitExportFailed
-											userInfo: @{ NSLocalizedDescriptionKey: @"No PDF was written." }];
-		return NO;
-	}
-	return YES;
-}
-#endif
 
 @end

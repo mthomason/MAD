@@ -524,6 +524,76 @@ truncating the caller's archive path on glibc.  What the comparison covers is th
 container: the members are the fixture's own bytes.  A Linux writer that *creates* a
 store extends it to the store layer.
 
+**Phase E status (2026-10-16, third part: the render half, and HTML).** The render
+half moved to Linux, and it moved as a conformance rather than a fork.  The user's
+answer on the shape was "one formatter, not two paths, and they should render the
+same", so:
+
+* `MADReportFormatter` takes `id <MADDocumentRenderProtocol>`; the protocol grew the
+  four members the formatter reads (`filename`, `storeContext` — it used to ask for
+  MADocument's `-managedObjectContext` — `database`, `resetSectionLayoutManagers`)
+  and inherits the data, cache and report-data-source protocols the formatter assigns
+  from the document.
+* The page walk moved out of `MADPrintPageRenderer` into `MADReportPageBuilder`, a
+  plain Foundation class: the same read transaction per page, the same element
+  references, the same one line representation per element, with the drawing now a
+  block the caller passes (the renderer passes one that draws; the formats pass none).
+  The builder also owns the render side's geometry (US Letter, the 1pt trim) and the
+  preparation sequence (sort the rows, size the formatter, format), which were copied
+  in the CLI's PDF arm and json-report.
+* `MADDocumentRenderDataSource` is the one implementation of the render half's reads —
+  `MADPrintPageRendererDataSourceProtocol` and `MADReportFormatterDataSource` over a
+  document — and both `MADocument` and `MADHeadlessDocument` answer by asking it.  The
+  bodies are MADocument's, moved; the app's pages read exactly what they read before.
+* `MADHeadlessDocument` conforms to `MADDocumentRenderProtocol`, so a document with no
+  window now formats and walks.  `MADOperationRefreshInitialize`'s render branch keys
+  on the protocol instead of on `[doc isKindOfClass: [MADocument class]]`.
+* The element family compiles headless: `MADPrintPageElement`'s initialisers are
+  Foundation (the text is resolved there), and only the `-drawInRect:` bodies and the
+  image's `UIImage` are `#if __APPLE__`.  `MADElementStylizedText` stays Apple's — it
+  is drawing, not layout.
+
+**Pagination needs no text engine**, measured rather than assumed: a section's display
+height comes from `MADSectionLayout` (stored rect + margin + padding + border), which
+is in the Linux build and has been since Phase C, so the page breaks are the same
+everywhere.  Text metrics enter only when an element is *drawn*, and the renderer
+draws with `NSLineBreakByTruncatingTail` — one line, clipped — which CSS spells
+`white-space: pre; overflow: hidden; text-overflow: ellipsis`.  Nothing wraps, so there
+is no wrap model to port; no font engine was added.
+
+**`mad export --format json-report` runs here**, on the same walk, and the frames it
+reports are now *page* coordinates (the element's frame offset by its section), which
+is what a renderer or a browser needs.
+
+**Two new formats, both on both platforms** (the user chose both): `html` is the
+facsimile — one CSS page box per walked page, every element absolutely positioned at
+its frame with its resolved text and its stored font, size, traits and alignment; a
+browser prints it to the same pages the PDF has.  `html-flow` is the same report
+reflowable — `<section>`s, a `<table>` per section, one `<td>` per element, the page
+furniture emitted once; a reading view, while `--format json` stays the data contract.
+Both are one UTF-8 file with an embedded `<style>` and no script; the facsimile's CSS
+is the 20 lines above plus a positioning rule, and the flow file's styles are a
+generated class table (nine classes for the London fixture).
+
+**`pdf` is on the seam**: `MADReportExporterPDF` registers everywhere, its body is
+Apple's (Core Graphics + `MADPrintPageRenderer`), and off Apple it answers
+`+isAvailable NO` with the reason.  The CLI has no local arms left.  The move is
+byte-neutral: the deterministic export of the London sample is the same 43,177-byte,
+5-page PDF before and after (`sha256 3eb2f1c4…` on both), measured by building the
+previous commit's CLI and comparing.
+
+**What the cross-platform comparison says.** The text of every line, every frame,
+every font, the page count and the file structure are identical on Apple and Linux for
+the London fixture — measured by diffing the two `html` files.  The one difference is
+currency formatting: GNUstep's `NSNumberFormatterCurrencyStyle` renders no fraction
+digits for any locale and puts a space after the symbol ("$ 0.99" where Apple writes
+"$0.99"), so 180 lines differ by that one space.  The formatter was still improved:
+it now takes the locale *and* the decimal count from the document's numeric format
+(the store keeps both) instead of the process locale, which is what makes the two
+platforms agree on everything except that space — and fixes a real defect in the
+meantime (a document designed in one locale rendered in another).  Recorded in
+`BUGS.md`; closing it means formatting money portably, which is its own piece of work.
+
 ## 10. Decisions for the user
 
 1. **The JSON export shape** (`MAD_CLI.md` §8.3, `MAD_FUTURE.md` §10.5) — this is
@@ -542,6 +612,23 @@ store extends it to the store layer.
    macOS-side workers: the HTML step is also where the render half
    (`MADReportFormatter`) moves to Linux, which `json-report` and testing want too.
    `pdf` stays the CLI's Apple-side arm until then.
+   **Done 2026-10-16 (the HTML step).** The render half is on Linux and `mad export`
+   has no local arms: `pdf` is a registered exporter whose body is Apple's, and it
+   says why off Apple.  The user's further decision the same day: the Linux PDF writer
+   is the *next* step, not part of this one, because the HTML facsimile's page boxes are
+   the geometry a Linux writer has to reproduce and make its test.  The writer's shape
+   is recorded here for that step: **Cairo (drawing, PDF surface) + Pango (layout,
+   wrapping) + FreeType/HarfBuzz**, the stack GTK/WebKit/Firefox use and the closest
+   Linux has to Core Graphics + Core Text — C APIs called from Objective-C the way
+   freetds and sqlite3 already are, so no Impl wrapper is needed.  Licences: Cairo
+   LGPL-2.1/MPL-1.1 dual, Pango LGPL-2.1, HarfBuzz MIT, FreeType FTL/GPLv2-dual; the
+   project already ships LGPL (FreeTDS, `LICENSE_COMPLIANCE_PLAN.md` §4) and the Linux
+   image is a server build, so it is a known class of obligation.  `libharu` is the
+   permissive alternative but has no layout engine; Skia is the closest in capability
+   but a heavy C++ build.  **Not achievable: byte-identical PDFs across platforms** —
+   Core Graphics' writer cannot be reproduced — so the target is the same pages, boxes,
+   text and fonts, with metric-compatible substitutes for Apple's fonts
+   (`MADFont`'s default family is Helvetica Neue, which Linux does not have).
 3. **mysqlclient → MariaDB Connector/C timing** — the GPL blocker gates any shipped
    binary; the replacement is already named in `LICENSE_COMPLIANCE_PLAN.md`.
 4. **Toolchain policy** — source-built clang/libobjc2/GNUstep (needed for ARC) is a

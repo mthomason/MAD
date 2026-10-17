@@ -31,6 +31,7 @@
 #import "MADConstants.h"
 #import "MADocumentState.h"
 #import "MADReportFormatter.h"
+#import "MADDocumentRenderDataSource.h"
 #import "MADNotificationDidFormatPage.h"
 #import "RptqDocument.h"
 #import "RptqBorder.h"
@@ -109,14 +110,9 @@ static NSString * const MADDocumentInfoKeyGenerator				= @"generator";
 
 static NSString * const MADDocumentTypeUtiMad					= @"com.everydayapps.productivity.mad";
 
-static inline NSRange MADRangeToGroup(int64_t);
 void fail(char *, const char *, int);
 void msg(const char *);
 void madwarn(char *,  const char *);
-
-static inline NSRange MADRangeToGroup(int64_t groupNumber) {
-	return NSMakeRange(0, (NSUInteger)groupNumber + 1);
-}
 
 void fail(char *__unused err, const char *__unused err2, int __unused n) { }
 void msg(const char *__unused err) { }
@@ -125,6 +121,9 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 @interface MADocument () <MADReportFormatterDataSource, MADCacheProtocol, MADDatabaseResultsProtocol, MADocumentDesignerProtocol>
 
 @property (readwrite, nonatomic, strong) MADReportFormatter *printingReportFormatter;
+
+// The render half's reads, held once and shared with MADHeadlessDocument.
+@property (nonatomic, strong) MADDocumentRenderDataSource *renderDataSource;
 
 @property (nonatomic, readwrite, strong) RptqDocument *activeDocumentModel;
 @property (nonatomic, readwrite, strong) RptqStoreContext *storeContext;
@@ -863,220 +862,77 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 }
 
 #pragma mark -
+#pragma mark The render half's reads
+
+// Every read the renderer, the element references and the formatter's data source ask
+// for is MADDocumentRenderDataSource's, one implementation shared with the headless
+// document (MAD_LINUX.md §9 Phase E).  These forward, so the app's callers keep asking
+// the document and the answers stay exactly what they were.
+
+- (MADDocumentRenderDataSource *)renderDataSource {
+	if (_renderDataSource == nil) {
+		_renderDataSource = [[MADDocumentRenderDataSource alloc] initWithDocument: self];
+	}
+	return _renderDataSource;
+}
+
 #pragma mark MADReportFormatterDataSource Protocol
 
-- (NSEnumerator *)enumeratorForReportData {
-	return [self.dataTable enumeratorForKeyObjectsSorted];
-}
+- (NSEnumerator *)enumeratorForReportData { return [self.renderDataSource enumeratorForReportData]; }
 
-- (BOOL)cacheExist {
-	NSString *path = self.urlDataTableCache.path;
-	return [[NSFileManager defaultManager] fileExistsAtPath: path];
-}
+- (BOOL)cacheExist { return [self.renderDataSource cacheExist]; }
 
-- (NSDictionary *)dataForRow:(NSUInteger)rowID {
-	return [self.dataTable dataForRow:rowID error:nil];
-}
+- (NSDictionary *)dataForRow:(NSUInteger)rowID { return [self.renderDataSource dataForRow: rowID]; }
 
 - (NSDictionary *)dataForRow:(NSUInteger)rowID error:(NSError *__autoreleasing *)outError {
-	NSError *error = nil;
-	NSDictionary *result = [self.dataTable dataForRow:rowID error:&error];
-	if (error != nil) {
-		os_log_error(GetMadLog(), "%s Error: %@", __PRETTY_FUNCTION__, error);
-		if (outError != NULL) {
-			*outError = error;
-		}
-	}
-	return result;
+	return [self.renderDataSource dataForRow: rowID error: outError];
 }
 
-#pragma mark -
 #pragma mark MADPrintPageRendererDataSourceProtocol
+
+// -database, -dataTable and -reportFormatter are the document's own state (they are
+// what the shared reads ask it for), so they stay where they were.
 
 - (NSDictionary *)dataForRow:(NSUInteger)rowID
 					  column:(NSString *)columnKey
 					   error:(NSError * __autoreleasing *)error {
-	NSError * errorQ = nil;
-	NSDictionary *result = [self.dataTable dataForRow:rowID column:columnKey error:&errorQ];
-	if (errorQ != nil && error != NULL) {
-		os_log_error(GetMadLog(), "%s Error: %@", __PRETTY_FUNCTION__, errorQ);
-		*error = errorQ;
-	}
-	return result;
+	return [self.renderDataSource dataForRow: rowID column: columnKey error: error];
 }
 
-- (NSArray <NSString *> *)groupLevelKeyNames {
-	NSMutableArray <NSString *> *groupKeys = [[NSMutableArray alloc] initWithCapacity:self.dataTable.sortDescriptors.count];
-	for (NSSortDescriptor *sortDescriptor in self.dataTable.sortDescriptors) {
-		NSString *key = sortDescriptor.key;
-		if (key != nil) {
-			[groupKeys addObject:key];
-		}
-	}
-	return groupKeys;
-}
+- (NSArray <NSString *> *)groupLevelKeyNames { return [self.renderDataSource groupLevelKeyNames]; }
 
-- (NSArray <MADResult *> *)groupLevelKeys:(int64_t)rowID {
-	if (self.reportFormatter.numberOfGroups > 0) {
-		NSError *error = nil;
-		NSDictionary <NSString *, MADResult *> *row = [self.dataTable dataForRow: (NSUInteger)rowID error:&error];
-		if (error != nil) {
-			os_log_error(GetMadLog(), "%s Error: %@", __PRETTY_FUNCTION__, error);
-		}
-		return [self.reportFormatter newObjectArrayKeyValuesForResultRow: row];
-	} else {
-		return [[NSArray alloc] init];
-		
-	}
-}
+- (NSArray <MADResult *> *)groupLevelKeys:(int64_t)rowID { return [self.renderDataSource groupLevelKeys: rowID]; }
 
 - (NSArray <MADResult *> *)groupKeys:(int64_t)rowID groupNumber:(int64_t)groupNumber {
-	NSArray *groupKeys = nil;
-	NSArray <MADResult *> *groupLevelKeys = [self groupLevelKeys:rowID];
-	if (groupNumber < (int64_t)groupLevelKeys.count && groupNumber >= 0) {
-		groupKeys = [groupLevelKeys subarrayWithRange:MADRangeToGroup(groupNumber)];
-	}
-	return groupKeys;
+	return [self.renderDataSource groupKeys: rowID groupNumber: groupNumber];
 }
 
-
-- (NSArray <__kindof NSDictionary *> *)dataForGroups:(NSArray *)groupKeys
-											 groupID:(int64_t)groupID {
-	NSArray <__kindof NSDictionary *> *dataForGroup;
-	if (groupID < (int64_t)groupKeys.count) {
-		NSArray *groupKeysInRange = [groupKeys subarrayWithRange: MADRangeToGroup(groupID)];
-		dataForGroup = [self.dataTable objectsForGroupKeys:groupKeysInRange];
-	} else {
-		dataForGroup = [[NSArray alloc] init];
-	}
-	
-	return dataForGroup;
+- (NSArray <__kindof NSDictionary *> *)dataForGroups:(NSArray *)groupKeys groupID:(int64_t)groupID {
+	return [self.renderDataSource dataForGroups: groupKeys groupID: groupID];
 }
 
 - (MADResult *)dataForRows:(NSArray *)rowIDs column:(NSString *)columnKey groups:(NSArray *)groupKeys
 				  function:(MTAggregateFunctionType)function groupBy:(MTAggregateGroupByType)groupBy {
-	os_log_t logger = GetMadLog();
-
-	if (!self.dataTable) {
-		return nil;
-	}
-
-	if (!columnKey || columnKey.length == 0) {
-		os_log_error(logger, "[MADocument dataForRows] CRITICAL - columnKey is NIL or EMPTY. Query will likely fail or return incorrect data.");
-	}
-
-	NSDictionary <NSNumber *, MADResult *> *parameters = [MADParameters paramatersAggregateByType: groupBy
-																						 function: function
-																						   rowids: rowIDs
-																						groupKeys: groupKeys
-																						 fieldKey: columnKey
-																						dataTable: self.dataTable];
-	if (parameters != nil) {
-		__kindof MADQuery *query = [[MADQuery alloc] initWithQueryType: MADQueryTypeCacheAggregateFunction
-																object: parameters];
-		MADResult *result = [self.dataTable runSelectQuery:query];
-		return result;
-	}
-	return nil;
+	return [self.renderDataSource dataForRows: rowIDs column: columnKey groups: groupKeys function: function groupBy: groupBy];
 }
 
-- (NSUInteger)rowIDFirstOfReport {
-	NSUInteger rowID = NSUIntegerMax;
-	MADDocumentSectionType sectionType;
-	NSArray<__kindof MADSectionRepresentation *> *pageLayout = nil;
-	bool found = false;
-	
-	for (pageLayout in self.reportFormatter.reportLayout) {
-		for (MADSectionRepresentation *pageSection in pageLayout) {
-			sectionType = pageSection.sectionType;
-			if (sectionType == MADDocumentSectionTypeBody) {
-				rowID = pageSection.detailRowId;
-				found = true;
-				break;
-			}
-		}
-		if (found) {
-			break;
-		}
-	}
-	return rowID;
-}
+- (NSUInteger)rowIDFirstOfReport { return [self.renderDataSource rowIDFirstOfReport]; }
 
-- (NSUInteger)rowIDLastOfReport {
-	NSUInteger rowID = NSUIntegerMax;
-	MADDocumentSectionType sectionType;
-	bool found = false;
-	NSArray<__kindof MADSectionRepresentation *> *pageLayout = nil;
-	NSUInteger reportLayoutCount = self.reportFormatter.reportLayout.count;
-	for (NSUInteger i = reportLayoutCount; i > 0; i--) {
-		pageLayout = self.reportFormatter.reportLayout[i - 1];
-		NSEnumerator<MADSectionRepresentation *> *reverseObjectEnumerator = [pageLayout reverseObjectEnumerator];
-		for (MADSectionRepresentation *pageSection in reverseObjectEnumerator) {
-			sectionType = pageSection.sectionType;
-			if (sectionType == MADDocumentSectionTypeBody) {
-				rowID = pageSection.detailRowId;
-				found = true;
-				break;
-			}
-		}
-		if (found) {
-			break;
-		}
-	}
-	return rowID;
-}
+- (NSUInteger)rowIDLastOfReport { return [self.renderDataSource rowIDLastOfReport]; }
 
-- (NSUInteger)rowIDFirstOfPage:(NSUInteger)page {
-	NSUInteger rowID = NSUIntegerMax;
-	MADDocumentSectionType section;
-	NSArray <MADSectionRepresentation *> *pageLayout;
-	pageLayout = self.reportFormatter.reportLayout[page];
-	for (MADSectionRepresentation *pageSection in pageLayout) {
-		section = pageSection.sectionType;
-		if (section == MADDocumentSectionTypeBody) {
-			rowID = pageSection.detailRowId;
-			break;
-		}
-	}
-	return rowID;
-}
+- (NSUInteger)rowIDFirstOfPage:(NSUInteger)page { return [self.renderDataSource rowIDFirstOfPage: page]; }
 
-- (NSUInteger)rowIDLastOfPage:(NSUInteger)page {
-	NSUInteger rowID = NSUIntegerMax;
-	NSEnumerator <MADSectionRepresentation *> *enumerator = [self.reportFormatter.reportLayout[page] reverseObjectEnumerator];
-	for (MADSectionRepresentation *pageSection in enumerator) {
-		if (pageSection.sectionType == MADDocumentSectionTypeBody) {
-			return pageSection.detailRowId;
-			break;
-		}
-	}
-	return rowID;
-}
+- (NSUInteger)rowIDLastOfPage:(NSUInteger)page { return [self.renderDataSource rowIDLastOfPage: page]; }
 
-- (NSDictionary *)dataForRowReportFirst {
-	NSUInteger firstRowID = [self rowIDFirstOfReport];
-	return firstRowID != NSUIntegerMax ? [self dataForRow:firstRowID] : nil;
+- (NSDictionary *)dataForRowReportFirst { return [self.renderDataSource dataForRowReportFirst]; }
 
-}
+- (NSDictionary *)dataForRowReportLast { return [self.renderDataSource dataForRowReportLast]; }
 
-- (NSDictionary *)dataForRowReportLast {
-	NSUInteger lastRowID = [self rowIDLastOfReport];
-	return lastRowID != NSUIntegerMax ? [self dataForRow:lastRowID] : nil;
-}
+- (NSDictionary *)dataForRowPageFirst:(NSUInteger)pageIndex { return [self.renderDataSource dataForRowPageFirst: pageIndex]; }
 
-- (NSDictionary *)dataForRowPageFirst:(NSUInteger)pageIndex {
-	NSUInteger firstRowid = [self rowIDFirstOfPage:pageIndex];
-	return firstRowid != NSUIntegerMax ? [self dataForRow:firstRowid] : nil;
-}
+- (NSDictionary *)dataForRowPageLast:(NSUInteger)pageIndex { return [self.renderDataSource dataForRowPageLast: pageIndex]; }
 
-- (NSDictionary *)dataForRowPageLast:(NSUInteger)pageIndex {
-	NSUInteger lastRowid = [self rowIDLastOfPage:pageIndex];
-	return lastRowid != NSUIntegerMax ? [self dataForRow:lastRowid] : nil;
-}
-
-- (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex {
-	return [self.reportFormatter rowIDsForPage:pageIndex];
-}
+- (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex { return [self.renderDataSource rowIDsForPage: pageIndex]; }
 
 #pragma mark -
 #pragma mark Helpers

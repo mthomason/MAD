@@ -1,7 +1,9 @@
-# The MAD subset the Linux build compiles (MAD_LINUX.md §9): 149 of the
-# framework's 181 implementation files -- the data, model, store, query and
-# archive side.  The 32 that stay on Apple fall in four groups, each named
-# below.  Keep this list in step with MAD_LINUX.md §4 and §5.2.
+# The MAD subset the Linux build compiles (MAD_LINUX.md §9): 168 of the 199
+# implementation files under MAD/Source -- the data, model, store, query and
+# archive side, and since Phase E the render half (the formatter, the page walk,
+# the element family and the shared render reads).  The 31 that stay on Apple
+# fall in four groups, each named below.  Keep this list in step with
+# MAD_LINUX.md §4 and §5.2.
 #
 # Excluded, and why:
 #
@@ -16,8 +18,6 @@
 #     MADImageThumbnail.m               UIImage rewriting
 #     MADOperationBackgroundTaskBegin.m  UIApplication background tasks
 #     MADOperationBackgroundTaskEnd.m    (no suspension concept headless)
-#     MADPrintPageElement.m             the print-side element base (UIImage)
-#     MADPrintPageElement+Constructor.m its factory; MADPrintPageRenderer was the only caller
 #     MADPrintPageElementBarcode.m      barcode printing (MADBarcodes)
 #     MADPrintPageRenderer.m            UIPrintPageRenderer: the PDF seam
 #     MADSectionLayoutAttributes.m      UICollectionViewLayoutAttributes
@@ -25,13 +25,12 @@
 #     UIDocument+Extras.m               UIDocument category
 #     UIFontDescriptor+MADAdditions.m   UIFontDescriptor category
 #
-#     MADReportFormatter.m              takes MADocument (UIDocument): the render half
-#
 #   The document class, and the operations that build, close or delete one --
 #   Phase D settles the rest.  MADocument is a UIDocument, so it stays out; the
 #   headless reader that replaces it for the data path is here instead
-#   (MADHeadlessDocument, on MADDocumentDataProtocol -- which the refresh chain
-#   in MADOperationRefresh* runs against, and which is now in this build).
+#   (MADHeadlessDocument, on MADDocumentDataProtocol and MADDocumentRenderProtocol
+#   -- which the refresh chain in MADOperationRefresh* and the render half both run
+#   against, and which is in this build).
 #     MADocument.m                        UIDocument subclass
 #     MADOperationCreateDocument*.m       five operations that build one
 #     MADOperationDeleteFile.m            file management on a document
@@ -107,18 +106,27 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/MADQuerySelectExpression.m"
 	"${SOURCE_DIR}/MADQuerySelectExpressionActiveFields.m"
 	"${SOURCE_DIR}/MADQuerySelectExpressionAllFields.m"
+	"${SOURCE_DIR}/MADPrintPageElement.m"
+	"${SOURCE_DIR}/MADPrintPageElement+Constructor.m"
 	"${SOURCE_DIR}/MADQueryTest.m"
+	"${SOURCE_DIR}/MADDocumentRenderDataSource.m"
 	"${SOURCE_DIR}/MADReportExporterCSV.m"
+	"${SOURCE_DIR}/MADReportExporterHTML.m"
+	"${SOURCE_DIR}/MADReportExporterHTMLFlow.m"
 	"${SOURCE_DIR}/MADReportExporterJSON.m"
 	"${SOURCE_DIR}/MADReportExporterJSONReport.m"
+	"${SOURCE_DIR}/MADReportExporterPDF.m"
 	"${SOURCE_DIR}/MADReportExporterRegistry.m"
 	"${SOURCE_DIR}/MADReportExporterText.m"
 	"${SOURCE_DIR}/MADReportExportSource.m"
 	"${SOURCE_DIR}/MADReportExportWriter.m"
+	"${SOURCE_DIR}/MADReportFormatter.m"
 	"${SOURCE_DIR}/MADReportFormatterCache.m"
 	"${SOURCE_DIR}/MADReportFormatterState.m"
 	"${SOURCE_DIR}/MADReportLineRepresentation.m"
+	"${SOURCE_DIR}/MADReportLineStyle.m"
 	"${SOURCE_DIR}/MADReportPageRepresentation.m"
+	"${SOURCE_DIR}/MADReportPageBuilder.m"
 	"${SOURCE_DIR}/MADReportRow.m"
 	"${SOURCE_DIR}/MADReportRows.m"
 	"${SOURCE_DIR}/MADReportSection.m"

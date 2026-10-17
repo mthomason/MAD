@@ -128,11 +128,13 @@ The formats are the export seam's (§5.3): each is a class registered with
 
 | format | writes | where it runs |
 |---|---|---|
-| `pdf` | the rendered report (pages, drawn) | Apple: UIKit's `UIPrintPageRenderer`, Core Graphics |
+| `pdf` | the rendered report (pages, drawn) | Apple: UIKit's `UIPrintPageRenderer`, Core Graphics; Linux says why not |
+| `html` | the rendered report as one HTML file, one page box per page, printed from a browser | both platforms |
+| `html-flow` | the rendered report as reflowable HTML, one table per section | both platforms |
 | `text` | the rows as a fixed-width table | both platforms |
 | `csv` | the rows as RFC 4180 CSV | both platforms |
 | `json` | the schema and the rows as JSON (§8.3) | both platforms |
-| `json-report` | `json` plus the rendered report's sections | where the render half is (Apple today; Linux says why not) |
+| `json-report` | `json` plus the rendered report's sections | both platforms |
 
 `--out` is optional for the Foundation formats -- absent, or `-`, writes the standard
 output -- and required for `pdf`. The Foundation formats write the same bytes on Apple
@@ -144,9 +146,21 @@ rendered report as a `report` member: pages, each page's sections in draw order 
 group level, visibility), each section's rows, and each line's element kind, frame and
 resolved text. It is what testing and a renderer read, and it is the renderer's own
 structure -- the page walk with nothing drawn -- so it cannot drift from what a PDF
-shows. It needs the render half (`MADReportFormatter`, the page renderer), which the
-Linux build excludes today; it registers everywhere and reports why it cannot run
-there (`json` is the data half and works).
+shows. The frame is where the line sits **on the page** (the element's frame offset by
+its section), which is what a renderer or a browser needs. The render half is compiled
+on Linux now, so this format runs on both platforms.
+
+**`html`** is the page-shaped artifact a browser prints: one CSS page box per walked
+page, each element absolutely positioned at its frame, its resolved text in the
+element's own font, size, weight, slant, decoration and alignment. The line-break rule
+is the renderer's (`NSLineBreakByTruncatingTail` -> `white-space: pre; overflow:
+hidden; text-overflow: ellipsis`). It is one UTF-8 file with an embedded style block
+and no script. **`html-flow`** is the same report with the pages dropped: a `<section>`
+per report section, a `<table>` per section, a `<td>` per element, page furniture
+emitted once, and a generated class per distinct element style. It is a reading view;
+`json` is the data contract. Neither carries colours (the store's colour columns have
+no reader on either platform today) or images on Linux (the Apple path draws them from
+`UIImage`; a Linux export places the empty box).
 
 Rendering to PDF goes through `MADPrintPageRenderer`; the share-sheet wrapper
 `MADActivityItemProviderPdf` is its other caller, and `MADActivityItemProviderDelegate.h`
@@ -309,13 +323,13 @@ and the CLI asks for one by name. `text`, `csv` and `json` are the framework's o
 formats cannot disagree about what a document is; and `MADReportExportWriter` is the one
 place bytes reach a file or the standard output.
 
-`json-report` is on the seam too, built on the render half's first protocol
-(`MADDocumentRenderProtocol`: a document that can ready its rows, format and hand over
-its formatter). One format is deliberately not on it yet:
-
-* **`pdf`** is still the CLI's own arm, because it draws through `MADocument` +
-  `MADPrintPageRenderer` and needs the render-half protocol to reach an exporter; it
-  becomes one with the HTML step (`MAD_LINUX.md` §10.2).
+`json-report`, `html` and `html-flow` are on the seam too, built on the render half's
+protocol (`MADDocumentRenderProtocol`: a document that can ready its rows, format and
+hand over its formatter) and on one page walk (`MADReportPageBuilder`). **`pdf` is on
+the seam as well** now: `MADReportExporterPDF` registers everywhere, its body is
+Core Graphics' (Apple's), and off Apple it answers `+isAvailable NO` with the reason
+(`MAD_LINUX.md` §10.2: the Linux writer is the next step). The CLI has no local arms
+left; every format, `pdf` included, is looked up in the registry.
 
 ### 5.4 Credentials
 

@@ -17,12 +17,12 @@
 //              "rows": [ { "lines": [
 //                  { "kind": "LabelStatic", "frame": [0, 0, 200, 20], "text": "Sales Report" } ] } ] } ] } ] }
 //
-//  The structure is the renderer's own: it walks the pages exactly as the PDF export
-//  does, minus the drawing (MADPrintPageRenderer -buildPageAtIndex:context:inPageRect:),
-//  so what this member says and what a page shows cannot drift apart.  It needs the
-//  document's render half, so the format registers everywhere and answers
-//  +isAvailable NO where that half is not compiled (Linux today; MAD_LINUX.md §9
-//  Phase E).
+//  The structure is the walk's own: it reads exactly the pages the PDF export draws
+//  (MADReportPageBuilder), minus the drawing, so what this member says and what a page
+//  shows cannot drift apart.  The render half is compiled on both platforms
+//  (MAD_LINUX.md §9 Phase E), so the format runs wherever the data half does; a
+//  document that cannot render is refused rather than served the data half under this
+//  name.
 //
 
 #ifndef MAD_MADReportExporterJSONReport_h

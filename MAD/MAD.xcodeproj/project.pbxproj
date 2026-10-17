@@ -397,7 +397,17 @@
 	4C0DB0A1000000000000F10F /* MADReportExporterJSONReport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F00F /* MADReportExporterJSONReport.m */; };
 	4C0DB0A1000000000000F110 /* MADDocumentRenderProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F010 /* MADDocumentRenderProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 	4C0DB0A1000000000000F111 /* MADReportPageBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F011 /* MADReportPageBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+	4C0DB0A1000000000000F113 /* MADReportLineStyle.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F013 /* MADReportLineStyle.h */; settings = {ATTRIBUTES = (Public, ); }; };
+	4C0DB0A1000000000000F115 /* MADDocumentRenderDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F015 /* MADDocumentRenderDataSource.h */; };
 	4C0DB0A1000000000000F112 /* MADReportPageBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F012 /* MADReportPageBuilder.m */; };
+	4C0DB0A1000000000000F114 /* MADReportLineStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F014 /* MADReportLineStyle.m */; };
+	4C0DB0A1000000000000F116 /* MADDocumentRenderDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F016 /* MADDocumentRenderDataSource.m */; };
+	4C0DB0A1000000000000F117 /* MADReportExporterHTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F017 /* MADReportExporterHTML.h */; settings = {ATTRIBUTES = (Public, ); }; };
+	4C0DB0A1000000000000F118 /* MADReportExporterHTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F018 /* MADReportExporterHTML.m */; };
+	4C0DB0A1000000000000F119 /* MADReportExporterHTMLFlow.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F019 /* MADReportExporterHTMLFlow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+	4C0DB0A1000000000000F11A /* MADReportExporterHTMLFlow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F01A /* MADReportExporterHTMLFlow.m */; };
+	4C0DB0A1000000000000F11B /* MADReportExporterPDF.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F01B /* MADReportExporterPDF.h */; settings = {ATTRIBUTES = (Public, ); }; };
+	4C0DB0A1000000000000F11C /* MADReportExporterPDF.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000F01C /* MADReportExporterPDF.m */; };
 		4C0DB0A1000000000000D007 /* MADOperationRefresh.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D001 /* MADOperationRefresh.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C0DB0A1000000000000D00A /* MADOperationRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D002 /* MADOperationRefresh.m */; };
 		4C0DB0A1000000000000D008 /* MADOperationRefreshInitialize.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C0DB0A1000000000000D003 /* MADOperationRefreshInitialize.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -981,6 +991,16 @@
 	4C0DB0A1000000000000F00F /* MADReportExporterJSONReport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportExporterJSONReport.m; sourceTree = "<group>"; };
 	4C0DB0A1000000000000F010 /* MADDocumentRenderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentRenderProtocol.h; sourceTree = "<group>"; };
 	4C0DB0A1000000000000F011 /* MADReportPageBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportPageBuilder.h; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F013 /* MADReportLineStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportLineStyle.h; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F014 /* MADReportLineStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportLineStyle.m; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F015 /* MADDocumentRenderDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDocumentRenderDataSource.h; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F016 /* MADDocumentRenderDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDocumentRenderDataSource.m; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F017 /* MADReportExporterHTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportExporterHTML.h; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F018 /* MADReportExporterHTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportExporterHTML.m; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F019 /* MADReportExporterHTMLFlow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportExporterHTMLFlow.h; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F01A /* MADReportExporterHTMLFlow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportExporterHTMLFlow.m; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F01B /* MADReportExporterPDF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADReportExporterPDF.h; sourceTree = "<group>"; };
+	4C0DB0A1000000000000F01C /* MADReportExporterPDF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportExporterPDF.m; sourceTree = "<group>"; };
 	4C0DB0A1000000000000F012 /* MADReportPageBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADReportPageBuilder.m; sourceTree = "<group>"; };
 		4C0DB0A1000000000000D001 /* MADOperationRefresh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADOperationRefresh.h; sourceTree = "<group>"; };
 		4C0DB0A1000000000000D002 /* MADOperationRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADOperationRefresh.m; sourceTree = "<group>"; };
@@ -1551,6 +1571,16 @@
 				4C0DB0A1000000000000F00F /* MADReportExporterJSONReport.m */,
 				4C0DB0A1000000000000F010 /* MADDocumentRenderProtocol.h */,
 				4C0DB0A1000000000000F011 /* MADReportPageBuilder.h */,
+				4C0DB0A1000000000000F013 /* MADReportLineStyle.h */,
+				4C0DB0A1000000000000F014 /* MADReportLineStyle.m */,
+				4C0DB0A1000000000000F015 /* MADDocumentRenderDataSource.h */,
+				4C0DB0A1000000000000F016 /* MADDocumentRenderDataSource.m */,
+				4C0DB0A1000000000000F017 /* MADReportExporterHTML.h */,
+				4C0DB0A1000000000000F018 /* MADReportExporterHTML.m */,
+				4C0DB0A1000000000000F019 /* MADReportExporterHTMLFlow.h */,
+				4C0DB0A1000000000000F01A /* MADReportExporterHTMLFlow.m */,
+				4C0DB0A1000000000000F01B /* MADReportExporterPDF.h */,
+				4C0DB0A1000000000000F01C /* MADReportExporterPDF.m */,
 				4C0DB0A1000000000000F012 /* MADReportPageBuilder.m */,
 				4C0DB0A1000000000000D001 /* MADOperationRefresh.h */,
 				4C0DB0A1000000000000D002 /* MADOperationRefresh.m */,
@@ -2078,6 +2108,11 @@
 				4C0DB0A1000000000000F10E /* MADReportExporterJSONReport.h in Headers */,
 				4C0DB0A1000000000000F110 /* MADDocumentRenderProtocol.h in Headers */,
 				4C0DB0A1000000000000F111 /* MADReportPageBuilder.h in Headers */,
+				4C0DB0A1000000000000F113 /* MADReportLineStyle.h in Headers */,
+				4C0DB0A1000000000000F115 /* MADDocumentRenderDataSource.h in Headers */,
+				4C0DB0A1000000000000F117 /* MADReportExporterHTML.h in Headers */,
+				4C0DB0A1000000000000F119 /* MADReportExporterHTMLFlow.h in Headers */,
+				4C0DB0A1000000000000F11B /* MADReportExporterPDF.h in Headers */,
 				4C0DB0A1000000000000D007 /* MADOperationRefresh.h in Headers */,
 				4C0DB0A1000000000000D008 /* MADOperationRefreshInitialize.h in Headers */,
 				4C0DB0A1000000000000D009 /* MADOperationRefreshInitalizeMainDataTable.h in Headers */,
@@ -2321,6 +2356,11 @@
 				4C0DB0A1000000000000F10D /* MADReportExporterJSON.m in Sources */,
 				4C0DB0A1000000000000F10F /* MADReportExporterJSONReport.m in Sources */,
 				4C0DB0A1000000000000F112 /* MADReportPageBuilder.m in Sources */,
+				4C0DB0A1000000000000F114 /* MADReportLineStyle.m in Sources */,
+				4C0DB0A1000000000000F116 /* MADDocumentRenderDataSource.m in Sources */,
+				4C0DB0A1000000000000F118 /* MADReportExporterHTML.m in Sources */,
+				4C0DB0A1000000000000F11A /* MADReportExporterHTMLFlow.m in Sources */,
+				4C0DB0A1000000000000F11C /* MADReportExporterPDF.m in Sources */,
 				4C0DB0A1000000000000D00A /* MADOperationRefresh.m in Sources */,
 				4C0DB0A1000000000000D00B /* MADOperationRefreshInitialize.m in Sources */,
 				4C0DB0A1000000000000D00C /* MADOperationRefreshInitalizeMainDataTable.m in Sources */,

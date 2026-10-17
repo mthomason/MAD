@@ -381,8 +381,15 @@ and `MADReportExporterRegistry` in the driver registry's shape; `MADReportExport
 and `MADReportExportWriter` as the one read and the one write; `text`, `csv`, `json`
 (both platforms, byte-identical output on both — digests in `Linux/README.md`) and
 `json-report` (Apple; built from the page renderer's walk, now split from its draw).
-**What remains:** HTML/SVG and the render half's move to Linux (which brings
-`json-report` there), `pdf` onto the seam, and the `.mad` writer's reproducible mode.
+**Landed since, 2026-10-16 (the HTML step):** the render half's move to Linux — one
+formatter (`MADReportFormatter` on `MADDocumentRenderProtocol`), one page walk
+(`MADReportPageBuilder`), one set of render reads (`MADDocumentRenderDataSource`) —
+so `json-report` runs on both platforms; the two HTML formats the user chose (`html`,
+the page-box facsimile, and `html-flow`, the reflowable reading view); and `pdf` on
+the seam (`MADReportExporterPDF`, Apple's body, registered everywhere, byte-identical
+output).  **What remains:** the Linux PDF writer itself (`MAD_LINUX.md` §10.2 records
+Cairo + Pango and the licences) and closing GNUstep's currency-formatting divergence
+(`BUGS.md`).
 
 Two things landed since this entry was written and belong to it: the driver registry
 (`ROADMAP.md` §5.1, `61991e85f`) — the seam shape this task mirrors — and the CLI

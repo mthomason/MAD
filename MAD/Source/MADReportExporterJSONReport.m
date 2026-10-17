@@ -13,12 +13,14 @@
 
 #import "MADReportExportSource.h"
 #import "MADReportExporterRegistry.h"
+#import "MADReportFormatter.h"
+#import "MADReportPageBuilder.h"
 
 #import <MAD/MADDocumentRenderProtocol.h>
-#import <MAD/MADReportSectionRepresentation.h>
-#import <MAD/MADReportSectionRowsRepresentation.h>
 #import <MAD/MADReportLineRepresentation.h>
 #import <MAD/MADReportPageRepresentation.h>
+#import <MAD/MADReportSectionRepresentation.h>
+#import <MAD/MADReportSectionRowsRepresentation.h>
 #import <MAD/MADocumentSectionType.h>
 #import <MAD/MADDocumentObjectType.h>
 
@@ -27,19 +29,6 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
-#import <Foundation/NSString.h>
-
-#if __APPLE__
-// The render half: the formatter, the page renderer that walks it, the paper the
-// application lays out on.  All three are excluded from the Linux build, which is why
-// this format reports itself unavailable there (isAvailable below).
-#import <MAD/MADPrintPageRenderer.h>
-#import <MAD/MADReportFormatter.h>
-#import <MAD/MTPaper.h>
-#import <UIKit/UIGeometry.h>
-#endif
-
-#if __APPLE__
 
 // "MADDocumentSectionTypeBody" is the runtime's stable spelling; a contract wants the
 // tail.  The same rule the column types follow (MADReportExportSource.m).
@@ -49,8 +38,6 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 	}
 	return name;
 }
-
-#endif
 
 @implementation MADReportExporterJSONReport
 
@@ -75,42 +62,35 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 }
 
 + (BOOL)isAvailable {
-#if __APPLE__
+	// The report member reads the page walk, which is the render half's and is
+	// compiled wherever the data half is (MADDocumentRenderProtocol).
 	return YES;
-#else
-	return NO;
-#endif
 }
 
 + (NSString *)unavailableReason {
-#if __APPLE__
 	return nil;
-#else
-	return @"the report's rendered structure needs the render half (MADReportFormatter and the page renderer), "
-			"which this build does not compile (MAD_LINUX.md §9 Phase E); --format json is the data half and works here.";
-#endif
 }
 
 // The CLI checks +isAvailable before it asks, but a direct caller must not get the
-// data half's bytes under this format's name where the render half is absent.
+// data half's bytes under this format's name from a document that cannot render.
 - (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
 				 toURL:(NSURL *)url
 			   options:(MADReportExportOptions)options
-				 error:(NSError **)error {
+				 error:(NSError * _Nullable __autoreleasing *)error {
 
-	if (![[self class] isAvailable]) {
+	if (![document conformsToProtocol: @protocol(MADDocumentRenderProtocol)]) {
 		if (error) {
 			*error = [NSError errorWithDomain: @"MADReportExport"
 										 code: 3
-									 userInfo: @{ NSLocalizedDescriptionKey: [MADReportExporterJSONReport unavailableReason] }];
+									 userInfo: @{ NSLocalizedDescriptionKey:
+					 @"the report's rendered structure needs a document that renders (MADDocumentRenderProtocol); "
+					 @"--format json is the data half and needs no more." }];
 		}
 		return NO;
 	}
 
 	return [super exportDocument: document toURL: url options: options error: error];
 }
-
-#if __APPLE__
 
 - (void)appendEntriesToJSON:(NSMutableString *)json source:(MADReportExportSource *)source {
 	[super appendEntriesToJSON: json source: source];
@@ -120,9 +100,8 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 	[json appendString: @"  }"];
 }
 
-// The pages, in order, the way MADCLIDocument's PDF export walks them -- the same
-// sequence before the walk (ready the rows, format the report), the same page renderer
-// and the same letter-and-1pt-trim geometry -- with no context, so nothing is drawn.
+// The pages, in order: the same walk the PDF draws from and the HTML formats read
+// (MADReportPageBuilder), with no drawing block, on the same letter-and-1pt-trim page.
 - (void)appendPagesToJSON:(NSMutableString *)json document:(id <MADDocumentDataProtocol>)document {
 
 	id <MADDocumentRenderProtocol> renderDocument = nil;
@@ -130,26 +109,16 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 		renderDocument = (id <MADDocumentRenderProtocol>)document;
 	}
 
-	CGRect letterRect = [[MTPaper alloc] initWithType: MTPaperTypeLetter].bounds;
-	CGRect trimBox = UIEdgeInsetsInsetRect(letterRect, UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0));
-
-	[renderDocument prepareForQuery];
-
+	MADReportPageBuilder *builder = [MADReportPageBuilder builderForDocument: renderDocument];
+	CGRect trimBox = [MADReportPageBuilder pageTrimBox];
 	MADReportFormatter *reportFormatter = renderDocument.reportFormatter;
-	reportFormatter.overrideIdentifier = @"madpreview";
-	reportFormatter.didRefresh = YES;
-	reportFormatter.layoutSize = letterRect.size;
-	[reportFormatter setMarginUsingPrintableRect: trimBox];
-	[renderDocument format];
-
-	MADPrintPageRenderer *renderer = [[MADPrintPageRenderer alloc] initWithDataSource: renderDocument];
 
 	[json appendString: @"    \"pages\": ["];
 	NSUInteger pageIndex = 0;
 	for (pageIndex = 0; pageIndex < reportFormatter.numberOfPages; pageIndex++) {
 		MADReportPageRepresentation *page = nil;
 		@autoreleasepool {
-			page = [renderer buildPageAtIndex: pageIndex context: NULL inPageRect: trimBox];
+			page = [builder buildPageAtIndex: pageIndex inPageRect: trimBox draw: NULL];
 		}
 		[json appendString: pageIndex == 0 ? @"\n" : @",\n"];
 		[self appendPageToJSON: json page: page index: pageIndex];
@@ -204,8 +173,9 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 	[json appendString: rowIndex > 0 ? @" ] }" : @"] }"];
 }
 
-// A line: what kind of element it is, where it sits, and its resolved text when it has
-// one.  An image has no text -- the member leaves it out rather than inventing one.
+// A line: what kind of element it is, where it sits on the page, and its resolved text
+// when it has one.  An image has no text -- the member leaves it out rather than
+// inventing one.
 - (void)appendLineToJSON:(NSMutableString *)json line:(MADReportLineRepresentation *)line {
 
 	NSString *kind = MADReportExporterTypeToken(NSStringFromMADPrintPageElementType(line.elementType),
@@ -224,7 +194,5 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 	}
 	[json appendString: @"}"];
 }
-
-#endif
 
 @end

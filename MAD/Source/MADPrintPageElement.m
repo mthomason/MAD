@@ -12,8 +12,16 @@
 #import <MADFoundation/madlog.h>
 
 #import <Foundation/NSString.h>
+
+#if __APPLE__
 #import <UIKit/UIImage.h>
 #import <UIKit/NSStringDrawing.h>
+#else
+// No UIKit: the element family is still the render half's shape everywhere -- a
+// format reads the text these classes resolve -- but nothing draws, so the image
+// is a type nothing hands over (the walk passes no drawing block).
+@class UIImage;
+#endif
 
 @interface MADPrintPageElementText()
 @property (readwrite, nonatomic, weak) MADDocumentObjectDataReference *definition;
@@ -45,12 +53,17 @@
 }
 
 - (void)drawInRect:(CGRect)rect {
+#if __APPLE__
 	NSDictionary <NSString *, id> *fontAttributes = [self.definition fontAttributes];
 	[self.text drawWithRect: rect
 					options: NSStringDrawingUsesLineFragmentOrigin
 				 attributes: fontAttributes
 					context: nil];
-	
+#else
+	// Nothing draws off Apple: the page walk runs with no drawing block there
+	// (MADReportPageBuilder), and the text this would have drawn is the line the
+	// walk hands a format.
+#endif
 }
 
 @end
@@ -113,7 +126,11 @@
 }
 
 - (void)drawInRect:(CGRect)rect {
+#if __APPLE__
 	[self.image drawInRect:rect];
+#else
+	(void)rect;
+#endif
 }
 
 @end

@@ -73,7 +73,7 @@ The code base also includes a custom scripting language in a file called `Scrimp
 
 The codebase also includes static library build scrips in a file called `Compressor`.  This is used to build the static libraries used by the project.  This is a very important part of the project.
 
-The codebase also includes `Linux`, the headless engine's build (`MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all ten headless frameworks against them, and runs their ported suites — 114 executables, 1098 tests (`./Linux/build.sh`).  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
+The codebase also includes `Linux`, the headless engine's build (`MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all ten headless frameworks against them, and runs their ported suites — 119 executables, 1,136 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
 
 ## Code Style Guidance
 

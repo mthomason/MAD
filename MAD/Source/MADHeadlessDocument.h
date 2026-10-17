@@ -3,19 +3,21 @@
 //  MAD
 //
 //  A document with no interface and no UIDocument: it opens a .mad, reads its
-//  definition out of the portable store, compiles the query and holds the row
-//  table.  It is the same data half MADocument has, for a process that has no
-//  window and no run loop to hand a UIDocument to -- the CLI's verbs on Linux, and
-//  any other client that wants the document without the app (MAD_LINUX.md §9
-//  Phase D; MAD_DATA_OBJECT.md §6's entry point).
+//  definition out of the portable store, compiles the query, holds the row table and
+//  lays the report out.  It is the same document MADocument is, for a process that
+//  has no window and no run loop to hand a UIDocument to -- the CLI's verbs on Linux,
+//  and any other client that wants the document without the app (MAD_LINUX.md §9
+//  Phases D and E; MAD_DATA_OBJECT.md §6's entry point).
 //
-//  It is not a second implementation of the refresh path: the chain
+//  It is not a second implementation of anything.  The refresh chain
 //  (MADOperationRefresh and its initializers) runs against
-//  MADDocumentDataProtocol, which both this and MADocument conform to.  What it
-//  does not have is everything render-side -- the report formatter, the section
-//  layout managers, the thumbnail.  What it writes is a copy: the guts directory it
-//  read, archived again with the v1 header (MAD_CLI.md's `mad write`), which is what
-//  makes a document writable on a platform that has no app.
+//  MADDocumentDataProtocol, and the render half -- MADReportFormatter, the page
+//  walk, the section reads -- against MADDocumentRenderProtocol, both of which this
+//  and MADocument conform to.  What it does not have is what only a windowed document
+//  has: the designer's section layout managers, the thumbnail, the printing formatter.
+//  What it writes is a copy: the guts directory it read, archived again with the v1
+//  header (MAD_CLI.md's `mad write`), which is what makes a document writable on a
+//  platform that has no app.
 //
 
 #ifndef MAD_MADHeadlessDocument_h
@@ -24,17 +26,18 @@
 #import <Foundation/Foundation.h>
 
 #import <MAD/MADDocumentDataProtocol.h>
+#import <MAD/MADDocumentRenderProtocol.h>
 #import <MAD/MADDocumentStore.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 
-@class MADDataTableFast, MADDatabase, MADQueryFull, RptqStoreContext;
+@class MADDataTableFast, MADDatabase, MADQueryFull, MADReportFormatter, RptqStoreContext;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MADHeadlessDocument : NSObject <MADDocumentDataProtocol, MADDataProtocol, MADCacheProtocol, MADDatabaseResultsProtocol>
+@interface MADHeadlessDocument : NSObject <MADDocumentDataProtocol, MADDocumentRenderProtocol, MADDataProtocol, MADCacheProtocol, MADDatabaseResultsProtocol>
 
 /// Opens `url`: unarchives the container, opens the portable store inside it
 /// (converting a legacy store when that is all the document has) and leaves the

@@ -139,11 +139,10 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 
 NSString *MADCLIUsageString(void) {
 	// The format list is the export seam's, so a format added as a new class appears
-	// here without this string being edited (MADReportExporterRegistry.h).
-	NSMutableArray <NSString *> *formats = [NSMutableArray arrayWithObject: @"pdf"];
-	for (NSString *name in [MADReportExporterRegistry registeredFormatNames]) {
-		[formats addObject: name];
-	}
+	// here without this string being edited (MADReportExporterRegistry.h).  It is
+	// every registered format, pdf included -- it is an exporter now, and a build
+	// that cannot produce it says so when it is asked for.
+	NSArray <NSString *> *formats = [MADReportExporterRegistry registeredFormatNames];
 
 	NSMutableString *usage = [[NSMutableString alloc] init];
 	[usage appendFormat:

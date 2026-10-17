@@ -252,6 +252,14 @@ and its categories are silently absent at runtime.
   checks gate the exit code, its 12 report items do not (the CLI's run added
   `directory-enumeration` and `directory-enumeration-url-form`).
 
+**Currency formatting (found 2026-10-16, by the render half).**  `NSNumberFormatter`
+with `NSNumberFormatterCurrencyStyle` renders no fraction digits for any locale here
+(`en_US` gives `$1`, Apple `$0.99`) and puts a space after the symbol (`$ 0.99`).  The
+report formatter now takes the locale and the decimal count from the document's
+numeric format, so the digits agree and only the space is left; the render-side
+exports are pinned with that stated (`BUGS.md`).  It matters beyond this file because
+it would have surfaced again in a Linux PDF.
+
 ## The need count, and why it is 6
 
 The Phase B image reported 3 needs; the finished Phase C image reports 6, and
@@ -318,7 +326,9 @@ the renderer decision is Phase E's).
 
 **`export` grew its Foundation formats here (Phase E, 2026-10-16).** The export seam
 (`MADReportExporting` + `MADReportExporterRegistry`, `MAD_CLI.md` §5.3) is in `mad`, so
-`text`, `csv` and `json` run in the image and write the same bytes as the Mac's tool.
+`text`, `csv` and `json` run in the image and write the same bytes as the Mac's tool
+(the render-side formats — `html`, `html-flow`, `json-report` — run here too; see the
+section below, and `pdf` says why it cannot).
 The comparison, run for the record on the London fixture (`CLI/Fixtures/London.portable.mad`,
 refreshed first, `sha256sum` on each side):
 
@@ -416,9 +426,46 @@ trip (`MAD_CLI.md` §6.1), the ordinary mode's characterisation, the reproducibl
 including an FNV-1a checksum of the whole document against the Mac's bytes -- and the
 document path, which writes a copy and leaves the source untouched.
 
+## The render half and the HTML formats run here
+
+Phase E's second decision (the user's, 2026-10-16) was HTML next and PDF last, and the
+HTML step is where the render half moves off Apple.  It moved as a conformance:
+
+* `MADReportFormatter` takes `id <MADDocumentRenderProtocol>`; `MADHeadlessDocument`
+  conforms, and `MADOperationRefreshInitialize`'s render branch keys on the protocol.
+* `MADReportPageBuilder` is the page walk, out of `MADPrintPageRenderer` (which keeps
+  `UIPrintPageRenderer` and the drawing).  It owns the render side's geometry (US
+  Letter, the 1pt trim) and the preparation sequence, so the PDF, json-report and the
+  HTML formats cannot disagree about a page.
+* `MADDocumentRenderDataSource` is the one implementation of the render half's reads,
+  shared by `MADocument` and `MADHeadlessDocument`; the `MADPrintPageElement` family
+  compiles here (its initialisers are Foundation; only drawing is Apple's).
+
+`mad export` now has `html`, `html-flow` and `json-report` here, and `pdf` registers
+and says why it cannot run (its body is Core Graphics).  Measured against the Mac on
+the London fixture:
+
+| format | Linux bytes | same as the Mac? |
+|---|---|---|
+| `json-report` | 118,289 | **no** — 180 currency values, see below |
+| `html` | 62,187 | **no** — the same 180 lines |
+| `html-flow` | 54,946 | **no** — the same 180 lines |
+| `pdf` | — | not produced here; `+isAvailable` NO with the reason |
+
+A line-by-line diff of the two `html` files is the measurement: every frame, font,
+font size, trait, alignment, text run and page box is identical, and the only
+differing lines are the currency values.  The cause is a GNUstep divergence:
+`NSNumberFormatterCurrencyStyle` renders no fraction digits for *any* locale
+(measured: `en_US` gives `$1` where Apple gives `$0.99`) and puts a space after the
+symbol (`$ 0.99`).  The formatter now takes its locale *and* its decimal count from the
+document's numeric format — the store keeps both — instead of the process locale,
+which removed the rounding difference and left the space; GNUstep's current locale in
+the image is `en_US_POSIX`, not the shell's `C`.  Recorded in `BUGS.md`; the Linux
+suite pins the Linux bytes with that stated, and `Linux/Tests/MADReportExporterTests.m`
+asserts the structure that *is* shared.
+
 ## What this does not do yet
 
-Phase E's remaining half — `json-report`'s report member and HTML/SVG, both of which
-need the render half (`MADReportFormatter`) ported here, which the user's 2026-10-16
-renderer decision put on the HTML step — and Phase F (the Compressor Linux driver, the
-CI row and the deployable image).
+The Linux PDF writer — the next step (`MAD_LINUX.md` §10.2 records the chosen shape:
+Cairo + Pango, with the licences) — and Phase F (the Compressor Linux driver, the CI
+row and the deployable image).

@@ -15,8 +15,11 @@
 
 #import <MAD/MADReportExporting.h>
 #import <MAD/MADReportExporterCSV.h>
+#import <MAD/MADReportExporterHTML.h>
+#import <MAD/MADReportExporterHTMLFlow.h>
 #import <MAD/MADReportExporterJSON.h>
 #import <MAD/MADReportExporterJSONReport.h>
+#import <MAD/MADReportExporterPDF.h>
 #import <MAD/MADReportExporterRegistry.h>
 #import <MAD/MADReportExporterText.h>
 #import <MAD/MADReportExportSource.h>
@@ -85,6 +88,30 @@
 	XCTAssertEqual([MADReportExporterRegistry exporterClassForFormat: @"test-format"], [MADTestReportExporter class]);
 	XCTAssertTrue([[MADReportExporterRegistry registeredExporterClasses] containsObject: [MADTestReportExporter class]]);
 	XCTAssertNoThrow([MADReportExporterRegistry registerExporterClass: [MADTestReportExporter class]]);
+}
+
+// The render-side formats: json-report and the two HTML ones read the page walk,
+// which is compiled on both platforms now (MAD_LINUX.md §9 Phase E); pdf draws with
+// Core Graphics and is Apple's, so it registers everywhere and says so.
+- (void)testTheRenderSideFormatsAreRegistered {
+	XCTAssertEqual([MADReportExporterRegistry exporterClassForFormat: @"html"], [MADReportExporterHTML class]);
+	XCTAssertEqual([MADReportExporterRegistry exporterClassForFormat: @"html-flow"], [MADReportExporterHTMLFlow class]);
+	XCTAssertEqual([MADReportExporterRegistry exporterClassForFormat: @"pdf"], [MADReportExporterPDF class]);
+
+	XCTAssertTrue([MADReportExporterHTML isAvailable]);
+	XCTAssertTrue([MADReportExporterHTMLFlow isAvailable]);
+	XCTAssertEqualObjects([MADReportExporterHTML fileExtension], @"html");
+	XCTAssertEqualObjects([MADReportExporterHTMLFlow fileExtension], @"html");
+	XCTAssertFalse([MADReportExporterHTML requiresOutputPath], @"a file a browser opens writes to a stream");
+	XCTAssertFalse([MADReportExporterHTMLFlow requiresOutputPath], @"the same");
+}
+
+- (void)testThePDFFormatDrawsHereAndNeedsAFile {
+	XCTAssertEqual([MADReportExporterRegistry exporterClassForFormat: @"pdf"], [MADReportExporterPDF class]);
+	XCTAssertTrue([MADReportExporterPDF isAvailable]);
+	XCTAssertNil([MADReportExporterPDF unavailableReason]);
+	XCTAssertEqualObjects([MADReportExporterPDF fileExtension], @"pdf");
+	XCTAssertTrue([MADReportExporterPDF requiresOutputPath], @"Core Graphics writes a file, not a stream");
 }
 
 - (void)testTheReportFormatIsRegisteredAndAnswersForThisPlatform {

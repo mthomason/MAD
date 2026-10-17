@@ -22,6 +22,7 @@
 #import "MADReportSectionRepresentation.h"
 #import "MADReportSectionRowsRepresentation.h"
 #import "MADSectionRepresentation.h"
+#import "MTPaper.h"
 #import "RptqDocument.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDocumentElement.h"
@@ -35,6 +36,9 @@
 #import <MADSqlite3/MADDataTableFast.h>
 
 #import <CoreFoundation/CFNumber.h>
+
+// The page's four-edge insets; the compat shim answers this off Apple too.
+#import <UIKit/UIGeometry.h>
 
 static inline CGRect ElementBounds(CGRect, CGPoint);
 static inline CGFloat HeightWithVisibility(CGFloat, BOOL);
@@ -77,6 +81,36 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 
 @implementation MADReportPageBuilder {
 	__weak NSObject <MADPrintPageRendererDataSourceProtocol> *_dataSource;
+}
+
+#pragma mark - The render side's geometry and preparation
+
++ (CGRect)pageBounds {
+	return [[MTPaper alloc] initWithType: MTPaperTypeLetter].bounds;
+}
+
++ (CGRect)pageTrimBox {
+	return UIEdgeInsetsInsetRect([self pageBounds], UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0));
+}
+
++ (void)prepareDocumentForRender:(id <MADDocumentRenderProtocol>)document {
+	// The reload the viewer runs after a refresh, which the CLI has no view controller
+	// to run for it: sort the rows, then lay the report out.  MADPrintPageRenderer
+	// draws from the document's own formatter -- not from a second one built alongside
+	// it -- so this is the formatter that has to be formatted.
+	[document prepareForQuery];
+
+	MADReportFormatter *reportFormatter = document.reportFormatter;
+	reportFormatter.overrideIdentifier = @"madpreview";
+	reportFormatter.didRefresh = YES;
+	reportFormatter.layoutSize = [self pageBounds].size;
+	[reportFormatter setMarginUsingPrintableRect: [self pageTrimBox]];
+	[document format];
+}
+
++ (instancetype)builderForDocument:(id <MADDocumentRenderProtocol>)document {
+	[self prepareDocumentForRender: document];
+	return [[self alloc] initWithDataSource: document];
 }
 
 - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)dataSource {
@@ -187,15 +221,24 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 
 				__kindof MADPrintPageElement *drawingObject = [MADPrintPageElement newDocumentObject:dataReference];
 
+				// Where the element sits on the page: its own frame, offset by the
+				// section it lives in.  The line carries this frame, so a format that
+				// reads the walk places the line where the drawing would.
+				CGRect frame = ElementBounds(item.frame, rect.origin);
+
 				// The element is built either way -- its text is resolved in its
 				// initializer -- and drawn only when there is a page to draw on.
 				if (draw != NULL) {
-					draw(drawingObject, ElementBounds(item.frame, rect.origin));
+					draw(drawingObject, frame);
 				}
 
 				MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
 																											 type: item.documentObjectType
-																											frame: item.frame];
+																											frame: frame];
+				// The element's styling is read here, while the page's read transaction
+				// is open, so a format that is not Core Graphics can spell the line the
+				// way MADElementStylizedText would have drawn it.
+				line.style = [MADReportLineStyle styleForElement: item];
 				line.elementOffset = offsetElement;
 				offsetElement++;
 

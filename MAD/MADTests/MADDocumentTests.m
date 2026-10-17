@@ -21,6 +21,7 @@
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqNumericFormat.h>
 #import <MAD/RptqTextStyle.h>
 #import <MAD/MADDesignerLayout.h>
 #import <MAD/MADSectionLayout.h>
@@ -131,6 +132,32 @@
 
 	// A value that is there still formats.
 	XCTAssertEqualObjects([element formattedString: MADDataTypeString forValue: @"Group A"], @"Group A");
+}
+
+// The currency branch used to read [NSLocale currentLocale] and the locale's own
+// precision, ignoring what the document stores.  That made the same report render
+// "$0.99" on Apple and "$ 1" in a process under the C locale -- and GNUstep's
+// currency style renders no fraction digits for any locale -- so the document's
+// numeric format decides both: its locale identifier ("en_US", the store keeps the
+// text) and its decimalCount.  The assertions are the portable facts (the locale's
+// symbol and the stored precision); the space GNUstep puts after the symbol is the
+// one difference left, recorded in BUGS.md.
+- (void)testFormattedStringTakesTheCurrencyLocaleAndPrecisionFromTheDocument {
+
+	RptqStoreContext *context = [self newTestContext];
+	RptqDocumentElement *element =
+		[context insertObjectForEntity:@"RptqDocumentElement" identifier:0];
+	RptqNumericFormat *format =
+		[context insertObjectForEntity:@"RptqNumericFormat" identifier:0];
+	format.enabled = YES;
+	format.decimalCount = 2;
+	format.locale = (id)@"en_US";	// the store's column is text: the locale identifier
+	element.numericFormat = format;
+
+	NSString *formatted = [element formattedString: MADDataTypeDouble forValue: @(0.99)];
+
+	XCTAssertTrue([formatted containsString: @"$"], @"the symbol comes from the document's locale");
+	XCTAssertTrue([formatted containsString: @"0.99"], @"the precision is the document's decimalCount");
 }
 
 #pragma mark - Document format

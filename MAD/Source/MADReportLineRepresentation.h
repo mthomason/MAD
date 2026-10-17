@@ -14,6 +14,8 @@
 #import <MAD/MADDocumentObjectType.h>
 #import <MAD/MADDocumentTextRepresentationProtocol.h>
 
+#import <MAD/MADReportLineStyle.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MADReportLineRepresentation : NSObject
@@ -22,10 +24,17 @@ NS_ASSUME_NONNULL_BEGIN
 	- (instancetype)initWithObject:(id)object type:(MADPrintPageElementType)type
 							 frame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
 
+	/// Where the line sits *on its page*: the element's own frame, offset by the
+	/// section it lives in, which is where the drawing would put it.
 	@property (nonatomic, assign, readonly) CGRect frame;
 
 	/// What kind of element the line drew.
 	@property (nonatomic, assign, readonly) MADPrintPageElementType elementType;
+
+	/// How the line's text is styled -- the font, its traits and the alignment.  Read
+	/// off the element by the walk, inside its read transaction; a format that is not
+	/// Core Graphics reads it here rather than asking the store again.
+	@property (nullable, nonatomic, strong) MADReportLineStyle *style;
 
 	- (NSString *)label;
 

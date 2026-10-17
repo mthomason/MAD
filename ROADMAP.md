@@ -565,14 +565,22 @@ and run on both platforms; `mad export --format json` is the data contract of
 `MAD_DATA_OBJECT.md` §6, `MAD_CLI.md` §8.3 now answers the shape question, and the
 three formats write **byte-identical output on Apple and Linux** for the London fixture
 (digests compared, `Linux/README.md` § the CLI), and `json-report` — the same schema
-with the rendered report as an extra member — landed with them on Apple, built from
-the page renderer's own walk (now split from its draw) so it cannot drift from what a
-PDF shows. Next, in this order: HTML (with the render half's move to Linux, which also
-brings `json-report` there), then the PDF decision (`MAD_LINUX.md` §10.2: the user
-chose HTML first, PDF last). `pdf` itself is still the
-CLI's own arm — an exporter needs a render-half protocol, which is the HTML step's work
-— and the columns the formats carry are the query's own, in the alias order the SELECT
-list now defines (`BUGS.md`).
+with the rendered report as an extra member — landed with them, built from the page
+renderer's own walk (now split from its draw) so it cannot drift from what a PDF
+shows. **Then HTML and the render half's move (2026-10-16).**
+`MADReportFormatter` takes `id <MADDocumentRenderProtocol>` and `MADHeadlessDocument`
+conforms, so there is one formatter on both platforms; the page walk moved out of
+`MADPrintPageRenderer` into `MADReportPageBuilder` and the render half's reads into
+`MADDocumentRenderDataSource`, so there is one walk and one set of reads. `json-report`
+runs on both platforms. Two HTML formats landed with it, on the user's choice:
+`html` is the facsimile (one CSS page box per page, every element positioned at its
+walked frame) and `html-flow` the reflowable reading view (sections as tables). `pdf`
+is on the seam too — `MADReportExporterPDF`, Apple's body, registering everywhere and
+saying why off Apple — and the CLI has no local arms; its output is byte-identical
+(43,177 bytes / 5 pages, `sha256 3eb2f1c4…`, before and after). What remains is the
+Linux PDF writer itself (`MAD_LINUX.md` §10.2 has the shape) and the currency-format
+divergence GNUstep's formatter carries (`BUGS.md`). The columns the formats carry are
+the query's own, in the alias order the SELECT list now defines (`BUGS.md`).
 
 `mad export` used to have one arm: PDF, behind a string comparison in `MADCLIExport.m`.
 `MAD_CLI.md` §5.3 asks for a `<MADReportExporting>` protocol so `--format json` is a

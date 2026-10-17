@@ -21,7 +21,10 @@
 #import "MADConstants.h"
 #import "MADDatabase+Constructor.h"
 #import "MADDatabaseConnection+Constructor.h"
+#import "MADDocumentRenderDataSource.h"
 #import "MADQueryFull.h"
+#import "MADReportFormatter.h"
+#import "MTPaper.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqDatabase.h"
 #import "RptqDatabaseCredentals+MADDatabaseConnection.h"
@@ -50,6 +53,9 @@
 	MADDataTableFast *_dataTable;
 	BOOL _refreshed;
 	BOOL _limitResultsDesignMode;
+	MADReportFormatter *_reportFormatter;
+	MADDocumentRenderDataSource *_renderDataSource;
+	MTPaper *_paper;
 }
 
 + (instancetype)documentWithContentsOfURL:(NSURL *)url error:(NSError * __autoreleasing *)error {
@@ -284,6 +290,120 @@
 
 - (NSUInteger)numberOfResults {
 	return self.dataTable.rowCounter;
+}
+
+#pragma mark - The render half
+
+// MADDocumentRenderProtocol, the same half MADocument carries and the same code:
+// -prepareForQuery and -format are the sequence the viewer's reload runs, the
+// formatter is the one MADReportFormatter, and every read below is
+// MADDocumentRenderDataSource's (MAD_LINUX.md §9 Phase E).  What is absent is what
+// only a document with a window has -- the designer's section layout managers, and
+// the printing formatter the app's print dialog builds.
+
+- (void)prepareForQuery {
+	NSArray *sortDescriptors = [self readCurrentSortDescriptors];
+	[self.dataTable sortUsingDescriptors:sortDescriptors];
+}
+
+- (void)format {
+	[self.reportFormatter format: self.paperSize contentChanged: NO];
+}
+
+- (MTPaper *)paper {
+	if (_paper == nil) {
+		_paper = [[MTPaper alloc] initWithType: self.activeDocumentModel.paperType];
+	}
+	return _paper;
+}
+
+- (CGSize)paperSize {
+	return self.paper.paperSize;
+}
+
+- (MADReportFormatter *)reportFormatter {
+	if (_reportFormatter == nil) {
+		_reportFormatter = [[MADReportFormatter alloc] initWithDocument: self
+																options: MADReportFormatterOptionsNone];
+	}
+	return _reportFormatter;
+}
+
+- (void)setReportFormatter:(MADReportFormatter *)reportFormatter {
+	_reportFormatter = reportFormatter;
+}
+
+- (void)resetSectionLayoutManagers {
+	// The designer's per-section collection-view layout managers have no headless
+	// counterpart; the formatter asks for the reset so a re-pagination cannot be
+	// drawn from a stale layout, and there is nothing here to be stale.
+}
+
+- (MADDocumentRenderDataSource *)renderDataSource {
+	if (_renderDataSource == nil) {
+		_renderDataSource = [[MADDocumentRenderDataSource alloc] initWithDocument: self];
+	}
+	return _renderDataSource;
+}
+
+#pragma mark MADReportFormatterDataSource
+
+- (NSEnumerator *)enumeratorForReportData { return [self.renderDataSource enumeratorForReportData]; }
+
+- (BOOL)cacheExist { return [self.renderDataSource cacheExist]; }
+
+- (NSDictionary *)dataForRow:(NSUInteger)rowID { return [self.renderDataSource dataForRow: rowID]; }
+
+#pragma mark MADPrintPageRendererDataSourceProtocol
+
+- (NSDictionary *)dataForRow:(NSUInteger)rowID error:(NSError *__autoreleasing *)outError {
+	return [self.renderDataSource dataForRow: rowID error: outError];
+}
+
+- (NSDictionary *)dataForRow:(NSUInteger)rowID
+					  column:(NSString *)columnKey
+					   error:(NSError * __autoreleasing *)error {
+	return [self.renderDataSource dataForRow: rowID column: columnKey error: error];
+}
+
+- (NSArray <NSString *> *)groupLevelKeyNames { return [self.renderDataSource groupLevelKeyNames]; }
+
+- (NSArray <MADResult *> *)groupLevelKeys:(int64_t)rowID { return [self.renderDataSource groupLevelKeys: rowID]; }
+
+- (NSArray <MADResult *> *)groupKeys:(int64_t)rowID groupNumber:(int64_t)groupNumber {
+	return [self.renderDataSource groupKeys: rowID groupNumber: groupNumber];
+}
+
+- (NSArray <__kindof NSDictionary *> *)dataForGroups:(NSArray *)groupKeys groupID:(int64_t)groupID {
+	return [self.renderDataSource dataForGroups: groupKeys groupID: groupID];
+}
+
+- (MADResult *)dataForRows:(NSArray *)rowIDs column:(NSString *)columnKey groups:(NSArray *)groupKeys
+				  function:(MTAggregateFunctionType)function groupBy:(MTAggregateGroupByType)groupBy {
+	return [self.renderDataSource dataForRows: rowIDs column: columnKey groups: groupKeys function: function groupBy: groupBy];
+}
+
+- (NSUInteger)rowIDFirstOfReport { return [self.renderDataSource rowIDFirstOfReport]; }
+
+- (NSUInteger)rowIDLastOfReport { return [self.renderDataSource rowIDLastOfReport]; }
+
+- (NSUInteger)rowIDFirstOfPage:(NSUInteger)page { return [self.renderDataSource rowIDFirstOfPage: page]; }
+
+- (NSUInteger)rowIDLastOfPage:(NSUInteger)page { return [self.renderDataSource rowIDLastOfPage: page]; }
+
+- (NSDictionary *)dataForRowReportFirst { return [self.renderDataSource dataForRowReportFirst]; }
+
+- (NSDictionary *)dataForRowReportLast { return [self.renderDataSource dataForRowReportLast]; }
+
+- (NSDictionary *)dataForRowPageFirst:(NSUInteger)pageIndex { return [self.renderDataSource dataForRowPageFirst: pageIndex]; }
+
+- (NSDictionary *)dataForRowPageLast:(NSUInteger)pageIndex { return [self.renderDataSource dataForRowPageLast: pageIndex]; }
+
+- (NSArray <NSNumber *> *)rowIDsForPage:(NSUInteger)pageIndex { return [self.renderDataSource rowIDsForPage: pageIndex]; }
+
+- (void)updatePrintingReportFormatter {
+	// The app's print dialog builds a second formatter through this.  There is no
+	// dialog headless, and nothing here prints.
 }
 
 @end
