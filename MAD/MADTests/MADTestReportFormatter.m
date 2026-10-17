@@ -55,6 +55,7 @@
 // reportLayout is a MADArrayCaching, forward-declared by MADReportFormatter.h, so
 // counting it and subscripting it needs the real interface.
 #import <MADSqlite3/MADArrayCaching.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 
 #pragma mark - Test double
 
@@ -89,9 +90,12 @@
 
 @interface TestMADReportFormatter : XCTestCase <MADReportFormatterDataSource, MADCacheProtocol>
 
+@property (nonatomic, copy) NSString *testDirectory;
 @property (nonatomic, strong) RptqStoreContext *moc;
 @property (nonatomic, strong) MADDataTableVirtual *testDataTable;
 @property (nonatomic, strong) RptqDocument *testDocument;
+@property (nonatomic, strong) RptqQueryField *testQueryField;
+@property (nonatomic, strong) RptqQueryGroup *testGroup;
 @property (nonatomic, strong) MADTestReportFormatterDocument *document;
 @property (nonatomic, strong) MADReportFormatter *reportFormatter;
 
@@ -102,8 +106,12 @@
 - (void)setUp {
 	[super setUp];
 
-	// 1. Set up a store-backed context.
+	// 1. Set up a store-backed context.  The directory is per test and is also
+	// the formatter's cache directory: every formatter in this class shares the
+	// same filename, so a shared directory would make one test's cache database
+	// (and any transaction left open by a throwing format) visible to the next.
 	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+	self.testDirectory = directory;
 	[[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
 	NSURL *storeURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"test.sqlite"]];
 	MADStore *store = [MADStore storeWithURL:storeURL];
@@ -147,6 +155,7 @@
 	RptqQueryField *queryField = [RptqQueryField newQueryField:self.moc];
 	queryField.databaseSchemaField = schemaField;
 	queryField.inQueryTable = queryTable;
+	self.testQueryField = queryField;
 
 	// The report data has to look like what the cache hands back, in two ways the
 	// formatter relies on and reads without guarding:
@@ -188,6 +197,7 @@
 	RptqQueryGroup *group = [RptqQueryGroup newQueryGroupQueryWithSortOrder:MADSortOrderAccending
 												   andManagedObjectContext:self.moc];
 	group.hasField = queryField;
+	self.testGroup = group;
 	[query addHasQueryGroupsObject:group];
 
 	// A section's -hasRows is required and must not be empty, so each gets a row.
@@ -260,6 +270,90 @@
 	XCTAssertEqual([groupAFooter detailRowId], expectedRowIdForGroupAFooter, @"The group footer for Group A should be associated with the last row of Group A (rowId 3).");
 }
 
+#pragma mark - Malformed groups
+
+// A query group is a GROUP BY: it must name a field of a table the query selects.
+// The report's group header/footer is only its presentation and may display no
+// field at all -- the grouping still happens.  The add-group screen cannot create
+// a group without a field, so a document that has one is malformed data.  The
+// designer still builds and labels the layout (so the broken group can be seen);
+// query execution and formatting refuse it when the field is used.  See BUGS.md.
+
+- (void)saveTestContext {
+	NSError *error = nil;
+	XCTAssertTrue([self.moc save:&error], @"Could not save the test context: %@", error);
+}
+
+- (void)testGroupWithoutFieldRaisesWhenFormatted {
+	self.testGroup.hasField = nil;
+	[self saveTestContext];
+
+	CGSize size = CGSizeMake(800, 600);
+	XCTAssertThrowsSpecificNamed([self.reportFormatter format:size],
+								 NSException, NSInvalidArgumentException,
+								 @"The formatter must refuse a group with no grouping field.");
+}
+
+- (void)testGroupFieldWithoutQueryTableRaisesWhenFormatted {
+	self.testQueryField.inQueryTable = nil;
+	[self saveTestContext];
+
+	CGSize size = CGSizeMake(800, 600);
+	XCTAssertThrowsSpecificNamed([self.reportFormatter format:size],
+								 NSException, NSInvalidArgumentException,
+								 @"The formatter must refuse a group whose field is not in a selected table.");
+}
+
+- (void)testDesignerDisplayOfGroupWithoutFieldDoesNotThrow {
+	self.testGroup.hasField = nil;
+	[self saveTestContext];
+
+	MADSectionsLayout *sections = [[MADSectionsLayout alloc] initWithManagedObjectContext:self.moc
+																		   databaseClass:NULL];
+	// MADSectionsLayout forward-declares MADSectionGroupLayout; the public
+	// superclass carries -localizedDisplay, which is all this test reads.
+	MADSectionLayout *header = (MADSectionLayout *)sections.groupHeaders.firstObject;
+	XCTAssertNotNil(header, @"The header section should still be built for the designer to show.");
+
+	XCTAssertNoThrow([header localizedDisplay]);
+	NSString *display = [header localizedDisplay];
+	XCTAssertTrue([display containsString:@"missing grouping field"],
+				  @"The designer should label the broken group instead of crashing: %@", display);
+}
+
+// -newDocumentForManagedObjectContext: builds only the sections, not a database
+// or query, so a test that needs the query path has to make the query itself.
+- (RptqQuery *)queryContainingTestGroup {
+	RptqQuery *query = (RptqQuery *)[self.moc insertObjectForEntity:NSStringFromClass([RptqQuery class])
+														 identifier:0];
+	[query addHasQueryGroupsObject:self.testGroup];
+	XCTAssertEqual(query.hasQueryGroups.count, (NSUInteger)1,
+				   @"The query must actually contain the group under test.");
+	return query;
+}
+
+- (void)testQuerySortDescriptorsRejectGroupWithoutField {
+	self.testGroup.hasField = nil;
+	[self saveTestContext];
+	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
+	RptqQuery *query = [self queryContainingTestGroup];
+
+	XCTAssertThrowsSpecificNamed([query sortDescriptorsForDatabase:database],
+								 NSException, NSInvalidArgumentException,
+								 @"Query generation must refuse a group with no grouping field.");
+}
+
+- (void)testQuerySortDescriptorsRejectGroupFieldWithoutQueryTable {
+	self.testQueryField.inQueryTable = nil;
+	[self saveTestContext];
+	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
+	RptqQuery *query = [self queryContainingTestGroup];
+
+	XCTAssertThrowsSpecificNamed([query sortDescriptorsForDatabase:database],
+								 NSException, NSInvalidArgumentException,
+								 @"Query generation must refuse a field that is not in a selected table.");
+}
+
 #pragma mark - MADReportFormatterDataSource
 
 - (NSEnumerator *)enumeratorForReportData {
@@ -281,8 +375,7 @@
 #pragma mark - MADCacheProtocol
 
 - (NSURL *)cachedFilesDirectory {
-	NSString *tempDir = NSTemporaryDirectory();
-	return [NSURL fileURLWithPath:tempDir isDirectory:YES];
+	return [NSURL fileURLWithPath:self.testDirectory isDirectory:YES];
 }
 
 @end

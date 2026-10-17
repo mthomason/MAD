@@ -20,6 +20,7 @@
 #import <Foundation/NSString.h>
 
 #import <MADFoundation/MADStringUtilities.h>
+#import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabaseField.h>
 #import <MADAPI/MADDatabase.h>
@@ -119,11 +120,23 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 		@autoreleasepool {
 			sortDirectionIsAscending = (queryGroup.sort == MADSortOrderAccending);
 			RptqQueryField *groupField = queryGroup.hasField;
-			
+			NSString *groupFieldName = groupField.databaseSchemaField.name;
+
+			// A query group is a GROUP BY: without a field backed by a table the
+			// query selects there is no key to sort or group by.  The UI cannot
+			// create one (the add-group screen keeps Done disabled until a field
+			// is chosen), so this is malformed data, not a design state.  Refuse
+			// it here, at the point of use, rather than emitting a "(null)" key
+			// and quietly rendering the report as one group.
 			valueInQueryTableAlias = [groupField.inQueryTable queryAlias];
+			if (groupField == nil || groupFieldName == nil || valueInQueryTableAlias == nil) {
+				os_log_error(GetMadLog(), "RptqQuery %lld: query group %lld has no grouping field backed by a selected query table; the document is invalid.", self.identifier, queryGroup.identifier);
+				[NSException raise:NSInvalidArgumentException
+							format:@"Query group %lld has no grouping field backed by a table the query selects. A query group must group by a field of a selected query table; the document is invalid.", queryGroup.identifier];
+			}
 
 			nameTablePart = [database newSafeIdentifier: valueInQueryTableAlias];
-			nameFieldPart = [database newSafeIdentifier: groupField.databaseSchemaField.name];
+			nameFieldPart = [database newSafeIdentifier: groupFieldName];
 			
 			keyForSort = [MADStringUtilities stringByAppendingPeriod:nameTablePart];
 			keyForSort = [keyForSort stringByAppendingString: nameFieldPart];

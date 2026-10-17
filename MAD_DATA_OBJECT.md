@@ -85,6 +85,18 @@ via `RptqQuery -sortDescriptorsForDatabase:`), and a vestigial sort row (`RptqQu
 read only by debug descriptions). The designer edits it through the `MADModel*` read model
 ("write through `Rptq`; read and observe through `MADModel`" — `MADModel_Layer.md`).
 
+A grouping is a query-level definition, not a report section. `RptqQueryGroup.hasField`
+names the field the query groups by and `sort` its direction. For the query to run, every
+group's field must belong to a query table the document selects
+(`hasField.inQueryTable`): the grouping is materialized as an ordered key over the result
+rows (`-sortDescriptorsForDatabase:`), and the formatter compares that key to find group
+boundaries. A report group header/footer section is only the presentation of that group —
+it may contain no element that displays the grouping field, and the grouping still occurs.
+No layout can supply a missing grouping field, so a group with a nil field, or a field not
+backed by a selected query table, is an invalid document. The designer still builds and
+labels such a section so the broken group can be seen; query execution and rendering refuse
+it with `NSInvalidArgumentException` and log the group.
+
 Two facts about its identity:
 
 - A `RptqQuery` hangs off a `RptqDatabase` row, and reaches the document through
