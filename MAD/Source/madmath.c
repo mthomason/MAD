@@ -15,7 +15,13 @@
 
 // Recursive count of number of digits in an integer.
 short digit_count_recur_int (int n) {
-    if (n < 0) return digit_count_recur_int ((n == INT_MIN) ? INT_MAX : -n);
+    if (n < 0) {
+        // -INT_MIN is not representable.  Divide before negating and add the
+        // digit the division dropped; the result no longer depends on INT_MIN
+        // happening to have the same digit count as INT_MAX.
+        if (n == INT_MIN) return 1 + digit_count_recur_int (-(n / 10));
+        return digit_count_recur_int (-n);
+    }
     if (n < 10) return 1;
     return 1 + digit_count_recur_int (n / 10);
 }
@@ -30,7 +36,14 @@ short digit_count_recur_uint (unsigned int n) {
 
 short digit_count_iterative_int (int n) {
     short r = 1;
-    if (n < 0) n = (n == INT_MIN) ? INT_MAX : -n;
+    if (n < 0) {
+        if (n == INT_MIN) {
+            n = -(n / 10);
+            r = 2;  // the dropped last digit, plus the leading digit below
+        } else {
+            n = -n;
+        }
+    }
     while (n > 9) {
         n /= 10;
         r++;

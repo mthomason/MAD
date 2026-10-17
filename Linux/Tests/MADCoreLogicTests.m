@@ -72,7 +72,8 @@ static void testDigitCountRecurIntNegative(void) {
 
 static void testDigitCountRecurIntBounds(void) {
 	MAD_PASS(digit_count_recur_int(INT_MAX) == 10, "INT_MAX is ten digits");
-	// INT_MIN is collapsed onto INT_MAX before counting (implementation quirk).
+	// INT_MIN divides before negating, so the count does not depend on
+	// INT_MAX's digit count and nothing overflows.
 	MAD_PASS(digit_count_recur_int(INT_MIN) == 10, "INT_MIN is ten digits");
 }
 

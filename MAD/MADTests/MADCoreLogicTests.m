@@ -62,7 +62,8 @@
 
 - (void)testDigitCountRecurIntBounds {
 	XCTAssertEqual(digit_count_recur_int(INT_MAX), 10);
-	// INT_MIN is collapsed onto INT_MAX before counting (implementation quirk).
+	// INT_MIN divides before negating, so the count does not depend on
+	// INT_MAX's digit count and nothing overflows.
 	XCTAssertEqual(digit_count_recur_int(INT_MIN), 10);
 }
 
@@ -84,7 +85,8 @@
 
 - (void)testDigitCountIterativeIntBounds {
 	XCTAssertEqual(digit_count_iterative_int(INT_MAX), 10);
-	// INT_MIN is collapsed onto INT_MAX before counting (implementation quirk).
+	// INT_MIN divides before negating, so the count does not depend on
+	// INT_MAX's digit count and nothing overflows.
 	XCTAssertEqual(digit_count_iterative_int(INT_MIN), 10);
 }
 
