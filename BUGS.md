@@ -1176,16 +1176,16 @@ libmysqlclient; it skips rather than fails when no server is reachable.
 ## MADTdsClient
 
 Covered by an offline suite (`MADTdsClientTests.m`, 47 tests) plus a live suite
-(`MADTdsClientLiveTests.m`, 28 tests) that runs against the local SQL Server 2022
+(`MADTdsClientLiveTests.m`, 29 tests) that runs against the local SQL Server 2022
 instance in `DEVELOPER.md` (`127.0.0.1`, `sa`, `AdventureWorksLT2022`). The live
 suite is the only way to reach `-connect:andPassword:error:`,
 `-getTablesFromConnection:error:`, `-fieldsForTable:connection:error:` and
-`-runSQL:onDataTable:fieldKeys:process:`, which are thin wrappers over freetds;
+`-runSQL:onDataTable:fieldKeys:process:error:`, which are thin wrappers over freetds;
 it skips rather than fails when no server is reachable.
 
-### `-runSQL:onDataTable:fieldKeys:process:` closes the connection it was given
+### `-runSQL:onDataTable:fieldKeys:process:error:` closes the connection it was given
 - **Status:** Quirk (load-bearing — documented, not changed)
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1481`
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1648`
 - **Behavior:** `dbclose(dbconn)` runs on every exit path, including the success
   path, on a `DBPROCESS` the caller opened. The read paths
   (`-getTablesFromConnection:error:`, `-fieldsForTable:connection:error:`) have
@@ -1244,27 +1244,10 @@ it skips rather than fails when no server is reachable.
   limit clause cannot neutralise it. Composing the base implementation would emit
   invalid T-SQL. An inline comment now records this at the source.
 
-### dbdatecrack is called with the sybase DBDATETIME under a microsoft DBDATEREC name
-- **Status:** Open -- found by the warning sweep, documented rather than changed.
-- **What:** `MADTdsClient/Source/MADDatabaseSQLServer.m` copies each `SYBDATETIME` /
-  `SYBDATETIMN` value into a malloc'd buffer and passes it to `dbdatecrack`
-  (`:1327`, `:1355`).  FreeTDS types the buffer as `struct tds_sybase_dbdaterec *`
-  while the call's third parameter is `DBDATEREC *`, which this build aliases to
-  `struct tds_microsoft_dbdaterec *`; the compiler reports the mismatch on both
-  calls.  The surrounding local (`dateinfo`, `:1323`) is declared with the sybase
-  struct as well.
-- **Why it is not changed here:** the FreeTDS sybase/microsoft struct duality decides
-  the layout of the data `dbdatecrack` reads, so the correct form depends on which
-  compatibility mode the vendored FreeTDS was built with -- a driver-correctness
-  question, not a cast to add mechanically.  The code carries `// CORRECTED:` notes
-  from an earlier pass, so the area is already sensitive.
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1320-1360`.
-- **Evidence:** `xcodebuild analyze` reports `-Wincompatible-pointer-types` on both
-  `dbdatecrack` calls; the two are the only remaining instances of that diagnostic in
-  the workspace.
-
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- dbdatecrack was called with the sybase DBDATETIME under a microsoft DBDATEREC name
+- `-runSQL:...`, `-runQuery:...` and `-executeSQL:...withError:` dropped their SQL errors
 - `-getTables:` passed the process wrapper to freetds as if it were a `DBPROCESS`
 - Every `DECIMAL` / `NUMERIC` value is lost or corrupted
 - `-fieldsForTable:connection:error:` feeds sybdb type codes into a table of SQL Server type ids

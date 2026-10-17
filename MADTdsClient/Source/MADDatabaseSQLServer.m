@@ -25,6 +25,7 @@
 #import <Foundation/NSCharacterSet.h>
 
 #import <MADFoundation/BDHost.h>
+#import <MADFoundation/madlog.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADCredential.h>
@@ -46,6 +47,12 @@
 #import <stdlib.h>
 #import <unistd.h>
 
+// FreeTDS's sybase and microsoft date records are physically identical; the
+// vendor's own dbdatecrack() casts one to the other, and the call sites below
+// only see the two typedef names.  Keep that guarantee visible.
+_Static_assert(sizeof(struct tds_sybase_dbdaterec) == sizeof(DBDATEREC),
+               "FreeTDS date-record layouts must match");
+
 NSString * const MTDatabaseConnectionUsername   = @"MTDatabaseConnectionUsername";
 NSString * const MTDatabaseConnectionPassword   = @"MTDatabaseConnectionPassword";
 NSString * const MTDatabaseConnectionDatabase   = @"MTDatabaseConnectionDatabase";
@@ -63,7 +70,7 @@ int err_handler(DBPROCESS *, int, int, int, char *, char *);
 static inline NSUInteger numberOfItemsOfType(int type, NSMutableDictionary <NSNumber *, NSNumber *> *counters) {
 	NSNumber *key = @(type);
 	NSNumber *counter = counters[key];
-	return counter ? counters[key].unsignedIntegerValue : 0;
+	return counter != nil ? counters[key].unsignedIntegerValue : 0;
 }
 
 int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, char *dberrstr, char *oserrstr) {
@@ -403,27 +410,32 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 	BOOL success = NO;
 	NSError * __autoreleasing sqlError = nil;
 	NSString *sql = [query getSql:self error:&sqlError];
-	if (sqlError == nil) {
-		success = [self runSQL: sql
-				   onDataTable: dataTable
-					 fieldKeys: [query conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)] ?
-									((MADQuery <MADQueryFieldKeysProtocol> *)query).fieldKeys : nil
-					   process: process];
+	if (sqlError != nil) {
+		os_log_error(GetTdsLog(), "SQL Server query generation failed: %@", sqlError);
+		if (error != NULL) *error = sqlError;
+		return success;
 	}
+	success = [self runSQL: sql
+			   onDataTable: dataTable
+				 fieldKeys: [query conformsToProtocol:@protocol(MADQueryFieldKeysProtocol)] ?
+								((MADQuery <MADQueryFieldKeysProtocol> *)query).fieldKeys : nil
+				   process: process
+					 error: error];
 	return success;
 }
 
 - (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
    intoResultTable:(id <MADDataTableWriting>)dataTable withError:(NSError * __autoreleasing *)error {
-	return [self runSQL:sql onDataTable:dataTable fieldKeys:fieldKeys process:dbconn];
+	return [self runSQL:sql onDataTable:dataTable fieldKeys:fieldKeys process:dbconn error:error];
 }
 
 - (BOOL)runSQL:(NSString *)sql onDataTable:(id <MADDataTableWriting>)datatable fieldKeys:(NSArray *)fieldKeys
-	   process:(MADDatabaseProcessSQLServer *)process {
-	
+	   process:(MADDatabaseProcessSQLServer *)process error:(NSError * __autoreleasing *)error {
+
 	BOOL rsuccess = NO;
-	// Use a local error variable, then assign to outError if provided
+	// Build the error locally; it is logged and handed back at every exit.
 	NSError * __autoreleasing localError = nil;
+	if (error != NULL) *error = nil;
 	if (sql.length > 0) {
 		
 		NSCalendar *gregorian = [[NSCalendar alloc]
@@ -1326,8 +1338,10 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 										struct tds_sybase_dbdaterec dateinfo;
 										// CORRECTED: Copy data INTO the malloc'd memory block
 										memcpy(sybDateTimeBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
-										// CORRECTED: Pass the pointer to the structure to dbdatecrack
-										dbdatecrack(dbconn, &dateinfo, sybDateTimeBind[indexOfType]);
+										// CORRECTED: Pass the pointer to the structure to dbdatecrack.
+										// The sybase/microsoft structs are layout-identical; see the
+										// static assertion at the top of this file.
+										dbdatecrack(dbconn, (DBDATEREC *)&dateinfo, sybDateTimeBind[indexOfType]);
 										NSDateComponents *comps = [[NSDateComponents alloc] init];
 										comps.year = dateinfo.dateyear;
 										// Already 1-based: freetds has applied its MSDBLIB
@@ -1354,8 +1368,10 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 										struct tds_sybase_dbdaterec dateinfo;
 										// CORRECTED: Copy data INTO the malloc'd memory block
 										memcpy(sybDateTimnBind[indexOfType], (DBDATETIME *) (dbdata(dbconn, (int)(columnNumber + 1))), sizeof(DBDATETIME));
-										// CORRECTED: Pass the pointer to the structure to dbdatecrack
-										dbdatecrack(dbconn, &dateinfo, sybDateTimnBind[indexOfType]);
+										// CORRECTED: Pass the pointer to the structure to dbdatecrack.
+										// The sybase/microsoft structs are layout-identical; see the
+										// static assertion at the top of this file.
+										dbdatecrack(dbconn, (DBDATEREC *)&dateinfo, sybDateTimnBind[indexOfType]);
 										NSDateComponents *comps = [[NSDateComponents alloc] init];
 										comps.year = dateinfo.dateyear;
 										// 1-based already, for the same reason as the
@@ -1650,20 +1666,24 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 		}];
 		rsuccess = NO;
 	}
-	
+
+	if (localError != nil) {
+		os_log_error(GetTdsLog(), "SQL Server query failed: %@", localError);
+		if (error != NULL) *error = localError;
+	}
+
 	return rsuccess;
 }
 
 - (NSInteger)numberOfItemsOfType:(int)type withCounters:(NSMutableDictionary *)counters {
 	NSNumber *key = @(type);
 	NSNumber *counter = counters[key];
-	return counter ? counter.integerValue : 0;
+	return counter != nil ? counter.integerValue : 0;
 }
 
 - (DBPROCESS *)connect:(NSString *)username andPassword:(NSString *)password error:(NSError * __autoreleasing *)error {
 
 	DBPROCESS *dbconn = NULL;
-	BOOL connected = NO;
 
 	// Callers may pass NULL for "I don't care"; route writes to a throwaway local then.
 	// This also means the flag checks below never dereference a NULL pointer, and the
@@ -1738,8 +1758,7 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 			}
 
 		}
-		connected = (*err == nil);
-		
+
 		dbloginfree(login);
 	}
 	

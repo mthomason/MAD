@@ -71,7 +71,8 @@
 - (BOOL)runSQL:(NSString *)sql
    onDataTable:(MADDataTable *)datatable
 	 fieldKeys:(NSArray *)fieldKeys
-	   process:(id)process;
+	   process:(id)process
+		 error:(NSError * __autoreleasing *)error;
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion;
 @end
 
@@ -191,6 +192,10 @@
 }
 
 - (BOOL)execute:(NSString *)sql into:(MADDataTable *)table {
+	return [self execute:sql into:table error:NULL];
+}
+
+- (BOOL)execute:(NSString *)sql into:(MADDataTable *)table error:(NSError * __autoreleasing *)error {
 	MADDatabaseSQLServer *db = [[MADDatabaseSQLServer alloc] init];
 	MADDatabaseConnectionSQLServer *connection = [[self class] testConnection];
 	db.databaseConnection = connection;
@@ -202,7 +207,7 @@
 								credentals:credential
 						  connectionError:NULL];
 	XCTAssertNotNil(process, @"Expected to connect to %@", settings[@"host"]);
-	return [db runSQL:sql onDataTable:table fieldKeys:nil process:process];
+	return [db runSQL:sql onDataTable:table fieldKeys:nil process:process error:error];
 }
 
 // Runs one statement on a connection of its own and returns the rows it produced.
@@ -655,16 +660,18 @@ static NSDateComponents *MADUTCComponents(NSDate *date) {
 	[self execute:[NSString stringWithFormat:@"DROP TABLE %@", table]];
 }
 
-// A failing statement returns NO and yields no columns. -runSQL: has no error
-// out-parameter at all, so the return value is the only thing a caller can see.
+// A failing statement returns NO, yields no columns, and reports why.
 - (void)testFailingStatementReturnsNo {
 	[self requireServer];
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
-	BOOL success = [self execute:@"SELECT * FROM mad_no_such_table_xyz" into:table];
+	NSError *error = nil;
+	BOOL success = [self execute:@"SELECT * FROM mad_no_such_table_xyz" into:table error:&error];
 
 	XCTAssertFalse(success);
 	XCTAssertEqual([table numberOfColumns], 0u);
 	XCTAssertEqual([table numberOfRows], 0u);
+	XCTAssertNotNil(error, @"The SQL Server failure must reach the caller");
+	XCTAssertEqualObjects(error.domain, @"MTDatabaseTds");
 }
 
 #pragma mark - Schema discovery

@@ -1861,6 +1861,57 @@ reference to "BUGS.md, the X entry" still lands.
   be told apart by any value, so no test can discriminate them.
 - **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1131-1150`.
 
+### dbdatecrack is called with the sybase DBDATETIME under a microsoft DBDATEREC name
+- **Status:** Fixed -- the type-name mismatch is real, but the vendor guarantees the layouts match.
+- **What:** `MADTdsClient/Source/MADDatabaseSQLServer.m` copies each `SYBDATETIME` /
+  `SYBDATETIMN` value into a malloc'd buffer and passes it to `dbdatecrack`
+  (`:1327`, `:1355`).  FreeTDS types the buffer as `struct tds_sybase_dbdaterec *`
+  while the call's third parameter is `DBDATEREC *`, which this build aliases to
+  `struct tds_microsoft_dbdaterec *`; the compiler reports the mismatch on both
+  calls.  The surrounding local (`dateinfo`, `:1323`) is declared with the sybase
+  struct as well.
+- **Why it was not changed in the first pass:** the FreeTDS sybase/microsoft struct
+  duality decides the layout of the data `dbdatecrack` reads, so the correct form
+  depends on which compatibility mode the vendored FreeTDS was built with -- a
+  driver-correctness question, not a cast to add mechanically.  The code carries
+  `// CORRECTED:` notes from an earlier pass, so the area is already sensitive.
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:1320-1360`.
+- **Evidence:** `xcodebuild analyze` reports `-Wincompatible-pointer-types` on both
+  `dbdatecrack` calls; the two are the only remaining instances of that diagnostic in
+  the workspace.
+- **Now:** FreeTDS's own header states that the sybase and microsoft date records are
+  physically identical in memory, and `dbdatecrack()` casts one to the other itself.
+  Both calls now carry an explicit `(DBDATEREC *)` cast, and a file-scope
+  `_Static_assert(sizeof(struct tds_sybase_dbdaterec) == sizeof(DBDATEREC), ...)`
+  keeps that vendor guarantee honest across a FreeTDS bump.  No layout or runtime
+  behaviour changed; both analyzer warnings are gone.
+- **Test:** the live suite's DATETIME/SMALLDATETIME cases, including
+  `testSelectClassicDateTimeKeepsItsMonth` and `testSelectModernDateTimeTypes`.
+
+### `-runSQL:...`, `-runQuery:...` and `-executeSQL:...withError:` dropped their SQL errors
+- **Status:** Fixed
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m` (`-runSQL:onDataTable:fieldKeys:process:`,
+  `-runQuery:onProcess:withDataTable:withError:`, `-executeSQL:fieldKeys:onConnection:intoResultTable:withError:`)
+- **Behavior:** `-runSQL:` built three `NSError` objects in a local named `localError`
+  and returned `NO` without exposing any of them; the method had no error out-parameter.
+  `-runQuery:withError:` discarded the error from `-getSql:` and never wrote through its
+  own `error` parameter, and `-executeSQL:...withError:` ignored its `error` entirely.
+  A caller of `-executeQuery:withDataTable:andError:` saw `NO` with a nil error.  The
+  analyzer reported the three `localError` stores as `deadcode.DeadStores` because
+  nothing read them.
+- **Why it matters:** the error surfaces promised by `-executeQuery:withDataTable:andError:`
+  and `-executeSQL:...withError:` could not explain a failed query; the user-visible
+  failure was a silent `NO`.
+- **Now:** `-runSQL:` takes `NSError * __autoreleasing *`, clears it on entry, logs a
+  failure to `GetTdsLog()` (the error object only, not SQL or row data), and hands the
+  error back before returning `NO`.  `-runQuery:` propagates a `-getSql:` error and
+  forwards the caller's error to `-runSQL:`; `-executeSQL:` forwards its own.
+  `-executeQuery:withDataTable:andError:` already forwards to `-runQuery:`, so it now
+  receives post-connection SQL failures as well.  The `-runSQL:` body and its
+  load-bearing `dbclose` are untouched.
+- **Test:** `MADTdsClientLiveTests -testFailingStatementReturnsNo` now asserts both the
+  `NO` and the propagated error domain; the full suite is 76 tests with the live server.
+
 ## MAD Designer (app)
 
 ### The refresh path reads the shared store context from operation-queue threads
