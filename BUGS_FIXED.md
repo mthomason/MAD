@@ -57,6 +57,48 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### MADSectionLayout reads CFNumbers at the wrong widths, corrupting adjacent ivars
+- **Status:** Fixed 2026-10-17.
+- **Where:** `MAD/Source/MADSectionLayout.m:52-67`.
+- **What:** `MAD/Source/MADSectionLayout.m` fills its ivars with `CFNumberGetValue` but
+  passes widths that do not match the destinations.  `:55` writes a `double` (8 bytes)
+  into `float _height` (4 bytes), and `:61` writes `SInt64` (8 bytes) into
+  `MADDocumentSectionType _type`, which is an `int16_t` (`MADDocumentSectionType.h:20`).
+  Each call therefore overwrites the storage after its target -- `:55`'s high half lands
+  in `_groupLevel`, and `:61`'s high half lands in `_height` -- and neither `_height` nor
+  `_groupLevel` is ever assigned again in the file, so the corrupted values stand.
+- **Why it is not fixed here:** the ivars are read as the layout's height and grouping;
+  correcting the widths changes what those reads return (today `_height` is effectively
+  zero), which would visibly change report layout.  That is a behaviour decision, not a
+  warning fix.
+- **Evidence:** `xcodebuild analyze`, `osx.coreFoundation.CFNumber`: "a CFNumber object
+  that represents a 64-bit integer is used to initialize a 16-bit integer; 48 bits of the
+  CFNumber value will overwrite adjacent storage".
+- **Now:** `_height` is read with `kCFNumberFloatType` and `_type` with
+  `kCFNumberSInt16Type`, matching the ivars.  `_height` now returns the stored declared
+  height and the designer sizes section views by it; rendering still uses `displayHeight`,
+  which is computed from the elements and is unchanged.  `_groupLevel` no longer holds the
+  double's high half.
+- **Test:** `MADDocumentTests testSectionLayoutReadsEachNumberAtItsDeclaredWidth`
+  (`MAD/MADTests/MADDocumentTests.m`).
+- **Commit:** `062eea381`.
+
+### `digit_count_*_int`: `INT_MIN` collapsed onto `INT_MAX`
+- **Status:** Fixed 2026-10-17.
+- **Where:** `MAD/MADTests/MADCoreLogicTests.m`
+- **Behavior:** `INT_MIN` is collapsed onto `INT_MAX` before counting digits.
+  Both happen to have 10 digits, so the output is correct, but only by
+  coincidence.
+- **Why it matters:** Harmless today; note it only because the collapse is not
+  mathematically general.
+- **Now:** both functions divide before negating for `INT_MIN` and add the digit the
+  division dropped, so the count does not depend on `INT_MAX`'s digit count and no
+  negation overflows.  The result is identical for every input.
+- **Test:** `MADCoreLogicTests testDigitCountRecurIntBounds` and
+  `testDigitCountIterativeIntBounds` (iOS), and the same bounds checks in
+  `Linux/Tests/MADCoreLogicTests.m`.
+- **Commit:** `d2000e960`.
+
 ### `MADSectionGroupLayout` segfaults on a group whose field has no query table
 - **Status:** Fixed 2026-10-17.
 - **Where:** `MAD/Source/MADSectionGroupLayout.m:43`, `:46`, `:49`, `:58`
@@ -1167,6 +1209,24 @@ reference to "BUGS.md, the X entry" still lands.
   is no longer load-bearing; it is left as it was.)
 
 ## MADExplorer
+
+### The document-browser thumbnail stayed blank after the viewer rewrote it
+- **Status:** Fixed 2026-10-17.
+- **Where:** `MADExplorer/MADExplorer/MADExplorer/MADThumbnailView.m`
+  (`-setThumbnailPath:`), `MADDesigner/Source/MADReportPageView.m` (the write).
+- **Behavior:** The viewer rewrites `Caches/<hash>/Name@2x.png` after every refresh.  The
+  thumbnail view reloaded only when the *path* changed, and the path is stable, so a cell
+  reconfigured after a refresh kept its old image -- usually the blank placeholder loaded
+  before the first write.  The write was also non-atomic, so a reader could decode a
+  half-written PNG and fall back to the blank image.
+- **Why it matters:** Refreshing a report, or opening and leaving it, made a good
+  thumbnail disappear from the document browser even though the PNG on disk was correct.
+- **Now:** `-setThumbnailPath:` reloads when the file's modification date changes (the
+  path alone is no longer the test), and `MADReportPageView` writes the PNG atomically and
+  skips the write when encoding fails.
+- **Test:** `MADExplorerTests testSamePathRewriteReloadsTheImage`
+  (`MADExplorer/MADExplorerTests/MADExplorerTests.m`).
+- **Commit:** `7dff3b42b`.
 
 ### `MADStandard -standardStringForFileSize:` has dead code with a latent throw
 - **Status:** Fixed

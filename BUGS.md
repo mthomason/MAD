@@ -84,15 +84,6 @@ Status key:
 
 ## MAD (framework)
 
-### `digit_count_*_int`: `INT_MIN` collapsed onto `INT_MAX`
-- **Status:** Quirk
-- **Where:** `MAD/MADTests/MADCoreLogicTests.m`
-- **Behavior:** `INT_MIN` is collapsed onto `INT_MAX` before counting digits.
-  Both happen to have 10 digits, so the output is correct, but only by
-  coincidence.
-- **Why it matters:** Harmless today; note it only because the collapse is not
-  mathematically general.
-
 ### The document thumbnail uses the deprecated QuickLook file-attribute keys
 - **Status:** Open -- kept deliberately, behind a scoped pragma.
 - **What:** `MAD/Source/MADocument.m -fileAttributesToWriteToURL:forSaveOperation:error:`
@@ -106,24 +97,13 @@ Status key:
 - **Where:** `MAD/Source/MADocument.m:661-676`.
 - **Follow-up:** decide whether the app wants a thumbnail extension; if not, the code can
   go entirely and the pragma with it.
-
-### MADSectionLayout reads CFNumbers at the wrong widths, corrupting adjacent ivars
-- **Status:** Open -- found by the analyzer; could not be fixed blind, so it is recorded.
-- **What:** `MAD/Source/MADSectionLayout.m` fills its ivars with `CFNumberGetValue` but
-  passes widths that do not match the destinations.  `:55` writes a `double` (8 bytes)
-  into `float _height` (4 bytes), and `:61` writes `SInt64` (8 bytes) into
-  `MADDocumentSectionType _type`, which is an `int16_t` (`MADDocumentSectionType.h:20`).
-  Each call therefore overwrites the storage after its target -- `:55`'s high half lands
-  in `_groupLevel`, and `:61`'s high half lands in `_height` -- and neither `_height` nor
-  `_groupLevel` is ever assigned again in the file, so the corrupted values stand.
-- **Why it is not fixed here:** the ivars are read as the layout's height and grouping;
-  correcting the widths changes what those reads return (today `_height` is effectively
-  zero), which would visibly change report layout.  That is a behaviour decision, not a
-  warning fix.
-- **Where:** `MAD/Source/MADSectionLayout.m:52-67`.
-- **Evidence:** `xcodebuild analyze`, `osx.coreFoundation.CFNumber`: "a CFNumber object
-  that represents a 64-bit integer is used to initialize a 16-bit integer; 48 bits of the
-  CFNumber value will overwrite adjacent storage".
+- **Update (2026-10-17):** the attribute is now populated from the cached thumbnail PNG
+  when the old `-thumbnail` property is empty
+  (`MADocument.m -fileAttributesToWriteToURL:...`), so the Files-app icon gets the
+  report's first page on the next save.  The keys are still deprecated; the QuickLook
+  extension remains the follow-up.  Pinned by
+  `MADDocumentTests testFileAttributesUseTheCachedThumbnailWhenThePropertyIsNil`
+  (commit `8254c7264`).
 
 ### The renderer's page representation keeps only the last page it built
 - **Status:** Quirk (inert -- nothing reads it)
@@ -460,6 +440,8 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADSectionLayout` reads CFNumbers at the wrong widths, corrupting adjacent ivars
+- `digit_count_*_int`: `INT_MIN` collapsed onto `INT_MAX`
 - `MADSectionGroupLayout` segfaults on a group whose field has no query table
 - Rendered currency depended on the machine, not on the document
 - `MADQueryActiveQueryFields`: the SELECT list's order is set order, and set order is not stable
@@ -889,6 +871,7 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- The document-browser thumbnail stayed blank after the viewer rewrote it
 - `MADStandard -standardStringForFileSize:` has dead code with a latent throw
 - `MADStandard` hides `+standardStringForDouble:` / `+standardStringForUnsignedLong:`
 
