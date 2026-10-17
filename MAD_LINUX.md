@@ -594,6 +594,30 @@ the currency symbol is written explicitly with the yen sign normalized (GNUstep 
 it fullwidth).  A 60-case comparison across six locales is byte-identical; the full
 entry is in `BUGS.md`'s archive.
 
+**Phase F status (2026-10-17, in part).** The CLI is a deliverable as a runtime
+image, not a binary in a build tree. `Linux/Dockerfile` grew a `runtime` stage
+on `ubuntu:24.04` carrying `/usr/local/bin/mad` (CMake's install rule), the
+shared objects the CLI links (GNUstep Base, libobjc2, libdispatch,
+libBlocksRuntime, mysqlclient), GNUstep's runtime directories, mysqlclient's
+message and charset files, and `chinook.sqlite3` at the app-support path; it
+leaves the compiler, sources, tests, headers and static archives behind. It is
+283 MB on disk (66.5 MB compressed) against the 6.65 GB build image.
+`./Linux/build.sh --runtime` builds it, and `--verify` runs
+`Linux/verify-cli.sh` inside it: 30 checks — the six verbs, every offline
+format's pinned digest, `pdf`'s refusal, the reproducible writer's bytes, the
+exit codes, and the image's own shape (no clang, cmake, git or build tree).
+Green 2026-10-17; `--live` adds the MySQL and TDS refreshes (32/32). The suite
+also gained a `RESOURCE_LOCK` between the two test binaries that share the
+London fixture and sample database — ctest's parallelism had made that pair
+fail intermittently (35 consecutive green parallel runs after the lock).
+
+The user's decisions the same day: **no CI** (the Linux port is a proof of
+concept and a repeatable test, not a release; `./Linux/build.sh --verify` is
+the check) and **no publication** (nothing is pulled from a registry, so the
+GPL question stays where §10.3 left it). The Compressor Linux driver is the
+one Phase F part not done, and it is not needed for the CLI: the image builds
+the C libraries natively.
+
 ## 10. Decisions for the user
 
 1. **The JSON export shape** (`MAD_CLI.md` §8.3, `MAD_FUTURE.md` §10.5) — this is

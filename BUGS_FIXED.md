@@ -2793,3 +2793,21 @@ reference to "BUGS.md, the X entry" still lands.
   and a `MADIdentifierROWID` per row, which the sqlite-backed tables inject in
   their enumerators. With the bare field name as the key every row compared equal
   and the report collapsed into one group; with no row id every row reported 0.
+
+### Two parallel Linux suites raced over the same London fixture and sample database
+- **Status:** Fixed (2026-10-17)
+- **Where:** `Linux/CMakeLists.txt` (the `mad_add_framework(mad …)` block),
+  `Linux/Tests/MADHeadlessDocumentTests.m`, `Linux/Tests/MADReportExporterTests.m`
+- **Behavior:** ctest runs the 119 test binaries in parallel, and both suites
+  install `chinook.sqlite3` into the same per-user Application Support directory
+  (remove-then-copy) and refresh the same London fixture into the same cache
+  directory. When their windows overlapped, one of them failed — seen as
+  `MADHeadlessDocumentTests`' *problem in testTheRefreshChainFillsTheRowCache*,
+  and once as an unexplained `MADURLFactoryTests` failure. GNUstep takes the
+  home directory from `getpwnam`, not `HOME`, so per-test `HOME` does not
+  isolate them.
+- **Now:** the pair carries a shared ctest `RESOURCE_LOCK`
+  (`mad-london-fixture`), so they take turns while the rest of the suite stays
+  parallel. Verified with 35 consecutive green parallel runs on 2026-10-17;
+  `Linux/AGENTS.md` records the rule for future suites.
+- **Test:** the suite itself (`./Linux/build.sh`).

@@ -1566,3 +1566,4 @@ setting that names a platform no target can build for.
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
 - `MADTestReportFormatter` was blocked, and the reason recorded was wrong
+- Two parallel Linux suites raced over the same London fixture and sample database

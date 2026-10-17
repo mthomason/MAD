@@ -300,8 +300,13 @@ matrix would not let a target compile for macOS today.
 
 ## 7. The `mad` CLI — the headless path
 
-**Status:** Phases 1–3 done 2026-10-01. Remaining: §3.4 housekeeping (move
-`MADOperationRefresh` into `MAD`). See `ROADMAP.md` Track 3.
+**Status:** Phases 1–3 done 2026-10-01; the §3.4 housekeeping landed
+2026-10-16 with the driver registry (`e0741a187`, `61991e85f`). The Linux
+runtime image and its repeatable CLI check landed 2026-10-17
+(`Linux/Dockerfile`'s `runtime` stage, `Linux/verify-cli.sh`,
+`./Linux/build.sh --runtime|--verify`; `Linux/README.md`). No CI and no
+publication — the user's decision that day: the Linux port is a proof of
+concept and a regression harness, not a release. See `ROADMAP.md` Track 3.
 
 **The CLI does not ship.** The user's decision, 2026-10-01: *"the CLI isn't going to be shipped
 (least not now, it's only for our understanding of how the software works, and testing)."* It
@@ -524,9 +529,12 @@ CarbonBlock. The miniz headers were corrected on 2026-10-04.
 libobjc2 (MIT), libdispatch (Apache-2.0 with the Swift runtime exception), GNUstep
 Make (GPL-3.0-or-later) and GNUstep Base (LGPL-2.1-or-later), and compiles
 gnustep-make's GPL-3.0 `Testing.h` into its test binaries. Nothing is linked into
-the app and no image ships yet, so no register entry is due; when one does
-(Phase F), GNUstep Base slots into Workstream B's mechanism and the rest need
-entries of their own. `Linux/README.md` §Licences carries the detail.
+the app. A runtime image now exists (Phase F, `Linux/Dockerfile`'s `runtime`
+stage) and contains mysqlclient and GNUstep Base, but it is built and run
+locally and is not published (user decision, 2026-10-17), so no register entry
+is due; if it is ever distributed, GNUstep Base slots into Workstream B's
+mechanism, mysqlclient is the §3 blocker, and the rest need entries of their
+own. `Linux/README.md` §Licences carries the detail.
 
 Do not start any of this without the user asking for it by name — the blocker in
 particular is a business decision, not an engineering task.
