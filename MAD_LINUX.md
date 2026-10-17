@@ -629,6 +629,11 @@ entry is in `BUGS.md`'s archive.
    Core Graphics' writer cannot be reproduced — so the target is the same pages, boxes,
    text and fonts, with metric-compatible substitutes for Apple's fonts
    (`MADFont`'s default family is Helvetica Neue, which Linux does not have).
+   **Status 2026-10-17: deferred, blocked on the user's research — do not start it
+   without their decision.** `MAD_PDF_LINUX.md` is the handoff file: what exists, what
+   is missing, the candidate stacks with licences, the open questions and the
+   acceptance test.  Nothing needs it yet: the HTML facsimile prints from a browser,
+   and the app's PDF is untouched.
 3. **mysqlclient → MariaDB Connector/C timing** — the GPL blocker gates any shipped
    binary; the replacement is already named in `LICENSE_COMPLIANCE_PLAN.md`.
 4. **Toolchain policy** — source-built clang/libobjc2/GNUstep (needed for ARC) is a

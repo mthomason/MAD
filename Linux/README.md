@@ -464,6 +464,9 @@ every frame, font, font size, trait, alignment, text run and page box, and the m
 
 ## What this does not do yet
 
-The Linux PDF writer — the next step (`MAD_LINUX.md` §10.2 records the chosen shape:
-Cairo + Pango, with the licences) — and Phase F (the Compressor Linux driver, the CI
-row and the deployable image).
+The Linux PDF writer — **deferred 2026-10-17, blocked on the user's research; do not
+start it without their decision.**  `MAD_PDF_LINUX.md` is the handoff file (what
+exists, what is missing, the candidate stacks with licences, the open questions, the
+acceptance test); `MAD_LINUX.md` §10.2 records the reasoning.  Until it lands, a PDF
+on Linux is a browser printing `--format html`.  Phase F (the Compressor Linux driver,
+the CI row, the deployable image) is unblocked and is the recorded next step.

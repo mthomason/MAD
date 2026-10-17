@@ -387,8 +387,10 @@ formatter (`MADReportFormatter` on `MADDocumentRenderProtocol`), one page walk
 so `json-report` runs on both platforms; the two HTML formats the user chose (`html`,
 the page-box facsimile, and `html-flow`, the reflowable reading view); and `pdf` on
 the seam (`MADReportExporterPDF`, Apple's body, registered everywhere, byte-identical
-output).  **What remains:** the Linux PDF writer itself (`MAD_LINUX.md` §10.2 records
-Cairo + Pango and the licences).  The currency-formatting divergence found on the way
+output).  **What remains:** the Linux PDF writer itself — **deferred 2026-10-17, blocked on the
+user's research; do not start it without their decision** (`MAD_PDF_LINUX.md` is the
+handoff file: what exists, what is missing, the candidate stacks and the open
+questions).  The currency-formatting divergence found on the way
 was closed on 2026-10-17 (the report's money is formatted from the document's locale
 and precision, so the render-side exports are byte-identical across platforms;
 `BUGS.md`'s archive).

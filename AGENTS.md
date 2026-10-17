@@ -139,6 +139,9 @@ the headless side.
   documented but deliberately not built.
 * `MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
   Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
+* `MAD_PDF_LINUX.md` -- the Linux PDF writer: status (deferred, blocked on the user's
+  research), what exists and what is missing, the candidate stacks and licences, the
+  open questions and the acceptance test.
 * `Linux/README.md` -- the Linux build: the image, the ten frameworks and their
   suites, the GNUstep divergences the tests found, and the licences.
 * `MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
