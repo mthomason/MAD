@@ -707,3 +707,34 @@ the framework's `cmake/<Name>Sources.cmake`. `MADExplorer`, `MADBarcodes`,
   and so does `mad export` (§8);
 * the toolchain and library components' licence-register entries (§10) — Phase
   F work, at the moment an image ships.
+
+---
+
+## 13. Compiler-warning and analyzer cleanup
+
+**Status:** In progress — five frameworks done 2026-10-17; the app, MAD and
+MADBarcodes remain.
+
+The 2026-10-17 clean Analyze of `MAD Designer` reported 128 raw / 124 unique
+compiler warnings and 98 analyzer issues. The five requested frameworks were
+cleared first, each analyzed in isolation with a private derived-data path and
+each committed with its suite green:
+
+* **MADTds** — no first-party diagnostics; the vendored `sybdb.h` quote and the
+  Compressor sandbox note stay documented. Commit `c55cef2bc`.
+* **MADTdsClient** — 8 cleared; `-runSQL:` now logs and propagates its SQL
+  errors. Suite 76/76 against SQL Server 2022. Commit `93c2e1d57`.
+* **MADMySQL** — 3 cleared; NULL `error` guarded, `MYSQL_BIND` zero-initialised.
+  Suite 121/121 against MySQL. Commit `598cadd03`.
+* **MADAPI** — 3 source and 12 test-bundle `-Wnonnull` cleared. Suite 105/105.
+  Commit `cd814227d`.
+* **MADSqlite3** — 11 source and 5 test-bundle warnings cleared; the
+  `MADArrayCaching` initializer contract and the `MADDataTableFast` nil paths
+  were settled with the user. Suite 89/89 (5 benchmarks skipped). Commit
+  `daff35986`.
+
+`./Linux/build.sh` passes 119/119. The full-project analyzer count is now 86
+(was 98); all remaining analyzer results and compiler warnings are in the app,
+MAD and MADBarcodes. The test bundles also carry a deployment-target linker
+warning (XCTest built for 17.0, bundle floor 15.0) that belongs to §6/the
+project-settings pass.
