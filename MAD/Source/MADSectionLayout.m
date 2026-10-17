@@ -49,14 +49,16 @@
 		_identifierObject = number.copy;
 		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt64Type, &_identifier);
 		
+		// These widths must match the ivars: a wider CFNumber write spills into
+		// the next one (_height into _groupLevel, _type into _height).
 		number = object[keyPathHeight];
-		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberDoubleType, &_height);
-		
+		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberFloatType, &_height);
+
 		number = object[keyPathNumberOfRows];
 		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt64Type, &_numberOfRows);
-		
+
 		number = object[keyPathType];
-		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt64Type, &_type);
+		CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)number, kCFNumberSInt16Type, &_type);
 		
 		number = object[keyPathVisibility];
 		_visibility = number.boolValue;

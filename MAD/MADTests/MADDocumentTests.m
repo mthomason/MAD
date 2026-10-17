@@ -659,6 +659,31 @@
 							   @"displayHeight is the maximum calculated element height, not the declared height");
 }
 
+// The projection's numbers must be read at the widths of the ivars they fill.
+// The height used to be read as a double (8 bytes) into a float, and the type
+// as an SInt64 (8 bytes) into an int16_t, so _height was zeroed by the type
+// write and _groupLevel held the double's high half.
+- (void)testSectionLayoutReadsEachNumberAtItsDeclaredWidth {
+	RptqStoreContext *context = [self newTestContext];
+	NSDictionary *projection = @{
+		NSStringFromSelector(@selector(identifier)): @100,
+		[RptqDocumentSection keyPathHeight]: @99,
+		[RptqDocumentSection keyPathNumberOfRows]: @3,
+		[RptqDocumentSection keyPathType]: @(MADDocumentSectionTypeGroupFooter),
+		[RptqDocumentSection keyPathVisibility]: @NO,
+		[RptqDocumentSection keyPathWrappingStyle]: @0,
+	};
+
+	MADSectionLayout *layout = [[MADSectionLayout alloc] initWithObject:projection
+												  managedObjectContext:context];
+	XCTAssertEqualWithAccuracy(layout.height, 99.0f, 0.001f,
+							   @"height is the stored declared height, not zero from a wide write");
+	XCTAssertEqual(layout.type, MADDocumentSectionTypeGroupFooter);
+	XCTAssertEqual(layout.numberOfRows, (NSUInteger)3);
+	XCTAssertEqual(layout.groupLevel, (NSUInteger)0,
+				   @"the taller writes must not spill into the adjacent ivars");
+}
+
 // The viewer writes the thumbnail to the cache; the Core Data-era -thumbnail
 // property never had a writer, so the file attribute that gives the document
 // its Files-app icon was always empty.
