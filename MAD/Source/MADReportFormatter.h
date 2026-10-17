@@ -14,21 +14,26 @@
 
 #import <CoreGraphics/CGGeometry.h>
 
+// The document this formatter lays out is whatever conforms to the render protocol --
+// MADocument on Apple, MADHeadlessDocument anywhere -- so the render half is one
+// implementation on both platforms (MAD_LINUX.md §9 Phase E).
+#import <MAD/MADDocumentRenderProtocol.h>
+
 typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
 	MADReportFormatterOptionsNone    = 0,
 	MADReportFormatterOptionsMargin  = 1 << 0,
 };
 
-@protocol MADReportFormatterDataSource, MADDataProtocol, MADCacheProtocol;
+@protocol MADReportFormatterDataSource, MADDataProtocol, MADCacheProtocol, MADDocumentRenderProtocol;
 
-@class MADocument, RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions, MADArrayCaching<__covariant ObjectType>;
+@class RptqDocumentSection, RptqDocument, MADArrayCaching, MADPageOptions, MADArrayCaching<__covariant ObjectType>;
 
 @interface MADReportFormatter : MADTableFormatter
 
-- (instancetype)initWithDocument: (MADocument *)layout
+- (instancetype)initWithDocument: (id <MADDocumentRenderProtocol>)layout
 						 options: (MADReportFormatterOptions)options;
 
-+ (instancetype)newReportFormatterWithLayout: (MADocument *)layout
++ (instancetype)newReportFormatterWithLayout: (id <MADDocumentRenderProtocol>)layout
 									 options: (MADReportFormatterOptions)options;
 
 @property (nonatomic, weak) id <MADDataProtocol> dataDelegate;
@@ -41,7 +46,7 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
 @property (readwrite, nonatomic, weak) id <MADCacheProtocol> cachedDelegate;
 
 @property (readonly, nonatomic, strong) MADPageOptions *page;
-@property (readonly, nonatomic, weak) MADocument *layout;
+@property (readonly, nonatomic, weak) id <MADDocumentRenderProtocol> layout;
 
 @property (readonly, nonatomic) NSUInteger numberOfPages;
 @property (readonly, nonatomic) NSUInteger numberOfGroups;

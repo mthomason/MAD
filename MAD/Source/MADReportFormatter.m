@@ -14,7 +14,6 @@
 #import "MADReportFormatterDataSourceProtocol.h"
 #import "MADSectionRepresentation.h"
 #import "MADReportFormatterState.h"
-#import "MADocument.h"
 #import "MADModel.h"
 #import "MADModelDocument.h"
 #import "MADModelDatabase.h"
@@ -45,9 +44,9 @@
 
 #import <MADSqlite3/MADArrayCaching.h>
 
-
-
-#import <UIKit/UIPrintInteractionController.h>
+// The page's margins, and nothing else from UIKit: this file is in the Linux build
+// too now, where the four-edge struct comes from the compat shim (Linux/Compat).
+#import <UIKit/UIGeometry.h>
 
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch(void);
 static inline UIEdgeInsets MADEdgeInsetsEmpty(void);
@@ -63,7 +62,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 @interface MADReportFormatter ()
 
-@property (nonatomic, readwrite, weak)      MADocument *layout;
+@property (nonatomic, readwrite, weak)      id <MADDocumentRenderProtocol> layout;
 @property (nonatomic, readwrite, strong)    MADSectionsLayout *sections;
 @property (nonatomic, readwrite, strong)    MADPageOptions *page;
 @property (nonatomic, readwrite, strong)    MADReportFormatterState *machineState;
@@ -91,7 +90,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 - (void)dealloc { }
 
-- (instancetype)initWithDocument: (MADocument *)layout
+- (instancetype)initWithDocument: (id <MADDocumentRenderProtocol>)layout
 						 options: (MADReportFormatterOptions)options  {
 	if (self = [super init]) {
 		
@@ -124,7 +123,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 	return self;
 }
 
-+ (instancetype)newReportFormatterWithLayout: (MADocument *)layout
++ (instancetype)newReportFormatterWithLayout: (id <MADDocumentRenderProtocol>)layout
 									 options: (MADReportFormatterOptions)options {
 	MADReportFormatter *result = [[MADReportFormatter alloc] initWithDocument: layout
 																	  options: options];
@@ -391,13 +390,13 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 - (MADSectionsLayout *)sections {
 	if (_sections == nil) {
-		MADocument *layout = _layout;
+		id <MADDocumentRenderProtocol> layout = _layout;
 		if (layout != nil) {
 			MADDatabase *database = layout.database;
 			MADSectionsLayout *sections;
-			// MADocument returns its store context from -managedObjectContext (the override is
-			// in MADocument.m), so the inherited UIDocument type is the wrong one at this call.
-			sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: (RptqStoreContext *)layout.managedObjectContext
+			// The store context is the protocol's own (it used to be read through
+			// -managedObjectContext, which only MADocument spells that way).
+			sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: layout.storeContext
 																 databaseClass: [database class]];
 			_sections = sections;
 		}
@@ -408,7 +407,7 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 - (void)formatDocument {
 
 	os_log_debug(OS_LOG_DEFAULT, "%s: BEGIN", __PRETTY_FUNCTION__);
-	MADocument *layout = _layout;
+	id <MADDocumentRenderProtocol> layout = _layout;
 	self.sections = nil;
 
 	[layout resetSectionLayoutManagers];

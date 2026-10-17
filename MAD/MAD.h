@@ -190,6 +190,7 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADSortOrder.h>
 #import <MAD/MADTableFieldIdentifier.h>
 #import <MAD/MADTableFormatter.h>
+#import <MAD/MADReportPageBuilder.h>
 #import <MAD/MADDocumentRenderProtocol.h>
 #import <MAD/MADocumentSectionType.h>
 #import <MAD/RptqAlignment.h>

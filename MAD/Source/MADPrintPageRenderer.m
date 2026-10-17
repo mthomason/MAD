@@ -45,6 +45,7 @@
 #import "MADReportSectionRepresentation.h"
 #import "MADReportSectionRowsRepresentation.h"
 #import "MADReportLineRepresentation.h"
+#import "MADReportPageBuilder.h"
 
 #import <MADQueryCacheAggregateFunctionParamaters.h>
 
@@ -77,38 +78,6 @@ static os_log_t log_print;
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
 static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 
-static inline CGRect ElementBounds(CGRect, CGPoint);
-static inline CGFloat HeightWithVisibility(CGFloat, BOOL);
-static inline CGRect SectionBounds(CGRect, CGFloat, BOOL, MADDocumentSectionType, NSUInteger, NSUInteger, CGFloat);
-
-static inline CGRect ElementBounds(CGRect frame, CGPoint bounds) { return CGRectMake(frame.origin.x + bounds.x, frame.origin.y + bounds.y, frame.size.width, frame.size.height); }
-
-static inline CGFloat HeightWithVisibility(CGFloat height, BOOL visibility) { return visibility ? height : CGSizeZero.height; }
-
-static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
-								   BOOL visility, MADDocumentSectionType sectionType,
-								   NSUInteger numberOfPages, NSUInteger pageIndex,
-								   CGFloat originY) {
-
-	switch (sectionType) {
-			
-		case MADDocumentSectionTypePageFooter:
-			originY = pageIndex == numberOfPages - 1 ?  // last page?
-				pageRect.origin.y + pageRect.size.height - HeightWithVisibility(sectionHeight, visility) - sectionHeight :
-				pageRect.origin.y + pageRect.size.height - HeightWithVisibility(sectionHeight, visility);
-			break;
-			
-		case MADDocumentSectionTypeReportFooter:
-			originY = pageRect.origin.y + pageRect.size.height - sectionHeight;
-			break;
-			
-		default:
-			break;
-	}
-	return CGRectMake(pageRect.origin.x, originY, pageRect.size.width, HeightWithVisibility(sectionHeight, visility));
-}
-
-
 @interface MADPrintPageRenderer ()
 	<MADDocumentObjectDataReferenceProtocol>
 
@@ -118,6 +87,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	@property (nonatomic, strong, readwrite) MADReportTextRepresentation *textRepresentation;
 	@property (nonatomic, weak) NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
 	@property (readwrite, nonatomic, strong) NSMutableDictionary <NSNumber *, MADElementStylizedText *> *fontDescriptors;
+	@property (nonatomic, strong) MADReportPageBuilder *pageBuilder;
 
 @end
 
@@ -302,135 +272,43 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	[self buildPageAtIndex: pageIndex context: ctx inPageRect: pageRect];
 }
 
-// The walk, and the drawing when there is a context to draw into.  The page is built
-// from the data either way -- a section's elements carry their resolved text in the
-// drawing objects they build -- so a caller that only wants the structure passes NULL
-// and reads what comes back (MADPrintPageRenderer.h; MAD_LINUX.md §9 Phase E).
+// The walk is MADReportPageBuilder's -- the same one the formats that draw nothing
+// read -- and this method is the renderer's half of it: the font-descriptor cache the
+// elements draw through, the drawing block when there is a context to draw into, and
+// the text representation the page is recorded in either way.  A caller that only
+// wants the structure passes NULL and reads what comes back (MADPrintPageRenderer.h;
+// MAD_LINUX.md §9 Phase E).
 - (MADReportPageRepresentation *)buildPageAtIndex:(NSUInteger)pageIndex
 										  context:(CGContextRef)ctx
 									   inPageRect:(CGRect)pageRect {
-	NSObject <MADPrintPageRendererDataSourceProtocol> * datasource = self.datasource;
 
-	MADReportFormatter *reportFormatter = datasource.reportFormatter;
-	if (pageIndex >= reportFormatter.numberOfPages) {
-		return nil;
+	MADReportPageBuilder *builder = self.pageBuilder;
+	builder.styler = self;
+
+	MADReportPageRepresentation *pageRepresentation = nil;
+	if (ctx != NULL) {
+		pageRepresentation = [builder buildPageAtIndex: pageIndex
+											inPageRect: pageRect
+												  draw: ^(MADPrintPageElement *element, CGRect frame) {
+			[element drawInRect: frame];
+		}];
+	} else {
+		pageRepresentation = [builder buildPageAtIndex: pageIndex inPageRect: pageRect draw: NULL];
 	}
 
-	// One read transaction for the whole page: every cell read would otherwise pay
-	// autocommit's journal begin/commit on its own.  See BUGS.md "Page draws run one
-	// SQLite transaction per cell".  Only the page-bound check above can return
-	// early, so the pair below stays balanced.
-	[datasource.dataTable beginReadTransaction];
-
-	CGFloat originY = pageRect.origin.y;
-	NSUInteger rowIndex = 0, offsetElement = 0, offsetCharacter = 0;
-	NSUInteger layoutSectionCounter = 0, readGroupCounter = 0;
-	
-	[self.textRepresentation removeAllPages];
-	
-	RptqDocument *document = (reportFormatter.layout).activeDocumentModel;
-	NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumerator:pageIndex];
-	MADReportPageRepresentation *pageRepresentation = [[MADReportPageRepresentation alloc] initWithNumberOfSections:0];
-
-	for (MADSectionRepresentation *pageSection in layoutEnumerator) {
-		RptqDocumentSection *documentSection = [document documentSectionForType: pageSection.sectionType
-																	   andLevel: pageSection.groupLevel];
-
-		NSNumber *sectionIdentifier = @(documentSection.identifier);
-		CGRect rect = SectionBounds(pageRect, HeightWithVisibility([reportFormatter heightSection:sectionIdentifier], documentSection.visibility), documentSection.visibility, pageSection.sectionType, reportFormatter.numberOfPages, pageIndex, originY);
-
-		if (pageSection.sectionType == MADDocumentSectionTypeGroupFooter &&
-			pageSection.groupLevel == reportFormatter.numberOfGroups - 1) {
-			readGroupCounter++;
-		}
-		
-		MADReportSectionRepresentation *sectionRepresentation = [self buildSection: documentSection
-																			inRect: rect
-																		  pageRect: pageRect
-																	   pageSection: pageSection
-																		  document: document
-																		 pageIndex: pageIndex
-																		   ofPages: reportFormatter.numberOfPages
-																			offset: originY
-																	 offsetElement: offsetElement
-																   offsetCharacter: offsetCharacter
-																		   context: ctx];
-
-		[pageRepresentation addSection:sectionRepresentation];
-		
-		if (pageSection.sectionType == MADDocumentSectionTypeBody) {
-			rowIndex++;
-		}
-		
-		originY += rect.size.height;
-		layoutSectionCounter++;
+	if (pageRepresentation != nil) {
+		[self.textRepresentation removeAllPages];
+		[self.textRepresentation setPage: pageRepresentation forPageIndex: pageIndex];
 	}
-	
-	
-	[self.textRepresentation setPage:pageRepresentation forPageIndex:pageIndex];
-
-	[datasource.dataTable commitReadTransaction];
 
 	return pageRepresentation;
 }
 
-- (MADReportSectionRepresentation *)buildSection: (RptqDocumentSection *)documentSection
-										  inRect: (CGRect)rect
-										pageRect: (CGRect)pageRect
-									 pageSection: (MADSectionRepresentation *)pageSection
-										document: (RptqDocument *)document
-									   pageIndex: (NSUInteger)pageIndex
-										 ofPages: (NSUInteger)numberOfPages
-										  offset: (CGFloat)originY
-								   offsetElement: (NSUInteger)offsetElement
-								 offsetCharacter: (NSUInteger)offsetCharacter
-										 context: (CGContextRef)ctx {
-
-	MADReportSectionRepresentation * _Nonnull sectionRepresentation = [[MADReportSectionRepresentation alloc] initWithNumberOfRows:1];
-	sectionRepresentation.type = pageSection.sectionType;
-	sectionRepresentation.groupLevel = pageSection.groupLevel;
-	sectionRepresentation.elementOffset = offsetElement;
-	sectionRepresentation.visibility = documentSection.visibility;
-	
-	if (sectionRepresentation.visibility) {
-		NSEnumerator <RptqDocumentSectionRows *> *rowsEnumerator = documentSection.hasRows.objectEnumerator;
-
-		for (RptqDocumentSectionRows *row in rowsEnumerator) {
-			NSEnumerator *documentObjectEnumerator = row.hasObjects.objectEnumerator;
-			MADReportSectionRowsRepresentation * _Nonnull rowRepresentation = [[MADReportSectionRowsRepresentation alloc] initWithNumberOfSectionRowElements:0];
-			
-			for (__kindof RptqDocumentElement *item in documentObjectEnumerator) {
-				
-				MADDocumentObjectDataReference *dataReference = [MADDocumentObjectDataReference newDocumentObjectDataReference: self.datasource
-																													  delegate: self
-																														  page: pageIndex
-																														  item: item
-																														itemID: pageSection.detailRowId];
-				
-				__kindof MADPrintPageElement *drawingObject = [MADPrintPageElement newDocumentObject:dataReference];
-
-				// The element is built either way -- its text is resolved in its
-				// initializer -- and drawn only when there is a page to draw on.
-				if (ctx != NULL) {
-					[drawingObject drawInRect:ElementBounds(item.frame, rect.origin)];
-				}
-				
-				MADReportLineRepresentation * _Nonnull line = [[MADReportLineRepresentation alloc] initWithObject: drawingObject
-																											 type: item.documentObjectType
-																											frame: item.frame];
-				line.elementOffset = offsetElement;
-				offsetElement++;
-				
-				[rowRepresentation addLine:line];
-			}
-			NSError *error = nil;
-			bool addedRow = [sectionRepresentation addRow:rowRepresentation error:&error];
-			if (!addedRow && error != nil) {
-				os_log_error(log_print, "%s", error.localizedDescription.UTF8String);
-			}
-		}
+- (MADReportPageBuilder *)pageBuilder {
+	if (_pageBuilder == nil) {
+		_pageBuilder = [[MADReportPageBuilder alloc] initWithDataSource: self.datasource];
 	}
-	return sectionRepresentation;
+	return _pageBuilder;
 }
 
 + (void)setBackgroundColorForSectionType:(MADDocumentSectionType)type inRect:(CGRect)rect {

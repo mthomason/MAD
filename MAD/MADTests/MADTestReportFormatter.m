@@ -58,8 +58,8 @@
 
 #pragma mark - Test double
 
-// MADReportFormatter takes a MADocument -- a UIDocument -- and reads exactly four
-// things from it: -filename, the class of -database, -managedObjectContext, and
+// MADReportFormatter takes whatever conforms to MADDocumentRenderProtocol and reads
+// exactly four things from it: -filename, the class of -database, -storeContext, and
 // -resetSectionLayoutManagers.  It cannot be opened for real here: -openWithCompletionHandler:
 // goes through MADocument -readFromURL:error:, which unarchives a .mad produced by the app's
 // create path, and there is no such archive to hand it.  So this double answers those four
@@ -67,14 +67,14 @@
 // MADocument *, which is not a MADocument at all -- hence the unrecognized -filename.
 @interface MADTestReportFormatterDocument : MADocument
 
-@property (nonatomic, strong) RptqStoreContext *testManagedObjectContext;
+@property (nonatomic, strong) RptqStoreContext *testStoreContext;
 @property (nonatomic, strong) RptqDocument *testActiveDocumentModel;
 
 @end
 
 @implementation MADTestReportFormatterDocument
 
-- (RptqStoreContext *)managedObjectContext { return self.testManagedObjectContext; }
+- (RptqStoreContext *)storeContext { return self.testStoreContext; }
 - (RptqDocument *)activeDocumentModel { return self.testActiveDocumentModel; }
 
 // The base implementation builds a real MADDatabase from the document's schemas; this test
@@ -221,7 +221,7 @@
 	NSURL *url = [NSURL fileURLWithPath:
 				  [NSTemporaryDirectory() stringByAppendingPathComponent:@"MADTestReportFormatter.mad"]];
 	self.document = [[MADTestReportFormatterDocument alloc] initWithFileURL:url];
-	self.document.testManagedObjectContext = self.moc;
+	self.document.testStoreContext = self.moc;
 	self.document.testActiveDocumentModel = self.testDocument;
 
 	self.reportFormatter = [[MADReportFormatter alloc] initWithDocument:self.document options:MADReportFormatterOptionsNone];
