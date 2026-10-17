@@ -16,7 +16,7 @@
 // The on-disk format of a .madac file: a single table named "ac" with an integer
 // primary key "ci" (the element index) and a blob "ck" (the serialised element).
 // Shared with MADArrayCachingEnumerator so the two stay on the same format.
-extern NSString * const MTArrayCachedTableName;
+extern NSString * const MTArrayCachedTableName;	// This gives warning: Pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
 extern NSString * const MTArrayCachedColumnKey;
 extern NSString * const MTArrayCachedColumnValue;
 extern NSString * const MTArrayCachedExtension;

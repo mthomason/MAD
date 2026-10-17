@@ -121,8 +121,8 @@ static inline BOOL isDataTypeNumeric(MADDataType type) {
 		
 		_width = [decoder decodeInt64ForKey:@"width"];
 		_fieldType = (MADDataType)[decoder decodeIntForKey:@"fieldType"];
-		_decimals = [decoder decodeIntForKey:@"decimals"];
-		_fieldTypeNative = [decoder decodeIntForKey:@"fieldTypeNative"];
+		_decimals = [decoder decodeIntForKey:@"decimals"];	// This gives warning: Implicit conversion loses integer precision: 'int' to 'int16_t' (aka 'short')
+		_fieldTypeNative = [decoder decodeIntForKey:@"fieldTypeNative"];	// This gives warning: Implicit conversion loses integer precision: 'int' to 'int16_t' (aka 'short')
 		_primaryKey = [decoder decodeBoolForKey:@"primaryKey"];
 	}
 	return self;

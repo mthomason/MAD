@@ -489,6 +489,11 @@ corrected (2026-10-04).
 The review found one blocker, three components with no licence grant at all, and a set of
 notice obligations the app does not currently meet (it ships no attributions).
 
+**Delayed 2026-10-17.** The user is not taking D1 yet: the CLI deliverable comes
+first.  Nothing here is started, and the image keeps mysqlclient until D1 is decided;
+if an image is ever *published* before then, the GPL exposure below becomes real and
+has to be raised with the user, not decided by an agent.
+
 **Blocker — needs an owner decision, not an agent.** `libmysqlclient` 8.4.10 is GPLv2,
 and the Universal FOSS Exception covers only software that is itself FOSS. _MAD Designer_
 is proprietary, so shipping the MySQL client library as configured obliges us to release

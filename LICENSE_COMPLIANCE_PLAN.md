@@ -52,7 +52,7 @@ alike — one mechanism covering both. See Workstream B.
 
 | # | Decision | Who | Blocks |
 |---|---|---|---|
-| D1 | MySQL client: MariaDB Connector/C (recommended), Oracle commercial license, or drop MySQL | Owner | Workstream A |
+| D1 | MySQL client: MariaDB Connector/C (recommended), Oracle commercial license, or drop MySQL | Owner — **delayed 2026-10-17: the CLI deliverable comes first** | Workstream A |
 | D2 | Confirm the ClickBits purchase tier covers *application embedding*, if those faces are ever to ship | Owner | Workstream E |
 
 Everything in Workstreams B, D and E is independent of D1 and can proceed in

@@ -364,6 +364,7 @@ static os_log_t mlog;
 		os_log_error(mlog, "NSKeyedArchiver Error: %@", error.localizedDescription);
 	}
 
+	// The below line gives: Implicit conversion from nullable pointer 'NSIndexSet * _Nullable' to non-nullable pointer type 'NSIndexSet * _Nonnull'
 	self.groupKeyIndexes = (groupKeysArray != nil) ? [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray] : [[NSMutableIndexSet alloc] init];
 
 	[self reopenDbConnection];
@@ -439,6 +440,7 @@ static os_log_t mlog;
 	NSURL *url = [NSURL URLWithString: stored];
 	if (url.scheme.length > 0) {
 		NSURL *directory = url.URLByDeletingLastPathComponent;
+		// The below line gives: Implicit conversion from nullable pointer 'NSIndexSet * _Nullable' to non-nullable pointer type 'NSIndexSet * _Nonnull'
 		if ([[NSFileManager defaultManager] fileExistsAtPath: directory.path]) {
 			return url;
 		}
@@ -500,6 +502,7 @@ static os_log_t mlog;
 	buf[0] = 't';
 	ultoa(self.tag, (buf+1));
 	char *ptr = buf;
+	// The below line gives: Implicit conversion from nullable pointer 'NSIndexSet * _Nullable' to non-nullable pointer type 'NSIndexSet * _Nonnull'
 	return [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
 }
 
@@ -550,6 +553,7 @@ static os_log_t mlog;
 	NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity: sortDescriptors.count];
 	NSUInteger index = NSNotFound;
 	for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
+		// The below line gives: Implicit conversion from nullable pointer 'NSIndexSet * _Nullable' to non-nullable pointer type 'NSIndexSet * _Nonnull'
 		index = [columnKeys indexOfObject: sortDescriptor.key];
 		if (index != NSNotFound) {
 			NSNumber *columnIndex = [[NSNumber alloc] initWithUnsignedInteger: index];
@@ -1119,6 +1123,7 @@ static os_log_t mlog;
 												 error:(NSError * __autoreleasing *)outError {
 	if (self.lastDataForCacheId != nil) {
 		if (cacheId == self.lastDataForCacheId.index) {
+			// The below line gives: Implicit conversion from nullable pointer 'NSIndexSet * _Nullable' to non-nullable pointer type 'NSIndexSet * _Nonnull'
 			return [[NSDictionary alloc] initWithDictionary:self.lastDataForCacheId.object];
 		}
 	}

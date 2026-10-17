@@ -284,7 +284,8 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (NSURL *)url {
 	NSURL *cachedArrayDirectories = [self.cachedDelegate cachedFilesDirectory];
 	_url = [cachedArrayDirectories URLByAppendingPathComponent:[self.identifier stringByAppendingPathExtension:@"madac"]
-												   isDirectory:NO];
+												   isDirectory:NO];	// This gives warning: Implicit conversion from nullable pointer 'NSString * _Nullable' to non-nullable pointer type 'NSString * _Nonnull'
+
 	return _url;
 }
 
