@@ -252,7 +252,7 @@
 											 insertIntoManagedObjectContext: context];
 	
 	NSNumber *n;
-	key = NSStringFromClass([RptqPoint class]);
+	key = NSStringFromClass([RptqPoint class]);	// Value stored to 'key' is never read
 	n = [sourceElement valueForKey:@"dropPointX"];
 	if (n != nil) [point setValue: n forKey:@"x"];
 	

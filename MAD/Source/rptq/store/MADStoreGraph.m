@@ -62,7 +62,8 @@
 						 identifier:(int64_t)identifier
 					createIfMissing:(BOOL)createIfMissing {
 	MADStoreObject *object = [self objectForEntity:entity identifier:identifier];
-	if (object || !createIfMissing) return object;
+	if (object || !createIfMissing) return object;	// ! nil returned from a method that is expected to return a non-null value
+
 	object = [MADStoreObject objectWithEntity:entity identifier:identifier];
 	[self addObject:object];
 	return object;
@@ -143,7 +144,7 @@ static MADStoreRelationship *MADStoreInverseOf(MADStoreEntity *__unused entity, 
 		// A to-one edge names its target; give the target the paired edge back.
 		for (MADStoreRelationship *relationship in entity.allRelationships) {
 			if (relationship.isToMany) continue;
-			NSNumber *targetIdentifier = [object referenceForName:relationship.name];
+			NSNumber *targetIdentifier = [object referenceForName:relationship.name];	// !: Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue
 			if (!targetIdentifier) continue;
 			MADStoreObject *target = [complete objectForEntity:relationship.destination
 													identifier:targetIdentifier.longLongValue];

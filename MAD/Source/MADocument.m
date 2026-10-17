@@ -857,7 +857,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 		self.dataTable.dataDelegate = self;
 		return self.dataTable;
 	} else {
-		return nil;
+		return nil;	// ! nil returned from a method that is expected to return a non-null value
 	}
 }
 

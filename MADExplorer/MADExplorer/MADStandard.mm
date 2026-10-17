@@ -31,6 +31,7 @@
 	const std::string decimal = ".", mb = " MB";
 	const double roundFactor = 1000.0, bitsToMBFactor = 1000000.0;
 	std::string filesize_str;
+	// Implicit conversion from 'unsigned long long' to 'double' may lose precision
 	filesize_str = std::to_string((round((filesize / bitsToMBFactor) * roundFactor) / roundFactor));
 	
 	size_t dec_locatoin = filesize_str.find_first_of(decimal);

@@ -61,7 +61,7 @@
 + (instancetype)documentWithContentsOfURL:(NSURL *)url error:(NSError * __autoreleasing *)error {
 	MADHeadlessDocument *document = [[self alloc] initWithFileURL: url];
 	if (![document readFromURL: url error: error]) {
-		return nil;
+		return nil;	// ! nil returned from a method that is expected to return a non-null value
 	}
 	return document;
 }

@@ -148,6 +148,7 @@
 	NSMutableArray<__kindof UIBarButtonItem *> *toolbarItemsLimited = toolbarItemsFull.mutableCopy;
 	toolbarItemsFull = nil;
 	
+	// !: nil passed to callee that requires a non-null 1st parameter
 	NSArray<__kindof UIBarButtonItem *> *toolbarItemsPremium = [[NSArray alloc] initWithObjects: barButtonItemRevealQuery, nil];
 	[toolbarItemsLimited removeObjectsInArray:toolbarItemsPremium];
 	toolbarItemsPremium = nil;

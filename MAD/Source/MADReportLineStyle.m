@@ -19,7 +19,7 @@
 
 + (instancetype)styleForElement:(RptqDocumentElement *)element {
 	MADReportLineStyle *style = [[self alloc] init];
-	if (style == nil) return nil;
+	if (style == nil) return nil;	// ! nil returned from a method that is expected to return a non-null value
 
 	style->_fontName = [element.fontname copy];
 	style->_fontSize = element.fontsize;

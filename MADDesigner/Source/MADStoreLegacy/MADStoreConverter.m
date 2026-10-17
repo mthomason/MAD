@@ -133,7 +133,7 @@ static void MADStoreWriteRelationships(NSManagedObject *object,
 		if (!relationship.isToMany) {
 			if (![value isKindOfClass:[NSManagedObject class]]) continue;
 			NSNumber *identifier = identifiers[((NSManagedObject *)value).objectID];
-			if (identifier) [row setReference:identifier forName:relationship.name];
+			if (identifier) [row setReference:identifier forName:relationship.name];	// Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue
 			continue;
 		}
 
@@ -153,7 +153,7 @@ static void MADStoreWriteRelationships(NSManagedObject *object,
 		NSMutableArray<NSNumber *> *collection = nil;
 		for (NSManagedObject *member in members) {
 			NSNumber *identifier = identifiers[member.objectID];
-			if (!identifier) continue;
+			if (!identifier) continue;	// Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue
 			if (!collection) collection = [row collectionForName:relationship.name];
 			[collection addObject:identifier];
 		}
@@ -173,7 +173,7 @@ MADStoreIdentifiersForRows(NSArray<NSManagedObject *> *rows, MADStoreSchema *sch
 		if (!entity.hasModelIdentifier) continue;
 		NSNumber *identifier = [object valueForKey:@"identifier"];
 		NSNumber *known = highest[entity.name];
-		if (!known || identifier.longLongValue > known.longLongValue) highest[entity.name] = identifier;
+		if (!known || identifier.longLongValue > known.longLongValue) highest[entity.name] = identifier;	// Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue
 	}
 
 	NSMutableDictionary<NSManagedObjectID *, NSNumber *> *identifiers =
@@ -181,7 +181,7 @@ MADStoreIdentifiersForRows(NSArray<NSManagedObject *> *rows, MADStoreSchema *sch
 	for (NSManagedObject *object in rows) {
 		MADStoreEntity *entity = [schema entityNamed:object.entity.name];
 		NSNumber *identifier = entity.hasModelIdentifier ? [object valueForKey:@"identifier"] : nil;
-		if (!identifier || identifier.longLongValue == 0) {
+		if (!identifier || identifier.longLongValue == 0) {	// Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue
 			identifier = @((highest[entity.name] ?: @0).longLongValue + 1);
 			highest[entity.name] = identifier;
 		}

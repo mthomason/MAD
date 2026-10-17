@@ -228,18 +228,21 @@
 	if (!aggItem) {
 		os_log_error(logger, "MADDocumentObjectDataReferenceAggregate (self: %p): fieldKey - self.item (RptqDocumentElementAggregate) is NIL. PageIndex: %lu, DetailRowId: %lu", self, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId);
 		return nil; // Or an appropriate default to avoid crashing, though nil is fine for string.
+		// ! nil returned from a method that is expected to return a non-null value
 	}
 	
 	RptqQueryField *aggregateField = aggItem.aggregateField;
 	if (!aggregateField) {
 		os_log_error(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.item.aggregateField is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType));
 		return nil;
+		// ! nil returned from a method that is expected to return a non-null value
 	}
 	
 	RptqDatabaseSchemaField *dbSchemaField = aggregateField.databaseSchemaField;
 	if (!dbSchemaField) {
 		os_log_error(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.item.aggregateField.databaseSchemaField is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType));
 		return nil;
+		// ! nil returned from a method that is expected to return a non-null value
 	}
 	
 	NSString *fieldName = dbSchemaField.name;
@@ -251,6 +254,7 @@
 	RptqQueryTable *queryTable = aggregateField.inQueryTable;
 	if (!queryTable) {
 		os_log_error(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.item.aggregateField.inQueryTable is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@, FieldName: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType), fieldName);
+		// ! nil returned from a method that is expected to return a non-null value
 		return nil;
 	}
 	
@@ -261,11 +265,13 @@
 	NSObject <MADPrintPageRendererDataSourceProtocol> *datasource = self.datasource;
 	if (!datasource) {
 		os_log_debug(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.datasource is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@, FieldName: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType), fieldName);
+		// ! nil returned from a method that is expected to return a non-null value
 		return nil;
 	}
 	
 	if (!datasource.database) {
 		os_log_debug(logger, "MADDocumentObjectDataReferenceAggregate (self: %p, item: %p, itemID: %lld): fieldKey - self.datasource.database is NIL. PageIndex: %lu, DetailRowId: %lu, FunctionType: %@, FieldName: %@", self, aggItem, aggItem.identifier, (unsigned long)self.pageIndex, (unsigned long)self.detailRowId, NSStringFromMADAggregateFunctionType(self.functionType), fieldName);
+		// ! nil returned from a method that is expected to return a non-null value
 		return nil;
 	}
 	

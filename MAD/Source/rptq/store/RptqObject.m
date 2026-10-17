@@ -84,7 +84,7 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 			return [NSSet setWithArray:members];
 		}
 		NSNumber *identifier = [self.backingObject referenceForName:key];
-		if (!identifier) return nil;
+		if (!identifier) return nil;	// !: Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue
 		return [storeContext objectForEntity:relationship.destination
 									  identifier:identifier.longLongValue];
 	}

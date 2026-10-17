@@ -563,7 +563,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	for (MADStoreRelationship *relationship in entity.allRelationships) {
 		if (relationship.isToMany || !relationship.ownsForeignKey) continue;
 		NSNumber *target = [object referenceForName:relationship.name];
-		if (!target) continue;
+		if (!target) continue;	// !: Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue
 		MADStoreColumn *column = [MADStoreColumn new];
 		column.name = relationship.column;
 		column.type = MADStoreValueTypeInteger;
@@ -691,7 +691,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 		MADStoreEntity *entity = [self.schema entityNamed:object.entity];
 		if (!entity.hasModelIdentifier && object.identifier == 0) {
 			NSNumber *next = nextIdentifier[entity.table];
-			if (!next) next = @([self nextIdentifierForTable:entity.table error:error]);
+			if (!next) next = @([self nextIdentifierForTable:entity.table error:error]);	// !: Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue
 			object.identifier = next.longLongValue;
 			nextIdentifier[entity.table] = @(next.longLongValue + 1);
 		}

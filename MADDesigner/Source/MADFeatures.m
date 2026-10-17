@@ -86,11 +86,11 @@
 			MADLogError("Warning: Skipping feature due to missing or invalid description in dictionary: %@", dictionary);
 			continue;
 		}
-		if (!typeNumber || ![typeNumber isKindOfClass:[NSNumber class]]) {
+		if (!typeNumber || ![typeNumber isKindOfClass:[NSNumber class]]) {	// !: Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue
 			MADLogError("Warning: Skipping feature due to missing or invalid type in dictionary: %@", dictionary);
 			continue;
 		}
-		if (!availableNumber || ![availableNumber isKindOfClass:[NSNumber class]]) {
+		if (!availableNumber || ![availableNumber isKindOfClass:[NSNumber class]]) {	// !: Converting a pointer value of type 'NSNumber *' to a primitive boolean value; instead, either compare the pointer to nil or call -boolValue
 			MADLogError("Warning: Skipping feature due to missing or invalid available status in dictionary: %@", dictionary);
 			continue;
 		}

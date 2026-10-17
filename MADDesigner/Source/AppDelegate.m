@@ -200,14 +200,15 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 			__block NSUInteger attempts = 0;
 			__block void (^tryOpen)(void);
 			tryOpen = ^{
+				// !: nil passed to callee that requires a non-null 1st parameter
 				UINavigationController *navController = (UINavigationController *)[self firstSceneWindow].rootViewController;
 				if (navController == nil && attempts++ < 30) {
-					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), tryOpen);
+					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), tryOpen);	// !: Capturing 'tryOpen' strongly in this block is likely to lead to a retain cycle
 					return;
 				}
 				NSLog(@"[UITestHook] open '%@': root=%@ top=%@", sampleName,
 					  NSStringFromClass([self firstSceneWindow].rootViewController.class),
-					  NSStringFromClass(navController.topViewController.class));
+					  NSStringFromClass(navController.topViewController.class));	// !: Implicit conversion from nullable pointer 'Class _Nullable' to non-nullable pointer type 'Class _Nonnull'
 				NSURL *directory = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:[AppDelegate groupIdentifier]];
 				NSURL *url = [[directory URLByAppendingPathComponent:sampleName]
 							  URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
@@ -253,7 +254,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 					}
 				}
 				if (attempts++ < 90) {
-					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), tryRefresh);
+					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), tryRefresh);	// !: Capturing 'tryRefresh' strongly in this block is likely to lead to a retain cycle
 				}
 			};
 			tryRefresh();
