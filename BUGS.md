@@ -1157,6 +1157,22 @@ libmysqlclient; it skips rather than fails when no server is reachable.
 - **Where:** the six projects with the phase: MAD, MADBarcodes, MADMySQL, MADSqlite3,
   MADTds, MAD Designer.
 
+### `MADTdsDb` leaks its login record and can execute on a NULL process
+- **Status:** Open -- found by inspection during the 2026-10-17 warning pass; recorded, not
+  changed.
+- **Where:** `MADTds/MADTds/MADTdsDb.m:79` (`dblogin()`), `:94-105` (the `dbopen`/`dbuse`
+  failure paths), and `:111-151` (`-executeQuery:`).
+- **Behavior:** The `LOGINREC *login` returned at `:79` is never passed to `dbloginfree()`,
+  not on the `dbopen` failure, not on the `dbuse` failure, and not after a successful
+  connect. Separately, `-executeQuery:` hands `self.dbProcess` to `dbcmd`, `dbsqlexec`,
+  `dbresults` and the row accessors without checking it for NULL, and `-connect` can leave
+  it NULL.
+- **Why it matters:** Each connection attempt leaks a login record. A query issued before a
+  successful `-connect`, or after one failed, dereferences NULL inside freetds instead of
+  failing cleanly.
+- **Test:** none -- MADTds ships no test target; it is exercised through `MADTdsClient`.
+  Both paths need a driver-level test before a fix.
+
 ## MADTdsClient
 
 Covered by an offline suite (`MADTdsClientTests.m`, 47 tests) plus a live suite
