@@ -144,42 +144,6 @@ Status key:
   that represents a 64-bit integer is used to initialize a 16-bit integer; 48 bits of the
   CFNumber value will overwrite adjacent storage".
 
-### Rendered currency depends on the machine, not on the document
-- **Status:** Partly fixed 2026-10-16 (the locale and the precision now come from the
-  document); one GNUstep divergence remains and is recorded here.
-- **Where:** `MAD/Source/rptq/RptqDocumentElement+Extras.m` (`-formattedString:forValue:`,
-  the numeric branch), `MAD/Source/MADCurrencyFormatter.h` (the locale and decimalCount
-  the model stores), `MAD/Source/rptq/autogen/RptqNumericFormat.h` (the store's text
-  column).
-- **Behavior:** The currency branch built one `NSNumberFormatter` with
-  `NSNumberFormatterCurrencyStyle` and `locale = [NSLocale currentLocale]` -- the
-  *process's* locale and the *locale's* fraction digits -- while the element's numeric
-  format already stores both the design-time locale (`"en_US"`, as text) and the
-  decimal count.  The rendered text therefore depended on the rendering machine.  It
-  went unnoticed because only Apple rendered; the render half's move to Linux
-  (2026-10-16) measured it: the London fixture's HTML export says `$0.99` on Apple and
-  `$ 1` in the image (the image's current locale is `en_US_POSIX`, and GNUstep's
-  currency style renders no fraction digits for any locale).
-- **Why it matters:** The same report rendered on two machines, or on two platforms,
-  showed different values.  A server rendering reports has no user locale to inherit,
-  and a report's text is part of the report.
-- **Now:** the formatter takes the locale from the document's numeric format (a stored
-  identifier when there is one, `[NSLocale currentLocale]` otherwise) and sets both
-  fraction-digit bounds from the document's `decimalCount`.  On Apple this is
-  behaviour-neutral for a document rendered where it was designed -- the London PDF is
-  still 43,177 bytes, `sha256 3eb2f1c4…` -- and it fixes a document moved between
-  locales, which used to re-format its money in the new machine's locale.
-- **What remains:** GNUstep's `NSNumberFormatter` puts a space after the currency
-  symbol (`$ 0.99` where Apple writes `$0.99`), so render-side exports are not
-  byte-identical across platforms: 180 lines of the London HTML differ by that one
-  space, everything else is identical.  Closing it means formatting money without the
-  platform's `NSNumberFormatter` -- a portable money formatter, its own piece of work
-  -- rather than patching the string.  `Linux/Tests/MADReportExporterTests.m` pins the
-  Linux bytes with this stated, and `Linux/README.md` records the measurement.
-- **Test:** `testFormattedStringTakesTheCurrencyLocaleAndPrecisionFromTheDocument`
-  (`MAD/MADTests/MADDocumentTests.m`) asserts the portable facts -- the document's
-  symbol and its precision.
-
 ### The renderer's page representation keeps only the last page it built
 - **Status:** Quirk (inert -- nothing reads it)
 - **Where:** `MAD/Source/MADPrintPageRenderer.m:300-301`
@@ -515,6 +479,7 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- Rendered currency depended on the machine, not on the document
 - `MADQueryActiveQueryFields`: the SELECT list's order is set order, and set order is not stable
 - The same document does not produce the same `.mad` on Linux and on Apple — and on Linux it cannot be written at all
 - `objectsForEntity:` missed every subentity row

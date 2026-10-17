@@ -584,15 +584,15 @@ previous commit's CLI and comparing.
 
 **What the cross-platform comparison says.** The text of every line, every frame,
 every font, the page count and the file structure are identical on Apple and Linux for
-the London fixture — measured by diffing the two `html` files.  The one difference is
-currency formatting: GNUstep's `NSNumberFormatterCurrencyStyle` renders no fraction
-digits for any locale and puts a space after the symbol ("$ 0.99" where Apple writes
-"$0.99"), so 180 lines differ by that one space.  The formatter was still improved:
-it now takes the locale *and* the decimal count from the document's numeric format
-(the store keeps both) instead of the process locale, which is what makes the two
-platforms agree on everything except that space — and fixes a real defect in the
-meantime (a document designed in one locale rendered in another).  Recorded in
-`BUGS.md`; closing it means formatting money portably, which is its own piece of work.
+the London fixture, and so are the bytes: `html`, `html-flow` and `json-report` have the
+same sha256 on both platforms (`Linux/README.md` has the digests).  Getting there took
+one finding and its fix: rendered currency used to depend on the machine.  The report
+now takes its locale *and* its decimal count from the document's numeric format (the
+store keeps both; a document that does not say falls back to `en_US`, not to the
+machine's locale), the element factory records the design locale on new elements, and
+the currency symbol is written explicitly with the yen sign normalized (GNUstep spells
+it fullwidth).  A 60-case comparison across six locales is byte-identical; the full
+entry is in `BUGS.md`'s archive.
 
 ## 10. Decisions for the user
 

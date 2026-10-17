@@ -57,6 +57,50 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### Rendered currency depended on the machine, not on the document
+- **Status:** Fixed 2026-10-17.
+- **Where:** `MAD/Source/rptq/RptqDocumentElement+Extras.m` (`-formattedString:forValue:`
+  and `-awakeFromInsert`), `MAD/Source/MADCurrencyFormatter.h` (the locale and
+  decimalCount the model stores), `MAD/Source/rptq/autogen/RptqNumericFormat.h` (the
+  store's text column).
+- **Behavior:** The currency branch built one `NSNumberFormatter` with
+  `NSNumberFormatterCurrencyStyle` and `locale = [NSLocale currentLocale]` -- the
+  *process's* locale and the *locale's* fraction digits -- while the element's numeric
+  format already stores both the design-time locale (`"en_US"`, as text) and the
+  decimal count.  The rendered text therefore depended on the rendering machine.  It
+  went unnoticed because only Apple rendered; the render half's move to Linux
+  (2026-10-16) measured it: the London fixture's HTML export said `$0.99` on Apple and
+  `$ 1` in the image (the image's current locale is `en_US_POSIX`, and GNUstep's
+  currency style rendered no fraction digits for any locale).
+- **Why it matters:** The same report rendered on two machines, or on two platforms,
+  showed different values.  A server rendering reports has no user locale to inherit,
+  and a report's text is part of the report.
+- **Now:** three things, all in the element's formatter:
+  1. The locale comes from the document's numeric format -- a stored identifier when
+     there is one, `en_US` when the document does not say.  The fallback is
+     deliberately *not* `[NSLocale currentLocale]`: that is what made the two
+     platforms disagree, and the London samples were designed in en_US, so the
+     reference PDF's bytes do not move (`sha256 3eb2f1c4…`, 43,177 bytes).
+  2. The element factory records the design locale when it creates a numeric format
+     (`-awakeFromInsert`, as the identifier the store's text column keeps), so new
+     documents carry their own locale and a French user's report stays French.
+  3. The currency symbol is taken from the locale and written explicitly, with the
+     yen sign normalized from GNUstep's fullwidth U+FFE5 to U+00A5.
+- **Measured, not assumed:** with an explicit locale and the document's fraction
+  digits, the two platforms' currency output is byte-identical across a 60-case
+  comparison -- six locales (en_US, fr_FR, de_DE, ja_JP, en_GB, es_ES) times ten values
+  including negatives, grouping, rounding at 0.005, and 1e12.  The only difference
+  found was the yen-sign codepoint, which point 3 addresses.  The London fixture's
+  `html`, `html-flow` and `json-report` exports are now the same sha256 on Apple and
+  in the image (`ba12a289…`, `6baa43ed…`, `5ba282fc…`).
+- **Test:** `testFormattedStringTakesTheCurrencyLocaleAndPrecisionFromTheDocument`
+  (`MAD/MADTests/MADDocumentTests.m`, exact strings) and
+  `testMoneyIsFormattedFromTheDocumentNotTheMachine`
+  (`Linux/Tests/MADHeadlessDocumentTests.m`, the same facts on GNUstep, plus the
+  negative-decimal-count guard).  The Linux exporter suite's three render-side
+  checksums are now "the Mac's bytes" like text/csv/json.
+
+
 ### `MADQueryActiveQueryFields`: the SELECT list's order is set order, and set order is not stable
 - **Status:** Fixed
 - **Where:** `MAD/Source/MADQuerySelectExpressionActiveFields.m` (`MADActiveFieldAlias`

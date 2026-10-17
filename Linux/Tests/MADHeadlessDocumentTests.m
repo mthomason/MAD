@@ -27,6 +27,9 @@
 #import <MAD/RptqDatabase+Extras.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDocumentElement.h>
+#import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqNumericFormat.h>
 #import <MAD/RptqStoreContext.h>
 
 #import <MADAPI/MADDatabase.h>
@@ -132,6 +135,44 @@ static void testTheDataSourceResolvesWithoutCredentials(void) {
 			 "the Sqlite3 driver answers a Sqlite3 document");
 }
 
+#pragma mark - Rendered values
+
+// The report's money is formatted from the document's own locale and precision, not
+// the machine's (BUGS.md).  Both facts are asserted here because this is where the
+// divergence was measured: the image's current locale is en_US_POSIX, which used to
+// render "$ 1" where the Mac rendered "$0.99".
+static void testMoneyIsFormattedFromTheDocumentNotTheMachine(void) {
+	MAD_NEED(MADHeadlessFixtureIsThere(), @"CLI/Fixtures/London.portable.mad is missing (it is checked in)");
+	MADHeadlessDocument *document = MADHeadlessDocumentForTests();
+	MAD_NEED(document != nil, @"could not open CLI/Fixtures/London.portable.mad");
+	if (document == nil) return;
+
+	RptqStoreContext *context = document.storeContext;
+	RptqDocumentElement *element = [context insertObjectForEntity: @"RptqDocumentElement" identifier: 0];
+	RptqNumericFormat *format = [context insertObjectForEntity: @"RptqNumericFormat" identifier: 0];
+	format.enabled = YES;
+	format.decimalCount = 2;
+	format.locale = nil;				// no design locale: the fixed fallback
+	element.numericFormat = format;
+
+	MAD_PASS_EQUAL([element formattedString: MADDataTypeDouble forValue: @(0.99)], @"$0.99",
+				   "a document with no locale falls back to en_US, not to the machine's");
+	MAD_PASS_EQUAL([element formattedString: MADDataTypeDouble forValue: @(1234.5)], @"$1,234.50",
+				   "with grouping and the document's two decimals");
+
+	format.locale = (id)@"ja_JP";
+	MAD_PASS_EQUAL([element formattedString: MADDataTypeDouble forValue: @(1234.5)], @"¥1,234.50",
+				   "the yen sign is U+00A5, not GNUstep's fullwidth U+FFE5");
+
+	format.decimalCount = 0;
+	MAD_PASS_EQUAL([element formattedString: MADDataTypeDouble forValue: @(1234.5)], @"¥1,234",
+				   "and the precision is still the document's (truncating, as both platforms do)");
+
+	format.decimalCount = -4;			// a corrupt store value, not a precision
+	MAD_PASS([element formattedString: MADDataTypeDouble forValue: @(1234.5)] != nil,
+			 "a negative decimal count does not wrap into a huge fraction width");
+}
+
 #pragma mark - The refresh
 
 static void testTheRefreshChainFillsTheRowCache(void) {
@@ -177,4 +218,5 @@ MAD_TEST_MAIN("MADHeadlessDocumentTests",
 	MAD_TEST(testOpeningReadsTheDefinition),
 	MAD_TEST(testTheQueryCompilesToSQL),
 	MAD_TEST(testTheDataSourceResolvesWithoutCredentials),
-	MAD_TEST(testTheRefreshChainFillsTheRowCache));
+	MAD_TEST(testTheRefreshChainFillsTheRowCache),
+	MAD_TEST(testMoneyIsFormattedFromTheDocumentNotTheMachine));

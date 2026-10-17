@@ -285,13 +285,11 @@ static void testTheJSONReportAddsTheRenderedReport(void) {
 	// The frames are page coordinates: the trim box's 1pt origin, not the section's 0.
 	MAD_PASS([json rangeOfString: @"\"frame\": [1, 1, 170, 29]" ].location != NSNotFound,
 			 "the first line sits at the page's trim corner, where the PDF draws it");
-	// The render side's own bytes.  Unlike text/csv/json these are not the Mac's
-	// bytes: GNUstep's currency style puts a space between the symbol and the number
-	// ("$ 0.99" where Apple writes "$0.99"), which is 180 bytes in this file and is
-	// recorded in BUGS.md and Linux/README.md.  Everything but the currency values is
-	// byte-identical to the Mac's (measured by diffing the two).
-	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x45BCFCED6E0151BBULL),
-				   "the report member's bytes here are pinned (see the currency note)");
+	// The render side's bytes are the Mac's, like text/csv/json: the money in the
+	// report is formatted from the document's own locale and precision, not the
+	// machine's, so the same document writes the same report here (BUGS.md).
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0xA72F927165709893ULL),
+				   "the report member's bytes are the ones the Mac writes");
 }
 
 static void testTheHTMExportIsAFacsimileOfThePages(void) {
@@ -316,8 +314,8 @@ static void testTheHTMExportIsAFacsimileOfThePages(void) {
 	MAD_PASS([html rangeOfString: @"white-space: pre; overflow: hidden; text-overflow: ellipsis"].location != NSNotFound,
 			 "one line, clipped with an ellipsis: the renderer's own line-break rule");
 	MAD_PASS([html hasSuffix: @"</body>\n</html>\n"], "and it closes");
-	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x4797EB4D0291B2B9ULL),
-				   "the facsimile's bytes here are pinned (see the currency note above)");
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x2972A86316D77281ULL),
+				   "the facsimile's bytes are the ones the Mac writes");
 }
 
 static void testTheHTMLFlowExportIsTheSectionsAndRows(void) {
@@ -341,8 +339,8 @@ static void testTheHTMLFlowExportIsTheSectionsAndRows(void) {
 	MAD_PASS([html rangeOfString: @".s1 { font-family:"].location != NSNotFound, "the styles are a class table");
 	MAD_PASS([html rangeOfString: @"<section data-type=\"GroupFooter\" data-group-level=\"0\" data-visible=\"false\">"].location != NSNotFound,
 			 "an invisible section is named and left empty");
-	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0xDD1B5192B1082E57ULL),
-				   "the reflowable file's bytes here are pinned (see the currency note above)");
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0xE6F5C361C537C3A7ULL),
+				   "the reflowable file's bytes are the ones the Mac writes");
 }
 
 #pragma mark - The value presentations, shared by the formats

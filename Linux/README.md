@@ -252,13 +252,18 @@ and its categories are silently absent at runtime.
   checks gate the exit code, its 12 report items do not (the CLI's run added
   `directory-enumeration` and `directory-enumeration-url-form`).
 
-**Currency formatting (found 2026-10-16, by the render half).**  `NSNumberFormatter`
-with `NSNumberFormatterCurrencyStyle` renders no fraction digits for any locale here
-(`en_US` gives `$1`, Apple `$0.99`) and puts a space after the symbol (`$ 0.99`).  The
-report formatter now takes the locale and the decimal count from the document's
-numeric format, so the digits agree and only the space is left; the render-side
-exports are pinned with that stated (`BUGS.md`).  It matters beyond this file because
-it would have surfaced again in a Linux PDF.
+**Currency formatting (found 2026-10-16, fixed 2026-10-17).**  Two GNUstep behaviours
+made the rendered money differ from Apple's: `NSNumberFormatterCurrencyStyle` renders
+no fraction digits for any locale (`en_US` gave `$1`, Apple `$0.99`), and the image's
+current locale is `en_US_POSIX`, whose currency has a space after the symbol and no
+grouping.  Both are answered without replacing the formatter: the report takes its
+locale and its fraction digits from the document's numeric format (the fallback is
+`en_US`, not the machine's locale), and the currency symbol is written explicitly with
+the yen sign normalized (GNUstep spells it fullwidth U+FFE5).  A 60-case comparison --
+six locales times ten values, negatives and 1e12 included -- is now byte-identical
+between the two platforms; the only difference it found was that yen codepoint.
+`BUGS.md` has the entry (archived: it is fixed), and the render-side exports below are
+pinned to the Mac's bytes.
 
 ## The need count, and why it is 6
 
@@ -445,24 +450,17 @@ HTML step is where the render half moves off Apple.  It moved as a conformance:
 and says why it cannot run (its body is Core Graphics).  Measured against the Mac on
 the London fixture:
 
-| format | Linux bytes | same as the Mac? |
+| format | bytes | sha256 (identical on both platforms) |
 |---|---|---|
-| `json-report` | 118,289 | **no** — 180 currency values, see below |
-| `html` | 62,187 | **no** — the same 180 lines |
-| `html-flow` | 54,946 | **no** — the same 180 lines |
+| `json-report` | 118,109 | `5ba282fce3389ce3fc031ec2e6fdb34b224ce4562d904bf4c8b7744950f580cb` |
+| `html` | 62,007 | `ba12a289794fc6dea0566c93dc436ebcfa772132a027eee2e46828348210c6f8` |
+| `html-flow` | 54,766 | `6baa43ed132a10adf6aec4d1f341975a1f38b286289ba3938130db785ee92d1e` |
 | `pdf` | — | not produced here; `+isAvailable` NO with the reason |
 
-A line-by-line diff of the two `html` files is the measurement: every frame, font,
-font size, trait, alignment, text run and page box is identical, and the only
-differing lines are the currency values.  The cause is a GNUstep divergence:
-`NSNumberFormatterCurrencyStyle` renders no fraction digits for *any* locale
-(measured: `en_US` gives `$1` where Apple gives `$0.99`) and puts a space after the
-symbol (`$ 0.99`).  The formatter now takes its locale *and* its decimal count from the
-document's numeric format — the store keeps both — instead of the process locale,
-which removed the rounding difference and left the space; GNUstep's current locale in
-the image is `en_US_POSIX`, not the shell's `C`.  Recorded in `BUGS.md`; the Linux
-suite pins the Linux bytes with that stated, and `Linux/Tests/MADReportExporterTests.m`
-asserts the structure that *is* shared.
+The render-side formats are byte-identical across the platforms, like the data ones:
+every frame, font, font size, trait, alignment, text run and page box, and the money
+(the finding that made them differ, and its fix, are above and in `BUGS.md`).
+`Linux/Tests/MADReportExporterTests.m` pins the three checksums.
 
 ## What this does not do yet
 

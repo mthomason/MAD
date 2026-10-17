@@ -78,17 +78,37 @@ NSString * const MTDocumentObjectDefinationField2 = @"MTDocumentObjectDefination
 
 // The report's own locale comes first: the numeric format stores the locale the
 // report was designed in ("en_US" in the store's text column), and the rendered text
-// is part of the report rather than of the machine that renders it.  It used to take
-// [NSLocale currentLocale] unconditionally, which made the same document render
-// "$0.99" on Apple and "$ 1" in a process running under the C locale -- the Linux
-// image, for one (BUGS.md, the rendered-text locale entry).
+// is part of the report rather than of the machine that renders it (BUGS.md, the
+// rendered-currency entry).
+//
+// When the document does not say -- the legacy samples, and anything converted before
+// the element factory started recording it -- the fallback is a fixed locale, not
+// [NSLocale currentLocale].  The machine's locale is exactly what made the same
+// document render "$0.99" on Apple and "$ 0.99" in the Linux image: the image's
+// current locale is en_US_POSIX, whose currency has a space after the symbol and no
+// grouping.  Everywhere else -- a document that carries a locale -- the two platforms
+// agree byte for byte, measured for en_US, fr_FR, de_DE, ja_JP, en_GB and es_ES
+// (Linux/README.md).  en_US is the fallback because it is the locale the samples were
+// designed in: the reference PDF's bytes do not move.
 static NSLocale *MADNumericFormatLocale(RptqNumericFormat *format) {
 	id locale = format.locale;
 	if ([locale isKindOfClass: [NSLocale class]]) return locale;
 	if ([locale isKindOfClass: [NSString class]] && [locale length] > 0) {
 		return [NSLocale localeWithLocaleIdentifier: locale];
 	}
-	return [NSLocale currentLocale];
+	return [NSLocale localeWithLocaleIdentifier: @"en_US"];
+}
+
+// GNUstep's locale data spells the yen sign fullwidth (U+FFE5, ￥) where Apple's uses
+// U+00A5 (¥) -- the one character that differed in a 60-case, six-locale comparison of
+// the two platforms' currency output.  The symbol is taken from the locale and written
+// explicitly, normalized, so both platforms write the same one.
+static NSString *MADPortableCurrencySymbol(NSString *symbol) {
+	if (symbol.length == 0) return symbol;
+	NSMutableString *portable = [symbol mutableCopy];
+	[portable replaceOccurrencesOfString: @"\uFFE5" withString: @"\u00A5"
+								 options: 0 range: NSMakeRange(0, portable.length)];
+	return portable;
 }
 
 // One formatter per locale and precision: the currency style is locale's, and two
@@ -109,8 +129,14 @@ static NSNumberFormatter *MADCurrencyNumberFormatter(NSLocale *locale, NSInteger
 		formatter = [[NSNumberFormatter alloc] init];
 		formatter.locale = locale;
 		formatter.numberStyle = NSNumberFormatterCurrencyStyle;
-		formatter.minimumFractionDigits = decimalCount;
-		formatter.maximumFractionDigits = decimalCount;
+		// A negative count is a corrupt store value, not a precision; the cast would
+		// wrap it into a huge NSUInteger.
+		if (decimalCount >= 0) {
+			formatter.minimumFractionDigits = (NSUInteger)decimalCount;
+			formatter.maximumFractionDigits = (NSUInteger)decimalCount;
+		}
+		NSString *symbol = MADPortableCurrencySymbol([locale objectForKey: NSLocaleCurrencySymbol]);
+		if (symbol != nil) formatter.currencySymbol = symbol;
 		formatters[key] = formatter;
 	}
 	return formatter;
@@ -185,7 +211,13 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 		self.margin = (RptqDirectionalAsymmetry *)[context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];
 	}
 	if (self.numericFormat == nil) {
-		self.numericFormat = (RptqNumericFormat *)[context insertObjectForEntity:NSStringFromClass([RptqNumericFormat class]) identifier:0];
+		RptqNumericFormat *numericFormat = (RptqNumericFormat *)[context insertObjectForEntity:NSStringFromClass([RptqNumericFormat class]) identifier:0];
+		// The locale the element was designed in, as the identifier the store keeps in
+		// its text column.  Without it the rendered money falls back to a fixed locale
+		// (MADNumericFormatLocale), which is right for old documents and wrong for a
+		// French user's new ones.
+		numericFormat.locale = (id)[NSLocale currentLocale].localeIdentifier;
+		self.numericFormat = numericFormat;
 	}
 	if (self.padding == nil) {
 		self.padding = (RptqDirectionalAsymmetry *)[context insertObjectForEntity:NSStringFromClass([RptqDirectionalAsymmetry class]) identifier:0];

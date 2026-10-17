@@ -139,9 +139,10 @@
 // "$0.99" on Apple and "$ 1" in a process under the C locale -- and GNUstep's
 // currency style renders no fraction digits for any locale -- so the document's
 // numeric format decides both: its locale identifier ("en_US", the store keeps the
-// text) and its decimalCount.  The assertions are the portable facts (the locale's
-// symbol and the stored precision); the space GNUstep puts after the symbol is the
-// one difference left, recorded in BUGS.md.
+// text) and its decimalCount.  A document that does not say falls back to en_US, not
+// to the machine's locale (BUGS.md; Linux/README.md has the cross-platform
+// comparison).  The Linux suite asserts the same four facts, which is what keeps the
+// two platforms' rendered money byte-identical.
 - (void)testFormattedStringTakesTheCurrencyLocaleAndPrecisionFromTheDocument {
 
 	RptqStoreContext *context = [self newTestContext];
@@ -151,13 +152,25 @@
 		[context insertObjectForEntity:@"RptqNumericFormat" identifier:0];
 	format.enabled = YES;
 	format.decimalCount = 2;
-	format.locale = (id)@"en_US";	// the store's column is text: the locale identifier
 	element.numericFormat = format;
 
-	NSString *formatted = [element formattedString: MADDataTypeDouble forValue: @(0.99)];
+	// No design locale: the fixed fallback, not the machine's.
+	format.locale = nil;
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDouble forValue: @(0.99)], @"$0.99");
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDouble forValue: @(1234.5)], @"$1,234.50");
 
-	XCTAssertTrue([formatted containsString: @"$"], @"the symbol comes from the document's locale");
-	XCTAssertTrue([formatted containsString: @"0.99"], @"the precision is the document's decimalCount");
+	// The document's locale ("en_US" in the store's text column) and its precision.
+	format.locale = (id)@"en_US";
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDouble forValue: @(0.99)], @"$0.99");
+	// The platform's own rule at zero fraction digits, which both platforms share:
+	// 1234.5 truncates to 1234 rather than rounding up.
+	format.decimalCount = 0;
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDouble forValue: @(1234.5)], @"$1,234");
+
+	// The yen sign is one code point everywhere: U+00A5, not GNUstep's fullwidth U+FFE5.
+	format.locale = (id)@"ja_JP";
+	format.decimalCount = 2;
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDouble forValue: @(1234.5)], @"¥1,234.50");
 }
 
 #pragma mark - Document format

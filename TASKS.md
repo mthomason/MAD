@@ -388,8 +388,10 @@ so `json-report` runs on both platforms; the two HTML formats the user chose (`h
 the page-box facsimile, and `html-flow`, the reflowable reading view); and `pdf` on
 the seam (`MADReportExporterPDF`, Apple's body, registered everywhere, byte-identical
 output).  **What remains:** the Linux PDF writer itself (`MAD_LINUX.md` §10.2 records
-Cairo + Pango and the licences) and closing GNUstep's currency-formatting divergence
-(`BUGS.md`).
+Cairo + Pango and the licences).  The currency-formatting divergence found on the way
+was closed on 2026-10-17 (the report's money is formatted from the document's locale
+and precision, so the render-side exports are byte-identical across platforms;
+`BUGS.md`'s archive).
 
 Two things landed since this entry was written and belong to it: the driver registry
 (`ROADMAP.md` §5.1, `61991e85f`) — the seam shape this task mirrors — and the CLI
