@@ -633,8 +633,19 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 							forSaveOperation: (UIDocumentSaveOperation)saveOperation
 									   error: (NSError * __autoreleasing *)outError {
 	NSDictionary *fileAttributes;
-	if (self.thumbnail != nil) {
-		UIImage *thumbnail = self.thumbnail.copy;
+	// The viewer's page view writes the thumbnail to the cache beside the
+	// document; the Core Data-era -thumbnail property has no writer.  Read the
+	// file when the property is empty so the Files app's icon is not always
+	// blank.  The deprecated attribute keys stay behind the pragma below.
+	UIImage *thumbnail = self.thumbnail;
+	if (thumbnail == nil) {
+		NSData *imageData = [NSData dataWithContentsOfURL:self.thumbnailURL
+												  options:NSDataReadingUncached
+													error:NULL];
+		if (imageData != nil) thumbnail = [UIImage imageWithData:imageData];
+	}
+	if (thumbnail != nil) {
+		thumbnail = thumbnail.copy;
 		// NSThumbnail1024x1024SizeKey / NSURLThumbnailDictionaryKey are deprecated in
 		// iOS 15; the replacement is a QuickLook thumbnail extension, which is a new
 		// target rather than a substitution, so the attribute-based thumbnail is kept

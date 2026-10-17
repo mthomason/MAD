@@ -11,6 +11,9 @@
 
 #import <XCTest/XCTest.h>
 #import <CoreData/CoreData.h>
+#import <UIKit/UIColor.h>
+#import <UIKit/UIGraphics.h>
+#import <UIKit/UIImage.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/MADStore.h>
@@ -654,6 +657,38 @@
 												  managedObjectContext:context];
 	XCTAssertEqualWithAccuracy(layout.displayHeight, 51.0f, 0.001f,
 							   @"displayHeight is the maximum calculated element height, not the declared height");
+}
+
+// The viewer writes the thumbnail to the cache; the Core Data-era -thumbnail
+// property never had a writer, so the file attribute that gives the document
+// its Files-app icon was always empty.
+- (void)testFileAttributesUseTheCachedThumbnailWhenThePropertyIsNil {
+	NSString *name = [[NSString alloc] initWithFormat:@"Thumbnail-%@", NSUUID.UUID.UUIDString];
+	NSURL *documentURL = [NSURL fileURLWithPath:
+						  [NSTemporaryDirectory() stringByAppendingPathComponent:
+						   [name stringByAppendingPathExtension:@"mad"]]];
+	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
+	NSURL *thumbnailURL = document.thumbnailURL;
+	XCTAssertNotNil(thumbnailURL);
+
+	UIGraphicsBeginImageContextWithOptions(CGSizeMake(2.0, 2.0), YES, 1.0);
+	[[UIColor redColor] setFill];
+	UIRectFill(CGRectMake(0.0, 0.0, 2.0, 2.0));
+	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	XCTAssertTrue([UIImagePNGRepresentation(image) writeToURL:thumbnailURL atomically:YES]);
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+	NSDictionary *attributes = [document fileAttributesToWriteToURL:documentURL
+												  forSaveOperation:UIDocumentSaveForOverwriting
+															 error:NULL];
+	NSDictionary *thumbnails = attributes[NSURLThumbnailDictionaryKey];
+	XCTAssertNotNil(thumbnails[NSThumbnail1024x1024SizeKey],
+					@"the cached PNG must supply the file-attribute thumbnail");
+#pragma clang diagnostic pop
+
+	[[NSFileManager defaultManager] removeItemAtURL:thumbnailURL error:NULL];
 }
 
 @end
