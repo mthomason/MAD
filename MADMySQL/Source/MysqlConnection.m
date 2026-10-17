@@ -56,7 +56,7 @@
 		if (outError) {
 			*outError = [NSError errorWithDomain:@"MADDatabaseMySQL"
 											code:mysql_errno(NULL) // Or a custom code for memory allocation failure
-										userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Failed to allocate memory for MySQL connection.", nil)}];
+										userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Failed to allocate memory for MySQL connection.", @"NSError description: the MySQL client handle could not be allocated")}];
 		}
 		return NULL;
 	}
@@ -87,7 +87,7 @@
 		if (outError) {
 			NSString *errorDescription = [NSString stringWithUTF8String:errMsg];
 			if (!errorDescription || errorDescription.length == 0) {
-				errorDescription = NSLocalizedString(@"Failed to connect to MySQL server (unknown error).", nil);
+				errorDescription = NSLocalizedString(@"Failed to connect to MySQL server (unknown error).", @"NSError description: the MySQL client returned no error text");
 			}
 			NSDictionary *userInfo = @{NSLocalizedDescriptionKey: errorDescription,
 									   @"MySQLHostnameKey": aServer.host ?: @"<unknown_host>",
@@ -140,7 +140,7 @@
 	
 	NSError *connectionError = nil;
 	MYSQL *mysqlHandle = [self internal_connectToServer:server outError:&connectionError]; // Pass the error pointer
-	if (connectionError != nil) {
+	if (connectionError != nil && error != NULL) {
 		*error = [connectionError copy];
 	}
 	

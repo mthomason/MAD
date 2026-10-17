@@ -1624,6 +1624,40 @@ reference to "BUGS.md, the X entry" still lands.
   session call the old crash needed, but it keeps the live connection in the loop.
   Both Linux ports carry the same tests.
 
+### `MysqlConnection +connectToServer:error:` wrote through a NULL error pointer
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MysqlConnection.m:144` (`+connectToServer:error:`)
+- **Behavior:** After `internal_connectToServer:outError:` returned a non-nil
+  `connectionError`, the method did `*error = [connectionError copy]` without checking
+  `error`.  `internal_connectToServer:outError:` and the neighbouring `:157` both treat
+  the pointer as optional, so `+connectToServer:error:NULL` against an unreachable server
+  dereferenced NULL and took the process down.  The analyzer reported it as
+  `osx.cocoa.NSError`.
+- **Why it matters:** A caller that only wanted the connection result had no safe way to
+  opt out of the error object.
+- **Now:** the write is guarded by `if (connectionError != nil && error != NULL)`.  Every
+  caller that passes an error pointer behaves exactly as before.
+- **Test:** `MADMySQLTests testConnectToServerWithNoListenerAndANULLErrorPointerDoesNotCrash`
+  (new; the old code crashes on it) and `testConnectToServerWithNoListenerFailsCleanly`
+  for the non-NULL path.
+
+### `MysqlFetch+DataTable` read an uninitialised `MYSQL_BIND` in its default case
+- **Status:** Fixed
+- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m:499`, `:668`
+  (`+bindDataForStatement:andField:`)
+- **Behavior:** `MYSQL_BIND binding;` was uninitialised, and the `default:` case evaluated
+  `mySQLTypeForType(binding.buffer_type)` inside `NSAssert` before assigning anything.
+  The analyzer reported `core.CallAndMessage`.  The default case also returned a struct
+  whose `length`, `error` and `is_null` fields were uninitialised.
+- **Why it matters:** Reaching the default case (an unsupported column type) read
+  indeterminate memory; in Debug the assertion itself did.
+- **Now:** `MYSQL_BIND binding = {0};` zero-initialises the struct, so every field the
+  switch does not assign is zero on every path.  The `MYSQL_TYPE_NULL` case still fills
+  the three out-parameter buffers.  The only observable difference is the Debug assertion
+  text on the unsupported-type path (it now names DECIMAL, enum 0, instead of garbage).
+- **Test:** the live suite's SELECT NULL and type-conversion cases; the default path is
+  unreachable with the SQL types the driver supports.
+
 ## MADTdsClient
 
 ### `-getTables:` passed the process wrapper to freetds as if it were a `DBPROCESS`

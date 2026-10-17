@@ -496,7 +496,7 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 }
 
 + (MYSQL_BIND)bindDataForStatement:(MYSQL_STMT *)myStatement andField:(NSUInteger)x {
-	MYSQL_BIND binding;
+	MYSQL_BIND binding = {0};
 	switch(myStatement->fields[x].type) {
 		case MYSQL_TYPE_LONGLONG:
 			binding.buffer_type = myStatement->fields[x].type;

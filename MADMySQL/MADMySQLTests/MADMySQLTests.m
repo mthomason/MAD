@@ -328,6 +328,16 @@
 	XCTAssertNil([MysqlConnection connectToServer:server]);
 }
 
+// The error: variant must treat a NULL error pointer as "I don't care", the same
+// way +connectToServer: does.  Before the guard it wrote through NULL on a failed
+// connection and took the process down.
+- (void)testConnectToServerWithNoListenerAndANULLErrorPointerDoesNotCrash {
+	MysqlServer *server = [[MysqlServer alloc] init];
+	server.host = @"127.0.0.1";
+	server.port = 1;
+	XCTAssertNil([MysqlConnection connectToServer:server error:NULL]);
+}
+
 - (void)testConnectToServersReturnsNilWhenAllCandidatesFail {
 	MysqlServer *first = [[MysqlServer alloc] init];
 	first.host = @"127.0.0.1";

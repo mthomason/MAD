@@ -1115,6 +1115,8 @@ libmysqlclient; it skips rather than fails when no server is reachable.
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MysqlConnection +connectToServer:error:` wrote through a NULL error pointer
+- `MysqlFetch+DataTable` read an uninitialised `MYSQL_BIND` in its default case
 - `MysqlFetch+DataTable`: no non-SELECT statement could ever execute
 - `MysqlFetch+DataTable`: row loop spun forever on a fetch error
 - `MysqlFetch+DataTable`: `MYSQL_TYPE_INT24` (MEDIUMINT) read 4 bytes as 8
