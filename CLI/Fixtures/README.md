@@ -69,19 +69,15 @@ for the SQL Server container (published on all interfaces), so the same document
 can be refreshed from the Mac and from the Linux image. `host.docker.internal`
 would work only inside a container; `127.0.0.1` only on the Mac.
 
-The MySQL fixture was created against a container that reuses the MADMySQL test
-volume (the checksum-verified `employees` dataset) and publishes on every
-interface, which is the one deliberate difference from
-`MADMySQL/TestDatabase/mysql-test-db.sh`, whose `up` binds 127.0.0.1:
+Both live fixtures were created against the canonical test containers, which
+`DEVELOPER.md` documents and whose scripts create them from pinned images and
+checksum-verified datasets:
 
-	docker run -d --name mad-mysql-fixture \
-		--env MYSQL_ROOT_PASSWORD=root --env MYSQL_ROOT_HOST='%' \
-		--publish 13306:3306 --volume mad-mysql-test-data:/var/lib/mysql \
-		mysql:8.4@sha256:6ea90827b1100f8f2ae306a539f86d2c264a26ed435a2a9f75551dd5c3aeb242
+	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on 13306
+	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on 1433
 
-The SQL Server container and dataset are documented in `DEVELOPER.md` and the live
-`MADTdsClientLiveTests` suite:
-
-	docker run -d --name mad-mssql -e ACCEPT_EULA=Y -e 'MSSQL_SA_PASSWORD=Root1@Root2' \
-		-p 1433:1433 mcr.microsoft.com/mssql/server:2022-latest
-	# then RESTORE the AdventureWorksLT2022 backup into it (see DEVELOPER.md)
+Both publish on every interface, so the documents' `mac` host name resolves
+from the Mac and from inside the Linux image. The MySQL container is on 13306,
+not 3306, because the Oracle MySQL installer's launchd service may own 3306.
+`down` stops a server (the volumes keep the data); `reset` removes it and the
+next `up` rebuilds it.

@@ -143,7 +143,9 @@ rehabilitating it:
 
 The live suite is `MADMySQL/MADMySQLTests/MADMySQLLiveTests.m`; it skips when no
 server is reachable, so the offline suite stays green either way. Point it at the
-local **MySQL 8.0.42** on `127.0.0.1:3306` (`DEVELOPER.md`) and check:
+local **MySQL 8.0.42** on `127.0.0.1:3306` (the Oracle installer's launchd
+service) or at the pinned **`mad-mysql`** container on `13306` — the scheme's
+default, both documented in `DEVELOPER.md` — and check:
 
 1. **Authentication.** That server currently uses `mysql_native_password` for
    `root@localhost`, which exercises the easy path — the *risky* path is a modern

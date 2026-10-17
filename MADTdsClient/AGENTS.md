@@ -30,7 +30,11 @@ This framework serves as a good example of how to add support for a new database
 *   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADTdsClient` section.
 *   **Task queue**: [`TASKS.md`](../TASKS.md) -- maintain it, but do not start work from it.
 *   **Architecture**: [`MADDataTable_Architecture_Report.md`](../MADDataTable_Architecture_Report.md).
-*   **Live tests**: `MADTdsClientTests/MADTdsClientLiveTests.m` talks to a real SQL Server
-    and skips when none is reachable. The credentials it expects are in
+*   **Live tests**: `MADTdsClientTests/MADTdsClientLiveTests.m` talks to a real SQL
+    Server and skips when none is reachable. The credentials it expects are in
     [`DEVELOPER.md`](../DEVELOPER.md); override them with the `MAD_TDS_TEST_*`
-    environment variables.
+    environment variables. `TestDatabase/sqlserver-test-db.sh` provides that
+    server in Docker -- one container, `mad-mssql`, from a pinned image with the
+    AdventureWorksLT2022 database restored from a checksum-verified backup. It
+    publishes 1433, needs no scheme environment, and the scheme starts it before
+    the tests and stops it after. Do not start a second SQL Server container.

@@ -34,7 +34,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Start the MySQL test database"
-               scriptText = "SCRIPT=&quot;${SRCROOT}/TestDatabase/mysql-test-db.sh&quot;&#10;[ -x &quot;$SCRIPT&quot; ] || SCRIPT=&quot;$(dirname &quot;${WORKSPACE_PATH:-$PWD}&quot;)/MADMySQL/TestDatabase/mysql-test-db.sh&quot;&#10;if [ -x &quot;$SCRIPT&quot; ]; then&#10;  &quot;$SCRIPT&quot; up || echo &quot;note: the MySQL test database did not start; the live tests skip, or use whatever already answers on 3306.&quot;&#10;else&#10;  echo &quot;note: mysql-test-db.sh not found (SRCROOT=${SRCROOT}); the live tests skip without a server on 3306.&quot;&#10;fi&#10;">
+               scriptText = "SCRIPT=&quot;${SRCROOT}/TestDatabase/mysql-test-db.sh&quot;&#10;[ -x &quot;$SCRIPT&quot; ] || SCRIPT=&quot;$(dirname &quot;${WORKSPACE_PATH:-$PWD}&quot;)/MADMySQL/TestDatabase/mysql-test-db.sh&quot;&#10;if [ -x &quot;$SCRIPT&quot; ]; then&#10;  &quot;$SCRIPT&quot; up || echo &quot;note: the MySQL test database did not start; the live tests skip.&quot;&#10;else&#10;  echo &quot;note: mysql-test-db.sh not found (SRCROOT=${SRCROOT}); the live tests skip without a server on 13306.&quot;&#10;fi&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
@@ -59,6 +59,13 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "MAD_MYSQL_TEST_PORT"
+            value = "13306"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <PostActions>
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">

@@ -2,14 +2,21 @@
 #
 #  mysql-test-db.sh -- the pinned MySQL test server, in Docker.
 #
-#  The live tests in MADMySQLTests/MADMySQLLiveTests.m talk to a real server on
-#  127.0.0.1:3306 as root/root and SKIP when there is not one.  This script
-#  supplies that server without touching whatever MySQL is installed on the
-#  Mac: a container, created from a digest-pinned image, whose named volume
-#  holds a checksum-verified copy of the standard `employees` sample database.
+#  The live tests in MADMySQLTests/MADMySQLLiveTests.m talk to a real server as
+#  root/root and SKIP when there is not one.  This script supplies that server
+#  without touching whatever MySQL is installed on the Mac: one container
+#  (`mad-mysql`), created from a digest-pinned image, whose named volume holds a
+#  checksum-verified copy of the standard `employees` sample database.
+#
+#  The container publishes 13306 on every interface.  The iOS scheme points the
+#  tests at it with MAD_MYSQL_TEST_PORT=13306, and the Linux image and the CLI
+#  fixtures connect to the Mac's `mac:13306`.  One port, one server, one
+#  container -- do not start a second MySQL container.  (3306 is left alone
+#  because the Oracle MySQL installer's launchd service may own it; see
+#  DEVELOPER.md.)
 #
 #  Usage:
-#    mysql-test-db.sh up        start the server, load the data if needed (default)
+#    mysql-test-db.sh up        create/start the server, load the data if needed (default)
 #    mysql-test-db.sh wait      block until the server answers
 #    mysql-test-db.sh verify    check every table against the upstream checksums
 #    mysql-test-db.sh status    container, port, and what dataset is loaded
@@ -17,14 +24,15 @@
 #    mysql-test-db.sh down      stop the container (the volume keeps the data)
 #    mysql-test-db.sh reset     remove the container and its volume
 #
-#  `up` is a no-op when the pinned image, the container and the loaded dataset
-#  all match, so it is cheap enough to run before every test session.  The
-#  MADMySQL scheme calls it from the test action's pre-action (and `down` from
-#  the post-action), so the server runs only while the tests do.
+#  `up` is idempotent: it creates the container when it is missing, starts it
+#  when it is stopped, and leaves it alone when the pinned image, the port and
+#  the loaded dataset match.  The MADMySQL scheme calls it from the test
+#  action's pre-action (and `down` from the post-action), so the server runs
+#  only while the tests do.
 #
 #  Environment overrides:
-#    MAD_TESTDB_PORT     host port to publish (default 3306, what the tests use)
-#    MAD_TESTDB_NAME     container name      (default mad-mysql-test)
+#    MAD_TESTDB_PORT     host port to publish (default 13306, what the tests use)
+#    MAD_TESTDB_NAME     container name      (default mad-mysql)
 #    MAD_TESTDB_VOLUME   volume name         (default mad-mysql-test-data)
 #    MAD_TESTDB_CACHE    download cache      (default ~/Library/Caches/MADTestDatabase)
 #
@@ -41,9 +49,9 @@ TESTDB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=db.conf
 . "${TESTDB_DIR}/db.conf"
 
-CONTAINER="${MAD_TESTDB_NAME:-mad-mysql-test}"
+CONTAINER="${MAD_TESTDB_NAME:-mad-mysql}"
 VOLUME="${MAD_TESTDB_VOLUME:-mad-mysql-test-data}"
-PORT="${MAD_TESTDB_PORT:-3306}"
+PORT="${MAD_TESTDB_PORT:-13306}"
 CACHE="${MAD_TESTDB_CACHE:-$HOME/Library/Caches/MADTestDatabase}"
 
 DATASET_TARBALL="${CACHE}/test_db.tar.gz"
@@ -124,8 +132,8 @@ container_image() {
 
 # From the container's config, not `docker port`: a stopped container publishes
 # nothing, and `up` after `down` must restart it rather than recreate it.
-container_port() {
-	docker inspect --format '{{range .HostConfig.PortBindings}}{{range .}}{{.HostPort}}{{end}}{{end}}' \
+container_ports() {
+	docker inspect --format '{{range .HostConfig.PortBindings}}{{range .}}{{.HostPort}} {{end}}{{end}}' \
 		"${CONTAINER}" 2>/dev/null || echo ""
 }
 
@@ -136,25 +144,27 @@ remove_container() {
 # A plain TCP connect, not lsof: a server running as another user (a stock
 # MySQL install runs as _mysql) is not visible to lsof here but certainly
 # holds the port.
-port_in_use() {
-	nc -z 127.0.0.1 "${PORT}" >/dev/null 2>&1
+port_in_use() { # <port>
+	nc -z 127.0.0.1 "$1" >/dev/null 2>&1
 }
 
-port_conflict_message() {
-	local local_mysqld=""
+port_conflict_message() { # <port>
+	local port="$1" local_mysqld=""
 	if pgrep -x mysqld >/dev/null 2>&1 || pgrep -x mysqld_safe >/dev/null 2>&1; then
 		local_mysqld="
-       This Mac is running its own mysqld, which is probably the holder.  The
-       tests will happily use that one (same credentials, same dataset), or stop
-       it and run the container instead."
+       This Mac is running its own mysqld (the Oracle installer's launchd
+       service is the usual holder), and the tests use this container, not it."
 	fi
-	die "port ${PORT} is already in use on 127.0.0.1.${local_mysqld}
-       Publish the container on another port with MAD_TESTDB_PORT=<port>, and
-       point the tests at it with MAD_MYSQL_TEST_PORT=<port>."
+	die "port ${port} is already in use on 127.0.0.1.${local_mysqld}
+       Publish the container on another port with MAD_TESTDB_PORT=<port> and
+       change the MADMySQL scheme's MAD_MYSQL_TEST_PORT to match."
 }
 
 container_matches() {
-	[ "$(container_image)" = "${MYSQL_IMAGE}" ] && [ "$(container_port)" = "${PORT}" ]
+	local ports
+	ports=" $(container_ports) "
+	[ "$(container_image)" = "${MYSQL_IMAGE}" ] \
+		&& [[ "${ports}" == *" ${PORT} "* ]]
 }
 
 create_container() {
@@ -168,8 +178,8 @@ create_container() {
 
 	# Check the port before touching anything: a conflict must not destroy a
 	# container that is running happily on some other port.
-	if port_in_use; then
-		port_conflict_message
+	if port_in_use "${PORT}"; then
+		port_conflict_message "${PORT}"
 	fi
 
 	if [ "${state}" != "missing" ] && ! container_matches; then
@@ -184,13 +194,13 @@ create_container() {
 		return 0
 	fi
 
-	log "creating ${CONTAINER} from ${MYSQL_IMAGE_TAG} on 127.0.0.1:${PORT}"
+	log "creating ${CONTAINER} from ${MYSQL_IMAGE_TAG} on :${PORT}"
 	docker volume create "${VOLUME}" >/dev/null
 	if ! docker run -d \
 		--name "${CONTAINER}" \
 		--env MYSQL_ROOT_PASSWORD="${ROOT_PASSWORD}" \
 		--env MYSQL_ROOT_HOST='%' \
-		--publish "127.0.0.1:${PORT}:3306" \
+		--publish "${PORT}:3306" \
 		--volume "${VOLUME}:/var/lib/mysql" \
 		--volume "${DATASET_DIR}:/dataset:ro" \
 		"${MYSQL_IMAGE}" >/dev/null; then
@@ -275,19 +285,19 @@ cmd_up() {
 	loaded="$(loaded_commit)"
 
 	if [ "${loaded}" = "${DATASET_COMMIT}" ]; then
-		log "ready on 127.0.0.1:${PORT} (dataset ${DATASET_COMMIT:0:8}, already loaded)"
+		log "ready on :${PORT} (dataset ${DATASET_COMMIT:0:8}, already loaded)"
 		return 0
 	fi
 
 	load_dataset
 	verify_dataset
-	log "ready on 127.0.0.1:${PORT} (dataset ${DATASET_COMMIT:0:8})"
+	log "ready on :${PORT} (dataset ${DATASET_COMMIT:0:8})"
 }
 
 cmd_wait() {
 	require_docker
 	wait_for_server
-	log "the server answers on 127.0.0.1:${PORT}"
+	log "the server answers on :${PORT}"
 }
 
 cmd_verify() {
@@ -307,7 +317,7 @@ cmd_status() {
 	log "container: ${CONTAINER} (${state})"
 	log "image:     $(container_image)"
 	if [ "${state}" = "running" ]; then
-		log "port:      127.0.0.1:$(container_port) -> 3306"
+		log "port:      ${PORT} -> 3306"
 		log "loaded:    $(loaded_commit)"
 		log "employees: $(employee_count)"
 	else

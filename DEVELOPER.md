@@ -36,8 +36,10 @@ The Linux toolchain spike lives in `Linux/` and is driven by one script — see
 not on `PATH` by default and the script finds it.
 
 ```
-./Linux/build.sh              build the image, run the Linux tests
-./Linux/build.sh --test       run the tests in the existing image
+./Linux/build.sh              build the build image, run the Linux tests
+./Linux/build.sh --test       run the tests in the existing build image
+./Linux/build.sh --runtime    build the CLI runtime image (mad-cli:latest)
+./Linux/build.sh --verify     build the runtime image, then verify the CLI in it
 ./Linux/build.sh --probe      the toolchain/Foundation report only
 ./Linux/build.sh --shell      interactive shell in the build image
 ./Linux/build.sh --rebuild    cold rebuild (~15-25 minutes)
@@ -45,10 +47,10 @@ not on `PATH` by default and the script finds it.
 
 Nothing built there ships: it compiles the ten headless frameworks against
 GNUstep, runs ported versions of their tests plus a toolchain probe, and builds
-the `mad` CLI beside them — `inspect`, `schema`, `query` and `refresh` run inside
-the image, `export` (PDF) is Apple-only. The GNUstep divergences it found are
-listed in `Linux/README.md`, which also carries the Phase D checkpoint's runs and
-the fixtures they use (`CLI/Fixtures/`).
+the `mad` CLI beside them. All six verbs run inside the image; `export --format
+pdf` refuses with its reason (the Linux PDF writer is deferred). The GNUstep
+divergences it found are listed in `Linux/README.md`, which also carries the
+checkpoint's runs and the fixtures they use (`CLI/Fixtures/`).
 
 The iOS regression gate for the platform guards those builds required:
 
@@ -60,57 +62,85 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 (The `OS=` qualifier is needed when several simulator runtimes are installed and
 the newest one has no device of that name.)
 
-## Test Database Passwords
+## Test Databases (Docker)
 
-Test passwords are (it's a never on test server):
-MySQL: 127.0.0.1, root, root, employees
-SQL Server: 192.168.1.224, test, test, AdventureWorks2022
+The live suites and the CLI fixtures use two containers, each created and
+maintained by a script beside its framework. Both scripts are idempotent:
+`up` creates the container when it is missing, starts it when it is stopped,
+and leaves it alone when the pinned image, port and data all match.
 
-## MySQL Test Database (Docker)
+|  | MySQL | SQL Server |
+|---|---|---|
+| container | `mad-mysql` | `mad-mssql` |
+| image | `mysql:8.4` (tag + digest) | `mcr.microsoft.com/mssql/server:2022-latest` (tag + digest) |
+| host port | `13306` (all interfaces) | `1433` (all interfaces) |
+| login | `root` / `root` | `sa` / `Root1@Root2` |
+| database | `employees` (300,024 employees) | `AdventureWorksLT2022` (295 products) |
+| volume | `mad-mysql-test-data` | `mad-mssql-data` |
+| script | `MADMySQL/TestDatabase/mysql-test-db.sh` | `MADTdsClient/TestDatabase/sqlserver-test-db.sh` |
+| pins | `db.conf`: image tag + digest, dataset commit + sha256 | `db.conf`: image tag + digest, backup URL + sha256 |
 
-`MADMySQL/TestDatabase/mysql-test-db.sh` runs the server the live MySQL tests
-talk to, in Docker, so those tests do not depend on whatever MySQL happens to
-be installed on the Mac. It is pinned end to end by
-`MADMySQL/TestDatabase/db.conf`: the server image by tag **and** digest
-(MySQL 8.4 LTS — the same line as the mysqlclient the app links), the data by
-the `datacharmer/test_db` commit and the archive's sha256. After loading, the
-dataset is checked against its own upstream row counts and per-table SHA-1
-checksums, so "the same sample database every time" is verified rather than
-assumed.
+Both scripts take the same verbs:
 
 ```
-MADMySQL/TestDatabase/mysql-test-db.sh up       # start; load the data if needed (default)
-MADMySQL/TestDatabase/mysql-test-db.sh status   # container, port, and what is loaded
-MADMySQL/TestDatabase/mysql-test-db.sh verify   # re-run the upstream checksums
-MADMySQL/TestDatabase/mysql-test-db.sh down     # stop (the volume keeps the data)
-MADMySQL/TestDatabase/mysql-test-db.sh reset    # remove the container and its volume
+<the framework's script> up       # create/start; load the data if missing (default)
+<the framework's script> wait     # block until the server answers
+<the framework's script> verify   # re-check the pinned dataset
+<the framework's script> status   # container, port, volume, what is loaded
+<the framework's script> logs     # tail the server log
+<the framework's script> down     # stop (the volume keeps the data)
+<the framework's script> reset    # remove the container and its volume
 ```
 
-The MADMySQL scheme calls `up` from the test action's pre-action and `down`
-from its post-action, so the server exists only while that scheme's tests run.
-The first `up` pulls ~600 MB of image and imports ~168 MB of SQL (a few
-minutes); every later `up` takes seconds, and the import is skipped unless the
-pins in `db.conf` changed or the volume was reset.
+The iOS schemes call `up` from the Test action's pre-action and `down` from
+the post-action, so each server runs only while its suite does. `up` is also
+what to run before the Linux suite or the CLI's `--verify --live`; both
+containers publish on every interface because the Linux image and the CLI
+fixtures reach the Mac by name (`mac`), not by loopback.
 
-The container publishes **127.0.0.1:3306**, which is what the tests connect to,
-so it needs that port free. A stock MySQL install runs as `_mysql` and will not
-show up in `lsof` — if `up` reports the port busy, either stop that server (then
-the container owns 3306 and nothing else is needed), or move both halves to
-another port: publish the container with `MAD_TESTDB_PORT=<port>` and add
-`MAD_MYSQL_TEST_PORT=<port>` to the MADMySQL scheme's **Test** action
-environment variables (Xcode: Edit Scheme → Test → Arguments → Environment
-Variables). The scheme sets `shouldUseLaunchSchemeArgsEnv = NO` so that the
-Test action's own environment is the one the test process gets.
+The first `up` is the slow one: MySQL pulls ~600 MB and imports ~168 MB of SQL
+(a few minutes); SQL Server pulls ~1.5 GB, starts, and restores the 8 MB
+AdventureWorks backup (a minute or two). Every later `up` takes seconds. If a
+container or volume is deleted, the next `up` rebuilds it from the pins in
+`db.conf`; nothing needs to be created by hand. The SQL Server image is
+`linux/amd64` only, so on Apple silicon Docker Desktop emulates it and prints a
+platform warning — expected, and why the first start is slower than MySQL's.
+
+**MySQL is on 13306, not 3306.** The Oracle MySQL installer's launchd service
+(`com.oracle.oss.mysql.mysqld`) may own 3306 on this Mac, as it did on
+2026-10-17. The test container deliberately leaves 3306 alone; the MADMySQL
+scheme's Test action sets `MAD_MYSQL_TEST_PORT=13306`, which is what points the
+live tests at the container. The CLI fixtures already store `mac:13306`.
 
 **`xcodebuild` cannot pass these through the shell.** A shell environment
 variable does not reach the test process, and neither does a `SIMCTL_CHILD_`
 prefix — both were measured, not assumed, so `MAD_MYSQL_TEST_PORT=13306
 xcodebuild test …` silently runs against 3306 instead. The scheme's
-environment is the only way in. (This applies to the `MAD_TDS_TEST_*` variables
-in the `MADTdsClient` suite too.)
+environment is the only way in; the MADMySQL scheme sets
+`shouldUseLaunchSchemeArgsEnv = NO` so that its Test action's environment is
+the one the test process gets. (The same rule applies to the `MAD_TDS_TEST_*`
+variables in the `MADTdsClient` suite; its scheme sets `up`/`down` too.)
 
-None of this is fatal to a test run: when no database can be provisioned, the
-live tests skip, exactly as they do on a machine with no MySQL at all.
+For a different server, either override the environment (`MAD_MYSQL_TEST_*`,
+`MAD_TDS_TEST_*`) or change the defaults in the test file; the scripts are the
+zero-configuration path. When no database can be provisioned, the live tests
+skip rather than fail.
+
+## Docker: what runs, and what persists
+
+Only the two test servers are containers. The Linux build has no persistent
+container: `./Linux/build.sh` runs `docker run --rm` for every test run, so
+nothing from it survives except the images it builds:
+
+* `mad-linux-toolchain:1` — the toolchain cache base (1.15 GB);
+* `mad-linux:phase-b` — the build/test image (6.69 GB), whose default command
+  runs ctest;
+* `mad-cli:latest` — the CLI runtime image (283 MB; `Linux/README.md`).
+
+`docker ps -a` should therefore show `mad-mysql` and `mad-mssql` (running or
+stopped), and nothing else from this project. `./Linux/build.sh --clean`
+removes the three Linux images; the two scripts' `down`/`reset` manage the
+servers.
 
 ## Common Commands
 

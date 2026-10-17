@@ -292,18 +292,25 @@ default scale; skips are counted separately and are not needs.
 
 ## The live database suites run here
 
-`MADTdsClientLiveTests` talks to a real SQL Server and skips (never fails)
-when none is reachable — the same contract the Xcode scheme has. It was run
-against the SQL Server 2022 container documented in `DEVELOPER.md`, from
-inside the Linux image:
+`MADMySQLLiveTests` and `MADTdsClientLiveTests` talk to real servers and skip
+(never fail) when none is reachable — the same contract the Xcode schemes have.
+The servers are the two containers `DEVELOPER.md` documents; start them first:
 
-	docker run --rm -e MAD_TDS_TEST_HOST=host.docker.internal \
-		mad-linux:phase-b /src/Linux/build/MADTdsClientLiveTests
+	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on :13306
+	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on :1433
 
-29/29 tests, 169 checks: the freetds wire path (login, queries, the
-date/time cracking, the decimal/blob/nvarchar conversions, schema discovery)
-works on Linux, not just compiles. `MADTdsClientTests`' two connection-failure
-tests run without a server.
+	docker run --rm \
+		-e MAD_MYSQL_TEST_HOST=host.docker.internal \
+		-e MAD_MYSQL_TEST_PORT=13306 \
+		-e MAD_TDS_TEST_HOST=host.docker.internal \
+		--entrypoint bash mad-linux:phase-b -c \
+		'/src/Linux/build/MADMySQLLiveTests && /src/Linux/build/MADTdsClientLiveTests'
+
+Measured 2026-10-17 with that clean setup: MySQL 44/44, 311 checks (prepared
+statements, the type conversions, schema discovery), and SQL Server 29/29, 169
+checks (the freetds wire path, the date/time cracking, decimal/blob/nvarchar,
+schema discovery) — so both drivers work on Linux, not just compile.
+`MADTdsClientTests`' two connection-failure tests run without a server.
 
 ## Licences
 
@@ -523,9 +530,11 @@ clang, cmake, git or build tree). 30 checks; it exits non-zero on any failure.
 	...
 	MADVERIFY 30 passed, 0 failed
 
-`--live` adds the MySQL and TDS refreshes (50 and 20 rows); it needs the two
-containers from `CLI/Fixtures/README.md`:
+`--live` adds the MySQL and TDS refreshes (50 and 20 rows); start the two test
+containers first (`DEVELOPER.md` has their scripts and logins):
 
+	MADMySQL/TestDatabase/mysql-test-db.sh up
+	MADTdsClient/TestDatabase/sqlserver-test-db.sh up
 	docker run --rm -v "$PWD":/repo:ro mad-cli:latest \
 		bash /repo/Linux/verify-cli.sh --live
 

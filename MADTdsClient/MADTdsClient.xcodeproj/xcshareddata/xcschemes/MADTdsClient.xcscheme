@@ -29,6 +29,24 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Start the SQL Server test database"
+               scriptText = "SCRIPT=&quot;${SRCROOT}/TestDatabase/sqlserver-test-db.sh&quot;&#10;[ -x &quot;$SCRIPT&quot; ] || SCRIPT=&quot;$(dirname &quot;${WORKSPACE_PATH:-$PWD}&quot;)/MADTdsClient/TestDatabase/sqlserver-test-db.sh&quot;&#10;if [ -x &quot;$SCRIPT&quot; ]; then&#10;  &quot;$SCRIPT&quot; up || echo &quot;note: the SQL Server test database did not start; the live tests skip.&quot;&#10;else&#10;  echo &quot;note: sqlserver-test-db.sh not found (SRCROOT=${SRCROOT}); the live tests skip without a server on 1433.&quot;&#10;fi&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "4C66C1461BA887D500663575"
+                     BuildableName = "MADTdsClient.framework"
+                     BlueprintName = "MADTdsClient"
+                     ReferencedContainer = "container:MADTdsClient.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -41,6 +59,24 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Stop the SQL Server test database"
+               scriptText = "SCRIPT=&quot;${SRCROOT}/TestDatabase/sqlserver-test-db.sh&quot;&#10;[ -x &quot;$SCRIPT&quot; ] || SCRIPT=&quot;$(dirname &quot;${WORKSPACE_PATH:-$PWD}&quot;)/MADTdsClient/TestDatabase/sqlserver-test-db.sh&quot;&#10;if [ -x &quot;$SCRIPT&quot; ]; then&#10;  &quot;$SCRIPT&quot; down || true&#10;fi&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "4C66C1461BA887D500663575"
+                     BuildableName = "MADTdsClient.framework"
+                     BlueprintName = "MADTdsClient"
+                     ReferencedContainer = "container:MADTdsClient.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
