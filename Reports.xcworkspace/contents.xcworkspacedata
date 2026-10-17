@@ -47,58 +47,142 @@
          location = "group:MADTdsClient/MADTdsClient.xcodeproj">
       </FileRef>
    </Group>
-   <FileRef
-      location = "group:Reports/../README.md">
-   </FileRef>
-   <FileRef
-      location = "group:DEVELOPER.md">
-   </FileRef>
-   <FileRef
-      location = "group:APPSTORE.md">
-   </FileRef>
-   <FileRef
-      location = "group:LICENSE.md">
-   </FileRef>
-   <FileRef
-      location = "group:AGENTS.md">
-   </FileRef>
-   <FileRef
-      location = "group:TODO.md">
-   </FileRef>
-   <FileRef
-      location = "group:BUGS.md">
-   </FileRef>
-   <FileRef
-      location = "group:LIBRARIES.md">
-   </FileRef>
-   <FileRef
-      location = "group:MAD_ARRAY_CACHING.md">
-   </FileRef>
-   <FileRef
-      location = "group:MAD_CLI.md">
-   </FileRef>
-   <FileRef
-      location = "group:MAD_DATA_OBJECT.md">
-   </FileRef>
-   <FileRef
-      location = "group:MAD_FORMAT.md">
-   </FileRef>
-   <FileRef
-      location = "group:MAD_LINUX.md">
-   </FileRef>
-   <FileRef
-      location = "group:MADModel_Layer.md">
-   </FileRef>
-   <FileRef
-      location = "group:MIGRATION_KICKOFF.md">
-   </FileRef>
-   <FileRef
-      location = "group:ROADMAP.md">
-   </FileRef>
-   <FileRef
-      location = "group:TASKS.md">
-   </FileRef>
-   <FileRef
-      location = "group:TEST-DB-INFO.md">
-   </FileRef>
+   <Group
+      location = "container:"
+      name = "CLI">
+      <FileRef
+         location = "group:CLI/Source">
+      </FileRef>
+      <FileRef
+         location = "group:CLI/Fixtures">
+      </FileRef>
+      <FileRef
+         location = "group:CLI/build.sh">
+      </FileRef>
+      <FileRef
+         location = "group:CLI/mad.entitlements">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Linux">
+      <FileRef
+         location = "group:Linux/README.md">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/AGENTS.md">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/Dockerfile">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/CMakeLists.txt">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/build.sh">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/verify-cli.sh">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/toolchain.conf">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/libraries.conf">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/cmake">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/Compat">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/Tests">
+      </FileRef>
+      <FileRef
+         location = "group:Linux/lib">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Documents">
+      <FileRef
+         location = "group:AGENTS.md">
+      </FileRef>
+      <FileRef
+         location = "group:APPSTORE.md">
+      </FileRef>
+      <FileRef
+         location = "group:BUGS.md">
+      </FileRef>
+      <FileRef
+         location = "group:BUGS_FIXED.md">
+      </FileRef>
+      <FileRef
+         location = "group:DEVELOPER.md">
+      </FileRef>
+      <FileRef
+         location = "group:LIBRARIES.md">
+      </FileRef>
+      <FileRef
+         location = "group:LICENSE.md">
+      </FileRef>
+      <FileRef
+         location = "group:LICENSE_COMPLIANCE_PLAN.md">
+      </FileRef>
+      <FileRef
+         location = "group:MAD_ARRAY_CACHING.md">
+      </FileRef>
+      <FileRef
+         location = "group:MAD_CLI.md">
+      </FileRef>
+      <FileRef
+         location = "group:MAD_DATA_OBJECT.md">
+      </FileRef>
+      <FileRef
+         location = "group:MAD_FORMAT.md">
+      </FileRef>
+      <FileRef
+         location = "group:MAD_FUTURE.md">
+      </FileRef>
+      <FileRef
+         location = "group:MAD_LINUX.md">
+      </FileRef>
+      <FileRef
+         location = "group:MAD_PDF_LINUX.md">
+      </FileRef>
+      <FileRef
+         location = "group:MAD_STORE_MIGRATION.md">
+      </FileRef>
+      <FileRef
+         location = "group:MAD_STORE_PHASE_C.md">
+      </FileRef>
+      <FileRef
+         location = "group:MADDataTable_Architecture_Report.md">
+      </FileRef>
+      <FileRef
+         location = "group:MADModel_Layer.md">
+      </FileRef>
+      <FileRef
+         location = "group:MIGRATION_KICKOFF.md">
+      </FileRef>
+      <FileRef
+         location = "group:README.md">
+      </FileRef>
+      <FileRef
+         location = "group:ROADMAP.md">
+      </FileRef>
+      <FileRef
+         location = "group:TASKS.md">
+      </FileRef>
+      <FileRef
+         location = "group:TEST-DB-INFO.md">
+      </FileRef>
+      <FileRef
+         location = "group:THIRD_PARTY_LICENSES.md">
+      </FileRef>
+      <FileRef
+         location = "group:TODO.md">
+      </FileRef>
+   </Group>
 </Workspace>
