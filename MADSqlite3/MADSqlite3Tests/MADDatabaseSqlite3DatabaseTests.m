@@ -167,7 +167,9 @@
 - (void)testOpenDatabaseCreatesHandleAndFile {
 	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
 	XCTAssertNotEqual([database databaseHandle], NULL);
-	XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:self.databaseURL.path]);
+	NSString *databasePath = self.databaseURL.path;
+	XCTAssertNotNil(databasePath);
+	XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:databasePath]);
 }
 
 - (void)testOpenDatabaseWithFlags {
@@ -550,7 +552,9 @@
 	XCTAssertEqualObjects(table.rows[1][@"age"], @25);
 
 	// Nothing on this path could have reached for a cache file.
-	NSArray <NSString *> *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.tempDirectory.path
+	NSString *tempPath = self.tempDirectory.path;
+	XCTAssertNotNil(tempPath);
+	NSArray <NSString *> *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:tempPath
 																					   error:NULL];
 	for (NSString *name in contents) {
 		XCTAssertFalse([name.pathExtension isEqualToString:@"maddb"],
@@ -573,16 +577,20 @@
 	XCTAssertEqual(sqlite3_exec(database, "CREATE TABLE t (x INTEGER);", NULL, NULL, NULL), SQLITE_OK);
 	XCTAssertEqual(sqlite3_exec(database, "INSERT INTO t VALUES (1);", NULL, NULL, NULL), SQLITE_OK);
 
-	NSURL *walURL = [NSURL fileURLWithPath: [self.databaseURL.path stringByAppendingString: @"-wal"]];
-	unsigned long long before = [[[NSFileManager defaultManager] attributesOfItemAtPath: walURL.path
-																			   error: NULL][NSFileSize] unsignedLongLongValue];
+	NSString *databasePath = self.databaseURL.path;
+	XCTAssertNotNil(databasePath);
+	NSURL *walURL = [NSURL fileURLWithPath:[databasePath stringByAppendingString:@"-wal"]];
+	NSString *walPath = walURL.path;
+	XCTAssertNotNil(walPath);
+	unsigned long long before = [[[NSFileManager defaultManager] attributesOfItemAtPath:walPath
+																			   error:NULL][NSFileSize] unsignedLongLongValue];
 	XCTAssertGreaterThan(before, 0ULL, @"the write sits in the WAL before the checkpoint");
 
 	BOOL checkpointed = [MADDatabaseSqlite3 checkpointStoreAtURL: self.databaseURL];
 	XCTAssertTrue(checkpointed, @"the checkpoint completes while the writer is still open");
 
-	unsigned long long after = [[[NSFileManager defaultManager] attributesOfItemAtPath: walURL.path
-																			  error: NULL][NSFileSize] unsignedLongLongValue];
+	unsigned long long after = [[[NSFileManager defaultManager] attributesOfItemAtPath:walPath
+																			  error:NULL][NSFileSize] unsignedLongLongValue];
 	XCTAssertEqual(after, 0ULL, @"TRUNCATE resets the WAL to zero bytes");
 
 	sqlite3_close(database);

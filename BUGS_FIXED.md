@@ -1430,6 +1430,62 @@ reference to "BUGS.md, the X entry" still lands.
   `NSRangeException` the entry describes) and
   `testGroupKeysProducePositionalColumnValuePairs`, unchanged.
 
+### `MADArrayCaching` could build a cache URL from an empty identifier
+- **Status:** Fixed
+- **Where:** `MADSqlite3/Source/MADArrayCaching.h:53-57`,
+  `MADSqlite3/Source/MADArrayCaching.m:121`, `:284-290`
+- **Behavior:** `-url` appended `"madac"` to `self.identifier` and passed the result
+  straight to `URLByAppendingPathComponent:`.  `-stringByAppendingPathExtension:` answers
+  nil for an empty identifier, and the URL API raises on nil, so an empty or missing
+  identifier surfaced as a deep `NSInvalidArgumentException` while constructing the cache
+  URL.  The class also inherited `-init`, which left the identifier nil.
+- **Why it matters:** The identifier becomes the on-disk file name; without a designated
+  initializer the class advertised a construction path that could never work.
+- **Now:** `-initWithIdentifier:cachedDelegate:types:` is marked
+  `NS_DESIGNATED_INITIALIZER`, `-init` and `+new` are `NS_UNAVAILABLE`, and an empty
+  identifier trips `NSParameterAssert` at initialization.  `-url` still guards the
+  nullable file name and answers nil rather than raising when assertion checking is
+  disabled.
+- **Test:** `MADDatabaseSqlite3DatabaseTests` constructs the class through the designated
+  initializer; the full suite passes 89/89 (5 benchmarks skipped).
+
+### `MADDataTableFast` passed possibly-nil values into paths that raise
+- **Status:** Fixed
+- **Where:** `MADSqlite3/Source/MADDataTableFast.m:447`, `:562`, `:1132`
+- **Behavior:** Three nullable values crossed a nonnull boundary and would raise when nil:
+  - `url.URLByDeletingLastPathComponent.path` was passed to `-fileExistsAtPath:`;
+  - `NSSortDescriptor.key` was passed to `-indexOfObject:`;
+  - `self.lastDataForCacheId.object` was passed to `-initWithDictionary:`.
+  The analyzer reported all three as `-Wnullable-to-nonnull-conversion`.
+- **Why it matters:** A stored cache URL with no directory, a descriptor with no key, or
+  a last-row cache holding nil each took the process down instead of producing a defined
+  answer.
+- **Now:**
+  - the directory path is stored in a local and checked; an unresolvable stored URL falls
+    through to recomputing the cache URL (and the log names the stored value, not nil);
+  - a nil sort key raises `NSInvalidArgumentException` with a message naming the cause --
+    the same exception `-indexOfObject:nil` raised, but with a usable diagnosis;
+  - a nil last-row cached object falls through to the SQLite query that rebuilds the row;
+    the invariant violation is logged once per process through `dispatch_once`, off the
+    successful-read path.
+- **Test:** `MADSqlite3Tests` 89/89 (5 benchmarks skipped), including
+  `MADDataTableFastSelectTests` and the database suite.
+
+### `MADQueryCacheAddRow` built its placeholder list with `strcat`
+- **Status:** Fixed
+- **Where:** `MADSqlite3/Source/MADQueryCacheAddRow.m:100-112`
+- **Behavior:** The `?` list for the bulk insert was built with `strcat(buf, ", ?")`
+  into a fixed-size stack buffer, while the write position was tracked separately in
+  `buf_ptr`.  The analyzer reported `security.insecureAPI.strcpy` (CWE-119).
+- **Why it matters:** The buffer is sized exactly for `n` placeholders, so the existing
+  arithmetic cannot overflow, but the append itself was unbounded and its length was
+  assumed rather than returned.
+- **Now:** `buf_ptr = (int)strlcat(buf, ", ?", sizeof(buf));` bounds the append and takes
+  the new length from the call.  The output is byte-identical under the existing sizing;
+  the Linux image's glibc 2.39 provides `strlcat`.
+- **Test:** the cache write paths in `MADDatabaseSqlite3DatabaseTests`; the Linux build is
+  the cross-platform gate for the libc call.
+
 ## MADMySQL
 
 ### `MysqlFetch+DataTable`: no non-SELECT statement could ever execute

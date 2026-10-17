@@ -10,16 +10,19 @@
 #define MAD_MTArrayCached_h
 
 #import <Foundation/NSEnumerator.h>
+#import <Foundation/NSSet.h>
 
 @protocol MADCacheProtocol;
 
 // The on-disk format of a .madac file: a single table named "ac" with an integer
 // primary key "ci" (the element index) and a blob "ck" (the serialised element).
 // Shared with MADArrayCachingEnumerator so the two stay on the same format.
-extern NSString * const MTArrayCachedTableName;	// This gives warning: Pointer is missing a nullability type specifier (_Nonnull, _Nullable, or _Null_unspecified)
+NS_ASSUME_NONNULL_BEGIN
+extern NSString * const MTArrayCachedTableName;
 extern NSString * const MTArrayCachedColumnKey;
 extern NSString * const MTArrayCachedColumnValue;
 extern NSString * const MTArrayCachedExtension;
+NS_ASSUME_NONNULL_END
 
 typedef NS_ENUM(int16_t, MADArrayCachingState) {
 	MADArrayCachingStateUnknown = 0,
@@ -50,7 +53,9 @@ static inline  NSString * _Nonnull NSStringFromMADArrayCachingState(MADArrayCach
 
 	- (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier
 								 cachedDelegate:(nonnull id <MADCacheProtocol>)cachedDelegate
-										  types:(nonnull NSSet<Class> *)classes;
+										  types:(nonnull NSSet<Class> *)classes NS_DESIGNATED_INITIALIZER;
+	- (instancetype _Nonnull)init NS_UNAVAILABLE;
+	+ (instancetype _Nonnull)new NS_UNAVAILABLE;
 
 	- (void)initializeDatabase;
 	- (void)finalizeDatabase;

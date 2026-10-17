@@ -104,10 +104,9 @@ static NSString * const SqlDelimitorObject = @", %@";
 		int buf_ptr = 1;
 		for (NSUInteger columnCounter = 0; columnCounter < columnKeysCount; columnCounter++) {
 			if (columnCounter > 0) {
-				// The following line emits the message:
-				// Call to function 'strcat' is insecure as it does not provide bounding of the memory buffer. Replace unbounded copy functions with analogous functions that support length arguments such as 'strlcat'. CWE-119
-				strcat(buf, ", ?");
-				buf_ptr += 3;
+				// The buffer is sized for this exact number of placeholders; strlcat
+				// bounds the append and also gives the new length back.
+				buf_ptr = (int)strlcat(buf, ", ?", sizeof(buf));
 			}
 			buf_ptr = buf_ptr + ultoa((unsigned int)columnCounter + 1, (buf+buf_ptr));
 		}

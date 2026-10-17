@@ -967,6 +967,9 @@ wrong answer.
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADArrayCaching` could build a cache URL from an empty identifier
+- `MADDataTableFast` passed possibly-nil values into paths that raise
+- `MADQueryCacheAddRow` built its placeholder list with `strcat`
 - `fieldsForTable:` ran the tables query and returned tables as fields
 - `connectWithConnection:credentals:connectionError:` returned nil after connecting
 - `MADDataTableFast` stored an absolute cache URL that a container change invalidates

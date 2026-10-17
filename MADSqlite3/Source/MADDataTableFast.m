@@ -364,8 +364,11 @@ static os_log_t mlog;
 		os_log_error(mlog, "NSKeyedArchiver Error: %@", error.localizedDescription);
 	}
 
-	// The below line gives: Implicit conversion from nullable pointer 'NSIndexSet * _Nullable' to non-nullable pointer type 'NSIndexSet * _Nonnull'
-	self.groupKeyIndexes = (groupKeysArray != nil) ? [[NSMutableIndexSet alloc] initWithIndexSet: groupKeysArray] : [[NSMutableIndexSet alloc] init];
+	if (groupKeysArray != nil) {
+		self.groupKeyIndexes = [[NSMutableIndexSet alloc] initWithIndexSet:(NSIndexSet *)groupKeysArray];
+	} else {
+		self.groupKeyIndexes = [[NSMutableIndexSet alloc] init];
+	}
 
 	[self reopenDbConnection];
 	// The plist carries the row counter but not the rows -- those live in the cache
@@ -440,11 +443,11 @@ static os_log_t mlog;
 	NSURL *url = [NSURL URLWithString: stored];
 	if (url.scheme.length > 0) {
 		NSURL *directory = url.URLByDeletingLastPathComponent;
-		// The below line gives: Implicit conversion from nullable pointer 'NSIndexSet * _Nullable' to non-nullable pointer type 'NSIndexSet * _Nonnull'
-		if ([[NSFileManager defaultManager] fileExistsAtPath: directory.path]) {
+		NSString *directoryPath = directory.path;
+		if (directoryPath != nil && [[NSFileManager defaultManager] fileExistsAtPath:directoryPath]) {
 			return url;
 		}
-		os_log_error(mlog, "[MADDataTableFast %p] the cache directory %@ is gone; recomputing this cache's url for the container in use.", self, directory.path);
+		os_log_error(mlog, "[MADDataTableFast %p] the cache directory %@ is gone; recomputing this cache's url for the container in use.", self, directoryPath ?: stored);
 		return nil;
 	}
 
@@ -502,8 +505,10 @@ static os_log_t mlog;
 	buf[0] = 't';
 	ultoa(self.tag, (buf+1));
 	char *ptr = buf;
-	// The below line gives: Implicit conversion from nullable pointer 'NSIndexSet * _Nullable' to non-nullable pointer type 'NSIndexSet * _Nonnull'
-	return [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+	NSString *tableName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
+	// The buffer is ASCII "t<decimal>", so the fallback is unreachable; it keeps
+	// the nonnull return contract if the conversion ever fails.
+	return tableName != nil ? tableName : [[NSString alloc] initWithFormat:@"t%lu", (unsigned long)self.tag];
 }
 
 - (NSString *)columnNameForIdentifier:(NSString *)identifier {
@@ -553,8 +558,13 @@ static os_log_t mlog;
 	NSMutableArray *groupKeys = [[NSMutableArray alloc] initWithCapacity: sortDescriptors.count];
 	NSUInteger index = NSNotFound;
 	for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
-		// The below line gives: Implicit conversion from nullable pointer 'NSIndexSet * _Nullable' to non-nullable pointer type 'NSIndexSet * _Nonnull'
-		index = [columnKeys indexOfObject: sortDescriptor.key];
+		NSString *key = sortDescriptor.key;
+		if (key == nil) {
+			// -indexOfObject: would raise anyway; make the diagnosis name the cause.
+			[NSException raise:NSInvalidArgumentException
+						format:@"A sort descriptor used for grouping has no key."];
+		}
+		index = [columnKeys indexOfObject:key];
 		if (index != NSNotFound) {
 			NSNumber *columnIndex = [[NSNumber alloc] initWithUnsignedInteger: index];
 			[_groupKeyIndexes addIndex:index];
@@ -1123,8 +1133,16 @@ static os_log_t mlog;
 												 error:(NSError * __autoreleasing *)outError {
 	if (self.lastDataForCacheId != nil) {
 		if (cacheId == self.lastDataForCacheId.index) {
-			// The below line gives: Implicit conversion from nullable pointer 'NSIndexSet * _Nullable' to non-nullable pointer type 'NSIndexSet * _Nonnull'
-			return [[NSDictionary alloc] initWithDictionary:self.lastDataForCacheId.object];
+			id cached = self.lastDataForCacheId.object;
+			if (cached != nil) {
+				return [[NSDictionary alloc] initWithDictionary:cached];
+			}
+			// A nil cached object is an invariant violation, not a normal miss.
+			// Log it once per process; the query below still answers correctly.
+			static dispatch_once_t onceToken;
+			dispatch_once(&onceToken, ^{
+				os_log_error(mlog, "[MADDataTableFast %p] the last-row cache held a nil object; requerying.", self);
+			});
 		}
 	}
 	

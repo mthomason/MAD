@@ -121,6 +121,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 - (instancetype _Nonnull)initWithIdentifier:(nonnull NSString *)identifier
 							 cachedDelegate:(nonnull id <MADCacheProtocol>)cachedDelegate
 									  types:(nonnull NSSet<Class> *)classes {
+	// The identifier becomes the on-disk file name; an empty one cannot build
+	// a URL and was the reachable nil case in -url.
+	NSParameterAssert(identifier.length > 0);
 	if (self = [super init]) {
 		
 		NSSet <Class> *types = [[NSSet alloc] initWithSet:classes];
@@ -283,9 +286,9 @@ void sqliteCallbackFunc(void *foo, const char* statement) {
 
 - (NSURL *)url {
 	NSURL *cachedArrayDirectories = [self.cachedDelegate cachedFilesDirectory];
-	_url = [cachedArrayDirectories URLByAppendingPathComponent:[self.identifier stringByAppendingPathExtension:@"madac"]
-												   isDirectory:NO];	// This gives warning: Implicit conversion from nullable pointer 'NSString * _Nullable' to non-nullable pointer type 'NSString * _Nonnull'
-
+	NSString *fileName = [self.identifier stringByAppendingPathExtension:@"madac"];
+	if (fileName == nil) return nil;
+	_url = [cachedArrayDirectories URLByAppendingPathComponent:fileName isDirectory:NO];
 	return _url;
 }
 
