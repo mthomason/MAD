@@ -60,7 +60,7 @@ NSString * const MADSqlTextFromPart = @"\nFROM\n";
 }
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-	if (self = [super init]) {
+	if (self = [self init]) {
 		_databaseConnection = [decoder decodeObjectOfClass:[MADDatabaseConnection class]
 												  forKey:@"databaseConnection"];
 		NSSet *errorClasses = [NSSet setWithObjects:[NSArray class], [NSError class], nil];

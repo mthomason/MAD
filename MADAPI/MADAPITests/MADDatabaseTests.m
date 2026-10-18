@@ -69,6 +69,21 @@
 
 @end
 
+// Records whether its -init ran.  Decoding should construct the instance the same way
+// -copyWithZone: does, through the concrete subclass's initializer.
+@interface MADTestInitializedDatabase : MADDatabase
+@property (nonatomic, assign) BOOL didRunInit;
+@end
+
+@implementation MADTestInitializedDatabase
+- (instancetype)init {
+	if (self = [super init]) {
+		_didRunInit = YES;
+	}
+	return self;
+}
+@end
+
 @interface MADDatabaseTests : XCTestCase
 @end
 
@@ -368,6 +383,25 @@
 	XCTAssertTrue(decoded.isLicensedUser);
 	XCTAssertEqual(decoded.errors.count, (NSUInteger)1);
 	XCTAssertNil(decoded.databaseConnection);
+}
+
+// A decoded instance must be constructed the way -copyWithZone: constructs one -- through
+// the concrete subclass's -init -- so its own setup (an observer, a queue) is not skipped.
+- (void)testDecodingRunsTheSubclassInitializer {
+	MADTestInitializedDatabase *db = [[MADTestInitializedDatabase alloc] init];
+	XCTAssertTrue(db.didRunInit);
+
+	NSError *error = nil;
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:db requiringSecureCoding:YES error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(data);
+
+	MADTestInitializedDatabase *decoded = [NSKeyedUnarchiver unarchivedObjectOfClass:[MADTestInitializedDatabase class]
+																		   fromData:data
+																			  error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(decoded);
+	XCTAssertTrue(decoded.didRunInit);
 }
 
 #pragma mark - Literal escaping limits

@@ -64,6 +64,21 @@
 
 @end
 
+// Records whether its -init ran.  Decoding should construct the instance the same way
+// -copyWithZone: does, through the concrete subclass's initializer.
+@interface MADTestInitializedDatabase : MADDatabase
+@property (nonatomic, assign) BOOL didRunInit;
+@end
+
+@implementation MADTestInitializedDatabase
+- (instancetype)init {
+	if (self = [super init]) {
+		_didRunInit = YES;
+	}
+	return self;
+}
+@end
+
 #pragma mark - Class-level defaults
 
 static void testClassLevelDefaults(void) {
@@ -378,6 +393,31 @@ static void testSecureCodingRoundTrip(void) {
 #endif
 }
 
+// A decoded instance must be constructed the way -copyWithZone: constructs one -- through
+// the concrete subclass's -init -- so its own setup (an observer, a queue) is not skipped.
+static void testDecodingRunsTheSubclassInitializer(void) {
+	MADTestInitializedDatabase *db = [[MADTestInitializedDatabase alloc] init];
+	MAD_PASS(db.didRunInit, "the subclass initializer runs on construction");
+
+#if __APPLE__
+	NSError *error = nil;
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:db requiringSecureCoding:YES error:&error];
+	MAD_PASS(error == nil, "the strict archive succeeds");
+	MADTestInitializedDatabase *decoded = [NSKeyedUnarchiver unarchivedObjectOfClass:[MADTestInitializedDatabase class]
+																		   fromData:data
+																			  error:&error];
+	MAD_PASS(error == nil, "the strict unarchive succeeds");
+#else
+	// GNUstep has no secure archiving; the permissive coder is the platform's path
+	// (Linux/README.md).
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:db requiringSecureCoding:NO error:NULL];
+	MAD_PASS(data != nil, "the permissive archive has bytes");
+	MADTestInitializedDatabase *decoded = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+#endif
+	MAD_PASS(decoded != nil, "the database round trips");
+	MAD_PASS(decoded.didRunInit, "decoding runs the subclass initializer");
+}
+
 #pragma mark - Literal escaping limits
 
 // The base class escapes only the quote character.  A backslash is deliberately left
@@ -420,4 +460,5 @@ MAD_TEST_MAIN("MADDatabaseTests",
 	MAD_TEST(testCopyPreservesState),
 	MAD_TEST(testInsecureNSCodingRoundTrip),
 	MAD_TEST(testSecureCodingRoundTrip),
+	MAD_TEST(testDecodingRunsTheSubclassInitializer),
 	MAD_TEST(testNewSafeLiteralLeavesBackslashUntouched));
