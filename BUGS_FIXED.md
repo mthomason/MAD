@@ -37,11 +37,17 @@ reference to "BUGS.md, the X entry" still lands.
   `MADDatabaseMySQL`, `MADDatabaseSqlite3` and `MADDatabaseSQLServer` override no
   coding methods, so they inherit the conformance and need no change (their own ivars
   were never encoded by the base class).
+- **Now (initializer):** `-initWithCoder:` dispatches through `[self init]` rather
+  than `[super init]` (commit `8d78329f9`), so a decoded subclass runs its own `-init`
+  before the archived base state is applied -- `MADDatabaseSQLServer`'s
+  `MADNotificationError` observer, for example. This matches `-copyWithZone:`, which
+  already constructs the copy through the concrete class's initializer.
 - **Test:** `MADDatabaseTests testSupportsSecureCoding` and
   `testSecureCodingRoundTrip` (which replaces `testSecureArchivingIsUnsupported`);
-  `testInsecureNSCodingRoundTrip` still passes. The Linux port asserts the conformance
-  claim and GNUstep's strict-archive refusal, because GNUstep has no secure archiving
-  (`Linux/README.md`).
+  `testInsecureNSCodingRoundTrip` still passes, and
+  `testDecodingRunsTheSubclassInitializer` pins the initializer dispatch. The Linux
+  port asserts the conformance claim and GNUstep's strict-archive refusal, because
+  GNUstep has no secure archiving (`Linux/README.md`).
 
 ### `MADDatabaseDataBinding`: `nil` vs `[NSNull null]` handled inconsistently
 - **Status:** Fixed
