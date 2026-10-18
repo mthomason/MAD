@@ -350,7 +350,11 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 #pragma mark Override Points
 
 - (MADDatabaseConnection *)databaseConnection {
-	@throw NSInternalInconsistencyException;
+	NSString *format = @"Not implemented: %@.  Subclass MADConnectionSQLGenericViewController; don't use it directly.";
+	NSString *reason = [[NSString alloc] initWithFormat:format, NSStringFromSelector(_cmd)];
+	@throw [NSException exceptionWithName: NSInternalInconsistencyException
+								   reason: reason
+								 userInfo: nil];
 }
 
 - (void)resetInterface {

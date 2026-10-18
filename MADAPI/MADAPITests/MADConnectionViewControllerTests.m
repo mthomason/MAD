@@ -33,18 +33,19 @@
 
 #pragma mark - Abstract override point
 
-// Both classes implement the override point as `@throw NSInternalInconsistencyException;`
-// -- which throws the *name constant* (an NSString), not an NSException.  Documented in
-// BUGS.md ("...-databaseConnection throws an NSString").  The tests catch `id` because a
-// `@catch (NSException *)` would not catch it.
+// Both classes implement the override point as an abstract method that throws a real
+// NSException named NSInternalInconsistencyException, matching MADDatabase's
+// "subclass me" methods.  BUGS.md used to record the name constant itself being
+// thrown; this test is what pins the corrected shape.
 
 - (void)testDatabaseConnectionThrowsOnBaseClass {
 	MADConnectionViewController *controller = [[MADConnectionViewController alloc] initWithNibName:nil bundle:nil];
 	@try {
 		[controller databaseConnection];
 		XCTFail(@"Expected -databaseConnection to throw");
-	} @catch (id thrown) {
-		XCTAssertEqualObjects(thrown, NSInternalInconsistencyException);
+	} @catch (NSException *exception) {
+		XCTAssertEqualObjects(exception.name, NSInternalInconsistencyException);
+		XCTAssertTrue([exception.reason containsString:@"MADConnectionViewController"]);
 	}
 }
 
@@ -53,8 +54,9 @@
 	@try {
 		[controller databaseConnection];
 		XCTFail(@"Expected -databaseConnection to throw");
-	} @catch (id thrown) {
-		XCTAssertEqualObjects(thrown, NSInternalInconsistencyException);
+	} @catch (NSException *exception) {
+		XCTAssertEqualObjects(exception.name, NSInternalInconsistencyException);
+		XCTAssertTrue([exception.reason containsString:@"MADConnectionSQLGenericViewController"]);
 	}
 }
 
