@@ -32,6 +32,15 @@ Status key:
 
 ## MAD (framework)
 
+### MADReportFormatter compares untyped values through id
+- **Status:** Open -- documented; the dynamic dispatch is intentional but unchecked.
+- **What:** `MADReportFormatter.m:219` and `:222` send `compare:` to a value held as `id`
+  while several classes declare that selector with different argument types, so the
+  compiler cannot bind it (`-Wstrict-selector-match`).  If the values being sorted are not
+  all the same class -- the formatter sorts query results, which mix numbers and strings --
+  the wrong implementation can be invoked, or none at all.
+- **Where:** `MAD/Source/MADReportFormatter.m:210-225`.
+
 ### The document thumbnail uses the deprecated QuickLook file-attribute keys
 - **Status:** Open -- kept deliberately, behind a scoped pragma.
 - **What:** `MAD/Source/MADocument.m -fileAttributesToWriteToURL:forSaveOperation:error:`
@@ -106,15 +115,6 @@ Status key:
   the same shape as the `MADCurrencyFormatter` locale question and belongs with the
   store, not with an exporter.
 - **Test:** none; there is no reader to characterize.
-
-### MADReportFormatter compares untyped values through id
-- **Status:** Open -- documented; the dynamic dispatch is intentional but unchecked.
-- **What:** `MADReportFormatter.m:219` and `:222` send `compare:` to a value held as `id`
-  while several classes declare that selector with different argument types, so the
-  compiler cannot bind it (`-Wstrict-selector-match`).  If the values being sorted are not
-  all the same class -- the formatter sorts query results, which mix numbers and strings --
-  the wrong implementation can be invoked, or none at all.
-- **Where:** `MAD/Source/MADReportFormatter.m:210-225`.
 
 ### MysqlFetch passes an uninitialized value to a function
 - **Status:** Open -- documented from the analyzer run.
