@@ -14,6 +14,37 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MADAPI
 
+### `MADDatabaseConnection` subclasses do not survive the base class's `NSCopying` / `NSCoding`
+- **Status:** Fixed 2026-10-18 (commit `a25756b5d`).
+- **Where:** `MADAPI/Source/MADDatabaseConnection.m:34-62`
+- **Behavior:** `-initWithCoder:` / `-encodeWithCoder:` / `-copyWithZone:` read and write
+  the base class's *own* ivars. A concrete subclass cannot see those ivars (they are
+  synthesized in the base `.m`, not declared in the header) and therefore shadows each
+  one with its own storage — `MADDatabaseConnectionMySql` does exactly this with
+  `@synthesize databaseType = _databaseType;`. The base's accessors are never consulted,
+  so a copied or archived connection reads back with `MADDatabaseTypeUnknown`, a nil
+  connection string, `requiresCredentials == NO` and a nil identifier.
+  `MADDatabaseConnectionMySql` works around the copy half by overriding
+  `-copyWithZone:` with a real initializer; nothing overrides the coding half.
+- **Why it matters:** Any future persistence of a connection object — or of a
+  `MADDatabase` that encodes its `databaseConnection` — silently loses the connection's
+  state. Latent today: no archive of either type exists in the app or frameworks.
+- **Now:** the four ivars are declared `@protected` in
+  `MADAPI/Source/MADDatabaseConnection.h`, so a driver uses the base class's storage
+  instead of shadowing it; the base's `-copyWithZone:` and coding methods therefore
+  carry the standard properties, and `-initWithCoder:` dispatches through `[self init]`
+  so a decoded driver's own initializer runs. The three drivers carry their own
+  parameters as well: `MADDatabaseConnectionMySql` (host, database, port),
+  `MADDatabaseConnectionSqlite3` (URL) and `MADDatabaseConnectionSQLServer` (host,
+  server, database, port) override the coding pair, call super and restate
+  `+supportsSecureCoding`. The header documents the contract for a third-party driver.
+- **Test:** `MADDatabaseConnectionTests testSubclassCopyCarriesSubclassState` and
+  `testSubclassNSCodingCarriesSubclassState` (renamed from `...DoesNotCarry...`), plus
+  `MADMySQLTests testConnectionCodingRoundTripCarriesTheConnectionState`,
+  `MADDatabaseSqlite3Tests testConnectionCodingRoundTripCarriesTheUrl` and
+  `MADTdsClientTests testConnectionCodingRoundTripCarriesTheConnectionState`, each with
+  its Linux port.
+
 ### `MADDatabase` is NSCoding-only, so secure archiving rejects it
 - **Status:** Fixed 2026-10-18 (commit `4e9f5af6f`).
 - **Where:** `MADAPI/Source/MADDatabase.h:32`, `MADAPI/Source/MADDatabase.m:50-63`

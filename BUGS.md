@@ -21,27 +21,9 @@ Status key:
 
 ## MADAPI
 
-### `MADDatabaseConnection` subclasses do not survive the base class's `NSCopying` / `NSCoding`
-- **Status:** Quirk (latent — nothing archives a connection; subclasses override `-copyWithZone:`)
-- **Where:** `MADAPI/Source/MADDatabaseConnection.m:34-62`
-- **Behavior:** `-initWithCoder:` / `-encodeWithCoder:` / `-copyWithZone:` read and write
-  the base class's *own* ivars. A concrete subclass cannot see those ivars (they are
-  synthesized in the base `.m`, not declared in the header) and therefore shadows each
-  one with its own storage — `MADDatabaseConnectionMySql` does exactly this with
-  `@synthesize databaseType = _databaseType;`. The base's accessors are never consulted,
-  so a copied or archived connection reads back with `MADDatabaseTypeUnknown`, a nil
-  connection string, `requiresCredentials == NO` and a nil identifier.
-  `MADDatabaseConnectionMySql` works around the copy half by overriding
-  `-copyWithZone:` with a real initializer; nothing overrides the coding half.
-- **Why it matters:** Any future persistence of a connection object — or of a
-  `MADDatabase` that encodes its `databaseConnection` — silently loses the connection's
-  state. Latent today: no archive of either type exists in the app or frameworks.
-- **Test:** `MADDatabaseConnectionTests testSubclassCopyDoesNotCarrySubclassState` and
-  `testSubclassNSCodingDoesNotCarrySubclassState`, which pin the lossy result so a fix
-  will be visible.
-
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADDatabaseConnection` subclasses do not survive the base class's `NSCopying` / `NSCoding`
 - `MADDatabase` is NSCoding-only, so secure archiving rejects it
 - `MADConnectionViewController` / `MADConnectionSQLGenericViewController` `-databaseConnection` threw an NSString
 - `MADDatabaseDataBinding`: `nil` vs `[NSNull null]` handled inconsistently
