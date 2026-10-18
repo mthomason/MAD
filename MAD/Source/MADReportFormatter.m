@@ -79,6 +79,10 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 @property (nonatomic, readwrite, strong)    NSMutableArray <__kindof MADSectionRepresentation *> *pageLayoutTemporary;
 @property (nonatomic, readwrite, strong)    NSArray <NSNumber *> *pageIndexesTemporary;
 
+//  The previous row's positional group-key values, as returned by
+//  -newObjectArrayKeyValuesForResultRow:; nil before the first row.  The elements
+//  are raw cache values (NSNull, NSNumber, NSString or NSData); see
+//  -compareValue:withValue:usingSelector: for how they are compared.
 @property (nonatomic, readwrite, strong)    NSArray *lastComparsonValues;
 
 @end
@@ -174,6 +178,41 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 	return _overrideIdentifier == nil ? _filename.hash : _overrideIdentifier.hash;
 }
 
+//  Group-boundary comparison.  The formatter does not sort: the cache is already
+//  ordered by the report's group keys.  -MADDataTableFast
+//  -enumeratorForKeyObjectsSorted: emits ORDER BY for them, and a text key sorts
+//  under the LSASC collation, which is exactly -localizedCaseInsensitiveCompare:
+//  (MADDatabaseSqlite3).  This method answers only "is this level's key the same
+//  as the previous row's?"; -formatDocumentGroupFooters:andLastValues: and
+//  -formatDocumentGroupHeaders:andLastValues: use it to find where a group ends
+//  and the next begins, and neither reads the ordering.
+//
+//  `value` and `value2` are raw row-cache values.  `MADResult` is an erased alias
+//  (MADAliases.h), so they arrive as `id`; the object's class is the only runtime
+//  tag the cache carries: the sqlite reader maps storage class to NSNull,
+//  NSNumber, NSString or NSData (+[MADDatabaseSqlite3 databaseResultValue:
+//  columnNumber:]).  NSDate never comes from that reader.
+//
+//  `selector` is the schema-side type hint for the level, from the group's
+//  NSSortDescriptor: MADDataTypeSelectorForSorting maps string fields to
+//  -localizedCaseInsensitiveCompare:, blob fields to -compareData:, and the rest
+//  to -compare:.  Hint and value class agree in the normal cache path, but
+//  nothing enforces it: the cache column's declared type is a schema hint, while
+//  the stored class is SQLite's per-value storage class.  Blob columns are the
+//  loose case -- the insert bind accepts both NSString and NSData for one,
+//  writing TEXT and BLOB respectively, so a driver that produces both will mix
+//  them -- and a non-sqlite datasource can supply anything.  A mismatch raises:
+//  either the selector is sent to a class that does not implement it, or a
+//  Foundation comparison is handed an argument of the wrong class.  It does not
+//  mis-sort.  See BUGS.md, "MADReportFormatter compares untyped values through id".
+//
+//  The two -compare: sends below are what -Wstrict-selector-match reports:
+//  Foundation declares `compare:` on several classes with different argument
+//  types, and the receiver is `id`, so the compiler cannot bind one.  Dispatch
+//  is by the receiver's class at runtime; the warning is a compile-time
+//  ambiguity.  Any fix must keep same-class results identical and should also
+//  remove the duplication noted above: both walks compare the same
+//  (last, current) pair at every level, so each level is compared twice per row.
 - (NSComparisonResult)compareValue:(id)value
 						 withValue:(id)value2
 					 usingSelector:(SEL)selector {
@@ -260,6 +299,9 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 	return self.sections.groupSortDescriptors[index].key;
 }
 
+//  The keyed sibling of -newObjectArrayKeyValuesForResultRow: one entry per group
+//  sort key, NSNull when the row has none.  Nothing in this tree calls it today;
+//  the formatter compares levels positionally and uses the array form below.
 - (NSDictionary <NSString *, MADResult *> *)newObjectDictionaryForResultRow:(id)resultRow {
 	NSMutableDictionary *keyValues = [[NSMutableDictionary alloc] initWithCapacity:self.numberOfGroups];
 	if ([resultRow isKindOfClass:[NSDictionary class]]) {
@@ -280,6 +322,20 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 	return keyValues;
 }
 
+//  One value per query group, in group order (level 0 first): for each group sort
+//  descriptor, the row's value at that key, or NSNull when the row has none.
+//  This is the array -formatDocumentAddDetail compares across rows.
+//
+//  The element type is erased: `MADResult` is
+//  NSObject <NSCopying, NSSecureCoding>, so the method says nothing about which
+//  class a value is, and the values are deliberately not converted or tagged
+//  here.  Each stays what the row cache produced, and the class is the only tag
+//  the cache carries: NSNull, NSNumber, NSString or NSData.
+//
+//  -MADDocumentRenderDataSource -groupLevelKeys: calls this too and passes the
+//  same values to the aggregate WHERE clause, so wrapping or coercing them would
+//  change query results, not just the comparison.  A type tag must therefore
+//  travel beside this array, not inside it.
 - (NSArray <MADResult *> *)newObjectArrayKeyValuesForResultRow:(id)resultRow {
 	NSMutableArray *keyValues = [[NSMutableArray alloc] initWithCapacity:self.numberOfGroups];
 	if ([resultRow isKindOfClass:[NSDictionary class]]) {
@@ -438,6 +494,24 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 				 (unsigned long)self.machineState.pageCounter);
 }
 
+//  The row loop, and where report groups are discovered.  Rows arrive already
+//  sorted by the cache on the report's group keys.  For each row this builds
+//  `keyValuesForComparson`, one raw cache value per query group in level order,
+//  and compares it with `self.lastComparsonValues`, the previous row's array:
+//    - a level that differs closes the group at that level (its footer), and the
+//      walk runs deepest to shallowest;
+//    - a level that differs opens a group at that level (its header), and the
+//      walk runs shallowest to deepest.
+//  The first row has no previous values and opens every level.  The same pair of
+//  arrays is handed to both walks, so each level is compared twice per row (see
+//  -compareValue:withValue:usingSelector:).  The loop can never see the last
+//  group end, so after it every level's footer is laid out directly, with no
+//  further comparison.
+//
+//  `resultRow` is either a dictionary of the group keys plus MADIdentifierROWID
+//  (the sqlite cache's enumerator, which only projects the key columns) or, when
+//  the query has no groups, a bare row-id NSNumber from the rowid-only
+//  enumerator; `rowIdOnly` caches which form this report uses.
 - (void)formatDocumentAddDetail {
 	[self clearReportLayoutContainers];
 	_machineState.rowCounter = 0;
@@ -534,6 +608,11 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 	[self layoutAddReportFooter];
 }
 
+//  Close the groups that ended at this row.  The levels are walked deepest
+//  first, so a footer is emitted inner before outer.  At each level the previous
+//  row's value is compared with the current row's using that level's sort
+//  selector; a difference means the group at that level closed.  Called for
+//  every row except the first (which has no previous values).
 - (void)formatDocumentGroupFooters:(NSArray *)currentValues
 					 andLastValues:(NSArray *)lastValues {
 	for (NSUInteger groupLevel = lastValues.count; groupLevel > 0; groupLevel--) {
@@ -552,6 +631,11 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 	}
 }
 
+//  Open the groups that start at this row.  The levels are walked shallowest
+//  first, so a header is emitted outer before inner.  With no previous row every
+//  level is new; otherwise a level is new when its value differs from the
+//  previous row's under that level's selector.  This is the same pair of arrays
+//  and the same comparison the footer walk just made, at every level.
 - (void)formatDocumentGroupHeaders:(NSArray *)currentValues
 					 andLastValues:(NSArray *)lastValues {
 	

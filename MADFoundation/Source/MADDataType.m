@@ -10,6 +10,10 @@
 #import <MADFoundation/NSData+Comparison.h>
 #import <Foundation/NSString.h>
 
+//  The comparison selector for a sort or group level.  The report formatter uses
+//  it for group-boundary equality and the cache uses the same sort descriptors to
+//  order the rows, so the two sides have to agree (MADReportFormatter
+//  -compareValue:withValue:usingSelector:).
 SEL MADDataTypeSelectorForSorting(MADDataType dataType) {
 	switch (dataType) {
 		case MADDataTypeDate:

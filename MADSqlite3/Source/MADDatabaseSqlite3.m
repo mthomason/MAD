@@ -66,6 +66,11 @@ BOOL Sqlite3StepResultOK(int result) {
 	return (result == SQLITE_OK) || (result == SQLITE_ROW) || (result == SQLITE_DONE);
 }
 
+//  The LSASC collation: the cache's ORDER BY for text columns (see
+//  +sortDescriptionForColumnType:ascending:), and the same test the report
+//  formatter uses for string group keys
+//  (MADReportFormatter -compareValue:withValue:usingSelector:).  Key equality
+//  and row order have to agree, or group boundaries land in the wrong place.
 int compare_string_utf8_localized_asc_collation(void *__unused data, int len1, const void *arg1, int len2, const void *arg2) {
 	id str1 = [[NSString alloc] initWithBytesNoCopy:(void *)arg1 length:(NSUInteger)abs(len1) encoding:NSUTF8StringEncoding freeWhenDone:NO];
 	id str2 = [[NSString alloc] initWithBytesNoCopy:(void *)arg2 length:(NSUInteger)abs(len2) encoding:NSUTF8StringEncoding freeWhenDone:NO];
@@ -1205,6 +1210,13 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 	
 }
 
+//  One column of the current row.  The returned class is the value's only type
+//  tag downstream, and it is SQLite's storage class, not the schema's:
+//  INTEGER/FLOAT -> NSNumber, TEXT -> NSString, BLOB -> NSData, NULL -> NSNull.
+//  SQLite types values, not columns, so a caller must not assume one column
+//  keeps one class across rows.  MADReportFormatter
+//  -compareValue:withValue:usingSelector: is the consumer that has to cope with
+//  that; see BUGS.md for the entry.
 + (__kindof NSObject <NSCopying, NSSecureCoding> *)databaseResultValue:(void *)statement columnNumber:(int)columnNumber {
 	switch (sqlite3_column_type(statement, columnNumber)) { //http://www.sqlite.org/c3ref/c_blob.html
 		case SQLITE_INTEGER: {

@@ -40,6 +40,59 @@ Status key:
   all the same class -- the formatter sorts query results, which mix numbers and strings --
   the wrong implementation can be invoked, or none at all.
 - **Where:** `MAD/Source/MADReportFormatter.m:210-225`.
+- **Update (2026-10-18, documentation pass -- behaviour unchanged):** the value classes are
+  bounded.  The values come from the row cache through
+  `MADDataTableFast -enumeratorForKeyObjectsSorted:` -> `MADDataTableObjectEnumerator` ->
+  `+[MADDatabaseSqlite3 databaseResultValue:columnNumber:]`, which maps SQLite's storage
+  class to a Foundation class and carries no other tag: INTEGER/FLOAT -> `NSNumber`,
+  TEXT -> `NSString`, BLOB -> `NSData`, NULL -> `NSNull`.  `NSDate` never comes from that
+  reader.  The selector on each level's `NSSortDescriptor` is the schema-side type hint
+  (`MADDataTypeSelectorForSorting`): string -> `localizedCaseInsensitiveCompare:`, blob ->
+  `compareData:`, everything else -> `compare:`.  No new sqlite API and no per-value cache
+  tag are needed: the object's class *is* the tag the reader produced, and the selector is
+  the type already known further up the chain.  The warning is at the two `-compare:`
+  sends in `-compareValue:withValue:usingSelector:`; the line numbers above have moved.
+- **What actually goes wrong:** a mismatch between the selector and the value's class
+  raises -- an `unrecognized selector` (for example an `NSNumber` sent
+  `localizedCaseInsensitiveCompare:`) or Foundation's own argument-type exception -- it does
+  not silently mis-sort.  The cache binds each column under its declared type, so a column
+  is normally homogeneous.  Blob columns are the loose case (the bind accepts `NSString` and
+  `NSData`, storing TEXT and BLOB), and a non-sqlite datasource can supply anything.  The
+  London and Music fixtures exercise only matching pairs (London numeric, Music string).
+  The entry's "mix numbers and strings" is across group levels, not within one: each level
+  has its own value/selector pair, and only `NSOrderedSame` is read from the result.
+- **Recommended fix (not made here):** compare once per level per row instead of twice.
+  `-formatDocumentGroupFooters:andLastValues:` and
+  `-formatDocumentGroupHeaders:andLastValues:` compare the same (last, current) pair at
+  every level, so one class-checked typed comparison can serve both walks.  Same-class
+  results stay identical; mixed classes become a group boundary instead of an exception.
+  Measured on the host: a typed `NSNumber compare:` is ~24 ns and two `isKindOfClass:`
+  checks add ~5 ns, while today's duplicate comparison costs another ~24 ns (numbers) or
+  ~80 ns (strings).  The single-comparison, class-checked shape is therefore roughly 40%
+  faster than today rather than slower.  The comparator for a level can also be resolved
+  once, not per row: the level's selector (or the dataType behind it) is fixed for the whole
+  format, so the family functions can be chosen when the sections are built and kept in a
+  per-level table; the row loop then only calls the selected one.  Three families cover
+  today's selectors (`compare:` serves numbers and dates), or split by dataType for four
+  (number, date, string, data).  That removes the selector branch from the hot path, but the
+  value's class still has to be guarded: the selector is a hint about the column, and the
+  send needs the value's class.
+- **Alternatives considered and rejected:** making `MADResult` a real type would ripple
+  through every datasource, dictionary and aggregate path and buys nothing here -- the
+  object's class already says what the value is.  A new sqlite API returning `(value, type)`
+  would duplicate that class: `NSNumber compare:` handles both numeric storage classes, and
+  the *declared* type is already the selector.  Storing a per-value tag in the cache or in
+  the key array costs an allocation per row, and the array's values are also fed to the
+  aggregate WHERE clause, so they must stay raw.  Caching one class per column is the
+  selector again, and SQLite's per-value typing means it cannot be a guarantee.  Testing
+  equality with `-isEqual:` instead of `compare:` was measured slower (32 ns vs 23 ns for
+  an `NSNumber`) and does not model the two string branches.  Pushing group-boundary
+  detection into SQLite (LAG or a second pass) would be the fastest in theory, but it
+  couples the formatter to the cache and changes the datasource contract.
+- **Documented in the code:** `MADReportFormatter.m`
+  (`-compareValue:withValue:usingSelector:`, `-formatDocumentAddDetail`,
+  `-newObjectArrayKeyValuesForResultRow:`, both group walks) and `MADDatabaseSqlite3.m`
+  (`+databaseResultValue:columnNumber:` and the LSASC collation).
 
 ### The document thumbnail uses the deprecated QuickLook file-attribute keys
 - **Status:** Open -- kept deliberately, behind a scoped pragma.
