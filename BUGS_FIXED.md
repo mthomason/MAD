@@ -55,6 +55,28 @@ reference to "BUGS.md, the X entry" still lands.
   Pinned by `testNSStringFromMADQueryTypeSampleDataTableRange` (renamed from
   `testNSStringFromMADQueryTypeSampleDataTableRangeFallsThrough`).
 
+### `MADConnectionViewController` / `MADConnectionSQLGenericViewController` `-databaseConnection` throws an NSString
+- **Status:** Fixed 2026-10-18 (commit `f492cb00f`).
+- **Where:** `MADAPI/Source/MADConnectionViewController.m:279`,
+  `MADAPI/Source/MADConnectionSQLGenericViewController.m:353`
+- **Behavior:** The override point is implemented as `@throw NSInternalInconsistencyException;`,
+  which throws the *name constant* — an `NSString` — rather than an `NSException`.
+  Every "subclass me" method on `MADDatabase` builds a real
+  `[NSException exceptionWithName:NSInternalInconsistencyException reason:... userInfo:nil]`
+  from the same constant; these two do not.
+- **Why it matters:** A `@catch (NSException *e)` — the only shape anything in this
+  codebase writes — does not catch it; the throw surfaces as an unknown exception
+  object. Only the abstract-method misuse path hits it, so the blast radius is small,
+  but the inconsistency is real.
+- **Now:** both overrides build a real `NSException` with name
+  `NSInternalInconsistencyException` and a reason naming the class to subclass,
+  matching `MADDatabase`'s abstract methods.  A `@catch (NSException *)` now catches
+  it.
+- **Test:** `MADConnectionViewControllerTests testDatabaseConnectionThrowsOnBaseClass`
+  and `testDatabaseConnectionThrowsOnSQLGenericClass`, which now catch `NSException`
+  and assert its name and reason (previously they caught `id` and asserted the thrown
+  object was the name constant).
+
 ## MAD (framework)
 
 ### MADSectionLayout reads CFNumbers at the wrong widths, corrupting adjacent ivars

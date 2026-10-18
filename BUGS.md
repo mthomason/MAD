@@ -21,23 +21,6 @@ Status key:
 
 ## MADAPI
 
-### `MADConnectionViewController` / `MADConnectionSQLGenericViewController` `-databaseConnection` throws an NSString
-- **Status:** Confirmed (left as is — no changed functionality)
-- **Where:** `MADAPI/Source/MADConnectionViewController.m:279`,
-  `MADAPI/Source/MADConnectionSQLGenericViewController.m:353`
-- **Behavior:** The override point is implemented as `@throw NSInternalInconsistencyException;`,
-  which throws the *name constant* — an `NSString` — rather than an `NSException`.
-  Every "subclass me" method on `MADDatabase` builds a real
-  `[NSException exceptionWithName:NSInternalInconsistencyException reason:... userInfo:nil]`
-  from the same constant; these two do not.
-- **Why it matters:** A `@catch (NSException *e)` — the only shape anything in this
-  codebase writes — does not catch it; the throw surfaces as an unknown exception
-  object. Only the abstract-method misuse path hits it, so the blast radius is small,
-  but the inconsistency is real.
-- **Test:** `MADConnectionViewControllerTests testDatabaseConnectionThrowsOnBaseClass`
-  and `testDatabaseConnectionThrowsOnSQLGenericClass` catch `id` and assert the thrown
-  object is the name constant.
-
 ### `MADDatabase` is NSCoding-only, so secure archiving rejects it
 - **Status:** Quirk (latent — nothing archives a `MADDatabase`)
 - **Where:** `MADAPI/Source/MADDatabase.h:32`, `MADAPI/Source/MADDatabase.m:50-63`
@@ -78,6 +61,7 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADConnectionViewController` / `MADConnectionSQLGenericViewController` `-databaseConnection` threw an NSString
 - `MADDatabaseDataBinding`: `nil` vs `[NSNull null]` handled inconsistently
 - `NSStringFromMADQueryType`: "TypeCache" missing for `MADQueryTypeCacheIndexDropParameters`
 - `NSStringFromMADQueryType`: `MADQueryTypeSampleDataTableRange` unmapped
@@ -499,12 +483,17 @@ Status key:
   failure paths in the same methods return `NO` with the error handed back through the
   out-parameter.
 - **Why it matters:** `@catch (NSException *)` -- the only shape the codebase writes --
-  does not catch it, so a caller passing nil (nullable per the signature) gets an untyped
-  object thrown past it.  The same shape as the MADAPI connection view controllers'
-  `@throw NSInternalInconsistencyException;`.
+  does not catch it, so a caller passing nil (which the signature already forbids: `url`
+  is `nonnull`) gets an untyped object thrown past it.  The same shape as the MADAPI
+  connection view controllers' `@throw NSInternalInconsistencyException;` (fixed
+  2026-10-18).
 - **Test:** `MADDataTableBaseTests testCacheWithNilUrlThrowsTheErrorObject` and
   `testLoadFromCacheWithNilUrlThrowsTheErrorObject`, which catch `id` and assert the
   thrown object's class, code and domain.
+- **Documented (2026-10-18):** both declarations in `MADDataTable.h` now carry `///`
+  comments saying `url` is required and that a nil URL throws the `NSError` object
+  rather than filling `error` (commit `e72b1e8df`).  Behaviour is unchanged; the
+  convention question is recorded at the bottom of this file.
 
 ### `BDHost +addressForHostname:` crashes when the name resolves to no IPv4 address
 - **Status:** Confirmed (latent -- no IPv6-only resolution in the test environment)
@@ -1536,3 +1525,25 @@ setting that names a platform no target can build for.
 
 - `MADTestReportFormatter` was blocked, and the reason recorded was wrong
 - Two parallel Linux suites raced over the same London fixture and sample database
+
+## Conventions (not product bugs)
+
+### Nullability and error reporting are not uniform across the program
+- **Status:** Observation -- recorded, not a defect.
+- **What:** Three related conventions are applied ad hoc:
+  - **Parameter nullability:** some parameters are annotated `nonnull`; many are
+    not, so a signature alone does not say whether nil is tolerated.
+  - **Nil-argument behaviour:** the program has not decided to throw on nil
+    parameters.  Some methods raise an `NSException`, some `@throw` the `NSError`
+    object itself (`MADDataTable`'s caching pair), some return `NO` and fill an
+    out-parameter, and some tolerate nil silently.
+  - **Error format:** there is no uniform error domain, code range or `userInfo`
+    contract; `MADDataTable` alone uses two domains
+    (`NSStringFromClass([MADDataTable class])` with negative codes, and
+    `MADDataTableErrorDomain`), and other classes define their own.
+- **Why record it:** a caller cannot tell from a declaration how to handle a nil or
+  invalid argument, and the same failure is reported in three different shapes.
+  Choosing one convention is a project-wide design decision, not a one-file fix.
+- **Mitigation (2026-10-18):** `MADDataTable -cacheWithUrl:error:` and
+  `-loadFromCacheWithUrl:error:` now carry `///` comments naming their nil-URL throw.
+  The rest of the program still has no convention.
