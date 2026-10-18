@@ -81,6 +81,12 @@
 				for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
 					if (sortCounter != 0) [sql appendString:@", "];
 					
+					// A nil `columns` leaves dataColumn nil, so nativeType is 0
+					// (MADDataTypeBit) and every column gets plain ASC.  Even with
+					// columns, nativeType is the driver's code, not the MADDataType
+					// sortDescriptionForColumnType: expects.  Callers that need LSASC
+					// for text keys must pass the cache's columns and the column's
+					// type; see BUGS.md, "The cache's ORDER BY ignores column types".
 					MADDataColumn *dataColumn = nil;
 					if (columns) {
 						NSString *key = sortDescriptor.key;

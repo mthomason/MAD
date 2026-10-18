@@ -180,10 +180,13 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 
 //  Group-boundary comparison.  The formatter does not sort: the cache is already
 //  ordered by the report's group keys.  -MADDataTableFast
-//  -enumeratorForKeyObjectsSorted: emits ORDER BY for them, and a text key sorts
-//  under the LSASC collation, which is exactly -localizedCaseInsensitiveCompare:
-//  (MADDatabaseSqlite3).  This method answers only "is this level's key the same
-//  as the previous row's?"; -formatDocumentGroupFooters:andLastValues: and
+//  -enumeratorForKeyObjectsSorted: emits ORDER BY for them.  Text keys are meant
+//  to sort under the LSASC collation, which is exactly
+//  -localizedCaseInsensitiveCompare: (MADDatabaseSqlite3), but that enumerator
+//  currently passes columns:nil and gets plain binary ASC; equality and row order
+//  disagree for case variants until that is fixed (BUGS.md, "The cache's ORDER BY
+//  ignores column types").  This method answers only "is this level's key the
+//  same as the previous row's?"; -formatDocumentGroupFooters:andLastValues: and
 //  -formatDocumentGroupHeaders:andLastValues: use it to find where a group ends
 //  and the next begins, and neither reads the ordering.
 //
@@ -210,9 +213,17 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 //  Foundation declares `compare:` on several classes with different argument
 //  types, and the receiver is `id`, so the compiler cannot bind one.  Dispatch
 //  is by the receiver's class at runtime; the warning is a compile-time
-//  ambiguity.  Any fix must keep same-class results identical and should also
-//  remove the duplication noted above: both walks compare the same
-//  (last, current) pair at every level, so each level is compared twice per row.
+//  ambiguity.
+//
+//  The agreed fix is upstream, not here (BUGS.md): the cache's insert path must
+//  store one canonical class per declared column type, and each group level gets
+//  a comparator chosen once from the cache column's type (the schema field's
+//  type as fallback).  This method can then call that comparator without a
+//  per-value class test.  A mismatch is a contract violation: assert in debug;
+//  in release, log once and take a cold, safe class-checked fallback, because an
+//  offline open can still use a pre-contract cache.  The duplicated comparison
+//  -- both walks, the same pair, every level -- is a later optimization, not
+//  the reason for the change.
 - (NSComparisonResult)compareValue:(id)value
 						 withValue:(id)value2
 					 usingSelector:(SEL)selector {

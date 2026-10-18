@@ -1384,6 +1384,10 @@ static os_log_t mlog;
 		return [self enumeratorForAllObjectsSortedRowIdOnly];
 	}
 	
+	// `columns:nil` leaves the ORDER BY without the cache column types, so every
+	// column falls back to plain binary ASC -- text group keys then sort
+	// differently from the formatter's localized comparison.  See BUGS.md, "The
+	// cache's ORDER BY ignores column types"; pass self.columns when that is fixed.
 	MADQuery *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
 																	   tableName:[self tableName]
 																 sortDescriptors:self.sortDescriptors

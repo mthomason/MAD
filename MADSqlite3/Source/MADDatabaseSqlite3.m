@@ -66,11 +66,13 @@ BOOL Sqlite3StepResultOK(int result) {
 	return (result == SQLITE_OK) || (result == SQLITE_ROW) || (result == SQLITE_DONE);
 }
 
-//  The LSASC collation: the cache's ORDER BY for text columns (see
-//  +sortDescriptionForColumnType:ascending:), and the same test the report
-//  formatter uses for string group keys
-//  (MADReportFormatter -compareValue:withValue:usingSelector:).  Key equality
-//  and row order have to agree, or group boundaries land in the wrong place.
+//  The LSASC collation: the collation +sortDescriptionForColumnType:ascending:
+//  selects for a text MADDataType, and the same test the report formatter uses
+//  for string group keys (MADReportFormatter
+//  -compareValue:withValue:usingSelector:).  Key equality and row order have to
+//  agree, or group boundaries land in the wrong place -- but the report
+//  enumerators currently pass columns:nil, so their text keys get plain binary
+//  ASC; see BUGS.md, "The cache's ORDER BY ignores column types".
 int compare_string_utf8_localized_asc_collation(void *__unused data, int len1, const void *arg1, int len2, const void *arg2) {
 	id str1 = [[NSString alloc] initWithBytesNoCopy:(void *)arg1 length:(NSUInteger)abs(len1) encoding:NSUTF8StringEncoding freeWhenDone:NO];
 	id str2 = [[NSString alloc] initWithBytesNoCopy:(void *)arg2 length:(NSUInteger)abs(len2) encoding:NSUTF8StringEncoding freeWhenDone:NO];
@@ -337,6 +339,17 @@ void sqliteLog(void *foo, const char* statement) {
 	completion(success, nil, result);
 }
 
+//  Binding is where a column's declared MADDataType becomes a storage class.
+//  The agreed contract (BUGS.md, the MADReportFormatter untyped-compare entry)
+//  is one canonical class per declared type -- number -> NSNumber, string ->
+//  NSString stored as TEXT, blob -> NSData stored as BLOB, date -> NSNumber
+//  epoch stored REAL, decimal -> NSNumber double stored REAL, null -> NSNull --
+//  so the report formatter can pick a comparator from the type and trust it.
+//  MADDatabaseDataBinding -initWithDataType:fieldIndex:value: is where the
+//  canonicalisation belongs; this switch keeps a defensive check.  Today it
+//  does not enforce the contract: it coerces some classes, stores a blob
+//  column's NSString as TEXT, and binds nothing for others (an NSDate in a
+//  string column becomes NULL).
 - (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement withBindings:(MADDatabaseDataBinding *)databinding {
 	if ([databinding.value isEqual:[NSNull null]]) {
 		int sqlite3_bind_result = sqlite3_bind_null(*statement, (int)databinding.columnNumber);
@@ -1213,10 +1226,11 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 //  One column of the current row.  The returned class is the value's only type
 //  tag downstream, and it is SQLite's storage class, not the schema's:
 //  INTEGER/FLOAT -> NSNumber, TEXT -> NSString, BLOB -> NSData, NULL -> NSNull.
-//  SQLite types values, not columns, so a caller must not assume one column
-//  keeps one class across rows.  MADReportFormatter
-//  -compareValue:withValue:usingSelector: is the consumer that has to cope with
-//  that; see BUGS.md for the entry.
+//  SQLite types values, not columns, so this reader can only report what the
+//  insert path stored; it cannot guarantee the column's declared class.  The
+//  agreed contract (BUGS.md) is that the bind path stores one canonical class
+//  per declared MADDataType; MADReportFormatter
+//  -compareValue:withValue:usingSelector: is the consumer that relies on it.
 + (__kindof NSObject <NSCopying, NSSecureCoding> *)databaseResultValue:(void *)statement columnNumber:(int)columnNumber {
 	switch (sqlite3_column_type(statement, columnNumber)) { //http://www.sqlite.org/c3ref/c_blob.html
 		case SQLITE_INTEGER: {
