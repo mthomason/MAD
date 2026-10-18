@@ -81,19 +81,20 @@
 				for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
 					if (sortCounter != 0) [sql appendString:@", "];
 					
-					// A nil `columns` leaves dataColumn nil, so nativeType is 0
-					// (MADDataTypeBit) and every column gets plain ASC.  Even with
-					// columns, nativeType is the driver's code, not the MADDataType
-					// sortDescriptionForColumnType: expects.  Callers that need LSASC
-					// for text keys must pass the cache's columns and the column's
-					// type; see BUGS.md, "The cache's ORDER BY ignores column types".
+					// The column's own MADDataType picks the collation: text keys
+					// order under LSASC, everything else plainly.  A column this
+					// query was not handed sorts plainly rather than guessing one.
+					// The column type -- never nativeType, which is the driver's
+					// own code -- is what the report formatter's group-key
+					// comparison agrees with (BUGS.md, "The cache's ORDER BY
+					// ignores column types").
 					MADDataColumn *dataColumn = nil;
 					if (columns) {
 						NSString *key = sortDescriptor.key;
 						dataColumn = columns[key];
 						key = nil;
 					}
-					NSString *sortDescription = [MADDatabaseSqlite3 sortDescriptionForColumnType: (MADDataType)dataColumn.nativeType
+					NSString *sortDescription = [MADDatabaseSqlite3 sortDescriptionForColumnType: (dataColumn != nil ? dataColumn.type : MADDataTypeNumber)
 																					   ascending: sortDescriptor.ascending];
 					[sql appendFormat:@"%@ %@", sortDescriptor.key, sortDescription];
 					sortCounter++;

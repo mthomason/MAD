@@ -57,7 +57,7 @@
 			MADDataColumn *column = columns[keySortDescriptor];
 			
 			NSAssert(column != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-			NSString *sortDirection = [MADDatabaseSqlite3 sortDescriptionForColumnType: (MADDataType) column.nativeType
+			NSString *sortDirection = [MADDatabaseSqlite3 sortDescriptionForColumnType: column.type
 																			 ascending: sortDescriptor.ascending];
 			[sql appendFormat:(sortCounter == 0) ? @"%@ %@" : @", %@ %@", keySortDescriptor, sortDirection];
 			sortCounter++;

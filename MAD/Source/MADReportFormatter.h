@@ -12,6 +12,8 @@
 #import <MAD/MADTableFormatter.h>
 #import <MAD/MADSectionRepresentation.h>
 
+#import <MADFoundation/MADDataType.h>
+
 #import <CoreGraphics/CGGeometry.h>
 
 // The document this formatter lays out is whatever conforms to the render protocol --
@@ -76,6 +78,17 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
 
 - (NSArray *)newObjectArrayKeyValuesForResultRow:(id)resultRow;
 - (void)layoutAddGroupFooterAtLevel:(NSUInteger)groupLevel withRowId:(NSUInteger)rowId;
+
+//  One group-key comparison for a level whose declared type is known.  NULL is
+//  first-class: NSNull implements no comparison, so the typed path never sees
+//  it.  The typed classes (NSNumber, NSString, NSData) are compared the way the
+//  cache's ORDER BY orders them, so equality and row adjacency agree.  Values
+//  outside the level's canonical class are a contract violation: pairs of the
+//  reader's three classes (a pre-contract cache) are logged once and compared
+//  by a safe class-checked fallback; a class the reader can never produce
+//  asserts in debug and answers Same in release.  See BUGS.md,
+//  "MADReportFormatter compares untyped values through id".
++ (NSComparisonResult)compareValue:(id)value withValue:(id)value2 forDataType:(MADDataType)dataType;
 
 @end
 

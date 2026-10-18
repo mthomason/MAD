@@ -101,6 +101,90 @@ static void testDataTypeLimitedBlob(void) {
 	MAD_PASS_EQUAL(binding.value, data, "the data is stored");
 }
 
+#pragma mark - Canonical classes
+
+// The contract (BUGS.md, the MADReportFormatter untyped-compare entry): the
+// binding stores one canonical class per declared type, converting what the
+// type can represent and storing NULL for what it cannot -- never silently as
+// another class.
+
+static void testCanonicalDateFamilyStoresTheEpochNumber(void) {
+	NSDate *date = [NSDate dateWithTimeIntervalSince1970:1234567890.5];
+	NSArray<NSNumber *> *types = @[
+		@(MADDataTypeDate), @(MADDataTypeDateTime),
+		@(MADDataTypeTime), @(MADDataTypeTimeStamp),
+	];
+	for (NSNumber *boxed in types) {
+		MADDataType type = (MADDataType)boxed.intValue;
+		MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:type fieldIndex:0 value:date];
+		MAD_PASS(binding.datatype == MADDataTypeString, "the date family limits to String");
+		MAD_PASS([binding.value isKindOfClass:[NSNumber class]], "the date family stores the epoch number");
+		MAD_PASS(((NSNumber *)binding.value).doubleValue > 1234567890.0 && ((NSNumber *)binding.value).doubleValue < 1234567891.0,
+				 "the epoch is the date's");
+	}
+}
+
+static void testCanonicalBlobConvertsTextToUtf8Data(void) {
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeBlob fieldIndex:0 value:@"abc"];
+	MAD_PASS([binding.value isKindOfClass:[NSData class]], "a blob column stores data");
+	MAD_PASS_EQUAL(binding.value, [@"abc" dataUsingEncoding:NSUTF8StringEncoding], "the text is stored as its UTF-8 bytes");
+}
+
+static void testCanonicalStringConvertsNumbersToText(void) {
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeString fieldIndex:0 value:@42];
+	MAD_PASS_EQUAL(binding.value, @"42", "a string column stores the number's text");
+	MAD_PASS(binding.datatype == MADDataTypeString, "the type stays String");
+}
+
+static void testCanonicalIntegerConvertsTextByParsing(void) {
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeInteger fieldIndex:0 value:@"42"];
+	MAD_PASS_EQUAL(binding.value, @42, "an integer column parses the number");
+	MAD_PASS(binding.datatype == MADDataTypeInteger, "the type stays Integer");
+}
+
+static void testCanonicalUnrepresentableValuesStoreNull(void) {
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeInteger fieldIndex:0 value:[NSData data]];
+	MAD_PASS(binding.value == [NSNull null], "data in an integer column stores NULL");
+
+	MADDatabaseDataBinding *stringBinding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeString fieldIndex:0 value:[NSDate date]];
+	MAD_PASS(stringBinding.value == [NSNull null], "a date in a plain string column stores NULL");
+}
+
+static void testCanonicalImageFamilyIsBlob(void) {
+	NSData *data = [@"abc" dataUsingEncoding:NSUTF8StringEncoding];
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeImage fieldIndex:0 value:data];
+	MAD_PASS(binding.datatype == MADDataTypeBlob, "an image column limits to Blob");
+	MAD_PASS_EQUAL(binding.value, data, "the data is stored");
+
+	MADDatabaseDataBinding *textBinding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeImage fieldIndex:0 value:@"abc"];
+	MAD_PASS([textBinding.value isKindOfClass:[NSData class]], "text in an image column stores data");
+	MAD_PASS_EQUAL(textBinding.value, data, "the UTF-8 bytes are stored");
+}
+
+static void testCanonicalRemainingFamilies(void) {
+	// Bit is numeric; Set, Year and Geometry are text.
+	MADDatabaseDataBinding *bit = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeBit fieldIndex:0 value:@1];
+	MAD_PASS(bit.datatype == MADDataTypeInteger, "a bit limits to Integer");
+	MAD_PASS_EQUAL(bit.value, @1, "the bit is stored");
+
+	NSArray<NSNumber *> *types = @[@(MADDataTypeSet), @(MADDataTypeYear), @(MADDataTypeGeometry)];
+	for (NSNumber *boxed in types) {
+		MADDataType type = (MADDataType)boxed.intValue;
+		MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:type fieldIndex:0 value:@42];
+		MAD_PASS(binding.datatype == MADDataTypeString, "set/year/geometry limit to String");
+		MAD_PASS_EQUAL(binding.value, @"42", "the number's text is stored");
+	}
+}
+
+static void testCanonicalNullColumnWithAValueStringifies(void) {
+	// A Null-declared column holding a real value is itself a violation of the
+	// table; the value takes the Unknown fallback and stringifies, as it did
+	// before the contract.
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeNull fieldIndex:0 value:@42];
+	MAD_PASS(binding.datatype == MADDataTypeString, "a null column with a value stringifies to String");
+	MAD_PASS_EQUAL(binding.value, @"42", "the value's text is stored");
+}
+
 #pragma mark - NSCopying
 
 static void testCopy(void) {
@@ -148,6 +232,14 @@ MAD_TEST_MAIN("MADDatabaseDataBindingTests",
 	MAD_TEST(testDataTypeLimitedStringFamily),
 	MAD_TEST(testDataTypeLimitedFloatAndDoubleFamily),
 	MAD_TEST(testDataTypeLimitedBlob),
+	MAD_TEST(testCanonicalDateFamilyStoresTheEpochNumber),
+	MAD_TEST(testCanonicalBlobConvertsTextToUtf8Data),
+	MAD_TEST(testCanonicalStringConvertsNumbersToText),
+	MAD_TEST(testCanonicalIntegerConvertsTextByParsing),
+	MAD_TEST(testCanonicalUnrepresentableValuesStoreNull),
+	MAD_TEST(testCanonicalImageFamilyIsBlob),
+	MAD_TEST(testCanonicalRemainingFamilies),
+	MAD_TEST(testCanonicalNullColumnWithAValueStringifies),
 	MAD_TEST(testCopy),
 	MAD_TEST(testSupportsSecureCoding),
 	MAD_TEST(testNSCodingRoundTrip));

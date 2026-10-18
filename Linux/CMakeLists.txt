@@ -250,6 +250,7 @@ file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/sqlite3-shim/MADSqlite3")
 file(CREATE_LINK "${SQLITE3_INCLUDE_DIR}/sqlite3.h"
 	"${CMAKE_BINARY_DIR}/sqlite3-shim/MADSqlite3/sqlite3.h" SYMBOLIC)
 mad_add_framework(madsqlite3 MADSQLITE3_SOURCES
+	MADDatabaseSqlite3BindingTests
 	MADDatabaseSqlite3DatabaseTests
 	MADDatabaseSqlite3ResultValueTests
 	MADDatabaseSqlite3Tests

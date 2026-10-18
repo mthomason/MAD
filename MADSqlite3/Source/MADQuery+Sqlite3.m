@@ -43,7 +43,7 @@
 				}
 			}
 			NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-			NSString *sortDirection = [MADDatabaseSqlite3 sortDescriptionForColumnType: dataColumn.nativeType
+			NSString *sortDirection = [MADDatabaseSqlite3 sortDescriptionForColumnType: dataColumn.type
 																			 ascending: sortDescriptor.ascending];
 			[sql appendFormat:@"%@ %@", sortDescriptor.key, sortDirection];
 			sortCounter++;

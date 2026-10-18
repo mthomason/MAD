@@ -56,6 +56,7 @@
 // counting it and subscripting it needs the real interface.
 #import <MADSqlite3/MADArrayCaching.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
+#import <MADSqlite3/MADDataTableFast.h>
 
 #pragma mark - Test double
 
@@ -70,6 +71,15 @@
 
 @property (nonatomic, strong) RptqStoreContext *testStoreContext;
 @property (nonatomic, strong) RptqDocument *testActiveDocumentModel;
+
+@end
+
+@interface MADTestReportFormatterDocument ()
+
+// The readwrite side of MADDocument's dataTable, which the render protocol
+// exposes readonly: lets a test stand a real row table in for the cache the
+// formatter consults for a group level's type.
+@property (nonatomic, readwrite, strong) MADDataTableFast *dataTable;
 
 @end
 
@@ -168,9 +178,7 @@
 	//   * each row carries MADIdentifierROWID, which the sqlite-backed tables inject in
 	//     their enumerators (MADDataTableObjectEnumerator.m:165).  Without it every row
 	//     reports row id 0.
-	NSString *tableAlias = [RptqQueryTable queryAliasForSchemaTableName:queryTable.alias
-															  dropIndex:queryTable.dropIndex];
-	NSString *sortKey = [[tableAlias stringByAppendingString:@"."] stringByAppendingString:schemaField.name];
+	NSString *sortKey = [self groupSortKey];
 
 	// Group A
 	[self.testDataTable addRowWithDataForFieldKeys:@{sortKey: @"Group A", @"value": @1, MADIdentifierROWID: @1}];
@@ -352,6 +360,224 @@
 	XCTAssertThrowsSpecificNamed([query sortDescriptorsForDatabase:database],
 								 NSException, NSInvalidArgumentException,
 								 @"Query generation must refuse a field that is not in a selected table.");
+}
+
+#pragma mark - Group boundary behaviour
+
+// The sort key the fixture rows are keyed by: the group's alias-qualified field
+// name, built the way MADSectionGroupLayout -safeSortKey builds it.
+- (NSString *)groupSortKey {
+	RptqQueryTable *queryTable = self.testQueryField.inQueryTable;
+	NSString *tableAlias = [RptqQueryTable queryAliasForSchemaTableName:queryTable.alias
+																  dropIndex:queryTable.dropIndex];
+	return [[tableAlias stringByAppendingString:@"."] stringByAppendingString:self.testQueryField.databaseSchemaField.name];
+}
+
+// Replaces the fixture rows with one row per value, in order; the value column
+// and row id are filled in so the body still lays out.
+- (void)setGroupValues:(NSArray <id> *)values {
+	[self.testDataTable removeAllObjects];
+	NSString *sortKey = [self groupSortKey];
+	for (NSUInteger i = 0; i < values.count; i++) {
+		[self.testDataTable addRowWithDataForFieldKeys:@{sortKey: values[i], @"value": @(i + 1), MADIdentifierROWID: @(i + 1)}];
+	}
+}
+
+- (NSUInteger)numberOfGroupHeadersInLayout {
+	NSArray <MADSectionRepresentation *> *pageLayout = self.reportFormatter.reportLayout[0];
+	NSUInteger count = 0;
+	for (MADSectionRepresentation *section in pageLayout) {
+		if (section.sectionType == MADDocumentSectionTypeGroupHeader) count++;
+	}
+	return count;
+}
+
+// Characterization: the string level compares case-insensitively, so two case
+// variants of the same key are one group.
+- (void)testCaseVariantStringValuesMergeIntoOneGroup {
+	[self setGroupValues:@[@"Apple", @"apple"]];
+	[self.reportFormatter format:CGSizeMake(800, 600)];
+	XCTAssertEqual([self numberOfGroupHeadersInLayout], (NSUInteger)1);
+}
+
+// Characterization: NULL is first-class in the comparator, so NULL keys are one
+// group and never compared with the typed path.
+- (void)testNullGroupKeysFormOneGroup {
+	[self setGroupValues:@[[NSNull null], [NSNull null]]];
+	[self.reportFormatter format:CGSizeMake(800, 600)];
+	XCTAssertEqual([self numberOfGroupHeadersInLayout], (NSUInteger)1);
+}
+
+- (void)testNullGroupKeysSplitFromRealValues {
+	[self setGroupValues:@[[NSNull null], @"x"]];
+	[self.reportFormatter format:CGSizeMake(800, 600)];
+	XCTAssertEqual([self numberOfGroupHeadersInLayout], (NSUInteger)2);
+}
+
+// Characterization: the walks read only equality, so a descending group splits
+// at the same boundaries an ascending one does.
+- (void)testDescendingGroupSortStillGroupsByEquality {
+	self.testGroup.sort = MADSortOrderDecending;
+	[self saveTestContext];
+	[self setGroupValues:@[@"A", @"A", @"B"]];
+	[self.reportFormatter format:CGSizeMake(800, 600)];
+	XCTAssertEqual([self numberOfGroupHeadersInLayout], (NSUInteger)2);
+}
+
+// Target: values outside the level's type are a contract violation -- a
+// pre-contract cache can hold them -- so the formatter logs once and falls back
+// to a safe class-checked comparison instead of raising.  (Pre-contract, the
+// untyped -compare: dispatch raised an unrecognized selector here; the raise
+// was pinned before the contract landed.)
+- (void)testNumberValuesInAStringLevelUseTheColdFallback {
+	[self setGroupValues:@[@1, @1, @2]];
+	[self.reportFormatter format:CGSizeMake(800, 600)];
+	XCTAssertEqual([self numberOfGroupHeadersInLayout], (NSUInteger)2);
+}
+
+// Target: the level's comparison type comes from the row cache's column, not the
+// schema field.  The schema says String (case-insensitive), the cache column
+// says Blob (bytewise), so "Apple" and "apple" are two groups.
+- (void)testCacheColumnTypeBeatsTheSchemaType {
+	[self setGroupValues:@[[@"Apple" dataUsingEncoding:NSUTF8StringEncoding],
+						   [@"apple" dataUsingEncoding:NSUTF8StringEncoding]]];
+
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:99 cacheDirectory:[NSURL fileURLWithPath:self.testDirectory isDirectory:YES]];
+	MADDataColumn *column = [MADDataColumn newDataColumnWithIdentifier:[self groupSortKey]];
+	column.fieldName = column.identifier;
+	column.type = MADDataTypeBlob;
+	[table addColumn:column];
+	((MADTestReportFormatterDocument *)self.document).dataTable = table;
+
+	[self.reportFormatter format:CGSizeMake(800, 600)];
+	XCTAssertEqual([self numberOfGroupHeadersInLayout], (NSUInteger)2);
+}
+
+// Target: a class the cache reader can never produce is a genuine violation and
+// asserts; a legacy cache's mismatches are only ever among the four classes the
+// reader answers (NSNull, NSNumber, NSString, NSData).
+- (void)testForeignValueClassesRaise {
+	[self setGroupValues:@[[NSDate date], [NSDate date]]];
+	XCTAssertThrowsSpecificNamed([self.reportFormatter format:CGSizeMake(800, 600)],
+								 NSException, NSInternalInconsistencyException);
+}
+
+// Target: two levels, each compared under its own type -- level 0 a string
+// (case-insensitive), level 1 a number.  The inner level's boundaries only
+// matter inside one outer value, so (A,1),(A,1),(A,2),(B,1) is two outer groups
+// and three inner ones.
+- (void)testMultiLevelGroupsUseEachLevelsType {
+	RptqQueryTable *queryTable = self.testQueryField.inQueryTable;
+
+	MADDatabaseField *dbField = [[MADDatabaseField alloc] initWithName:@"region"];
+	dbField.fieldType = MADDataTypeInteger;
+	RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField newDatabaseSchemaFieldFactoryForManagedObjectContext:self.moc andField:dbField];
+	RptqDatabaseSchemaTable *schemaTable = self.testQueryField.databaseSchemaField.inTable;
+	schemaField.inTable = schemaTable;
+
+	RptqQueryField *queryField = [RptqQueryField newQueryField:self.moc];
+	queryField.databaseSchemaField = schemaField;
+	queryField.inQueryTable = queryTable;
+
+	RptqQueryGroup *group = [RptqQueryGroup newQueryGroupQueryWithSortOrder:MADSortOrderAccending
+												   andManagedObjectContext:self.moc];
+	group.weight = self.testGroup.weight + 1;
+	group.hasField = queryField;
+	[self.testDocument.mainQuery addHasQueryGroupsObject:group];
+
+	RptqDocumentSection *groupHeader = [RptqDocumentSection newDocumentSectionOfType:MADDocumentSectionTypeGroupHeader
+															   forManagedObjectContext:self.moc];
+	RptqDocumentSectionRows *headerRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:self.moc];
+	headerRow.inSection = groupHeader;
+	groupHeader.hasRows = [[NSOrderedSet alloc] initWithObject:headerRow];
+
+	RptqDocumentSection *groupFooter = [RptqDocumentSection newDocumentSectionOfType:MADDocumentSectionTypeGroupFooter
+															   forManagedObjectContext:self.moc];
+	RptqDocumentSectionRows *footerRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:self.moc];
+	footerRow.inSection = groupFooter;
+	groupFooter.hasRows = [[NSOrderedSet alloc] initWithObject:footerRow];
+	[group addHasSectionObject:groupHeader];
+	[group addHasSectionObject:groupFooter];
+	[self saveTestContext];
+
+	NSString *outerKey = [self groupSortKey];
+	NSString *tableAlias = [RptqQueryTable queryAliasForSchemaTableName:queryTable.alias
+																  dropIndex:queryTable.dropIndex];
+	NSString *innerKey = [[tableAlias stringByAppendingString:@"."] stringByAppendingString:@"region"];
+	[self.testDataTable removeAllObjects];
+	NSArray *rows = @[@{outerKey: @"A", innerKey: @1, @"value": @1, MADIdentifierROWID: @1},
+					  @{outerKey: @"A", innerKey: @1, @"value": @2, MADIdentifierROWID: @2},
+					  @{outerKey: @"A", innerKey: @2, @"value": @3, MADIdentifierROWID: @3},
+					  @{outerKey: @"B", innerKey: @1, @"value": @4, MADIdentifierROWID: @4}];
+	for (NSDictionary *row in rows) {
+		[self.testDataTable addRowWithDataForFieldKeys:row];
+	}
+
+	[self.reportFormatter format:CGSizeMake(800, 600)];
+
+	NSArray <MADSectionRepresentation *> *pageLayout = self.reportFormatter.reportLayout[0];
+	NSUInteger outerHeaders = 0, innerHeaders = 0;
+	for (MADSectionRepresentation *section in pageLayout) {
+		if (section.sectionType == MADDocumentSectionTypeGroupHeader) {
+			if (section.groupLevel == 0) outerHeaders++;
+			else if (section.groupLevel == 1) innerHeaders++;
+		}
+	}
+	XCTAssertEqual(outerHeaders, (NSUInteger)2);
+	XCTAssertEqual(innerHeaders, (NSUInteger)3);
+}
+
+#pragma mark - Level comparator
+
+// The comparator the walks use, exercised directly: NULL first, then the typed
+// comparison for the level's type, then the tolerated fallback for legacy pairs.
+
+- (void)testComparatorHandlesNullFirstClass {
+	XCTAssertEqual([MADReportFormatter compareValue:[NSNull null] withValue:[NSNull null] forDataType:MADDataTypeString], NSOrderedSame);
+	XCTAssertEqual([MADReportFormatter compareValue:[NSNull null] withValue:@"x" forDataType:MADDataTypeString], NSOrderedAscending);
+	XCTAssertEqual([MADReportFormatter compareValue:@"x" withValue:[NSNull null] forDataType:MADDataTypeString], NSOrderedDescending);
+}
+
+- (void)testComparatorUsesCaseInsensitiveStrings {
+	XCTAssertEqual([MADReportFormatter compareValue:@"Apple" withValue:@"apple" forDataType:MADDataTypeString], NSOrderedSame);
+	XCTAssertEqual([MADReportFormatter compareValue:@"apple" withValue:@"apricot" forDataType:MADDataTypeString], NSOrderedAscending);
+}
+
+- (void)testComparatorUsesNumericOrderForNumbers {
+	XCTAssertEqual([MADReportFormatter compareValue:@2 withValue:@10 forDataType:MADDataTypeInteger], NSOrderedAscending);
+	// The date family's canonical class is the epoch number.
+	XCTAssertEqual([MADReportFormatter compareValue:@100.0 withValue:@200.0 forDataType:MADDataTypeDateTime], NSOrderedAscending);
+}
+
+- (void)testComparatorUsesByteOrderForData {
+	NSData *a = [@"a" dataUsingEncoding:NSUTF8StringEncoding];
+	NSData *b = [@"b" dataUsingEncoding:NSUTF8StringEncoding];
+	XCTAssertEqual([MADReportFormatter compareValue:a withValue:b forDataType:MADDataTypeBlob], NSOrderedAscending);
+	XCTAssertEqual([MADReportFormatter compareValue:a withValue:a forDataType:MADDataTypeBlob], NSOrderedSame);
+}
+
+- (void)testComparatorToleratesLegacyNumberValuesInAStringLevel {
+	// A pre-contract cache can hold numbers in a text column; the pair still
+	// orders instead of raising.
+	XCTAssertEqual([MADReportFormatter compareValue:@1 withValue:@2 forDataType:MADDataTypeString], NSOrderedAscending);
+}
+
+- (void)testComparatorToleratesLegacyStringValuesInABlobLevel {
+	XCTAssertEqual([MADReportFormatter compareValue:@"a" withValue:@"b" forDataType:MADDataTypeBlob], NSOrderedAscending);
+}
+
+- (void)testComparatorOrdersMixedClassPairsByClass {
+	// A heterogeneous legacy column still groups homogeneous runs: a mixed
+	// pair must not answer Same, or every row would collapse into one group.
+	NSData *data = [@"a" dataUsingEncoding:NSUTF8StringEncoding];
+	XCTAssertEqual([MADReportFormatter compareValue:@"x" withValue:data forDataType:MADDataTypeBlob], NSOrderedAscending);
+	XCTAssertEqual([MADReportFormatter compareValue:data withValue:@"x" forDataType:MADDataTypeBlob], NSOrderedDescending);
+	XCTAssertEqual([MADReportFormatter compareValue:@1 withValue:@"x" forDataType:MADDataTypeString], NSOrderedAscending);
+}
+
+- (void)testComparatorRaisesForClassesTheReaderCannotProduce {
+	XCTAssertThrowsSpecificNamed([MADReportFormatter compareValue:[NSDate date] withValue:[NSDate date] forDataType:MADDataTypeString],
+								 NSException, NSInternalInconsistencyException);
 }
 
 #pragma mark - MADReportFormatterDataSource

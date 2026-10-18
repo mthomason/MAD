@@ -10,11 +10,12 @@
 #import <MADFoundation/NSData+Comparison.h>
 #import <Foundation/NSString.h>
 
-//  The comparison selector for a sort or group level.  The report formatter uses
-//  it for group-boundary equality; the cache uses the same sort descriptors to
-//  order rows, but derives the collation from the cache column's type.  The two
-//  sides have to agree (MADReportFormatter -compareValue:withValue:usingSelector:);
-//  BUGS.md records where they currently do not.
+//  The comparison selector for a sort or group level.  The cache's sort
+//  descriptors carry it and the in-memory tables sort by it; the report
+//  formatter compares group keys directly from the level's MADDataType
+//  (MADReportFormatter +compareValue:withValue:forDataType:), which must agree
+//  with the collation the cache's ORDER BY picks
+//  (+[MADDatabaseSqlite3 sortDescriptionForColumnType:ascending:]).
 SEL MADDataTypeSelectorForSorting(MADDataType dataType) {
 	switch (dataType) {
 		case MADDataTypeDate:

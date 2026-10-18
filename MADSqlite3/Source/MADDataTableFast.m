@@ -1298,7 +1298,7 @@ static os_log_t mlog;
 																		   limit: limit
 																		  offset: row
 																	   dropRowID: NO
-																		 columns: nil];
+																		 columns: self.columns];
 	NSMutableArray *results = [[NSMutableArray alloc] initWithCapacity:limit];
 	
 	if (row != NSNotFound && limit > 0) {
@@ -1343,7 +1343,7 @@ static os_log_t mlog;
 																		   limit:NSNotFound
 																		  offset:NSNotFound
 																	   dropRowID:NO
-																		 columns:nil];
+																		 columns:self.columns];
 	MADDatabaseConnection *databaseConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
 	NSEnumerator *objectEnumerator = [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: databaseConnection
 																							  columns: self.columns
@@ -1361,7 +1361,7 @@ static os_log_t mlog;
 																		   limit: NSNotFound
 																		  offset: NSNotFound
 																	   dropRowID: NO
-																		 columns: nil];
+																		 columns: self.columns];
 	
 	MADDatabaseConnection *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
 	
@@ -1384,17 +1384,17 @@ static os_log_t mlog;
 		return [self enumeratorForAllObjectsSortedRowIdOnly];
 	}
 	
-	// `columns:nil` leaves the ORDER BY without the cache column types, so every
-	// column falls back to plain binary ASC -- text group keys then sort
-	// differently from the formatter's localized comparison.  See BUGS.md, "The
-	// cache's ORDER BY ignores column types"; pass self.columns when that is fixed.
+	// The query is handed the cache's columns so the ORDER BY picks each key's
+	// collation from its own MADDataType: text keys sort under LSASC, which is
+	// the same comparison the report formatter finds group boundaries with
+	// (BUGS.md, "The cache's ORDER BY ignores column types").
 	MADQuery *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
 																	   tableName:[self tableName]
 																 sortDescriptors:self.sortDescriptors
 																		   limit:NSNotFound
 																		  offset:NSNotFound
 																	   dropRowID:NO
-																		 columns:nil];
+																		 columns:self.columns];
 	MADDatabaseConnection *dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
 	return [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection
 																	columns: self.columns
@@ -1409,7 +1409,7 @@ static os_log_t mlog;
 																		   limit:NSNotFound
 																		  offset:NSNotFound
 																	   dropRowID:NO
-																		 columns:nil];
+																		 columns:self.columns];
 	
 	MADDatabaseConnection *dbConnection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: self.urlFastCache];
 	return [[MADDataTableObjectEnumerator alloc] initWithDatabaseConnection: dbConnection

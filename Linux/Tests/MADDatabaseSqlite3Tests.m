@@ -450,7 +450,7 @@ static void testAddRow(void) {
 
 static void testIndexCreate(void) {
 	MADDataColumn *name = [[MADDataColumn alloc] initWithIdentifier:@"name"];
-	name.nativeType = MADDataTypeString;
+	name.type = MADDataTypeString;
 
 	NSArray *sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
 	NSDictionary *columns = @{@"name": name};
@@ -601,7 +601,7 @@ static void testSelectItemsForGroupWithPredicate(void) {
 
 static void testOrderByClauseWithSortDescriptors(void) {
 	MADDataColumn *name = [[MADDataColumn alloc] initWithIdentifier:@"name"];
-	name.nativeType = MADDataTypeString;
+	name.type = MADDataTypeString;
 
 	MADQuerySqlite3ColumnDouble *query = [[MADQuerySqlite3ColumnDouble alloc] init];
 	query.columns = @{@"name": name};

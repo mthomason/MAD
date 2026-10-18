@@ -449,7 +449,7 @@
 
 - (void)testIndexCreate {
 	MADDataColumn *name = [[MADDataColumn alloc] initWithIdentifier:@"name"];
-	name.nativeType = MADDataTypeString;
+	name.type = MADDataTypeString;
 
 	NSArray *sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
 	NSDictionary *columns = @{@"name": name};
@@ -600,7 +600,7 @@
 
 - (void)testOrderByClauseWithSortDescriptors {
 	MADDataColumn *name = [[MADDataColumn alloc] initWithIdentifier:@"name"];
-	name.nativeType = MADDataTypeString;
+	name.type = MADDataTypeString;
 
 	MADQuerySqlite3ColumnDouble *query = [[MADQuerySqlite3ColumnDouble alloc] init];
 	query.columns = @{@"name": name};

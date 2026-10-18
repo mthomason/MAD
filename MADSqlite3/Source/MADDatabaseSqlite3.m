@@ -69,10 +69,8 @@ BOOL Sqlite3StepResultOK(int result) {
 //  The LSASC collation: the collation +sortDescriptionForColumnType:ascending:
 //  selects for a text MADDataType, and the same test the report formatter uses
 //  for string group keys (MADReportFormatter
-//  -compareValue:withValue:usingSelector:).  Key equality and row order have to
-//  agree, or group boundaries land in the wrong place -- but the report
-//  enumerators currently pass columns:nil, so their text keys get plain binary
-//  ASC; see BUGS.md, "The cache's ORDER BY ignores column types".
+//  +compareValue:withValue:forDataType:).  Key equality and row order have to
+//  agree, or group boundaries land in the wrong place.
 int compare_string_utf8_localized_asc_collation(void *__unused data, int len1, const void *arg1, int len2, const void *arg2) {
 	id str1 = [[NSString alloc] initWithBytesNoCopy:(void *)arg1 length:(NSUInteger)abs(len1) encoding:NSUTF8StringEncoding freeWhenDone:NO];
 	id str2 = [[NSString alloc] initWithBytesNoCopy:(void *)arg2 length:(NSUInteger)abs(len2) encoding:NSUTF8StringEncoding freeWhenDone:NO];
@@ -339,17 +337,33 @@ void sqliteLog(void *foo, const char* statement) {
 	completion(success, nil, result);
 }
 
+//  One log line per (datatype, value class) pair per process, for a hand-built
+//  binding that reached the binder outside the canonical contract.
+static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
+	static NSMutableSet *loggedViolations;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		loggedViolations = [[NSMutableSet alloc] init];
+	});
+	NSString *key = [[NSString alloc] initWithFormat:@"%d:%@", (int)datatype, NSStringFromClass(valueClass)];
+	@synchronized (loggedViolations) {
+		if (![loggedViolations containsObject:key]) {
+			[loggedViolations addObject:key];
+			os_log_error(GetSqlite3Log(), "%s: a %@ value in a %@ column is not the column's canonical class; storing NULL.",
+						 __PRETTY_FUNCTION__, NSStringFromClass(valueClass), NSStringFromMADDataType(datatype));
+		}
+	}
+}
+
 //  Binding is where a column's declared MADDataType becomes a storage class.
-//  The agreed contract (BUGS.md, the MADReportFormatter untyped-compare entry)
-//  is one canonical class per declared type -- number -> NSNumber, string ->
-//  NSString stored as TEXT, blob -> NSData stored as BLOB, date -> NSNumber
-//  epoch stored REAL, decimal -> NSNumber double stored REAL, null -> NSNull --
-//  so the report formatter can pick a comparator from the type and trust it.
+//  The contract (BUGS.md, the MADReportFormatter untyped-compare entry) is one
+//  canonical class per declared type -- number -> NSNumber, string -> NSString
+//  stored as TEXT, blob -> NSData stored as BLOB, date -> NSNumber epoch stored
+//  REAL, decimal -> NSNumber double stored REAL, null -> NSNull --
 //  MADDatabaseDataBinding -initWithDataType:fieldIndex:value: is where the
-//  canonicalisation belongs; this switch keeps a defensive check.  Today it
-//  does not enforce the contract: it coerces some classes, stores a blob
-//  column's NSString as TEXT, and binds nothing for others (an NSDate in a
-//  string column becomes NULL).
+//  canonicalisation happens, so each case below sees its own class only.  A
+//  hand-built binding that reaches here with anything else is a contract
+//  violation: asserted in debug, logged once and bound NULL in release.
 - (BOOL)bindStatement:(void ** /* sqlite3_stmt ** */)statement withBindings:(MADDatabaseDataBinding *)databinding {
 	if ([databinding.value isEqual:[NSNull null]]) {
 		int sqlite3_bind_result = sqlite3_bind_null(*statement, (int)databinding.columnNumber);
@@ -360,13 +374,7 @@ void sqliteLog(void *foo, const char* statement) {
 	} else {
 		switch (databinding.datatype) {
 			case MADDataTypeBlob: {
-				if ([databinding.value isKindOfClass:[NSString class]]) {
-					int sqlite3_bind_result = sqlite3_bind_text(*statement, (int)databinding.columnNumber, ((NSString *)databinding.value).UTF8String, (int)strlen(((NSString *)databinding.value).UTF8String), SQLITE_TRANSIENT);
-					if (sqlite3_bind_result != SQLITE_OK) {
-						os_log_error(GetSqlite3Log(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
-					}
-					return sqlite3_bind_result == SQLITE_OK;
-				} else if ([databinding.value isKindOfClass:[NSData class]]) {
+				if ([databinding.value isKindOfClass:[NSData class]]) {
 					int sqlite3_bind_result = sqlite3_bind_blob(*statement, (int)databinding.columnNumber, ((NSData *)databinding.value).bytes, (int)((NSData *)databinding.value).length, SQLITE_TRANSIENT);
 					if (sqlite3_bind_result != SQLITE_OK) {
 						os_log_error(GetSqlite3Log(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
@@ -376,46 +384,66 @@ void sqliteLog(void *foo, const char* statement) {
 				break;
 			}
 			case MADDataTypeInteger: {
-				int sqlite3_bind_result = sqlite3_bind_int64(*statement, (int)databinding.columnNumber, ((NSNumber *)databinding.value).longLongValue);
+				if ([databinding.value isKindOfClass:[NSNumber class]]) {
+					int sqlite3_bind_result = sqlite3_bind_int64(*statement, (int)databinding.columnNumber, ((NSNumber *)databinding.value).longLongValue);
+					if (sqlite3_bind_result != SQLITE_OK) {
+						os_log_error(GetSqlite3Log(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+					}
+					return sqlite3_bind_result == SQLITE_OK;
+				}
+				break;
+			}
+
+			case MADDataTypeString: {
+				if ([databinding.value isKindOfClass:[NSString class]]) {
+					int sqlite3_bind_result = sqlite3_bind_text(*statement, (int)databinding.columnNumber, ((NSString *)databinding.value).UTF8String, (int)strlen(((NSString *)databinding.value).UTF8String), SQLITE_TRANSIENT);
+					if (sqlite3_bind_result != SQLITE_OK) {
+						os_log_error(GetSqlite3Log(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+					}
+					return sqlite3_bind_result == SQLITE_OK;
+				} else if ([databinding.value isKindOfClass:[NSNumber class]]) {
+					// The date family's canonical epoch number.
+					int sqlite3_bind_result = sqlite3_bind_double(*statement, (int)databinding.columnNumber, ((NSNumber *)databinding.value).doubleValue);
+					if (sqlite3_bind_result != SQLITE_OK) {
+						os_log_error(GetSqlite3Log(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+					}
+					return sqlite3_bind_result == SQLITE_OK;
+				}
+				break;
+
+			}
+			case MADDataTypeFloat:
+			case MADDataTypeDouble: {
+				if ([databinding.value isKindOfClass:[NSNumber class]]) {
+					int sqlite3_bind_result = sqlite3_bind_double(*statement, (int)databinding.columnNumber, ((NSNumber *)databinding.value).doubleValue);
+					if (sqlite3_bind_result != SQLITE_OK) {
+						os_log_error(GetSqlite3Log(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+					}
+					return sqlite3_bind_result == SQLITE_OK;
+				}
+				break;
+			}
+
+			case MADDataTypeNull: {
+				int sqlite3_bind_result = sqlite3_bind_null(*statement, (int)databinding.columnNumber);
 				if (sqlite3_bind_result != SQLITE_OK) {
 					os_log_error(GetSqlite3Log(), "%s Error: %s", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
 				}
 				return sqlite3_bind_result == SQLITE_OK;
 				break;
 			}
-				
-			case MADDataTypeString: {
-				if ([databinding.value isKindOfClass:[NSString class]]) {
-					int sqlite3_bind_result = sqlite3_bind_text(*statement, (int)databinding.columnNumber, ((NSString *)databinding.value).UTF8String, (int)strlen(((NSString *)databinding.value).UTF8String), SQLITE_TRANSIENT);
-					return sqlite3_bind_result == SQLITE_OK;
-				} else if ([databinding.value isKindOfClass:[NSDateComponents class]]) {
-					NSDate *date = ((NSDateComponents *)databinding.value).date != nil ? ((NSDateComponents *)databinding.value).date : [[NSCalendar currentCalendar] dateFromComponents:databinding.value];
-					int sqlite3_bind_result = sqlite3_bind_double(*statement, (int)databinding.columnNumber, date.timeIntervalSince1970);
-					return sqlite3_bind_result == SQLITE_OK;
-				}
-				break;
-				
-			}
-			case MADDataTypeFloat:
-			case MADDataTypeDouble: {
-				int sqlite3_bind_result = sqlite3_bind_double(*statement, (int)databinding.columnNumber, ((NSNumber *)databinding.value).doubleValue);
-				return sqlite3_bind_result == SQLITE_OK;
-				break;
-			}
-				
-			case MADDataTypeNull: {
-				int sqlite3_bind_result = sqlite3_bind_null(*statement, (int)databinding.columnNumber);
-				return sqlite3_bind_result == SQLITE_OK;
-				break;
-			}
 			default:
-				NSAssert(NO, @"This is going to end badly.  Only binding blobs right now.");
 				break;
-				
+
 		}
 	}
-	//NSAssert(NO, @"Error: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
-	return NO;
+	// A hand-built binding outside the canonical contract: never silently bound.
+	// Debug asserts; release logs once per (type, class) and stores NULL.
+	MADSqlite3LogBindViolation(databinding.datatype, [databinding.value class]);
+	NSAssert(NO, @"A %@ value in a %@ column is not the column's canonical class.",
+			 NSStringFromClass([databinding.value class]), NSStringFromMADDataType(databinding.datatype));
+	int sqlite3_bind_result = sqlite3_bind_null(*statement, (int)databinding.columnNumber);
+	return sqlite3_bind_result == SQLITE_OK;
 }
 
 - (void)executeQueryWithSql:(NSString *)queryString
@@ -1228,9 +1256,9 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 //  INTEGER/FLOAT -> NSNumber, TEXT -> NSString, BLOB -> NSData, NULL -> NSNull.
 //  SQLite types values, not columns, so this reader can only report what the
 //  insert path stored; it cannot guarantee the column's declared class.  The
-//  agreed contract (BUGS.md) is that the bind path stores one canonical class
-//  per declared MADDataType; MADReportFormatter
-//  -compareValue:withValue:usingSelector: is the consumer that relies on it.
+//  contract (BUGS.md) is that the bind path stores one canonical class per
+//  declared MADDataType; MADReportFormatter
+//  +compareValue:withValue:forDataType: is the consumer that relies on it.
 + (__kindof NSObject <NSCopying, NSSecureCoding> *)databaseResultValue:(void *)statement columnNumber:(int)columnNumber {
 	switch (sqlite3_column_type(statement, columnNumber)) { //http://www.sqlite.org/c3ref/c_blob.html
 		case SQLITE_INTEGER: {

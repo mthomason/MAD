@@ -110,6 +110,84 @@
 	XCTAssertEqualObjects(binding.value, data);
 }
 
+#pragma mark - Canonical classes
+
+// The contract (BUGS.md, the MADReportFormatter untyped-compare entry): the
+// binding stores one canonical class per declared type, converting what the
+// type can represent and storing NULL for what it cannot -- never silently as
+// another class.
+
+- (void)testCanonicalDateFamilyStoresTheEpochNumber {
+	NSDate *date = [NSDate dateWithTimeIntervalSince1970:1234567890.5];
+	for (NSNumber *boxed in @[@(MADDataTypeDate), @(MADDataTypeDateTime), @(MADDataTypeTime), @(MADDataTypeTimeStamp)]) {
+		MADDataType type = (MADDataType)boxed.intValue;
+		MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:type fieldIndex:0 value:date];
+		XCTAssertEqual(binding.datatype, MADDataTypeString, @"%@ limits to String", NSStringFromMADDataType(type));
+		XCTAssertTrue([binding.value isKindOfClass:[NSNumber class]], @"%@ stores the epoch number", NSStringFromMADDataType(type));
+		XCTAssertEqualWithAccuracy(((NSNumber *)binding.value).doubleValue, 1234567890.5, 0.001);
+	}
+}
+
+- (void)testCanonicalBlobConvertsTextToUtf8Data {
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeBlob fieldIndex:0 value:@"abc"];
+	XCTAssertTrue([binding.value isKindOfClass:[NSData class]]);
+	XCTAssertEqualObjects(binding.value, [@"abc" dataUsingEncoding:NSUTF8StringEncoding]);
+}
+
+- (void)testCanonicalStringConvertsNumbersToText {
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeString fieldIndex:0 value:@42];
+	XCTAssertEqualObjects(binding.value, @"42");
+	XCTAssertEqual(binding.datatype, MADDataTypeString);
+}
+
+- (void)testCanonicalIntegerConvertsTextByParsing {
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeInteger fieldIndex:0 value:@"42"];
+	XCTAssertEqualObjects(binding.value, @42);
+	XCTAssertEqual(binding.datatype, MADDataTypeInteger);
+}
+
+- (void)testCanonicalUnrepresentableValuesStoreNull {
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeInteger fieldIndex:0 value:[NSData data]];
+	XCTAssertEqual(binding.value, [NSNull null]);
+
+	MADDatabaseDataBinding *stringBinding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeString fieldIndex:0 value:[NSDate date]];
+	XCTAssertEqual(stringBinding.value, [NSNull null]);
+}
+
+- (void)testCanonicalImageFamilyIsBlob {
+	NSData *data = [@"abc" dataUsingEncoding:NSUTF8StringEncoding];
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeImage fieldIndex:0 value:data];
+	XCTAssertEqual(binding.datatype, MADDataTypeBlob);
+	XCTAssertEqualObjects(binding.value, data);
+
+	MADDatabaseDataBinding *textBinding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeImage fieldIndex:0 value:@"abc"];
+	XCTAssertTrue([textBinding.value isKindOfClass:[NSData class]]);
+	XCTAssertEqualObjects(textBinding.value, data);
+}
+
+- (void)testCanonicalRemainingFamilies {
+	// Bit is numeric; Set, Year and Geometry are text.
+	MADDatabaseDataBinding *bit = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeBit fieldIndex:0 value:@1];
+	XCTAssertEqual(bit.datatype, MADDataTypeInteger);
+	XCTAssertEqualObjects(bit.value, @1);
+
+	for (NSNumber *boxed in @[@(MADDataTypeSet), @(MADDataTypeYear), @(MADDataTypeGeometry)]) {
+		MADDataType type = (MADDataType)boxed.intValue;
+		MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:type fieldIndex:0 value:@42];
+		XCTAssertEqual(binding.datatype, MADDataTypeString, @"%@ limits to String", NSStringFromMADDataType(type));
+		XCTAssertEqualObjects(binding.value, @"42", @"%@ stores the number's text", NSStringFromMADDataType(type));
+	}
+}
+
+- (void)testCanonicalNullColumnWithAValueStringifies {
+	// A Null-declared column holding a real value is itself a violation of the
+	// table; the value takes the Unknown fallback and stringifies, as it did
+	// before the contract.
+	MADDatabaseDataBinding *binding = [[MADDatabaseDataBinding alloc] initWithDataType:MADDataTypeNull fieldIndex:0 value:@42];
+	XCTAssertEqual(binding.datatype, MADDataTypeString);
+	XCTAssertEqualObjects(binding.value, @"42");
+}
+
 #pragma mark - NSCopying
 
 - (void)testCopy {

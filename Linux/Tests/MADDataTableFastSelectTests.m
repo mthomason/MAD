@@ -14,10 +14,13 @@
 
 #import "MADTestSupport.h"
 
+#import <MADFoundation/MADDataColumn.h>
+#import <MADFoundation/MADDataType.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADAPI/MADQuery.h>
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
+#import <MADSqlite3/MADQueryCacheSelectLimitOffset.h>
 
 #pragma mark - Test query
 
@@ -160,6 +163,118 @@ static void testRunSelectQueryYieldsNilWhenTheQueryHasNoRow(void) {
 	MADSelectRemoveTempDirectory(directory);
 }
 
+#pragma mark - ORDER BY generation
+
+// The report formatter finds group boundaries by comparing adjacent rows, so the
+// cache's ORDER BY has to order a key the way the formatter compares it: text keys
+// under the LSASC collation (localizedCaseInsensitiveCompare:), everything else
+// plainly.  See BUGS.md, "The cache's ORDER BY ignores column types".
+
+static void testSelectLimitOffsetWithoutColumnsOrdersPlainly(void) {
+	// The constructor cannot consult a column it was not handed; it must fall
+	// back to a plain order rather than guess a collation.
+	NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"c123" ascending:YES];
+	MADQueryCacheSelectLimitOffset *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:@[@"c123"]
+																							   tableName:@"t"
+																						 sortDescriptors:@[descriptor]
+																								   limit:NSNotFound
+																								  offset:NSNotFound
+																							  dropRowID:NO
+																								columns:nil];
+	NSString *sql = [query getSql:nil];
+	MAD_PASS([sql containsString:@"ORDER BY c123 ASC"], "a column-less ORDER BY is plain ascending");
+	MAD_PASS(![sql containsString:@"COLLATE"], "no collation is guessed");
+}
+
+static void testSelectLimitOffsetWithATextColumnOrdersWithLSASC(void) {
+	MADDataColumn *column = [MADDataColumn newDataColumnWithIdentifier:@"c123"];
+	column.type = MADDataTypeString;
+	NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"c123" ascending:YES];
+	MADQueryCacheSelectLimitOffset *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:@[@"c123"]
+																							   tableName:@"t"
+																						 sortDescriptors:@[descriptor]
+																								   limit:NSNotFound
+																								  offset:NSNotFound
+																							  dropRowID:NO
+																								columns:@{@"c123": column}];
+	NSString *sql = [query getSql:nil];
+	MAD_PASS([sql containsString:@"ORDER BY c123 COLLATE LSASC ASC"], "a text column orders under LSASC");
+}
+
+static void testSelectLimitOffsetWithANumericColumnOrdersPlainly(void) {
+	MADDataColumn *column = [MADDataColumn newDataColumnWithIdentifier:@"c123"];
+	column.type = MADDataTypeInteger;
+	NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"c123" ascending:YES];
+	MADQueryCacheSelectLimitOffset *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:@[@"c123"]
+																							   tableName:@"t"
+																						 sortDescriptors:@[descriptor]
+																								   limit:NSNotFound
+																								  offset:NSNotFound
+																							  dropRowID:NO
+																								columns:@{@"c123": column}];
+	NSString *sql = [query getSql:nil];
+	MAD_PASS([sql containsString:@"ORDER BY c123 ASC"], "a numeric column orders plainly");
+	MAD_PASS(![sql containsString:@"COLLATE"], "no collation for numbers");
+}
+
+#pragma mark - Sorted enumerator
+
+// One column, rows added out of order, read back through the enumerator the
+// report formatter walks.  The order the enumerator yields is what group
+// boundaries are detected against.
+
+static NSArray *MADSelectEnumeratedValues(MADDataTableFast *table, NSString *key) {
+	NSMutableArray *ordered = [[NSMutableArray alloc] init];
+	NSEnumerator *enumerator = [table enumeratorForKeyObjectsSorted];
+	for (NSDictionary *row in enumerator) {
+		[ordered addObject:row[key]];
+	}
+	return ordered;
+}
+
+static NSArray *MADSelectValuesForColumnType(MADDataType type, NSArray *values) {
+	NSURL *directory = MADSelectMakeTempDirectory();
+	MADDataTableFast *table = MADSelectFastTable(directory);
+	MADDataColumn *column = [MADDataColumn newDataColumnWithIdentifier:@"field"];
+	column.fieldName = column.identifier;
+	column.type = type;
+	[table addColumn:column];
+	for (id value in values) {
+		[table addRowWithDataForFieldKeys:@{@"field": value}];
+	}
+	[table sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"field" ascending:YES]]];
+
+	NSArray *ordered = MADSelectEnumeratedValues(table, @"field");
+	MADSelectRemoveTempDirectory(directory);
+	return ordered;
+}
+
+static void testEnumeratorOrdersNumericKeysNumerically(void) {
+	NSArray *values = MADSelectValuesForColumnType(MADDataTypeInteger, @[@10, @1, @2]);
+	MAD_PASS_EQUAL(values, (@[@1, @2, @10]), "numbers order numerically");
+}
+
+static void testEnumeratorOrdersTextKeysCaseInsensitively(void) {
+	// "Apple" and "apple" are one key under LSASC on Apple, where
+	// localizedCaseInsensitiveCompare: folds case; on GNUstep that comparison
+	// is case-sensitive (README.md), so the cache's ORDER BY and the formatter's
+	// comparator -- which both call it -- still agree, but the case variants
+	// stay separate.
+	NSArray *values = MADSelectValuesForColumnType(MADDataTypeString, @[@"Apple", @"Armadillo", @"apple"]);
+	MAD_PASS(values.count == (NSUInteger)3, "all three rows come back");
+#if __APPLE__
+	MAD_PASS_EQUAL(values[2], @"Armadillo", "the case-insensitively greater key sorts last");
+	MAD_PASS([values[0] caseInsensitiveCompare:@"apple"] == NSOrderedSame, "a case variant of apple sorts first");
+	MAD_PASS([values[1] caseInsensitiveCompare:@"apple"] == NSOrderedSame, "the other case variant is adjacent to it");
+#else
+	MAD_PASS_EQUAL(values, (@[@"Apple", @"Armadillo", @"apple"]), "the case-sensitive order the GNUstep comparison gives");
+	{
+		gMadTestNeeds++;
+		fprintf(stderr, "NEED: localizedCaseInsensitiveCompare: is case-sensitive on GNUstep (README.md); the rows order by case\n");
+	}
+#endif
+}
+
 MAD_TEST_MAIN("MADDataTableFastSelectTests",
 	MAD_TEST(testGroupKeysProducePositionalColumnValuePairs),
 	MAD_TEST(testEmptyGroupKeysProduceAnEmptyClause),
@@ -167,4 +282,9 @@ MAD_TEST_MAIN("MADDataTableFastSelectTests",
 	MAD_TEST(testReadTransactionsWithoutASelectsDatabaseAreANoOp),
 	MAD_TEST(testReadTransactionsOnADirectoryBackedTable),
 	MAD_TEST(testRunSelectQueryReturnsTheFirstColumnsValue),
-	MAD_TEST(testRunSelectQueryYieldsNilWhenTheQueryHasNoRow));
+	MAD_TEST(testRunSelectQueryYieldsNilWhenTheQueryHasNoRow),
+	MAD_TEST(testSelectLimitOffsetWithoutColumnsOrdersPlainly),
+	MAD_TEST(testSelectLimitOffsetWithATextColumnOrdersWithLSASC),
+	MAD_TEST(testSelectLimitOffsetWithANumericColumnOrdersPlainly),
+	MAD_TEST(testEnumeratorOrdersNumericKeysNumerically),
+	MAD_TEST(testEnumeratorOrdersTextKeysCaseInsensitively));

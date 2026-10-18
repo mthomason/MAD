@@ -13,11 +13,14 @@
 
 #import <XCTest/XCTest.h>
 
+#import <MADFoundation/MADDataColumn.h>
+#import <MADFoundation/MADDataType.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADAPI/MADQuery.h>
 
 #import "MADDataTableFast.h"
 #import "MADDatabaseSqlite3.h"
+#import "MADQueryCacheSelectLimitOffset.h"
 
 #pragma mark - Test query
 
@@ -138,6 +141,99 @@
 	query.binaryBindings = [NSMutableArray array];
 
 	XCTAssertNil([table runSelectQuery:query]);
+}
+
+#pragma mark - ORDER BY generation
+
+// The report formatter finds group boundaries by comparing adjacent rows, so the
+// cache's ORDER BY has to order a key the way the formatter compares it: text keys
+// under the LSASC collation (localizedCaseInsensitiveCompare:), everything else
+// plainly.  See BUGS.md, "The cache's ORDER BY ignores column types".
+
+- (void)testSelectLimitOffsetWithoutColumnsOrdersPlainly {
+	// The constructor cannot consult a column it was not handed; it must fall
+	// back to a plain order rather than guess a collation.
+	NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"c123" ascending:YES];
+	MADQueryCacheSelectLimitOffset *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:@[@"c123"]
+																							   tableName:@"t"
+																						 sortDescriptors:@[descriptor]
+																								   limit:NSNotFound
+																								  offset:NSNotFound
+																							  dropRowID:NO
+																								columns:nil];
+	NSString *sql = [query getSql:nil];
+	XCTAssertTrue([sql containsString:@"ORDER BY c123 ASC"], @"%@", sql);
+	XCTAssertFalse([sql containsString:@"COLLATE"], @"%@", sql);
+}
+
+- (void)testSelectLimitOffsetWithATextColumnOrdersWithLSASC {
+	MADDataColumn *column = [MADDataColumn newDataColumnWithIdentifier:@"c123"];
+	column.type = MADDataTypeString;
+	NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"c123" ascending:YES];
+	MADQueryCacheSelectLimitOffset *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:@[@"c123"]
+																							   tableName:@"t"
+																						 sortDescriptors:@[descriptor]
+																								   limit:NSNotFound
+																								  offset:NSNotFound
+																							  dropRowID:NO
+																								columns:@{@"c123": column}];
+	NSString *sql = [query getSql:nil];
+	XCTAssertTrue([sql containsString:@"ORDER BY c123 COLLATE LSASC ASC"], @"%@", sql);
+}
+
+- (void)testSelectLimitOffsetWithANumericColumnOrdersPlainly {
+	MADDataColumn *column = [MADDataColumn newDataColumnWithIdentifier:@"c123"];
+	column.type = MADDataTypeInteger;
+	NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"c123" ascending:YES];
+	MADQueryCacheSelectLimitOffset *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:@[@"c123"]
+																							   tableName:@"t"
+																						 sortDescriptors:@[descriptor]
+																								   limit:NSNotFound
+																								  offset:NSNotFound
+																							  dropRowID:NO
+																								columns:@{@"c123": column}];
+	NSString *sql = [query getSql:nil];
+	XCTAssertTrue([sql containsString:@"ORDER BY c123 ASC"], @"%@", sql);
+	XCTAssertFalse([sql containsString:@"COLLATE"], @"%@", sql);
+}
+
+#pragma mark - Sorted enumerator
+
+// One column, rows added out of order, read back through the enumerator the
+// report formatter walks.  The order the enumerator yields is what group
+// boundaries are detected against.
+
+- (NSArray <NSString *> *)enumeratedValuesForColumnType:(MADDataType)type values:(NSArray <id> *)values {
+	MADDataTableFast *table = [self fastTable];
+	MADDataColumn *column = [MADDataColumn newDataColumnWithIdentifier:@"field"];
+	column.fieldName = column.identifier;
+	column.type = type;
+	[table addColumn:column];
+	for (id value in values) {
+		[table addRowWithDataForFieldKeys:@{@"field": value}];
+	}
+	[table sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"field" ascending:YES]]];
+
+	NSMutableArray *ordered = [[NSMutableArray alloc] init];
+	for (NSDictionary *row in [table enumeratorForKeyObjectsSorted]) {
+		[ordered addObject:row[@"field"]];
+	}
+	return ordered;
+}
+
+- (void)testEnumeratorOrdersNumericKeysNumerically {
+	NSArray *values = [self enumeratedValuesForColumnType:MADDataTypeInteger values:@[@10, @1, @2]];
+	XCTAssertEqualObjects(values, (@[@1, @2, @10]));
+}
+
+- (void)testEnumeratorOrdersTextKeysCaseInsensitively {
+	// "Apple" and "apple" are one key under LSASC, so the two case variants must
+	// be adjacent and "Armadillo" last; their relative order is unspecified.
+	NSArray *values = [self enumeratedValuesForColumnType:MADDataTypeString values:@[@"Apple", @"Armadillo", @"apple"]];
+	XCTAssertEqual(values.count, (NSUInteger)3);
+	XCTAssertEqualObjects(values[2], @"Armadillo");
+	XCTAssertEqual([values[0] caseInsensitiveCompare:@"apple"], NSOrderedSame, @"%@", values[0]);
+	XCTAssertEqual([values[1] caseInsensitiveCompare:@"apple"], NSOrderedSame, @"%@", values[1]);
 }
 
 @end

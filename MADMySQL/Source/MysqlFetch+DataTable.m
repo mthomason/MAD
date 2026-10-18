@@ -282,54 +282,23 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 								bindings[x].buffer = previousBuffer;
 								
 							} else {
-							
+
 								NSData *theData = [[NSData alloc] initWithBytes:bindings[x].buffer length:*(bindings[x].length)];
 								dict[key] = theData;
-								
-								//Trying to add support for MYSQL_TYPE_TEXT, which is just like a blob with a string in it.
+
+								// A TEXT column arrives under a blob-ish protocol type; the
+								// column's declared type (decided once in
+								// +dataColumnForFieldName:) is what tells it apart from a
+								// BLOB.  A TEXT value decodes to a string; empty stores
+								// NULL (an empty NSData has no bytes), as before.  A BLOB
+								// stays bytes either way.
 								if (theData.bytes != nil) {
-									NSString *theDataString = [[NSString alloc] initWithUTF8String:theData.bytes];
-									
-									if (theDataString != nil) {
-
-										if ([theDataString isKindOfClass:[NSString class]]) {
-										
-											// FIXME: This is a hack.
-											if (rowCounter == 0) {
-
-												MADDataColumn *column = dataTable.columns[dataTable.columnKeys[x]];
-												column.type = MADDataTypeString;
-
-											}
-											
-											if (theDataString.length != 0) {
-												
-												dict[key] = theDataString;
-												
-											} else {
-											
-												id data = [[NSData alloc] initWithBytes: bindings[x].buffer
-																				 length: *(bindings[x].length)];
-												dict[key] = data;
-												
-											}
-										} else if ([theDataString isKindOfClass:[NSNumber class]]) {
-											
-											if (rowCounter == 0) {
-
-												MADDataColumn *column = dataTable.columns[dataTable.columnKeys[x]];
-												column.type = MADDataTypeInteger;
-
-											}
-											
-											dict[key] = theDataString;
-										} else {
+									MADDataColumn *column = dataTable.columns[dataTable.columnKeys[x]];
+									if (column.type == MADDataTypeString) {
+										NSString *theDataString = [[NSString alloc] initWithUTF8String:theData.bytes];
+										if (theDataString != nil && theDataString.length != 0) {
 											dict[key] = theDataString;
 										}
-									}
-									if (![dict[key] respondsToSelector:@selector(compare:)]) {
-										NSString *utf8String = [[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding];
-										dict[key] = utf8String;
 									}
 								} else {
 									dict[key] = [NSNull null];
@@ -491,7 +460,15 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 	dataColumn.dataPercision = (int32_t)myField.decimals;
 	dataColumn.primaryKey = IS_PRI_KEY(myField.flags);
 	dataColumn.type = [MADDataTypeMySQL dataTypeForNativeType:myField.type];
-	
+	// A TEXT column and a BLOB column share the blob-ish protocol types; the
+	// column's charset tells them apart -- binary (63) is a BLOB, anything else
+	// is TEXT.  Deciding here, before the cache table is created, replaces the
+	// fetch loop's first-row type correction, so a column's type is fixed for
+	// every row it binds.  See BUGS.md, MADMySQL.
+	if (dataColumn.type == MADDataTypeBlob && myField.charsetnr != 63) {
+		dataColumn.type = MADDataTypeString;
+	}
+
 	return dataColumn;
 }
 

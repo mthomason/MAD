@@ -67,7 +67,7 @@
 		MADDataColumn *dataColumn = [columns objectForKey: columnName];
 
 		NSAssert(dataColumn != nil, @"Need to know column types at %s", __PRETTY_FUNCTION__);
-		self.sqlSpeedSorting = [MADDatabaseSqlite3 sortDescriptionForColumnType:dataColumn.nativeType
+		self.sqlSpeedSorting = [MADDatabaseSqlite3 sortDescriptionForColumnType:dataColumn.type
 																	  ascending:self.accending];
 
 	}
