@@ -295,8 +295,29 @@
 	NSURL *url = [NSURL fileURLWithPath:@"/tmp/example.sqlite"];
 	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
 
-	NSString *expected = [NSString stringWithFormat:@"(%@)[%@]", @"Sqlite 3", url];
+	NSString *expected = [[NSString alloc] initWithFormat:@"(%@)[%@]", @"Sqlite 3", url];
 	XCTAssertEqualObjects(connection.connectionString, expected);
+}
+
+- (void)testConnectionCodingRoundTripCarriesTheUrl {
+	NSURL *url = [NSURL fileURLWithPath:@"/tmp/example.sqlite"];
+	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+
+	NSError *error = nil;
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:connection requiringSecureCoding:YES error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(data);
+
+	MADDatabaseConnectionSqlite3 *decoded =
+		[NSKeyedUnarchiver unarchivedObjectOfClass:[MADDatabaseConnectionSqlite3 class]
+										  fromData:data
+											 error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(decoded);
+	XCTAssertEqualObjects(decoded.databaseUrl, url);
+	XCTAssertEqual(decoded.databaseType, MADDatabaseTypeSqlite3);
+	NSString *expected = [[NSString alloc] initWithFormat:@"(%@)[%@]", @"Sqlite 3", url];
+	XCTAssertEqualObjects(decoded.connectionString, expected);
 }
 
 #pragma mark - MADQueryCache SQL builders

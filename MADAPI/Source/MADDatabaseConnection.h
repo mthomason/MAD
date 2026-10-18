@@ -27,7 +27,23 @@
 	@property (readonly, class) NSString *Identifier;
 @end
 
+/*
+ * A concrete driver keeps the standard connection properties in these protected
+ * ivars: it sets them in its designated initializer and reads them back from the
+ * accessors it overrides (the base class's accessors are abstract).  The base
+ * class's -copyWithZone: and coding methods carry the ivars, so a driver whose
+ * whole state is these properties needs no copying or coding code.  A driver
+ * with additional parameters (a host, a port, a file URL) overrides
+ * -copyWithZone: and the coding methods, calls super, and carries its own state.
+ */
 @interface MADDatabaseConnection : NSObject <MADDatabaseConnectionConstructors, MADDatabaseConnectionsProperties, NSCopying, NSSecureCoding>
+{
+@protected
+	MADDatabaseType _databaseType;
+	BOOL _requiresCredentials;
+	NSString *_connectionString;
+	NSString *_identifier;
+}
 
 @end
 

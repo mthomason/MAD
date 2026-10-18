@@ -349,6 +349,32 @@ static void testConnectionCopyIsIndependent(void) {
 	MAD_PASS(copy.databaseType == MADDatabaseTypeTDS, "the copy carries the type");
 }
 
+static void testConnectionCodingRoundTripCarriesTheConnectionState(void) {
+	MADDatabaseConnectionSQLServer *conn =
+		[[MADDatabaseConnectionSQLServer alloc] initWithHost:@"db.example.com"
+													  server:@"INSTANCE"
+													database:@"AdventureWorks2022"
+													 andPort:1433];
+
+#if __APPLE__
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:conn requiringSecureCoding:YES error:NULL];
+	MADDatabaseConnectionSQLServer *decoded = [NSKeyedUnarchiver unarchivedObjectOfClass:[MADDatabaseConnectionSQLServer class] fromData:data error:NULL];
+#else
+	// GNUstep has no secure-coding path (the toolchain probe records the need);
+	// the round trip is asserted on the permissive path it does have.
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:conn requiringSecureCoding:NO error:NULL];
+	MADDatabaseConnectionSQLServer *decoded = [NSKeyedUnarchiver unarchiveTopLevelObjectWithData:data error:NULL];
+#endif
+	MAD_PASS(decoded != nil, "the connection round trips");
+	MAD_PASS_EQUAL(decoded.host, @"db.example.com", "the host survives");
+	MAD_PASS_EQUAL(decoded.server, @"INSTANCE", "the server survives");
+	MAD_PASS_EQUAL(decoded.database, @"AdventureWorks2022", "the database survives");
+	MAD_PASS(decoded.port == 1433, "the port survives");
+	MAD_PASS(decoded.databaseType == MADDatabaseTypeTDS, "the type survives");
+	MAD_PASS_EQUAL(decoded.connectionString, @"(TDS)[db.example.com:INSTANCE:1433]AdventureWorks2022",
+				   "the connection string survives");
+}
+
 static void testNewDatabaseConnectionFromProperties(void) {
 	MADDatabaseConnectionSQLServer *seed =
 		[[MADDatabaseConnectionSQLServer alloc] initWithHost:@"db.example.com"
@@ -469,6 +495,7 @@ MAD_TEST_MAIN("MADTdsClientTests",
 	MAD_TEST(testConnectionStringIncludesHostServerPortAndDatabase),
 	MAD_TEST(testConnectionStringIsMemoised),
 	MAD_TEST(testConnectionCopyIsIndependent),
+	MAD_TEST(testConnectionCodingRoundTripCarriesTheConnectionState),
 	MAD_TEST(testNewDatabaseConnectionFromProperties),
 	MAD_TEST(testProcessWrapperRoundTripsOpaquePointer),
 	MAD_TEST(testProcessWrapperAcceptsNull),

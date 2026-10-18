@@ -13,6 +13,7 @@
 #import "MADDatabaseConnectionMySql.h"
 #import "MADDatabaseMySQL.h"
 #import <Foundation/NSCharacterSet.h>
+#import <Foundation/NSCoder.h>
 
 @implementation MADDatabaseConnectionMySql
 
@@ -20,6 +21,10 @@
 // from this, not from an import (MADDatabaseDriverRegistry.h).
 + (void)load {
 	[MADDatabaseDriverRegistry registerDriverClass: self];
+}
+
++ (BOOL)supportsSecureCoding {
+	return YES;
 }
 
 + (MADDatabaseType)databaseType {
@@ -40,8 +45,6 @@
 @synthesize server = _server;
 @synthesize host = _host;
 @synthesize port = _port;
-@synthesize connectionString = _connectionString;
-@synthesize databaseType = _databaseType;
 
 @dynamic identifier;
 
@@ -72,6 +75,25 @@
 	return copy;
 }
 
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[super encodeWithCoder: coder];
+	[coder encodeObject:_host forKey:NSStringFromSelector(@selector(host))];
+	[coder encodeObject:_database forKey:NSStringFromSelector(@selector(database))];
+	[coder encodeInteger:_port forKey:NSStringFromSelector(@selector(port))];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+	if (self = [super initWithCoder: decoder]) {
+		_host = [decoder decodeObjectOfClass:[NSString class]
+									  forKey:NSStringFromSelector(@selector(host))];
+		_database = [decoder decodeObjectOfClass:[NSString class]
+										  forKey:NSStringFromSelector(@selector(database))];
+		_port = [decoder decodeIntegerForKey:NSStringFromSelector(@selector(port))];
+		_server = [_host stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	}
+	return self;
+}
+
 - (NSString *)identifier {
 	return [[self class] Identifier];
 }
@@ -82,6 +104,10 @@
 
 - (NSString *)connectionString {
 	return [[NSString alloc] initWithFormat:@"(%@)[%@:%ld]%@", self.identifier, self.server, (long)_port, _database];
+}
+
+- (MADDatabaseType)databaseType {
+	return _databaseType;
 }
 
 - (BOOL)requiresCredentials {

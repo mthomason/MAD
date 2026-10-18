@@ -12,6 +12,7 @@
 
 #import "MADDatabaseConnectionSQLServer.h"
 #import "MADDatabaseSQLServer.h"
+#import <Foundation/NSCoder.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSCharacterSet.h>
 #import <MADAPI/MADDatabaseType.h>
@@ -22,6 +23,10 @@
 // here from this, not from an import (MADDatabaseDriverRegistry.h).
 + (void)load {
 	[MADDatabaseDriverRegistry registerDriverClass: self];
+}
+
++ (BOOL)supportsSecureCoding {
+	return YES;
 }
 
 + (MADDatabaseType)databaseType {
@@ -44,8 +49,6 @@
 @synthesize server = _server;
 @synthesize host = _host;
 @synthesize port = _port;
-@synthesize connectionString = _connectionString;
-@synthesize databaseType = _databaseType;
 
 @dynamic identifier;
 
@@ -79,6 +82,27 @@
 	return copy;
 }
 
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[super encodeWithCoder: coder];
+	[coder encodeObject:_host forKey:NSStringFromSelector(@selector(host))];
+	[coder encodeObject:_server forKey:NSStringFromSelector(@selector(server))];
+	[coder encodeObject:_database forKey:NSStringFromSelector(@selector(database))];
+	[coder encodeInteger:_port forKey:NSStringFromSelector(@selector(port))];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+	if (self = [super initWithCoder: decoder]) {
+		_host = [decoder decodeObjectOfClass:[NSString class]
+									  forKey:NSStringFromSelector(@selector(host))];
+		_server = [decoder decodeObjectOfClass:[NSString class]
+										forKey:NSStringFromSelector(@selector(server))];
+		_database = [decoder decodeObjectOfClass:[NSString class]
+										  forKey:NSStringFromSelector(@selector(database))];
+		_port = [decoder decodeIntegerForKey:NSStringFromSelector(@selector(port))];
+	}
+	return self;
+}
+
 - (NSString *)connectionString {
 	if (!_connectionString) {
 		_connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@:%@:%ld]%@",
@@ -94,6 +118,10 @@
 
 + (NSString *)Identifier {
 	return @"TDS";
+}
+
+- (MADDatabaseType)databaseType {
+	return _databaseType;
 }
 
 - (BOOL)requiresCredentials {

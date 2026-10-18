@@ -12,6 +12,7 @@
 
 #import "MADDatabaseConnectionSqlite3.h"
 #import "MADDatabaseSqlite3.h"
+#import <Foundation/NSCoder.h>
 #import <Foundation/NSURL.h>
 
 #import <MADFoundation/MADURLFactory.h>
@@ -26,6 +27,10 @@
 // from this, not from an import (MADDatabaseDriverRegistry.h).
 + (void)load {
 	[MADDatabaseDriverRegistry registerDriverClass: self];
+}
+
++ (BOOL)supportsSecureCoding {
+	return YES;
 }
 
 + (MADDatabaseType)databaseType {
@@ -49,8 +54,6 @@
 }
 
 @synthesize databaseUrl = _databaseUrl;
-@synthesize connectionString = _connectionString;
-@synthesize databaseType = _databaseType;
 
 @dynamic identifier;
 
@@ -76,6 +79,19 @@
 	return copy;
 }
 
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[super encodeWithCoder: coder];
+	[coder encodeObject:_databaseUrl forKey:NSStringFromSelector(@selector(databaseUrl))];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)decoder {
+	if (self = [super initWithCoder: decoder]) {
+		_databaseUrl = [decoder decodeObjectOfClass:[NSURL class]
+											forKey:NSStringFromSelector(@selector(databaseUrl))];
+	}
+	return self;
+}
+
 - (NSString *)connectionString {
 	if (!_connectionString) {
 		_connectionString = [[NSString alloc] initWithFormat:@"(%@)[%@]",
@@ -91,6 +107,10 @@
 
 + (NSString *)Identifier {
 	return @"Sqlite 3";
+}
+
+- (MADDatabaseType)databaseType {
+	return _databaseType;
 }
 
 - (BOOL)requiresCredentials {

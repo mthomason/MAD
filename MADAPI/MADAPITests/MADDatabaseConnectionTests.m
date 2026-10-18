@@ -8,7 +8,7 @@
 //  database connection descriptors.  This documents the "abstract class"
 //  contract: property accessors and the class-level Identifier throw until a
 //  concrete subclass implements them, while NSCopying / NSSecureCoding operate
-//  on the backing ivars directly (and therefore do not throw).
+//  on the shared protected ivars (and therefore do not throw).
 //
 
 #import <XCTest/XCTest.h>
@@ -16,14 +16,14 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseType.h>
 
-// A concrete connection shaped exactly like MADDatabaseConnectionMySql: the subclass
-// declares its own storage for the protocol properties.  See the shadowing tests below.
+// A concrete connection shaped exactly like MADDatabaseConnectionMySql: it stores the
+// protocol properties in the base class's protected ivars, as the driver contract says.
 @interface MADTestConnection : MADDatabaseConnection
 @end
 
 @interface MADTestConnection ()
 // The protocol declares these readonly; the concrete subclass is where they turn
-// writable, exactly as the base class does in its own class extension.
+// writable.
 @property (nonatomic, assign, readwrite) MADDatabaseType databaseType;
 @property (nonatomic, copy, readwrite) NSString *connectionString;
 @property (nonatomic, assign, readwrite) BOOL requiresCredentials;
@@ -31,10 +31,14 @@
 @end
 
 @implementation MADTestConnection
-@synthesize databaseType = _databaseType;
-@synthesize connectionString = _connectionString;
-@synthesize requiresCredentials = _requiresCredentials;
-@synthesize identifier = _identifier;
+- (MADDatabaseType)databaseType { return _databaseType; }
+- (void)setDatabaseType:(MADDatabaseType)databaseType { _databaseType = databaseType; }
+- (NSString *)connectionString { return _connectionString; }
+- (void)setConnectionString:(NSString *)connectionString { _connectionString = [connectionString copy]; }
+- (BOOL)requiresCredentials { return _requiresCredentials; }
+- (void)setRequiresCredentials:(BOOL)requiresCredentials { _requiresCredentials = requiresCredentials; }
+- (NSString *)identifier { return _identifier; }
+- (void)setIdentifier:(NSString *)identifier { _identifier = [identifier copy]; }
 @end
 
 @interface MADDatabaseConnectionTests : XCTestCase
@@ -88,16 +92,13 @@
 	XCTAssertNotNil(decoded);
 }
 
-#pragma mark - Subclass state does not survive the base class's NSCopying / NSCoding
+#pragma mark - Subclass state survives the base class's NSCopying / NSCoding
 
-// Characterization of a latent defect, documented in BUGS.md ("MADDatabaseConnection
-// subclasses do not survive NSCopying / NSCoding").  The base class's -copyWithZone: and
-// -encodeWithCoder: read and write the base class's *own* private ivars, which a concrete
-// subclass cannot see and therefore shadows with its own storage.  The base class's
-// accessors are never invoked: the subclass's synthesized getters win.  MADDatabaseConnectionMySql
-// works around the copy half by overriding -copyWithZone:; nothing overrides the coding
-// half.  Nothing in the app archives a connection today, so the defect is latent.
-- (void)testSubclassCopyDoesNotCarrySubclassState {
+// The base class's -copyWithZone: and the coding methods read and write the protected
+// ivars declared in MADDatabaseConnection.h, which the concrete subclass's accessors use
+// too.  Driver-specific parameters live in the subclass and are carried by its own
+// overrides (MADDatabaseConnectionMySql, ...Sqlite3 and ...SQLServer each do this).
+- (void)testSubclassCopyCarriesSubclassState {
 	MADTestConnection *connection = [[MADTestConnection alloc] init];
 	connection.databaseType = MADDatabaseTypeMySQL;
 	connection.connectionString = @"(MADTestConnection)[host:3306]db";
@@ -108,15 +109,13 @@
 
 	XCTAssertNotNil(copy);
 	XCTAssertEqualObjects(NSStringFromClass([copy class]), NSStringFromClass([MADTestConnection class]));
-	// The base class's -copyWithZone: copies only its own ivars, so the subclass's
-	// state reads back as defaults.
-	XCTAssertEqual(copy.databaseType, MADDatabaseTypeUnknown);
-	XCTAssertNil(copy.connectionString);
-	XCTAssertFalse(copy.requiresCredentials);
-	XCTAssertNil(copy.identifier);
+	XCTAssertEqual(copy.databaseType, MADDatabaseTypeMySQL);
+	XCTAssertEqualObjects(copy.connectionString, @"(MADTestConnection)[host:3306]db");
+	XCTAssertTrue(copy.requiresCredentials);
+	XCTAssertEqualObjects(copy.identifier, @"MADTestConnection");
 }
 
-- (void)testSubclassNSCodingDoesNotCarrySubclassState {
+- (void)testSubclassNSCodingCarriesSubclassState {
 	MADTestConnection *connection = [[MADTestConnection alloc] init];
 	connection.databaseType = MADDatabaseTypeMySQL;
 	connection.connectionString = @"(MADTestConnection)[host:3306]db";
@@ -127,12 +126,10 @@
 	MADTestConnection *decoded = [NSKeyedUnarchiver unarchivedObjectOfClass:[MADTestConnection class] fromData:data error:NULL];
 
 	XCTAssertNotNil(decoded);
-	// The base class's -encodeWithCoder: wrote only its own ivars; the subclass's
-	// state reads back as defaults.
-	XCTAssertEqual(decoded.databaseType, MADDatabaseTypeUnknown);
-	XCTAssertNil(decoded.connectionString);
-	XCTAssertFalse(decoded.requiresCredentials);
-	XCTAssertNil(decoded.identifier);
+	XCTAssertEqual(decoded.databaseType, MADDatabaseTypeMySQL);
+	XCTAssertEqualObjects(decoded.connectionString, @"(MADTestConnection)[host:3306]db");
+	XCTAssertTrue(decoded.requiresCredentials);
+	XCTAssertEqualObjects(decoded.identifier, @"MADTestConnection");
 }
 
 @end

@@ -32,7 +32,7 @@
 #pragma mark - NSCoding
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
-	if (self = [super init]) {
+	if (self = [self init]) {
 		_databaseType = (MADDatabaseType)[decoder decodeIntegerForKey:NSStringFromSelector(@selector(databaseType))];
 		_connectionString = [decoder decodeObjectOfClass:[NSString class] forKey:NSStringFromSelector(@selector(connectionString))];
 		_requiresCredentials = [decoder decodeBoolForKey:NSStringFromSelector(@selector(requiresCredentials))];

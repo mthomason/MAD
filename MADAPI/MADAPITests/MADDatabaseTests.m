@@ -54,7 +54,8 @@
 @end
 
 @implementation MADTestCredentialConnection
-@synthesize connectionString = _connectionString;
+- (NSString *)connectionString { return _connectionString; }
+- (void)setConnectionString:(NSString *)connectionString { _connectionString = [connectionString copy]; }
 
 - (MADDatabaseType)databaseType { return MADDatabaseTypeSample1; }
 - (BOOL)requiresCredentials { return YES; }

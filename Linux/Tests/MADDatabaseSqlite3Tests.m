@@ -301,6 +301,26 @@ static void testConnectionString(void) {
 	MAD_PASS_EQUAL(connection.connectionString, expected, "the connection string names the driver and URL");
 }
 
+static void testConnectionCodingRoundTripCarriesTheUrl(void) {
+	NSURL *url = [NSURL fileURLWithPath:@"/tmp/example.sqlite"];
+	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+
+#if __APPLE__
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:connection requiringSecureCoding:YES error:NULL];
+	MADDatabaseConnectionSqlite3 *decoded = [NSKeyedUnarchiver unarchivedObjectOfClass:[MADDatabaseConnectionSqlite3 class] fromData:data error:NULL];
+#else
+	// GNUstep has no secure-coding path (the toolchain probe records the need);
+	// the round trip is asserted on the permissive path it does have.
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:connection requiringSecureCoding:NO error:NULL];
+	MADDatabaseConnectionSqlite3 *decoded = [NSKeyedUnarchiver unarchiveTopLevelObjectWithData:data error:NULL];
+#endif
+	MAD_PASS(decoded != nil, "the connection round trips");
+	MAD_PASS_EQUAL(decoded.databaseUrl, url, "the URL survives");
+	MAD_PASS(decoded.databaseType == MADDatabaseTypeSqlite3, "the type survives");
+	NSString *expected = [[NSString alloc] initWithFormat:@"(%@)[%@]", @"Sqlite 3", url];
+	MAD_PASS_EQUAL(decoded.connectionString, expected, "the connection string survives");
+}
+
 #pragma mark - MADQueryCache SQL builders
 
 static void testBeginTransaction(void) {
@@ -643,6 +663,7 @@ MAD_TEST_MAIN("MADDatabaseSqlite3Tests",
 	MAD_TEST(testConnectionInitWithUrl),
 	MAD_TEST(testConnectionCopy),
 	MAD_TEST(testConnectionString),
+	MAD_TEST(testConnectionCodingRoundTripCarriesTheUrl),
 	MAD_TEST(testBeginTransaction),
 	MAD_TEST(testEndTransaction),
 	MAD_TEST(testSyncOff),

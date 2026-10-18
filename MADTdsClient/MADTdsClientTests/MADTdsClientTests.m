@@ -402,6 +402,32 @@
 	XCTAssertEqual(copy.databaseType, MADDatabaseTypeTDS);
 }
 
+- (void)testConnectionCodingRoundTripCarriesTheConnectionState {
+	MADDatabaseConnectionSQLServer *conn =
+		[[MADDatabaseConnectionSQLServer alloc] initWithHost:@"db.example.com"
+													  server:@"INSTANCE"
+													database:@"AdventureWorks2022"
+													 andPort:1433];
+
+	NSError *error = nil;
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:conn requiringSecureCoding:YES error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(data);
+
+	MADDatabaseConnectionSQLServer *decoded =
+		[NSKeyedUnarchiver unarchivedObjectOfClass:[MADDatabaseConnectionSQLServer class]
+										  fromData:data
+											 error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(decoded);
+	XCTAssertEqualObjects(decoded.host, @"db.example.com");
+	XCTAssertEqualObjects(decoded.server, @"INSTANCE");
+	XCTAssertEqualObjects(decoded.database, @"AdventureWorks2022");
+	XCTAssertEqual(decoded.port, 1433);
+	XCTAssertEqual(decoded.databaseType, MADDatabaseTypeTDS);
+	XCTAssertEqualObjects(decoded.connectionString, @"(TDS)[db.example.com:INSTANCE:1433]AdventureWorks2022");
+}
+
 - (void)testNewDatabaseConnectionFromProperties {
 	MADDatabaseConnectionSQLServer *seed =
 		[[MADDatabaseConnectionSQLServer alloc] initWithHost:@"db.example.com"

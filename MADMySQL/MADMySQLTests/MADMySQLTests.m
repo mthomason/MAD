@@ -224,6 +224,31 @@
 	XCTAssertEqualObjects(copy.connectionString, conn.connectionString);
 }
 
+- (void)testConnectionCodingRoundTripCarriesTheConnectionState {
+	MADDatabaseConnectionMySql *conn =
+		[[MADDatabaseConnectionMySql alloc] initWithHost:@"db.example.com"
+											   database:@"employees"
+												andPort:3306];
+
+	NSError *error = nil;
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:conn requiringSecureCoding:YES error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(data);
+
+	MADDatabaseConnectionMySql *decoded =
+		[NSKeyedUnarchiver unarchivedObjectOfClass:[MADDatabaseConnectionMySql class]
+										  fromData:data
+											 error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(decoded);
+	XCTAssertEqualObjects(decoded.host, @"db.example.com");
+	XCTAssertEqualObjects(decoded.server, @"db.example.com");
+	XCTAssertEqualObjects(decoded.database, @"employees");
+	XCTAssertEqual(decoded.port, 3306);
+	XCTAssertEqual(decoded.databaseType, MADDatabaseTypeMySQL);
+	XCTAssertEqualObjects(decoded.connectionString, @"(MySQL)[db.example.com:3306]employees");
+}
+
 - (void)testNewDatabaseConnectionFromProperties {
 	MADDatabaseConnectionMySql *seed =
 		[[MADDatabaseConnectionMySql alloc] initWithHost:@"db.example.com"

@@ -224,6 +224,30 @@ static void testConnectionCopyIsIndependent(void) {
 	MAD_PASS_EQUAL(copy.connectionString, conn.connectionString, "the copy carries the connection string");
 }
 
+static void testConnectionCodingRoundTripCarriesTheConnectionState(void) {
+	MADDatabaseConnectionMySql *conn =
+		[[MADDatabaseConnectionMySql alloc] initWithHost:@"db.example.com"
+											   database:@"employees"
+												andPort:3306];
+
+#if __APPLE__
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:conn requiringSecureCoding:YES error:NULL];
+	MADDatabaseConnectionMySql *decoded = [NSKeyedUnarchiver unarchivedObjectOfClass:[MADDatabaseConnectionMySql class] fromData:data error:NULL];
+#else
+	// GNUstep has no secure-coding path (the toolchain probe records the need);
+	// the round trip is asserted on the permissive path it does have.
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:conn requiringSecureCoding:NO error:NULL];
+	MADDatabaseConnectionMySql *decoded = [NSKeyedUnarchiver unarchiveTopLevelObjectWithData:data error:NULL];
+#endif
+	MAD_PASS(decoded != nil, "the connection round trips");
+	MAD_PASS_EQUAL(decoded.host, @"db.example.com", "the host survives");
+	MAD_PASS_EQUAL(decoded.server, @"db.example.com", "the server is derived again");
+	MAD_PASS_EQUAL(decoded.database, @"employees", "the database survives");
+	MAD_PASS(decoded.port == 3306, "the port survives");
+	MAD_PASS(decoded.databaseType == MADDatabaseTypeMySQL, "the type survives");
+	MAD_PASS_EQUAL(decoded.connectionString, @"(MySQL)[db.example.com:3306]employees", "the connection string survives");
+}
+
 static void testNewDatabaseConnectionFromProperties(void) {
 	MADDatabaseConnectionMySql *seed =
 		[[MADDatabaseConnectionMySql alloc] initWithHost:@"db.example.com"
@@ -395,6 +419,7 @@ MAD_TEST_MAIN("MADMySQLTests",
 	MAD_TEST(testConnectionIdentifier),
 	MAD_TEST(testConnectionStringFormat),
 	MAD_TEST(testConnectionCopyIsIndependent),
+	MAD_TEST(testConnectionCodingRoundTripCarriesTheConnectionState),
 	MAD_TEST(testNewDatabaseConnectionFromProperties),
 	MAD_TEST(testMysqlServerDefaults),
 	MAD_TEST(testMysqlServerDescriptionOmitsPassword),
