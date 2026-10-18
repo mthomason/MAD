@@ -107,7 +107,14 @@ typedef NS_ENUM(short, MADDataTableParameters) {
 
 #pragma mark - Caching
 
+/// `url` is required.  A nil URL throws the `NSError` object itself rather than
+/// returning NO through `error`, so `@catch (NSException *)` will not catch it.
+/// Every other failure returns NO and fills `error`.
 - (BOOL)cacheWithUrl:(nonnull NSURL *)url error:(NSError * _Nullable __autoreleasing * _Nullable)error;
+
+/// `url` is required.  A nil URL throws the `NSError` object itself rather than
+/// returning NO through `error`, so `@catch (NSException *)` will not catch it.
+/// Every other failure returns NO and fills `error`.
 - (BOOL)loadFromCacheWithUrl:(nonnull NSURL *)url error:(NSError * _Nullable __autoreleasing * _Nullable)error;
 
 #pragma mark - Plist Operations
