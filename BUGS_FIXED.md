@@ -145,6 +145,137 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### MADReportFormatter compares untyped values through id
+- **Status:** Fixed 2026-10-18 (commit `661d71f12`).
+- **What:** `MADReportFormatter.m:219` and `:222` send `compare:` to a value held as `id`
+  while several classes declare that selector with different argument types, so the
+  compiler cannot bind it (`-Wstrict-selector-match`).  If the values being sorted are not
+  all the same class -- the formatter sorts query results, which mix numbers and strings --
+  the wrong implementation can be invoked, or none at all.
+- **Where:** `MAD/Source/MADReportFormatter.m:210-225`.
+- **Update (2026-10-18, documentation pass -- behaviour unchanged):** the value classes are
+  bounded.  The values come from the row cache through
+  `MADDataTableFast -enumeratorForKeyObjectsSorted:` -> `MADDataTableObjectEnumerator` ->
+  `+[MADDatabaseSqlite3 databaseResultValue:columnNumber:]`, which maps SQLite's storage
+  class to a Foundation class and carries no other tag: INTEGER/FLOAT -> `NSNumber`,
+  TEXT -> `NSString`, BLOB -> `NSData`, NULL -> `NSNull`.  `NSDate` never comes from that
+  reader.  The selector on each level's `NSSortDescriptor` is the schema-side type hint
+  (`MADDataTypeSelectorForSorting`): string -> `localizedCaseInsensitiveCompare:`, blob ->
+  `compareData:`, everything else -> `compare:`.  No new sqlite API and no per-value cache
+  tag are needed: the object's class *is* the tag the reader produced, and the selector is
+  the type already known further up the chain.  The cache's actual ordering is a separate
+  matter: the formatter's enumerator builds its ORDER BY query with `columns:nil`, so today
+  text keys sort binary while this selector says case-insensitive -- see "The cache's ORDER
+  BY ignores column types" under MADSqlite3.  The warning is at the two `-compare:` sends in
+  `-compareValue:withValue:usingSelector:`; the line numbers above have moved.
+- **What actually goes wrong:** a mismatch between the selector and the value's class
+  raises -- an `unrecognized selector` (for example an `NSNumber` sent
+  `localizedCaseInsensitiveCompare:`) or Foundation's own argument-type exception -- it does
+  not silently mis-sort.  The cache binds each column under its declared type, so a column
+  is normally homogeneous, but the bind does not enforce the value's class.  Blob columns
+  are the loose case (the bind accepts `NSString` and `NSData`, storing TEXT and BLOB), and a
+  non-sqlite datasource can supply anything.  The London and Music fixtures exercise only
+  matching pairs (London numeric, Music string).
+  The entry's "mix numbers and strings" is across group levels, not within one: each level
+  has its own value/selector pair, and only `NSOrderedSame` is read from the result.
+- **Agreed design (2026-10-18):** the cache column's declared `MADDataType` is the source of
+  truth for how a group key is compared -- it is the type the bind path actually stores and
+  the type the cache's ORDER BY must use.  The grouping field's schema type is the design
+  intent and the fallback when the cache has no column metadata.  A group level is one column
+  with one declared type, and every key at that level is compared with a comparator chosen
+  once, for that level, from the type.  Groups of groups are independent levels, each with its
+  own comparator.  The per-group header/footer structure stays: the two walks express
+  different domain behaviour (headers open outside-in, footers close inside-out), and both use
+  the shared level comparator.  NULL is first-class in the comparator, not a fallback: `NSNull`
+  implements no comparison, so the typed path never sees it.  Canonical representations:
+  Date/DateTime/TimeStamp/Time -> `NSNumber` epoch (stored REAL, which is what the display
+  path already reads); Decimal -> `NSNumber` double (stored REAL, with documented precision
+  loss); the remaining `MADDataType` values get the same table before implementation.
+- **Where the contract belongs:** `MADDatabaseDataBinding
+  -initWithDataType:fieldIndex:value:` is the single construction point for the bulk insert,
+  the non-bulk insert and the aggregate WHERE bindings, so it is where the canonical class is
+  chosen; `-[MADDatabaseSqlite3 bindStatement:withBindings:]` keeps a defensive assertion and
+  one-time log for a hand-built binding.  The bind path must store one canonical class per
+  declared `MADDataType` -- number -> `NSNumber`, string -> `NSString`, blob -> `NSData`,
+  null -> `NSNull`, with Date and Decimal as above -- and log or reject a value it cannot
+  represent instead of binding nothing or another class.  The reader
+  (`+databaseResultValue:columnNumber:`) can then answer a class that is a function of the
+  column type.  Compatibility: a cache is reused without a refresh when the file exists
+  (offline viewing), so a pre-contract cache can still reach the formatter.  Debug asserts;
+  release logs once and takes a cold, safe class-checked fallback only on a violation -- not
+  a branch in the healthy hot path.  An optional cache `user_version` stamp can retire the
+  fallback later.
+- **Work order (correctness before performance):** (0) fix the cache's ORDER BY so text keys
+  sort with LSASC and every column uses its own `MADDataType`: pass the cache's columns into
+  the enumerator query and switch the five `sortDescriptionForColumnType:` call sites from
+  `nativeType` to `column.type` (see the MADSqlite3 entry).  Without this the comparator and
+  the row order disagree and case-variant groups split.  (1) write down the canonical
+  representation per `MADDataType`; (2) canonicalise in `MADDatabaseDataBinding`, keep the
+  binder's defensive check, and move the MySQL first-row type mutation into
+  `dataColumnForFieldName:`; (3) give the group level a comparator resolved from the cache
+  column type (schema fallback) once per format, use it in both walks, and delete the generic
+  `id` path; (4) tests: multi-level groups, string (LSASC case-insensitive), number, date,
+  blob, NULL, a malformed cache value reported rather than crashing the formatter, and the
+  legacy-cache tolerance.  Then, and only then, performance: the per-level function-pointer
+  table, one changed/unchanged result per level per row shared by both walks, and, if still
+  needed, boundary flags from the enumerator/SQL.
+- **Deferred or rejected:** class-checked typed dispatch at the formatter (the previous
+  revision's recommendation) is the release-time fallback for a legacy cache that violates
+  the contract, not the target -- it leaves checks in the render loop and fixes only one
+  consumer.  Making `MADResult` a real type would ripple through every datasource, dictionary
+  and aggregate path.  A new sqlite API returning `(value, type)` duplicates the class.  A
+  per-value tag in the cache or key array adds an allocation per row, and the key array's
+  values are also fed to the aggregate WHERE clause, so they must stay raw.  Testing equality
+  with `-isEqual:` was measured slower than `compare:` (32 ns vs 23 ns for an `NSNumber`).
+  Boundary detection in SQLite (LAG or a second pass) is fastest in theory but couples the
+  formatter to the cache and changes the datasource contract.
+- **Resolved by the second opinion (2026-10-18):** the insert path is the enforcement point
+  (with `MADDatabaseDataBinding` doing the canonicalisation); the cache column's type is the
+  source of truth; Date/Decimal are `NSNumber` epoch/double; pre-contract caches are tolerated
+  with a cold logged fallback; and the cache's ORDER BY is a live, separate defect (see the
+  MADSqlite3 entry below).
+- **Now:** the canonical table is one class per declared
+  type, decided in `MADDatabaseDataBinding -initWithDataType:fieldIndex:value:`
+  (`MADCanonicalValueForType`): Bit/Integer/Short/Long/LongLong/Int24/Enum -> `NSNumber`
+  (`longLongValue`; a numeric `NSString` is parsed with a one-time log), Float/Double/
+  Number/Decimal -> `NSNumber` (`doubleValue`; `NSDecimalNumber` is an `NSNumber`, so the
+  precision loss is documented, not silent), String/VarChar/Set/Year/Geometry -> `NSString`
+  (an `NSNumber` stores its text with a one-time log), Date/DateTime/TimeStamp/Time -> the
+  `NSNumber` epoch (stored REAL, the class the display path reads; `NSDate`,
+  `NSDateComponents` and an epoch string all convert), Blob/Image -> `NSData` (an
+  `NSString` stores its UTF-8 bytes with a one-time log), Unknown -> stringified (as
+  before), Null -> `NSNull`.  A value the type cannot represent stores NULL with a one-time
+  log -- never silently another class, and the old binder crashes (data/date into numeric
+  columns) are gone.  `-[MADDatabaseSqlite3 bindStatement:withBindings:]` now sees its own
+  class per case and keeps a defensive one-time log + NULL for a hand-built binding outside
+  the contract (debug asserts).  `MADReportFormatter +compareValue:withValue:forDataType:`
+  replaced `-compareValue:withValue:usingSelector:` (the strict-selector-match warning is
+  gone): NULL is first-class, the typed classes compare the way the cache's ORDER BY orders
+  them, and each group level resolves its type once per format from the row cache's column
+  (`-groupDataTypes`, schema field as fallback only when the cache holds no such column --
+  a present column keeps its own type, Unknown included).  A violation among the reader's
+  four classes -- what a pre-contract cache can hold -- logs once and compares by a safe
+  class-checked fallback: same-class pairs compare by value, mixed pairs order by class
+  (never Same, so homogeneous runs in a heterogeneous legacy column still group), and an
+  offline open still formats; a class the reader can never produce asserts.  MySQL's
+  first-row `column.type` correction is gone: TEXT vs BLOB is
+  decided once in `+[MysqlFetch dataColumnForFieldName:mySqlField:]` from the column's
+  charset (binary 63 is a BLOB), and the fetch respects the column's declared type.  Enum
+  columns still store parsed numbers (pre-existing; "red" becomes 0) -- left as a follow-up,
+  not silently changed here.  The optional cache `user_version` stamp remains a follow-up.
+- **Test:** `MADSqlite3Tests/MADDatabaseSqlite3BindingTests.m` (the bind matrix),
+  `MADAPITests/MADDatabaseDataBindingTests.m` (the canonical classes), and the group-boundary
+  and comparator tranches in `MADTests/MADTestReportFormatter.m`, each mirrored under
+  `Linux/Tests/`.  Characterization pins the pairs the contract keeps; the failing pins
+  (number-in-string-level raise, date-binds-NULL, LSASC-less ORDER BY) were replaced by the
+  contract assertions once green.
+- **Documented in the code:** `MADReportFormatter.m`
+  (`+compareValue:withValue:forDataType:`, `-groupDataTypes`, `-formatDocumentAddDetail`,
+  `-newObjectArrayKeyValuesForResultRow:`, both group walks), `MADDatabaseDataBinding.m`
+  (`MADCanonicalValueForType`), and `MADDatabaseSqlite3.m`
+  (`+databaseResultValue:columnNumber:`, `-bindStatement:withBindings:`, the LSASC
+  collation).
+
 ### MADSectionLayout reads CFNumbers at the wrong widths, corrupting adjacent ivars
 - **Status:** Fixed 2026-10-17.
 - **Where:** `MAD/Source/MADSectionLayout.m:52-67`.
@@ -1341,6 +1472,38 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MADSqlite3
 
+### The cache's ORDER BY ignores column types, so text keys sort binary
+- **Status:** Fixed 2026-10-18 (commit `661d71f12`).
+- **Where:** `MADSqlite3/Source/MADQueryCacheSelectLimitOffset.m`'s ORDER BY block; the
+  report enumerators passed `columns:nil` in `MADDataTableFast.m`; the same
+  `nativeType`-as-`MADDataType` cast sat at `MADQuery+Sqlite3.m`,
+  `MADQueryCacheIndexCreate.m`, and `MAD/Source/MADQueryCacheSelectGroupKeys.m`.
+- **Behavior:** `+[MADDatabaseSqlite3 sortDescriptionForColumnType:ascending:]` expects a
+  `MADDataType` and returns `COLLATE LSASC` only for text types.  The callers passed
+  `MADDataColumn.nativeType`, a driver-native code, and the report enumerators passed no
+  columns at all, so `dataColumn` was nil and `nativeType` was 0 (`MADDataTypeBit`): every
+  column got plain binary `ASC`.  The report formatter compares the same keys with
+  `localizedCaseInsensitiveCompare:`, so equality and adjacency disagreed.  Rows
+  `"Apple"`, `"Armadillo"`, `"apple"` arrived in that order and the formatter emitted three
+  groups where case-insensitive ordering emits two (`{Apple, apple}`, `{Armadillo}`).
+- **Why it matters:** group boundaries are found by comparing adjacent rows, so an ORDER BY
+  that disagrees with the comparator splits case-variant groups (user-visible).  The typed
+  comparator design depends on the two agreeing, so this was the first correctness step,
+  not a performance follow-up.
+- **Now:** the sorted enumerators (and the other `MADQueryCacheSelectLimitOffset`
+  call sites in `MADDataTableFast.m`) pass the cache's `columns`, and every
+  `sortDescriptionForColumnType:` call site passes `column.type`; a query handed no column
+  sorts plainly rather than guessing a collation.  Text keys now order under LSASC, which
+  is the same comparison the formatter makes, so equality and adjacency agree.  On GNUstep
+  `localizedCaseInsensitiveCompare:` is case-sensitive (README.md), so the two sides still
+  agree there, just without the case folding -- recorded as a need in the Linux suite.
+- **Test:** `MADDataTableFastSelectTests testSelectLimitOffsetWithATextColumnOrdersWithLSASC`,
+  `testEnumeratorOrdersTextKeysCaseInsensitively` (both platforms), and
+  `testSelectLimitOffsetWithoutColumnsOrdersPlainly` (the no-columns fallback).  iOS and
+  `Linux/Tests` mirrors agree.
+- **Related:** "MADReportFormatter compares untyped values through id" above -- its
+  comparator uses the cache column's type, and this ORDER BY fix was the prerequisite.
+
 ### `fieldsForTable:` ran the tables query and returned tables as fields
 - **Status:** Fixed
 - **Where:** `MADSqlite3/Source/MADDatabaseSqlite3.m` (`-fieldsForTable:connection:error:`)
@@ -1680,6 +1843,26 @@ reference to "BUGS.md, the X entry" still lands.
   the cross-platform gate for the libc call.
 
 ## MADMySQL
+
+### The fetch corrected a column's type from its first row
+- **Status:** Fixed 2026-10-18 (commit `661d71f12`).
+- **Where:** was `MADMySQL/Source/MysqlFetch+DataTable.m`, the `MYSQL_TYPE_*_BLOB` fetch
+  branch: on the first row it decoded the bytes, and when they read as UTF-8 it mutated the
+  cache column's `type` to String (a dead NSNumber branch mutated it to Integer).
+- **Behavior:** a column's type depended on the content of its first row, and the cache
+  table had already been created under the original affinity when the type changed.  Under
+  the group-key contract (one canonical class per declared type, enforced at the bind) a
+  type decided per row cannot stand.
+- **Now:** TEXT and BLOB share the blob-ish protocol types; the column's charset is
+  what tells them apart -- binary (63) is a BLOB, anything else is TEXT.  The decision now
+  happens once in `+[MysqlFetch dataColumnForFieldName:mySqlField:]`, before the table is
+  created, and the fetch branch stores bytes for a BLOB column and decodes UTF-8 for a TEXT
+  column (empty text stores NULL, as before -- an empty NSData has no bytes).  A binary
+  BLOB whose bytes happen to decode as UTF-8 is now data rather than text -- the correct
+  reading, and a user-visible change for such columns.
+- **Test:** the live suite (`MADMySQLLiveTests`) exercises the fetch; no content-based
+  fixture exists for a binary blob that decodes, so the charset decision is pinned by the
+  bind-path contract tests in `MADSqlite3Tests/MADDatabaseSqlite3BindingTests.m` instead.
 
 ### `MysqlFetch+DataTable`: no non-SELECT statement could ever execute
 - **Status:** Fixed
