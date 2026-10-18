@@ -317,11 +317,14 @@
 	XCTAssertEqualObjects(copy.databaseConnection.connectionString, @"(MADTestCredentialConnection)[host:3306]db");
 }
 
-#pragma mark - NSCoding
+#pragma mark - NSSecureCoding
 
-// MADDatabase conforms to NSCoding, not NSSecureCoding, and its -initWithCoder: uses the
-// non-secure -decodeObjectForKey:.  It is therefore only archivable through the
-// insecure path.  Documented in BUGS.md ("MADDatabase is NSCoding-only").
+- (void)testSupportsSecureCoding {
+	XCTAssertTrue([MADDatabase supportsSecureCoding]);
+}
+
+// The classic archive path still works: a permissive archiver and unarchiver use the
+// same coding methods without enforcing the class allowlist.
 - (void)testInsecureNSCodingRoundTrip {
 	MADDatabase *db = [[MADDatabase alloc] init];
 	[db.errors addObject:[NSError errorWithDomain:@"com.example.tests" code:9 userInfo:nil]];
@@ -333,8 +336,8 @@
 	XCTAssertNotNil(data);
 
 	NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:NULL];
-	// -initForReadingFromData:error: defaults to requiring secure coding, and MADDatabase
-	// is NSCoding-only; the classic decode path is the only one it can satisfy.
+	// -initForReadingFromData:error: defaults to requiring secure coding; the classic
+	// path is exercised here deliberately.
 	unarchiver.requiresSecureCoding = NO;
 	MADDatabase *decoded = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 	[unarchiver finishDecoding];
@@ -345,13 +348,26 @@
 	XCTAssertNil(decoded.databaseConnection);
 }
 
-- (void)testSecureArchivingIsUnsupported {
+// The errors array holds NSError, which the secure decoder must name in its allowlist;
+// without that, the strict unarchive fails rather than losing the array.
+- (void)testSecureCodingRoundTrip {
 	MADDatabase *db = [[MADDatabase alloc] init];
+	[db.errors addObject:[NSError errorWithDomain:@"com.example.tests" code:9 userInfo:nil]];
+	[db setValue:@YES forKey:@"isLicensedUser"];
+
 	NSError *error = nil;
 	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:db requiringSecureCoding:YES error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(data);
 
-	XCTAssertNil(data);
-	XCTAssertNotNil(error);
+	MADDatabase *decoded = [NSKeyedUnarchiver unarchivedObjectOfClass:[MADDatabase class]
+														   fromData:data
+															  error:&error];
+	XCTAssertNil(error);
+	XCTAssertNotNil(decoded);
+	XCTAssertTrue(decoded.isLicensedUser);
+	XCTAssertEqual(decoded.errors.count, (NSUInteger)1);
+	XCTAssertNil(decoded.databaseConnection);
 }
 
 #pragma mark - Literal escaping limits

@@ -309,11 +309,10 @@ static void testCopyPreservesState(void) {
 	MAD_PASS_EQUAL(copy.databaseConnection.connectionString, @"(MADTestCredentialConnection)[host:3306]db", "the connection string survives");
 }
 
-#pragma mark - NSCoding
+#pragma mark - NSSecureCoding
 
-// MADDatabase conforms to NSCoding, not NSSecureCoding, and its -initWithCoder: uses the
-// non-secure -decodeObjectForKey:.  It is therefore only archivable through the
-// insecure path.  Documented in BUGS.md ("MADDatabase is NSCoding-only").
+// The classic archive path still works: a permissive archiver and unarchiver use the
+// same coding methods without enforcing the class allowlist.
 static void testInsecureNSCodingRoundTrip(void) {
 	MADDatabase *db = [[MADDatabase alloc] init];
 	[db.errors addObject:[NSError errorWithDomain:@"com.example.tests" code:9 userInfo:nil]];
@@ -326,8 +325,8 @@ static void testInsecureNSCodingRoundTrip(void) {
 	MAD_PASS(data != nil, "the insecure archive has bytes");
 
 	NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:data error:NULL];
-	// -initForReadingFromData:error: defaults to requiring secure coding, and MADDatabase
-	// is NSCoding-only; the classic decode path is the only one it can satisfy.
+	// -initForReadingFromData:error: defaults to requiring secure coding; the classic
+	// path is exercised here deliberately.
 	unarchiver.requiresSecureCoding = NO;
 	MADDatabase *decoded = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 	[unarchiver finishDecoding];
@@ -346,16 +345,35 @@ static void testInsecureNSCodingRoundTrip(void) {
 	MAD_PASS(decoded.databaseConnection == nil, "the connection does not survive");
 }
 
-static void testSecureArchivingIsUnsupported(void) {
+// MADDatabase declares NSSecureCoding.  Apple's strict archiver round-trips it; GNUstep
+// has no secure archiving at all -- the strict archive is nil with no error
+// (Linux/README.md) -- so only the codec claim and the refusal can be asserted there.
+static void testSecureCodingRoundTrip(void) {
+	MAD_PASS([MADDatabase supportsSecureCoding], "the class claims secure coding");
+
 	MADDatabase *db = [[MADDatabase alloc] init];
+	[db.errors addObject:[NSError errorWithDomain:@"com.example.tests" code:9 userInfo:nil]];
+	[db setValue:@YES forKey:@"isLicensedUser"];
+
 	NSError *error = nil;
 	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:db requiringSecureCoding:YES error:&error];
 
-	MAD_PASS(data == nil, "the strict archive is refused");
 #if __APPLE__
-	MAD_PASS(error != nil, "the refusal carries an error");
+	MAD_PASS(data != nil, "the strict archive has bytes");
+	MAD_PASS(error == nil, "the strict archive succeeds");
+
+	MADDatabase *decoded = [NSKeyedUnarchiver unarchivedObjectOfClass:[MADDatabase class]
+														   fromData:data
+															  error:&error];
+	MAD_PASS(error == nil, "the strict unarchive succeeds");
+	MAD_PASS(decoded != nil, "the database round trips");
+	MAD_PASS(decoded.isLicensedUser, "the licensed flag survives the round trip");
+	MAD_PASS(decoded.errors.count == (NSUInteger)1, "the errors survive the round trip");
+	MAD_PASS(decoded.databaseConnection == nil, "the connection does not survive");
 #else
-	// GNUstep's strict archiver answers nil with no error (Linux/README.md).
+	// GNUstep's strict archiver answers nil with no error (Linux/README.md).  The
+	// permissive round trip is testInsecureNSCodingRoundTrip's job.
+	MAD_PASS(data == nil, "GNUstep refuses the strict archive");
 	MAD_PASS(error == nil, "GNUstep refuses without an error");
 #endif
 }
@@ -401,5 +419,5 @@ MAD_TEST_MAIN("MADDatabaseTests",
 	MAD_TEST(testNewDatabaseWithConnectionReturnsInstanceOfReceiver),
 	MAD_TEST(testCopyPreservesState),
 	MAD_TEST(testInsecureNSCodingRoundTrip),
-	MAD_TEST(testSecureArchivingIsUnsupported),
+	MAD_TEST(testSecureCodingRoundTrip),
 	MAD_TEST(testNewSafeLiteralLeavesBackslashUntouched));

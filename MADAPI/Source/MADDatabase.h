@@ -29,7 +29,7 @@ extern NSString * const MADSqlTextFromPart;
 - (void)displayError:(NSError *)error;
 @end
 
-@interface MADDatabase : NSObject <MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseSQLProtocol, NSCoding, NSCopying>
+@interface MADDatabase : NSObject <MADPluginProtocol, MADDatabaseResultsProtocol, MADDatabaseDataSource, MADDatabaseSQLProtocol, NSSecureCoding, NSCopying>
 
 @property (nonatomic, weak) id <MADDatabaseResultsProtocol> delegate;
 @property (nonatomic, copy) MADDatabaseConnection *databaseConnection;

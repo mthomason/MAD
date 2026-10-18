@@ -21,7 +21,9 @@
 #import <MADAPI/MADNotificationDidReadRows.h>
 #import <MADAPI/MADDatabaseConnection.h>
 
+#import <Foundation/NSError.h>
 #import <Foundation/NSException.h>
+#import <Foundation/NSSet.h>
 
 NSString * const MADSqlTextFromPart = @"\nFROM\n";
 
@@ -45,6 +47,10 @@ NSString * const MADSqlTextFromPart = @"\nFROM\n";
 	return self;
 }
 
+#pragma mark - NSSecureCoding
+
++ (BOOL)supportsSecureCoding { return YES; }
+
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)coder {
@@ -55,8 +61,10 @@ NSString * const MADSqlTextFromPart = @"\nFROM\n";
 
 - (instancetype)initWithCoder:(NSCoder *)decoder {
 	if (self = [super init]) {
-		_databaseConnection = [decoder decodeObjectForKey:@"databaseConnection"];
-		_errors = [[decoder decodeObjectForKey:@"errors"] mutableCopy];
+		_databaseConnection = [decoder decodeObjectOfClass:[MADDatabaseConnection class]
+												  forKey:@"databaseConnection"];
+		NSSet *errorClasses = [NSSet setWithObjects:[NSArray class], [NSError class], nil];
+		_errors = [[decoder decodeObjectOfClasses:errorClasses forKey:@"errors"] mutableCopy];
 		_isLicensedUser = [decoder decodeBoolForKey:@"isLicensedUser"];
 	}
 	return self;
