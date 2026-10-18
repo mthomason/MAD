@@ -21,25 +21,6 @@ Status key:
 
 ## MADAPI
 
-### `MADDatabase` is NSCoding-only, so secure archiving rejects it
-- **Status:** Quirk (latent — nothing archives a `MADDatabase`)
-- **Where:** `MADAPI/Source/MADDatabase.h:32`, `MADAPI/Source/MADDatabase.m:50-63`
-- **Behavior:** The class declares `NSCoding`, not `NSSecureCoding`, and does not
-  implement `+supportsSecureCoding`. `+[NSKeyedArchiver archivedDataWithRootObject:requiringSecureCoding:YES
-  error:]` therefore returns `nil` with an error. Its `-initWithCoder:` also uses the
-  non-secure `-decodeObjectForKey:`, so even the modern class-matching decode APIs
-  (`-decodeObjectOfClass:forKey:`) refuse it. Round-tripping works only through the
-  classic path (`[[NSKeyedArchiver alloc] initRequiringSecureCoding:NO]` and an
-  unarchiver with `requiresSecureCoding = NO`, which is *not* the default for
-  `-initForReadingFromData:error:`).
-- **Why it matters:** If a caller ever reaches for the secure APIs — the enforced
-  default in recent SDKs — archiving fails at runtime with a nil result. Nothing in
-  the app or frameworks archives a `MADDatabase` today (checked: the only
-  `NSKeyedArchiver` users archive caches and query-visualization payloads), so this
-  is latent.
-- **Test:** `MADDatabaseTests testInsecureNSCodingRoundTrip` and
-  `testSecureArchivingIsUnsupported`.
-
 ### `MADDatabaseConnection` subclasses do not survive the base class's `NSCopying` / `NSCoding`
 - **Status:** Quirk (latent — nothing archives a connection; subclasses override `-copyWithZone:`)
 - **Where:** `MADAPI/Source/MADDatabaseConnection.m:34-62`
@@ -61,6 +42,7 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADDatabase` is NSCoding-only, so secure archiving rejects it
 - `MADConnectionViewController` / `MADConnectionSQLGenericViewController` `-databaseConnection` threw an NSString
 - `MADDatabaseDataBinding`: `nil` vs `[NSNull null]` handled inconsistently
 - `NSStringFromMADQueryType`: "TypeCache" missing for `MADQueryTypeCacheIndexDropParameters`
@@ -458,6 +440,29 @@ Status key:
 - MAD's document fixtures shared one store across test runs
 
 ## MADFoundation
+
+### `MADDataTable` supports `NSCoding` but not secure coding
+- **Status:** Open -- found while adopting `NSSecureCoding` on `MADDatabase`
+  (2026-10-18); deferred as a larger change.
+- **Where:** `MADFoundation/Source/MADDataTable.h:90` (`NSCoding`),
+  `MADFoundation/Source/MADDataTable.m:73-110` (non-secure `-decodeObjectForKey:`),
+  `MADFoundation/Source/MADDataTableVirtual.m:64-88`,
+  `MADSqlite3/Source/MADDataTableFast.m:226-260`.
+- **Behavior:** The base class declares `NSCoding`, and neither it nor either subclass
+  implements `+supportsSecureCoding` or decodes with the class-matching APIs.
+  `+[NSKeyedArchiver archivedDataWithRootObject:requiringSecureCoding:YES error:]`
+  therefore has no secure codec to run, and
+  `+[NSKeyedUnarchiver unarchivedObjectOfClass:fromData:error:]` refuses the result.
+  The table's own cache path (`-cacheWithUrl:error:` /
+  `-loadFromCacheWithUrl:error:`) uses property lists, not keyed archives; the keyed
+  coding is the path `MADDataTableFast` overrides.
+- **Why it matters:** A caller that archives a data table through the SDK's
+  secure-coding default -- a cache, a document payload, an export -- cannot, and the
+  insecure path is the only one that works.
+- **Follow-up:** adopt `NSSecureCoding` in the base and both subclasses the way
+  `MADDatabase` now does, with decode allowlists for `MADDataColumn`,
+  `NSSortDescriptor`, the column keys and the row storage.
+- **Test:** none yet; the existing coding tests use the permissive archiver.
 
 ### `MADOperation -willEnqueue` advances past `Pending` to `Ready`
 - **Status:** Quirk (documented; not a defect)

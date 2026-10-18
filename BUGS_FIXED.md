@@ -14,6 +14,35 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MADAPI
 
+### `MADDatabase` is NSCoding-only, so secure archiving rejects it
+- **Status:** Fixed 2026-10-18 (commit `4e9f5af6f`).
+- **Where:** `MADAPI/Source/MADDatabase.h:32`, `MADAPI/Source/MADDatabase.m:50-63`
+- **Behavior:** The class declares `NSCoding`, not `NSSecureCoding`, and does not
+  implement `+supportsSecureCoding`. `+[NSKeyedArchiver archivedDataWithRootObject:requiringSecureCoding:YES
+  error:]` therefore returns `nil` with an error. Its `-initWithCoder:` also uses the
+  non-secure `-decodeObjectForKey:`, so even the modern class-matching decode APIs
+  (`-decodeObjectOfClass:forKey:`) refuse it. Round-tripping works only through the
+  classic path (`[[NSKeyedArchiver alloc] initRequiringSecureCoding:NO]` and an
+  unarchiver with `requiresSecureCoding = NO`, which is *not* the default for
+  `-initForReadingFromData:error:`).
+- **Why it matters:** If a caller ever reaches for the secure APIs — the enforced
+  default in recent SDKs — archiving fails at runtime with a nil result. Nothing in
+  the app or frameworks archives a `MADDatabase` today (checked: the only
+  `NSKeyedArchiver` users archive caches and query-visualization payloads), so this
+  is latent.
+- **Now:** the class declares `NSSecureCoding` and implements
+  `+supportsSecureCoding`; `-initWithCoder:` decodes the connection with
+  `-decodeObjectOfClass:` and the errors array with `-decodeObjectOfClasses:` allowing
+  `NSArray` and `NSError`. The classic insecure round trip still works.
+  `MADDatabaseMySQL`, `MADDatabaseSqlite3` and `MADDatabaseSQLServer` override no
+  coding methods, so they inherit the conformance and need no change (their own ivars
+  were never encoded by the base class).
+- **Test:** `MADDatabaseTests testSupportsSecureCoding` and
+  `testSecureCodingRoundTrip` (which replaces `testSecureArchivingIsUnsupported`);
+  `testInsecureNSCodingRoundTrip` still passes. The Linux port asserts the conformance
+  claim and GNUstep's strict-archive refusal, because GNUstep has no secure archiving
+  (`Linux/README.md`).
+
 ### `MADDatabaseDataBinding`: `nil` vs `[NSNull null]` handled inconsistently
 - **Status:** Fixed
 - **Where:** `MADAPI/Source/MADDatabaseDataBinding.m:153`
