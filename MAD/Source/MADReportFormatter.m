@@ -48,6 +48,9 @@
 
 #import <dispatch/dispatch.h>
 
+#include <stdint.h>
+#include <stdlib.h>
+
 // The page's margins, and nothing else from UIKit: this file is in the Linux build
 // too now, where the four-edge struct comes from the compat shim (Linux/Compat).
 #import <UIKit/UIGeometry.h>
@@ -63,6 +66,11 @@ static inline UIEdgeInsets MADEdgeInsetsEmpty(void) { return UIEdgeInsetsMake(CG
 static inline UIEdgeInsets MADEdgeInsetsPrinting(CGRect printableRect, CGSize layoutSize) { return UIEdgeInsetsMake(printableRect.origin.y, printableRect.origin.x, layoutSize.height - printableRect.size.height - printableRect.origin.y, layoutSize.width - printableRect.size.width - printableRect.origin.x); }
 static inline CGFloat PrintableHeightForPage(MADPageOptions *page) { return page.layoutSize.height - page.margins.top - page.margins.bottom; }
 static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat nextItemHeight, CGFloat pageFooterHeight) { return heightUsedCurrentPage + nextItemHeight + pageFooterHeight; }
+
+//  A level's comparison function: NULL never reaches one (the callers handle it
+//  first, since NULL is first-class and type-independent), and the data type is
+//  carried only for the fallback's log and assertion.
+typedef NSComparisonResult (*MADGroupLevelComparator)(id value, id value2, MADDataType dataType);
 
 @interface MADReportFormatter ()
 
@@ -98,9 +106,19 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 @implementation MADReportFormatter {
 	NSUInteger _numberOfGroups;
 	NSString *_filename;
+	//  One comparator per group level, resolved once per format from the
+	//  types -groupDataTypes resolves (the cache whose invalidation the
+	//  table rides on), and the per-row changed flags both walks consume.
+	MADGroupLevelComparator *_groupComparators;
+	NSUInteger _groupComparatorsCount;
+	uint8_t *_changedLevels;
+	NSUInteger _changedLevelsCount;
 }
 
-- (void)dealloc { }
+- (void)dealloc {
+	free(_groupComparators);
+	free(_changedLevels);
+}
 
 - (instancetype)initWithDocument: (id <MADDocumentRenderProtocol>)layout
 						 options: (MADReportFormatterOptions)options  {
@@ -189,10 +207,10 @@ static inline CGFloat HeightWithNextItem(CGFloat heightUsedCurrentPage, CGFloat 
 //  Group-boundary comparison.  The formatter does not sort: the cache is already
 //  ordered by the report's group keys, and +compareValue:withValue:forDataType:
 //  answers only "is this level's key the same as the previous row's?".
-//  -formatDocumentGroupFooters:andLastValues: and
-//  -formatDocumentGroupHeaders:andLastValues: use it to find where a group ends
-//  and the next begins, and neither reads the ordering.  The values are raw
-//  row-cache values: the sqlite reader maps storage class to NSNull, NSNumber,
+//  -formatDocumentGroupFootersForChangedLevels:count: and
+//  -formatDocumentGroupHeadersForChangedLevels:count:firstRow: use it to find
+//  where a group ends and the next begins, and neither reads the ordering.  The
+//  values are raw row-cache values: the sqlite reader maps storage class to NSNull, NSNumber,
 //  NSString or NSData (+[MADDatabaseSqlite3 databaseResultValue:columnNumber:]),
 //  and the bind path now stores one canonical class per declared type, so the
 //  level's type and the values' classes agree on the healthy path.  See
@@ -249,40 +267,18 @@ static void MADComparisonLogViolation(MADDataType dataType, Class aClass, Class 
 	}
 }
 
-+ (NSComparisonResult)compareValue:(id)value
-						 withValue:(id)value2
-					   forDataType:(MADDataType)dataType {
-
-	//  NULL is first-class: NSNull implements no comparison, and a NULL key sits
-	//  below every real one -- the same place the cache's ORDER BY puts it.
-	if (value == [NSNull null]) {
-		return (value2 == [NSNull null]) ? NSOrderedSame : NSOrderedAscending;
-	}
-	if (value2 == [NSNull null]) {
-		return NSOrderedDescending;
-	}
-
-	if (MADDataTypeComparesAsString(dataType)) {
-		if ([value isKindOfClass:[NSString class]] && [value2 isKindOfClass:[NSString class]]) {
-			return [(NSString *)value localizedCaseInsensitiveCompare:(NSString *)value2];
-		}
-	} else if (MADDataTypeComparesAsData(dataType)) {
-		if ([value isKindOfClass:[NSData class]] && [value2 isKindOfClass:[NSData class]]) {
-			return [(NSData *)value compareData:(NSData *)value2];
-		}
-	} else {
-		if ([value isKindOfClass:[NSNumber class]] && [value2 isKindOfClass:[NSNumber class]]) {
-			return [(NSNumber *)value compare:(NSNumber *)value2];
-		}
-	}
-
-	//  A violation: the level's type and the values' classes do not agree.  The
-	//  bind path cannot produce this, but a pre-contract cache can -- and the
-	//  reader answers only NSNull, NSNumber, NSString and NSData (NULL is
-	//  handled above), so any pair of the other three is tolerated: logged once
-	//  and compared by the safe class-checked fallback, and an offline open of
-	//  a pre-contract cache still formats.  A class outside them the reader can
-	//  never have produced, so it asserts in debug and answers Same in release.
+//  The class-checked fallback for a pair outside the level's canonical class,
+//  shared by every family so the legacy-pair semantics live in one place: the
+//  bind path cannot produce this, but a pre-contract cache can -- and the reader
+//  answers only NSNull, NSNumber, NSString and NSData, so any pair of the other
+//  three is tolerated: logged once and compared by the safe class-checked
+//  fallback, and an offline open of a pre-contract cache still formats.
+//  Same-class pairs compare by value; mixed pairs order by class rank so
+//  homogeneous runs in a heterogeneous legacy column still group together
+//  instead of collapsing into one group; a class outside the reader's four
+//  asserts in debug and answers Same in release.  See
+//  +compareValue:withValue:forDataType:.
+static NSComparisonResult MADComparisonFallback(id value, id value2, MADDataType dataType) {
 	MADComparisonLogViolation(dataType, [value class], [value2 class]);
 
 	BOOL valueIsKnown = [value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]] || [value isKindOfClass:[NSData class]];
@@ -297,16 +293,63 @@ static void MADComparisonLogViolation(MADDataType dataType, Class aClass, Class 
 		if ([value isKindOfClass:[NSData class]] && [value2 isKindOfClass:[NSData class]]) {
 			return [(NSData *)value compareData:(NSData *)value2];
 		}
-		// A mixed pair has no class-checked comparison; order by class so
-		// homogeneous runs in a heterogeneous legacy column still group
-		// together rather than collapsing into one group.
 		NSUInteger valueRank = MADComparisonClassRank(value);
 		NSUInteger value2Rank = MADComparisonClassRank(value2);
 		return valueRank < value2Rank ? NSOrderedAscending : NSOrderedDescending;
 	}
-	NSAssert(NO, @"A group key's class does not match its level's type: %@ and %@ in a %@ level.",
-			 NSStringFromClass([value class]), NSStringFromClass([value2 class]), NSStringFromMADDataType(dataType));
+	NSCAssert(NO, @"A group key's class does not match its level's type: %@ and %@ in a %@ level.",
+			  NSStringFromClass([value class]), NSStringFromClass([value2 class]), NSStringFromMADDataType(dataType));
 	return NSOrderedSame;
+}
+
+//  The comparison families a level's declared type sorts under: the typed pair
+//  on the fast path, the shared fallback for anything outside the level's
+//  canonical class.
+static NSComparisonResult MADCompareValuesAsString(id value, id value2, MADDataType dataType) {
+	if ([value isKindOfClass:[NSString class]] && [value2 isKindOfClass:[NSString class]]) {
+		return [(NSString *)value localizedCaseInsensitiveCompare:(NSString *)value2];
+	}
+	return MADComparisonFallback(value, value2, dataType);
+}
+
+static NSComparisonResult MADCompareValuesAsNumber(id value, id value2, MADDataType dataType) {
+	if ([value isKindOfClass:[NSNumber class]] && [value2 isKindOfClass:[NSNumber class]]) {
+		return [(NSNumber *)value compare:(NSNumber *)value2];
+	}
+	return MADComparisonFallback(value, value2, dataType);
+}
+
+static NSComparisonResult MADCompareValuesAsData(id value, id value2, MADDataType dataType) {
+	if ([value isKindOfClass:[NSData class]] && [value2 isKindOfClass:[NSData class]]) {
+		return [(NSData *)value compareData:(NSData *)value2];
+	}
+	return MADComparisonFallback(value, value2, dataType);
+}
+
+static MADGroupLevelComparator MADComparisonFunctionForDataType(MADDataType dataType) {
+	if (MADDataTypeComparesAsString(dataType)) return MADCompareValuesAsString;
+	if (MADDataTypeComparesAsData(dataType)) return MADCompareValuesAsData;
+	return MADCompareValuesAsNumber;
+}
+
++ (NSComparisonResult)compareValue:(id)value
+						 withValue:(id)value2
+					   forDataType:(MADDataType)dataType {
+
+	//  NULL is first-class: NSNull implements no comparison, and a NULL key sits
+	//  below every real one -- the same place the cache's ORDER BY puts it.
+	if (value == [NSNull null]) {
+		return (value2 == [NSNull null]) ? NSOrderedSame : NSOrderedAscending;
+	}
+	if (value2 == [NSNull null]) {
+		return NSOrderedDescending;
+	}
+
+	//  The one-per-call form: resolve the level's family and compare through it.
+	//  The row loop resolves each family once per format instead (-groupDataTypes)
+	//  and calls it through the stored pointer; both routes share the families,
+	//  the fallback, and the log-once rule.
+	return MADComparisonFunctionForDataType(dataType)(value, value2, dataType);
 }
 
 //  The comparison type for each group level, resolved once per format: the row
@@ -340,6 +383,19 @@ static void MADComparisonLogViolation(MADDataType dataType, Class aClass, Class 
 			groupLevel++;
 		}
 		_groupDataTypes = dataTypes;
+
+		//  One comparator per level, resolved from the same types: the walks
+		//  compare through these pointers, so a format pays the family dispatch
+		//  once per level instead of once per comparison.
+		NSUInteger levelCount = dataTypes.count;
+		if (_groupComparatorsCount != levelCount) {
+			free(_groupComparators);
+			_groupComparators = levelCount == 0 ? NULL : malloc(sizeof(MADGroupLevelComparator) * levelCount);
+			_groupComparatorsCount = levelCount;
+		}
+		for (NSUInteger level = 0; level < levelCount; level++) {
+			_groupComparators[level] = MADComparisonFunctionForDataType((MADDataType)[dataTypes[level] shortValue]);
+		}
 	}
 	return _groupDataTypes;
 }
@@ -595,16 +651,17 @@ static void MADComparisonLogViolation(MADDataType dataType, Class aClass, Class 
 //  The row loop, and where report groups are discovered.  Rows arrive already
 //  sorted by the cache on the report's group keys.  For each row this builds
 //  `keyValuesForComparson`, one raw cache value per query group in level order,
-//  and compares it with `self.lastComparsonValues`, the previous row's array:
-//    - a level that differs closes the group at that level (its footer), and the
-//      walk runs deepest to shallowest;
-//    - a level that differs opens a group at that level (its header), and the
-//      walk runs shallowest to deepest.
-//  The first row has no previous values and opens every level.  The same pair of
-//  arrays is handed to both walks, so each level is compared twice per row (see
-//  +compareValue:withValue:forDataType:).  The loop can never see the last
-//  group end, so after it every level's footer is laid out directly, with no
-//  further comparison.
+//  and compares each level once with `self.lastComparsonValues`, the previous
+//  row's array, storing a changed flag per level:
+//    - the footer walk consumes the flags deepest to shallowest, closing the
+//      groups that ended at this row;
+//    - the header walk consumes them shallowest to deepest, opening the groups
+//      that start at this row.
+//  The first row has no previous values: no footers, and every level opens.
+//  Each level was once compared by each walk separately, twice per row; the
+//  flags compare it once (see +compareValue:withValue:forDataType:).  The loop
+//  can never see the last group end, so after it every level's footer is laid
+//  out directly, with no further comparison.
 //
 //  `resultRow` is either a dictionary of the group keys plus MADIdentifierROWID
 //  (the sqlite cache's enumerator, which only projects the key columns) or, when
@@ -617,7 +674,11 @@ static void MADComparisonLogViolation(MADDataType dataType, Class aClass, Class 
 	BOOL firstRow = YES, rowIdOnly = YES, calculatedRowId = NO;
 	
 	id lastResultRow = nil;
-	
+
+	//  The per-level comparison types and comparators, resolved once per format;
+	//  the row loop compares through the stored pointers.
+	NSArray <NSNumber *> *groupDataTypes = self.groupDataTypes;
+
 	NSEnumerator *enumeratorForReportData = [self.datasource enumeratorForReportData];
 	NSArray *keyValuesForComparson;
 	
@@ -645,18 +706,46 @@ static void MADComparisonLogViolation(MADDataType dataType, Class aClass, Class 
 			
 			//Get row key values
 			keyValuesForComparson = [self newObjectArrayKeyValuesForResultRow:resultRow];
-			
-			//Display new footers if needed.
-			if (firstRow) {
+
+			//  One comparison per level for this row, and one changed flag each;
+			//  the footer and header walks below both consume the same flags.
+			//  NULL stays first-class: a NULL key sorts below every real one, so
+			//  any non-equal NULL pair has changed.
+			NSUInteger groupLevelCount = keyValuesForComparson.count;
+			if (_changedLevelsCount != groupLevelCount) {
+				free(_changedLevels);
+				_changedLevels = groupLevelCount == 0 ? NULL : malloc(sizeof(uint8_t) * groupLevelCount);
+				_changedLevelsCount = groupLevelCount;
+			}
+
+			BOOL firstRowNow = firstRow;
+			if (firstRowNow) {
 				firstRow = NO;
 			} else {
-				[self formatDocumentGroupFooters: keyValuesForComparson
-								   andLastValues: self.lastComparsonValues];
+				NSArray *lastValues = self.lastComparsonValues;
+				for (NSUInteger groupLevel = 0; groupLevel < groupLevelCount; groupLevel++) {
+					id lastValue = lastValues[groupLevel];
+					id currentValue = keyValuesForComparson[groupLevel];
+					BOOL changed;
+					if (lastValue == [NSNull null]) {
+						changed = currentValue != [NSNull null];
+					} else if (currentValue == [NSNull null]) {
+						changed = YES;
+					} else {
+						changed = _groupComparators[groupLevel](lastValue, currentValue, (MADDataType)groupDataTypes[groupLevel].shortValue) != NSOrderedSame;
+					}
+					_changedLevels[groupLevel] = changed;
+				}
+
+				//Display new footers if needed.
+				[self formatDocumentGroupFootersForChangedLevels: _changedLevels
+															count: groupLevelCount];
 			}
-			
+
 			//Display new group headers if needed.
-			[self formatDocumentGroupHeaders: keyValuesForComparson
-							   andLastValues: self.lastComparsonValues];
+			[self formatDocumentGroupHeadersForChangedLevels: _changedLevels
+														count: groupLevelCount
+													 firstRow: firstRowNow];
 			
 			[self formatDocumentAddHeightFromSection: self.sections.detail];
 			
@@ -707,53 +796,33 @@ static void MADComparisonLogViolation(MADDataType dataType, Class aClass, Class 
 }
 
 //  Close the groups that ended at this row.  The levels are walked deepest
-//  first, so a footer is emitted inner before outer.  At each level the previous
-//  row's value is compared with the current row's under that level's comparison
-//  type; a difference means the group at that level closed.  Called for every
-//  row except the first (which has no previous values).
-- (void)formatDocumentGroupFooters:(NSArray *)currentValues
-					 andLastValues:(NSArray *)lastValues {
-	NSArray <NSNumber *> *groupDataTypes = self.groupDataTypes;
-	for (NSUInteger groupLevel = lastValues.count; groupLevel > 0; groupLevel--) {
-		//@autoreleasepool {
-		NSComparisonResult comparsonResult = [MADReportFormatter compareValue: lastValues[groupLevel - 1]
-																  withValue: currentValues[groupLevel - 1]
-																forDataType: (MADDataType)groupDataTypes[groupLevel - 1].shortValue];
-
-		if (comparsonResult != NSOrderedSame) {
+//  first, so a footer is emitted inner before outer; each flag was set by the
+//  row loop's one comparison per level.  Called for every row except the first
+//  (which has no previous values).
+- (void)formatDocumentGroupFootersForChangedLevels:(const uint8_t *)changedLevels
+											 count:(NSUInteger)levelCount {
+	for (NSUInteger groupLevel = levelCount; groupLevel > 0; groupLevel--) {
+		if (changedLevels[groupLevel - 1]) {
 			MADSectionGroupLayout *section = self.sections.groupFooters[groupLevel - 1];
 			[self formatDocumentAddHeightFromSection: section];
 			[self layoutAddGroupFooterAtLevel:groupLevel - 1 withRowId:self.machineState.detailRowIdLast];//[self layoutAddGroupFooterAtLevel:groupLevel - 1];
 		}
-		//}
 	}
 }
 
 //  Open the groups that start at this row.  The levels are walked shallowest
 //  first, so a header is emitted outer before inner.  With no previous row every
-//  level is new; otherwise a level is new when its value differs from the
-//  previous row's under that level's comparison type.  This is the same pair of
-//  arrays and the same comparison the footer walk just made, at every level.
-- (void)formatDocumentGroupHeaders:(NSArray *)currentValues
-					 andLastValues:(NSArray *)lastValues {
-
-	NSArray <NSNumber *> *groupDataTypes = self.groupDataTypes;
-	for (NSUInteger groupLevel = 0; groupLevel < currentValues.count; groupLevel++) {
-		//@autoreleasepool {
-		BOOL newHeader = lastValues.count == 0;
-		if (newHeader == NO) {
-
-			newHeader = [MADReportFormatter compareValue:lastValues[groupLevel]
-											  withValue:currentValues[groupLevel]
-											forDataType:(MADDataType)groupDataTypes[groupLevel].shortValue] != NSOrderedSame;
-		}
-
+//  level is new; otherwise a level is new when its flag is set.
+- (void)formatDocumentGroupHeadersForChangedLevels:(const uint8_t *)changedLevels
+											 count:(NSUInteger)levelCount
+										  firstRow:(BOOL)firstRow {
+	for (NSUInteger groupLevel = 0; groupLevel < levelCount; groupLevel++) {
+		BOOL newHeader = firstRow || changedLevels[groupLevel];
 		if (newHeader) {
 			MADSectionGroupLayout *layout = self.sections.groupHeaders[groupLevel];
 			[self formatDocumentAddHeightFromSection:layout];
 			[self layoutAddGroupHeaderLevel:groupLevel];
 		}
-		//}
 	}
 }
 
