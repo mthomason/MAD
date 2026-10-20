@@ -33,7 +33,7 @@
 @dynamic fieldKey2;
 @dynamic barcode;
 
-- (id <MTBarcodeProtocol>)barcode {
+- (id <MADBarcodeProtocol>)barcode {
 	return self.item;
 }
 

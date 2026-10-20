@@ -5,7 +5,7 @@
 //  Copyright © 2026 Michael Thomason. All rights reserved.
 //
 //  Characterization coverage for MADDocumentObjectDataReferenceBarcode: the handle over a
-//  barcode element.  It hands the element itself back as the MTBarcodeProtocol object and
+//  barcode element.  It hands the element itself back as the MADBarcodeProtocol object and
 //  builds each of the two field keys from its referenced query field's table alias and
 //  schema field name.
 //

@@ -600,7 +600,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 #if __APPLE__
 		case MADPrintPageElementTypeBarcode: {
 			
-			MTBarcode *barcode = defination[MTDocumentObjectDefinationObject];
+			MADBarcode *barcode = defination[MTDocumentObjectDefinationObject];
 			int64_t field1ObjectId = [defination[MTDocumentObjectDefinationField1] longLongValue];
 			int64_t field2ObjectId = [defination[MTDocumentObjectDefinationField2] longLongValue];
 			RptqQueryField *field1 = [RptqQueryField queryFieldForObjectID: field1ObjectId managedObjectContext: managedObjectContext];

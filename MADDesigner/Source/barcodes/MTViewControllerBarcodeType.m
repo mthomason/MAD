@@ -14,7 +14,7 @@
 
 #import <UIKit/NSAttributedString.h>
 
-#import <MADBarcodes/MTBarcode.h>
+#import <MADBarcodes/MADBarcode.h>
 
 @interface MTViewControllerBarcodeType ()
 
@@ -42,7 +42,7 @@
 }
 
 - (void)customInit {
-    NSDictionary *namesByType = [MTBarcode newDictionaryNames];
+    NSDictionary *namesByType = [MADBarcode newDictionaryNames];
     self.barcodeNamesByType = namesByType;
     
     NSArray *allNames = (self.barcodeNamesByType).allValues;
@@ -100,7 +100,7 @@
     NSArray *keys = [self.barcodeNamesByType allKeysForObject:barcodeName];
     if (keys.count > 0) {
         NSNumber *key = keys[0];
-        MTBarcodeType resultType = key.shortValue;
+        MADBarcodeType resultType = key.shortValue;
         [self.delegate didChangeBarcodeType:resultType];
     }
 }

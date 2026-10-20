@@ -10,16 +10,16 @@
 #define Reports_RptqDocumentElementBarcode_Extras_h
 
 #import <MAD/RptqDocumentElementBarcode.h>
-#import <MADBarcodes/MTBarcodeProtocol.h>
+#import <MADBarcodes/MADBarcodeProtocol.h>
 
-@class MTBarcode;
+@class MADBarcode;
 
-@interface RptqDocumentElementBarcode (Extras) <MTBarcodeProtocol>
+@interface RptqDocumentElementBarcode (Extras) <MADBarcodeProtocol>
 
-- (void)updateWithBarcode:(MTBarcode *)barcode
+- (void)updateWithBarcode:(MADBarcode *)barcode
 				 field1ID:(int64_t)field1ID
 				 field2ID:(int64_t)field2ID;
-+ (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode
++ (instancetype)barcodeWithMtBarcode:(MADBarcode *)barcode
 					   queryFieldOne:(RptqQueryField *)queryFieldOne
 					   queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED;
 

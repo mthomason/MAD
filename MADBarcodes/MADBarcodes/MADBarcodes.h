@@ -22,25 +22,25 @@ FOUNDATION_EXPORT const unsigned char MADBarcodesVersionString[];
 
 #import <MADBarcodes/zint.h>
 #import <MADBarcodes/png.h>
-#import <MADBarcodes/MTBarcodeProtocol.h>
+#import <MADBarcodes/MADBarcodeProtocol.h>
 #import <MADBarcodes/MADBarcodeType.h>
-#import <MADBarcodes/MTBarcode.h>
-#import <MADBarcodes/MTBarcodeView.h>
-#import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
-#import <MADBarcodes/MTBarcodeCode39Iso16388.h>
-#import <MADBarcodes/MTBarcodeAztec.h>
-#import <MADBarcodes/MTBarcodeQrCodeIso18004.h>
-#import <MADBarcodes/MTBarcodeGridMatrix.h>
-#import <MADBarcodes/MTBarcodeMicroQrCode.h>
-#import <MADBarcodes/MTBarcodeMaxicodeIso16023.h>
-#import <MADBarcodes/MTBarcodePdf417Iso15438.h>
-#import <MADBarcodes/MTBarcodeCodeOne.h>
-#import <MADBarcodes/MTBarcodeDatabarStacked.h>
-#import <MADBarcodes/MTBarcodeDatabarExpandedStacked.h>
-#import <MADBarcodes/MTBarcodeMsiPlessey.h>
-#import <MADBarcodes/MTBarcodeMicroPdf417Iso24728.h>
-#import <MADBarcodes/MTBarcodeChannelCode.h>
-#import <MADBarcodes/MTBarcodeCode39Extended.h>
+#import <MADBarcodes/MADBarcode.h>
+#import <MADBarcodes/MADBarcodeView.h>
+#import <MADBarcodes/MADBarcodeDataMatrixIso16022.h>
+#import <MADBarcodes/MADBarcodeCode39Iso16388.h>
+#import <MADBarcodes/MADBarcodeAztec.h>
+#import <MADBarcodes/MADBarcodeQrCodeIso18004.h>
+#import <MADBarcodes/MADBarcodeGridMatrix.h>
+#import <MADBarcodes/MADBarcodeMicroQrCode.h>
+#import <MADBarcodes/MADBarcodeMaxicodeIso16023.h>
+#import <MADBarcodes/MADBarcodePdf417Iso15438.h>
+#import <MADBarcodes/MADBarcodeCodeOne.h>
+#import <MADBarcodes/MADBarcodeDatabarStacked.h>
+#import <MADBarcodes/MADBarcodeDatabarExpandedStacked.h>
+#import <MADBarcodes/MADBarcodeMsiPlessey.h>
+#import <MADBarcodes/MADBarcodeMicroPdf417Iso24728.h>
+#import <MADBarcodes/MADBarcodeChannelCode.h>
+#import <MADBarcodes/MADBarcodeCode39Extended.h>
 
 // Remaining public headers, so the module umbrella is complete.
 // (-Wincomplete-umbrella; keep in sync with the Public headers phase.)

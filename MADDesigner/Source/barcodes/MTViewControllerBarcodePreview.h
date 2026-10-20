@@ -13,13 +13,13 @@
 
 @protocol MTViewControllerBarcodePreviewDelegate;
 
-@class MTBarcode;
+@class MADBarcode;
 
 @interface MTViewControllerBarcodePreview : UIViewController
 
     @property (nonatomic, weak) id <MTViewControllerBarcodePreviewDelegate> delegate;
 
-    - (void)setBarcodeToPreview:(MTBarcode *)barcode;
+    - (void)setBarcodeToPreview:(MADBarcode *)barcode;
     - (void)update;
 
 @end

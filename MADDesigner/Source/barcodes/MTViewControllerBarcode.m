@@ -39,21 +39,21 @@
 #import <MAD/MADQuery+Extras.h>
 #import <MAD/MADDatabase+Constructor.h>
 
-#import <MADBarcodes/MTBarcodeDataMatrixIso16022.h>
-#import <MADBarcodes/MTBarcodeCode39Iso16388.h>
-#import <MADBarcodes/MTBarcodeAztec.h>
-#import <MADBarcodes/MTBarcodeQrCodeIso18004.h>
-#import <MADBarcodes/MTBarcodeGridMatrix.h>
-#import <MADBarcodes/MTBarcodeMicroQrCode.h>
-#import <MADBarcodes/MTBarcodeMaxicodeIso16023.h>
-#import <MADBarcodes/MTBarcodePdf417Iso15438.h>
-#import <MADBarcodes/MTBarcodeCodeOne.h>
-#import <MADBarcodes/MTBarcodeDatabarStacked.h>
-#import <MADBarcodes/MTBarcodeDatabarExpandedStacked.h>
-#import <MADBarcodes/MTBarcodeMsiPlessey.h>
-#import <MADBarcodes/MTBarcodeMicroPdf417Iso24728.h>
-#import <MADBarcodes/MTBarcodeChannelCode.h>
-#import <MADBarcodes/MTBarcodeCode39Extended.h>
+#import <MADBarcodes/MADBarcodeDataMatrixIso16022.h>
+#import <MADBarcodes/MADBarcodeCode39Iso16388.h>
+#import <MADBarcodes/MADBarcodeAztec.h>
+#import <MADBarcodes/MADBarcodeQrCodeIso18004.h>
+#import <MADBarcodes/MADBarcodeGridMatrix.h>
+#import <MADBarcodes/MADBarcodeMicroQrCode.h>
+#import <MADBarcodes/MADBarcodeMaxicodeIso16023.h>
+#import <MADBarcodes/MADBarcodePdf417Iso15438.h>
+#import <MADBarcodes/MADBarcodeCodeOne.h>
+#import <MADBarcodes/MADBarcodeDatabarStacked.h>
+#import <MADBarcodes/MADBarcodeDatabarExpandedStacked.h>
+#import <MADBarcodes/MADBarcodeMsiPlessey.h>
+#import <MADBarcodes/MADBarcodeMicroPdf417Iso24728.h>
+#import <MADBarcodes/MADBarcodeChannelCode.h>
+#import <MADBarcodes/MADBarcodeCode39Extended.h>
 
 #import "MTViewControllerBarcodePreviewDelegate.h"
 
@@ -291,7 +291,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 - (void)commonInit {
     [self setEditModeBarcodeType:NO];
 
-    MTBarcode *barcode = [MTBarcode newBarcodeWithType:MTBarcodeTypeAztec];
+    MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeAztec];
     barcode.showErrorMessage = YES;
     self.barcode = barcode;
 }
@@ -328,8 +328,8 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
 - (void)setBarcodeToEdit:(RptqDocumentElementBarcode *)barcodeDocumentObject {
 
-    MTBarcode *barcode;
-    barcode = [MTBarcode newBarcode:barcodeDocumentObject];
+    MADBarcode *barcode;
+    barcode = [MADBarcode newBarcode:barcodeDocumentObject];
     self.barcode = barcode;
     
     self.queryField1ID = barcodeDocumentObject.referencesField1.identifier;
@@ -365,7 +365,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 
 }
 
-- (MTBarcode *)barcodeToDisplay {
+- (MADBarcode *)barcodeToDisplay {
     return self.barcode;
 }
 
@@ -401,7 +401,7 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     [self updateBarcode];
 }
 
-- (void)setBorderType:(MTBarcodeBorderStyle)borderStyle {
+- (void)setBorderType:(MADBarcodeBorderStyle)borderStyle {
     (self.barcode).barcodeBorderStyle = borderStyle;
     [self updateBarcode];
 }
@@ -414,19 +414,19 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 #pragma mark Aztec
 
 - (void)barcodeAztecDidEnableAutomaticResizing {
-    MTBarcodeAztec *barcode = (MTBarcodeAztec *)self.barcode;
+    MADBarcodeAztec *barcode = (MADBarcodeAztec *)self.barcode;
     [barcode enableAutomaticResizing];
     [self updateBarcode];
 }
 
 - (void)barcodeAztecDidSetSize:(NSUInteger)size {
-    MTBarcodeAztec *barcode = (MTBarcodeAztec *)self.barcode;
+    MADBarcodeAztec *barcode = (MADBarcodeAztec *)self.barcode;
     barcode.size = size;
     [self updateBarcode];
 }
 
 - (void)barcodeAztecDidSetErrorCorrection:(NSUInteger)errorCorrection {
-    MTBarcodeAztec *barcode = (MTBarcodeAztec *)self.barcode;
+    MADBarcodeAztec *barcode = (MADBarcodeAztec *)self.barcode;
     [barcode setMinmumErrorCorrection:errorCorrection];
     [self updateBarcode];
 }
@@ -434,19 +434,19 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 #pragma mark Qr Code
 
 - (void)barcodeQrCodeDidEnableAutomaticResizing {
-    MTBarcodeQrCodeIso18004 *barcode = (MTBarcodeQrCodeIso18004 *)self.barcode;
+    MADBarcodeQrCodeIso18004 *barcode = (MADBarcodeQrCodeIso18004 *)self.barcode;
     [barcode enableAutomaticResizing];
     [self updateBarcode];
 }
 
 - (void)barcodeQrCodeDidSetSize:(NSInteger)size {
-    MTBarcodeQrCodeIso18004 *barcode = (MTBarcodeQrCodeIso18004 *)self.barcode;
+    MADBarcodeQrCodeIso18004 *barcode = (MADBarcodeQrCodeIso18004 *)self.barcode;
     [barcode setSize:size];
     [self updateBarcode];
 }
 
 - (void)barcodeQrCodeDidSetErrorCorrection:(NSInteger)errorCorrection {
-    MTBarcodeQrCodeIso18004 *barcode = (MTBarcodeQrCodeIso18004 *)self.barcode;
+    MADBarcodeQrCodeIso18004 *barcode = (MADBarcodeQrCodeIso18004 *)self.barcode;
     [barcode setErrorCorrection:errorCorrection];
     [self updateBarcode];
 }
@@ -454,12 +454,12 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 #pragma mark Maxicode
 
 - (void)barcodeMaxicodeDidSetEncodingMode:(NSInteger)encodingMode {
-    MTBarcodeMaxicodeIso16023 *barcode = (MTBarcodeMaxicodeIso16023 *)self.barcode;
+    MADBarcodeMaxicodeIso16023 *barcode = (MADBarcodeMaxicodeIso16023 *)self.barcode;
     [barcode setEncodingMode:encodingMode];
     [self updateBarcode];
 }
 - (void)barcodeMaxicodeDidSetPrimaryData:(NSString *)primaryData {
-    MTBarcodeMaxicodeIso16023 *barcode = (MTBarcodeMaxicodeIso16023 *)self.barcode;
+    MADBarcodeMaxicodeIso16023 *barcode = (MADBarcodeMaxicodeIso16023 *)self.barcode;
     [barcode setPrimaryDataString:primaryData];
     [self updateBarcode];
 }
@@ -467,19 +467,19 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 #pragma mark Micro Qr Code
 
 - (void)barcodeMicroQrCodeDidEnableAutomaticResizing {
-    MTBarcodeMicroQrCode *barcode = (MTBarcodeMicroQrCode *)self.barcode;
+    MADBarcodeMicroQrCode *barcode = (MADBarcodeMicroQrCode *)self.barcode;
     [barcode enableAutomaticResizing];
     [self updateBarcode];
 }
 
 - (void)barcodeMicroQrCodeDidSetSize:(NSInteger)size {
-    MTBarcodeMicroQrCode *barcode = (MTBarcodeMicroQrCode *)self.barcode;
+    MADBarcodeMicroQrCode *barcode = (MADBarcodeMicroQrCode *)self.barcode;
     [barcode setSize:size];
     [self updateBarcode];
 }
 
 - (void)barcodeMicroQrCodeDidSetErrorCorrection:(NSInteger)errorCorrection {
-    MTBarcodeMicroQrCode *barcode = (MTBarcodeMicroQrCode *)self.barcode;
+    MADBarcodeMicroQrCode *barcode = (MADBarcodeMicroQrCode *)self.barcode;
     [barcode setMinmumErrorCorrection:errorCorrection];
     [self updateBarcode];
 }
@@ -487,19 +487,19 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 #pragma mark GridMatrix
 
 - (void)barcodeGridMatrixDidEnableAutomaticResizing {
-    MTBarcodeGridMatrix *barcode = (MTBarcodeGridMatrix *)self.barcode;
+    MADBarcodeGridMatrix *barcode = (MADBarcodeGridMatrix *)self.barcode;
     [barcode enableAutomaticResizing];
     [self updateBarcode];
 }
 
 - (void)barcodeGridMatrixDidSetSize:(NSInteger)size {
-    MTBarcodeGridMatrix *barcode = (MTBarcodeGridMatrix *)self.barcode;
+    MADBarcodeGridMatrix *barcode = (MADBarcodeGridMatrix *)self.barcode;
     [barcode setSize:size];
     [self updateBarcode];
 }
 
 - (void)barcodeGridMatrixDidSetErrorCorrection:(NSInteger)errorCorrection {
-    MTBarcodeGridMatrix *barcode = (MTBarcodeGridMatrix *)self.barcode;
+    MADBarcodeGridMatrix *barcode = (MADBarcodeGridMatrix *)self.barcode;
     [barcode setMinmumErrorCorrection:errorCorrection];
     [self updateBarcode];
 }
@@ -507,23 +507,23 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
 #pragma mark PDF 417
 
 - (void)barcodePDF417DidSetColumns:(NSInteger)columns {
-    ((MTBarcodePdf417Iso15438 *)self.barcode).width = columns;
+    ((MADBarcodePdf417Iso15438 *)self.barcode).width = columns;
     [self updateBarcode];
 }
 
 - (void)barcodePDF417DidSetFormat:(NSInteger)format {
-    ((MTBarcodePdf417Iso15438 *)self.barcode).format = format;
+    ((MADBarcodePdf417Iso15438 *)self.barcode).format = format;
     [self updateBarcode];
 }
 
 - (void)barcodePDF417DidSetErrorCorrection:(NSInteger)errorCorrection {
-    ((MTBarcodePdf417Iso15438 *)self.barcode).errorCorrectionCapacity = errorCorrection;
+    ((MADBarcodePdf417Iso15438 *)self.barcode).errorCorrectionCapacity = errorCorrection;
     [self updateBarcode];
 }
 
 #pragma mark - MTViewControllerBarcodePreviewDelegate
-- (void)didChangeBarcodeType:(MTBarcodeType)barcodeType {
-    MTBarcode *barcode = [MTBarcode newBarcodeWithType:barcodeType];
+- (void)didChangeBarcodeType:(MADBarcodeType)barcodeType {
+    MADBarcode *barcode = [MADBarcode newBarcodeWithType:barcodeType];
     
     NSString *barcodeTypeString = NSStringFromSelector(@selector(barcodeType));
     NSString *showErrorMessage = NSStringFromSelector(@selector(showErrorMessage));

@@ -25,10 +25,10 @@
 		[displayObject drawWithRect: rect
 							options: NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
 							context: nil];
-	} else if ([displayObject isKindOfClass: [MTBarcode class]]) {
+	} else if ([displayObject isKindOfClass: [MADBarcode class]]) {
 		[displayObject loadSampleData];
 		//MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
-		//((MTBarcode *)displayObject).forgroundColor = color;
+		//((MADBarcode *)displayObject).forgroundColor = color;
 	} else {
 		[displayObject drawInRect:rect];
 	}

@@ -5,13 +5,13 @@
 //  Copyright © 2026 Michael Thomason. All rights reserved.
 //
 //  Characterization tests for MADPrintPageElementBarcode: the element that turns a
-//  MADDocumentObjectDataReferenceBarcode into an MTBarcode, copies the symbology
+//  MADDocumentObjectDataReferenceBarcode into an MADBarcode, copies the symbology
 //  settings across, and forwards drawing to it.
 //
-//  MADTests does not link MADBarcodes (MAD.framework does, so MTBarcode is present at
+//  MADTests does not link MADBarcodes (MAD.framework does, so MADBarcode is present at
 //  runtime), so this file never imports the barcode headers.  The definition is a
-//  double whose `barcode` is a duck-typed object with MTBarcodeProtocol's property
-//  names, and the created MTBarcode is inspected through KVC.
+//  double whose `barcode` is a duck-typed object with MADBarcodeProtocol's property
+//  names, and the created MADBarcode is inspected through KVC.
 //
 //  The type-8 double is Code 39 (zint's BARCODE_CODE39), whose class initialiser needs
 //  no input; type 0 is not a case in +newBarcodeWithType:, so the factory returns nil.
@@ -30,7 +30,7 @@
 #import "MADPrintPageRendererDataSource.h"
 
 // MADBarcodes is not linked here, so the protocol only needs to be named, not defined.
-@protocol MTBarcodeProtocol;
+@protocol MADBarcodeProtocol;
 
 #pragma mark - Test doubles
 
@@ -79,7 +79,7 @@
 @end
 
 // A duck-typed stand-in for RptqDocumentElementBarcode, which is what the real
-// reference returns from -barcode.  MTBarcode reads only these properties from it.
+// reference returns from -barcode.  MADBarcode reads only these properties from it.
 @interface MADBarcodeElementTestBarcode : NSObject
 
 @property (nonatomic, assign) int16_t barcodeType;
@@ -122,7 +122,7 @@
 - (NSString *)fieldKey1 { return self.testFieldKey1; }
 - (NSString *)fieldKey2 { return self.testFieldKey2; }
 - (MADPrintPageElementType)type { return self.testType; }
-- (id <MTBarcodeProtocol>)barcode { return (id <MTBarcodeProtocol>)self.testBarcode; }
+- (id <MADBarcodeProtocol>)barcode { return (id <MADBarcodeProtocol>)self.testBarcode; }
 
 - (NSString *)formattedStringForValue1:(id)value {
 	self.firstValueSeen = value;
@@ -169,7 +169,7 @@
 	MADBarcodeElementTestSource *source = (MADBarcodeElementTestSource *)definition.testDatasource;
 	source.rowData = @{ @"Invoice0.Code" : @"123456", @"Invoice0.Note" : @"note" };
 
-	// Code 39 -- MTBarcode +newBarcodeWithType: supports it, so a real object comes back.
+	// Code 39 -- MADBarcode +newBarcodeWithType: supports it, so a real object comes back.
 	definition.testBarcode.barcodeType = 8;
 	definition.testBarcode.scale = 1.5f;
 	definition.testBarcode.humanReadable = YES;

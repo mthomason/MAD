@@ -9,12 +9,12 @@
 #ifndef MADViewControllerBarcodeDelegate_h
 #define MADViewControllerBarcodeDelegate_h
 
-@class MTBarcode, RptqQueryField;
+@class MADBarcode, RptqQueryField;
 
 @protocol MADViewControllerBarcodeDelegate
 
     - (void)didUpdateBarcodeWithObjectID:(int64_t)barcodeObjectID
-                           barcodeObject:(MTBarcode *)barcode
+                           barcodeObject:(MADBarcode *)barcode
                             withFieldOne:(int64_t /* RptqQueryField */)fieldOne
                              andFieldTwo:(int64_t /* RptqQueryField */)fieldTwo;
 

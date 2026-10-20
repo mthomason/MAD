@@ -27,7 +27,7 @@
 
 @protocol MTViewControllerBarcodeOptionsDelegate;
 
-@class MTBarcode;
+@class MADBarcode;
 
 @interface MTViewControllerBarcodeOptions : UITableViewController
     <MADQueryChooseFieldProtocol,

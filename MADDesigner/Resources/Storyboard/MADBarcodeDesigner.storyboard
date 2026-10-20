@@ -578,7 +578,7 @@
                         <viewControllerLayoutGuide type="top" id="Hjt-oz-7Tc"/>
                         <viewControllerLayoutGuide type="bottom" id="JqV-7T-9jv"/>
                     </layoutGuides>
-                    <view key="view" opaque="NO" contentMode="scaleToFill" id="iBP-ny-9Oc" customClass="MTBarcodeView">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="iBP-ny-9Oc" customClass="MADBarcodeView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>

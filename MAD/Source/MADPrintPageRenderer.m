@@ -73,7 +73,7 @@
 
 static os_log_t log_print;
 
-@class MTBarcode;
+@class MADBarcode;
 
 static NSString * const MTCachedSizeHorizontal = @"MTCachedSizeHorizontal";
 static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";

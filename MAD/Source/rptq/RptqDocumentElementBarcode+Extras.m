@@ -29,7 +29,7 @@
 @dynamic has2dComponentEnabled;
 
 - (NSString *)designerRepresentationText {
-	NSString *barcodeName = [MTBarcode newBarcodeNameForType:barcodeTypeForInt(self.barcodeType)];
+	NSString *barcodeName = [MADBarcode newBarcodeNameForType:barcodeTypeForInt(self.barcodeType)];
 	id result = [[NSString alloc] initWithFormat:@"Barcode (%@)", barcodeName];
 	return result;
 }
@@ -42,7 +42,7 @@
 	return self.add2dComponent;
 }
 
-- (void)updateWithBarcode: (MTBarcode *)barcode
+- (void)updateWithBarcode: (MADBarcode *)barcode
 				 field1ID: (int64_t)field1ID
 				 field2ID: (int64_t)field2ID {
 	RptqStoreContext * storeContext = self.storeContext;
@@ -71,7 +71,7 @@
 	}
 }
 
-+ (instancetype)barcodeWithMtBarcode:(MTBarcode *)barcode
++ (instancetype)barcodeWithMtBarcode:(MADBarcode *)barcode
 					   queryFieldOne:(RptqQueryField *)queryFieldOne
 					   queryFieldTwo:(RptqQueryField *)queryFieldTwo NS_RETURNS_RETAINED {
 	

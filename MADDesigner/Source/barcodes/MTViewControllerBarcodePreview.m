@@ -14,18 +14,18 @@
 
 #import <UIKit/UIPickerView.h>
 
-#import <MADBarcodes/MTBarcode.h>
-#import <MADBarcodes/MTBarcodeView.h>
+#import <MADBarcodes/MADBarcode.h>
+#import <MADBarcodes/MADBarcodeView.h>
 
 
 @interface MTViewControllerBarcodePreview ()
 
     @property (nonatomic, weak) IBOutlet UIPickerView *barcodePicker;
-    @property (nonatomic, weak) IBOutlet MTBarcodeView *barcodeView;
+    @property (nonatomic, weak) IBOutlet MADBarcodeView *barcodeView;
 
     @property (nonatomic, strong) NSDictionary *barcodeNamesByType;
     @property (nonatomic, strong) NSArray *barcodeNamesOrdered;
-    @property (nonatomic, strong) MTBarcode *barcode;
+    @property (nonatomic, strong) MADBarcode *barcode;
 
 @end
 
@@ -34,7 +34,7 @@
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        NSDictionary *namesByType = [MTBarcode newDictionaryNames];
+        NSDictionary *namesByType = [MADBarcode newDictionaryNames];
         NSArray *names = namesByType.allValues;
 
         self.barcodeNamesByType = namesByType;
@@ -51,7 +51,7 @@
 	self.barcodeView.backgroundColor = [UIColor systemGroupedBackgroundColor];
 }
 
-- (void)setBarcodeToPreview:(MTBarcode *)barcode {
+- (void)setBarcodeToPreview:(MADBarcode *)barcode {
     self.barcode = barcode;
     (self.barcodeView).barcode = barcode;
 }

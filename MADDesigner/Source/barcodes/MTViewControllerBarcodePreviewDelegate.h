@@ -12,7 +12,7 @@
 #import <MADBarcodes/MADBarcodeType.h>
 
 @protocol MTViewControllerBarcodePreviewDelegate
-	- (void)didChangeBarcodeType:(MTBarcodeType)type;
+	- (void)didChangeBarcodeType:(MADBarcodeType)type;
 @end
 
 #endif

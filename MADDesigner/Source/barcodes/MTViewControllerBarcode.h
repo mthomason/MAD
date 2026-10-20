@@ -27,7 +27,7 @@
 
 @property (nonatomic, assign, readwrite) int64_t queryField1ID;
 @property (nonatomic, assign, readwrite) int64_t queryField2ID;
-@property (nonatomic, strong, readwrite) MTBarcode *barcode;
+@property (nonatomic, strong, readwrite) MADBarcode *barcode;
 @property (nonatomic, strong, readonly) MTViewControllerBarcodeOptions *optionsViewController;
 
 @property (nonatomic, assign) BOOL editmode;

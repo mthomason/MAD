@@ -1758,7 +1758,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 #pragma mark - MADViewControllerBarcodeDelegate
 
 - (void)didUpdateBarcodeWithObjectID:(int64_t)barcodeObjectID
-					   barcodeObject:(MTBarcode *)barcode
+					   barcodeObject:(MADBarcode *)barcode
 						withFieldOne:(int64_t /* RptqQueryField */)fieldOne
 						 andFieldTwo:(int64_t /* RptqQueryField */)fieldTwo {
 	
@@ -2451,7 +2451,7 @@ shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherG
 	
 	if (_objectIdEditBarcode  != nil) {
 		MADocument *document = self.document;
-		MTBarcode *barcode = viewController.barcode;
+		MADBarcode *barcode = viewController.barcode;
 		
 		RptqStoreContext *managedObjectContext = document.storeContext;
 		RptqDocumentElementBarcode *object = [RptqDocumentElementBarcode newDocumentElementWithIdentifier: _objectIdEditBarcode.longLongValue

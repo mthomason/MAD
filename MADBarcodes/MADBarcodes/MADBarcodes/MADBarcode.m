@@ -1,0 +1,784 @@
+//
+//  MADBarcode.m
+//  Barcodes
+//
+//  Created by Michael Thomason on 11/7/13.
+//  Copyright © 2017 Michael Thomason. All rights reserved.
+//
+
+#if ! __has_feature(objc_arc)
+#warning Compile this file with ARC using the -fobjc-arc flag.
+#endif
+
+#import "MADBarcode.h"
+#import "MADBarcodeAusPostStandardCustomer.h"
+#import "MADBarcodeAusreDirect.h"
+#import "MADBarcodeAusreply.h"
+#import "MADBarcodeAusRoute.h"
+#import "MADBarcodeAztec.h"
+#import "MADBarcodeAztecRunes.h"
+#import "MADBarcodeChannelCode.h"
+#import "MADBarcodeCodabar.h"
+#import "MADBarcodeCode11.h"
+#import "MADBarcodeCode128Iso15417.h"
+#import "MADBarcodeCode16k.h"
+#import "MADBarcodeCode2of5DataLogic.h"
+#import "MADBarcodeCode2of5Iata.h"
+#import "MADBarcodeCode2of5Industrial.h"
+#import "MADBarcodeCode2of5Interleaved.h"
+#import "MADBarcodeCode2of5Matrix.h"
+#import "MADBarcodeCode32ItalianPharmacode.h"
+#import "MADBarcodeCode39Extended.h"
+#import "MADBarcodeCode39Iso16388.h"
+#import "MADBarcodeCode49.h"
+#import "MADBarcodeCode93.h"
+#import "MADBarcodeCodeOne.h"
+#import "MADBarcodeDatabar.h"
+#import "MADBarcodeDatabarExpanded.h"
+#import "MADBarcodeDatabarExpandedStacked.h"
+#import "MADBarcodeDatabarLimited.h"
+#import "MADBarcodeDatabarStacked.h"
+#import "MADBarcodeDatabarStackedOmnidirectional.h"
+#import "MADBarcodeDataMatrixIso16022.h"
+#import "MADBarcodeDeutschePostIdentcode.h"
+#import "MADBarcodeDeutschePostLeitcode.h"
+#import "MADBarcodeDutchPostKix.h"
+#import "MADBarcodeEan14.h"
+#import "MADBarcodeEuropeanArticleNumberEan.h"
+#import "MADBarcodeFacingIdentificationMarkFim.h"
+#import "MADBarcodeFlattermarken.h"
+#import "MADBarcodeGridMatrix.h"
+#import "MADBarcodeInternationalStandardBookNumberIsbn.h"
+#import "MADBarcodeItf14.h"
+#import "MADBarcodeJapanesePostalBarcode.h"
+#import "MADBarcodeKoreanPostalBarcode.h"
+#import "MADBarcodeLogmars.h"
+#import "MADBarcodeMaxicodeIso16023.h"
+#import "MADBarcodeMicroPdf417Iso24728.h"
+#import "MADBarcodeMicroQrCode.h"
+#import "MADBarcodeMsiPlessey.h"
+#import "MADBarcodeNve18.h"
+#import "MADBarcodePdf417Iso15438.h"
+#import "MADBarcodePharmacode.h"
+#import "MADBarcodePharmacode2Track.h"
+#import "MADBarcodePharmaZentralnummerPzn.h"
+#import "MADBarcodePlanet.h"
+#import "MADBarcodePostnet.h"
+#import "MADBarcodeQrCodeIso18004.h"
+#import "MADBarcodeRoyalMail4StateBarcode.h"
+#import "MADBarcodeTelepen.h"
+#import "MADBarcodeTelepenNumeric.h"
+#import "MADBarcodeUkPlessey.h"
+#import "MADBarcodeUniversalProductCodeUpca.h"
+#import "MADBarcodeUniversalProductCodeUpce.h"
+#import "MADBarcodeUspsIntelligentMail.h"
+
+#import <UIKit/UIGraphics.h>
+#import <UIKit/NSStringDrawing.h>
+#import <UIKit/UIColor.h>
+
+typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
+	MADBarcodeDataTypeUnicode = UNICODE_MODE,
+	MADBarcodeDataTypeData = DATA_MODE,
+	MADBarcodeDataTypeGs1 = GS1_MODE
+};
+
+
+@interface MADBarcode ()
+
+@property (nonatomic, assign) CGFloat rotate;
+
+@property (nonatomic, strong, readwrite) NSString *name;
+@property (nonatomic, assign, readwrite) int16_t barcodeType;
+@property (nonatomic, assign, readwrite) BOOL has2dComponent;
+@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
+
++ (instancetype)newBarcodeWithType:(MADBarcodeType)type;
+
+@end
+
+@implementation MADBarcode
+
+@synthesize barcodeType = _barcodeType;
+@synthesize whitespaceWidth = _whitespaceWidth;
+@synthesize has2dComponentEnabled = _has2dComponentEnabled;
+@synthesize barcodeBorderStyle = _barcodeBorderStyle;
+@synthesize barcodeBorderWidth = _barcodeBorderWidth;
+@synthesize barcodeHeight = _barcodeHeight;
+@synthesize humanReadable = _humanReadable;
+@synthesize option1 = _option1;
+@synthesize option2 = _option2;
+@synthesize option3 = _option3;
+@synthesize showErrorMessage = _showErrorMessage;
+@synthesize scale = _scale;
+
+- (void)dealloc { }
+
+- (instancetype)init {
+	if (self = [super init]) {
+		//MADColor *blackColor = [[MADColor alloc] initWithColor:[UIColor blackColor]];
+		//MADColor *whiteColor = [[MADColor alloc] initWithColor:[UIColor whiteColor]];
+		//_forgroundColor = blackColor;
+		//_backgroundColor = whiteColor;
+		_showErrorMessage = YES;
+		_humanReadable = YES;
+		_barcodeHeight = 50;
+		_barcodeBorderWidth = 5;
+		_rotate = (90.0000f * M_PI / 180.0000f);
+		_option1 = NO;
+		_option2 = NO;
+		_option3 = NO;
+		_center = NO;
+		_scale = 1.0000f;
+	}
+	return self;
+}
+
++ (instancetype)newBarcode:(id <MADBarcodeProtocol>)documentObject {
+	
+	MADBarcode *barcode = [MADBarcode newBarcodeWithType:documentObject.barcodeType];
+	barcode.has2dComponentEnabled =		documentObject.has2dComponentEnabled;
+	barcode.barcodeBorderStyle =		documentObject.barcodeBorderStyle;
+	barcode.barcodeBorderWidth =		documentObject.barcodeBorderWidth;
+	barcode.barcodeHeight =				documentObject.barcodeHeight;
+	barcode.humanReadable =				documentObject.humanReadable;
+	barcode.option1 =					documentObject.option1;
+	barcode.option2 =					documentObject.option2;
+	barcode.option3 =					documentObject.option3;
+	barcode.showErrorMessage =			documentObject.showErrorMessage;
+	barcode.whitespaceWidth =			documentObject.whitespaceWidth;
+	barcode.scale =						documentObject.scale;
+	barcode.input =						@"Sample data";
+	barcode.primaryData =				@"";
+	return barcode;
+}
+
++ (instancetype)newBarcode:(id <MADBarcodeProtocol>)documentObject
+					input1:(NSString *)input1
+					input2:(NSString *)input2 {
+	MADBarcode *barcode = [self newBarcode:documentObject];
+	barcode.input = input1.copy;
+	barcode.primaryData = input2.copy;
+	return barcode;
+}
+
++ (instancetype)newBarcodeWithType:(MADBarcodeType)type {
+	id result = nil;
+	switch (type) {
+		case MADBarcodeTypeAuspost:
+			result = [[MADBarcodeAusPostStandardCustomer alloc] init];
+			break;
+		case MADBarcodeTypeAusreDirect:
+			result = [[MADBarcodeAusreDirect alloc] init];
+			break;
+		case MADBarcodeTypeAusreply:
+			result = [[MADBarcodeAusreply alloc] init];
+			break;
+		case MADBarcodeTypeAusroute:
+			result = [[MADBarcodeAusRoute alloc] init];
+			break;
+		case MADBarcodeTypeAzrune:
+			result = [[MADBarcodeAztecRunes alloc] init];
+			break;
+		case MADBarcodeTypeAztec:
+			result = [[MADBarcodeAztec alloc] init];
+			break;
+		case MADBarcodeTypeC25IATA:
+			result = [[MADBarcodeCode2of5Iata alloc] init];
+			break;
+		case MADBarcodeTypeC25IND:
+			result = [[MADBarcodeCode2of5Industrial alloc] init];
+			break;
+		case MADBarcodeTypeC25INTER:
+			result = [[MADBarcodeCode2of5Interleaved alloc] init];
+			break;
+		case MADBarcodeTypeC25LOGIC:
+			result = [[MADBarcodeCode2of5DataLogic alloc] init];
+			break;
+		case MADBarcodeTypeC25MATRIX:
+			result = [[MADBarcodeCode2of5Matrix alloc] init];
+			break;
+		case MADBarcodeTypeChannel:
+			result = [[MADBarcodeChannelCode alloc] init];
+			break;
+		case MADBarcodeTypeCodeOne:
+			result = [[MADBarcodeCodeOne alloc] init];
+			break;
+		case MADBarcodeTypeCODABAR:
+			result = [[MADBarcodeCodabar alloc] init];
+			break;
+		case MADBarcodeTypeCode11:
+			result = [[MADBarcodeCode11 alloc] init];
+			break;
+		case MADBarcodeTypeCODE128:
+			result = [[MADBarcodeCode128Iso15417 alloc] init];
+			break;
+		case MADBarcodeTypeCode128b:
+			result = [[MADBarcodeCode128SubsetB alloc] init];
+			break;
+		case MADBarcodeTypeEan14:
+			result = [[MADBarcodeCode128Ean14 alloc] init];
+			break;
+		case MADBarcodeTypeNve18:
+			result = [[MADBarcodeCode128Nve18 alloc] init];
+			break;
+		case MADBarcodeTypeHibc128:
+			result = [[MADBarcodeCode128Hibc alloc] init];
+			break;
+		case MADBarcodeTypeEAN128:
+			result = [[MADBarcodeCode128Ean128 alloc] init];
+			break;
+		case MADBarcodeTypeCODE16K:
+			result = [[MADBarcodeCode16k alloc] init];
+			break;
+		case MADBarcodeTypeCode32:
+			result = [[MADBarcodeCode32ItalianPharmacode alloc] init];
+			break;
+		case MADBarcodeTypeCODE39:
+			result = [[MADBarcodeCode39Iso16388 alloc] init];
+			break;
+		case MADBarcodeTypeHibc39:
+			result = [[MADBarcodeCode39Hbic alloc] init];
+			break;
+		case MADBarcodeTypeCODE49:
+			result = [[MADBarcodeCode49 alloc] init];
+			break;
+		case MADBarcodeTypeCODE93:
+			result = [[MADBarcodeCode93 alloc] init];
+			break;
+		case MADBarcodeTypeDataMatrix:
+			result = [[MADBarcodeDataMatrixIso16022 alloc] init];
+			break;
+		case MADBarcodeTypeDPIDENT:
+			result = [[MADBarcodeDeutschePostIdentcode alloc] init];
+			break;
+		case MADBarcodeTypeDPLEIT:
+			result = [[MADBarcodeDeutschePostLeitcode alloc] init];
+			break;
+			//case MADBarcodeTypeEan14:
+			//	result = [[MADBarcodeEan14 alloc] init];
+			//	break;
+		case MADBarcodeTypeEANX:
+			result = [[MADBarcodeEuropeanArticleNumberEan alloc] init];
+			break;
+		case MADBarcodeTypeEXCODE39:
+			result = [[MADBarcodeCode39Extended alloc] init];
+			break;
+		case MADBarcodeTypeFim:
+			result = [[MADBarcodeFacingIdentificationMarkFim alloc] init];
+			break;
+		case MADBarcodeTypeFlat:
+			result = [[MADBarcodeFlattermarken alloc] init];
+			break;
+		case MADBarcodeTypeGridMatrix:
+			result = [[MADBarcodeGridMatrix alloc] init];
+			break;
+		case MADBarcodeTypeItf14:
+			result = [[MADBarcodeItf14 alloc] init];
+			break;
+		case MADBarcodeTypeIsbnX:
+			result = [[MADBarcodeInternationalStandardBookNumberIsbn alloc] init];
+			break;
+		case MADBarcodeTypeJapanPost:
+			result = [[MADBarcodeJapanesePostalBarcode alloc] init];
+			break;
+		case MADBarcodeTypeKoreaPost:
+			result = [[MADBarcodeKoreanPostalBarcode alloc] init];
+			break;
+		case MADBarcodeTypeLogmars:
+			result = [[MADBarcodeLogmars alloc] init];
+			break;
+		case MADBarcodeTypeMaxicode:
+			result = [[MADBarcodeMaxicodeIso16023 alloc] init];
+			break;
+		case MADBarcodeTypeMicroPdf417:
+			result = [[MADBarcodeMicroPdf417Iso24728 alloc] init];
+			break;
+		case MADBarcodeTypeMicroqr:
+			result = [[MADBarcodeMicroQrCode alloc] init];
+			break;
+		case MADBarcodeTypeMsiPlessey:
+			result = [[MADBarcodeMsiPlessey alloc] init];
+			break;
+			//case MADBarcodeTypeNve18:
+			//	result = [[MADBarcodeNve18 alloc] init];
+			//	break;
+		case MADBarcodeTypePdf417:
+			result = [[MADBarcodePdf417Iso15438 alloc] init];
+			break;
+		case MADBarcodeTypePharma:
+			result = [[MADBarcodePharmacode alloc] init];
+			break;
+		case MADBarcodeTypePharmaTwo:
+			result = [[MADBarcodePharmacode2Track alloc] init];
+			break;
+		case MADBarcodeTypePzn:
+			result = [[MADBarcodePharmaZentralnummerPzn alloc] init];
+			break;
+		case MADBarcodeTypePlanet:
+			result = [[MADBarcodePlanet alloc] init];
+			break;
+		case MADBarcodeTypePostnet:
+			result = [[MADBarcodePostnet alloc] init];
+			break;
+		case MADBarcodeTypeQrcode:
+			result = [[MADBarcodeQrCodeIso18004 alloc] init];
+			break;
+		case MADBarcodeTypeRm4scc:
+			result = [[MADBarcodeRoyalMail4StateBarcode alloc] init];
+			break;
+		case MADBarcodeTypeTelepen:
+			result = [[MADBarcodeTelepen alloc] init];
+			break;
+		case MADBarcodeTypeTelepenNum:
+			result = [[MADBarcodeTelepenNumeric alloc] init];
+			break;
+		case MADBarcodeTypePlessey:
+			result = [[MADBarcodeUkPlessey alloc] init];
+			break;
+		case MADBarcodeTypeUpca:
+			result = [[MADBarcodeUniversalProductCodeUpca alloc] init];
+			break;
+		case MADBarcodeTypeUpce:
+			result = [[MADBarcodeUniversalProductCodeUpce alloc] init];
+			break;
+		case MADBarcodeTypeOneCode:
+			result = [[MADBarcodeUspsIntelligentMail alloc] init];
+			break;
+		case MADBarcodeTypeRss14:
+			result = [[MADBarcodeDatabar alloc] init];
+			break;
+		case MADBarcodeTypeRssLtd:
+			result = [[MADBarcodeDatabarLimited alloc] init];
+			break;
+		case MADBarcodeTypeRssExp:
+			result = [[MADBarcodeDatabarExpanded alloc] init];
+			break;
+		case MADBarcodeTypeRss14Stack:
+			result = [[MADBarcodeDatabarStacked alloc] init];
+			break;
+		case MADBarcodeTypeRss14StackOmni:
+			result = [[MADBarcodeDatabarStackedOmnidirectional alloc] init];
+			break;
+		case MADBarcodeTypeRssExpstack:
+			result = [[MADBarcodeDatabarExpandedStacked alloc] init];
+			break;
+		case MADBarcodeTypeKix:
+			result = [[MADBarcodeDutchPostKix alloc] init];
+			break;
+		default:
+			break;
+	}
+	return result;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+	if (self = [super init]) {
+		
+	}
+	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+	
+	[coder encodeFloat:		self.rotate					forKey:@""];	// This gives Warning: Implicit conversion loses floating-point precision: 'CGFloat' (aka 'double') to 'float'
+	[coder encodeObject:	self.name					forKey:@""];
+	[coder encodeInteger:	self.barcodeType			forKey:@""];
+	[coder encodeBool:		self.has2dComponent			forKey:@""];
+	[coder encodeBool:		self.hasOptionalInput		forKey:@""];
+	[coder encodeObject:	self.detailsSegueIdentifer	forKey:@""];
+	[coder encodeObject:	self.primaryData			forKey:@""];
+	[coder encodeInteger:	self.option1				forKey:@""];
+	[coder encodeInteger:	self.option2				forKey:@""];
+	[coder encodeInteger:	self.option3				forKey:@""];
+	[coder encodeBool:		self.center					forKey:@""];
+	[coder encodeObject:	self.input					forKey:@""];
+
+	[coder encodeInteger:	self.barcodeHeight			forKey:@""];
+	[coder encodeInteger:	self.width					forKey:@""];
+	[coder encodeInteger:	self.barcodeBorderWidth		forKey:@""];
+	[coder encodeInteger:	self.whitespaceWidth		forKey:@""];
+	[coder encodeBool:		self.humanReadable			forKey:@""];
+	[coder encodeInteger:	self.barcodeBorderStyle		forKey:@""];
+	[coder encodeBool:		self.showErrorMessage		forKey:@""];
+	[coder encodeBool:		self.has2dComponentEnabled	forKey:@""];
+	[coder encodeInteger:	self.has2dComponentType		forKey:@""];
+	[coder encodeFloat:		self.scale					forKey:@""];
+}
+
+- (void)drawInRect:(CGRect)rect {
+	CGRect originalRect = rect;
+
+	struct zint_symbol *barcode = ZBarcode_Create();
+	
+	if (barcode == NULL) {
+		[@"No barcode data." drawInRect:rect withAttributes:nil];
+		
+	} else {
+
+		if (self.has2dComponentEnabled == NO) {
+			barcode->symbology = self.barcodeType;
+		} else {
+			switch (self.barcodeType) {
+				case MADBarcodeTypeEANX:
+					barcode->symbology = MADBarcodeTypeEanxCc;
+					break;
+				case MADBarcodeTypeEAN128:
+					barcode->symbology = MADBarcodeTypeEan128Cc;
+					break;
+				case MADBarcodeTypeCODE128:
+					barcode->symbology = MADBarcodeTypeCode128b;
+					break;
+				case MADBarcodeTypeRss14:
+					barcode->symbology = MADBarcodeTypeRss14Cc;
+					break;
+				case MADBarcodeTypeRssLtd:
+					barcode->symbology = MADBarcodeTypeRssLtdCc;
+					break;
+				case MADBarcodeTypeRssExp:
+					barcode->symbology = MADBarcodeTypeRssExpCc;
+					break;
+				case MADBarcodeTypeUpca:
+					barcode->symbology = MADBarcodeTypeUpcaCc;
+					break;
+				case MADBarcodeTypeRss14Stack:
+					barcode->symbology = MADBarcodeTypeRss14StackCc;
+					break;
+				case MADBarcodeTypeRss14StackOmni:
+					barcode->symbology = MADBarcodeTypeRss14OmniCc;
+					break;
+				case MADBarcodeTypeRssExpstack:
+					barcode->symbology = MADBarcodeTypeRssExpstackCc;
+					break;
+				case MADBarcodeTypeTelepenNum:
+					
+					
+					
+				default:
+					break;
+			}
+		}
+		//NSString *forgroundColor =  (self.forgroundColor).hexStringValue;
+		//NSString *backgroundColor = (self.backgroundColor).hexStringValue;
+		//const char *fgcolor = [forgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
+		//const char *bgcolor = [backgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
+		//strcpy(barcode->fgcolour, fgcolor);
+		//strcpy(barcode->bgcolour, bgcolor);
+		
+		barcode->height = (int)self.barcodeHeight;	// This gives warning: Implicit conversion from 'int' to 'float' may lose precision
+		barcode->border_width = (int)self.barcodeBorderWidth;
+		barcode->whitespace_width = (int)self.whitespaceWidth;
+		barcode->show_hrt = self.humanReadable;
+		barcode->output_options = self.barcodeBorderStyle;
+		barcode->scale = 1.0000f;
+		barcode->input_mode = MADBarcodeDataTypeUnicode;
+		
+		if (barcode->symbology != MADBarcodeTypeMaxicode) {
+			barcode->option_1 = (int)self.option1;
+			barcode->option_2 = (int)self.option2;
+			barcode->option_3 = (int)self.option3;
+		} else {
+		}
+		
+		NSString *primaryInput = nil;
+		if (self.has2dComponentEnabled) {
+			
+			primaryInput = self.primaryData;
+			barcode->option_1 = (int)self.has2dComponentType;
+			
+			if (self.input.length > 0) {
+				const char *primaryData = self.input.UTF8String;
+				strcpy(barcode->primary, primaryData);
+			} else {
+				strcpy(barcode->primary, "");
+			}
+
+		} else {
+			primaryInput = self.input;
+		}
+		
+		NSString *inputString = primaryInput.length > 0 ? primaryInput : @"";
+		
+		if (barcode->symbology == MADBarcodeTypeTelepenNum) {
+			NSCharacterSet *numeric = [NSCharacterSet decimalDigitCharacterSet].invertedSet;
+			inputString = [[inputString componentsSeparatedByCharactersInSet:numeric] componentsJoinedByString:@""];
+		}
+
+		const char *input = inputString.UTF8String;
+		int inputLen = (int)strlen(input);
+		int success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
+		NSString *errorMessage = nil;
+		switch (success) {
+			case ZINT_WARN_INVALID_OPTION:
+				errorMessage = NSLocalizedString(@"Warning: Invalid Option.", @"Warning: Invalid Option.");
+				break;
+			case ZINT_ERROR_TOO_LONG:
+				errorMessage = NSLocalizedString(@"Barcode error: To long.", @"Barcode error: To long.");
+				break;
+			case ZINT_ERROR_INVALID_DATA:
+				errorMessage = NSLocalizedString(@"Barcode error: Invalid data.", @"Barcode error: Invalid data.");
+				break;
+			case ZINT_ERROR_INVALID_CHECK:
+				errorMessage = NSLocalizedString(@"Barcode error: Invalid check.", @"Barcode error: Invalid check.");
+				break;
+			case ZINT_ERROR_ENCODING_PROBLEM:
+				errorMessage = NSLocalizedString(@"Barcode error: Encoding problem.", @"Barcode error: Encoding problem.");
+				break;
+			case ZINT_ERROR_FILE_ACCESS:
+				errorMessage = NSLocalizedString(@"Barcode error: File access.", @"Barcode error: File access.");
+				break;
+			case ZINT_ERROR_MEMORY:
+				errorMessage = NSLocalizedString(@"Barcode error: Memory error.", @"Barcode error: Memory error.");
+				break;
+			default:
+				break;
+		}
+		
+		if (errorMessage) {
+			if (self.showErrorMessage) {
+				[errorMessage drawInRect:rect withAttributes:nil];
+			}
+		}
+		
+		CGFloat skewValue, skewValue2;
+		BOOL portrait = barcode->bitmap_height > barcode->bitmap_width;
+		BOOL makeSmaller, makeSmaller2;
+		if (portrait) {
+			makeSmaller = barcode->bitmap_height > rect.size.height;
+			if (makeSmaller) {	//Make bigger
+				skewValue = rect.size.height / barcode->bitmap_height;
+			} else {
+				skewValue = barcode->bitmap_height / rect.size.height;
+			}
+			makeSmaller2 = barcode->bitmap_width > rect.size.width;
+			if (makeSmaller2) {
+				skewValue2 = rect.size.width / barcode->bitmap_width;
+			} else {
+				skewValue2 = barcode->bitmap_width / rect.size.width;
+			}
+
+		} else {
+			makeSmaller = barcode->bitmap_width > rect.size.width;
+			if (makeSmaller) {
+				skewValue = rect.size.width / barcode->bitmap_width;
+			} else {
+				skewValue = barcode->bitmap_width / rect.size.width;
+			}
+			makeSmaller2 = barcode->bitmap_height > rect.size.height;
+			if (makeSmaller2) {
+				skewValue2 = rect.size.height / barcode->bitmap_height;
+			} else {
+				skewValue2 = barcode->bitmap_height / rect.size.height;
+			}
+			
+		}
+		
+		if (makeSmaller && makeSmaller2) {
+			skewValue = MIN(skewValue, skewValue2);
+		} else if (makeSmaller) {
+			skewValue = skewValue;
+		} else if (makeSmaller2) {
+			skewValue = skewValue2;
+		} else {
+			skewValue = self.scale;
+		}
+		
+		CGAffineTransform affineTransformMakeFit = CGAffineTransformMakeScale(skewValue, skewValue);
+		CGAffineTransform affineTransformMoveOriginCenter = CGAffineTransformMakeTranslation(rect.size.width / 2.0000f, rect.size.height / 2.0000f);
+		CGAffineTransform affineTransformRotate90 = CGAffineTransformMakeRotation(self.rotate);
+		
+		//Scale to fit
+		CGContextRef context = UIGraphicsGetCurrentContext();
+
+		CGContextSaveGState(context);
+		//CGContextClipToRect(context, originalRect);
+		
+		if (self.center) {
+			CGRect bitmapRect = CGRectMake(CGPointZero.x, CGPointZero.y, barcode->bitmap_width * skewValue, barcode->bitmap_height * skewValue);
+			CGFloat mx = CGRectGetMidX(bitmapRect);
+			CGFloat my = CGRectGetMidY(bitmapRect);
+			CGPoint bitmapCenter = CGPointMake(mx, my);
+			mx = CGRectGetMidX(originalRect);
+			my = CGRectGetMidY(originalRect);
+			CGPoint origionalCenter = CGPointMake(mx, my);
+			mx = origionalCenter.x - bitmapCenter.x;
+			my = origionalCenter.y - bitmapCenter.y;
+			CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(mx, my);
+			CGContextConcatCTM(context, affineTransformOrigin);
+			
+		}
+
+		//Center, rotate, reset to origin
+		CGContextConcatCTM(context, affineTransformMoveOriginCenter);
+		CGContextConcatCTM(context, affineTransformRotate90);
+
+		rect = CGRectMake(rect.origin.x, rect.origin.y, rect.size.height, rect.size.width);
+		CGAffineTransform affineTransformResetOrigin = CGAffineTransformMakeTranslation(-rect.size.width / 2.0000f, -rect.size.height / 2.0000f);
+		CGAffineTransform affineTransformMoveOffscreenTop = CGAffineTransformMakeTranslation(0, rect.size.height);
+		CGAffineTransform affineTransformReflectDown = CGAffineTransformMakeScale(1.0000f, -1.0000f);
+
+		CGContextConcatCTM(context, affineTransformResetOrigin);
+		
+		//Move up and flip down
+		CGContextConcatCTM(context, affineTransformMoveOffscreenTop);
+		CGContextConcatCTM(context, affineTransformReflectDown);
+		
+			//Right now we are at zero point.  Move to rect.org
+			CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(originalRect.origin.y, originalRect.origin.x);
+			CGContextConcatCTM(context, affineTransformOrigin);
+			/*
+			CGRect bitmapRect = CGRectMake(CGPointZero.x, CGPointZero.y, barcode->bitmap_width * skewValue, barcode->bitmap_height * skewValue);
+			CGFloat mx = CGRectGetMidX(bitmapRect);
+			CGFloat my = CGRectGetMidY(bitmapRect);
+			CGPoint bitmapCenter = CGPointMake(mx, my);
+			mx = CGRectGetMidX(originalRect);
+			my = CGRectGetMidY(originalRect);
+			CGPoint origionalCenter = CGPointMake(mx, my);
+			mx = origionalCenter.x - bitmapCenter.x;
+			my = origionalCenter.y - bitmapCenter.y;
+			CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(mx, my);
+			CGContextConcatCTM(context, affineTransformMoveOriginCenter);*/
+		//Skew that bitch
+		CGContextConcatCTM(context, affineTransformMakeFit);
+
+		
+		
+		
+		//Draw barcode
+		if (success == 0) {
+			int i = 0;
+			int red, blue, green;
+			for(int row = 0; row < barcode->bitmap_height; row++) {
+				for(int column = 0; column < barcode->bitmap_width; column++) {
+					red = barcode->bitmap[i++];
+					green = barcode->bitmap[i++];
+					blue = barcode->bitmap[i++];
+					if (blue != -1 || red != -1 || green != -1) {
+						CGRect pixelToShade = CGRectMake(row, column, 1, 1);
+						CGContextSetRGBFillColor(context, red, green, blue, 1.0);
+						CGContextFillRect(context, pixelToShade);					   //Draw transparent background
+					} else {
+						CGRect pixelToShade = CGRectMake(row, column, 1, 1);
+						CGContextSetRGBFillColor(context, 1, 1, 1, 1.0);
+						CGContextFillRect(context, pixelToShade);					   //Draw transparent background
+					}
+				}
+			}
+		}
+		
+		ZBarcode_Delete(barcode);
+		barcode = NULL;
+		
+		CGContextRestoreGState(context);
+		
+
+	}
+}
+
++ (NSDictionary *)newDictionaryNames {
+	
+	NSDictionary *names = @{
+				  @BARCODE_AUSREDIRECT		: @"Australia Post Redirect Code",
+				   @BARCODE_AUSREPLY		: @"Australia Post Reply-Paid",
+				   @BARCODE_AUSROUTE		: @"Australia Post Routing Code",
+				   @BARCODE_AUSPOST			: @"Australia Post Standard Customer",
+				   @BARCODE_AZTEC			: @"Aztec Code (ISO 24778)",
+				   @BARCODE_AZRUNE			: @"Aztec Runes",
+				   @BARCODE_CHANNEL			: @"Channel Code",
+				   @BARCODE_CODABAR			: @"Codabar",
+				   @BARCODE_CODE11			: @"Code 11",
+				   @BARCODE_CODE128			: @"Code 128 (ISO 15417)",
+				   @(MADBarcodeTypeCode128b)	: @"Code 128 (Subset C Suppression)",
+				   @(MADBarcodeTypeEan14)	: @"Code 128 (EAN-14)",
+				   @(MADBarcodeTypeHibc128)	: @"Code 128 (HBIC)",
+				   @(MADBarcodeTypeEAN128)	: @"Code 128 (HBIC)",
+				   @BARCODE_CODE16K			: @"Code 16k",
+				   @BARCODE_C25LOGIC		: @"Code 2 of 5 Data Logic",
+				   @BARCODE_C25IATA			: @"Code 2 of 5 IATA",
+				   @BARCODE_C25IND			: @"Code 2 of 5 Industrial",
+				   @BARCODE_C25INTER		: @"Code 2 of 5 Interleaved",
+				   @BARCODE_C25MATRIX		: @"Code 2 of 5 Matrix",
+				   @BARCODE_CODE32			: @"Code 32 (Italian Pharmacode)",
+				   @BARCODE_CODE39			: @"Code 39 (ISO 16388)",
+				   @BARCODE_EXCODE39		: @"Code 39 (Extended)",
+				   @(MADBarcodeTypeHibc39)	: @"Code 39 (HBIC)",
+				   @BARCODE_CODE49			: @"Code 49",
+				   @BARCODE_CODE93			: @"Code 93",
+				   @BARCODE_CODEONE			: @"Code One",
+				   @BARCODE_RSS14			: @"Databar",
+				   @BARCODE_RSS_EXP			: @"Databar Expanded",
+				   @BARCODE_RSS_EXPSTACK	: @"Databar Expanded Stacked",
+				   @BARCODE_RSS_LTD			: @"Databar Limited",
+				   @BARCODE_RSS14STACK		: @"Databar Stacked",
+				   @BARCODE_RSS14STACK_OMNI	: @"Databar Stacked Omnidirectional",
+				   @BARCODE_DATAMATRIX		: @"Data Matrix (ISO 16022)",
+				   @BARCODE_DPIDENT			: @"Deutsche Post Identcode",
+				   @BARCODE_DPLEIT			: @"Deutsche Post Leitcode",
+				   @BARCODE_KIX				: @"Dutch Post KIX",
+				   @BARCODE_EAN14			: @"EAN-14",		// This gives warning: Duplicate key in dictionary literal
+				   @BARCODE_EANX			: @"European Article Number (EAN)",
+				   @BARCODE_FIM				: @"Facing Identification Mark (FIM)",
+				   @BARCODE_FLAT			: @"Flattermarken",
+				   @BARCODE_GRIDMATRIX		: @"Grid Matrix",
+				   @BARCODE_ITF14			: @"ITF-14",
+				   @BARCODE_ISBNX			: @"International Standard Book Number (ISBN)",
+				   @BARCODE_JAPANPOST		: @"Japanese Postal Barcode",
+				   @BARCODE_KOREAPOST		: @"Korean Postal Barcode",
+				   @BARCODE_LOGMARS			: @"LOGMARS",
+				   @BARCODE_MAXICODE		: @"Maxicode (ISO 16023)",
+				   @BARCODE_MICROPDF417		: @"MicroPDF417 (ISO 24728)",
+				   @BARCODE_MICROQR			: @"Micro QR Code",
+				   @BARCODE_MSI_PLESSEY		: @"MSI Plessey",
+				   @BARCODE_NVE18			: @"NVE-18",
+				   @BARCODE_PDF417			: @"PDF417 (ISO 15438)",
+				   @BARCODE_PHARMA			: @"Pharmacode",
+				   @BARCODE_PHARMA_TWO		: @"Pharmacode 2-track",
+				   @BARCODE_PZN				: @"Pharma Zentralnummer (PZN)",
+				   @BARCODE_PLANET			: @"PLANET",
+				   @BARCODE_POSTNET			: @"Postnet",
+				   @BARCODE_QRCODE			: @"QR Code (ISO 18004)",
+				   @BARCODE_RM4SCC			: @"Royal Mail 4-state Barcode",
+				   @BARCODE_TELEPEN			: @"Telepen",
+				   @BARCODE_TELEPEN_NUM		: @"Telepen Numeric",
+				   @BARCODE_PLESSEY			: @"UK Plessey",
+				   @BARCODE_UPCA			: @"Universal Product Code (UPC-A)",
+				   @BARCODE_UPCE			: @"Universal Product Code (UPC-E)",
+				   @BARCODE_ONECODE			: @"USPS Intelligent Mail"
+				   };
+	return names;
+}
+
++ (NSString *)newBarcodeNameForType:(MADBarcodeType)type {
+	NSNumber *typeWrapper = [[NSNumber alloc] initWithUnsignedInteger: (NSUInteger)type];
+	NSDictionary *names = [MADBarcode newDictionaryNames];
+	NSString *name = names[typeWrapper];
+	return name.copy;
+}
+
+- (void)loadSampleData {
+	
+}
+
+/*+ (NSString *)hexStringValueStatic:(UIColor)c {
+	NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -hexStringValue");
+	NSString *result;
+	
+	switch (self.colorSpaceModel) {
+		case kCGColorSpaceModelRGB:
+			result = [[NSString alloc] initWithFormat:@"%02X%02X%02X",
+					  c.redByte, c.greenByte, c.blueByte];
+			break;
+			
+		case kCGColorSpaceModelMonochrome:
+			result = [[NSString alloc] initWithFormat:@"%02X%02X%02X",
+					  c.whiteByte, c.whiteByte, c.whiteByte];
+			break;
+			
+		default:
+			result = nil;
+	}
+	return result;
+}*/
+
+@end

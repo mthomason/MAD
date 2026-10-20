@@ -12,19 +12,19 @@
 #import <MADBarcodes/MADBarcodeType.h>
 #import <MADBarcodes/MADBarcodeBorderStyle.h>
 
-@class MTBarcode, RptqQueryField, NSArray;
+@class MADBarcode, RptqQueryField, NSArray;
 
 @protocol MTViewControllerBarcodeOptionsDelegate
 
-    - (MTBarcode *)barcodeToDisplay;
+    - (MADBarcode *)barcodeToDisplay;
     - (void)updateBarcode;
-    - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType;
+    - (void)didChangeBarcodeType:(MADBarcodeType)barcodeType;
     - (BOOL)didToggleHumanReadable;
     - (BOOL)didToggleShowErrorMessages;
     - (void)didChangeSymbolHeight:(int16_t)symbolHeight;
     - (void)setInput:(NSString *)input;
     - (void)setBorderWidth:(int16_t)borderWidth;
-    - (void)setBorderType:(MTBarcodeBorderStyle)borderStyle;
+    - (void)setBorderType:(MADBarcodeBorderStyle)borderStyle;
     - (void)setSampleData:(NSArray *)sampleData;
 
     - (void)barcodeAztecDidEnableAutomaticResizing;

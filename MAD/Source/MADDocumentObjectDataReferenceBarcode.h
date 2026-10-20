@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, readonly) NSString *fieldKey1;
 @property (nonatomic, copy, readonly) NSString *fieldKey2;
-@property (nonatomic, strong, readonly) id <MTBarcodeProtocol> barcode;
+@property (nonatomic, strong, readonly) id <MADBarcodeProtocol> barcode;
 - (NSString *)formattedStringForValue1:(id)value;
 - (NSString *)formattedStringForValue2:(id)value;
 

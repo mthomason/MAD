@@ -12,13 +12,13 @@
 #import "MADPrintPageRendererDataSource.h"
 #import <MADFoundation/madlog.h>
 
-#import <MADBarcodes/MTBarcode.h>
+#import <MADBarcodes/MADBarcode.h>
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSDictionary.h>
 
 @implementation MADPrintPageElementBarcode {
-	MTBarcode *_drawingObject;
+	MADBarcode *_drawingObject;
 }
 
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceBarcode *)definition {
@@ -39,7 +39,7 @@
 		NSString *input1 = [definition formattedStringForValue1: value1];
 		NSString *input2 = [definition formattedStringForValue2: value2];
 		
-		MTBarcode *barcode = [MTBarcode newBarcode:definition.barcode
+		MADBarcode *barcode = [MADBarcode newBarcode:definition.barcode
 											input1:input1
 											input2:input2];
 		_drawingObject = barcode;

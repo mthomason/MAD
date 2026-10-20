@@ -9,10 +9,10 @@
 #ifndef MADBarcodeDataInputType_h
 #define MADBarcodeDataInputType_h
 /*
-typedef NS_ENUM(unsigned char, MTBarcodeDataInputType) {
-	MTBarcodeDataTypeUnicode = UNICODE_MODE,
-	MTBarcodeDataTypeData = DATA_MODE,
-	MTBarcodeDataTypeGs1 = GS1_MODE
+typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
+	MADBarcodeDataTypeUnicode = UNICODE_MODE,
+	MADBarcodeDataTypeData = DATA_MODE,
+	MADBarcodeDataTypeGs1 = GS1_MODE
 };
 */
 #endif /* MADBarcodeDataInputType_h */

@@ -8,7 +8,7 @@
 
 #import "MADDesignerElementBarcodeView.h"
 #import <MAD/RptqDocumentElement+Extras.h>
-#import <MADBarcodes/MTBarcode.h>
+#import <MADBarcodes/MADBarcode.h>
 #import <MADCocoaExtensions/MADColor.h>
 
 @implementation MADDesignerElementBarcodeView
@@ -18,15 +18,15 @@
 	RptqDocumentElement *element = (RptqDocumentElement *)[self.managedObjectContext objectForEntity:NSStringFromClass([RptqDocumentElement class]) identifier:self.objectID];
 	[self.displayObject loadSampleData];
 	//MADColor *color = [[MADColor alloc] initWithColor:[UIColor lightGrayColor]];
-	//((MTBarcode *)self.displayObject).forgroundColor = color;
-	[((MTBarcode *)self.displayObject) drawInRect:[element innerRect]];
+	//((MADBarcode *)self.displayObject).forgroundColor = color;
+	[((MADBarcode *)self.displayObject) drawInRect:[element innerRect]];
 }
 
 - (void)updateWithElement:(RptqDocumentElement *)element {
 	[super updateWithElement:element];
 	
-	MTBarcode *barcode;
-	barcode = [MTBarcode newBarcode:(id <MTBarcodeProtocol>)element];
+	MADBarcode *barcode;
+	barcode = [MADBarcode newBarcode:(id <MADBarcodeProtocol>)element];
 	self.displayObject = barcode;
 	
 }

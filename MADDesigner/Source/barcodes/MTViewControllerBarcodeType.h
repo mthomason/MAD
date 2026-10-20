@@ -15,7 +15,7 @@
 #import <MADBarcodes/MADBarcodeType.h>
 
 @protocol MTViewControllerBarcodeTypeDelegate
-    - (void)didChangeBarcodeType:(MTBarcodeType)barcodeType;
+    - (void)didChangeBarcodeType:(MADBarcodeType)barcodeType;
 @end
 
 @interface MTViewControllerBarcodeType : UIViewController
