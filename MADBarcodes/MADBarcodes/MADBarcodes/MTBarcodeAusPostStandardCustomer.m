@@ -20,24 +20,24 @@
 @implementation MTBarcodeAusPostStandardCustomer
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeAusPostStandardCustomer type];
-        self.name = @"Australia Post Standard Customer";
-        self.has2dComponent = NO;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeAusPostStandardCustomer type];
+		self.name = @"Australia Post Standard Customer";
+		self.has2dComponent = NO;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeAuspost;
+	return MTBarcodeTypeAuspost;
 }
 
 - (void)loadSampleData {
-    self.input = @"39549554";
-    self.primaryData = @"";
+	self.input = @"39549554";
+	self.primaryData = @"";
 }
 
 @end

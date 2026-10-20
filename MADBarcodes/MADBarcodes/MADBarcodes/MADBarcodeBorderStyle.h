@@ -12,9 +12,9 @@
 #import <MADBarcodes/zint.h>
 
 typedef NS_ENUM(int16_t, MTBarcodeBorderStyle) {
-    MTBarcodeBorderStyleNone    = 0,
-    MTBarcodeBorderStyleBind    = BARCODE_BIND,
-    MTBarcodeBorderStyleBox     = BARCODE_BOX
+	MTBarcodeBorderStyleNone	= 0,
+	MTBarcodeBorderStyleBind	= BARCODE_BIND,
+	MTBarcodeBorderStyleBox	 = BARCODE_BOX
 };
 
 #endif /* MADBarcodeBorderStyle_h */

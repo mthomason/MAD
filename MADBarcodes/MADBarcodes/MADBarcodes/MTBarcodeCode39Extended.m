@@ -21,36 +21,36 @@
 
 - (instancetype)init {
 
-    if (self = [super init]) {
-        
-        self.barcodeType = MTBarcodeTypeEXCODE39;
-        self.name = @"Code 39 Extended";
-        self.has2dComponent = NO;
-        self.hasOptionalInput = YES;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = MTBarcodeTypeEXCODE39;
+		self.name = @"Code 39 Extended";
+		self.has2dComponent = NO;
+		self.hasOptionalInput = YES;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeEXCODE39;
+	return MTBarcodeTypeEXCODE39;
 }
 
 - (void)setMod43CheckDigitEnabled:(BOOL)enabled {
-    if (enabled) {
-        self.option2 = 1;
-    } else {
-        self.option2 = 0;
-    }
+	if (enabled) {
+		self.option2 = 1;
+	} else {
+		self.option2 = 0;
+	}
 }
 
 - (BOOL)mod43CheckDigitEnabled {
-    return self.option2 == 1;
+	return self.option2 == 1;
 }
 
 - (void)loadSampleData {
-    self.input = @"*CODE39*";
-    self.primaryData = @"";
+	self.input = @"*CODE39*";
+	self.primaryData = @"";
 }
 
 @end

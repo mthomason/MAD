@@ -10,10 +10,10 @@
 
 @interface MTBarcode ()
 
-    @property (nonatomic, strong, readwrite) NSString *name;
-    @property (nonatomic, assign, readwrite) int16_t barcodeType;
-    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
-    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+	@property (nonatomic, strong, readwrite) NSString *name;
+	@property (nonatomic, assign, readwrite) int16_t barcodeType;
+	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
+	@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
@@ -21,24 +21,24 @@
 
 - (instancetype)init {
 
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeRoyalMail4StateBarcode type];
-        self.name = @"Royal Mail 4-state Barcode";
-        self.has2dComponent = NO;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeRoyalMail4StateBarcode type];
+		self.name = @"Royal Mail 4-state Barcode";
+		self.has2dComponent = NO;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeRm4scc;
+	return MTBarcodeTypeRm4scc;
 }
 
 - (void)loadSampleData {
-    self.input = @"W1J0TR01";
-    self.primaryData = @"";
+	self.input = @"W1J0TR01";
+	self.primaryData = @"";
 }
 
 @end

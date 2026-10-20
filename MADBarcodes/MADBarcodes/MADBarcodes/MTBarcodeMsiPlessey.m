@@ -11,11 +11,11 @@
 
 @interface MTBarcode ()
 
-    @property (nonatomic, strong, readwrite) NSString *name;
-    @property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
-    @property (nonatomic, assign, readwrite) int16_t barcodeType;
-    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
-    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+	@property (nonatomic, strong, readwrite) NSString *name;
+	@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
+	@property (nonatomic, assign, readwrite) int16_t barcodeType;
+	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
+	@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
@@ -23,35 +23,35 @@
 
 - (instancetype)init {
 
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeMsiPlessey type];
-        self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasMsiPlessey";
-        self.name = @"MSI Plessey";
-        self.has2dComponent = NO;
-        self.hasOptionalInput = YES;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeMsiPlessey type];
+		self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasMsiPlessey";
+		self.name = @"MSI Plessey";
+		self.has2dComponent = NO;
+		self.hasOptionalInput = YES;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeMsiPlessey;
+	return MTBarcodeTypeMsiPlessey;
 }
 
 - (NSInteger)checkpointDigit {
-    return self.option2;
+	return self.option2;
 }
 
 - (void)setCheckDigit:(NSInteger)checkDigit {
-    NSAssert(checkDigit == 0 || checkDigit == 1 || checkDigit == 2 || checkDigit == 3 || checkDigit == 4, @"Incorrect barcode check digit.");
-    self.option2 = checkDigit;
+	NSAssert(checkDigit == 0 || checkDigit == 1 || checkDigit == 2 || checkDigit == 3 || checkDigit == 4, @"Incorrect barcode check digit.");
+	self.option2 = checkDigit;
 }
 
 - (void)loadSampleData {
-    self.option2 = 0;
-    self.input = @"87654321";
-    self.primaryData = @"";
+	self.option2 = 0;
+	self.input = @"87654321";
+	self.primaryData = @"";
 }
 
 @end

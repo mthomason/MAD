@@ -22,34 +22,32 @@
 @implementation MTBarcodeChannelCode
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeChannelCode type];
-        self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasChannelCode";
-        self.name = @"Channel Code";
-        self.has2dComponent = NO;
-        self.hasOptionalInput = YES;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		self.barcodeType = [MTBarcodeChannelCode type];
+		self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasChannelCode";
+		self.name = @"Channel Code";
+		self.has2dComponent = NO;
+		self.hasOptionalInput = YES;
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeChannel;
+	return MTBarcodeTypeChannel;
 }
 
 - (void)setNumberOfChannels:(NSInteger)numberOfChannels {
-    self.option2 = numberOfChannels;
+	self.option2 = numberOfChannels;
 }
 
 - (NSInteger)numberOfChannels {
-    return self.option2;
+	return self.option2;
 }
 
 - (void)loadSampleData {
-    [self setNumberOfChannels:   4];
-    self.input = @"257";
-    self.primaryData = @"";
+	[self setNumberOfChannels:   4];
+	self.input = @"257";
+	self.primaryData = @"";
 }
 
 @end

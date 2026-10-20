@@ -15,7 +15,7 @@
 
 @interface MTBarcodeView : UIView
 
-    @property (nonatomic, retain) MTBarcode *barcode;
+	@property (nonatomic, retain) MTBarcode *barcode;
 
 @end
 

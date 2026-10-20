@@ -10,10 +10,10 @@
 
 @interface MTBarcode ()
 
-    @property (nonatomic, strong, readwrite) NSString *name;
-    @property (nonatomic, assign, readwrite) int16_t barcodeType;
-    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
-    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+	@property (nonatomic, strong, readwrite) NSString *name;
+	@property (nonatomic, assign, readwrite) int16_t barcodeType;
+	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
+	@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
@@ -21,24 +21,24 @@
 
 - (instancetype)init {
 
-    if (self = [super init]) {
-        
-        self.barcodeType = MTBarcodeTypeUpce;
-        self.name = @"Universal Product Code (UPC-E)";
-        self.has2dComponent = YES;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = MTBarcodeTypeUpce;
+		self.name = @"Universal Product Code (UPC-E)";
+		self.has2dComponent = YES;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeUpce;
+	return MTBarcodeTypeUpce;
 }
 
 - (void)loadSampleData {
-    self.input = @"1123456";
-    self.primaryData = @"";
+	self.input = @"1123456";
+	self.primaryData = @"";
 }
 
 @end

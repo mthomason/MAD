@@ -10,34 +10,34 @@
 
 @interface MTBarcode ()
 
-    @property (nonatomic, strong, readwrite) NSString *name;
-    @property (nonatomic, assign, readwrite) int16_t barcodeType;
-    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
-    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+	@property (nonatomic, strong, readwrite) NSString *name;
+	@property (nonatomic, assign, readwrite) int16_t barcodeType;
+	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
+	@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeCode11
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeCode11 type];
-        self.name = @"Code 11";
-        self.has2dComponent = NO;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeCode11 type];
+		self.name = @"Code 11";
+		self.has2dComponent = NO;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeCode11;
+	return MTBarcodeTypeCode11;
 }
 
 - (void)loadSampleData {
-    self.input = @"555-555-0199";
-    self.primaryData = @"";
+	self.input = @"555-555-0199";
+	self.primaryData = @"";
 }
 
 @end

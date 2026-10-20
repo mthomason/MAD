@@ -21,33 +21,33 @@
 @implementation MTBarcodeCodeOne
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeCodeOne type];
-        self.name = @"Code One";
-        self.has2dComponent = NO;
-        self.hasOptionalInput = YES;
-        self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasCodeOne";
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeCodeOne type];
+		self.name = @"Code One";
+		self.has2dComponent = NO;
+		self.hasOptionalInput = YES;
+		self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasCodeOne";
    
-    }
-    return self;
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeCodeOne;
+	return MTBarcodeTypeCodeOne;
 }
 
 - (void)setSize:(NSInteger)size {
-    self.option2 = size;
+	self.option2 = size;
 }
 
 - (NSInteger)size {
-    return self.option2;
+	return self.option2;
 }
 
 - (void)loadSampleData {
-    self.input = @"http://www.everydayapps.com/";
-    self.primaryData = @"";
+	self.input = @"http://www.everydayapps.com/";
+	self.primaryData = @"";
 }
 
 @end

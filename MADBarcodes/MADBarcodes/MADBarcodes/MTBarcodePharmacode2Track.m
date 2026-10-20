@@ -20,24 +20,24 @@
 @implementation MTBarcodePharmacode2Track
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodePharmacode2Track type];
-        self.name = @"Pharmacode 2-track";
-        self.has2dComponent = NO;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodePharmacode2Track type];
+		self.name = @"Pharmacode 2-track";
+		self.has2dComponent = NO;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypePharmaTwo;
+	return MTBarcodeTypePharmaTwo;
 }
 
 - (void)loadSampleData {
-    self.input = @"64570080";
-    self.primaryData = @"";
+	self.input = @"64570080";
+	self.primaryData = @"";
 }
 
 @end

@@ -10,10 +10,10 @@
 
 @interface MTBarcode ()
 
-    @property (nonatomic, strong, readwrite) NSString *name;
-    @property (nonatomic, assign, readwrite) int16_t barcodeType;
-    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
-    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+	@property (nonatomic, strong, readwrite) NSString *name;
+	@property (nonatomic, assign, readwrite) int16_t barcodeType;
+	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
+	@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
@@ -21,24 +21,24 @@
 
 - (instancetype)init {
 
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeCode2of5Interleaved type];
-        self.name = @"Code 2 of 5 Interleaved";
-        self.has2dComponent = NO;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeCode2of5Interleaved type];
+		self.name = @"Code 2 of 5 Interleaved";
+		self.has2dComponent = NO;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeC25INTER;
+	return MTBarcodeTypeC25INTER;
 }
 
 - (void)loadSampleData {
-    self.input = @"11111111111";
-    self.primaryData = @"";
+	self.input = @"11111111111";
+	self.primaryData = @"";
 }
 
 @end

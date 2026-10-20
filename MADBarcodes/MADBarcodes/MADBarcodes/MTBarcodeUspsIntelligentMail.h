@@ -14,7 +14,7 @@
 
 @interface MTBarcodeUspsIntelligentMail : MTBarcode
 
-    + (MTBarcodeType)type;
+	+ (MTBarcodeType)type;
 
 @end
 

@@ -10,34 +10,34 @@
 
 @interface MTBarcode ()
 
-    @property (nonatomic, strong, readwrite) NSString *name;
-    @property (nonatomic, assign, readwrite) int16_t barcodeType;
-    @property (nonatomic, assign, readwrite) BOOL has2dComponent;
-    @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
+	@property (nonatomic, strong, readwrite) NSString *name;
+	@property (nonatomic, assign, readwrite) int16_t barcodeType;
+	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
+	@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
 
 @end
 
 @implementation MTBarcodeCode128Iso15417
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeCode128Iso15417 type];
-        self.name = @"Code 128 (ISO 15417)";
-        self.has2dComponent = YES;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeCode128Iso15417 type];
+		self.name = @"Code 128 (ISO 15417)";
+		self.has2dComponent = YES;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeCODE128;
+	return MTBarcodeTypeCODE128;
 }
 
 - (void)loadSampleData {
-    self.input = @"Code 128";
-    self.primaryData = @"";
+	self.input = @"Code 128";
+	self.primaryData = @"";
 }
 
 @end
@@ -45,24 +45,24 @@
 @implementation MTBarcodeCode128SubsetB
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeCode128SubsetB type];
-        self.name = @"Code 128 (Subset C Suppression)";
-        self.has2dComponent = YES;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeCode128SubsetB type];
+		self.name = @"Code 128 (Subset C Suppression)";
+		self.has2dComponent = YES;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeCode128b;
+	return MTBarcodeTypeCode128b;
 }
 
 - (void)loadSampleData {
-    self.input = @"Code 128b";
-    self.primaryData = @"";
+	self.input = @"Code 128b";
+	self.primaryData = @"";
 }
 
 @end
@@ -70,24 +70,24 @@
 @implementation MTBarcodeCode128Ean14
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeCode128Ean14 type];
-        self.name = @"Code 128 (EAN-14)";
-        self.has2dComponent = YES;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeCode128Ean14 type];
+		self.name = @"Code 128 (EAN-14)";
+		self.has2dComponent = YES;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeEan14;
+	return MTBarcodeTypeEan14;
 }
 
 - (void)loadSampleData {
-    self.input = @"9889876543210";
-    self.primaryData = @"";
+	self.input = @"9889876543210";
+	self.primaryData = @"";
 }
 
 @end
@@ -95,24 +95,24 @@
 @implementation MTBarcodeCode128Nve18
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeCode128Nve18 type];
-        self.name = @"Code 128 (HBIC)";
-        self.has2dComponent = YES;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeCode128Nve18 type];
+		self.name = @"Code 128 (HBIC)";
+		self.has2dComponent = YES;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeNve18;
+	return MTBarcodeTypeNve18;
 }
 
 - (void)loadSampleData {
-    self.input = @"13666666666666613";
-    self.primaryData = @"";
+	self.input = @"13666666666666613";
+	self.primaryData = @"";
 }
 
 @end
@@ -120,24 +120,24 @@
 @implementation MTBarcodeCode128Hibc
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeCode128Hibc type];
-        self.name = @"Code 128 (GS1-128)";
-        self.has2dComponent = YES;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeCode128Hibc type];
+		self.name = @"Code 128 (GS1-128)";
+		self.has2dComponent = YES;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeHibc128;
+	return MTBarcodeTypeHibc128;
 }
 
 - (void)loadSampleData {
-    self.input = @"27182818";
-    self.primaryData = @"";
+	self.input = @"27182818";
+	self.primaryData = @"";
 }
 
 @end
@@ -145,24 +145,24 @@
 @implementation MTBarcodeCode128Ean128
 
 - (instancetype)init {
-    if (self = [super init]) {
-        
-        self.barcodeType = [MTBarcodeCode128Hibc type];
-        self.name = @"Code 128 (GS1-128)";
-        self.has2dComponent = YES;
-        self.hasOptionalInput = NO;
-        
-    }
-    return self;
+	if (self = [super init]) {
+		
+		self.barcodeType = [MTBarcodeCode128Hibc type];
+		self.name = @"Code 128 (GS1-128)";
+		self.has2dComponent = YES;
+		self.hasOptionalInput = NO;
+		
+	}
+	return self;
 }
 
 + (MTBarcodeType)type {
-    return MTBarcodeTypeEAN128;
+	return MTBarcodeTypeEAN128;
 }
 
 - (void)loadSampleData {
-    self.input = @"27182818";
-    self.primaryData = @"";
+	self.input = @"27182818";
+	self.primaryData = @"";
 }
 
 @end
