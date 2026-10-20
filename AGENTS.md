@@ -100,7 +100,13 @@ Each framework has one test target, exposed by a shared scheme of the same name.
 suite against an iOS Simulator:
 
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+		-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
+
+The destination is pinned by device id, not name: `OS:latest` resolves to the newest
+installed runtime (iOS 27.0), which has no iPhone 17 Pro device (26.0/26.1/26.5 do), so
+the `name=iPhone 17 Pro` form fails with exit code 70.  The shared DerivedData path is
+required -- the frameworks reference each other via `BUILT_PRODUCTS_DIR`.
 
 `MADMySQL` and `MADTdsClient` each carry a second file -- `MADMySQLLiveTests.m` and
 `MADTdsClientLiveTests.m` -- that talks to a real database server and **skips** when one is

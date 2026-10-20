@@ -165,11 +165,14 @@ occurrence of the same value. There is also no image-returning API at all.
 
 ```sh
 xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
-	-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+	-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 xcodebuild test -workspace Reports.xcworkspace -scheme MAD \
-	-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+	-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
-	-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+	-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ./Linux/build.sh
 ```
 
@@ -186,11 +189,14 @@ Run these four commands in /Users/michael/Desktop/Reports and record their resul
 exactly (all four must pass; if any fails, stop and report before doing anything else):
 
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild test -workspace Reports.xcworkspace -scheme MAD \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	./Linux/build.sh
 
 Also run `git status` to confirm the tree is clean. This is the safety net: every later
@@ -284,11 +290,14 @@ Steps:
 
 Verify (all must pass):
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild test -workspace Reports.xcworkspace -scheme MAD \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	./Linux/build.sh
 
 Commit on master with a message like "Rename the barcode classes from MTBarcode to
@@ -357,11 +366,14 @@ names the exact symbols.
 
 Verify:
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild test -workspace Reports.xcworkspace -scheme MAD \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	./Linux/build.sh
 
 Commit on master ("Fix the pinned MADBarcodes defects and delete the dead code"). Do
@@ -436,11 +448,14 @@ Steps:
 
 Verify:
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild test -workspace Reports.xcworkspace -scheme MAD \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	./Linux/build.sh
 
 Commit on master ("Render barcodes as one cached image draw"). Do not push.
@@ -459,7 +474,8 @@ remain). Work on master in /Users/michael/Desktop/Reports.
 
 1. Build the framework and run Analyze on it in isolation:
 	xcodebuild build -workspace Reports.xcworkspace -scheme MADBarcodes \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
    plus Product > Analyze equivalent (or the analyze xcodebuild flag) and record every
    first-party diagnostic.
 2. Fix first-party diagnostics the house way: deliberately-unused code gets a clang
@@ -476,9 +492,11 @@ remain). Work on master in /Users/michael/Desktop/Reports.
 
 Verify:
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	./Linux/build.sh
 
 Commit on master ("Clear the MADBarcodes warning sweep"). Do not push.
@@ -548,11 +566,14 @@ compiles some of these files and excludes others (Linux/cmake/MADSources.cmake).
 
 Verify:
 	xcodebuild test -workspace Reports.xcworkspace -scheme MAD \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	./Linux/build.sh
 
 Commit on master ("Fix the barcode element's type, colours, text and edit path"). Do
@@ -597,11 +618,14 @@ task is mostly tests; change code only where a test proves a gap.
 
 Verify:
 	xcodebuild test -workspace Reports.xcworkspace -scheme MAD \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	./Linux/build.sh
 
 Commit on master ("Cover the barcode element in the report exporters"). Do not push.
@@ -668,11 +692,14 @@ documentation in line with reality. Work on master in /Users/michael/Desktop/Rep
 
 Verify (the mechanical ones):
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild test -workspace Reports.xcworkspace -scheme MAD \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
-		-destination 'platform=iOS Simulator,name=iPhone 17 Pro'
+		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 	xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
 		-destination 'generic/platform=iOS'
 	./Linux/build.sh
