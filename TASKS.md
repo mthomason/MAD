@@ -712,8 +712,8 @@ the framework's `cmake/<Name>Sources.cmake`. `MADExplorer`, `MADBarcodes`,
 
 ## 13. Compiler-warning and analyzer cleanup
 
-**Status:** In progress — five frameworks done 2026-10-17; the app, MAD and
-MADBarcodes remain.
+**Status:** In progress — five frameworks done 2026-10-17 and MADBarcodes cleared
+2026-10-20; the app and MAD remain.
 
 The 2026-10-17 clean Analyze of `MAD Designer` reported 128 raw / 124 unique
 compiler warnings and 98 analyzer issues. The five requested frameworks were
@@ -732,10 +732,19 @@ each committed with its suite green:
   `MADArrayCaching` initializer contract and the `MADDataTableFast` nil paths
   were settled with the user. Suite 89/89 (5 benchmarks skipped). Commit
   `daff35986`.
+* **MADBarcodes** — 20 compiler warnings and one analyzer issue cleared in an
+  isolated clean build and Analyze. The `CGImageCreate` alpha is cast to
+  `CGBitmapInfo`, the `height` assignment casts to `float`, the out-parameter is
+  explicitly `__autoreleasing`, and the already-bounded copy into zint's
+  `primary[128]` uses `memcpy` instead of `strcpy`; seventeen
+  `NSInteger`/enum option assignments took explicit `int16_t` casts, behaviour
+  unchanged. Suite 29/29; app build green. The project's Copy Headers sandbox
+  note is a build-setting warning, not source. Commit `2be05d692`.
 
-`./Linux/build.sh` passes 119/119. The full-project analyzer count is now 86
-(was 98); all remaining analyzer results and compiler warnings are in the app,
-MAD and MADBarcodes. The test bundles also carry a deployment-target linker
+`./Linux/build.sh` passes 120/120. The full-project analyzer count stood at 86
+after the five frameworks (was 98); MADBarcodes' one isolated issue is cleared
+here, and all remaining analyzer results and compiler warnings are in the app
+and MAD. The test bundles also carry a deployment-target linker
 warning (XCTest built for 17.0, bundle floor 15.0) that belongs to §6/the
 project-settings pass.
 
@@ -817,7 +826,8 @@ entry; give each its own task or `BUGS.md` entry when it is picked up.
 
 ## 15. Barcode element: modernize MADBarcodes and re-integrate the element
 
-**Status:** Open -- design complete (2026-10-20); nothing implemented.
+**Status:** In progress -- Tasks 0-4 implemented (rename, framework defects, cached
+render path, warning sweep); Tasks 5-8 remain.
 
 The barcode element was never removed from the Apple app -- it is wired end to end
 (model `RptqDocumentElementBarcode`, render `MADPrintPageElementBarcode`, the
@@ -826,7 +836,7 @@ hidden only by the designer picker's IAP check
 (`MADDesignerElementPickerViewController.m:117-120`). The user's decision
 (2026-10-20): the element is **always available** -- the picker gate comes off.
 The `MADBarcodes` framework wraps zint 2.16.0 (Compressor recipe) behind 67
-`MTBarcode*` symbology subclasses, has a green 21-test suite, and is excluded from
+`MADBarcode*` symbology subclasses, has a green 29-test suite, and is excluded from
 the Linux build by design (the `#if __APPLE__` creation paths log-and-skip).
 
 The full survey, the design decisions (framework-only rename `MTBarcode*` ->
