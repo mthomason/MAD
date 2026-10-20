@@ -44,7 +44,7 @@
 }
 
 - (void)setNumberOfDataColumns:(NSInteger)numberOfDataColumns {
-	self.option2 = numberOfDataColumns;
+	self.option2 = (int16_t)numberOfDataColumns;
 }
 
 - (void)loadSampleData {

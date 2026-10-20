@@ -52,7 +52,7 @@
 
 - (void)setEncodingMode:(NSInteger)encodingMode {
 	if (encodingMode == -1 || encodingMode == 2 || encodingMode == 3 || encodingMode == 4 || encodingMode == 5 || encodingMode == 6) {
-		self.option1 = encodingMode;
+		self.option1 = (int16_t)encodingMode;
 	}
 }
 

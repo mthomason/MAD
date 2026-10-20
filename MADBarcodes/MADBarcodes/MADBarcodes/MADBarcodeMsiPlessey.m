@@ -45,7 +45,7 @@
 
 - (void)setCheckDigit:(NSInteger)checkDigit {
 	NSAssert(checkDigit == 0 || checkDigit == 1 || checkDigit == 2 || checkDigit == 3 || checkDigit == 4, @"Incorrect barcode check digit.");
-	self.option2 = checkDigit;
+	self.option2 = (int16_t)checkDigit;
 }
 
 - (void)loadSampleData {

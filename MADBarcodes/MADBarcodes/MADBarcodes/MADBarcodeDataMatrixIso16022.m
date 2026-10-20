@@ -38,7 +38,7 @@
 }
 
 - (void)setSymbolSize:(NSInteger)symbolSize {
-	self.option2 = symbolSize;	// Gives warning: Implicit conversion loses integer precision: 'NSInteger' (aka 'long') to 'int16_t' (aka 'short')
+	self.option2 = (int16_t)symbolSize;
 }
 
 - (NSInteger)symbolSize {

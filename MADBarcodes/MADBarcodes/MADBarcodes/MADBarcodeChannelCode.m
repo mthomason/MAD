@@ -37,7 +37,7 @@
 }
 
 - (void)setNumberOfChannels:(NSInteger)numberOfChannels {
-	self.option2 = numberOfChannels;
+	self.option2 = (int16_t)numberOfChannels;
 }
 
 - (NSInteger)numberOfChannels {

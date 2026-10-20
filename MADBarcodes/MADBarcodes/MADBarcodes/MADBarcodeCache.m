@@ -19,7 +19,7 @@
 // message from the failed zint pass, so a miss costs one encode whether it
 // succeeds or not.  It stays off MADBarcode.h; MADBarcode.m declares it too.
 @interface MADBarcode (MADBarcodeCacheRendering)
-- (UIImage *)renderedImageWithErrorMessage:(NSString **)errorMessage;
+- (UIImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessage;
 @end
 
 // NSCache never evicts without a limit, and a report can carry thousands of

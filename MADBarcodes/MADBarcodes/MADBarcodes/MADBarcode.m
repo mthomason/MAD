@@ -127,7 +127,7 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 	CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	CGImageRef cgImage = CGImageCreate(width, height, 8, 24, bytesPerRow, colorSpace,
-									   kCGImageAlphaNone, provider, NULL, false,
+									   (CGBitmapInfo)kCGImageAlphaNone, provider, NULL, false,
 									   kCGRenderingIntentDefault);
 	CGColorSpaceRelease(colorSpace);
 	CGDataProviderRelease(provider);
@@ -157,7 +157,7 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 // The rendering primitive behind -renderedImage, and the only caller that can
 // see the message from the same zint pass that failed.  MADBarcodeCache
 // declares it too, to keep it off the public header.
-- (UIImage *)renderedImageWithErrorMessage:(NSString **)errorMessage;
+- (UIImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessage;
 
 @end
 
@@ -603,7 +603,7 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 	return [self renderedImageWithErrorMessage:NULL];
 }
 
-- (UIImage *)renderedImageWithErrorMessage:(NSString **)errorMessageOut {
+- (UIImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessageOut {
 	struct zint_symbol *barcode = ZBarcode_Create();
 
 	if (barcode == NULL) {
@@ -652,7 +652,7 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 				break;
 		}
 	}
-	barcode->height = (int)self.barcodeHeight;	// This gives warning: Implicit conversion from 'int' to 'float' may lose precision
+	barcode->height = (float)self.barcodeHeight;
 	barcode->border_width = (int)self.barcodeBorderWidth;
 	barcode->whitespace_width = (int)self.whitespaceWidth;
 	barcode->show_hrt = self.humanReadable;
@@ -683,7 +683,8 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 					  primaryLength, sizeof(barcode->primary) - 1);
 				primaryTooLong = YES;
 			} else {
-				strcpy(barcode->primary, primaryData);
+				// The length check above bounds this copy by the 128-byte buffer.
+				memcpy(barcode->primary, primaryData, primaryLength + 1);
 			}
 		} else {
 			barcode->primary[0] = '\0';

@@ -68,7 +68,7 @@ NSString * const MADStringDisplayPdfHibc	= @"HIBC PDF";
 }
 
 - (void)setNumberOfColumns:(NSInteger)numberOfColumns {
-	self.option2 = numberOfColumns;
+	self.option2 = (int16_t)numberOfColumns;
 }
 
 - (NSInteger)errorCorrectionCapacity {
@@ -76,7 +76,7 @@ NSString * const MADStringDisplayPdfHibc	= @"HIBC PDF";
 }
 
 - (void)setErrorCorrectionCapacity:(NSInteger)errorCorrectionCapacity {
-	self.option1 = errorCorrectionCapacity;
+	self.option1 = (int16_t)errorCorrectionCapacity;
 }
 
 - (void)loadSampleData {

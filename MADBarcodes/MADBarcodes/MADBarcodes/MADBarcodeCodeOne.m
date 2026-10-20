@@ -38,7 +38,7 @@
 }
 
 - (void)setSize:(NSInteger)size {
-	self.option2 = size;
+	self.option2 = (int16_t)size;
 }
 
 - (NSInteger)size {

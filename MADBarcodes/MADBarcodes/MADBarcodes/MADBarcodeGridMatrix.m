@@ -57,11 +57,11 @@
 }
 - (void)setSize:(NSInteger)size {
 	[self setOption1:NO];
-	self.option2 = size;
+	self.option2 = (int16_t)size;
 	[self setOption3:NO];
 }
 - (void)setMinmumErrorCorrection:(NSInteger)minmumErrorCorrection {
-	self.option1 = minmumErrorCorrection;
+	self.option1 = (int16_t)minmumErrorCorrection;
 	[self setOption2:NO];
 	[self setOption3:NO];
 }
