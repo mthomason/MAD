@@ -146,7 +146,7 @@ reference to "BUGS.md, the X entry" still lands.
 ## MAD (framework)
 
 ### MADReportFormatter compares untyped values through id
-- **Status:** Fixed 2026-10-18 (commit `661d71f12`).
+- **Status:** Fixed 2026-10-18 (commit `483a77259`).
 - **What:** `MADReportFormatter.m:219` and `:222` send `compare:` to a value held as `id`
   while several classes declare that selector with different argument types, so the
   compiler cannot bind it (`-Wstrict-selector-match`).  If the values being sorted are not
@@ -1473,7 +1473,7 @@ reference to "BUGS.md, the X entry" still lands.
 ## MADSqlite3
 
 ### The cache's ORDER BY ignores column types, so text keys sort binary
-- **Status:** Fixed 2026-10-18 (commit `661d71f12`).
+- **Status:** Fixed 2026-10-18 (commit `483a77259`).
 - **Where:** `MADSqlite3/Source/MADQueryCacheSelectLimitOffset.m`'s ORDER BY block; the
   report enumerators passed `columns:nil` in `MADDataTableFast.m`; the same
   `nativeType`-as-`MADDataType` cast sat at `MADQuery+Sqlite3.m`,
@@ -1845,7 +1845,7 @@ reference to "BUGS.md, the X entry" still lands.
 ## MADMySQL
 
 ### The fetch corrected a column's type from its first row
-- **Status:** Fixed 2026-10-18 (commit `661d71f12`).
+- **Status:** Fixed 2026-10-18 (commit `483a77259`).
 - **Where:** was `MADMySQL/Source/MysqlFetch+DataTable.m`, the `MYSQL_TYPE_*_BLOB` fetch
   branch: on the first row it decoded the bytes, and when they read as UTF-8 it mutated the
   cache column's `type` to String (a dead NSNumber branch mutated it to Integer).

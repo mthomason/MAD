@@ -738,3 +738,77 @@ each committed with its suite green:
 MAD and MADBarcodes. The test bundles also carry a deployment-target linker
 warning (XCTest built for 17.0, bundle floor 15.0) that belongs to §6/the
 project-settings pass.
+
+---
+
+## 14. Report formatter end-to-end performance
+
+**Status:** Open — the group-boundary comparison phase is done (`327cccc1b`);
+the per-row work below is what remains.
+
+The 2026-10-20 performance pass resolved one comparator per group level once
+per format and computed one changed flag per level per row, shared by the
+header and footer walks. On the synthetic 200k-row, 3-level format used to
+measure it, the boundary phase fell from ~0.20 s to ~0.03 s (5–6×), and the
+London and Music `json-report` exports stayed byte-identical. That phase is
+now ~0.1% of a ~38 s Debug/simulator format; the rest is the per-row work
+below. The design and the measurements are in commit `327cccc1b`; the
+correctness contract it builds on is `483a77259` and the archived entries in
+`BUGS_FIXED.md` (“MADReportFormatter compares untyped values through id” and
+“The cache's ORDER BY ignores column types, so text keys sort binary”).
+
+**Hot spots, in expected-impact order.**
+
+1. **The page index array is copied per row.** `MADReportFormatter.m:756`:
+   `self.pageIndexesTemporary = [self.pageIndexesTemporary arrayByAddingObject:rowIDObject]`
+   is an O(page) copy for every detail row, O(rows²/page) over a page. The
+   loop's own comment (`:687-692`) already suspects it in the memory-spike
+   story. Replace it with one mutable page buffer reset per page, flushing a
+   copy into the report caches at the page break and at the end; keep the
+   arrays the caches receive unchanged. Likely the largest wall-clock win.
+2. **A fresh key-value array per row.** `-newObjectArrayKeyValuesForResultRow:`
+   (`:491`, called at `:708`) allocates an `NSMutableArray` and does one
+   dictionary lookup per group per row. A reusable per-formatter buffer (or
+   an enumerator that hands the keys back) removes the allocation. Do not
+   change the method's public result: `MADDocumentRenderDataSource
+   -groupLevelKeys:` uses it for the aggregate WHERE clauses
+   (`MADDocumentRenderDataSource.m:87`), so a reused buffer must stay internal
+   to the formatter.
+3. **Per-row `@autoreleasepool`.** `:687-693`. It is deliberate and prevents
+   the 8k-page memory spike; do not remove it. Measure it only after 1 and 2,
+   and only if the remaining per-row work warrants it.
+4. **Per-detail-row section objects and cache inserts.** Every body row
+   allocates a `MADSectionRepresentation` (`:752`), and each page's layout and
+   index arrays are inserted into `MADArrayCaching` (`:638-641`, `:861-867`).
+   A representation pool or a different page-layout carrier is a larger design
+   change; measure before designing.
+5. **The public comparator's per-call path.** `+compareValue:withValue:forDataType:`
+   (`:335-352`) resolves the family per call (`MADComparisonFunctionForDataType`,
+   `:329`) and measured ~16 ns slower than the pre-pass implementation. It is
+   the test-facing and rare path, not the row loop; leave it unless an
+   external caller ever makes it hot.
+
+**How to measure and prove a win.** Reproduce the baseline on the same machine
+and configuration:
+
+* a `MADDataTableVirtual`-backed document with 200,000 rows and 3 group levels
+  (a ten-value repeating pattern so ~1,110 boundaries fire), timing `format:`
+  as the median of three runs, with a 0-group control;
+* report the boundary phase and the end-to-end time separately: the end-to-end
+  is noisy (±1.5 s on this machine), so a change that only moves a small phase
+  may not show there;
+* build the CLI (`CLI/build.sh --no-frameworks`), refresh and export London
+  and Music with `--deterministic`, and compare the `json-report` bytes; they
+  must be identical before and after;
+* run the MAD suite and `./Linux/build.sh` (plain, Docker up);
+  `MADReportFormatter.m` is in the Linux build.
+
+**Done when:** at least one hot spot shows a measured end-to-end improvement
+above the noise floor, the exports are byte-identical, and the MAD and Linux
+suites are green. Do not change the comparison contract, the header/footer
+walk order, or the page arrays the caches receive as part of a speed change.
+
+**Follow-ups without a queue entry yet:** Enum storage (`"red"` parses to 0)
+and the cache `user_version` stamp that would let the pre-contract cold
+fallback retire. Both currently live only in the archived `BUGS_FIXED.md`
+entry; give each its own task or `BUGS.md` entry when it is picked up.
