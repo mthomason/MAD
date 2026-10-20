@@ -812,3 +812,34 @@ walk order, or the page arrays the caches receive as part of a speed change.
 and the cache `user_version` stamp that would let the pre-contract cold
 fallback retire. Both currently live only in the archived `BUGS_FIXED.md`
 entry; give each its own task or `BUGS.md` entry when it is picked up.
+
+---
+
+## 15. Barcode element: modernize MADBarcodes and re-integrate the element
+
+**Status:** Open -- design complete (2026-10-20); nothing implemented.
+
+The barcode element was never removed from the Apple app -- it is wired end to end
+(model `RptqDocumentElementBarcode`, render `MADPrintPageElementBarcode`, the
+`MADDesigner/Source/barcodes/` editor, the `MADBarcodeDesigner.storyboard`) and
+hidden only by the designer picker's IAP check
+(`MADDesignerElementPickerViewController.m:117-120`). The user's decision
+(2026-10-20): the element is **always available** -- the picker gate comes off.
+The `MADBarcodes` framework wraps zint 2.16.0 (Compressor recipe) behind 67
+`MTBarcode*` symbology subclasses, has a green 21-test suite, and is excluded from
+the Linux build by design (the `#if __APPLE__` creation paths log-and-skip).
+
+The full survey, the design decisions (framework-only rename `MTBarcode*` ->
+`MADBarcode*`; one-`CGImage`-draw render path plus an `NSCache` for the per-row
+perf requirement; the four pinned `BUGS.md` framework defects; the base-`type`
+clobber and the store colour-columns bug that may crash barcode creation on
+Apple), and the self-contained per-task prompts for a flash model are in
+**`MAD_BARCODES.md`** -- the implementer starts there, with Task 0 (baseline) and
+goes in order. Known defects this track closes: the `BUGS.md` `## MADBarcodes`
+entries (duplicate name key, QR/EAN128 wrong symbology, ISBN recursion, `strcpy`
+overflow, broken NSCoding) and "The store's colour columns have no reader"
+(whose one writer is the barcode creation path). Gates per task: the
+`MADBarcodes` and `MAD` suites, the app build, and `./Linux/build.sh` (the
+guards and `MADSources.cmake` exclusions stay intact). Out of scope, documented
+in `MAD_BARCODES.md` §5: headless barcode rendering, GS1/Data input modes, HTML
+barcode images, the notices gap.

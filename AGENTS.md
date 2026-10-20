@@ -64,7 +64,7 @@ Once this is complete, the user can go to the MAD Viewer screen and use the refr
 	* `MADTdsClient`: Implements `MADDatabaseSQLServer`, the SQL Server subclass of `MADDatabase`
 	* `MADSqlite3`: A wrapper around Sqlite3.
 	* `MADTds`: A base wrapper around the freetds project.
-	* `MADBarcodes`: This is used for the barcode element.  `MADBarcodes` is currently unused and unmaintained.
+	* `MADBarcodes`: This is used for the barcode element.  The element is wired end to end but hidden behind the designer's IAP gate; the modernization and re-integration plan is `MAD_BARCODES.md` (`TASKS.md` §15).
 	* `MADFeedback`: This is a framework to allow user feedback.  `MADFeedback` is currently unused and unmaintained.
 
 The core app is in `MADDesigner`.  Its source is in `MADDesigner/Source`, and its targets -- the app itself, the stand-alone viewer, and the unit and UI test bundles -- are in `MADDesigner/Targets`.
@@ -137,6 +137,9 @@ the headless side.
   schema and result set as one contract, how each piece is represented in the code today,
   what formalizing it takes in phases, and the multi-source/subreport composition
   documented but deliberately not built.
+* `MAD_BARCODES.md` -- the barcode element's modernization and re-integration: the
+  survey of what exists, the design decisions, and the step-by-step task prompts for
+  the `MADBarcodes` framework and the element's return to the designer.
 * `MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
   Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
 * `MAD_PDF_LINUX.md` -- the Linux PDF writer: status (deferred, blocked on the user's
