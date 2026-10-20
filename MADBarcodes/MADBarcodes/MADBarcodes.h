@@ -25,6 +25,7 @@ FOUNDATION_EXPORT const unsigned char MADBarcodesVersionString[];
 #import <MADBarcodes/MADBarcodeProtocol.h>
 #import <MADBarcodes/MADBarcodeType.h>
 #import <MADBarcodes/MADBarcode.h>
+#import <MADBarcodes/MADBarcodeCache.h>
 #import <MADBarcodes/MADBarcodeView.h>
 #import <MADBarcodes/MADBarcodeDataMatrixIso16022.h>
 #import <MADBarcodes/MADBarcodeCode39Iso16388.h>

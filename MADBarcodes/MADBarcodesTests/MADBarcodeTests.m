@@ -18,11 +18,13 @@
 #import <UIKit/UIColor.h>
 
 #import "MADBarcode.h"
+#import "MADBarcodeCache.h"
 #import "MADBarcodeCode39Iso16388.h"
 #import "MADBarcodeCode128Iso15417.h"
 #import "MADBarcodeQrCodeIso18004.h"
 #import "MADBarcodeDataMatrixIso16022.h"
 #import "MADBarcodeUniversalProductCodeUpca.h"
+#import "zint.h"
 
 #pragma mark - Test double
 
@@ -49,6 +51,16 @@
 @end
 
 @implementation MADBarcodeTests
+
+- (void)setUp {
+	[super setUp];
+	[[MADBarcodeCache sharedCache] flush];
+}
+
+- (void)tearDown {
+	[[MADBarcodeCache sharedCache] flush];
+	[super tearDown];
+}
 
 #pragma mark - Init defaults
 
@@ -213,6 +225,8 @@
 	barcode.has2dComponentType = 0;
 	barcode.input = [@"A" stringByPaddingToLength:200 withString:@"A" startingAtIndex:0];
 
+	XCTAssertNil([barcode renderedImage], @"an overlong primary value must not render");
+
 	barcode.showErrorMessage = NO;
 	XCTAssertFalse([self drawBarcode:barcode intoSize:CGSizeMake(220, 110)],
 				   @"an overlong primary value must not produce a symbol");
@@ -220,6 +234,150 @@
 	barcode.showErrorMessage = YES;
 	XCTAssertTrue([self drawBarcode:barcode intoSize:CGSizeMake(220, 110)],
 				  @"the error text must be drawn when showErrorMessage is on");
+}
+
+#pragma mark - Rendered image
+
+- (void)testRenderedImageMatchesTheZintBitmap {
+	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	barcode.input = @"TEST";
+
+	// Encode the same values through zint to know the bitmap the image must hold.
+	struct zint_symbol *reference = ZBarcode_Create();
+	XCTAssertTrue(reference != NULL);
+	if (reference == NULL) {
+		return;
+	}
+	reference->symbology = barcode.barcodeType;
+	reference->height = (float)barcode.barcodeHeight;
+	reference->border_width = (int)barcode.barcodeBorderWidth;
+	reference->whitespace_width = (int)barcode.whitespaceWidth;
+	reference->show_hrt = barcode.humanReadable;
+	reference->output_options = barcode.barcodeBorderStyle;
+	reference->scale = 1.0f;
+	reference->input_mode = UNICODE_MODE;
+	reference->option_1 = (int)barcode.option1;
+	reference->option_2 = (int)barcode.option2;
+	reference->option_3 = (int)barcode.option3;
+	int result = ZBarcode_Encode_and_Buffer(reference, (unsigned char *)"TEST", 4, 0);
+	XCTAssertEqual(result, 0);
+	CGSize expected = CGSizeMake((CGFloat)reference->bitmap_width,
+								 (CGFloat)reference->bitmap_height);
+	ZBarcode_Delete(reference);
+
+	UIImage *image = [barcode renderedImage];
+
+	XCTAssertNotNil(image);
+	XCTAssertEqualWithAccuracy(image.size.width, expected.width, 0.5);
+	XCTAssertEqualWithAccuracy(image.size.height, expected.height, 0.5);
+}
+
+- (void)testRenderedImageIsNilWhenZintRefusesTheInput {
+	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	barcode.input = @"";
+
+	XCTAssertNil([barcode renderedImage]);
+}
+
+#pragma mark - Cache
+
+- (void)testCacheSharesOneImageBetweenEquivalentBarcodes {
+	MADBarcode *first = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	first.input = @"TEST";
+	MADBarcode *second = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	second.input = @"TEST";
+
+	UIImage *firstImage = [[MADBarcodeCache sharedCache] imageForBarcode:first];
+	UIImage *secondImage = [[MADBarcodeCache sharedCache] imageForBarcode:second];
+
+	XCTAssertNotNil(firstImage);
+	XCTAssertTrue(firstImage == secondImage,
+				  @"an equal render key must serve the identical image");
+}
+
+- (void)testCacheSeparatesDifferentInputs {
+	MADBarcode *first = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	first.input = @"TEST";
+	MADBarcode *second = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	second.input = @"OTHER";
+
+	UIImage *firstImage = [[MADBarcodeCache sharedCache] imageForBarcode:first];
+	UIImage *secondImage = [[MADBarcodeCache sharedCache] imageForBarcode:second];
+
+	XCTAssertNotNil(firstImage);
+	XCTAssertNotNil(secondImage);
+	XCTAssertFalse(firstImage == secondImage);
+	XCTAssertNotEqualObjects(first.renderCacheKey, second.renderCacheKey);
+}
+
+- (void)testCacheKeepsTheErrorForAnInvalidBarcode {
+	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	barcode.input = @"";
+
+	XCTAssertNil([[MADBarcodeCache sharedCache] imageForBarcode:barcode]);
+	XCTAssertNotNil([[MADBarcodeCache sharedCache] errorMessageForBarcode:barcode]);
+}
+
+- (void)testFlushForcesARerender {
+	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	barcode.input = @"TEST";
+
+	UIImage *firstImage = [[MADBarcodeCache sharedCache] imageForBarcode:barcode];
+	[[MADBarcodeCache sharedCache] flush];
+	UIImage *secondImage = [[MADBarcodeCache sharedCache] imageForBarcode:barcode];
+
+	XCTAssertNotNil(firstImage);
+	XCTAssertNotNil(secondImage);
+	XCTAssertFalse(firstImage == secondImage);
+}
+
+#pragma mark - Render key
+
+- (void)testRenderCacheKeyIsEqualForEquivalentBarcodes {
+	MADBarcode *first = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	first.input = @"TEST";
+	first.primaryData = @"2D";
+	MADBarcode *second = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	second.input = @"TEST";
+	second.primaryData = @"2D";
+
+	XCTAssertEqualObjects(first.renderCacheKey, second.renderCacheKey);
+}
+
+- (void)testRenderCacheKeyCoversEveryDrawInput {
+	MADBarcode *base = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	base.input = @"TEST";
+
+	MADBarcode *variant = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	variant.input = @"TEST";
+	variant.option1 = 1;
+	XCTAssertNotEqualObjects(base.renderCacheKey, variant.renderCacheKey);
+
+	variant = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	variant.input = @"TEST";
+	variant.humanReadable = NO;
+	XCTAssertNotEqualObjects(base.renderCacheKey, variant.renderCacheKey);
+
+	variant = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	variant.input = @"TEST";
+	variant.center = YES;
+	XCTAssertNotEqualObjects(base.renderCacheKey, variant.renderCacheKey);
+
+	variant = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	variant.input = @"TEST";
+	variant.scale = 2.0f;
+	XCTAssertNotEqualObjects(base.renderCacheKey, variant.renderCacheKey);
+
+	variant = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	variant.input = @"TEST";
+	variant.barcodeBorderStyle = MADBarcodeBorderStyleBox;
+	XCTAssertNotEqualObjects(base.renderCacheKey, variant.renderCacheKey);
+
+	variant = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	variant.input = @"TEST";
+	variant.has2dComponentEnabled = YES;
+	variant.has2dComponentType = 1;
+	XCTAssertNotEqualObjects(base.renderCacheKey, variant.renderCacheKey);
 }
 
 #pragma mark - Coding

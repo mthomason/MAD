@@ -11,6 +11,7 @@
 #endif
 
 #import "MADBarcode.h"
+#import "MADBarcodeCache.h"
 #import "MADBarcodeAusPostStandardCustomer.h"
 #import "MADBarcodeAusreDirect.h"
 #import "MADBarcodeAusreply.h"
@@ -74,8 +75,12 @@
 #import "MADBarcodeUspsIntelligentMail.h"
 
 #import <UIKit/UIGraphics.h>
+#import <UIKit/UIImage.h>
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/UIColor.h>
+#import <CoreGraphics/CGColorSpace.h>
+#import <CoreGraphics/CGDataProvider.h>
+#import <CoreGraphics/CGImage.h>
 
 typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 	MADBarcodeDataTypeUnicode = UNICODE_MODE,
@@ -106,6 +111,36 @@ static NSString * const MADBarcodeCodingKeyCenter				= @"center";
 static NSString * const MADBarcodeCodingKeyWidth				= @"width";
 static NSString * const MADBarcodeCodingKeyRotate				= @"rotate";
 
+// zint's raster buffer is 8-bit RGB, three bytes per pixel, row-major and
+// opaque.  A CGImage consumes that layout directly; this class never sets
+// fgcolour/bgcolour, so the bytes already are the black and white the paint
+// loop used to clamp to.
+static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) {
+	if (symbol->bitmap == NULL || symbol->bitmap_width <= 0 || symbol->bitmap_height <= 0) {
+		return nil;
+	}
+
+	const size_t width = (size_t)symbol->bitmap_width;
+	const size_t height = (size_t)symbol->bitmap_height;
+	const size_t bytesPerRow = width * 3;
+	NSData *data = [NSData dataWithBytes:symbol->bitmap length:bytesPerRow * height];
+	CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	CGImageRef cgImage = CGImageCreate(width, height, 8, 24, bytesPerRow, colorSpace,
+									   kCGImageAlphaNone, provider, NULL, false,
+									   kCGRenderingIntentDefault);
+	CGColorSpaceRelease(colorSpace);
+	CGDataProviderRelease(provider);
+	if (cgImage == NULL) {
+		return nil;
+	}
+	UIImage *image = [UIImage imageWithCGImage:cgImage
+										 scale:1.0
+								   orientation:UIImageOrientationUp];
+	CGImageRelease(cgImage);
+	return image;
+}
+
 
 @interface MADBarcode ()
 
@@ -118,6 +153,11 @@ static NSString * const MADBarcodeCodingKeyRotate				= @"rotate";
 @property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 
 + (instancetype)newBarcodeWithType:(MADBarcodeType)type;
+
+// The rendering primitive behind -renderedImage, and the only caller that can
+// see the message from the same zint pass that failed.  MADBarcodeCache
+// declares it too, to keep it off the public header.
+- (UIImage *)renderedImageWithErrorMessage:(NSString **)errorMessage;
 
 @end
 
@@ -462,280 +502,251 @@ static NSString * const MADBarcodeCodingKeyRotate				= @"rotate";
 }
 
 - (void)drawInRect:(CGRect)rect {
-	CGRect originalRect = rect;
+	MADBarcodeCache *cache = [MADBarcodeCache sharedCache];
+	UIImage *image = [cache imageForBarcode:self];
 
-	struct zint_symbol *barcode = ZBarcode_Create();
-	
-	if (barcode == NULL) {
-		[@"No barcode data." drawInRect:rect withAttributes:nil];
-		
-	} else {
-
-		if (self.has2dComponentEnabled == NO) {
-			barcode->symbology = self.barcodeType;
-		} else {
-			switch (self.barcodeType) {
-				case MADBarcodeTypeEANX:
-					barcode->symbology = MADBarcodeTypeEanxCc;
-					break;
-				case MADBarcodeTypeEAN128:
-					barcode->symbology = MADBarcodeTypeEan128Cc;
-					break;
-				case MADBarcodeTypeCODE128:
-					barcode->symbology = MADBarcodeTypeCode128b;
-					break;
-				case MADBarcodeTypeRss14:
-					barcode->symbology = MADBarcodeTypeRss14Cc;
-					break;
-				case MADBarcodeTypeRssLtd:
-					barcode->symbology = MADBarcodeTypeRssLtdCc;
-					break;
-				case MADBarcodeTypeRssExp:
-					barcode->symbology = MADBarcodeTypeRssExpCc;
-					break;
-				case MADBarcodeTypeUpca:
-					barcode->symbology = MADBarcodeTypeUpcaCc;
-					break;
-				case MADBarcodeTypeRss14Stack:
-					barcode->symbology = MADBarcodeTypeRss14StackCc;
-					break;
-				case MADBarcodeTypeRss14StackOmni:
-					barcode->symbology = MADBarcodeTypeRss14OmniCc;
-					break;
-				case MADBarcodeTypeRssExpstack:
-					barcode->symbology = MADBarcodeTypeRssExpstackCc;
-					break;
-				case MADBarcodeTypeTelepenNum:
-					
-					
-					
-				default:
-					break;
-			}
-		}
-		barcode->height = (int)self.barcodeHeight;	// This gives warning: Implicit conversion from 'int' to 'float' may lose precision
-		barcode->border_width = (int)self.barcodeBorderWidth;
-		barcode->whitespace_width = (int)self.whitespaceWidth;
-		barcode->show_hrt = self.humanReadable;
-		barcode->output_options = self.barcodeBorderStyle;
-		barcode->scale = 1.0000f;
-		barcode->input_mode = MADBarcodeDataTypeUnicode;
-		
-		if (barcode->symbology != MADBarcodeTypeMaxicode) {
-			barcode->option_1 = (int)self.option1;
-			barcode->option_2 = (int)self.option2;
-			barcode->option_3 = (int)self.option3;
-		} else {
-		}
-		
-		NSString *primaryInput = nil;
-		BOOL primaryTooLong = NO;
-		if (self.has2dComponentEnabled) {
-
-			primaryInput = self.primaryData;
-			barcode->option_1 = (int)self.has2dComponentType;
-
-			if (self.input.length > 0) {
-				const char *primaryData = self.input.UTF8String;
-				size_t primaryLength = strlen(primaryData);
-				if (primaryLength >= sizeof(barcode->primary)) {
-					// zint's primary buffer is a fixed 128-byte array; copying an
-					// overlong value would run past the end of the struct.
-					NSLog(@"Barcode primary data is %zu bytes; zint's primary buffer holds %zu.",
-						  primaryLength, sizeof(barcode->primary) - 1);
-					primaryTooLong = YES;
-				} else {
-					strcpy(barcode->primary, primaryData);
-				}
-			} else {
-				barcode->primary[0] = '\0';
-			}
-
-		} else {
-			primaryInput = self.input;
-		}
-
-		NSString *inputString = primaryInput.length > 0 ? primaryInput : @"";
-
-		if (barcode->symbology == MADBarcodeTypeTelepenNum) {
-			NSCharacterSet *numeric = [NSCharacterSet decimalDigitCharacterSet].invertedSet;
-			inputString = [[inputString componentsSeparatedByCharactersInSet:numeric] componentsJoinedByString:@""];
-		}
-
-		NSString *errorMessage = nil;
-		int success = ZINT_ERROR_INVALID_DATA;
-		if (primaryTooLong) {
-			errorMessage = NSLocalizedString(@"Barcode error: Primary data too long.", @"Barcode error: Primary data too long.");
-		} else {
-			const char *input = inputString.UTF8String;
-			int inputLen = (int)strlen(input);
-			success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
-			switch (success) {
-				case ZINT_WARN_INVALID_OPTION:
-					errorMessage = NSLocalizedString(@"Warning: Invalid Option.", @"Warning: Invalid Option.");
-					break;
-				case ZINT_ERROR_TOO_LONG:
-					errorMessage = NSLocalizedString(@"Barcode error: To long.", @"Barcode error: To long.");
-					break;
-				case ZINT_ERROR_INVALID_DATA:
-					errorMessage = NSLocalizedString(@"Barcode error: Invalid data.", @"Barcode error: Invalid data.");
-					break;
-				case ZINT_ERROR_INVALID_CHECK:
-					errorMessage = NSLocalizedString(@"Barcode error: Invalid check.", @"Barcode error: Invalid check.");
-					break;
-				case ZINT_ERROR_ENCODING_PROBLEM:
-					errorMessage = NSLocalizedString(@"Barcode error: Encoding problem.", @"Barcode error: Encoding problem.");
-					break;
-				case ZINT_ERROR_FILE_ACCESS:
-					errorMessage = NSLocalizedString(@"Barcode error: File access.", @"Barcode error: File access.");
-					break;
-				case ZINT_ERROR_MEMORY:
-					errorMessage = NSLocalizedString(@"Barcode error: Memory error.", @"Barcode error: Memory error.");
-					break;
-				default:
-					break;
-			}
-		}
-		
-		if (errorMessage) {
-			if (self.showErrorMessage) {
+	if (image == nil) {
+		if (self.showErrorMessage) {
+			NSString *errorMessage = [cache errorMessageForBarcode:self];
+			if (errorMessage != nil) {
 				[errorMessage drawInRect:rect withAttributes:nil];
 			}
 		}
-		
-		CGFloat skewValue, skewValue2;
-		BOOL portrait = barcode->bitmap_height > barcode->bitmap_width;
-		BOOL makeSmaller, makeSmaller2;
-		if (portrait) {
-			makeSmaller = barcode->bitmap_height > rect.size.height;
-			if (makeSmaller) {	//Make bigger
-				skewValue = rect.size.height / barcode->bitmap_height;
-			} else {
-				skewValue = barcode->bitmap_height / rect.size.height;
-			}
-			makeSmaller2 = barcode->bitmap_width > rect.size.width;
-			if (makeSmaller2) {
-				skewValue2 = rect.size.width / barcode->bitmap_width;
-			} else {
-				skewValue2 = barcode->bitmap_width / rect.size.width;
-			}
-
-		} else {
-			makeSmaller = barcode->bitmap_width > rect.size.width;
-			if (makeSmaller) {
-				skewValue = rect.size.width / barcode->bitmap_width;
-			} else {
-				skewValue = barcode->bitmap_width / rect.size.width;
-			}
-			makeSmaller2 = barcode->bitmap_height > rect.size.height;
-			if (makeSmaller2) {
-				skewValue2 = rect.size.height / barcode->bitmap_height;
-			} else {
-				skewValue2 = barcode->bitmap_height / rect.size.height;
-			}
-			
-		}
-		
-		if (makeSmaller && makeSmaller2) {
-			skewValue = MIN(skewValue, skewValue2);
-		} else if (makeSmaller) {
-			skewValue = skewValue;
-		} else if (makeSmaller2) {
-			skewValue = skewValue2;
-		} else {
-			skewValue = self.scale;
-		}
-		
-		CGAffineTransform affineTransformMakeFit = CGAffineTransformMakeScale(skewValue, skewValue);
-		CGAffineTransform affineTransformMoveOriginCenter = CGAffineTransformMakeTranslation(rect.size.width / 2.0000f, rect.size.height / 2.0000f);
-		CGAffineTransform affineTransformRotate90 = CGAffineTransformMakeRotation(self.rotate);
-		
-		//Scale to fit
-		CGContextRef context = UIGraphicsGetCurrentContext();
-
-		CGContextSaveGState(context);
-		//CGContextClipToRect(context, originalRect);
-		
-		if (self.center) {
-			CGRect bitmapRect = CGRectMake(CGPointZero.x, CGPointZero.y, barcode->bitmap_width * skewValue, barcode->bitmap_height * skewValue);
-			CGFloat mx = CGRectGetMidX(bitmapRect);
-			CGFloat my = CGRectGetMidY(bitmapRect);
-			CGPoint bitmapCenter = CGPointMake(mx, my);
-			mx = CGRectGetMidX(originalRect);
-			my = CGRectGetMidY(originalRect);
-			CGPoint origionalCenter = CGPointMake(mx, my);
-			mx = origionalCenter.x - bitmapCenter.x;
-			my = origionalCenter.y - bitmapCenter.y;
-			CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(mx, my);
-			CGContextConcatCTM(context, affineTransformOrigin);
-			
-		}
-
-		//Center, rotate, reset to origin
-		CGContextConcatCTM(context, affineTransformMoveOriginCenter);
-		CGContextConcatCTM(context, affineTransformRotate90);
-
-		rect = CGRectMake(rect.origin.x, rect.origin.y, rect.size.height, rect.size.width);
-		CGAffineTransform affineTransformResetOrigin = CGAffineTransformMakeTranslation(-rect.size.width / 2.0000f, -rect.size.height / 2.0000f);
-		CGAffineTransform affineTransformMoveOffscreenTop = CGAffineTransformMakeTranslation(0, rect.size.height);
-		CGAffineTransform affineTransformReflectDown = CGAffineTransformMakeScale(1.0000f, -1.0000f);
-
-		CGContextConcatCTM(context, affineTransformResetOrigin);
-		
-		//Move up and flip down
-		CGContextConcatCTM(context, affineTransformMoveOffscreenTop);
-		CGContextConcatCTM(context, affineTransformReflectDown);
-		
-			//Right now we are at zero point.  Move to rect.org
-			CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(originalRect.origin.y, originalRect.origin.x);
-			CGContextConcatCTM(context, affineTransformOrigin);
-			/*
-			CGRect bitmapRect = CGRectMake(CGPointZero.x, CGPointZero.y, barcode->bitmap_width * skewValue, barcode->bitmap_height * skewValue);
-			CGFloat mx = CGRectGetMidX(bitmapRect);
-			CGFloat my = CGRectGetMidY(bitmapRect);
-			CGPoint bitmapCenter = CGPointMake(mx, my);
-			mx = CGRectGetMidX(originalRect);
-			my = CGRectGetMidY(originalRect);
-			CGPoint origionalCenter = CGPointMake(mx, my);
-			mx = origionalCenter.x - bitmapCenter.x;
-			my = origionalCenter.y - bitmapCenter.y;
-			CGAffineTransform affineTransformOrigin = CGAffineTransformMakeTranslation(mx, my);
-			CGContextConcatCTM(context, affineTransformMoveOriginCenter);*/
-		//Skew that bitch
-		CGContextConcatCTM(context, affineTransformMakeFit);
-
-		
-		
-		
-		//Draw barcode
-		if (success == 0) {
-			int i = 0;
-			int red, blue, green;
-			for(int row = 0; row < barcode->bitmap_height; row++) {
-				for(int column = 0; column < barcode->bitmap_width; column++) {
-					red = barcode->bitmap[i++];
-					green = barcode->bitmap[i++];
-					blue = barcode->bitmap[i++];
-					if (blue != -1 || red != -1 || green != -1) {
-						CGRect pixelToShade = CGRectMake(row, column, 1, 1);
-						CGContextSetRGBFillColor(context, red, green, blue, 1.0);
-						CGContextFillRect(context, pixelToShade);					   //Draw transparent background
-					} else {
-						CGRect pixelToShade = CGRectMake(row, column, 1, 1);
-						CGContextSetRGBFillColor(context, 1, 1, 1, 1.0);
-						CGContextFillRect(context, pixelToShade);					   //Draw transparent background
-					}
-				}
-			}
-		}
-		
-		ZBarcode_Delete(barcode);
-		barcode = NULL;
-		
-		CGContextRestoreGState(context);
-		
-
+		return;
 	}
+
+	// The paint loop this replaces walked the zint rows and columns and painted
+	// cell (column, row) at (row, column) through a rotate/flip stack whose net
+	// effect was the natural bitmap, scaled to fit, at the rect's origin.  The
+	// image is that natural bitmap, so one draw call reproduces the result.
+	const CGFloat bitmapWidth = image.size.width;
+	const CGFloat bitmapHeight = image.size.height;
+
+	CGFloat skewValue, skewValue2;
+	BOOL makeSmaller, makeSmaller2;
+	BOOL portrait = bitmapHeight > bitmapWidth;
+	if (portrait) {
+		makeSmaller = bitmapHeight > rect.size.height;
+		if (makeSmaller) {
+			skewValue = rect.size.height / bitmapHeight;
+		} else {
+			skewValue = bitmapHeight / rect.size.height;
+		}
+		makeSmaller2 = bitmapWidth > rect.size.width;
+		if (makeSmaller2) {
+			skewValue2 = rect.size.width / bitmapWidth;
+		} else {
+			skewValue2 = bitmapWidth / rect.size.width;
+		}
+	} else {
+		makeSmaller = bitmapWidth > rect.size.width;
+		if (makeSmaller) {
+			skewValue = rect.size.width / bitmapWidth;
+		} else {
+			skewValue = bitmapWidth / rect.size.width;
+		}
+		makeSmaller2 = bitmapHeight > rect.size.height;
+		if (makeSmaller2) {
+			skewValue2 = rect.size.height / bitmapHeight;
+		} else {
+			skewValue2 = bitmapHeight / rect.size.height;
+		}
+	}
+
+	if (makeSmaller && makeSmaller2) {
+		skewValue = MIN(skewValue, skewValue2);
+	} else if (makeSmaller) {
+		// skewValue already holds the fit.
+	} else if (makeSmaller2) {
+		skewValue = skewValue2;
+	} else {
+		skewValue = self.scale;
+	}
+
+	CGFloat x = rect.origin.x;
+	CGFloat y = rect.origin.y;
+	if (self.center) {
+		x += CGRectGetMidX(rect) - (bitmapWidth * skewValue) / 2.0000f;
+		y += CGRectGetMidY(rect) - (bitmapHeight * skewValue) / 2.0000f;
+	}
+
+	[image drawInRect:CGRectMake(x, y, bitmapWidth * skewValue, bitmapHeight * skewValue)];
+}
+
+- (NSString *)renderCacheKey {
+	NSMutableString *key = [NSMutableString string];
+	[key appendFormat:@"%d.%d.%ld.%d.%d.%d.%d.%d.%d.%d.%d.%d.",
+	 (int)self.barcodeType,
+	 self.has2dComponentEnabled ? 1 : 0,
+	 (long)self.has2dComponentType,
+	 (int)self.barcodeBorderStyle,
+	 (int)self.barcodeBorderWidth,
+	 (int)self.barcodeHeight,
+	 (int)self.whitespaceWidth,
+	 self.humanReadable ? 1 : 0,
+	 (int)self.option1,
+	 (int)self.option2,
+	 (int)self.option3,
+	 self.showErrorMessage ? 1 : 0];
+	[key appendFormat:@"%.9g.", (double)self.scale];
+	[key appendFormat:@"%.17g.", (double)self.rotate];
+	[key appendFormat:@"%d.", self.center ? 1 : 0];
+	// Length-prefixed so a value can never forge a field boundary.
+	[key appendFormat:@"%lu:", (unsigned long)self.input.length];
+	[key appendString:self.input ?: @""];
+	[key appendFormat:@".%lu:", (unsigned long)self.primaryData.length];
+	[key appendString:self.primaryData ?: @""];
+	return key;
+}
+
+- (UIImage *)renderedImage {
+	return [self renderedImageWithErrorMessage:NULL];
+}
+
+- (UIImage *)renderedImageWithErrorMessage:(NSString **)errorMessageOut {
+	struct zint_symbol *barcode = ZBarcode_Create();
+
+	if (barcode == NULL) {
+		if (errorMessageOut != NULL) {
+			*errorMessageOut = NSLocalizedString(@"No barcode data.", @"No barcode data.");
+		}
+		return nil;
+	}
+
+	if (self.has2dComponentEnabled == NO) {
+		barcode->symbology = self.barcodeType;
+	} else {
+		switch (self.barcodeType) {
+			case MADBarcodeTypeEANX:
+				barcode->symbology = MADBarcodeTypeEanxCc;
+				break;
+			case MADBarcodeTypeEAN128:
+				barcode->symbology = MADBarcodeTypeEan128Cc;
+				break;
+			case MADBarcodeTypeCODE128:
+				barcode->symbology = MADBarcodeTypeCode128b;
+				break;
+			case MADBarcodeTypeRss14:
+				barcode->symbology = MADBarcodeTypeRss14Cc;
+				break;
+			case MADBarcodeTypeRssLtd:
+				barcode->symbology = MADBarcodeTypeRssLtdCc;
+				break;
+			case MADBarcodeTypeRssExp:
+				barcode->symbology = MADBarcodeTypeRssExpCc;
+				break;
+			case MADBarcodeTypeUpca:
+				barcode->symbology = MADBarcodeTypeUpcaCc;
+				break;
+			case MADBarcodeTypeRss14Stack:
+				barcode->symbology = MADBarcodeTypeRss14StackCc;
+				break;
+			case MADBarcodeTypeRss14StackOmni:
+				barcode->symbology = MADBarcodeTypeRss14OmniCc;
+				break;
+			case MADBarcodeTypeRssExpstack:
+				barcode->symbology = MADBarcodeTypeRssExpstackCc;
+				break;
+			case MADBarcodeTypeTelepenNum:
+			default:
+				break;
+		}
+	}
+	barcode->height = (int)self.barcodeHeight;	// This gives warning: Implicit conversion from 'int' to 'float' may lose precision
+	barcode->border_width = (int)self.barcodeBorderWidth;
+	barcode->whitespace_width = (int)self.whitespaceWidth;
+	barcode->show_hrt = self.humanReadable;
+	barcode->output_options = self.barcodeBorderStyle;
+	barcode->scale = 1.0000f;
+	barcode->input_mode = MADBarcodeDataTypeUnicode;
+
+	if (barcode->symbology != MADBarcodeTypeMaxicode) {
+		barcode->option_1 = (int)self.option1;
+		barcode->option_2 = (int)self.option2;
+		barcode->option_3 = (int)self.option3;
+	}
+
+	NSString *primaryInput = nil;
+	BOOL primaryTooLong = NO;
+	if (self.has2dComponentEnabled) {
+
+		primaryInput = self.primaryData;
+		barcode->option_1 = (int)self.has2dComponentType;
+
+		if (self.input.length > 0) {
+			const char *primaryData = self.input.UTF8String;
+			size_t primaryLength = strlen(primaryData);
+			if (primaryLength >= sizeof(barcode->primary)) {
+				// zint's primary buffer is a fixed 128-byte array; copying an
+				// overlong value would run past the end of the struct.
+				NSLog(@"Barcode primary data is %zu bytes; zint's primary buffer holds %zu.",
+					  primaryLength, sizeof(barcode->primary) - 1);
+				primaryTooLong = YES;
+			} else {
+				strcpy(barcode->primary, primaryData);
+			}
+		} else {
+			barcode->primary[0] = '\0';
+		}
+
+	} else {
+		primaryInput = self.input;
+	}
+
+	NSString *inputString = primaryInput.length > 0 ? primaryInput : @"";
+
+	if (barcode->symbology == MADBarcodeTypeTelepenNum) {
+		NSCharacterSet *numeric = [NSCharacterSet decimalDigitCharacterSet].invertedSet;
+		inputString = [[inputString componentsSeparatedByCharactersInSet:numeric] componentsJoinedByString:@""];
+	}
+
+	NSString *errorMessage = nil;
+	int success = ZINT_ERROR_INVALID_DATA;
+	if (primaryTooLong) {
+		errorMessage = NSLocalizedString(@"Barcode error: Primary data too long.", @"Barcode error: Primary data too long.");
+	} else {
+		const char *input = inputString.UTF8String;
+		int inputLen = (int)strlen(input);
+		success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
+		switch (success) {
+			case ZINT_WARN_INVALID_OPTION:
+				errorMessage = NSLocalizedString(@"Warning: Invalid Option.", @"Warning: Invalid Option.");
+				break;
+			case ZINT_ERROR_TOO_LONG:
+				errorMessage = NSLocalizedString(@"Barcode error: To long.", @"Barcode error: To long.");
+				break;
+			case ZINT_ERROR_INVALID_DATA:
+				errorMessage = NSLocalizedString(@"Barcode error: Invalid data.", @"Barcode error: Invalid data.");
+				break;
+			case ZINT_ERROR_INVALID_CHECK:
+				errorMessage = NSLocalizedString(@"Barcode error: Invalid check.", @"Barcode error: Invalid check.");
+				break;
+			case ZINT_ERROR_ENCODING_PROBLEM:
+				errorMessage = NSLocalizedString(@"Barcode error: Encoding problem.", @"Barcode error: Encoding problem.");
+				break;
+			case ZINT_ERROR_FILE_ACCESS:
+				errorMessage = NSLocalizedString(@"Barcode error: File access.", @"Barcode error: File access.");
+				break;
+			case ZINT_ERROR_MEMORY:
+				errorMessage = NSLocalizedString(@"Barcode error: Memory error.", @"Barcode error: Memory error.");
+				break;
+			default:
+				break;
+		}
+	}
+
+	UIImage *image = nil;
+	if (success == 0 && errorMessage == nil) {
+		image = MADBarcodeImageFromZintBitmap(barcode);
+	}
+
+	ZBarcode_Delete(barcode);
+	barcode = NULL;
+
+	if (errorMessageOut != NULL) {
+		*errorMessageOut = errorMessage;
+	}
+	return image;
 }
 
 + (NSDictionary *)newDictionaryNames {

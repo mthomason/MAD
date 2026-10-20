@@ -48,6 +48,7 @@
 #import <MAD/MTPaper.h>
 #import <MAD/MADActivityItemProviderPdf.h>
 #import <MAD/MADNotificationDidFormatPage.h>
+#import <MADBarcodes/MADBarcodeCache.h>
 
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UIAccessibilityConstants.h>
@@ -695,6 +696,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 			if (strongSelf) {
 				strongSelf->_refreshing = NO;
 			}
+			// The render key covers every input, so this only releases the images
+			// of the run that just ended; it keeps a long editing session from
+			// accumulating a set per refresh.
+			[MADBarcodeCache.sharedCache flush];
 		};
 		[self.refreshQueue addOperation:refresh];
 	}

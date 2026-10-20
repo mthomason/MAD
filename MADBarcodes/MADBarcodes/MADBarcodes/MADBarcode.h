@@ -16,6 +16,7 @@
 #import <MADBarcodes/MADBarcodeSizingMode.h>
 
 @class MADColor;
+@class UIImage;
 
 @interface MADBarcode : NSObject <MADBarcodeProtocol, NSSecureCoding>
 	
@@ -44,6 +45,14 @@
 
 	- (void)drawInRect:(CGRect)rect;
 	- (void)loadSampleData;
+
+	// The encoded symbol as one image, in zint's natural orientation and at one
+	// point per bitmap pixel.  nil when zint refuses the inputs.
+	- (UIImage *)renderedImage;
+
+	// Canonical key over every value that changes what -renderedImage or
+	// -drawInRect: produces, for MADBarcodeCache.
+	- (NSString *)renderCacheKey;
 
 	+ (NSString *)newBarcodeNameForType:(MADBarcodeType)type;
 	+ (NSDictionary *)newDictionaryNames;

@@ -15,6 +15,8 @@
 		4C130A5A1BA8075B0022665F /* MADBarcodeType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A31BA8075B0022665F /* MADBarcodeType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130A601BA8075B0022665F /* MADBarcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309A91BA8075B0022665F /* MADBarcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C130A611BA8075B0022665F /* MADBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309AA1BA8075B0022665F /* MADBarcode.m */; };
+		4CDB7C2000000000000000D3 /* MADBarcodeCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CDB7C2000000000000000D1 /* MADBarcodeCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CDB7C2000000000000000D4 /* MADBarcodeCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7C2000000000000000D2 /* MADBarcodeCache.m */; };
 		4C130A621BA8075B0022665F /* MADBarcodeAusPostStandardCustomer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309AB1BA8075B0022665F /* MADBarcodeAusPostStandardCustomer.h */; };
 		4C130A631BA8075B0022665F /* MADBarcodeAusPostStandardCustomer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309AC1BA8075B0022665F /* MADBarcodeAusPostStandardCustomer.m */; };
 		4C130A641BA8075B0022665F /* MADBarcodeAusreDirect.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1309AD1BA8075B0022665F /* MADBarcodeAusreDirect.h */; };
@@ -179,6 +181,8 @@
 		4C1309A31BA8075B0022665F /* MADBarcodeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeType.h; path = MADBarcodes/MADBarcodeType.h; sourceTree = "<group>"; };
 		4C1309A91BA8075B0022665F /* MADBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcode.h; path = MADBarcodes/MADBarcode.h; sourceTree = "<group>"; };
 		4C1309AA1BA8075B0022665F /* MADBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBarcode.m; path = MADBarcodes/MADBarcode.m; sourceTree = "<group>"; };
+		4CDB7C2000000000000000D1 /* MADBarcodeCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeCache.h; path = MADBarcodes/MADBarcodeCache.h; sourceTree = "<group>"; };
+		4CDB7C2000000000000000D2 /* MADBarcodeCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBarcodeCache.m; path = MADBarcodes/MADBarcodeCache.m; sourceTree = "<group>"; };
 		4C1309AB1BA8075B0022665F /* MADBarcodeAusPostStandardCustomer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeAusPostStandardCustomer.h; path = MADBarcodes/MADBarcodeAusPostStandardCustomer.h; sourceTree = "<group>"; };
 		4C1309AC1BA8075B0022665F /* MADBarcodeAusPostStandardCustomer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MADBarcodeAusPostStandardCustomer.m; path = MADBarcodes/MADBarcodeAusPostStandardCustomer.m; sourceTree = "<group>"; };
 		4C1309AD1BA8075B0022665F /* MADBarcodeAusreDirect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeAusreDirect.h; path = MADBarcodes/MADBarcodeAusreDirect.h; sourceTree = "<group>"; };
@@ -399,6 +403,8 @@
 				4C1309A31BA8075B0022665F /* MADBarcodeType.h */,
 				4C1309A91BA8075B0022665F /* MADBarcode.h */,
 				4C1309AA1BA8075B0022665F /* MADBarcode.m */,
+				4CDB7C2000000000000000D1 /* MADBarcodeCache.h */,
+				4CDB7C2000000000000000D2 /* MADBarcodeCache.m */,
 				4C1309AB1BA8075B0022665F /* MADBarcodeAusPostStandardCustomer.h */,
 				4C1309AC1BA8075B0022665F /* MADBarcodeAusPostStandardCustomer.m */,
 				4C1309AD1BA8075B0022665F /* MADBarcodeAusreDirect.h */,
@@ -609,6 +615,7 @@
 			files = (
 				4C13096E1BA8068B0022665F /* MADBarcodes.h in Headers */,
 				4C130A601BA8075B0022665F /* MADBarcode.h in Headers */,
+				4CDB7C2000000000000000D3 /* MADBarcodeCache.h in Headers */,
 				4C130ACC1BA8075B0022665F /* MADBarcodeProtocol.h in Headers */,
 				4C130A841BA8075B0022665F /* MADBarcodeCode39Iso16388.h in Headers */,
 				4C130A9A1BA8075B0022665F /* MADBarcodeDataMatrixIso16022.h in Headers */,
@@ -825,6 +832,7 @@
 				4C130A971BA8075B0022665F /* MADBarcodeDatabarStacked.m in Sources */,
 				4C130A8D1BA8075B0022665F /* MADBarcodeCodeOne.m in Sources */,
 				4C130A611BA8075B0022665F /* MADBarcode.m in Sources */,
+				4CDB7C2000000000000000D4 /* MADBarcodeCache.m in Sources */,
 				4C130A6B1BA8075B0022665F /* MADBarcodeAztec.m in Sources */,
 				4C130A991BA8075B0022665F /* MADBarcodeDatabarStackedOmnidirectional.m in Sources */,
 				4C130AD41BA8075B0022665F /* MADBarcodeTelepenNumeric.m in Sources */,
