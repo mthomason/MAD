@@ -1842,6 +1842,104 @@ reference to "BUGS.md, the X entry" still lands.
 - **Test:** the cache write paths in `MADDatabaseSqlite3DatabaseTests`; the Linux build is
   the cross-platform gate for the libc call.
 
+## MADBarcodes
+
+### MADBarcode's type-name dictionary has a duplicate key
+- **Status:** Fixed 2026-10-20.
+- **What:** The dictionary literal built in `MADBarcode.m` uses both
+  `@(MADBarcodeTypeEan14)` (`:693`) and `@BARCODE_EAN14` (`:719`); the enum aliases the zint
+  macro, so both box the value 72 and the second entry silently replaces the first --
+  "Code 128 (EAN-14)" can never be returned.
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MADBarcode.m:693,719`.
+- **Evidence:** `-Wobjc-dictionary-duplicate-keys`.
+- **Now:** the redundant `@(MADBarcodeTypeEan14)` entry is deleted, so the surviving
+  `@BARCODE_EAN14` entry supplies the type's single name, "EAN-14".
+- **Test:** `MADBarcodeTests testDictionaryNamesAreWellFormed`.
+
+### Two symbology classes initialize with another class's type
+- **Status:** Fixed 2026-10-20.
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MADBarcodeQrCodeIso18004.m` (init and
+  `+type` both return `MADBarcodeTypeOneCode`) and
+  `MADBarcodes/MADBarcodes/MADBarcodes/MADBarcodeCode128Iso15417.m:145-161`
+  (`MADBarcodeCode128Ean128`'s init assigns `[MADBarcodeCode128Hibc type]` -- HIBC Code
+  128 -- while its `+type` says `MADBarcodeTypeEAN128`)
+- **Behavior:** `+[MADBarcode newBarcodeWithType:MADBarcodeTypeQrcode]` builds an
+  `MADBarcodeQrCodeIso18004` whose `barcodeType` is `MADBarcodeTypeOneCode`; the factory's
+  `MADBarcodeTypeEAN128` case builds an `MADBarcodeCode128Ean128` whose `barcodeType` is
+  `MADBarcodeTypeHibc128`.  `-drawInRect:` passes the instance's type straight to
+  `barcode->symbology`, so each object draws a symbol other than the one it is named
+  for -- QR code → USPS Intelligent Mail, GS1-128 → HIBC Code 128.
+- **Why it matters:** Any feature that asks for a QR code or a GS1-128 barcode gets the
+  wrong symbology and the wrong payload validation.  The exhaustive factory matrix found
+  the second one; the other 63 mapped types round-trip correctly.
+- **Test:** `MADBarcodeSymbologyTests testQrCodeClassClaimsTheOneCodeType` and
+  `testEan128ClassClaimsTheHibcType`, with
+  `testEveryMappedTypeRoundTripsExceptTheTwoKnownMismatches` covering the rest.
+- **Now:** `MADBarcodeQrCodeIso18004 +type` returns `MADBarcodeTypeQrcode`, and
+  `MADBarcodeCode128Ean128 -init` assigns `[MADBarcodeCode128Ean128 type]`.  `+type` is
+  also declared on `MADBarcode` (the base answers 0), so a picker can ask a class for its
+  type without a private-selector warning.  The two pinning tests became
+  `testQrCodeClassClaimsTheQrType` and `testEan128ClassClaimsTheEan128Type`;
+  `testEveryMappedTypeRoundTripsExceptTheTwoKnownMismatches` dropped its skip and became
+  `testEveryMappedTypeRoundTrips`, which now covers all 65 mapped types.
+
+### `MADBarcodeInternationalStandardBookNumberIsbn +type` calls itself
+- **Status:** Fixed 2026-10-20.
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MADBarcodeInternationalStandardBookNumberIsbn.m`
+- **Behavior:** The class method's body is
+  `return [MADBarcodeInternationalStandardBookNumberIsbn type];` -- itself, so any call
+  recurses until the stack is exhausted.  The initializer is fine (it assigns
+  `MADBarcodeTypeIsbnX` directly), so the factory path works; only the class-method
+  accessor is a trap.
+- **Why it matters:** A generic caller enumerating symbology classes for their `+type`
+  (the obvious way to build a picker) takes the process down on the ISBN entry.
+- **Test:** `MADBarcodeSymbologyTests testIsbnClassInitializesToItsOwnType` exercises the
+  factory path only; `+type` is deliberately not called.
+- **Now:** `+type` returns `MADBarcodeTypeIsbnX`.  The factory-path test is unchanged, and
+  the new `MADBarcodeSymbologyTests testIsbnClassTypeReturnsItsOwnType` calls `+type`
+  directly.
+
+### `MADBarcode`'s NSCoding round trip loses everything
+- **Status:** Fixed 2026-10-20.
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MADBarcode.m:376-408`
+- **Behavior:** `-encodeWithCoder:` writes every property under the same empty key
+  (`@""`), so only the last value survives in the archive; `-initWithCoder:` ignores the
+  decoder entirely and just calls `[super init]`.  A decoded barcode is therefore a
+  default instance of the right class -- not even the subclass's `-init` defaults apply,
+  because `[super init]` skips them.  The class conforms to `NSCoding`, not
+  `NSSecureCoding`, so secure archiving rejects it outright.
+- **Why it matters:** Nothing archives a barcode today, so this is latent; it would bite
+  the first time one is persisted.
+- **Test:** `MADBarcodeTests testNSCodingRoundTripLosesTheState`.
+- **Now:** every `MADBarcodeProtocol` property, the two inputs (`input`, `primaryData`),
+  and the subclass state (`name`, `detailsSegueIdentifer`, `has2dComponent`,
+  `hasOptionalInput`, `center`, `width`, `has2dComponentType`, `rotate`) are encoded
+  under their own string keys and decoded back; `-initWithCoder:` dispatches through
+  `[self init]` so the subclass's own initializer runs before the archived values are
+  applied.  The class declares
+  `NSSecureCoding` and decodes strings with `-decodeObjectOfClass:forKey:`.  A workspace
+  grep found no archiver use with a barcode object, so the old format needs no
+  compatibility path.  The pinning test became
+  `testNSCodingRoundTripPreservesTheState`.
+
+### `MADBarcode -drawInRect:` copies user input into `primary[128]` unchecked
+- **Status:** Fixed 2026-10-20.
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MADBarcode.m:492`
+  (`strcpy(barcode->primary, primaryData)`), against
+  `Compressor/library/zint/include/zint.h:121` (`char primary[128]`)
+- **Behavior:** When `has2dComponentEnabled` is on, the user's second input is copied
+  with `strcpy` into zint's fixed 128-byte `primary` buffer -- no length check ahead of
+  it, unlike the main payload which goes through `ZBarcode_Encode_and_Buffer`'s
+  length-taking API.
+- **Why it matters:** A primary-data string of 128 bytes or more overruns the struct.
+  Not exercised in tests: the failure mode is memory corruption, not an assertion.
+- **Test:** none, deliberately.
+- **Now:** the UTF-8 length is compared with `sizeof(barcode->primary)` before the copy;
+  an overlong value is logged, skips `ZBarcode_Encode_and_Buffer`, and takes the
+  ordinary error path -- the error text is drawn when `showErrorMessage` is on and no
+  symbol is drawn either way.  `MADBarcodeTests testOverlongPrimaryDataIsRefused` covers
+  both settings with a 200-byte input.
+
 ## MADMySQL
 
 ### The fetch corrected a column's type from its first row

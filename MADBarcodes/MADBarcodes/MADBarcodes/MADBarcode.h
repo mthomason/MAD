@@ -17,7 +17,7 @@
 
 @class MADColor;
 
-@interface MADBarcode : NSObject <MADBarcodeProtocol>
+@interface MADBarcode : NSObject <MADBarcodeProtocol, NSSecureCoding>
 	
 	+ (instancetype)newBarcode:(id <MADBarcodeProtocol>)documentObject;
 	+ (instancetype)newBarcode:(id <MADBarcodeProtocol>)documentObject
@@ -25,6 +25,7 @@
 						input2:(NSString *)input2;
 
 	+ (instancetype)newBarcodeWithType:(MADBarcodeType)type;
+	+ (MADBarcodeType)type;
 
 	@property (nonatomic, readonly, strong) NSString *name;
 	@property (nonatomic, readonly, strong) NSString *detailsSegueIdentifer;

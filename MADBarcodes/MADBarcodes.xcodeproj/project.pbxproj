@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4C13096E1BA8068B0022665F /* MADBarcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C13096D1BA8068B0022665F /* MADBarcodes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C1309751BA8068B0022665F /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C13096A1BA8068B0022665F /* MADBarcodes.framework */; };
-		4C13097A1BA8068B0022665F /* MADBarcodesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C1309791BA8068B0022665F /* MADBarcodesTests.m */; };
 		4CDB7C1000000000000000A1 /* MADBarcodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7C1000000000000000B1 /* MADBarcodeTests.m */; };
 		4CDB7C1100000000000000A1 /* MADBarcodeSymbologyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7C1100000000000000B1 /* MADBarcodeSymbologyTests.m */; };
 		4CDB7C1200000000000000A1 /* MADBarcodeViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7C1200000000000000B1 /* MADBarcodeViewTests.m */; };
@@ -173,7 +172,6 @@
 		4C13096D1BA8068B0022665F /* MADBarcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADBarcodes.h; sourceTree = "<group>"; };
 		4C13096F1BA8068B0022665F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C1309741BA8068B0022665F /* MADBarcodesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADBarcodesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4C1309791BA8068B0022665F /* MADBarcodesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADBarcodesTests.m; sourceTree = "<group>"; };
 		4CDB7C1000000000000000B1 /* MADBarcodeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADBarcodeTests.m; sourceTree = "<group>"; };
 		4CDB7C1100000000000000B1 /* MADBarcodeSymbologyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADBarcodeSymbologyTests.m; sourceTree = "<group>"; };
 		4CDB7C1200000000000000B1 /* MADBarcodeViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADBarcodeViewTests.m; sourceTree = "<group>"; };
@@ -324,7 +322,6 @@
 		4CA8B2F42DD5E4CA001E27B3 /* pnglibconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pnglibconf.h; sourceTree = "<group>"; };
 		4CBF04372E8517A300812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CC909001D0FC4FC007A1C75 /* MADBarcodeSizingMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeSizingMode.h; path = MADBarcodes/MADBarcodeSizingMode.h; sourceTree = "<group>"; };
-		4CC909021D0FC53E007A1C75 /* MADBarcodeDataInputType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADBarcodeDataInputType.h; sourceTree = "<group>"; };
 		4CF46DD41CF3184600D93406 /* MADBarcodeBorderStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MADBarcodeBorderStyle.h; path = MADBarcodes/MADBarcodeBorderStyle.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -387,7 +384,6 @@
 		4C1309781BA8068B0022665F /* MADBarcodesTests */ = {
 			isa = PBXGroup;
 			children = (
-				4C1309791BA8068B0022665F /* MADBarcodesTests.m */,
 				4CDB7C1000000000000000B1 /* MADBarcodeTests.m */,
 				4CDB7C1100000000000000B1 /* MADBarcodeSymbologyTests.m */,
 				4CDB7C1200000000000000B1 /* MADBarcodeViewTests.m */,
@@ -530,7 +526,6 @@
 				4C130A271BA8075B0022665F /* MADBarcodeView.m */,
 				4CF46DD41CF3184600D93406 /* MADBarcodeBorderStyle.h */,
 				4CC909001D0FC4FC007A1C75 /* MADBarcodeSizingMode.h */,
-				4CC909021D0FC53E007A1C75 /* MADBarcodeDataInputType.h */,
 			);
 			name = MADBarcodes;
 			sourceTree = "<group>";
@@ -877,7 +872,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C13097A1BA8068B0022665F /* MADBarcodesTests.m in Sources */,
 				4CDB7C1000000000000000A1 /* MADBarcodeTests.m in Sources */,
 				4CDB7C1100000000000000A1 /* MADBarcodeSymbologyTests.m in Sources */,
 				4CDB7C1200000000000000A1 /* MADBarcodeViewTests.m in Sources */,

@@ -33,7 +33,7 @@
 }
 
 + (MADBarcodeType)type {
-	return [MADBarcodeInternationalStandardBookNumberIsbn type];
+	return MADBarcodeTypeIsbnX;
 }
 
 - (void)loadSampleData {

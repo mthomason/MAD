@@ -35,7 +35,7 @@
 }
 
 + (MADBarcodeType)type {
-	return MADBarcodeTypeOneCode;
+	return MADBarcodeTypeQrcode;
 }
 
 - (MADBarcodeSizingMode)sizingMode {

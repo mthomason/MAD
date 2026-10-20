@@ -146,8 +146,8 @@
 
 - (instancetype)init {
 	if (self = [super init]) {
-		
-		self.barcodeType = [MADBarcodeCode128Hibc type];
+
+		self.barcodeType = [MADBarcodeCode128Ean128 type];
 		self.name = @"Code 128 (GS1-128)";
 		self.has2dComponent = YES;
 		self.hasOptionalInput = NO;

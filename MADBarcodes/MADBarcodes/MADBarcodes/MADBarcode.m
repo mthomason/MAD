@@ -83,6 +83,29 @@ typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 	MADBarcodeDataTypeGs1 = GS1_MODE
 };
 
+static NSString * const MADBarcodeCodingKeyName					= @"name";
+static NSString * const MADBarcodeCodingKeyDetailsSegue			= @"detailsSegueIdentifer";
+static NSString * const MADBarcodeCodingKeyBarcodeType			= @"barcodeType";
+static NSString * const MADBarcodeCodingKeyBorderStyle			= @"barcodeBorderStyle";
+static NSString * const MADBarcodeCodingKeyWhitespaceWidth		= @"whitespaceWidth";
+static NSString * const MADBarcodeCodingKeyBorderWidth			= @"barcodeBorderWidth";
+static NSString * const MADBarcodeCodingKeyHeight				= @"barcodeHeight";
+static NSString * const MADBarcodeCodingKeyHumanReadable		= @"humanReadable";
+static NSString * const MADBarcodeCodingKeyOption1				= @"option1";
+static NSString * const MADBarcodeCodingKeyOption2				= @"option2";
+static NSString * const MADBarcodeCodingKeyOption3				= @"option3";
+static NSString * const MADBarcodeCodingKeyShowErrorMessage		= @"showErrorMessage";
+static NSString * const MADBarcodeCodingKeyScale				= @"scale";
+static NSString * const MADBarcodeCodingKeyHas2dComponentEnabled = @"has2dComponentEnabled";
+static NSString * const MADBarcodeCodingKeyHas2dComponent		= @"has2dComponent";
+static NSString * const MADBarcodeCodingKeyHasOptionalInput		= @"hasOptionalInput";
+static NSString * const MADBarcodeCodingKeyHas2dComponentType	= @"has2dComponentType";
+static NSString * const MADBarcodeCodingKeyInput				= @"input";
+static NSString * const MADBarcodeCodingKeyPrimaryData			= @"primaryData";
+static NSString * const MADBarcodeCodingKeyCenter				= @"center";
+static NSString * const MADBarcodeCodingKeyWidth				= @"width";
+static NSString * const MADBarcodeCodingKeyRotate				= @"rotate";
+
 
 @interface MADBarcode ()
 
@@ -161,6 +184,10 @@ typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 	barcode.input = input1.copy;
 	barcode.primaryData = input2.copy;
 	return barcode;
+}
+
++ (MADBarcodeType)type {
+	return (MADBarcodeType)0;
 }
 
 + (instancetype)newBarcodeWithType:(MADBarcodeType)type {
@@ -373,38 +400,65 @@ typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 	return result;
 }
 
++ (BOOL)supportsSecureCoding {
+	return YES;
+}
+
 - (instancetype)initWithCoder:(NSCoder *)coder {
-	if (self = [super init]) {
-		
+	if (self = [self init]) {
+		_name = [[coder decodeObjectOfClass:[NSString class]
+									 forKey:MADBarcodeCodingKeyName] copy];
+		_detailsSegueIdentifer = [[coder decodeObjectOfClass:[NSString class]
+													 forKey:MADBarcodeCodingKeyDetailsSegue] copy];
+		_barcodeType = (int16_t)[coder decodeIntegerForKey:MADBarcodeCodingKeyBarcodeType];
+		_barcodeBorderStyle = (int16_t)[coder decodeIntegerForKey:MADBarcodeCodingKeyBorderStyle];
+		_whitespaceWidth = (int16_t)[coder decodeIntegerForKey:MADBarcodeCodingKeyWhitespaceWidth];
+		_barcodeBorderWidth = (int16_t)[coder decodeIntegerForKey:MADBarcodeCodingKeyBorderWidth];
+		_barcodeHeight = (int16_t)[coder decodeIntegerForKey:MADBarcodeCodingKeyHeight];
+		_humanReadable = [coder decodeBoolForKey:MADBarcodeCodingKeyHumanReadable];
+		_option1 = (int16_t)[coder decodeIntegerForKey:MADBarcodeCodingKeyOption1];
+		_option2 = (int16_t)[coder decodeIntegerForKey:MADBarcodeCodingKeyOption2];
+		_option3 = (int16_t)[coder decodeIntegerForKey:MADBarcodeCodingKeyOption3];
+		_showErrorMessage = [coder decodeBoolForKey:MADBarcodeCodingKeyShowErrorMessage];
+		_scale = [coder decodeFloatForKey:MADBarcodeCodingKeyScale];
+		_has2dComponentEnabled = [coder decodeBoolForKey:MADBarcodeCodingKeyHas2dComponentEnabled];
+		_has2dComponent = [coder decodeBoolForKey:MADBarcodeCodingKeyHas2dComponent];
+		_hasOptionalInput = [coder decodeBoolForKey:MADBarcodeCodingKeyHasOptionalInput];
+		_has2dComponentType = [coder decodeIntegerForKey:MADBarcodeCodingKeyHas2dComponentType];
+		_input = [[coder decodeObjectOfClass:[NSString class]
+									  forKey:MADBarcodeCodingKeyInput] copy];
+		_primaryData = [[coder decodeObjectOfClass:[NSString class]
+											forKey:MADBarcodeCodingKeyPrimaryData] copy];
+		_center = [coder decodeBoolForKey:MADBarcodeCodingKeyCenter];
+		_width = [coder decodeIntegerForKey:MADBarcodeCodingKeyWidth];
+		_rotate = [coder decodeDoubleForKey:MADBarcodeCodingKeyRotate];
 	}
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	
-	[coder encodeFloat:		self.rotate					forKey:@""];	// This gives Warning: Implicit conversion loses floating-point precision: 'CGFloat' (aka 'double') to 'float'
-	[coder encodeObject:	self.name					forKey:@""];
-	[coder encodeInteger:	self.barcodeType			forKey:@""];
-	[coder encodeBool:		self.has2dComponent			forKey:@""];
-	[coder encodeBool:		self.hasOptionalInput		forKey:@""];
-	[coder encodeObject:	self.detailsSegueIdentifer	forKey:@""];
-	[coder encodeObject:	self.primaryData			forKey:@""];
-	[coder encodeInteger:	self.option1				forKey:@""];
-	[coder encodeInteger:	self.option2				forKey:@""];
-	[coder encodeInteger:	self.option3				forKey:@""];
-	[coder encodeBool:		self.center					forKey:@""];
-	[coder encodeObject:	self.input					forKey:@""];
-
-	[coder encodeInteger:	self.barcodeHeight			forKey:@""];
-	[coder encodeInteger:	self.width					forKey:@""];
-	[coder encodeInteger:	self.barcodeBorderWidth		forKey:@""];
-	[coder encodeInteger:	self.whitespaceWidth		forKey:@""];
-	[coder encodeBool:		self.humanReadable			forKey:@""];
-	[coder encodeInteger:	self.barcodeBorderStyle		forKey:@""];
-	[coder encodeBool:		self.showErrorMessage		forKey:@""];
-	[coder encodeBool:		self.has2dComponentEnabled	forKey:@""];
-	[coder encodeInteger:	self.has2dComponentType		forKey:@""];
-	[coder encodeFloat:		self.scale					forKey:@""];
+	[coder encodeObject:	self.name					forKey:MADBarcodeCodingKeyName];
+	[coder encodeObject:	self.detailsSegueIdentifer	forKey:MADBarcodeCodingKeyDetailsSegue];
+	[coder encodeInteger:	self.barcodeType			forKey:MADBarcodeCodingKeyBarcodeType];
+	[coder encodeInteger:	self.barcodeBorderStyle		forKey:MADBarcodeCodingKeyBorderStyle];
+	[coder encodeInteger:	self.whitespaceWidth		forKey:MADBarcodeCodingKeyWhitespaceWidth];
+	[coder encodeInteger:	self.barcodeBorderWidth		forKey:MADBarcodeCodingKeyBorderWidth];
+	[coder encodeInteger:	self.barcodeHeight			forKey:MADBarcodeCodingKeyHeight];
+	[coder encodeBool:		self.humanReadable			forKey:MADBarcodeCodingKeyHumanReadable];
+	[coder encodeInteger:	self.option1				forKey:MADBarcodeCodingKeyOption1];
+	[coder encodeInteger:	self.option2				forKey:MADBarcodeCodingKeyOption2];
+	[coder encodeInteger:	self.option3				forKey:MADBarcodeCodingKeyOption3];
+	[coder encodeBool:		self.showErrorMessage		forKey:MADBarcodeCodingKeyShowErrorMessage];
+	[coder encodeFloat:		self.scale					forKey:MADBarcodeCodingKeyScale];
+	[coder encodeBool:		self.has2dComponentEnabled	forKey:MADBarcodeCodingKeyHas2dComponentEnabled];
+	[coder encodeBool:		self.has2dComponent			forKey:MADBarcodeCodingKeyHas2dComponent];
+	[coder encodeBool:		self.hasOptionalInput		forKey:MADBarcodeCodingKeyHasOptionalInput];
+	[coder encodeInteger:	self.has2dComponentType		forKey:MADBarcodeCodingKeyHas2dComponentType];
+	[coder encodeObject:	self.input					forKey:MADBarcodeCodingKeyInput];
+	[coder encodeObject:	self.primaryData			forKey:MADBarcodeCodingKeyPrimaryData];
+	[coder encodeBool:		self.center					forKey:MADBarcodeCodingKeyCenter];
+	[coder encodeInteger:	self.width					forKey:MADBarcodeCodingKeyWidth];
+	[coder encodeDouble:	self.rotate					forKey:MADBarcodeCodingKeyRotate];
 }
 
 - (void)drawInRect:(CGRect)rect {
@@ -459,13 +513,6 @@ typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 					break;
 			}
 		}
-		//NSString *forgroundColor =  (self.forgroundColor).hexStringValue;
-		//NSString *backgroundColor = (self.backgroundColor).hexStringValue;
-		//const char *fgcolor = [forgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
-		//const char *bgcolor = [backgroundColor cStringUsingEncoding:NSUTF8StringEncoding];
-		//strcpy(barcode->fgcolour, fgcolor);
-		//strcpy(barcode->bgcolour, bgcolor);
-		
 		barcode->height = (int)self.barcodeHeight;	// This gives warning: Implicit conversion from 'int' to 'float' may lose precision
 		barcode->border_width = (int)self.barcodeBorderWidth;
 		barcode->whitespace_width = (int)self.whitespaceWidth;
@@ -482,57 +529,72 @@ typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 		}
 		
 		NSString *primaryInput = nil;
+		BOOL primaryTooLong = NO;
 		if (self.has2dComponentEnabled) {
-			
+
 			primaryInput = self.primaryData;
 			barcode->option_1 = (int)self.has2dComponentType;
-			
+
 			if (self.input.length > 0) {
 				const char *primaryData = self.input.UTF8String;
-				strcpy(barcode->primary, primaryData);
+				size_t primaryLength = strlen(primaryData);
+				if (primaryLength >= sizeof(barcode->primary)) {
+					// zint's primary buffer is a fixed 128-byte array; copying an
+					// overlong value would run past the end of the struct.
+					NSLog(@"Barcode primary data is %zu bytes; zint's primary buffer holds %zu.",
+						  primaryLength, sizeof(barcode->primary) - 1);
+					primaryTooLong = YES;
+				} else {
+					strcpy(barcode->primary, primaryData);
+				}
 			} else {
-				strcpy(barcode->primary, "");
+				barcode->primary[0] = '\0';
 			}
 
 		} else {
 			primaryInput = self.input;
 		}
-		
+
 		NSString *inputString = primaryInput.length > 0 ? primaryInput : @"";
-		
+
 		if (barcode->symbology == MADBarcodeTypeTelepenNum) {
 			NSCharacterSet *numeric = [NSCharacterSet decimalDigitCharacterSet].invertedSet;
 			inputString = [[inputString componentsSeparatedByCharactersInSet:numeric] componentsJoinedByString:@""];
 		}
 
-		const char *input = inputString.UTF8String;
-		int inputLen = (int)strlen(input);
-		int success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
 		NSString *errorMessage = nil;
-		switch (success) {
-			case ZINT_WARN_INVALID_OPTION:
-				errorMessage = NSLocalizedString(@"Warning: Invalid Option.", @"Warning: Invalid Option.");
-				break;
-			case ZINT_ERROR_TOO_LONG:
-				errorMessage = NSLocalizedString(@"Barcode error: To long.", @"Barcode error: To long.");
-				break;
-			case ZINT_ERROR_INVALID_DATA:
-				errorMessage = NSLocalizedString(@"Barcode error: Invalid data.", @"Barcode error: Invalid data.");
-				break;
-			case ZINT_ERROR_INVALID_CHECK:
-				errorMessage = NSLocalizedString(@"Barcode error: Invalid check.", @"Barcode error: Invalid check.");
-				break;
-			case ZINT_ERROR_ENCODING_PROBLEM:
-				errorMessage = NSLocalizedString(@"Barcode error: Encoding problem.", @"Barcode error: Encoding problem.");
-				break;
-			case ZINT_ERROR_FILE_ACCESS:
-				errorMessage = NSLocalizedString(@"Barcode error: File access.", @"Barcode error: File access.");
-				break;
-			case ZINT_ERROR_MEMORY:
-				errorMessage = NSLocalizedString(@"Barcode error: Memory error.", @"Barcode error: Memory error.");
-				break;
-			default:
-				break;
+		int success = ZINT_ERROR_INVALID_DATA;
+		if (primaryTooLong) {
+			errorMessage = NSLocalizedString(@"Barcode error: Primary data too long.", @"Barcode error: Primary data too long.");
+		} else {
+			const char *input = inputString.UTF8String;
+			int inputLen = (int)strlen(input);
+			success = ZBarcode_Encode_and_Buffer(barcode, (unsigned char *)input, inputLen, 0);
+			switch (success) {
+				case ZINT_WARN_INVALID_OPTION:
+					errorMessage = NSLocalizedString(@"Warning: Invalid Option.", @"Warning: Invalid Option.");
+					break;
+				case ZINT_ERROR_TOO_LONG:
+					errorMessage = NSLocalizedString(@"Barcode error: To long.", @"Barcode error: To long.");
+					break;
+				case ZINT_ERROR_INVALID_DATA:
+					errorMessage = NSLocalizedString(@"Barcode error: Invalid data.", @"Barcode error: Invalid data.");
+					break;
+				case ZINT_ERROR_INVALID_CHECK:
+					errorMessage = NSLocalizedString(@"Barcode error: Invalid check.", @"Barcode error: Invalid check.");
+					break;
+				case ZINT_ERROR_ENCODING_PROBLEM:
+					errorMessage = NSLocalizedString(@"Barcode error: Encoding problem.", @"Barcode error: Encoding problem.");
+					break;
+				case ZINT_ERROR_FILE_ACCESS:
+					errorMessage = NSLocalizedString(@"Barcode error: File access.", @"Barcode error: File access.");
+					break;
+				case ZINT_ERROR_MEMORY:
+					errorMessage = NSLocalizedString(@"Barcode error: Memory error.", @"Barcode error: Memory error.");
+					break;
+				default:
+					break;
+			}
 		}
 		
 		if (errorMessage) {
@@ -690,7 +752,6 @@ typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 				   @BARCODE_CODE11			: @"Code 11",
 				   @BARCODE_CODE128			: @"Code 128 (ISO 15417)",
 				   @(MADBarcodeTypeCode128b)	: @"Code 128 (Subset C Suppression)",
-				   @(MADBarcodeTypeEan14)	: @"Code 128 (EAN-14)",
 				   @(MADBarcodeTypeHibc128)	: @"Code 128 (HBIC)",
 				   @(MADBarcodeTypeEAN128)	: @"Code 128 (HBIC)",
 				   @BARCODE_CODE16K			: @"Code 16k",
@@ -716,7 +777,7 @@ typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 				   @BARCODE_DPIDENT			: @"Deutsche Post Identcode",
 				   @BARCODE_DPLEIT			: @"Deutsche Post Leitcode",
 				   @BARCODE_KIX				: @"Dutch Post KIX",
-				   @BARCODE_EAN14			: @"EAN-14",		// This gives warning: Duplicate key in dictionary literal
+				   @BARCODE_EAN14			: @"EAN-14",
 				   @BARCODE_EANX			: @"European Article Number (EAN)",
 				   @BARCODE_FIM				: @"Facing Identification Mark (FIM)",
 				   @BARCODE_FLAT			: @"Flattermarken",
@@ -757,28 +818,7 @@ typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 }
 
 - (void)loadSampleData {
-	
-}
 
-/*+ (NSString *)hexStringValueStatic:(UIColor)c {
-	NSAssert(self.canProvideRGBComponents, @"Must be an RGB color to use -hexStringValue");
-	NSString *result;
-	
-	switch (self.colorSpaceModel) {
-		case kCGColorSpaceModelRGB:
-			result = [[NSString alloc] initWithFormat:@"%02X%02X%02X",
-					  c.redByte, c.greenByte, c.blueByte];
-			break;
-			
-		case kCGColorSpaceModelMonochrome:
-			result = [[NSString alloc] initWithFormat:@"%02X%02X%02X",
-					  c.whiteByte, c.whiteByte, c.whiteByte];
-			break;
-			
-		default:
-			result = nil;
-	}
-	return result;
-}*/
+}
 
 @end

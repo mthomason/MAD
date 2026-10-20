@@ -205,29 +205,76 @@
 	XCTAssertTrue([self drawBarcode:barcode intoSize:CGSizeMake(220, 110)]);
 }
 
+- (void)testOverlongPrimaryDataIsRefused {
+	// zint's primary buffer is 128 bytes; a longer second input must not be copied,
+	// must not encode a symbol, and must follow the ordinary error path.
+	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeEAN128];
+	barcode.has2dComponentEnabled = YES;
+	barcode.has2dComponentType = 0;
+	barcode.input = [@"A" stringByPaddingToLength:200 withString:@"A" startingAtIndex:0];
+
+	barcode.showErrorMessage = NO;
+	XCTAssertFalse([self drawBarcode:barcode intoSize:CGSizeMake(220, 110)],
+				   @"an overlong primary value must not produce a symbol");
+
+	barcode.showErrorMessage = YES;
+	XCTAssertTrue([self drawBarcode:barcode intoSize:CGSizeMake(220, 110)],
+				  @"the error text must be drawn when showErrorMessage is on");
+}
+
 #pragma mark - Coding
 
-- (void)testNSCodingRoundTripLosesTheState {
-	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+- (void)testNSCodingRoundTripPreservesTheState {
+	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeQrcode];
 	barcode.input = @"TEST";
+	barcode.primaryData = @"2D";
 	barcode.barcodeHeight = 99;
+	barcode.barcodeBorderWidth = 3;
+	barcode.barcodeBorderStyle = MADBarcodeBorderStyleBox;
+	barcode.whitespaceWidth = 7;
+	barcode.humanReadable = NO;
+	barcode.option1 = 1;
+	barcode.option2 = 2;
+	barcode.option3 = 3;
+	barcode.showErrorMessage = NO;
+	barcode.scale = 2.5f;
+	barcode.has2dComponentEnabled = YES;
+	barcode.has2dComponentType = 4;
+	barcode.center = YES;
+	barcode.width = 123;
 
-	// MADBarcode is NSCoding-only, and -encodeWithCoder: writes every value under the
-	// empty key -- -initWithCoder: ignores the decoder entirely, so the round trip
-	// returns a default instance.  Characterization of that; see BUGS.md.
-	NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initRequiringSecureCoding:NO];
-	[archiver encodeObject:barcode forKey:NSKeyedArchiveRootObjectKey];
-	NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:archiver.encodedData error:NULL];
-	unarchiver.requiresSecureCoding = NO;
-	MADBarcode *decoded = [unarchiver decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-	[unarchiver finishDecoding];
+	NSError *error = nil;
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:barcode
+									  requiringSecureCoding:YES
+													  error:&error];
+	XCTAssertNotNil(data, @"%@", error);
+	MADBarcode *decoded = [NSKeyedUnarchiver unarchivedObjectOfClass:[MADBarcode class]
+														   fromData:data
+															  error:&error];
+	XCTAssertNotNil(decoded, @"%@", error);
 
-	XCTAssertNotNil(decoded);
-	XCTAssertNil(decoded.input);
-	// -initWithCoder: calls [super init], not the subclass's -init, so even the
-	// subclass's defaults (name, 50pt height) are lost.
-	XCTAssertNil(decoded.name);
-	XCTAssertEqual(decoded.barcodeHeight, (int16_t)0);
+	XCTAssertEqualObjects(NSStringFromClass([decoded class]), @"MADBarcodeQrCodeIso18004");
+	XCTAssertEqualObjects(decoded.name, @"QR Code (ISO 18004)");
+	XCTAssertEqualObjects(decoded.detailsSegueIdentifer, @"MTIdentiferSegueBarcodeExtrasQrCode");
+	XCTAssertEqualObjects(decoded.input, @"TEST");
+	XCTAssertEqualObjects(decoded.primaryData, @"2D");
+	XCTAssertEqual(decoded.barcodeType, (int16_t)MADBarcodeTypeQrcode);
+	XCTAssertEqual(decoded.barcodeBorderStyle, (int16_t)MADBarcodeBorderStyleBox);
+	XCTAssertEqual(decoded.whitespaceWidth, (int16_t)7);
+	XCTAssertEqual(decoded.barcodeBorderWidth, (int16_t)3);
+	XCTAssertEqual(decoded.barcodeHeight, (int16_t)99);
+	XCTAssertFalse(decoded.humanReadable);
+	XCTAssertEqual(decoded.option1, (int16_t)1);
+	XCTAssertEqual(decoded.option2, (int16_t)2);
+	XCTAssertEqual(decoded.option3, (int16_t)3);
+	XCTAssertFalse(decoded.showErrorMessage);
+	XCTAssertEqualWithAccuracy(decoded.scale, 2.5f, 0.0001f);
+	XCTAssertTrue(decoded.has2dComponentEnabled);
+	XCTAssertEqual(decoded.has2dComponentType, (NSInteger)4);
+	XCTAssertTrue(decoded.center);
+	XCTAssertEqual(decoded.width, (NSInteger)123);
+	XCTAssertFalse(decoded.has2dComponent);
+	XCTAssertTrue(decoded.hasOptionalInput);
 }
 
 @end

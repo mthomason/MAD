@@ -6,8 +6,7 @@
 //
 //  The symbology matrix: for a representative set of the framework's one-class-per-
 //  type subclasses, pin what the factory builds, what the instance calls itself, and
-//  which type it claims.  Two entries are deliberately recorded as defects (the QR
-//  class claims OneCode; the ISBN class's +type recurses) -- see BUGS.md.
+//  which type it claims.  Every mapped type must round-trip through the factory.
 //
 
 #import <XCTest/XCTest.h>
@@ -72,39 +71,39 @@
 	XCTAssertEqual(barcode.barcodeType, (int16_t)MADBarcodeTypePdf417);
 }
 
-#pragma mark - Defects recorded as behavior
+#pragma mark - Symbology classes claim their own type
 
-- (void)testQrCodeClassClaimsTheOneCodeType {
-	// BUGS.md: MADBarcodeQrCodeIso18004's +type and init both say MADBarcodeTypeOneCode,
-	// so the factory hands back a QR-named object that would encode as USPS OneCode.
+- (void)testQrCodeClassClaimsTheQrType {
+	// MADBarcodeQrCodeIso18004's +type and init must both say MADBarcodeTypeQrcode;
+	// -drawInRect: passes the instance's type straight to zint.
 	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeQrcode];
 
 	XCTAssertEqualObjects(NSStringFromClass([barcode class]), @"MADBarcodeQrCodeIso18004");
 	XCTAssertEqualObjects(barcode.name, @"QR Code (ISO 18004)");
-	XCTAssertEqual(barcode.barcodeType, (int16_t)MADBarcodeTypeOneCode);
-	XCTAssertNotEqual(barcode.barcodeType, (int16_t)MADBarcodeTypeQrcode);
+	XCTAssertEqual([MADBarcodeQrCodeIso18004 type], MADBarcodeTypeQrcode);
+	XCTAssertEqual(barcode.barcodeType, (int16_t)MADBarcodeTypeQrcode);
 }
 
-- (void)testEan128ClassClaimsTheHibcType {
-	// BUGS.md: MADBarcodeCode128Ean128's +type says MADBarcodeTypeEAN128 but its init
-	// assigns [MADBarcodeCode128Hibc type], so the factory hands back a GS1-128-named
-	// object that would encode as HIBC Code 128.
+- (void)testEan128ClassClaimsTheEan128Type {
+	// MADBarcodeCode128Ean128 must initialize with its own type, not the HIBC one.
 	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeEAN128];
 
 	XCTAssertEqualObjects(NSStringFromClass([barcode class]), @"MADBarcodeCode128Ean128");
 	XCTAssertEqualObjects(barcode.name, @"Code 128 (GS1-128)");
-	XCTAssertEqual(barcode.barcodeType, (int16_t)MADBarcodeTypeHibc128);
-	XCTAssertNotEqual(barcode.barcodeType, (int16_t)MADBarcodeTypeEAN128);
+	XCTAssertEqual([MADBarcodeCode128Ean128 type], MADBarcodeTypeEAN128);
+	XCTAssertEqual(barcode.barcodeType, (int16_t)MADBarcodeTypeEAN128);
 }
 
 - (void)testIsbnClassInitializesToItsOwnType {
-	// +[MADBarcodeInternationalStandardBookNumberIsbn type] is NOT called: it returns
-	// itself, which recurses until the stack runs out (BUGS.md).  The initializer sets
-	// the type directly, so the factory path is safe.
 	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeIsbnX];
 
 	XCTAssertEqualObjects(NSStringFromClass([barcode class]), @"MADBarcodeInternationalStandardBookNumberIsbn");
 	XCTAssertEqual(barcode.barcodeType, (int16_t)MADBarcodeTypeIsbnX);
+}
+
+- (void)testIsbnClassTypeReturnsItsOwnType {
+	// The class method used to return itself, recursing until the stack ran out.
+	XCTAssertEqual([MADBarcodeInternationalStandardBookNumberIsbn type], MADBarcodeTypeIsbnX);
 }
 
 - (void)testEveryMappedTypeBuildsANamedInstance {
@@ -146,7 +145,7 @@
 	}
 }
 
-- (void)testEveryMappedTypeRoundTripsExceptTheTwoKnownMismatches {
+- (void)testEveryMappedTypeRoundTrips {
 	NSArray<NSNumber *> *mapped = @[
 		@(MADBarcodeTypeAuspost), @(MADBarcodeTypeAusreDirect), @(MADBarcodeTypeAusreply),
 		@(MADBarcodeTypeAusroute), @(MADBarcodeTypeAzrune), @(MADBarcodeTypeAztec),
@@ -174,12 +173,6 @@
 
 	for (NSNumber *boxed in mapped) {
 		MADBarcodeType type = (MADBarcodeType)boxed.intValue;
-		if (type == MADBarcodeTypeQrcode || type == MADBarcodeTypeEAN128) {
-			// Two known copy/paste defects, pinned separately: the QR class reports
-			// OneCode and the GS1-128 class reports HIBC Code 128.  Every other mapped
-			// type round-trips.
-			continue;
-		}
 		MADBarcode *barcode = [MADBarcode newBarcodeWithType:type];
 		XCTAssertEqual(barcode.barcodeType, (int16_t)type,
 					   @"%@ reports type %d for factory type %d",
