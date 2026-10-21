@@ -2,9 +2,7 @@
 
 ## Framework Description
 
-The `MADBarcodes` framework provides functionality for generating a wide variety of barcodes. It appears to be a wrapper around the `zint` barcode generation library. The framework includes classes for different barcode symbologies, a view for displaying barcodes, and protocols for interacting with barcode data.
-
-**Note:** According to the main project `AGENTS.md` file, this framework is currently **unused and unmaintained**. Therefore, it should be used with caution, and its functionality may not be up-to-date or reliable.
+The `MADBarcodes` framework provides functionality for generating a wide variety of barcodes. It is a wrapper around the `zint` barcode generation library (2.16.0, built by the `Compressor` recipe). The framework includes classes for different barcode symbologies, a view for displaying barcodes, and protocols for interacting with barcode data. It is maintained and backs the designer's barcode element on Apple; it is deliberately excluded from the Linux build, where the element type is model-only.
 
 ## Key Features
 
@@ -23,13 +21,11 @@ The `MADBarcodes` framework provides functionality for generating a wide variety
 
 ## Usage Guidelines
 
-Given that this framework is **unused and unmaintained**, it is not recommended to use it in new code. If you need to add barcode functionality to the application, you should first evaluate whether this framework can be updated and made reliable, or if it would be better to use a different barcode generation library.
-
-If you do decide to use this framework, you will need to familiarize yourself with the `zint` library and the various `MADBarcode` subclasses. The `MADBarcodeView` class can be used to display barcodes in the UI.#  <#Title#>
-
+The framework is the app's barcode generator: the designer's element picker creates barcode elements through it, and `MADPrintPageElementBarcode` renders them. A symbology is a `MADBarcode` subclass reachable through `+newBarcodeWithType:`; adding one means adding the subclass and its type to that factory. Familiarity with the `zint` library helps when working on the encoder. The `MADBarcodeView` class can be used to display barcodes in the UI.
 
 ## Testing and Reports
 
-*   **Tests**: `MADBarcodes/MADBarcodesTests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+*   **Tests**: `MADBarcodes/MADBarcodesTests`, exposed by the shared `MADBarcodes`
+    scheme. Run with
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes -destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci`.
 *   **Tracking**: [`BUGS.md`](../BUGS.md) -- the defect register; [`TASKS.md`](../TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.

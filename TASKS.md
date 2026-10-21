@@ -826,31 +826,37 @@ entry; give each its own task or `BUGS.md` entry when it is picked up.
 
 ## 15. Barcode element: modernize MADBarcodes and re-integrate the element
 
-**Status:** In progress -- Tasks 0-6 implemented (rename, framework defects, cached
-render path, warning sweep, element-layer fixes, export/accessibility coverage);
-Tasks 7-8 remain.
+**Status:** Done 2026-10-21 -- Tasks 0-7 landed. Task 8 (umbrella header) was
+optional and is not taken.
 
-The barcode element was never removed from the Apple app -- it is wired end to end
-(model `RptqDocumentElementBarcode`, render `MADPrintPageElementBarcode`, the
-`MADDesigner/Source/barcodes/` editor, the `MADBarcodeDesigner.storyboard`) and
-hidden only by the designer picker's IAP check
-(`MADDesignerElementPickerViewController.m:117-120`). The user's decision
-(2026-10-20): the element is **always available** -- the picker gate comes off.
-The `MADBarcodes` framework wraps zint 2.16.0 (Compressor recipe) behind 67
-`MADBarcode*` symbology subclasses, has a green 29-test suite, and is excluded from
-the Linux build by design (the `#if __APPLE__` creation paths log-and-skip).
+The barcode element is **always available**: the designer picker adds
+`MADPrintPageElementTypeBarcode` with the other element types
+(`MADDesignerElementPickerViewController.m`), and the `barcodeDesignerEnabled`
+flag stays defined for the separate licensing cleanup. The `MADBarcodes`
+framework wraps zint 2.16.0 (Compressor recipe) behind 67 `MADBarcode*`
+symbology subclasses; it is Apple-only and excluded from the Linux build, where
+the element type stays model-only (the `#if __APPLE__` creation paths
+log-and-skip).
 
-The full survey, the design decisions (framework-only rename `MTBarcode*` ->
-`MADBarcode*`; one-`CGImage`-draw render path plus an `NSCache` for the per-row
-perf requirement; the four pinned `BUGS.md` framework defects; the base-`type`
-clobber and the store colour-columns bug that may crash barcode creation on
-Apple), and the self-contained per-task prompts for a flash model are in
-**`MAD_BARCODES.md`** -- the implementer starts there, with Task 0 (baseline) and
-goes in order. Known defects this track closes: the `BUGS.md` `## MADBarcodes`
-entries (duplicate name key, QR/EAN128 wrong symbology, ISBN recursion, `strcpy`
-overflow, broken NSCoding) and "The store's colour columns have no reader"
-(whose one writer is the barcode creation path). Gates per task: the
-`MADBarcodes` and `MAD` suites, the app build, and `./Linux/build.sh` (the
-guards and `MADSources.cmake` exclusions stay intact). Out of scope, documented
-in `MAD_BARCODES.md` §5: headless barcode rendering, GS1/Data input modes, HTML
-barcode images, the notices gap.
+The commits, one per task:
+
+* `bd37d0ec4` -- Task 1: framework rename `MTBarcode*` -> `MADBarcode*`.
+* `db5087c61` -- Task 2: the pinned framework defects fixed, dead code deleted.
+* `2b71079af` -- Task 3: one-`CGImage`-draw render path plus `MADBarcodeCache`.
+* `2be05d692` (recorded in `78b21621f`) -- Task 4: the warning sweep.
+* `b762d1ded` -- Task 5: element-layer fixes (base-`type` clobber, the store
+  colour mapping, `-text`, Edit menu).
+* `e4c29cbc6` -- Task 6: export and accessibility coverage.
+* Task 7 (this commit): the picker gate removed, the documentation corrected,
+  end-to-end verification.
+
+Gates: `MADBarcodes` 29/29 and `MAD` 608/608; the app builds for the simulator
+and, with signing disabled, for a generic device (this machine has no `iOS
+Distribution` certificate); `./Linux/build.sh` passes 120/120. The design
+record and the per-task prompts stay in `MAD_BARCODES.md`.
+
+**Remains** (documented in `MAD_BARCODES.md` §5, deliberately not built):
+headless barcode rendering (zint in `Linux/libraries.conf` plus a UIKit-free
+render core), GS1/Data input modes, `detailsSegueIdentifer` on the model,
+barcode images inside the HTML exporter, and the app-wide third-party notices
+gap (the zint BSD-3-Clause notice rides the licence-register track).

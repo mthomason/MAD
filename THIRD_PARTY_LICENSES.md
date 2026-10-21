@@ -280,8 +280,10 @@ them if the repository is ever made public.*
 5. **Three components have no license grant** (Karl Kraft connector,
    NSOperation+Advanced, NSData+AES256).
 6. `DEVELOPER.md`'s claim that nothing third-party is in revision control is
-   inaccurate, and `LIBRARIES.md` (§1) and `Compressor/lib/recipes/zint.sh` still
-   refer to `patches/zint-2.4.2-mad.patch`, deleted in `f7526ba04`.
+   inaccurate. The stale `patches/zint-2.4.2-mad.patch` references are corrected:
+   `LIBRARIES.md` (§1) now describes the zint 2.16.0 recipe, and
+   `Compressor/lib/recipes/zint.sh` mentions the patch only to record that it is
+   retired (the file was deleted in `f7526ba04`).
 
 ---
 

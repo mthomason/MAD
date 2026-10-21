@@ -95,7 +95,7 @@ contract: whichever side writes the store, the other reads it.
 | `MADMySQL` | yes | 0 Apple imports |
 | `MADTds` / `MADTdsClient` | yes | 0 Apple imports |
 | `MADExplorer` | no | file-explorer UI (19 of 32 files import UIKit) |
-| `MADBarcodes` | no | unused and unmaintained |
+| `MADBarcodes` | no | Apple-only: UIKit render path plus zint, which the image does not carry; the element type stays model-only headless |
 | `MADFeedback` | no | unused and unmaintained |
 | `Scrimpter` | no | 0 Apple imports, but unused |
 | `MADDesigner` (app) | no | 302 UIKit files; the UI stays on Apple platforms |

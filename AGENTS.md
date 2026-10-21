@@ -64,7 +64,7 @@ Once this is complete, the user can go to the MAD Viewer screen and use the refr
 	* `MADTdsClient`: Implements `MADDatabaseSQLServer`, the SQL Server subclass of `MADDatabase`
 	* `MADSqlite3`: A wrapper around Sqlite3.
 	* `MADTds`: A base wrapper around the freetds project.
-	* `MADBarcodes`: This is used for the barcode element.  The element is wired end to end but hidden behind the designer's IAP gate; the modernization and re-integration plan is `MAD_BARCODES.md` (`TASKS.md` §15).
+	* `MADBarcodes`: This is used for the barcode element.  The framework is maintained, links zint 2.16.0 via the Compressor recipe, and backs the barcode element on Apple; it is deliberately excluded from the Linux build.
 	* `MADFeedback`: This is a framework to allow user feedback.  `MADFeedback` is currently unused and unmaintained.
 
 The core app is in `MADDesigner`.  Its source is in `MADDesigner/Source`, and its targets -- the app itself, the stand-alone viewer, and the unit and UI test bundles -- are in `MADDesigner/Targets`.

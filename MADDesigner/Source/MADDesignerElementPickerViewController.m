@@ -41,8 +41,6 @@
 
 #import "MADDesignerViewController.h"
 
-#import "MADStoreKitController.h"
-#import "MTStoreKitController+Features.h"
 #import "MADDocumentObjectCollectionViewCell.h"
 
 static const NSInteger MADViewTagAggregateFunctions             = 2003;
@@ -111,14 +109,10 @@ static const NSInteger MADViewTagFieldOrFormulaSelector         = 2029;
 	// Add additional items following the pattern below.
 	NSNumber *image = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeImage];
 	NSNumber *whitespace = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeWhtiespace];
-	
-	[dataSource addObjectsFromArray:@[labelDynamic, labelStatic, aggregate, image, whitespace]];
-	
-	if ([MADStoreKitController sharedObject].barcodeDesignerEnabled) {
-		NSNumber *barcode = [NSNumber numberWithShort: MADPrintPageElementTypeBarcode];
-		[dataSource addObject:barcode];
-	}
-	
+	NSNumber *barcode = [[NSNumber alloc] initWithShort:MADPrintPageElementTypeBarcode];
+
+	[dataSource addObjectsFromArray:@[labelDynamic, labelStatic, aggregate, image, whitespace, barcode]];
+
 	self.dataSource = dataSource;
 }
 

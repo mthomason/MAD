@@ -27,7 +27,7 @@ Compressor/
   lib/recipes/<lib>.sh         # one recipe per library (configure/cmake + install)
   lib/verify/<lib>.sh          # optional per-library artifact checks
   patches/                     # local modifications to upstream sources, captured
-                               #   as diffs (zint-2.4.2-mad.patch)
+                               #   as diffs (none current; zint's 2.4.2 patch retired)
   media/<sha256>-<archive>     # content-addressed download cache (gitignored)
   src/  build/                 # extracted sources and build trees (gitignored)
   library/
@@ -97,9 +97,13 @@ Notes worth knowing when touching a recipe:
   (`build/mysqlclient/cross-preset.cmake`) that answers every run-based cmake
   probe with the value iOS actually has — an unseeded probe fails loudly rather
   than guessing.
-* **zint** applies `patches/zint-2.4.2-mad.patch` (the local `ZBarcode_PNG_Buffer`
-  addition and 64-bit casts the vendored tree carried) to stock 2.4.2, then
-  compiles the backend directly, as MADBarcodes always did.
+* **zint** is stock 2.16.0 built by `lib/recipes/zint.sh` with cmake
+  (`ZINT_SHARED=OFF`, `ZINT_STATIC=ON`, `ZINT_FRONTEND=OFF`, `ZINT_USE_PNG=ON`,
+  linked against the recipe's libpng and zlib) into
+  `library/zint.xcframework`.  The 2.4.2-era direct compile and its local
+  patch (`patches/zint-2.4.2-mad.patch`) are retired: `ZBarcode_Encode_and_Buffer`,
+  which the patch backported, is upstream API in 2.16, and the wrapper's
+  `BARCODE_*` names survive as aliases.
 * **freetds** patches the *installed* headers, not the sources: `typedef int BOOL;`
   is commented out of `sybdb.h` after each install, because Objective-C already
   typedefs `BOOL` — but the library itself must keep the typedef, since dblib's C
