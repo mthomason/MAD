@@ -344,7 +344,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                 NSString *sampleText = [NSString stringWithFormat:@"%@", sampleItem.allValues.lastObject];
                 [delegate setInput:sampleText];
                 
-                NSString *fieldOneName = [[delegate barcodeQueryField1] toStringHumanReadable];
+                NSString *fieldOneName = [[delegate barcodeQueryField1] toStringHumanReadable];		// EXC_BAD_ACCESS at `[delegate barcodeQueryField1]`.  `barcodeQueryField1` is part of `MADViewControllerBarcodeOptionsDelegate.h`.  Crash happens after selecting a data field for the barcode.
                 cell.detailTextLabel.text = fieldOneName;
                 
                 break;
@@ -404,7 +404,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                     
                     UIStepper *stepper = [[UIStepper alloc] init];
                     [stepper setWraps:NO];
-                    stepper.value = symbolHeight;
+                    stepper.value = symbolHeight;		// Warning: Implicit conversion from 'NSInteger' (aka 'long') to 'double' may lose precision
                     CGPoint newCenter = CGPointMake(CGRectGetMidY(cell.contentView.bounds),
                                                   CGPointZero.x + cell.contentView.bounds.size.width - (stepper.bounds.size.width / 2.0000f) - 20.0000f);
                     [stepper addTarget:self action:@selector(didChangeSymbolHeight:) forControlEvents:UIControlEventValueChanged];
@@ -470,7 +470,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                     
                     UIStepper *stepper = [[UIStepper alloc] init];
                     stepper.wraps = NO;
-                    stepper.value = self.borderWidth;
+                    stepper.value = self.borderWidth;	// Warning: Implicit conversion from 'NSInteger' (aka 'long') to 'double' may lose precision
                     CGFloat centerY = CGRectGetMidY(cell.contentView.bounds);
                     CGFloat correctX = CGPointZero.x + cell.contentView.bounds.size.width - (stepper.bounds.size.width / 2.0000f) - 20.0000f;
                     [stepper addTarget:self action:@selector(didChangeBorderWidth:) forControlEvents:UIControlEventValueChanged];
@@ -955,7 +955,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     self.sampleBarcodeDataMaxicode = sampleData;
     id <MTViewControllerBarcodeOptionsDelegate> delegate = self.delegate;
     if (sampleData.count > 0) {
-        id result = [sampleData[0] allObjects].lastObject;
+        id result = [sampleData[0] allObjects].lastObject;		// Warning: Multiple methods named 'allObjects' found
         [delegate barcodeMaxicodeDidSetPrimaryData:result];
     } else {
         [delegate barcodeMaxicodeDidSetPrimaryData:nil];
