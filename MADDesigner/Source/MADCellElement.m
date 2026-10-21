@@ -136,7 +136,7 @@
 			break;
 		}
 		case MADPrintPageElementTypeBarcode: {
-			result = deleteAction || formatAction; // FIXME: Edit action broke on barcodes...
+			result = deleteAction || editAction || formatAction;
 			break;
 		}
 		default:

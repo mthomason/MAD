@@ -28,6 +28,7 @@
 #import "MADPrintPageElement+Constructor.h"
 #import "MADPrintPageElementBarcode.h"
 #import "MADPrintPageRendererDataSource.h"
+#import "MADReportLineRepresentation.h"
 
 // MADBarcodes is not linked here, so the protocol only needs to be named, not defined.
 @protocol MADBarcodeProtocol;
@@ -250,6 +251,40 @@
 	UIGraphicsEndImageContext();
 
 	XCTAssertNotNil(image);
+}
+
+#pragma mark - Text
+
+- (void)testBarcodeElementCarriesTheComposedInputAsText {
+	MADBarcodeElementTestDefinition *definition = [self definitionWithFields];
+	MADBarcodeElementTestSource *source = (MADBarcodeElementTestSource *)definition.testDatasource;
+	source.rowData = @{ @"Invoice0.Code" : @"123456", @"Invoice0.Note" : @"note" };
+	definition.testBarcode.barcodeType = 8;
+
+	MADPrintPageElementBarcode *element;
+	element = [[MADPrintPageElementBarcode alloc] initWithDefinition:definition];
+
+	XCTAssertEqualObjects(element.text, @"123456note");
+
+	// The line representation already reads -text from a text-shaped drawing object, so
+	// the barcode line reaches every exporter and the accessibility walk through it.
+	MADReportLineRepresentation *line;
+	line = [[MADReportLineRepresentation alloc] initWithObject:element
+														 type:MADPrintPageElementTypeBarcode
+														frame:CGRectMake(0.0, 0.0, 80.0, 30.0)];
+	XCTAssertEqualObjects(line.text, @"123456note");
+}
+
+- (void)testBarcodeElementTextOmitsAnAbsentSecondInput {
+	MADBarcodeElementTestDefinition *definition = [self definitionWithFields];
+	MADBarcodeElementTestSource *source = (MADBarcodeElementTestSource *)definition.testDatasource;
+	source.rowData = @{ @"Invoice0.Code" : @"123456" };
+	definition.testBarcode.barcodeType = 8;
+
+	MADPrintPageElementBarcode *element;
+	element = [[MADPrintPageElementBarcode alloc] initWithDefinition:definition];
+
+	XCTAssertEqualObjects(element.text, @"123456");
 }
 
 #pragma mark - Logging contract

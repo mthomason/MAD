@@ -76,37 +76,6 @@ Status key:
 - **Test:** none -- there is no caller to characterize.  Recorded so the next reader
   does not mistake the one-page result for a lost page.
 
-### The store's colour columns have no reader, and the model's colour properties have no column
-- **Status:** Open -- found while adding the HTML formats (2026-10-16), recorded rather
-  than fixed.
-- **Where:** `MAD/Source/rptq/store/MADStoreSchema.m:496-503` (the columns),
-  `MAD/Source/rptq/autogen/RptqDocumentElement.h:30-31` (`backgroundColor`,
-  `foregroundColor` as `UIColor *`), `MAD/Source/rptq/store/RptqObject.m:63-92`
-  (`-valueForUndefinedKey:`: exact name only), `MAD/Source/rptq/RptqDocumentElementBarcode+Extras.m:89-90`
-  (the one writer).
-- **Behavior:** The portable store gives every element eight colour columns --
-  `backgroundColorR/G/B/A` and the same four for `foregroundColor` -- but the model's
-  properties are `backgroundColor` / `foregroundColor`, and nothing maps the one to the
-  other.  `RptqDocumentElement -backgroundColor` asks for an attribute of that exact
-  name, finds none, finds no such relationship, and falls through to
-  `NSObject -valueForUndefinedKey:`, which raises `NSUnknownKeyException`.  The one
-  caller that writes a colour (`RptqDocumentElementBarcode+Extras.m:89-90`) looks like
-  it would raise the same way; it is on the barcode creation path, which is off the
-  headless build and untested on Apple.  The converter that writes the four columns
-  (`MADDesigner/Source/MADStoreLegacy/MADStoreConverter.m:66-85, 111`) is the only code
-  that touches them at all.
-- **Why it matters:** A colour set on an element is not readable back, and the same
-  document cannot paint it.  The HTML facsimile and the PDF are monochrome for this
-  reason (both record it in their headers): the walk has no colour to give them.  The
-  banner is only the first casualty -- any element styling that is a colour has the
-  same hole.
-- **Why it is not fixed here:** the mapping is a store-layer decision, not a format's.
-  Reading needs four reals to become a colour -- a `UIColor` on Apple, and something
-  portable for Linux, which has no `UIColor` -- and writing needs the reverse.  That is
-  the same shape as the `MADCurrencyFormatter` locale question and belongs with the
-  store, not with an exporter.
-- **Test:** none; there is no reader to characterize.
-
 ### MysqlFetch passes an uninitialized value to a function
 - **Status:** Open -- documented from the analyzer run.
 - **What:** `core.CallAndMessage` reports that the first argument of a function call at
@@ -393,6 +362,7 @@ Status key:
 - The milestone-(a) model rewrites dropped the schema sort orders
 - A NULL read from a source database printed as the text `<null>`, or as the epoch
 - `MADSectionLayout` computes no element height, so a report piles onto its first pages
+- The store's colour columns have no reader, and the model's colour properties have no column
 - `MADocument -managedObjectContext` returns a `RptqStoreContext` under a Core Data type
 - `MADReportTextRepresentation` `-characterCount` / `-elementCount` crash on non-empty input
 - `RptqDirectionalAsymmetry +keyRight` returns `@"left"`

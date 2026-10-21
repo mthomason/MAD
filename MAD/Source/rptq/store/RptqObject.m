@@ -11,6 +11,88 @@
 
 #import <objc/runtime.h>
 
+#if __APPLE__
+#import <CoreGraphics/CGColor.h>
+#import <CoreGraphics/CGColorSpace.h>
+#import <UIKit/UIColor.h>
+#endif
+
+#pragma mark - Colours
+
+// Two model properties the schema spreads over four REAL columns each:
+// `backgroundColor` is backgroundColorR/G/B/A and `foregroundColor` its four.  Apple
+// hands a UIColor back and takes one apart; off Apple, where there is no UIColor, the
+// value is an NSArray of the four components in R, G, B, A order.  A colour with all
+// four columns absent is unset.
+static NSString * const RptqBackgroundColorKey = @"backgroundColor";
+static NSString * const RptqForegroundColorKey = @"foregroundColor";
+
+static BOOL RptqIsColorKey(NSString *key) {
+	return [key isEqualToString:RptqBackgroundColorKey] || [key isEqualToString:RptqForegroundColorKey];
+}
+
+static NSString *RptqColorComponentName(NSString *key, NSString *component) {
+	return [key stringByAppendingString:component];
+}
+
+static BOOL RptqColorIsSet(MADStoreObject *row, NSString *key) {
+	return [row attributeValue:RptqColorComponentName(key, @"R")] != nil ||
+		   [row attributeValue:RptqColorComponentName(key, @"G")] != nil ||
+		   [row attributeValue:RptqColorComponentName(key, @"B")] != nil ||
+		   [row attributeValue:RptqColorComponentName(key, @"A")] != nil;
+}
+
+static void RptqReadColorComponents(MADStoreObject *row, NSString *key, double components[4]) {
+	components[0] = [[row attributeValue:RptqColorComponentName(key, @"R")] doubleValue];
+	components[1] = [[row attributeValue:RptqColorComponentName(key, @"G")] doubleValue];
+	components[2] = [[row attributeValue:RptqColorComponentName(key, @"B")] doubleValue];
+	NSNumber *alpha = [row attributeValue:RptqColorComponentName(key, @"A")];
+	components[3] = alpha != nil ? alpha.doubleValue : 1.0;
+}
+
+#if __APPLE__
+static BOOL RptqColorComponentsFromValue(id value, double components[4]) {
+	if (![value isKindOfClass:[UIColor class]]) return NO;
+	UIColor *color = value;
+	CGFloat red = 0.0, green = 0.0, blue = 0.0, alpha = 0.0;
+	if (![color getRed:&red green:&green blue:&blue alpha:&alpha]) {
+		// A colour UIKit cannot describe in RGB -- a pattern, or an extended range --
+		// is converted into the space the report renders in, as the converter does.
+		CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+		CGColorRef converted = CGColorCreateCopyByMatchingToColorSpace(space, kCGRenderingIntentDefault, color.CGColor, NULL);
+		CGColorSpaceRelease(space);
+		if (!converted) return NO;
+		UIColor *srgb = [UIColor colorWithCGColor:converted];
+		CGColorRelease(converted);
+		if (![srgb getRed:&red green:&green blue:&blue alpha:&alpha]) return NO;
+	}
+	components[0] = red;
+	components[1] = green;
+	components[2] = blue;
+	components[3] = alpha;
+	return YES;
+}
+#else
+static BOOL RptqColorComponentsFromValue(id value, double components[4]) {
+	if (![value isKindOfClass:[NSArray class]]) return NO;
+	NSArray *array = value;
+	if (array.count != 4) return NO;
+	for (NSUInteger index = 0; index < 4; index++) {
+		if (![array[index] isKindOfClass:[NSNumber class]]) return NO;
+		components[index] = [array[index] doubleValue];
+	}
+	return YES;
+}
+#endif
+
+static id RptqColorValue(const double components[4]) {
+#if __APPLE__
+	return [UIColor colorWithRed:components[0] green:components[1] blue:components[2] alpha:components[3]];
+#else
+	return @[ @(components[0]), @(components[1]), @(components[2]), @(components[3]) ];
+#endif
+}
+
 @implementation RptqObject
 
 + (instancetype)objectWithBackingObject:(MADStoreObject *)backingObject
@@ -63,7 +145,6 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 - (id)valueForUndefinedKey:(NSString *)key {
 	RptqStoreContext * storeContext = self.storeContext;
 	MADStoreEntity *entity = [[MADStoreSchema sharedSchema] entityNamed:self.entity];
-	if (!entity) return [super valueForUndefinedKey:key];
 
 	MADStoreAttribute *attribute = MADStoreAttributeNamed(entity, key);
 	if (attribute) return [self.backingObject attributeValue:key];
@@ -89,16 +170,21 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 									  identifier:identifier.longLongValue];
 	}
 
+	// The two colours are the one pair of properties the schema keeps as four
+	// component columns rather than a column of their own.
+	if (RptqIsColorKey(key)) {
+		if (!RptqColorIsSet(self.backingObject, key)) return nil;
+		double components[4] = { 0.0, 0.0, 0.0, 1.0 };
+		RptqReadColorComponents(self.backingObject, key, components);
+		return RptqColorValue(components);
+	}
+
 	return [super valueForUndefinedKey:key];
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
 	RptqStoreContext * storeContext = self.storeContext;
 	MADStoreEntity *entity = [[MADStoreSchema sharedSchema] entityNamed:self.entity];
-	if (!entity) {
-		[super setValue:value forUndefinedKey:key];
-		return;
-	}
 
 	MADStoreAttribute *attribute = MADStoreAttributeNamed(entity, key);
 	if (attribute) {
@@ -117,7 +203,41 @@ static MADStoreAttribute *MADStoreAttributeNamed(MADStoreEntity *entity, NSStrin
 		return;
 	}
 
+	if (RptqIsColorKey(key) && [self setColorValue:value forKey:key]) return;
+
 	[super setValue:value forUndefinedKey:key];
+}
+
+#pragma mark - Colours
+
+- (BOOL)setColorValue:(id)value forKey:(NSString *)key {
+	double components[4] = { 0.0, 0.0, 0.0, 0.0 };
+	BOOL hasValue = NO;
+	if (value != nil) {
+		if (!RptqColorComponentsFromValue(value, components)) return NO;
+		hasValue = YES;
+	}
+
+	double current[4] = { 0.0, 0.0, 0.0, 1.0 };
+	BOOL changed = hasValue != RptqColorIsSet(self.backingObject, key);
+	if (!changed && hasValue) {
+		RptqReadColorComponents(self.backingObject, key, current);
+		for (NSUInteger index = 0; index < 4; index++) {
+			if (current[index] != components[index]) {
+				changed = YES;
+				break;
+			}
+		}
+	}
+	if (!changed) return YES;
+
+	static NSString * const componentNames[4] = { @"R", @"G", @"B", @"A" };
+	for (NSUInteger index = 0; index < 4; index++) {
+		[self.backingObject setAttributeValue:(hasValue ? @(components[index]) : nil)
+									  forName:RptqColorComponentName(key, componentNames[index])];
+	}
+	[self.storeContext markObjectChanged:self];
+	return YES;
 }
 
 #pragma mark - Dynamic accessors

@@ -53,7 +53,7 @@
 	self.add2dComponent =       @(barcode.has2dComponent);
 	self.barcodeBorderStyle =   barcode.barcodeBorderStyle;
 	self.barcodeBorderWidth =   barcode.barcodeBorderWidth;
-	self.type =                 barcode.barcodeType;
+	self.barcodeType =          barcode.barcodeType;
 	self.barcodeHeight =        barcode.barcodeHeight;
 	self.humanReadable =        barcode.humanReadable;
 	self.option1 =              barcode.option1;
@@ -94,7 +94,8 @@
 		reportObject.option2 = barcode.option2;
 		reportObject.option3 = barcode.option3;
 		reportObject.showErrorMessage = barcode.showErrorMessage;
-		reportObject.type = barcode.barcodeType;
+		reportObject.type = MADPrintPageElementTypeBarcode;
+		reportObject.barcodeType = barcode.barcodeType;
 		reportObject.whitespaceWidth = barcode.whitespaceWidth;
 		reportObject.useStaticInput1 = NO;
 		reportObject.useStaticInput2 = NO;

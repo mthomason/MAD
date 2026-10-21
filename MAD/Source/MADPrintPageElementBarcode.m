@@ -34,15 +34,21 @@
 		
 		NSString *tableFieldKey1 = definition.fieldKey1;
 		NSString *tableFieldKey2 = definition.fieldKey2;
-		
+
 		id value1 = rowData[tableFieldKey1], value2 = rowData[tableFieldKey2];
 		NSString *input1 = [definition formattedStringForValue1: value1];
 		NSString *input2 = [definition formattedStringForValue2: value2];
-		
+
 		MADBarcode *barcode = [MADBarcode newBarcode:definition.barcode
 											input1:input1
 											input2:input2];
 		_drawingObject = barcode;
+
+		// The line representations read -text; the barcode's content is the input the
+		// drawing object encodes, first input then the optional second one.
+		NSMutableString *text = [[NSMutableString alloc] initWithString:input1 ?: @""];
+		if (input2.length > 0) [text appendString:input2];
+		self.text = text;
 	}
 	return self;
 }

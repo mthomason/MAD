@@ -90,6 +90,7 @@
 		4CDA7A4200000000000000A1 /* RptqDocumentElementGroupKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A4200000000000000B1 /* RptqDocumentElementGroupKeyTests.m */; };
 		4CDA7A4300000000000000A1 /* RptqDocumentElementLabelLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A4300000000000000B1 /* RptqDocumentElementLabelLinkTests.m */; };
 		4CDA7A4400000000000000A1 /* RptqDocumentSectionEnumeratorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A4400000000000000B1 /* RptqDocumentSectionEnumeratorTests.m */; };
+		4CDA7A4500000000000000A1 /* RptqDocumentElementBarcodeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A4500000000000000B1 /* RptqDocumentElementBarcodeTests.m */; };
 		4CDA7A1400000000000000A1 /* MADElementStylizedTextTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A1400000000000000B1 /* MADElementStylizedTextTests.m */; };
 		4CDA7A0400000000000000A1 /* MADFormatterAndRepresentationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */; };
 		4CDA7A0500000000000000A1 /* MAD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4CDA7A0500000000000000B1 /* MAD.xcdatamodeld */; };
@@ -685,6 +686,7 @@
 		4CDA7A4200000000000000B1 /* RptqDocumentElementGroupKeyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentElementGroupKeyTests.m; sourceTree = "<group>"; };
 		4CDA7A4300000000000000B1 /* RptqDocumentElementLabelLinkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentElementLabelLinkTests.m; sourceTree = "<group>"; };
 		4CDA7A4400000000000000B1 /* RptqDocumentSectionEnumeratorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentSectionEnumeratorTests.m; sourceTree = "<group>"; };
+		4CDA7A4500000000000000B1 /* RptqDocumentElementBarcodeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RptqDocumentElementBarcodeTests.m; sourceTree = "<group>"; };
 		4CDA7A1400000000000000B1 /* MADElementStylizedTextTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADElementStylizedTextTests.m; sourceTree = "<group>"; };
 		4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADFormatterAndRepresentationTests.m; sourceTree = "<group>"; };
 		4CDA7A0500000000000000B2 /* MAD 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 3.xcdatamodel"; sourceTree = "<group>"; };
@@ -1909,6 +1911,7 @@
 				4CDA7A4200000000000000B1 /* RptqDocumentElementGroupKeyTests.m */,
 				4CDA7A4300000000000000B1 /* RptqDocumentElementLabelLinkTests.m */,
 				4CDA7A4400000000000000B1 /* RptqDocumentSectionEnumeratorTests.m */,
+				4CDA7A4500000000000000B1 /* RptqDocumentElementBarcodeTests.m */,
 				4CDA7A1400000000000000B1 /* MADElementStylizedTextTests.m */,
 				4CDA7A0400000000000000B1 /* MADFormatterAndRepresentationTests.m */,
 				4CDA7A0500000000000000B1 /* MAD.xcdatamodeld */,
@@ -2616,6 +2619,7 @@
 				4CDA7A4200000000000000A1 /* RptqDocumentElementGroupKeyTests.m in Sources */,
 				4CDA7A4300000000000000A1 /* RptqDocumentElementLabelLinkTests.m in Sources */,
 				4CDA7A4400000000000000A1 /* RptqDocumentSectionEnumeratorTests.m in Sources */,
+				4CDA7A4500000000000000A1 /* RptqDocumentElementBarcodeTests.m in Sources */,
 				4CDA7A1400000000000000A1 /* MADElementStylizedTextTests.m in Sources */,
 				4CDA7A0400000000000000A1 /* MADFormatterAndRepresentationTests.m in Sources */,
 				4CDA7A0500000000000000A1 /* MAD.xcdatamodeld in Sources */,
