@@ -183,7 +183,7 @@
 
 	XCTAssertEqual(line.type, MADPrintPageElementTypeLabelDynamic);
 	XCTAssertTrue(CGRectEqualToRect(line.frame, frame));
-	// The label is the value's debug description.
+	// A value with no -text falls back to its debug description.
 	XCTAssertEqualObjects(line.label, @"42");
 }
 

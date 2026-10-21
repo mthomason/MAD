@@ -18,6 +18,8 @@
 - (instancetype)initWithValue:(id)value type:(MADPrintPageElementType)type
 					 andFrame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
 
+/// The value's text when it carries one -- a drawing object does -- and otherwise
+/// its debug description.
 @property (readonly) NSString *label;
 @property (readonly) CGRect frame;
 @property (nonatomic, assign, readonly) MADPrintPageElementType type;

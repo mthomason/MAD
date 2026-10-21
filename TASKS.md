@@ -826,8 +826,9 @@ entry; give each its own task or `BUGS.md` entry when it is picked up.
 
 ## 15. Barcode element: modernize MADBarcodes and re-integrate the element
 
-**Status:** In progress -- Tasks 0-5 implemented (rename, framework defects, cached
-render path, warning sweep, element-layer fixes); Tasks 6-8 remain.
+**Status:** In progress -- Tasks 0-6 implemented (rename, framework defects, cached
+render path, warning sweep, element-layer fixes, export/accessibility coverage);
+Tasks 7-8 remain.
 
 The barcode element was never removed from the Apple app -- it is wired end to end
 (model `RptqDocumentElementBarcode`, render `MADPrintPageElementBarcode`, the

@@ -9,6 +9,13 @@
 #import "MADAccessibilityLine.h"
 #import <UIKit/UIGeometry.h>
 
+// The one member the label reads off a text-carrying drawing object, declared here
+// rather than imported: the line takes any object, and the element family's headers
+// are not all visible to this file.
+@protocol MADAccessibilityLineTextValue <NSObject>
+@property (nonatomic, readonly, copy) NSString *text;
+@end
+
 @interface MADAccessibilityLine ()
 
 @property (nonatomic, copy) NSValue *rect;
@@ -36,7 +43,17 @@
 	return self;
 }
 
-- (NSString *)label { return [self.value debugDescription]; }
+// A drawing object that carries text answers with it -- the label, aggregate and
+// barcode elements do -- so the line reads the value the report shows rather than an
+// object dump.  Anything else keeps the debug-description spelling.
+- (NSString *)label {
+	id value = self.value;
+	if ([value respondsToSelector: @selector(text)]) {
+		NSString *text = [(id <MADAccessibilityLineTextValue>)value text];
+		if (text != nil) return text;
+	}
+	return [value debugDescription];
+}
 
 - (CGRect)frame { return self.rect.CGRectValue; }
 
