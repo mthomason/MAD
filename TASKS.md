@@ -901,6 +901,17 @@ The design's phases, each with its acceptance criteria and its tests:
   (`MAD/Source/sql/`) and `MADSQLParserTests`. The supported subset is exactly what
   the model can hold (`MAD_SQL_ENTRY.md` §5); rejections carry coded errors with
   line:column.
+  **Done on `sql-entry` (2026-10-22, unmerged).** Ten golden tests (exact
+  statements, MySQL and TDS dialects, all seven link types, the drop-index alias,
+  all six predicate operators with literal quoting, the alias-ordered active
+  select list) in `MADQueryFullTests` on both platforms; the parser suite (64
+  tests) covers the §5 accept matrix and the §10.3 rejection table with codes and
+  line:column on both platforms. `+identifierQuoteCharacters` on `MADDatabase` /
+  `MADDatabaseMySQL` / `MADDatabaseSQLServer` feeds the lexer its quote pair.
+  Note for Phase C: the parser takes the schema (table → field names) and does
+  the §5 name checks itself — unknown table/column, ambiguity, alias forms, one
+  join per pair, ORDER BY ⊆ GROUP BY — so the resolver's job is binding the
+  validated names to Rptq rows.
 * **Phase C (MAD only; Linux green)** — `MADSQLStatementResolver` +
   `MADSQLQueryCompiler` (atomic replace; conflict check against designer-element
   references; writes `sqlSourceText` verbatim on success), plus
