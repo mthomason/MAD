@@ -288,6 +288,47 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 	return storeFile;
 }
 
+/// The momd version whose hashes match the store's metadata.  A legacy store is
+/// opened with the model it was written against, never migrated: Core Data cannot
+/// infer a mapping for this model family (the barcode element's `barcodeBorderType`
+/// carries `elementID="type"`, clashing with the inherited `type` on every entity
+/// mapping -- BUGS.md), and every version a document in the wild can carry is in
+/// the momd.
++ (NSManagedObjectModel *)modelInMomdMatchingStoreAtURL:(NSURL *)storeURL
+												  error:(NSError * __autoreleasing *)error {
+	NSDictionary *metadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
+																						URL:storeURL
+																					options:@{}
+																					  error:error];
+	if (!metadata) return nil;
+
+	NSURL *momdURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"MAD" withExtension:@"momd"];
+	if (!momdURL) {
+		if (error) {
+			*error = [NSError errorWithDomain:MADStoreConverterErrorDomain
+										 code:MADStoreConverterErrorModelMissing
+									 userInfo:@{ NSLocalizedDescriptionKey: @"MAD.momd was not found in the bundle." }];
+		}
+		return nil;
+	}
+	NSArray<NSURL *> *momURLs = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:momdURL
+										includingPropertiesForKeys:nil
+														   options:NSDirectoryEnumerationSkipsHiddenFiles
+															 error:NULL];
+	for (NSURL *momURL in momURLs) {
+		if (![momURL.pathExtension isEqualToString:@"mom"]) continue;
+		NSManagedObjectModel *candidate = [[NSManagedObjectModel alloc] initWithContentsOfURL:momURL];
+		if (!candidate) continue;
+		if ([candidate isConfiguration:nil compatibleWithStoreMetadata:metadata]) return candidate;
+	}
+	if (error) {
+		*error = [NSError errorWithDomain:MADStoreConverterErrorDomain
+									 code:MADStoreConverterErrorModelMissing
+								 userInfo:@{ NSLocalizedDescriptionKey: @"No model version in MAD.momd matches the legacy store." }];
+	}
+	return nil;
+}
+
 /// Open the legacy store at `storeURL` as a context of plain NSManagedObjects.
 ///
 /// The converter reads rows through NSManagedObject, not the Rptq subclasses: the
@@ -298,6 +339,19 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 + (NSManagedObjectContext *)legacyContextForStoreAtURL:(NSURL *)storeURL
 												 model:(NSManagedObjectModel *)model
 												 error:(NSError * __autoreleasing *)error {
+	// The caller hands over the momd's current version.  A store written against an
+	// older version is opened with that version instead, so the two never have to
+	// migrate; a store the given model cannot be checked against (no metadata) is
+	// opened with the given model, exactly as before.
+	NSDictionary *metadata = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
+																						URL:storeURL
+																					options:@{}
+																					  error:NULL];
+	if (metadata != nil && ![model isConfiguration:nil compatibleWithStoreMetadata:metadata]) {
+		model = [self modelInMomdMatchingStoreAtURL:storeURL error:error];
+		if (model == nil) return nil;
+	}
+
 	NSManagedObjectModel *mutableModel = [model copy];
 	for (NSEntityDescription *entity in mutableModel.entities) {
 		entity.managedObjectClassName = @"NSManagedObject";

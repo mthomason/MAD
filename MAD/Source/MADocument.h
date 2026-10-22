@@ -17,6 +17,7 @@
 #import <MAD/MADPrintPageRendererDataSource.h>
 #import <MAD/RptqStoreContext.h>
 #import <MAD/MADSortOrder.h>
+#import <MAD/MADSQLQueryCompiler.h>
 #import <MAD/MADReportFormatterDataSourceProtocol.h>
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADDocumentRenderProtocol.h>
@@ -36,7 +37,7 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 - (void)setStatusText:(NSString *)statusText;
 @end
 
-@interface MADocument : UIDocument <UIPrintInteractionControllerDelegate, MADDataProtocol, MADCacheProtocol, MADReportFormatterDataSource, MADPrintPageRendererDataSourceProtocol, MADDocumentDataProtocol, MADDocumentRenderProtocol>
+@interface MADocument : UIDocument <UIPrintInteractionControllerDelegate, MADDataProtocol, MADCacheProtocol, MADReportFormatterDataSource, MADPrintPageRendererDataSourceProtocol, MADDocumentDataProtocol, MADDocumentRenderProtocol, MADSQLQueryDocument>
 
 @property (nonatomic, readonly, strong) MADDesignerQuery *designerQuery;
 @property (nonatomic, readonly, strong) MADDesignerLayout *designerLayout;
@@ -96,6 +97,13 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 
 - (void)removeGroupWitObjectID:(int64_t)groupID
 		 fromManagedObjectContext:(RptqStoreContext *)managedObjectContext;
+
+/// The replace path's symmetrical helpers (MADSQLQueryCompiler): every link of
+/// the document's query goes, whatever table it touches.
+- (void)deleteAllQueryLinksInContent:(RptqStoreContext *)context;
+
+/// The same, for the query's predicates.
+- (void)deleteAllQueryPredicatesInContent:(RptqStoreContext *)context;
 
 - (NSDictionary <NSNumber *, NSNumber *> *)layoutHeightsBySectionKey;
 

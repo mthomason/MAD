@@ -516,9 +516,10 @@ opt-in mode the user chose (fixed time 2001-01-12T00:00:00Z, uid/gid 0, sorted m
 walk; ordinary saves keep the filesystem's metadata), `MADHeadlessDocument` grew
 `-writeToURL:reproducible:error:` (the app's save without the UIDocument parts), and
 `mad write` is the verb that reaches it on both platforms.  Measured: the London
-fixture written on the Mac and in the image is the same 16,243-byte file, sha256
-`22dd3123…`; `Linux/Tests/MADArchiveManagerTests.m` pins the bytes, the round trip and
-the mode.  Two Linux-only defects were in the way and are fixed (`BUGS.md`, the
+fixture written on the Mac and in the image is the same 16,261-byte file, sha256
+`09815b24…` (the store migration of SQL entry Phase A changed the written bytes; the
+fixture itself stays a version-1 store); `Linux/Tests/MADArchiveManagerTests.m` pins
+the bytes, the round trip and the mode.  Two Linux-only defects were in the way and are fixed (`BUGS.md`, the
 byte-identity entry): the walk that never terminated, and `dirname(3)`/`basename(3)`
 truncating the caller's archive path on glibc.  What the comparison covers is the
 container: the members are the fixture's own bytes.  A Linux writer that *creates* a

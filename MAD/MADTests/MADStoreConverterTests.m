@@ -15,6 +15,8 @@
 
 #import <XCTest/XCTest.h>
 #import <CoreData/CoreData.h>
+#import <sqlite3.h>
+#import <string.h>
 #import <UIKit/UIKit.h>
 
 #import "MADStoreConverter.h"
@@ -182,6 +184,36 @@
 	[self assertGraph:[read graphByCompletingInverses]
 		  equalsGraph:[written graphByCompletingInverses]];
 	XCTAssertTrue([[read graphByCompletingInverses] isEqualToGraph:[written graphByCompletingInverses]]);
+}
+
+/// user_version, read straight from SQLite so nothing under test answers the
+/// question.
+static NSInteger SQLiteUserVersion(NSURL *url) {
+	sqlite3 *database = NULL;
+	if (sqlite3_open(url.path.fileSystemRepresentation, &database) != SQLITE_OK) return -1;
+	sqlite3_stmt *statement = NULL;
+	NSInteger version = 0;
+	if (sqlite3_prepare_v2(database, "PRAGMA user_version;", -1, &statement, NULL) == SQLITE_OK) {
+		if (sqlite3_step(statement) == SQLITE_ROW) version = (NSInteger)sqlite3_column_int64(statement, 0);
+	}
+	sqlite3_finalize(statement);
+	sqlite3_close(database);
+	return version;
+}
+
+/// A converted document is born at the current store version: the converter's
+/// creation path is -[MADStore openWithError:], the same fresh-store
+/// initialization the migration tests pin.
+- (void)testConvertedStoreIsBornAtTheCurrentVersion {
+	NSURL *storeURL = [self.directory URLByAppendingPathComponent:@"London.sqlite"];
+	NSError *error = nil;
+	MADStoreGraph *graph = [MADStoreConverter convertDocumentAtURL:[self sampleURLNamed:@"London"]
+													  toStoreAtURL:storeURL
+															 model:self.model
+															 error:&error];
+	XCTAssertNotNil(graph, @"converting London failed: %@", error);
+	if (!graph) return;
+	XCTAssertEqual(SQLiteUserVersion(storeURL), MADStoreCurrentVersion, @"the converted store is born at the current version");
 }
 
 #pragma mark - What the samples pin

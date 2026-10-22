@@ -144,6 +144,7 @@ NSString * const MADSqlTextFromPart = @"\nFROM\n";
 }
 
 - (NSString *)tableAliasForTable:(NSString *)table { return [self newSafeIdentifier: table]; }
++ (NSString *)identifierQuoteCharacters { return @"\"\""; }
 - (NSString *)tableAliasConnector { return @" AS "; }
 - (NSString *)identifier { return @"NONE"; }
 + (NSString *)identifier { return @"NONE"; }

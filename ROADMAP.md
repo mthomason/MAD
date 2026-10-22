@@ -493,8 +493,9 @@ files. What remains for the document itself is §4.2's decisions and then §4.3'
   `TASKS.md` §9.
 - **The byte-identical `.mad` — done 2026-10-16.** The user's requirement ("Linux and iOS
   should produce the same exact MAD file") is met and measured: `mad write --reproducible`
-  writes 16,243 bytes with sha256 `22dd3123…` on both platforms for the London fixture,
-  and `Linux/Tests/MADArchiveManagerTests.m` pins it. The mode is opt-in
+  writes 16,261 bytes with sha256 `09815b24…` on both platforms for the London fixture
+  (16,243 / `22dd3123…` before SQL entry Phase A's store migration changed the written
+  bytes), and `Linux/Tests/MADArchiveManagerTests.m` pins it. The mode is opt-in
   (`MADArchiveManager.reproducible`), ordinary saves keep the filesystem's metadata, and
   the two Linux-only defects it turned up are fixed. What remains for a later pass is a
   writer that creates a *store* on Linux — the comparison covers the container today.

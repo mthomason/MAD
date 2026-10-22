@@ -1807,6 +1807,8 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 	return [[qualifiedName componentsSeparatedByString:@"."] lastObject] ?: qualifiedName;
 }
 
++ (NSString *)identifierQuoteCharacters { return @"[]"; }
+
 + (NSString *)newSafeQueryField:(NSString *)fieldName andTable:(NSString *)tableName {
 	// Split the table half on its dot so a schema-qualified name yields
 	// [schema].[table], not one bracket pair containing a dot -- T-SQL would read the

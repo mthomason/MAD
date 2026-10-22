@@ -37,6 +37,8 @@
 #import "RptqBorder.h"
 #import "RptqAlignment.h"
 #import "RptqDocument+Extras.h"
+#import "RptqQueryLinks.h"
+#import "RptqQueryPredicate.h"
 #import "RptqDatabase.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqDocumentSection.h"
@@ -1167,6 +1169,27 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	BOOL saved = [managedObjectContext save:&error];
 	if (!saved && error != nil) {
 		os_log_error(GetMadLog(), "Error saving managed object: %@", error);
+	}
+}
+
+// The replace path's symmetrical helpers (MADSQLQueryCompiler): every link of
+// the document's query goes, whatever table it touches.  Links carry no layout
+// managers, so the store-level delete is the whole removal.
+- (void)deleteAllQueryLinksInContent:(RptqStoreContext *)context {
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	RptqQuery *query = document.hasDatabaseSchemas.anyObject.hasQueries.anyObject;
+	for (RptqQueryLinks *link in query.hasQueryLinks.allObjects) {
+		[query removeHasQueryLinksObject:link];
+		[context deleteObject:link error:NULL];
+	}
+}
+
+- (void)deleteAllQueryPredicatesInContent:(RptqStoreContext *)context {
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	RptqQuery *query = document.hasDatabaseSchemas.anyObject.hasQueries.anyObject;
+	for (RptqQueryPredicate *predicate in query.hasQueryPredicate.allObjects) {
+		[query removeHasQueryPredicateObject:predicate];
+		[context deleteObject:predicate error:NULL];
 	}
 }
 

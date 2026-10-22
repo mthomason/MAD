@@ -866,8 +866,10 @@ gap (the zint BSD-3-Clause notice rides the licence-register track).
 
 ## 16. SQL entry — paste a SQL statement into the query designer
 
-**Status:** Open — designed 2026-10-22, not started. See `MAD_SQL_ENTRY.md` for the
-full design; this entry is the pointer, not a restatement.
+**Status:** In progress — Phase A on branch `sql-entry` (started 2026-10-22); the
+branch merges into master when the whole feature is complete. Phases B–E not
+started. See `MAD_SQL_ENTRY.md` for the full design; this entry is the pointer,
+not a restatement.
 
 The feature: a View/Edit mode on the existing read-only SQL popover
 (`MADViewControllerSQL`, presented by `barButtonItemSQL` in
@@ -888,21 +890,57 @@ The design's phases, each with its acceptance criteria and its tests:
   a migration list with one entry — v1 → v2 adds the column — applied on open;
   fresh stores at the current version). Migration tests in MAD and in the Linux
   image. Self-contained; lands before the parser.
+  **Done on `sql-entry` (2026-10-22, unmerged).** Two deviations from the design,
+  both forced by Core Data's mechanics: the model change is a new `MAD 4` version
+  (an in-place `MAD 3` edit changes its version hash and orphans every in-the-wild
+  document's metadata), and the legacy converter now opens each store with the momd
+  version matching its metadata — automatic migration can never work for this model
+  family (barcode `elementID` clash, BUGS.md).
 * **Phase B (MAD only; Linux green)** — golden SQL tests pinning `MADQueryFull`'s
   per-driver output, then `MADSQLTokenizer`/`MADSQLParser`/`MADSQLStatement`
   (`MAD/Source/sql/`) and `MADSQLParserTests`. The supported subset is exactly what
   the model can hold (`MAD_SQL_ENTRY.md` §5); rejections carry coded errors with
   line:column.
+  **Done on `sql-entry` (2026-10-22, unmerged).** Ten golden tests (exact
+  statements, MySQL and TDS dialects, all seven link types, the drop-index alias,
+  all six predicate operators with literal quoting, the alias-ordered active
+  select list) in `MADQueryFullTests` on both platforms; the parser suite (64
+  tests) covers the §5 accept matrix and the §10.3 rejection table with codes and
+  line:column on both platforms. `+identifierQuoteCharacters` on `MADDatabase` /
+  `MADDatabaseMySQL` / `MADDatabaseSQLServer` feeds the lexer its quote pair.
+  Note for Phase C: the parser takes the schema (table → field names) and does
+  the §5 name checks itself — unknown table/column, ambiguity, alias forms, one
+  join per pair, ORDER BY ⊆ GROUP BY — so the resolver's job is binding the
+  validated names to Rptq rows.
 * **Phase C (MAD only; Linux green)** — `MADSQLStatementResolver` +
   `MADSQLQueryCompiler` (atomic replace; conflict check against designer-element
   references; writes `sqlSourceText` verbatim on success), plus
   `MADSQLQueryCompilerTests` and the fixpoint round-trip test
   (model → SQL → parse → compile → same SQL).
+  **Done on `sql-entry` (2026-10-22, unmerged).** The compiler talks to the
+  document through a new `MADSQLQueryDocument` protocol: `MADocument` implements
+  it with the designer's layout managers (plus the two new clear helpers for
+  links and predicates), `MADHeadlessDocument` with the definition rows alone.
+  The conflict check covers the three element shapes (label-data, aggregate,
+  barcode) plus group sections; the fixpoint test keeps the WHERE clause to one
+  predicate, because the generator iterates the predicate set and GNUstep's set
+  order differs from Apple's (the order is deliberately unpinned in the golden
+  tests too).
 * **Phase D (MADDesigner)** — the View/Edit popover (Generated and As entered tabs,
   Edit seeded from the stored text), `MADOperationValidateSQL` (probe
   `SELECT * FROM (<sql>) AS _mad_probe WHERE 1=0` through the `MADOperationRefresh`
   pattern), UI tests on a sample sqlite3 document, including close-and-reopen
   persistence.
+  **Done on `sql-entry` (2026-10-22, unmerged), with one recorded gap.** The
+  popover's View/Edit modes are built in code over the storyboard scene;
+  `MADOperationValidateSQL` and its five construction tests are in the app
+  target (app scheme 80/80). **§10.6's UI assertions are not run:** the XCUITest
+  environment sees an empty accessibility tree (BUGS.md, "Test infrastructure"),
+  so the tables-list/canvas/designer assertions cannot be made, and the UI-test
+  refresh assertion is recorded here rather than faked. The §9 close-and-reopen
+  persistence the UI test would show is covered at the store level by the
+  Phase A migration suite and Phase C's compiler suite (`sqlSourceText` verbatim,
+  one save, reopen), which run on both platforms.
 * **Phase E (deferred; its own decisions)** — SELECT-list element synthesis, and a
   history of applied statements if ever wanted (an ordered to-many backfilled from
   the current `sqlSourceText`).
