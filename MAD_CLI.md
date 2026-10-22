@@ -178,7 +178,7 @@ same file -- and §6.1's round-trip fixture, which needs a writer a script can r
 
 ```
 $ mad write London.portable.mad --out copy.mad --reproducible
-wrote /tmp/copy.mad (16243 bytes, reproducible)
+wrote /tmp/copy.mad (16261 bytes, reproducible)
 ```
 
 `--reproducible` pins what the clock and the filesystem would otherwise stamp into the

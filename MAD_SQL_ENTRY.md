@@ -307,10 +307,15 @@ Persistence rules:
 
 ### 8.1 The store change
 
-The attribute lands on both sides of the schema cross-check: the compiled model
-(`MAD 3.xcdatamodel`, which `MADStoreSchemaTests` checks the hand-maintained descriptors
-against) and `MADStoreSchema` itself, plus the `RptqQuery` autogen property
+The attribute lands on both sides of the schema cross-check: the compiled model and the
+hand-maintained `MADStoreSchema` descriptors, plus the `RptqQuery` autogen property
 (`MAD/Source/rptq/autogen/`). `MAD_FORMAT.md` gains the column in its field list.
+
+**Amended (Phase A, 2026-10-22).** The model change is a **new `MAD 4.xcdatamodel`
+version**, not an in-place `MAD 3` edit: a shipped model version's hash pins every
+in-the-wild document's store metadata, and editing it orphans them. `MAD 4` also drops
+`RptqDocumentElementBarcode.barcodeBorderType`'s dead `elementID="type"` (no pre-`MAD 3`
+version has a barcode entity; BUGS.md).
 
 ### 8.2 Store versioning — new, small, and now required
 
@@ -323,10 +328,15 @@ This phase adds the mechanism, deliberately minimal:
 * On open, `MADStore` reads `PRAGMA user_version`, applies the missing steps in a
   transaction, and writes the new version. Fresh stores are created at the current version
   (`createSchemaSQL` already generates the whole schema).
-* `MADLegacyStoreConversion` is unaffected — converted Core Data documents are created at
-  the current version.
+* `MADLegacyStoreConversion` is unaffected in flow — converted Core Data documents are
+  created at the current version through the same `MADStore` open path.
 * The Linux headless engine compiles the same `MADStore` code, so existing documents open
   identically in the image; the migration tests run there too.
+
+**Amended (Phase A, 2026-10-22).** `MADStoreConverter` now opens each legacy store with
+the momd version matching its metadata, never via automatic migration: Core Data cannot
+infer a mapping for this model family (the barcode `elementID` clash, BUGS.md), and the
+momd-current model is no longer the version in-the-wild stores were written against.
 
 ### 8.3 Considered and rejected: the guts metadata plist
 
