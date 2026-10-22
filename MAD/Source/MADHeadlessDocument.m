@@ -33,6 +33,22 @@
 #import "RptqQuery+Extras.h"
 #import "RptqQuery.h"
 #import "RptqStoreContext.h"
+#import "RptqQueryGroup.h"
+#import "RptqQueryGroup+Extras.h"
+#import "RptqQueryField.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryLinks.h"
+#import "RptqQueryPredicate.h"
+#import "RptqDocumentElement.h"
+#import "RptqDocumentElementLabelDataField.h"
+#import "RptqDocumentElementAggregate.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSection+Extras.h"
+#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentSectionRows+Extras.h"
+#import "MADocumentSectionType.h"
+#import "MADSortOrder.h"
+#import "MADSQLQueryCompiler.h"
 
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseConnection.h>
@@ -404,6 +420,101 @@
 - (void)updatePrintingReportFormatter {
 	// The app's print dialog builds a second formatter through this.  There is no
 	// dialog headless, and nothing here prints.
+}
+
+#pragma mark - The query designer's helpers (MADSQLQueryDocument)
+
+// MADocument's versions of these, minus what only a windowed document has: the
+// section layout managers, the change count and the autosave.  The rows written
+// are the same definition rows, so a document an apply built on one platform
+// reads the same on the other (MAD_SQL_ENTRY.md §6.4, decision 3).
+
+- (void)addQueryGroupWithQueryField:(int64_t)queryFieldObjectID
+					   andSortOrder:(MADSortOrder)sortOrder {
+	RptqStoreContext *context = self.storeContext;
+
+	RptqQueryField *queryField = (RptqQueryField *)[context objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:queryFieldObjectID];
+	RptqQueryGroup *queryGroup = [RptqQueryGroup newQueryGroupQueryWithSortOrder:sortOrder andManagedObjectContext:context];
+	queryGroup.hasField = queryField;
+
+	RptqDocumentSection *headerSection = [RptqDocumentSection newDocumentSectionOfType:MADDocumentSectionTypeGroupHeader forManagedObjectContext:context];
+	RptqDocumentSectionRows *headerRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:context];
+	headerRow.inSection = headerSection;
+	headerSection.hasRows = [NSMutableOrderedSet orderedSetWithObject:headerRow];
+	[queryGroup addHasSectionObject:headerSection];
+
+	RptqDocumentSection *footerSection = [RptqDocumentSection newDocumentSectionOfType:MADDocumentSectionTypeGroupFooter forManagedObjectContext:context];
+	RptqDocumentSectionRows *footerRow = [RptqDocumentSectionRows newDocumentSectionRowsForManagedObjectContext:context];
+	footerRow.inSection = footerSection;
+	footerSection.hasRows = [NSMutableOrderedSet orderedSetWithObject:footerRow];
+	[queryGroup addHasSectionObject:footerSection];
+
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	[document.hasDatabaseSchemas.anyObject.hasQueries.anyObject addHasQueryGroupsObject:queryGroup];
+}
+
+- (void)removeGroupWitObjectID:(int64_t)groupID
+	 fromManagedObjectContext:(RptqStoreContext *)managedObjectContext {
+	RptqQueryGroup *group = (RptqQueryGroup *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQueryGroup class]) identifier:groupID];
+	if (group == nil) return;
+
+	RptqQuery *query = group.inQuery;
+	for (RptqDocumentSection *section in group.hasSection.allObjects) {
+		[group removeHasSectionObject:section];
+	}
+	[query removeHasQueryGroupsObject:group];
+	[managedObjectContext deleteObject:group error:NULL];
+
+	NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(weight)) ascending:YES];
+	int16_t counter = 0;
+	for (RptqQueryGroup *sortedGroup in [query.hasQueryGroups sortedArrayUsingDescriptors:@[sort]]) {
+		sortedGroup.weight = counter;
+		counter++;
+	}
+}
+
+- (void)deleteDatafieldsRelatedToTable:(int64_t)deleatedTableObjectID
+							 inContent:(RptqStoreContext *)context {
+	for (RptqDocumentElement *documentObject in [context objectsForEntity:NSStringFromClass([RptqDocumentElement class])]) {
+		if (![documentObject isKindOfClass:[RptqDocumentElementLabelDataField class]]) continue;
+		if (((RptqDocumentElementLabelDataField *)documentObject).referencesQueryField.inQueryTable.identifier != deleatedTableObjectID) continue;
+		RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
+		NSMutableOrderedSet *hasObjects = sectionRow.hasObjects.mutableCopy;
+		[hasObjects removeObject:documentObject];
+		sectionRow.hasObjects = hasObjects;
+		[context deleteObject:documentObject error:NULL];
+	}
+}
+
+- (void)deleteAggregateFieldRelatedToTable:(int64_t)deleatedTableObjectID
+								 inContent:(RptqStoreContext *)context {
+	for (RptqDocumentElement *documentObject in [context objectsForEntity:NSStringFromClass([RptqDocumentElement class])]) {
+		if (![documentObject isKindOfClass:[RptqDocumentElementAggregate class]]) continue;
+		if (((RptqDocumentElementAggregate *)documentObject).aggregateField.inQueryTable.identifier != deleatedTableObjectID) continue;
+		RptqDocumentSectionRows *sectionRow = documentObject.inSectionRow;
+		NSMutableOrderedSet *hasObjects = sectionRow.hasObjects.mutableCopy;
+		[hasObjects removeObject:documentObject];
+		sectionRow.hasObjects = hasObjects;
+		[context deleteObject:documentObject error:NULL];
+	}
+}
+
+- (void)deleteAllQueryLinksInContent:(RptqStoreContext *)context {
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	RptqQuery *query = document.hasDatabaseSchemas.anyObject.hasQueries.anyObject;
+	for (RptqQueryLinks *link in query.hasQueryLinks.allObjects) {
+		[query removeHasQueryLinksObject:link];
+		[context deleteObject:link error:NULL];
+	}
+}
+
+- (void)deleteAllQueryPredicatesInContent:(RptqStoreContext *)context {
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	RptqQuery *query = document.hasDatabaseSchemas.anyObject.hasQueries.anyObject;
+	for (RptqQueryPredicate *predicate in query.hasQueryPredicate.allObjects) {
+		[query removeHasQueryPredicateObject:predicate];
+		[context deleteObject:predicate error:NULL];
+	}
 }
 
 @end

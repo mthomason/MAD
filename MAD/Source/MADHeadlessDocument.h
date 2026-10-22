@@ -28,6 +28,7 @@
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADDocumentRenderProtocol.h>
 #import <MAD/MADDocumentStore.h>
+#import <MAD/MADSQLQueryCompiler.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADFoundation/MADCacheProtocol.h>
@@ -37,7 +38,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MADHeadlessDocument : NSObject <MADDocumentDataProtocol, MADDocumentRenderProtocol, MADDataProtocol, MADCacheProtocol, MADDatabaseResultsProtocol>
+@interface MADHeadlessDocument : NSObject <MADDocumentDataProtocol, MADDocumentRenderProtocol, MADDataProtocol, MADCacheProtocol, MADDatabaseResultsProtocol, MADSQLQueryDocument>
 
 /// Opens `url`: unarchives the container, opens the portable store inside it
 /// (converting a legacy store when that is all the document has) and leaves the

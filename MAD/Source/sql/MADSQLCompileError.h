@@ -48,6 +48,9 @@ typedef NS_ENUM(NSInteger, MADSQLCompileErrorCode) {
 	MADSQLCompileErrorOrderByOutsideGroupBy = 19,
 	MADSQLCompileErrorDuplicateJoin = 20,
 	MADSQLCompileErrorUnsupportedSelectAlias = 21,
+	/// The apply's conflict check: a designer element or a group section holds a
+	/// field of a table the new plan drops (MAD_SQL_ENTRY.md §6.3).
+	MADSQLCompileErrorDesignerConflict = 22,
 };
 
 @interface MADSQLCompileError : NSObject

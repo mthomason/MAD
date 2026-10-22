@@ -28,42 +28,42 @@
 #import <MAD/MADSQLStatement.h>
 #import <MAD/MADSQLStatementResolver.h>
 #import <MAD/MADSQLQueryCompiler.h>
-#import <MAD/MADQueryFull.h>
-#import <MAD/MADQueryPredicate.h>
-#import <MAD/MADPredicateOperator.h>
-#import <MAD/MADQueryLinkType.h>
-#import <MAD/MADSortOrder.h>
-#import <MAD/MADDocumentSectionType.h>
+#import "MADQueryFull.h"
+#import "MADQueryPredicate.h"
+#import "MADPredicateOperator.h"
+#import "MADQueryLinkType.h"
+#import "MADSortOrder.h"
+#import "MADocumentSectionType.h"
 #import <MAD/MADHeadlessDocument.h>
 #import <MAD/MADStore.h>
 #import <MAD/MADStoreGraph.h>
 #import <MAD/MADStoreObject.h>
-#import <MAD/RptqStoreContext.h>
-#import <MAD/RptqDocument.h>
-#import <MAD/RptqDocument+Extras.h>
-#import <MAD/RptqDatabase.h>
-#import <MAD/RptqDatabase+Extras.h>
-#import <MAD/RptqDatabaseSchemaTable.h>
-#import <MAD/RptqDatabaseSchemaTable+Extras.h>
-#import <MAD/RptqDatabaseSchemaField.h>
-#import <MAD/RptqDatabaseSchemaField+Extras.h>
-#import <MAD/RptqQuery.h>
-#import <MAD/RptqQueryTable.h>
-#import <MAD/RptqQueryTable+Extras.h>
-#import <MAD/RptqQueryField.h>
-#import <MAD/RptqQueryField+Extras.h>
-#import <MAD/RptqQueryLinks.h>
-#import <MAD/RptqQueryLinks+Extras.h>
-#import <MAD/RptqQueryPredicate.h>
-#import <MAD/RptqQueryPredicate+Extras.h>
-#import <MAD/RptqQueryGroup.h>
-#import <MAD/RptqQueryGroup+Extras.h>
-#import <MAD/RptqDocumentSection.h>
-#import <MAD/RptqDocumentSectionRows.h>
-#import <MAD/RptqDocumentElement.h>
-#import <MAD/RptqDocumentElementLabelDataField.h>
-#import <MAD/RptqDocumentElementAggregate.h>
-#import <MAD/RptqDocumentElementBarcode.h>
+#import "RptqStoreContext.h"
+#import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
+#import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseSchemaTable+Extras.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaField+Extras.h"
+#import "RptqQuery.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryTable+Extras.h"
+#import "RptqQueryField.h"
+#import "RptqQueryField+Extras.h"
+#import "RptqQueryLinks.h"
+#import "RptqQueryLinks+Extras.h"
+#import "RptqQueryPredicate.h"
+#import "RptqQueryPredicate+Extras.h"
+#import "RptqQueryGroup.h"
+#import "RptqQueryGroup+Extras.h"
+#import "RptqDocumentSection.h"
+#import "RptqDocumentSectionRows.h"
+#import "RptqDocumentElement.h"
+#import "RptqDocumentElementLabelDataField.h"
+#import "RptqDocumentElementAggregate.h"
+#import "RptqDocumentElementBarcode.h"
 
 #import "MADMock.h"
 
@@ -108,7 +108,11 @@
 // the statements name: customers(id, name), invoices(id, customer_id, amount),
 // lines(id, invoice_id, sku).
 - (MADHeadlessDocument *)makeDocumentNamed:(NSString *)name {
-	NSURL *url = [self.directory URLByAppendingPathComponent:name];
+	// The document's guts directory is keyed by the file name in the app's
+	// shared ~/tmp (MADURLFactory newURLDocumentArchiveForFileURL:), so a test
+	// fixture must carry a name no earlier run used or it reopens their store.
+	NSString *unique = [[NSString alloc] initWithFormat:@"%@-%@.mad", name, NSUUID.UUID.UUIDString];
+	NSURL *url = [self.directory URLByAppendingPathComponent:unique];
 	MADHeadlessDocument *document = [[MADHeadlessDocument alloc] initWithFileURL:url];
 	NSError *error = nil;
 	XCTAssertTrue([document.documentStore openWithError:&error], @"open failed: %@", error);
@@ -287,7 +291,9 @@
 	RptqQueryGroup *group = query.hasQueryGroups.anyObject;
 	XCTAssertEqualObjects(group.hasField.databaseSchemaField.name, @"name");
 	XCTAssertEqual(group.sort, (int16_t)MADSortOrderDecending);
-	XCTAssertEqual(group.weight, (int16_t)0);
+	// The group factory weights the first group 1 (lastWeight + 1, the same
+	// arithmetic the designer's own path uses).
+	XCTAssertEqual(group.weight, (int16_t)1);
 	XCTAssertEqual(group.hasSection.count, (NSUInteger)2);
 	RptqDocumentSection *header = nil;
 	RptqDocumentSection *footer = nil;
@@ -378,7 +384,7 @@
 					  document:(MADHeadlessDocument *)document {
 	RptqStoreContext *context = document.storeContext;
 	RptqDocumentElement *element = [context insertObjectForEntity:NSStringFromClass(elementClass) identifier:0];
-	element.inSectionRow = document.activeDocumentModel.hasDetailSection.hasRows.anyObject;
+	element.inSectionRow = document.activeDocumentModel.hasDetailSection.hasRows.firstObject;
 	if ([element isKindOfClass:[RptqDocumentElementLabelDataField class]]) {
 		((RptqDocumentElementLabelDataField *)element).referencesQueryField = field;
 	} else if ([element isKindOfClass:[RptqDocumentElementAggregate class]]) {

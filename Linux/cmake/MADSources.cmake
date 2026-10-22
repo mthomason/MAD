@@ -109,6 +109,8 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/sql/MADSQLStatement.m"
 	"${SOURCE_DIR}/sql/MADSQLTokenizer.m"
 	"${SOURCE_DIR}/sql/MADSQLParser.m"
+	"${SOURCE_DIR}/sql/MADSQLQueryCompiler.m"
+	"${SOURCE_DIR}/sql/MADSQLStatementResolver.m"
 	"${SOURCE_DIR}/MADQuerySelectExpressionAllFields.m"
 	"${SOURCE_DIR}/MADPrintPageElement.m"
 	"${SOURCE_DIR}/MADPrintPageElement+Constructor.m"
