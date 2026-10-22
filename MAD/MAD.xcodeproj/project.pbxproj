@@ -27,6 +27,7 @@
 		4CA7C41402EA44B3800470140 /* MADStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C4402EA44B3800470040 /* MADStoreTests.m */; };
 		4CA7C41412EA44B3800470141 /* MADStoreConverterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C4412EA44B3800470041 /* MADStoreConverterTests.m */; };
 		4CA7C41422EA44B3800470142 /* MADStoreMigrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C4422EA44B3800470042 /* MADStoreMigrationTests.m */; };
+		4CA7C41432EA44B3800470143 /* MADSQLParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA7C4432EA44B3800470043 /* MADSQLParserTests.m */; };
 		4CA7C41602EA44B3800470160 /* London.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4CA7C4602EA44B3800470060 /* London.mad */; };
 		4CA7C41612EA44B3800470161 /* Music.mad in Resources */ = {isa = PBXBuildFile; fileRef = 4CA7C4612EA44B3800470061 /* Music.mad */; };
 		4CA7C41502EA44B3800470150 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA7C4502EA44B3800470050 /* libsqlite3.tbd */; };
@@ -625,6 +626,7 @@
 		4CA7C4402EA44B3800470040 /* MADStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreTests.m; sourceTree = "<group>"; };
 		4CA7C4412EA44B3800470041 /* MADStoreConverterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreConverterTests.m; sourceTree = "<group>"; };
 		4CA7C4422EA44B3800470042 /* MADStoreMigrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreMigrationTests.m; sourceTree = "<group>"; };
+		4CA7C4432EA44B3800470043 /* MADSQLParserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADSQLParserTests.m; sourceTree = "<group>"; };
 		4CA7C4602EA44B3800470060 /* London.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = London.mad; path = "../MADDesigner/Resources/Assets/Samples.xcassets/Reports/London.dataset/London.mad"; sourceTree = SOURCE_ROOT; };
 		4CA7C4612EA44B3800470061 /* Music.mad */ = {isa = PBXFileReference; lastKnownFileType = file; name = Music.mad; path = "../MADDesigner/Resources/Assets/Samples.xcassets/Reports/Music.dataset/Music.mad"; sourceTree = SOURCE_ROOT; };
 		4CA7C4502EA44B3800470050 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
@@ -1936,6 +1938,7 @@
 				4CA7C4402EA44B3800470040 /* MADStoreTests.m */,
 				4CA7C4412EA44B3800470041 /* MADStoreConverterTests.m */,
 				4CA7C4422EA44B3800470042 /* MADStoreMigrationTests.m */,
+				4CA7C4432EA44B3800470043 /* MADSQLParserTests.m */,
 				4CA7C42E2EA44B380047002E /* RptqStoreContextTests.m */,
 				4CA7C4602EA44B3800470060 /* London.mad */,
 				4CA7C4612EA44B3800470061 /* Music.mad */,
@@ -2562,6 +2565,7 @@
 				4CA7C41402EA44B3800470140 /* MADStoreTests.m in Sources */,
 				4CA7C41412EA44B3800470141 /* MADStoreConverterTests.m in Sources */,
 				4CA7C41422EA44B3800470142 /* MADStoreMigrationTests.m in Sources */,
+				4CA7C41432EA44B3800470143 /* MADSQLParserTests.m in Sources */,
 				4CA7C4292EA44B3800470029 /* RptqStoreContextTests.m in Sources */,
 				4C37AD312E86D00F003C2B2C /* MADMock.m in Sources */,
 				4C37AD402E86D00F003C2B2C /* MADDocumentTests.m in Sources */,
