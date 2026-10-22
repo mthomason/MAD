@@ -917,6 +917,15 @@ The design's phases, each with its acceptance criteria and its tests:
   references; writes `sqlSourceText` verbatim on success), plus
   `MADSQLQueryCompilerTests` and the fixpoint round-trip test
   (model → SQL → parse → compile → same SQL).
+  **Done on `sql-entry` (2026-10-22, unmerged).** The compiler talks to the
+  document through a new `MADSQLQueryDocument` protocol: `MADocument` implements
+  it with the designer's layout managers (plus the two new clear helpers for
+  links and predicates), `MADHeadlessDocument` with the definition rows alone.
+  The conflict check covers the three element shapes (label-data, aggregate,
+  barcode) plus group sections; the fixpoint test keeps the WHERE clause to one
+  predicate, because the generator iterates the predicate set and GNUstep's set
+  order differs from Apple's (the order is deliberately unpinned in the golden
+  tests too).
 * **Phase D (MADDesigner)** — the View/Edit popover (Generated and As entered tabs,
   Edit seeded from the stored text), `MADOperationValidateSQL` (probe
   `SELECT * FROM (<sql>) AS _mad_probe WHERE 1=0` through the `MADOperationRefresh`
