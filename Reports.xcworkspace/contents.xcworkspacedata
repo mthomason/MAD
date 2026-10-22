@@ -106,6 +106,13 @@
    <Group
       location = "container:"
       name = "Documents">
+      <Group
+         location = "group:Archived"
+         name = "Archived">
+         <FileRef
+            location = "group:../Archive/MAD_BARCODES.md">
+         </FileRef>
+      </Group>
       <FileRef
          location = "group:AGENTS.md">
       </FileRef>
@@ -132,9 +139,6 @@
       </FileRef>
       <FileRef
          location = "group:MAD_ARRAY_CACHING.md">
-      </FileRef>
-      <FileRef
-         location = "group:Archive/MAD_BARCODES.md">
       </FileRef>
       <FileRef
          location = "group:MAD_CLI.md">
