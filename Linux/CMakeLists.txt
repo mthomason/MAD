@@ -342,6 +342,7 @@ mad_add_framework(mad MAD_SOURCES
 	MADQueryDefinitionTests
 	MADQueryFullTests
 	MADSQLParserTests
+	MADSQLQueryCompilerTests
 	MADQueryPredicateTests
 	MADQuerySampleDataTests
 	MADQuerySelectExpressionTests
