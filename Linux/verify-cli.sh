@@ -135,7 +135,7 @@ check "pdf names its reason"		grep -q 'not available in this build' "${WORK}/pdf
 # --- write ----------------------------------------------------------------
 
 output mad write "${LONDON}" --out "${WORK}/copy.mad" --reproducible --quiet >/dev/null
-check_file "write --reproducible" "${WORK}/copy.mad" 16243	22dd3123ea1efe059f298fe39aa54aa3c7dd89aba33cf15870b55b309f9d1848
+check_file "write --reproducible" "${WORK}/copy.mad" 16261	09815b24e91e03b6e526008f7c2700074fed10679771b9e1ee4609e54a1192f5
 
 # --- exit codes (MAD_CLI.md §3) -------------------------------------------
 

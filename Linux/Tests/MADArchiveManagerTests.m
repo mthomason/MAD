@@ -19,6 +19,7 @@
 #import <MAD/MADArchiveManager.h>
 #import <MAD/MADConstants.h>
 #import <MAD/MADHeadlessDocument.h>
+#import <MAD/MADStore.h>
 
 static NSString *MADArchiveFixturePath(void) {
 	NSString *testFile = [@(__FILE__) stringByDeletingLastPathComponent];
@@ -201,6 +202,16 @@ static void testTheReproducibleWriterIsByteIdentical(void) {
 	MAD_NEED(guts != nil, @"the fixture did not unpack");
 	if (guts == nil) return;
 
+	// The Mac's `mad write` opens the document before it archives, and opening
+	// migrates the store to the current version (MAD_SQL_ENTRY.md §8.2) -- so the
+	// bytes the pin names are the opened store's.  Open and close here for the
+	// same reason; the fixture itself is a version-1 store and stays one.
+	MADStore *store = [MADStore storeWithURL: [guts URLByAppendingPathComponent: @"StoreContent/store.sqlite"]];
+	NSError *openError = nil;
+	MAD_PASS([store openWithError: &openError], "the fixture's store opens: %s",
+			 openError != nil ? [[openError description] UTF8String] : "no error");
+	[store close];
+
 	// Age a member: a reproducible archive must not care.
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSString *member = [guts.path stringByAppendingPathComponent: @"meta.plist"];
@@ -224,7 +235,7 @@ static void testTheReproducibleWriterIsByteIdentical(void) {
 	NSData *firstBytes = [NSData dataWithContentsOfURL: first];
 	NSData *secondBytes = [NSData dataWithContentsOfURL: second];
 	MAD_PASS([firstBytes isEqualToData: secondBytes], "two reproducible writes of one directory are one file");
-	MAD_PASS_EQUAL(@(MADArchiveChecksum(firstBytes)), @(0x30BAFF705741EAECULL),
+	MAD_PASS_EQUAL(@(MADArchiveChecksum(firstBytes)), @(0x7A7978D6C388EE44ULL),
 				   "and they are the bytes the Mac writes for the same document (Linux/README.md)");
 
 	[fileManager removeItemAtURL: guts error: NULL];
@@ -252,7 +263,7 @@ static void testTheHeadlessDocumentWritesACopy(void) {
 
 	NSData *written = [NSData dataWithContentsOfURL: copy];
 	MAD_PASS(written.length > 0, "the copy has bytes");
-	MAD_PASS_EQUAL(@(MADArchiveChecksum(written)), @(0x30BAFF705741EAECULL),
+	MAD_PASS_EQUAL(@(MADArchiveChecksum(written)), @(0x7A7978D6C388EE44ULL),
 				   "the copy is the same file the Mac writes for this document");
 
 	NSData *sourceAfter = [NSData dataWithContentsOfFile: MADArchiveFixturePath()];

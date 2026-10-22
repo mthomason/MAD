@@ -418,8 +418,13 @@ the document is opened headlessly on both platforms, so both sides run the same 
 Measured on the London fixture (`CLI/Fixtures/London.portable.mad`):
 
 	$ mad write London.portable.mad --out copy.mad --reproducible
-	16243 bytes, sha256 22dd3123ea1efe059f298fe39aa54aa3c7dd89aba33cf15870b55b309f9d1848
+	16261 bytes, sha256 09815b24e91e03b6e526008f7c2700074fed10679771b9e1ee4609e54a1192f5
 	                                     (identical on the Mac and in this image)
+
+The fixture is a version-1 store, and the write opens the document first, so the
+opened copy carries the store migration (SQL entry Phase A: the `sqlSourceText`
+column and `user_version` 2) on both platforms; the bytes above are the migrated
+document's.
 
 `--reproducible` pins uid/gid 0, the fixed time 2001-01-12T00:00:00Z and a sorted member
 walk; an ordinary write keeps the members' real metadata, so it differs between runs
