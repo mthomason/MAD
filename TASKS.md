@@ -890,6 +890,12 @@ The design's phases, each with its acceptance criteria and its tests:
   a migration list with one entry — v1 → v2 adds the column — applied on open;
   fresh stores at the current version). Migration tests in MAD and in the Linux
   image. Self-contained; lands before the parser.
+  **Done on `sql-entry` (2026-10-22, unmerged).** Two deviations from the design,
+  both forced by Core Data's mechanics: the model change is a new `MAD 4` version
+  (an in-place `MAD 3` edit changes its version hash and orphans every in-the-wild
+  document's metadata), and the legacy converter now opens each store with the momd
+  version matching its metadata — automatic migration can never work for this model
+  family (barcode `elementID` clash, BUGS.md).
 * **Phase B (MAD only; Linux green)** — golden SQL tests pinning `MADQueryFull`'s
   per-driver output, then `MADSQLTokenizer`/`MADSQLParser`/`MADSQLStatement`
   (`MAD/Source/sql/`) and `MADSQLParserTests`. The supported subset is exactly what
