@@ -931,6 +931,16 @@ The design's phases, each with its acceptance criteria and its tests:
   `SELECT * FROM (<sql>) AS _mad_probe WHERE 1=0` through the `MADOperationRefresh`
   pattern), UI tests on a sample sqlite3 document, including close-and-reopen
   persistence.
+  **Done on `sql-entry` (2026-10-22, unmerged), with one recorded gap.** The
+  popover's View/Edit modes are built in code over the storyboard scene;
+  `MADOperationValidateSQL` and its five construction tests are in the app
+  target (app scheme 80/80). **§10.6's UI assertions are not run:** the XCUITest
+  environment sees an empty accessibility tree (BUGS.md, "Test infrastructure"),
+  so the tables-list/canvas/designer assertions cannot be made, and the UI-test
+  refresh assertion is recorded here rather than faked. The §9 close-and-reopen
+  persistence the UI test would show is covered at the store level by the
+  Phase A migration suite and Phase C's compiler suite (`sqlSourceText` verbatim,
+  one save, reopen), which run on both platforms.
 * **Phase E (deferred; its own decisions)** — SELECT-list element synthesis, and a
   history of applied statements if ever wanted (an ordered to-many backfilled from
   the current `sqlSourceText`).
