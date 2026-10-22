@@ -358,6 +358,7 @@ mad_add_framework(mad MAD_SOURCES
 	MADRptqValueTypeTests
 	MADSchemaFieldSelectorModelTests
 	MADStoreTests
+	MADStoreMigrationTests
 	RptqDataHelperTests
 	RptqDocumentElementFormulaTests
 	RptqDocumentElementGroupKeyTests

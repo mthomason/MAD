@@ -296,6 +296,29 @@ static void SetValue(MADStoreObject *object, NSString *name, id value) {
 	XCTAssertNotEqual([sql rangeOfString:@"\"RptqQueryHasFields\""].location, (NSUInteger)NSNotFound);
 }
 
+/// The persisted SQL source text (MAD_SQL_ENTRY.md §8.1): the compiled model and
+/// the descriptors must agree on it, on both its type and its optionality.  The
+/// generic fidelity test covers it too; this one names it so a regression reads
+/// as "the model lost sqlSourceText", not as a diff deep in a loop.
+- (void)testRptqQueryCarriesTheSQLSourceText {
+	NSManagedObjectModel *model = [self modelFromTestBundle];
+	NSEntityDescription *modelEntity = model.entitiesByName[@"RptqQuery"];
+	XCTAssertNotNil(modelEntity);
+	NSAttributeDescription *modelAttribute = modelEntity.attributesByName[@"sqlSourceText"];
+	XCTAssertNotNil(modelAttribute, @"the compiled model has no sqlSourceText on RptqQuery");
+	if (!modelAttribute) return;
+	XCTAssertEqual(modelAttribute.attributeType, NSStringAttributeType, @"sqlSourceText is a string");
+	XCTAssertTrue(modelAttribute.isOptional, @"sqlSourceText is optional");
+
+	MADStoreEntity *descriptor = [[MADStoreSchema sharedSchema] entityNamed:@"RptqQuery"];
+	XCTAssertNotNil(descriptor);
+	MADStoreAttribute *attribute = [descriptor attributeNamed:@"sqlSourceText"];
+	XCTAssertNotNil(attribute, @"the descriptor has no sqlSourceText on RptqQuery");
+	if (!attribute) return;
+	XCTAssertEqual(attribute.type, MADStoreValueTypeText, @"sqlSourceText is a string");
+	XCTAssertTrue(attribute.isOptional, @"sqlSourceText is optional");
+}
+
 #pragma mark - Round trip
 
 - (void)testRoundTripOfAWholeDefinition {
