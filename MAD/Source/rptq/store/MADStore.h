@@ -51,7 +51,8 @@ typedef NS_ENUM(NSInteger, MADStoreErrorCode) {
 @property (nonatomic, assign, readonly, getter=isOpen) BOOL open;
 @property (nonatomic, strong, readonly) MADStoreSchema *schema;
 
-/// Opens the file, creating the schema when it is not there yet.
+/// Opens the file, creating the schema when it is not there yet and applying
+/// the migration steps the store is behind on (MADStoreSchema.migrations).
 - (BOOL)openWithError:(NSError * __autoreleasing *)error;
 - (void)close;
 
