@@ -187,7 +187,7 @@ pins its dates to), owner and group 0, and a sorted member walk
 (`MADArchiveManager.reproducible`).  Without it an ordinary save is written, with the
 members' real metadata.  The document is opened headlessly on both platforms
 (`MADHeadlessDocument`), so the two sides of the comparison run the same writer, and
-the same document writes the same bytes there (16,243 bytes on the London fixture,
+the same document writes the same bytes there (16,261 bytes on the London fixture,
 `Linux/README.md`).
 
 ### Global options
