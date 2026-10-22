@@ -372,7 +372,7 @@ mad_add_framework(mad MAD_SOURCES
 # the Xcode target's header search paths do.
 target_include_directories(mad PRIVATE
 	"${SOURCE_DIR}" "${SOURCE_DIR}/model" "${SOURCE_DIR}/rptq"
-	"${SOURCE_DIR}/rptq/autogen" "${SOURCE_DIR}/rptq/store" "${SOURCE_DIR}/paper")
+	"${SOURCE_DIR}/rptq/autogen" "${SOURCE_DIR}/rptq/store" "${SOURCE_DIR}/sql" "${SOURCE_DIR}/paper")
 target_include_directories(mad PUBLIC
 	"${CMAKE_BINARY_DIR}/sqlite3-shim" "${CMAKE_BINARY_DIR}/sybdb-shim"
 	"${CMAKE_BINARY_DIR}/umbrella-shim")
