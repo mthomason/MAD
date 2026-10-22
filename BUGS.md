@@ -1213,24 +1213,9 @@ bundle's header search path.
 - **Reproduction:** the analyzer reports both the deprecation and the leak on every
   `xcodebuild analyze` of the app scheme.
 
-### The barcode delegate's query-field accessors disagree with their declarations
-- **Status:** Open -- found by the warning sweep; the mismatch is real and reachable.
-- **What:** The `MADViewControllerBarcodeOptionsDelegate` protocol declares
-  `- (RptqQueryField *)barcodeQueryField1;` and `:2`
-  (`MADViewControllerBarcodeOptionsDelegate.h:60-61`), but `MTViewControllerBarcode`
-  implements both returning `int64_t` (`MTViewControllerBarcode.m:321`, `:325`).  The
-  caller `MTViewControllerBarcodeOptions.m:347` then messages the result
-  (`[[delegate barcodeQueryField1] toStringHumanReadable]`), so an integer is treated as an
-  object pointer -- a crash whenever that cell is populated.  The same file resolves the
-  identifiers to `RptqQueryField` objects itself at `:168` and `:219`, which is what the
-  protocol's callers appear to expect.
-- **Why it is documented rather than fixed:** the correct shape depends on intent -- return
-  the looked-up field object, or change the protocol and both call sites to the identifier.
-  Both are real options and neither is a compile-fix.
-- **Where:** `MADDesigner/Source/barcodes/MTViewControllerBarcode.m:321-327`,
-  `MADViewControllerBarcodeOptionsDelegate.h:60-61`,
-  `MTViewControllerBarcodeOptions.m:347,516`.
-- **Evidence:** `-Wmismatched-return-types` on both implementations.
+*Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
+
+- The barcode delegate's query-field accessors disagree with their declarations
 
 ### AppDelegate's retry blocks capture themselves
 - **Status:** Open -- documented; a leak rather than a crash.

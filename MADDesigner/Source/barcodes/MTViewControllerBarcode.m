@@ -318,12 +318,21 @@ static NSString * const MTDocumentObjectNewBarcodeNavigationViewControllerIdenti
     self.queryField2ID = fieldID;
 }
 
-- (int64_t)barcodeQueryField1 {
-    return self.queryField1ID;
+- (RptqQueryField *)queryFieldForIdentifier:(int64_t)identifier {
+    if (identifier == 0) {
+        return nil;
+    }
+    RptqStoreContext *context = self.document.storeContext;
+    return (RptqQueryField *)[context objectForEntity:NSStringFromClass([RptqQueryField class])
+                                           identifier:identifier];
 }
 
-- (int64_t)barcodeQueryField2 {
-    return self.queryField2ID;
+- (RptqQueryField *)barcodeQueryField1 {
+    return [self queryFieldForIdentifier:self.queryField1ID];
+}
+
+- (RptqQueryField *)barcodeQueryField2 {
+    return [self queryFieldForIdentifier:self.queryField2ID];
 }
 
 - (void)setBarcodeToEdit:(RptqDocumentElementBarcode *)barcodeDocumentObject {

@@ -860,3 +860,53 @@ headless barcode rendering (zint in `Linux/libraries.conf` plus a UIKit-free
 render core), GS1/Data input modes, `detailsSegueIdentifer` on the model,
 barcode images inside the HTML exporter, and the app-wide third-party notices
 gap (the zint BSD-3-Clause notice rides the licence-register track).
+
+---
+
+## 16. SQL entry — paste a SQL statement into the query designer
+
+**Status:** Open — designed 2026-10-22, not started. See `MAD_SQL_ENTRY.md` for the
+full design; this entry is the pointer, not a restatement.
+
+The feature: a View/Edit mode on the existing read-only SQL popover
+(`MADViewControllerSQL`, presented by `barButtonItemSQL` in
+`MADQueryBuilderSplitViewController`) where the user pastes one SELECT statement; on
+Apply it is parsed, resolved against the document schema, validated (optionally by a
+zero-row server probe), and compiled into the `Rptq` query graph through the same
+factories the visual designer uses — tables, links, predicates, groups — so the visual
+query designer, the visualization canvas, and the report designer all continue to work
+on the imported query. The exact pasted text is persisted as `sqlSourceText` on
+`RptqQuery` (a new store attribute and the portable store's first versioning step);
+the popover's View shows it as **As entered** beside the **Generated** form.
+
+The design's phases, each with its acceptance criteria and its tests:
+
+* **Phase A (MAD only; Linux green)** — the persisted source text: `sqlSourceText`
+  on `RptqQuery` (compiled model + `MADStoreSchema` descriptors + autogen property in
+  one change), plus the store's first versioning mechanism (`PRAGMA user_version`,
+  a migration list with one entry — v1 → v2 adds the column — applied on open;
+  fresh stores at the current version). Migration tests in MAD and in the Linux
+  image. Self-contained; lands before the parser.
+* **Phase B (MAD only; Linux green)** — golden SQL tests pinning `MADQueryFull`'s
+  per-driver output, then `MADSQLTokenizer`/`MADSQLParser`/`MADSQLStatement`
+  (`MAD/Source/sql/`) and `MADSQLParserTests`. The supported subset is exactly what
+  the model can hold (`MAD_SQL_ENTRY.md` §5); rejections carry coded errors with
+  line:column.
+* **Phase C (MAD only; Linux green)** — `MADSQLStatementResolver` +
+  `MADSQLQueryCompiler` (atomic replace; conflict check against designer-element
+  references; writes `sqlSourceText` verbatim on success), plus
+  `MADSQLQueryCompilerTests` and the fixpoint round-trip test
+  (model → SQL → parse → compile → same SQL).
+* **Phase D (MADDesigner)** — the View/Edit popover (Generated and As entered tabs,
+  Edit seeded from the stored text), `MADOperationValidateSQL` (probe
+  `SELECT * FROM (<sql>) AS _mad_probe WHERE 1=0` through the `MADOperationRefresh`
+  pattern), UI tests on a sample sqlite3 document, including close-and-reopen
+  persistence.
+* **Phase E (deferred; its own decisions)** — SELECT-list element synthesis, and a
+  history of applied statements if ever wanted (an ordered to-many backfilled from
+  the current `sqlSourceText`).
+
+Product decisions, resolved 2026-10-22 (`MAD_SQL_ENTRY.md` §11): strict subset,
+replace-not-append atomic apply, GROUP BY auto-creating report group sections, the
+SELECT list validated-but-not-stored until Phase E, and the pasted text persisted as
+a single `sqlSourceText` property.

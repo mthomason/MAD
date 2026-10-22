@@ -2517,7 +2517,36 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD Designer (app)
 
-### The refresh path reads the shared store context from operation-queue threads
+### The barcode delegate's query-field accessors disagree with their declarations
+- **Status:** Fixed 2026-10-22.
+- **What:** The `MADViewControllerBarcodeOptionsDelegate` protocol declares
+  `- (RptqQueryField *)barcodeQueryField1;` and `:2`
+  (`MADViewControllerBarcodeOptionsDelegate.h:60-61`), but `MTViewControllerBarcode`
+  implements both returning `int64_t` (`MTViewControllerBarcode.m:321`, `:325`).  The
+  caller `MTViewControllerBarcodeOptions.m:347` then messages the result
+  (`[[delegate barcodeQueryField1] toStringHumanReadable]`), so an integer is treated as an
+  object pointer -- a crash whenever that cell is populated.  The same file resolves the
+  identifiers to `RptqQueryField` objects itself at `:168` and `:219`, which is what the
+  protocol's callers appear to expect.
+- **Why it was documented rather than fixed:** the correct shape depends on intent -- return
+  the looked-up field object, or change the protocol and both call sites to the identifier.
+  Both are real options and neither is a compile-fix.
+- **Where:** `MADDesigner/Source/barcodes/MTViewControllerBarcode.m:321-327`,
+  `MADViewControllerBarcodeOptionsDelegate.h:60-61`,
+  `MTViewControllerBarcodeOptions.m:347,516`.
+- **Evidence:** `-Wmismatched-return-types` on both implementations.
+- **Now:** the accessors return what the protocol declares.  Both getters delegate to
+  `-queryFieldForIdentifier:`, which returns `nil` for identifier `0` (no field selected
+  yet) and otherwise resolves the identifier through `self.document.storeContext` -- the
+  same `objectForEntity:identifier:` lookup `MTViewControllerBarcode` already performs in
+  `-viewWillAppear:` and the options controller performs when a field is chosen.  A
+  stale/deleted identifier resolves to `nil` and the detail label simply stays empty.
+  The inline EXC_BAD_ACCESS note at the call site is removed, and the
+  `-Wmismatched-return-types` warning is gone.
+- **Test:** none; exercising the getter needs a barcode view controller instantiated from
+  the storyboard plus a document with a populated store, which the app's unit bundle has
+  no fixture for.  Verified by the compiler (the warning above) and the app suite:
+  74 unit tests and 33 UI tests, 0 failures, and the app builds.
 - **Status:** Fixed
 - **Now:** store reads on the refresh path are marshalled onto the main queue
   (inline when already there), the store's owning queue.  In

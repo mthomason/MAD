@@ -344,7 +344,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                 NSString *sampleText = [NSString stringWithFormat:@"%@", sampleItem.allValues.lastObject];
                 [delegate setInput:sampleText];
                 
-                NSString *fieldOneName = [[delegate barcodeQueryField1] toStringHumanReadable];		// EXC_BAD_ACCESS at `[delegate barcodeQueryField1]`.  `barcodeQueryField1` is part of `MADViewControllerBarcodeOptionsDelegate.h`.  Crash happens after selecting a data field for the barcode.
+                NSString *fieldOneName = [[delegate barcodeQueryField1] toStringHumanReadable];
                 cell.detailTextLabel.text = fieldOneName;
                 
                 break;
