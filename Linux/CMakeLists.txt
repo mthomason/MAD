@@ -313,7 +313,7 @@ include(cmake/MADSources.cmake)
 file(MAKE_DIRECTORY "${SHIM_DIR}/MAD")
 file(GLOB _mad_headers "${SOURCE_DIR}/*.h" "${SOURCE_DIR}/model/*.h"
 	"${SOURCE_DIR}/rptq/*.h" "${SOURCE_DIR}/rptq/autogen/*.h" "${SOURCE_DIR}/rptq/store/*.h"
-	"${SOURCE_DIR}/paper/*.h")
+	"${SOURCE_DIR}/sql/*.h" "${SOURCE_DIR}/paper/*.h")
 foreach (_mad_header IN LISTS _mad_headers)
 	get_filename_component(_mad_header_name "${_mad_header}" NAME)
 	file(CREATE_LINK "${_mad_header}" "${SHIM_DIR}/MAD/${_mad_header_name}" SYMBOLIC)

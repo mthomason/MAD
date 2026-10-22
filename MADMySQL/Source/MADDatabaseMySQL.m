@@ -61,6 +61,8 @@
 	return [[NSString alloc] initWithFormat:@"`%@`.`%@`", tableName, fieldName];
 }
 
++ (NSString *)identifierQuoteCharacters { return @"``"; }
+
 + (MADSafeQueryField *)newSafeIdentifier:(NSString *)fieldOrTableName {
 	return [[NSString alloc] initWithFormat:@"`%@`", fieldOrTableName];
 }

@@ -314,9 +314,11 @@ static void testDropIndexAliasesParse(void) {
 		@"SELECT invoices0.id FROM invoices AS invoices0 "
 		@"INNER JOIN invoices AS invoices1 ON invoices0.id = invoices1.customer_id");
 
-	MAD_PASS(statement.fromItems.count == (NSUInteger)1, "one from item");
+	MAD_PASS(statement.fromItems.count == (NSUInteger)2, "the base table and the joined copy");
 	MAD_PASS_EQUAL(statement.fromItems.firstObject.tableName, @"invoices", "the base table");
 	MAD_PASS_EQUAL(statement.fromItems.firstObject.alias, @"invoices0", "the base table's alias");
+	MAD_PASS_EQUAL(statement.fromItems.lastObject.tableName, @"invoices", "the joined copy's table");
+	MAD_PASS_EQUAL(statement.fromItems.lastObject.alias, @"invoices1", "the joined copy's alias");
 	MAD_PASS_EQUAL(statement.joins.firstObject.rightTable, @"invoices1", "the second copy's alias");
 }
 
@@ -437,7 +439,7 @@ static void testKeywordsAreCaseInsensitive(void) {
 
 static void testNumericLiteralsParse(void) {
 	MADSQLStatement *statement =
-		ParseStatement(@"SELECT name FROM customers WHERE id = 42 AND amount >= 1.5");
+		ParseStatement(@"SELECT invoices.amount FROM invoices WHERE id = 42 AND amount >= 1.5");
 	MAD_PASS_EQUAL(statement.predicates[0].rightLiteral.text, @"42", "the integer literal");
 	MAD_PASS_EQUAL(statement.predicates[1].rightLiteral.text, @"1.5", "the decimal literal");
 }

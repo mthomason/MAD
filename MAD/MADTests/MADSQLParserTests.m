@@ -323,9 +323,11 @@ static MADSQLParser *ParserForSQLWithQuotes(NSString *sql, NSString *quotes) {
 		@"SELECT invoices0.id FROM invoices AS invoices0 "
 		@"INNER JOIN invoices AS invoices1 ON invoices0.id = invoices1.customer_id"];
 
-	XCTAssertEqual(statement.fromItems.count, (NSUInteger)1);
+	XCTAssertEqual(statement.fromItems.count, (NSUInteger)2);
 	XCTAssertEqualObjects(statement.fromItems.firstObject.tableName, @"invoices");
 	XCTAssertEqualObjects(statement.fromItems.firstObject.alias, @"invoices0");
+	XCTAssertEqualObjects(statement.fromItems.lastObject.tableName, @"invoices");
+	XCTAssertEqualObjects(statement.fromItems.lastObject.alias, @"invoices1");
 	XCTAssertEqualObjects(statement.joins.firstObject.rightTable, @"invoices1");
 }
 
@@ -446,7 +448,7 @@ static MADSQLParser *ParserForSQLWithQuotes(NSString *sql, NSString *quotes) {
 
 - (void)testNumericLiteralsParse {
 	MADSQLStatement *statement =
-		[self parseStatement:@"SELECT name FROM customers WHERE id = 42 AND amount >= 1.5"];
+		[self parseStatement:@"SELECT invoices.amount FROM invoices WHERE id = 42 AND amount >= 1.5"];
 	XCTAssertEqualObjects(statement.predicates[0].rightLiteral.text, @"42");
 	XCTAssertEqualObjects(statement.predicates[1].rightLiteral.text, @"1.5");
 }
@@ -531,7 +533,7 @@ static MADSQLParser *ParserForSQLWithQuotes(NSString *sql, NSString *quotes) {
 - (void)testAMultiConditionOnClauseIsRejected {
 	[self assertParseOfSQL:@"SELECT invoices.id FROM customers INNER JOIN invoices "
 						   @"ON customers.id = invoices.customer_id AND invoices.id > 5"
-					  code:MADSQLCompileErrorUnsupportedOnCondition line:1 column:93];
+					  code:MADSQLCompileErrorUnsupportedOnCondition line:1 column:94];
 }
 
 - (void)testANonEquiOnClauseIsRejected {
@@ -569,7 +571,7 @@ static MADSQLParser *ParserForSQLWithQuotes(NSString *sql, NSString *quotes) {
 
 - (void)testAnUnknownTableIsRejected {
 	[self assertParseOfSQL:@"SELECT name FROM nope"
-					  code:MADSQLCompileErrorUnknownTable line:1 column:19];
+					  code:MADSQLCompileErrorUnknownTable line:1 column:18];
 }
 
 - (void)testAnUnknownColumnIsRejected {
@@ -586,7 +588,7 @@ static MADSQLParser *ParserForSQLWithQuotes(NSString *sql, NSString *quotes) {
 - (void)testAnAmbiguousWhereColumnIsRejected {
 	[self assertParseOfSQL:@"SELECT customers.id FROM customers INNER JOIN invoices "
 						   @"ON customers.id = invoices.customer_id WHERE id = 5"
-					  code:MADSQLCompileErrorAmbiguousColumn line:1 column:96];
+					  code:MADSQLCompileErrorAmbiguousColumn line:1 column:101];
 }
 
 - (void)testAnOrderByOutsideTheGroupByIsRejected {
@@ -603,7 +605,7 @@ static MADSQLParser *ParserForSQLWithQuotes(NSString *sql, NSString *quotes) {
 	[self assertParseOfSQL:@"SELECT name FROM customers INNER JOIN invoices "
 						   @"ON customers.id = invoices.customer_id INNER JOIN invoices "
 						   @"ON invoices.customer_id = customers.id"
-					  code:MADSQLCompileErrorDuplicateJoin line:1 column:101];
+					  code:MADSQLCompileErrorDuplicateJoin line:1 column:98];
 }
 
 - (void)testASecondStatementIsRejected {
