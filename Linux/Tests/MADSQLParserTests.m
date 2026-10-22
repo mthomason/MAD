@@ -93,7 +93,7 @@ static void testTokenizerTracksLineAndColumn(void) {
 										   identifierQuoteCharacters:@"\"\""];
 	NSError *error = nil;
 	MAD_PASS([tokenizer tokenizeWithError:&error], "%s", [[error description] UTF8String]);
-	NSArray *tokens = tokenizer.tokens;
+	NSArray<MADSQLToken *> *tokens = tokenizer.tokens;
 	MAD_PASS(tokens != nil, "the tokenizer yields tokens");
 
 	MAD_PASS(tokens.count == (NSUInteger)5, "SELECT, name, FROM, customers, End");
@@ -164,7 +164,7 @@ static void testTokenizerSkipsComments(void) {
 										   identifierQuoteCharacters:@"\"\""];
 	NSError *error = nil;
 	MAD_PASS([tokenizer tokenizeWithError:&error], "%s", [[error description] UTF8String]);
-	NSArray *tokens = tokenizer.tokens;
+	NSArray<MADSQLToken *> *tokens = tokenizer.tokens;
 	MAD_PASS(tokens.count == (NSUInteger)3, "SELECT, name and End");
 	MAD_PASS_EQUAL(tokens[0].text, @"SELECT", "the first token");
 	MAD_PASS(tokens[0].line == 2, "SELECT is on line 2 after the line comment");
@@ -177,7 +177,7 @@ static void testTokenizerReadsEveryOperator(void) {
 										   identifierQuoteCharacters:@"\"\""];
 	NSError *error = nil;
 	MAD_PASS([tokenizer tokenizeWithError:&error], "%s", [[error description] UTF8String]);
-	NSArray *tokens = tokenizer.tokens;
+	NSArray<MADSQLToken *> *tokens = tokenizer.tokens;
 	MAD_PASS(tokens.count == (NSUInteger)12, "eleven operators and End");
 	NSArray *expected = @[ @"=", @"<>", @">", @">=", @"<", @"<=", @"(", @")", @",", @".", @"*" ];
 	for (NSUInteger index = 0; index < expected.count; index++) {
@@ -524,7 +524,7 @@ static void testAFunctionInTheWhereClauseIsRejected(void) {
 static void testAMultiConditionOnClauseIsRejected(void) {
 	AssertParseFails(@"SELECT invoices.id FROM customers INNER JOIN invoices "
 					 @"ON customers.id = invoices.customer_id AND invoices.id > 5",
-					 MADSQLCompileErrorUnsupportedOnCondition, 1, 93);
+					 MADSQLCompileErrorUnsupportedOnCondition, 1, 94);
 }
 
 static void testANonEquiOnClauseIsRejected(void) {
@@ -562,7 +562,7 @@ static void testLIMITIsRejected(void) {
 
 static void testAnUnknownTableIsRejected(void) {
 	AssertParseFails(@"SELECT name FROM nope",
-					 MADSQLCompileErrorUnknownTable, 1, 19);
+					 MADSQLCompileErrorUnknownTable, 1, 18);
 }
 
 static void testAnUnknownColumnIsRejected(void) {
@@ -579,7 +579,7 @@ static void testAnAmbiguousSelectColumnIsRejected(void) {
 static void testAnAmbiguousWhereColumnIsRejected(void) {
 	AssertParseFails(@"SELECT customers.id FROM customers INNER JOIN invoices "
 					 @"ON customers.id = invoices.customer_id WHERE id = 5",
-					 MADSQLCompileErrorAmbiguousColumn, 1, 96);
+					 MADSQLCompileErrorAmbiguousColumn, 1, 101);
 }
 
 static void testAnOrderByOutsideTheGroupByIsRejected(void) {
@@ -596,7 +596,7 @@ static void testARepeatedJoinBetweenTheSamePairIsRejected(void) {
 	AssertParseFails(@"SELECT name FROM customers INNER JOIN invoices "
 					 @"ON customers.id = invoices.customer_id INNER JOIN invoices "
 					 @"ON invoices.customer_id = customers.id",
-					 MADSQLCompileErrorDuplicateJoin, 1, 101);
+					 MADSQLCompileErrorDuplicateJoin, 1, 98);
 }
 
 static void testASecondStatementIsRejected(void) {

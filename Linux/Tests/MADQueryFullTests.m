@@ -113,10 +113,6 @@ static RptqQueryField *queryFieldNamed(NSString *name, MADDataType type,
 	return queryField;
 }
 
-static MADQueryFull *queryFullForDocument(RptqDocument *document, NSUInteger limit) {
-	return queryFullForDocumentWithDatabase(document, limit, [MADMock mockDatabase]);
-}
-
 static MADQueryFull *queryFullForDocumentWithDatabase(RptqDocument *document, NSUInteger limit, MADDatabase *database) {
 	MADQueryFull *query = [[MADQueryFull alloc] initWithQuery:document.mainQuery andQueryLimit:limit];
 	// The query holds its data delegate weakly (it is normally the document itself), so
@@ -125,6 +121,10 @@ static MADQueryFull *queryFullForDocumentWithDatabase(RptqDocument *document, NS
 	dataDelegate.database = database;
 	query.dataDelegate = dataDelegate;
 	return query;
+}
+
+static MADQueryFull *queryFullForDocument(RptqDocument *document, NSUInteger limit) {
+	return queryFullForDocumentWithDatabase(document, limit, [MADMock mockDatabase]);
 }
 
 // The single-table helper above creates a fresh schema table per field; the
