@@ -1,7 +1,8 @@
 # MAD_BARCODES.md — the barcode element: modernization and re-integration plan
 
-**Status:** Design complete (2026-10-20). Tasks are written as self-contained prompts to
-hand to a junior/flash model one at a time. Queue: `TASKS.md` §15.
+**Status:** Archived 2026-10-22 — the design and all of its tasks (0-7) were implemented
+(TASKS.md §15, done 2026-10-21). The document is kept for reference only and is no longer
+a work queue.
 
 **Product decision (user, 2026-10-20):** the barcode element is **always available** in
 the designer. The IAP gate (`com.everydayapps.mad.designer.product.element.barcode`) is

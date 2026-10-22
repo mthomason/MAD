@@ -853,9 +853,10 @@ The commits, one per task:
 Gates: `MADBarcodes` 29/29 and `MAD` 608/608; the app builds for the simulator
 and, with signing disabled, for a generic device (this machine has no `iOS
 Distribution` certificate); `./Linux/build.sh` passes 120/120. The design
-record and the per-task prompts stay in `MAD_BARCODES.md`.
+record and the per-task prompts stay in `Archive/MAD_BARCODES.md` (archived
+2026-10-22).
 
-**Remains** (documented in `MAD_BARCODES.md` §5, deliberately not built):
+**Remains** (documented in `Archive/MAD_BARCODES.md` §5, deliberately not built):
 headless barcode rendering (zint in `Linux/libraries.conf` plus a UIKit-free
 render core), GS1/Data input modes, `detailsSegueIdentifer` on the model,
 barcode images inside the HTML exporter, and the app-wide third-party notices

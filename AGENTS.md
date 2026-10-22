@@ -143,9 +143,8 @@ the headless side.
   schema and result set as one contract, how each piece is represented in the code today,
   what formalizing it takes in phases, and the multi-source/subreport composition
   documented but deliberately not built.
-* `MAD_BARCODES.md` -- the barcode element's modernization and re-integration: the
-  survey of what exists, the design decisions, and the step-by-step task prompts for
-  the `MADBarcodes` framework and the element's return to the designer.
+* `Archive/MAD_BARCODES.md` -- the barcode element's modernization and re-integration
+  design: complete and archived 2026-10-22 (TASKS.md §15); kept for reference.
 * `MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
   Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
 * `MAD_PDF_LINUX.md` -- the Linux PDF writer: status (deferred, blocked on the user's

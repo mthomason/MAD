@@ -134,6 +134,9 @@
          location = "group:MAD_ARRAY_CACHING.md">
       </FileRef>
       <FileRef
+         location = "group:Archive/MAD_BARCODES.md">
+      </FileRef>
+      <FileRef
          location = "group:MAD_CLI.md">
       </FileRef>
       <FileRef
@@ -156,6 +159,9 @@
       </FileRef>
       <FileRef
          location = "group:MAD_STORE_PHASE_C.md">
+      </FileRef>
+      <FileRef
+         location = "group:MAD_SQL_ENTRY.md">
       </FileRef>
       <FileRef
          location = "group:MADDataTable_Architecture_Report.md">
