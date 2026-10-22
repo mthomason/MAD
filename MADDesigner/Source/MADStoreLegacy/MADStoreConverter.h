@@ -50,7 +50,8 @@ typedef NS_ENUM(NSInteger, MADStoreConverterErrorCode) {
 /// and is expected to remove it once the context is no longer wanted -- the legacy
 /// store files live in it.  This is the one place a legacy document is opened, so
 /// it is also the only place to look at the rows Core Data holds before they are
-/// serialised.
+/// serialised.  `model` is the momd's current version; a store written against an
+/// older version is opened with that version instead, never migrated.
 + (nullable NSManagedObjectContext *)legacyContextForDocumentAtURL:(NSURL *)documentURL
 													   extractedTo:(NSURL *)directory
 															 model:(NSManagedObjectModel *)model
@@ -73,9 +74,10 @@ typedef NS_ENUM(NSInteger, MADStoreConverterErrorCode) {
 											   error:(NSError * __autoreleasing *)error;
 
 /// The whole bridge: open the legacy `.mad` at `documentURL`, serialise its graph,
-/// and write the portable store at `storeURL`.  `model` is the Core Data model the
-/// document was written against.  Returns the graph that was written, so the caller
-/// can compare it with what the store reads back.
+/// and write the portable store at `storeURL`.  `model` is the momd's current
+/// version; the converter opens the store with the momd version matching its
+/// metadata.  Returns the graph that was written, so the caller can compare it
+/// with what the store reads back.
 + (nullable MADStoreGraph *)convertDocumentAtURL:(NSURL *)documentURL
 									 toStoreAtURL:(NSURL *)storeURL
 											model:(NSManagedObjectModel *)model

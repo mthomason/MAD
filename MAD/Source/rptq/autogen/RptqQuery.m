@@ -27,6 +27,7 @@
 @dynamic identifier;
 @dynamic override;
 @dynamic overrideText;
+@dynamic sqlSourceText;
 @dynamic hasFields;
 @dynamic hasQueryGroups;
 @dynamic hasQueryLinks;

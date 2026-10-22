@@ -18,6 +18,7 @@
 #import "MADTestSupport.h"
 
 #import <sqlite3.h>
+#import <string.h>
 
 #import <MAD/MADStore.h>
 #import <MAD/MADStoreGraph.h>
@@ -422,7 +423,6 @@ static NSURL *makeVersionOneStoreURL(NSURL *directory) {
 	return url;
 }
 
-// The literal below is MADStoreCurrentVersion once the constant exists.
 static void testVersionOneStoreMigratesOnOpen(void) {
 	NSURL *directory = makeTempDirectory();
 	NSURL *url = makeVersionOneStoreURL(directory);
@@ -432,7 +432,7 @@ static void testVersionOneStoreMigratesOnOpen(void) {
 	MAD_PASS([store openWithError:&error], "open failed: %s", [[error description] UTF8String]);
 
 	MAD_PASS((SQLiteTableHasColumn(url, @"RptqQuery", @"sqlSourceText")), "RptqQuery did not gain sqlSourceText");
-	MAD_PASS(SQLiteUserVersion(url) == 2, "user_version");
+	MAD_PASS(SQLiteUserVersion(url) == MADStoreCurrentVersion, "user_version");
 
 	MADStoreGraph *graph = [store allObjectsWithError:&error];
 	MAD_PASS(graph != nil, "read failed: %s", [[error description] UTF8String]);
@@ -484,13 +484,13 @@ static void testOpeningTwiceIsIdempotent(void) {
 	MADStore *first = [MADStore storeWithURL:url];
 	NSError *error = nil;
 	MAD_PASS([first openWithError:&error], "first open failed: %s", [[error description] UTF8String]);
-	MAD_PASS(SQLiteUserVersion(url) == 2, "user_version after the first open");
+	MAD_PASS(SQLiteUserVersion(url) == MADStoreCurrentVersion, "user_version after the first open");
 	NSUInteger countAfterFirst = [first allObjectsWithError:&error].count;
 	[first close];
 
 	MADStore *second = [MADStore storeWithURL:url];
 	MAD_PASS([second openWithError:&error], "second open failed: %s", [[error description] UTF8String]);
-	MAD_PASS(SQLiteUserVersion(url) == 2, "user_version after the second open");
+	MAD_PASS(SQLiteUserVersion(url) == MADStoreCurrentVersion, "user_version after the second open");
 	NSUInteger countAfterSecond = [second allObjectsWithError:&error].count;
 	MAD_PASS(countAfterSecond == countAfterFirst, "the second open changes no row");
 	MAD_PASS((SQLiteTableHasColumn(url, @"RptqQuery", @"sqlSourceText")), "the column survives the second open");
@@ -507,7 +507,7 @@ static void testFreshStoreIsCreatedAtTheCurrentVersion(void) {
 	NSError *error = nil;
 	MAD_PASS([store openWithError:&error], "open failed: %s", [[error description] UTF8String]);
 
-	MAD_PASS(SQLiteUserVersion(url) == 2, "a fresh store is born at the current version");
+	MAD_PASS(SQLiteUserVersion(url) == MADStoreCurrentVersion, "a fresh store is born at the current version");
 	MAD_PASS((SQLiteTableHasColumn(url, @"RptqQuery", @"sqlSourceText")), "createSchemaSQL carries the column");
 	[store close];
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:nil];

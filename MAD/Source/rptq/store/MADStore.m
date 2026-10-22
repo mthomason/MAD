@@ -7,6 +7,7 @@
 
 #import "MADStore.h"
 #import <sqlite3.h>
+#import <string.h>
 
 NSString * const MADStoreErrorDomain = @"MADStoreErrorDomain";
 
@@ -96,6 +97,10 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 		[self close];
 		return NO;
 	}
+	if (![self migrateIfNeededWithError:error]) {
+		[self close];
+		return NO;
+	}
 
 	self.open = YES;
 	return YES;
@@ -133,6 +138,76 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 
 - (void)rollbackTransaction {
 	[self execute:@"ROLLBACK;" error:NULL];
+}
+
+#pragma mark - Versioning
+
+/// PRAGMA user_version, or -1 when the pragma cannot be read.
+- (NSInteger)readUserVersionWithError:(NSError * __autoreleasing *)error {
+	sqlite3_stmt *statement = NULL;
+	if (sqlite3_prepare_v2(self.database, "PRAGMA user_version;", -1, &statement, NULL) != SQLITE_OK) {
+		if (error) *error = MADStoreSQLiteError(self.database, @"Could not read the store version");
+		return -1;
+	}
+	NSInteger version = 0;
+	if (sqlite3_step(statement) == SQLITE_ROW) version = (NSInteger)sqlite3_column_int64(statement, 0);
+	sqlite3_finalize(statement);
+	return version;
+}
+
+/// Applies one migration step.  The column is added only when the table does
+/// not already carry it -- a store created at the current version has it from
+/// -createSchemaSQL, and the ALTER would fail on the duplicate column name.
+- (BOOL)applyMigration:(MADStoreMigration *)migration error:(NSError * __autoreleasing *)error {
+	NSString *infoSQL = [[NSString alloc] initWithFormat:@"PRAGMA table_info(\"%@\");", migration.table];
+	sqlite3_stmt *statement = NULL;
+	if (sqlite3_prepare_v2(self.database, infoSQL.UTF8String, -1, &statement, NULL) != SQLITE_OK) {
+		if (error) *error = MADStoreSQLiteError(self.database, @"Could not read a table's columns");
+		return NO;
+	}
+	BOOL present = NO;
+	while (sqlite3_step(statement) == SQLITE_ROW) {
+		const unsigned char *name = sqlite3_column_text(statement, 1);
+		if (name != NULL && strcmp((const char *)name, migration.column.UTF8String) == 0) { present = YES; break; }
+	}
+	sqlite3_finalize(statement);
+	if (present) return YES;
+
+	NSString *sql = [[NSString alloc] initWithFormat:@"ALTER TABLE \"%@\" ADD COLUMN \"%@\" %@;",
+					 migration.table, migration.column, migration.sqlTypeName];
+	return [self execute:sql error:error];
+}
+
+/// Reads PRAGMA user_version, applies the migration steps the store is behind
+/// on, and writes the current version -- all in one transaction, so a failed
+/// step leaves the store as it was.  A store at 0 has never been versioned and
+/// is version 1's schema.
+- (BOOL)migrateIfNeededWithError:(NSError * __autoreleasing *)error {
+	NSInteger version = [self readUserVersionWithError:error];
+	if (version < 0) return NO;
+	if (version == 0) version = 1;
+	if (version >= MADStoreCurrentVersion) return YES;
+
+	if (![self beginTransactionWithError:error]) return NO;
+	for (MADStoreMigration *migration in self.schema.migrations) {
+		if (migration.toVersion <= version) continue;
+		if (migration.fromVersion != version) {
+			// The ladder must be contiguous; a gap means the list, not the store.
+			[self rollbackTransaction];
+			if (error) *error = MADStoreError(MADStoreErrorSQLite, @"The migration list skips a version");
+			return NO;
+		}
+		if (![self applyMigration:migration error:error]) {
+			[self rollbackTransaction];
+			return NO;
+		}
+		version = migration.toVersion;
+	}
+	if (![self execute:[[NSString alloc] initWithFormat:@"PRAGMA user_version = %ld;", (long)MADStoreCurrentVersion] error:error]) {
+		[self rollbackTransaction];
+		return NO;
+	}
+	return [self commitTransactionWithError:error];
 }
 
 #pragma mark - Columns

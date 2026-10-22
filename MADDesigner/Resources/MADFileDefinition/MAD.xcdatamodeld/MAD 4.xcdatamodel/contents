@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788.4" systemVersion="24F74" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="3.0">
+    <entity name="RptqAlignment" representedClassName="RptqAlignment" syncable="YES">
+        <attribute name="horizontal" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="vertical" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="inElement" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElement" inverseName="alignment" inverseEntity="RptqDocumentElement"/>
+    </entity>
+    <entity name="RptqBorder" representedClassName="RptqBorder" syncable="YES">
+        <relationship name="inElement" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElement" inverseName="border" inverseEntity="RptqDocumentElement"/>
+        <relationship name="style" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDirectionalProperty" inverseName="inBorder" inverseEntity="RptqDirectionalProperty"/>
+        <relationship name="width" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDirectionalAsymmetry" inverseName="inBorder" inverseEntity="RptqDirectionalAsymmetry"/>
+    </entity>
+    <entity name="RptqDatabase" representedClassName="RptqDatabase" syncable="YES">
+        <attribute name="databaseDriverType" optional="YES" attributeType="String"/>
+        <attribute name="databaseDriverTypeEnum" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <relationship name="hasQueries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="inDatabase" inverseEntity="RptqQuery"/>
+        <relationship name="hasTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaTable" inverseName="inDatabase" inverseEntity="RptqDatabaseSchemaTable"/>
+        <relationship name="ownedByQueryAsStaticResource" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasDatabaseSchemas" inverseEntity="RptqDocument"/>
+        <relationship name="ownedByUser" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseCredentals" inverseName="inDatabase" inverseEntity="RptqDatabaseCredentals"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqDatabaseCredentals" representedClassName="RptqDatabaseCredentals" syncable="YES">
+        <attribute name="dbkey" optional="YES" attributeType="String"/>
+        <attribute name="dbname" optional="YES" attributeType="String"/>
+        <attribute name="domain" optional="YES" attributeType="String"/>
+        <attribute name="driverID" optional="YES" attributeType="String"/>
+        <attribute name="host" optional="YES" attributeType="String"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <attribute name="inUse" optional="YES" attributeType="Boolean" usesScalarValueType="NO"/>
+        <attribute name="port" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="server" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <relationship name="inDatabase" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByUser" inverseEntity="RptqDatabase"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqDatabaseSchemaField" representedClassName="RptqDatabaseSchemaField" syncable="YES">
+        <attribute name="dataType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="dataTypeNative" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="decimals" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="primaryKey" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="width" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="inQuery" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasFields" inverseEntity="RptqQuery"/>
+        <relationship name="inQueryField" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="databaseSchemaField" inverseEntity="RptqQueryField"/>
+        <relationship name="inTable" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaTable" inverseName="hasFields" inverseEntity="RptqDatabaseSchemaTable"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqDatabaseSchemaTable" representedClassName="RptqDatabaseSchemaTable" syncable="YES">
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="queryable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="hasFields" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDatabaseSchemaField" inverseName="inTable" inverseEntity="RptqDatabaseSchemaField"/>
+        <relationship name="inDatabase" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="hasTables" inverseEntity="RptqDatabase"/>
+        <relationship name="inQueryTable" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RptqQueryTable" inverseName="databaseSchemaTable" inverseEntity="RptqQueryTable"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byNameIndex">
+            <fetchIndexElement property="name" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqDirectionalAsymmetry" representedClassName="RptqDirectionalAsymmetry" syncable="YES">
+        <attribute name="bottom" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="left" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="right" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="top" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="inBorder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqBorder" inverseName="width" inverseEntity="RptqBorder"/>
+        <relationship name="inElementMargin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElement" inverseName="margin" inverseEntity="RptqDocumentElement"/>
+        <relationship name="inElementPadding" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElement" inverseName="padding" inverseEntity="RptqDocumentElement"/>
+    </entity>
+    <entity name="RptqDirectionalProperty" representedClassName="RptqDirectionalProperty" syncable="YES">
+        <attribute name="bottom" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="left" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="right" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="top" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="inBorder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqBorder" inverseName="style" inverseEntity="RptqBorder"/>
+    </entity>
+    <entity name="RptqDocument" representedClassName="RptqDocument" syncable="YES">
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <attribute name="papersize" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="hasDatabaseSchemas" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="ownedByQueryAsStaticResource" inverseEntity="RptqDatabase"/>
+        <relationship name="hasDetailSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inReport" inverseEntity="RptqDocumentSection"/>
+        <relationship name="hasPageFooterSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inReportPageFooter" inverseEntity="RptqDocumentSection"/>
+        <relationship name="hasPageHeaderSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inReportPageHeader" inverseEntity="RptqDocumentSection"/>
+        <relationship name="hasReportFooterSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inReportReportFooter" inverseEntity="RptqDocumentSection"/>
+        <relationship name="hasReportHeaderSection" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inReportReportHeader" inverseEntity="RptqDocumentSection"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqDocumentElement" representedClassName="RptqDocumentElement" isAbstract="YES" syncable="YES">
+        <attribute name="backgroundColor" optional="YES" attributeType="Transformable" valueTransformerName="MADColorTransformer" customClassName="UIColor"/>
+        <attribute name="dropIndex" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fontname" optional="YES" attributeType="String"/>
+        <attribute name="fontsize" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="foregroundColor" optional="YES" attributeType="Transformable" valueTransformerName="MADColorTransformer" customClassName="UIColor"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="alignment" maxCount="1" deletionRule="Nullify" destinationEntity="RptqAlignment" inverseName="inElement" inverseEntity="RptqAlignment"/>
+        <relationship name="border" maxCount="1" deletionRule="Nullify" destinationEntity="RptqBorder" inverseName="inElement" inverseEntity="RptqBorder"/>
+        <relationship name="dropPoint" maxCount="1" deletionRule="Nullify" destinationEntity="RptqPoint" inverseName="inElement" inverseEntity="RptqPoint"/>
+        <relationship name="inSectionRow" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSectionRows" inverseName="hasObjects" inverseEntity="RptqDocumentSectionRows"/>
+        <relationship name="margin" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDirectionalAsymmetry" inverseName="inElementMargin" inverseEntity="RptqDirectionalAsymmetry"/>
+        <relationship name="numericFormat" maxCount="1" deletionRule="Nullify" destinationEntity="RptqNumericFormat" inverseName="inElement" inverseEntity="RptqNumericFormat"/>
+        <relationship name="padding" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDirectionalAsymmetry" inverseName="inElementPadding" inverseEntity="RptqDirectionalAsymmetry"/>
+        <relationship name="rect" maxCount="1" deletionRule="Nullify" destinationEntity="RptqRect" inverseName="inElement" inverseEntity="RptqRect"/>
+        <relationship name="textStyle" maxCount="1" deletionRule="Nullify" destinationEntity="RptqTextStyle" inverseName="inElement" inverseEntity="RptqTextStyle"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqDocumentElementAggregate" representedClassName="RptqDocumentElementAggregate" parentEntity="RptqDocumentElement" syncable="YES">
+        <attribute name="functionType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="groupNumber" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="groupType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="aggregateField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inAggregateObject" inverseEntity="RptqQueryField"/>
+        <relationship name="aggregateFunction" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElementFormula" inverseName="includedInAggregateObject" inverseEntity="RptqDocumentElementFormula"/>
+    </entity>
+    <entity name="RptqDocumentElementBarcode" representedClassName="RptqDocumentElementBarcode" parentEntity="RptqDocumentElement" syncable="YES">
+        <attribute name="add2dComponent" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="barcodeBorderStyle" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="barcodeBorderType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="barcodeBorderWidth" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="barcodeHeight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="barcodeType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="humanReadable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="inputField1" optional="YES" attributeType="String"/>
+        <attribute name="inputField2" optional="YES" attributeType="String"/>
+        <attribute name="inputMode" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="inputStatic1" optional="YES" attributeType="String"/>
+        <attribute name="inputStatic2" optional="YES" attributeType="String"/>
+        <attribute name="option1" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="option2" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="option3" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="scale" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="showErrorMessage" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="useStaticInput1" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="useStaticInput2" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="whitespaceWidth" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="referencesField1" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inBarcodeField1" inverseEntity="RptqQueryField"/>
+        <relationship name="referencesField2" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inBarcodeField2" inverseEntity="RptqQueryField"/>
+    </entity>
+    <entity name="RptqDocumentElementChart" representedClassName="RptqDocumentElementChart" parentEntity="RptqDocumentElement" syncable="YES"/>
+    <entity name="RptqDocumentElementFormula" representedClassName="RptqDocumentElementFormula" parentEntity="RptqDocumentElement" syncable="YES">
+        <attribute name="functionScope" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="functionType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="inputType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="resultType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="source" optional="YES" attributeType="String"/>
+        <relationship name="includedInAggregateObject" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElementAggregate" inverseName="aggregateFunction" inverseEntity="RptqDocumentElementAggregate"/>
+    </entity>
+    <entity name="RptqDocumentElementGroupKey" representedClassName="RptqDocumentElementGroupKey" parentEntity="RptqDocumentElement" syncable="YES">
+        <attribute name="groupNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="RptqDocumentElementImage" representedClassName="RptqDocumentElementImage" parentEntity="RptqDocumentElement" syncable="YES">
+        <attribute name="image" optional="YES" attributeType="Transformable" valueTransformerName="MADPngImageTransformer" customClassName="UIImage"/>
+    </entity>
+    <entity name="RptqDocumentElementLabel" representedClassName="RptqDocumentElementLabel" parentEntity="RptqDocumentElement" syncable="YES">
+        <attribute name="text" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="RptqDocumentElementLabelDataField" representedClassName="RptqDocumentElementLabelDataField" parentEntity="RptqDocumentElement" syncable="YES">
+        <attribute name="fieldID" optional="YES" attributeType="String"/>
+        <attribute name="tableID" optional="YES" attributeType="String"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <relationship name="referencesQueryField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inDataObject" inverseEntity="RptqQueryField"/>
+    </entity>
+    <entity name="RptqDocumentElementLabelLink" representedClassName="RptqDocumentElementLabelLink" parentEntity="RptqDocumentElement" syncable="YES">
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="RptqDocumentSection" representedClassName="RptqDocumentSection" syncable="YES">
+        <attribute name="height" optional="YES" attributeType="Double" defaultValueString="44" usesScalarValueType="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="layoutHeight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="numberOfRows" attributeType="Integer 32" minValueString="0" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="visibility" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="wrappingStyle" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <relationship name="hasRows" toMany="YES" minCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDocumentSectionRows" inverseName="inSection" inverseEntity="RptqDocumentSectionRows"/>
+        <relationship name="inGroup" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryGroup" inverseName="hasSection" inverseEntity="RptqQueryGroup"/>
+        <relationship name="inReport" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasDetailSection" inverseEntity="RptqDocument"/>
+        <relationship name="inReportPageFooter" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasPageFooterSection" inverseEntity="RptqDocument"/>
+        <relationship name="inReportPageHeader" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasPageHeaderSection" inverseEntity="RptqDocument"/>
+        <relationship name="inReportReportFooter" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasReportFooterSection" inverseEntity="RptqDocument"/>
+        <relationship name="inReportReportHeader" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocument" inverseName="hasReportHeaderSection" inverseEntity="RptqDocument"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqDocumentSectionRows" representedClassName="RptqDocumentSectionRows" syncable="YES">
+        <attribute name="layoutHeight" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="rowNumber" attributeType="Integer 32" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="hasObjects" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="RptqDocumentElement" inverseName="inSectionRow" inverseEntity="RptqDocumentElement"/>
+        <relationship name="inSection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="hasRows" inverseEntity="RptqDocumentSection"/>
+        <fetchIndex name="byRowNumberIndex">
+            <fetchIndexElement property="rowNumber" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqNumericFormat" representedClassName="RptqNumericFormat" syncable="YES">
+        <attribute name="decimalCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="enabled" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="locale" optional="YES" attributeType="Transformable" valueTransformerName="MADLocaleTransformer" customClassName="NSLocale"/>
+        <relationship name="inElement" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElement" inverseName="numericFormat" inverseEntity="RptqDocumentElement"/>
+    </entity>
+    <entity name="RptqPoint" representedClassName="RptqPoint" syncable="YES">
+        <attribute name="x" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="y" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="inElement" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElement" inverseName="dropPoint" inverseEntity="RptqDocumentElement"/>
+        <relationship name="inRect" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqRect" inverseName="origin" inverseEntity="RptqRect"/>
+    </entity>
+    <entity name="RptqQuery" representedClassName="RptqQuery" syncable="YES">
+        <attribute name="cachedText" optional="YES" attributeType="String"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <attribute name="override" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="overrideText" optional="YES" attributeType="String"/>
+        <attribute name="sqlSourceText" optional="YES" attributeType="String"/>
+        <relationship name="hasFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaField" inverseName="inQuery" inverseEntity="RptqDatabaseSchemaField"/>
+        <relationship name="hasQueryGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryGroup" inverseName="inQuery" inverseEntity="RptqQueryGroup"/>
+        <relationship name="hasQueryLinks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryLinks" inverseName="inQuery" inverseEntity="RptqQueryLinks"/>
+        <relationship name="hasQueryPredicate" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryPredicate" inverseName="inQuery" inverseEntity="RptqQueryPredicate"/>
+        <relationship name="hasQuerySort" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuerySort" inverseName="inQuery" inverseEntity="RptqQuerySort"/>
+        <relationship name="hasQueryTables" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryTable" inverseName="inQuery" inverseEntity="RptqQueryTable"/>
+        <relationship name="inDatabase" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabase" inverseName="hasQueries" inverseEntity="RptqDatabase"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqQueryField" representedClassName="RptqQueryField" syncable="YES">
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="databaseSchemaField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaField" inverseName="inQueryField" inverseEntity="RptqDatabaseSchemaField"/>
+        <relationship name="inAggregateObject" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentElementAggregate" inverseName="aggregateField" inverseEntity="RptqDocumentElementAggregate"/>
+        <relationship name="inBarcodeField1" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentElementBarcode" inverseName="referencesField1" inverseEntity="RptqDocumentElementBarcode"/>
+        <relationship name="inBarcodeField2" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentElementBarcode" inverseName="referencesField2" inverseEntity="RptqDocumentElementBarcode"/>
+        <relationship name="inDataObject" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqDocumentElementLabelDataField" inverseName="referencesQueryField" inverseEntity="RptqDocumentElementLabelDataField"/>
+        <relationship name="inQueryGroup" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryGroup" inverseName="hasField" inverseEntity="RptqQueryGroup"/>
+        <relationship name="inQueryLinkLeft" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryLinks" inverseName="hasLeftField" inverseEntity="RptqQueryLinks"/>
+        <relationship name="inQueryLinkRight" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryLinks" inverseName="hasRightField" inverseEntity="RptqQueryLinks"/>
+        <relationship name="inQueryPredicateLeft" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryPredicate" inverseName="hasLeftField" inverseEntity="RptqQueryPredicate"/>
+        <relationship name="inQueryPredicateRight" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryPredicate" inverseName="hasRightField" inverseEntity="RptqQueryPredicate"/>
+        <relationship name="inQuerySort" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQuerySort" inverseName="hasField" inverseEntity="RptqQuerySort"/>
+        <relationship name="inQueryTable" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryTable" inverseName="hasQueryFields" inverseEntity="RptqQueryTable"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqQueryGroup" representedClassName="RptqQueryGroup" syncable="YES">
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sort" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="hasField" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryGroup" inverseEntity="RptqQueryField"/>
+        <relationship name="hasSection" optional="YES" toMany="YES" minCount="1" maxCount="2" deletionRule="Nullify" destinationEntity="RptqDocumentSection" inverseName="inGroup" inverseEntity="RptqDocumentSection"/>
+        <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryGroups" inverseEntity="RptqQuery"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqQueryLinks" representedClassName="RptqQueryLinks" syncable="YES">
+        <attribute name="fieldLeftID" optional="YES" attributeType="String"/>
+        <attribute name="fieldRightID" optional="YES" attributeType="String"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <attribute name="tableLeftID" optional="YES" attributeType="String"/>
+        <attribute name="tableRightID" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="hasLeftField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryLinkLeft" inverseEntity="RptqQueryField"/>
+        <relationship name="hasRightField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryLinkRight" inverseEntity="RptqQueryField"/>
+        <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryLinks" inverseEntity="RptqQuery"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqQueryPredicate" representedClassName="RptqQueryPredicate" syncable="YES">
+        <attribute name="comparson" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <attribute name="leftFieldID" optional="YES" attributeType="String"/>
+        <attribute name="rigthFieldID" optional="YES" attributeType="String"/>
+        <relationship name="hasLeftField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryPredicateLeft" inverseEntity="RptqQueryField"/>
+        <relationship name="hasRightField" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryPredicateRight" inverseEntity="RptqQueryField"/>
+        <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryPredicate" inverseEntity="RptqQuery"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqQuerySort" representedClassName="RptqQuerySort" syncable="YES">
+        <attribute name="ascending" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="identifier" attributeType="Integer 64" minValueString="0" usesScalarValueType="YES"/>
+        <relationship name="hasField" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQuerySort" inverseEntity="RptqQueryField"/>
+        <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQuerySort" inverseEntity="RptqQuery"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqQueryTable" representedClassName="RptqQueryTable" syncable="YES">
+        <attribute name="alias" optional="YES" attributeType="String"/>
+        <attribute name="dropIndex" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="identifier" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="databaseSchemaTable" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDatabaseSchemaTable" inverseName="inQueryTable" inverseEntity="RptqDatabaseSchemaTable"/>
+        <relationship name="hasQueryFields" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RptqQueryField" inverseName="inQueryTable" inverseEntity="RptqQueryField"/>
+        <relationship name="inQuery" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="RptqQuery" inverseName="hasQueryTables" inverseEntity="RptqQuery"/>
+        <fetchIndex name="byIdentifierIndex">
+            <fetchIndexElement property="identifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+    </entity>
+    <entity name="RptqRect" representedClassName="RptqRect" syncable="YES">
+        <relationship name="inElement" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElement" inverseName="rect" inverseEntity="RptqDocumentElement"/>
+        <relationship name="origin" maxCount="1" deletionRule="Nullify" destinationEntity="RptqPoint" inverseName="inRect" inverseEntity="RptqPoint"/>
+        <relationship name="size" maxCount="1" deletionRule="Nullify" destinationEntity="RptqSize" inverseName="inRect" inverseEntity="RptqSize"/>
+    </entity>
+    <entity name="RptqSize" representedClassName="RptqSize" syncable="YES">
+        <attribute name="height" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="width" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="inRect" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqRect" inverseName="size" inverseEntity="RptqRect"/>
+    </entity>
+    <entity name="RptqTextStyle" representedClassName="RptqTextStyle" syncable="YES">
+        <attribute name="bold" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="italic" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="strikethrough" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="underline" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <relationship name="inElement" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RptqDocumentElement" inverseName="textStyle" inverseEntity="RptqDocumentElement"/>
+    </entity>
+</model>

@@ -10,6 +10,8 @@
 NSString * const MADStorePositionColumn = @"position";
 NSString * const MADStoreIdentifierColumnSuffix = @"_identifier";
 
+NSInteger const MADStoreCurrentVersion = 2;
+
 #pragma mark - Attribute
 
 @implementation MADStoreAttribute
@@ -87,6 +89,36 @@ NSString * const MADStoreIdentifierColumnSuffix = @"_identifier";
 
 - (NSString *)description {
 	return [[NSString alloc] initWithFormat:@"<%@ %@ -> %@>", NSStringFromClass(self.class), self.name, self.destination];
+}
+
+@end
+
+#pragma mark - Migration
+
+@implementation MADStoreMigration
+
++ (instancetype)migrationFromVersion:(NSInteger)fromVersion
+						   toVersion:(NSInteger)toVersion
+					   addingColumn:(NSString *)column
+							  toTable:(NSString *)table
+								 type:(MADStoreValueType)type {
+	MADStoreMigration *migration = [MADStoreMigration new];
+	migration.fromVersion = fromVersion;
+	migration.toVersion = toVersion;
+	migration.table = table;
+	migration.column = column;
+	migration.type = type;
+	return migration;
+}
+
+- (NSString *)sqlTypeName {
+	switch (self.type) {
+		case MADStoreValueTypeInteger: return @"INTEGER";
+		case MADStoreValueTypeReal: return @"REAL";
+		case MADStoreValueTypeText: return @"TEXT";
+		case MADStoreValueTypeBlob: return @"BLOB";
+	}
+	return @"BLOB";
 }
 
 @end
@@ -267,6 +299,26 @@ static MADStoreRelationship *ToManyOrdered(NSString *name, NSString *destination
 	return [MADStoreRelationship toManyNamed:name destination:destination inverse:inverse ordered:YES];
 }
 
+/// The version ladder, oldest first and contiguous from version 1.  Version 1
+/// is the schema the portable store shipped with (MAD_SQL_ENTRY.md §8.2);
+/// version 2 adds the persisted SQL source text.  A store with no user_version
+/// at all is version 1's schema, and a step's work is guarded on the column's
+/// absence, so a store created at the current version passes through unchanged.
+static NSArray<MADStoreMigration *> *MADStoreMigrations(void) {
+	static NSArray<MADStoreMigration *> *migrations = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		migrations = @[
+			[MADStoreMigration migrationFromVersion:1
+										  toVersion:2
+									  addingColumn:@"sqlSourceText"
+											 toTable:@"RptqQuery"
+												type:MADStoreValueTypeText],
+		];
+	});
+	return migrations;
+}
+
 /// The one many-to-many: a query selects schema fields, and a field knows the
 /// queries that select it.  Both sides name the same join table and their own
 /// column in it.
@@ -297,7 +349,7 @@ static MADStoreEntity *Element(NSString *name, NSArray *attributes, NSArray *rel
 							   relationships:relationships];
 }
 
-/// The whole model, transcribed entity by entity from `MAD 3.xcdatamodel`.
+/// The whole model, transcribed entity by entity from `MAD 4.xcdatamodel`.
 static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 	static NSArray<MADStoreEntity *> *descriptors = nil;
 	static dispatch_once_t onceToken;
@@ -366,6 +418,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 			Int(@"identifier"),
 			Int(@"override"),
 			TextOpt(@"overrideText"),
+			TextOpt(@"sqlSourceText"),
 		], @[
 			QuerySelectsFields(),
 			ToMany(@"hasQueryGroups", @"RptqQueryGroup", @"inQuery"),
@@ -661,6 +714,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 @interface MADStoreSchema ()
 @property (nonatomic, copy) NSArray<MADStoreEntity *> *entities;
 @property (nonatomic, copy) NSArray<MADStoreEntity *> *tables;
+@property (nonatomic, copy) NSArray<MADStoreMigration *> *migrations;
 @property (nonatomic, copy) NSDictionary<NSString *, MADStoreEntity *> *byName;
 @property (nonatomic, copy) NSDictionary<NSString *, MADStoreEntity *> *byTable;
 @end
@@ -761,6 +815,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 
 	self.entities = all;
 	self.tables = tables;
+	self.migrations = MADStoreMigrations();
 	self.byName = byName;
 
 	NSMutableDictionary<NSString *, MADStoreEntity *> *byTable = [NSMutableDictionary dictionaryWithCapacity:tables.count];

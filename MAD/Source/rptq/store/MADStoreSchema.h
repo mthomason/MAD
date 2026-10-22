@@ -13,7 +13,8 @@
 //  They load independently; see MADStorePart.
 //
 //  This is the description a non-Apple platform implements to read a document.  It
-//  was transcribed from `MAD 3.xcdatamodel` and is now hand-maintained: it does not
+//  was transcribed from the compiled model (`MAD 4.xcdatamodel`) and is now
+//  hand-maintained: it does not
 //  consult Core Data, and it must not start.  MADStoreSchemaTests cross-checks it
 //  against the compiled model so the two cannot drift apart unnoticed.
 //
@@ -53,6 +54,12 @@ FOUNDATION_EXPORT NSString * const MADStorePositionColumn;
 
 /// Suffix appended to a relationship's name to name its foreign-key column.
 FOUNDATION_EXPORT NSString * const MADStoreIdentifierColumnSuffix;
+
+/// The version a store carries once every known migration has run, recorded in
+/// the store's PRAGMA user_version.  A store with no user_version at all is
+/// version 1 -- the schema the portable store shipped with -- so version 0 and
+/// version 1 are the same thing to the migration list.
+FOUNDATION_EXPORT NSInteger const MADStoreCurrentVersion;
 
 #pragma mark -
 
@@ -153,6 +160,36 @@ FOUNDATION_EXPORT NSString * const MADStoreIdentifierColumnSuffix;
 
 #pragma mark -
 
+/// One step of the store's version ladder.  Today every step is a column added
+/// to an existing table; new tables need no step at all, because
+/// -createSchemaSQL creates them wherever they are missing.
+@interface MADStoreMigration : NSObject
+
+/// The version this step upgrades.  A store at version 0 (never versioned) is
+/// treated as version 1.
+@property (nonatomic, assign) NSInteger fromVersion;
+/// The version a store carries once this step has run.
+@property (nonatomic, assign) NSInteger toVersion;
+/// The table gaining the column.
+@property (nonatomic, copy) NSString *table;
+/// The column the step adds.
+@property (nonatomic, copy) NSString *column;
+/// The column's SQLite storage class.
+@property (nonatomic, assign) MADStoreValueType type;
+
++ (instancetype)migrationFromVersion:(NSInteger)fromVersion
+						   toVersion:(NSInteger)toVersion
+					   addingColumn:(NSString *)column
+							  toTable:(NSString *)table
+								 type:(MADStoreValueType)type;
+
+/// The SQLite type name of -type, for the ALTER TABLE the step runs.
+- (NSString *)sqlTypeName;
+
+@end
+
+#pragma mark -
+
 @interface MADStoreSchema : NSObject
 
 + (instancetype)sharedSchema;
@@ -161,6 +198,9 @@ FOUNDATION_EXPORT NSString * const MADStoreIdentifierColumnSuffix;
 @property (nonatomic, copy, readonly) NSArray<MADStoreEntity *> *entities;
 /// One descriptor per table -- the entities that are not subentities.
 @property (nonatomic, copy, readonly) NSArray<MADStoreEntity *> *tables;
+/// The migration steps, oldest first and contiguous: applying one brings a
+/// store from its -fromVersion to its -toVersion.
+@property (nonatomic, copy, readonly) NSArray<MADStoreMigration *> *migrations;
 
 - (nullable MADStoreEntity *)entityNamed:(nullable NSString *)name;
 - (nullable MADStoreEntity *)entityForTable:(NSString *)table;

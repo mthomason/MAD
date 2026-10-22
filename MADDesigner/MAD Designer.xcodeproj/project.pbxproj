@@ -978,6 +978,7 @@
 		4CA1AAAC1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryVisualizationSchemaView.h; sourceTree = "<group>"; };
 		4CA1AAAD1E3A86AC00923F49 /* MADQueryVisualizationSchemaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADQueryVisualizationSchemaView.m; sourceTree = "<group>"; };
 		4CA354B01D27B1650072BD38 /* MAD 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 3.xcdatamodel"; sourceTree = "<group>"; };
+		4CA354B11D27B1650072BD39 /* MAD 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MAD 4.xcdatamodel"; sourceTree = "<group>"; };
 		4CA4D61E1D1714BD00A1240C /* MADNavigationControllerFileExplorer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADNavigationControllerFileExplorer.h; sourceTree = "<group>"; };
 		4CA4D61F1D1714BD00A1240C /* MADNavigationControllerFileExplorer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADNavigationControllerFileExplorer.m; sourceTree = "<group>"; };
 		4CA54D3218938266006B301A /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -3201,10 +3202,11 @@
 			isa = XCVersionGroup;
 			children = (
 				4CA354B01D27B1650072BD38 /* MAD 3.xcdatamodel */,
+				4CA354B11D27B1650072BD39 /* MAD 4.xcdatamodel */,
 				4C19066F1832A38B00116900 /* MAD 2.xcdatamodel */,
 				4CE8A03814BFF744007C8345 /* MAD.xcdatamodel */,
 			);
-			currentVersion = 4CA354B01D27B1650072BD38 /* MAD 3.xcdatamodel */;
+			currentVersion = 4CA354B11D27B1650072BD39 /* MAD 4.xcdatamodel */;
 			path = MAD.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

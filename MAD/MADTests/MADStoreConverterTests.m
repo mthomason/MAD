@@ -16,6 +16,7 @@
 #import <XCTest/XCTest.h>
 #import <CoreData/CoreData.h>
 #import <sqlite3.h>
+#import <string.h>
 #import <UIKit/UIKit.h>
 
 #import "MADStoreConverter.h"
@@ -202,8 +203,7 @@ static NSInteger SQLiteUserVersion(NSURL *url) {
 
 /// A converted document is born at the current store version: the converter's
 /// creation path is -[MADStore openWithError:], the same fresh-store
-/// initialization the migration tests pin.  (The literal is
-/// MADStoreCurrentVersion once the constant exists.)
+/// initialization the migration tests pin.
 - (void)testConvertedStoreIsBornAtTheCurrentVersion {
 	NSURL *storeURL = [self.directory URLByAppendingPathComponent:@"London.sqlite"];
 	NSError *error = nil;
@@ -213,7 +213,7 @@ static NSInteger SQLiteUserVersion(NSURL *url) {
 															 error:&error];
 	XCTAssertNotNil(graph, @"converting London failed: %@", error);
 	if (!graph) return;
-	XCTAssertEqual(SQLiteUserVersion(storeURL), (NSInteger)2, @"the converted store is born at the current version");
+	XCTAssertEqual(SQLiteUserVersion(storeURL), MADStoreCurrentVersion, @"the converted store is born at the current version");
 }
 
 #pragma mark - What the samples pin

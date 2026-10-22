@@ -19,6 +19,7 @@
 
 #import <XCTest/XCTest.h>
 #import <sqlite3.h>
+#import <string.h>
 
 #import <MAD/MADStore.h>
 #import <MAD/MADStoreGraph.h>
@@ -445,11 +446,10 @@ static BOOL SQLiteTableHasColumn(NSURL *url, NSString *table, NSString *column) 
 	NSError *error = nil;
 	XCTAssertTrue([store openWithError:&error], @"open failed: %@", error);
 
-	// The column exists and the store records the current version.  (The
-	// literal is MADStoreCurrentVersion once the constant exists.)
+	// The column exists and the store records the current version.
 	XCTAssertTrue((SQLiteTableHasColumn(url, @"RptqQuery", @"sqlSourceText")),
 				  @"RptqQuery did not gain sqlSourceText");
-	XCTAssertEqual(SQLiteUserVersion(url), (NSInteger)2, @"user_version");
+	XCTAssertEqual(SQLiteUserVersion(url), MADStoreCurrentVersion, @"user_version");
 
 	// Every pre-existing row and relationship survives, and the new column
 	// reads back empty.
@@ -501,13 +501,13 @@ static BOOL SQLiteTableHasColumn(NSURL *url, NSString *table, NSString *column) 
 	MADStore *first = [MADStore storeWithURL:url];
 	NSError *error = nil;
 	XCTAssertTrue([first openWithError:&error], @"first open failed: %@", error);
-	XCTAssertEqual(SQLiteUserVersion(url), (NSInteger)2, @"user_version after the first open");
+	XCTAssertEqual(SQLiteUserVersion(url), MADStoreCurrentVersion, @"user_version after the first open");
 	NSUInteger countAfterFirst = [first allObjectsWithError:&error].count;
 	[first close];
 
 	MADStore *second = [MADStore storeWithURL:url];
 	XCTAssertTrue([second openWithError:&error], @"second open failed: %@", error);
-	XCTAssertEqual(SQLiteUserVersion(url), (NSInteger)2, @"user_version after the second open");
+	XCTAssertEqual(SQLiteUserVersion(url), MADStoreCurrentVersion, @"user_version after the second open");
 	NSUInteger countAfterSecond = [second allObjectsWithError:&error].count;
 	XCTAssertEqual(countAfterSecond, countAfterFirst, @"the second open changes no row");
 	XCTAssertTrue((SQLiteTableHasColumn(url, @"RptqQuery", @"sqlSourceText")),
@@ -523,7 +523,7 @@ static BOOL SQLiteTableHasColumn(NSURL *url, NSString *table, NSString *column) 
 	NSError *error = nil;
 	XCTAssertTrue([store openWithError:&error], @"open failed: %@", error);
 
-	XCTAssertEqual(SQLiteUserVersion(url), (NSInteger)2, @"a fresh store is born at the current version");
+	XCTAssertEqual(SQLiteUserVersion(url), MADStoreCurrentVersion, @"a fresh store is born at the current version");
 	XCTAssertTrue((SQLiteTableHasColumn(url, @"RptqQuery", @"sqlSourceText")),
 				  @"createSchemaSQL carries the column");
 	[store close];
