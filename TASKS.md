@@ -866,8 +866,10 @@ gap (the zint BSD-3-Clause notice rides the licence-register track).
 
 ## 16. SQL entry — paste a SQL statement into the query designer
 
-**Status:** Open — designed 2026-10-22, not started. See `MAD_SQL_ENTRY.md` for the
-full design; this entry is the pointer, not a restatement.
+**Status:** In progress — Phase A on branch `sql-entry` (started 2026-10-22); the
+branch merges into master when the whole feature is complete. Phases B–E not
+started. See `MAD_SQL_ENTRY.md` for the full design; this entry is the pointer,
+not a restatement.
 
 The feature: a View/Edit mode on the existing read-only SQL popover
 (`MADViewControllerSQL`, presented by `barButtonItemSQL` in
