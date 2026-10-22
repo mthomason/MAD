@@ -1121,34 +1121,7 @@ own source through the running executable; the app's classes are declared locall
 in the test files rather than imported, because `MADDesigner/Source` is not on the
 bundle's header search path.
 
-### The compiled model cannot be migrated by Core Data's inference (clashing renaming identifiers)
-- **Status:** Fixed on branch `sql-entry` (unmerged) — the fix moves to the portable
-  store side entirely; see below.
-- **What:** `MAD 3.xcdatamodel`'s `RptqDocumentElementBarcode` declares
-  `barcodeBorderType` with `elementID="type"` while the same entity inherits the base
-  element's `type` attribute.  Two properties of one entity therefore share the
-  renaming identifier `type`, and `NSMappingModel` inference refuses the whole model
-  with *"Each property must have a unique renaming identifier"* — so
-  `NSMigratePersistentStoresAutomaticallyOption` can never migrate a store written
-  against any model version that contains the barcode entity.  It went unnoticed
-  because the momd's current version always matched the store exactly and no migration
-  ever ran.
-- **Why it was load-bearing-free:** no model version before `MAD 3` has a barcode
-  entity at all (`MAD.mom` and `MAD 2.mom` both lack it), so the `elementID` renames
-  nothing.  It is a fossil of the entity's re-integration (`TASKS.md` §15).
-- **Where:** `MADDesigner/Resources/MADFileDefinition/MAD.xcdatamodeld/MAD 3.xcdatamodel`
-  (still carries it — its version hash pins the in-the-wild documents and cannot
-  change) and `MAD 4.xcdatamodel` (dropped on `sql-entry`).  Diagnosed with
-  `-inferredMappingModelForSourceModel:destinationModel:error:` against each `.mom` in
-  the compiled `MAD.momd`: `MAD`→`MAD 4` and `MAD 2`→`MAD 4` infer cleanly;
-  `MAD 3`→`MAD 4` fails with the renaming-identifier error.
-- **The fix (`sql-entry`, with SQL entry Phase A):** `MAD 4.xcdatamodel` drops the
-  `elementID`, so the current model is a clean inference source for future versions;
-  and `MADStoreConverter` opens each legacy store with the momd version matching its
-  metadata (`-modelInMomdMatchingStoreAtURL:`) instead of attempting automatic
-  migration — which also repairs the latent breakage for `MAD`/`MAD 2` documents.
-  Pinned by `MADStoreConverterTests` (the London/Music samples convert and read back
-  equal against a `MAD 4`-current momd).
+- The compiled model cannot be migrated by Core Data's inference (clashing renaming identifiers)
 
 ### The value picker offers `NULL` as a value, and it is not SQL NULL
 - **Status:** Still open

@@ -153,7 +153,8 @@ the headless side.
 * `MAD_SQL_ENTRY.md` -- the design for pasting a SQL statement into the query designer: the
   supported subset, the parser/resolver/compiler in `MAD`, the validation probe, the apply
   semantics, the persisted source text (`RptqQuery.sqlSourceText` + the store's first
-  versioning step), the phases, and the tests that pin it. Not implemented.
+  versioning step), the phases, and the tests that pin it. Phases A-D implemented and
+  merged 2026-10-22 (`c48a39fb7`); Phase E deferred.
 * `Linux/README.md` -- the Linux build: the image, the ten frameworks and their
   suites, the GNUstep divergences the tests found, and the licences.
 * `MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.

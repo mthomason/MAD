@@ -866,10 +866,11 @@ gap (the zint BSD-3-Clause notice rides the licence-register track).
 
 ## 16. SQL entry — paste a SQL statement into the query designer
 
-**Status:** In progress — Phase A on branch `sql-entry` (started 2026-10-22); the
-branch merges into master when the whole feature is complete. Phases B–E not
-started. See `MAD_SQL_ENTRY.md` for the full design; this entry is the pointer,
-not a restatement.
+**Status:** Done 2026-10-22 — Phases A–D landed on `sql-entry` and merged into
+master as `c48a39fb7` (unpushed). Phase E deferred (its own decisions). Gates at
+merge: app scheme 79/79, MAD 696/696, `./Linux/build.sh` 123/123 — re-run by the
+reviewer, not just the builder. See `MAD_SQL_ENTRY.md` for the full design; this
+entry is the pointer, not a restatement.
 
 The feature: a View/Edit mode on the existing read-only SQL popover
 (`MADViewControllerSQL`, presented by `barButtonItemSQL` in
@@ -890,7 +891,7 @@ The design's phases, each with its acceptance criteria and its tests:
   a migration list with one entry — v1 → v2 adds the column — applied on open;
   fresh stores at the current version). Migration tests in MAD and in the Linux
   image. Self-contained; lands before the parser.
-  **Done on `sql-entry` (2026-10-22, unmerged).** Two deviations from the design,
+  **Done on `sql-entry` (2026-10-22, merged `c48a39fb7`).** Two deviations from the design,
   both forced by Core Data's mechanics: the model change is a new `MAD 4` version
   (an in-place `MAD 3` edit changes its version hash and orphans every in-the-wild
   document's metadata), and the legacy converter now opens each store with the momd
@@ -901,7 +902,7 @@ The design's phases, each with its acceptance criteria and its tests:
   (`MAD/Source/sql/`) and `MADSQLParserTests`. The supported subset is exactly what
   the model can hold (`MAD_SQL_ENTRY.md` §5); rejections carry coded errors with
   line:column.
-  **Done on `sql-entry` (2026-10-22, unmerged).** Ten golden tests (exact
+  **Done on `sql-entry` (2026-10-22, merged `c48a39fb7`).** Ten golden tests (exact
   statements, MySQL and TDS dialects, all seven link types, the drop-index alias,
   all six predicate operators with literal quoting, the alias-ordered active
   select list) in `MADQueryFullTests` on both platforms; the parser suite (64
@@ -917,7 +918,7 @@ The design's phases, each with its acceptance criteria and its tests:
   references; writes `sqlSourceText` verbatim on success), plus
   `MADSQLQueryCompilerTests` and the fixpoint round-trip test
   (model → SQL → parse → compile → same SQL).
-  **Done on `sql-entry` (2026-10-22, unmerged).** The compiler talks to the
+  **Done on `sql-entry` (2026-10-22, merged `c48a39fb7`).** The compiler talks to the
   document through a new `MADSQLQueryDocument` protocol: `MADocument` implements
   it with the designer's layout managers (plus the two new clear helpers for
   links and predicates), `MADHeadlessDocument` with the definition rows alone.
@@ -931,10 +932,11 @@ The design's phases, each with its acceptance criteria and its tests:
   `SELECT * FROM (<sql>) AS _mad_probe WHERE 1=0` through the `MADOperationRefresh`
   pattern), UI tests on a sample sqlite3 document, including close-and-reopen
   persistence.
-  **Done on `sql-entry` (2026-10-22, unmerged), with one recorded gap.** The
+  **Done on `sql-entry` (2026-10-22, merged `c48a39fb7`), with one recorded gap.** The
   popover's View/Edit modes are built in code over the storyboard scene;
   `MADOperationValidateSQL` and its five construction tests are in the app
-  target (app scheme 80/80). **§10.6's UI assertions are not run:** the XCUITest
+  target (app scheme 79/79; one pre-existing `MADStatusLabelRefreshTests`
+  method never executes). **§10.6's UI assertions are not run:** the XCUITest
   environment sees an empty accessibility tree (BUGS.md, "Test infrastructure"),
   so the tables-list/canvas/designer assertions cannot be made, and the UI-test
   refresh assertion is recorded here rather than faked. The §9 close-and-reopen
