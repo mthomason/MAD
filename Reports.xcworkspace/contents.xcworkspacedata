@@ -106,6 +106,9 @@
    <Group
       location = "container:"
       name = "Documents">
+      <FileRef
+         location = "container:MAD_STRATEGY.md">
+      </FileRef>
       <Group
          location = "group:Archived"
          name = "Archived">

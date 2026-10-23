@@ -459,6 +459,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A7F684831529DE32DF20727B /* MAD_STRATEGY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = MAD_STRATEGY.md; path = ../MAD_STRATEGY.md; sourceTree = SOURCE_ROOT; };
 		4CDEAD0000000000000000A1 /* MADStoreConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreConverter.h; sourceTree = "<group>"; };
 		4CDEAD0000000000000000A2 /* MADStoreConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreConverter.m; sourceTree = "<group>"; };
 		4CDEAD0000000000000000A3 /* MADStoreLegacyConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreLegacyConverter.h; sourceTree = "<group>"; };
@@ -1904,6 +1905,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				A7F684831529DE32DF20727B /* MAD_STRATEGY.md */,
 				4C63B02E306AB71200FE4ECE /* MAD DesignerDebug.entitlements */,
 				4C296A7B2EA4CEF6007DB66E /* Resources */,
 				4C296A782EA4A160007DB66E /* Source */,
