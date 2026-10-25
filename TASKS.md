@@ -980,19 +980,22 @@ replace-not-append atomic apply, GROUP BY auto-creating report group sections, t
 SELECT list validated-but-not-stored until Phase E, and the pasted text persisted as
 a single `sqlSourceText` property.
 
-## 17. The open-source launch — prompts 1–5
+## 17. The open-source launch — prompts 1–6
 
 **Status:** In progress — prompt 4 landed 2026-10-25 (drafts only, nothing
-published); prompt 5's report refreshed the same day.  The name gate is
-still open (asked; the user leans "Madfile").
+published); prompt 5's report refreshed the same day; prompt 6 (the
+libmysqlclient history pass) landed 2026-10-25, including the first push of
+`master` to the private remote.  The name gate is still open (asked; the
+user leans "Madfile").
 
-The MIT launch is a five-prompt operation driven from
-`~/Desktop/MADOpenSource/` (prompt files `0[1-5]-*.md`), run on the
-`open-source-prep` branch; nothing is pushed and nothing is published until
-the user flips the switch. The strategy is `MAD_STRATEGY.md` Appendix A; the
+The MIT launch is a six-prompt operation driven from
+`~/Desktop/MADOpenSource/` (prompt files `0[1-6]-*.md`), run on the
+`open-source-prep` branch; nothing is published until the user flips the
+switch. The strategy is `MAD_STRATEGY.md` Appendix A; the
 licence work the launch depends on is §10 (prompts 1–2). The git history
 scrub completed 2026-10-23 (backups `~/Desktop/Reports-prescrub/` and
-`.git.prescrub-2026-10-23`).
+`.git.prescrub-2026-10-23`); the second scrub — the libmysqlclient pass —
+completed 2026-10-25 (backup `~/Desktop/Reports-prescrub-libmysql-20261025.bundle`).
 
 * **Prompt 1 (licence hygiene) — done 2026-10-24.** The unlicensed rewrites
   (`NSOperation+CompletionBlock`, `NSData+AES256`), the FreeTDS LGPL
@@ -1037,7 +1040,32 @@ scrub completed 2026-10-23 (backups `~/Desktop/Reports-prescrub/` and
 * **Prompt 5 (launch decisions) — the report was written 2026-10-25
   (outside the repo, `~/Desktop/MADOpenSource/FINAL-REPORT.md`) and
   refreshed the same day with prompt 4's outcome; the publication
-  commands in it remain unexecuted.**
+  commands in it remain unexecuted except §3.2–3.3, run by prompt 6.**
+* **Prompt 6 (libmysqlclient history pass) — done 2026-10-25.** The
+  second `git filter-repo` pass (FINAL-REPORT §4 item 7, option (b)): the
+  unlicensed upstream MySQL client distribution and the GPL
+  `libmysqlclient` binaries are gone from the entire published history —
+  the prompt's five families (`libMySqlClient*`, `Reports/libMysqlClient*`,
+  `Reports/libmysqlclient*`, `Reports/TheReportViewer/APIs/libmysqlclient*`,
+  `README-libmysqlclient.txt`) plus the same-family paths the pass's
+  verification gate demanded (both `mysql-connector-c-6.0.2` distributions,
+  the `TheReportViewer/libmysqlclient.a` and framework copies, and the
+  `Objc_Mysql_iPhone_OSX` vendored dirs in both layouts).  filter-repo
+  parsed 9,216 commits; `7120a3b02` did not survive (its ancestors were
+  rewritten) — the new tip is `9ef855d1d`, tree byte-identical to
+  `94aa729ae`; the 13 earliest commits kept their hashes.  The 18 stale
+  pre-scrub branches and 11 tags were deleted from the remote and the
+  rewritten `master` force-pushed (lease-protected) while the repo is
+  private.  Report-only, unfiltered (the user's call for a later pass):
+  the Karl Kraft wrapper copies inside first-party source trees
+  (`MAD/MAD/MAD/MySQL/`, `Reports/MySQL/`), and the non-mysql third-party
+  material (`Reports/TheReportViewer/APIs/salesforce/…` incl. RestKit,
+  `Reports/TheReportViewer/APIs/Windows-Azure/…`,
+  `Reports/Barcodes/libz.1.2.8.a` — same content in the `TheReportViewer/`
+  layout).  The local pre-scrub branches and the updated safety refs
+  `kk-rewrite`/`open-source-prep-backup-kk` stay local-only.  GitHub GC
+  caveat: deleted refs stop being browsable, but GitHub purges on its own
+  schedule; a brand-new repository is the only absolute-certainty option.
 
 Open items carried out of prompt 3: the CI badge placeholder in `README.md`
 (owner/repo to be filled at publication), the workflow's `master` triggers
