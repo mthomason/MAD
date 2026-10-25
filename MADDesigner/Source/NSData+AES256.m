@@ -2,21 +2,22 @@
 //  NSData+AES256.m
 //  Reports
 //
-//  Created by Michael Thomason on 5/31/13.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012–2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "NSData+AES256.h"
 #import <stdlib.h>
+#import <string.h>
 #import <strings.h>
 #import <Foundation/NSString.h>
 
 @implementation NSData (AES256)
 
+#pragma mark - Public
+
+// A fresh random IV per message, stored in the first block of the result, so the
+// same plaintext under the same key never produces the same ciphertext.
 - (NSData *)AES256EncryptWithKey:(NSString *)key {
-	// A fresh random IV per message, stored in the first block of the result. A NULL IV
-	// made every encryption under a given key deterministic, so the same plaintext
-	// always produced the same ciphertext and callers could tell two values apart.
 	uint8_t iv[kCCBlockSizeAES128];
 	arc4random_buf(iv, sizeof(iv));
 
@@ -31,8 +32,9 @@
 	return result;
 }
 
+// The stored value is the IV followed by the ciphertext, so the first block is
+// the IV the encryptor chose for this message.
 - (NSData *)AES256DecryptWithKey:(NSString *)key {
-	// The first block is the IV the encryptor chose for this message.
 	if (self.length < kCCBlockSizeAES128) {
 		return nil;
 	}
@@ -46,97 +48,82 @@
 	return [ciphertext AES256DecryptWithKey:key iv:iv];
 }
 
-#pragma mark - Fixed-IV core (test seam)
+#pragma mark - Core (fixed IV)
 
-/*
-	The deterministic core behind the public encryptor: encrypt self under key with the
-	given 16-byte IV, returning the ciphertext alone. Exposed so the golden tests can pin
-	exact ciphertext bytes against externally computed vectors; the public method draws a
-	random IV and prepends it.
- */
+// The AES-256 key is the UTF-8 bytes of key, zero-padded to 32 bytes when
+// shorter. A key that does not fit 32 bytes is refused: silently truncating --
+// or worse, falling back to an all-zero key -- would let two different keys
+// produce the same ciphertext.
+static BOOL MADCopyAESKey(NSString *key, char keyBuffer[kCCKeySizeAES256]) {
+	char buffer[kCCKeySizeAES256 + 1]; // room for the terminator, which is not part of the key
+	bzero(buffer, sizeof(buffer)); // fill with zeroes (for padding)
+	if (![key getCString:buffer maxLength:sizeof(buffer) encoding:NSUTF8StringEncoding]) {
+		return NO;
+	}
+	memcpy(keyBuffer, buffer, kCCKeySizeAES256);
+	return YES;
+}
+
+// Encrypts self with AES-256-CBC and PKCS#7 padding under the given 16-byte IV,
+// returning the ciphertext alone. The public encryptor draws a random IV and
+// prepends it; this form exists so the tests can pin the ciphertext against
+// known vectors.
 - (NSData *)AES256EncryptWithKey:(NSString *)key iv:(NSData *)iv {
 	if (iv.length != kCCBlockSizeAES128) {
 		return nil;
 	}
-
-	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
-	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
-	bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
-
-	// fetch key data. The result was once discarded, so a key too long to fit left the
-	// buffer as the 32 zero bytes it was just cleared to -- two different keys then
-	// produced identical ciphertext. Refuse instead of silently using the zero key.
-	if (![key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding]) {
+	char keyBuffer[kCCKeySizeAES256];
+	if (!MADCopyAESKey(key, keyBuffer)) {
 		return nil;
 	}
 
-	NSUInteger dataLength = self.length;
-
-	//See the doc: For block ciphers, the output size will always be less than or
-	//equal to the input size plus the size of one block.
-	//That's why we need to add the size of one block here
-	size_t bufferSize = dataLength + kCCBlockSizeAES128;
+	// For a block cipher, the output is at most the input plus one block.
+	size_t bufferSize = self.length + kCCBlockSizeAES128;
 	void *buffer = malloc(bufferSize);
 
 	size_t numBytesEncrypted = 0;
-	CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
-										  keyPtr, kCCKeySizeAES256,
-										  iv.bytes,
-										  self.bytes, dataLength, /* input */
-										  buffer, bufferSize, /* output */
-										  &numBytesEncrypted);
-	if (cryptStatus == kCCSuccess) {
-		NSData *result = [NSData dataWithBytes:buffer length:numBytesEncrypted];
+	CCCryptorStatus status = CCCrypt(kCCEncrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
+									 keyBuffer, kCCKeySizeAES256,
+									 iv.bytes,
+									 self.bytes, self.length,
+									 buffer, bufferSize,
+									 &numBytesEncrypted);
+	if (status != kCCSuccess) {
 		free(buffer);
-		return result;
+		return nil;
 	}
 
-	free(buffer); //free the buffer;
-	return nil;
+	// The returned data takes ownership of the buffer and frees it on deallocation.
+	return [NSData dataWithBytesNoCopy:buffer length:numBytesEncrypted freeWhenDone:YES];
 }
 
-/*
-	The deterministic core behind the public decryptor: self is the ciphertext (without
-	the IV prefix), iv the 16 bytes the encryptor used for this message.
- */
+// Decrypts self (the ciphertext, without the IV prefix) with AES-256-CBC under
+// the given 16-byte IV; see the encryptor above.
 - (NSData *)AES256DecryptWithKey:(NSString *)key iv:(NSData *)iv {
 	if (iv.length != kCCBlockSizeAES128) {
 		return nil;
 	}
-
-	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
-	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
-	bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
-
-	// fetch key data. As in the encrypt path, a key too long to fit is refused rather
-	// than silently turning into the all-zero key.
-	if (![key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding]) {
+	char keyBuffer[kCCKeySizeAES256];
+	if (!MADCopyAESKey(key, keyBuffer)) {
 		return nil;
 	}
 
-	NSUInteger dataLength = self.length;
-
-	//See the doc: For block ciphers, the output size will always be less than or
-	//equal to the input size plus the size of one block.
-	//That's why we need to add the size of one block here
-	size_t bufferSize = dataLength + kCCBlockSizeAES128;
+	size_t bufferSize = self.length + kCCBlockSizeAES128;
 	void *buffer = malloc(bufferSize);
 
 	size_t numBytesDecrypted = 0;
-	CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
-										  keyPtr, kCCKeySizeAES256,
-										  iv.bytes,
-										  self.bytes, dataLength, /* input */
-										  buffer, bufferSize, /* output */
-										  &numBytesDecrypted);
-
-	if (cryptStatus == kCCSuccess) {
-		//the returned NSData takes ownership of the buffer and will free it on deallocation
-		return [NSData dataWithBytesNoCopy:buffer length:numBytesDecrypted];
+	CCCryptorStatus status = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
+									 keyBuffer, kCCKeySizeAES256,
+									 iv.bytes,
+									 self.bytes, self.length,
+									 buffer, bufferSize,
+									 &numBytesDecrypted);
+	if (status != kCCSuccess) {
+		free(buffer);
+		return nil;
 	}
 
-	free(buffer); //free the buffer;
-	return nil;
+	return [NSData dataWithBytesNoCopy:buffer length:numBytesDecrypted freeWhenDone:YES];
 }
 
 @end

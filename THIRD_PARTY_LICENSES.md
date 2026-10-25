@@ -27,7 +27,7 @@ possibly three more.**
 | 1 | **mysqlclient 8.4.10** | **GPL-2.0-only** + Universal FOSS Exception | **BLOCKER — must not ship in a proprietary app without an Oracle commercial license.** |
 | 2 | **Karl Kraft MySQL connector** | none — "All rights reserved" | **Unresolved — no license grant found. Obtain one or replace the code.** |
 | 3 | **NSOperation+Advanced** | none — "All rights reserved" | **Unresolved — upstream has no license file. Two small methods; rewrite.** |
-| 4 | **NSData+AES256** | unknown — pastie snippet | **Unresolved — no author, no grant. Rewrite.** |
+| 4 | **NSData+AES256** | ~~unknown — pastie snippet~~ | **Resolved 2026-10-24 — rewritten as first-party code, format pinned by golden vectors.** |
 | 5 | FreeTDS 1.4.27 | LGPL-2.0-or-later | Permitted, but **carries relink + notice obligations we do not currently meet**. |
 | 6 | OpenSSL 3.5.9 | Apache-2.0 | Permitted; **license text must ship**. |
 | 7 | libarchive 3.8.9 | BSD-2-Clause | Permitted; **notice must ship**. |
@@ -227,12 +227,17 @@ a handful of lines each.
 
 *Action: rewrite them in-house. This is cheaper than resolving provenance.*
 
-**`NSData+AES256.{h,m}`** — `MADDesigner/Source/`. Header credits Michael
-Thomason but carries "Found at http://pastie.org/426530#44" — a public snippet
-paste with no author and no license, since removed. The AES-256-CBC wrapping of
-CommonCrypto is short and is well-documented by Apple.
-
-*Action: rewrite in-house, or establish the origin.*
+**`NSData+AES256.{h,m}`** — `MADDesigner/Source/`. **Resolved 2026-10-24:
+rewritten as first-party code.** The ciphertext format was pinned first by
+golden vectors in `MADAppLogicTests.m` computed independently with
+`openssl enc -aes-256-cbc` and verified green against the pre-rewrite
+implementation, then the bodies were rewritten from the AES-256-CBC
+specification (CommonCrypto's documented `CCCrypt` usage, PKCS#7) with the same
+key derivation (UTF-8, zero-padded to 32 bytes, refused when longer) and the
+same IV handling (random IV prepended to the ciphertext). The golden vectors
+pass unchanged after the rewrite. Was: the header credited Michael Thomason but
+carried "Found at http://pastie.org/426530#44" — a public snippet paste with no
+author and no license, since removed.
 
 ### 4.2 Permissive, with notices to carry
 

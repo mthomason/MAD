@@ -2,10 +2,7 @@
 //  NSData+AES256.h
 //  Reports
 //
-//  Created by Michael Thomason on 5/31/13.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
-//
-//  Found at http://pastie.org/426530#44
+//  Copyright © 2012–2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef Reports_NSData_AES256_h
