@@ -24,8 +24,9 @@ possibly three more.**
 
 | # | Component | License | Verdict |
 |---|---|---|---|
-| 1 | **mysqlclient 8.4.10** | **GPL-2.0-only** + Universal FOSS Exception | **BLOCKER — must not ship in a proprietary app without an Oracle commercial license.** |
-| 2 | **Karl Kraft MySQL connector** | none — "All rights reserved" | **Unresolved — no license grant found. Obtain one or replace the code.** |
+| 1 | ~~**mysqlclient 8.4.10**~~ | ~~GPL-2.0-only + Universal FOSS Exception~~ | **Removed 2026-10-24 — replaced by MariaDB Connector/C (below); GPLv2 is gone from the product.** |
+| 1b | **MariaDB Connector/C 3.4.11** | LGPL-2.0-or-later, **elected LGPL-3.0** | Permitted; covered by the same relink mechanism as FreeTDS (see §3.3 and `ThirdParty/Licenses/README.md`). |
+| 2 | ~~**Karl Kraft MySQL connector**~~ | ~~none — "All rights reserved"~~ | **Resolved 2026-10-24 — rewritten as first-party code with the MariaDB swap.** |
 | 3 | **NSOperation+CompletionBlock** (was `NSOperation+Advanced`) | ~~none — "All rights reserved"~~ | **Resolved 2026-10-24 — rewritten as first-party code under a first-party name.** |
 | 4 | **NSData+AES256** | ~~unknown — pastie snippet~~ | **Resolved 2026-10-24 — rewritten as first-party code, format pinned by golden vectors.** |
 | 5 | FreeTDS 1.4.27 | LGPL-2.0-or-later, **elected LGPL-3.0** | Permitted; **notice, marked header, LGPL text and written relink offer landed 2026-10-24** (kit script deferred to the MariaDB prompt). |
@@ -63,7 +64,7 @@ The link model matters for which obligations attach, so it is worth stating once
   xcframeworks. Nothing from `Compressor/` is embedded or copied into the bundle.
 * Each `.a` is linked into a **first-party dynamic `MAD*.framework`**:
   MAD (libarchive, bzip2, zlib), MADBarcodes (libpng, zlib, zint),
-  MADMySQL (mysqlclient, openssl), MADSqlite3 (sqlite3), MADTds (freetds, openssl).
+  MADMySQL (mariadb, openssl, zlib), MADSqlite3 (sqlite3), MADTds (freetds, openssl).
 * The app embeds and codesigns 12 `MAD*.framework` bundles. **No third-party dylib
   ships.** At runtime the app links only Apple libraries (`libc++`, `libxml2`,
   `liblzma`, `libiconv`, `libobjc`, `libSystem`).
@@ -102,7 +103,13 @@ permissive components — **zstd** (BSD-3-Clause), **zlib** (Zlib) and
 **libdivsufsort** (MIT). None of them changes the analysis; the archive as a whole
 is governed by Oracle's GPLv2.
 
-### 3.2 libmysqlclient — the blocker
+### 3.2 libmysqlclient — the blocker (historical, removed 2026-10-24)
+
+**Removed 2026-10-24.** D1 was decided by the owner: MariaDB Connector/C is the
+replacement, the swap landed (Compressor recipe, the framework link, the Linux
+image build, and the Karl Kraft layer rewritten as first-party code in the same
+pass), and the mysqlclient matrix row and recipe are deleted. The analysis below
+is kept as the record of why it had to go.
 
 **License.** `Compressor/build/mysqlclient/source/src/LICENSE` states the release
 is "under version 2 of the GNU General Public License (GPLv2)" and Oracle
@@ -193,7 +200,9 @@ notice and source-offer wording is the one that must ship.
 **The LGPL-3.0 election is recorded.** 2026-10-24: this project elects
 **LGPL-3.0** for FreeTDS, for the compatibility reason above. The election is
 also recorded in `ThirdParty/Licenses/README.md` and `NOTICE`; the LGPL-3.0
-text is committed at `ThirdParty/Licenses/LGPL-3.0.txt`.
+text is committed at `ThirdParty/Licenses/LGPL-3.0.txt`. **The same election
+covers MariaDB Connector/C (§3.4)**, which is LGPL-2.0-or-later and links the
+same OpenSSL 3 — one election, one mechanism, two libraries.
 
 **Two concrete defects, both addressed:**
 
@@ -214,6 +223,38 @@ text is committed at `ThirdParty/Licenses/LGPL-3.0.txt`.
 
 ---
 
+### 3.4 MariaDB Connector/C — LGPL, the mysqlclient replacement
+
+**License.** Every source file carries the same grant: "This library is free
+software; you can redistribute it and/or modify it under the terms of the GNU
+Library General Public License ... either version 2 of the License, or (at
+your option) any later version." So it is **LGPL-2.0-or-later**, and — exactly
+as for FreeTDS — this project elects **LGPL-3.0**, because the connector links
+OpenSSL 3 (Apache-2.0) and the v3 terms are the compatible ones. The election
+is recorded in §3.3, `NOTICE` and `ThirdParty/Licenses/README.md`; the LGPL-3.0
+text committed there serves both libraries.
+
+**What ships.** `Compressor` builds 3.4.11 from the pinned GitHub release
+tarball into `mariadb.xcframework`; the static archive is `libmariadbclient.a`
+(Connector/C's `libmariadb` target is hardcoded shared on UNIX). The recipe
+compiles the `caching_sha2_password` and `sha256_password` auth plugins into
+the static archive and disables every other plugin, so no plugin `.so` exists
+in the product at all. `MADMySQL` links `mariadb.xcframework` plus
+`zlib.xcframework` (the external-zlib build leaves `compress2`/`uncompress` as
+link dependencies). The Linux image builds the same version into `/usr/local`
+(`Linux/libraries.conf`).
+
+**Obligations.** The LGPL-3.0 relink condition applies exactly as for FreeTDS
+and is discharged by the same mechanism: the written offer in
+`ThirdParty/Licenses/README.md` names both libraries, and the relink-kit
+script (deferred by the owner's decision, plan §9.3) will serve both. The
+source position is the pinned upstream release; nothing is modified.
+
+**Why this exists.** This is the resolution of D1 (owner's decision,
+2026-10-24) and the exit of GPLv2 from the product (§3.2 is the historical
+record). The `MADMySQL` layer above the C API was rewritten as first-party
+code in the same pass (§4.1).
+
 ## 4. Committed third-party source inside the app targets
 
 `DEVELOPER.md` says "nothing third-party is in revision control." That is not
@@ -222,18 +263,18 @@ compile into the shipped app.
 
 ### 4.1 Unresolved — no license grant
 
-**Karl Kraft MySQL connector** — `MADMySQL/Source/` (30 files). Headers read
-"Created by Karl Kraft on 5/21/08. Copyright 2008-2012 Karl Kraft. All rights
-reserved." There is **no license text anywhere in the repo**, and the upstream
-project (formerly `svn.karlkraft.com/mysql_connector`, described in his 2010–2011
-blog posts) is no longer reachable; no mirror or license statement could be
-located. Absent a grant, "all rights reserved" means there is no permission to
-copy and distribute it. Note this sits directly on top of the GPL problem of
-§3.2 — the MySQL support would need attention on this axis even if the client
-library were replaced.
-
-*Action: obtain a written grant from Karl Kraft, or replace these classes with
-first-party code (the API surface used is small: connect, query, fetch, escape).*
+**Karl Kraft MySQL connector** — `MADMySQL/Source/` (30 files). **Resolved
+2026-10-24: rewritten as first-party code, riding the MariaDB swap (plan §3
+A3).** Every `Mysql*` file was rewritten from the MySQL C API with the class
+structure and the `MADMySQL`-facing API kept, the attribution deleted, and the
+behaviour pinned by the existing `MADMySQL` suite (122 tests, including the
+live suite against the Docker MySQL 8.4 server) before and after. Was: the
+headers read "Created by Karl Kraft on 5/21/08. Copyright 2008-2012 Karl Kraft.
+All rights reserved." There is no license text anywhere in the repo, and the
+upstream project (formerly `svn.karlkraft.com/mysql_connector`, described in
+his 2010–2011 blog posts) is no longer reachable; no mirror or license
+statement could be located. Absent a grant, "all rights reserved" means there
+is no permission to copy and distribute it.
 
 **`NSOperation+Advanced.{h,m}`** — `MADFoundation/Source/`. **Resolved
 2026-10-24: rewritten as first-party code and renamed
@@ -308,14 +349,14 @@ them if the repository is ever made public.*
 3. **FreeTDS's relink obligation** — header marked and written offer landed
    2026-10-24; the relink-kit script is deferred by the owner's decision (plan
    §9.3) to the MariaDB prompt, where the mechanism serves both libraries.
-4. **`libmysqlclient` cannot lawfully ship** in this product as configured —
-   unchanged; the owner's decision (D1) remains open, and the 2026-10-24 MIT
-   relicensing is recorded in §3.2 as a fact the decision should weigh.
-5. ~~**Three components have no license grant.**~~ Two of three resolved
-   2026-10-24: `NSOperation+CompletionBlock` (was `NSOperation+Advanced`) and
-   `NSData+AES256` are rewritten as
-   first-party code. The Karl Kraft connector remains (Prompt 2, with the
-   MariaDB swap).
+4. ~~**`libmysqlclient` cannot lawfully ship** in this product as
+   configured.~~ **Resolved 2026-10-24:** D1 went to MariaDB Connector/C and the
+   swap landed — the mysqlclient matrix row, recipe and link are gone, and
+   GPLv2 has left the product (§3.2 is the historical record).
+5. ~~**Three components have no license grant.**~~ **All three resolved
+   2026-10-24:** `NSOperation+CompletionBlock` (was `NSOperation+Advanced`),
+   `NSData+AES256`, and — with the MariaDB swap — the Karl Kraft connector,
+   all rewritten as first-party code.
 6. `DEVELOPER.md`'s claim that nothing third-party is in revision control is
    inaccurate. The stale `patches/zint-2.4.2-mad.patch` references are corrected:
    `LIBRARIES.md` (§1) now describes the zint 2.16.0 recipe, and
@@ -328,16 +369,14 @@ them if the repository is ever made public.*
 
 **P0 — blocking, decide before the next submission**
 
-1. Decide the `libmysqlclient` question: Oracle commercial license, MariaDB
-   Connector/C (LGPL-2.1), or drop MySQL. Nothing else on this list is as
-   consequential. **Open — the owner's decision (D1); the MIT relicensing of
-   2026-10-24 is recorded in §3.2 as a fact the decision should weigh.**
-2. Resolve the three unlicensed components. Two of them are small enough to
-   rewrite in an afternoon; the Karl Kraft connector is the real decision.
-   **Two of three done 2026-10-24: `NSOperation+CompletionBlock` (was
-   `NSOperation+Advanced`) and `NSData+AES256`
-   are rewritten as first-party code. The Karl Kraft connector is Prompt 2's
-   work, with the MariaDB swap.**
+1. ~~Decide the `libmysqlclient` question: Oracle commercial license, MariaDB
+   Connector/C (LGPL-2.1), or drop MySQL.~~ **Decided 2026-10-24: MariaDB
+   Connector/C, and the swap landed the same day.** The MIT relicensing of
+   2026-10-24 is recorded in §3.2 as a fact the decision weighed.
+2. ~~Resolve the three unlicensed components.~~ **All three resolved
+   2026-10-24:** `NSOperation+CompletionBlock` (was `NSOperation+Advanced`),
+   `NSData+AES256`, and the Karl Kraft connector (with the MariaDB swap) are
+   rewritten as first-party code.
 3. Remove the dead `openssl.xcframework` link from the app target. **Open.**
 
 **P1 — compliance, should be done before shipping**

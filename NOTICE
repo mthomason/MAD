@@ -15,5 +15,12 @@ and registered in THIRD_PARTY_LICENSES.md. In particular:
   exercise the right to modify the library and relink this application, see
   the written offer in ThirdParty/Licenses/README.md.
 
+- MariaDB Connector/C 3.4.11 (LGPL-2.0-or-later, taken under LGPL-3.0 for
+  the same reason as FreeTDS: it links OpenSSL 3) is linked statically as
+  libmariadbclient.a, with the caching_sha2_password and sha256_password
+  auth plugins compiled in and every other plugin disabled. The source is
+  the pinned upstream release in Compressor/matrix.conf, unmodified. The
+  same written relink offer covers it.
+
 - The .mad document format specification (MAD_FORMAT.md) is published freely.
   The "MAD" name is not covered by the code licence.

@@ -486,54 +486,59 @@ covers the conversion of the two shipping samples and the existing user reports.
 
 ## 10. Third-party licence compliance
 
-**Status:** Open — prompt 1 of the open-source launch (licence hygiene) landed
-2026-10-24; D1 and the Karl Kraft rewrite stay open for Prompt 2. The register is
-`THIRD_PARTY_LICENSES.md` and the plan is `LICENSE_COMPLIANCE_PLAN.md`; read those
-first, this entry is only the queue. Done so far: the miniz copyright headers were
-corrected (2026-10-04); on 2026-10-24 `NSOperation+Advanced` was reimplemented
-as first-party code and renamed `NSOperation+CompletionBlock`, and
-`NSData+AES256` was rewritten as first-party code (the AES ciphertext format was pinned by golden
-vectors before the rewrite), the FreeTDS LGPL obligations landed (LGPL-3.0 elected
-and recorded, the modified `sybdb.h` now carries its notice from the recipe, the
-LGPL text and the written relink offer are committed — the relink-kit script is
-deferred by the owner's decision, plan §9.3), the repository is now MIT (`LICENSE`,
-`NOTICE`), and every third-party licence text ships in `ThirdParty/Licenses/`
-including the FontAwesome OFL and the recovered Larabie readme for CarbonBlock.
+**Status:** Open — prompt 2 of the open-source launch (MariaDB Connector/C swap)
+landed 2026-10-24; what remains is mechanical (the in-app Acknowledgements
+surface, plan C2, and the relink-kit script, plan §9.3 — both deferred by
+decisions already made). The register is `THIRD_PARTY_LICENSES.md` and the plan
+is `LICENSE_COMPLIANCE_PLAN.md`; read those first, this entry is only the
+queue. Done: the miniz copyright headers were corrected (2026-10-04); prompt 1
+landed 2026-10-24 (the two unlicensed rewrites — `NSOperation+CompletionBlock`
+and `NSData+AES256` with golden-vector-pinned ciphertext — the FreeTDS LGPL
+obligations with LGPL-3.0 elected, the MIT relicensing, and
+`ThirdParty/Licenses/`); prompt 2 landed 2026-10-24 (below).
 
 The review found one blocker, three components with no licence grant at all, and a set of
 notice obligations the app does not currently meet (it ships no attributions).
 
-**Delayed 2026-10-17; updated 2026-10-24.** The user is not taking D1 yet: the
-CLI deliverable came first, and D1 is now Prompt 2 of the launch plan. The image
-keeps mysqlclient until D1 is decided; if an image is ever *published* before
-then, the GPL exposure below becomes real and has to be raised with the user, not
-decided by an agent. Note for Prompt 2: the 2026-10-24 MIT relicensing may bring
-the Universal FOSS Exception into play (recorded in `THIRD_PARTY_LICENSES.md`
-§3.2) — a fact for the D1 decision, not a decision by an agent.
+**D1 — decided 2026-10-24, landed the same day.** The owner chose MariaDB
+Connector/C for the mysqlclient replacement. The swap: Compressor builds
+3.4.11 (recipe `lib/recipes/mariadb.sh`, verified by `lib/verify/mariadb.sh`
+gating the static `caching_sha2_password` plugin), `MADMySQL` links
+`mariadb.xcframework` + `zlib.xcframework` and no longer re-exports the
+library header trees, the Karl Kraft layer was rewritten as first-party code
+in the same pass (plan §3 A3), and the Linux image build swapped
+`Linux/libraries.conf`/`lib/libraries.sh`/`CMakeLists.txt` to the same
+library. The MySQL suite stays green through the MariaDB client — 122 tests
+including the live suite against the Docker MySQL 8.4 server — and the
+mysqlclient matrix row and recipe were deleted after every gate. The old
+GPLv2 analysis remains as `THIRD_PARTY_LICENSES.md` §3.2, marked historical.
+The 2026-10-24 MIT relicensing and its effect on the FOSS-exception analysis
+are recorded there as facts the decision weighed.
 
-**Blocker — needs an owner decision, not an agent.** `libmysqlclient` 8.4.10 is GPLv2,
+**Blocker — historical, resolved 2026-10-24.** `libmysqlclient` 8.4.10 is GPLv2,
 and the Universal FOSS Exception covers only software that is itself FOSS. _MAD Designer_
 is proprietary, so shipping the MySQL client library as configured obliges us to release
-the app's source under the GPLv2. The options are: buy an Oracle commercial licence,
+the app's source under the GPLv2. The options were: buy an Oracle commercial licence,
 replace the client with MariaDB Connector/C (LGPL-2.0-or-later, same C API — all 27
 `mysql_*` entry points `MADMySQL` uses are in its surface), or drop MySQL support.
 Linking it dynamically does **not** help; GPL copyleft is indifferent to the link mode.
-Do not submit a build until this is resolved. `LICENSE_COMPLIANCE_PLAN.md` §3 is the
-step-by-step for the MariaDB route.
+D1 chose MariaDB and the swap landed; the mysqlclient matrix row, recipe and link are
+gone, and GPLv2 has left the product.
 
 **Unlicensed code that must be resolved.** Three committed components carried "all rights
 reserved" and no grant: the Karl Kraft MySQL connector (`MADMySQL/Source/`, 30 files),
 `NSData+AES256` (`MADDesigner/Source/`, a pastie snippet with no author), and
 `NSOperation+Advanced`, now `NSOperation+CompletionBlock` (`MADFoundation/Source/`,
-two small methods, upstream `kas-kad/AdvancedNSOperations` has no LICENSE file). All three are rewrites rather than
-negotiations. **Two landed 2026-10-24:** `NSOperation+Advanced` (renamed
-`NSOperation+CompletionBlock`) and `NSData+AES256` are
-first-party code now, their behaviour pinned by the existing tests plus golden AES
-vectors. Only the Karl Kraft connector remains — its rewrite rides the MariaDB swap in
-Prompt 2. On the connector specifically: the original distribution (examined
-2026-10-04, then deleted) carries no grant either — a public blog post is not a
-dedication to the public domain — and since the MariaDB swap means touching that layer
-anyway, the plan rewrites it as first-party code (plan §3 A3).
+two small methods, upstream `kas-kad/AdvancedNSOperations` has no LICENSE file). All three were rewrites rather than
+negotiations. **All three landed 2026-10-24:** `NSOperation+Advanced` (renamed
+`NSOperation+CompletionBlock`) and `NSData+AES256` in prompt 1, and the Karl
+Kraft connector in prompt 2 — all 28 `Mysql*` files rewritten from the MySQL C
+API with the class structure and `MADMySQL`-facing API kept, behaviour pinned
+by the 122-test MySQL suite (live tests included) before and after. On the
+connector specifically: the original distribution (examined 2026-10-04, then
+deleted) carries no grant either — a public blog post is not a dedication to
+the public domain — and since the MariaDB swap means touching that layer
+anyway, the plan rewrote it as first-party code (plan §3 A3).
 
 **Mechanical compliance work, once the above is decided.** The licence texts are
 committed (`ThirdParty/Licenses/`), and the FreeTDS LGPL items landed 2026-10-24:
