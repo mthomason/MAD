@@ -916,6 +916,21 @@ Covered by an offline suite (`MADMySQLTests.m`) plus a live suite
 `MADMySQLFetch` and `MADMySQLFetch+DataTable`, which are thin wrappers over
 libmysqlclient; it skips rather than fails when no server is reachable.
 
+### `MADDatabaseMySQL -closeConnection:` and `MADMySQLConnection -dealloc` both `mysql_close` the handle
+- **Status:** Confirmed (latent -- the closeConnection path is the create-document-from-schema import)
+- **Where:** `MADMySQL/Source/MADDatabaseMySQL.m:397-403` and `MADMySQL/Source/MADMySQLConnection.m:79-85`
+- **Behavior:** `-closeConnection:` calls `mysql_close` on the connection's handle, and the
+  connection's own `-dealloc` calls `mysql_close` on the same handle again when the object
+  dies. The handle's storage is calloc'd by the connection and `free_me` is false, so
+  neither call frees the struct -- but each call frees the session's internal buffers, so
+  the second is a double free.
+- **Why it matters:** Only latent. Every other path drops the connection without
+  `-closeConnection:`, so the single close in `-dealloc` is the common case; the import
+  path (`MADOperationCreateDocumentImportSchema.m:246,293`) is the only caller that
+  closes and then releases. Recorded during the connector rewrite so the next reader does
+  not mistake the arrangement for one that was checked.
+- **Test:** none -- the path needs the app and a live server.
+
 ### `MADMySQLInsert -execute` reports `ULONG_MAX` rows for a duplicate it ignored
 - **Status:** Quirk (left as is)
 - **Where:** `MADMySQL/Source/MADMySQLInsert.m:110-126`
