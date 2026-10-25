@@ -486,18 +486,29 @@ covers the conversion of the two shipping samples and the existing user reports.
 
 ## 10. Third-party licence compliance
 
-**Status:** Open — the plan is written and one item is done. The register is
+**Status:** Open — prompt 1 of the open-source launch (licence hygiene) landed
+2026-10-24; D1 and the Karl Kraft rewrite stay open for Prompt 2. The register is
 `THIRD_PARTY_LICENSES.md` and the plan is `LICENSE_COMPLIANCE_PLAN.md`; read those
 first, this entry is only the queue. Done so far: the miniz copyright headers were
-corrected (2026-10-04).
+corrected (2026-10-04); on 2026-10-24 `NSOperation+Advanced` and `NSData+AES256`
+were rewritten as first-party code (the AES ciphertext format was pinned by golden
+vectors before the rewrite), the FreeTDS LGPL obligations landed (LGPL-3.0 elected
+and recorded, the modified `sybdb.h` now carries its notice from the recipe, the
+LGPL text and the written relink offer are committed — the relink-kit script is
+deferred by the owner's decision, plan §9.3), the repository is now MIT (`LICENSE`,
+`NOTICE`), and every third-party licence text ships in `ThirdParty/Licenses/`
+including the FontAwesome OFL and the recovered Larabie readme for CarbonBlock.
 
 The review found one blocker, three components with no licence grant at all, and a set of
 notice obligations the app does not currently meet (it ships no attributions).
 
-**Delayed 2026-10-17.** The user is not taking D1 yet: the CLI deliverable comes
-first.  Nothing here is started, and the image keeps mysqlclient until D1 is decided;
-if an image is ever *published* before then, the GPL exposure below becomes real and
-has to be raised with the user, not decided by an agent.
+**Delayed 2026-10-17; updated 2026-10-24.** The user is not taking D1 yet: the
+CLI deliverable came first, and D1 is now Prompt 2 of the launch plan. The image
+keeps mysqlclient until D1 is decided; if an image is ever *published* before
+then, the GPL exposure below becomes real and has to be raised with the user, not
+decided by an agent. Note for Prompt 2: the 2026-10-24 MIT relicensing may bring
+the Universal FOSS Exception into play (recorded in `THIRD_PARTY_LICENSES.md`
+§3.2) — a fact for the D1 decision, not a decision by an agent.
 
 **Blocker — needs an owner decision, not an agent.** `libmysqlclient` 8.4.10 is GPLv2,
 and the Universal FOSS Exception covers only software that is itself FOSS. _MAD Designer_
@@ -509,21 +520,28 @@ Linking it dynamically does **not** help; GPL copyleft is indifferent to the lin
 Do not submit a build until this is resolved. `LICENSE_COMPLIANCE_PLAN.md` §3 is the
 step-by-step for the MariaDB route.
 
-**Unlicensed code that must be resolved.** Three committed components carry "all rights
-reserved" and no grant: the Karl Kraft MySQL connector (`MADMySQL/Source/`, 30 files), and
+**Unlicensed code that must be resolved.** Three committed components carried "all rights
+reserved" and no grant: the Karl Kraft MySQL connector (`MADMySQL/Source/`, 30 files),
 `NSData+AES256` (`MADDesigner/Source/`, a pastie snippet with no author), and
 `NSOperation+Advanced` (`MADFoundation/Source/`, two small methods, upstream
 `kas-kad/AdvancedNSOperations` has no LICENSE file). All three are rewrites rather than
-negotiations. On the connector specifically: the original distribution (examined
+negotiations. **Two landed 2026-10-24:** `NSOperation+Advanced` and `NSData+AES256` are
+first-party code now, their behaviour pinned by the existing tests plus golden AES
+vectors. Only the Karl Kraft connector remains — its rewrite rides the MariaDB swap in
+Prompt 2. On the connector specifically: the original distribution (examined
 2026-10-04, then deleted) carries no grant either — a public blog post is not a
 dedication to the public domain — and since the MariaDB swap means touching that layer
 anyway, the plan rewrites it as first-party code (plan §3 A3).
 
-**Mechanical compliance work, once the above is decided.** Add an Acknowledgements surface
-and commit the licence texts; FreeTDS needs its LGPL notices, a marked modified `sybdb.h`
-and a written relink offer (elect LGPL-3.0 — it links OpenSSL 3, and Apache-2.0 is not
-compatible with the v2 terms); add the OFL text for FontAwesome and the readme for
-CarbonBlock. The miniz headers were corrected on 2026-10-04.
+**Mechanical compliance work, once the above is decided.** The licence texts are
+committed (`ThirdParty/Licenses/`), and the FreeTDS LGPL items landed 2026-10-24:
+LGPL-3.0 elected and recorded (it links OpenSSL 3, and Apache-2.0 is not compatible
+with the v2 terms), the modified `sybdb.h` now carries its notice from the recipe,
+and the written relink offer is in `ThirdParty/Licenses/README.md` (the kit script
+is deferred by the owner's decision, plan §9.3). The OFL text for FontAwesome and
+the Larabie readme for CarbonBlock are committed. Still open: the in-app
+Acknowledgements surface (plan C2, held until D1) and the relink-kit script. The
+miniz headers were corrected on 2026-10-04.
 
 **Linux toolchain, flagged 2026-10-06 (see §11).** The Phase B image builds on
 libobjc2 (MIT), libdispatch (Apache-2.0 with the Swift runtime exception), GNUstep
