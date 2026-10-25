@@ -75,9 +75,11 @@ CMD ["bash", "Linux/build.sh", "--in-image", "test"]
 # the sources and the 119 test binaries stay in the stages above.
 #
 # Built and run locally (`Linux/build.sh --runtime` / `--verify`); it is not
-# published.  mysqlclient is GPLv2, and *distributing* this image would make
-# LICENSE_COMPLIANCE_PLAN.md §2's obligation real -- publication is the user's
-# decision (TASKS.md §10), not a build step.
+# published.  The GPLv2 blocker left with the mysqlclient swap: mariadb
+# (Connector/C) is LGPL and is linked statically, so it needs no runtime files
+# here and its relink offer (`ThirdParty/Licenses/README.md`) covers
+# distribution.  Publication remains the user's decision (TASKS.md §10), not
+# a build step.
 # ---------------------------------------------------------------------------
 FROM ubuntu:24.04 AS runtime
 
@@ -85,8 +87,10 @@ ENV DEBIAN_FRONTEND=noninteractive \
 	LANG=C.UTF-8 \
 	LD_LIBRARY_PATH=/usr/local/lib
 
-# The runtime half of toolchain-base's package list: what GNUstep Base and
-# mysqlclient link, without clang, cmake, git or the -dev packages.
+# The runtime half of toolchain-base's package list: what GNUstep Base links,
+# without clang, cmake, git or the -dev packages.  The C libraries the
+# frameworks link (sqlite3, freetds, openssl, zlib, bzip2, libarchive,
+# mariadb) are static and are already inside the binary.
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		ca-certificates libavahi-client3 libcurl4 libffi8 libgmp10 \
@@ -100,14 +104,9 @@ COPY --from=toolchain /usr/local/lib/libgnustep-base.so.1.31.1 /usr/local/lib/
 COPY --from=toolchain /usr/local/lib/libobjc.so.4.6 /usr/local/lib/
 COPY --from=toolchain /usr/local/lib/libdispatch.so /usr/local/lib/
 COPY --from=toolchain /usr/local/lib/libBlocksRuntime.so /usr/local/lib/
-COPY --from=toolchain /usr/local/lib/libmysqlclient.so.24.0.10 /usr/local/lib/
 COPY --from=toolchain /usr/local/lib/GNUstep /usr/local/lib/GNUstep
 COPY --from=toolchain /usr/local/etc/GNUstep /usr/local/etc/GNUstep
 COPY --from=toolchain /usr/local/share/GNUstep /usr/local/share/GNUstep
-# mysqlclient resolves its error messages and charset tables against the
-# prefix it was built with.
-COPY --from=toolchain /usr/local/share/english /usr/local/share/english
-COPY --from=toolchain /usr/local/share/charsets /usr/local/share/charsets
 
 COPY --from=build /usr/local/bin/mad /usr/local/bin/mad
 
@@ -124,7 +123,6 @@ COPY --from=build \
 # the ENV above.  `mad help` is the build-time link check: a missing shared
 # object fails this RUN.
 RUN ln -s libgnustep-base.so.1.31.1 /usr/local/lib/libgnustep-base.so.1.31 \
-	&& ln -s libmysqlclient.so.24.0.10 /usr/local/lib/libmysqlclient.so.24 \
 	&& ldconfig \
 	&& mad help >/dev/null
 
