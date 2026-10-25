@@ -4,7 +4,7 @@
 
 The `Compressor` project builds the third-party static libraries the _MAD Designer_
 application links (SQLite, zlib, OpenSSL, bzip2, libpng, libarchive, FreeTDS,
-mysqlclient, zint). Nothing third-party is committed: sources are downloaded on
+MariaDB Connector/C, zint). Nothing third-party is committed: sources are downloaded on
 demand and built by recipes, and the artifacts are xcframeworks plus canonical
 include dirs, all gitignored.
 
@@ -45,10 +45,11 @@ To add a new third-party library: add its row to `matrix.conf`, write
 the simplest model), and add the xcframework + ensure phase to the consuming
 Xcode target.
 
-**Version bumps carry per-recipe knowledge.** The mysqlclient recipe (host
-tools, cross preset answers), the freetds recipe (installed-header patch) and
-the zint recipe (cmake flags) all encode assumptions about the pinned version
--- `LIBRARIES.md` section 1 lists them. When a version bumps, re-check those.
+**Version bumps carry per-recipe knowledge.** The mariadb recipe (static
+target name, install layout, auth-plugin types, the LibreSSL probe answer), the
+freetds recipe (installed-header patch) and the zint recipe (cmake flags) all
+encode assumptions about the pinned version -- `LIBRARIES.md` section 1 lists
+them. When a version bumps, re-check those.
 
 ## Testing and Reports
 
