@@ -2,7 +2,7 @@
 //  NSData+AES256.m
 //  Reports
 //
-//  Copyright © 2012–2026 Michael Thomason. SPDX-License-Identifier: MIT
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "NSData+AES256.h"
