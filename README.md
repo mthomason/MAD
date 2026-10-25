@@ -1,9 +1,112 @@
 # MAD Designer
 
-## Mobile Analytics Document Designer
+**A report is a file.**
 
-Copyright © Michael Thomason 2025.  All rights reserved.
+MAD Designer is a mobile analytic document designer: a portable report
+definition plus the engine that renders it. A `.mad` document holds the whole
+report — the query, its tables and joins, and the layout of its elements — in
+one small file (under 100 KB), separate from the data it displays. Anyone who
+can read the file can run the report, refresh it against the database, and
+export it.
 
-## Build Notes
+The repository is one self-contained project: the iPad/iPhone app, thirteen
+frameworks, the headless engine with its Linux build and test suite, the `mad`
+command-line tool, and the build system that produces the third-party
+libraries. It is published under the MIT licence; the `.mad` format is an open
+specification (see [`docs/`](docs/)), though the project's name is not covered
+by the licence grant.
 
-We use OpenSSL / TLS in MySQL / FreeTDS drivers; we are not using custom encryption algorithms. These are standard, widely accepted encryption algorithms. Under Apple’s export compliance guidelines, we believe this is exempt encryption, so we set `ITSAppUsesNonExemptEncryption` = `NO`.
+[![Linux verification](https://github.com/OWNER/REPO/actions/workflows/linux.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/linux.yml)
+<!-- Fill in OWNER/REPO when the repository is published; the workflow activates then. -->
+
+## Try it
+
+The headless engine runs the `mad` CLI in Docker. Build the image once, then
+inspect one of the checked-in sample documents:
+
+```sh
+./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
+docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro mad-cli:latest \
+    mad inspect /docs/London.portable.mad
+```
+
+Every verb works the same way — `schema`, `refresh`, `export` (HTML paged and
+flow, text, CSV, JSON data and report; PDF refused on Linux by design for
+now):
+
+```sh
+docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro mad-cli:latest \
+    mad refresh /docs/Music.portable.mad
+docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out mad-cli:latest \
+    mad export /docs/London.portable.mad --format html --out /out/london.html
+```
+
+The sample documents refresh against the Sqlite3 sample database that ships
+inside the image; the MySQL and SQL Server fixtures expect the test servers
+from `DEVELOPER.md`. The image is built locally for now — publishing it to a
+registry is part of the launch.
+
+## The `.mad` format
+
+A `.mad` file is a bzip2-compressed tar archive holding the report's
+*definition*: the query, its tables and joins, the report's sections and
+elements, and the database schema snapshot. The row data a report displays is
+**not** in the document — it is a derived cache, regenerated on refresh, and
+deliberately kept outside the file. The format is fully specified in
+[`docs/`](docs/): what ships today, the normative `v1` target, and the hazards
+a second reader must handle. Both shipping samples are under 80 KB.
+
+## Database drivers
+
+MAD Designer talks to databases through `MADDatabase` subclasses. Three
+drivers ship today:
+
+* **MySQL / MariaDB** — `MADMySQL`, over MariaDB Connector/C;
+* **SQL Server** — `MADTdsClient`, over FreeTDS;
+* **SQLite** — `MADSqlite3`, for sample documents and internal tables.
+
+A driver is a framework that subclasses `MADDatabase` and registers itself —
+the query designer and the engine never see the wire protocol. Writing one is
+the intended first contribution (see the driver-authoring tutorial under
+[`docs/tutorials/driver-authoring.md`](docs/tutorials/driver-authoring.md)).
+The seam is real: the query designer auto-generates the SQL, so a user designs
+a report without writing a statement, and the driver only has to execute it
+and return rows.
+
+## Build and test
+
+The iOS side is a workspace of thirteen frameworks plus the app. Run a
+framework's suite against the iOS Simulator:
+
+```sh
+xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
+	-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
+```
+
+(`MADMySQL` and `MADTdsClient` also carry live suites that talk to a real
+database server and skip when one is not reachable — see `DEVELOPER.md`.)
+
+The headless engine is verified the same way on Linux. From the repository
+root, with Docker installed:
+
+```sh
+./Linux/build.sh       # build the toolchain image, compile the ten frameworks, run the suites
+```
+
+This runs 123 test executables and 1,262 tests inside the container, and
+`--verify` adds the CLI's end-to-end checks against the checked-in fixtures
+and their pinned digests. See `Linux/README.md` for the image, the pins, and
+the GNUstep divergences the port found.
+
+## Licence
+
+MIT — see [`LICENSE`](LICENSE). Every third-party component, its licence, and
+what shipping it obliges us to do is recorded in
+[`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
+
+## Export compliance
+
+The MySQL and FreeTDS drivers use OpenSSL/TLS; no custom encryption is
+implemented. Under Apple's export compliance guidelines this is exempt
+encryption, and the app sets `ITSAppUsesNonExemptEncryption = NO`.

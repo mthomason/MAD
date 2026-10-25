@@ -1,0 +1,62 @@
+# Linux verification — the headless engine's gate.
+#
+# Runs on pushes to master and on pull requests against it, plus manual
+# dispatch.  The build image is ~6.6 GB and the toolchain stage takes
+# 15-25 minutes cold, so the Dockerfile stages are built with buildx and the
+# GitHub Actions layer cache (one shared scope) before ./Linux/build.sh
+# takes over; later runs only rebuild the source layer.
+#
+# Free-tier math, stated honestly: public repositories get free, unlimited
+# Actions minutes, so runtime is fine.  The layer cache must stay under the
+# 10 GB per-repo Actions cache limit -- the compressed layers of the pinned
+# toolchain and the sources are ~2-3 GB in one shared scope, leaving margin.
+# The runner disk is the tight number: 14 GB total, of which the toolchain,
+# build and runtime images share layers and occupy roughly 7-8 GB.  If disk
+# ever becomes the failure, the job must be split (toolchain cache job with
+# artifacts) rather than the images grown.
+#
+# The file activates the moment the repository is published on GitHub; it is
+# inert until then.  If the default branch is renamed at publication, update
+# the two `master` triggers below.
+
+name: Linux verification
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build the toolchain stage (pinned by Linux/toolchain.conf; cached)
+        run: |
+          docker buildx build -f Linux/Dockerfile --target toolchain \
+            -t mad-linux-toolchain:1 \
+            --cache-from type=gha,scope=mad-linux \
+            --cache-to type=gha,mode=max,scope=mad-linux \
+            --load .
+
+      - name: Build the build stage and run the suites
+        run: |
+          docker buildx build -f Linux/Dockerfile --target build \
+            -t mad-linux:phase-b \
+            --cache-from type=gha,scope=mad-linux \
+            --cache-to type=gha,mode=max,scope=mad-linux \
+            --load .
+          ./Linux/build.sh --test
+
+      - name: Verify the runtime image end to end
+        run: ./Linux/build.sh --verify
