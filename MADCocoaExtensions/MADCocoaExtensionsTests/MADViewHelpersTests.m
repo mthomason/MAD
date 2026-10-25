@@ -2,7 +2,7 @@
 //  MADViewHelpersTests.m
 //  MADCocoaExtensionsTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADViewHelpers: the autoresizing mask the title labels use, and the
 //  safe-area reader.  A detached view has zero safe-area insets, which is the state

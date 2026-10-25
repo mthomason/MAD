@@ -3,7 +3,7 @@
 //  MADSqlite3
 //
 //  Created by Michael Thomason on 9/15/15.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import <Foundation/NSObjCRuntime.h>

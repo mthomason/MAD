@@ -2,7 +2,7 @@
 //  MADOperationDocumentCloseDocumentTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADOperationDocumentCloseDocument: the dependency scan, the
 //  quick finish for a document that was never opened (Closed state, no store),

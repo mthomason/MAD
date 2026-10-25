@@ -2,7 +2,7 @@
 //  MADCoreDataModelTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 4 (Core Data domain model) coverage for the MAD framework.  These tests
 //  load the compiled MAD.xcdatamodeld (MAD.momd) from the test bundle and exercise

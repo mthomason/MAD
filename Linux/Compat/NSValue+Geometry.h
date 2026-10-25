@@ -2,7 +2,7 @@
 //  NSValue+Geometry.h
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Apple's NSValue boxes CoreGraphics values under the CG*Value spellings;
 //  GNUstep carries the same accessors under Foundation's NSPoint/NSSize/NSRect

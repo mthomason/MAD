@@ -2,7 +2,7 @@
 //  MADLegacyStoreConversion.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  A document written before the portable store holds its definition in a Core Data
 //  store; opening it converts that store to the portable form.  Conversion needs Core

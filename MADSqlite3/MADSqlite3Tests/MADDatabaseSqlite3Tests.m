@@ -2,7 +2,7 @@
 //  MADDatabaseSqlite3Tests.m
 //  MADSqlite3Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Stateless (no live database) coverage for the MADSqlite3 framework:
 //    * MADDatabaseSqlite3 class methods (type/affinity mapping, safe identifiers,

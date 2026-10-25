@@ -2,7 +2,7 @@
 //  MADQuerySampleDataTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the three sample-data queries: MADQuerySampleDataField,
 //  MADQuerySampleDataTable and MADQuerySampleDataTableRange.  These back the sample

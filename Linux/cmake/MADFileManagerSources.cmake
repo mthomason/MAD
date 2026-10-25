@@ -1,3 +1,5 @@
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 # The MADFileManager subset the Linux build compiles (MAD_LINUX.md §9): 10 of
 # the framework's 11 implementation files.
 #

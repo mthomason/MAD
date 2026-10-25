@@ -3,7 +3,7 @@
 //  Scrimpter
 //
 //  Created by Michael Thomason on 6/23/14.
-//  Copyright (c) 2024 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "MTAstNodeStatement.h"

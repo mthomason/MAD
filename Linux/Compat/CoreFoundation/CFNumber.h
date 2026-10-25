@@ -2,7 +2,7 @@
 //  CFNumber.h
 //  Linux/Compat/CoreFoundation
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  GNUstep ships no CFNumber, and no toll-free bridge to reach one.  The code
 //  that imports this header uses exactly one call -- CFNumberGetValue over an

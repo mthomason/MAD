@@ -2,7 +2,7 @@
 //  CGBase.h
 //  Linux/Compat/CoreGraphics
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The frameworks import <CoreGraphics/CGBase.h> for the geometry scalars;
 //  off Apple that is the same header as <CoreGraphics/CGGeometry.h>.

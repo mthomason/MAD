@@ -2,7 +2,7 @@
 //  NSURL+FileSystem.h
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Apple's NSURL converts itself to the file system's byte representation;
 //  GNUstep's stops at NSString's version of the same call.  The shim answers

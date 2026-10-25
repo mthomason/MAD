@@ -2,7 +2,7 @@
 //  MADDataTypeTests.m
 //  Linux/Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Ported from MADFoundationTests/MADDataTypeTests.m: coverage for the
 //  MADDataType enum, the name mapping and the sort-selector lookup that every

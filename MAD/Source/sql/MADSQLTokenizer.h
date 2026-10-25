@@ -2,7 +2,7 @@
 //  MADSQLTokenizer.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The pasted-SQL lexer (MAD_SQL_ENTRY.md §4): splits the input into tokens with
 //  1-based line:column positions, reading identifiers through the dialect's own

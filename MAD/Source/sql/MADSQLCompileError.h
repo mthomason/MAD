@@ -2,7 +2,7 @@
 //  MADSQLCompileError.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The one error shape the pasted-SQL front half reports (MAD_SQL_ENTRY.md §5):
 //  a coded NSError whose userInfo carries the offending token's 1-based

@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 2/3/17.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  One schema field, keyed by the RptqDatabaseSchemaField row's identifier: name,
 //  data type and the width/decimals metadata.  Built by MADModelTable -update.

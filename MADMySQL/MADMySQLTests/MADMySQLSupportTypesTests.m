@@ -2,7 +2,7 @@
 //  MADMySQLSupportTypesTests.m
 //  MADMySQLTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Offline coverage for the two small carrier types in MADMySQL: MADMySQLIndex,
 //  which only remembers the connection it was built with, and MADMySQLLiteral,

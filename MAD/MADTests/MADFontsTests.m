@@ -2,7 +2,7 @@
 //  MADFontsTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADFonts: the font family list the style inspector
 //  offers.  An instance snapshots UIFont's family names sorted case-insensitively, so the

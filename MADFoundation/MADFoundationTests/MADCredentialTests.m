@@ -2,7 +2,7 @@
 //  MADCredentialTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADCredential: the username/password value object used to carry
 //  database credentials into connection flows.

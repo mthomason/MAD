@@ -1,3 +1,5 @@
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 # The MAD subset the Linux build compiles (MAD_LINUX.md §9): 168 of the 199
 # implementation files under MAD/Source -- the data, model, store, query and
 # archive side, and since Phase E the render half (the formatter, the page walk,

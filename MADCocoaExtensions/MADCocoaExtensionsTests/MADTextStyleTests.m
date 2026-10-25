@@ -2,7 +2,7 @@
 //  MADTextStyleTests.m
 //  MADCocoaExtensionsTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADTextStyle: init, property accessors, NSCoding round-trip.
 //  Documents the defect where the initializer scrambles the italic/underline/

@@ -2,7 +2,7 @@
 //  madlibTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the C string helpers in madlib.c: the hand-rolled integer-to-ASCII
 //  converters and digit counters.  These predate the framework and are used where a

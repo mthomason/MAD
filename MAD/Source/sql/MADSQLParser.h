@@ -2,7 +2,7 @@
 //  MADSQLParser.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The pasted-SQL front end (MAD_SQL_ENTRY.md §4, §5): a dialect-aware
 //  recursive-descent parser that accepts exactly the language the model can

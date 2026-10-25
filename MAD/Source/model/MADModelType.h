@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 3/31/17.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The kinds a MADModel can be.  Declared early; nothing in the tree reads it
 //  (MADModel_Layer.md §6).

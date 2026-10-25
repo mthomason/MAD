@@ -3,7 +3,7 @@
 //  MADExplorer
 //
 //  Created by Michael on 1/27/18.
-//  Copyright © 2018 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 /*
 #ifndef Reports_MADFileExplorerFlowLayoutDelegate_h

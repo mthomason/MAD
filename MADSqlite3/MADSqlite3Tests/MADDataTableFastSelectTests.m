@@ -2,7 +2,7 @@
 //  MADDataTableFastSelectTests.m
 //  MADSqlite3Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the MADDataTableFast surface the existing suites do not reach: the
 //  group-key WHERE clause, the read-transaction pair, and -runSelectQuery: (the

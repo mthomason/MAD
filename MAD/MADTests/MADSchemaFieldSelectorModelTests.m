@@ -2,7 +2,7 @@
 //  MADSchemaFieldSelectorModelTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADSchemaFieldSelectorModel: the schema field selector's
 //  per-table folding state.  The only behaviour is that a fresh model starts closed and

@@ -2,7 +2,7 @@
 //  MADDataTableBaseTests.m
 //  Linux/Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Ported from MADFoundationTests/MADDataTableBaseTests.m: coverage for the
 //  pieces of the MADDataTable base class the MAD-bundle regression suite does

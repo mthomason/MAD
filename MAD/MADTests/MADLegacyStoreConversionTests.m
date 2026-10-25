@@ -2,7 +2,7 @@
 //  MADLegacyStoreConversionTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADLegacyStoreConversion: the registry the document uses
 //  to reach a Core Data converter it must not link itself.  Pinned here: the error

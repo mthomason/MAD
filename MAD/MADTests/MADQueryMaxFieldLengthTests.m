@@ -2,7 +2,7 @@
 //  MADQueryMaxFieldLengthTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADQueryMaxFieldLength: the query that asks a database for the
 //  longest value in each field, used to size columns for the sample-data preview.

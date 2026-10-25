@@ -2,7 +2,7 @@
 //  MADDatabaseDataBindingTests.m
 //  MADAPITests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 2 coverage for MADDatabaseDataBinding: the value type that binds a
 //  typed value to a query-result field index.  Exercises the private

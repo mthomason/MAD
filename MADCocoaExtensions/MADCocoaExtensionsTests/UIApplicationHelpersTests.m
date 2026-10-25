@@ -2,7 +2,7 @@
 //  UIApplicationHelpersTests.m
 //  MADCocoaExtensionsTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for UIApplication (Helpers).  This is a logic-test bundle, so there is no
 //  application scene: the window lookup has nothing to find, and the pins record that

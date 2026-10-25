@@ -2,7 +2,7 @@
 //  MADOperationHoldsProtocolsTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the three "holder" protocols an operation adopts when it carries
 //  credentials, a password, or a username for a dependent operation to read:

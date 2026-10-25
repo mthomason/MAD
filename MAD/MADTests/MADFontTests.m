@@ -2,7 +2,7 @@
 //  MADFontTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADFont: the two class-level defaults the designer's
 //  style inspector starts from -- "Helvetica Neue" at 9 points.

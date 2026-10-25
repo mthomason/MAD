@@ -1,3 +1,5 @@
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 # The MADMySQL subset the Linux build compiles (MAD_LINUX.md §9): the 18
 # implementation files of the Xcode target's 19.
 #

@@ -2,7 +2,7 @@
 //  MADStoreConverter.h
 //  MAD Designer
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The bridge from a legacy Core Data `.mad` to the portable store.  It lives in the
 //  application target, not the MAD framework: the framework is the headless engine's

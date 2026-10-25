@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  Recipe for MariaDB Connector/C.  Depends on the openssl and zlib recipes
 #  (matrix deps): every slice links the per-platform openssl and zlib

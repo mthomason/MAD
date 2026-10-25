@@ -2,7 +2,7 @@
 //  MADStoreObject.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  One row of the portable store: an entity name, the `identifier` that keys it,
 //  its attribute values, and its relationship edges.  Attribute values are keyed by

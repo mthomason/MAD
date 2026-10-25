@@ -3,7 +3,7 @@
 //  MADFoundation
 //
 //  Created by Michael Thomason on 9/23/15.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "MADApplication.h"

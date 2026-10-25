@@ -2,7 +2,7 @@
 //  MADCloudFileCoordinatorTests.m
 //  MADFileManagerTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADCloudFileCoordinator.  iCloud is not offered in this build
 //  and the simulator has no ubiquity container (URLForUbiquityContainerIdentifier:

@@ -2,7 +2,7 @@
 //  MADDatabaseFieldTests.m
 //  MADAPITests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 2 coverage for MADDatabaseField: the value type that represents a column
 //  in a database table.  Exercises initialization defaults, the numeric-type

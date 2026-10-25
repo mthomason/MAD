@@ -2,7 +2,7 @@
 //  MADDocumentObjectDataReferenceBarcodeTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADDocumentObjectDataReferenceBarcode: the handle over a
 //  barcode element.  It hands the element itself back as the MADBarcodeProtocol object and

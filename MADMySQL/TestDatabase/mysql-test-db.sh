@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  mysql-test-db.sh -- the pinned MySQL test server, in Docker.
 #

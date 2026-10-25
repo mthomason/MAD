@@ -2,7 +2,7 @@
 //  CGGeometry.h
 //  Linux/Compat/CoreGraphics
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Apple's CoreGraphics geometry, off Apple.  GNUstep's Foundation already
 //  carries the types -- CGFloat, CGPoint, CGSize and CGRect come in with

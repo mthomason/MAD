@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 2/3/17.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The root of the read-model: one per open document, built lazily by
 //  -MADocument.documentModel over the store context.  Owns the databases and

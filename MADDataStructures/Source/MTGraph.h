@@ -3,7 +3,7 @@
 //  libMTDataStrutures
 //
 //  Created by Michael Thomason on 12/10/12.
-//  Copyright © 2025 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef MAD_MTGraph_MTObject_h

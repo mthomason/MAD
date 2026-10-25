@@ -3,7 +3,7 @@
 //  MADFoundation
 //
 //  Created by Michael on 5/27/25.
-//  Copyright © 2025 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef MADFoundation_madmacros_h

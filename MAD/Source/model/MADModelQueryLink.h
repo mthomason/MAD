@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 2/3/17.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  One join in a query, keyed by the RptqQueryLinks row's identifier: the
 //  table+field pair at each end (MADTableFieldIdentifier).  These are the graph

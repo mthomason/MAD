@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  Recipe for FreeTDS.  Depends on the openssl recipe (matrix deps): every
 #  slice links our per-platform openssl install.  config.guess/config.sub

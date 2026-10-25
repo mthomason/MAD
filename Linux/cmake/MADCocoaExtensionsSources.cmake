@@ -1,3 +1,5 @@
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 # The MADCocoaExtensions subset the Linux build compiles (MAD_LINUX.md §9):
 # the 7 layout/style implementation files of the Xcode target's 14.  The
 # framework splits cleanly: everything that stores geometry, numbers and

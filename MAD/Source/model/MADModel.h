@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 1/22/17.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The base of the document read-model: identity only.  A model object's
 //  `identifier` is the store row's identifier, which is the glue between this layer

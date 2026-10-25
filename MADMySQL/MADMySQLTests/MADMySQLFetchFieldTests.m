@@ -2,7 +2,7 @@
 //  MADMySQLFetchFieldTests.m
 //  MADMySQLTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Offline coverage for MADMySQLFetchField, the per-column descriptor the fetch
 //  builds out of a MYSQL_FIELD. The struct is filled in by hand here, which is

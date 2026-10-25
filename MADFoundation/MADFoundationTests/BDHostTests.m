@@ -2,7 +2,7 @@
 //  BDHostTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for BDHost: the CFHost-based DNS lookups the connection setup uses to
 //  resolve a server name.  Only the IPv4 half is pinned -- that is what the code

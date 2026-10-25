@@ -2,7 +2,7 @@
 //  MADDataTableBaseTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the pieces of the MADDataTable base class the MAD-bundle regression
 //  suite does not reach: the plist contract (copyPlist's exact shape, and each of

@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  Recipe for zlib.  zlib's configure builds in-source, so each arch gets its
 #  own copy of the source tree.  CC carries the arch, CFLAGS the sysroot and

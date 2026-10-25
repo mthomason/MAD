@@ -3,7 +3,7 @@
 //  MADAPI
 //
 //  Created by Michael on 9/4/17.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef MADAPI_MADConnectionSQLGenericViewController_h

@@ -3,7 +3,7 @@
 //  MADTests
 //
 //  Created by Michael on 9/26/25.
-//  Copyright © 2025 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "MADMock.h"

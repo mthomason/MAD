@@ -2,7 +2,7 @@
 //  MADOperationBooleanAndTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADOperationBooleanAnd: the composite condition that folds a list of
 //  conditions into one answer.  Pinned here: the vacuous truth for an empty list, the

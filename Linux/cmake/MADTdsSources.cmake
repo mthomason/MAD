@@ -1,3 +1,5 @@
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 # The MADTds subset the Linux build compiles (MAD_LINUX.md §9): the whole
 # framework, one implementation file.  It is the thin base over freetds --
 # MADTdsClient sits on it -- and it links the freetds the image builds from

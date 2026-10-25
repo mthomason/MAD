@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 4/30/13.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "MADDesignerSectionControl.h"

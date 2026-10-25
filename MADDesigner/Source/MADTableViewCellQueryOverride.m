@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 1/23/12.
-//  Copyright © 2020 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "MADTableViewCellQueryOverride.h"

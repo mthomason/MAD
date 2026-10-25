@@ -2,7 +2,7 @@
 //  MADDataTableVirtualTests.m
 //  Linux/Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Ported from MADFoundationTests/MADDataTableVirtualTests.m: coverage for
 //  MADDataTableVirtual, the in-memory MADDataTable.  The row/sort/cache

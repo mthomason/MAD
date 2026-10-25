@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  toolchain.sh -- builds the Linux toolchain inside the image (Phase B).
 #

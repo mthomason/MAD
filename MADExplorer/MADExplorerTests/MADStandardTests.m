@@ -2,7 +2,7 @@
 //  MADStandardTests.m
 //  MADExplorerTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADStandard, the file-size formatting helper. Documents the
 //  decimal (10^6) megabyte scale, the fixed three-decimal "X.XXX MB" format,

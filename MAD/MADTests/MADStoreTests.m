@@ -2,7 +2,7 @@
 //  MADStoreTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the portable store: the schema descriptors, and a headless round
 //  trip of a document definition through a real SQLite file.  Nothing here touches

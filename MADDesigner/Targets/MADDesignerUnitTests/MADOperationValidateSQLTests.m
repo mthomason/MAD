@@ -2,7 +2,7 @@
 //  MADOperationValidateSQLTests.m
 //  MADDesignerUnitTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Non-UI tests for the SQL validation probe's construction half
 //  (MAD_SQL_ENTRY.md §7, §10.5): the zero-row wrapper, the derived-table alias,

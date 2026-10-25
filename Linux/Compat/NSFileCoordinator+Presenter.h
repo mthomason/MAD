@@ -2,7 +2,7 @@
 //  NSFileCoordinator+Presenter.h
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Apple's NSFileCoordinator is built around an initializer that takes the
 //  presenter it coordinates for; GNUstep's has no such initializer (its

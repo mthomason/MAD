@@ -2,7 +2,7 @@
 //  MADDocumentTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the accessors MADocument builds lazily.  A MADocument is a
 //  UIDocument, so these exercise only the state that does not need a database

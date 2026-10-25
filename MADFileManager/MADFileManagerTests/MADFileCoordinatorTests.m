@@ -2,7 +2,7 @@
 //  MADFileCoordinatorTests.m
 //  MADFileManagerTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the MADFileCoordinator base class: the two factories that choose
 //  a concrete coordinator, and the abstract contract every unimplemented method

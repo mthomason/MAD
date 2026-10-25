@@ -2,7 +2,7 @@
 //  MADAppOperationConditionTests.m
 //  MADDesignerUnitTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The condition classes the app adds on top of the four MADFoundation ships with.
 //  All of them follow the same shape as the framework ones: they look at the

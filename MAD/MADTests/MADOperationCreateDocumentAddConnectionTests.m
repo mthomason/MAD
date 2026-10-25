@@ -2,7 +2,7 @@
 //  MADOperationCreateDocumentAddConnectionTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADOperationCreateDocumentAddConnection: the initializer's copy
 //  of the connection, the dependency scan that finds the MADocument, and the

@@ -2,7 +2,7 @@
 //  MADOperationTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADOperation, the base class of the app's async operation
 //  framework.  Exercises the state-machine naming, lazy collections, the

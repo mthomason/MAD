@@ -2,7 +2,7 @@
 //  MADDataColumnTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADDataColumn, the column struct used by the SQLite result
 //  cache.  This locks down init variants, row storage, plist/coding round trips,

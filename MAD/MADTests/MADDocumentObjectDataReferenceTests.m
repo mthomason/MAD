@@ -2,7 +2,7 @@
 //  MADDocumentObjectDataReferenceTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADDocumentObjectDataReference: the per-element handle
 //  the print page renderer hands around.  Pinned here: the factory's element-type ->

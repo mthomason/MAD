@@ -2,7 +2,7 @@
 //  MADColorEverydayAppsTests.m
 //  MADCocoaExtensionsTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADColorEverydayApps, the app's fixed palette.  The factory methods
 //  build sRGB colors from 8-bit triples (the helper divides by 255), so the pins here

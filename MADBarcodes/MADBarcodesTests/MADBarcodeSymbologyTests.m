@@ -2,7 +2,7 @@
 //  MADBarcodeSymbologyTests.m
 //  MADBarcodesTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The symbology matrix: for a representative set of the framework's one-class-per-
 //  type subclasses, pin what the factory builds, what the instance calls itself, and

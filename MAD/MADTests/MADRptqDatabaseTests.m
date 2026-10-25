@@ -2,7 +2,7 @@
 //  MADRptqDatabaseTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 4 (Core Data database-schema domain) coverage for the MAD framework.
 //  These tests exercise the pure-logic "Extras" categories that map schema data

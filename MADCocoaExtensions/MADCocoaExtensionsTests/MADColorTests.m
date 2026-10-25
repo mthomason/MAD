@@ -2,7 +2,7 @@
 //  MADColorTests.m
 //  MADCocoaExtensionsTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADColor (hex string, RGB components, copy) and the free color
 //  factory functions.  Documents the "instancetype lie" in MADColorSocial, whose

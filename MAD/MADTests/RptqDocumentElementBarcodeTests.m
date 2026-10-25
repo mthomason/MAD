@@ -2,7 +2,7 @@
 //  RptqDocumentElementBarcodeTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The barcode element's model invariants: the factory stores the symbology in
 //  `barcodeType` and leaves the base `type` at MADPrintPageElementTypeBarcode, the

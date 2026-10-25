@@ -6,7 +6,7 @@ exit 0
 # MAD
 #
 # Original script by Michael Thomason on 3/4/14.
-# Copyright © 2025 Michael Thomason. All rights reserved.
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
 # Exit immediately if a command exits with a non-zero status.
 # Treat unset variables as an error.

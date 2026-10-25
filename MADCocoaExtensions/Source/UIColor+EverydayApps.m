@@ -3,7 +3,7 @@
 //  CocoaExtensions
 //
 //  Created by Michael Thomason on 2/9/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "UIColor+EverydayApps.h"

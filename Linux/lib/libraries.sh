@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  libraries.sh -- builds the C libraries the frameworks link (MAD_LINUX.md
 #  §7), natively, inside the image.

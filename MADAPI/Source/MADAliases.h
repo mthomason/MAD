@@ -3,7 +3,7 @@
 //  MADAPI
 //
 //  Created by Michael on 5/20/25.
-//  Copyright © 2025 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef MADAPI_MADAliases_h

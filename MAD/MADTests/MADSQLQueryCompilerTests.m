@@ -2,7 +2,7 @@
 //  MADSQLQueryCompilerTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the pasted-SQL importer's write half (MAD_SQL_ENTRY.md §6.3,
 //  §6.4, §10.4): the happy-path apply produces exactly the Rptq rows the visual

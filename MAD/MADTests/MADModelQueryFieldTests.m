@@ -2,7 +2,7 @@
 //  MADModelQueryFieldTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADModelQueryField: a query field in the lightweight
 //  model layer.  It resolves its schema field through the weak database by looking the

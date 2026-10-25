@@ -2,7 +2,7 @@
 //  MADStoreLegacyConverter.h
 //  MAD Designer
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The implementation the MAD framework's MADLegacyStoreConversion registry finds:
 //  the document asks for a converter, and this answers with the compiled Core Data

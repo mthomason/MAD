@@ -2,7 +2,7 @@
 //  MADActivityItemProviderPdfTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the parts of MADActivityItemProviderPdf that are reachable without a
 //  live MADocument: the placeholder item and its pass-through to

@@ -2,7 +2,7 @@
 //  MADActivityIndicatorTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADActivityIndicator: the formatting panel's
 //  initialiser wires a large UIActivityIndicatorView and a MADActivityIndicatorLabel

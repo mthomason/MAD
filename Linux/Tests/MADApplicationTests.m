@@ -2,7 +2,7 @@
 //  MADApplicationTests.m
 //  Linux/Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Ported from MADFoundationTests/MADApplicationTests.m: coverage for
 //  MADApplication, the app-identity helpers the frameworks use to decide how

@@ -2,7 +2,7 @@
 //  MADErrorContainerTests.m
 //  MADAPITests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 2 coverage for MADErrorContainer: the error accumulator used during
 //  database operations.  Exercises counting, copy-on-read of the error objects,

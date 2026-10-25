@@ -2,7 +2,7 @@
 //  MADDocumentObjectDataReferenceLabelDynamicTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADDocumentObjectDataReferenceLabelDynamic: the handle
 //  over a data label.  Its fieldKey is the qualified name built from the referenced query

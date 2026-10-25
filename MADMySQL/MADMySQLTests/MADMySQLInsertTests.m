@@ -2,7 +2,7 @@
 //  MADMySQLInsertTests.m
 //  MADMySQLTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Offline coverage for MADMySQLInsert. The factory and the two guards in
 //  -execute are everything that is reachable without a server: past them the

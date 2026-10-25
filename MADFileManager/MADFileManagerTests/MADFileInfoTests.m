@@ -2,7 +2,7 @@
 //  MADFileInfoTests.m
 //  MADFileManagerTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADFileInfo. Documents that -isEqual: compares by URL but no
 //  -hash override is provided, so two equal MADFileInfo instances hash

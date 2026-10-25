@@ -2,7 +2,7 @@
 //  MADAppStorageOptionTests.m
 //  MADFileManagerTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Locks down the raw values of the MADAppStorage enum. These values are the
 //  persisted storage-location state and must not drift across a Core Data ->

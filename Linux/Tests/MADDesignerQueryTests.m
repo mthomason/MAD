@@ -1,3 +1,5 @@
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 //
 //  MADDesignerQueryTests.m
 //  Linux/Tests

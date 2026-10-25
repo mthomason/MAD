@@ -2,7 +2,7 @@
 //  RptqDocumentElementFormulaTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for RptqDocumentElementFormula: the formula element's autogen
 //  attributes over the portable store, the designer text (the formula source), the log

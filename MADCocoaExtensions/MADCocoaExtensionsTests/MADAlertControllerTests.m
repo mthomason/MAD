@@ -2,7 +2,7 @@
 //  MADAlertControllerTests.m
 //  MADCocoaExtensionsTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADAlertController: the app's alert factories.  Each is pinned for
 //  the pieces a caller can observe without presenting the alert -- title, message,

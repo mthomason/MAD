@@ -2,7 +2,7 @@
 //  MADQueryTestTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADQueryTest: the trivial connection probe.  It selects the literal
 //  255 under a safe identifier, which is enough to prove a connection answers.

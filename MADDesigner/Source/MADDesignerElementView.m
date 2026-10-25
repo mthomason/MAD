@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 2/16/12.
-//  Copyright © 2020 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "MADDesignerElementView.h"

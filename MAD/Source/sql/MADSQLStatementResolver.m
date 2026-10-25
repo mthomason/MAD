@@ -2,7 +2,7 @@
 //  MADSQLStatementResolver.m
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "MADSQLStatementResolver.h"

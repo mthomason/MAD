@@ -2,7 +2,7 @@
 //  MADModelQueryTableTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADModelQueryTable: a query table in the lightweight
 //  model layer.  Pinned here: the schema-table identifier round-trips, -alias is the

@@ -2,7 +2,7 @@
 //  RptqDataHelperTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for RptqDataHelper.  The class survives only for its
 //  -cleanup entry point: identifier allocation moved into RptqStoreContext, so the

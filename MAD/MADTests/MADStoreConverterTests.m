@@ -2,7 +2,7 @@
 //  MADStoreConverterTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the bridge from a legacy Core Data `.mad` to the portable store.
 //  The fixtures are the two shipping samples, so what is asserted here is asserted

@@ -2,7 +2,7 @@
 //  MADFilesControllerTests.m
 //  MADFileManagerTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADFilesController, the model in front of the file coordinators.
 //  A hand-rolled MADFileCoordinatorProtocol double stands in for the local and

@@ -2,7 +2,7 @@
 //  MADStoreGraph.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  A set of MADStoreObjects, keyed by entity and identifier.  This is what the
 //  reader hands back and the writer consumes; it is the in-memory form of a whole

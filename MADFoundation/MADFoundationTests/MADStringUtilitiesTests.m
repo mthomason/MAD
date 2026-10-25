@@ -2,7 +2,7 @@
 //  MADStringUtilitiesTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADStringUtilities: the two tiny string-assembly helpers used
 //  for key paths and display strings throughout the app.

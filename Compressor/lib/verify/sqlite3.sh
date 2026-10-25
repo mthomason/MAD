@@ -1,3 +1,5 @@
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 # Per-library checks for sqlite3, run by build.sh --verify inside the
 # driver's verify_lib scope ($xcfw, $LIB and the matrix env are set).
 #

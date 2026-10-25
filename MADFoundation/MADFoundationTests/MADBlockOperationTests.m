@@ -2,7 +2,7 @@
 //  MADBlockOperationTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADBlockOperation: the block-to-operation adapter.  The block
 //  is invoked by `-execute`, which is exercised directly here (it does not touch

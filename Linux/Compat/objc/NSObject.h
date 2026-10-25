@@ -2,7 +2,7 @@
 //  NSObject.h
 //  Linux/Compat/objc
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Apple's runtime headers declare NSObject; GNUstep's Foundation does, and
 //  its objc/ directory does not.  The frameworks import <objc/NSObject.h>

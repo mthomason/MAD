@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 2/3/17.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  One table pulled into a query, keyed by the RptqQueryTable row's identifier:
 //  the schema table it stands for, its drop index, and its selected fields

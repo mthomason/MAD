@@ -2,7 +2,7 @@
 //  MADOperationQueueTests.m
 //  Linux/Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Ported from MADFoundationTests/MADOperationQueueTests.m: coverage for
 //  MADOperationQueue, the delegate callbacks for both MADOperation and plain

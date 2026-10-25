@@ -2,7 +2,7 @@
 //  madlogTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for madlog: the framework's os_log facility.  The log object is created
 //  once (dispatch_once) and reused, so every MADLog* macro in the framework writes to

@@ -3,7 +3,7 @@
 //  Reports
 //
 //  Created by Michael Thomason on 11/12/12.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #if ! __has_feature(objc_arc)

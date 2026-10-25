@@ -2,7 +2,7 @@
 //  MADQueryPredicateTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 3 coverage for MADQueryPredicate: the object that turns a set of
 //  RptqQueryPredicate rows into the WHERE clause of a generated query.

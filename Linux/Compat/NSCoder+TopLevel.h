@@ -2,7 +2,7 @@
 //  NSCoder+TopLevel.h
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Apple's NSCoder gained the secure-coding decoders
 //  (-decodeTopLevelObjectOfClasses:forKey:error: and its sibling) with

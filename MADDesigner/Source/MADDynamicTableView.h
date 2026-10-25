@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael on 5/30/25.
-//  Copyright © 2025 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 /*
 #ifndef Reports_MADDynamicTableView_h

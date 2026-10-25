@@ -2,7 +2,7 @@
 //  MADLabelTitleTests.m
 //  MADCocoaExtensionsTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADLabelTitle: the two-tone navigation title.  The attributed-string
 //  builder is a pure class method (undeclared in the header; reached through a

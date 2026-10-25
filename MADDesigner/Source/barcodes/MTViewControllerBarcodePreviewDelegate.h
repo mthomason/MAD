@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 9/28/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef MAD_MTViewControllerBarcodePreviewDelegate_h

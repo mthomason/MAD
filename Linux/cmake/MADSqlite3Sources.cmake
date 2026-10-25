@@ -1,3 +1,5 @@
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 # The MADSqlite3 subset the Linux build compiles (MAD_LINUX.md §9): the 26
 # implementation files of the Xcode target's Sources phase -- the framework
 # the CLI's .maddb row cache and .madac render cache are built on.

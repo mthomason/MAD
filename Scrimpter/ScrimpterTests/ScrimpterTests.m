@@ -3,7 +3,7 @@
 //  ScrimpterTests
 //
 //  Created by Michael Thomason on 6/16/14.
-//  Copyright (c) 2024 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import <XCTest/XCTest.h>

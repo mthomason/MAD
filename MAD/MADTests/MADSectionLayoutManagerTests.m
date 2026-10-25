@@ -2,7 +2,7 @@
 //  MADSectionLayoutManagerTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization tests for MADSectionLayoutManager: the per-section collection of
 //  MADSectionLayoutAttributes the designer lays elements out with.

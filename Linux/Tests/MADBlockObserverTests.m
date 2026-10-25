@@ -2,7 +2,7 @@
 //  MADBlockObserverTests.m
 //  Linux/Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Ported from MADFoundationTests/MADBlockObserverTests.m: coverage for
 //  MADBlockObserver, the block-based MADOperationObserver the app uses to

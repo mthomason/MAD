@@ -3,7 +3,7 @@
 //  MADDesignerUnitTests
 //
 //  Created by Michael Thomason on 3/15/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Non-UI tests for the app. This bundle is hosted by `MAD Designer.app`
 //  (TEST_HOST/BUNDLE_LOADER are set), so it can reach two things the framework test

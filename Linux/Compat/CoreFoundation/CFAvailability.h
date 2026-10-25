@@ -2,7 +2,7 @@
 //  CFAvailability.h
 //  Linux/Compat/CoreFoundation
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The availability-and-enum spellings Apple's CF headers carry.  GNUstep has
 //  none of them, and the frameworks use CF_ENUM for a handful of typed enums

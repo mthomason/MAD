@@ -2,7 +2,7 @@
 //  MADNotificationDidReadRowsTests.m
 //  MADAPITests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 3 coverage for MADNotificationDidReadRows, the singleton that posts
 //  row-read progress notifications while a database result set is being read.

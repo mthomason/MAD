@@ -2,7 +2,7 @@
 //  MADDesignerQueryTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADDesignerQuery: the object exists only as a weak
 //  reference to its document designer, and that is all an instance does today.

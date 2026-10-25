@@ -2,7 +2,7 @@
 //  MADURLFactoryTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADURLFactory: the factory for every directory and file URL the app
 //  uses (documents, caches, application support, temporaries, thumbnails), plus the

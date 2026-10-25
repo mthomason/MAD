@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  Recipe for bzip2.  Plain make with a fresh source copy per arch, as the
 #  old build_bzip2.sh did -- bzip2's Makefile does not support out-of-tree

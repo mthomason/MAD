@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 6/18/15.
-//  Copyright © 2020 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "MADStoreViewController.h"

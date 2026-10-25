@@ -2,7 +2,7 @@
 //  MADReportSectionTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADReportSection: the wrapper a RptqDocumentSection is
 //  presented through.  -initWithReportSection: actually returns one of seven private

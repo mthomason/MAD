@@ -2,7 +2,7 @@
 //  MADTextFieldTests.m
 //  MADCocoaExtensionsTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADTextField: the credential-entry preconfigured text-field pair.
 //  The class is a pair of configuration blocks; each is applied to a caller-supplied

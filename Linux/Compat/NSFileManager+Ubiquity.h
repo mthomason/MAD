@@ -2,7 +2,7 @@
 //  NSFileManager+Ubiquity.h
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Apple's NSFileManager answers iCloud's ubiquity questions -- the container
 //  URL, the identity token, whether an item is ubiquitous -- and GNUstep's

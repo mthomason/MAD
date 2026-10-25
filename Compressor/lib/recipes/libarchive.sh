@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  Recipe for libarchive.  Depends on zlib and bzip2 (matrix deps): both
 #  link from our installs now.  XML2 and LZMA stay on the system SDK -- the

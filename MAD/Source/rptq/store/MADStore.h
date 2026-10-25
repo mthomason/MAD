@@ -2,7 +2,7 @@
 //  MADStore.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The portable store: the document definition kept in a SQLite schema of our own
 //  instead of a Core Data store.  Nothing here imports Core Data.

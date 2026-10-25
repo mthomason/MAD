@@ -2,7 +2,7 @@
 //  RptqObject.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The plain base class the Rptq entities grow into over Phase C: a typed, faulting
 //  view over one MADStoreObject row.  It is what an NSManagedObject was -- identity,

@@ -2,7 +2,7 @@
 //  RptqDocumentElementLabelLinkTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for RptqDocumentElementLabelLink: the linked-label element's
 //  text and url over the portable store.  Its designer text is deliberately empty -- the

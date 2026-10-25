@@ -2,7 +2,7 @@
 //  MADSQLStatement.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The parse tree the pasted-SQL front half produces (MAD_SQL_ENTRY.md §4): the
 //  one SELECT the model can hold, as value objects.  Nothing here touches the

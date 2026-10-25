@@ -2,7 +2,7 @@
 //  UIGeometry.h
 //  Linux/Compat/UIKit
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  UIKit's geometry header is CoreGraphics' geometry plus a couple of
 //  aliases; off Apple the frameworks that import it use only CGPoint, CGSize

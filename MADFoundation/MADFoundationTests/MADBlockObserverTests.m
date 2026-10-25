@@ -2,7 +2,7 @@
 //  MADBlockObserverTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADBlockObserver: the block-based MADOperationObserver the app uses
 //  to hang start/produce/finish handlers on an operation without a delegate object.

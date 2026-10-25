@@ -3,7 +3,7 @@
 //  MADDataStructures
 //
 //  Created by Michael on 11/23/24.
-//  Copyright © 2025 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef MADDataStructures_MTLinkedListNode_h

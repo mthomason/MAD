@@ -2,7 +2,7 @@
 //  MADActivityIndicatorLabelTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADActivityIndicatorLabel: the status label shown at
 //  the bottom of MADActivityIndicator.  Its initialiser pins the placeholder text

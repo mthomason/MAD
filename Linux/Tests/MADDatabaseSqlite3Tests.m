@@ -1,3 +1,5 @@
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 //
 //  MADDatabaseSqlite3Tests.m
 //  Linux/Tests

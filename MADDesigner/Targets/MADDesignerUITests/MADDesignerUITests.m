@@ -3,7 +3,7 @@
 //  MADDesignerUITests
 //
 //  Created by Michael Thomason on 3/15/16.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 // The XCUITest runner in this environment sees an empty accessibility tree for the

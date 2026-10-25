@@ -2,7 +2,7 @@
 //  MADRptqValueTypeTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 4 (Core Data value-type) coverage for the MAD framework.  These are the
 //  small Rptq* managed-object value types that back document element geometry and

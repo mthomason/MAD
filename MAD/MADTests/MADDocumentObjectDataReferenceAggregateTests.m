@@ -2,7 +2,7 @@
 //  MADDocumentObjectDataReferenceAggregateTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADDocumentObjectDataReferenceAggregate: the handle over
 //  an aggregate element.  Pinned here: the element's group/function settings are surfaced

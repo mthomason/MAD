@@ -2,7 +2,7 @@
 //  MADDatabaseDriverRegistryTests.m
 //  MADAPITests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADDatabaseDriverRegistry -- the seam that lets a driver register
 //  itself instead of being imported by the constructor (ROADMAP.md §5.1).  This

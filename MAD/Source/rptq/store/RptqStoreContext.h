@@ -2,7 +2,7 @@
 //  RptqStoreContext.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The store-backed replacement for the NSManagedObjectContext role.  It owns an open
 //  MADStore and a loaded MADStoreGraph (with inverses completed), and is the single

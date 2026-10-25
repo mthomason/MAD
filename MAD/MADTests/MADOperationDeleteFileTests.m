@@ -2,7 +2,7 @@
 //  MADOperationDeleteFileTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADOperationDeleteFile, which only deletes when a dependency
 //  that conforms to MADOperationTestResults reports failure, and only knows

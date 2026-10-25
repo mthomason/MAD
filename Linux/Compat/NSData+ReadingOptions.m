@@ -2,7 +2,7 @@
 //  NSData+ReadingOptions.m
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "NSData+ReadingOptions.h"

@@ -2,7 +2,7 @@
 //  MADReportSectionEnumeratorTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADReportSectionEnumerator: fast enumeration over the
 //  sections of a document, one MADReportSection per report row.  With no query groups the

@@ -2,7 +2,7 @@
 //  MADGroupOperationTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADGroupOperation's structural API: the lazily-created suspended
 //  internal queue, the finishing-operation/dependency wiring, and the aggregated

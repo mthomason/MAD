@@ -2,7 +2,7 @@
 //  MADSQLQueryCompiler.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The pasted-SQL importer's write half (MAD_SQL_ENTRY.md §6.3, §6.4): an atomic
 //  apply of a resolver's plan over the document's query -- the conflict check

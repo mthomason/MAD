@@ -2,7 +2,7 @@
 //  MADConnectionViewControllerTests.m
 //  MADAPITests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 3 coverage for the two connection view controllers.  The screens themselves
 //  are storyboard-driven and their flows present alerts, so what is pinned here is the

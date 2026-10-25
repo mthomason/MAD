@@ -2,7 +2,7 @@
 //  MADElementStylizedTextTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 2 coverage for MADElementStylizedText: the object that turns a font name,
 //  size, RptqTextStyle and a horizontal alignment into the NSAttributedString

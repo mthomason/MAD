@@ -2,7 +2,7 @@
 //  MADDatabaseConnectionTests.m
 //  MADAPITests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 3 coverage for MADDatabaseConnection, the factory base class for
 //  database connection descriptors.  This documents the "abstract class"

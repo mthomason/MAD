@@ -1,3 +1,5 @@
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 # Per-library checks for mariadb, beyond the generic slice/arch and version
 # gates in build.sh.  MADMySQL talks to MySQL 8.4 servers, which no longer
 # enable mysql_native_password by default: the caching_sha2_password auth

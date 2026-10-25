@@ -2,7 +2,7 @@
 //  MADDataTableRegressionTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization ("lock down the current behaviour") tests for MADDataTable and
 //  its derivatives.  These tests intentionally record how the code behaves TODAY,

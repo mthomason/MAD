@@ -2,7 +2,7 @@
 //  MADCoreLogicTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 1 (pure-logic / value-type) coverage for the MAD framework.  These types
 //  carry no Core Data or database state, so they can be exercised directly:

@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 5/28/17.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import "MADSectionsLayout.h"

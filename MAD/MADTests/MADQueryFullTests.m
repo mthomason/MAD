@@ -2,7 +2,7 @@
 //  MADQueryFullTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 3 coverage for MADQueryFull, the SELECT/JOIN/WHERE/ORDER BY generator behind
 //  the report's data load.  The SQL is assembled against the *first* document in the

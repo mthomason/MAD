@@ -2,7 +2,7 @@
 //  MADDatabaseSqlite3ResultValueTests.m
 //  MADSqlite3Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the two result-value factories on MADDatabaseSqlite3, driven against
 //  a real in-memory sqlite3 database.  The untyped factory is the hot path every fast

@@ -2,7 +2,7 @@
 //  MADCompatFileCopy.h
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Apple's copyfile(3) -- the single-file and recursive cases the archive
 //  code uses, in POSIX.  The flags the call sites pass (COPYFILE_ALL,

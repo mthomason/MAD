@@ -2,7 +2,7 @@
 //  NSURL+SecurityScope.h
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Apple's sandbox grants a document URL through security-scoped bookmarks;
 //  GNUstep's NSURL has no such calls.  Off Apple a plain filesystem path needs

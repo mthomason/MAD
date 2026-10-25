@@ -2,7 +2,7 @@
 //  MADMetaDataTests.m
 //  MADFileManagerTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADMetaData and its Local/Cloud subclasses. Documents the
 //  factory-style initializers, the NSDate/NSData return-type lie on the two

@@ -3,7 +3,7 @@
 //  MAD Designer
 //
 //  Created by Michael Thomason on 10/25/15.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef MAD_MADReportLineRepresentation_h

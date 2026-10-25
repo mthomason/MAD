@@ -2,7 +2,7 @@
 //  MADOperationKeyChainDeletePasswordTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADOperationKeyChainDeletePassword.  The key used in the run
 //  is a fresh UUID under a UUID description, so neither the u:<key> nor the

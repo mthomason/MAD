@@ -2,7 +2,7 @@
 //  ToolchainProbe.m
 //  Linux/Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The Phase B toolchain probe (MAD_LINUX.md §9): proves that clang +
 //  libobjc2 + GNUstep Foundation can run the language and Foundation features

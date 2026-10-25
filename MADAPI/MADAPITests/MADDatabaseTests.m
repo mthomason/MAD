@@ -2,7 +2,7 @@
 //  MADDatabaseTests.m
 //  MADAPITests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 3 coverage for MADDatabase, the abstract base class for all database
 //  drivers.  This exercises the concrete SQL-generation helper methods and the

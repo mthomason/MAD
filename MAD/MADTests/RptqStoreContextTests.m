@@ -2,7 +2,7 @@
 //  RptqStoreContextTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the Phase C mechanism: the plain store-backed RptqObject and the
 //  RptqStoreContext that replaces the NSManagedObjectContext role.  The schema family

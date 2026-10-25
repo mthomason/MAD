@@ -2,7 +2,7 @@
 //  MADSQLParserTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the pasted-SQL importer's front half (MAD_SQL_ENTRY.md §5, §10.3):
 //  the tokenizer's per-dialect quoting and line:column positions, and the parser's

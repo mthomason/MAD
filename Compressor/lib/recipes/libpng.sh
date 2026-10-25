@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  Recipe for libpng.  Depends on the zlib recipe: every slice links our
 #  zlib install instead of the system libz (the old build_png.sh used the

@@ -2,7 +2,7 @@
 //  MADDocumentObjectDataReferenceImageTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADDocumentObjectDataReferenceImage: the handle over an
 //  image element.  It simply hands back the element's `image`.

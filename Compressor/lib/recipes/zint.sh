@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  Recipe for zint.  2.16 builds with cmake; the 2.4.2-era direct compile
 #  and the local patch (Compressor/patches/zint-2.4.2-mad.patch) are

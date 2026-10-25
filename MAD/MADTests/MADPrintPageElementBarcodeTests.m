@@ -2,7 +2,7 @@
 //  MADPrintPageElementBarcodeTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization tests for MADPrintPageElementBarcode: the element that turns a
 //  MADDocumentObjectDataReferenceBarcode into an MADBarcode, copies the symbology

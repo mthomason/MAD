@@ -2,7 +2,7 @@
 //  MADPageOptionsTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADPageOptions: a plain property bag for the page
 //  geometry the formatter uses.  It has no initialiser of its own, so an instance starts

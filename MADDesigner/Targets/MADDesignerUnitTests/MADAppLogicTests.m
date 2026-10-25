@@ -2,7 +2,7 @@
 //  MADAppLogicTests.m
 //  MADDesignerUnitTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Non-UI tests for the app's own model and helper classes. As in
 //  MADDesignerUnitTests.m, the classes live in the app target's Sources phase and are

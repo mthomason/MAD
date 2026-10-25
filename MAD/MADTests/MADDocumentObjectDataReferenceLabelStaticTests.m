@@ -2,7 +2,7 @@
 //  MADDocumentObjectDataReferenceLabelStaticTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Characterization coverage for MADDocumentObjectDataReferenceLabelStatic: the handle
 //  over a static label element.  The factory maps MADPrintPageElementTypeLabelStatic to

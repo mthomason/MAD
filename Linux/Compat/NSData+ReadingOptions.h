@@ -2,7 +2,7 @@
 //  NSData+ReadingOptions.h
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  GNUstep's NSData reads a URL but has neither the options/error variant nor
 //  the NSDataReadingOptions type.  The shim takes the options as the

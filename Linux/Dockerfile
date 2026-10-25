@@ -1,4 +1,5 @@
 # syntax=docker/dockerfile:1
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  Linux/Dockerfile -- the Phase B toolchain spike (MAD_LINUX.md §9).
 #

@@ -2,7 +2,7 @@
 //  MADMySQLUpdateTests.m
 //  MADMySQLTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Offline coverage for MADMySQLUpdate.  Past the guards, -execute builds its
 //  statement and escapes every key through the live session, so the writing

@@ -2,7 +2,7 @@
 //  MADTestReportFormatter.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Group-footer row-ID association: the footer for a group has to be associated
 //  with the *last* row of that group, which is what tells the printer which rows

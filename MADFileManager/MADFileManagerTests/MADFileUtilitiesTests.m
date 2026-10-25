@@ -2,7 +2,7 @@
 //  MADFileUtilitiesTests.m
 //  MADFileManagerTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the pure filesystem helpers on MADFileUtilities. Several of
 //  these are not declared in the public header; they are surfaced here via a

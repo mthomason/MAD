@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael on 6/3/17.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The read-model's data protocol: a store context, an id+context initializer, and
 //  -update, the refresh hook the layer's own lazy getters call.  Nothing outside

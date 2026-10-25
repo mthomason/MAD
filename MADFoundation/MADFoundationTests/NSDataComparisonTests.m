@@ -2,7 +2,7 @@
 //  NSDataComparisonTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the NSData (Comparison) category: lexicographic byte ordering
 //  used for sorting BLOB columns.

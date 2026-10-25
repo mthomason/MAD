@@ -2,7 +2,7 @@
 //  MADOperationKeyChainPutTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADOperationKeyChainPut: the initializer wiring, the dependency
 //  scan for the value to write, and the not-found error the operation raises

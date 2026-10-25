@@ -3,7 +3,7 @@
 //  MADBarcodes
 //
 //  Created by Michael Thomason on 10/20/26.
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef MADBarcodes_MADBarcodeCache_h

@@ -2,7 +2,7 @@
 //  MADBarcodeViewTests.m
 //  MADBarcodesTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADBarcodeView is deliberately thin: its only two constructors are
 //  -initWithFrame: (which asserts "Don't you dare!" -- the view is meant to come from

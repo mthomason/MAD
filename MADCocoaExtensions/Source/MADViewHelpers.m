@@ -3,7 +3,7 @@
 //  MADCocoaExtensions
 //
 //  Created by Michael on 7/20/20.
-//  Copyright © 2020 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #include "MADViewHelpers.h"

@@ -3,7 +3,7 @@
 //  CocoaExtensions
 //
 //  Created by Michael Thomason on 4/13/15.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  From http://www.bdunagan.com/2009/11/28/iphone-tip-no-nshost/
 //  MIT license

@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  sqlserver-test-db.sh -- the pinned SQL Server test server, in Docker.
 #

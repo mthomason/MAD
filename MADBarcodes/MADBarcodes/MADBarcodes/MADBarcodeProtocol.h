@@ -3,7 +3,7 @@
 //  Barcodes
 //
 //  Created by Michael Thomason on 2/15/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef Barcodes_MADBarcodeProtocol_h

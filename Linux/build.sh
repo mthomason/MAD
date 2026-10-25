@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  build.sh -- the Linux entry point (MAD_LINUX.md §9).
 #

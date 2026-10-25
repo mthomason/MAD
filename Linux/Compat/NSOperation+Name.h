@@ -2,7 +2,7 @@
 //  NSOperation+Name.h
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Apple's NSOperation carries a `name` property (iOS 4+/macOS 10.6+), a
 //  `cancelled` one spelling the same thing as -isCancelled, and an

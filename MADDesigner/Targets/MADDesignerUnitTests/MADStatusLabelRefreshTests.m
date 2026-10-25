@@ -2,7 +2,7 @@
 //  MADStatusLabelRefreshTests.m
 //  MADDesignerUnitTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The per-page "Formatting page N." status message, driven end to end without a
 //  database.  The app's path is:

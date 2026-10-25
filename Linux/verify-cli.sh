@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  verify-cli.sh -- the `mad` runtime image's end-to-end check.
 #

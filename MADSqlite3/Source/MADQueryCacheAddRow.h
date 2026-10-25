@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 4/19/14.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef Reports_MTQueryCacheAddRow_h

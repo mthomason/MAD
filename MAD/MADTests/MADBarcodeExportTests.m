@@ -2,7 +2,7 @@
 //  MADBarcodeExportTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Export and accessibility coverage for a barcode line.  A store-backed document
 //  holds one barcode element, created through the element factory with Code 39 and

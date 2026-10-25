@@ -2,7 +2,7 @@
 //  MADKeyChainTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the deterministic parts of MADKeyChain: the key derivation and
 //  the SecItem query dictionaries.  (Actual keychain I/O is left out of the

@@ -2,7 +2,7 @@
 //  MADReportExporterTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the export seam: MADReportExporterRegistry (the lookup the CLI
 //  reaches a format through) and the value spellings every Foundation format shares

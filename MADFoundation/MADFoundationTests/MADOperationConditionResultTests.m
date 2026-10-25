@@ -2,7 +2,7 @@
 //  MADOperationConditionResultTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADOperationConditionResult: the four public factories, the
 //  `-error` accessor, and +evaluateConditions:operation:completion:.

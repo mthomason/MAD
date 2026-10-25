@@ -1,3 +1,5 @@
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 # The MADFoundation subset the Linux build compiles (MAD_LINUX.md §9): 26 of
 # the framework's 27 implementation files, plus madlib.c.
 #

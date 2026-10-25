@@ -2,7 +2,7 @@
 //  MADTestSupport.h
 //  Linux/Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Glue over GNUstep's Testing.h (gnustep-make's TestFramework), which is the
 //  zero-dependency runner on Linux -- there is no XCTest for Objective-C

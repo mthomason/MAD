@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  Recipe for sqlite3.  Generates the amalgamation on the host, then compiles
 #  it once per slice into libsqlite3.a with the option list from

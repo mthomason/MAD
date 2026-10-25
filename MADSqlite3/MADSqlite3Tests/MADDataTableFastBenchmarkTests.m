@@ -2,7 +2,7 @@
 //  MADDataTableFastBenchmarkTests.m
 //  MADSqlite3Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Throughput and footprint baseline for the one row path the app actually pays for
 //  on a report refresh:

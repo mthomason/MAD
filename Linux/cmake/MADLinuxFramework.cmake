@@ -1,3 +1,5 @@
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
+
 #
 #  MADLinuxFramework.cmake -- the one recipe for putting a MAD framework into
 #  the Linux build (Linux/AGENTS.md has the step-by-step).

@@ -3,7 +3,7 @@
 //  MADMySQLTests
 //
 //  Created by Michael Thomason on 9/18/15.
-//  Copyright © 2017 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Offline unit tests for MADMySQL. Nothing in this file contacts a server;
 //  see MADMySQLLiveTests.m for the tests that require the local MySQL instance

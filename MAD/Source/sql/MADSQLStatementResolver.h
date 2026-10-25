@@ -2,7 +2,7 @@
 //  MADSQLStatementResolver.h
 //  MAD
 //
-//  Copyright © 2026 Everyday Apps LLC. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The parser's second half (MAD_SQL_ENTRY.md §6.1, §6.2): binds the statement's
 //  validated names to the document's RptqDatabaseSchemaTable / Field rows and

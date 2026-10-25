@@ -2,7 +2,7 @@
 //  MADBarcodeTests.m
 //  MADBarcodesTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADBarcode, the framework's base class and factory: the init
 //  defaults the zint pass reads, the type-to-class factory, the two document-object

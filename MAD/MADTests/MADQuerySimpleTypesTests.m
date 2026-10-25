@@ -2,7 +2,7 @@
 //  MADQuerySimpleTypesTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 1 coverage for the self-contained MADQuery subclasses: the ones whose SQL is
 //  a constant or a small template, with no store or database dependency.  Also pins the

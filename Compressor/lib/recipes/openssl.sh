@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  Recipe for OpenSSL.  One out-of-tree Configure per arch, then install_sw
 #  into a per-arch prefix.

@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
 #  common.sh -- helpers shared by Compressor/build.sh and lib/recipes/<lib>.sh.
 #

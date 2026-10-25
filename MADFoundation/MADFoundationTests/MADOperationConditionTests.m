@@ -2,7 +2,7 @@
 //  MADOperationConditionTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the four condition classes that MADFoundation ships with. All four
 //  work the same way: they look at the conditionalized operation's *dependencies*,

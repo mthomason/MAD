@@ -2,7 +2,7 @@
 //  MADOperationConditionResultTests.m
 //  Linux/Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Ported from MADFoundationTests/MADOperationConditionResultTests.m: coverage
 //  for MADOperationConditionResult: the public factories, the -error accessor,

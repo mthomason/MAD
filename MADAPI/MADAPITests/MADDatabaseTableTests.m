@@ -2,7 +2,7 @@
 //  MADDatabaseTableTests.m
 //  MADAPITests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 2 coverage for MADDatabaseTable: the value type that represents a table
 //  in a database schema.  Exercises initialization, the queryable flag, and

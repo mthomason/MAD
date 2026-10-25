@@ -2,7 +2,7 @@
 //  MADDirectionTests.m
 //  MADCocoaExtensionsTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the direction enums and their mapping helpers:
 //  MAD2dDirection, MADCompassDirection, MADAspectRatio, MADDirection, and

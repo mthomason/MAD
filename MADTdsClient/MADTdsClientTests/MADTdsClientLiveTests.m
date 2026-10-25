@@ -3,7 +3,7 @@
 //  MADTdsClientTests
 //
 //  Created by Michael Thomason on 9/30/26.
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Integration tests for MADTdsClient that talk to a real SQL Server -- this is the
 //  only way to exercise the freetds calls behind -connect:andPassword:error:,

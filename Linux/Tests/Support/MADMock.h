@@ -2,7 +2,7 @@
 //  MADMock.h
 //  Linux/Tests/Support
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The portable half of MAD/MADTests/MADMock: +mockDatabase, the MADDatabase
 //  subclass whose only override is queryKey:table: ("<table>.<field>"), which

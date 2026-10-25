@@ -2,7 +2,7 @@
 //  MADRptqDocumentSectionTests.m
 //  MADTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 4 (Core Data domain model) coverage for RptqDocumentSection.  These tests
 //  exercise the pure-logic "Extras" category: section-type mapping by row/group,

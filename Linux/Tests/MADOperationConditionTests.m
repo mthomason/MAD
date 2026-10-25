@@ -2,7 +2,7 @@
 //  MADOperationConditionTests.m
 //  Linux/Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Ported from MADFoundationTests/MADOperationConditionTests.m: coverage for
 //  the condition classes MADFoundation ships with.  All of them look at the

@@ -2,7 +2,7 @@
 //  MADCompat.h
 //  Linux/Compat
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The Linux build's Objective-C prelude (see Linux/CMakeLists.txt, which
 //  force-includes this one header -- a single -include, because CMake

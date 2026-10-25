@@ -3,7 +3,7 @@
 //  MADExplorer
 //
 //  Created by Michael on 1/25/18.
-//  Copyright © 2018 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #ifndef Reports_MADExplorerCellTitle_h

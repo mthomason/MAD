@@ -2,7 +2,7 @@
 //  NSOperationAdvancedTests.m
 //  MADFoundationTests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the NSOperation (CompletionBlock) category: the completion-block
 //  chaining (the new block runs *after* the existing one, in that order) and the

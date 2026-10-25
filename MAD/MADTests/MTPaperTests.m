@@ -3,7 +3,7 @@
 //  MAD
 //
 //  Created by Michael Thomason on 10/4/26.
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
 #import <XCTest/XCTest.h>

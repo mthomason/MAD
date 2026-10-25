@@ -2,7 +2,7 @@
 //  MADDatabaseSqlite3BindingTests.m
 //  MADSqlite3Tests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for the cache's bind path: a value bound under a column's declared
 //  MADDataType, and the storage class it lands in.  Every pair is driven through

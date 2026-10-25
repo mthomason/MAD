@@ -2,7 +2,7 @@
 //  MADAPIEnumsAndConstantsTests.m
 //  MADAPITests
 //
-//  Copyright © 2026 Michael Thomason. All rights reserved.
+//  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 1 coverage for MADAPI: the framework's public enums (MADDatabaseType,
 //  MADQueryType) and its exported string constants.  These are compile-time
