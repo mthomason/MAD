@@ -66,6 +66,10 @@ typedef NS_ENUM(short, MADFeatureType) {
 @interface NSData (MADAppLogicTestsAES256)
 - (NSData *)AES256EncryptWithKey:(NSString *)key;
 - (NSData *)AES256DecryptWithKey:(NSString *)key;
+// The fixed-IV core behind the public methods, exposed for the golden tests so the
+// ciphertext format can be pinned against externally computed vectors.
+- (NSData *)AES256EncryptWithKey:(NSString *)key iv:(NSData *)iv;
+- (NSData *)AES256DecryptWithKey:(NSString *)key iv:(NSData *)iv;
 @end
 
 typedef struct { NSUInteger currentPage; NSUInteger totalPages; } MADReportPosition;
@@ -264,6 +268,83 @@ CG_INLINE MADReportPosition MADReportPositionMake(NSUInteger current, NSUInteger
 	XCTAssertEqual(encrypted.length, (NSUInteger)32);
 	XCTAssertEqualObjects([encrypted AES256DecryptWithKey:@"0123456789abcdef0123456789abcdef"],
 						  [NSData data]);
+}
+
+#pragma mark - NSData (AES256) golden vectors
+
+// The vectors below pin the ciphertext format: AES-256-CBC with PKCS#7 padding, a UTF-8
+// key zero-padded to 32 bytes, and the IV carried in the first block of the packet. The
+// expected bytes were computed independently with `openssl enc -aes-256-cbc` and checked
+// against the implementation that shipped before the rewrite, so the format cannot drift
+// silently. The encrypt pins run through the fixed-IV core; the decrypt pins run through
+// the public API on the full packet, which is the shape stored values actually have.
+
+static NSData *MADAES256HexData(NSString *hex) {
+	NSMutableData *data = [NSMutableData dataWithCapacity:hex.length / 2];
+	for (NSUInteger i = 0; i + 1 < hex.length; i += 2) {
+		unsigned int byte = 0;
+		[[NSScanner scannerWithString:[hex substringWithRange:NSMakeRange(i, 2)]] scanHexInt:&byte];
+		uint8_t value = (uint8_t)byte;
+		[data appendBytes:&value length:1];
+	}
+	return data;
+}
+
+static NSString *const MADAES256GoldenKey = @"0123456789abcdef0123456789abcdef";
+static NSData *MADAES256GoldenIV(void) {
+	// "0123456789abcdef"
+	return MADAES256HexData(@"30313233343536373839616263646566");
+}
+
+- (void)testAES256GoldenVectorNonBlockAlignedPlaintext {
+	NSData *iv = MADAES256GoldenIV();
+	NSData *plaintext = [@"The quick brown fox jumps over the lazy dog" dataUsingEncoding:NSUTF8StringEncoding];
+	NSData *ciphertext = [plaintext AES256EncryptWithKey:MADAES256GoldenKey iv:iv];
+	NSData *expected = MADAES256HexData(@"3fb71aa5df5cb45088bb79102524e2abf3be6098d39db8996f4ea605bb14a64e1fd1c082c754f3d51fd48d4406574af6");
+	XCTAssertEqualObjects(ciphertext, expected);
+
+	NSMutableData *packet = [NSMutableData dataWithData:iv];
+	[packet appendData:expected];
+	XCTAssertEqualObjects([packet AES256DecryptWithKey:MADAES256GoldenKey], plaintext);
+}
+
+- (void)testAES256GoldenVectorEmptyPlaintext {
+	NSData *iv = MADAES256GoldenIV();
+	NSData *ciphertext = [[NSData data] AES256EncryptWithKey:MADAES256GoldenKey iv:iv];
+
+	// One block of PKCS#7 padding for the empty payload.
+	XCTAssertEqualObjects(ciphertext, MADAES256HexData(@"38ae83a3edd22a71ecf296539ddf7320"));
+
+	NSMutableData *packet = [NSMutableData dataWithData:iv];
+	[packet appendData:ciphertext];
+	XCTAssertEqualObjects([packet AES256DecryptWithKey:MADAES256GoldenKey], [NSData data]);
+}
+
+- (void)testAES256GoldenVectorBlockAlignedPlaintext {
+	NSData *iv = MADAES256GoldenIV();
+	NSData *plaintext = [@"0123456789abcdef" dataUsingEncoding:NSUTF8StringEncoding];
+	NSData *ciphertext = [plaintext AES256EncryptWithKey:MADAES256GoldenKey iv:iv];
+
+	// One aligned block plus one full block of PKCS#7 padding.
+	XCTAssertEqualObjects(ciphertext, MADAES256HexData(@"7dbd88272fb25937692a3b81004741755cc246053c1506c574adf2c40f5cde7e"));
+
+	NSMutableData *packet = [NSMutableData dataWithData:iv];
+	[packet appendData:ciphertext];
+	XCTAssertEqualObjects([packet AES256DecryptWithKey:MADAES256GoldenKey], plaintext);
+}
+
+- (void)testAES256GoldenVectorShortKeyIsZeroPadded {
+	NSData *iv = MADAES256GoldenIV();
+	NSString *key = @"short";
+	NSData *plaintext = [@"The quick brown fox jumps over the lazy dog" dataUsingEncoding:NSUTF8StringEncoding];
+	NSData *ciphertext = [plaintext AES256EncryptWithKey:key iv:iv];
+
+	// The 5-byte key is zero-padded to 32 bytes before use.
+	XCTAssertEqualObjects(ciphertext, MADAES256HexData(@"67d0b7f67b23985f346fb1f6d34fe1b2f0bcd902277613fae9366208e42c8f0442f8d2edf633ca2fc09fe54ff3be73c1"));
+
+	NSMutableData *packet = [NSMutableData dataWithData:iv];
+	[packet appendData:ciphertext];
+	XCTAssertEqualObjects([packet AES256DecryptWithKey:key], plaintext);
 }
 
 #pragma mark - MADPageViewAttributes

@@ -14,6 +14,51 @@
 @implementation NSData (AES256)
 
 - (NSData *)AES256EncryptWithKey:(NSString *)key {
+	// A fresh random IV per message, stored in the first block of the result. A NULL IV
+	// made every encryption under a given key deterministic, so the same plaintext
+	// always produced the same ciphertext and callers could tell two values apart.
+	uint8_t iv[kCCBlockSizeAES128];
+	arc4random_buf(iv, sizeof(iv));
+
+	NSData *ciphertext = [self AES256EncryptWithKey:key iv:[NSData dataWithBytes:iv length:sizeof(iv)]];
+	if (!ciphertext) {
+		return nil;
+	}
+
+	NSMutableData *result = [NSMutableData dataWithCapacity:sizeof(iv) + ciphertext.length];
+	[result appendBytes:iv length:sizeof(iv)];
+	[result appendData:ciphertext];
+	return result;
+}
+
+- (NSData *)AES256DecryptWithKey:(NSString *)key {
+	// The first block is the IV the encryptor chose for this message.
+	if (self.length < kCCBlockSizeAES128) {
+		return nil;
+	}
+	const uint8_t *bytes = self.bytes;
+
+	NSData *iv = [[NSData alloc] initWithBytesNoCopy:(void *)bytes length:kCCBlockSizeAES128 freeWhenDone:NO];
+	NSData *ciphertext = [[NSData alloc] initWithBytesNoCopy:(void *)(bytes + kCCBlockSizeAES128)
+													  length:self.length - kCCBlockSizeAES128
+												freeWhenDone:NO];
+
+	return [ciphertext AES256DecryptWithKey:key iv:iv];
+}
+
+#pragma mark - Fixed-IV core (test seam)
+
+/*
+	The deterministic core behind the public encryptor: encrypt self under key with the
+	given 16-byte IV, returning the ciphertext alone. Exposed so the golden tests can pin
+	exact ciphertext bytes against externally computed vectors; the public method draws a
+	random IV and prepends it.
+ */
+- (NSData *)AES256EncryptWithKey:(NSString *)key iv:(NSData *)iv {
+	if (iv.length != kCCBlockSizeAES128) {
+		return nil;
+	}
+
 	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
 	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
 	bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
@@ -27,12 +72,6 @@
 
 	NSUInteger dataLength = self.length;
 
-	// A fresh random IV per message, stored in the first block of the result. A NULL IV
-	// made every encryption under a given key deterministic, so the same plaintext
-	// always produced the same ciphertext and callers could tell two values apart.
-	uint8_t iv[kCCBlockSizeAES128];
-	arc4random_buf(iv, sizeof(iv));
-
 	//See the doc: For block ciphers, the output size will always be less than or
 	//equal to the input size plus the size of one block.
 	//That's why we need to add the size of one block here
@@ -42,14 +81,12 @@
 	size_t numBytesEncrypted = 0;
 	CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
 										  keyPtr, kCCKeySizeAES256,
-										  iv,
+										  iv.bytes,
 										  self.bytes, dataLength, /* input */
 										  buffer, bufferSize, /* output */
 										  &numBytesEncrypted);
 	if (cryptStatus == kCCSuccess) {
-		NSMutableData *result = [NSMutableData dataWithCapacity:sizeof(iv) + numBytesEncrypted];
-		[result appendBytes:iv length:sizeof(iv)];
-		[result appendBytes:buffer length:numBytesEncrypted];
+		NSData *result = [NSData dataWithBytes:buffer length:numBytesEncrypted];
 		free(buffer);
 		return result;
 	}
@@ -58,7 +95,15 @@
 	return nil;
 }
 
-- (NSData *)AES256DecryptWithKey:(NSString *)key {
+/*
+	The deterministic core behind the public decryptor: self is the ciphertext (without
+	the IV prefix), iv the 16 bytes the encryptor used for this message.
+ */
+- (NSData *)AES256DecryptWithKey:(NSString *)key iv:(NSData *)iv {
+	if (iv.length != kCCBlockSizeAES128) {
+		return nil;
+	}
+
 	// 'key' should be 32 bytes for AES256, will be null-padded otherwise
 	char keyPtr[kCCKeySizeAES256+1]; // room for terminator (unused)
 	bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
@@ -69,13 +114,7 @@
 		return nil;
 	}
 
-	// The first block is the IV the encryptor chose for this message.
-	if (self.length < kCCBlockSizeAES128) {
-		return nil;
-	}
-	const void *iv = self.bytes;
-	const void *ciphertext = (const uint8_t *)self.bytes + kCCBlockSizeAES128;
-	NSUInteger dataLength = self.length - kCCBlockSizeAES128;
+	NSUInteger dataLength = self.length;
 
 	//See the doc: For block ciphers, the output size will always be less than or
 	//equal to the input size plus the size of one block.
@@ -86,8 +125,8 @@
 	size_t numBytesDecrypted = 0;
 	CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt, kCCAlgorithmAES128, kCCOptionPKCS7Padding,
 										  keyPtr, kCCKeySizeAES256,
-										  iv,
-										  ciphertext, dataLength, /* input */
+										  iv.bytes,
+										  self.bytes, dataLength, /* input */
 										  buffer, bufferSize, /* output */
 										  &numBytesDecrypted);
 
