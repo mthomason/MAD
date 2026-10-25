@@ -979,3 +979,43 @@ Product decisions, resolved 2026-10-22 (`MAD_SQL_ENTRY.md` §11): strict subset,
 replace-not-append atomic apply, GROUP BY auto-creating report group sections, the
 SELECT list validated-but-not-stored until Phase E, and the pasted text persisted as
 a single `sqlSourceText` property.
+
+## 17. The open-source launch — prompts 1–5
+
+**Status:** In progress — prompt 3 landed 2026-10-25; prompts 4–5 remain.
+
+The MIT launch is a five-prompt operation driven from
+`~/Desktop/MADOpenSource/` (prompt files `0[1-5]-*.md`), run on the
+`open-source-prep` branch; nothing is pushed and nothing is published until
+the user flips the switch. The strategy is `MAD_STRATEGY.md` Appendix A; the
+licence work the launch depends on is §10 (prompts 1–2). The git history
+scrub completed 2026-10-23 (backups `~/Desktop/Reports-prescrub/` and
+`.git.prescrub-2026-10-23`).
+
+* **Prompt 1 (licence hygiene) — done 2026-10-24.** The unlicensed rewrites
+  (`NSOperation+CompletionBlock`, `NSData+AES256`), the FreeTDS LGPL
+  obligations, `LICENSE`/`NOTICE`, `ThirdParty/Licenses/`.
+* **Prompt 2 (MariaDB swap) — done 2026-10-24.** Connector/C replaces
+  mysqlclient; the Karl Kraft layer rewritten as `MADMySQL*` classes
+  (redo landed 2026-10-25, `c46201465`); live suites green.
+* **Prompt 3 (headers and the public surface) — done 2026-10-25.** The SPDX
+  sweep (`3d685d220`): the confirmed one-line header on 1,913 first-party
+  files (old `All rights reserved` lines converted in place; headerless files
+  gained the line; third-party untouched). The public surface: `README.md`
+  rewritten around "a report is a file", `CONTRIBUTING.md` (test-first,
+  DCO), `SECURITY.md`, `CODE_OF_CONDUCT.md`, issue/PR templates, the
+  `.github/workflows/linux.yml` CI (buildx layer cache, master-triggered),
+  the spec restructured into `docs/` (normative content moved verbatim;
+  `MAD_FORMAT.md` is now a pointer), and the stale `opt/` mysqlclient
+  patterns dropped from `.gitignore`. Gates: `./Linux/build.sh` green
+  (123 executables, 1,262 tests, 8 needs) and the iOS MADFoundation + app
+  suites green.
+* **Prompt 4 (driver-authoring tutorial) — not started.** The forward link
+  is `docs/tutorials/driver-authoring.md` (referenced from `README.md`,
+  `CONTRIBUTING.md`, and the driver-proposal template).
+* **Prompt 5 (launch decisions) — not started.**
+
+Open items carried out of prompt 3: the CI badge placeholder in `README.md`
+(owner/repo to be filled at publication), the workflow's `master` triggers
+to update if the default branch is renamed, and the runtime image's registry
+publication (README says it is built locally for now).
