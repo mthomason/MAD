@@ -2212,7 +2212,7 @@ reference to "BUGS.md, the X entry" still lands.
   for the non-NULL path.
 
 ### `MADMySQLConnection`'s transaction toggles crashed on a connection with no handle
-- **Status:** Fixed by the first-party connector rewrite (2026-10-25)
+- **Status:** Fixed by the first-party connector rewrite (2026-10-25, `c46201465`)
 - **Where:** `MADMySQL/Source/MADMySQLConnection.m:157-186` (`enableTransactions`,
   `disableTransactions`, and the commit/rollback pair beside them)
 - **Behavior:** The old class left its handle NULL after `-init`, and the toggles called

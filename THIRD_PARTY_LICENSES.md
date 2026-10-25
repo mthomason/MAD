@@ -264,11 +264,14 @@ compile into the shipped app.
 ### 4.1 Unresolved — no license grant
 
 **Karl Kraft MySQL connector** — `MADMySQL/Source/` (30 files). **Resolved
-2026-10-24: rewritten as first-party code, riding the MariaDB swap (plan §3
-A3).** Every `Mysql*` file was rewritten from the MySQL C API with the class
-structure and the `MADMySQL`-facing API kept, the attribution deleted, and the
-behaviour pinned by the existing `MADMySQL` suite (122 tests, including the
-live suite against the Docker MySQL 8.4 server) before and after. Was: the
+2026-10-25: rewritten as first-party code, riding the MariaDB swap (plan §3
+A3; commit `c46201465`).** The 28 `Mysql*` files were deleted and replaced by
+`MADMySQL*` classes written from the MySQL C API with the class structure and
+the `MADMySQL`-facing API kept, the attribution deleted, and the behaviour
+pinned by the existing `MADMySQL` suite (122 tests, including the live suite
+against the Docker MySQL 8.4 server) before and after. The first pass of
+2026-10-24 (`68d885440`) kept the old file names and read as a header edit; it
+is replaced in history. Was: the
 headers read "Created by Karl Kraft on 5/21/08. Copyright 2008-2012 Karl Kraft.
 All rights reserved." There is no license text anywhere in the repo, and the
 upstream project (formerly `svn.karlkraft.com/mysql_connector`, described in

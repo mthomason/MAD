@@ -506,7 +506,7 @@ Connector/C for the mysqlclient replacement. The swap: Compressor builds
 gating the static `caching_sha2_password` plugin), `MADMySQL` links
 `mariadb.xcframework` + `zlib.xcframework` and no longer re-exports the
 library header trees, the Karl Kraft layer was rewritten as first-party code
-in the same pass (plan §3 A3), and the Linux image build swapped
+(plan §3 A3), and the Linux image build swapped
 `Linux/libraries.conf`/`lib/libraries.sh`/`CMakeLists.txt` to the same
 library. The MySQL suite stays green through the MariaDB client — 122 tests
 including the live suite against the Docker MySQL 8.4 server — and the
@@ -530,15 +530,18 @@ reserved" and no grant: the Karl Kraft MySQL connector (`MADMySQL/Source/`, 30 f
 `NSData+AES256` (`MADDesigner/Source/`, a pastie snippet with no author), and
 `NSOperation+Advanced`, now `NSOperation+CompletionBlock` (`MADFoundation/Source/`,
 two small methods, upstream `kas-kad/AdvancedNSOperations` has no LICENSE file). All three were rewrites rather than
-negotiations. **All three landed 2026-10-24:** `NSOperation+Advanced` (renamed
-`NSOperation+CompletionBlock`) and `NSData+AES256` in prompt 1, and the Karl
-Kraft connector in prompt 2 — all 28 `Mysql*` files rewritten from the MySQL C
-API with the class structure and `MADMySQL`-facing API kept, behaviour pinned
-by the 122-test MySQL suite (live tests included) before and after. On the
-connector specifically: the original distribution (examined 2026-10-04, then
-deleted) carries no grant either — a public blog post is not a dedication to
-the public domain — and since the MariaDB swap means touching that layer
-anyway, the plan rewrote it as first-party code (plan §3 A3).
+negotiations. **All three landed:** `NSOperation+Advanced` (renamed
+`NSOperation+CompletionBlock`) and `NSData+AES256` in prompt 1 (2026-10-24), and
+the Karl Kraft connector in prompt 2's redo (2026-10-25, `c46201465`) — the 28
+`Mysql*` files deleted and replaced by `MADMySQL*` classes written from the
+MySQL C API with the class structure and `MADMySQL`-facing API kept, behaviour
+pinned by the 122-test MySQL suite (live tests included) before and after. The
+first pass of 2026-10-24 (`68d885440`) kept the old file names and read as a
+header edit rather than a rewrite; it is replaced in history. On the connector
+specifically: the original distribution (examined 2026-10-04, then deleted)
+carries no grant either — a public blog post is not a dedication to the public
+domain — and since the MariaDB swap means touching that layer anyway, the plan
+rewrote it as first-party code (plan §3 A3).
 
 **Mechanical compliance work, once the above is decided.** The licence texts are
 committed (`ThirdParty/Licenses/`), and the FreeTDS LGPL items landed 2026-10-24:
