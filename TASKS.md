@@ -982,7 +982,9 @@ a single `sqlSourceText` property.
 
 ## 17. The open-source launch — prompts 1–5
 
-**Status:** In progress — prompt 3 landed 2026-10-25; prompts 4–5 remain.
+**Status:** In progress — prompt 4 landed 2026-10-25 (drafts only, nothing
+published); prompt 5's report refreshed the same day.  The name gate is
+still open (asked; the user leans "Madfile").
 
 The MIT launch is a five-prompt operation driven from
 `~/Desktop/MADOpenSource/` (prompt files `0[1-5]-*.md`), run on the
@@ -1016,10 +1018,26 @@ scrub completed 2026-10-23 (backups `~/Desktop/Reports-prescrub/` and
   the three COPYs and the soname symlink are removed (static mariadb needs
   none of it) and the stage comment now records the publication-licence
   position (`4615e9266`).
-* **Prompt 4 (driver-authoring tutorial) — not started.** The forward link
-  is `docs/tutorials/driver-authoring.md` (referenced from `README.md`,
-  `CONTRIBUTING.md`, and the driver-proposal template).
-* **Prompt 5 (launch decisions) — not started.**
+* **Prompt 4 (marketing deliverables) — done 2026-10-25.** Drafts only,
+  under `~/Desktop/MADOpenSource/drafts/` (outside the repo): the launch
+  announcement (`01`, Show HN title + body, `[NAME]` placeholders), the
+  demo script (`02`, every command run and its output captured — Docker
+  one-liner, `inspect`, `refresh --verbose` (76 rows in 0.05 s), `export
+  --format html` (62,007 bytes), digest match against the pinned table,
+  browser open; the two-platform beat is documented as *not* demonstrable
+  until the BUGS.md export-order entry is closed), the name memo (`03`,
+  candidates checked by web search; ends with the question — asked, the
+  user leans "Madfile" on "MAD = mobile analytics document"), and the
+  driver-authoring tutorial (`04`; the forward link is
+  `docs/tutorials/driver-authoring.md`, referenced from `README.md`,
+  `CONTRIBUTING.md`, and the driver-proposal template — the draft's
+  published home once the name is picked).  The demo verification found
+  the LSASC export-order divergence recorded in BUGS.md (the pinned
+  cross-platform digests are stale on the Apple side since `c27cd4188`).
+* **Prompt 5 (launch decisions) — the report was written 2026-10-25
+  (outside the repo, `~/Desktop/MADOpenSource/FINAL-REPORT.md`) and
+  refreshed the same day with prompt 4's outcome; the publication
+  commands in it remain unexecuted.**
 
 Open items carried out of prompt 3: the CI badge placeholder in `README.md`
 (owner/repo to be filled at publication), the workflow's `master` triggers
