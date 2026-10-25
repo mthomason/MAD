@@ -1,7 +1,7 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADFoundation subset the Linux build compiles (MAD_LINUX.md §9): 26 of
-# the framework's 27 implementation files, plus madlib.c.
+# The MADFoundation subset the Linux build compiles (MAD_LINUX.md §9): 27 of
+# the framework's 28 implementation files, plus madlib.c.
 #
 # The one excluded file and why:
 #   MADKeyChain.m        Security.framework SecItem*; §4 excludes it -- the
@@ -25,6 +25,7 @@ set(MADFOUNDATION_SOURCES
 	"${SOURCE_DIR}/MADProgress.m"
 	"${SOURCE_DIR}/MADStringUtilities.m"
 	"${SOURCE_DIR}/NSData+Comparison.m"
+	"${SOURCE_DIR}/NSString+Comparison.m"
 	"${SOURCE_DIR}/NSOperation+CompletionBlock.m"
 	"${SOURCE_DIR}/MADOperationConditionHasResultStringResult.m"
 	"${SOURCE_DIR}/MADOperationConditionTestConnectionSuccess.m"

@@ -16,6 +16,7 @@
 #import "MADQueryCacheSyncDefault.h"
 
 #import <MADFoundation/madlog.h>
+#import <MADFoundation/NSString+Comparison.h>
 
 #import <MADSqlite3/sqlite3.h>
 #import <MADFoundation/MADDataColumn.h>
@@ -69,12 +70,14 @@ BOOL Sqlite3StepResultOK(int result) {
 //  The LSASC collation: the collation +sortDescriptionForColumnType:ascending:
 //  selects for a text MADDataType, and the same test the report formatter uses
 //  for string group keys (MADReportFormatter
-//  +compareValue:withValue:forDataType:).  Key equality and row order have to
+//  +compareValue:withValue:forDataType:) and the in-memory sorts use as their
+//  descriptor's selector.  All three route through the one defined order
+//  (MADStringOrderedCompareUTF8): case-fold, then UTF-8 code-point order,
+//  identical on Apple and GNUstep -- the name stays, the platform's localized
+//  order is no longer what it means.  Key equality and row order have to
 //  agree, or group boundaries land in the wrong place.
 int compare_string_utf8_localized_asc_collation(void *__unused data, int len1, const void *arg1, int len2, const void *arg2) {
-	id str1 = [[NSString alloc] initWithBytesNoCopy:(void *)arg1 length:(NSUInteger)abs(len1) encoding:NSUTF8StringEncoding freeWhenDone:NO];
-	id str2 = [[NSString alloc] initWithBytesNoCopy:(void *)arg2 length:(NSUInteger)abs(len2) encoding:NSUTF8StringEncoding freeWhenDone:NO];
-	return (int)(str2 != nil ? [str1 localizedCaseInsensitiveCompare: str2] : NSOrderedDescending);
+	return (int)MADStringOrderedCompareUTF8(arg1, (NSUInteger)abs(len1), arg2, (NSUInteger)abs(len2));
 }
 
 #ifdef MAD_MTDatabaseSqlite3_DEBUG

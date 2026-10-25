@@ -141,6 +141,24 @@ output -- and required for `pdf`. The Foundation formats write the same bytes on
 and on Linux for the same document (`Linux/README.md`; the two platforms' exports of
 the London fixture compare equal by digest).
 
+**The defined order.** The export's group order is part of that contract, so it is a
+defined order, not the platform's: text keys compare case-insensitively, then by
+code-point order on the UTF-8 bytes. The case fold is the simple (one-to-one) case
+fold of Unicode 17.0.0, held as a checked-in table (`MADStringOrderingTable` in
+`MADFoundation/Source/NSString+Comparison.m`, generated from the UCD's
+`CaseFolding.txt` status-C/S entries) -- ASCII and every Unicode pair the table maps
+fold; anything else, including diacritics, compares as its own code point. Because
+the fold sends every letter into the lowercase range, which follows every ASCII
+punctuation byte, a punctuation-led key (`[1997] Black Light Syndrome`) sorts before
+a word-led one (`Core`) -- the same place SQLite's `NOCASE` puts it. UTF-8 preserves
+code-point order, so the byte comparison is the code-point comparison. One
+comparator (`-[NSString mad_orderedCompare:]` and its C core
+`MADStringOrderedCompareUTF8`) drives all three sites: the cache's `LSASC` collation,
+the in-memory sort descriptors (`MADDataTypeSelectorForSorting`), and the report
+formatter's group-boundary comparison. The order is deterministic across platforms,
+OS releases and locales; it changed from the localized order on 2026-10-25, so
+exports before that date do not compare equal to exports after it.
+
 **`json-report`** (`MAD_LINUX.md` §10.1, §9 Phase E) is the same schema with the
 rendered report as a `report` member: pages, each page's sections in draw order (type,
 group level, visibility), each section's rows, and each line's element kind, frame and

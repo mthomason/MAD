@@ -43,6 +43,7 @@
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADDataType.h>
+#import <MADFoundation/NSString+Comparison.h>
 #import <MADAPI/MADQuery.h>
 #import <MADAPI/MADQueryType.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
@@ -246,9 +247,35 @@
 	XCTAssertEqual([self collationResultBetween:@"a" and:@"b"], NSOrderedAscending);
 	XCTAssertEqual([self collationResultBetween:@"b" and:@"a"], NSOrderedDescending);
 	XCTAssertEqual([self collationResultBetween:@"a" and:@"a"], NSOrderedSame);
-	// The comparison is localized and case-insensitive.
+	// The defined order both platforms share now (MAD_CLI.md's `mad export`
+	// section, MADStringOrderedCompareUTF8): case-fold, then UTF-8 code-point
+	// order.  These hold identically on Apple and GNUstep -- that is the point.
 	XCTAssertEqual([self collationResultBetween:@"A" and:@"b"], NSOrderedAscending);
 	XCTAssertEqual([self collationResultBetween:@"a" and:@"B"], NSOrderedAscending);
+	XCTAssertEqual([self collationResultBetween:@"A" and:@"a"], NSOrderedSame);
+	// Punctuation is not skipped: the fold sends every letter into the lowercase
+	// range (0x61-0x7A), which follows every ASCII punctuation byte, so the
+	// punctuation-led key sorts before the word-led one -- the same place
+	// SQLite's NOCASE puts it, and the place ICU's localized order does too.
+	XCTAssertEqual([self collationResultBetween:@"[1997] Black Light Syndrome" and:@"Core"], NSOrderedAscending);
+	// The fold is Unicode-aware (the simple one-to-one fold, MADStringOrderingTable).
+	XCTAssertEqual([self collationResultBetween:@"K" and:@"k"], NSOrderedSame);
+	XCTAssertEqual([self collationResultBetween:@"Ä" and:@"ä"], NSOrderedSame);
+}
+
+- (void)testTheCollationAgreesWithTheDefinedOrderComparator {
+	// The cache's ORDER BY (this collation) and the in-memory sorts and the
+	// formatter's group-boundary walk all compare through
+	// -[NSString mad_orderedCompare:]; the collation must agree with it on
+	// every pair, or group boundaries land in the wrong place.
+	NSArray *keys = @[@"", @"a", @"A", @"B", @"b", @"Core", @"[1997] Black Light Syndrome",
+					  @"Ä", @"ä", @"Zebra", @"ac/dc", @"AC/DC", @"Straße", @"strabe"];
+	for (NSString *lhs in keys) {
+		for (NSString *rhs in keys) {
+			XCTAssertEqual([self collationResultBetween:lhs and:rhs], [lhs mad_orderedCompare:rhs],
+						   @"the collation and -mad_orderedCompare: agree on '%@' vs '%@'", lhs, rhs);
+		}
+	}
 }
 
 - (void)testMadSqlite3Err {

@@ -147,8 +147,8 @@
 
 // The report formatter finds group boundaries by comparing adjacent rows, so the
 // cache's ORDER BY has to order a key the way the formatter compares it: text keys
-// under the LSASC collation (localizedCaseInsensitiveCompare:), everything else
-// plainly.  See BUGS.md, "The cache's ORDER BY ignores column types".
+// under the LSASC collation (the defined order, NSString+Comparison.h), everything
+// else plainly.  See BUGS.md, "The cache's ORDER BY ignores column types".
 
 - (void)testSelectLimitOffsetWithoutColumnsOrdersPlainly {
 	// The constructor cannot consult a column it was not handed; it must fall

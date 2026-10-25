@@ -67,8 +67,8 @@ static void testSelectorForSorting(void) {
 	MADDatabaseField *field = [[MADDatabaseField alloc] initWithName:@"n"];
 
 	field.fieldType = MADDataTypeString;
-	MAD_PASS_EQUAL(NSStringFromSelector([field selectorForSorting]), @"localizedCaseInsensitiveCompare:",
-				   "strings sort case-insensitively");
+	MAD_PASS_EQUAL(NSStringFromSelector([field selectorForSorting]), @"mad_orderedCompare:",
+				   "strings sort by the defined order");
 
 	field.fieldType = MADDataTypeBlob;
 	MAD_PASS_EQUAL(NSStringFromSelector([field selectorForSorting]), @"compareData:", "blobs compare as data");

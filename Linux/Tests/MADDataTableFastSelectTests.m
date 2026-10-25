@@ -169,8 +169,8 @@ static void testRunSelectQueryYieldsNilWhenTheQueryHasNoRow(void) {
 
 // The report formatter finds group boundaries by comparing adjacent rows, so the
 // cache's ORDER BY has to order a key the way the formatter compares it: text keys
-// under the LSASC collation (localizedCaseInsensitiveCompare:), everything else
-// plainly.  See BUGS.md, "The cache's ORDER BY ignores column types".
+// under the LSASC collation (the defined order, NSString+Comparison.h), everything
+// else plainly.  See BUGS.md, "The cache's ORDER BY ignores column types".
 
 static void testSelectLimitOffsetWithoutColumnsOrdersPlainly(void) {
 	// The constructor cannot consult a column it was not handed; it must fall
@@ -257,24 +257,15 @@ static void testEnumeratorOrdersNumericKeysNumerically(void) {
 }
 
 static void testEnumeratorOrdersTextKeysCaseInsensitively(void) {
-	// "Apple" and "apple" are one key under LSASC on Apple, where
-	// localizedCaseInsensitiveCompare: folds case; on GNUstep that comparison
-	// is case-sensitive (README.md), so the cache's ORDER BY and the formatter's
-	// comparator -- which both call it -- still agree, but the case variants
-	// stay separate.
+	// "Apple" and "apple" are one key under LSASC on both platforms now: the
+	// collation folds case (the defined order, NSString+Comparison.h), so the
+	// case variants stay adjacent -- insertion order among equal keys -- and
+	// the folded-greater key sorts last.
 	NSArray *values = MADSelectValuesForColumnType(MADDataTypeString, @[@"Apple", @"Armadillo", @"apple"]);
 	MAD_PASS(values.count == (NSUInteger)3, "all three rows come back");
-#if __APPLE__
 	MAD_PASS_EQUAL(values[2], @"Armadillo", "the case-insensitively greater key sorts last");
 	MAD_PASS([values[0] caseInsensitiveCompare:@"apple"] == NSOrderedSame, "a case variant of apple sorts first");
 	MAD_PASS([values[1] caseInsensitiveCompare:@"apple"] == NSOrderedSame, "the other case variant is adjacent to it");
-#else
-	MAD_PASS_EQUAL(values, (@[@"Apple", @"Armadillo", @"apple"]), "the case-sensitive order the GNUstep comparison gives");
-	{
-		gMadTestNeeds++;
-		fprintf(stderr, "NEED: localizedCaseInsensitiveCompare: is case-sensitive on GNUstep (README.md); the rows order by case\n");
-	}
-#endif
 }
 
 MAD_TEST_MAIN("MADDataTableFastSelectTests",

@@ -71,7 +71,7 @@
 	MADDatabaseField *field = [[MADDatabaseField alloc] initWithName:@"n"];
 
 	field.fieldType = MADDataTypeString;
-	XCTAssertEqualObjects(NSStringFromSelector([field selectorForSorting]), @"localizedCaseInsensitiveCompare:");
+	XCTAssertEqualObjects(NSStringFromSelector([field selectorForSorting]), @"mad_orderedCompare:");
 
 	field.fieldType = MADDataTypeBlob;
 	XCTAssertEqualObjects(NSStringFromSelector([field selectorForSorting]), @"compareData:");

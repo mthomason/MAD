@@ -59,7 +59,7 @@
 }
 
 - (void)testSortSelectorForString {
-	XCTAssertEqual(MADDataTypeSelectorForSorting(MADDataTypeString), @selector(localizedCaseInsensitiveCompare:));
+	XCTAssertEqual(MADDataTypeSelectorForSorting(MADDataTypeString), @selector(mad_orderedCompare:));
 }
 
 - (void)testSortSelectorForBlob {

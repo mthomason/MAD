@@ -19,6 +19,7 @@
 
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADHeadlessDocument.h>
+#import <MAD/MADReportFormatter.h>
 #import <MAD/MADOperationRefresh.h>
 #import <MAD/MADOperationRefreshInitialize.h>
 #import <MAD/MADOperationRefreshInitalizeMainDataTable.h>
@@ -34,8 +35,12 @@
 #import <MAD/MADReportExportSource.h>
 
 #import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADDataType.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADURLFactory.h>
+#import <MADFoundation/NSString+Comparison.h>
+
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 
 // __FILE__ is absolute here (CMake hands the compiler an absolute path), so
 // Tests -> Linux -> the repository root.
@@ -220,7 +225,7 @@ static void testTheTextExportIsATableOfTheRows(void) {
 	MAD_PASS([text rangeOfString: @"London"].location != NSNotFound, "the rows carry the London data");
 	// The header, the blank line, the column-name line and one line per row.
 	MAD_PASS([text componentsSeparatedByString: @"\n"].count == 80, "76 rows and three lines of framing");
-	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x1E679E6AD5E1A6C3ULL),
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x03008506CF27F6EFULL),
 				   "the text export's bytes are the ones the Mac writes (see this file's header)");
 }
 
@@ -236,7 +241,7 @@ static void testTheCSVExportIsTheRowsAndTheColumnKeys(void) {
 	MAD_PASS([csv rangeOfString: @"phil.hughes@gmail.com"].location != NSNotFound, "the rows carry the London data");
 	// The header and one line per row, plus the empty piece after the last CRLF.
 	MAD_PASS([csv componentsSeparatedByString: @"\r\n"].count == 78, "76 rows and a header");
-	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0xC9FCD14079767021ULL),
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0xFF1C607E7D2F3391ULL),
 				   "the csv export's bytes are the ones the Mac writes (see this file's header)");
 }
 
@@ -263,7 +268,7 @@ static void testTheJSONExportIsTheSchemaAndTheRows(void) {
 			 "a row is keyed by the column key and carries the value");
 	// One line per row, and the object closes without a trailing comma.
 	MAD_PASS([json hasSuffix: @"\n  ]\n}\n"], "the rows array closes the object");
-	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x7E476E9FB57AF603ULL),
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0xB548747AC759A4ABULL),
 				   "the json export's bytes are the ones the Mac writes (see this file's header)");
 }
 
@@ -290,7 +295,7 @@ static void testTheJSONReportAddsTheRenderedReport(void) {
 	// The render side's bytes are the Mac's, like text/csv/json: the money in the
 	// report is formatted from the document's own locale and precision, not the
 	// machine's, so the same document writes the same report here (BUGS.md).
-	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0xA72F927165709893ULL),
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x499761E44D3BDD39ULL),
 				   "the report member's bytes are the ones the Mac writes");
 }
 
@@ -316,7 +321,7 @@ static void testTheHTMExportIsAFacsimileOfThePages(void) {
 	MAD_PASS([html rangeOfString: @"white-space: pre; overflow: hidden; text-overflow: ellipsis"].location != NSNotFound,
 			 "one line, clipped with an ellipsis: the renderer's own line-break rule");
 	MAD_PASS([html hasSuffix: @"</body>\n</html>\n"], "and it closes");
-	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x2972A86316D77281ULL),
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0xC3B163A710CA3B6FULL),
 				   "the facsimile's bytes are the ones the Mac writes");
 }
 
@@ -341,8 +346,44 @@ static void testTheHTMLFlowExportIsTheSectionsAndRows(void) {
 	MAD_PASS([html rangeOfString: @".s1 { font-family:"].location != NSNotFound, "the styles are a class table");
 	MAD_PASS([html rangeOfString: @"<section data-type=\"GroupFooter\" data-group-level=\"0\" data-visible=\"false\">"].location != NSNotFound,
 			 "an invisible section is named and left empty");
-	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0xE6F5C361C537C3A7ULL),
+	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x6310CBA068B4934FULL),
 				   "the reflowable file's bytes are the ones the Mac writes");
+}
+
+#pragma mark - The defined order, shared by the three comparison sites
+
+static NSComparisonResult MADExporterCollationResult(NSString *lhs, NSString *rhs) {
+	const char *l = lhs.UTF8String;
+	const char *r = rhs.UTF8String;
+	int result = compare_string_utf8_localized_asc_collation(NULL,
+															 (int)[lhs lengthOfBytesUsingEncoding:NSUTF8StringEncoding], l,
+															 (int)[rhs lengthOfBytesUsingEncoding:NSUTF8StringEncoding], r);
+	return (NSComparisonResult)result;
+}
+
+static void testTheFormatterComparesStringGroupKeysByTheDefinedOrder(void) {
+	//  The formatter walks group boundaries with its own string comparator
+	//  (+compareValue:withValue:forDataType:), and the cache's ORDER BY sorts
+	//  the same keys with the LSASC collation; both must agree with
+	//  -[NSString mad_orderedCompare:] on every pair, or the sections the walk
+	//  finds will not be the sections the ORDER BY produced (MAD_CLI.md's
+	//  `mad export` section).
+	NSArray *keys = @[@"", @"a", @"A", @"B", @"b", @"Core", @"[1997] Black Light Syndrome",
+					  @"Ä", @"ä", @"Zebra", @"ac/dc", @"AC/DC", @"Straße", @"strabe"];
+	for (NSString *lhs in keys) {
+		for (NSString *rhs in keys) {
+			NSComparisonResult expected = [lhs mad_orderedCompare: rhs];
+			NSComparisonResult formatterResult = [MADReportFormatter compareValue: lhs
+																		withValue: rhs
+																	  forDataType: MADDataTypeString];
+			MAD_PASS(formatterResult == expected,
+					 "the formatter and -mad_orderedCompare: agree on '%s' vs '%s'",
+					 lhs.UTF8String, rhs.UTF8String);
+			MAD_PASS(MADExporterCollationResult(lhs, rhs) == expected,
+					 "the collation and -mad_orderedCompare: agree on '%s' vs '%s'",
+					 lhs.UTF8String, rhs.UTF8String);
+		}
+	}
 }
 
 #pragma mark - The value presentations, shared by the formats
@@ -366,6 +407,7 @@ MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testThePDFFormatSaysWhyItCannotRun),
 	MAD_TEST(testNumbersAreSpelledInOneRoundTripForm),
 	MAD_TEST(testDatesAreISO8601InUTC),
+	MAD_TEST(testTheFormatterComparesStringGroupKeysByTheDefinedOrder),
 	MAD_TEST(testTheTextExportIsATableOfTheRows),
 	MAD_TEST(testTheCSVExportIsTheRowsAndTheColumnKeys),
 	MAD_TEST(testTheJSONExportIsTheSchemaAndTheRows),

@@ -435,9 +435,13 @@ encoding (`'C'` off Apple), `class_getProperty()`'s missing superclass walk
 finishing async operation raised out of `-dealloc`), `-coordinateAccessWithIntents:`
 (its GNUstep implementation faults; the Compat category calls the accessor on
 the queue), and scheme-less URLs from `MADURLFactory` (now
-`+fileURLWithPath:`, which un-parked five coordinator tests). One divergence stays pinned rather than fixed: GNUstep's
-`-localizedCaseInsensitiveCompare:` is case-sensitive, so MADSqlite3's
-registered collation orders text differently than on Apple. The live
+`+fileURLWithPath:`, which un-parked five coordinator tests). The one divergence
+that stayed pinned longest — GNUstep's `-localizedCaseInsensitiveCompare:` is
+case-sensitive, so MADSqlite3's registered collation ordered text differently
+than on Apple — is fixed now (2026-10-25): the collation, the in-memory sort
+selectors and the formatter's comparator all route through one first-party
+defined order (`NSString+Comparison.h`), and the pin became defined-order tests
+that hold identically on both platforms. The live
 `MADTdsClientLiveTests` suite runs green from inside
 the image against the SQL Server container (29/29), so the driver path is
 exercised on Linux, not just compiled. Phase D — the CLI and the data-path

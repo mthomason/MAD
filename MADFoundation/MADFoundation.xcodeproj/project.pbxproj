@@ -27,6 +27,8 @@
 		4C7C00D91EE2A46C00E7A5B1 /* MADStringUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7C00D71EE2A46C00E7A5B1 /* MADStringUtilities.m */; };
 		4C855B862D8A16D800AC69FE /* NSData+Comparison.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C855B842D8A16D800AC69FE /* NSData+Comparison.m */; };
 		4C855B872D8A16FA00AC69FE /* NSData+Comparison.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C855B852D8A16D800AC69FE /* NSData+Comparison.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C855B8AA7B1C2D300AC69FE /* NSString+Comparison.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C855B88A7B1C2D300AC69FE /* NSString+Comparison.m */; };
+		4C855B8BA7B1C2D300AC69FE /* NSString+Comparison.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C855B89A7B1C2D300AC69FE /* NSString+Comparison.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C93729E1BACFC9200D6BD62 /* MADFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C93729D1BACFC9200D6BD62 /* MADFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C9372A51BACFC9200D6BD62 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C93729A1BACFC9200D6BD62 /* MADFoundation.framework */; };
 		4C9372AA1BACFC9200D6BD62 /* MADFoundationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9372A91BACFC9200D6BD62 /* MADFoundationTests.m */; };
@@ -43,6 +45,7 @@
 		4CDB7A1800000000000000A1 /* madlogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A1800000000000000B1 /* madlogTests.m */; };
 		4CDB7A1900000000000000A1 /* MADDataTableVirtualTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A1900000000000000B1 /* MADDataTableVirtualTests.m */; };
 		4CDB7A0200000000000000A1 /* NSDataComparisonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A0200000000000000B1 /* NSDataComparisonTests.m */; };
+		4CDB7A0200000000000000A2 /* NSStringComparisonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A0200000000000000B2 /* NSStringComparisonTests.m */; };
 		4CDB7A0400000000000000A1 /* MADDataColumnTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A0400000000000000B1 /* MADDataColumnTests.m */; };
 		4CDB7A0500000000000000A1 /* MADCredentialTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A0500000000000000B1 /* MADCredentialTests.m */; };
 		4CDB7A0600000000000000A1 /* MADKeyChainTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB7A0600000000000000B1 /* MADKeyChainTests.m */; };
@@ -136,6 +139,8 @@
 		4C7C00D71EE2A46C00E7A5B1 /* MADStringUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStringUtilities.m; sourceTree = "<group>"; };
 		4C855B842D8A16D800AC69FE /* NSData+Comparison.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Comparison.m"; sourceTree = "<group>"; };
 		4C855B852D8A16D800AC69FE /* NSData+Comparison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Comparison.h"; sourceTree = "<group>"; };
+		4C855B88A7B1C2D300AC69FE /* NSString+Comparison.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Comparison.m"; sourceTree = "<group>"; };
+		4C855B89A7B1C2D300AC69FE /* NSString+Comparison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Comparison.h"; sourceTree = "<group>"; };
 		4C93729A1BACFC9200D6BD62 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C93729D1BACFC9200D6BD62 /* MADFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADFoundation.h; sourceTree = "<group>"; };
 		4C93729F1BACFC9200D6BD62 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -154,6 +159,7 @@
 		4CDB7A1800000000000000B1 /* madlogTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = madlogTests.m; sourceTree = "<group>"; };
 		4CDB7A1900000000000000B1 /* MADDataTableVirtualTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataTableVirtualTests.m; sourceTree = "<group>"; };
 		4CDB7A0200000000000000B1 /* NSDataComparisonTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSDataComparisonTests.m; sourceTree = "<group>"; };
+		4CDB7A0200000000000000B2 /* NSStringComparisonTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSStringComparisonTests.m; sourceTree = "<group>"; };
 		4CDB7A0400000000000000B1 /* MADDataColumnTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADDataColumnTests.m; sourceTree = "<group>"; };
 		4CDB7A0500000000000000B1 /* MADCredentialTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADCredentialTests.m; sourceTree = "<group>"; };
 		4CDB7A0600000000000000B1 /* MADKeyChainTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADKeyChainTests.m; sourceTree = "<group>"; };
@@ -278,6 +284,7 @@
 				4CDB7A1800000000000000B1 /* madlogTests.m */,
 				4CDB7A1900000000000000B1 /* MADDataTableVirtualTests.m */,
 				4CDB7A0200000000000000B1 /* NSDataComparisonTests.m */,
+				4CDB7A0200000000000000B2 /* NSStringComparisonTests.m */,
 				4CDB7A0400000000000000B1 /* MADDataColumnTests.m */,
 				4CDB7A0500000000000000B1 /* MADCredentialTests.m */,
 				4CDB7A0600000000000000B1 /* MADKeyChainTests.m */,
@@ -354,6 +361,8 @@
 				4CF09A481BB2791D007BCF7A /* MADApplication.m */,
 				4C855B852D8A16D800AC69FE /* NSData+Comparison.h */,
 				4C855B842D8A16D800AC69FE /* NSData+Comparison.m */,
+				4C855B89A7B1C2D300AC69FE /* NSString+Comparison.h */,
+				4C855B88A7B1C2D300AC69FE /* NSString+Comparison.m */,
 				4CDA62D91D0803ED00E95859 /* MADURLFactory.h */,
 				4CDA62D81D0803ED00E95859 /* MADURLFactory.m */,
 				4C7C00D61EE2A46C00E7A5B1 /* MADStringUtilities.h */,
@@ -430,6 +439,7 @@
 				4C1E54E31E5639B900E3FAF0 /* MADDataTableType.h in Headers */,
 				4C9372CF1BACFF0F00D6BD62 /* MADDataColumn.h in Headers */,
 				4C855B872D8A16FA00AC69FE /* NSData+Comparison.h in Headers */,
+				4C855B8BA7B1C2D300AC69FE /* NSString+Comparison.h in Headers */,
 				4C2D78581F56F34B005415F7 /* madlib.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -543,6 +553,7 @@
 				4C7C00D91EE2A46C00E7A5B1 /* MADStringUtilities.m in Sources */,
 				4CB98DA51F43EBA90043B583 /* MADCredential.m in Sources */,
 				4C855B862D8A16D800AC69FE /* NSData+Comparison.m in Sources */,
+				4C855B8AA7B1C2D300AC69FE /* NSString+Comparison.m in Sources */,
 				4C6C09FB1F5D2B8F00EDA039 /* MADProgress.m in Sources */,
 				4CB98E171F47BA720043B583 /* MADOperationBooleanAnd.m in Sources */,
 				4CF09A4A1BB2791D007BCF7A /* MADApplication.m in Sources */,
@@ -580,6 +591,7 @@
 				4CDB7A1800000000000000A1 /* madlogTests.m in Sources */,
 				4CDB7A1900000000000000A1 /* MADDataTableVirtualTests.m in Sources */,
 				4CDB7A0200000000000000A1 /* NSDataComparisonTests.m in Sources */,
+				4CDB7A0200000000000000A2 /* NSStringComparisonTests.m in Sources */,
 				4CDB7A0400000000000000A1 /* MADDataColumnTests.m in Sources */,
 				4CDB7A0500000000000000A1 /* MADCredentialTests.m in Sources */,
 				4CDB7A0600000000000000A1 /* MADKeyChainTests.m in Sources */,

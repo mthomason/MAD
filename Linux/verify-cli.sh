@@ -121,12 +121,12 @@ export_format html		"${WORK}/out.html"
 export_format html-flow		"${WORK}/out.flow.html"
 export_format json-report	"${WORK}/out.report.json"
 
-check_file "export text"	"${WORK}/out.text"		40441	b3f3954ed88656847cab2fe24ac57ce2ba6dd786dc010be4a2fef45f592d538c
-check_file "export csv"		"${WORK}/out.csv"		12538	394382cacbc74b88a3e352f0f19026d0bee0e9f3f80d06962b616c27f15ea185
-check_file "export json"	"${WORK}/out.json"		64595	b5e75234a9819dca4c1edf170833f342f7a7986008a99a8af4483e4c1048a859
-check_file "export html"	"${WORK}/out.html"		62007	ba12a289794fc6dea0566c93dc436ebcfa772132a027eee2e46828348210c6f8
-check_file "export html-flow"	"${WORK}/out.flow.html"		54766	6baa43ed132a10adf6aec4d1f341975a1f38b286289ba3938130db785ee92d1e
-check_file "export json-report"	"${WORK}/out.report.json"	118109	5ba282fce3389ce3fc031ec2e6fdb34b224ce4562d904bf4c8b7744950f580cb
+check_file "export text"	"${WORK}/out.text"		40441	7dcee96c45951fac0e0057094a6a142c90a88d6d88a1c03278b273f5140c6e49
+check_file "export csv"		"${WORK}/out.csv"		12538	773f6215a5447f72d499282d337a5916b11f0f3b06cb4c5aec134db6f493cb21
+check_file "export json"	"${WORK}/out.json"		64595	569c6ee25223c51ecffd15923dd897e75c8362d72f4ece72f8dbeee3e9c8cdbc
+check_file "export html"	"${WORK}/out.html"		62007	285541ed59333e0e55b8c7fe5619e4b64dde7aaf8e93a24ba881b40111ab2327
+check_file "export html-flow"	"${WORK}/out.flow.html"		54766	0565204a55d02f925602b5c0bf298bb0e41c9cbe56bea6df770e828a35782382
+check_file "export json-report"	"${WORK}/out.report.json"	118109	9d01d0daabbb5e38921c0bfbed083b288031c9340e9a4af81679d03b691ce94c
 
 output mad export "${LONDON}" --format pdf --out "${WORK}/out.pdf" > "${WORK}/pdf.txt"
 PDF_STATUS=$?

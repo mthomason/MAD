@@ -54,7 +54,7 @@ static void testNameMapping(void) {
 }
 
 static void testSortSelectorForString(void) {
-	MAD_PASS(MADDataTypeSelectorForSorting(MADDataTypeString) == @selector(localizedCaseInsensitiveCompare:), "string sorts case-insensitively");
+	MAD_PASS(MADDataTypeSelectorForSorting(MADDataTypeString) == @selector(mad_orderedCompare:), "string sorts by the defined order");
 }
 
 static void testSortSelectorForBlob(void) {

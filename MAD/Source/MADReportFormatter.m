@@ -39,6 +39,7 @@
 #import <MADAPI/MADDatabaseField.h>
 
 #import <MADFoundation/NSData+Comparison.h>
+#import <MADFoundation/NSString+Comparison.h>
 #import <MADFoundation/MADDataType.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MADCocoaExtensions/CGGeometry+Extras.h>
@@ -285,7 +286,7 @@ static NSComparisonResult MADComparisonFallback(id value, id value2, MADDataType
 	BOOL value2IsKnown = [value2 isKindOfClass:[NSString class]] || [value2 isKindOfClass:[NSNumber class]] || [value2 isKindOfClass:[NSData class]];
 	if (valueIsKnown && value2IsKnown) {
 		if ([value isKindOfClass:[NSString class]] && [value2 isKindOfClass:[NSString class]]) {
-			return [(NSString *)value caseInsensitiveCompare:(NSString *)value2];
+			return [(NSString *)value mad_orderedCompare:(NSString *)value2];
 		}
 		if ([value isKindOfClass:[NSNumber class]] && [value2 isKindOfClass:[NSNumber class]]) {
 			return [(NSNumber *)value compare:(NSNumber *)value2];
@@ -304,10 +305,12 @@ static NSComparisonResult MADComparisonFallback(id value, id value2, MADDataType
 
 //  The comparison families a level's declared type sorts under: the typed pair
 //  on the fast path, the shared fallback for anything outside the level's
-//  canonical class.
+//  canonical class.  The string pair compares through the defined order
+//  (NSString+Comparison.h) -- the same comparison the cache's LSASC collation
+//  and the in-memory sort descriptors use.
 static NSComparisonResult MADCompareValuesAsString(id value, id value2, MADDataType dataType) {
 	if ([value isKindOfClass:[NSString class]] && [value2 isKindOfClass:[NSString class]]) {
-		return [(NSString *)value localizedCaseInsensitiveCompare:(NSString *)value2];
+		return [(NSString *)value mad_orderedCompare:(NSString *)value2];
 	}
 	return MADComparisonFallback(value, value2, dataType);
 }

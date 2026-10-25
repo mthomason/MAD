@@ -189,14 +189,14 @@ and its categories are silently absent at runtime.
   `+unarchiveTopLevelObjectWithData:error:` exists came from a branch the nil
   strict-archive never reached, so only the latter was ever true). That one
   does not exist and is shimmed in `Compat/` over `+unarchiveObjectWithData:`.
-* **`-localizedCaseInsensitiveCompare:` is case-sensitive on GNUstep.**
-  Measured 2026-10-06: `[@"a" localizedCaseInsensitiveCompare:@"B"]` answers
-  `NSOrderedDescending` where Apple answers ascending — the comparison is by
-  code point. The SQLite collation MADDatabaseSqlite3 registers
-  (`compare_string_utf8_localized_asc_collation`) is built on it, so a cache
-  created on Linux orders its text differently from one created on Apple.
-  Pinned per-platform in `Linux/Tests/MADDatabaseSqlite3Tests.m` rather than
-  papered over.
+* **`-localizedCaseInsensitiveCompare:` is case-sensitive on GNUstep** — no
+  longer load-bearing (fixed 2026-10-25). The SQLite collation
+  MADDatabaseSqlite3 registers (`compare_string_utf8_localized_asc_collation`),
+  the in-memory sort selectors and the report formatter's string comparator all
+  route through one first-party defined order (`NSString+Comparison.h`:
+  case-fold, then UTF-8 code-point order), so the divergence the localized
+  comparison caused is gone, not papered over; the tests assert the defined
+  order identically on both platforms. See `MAD_CLI.md`'s `mad export` section.
 * **BOOL's runtime encoding, and `class_getProperty` inheritance — found by
   MAD's rptq suites, fixed in RptqObject.** The runtime compares an installed
   accessor's type encoding against the compiled call site's, and BOOL is
@@ -353,9 +353,9 @@ refreshed first, `sha256sum` on each side):
 
 | format | bytes | sha256 (identical on both platforms) |
 |---|---|---|
-| `json` | 64595 | `b5e75234a9819dca4c1edf170833f342f7a7986008a99a8af4483e4c1048a859` |
-| `csv` | 12538 | `394382cacbc74b88a3e352f0f19026d0bee0e9f3f80d06962b616c27f15ea185` |
-| `text` | 40441 | `b3f3954ed88656847cab2fe24ac57ce2ba6dd786dc010be4a2fef45f592d538c` |
+| `json` | 64595 | `569c6ee25223c51ecffd15923dd897e75c8362d72f4ece72f8dbeee3e9c8cdbc` |
+| `csv` | 12538 | `773f6215a5447f72d499282d337a5916b11f0f3b06cb4c5aec134db6f493cb21` |
+| `text` | 40441 | `7dcee96c45951fac0e0057094a6a142c90a88d6d88a1c03278b273f5140c6e49` |
 
 `Linux/Tests/MADReportExporterTests.m` is the same check as a test: it refreshes the
 fixture and asserts each export's FNV-1a checksum against the Mac's bytes (plus the
@@ -471,9 +471,9 @@ the London fixture:
 
 | format | bytes | sha256 (identical on both platforms) |
 |---|---|---|
-| `json-report` | 118,109 | `5ba282fce3389ce3fc031ec2e6fdb34b224ce4562d904bf4c8b7744950f580cb` |
-| `html` | 62,007 | `ba12a289794fc6dea0566c93dc436ebcfa772132a027eee2e46828348210c6f8` |
-| `html-flow` | 54,766 | `6baa43ed132a10adf6aec4d1f341975a1f38b286289ba3938130db785ee92d1e` |
+| `json-report` | 118,109 | `9d01d0daabbb5e38921c0bfbed083b288031c9340e9a4af81679d03b691ce94c` |
+| `html` | 62,007 | `285541ed59333e0e55b8c7fe5619e4b64dde7aaf8e93a24ba881b40111ab2327` |
+| `html-flow` | 54,766 | `0565204a55d02f925602b5c0bf298bb0e41c9cbe56bea6df770e828a35782382` |
 | `pdf` | — | not produced here; `+isAvailable` NO with the reason |
 
 The render-side formats are byte-identical across the platforms, like the data ones:

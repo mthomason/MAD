@@ -43,6 +43,7 @@
 
 #import <MADFoundation/MADDataColumn.h>
 #import <MADFoundation/MADDataType.h>
+#import <MADFoundation/NSString+Comparison.h>
 #import <MADAPI/MADQuery.h>
 #import <MADAPI/MADQueryType.h>
 #import <MADAPI/MADDatabaseDataBinding.h>
@@ -239,20 +240,45 @@ static NSComparisonResult collationResultBetween(NSString *lhs, NSString *rhs) {
 	return (NSComparisonResult)result;
 }
 
+//  The defined order both platforms share now (MAD_CLI.md's `mad export`
+//  section, MADStringOrderedCompareUTF8): case-fold, then UTF-8 code-point
+//  order.  These hold identically on Apple and GNUstep -- that is the point.
 static void testCompareStringUtf8LocalizedAscCollation(void) {
 	MAD_PASS(collationResultBetween(@"a", @"b") == NSOrderedAscending, "a sorts before b");
 	MAD_PASS(collationResultBetween(@"b", @"a") == NSOrderedDescending, "b sorts after a");
 	MAD_PASS(collationResultBetween(@"a", @"a") == NSOrderedSame, "a equals a");
-	MAD_PASS(collationResultBetween(@"A", @"b") == NSOrderedAscending, "A sorts before b case-insensitively");
-	// The comparison is meant to be localized and case-insensitive; GNUstep's
-	// -localizedCaseInsensitiveCompare: is not (measured 2026-10-06: "a" vs
-	// "B" answers Descending, code-point order), so the collation this
-	// registers orders differently on Linux.  Recorded in Linux/README.md.
-#if __APPLE__
-	MAD_PASS(collationResultBetween(@"a", @"B") == NSOrderedAscending, "a sorts before B case-insensitively");
-#else
-	MAD_PASS(collationResultBetween(@"a", @"B") == NSOrderedDescending, "GNUstep's comparison is case-sensitive here");
-#endif
+	MAD_PASS(collationResultBetween(@"A", @"b") == NSOrderedAscending, "A folds to a and sorts before b");
+	MAD_PASS(collationResultBetween(@"a", @"B") == NSOrderedAscending, "a sorts before B, folded to b");
+	MAD_PASS(collationResultBetween(@"A", @"a") == NSOrderedSame, "case-folded keys are equal");
+	// Punctuation is not skipped: the fold sends every letter into the lowercase
+	// range (0x61-0x7A), which follows every ASCII punctuation byte, so the
+	// punctuation-led key sorts before the word-led one -- the same place
+	// SQLite's NOCASE puts it, and the place ICU's localized order does too.
+	MAD_PASS(collationResultBetween(@"[1997] Black Light Syndrome", @"Core") == NSOrderedAscending,
+			 "[ sorts before the folded word -- punctuation compares as its own code point");
+	// The fold is Unicode-aware (the simple one-to-one fold, MADStringOrderingTable):
+	// the Kelvin sign folds to k, and the Latin-1 pairs fold to each other.
+	MAD_PASS(collationResultBetween(@"K", @"k") == NSOrderedSame,
+			 "the Kelvin sign folds to k");
+	MAD_PASS(collationResultBetween(@"Ä", @"ä") == NSOrderedSame,
+			 "A-umlaut folds to a-umlaut");
+}
+
+static void testTheCollationAgreesWithTheDefinedOrderComparator(void) {
+	//  The cache's ORDER BY (this collation) and the in-memory sorts and the
+	//  formatter's group-boundary walk all compare through
+	//  -[NSString mad_orderedCompare:]; the collation must agree with it on
+	//  every pair, or group boundaries land in the wrong place.
+	NSArray *keys = @[@"", @"a", @"A", @"B", @"b", @"Core", @"[1997] Black Light Syndrome",
+					  @"Ä", @"ä", @"Zebra", @"ac/dc", @"AC/DC", @"Straße", @"strabe"];
+	for (NSString *lhs in keys) {
+		for (NSString *rhs in keys) {
+			NSComparisonResult expected = [lhs mad_orderedCompare: rhs];
+			MAD_PASS(collationResultBetween(lhs, rhs) == expected,
+					 "the collation and -mad_orderedCompare: agree on '%s' vs '%s'",
+					 lhs.UTF8String, rhs.UTF8String);
+		}
+	}
 }
 
 static void testMadSqlite3Err(void) {
@@ -661,6 +687,7 @@ MAD_TEST_MAIN("MADDatabaseSqlite3Tests",
 	MAD_TEST(testDriverAndIconNames),
 	MAD_TEST(testSqlite3StepResultOK),
 	MAD_TEST(testCompareStringUtf8LocalizedAscCollation),
+	MAD_TEST(testTheCollationAgreesWithTheDefinedOrderComparator),
 	MAD_TEST(testMadSqlite3Err),
 	MAD_TEST(testConnectionInitWithUrl),
 	MAD_TEST(testConnectionCopy),

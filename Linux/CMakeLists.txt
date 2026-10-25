@@ -153,6 +153,7 @@ mad_add_framework(madfoundation MADFOUNDATION_SOURCES
 	MADProgressTests
 	MADStringUtilitiesTests
 	NSDataComparisonTests
+	NSStringComparisonTests
 	MADDataTypeTests
 	MADBlockOperationTests
 	MADGroupOperationTests

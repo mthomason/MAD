@@ -8,6 +8,7 @@
 
 #import <MADFoundation/MADDataType.h>
 #import <MADFoundation/NSData+Comparison.h>
+#import <MADFoundation/NSString+Comparison.h>
 #import <Foundation/NSString.h>
 
 //  The comparison selector for a sort or group level.  The cache's sort
@@ -15,7 +16,9 @@
 //  formatter compares group keys directly from the level's MADDataType
 //  (MADReportFormatter +compareValue:withValue:forDataType:), which must agree
 //  with the collation the cache's ORDER BY picks
-//  (+[MADDatabaseSqlite3 sortDescriptionForColumnType:ascending:]).
+//  (+[MADDatabaseSqlite3 sortDescriptionForColumnType:ascending:]).  A string
+//  level compares through the defined order (NSString+Comparison.h), the one
+//  comparison the three sites share.
 SEL MADDataTypeSelectorForSorting(MADDataType dataType) {
 	switch (dataType) {
 		case MADDataTypeDate:
@@ -40,7 +43,7 @@ SEL MADDataTypeSelectorForSorting(MADDataType dataType) {
 			break;
 			
 		case MADDataTypeString:
-			return @selector(localizedCaseInsensitiveCompare:);
+			return @selector(mad_orderedCompare:);
 			break;
 			
 		default:
