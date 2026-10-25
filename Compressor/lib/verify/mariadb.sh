@@ -7,7 +7,10 @@ if [[ -z "${slice_lib}" ]]; then
 	echo "FAIL ${lib}: no libmariadbclient.a in ${xcfw}"
 	exit 1
 fi
-if ! strings "${slice_lib}" | grep -q "caching_sha2_password"; then
+# grep -c reads the whole stream: grep -q would close the pipe at the first
+# match, and under pipefail the SIGPIPE in strings would fail the check.
+plugin_hits="$(strings "${slice_lib}" | grep -c "caching_sha2_password" || true)"
+if [[ "${plugin_hits}" -lt 1 ]]; then
 	echo "FAIL ${lib}: caching_sha2_password auth plugin not compiled in"
 	exit 1
 fi

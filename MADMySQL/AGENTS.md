@@ -31,8 +31,9 @@ This framework, along with `MADTdsClient`, serves as a good example of how to ad
 *   **Live tests**: `MADMySQLTests/MADMySQLLiveTests.m` talks to a real MySQL server
     and skips when none is reachable. The credentials it expects are in
     [`DEVELOPER.md`](../DEVELOPER.md); override them with the `MAD_MYSQL_TEST_*`
-    environment variables. Use `127.0.0.1`, not `localhost` -- libmysqlclient reads
-    `localhost` as a request for a Unix socket, which the Simulator does not have.
+    environment variables. Use `127.0.0.1`, not `localhost` -- the MySQL
+    client libraries read `localhost` as a request for a Unix socket, which the
+    Simulator does not have.
     `TestDatabase/mysql-test-db.sh` provides that server in Docker -- one
     container, `mad-mysql`, from a pinned image with a checksum-verified copy of
     the standard `employees` dataset. It publishes 13306; the scheme sets

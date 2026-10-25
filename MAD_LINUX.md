@@ -58,7 +58,7 @@ ctypes/CFFI — but that is optional, not a prerequisite.
 **On the stated reason to prefer Python — driver hookup.** It is true that Python's
 connector ecosystem is broad, and one `pip install` reaches databases this project
 has no driver for. But for the sources that exist today the hookup is already
-language-neutral: the MAD drivers sit on freetds and mysqlclient — the same C
+language-neutral: the MAD drivers sit on freetds and MariaDB Connector/C — the same C
 libraries a Python or C program would link — and both build natively on Linux (§7).
 Compiling the engine moves that hookup to Linux unchanged. Where Python genuinely
 has an edge is *new* source types (Postgres, BigQuery, REST), and there the right

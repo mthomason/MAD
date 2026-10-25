@@ -153,29 +153,35 @@ build_libarchive() { # src
 	ldconfig
 }
 
-build_mysqlclient() { # src
+build_mariadb() { # src
 	local bld="$1/build-linux"
 	mkdir -p "${bld}"
-	# The option set mirrors Compressor/lib/recipes/mysqlclient.sh's preset:
-	# the client library only (WITHOUT_SERVER=ON), bundled zlib/zstd, the
-	# openssl built above, no SASL/LDAP, static.  mysqlclient is GPL with the
-	# FOSS exception and nothing here ships -- LICENSE_COMPLIANCE_PLAN.md
-	# carries that decision (MAD_LINUX.md §7).
+	# The option set mirrors Compressor/lib/recipes/mariadb.sh: the static
+	# mariadbclient target (libmariadb is hardcoded shared on UNIX), the
+	# openssl built above, external zlib, no curl/tests, and the MySQL 8 auth
+	# plugins static while every other plugin is disabled -- no plugin .so
+	# exists in the image.  The install dirs are overridden so mysql.h lands
+	# in the default include path and the archive where find_library looks.
 	(
 		cd "${bld}"
 		cmake "$1" \
 			-DCMAKE_INSTALL_PREFIX="${PREFIX}" \
 			-DCMAKE_BUILD_TYPE=Release \
-			-DWITHOUT_SERVER=ON \
-			-DBUILD_SHARED_LIBS=OFF \
-			-DWITH_SSL=system \
-			-DOPENSSL_ROOT_DIR="${PREFIX}" -DOPENSSL_INCLUDE_DIR="${PREFIX}/include" \
-			-DOPENSSL_CRYPTO_LIBRARY="${PREFIX}/lib/libcrypto.a" \
-			-DOPENSSL_SSL_LIBRARY="${PREFIX}/lib/libssl.a" \
-			-DWITH_ZLIB=bundled -DWITH_ZSTD=bundled \
-			-DWITH_UNIT_TESTS=OFF -DWITH_SASL=OFF -DWITH_LDAP=OFF -DWITH_CURL=none \
-			-DINSTALL_STATIC_LIBRARIES=ON -DINSTALL_LIBDIR=lib -DINSTALL_INCLUDEDIR=include
-		make -j"${JOBS}" mysqlclient
+			-DWITH_SSL=OPENSSL \
+			-DOPENSSL_ROOT_DIR="${PREFIX}" -DOPENSSL_USE_STATIC_LIBS=TRUE \
+			-DWITH_EXTERNAL_ZLIB=ON \
+			-DZLIB_LIBRARY="${PREFIX}/lib/libz.a" -DZLIB_INCLUDE_DIR="${PREFIX}/include" \
+			-DWITH_CURL=OFF -DWITH_UNIT_TESTS=OFF \
+			-DCLIENT_PLUGIN_CACHING_SHA2_PASSWORD=STATIC \
+			-DCLIENT_PLUGIN_SHA256_PASSWORD=STATIC \
+			-DCLIENT_PLUGIN_DIALOG=OFF \
+			-DCLIENT_PLUGIN_CLIENT_ED25519=OFF \
+			-DCLIENT_PLUGIN_PARSEC=OFF \
+			-DCLIENT_PLUGIN_AUTH_GSSAPI_CLIENT=OFF \
+			-DCLIENT_PLUGIN_MYSQL_CLEAR_PASSWORD=OFF \
+			-DCLIENT_PLUGIN_ZSTD=OFF \
+			-DINSTALL_LIBDIR=lib -DINSTALL_INCLUDEDIR=include
+		make -j"${JOBS}" mariadbclient
 		make install
 	)
 	ldconfig

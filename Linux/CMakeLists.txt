@@ -114,7 +114,7 @@ set(FREETDS_INCLUDE_DIR "/usr/local/include")
 find_library(FREETDS_LIBRARY sybdb REQUIRED)
 find_library(OPENSSL_SSL_LIBRARY ssl REQUIRED)
 find_library(OPENSSL_CRYPTO_LIBRARY crypto REQUIRED)
-find_library(MYSQL_LIBRARY mysqlclient REQUIRED)
+find_library(MYSQL_LIBRARY mariadbclient REQUIRED)
 find_library(ARCHIVE_LIBRARY archive REQUIRED)
 find_library(ZLIB_LIBRARY z REQUIRED)
 find_library(BZIP2_LIBRARY bz2 REQUIRED)
@@ -303,7 +303,7 @@ mad_add_framework(madmysql MADMYSQL_SOURCES
 	MADMySQLTruncateTests
 	MADMySQLUpdateTests
 )
-target_link_libraries(madmysql PUBLIC madfoundation madapi ${MYSQL_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+target_link_libraries(madmysql PUBLIC madfoundation madapi ${MYSQL_LIBRARY} ${ZLIB_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
 set(SOURCE_DIR "${REPO_ROOT}/MAD/Source")
 include(cmake/MADSources.cmake)

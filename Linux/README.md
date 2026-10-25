@@ -69,10 +69,13 @@ the Compressor matrix next door; nothing here ships.
 	zlib         1.3.2
 	bzip2        1.0.8    CC=clang: its Makefile hardcodes gcc
 	libarchive   3.8.9    the .mad container's tar/bzip2 path
-	mysqlclient  8.4.10   WITHOUT_SERVER=ON, against the openssl above it
+	mariadb      3.4.11   the mariadbclient static target, openssl + external
+	                       zlib, auth plugins static, others off (mirrors
+	                       Compressor/lib/recipes/mariadb.sh)
 
-Two external build dependencies: `libncurses-dev` and `libtirpc-dev` (mysql's
-cmake needs both).
+Two external build dependencies remain from the retired mysqlclient build
+(`libncurses-dev` and `libtirpc-dev`, which mysql's cmake needed); the mariadb
+build does not use them, but they stay in the image.
 
 ## What compiles, and what does not
 
@@ -319,12 +322,11 @@ libobjc2 is MIT; libdispatch is Apache-2.0 with the Swift runtime exception;
 GNUstep Base is LGPL-2.1-or-later; gnustep-make is GPL-3.0-or-later, and its
 `Testing.h` (GPL-3.0-or-later) is compiled into the Linux test binaries — those
 exist only inside this build image. The C libraries carry their own licences
-(THIRD_PARTY_LICENSES.md); mysqlclient's GPL is the one
-LICENSE_COMPLIANCE_PLAN.md exists to settle before anything ships, and
-nothing here does.  The runtime image (above) contains mysqlclient, but it is
-built and run locally and is not published, so no register entry is due yet;
-if that changes, GNUstep Base and mysqlclient both need one (`TASKS.md` §10
-carries the flag).
+(THIRD_PARTY_LICENSES.md); the mysqlclient GPL problem is settled — D1 went
+to MariaDB Connector/C (LGPL-2.0-or-later, elected LGPL-3.0) and this image
+builds it (`TASKS.md` §10). The runtime image is built and run locally and is
+not published; if that changes, GNUstep Base and mariadb both need relink
+offers of their own (`TASKS.md` §10 carries the flag).
 
 ## The CLI runs here — Phase D
 
@@ -493,12 +495,12 @@ The image carries:
 
 * `/usr/local/bin/mad`, the CMake install rule's stable path (the binary is no
   longer reachable only at `Linux/build/mad`);
-* the shared objects the binary links — GNUstep Base, libobjc2, libdispatch,
-  libBlocksRuntime and mysqlclient — plus GNUstep's runtime directories and
-  config. The other C libraries (sqlite3, freetds, openssl, zlib, bzip2,
-  libarchive) are static and are already inside the binary;
-* mysqlclient's error messages and charset tables (`/usr/local/share/english`,
-  `/usr/local/share/charsets`);
+* the shared objects the binary links — GNUstep Base, libobjc2, libdispatch
+  and libBlocksRuntime — plus GNUstep's runtime directories and config. The
+  other C libraries (sqlite3, freetds, openssl, zlib, bzip2, libarchive,
+  mariadb) are static and are already inside the binary;
+* none of mysqlclient's share data: Connector/C embeds its client error
+  messages and installs no `share/` files;
 * `chinook.sqlite3` at `/root/GNUstep/Library/ApplicationSupport/`, where a
   Sqlite3 document's bare database name resolves. A document stores the name,
   not a path, so this one file is what lets the checked-in London and Music
