@@ -1008,8 +1008,14 @@ scrub completed 2026-10-23 (backups `~/Desktop/Reports-prescrub/` and
   the spec restructured into `docs/` (normative content moved verbatim;
   `MAD_FORMAT.md` is now a pointer), and the stale `opt/` mysqlclient
   patterns dropped from `.gitignore`. Gates: `./Linux/build.sh` green
-  (123 executables, 1,262 tests, 8 needs) and the iOS MADFoundation + app
-  suites green.
+  (123 executables, 1,262 tests, 8 needs), `--verify` green (MADVERIFY
+  30 passed), and the iOS MADFoundation (191) + app (87) suites green.
+  `--verify` also surfaced a swap-leftover: the Dockerfile's runtime stage
+  still copied the retired mysqlclient's shared object, error messages and
+  charset tables, so the runtime image build had been broken since prompt 2;
+  the three COPYs and the soname symlink are removed (static mariadb needs
+  none of it) and the stage comment now records the publication-licence
+  position (`4615e9266`).
 * **Prompt 4 (driver-authoring tutorial) — not started.** The forward link
   is `docs/tutorials/driver-authoring.md` (referenced from `README.md`,
   `CONTRIBUTING.md`, and the driver-proposal template).
