@@ -11,8 +11,5 @@
 FOUNDATION_EXPORT double MADMySQLVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADMySQLVersionString[];
 
-#import <MADMySQL/client_plugin.h>
-#import <MADMySQL/plugin_auth_common.h>
-
 #import <MADMySQL/MADDatabaseMySQL.h>
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
