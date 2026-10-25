@@ -985,8 +985,9 @@ a single `sqlSourceText` property.
 **Status:** In progress — prompt 4 landed 2026-10-25 (drafts only, nothing
 published); prompt 5's report refreshed the same day; prompt 6 (the
 libmysqlclient history pass) landed 2026-10-25, including the first push of
-`master` to the private remote.  The name gate is still open (asked; the
-user leans "Madfile").
+`master` to the private remote; its salesforce/RestKit/Azure follow-up
+landed the same day.  The name gate is still open (asked; the user leans
+"Madfile").
 
 The MIT launch is a six-prompt operation driven from
 `~/Desktop/MADOpenSource/` (prompt files `0[1-6]-*.md`), run on the
@@ -1056,16 +1057,32 @@ completed 2026-10-25 (backup `~/Desktop/Reports-prescrub-libmysql-20261025.bundl
   `94aa729ae`; the 13 earliest commits kept their hashes.  The 18 stale
   pre-scrub branches and 11 tags were deleted from the remote and the
   rewritten `master` force-pushed (lease-protected) while the repo is
-  private.  Report-only, unfiltered (the user's call for a later pass):
-  the Karl Kraft wrapper copies inside first-party source trees
-  (`MAD/MAD/MAD/MySQL/`, `Reports/MySQL/`), and the non-mysql third-party
-  material (`Reports/TheReportViewer/APIs/salesforce/…` incl. RestKit,
-  `Reports/TheReportViewer/APIs/Windows-Azure/…`,
-  `Reports/Barcodes/libz.1.2.8.a` — same content in the `TheReportViewer/`
-  layout).  The local pre-scrub branches and the updated safety refs
+  private.  The local pre-scrub branches and the updated safety refs
   `kk-rewrite`/`open-source-prep-backup-kk` stay local-only.  GitHub GC
   caveat: deleted refs stop being browsable, but GitHub purges on its own
   schedule; a brand-new repository is the only absolute-certainty option.
+* **Prompt 6 follow-up (the salesforce/RestKit/SBJson/Azure pass) — done
+  2026-10-25, by the user's direct instruction.**  A third
+  `git filter-repo` pass removed the remaining third-party shelf from the
+  entire history, in both legacy layouts (`Reports/TheReportViewer/…` and
+  the 2012-era `TheReportViewer/…`): RestKit (compiled `.a` libs and
+  headers, incl. the bundled YAJL/JSONKit headers), SBJson
+  (`libsbjson-ios.a` and headers), the Salesforce Mobile SDK
+  (`SalesforceOAuth`, `SalesforceSDK`, `APIs/salesforce`, `native/` with
+  the SampleApps and the Force.com xctemplate) and the Windows-Azure
+  watoolkit (`libwatoolkitios.a` and headers).  The first-party salesforce
+  driver code (`MTDatabaseSalesForce`, `NSDatabaseSalesForce`, the
+  selector/setup view controllers) and the `UIImageExportTypeSalesforce`
+  icons were untouched — they are the project's own work.  filter-repo
+  parsed 13,910 commits; the tip `cf74dd2a2` did not survive — the new tip
+  is `d670b968d`, tree byte-identical to `86b5d0630`; no commits became
+  empty.  Backup: `~/Desktop/Reports-prescrub-apis-20261025.bundle`
+  (verified).  The rewritten `master` was force-pushed (lease-protected)
+  while the repo is private; the local tags and safety refs were moved to
+  their rewritten counterparts (trees byte-identical).  Still report-only,
+  unfiltered (the user's call for a later pass): the Karl Kraft wrapper
+  copies inside first-party source trees (`MAD/MAD/MAD/MySQL/`,
+  `Reports/MySQL/`) and `Reports/Barcodes/libz.1.2.8.a`.
 
 Open items carried out of prompt 3: the CI badge placeholder in `README.md`
 (owner/repo to be filled at publication), the workflow's `master` triggers
