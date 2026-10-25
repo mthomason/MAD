@@ -1303,44 +1303,7 @@ bundle's header search path.
 
 - `mad refresh` over MySQL aborted: a category is not a symbol, so the linker dropped it
 - Three `Rptq…+extras.h` imports were spelled in the wrong case, which only a case-sensitive filesystem can see
-
-### The pinned cross-platform export digests went stale on the Apple side
-
-- **Status:** Open — found 2026-10-25 while verifying the launch demo script
-- **Where:** the pinned digests in `Linux/README.md` (the export tables) and the
-  FNV-1a expectations in `Linux/Tests/MADReportExporterTests.m`, recorded from the
-  Mac's bytes on 2026-10-16.  The behaviour change is `c27cd4188` ("cache ORDER BY
-  uses the column's MADDataType, so text keys sort under LSASC", 2026-10-18): the
-  collation lives in `MADSqlite3/Source/MADDatabaseSqlite3.m`
-  (`compare_string_utf8_localized_asc_collation`) and is selected by
-  `MADDataTableFast -enumeratorForKeyObjectsSorted`
-  (`MADSqlite3/Source/MADDataTableFast.m:1380`).
-- **Behavior:** the cache's export ORDER BY sorts text keys under LSASC, which is
-  `localizedCaseInsensitiveCompare:` — ICU on Apple, code-point on GNUstep (the
-  divergence pinned per-platform in `MADDatabaseSqlite3Tests`).  ICU sorts
-  punctuation before letters, so `[1997] Black Light Syndrome` sorts ahead of
-  `Core`; code-point sorts `[` after `Z`.  Measured 2026-10-25 on
-  `CLI/Fixtures/London.portable.mad`: the Mac CLI (iOS 26.0 and 26.1 simulators,
-  frameworks built at `91d5b55ff`) exports the same *sizes* but a different *group
-  order* for all six formats — html is `285541ed…` where the pin (and today's
-  Linux) is `ba12a289…`; json, csv, text, json-report and html-flow diverge the
-  same way.  The two caches' insertion order is identical (76 rows compared by
-  value); only the collated order differs.  Linux still matches every pinned
-  digest, so the Linux suite stays green and nothing re-measures the Mac — the
-  staleness is silent.
-- **Why it matters:** "the same bytes on two platforms" is the load-bearing claim
-  of the launch (`MAD_STRATEGY.md` §3.2) and of the marketing drafts; the pinned
-  digests are what the demo script shows.  Until this is settled the claim is
-  true of Linux only.
-- **Options:** (a) make the export order collation-independent — a stable,
-  defined order both platforms can implement, which is the fix that keeps the
-  claim; (b) re-baseline the pins to whichever platform's order is chosen as
-  canonical and weaken the claim to "identical given the platform's collation";
-  (c) accept and document.  Not a blocker for the Linux demo, but the launch
-  post must not claim Apple/Linux byte identity until (a) lands.
-- **Test:** the Mac CLI export compared against `Linux/README.md`'s table
-  (2026-10-25).  No automated Mac-side digest gate exists; its addition (the
-  Mac-side counterpart of `MADReportExporterTests`) is the fix's proof.
+- The pinned cross-platform export digests went stale on the Apple side
 
 ## Build wiring (Xcode references)
 

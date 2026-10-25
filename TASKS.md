@@ -980,7 +980,7 @@ replace-not-append atomic apply, GROUP BY auto-creating report group sections, t
 SELECT list validated-but-not-stored until Phase E, and the pasted text persisted as
 a single `sqlSourceText` property.
 
-## 17. The open-source launch — prompts 1–6
+## 17. The open-source launch — prompts 1–7
 
 **Status:** In progress — prompt 4 landed 2026-10-25 (drafts only, nothing
 published); prompt 5's report refreshed the same day; prompt 6 (the
@@ -1038,6 +1038,19 @@ completed 2026-10-25 (backup `~/Desktop/Reports-prescrub-libmysql-20261025.bundl
   published home once the name is picked).  The demo verification found
   the LSASC export-order divergence recorded in BUGS.md (the pinned
   cross-platform digests are stale on the Apple side since `c27cd4188`).
+* **Prompt 7 (export-order divergence fix) — done 2026-10-25,
+  `b07b51f43`.** The BUGS.md entry prompt 4's verification found is closed
+  with its option (a): the export's group order is now a defined order --
+  case-fold (a checked-in Unicode 17.0.0 simple-fold table), then UTF-8
+  code-point order -- with one comparator (`NSString+Comparison` in
+  MADFoundation) driving the LSASC collation, the sort descriptors and the
+  formatter. All pins re-measured from both platforms and identical; the
+  Mac-side digest gate now exists (`MAD/MADTests/MADReportExporterTests.m`).
+  Gates: `./Linux/build.sh` green (124 suites) + `--verify` 30/30, and the
+  iOS MADFoundation/MAD/MADSqlite3/MADAPI suites green. The launch drafts
+  (`~/Desktop/MADOpenSource/drafts/01` and `02`) carry the new digests and
+  the demo's two-platform beat is now demonstrable; FINAL-REPORT.md §2 item
+  10 can be marked resolved.
 * **Prompt 5 (launch decisions) — the report was written 2026-10-25
   (outside the repo, `~/Desktop/MADOpenSource/FINAL-REPORT.md`) and
   refreshed the same day with prompt 4's outcome; the publication
