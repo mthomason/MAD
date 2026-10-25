@@ -985,9 +985,9 @@ a single `sqlSourceText` property.
 **Status:** In progress — prompt 4 landed 2026-10-25 (drafts only, nothing
 published); prompt 5's report refreshed the same day; prompt 6 (the
 libmysqlclient history pass) landed 2026-10-25, including the first push of
-`master` to the private remote; the salesforce/RestKit/Azure and the Karl
-Kraft/zlib follow-up passes landed the same day.  The name gate is still
-open (asked; the user leans "Madfile").
+`master` to the private remote; the salesforce/RestKit/Azure, Karl
+Kraft/zlib, and zint follow-up passes landed the same day.  The name gate
+is still open (asked; the user leans "Madfile").
 
 The MIT launch is a six-prompt operation driven from
 `~/Desktop/MADOpenSource/` (prompt files `0[1-6]-*.md`), run on the
@@ -1095,9 +1095,26 @@ completed 2026-10-25 (backup `~/Desktop/Reports-prescrub-libmysql-20261025.bundl
   `~/Desktop/Reports-prescrub-kk-zlib-20261025.bundle` (verified).  The
   rewritten `master` was force-pushed (lease-protected) while the repo is
   private; the local tags and safety refs were moved to their rewritten
+  counterparts (trees byte-identical).
+* **zint follow-up pass — done 2026-10-25, by the user's direct
+  instruction.**  A fifth `git filter-repo` pass removed the vendored
+  zint barcode sources from the entire history — the full zint 2.x source
+  set (`2of5.c` … `zint.h` plus the bundled `DEVELOPER`, `ms_stdint.h`,
+  `sjis.h`, `maxipng.h` shims; 52 files) in each of the three layouts
+  (`Barcodes/Barcodes/`, `Reports/Barcodes/Barcodes/`,
+  `MADBarcodes/MADBarcodes/MADBarcodes/`).  The first-party
+  `MTBarcode*`/`MADBarcode*` classes, the `Barcodes-Prefix.pch` template
+  header, and the `Compressor` zint recipe/patch were untouched (the
+  current tree has no zint sources; MADBarcodes links the Compressor-built
+  zint).  filter-repo parsed 18,239 commits; the tip `eb94fa6b5` did not
+  survive — the new tip is `d3681c0ac`, tree byte-identical to
+  `49fc2ed6`; no commits became empty.  Backup:
+  `~/Desktop/Reports-prescrub-zint-20261025.bundle` (verified).  The
+  rewritten `master` was force-pushed (lease-protected) while the repo is
+  private; the local tags and safety refs were moved to their rewritten
   counterparts (trees byte-identical).  Still report-only, unfiltered (the
-  user's call for a later pass): the vendored zint barcode sources mixed
-  with first-party classes in `Reports/Barcodes/Barcodes/`.
+  user's call for a later pass): the third-party `UIColor+Expanded`
+  category files beside the first-party barcode classes.
 
 Open items carried out of prompt 3: the CI badge placeholder in `README.md`
 (owner/repo to be filled at publication), the workflow's `master` triggers
