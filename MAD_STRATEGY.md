@@ -282,13 +282,17 @@ unoccupied for *a portable reporting artifact with an engine attached*.
 ### 6.1 App Store (keep doing; it is not the business)
 
 Realistic outcome: low revenue, low risk. Mobile BI *design* on iPad is a prosumer niche,
-and the product is **not currently for sale** — so the first monetization milestone here
-is simply *listing* it (free viewer, paid designer, or paid at all), not optimizing
-price. The app's role in the plan is a **flagship and a billboard**: the one place where
-the product is visible and shippable today, and the demo a potential OEM partner or design
-customer can touch. Fix the keychain bug first (§9). Freemium viewer + paid designer,
-priced low ($10–20 one-time or $2–3/mo), is the ceiling-appropriate model; treat revenue
-as lead generation, not income.
+and the product is **not currently for sale — the App Store listing has lapsed and
+renewing the developer account awaits funds** (2026-10-24). So the first monetization
+milestone here is *renewal plus* listing it (free viewer, paid designer, or paid at
+all), not optimizing price. This scenario does **not** gate the open-source launch
+(Appendix A): the App Store audience and the open-source audience barely overlap, and
+the app returns as a later chapter — renew, fix the keychain bug (§9), release — at
+which point it is its own small announcement to a community that already exists. The
+app's eventual role is a **flagship and a billboard**: a demo a potential OEM partner or
+design customer can touch. Freemium viewer + paid designer, priced low ($10–20 one-time
+or $2–3/mo), is the ceiling-appropriate model; treat revenue as lead generation, not
+income.
 
 ### 6.2 Embedded / OEM licensing (best fit for the technology; slowest to first revenue)
 
@@ -647,8 +651,10 @@ product. The offer is three artifacts that already exist: (1) the published form
 (`MAD_FORMAT.md` as a docs site), (2) the runnable engine — one `docker run … mad inspect
 London.mad` command plus the sample documents, published as an image (after item 1), and
 (3) the proof — byte-identical output across platforms, 123 green Linux tests, 14 years
-of history. The App Store app (keychain bug fixed first) is the touchable flagship. The
-pitch in one line: **"a report is a file."**
+of history. The App Store app is **not** part of the launch: the listing has lapsed and
+its renewal awaits funds (2026-10-24), and the two audiences barely overlap. It returns
+as a later chapter — renew, fix the keychain bug, release — as its own announcement to a
+community that by then exists. The pitch in one line: **"a report is a file."**
 
 **When.** As soon as items 1–6 land — roughly 3–6 weeks of part-time work. Two reasons
 not to wait for the web designer: launches are one-shot (you get one Show HN), and the

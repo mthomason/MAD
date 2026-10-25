@@ -89,8 +89,4 @@ path without the app: `inspect`, `schema`, `query`, `refresh`, `export`.
 ## Report back
 
 What you built, the tests you wrote, and a clean `xcodebuild test` result. Work on a branch; do
-not push to `master` unless asked. End commit messages with:
-
-```
-Co-Authored-By: Claude Code <noreply@anthropic.com>
-```
+not push to `master` unless asked.

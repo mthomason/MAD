@@ -143,6 +143,10 @@ the headless side.
   schema and result set as one contract, how each piece is represented in the code today,
   what formalizing it takes in phases, and the multi-source/subreport composition
   documented but deliberately not built.
+* `MAD_SCRIPTING.md` -- the Scrimpter revival analysis: the state and correctness audit of
+  the language, the formula-element integration map, the engine alternatives, and the
+  licensing surface. The engine decision is deferred by the user; when the formula-element
+  work starts, the implementing agent must ask the user to choose the engine (§8).
 * `Archive/MAD_BARCODES.md` -- the barcode element's modernization and re-integration
   design: complete and archived 2026-10-22 (TASKS.md §15); kept for reference.
 * `MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
