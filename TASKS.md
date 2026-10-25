@@ -985,9 +985,9 @@ a single `sqlSourceText` property.
 **Status:** In progress — prompt 4 landed 2026-10-25 (drafts only, nothing
 published); prompt 5's report refreshed the same day; prompt 6 (the
 libmysqlclient history pass) landed 2026-10-25, including the first push of
-`master` to the private remote; its salesforce/RestKit/Azure follow-up
-landed the same day.  The name gate is still open (asked; the user leans
-"Madfile").
+`master` to the private remote; the salesforce/RestKit/Azure and the Karl
+Kraft/zlib follow-up passes landed the same day.  The name gate is still
+open (asked; the user leans "Madfile").
 
 The MIT launch is a six-prompt operation driven from
 `~/Desktop/MADOpenSource/` (prompt files `0[1-6]-*.md`), run on the
@@ -1079,10 +1079,25 @@ completed 2026-10-25 (backup `~/Desktop/Reports-prescrub-libmysql-20261025.bundl
   empty.  Backup: `~/Desktop/Reports-prescrub-apis-20261025.bundle`
   (verified).  The rewritten `master` was force-pushed (lease-protected)
   while the repo is private; the local tags and safety refs were moved to
-  their rewritten counterparts (trees byte-identical).  Still report-only,
-  unfiltered (the user's call for a later pass): the Karl Kraft wrapper
+  their rewritten counterparts (trees byte-identical).
+* **Karl Kraft/zlib follow-up pass — done 2026-10-25, by the user's direct
+  instruction.**  A fourth `git filter-repo` pass removed the last
+  third-party families from the entire history: the Karl Kraft wrapper
   copies inside first-party source trees (`MAD/MAD/MAD/MySQL/`,
-  `Reports/MySQL/`) and `Reports/Barcodes/libz.1.2.8.a`.
+  `Reports/MySQL/`, and the stray 2012-era `MySQL/MySQL-Prefix.pch`) and
+  the vendored zlib (`Reports/Barcodes/libz.1.2.8.a` and
+  `Reports/Barcodes/zlib.h`).  The first-party `MTDatabaseMySql`/
+  `MysqlFetch+DataTable`/`MTQueryMySql` code, the `MySQLClientObjC` and
+  `libdbmysql` scaffolds, and the `ThirdParty/Licenses/zlib-LICENSE.txt`
+  licence record were untouched.  filter-repo parsed 18,156 commits; the
+  tip `ab3f1f47f` did not survive — the new tip is `6ef6d3664`, tree
+  byte-identical to `7b4feeb79`; one commit became empty.  Backup:
+  `~/Desktop/Reports-prescrub-kk-zlib-20261025.bundle` (verified).  The
+  rewritten `master` was force-pushed (lease-protected) while the repo is
+  private; the local tags and safety refs were moved to their rewritten
+  counterparts (trees byte-identical).  Still report-only, unfiltered (the
+  user's call for a later pass): the vendored zint barcode sources mixed
+  with first-party classes in `Reports/Barcodes/Barcodes/`.
 
 Open items carried out of prompt 3: the CI badge placeholder in `README.md`
 (owner/repo to be filled at publication), the workflow's `master` triggers
