@@ -28,7 +28,7 @@ possibly three more.**
 | 2 | **Karl Kraft MySQL connector** | none — "All rights reserved" | **Unresolved — no license grant found. Obtain one or replace the code.** |
 | 3 | **NSOperation+Advanced** | none — "All rights reserved" | **Unresolved — upstream has no license file. Two small methods; rewrite.** |
 | 4 | **NSData+AES256** | ~~unknown — pastie snippet~~ | **Resolved 2026-10-24 — rewritten as first-party code, format pinned by golden vectors.** |
-| 5 | FreeTDS 1.4.27 | LGPL-2.0-or-later | Permitted, but **carries relink + notice obligations we do not currently meet**. |
+| 5 | FreeTDS 1.4.27 | LGPL-2.0-or-later, **elected LGPL-3.0** | Permitted; **notice, marked header, LGPL text and written relink offer landed 2026-10-24** (kit script deferred to the MariaDB prompt). |
 | 6 | OpenSSL 3.5.9 | Apache-2.0 | Permitted; **license text must ship**. |
 | 7 | libarchive 3.8.9 | BSD-2-Clause | Permitted; **notice must ship**. |
 | 8 | zint 2.16.0 (backend) | BSD-3-Clause | Permitted; **notice must ship**. |
@@ -40,7 +40,7 @@ possibly three more.**
 | 14 | pngquant `rwpng` | BSD-2-Clause | Permitted; notice must ship. |
 | 15 | miniz | Public domain (Unlicense) | No obligation. Header corrected 2026-10-04. |
 | 16 | NSData+Base64 (Matt Gallagher) | permissive, notice-retained | OK. |
-| 17 | Fonts | mixed | **FontAwesome and CarbonBlock ship without their license texts; ClickBits/InfoBits are commercial.** |
+| 17 | Fonts | mixed | **OFL text and Larabie readme committed 2026-10-24; ClickBits/InfoBits are commercial and stay out of the bundle and any public mirror.** |
 
 **Answer to "must some be compiled as frameworks instead of `.a`?" — no.**
 
@@ -119,11 +119,18 @@ categorized by the FSF as free" ("Other FOSS"). It closes with: *"Nothing in thi
 additional permission ... grants any additional permission of any kind for use or
 distribution of the Software in conjunction with software other than Other FOSS."*
 
-_MAD Designer_ is `LICENSE.md`: "Copyright © Michael Thomason 2025. All rights
-reserved." It is not Other FOSS, so **no exception applies**: distributing the app
-with `libmysqlclient` linked in means the GPLv2's copyleft reaches the whole work,
-and the app's source would have to be released under the GPLv2. Building the
+_MAD Designer_ was `LICENSE.md`: "Copyright © Michael Thomason 2025. All rights
+reserved." It was not Other FOSS, so **no exception applied**: distributing the app
+with `libmysqlclient` linked in meant the GPLv2's copyleft reached the whole work,
+and the app's source would have had to be released under the GPLv2. Building the
 library as a dynamic framework does not change this.
+
+**Changed 2026-10-24 by the open-source launch:** the repository is now
+licensed under the MIT (see `LICENSE`), an OSI-approved licence. Recorded for
+the MariaDB decision (Prompt 2 of the launch plan): as MIT software _MAD
+Designer_ now arguably falls within the Universal FOSS Exception's "Other
+FOSS" definition, which would change this analysis. That is for the owner to
+weigh; the MariaDB swap remains the plan's recommendation.
 
 **Options, best first:**
 
@@ -183,17 +190,27 @@ combination to be license-compatible — the "or later" wording is what makes th
 available. This is worth recording explicitly, because it also means the LGPLv3
 notice and source-offer wording is the one that must ship.
 
-**Two concrete defects to fix:**
+**The LGPL-3.0 election is recorded.** 2026-10-24: this project elects
+**LGPL-3.0** for FreeTDS, for the compatibility reason above. The election is
+also recorded in `ThirdParty/Licenses/README.md` and `NOTICE`; the LGPL-3.0
+text is committed at `ThirdParty/Licenses/LGPL-3.0.txt`.
 
-1. **The shipped header is modified without a notice.** `sybdb.h` has
-   `typedef int BOOL;` commented out by the recipe
+**Two concrete defects, both addressed:**
+
+1. ~~**The shipped header is modified without a notice.**~~ **Fixed 2026-10-24.**
+   `sybdb.h` has `typedef int BOOL;` commented out by the recipe
    (`Compressor/lib/recipes/freetds.sh`), and that edited file ships in all three
-   slices of `freetds.xcframework` and in the canonical include dir. LGPL §2
-   requires modified files to carry a prominent notice that they were changed.
-   Add a comment at the edit site recording the change and its date.
-2. **The relink materials do not exist yet.** Nothing in the repo offers or
-   describes a relink kit. This is the substantive gap; §6 will not be satisfied
-   until the offer is written and the build can produce the object files.
+   slices of `freetds.xcframework` and in the canonical include dir. The recipe
+   now inserts a prominent notice of the change and its date (2026-10-24)
+   directly above the commented line, so every shipped copy of the modified
+   header carries it.
+2. ~~**The relink materials do not exist yet.**~~ **Partially addressed
+   2026-10-24.** The written relink offer exists
+   (`ThirdParty/Licenses/README.md`: how to request the object files and build
+   materials, the three-year statement, and the honest note that an iOS
+   recipient needs a developer account). The `Compressor/relink-kit.sh` script
+   is deferred by the owner's decision (plan §9.3); it will serve FreeTDS and
+   MariaDB alike and is Prompt 2's work.
 
 ---
 
@@ -275,15 +292,24 @@ them if the repository is ever made public.*
 
 1. The app ships **no third-party notices at all**, while shipping code whose
    licenses require them (libarchive BSD-2, zint BSD-3, OpenSSL Apache-2.0, asn1c
-   BSD, rwpng BSD-2, FreeTDS LGPL).
-2. **No license texts are committed anywhere.** `Compressor` deliberately commits
-   nothing third-party, and that is the right default for *code* — but the
-   notices and license texts are exactly the part that must be distributed, so
-   they need a committed home.
-3. **FreeTDS's relink obligation is unmet** and its shipped header is unmarked.
-4. **`libmysqlclient` cannot lawfully ship** in this product as configured.
-5. **Three components have no license grant** (Karl Kraft connector,
-   NSOperation+Advanced, NSData+AES256).
+   BSD, rwpng BSD-2, FreeTDS LGPL). **The repository now carries the notices**
+   (`NOTICE`, `ThirdParty/Licenses/`, 2026-10-24); the in-app Acknowledgements
+   screen remains open (plan C2, after the MariaDB decision).
+2. ~~**No license texts are committed anywhere.**~~ **Fixed 2026-10-24:**
+   `ThirdParty/Licenses/` holds every text from §7's table. `Compressor`
+   deliberately commits nothing third-party, and that is the right default for
+   *code* — the notices and license texts are exactly the part that must be
+   distributed, so they have a committed home of their own.
+3. **FreeTDS's relink obligation** — header marked and written offer landed
+   2026-10-24; the relink-kit script is deferred by the owner's decision (plan
+   §9.3) to the MariaDB prompt, where the mechanism serves both libraries.
+4. **`libmysqlclient` cannot lawfully ship** in this product as configured —
+   unchanged; the owner's decision (D1) remains open, and the 2026-10-24 MIT
+   relicensing is recorded in §3.2 as a fact the decision should weigh.
+5. ~~**Three components have no license grant.**~~ Two of three resolved
+   2026-10-24: `NSOperation+Advanced` and `NSData+AES256` are rewritten as
+   first-party code. The Karl Kraft connector remains (Prompt 2, with the
+   MariaDB swap).
 6. `DEVELOPER.md`'s claim that nothing third-party is in revision control is
    inaccurate. The stale `patches/zint-2.4.2-mad.patch` references are corrected:
    `LIBRARIES.md` (§1) now describes the zint 2.16.0 recipe, and
@@ -298,27 +324,31 @@ them if the repository is ever made public.*
 
 1. Decide the `libmysqlclient` question: Oracle commercial license, MariaDB
    Connector/C (LGPL-2.1), or drop MySQL. Nothing else on this list is as
-   consequential.
+   consequential. **Open — the owner's decision (D1); the MIT relicensing of
+   2026-10-24 is recorded in §3.2 as a fact the decision should weigh.**
 2. Resolve the three unlicensed components. Two of them are small enough to
    rewrite in an afternoon; the Karl Kraft connector is the real decision.
-3. Remove the dead `openssl.xcframework` link from the app target.
+   **Two of three done 2026-10-24: `NSOperation+Advanced` and `NSData+AES256`
+   are rewritten as first-party code. The Karl Kraft connector is Prompt 2's
+   work, with the MariaDB swap.**
+3. Remove the dead `openssl.xcframework` link from the app target. **Open.**
 
 **P1 — compliance, should be done before shipping**
 
 4. Add a third-party notices surface to the app (About → Acknowledgements is the
    natural home) and commit the license texts it displays. Draft text in §7.
+   **Open — plan C2, held until the MariaDB decision.**
 5. FreeTDS: add the LGPL notice and license text; mark the modified `sybdb.h`;
    elect LGPL-3.0 and record why; write the relink offer and make the build able
-   to produce the corresponding object files.
+   to produce the corresponding object files. **Mostly done 2026-10-24: the
+   election is recorded, the LGPL-3.0 text is committed, the recipe now marks
+   the shipped header, and the written relink offer is in
+   `ThirdParty/Licenses/README.md`. The relink-kit script is deferred by the
+   owner's decision (plan §9.3) to the MariaDB prompt.**
 6. ~~Correct the miniz copyright header.~~ Done 2026-10-04.
 7. Add the OFL text alongside FontAwesome, and the Larabie readme alongside
-   CarbonBlock.
-
-**P2 — hygiene**
-
-8. Move `ClickBits*`/`InfoBits*` out of the repository, or record the licence
-   covering them.
-9. Fix the `DEVELOPER.md` sentence and the two stale patch references.
+   CarbonBlock. **Done 2026-10-24 — both texts are committed in
+   `ThirdParty/Licenses/`, with provenance recorded there.**
 
 ---
 
@@ -378,9 +408,12 @@ which case add the GPLv2 text and a written offer of the corresponding source.
 > accompanying the font.
 
 Plus, in the repository, the full licence texts for each of the above, which are
-the ones read for this review:
+the ones read for this review. **Committed 2026-10-24 in `ThirdParty/Licenses/`,**
+one file per component; the provenance of each committed file (including the
+LGPL-3.0 election, the OFL provenance and the recovered Larabie readme) is
+recorded in `ThirdParty/Licenses/README.md`. The paths each text was read from:
 
-| Component | Licence text to commit |
+| Component | Licence text source (as read for this review) |
 |---|---|
 | libarchive | `Compressor/build/libarchive/source/src/COPYING` |
 | zint | `Compressor/build/zint/source/src/LICENSE` |

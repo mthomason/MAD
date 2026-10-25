@@ -69,8 +69,18 @@ for platform in ${PLATFORMS}; do
 			# the framework build.  The library itself must keep the
 			# typedef -- dblib's C sources use BOOL -- which is why the
 			# legacy tree patched the header copies after building.
+			# FreeTDS is LGPL-2.0-or-later and this project elects
+			# LGPL-3.0 (recorded in THIRD_PARTY_LICENSES.md), whose s.4
+			# requires the modified file itself to carry a prominent
+			# notice of the change and its date, so the marker below is
+			# inserted into the shipped header, not just recorded here.
 			sed -i '' 's/^typedef int BOOL;$/\/\/typedef int BOOL;/' \
 				"${outdir}/install/include/sybdb.h"
+			notice='/* MODIFIED BY MAD Designer (2026-10-24): "typedef int BOOL;" is commented out below because Objective-C already defines BOOL and the redefinition fails the framework build. The FreeTDS library itself is built unmodified; only this installed header is edited. See Compressor/lib/recipes/freetds.sh. */'
+			awk -v notice="${notice}" \
+				'/^\/\/typedef int BOOL;$/ && !marked { print notice; marked = 1 } { print }' \
+				"${outdir}/install/include/sybdb.h" > "${outdir}/install/include/sybdb.h.tmp" \
+				&& mv "${outdir}/install/include/sybdb.h.tmp" "${outdir}/install/include/sybdb.h"
 		)
 		cp "${outdir}/install/lib/libct.a" "${outdir}/libct.a"
 		cp "${outdir}/install/lib/libsybdb.a" "${outdir}/libsybdb.a"
