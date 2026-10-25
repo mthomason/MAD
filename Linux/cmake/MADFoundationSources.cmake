@@ -23,7 +23,7 @@ set(MADFOUNDATION_SOURCES
 	"${SOURCE_DIR}/MADProgress.m"
 	"${SOURCE_DIR}/MADStringUtilities.m"
 	"${SOURCE_DIR}/NSData+Comparison.m"
-	"${SOURCE_DIR}/NSOperation+Advanced.m"
+	"${SOURCE_DIR}/NSOperation+CompletionBlock.m"
 	"${SOURCE_DIR}/MADOperationConditionHasResultStringResult.m"
 	"${SOURCE_DIR}/MADOperationConditionTestConnectionSuccess.m"
 	"${SOURCE_DIR}/BDHost.m"

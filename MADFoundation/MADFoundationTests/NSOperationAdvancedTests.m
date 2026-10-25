@@ -4,14 +4,14 @@
 //
 //  Copyright © 2026 Michael Thomason. All rights reserved.
 //
-//  Coverage for the NSOperation (Advanced) category: the completion-block chaining
-//  (the new block runs *after* the existing one, in that order) and the bulk
-//  dependency adder.
+//  Coverage for the NSOperation (CompletionBlock) category: the completion-block
+//  chaining (the new block runs *after* the existing one, in that order) and the
+//  bulk dependency adder.
 //
 
 #import <XCTest/XCTest.h>
 
-#import <MADFoundation/NSOperation+Advanced.h>
+#import <MADFoundation/NSOperation+CompletionBlock.h>
 
 @interface NSOperationAdvancedTests : XCTestCase
 @end
@@ -31,6 +31,23 @@
 	XCTAssertNotNil(operation.completionBlock);
 	operation.completionBlock();
 	XCTAssertTrue(ran);
+}
+
+- (void)testAddCompletionBlockNilIsANoOp {
+	NSOperation *operation = [[NSOperation alloc] init];
+	__block BOOL existingRan = NO;
+	operation.completionBlock = ^{
+		existingRan = YES;
+	};
+
+	[operation addCompletionBlock:nil];
+	operation.completionBlock();
+
+	XCTAssertTrue(existingRan);
+
+	NSOperation *fresh = [[NSOperation alloc] init];
+	[fresh addCompletionBlock:nil];
+	XCTAssertNil(fresh.completionBlock);
 }
 
 - (void)testAddCompletionBlockChainsAfterTheExistingOne {

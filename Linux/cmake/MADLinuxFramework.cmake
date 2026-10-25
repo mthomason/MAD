@@ -49,7 +49,7 @@ endfunction()
 # manual-retain-release, so the tests compile without ARC while the library
 # stays ARC -- a per-translation-unit matter, not an ABI one.  WHOLE_ARCHIVE is
 # Apple's -ObjC: the framework's categories (NSData+Comparison,
-# NSOperation+Advanced, the NSOperation name shim) and any unreferenced class
+# NSOperation+CompletionBlock, the NSOperation name shim) and any unreferenced class
 # would otherwise be dropped from the static archive before the runtime sees
 # them.  madcompat -- the compat shims, one archive of their own -- is whole-
 # archived for the same reason: every shim is a category or a category's

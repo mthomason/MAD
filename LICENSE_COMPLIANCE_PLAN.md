@@ -243,9 +243,10 @@ depending on whether MySQL is replaced, licensed, or dropped.
 
 Both are small and both are rewrites rather than negotiations.
 
-* **`NSOperation+Advanced.{h,m}`** (`MADFoundation/Source/`) — `addCompletionBlock:`
-  and `addDependencies:`. A few lines each; reimplement them against `NSOperation`
-  and delete the attribution.
+* ~~**`NSOperation+Advanced.{h,m}`**~~ **Done 2026-10-24 — rewritten as first-party
+  code and renamed `NSOperation+CompletionBlock.{h,m}`.** The two methods were
+  reimplemented from `NSOperation`'s documented semantics and the attribution
+  deleted.
 * **`NSData+AES256.{h,m}`** (`MADDesigner/Source/`) — AES-256-CBC over CommonCrypto.
   Rewrite from Apple's documented `CCCrypt` usage; it is a well-trodden 30 lines.
 
@@ -284,7 +285,7 @@ Neither blocks anything else.
 | 8 | Retire mysqlclient (A5) | step 7 |
 | 9 | Acknowledgements screen and bundled texts (C2, C3) | step 8 |
 | 10 | Relink kit and written offer (B5) | steps 2, 9 |
-| 11 | Rewrite `NSOperation+Advanced` and `NSData+AES256` (D) | — |
+| 11 | ~~Rewrite `NSOperation+Advanced` and `NSData+AES256` (D)~~ | done 2026-10-24 |
 | 12 | Fonts: OFL text, Larabie readme (E) | — |
 | 13 | Hygiene: `DEVELOPER.md` sentence, stale patch references | — |
 

@@ -7,7 +7,7 @@
 //
 
 #import "MADOperationQueue.h"
-#import "NSOperation+Advanced.h"
+#import "NSOperation+CompletionBlock.h"
 #import "MADBlockObserver.h"
 #import "MADOperationCondition.h"
 #import "MADExclusivityController.h"

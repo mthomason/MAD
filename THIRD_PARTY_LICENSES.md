@@ -26,7 +26,7 @@ possibly three more.**
 |---|---|---|---|
 | 1 | **mysqlclient 8.4.10** | **GPL-2.0-only** + Universal FOSS Exception | **BLOCKER — must not ship in a proprietary app without an Oracle commercial license.** |
 | 2 | **Karl Kraft MySQL connector** | none — "All rights reserved" | **Unresolved — no license grant found. Obtain one or replace the code.** |
-| 3 | **NSOperation+Advanced** | none — "All rights reserved" | **Unresolved — upstream has no license file. Two small methods; rewrite.** |
+| 3 | **NSOperation+CompletionBlock** (was `NSOperation+Advanced`) | ~~none — "All rights reserved"~~ | **Resolved 2026-10-24 — rewritten as first-party code under a first-party name.** |
 | 4 | **NSData+AES256** | ~~unknown — pastie snippet~~ | **Resolved 2026-10-24 — rewritten as first-party code, format pinned by golden vectors.** |
 | 5 | FreeTDS 1.4.27 | LGPL-2.0-or-later, **elected LGPL-3.0** | Permitted; **notice, marked header, LGPL text and written relink offer landed 2026-10-24** (kit script deferred to the MariaDB prompt). |
 | 6 | OpenSSL 3.5.9 | Apache-2.0 | Permitted; **license text must ship**. |
@@ -235,14 +235,19 @@ library were replaced.
 *Action: obtain a written grant from Karl Kraft, or replace these classes with
 first-party code (the API surface used is small: connect, query, fetch, escape).*
 
-**`NSOperation+Advanced.{h,m}`** — `MADFoundation/Source/`. Headers read
-"Copyright (c) 2015 Andrey K. All rights reserved." The project name and date
-match the GitHub project `kas-kad/AdvancedNSOperations` (created 2015-07-05,
-Objective-C, same class names) — which **has no LICENSE file** and reports
-`license: null`. The two methods (`addCompletionBlock:`, `addDependencies:`) are
-a handful of lines each.
-
-*Action: rewrite them in-house. This is cheaper than resolving provenance.*
+**`NSOperation+Advanced.{h,m}`** — `MADFoundation/Source/`. **Resolved
+2026-10-24: rewritten as first-party code and renamed
+`NSOperation+CompletionBlock.{h,m}`.** The two methods
+(`addCompletionBlock:`, `addDependencies:`) were reimplemented from
+`NSOperation`'s documented semantics — `addCompletionBlock:` ignores nil,
+chains the new block after an existing one (each running once), and assigns
+otherwise; `addDependencies:` enumerates — and the category, files, umbrella
+export and every import follow the rename. The behaviour is pinned by
+`MADFoundationTests/NSOperationAdvancedTests.m` and its Linux port, which pass
+unchanged, plus a nil-block test. Was: the headers read "Copyright (c) 2015
+Andrey K. All rights reserved." The project name and date match the GitHub
+project `kas-kad/AdvancedNSOperations` (created 2015-07-05, Objective-C, same
+class names) — which has no LICENSE file and reports `license: null`.
 
 **`NSData+AES256.{h,m}`** — `MADDesigner/Source/`. **Resolved 2026-10-24:
 rewritten as first-party code.** The ciphertext format was pinned first by
@@ -307,7 +312,8 @@ them if the repository is ever made public.*
    unchanged; the owner's decision (D1) remains open, and the 2026-10-24 MIT
    relicensing is recorded in §3.2 as a fact the decision should weigh.
 5. ~~**Three components have no license grant.**~~ Two of three resolved
-   2026-10-24: `NSOperation+Advanced` and `NSData+AES256` are rewritten as
+   2026-10-24: `NSOperation+CompletionBlock` (was `NSOperation+Advanced`) and
+   `NSData+AES256` are rewritten as
    first-party code. The Karl Kraft connector remains (Prompt 2, with the
    MariaDB swap).
 6. `DEVELOPER.md`'s claim that nothing third-party is in revision control is
@@ -328,7 +334,8 @@ them if the repository is ever made public.*
    2026-10-24 is recorded in §3.2 as a fact the decision should weigh.**
 2. Resolve the three unlicensed components. Two of them are small enough to
    rewrite in an afternoon; the Karl Kraft connector is the real decision.
-   **Two of three done 2026-10-24: `NSOperation+Advanced` and `NSData+AES256`
+   **Two of three done 2026-10-24: `NSOperation+CompletionBlock` (was
+   `NSOperation+Advanced`) and `NSData+AES256`
    are rewritten as first-party code. The Karl Kraft connector is Prompt 2's
    work, with the MariaDB swap.**
 3. Remove the dead `openssl.xcframework` link from the app target. **Open.**

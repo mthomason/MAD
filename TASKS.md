@@ -490,8 +490,9 @@ covers the conversion of the two shipping samples and the existing user reports.
 2026-10-24; D1 and the Karl Kraft rewrite stay open for Prompt 2. The register is
 `THIRD_PARTY_LICENSES.md` and the plan is `LICENSE_COMPLIANCE_PLAN.md`; read those
 first, this entry is only the queue. Done so far: the miniz copyright headers were
-corrected (2026-10-04); on 2026-10-24 `NSOperation+Advanced` and `NSData+AES256`
-were rewritten as first-party code (the AES ciphertext format was pinned by golden
+corrected (2026-10-04); on 2026-10-24 `NSOperation+Advanced` was reimplemented
+as first-party code and renamed `NSOperation+CompletionBlock`, and
+`NSData+AES256` was rewritten as first-party code (the AES ciphertext format was pinned by golden
 vectors before the rewrite), the FreeTDS LGPL obligations landed (LGPL-3.0 elected
 and recorded, the modified `sybdb.h` now carries its notice from the recipe, the
 LGPL text and the written relink offer are committed — the relink-kit script is
@@ -523,9 +524,10 @@ step-by-step for the MariaDB route.
 **Unlicensed code that must be resolved.** Three committed components carried "all rights
 reserved" and no grant: the Karl Kraft MySQL connector (`MADMySQL/Source/`, 30 files),
 `NSData+AES256` (`MADDesigner/Source/`, a pastie snippet with no author), and
-`NSOperation+Advanced` (`MADFoundation/Source/`, two small methods, upstream
-`kas-kad/AdvancedNSOperations` has no LICENSE file). All three are rewrites rather than
-negotiations. **Two landed 2026-10-24:** `NSOperation+Advanced` and `NSData+AES256` are
+`NSOperation+Advanced`, now `NSOperation+CompletionBlock` (`MADFoundation/Source/`,
+two small methods, upstream `kas-kad/AdvancedNSOperations` has no LICENSE file). All three are rewrites rather than
+negotiations. **Two landed 2026-10-24:** `NSOperation+Advanced` (renamed
+`NSOperation+CompletionBlock`) and `NSData+AES256` are
 first-party code now, their behaviour pinned by the existing tests plus golden AES
 vectors. Only the Karl Kraft connector remains — its rewrite rides the MariaDB swap in
 Prompt 2. On the connector specifically: the original distribution (examined

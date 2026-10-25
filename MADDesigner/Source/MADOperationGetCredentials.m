@@ -10,7 +10,7 @@
 
 #import <MADAPI/MADDatabaseConnection.h>
 
-#import <MADFoundation/NSOperation+Advanced.h>
+#import <MADFoundation/NSOperation+CompletionBlock.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADOperationBooleanAnd.h>
 #import <MADFoundation/MADKeyChain.h>

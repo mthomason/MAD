@@ -5,13 +5,13 @@
 //  Copyright © 2026 Michael Thomason. All rights reserved.
 //
 //  Ported from MADFoundationTests/NSOperationAdvancedTests.m: coverage for
-//  the NSOperation (Advanced) category -- the completion-block chaining (the
-//  new block runs *after* the existing one, in that order) and the bulk
+//  the NSOperation (CompletionBlock) category -- the completion-block chaining
+//  (the new block runs *after* the existing one, in that order) and the bulk
 //  dependency adder.
 //
 
 #import "MADTestSupport.h"
-#import <MADFoundation/NSOperation+Advanced.h>
+#import <MADFoundation/NSOperation+CompletionBlock.h>
 
 #pragma mark - Completion blocks
 
@@ -26,6 +26,23 @@ static void testAddCompletionBlockOnAFreshOperation(void) {
 	MAD_PASS(operation.completionBlock != nil, "the completion block is set");
 	operation.completionBlock();
 	MAD_PASS(ran, "the block ran");
+}
+
+static void testAddCompletionBlockNilIsANoOp(void) {
+	NSOperation *operation = [[NSOperation alloc] init];
+	__block BOOL existingRan = NO;
+	operation.completionBlock = ^{
+		existingRan = YES;
+	};
+
+	[operation addCompletionBlock:nil];
+	operation.completionBlock();
+
+	MAD_PASS(existingRan, "a nil block leaves the existing completion block intact");
+
+	NSOperation *fresh = [[NSOperation alloc] init];
+	[fresh addCompletionBlock:nil];
+	MAD_PASS(fresh.completionBlock == nil, "a nil block on a fresh operation sets nothing");
 }
 
 static void testAddCompletionBlockChainsAfterTheExistingOne(void) {
@@ -87,6 +104,7 @@ static void testAddDependenciesWithAnEmptyArrayIsANoOp(void) {
 
 MAD_TEST_MAIN("NSOperationAdvancedTests",
 	MAD_TEST(testAddCompletionBlockOnAFreshOperation),
+	MAD_TEST(testAddCompletionBlockNilIsANoOp),
 	MAD_TEST(testAddCompletionBlockChainsAfterTheExistingOne),
 	MAD_TEST(testChainedCompletionBlocksRunOnceEach),
 	MAD_TEST(testAddDependenciesAddsEach),
