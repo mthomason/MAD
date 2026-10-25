@@ -7,7 +7,7 @@ nothing third-party is in revision control. See `LIBRARIES.md` for the design;
 here is the day-to-day usage.
 
 **First run on a fresh checkout** (network required, ~30–90 min, most of it
-mysqlclient):
+the larger source tarballs):
 
 ```
 Compressor/build.sh --all --platforms ios,simulator
@@ -26,7 +26,7 @@ Compressor/build.sh --verify --all --platforms ios,simulator
 **Bump a library version:** edit its row in `Compressor/matrix.conf` (version,
 URL, sha256 of the new archive), then `Compressor/build.sh --rebuild <lib>` and
 run the consuming framework's test suite plus `--verify`. One library per commit.
-The mysqlclient, freetds and zint recipes carry per-version knowledge — see the
+The mariadb, freetds and zint recipes carry per-version knowledge — see the
 notes in `LIBRARIES.md` §1 before bumping those.
 
 ## Building on Linux (Phases B–D)

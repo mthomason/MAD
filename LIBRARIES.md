@@ -77,8 +77,9 @@ lipos per platform, and calls `finish_library`, which creates the xcframework,
 installs the canonical include dir and writes the manifest. One library per
 xcframework slice identifier is a hard constraint of `-create-xcframework`, so
 multi-component libraries merge: openssl merges crypto+ssl into `libopenssl.a`,
-freetds merges ct+sybdb+tds into `libfreetds.a`, and mysql's own cmake merges its
-components into `libmysqlclient.a`. Slices are inferred from the libraries'
+freetds merges ct+sybdb+tds into `libfreetds.a`, and mariadb is a single
+`libmariadbclient.a` (Connector/C's `libmariadb` target is hardcoded shared on
+UNIX, so the recipe builds the `mariadbclient` static target). Slices are inferred from the libraries'
 Mach-O load commands (the per-platform `-m*-version-min` flags), which is why no
 `-platform` hints are needed.
 
@@ -89,14 +90,14 @@ Notes worth knowing when touching a recipe:
   consumer of that list (the MADSqlite3 target used to be the second, which is
   hazard H7 in `BUGS.md`). The options pin the `.maddb` cache format (page size
   8192, `DQS=0`, FTS5, STAT4, …); treat changes as format decisions.
-* **mysqlclient** is a two-stage build: a native macosx-arm64 configure produces
-  the host tools (`comp_err`, `uca9dump`) and their generated files; the cross
-  builds seed those files and repoint the tool commands at the native executables,
-  because make rebuilds the cross tool targets and then runs the commands. The
-  cross configure runs with `CMAKE_CROSSCOMPILING=1` and a preset
-  (`build/mysqlclient/cross-preset.cmake`) that answers every run-based cmake
-  probe with the value iOS actually has — an unseeded probe fails loudly rather
-  than guessing.
+* **mariadb** builds the `mariadbclient` static target per slice with
+  `WITH_SSL=OPENSSL` against the per-platform openssl install and
+  `WITH_EXTERNAL_ZLIB=ON` against the zlib install, the `caching_sha2_password`
+  and `sha256_password` auth plugins compiled in statically and every other
+  plugin disabled (no plugin `.so` ships). The DEFAULT install layout nests
+  headers under `include/mariadb`; the recipe flattens them so `mysql.h`
+  resolves from the canonical include root, and its cross preset answers the
+  one run-based cmake probe (the LibreSSL check) with the OpenSSL outcome.
 * **zint** is stock 2.16.0 built by `lib/recipes/zint.sh` with cmake
   (`ZINT_SHARED=OFF`, `ZINT_STATIC=ON`, `ZINT_FRONTEND=OFF`, `ZINT_USE_PNG=ON`,
   linked against the recipe's libpng and zlib) into
@@ -150,7 +151,7 @@ UIKit decoupling lands (see `ROADMAP.md` Track 2).
 |---|---|---|
 | MADSqlite3 | `sqlite3.xcframework` | `sqlite3` |
 | MAD | `libarchive.xcframework`, `bzip2.xcframework`, `zlib.xcframework` | `libarchive` |
-| MADMySQL | `mysqlclient.xcframework`, `openssl.xcframework` | `mysqlclient` |
+| MADMySQL | `mariadb.xcframework`, `openssl.xcframework`, `zlib.xcframework` | `mariadb` |
 | MADTds | `freetds.xcframework`, `openssl.xcframework` | `freetds` |
 | MADTdsClient | nothing from Compressor (tds symbols come via MADTds) | — |
 | MADBarcodes | `libpng.xcframework`, `zlib.xcframework`, `zint.xcframework` | `zint` |
@@ -178,8 +179,8 @@ the libraries once, before or during the first Xcode build:
 Compressor/build.sh --all --platforms ios,simulator
 ```
 
-Needs network access for the downloads (roughly 600 MB total; the mysql-boost
-tarball is most of it) and 30–90 minutes on first build, most of it mysqlclient.
+Needs network access for the downloads and 30–90 minutes on first build,
+most of it the larger source tarballs.
 After that, Xcode's ensure phases are no-ops and a normal build proceeds.
 
 **Verifying the artifacts:**
@@ -191,12 +192,12 @@ Compressor/build.sh --verify --all --platforms ios,simulator
 **Bumping a library:** edit its `matrix.conf` row (version, URL, sha256 of the
 new archive), then `Compressor/build.sh --rebuild <lib>` and run the consuming
 framework's test suite plus `--verify`. One library per commit. If the new
-version adds a cmake run-probe, the mysqlclient preset fails loudly and names it
+version adds a cmake run-probe, the mariadb preset fails loudly and names it
 — answer it explicitly, never by guessing.
 
-**The zint/freetds/mysqlclient recipes carry per-version knowledge** (patches,
-generated-file lists, probe answers, bundled libevent version). When a version
-bumps, those are the places to re-check.
+**The zint/freetds/mariadb recipes carry per-version knowledge** (patches,
+installed-header edits, probe answers, plugin type names, install layout). When a
+version bumps, those are the places to re-check.
 
 ---
 
