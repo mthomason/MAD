@@ -135,7 +135,7 @@
          location = "group:LIBRARIES.md">
       </FileRef>
       <FileRef
-         location = "group:LICENSE.md">
+         location = "group:LICENSE">
       </FileRef>
       <FileRef
          location = "group:LICENSE_COMPLIANCE_PLAN.md">

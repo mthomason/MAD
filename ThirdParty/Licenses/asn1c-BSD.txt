@@ -1,0 +1,8 @@
+The BSD licence the asn1c runtime files carry, as stated in
+MADDesigner/Source/ReceiptModuleAsn1c/asn_application.h (and similarly in the other
+runtime headers):
+
+/*-
+ * Copyright (c) 2004, 2006 Lev Walkin <vlm@lionet.info>. All rights reserved.
+ * Redistribution and modifications are permitted subject to BSD license.
+ */
