@@ -5,7 +5,7 @@
 //  Linux/Tests
 //
 //  Ported from MADTests/MADSQLQueryCompilerTests.m: the pasted-SQL importer's
-//  write half (MAD_SQL_ENTRY.md §6.3, §6.4, §10.4) -- the happy-path apply
+//  write half (docs/project/MAD_SQL_ENTRY.md §6.3, §6.4, §10.4) -- the happy-path apply
 //  builds the designer's rows and stores the entered text verbatim, the replace
 //  path leaves no orphan, the conflict path aborts with the store untouched,
 //  and the fixpoint round trip is the statement that defines the feature.

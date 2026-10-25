@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
-#  Linux/Dockerfile -- the Phase B toolchain spike (MAD_LINUX.md §9).
+#  Linux/Dockerfile -- the Phase B toolchain spike (docs/project/MAD_LINUX.md §9).
 #
 #  Three stages:
 #    toolchain-base  Ubuntu 24.04 plus the distro clang and GNUstep's
@@ -72,13 +72,13 @@ CMD ["bash", "Linux/build.sh", "--in-image", "test"]
 # ---------------------------------------------------------------------------
 # runtime -- the CLI deliverable: `mad` on PATH, the shared libraries it links,
 # GNUstep's runtime directories, and the Sqlite3 sample database.  The compiler,
-# the sources and the 119 test binaries stay in the stages above.
+# the sources and the 124 test binaries stay in the stages above.
 #
 # Built and run locally (`Linux/build.sh --runtime` / `--verify`); it is not
 # published.  The GPLv2 blocker left with the mysqlclient swap: mariadb
 # (Connector/C) is LGPL and is linked statically, so it needs no runtime files
 # here and its relink offer (`ThirdParty/Licenses/README.md`) covers
-# distribution.  Publication remains the user's decision (TASKS.md §10), not
+# distribution.  Publication remains the user's decision (docs/project/TASKS.md §10), not
 # a build step.
 # ---------------------------------------------------------------------------
 FROM ubuntu:24.04 AS runtime
@@ -128,6 +128,6 @@ RUN ln -s libgnustep-base.so.1.31.1 /usr/local/lib/libgnustep-base.so.1.31 \
 
 WORKDIR /work
 
-# No ENTRYPOINT, so the command reads the way MAD_CLI.md writes it:
+# No ENTRYPOINT, so the command reads the way docs/project/MAD_CLI.md writes it:
 #   docker run --rm -v "$PWD/docs":/docs mad-cli:latest mad inspect /docs/x.mad
 CMD ["mad"]

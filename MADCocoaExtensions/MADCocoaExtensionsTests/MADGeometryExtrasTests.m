@@ -7,7 +7,7 @@
 //  Coverage for the inline geometry helpers in CGGeometry+Extras.h.  The corner
 //  helpers and CGCenterRect were once wrong; the tests now pin the corrected
 //  values.  CGRectAdjustForScale is deliberately left alone -- see its comment
-//  in the header and BUGS.md.
+//  in the header and docs/project/BUGS.md.
 //
 
 #import <XCTest/XCTest.h>
@@ -174,7 +174,7 @@ static inline BOOL MADPointEqualToPoint(CGPoint a, CGPoint b) {
 
 - (void)testAdjustForScale {
 	// Deliberate: both branches shrink. The two MADDesignerScrollView callers
-	// each reach a different branch on purpose; see BUGS.md before changing this.
+	// each reach a different branch on purpose; see docs/project/BUGS.md before changing this.
 	CGRect r = CGRectMake(10, 20, 100, 200);
 	CGRect zoomIn = CGRectAdjustForScale(r, 2.0);
 	XCTAssertEqual(zoomIn.size.width, (CGFloat)50);

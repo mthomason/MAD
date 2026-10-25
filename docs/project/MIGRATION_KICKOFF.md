@@ -12,8 +12,8 @@ project's most important remaining work: it removes the last Apple dependency (h
 ## Where you are
 
 Objective-C, iOS 15+, repo at the repo root, main branch `master`. Large codebase — a main app
-plus ~13 frameworks. Read, in order: `MAD_STORE_MIGRATION.md`, `MAD_FORMAT.md`, `CLAUDE.md`
-(symlinked to `AGENTS.md`), then `ROADMAP.md` / `TASKS.md` / `BUGS.md` (maintain these; do not
+plus ~13 frameworks. Read, in order: `MAD_STORE_MIGRATION.md`, `MAD_FORMAT.md`, the root
+`CLAUDE.md` (a symlink to `AGENTS.md`), then `ROADMAP.md` / `TASKS.md` / `BUGS.md` (maintain these; do not
 start work from them).
 
 ## What is being migrated

@@ -4,7 +4,7 @@
 //
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
-//  The one error shape the pasted-SQL front half reports (MAD_SQL_ENTRY.md §5):
+//  The one error shape the pasted-SQL front half reports (docs/project/MAD_SQL_ENTRY.md §5):
 //  a coded NSError whose userInfo carries the offending token's 1-based
 //  position, so every rejection names the construct, the clause and the reason,
 //  and tests assert codes and positions rather than message text.
@@ -49,7 +49,7 @@ typedef NS_ENUM(NSInteger, MADSQLCompileErrorCode) {
 	MADSQLCompileErrorDuplicateJoin = 20,
 	MADSQLCompileErrorUnsupportedSelectAlias = 21,
 	/// The apply's conflict check: a designer element or a group section holds a
-	/// field of a table the new plan drops (MAD_SQL_ENTRY.md §6.3).
+	/// field of a table the new plan drops (docs/project/MAD_SQL_ENTRY.md §6.3).
 	MADSQLCompileErrorDesignerConflict = 22,
 };
 

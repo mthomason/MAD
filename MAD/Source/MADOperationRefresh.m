@@ -35,7 +35,7 @@ static const short errNoDocument = 3842;
 
 // The portable store context is main-queue-owned.  Marshal store reads onto
 // the main queue (inline when already there) rather than taking a lock in
-// every accessor.  See BUGS.md "The refresh path reads the shared store
+// every accessor.  See docs/project/BUGS.md "The refresh path reads the shared store
 // context from operation-queue threads".
 static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 	if ([NSThread isMainThread]) block();
@@ -89,7 +89,7 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 			// This is a missing credential, not a cache fault: the database wants
 			// credentials and no dependency supplied any.  It used to report domain
 			// @"MADCache" with code errCache + 1, which points the reader at the
-			// result cache.  See BUGS.md.
+			// result cache.  See docs/project/BUGS.md.
 			NSError *error = [NSError errorWithDomain: MADOperationRefreshErrorDomain
 												 code: errMissingCredentials
 											 userInfo: @{
@@ -147,7 +147,7 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 		// returned above.  Finishing with it completed the operation with an empty
 		// error list, so a query that failed was indistinguishable from one that
 		// succeeded -- and the cache still held the previous run's rows, which is
-		// what the caller saw.  executeError is what the driver reported.  See BUGS.md.
+		// what the caller saw.  executeError is what the driver reported.  See docs/project/BUGS.md.
 		NSError *error = executeError;
 		if (error == nil) {
 			error = [NSError errorWithDomain: MADOperationRefreshErrorDomain

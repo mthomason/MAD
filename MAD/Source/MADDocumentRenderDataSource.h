@@ -7,7 +7,7 @@
 //  The render half's reads, over a document.  MADPrintPageRendererDataSourceProtocol
 //  and MADReportFormatterDataSource were implemented on MADocument itself, which is
 //  fine while MADocument is the only document that renders -- and is not fine now
-//  that a headless document renders too (MAD_LINUX.md §9 Phase E): two copies of
+//  that a headless document renders too (docs/project/MAD_LINUX.md §9 Phase E): two copies of
 //  "the row for this group", "the rows for this page", "the last row of the report"
 //  would drift apart, and the data half's history says they would.
 //

@@ -4,7 +4,7 @@
 //
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
-//  The SQL entry feature's server probe (MAD_SQL_ENTRY.md §7): the statement
+//  The SQL entry feature's server probe (docs/project/MAD_SQL_ENTRY.md §7): the statement
 //  wrapped as a zero-row derived table and run through the MADOperationRefresh
 //  shape -- connect with credentials from operation dependencies, the driver's
 //  executeSQL:…intoResultTable:… -- so the server's own name resolution and its

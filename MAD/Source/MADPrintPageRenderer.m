@@ -277,7 +277,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 // elements draw through, the drawing block when there is a context to draw into, and
 // the text representation the page is recorded in either way.  A caller that only
 // wants the structure passes NULL and reads what comes back (MADPrintPageRenderer.h;
-// MAD_LINUX.md §9 Phase E).
+// docs/project/MAD_LINUX.md §9 Phase E).
 - (MADReportPageRepresentation *)buildPageAtIndex:(NSUInteger)pageIndex
 										  context:(CGContextRef)ctx
 									   inPageRect:(CGRect)pageRect {

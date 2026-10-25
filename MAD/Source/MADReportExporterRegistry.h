@@ -6,7 +6,7 @@
 //
 //  The lookup half of the export seam: which formats a process has is what it links,
 //  the same rule the driver registry follows (MADDatabaseDriverRegistry.h,
-//  ROADMAP.md section 5.1).  Each exporter registers itself in +load; the CLI asks for
+//  docs/project/ROADMAP.md section 5.1).  Each exporter registers itself in +load; the CLI asks for
 //  one by the name `--format` carries instead of naming the classes, so a new format
 //  is a new class and nothing else.
 //

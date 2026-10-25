@@ -42,5 +42,5 @@ When you need to interact with a database, you should use the classes and protoc
 
 *   **Tests**: `MADAPI/MADAPITests`. Run with
     `xcodebuild test -workspace Reports.xcworkspace -scheme MADAPI -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
-*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MADAPI` section.
-*   **Task queue**: [`TASKS.md`](../TASKS.md) -- maintain it, but do not start work from it.
+*   **Known issues**: [`BUGS.md`](../docs/project/BUGS.md) -- see the `## MADAPI` section.
+*   **Task queue**: [`TASKS.md`](../docs/project/TASKS.md) -- maintain it, but do not start work from it.

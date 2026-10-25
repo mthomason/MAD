@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADMySQL subset the Linux build compiles (MAD_LINUX.md §9): the 18
+# The MADMySQL subset the Linux build compiles (docs/project/MAD_LINUX.md §9): the 18
 # implementation files of the Xcode target's 19.
 #
 # Excluded, with reason:
@@ -10,10 +10,10 @@
 # It links the mysqlclient the image builds from the pin in
 # Linux/libraries.conf, with openssl beneath it.  The licence position is
 # unchanged by this: the GPL/FOSS-exception blocker and the MariaDB
-# replacement are LICENSE_COMPLIANCE_PLAN.md's to settle, and nothing here
-# ships (MAD_LINUX.md §7).
+# replacement are docs/project/LICENSE_COMPLIANCE_PLAN.md's to settle, and nothing here
+# ships (docs/project/MAD_LINUX.md §7).
 #
-# Keep this list in step with MAD_LINUX.md §4.
+# Keep this list in step with docs/project/MAD_LINUX.md §4.
 
 set(MADMYSQL_SOURCES
 	"${SOURCE_DIR}/MADDatabaseConnectionMySql.m"

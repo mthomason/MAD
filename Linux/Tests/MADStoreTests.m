@@ -664,7 +664,7 @@ static void testClosedStoreRefusesToRead(void) {
 // -- the model bundle's NSManagedObjectModel, its entity and relationship
 // descriptions, and the deliberate rename/expansion/transform exceptions.  Core
 // Data does not exist off Apple and the model bundle is not compiled here, so the
-// check reports a need; MAD_LINUX.md §4 and MAD_STORE_MIGRATION.md record why the
+// check reports a need; docs/project/MAD_LINUX.md §4 and docs/project/MAD_STORE_MIGRATION.md record why the
 // model left the framework.
 static void testSchemaMatchesEveryModelEntity(void) {
 	MAD_NEED(NO, @"the model fidelity check needs Core Data and the compiled MAD.momd, which are Apple-only");

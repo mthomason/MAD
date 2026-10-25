@@ -4,7 +4,7 @@
 //  MADCLI.h
 //  MAD Designer
 //
-//  Shared declarations for the `mad` command-line tool.  See MAD_CLI.md for the
+//  Shared declarations for the `mad` command-line tool.  See docs/project/MAD_CLI.md for the
 //  command surface this implements.
 //
 

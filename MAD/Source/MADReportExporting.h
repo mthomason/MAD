@@ -4,10 +4,10 @@
 //  MADReportExporting.h
 //  MAD
 //
-//  The export seam (MAD_CLI.md section 5.3, ROADMAP.md section 5.2): a format is a
+//  The export seam (docs/project/MAD_CLI.md section 5.3, docs/project/ROADMAP.md section 5.2): a format is a
 //  class that adopts this protocol and registers itself with MADReportExporterRegistry
 //  in +load, not an arm of a switch.  The shape is the driver registry's
-//  (MADDatabaseDriverRegistry.h, ROADMAP.md section 5.1) -- an implementation protocol
+//  (MADDatabaseDriverRegistry.h, docs/project/ROADMAP.md section 5.1) -- an implementation protocol
 //  and a lookup by name -- so adding "export to markdown" is a new class in a new
 //  framework and nothing in the core changes.
 //
@@ -15,7 +15,7 @@
 //  needs no rendering works wherever a document opens -- Apple and Linux alike.  A
 //  format that needs the render half says so: it registers everywhere and answers
 //  +isAvailable NO with a reason where the machinery is absent (json-report off Apple
-//  until the render half ports; MAD_LINUX.md section 9 Phase E).
+//  until the render half ports; docs/project/MAD_LINUX.md section 9 Phase E).
 //
 
 #ifndef MAD_MADReportExporting_h

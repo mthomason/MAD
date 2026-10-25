@@ -18,7 +18,7 @@
 //  and dereference it, so releasing a monitor with a cancel still pending
 //  segfaulted in the handler.  The handler now holds the monitor for its one and
 //  only run, which the last test below exercises -- holding the queue so the
-//  handler cannot have run first; see BUGS.md.  The other monitors here are
+//  handler cannot have run first; see docs/project/BUGS.md.  The other monitors here are
 //  still stopped and drained before release.
 //
 
@@ -228,7 +228,7 @@ static void testStoppedMonitorStopsObserving(void) {
 }
 
 static void testReleasingAMonitorWithACancelPendingDoesNotCrash(void) {
-	// BUGS.md: with the cancel pending, the handler used to dereference a nil owner.
+	// docs/project/BUGS.md: with the cancel pending, the handler used to dereference a nil owner.
 	// The source's queue is held down so the handler cannot have run before the
 	// monitor is released, then let go: the handler runs with nothing else retaining
 	// the monitor.  Against the old code the process faults here; with the fix the

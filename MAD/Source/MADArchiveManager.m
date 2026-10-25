@@ -50,7 +50,7 @@ int mad_file_remove_if_exist(char *path) { return (access(path, F_OK) == 0) ? re
 static int mad_path_is_absolute(const char *path) { return strlen(path) > 1 && path[0] == '/' ? 1 : 0; }
 static int mad_path_is_relative(const char *path) { return mad_path_is_absolute(path) ? 0 : 1; }
 
-// The v1 document header, per MAD_FORMAT.md section 7.1: 8 magic bytes, two
+// The v1 document header, per docs/project/MAD_FORMAT.md section 7.1: 8 magic bytes, two
 // little-endian version words, then four flags bytes (bit 0 records whether the store
 // was checkpointed).  It sits ahead of the bzip2 stream so a document is identified by
 // content, not by its extension.
@@ -100,7 +100,7 @@ int backup_file(char *path_origin, char *path_destination) {
 	// caller's path is used again after this returns, and a path truncated at its last
 	// slash made the composed document write over its own directory -- measured on
 	// Linux as "Open (/tmp/out) failed - Is a directory", and it cost a write that
-	// Apple's implementations, which leave the buffer alone, never noticed (BUGS.md,
+	// Apple's implementations, which leave the buffer alone, never noticed (docs/project/BUGS.md,
 	// the .mad byte-identity entry).
 	char *directory_copy = strdup(path_origin);
 	char *name_copy = strdup(path_origin);
@@ -136,7 +136,7 @@ int backup_file(char *path_origin, char *path_destination) {
 }
 
 // The old walk skipped hidden members (NSDirectoryEnumerationSkipsHiddenFiles) and
-// this one keeps that: MAD_FORMAT.md §6 H4 records that a hidden member is dropped
+// this one keeps that: docs/project/MAD_FORMAT.md §6 H4 records that a hidden member is dropped
 // silently, which is a hazard to be decided, not a behaviour to change by rewriting
 // the walk.
 static int mad_path_is_hidden(NSString *relativePath) {
@@ -166,7 +166,7 @@ int write_archive(char *outname, NSURL *filewrapper, int reproducible) {
 	// it, and they are read with -subpathsAtPath: rather than a URL enumerator:
 	// GNUstep's -enumeratorAtURL: yields URLs with the containing directory stripped,
 	// which is what used to send the old walk-up loop to "/" and never let it return
-	// (BUGS.md, the byte-identity entry; Linux/README.md).
+	// (docs/project/BUGS.md, the byte-identity entry; Linux/README.md).
 	NSString *basePath = filewrapper.path;
 	NSMutableArray <NSString *> *relativePaths = [NSMutableArray array];
 	for (NSString *relativePath in [[NSFileManager defaultManager] subpathsAtPath: basePath]) {

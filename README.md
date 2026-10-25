@@ -1,23 +1,23 @@
-# MAD Designer
+# MAD (Mobile Analytics Document)
 
 **A report is a file.**
 
-MAD Designer is a mobile analytic document designer: a portable report
-definition plus the engine that renders it. A `.mad` document holds the whole
-report — the query, its tables and joins, and the layout of its elements — in
-one small file (under 100 KB), separate from the data it displays. Anyone who
-can read the file can run the report, refresh it against the database, and
-export it.
+MAD is a mobile analytic document designer: the **MAD Designer** app, where a
+report is built, the **MAD Viewer** app, where it is read, and the portable
+report-definition format plus the engine that renders it. A `.mad` document
+holds the whole report — the query, its tables and joins, and the layout of
+its elements — in one small file (under 100 KB), separate from the data it
+displays. Anyone who can read the file can run the report, refresh it against
+the database, and export it.
 
-The repository is one self-contained project: the iPad/iPhone app, thirteen
+The repository is one self-contained project: the iPad/iPhone apps, thirteen
 frameworks, the headless engine with its Linux build and test suite, the `mad`
 command-line tool, and the build system that produces the third-party
 libraries. It is published under the MIT licence; the `.mad` format is an open
 specification (see [`docs/`](docs/)), though the project's name is not covered
 by the licence grant.
 
-[![Linux verification](https://github.com/OWNER/REPO/actions/workflows/linux.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/linux.yml)
-<!-- Fill in OWNER/REPO when the repository is published; the workflow activates then. -->
+[![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
 ## Try it
 
@@ -43,8 +43,8 @@ docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out mad-cli:lates
 
 The sample documents refresh against the Sqlite3 sample database that ships
 inside the image; the MySQL and SQL Server fixtures expect the test servers
-from `DEVELOPER.md`. The image is built locally for now — publishing it to a
-registry is part of the launch.
+from [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md). The image is
+built locally for now — publishing it to a registry is part of the launch.
 
 ## The `.mad` format
 
@@ -58,8 +58,8 @@ a second reader must handle. Both shipping samples are under 80 KB.
 
 ## Database drivers
 
-MAD Designer talks to databases through `MADDatabase` subclasses. Three
-drivers ship today:
+MAD talks to databases through `MADDatabase` subclasses. Three drivers ship
+today:
 
 * **MySQL / MariaDB** — `MADMySQL`, over MariaDB Connector/C;
 * **SQL Server** — `MADTdsClient`, over FreeTDS;
@@ -75,7 +75,7 @@ and return rows.
 
 ## Build and test
 
-The iOS side is a workspace of thirteen frameworks plus the app. Run a
+The iOS side is a workspace of thirteen frameworks plus the apps. Run a
 framework's suite against the iOS Simulator:
 
 ```sh
@@ -85,7 +85,8 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 ```
 
 (`MADMySQL` and `MADTdsClient` also carry live suites that talk to a real
-database server and skip when one is not reachable — see `DEVELOPER.md`.)
+database server and skip when one is not reachable — see
+[`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).)
 
 The headless engine is verified the same way on Linux. From the repository
 root, with Docker installed:
@@ -94,16 +95,31 @@ root, with Docker installed:
 ./Linux/build.sh       # build the toolchain image, compile the ten frameworks, run the suites
 ```
 
-This runs 123 test executables and 1,262 tests inside the container, and
+This runs 124 test executables and 1,270 tests inside the container, and
 `--verify` adds the CLI's end-to-end checks against the checked-in fixtures
-and their pinned digests. See `Linux/README.md` for the image, the pins, and
-the GNUstep divergences the port found.
+and their pinned digests. See [`Linux/README.md`](Linux/README.md) for the
+image, the pins, and the GNUstep divergences the port found.
+
+## Support
+
+MAD is free software and stays free. One maintainer keeps it: the design
+documents, the two-platform test matrix, and the agent-driven development all
+run on real time and API tokens. If MAD saves your team time, here is how to
+give some of it back — and thank you either way:
+
+* **[Sponsor the maintainer](https://github.com/sponsors/mthomason)** —
+  one-time or monthly, GitHub Sponsors.
+* **Send API credits.** The project is developed with AI agents; OpenAI,
+  Anthropic, or agent-token credits go straight back into the work. Get in
+  touch through the sponsor page or an issue.
+* **[Contribute](CONTRIBUTING.md).** A database driver, a document element,
+  an export format, or a fix — the seams are the point.
 
 ## Licence
 
 MIT — see [`LICENSE`](LICENSE). Every third-party component, its licence, and
 what shipping it obliges us to do is recorded in
-[`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
+[`docs/project/THIRD_PARTY_LICENSES.md`](docs/project/THIRD_PARTY_LICENSES.md).
 
 ## Export compliance
 

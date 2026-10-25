@@ -5,7 +5,7 @@
 //  Linux/Tests
 //
 //  Ported from MADTests/MADSQLParserTests.m: the pasted-SQL importer's front half
-//  (MAD_SQL_ENTRY.md §5, §10.3) -- the tokenizer's per-dialect quoting and
+//  (docs/project/MAD_SQL_ENTRY.md §5, §10.3) -- the tokenizer's per-dialect quoting and
 //  line:column positions, the parser's accept matrix and its rejection table,
 //  each rejection asserting the error code and the line:column, never just the
 //  message.

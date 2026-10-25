@@ -1,11 +1,11 @@
-MAD Designer
+MAD (Mobile Analytics Document) — the MAD Designer and MAD Viewer apps
 Copyright (c) 2012-2026 Michael Thomason
 
 Licensed under the MIT License; see LICENSE.
 
 This product includes third-party software. The licence texts and notices are
 collected in ThirdParty/Licenses/ (see its README for where each came from)
-and registered in THIRD_PARTY_LICENSES.md. In particular:
+and registered in docs/project/THIRD_PARTY_LICENSES.md. In particular:
 
 - FreeTDS 1.4.27 (LGPL-2.0-or-later, taken under LGPL-3.0) is linked
   statically. One installed header (sybdb.h) is modified; the modification
@@ -22,5 +22,5 @@ and registered in THIRD_PARTY_LICENSES.md. In particular:
   the pinned upstream release in Compressor/matrix.conf, unmodified. The
   same written relink offer covers it.
 
-- The .mad document format specification (MAD_FORMAT.md) is published freely.
-  The "MAD" name is not covered by the code licence.
+- The .mad document format specification (docs/project/MAD_FORMAT.md) is
+  published freely. The "MAD" name is not covered by the code licence.

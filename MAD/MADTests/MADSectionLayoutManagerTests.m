@@ -19,7 +19,7 @@
 //    * -removeItemWithID: with a number that is not in the manager, the nil item's
 //      indexPath reads a zero at every position, so every item's index is decremented
 //      and the item at index zero underflows to NSUIntegerMax.  This is pinned as a
-//      defect in BUGS.md, not fixed.
+//      defect in docs/project/BUGS.md, not fixed.
 //
 //  The manager reads only the section's visibility (no getter, so not observable) and
 //  its rows; the fixture below builds those in a real in-memory store.

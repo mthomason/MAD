@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADFoundation subset the Linux build compiles (MAD_LINUX.md §9): 27 of
+# The MADFoundation subset the Linux build compiles (docs/project/MAD_LINUX.md §9): 27 of
 # the framework's 28 implementation files, plus madlib.c.
 #
 # The one excluded file and why:
@@ -16,7 +16,7 @@
 # __APPLE__, MADApplication's AppDelegate returns nil in the headless engine,
 # and MADURLFactory's UIScreen and app-group-container sites have Linux
 # branches (the group path falls back to the per-user directories).  Keep the
-# groups in step with MAD_LINUX.md §4 and this directory's README.
+# groups in step with docs/project/MAD_LINUX.md §4 and this directory's README.
 
 set(MADFOUNDATION_SOURCES
 	# Foundation-only

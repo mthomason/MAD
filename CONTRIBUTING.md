@@ -1,9 +1,9 @@
-# Contributing to MAD Designer
+# Contributing to MAD
 
-Thanks for being here. The project is a report *definition* engine — one
-`.mad` file holds a whole report, and the engine renders it — and the seams
-for new work are the point: a new database driver, a new document element, a
-new export format. The driver-authoring tutorial
+Thanks for being here. MAD (Mobile Analytics Document) is the project — the
+MAD Designer and MAD Viewer apps, the frameworks, and the headless engine —
+and the seams for new work are the point: a new database driver, a new
+document element, a new export format. The driver-authoring tutorial
 ([`docs/tutorials/driver-authoring.md`](docs/tutorials/driver-authoring.md))
 walks through the first one; it is the intended first contribution.
 
@@ -15,7 +15,8 @@ walks through the first one; it is the intended first contribution.
   the Objective-C toolchain (libobjc2, libdispatch, GNUstep) and the C
   libraries, compiles the ten headless frameworks, and runs their suites.
 * No database server is needed to contribute: the live MySQL and SQL Server
-  suites skip when no server is reachable, and `DEVELOPER.md` documents the
+  suites skip when no server is reachable, and
+  [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) documents the
   Docker containers that supply them.
 
 ## Getting started
@@ -31,11 +32,12 @@ walks through the first one; it is the intended first contribution.
    ```
 
    ```sh
-   # Linux: the whole headless engine — 123 test executables, 1,262 tests
+   # Linux: the whole headless engine — 124 test executables, 1,270 tests
    ./Linux/build.sh
    ```
 
-   `DEVELOPER.md` has the full command matrix, the shared DerivedData path the
+   [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) has the full
+   command matrix, the shared DerivedData path the
    frameworks expect, and the test-database setup.
 3. Pick something. A new driver, an element, or an issue labelled
    "good first issue". Small is good: the review culture here is exact.
@@ -68,9 +70,10 @@ that isn't either fixed or recorded is a failing change.
   declaration — an unmarked unused warning means the code is dead.
 * New files carry the one-line header, `Copyright © 2012-2026 Michael
   Thomason. SPDX-License-Identifier: MIT` (`//` for source, `#` for scripts).
-* `BUGS.md` records open defects with the tests that pin them; when you fix
-  one, the entry moves to `BUGS_FIXED.md` — a fix that isn't recorded didn't
-  happen.
+* [`docs/project/BUGS.md`](docs/project/BUGS.md) records open defects with
+  the tests that pin them; when you fix one, the entry moves to
+  [`docs/project/BUGS_FIXED.md`](docs/project/BUGS_FIXED.md) — a fix that
+  isn't recorded didn't happen.
 
 ## Developer Certificate of Origin
 
@@ -105,3 +108,11 @@ the private path in [`SECURITY.md`](SECURITY.md), never to a public issue.
 Ask in an issue (or the discussions board once it opens). The maintainer
 answers every issue; the project is a solo effort growing into a community,
 so a clear question that shows what you tried gets the fastest answer.
+
+## Support
+
+MAD is MIT-licensed and free, and contributions are the best kind of support.
+If the project saves your team time and you want to give more, the maintainer
+accepts [GitHub Sponsors](https://github.com/sponsors/mthomason) and API
+credits for the agent-driven development — every bit of it goes back into the
+work (see the [README](README.md), "Support").

@@ -35,6 +35,6 @@ The project defines four targets:
     *   `MADAppOperationConditionTests.m` -- the app's `MADOperationCondition` classes and
         `MADMutualExclusiveCondition`.
 *   **UI tests**: `MADDesigner/Targets/MADDesignerUITests`.
-*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MAD Designer (app)` section. The
+*   **Known issues**: [`BUGS.md`](../docs/project/BUGS.md) -- see the `## MAD Designer (app)` section. The
     faults found in this test target itself are under `## Test infrastructure`.
-*   **Task queue**: [`TASKS.md`](../TASKS.md) -- maintain it, but do not start work from it.
+*   **Task queue**: [`TASKS.md`](../docs/project/TASKS.md) -- maintain it, but do not start work from it.

@@ -169,7 +169,7 @@ static void testActiveFieldsSelectList(void) {
 
 // The SELECT list's order used to be NSSet enumeration order, and that order is not
 // stable: not insertion order, not platform order, and -- measured here -- not even
-// the same between two documents built by the same fixture in one process.  BUGS.md
+// the same between two documents built by the same fixture in one process.  docs/project/BUGS.md
 // recorded it; the order is now defined as the column alias, so the generated SQL,
 // the row cache and every export agree (the order tests below).  What is pinned here
 // is the part that must not vary: the *content* of the list, whichever order the

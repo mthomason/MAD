@@ -459,7 +459,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A7F684831529DE32DF20727B /* MAD_STRATEGY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = MAD_STRATEGY.md; path = ../MAD_STRATEGY.md; sourceTree = SOURCE_ROOT; };
+		A7F684831529DE32DF20727B /* MAD_STRATEGY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = MAD_STRATEGY.md; path = ../docs/project/MAD_STRATEGY.md; sourceTree = SOURCE_ROOT; };
 		4CDEAD0000000000000000A1 /* MADStoreConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreConverter.h; sourceTree = "<group>"; };
 		4CDEAD0000000000000000A2 /* MADStoreConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreConverter.m; sourceTree = "<group>"; };
 		4CDEAD0000000000000000A3 /* MADStoreLegacyConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreLegacyConverter.h; sourceTree = "<group>"; };

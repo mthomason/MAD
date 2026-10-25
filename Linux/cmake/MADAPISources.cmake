@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADAPI subset the Linux build compiles (MAD_LINUX.md §9): the 8
+# The MADAPI subset the Linux build compiles (docs/project/MAD_LINUX.md §9): the 8
 # implementation files of the Xcode target's 11.
 #
 # Excluded, with reasons:
@@ -13,7 +13,7 @@
 # Everything else here is the connection layer -- the database base class,
 # connection, field, table, data binding, the query model, the error
 # container and the read notification -- which is what the drivers and the
-# refresh path sit on.  Keep this list in step with MAD_LINUX.md §4.
+# refresh path sit on.  Keep this list in step with docs/project/MAD_LINUX.md §4.
 
 set(MADAPI_SOURCES
 	"${SOURCE_DIR}/MADDatabase.m"

@@ -9,7 +9,7 @@
 //  -MADocument.documentModel over the store context.  Owns the databases and
 //  queries, and observes the store's change notifications so query-graph changes
 //  arrive as the MADNotification... postings the designer subscribes to.
-//  See MADModel_Layer.md at the repo root.
+//  See docs/project/MADModel_Layer.md at the repo root.
 //
 
 #ifndef MADModelDocument_h

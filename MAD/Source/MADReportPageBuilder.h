@@ -10,7 +10,7 @@
 //  drawing block.  Nothing here is UIKit: MADPrintPageRenderer supplies the block and
 //  keeps the UIPrintPageRenderer around it, while a format that wants the report's
 //  structure without drawing (json-report, html) reads the same walk with no block at
-//  all.  That is what makes the two agree (MAD_LINUX.md §9 Phase E).
+//  all.  That is what makes the two agree (docs/project/MAD_LINUX.md §9 Phase E).
 //
 //  It was MADPrintPageRenderer's own -buildPageAtIndex:context:inPageRect: and
 //  -buildSection:..., moved; the sequence -- begin a read transaction for the page,
@@ -47,7 +47,7 @@ typedef void (^MADReportPageElementDrawBlock)(__kindof MADPrintPageElement *elem
 
 /// The sequence every render-side format runs before it reads a page: ready the rows,
 /// size the formatter to the page and the printable rect, lay the report out.  It is
-/// MADCLIDocument's PDF preparation, in one place (MAD_LINUX.md §9 Phase E).
+/// MADCLIDocument's PDF preparation, in one place (docs/project/MAD_LINUX.md §9 Phase E).
 + (void)prepareDocumentForRender:(id <MADDocumentRenderProtocol>)document;
 
 /// A builder over a document, prepared as above.

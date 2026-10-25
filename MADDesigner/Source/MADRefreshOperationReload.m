@@ -41,14 +41,14 @@
 // label showed nothing until the page position landed.  Only the newest page
 // matters, so posts coalesce (last one wins) and deliveries are floored at the
 // rate the label already re-renders at, the same 10 Hz timer behind
-// -updateTimeSinceLastRefresh: (see BUGS.md, "Give the status label one
+// -updateTimeSinceLastRefresh: (see docs/project/BUGS.md, "Give the status label one
 // consistent story per line").  The records path coalesces the same way in
 // MADOperationRefreshReload -updateNumberOfRecords:.
 static const NSTimeInterval MADFormattingProgressMinimumInterval = 0.1;
 
 // The portable store context is main-queue-owned.  Marshal store reads onto
 // the main queue (inline when already there) rather than taking a lock in
-// every accessor.  See BUGS.md "The refresh path reads the shared store
+// every accessor.  See docs/project/BUGS.md "The refresh path reads the shared store
 // context from operation-queue threads".
 static void MADRefreshOperationReloadRunOnMain(dispatch_block_t block) {
 	if ([NSThread isMainThread]) block();

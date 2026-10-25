@@ -25,7 +25,7 @@
 
 // Unlike the insert/update/delete factories, these take a nil connection and
 // hand back an object that fails at -execute instead. Deliberately left as
-// the other three had it (see BUGS.md, MADMySQL).
+// the other three had it (see docs/project/BUGS.md, MADMySQL).
 
 + (MADMySQLTruncate *)truncateWithConnection:(MADMySQLConnection *)aConnection {
 	MADMySQLTruncate *truncate = [[self alloc] init];

@@ -4,7 +4,7 @@
 
 The `MAD` framework is the central component of the _MAD Designer_ application. It contains the portable document store, document handling logic, and the core functionality for creating and managing reports. This framework brings together all the other components of the application to deliver the main features of _MAD Designer_. It has dependencies on `MADFoundation`, `MADCocoaExtensions`, and `MADAPI`.
 
-The framework does not link Core Data: a document's definition lives in the portable SQLite store (`MADStore`, `MADStoreSchema`, `RptqStoreContext`), and the Core Data model survives only for converting old documents, in the application target (`MADDesigner/Source/MADStoreLegacy/`). See `MAD_STORE_MIGRATION.md` and `MAD_LINUX.md`.
+The framework does not link Core Data: a document's definition lives in the portable SQLite store (`MADStore`, `MADStoreSchema`, `RptqStoreContext`), and the Core Data model survives only for converting old documents, in the application target (`MADDesigner/Source/MADStoreLegacy/`). See `docs/project/MAD_STORE_MIGRATION.md` and `docs/project/MAD_LINUX.md`.
 
 ## Key Features
 
@@ -47,6 +47,6 @@ When performing asynchronous tasks related to documents or data, look for an exi
 
 *   **Tests**: `MAD/MADTests`. Run with
     `xcodebuild test -workspace Reports.xcworkspace -scheme MAD -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
-*   **Known issues**: [`BUGS.md`](../BUGS.md) -- see the `## MAD (framework)` section.
-*   **Task queue**: [`TASKS.md`](../TASKS.md) -- maintain it, but do not start work from it.
-*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../MADDataTable_Architecture_Report.md).
+*   **Known issues**: [`BUGS.md`](../docs/project/BUGS.md) -- see the `## MAD (framework)` section.
+*   **Task queue**: [`TASKS.md`](../docs/project/TASKS.md) -- maintain it, but do not start work from it.
+*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../docs/project/MADDataTable_Architecture_Report.md).

@@ -15,7 +15,7 @@
 
 static NSString * const MADCLIMetaPlistName		= @"meta.plist";
 static NSString * const MADCLIStoreDirectory	= @"StoreContent";
-static NSString * const MADCLIStoreName			= @"analyitics";	// misspelled on disk; see MAD_FORMAT.md section 2
+static NSString * const MADCLIStoreName			= @"analyitics";	// misspelled on disk; see docs/project/MAD_FORMAT.md section 2
 static NSString * const MADCLIPortableStoreName	= @"store.sqlite";	// MAD_DocumentStore's name for it
 static NSString * const MADCLIAdditionalContent	= @"AdditionalContent";
 

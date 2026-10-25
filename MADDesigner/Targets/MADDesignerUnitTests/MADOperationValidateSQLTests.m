@@ -5,7 +5,7 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Non-UI tests for the SQL validation probe's construction half
-//  (MAD_SQL_ENTRY.md §7, §10.5): the zero-row wrapper, the derived-table alias,
+//  (docs/project/MAD_SQL_ENTRY.md §7, §10.5): the zero-row wrapper, the derived-table alias,
 //  the `WHERE 1=0` fold, per driver.  No server, no connection -- the class
 //  lives in the app target and is reached through the host app, so its
 //  interface is declared locally rather than imported.

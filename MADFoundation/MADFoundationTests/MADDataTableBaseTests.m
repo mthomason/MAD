@@ -16,7 +16,7 @@
 //
 //  The nil-URL paths are pinned as characterization: both methods @throw an NSError
 //  object (not an NSException), so a @catch (NSException *) will not see them.
-//  See BUGS.md.
+//  See docs/project/BUGS.md.
 //
 
 #import <XCTest/XCTest.h>
@@ -151,7 +151,7 @@
 	table.columns[@"title"] = column;
 
 	// MADDataTable is NSCoding-only, so the insecure path is the only one it can
-	// satisfy (the same shape as MADDatabase; see BUGS.md).
+	// satisfy (the same shape as MADDatabase; see docs/project/BUGS.md).
 	NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initRequiringSecureCoding:NO];
 	[archiver encodeObject:table forKey:NSKeyedArchiveRootObjectKey];
 	NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:archiver.encodedData error:NULL];
@@ -190,7 +190,7 @@
 	XCTAssertTrue([restored.columns[@"title"] isKindOfClass:[MADDataColumn class]]);
 }
 
-// Characterization of a defect documented in BUGS.md: these two throw the NSError
+// Characterization of a defect documented in docs/project/BUGS.md: these two throw the NSError
 // object itself, so `@catch (NSException *)` will not catch them.
 - (void)testCacheWithNilUrlThrowsTheErrorObject {
 	MADDataTable *table = [[MADDataTable alloc] initWithId:0];

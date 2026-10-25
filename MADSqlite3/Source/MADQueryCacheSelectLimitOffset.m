@@ -86,7 +86,7 @@
 					// query was not handed sorts plainly rather than guessing one.
 					// The column type -- never nativeType, which is the driver's
 					// own code -- is what the report formatter's group-key
-					// comparison agrees with (BUGS.md, "The cache's ORDER BY
+					// comparison agrees with (docs/project/BUGS.md, "The cache's ORDER BY
 					// ignores column types").
 					MADDataColumn *dataColumn = nil;
 					if (columns) {

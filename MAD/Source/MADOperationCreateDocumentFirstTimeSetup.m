@@ -30,7 +30,7 @@
 
 // The portable store context is main-queue-owned.  Marshal store reads onto
 // the main queue (inline when already there) rather than taking a lock in
-// every accessor.  See BUGS.md "The refresh path reads the shared store
+// every accessor.  See docs/project/BUGS.md "The refresh path reads the shared store
 // context from operation-queue threads".
 static void MADOperationCreateDocumentFirstTimeSetupRunOnMain(dispatch_block_t block) {
 	if ([NSThread isMainThread]) block();

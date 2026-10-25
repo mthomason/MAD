@@ -18,7 +18,7 @@
 
 // The document this formatter lays out is whatever conforms to the render protocol --
 // MADocument on Apple, MADHeadlessDocument anywhere -- so the render half is one
-// implementation on both platforms (MAD_LINUX.md §9 Phase E).
+// implementation on both platforms (docs/project/MAD_LINUX.md §9 Phase E).
 #import <MAD/MADDocumentRenderProtocol.h>
 
 typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
@@ -86,7 +86,7 @@ typedef NS_OPTIONS(NSUInteger, MADReportFormatterOptions) {
 //  outside the level's canonical class are a contract violation: pairs of the
 //  reader's three classes (a pre-contract cache) are logged once and compared
 //  by a safe class-checked fallback; a class the reader can never produce
-//  asserts in debug and answers Same in release.  See BUGS.md,
+//  asserts in debug and answers Same in release.  See docs/project/BUGS.md,
 //  "MADReportFormatter compares untyped values through id".
 + (NSComparisonResult)compareValue:(id)value withValue:(id)value2 forDataType:(MADDataType)dataType;
 

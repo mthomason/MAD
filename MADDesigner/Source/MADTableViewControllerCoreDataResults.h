@@ -13,7 +13,7 @@
 
 // Was an NSFetchedResultsController-backed table controller.  The store has no live
 // query, so it now holds a plain array that subclasses fill and reloads on change
-// (MAD_STORE_PHASE_C.md §6).
+// (docs/project/MAD_STORE_PHASE_C.md §6).
 @interface MADTableViewControllerCoreDataResults : UITableViewController
 
 @property (nonatomic, strong) NSArray *results;

@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADSqlite3 subset the Linux build compiles (MAD_LINUX.md §9): the 26
+# The MADSqlite3 subset the Linux build compiles (docs/project/MAD_LINUX.md §9): the 26
 # implementation files of the Xcode target's Sources phase -- the framework
 # the CLI's .maddb row cache and .madac render cache are built on.
 #
@@ -14,7 +14,7 @@
 # It links the sqlite3 the image builds from the pin in Linux/libraries.conf;
 # the framework imports it as <MADSqlite3/sqlite3.h> (the Xcode target keeps
 # the header Public), which the include shim beside this file satisfies.
-# Keep this list in step with MAD_LINUX.md §4.
+# Keep this list in step with docs/project/MAD_LINUX.md §4.
 
 set(MADSQLITE3_SOURCES
 	"${SOURCE_DIR}/MADArrayCaching.m"

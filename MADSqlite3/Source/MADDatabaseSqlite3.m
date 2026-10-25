@@ -245,7 +245,7 @@ void sqliteLog(void *foo, const char* statement) {
 		BOOL databaseOpen = sqlite3_open == SQLITE_OK;
 		// The path belongs in the message: SQLITE_CANTOPEN is what a stale or missing
 		// directory reports, and without the path the failure says only "unable to open
-		// database file" -- which names neither the file nor the reason.  See BUGS.md.
+		// database file" -- which names neither the file nor the reason.  See docs/project/BUGS.md.
 		NSAssert(databaseOpen, @"openDatabaseWithFlags failed (%s) for %s.",
 				 (char *)sqlite3_errmsg(_database), path != NULL ? path : "(no path)");
 
@@ -359,7 +359,7 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 }
 
 //  Binding is where a column's declared MADDataType becomes a storage class.
-//  The contract (BUGS.md, the MADReportFormatter untyped-compare entry) is one
+//  The contract (docs/project/BUGS.md, the MADReportFormatter untyped-compare entry) is one
 //  canonical class per declared type -- number -> NSNumber, string -> NSString
 //  stored as TEXT, blob -> NSData stored as BLOB, date -> NSNumber epoch stored
 //  REAL, decimal -> NSNumber double stored REAL, null -> NSNull --
@@ -1259,7 +1259,7 @@ void mad_sqlite3Err(int rc, const char **errName, const char **errMsg) {
 //  INTEGER/FLOAT -> NSNumber, TEXT -> NSString, BLOB -> NSData, NULL -> NSNull.
 //  SQLite types values, not columns, so this reader can only report what the
 //  insert path stored; it cannot guarantee the column's declared class.  The
-//  contract (BUGS.md) is that the bind path stores one canonical class per
+//  contract (docs/project/BUGS.md) is that the bind path stores one canonical class per
 //  declared MADDataType; MADReportFormatter
 //  +compareValue:withValue:forDataType: is the consumer that relies on it.
 + (__kindof NSObject <NSCopying, NSSecureCoding> *)databaseResultValue:(void *)statement columnNumber:(int)columnNumber {

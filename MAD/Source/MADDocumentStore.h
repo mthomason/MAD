@@ -10,7 +10,7 @@
 //  through the registry -- and the directory the row cache goes in.
 //
 //  MADocument and MADHeadlessDocument each hold one, so the two cannot disagree
-//  about the document's own layout.  That layout is the format (MAD_FORMAT.md §2),
+//  about the document's own layout.  That layout is the format (docs/project/MAD_FORMAT.md §2),
 //  which is why it is stated once rather than twice.
 //
 

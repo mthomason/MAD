@@ -11,7 +11,7 @@
 //  Pinned here: the five attributes the dictionary always carries, the font-traits
 //  mapping for bold/italic, the underline/strikethrough mapping, the alignment
 //  mapping (including the unknown value), and the nullable-font-name crash the
-//  header's nullability promises cannot happen.  See BUGS.md.
+//  header's nullability promises cannot happen.  See docs/project/BUGS.md.
 //
 
 #import <XCTest/XCTest.h>
@@ -123,7 +123,7 @@
 
 - (void)testNilFontNameThrows {
 	// The initializer declares fontname nullable, but a nil family crashes when the
-	// font descriptor dictionary is built.  Documented in BUGS.md.
+	// font descriptor dictionary is built.  Documented in docs/project/BUGS.md.
 	XCTAssertThrows(([[MADElementStylizedText alloc] initWithFontName:nil
 															fontSize:12.0
 														   textStyle:nil

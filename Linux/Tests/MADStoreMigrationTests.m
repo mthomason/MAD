@@ -5,7 +5,7 @@
 //  Linux/Tests
 //
 //  Ported from MADTests/MADStoreMigrationTests.m: coverage for the store's
-//  versioning (MAD_SQL_ENTRY.md §8.2) -- a version-1 store on disk gains the
+//  versioning (docs/project/MAD_SQL_ENTRY.md §8.2) -- a version-1 store on disk gains the
 //  `sqlSourceText` column on open, keeps every pre-existing row and
 //  relationship, and records the current version in PRAGMA user_version; a
 //  fresh store is born at the current version; opening twice changes nothing.

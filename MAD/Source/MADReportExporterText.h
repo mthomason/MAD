@@ -6,7 +6,7 @@
 //
 //  `--format text`: the document's rows as a fixed-width table, for a reader.  Pure
 //  Foundation and no renderer, so it is the format that proves the export seam is
-//  real on both platforms (ROADMAP.md section 5.2: text first, because if the seam
+//  real on both platforms (docs/project/ROADMAP.md section 5.2: text first, because if the seam
 //  is wrong, text is where that shows).
 //
 //  The content is the same as json's and csv's -- the columns the query selects, the

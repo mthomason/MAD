@@ -22,7 +22,7 @@
 //
 //  The nil-URL paths are pinned as characterization: both methods @throw an
 //  NSError object (not an NSException), so a @catch (NSException *) will not
-//  see them.  See BUGS.md.
+//  see them.  See docs/project/BUGS.md.
 //
 
 #import "MADTestSupport.h"
@@ -153,7 +153,7 @@ static void testBaseNSCodingRoundTrip(void) {
 	table.columns[@"title"] = column;
 
 	// MADDataTable is NSCoding-only, so the insecure path is the only one it can
-	// satisfy (the same shape as MADDatabase; see BUGS.md).  GNUstep has neither
+	// satisfy (the same shape as MADDatabase; see docs/project/BUGS.md).  GNUstep has neither
 	// -initRequiringSecureCoding: nor -initForReadingFromData:error:, so the
 	// portable class pair is the same round trip with secure coding off.
 	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:table];
@@ -194,7 +194,7 @@ static void testCacheAndLoadRoundTripThroughAFile(void) {
 	baseTearDown();
 }
 
-// Characterization of a defect documented in BUGS.md: these two throw the NSError
+// Characterization of a defect documented in docs/project/BUGS.md: these two throw the NSError
 // object itself, so `@catch (NSException *)` will not catch them.
 static void testCacheWithNilUrlThrowsTheErrorObject(void) {
 	MADDataTable *table = [[MADDataTable alloc] initWithId:0];

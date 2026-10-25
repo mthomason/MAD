@@ -22,7 +22,7 @@
 //  the FTS5 and STAT4 code behind #ifdef, and SQLITE_DEFAULT_PAGE_SIZE is a
 //  plain #ifndef, so changing this list does not require regenerating
 //  sqlite3.c -- but it does change the bytes of every cache written after
-//  it.  Treat this as a format decision.  See LIBRARIES.md section 4.
+//  it.  Treat this as a format decision.  See docs/project/LIBRARIES.md section 4.
 //
 
 // Bare macro names, no "-D": GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS

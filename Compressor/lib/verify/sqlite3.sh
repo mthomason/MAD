@@ -3,7 +3,7 @@
 # Per-library checks for sqlite3, run by build.sh --verify inside the
 # driver's verify_lib scope ($xcfw, $LIB and the matrix env are set).
 #
-# The compile-option strings are the §9 checks from LIBRARIES.md: they are
+# The compile-option strings are the §9 checks from docs/project/LIBRARIES.md: they are
 # what pins the .maddb cache format (page size, DQS, TEMP_STORE, …).  FTS5
 # presence is checked by its init symbol, not by counting symbols named
 # fts5: at -Os the optimizer inlines away most of fts5's static functions,

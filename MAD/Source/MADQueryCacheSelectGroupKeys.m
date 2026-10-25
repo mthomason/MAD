@@ -99,7 +99,7 @@
 // takes a double-quoted token for a *name*, not for text: the filter asked for a column
 // called London, which does not exist.  Sqlite3 forgave that only while SQLITE_DQS was on,
 // and Compressor/sqlite3.xcconfig turned it off.  The column and the value both go through
-// the dialect now.  See BUGS.md.
+// the dialect now.  See docs/project/BUGS.md.
 - (NSString *)whereClauseQuotedByDatabase:(MADDatabase *)database {
 	NSMutableString *sql = [[NSMutableString alloc] initWithString:@""];
 	NSUInteger counter = 0;

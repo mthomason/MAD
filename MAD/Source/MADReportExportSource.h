@@ -8,11 +8,11 @@
 //  the order the query defines, the rows, and one value's presentation.  An exporter
 //  that re-derived any of this would drift from the others, so this is the one place
 //  that answers -- and it is deliberately pure Foundation, so a format that needs no
-//  rendering works wherever a document opens (MAD_LINUX.md section 9 Phase E).
+//  rendering works wherever a document opens (docs/project/MAD_LINUX.md section 9 Phase E).
 //
 //  The columns are the document's *result* columns: the query's active fields, which
 //  are the row cache's columns in the same order (MADQuerySelectExpressionActiveFields
-//  defines it; BUGS.md, the SELECT-list entry).  The rows are keyed by column key,
+//  defines it; docs/project/BUGS.md, the SELECT-list entry).  The rows are keyed by column key,
 //  which is what MADDataTableFast hands back.
 //
 

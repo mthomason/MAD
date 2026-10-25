@@ -8,7 +8,7 @@
 //  and the horizontal alignment.  It is a value, read once per line inside the page
 //  walk's read transaction (MADReportPageBuilder) -- an exporter that read the element
 //  again afterwards would pay a store read per element, outside that transaction
-//  (BUGS.md, "Page draws run one SQLite transaction per cell").
+//  (docs/project/BUGS.md, "Page draws run one SQLite transaction per cell").
 //
 //  The six fields are exactly what MADElementStylizedText turns into drawing
 //  attributes on Apple: the same font name and size, the same bold/italic/underline/

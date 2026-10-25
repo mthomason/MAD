@@ -37,7 +37,7 @@
 
 - (void)reloadTables {
 	// The store has no live query, so the rows are fetched and held; the table reloads
-	// when the model posts its insert/delete notifications (MAD_STORE_PHASE_C.md §6).
+	// when the model posts its insert/delete notifications (docs/project/MAD_STORE_PHASE_C.md §6).
 	NSArray *tables = [self.managedObjectContext objectsForEntity:NSStringFromClass([RptqDatabaseSchemaTable class])];
 	if (self.excludeResults.count > 0) {
 		NSMutableSet *excluded = [NSMutableSet setWithArray:self.excludeResults];

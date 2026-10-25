@@ -8,8 +8,8 @@
 //  definition out of the portable store, compiles the query, holds the row table and
 //  lays the report out.  It is the same document MADocument is, for a process that
 //  has no window and no run loop to hand a UIDocument to -- the CLI's verbs on Linux,
-//  and any other client that wants the document without the app (MAD_LINUX.md §9
-//  Phases D and E; MAD_DATA_OBJECT.md §6's entry point).
+//  and any other client that wants the document without the app (docs/project/MAD_LINUX.md §9
+//  Phases D and E; docs/project/MAD_DATA_OBJECT.md §6's entry point).
 //
 //  It is not a second implementation of anything.  The refresh chain
 //  (MADOperationRefresh and its initializers) runs against
@@ -18,7 +18,7 @@
 //  and MADocument conform to.  What it does not have is what only a windowed document
 //  has: the designer's section layout managers, the thumbnail, the printing formatter.
 //  What it writes is a copy: the guts directory it read, archived again with the v1
-//  header (MAD_CLI.md's `mad write`), which is what makes a document writable on a
+//  header (docs/project/MAD_CLI.md's `mad write`), which is what makes a document writable on a
 //  platform that has no app.
 //
 
@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// being regenerated.  Fails when the document has not been opened.
 ///
 /// `reproducible` pins what the clock and the filesystem would otherwise stamp into
-/// the archive (MADArchiveManager.reproducible); it is the mode MAD_CLI.md's
+/// the archive (MADArchiveManager.reproducible); it is the mode docs/project/MAD_CLI.md's
 /// byte-comparison uses.  The file the source was read from is never touched.
 - (BOOL)writeToURL:(NSURL *)url
 	  reproducible:(BOOL)reproducible

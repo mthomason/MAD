@@ -104,7 +104,7 @@
 }
 
 // The render-side formats: json-report and the two HTML ones read the page walk,
-// which is compiled on both platforms now (MAD_LINUX.md §9 Phase E); pdf draws with
+// which is compiled on both platforms now (docs/project/MAD_LINUX.md §9 Phase E); pdf draws with
 // Core Graphics and is Apple's, so it registers everywhere and says so.
 - (void)testTheRenderSideFormatsAreRegistered {
 	XCTAssertEqual([MADReportExporterRegistry exporterClassForFormat: @"html"], [MADReportExporterHTML class]);
@@ -184,8 +184,8 @@
 //  The Mac-side half of the digest gate (the Linux half is
 //  Linux/Tests/MADReportExporterTests.m): the same London fixture, the same
 //  refresh chain and the same FNV-1a checksums the Linux suite pins, so the
-//  "same bytes on both platforms" claim (MAD_CLI.md's `mad export` section)
-//  is asserted on Apple too rather than assumed (BUGS.md, "The pinned
+//  "same bytes on both platforms" claim (docs/project/MAD_CLI.md's `mad export` section)
+//  is asserted on Apple too rather than assumed (docs/project/BUGS.md, "The pinned
 //  cross-platform export digests went stale on the Apple side").
 //  __FILE__ is the source's absolute path: MADTests -> MAD -> the repository
 //  root.
@@ -346,7 +346,7 @@ static NSString *MADReportExporterSHA256(NSData *data) {
 	//  (+compareValue:withValue:forDataType:), and the cache's ORDER BY sorts
 	//  the same keys with the LSASC collation; both must agree with
 	//  -[NSString mad_orderedCompare:] on every pair, or the sections the walk
-	//  finds will not be the sections the ORDER BY produced (MAD_CLI.md's
+	//  finds will not be the sections the ORDER BY produced (docs/project/MAD_CLI.md's
 	//  `mad export` section).
 	NSArray *keys = @[@"", @"a", @"A", @"B", @"b", @"Core", @"[1997] Black Light Syndrome",
 					  @"Ä", @"ä", @"Zebra", @"ac/dc", @"AC/DC", @"Straße", @"strabe"];

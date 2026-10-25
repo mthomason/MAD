@@ -9,7 +9,7 @@
 //  storage class it lands in.  Every pair is driven through MADDatabaseDataBinding
 //  and -bindStatement:withBindings: into a NONE-affinity column, so what
 //  sqlite3_column_type reports is exactly the class the bind stored -- no
-//  affinity conversion.  See BUGS.md, "MADReportFormatter compares untyped
+//  affinity conversion.  See docs/project/BUGS.md, "MADReportFormatter compares untyped
 //  values through id" (the canonical-class contract).
 //
 //  Two tranches.  "Characterization" pins the pairs whose stored form the
@@ -228,7 +228,7 @@ static void testDateInAStringColumnStoresNullWithoutRaising(void) {
 }
 
 static void testDateInADateTimeColumnStoresTheEpoch(void) {
-	// BUGS.md: NSDate is not NSString, so the old bind stored nothing and the
+	// docs/project/BUGS.md: NSDate is not NSString, so the old bind stored nothing and the
 	// cell came back NULL.  The date family's canonical class is the epoch
 	// number, which is what the display path reads.
 	sqlite3 *database = NULL;
@@ -247,7 +247,7 @@ static void testDateInADateTimeColumnStoresTheEpoch(void) {
 }
 
 static void testTextInABlobColumnStoresUtf8Data(void) {
-	// BUGS.md: the old bind stored the string as TEXT -- a different storage
+	// docs/project/BUGS.md: the old bind stored the string as TEXT -- a different storage
 	// class than the column's.  The canonical blob class is NSData.
 	sqlite3 *database = NULL;
 	sqlite3_open(":memory:", &database);
@@ -264,7 +264,7 @@ static void testTextInABlobColumnStoresUtf8Data(void) {
 }
 
 static void testNumberInAStringColumnStoresItsText(void) {
-	// BUGS.md: the old bind stored nothing and the cell came back NULL.  The
+	// docs/project/BUGS.md: the old bind stored nothing and the cell came back NULL.  The
 	// canonical string class is NSString, and a number has a string form.
 	sqlite3 *database = NULL;
 	sqlite3_open(":memory:", &database);

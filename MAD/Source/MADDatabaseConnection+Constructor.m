@@ -14,7 +14,7 @@
 
 // The driver is looked up, not imported: which drivers a process has is a matter
 // of what it links, and the registry is what a driver says there
-// (MADDatabaseDriverRegistry.h; ROADMAP.md §5.1).  A type with no registered
+// (MADDatabaseDriverRegistry.h; docs/project/ROADMAP.md §5.1).  A type with no registered
 // driver is asserted and answers nil, as the old switch's default did.
 static Class <MADDatabaseDriver> MADDriverForType(MADDatabaseType databaseType) {
 	Class <MADDatabaseDriver> driver = [MADDatabaseDriverRegistry driverClassForType: databaseType];

@@ -21,7 +21,7 @@
 @property (nonatomic, weak) MADocument *document;
 @property (nonatomic, weak) IBOutlet UITextView *textView;
 
-// The SQL entry modes (MAD_SQL_ENTRY.md §3), built in code over the
+// The SQL entry modes (docs/project/MAD_SQL_ENTRY.md §3), built in code over the
 // storyboard's read-only text view: a View/Edit switch in the navigation bar;
 // View's Generated / As entered tabs; Edit's monospaced editor with Revert,
 // Validate and Apply.

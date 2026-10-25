@@ -6,7 +6,7 @@
 //
 //  Ported from MADCocoaExtensionsTests/MADGeometryExtrasTests.m: the inline
 //  geometry helpers in CGGeometry+Extras.h.  CGRectAdjustForScale is pinned
-//  deliberately as it is -- see its comment in the header and BUGS.md.
+//  deliberately as it is -- see its comment in the header and docs/project/BUGS.md.
 //
 
 #import "MADTestSupport.h"
@@ -161,7 +161,7 @@ static void testPointsForMillimeters(void) {
 
 static void testAdjustForScale(void) {
 	// Deliberate: both branches shrink. The two MADDesignerScrollView callers
-	// each reach a different branch on purpose; see BUGS.md before changing.
+	// each reach a different branch on purpose; see docs/project/BUGS.md before changing.
 	CGRect r = CGRectMake(10, 20, 100, 200);
 	CGRect zoomIn = CGRectAdjustForScale(r, 2.0);
 	MAD_PASS(zoomIn.size.width == (CGFloat)50, "zooming in halves the width");

@@ -8,7 +8,7 @@
 //  MADMySQL.  Nothing in this file contacts a server -- the one that needs one,
 //  the connection-failure paths prove the failure is reported cleanly against
 //  a dead port.  The tests that require the local MySQL instance described in
-//  DEVELOPER.md (127.0.0.1, root, root, employees) are in MADMySQLLiveTests.m.
+//  docs/project/DEVELOPER.md (127.0.0.1, root, root, employees) are in MADMySQLLiveTests.m.
 //
 //  The Xcode file opens with <MADMySQL/MADMySQL.h>; the umbrella header lives
 //  at the framework's root and re-exports the mysqlclient plugin headers the
@@ -93,7 +93,7 @@ static void testDataTypeForNativeTypeMapsTemporalTypes(void) {
 }
 
 static void testDataTypeForNativeTypeMapsNullToNumber(void) {
-	// MYSQL_TYPE_NULL stays MADDataTypeNumber, deliberately. See BUGS.md, MADMySQL:
+	// MYSQL_TYPE_NULL stays MADDataTypeNumber, deliberately. See docs/project/BUGS.md, MADMySQL:
 	// MADDataTypeNull is the binding-null used for null parameters, not a column type,
 	// and it has no schema display case.
 	MAD_PASS((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_NULL] == MADDataTypeNumber, "NULL is Number");
@@ -374,7 +374,7 @@ static void testConnectToServersReturnsNilWhenAllCandidatesFail(void) {
 // -[MADMySQLConnection init] is not how the app builds connections (the factories
 // answer nil when the server cannot be reached), but it produces the state
 // these tests need: an object whose handle is NULL.  Reading from it is safe;
-// the mutating session commands are not (see BUGS.md).
+// the mutating session commands are not (see docs/project/BUGS.md).
 
 static void testErrorAccessorsOnAConnectionWithoutAServer(void) {
 	MADMySQLConnection *connection = [[MADMySQLConnection alloc] init];

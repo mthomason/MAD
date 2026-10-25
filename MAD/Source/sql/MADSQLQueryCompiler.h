@@ -4,7 +4,7 @@
 //
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
-//  The pasted-SQL importer's write half (MAD_SQL_ENTRY.md §6.3, §6.4): an atomic
+//  The pasted-SQL importer's write half (docs/project/MAD_SQL_ENTRY.md §6.3, §6.4): an atomic
 //  apply of a resolver's plan over the document's query -- the conflict check
 //  against designer-element references first, then delete and create through the
 //  same factories the query UI calls, one save, and `sqlSourceText` written only
@@ -28,7 +28,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /// The document-level query mutations the compiler needs -- the same calls the
-/// query UI makes (MAD_SQL_ENTRY.md §2.4), plus the two symmetrical clear
+/// query UI makes (docs/project/MAD_SQL_ENTRY.md §2.4), plus the two symmetrical clear
 /// helpers the replace path completes the family with.
 @protocol MADSQLQueryDocument <NSObject>
 

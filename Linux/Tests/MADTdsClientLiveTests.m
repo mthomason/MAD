@@ -10,7 +10,7 @@
 //  -getTablesFromConnection:error:, -fieldsForTable:connection:error: and
 //  -runSQL:onDataTable:fieldKeys:process:.
 //
-//  The server is the local Docker instance documented in DEVELOPER.md:
+//  The server is the local Docker instance documented in docs/project/DEVELOPER.md:
 //
 //      SQL Server 2022 Developer Edition, 127.0.0.1, sa, Root1@Root2,
 //      AdventureWorksLT2022
@@ -202,7 +202,7 @@ static MADDataTable *query(NSString *sql) {
 #pragma mark - Connection
 
 static void testConnectToLocalServerSucceeds(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDatabaseSQLServer *db = [[MADDatabaseSQLServer alloc] init];
 	db.databaseConnection = testConnection();
 	NSDictionary<NSString *, NSString *> *settings = testSettings();
@@ -221,7 +221,7 @@ static void testConnectToLocalServerSucceeds(void) {
 // query can name an unqualified table from it. If DBSETLDBNAME were dropped the login
 // would land in master and this would fail.
 static void testConnectedSessionUsesTheRequestedDatabase(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(@"SELECT DB_NAME() AS db");
 	NSString *database = testSettings()[@"database"];
 
@@ -249,7 +249,7 @@ static void testConnectedSessionUsesTheRequestedDatabase(void) {
 // Contrast -getTablesFromConnection:error: and -fieldsForTable:connection:error:,
 // which leave the connection open -- their dbclose calls are commented out.
 static void testEachStatementNeedsItsOwnConnection(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MAD_PASS_EQUAL([query(@"SELECT 1 AS a") objectAtRow:0 column:0], @1,
 				   "the first statement on its own connection returns 1");
 	MAD_PASS_EQUAL([query(@"SELECT 2 AS a") objectAtRow:0 column:0], @2,
@@ -259,7 +259,7 @@ static void testEachStatementNeedsItsOwnConnection(void) {
 #pragma mark - Scalar round trips
 
 static void testSelectIntegerLiteral(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(@"SELECT 255 AS f1");
 
 	MAD_PASS([table numberOfRows] == 1u, "one row");
@@ -268,7 +268,7 @@ static void testSelectIntegerLiteral(void) {
 }
 
 static void testSelectStringLiteral(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(@"SELECT 'hello' AS greeting");
 
 	MAD_PASS_EQUAL([table objectAtRow:0 column:0], @"hello", "the string literal round trips");
@@ -277,7 +277,7 @@ static void testSelectStringLiteral(void) {
 // A literal NULL has no declared type at all, so it takes a different path from a
 // typed column that happens to hold NULL -- see -testSelectNullColumnValueYieldsNSNull.
 static void testSelectNullLiteralYieldsNSNull(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(@"SELECT NULL AS n");
 
 	MAD_PASS([table numberOfColumns] == 1u, "one column");
@@ -285,7 +285,7 @@ static void testSelectNullLiteralYieldsNSNull(void) {
 }
 
 static void testSelectMultipleColumns(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	// The float literal is cast explicitly: a bare "3.5" is DECIMAL(2,1) in T-SQL, not
 	// FLOAT, and would take the decimal path exercised further down.
 	MADDataTable *table = query(
@@ -298,7 +298,7 @@ static void testSelectMultipleColumns(void) {
 }
 
 static void testSelectMultipleRows(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT n FROM (VALUES (1),(2),(3),(4),(5)) AS v(n) ORDER BY n");
 
@@ -308,7 +308,7 @@ static void testSelectMultipleRows(void) {
 }
 
 static void testSelectNegativeNumbers(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT -1 AS i, CAST(-2.5 AS FLOAT) AS f, -300 AS s");
 
@@ -322,7 +322,7 @@ static void testSelectNegativeNumbers(void) {
 // because the column is bound as a NUL-terminated string. Pinned as the behaviour a
 // report actually sees.
 static void testSelectCharTrailingBlanksAreNotPreserved(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(@"SELECT CAST('ab' AS CHAR(5)) AS c");
 
 	MAD_PASS_EQUAL([table objectAtRow:0 column:0], @"ab", "the trailing blanks are not preserved");
@@ -341,7 +341,7 @@ static void testSelectCharTrailingBlanksAreNotPreserved(void) {
 // derived separator "-2." occurs inside the string being rewritten, so "-2.5" became
 // ".5" and was reported as 0.5 -- a plausible number that was silently wrong.
 static void testSelectDecimalReturnedValues(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT CAST(3.5 AS DECIMAL(2,1)) AS pos, CAST(1 AS DECIMAL(10,2)) AS whole, "
 		 "CAST(123.456 AS DECIMAL(10,3)) AS frac");
@@ -357,7 +357,7 @@ static void testSelectDecimalReturnedValues(void) {
 
 // The sign-bearing case the old separator search corrupted.
 static void testSelectNegativeDecimalKeepsItsSign(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(@"SELECT CAST(-2.5 AS DECIMAL(4,1)) AS neg");
 
 	MAD_PASS_EQUAL([table objectAtRow:0 column:0], [NSDecimalNumber decimalNumberWithString:@"-2.5"],
@@ -371,7 +371,7 @@ static void testSelectNegativeDecimalKeepsItsSign(void) {
 // SYBMONEY, which is why those two -- unmapped in the method itself, see the offline
 // suite -- still classify correctly when a real query is run.
 static void testSelectColumnMetadataForScalars(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT CAST(1 AS INT) AS i, CAST('x' AS VARCHAR(4)) AS v, "
 		 "CAST(1.25 AS FLOAT) AS f, CAST(123.45 AS DECIMAL(10,2)) AS d, "
@@ -391,7 +391,7 @@ static void testSelectColumnMetadataForScalars(void) {
 }
 
 static void testSelectSmallMoneyIsRewrittenToMoney(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(@"SELECT CAST(12.34 AS SMALLMONEY) AS sm");
 
 	NSString *key = [table columnKeys][0];
@@ -417,7 +417,7 @@ static NSDateComponents *MADUTCComponents(NSDate *date) {
 // code and does the layout work itself. Nothing is bound for these types; freetds keeps
 // each value in the row buffer in a layout only the type code explains.
 static void testSelectModernDateTimeTypes(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT CAST('2020-01-15' AS DATE) AS d, "
 		 "CAST('13:45:00' AS TIME) AS t, "
@@ -475,7 +475,7 @@ static void testSelectModernDateTimeTypes(void) {
 // The classic DATETIME and DATETIMN types go through dbdatecrack, not dbanydatecrack,
 // but both land in the same freetds record and so share its month convention.
 static void testSelectClassicDateTimeKeepsItsMonth(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT CAST('2020-01-15T13:45:00' AS DATETIME) AS dt, "
 		 "CAST('2020-12-15T13:45:00' AS DATETIME) AS dt2");
@@ -500,7 +500,7 @@ static void testSelectClassicDateTimeKeepsItsMonth(void) {
 // A NULL of any of these types must still read back as [NSNull null] rather than being
 // cracked out of a zero-length buffer.
 static void testSelectModernDateTimeTypesNull(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT CAST(NULL AS DATE) AS d, "
 		 "CAST(NULL AS TIME) AS t, "
@@ -517,7 +517,7 @@ static void testSelectModernDateTimeTypesNull(void) {
 // One query that exercises every type code the framework binds. Values are chosen so
 // each conversion is distinguishable from the others.
 static void testTypeConversionRoundTrip(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT CAST(1 AS BIT) AS b, CAST(300 AS SMALLINT) AS s, "
 		 "CAST(70000 AS INT) AS i, CAST(5000000000 AS BIGINT) AS bi, "
@@ -549,7 +549,7 @@ static void testTypeConversionRoundTrip(void) {
 /// and SQL Server sends FLOAT as FLT8 -- so this test guards the 8-byte path rather
 /// than discriminating those two cases.
 static void testSelectFloatKeepsDoublePrecision(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(@"SELECT CAST(0.1 AS FLOAT) AS f");
 
 	NSNumber *value = [table objectAtRow:0 column:0];
@@ -561,7 +561,7 @@ static void testSelectFloatKeepsDoublePrecision(void) {
 #pragma mark - Real table data
 
 static void testSelectKnownCustomerRow(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT TOP 5 CustomerID, FirstName, LastName "
 		 "FROM SalesLT.Customer ORDER BY CustomerID");
@@ -574,7 +574,7 @@ static void testSelectKnownCustomerRow(void) {
 }
 
 static void testSelectCountMatchesKnownRowCount(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT COUNT(*) AS total FROM SalesLT.Customer");
 
@@ -587,7 +587,7 @@ static void testSelectCountMatchesKnownRowCount(void) {
 // because the column still has a declared type and a bind buffer. CustomerID 2 is one
 // of the seeded rows whose MiddleName really is NULL; CustomerID 1 is "N.".
 static void testSelectNullColumnValueYieldsNSNull(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = query(
 		@"SELECT MiddleName FROM SalesLT.Customer WHERE CustomerID = 2");
 
@@ -601,7 +601,7 @@ static void testSelectNullColumnValueYieldsNSNull(void) {
 // inventing columns. SET NOCOUNT ON is used because it produces no result set and,
 // unlike DDL, leaves nothing behind on the server.
 static void testStatementWithNoResultSetReturnsEmptyTable(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	BOOL success = executeInto(@"SET NOCOUNT ON", table);
 
@@ -613,7 +613,7 @@ static void testStatementWithNoResultSetReturnsEmptyTable(void) {
 // DML is proven against a real table rather than a #temp table, because a #temp table
 // is scoped to a single connection and each statement here needs its own.
 static void testInsertUpdateDeleteRoundTrip(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	NSString *table = @"dbo.mad_tds_dml_probe";
 
 	// Self-healing: clears anything an earlier aborted run left behind.
@@ -652,7 +652,7 @@ static void testInsertUpdateDeleteRoundTrip(void) {
 // A failing statement returns NO and yields no columns. -runSQL: has no error
 // out-parameter at all, so the return value is the only thing a caller can see.
 static void testFailingStatementReturnsNo(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	BOOL success = executeInto(@"SELECT * FROM mad_no_such_table_xyz", table);
 
@@ -664,7 +664,7 @@ static void testFailingStatementReturnsNo(void) {
 #pragma mark - Schema discovery
 
 static void testGetTablesFindsShippedTables(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDatabaseSQLServer *db = nil;
 	id process = openProcess(&db);
 
@@ -699,7 +699,7 @@ static void testGetTablesFindsShippedTables(void) {
 // The connection also has to come from a delegate, because -getTables: passes a nil
 // credential and the base class then asks its delegate for them.
 static void testGetTablesIsAsyncAndReportsSuccess(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDatabaseSQLServer *db = [[MADDatabaseSQLServer alloc] init];
 	db.databaseConnection = testConnection();
 
@@ -735,7 +735,7 @@ static void testGetTablesIsAsyncAndReportsSuccess(void) {
 // in both, for instance) but diverge for others, so the mapping is right by
 // coincidence where it is right at all.
 static void testFieldsForTableMapsCommonTypes(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDatabaseSQLServer *db = nil;
 	id process = openProcess(&db);
 
@@ -771,7 +771,7 @@ static void testFieldsForTableMapsCommonTypes(void) {
 // the default branch and were reported as strings. -fieldsForTable: now maps
 // system_type_id through its own table (+dataTypeForSystemTypeId:) instead.
 static void testFieldsForTableMapsDecimalAndBinary(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADDatabaseSQLServer *db = nil;
 	id process = openProcess(&db);
 

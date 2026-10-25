@@ -8,7 +8,7 @@
 //  .mad, reads its definition out of the store, compiles the query, and the
 //  application's own refresh chain (MADOperationRefresh and its two initializers)
 //  runs against it and fills the row cache.  This is Phase D's checkpoint in test
-//  form (MAD_LINUX.md §9).
+//  form (docs/project/MAD_LINUX.md §9).
 //
 //  The document is the checked-in portable copy of the London sample
 //  (CLI/Fixtures/London.portable.mad, made on the Mac -- a legacy document needs
@@ -140,7 +140,7 @@ static void testTheDataSourceResolvesWithoutCredentials(void) {
 #pragma mark - Rendered values
 
 // The report's money is formatted from the document's own locale and precision, not
-// the machine's (BUGS.md).  Both facts are asserted here because this is where the
+// the machine's (docs/project/BUGS.md).  Both facts are asserted here because this is where the
 // divergence was measured: the image's current locale is en_US_POSIX, which used to
 // render "$ 1" where the Mac rendered "$0.99".
 static void testMoneyIsFormattedFromTheDocumentNotTheMachine(void) {

@@ -5,7 +5,7 @@
 //  Linux/Tests
 //
 //  Ported from MAD/MADTests/MADDatabaseDriverDispatchTests.m: the constructor
-//  categories over the driver registry (ROADMAP.md §5.1).  This executable links
+//  categories over the driver registry (docs/project/ROADMAP.md §5.1).  This executable links
 //  libmad, so it is where the drivers' self-registration is pinned -- and, on
 //  Linux, where the linkage that makes it happen is pinned: nothing in the
 //  framework sources names a driver class, so the drivers are here because
@@ -67,7 +67,7 @@ static void testTheLinkedDriversRegisterThemselves(void) {
 // static linker has no reason to pull in unless the archive is whole-archived
 // (Linux/CMakeLists.txt).  The CLI aborted on live MySQL the day that was not true --
 // .objc_category_MADMySQLFetchDataTable was simply absent -- so the categories the data
-// path needs are asserted here, where the arrangement is under test.  See BUGS.md.
+// path needs are asserted here, where the arrangement is under test.  See docs/project/BUGS.md.
 static void testTheDriversCategoriesAreLinked(void) {
 	Class fetch = NSClassFromString(@"MADMySQLFetch");
 	MAD_NEED(fetch != Nil, @"MADMySQLFetch is not linked in");

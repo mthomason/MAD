@@ -161,7 +161,7 @@
 // RptqQueryTable conforms to MTProtocolCompare, but its -isEqualTo: is degenerate: the
 // first clause is the tautology [sender isEqual:sender], so any non-nil argument
 // compares equal, and the fallback branch compares two nil NSNumbers.  Documented in
-// BUGS.md; no production caller reaches it today.
+// docs/project/BUGS.md; no production caller reaches it today.
 - (void)testQueryTableIsEqualToIsDegenerate {
 	RptqStoreContext *context = [self inMemoryContext];
 	RptqQueryTable *first = [context insertObjectForEntity:@"RptqQueryTable" identifier:1];

@@ -16,7 +16,7 @@ ls -la ~/Library/Developer/CoreSimulator/Devices/<UDID>/data/Library/Caches/<dat
 ```
 
 Any change to the format must extend the round-trip fixtures described in
-`../MAD_CLI.md` §6, so that the definition in this file is pinned by a test rather than
+`docs/project/MAD_CLI.md` §6, so that the definition in this file is pinned by a test rather than
 by this prose.  The container's fixture exists as of 2026-10-16
 (`../Linux/Tests/MADArchiveManagerTests.m`: unpack, repack, unpack again, member list and
 bytes unchanged), and §7.2's checkpoint bit is pinned by the writer that sets it (`mad

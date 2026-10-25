@@ -135,7 +135,7 @@ static void testInitWithAnUnknownTypeReturnsNil(void) {
 	MADReportSection *section = [[MADReportSection alloc] initWithReportSection:row];
 
 	// The initialiser's switch has no case for Unknown; the strong local is
-	// zero-initialised, so the answer is nil rather than a wrapper.  See BUGS.md for
+	// zero-initialised, so the answer is nil rather than a wrapper.  See docs/project/BUGS.md for
 	// the recursion -identifier hits on a wrapper whose row is unwired.
 	MAD_PASS(section == nil, "an unknown section type returns nil");
 }

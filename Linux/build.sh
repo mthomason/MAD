@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
-#  build.sh -- the Linux entry point (MAD_LINUX.md §9).
+#  build.sh -- the Linux entry point (docs/project/MAD_LINUX.md §9).
 #
 #  Builds the toolchain image, compiles the ten headless frameworks and the `mad`
 #  CLI inside it, and runs the Linux tests.  The runtime image is the CLI

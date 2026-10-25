@@ -4,7 +4,7 @@
 //
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
-//  The pasted-SQL front end (MAD_SQL_ENTRY.md §4, §5): a dialect-aware
+//  The pasted-SQL front end (docs/project/MAD_SQL_ENTRY.md §4, §5): a dialect-aware
 //  recursive-descent parser that accepts exactly the language the model can
 //  hold -- one SELECT, the four join spellings with single equi-ON conditions,
 //  a flat AND where-clause, GROUP BY and an ORDER BY inside it -- and rejects

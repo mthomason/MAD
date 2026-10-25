@@ -26,7 +26,7 @@
 #import <Foundation/NSNull.h>
 #import <Foundation/NSValue.h>
 
-// The schema's identifier: a reader dispatches on it the way MAD_FORMAT.md's magic
+// The schema's identifier: a reader dispatches on it the way docs/project/MAD_FORMAT.md's magic
 // dispatches on a container.  It changes when the members' meaning changes, not when
 // one is added.
 static NSString * const MADReportExporterJSONFormat = @"mad.report/1";

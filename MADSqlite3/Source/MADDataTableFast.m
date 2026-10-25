@@ -249,7 +249,7 @@ static os_log_t mlog;
 - (void)encodeWithCoder:(NSCoder *)encoder {
 	[super encodeWithCoder:encoder];
 	
-	// The file name alone, never the absolute URL: see -copyPlist and BUGS.md.
+	// The file name alone, never the absolute URL: see -copyPlist and docs/project/BUGS.md.
 	[encoder encodeObject: self.urlFastCache.lastPathComponent forKey: [MADDataTableFast keyUrlFastCache]];
 	
 	NSNumber *objid = [[NSNumber alloc] initWithUnsignedInteger: self.tag];
@@ -273,7 +273,7 @@ static os_log_t mlog;
 	// container, whose UUID changes on reinstall, so a path written today points
 	// into a directory that may be gone by the time it is read -- which took the
 	// app down on the first document tap.  The container in use is what
-	// -cacheUrlForStoredValue: resolves the name against.  See BUGS.md.
+	// -cacheUrlForStoredValue: resolves the name against.  See docs/project/BUGS.md.
 	NSString *filename = urlFastCache.lastPathComponent;
 	NSAssert(filename != nil, @"We need a path.");
 	plist[[MADDataTableFast keyUrlFastCache]] = [[NSString alloc] initWithString: filename];
@@ -341,7 +341,7 @@ static os_log_t mlog;
 	// SQLITE_OPEN_CREATE cannot create a file inside a directory that is gone, and
 	// -openDatabaseWithFlags: asserts when the open fails.  A URL that cannot be
 	// used, and a name that cannot be resolved, are both left nil, which asks
-	// -urlFastCache to build one.  See BUGS.md.
+	// -urlFastCache to build one.  See docs/project/BUGS.md.
 	NSString *storedCache = plist[[MADDataTableFast keyUrlFastCache]];
 	if (storedCache.length > 0) {
 		self.urlFastCache = [self cacheUrlForStoredValue: storedCache];
@@ -1387,7 +1387,7 @@ static os_log_t mlog;
 	// The query is handed the cache's columns so the ORDER BY picks each key's
 	// collation from its own MADDataType: text keys sort under LSASC, which is
 	// the same comparison the report formatter finds group boundaries with
-	// (BUGS.md, "The cache's ORDER BY ignores column types").
+	// (docs/project/BUGS.md, "The cache's ORDER BY ignores column types").
 	MADQuery *query = [[MADQueryCacheSelectLimitOffset alloc] initWithColumnKeys:columnKeys
 																	   tableName:[self tableName]
 																 sortDescriptors:self.sortDescriptors

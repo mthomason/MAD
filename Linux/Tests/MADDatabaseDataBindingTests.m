@@ -105,7 +105,7 @@ static void testDataTypeLimitedBlob(void) {
 
 #pragma mark - Canonical classes
 
-// The contract (BUGS.md, the MADReportFormatter untyped-compare entry): the
+// The contract (docs/project/BUGS.md, the MADReportFormatter untyped-compare entry): the
 // binding stores one canonical class per declared type, converting what the
 // type can represent and storing NULL for what it cannot -- never silently as
 // another class.

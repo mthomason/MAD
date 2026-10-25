@@ -19,7 +19,7 @@
 //  Each cell carries `data-kind` (the element type the walk recorded) and its text;
 //  the font and its traits ride on the row's style where the section's elements agree
 //  on them.  It is a reading view, not the data contract: `--format json` is the
-//  contract (MAD_DATA_OBJECT.md §6), and it has the columns, their types and the rows
+//  contract (docs/project/MAD_DATA_OBJECT.md §6), and it has the columns, their types and the rows
 //  as values rather than as laid-out text.
 //
 

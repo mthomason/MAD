@@ -155,7 +155,7 @@
 	self.querySampleDataField = querySampleDataField;
 
 	// The store context is main-queue-owned, so resolve the field's credentials
-	// here and hand the block only plain values.  See BUGS.md "The refresh path
+	// here and hand the block only plain values.  See docs/project/BUGS.md "The refresh path
 	// reads the shared store context from operation-queue threads".
 	RptqDatabaseCredentals *userCredentals = schemaField.inTable.inDatabase.ownedByUser;
 	MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnection:userCredentals];

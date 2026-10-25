@@ -1,7 +1,7 @@
 # CLI fixtures
 
 Documents the CLI's verbs are run against, beside the samples they come from
-(`MAD_CLI.md` §6).
+(`docs/project/MAD_CLI.md` §6).
 
 | Fixture | Source | What it pins |
 |---|---|---|
@@ -14,7 +14,7 @@ Documents the CLI's verbs are run against, beside the samples they come from
 
 Both shipping samples are **legacy** documents: their definition is a Core Data
 store (`StoreContent/analyitics`), and converting one needs Core Data, which the
-MAD framework does not link and Linux does not have (`MAD_LINUX.md` §5.1, §9).
+MAD framework does not link and Linux does not have (`docs/project/MAD_LINUX.md` §5.1, §9).
 `London.portable.mad` and `Music.portable.mad` are the same documents written in
 the portable store, so a platform without Core Data can read and refresh them —
 which is what the Linux CLI and `Linux/Tests/MADHeadlessDocumentTests.m` do.
@@ -70,7 +70,7 @@ can be refreshed from the Mac and from the Linux image. `host.docker.internal`
 would work only inside a container; `127.0.0.1` only on the Mac.
 
 Both live fixtures were created against the canonical test containers, which
-`DEVELOPER.md` documents and whose scripts create them from pinned images and
+`docs/project/DEVELOPER.md` documents and whose scripts create them from pinned images and
 checksum-verified datasets:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on 13306

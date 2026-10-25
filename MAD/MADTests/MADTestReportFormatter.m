@@ -145,7 +145,7 @@
 	// the query actually selects: MADSectionGroupLayout reads the group's
 	// sort/weight/dataType and, through the field, its table alias and drop index, and
 	// hands each to CFNumberGetValue / -copy without a nil check -- an unwired field
-	// dereferences NULL.  See BUGS.md.
+	// dereferences NULL.  See docs/project/BUGS.md.
 	MADDatabaseField *dbField = [[MADDatabaseField alloc] initWithName:@"group"];
 	dbField.fieldType = MADDataTypeString;
 	RptqDatabaseSchemaField *schemaField = [RptqDatabaseSchemaField newDatabaseSchemaFieldFactoryForManagedObjectContext:self.moc andField:dbField];
@@ -285,7 +285,7 @@
 // field at all -- the grouping still happens.  The add-group screen cannot create
 // a group without a field, so a document that has one is malformed data.  The
 // designer still builds and labels the layout (so the broken group can be seen);
-// query execution and formatting refuse it when the field is used.  See BUGS.md.
+// query execution and formatting refuse it when the field is used.  See docs/project/BUGS.md.
 
 - (void)saveTestContext {
 	NSError *error = nil;

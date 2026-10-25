@@ -24,7 +24,7 @@
 // The rendering side of a document, which only a MADocument has: the report
 // formatter that draws the report and the section layout managers that measure it.
 // MADReportFormatter, MADSectionLayoutManager and MADocument are all excluded from
-// the Linux build (MAD_LINUX.md §9 Phase D), so this is the one branch of the
+// the Linux build (docs/project/MAD_LINUX.md §9 Phase D), so this is the one branch of the
 // refresh chain that does not compile there -- and a headless document has nothing
 // to render, so the branch is skipped rather than stubbed.
 #import <MAD/MADocument.h>
@@ -48,7 +48,7 @@
 
 // The portable store context is main-queue-owned.  Marshal store reads onto
 // the main queue (inline when already there) rather than taking a lock in
-// every accessor.  See BUGS.md "The refresh path reads the shared store
+// every accessor.  See docs/project/BUGS.md "The refresh path reads the shared store
 // context from operation-queue threads".
 static void MADOperationRefreshInitializeRunOnMain(dispatch_block_t block) {
 	if ([NSThread isMainThread]) block();

@@ -4,7 +4,7 @@
 //
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
-//  The parse tree the pasted-SQL front half produces (MAD_SQL_ENTRY.md §4): the
+//  The parse tree the pasted-SQL front half produces (docs/project/MAD_SQL_ENTRY.md §4): the
 //  one SELECT the model can hold, as value objects.  Nothing here touches the
 //  store -- the resolver (Phase C) binds the names to Rptq rows; the compiler
 //  writes them.  Every value that can be the subject of a coded error carries

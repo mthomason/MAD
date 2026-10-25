@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADDataStructures subset the Linux build compiles (MAD_LINUX.md §9):
+# The MADDataStructures subset the Linux build compiles (docs/project/MAD_LINUX.md §9):
 # all 15 implementation files of the Xcode target, plus its two Objective-C++
 # files, which is every file the target builds.
 #

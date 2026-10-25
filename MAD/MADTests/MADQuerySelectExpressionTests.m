@@ -174,7 +174,7 @@
 // The SELECT list's order used to be NSSet enumeration order, and that order is not
 // stable: not insertion order, not platform order, and -- measured on Linux -- not
 // even the same between two documents built by the same fixture in one process.
-// BUGS.md recorded it; the order is now defined as the column alias, so the generated
+// docs/project/BUGS.md recorded it; the order is now defined as the column alias, so the generated
 // SQL, the row cache and every export agree (the order test below).  What is pinned
 // here is the part that must not vary: the *content* of the list, whichever order the
 // fields were created in and whichever order the set happens to enumerate.

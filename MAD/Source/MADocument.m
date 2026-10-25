@@ -179,7 +179,7 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 // activeDocumentModel.paperType, so reading the ivar answered {0, 0} to whoever asked first.
 // A zero layout size makes PrintableHeightForPage negative and the formatter starts a new
 // page on every row -- 3503 rows produced 11602 pages for the CLI, which is the only caller
-// that asks before something else has touched -paper.  See BUGS.md.
+// that asks before something else has touched -paper.  See docs/project/BUGS.md.
 - (CGSize)paperSize {
 	return self.paper.paperSize;
 }
@@ -651,7 +651,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 		// NSThumbnail1024x1024SizeKey / NSURLThumbnailDictionaryKey are deprecated in
 		// iOS 15; the replacement is a QuickLook thumbnail extension, which is a new
 		// target rather than a substitution, so the attribute-based thumbnail is kept
-		// for now.  See BUGS.md "The document thumbnail uses the deprecated QuickLook
+		// for now.  See docs/project/BUGS.md "The document thumbnail uses the deprecated QuickLook
 		// file-attribute keys".
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
@@ -879,7 +879,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 
 // Every read the renderer, the element references and the formatter's data source ask
 // for is MADDocumentRenderDataSource's, one implementation shared with the headless
-// document (MAD_LINUX.md §9 Phase E).  These forward, so the app's callers keep asking
+// document (docs/project/MAD_LINUX.md §9 Phase E).  These forward, so the app's callers keep asking
 // the document and the answers stay exactly what they were.
 
 - (MADDocumentRenderDataSource *)renderDataSource {

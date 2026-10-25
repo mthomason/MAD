@@ -9,7 +9,7 @@
 //  exercise MADMySQLConnection, MADMySQLFetch and MADMySQLFetch+DataTable, which are
 //  thin wrappers over libmysqlclient.
 //
-//  The server is the local development instance documented in DEVELOPER.md:
+//  The server is the local development instance documented in docs/project/DEVELOPER.md:
 //
 //      MySQL: 127.0.0.1, root, root, employees
 //
@@ -166,7 +166,7 @@ static NSObject *countOfTable(NSString *name, MADMySQLConnection *connection) {
 #pragma mark - Connection
 
 static void testConnectToLocalServerSucceeds(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	NSError *error = nil;
 	MADMySQLServer *server = testServer();
 	MADMySQLConnection *connection = [MADMySQLConnection connectToServer:server error:&error];
@@ -177,7 +177,7 @@ static void testConnectToLocalServerSucceeds(void) {
 }
 
 static void testConnectionDescriptionMentionsHostAndConnectedState(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSString *description = [connection description];
 	MAD_PASS([description containsString:testServer().host], "the description names the host");
@@ -185,7 +185,7 @@ static void testConnectionDescriptionMentionsHostAndConnectedState(void) {
 }
 
 static void testConnectWithWrongPasswordReportsAccessDenied(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLServer *server = testServer();
 	server.password = @"definitely-not-the-password";
 
@@ -200,7 +200,7 @@ static void testConnectWithWrongPasswordReportsAccessDenied(void) {
 }
 
 static void testConnectWithUnknownSchemaReportsUnknownDatabase(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLServer *server = testServer();
 	server.schema = @"mad_no_such_schema";
 
@@ -213,7 +213,7 @@ static void testConnectWithUnknownSchemaReportsUnknownDatabase(void) {
 }
 
 static void testConnectToServersReturnsFirstReachableCandidate(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLServer *dead = [[MADMySQLServer alloc] init];
 	dead.host = @"127.0.0.1";
 	dead.port = 1;
@@ -226,7 +226,7 @@ static void testConnectToServersReturnsFirstReachableCandidate(void) {
 #pragma mark - Escaping
 
 static void testEscapeStringQuotesSingleQuote(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	// mysql_real_escape_string turns ' into \' (backslash + quote).
 	MAD_PASS_EQUAL([connection mysqlEscapeString:@"O'Brien"], @"O\\'Brien",
@@ -234,7 +234,7 @@ static void testEscapeStringQuotesSingleQuote(void) {
 }
 
 static void testEscapeStringDoublesBackslash(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	// One backslash in, two backslashes out.
 	MAD_PASS_EQUAL([connection mysqlEscapeString:@"a\\b"], @"a\\\\b",
@@ -242,7 +242,7 @@ static void testEscapeStringDoublesBackslash(void) {
 }
 
 static void testEscapeStringReturnsNilForNilInput(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	MAD_PASS([connection mysqlEscapeString:nil] == nil, "a nil string escapes to nil");
 }
@@ -279,7 +279,7 @@ static MADDatabaseMySQL *openDatabase(MADMySQLConnection **outSocket) {
 }
 
 static void testNewSafeLiteralEscapesABackslashThroughTheLiveSession(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *socket = nil;
 	MADDatabaseMySQL *database = openDatabase(&socket);
 	if (database == nil) return;
@@ -297,7 +297,7 @@ static void testNewSafeLiteralEscapesABackslashThroughTheLiveSession(void) {
 }
 
 static void testNewSafeLiteralEscapesAnApostropheThroughTheLiveSession(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *socket = nil;
 	MADDatabaseMySQL *database = openDatabase(&socket);
 	if (database == nil) return;
@@ -314,7 +314,7 @@ static void testNewSafeLiteralEscapesAnApostropheThroughTheLiveSession(void) {
 }
 
 static void testNewSafeLiteralReportsNullWithoutASession(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *socket = nil;
 	MADDatabaseMySQL *database = openDatabase(&socket);
 	if (database == nil) return;
@@ -326,7 +326,7 @@ static void testNewSafeLiteralReportsNullWithoutASession(void) {
 #pragma mark - Fetch: scalars and shapes
 
 static void testFetchScalarSelect(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 	MADDataTable *table = fetch(@"SELECT 255 AS `f1`;", connection, &error);
@@ -338,7 +338,7 @@ static void testFetchScalarSelect(void) {
 }
 
 static void testFetchKnownEmployeeRow(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 	MADDataTable *table = fetch(@"SELECT emp_no, first_name, last_name, gender "
@@ -355,7 +355,7 @@ static void testFetchKnownEmployeeRow(void) {
 }
 
 static void testFetchRespectsLimitClause(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 	MADDataTable *table = fetch(@"SELECT emp_no FROM employees ORDER BY emp_no LIMIT 25;",
@@ -368,7 +368,7 @@ static void testFetchRespectsLimitClause(void) {
 }
 
 static void testFetchCountMatchesKnownTableSize(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 	MADDataTable *table = fetch(@"SELECT COUNT(*) AS `total` FROM employees;", connection, &error);
@@ -380,7 +380,7 @@ static void testFetchCountMatchesKnownTableSize(void) {
 }
 
 static void testFetchShowTablesFindsEmployees(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 	MADDataTable *table = fetch(@"SHOW TABLES;", connection, &error);
@@ -397,7 +397,7 @@ static void testFetchShowTablesFindsEmployees(void) {
 #pragma mark - Fetch: column metadata
 
 static void testFetchColumnMetadataForEmployees(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 	MADDataTable *table = fetch(@"SELECT emp_no, first_name, birth_date FROM employees "
@@ -425,7 +425,7 @@ static void testFetchColumnMetadataForEmployees(void) {
 }
 
 static void testFetchColumnKeysAreTableQualifiedWithExtendedNames(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *error = nil;
@@ -441,7 +441,7 @@ static void testFetchColumnKeysAreTableQualifiedWithExtendedNames(void) {
 }
 
 static void testFetchColumnKeysAreBareWithoutExtendedNames(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *error = nil;
@@ -457,7 +457,7 @@ static void testFetchColumnKeysAreBareWithoutExtendedNames(void) {
 }
 
 static void testFetchDateColumnYieldsDateComponents(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 	MADDataTable *table = fetch(@"SELECT birth_date FROM employees WHERE emp_no = 10001;",
@@ -477,7 +477,7 @@ static void testFetchDateColumnYieldsDateComponents(void) {
 #pragma mark - Fetch: error handling
 
 static void testFetchReportsErrorForInvalidSQL(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 	fetch(@"SELECT * FROM mad_no_such_table_xyz;", connection, &error);
@@ -502,7 +502,7 @@ static void testFetchReportsErrorWhenConnectionIsNil(void) {
 #pragma mark - Fetch: table reuse
 
 static void testFetchReusesAndClearsProvidedTable(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	MADMySQLFetch *fetch = [[MADMySQLFetch alloc] init];
@@ -529,7 +529,7 @@ static void testFetchReusesAndClearsProvidedTable(void) {
 // table is created and dropped rather than TEMPORARY so the rows are visible to the
 // SELECTs below across statement boundaries.
 static void testStatementWithNoResultSetExecutes(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 
@@ -567,7 +567,7 @@ static void testStatementWithNoResultSetExecutes(void) {
 // A no-result-set statement that the server rejects must report an error rather than
 // fail silently, and must leave the connection usable.
 static void testFailingStatementWithNoResultSetReportsError(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 
@@ -596,7 +596,7 @@ static void testFailingStatementWithNoResultSetReportsError(void) {
 // SELECT NULL literal: the server reports MYSQL_TYPE_NULL, which takes its own branch
 // in both -bindDataForStatement:andField: and -fetchResultsFromConnection:.
 static void testFetchLiteralNullYieldsNSNull(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 	MADDataTable *table = fetch(@"SELECT NULL AS `n`;", connection, &error);
@@ -612,7 +612,7 @@ static void testFetchLiteralNullYieldsNSNull(void) {
 // the probe table can reach. TEMPORARY, so it disappears with the connection and the
 // employees schema is untouched.
 static void testFetchTypeConversionRoundTrip(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 
@@ -681,7 +681,7 @@ static void testFetchTypeConversionRoundTrip(void) {
 }
 
 static void testFetchProbeTableColumnMetadata(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 
@@ -726,7 +726,7 @@ static void testFetchProbeTableColumnMetadata(void) {
 #pragma mark - MADMySQLInsert
 
 static void testInsertWritesARowAndReportsTheNewId(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_insert", connection);
 
@@ -744,7 +744,7 @@ static void testInsertWritesARowAndReportsTheNewId(void) {
 }
 
 static void testInsertBindsNullsAndBlobs(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_blob", connection);
 
@@ -765,7 +765,7 @@ static void testInsertBindsNullsAndBlobs(void) {
 }
 
 static void testInsertRejectsADuplicateKeyUnlessToldToIgnoreIt(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_dupe", connection);
 
@@ -781,7 +781,7 @@ static void testInsertRejectsADuplicateKeyUnlessToldToIgnoreIt(void) {
 	// With the flag set the same collision is swallowed and the row stands.
 	insert.ignoreDuplicateErrors = YES;
 	MAD_NO_THROW([insert execute], "the ignore flag swallows the collision");
-	// BUGS.md: the ignored statement still failed, and -affectedRows is read
+	// docs/project/BUGS.md: the ignored statement still failed, and -affectedRows is read
 	// straight off mysql_affected_rows, which answers (my_ulonglong)-1 for a
 	// failed statement -- so the count is ULONG_MAX rather than 0.
 	MAD_PASS(insert.affectedRows.unsignedLongLongValue == ULLONG_MAX,
@@ -796,7 +796,7 @@ static void testInsertRejectsADuplicateKeyUnlessToldToIgnoreIt(void) {
 #pragma mark - MADMySQLUpdate
 
 static void testUpdateChangesOnlyTheQualifiedRows(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_update", connection);
 
@@ -823,7 +823,7 @@ static void testUpdateChangesOnlyTheQualifiedRows(void) {
 }
 
 static void testUpdateQualifierHandlesStringsAndNulls(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_qual", connection);
 
@@ -851,11 +851,11 @@ static void testUpdateQualifierHandlesStringsAndNulls(void) {
 }
 
 static void testUpdateWithoutAQualifierRaisesTheUpdatesOwnError(void) {
-	// BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and -execute
+	// docs/project/BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and -execute
 	// deleted four characters off the front of it instead of telling the caller
 	// to qualify the update.  The guard runs before any session call, so the
 	// offline suite covers it too; this keeps the live connection in the loop.
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_noqual", connection);
 
@@ -880,7 +880,7 @@ static void testUpdateWithoutAQualifierRaisesTheUpdatesOwnError(void) {
 #pragma mark - MADMySQLDelete
 
 static void testDeleteRemovesTheQualifiedRows(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_delete", connection);
 
@@ -906,7 +906,7 @@ static void testDeleteRemovesTheQualifiedRows(void) {
 }
 
 static void testDeleteWithARubbishQualifierRaises(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_badqual", connection);
 
@@ -922,7 +922,7 @@ static void testDeleteWithARubbishQualifierRaises(void) {
 #pragma mark - MADMySQLTruncate
 
 static void testTruncateEmptiesATable(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_truncate", connection);
 
@@ -946,7 +946,7 @@ static void testTruncateEmptiesATable(void) {
 #pragma mark - MADMySQLIndex
 
 static void testIndexFactoryKeepsALiveConnection(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 
 	MAD_PASS([MADMySQLIndex indexWithConnection:connection].connection == connection,
@@ -956,7 +956,7 @@ static void testIndexFactoryKeepsALiveConnection(void) {
 #pragma mark - Transactions
 
 static void testRollbackDiscardsAndCommitKeeps(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	createScratchTable(@"mad_scratch_tx", connection);
 
@@ -988,7 +988,7 @@ static void testRollbackDiscardsAndCommitKeeps(void) {
 #pragma mark - Session settings and error reporting
 
 static void testEnableStrictSqlTurnsOnTheMode(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 
 	MAD_NO_THROW([connection enableStrictSql], "the strict mode is set without throwing");
@@ -998,7 +998,7 @@ static void testEnableStrictSqlTurnsOnTheMode(void) {
 }
 
 static void testTriggerTogglesSetAndClearTheSessionFlag(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 
 	MAD_NO_THROW([connection disableTriggers], "triggers are disabled without throwing");
@@ -1011,7 +1011,7 @@ static void testTriggerTogglesSetAndClearTheSessionFlag(void) {
 }
 
 static void testErrorNumberAndErrorTextReportTheLastFailure(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 	NSError *error = nil;
 
@@ -1026,7 +1026,7 @@ static void testErrorNumberAndErrorTextReportTheLastFailure(void) {
 }
 
 static void testErrorWithConnectionDescribesTheServerState(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 
 	NSError *error = [MADMySQLException errorWithConnection:connection domain:@"MADMySQLTests" andCode:7];
@@ -1041,7 +1041,7 @@ static void testErrorWithConnectionDescribesTheServerState(void) {
 #pragma mark - Escaping through the connection
 
 static void testEscapeInConnectionMatchesTheConnectionHelper(void) {
-	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+	MAD_SKIP(!serverIsAvailable(), @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 	MADMySQLConnection *connection = openConnection();
 
 	// The NSString category and the connection's own helper are two entry

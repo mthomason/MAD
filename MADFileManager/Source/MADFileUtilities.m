@@ -689,7 +689,7 @@ static NSString * const MADPathComponentData       = @"Data";
 // Removes the directory itself as well as its contents, which the name does not say.
 // Deliberate: the only caller, -removeCachedFileForDocumentUrl:groupIdentifier: above,
 // tears the document's whole local cache directory down and needs it gone, not left
-// empty. Documented rather than changed -- see BUGS.md.
+// empty. Documented rather than changed -- see docs/project/BUGS.md.
 + (BOOL)removeContentsOfDirectory:(NSURL *)directory {
 	NSError *error = nil;
 	NSArray <NSURL *> *files = [[NSFileManager defaultManager] contentsOfDirectoryAtURL: directory

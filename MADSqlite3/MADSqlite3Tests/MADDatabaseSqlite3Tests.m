@@ -247,7 +247,7 @@
 	XCTAssertEqual([self collationResultBetween:@"a" and:@"b"], NSOrderedAscending);
 	XCTAssertEqual([self collationResultBetween:@"b" and:@"a"], NSOrderedDescending);
 	XCTAssertEqual([self collationResultBetween:@"a" and:@"a"], NSOrderedSame);
-	// The defined order both platforms share now (MAD_CLI.md's `mad export`
+	// The defined order both platforms share now (docs/project/MAD_CLI.md's `mad export`
 	// section, MADStringOrderedCompareUTF8): case-fold, then UTF-8 code-point
 	// order.  These hold identically on Apple and GNUstep -- that is the point.
 	XCTAssertEqual([self collationResultBetween:@"A" and:@"b"], NSOrderedAscending);

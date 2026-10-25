@@ -6,7 +6,7 @@
 //
 //  The bridge from a legacy Core Data `.mad` to the portable store.  It lives in the
 //  application target, not the MAD framework: the framework is the headless engine's
-//  base and must not link Core Data (MAD_LINUX.md), so it reaches the converter
+//  base and must not link Core Data (docs/project/MAD_LINUX.md), so it reaches the converter
 //  through MADLegacyStoreConversion's registry instead.  MADStore, MADStoreSchema,
 //  MADStoreObject and MADStoreGraph neither know nor care where a graph came from.
 //

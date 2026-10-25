@@ -85,7 +85,7 @@
 			// A real time of day, and the fetch code builds only hour/minute/second
 			// into the NSDate, so the date part is whatever the calendar defaults to.
 			// MADDataTypeTime is what renders it as a clock and drops that bogus date.
-			// See BUGS.md, MADMySQL.
+			// See docs/project/BUGS.md, MADMySQL.
 			return MADDataTypeTime;
 			break;
 		case MYSQL_TYPE_TIMESTAMP:

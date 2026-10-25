@@ -9,7 +9,7 @@
 //  before a render (sort the rows, then format), and the page data source the walk
 //  reads every element through.  MADocument conforms, and so does
 //  MADHeadlessDocument, which is the same document with no UIDocument underneath:
-//  the render half's move off Apple (MAD_LINUX.md §9 Phase E) is a conformance, not
+//  the render half's move off Apple (docs/project/MAD_LINUX.md §9 Phase E) is a conformance, not
 //  a fork, so `mad export --format json-report` runs where the data half does.
 //
 //  The split is the same one Phase D made for the data half: a protocol the renderers

@@ -10,7 +10,7 @@
 //  -getTablesFromConnection:error:, -fieldsForTable:connection:error: and
 //  -runSQL:onDataTable:fieldKeys:process:.
 //
-//  The server is the local Docker instance documented in DEVELOPER.md:
+//  The server is the local Docker instance documented in docs/project/DEVELOPER.md:
 //
 //      SQL Server 2022 Developer Edition, 127.0.0.1, sa, Root1@Root2,
 //      AdventureWorksLT2022
@@ -143,7 +143,7 @@
 
 - (void)requireServer {
 	XCTSkipIf(![[self class] serverIsAvailable],
-			  @"No SQL Server reachable; see DEVELOPER.md for the expected test instance.");
+			  @"No SQL Server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 }
 
 - (id)openProcess {

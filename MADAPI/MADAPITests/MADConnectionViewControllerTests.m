@@ -35,7 +35,7 @@
 
 // Both classes implement the override point as an abstract method that throws a real
 // NSException named NSInternalInconsistencyException, matching MADDatabase's
-// "subclass me" methods.  BUGS.md used to record the name constant itself being
+// "subclass me" methods.  docs/project/BUGS.md used to record the name constant itself being
 // thrown; this test is what pins the corrected shape.
 
 - (void)testDatabaseConnectionThrowsOnBaseClass {

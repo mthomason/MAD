@@ -7,7 +7,7 @@
 //
 //  Offline unit tests for MADMySQL. Nothing in this file contacts a server;
 //  see MADMySQLLiveTests.m for the tests that require the local MySQL instance
-//  described in DEVELOPER.md (127.0.0.1, root, root, employees).
+//  described in docs/project/DEVELOPER.md (127.0.0.1, root, root, employees).
 //
 
 #import <XCTest/XCTest.h>
@@ -94,7 +94,7 @@
 }
 
 - (void)testDataTypeForNativeTypeMapsNullToNumber {
-	// MYSQL_TYPE_NULL stays MADDataTypeNumber, deliberately. See BUGS.md, MADMySQL:
+	// MYSQL_TYPE_NULL stays MADDataTypeNumber, deliberately. See docs/project/BUGS.md, MADMySQL:
 	// MADDataTypeNull is the binding-null used for null parameters, not a column type,
 	// and it has no schema display case.
 	XCTAssertEqual((MADDataType)[MADDataTypeMySQL dataTypeForNativeType:MYSQL_TYPE_NULL], MADDataTypeNumber);
@@ -383,7 +383,7 @@
 // -[MADMySQLConnection init] is not how the app builds connections (the factories
 // answer nil when the server cannot be reached), but it produces the state
 // these tests need: an object whose handle is NULL.  Reading from it is safe;
-// the mutating session commands are not (see BUGS.md).
+// the mutating session commands are not (see docs/project/BUGS.md).
 
 - (void)testErrorAccessorsOnAConnectionWithoutAServer {
 	MADMySQLConnection *connection = [[MADMySQLConnection alloc] init];

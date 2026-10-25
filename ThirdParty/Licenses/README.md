@@ -5,7 +5,7 @@ third-party in the repository" rule. No third-party *code* is committed; what
 is committed here are the licence texts and notices the app is obliged to
 redistribute alongside the binaries that link or embed these components. Do
 not remove this directory during a cleanup without first reading
-`THIRD_PARTY_LICENSES.md` — several of these licences (Apache-2.0, the BSD
+`docs/project/THIRD_PARTY_LICENSES.md` — several of these licences (Apache-2.0, the BSD
 family, the SIL OFL, the LGPL) require the text to travel with the distributed
 software, and the LGPL additionally requires the written offer below.
 
@@ -13,7 +13,7 @@ software, and the LGPL additionally requires the written offer below.
 
 | File | Component | Source |
 |---|---|---|
-| `LGPL-3.0.txt` | FreeTDS, MariaDB Connector/C | Canonical FSF text from gnu.org. Both libraries are LGPL-2.0-or-later; this project **elects LGPL-3.0** for both, because both link OpenSSL 3 (Apache-2.0), and Apache-2.0 is compatible with the v3 terms but not the v2 terms. The election is recorded in `THIRD_PARTY_LICENSES.md` §3.3–§3.4. |
+| `LGPL-3.0.txt` | FreeTDS, MariaDB Connector/C | Canonical FSF text from gnu.org. Both libraries are LGPL-2.0-or-later; this project **elects LGPL-3.0** for both, because both link OpenSSL 3 (Apache-2.0), and Apache-2.0 is compatible with the v3 terms but not the v2 terms. The election is recorded in `docs/project/THIRD_PARTY_LICENSES.md` §3.3–§3.4. |
 | `openssl-Apache-2.0.txt` | OpenSSL | `Compressor/build/openssl/source/src/LICENSE.txt` (pinned 3.5.9). |
 | `libarchive-BSD-2-Clause.txt` | libarchive | `Compressor/build/libarchive/source/src/COPYING` (pinned 3.8.9). |
 | `zint-BSD-3-Clause.txt` | zint backend | `Compressor/build/zint/source/src/LICENSE` (pinned 2.16.0). |

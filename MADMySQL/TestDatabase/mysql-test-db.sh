@@ -14,7 +14,7 @@
 #  fixtures connect to the Mac's `mac:13306`.  One port, one server, one
 #  container -- do not start a second MySQL container.  (3306 is left alone
 #  because the Oracle MySQL installer's launchd service may own it; see
-#  DEVELOPER.md.)
+#  docs/project/DEVELOPER.md.)
 #
 #  Usage:
 #    mysql-test-db.sh up        create/start the server, load the data if needed (default)

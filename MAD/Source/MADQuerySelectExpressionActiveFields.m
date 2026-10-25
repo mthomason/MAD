@@ -38,7 +38,7 @@ static NSString *MADActiveFieldAlias(MADDatabase *database, RptqQueryField *quer
 }
 
 // The set's enumeration order is hash order, and hash order is not stable -- not
-// across runs and not across platforms (BUGS.md: "the SELECT list's order is set
+// across runs and not across platforms (docs/project/BUGS.md: "the SELECT list's order is set
 // order").  The order is defined here instead, once, as the column alias the list is
 // written in, so the generated SQL, the row cache and every export share it.
 // -compare: rather than a localized comparison, because GNUstep's localized

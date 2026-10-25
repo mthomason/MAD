@@ -187,7 +187,7 @@
 // The base emits the ANSI literal.  A value is single-quoted, and an interior quote is
 // doubled -- not backslash-escaped, and never wrapped in a double quote, which SQL reads as
 // a *name*.  Writing "London" is what made a text filter fail once SQLITE_DQS stopped
-// forgiving it.  See BUGS.md.
+// forgiving it.  See docs/project/BUGS.md.
 - (void)testNewSafeLiteralQuotesAndEscapes {
 	MADDatabase *db = [[MADDatabase alloc] init];
 	XCTAssertEqualObjects([db newSafeLiteral:@"London"], @"'London'");
@@ -410,7 +410,7 @@
 // The base class escapes only the quote character.  A backslash is deliberately left
 // alone: whether it escapes the following character depends on the session's
 // NO_BACKSLASH_ESCAPES setting, which only the dialect's connection object knows.  See
-// MADDatabaseSQLProtocol.h and BUGS.md.
+// MADDatabaseSQLProtocol.h and docs/project/BUGS.md.
 - (void)testNewSafeLiteralLeavesBackslashUntouched {
 	MADDatabase *db = [[MADDatabase alloc] init];
 	XCTAssertEqualObjects([db newSafeLiteral:@"a\\b"], @"'a\\b'");

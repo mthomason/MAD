@@ -148,7 +148,7 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	}
 
 	// One read transaction for the whole page: every cell read would otherwise pay
-	// autocommit's journal begin/commit on its own.  See BUGS.md "Page draws run one
+	// autocommit's journal begin/commit on its own.  See docs/project/BUGS.md "Page draws run one
 	// SQLite transaction per cell".  Only the page-bound check above can return
 	// early, so the pair below stays balanced.
 	[datasource.dataTable beginReadTransaction];

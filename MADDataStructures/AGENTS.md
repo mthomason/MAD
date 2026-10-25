@@ -44,4 +44,4 @@ When you need to work with complex data relationships or implement algorithms, c
 
 *   **Tests**: `MADDataStructures/MADDataStructuresTests`. Run with
     `xcodebuild test -workspace Reports.xcworkspace -scheme MADDataStructures -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
-*   **Tracking**: [`BUGS.md`](../BUGS.md) -- the defect register; [`TASKS.md`](../TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.
+*   **Tracking**: [`BUGS.md`](../docs/project/BUGS.md) -- the defect register; [`TASKS.md`](../docs/project/TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.

@@ -292,7 +292,7 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 /// opened with the model it was written against, never migrated: Core Data cannot
 /// infer a mapping for this model family (the barcode element's `barcodeBorderType`
 /// carries `elementID="type"`, clashing with the inherited `type` on every entity
-/// mapping -- BUGS.md), and every version a document in the wild can carry is in
+/// mapping -- docs/project/BUGS.md), and every version a document in the wild can carry is in
 /// the momd.
 + (NSManagedObjectModel *)modelInMomdMatchingStoreAtURL:(NSURL *)storeURL
 												  error:(NSError * __autoreleasing *)error {

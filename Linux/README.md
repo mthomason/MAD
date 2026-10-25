@@ -1,12 +1,12 @@
 # Linux — the headless engine's build
 
-`MAD_LINUX.md` §9: Phase B proved the toolchain (a Dockerfile that
+`docs/project/MAD_LINUX.md` §9: Phase B proved the toolchain (a Dockerfile that
 source-builds clang + libobjc2 + GNUstep Base and compiled a MADFoundation
 subset); Phase C is the §4 shim list, and this directory is where it lands.
 The build now compiles **all ten headless frameworks** — every framework in
-MAD_LINUX.md §3's table except the UI-only ones (`MADExplorer`, `MADBarcodes`,
+docs/project/MAD_LINUX.md §3's table except the UI-only ones (`MADExplorer`, `MADBarcodes`,
 `MADFeedback`, `Scrimpter`, the app) — and runs their suites inside the
-container: 119 test executables, 1,136 tests, 7 recorded needs. The test
+container: 124 test executables, 1,270 tests, 7 recorded needs. The test
 coverage master merged on 2026-10-10 (~100 Xcode test files) is ported in
 full, suite for suite. Nothing here ships in the app; the CLI — Phase D's
 checkpoint — builds and runs here too (see "The CLI runs here" below), and
@@ -58,7 +58,7 @@ compiles with `-fobjc-runtime=gnustep-2.2` and ARC.
 ## The libraries layer
 
 `libraries.conf` + `lib/libraries.sh` build the C libraries the frameworks
-link, natively, into `/usr/local` (MAD_LINUX.md §7). Same shape and intent as
+link, natively, into `/usr/local` (docs/project/MAD_LINUX.md §7). Same shape and intent as
 the Compressor matrix next door; nothing here ships.
 
 	sqlite3      3.53.3   the released amalgamation; the option list still comes
@@ -95,7 +95,7 @@ build does not use them, but they stay in the image.
 Each framework's source list is a `cmake/<Name>Sources.cmake` beside the
 build, with the exclusions named and their reasons — the same shape as
 `MADFoundationSources.cmake`. `MADExplorer`, `MADBarcodes`, `MADFeedback` and
-`Scrimpter` are not in the Linux build at all (MAD_LINUX.md §3).
+`Scrimpter` are not in the Linux build at all (docs/project/MAD_LINUX.md §3).
 
 The Linux build supplies what GNUstep lacks without touching the framework
 sources:
@@ -126,7 +126,7 @@ green on the simulator, and the `MAD Designer` workspace builds.
 ## The drivers are registered, not imported
 
 The constructor used to import the drivers, which is the `MAD` ↔ drivers cycle
-(`ROADMAP.md` §5.1). `MADDatabaseDriverRegistry` (`MADAPI`) is the seam now: each
+(`docs/project/ROADMAP.md` §5.1). `MADDatabaseDriverRegistry` (`MADAPI`) is the seam now: each
 driver's connection class conforms to `MADDatabaseDriver` and registers itself in
 `+load`, and `MADDatabase+Constructor` / `MADDatabaseConnection+Constructor` look a
 driver up by `MADDatabaseType` instead of naming one. Which drivers a process has
@@ -196,7 +196,7 @@ and its categories are silently absent at runtime.
   route through one first-party defined order (`NSString+Comparison.h`:
   case-fold, then UTF-8 code-point order), so the divergence the localized
   comparison caused is gone, not papered over; the tests assert the defined
-  order identically on both platforms. See `MAD_CLI.md`'s `mad export` section.
+  order identically on both platforms. See `docs/project/MAD_CLI.md`'s `mad export` section.
 * **BOOL's runtime encoding, and `class_getProperty` inheritance — found by
   MAD's rptq suites, fixed in RptqObject.** The runtime compares an installed
   accessor's type encoding against the compiled call site's, and BOOL is
@@ -268,7 +268,7 @@ locale and its fraction digits from the document's numeric format (the fallback 
 the yen sign normalized (GNUstep spells it fullwidth U+FFE5).  A 60-case comparison --
 six locales times ten values, negatives and 1e12 included -- is now byte-identical
 between the two platforms; the only difference it found was that yen codepoint.
-`BUGS.md` has the entry (archived: it is fixed), and the render-side exports below are
+`docs/project/BUGS.md` has the entry (archived: it is fixed), and the render-side exports below are
 pinned to the Mac's bytes.
 
 ## The need count, and why it is 6
@@ -297,7 +297,7 @@ default scale; skips are counted separately and are not needs.
 
 `MADMySQLLiveTests` and `MADTdsClientLiveTests` talk to real servers and skip
 (never fail) when none is reachable — the same contract the Xcode schemes have.
-The servers are the two containers `DEVELOPER.md` documents; start them first:
+The servers are the two containers `docs/project/DEVELOPER.md` documents; start them first:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on :13306
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on :1433
@@ -322,11 +322,11 @@ libobjc2 is MIT; libdispatch is Apache-2.0 with the Swift runtime exception;
 GNUstep Base is LGPL-2.1-or-later; gnustep-make is GPL-3.0-or-later, and its
 `Testing.h` (GPL-3.0-or-later) is compiled into the Linux test binaries — those
 exist only inside this build image. The C libraries carry their own licences
-(THIRD_PARTY_LICENSES.md); the mysqlclient GPL problem is settled — D1 went
+(docs/project/THIRD_PARTY_LICENSES.md); the mysqlclient GPL problem is settled — D1 went
 to MariaDB Connector/C (LGPL-2.0-or-later, elected LGPL-3.0) and this image
-builds it (`TASKS.md` §10). The runtime image is built and run locally and is
+builds it (`docs/project/TASKS.md` §10). The runtime image is built and run locally and is
 not published; if that changes, GNUstep Base and mariadb both need relink
-offers of their own (`TASKS.md` §10 carries the flag).
+offers of their own (`docs/project/TASKS.md` §10 carries the flag).
 
 ## The CLI runs here — Phase D
 
@@ -340,11 +340,11 @@ whole-archive, and runs in the image:
 	/build/mad refresh --credentials user:pass <document.mad>
 
 `export` is the one verb that is not here: PDF is a Core Graphics context drawn by
-a `UIPrintPageRenderer`, so it stays on Apple and says so (`MAD_LINUX.md` §5.2;
+a `UIPrintPageRenderer`, so it stays on Apple and says so (`docs/project/MAD_LINUX.md` §5.2;
 the renderer decision is Phase E's).
 
 **`export` grew its Foundation formats here (Phase E, 2026-10-16).** The export seam
-(`MADReportExporting` + `MADReportExporterRegistry`, `MAD_CLI.md` §5.3) is in `mad`, so
+(`MADReportExporting` + `MADReportExporterRegistry`, `docs/project/MAD_CLI.md` §5.3) is in `mad`, so
 `text`, `csv` and `json` run in the image and write the same bytes as the Mac's tool
 (the render-side formats — `html`, `html-flow`, `json-report` — run here too; see the
 section below, and `pdf` says why it cannot).
@@ -365,7 +365,7 @@ here — and the same FNV-1a checksums are pinned on the Mac side now
 platform. `json-report` is the same schema with the rendered report as an extra
 member; it needs the render half (`MADReportFormatter` and the page renderer), which
 compiles here since Phase E — the section below carries its digest, and only `pdf`
-registers and says why it cannot run (`MAD_CLI.md` §3); `Linux/Tests/MADReportExporterTests.m`
+registers and says why it cannot run (`docs/project/MAD_CLI.md` §3); `Linux/Tests/MADReportExporterTests.m`
 asserts that it fails
 rather than silently writing the data half.
 
@@ -405,17 +405,17 @@ was *set* order (`MADQueryActiveQueryFields` accumulates into an `NSSet`), so th
 same document produced a different order on Apple and on GNUstep — the same fields,
 different order; the cache's *data* is identical once compared by field name, and the
 cache's `c<hash>` column names are hash-derived, so they differed per platform too.
-**Settled 2026-10-16 (the JSON export shape decision, `MAD_LINUX.md` §10.1):** the
+**Settled 2026-10-16 (the JSON export shape decision, `docs/project/MAD_LINUX.md` §10.1):** the
 order is now defined as the column alias, sorted with `-compare:`, in both SQL
 builders, so the generated SQL, the row cache and every export agree on both
-platforms (BUGS.md, the SELECT-list entry; the order tests in
+platforms (docs/project/BUGS.md, the SELECT-list entry; the order tests in
 `Linux/Tests/MADQuerySelectExpressionTests.m`). A cache refreshed before the change
 orders its columns differently from one refreshed after it — the same data, a new
 order — so refresh once before comparing caches across that date.
 
 ## The writer runs here, and the two platforms agree
 
-Phase E's other half (`MAD_LINUX.md` §9; the user's requirement, 2026-10-16): the `.mad`
+Phase E's other half (`docs/project/MAD_LINUX.md` §9; the user's requirement, 2026-10-16): the `.mad`
 writer works on Linux and produces the **same bytes** as the Mac's for the same
 document.  `mad write <doc.mad> --out <copy.mad> [--reproducible]` is the surface, and
 the document is opened headlessly on both platforms, so both sides run the same writer.
@@ -435,7 +435,7 @@ document's.
 walk; an ordinary write keeps the members' real metadata, so it differs between runs
 and platforms by design.
 
-Two things had to be fixed for the writer to run here, both recorded in `BUGS.md`
+Two things had to be fixed for the writer to run here, both recorded in `docs/project/BUGS.md`
 (the `.mad` byte-identity entry):
 
 * `-write_archive:` walked each enumerated URL *up to* the archived directory, and
@@ -449,7 +449,7 @@ Two things had to be fixed for the writer to run here, both recorded in `BUGS.md
   saw it.
 
 `Linux/Tests/MADArchiveManagerTests.m` is the coverage (5 tests, 0 needs): the round
-trip (`MAD_CLI.md` §6.1), the ordinary mode's characterisation, the reproducible mode --
+trip (`docs/project/MAD_CLI.md` §6.1), the ordinary mode's characterisation, the reproducible mode --
 including an FNV-1a checksum of the whole document against the Mac's bytes -- and the
 document path, which writes a copy and leaves the source untouched.
 
@@ -481,7 +481,7 @@ the London fixture:
 
 The render-side formats are byte-identical across the platforms, like the data ones:
 every frame, font, font size, trait, alignment, text run and page box, and the money
-(the finding that made them differ, and its fix, are above and in `BUGS.md`).
+(the finding that made them differ, and its fix, are above and in `docs/project/BUGS.md`).
 `Linux/Tests/MADReportExporterTests.m` pins the three checksums.
 
 ## The runtime image — the CLI deliverable (Phase F)
@@ -509,7 +509,7 @@ The image carries:
   not a path, so this one file is what lets the checked-in London and Music
   fixtures refresh without extra setup.
 
-It leaves behind the compiler, cmake, git, the sources, the 119 test binaries,
+It leaves behind the compiler, cmake, git, the sources, the 124 test binaries,
 and the static archives and headers: the final stage is `ubuntu:24.04` plus
 the runtime libraries from apt, not the toolchain image. It is **283 MB on
 disk (66.5 MB compressed)**; the build image is 6.65 GB.
@@ -541,7 +541,7 @@ clang, cmake, git or build tree). 30 checks; it exits non-zero on any failure.
 	MADVERIFY 30 passed, 0 failed
 
 `--live` adds the MySQL and TDS refreshes (50 and 20 rows); start the two test
-containers first (`DEVELOPER.md` has their scripts and logins):
+containers first (`docs/project/DEVELOPER.md` has their scripts and logins):
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up
@@ -562,9 +562,9 @@ hand-run build should do the same.
 ## What this does not do yet
 
 The Linux PDF writer — **deferred 2026-10-17, blocked on the user's research; do not
-start it without their decision.**  `MAD_PDF_LINUX.md` is the handoff file (what
+start it without their decision.**  `docs/project/MAD_PDF_LINUX.md` is the handoff file (what
 exists, what is missing, the candidate stacks with licences, the open questions, the
-acceptance test); `MAD_LINUX.md` §10.2 records the reasoning.  Until it lands, a PDF
+acceptance test); `docs/project/MAD_LINUX.md` §10.2 records the reasoning.  Until it lands, a PDF
 on Linux is a browser printing `--format html`.
 
 Phase F's other parts, as of 2026-10-17: the **runtime image** and its **repeatable

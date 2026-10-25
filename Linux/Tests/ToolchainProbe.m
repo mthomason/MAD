@@ -4,7 +4,7 @@
 //
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
-//  The Phase B toolchain probe (MAD_LINUX.md §9): proves that clang +
+//  The Phase B toolchain probe (docs/project/MAD_LINUX.md §9): proves that clang +
 //  libobjc2 + GNUstep Foundation can run the language and Foundation features
 //  the MAD engine leans on, before any of the engine is judged portable.
 //
@@ -428,7 +428,7 @@ static void MADProbeReportChecks(void) {
 	// Directory enumeration by URL.  GNUstep's -enumeratorAtURL:... yields URLs with
 	// the containing directory stripped -- file:///repo/.../London.dataset comes back
 	// as file:///Contents.json -- which is why the CLI's member list uses
-	// -subpathsAtPath: instead (measured 2026-10-16; BUGS.md).  The path-based
+	// -subpathsAtPath: instead (measured 2026-10-16; docs/project/BUGS.md).  The path-based
 	// enumerators are correct, and this item checks that they still are.
 	@try {
 		NSString *directory = NSTemporaryDirectory();
@@ -448,7 +448,7 @@ static void MADProbeReportChecks(void) {
 						   @"-subpathsAtPath: did not list a file it had just written");
 		MADProbeReportItem("directory-enumeration-url-form", urlFormWhole,
 						   @"-enumeratorAtURL: yields URLs with the containing directory stripped;"
-						   @" the CLI uses -subpathsAtPath: for its member list (BUGS.md)");
+						   @" the CLI uses -subpathsAtPath: for its member list (docs/project/BUGS.md)");
 		[[NSFileManager defaultManager] removeItemAtPath: file error: NULL];
 	} @catch (NSException *e) {
 		MADProbeReportItem("directory-enumeration", NO, MADProbeExceptionDetail(e));

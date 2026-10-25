@@ -1347,7 +1347,7 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 										// Already 1-based: freetds has applied its MSDBLIB
 										// bump by the time it returns.  Adding one here made
 										// every January read as February and pushed December
-										// into the following year.  See BUGS.md.
+										// into the following year.  See docs/project/BUGS.md.
 										comps.month = dateinfo.datemonth;
 										comps.day = dateinfo.datedmonth;
 										comps.hour = dateinfo.datehour;
@@ -1375,7 +1375,7 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 										NSDateComponents *comps = [[NSDateComponents alloc] init];
 										comps.year = dateinfo.dateyear;
 										// 1-based already, for the same reason as the
-										// SYBDATETIME case above.  See BUGS.md.
+										// SYBDATETIME case above.  See docs/project/BUGS.md.
 										comps.month = dateinfo.datemonth;
 										comps.day = dateinfo.datedmonth;
 										comps.hour = dateinfo.datehour;

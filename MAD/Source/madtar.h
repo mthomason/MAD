@@ -16,7 +16,7 @@
 /// The modification time every member carries in a reproducible archive: 2001-01-12
 /// 00:00:00 UTC, the instant MADCLIPinPDFMetadata pins a PDF's dates to.  A constant
 /// rather than the file's own mtime, which is what makes two archives of the same
-/// members equal (BUGS.md, the .mad byte-identity entry).
+/// members equal (docs/project/BUGS.md, the .mad byte-identity entry).
 #define MADArchiveReproducibleModificationTime 979257600
 
 int mad_copy_data(struct archive *, struct archive *);

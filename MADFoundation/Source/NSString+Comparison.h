@@ -6,7 +6,7 @@
 //
 
 //  The defined order every text comparison in the export path routes through
-//  (MAD_CLI.md's `mad export` section): case-fold, then code-point order on
+//  (docs/project/MAD_CLI.md's `mad export` section): case-fold, then code-point order on
 //  the UTF-8 bytes.  It is first-party and platform-independent -- the cache's
 //  LSASC collation, the in-memory sort descriptors and the report formatter's
 //  group-boundary walk all compare through it, so key equality and row order

@@ -56,5 +56,6 @@ spec and the bug register, and changing them is a product decision:
 * The render cache is keyed by filename and page size, not content
   (`docs/05-companion-files.md` §5.3), so editing a document under the same
   name can serve stale pages until the cache files are removed.
-* The test suites' database credentials in `DEVELOPER.md` are throwaway
+* The test suites' database credentials in
+  [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) are throwaway
   local-docker credentials, not production secrets.

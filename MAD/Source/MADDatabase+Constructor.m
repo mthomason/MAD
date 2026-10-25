@@ -14,7 +14,7 @@
 
 // The driver is looked up, not imported: which drivers a process has is a matter
 // of what it links, and the registry is what a driver says there
-// (MADDatabaseDriverRegistry.h; ROADMAP.md §5.1).  A type with no registered
+// (MADDatabaseDriverRegistry.h; docs/project/ROADMAP.md §5.1).  A type with no registered
 // driver builds nothing, the way the old switch's default did -- but the driver
 // being absent is now a link fact rather than a compile error here.
 + (instancetype)newDatabaseWithConnection:(MADDatabaseConnection *)connection {

@@ -25,7 +25,7 @@
 /// The iCloud container's Documents directory, for the cloud browsing code below.
 /// This helper lived in MADURLFactory until Phase D; iCloud document sync is no
 /// longer offered, so it moved in with the (now unused) code that still names it --
-/// the headless base framework must not reference iCloud (MAD_LINUX.md).
+/// the headless base framework must not reference iCloud (docs/project/MAD_LINUX.md).
 + (NSURL *)newURLForCloudDocumentsDirectoryForUbiquityID:(NSString *)ubiquityID;
 
 + (void)migrateLocalFiles:(NSString *)groupID toCloud:(NSString *)ubiquityID

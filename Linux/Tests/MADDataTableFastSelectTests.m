@@ -92,7 +92,7 @@ static void testEmptyGroupKeysProduceAnEmptyClause(void) {
 }
 
 static void testFewerSortDescriptorsThanGroupKeysClipsToTheDescriptors(void) {
-	// BUGS.md: the loop used to index sortDescriptors by the group-key index and walk
+	// docs/project/BUGS.md: the loop used to index sortDescriptors by the group-key index and walk
 	// off the end of the array.  A group key whose position has no descriptor cannot
 	// be named, so its pair is left out (and logged) rather than raised.
 	NSURL *directory = MADSelectMakeTempDirectory();
@@ -113,7 +113,7 @@ static void testFewerSortDescriptorsThanGroupKeysClipsToTheDescriptors(void) {
 #pragma mark - Read transactions
 
 static void testReadTransactionsWithoutASelectsDatabaseAreANoOp(void) {
-	// BUGS.md: a delegate-less table has no selects database at all.  The pair used to
+	// docs/project/BUGS.md: a delegate-less table has no selects database at all.  The pair used to
 	// read self.databaseForSelects->_database and crash on the nil object before its
 	// handle guard could run; with nothing to begin or commit, the calls are no-ops.
 	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:123 fromCache:YES];
@@ -170,7 +170,7 @@ static void testRunSelectQueryYieldsNilWhenTheQueryHasNoRow(void) {
 // The report formatter finds group boundaries by comparing adjacent rows, so the
 // cache's ORDER BY has to order a key the way the formatter compares it: text keys
 // under the LSASC collation (the defined order, NSString+Comparison.h), everything
-// else plainly.  See BUGS.md, "The cache's ORDER BY ignores column types".
+// else plainly.  See docs/project/BUGS.md, "The cache's ORDER BY ignores column types".
 
 static void testSelectLimitOffsetWithoutColumnsOrdersPlainly(void) {
 	// The constructor cannot consult a column it was not handed; it must fall

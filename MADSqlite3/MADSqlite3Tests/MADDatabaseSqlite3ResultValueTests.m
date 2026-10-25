@@ -12,11 +12,11 @@
 //  One case is deliberately NOT exercised: the cast factory's text-family branches
 //  call free() on the pointer sqlite3_column_text hands back, which belongs to the
 //  statement -- calling them would corrupt the heap rather than fail a test.  See
-//  BUGS.md.
+//  docs/project/BUGS.md.
 //
 //  MADDatabaseResultValue (MADSqlite3/Source/MADDatabaseResultValue.m) is a dead
 //  near-copy of these two methods: the file is in no target's Sources phase, so the
-//  class is in no binary and cannot be linked against.  Also recorded in BUGS.md.
+//  class is in no binary and cannot be linked against.  Also recorded in docs/project/BUGS.md.
 //
 
 #import <XCTest/XCTest.h>

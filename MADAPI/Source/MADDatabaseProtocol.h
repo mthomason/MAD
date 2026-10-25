@@ -29,7 +29,7 @@
 // port, not the concrete class.  MySQL's fetch does read the table's column metadata
 // back mid-row to correct a column's type, but that metadata is declared by
 // <MADDataTableWriting> itself (MADDataTable.h), so this stays the narrowest type
-// all three drivers can honour.  See MADDataTable_Architecture_Report.md.
+// all three drivers can honour.  See docs/project/MADDataTable_Architecture_Report.md.
 - (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn
    intoResultTable:(id <MADDataTableWriting>)dataTable withError:(NSError * __autoreleasing *)error;
 

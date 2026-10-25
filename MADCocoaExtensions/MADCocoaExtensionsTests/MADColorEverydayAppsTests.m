@@ -12,7 +12,7 @@
 //  The light-mode branches of -newColorHeaderColor and -blueHeaderSecondaryColor pass
 //  those same 8-bit triples straight to +colorWithRed:green:blue:alpha: (which expects
 //  0-1) instead of through the dividing helper, so the colors are stored out of range.
-//  That is pinned as it currently behaves and recorded in BUGS.md.
+//  That is pinned as it currently behaves and recorded in docs/project/BUGS.md.
 //
 
 #import <XCTest/XCTest.h>
@@ -87,7 +87,7 @@
 	UITraitCollection *light = [UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight];
 	UIColor *resolved = [[MADColorEverydayApps newColorHeaderColor] resolvedColorWithTraitCollection:light];
 
-	// Characterization of a defect documented in BUGS.md: the light branch passes the
+	// Characterization of a defect documented in docs/project/BUGS.md: the light branch passes the
 	// 8-bit triple (2, 108, 182) to +colorWithRed:green:blue:alpha:, which expects 0-1.
 	// The components are stored as given -- an extended-range sRGB color -- instead of
 	// the intended (2/255, 108/255, 182/255), so the blue treatment is lost: at draw

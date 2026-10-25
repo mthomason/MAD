@@ -6,7 +6,7 @@
 #  The tool is built for the iOS Simulator and run on the Mac through
 #  `xcrun simctl spawn`, which is what lets it link the existing frameworks and the
 #  existing static libraries without any of them being rebuilt for a second platform.
-#  See MAD_CLI.md section 4.
+#  See docs/project/MAD_CLI.md section 4.
 #
 #  Usage:
 #    CLI/build.sh                     build the frameworks, then the tool
@@ -32,7 +32,7 @@ readonly FIXTURE_OUTPUT="${BUILD_DIR}/mad-fixture-maker"
 # required by the linker, but keeping the list readable is worth something.
 #
 # The drivers are named here because the framework no longer imports them: a driver
-# registers itself when something links it (MADDatabaseDriverRegistry.h, ROADMAP.md
+# registers itself when something links it (MADDatabaseDriverRegistry.h, docs/project/ROADMAP.md
 # §5.1), so the tool links the ones it runs queries against.  Sqlite3 comes in with
 # MAD, which still links it for MADDataTableFast; MySQL and TDS do not.
 readonly FRAMEWORKS=(
@@ -58,11 +58,11 @@ readonly TRANSFORMERS=(
 )
 
 # The refresh chain used to be compiled in from the application target; it lives in
-# the MAD framework now (MAD_CLI.md section 4.1, ROADMAP.md §3.4), so the tool takes
+# the MAD framework now (docs/project/MAD_CLI.md section 4.1, docs/project/ROADMAP.md §3.4), so the tool takes
 # it from -framework MAD like the rest.
 
 # The legacy store converter, compiled in from the application target for the same
-# reason: the MAD framework no longer links Core Data (MAD_LINUX.md), so a process
+# reason: the MAD framework no longer links Core Data (docs/project/MAD_LINUX.md), so a process
 # that must open a pre-portable-store document carries the converter itself.  The
 # shipping samples are legacy documents, so the CLI needs it.
 readonly LEGACY_SOURCES=(

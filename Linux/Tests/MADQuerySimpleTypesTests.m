@@ -142,7 +142,7 @@ static void testFormatterStateResetClearsEverything(void) {
 
 // MADReportFormatterCache is not tested here: its implementation file is in the MAD
 // project group but in no target's Sources build phase, so it is never compiled and
-// has no callers.  See BUGS.md.
+// has no callers.  See docs/project/BUGS.md.
 
 MAD_TEST_MAIN("MADQuerySimpleTypesTests",
 	MAD_TEST(testCustomNoResultsDefaults),

@@ -375,7 +375,7 @@ The honest answer, as the artifacts stand:
 
 The measured facts behind "this is cheap once the contract exists": the data path is already
 headless — SQL generation, the store, `MADDataTableFast`, and all three drivers compile on
-Linux today, with 119 test executables and 1,136 tests green (`Linux/README.md`), and since
+Linux today, with 124 test executables and 1,270 tests green (`Linux/README.md`), and since
 Phase D the CLI builds and runs in that image (`inspect`, `schema`, `query`, `refresh`,
 `export`, `write`). So the ordering that follows is the contract first, entry point second,
 front-ends third — and it makes "CLI or webserver?" a question with a two-line answer

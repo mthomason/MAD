@@ -569,7 +569,7 @@ particular is a business decision, not an engineering task.
 
 ---
 
-## 11. The Linux toolchain (MAD_LINUX.md Phase B)
+## 11. The Linux toolchain (docs/project/MAD_LINUX.md Phase B)
 
 **Status:** Done 2026-10-06 on `linux-port` (renamed from `linux-phase-b`; merged to `master` 2026-10-16, `524e0d86e`) — the spike is green, and
 Phase C is the next step. Two of Phase C's inputs come from this work: the GNUstep
@@ -881,10 +881,10 @@ The commits, one per task:
 Gates: `MADBarcodes` 29/29 and `MAD` 608/608; the app builds for the simulator
 and, with signing disabled, for a generic device (this machine has no `iOS
 Distribution` certificate); `./Linux/build.sh` passes 120/120. The design
-record and the per-task prompts stay in `Archive/MAD_BARCODES.md` (archived
+record and the per-task prompts stay in `docs/archive/MAD_BARCODES.md` (archived
 2026-10-22).
 
-**Remains** (documented in `Archive/MAD_BARCODES.md` §5, deliberately not built):
+**Remains** (documented in `docs/archive/MAD_BARCODES.md` §5, deliberately not built):
 headless barcode rendering (zint in `Linux/libraries.conf` plus a UIKit-free
 render core), GS1/Data input modes, `detailsSegueIdentifer` on the model,
 barcode images inside the HTML exporter, and the app-wide third-party notices
@@ -965,7 +965,7 @@ The design's phases, each with its acceptance criteria and its tests:
   `MADOperationValidateSQL` and its five construction tests are in the app
   target (app scheme 79/79; one pre-existing `MADStatusLabelRefreshTests`
   method never executes). **§10.6's UI assertions are not run:** the XCUITest
-  environment sees an empty accessibility tree (BUGS.md, "Test infrastructure"),
+  environment sees an empty accessibility tree (docs/project/BUGS.md, "Test infrastructure"),
   so the tables-list/canvas/designer assertions cannot be made, and the UI-test
   refresh assertion is recorded here rather than faked. The §9 close-and-reopen
   persistence the UI test would show is covered at the store level by the
@@ -1128,6 +1128,23 @@ completed 2026-10-25 (backup `~/Desktop/Reports-prescrub-libmysql-20261025.bundl
   counterparts (trees byte-identical).  Still report-only, unfiltered (the
   user's call for a later pass): the third-party `UIColor+Expanded`
   category files beside the first-party barcode classes.
+* **Prompt 8 (open-source documentation pass) — done 2026-10-25.**  The
+  user's one-pass cleanup of the documents for publication.  The name is
+  decided: the project is published as **MAD (Mobile Analytics Document)**
+  (repo `MAD`; the app names stay MAD Designer / MAD Viewer), closing the
+  name memo's open question.  The working documents moved under `docs/` — the records and
+  design documents in `docs/project/`, the archived barcode design in
+  `docs/archive/` — and only the GitHub-facing set stays at the root
+  (`README.md`, `LICENSE`, `NOTICE`, `CONTRIBUTING.md`, `SECURITY.md`,
+  `CODE_OF_CONDUCT.md`, `AGENTS.md`).  The driver-authoring tutorial was
+  published from `~/Desktop/MADOpenSource/drafts/04` to `docs/tutorials/`,
+  the TODO wishlist was cleaned, the README badge now points at
+  `mthomason/MAD`'s `linux.yml` workflow, `.github/FUNDING.yml` and the
+  Support sections were added, and the workspace's Documents group now
+  shows the root documents plus the `docs/` tree.  Every stale reference —
+  links, citations and code comments — was re-pointed, and the Linux
+  counts were re-measured green at 124 executables / 1,270 tests / 7 needs
+  (2026-10-25).
 
 Open items carried out of prompt 3: the CI badge placeholder in `README.md`
 (owner/repo to be filled at publication), the workflow's `master` triggers

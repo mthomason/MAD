@@ -4,7 +4,7 @@
 //
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
-//  The parser's second half (MAD_SQL_ENTRY.md §6.1, §6.2): binds the statement's
+//  The parser's second half (docs/project/MAD_SQL_ENTRY.md §6.1, §6.2): binds the statement's
 //  validated names to the document's RptqDatabaseSchemaTable / Field rows and
 //  produces the write plan -- a value-object list of tables (with their copy
 //  indexes), links, predicates and groups -- the compiler applies.  The plan is

@@ -11,7 +11,7 @@
 //  The original's testSecureCodingRoundTrip used requiringSecureCoding:YES
 //  and unarchivedObjectOfClass:fromData:error:.  GNUstep has neither (the
 //  strict archive returns nil and neither class-keyed entry point exists --
-//  see the Phase B report in MAD_LINUX.md), so the round trip here runs on
+//  see the Phase B report in docs/project/MAD_LINUX.md), so the round trip here runs on
 //  the permissive/classic path and the strict path is pinned as a need.
 //
 

@@ -107,95 +107,31 @@
       location = "container:"
       name = "Documents">
       <FileRef
-         location = "container:MAD_STRATEGY.md">
-      </FileRef>
-      <Group
-         location = "group:Archived"
-         name = "Archived">
-         <FileRef
-            location = "group:../Archive/MAD_BARCODES.md">
-         </FileRef>
-      </Group>
-      <FileRef
-         location = "group:AGENTS.md">
-      </FileRef>
-      <FileRef
-         location = "group:APPSTORE.md">
-      </FileRef>
-      <FileRef
-         location = "group:BUGS.md">
-      </FileRef>
-      <FileRef
-         location = "group:BUGS_FIXED.md">
-      </FileRef>
-      <FileRef
-         location = "group:DEVELOPER.md">
-      </FileRef>
-      <FileRef
-         location = "group:LIBRARIES.md">
+         location = "group:README.md">
       </FileRef>
       <FileRef
          location = "group:LICENSE">
       </FileRef>
       <FileRef
-         location = "group:LICENSE_COMPLIANCE_PLAN.md">
+         location = "group:NOTICE">
       </FileRef>
       <FileRef
-         location = "group:MAD_ARRAY_CACHING.md">
+         location = "group:CONTRIBUTING.md">
       </FileRef>
       <FileRef
-         location = "group:MAD_CLI.md">
+         location = "group:SECURITY.md">
       </FileRef>
       <FileRef
-         location = "group:MAD_DATA_OBJECT.md">
+         location = "group:CODE_OF_CONDUCT.md">
       </FileRef>
       <FileRef
-         location = "group:MAD_FORMAT.md">
+         location = "group:AGENTS.md">
       </FileRef>
       <FileRef
-         location = "group:MAD_FUTURE.md">
+         location = "group:CLAUDE.md">
       </FileRef>
       <FileRef
-         location = "group:MAD_LINUX.md">
-      </FileRef>
-      <FileRef
-         location = "group:MAD_PDF_LINUX.md">
-      </FileRef>
-      <FileRef
-         location = "group:MAD_STORE_MIGRATION.md">
-      </FileRef>
-      <FileRef
-         location = "group:MAD_STORE_PHASE_C.md">
-      </FileRef>
-      <FileRef
-         location = "group:MAD_SQL_ENTRY.md">
-      </FileRef>
-      <FileRef
-         location = "group:MADDataTable_Architecture_Report.md">
-      </FileRef>
-      <FileRef
-         location = "group:MADModel_Layer.md">
-      </FileRef>
-      <FileRef
-         location = "group:MIGRATION_KICKOFF.md">
-      </FileRef>
-      <FileRef
-         location = "group:README.md">
-      </FileRef>
-      <FileRef
-         location = "group:ROADMAP.md">
-      </FileRef>
-      <FileRef
-         location = "group:TASKS.md">
-      </FileRef>
-      <FileRef
-         location = "group:TEST-DB-INFO.md">
-      </FileRef>
-      <FileRef
-         location = "group:THIRD_PARTY_LICENSES.md">
-      </FileRef>
-      <FileRef
-         location = "group:TODO.md">
+         location = "group:docs">
       </FileRef>
    </Group>
 </Workspace>

@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADCocoaExtensions subset the Linux build compiles (MAD_LINUX.md §9):
+# The MADCocoaExtensions subset the Linux build compiles (docs/project/MAD_LINUX.md §9):
 # the 7 layout/style implementation files of the Xcode target's 14.  The
 # framework splits cleanly: everything that stores geometry, numbers and
 # styles is Foundation plus CoreGraphics struct math, and everything that
@@ -20,7 +20,7 @@
 #
 # The geometry they need is Compat/CoreGraphics/ (see CGGeometry.h); the
 # excluded files' UIKit imports have no equivalent there by design.  Keep this
-# list in step with MAD_LINUX.md §4 and §5.2.
+# list in step with docs/project/MAD_LINUX.md §4 and §5.2.
 
 set(MADCOCOAEXTENSIONS_SOURCES
 	"${SOURCE_DIR}/CGGeometry+Extras.m"

@@ -18,7 +18,7 @@
 //  segfaulted in the handler (SIGSEGV at 0x8 in
 //  -[MADDirectoryMonitor startMonitoring]_block_invoke.2).  The handler now holds
 //  the monitor for its one and only run, which the last test below exercises --
-//  holding the queue so the handler cannot have run first; see BUGS.md.  The
+//  holding the queue so the handler cannot have run first; see docs/project/BUGS.md.  The
 //  other monitors here are still stopped and drained before release.
 //
 
@@ -71,7 +71,7 @@ static BOOL MADSpyMonitorDeallocated = NO;
 
 @property (nonatomic, strong) NSURL *directory;
 // Held strongly so the monitor cannot deallocate while its source is still
-// pending cancellation -- see -tearDown: and BUGS.md.
+// pending cancellation -- see -tearDown: and docs/project/BUGS.md.
 @property (nonatomic, strong) MADDirectoryMonitor *monitor;
 
 @end
@@ -97,7 +97,7 @@ static BOOL MADSpyMonitorDeallocated = NO;
 
 // Cancelling a source is asynchronous.  The cancel handler reads its owner
 // through a weak reference and dereferences it without a nil check, so a
-// monitor released before the handler runs crashes the process (BUGS.md).
+// monitor released before the handler runs crashes the process (docs/project/BUGS.md).
 // Stopping here and letting the queue drain keeps the owner alive long enough.
 - (void)stopAndDrain:(MADDirectoryMonitor *)monitor {
 	[monitor stopMonitoring];
@@ -184,7 +184,7 @@ static BOOL MADSpyMonitorDeallocated = NO;
 }
 
 - (void)testReleasingAMonitorWithACancelPendingDoesNotCrash {
-	// BUGS.md: with the cancel pending, the handler used to dereference a nil owner.
+	// docs/project/BUGS.md: with the cancel pending, the handler used to dereference a nil owner.
 	// The source's queue is held down so the handler cannot have run before the
 	// monitor is released, then let go: the handler runs with nothing else retaining
 	// the monitor.  Against the old code the process faults here; with the fix the

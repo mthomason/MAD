@@ -8,9 +8,9 @@
 //  Offline unit tests for MADTdsClient. Nothing here needs a SQL Server.
 //
 //  The live suite is in MADTdsClientLiveTests.m. It talks to the SQL Server 2022
-//  Developer Edition container documented in DEVELOPER.md.
+//  Developer Edition container documented in docs/project/DEVELOPER.md.
 //
-//  The instance recorded in DEVELOPER.md (192.168.1.224, test/test,
+//  The instance recorded in docs/project/DEVELOPER.md (192.168.1.224, test/test,
 //  AdventureWorks2022) is not reachable and is not what the live suite uses.
 //
 //  A consequence worth stating plainly: the parts of this framework that can only be

@@ -150,7 +150,7 @@ static void MADReportExporterPinPDFMetadata(NSURL *url) {
 #else
 	return @"PDF is a Core Graphics context drawn by a UIPrintPageRenderer, neither of which exists "
 			"off Apple.  The report's pages are the same everywhere -- --format html prints them from "
-			"a browser, and a Linux PDF writer is the next step (MAD_LINUX.md §10.2).";
+			"a browser, and a Linux PDF writer is the next step (docs/project/MAD_LINUX.md §10.2).";
 #endif
 }
 

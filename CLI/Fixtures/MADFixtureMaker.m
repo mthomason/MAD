@@ -13,7 +13,7 @@
 //      save path: the store written beside the metadata, the legacy files pruned,
 //      and the guts directory archived back over the file.  This is how the
 //      shipping samples, which are legacy documents, become portable fixtures:
-//      nothing off Apple can convert one (Core Data, MAD_LINUX.md §5.1).
+//      nothing off Apple can convert one (Core Data, docs/project/MAD_LINUX.md §5.1).
 //
 //    MADFixtureMaker create <mysql|tds> <host> <port> <user> <password> <database> <out.mad>
 //      ...

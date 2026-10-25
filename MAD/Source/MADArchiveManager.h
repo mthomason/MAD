@@ -28,7 +28,7 @@
 /// a sorted member walk.  Off by default -- an ordinary save keeps recording the real
 /// metadata -- and set before -archive:, the way -checkpointed is.  Two archives of
 /// the same members are then equal on any machine and on either platform, which is
-/// what the user's .mad byte-identity requirement needs (BUGS.md, that entry).
+/// what the user's .mad byte-identity requirement needs (docs/project/BUGS.md, that entry).
 @property (nonatomic, assign) BOOL reproducible;
 
 @end

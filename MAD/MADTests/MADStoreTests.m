@@ -296,7 +296,7 @@ static void SetValue(MADStoreObject *object, NSString *name, id value) {
 	XCTAssertNotEqual([sql rangeOfString:@"\"RptqQueryHasFields\""].location, (NSUInteger)NSNotFound);
 }
 
-/// The persisted SQL source text (MAD_SQL_ENTRY.md §8.1): the compiled model and
+/// The persisted SQL source text (docs/project/MAD_SQL_ENTRY.md §8.1): the compiled model and
 /// the descriptors must agree on it, on both its type and its optionality.  The
 /// generic fidelity test covers it too; this one names it so a regression reads
 /// as "the model lost sqlSourceText", not as a diff deep in a loop.

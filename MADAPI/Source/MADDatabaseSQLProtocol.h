@@ -21,7 +21,7 @@
 	// The two characters that quote an identifier in this dialect -- open then
 	// close: "``" for MySQL, "[]" for T-SQL, "\"\"" by default.  The SQL
 	// importer's lexer reads identifiers through it before any connection
-	// exists (MAD_SQL_ENTRY.md §4).
+	// exists (docs/project/MAD_SQL_ENTRY.md §4).
 	+ (NSString *)identifierQuoteCharacters;
 
 	// Turns a value into a SQL literal, quoted and escaped for this dialect.  Its

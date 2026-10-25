@@ -192,7 +192,7 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 		// element kinds share RptqDocumentElement's table.  Mint over the
 		// table's owner entity -- the graph's objectsForEntity: fallback returns
 		// every kind in the table -- so a subentity insert never collides with
-		// a sibling kind already there.  See BUGS.md "insertObjectForEntity:
+		// a sibling kind already there.  See docs/project/BUGS.md "insertObjectForEntity:
 		// mints identifiers per entity, not per table".
 		NSString *mintingEntity = descriptor.parentName != nil ? descriptor.parentName : entity;
 		int64_t highest = 0;

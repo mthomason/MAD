@@ -1,7 +1,7 @@
 #!/bin/bash
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
-#  libraries.sh -- builds the C libraries the frameworks link (MAD_LINUX.md
+#  libraries.sh -- builds the C libraries the frameworks link (docs/project/MAD_LINUX.md
 #  §7), natively, inside the image.
 #
 #  Usage:
@@ -16,7 +16,7 @@
 #  sqlite3 is compiled from the released amalgamation with the option list in
 #  Compressor/sqlite3.xcconfig, which the image copies in beside this script.
 #  That file is the single place the format-deciding flags are written down
-#  (LIBRARIES.md §4); it is read here, never duplicated.
+#  (docs/project/LIBRARIES.md §4); it is read here, never duplicated.
 
 set -euo pipefail
 

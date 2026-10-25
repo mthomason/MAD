@@ -78,7 +78,7 @@ NSString * const MTDocumentObjectDefinationField2 = @"MTDocumentObjectDefination
 
 // The report's own locale comes first: the numeric format stores the locale the
 // report was designed in ("en_US" in the store's text column), and the rendered text
-// is part of the report rather than of the machine that renders it (BUGS.md, the
+// is part of the report rather than of the machine that renders it (docs/project/BUGS.md, the
 // rendered-currency entry).
 //
 // When the document does not say -- the legacy samples, and anything converted before
@@ -116,7 +116,7 @@ static NSString *MADPortableCurrencySymbol(NSString *symbol) {
 // own -- the numeric format's decimalCount -- because the locale's default is not the
 // same everywhere: GNUstep's currency style renders no fraction digits for any locale
 // (measured: en_US gives "$1" where Apple gives "$0.99"), so leaving it to the locale
-// makes the same report render differently on the two platforms (BUGS.md).
+// makes the same report render differently on the two platforms (docs/project/BUGS.md).
 static NSNumberFormatter *MADCurrencyNumberFormatter(NSLocale *locale, NSInteger decimalCount) {
 	static NSMutableDictionary <NSString *, NSNumberFormatter *> *formatters;
 	static dispatch_once_t onceToken;

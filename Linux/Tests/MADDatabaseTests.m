@@ -181,7 +181,7 @@ static void testSqlSampleDataForFieldAndTable(void) {
 
 // The base emits the ANSI literal.  A value is single-quoted, and an interior
 // quote is doubled -- not backslash-escaped, and never wrapped in a double
-// quote, which SQL reads as a *name*.  See BUGS.md.
+// quote, which SQL reads as a *name*.  See docs/project/BUGS.md.
 static void testNewSafeLiteralQuotesAndEscapes(void) {
 	MADDatabase *db = [[MADDatabase alloc] init];
 	MAD_PASS_EQUAL([db newSafeLiteral:@"London"], @"'London'", "a plain value is single-quoted");
@@ -426,7 +426,7 @@ static void testDecodingRunsTheSubclassInitializer(void) {
 // The base class escapes only the quote character.  A backslash is deliberately left
 // alone: whether it escapes the following character depends on the session's
 // NO_BACKSLASH_ESCAPES setting, which only the dialect's connection object knows.  See
-// MADDatabaseSQLProtocol.h and BUGS.md.
+// MADDatabaseSQLProtocol.h and docs/project/BUGS.md.
 static void testNewSafeLiteralLeavesBackslashUntouched(void) {
 	MADDatabase *db = [[MADDatabase alloc] init];
 	MAD_PASS_EQUAL([db newSafeLiteral:@"a\\b"], @"'a\\b'", "a backslash is left alone");

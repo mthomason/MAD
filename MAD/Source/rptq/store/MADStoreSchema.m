@@ -300,7 +300,7 @@ static MADStoreRelationship *ToManyOrdered(NSString *name, NSString *destination
 }
 
 /// The version ladder, oldest first and contiguous from version 1.  Version 1
-/// is the schema the portable store shipped with (MAD_SQL_ENTRY.md §8.2);
+/// is the schema the portable store shipped with (docs/project/MAD_SQL_ENTRY.md §8.2);
 /// version 2 adds the persisted SQL source text.  A store with no user_version
 /// at all is version 1's schema, and a step's work is guarded on the column's
 /// absence, so a store created at the current version passes through unchanged.

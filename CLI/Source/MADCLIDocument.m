@@ -10,7 +10,7 @@
 
 // The refresh chain.  It lives in the MAD framework (it used to be compiled in from
 // the application target), so the CLI and the application run the same code by
-// linking it rather than by copying it.  MAD_CLI.md section 4.1, ROADMAP.md §3.4.
+// linking it rather than by copying it.  docs/project/MAD_CLI.md section 4.1, docs/project/ROADMAP.md §3.4.
 #import <MAD/MADOperationRefresh.h>
 #import <MAD/MADOperationRefreshInitialize.h>
 #import <MAD/MADOperationRefreshInitalizeMainDataTable.h>

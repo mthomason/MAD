@@ -4,7 +4,7 @@
 //
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
-//  Coverage for the store's versioning (MAD_SQL_ENTRY.md §8.2): a version-1
+//  Coverage for the store's versioning (docs/project/MAD_SQL_ENTRY.md §8.2): a version-1
 //  store on disk -- the schema the portable store shipped with, before
 //  `sqlSourceText` -- gains the column on open, keeps every pre-existing row
 //  and relationship, and records the current version in PRAGMA user_version;

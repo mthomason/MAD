@@ -5,7 +5,7 @@
 //  MADAPI
 //
 //  The seam that turns "add a database driver" from editing the constructor into
-//  linking another framework (ROADMAP.md §5.1).  A driver's MADDatabaseConnection
+//  linking another framework (docs/project/ROADMAP.md §5.1).  A driver's MADDatabaseConnection
 //  subclass conforms to MADDatabaseDriver and registers itself in +load; the
 //  constructor categories in MAD look a driver up by MADDatabaseType instead of
 //  importing MySQL and TDS, which is the MAD <-> drivers cycle.

@@ -7,7 +7,7 @@
 //
 //  The read-model's data protocol: a store context, an id+context initializer, and
 //  -update, the refresh hook the layer's own lazy getters call.  Nothing outside
-//  the layer calls -update (MADModel_Layer.md §2.8).
+//  the layer calls -update (docs/project/MADModel_Layer.md §2.8).
 //
 
 #ifndef MADModelDataProtocol_h

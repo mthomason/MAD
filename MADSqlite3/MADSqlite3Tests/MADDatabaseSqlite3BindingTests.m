@@ -8,7 +8,7 @@
 //  MADDataType, and the storage class it lands in.  Every pair is driven through
 //  MADDatabaseDataBinding and -bindStatement:withBindings: into a NONE-affinity
 //  column, so what sqlite3_column_type reports is exactly the class the bind
-//  stored -- no affinity conversion.  See BUGS.md, "MADReportFormatter compares
+//  stored -- no affinity conversion.  See docs/project/BUGS.md, "MADReportFormatter compares
 //  untyped values through id" (the canonical-class contract).
 //
 //  Two tranches.  "Characterization" pins the pairs whose stored form the
@@ -181,7 +181,7 @@
 }
 
 - (void)testTextInABlobColumnStoresUtf8Data {
-	// BUGS.md: the old bind stored the string as TEXT -- a different storage
+	// docs/project/BUGS.md: the old bind stored the string as TEXT -- a different storage
 	// class than the column's.  The canonical blob class is NSData.
 	int storage = 0;
 	id stored = [self storedValueForType:MADDataTypeBlob value:@"abc" storageClass:&storage];
@@ -191,7 +191,7 @@
 }
 
 - (void)testNumberInAStringColumnStoresItsText {
-	// BUGS.md: the old bind stored nothing and the cell came back NULL.  The
+	// docs/project/BUGS.md: the old bind stored nothing and the cell came back NULL.  The
 	// canonical string class is NSString, and a number has a string form.
 	int storage = 0;
 	id stored = [self storedValueForType:MADDataTypeString value:@42 storageClass:&storage];

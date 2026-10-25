@@ -117,7 +117,7 @@ fetch_source() {
 		if [[ ! -f "${MEDIA_DIR}/unpinned-${basename}" ]]; then
 			log "downloading ${url}"
 			curl -fsSL -o "${MEDIA_DIR}/unpinned-${basename}" "${url}" \
-				|| die "download failed: ${url} (first build needs network access; see DEVELOPER.md)"
+				|| die "download failed: ${url} (first build needs network access; see docs/project/DEVELOPER.md)"
 		fi
 		RECORDED_SHA="$(shasum -a 256 "${MEDIA_DIR}/unpinned-${basename}" | awk '{print $1}')"
 		log "WARNING: no sha256 pinned for ${basename}; computed ${RECORDED_SHA}"
@@ -127,7 +127,7 @@ fetch_source() {
 		if [[ ! -f "${target}" ]]; then
 			log "downloading ${url}"
 			curl -fsSL -o "${tmp}" "${url}" \
-				|| die "download failed: ${url} (first build needs network access; see DEVELOPER.md)"
+				|| die "download failed: ${url} (first build needs network access; see docs/project/DEVELOPER.md)"
 			local actual
 			actual="$(shasum -a 256 "${tmp}" | awk '{print $1}')"
 			[[ "${actual}" == "${sha}" ]] \

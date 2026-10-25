@@ -4,8 +4,8 @@
 //  MADReportExporterJSON.h
 //  MAD
 //
-//  `--format json`: the document's result set as JSON -- the contract MAD_CLI.md
-//  section 8.3 asks for and MAD_DATA_OBJECT.md section 6 says the CLI, a webserver and
+//  `--format json`: the document's result set as JSON -- the contract docs/project/MAD_CLI.md
+//  section 8.3 asks for and docs/project/MAD_DATA_OBJECT.md section 6 says the CLI, a webserver and
 //  an AI layer should share.  The shape, one schema rather than three private ones:
 //
 //    {
@@ -26,7 +26,7 @@
 //  The text is written by this class, not by NSJSONSerialization: the key order is
 //  fixed and the number spelling is locale-independent, so two runs -- and the two
 //  platforms -- produce the same bytes (the same property the .mad writer is being
-//  given; BUGS.md, the byte-identity entry).
+//  given; docs/project/BUGS.md, the byte-identity entry).
 //
 //  json-report is this class with one more member, "report" (MADReportExporterJSONReport);
 //  the subclassing seam is -appendEntriesToJSON:source:.

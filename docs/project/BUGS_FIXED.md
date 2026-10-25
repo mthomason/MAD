@@ -2643,7 +2643,7 @@ reference to "BUGS.md, the X entry" still lands.
   synchronization.  A refresh therefore mutates and iterates those collections
   on a background thread while the main thread reads them continuously --
   a data race that can fault objects twice, lose registry entries, or corrupt
-  iteration.  The Phase C design (MAD_STORE_PHASE_C.md §2-3) specified the
+  iteration.  The Phase C design (docs/project/MAD_STORE_PHASE_C.md §2-3) specified the
   single shared context but never addressed queue confinement, so this is a
   design gap, not a mechanical slip.
 - **Fix shape.**  Restore confinement on the refresh path without touching the

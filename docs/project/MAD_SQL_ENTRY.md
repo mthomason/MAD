@@ -5,7 +5,7 @@ the SQL popover in `MADDesigner`, the persisted source text (§8, which adds the
 versioning step), and the tests that pin all of it.
 **Date:** 2026-10-22, read at `cf0fe3acd`; revised 2026-10-22 with the persistence decision (§8).
 **Status:** implemented — Phases A–D landed 2026-10-22 and merged into master as `c48a39fb7`
-(TASKS.md §16). Phase E (§9) remains deferred; §8.1–§8.2 carry the as-built amendments.
+(docs/project/TASKS.md §16). Phase E (§9) remains deferred; §8.1–§8.2 carry the as-built amendments.
 
 ---
 

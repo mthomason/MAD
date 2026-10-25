@@ -71,7 +71,7 @@ for platform in ${PLATFORMS}; do
 			# typedef -- dblib's C sources use BOOL -- which is why the
 			# legacy tree patched the header copies after building.
 			# FreeTDS is LGPL-2.0-or-later and this project elects
-			# LGPL-3.0 (recorded in THIRD_PARTY_LICENSES.md), whose s.4
+			# LGPL-3.0 (recorded in docs/project/THIRD_PARTY_LICENSES.md), whose s.4
 			# requires the modified file itself to carry a prominent
 			# notice of the change and its date, so the marker below is
 			# inserted into the shipped header, not just recorded here.

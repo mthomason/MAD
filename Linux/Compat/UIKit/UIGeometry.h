@@ -6,7 +6,7 @@
 //
 //  UIKit's geometry header is CoreGraphics' geometry plus a couple of
 //  aliases; off Apple the frameworks that import it use only CGPoint, CGSize
-//  and CGRect (MAD_LINUX.md §5.2: the geometry tail is plain struct math).
+//  and CGRect (docs/project/MAD_LINUX.md §5.2: the geometry tail is plain struct math).
 //  UIEdgeInsets lives in the CoreGraphics shim beside this one.
 //
 

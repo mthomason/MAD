@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADFileManager subset the Linux build compiles (MAD_LINUX.md §9): 10 of
+# The MADFileManager subset the Linux build compiles (docs/project/MAD_LINUX.md §9): 10 of
 # the framework's 11 implementation files.
 #
 # The one excluded file and why:
@@ -18,7 +18,7 @@
 # manager's ubiquity calls compile through Compat/NSFileManager+Ubiquity.h,
 # whose answers are all "no iCloud"; the cloud paths then take their local
 # branches.  MADMetaDataLocal's contentType has no UTI database to consult off
-# Apple and answers nil.  Keep this list in step with MAD_LINUX.md §4.
+# Apple and answers nil.  Keep this list in step with docs/project/MAD_LINUX.md §4.
 
 set(MADFILEMANAGER_SOURCES
 	"${SOURCE_DIR}/MADFileCoordinator.m"

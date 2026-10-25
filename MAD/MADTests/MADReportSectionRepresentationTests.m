@@ -12,7 +12,7 @@
 //
 //  Also pins the count-accessor mismatch on the rows container: the header declares
 //  `itemCount`, but the implementation names the getter `isItemCount`, so the declared
-//  accessor reads the auto-synthesised zero.  See BUGS.md.
+//  accessor reads the auto-synthesised zero.  See docs/project/BUGS.md.
 //
 
 #import <XCTest/XCTest.h>

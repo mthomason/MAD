@@ -315,7 +315,7 @@
 // MADDocumentRenderProtocol, the same half MADocument carries and the same code:
 // -prepareForQuery and -format are the sequence the viewer's reload runs, the
 // formatter is the one MADReportFormatter, and every read below is
-// MADDocumentRenderDataSource's (MAD_LINUX.md §9 Phase E).  What is absent is what
+// MADDocumentRenderDataSource's (docs/project/MAD_LINUX.md §9 Phase E).  What is absent is what
 // only a document with a window has -- the designer's section layout managers, and
 // the printing formatter the app's print dialog builds.
 
@@ -429,7 +429,7 @@
 // MADocument's versions of these, minus what only a windowed document has: the
 // section layout managers, the change count and the autosave.  The rows written
 // are the same definition rows, so a document an apply built on one platform
-// reads the same on the other (MAD_SQL_ENTRY.md §6.4, decision 3).
+// reads the same on the other (docs/project/MAD_SQL_ENTRY.md §6.4, decision 3).
 
 - (void)addQueryGroupWithQueryField:(int64_t)queryFieldObjectID
 					   andSortOrder:(MADSortOrder)sortOrder {

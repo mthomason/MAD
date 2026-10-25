@@ -208,7 +208,7 @@ __attribute__((unused)) static inline double CGDirectionInDegreesFromVelocity(CG
 // branch that is correct for it: displayBoundsToScale calls this only when
 // zoomScale < 1, and positionForRectOfInterest: forces zoomScale >= 1 before
 // calling. The results are compared with CGRectContainsRect, so changing one
-// branch without reworking both call sites breaks that test. See BUGS.md.
+// branch without reworking both call sites breaks that test. See docs/project/BUGS.md.
 static inline CGRect CGRectAdjustForScale(CGRect r, CGFloat zoomScale) {
 	CGFloat scale = 1.0 / zoomScale;
 	if ( isless(scale, 1.0) ) {

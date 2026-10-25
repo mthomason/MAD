@@ -84,7 +84,7 @@
 // therefore got {0, 0}; a zero layout size makes PrintableHeightForPage
 // negative, so the formatter starts a new page on every row -- 3503 rows
 // produced 11602 pages for the CLI, the only caller that asked before something
-// else had touched -paper.  See BUGS.md.
+// else had touched -paper.  See docs/project/BUGS.md.
 - (void)testPaperSizeBuildsThePaperItself {
 
 	NSURL *url = [NSURL fileURLWithPath:
@@ -143,7 +143,7 @@
 // currency style renders no fraction digits for any locale -- so the document's
 // numeric format decides both: its locale identifier ("en_US", the store keeps the
 // text) and its decimalCount.  A document that does not say falls back to en_US, not
-// to the machine's locale (BUGS.md; Linux/README.md has the cross-platform
+// to the machine's locale (docs/project/BUGS.md; Linux/README.md has the cross-platform
 // comparison).  The Linux suite asserts the same four facts, which is what keeps the
 // two platforms' rendered money byte-identical.
 - (void)testFormattedStringTakesTheCurrencyLocaleAndPrecisionFromTheDocument {
@@ -178,7 +178,7 @@
 
 #pragma mark - Document format
 
-// The v1 header (MAD_FORMAT.md section 7.1) is written ahead of the bzip2 stream by
+// The v1 header (docs/project/MAD_FORMAT.md section 7.1) is written ahead of the bzip2 stream by
 // MADArchiveManager -archive: and stripped again by -unarchive.  A directory with one
 // file should round-trip, and the archive should begin with the magic and version.
 - (void)testArchiveRoundTripWritesAndStripsTheV1Header {
@@ -255,7 +255,7 @@
 // The archive is not reproducible from unchanged members: the tar headers carry each
 // member's stat -- uid, gid, mode and mtime (madtar.m:332-338) -- so the same document
 // saved twice differs by those bytes, and an archive written on Linux cannot match one
-// written here.  BUGS.md records it as the reason "the same .mad on both platforms" is
+// written here.  docs/project/BUGS.md records it as the reason "the same .mad on both platforms" is
 // not possible today, and as characterisation this test *fails* the day a reproducible
 // writer lands -- which is the signal to delete it and re-status the entry.
 - (void)testArchiveIsNotReproducibleFromUnchangedMembers {
@@ -288,7 +288,7 @@
 	XCTAssertGreaterThan(firstBytes.length, (NSUInteger)0);
 	XCTAssertGreaterThan(secondBytes.length, (NSUInteger)0);
 	XCTAssertFalse([firstBytes isEqualToData: secondBytes],
-				   @"an ordinary archive carries the members' mtimes, so it is not reproducible (BUGS.md)");
+				   @"an ordinary archive carries the members' mtimes, so it is not reproducible (docs/project/BUGS.md)");
 
 	[fileManager removeItemAtURL: source error: NULL];
 	[fileManager removeItemAtURL: firstURL error: NULL];

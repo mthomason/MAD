@@ -486,7 +486,7 @@ SELECT-list column order, which was set order and therefore differed from Apple'
 (same fields, same rows; noted in `Linux/README.md`). **Settled 2026-10-16**, with
 the JSON export shape decision (§10.1 below): the order is defined as the column
 alias in both SQL builders, so the generated SQL, the row cache and every export
-agree on both platforms (BUGS.md, the SELECT-list entry; the order tests in
+agree on both platforms (docs/project/BUGS.md, the SELECT-list entry; the order tests in
 `Linux/Tests/MADQuerySelectExpressionTests.m`).
 
 **Phase E status (2026-10-16, first half).** The export seam is real and the
@@ -633,7 +633,7 @@ the C libraries natively.
    JSON-typed values — and `--format json-report` is that document plus a `report`
    member (the rendered sections). With it, the SELECT list's order is defined as the
    column alias, sorted, so the generated SQL, the row cache and every export agree on
-   both platforms (BUGS.md, the SELECT-list entry — previously set order). The data
+   both platforms (docs/project/BUGS.md, the SELECT-list entry — previously set order). The data
    half is built (`MADReportExporterJSON`, both platforms); the report member waits
    for the render half.
 2. **Renderer staging** — HTML/SVG first, PDF last, or macOS-side PDF workers?

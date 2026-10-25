@@ -5,10 +5,10 @@
 //  MAD Designer
 //
 //  `mad export` -- render the report and write it out.  The formats are the export
-//  seam's (MADReportExporterRegistry, MAD_CLI.md section 5.3): the verb looks one up
+//  seam's (MADReportExporterRegistry, docs/project/MAD_CLI.md section 5.3): the verb looks one up
 //  by name and hands it the document, so a new format is a new class and nothing
 //  here changes.  There are no local arms left: `pdf` moved onto the seam with the
-//  HTML formats (MAD_LINUX.md section 9 Phase E), and the verb is the same for it as
+//  HTML formats (docs/project/MAD_LINUX.md section 9 Phase E), and the verb is the same for it as
 //  for the rest -- the registry says whether this build can produce it.
 //
 
@@ -22,7 +22,7 @@
 #import <MADFoundation/MADCredential.h>
 
 // Opens the document and refreshes it: every format needs the rows, which are
-// derived and live outside the document (MAD_FORMAT.md section 5).  A spawned CLI
+// derived and live outside the document (docs/project/MAD_FORMAT.md section 5).  A spawned CLI
 // cannot see the keychain items the app stored (different access group), so the
 // credentials come from --credentials, the way the refresh verb takes them.
 static MADCLIDocument *MADCLIOpenRefreshedDocument(MADCLIInvocation *invocation, MADCLIExitCode *exitCode) {
@@ -59,7 +59,7 @@ static MADCLIDocument *MADCLIOpenRefreshedDocument(MADCLIInvocation *invocation,
 }
 
 // The --out path, or nil for the standard output.  "-" is the convention the other
-// command-line tools use and MAD_CLI.md's default says stdout, so both spell it.
+// command-line tools use and docs/project/MAD_CLI.md's default says stdout, so both spell it.
 static NSURL *MADCLIExportOutputURL(MADCLIInvocation *invocation) {
 	if (invocation.outPath.length == 0 || [invocation.outPath isEqualToString: @"-"]) {
 		return nil;

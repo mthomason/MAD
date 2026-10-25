@@ -4,7 +4,7 @@
 //
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
-//  The pasted-SQL lexer (MAD_SQL_ENTRY.md §4): splits the input into tokens with
+//  The pasted-SQL lexer (docs/project/MAD_SQL_ENTRY.md §4): splits the input into tokens with
 //  1-based line:column positions, reading identifiers through the dialect's own
 //  quote pair (backticks for MySQL, brackets for T-SQL, double quotes by
 //  default), `'...'` string literals with doubled interior quotes, numbers,

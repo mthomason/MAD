@@ -7,7 +7,7 @@
 //
 //  One schema field, keyed by the RptqDatabaseSchemaField row's identifier: name,
 //  data type and the width/decimals metadata.  Built by MADModelTable -update.
-//  The `inTable` back-pointer is declared but never assigned (MADModel_Layer.md §6).
+//  The `inTable` back-pointer is declared but never assigned (docs/project/MADModel_Layer.md §6).
 //
 
 #ifndef MAD_MADModelField_h

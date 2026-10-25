@@ -11,7 +11,7 @@
 //  Attribute and relationship access routes through MADStoreSchema, which already
 //  knows every property's name and type, so a subclass needs no accessor of its own:
 //  it declares the same properties it always did, and the generic KVC fall-through
-//  below serves them.  See MAD_STORE_PHASE_C.md §2.
+//  below serves them.  See docs/project/MAD_STORE_PHASE_C.md §2.
 //
 
 #ifndef MAD_RptqObject_h

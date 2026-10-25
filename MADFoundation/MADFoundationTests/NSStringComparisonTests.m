@@ -7,7 +7,7 @@
 //  Coverage for the defined order every text comparison in the export path
 //  routes through: -[NSString mad_orderedCompare:] and its C core
 //  MADStringOrderedCompareUTF8.  The order is part of the export format's
-//  contract (MAD_CLI.md's `mad export` section): case-fold, then UTF-8
+//  contract (docs/project/MAD_CLI.md's `mad export` section): case-fold, then UTF-8
 //  code-point order, identical on every platform.
 //
 

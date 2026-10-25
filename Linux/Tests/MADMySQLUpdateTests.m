@@ -11,7 +11,7 @@
 //  raise before any session call and are covered here.
 //
 //  The empty-rowData and empty-qualifier range errors were the pinned defects
-//  (BUGS.md): the leading ", " and "AND " trims ran against empty buffers, so
+//  (docs/project/BUGS.md): the leading ", " and "AND " trims ran against empty buffers, so
 //  the intended diagnostics never ran.  Both now raise MADMySQLException before
 //  any buffer is built.
 //
@@ -64,7 +64,7 @@ static void testExecuteWithoutATableRaises(void) {
 }
 
 static void testExecuteWithoutRowDataRaisesTheUpdatesOwnError(void) {
-	// BUGS.md: with no rows to set, the column list was still empty when
+	// docs/project/BUGS.md: with no rows to set, the column list was still empty when
 	// -execute deleted its leading ", ", so the range edit raised before the
 	// intended diagnostic could run.
 	MADMySQLUpdate *update = [MADMySQLUpdate updateWithConnection:connectionWithoutAServer()];
@@ -96,7 +96,7 @@ static void testExecuteWithAnEmptyRowDataDictionaryRaisesTheSameWay(void) {
 }
 
 static void testExecuteWithoutAQualifierRaisesTheUpdatesOwnError(void) {
-	// BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and the
+	// docs/project/BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and the
 	// four-character delete raised rather than telling the caller to qualify
 	// the update.
 	MADMySQLUpdate *update = [MADMySQLUpdate updateWithConnection:connectionWithoutAServer()];

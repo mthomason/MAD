@@ -9,7 +9,7 @@
 //  the drawing is MADPrintPageRenderer's -- UIKit's UIPrintPageRenderer over Core
 //  Graphics, which is Apple's alone, so this format registers everywhere and answers
 //  +isAvailable NO where the renderer is not compiled.  It is the CLI's own arm moved
-//  onto the seam (MAD_CLI.md §5.3), and the render-half protocol's second customer.
+//  onto the seam (docs/project/MAD_CLI.md §5.3), and the render-half protocol's second customer.
 //
 //  `--out` is required: Core Graphics writes a file, not a stream.
 //

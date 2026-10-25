@@ -105,7 +105,7 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 	// A result with no rows has no columns in the table at all -- the sqlite driver
 	// builds them from the first row -- so the query's own field keys stand in, and
 	// the export still describes the shape of something empty rather than nothing
-	// (MAD_DATA_OBJECT.md section 3.6).
+	// (docs/project/MAD_DATA_OBJECT.md section 3.6).
 	MADDataTableFast *table = document.dataTable;
 	NSMutableArray <NSString *> *columnKeys = [NSMutableArray arrayWithCapacity: table.columnKeys.count];
 	for (NSString *tableColumnKey in table.columnKeys) {

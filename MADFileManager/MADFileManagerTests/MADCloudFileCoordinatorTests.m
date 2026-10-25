@@ -13,7 +13,7 @@
 //  Every coordinator built here is kept alive and has its private
 //  documentsDirectoryQueue drained before it is released.  -init… queues a
 //  barrier block that assigns _documentsDirectory through a weak self with no
-//  nil check, so releasing a coordinator first segfaults at 0x10 (see BUGS.md).
+//  nil check, so releasing a coordinator first segfaults at 0x10 (see docs/project/BUGS.md).
 //
 
 #import <XCTest/XCTest.h>
@@ -64,7 +64,7 @@
 
 - (void)tearDown {
 	// Keep each coordinator alive until its queued documents-directory block has
-	// run, then let them go (BUGS.md).
+	// run, then let them go (docs/project/BUGS.md).
 	for (MADCloudFileCoordinator *coordinator in self.coordinators) {
 		dispatch_queue_t queue = [coordinator valueForKey:@"documentsDirectoryQueue"];
 		if (queue != NULL) dispatch_sync(queue, ^{ });

@@ -1,7 +1,7 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
 #
-#  Linux/CMakeLists.txt -- the Phase B Linux build (MAD_LINUX.md §9).
+#  Linux/CMakeLists.txt -- the Phase B Linux build (docs/project/MAD_LINUX.md §9).
 #
 #  Compiles the MADFoundation subset against GNUstep and builds the Linux
 #  tests.  The flags come from gnustep-config inside the toolchain image; a
@@ -109,7 +109,7 @@ set(SHIM_DIR "${CMAKE_BINARY_DIR}/shim")
 file(MAKE_DIRECTORY "${SHIM_DIR}")
 
 # The C libraries the frameworks link are built by Linux/lib/libraries.sh
-# into /usr/local, the image's prefix (MAD_LINUX.md §7).
+# into /usr/local, the image's prefix (docs/project/MAD_LINUX.md §7).
 set(SQLITE3_INCLUDE_DIR "/usr/local/include")
 find_library(SQLITE3_LIBRARY sqlite3 REQUIRED)
 set(FREETDS_INCLUDE_DIR "/usr/local/include")
@@ -418,10 +418,10 @@ target_link_libraries(ToolchainProbe PRIVATE
 add_test(NAME ToolchainProbe COMMAND ToolchainProbe)
 
 # ---------------------------------------------------------------------------
-# `mad` -- the CLI (MAD_CLI.md).  The same sources build for the iOS Simulator
+# `mad` -- the CLI (docs/project/MAD_CLI.md).  The same sources build for the iOS Simulator
 # through CLI/build.sh; this is the Linux half, and the Phase D checkpoint's
 # subject.  inspect/schema/query/refresh are the verbs here; export is PDF and
-# stays on Apple (MAD_LINUX.md §5.2).
+# stays on Apple (docs/project/MAD_LINUX.md §5.2).
 #
 # The target is named mad-cli because `mad` is the framework library; the
 # binary is mad, the same name CLI/build.sh writes on the Mac.

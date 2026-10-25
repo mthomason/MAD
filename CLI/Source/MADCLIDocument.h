@@ -10,7 +10,7 @@
 //  rendering is the export seam's (MADReportExporting), including PDF's.
 //
 //  The document underneath is a MADocument on Apple, where the app's document class
-//  exists, and a MADHeadlessDocument everywhere else (MAD_LINUX.md §9 Phase D); both
+//  exists, and a MADHeadlessDocument everywhere else (docs/project/MAD_LINUX.md §9 Phase D); both
 //  are read through MADDocumentDataProtocol, which is what the refresh chain takes
 //  too, so the verbs above this file are the same on both.
 //

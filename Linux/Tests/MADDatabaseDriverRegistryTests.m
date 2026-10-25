@@ -6,7 +6,7 @@
 //
 //  Ported from MADAPITests/MADDatabaseDriverRegistryTests.m: the registry that
 //  lets a driver register itself instead of being imported by the constructor
-//  (ROADMAP.md §5.1).  This executable links libmadapi and no driver archive, so
+//  (docs/project/ROADMAP.md §5.1).  This executable links libmadapi and no driver archive, so
 //  it is also the "a process that links no driver has none" check; the drivers'
 //  own registration is pinned by MADDatabaseDriverDispatchTests, which links
 //  libmad and through it the drivers.

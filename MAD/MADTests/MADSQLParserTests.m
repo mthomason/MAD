@@ -4,7 +4,7 @@
 //
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
-//  Coverage for the pasted-SQL importer's front half (MAD_SQL_ENTRY.md §5, §10.3):
+//  Coverage for the pasted-SQL importer's front half (docs/project/MAD_SQL_ENTRY.md §5, §10.3):
 //  the tokenizer's per-dialect quoting and line:column positions, and the parser's
 //  accept matrix -- exactly the language the model can hold -- and its rejection
 //  table, each rejection asserting the error code and the line:column, never just

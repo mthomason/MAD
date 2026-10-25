@@ -215,7 +215,7 @@ typedef NSComparisonResult (*MADGroupLevelComparator)(id value, id value2, MADDa
 //  NSString or NSData (+[MADDatabaseSqlite3 databaseResultValue:columnNumber:]),
 //  and the bind path now stores one canonical class per declared type, so the
 //  level's type and the values' classes agree on the healthy path.  See
-//  BUGS.md, "MADReportFormatter compares untyped values through id".
+//  docs/project/BUGS.md, "MADReportFormatter compares untyped values through id".
 
 //  The comparison family a level's declared type sorts under.  Must agree with
 //  the cache's ORDER BY collation
@@ -358,7 +358,7 @@ static MADGroupLevelComparator MADComparisonFunctionForDataType(MADDataType data
 //  The comparison type for each group level, resolved once per format: the row
 //  cache column's own MADDataType, with the schema field's as the fallback for a
 //  cache that has no column to consult.  The cache's is the type the bind path
-//  stores under, so it is the one the values' classes agree with (BUGS.md).
+//  stores under, so it is the one the values' classes agree with (docs/project/BUGS.md).
 - (NSArray <NSNumber *> *)groupDataTypes {
 	if (_groupDataTypes == nil) {
 		NSArray <NSSortDescriptor *> *sortDescriptors = self.sections.groupSortDescriptors;

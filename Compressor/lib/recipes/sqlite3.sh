@@ -7,7 +7,7 @@
 #  options are written down.  They were once written in two places (this
 #  script and the MADSqlite3 target) and silently disagreed, so the engine
 #  writing every .maddb cache was configured by accident.  Now the recipe is
-#  the only consumer.  See LIBRARIES.md section 4 and BUGS.md (hazard H7).
+#  the only consumer.  See docs/project/LIBRARIES.md section 4 and docs/project/BUGS.md (hazard H7).
 
 set -euo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/../common.sh"

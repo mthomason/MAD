@@ -5,7 +5,7 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Coverage for MADDatabaseDriverRegistry -- the seam that lets a driver register
-//  itself instead of being imported by the constructor (ROADMAP.md §5.1).  This
+//  itself instead of being imported by the constructor (docs/project/ROADMAP.md §5.1).  This
 //  bundle links no driver framework, so it is also the "a process that links no
 //  driver has none" check; the drivers' own registration is pinned by the MAD
 //  suite, which links them.

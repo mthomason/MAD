@@ -9,7 +9,7 @@
 //  only way to exercise MADMySQLConnection, MADMySQLFetch and MADMySQLFetch+DataTable, which
 //  are thin wrappers over libmysqlclient.
 //
-//  The server is the local development instance documented in DEVELOPER.md:
+//  The server is the local development instance documented in docs/project/DEVELOPER.md:
 //
 //      MySQL: 127.0.0.1, root, root, employees
 //
@@ -86,7 +86,7 @@
 
 - (void)requireServer {
 	XCTSkipIf(![self serverIsAvailable],
-			  @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
+			  @"No MySQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
 }
 
 - (MADMySQLConnection *)openConnection {
@@ -792,7 +792,7 @@
 	// With the flag set the same collision is swallowed and the row stands.
 	insert.ignoreDuplicateErrors = YES;
 	XCTAssertNoThrow([insert execute]);
-	// BUGS.md: the ignored statement still failed, and -affectedRows is read
+	// docs/project/BUGS.md: the ignored statement still failed, and -affectedRows is read
 	// straight off mysql_affected_rows, which answers (my_ulonglong)-1 for a
 	// failed statement -- so the count is ULONG_MAX rather than 0.
 	XCTAssertEqual(insert.affectedRows.unsignedLongLongValue, ULLONG_MAX);
@@ -859,7 +859,7 @@
 }
 
 - (void)testUpdateWithoutAQualifierRaisesTheUpdatesOwnError {
-	// BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and -execute
+	// docs/project/BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and -execute
 	// deleted four characters off the front of it instead of telling the caller
 	// to qualify the update.  The guard runs before any session call, so the
 	// offline suite covers it too; this keeps the live connection in the loop.

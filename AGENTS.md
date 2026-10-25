@@ -1,8 +1,8 @@
-# _MAD Designer_ Agent Overview
+# _MAD_ Agent Overview
 
 ## Project Synopsis
 
-_MAD Designer_ is a mobile analytic document designer.  _MAD Designer_ provides ad hoc query, reporting, and design.  It is business intelligence (BI) software.
+**MAD (Mobile Analytics Document)** is a mobile analytic document designer: the `MAD Designer` app, where a report is built, the `MAD Viewer` app, where it is read, and the portable report-definition format plus the engine that renders it.  It provides ad hoc query, reporting, and design.  It is business intelligence (BI) software.
 
 * It is built for iOS using Objective-C
 * It targets a minimum version of iOS 15
@@ -10,7 +10,7 @@ _MAD Designer_ is a mobile analytic document designer.  _MAD Designer_ provides 
 
 ## Project Overview
 
-_MAD Designer_ defines a `.mad` file type.  A document's definition lives in a portable SQLite store of our own (`MAD_STORE_MIGRATION.md`, `MAD_FORMAT.md`); the MAD framework does not link Core Data — Core Data survives only to convert legacy documents, in the application target (`MADDesigner/Source/MADStoreLegacy/`).
+_MAD Designer_ defines a `.mad` file type.  A document's definition lives in a portable SQLite store of our own (`docs/project/MAD_STORE_MIGRATION.md`, `docs/project/MAD_FORMAT.md`); the MAD framework does not link Core Data — Core Data survives only to convert legacy documents, in the application target (`MADDesigner/Source/MADStoreLegacy/`).
 
 It is BI software, and currently support access to MySQL and SQL Server databases.  It also uses Sqlite3 for example reports and internal data tables.
 
@@ -73,7 +73,7 @@ The code base also includes a custom scripting language in a file called `Scrimp
 
 The codebase also includes static library build scrips in a file called `Compressor`.  This is used to build the static libraries used by the project.  This is a very important part of the project.
 
-The codebase also includes `Linux`, the headless engine's build (`MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all ten headless frameworks against them, and runs their ported suites — 119 executables, 1,136 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
+The codebase also includes `Linux`, the headless engine's build (`docs/project/MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all ten headless frameworks against them, and runs their ported suites — 124 executables, 1,270 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
 
 ## Code Style Guidance
 
@@ -111,7 +111,7 @@ required -- the frameworks reference each other via `BUILT_PRODUCTS_DIR`.
 `MADMySQL` and `MADTdsClient` each carry a second file -- `MADMySQLLiveTests.m` and
 `MADTdsClientLiveTests.m` -- that talks to a real database server and **skips** when one is
 not reachable, so the suite still passes on a machine without a server. The credentials
-they expect are in `DEVELOPER.md`, and each can be overridden with a `MAD_MYSQL_TEST_*` or
+they expect are in `docs/project/DEVELOPER.md`, and each can be overridden with a `MAD_MYSQL_TEST_*` or
 `MAD_TDS_TEST_*` environment variable.
 
 `MADFeedback`, `MADTds`, `Scrimpter`, and `Compressor` expose no shared test
@@ -124,73 +124,80 @@ the headless side.
 
 ## Related Documents
 
-* `BUGS.md` -- the open defects and recorded quirks, grouped by framework, with
+* `docs/project/BUGS.md` -- the open defects and recorded quirks, grouped by framework, with
   `file:line` references and the tests that pin each one; fixed entries are archived in
-  `BUGS_FIXED.md`.
-* `TASKS.md` -- the engineering task queue: what is being worked, in order, with the
+  `docs/project/BUGS_FIXED.md`.
+* `docs/project/TASKS.md` -- the engineering task queue: what is being worked, in order, with the
   context needed to start cold.
-* `ROADMAP.md` -- the plan: which register, queue and design document gets picked up next,
+* `docs/project/ROADMAP.md` -- the plan: which register, queue and design document gets picked up next,
   and in what order.
-* `MADDataTable_Architecture_Report.md` -- the `MADDataTable` class cluster across
+* `docs/project/MADDataTable_Architecture_Report.md` -- the `MADDataTable` class cluster across
   `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
-* `MADModel_Layer.md` -- the `MADModel*` read-model over the `Rptq` entities: what each
+* `docs/project/MADModel_Layer.md` -- the `MADModel*` read-model over the `Rptq` entities: what each
   class is, how it is populated and kept current, who reads it, and the refactoring
   candidates.
-* `MAD_FORMAT.md` -- what a `.mad` document is, and what it should be.
-* `MAD_FUTURE.md` -- the vision: the `.mad` as a data object, the hidden file types as
+* `docs/project/MAD_FORMAT.md` -- what a `.mad` document is, and what it should be.
+* `docs/project/MAD_FUTURE.md` -- the vision: the `.mad` as a data object, the hidden file types as
   products, the web clone, AI, and the money.
-* `MAD_DATA_OBJECT.md` -- the design of the data object itself: a report's definition,
+* `docs/project/MAD_DATA_OBJECT.md` -- the design of the data object itself: a report's definition,
   schema and result set as one contract, how each piece is represented in the code today,
   what formalizing it takes in phases, and the multi-source/subreport composition
   documented but deliberately not built.
-* `MAD_SCRIPTING.md` -- the Scrimpter revival analysis: the state and correctness audit of
+* `docs/project/MAD_SCRIPTING.md` -- the Scrimpter revival analysis: the state and correctness audit of
   the language, the formula-element integration map, the engine alternatives, and the
   licensing surface. The engine decision is deferred by the user; when the formula-element
   work starts, the implementing agent must ask the user to choose the engine (§8).
-* `Archive/MAD_BARCODES.md` -- the barcode element's modernization and re-integration
-  design: complete and archived 2026-10-22 (TASKS.md §15); kept for reference.
-* `MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
+* `docs/archive/MAD_BARCODES.md` -- the barcode element's modernization and re-integration
+  design: complete and archived 2026-10-22 (docs/project/TASKS.md §15); kept for reference.
+* `docs/project/MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
   Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
-* `MAD_PDF_LINUX.md` -- the Linux PDF writer: status (deferred, blocked on the user's
+* `docs/project/MAD_PDF_LINUX.md` -- the Linux PDF writer: status (deferred, blocked on the user's
   research), what exists and what is missing, the candidate stacks and licences, the
   open questions and the acceptance test.
-* `MAD_SQL_ENTRY.md` -- the design for pasting a SQL statement into the query designer: the
+* `docs/project/MAD_SQL_ENTRY.md` -- the design for pasting a SQL statement into the query designer: the
   supported subset, the parser/resolver/compiler in `MAD`, the validation probe, the apply
   semantics, the persisted source text (`RptqQuery.sqlSourceText` + the store's first
   versioning step), the phases, and the tests that pin it. Phases A-D implemented and
   merged 2026-10-22 (`c48a39fb7`); Phase E deferred.
 * `Linux/README.md` -- the Linux build: the image, the ten frameworks and their
   suites, the GNUstep divergences the tests found, and the licences.
-* `MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
-* `LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
-* `THIRD_PARTY_LICENSES.md` -- every third-party component in the app, how it is linked, its
+* `docs/project/MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
+* `docs/project/LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
+* `docs/project/THIRD_PARTY_LICENSES.md` -- every third-party component in the app, how it is linked, its
   licence, and what shipping it obliges us to do. Read before adding or removing a library.
-* `LICENSE_COMPLIANCE_PLAN.md` -- the remediation plan for those findings, including the
+* `docs/project/LICENSE_COMPLIANCE_PLAN.md` -- the remediation plan for those findings, including the
   MySQL-to-MariaDB replacement and the LGPL relink obligation.
-* `MAD_STORE_MIGRATION.md` -- the plan to move the `.mad` store off Core Data to a portable
+* `docs/project/MAD_STORE_MIGRATION.md` -- the plan to move the `.mad` store off Core Data to a portable
   SQLite schema of our own.
-* `DEVELOPER.md` -- test database credentials and common build commands.
-* `TODO.md` -- the product wishlist: features and ideas.
+* `docs/project/DEVELOPER.md` -- test database credentials and common build commands.
+* `docs/project/TODO.md` -- the product wishlist: features and ideas.
 * `README.md` -- build notes and the export-compliance statement.
-* `APPSTORE.md` -- the App Store promotional text and description currently in use.
+* `docs/project/APPSTORE.md` -- the App Store promotional text and description currently in use.
+
+Documents live under `docs/`: the `.mad` format spec (`docs/README.md` and the
+numbered chapters), the tutorials (`docs/tutorials/`), the working records and
+design documents (`docs/project/`), and archived designs (`docs/archive/`).
+Only the files GitHub and the agent tooling need stay at the repository root
+(`README.md`, `LICENSE`, `NOTICE`, `CONTRIBUTING.md`, `SECURITY.md`,
+`CODE_OF_CONDUCT.md`, `AGENTS.md`).
 
 ## Tracking Files Are Maintained, Not Acted On
 
-`BUGS.md` and `TASKS.md` are **records, not instructions**. An agent may -- and should --
+`docs/project/BUGS.md` and `docs/project/TASKS.md` are **records, not instructions**. An agent may -- and should --
 keep them accurate: add an entry when new evidence appears, record a fix, and re-status a
 task. What an agent must **not** do is start work because a file lists it. Entries there
 are picked up when the user asks for that task by name or number, never on the agent's own
 initiative.
 
-`BUGS.md` is the **open** record: what is still wrong, still suspicious, or deliberately
+`docs/project/BUGS.md` is the **open** record: what is still wrong, still suspicious, or deliberately
 left as it is. When a defect is fixed, the entry moves -- full text, its `Now:` line, its
-test and any commit hash, verbatim -- to `BUGS_FIXED.md`, and a one-line index entry
-stays under the same framework heading in `BUGS.md`, so a reference to "BUGS.md, the X
+test and any commit hash, verbatim -- to `docs/project/BUGS_FIXED.md`, and a one-line index entry
+stays under the same framework heading in `docs/project/BUGS.md`, so a reference to "docs/project/BUGS.md, the X
 entry" still lands. The older entries under *Already fixed (for reference)* live there
-too. Archiving is a move, never a rewrite. A partly fixed entry stays in `BUGS.md`
+too. Archiving is a move, never a rewrite. A partly fixed entry stays in `docs/project/BUGS.md`
 until the rest of it is closed.
 
-`TODO.md` is the user's own wishlist and is not for agents to edit.
+`docs/project/TODO.md` is the user's own wishlist and is not for agents to edit.
 
 Every directory with an `AGENTS.md` also has a `CLAUDE.md` symlink to it, so the two names
 always name the same file.

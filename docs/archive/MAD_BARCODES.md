@@ -1,7 +1,7 @@
 # MAD_BARCODES.md — the barcode element: modernization and re-integration plan
 
 **Status:** Archived 2026-10-22 — the design and all of its tasks (0-7) were implemented
-(TASKS.md §15, done 2026-10-21). The document is kept for reference only and is no longer
+(docs/project/TASKS.md §15, done 2026-10-21). The document is kept for reference only and is no longer
 a work queue.
 
 **Product decision (user, 2026-10-20):** the barcode element is **always available** in
@@ -17,7 +17,7 @@ links today:
 - **`MADBarcodes` framework** is a workspace member, linked and embedded by the app target
   and linked by `MAD`. It wraps **zint 2.16.0** (pure C, BSD-3-Clause backend only),
   built by the Compressor recipe into `Compressor/library/zint.xcframework`, linked
-  alongside `libpng.xcframework` and `zlib.xcframework` (`LIBRARIES.md:152`).
+  alongside `libpng.xcframework` and `zlib.xcframework` (`docs/project/LIBRARIES.md:152`).
 - **Framework shape:** `MTBarcode` base class + `MTBarcodeProtocol` + `MTBarcodeView`
   (UIView) + **67 symbology subclasses** in 61 headers (two files declare more than one
   class: `MTBarcodeCode128Iso15417.h` holds 6, `MTBarcodeCode39Iso16388.h` holds 2).
@@ -48,7 +48,7 @@ links today:
   `MADPrintPageElement+Constructor.m:31`, `MADDocumentObjectDataReference.m` barcode arm).
   These guards must stay intact; `./Linux/build.sh` must stay green.
 
-### Known defects (all pinned in BUGS.md — read the entries before fixing)
+### Known defects (all pinned in docs/project/BUGS.md — read the entries before fixing)
 
 1. `MTBarcode.m:693/:719` — the type-name dictionary has a duplicate key
    (`@(MTBarcodeTypeEan14)` aliases `@BARCODE_EAN14`).
@@ -66,7 +66,7 @@ links today:
 7. `MADBarcodes/MADBarcodes/MADBarcodes/MADBarcodeDataInputType.h` — a dead stub (enum
    commented out; the live private enum is in `MTBarcode.m:80-84`; the header is a file
    reference in the pbxproj but in no build phase).
-8. `BUGS.md` "The store's colour columns have no reader…" — the store has
+8. `docs/project/BUGS.md` "The store's colour columns have no reader…" — the store has
    `backgroundColorR/G/B/A` + `foregroundColorR/G/B/A` columns (`MADStoreSchema.m:496-503`)
    but the model's `backgroundColor`/`foregroundColor` properties (`RptqDocumentElement.h:30-31`)
    have no attribute mapping in `RptqObject.m:63-92`, so reading or writing a colour
@@ -84,7 +84,7 @@ links today:
 11. `MADPrintPageElementBarcode` has no `-text`, so `MADReportLineRepresentation -text`
     returns nil for barcode lines — `json-report`, `html`, `html-flow` and accessibility
     serialize an empty string for the element.
-12. `TASKS.md` §13 — `MADBarcodes` still carries first-party compiler warnings/analyzer
+12. `docs/project/TASKS.md` §13 — `MADBarcodes` still carries first-party compiler warnings/analyzer
     findings (five frameworks were cleared; the app, MAD and MADBarcodes remain).
 
 ### Performance problem (the design driver)
@@ -107,7 +107,7 @@ occurrence of the same value. There is also no image-returning API at all.
   string does change: `customClass="MTBarcodeView"` → `"MADBarcodeView"` (storyboard:581).
   The rename touches: the framework (126 files + umbrella + pbxproj), `MAD` (7 files,
   all Apple-guarded), the app (12 files), the framework tests (3 files), and the
-  `MTBarcode*.m` path references in open `BUGS.md` entries.
+  `MTBarcode*.m` path references in open `docs/project/BUGS.md` entries.
 - **D2 — Keep the class-per-symbology hierarchy.** 67 tiny subclasses mirroring zint's
   symbologies 1:1 is a maintainable design (each is an init + `+type`). Collapsing it
   into a table-driven registry would be a rewrite with no product gain. The factory
@@ -123,8 +123,8 @@ occurrence of the same value. There is also no image-returning API at all.
 - **D4 — Fix the pinned defects, and archive them properly.** Items 1–8 above are fixed in
   Task 2/Task 5. NSCoding gets a **correct implementation** (encode/decode all protocol
   properties under real keys) — cheap, and makes the class honest; the pinning tests are
-  updated to assert the corrected behavior. `BUGS.md` entries move verbatim to
-  `BUGS_FIXED.md` with a one-line index entry left behind (the house protocol).
+  updated to assert the corrected behavior. `docs/project/BUGS.md` entries move verbatim to
+  `docs/project/BUGS_FIXED.md` with a one-line index entry left behind (the house protocol).
 - **D5 — Delete what is dead.** The `MADBarcodeDataInputType.h` stub and its pbxproj file
   references, the empty `MADBarcodesTests.m` template, and the commented-out colour
   blocks in `MTBarcode.m` (:462-467, :763-782) are deleted. The input mode stays
@@ -144,7 +144,7 @@ occurrence of the same value. There is also no image-returning API at all.
   `libraries.conf` + a UIKit-free render path), macOS/Catalyst, GS1/Data input-mode
   wiring, storyboard segue IDs living in the model (`detailsSegueIdentifer`), barcode
   images inside the HTML exporter, and the app-wide third-party-notices gap
-  (`THIRD_PARTY_LICENSES.md:269-284` — the zint BSD-3 notice obligation is flagged there
+  (`docs/project/THIRD_PARTY_LICENSES.md:269-284` — the zint BSD-3 notice obligation is flagged there
   already and belongs to the licence-register track, not this one).
 
 ## 3. Ground rules (repeat in spirit inside every task)
@@ -157,8 +157,8 @@ occurrence of the same value. There is also no image-returning API at all.
   from the code; an unmarked warning means delete.
 - zsh `rm`/`cp` are interactive — use `/bin/rm -f`, `/bin/cp -f`, or `git mv`.
 - Header imports must match file case exactly (the Linux filesystem is case-sensitive).
-- `BUGS.md` is a record: when an entry is fixed, move it **verbatim** to `BUGS_FIXED.md`
-  and leave a one-line index entry in `BUGS.md`. `TASKS.md` status updates are welcome;
+- `docs/project/BUGS.md` is a record: when an entry is fixed, move it **verbatim** to `docs/project/BUGS_FIXED.md`
+  and leave a one-line index entry in `docs/project/BUGS.md`. `docs/project/TASKS.md` status updates are welcome;
   never start work merely because a tracking file lists it.
 - Work on `master`; commit per task when its gates pass; **do not push** unless asked.
 - Gates (run before every commit): the framework suite, the `MAD` suite, the app build,
@@ -281,7 +281,7 @@ Steps:
        MADDesigner/Source/MADElementCanvas.h/.m
      The app-side CLASS names (MTViewControllerBarcode, MTTableViewControllerBarcodeExtra*
      etc.) do NOT change — only the MTBarcode* framework symbols they reference.
-6. Update the open BUGS.md entries that cite MTBarcode*.m paths (the ## MADBarcodes
+6. Update the open docs/project/BUGS.md entries that cite MTBarcode*.m paths (the ## MADBarcodes
    section and the colour entry at ~line 89): change the file paths to the new names.
    Do not change any other wording.
 7. Grep to confirm nothing is left: `grep -rn 'MTBarcode' MADBarcodes MAD MADDesigner/Source
@@ -314,18 +314,18 @@ fix it or stop and ask.
 
 ```
 Goal: fix the five framework defects below and delete the dead code, each pinned by
-BUGS.md entries. Work on master in /Users/michael/Desktop/Reports. House rules: tabs;
+docs/project/BUGS.md entries. Work on master in /Users/michael/Desktop/Reports. House rules: tabs;
 no stringWithFormat:; unused code gets a clang attribute at the declaration, never a
-silenced warning. Read each BUGS.md entry in full before touching its code — the entry
+silenced warning. Read each docs/project/BUGS.md entry in full before touching its code — the entry
 names the exact symbols.
 
-1. Duplicate dictionary key (BUGS.md ## MADBarcodes, "MTBarcode's type-name dictionary
+1. Duplicate dictionary key (docs/project/BUGS.md ## MADBarcodes, "MTBarcode's type-name dictionary
    has a duplicate key"): in MADBarcodes/MADBarcodes/MADBarcodes/MADBarcode.m the
    dictionary literal built around lines 693/719 uses both @(MADBarcodeTypeEan14) and
    @BARCODE_EAN14 (the enum value aliases the zint constant, so they collide). Delete
    the redundant line (keep the @BARCODE_EAN14 entry). Update the dictionary-shape test
    if it asserts the entry count.
-2. Wrong symbology types (BUGS.md, the QR and EAN128 entry): in
+2. Wrong symbology types (docs/project/BUGS.md, the QR and EAN128 entry): in
    MADBarcodeQrCodeIso18004.m make init and +type both return the QR type (they return
    MADBarcodeTypeOneCode today, and -drawInRect: passes the instance's type to zint, so
    the object draws the wrong symbol). In MADBarcodeCode128Iso15417.m lines ~145-161,
@@ -334,11 +334,11 @@ names the exact symbols.
    MADBarcodes/MADBarcodesTests/MADBarcodeSymbologyTests.m
    (testQrCodeClassClaimsTheOneCodeType and the EAN128 one) to assert the corrected
    behavior, renaming them to match.
-3. ISBN recursion (BUGS.md): MADBarcodeInternationalStandardBookNumberIsbn's +type
+3. ISBN recursion (docs/project/BUGS.md): MADBarcodeInternationalStandardBookNumberIsbn's +type
    calls itself. Make it return the enum value its class is named for (check
    MADBarcodeType.h and the factory case in MADBarcode.m +newBarcodeWithType: for the
    right spelling). Add a test if the suite does not already pin it.
-4. strcpy overflow (BUGS.md): MADBarcode.m around line 492 does an unchecked
+4. strcpy overflow (docs/project/BUGS.md): MADBarcode.m around line 492 does an unchecked
    strcpy(barcode->primary, primaryData) into zint's char primary[128]
    (Compressor/library/zint/include/zint.h:121). Guard it: if the input's UTF-8 length
    would not fit (>= sizeof(barcode->primary)), skip the encode and follow the
@@ -346,10 +346,10 @@ names the exact symbols.
    logging the reason; honor showErrorMessage the way the existing error path does.
    Add a test: a >127-byte input must not crash and must produce the defined error
    result (no symbol, or an error image per showErrorMessage).
-5. NSCoding (BUGS.md): MADBarcode.m's encodeWithCoder:/initWithCoder: pair is broken
+5. NSCoding (docs/project/BUGS.md): MADBarcode.m's encodeWithCoder:/initWithCoder: pair is broken
    (empty-key encoding; decoder discards the archive). First grep the workspace for
    NSKeyedArchiver/NSKeyedUnarchiver use with barcode objects to confirm nothing
-   depends on the broken format (BUGS.md says nothing does). Then implement it
+   depends on the broken format (docs/project/BUGS.md says nothing does). Then implement it
    properly: encode every MTBarcodeProtocol property plus the inputs and subclass
    state under real string keys, decode them back, and update the pinning test in
    MADBarcodesTests to assert a round-trip preserves the values.
@@ -360,10 +360,10 @@ names the exact symbols.
    - The empty Xcode template MADBarcodesTests/MADBarcodesTests.m and its pbxproj
      entries in the test target.
    - The commented-out colour blocks in MADBarcode.m (~lines 462-467 and 763-782).
-7. BUGS.md bookkeeping: for each of the five fixed entries, move the entry VERBATIM
-   (full text, including its test names) to BUGS_FIXED.md under the same framework
-   heading, and leave a one-line index entry in BUGS.md under ## MADBarcodes so
-   "BUGS.md, the X entry" still lands. The colour-columns entry stays open (Task 5).
+7. docs/project/BUGS.md bookkeeping: for each of the five fixed entries, move the entry VERBATIM
+   (full text, including its test names) to docs/project/BUGS_FIXED.md under the same framework
+   heading, and leave a one-line index entry in docs/project/BUGS.md under ## MADBarcodes so
+   "docs/project/BUGS.md, the X entry" still lands. The colour-columns entry stays open (Task 5).
 
 Verify:
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
@@ -462,7 +462,7 @@ Verify:
 Commit on master ("Render barcodes as one cached image draw"). Do not push.
 ```
 
-### Task 4 — `MADBarcodes` warning sweep (TASKS.md §13)
+### Task 4 — `MADBarcodes` warning sweep (docs/project/TASKS.md §13)
 
 **Depends on:** Task 3.
 
@@ -470,7 +470,7 @@ Commit on master ("Render barcodes as one cached image draw"). Do not push.
 
 ```
 Goal: clear MADBarcodes' remaining first-party compiler warnings and analyzer findings
-(TASKS.md §13: five frameworks were cleared 2026-10-17; the app, MAD and MADBarcodes
+(docs/project/TASKS.md §13: five frameworks were cleared 2026-10-17; the app, MAD and MADBarcodes
 remain). Work on master in /Users/michael/Desktop/Reports.
 
 1. Build the framework and run Analyze on it in isolation:
@@ -486,10 +486,10 @@ remain). Work on master in /Users/michael/Desktop/Reports.
    code is dead and should be deleted. Do not "fix" warnings inside vendored zint/png
    headers — those are not ours.
 3. If a diagnostic reveals a real defect you are unsure how to fix without behavior
-   change, leave the code alone and record it as a new BUGS.md entry under
+   change, leave the code alone and record it as a new docs/project/BUGS.md entry under
    ## MADBarcodes (Status: Open, with the file:line and what you saw) rather than
    papering over it.
-4. Update TASKS.md §13's status line to note MADBarcodes is cleared (or what remains).
+4. Update docs/project/TASKS.md §13's status line to note MADBarcodes is cleared (or what remains).
 
 Verify:
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
@@ -529,7 +529,7 @@ compiles some of these files and excludes others (Linux/cmake/MADSources.cmake).
    MADDocumentObjectDataReferenceBarcodeTests.m): create a barcode element through the
    factory, assert documentObjectType == MADPrintPageElementTypeBarcode and barcodeType
    == the symbology; then call updateWithBarcode: and assert the same invariant.
-2. Fix the store's colour columns (BUGS.md "The store's colour columns have no reader,
+2. Fix the store's colour columns (docs/project/BUGS.md "The store's colour columns have no reader,
    and the model's colour properties have no column" — read the whole entry first).
    The store has backgroundColorR/G/B/A + foregroundColorR/G/B/A columns
    (MAD/Source/rptq/store/MADStoreSchema.m:496-503); the model exposes
@@ -543,7 +543,7 @@ compiles some of these files and excludes others (Linux/cmake/MADSources.cmake).
    to read/write backgroundColor and foregroundColor through the four RGBA columns.
    Do not change the schema columns. Then add a MAD test that creates a barcode element
    via the factory (exercising the :89-90 write) and reads its colours back without an
-   exception. Once green, move the BUGS.md entry VERBATIM to BUGS_FIXED.md and leave
+   exception. Once green, move the docs/project/BUGS.md entry VERBATIM to docs/project/BUGS_FIXED.md and leave
    the one-line index entry behind. (This fixes the whole element colour story, not
    just barcodes — the entry's "Why it matters" names the HTML/PDF consequences.)
 3. Give barcode lines text.
@@ -659,20 +659,20 @@ documentation in line with reality. Work on master in /Users/michael/Desktop/Rep
      Also add MAD_BARCODES.md to the Related Documents list.
    - MADBarcodes/AGENTS.md (and its CLAUDE.md symlink): remove the "unused and
      unmaintained" claim; state the framework's role and its test scheme.
-   - LIBRARIES.md lines ~100-102 are stale: they still describe zint 2.4.2 with
+   - docs/project/LIBRARIES.md lines ~100-102 are stale: they still describe zint 2.4.2 with
      patches/zint-2.4.2-mad.patch. Correct them to the actual arrangement: zint
      2.16.0 built by the Compressor recipe (Compressor/matrix.conf + lib/recipes/zint.sh)
      into Compressor/library/zint.xcframework; the old 2.4.2 patch is retired
-     (ZBarcode_Encode_and_Buffer is upstream API in 2.16). THIRD_PARTY_LICENSES.md
+     (ZBarcode_Encode_and_Buffer is upstream API in 2.16). docs/project/THIRD_PARTY_LICENSES.md
      ~283-284 already flags the staleness — check that note and update it to say the
-     LIBRARIES.md text is now corrected. Do not touch the notices gap itself (it is on
+     docs/project/LIBRARIES.md text is now corrected. Do not touch the notices gap itself (it is on
      the licence-register track).
-   - BUGS.md: the colour-columns entry's "untested on Apple" note was resolved by
-     Task 5 (the entry moved to BUGS_FIXED.md). The "barcode creation path, which is
+   - docs/project/BUGS.md: the colour-columns entry's "untested on Apple" note was resolved by
+     Task 5 (the entry moved to docs/project/BUGS_FIXED.md). The "barcode creation path, which is
      off the headless build" wording in any remaining open entry: adjust only the
      stale "untested on Apple" phrasing where the facts have changed; leave everything
      else verbatim.
-   - TASKS.md: update §15 (this queue entry) with what landed, commit hashes included,
+   - docs/project/TASKS.md: update §15 (this queue entry) with what landed, commit hashes included,
      and mark it Done; keep the follow-ups listed there under a short "Remains" line
      (see MAD_BARCODES.md §5).
 3. End-to-end verification:
@@ -744,5 +744,5 @@ Do not push.
 - **Barcode images inside the HTML exporter.** Today the facsimile carries the
   barcode's input text; an embedded data-URI PNG is possible on Apple only.
 - **App-wide third-party notices.** The zint BSD-3-Clause notice obligation remains
-  unmet (flagged in `THIRD_PARTY_LICENSES.md:269-284`); it rides the licence-register
+  unmet (flagged in `docs/project/THIRD_PARTY_LICENSES.md:269-284`); it rides the licence-register
   track, not this one.

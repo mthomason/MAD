@@ -7,7 +7,7 @@
 //  A document written before the portable store holds its definition in a Core Data
 //  store; opening it converts that store to the portable form.  Conversion needs Core
 //  Data, which the MAD framework must not link -- it is the headless engine's base
-//  (MAD_LINUX.md) -- so the converter is supplied from outside and reached through
+//  (docs/project/MAD_LINUX.md) -- so the converter is supplied from outside and reached through
 //  this registry.  The application target registers an implementation at load time;
 //  a build without one can read and write portable documents but cannot open a
 //  legacy one.

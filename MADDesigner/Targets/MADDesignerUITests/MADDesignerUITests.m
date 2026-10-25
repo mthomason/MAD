@@ -10,7 +10,7 @@
 // app (every query, down to app.debugDescription, reports no elements), so no UI
 // assertion can pass here.  The simulator exercise -- open a sample, walk the three
 // tabs -- is driven instead with the app's launch arguments (see AppDelegate.m:
-// -UITestOpenSample and -UITestSelectTab) and verified by screenshot.  See BUGS.md,
+// -UITestOpenSample and -UITestSelectTab) and verified by screenshot.  See docs/project/BUGS.md,
 // "Test infrastructure".
 
 #import <XCTest/XCTest.h>

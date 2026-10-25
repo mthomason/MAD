@@ -11,9 +11,9 @@
 //
 //  MADocument conforms -- every member here is one of its own accessors -- and so
 //  does MADHeadlessDocument, which is the same half of a document with no
-//  UIDocument underneath it and nothing to render (MAD_LINUX.md §9 Phase D).  The
+//  UIDocument underneath it and nothing to render (docs/project/MAD_LINUX.md §9 Phase D).  The
 //  point of the protocol is that the refresh chain runs against either, on one
-//  implementation: MAD_CLI.md §5.2 forbids a second refresh path.
+//  implementation: docs/project/MAD_CLI.md §5.2 forbids a second refresh path.
 //
 //  Everything render-side -- the report formatter, the section layout managers,
 //  the thumbnail -- is deliberately absent; those live on MADocument.

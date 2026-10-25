@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// current UIKit context as -drawPageAtIndex:withContext:inPageRect: always has,
 /// while NULL only builds the representation and returns it.  A format that wants the
 /// report's structure -- its sections, their elements and each element's resolved
-/// text -- without drawing reads it here (MAD_LINUX.md §9 Phase E); the page is also
+/// text -- without drawing reads it here (docs/project/MAD_LINUX.md §9 Phase E); the page is also
 /// recorded in -textRepresentation either way.
 - (nullable MADReportPageRepresentation *)buildPageAtIndex:(NSUInteger)pageIndex
 												   context:(CGContextRef _Nullable)ctx

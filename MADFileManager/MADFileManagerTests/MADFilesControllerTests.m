@@ -193,7 +193,7 @@ didFailDuplicatingFileInfo:(MADMetaData *)fileInfo
 @property (nonatomic, strong) MADTestFileCoordinator *coordinator;
 @property (nonatomic, strong) NSOperationQueue *delegateQueue;
 @property (nonatomic, strong) MADRecordingFilesControllerDelegate *delegate;
-// Held strongly until its documents-directory block has run (BUGS.md).
+// Held strongly until its documents-directory block has run (docs/project/BUGS.md).
 @property (nonatomic, strong) id <MADFileCoordinatorProtocol> cloudCoordinator;
 
 @end
@@ -421,7 +421,7 @@ didFailDuplicatingFileInfo:(MADMetaData *)fileInfo
 #pragma mark - Sorting
 
 - (void)testTheSortComparatorArgumentIsIgnored {
-	// BUGS.md: -initWithFileCoordinator:delegateQueue:sortComparator: accepts a
+	// docs/project/BUGS.md: -initWithFileCoordinator:delegateQueue:sortComparator: accepts a
 	// comparator and never stores or calls it; inserts are ordered by
 	// finderSortWithLocale.
 	NSComparisonResult (^reversed)(MADMetaData *, MADMetaData *) =
@@ -494,7 +494,7 @@ didFailDuplicatingFileInfo:(MADMetaData *)fileInfo
 }
 
 - (void)testRenamingFailureIsGatedOnTheRemovingCallback {
-	// BUGS.md: -fileCoordinatorDidFailRenamingFileAtURL: checks
+	// docs/project/BUGS.md: -fileCoordinatorDidFailRenamingFileAtURL: checks
 	// respondsToSelector: for the *removing* callback before sending the
 	// renaming one, so a delegate that implements only the renaming callback
 	// never hears about a rename failure.
@@ -518,7 +518,7 @@ didFailDuplicatingFileInfo:(MADMetaData *)fileInfo
 	// tracked, -setFileCoordinator: passes the tracked list through
 	// -valueForKey:@"URL" and hands URLs in where MADMetaData is expected, which
 	// raises NSUnknownKeyException on the delegate queue and terminates the
-	// process (see BUGS.md).  Nothing here is allowed to crash the suite, so the
+	// process (see docs/project/BUGS.md).  Nothing here is allowed to crash the suite, so the
 	// populated case stays untested until that is fixed.
 	MADFilesController *controller = [self controller];
 
@@ -556,7 +556,7 @@ didFailDuplicatingFileInfo:(MADMetaData *)fileInfo
 	XCTAssertTrue([cloud.fileCoordinator isKindOfClass:[MADCloudFileCoordinator class]]);
 
 	// The cloud coordinator must outlive its queued documents-directory block or
-	// the process segfaults when it is released (BUGS.md).
+	// the process segfaults when it is released (docs/project/BUGS.md).
 	self.cloudCoordinator = cloud.fileCoordinator;
 }
 
@@ -568,7 +568,7 @@ didFailDuplicatingFileInfo:(MADMetaData *)fileInfo
 }
 
 - (void)testStorageLocationsWithoutCloudAnswerLocalDirectories {
-	// BUGS.md: the two URL arguments are crossed -- `documents` is handed the
+	// docs/project/BUGS.md: the two URL arguments are crossed -- `documents` is handed the
 	// Data directory and `data` the Documents directory.  The only caller marks
 	// both unused, so nothing breaks today.
 	__block BOOL completionCalled = NO;

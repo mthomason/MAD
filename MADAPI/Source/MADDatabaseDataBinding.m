@@ -110,7 +110,7 @@ static void MADBindingLogViolation(MADDataType declaredType, Class valueClass, N
 }
 
 //  The canonical cache value for a column: one class per declared type, decided
-//  here so the sqlite binder never meets a value outside it (BUGS.md,
+//  here so the sqlite binder never meets a value outside it (docs/project/BUGS.md,
 //  "MADReportFormatter compares untyped values through id").  A value the type
 //  can represent is converted or kept; one it cannot is stored NULL with a
 //  one-time log -- never silently as another class, and never a crash.
@@ -274,7 +274,7 @@ static id MADCanonicalValueForType(MADResult *value, MADDataType datatype, MADDa
 				datatype = MADDataTypeString;
 			} else {
 				// The canonical class for the column's declared type, so the
-				// binder can trust the pair it is handed (BUGS.md, the
+				// binder can trust the pair it is handed (docs/project/BUGS.md, the
 				// untyped-compare entry).
 				self.value = MADCanonicalValueForType(value, datatype, declaredType);
 			}

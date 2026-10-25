@@ -6,12 +6,12 @@
 #  Runs INSIDE the runtime image, with the repository mounted read-only at
 #  /repo (Linux/build.sh --verify does that).  It exercises the verbs the way a
 #  caller does -- inspect, schema, query, refresh, export in every format this
-#  build offers, and write -- and asserts the pinned digests (MAD_CLI.md §3,
+#  build offers, and write -- and asserts the pinned digests (docs/project/MAD_CLI.md §3,
 #  Linux/README.md).  It also checks that the image really is the runtime layer:
 #  no compiler, no build tree, and the sample database in place.
 #
 #  --live additionally refreshes the MySQL and TDS fixtures, which needs the
-#  two containers documented in CLI/Fixtures/README.md and DEVELOPER.md.
+#  two containers documented in CLI/Fixtures/README.md and docs/project/DEVELOPER.md.
 #
 #  Exit code: 0 when every check passes, 1 otherwise.
 #
@@ -138,7 +138,7 @@ check "pdf names its reason"		grep -q 'not available in this build' "${WORK}/pdf
 output mad write "${LONDON}" --out "${WORK}/copy.mad" --reproducible --quiet >/dev/null
 check_file "write --reproducible" "${WORK}/copy.mad" 16261	09815b24e91e03b6e526008f7c2700074fed10679771b9e1ee4609e54a1192f5
 
-# --- exit codes (MAD_CLI.md §3) -------------------------------------------
+# --- exit codes (docs/project/MAD_CLI.md §3) -------------------------------------------
 
 mad inspect /nonexistent.mad >/dev/null 2>&1
 check "bad document exits 2"		[ "$?" -eq 2 ]

@@ -332,7 +332,7 @@ void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st,
 	// A reproducible member carries none of what the machine put in it -- owner,
 	// group, device, links, modification time -- just its path and its bytes, so the
 	// same members make the same archive on any machine and on either platform
-	// (BUGS.md, the .mad byte-identity entry).
+	// (docs/project/BUGS.md, the .mad byte-identity entry).
 	if (reproducible) {
 		archive_entry_set_uid(*e, 0);
 		archive_entry_set_gid(*e, 0);

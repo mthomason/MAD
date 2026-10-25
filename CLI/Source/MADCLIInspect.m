@@ -5,7 +5,7 @@
 //  MAD Designer
 //
 //  `mad inspect` -- reads the container only.  No database connection, no Core Data
-//  context; the store is read as bytes and as SQLite, which is what MAD_FORMAT.md
+//  context; the store is read as bytes and as SQLite, which is what docs/project/MAD_FORMAT.md
 //  section 7 asks a reader on another platform to be able to do.
 //
 
@@ -46,7 +46,7 @@ static NSString *MADCLIHumanBytes(unsigned long long bytes) {
 
 /// The companion files, grouped by extension.  These are the document's on-disk
 /// footprint, regenerated on refresh and deliberately outside the archive --
-/// MAD_FORMAT.md section 5.  The three kinds are three extensions: .maddb (row
+/// docs/project/MAD_FORMAT.md section 5.  The three kinds are three extensions: .maddb (row
 /// data), .mdcache (the virtual-table index) and .madac (the rendered-page cache).
 static void MADCLIAppendCacheSummary(NSMutableString *out, NSURL *documentURL, BOOL verbose) {
 
@@ -189,7 +189,7 @@ MADCLIExitCode MADCLIRunInspect(MADCLIInvocation *invocation) {
 
 	// Counts come straight out of the store's own tables, whose names say which store
 	// it is: a legacy Core Data document writes them Z-prefixed, the portable store
-	// (MAD_STORE_MIGRATION.md) uses the entity names as they are.
+	// (docs/project/MAD_STORE_MIGRATION.md) uses the entity names as they are.
 	BOOL portable = container.storeKind == MADCLIContainerStoreKindPortable;
 	unsigned long long sections = 0, elements = 0;
 	BOOL gotSections = MADCLICountRows(container.storeURL, portable ? @"RptqDocumentSection" : @"ZRPTQDOCUMENTSECTION", &sections);

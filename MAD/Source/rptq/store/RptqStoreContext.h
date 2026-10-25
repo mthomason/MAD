@@ -7,7 +7,7 @@
 //  The store-backed replacement for the NSManagedObjectContext role.  It owns an open
 //  MADStore and a loaded MADStoreGraph (with inverses completed), and is the single
 //  place objects are created, faulted, saved and deleted.  Nothing here imports Core
-//  Data; see MAD_STORE_PHASE_C.md.
+//  Data; see docs/project/MAD_STORE_PHASE_C.md.
 //
 
 #ifndef MAD_RptqStoreContext_h
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// The change-tracking notifications the store context posts.  The names and the
 /// userInfo keys (`RptqStoreContextInsertedObjectsKey` and friends) mirror the Core Data
 /// notifications the app's view controllers were written against, but the symbols
-/// are ours: the framework must not link Core Data (MAD_LINUX.md).  The change
+/// are ours: the framework must not link Core Data (docs/project/MAD_LINUX.md).  The change
 /// notification is coalesced to one post per run-loop turn.
 FOUNDATION_EXPORT NSNotificationName const RptqStoreContextObjectsDidChangeNotification;
 FOUNDATION_EXPORT NSNotificationName const RptqStoreContextWillSaveNotification;

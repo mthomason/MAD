@@ -13,10 +13,11 @@ Everything in the first half is measured, not inferred. The two samples are
 ---
 
 **The `.mad` format is an open specification.** Anyone may read it and implement
-it. The MIT licence covers the project's code, not the project's name -- "MAD
-Designer" is the author's name for the product, and nothing in this repository
-licenses its use. See [`../LICENSE`](../LICENSE) and
-[`../THIRD_PARTY_LICENSES.md`](../THIRD_PARTY_LICENSES.md).
+it. The MIT licence covers the project's code, not the project's name -- "MAD"
+(Mobile Analytics Document; the MAD Designer and MAD Viewer apps) is the
+author's name for the product, and nothing in this repository licenses its use.
+See [`../LICENSE`](../LICENSE) and
+[`../project/THIRD_PARTY_LICENSES.md`](../project/THIRD_PARTY_LICENSES.md).
 
 The spec is organised as one chapter per file. Chapters 1-6 describe the format as
 it ships; chapter 7 is the normative target (`v1`); chapters 8-9 are the open

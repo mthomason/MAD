@@ -116,7 +116,7 @@ static void MADMySQLFreeBindings(MYSQL_BIND *bindings, void **buffers, NSUIntege
 
 	// Read on every path: for a statement that did not run the client answers
 	// (my_ulonglong)-1, and an ignored duplicate is deliberately reported that
-	// way (see BUGS.md, MADMySQL).
+	// way (see docs/project/BUGS.md, MADMySQL).
 	self.affectedRows = @(mysql_stmt_affected_rows(statement));
 	self.rowid = @(mysql_stmt_insert_id(statement));
 

@@ -6,7 +6,7 @@
 //
 //  Reads a .mad file's container: the archive, its members and its metadata.
 //  Deliberately knows nothing about Core Data or the report model -- this is the
-//  layer MAD_FORMAT.md section 7 says a second platform can implement on its own.
+//  layer docs/project/MAD_FORMAT.md section 7 says a second platform can implement on its own.
 //
 
 #import <Foundation/Foundation.h>
@@ -27,7 +27,7 @@ typedef struct {
 } MADCLISQLiteHeader;
 
 /// Which store the document's definition is in.  A document written before the
-/// portable store (MAD_STORE_MIGRATION.md) holds a Core Data SQLite file named
+/// portable store (docs/project/MAD_STORE_MIGRATION.md) holds a Core Data SQLite file named
 /// `analyitics`; one written since holds the portable store, `store.sqlite`.
 typedef NS_ENUM(NSInteger, MADCLIContainerStoreKind) {
 	MADCLIContainerStoreKindNone = 0,

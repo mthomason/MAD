@@ -234,9 +234,9 @@ For the *formula element*, the candidate set:
 | Engine | Third-party code | License surface | Dates | Re-entrant | Headless/Linux | Users know it |
 |---|---|---|---|---|---|---|
 | **JavaScriptCore** (system framework) | none | none — Apple system framework | built-in `Date` | one `JSContext` per evaluation | no (Apple-only) | yes — JavaScript |
-| **QuickJS** (with JSC, as the Linux half of a JS pairing) | yes (C) | MIT — attribution + license text (THIRD_PARTY_LICENSES.md §6/§7) | built-in `Date` | yes | yes | yes (JS) |
+| **QuickJS** (with JSC, as the Linux half of a JS pairing) | yes (C) | MIT — attribution + license text (docs/project/THIRD_PARTY_LICENSES.md §6/§7) | built-in `Date` | yes | yes | yes (JS) |
 | **Scrimpter** | none (own code) | none | missing today | no (globals) | portable (ObjC+GNUstep) | no |
-| **Lua 5.5** | yes (~25k lines C) | MIT — attribution + license text (THIRD_PARTY_LICENSES.md §6/§7) | no native date | yes | yes | some |
+| **Lua 5.5** | yes (~25k lines C) | MIT — attribution + license text (docs/project/THIRD_PARTY_LICENSES.md §6/§7) | no native date | yes | yes | some |
 | **Wren** | yes (~4k lines C) | MIT — same obligations | no | yes | yes | no |
 | **NSExpression** (Foundation) | none | none | yes | yes | partial (GNUstep has it) | no — and no control flow/variables, expression-only |
 | **C# / .NET** | — | — | **not viable**, see below | — | — | — |

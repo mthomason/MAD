@@ -20,7 +20,7 @@
 #
 #  Xcode calls this in ensure mode from the run-script phases of the targets
 #  that consume libraries.  It is fast when fresh and builds only what is
-#  missing.  See DEVELOPER.md and LIBRARIES.md.
+#  missing.  See docs/project/DEVELOPER.md and docs/project/LIBRARIES.md.
 #
 #  Runs on the system bash (3.2 on macOS): no associative arrays, no
 #  mapfile, no ${var,,} -- matrix values live in prefixed variables.

@@ -464,7 +464,7 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position) {
 	// column's charset tells them apart -- binary (63) is a BLOB, anything else
 	// is TEXT.  Deciding here, before the cache table is created, replaces the
 	// fetch loop's first-row type correction, so a column's type is fixed for
-	// every row it binds.  See BUGS.md, MADMySQL.
+	// every row it binds.  See docs/project/BUGS.md, MADMySQL.
 	if (dataColumn.type == MADDataTypeBlob && myField.charsetnr != 63) {
 		dataColumn.type = MADDataTypeString;
 	}
