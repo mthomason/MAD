@@ -7,12 +7,12 @@
 //
 
 #import "MADDatabaseMySQL.h"
-#import "MysqlConnection.h"
-#import "MysqlServer.h"
-#import "MysqlFetch.h"
-#import "MysqlFetchField.h"
+#import "MADMySQLConnection.h"
+#import "MADMySQLServer.h"
+#import "MADMySQLFetch.h"
+#import "MADMySQLFetchField.h"
 #import "MADDataTypeMySQL.h"
-#import "MysqlFetch+DataTable.h"
+#import "MADMySQLFetch+DataTable.h"
 #import <MADFoundation/madlog.h>
 
 #import <MADFoundation/MADDataColumn.h>
@@ -43,7 +43,7 @@
 // character -- and the connection is dropped again as soon as the query that needed
 // it has finished, so this driver still holds no idle connection.  See
 // -newSafeLiteral:.
-@property (nonatomic, strong, nullable) MysqlConnection *liveConnection;
+@property (nonatomic, strong, nullable) MADMySQLConnection *liveConnection;
 
 @end
 
@@ -79,7 +79,7 @@
 // it ever was.
 - (NSString *)newSafeLiteral:(NSString *)value {
 	if (value == nil) return @"NULL";
-	MysqlConnection *connection = self.liveConnection;
+	MADMySQLConnection *connection = self.liveConnection;
 	if (connection != nil) {
 		NSString *escaped = [connection mysqlEscapeString: value];
 		if (escaped != nil) {
@@ -107,11 +107,11 @@
 	
 	id connectionSettings = self.databaseConnection;
 	NSError * __autoreleasing connectionError = nil;
-	MysqlConnection *conn = [self connectWithConnection:connectionSettings credentals:nil connectionError:&connectionError];
+	MADMySQLConnection *conn = [self connectWithConnection:connectionSettings credentals:nil connectionError:&connectionError];
 	if (conn && connectionError == nil) {
 		
 		NSError *fetchError = nil;
-		MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+		MADMySQLFetch *myFetch = [[MADMySQLFetch alloc] init];
 		NSString *identifier = @"v999";
 		MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
 		MADDataTable *dataTable = [myFetch fetchWithCommand:@"SHOW TABLES;" dataTable:dataTableVirtual
@@ -139,8 +139,8 @@
 - (void)getTablesFromConnection:(id)dbconn completion:(void (^)(BOOL, NSError *, NSArray *))completion {
 	
 	NSError *error = nil;
-	MysqlConnection *conn = dbconn;
-	MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+	MADMySQLConnection *conn = dbconn;
+	MADMySQLFetch *myFetch = [[MADMySQLFetch alloc] init];
 	NSString *identifier = @"v999";
 	MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
 	MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
@@ -166,8 +166,8 @@
 - (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)dbconn error:(NSError * __autoreleasing *)outError {
 	
 	NSError *errorFetch = nil;
-	MysqlConnection *conn = dbconn;
-	MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+	MADMySQLConnection *conn = dbconn;
+	MADMySQLFetch *myFetch = [[MADMySQLFetch alloc] init];
 	NSString *identifier = @"v999";
 	MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
 	MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"
@@ -198,14 +198,14 @@
 - (NSArray<MADDatabaseField *> *)fieldsForTable:(NSString *)tableName
 									 connection:(id)dbconn
 										  error:(NSError * __autoreleasing *)error {
-	MysqlConnection *conn = dbconn;
+	MADMySQLConnection *conn = dbconn;
 	NSMutableDictionary *resultsDictionary = [NSMutableDictionary dictionary]; // Initialize the dictionary
 	
 	MADSafeQueryField *safeTableName = [self newSafeIdentifier:tableName];
 	NSString *formatShowColumns = @"SHOW COLUMNS FROM %@;";
 	NSString *command = [[NSString alloc] initWithFormat:formatShowColumns, safeTableName];
 	
-	MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+	MADMySQLFetch *myFetch = [[MADMySQLFetch alloc] init];
 	NSString *identifier = @"v9998";
 	MADDataTable *dataTableVirtual1 = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
 	NSError *errorShowColumns = nil;
@@ -233,7 +233,7 @@
 		
 		NSString *formatSelectAll = @"SELECT * FROM %@ LIMIT 0;";
 		NSString *command2 = [[NSString alloc] initWithFormat:formatSelectAll, safeTableName];
-		MysqlFetch *myFetch2 = [[MysqlFetch alloc] init];
+		MADMySQLFetch *myFetch2 = [[MADMySQLFetch alloc] init];
 		MADDataTable *dataTable2 = [myFetch2 fetchWithCommand:command2
 													dataTable:dataTableVirtual2
 												 onConnection:conn
@@ -273,11 +273,11 @@
 	}
 
 	BOOL success = NO;
-	MysqlConnection *conn = nil;
+	MADMySQLConnection *conn = nil;
 	
 	NSError *connError = nil;
 	if (connection && credentals) {
-		MysqlServer *serv = [[MysqlServer alloc] init];
+		MADMySQLServer *serv = [[MADMySQLServer alloc] init];
 		
 		NSString *server = [connection server];
 		serv.host = server.copy;
@@ -289,7 +289,7 @@
 		serv.user = credentals.username.copy;
 		serv.password = credentals.password.copy;
 		
-		conn = [MysqlConnection connectToServer:serv error:&connError];
+		conn = [MADMySQLConnection connectToServer:serv error:&connError];
 		
 		success = (conn && connError == nil);
 		// Held, not owned: the SQL builder escapes literals through the session
@@ -317,7 +317,7 @@
 - (BOOL)executeSQL:(NSString *)sql fieldKeys:(NSArray *)fieldKeys onConnection:(id)dbconn intoResultTable:(id <MADDataTableWriting>)dataTable
 		 withError:(NSError * __autoreleasing *)error {
 	
-	MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+	MADMySQLFetch *myFetch = [[MADMySQLFetch alloc] init];
 	myFetch.delegate = self;
 	
 	NSError *fetchError = nil;
@@ -356,11 +356,11 @@
 		c = ((MADQuery <MADQueryCredentialProtocol> *)query).credential.copy;
 	}
 	
-	MysqlConnection *dbconn = [self connectWithConnection:connectionSettings
+	MADMySQLConnection *dbconn = [self connectWithConnection:connectionSettings
 											   credentals:c
 										  connectionError:&dberror];
 	if (dbconn && dberror == nil) {
-		MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+		MADMySQLFetch *myFetch = [[MADMySQLFetch alloc] init];
 		myFetch.delegate = self;
 		
 		NSError * __autoreleasing sqlError = nil;
@@ -399,7 +399,7 @@
 	// already shut.  The handle itself is freed by the connection's -dealloc: -mysql_init
 	// was handed memory this side allocated, so the client leaves freeing it to us.
 	if (process == self.liveConnection) self.liveConnection = nil;
-	mysql_close(((MysqlConnection *)process).connection);
+	mysql_close(((MADMySQLConnection *)process).connection);
 }
 
 - (NSString *)identifier {
@@ -424,8 +424,8 @@
 						   usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
 						   completion:(void (^)(BOOL, NSError *, NSArray *))completion {
 	NSError *error = nil;
-	MysqlConnection *connection = dbconn;
-	MysqlFetch *myFetch = [[MysqlFetch alloc] init];
+	MADMySQLConnection *connection = dbconn;
+	MADMySQLFetch *myFetch = [[MADMySQLFetch alloc] init];
 	NSString *identifier = @"v999";
 	MADDataTable *dataTableVirtual = [[MADDataTableVirtual alloc] initWithId:identifier.hash];
 	MADDataTable *dataTable = [myFetch fetchWithCommand: @"SHOW TABLES;"

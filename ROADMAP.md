@@ -106,7 +106,7 @@ longer contradicts itself. No code changed; nothing was open.
 Two mappings were a standing "deferred". Both are now decided and written down.
 
 `MYSQL_TYPE_TIME` **is corrected** to `MADDataTypeTime`. The mapping was live
-(`MADDatabaseMySQL.m:247`) and wrong in a way that showed: `MysqlFetch+DataTable.m:431` builds
+(`MADDatabaseMySQL.m:247`) and wrong in a way that showed: `MADMySQLFetch+DataTable.m:431` builds
 the value from hour/minute/second alone, so the `NSDate` carries the calendar's default date,
 and `dateTimeformatter` rendered "1/1/01, 1:45 PM" for a pure clock. `MADDataTypeTime` is not a
 dormant case — the SQL Server driver has produced it for years and its live suite asserts it —

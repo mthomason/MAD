@@ -134,7 +134,7 @@ The abstract point is
 typed `id <MADDataTableWriting>` — *any* writable table, not a table class. The fill contract
 is uniform across the drivers: `removeAllObjects` → `addColumn:` → `beginBulkInsert` →
 `addRowWithDataForFieldKeys:` → `endBulkInsert` (`MAD_DATA_OBJECT`'s drivers: MySQL
-`MysqlFetch+DataTable.m:148-235`, SQL Server `MADDatabaseSQLServer.m:485-571`, Sqlite3
+`MADMySQLFetch+DataTable.m:148-235`, SQL Server `MADDatabaseSQLServer.m:485-571`, Sqlite3
 `MADDatabaseSqlite3.m:474-540`).
 
 The drivers also already prefer a query's own target table over the document's, when the

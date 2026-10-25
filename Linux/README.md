@@ -147,9 +147,9 @@ Every framework archive used to embed `Compat/*.m`. That made whole-archiving tw
 of them a duplicate-symbol error, which is why exactly one category
 (`MADQuery+Sqlite3`) had been compiled into `libmad.a` by hand. The CLI found the
 cost of that arrangement: `mad refresh` against live MySQL **aborted** (SIGABRT,
-no diagnostic) because `MysqlFetch (DataTable)` — the method that runs the
+no diagnostic) because `MADMySQLFetch (DataTable)` — the method that runs the
 prepared statement — was a category reached by message send, so the linker had
-never pulled its object file in. `nm` showed `.objc_category_MysqlFetchDataTable`
+never pulled its object file in. `nm` showed `.objc_category_MADMySQLFetchDataTable`
 present in the MySQL test binary and absent from the CLI's.
 
 `madcompat` is now its own static library, whole-archived by every executable

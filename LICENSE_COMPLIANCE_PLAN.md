@@ -123,11 +123,10 @@ original distribution carries **no license file and no grant** — only "Copyrig
 does not place a work in the public domain; absent a grant, the default is
 all-rights-reserved. The `notes.txt` in the distribution is empty boilerplate.
 
-The code in `MADMySQL/Source/` is already substantially modified from that
-original, and the wrapper is thin — `MysqlConnection`, `MysqlFetch`,
-`MysqlFetchField`, the exception classes, and the four statement helpers. Since
-the MariaDB swap means touching this layer anyway, rewrite it rather than
-rehabilitating it:
+The code in `MADMySQL/Source/` was substantially modified from that original,
+and the wrapper was thin — the connection, the fetch, the fetch-field, the
+exception classes, and the four statement helpers. Since the MariaDB swap means
+touching this layer anyway, rewrite it rather than rehabilitating it:
 
 * keep the class structure and the `MADMySQL`-facing API, so nothing above it
   changes;
@@ -137,7 +136,12 @@ rehabilitating it:
 * keep the existing `<MADMySQL/...>` public headers and the
   `MADDatabaseConnectionMySql` / `MADDataTypeMySQL` glue untouched where possible.
 
-`MysqlServer` and `MADDatabaseMySQL` are already first-party and stay.
+`MADDatabaseMySQL` is already first-party and stays. The rewrite landed
+2026-10-25, with the replacement classes renamed onto the `MADMySQL` prefix
+(`MADMySQLConnection`, `MADMySQLFetch`, `MADMySQLFetchField`, `MADMySQLServer`,
+the exception classes and the four statement helpers) — a redo that replaced
+the 2026-10-24 first pass, which kept the old `Mysql*` names and read as a
+header edit rather than a rewrite.
 
 ### A4. Verify
 

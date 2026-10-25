@@ -64,11 +64,11 @@ static void testTheLinkedDriversRegisterThemselves(void) {
 // A driver's work is reached by *message send* through its categories, which the
 // static linker has no reason to pull in unless the archive is whole-archived
 // (Linux/CMakeLists.txt).  The CLI aborted on live MySQL the day that was not true --
-// .objc_category_MysqlFetchDataTable was simply absent -- so the categories the data
+// .objc_category_MADMySQLFetchDataTable was simply absent -- so the categories the data
 // path needs are asserted here, where the arrangement is under test.  See BUGS.md.
 static void testTheDriversCategoriesAreLinked(void) {
-	Class fetch = NSClassFromString(@"MysqlFetch");
-	MAD_NEED(fetch != Nil, @"MysqlFetch is not linked in");
+	Class fetch = NSClassFromString(@"MADMySQLFetch");
+	MAD_NEED(fetch != Nil, @"MADMySQLFetch is not linked in");
 	if (fetch == Nil) return;
 	MAD_PASS([fetch instancesRespondToSelector:
 			  NSSelectorFromString(@"fetchWithCommand:dataTable:onConnection:extendedNames:error:")],

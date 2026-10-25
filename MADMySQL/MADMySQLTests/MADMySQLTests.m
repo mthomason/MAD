@@ -20,9 +20,9 @@
 #import "MADDataTypeMySQL.h"
 #import "MADDatabaseMySQL.h"
 #import "MADDatabaseConnectionMySql.h"
-#import "MysqlServer.h"
-#import "MysqlConnection.h"
-#import "MysqlFetch.h"
+#import "MADMySQLServer.h"
+#import "MADMySQLConnection.h"
+#import "MADMySQLFetch.h"
 
 #import <mysql.h>
 
@@ -260,10 +260,10 @@
 	XCTAssertEqual(built.port, 3306);
 }
 
-#pragma mark - MysqlServer defaults
+#pragma mark - MADMySQLServer defaults
 
-- (void)testMysqlServerDefaults {
-	MysqlServer *server = [[MysqlServer alloc] init];
+- (void)testMADMySQLServerDefaults {
+	MADMySQLServer *server = [[MADMySQLServer alloc] init];
 	XCTAssertEqualObjects(server.host, @"localhost");
 	XCTAssertEqualObjects(server.user, @"username");
 	XCTAssertEqualObjects(server.password, @"password");
@@ -273,8 +273,8 @@
 	XCTAssertEqual(server.connectionTimeout, 30u);
 }
 
-- (void)testMysqlServerDescriptionOmitsPassword {
-	MysqlServer *server = [[MysqlServer alloc] init];
+- (void)testMADMySQLServerDescriptionOmitsPassword {
+	MADMySQLServer *server = [[MADMySQLServer alloc] init];
 	server.host = @"db.example.com";
 	server.user = @"alice";
 	server.password = @"super-secret";
@@ -312,7 +312,7 @@
 
 // MYSQL_TYPE_MEDIUM_BLOB and MYSQL_TYPE_LONG_BLOB both used to return the string
 // "MYSQL_TYPE_DECIMAL" -- a copy/paste slip in this diagnostics-only helper. Fixed
-// in MysqlFetch.m; these assertions keep it fixed. Likewise MYSQL_TYPE_LONGLONG had
+// in MADMySQLFetch.m; these assertions keep it fixed. Likewise MYSQL_TYPE_LONGLONG had
 // no case at all and fell through to "Unknown".
 - (void)testMySqlTypeForTypeNamesBlobAndLongLongTypes {
 	XCTAssertEqualObjects(@(mySQLTypeForType(MYSQL_TYPE_MEDIUM_BLOB)), @"MYSQL_TYPE_MEDIUM_BLOB");
@@ -327,7 +327,7 @@
 #pragma mark - Connection failure paths (no server required)
 
 - (void)testConnectToServerWithNoListenerFailsCleanly {
-	MysqlServer *server = [[MysqlServer alloc] init];
+	MADMySQLServer *server = [[MADMySQLServer alloc] init];
 	server.host = @"127.0.0.1";
 	server.port = 1;            // privileged, nothing listens here
 	server.user = @"root";
@@ -335,7 +335,7 @@
 	server.schema = @"employees";
 
 	NSError *error = nil;
-	MysqlConnection *connection = [MysqlConnection connectToServer:server error:&error];
+	MADMySQLConnection *connection = [MADMySQLConnection connectToServer:server error:&error];
 
 	XCTAssertNil(connection);
 	XCTAssertNotNil(error);
@@ -347,46 +347,46 @@
 }
 
 - (void)testConnectToServerWithoutErrorPointerStillReturnsNil {
-	MysqlServer *server = [[MysqlServer alloc] init];
+	MADMySQLServer *server = [[MADMySQLServer alloc] init];
 	server.host = @"127.0.0.1";
 	server.port = 1;
-	XCTAssertNil([MysqlConnection connectToServer:server]);
+	XCTAssertNil([MADMySQLConnection connectToServer:server]);
 }
 
 // The error: variant must treat a NULL error pointer as "I don't care", the same
 // way +connectToServer: does.  Before the guard it wrote through NULL on a failed
 // connection and took the process down.
 - (void)testConnectToServerWithNoListenerAndANULLErrorPointerDoesNotCrash {
-	MysqlServer *server = [[MysqlServer alloc] init];
+	MADMySQLServer *server = [[MADMySQLServer alloc] init];
 	server.host = @"127.0.0.1";
 	server.port = 1;
-	XCTAssertNil([MysqlConnection connectToServer:server error:NULL]);
+	XCTAssertNil([MADMySQLConnection connectToServer:server error:NULL]);
 }
 
 - (void)testConnectToServersReturnsNilWhenAllCandidatesFail {
-	MysqlServer *first = [[MysqlServer alloc] init];
+	MADMySQLServer *first = [[MADMySQLServer alloc] init];
 	first.host = @"127.0.0.1";
 	first.port = 1;
 
-	MysqlServer *second = [[MysqlServer alloc] init];
+	MADMySQLServer *second = [[MADMySQLServer alloc] init];
 	second.host = @"127.0.0.1";
 	second.port = 1;
 
 	// Bind to a local first: a comma inside an @[...] literal would otherwise be
 	// taken as an extra argument to the XCTest macro.
 	NSArray *candidates = @[first, second];
-	XCTAssertNil([MysqlConnection connectToServers:candidates]);
+	XCTAssertNil([MADMySQLConnection connectToServers:candidates]);
 }
 
-#pragma mark - MysqlConnection without a server behind it
+#pragma mark - MADMySQLConnection without a server behind it
 
-// -[MysqlConnection init] is not how the app builds connections (the factories
+// -[MADMySQLConnection init] is not how the app builds connections (the factories
 // answer nil when the server cannot be reached), but it produces the state
 // these tests need: an object whose handle is NULL.  Reading from it is safe;
 // the mutating session commands are not (see BUGS.md).
 
 - (void)testErrorAccessorsOnAConnectionWithoutAServer {
-	MysqlConnection *connection = [[MysqlConnection alloc] init];
+	MADMySQLConnection *connection = [[MADMySQLConnection alloc] init];
 
 	// The client library checks for a NULL handle, so the "why did it not
 	// connect?" accessors answer instead of faulting.
@@ -397,12 +397,12 @@
 }
 
 - (void)testTransactionsFlagStartsOff {
-	MysqlConnection *connection = [[MysqlConnection alloc] init];
+	MADMySQLConnection *connection = [[MADMySQLConnection alloc] init];
 	XCTAssertFalse(connection.transactionsEnabled);
 }
 
 - (void)testDescriptionOfAConnectionWithoutAServer {
-	MysqlConnection *connection = [[MysqlConnection alloc] init];
+	MADMySQLConnection *connection = [[MADMySQLConnection alloc] init];
 
 	NSString *description = [connection description];
 	XCTAssertTrue([description containsString:@"NO"], @"Expected the disconnected state in: %@", description);

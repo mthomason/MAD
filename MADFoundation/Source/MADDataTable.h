@@ -41,7 +41,7 @@ typedef NS_ENUM(short, MADDataTableParameters) {
 /// order to describe the rows it is about to write.  The metadata lives here rather
 /// than in a protocol of its own because the MySQL fetch is the only caller that
 /// reads it back, and it reads it *while writing*: on the first row it corrects a
-/// column's type from the value it actually received (MysqlFetch+DataTable.m).
+/// column's type from the value it actually received (MADMySQLFetch+DataTable.m).
 @protocol MADDataTableWriting <NSObject>
 @required
 - (void)removeAllObjects;

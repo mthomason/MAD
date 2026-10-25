@@ -259,7 +259,7 @@ reference to "BUGS.md, the X entry" still lands.
   (never Same, so homogeneous runs in a heterogeneous legacy column still group), and an
   offline open still formats; a class the reader can never produce asserts.  MySQL's
   first-row `column.type` correction is gone: TEXT vs BLOB is
-  decided once in `+[MysqlFetch dataColumnForFieldName:mySqlField:]` from the column's
+  decided once in `+[MADMySQLFetch dataColumnForFieldName:mySqlField:]` from the column's
   charset (binary 63 is a BLOB), and the fetch respects the column's declared type.  Enum
   columns still store parsed numbers (pre-existing; "red" becomes 0) -- left as a follow-up,
   not silently changed here.  The optional cache `user_version` stamp remains a follow-up.
@@ -1371,7 +1371,7 @@ reference to "BUGS.md, the X entry" still lands.
   Every `#if DEBUG` in framework code was therefore dead in Debug builds:
   `MADApplication +groupIdentifier` never answered the `.local` group,
   `MADLogDebug` was always the no-op arm (`madlog.h`), and
-  `MADMySQL/Source/MysqlFetch.m`'s `#ifdef DEBUG` block never compiled.
+  `MADMySQL/Source/MADMySQLFetch.m`'s `#ifdef DEBUG` block never compiled.
 - **Now:** `"$(inherited)"` added after the accessor in each list (Debug and
   Release, ten projects).  `-showBuildSettings` now resolves to
   `MADLOG_ACCESSOR=... DEBUG=1` for the framework and app targets.
@@ -1983,7 +1983,7 @@ reference to "BUGS.md, the X entry" still lands.
 
 ### The fetch corrected a column's type from its first row
 - **Status:** Fixed 2026-10-18 (commit `483a77259`).
-- **Where:** was `MADMySQL/Source/MysqlFetch+DataTable.m`, the `MYSQL_TYPE_*_BLOB` fetch
+- **Where:** was `MADMySQL/Source/MADMySQLFetch+DataTable.m`, the `MYSQL_TYPE_*_BLOB` fetch
   branch: on the first row it decoded the bytes, and when they read as UTF-8 it mutated the
   cache column's `type` to String (a dead NSNumber branch mutated it to Integer).
 - **Behavior:** a column's type depended on the content of its first row, and the cache
@@ -1992,7 +1992,7 @@ reference to "BUGS.md, the X entry" still lands.
   type decided per row cannot stand.
 - **Now:** TEXT and BLOB share the blob-ish protocol types; the column's charset is
   what tells them apart -- binary (63) is a BLOB, anything else is TEXT.  The decision now
-  happens once in `+[MysqlFetch dataColumnForFieldName:mySqlField:]`, before the table is
+  happens once in `+[MADMySQLFetch dataColumnForFieldName:mySqlField:]`, before the table is
   created, and the fetch branch stores bytes for a BLOB column and decodes UTF-8 for a TEXT
   column (empty text stores NULL, as before -- an empty NSData has no bytes).  A binary
   BLOB whose bytes happen to decode as UTF-8 is now data rather than text -- the correct
@@ -2001,21 +2001,21 @@ reference to "BUGS.md, the X entry" still lands.
   fixture exists for a binary blob that decodes, so the charset decision is pinned by the
   bind-path contract tests in `MADSqlite3Tests/MADDatabaseSqlite3BindingTests.m` instead.
 
-### `MysqlFetch+DataTable`: no non-SELECT statement could ever execute
+### `MADMySQLFetch+DataTable`: no non-SELECT statement could ever execute
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`
+- **Where:** `MADMySQL/Source/MADMySQLFetch+DataTable.m`
 - **Behavior:** `mysql_stmt_bind_result` was called unconditionally. For any
   statement with `field_count == 0` — every `INSERT`, `UPDATE`, `DELETE`,
   `CREATE`, `DROP` — it fails client-side with code 3534, which aborted the call
-  before `mysql_stmt_execute` was reached. All DDL and DML through `MysqlFetch`
+  before `mysql_stmt_execute` was reached. All DDL and DML through `MADMySQLFetch`
   silently did nothing.
 - **Why it matters:** `MADDatabaseMySQL -executeSQL:...` and the
-  `MysqlInsert`/`MysqlUpdate`/`MysqlDelete`/`MysqlTruncate` builders all route
+  `MADMySQLInsert`/`MADMySQLUpdate`/`MADMySQLDelete`/`MADMySQLTruncate` builders all route
   through this path, so the whole write side of the MySQL driver was dead.
 
-### `MysqlFetch+DataTable`: row loop spun forever on a fetch error
+### `MADMySQLFetch+DataTable`: row loop spun forever on a fetch error
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`
+- **Where:** `MADMySQL/Source/MADMySQLFetch+DataTable.m`
 - **Behavior:** The row loop terminated only on `MYSQL_NO_DATA`. `mysql_stmt_fetch`
   returns `1` (`stmt_read_row_no_result_set` → `set_stmt_error`) rather than
   `MYSQL_NO_DATA` for a statement with no result set, so the loop never exited.
@@ -2023,9 +2023,9 @@ reference to "BUGS.md, the X entry" still lands.
 - **Why it matters:** One bad statement hung the app thread with no error and no
   way out. The loop now ends on any result that is neither a row nor a truncation.
 
-### `MysqlFetch+DataTable`: `MYSQL_TYPE_INT24` (MEDIUMINT) read 4 bytes as 8
+### `MADMySQLFetch+DataTable`: `MYSQL_TYPE_INT24` (MEDIUMINT) read 4 bytes as 8
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`, `-fetchResultsFromConnection:`
+- **Where:** `MADMySQL/Source/MADMySQLFetch+DataTable.m`, `-fetchResultsFromConnection:`
 - **Behavior:** The `MYSQL_TYPE_INT24` case had no `break` and fell through into
   the `MYSQL_TYPE_DECIMAL`/`MYSQL_TYPE_DOUBLE` case, which re-read the 4-byte
   `int` buffer as an 8-byte `double`. That is a heap over-read, and it overwrote
@@ -2033,18 +2033,18 @@ reference to "BUGS.md, the X entry" still lands.
 - **Why it matters:** MEDIUMINT columns returned nonsense. Now covered live by a
   round-trip through a probe table.
 
-### `MysqlFetch+DataTable`: bind and execute failures were never reported
+### `MADMySQLFetch+DataTable`: bind and execute failures were never reported
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`, `-fetchWithCommand:...`
+- **Where:** `MADMySQL/Source/MADMySQLFetch+DataTable.m`, `-fetchWithCommand:...`
 - **Behavior:** Both failure branches built an `NSError` but never assigned it to
   the caller's `*error` out-parameter, so a failed bind or execute was
   indistinguishable from success. The nil-connection branch had the same problem.
 - **Why it matters:** This is what made the DDL bug above invisible for so long:
   the statement did not run, and nothing said so.
 
-### `MysqlFetch+DataTable`: `MYSQL_TYPE_NULL` left its out-parameters uninitialized
+### `MADMySQLFetch+DataTable`: `MYSQL_TYPE_NULL` left its out-parameters uninitialized
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`, `-bindDataForStatement:andField:`
+- **Where:** `MADMySQL/Source/MADMySQLFetch+DataTable.m`, `-bindDataForStatement:andField:`
 - **Behavior:** The `MYSQL_TYPE_NULL` case set only `buffer_type` and `buffer`,
   then fell through into `default:` and fired `NSAssert(NO, ...)`. The `length`,
   `error` and `is_null` pointers were left as uninitialized stack garbage, and the
@@ -2052,18 +2052,18 @@ reference to "BUGS.md, the X entry" still lands.
 - **Why it matters:** `SELECT NULL` — a literal `NULL` in any ad hoc query —
   asserted in debug builds and dereferenced a wild pointer in release.
 
-### `MysqlFetch+DataTable`: bindings and statement leaked on the error paths
+### `MADMySQLFetch+DataTable`: bindings and statement leaked on the error paths
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m`, `-fetchWithCommand:...`
+- **Where:** `MADMySQL/Source/MADMySQLFetch+DataTable.m`, `-fetchWithCommand:...`
 - **Behavior:** The `free()` calls and `mysql_stmt_close` sat inside the
   success-only branch, so a failed bind or execute leaked the `calloc`'d binding
   buffers and the `MYSQL_STMT` on every call.
 - **Why it matters:** Leaks per failed statement. Became reachable once failing
   DML was able to run at all.
 
-### `MysqlFetch`: `mySQLTypeForType` returned wrong names for three types
+### `MADMySQLFetch`: `mySQLTypeForType` returned wrong names for three types
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlFetch.m`
+- **Where:** `MADMySQL/Source/MADMySQLFetch.m`
 - **Behavior:** `MYSQL_TYPE_MEDIUM_BLOB` and `MYSQL_TYPE_LONG_BLOB` both returned
   `"MYSQL_TYPE_DECIMAL"` (copy-paste), and `MYSQL_TYPE_LONGLONG` had no case at
   all and fell through to `"Unknown"`.
@@ -2085,7 +2085,7 @@ reference to "BUGS.md, the X entry" still lands.
     `MADMySQLTests.m`, `MADMySQLLiveTests.m:594`.
   - **TIME — corrected.** `MYSQL_TYPE_TIME` now maps to `MADDataTypeTime`. The
     mapping was reachable (`MADDatabaseMySQL.m:247` sets every schema field's
-    `fieldType` from it) and wrong in a way that showed: `MysqlFetch+DataTable.m:431`
+    `fieldType` from it) and wrong in a way that showed: `MADMySQLFetch+DataTable.m:431`
     builds the value from hour/minute/second alone, so the `NSDate` carries whatever
     date the calendar defaults to, and `RptqDocumentElement+Extras.m:1008-1076`
     rendered `MADDataTypeDateTime` through `dateTimeformatter` — a date part the value
@@ -2104,9 +2104,9 @@ reference to "BUGS.md, the X entry" still lands.
     branch, and `MADDataTypeNull` would be wrong for both. This is a decision, not a
     deferral. Pinned by `MADMySQLTests.m` `-testDataTypeForNativeTypeMapsNullToNumber`.
 
-### `MysqlFetch+DataTable` comment claims SMALLINT/MEDIUMINT/BIT are unsupported
+### `MADMySQLFetch+DataTable` comment claims SMALLINT/MEDIUMINT/BIT are unsupported
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m:139`
+- **Where:** `MADMySQL/Source/MADMySQLFetch+DataTable.m:139`
 - **Behavior:** The comment block above the binding loop says these types are
   "not handled currently - exception will occur if used", but all three have
   `bindDataForStatement:` cases and fetch cases and work correctly.
@@ -2146,7 +2146,7 @@ reference to "BUGS.md, the X entry" still lands.
   there, and falls back to the base when it is not (SQL built with no session open, such
   as a preview that never connects), which is what the driver emitted before and is no
   worse for such a value than it ever was. The handle is still freed by
-  `MysqlConnection -dealloc`: `mysql_init` is handed memory this side `calloc`'d, so the
+  `MADMySQLConnection -dealloc`: `mysql_init` is handed memory this side `calloc`'d, so the
   client's `free_me` is false and `mysql_close` does not free it.
 - **Test:** `MADMySQLLiveTests testNewSafeLiteralEscapesABackslashThroughTheLiveSession`
   and `testNewSafeLiteralEscapesAnApostropheThroughTheLiveSession`. Each connects the way
@@ -2156,9 +2156,9 @@ reference to "BUGS.md, the X entry" still lands.
   `MADMySQLTests testNewSafeLiteralWithoutASessionFallsBackToAnsiQuoting` pins the
   no-session path, backslash and all, so the limitation is stated rather than implied.
 
-### `MysqlUpdate -execute` raises an out-of-bounds string exception instead of its own error
+### `MADMySQLUpdate -execute` raises an out-of-bounds string exception instead of its own error
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlUpdate.m:70` (the column list) and `:130` (the qualifier)
+- **Where:** `MADMySQL/Source/MADMySQLUpdate.m:56-62` (the three guards in `-execute`)
 - **Behavior:** Both buffers are built with a leading separator and then trimmed with
   `deleteCharactersInRange:NSMakeRange(0, 2)` / `NSMakeRange(0, 4)`.  Nothing forces
   either buffer to have that many characters:
@@ -2176,13 +2176,14 @@ reference to "BUGS.md, the X entry" still lands.
   exception that names `__NSCFString`, not the caller's mistake.  (Losing the qualifier
   *silently* would be worse — the error is the point.)
 - **Now:** `-execute` guards both before either buffer is built: no row data and no
-  qualifier each raise the class's own `MysqlException` -- *row data must be specified
+  qualifier each raise the class's own `MADMySQLException` -- *row data must be specified
   to perform an update* and *a qualifier must be specified to perform an update* -- in
-  the same nil-connection form as the table guard beside them.  The two trims are
-  therefore always at least as long as what they delete, and the "forgot the WHERE
-  clause" update is refused with a diagnostic instead of an `__NSCFString` range
-  exception.
-- **Locked down by:** `MysqlUpdateTests testExecuteWithoutRowDataRaisesTheUpdatesOwnError`
+  the same nil-connection form as the table guard beside them.  The 2026-10-25
+  connector rewrite rebuilt the statement without the leading-separator trims, so the
+  buffers the old code trimmed no longer exist; the guards, their strings and the
+  tests stand unchanged, and the "forgot the WHERE clause" update is refused with a
+  diagnostic instead of an `__NSCFString` range exception.
+- **Locked down by:** `MADMySQLUpdateTests testExecuteWithoutRowDataRaisesTheUpdatesOwnError`
   (renamed from `testExecuteWithoutRowDataRaisesAnInvalidArgumentException`) and
   `testExecuteWithAnEmptyRowDataDictionaryRaisesTheSameWay`, both confirmed failing
   against the old code, plus the new
@@ -2193,9 +2194,9 @@ reference to "BUGS.md, the X entry" still lands.
   session call the old crash needed, but it keeps the live connection in the loop.
   Both Linux ports carry the same tests.
 
-### `MysqlConnection +connectToServer:error:` wrote through a NULL error pointer
+### `MADMySQLConnection +connectToServer:error:` wrote through a NULL error pointer
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlConnection.m:144` (`+connectToServer:error:`)
+- **Where:** `MADMySQL/Source/MADMySQLConnection.m:56-64` (`+connectToServer:error:`)
 - **Behavior:** After `internal_connectToServer:outError:` returned a non-nil
   `connectionError`, the method did `*error = [connectionError copy]` without checking
   `error`.  `internal_connectToServer:outError:` and the neighbouring `:157` both treat
@@ -2204,15 +2205,39 @@ reference to "BUGS.md, the X entry" still lands.
   `osx.cocoa.NSError`.
 - **Why it matters:** A caller that only wanted the connection result had no safe way to
   opt out of the error object.
-- **Now:** the write is guarded by `if (connectionError != nil && error != NULL)`.  Every
-  caller that passes an error pointer behaves exactly as before.
+- **Now:** the write is guarded by `if (error != NULL)`.  Every caller that passes
+  an error pointer behaves exactly as before; a NULL pointer asks for no error at all.
 - **Test:** `MADMySQLTests testConnectToServerWithNoListenerAndANULLErrorPointerDoesNotCrash`
   (new; the old code crashes on it) and `testConnectToServerWithNoListenerFailsCleanly`
   for the non-NULL path.
 
-### `MysqlFetch+DataTable` read an uninitialised `MYSQL_BIND` in its default case
+### `MADMySQLConnection`'s transaction toggles crashed on a connection with no handle
+- **Status:** Fixed by the first-party connector rewrite (2026-10-25)
+- **Where:** `MADMySQL/Source/MADMySQLConnection.m:157-186` (`enableTransactions`,
+  `disableTransactions`, and the commit/rollback pair beside them)
+- **Behavior:** The old class left its handle NULL after `-init`, and the toggles called
+  `mysql_autocommit` / `mysql_commit` / `mysql_rollback` without checking it.
+  `mysql_autocommit` dereferences the handle, so `[[MADMySQLConnection alloc] init]`
+  followed by `-enableTransactions` crashed the process (verified: the test process died
+  at that call, with no exception to catch).
+- **Why it matters:** Only latent.  Every production path got its connection from
+  `+connectToServer:…`, which answers `nil` rather than a handle-less object, and no
+  in-tree caller invoked the transaction methods — they are API for the query cache and
+  the portable store.  The trap was that the class is `init`-able and looked usable;
+  note that the neighbouring accessors (`-errorNumber`, `-errorText`) were already
+  NULL-safe, which is what made the omission look inconsistent rather than deliberate.
+- **Now:** the rewrite's `-init` allocates the handle up front (`calloc` + `mysql_init`,
+  freed by `-dealloc`), so every mutating session command has a handle to fail against
+  and the toggles raise `MADMySQLException` (the commit/rollback pair their own
+  subclasses) instead of dereferencing NULL.  A server-less connection now raises a
+  catchable exception where it used to take the process down.
+- **Test:** `MADMySQLTests testErrorAccessorsOnAConnectionWithoutAServer` and
+  `testTransactionsFlagStartsOff` still pin the safe half.  The old crash could not be
+  asserted — it terminated the test process, so there is nothing to catch.
+
+### `MADMySQLFetch+DataTable` read an uninitialised `MYSQL_BIND` in its default case
 - **Status:** Fixed
-- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m:499`, `:668`
+- **Where:** `MADMySQL/Source/MADMySQLFetch+DataTable.m:499`, `:668`
   (`+bindDataForStatement:andField:`)
 - **Behavior:** `MYSQL_BIND binding;` was uninitialised, and the `default:` case evaluated
   `mySQLTypeForType(binding.buffer_type)` inside `NSAssert` before assigning anything.
@@ -3098,11 +3123,11 @@ reference to "BUGS.md, the X entry" still lands.
   `CLI/Source/MADCLIDocument.m`'s refresh chain
 - **Behavior:** The first `mad refresh` against live MySQL from inside the Linux image
   died with SIGABRT and no diagnostic, after `executeSQL:` had been entered and before
-  the fetch. `MysqlFetch (DataTable)` -- `-fetchWithCommand:dataTable:onConnection:
+  the fetch. `MADMySQLFetch (DataTable)` -- `-fetchWithCommand:dataTable:onConnection:
   extendedNames:error:`, the only path that runs a prepared statement -- is a
   *category*, and a category is reached by message send, which leaves no symbol for
   the linker to resolve; libmadmysql.a was linked normally, so its member was never
-  pulled in. `nm` showed `.objc_category_MysqlFetchDataTable` present in the MySQL
+  pulled in. `nm` showed `.objc_category_MADMySQLFetchDataTable` present in the MySQL
   test binary and absent from the CLI's; `instancesRespondToSelector:` was false at
   runtime, and the unrecognized selector ended in `abort()`.
 - **Why it matters:** The same failure waits for every category in any framework
@@ -3118,7 +3143,7 @@ reference to "BUGS.md, the X entry" still lands.
   freetds' `err_handler`). The per-file `target_sources` hack is gone. `Linux/README.md`
   has the story; `Linux/AGENTS.md` states the rule.
 - **Test:** `Linux/Tests/MADDatabaseDriverDispatchTests.m`
-  (`testTheDriversCategoriesAreLinked`) asserts at runtime that `MysqlFetch` still
+  (`testTheDriversCategoriesAreLinked`) asserts at runtime that `MADMySQLFetch` still
   answers its `DataTable` selector and that `MADQuery` still answers
   `-whereClauseWithRowIds:` / `-whereClauseWithParameters:` -- the two categories the
   data path needs. It fails the moment an archive stops being whole-archived.

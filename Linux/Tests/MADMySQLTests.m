@@ -20,9 +20,9 @@
 #import <MADMySQL/MADDatabaseMySQL.h>
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
 #import <MADMySQL/MADDataTypeMySQL.h>
-#import <MADMySQL/MysqlServer.h>
-#import <MADMySQL/MysqlConnection.h>
-#import <MADMySQL/MysqlFetch.h>
+#import <MADMySQL/MADMySQLServer.h>
+#import <MADMySQL/MADMySQLConnection.h>
+#import <MADMySQL/MADMySQLFetch.h>
 
 #import <MADFoundation/MADDataType.h>
 #import <MADAPI/MADDatabaseType.h>
@@ -259,10 +259,10 @@ static void testNewDatabaseConnectionFromProperties(void) {
 	MAD_PASS(built.port == 3306, "the port is copied");
 }
 
-#pragma mark - MysqlServer defaults
+#pragma mark - MADMySQLServer defaults
 
-static void testMysqlServerDefaults(void) {
-	MysqlServer *server = [[MysqlServer alloc] init];
+static void testMADMySQLServerDefaults(void) {
+	MADMySQLServer *server = [[MADMySQLServer alloc] init];
 	MAD_PASS_EQUAL(server.host, @"localhost", "the default host");
 	MAD_PASS_EQUAL(server.user, @"username", "the default user");
 	MAD_PASS_EQUAL(server.password, @"password", "the default password");
@@ -272,8 +272,8 @@ static void testMysqlServerDefaults(void) {
 	MAD_PASS(server.connectionTimeout == 30u, "the default connection timeout");
 }
 
-static void testMysqlServerDescriptionOmitsPassword(void) {
-	MysqlServer *server = [[MysqlServer alloc] init];
+static void testMADMySQLServerDescriptionOmitsPassword(void) {
+	MADMySQLServer *server = [[MADMySQLServer alloc] init];
 	server.host = @"db.example.com";
 	server.user = @"alice";
 	server.password = @"super-secret";
@@ -311,7 +311,7 @@ static void testMySqlTypeForTypeNamesCommonTypes(void) {
 
 // MYSQL_TYPE_MEDIUM_BLOB and MYSQL_TYPE_LONG_BLOB both used to return the string
 // "MYSQL_TYPE_DECIMAL" -- a copy/paste slip in this diagnostics-only helper. Fixed
-// in MysqlFetch.m; these assertions keep it fixed. Likewise MYSQL_TYPE_LONGLONG had
+// in MADMySQLFetch.m; these assertions keep it fixed. Likewise MYSQL_TYPE_LONGLONG had
 // no case at all and fell through to "Unknown".
 static void testMySqlTypeForTypeNamesBlobAndLongLongTypes(void) {
 	MAD_PASS_EQUAL(@(mySQLTypeForType(MYSQL_TYPE_MEDIUM_BLOB)), @"MYSQL_TYPE_MEDIUM_BLOB", "MEDIUM_BLOB");
@@ -326,7 +326,7 @@ static void testMySqlTypeForTypeUnknownFallsBack(void) {
 #pragma mark - Connection failure paths (no server required)
 
 static void testConnectToServerWithNoListenerFailsCleanly(void) {
-	MysqlServer *server = [[MysqlServer alloc] init];
+	MADMySQLServer *server = [[MADMySQLServer alloc] init];
 	server.host = @"127.0.0.1";
 	server.port = 1;            // privileged, nothing listens here
 	server.user = @"root";
@@ -334,7 +334,7 @@ static void testConnectToServerWithNoListenerFailsCleanly(void) {
 	server.schema = @"employees";
 
 	NSError *error = nil;
-	MysqlConnection *connection = [MysqlConnection connectToServer:server error:&error];
+	MADMySQLConnection *connection = [MADMySQLConnection connectToServer:server error:&error];
 
 	MAD_PASS(connection == nil, "the connection attempt fails");
 	MAD_PASS(error != nil, "the failure is reported");
@@ -346,36 +346,36 @@ static void testConnectToServerWithNoListenerFailsCleanly(void) {
 }
 
 static void testConnectToServerWithoutErrorPointerStillReturnsNil(void) {
-	MysqlServer *server = [[MysqlServer alloc] init];
+	MADMySQLServer *server = [[MADMySQLServer alloc] init];
 	server.host = @"127.0.0.1";
 	server.port = 1;
-	MAD_PASS([MysqlConnection connectToServer:server] == nil, "no error pointer, still nil");
+	MAD_PASS([MADMySQLConnection connectToServer:server] == nil, "no error pointer, still nil");
 }
 
 static void testConnectToServersReturnsNilWhenAllCandidatesFail(void) {
-	MysqlServer *first = [[MysqlServer alloc] init];
+	MADMySQLServer *first = [[MADMySQLServer alloc] init];
 	first.host = @"127.0.0.1";
 	first.port = 1;
 
-	MysqlServer *second = [[MysqlServer alloc] init];
+	MADMySQLServer *second = [[MADMySQLServer alloc] init];
 	second.host = @"127.0.0.1";
 	second.port = 1;
 
 	// Bind to a local first: a comma inside an @[...] literal would otherwise be
 	// taken as an extra argument to the macro.
 	NSArray *candidates = @[first, second];
-	MAD_PASS([MysqlConnection connectToServers:candidates] == nil, "every candidate fails");
+	MAD_PASS([MADMySQLConnection connectToServers:candidates] == nil, "every candidate fails");
 }
 
-#pragma mark - MysqlConnection without a server behind it
+#pragma mark - MADMySQLConnection without a server behind it
 
-// -[MysqlConnection init] is not how the app builds connections (the factories
+// -[MADMySQLConnection init] is not how the app builds connections (the factories
 // answer nil when the server cannot be reached), but it produces the state
 // these tests need: an object whose handle is NULL.  Reading from it is safe;
 // the mutating session commands are not (see BUGS.md).
 
 static void testErrorAccessorsOnAConnectionWithoutAServer(void) {
-	MysqlConnection *connection = [[MysqlConnection alloc] init];
+	MADMySQLConnection *connection = [[MADMySQLConnection alloc] init];
 
 	// The client library checks for a NULL handle, so the "why did it not
 	// connect?" accessors answer instead of faulting.
@@ -386,12 +386,12 @@ static void testErrorAccessorsOnAConnectionWithoutAServer(void) {
 }
 
 static void testTransactionsFlagStartsOff(void) {
-	MysqlConnection *connection = [[MysqlConnection alloc] init];
+	MADMySQLConnection *connection = [[MADMySQLConnection alloc] init];
 	MAD_PASS(!connection.transactionsEnabled, "transactions start disabled");
 }
 
 static void testDescriptionOfAConnectionWithoutAServer(void) {
-	MysqlConnection *connection = [[MysqlConnection alloc] init];
+	MADMySQLConnection *connection = [[MADMySQLConnection alloc] init];
 
 	NSString *description = [connection description];
 	MAD_PASS([description containsString:@"NO"], "the description reports the disconnected state");
@@ -421,8 +421,8 @@ MAD_TEST_MAIN("MADMySQLTests",
 	MAD_TEST(testConnectionCopyIsIndependent),
 	MAD_TEST(testConnectionCodingRoundTripCarriesTheConnectionState),
 	MAD_TEST(testNewDatabaseConnectionFromProperties),
-	MAD_TEST(testMysqlServerDefaults),
-	MAD_TEST(testMysqlServerDescriptionOmitsPassword),
+	MAD_TEST(testMADMySQLServerDefaults),
+	MAD_TEST(testMADMySQLServerDescriptionOmitsPassword),
 	MAD_TEST(testMySqlTypeForTypeNamesCommonTypes),
 	MAD_TEST(testMySqlTypeForTypeNamesBlobAndLongLongTypes),
 	MAD_TEST(testMySqlTypeForTypeUnknownFallsBack),

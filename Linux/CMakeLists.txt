@@ -134,7 +134,7 @@ include(cmake/MADLinuxFramework.cmake)
 # the static link (Apple's -ObjC).  Now the shims are linked once, whole-archive,
 # by each executable, and the framework archives are pure: a category in a driver
 # can be whole-archived like any other code.  (Found by the CLI: mad refresh over
-# MySQL aborted because .objc_category_MysqlFetchDataTable was never linked in.)
+# MySQL aborted because .objc_category_MADMySQLFetchDataTable was never linked in.)
 add_library(madcompat STATIC ${MAD_COMPAT_SOURCES})
 target_include_directories(madcompat PUBLIC "${SHIM_DIR}" "${MAD_COMPAT_DIR}")
 target_compile_options(madcompat PRIVATE
@@ -295,13 +295,13 @@ mad_make_include_shim(MADMySQL "${SOURCE_DIR}")
 mad_add_framework(madmysql MADMYSQL_SOURCES
 	MADMySQLLiveTests
 	MADMySQLTests
-	MysqlDeleteTests
-	MysqlExceptionTests
-	MysqlFetchFieldTests
-	MysqlInsertTests
-	MysqlSupportTypesTests
-	MysqlTruncateTests
-	MysqlUpdateTests
+	MADMySQLDeleteTests
+	MADMySQLExceptionTests
+	MADMySQLFetchFieldTests
+	MADMySQLInsertTests
+	MADMySQLSupportTypesTests
+	MADMySQLTruncateTests
+	MADMySQLUpdateTests
 )
 target_link_libraries(madmysql PUBLIC madfoundation madapi ${MYSQL_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
@@ -378,7 +378,7 @@ target_include_directories(mad PUBLIC
 	"${CMAKE_BINARY_DIR}/umbrella-shim")
 target_compile_options(mad PRIVATE -I/usr/include/libxml2)
 # The driver archives are whole-archived, not merely linked: a driver's work is
-# reached through its categories (MysqlFetch+DataTable, MADQuery+Sqlite3), and a
+# reached through its categories (MADMySQLFetch+DataTable, MADQuery+Sqlite3), and a
 # category is a message send -- no symbol -- so the linker drops its member
 # unless the archive is whole.  The expression propagates to every consumer of
 # mad, the way a category in a framework survives on Apple only with -ObjC.

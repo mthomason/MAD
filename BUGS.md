@@ -76,11 +76,11 @@ Status key:
 - **Test:** none -- there is no caller to characterize.  Recorded so the next reader
   does not mistake the one-page result for a lost page.
 
-### MysqlFetch passes an uninitialized value to a function
+### MADMySQLFetch passes an uninitialized value to a function
 - **Status:** Open -- documented from the analyzer run.
 - **What:** `core.CallAndMessage` reports that the first argument of a function call at
-  `MysqlFetch+DataTable.m:668` is uninitialized on some paths.
-- **Where:** `MADMySQL/Source/MysqlFetch+DataTable.m:668`.
+  `MADMySQLFetch+DataTable.m:668` is uninitialized on some paths.
+- **Where:** `MADMySQL/Source/MADMySQLFetch+DataTable.m:668`.
 
 ### The nullability analyzer reports nil crossing nonnull boundaries
 - **Status:** Open -- documented from the analyzer run; each site is a crash risk if its
@@ -912,31 +912,13 @@ wrong answer.
 
 Covered by an offline suite (`MADMySQLTests.m`) plus a live suite
 (`MADMySQLLiveTests.m`) that runs against the development instance in
-`DEVELOPER.md`. The live suite is the only way to reach `MysqlConnection`,
-`MysqlFetch` and `MysqlFetch+DataTable`, which are thin wrappers over
+`DEVELOPER.md`. The live suite is the only way to reach `MADMySQLConnection`,
+`MADMySQLFetch` and `MADMySQLFetch+DataTable`, which are thin wrappers over
 libmysqlclient; it skips rather than fails when no server is reachable.
 
-### `MysqlConnection`'s transaction toggles crash on a connection with no handle
-- **Status:** Confirmed (latent -- no caller builds such a connection)
-- **Where:** `MADMySQL/Source/MysqlConnection.m:214-232` (`enableTransactions`,
-  `disableTransactions`, and the commit/rollback pair beside them)
-- **Behavior:** These call `mysql_autocommit(_connection, 0)` / `mysql_commit` /
-  `mysql_rollback` without checking the handle.  `mysql_autocommit` dereferences it, so
-  `[[MysqlConnection alloc] init]` followed by `-enableTransactions` crashes the process
-  (verified: the test process died at that call, with no exception to catch).
-- **Why it matters:** Only latent.  Every production path gets its connection from
-  `+connectToServer:…`, which answers `nil` rather than a handle-less object, and no
-  in-tree caller invokes the transaction methods yet — they are API for the query cache
-  and the portable store.  The trap is that the class is `init`-able and looks usable;
-  note that the neighbouring accessors (`-errorNumber`, `-errorText`) *are* NULL-safe,
-  which is what makes the omission look inconsistent rather than deliberate.
-- **Test:** `MADMySQLTests testErrorAccessorsOnAConnectionWithoutAServer` and
-  `testTransactionsFlagStartsOff` pin the safe half.  The crash itself is not asserted —
-  it terminates the test process, so there is nothing to catch.
-
-### `MysqlInsert -execute` reports `ULONG_MAX` rows for a duplicate it ignored
+### `MADMySQLInsert -execute` reports `ULONG_MAX` rows for a duplicate it ignored
 - **Status:** Quirk (left as is)
-- **Where:** `MADMySQL/Source/MysqlInsert.m:139-142`
+- **Where:** `MADMySQL/Source/MADMySQLInsert.m:110-126`
 - **Behavior:** With `ignoreDuplicateErrors` set, a failed `mysql_stmt_execute` is
   swallowed and the code goes straight on to read `mysql_affected_rows`, which answers
   `(my_ulonglong)-1` for a statement that did not run.  `affectedRows` therefore comes
@@ -948,34 +930,35 @@ libmysqlclient; it skips rather than fails when no server is reachable.
   asserts the value exactly, so a future fix to 0 fails the test rather than passing
   silently.
 
-### `MysqlTruncate`'s factories skip the nil-connection check the other DML classes make
+### `MADMySQLTruncate`'s factories skip the nil-connection check the other DML classes make
 - **Status:** Quirk (left as is)
-- **Where:** `MADMySQL/Source/MysqlTruncate.m:22-33` against `MysqlInsert.m:27-33`,
-  `MysqlUpdate.m:26-32`, `MysqlDelete.m:25-31`
-- **Behavior:** `MysqlInsert`, `MysqlUpdate` and `MysqlDelete` all raise
-  `MysqlException` from their factories when handed a nil connection; the two truncate
+- **Where:** `MADMySQL/Source/MADMySQLTruncate.m:30-40` against `MADMySQLInsert.m:44-50`,
+  `MADMySQLUpdate.m:43-50`, `MADMySQLDelete.m:28-34`
+- **Behavior:** `MADMySQLInsert`, `MADMySQLUpdate` and `MADMySQLDelete` all raise
+  `MADMySQLException` from their factories when handed a nil connection; the two truncate
   factories do not, and hand back an object that fails at `-execute` instead.
 - **Why it matters:** A caller that checks for a raise (or relies on the factory to
   refuse) gets an object rather than a diagnosis.  Harmless today — nothing in-tree
   passes nil — but the four classes should behave the same way.
-- **Test:** `MysqlTruncateTests testFactoryAcceptsANilConnection`.
+- **Test:** `MADMySQLTruncateTests testFactoryAcceptsANilConnection`.
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
-- `MysqlConnection +connectToServer:error:` wrote through a NULL error pointer
-- `MysqlFetch+DataTable` read an uninitialised `MYSQL_BIND` in its default case
-- `MysqlFetch+DataTable`: no non-SELECT statement could ever execute
-- `MysqlFetch+DataTable`: row loop spun forever on a fetch error
-- `MysqlFetch+DataTable`: `MYSQL_TYPE_INT24` (MEDIUMINT) read 4 bytes as 8
-- `MysqlFetch+DataTable`: bind and execute failures were never reported
-- `MysqlFetch+DataTable`: `MYSQL_TYPE_NULL` left its out-parameters uninitialized
-- `MysqlFetch+DataTable`: bindings and statement leaked on the error paths
-- `MysqlFetch`: `mySQLTypeForType` returned wrong names for three types
+- `MADMySQLConnection`'s transaction toggles crashed on a connection with no handle
+- `MADMySQLConnection +connectToServer:error:` wrote through a NULL error pointer
+- `MADMySQLFetch+DataTable` read an uninitialised `MYSQL_BIND` in its default case
+- `MADMySQLFetch+DataTable`: no non-SELECT statement could ever execute
+- `MADMySQLFetch+DataTable`: row loop spun forever on a fetch error
+- `MADMySQLFetch+DataTable`: `MYSQL_TYPE_INT24` (MEDIUMINT) read 4 bytes as 8
+- `MADMySQLFetch+DataTable`: bind and execute failures were never reported
+- `MADMySQLFetch+DataTable`: `MYSQL_TYPE_NULL` left its out-parameters uninitialized
+- `MADMySQLFetch+DataTable`: bindings and statement leaked on the error paths
+- `MADMySQLFetch`: `mySQLTypeForType` returned wrong names for three types
 - `MADDataTypeMySQL` mapping is lossy for three types
-- `MysqlFetch+DataTable` comment claims SMALLINT/MEDIUMINT/BIT are unsupported
+- `MADMySQLFetch+DataTable` comment claims SMALLINT/MEDIUMINT/BIT are unsupported
 - `The fetch corrected a column's type from its first row`
 - A backslash in a MySQL literal is an escape character, so ANSI quoting alone is wrong
-- `MysqlUpdate -execute` raises an out-of-bounds string exception instead of its own error
+- `MADMySQLUpdate -execute` raises an out-of-bounds string exception instead of its own error
 
 ## MADTds
 

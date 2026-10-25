@@ -6,7 +6,7 @@
 //  Copyright © 2026 Michael Thomason. All rights reserved.
 //
 //  Integration tests for MADMySQL that talk to a real MySQL server -- this is the
-//  only way to exercise MysqlConnection, MysqlFetch and MysqlFetch+DataTable, which
+//  only way to exercise MADMySQLConnection, MADMySQLFetch and MADMySQLFetch+DataTable, which
 //  are thin wrappers over libmysqlclient.
 //
 //  The server is the local development instance documented in DEVELOPER.md:
@@ -37,19 +37,19 @@
 
 #import "MADDatabaseMySQL.h"
 #import "MADDatabaseConnectionMySql.h"
-#import "MysqlServer.h"
-#import "MysqlConnection.h"
-#import "MysqlFetch.h"
-#import "MysqlFetch+DataTable.h"
-#import "MysqlInsert.h"
-#import "MysqlUpdate.h"
-#import "MysqlDelete.h"
-#import "MysqlTruncate.h"
-#import "MysqlIndex.h"
-#import "MysqlException.h"
-#import "MysqlCommitException.h"
-#import "MysqlRollbackException.h"
-#import "NSString+MysqlEscape.h"
+#import "MADMySQLServer.h"
+#import "MADMySQLConnection.h"
+#import "MADMySQLFetch.h"
+#import "MADMySQLFetch+DataTable.h"
+#import "MADMySQLInsert.h"
+#import "MADMySQLUpdate.h"
+#import "MADMySQLDelete.h"
+#import "MADMySQLTruncate.h"
+#import "MADMySQLIndex.h"
+#import "MADMySQLException.h"
+#import "MADMySQLCommitException.h"
+#import "MADMySQLRollbackException.h"
+#import "NSString+MADMySQLEscape.h"
 
 #import <mysql.h>
 
@@ -61,9 +61,9 @@
 
 #pragma mark - Fixtures
 
-+ (MysqlServer *)testServer {
++ (MADMySQLServer *)testServer {
 	NSDictionary<NSString *, NSString *> *env = [[NSProcessInfo processInfo] environment];
-	MysqlServer *server = [[MysqlServer alloc] init];
+	MADMySQLServer *server = [[MADMySQLServer alloc] init];
 	server.host     = env[@"MAD_MYSQL_TEST_HOST"]     ?: @"127.0.0.1";
 	server.user     = env[@"MAD_MYSQL_TEST_USER"]     ?: @"root";
 	server.password = env[@"MAD_MYSQL_TEST_PASSWORD"] ?: @"root";
@@ -78,7 +78,7 @@
 	static dispatch_once_t once;
 	dispatch_once(&once, ^{
 		NSError *error = nil;
-		MysqlConnection *connection = [MysqlConnection connectToServer:[[self class] testServer] error:&error];
+		MADMySQLConnection *connection = [MADMySQLConnection connectToServer:[[self class] testServer] error:&error];
 		available = (connection != nil);
 	});
 	return available;
@@ -89,22 +89,22 @@
 			  @"No MySQL server reachable; see DEVELOPER.md for the expected test instance.");
 }
 
-- (MysqlConnection *)openConnection {
+- (MADMySQLConnection *)openConnection {
 	return [self openConnectionForServer:[[self class] testServer]];
 }
 
-- (MysqlConnection *)openConnectionForServer:(MysqlServer *)server {
+- (MADMySQLConnection *)openConnectionForServer:(MADMySQLServer *)server {
 	NSError *error = nil;
-	MysqlConnection *connection = [MysqlConnection connectToServer:server error:&error];
+	MADMySQLConnection *connection = [MADMySQLConnection connectToServer:server error:&error];
 	XCTAssertNotNil(connection, @"Expected to connect to %@, got error: %@", server.host, error);
 	XCTAssertNil(error);
 	return connection;
 }
 
-- (MADDataTable *)fetch:(NSString *)sql onConnection:(MysqlConnection *)connection error:(NSError * __autoreleasing *)error {
+- (MADDataTable *)fetch:(NSString *)sql onConnection:(MADMySQLConnection *)connection error:(NSError * __autoreleasing *)error {
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *fetchError = nil;
-	MysqlFetch *fetch = [[MysqlFetch alloc] init];
+	MADMySQLFetch *fetch = [[MADMySQLFetch alloc] init];
 	[fetch fetchWithCommand:sql dataTable:table onConnection:connection error:&fetchError];
 	if (error != NULL) { *error = fetchError; }
 	return table;
@@ -114,9 +114,9 @@
 
 - (void)testConnectToLocalServerSucceeds {
 	[self requireServer];
-	MysqlServer *server = [[self class] testServer];
+	MADMySQLServer *server = [[self class] testServer];
 	NSError *error = nil;
-	MysqlConnection *connection = [MysqlConnection connectToServer:server error:&error];
+	MADMySQLConnection *connection = [MADMySQLConnection connectToServer:server error:&error];
 	XCTAssertNotNil(connection);
 	XCTAssertNil(error);
 	XCTAssertEqualObjects(connection.server.host, server.host);
@@ -124,7 +124,7 @@
 
 - (void)testConnectionDescriptionMentionsHostAndConnectedState {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSString *description = [connection description];
 	XCTAssertTrue([description containsString:[[self class] testServer].host]);
 	XCTAssertTrue([description containsString:@"YES"], @"Expected connected state in: %@", description);
@@ -132,11 +132,11 @@
 
 - (void)testConnectWithWrongPasswordReportsAccessDenied {
 	[self requireServer];
-	MysqlServer *server = [[self class] testServer];
+	MADMySQLServer *server = [[self class] testServer];
 	server.password = @"definitely-not-the-password";
 
 	NSError *error = nil;
-	MysqlConnection *connection = [MysqlConnection connectToServer:server error:&error];
+	MADMySQLConnection *connection = [MADMySQLConnection connectToServer:server error:&error];
 
 	XCTAssertNil(connection);
 	XCTAssertNotNil(error);
@@ -147,11 +147,11 @@
 
 - (void)testConnectWithUnknownSchemaReportsUnknownDatabase {
 	[self requireServer];
-	MysqlServer *server = [[self class] testServer];
+	MADMySQLServer *server = [[self class] testServer];
 	server.schema = @"mad_no_such_schema";
 
 	NSError *error = nil;
-	MysqlConnection *connection = [MysqlConnection connectToServer:server error:&error];
+	MADMySQLConnection *connection = [MADMySQLConnection connectToServer:server error:&error];
 
 	XCTAssertNil(connection);
 	XCTAssertNotNil(error);
@@ -160,11 +160,11 @@
 
 - (void)testConnectToServersReturnsFirstReachableCandidate {
 	[self requireServer];
-	MysqlServer *dead = [[MysqlServer alloc] init];
+	MADMySQLServer *dead = [[MADMySQLServer alloc] init];
 	dead.host = @"127.0.0.1";
 	dead.port = 1;
 
-	MysqlConnection *connection = [MysqlConnection connectToServers:@[dead, [[self class] testServer]]];
+	MADMySQLConnection *connection = [MADMySQLConnection connectToServers:@[dead, [[self class] testServer]]];
 	XCTAssertNotNil(connection);
 	XCTAssertEqualObjects(connection.server.host, [[self class] testServer].host);
 }
@@ -173,21 +173,21 @@
 
 - (void)testEscapeStringQuotesSingleQuote {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	// mysql_real_escape_string turns ' into \' (backslash + quote).
 	XCTAssertEqualObjects([connection mysqlEscapeString:@"O'Brien"], @"O\\'Brien");
 }
 
 - (void)testEscapeStringDoublesBackslash {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	// One backslash in, two backslashes out.
 	XCTAssertEqualObjects([connection mysqlEscapeString:@"a\\b"], @"a\\\\b");
 }
 
 - (void)testEscapeStringReturnsNilForNilInput {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	XCTAssertNil([connection mysqlEscapeString:nil]);
 }
 
@@ -199,8 +199,8 @@
 // query does, ask the driver for the literal, and then have the server read it back --
 // the round trip is the assertion, since only the server's reading proves the escape.
 
-- (MADDatabaseMySQL *)openDatabase:(MysqlConnection * __autoreleasing *)outSocket {
-	MysqlServer *server = [[self class] testServer];
+- (MADDatabaseMySQL *)openDatabase:(MADMySQLConnection * __autoreleasing *)outSocket {
+	MADMySQLServer *server = [[self class] testServer];
 	MADDatabaseConnectionMySql *settings =
 		[[MADDatabaseConnectionMySql alloc] initWithHost: server.host
 												database: server.schema
@@ -212,7 +212,7 @@
 	database.databaseConnection = settings;
 
 	NSError *error = nil;
-	MysqlConnection *socket = [database connectWithConnection: settings
+	MADMySQLConnection *socket = [database connectWithConnection: settings
 													credentals: credential
 											   connectionError: &error];
 	XCTAssertNotNil(socket, @"Expected to connect to %@: %@", server.host, error);
@@ -222,7 +222,7 @@
 
 - (void)testNewSafeLiteralEscapesABackslashThroughTheLiveSession {
 	[self requireServer];
-	MysqlConnection *socket = nil;
+	MADMySQLConnection *socket = nil;
 	MADDatabaseMySQL *database = [self openDatabase:&socket];
 	if (database == nil) return;
 
@@ -242,7 +242,7 @@
 
 - (void)testNewSafeLiteralEscapesAnApostropheThroughTheLiveSession {
 	[self requireServer];
-	MysqlConnection *socket = nil;
+	MADMySQLConnection *socket = nil;
 	MADDatabaseMySQL *database = [self openDatabase:&socket];
 	if (database == nil) return;
 
@@ -260,7 +260,7 @@
 
 - (void)testNewSafeLiteralReportsNullWithoutASession {
 	[self requireServer];
-	MysqlConnection *socket = nil;
+	MADMySQLConnection *socket = nil;
 	MADDatabaseMySQL *database = [self openDatabase:&socket];
 	if (database == nil) return;
 
@@ -272,7 +272,7 @@
 
 - (void)testFetchScalarSelect {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 	MADDataTable *table = [self fetch:@"SELECT 255 AS `f1`;" onConnection:connection error:&error];
 
@@ -284,7 +284,7 @@
 
 - (void)testFetchKnownEmployeeRow {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 	MADDataTable *table = [self fetch:@"SELECT emp_no, first_name, last_name, gender "
 									  @"FROM employees WHERE emp_no = 10001;"
@@ -303,7 +303,7 @@
 
 - (void)testFetchRespectsLimitClause {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 	MADDataTable *table = [self fetch:@"SELECT emp_no FROM employees ORDER BY emp_no LIMIT 25;"
 						 onConnection:connection
@@ -317,7 +317,7 @@
 
 - (void)testFetchCountMatchesKnownTableSize {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 	MADDataTable *table = [self fetch:@"SELECT COUNT(*) AS `total` FROM employees;"
 						 onConnection:connection
@@ -331,7 +331,7 @@
 
 - (void)testFetchShowTablesFindsEmployees {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 	MADDataTable *table = [self fetch:@"SHOW TABLES;" onConnection:connection error:&error];
 
@@ -348,7 +348,7 @@
 
 - (void)testFetchColumnMetadataForEmployees {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 	MADDataTable *table = [self fetch:@"SELECT emp_no, first_name, birth_date FROM employees "
 									  @"WHERE emp_no = 10001;"
@@ -378,10 +378,10 @@
 
 - (void)testFetchColumnKeysAreTableQualifiedWithExtendedNames {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *error = nil;
-	MysqlFetch *fetch = [[MysqlFetch alloc] init];
+	MADMySQLFetch *fetch = [[MADMySQLFetch alloc] init];
 	[fetch fetchWithCommand:@"SELECT emp_no FROM employees WHERE emp_no = 10001;"
 				  dataTable:table
 			   onConnection:connection
@@ -394,10 +394,10 @@
 
 - (void)testFetchColumnKeysAreBareWithoutExtendedNames {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *error = nil;
-	MysqlFetch *fetch = [[MysqlFetch alloc] init];
+	MADMySQLFetch *fetch = [[MADMySQLFetch alloc] init];
 	[fetch fetchWithCommand:@"SELECT emp_no FROM employees WHERE emp_no = 10001;"
 				  dataTable:table
 			   onConnection:connection
@@ -410,7 +410,7 @@
 
 - (void)testFetchDateColumnYieldsDateComponents {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 	MADDataTable *table = [self fetch:@"SELECT birth_date FROM employees WHERE emp_no = 10001;"
 						 onConnection:connection
@@ -431,7 +431,7 @@
 
 - (void)testFetchReportsErrorForInvalidSQL {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 	[self fetch:@"SELECT * FROM mad_no_such_table_xyz;" onConnection:connection error:&error];
 
@@ -444,7 +444,7 @@
 - (void)testFetchReportsErrorWhenConnectionIsNil {
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *error = nil;
-	MysqlFetch *fetch = [[MysqlFetch alloc] init];
+	MADMySQLFetch *fetch = [[MADMySQLFetch alloc] init];
 	[fetch fetchWithCommand:@"SELECT 1;" dataTable:table onConnection:nil error:&error];
 
 	XCTAssertNotNil(error);
@@ -456,9 +456,9 @@
 
 - (void)testFetchReusesAndClearsProvidedTable {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	MADDataTable *table = [[MADDataTableVirtual alloc] initWithId:1];
-	MysqlFetch *fetch = [[MysqlFetch alloc] init];
+	MADMySQLFetch *fetch = [[MADMySQLFetch alloc] init];
 	NSError *error = nil;
 
 	[fetch fetchWithCommand:@"SELECT emp_no FROM employees ORDER BY emp_no LIMIT 50;"
@@ -478,12 +478,12 @@
 
 // Regression: mysql_stmt_bind_result used to be called unconditionally, and it fails
 // with code 3534 when the statement reports field_count == 0. That aborted the call
-// before mysql_stmt_execute, so DDL and DML were impossible through MysqlFetch. The
+// before mysql_stmt_execute, so DDL and DML were impossible through MADMySQLFetch. The
 // table is created and dropped rather than TEMPORARY so the rows are visible to the
 // SELECTs below across statement boundaries.
 - (void)testStatementWithNoResultSetExecutes {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 
 	[self runStatement:@"DROP TABLE IF EXISTS mad_dml_probe;" onConnection:connection error:&error];
@@ -529,7 +529,7 @@
 // fail silently, and must leave the connection usable.
 - (void)testFailingStatementWithNoResultSetReportsError {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 
 	[self runStatement:@"DROP TABLE IF EXISTS mad_dml_dup;" onConnection:connection error:&error];
@@ -563,7 +563,7 @@
 // in both -bindDataForStatement:andField: and -fetchResultsFromConnection:.
 - (void)testFetchLiteralNullYieldsNSNull {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 	MADDataTable *table = [self fetch:@"SELECT NULL AS `n`;" onConnection:connection error:&error];
 
@@ -577,10 +577,10 @@
 // Runs a statement that returns no rows (DDL/DML) through the same prepared-statement
 // path the fetches use, so the probe table below is built exactly the way the app
 // would see it.
-- (void)runStatement:(NSString *)sql onConnection:(MysqlConnection *)connection error:(NSError * __autoreleasing *)error {
+- (void)runStatement:(NSString *)sql onConnection:(MADMySQLConnection *)connection error:(NSError * __autoreleasing *)error {
 	MADDataTable *scratch = [[MADDataTableVirtual alloc] initWithId:1];
 	NSError *statementError = nil;
-	MysqlFetch *runner = [[MysqlFetch alloc] init];
+	MADMySQLFetch *runner = [[MADMySQLFetch alloc] init];
 	[runner fetchWithCommand:sql dataTable:scratch onConnection:connection error:&statementError];
 	if (error != NULL) { *error = statementError; }
 }
@@ -590,7 +590,7 @@
 // employees schema is untouched.
 - (void)testFetchTypeConversionRoundTrip {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 
 	NSString *create =
@@ -659,7 +659,7 @@
 
 - (void)testFetchProbeTableColumnMetadata {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 
 	[self runStatement:@"CREATE TEMPORARY TABLE mad_meta_probe ("
@@ -697,12 +697,12 @@
 
 #pragma mark - DML: scratch tables
 
-// The write-side classes (MysqlInsert, MysqlUpdate, MysqlDelete,
-// MysqlTruncate) are the app's DML path and can only be exercised against a
+// The write-side classes (MADMySQLInsert, MADMySQLUpdate, MADMySQLDelete,
+// MADMySQLTruncate) are the app's DML path and can only be exercised against a
 // server.  Every test here works on a scratch table that is created and
 // dropped inside the test, so the employees dataset is never written to.
 
-- (void)createScratchTableNamed:(NSString *)name onConnection:(MysqlConnection *)connection {
+- (void)createScratchTableNamed:(NSString *)name onConnection:(MADMySQLConnection *)connection {
 	NSError *error = nil;
 	[self runStatement:[[NSString alloc] initWithFormat:@"DROP TABLE IF EXISTS %@;", name]
 		  onConnection:connection
@@ -717,7 +717,7 @@
 	XCTAssertNil(error, @"CREATE failed: %@", error);
 }
 
-- (void)dropScratchTableNamed:(NSString *)name onConnection:(MysqlConnection *)connection {
+- (void)dropScratchTableNamed:(NSString *)name onConnection:(MADMySQLConnection *)connection {
 	NSError *error = nil;
 	[self runStatement:[[NSString alloc] initWithFormat:@"DROP TABLE %@;", name]
 		  onConnection:connection
@@ -725,26 +725,26 @@
 	XCTAssertNil(error, @"DROP failed: %@", error);
 }
 
-- (NSObject *)scalar:(NSString *)sql onConnection:(MysqlConnection *)connection {
+- (NSObject *)scalar:(NSString *)sql onConnection:(MADMySQLConnection *)connection {
 	NSError *error = nil;
 	MADDataTable *table = [self fetch:sql onConnection:connection error:&error];
 	XCTAssertNil(error, @"%@ failed: %@", sql, error);
 	return [table objectAtRow:0 column:0];
 }
 
-- (NSObject *)countOfTable:(NSString *)table onConnection:(MysqlConnection *)connection {
+- (NSObject *)countOfTable:(NSString *)table onConnection:(MADMySQLConnection *)connection {
 	return [self scalar:[[NSString alloc] initWithFormat:@"SELECT COUNT(*) AS `n` FROM %@;", table]
 		   onConnection:connection];
 }
 
-#pragma mark - MysqlInsert
+#pragma mark - MADMySQLInsert
 
 - (void)testInsertWritesARowAndReportsTheNewId {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_insert" onConnection:connection];
 
-	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	MADMySQLInsert *insert = [MADMySQLInsert insertWithConnection:connection];
 	insert.table = @"mad_scratch_insert";
 	insert.rowData = @{@"label": @"alpha"};
 	[insert execute];
@@ -759,11 +759,11 @@
 
 - (void)testInsertBindsNullsAndBlobs {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_blob" onConnection:connection];
 
 	NSData *payload = [NSData dataWithBytes:"\x01\x02\x03" length:3];
-	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	MADMySQLInsert *insert = [MADMySQLInsert insertWithConnection:connection];
 	insert.table = @"mad_scratch_blob";
 	insert.rowData = @{@"label": @"blob", @"note": [NSNull null], @"payload": payload};
 	[insert execute];
@@ -777,17 +777,17 @@
 
 - (void)testInsertRejectsADuplicateKeyUnlessToldToIgnoreIt {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_dupe" onConnection:connection];
 
-	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	MADMySQLInsert *insert = [MADMySQLInsert insertWithConnection:connection];
 	insert.table = @"mad_scratch_dupe";
 	insert.rowData = @{@"id": @1, @"label": @"first"};
 	[insert execute];
 
 	// The second insert collides on the primary key and raises.
 	insert.rowData = @{@"id": @1, @"label": @"second"};
-	XCTAssertThrowsSpecificNamed([insert execute], MysqlException, @"MysqlException");
+	XCTAssertThrowsSpecificNamed([insert execute], MADMySQLException, @"MADMySQLException");
 
 	// With the flag set the same collision is swallowed and the row stands.
 	insert.ignoreDuplicateErrors = YES;
@@ -802,21 +802,21 @@
 	[self dropScratchTableNamed:@"mad_scratch_dupe" onConnection:connection];
 }
 
-#pragma mark - MysqlUpdate
+#pragma mark - MADMySQLUpdate
 
 - (void)testUpdateChangesOnlyTheQualifiedRows {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_update" onConnection:connection];
 
-	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	MADMySQLInsert *insert = [MADMySQLInsert insertWithConnection:connection];
 	insert.table = @"mad_scratch_update";
 	insert.rowData = @{@"label": @"alpha"};
 	[insert execute];
 	insert.rowData = @{@"label": @"alpha"};
 	[insert execute];
 
-	MysqlUpdate *update = [MysqlUpdate updateWithConnection:connection];
+	MADMySQLUpdate *update = [MADMySQLUpdate updateWithConnection:connection];
 	update.table = @"mad_scratch_update";
 	update.rowData = @{@"label": @"beta"};
 	update.qualifier = @{@"id": @1};
@@ -833,16 +833,16 @@
 
 - (void)testUpdateQualifierHandlesStringsAndNulls {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_qual" onConnection:connection];
 
-	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	MADMySQLInsert *insert = [MADMySQLInsert insertWithConnection:connection];
 	insert.table = @"mad_scratch_qual";
 	insert.rowData = @{@"label": @"alpha"};
 	[insert execute];
 
 	// String qualifiers are escaped and quoted, NSNull becomes "is null".
-	MysqlUpdate *update = [MysqlUpdate updateWithConnection:connection];
+	MADMySQLUpdate *update = [MADMySQLUpdate updateWithConnection:connection];
 	update.table = @"mad_scratch_qual";
 	update.rowData = @{@"note": @"quoted"};
 	update.qualifier = @{@"label": @"alpha"};
@@ -864,17 +864,17 @@
 	// to qualify the update.  The guard runs before any session call, so the
 	// offline suite covers it too; this keeps the live connection in the loop.
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_noqual" onConnection:connection];
 
-	MysqlUpdate *update = [MysqlUpdate updateWithConnection:connection];
+	MADMySQLUpdate *update = [MADMySQLUpdate updateWithConnection:connection];
 	update.table = @"mad_scratch_noqual";
 	update.rowData = @{@"label": @"beta"};
 
 	@try {
 		[update execute];
 		XCTFail(@"An update with no qualifier must raise");
-	} @catch (MysqlException *exception) {
+	} @catch (MADMySQLException *exception) {
 		XCTAssertEqualObjects(exception.reason, @"a qualifier must be specified to perform an update");
 		XCTAssertNil(exception.userInfo);
 	}
@@ -882,14 +882,14 @@
 	[self dropScratchTableNamed:@"mad_scratch_noqual" onConnection:connection];
 }
 
-#pragma mark - MysqlDelete
+#pragma mark - MADMySQLDelete
 
 - (void)testDeleteRemovesTheQualifiedRows {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_delete" onConnection:connection];
 
-	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	MADMySQLInsert *insert = [MADMySQLInsert insertWithConnection:connection];
 	insert.table = @"mad_scratch_delete";
 	for (NSString *label in @[@"alpha", @"beta", @"alpha"]) {
 		insert.rowData = @{@"label": label};
@@ -897,7 +897,7 @@
 	}
 	XCTAssertEqualObjects([self countOfTable:@"mad_scratch_delete" onConnection:connection], @3);
 
-	MysqlDelete *delete = [MysqlDelete deleteWithConnection:connection];
+	MADMySQLDelete *delete = [MADMySQLDelete deleteWithConnection:connection];
 	delete.tableName = @"mad_scratch_delete";
 	delete.qualifier = @"label='alpha'";
 	[delete execute];
@@ -911,26 +911,26 @@
 
 - (void)testDeleteWithARubbishQualifierRaises {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_badqual" onConnection:connection];
 
-	MysqlDelete *delete = [MysqlDelete deleteWithConnection:connection];
+	MADMySQLDelete *delete = [MADMySQLDelete deleteWithConnection:connection];
 	delete.tableName = @"mad_scratch_badqual";
 	delete.qualifier = @"no_such_column = 1";
 
-	XCTAssertThrowsSpecificNamed([delete execute], MysqlException, @"MysqlException");
+	XCTAssertThrowsSpecificNamed([delete execute], MADMySQLException, @"MADMySQLException");
 
 	[self dropScratchTableNamed:@"mad_scratch_badqual" onConnection:connection];
 }
 
-#pragma mark - MysqlTruncate
+#pragma mark - MADMySQLTruncate
 
 - (void)testTruncateEmptiesATable {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_truncate" onConnection:connection];
 
-	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	MADMySQLInsert *insert = [MADMySQLInsert insertWithConnection:connection];
 	insert.table = @"mad_scratch_truncate";
 	insert.rowData = @{@"label": @"alpha"};
 	[insert execute];
@@ -938,7 +938,7 @@
 	[insert execute];
 	XCTAssertEqualObjects([self countOfTable:@"mad_scratch_truncate" onConnection:connection], @2);
 
-	MysqlTruncate *truncate = [MysqlTruncate truncateWithConnection:connection
+	MADMySQLTruncate *truncate = [MADMySQLTruncate truncateWithConnection:connection
 														   forTable:@"mad_scratch_truncate"];
 	XCTAssertNoThrow([truncate execute]);
 
@@ -947,27 +947,27 @@
 	[self dropScratchTableNamed:@"mad_scratch_truncate" onConnection:connection];
 }
 
-#pragma mark - MysqlIndex
+#pragma mark - MADMySQLIndex
 
 - (void)testIndexFactoryKeepsALiveConnection {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 
-	XCTAssertEqual([MysqlIndex indexWithConnection:connection].connection, connection);
+	XCTAssertEqual([MADMySQLIndex indexWithConnection:connection].connection, connection);
 }
 
 #pragma mark - Transactions
 
 - (void)testRollbackDiscardsAndCommitKeeps {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	[self createScratchTableNamed:@"mad_scratch_tx" onConnection:connection];
 
 	XCTAssertFalse(connection.transactionsEnabled);
 	[connection enableTransactions];
 	XCTAssertTrue(connection.transactionsEnabled);
 
-	MysqlInsert *insert = [MysqlInsert insertWithConnection:connection];
+	MADMySQLInsert *insert = [MADMySQLInsert insertWithConnection:connection];
 	insert.table = @"mad_scratch_tx";
 	insert.rowData = @{@"label": @"rolled-back"};
 	[insert execute];
@@ -992,7 +992,7 @@
 
 - (void)testEnableStrictSqlTurnsOnTheMode {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 
 	XCTAssertNoThrow([connection enableStrictSql]);
 
@@ -1002,7 +1002,7 @@
 
 - (void)testTriggerTogglesSetAndClearTheSessionFlag {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 
 	XCTAssertNoThrow([connection disableTriggers]);
 	XCTAssertEqualObjects([self scalar:@"SELECT @DISABLE_TRIGGERS AS `v`;" onConnection:connection], @1);
@@ -1014,7 +1014,7 @@
 
 - (void)testErrorNumberAndErrorTextReportTheLastFailure {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 	NSError *error = nil;
 
 	[self fetch:@"SELECT * FROM mad_no_such_table;" onConnection:connection error:&error];
@@ -1029,9 +1029,9 @@
 
 - (void)testErrorWithConnectionDescribesTheServerState {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 
-	NSError *error = [MysqlException errorWithConnection:connection domain:@"MADMySQLTests" andCode:7];
+	NSError *error = [MADMySQLException errorWithConnection:connection domain:@"MADMySQLTests" andCode:7];
 
 	XCTAssertEqualObjects(error.domain, @"MADMySQLTests");
 	XCTAssertEqual(error.code, 7);
@@ -1043,7 +1043,7 @@
 
 - (void)testEscapeInConnectionMatchesTheConnectionHelper {
 	[self requireServer];
-	MysqlConnection *connection = [self openConnection];
+	MADMySQLConnection *connection = [self openConnection];
 
 	// The NSString category and the connection's own helper are two entry
 	// points to mysql_real_escape_string; they must agree.

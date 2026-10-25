@@ -30,7 +30,7 @@ All `file:line` references below were read first-hand during this analysis, not 
 > moved too, and its references were re-derived with it.
 >
 > **Revision 4 — 2026-10-01.** The MySQL obstacle of Revision 3 is gone. The column metadata
-> that `MysqlFetch+DataTable.m` reads mid-fetch is now declared by `<MADDataTableWriting>`
+> that `MADMySQLFetch+DataTable.m` reads mid-fetch is now declared by `<MADDataTableWriting>`
 > itself, so all three drivers — including `MADDatabaseMySQL`, `MADDatabase.m` and the
 > `MADDatabaseDataSource` protocol — take `id <MADDataTableWriting>` and the fetch's
 > out-parameters are by-value (`&` dropped at all call sites). Phase 2 ("store `urlFastCache`;
@@ -166,7 +166,7 @@ subclass-specific one. `MADDatabaseSqlite3.m:474-540` is the canonical loop:
 ```
 
 `MADDatabaseSQLServer.m:500 / :1367 / :1472` uses the identical five-call shape.
-`MysqlFetch+DataTable.m:211 / :438 / :442` likewise.
+`MADMySQLFetch+DataTable.m:211 / :438 / :442` likewise.
 
 This is a **narrow, well-defined write port**: five methods. It is the strongest existing
 boundary in the family and should be preserved verbatim by any refactor.
@@ -176,7 +176,7 @@ Divergence between drivers:
 | Driver | Table it builds | Write path |
 |---|---|---|
 | `MADDatabaseSqlite3` | whatever it is handed (typically `MADDataTableFast`) | `executeSQL:...intoResultTable:` |
-| `MADDatabaseMySQL` | **constructs** `MADDataTableVirtual` itself (`MADDatabaseMySQL.m:83, 110, 137, 175, 196, 376`) | `MysqlFetch+DataTable.m` |
+| `MADDatabaseMySQL` | **constructs** `MADDataTableVirtual` itself (`MADDatabaseMySQL.m:83, 110, 137, 175, 196, 376`) | `MADMySQLFetch+DataTable.m` |
 | `MADDatabaseSQLServer` | **never constructs one** — purely write-only into a caller-supplied table | `MADDatabaseSQLServer.m` |
 
 So MySQL cannot produce a `MADDataTableFast`, and SQL Server cannot produce any table at all.
@@ -796,9 +796,9 @@ returns YES from a write I discarded" hazard from every driver.
 
 6. **Done (Revision 4) — all three drivers and the protocol.** The block below is Revision 3's
    account of why this was blocked; it is kept for the record. The unblock it identified was
-   taken: the column metadata `MysqlFetch+DataTable.m` needs (`columns`, `columnKeys`) is now
+   taken: the column metadata `MADMySQLFetch+DataTable.m` needs (`columns`, `columnKeys`) is now
    declared by `<MADDataTableWriting>` itself, so the write port is sufficient for MySQL too.
-   `MysqlFetch`'s two `fetchWithCommand:dataTable:...` methods and its private
+   `MADMySQLFetch`'s two `fetchWithCommand:dataTable:...` methods and its private
    `-fetchResultsFromConnection:intoDataTable:...` take `id <MADDataTableWriting>` by value and
    return the same table (`(MADDataTable *)dataTable`); all 11 call sites in
    `MADDatabaseMySQL.m` and the 7 in `MADMySQLLiveTests.m` dropped their `&`. The metadata was
@@ -817,7 +817,7 @@ returns YES from a write I discarded" hazard from every driver.
 
    **`MADDatabaseMySQL` cannot be narrowed yet**, and neither can
    `MADAPI/Source/MADDatabaseProtocol.h:28-31`. The obstacle is not in the driver — it is in
-   `MysqlFetch+DataTable.m`, which reads `(*dataTable).columns` and `.columnKeys` *while*
+   `MADMySQLFetch+DataTable.m`, which reads `(*dataTable).columns` and `.columnKeys` *while*
    filling the table, to correct a column's type once it sees the first row
    (`:301` and `:321`, under the existing `// FIXME: This is a hack.` at `:297`). A write port that
    does not expose the column metadata is therefore not sufficient for that path. Since
@@ -826,9 +826,9 @@ returns YES from a write I discarded" hazard from every driver.
    a remote crash for the next caller, not a compile error. Both declarations carry a comment
    pointing here.
 
-   **The concrete unblock, found while checking this:** `MysqlFetch+DataTable.m` never
+   **The concrete unblock, found while checking this:** `MADMySQLFetch+DataTable.m` never
    assigns through its `MADDataTable * __autoreleasing *` out-parameters —
-   `grep -n '\*dataTable *=' MADMySQL/Source/MysqlFetch+DataTable.m` returns nothing. The
+   `grep -n '\*dataTable *=' MADMySQL/Source/MADMySQLFetch+DataTable.m` returns nothing. The
    pointer is an in-parameter the callers were never told about. Making it by-value
    (`dataTable:(id <MADDataTableWriting>)dataTable`) removes the pointer-type problem
    outright and lets the 11 call sites in `MADDatabaseMySQL.m` drop their `&`. That, plus
@@ -913,7 +913,7 @@ returns YES from a write I discarded" hazard from every driver.
 | `MTTableController` | `:249, :281, :284, :377, :393, :399, :449, :455` | **High** — treats `count` as a page cursor; any change to `rowCounter` semantics breaks paging. Revision 5 made the derivation total — an empty page no longer underflows and a failed fetch no longer reads the previous page's count (§2.5) — but the coupling is unchanged |
 | `MADDatabaseMySQL` | `:88-92, :118-122, :150-154, :187-189` | **High** — O(n) `objectAtRow:i column:0`; per-subclass `row` semantics must be unified first |
 | `MADocument` | `:197` (`rowCounter`), `:865-867` (enumerator), `:874-919` (`dataForRow:error:`), `:1053-1072` | **High** — but only for the enumerator and `rowCounter`. Its `-dataForRow:error:` sends resolve to `MADDataTableFast`, which implements the selector, so the print/barcode path is sound (see §3.5) |
-| `MysqlFetch+DataTable` | `:301, :321` | **Medium** — mutates `column.type` mid-fetch behind `// FIXME: This is a hack.` (`:297`); the column dictionary must stay publicly mutable |
+| `MADMySQLFetch+DataTable` | `:301, :321` | **Medium** — mutates `column.type` mid-fetch behind `// FIXME: This is a hack.` (`:297`); the column dictionary must stay publicly mutable |
 | `MADQuerySampleDataTable(Range)` | `:118, :126` / `:123, :131` | **Low** — single `objectAtRow:0` width probe |
 | `MADReportFormatter` | `:449-502` | **Low** — tolerant of both row-id and dictionary enumeration |
 | `MADDatabaseSQLServer` | `:500, :1367, :1472` | **Low** — write-only through the five-method port |
@@ -975,7 +975,7 @@ consequence of being wrong is silent corruption.
 | `MADSqlite3/Source/MADDatabaseSqlite3.m` | 1346 |
 | `MAD/Source/MADDataTable+Constructor.h` / `.m` | 30 / 94 |
 | `MAD/Source/MADocument.m`, `MADReportFormatter.m` | — |
-| `MADMySQL/Source/MADDatabaseMySQL.m`, `MysqlFetch+DataTable.{h,m}` | — |
+| `MADMySQL/Source/MADDatabaseMySQL.m`, `MADMySQLFetch+DataTable.{h,m}` | — |
 | `MADTdsClient/Source/MADDatabaseSQLServer.m` | — |
 | `MADAPI/Source/MADDatabaseProtocol.h`, `MADQuery.h`, `MADDatabaseResultsProtocol.h` | — |
 | `MADDesigner/Source/MTTableController.m` | — |
