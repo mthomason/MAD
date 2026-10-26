@@ -94,6 +94,38 @@ The codebase also includes `Linux`, the headless engine's build (`docs/project/M
   `YES`.  The point of the attribute is that what the compiler still reports is genuinely
   dead code rather than something parked on purpose -- an unmarked warning means delete it.
 
+## Committing: the PR flow, and the approval gate
+
+Every commit reaches `master` through a pull request. The "Protect master"
+ruleset blocks direct pushes to `master` (measured 2026-10-26), and the
+required checks are **Linux verification** and **DCO** — the job names in
+`.github/workflows/linux.yml` and `dco.yml` must keep those exact names,
+because a ruleset matches a check's context to its job name, not its
+workflow name.
+
+The flow:
+
+1. Work on a branch off `master`; commit there freely, each with
+   `git commit -s` (the DCO check fails the PR on any unsigned commit; to
+   sign an existing branch:
+   `git rebase --exec 'git commit --amend --no-edit -s' <base>`).
+2. **Approval gate — push nothing until it passes.** Routine work (docs,
+   comments, tests, small fixes whose behaviour existing tests pin) needs no
+   approval. Everything else — design or architecture, the public API, the
+   document or store formats, new or removed features and dependencies,
+   rewrites and renames, deletions — is described to the user and approved
+   **in chat before the branch is pushed**. The repo is public: a pushed
+   branch is visible to everyone.
+3. Push the branch, open the PR, and watch the checks:
+   `gh pr checks <n> --watch`, then merge with
+   `gh pr merge <n> --rebase --delete-branch` (the rebase merge keeps
+   `master` linear, and the local copies of the branch are deleted with the
+   remote).
+4. A merged push to `master` re-runs Linux verification and re-publishes
+   the `ghcr.io/mthomason/mad` image (`publish-image.yml`, `latest` + short
+   sha, amd64). The publication is automatic and public; the approval gate
+   covers it too.
+
 ## Testing
 
 Each framework has one test target, exposed by a shared scheme of the same name. Run a
