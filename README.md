@@ -61,9 +61,11 @@ docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out ghcr.io/mthom
 ```
 
 The published tags are `latest` and the commit's short SHA, built for
-linux/amd64 by the publish workflow on every push to master; Docker Desktop
-runs them under emulation on Apple silicon. Building the image locally
-instead — a native arm64 `mad-cli:latest` — is one command:
+linux/amd64 by the publish workflow on every push to master. On Apple
+silicon add `--platform linux/amd64` — Docker Desktop runs the tag under
+emulation, and without the flag the pull fails (`no matching manifest`).
+Building the image locally instead — a native arm64 `mad-cli:latest` — is
+one command:
 
 ```sh
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)

@@ -371,11 +371,13 @@ The image is published (2026-10-26, reversing the earlier not-published
 decision) as `ghcr.io/mthomason/mad`, tagged `latest` and the commit's short
 SHA, pushed by `.github/workflows/publish-image.yml` on every push to master
 (plus `workflow_dispatch`). The published tags are **linux/amd64**, built by
-CI on ubuntu-latest; the Mac's local `mad-cli:latest` is arm64. The same
-verbs over the published image:
+CI on ubuntu-latest; the Mac's local `mad-cli:latest` is arm64, and on
+Apple silicon the published tag needs `--platform linux/amd64` (run under
+emulation; without the flag the pull fails with `no matching manifest`).
+The same verbs over the published image:
 
-	docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro ghcr.io/mthomason/mad \
-		mad inspect /docs/London.portable.mad
+	docker run --rm --platform linux/amd64 -v "$PWD/CLI/Fixtures":/docs:ro \
+		ghcr.io/mthomason/mad mad inspect /docs/London.portable.mad
 
 A Sqlite3 document resolves its stored database name against the per-user
 Application Support directory, which is
