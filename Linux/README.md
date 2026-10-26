@@ -502,10 +502,12 @@ The image is published (2026-10-26) as `ghcr.io/mthomason/mad`, tagged
 `latest` and the commit's short SHA. The published tags are built by CI
 (`.github/workflows/publish-image.yml`) on ubuntu-latest, so they are
 **linux/amd64** — the Mac's local `mad-cli:latest` build is arm64. Pulling
-instead of building is the ten-second route:
+instead of building is the ten-second route; on Apple silicon add
+`--platform linux/amd64` (Docker Desktop runs the tag under emulation —
+without the flag the pull fails with `no matching manifest`):
 
-	docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro ghcr.io/mthomason/mad \
-		mad inspect /docs/London.portable.mad
+	docker run --rm --platform linux/amd64 -v "$PWD/CLI/Fixtures":/docs:ro \
+		ghcr.io/mthomason/mad mad inspect /docs/London.portable.mad
 
 Distributing the image obliges relink offers for the LGPL components in it
 (GNUstep Base, and mariadb and freetds static inside `mad`); the written
