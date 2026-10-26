@@ -1,0 +1,53 @@
+# Publish the `mad` runtime image to GHCR -- the distribution vehicle.
+#
+# Builds the runtime stage of Linux/Dockerfile (the CLI deliverable,
+# docs/project/MAD_CLI.md §5.5) and pushes it to ghcr.io/mthomason/mad as
+# :latest and :<short-sha>.  Runs on pushes to master and by hand from the
+# Actions tab; deliberately not on pull requests -- a PR must not publish.
+# ubuntu-latest is native amd64, the platform the published tag targets (the
+# Mac's local build of mad-cli:latest is arm64).
+#
+# The toolchain layers are shared with the linux.yml verification job through
+# the one gha cache scope, so a publish after a verification run only rebuilds
+# the runtime layer.
+#
+# The file activates the moment the repository is published on GitHub; it is
+# inert until then.  If the default branch is renamed at publication, update
+# the `master` trigger below.
+
+name: Publish image
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the runtime stage and push it to GHCR
+        run: |
+          docker buildx build -f Linux/Dockerfile --target runtime \
+            --platform linux/amd64 \
+            -t ghcr.io/mthomason/mad:latest \
+            -t "ghcr.io/mthomason/mad:${GITHUB_SHA::8}" \
+            --cache-from type=gha,scope=mad-linux \
+            --cache-to type=gha,mode=max,scope=mad-linux \
+            --push .

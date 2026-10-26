@@ -74,12 +74,12 @@ CMD ["bash", "Linux/build.sh", "--in-image", "test"]
 # GNUstep's runtime directories, and the Sqlite3 sample database.  The compiler,
 # the sources and the 124 test binaries stay in the stages above.
 #
-# Built and run locally (`Linux/build.sh --runtime` / `--verify`); it is not
-# published.  The GPLv2 blocker left with the mysqlclient swap: mariadb
-# (Connector/C) is LGPL and is linked statically, so it needs no runtime files
-# here and its relink offer (`ThirdParty/Licenses/README.md`) covers
-# distribution.  Publication remains the user's decision (docs/project/TASKS.md §10), not
-# a build step.
+# Built locally as mad-cli:latest (`Linux/build.sh --runtime` / `--verify`) and
+# published by CI as ghcr.io/mthomason/mad
+# (`.github/workflows/publish-image.yml`).  The GPLv2 blocker left with the
+# mysqlclient swap: mariadb (Connector/C) is LGPL and is linked statically, so
+# it needs no runtime files here and its relink offer
+# (`ThirdParty/Licenses/README.md`) covers distribution.
 # ---------------------------------------------------------------------------
 FROM ubuntu:24.04 AS runtime
 
