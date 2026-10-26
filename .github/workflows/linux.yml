@@ -33,6 +33,9 @@ permissions:
 
 jobs:
   linux:
+    # The check name is the job name, and the "Protect master" ruleset
+    # requires the context "Linux verification" -- keep the two in step.
+    name: Linux verification
     runs-on: ubuntu-24.04
     timeout-minutes: 120
 

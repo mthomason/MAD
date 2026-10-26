@@ -14,6 +14,9 @@ permissions:
 
 jobs:
   dco:
+    # The check name is the job name, and the "Protect master" ruleset
+    # requires the context "DCO" -- keep the two in step.
+    name: DCO
     runs-on: ubuntu-latest
     steps:
       # Check out the PR head, not the merge ref: checkout's default for
