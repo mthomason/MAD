@@ -16,8 +16,13 @@ jobs:
   dco:
     runs-on: ubuntu-latest
     steps:
+      # Check out the PR head, not the merge ref: checkout's default for
+      # pull_request events is refs/pull/N/merge, GitHub's synthetic merge
+      # commit, which carries no Signed-off-by and fails the loop below on
+      # every PR.
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - name: Check every commit is signed off
