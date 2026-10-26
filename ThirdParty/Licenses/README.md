@@ -31,8 +31,8 @@ software, and the LGPL additionally requires the written offer below.
 MAD Designer links FreeTDS and MariaDB Connector/C statically. Both are
 LGPL-2.0-or-later, taken here under **LGPL-3.0**, whose section 4 requires
 that a recipient be able to modify the library and relink the application.
-To exercise that right, contact the copyright holder at **[contact address —
-to be filled in by the owner before publication]** to receive the
+To exercise that right, contact the copyright holder at
+**mthomason [at] gmail [dot] com** to receive the
 application's object files and the build materials needed to relink against a
 modified FreeTDS or MariaDB Connector/C: the pinned upstream sources (see
 `Compressor/matrix.conf`) and the `Compressor` recipes. This offer stands for
