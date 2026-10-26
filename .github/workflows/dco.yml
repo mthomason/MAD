@@ -1,0 +1,34 @@
+# Developer Certificate of Origin -- the DCO check promised in
+# CONTRIBUTING.md. Every commit in a pull request must carry a
+# Signed-off-by line (git commit -s). Runs on pull requests only;
+# required by the "Protect master" ruleset.
+
+name: DCO
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  dco:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check every commit is signed off
+        run: |
+          set -euo pipefail
+          base="origin/${{ github.event.pull_request.base.ref }}"
+          git fetch origin "${{ github.event.pull_request.base.ref }}:refs/remotes/$base" --quiet
+          for commit in $(git rev-list "$base..HEAD"); do
+            if ! git log -1 --format='%B' "$commit" | grep -qE '^Signed-off-by: .+ <.+@.+>$'; then
+              echo "::error::Commit $commit is missing a Signed-off-by line (use git commit -s)"
+              exit 1
+            fi
+          done
+          echo "All commits are signed off."
