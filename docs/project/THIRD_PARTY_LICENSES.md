@@ -1,7 +1,8 @@
 # Third-Party Software: Use and License Compliance
 
-This document records every third-party component in _MAD Designer_, how each one
-reaches the shipped app, and what its license requires. It is the compliance
+This document records every third-party component in _MAD Designer_ — and in
+the published `mad` container image (§9) — how each one
+reaches the shipped app or image, and what its license requires. It is the compliance
 register for the project: when a library is added, removed or version-bumped, the
 entry here changes with it. The remediation plan that works through the findings
 below is `LICENSE_COMPLIANCE_PLAN.md`.
@@ -53,6 +54,11 @@ possibly three more.**
   dynamic framework does not cleanly discharge the obligation either. The route
   that works on iOS is §6(a): notices plus a relink offer. See §3.3.
 * For **permissive** libraries, linking mode is irrelevant; only the notices matter.
+
+The published container image (`ghcr.io/mthomason/mad`) is a second
+distribution surface with components of its own — GNUstep Base, the
+source-built runtimes, and the same C libraries as above, statically linked
+into the `mad` binary. It is registered in §9.
 
 ---
 
@@ -498,6 +504,35 @@ lost:
   Compressor-built SQLite that `MADSqlite3` links. At runtime only the static
   copy is loaded, but two SQLite copies in one process is a latent hazard worth a
   look from the defect register, not this document.
+
+---
+
+## 9. The published container image
+
+Published 2026-10-26 as `ghcr.io/mthomason/mad` (the `mad` CLI's Linux
+runtime, built by `.github/workflows/publish-image.yml`; `Linux/README.md`
+"The runtime image"). Distributing the image adds components the app does not
+ship, so they are registered here rather than in §1's app table.
+
+| Component | Version | License | Where it is | What it requires |
+|---|---|---|---|---|
+| GNUstep Base | 1.31.1 | LGPL-2.1-or-later | shared object in the image | relink offer + prominent notice; the LGPL-3.0 election does not apply to it (it links GnuTLS, not OpenSSL) |
+| MariaDB Connector/C | 3.4.11 | LGPL-2.0-or-later, **elected LGPL-3.0** | static inside `mad` | the same §3.3/§3.4 mechanism, extended to the image |
+| FreeTDS | 1.4.27 | LGPL-2.0-or-later, **elected LGPL-3.0** | static inside `mad` | the same mechanism |
+| libobjc2 (incl. libBlocksRuntime) | 2.3 | MIT | shared object in the image | retain the notice |
+| libdispatch | 6.1.3 | Apache-2.0 with the Swift runtime exception | shared object in the image | a copy of the license must be given to recipients |
+| gnustep-make | 2.9.3 | GPL-3.0-or-later | **build tooling — not in the runtime image** | nothing; it is not distributed |
+| the C libraries (§3.1) | as pinned | as registered | static inside `mad` | the same permissive terms as the app; the image conveys them a second time |
+| the apt runtime packages | Ubuntu 24.04 | distro packages | shared objects in the image | the distro's own licence texts under `/usr/share/doc` |
+
+The relink obligation for the two static LGPL libraries (MariaDB Connector/C
+and FreeTDS) and the offer covering GNUstep Base are discharged by the
+written offer in `ThirdParty/Licenses/README.md`, which now names the image:
+the pinned sources are public in `Linux/toolchain.conf` and
+`Linux/libraries.conf`, the image rebuilds from them with
+`./Linux/build.sh --runtime`, and the offer stands for at least three years
+from the last distribution. `docs/project/TASKS.md` §10 carried the flag that publication
+would create this obligation; it is closed there.
 
 ---
 

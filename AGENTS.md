@@ -168,8 +168,9 @@ the headless side.
   suites, the GNUstep divergences the tests found, and the licences.
 * `docs/project/MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
 * `docs/project/LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
-* `docs/project/THIRD_PARTY_LICENSES.md` -- every third-party component in the app, how it is linked, its
-  licence, and what shipping it obliges us to do. Read before adding or removing a library.
+* `docs/project/THIRD_PARTY_LICENSES.md` -- every third-party component in the app and the published
+  container image, how it is linked, its licence, and what shipping it obliges us to do. Read
+  before adding or removing a library.
 * `docs/project/LICENSE_COMPLIANCE_PLAN.md` -- the remediation plan for those findings, including the
   MySQL-to-MariaDB replacement and the LGPL relink obligation.
 * `docs/project/MAD_STORE_MIGRATION.md` -- the plan to move the `.mad` store off Core Data to a portable

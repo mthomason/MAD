@@ -487,7 +487,8 @@ covers the conversion of the two shipping samples and the existing user reports.
 ## 10. Third-party licence compliance
 
 **Status:** Open — prompt 2 of the open-source launch (MariaDB Connector/C swap)
-landed 2026-10-24; what remains is mechanical (the in-app Acknowledgements
+landed 2026-10-24, and the GHCR-publish prompt closed the container-image flag
+2026-10-26 (below); what remains is mechanical (the in-app Acknowledgements
 surface, plan C2, and the relink-kit script, plan §9.3 — both deferred by
 decisions already made). The register is `THIRD_PARTY_LICENSES.md` and the plan
 is `LICENSE_COMPLIANCE_PLAN.md`; read those first, this entry is only the
@@ -553,16 +554,21 @@ the Larabie readme for CarbonBlock are committed. Still open: the in-app
 Acknowledgements surface (plan C2, held until D1) and the relink-kit script. The
 miniz headers were corrected on 2026-10-04.
 
-**Linux toolchain, flagged 2026-10-06 (see §11).** The Phase B image builds on
+**Linux toolchain, flagged 2026-10-06 (see §11) — resolved 2026-10-26.** The
+Phase B image builds on
 libobjc2 (MIT), libdispatch (Apache-2.0 with the Swift runtime exception), GNUstep
 Make (GPL-3.0-or-later) and GNUstep Base (LGPL-2.1-or-later), and compiles
 gnustep-make's GPL-3.0 `Testing.h` into its test binaries. Nothing is linked into
-the app. A runtime image now exists (Phase F, `Linux/Dockerfile`'s `runtime`
-stage) and contains mysqlclient and GNUstep Base, but it is built and run
-locally and is not published (user decision, 2026-10-17), so no register entry
-is due; if it is ever distributed, GNUstep Base slots into Workstream B's
-mechanism, mysqlclient is the §3 blocker, and the rest need entries of their
-own. `Linux/README.md` §Licences carries the detail.
+the app. The runtime image (Phase F, `Linux/Dockerfile`'s `runtime` stage) was
+built and run locally and not published (user decision, 2026-10-17); the GHCR
+publish prompt reversed that decision, and the image is published as
+`ghcr.io/mthomason/mad` (CI-built amd64, `.github/workflows/publish-image.yml`).
+The obligation the flag named is now discharged: the relink offer in
+`ThirdParty/Licenses/README.md` names the image (GNUstep Base and the two
+statically linked LGPL libraries — mariadb and freetds — with the public pins
+and the rebuild path), gnustep-make stays build tooling and is not in the
+image, and the register entry is `THIRD_PARTY_LICENSES.md` §9.
+`Linux/README.md` §Licences carries the detail.
 
 Do not start any of this without the user asking for it by name — the blocker in
 particular is a business decision, not an engineering task.
