@@ -46,6 +46,7 @@ jobs:
         run: |
           docker buildx build -f Linux/Dockerfile --target runtime \
             --platform linux/amd64 \
+            --provenance=false \
             -t ghcr.io/mthomason/mad:latest \
             -t "ghcr.io/mthomason/mad:${GITHUB_SHA::8}" \
             --cache-from type=gha,scope=mad-linux \
