@@ -40,3 +40,22 @@ at least three years from the last distribution of the application.
 
 Note honestly: a relinked iOS build still needs an Apple developer account to
 install. The obligation is to make the relink *possible*, and this offer does.
+
+## The relink offer (the published container image)
+
+The published container image (`ghcr.io/mthomason/mad`, the `mad` CLI's Linux
+runtime) distributes GNUstep Base (LGPL-2.1-or-later, as a shared object), and
+the statically linked MariaDB Connector/C and FreeTDS (both
+LGPL-2.0-or-later, taken here under **LGPL-3.0** for the OpenSSL reason in
+the section above). The LGPL requires that a recipient be able to modify
+each library and relink the distributed work. To exercise that right,
+contact the copyright holder at **mthomason [at] gmail [dot] com** to
+receive the image's object files and the build materials needed to relink
+against a modified GNUstep Base, MariaDB Connector/C or FreeTDS. The pinned
+upstream sources are public in `Linux/toolchain.conf` and
+`Linux/libraries.conf`, and the image rebuilds from them with
+`./Linux/build.sh --runtime`. This offer stands for at least three years from
+the last distribution of the image.
+
+gnustep-make (GPL-3.0-or-later) is build tooling and is **not** in the
+runtime image.
