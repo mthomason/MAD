@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## 1. What a document is, in one sentence
 
 A `.mad` file is a **bzip2-compressed tar archive** whose members are a Core Data

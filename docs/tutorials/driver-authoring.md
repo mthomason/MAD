@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # Writing a MAD driver in an afternoon
 
 Every file:line reference below is current as of 2026-10-25.
@@ -189,9 +193,9 @@ later.
 ## Step 7 — land it
 
 Propose the driver through the driver-proposal issue template, follow the
-test-first rule in [`CONTRIBUTING.md`](../../CONTRIBUTING.md) (failing
+test-first rule in [CONTRIBUTING.md](https://github.com/mthomason/MAD/blob/master/CONTRIBUTING.md) (failing
 test, then code toward green; snapshot fixtures rather than generating
 them with the new code), and if the driver links a new third-party
 library, extend
-[`docs/project/THIRD_PARTY_LICENSES.md`](../project/THIRD_PARTY_LICENSES.md)
+[docs/project/THIRD_PARTY_LICENSES.md](https://github.com/mthomason/MAD/blob/master/docs/project/THIRD_PARTY_LICENSES.md)
 and the licence obligations with it — the repo takes that file seriously.

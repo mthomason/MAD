@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## 8. Open questions
 
 1. **Does the store need to be Core Data at all?** The definition it holds is a

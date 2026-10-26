@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## 5. What is *not* in the document: the companion files
 
 A `.mad` is a definition, not a dataset. Everything a report *displays* is derived,

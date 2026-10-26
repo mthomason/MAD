@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## 6. Hazards a second reader must handle
 
 These are defects in the current format, not opinions. Each is stated with what it

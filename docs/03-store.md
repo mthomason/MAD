@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## 3. The store
 
 `StoreContent/analyitics` is an ordinary SQLite database:

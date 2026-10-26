@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## 4. Reading and writing, as implemented
 
 ```

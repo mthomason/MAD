@@ -17,6 +17,26 @@ libraries. It is published under the MIT licence; the `.mad` format is an open
 specification (see [`docs/`](docs/)), though the project's name is not covered
 by the licence grant.
 
+## Why MAD
+
+The engine is written by hand for the device it runs on:
+
+* **Written, not assembled.** The SQL generation, the data-table engine, the
+  store, the layout model, and the renderer are first-party Objective-C
+  across the thirteen frameworks. Third-party code is limited to the wire --
+  MariaDB Connector/C, FreeTDS, and SQLite -- plus the barcode library. No
+  reporting SDK is being resold.
+* **Mobile-first means memory-budgeted.** A refresh reads the result set
+  once into a SQLite row cache and computes from there, so aggregates and
+  paginated rendering stay fast within a phone's memory. The definition is
+  the cheap part: a `.mad` is under 100 KB.
+* **No reporting server required.** The definition travels and the device
+  runs it -- native on Apple silicon, no tracking, no account. The headless
+  half of the same stack compiles on Linux and passes 1,270 tests in Docker.
+
+The technical documentation is also served as a website at
+<https://docs.everydayapps.com>.
+
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
 ## Try it
@@ -56,6 +76,10 @@ deliberately kept outside the file. The format is fully specified in
 [`docs/`](docs/): what ships today, the normative `v1` target, and the hazards
 a second reader must handle. Both shipping samples are under 80 KB.
 
+Where the format is designed to go -- a report's result table becoming a data
+source for other reports, so one document can span several databases -- is
+[`docs/vision.md`](docs/vision.md).
+
 ## Database drivers
 
 MAD talks to databases through `MADDatabase` subclasses. Three drivers ship
@@ -72,6 +96,16 @@ the intended first contribution (see the driver-authoring tutorial under
 The seam is real: the query designer auto-generates the SQL, so a user designs
 a report without writing a statement, and the driver only has to execute it
 and return rows.
+
+## Embedding the engine
+
+Ten of the thirteen frameworks are UIKit-free and build headlessly. The `mad`
+CLI above is that engine wearing a command line: the verb set -- `inspect`,
+`schema`, `refresh`, `export` -- is the embedding surface, and an application
+that links `MAD`, a driver framework, and `MADSqlite3` has reporting with no
+server in the loop. Drivers register themselves, so adding a data source is a
+subclass, not a fork (see
+[`docs/tutorials/driver-authoring.md`](docs/tutorials/driver-authoring.md)).
 
 ## Build and test
 

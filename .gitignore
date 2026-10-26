@@ -299,3 +299,6 @@ Reports/Reports/MADAppConfiguration.me
 
 
 Compressor/media/sqlite-src-3490200.zip
+
+# Jekyll output (local preview of the docs site)
+_site/

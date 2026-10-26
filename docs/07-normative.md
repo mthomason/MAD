@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## 7. The format as it should be defined
 
 This is the normative target. It is deliberately a small delta from what exists,

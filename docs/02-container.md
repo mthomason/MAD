@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## 2. The container
 
 ```

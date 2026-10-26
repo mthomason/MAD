@@ -143,6 +143,11 @@ the headless side.
   schema and result set as one contract, how each piece is represented in the code today,
   what formalizing it takes in phases, and the multi-source/subreport composition
   documented but deliberately not built.
+* `docs/vision.md` -- the public statement of the direction: a report is a table; reports as
+  composable data sources, one document spanning several databases, documented but
+  deliberately not built (the design behind it is `MAD_DATA_OBJECT.md`).
+* `docs/index.md` -- the developer site's landing page; GitHub Pages serves `docs/` via Jekyll
+  (`_config.yml`, `docs/CNAME`, `docs/robots.txt`), live once the repository is public.
 * `docs/project/MAD_SCRIPTING.md` -- the Scrimpter revival analysis: the state and correctness audit of
   the language, the formula-element integration map, the engine alternatives, and the
   licensing surface. The engine decision is deferred by the user; when the formula-element

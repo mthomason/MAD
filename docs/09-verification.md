@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 ## 9. Verification
 
 The claims in §§2-5 are reproducible (run these from the repository root):

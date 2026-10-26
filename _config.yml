@@ -1,0 +1,25 @@
+# The developer documentation site (GitHub Pages, Jekyll).
+# Pages serves docs/ from the default branch once the repository is public.
+# The working records under docs/project/ and docs/archive/ are deliberately
+# not part of the site; the landing page is docs/index.md.
+
+title: MAD — Mobile Analytics Document
+description: The embedded reporting framework and the .mad file format
+theme: jekyll-theme-cayman
+
+exclude:
+  - README.md
+  - project
+  - archive
+
+defaults:
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: default
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: default
