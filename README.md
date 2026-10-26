@@ -41,12 +41,11 @@ The technical documentation is also served as a website at
 
 ## Try it
 
-The headless engine runs the `mad` CLI in Docker. Build the image once, then
-inspect one of the checked-in sample documents:
+The headless engine runs the `mad` CLI in Docker. Pull the published image
+and inspect one of the checked-in sample documents:
 
 ```sh
-./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
-docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro mad-cli:latest \
+docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro ghcr.io/mthomason/mad \
     mad inspect /docs/London.portable.mad
 ```
 
@@ -55,16 +54,24 @@ flow, text, CSV, JSON data and report; PDF refused on Linux by design for
 now):
 
 ```sh
-docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro mad-cli:latest \
+docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro ghcr.io/mthomason/mad \
     mad refresh /docs/Music.portable.mad
-docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out mad-cli:latest \
+docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out ghcr.io/mthomason/mad \
     mad export /docs/London.portable.mad --format html --out /out/london.html
+```
+
+The published tags are `latest` and the commit's short SHA, built for
+linux/amd64 by the publish workflow on every push to master; Docker Desktop
+runs them under emulation on Apple silicon. Building the image locally
+instead — a native arm64 `mad-cli:latest` — is one command:
+
+```sh
+./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
 The sample documents refresh against the Sqlite3 sample database that ships
 inside the image; the MySQL and SQL Server fixtures expect the test servers
-from [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md). The image is
-built locally for now — publishing it to a registry is part of the launch.
+from [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).
 
 ## The `.mad` format
 

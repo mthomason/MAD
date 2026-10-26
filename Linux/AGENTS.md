@@ -7,9 +7,11 @@ this directory's [`README.md`](README.md)). One Docker image builds libobjc2,
 libdispatch, GNUstep and the C libraries the frameworks link from pinned
 sources on Ubuntu 24.04, compiles all ten headless frameworks against them,
 and runs their suites. Nothing here ships in the app; the CLI is Phase D's
-checkpoint, and Phase F's runtime image (`mad-cli:latest`) is how it is run.
-CI is `.github/workflows/linux.yml` (this build plus `--verify`), which
-activates when the repository is published and carries the README badge;
+checkpoint, and Phase F's runtime image (`mad-cli:latest` locally, published
+as `ghcr.io/mthomason/mad`) is how it is run.
+CI is `.github/workflows/linux.yml` (this build plus `--verify`; the README
+badge) and `.github/workflows/publish-image.yml` (pushes the runtime image to
+GHCR on master, tagged `latest` and `<short-sha>`, amd64);
 locally, `./Linux/build.sh --verify` is the repeatable check.
 
 ## Layout

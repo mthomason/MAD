@@ -367,14 +367,25 @@ contents). A document is mounted, not stored:
 	docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro mad-cli:latest \
 		mad refresh /docs/MySQL.employees.mad --credentials root:root --rows 50
 
+The image is published (2026-10-26, reversing the earlier not-published
+decision) as `ghcr.io/mthomason/mad`, tagged `latest` and the commit's short
+SHA, pushed by `.github/workflows/publish-image.yml` on every push to master
+(plus `workflow_dispatch`). The published tags are **linux/amd64**, built by
+CI on ubuntu-latest; the Mac's local `mad-cli:latest` is arm64. The same
+verbs over the published image:
+
+	docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro ghcr.io/mthomason/mad \
+		mad inspect /docs/London.portable.mad
+
 A Sqlite3 document resolves its stored database name against the per-user
 Application Support directory, which is
 `/root/GNUstep/Library/ApplicationSupport` in the image; `chinook.sqlite3` is
 there, so the London and Music fixtures refresh without setup. The row cache
 lives under the same home and is per-container; every export refreshes the
-document itself, so a cache does not need to persist between runs.
-`mad-cli` is not published, and there is no CI (the user's decisions,
-2026-10-17).
+document itself, so a cache does not need to persist between runs. The LGPL
+components in the published image oblige relink offers; the written offer in
+`ThirdParty/Licenses/README.md` names the image (`THIRD_PARTY_LICENSES.md`
+§9 is the register entry).
 
 `Linux/build.sh --verify` rebuilds the image and runs the repeatable check: all
 six verbs on the fixtures, every format's pinned digest, `pdf`'s refusal, the

@@ -35,8 +35,10 @@ cross-check was last run end to end after the merged coverage landed
 amd64 toolchain stage and libraries came from the earlier cache; the subset,
 the 55 new suites included, rebuilt), and the run matched native arm64
 exactly — 114 executables, 1098 tests, 6 needs, 10 report items, the counts
-of that day. It has not been re-run since Phase D added its three suites and
-the CLI, so re-run it before trusting the emulated image. Run it under its
+of that day. It is kept as the record of that hand-run; it is superseded by
+the CI build, which compiles the image natively on amd64
+(ubuntu-latest) and runs `--verify` there on every push to master — the
+publish workflow pushes that same platform's runtime stage. Run it under its
 own tag (`MAD_LINUX_IMAGE=mad-linux:phase-b-amd64 ./Linux/build.sh
 --platform linux/amd64`) so the native image is not replaced.
 
@@ -324,9 +326,11 @@ GNUstep Base is LGPL-2.1-or-later; gnustep-make is GPL-3.0-or-later, and its
 exist only inside this build image. The C libraries carry their own licences
 (docs/project/THIRD_PARTY_LICENSES.md); the mysqlclient GPL problem is settled — D1 went
 to MariaDB Connector/C (LGPL-2.0-or-later, elected LGPL-3.0) and this image
-builds it (`docs/project/TASKS.md` §10). The runtime image is built and run locally and is
-not published; if that changes, GNUstep Base and mariadb both need relink
-offers of their own (`docs/project/TASKS.md` §10 carries the flag).
+builds it (`docs/project/TASKS.md` §10). The runtime image is published as
+`ghcr.io/mthomason/mad`, so the LGPL components it distributes need relink
+offers: the written offer in `ThirdParty/Licenses/README.md` now names the
+image, and the register entry is `THIRD_PARTY_LICENSES.md` §9. gnustep-make
+is build tooling and is not in the runtime image.
 
 ## The CLI runs here — Phase D
 
@@ -494,6 +498,20 @@ from the same Dockerfile (the `runtime` stage, downstream of `build`), tagged
 	docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro mad-cli:latest \
 		mad inspect /docs/London.portable.mad
 
+The image is published (2026-10-26) as `ghcr.io/mthomason/mad`, tagged
+`latest` and the commit's short SHA. The published tags are built by CI
+(`.github/workflows/publish-image.yml`) on ubuntu-latest, so they are
+**linux/amd64** — the Mac's local `mad-cli:latest` build is arm64. Pulling
+instead of building is the ten-second route:
+
+	docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro ghcr.io/mthomason/mad \
+		mad inspect /docs/London.portable.mad
+
+Distributing the image obliges relink offers for the LGPL components in it
+(GNUstep Base, and mariadb and freetds static inside `mad`); the written
+offer in `ThirdParty/Licenses/README.md` names the image (the §Licences
+section above).
+
 The image carries:
 
 * `/usr/local/bin/mad`, the CMake install rule's stable path (the binary is no
@@ -548,10 +566,12 @@ containers first (`docs/project/DEVELOPER.md` has their scripts and logins):
 	docker run --rm -v "$PWD":/repo:ro mad-cli:latest \
 		bash /repo/Linux/verify-cli.sh --live
 
-**Not published, and no CI.** The image is built and run locally; there is no
-registry push and no GitHub Actions job (the user's decision, 2026-10-17: this
-is a proof of concept and a repeatable test, not a product release yet). The
-GPL note below is therefore still prospective — nothing is distributed.
+**Published, with CI (2026-10-26, reversing the 2026-10-17 decision).**
+`.github/workflows/publish-image.yml` pushes the runtime stage to
+`ghcr.io/mthomason/mad` as `latest` and `<short-sha>` on every push to
+master, plus by hand from the Actions tab (`workflow_dispatch`); the local
+`./Linux/build.sh --runtime` build is unchanged. The published tags are
+amd64, built by CI; the Mac's local build is arm64.
 
 **A Dockerfile hazard, written down because it bit the first build.** The
 runtime stage is the Dockerfile's last stage, so `docker build` with no
@@ -570,6 +590,8 @@ on Linux is a browser printing `--format html`.
 Phase F's other parts, as of 2026-10-17: the **runtime image** and its **repeatable
 verification** are done (the section above), and the **CI row was dropped on the
 user's decision** — no GitHub Actions, because the Linux port is a proof of concept
-for testing, not a product release.  The **Compressor Linux driver** is not done and
+for testing, not a product release. That changed 2026-10-26 with the GHCR
+publish: the image is published and `publish-image.yml` builds and pushes it
+(the section above). The **Compressor Linux driver** is not done and
 is not needed for the CLI: the image already builds the C libraries natively
 (`libraries.conf` + `lib/libraries.sh`).  Ask before starting it.
