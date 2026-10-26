@@ -302,3 +302,6 @@ Compressor/media/sqlite-src-3490200.zip
 
 # Jekyll output (local preview of the docs site)
 _site/
+
+# Claude Code local settings (machine-specific permission grants)
+.claude/settings.local.json
