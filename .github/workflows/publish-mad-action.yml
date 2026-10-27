@@ -1,0 +1,110 @@
+# Publish the mad-action satellite repository from satellites/mad-action.
+#
+# The source of truth is this repository; mthomason/mad-action is a
+# publication target, the way ghcr.io/mthomason/mad is for the image.  A push
+# to master that touches the satellite source, the fixture, or the licence
+# copies the content into mthomason/mad-action and moves its major tag
+# (satellites/mad-action/VERSION).  Every other MAD change reaches the action
+# through the published image, not through this workflow.
+#
+# The target push uses the write deploy key in MAD_ACTION_DEPLOY_KEY (a
+# repository secret).  A deploy-key push triggers the satellite's own test
+# workflow; a push made with GITHUB_TOKEN would not, which is why this is a
+# deploy key rather than a token.
+
+name: Publish mad-action
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'satellites/mad-action/**'
+      - 'CLI/Fixtures/London.portable.mad'
+      - 'LICENSE'
+      - 'NOTICE'
+      - '.github/workflows/publish-mad-action.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: publish-mad-action
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test the action source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Export the fixture through the action
+        uses: ./satellites/mad-action
+        with:
+          command: export
+          document: CLI/Fixtures/London.portable.mad
+          format: html
+          out-dir: mad-output
+
+      - name: Check the export
+        run: test -s mad-output/report.html
+
+  publish:
+    name: Publish
+    needs: test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    env:
+      MAD_ACTION_DEPLOY_KEY: ${{ secrets.MAD_ACTION_DEPLOY_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish to mthomason/mad-action
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${MAD_ACTION_DEPLOY_KEY:-}" ]]; then
+            echo "::error::MAD_ACTION_DEPLOY_KEY is not set; add the write deploy key as a repository secret."
+            exit 1
+          fi
+
+          key="${RUNNER_TEMP}/mad-action-deploy-key"
+          printf '%s\n' "${MAD_ACTION_DEPLOY_KEY}" > "${key}"
+          chmod 600 "${key}"
+          export GIT_SSH_COMMAND="ssh -i ${key} -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
+
+          target="${RUNNER_TEMP}/mad-action"
+          git clone --depth 1 git@github.com:mthomason/mad-action.git "${target}"
+          git -C "${target}" checkout -B master
+
+          rsync -a --delete --exclude='.git' --exclude='VERSION' \
+            "${GITHUB_WORKSPACE}/satellites/mad-action/" "${target}/"
+          mkdir -p "${target}/fixtures"
+          cp "${GITHUB_WORKSPACE}/CLI/Fixtures/London.portable.mad" "${target}/fixtures/London.portable.mad"
+          cp "${GITHUB_WORKSPACE}/LICENSE" "${target}/LICENSE"
+          cp "${GITHUB_WORKSPACE}/NOTICE" "${target}/NOTICE"
+
+          tag="$(tr -d '[:space:]' < "${GITHUB_WORKSPACE}/satellites/mad-action/VERSION")"
+          if [[ ! "${tag}" =~ ^v[0-9]+$ ]]; then
+            echo "::error::satellites/mad-action/VERSION must be a major tag like v1 (got '${tag}')."
+            exit 1
+          fi
+
+          git -C "${target}" config user.name "MAD release bot"
+          git -C "${target}" config user.email "mad-release-bot@users.noreply.github.com"
+          git -C "${target}" add -A
+          if ! git -C "${target}" diff --cached --quiet; then
+            git -C "${target}" commit -m "Publish from mthomason/MAD@${GITHUB_SHA::8}"
+            git -C "${target}" push origin master
+          fi
+
+          git -C "${target}" tag -f "${tag}"
+          git -C "${target}" push -f origin "${tag}"
+
+          /bin/rm -f "${key}"
+          echo "Published ${tag} at $(git -C "${target}" rev-parse --short HEAD)."
