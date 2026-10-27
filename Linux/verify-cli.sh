@@ -95,6 +95,32 @@ check "mad help"		grep -q 'mad -- MAD Designer command line' "${WORK}/help.txt"
 check "help names every format"	grep -q \
 	'export: csv, html, html-flow, json, json-report, pdf, text' "${WORK}/help.txt"
 
+# --- the source-database overrides -----------------------------------------
+# The document stores the connection (host, port, database name); the flags
+# override it for a run, which is what lets one checked-in document run against
+# a CI service container.  A Sqlite3 document has no server connection, so it
+# refuses them rather than silently ignoring the request.
+
+check "help names --host"		grep -q -- '--host <name>' "${WORK}/help.txt"
+check "help names --port"		grep -q -- '--port <n>' "${WORK}/help.txt"
+check "help names --database"	grep -q -- '--database <name>' "${WORK}/help.txt"
+
+output mad refresh "${LONDON}" --port nope > "${WORK}/port-nope.txt"
+check "--port rejects a non-number"		[ "$?" -eq 1 ]
+check "--port says what it wants"		grep -q 'port number between 1 and 65535' "${WORK}/port-nope.txt"
+
+output mad refresh "${LONDON}" --port 70000 > "${WORK}/port-range.txt"
+check "--port rejects an out-of-range number"	[ "$?" -eq 1 ]
+check "--port range says what it wants"		grep -q 'port number between 1 and 65535' "${WORK}/port-range.txt"
+
+output mad refresh "${LONDON}" --host db.example > "${WORK}/host-sqlite.txt"
+check "a Sqlite3 document refuses --host"		[ "$?" -eq 1 ]
+check "the --host refusal says why"			grep -q 'only apply to a server database' "${WORK}/host-sqlite.txt"
+
+output mad refresh "${LONDON}" --database other > "${WORK}/database-sqlite.txt"
+check "a Sqlite3 document refuses --database"	[ "$?" -eq 1 ]
+check "the --database refusal says why"		grep -q 'only apply to a server database' "${WORK}/database-sqlite.txt"
+
 output mad inspect "${LONDON}" > "${WORK}/inspect.txt"
 check "inspect: v1 container"		grep -q 'format      v1' "${WORK}/inspect.txt"
 check "inspect: four members"		grep -q 'members     4' "${WORK}/inspect.txt"
@@ -156,6 +182,16 @@ if [[ "${1:-}" == "--live" ]]; then
 	check "refresh MySQL: 50 rows"	grep -q 'refreshed 50 rows' "${WORK}/mysql.txt"
 	output mad refresh "${TDS_DOC}" --credentials 'sa:Root1@Root2' --rows 20 --no-keychain > "${WORK}/tds.txt"
 	check "refresh TDS: 20 rows"	grep -q 'refreshed 20 rows' "${WORK}/tds.txt"
+
+	# The overrides reach the driver: the fixture's stored server is reachable,
+	# so a deliberately wrong override must fail in the refresh, not in the
+	# parser (which would say "Unknown option" and exit 1).
+	output mad refresh "${MYSQL_DOC}" --database definitely_not_a_database \
+		--credentials root:root --rows 5 --no-keychain > "${WORK}/mysql-database.txt"
+	check "MySQL --database override reaches the connection"	grep -q 'refresh failed' "${WORK}/mysql-database.txt"
+	output mad refresh "${MYSQL_DOC}" --host 127.0.0.1 \
+		--credentials root:root --rows 5 --no-keychain > "${WORK}/mysql-host.txt"
+	check "MySQL --host override reaches the connection"	grep -q 'refresh failed' "${WORK}/mysql-host.txt"
 fi
 
 # --- summary --------------------------------------------------------------
