@@ -39,6 +39,21 @@ The technical documentation is also served as a website at
 
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
+## See it
+
+MAD Designer, from choosing a data source to reading the finished report in
+MAD Viewer (28 seconds; [video](https://docs.everydayapps.com/assets/app-preview.mp4)):
+
+[![MAD Designer app preview](docs/assets/app-preview-poster.png)](https://docs.everydayapps.com/assets/app-preview.mp4)
+
+The same engine headless: `inspect`, `schema`, `query`, `refresh`, and
+`export` through the `mad` CLI, with no database server and no credentials:
+
+![The mad CLI inspecting, querying, refreshing and exporting a .mad document](docs/assets/mad-cli-demo.gif)
+
+The recording's [exported report](https://docs.everydayapps.com/assets/london.html)
+is plain HTML, opened in any browser.
+
 ## Try it
 
 The headless engine runs the `mad` CLI in Docker. Pull the published image
