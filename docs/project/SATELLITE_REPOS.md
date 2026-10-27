@@ -83,10 +83,11 @@ target repository and can only write.
 
 ## One-time setup, recorded
 
-The target repository was created empty and public; the first publish set its
-default branch to `master`. It was not initialized with a README or licence,
-because the first sync supplies both. Issues and the wiki are disabled there:
-the README sends both to MAD. If it is ever recreated, repeat this:
+The target repository was created empty and public. GitHub's default branch is
+`main`, and the first publish populates it; the workflow pushes `main`. It was
+not initialized with a README or licence, because the first sync supplies
+both. Issues and the wiki are disabled there: the README sends both to MAD. If
+it is ever recreated, repeat this:
 
 1. `gh repo create mthomason/mad-action --public`
 2. Disable issues and the wiki.
