@@ -63,3 +63,17 @@ jobs:
 
       - name: Verify the runtime image end to end
         run: ./Linux/build.sh --verify
+
+      # The satellite's source lives here, so the wrapper is tested against
+      # this build's runtime image before anything is published from it.
+      - name: Test the mad-action wrapper
+        uses: ./satellites/mad-action
+        with:
+          command: export
+          document: CLI/Fixtures/London.portable.mad
+          format: html
+          out-dir: mad-output
+          image: mad-cli:latest
+
+      - name: Check the wrapper's export
+        run: test -s mad-output/report.html

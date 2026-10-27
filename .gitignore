@@ -21,6 +21,9 @@ docs/project/TEST-DB-INFO.md
 # The CLI's project-local DerivedData (CLI/build.sh)
 .cli-deriveddata/
 
+# The mad-action wrapper's default export directory (linux.yml)
+mad-output/
+
 Compressor/src/
 Compressor/build_temp/
 Compressor/bin/iPhoneSimulator-i386.sdk/
