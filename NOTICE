@@ -3,6 +3,20 @@ Copyright (c) 2012-2026 Michael Thomason
 
 Licensed under the MIT License; see LICENSE.
 
+The names "MAD", "MAD Designer", "MAD Viewer", and the names of related
+products are the author's product names and marks. The application icons and
+other product artwork — including the AppIcon sets for MAD Designer and MAD
+Viewer, the MAD Query, MAD Designer and MAD Viewer marks in the app asset
+catalogs, and the app preview video and poster in docs/assets — are the
+author's copyright, and all rights in them are reserved. Neither the names nor
+the artwork are licensed under the MIT License, and no permission is granted to
+use them as the name or branding of another product, service, or distribution,
+or in a way that suggests endorsement by the author.
+
+Descriptive references to .mad files, to this project, and to its software are
+welcome: saying that a tool reads or writes .mad files, or that it is
+compatible with MAD, is not a use of the names as branding.
+
 This product includes third-party software. The licence texts and notices are
 collected in ThirdParty/Licenses/ (see its README for where each came from)
 and registered in docs/project/THIRD_PARTY_LICENSES.md. In particular:
@@ -23,4 +37,4 @@ and registered in docs/project/THIRD_PARTY_LICENSES.md. In particular:
   same written relink offer covers it.
 
 - The .mad document format specification (docs/project/MAD_FORMAT.md) is
-  published freely. The "MAD" name is not covered by the code licence.
+  published freely. The names and artwork are addressed above.
