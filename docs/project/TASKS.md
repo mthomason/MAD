@@ -1161,9 +1161,8 @@ publication (README says it is built locally for now).
 
 ## 18. The post-launch steps — prompts 01–04
 
-**Status:** 01 and 02 done 2026-10-26; 03 in progress on the `mad-action`
-branch; 04 not started. The prompts are in
-`~/Desktop/MADOpenSource-PostSteps/`.
+**Status:** 01 and 02 done 2026-10-26; 03 is PR #7; 04 not started. The
+prompts are in `~/Desktop/MADOpenSource-PostSteps/`.
 
 * **01 — publish the CLI image.** `.github/workflows/publish-image.yml`
   pushes `ghcr.io/mthomason/mad:latest` and `:<short-sha>` on every push to
@@ -1172,8 +1171,8 @@ branch; 04 not started. The prompts are in
 * **02 — the terminal demo.** The CLI demo GIF, the app preview, and the
   exported London report are in `docs/assets/` and on
   `docs.everydayapps.com` (PR #5, `db57127b1`).
-* **03 — the `mad-action` GitHub Action.** The action's source lives in
-  `satellites/mad-action/`; `.github/workflows/publish-mad-action.yml`
+* **03 — the `mad-action` GitHub Action (PR #7).** The action's source lives
+  in `satellites/mad-action/`; `.github/workflows/publish-mad-action.yml`
   publishes it to `mthomason/mad-action` and moves `v1`. The policy and the
   release checklist are `docs/project/SATELLITE_REPOS.md`. The `mad` CLI
   gained `--host`, `--port` and `--database` so a checked-in document can
