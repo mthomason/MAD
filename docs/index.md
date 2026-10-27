@@ -74,6 +74,8 @@ The open specification, one chapter per file:
   the exact commands for the iOS suites and the Linux build.
 * [The `mad` CLI](https://github.com/mthomason/MAD#try-it) -- inspect,
   refresh, and export a `.mad` from Docker in one line.
+* [mad-action](https://github.com/mthomason/mad-action) -- run a checked-in
+  `.mad` in GitHub Actions and upload its export; `mthomason/mad-action@v1`.
 * [Driver-authoring tutorial](tutorials/driver-authoring.html) -- the
   intended first contribution: subclass `MADDatabase`, register the
   driver, return rows.

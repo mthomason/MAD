@@ -1156,3 +1156,27 @@ Open items carried out of prompt 3: the CI badge placeholder in `README.md`
 (owner/repo to be filled at publication), the workflow's `master` triggers
 to update if the default branch is renamed, and the runtime image's registry
 publication (README says it is built locally for now).
+
+---
+
+## 18. The post-launch steps — prompts 01–04
+
+**Status:** 01 and 02 done 2026-10-26; 03 in progress on the `mad-action`
+branch; 04 not started. The prompts are in
+`~/Desktop/MADOpenSource-PostSteps/`.
+
+* **01 — publish the CLI image.** `.github/workflows/publish-image.yml`
+  pushes `ghcr.io/mthomason/mad:latest` and `:<short-sha>` on every push to
+  `master`; the package is public (2026-10-26). The licence position is
+  `Linux/README.md` "Licences" and `THIRD_PARTY_LICENSES.md` §9.
+* **02 — the terminal demo.** The CLI demo GIF, the app preview, and the
+  exported London report are in `docs/assets/` and on
+  `docs.everydayapps.com` (PR #5, `db57127b1`).
+* **03 — the `mad-action` GitHub Action.** The action's source lives in
+  `satellites/mad-action/`; `.github/workflows/publish-mad-action.yml`
+  publishes it to `mthomason/mad-action` and moves `v1`. The policy and the
+  release checklist are `docs/project/SATELLITE_REPOS.md`. The `mad` CLI
+  gained `--host`, `--port` and `--database` so a checked-in document can
+  point at a CI database without being rewritten (`MAD_CLI.md` §3).
+* **04 — the PostgreSQL driver.** Not started; its prompt is the scope, and
+  it is independent of 01–03.
