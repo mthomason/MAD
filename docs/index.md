@@ -14,6 +14,26 @@ database and export it.
 The code is at
 [github.com/mthomason/MAD](https://github.com/mthomason/MAD), MIT-licensed.
 
+## See it
+
+MAD Designer, from choosing a data source to reading the finished report in
+MAD Viewer:
+
+<video controls playsinline preload="metadata" width="360"
+  poster="assets/app-preview-poster.png">
+  <source src="assets/app-preview.mp4" type="video/mp4">
+  Your browser does not support the video element; the
+  <a href="assets/app-preview.mp4">app preview</a> is a plain MP4.
+</video>
+
+The same engine headless: `inspect`, `schema`, `query`, `refresh`, and
+`export` through the `mad` CLI, with no database server and no credentials:
+
+![The mad CLI inspecting, querying, refreshing and exporting a .mad document](assets/mad-cli-demo.gif)
+
+The recording's [exported report](assets/london.html) is plain HTML, opened in
+any browser.
+
 ## Why MAD
 
 * **Written, not assembled.** The SQL generation, the data-table engine,
