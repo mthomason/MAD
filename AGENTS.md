@@ -198,6 +198,10 @@ the headless side.
   merged 2026-10-22 (`c48a39fb7`); Phase E deferred.
 * `Linux/README.md` -- the Linux build: the image, the ten frameworks and their
   suites, the GNUstep divergences the tests found, and the licences.
+* `docs/project/SATELLITE_REPOS.md` -- the satellite repositories (the
+  `mthomason/mad-action` GitHub Action) and the rule that keeps them current: MAD is
+  the source of truth under `satellites/<name>/`, and a publish workflow carries the
+  source to the target on master while the image carries every engine change.
 * `docs/project/MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
 * `docs/project/LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
 * `docs/project/THIRD_PARTY_LICENSES.md` -- every third-party component in the app and the published

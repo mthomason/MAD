@@ -90,6 +90,23 @@ The sample documents refresh against the Sqlite3 sample database that ships
 inside the image; the MySQL and SQL Server fixtures expect the test servers
 from [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).
 
+## In CI
+
+The [mad-action](https://github.com/mthomason/mad-action) GitHub Action runs a
+checked-in `.mad` in a workflow and uploads its export as an artifact:
+
+```yaml
+- uses: mthomason/mad-action@v1
+  with:
+    command: export
+    document: reports/sales.mad
+```
+
+It runs the published image, so the action and the CLI are the same engine.
+The action is generated from [`satellites/mad-action/`](satellites/mad-action/)
+here; [`docs/project/SATELLITE_REPOS.md`](docs/project/SATELLITE_REPOS.md)
+records how the satellite is kept current.
+
 ## The `.mad` format
 
 A `.mad` file is a bzip2-compressed tar archive holding the report's
