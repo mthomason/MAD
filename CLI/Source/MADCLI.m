@@ -8,6 +8,11 @@
 #import "MADCLI.h"
 
 #import <MAD/MADReportExporterRegistry.h>
+#import <MAD/MADDocumentDataProtocol.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDocument.h>
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 static NSString * const MADCLICommandInspect	= @"inspect";
 static NSString * const MADCLICommandSchema		= @"schema";
@@ -88,6 +93,26 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 				invocation.outPath = value;
 			} else if ([name isEqualToString: @"credentials"]) {
 				invocation.credentials = value;
+			} else if ([name isEqualToString: @"host"]) {
+				if (value.length == 0) {
+					if (error) *error = MADCLIUsageError(@"--host needs a non-empty value.");
+					return nil;
+				}
+				invocation.host = value;
+			} else if ([name isEqualToString: @"database"]) {
+				if (value.length == 0) {
+					if (error) *error = MADCLIUsageError(@"--database needs a non-empty value.");
+					return nil;
+				}
+				invocation.databaseName = value;
+			} else if ([name isEqualToString: @"port"]) {
+				NSScanner *scanner = [NSScanner scannerWithString: value];
+				long long port = 0;
+				if (![scanner scanLongLong: &port] || !scanner.isAtEnd || port < 1 || port > 65535) {
+					if (error) *error = MADCLIUsageError([NSString stringWithFormat: @"--port needs a port number between 1 and 65535, got '%@'.", value]);
+					return nil;
+				}
+				invocation.port = (NSInteger)port;
 			} else if ([name isEqualToString: @"rows"]) {
 				NSScanner *scanner = [NSScanner scannerWithString: value];
 				long long rows = 0;
@@ -139,6 +164,55 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 	return invocation;
 }
 
+BOOL MADCLIApplyConnectionOverrides(MADCLIInvocation *invocation,
+									id <MADDocumentDataProtocol> document,
+									NSError **error) {
+
+	if (invocation.host.length == 0 && invocation.databaseName.length == 0 && invocation.port == 0) {
+		return YES;
+	}
+
+	RptqDocument *model = document.activeDocumentModel;
+	RptqDatabase *storedDatabase = model.hasDatabaseSchemas.anyObject;
+	if (storedDatabase == nil) {
+		if (error) *error = MADCLIUsageError(@"The document has no source database to override.");
+		return NO;
+	}
+
+	NSObject <MADConnectionsPropertiesProtocol> *stored =
+		(NSObject <MADConnectionsPropertiesProtocol> *)storedDatabase.ownedByUser;
+	if (stored == nil) {
+		if (error) *error = MADCLIUsageError(@"The document has no stored connection to override.");
+		return NO;
+	}
+
+	// A Sqlite3 connection is a file, not a server: silently ignoring the flags
+	// would make a script believe it had pointed the run somewhere it had not.
+	if (stored.databaseType == MADDatabaseTypeSqlite3) {
+		if (error) *error = MADCLIUsageError(@"--host, --port and --database only apply to a server database; this document uses Sqlite3.");
+		return NO;
+	}
+
+	// Anything not overridden keeps what the document stored.  The port in the
+	// document is the default, not a requirement.
+	NSString *host = invocation.host.length > 0 ? invocation.host : stored.host;
+	NSString *databaseName = invocation.databaseName.length > 0 ? invocation.databaseName : stored.database;
+	NSInteger port = invocation.port > 0 ? invocation.port : stored.port;
+
+	MADDatabaseConnection *connection =
+		[MADDatabaseConnection newDatabaseConnectionWithType: stored.databaseType
+														host: host
+													database: databaseName
+														port: port];
+	if (connection == nil) {
+		if (error) *error = MADCLIUsageError(@"Could not build a connection for this document's driver.");
+		return NO;
+	}
+
+	[document updateDatabaseWithConnection: connection];
+	return YES;
+}
+
 NSString *MADCLIUsageString(void) {
 	// The format list is the export seam's, so a format added as a new class appears
 	// here without this string being edited (MADReportExporterRegistry.h).  It is
@@ -166,6 +240,9 @@ NSString *MADCLIUsageString(void) {
 			[formats componentsJoinedByString: @", "]];
 	[usage appendString:
 			@"  --credentials user:pass  source-database credentials\n"
+			@"  --host <name>            source-database host override\n"
+			@"  --port <n>               source-database port override, 1-65535\n"
+			@"  --database <name>        source-database name override\n"
 			@"  --no-keychain            never read the keychain\n"
 			@"  --deterministic          pin the export's dates and identifier, so two\n"
 			@"                           runs over unchanged data are byte-identical\n"

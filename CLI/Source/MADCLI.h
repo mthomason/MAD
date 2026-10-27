@@ -19,6 +19,8 @@ typedef NS_ENUM(int, MADCLIExitCode) {
 	MADCLIExitExportFailed			= 5,
 };
 
+@protocol MADDocumentDataProtocol;
+
 /// The parsed command line.  One instance per run; nothing here touches a document.
 @interface MADCLIInvocation : NSObject
 
@@ -27,6 +29,9 @@ typedef NS_ENUM(int, MADCLIExitCode) {
 @property (nonatomic, copy)   NSString *format;			// --format
 @property (nonatomic, copy)   NSString *outPath;		// --out
 @property (nonatomic, copy)   NSString *credentials;	// --credentials user:pass
+@property (nonatomic, copy)   NSString *host;			// --host, the stored host when nil
+@property (nonatomic, copy)   NSString *databaseName;	// --database, the stored name when nil
+@property (nonatomic, assign) NSInteger port;			// --port, the stored port when 0
 @property (nonatomic, assign) BOOL noKeychain;			// --no-keychain
 @property (nonatomic, assign) BOOL deterministic;		// --deterministic
 @property (nonatomic, assign) BOOL reproducible;		// --reproducible (write)
@@ -44,6 +49,13 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 /// Make a path from the command line absolute, relative to the caller's shell rather
 /// than to this process.  See the note in MADCLI.m.
 NSString *MADCLIResolveArgumentPath(NSString *path);
+
+/// Apply --host/--port/--database to the document's stored connection.  Returns NO
+/// and fills `error` when the document cannot take an override: a Sqlite3 document,
+/// whose connection is a file, or one with no source database.
+BOOL MADCLIApplyConnectionOverrides(MADCLIInvocation *invocation,
+									id <MADDocumentDataProtocol> document,
+									NSError **error);
 
 /// The verbs.  Each returns an exit code.
 MADCLIExitCode MADCLIRunInspect(MADCLIInvocation *invocation);
