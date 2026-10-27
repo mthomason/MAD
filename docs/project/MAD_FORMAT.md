@@ -16,5 +16,6 @@ file is a pointer so the many references to `MAD_FORMAT.md` by name keep landing
 * [8. Open questions](../08-open-questions.md)
 * [9. Verification](../09-verification.md)
 
-The `.mad` format is an open specification; the project's name is not covered by
-the MIT licence grant (see [`docs/README.md`](../README.md)).
+The `.mad` format is an open specification; the project's names and app artwork
+are not covered by the MIT licence grant (see [`docs/README.md`](../README.md)
+and [`NOTICE`](../../NOTICE)).

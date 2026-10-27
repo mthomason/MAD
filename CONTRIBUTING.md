@@ -111,8 +111,8 @@ so a clear question that shows what you tried gets the fastest answer.
 
 ## Support
 
-MAD is MIT-licensed and free, and contributions are the best kind of support.
-If the project saves your team time and you want to give more, the maintainer
-accepts [GitHub Sponsors](https://github.com/sponsors/mthomason) and API
+MAD's code is MIT-licensed and free, and contributions are the best kind of
+support. If the project saves your team time and you want to give more, the
+maintainer accepts [GitHub Sponsors](https://github.com/sponsors/mthomason) and API
 credits for the agent-driven development — every bit of it goes back into the
 work (see the [README](README.md), "Support").

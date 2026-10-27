@@ -12,7 +12,9 @@ the query, its tables and joins, and the layout of its elements -- in under
 database and export it.
 
 The code is at
-[github.com/mthomason/MAD](https://github.com/mthomason/MAD), MIT-licensed.
+[github.com/mthomason/MAD](https://github.com/mthomason/MAD), MIT-licensed;
+the names and app artwork are not covered by that licence (see
+[NOTICE](https://github.com/mthomason/MAD/blob/master/NOTICE)).
 
 ## See it
 

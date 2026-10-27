@@ -14,8 +14,8 @@ The repository is one self-contained project: the iPad/iPhone apps, thirteen
 frameworks, the headless engine with its Linux build and test suite, the `mad`
 command-line tool, and the build system that produces the third-party
 libraries. It is published under the MIT licence; the `.mad` format is an open
-specification (see [`docs/`](docs/)), though the project's name is not covered
-by the licence grant.
+specification (see [`docs/`](docs/)), though the project's names and app
+artwork are not covered by the licence grant (see [`NOTICE`](NOTICE)).
 
 ## Why MAD
 
@@ -175,8 +175,11 @@ give some of it back — and thank you either way:
 
 ## Licence
 
-MIT — see [`LICENSE`](LICENSE). Every third-party component, its licence, and
-what shipping it obliges us to do is recorded in
+MIT — see [`LICENSE`](LICENSE). The licence covers the software; the names
+"MAD", "MAD Designer" and "MAD Viewer", the app icons and other product
+artwork, and the app preview media are the author's and are excluded from it
+(see [`NOTICE`](NOTICE)). Every third-party component, its licence, and what
+shipping it obliges us to do is recorded in
 [`docs/project/THIRD_PARTY_LICENSES.md`](docs/project/THIRD_PARTY_LICENSES.md).
 
 ## Export compliance
