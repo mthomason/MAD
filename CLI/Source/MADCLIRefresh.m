@@ -36,6 +36,12 @@ MADCLIExitCode MADCLIRunRefresh(MADCLIInvocation *invocation) {
 		return MADCLIExitBadDocument;
 	}
 
+	NSError *overrideError = nil;
+	if (!MADCLIApplyConnectionOverrides(invocation, cliDocument.document, &overrideError)) {
+		MADCLIError(@"%@", MADCLIDescriptionForError(overrideError));
+		return MADCLIExitUsage;
+	}
+
 	// --rows caps the query, not the fetch.  The document builds its main query lazily
 	// and once, with the design-mode cap (50) or no cap at all; the CLI then overwrites
 	// that with the requested figure before the refresh runs, so the SQL carries a real

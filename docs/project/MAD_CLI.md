@@ -107,8 +107,8 @@ refreshed 148,392 rows in 1.21 s (122,638 rows/s)
 cache  ~/Library/Caches/MADDesigner/<id>/<tag>.maddb
 ```
 
-Options: `--credentials`, `--no-cache` (run without persisting), `--rows N` (stop
-after N rows, for smoke tests).
+Options: `--credentials`, `--host`, `--port`, `--database`, `--no-cache` (run
+without persisting), `--rows N` (stop after N rows, for smoke tests).
 
 `--rows` exists because it is what makes the verb testable in CI against a live
 server without pulling a million rows, and because the benchmark in
@@ -215,11 +215,23 @@ the same document writes the same bytes there (16,261 bytes on the London fixtur
 | `--verbose` | log the data path at each stage |
 | `--quiet` | suppress everything but the result |
 | `--credentials user:pass` | source-database credentials; otherwise the keychain |
+| `--host <name>` | source-database host override (refresh, export) |
+| `--port <n>` | source-database port override, 1-65535 (refresh, export) |
+| `--database <name>` | source-database name override (refresh, export) |
 | `--no-keychain` | never touch the keychain |
 | `--format <name>` | output format |
 | `--out <path>` | output path; default stdout |
 | `--deterministic` | pin the export's dates and identifier, so two runs over unchanged data are byte-identical |
 | `--reproducible` | pin the `.mad` archive's inputs -- time, ownership, member order (`write`) |
+
+The connection definition -- host, port and database name -- is part of the
+document's portable store; the username and password never are. `--host`,
+`--port` and `--database` override the stored connection for this run only,
+so one checked-in document can run against a CI service container without
+being rewritten. Anything not given keeps its stored value. They are refused
+on a Sqlite3 document, whose connection is a file, and on the verbs that do
+not connect (`inspect`, `schema`, `query`, `write`) they are simply unused.
+Credentials stay `--credentials`; the store holds no username or password.
 
 ### Exit codes
 

@@ -35,6 +35,13 @@ static MADCLIDocument *MADCLIOpenRefreshedDocument(MADCLIInvocation *invocation,
 		return nil;
 	}
 
+	NSError *overrideError = nil;
+	if (!MADCLIApplyConnectionOverrides(invocation, cliDocument.document, &overrideError)) {
+		MADCLIError(@"%@", MADCLIDescriptionForError(overrideError));
+		*exitCode = MADCLIExitUsage;
+		return nil;
+	}
+
 	MADCredential *credentials = nil;
 	if (invocation.credentials.length > 0) {
 		NSRange colon = [invocation.credentials rangeOfString: @":"];
