@@ -38,6 +38,7 @@ possibly three more.**
 | 10 | libpng 1.6.59 | PNG Reference Library v2 | Permitted; notice recommended. |
 | 11 | zlib 1.3.2 | Zlib | Permitted; acknowledgment appreciated. |
 | 12 | SQLite 3.53.3 | Public domain | No obligation. |
+| 12b | PostgreSQL `libpq` 17.11 | PostgreSQL License (permissive) | Permitted; **copyright notice and disclaimer must ship** (`ThirdParty/Licenses/postgres-LICENSE.txt`). |
 | 13 | asn1c runtime | BSD | Permitted; notice must ship. |
 | 14 | pngquant `rwpng` | BSD-2-Clause | Permitted; notice must ship. |
 | 15 | miniz | Public domain (Unlicense) | No obligation. Header corrected 2026-10-04. |
@@ -66,12 +67,12 @@ into the `mad` binary. It is registered in §9.
 
 The link model matters for which obligations attach, so it is worth stating once.
 
-* `Compressor/` builds nine libraries as **static `.a`** archives inside
+* `Compressor/` builds ten libraries as **static `.a`** archives inside
   xcframeworks. Nothing from `Compressor/` is embedded or copied into the bundle.
 * Each `.a` is linked into a **first-party dynamic `MAD*.framework`**:
   MAD (libarchive, bzip2, zlib), MADBarcodes (libpng, zlib, zint),
-  MADMySQL (mariadb, openssl, zlib), MADSqlite3 (sqlite3), MADTds (freetds, openssl).
-* The app embeds and codesigns 12 `MAD*.framework` bundles. **No third-party dylib
+  MADMySQL (mariadb, openssl, zlib), MADPostgres (postgres, openssl), MADSqlite3 (sqlite3), MADTds (freetds, openssl).
+* The app embeds and codesigns 13 `MAD*.framework` bundles. **No third-party dylib
   ships.** At runtime the app links only Apple libraries (`libc++`, `libxml2`,
   `liblzma`, `libiconv`, `libobjc`, `libSystem`).
 * Consequence: every third-party library above is **statically linked into a
@@ -98,6 +99,7 @@ downloaded sources under `Compressor/build/<lib>/source/`.
 | libarchive | 3.8.9 | BSD-2-Clause | **Copyright notice, conditions and disclaimer must be reproduced in the documentation or materials.** |
 | zint (backend) | 2.16.0 | BSD-3-Clause | **Copyright notice, conditions and disclaimer must be reproduced in the documentation or materials.** |
 | openssl | 3.5.9 | Apache-2.0 | **A copy of the license must be given to recipients** (§4(a)); retain notices. No `NOTICE` file is shipped. |
+| postgres (`libpq`) | 17.11 | PostgreSQL License | **Copyright notice, permission notice, and disclaimer must appear in all copies.** |
 
 Note on zint: the upstream `LICENSE` says the *backend* (which is all we build —
 `ZINT_FRONTEND=OFF`) is BSD-3-Clause while the Qt frontends remain GPL. Only the
@@ -439,6 +441,10 @@ which case add the GPLv2 text and a written offer of the corresponding source.
 > **OpenSSL** — © 1998–2026 The OpenSSL Project Authors. Provided under the
 > Apache License 2.0. A copy of the licence is included below.
 >
+> **PostgreSQL `libpq`** — Portions © 1996–2026 PostgreSQL Global Development Group;
+> Portions © 1994 The Regents of the University of California. Provided under the
+> PostgreSQL Licence.
+>
 > **asn1c runtime** — © 2004, 2006 Lev Walkin. Redistribution and modification
 > permitted subject to the BSD licence.
 >
@@ -478,6 +484,7 @@ recorded in `ThirdParty/Licenses/README.md`. The paths each text was read from:
 | bzip2 | `Compressor/build/bzip2/source/src/LICENSE` |
 | zlib | `Compressor/build/zlib/source/src/LICENSE` |
 | sqlite3 | `Compressor/build/sqlite3/source/src/LICENSE.md` |
+| postgres | `Compressor/build/postgres/source/src/COPYRIGHT` |
 | asn1c | BSD text in `MADDesigner/Source/ReceiptModuleAsn1c/asn_application.h` |
 | rwpng | BSD text in `MADDesigner/Source/rwpng/rwpng.c` |
 | FontAwesome | SIL OFL 1.1 text |

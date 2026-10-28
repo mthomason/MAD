@@ -109,6 +109,11 @@ Notes worth knowing when touching a recipe:
   is commented out of `sybdb.h` after each install, because Objective-C already
   typedefs `BOOL` — but the library itself must keep the typedef, since dblib's C
   sources use it.
+* **postgres** builds only the client interfaces (`src/common`, `src/port`,
+  `src/interfaces/libpq`, `src/bin/pg_config`, and `src/include`) against the
+  per-platform `openssl` install (`--with-ssl=openssl` and the explicit module
+   flags off), then merges `libpq.a`, `libpgcommon.a`, and `libpgport.a` into a
+  single `libpostgres.a` for `postgres.xcframework`.
 
 ### The manifest (`library/manifests/<lib>.json`)
 
@@ -152,6 +157,7 @@ UIKit decoupling lands (see `ROADMAP.md` Track 2).
 | MADSqlite3 | `sqlite3.xcframework` | `sqlite3` |
 | MAD | `libarchive.xcframework`, `bzip2.xcframework`, `zlib.xcframework` | `libarchive` |
 | MADMySQL | `mariadb.xcframework`, `openssl.xcframework`, `zlib.xcframework` | `mariadb` |
+| MADPostgres | `postgres.xcframework`, `openssl.xcframework` | `postgres` |
 | MADTds | `freetds.xcframework`, `openssl.xcframework` | `freetds` |
 | MADTdsClient | nothing from Compressor (tds symbols come via MADTds) | — |
 | MADBarcodes | `libpng.xcframework`, `zlib.xcframework`, `zint.xcframework` | `zint` |

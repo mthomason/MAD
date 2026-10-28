@@ -3,10 +3,10 @@
 `docs/project/MAD_LINUX.md` §9: Phase B proved the toolchain (a Dockerfile that
 source-builds clang + libobjc2 + GNUstep Base and compiled a MADFoundation
 subset); Phase C is the §4 shim list, and this directory is where it lands.
-The build now compiles **all ten headless frameworks** — every framework in
-docs/project/MAD_LINUX.md §3's table except the UI-only ones (`MADExplorer`, `MADBarcodes`,
+The build now compiles **all eleven headless frameworks** — every framework in
+docs/project/MAD_LINUX.md §3's table plus `MADPostgres`, except the UI-only ones (`MADExplorer`, `MADBarcodes`,
 `MADFeedback`, `Scrimpter`, the app) — and runs their suites inside the
-container: 124 test executables, 1,270 tests, 7 recorded needs. The test
+container: 126 test executables, 1,303 tests, 7 recorded needs. The test
 coverage master merged on 2026-10-10 (~100 Xcode test files) is ported in
 full, suite for suite. Nothing here ships in the app; the CLI — Phase D's
 checkpoint — builds and runs here too (see "The CLI runs here" below), and
@@ -74,6 +74,9 @@ the Compressor matrix next door; nothing here ships.
 	mariadb      3.4.11   the mariadbclient static target, openssl + external
 	                       zlib, auth plugins static, others off (mirrors
 	                       Compressor/lib/recipes/mariadb.sh)
+	postgres     17.11    the libpq static client library + libpgcommon/libpgport,
+	                       with openssl, without readline/icu/gssapi/ldap/pam/xml/
+	                       xslt/lz4/zstd/zlib (mirrors Compressor/lib/recipes/postgres.sh)
 
 Two external build dependencies remain from the retired mysqlclient build
 (`libncurses-dev` and `libtirpc-dev`, which mysql's cmake needed); the mariadb
@@ -92,6 +95,7 @@ build does not use them, but they stay in the image.
 | MADTds | all 1 | |
 | MADTdsClient | 4 of 5 | its connection view controller |
 | MADMySQL | 18 of 19 | its connection view controller |
+| MADPostgres | 5 of 6 | its connection view controller |
 | MAD | 150 of 181 | the UI tail (§5.2), `MADocument` + the operations that build/close one (Phase D's), the keychain operations, the MADBarcodes-backed element files. Each is named in `cmake/MADSources.cmake` |
 
 Each framework's source list is a `cmake/<Name>Sources.cmake` beside the
@@ -104,8 +108,9 @@ sources:
 
 * an include shim per framework so the `<Framework/…>` self-imports resolve
   (MAD's is a directory of symlinks, because the Xcode target flattens its
-  headers as `<MAD/Foo.h>`), plus three library-header shims
-  (`<MADSqlite3/sqlite3.h>`, `<MADTds/sybdb.h>`, the MADTdsClient umbrella);
+  headers as `<MAD/Foo.h>`), plus four library-header shims
+  (`<MADSqlite3/sqlite3.h>`, `<MADTds/sybdb.h>`, the MADTdsClient umbrella,
+  `<MADPostgres/libpq-fe.h>`);
 * a prelude header (`Compat/MADCompat.h`) carrying the platform gaps that are
   macros or typedefs (see the list below);
 * whole-archive linking, Apple's `-ObjC`, without which the frameworks'
@@ -297,24 +302,29 @@ default scale; skips are counted separately and are not needs.
 
 ## The live database suites run here
 
-`MADMySQLLiveTests` and `MADTdsClientLiveTests` talk to real servers and skip
-(never fail) when none is reachable — the same contract the Xcode schemes have.
-The servers are the two containers `docs/project/DEVELOPER.md` documents; start them first:
+`MADMySQLLiveTests`, `MADTdsClientLiveTests` and `MADPostgresLiveTests` talk to
+real servers and skip (never fail) when none is reachable — the same contract the
+Xcode schemes have. The servers are the three containers `docs/project/DEVELOPER.md`
+documents; start them first:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on :13306
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on :1433
+	MADPostgres/TestDatabase/postgres-test-db.sh up    # mad-postgres on :5432
 
 	docker run --rm \
 		-e MAD_MYSQL_TEST_HOST=host.docker.internal \
 		-e MAD_MYSQL_TEST_PORT=13306 \
 		-e MAD_TDS_TEST_HOST=host.docker.internal \
+		-e MAD_PG_TEST_HOST=host.docker.internal \
 		--entrypoint bash mad-linux:phase-b -c \
-		'/src/Linux/build/MADMySQLLiveTests && /src/Linux/build/MADTdsClientLiveTests'
+		'/src/Linux/build/MADMySQLLiveTests && /src/Linux/build/MADTdsClientLiveTests && /src/Linux/build/MADPostgresLiveTests'
 
 Measured 2026-10-17 with that clean setup: MySQL 44/44, 311 checks (prepared
 statements, the type conversions, schema discovery), and SQL Server 29/29, 169
 checks (the freetds wire path, the date/time cracking, decimal/blob/nvarchar,
-schema discovery) — so both drivers work on Linux, not just compile.
+schema discovery); PostgreSQL 14/14, 132 checks (measured 2026-10-27: libpq
+fetch, OID type conversions, schema discovery across public and non-public
+schemas) — so all three drivers work on Linux, not just compile.
 `MADTdsClientTests`' two connection-failure tests run without a server.
 
 ## Licences
@@ -398,9 +408,10 @@ in Compat and over splitting `MADocument` itself.
 | `mad refresh` on `London.portable.mad` | 76 rows, and the row cache is identical to the Mac's (21 columns by name, 76 rows, every value equal) |
 | `mad refresh --rows 50 --credentials root:root` on `MySQL.employees.mad` | 50 rows from live MySQL 8.4 (prepared-statement fetch, database `employees`) |
 | `mad refresh --rows 20 --credentials sa:Root1@Root2` on `TDS.AdventureWorksLT2022.mad` | 20 rows from live SQL Server 2022 (freetds, `AdventureWorksLT2022`) |
+| `mad refresh --rows 25 --credentials mad:mad_test_pw` on `Postgres.chinook.mad` | 25 rows from live PostgreSQL 17 (libpq, `chinook`) |
 
-The live suites agree: `MADMySQLLiveTests` 44/44 and `MADTdsClientLiveTests` 29/29
-from the same image. `Linux/Tests/MADHeadlessDocumentTests.m` is the same
+The live suites agree: `MADMySQLLiveTests` 44/44, `MADTdsClientLiveTests` 29/29
+and `MADPostgresLiveTests` 14/14 from the same image. `Linux/Tests/MADHeadlessDocumentTests.m` is the same
 checkpoint as a test — open, schema, query, driver resolution, refresh, 76 rows —
 so it fails in CI rather than in a hand-run.
 
@@ -521,7 +532,7 @@ The image carries:
 * the shared objects the binary links — GNUstep Base, libobjc2, libdispatch
   and libBlocksRuntime — plus GNUstep's runtime directories and config. The
   other C libraries (sqlite3, freetds, openssl, zlib, bzip2, libarchive,
-  mariadb) are static and are already inside the binary;
+  mariadb, postgres) are static and are already inside the binary;
 * none of mysqlclient's share data: Connector/C embeds its client error
   messages and installs no `share/` files;
 * `chinook.sqlite3` at `/root/GNUstep/Library/ApplicationSupport/`, where a
@@ -560,11 +571,13 @@ clang, cmake, git or build tree). 30 checks; it exits non-zero on any failure.
 	...
 	MADVERIFY 30 passed, 0 failed
 
-`--live` adds the MySQL and TDS refreshes (50 and 20 rows); start the two test
-containers first (`docs/project/DEVELOPER.md` has their scripts and logins):
+`--live` adds the MySQL, TDS and PostgreSQL refreshes (50, 20 and 25 rows); start
+the three test containers first (`docs/project/DEVELOPER.md` has their scripts
+and logins):
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up
+	MADPostgres/TestDatabase/postgres-test-db.sh up
 	docker run --rm -v "$PWD":/repo:ro mad-cli:latest \
 		bash /repo/Linux/verify-cli.sh --live
 
