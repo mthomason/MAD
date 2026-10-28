@@ -349,7 +349,8 @@ them if the repository is ever made public.*
 
 1. The app ships **no third-party notices at all**, while shipping code whose
    licenses require them (libarchive BSD-2, zint BSD-3, OpenSSL Apache-2.0, asn1c
-   BSD, rwpng BSD-2, FreeTDS LGPL). **The repository now carries the notices**
+   BSD, rwpng BSD-2, PostgreSQL libpq PostgreSQL License, FreeTDS LGPL, MariaDB
+   Connector/C LGPL). **The repository now carries the notices**
    (`NOTICE`, `ThirdParty/Licenses/`, 2026-10-24); the in-app Acknowledgements
    screen remains open (plan C2, after the MariaDB decision).
 2. ~~**No license texts are committed anywhere.**~~ **Fixed 2026-10-24:**

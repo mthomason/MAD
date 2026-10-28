@@ -197,7 +197,7 @@ the headless side.
   semantics, the persisted source text (`RptqQuery.sqlSourceText` + the store's first
   versioning step), the phases, and the tests that pin it. Phases A-D implemented and
   merged 2026-10-22 (`c48a39fb7`); Phase E deferred.
-* `Linux/README.md` -- the Linux build: the image, the ten frameworks and their
+* `Linux/README.md` -- the Linux build: the image, the eleven frameworks and their
   suites, the GNUstep divergences the tests found, and the licences.
 * `docs/project/SATELLITE_REPOS.md` -- the satellite repositories (the
   `mthomason/mad-action` GitHub Action) and the rule that keeps them current: MAD is

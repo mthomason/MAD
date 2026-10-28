@@ -403,7 +403,7 @@ components in the published image oblige relink offers; the written offer in
 
 `Linux/build.sh --verify` rebuilds the image and runs the repeatable check: all
 six verbs on the fixtures, every format's pinned digest, `pdf`'s refusal, the
-writer's bytes and the exit codes (`Linux/verify-cli.sh`; `--live` adds the two
+writer's bytes and the exit codes (`Linux/verify-cli.sh`; `--live` adds the three
 live databases).
 
 ---
@@ -430,9 +430,10 @@ The format and the CLI are pinned by **round-trip fixtures**, not by prose:
 5. **Exit codes.** One test per row of the table in §3, driven by deliberately broken
    inputs.
 
-Fixtures live beside the samples they test. Tests that need a live MySQL or SQL Server
-**skip** when one is not reachable, following the existing convention in
-`MADMySQLLiveTests.m` and `MADTdsClientLiveTests.m`.
+Fixtures live beside the samples they test. Tests that need a live MySQL, SQL Server
+or PostgreSQL server **skip** when one is not reachable, following the existing
+convention in `MADMySQLLiveTests.m`, `MADTdsClientLiveTests.m` and
+`MADPostgresLiveTests.m`.
 
 ---
 

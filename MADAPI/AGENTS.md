@@ -6,7 +6,7 @@
 
 ## Key Features
 
-*   **Database Abstraction**: `MADAPI` provides the `MADDatabase` class, which is the base class for all database connections. This allows the application to support different database systems (e.g., MySQL, SQL Server) through a common interface.
+*   **Database Abstraction**: `MADAPI` provides the `MADDatabase` class, which is the base class for all database connections. This allows the application to support different database systems (e.g., MySQL, SQL Server, PostgreSQL) through a common interface.
 *   **Connection Management**: The framework includes classes and view controllers for managing database connections, such as `MADDatabaseConnection` and `MADConnectionViewController`.
 *   **Query Construction**: `MADAPI` defines the `MADQuery` class, which is used to build and represent database queries. This allows for a consistent approach to query creation, regardless of the underlying database system.
 *   **Schema Representation**: The framework includes classes like `MADDatabaseTable` and `MADDatabaseField` to represent the structure of a database, including its tables and fields.

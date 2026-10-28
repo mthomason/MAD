@@ -9,13 +9,13 @@ walks through the first one; it is the intended first contribution.
 
 ## Prerequisites
 
-* **macOS with Xcode** — the iOS side is a workspace of thirteen frameworks
+* **macOS with Xcode** — the iOS side is a workspace of fourteen frameworks
   plus the app, built for iOS 15 and later. The frameworks are Objective-C.
 * **Docker** — the headless engine's Linux build: one image that source-builds
   the Objective-C toolchain (libobjc2, libdispatch, GNUstep) and the C
-  libraries, compiles the ten headless frameworks, and runs their suites.
-* No database server is needed to contribute: the live MySQL and SQL Server
-  suites skip when no server is reachable, and
+  libraries, compiles the eleven headless frameworks, and runs their suites.
+* No database server is needed to contribute: the live MySQL, SQL Server, and
+  PostgreSQL suites skip when no server is reachable, and
   [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) documents the
   Docker containers that supply them.
 
@@ -32,7 +32,7 @@ walks through the first one; it is the intended first contribution.
    ```
 
    ```sh
-   # Linux: the whole headless engine — 124 test executables, 1,270 tests
+   # Linux: the whole headless engine — 126 test executables, 1,303 tests
    ./Linux/build.sh
    ```
 

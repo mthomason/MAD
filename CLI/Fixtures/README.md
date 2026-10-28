@@ -66,14 +66,14 @@ store format changes, and a diff in them is a real one to look at.
 
 ## The host name in the live fixtures
 
-Both name the server as `mac` — this Mac's hostname, which resolves to its LAN
+All three name the server as `mac` — this Mac's hostname, which resolves to its LAN
 address here and inside the Docker containers. One name, then, for the Mac's
 MySQL (published on the loopback *and* the LAN by the fixture container below) and
-for the SQL Server container (published on all interfaces), so the same document
+for the SQL Server and PostgreSQL containers (published on all interfaces), so the same document
 can be refreshed from the Mac and from the Linux image. `host.docker.internal`
 would work only inside a container; `127.0.0.1` only on the Mac.
 
-Both live fixtures were created against the canonical test containers, which
+All three live fixtures were created against the canonical test containers, which
 `docs/project/DEVELOPER.md` documents and whose scripts create them from pinned images and
 checksum-verified datasets:
 
