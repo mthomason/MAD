@@ -19,6 +19,7 @@
 #import <MADAPI/MADDatabase.h>
 #import <MADMySQL/MADDatabaseMySQL.h>
 #import <MADTdsClient/MADDatabaseSQLServer.h>
+#import <MADPostgres/MADDatabasePostgres.h>
 
 #import <MAD/MADSQLCompileError.h>
 #import <MAD/MADSQLParser.h>
@@ -86,6 +87,7 @@ static void testIdentifierQuoteCharactersPerDriver(void) {
 	MAD_PASS_EQUAL([MADDatabase identifierQuoteCharacters], @"\"\"", "the base dialect quotes with double quotes");
 	MAD_PASS_EQUAL([MADDatabaseMySQL identifierQuoteCharacters], @"``", "MySQL quotes with backticks");
 	MAD_PASS_EQUAL([MADDatabaseSQLServer identifierQuoteCharacters], @"[]", "T-SQL quotes with brackets");
+	MAD_PASS_EQUAL([MADDatabasePostgres identifierQuoteCharacters], @"\"\"", "PostgreSQL quotes with double quotes");
 }
 
 #pragma mark - The tokenizer

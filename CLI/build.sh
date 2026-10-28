@@ -45,6 +45,7 @@ readonly FRAMEWORKS=(
 	MAD
 	MADMySQL
 	MADTdsClient
+	MADPostgres
 )
 
 # The Core Data model names these as value transformers for its transformable

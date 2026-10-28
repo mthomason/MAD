@@ -48,6 +48,7 @@
 
 #import <MADMySQL/MADDatabaseMySQL.h>
 #import <MADTdsClient/MADDatabaseSQLServer.h>
+#import <MADPostgres/MADDatabasePostgres.h>
 #import <MAD/RptqQueryPredicate+Extras.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
@@ -381,6 +382,24 @@ static void testTDSDialectSingleTableSql(void) {
 		"the TDS statement is exact");
 }
 
+static void testPostgresDialectSingleTableSql(void) {
+	RptqStoreContext *context = inMemoryContext();
+	RptqDocument *document = documentWithDatabaseAndQueryInContext(context);
+	RptqDatabaseSchemaTable *invoice = schemaTableNamed(@"Invoice", document.defaultDatabase, context);
+	queryFieldNamedOnTable(@"Amount", MADDataTypeDecimal, invoice, document.defaultDatabase, context);
+	queryFieldNamedOnTable(@"Name", MADDataTypeString, invoice, document.defaultDatabase, context);
+	MADQueryFull *query = queryFullForDocumentWithDatabase(document, 10, [[[MADDatabasePostgres alloc] init] autorelease]);
+
+	NSError *error = nil;
+	NSString *sql = [query SQLOnlyActiveFields:NO managedObjectContext:context error:&error];
+
+	MAD_PASS(error == nil, "the Postgres query builds without error");
+	MAD_PASS_EQUAL(sql,
+		@"SELECT\n\t\"Invoice0\".\"Amount\",\n\t\"Invoice0\".\"Name\"\n"
+		@"FROM\n\t\"Invoice\" AS \"Invoice0\"\nLIMIT 10",
+		"the Postgres statement is exact");
+}
+
 #pragma mark - Golden SQL, joins
 
 static void testEveryJoinTypeSql(void) {
@@ -618,6 +637,7 @@ MAD_TEST_MAIN("MADQueryFullTests",
 	MAD_TEST(testFieldKeysReflectActiveFieldOrder),
 	MAD_TEST(testMySQLDialectSingleTableSql),
 	MAD_TEST(testTDSDialectSingleTableSql),
+	MAD_TEST(testPostgresDialectSingleTableSql),
 	MAD_TEST(testEveryJoinTypeSql),
 	MAD_TEST(testSelfJoinUsesTheDropIndexAlias),
 	MAD_TEST(testEveryPredicateOperatorQuotesStringLiterals),

@@ -27,6 +27,8 @@
 		4C0E77AA163B5AEC003B951E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C384E2C14B29789007B4F48 /* CoreGraphics.framework */; };
 		4C0E784A163B5AEC003B951E /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
+		4C0E784C163B5AEC003B959E /* UIImageExportTypePostgres.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FE15358DA600738099 /* UIImageExportTypePostgres.png */; };
+		4C0E784D163B5AEC003B959E /* UIImageExportTypePostgres@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FF15358DA600738099 /* UIImageExportTypePostgres@2x.png */; };
 		4C1848071B8E1CF100FA7872 /* CarbonBlock.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C1848051B8E1CF100FA7872 /* CarbonBlock.ttf */; };
 		4C18BC741C7E29BD000DF79C /* MADPageViewAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */; };
 		4C1CC25824C5ED300027A454 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1CC25724C5ED300027A454 /* CoreServices.framework */; };
@@ -125,12 +127,16 @@
 		4C29162424AC75E400EC794B /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160F24AC75E300EC794B /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C29162524AC75E400EC794B /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161024AC75E300EC794B /* MADMySQL.framework */; };
 		4C29162624AC75E400EC794B /* MADMySQL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161024AC75E300EC794B /* MADMySQL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C29162B24AC75E400EC799B /* MADPostgres.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161324AC75E300EC799B /* MADPostgres.framework */; };
+		4C29162C24AC75E400EC799B /* MADPostgres.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161324AC75E300EC799B /* MADPostgres.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C29162724AC75E400EC794B /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161124AC75E300EC794B /* MADSqlite3.framework */; };
 		4C29162824AC75E400EC794B /* MADSqlite3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161124AC75E300EC794B /* MADSqlite3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C29162924AC75E400EC794B /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161224AC75E300EC794B /* MADTdsClient.framework */; };
 		4C29162A24AC75E400EC794B /* MADTdsClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161224AC75E300EC794B /* MADTdsClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */; };
 		4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */; };
+		4C2AC30215358DA600738099 /* UIImageExportTypePostgres.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FE15358DA600738099 /* UIImageExportTypePostgres.png */; };
+		4C2AC30315358DA600738099 /* UIImageExportTypePostgres@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2AC2FF15358DA600738099 /* UIImageExportTypePostgres@2x.png */; };
 		4C2F3B3B1CA26495002CF271 /* MADMutualExclusive.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F3B3A1CA26495002CF271 /* MADMutualExclusive.m */; };
 		4C3186312DE2018E0007DDA2 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3186302DE2018E0007DDA2 /* UserNotifications.framework */; };
 		4C32A4AF1BB076FC00DD59A3 /* MAD Viewer.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4C32A4AE1BB076FC00DD59A3 /* MAD Viewer.entitlements */; };
@@ -271,6 +277,7 @@
 		4C7E5A04000000000000A1 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160B24AC75E300EC794B /* MADDataStructures.framework */; };
 		4C7E5A05000000000000A1 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160F24AC75E300EC794B /* MADFoundation.framework */; };
 		4C7E5A06000000000000A1 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161024AC75E300EC794B /* MADMySQL.framework */; };
+		4C7E5A09000000000000A1 /* MADPostgres.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161324AC75E300EC799B /* MADPostgres.framework */; };
 		4C7E5A0700000000000000A1 /* MADAppLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7E5A0700000000000000B1 /* MADAppLogicTests.m */; };
 		4C7E5A0800000000000000A1 /* MADOperationValidateSQLTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7E5A0800000000000000B1 /* MADOperationValidateSQLTests.m */; };
 		4C7E5A0700000000000000A2 /* MADAppOperationConditionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7E5A0700000000000000B2 /* MADAppOperationConditionTests.m */; };
@@ -420,6 +427,7 @@
 				4CA0C0432DCE788C0009164B /* MADTds.framework in Embed Frameworks */,
 				4C29162824AC75E400EC794B /* MADSqlite3.framework in Embed Frameworks */,
 				4C29162624AC75E400EC794B /* MADMySQL.framework in Embed Frameworks */,
+				4C29162C24AC75E400EC799B /* MADPostgres.framework in Embed Frameworks */,
 				4C29161424AC75E300EC794B /* MAD.framework in Embed Frameworks */,
 				4C29161A24AC75E300EC794B /* MADCocoaExtensions.framework in Embed Frameworks */,
 				4C29161C24AC75E300EC794B /* MADDataStructures.framework in Embed Frameworks */,
@@ -657,10 +665,13 @@
 		4C29160E24AC75E300EC794B /* MADFileManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFileManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C29160F24AC75E300EC794B /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C29161024AC75E300EC794B /* MADMySQL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADMySQL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C29161324AC75E300EC799B /* MADPostgres.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADPostgres.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C29161124AC75E300EC794B /* MADSqlite3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADSqlite3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C29161224AC75E300EC794B /* MADTdsClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADTdsClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypeMySQL.png; sourceTree = "<group>"; };
 		4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypeMySQL@2x.png"; sourceTree = "<group>"; };
+		4C2AC2FE15358DA600738099 /* UIImageExportTypePostgres.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIImageExportTypePostgres.png; sourceTree = "<group>"; };
+		4C2AC2FF15358DA600738099 /* UIImageExportTypePostgres@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIImageExportTypePostgres@2x.png"; sourceTree = "<group>"; };
 		4C2F3B391CA26495002CF271 /* MADMutualExclusive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMutualExclusive.h; sourceTree = "<group>"; };
 		4C2F3B3A1CA26495002CF271 /* MADMutualExclusive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMutualExclusive.m; sourceTree = "<group>"; };
 		4C3186302DE2018E0007DDA2 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
@@ -1177,6 +1188,7 @@
 				4C29161D24AC75E300EC794B /* MADExplorer.framework in Frameworks */,
 				4C29162924AC75E400EC794B /* MADTdsClient.framework in Frameworks */,
 				4C29162524AC75E400EC794B /* MADMySQL.framework in Frameworks */,
+				4C29162B24AC75E400EC799B /* MADPostgres.framework in Frameworks */,
 				4C29161B24AC75E300EC794B /* MADDataStructures.framework in Frameworks */,
 				4CA54D341893828B006B301A /* libc++.dylib in Frameworks */,
 				4CDA76B018257E4A00E462F6 /* libz.dylib in Frameworks */,
@@ -1202,6 +1214,7 @@
 				4C7E5A04000000000000A1 /* MADDataStructures.framework in Frameworks */,
 				4C7E5A05000000000000A1 /* MADFoundation.framework in Frameworks */,
 				4C7E5A06000000000000A1 /* MADMySQL.framework in Frameworks */,
+				4C7E5A09000000000000A1 /* MADPostgres.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1816,6 +1829,8 @@
 				4CD52A49178A643900FC5D1C /* UIImageExportTypeSqlServer.png */,
 				4C2AC2FC15358DA600738091 /* UIImageExportTypeMySQL.png */,
 				4C2AC2FD15358DA600738091 /* UIImageExportTypeMySQL@2x.png */,
+				4C2AC2FE15358DA600738099 /* UIImageExportTypePostgres.png */,
+				4C2AC2FF15358DA600738099 /* UIImageExportTypePostgres@2x.png */,
 				4CC3D7281BCB6D9500BDA5D3 /* UIImageExportTypeSqlServer@2x.png */,
 				4CC3D66E1BCB6D9400BDA5D3 /* MADInfinity64.png */,
 				4CC3D6701BCB6D9400BDA5D3 /* MADInfinity64@2x.png */,
@@ -2049,6 +2064,7 @@
 				4C29160E24AC75E300EC794B /* MADFileManager.framework */,
 				4C29160F24AC75E300EC794B /* MADFoundation.framework */,
 				4C29161024AC75E300EC794B /* MADMySQL.framework */,
+				4C29161324AC75E300EC799B /* MADPostgres.framework */,
 				4C29161124AC75E300EC794B /* MADSqlite3.framework */,
 				4C29161224AC75E300EC794B /* MADTdsClient.framework */,
 			);
@@ -2271,6 +2287,8 @@
 				4C453FC92E25DB4000641E6E /* MAD Designer.storekit in Resources */,
 				4C0E784A163B5AEC003B951E /* UIImageExportTypeMySQL.png in Resources */,
 				4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */,
+				4C0E784C163B5AEC003B959E /* UIImageExportTypePostgres.png in Resources */,
+				4C0E784D163B5AEC003B959E /* UIImageExportTypePostgres@2x.png in Resources */,
 				4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
 			);
@@ -2313,6 +2331,8 @@
 				4C401EDF1BAE5E9000BAE5FC /* ReceiptModule.ans1 in Resources */,
 				4C2AC30015358DA600738091 /* UIImageExportTypeMySQL.png in Resources */,
 				4C2AC30115358DA600738091 /* UIImageExportTypeMySQL@2x.png in Resources */,
+				4C2AC30215358DA600738099 /* UIImageExportTypePostgres.png in Resources */,
+				4C2AC30315358DA600738099 /* UIImageExportTypePostgres@2x.png in Resources */,
 				4CC3D72A1BCB6D9500BDA5D3 /* MADIcon320.png in Resources */,
 				4CC3D8141BCB6D9500BDA5D3 /* UIImageExportTypeSqlServer@2x.png in Resources */,
 				4C3DCC1B1BCAEFA900ABE231 /* Settings.bundle in Resources */,

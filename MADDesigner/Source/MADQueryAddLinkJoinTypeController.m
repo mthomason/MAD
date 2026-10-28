@@ -77,6 +77,23 @@
 		tableViewCell.selectionStyle = UITableViewCellSelectionStyleGray;
 		tableViewCell.textLabel.enabled = NO;
 		
+	} else if ([databaseDriverType isEqualToString:[MADDatabaseConnection Identifier:MADDatabaseTypePostgres]]) {
+
+		tableViewCell = _tableViewCellEquiJoin;
+		tableViewCell.userInteractionEnabled = YES;
+		tableViewCell.selectionStyle = UITableViewCellSelectionStyleGray;
+		tableViewCell.textLabel.enabled = YES;
+
+		tableViewCell = _tableViewCellNaturalJoin;
+		tableViewCell.userInteractionEnabled = YES;
+		tableViewCell.selectionStyle = UITableViewCellSelectionStyleGray;
+		tableViewCell.textLabel.enabled = YES;
+
+		tableViewCell = _tableViewCellFullOuterJoin;
+		tableViewCell.userInteractionEnabled = YES;
+		tableViewCell.selectionStyle = UITableViewCellSelectionStyleGray;
+		tableViewCell.textLabel.enabled = YES;
+
 	}
 
 }

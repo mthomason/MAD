@@ -36,6 +36,8 @@
 #import <MAD/MADQueryTest.h>
 #import <MADMySQL/MADDatabaseMySQL.h>
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
+#import <MADPostgres/MADPostgres.h>
+#import <MADAPI/MADConnectionViewController.h>
 
 #import <MAD/MADocument.h>
 #import <MAD/RptqStoreContext.h>
@@ -43,6 +45,8 @@
 #import <MAD/MADStoreGraph.h>
 #import <MAD/MADStoreObject.h>
 #import <MAD/RptqObject.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseCredentals.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MADOperationCreateDocumentCreateDocument.h>
@@ -87,6 +91,15 @@
 
 @interface NSDateFormatter (MADDesignerUnitTestsRFC3339)
 + (instancetype)RFC_3339;
+@end
+
+@interface MADDriverSelectorController : UITableViewController
+@property (nonatomic, weak, readonly) __kindof MADConnectionViewController *connectionViewController;
+- (void)showViewControllerConnection:(NSInteger)type;
+@end
+
+@interface MADQueryAddLinkJoinTypeController : UITableViewController
+@property (nonatomic, strong) MADocument *document;
 @end
 
 @interface MADDesignerUnitTests : XCTestCase
@@ -178,6 +191,17 @@
 	XCTAssertNotNil(connection.identifier);
 }
 
+- (void)testPostgresConnectionProperties {
+	MADDatabaseConnectionPostgres *connection = [[MADDatabaseConnectionPostgres alloc] initWithHost:@"localhost"
+																						  database:@"chinook"
+																						   andPort:5432];
+
+	XCTAssertEqual(connection.databaseType, MADDatabaseTypePostgres);
+	XCTAssertTrue(connection.requiresCredentials);
+	XCTAssertNotNil(connection.connectionString);
+	XCTAssertNotNil(connection.identifier);
+}
+
 #pragma mark - Framework consumption: SQL generation
 
 // MADQueryTest is the connection-test query the app runs before it will accept a new
@@ -200,6 +224,83 @@
 	XCTAssertTrue([sql containsString:@"SELECT"], @"Got: %@", sql);
 	XCTAssertTrue([sql containsString:@"255"], @"Got: %@", sql);
 	XCTAssertTrue([sql containsString:@"`f1`"], @"Got: %@", sql);
+}
+
+- (void)testQueryTestGeneratesPostgresStatement {
+	MADDatabasePostgres *database = [[MADDatabasePostgres alloc] init];
+	database.databaseConnection = [[MADDatabaseConnectionPostgres alloc] initWithHost:@"localhost"
+																			database:@"chinook"
+																			 andPort:5432];
+
+	MADQueryTest *query = [[MADQueryTest alloc] initWithObject:database];
+	query.database = database;
+
+	NSError *error = nil;
+	NSString *sql = [query getSql:&error];
+
+	XCTAssertNil(error);
+	XCTAssertNotNil(sql);
+	XCTAssertTrue([sql containsString:@"SELECT"], @"Got: %@", sql);
+	XCTAssertTrue([sql containsString:@"255"], @"Got: %@", sql);
+	XCTAssertTrue([sql containsString:@"\"f1\""], @"Got: %@", sql);
+}
+
+#pragma mark - App source: PostgreSQL driver wiring
+
+- (void)testDriverSelectorControllerIncludesPostgres {
+	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADCreateDocument" bundle:[NSBundle mainBundle]];
+	UINavigationController *nav = [storyboard instantiateViewControllerWithIdentifier:@"MADIdentifierNavControllerCreateDoc"];
+	MADDriverSelectorController *selector = (MADDriverSelectorController *)nav.topViewController;
+	[selector loadViewIfNeeded];
+
+	XCTAssertEqual([selector tableView:selector.tableView numberOfRowsInSection:0], (NSInteger)3);
+	UITableViewCell *cell = [selector tableView:selector.tableView
+						  cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+	XCTAssertEqualObjects(cell.textLabel.text, @"PostgreSQL Native Driver");
+	XCTAssertNotNil(cell.imageView.image);
+
+	[selector showViewControllerConnection:2];
+	XCTAssertTrue([selector.connectionViewController isKindOfClass:NSClassFromString(@"MADPostgresConnectionViewController")]);
+	XCTAssertEqual(selector.connectionViewController.databaseType, MADDatabaseTypePostgres);
+}
+
+- (void)testQueryAddLinkJoinTypeControllerEnablesAllJoinsForPostgres {
+	NSURL *directory = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+						URLByAppendingPathComponent:NSUUID.UUID.UUIDString isDirectory:YES];
+	[[NSFileManager defaultManager] createDirectoryAtURL:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *documentURL = [directory URLByAppendingPathComponent:@"pg.mad"];
+	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
+	RptqDatabase *database = (RptqDatabase *)[document.storeContext insertObjectForEntity:@"RptqDatabase" identifier:1];
+	RptqDatabaseCredentals *creds = (RptqDatabaseCredentals *)[document.storeContext insertObjectForEntity:@"RptqDatabaseCredentals" identifier:2];
+	creds.driverID = [MADDatabaseConnection Identifier:MADDatabaseTypePostgres];
+	creds.inDatabase = database;
+	database.ownedByUser = creds;
+
+	MADQueryAddLinkJoinTypeController *joinController = [[MADQueryAddLinkJoinTypeController alloc] initWithStyle:UITableViewStyleGrouped];
+	joinController.document = document;
+	UITableViewCell *equiCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MNSJoinTypeEquiJoin"];
+	UITableViewCell *naturalCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MNSJoinTypeNaturalJoin"];
+	UITableViewCell *fullOuterCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MNSJoinTypeFullOuterJoin"];
+	equiCell.userInteractionEnabled = NO;
+	equiCell.textLabel.enabled = NO;
+	naturalCell.userInteractionEnabled = NO;
+	naturalCell.textLabel.enabled = NO;
+	fullOuterCell.userInteractionEnabled = NO;
+	fullOuterCell.textLabel.enabled = NO;
+	[joinController setValue:equiCell forKey:@"tableViewCellEquiJoin"];
+	[joinController setValue:naturalCell forKey:@"tableViewCellNaturalJoin"];
+	[joinController setValue:fullOuterCell forKey:@"tableViewCellFullOuterJoin"];
+
+	[joinController loadViewIfNeeded];
+
+	XCTAssertTrue(equiCell.userInteractionEnabled);
+	XCTAssertTrue(equiCell.textLabel.enabled);
+	XCTAssertTrue(naturalCell.userInteractionEnabled);
+	XCTAssertTrue(naturalCell.textLabel.enabled);
+	XCTAssertTrue(fullOuterCell.userInteractionEnabled);
+	XCTAssertTrue(fullOuterCell.textLabel.enabled);
+
+	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
 }
 
 // -initWithObject: deliberately ignores its argument -- the database has to be assigned

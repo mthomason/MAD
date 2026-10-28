@@ -34,6 +34,7 @@
 
 #import <MADMySQL/MADMySQL.h>
 #import <MADTdsClient/MADTdsClient.h>
+#import <MADPostgres/MADPostgres.h>
 
 @interface MADDriverSelectorController () <MADViewControllerStandardProtocol, MADDocumentCreationManagerProtocol, UITableViewDelegate>
 	@property (nonatomic, strong) MADDocumentCreationManager *documentCreationManager;
@@ -60,7 +61,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView { return 1; }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section { return 2; }
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section { return 3; }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
@@ -76,6 +77,11 @@
 		case 1:
 			cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypeSqlServer"];
 			cell.textLabel.text = NSLocalizedString(@"Sql Server / TDS Driver", @"Selection Label 'Sql Server / TDS Driver'");
+			break;
+
+		case 2:
+			cell.imageView.image = [UIImage imageNamed:@"UIImageExportTypePostgres"];
+			cell.textLabel.text = NSLocalizedString(@"PostgreSQL Native Driver", @"Selection Label 'PostgreSQL Native Driver'");
 			break;
 			
 		default:
@@ -113,14 +119,31 @@
 	//MADConnectionViewController *connectionViewController = [[UIStoryboard storyboardWithName: @"MADCreateDocument"
 	//																				   bundle: [NSBundle bundleWithIdentifier:type == 0 ? @"com.everydayapps.mysql" : @"com.everydayapps.tdsclient"]] instantiateViewControllerWithIdentifier:@"MADConnectionViewControllerSQLGeneric"];
 	
-	
+	Class bundleClass = nil;
+	MADDatabaseType databaseType = MADDatabaseTypeNone;
+	switch (type) {
+		case 0:
+			bundleClass = [MADDatabaseMySQL class];
+			databaseType = MADDatabaseTypeMySQL;
+			break;
+		case 1:
+			bundleClass = [MADDatabaseConnectionSQLServer class];
+			databaseType = MADDatabaseTypeTDS;
+			break;
+		case 2:
+			bundleClass = [MADDatabasePostgres class];
+			databaseType = MADDatabaseTypePostgres;
+			break;
+		default:
+			os_log_error(GetDesignerLog(), "%s: Unknown row in driver selector: %ld", __PRETTY_FUNCTION__, (long)type);
+			return;
+	}
 	UIStoryboard *storyboard = [UIStoryboard storyboardWithName: @"MADCreateDocument"
-														 bundle: [NSBundle bundleForClass:type == 0 ? [MADDatabaseMySQL class] : [MADDatabaseConnectionSQLServer class]]];
+														 bundle: [NSBundle bundleForClass:bundleClass]];
 	MADConnectionViewController *connectionViewController = [storyboard instantiateViewControllerWithIdentifier:@"MADConnectionViewControllerSQLGeneric"];
 	connectionViewController.delegate = self;
 	connectionViewController.saveFileDelegate = self;
-	connectionViewController.databaseType = type == 0 ? MADDatabaseTypeMySQL :
-														MADDatabaseTypeTDS;
+	connectionViewController.databaseType = databaseType;
 	[self.navigationController pushViewController:connectionViewController
 										 animated:YES];
 	self.connectionViewController = connectionViewController;
