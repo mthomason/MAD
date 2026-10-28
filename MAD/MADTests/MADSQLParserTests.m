@@ -33,6 +33,8 @@ static NSDictionary *FixtureSchema(void) {
 		@"customers": @[ @"id", @"name" ],
 		@"invoices": @[ @"id", @"customer_id", @"amount" ],
 		@"lines": @[ @"id", @"invoice_id", @"sku" ],
+		@"sales.orders": @[ @"id", @"customer_id", @"total" ],
+		@"SalesLT.Product": @[ @"ProductID", @"Name" ],
 	};
 }
 
@@ -460,6 +462,88 @@ static MADSQLParser *ParserForSQLWithQuotes(NSString *sql, NSString *quotes) {
 	XCTAssertEqual(statement.selectColumns.count, (NSUInteger)1);
 }
 
+- (void)testSchemaQualifiedTableAndThreePartColumnsParse {
+	MADSQLStatement *statement = [self parseStatement:
+		@"SELECT sales.orders.id, sales.orders.total FROM sales.orders "
+		@"INNER JOIN customers ON sales.orders.customer_id = customers.id "
+		@"WHERE sales.orders.total > 50 GROUP BY sales.orders.id ORDER BY sales.orders.id DESC"];
+
+	XCTAssertEqual(statement.selectColumns.count, (NSUInteger)2);
+	XCTAssertEqualObjects(statement.selectColumns[0].table, @"sales.orders");
+	XCTAssertEqualObjects(statement.selectColumns[0].name, @"id");
+	XCTAssertEqualObjects(statement.selectColumns[1].table, @"sales.orders");
+	XCTAssertEqualObjects(statement.selectColumns[1].name, @"total");
+
+	XCTAssertEqual(statement.fromItems.count, (NSUInteger)2);
+	XCTAssertEqualObjects(statement.fromItems[0].tableName, @"sales.orders");
+	XCTAssertNil(statement.fromItems[0].alias);
+	XCTAssertEqualObjects(statement.fromItems[1].tableName, @"customers");
+
+	XCTAssertEqual(statement.joins.count, (NSUInteger)1);
+	XCTAssertEqualObjects(statement.joins[0].leftTable, @"sales.orders");
+	XCTAssertEqualObjects(statement.joins[0].rightTable, @"customers");
+	XCTAssertEqualObjects(statement.joins[0].leftColumn.table, @"sales.orders");
+	XCTAssertEqualObjects(statement.joins[0].leftColumn.name, @"customer_id");
+
+	XCTAssertEqual(statement.predicates.count, (NSUInteger)1);
+	XCTAssertEqualObjects(statement.predicates[0].leftColumn.table, @"sales.orders");
+	XCTAssertEqualObjects(statement.predicates[0].leftColumn.name, @"total");
+
+	XCTAssertEqual(statement.groupByColumns.count, (NSUInteger)1);
+	XCTAssertEqualObjects(statement.groupByColumns[0].table, @"sales.orders");
+	XCTAssertEqualObjects(statement.groupByColumns[0].name, @"id");
+
+	XCTAssertEqual(statement.orderByTerms.count, (NSUInteger)1);
+	XCTAssertEqualObjects(statement.orderByTerms[0].column.table, @"sales.orders");
+	XCTAssertEqualObjects(statement.orderByTerms[0].column.name, @"id");
+	XCTAssertFalse(statement.orderByTerms[0].isAscending);
+}
+
+- (void)testQuotedSchemaQualifiedTableAndThreePartColumnsParsePerDialect {
+	MADSQLStatement *pgStatement = [self parseStatement:
+		@"SELECT \"sales\".\"orders\".\"id\", \"sales\".\"orders\".* FROM \"sales\".\"orders\" "
+		@"WHERE \"sales\".\"orders\".\"total\" >= 10"
+												 quotes:[MADDatabasePostgres identifierQuoteCharacters]];
+	XCTAssertEqual(pgStatement.selectColumns.count, (NSUInteger)2);
+	XCTAssertEqualObjects(pgStatement.selectColumns[0].table, @"sales.orders");
+	XCTAssertEqualObjects(pgStatement.selectColumns[0].name, @"id");
+	XCTAssertTrue(pgStatement.selectColumns[1].isWildcard);
+	XCTAssertEqualObjects(pgStatement.selectColumns[1].table, @"sales.orders");
+	XCTAssertEqualObjects(pgStatement.fromItems[0].tableName, @"sales.orders");
+
+	MADSQLStatement *tdsStatement = [self parseStatement:
+		@"SELECT [SalesLT].[Product].[ProductID], [SalesLT].[Product].[Name] "
+		@"FROM [SalesLT].[Product] WHERE [SalesLT].[Product].[Name] = 'Bike'"
+												  quotes:[MADDatabaseSQLServer identifierQuoteCharacters]];
+	XCTAssertEqual(tdsStatement.selectColumns.count, (NSUInteger)2);
+	XCTAssertEqualObjects(tdsStatement.selectColumns[0].table, @"SalesLT.Product");
+	XCTAssertEqualObjects(tdsStatement.selectColumns[0].name, @"ProductID");
+	XCTAssertEqualObjects(tdsStatement.fromItems[0].tableName, @"SalesLT.Product");
+	XCTAssertEqualObjects(tdsStatement.predicates[0].leftColumn.table, @"SalesLT.Product");
+	XCTAssertEqualObjects(tdsStatement.predicates[0].leftColumn.name, @"Name");
+}
+
+- (void)testSchemaQualifiedDropIndexAliasesParse {
+	// RptqQueryTable strips the dot when building -queryAlias ("salesorders0"),
+	// which is what MADQueryFull emits for a schema-qualified table.
+	MADSQLStatement *statement = [self parseStatement:
+		@"SELECT \"salesorders0\".\"id\" FROM \"sales\".\"orders\" AS \"salesorders0\" "
+		@"INNER JOIN \"sales\".\"orders\" AS \"salesorders1\" "
+		@"ON \"salesorders0\".\"id\" = \"salesorders1\".\"customer_id\""
+											   quotes:[MADDatabasePostgres identifierQuoteCharacters]];
+	XCTAssertEqual(statement.fromItems.count, (NSUInteger)2);
+	XCTAssertEqualObjects(statement.fromItems[0].tableName, @"sales.orders");
+	XCTAssertEqualObjects(statement.fromItems[0].alias, @"salesorders0");
+	XCTAssertEqualObjects(statement.fromItems[1].tableName, @"sales.orders");
+	XCTAssertEqualObjects(statement.fromItems[1].alias, @"salesorders1");
+
+	MADSQLStatement *dottedAlias = [self parseStatement:
+		@"SELECT \"sales.orders0\".\"id\" FROM \"sales\".\"orders\" AS \"sales.orders0\""
+												 quotes:[MADDatabasePostgres identifierQuoteCharacters]];
+	XCTAssertEqualObjects(dottedAlias.fromItems[0].tableName, @"sales.orders");
+	XCTAssertEqualObjects(dottedAlias.fromItems[0].alias, @"sales.orders0");
+}
+
 #pragma mark - The rejection table
 
 - (void)testORIsRejected {
@@ -574,6 +658,21 @@ static MADSQLParser *ParserForSQLWithQuotes(NSString *sql, NSString *quotes) {
 - (void)testAnUnknownTableIsRejected {
 	[self assertParseOfSQL:@"SELECT name FROM nope"
 					  code:MADSQLCompileErrorUnknownTable line:1 column:18];
+}
+
+- (void)testAnUnknownSchemaQualifiedTableIsRejected {
+	[self assertParseOfSQL:@"SELECT id FROM sales.nope"
+					  code:MADSQLCompileErrorUnknownTable line:1 column:16];
+}
+
+- (void)testAnUnknownThreePartColumnIsRejected {
+	[self assertParseOfSQL:@"SELECT sales.orders.nope FROM sales.orders"
+					  code:MADSQLCompileErrorUnknownColumn line:1 column:21];
+}
+
+- (void)testARenamedSchemaQualifiedAliasIsRejected {
+	[self assertParseOfSQL:@"SELECT o.id FROM sales.orders AS o"
+					  code:MADSQLCompileErrorUnsupportedAlias line:1 column:34];
 }
 
 - (void)testAnUnknownColumnIsRejected {

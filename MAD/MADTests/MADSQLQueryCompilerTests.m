@@ -558,4 +558,51 @@
 	XCTAssertEqualObjects([self queryOfDocument:second].sqlSourceText, generatedSQL);
 }
 
+- (void)testSchemaQualifiedTableApplyAndFixpointRoundTrip {
+	MADHeadlessDocument *first = [self makeDocumentNamed:@"fixpoint-qualified-first.mad"];
+	RptqStoreContext *firstContext = first.storeContext;
+	RptqQuery *firstQuery = [self queryOfDocument:first];
+	RptqDatabase *firstDatabase = first.activeDocumentModel.defaultDatabase;
+	[self addSchemaTableNamed:@"sales.orders"
+					   fields:@[ @[ @"id", @(MADDataTypeInteger) ], @[ @"customer_id", @(MADDataTypeInteger) ], @[ @"total", @(MADDataTypeDecimal) ] ]
+					 database:firstDatabase
+					  context:firstContext];
+	NSError *error = nil;
+	XCTAssertTrue([firstContext save:&error], @"save failed: %@", error);
+
+	// 1. Hand-written three-part SQL without table aliases compiles into the Rptq graph.
+	NSString *threePartSQL =
+		@"SELECT \"customers\".\"name\", \"sales\".\"orders\".\"total\" "
+		@"FROM \"customers\" INNER JOIN \"sales\".\"orders\" "
+		@"ON \"customers\".\"id\" = \"sales\".\"orders\".\"customer_id\" "
+		@"WHERE \"sales\".\"orders\".\"total\" > 25";
+	XCTAssertTrue([self applyStatement:threePartSQL toDocument:first error:&error], @"%@", error);
+	XCTAssertEqual(firstQuery.hasQueryTables.count, (NSUInteger)2);
+	XCTAssertEqual(firstQuery.hasQueryLinks.count, (NSUInteger)1);
+	XCTAssertEqual(firstQuery.hasQueryPredicate.count, (NSUInteger)1);
+
+	// 2. The SQL that MADQueryFull generates for that model (emitting `"sales"."orders" AS "salesorders0"`)
+	//    round-trips through the parser, resolver and compiler to the identical SQL string.
+	self.dataDelegate.database = [MADMock mockDatabase];
+	MADQueryFull *generator = [[MADQueryFull alloc] initWithQuery:firstQuery andQueryLimit:0];
+	generator.dataDelegate = self.dataDelegate;
+	NSString *generatedSQL = [generator SQLOnlyActiveFields:NO managedObjectContext:firstContext error:&error];
+	XCTAssertNotNil(generatedSQL, @"%@", error);
+	XCTAssertTrue([generatedSQL containsString:@"sales.orders AS salesorders0"], @"%@", generatedSQL);
+
+	MADHeadlessDocument *second = [self makeDocumentNamed:@"fixpoint-qualified-second.mad"];
+	[self addSchemaTableNamed:@"sales.orders"
+					   fields:@[ @[ @"id", @(MADDataTypeInteger) ], @[ @"customer_id", @(MADDataTypeInteger) ], @[ @"total", @(MADDataTypeDecimal) ] ]
+					 database:second.activeDocumentModel.defaultDatabase
+					  context:second.storeContext];
+	XCTAssertTrue([second.storeContext save:&error], @"save failed: %@", error);
+	XCTAssertTrue([self applyStatement:generatedSQL toDocument:second error:&error], @"%@", error);
+
+	MADQueryFull *regenerated = [[MADQueryFull alloc] initWithQuery:[self queryOfDocument:second] andQueryLimit:0];
+	regenerated.dataDelegate = self.dataDelegate;
+	NSString *regeneratedSQL = [regenerated SQLOnlyActiveFields:NO managedObjectContext:second.storeContext error:&error];
+	XCTAssertNotNil(regeneratedSQL, @"%@", error);
+	XCTAssertEqualObjects(regeneratedSQL, generatedSQL);
+}
+
 @end

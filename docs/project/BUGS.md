@@ -32,28 +32,6 @@ Status key:
 
 ## MAD (framework)
 
-### `MADSQLParser` rejects schema-qualified table names (`schema.table`) in `FROM`, `JOIN`, and three-part column references
-- **Status:** Open -- documented during the PostgreSQL driver (`MADPostgres`) work.
-- **Where:** `MAD/Source/sql/MADSQLParser.m:242-267` (`-parseSelectItemReturningError:`),
-  `:367-380` (`-parseFromItemReturningError:`), and `:630-655`
-  (`-parseColumnReferenceReturningError:`).
-- **Behavior:** `MADDatabaseSQLServer` (`MADTdsClient`) and `MADDatabasePostgres`
-  (`MADPostgres`, for tables outside `public`) store schema-qualified table names
-  such as `SalesLT.Product` or `sales.orders` in the document schema and emit each
-  dot-separated part as a separate quoted identifier (`[SalesLT].[Product].[Name]`,
-  `"sales"."orders"."id"`).  `MADSQLParser` reads only a single identifier token after
-  `FROM` or `JOIN` in `-parseFromItemReturningError:` (never consuming `.` + table) and
-  at most one `.` qualifier in `-parseSelectItemReturningError:` /
-  `-parseColumnReferenceReturningError:`, so pasting a statement generated for a
-  schema-qualified table fails to parse even when the schema dictionary holds
-  `"sales.orders"` or `"SalesLT.Product"`.  Tables in PostgreSQL's `public` schema are
-  stored unqualified and round-trip through `MADSQLParser` without issue.
-- **Why it is not changed here:** `MAD_SQL_ENTRY.md` §5 defines the parser grammar
-  around single-token table names and two-part `table.column` references; extending it
-  to optional `schema.table` / `schema.table.column` (plus drop-index alias checking on
-  the qualified canonical name) is a parser grammar change in `MAD` outside the
-  driver's scope.
-
 ### The document thumbnail uses the deprecated QuickLook file-attribute keys
 - **Status:** Open -- kept deliberately, behind a scoped pragma.
 - **What:** `MAD/Source/MADocument.m -fileAttributesToWriteToURL:forSaveOperation:error:`
@@ -370,6 +348,7 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADSQLParser` rejects schema-qualified table names (`schema.table`) in `FROM`, `JOIN`, and three-part column references
 - `MADSectionLayout` reads CFNumbers at the wrong widths, corrupting adjacent ivars
 - `digit_count_*_int`: `INT_MIN` collapsed onto `INT_MAX`
 - `MADSectionGroupLayout` segfaults on a group whose field has no query table

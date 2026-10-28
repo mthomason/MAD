@@ -186,20 +186,23 @@ three-method addition.
 The importer accepts **exactly the language the model can hold** — one `SELECT`, no
 subqueries anywhere, and each clause within the limits of §2.1:
 
-* **SELECT list** — column references only: `col`, `tbl.col`, `alias.col`, quoted or bare,
-  plus `alias.*`. The list is *validated and used for table/column discovery*, not stored
-  (the model has no SELECT list — §2.1): every column must resolve, and a qualified column
-  names a table that must appear in `FROM`. Expressions, aggregates, aliases (`AS x`), and
-  `DISTINCT` are rejected with a pointer to Phase E (§9), which is the phase that makes the
-  pasted column list real by synthesizing designer elements. The entered text itself *is*
-  stored, verbatim, in `sqlSourceText` (§8) — validation shape and input text are separate
-  things.
-* **FROM** — one table reference `name [AS alias]`, then a chain/tree of
+* **SELECT list** — column references only: `col`, `tbl.col`, `schema.tbl.col`, `alias.col`,
+  quoted or bare, plus `alias.*` / `schema.tbl.*`. The list is *validated and used for
+  table/column discovery*, not stored (the model has no SELECT list — §2.1): every column
+  must resolve, and a qualified column names a table that must appear in `FROM`. Expressions,
+  aggregates, aliases (`AS x`), and `DISTINCT` are rejected with a pointer to Phase E (§9),
+  which is the phase that makes the pasted column list real by synthesizing designer elements.
+  The entered text itself *is* stored, verbatim, in `sqlSourceText` (§8) — validation shape
+  and input text are separate things.
+* **FROM** — one table reference `[schema.]name [AS alias]`, then a chain/tree of
   `[INNER] JOIN`, `LEFT [OUTER] JOIN`, `RIGHT [OUTER] JOIN`, `FULL [OUTER] JOIN` each with
-  exactly one equi-condition `l.col = r.col` (bare columns allowed when unambiguous).
-  * Aliases must be the schema table's own name, or the drop-index form (`name0`, `name1`)
-    for a second copy of the same table — the model computes aliases itself and cannot hold
-    renames (`Customer AS c` is rejected: "the designer names tables itself").
+  exactly one equi-condition `l.col = r.col` (bare, two-part, or three-part `schema.tbl.col`
+  columns; bare allowed when unambiguous).
+  * Aliases must be the schema table's own name (or its dot-stripped form), or the drop-index
+    form (`name0`, `name1`, `schema.name0`, or dot-stripped `schemaname0` matching
+    `RptqQueryTable -queryAlias`) for a second copy of the same table — the model computes
+    aliases itself and cannot hold renames (`Customer AS c` is rejected: "the designer names
+    tables itself").
   * At most one join between a given pair of tables (the generator emits one `JOIN` per
     table pair; two links between the same pair would double the alias).
   * No comma joins, no `NATURAL`/`CROSS` joins (the link model holds exactly one field pair
