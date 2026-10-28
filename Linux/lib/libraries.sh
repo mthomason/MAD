@@ -188,6 +188,57 @@ build_mariadb() { # src
 	ldconfig
 }
 
+build_postgres() { # src
+	(
+		cd "$1"
+		# The option set mirrors Compressor/lib/recipes/postgres.sh: only the
+		# static client archives (libpq.a, libpgcommon.a, libpgport.a) and
+		# the client headers, linked against the openssl built above.  No
+		# shared libpq.so is built or installed, so find_library resolves the
+		# static archive and the runtime image needs no extra shared object.
+		CFLAGS="-O2 -fPIC" \
+		CPPFLAGS="-I${PREFIX}/include" \
+		LDFLAGS="-L${PREFIX}/lib -fuse-ld=lld" \
+		BISON="echo bison (GNU Bison) 3.8" \
+		FLEX=":" \
+		./configure \
+			--prefix="${PREFIX}" \
+			--with-ssl=openssl \
+			--without-readline \
+			--without-icu \
+			--without-zlib \
+			--without-lz4 \
+			--without-zstd \
+			--without-gssapi \
+			--without-ldap \
+			--without-pam \
+			--without-bonjour \
+			--disable-rpath
+		make -C src/include NO_GENERATED_HEADERS=1 all
+		make -C src/backend submake-catalog-headers
+		make -C src/backend/utils errcodes.h
+		mkdir -p src/include/utils
+		/bin/cp -f src/backend/utils/errcodes.h src/include/utils/errcodes.h
+		make -C src/common -j"${JOBS}" libpgcommon_shlib.a
+		make -C src/port -j"${JOBS}" libpgport_shlib.a
+		make -C src/interfaces/libpq -j"${JOBS}" SHLIB_PREREQS="" libpq.a
+		/bin/cp -f src/interfaces/libpq/libpq.a "${PREFIX}/lib/libpq.a"
+		/bin/cp -f src/common/libpgcommon_shlib.a "${PREFIX}/lib/libpgcommon.a"
+		/bin/cp -f src/port/libpgport_shlib.a "${PREFIX}/lib/libpgport.a"
+		mkdir -p "${PREFIX}/include/libpq"
+		/bin/cp -f src/interfaces/libpq/libpq-fe.h "${PREFIX}/include/"
+		/bin/cp -f src/interfaces/libpq/libpq-events.h "${PREFIX}/include/"
+		/bin/cp -f src/include/postgres_ext.h "${PREFIX}/include/"
+		/bin/cp -f src/include/pg_config_manual.h "${PREFIX}/include/"
+		/bin/cp -f src/include/libpq/libpq-fs.h "${PREFIX}/include/libpq/"
+		/bin/cp -f src/include/pg_config.h "${PREFIX}/include/"
+		/bin/cp -f src/include/pg_config_ext.h "${PREFIX}/include/"
+		/bin/cp -f src/include/pg_config_os.h "${PREFIX}/include/"
+		/bin/cp -f src/include/catalog/pg_type_d.h "${PREFIX}/include/"
+	)
+	ldconfig
+}
+
 fetch_all() {
 	require_cmd curl git tar
 	conf_read
