@@ -310,7 +310,7 @@ static inline unsigned long availableLabelSlots(CGFloat viewSizeHeight, CGFloat 
 }
 
 - (void)handleSliderDidFinishDrag:(UISlider *)sender {
-	sender.value = lroundf(sender.value);               // Sets your slider to this value
+	sender.value = (float)lroundf(sender.value);               // Sets your slider to this value
 }
 
 - (void)handleGestureTapSlider:(UIGestureRecognizer *)tap {

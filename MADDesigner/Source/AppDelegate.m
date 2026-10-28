@@ -198,21 +198,27 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 		// launch, so poll until it exists rather than racing a fixed delay.
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 			__block NSUInteger attempts = 0;
-			__block void (^tryOpen)(void);
-			tryOpen = ^{
-				// !: nil passed to callee that requires a non-null 1st parameter
+			__block dispatch_block_t tryOpen;
+			__weak __block dispatch_block_t weakTryOpen;
+			weakTryOpen = tryOpen = ^{
 				UINavigationController *navController = (UINavigationController *)[self firstSceneWindow].rootViewController;
 				if (navController == nil && attempts++ < 30) {
-					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), tryOpen);	// !: Capturing 'tryOpen' strongly in this block is likely to lead to a retain cycle
+					dispatch_block_t next = weakTryOpen;
+					if (next != nil) {
+						dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), next);
+					}
 					return;
 				}
+				Class rootClass = [self firstSceneWindow].rootViewController.class;
+				Class topClass = navController.topViewController.class;
 				NSLog(@"[UITestHook] open '%@': root=%@ top=%@", sampleName,
-					  NSStringFromClass([self firstSceneWindow].rootViewController.class),
-					  NSStringFromClass(navController.topViewController.class));	// !: Implicit conversion from nullable pointer 'Class _Nullable' to non-nullable pointer type 'Class _Nonnull'
+					  rootClass != nil ? NSStringFromClass((Class _Nonnull)rootClass) : @"<nil>",
+					  topClass != nil ? NSStringFromClass((Class _Nonnull)topClass) : @"<nil>");
 				NSURL *directory = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:[AppDelegate groupIdentifier]];
 				NSURL *url = [[directory URLByAppendingPathComponent:sampleName]
 							  URLByAppendingPathExtension:MADFileExtentionMobleApplicationDocument];
 				[self application:application OpenURL:url options:@{}];
+				tryOpen = nil;
 			};
 			tryOpen();
 		});
@@ -235,11 +241,13 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 	if ([arguments containsObject:@"-UITestRefresh"]) {
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 			__block NSUInteger attempts = 0;
-			__block void (^tryRefresh)(void);
-			tryRefresh = ^{
+			__block dispatch_block_t tryRefresh;
+			__weak __block dispatch_block_t weakTryRefresh;
+			weakTryRefresh = tryRefresh = ^{
 				UINavigationController *navController = (UINavigationController *)[self firstSceneWindow].rootViewController;
+				Class topClass = navController.topViewController.class;
 				NSLog(@"[UITestHook] refresh attempt %lu: top=%@", (unsigned long)attempts,
-					  NSStringFromClass(navController.topViewController.class));
+					  topClass != nil ? NSStringFromClass((Class _Nonnull)topClass) : @"<nil>");
 				if ([navController.topViewController isKindOfClass:[MADTabBarController class]]) {
 					MADTabBarController *tabBarController = (MADTabBarController *)navController.topViewController;
 					tabBarController.selectedIndex = 2;
@@ -249,12 +257,18 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 						if ([top isKindOfClass:[MADViewerController class]]) {
 							NSLog(@"[UITestHook] firing refresh:");
 							[(MADViewerController *)top refresh:nil];
+							tryRefresh = nil;
 							return;
 						}
 					}
 				}
 				if (attempts++ < 90) {
-					dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), tryRefresh);	// !: Capturing 'tryRefresh' strongly in this block is likely to lead to a retain cycle
+					dispatch_block_t next = weakTryRefresh;
+					if (next != nil) {
+						dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), next);
+					}
+				} else {
+					tryRefresh = nil;
 				}
 			};
 			tryRefresh();
@@ -301,15 +315,11 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 	return window.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone ? UIInterfaceOrientationMaskAllButUpsideDown : UIInterfaceOrientationMaskAll;
 }
 
-- (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
-	return NO;
-}
-
 - (BOOL)application:(UIApplication *)application shouldSaveSecureApplicationState:(nonnull NSCoder *)coder {
 	return NO;
 }
 
-- (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
+- (BOOL)application:(UIApplication *)application shouldRestoreSecureApplicationState:(nonnull NSCoder *)coder {
 	return NO;
 }
 

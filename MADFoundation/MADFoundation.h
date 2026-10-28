@@ -51,3 +51,4 @@ FOUNDATION_EXPORT const unsigned char MADFoundationVersionString[];
 #import <MADFoundation/MADKeyChain.h>
 #import <MADFoundation/MADStringUtilities.h>
 #import <MADFoundation/NSData+Comparison.h>
+#import <MADFoundation/NSString+Comparison.h>

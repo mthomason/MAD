@@ -11,14 +11,14 @@
 
 #import <Foundation/NSObject.h>
 
-@class UIManagedDocument, NSURL;
+@class UIDocument, NSURL;
 
 @interface MADOpenDocumentManager : NSObject
 
 	@property (nonatomic, copy, readonly) NSURL *openUrl;
 
-	- (__kindof UIManagedDocument *)openDocument;
-	- (void)setOpenDocument:(__kindof UIManagedDocument *)document;
+	- (__kindof UIDocument *)openDocument;
+	- (void)setOpenDocument:(__kindof UIDocument *)document;
 	- (void)unload;
 	- (void)removeDocumentWithUrl:(NSURL *)url;
 

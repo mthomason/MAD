@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="1pu-Do-TYA">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="1pu-Do-TYA">
     <device id="ipad11_0rounded" orientation="portrait" layout="fullscreen" appearance="dark"/>
     <dependencies>
-        <deployment version="4864" identifier="iOS"/>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -120,7 +120,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <connections>
-                                            <segue destination="bce-zh-8oY" kind="push" identifier="showAddGroupByField" id="6gw-Fs-bRA"/>
+                                            <segue destination="bce-zh-8oY" kind="show" identifier="showAddGroupByField" id="6gw-Fs-bRA"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="8zK-CY-dZj" detailTextLabel="OON-CQ-oP7" style="IBUITableViewCellStyleValue1" id="IkT-en-GJd">
@@ -148,7 +148,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <connections>
-                                            <segue destination="ET2-nF-Om5" kind="push" identifier="showGroupSortOrders" id="50T-Y0-kco"/>
+                                            <segue destination="ET2-nF-Om5" kind="show" identifier="showGroupSortOrders" id="50T-Y0-kco"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>

@@ -107,7 +107,7 @@ static inline MADDirection directionHorizontal(CGPoint l, CGPoint r) {
 }
 
 static inline CGPoint MADPointInsertTable(CGFloat viewHeight, NSUInteger tableCount) {
-	return CGPointMake(CGPointZero.x + 300, viewHeight / (tableCount + 2) * (tableCount + 1));
+	return CGPointMake(CGPointZero.x + 300.0, viewHeight / (CGFloat)(tableCount + 2) * (CGFloat)(tableCount + 1));
 }
 
 @implementation MADQueryVisualizationViewController

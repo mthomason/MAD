@@ -7,9 +7,9 @@
 //
 
 #import "MADOpenDocumentManager.h"
-#import <UIKit/UIManagedDocument.h>
+#import <UIKit/UIDocument.h>
 
-typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocumentHolder;
+typedef NSMutableDictionary <NSString *, __kindof UIDocument *> MADDocumentHolder;
 
 @interface MADOpenDocumentManager ()
 
@@ -34,7 +34,7 @@ typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocume
 	return self;
 }
 
-- (void)setOpenDocument:(__kindof UIManagedDocument *)document {
+- (void)setOpenDocument:(__kindof UIDocument *)document {
 	if (document) {
 		self.openUrl = document.fileURL.copy;
 		NSString *path = self.openUrl.absoluteURL.absoluteString;
@@ -44,7 +44,7 @@ typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocume
 	}
 }
 
-- (__kindof UIManagedDocument *)openDocument {
+- (__kindof UIDocument *)openDocument {
 	NSURL *absoluteURL = self.openUrl.absoluteURL;
 	NSString *absoluteString = absoluteURL.absoluteString;
 	return absoluteString != nil ? self.openFiles[absoluteString] : nil;
@@ -56,7 +56,7 @@ typedef NSMutableDictionary <NSString *, __kindof UIManagedDocument *> MADDocume
 }
 
 - (void)removeDocumentWithUrl:(NSURL *)url {
-	NSURL *absoluteURL = self.openUrl.absoluteURL;
+	NSURL *absoluteURL = url.absoluteURL;
 	NSString *absoluteString = absoluteURL.absoluteString;
 	if (absoluteString != nil) {
 		[self.openFiles removeObjectForKey:absoluteString];

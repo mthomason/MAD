@@ -18,7 +18,7 @@
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>Mobile Analytics Document</string>
-			<key>LSHandleRank</key>
+			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
@@ -61,7 +61,7 @@
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
-	<string>MADLaunchImagesOS7</string>
+	<string>LaunchScreen</string>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>

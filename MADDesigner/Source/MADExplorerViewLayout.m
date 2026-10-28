@@ -56,7 +56,7 @@
 	NSArray *sorted = [sameLineAttributes sortedArrayUsingComparator:^NSComparisonResult(UICollectionViewLayoutAttributes *attributes1,
 																						 UICollectionViewLayoutAttributes *attributes2) {
 		CGFloat delta = attributes1.frame.size.height - attributes2.frame.size.height;
-		return delta == 0.0 ? NSOrderedSame : ABS(delta)/delta;
+		return delta == 0.0 ? NSOrderedSame : (delta > 0.0 ? NSOrderedDescending : NSOrderedAscending);
 	}];
 	UICollectionViewLayoutAttributes *tallest = [sorted lastObject];
 	CGFloat tallestOriginY = tallest.frame.origin.y;

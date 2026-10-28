@@ -426,7 +426,6 @@ BOOL storeEnabled(void) {
 		if (cell) {
 			object = [context objectForEntity:NSStringFromClass([RptqQueryPredicate class]) identifier:cell.predicateID];
 		} else {
-			NSIndexPath *testPredicateIndexPath = [NSIndexPath indexPathForRow: row inSection: 0];
 			object = self.queryViewDataSource.queryPredicatesController[(NSUInteger)row];
 		}
 		
@@ -601,7 +600,7 @@ BOOL storeEnabled(void) {
 	RptqStoreContext *private = document.storeContext;
 		
 		RptqObject *objectToDelete = [private objectForEntity:NSStringFromClass([RptqQueryLinks class]) identifier:tableID];
-		NSAssert(objectToDelete != nil, @"Need a non-nil value for %@", tableID);
+		NSAssert(objectToDelete != nil, @"Need a non-nil value for %lld", (long long)tableID);
 		[private deleteObject:objectToDelete error:NULL];
 		
 		NSError *error = nil;

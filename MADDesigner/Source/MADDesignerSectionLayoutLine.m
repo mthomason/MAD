@@ -221,7 +221,7 @@
 	NSInteger counter = 0;
 	BOOL valueSet = NO;
 	NSArray *indexPathsForItems = [self.collectionView indexPathsForVisibleItems];
-	CGFloat sectionHeight = ((self.collectionView).frame.size.height / [self.collectionView numberOfSections]);
+	CGFloat sectionHeight = ((self.collectionView).frame.size.height / (CGFloat)[self.collectionView numberOfSections]);
 	NSInteger section = (NSInteger)(alienCenter.y / sectionHeight);
 	NSInteger numberOfItemsInSameSection = 0;
 	

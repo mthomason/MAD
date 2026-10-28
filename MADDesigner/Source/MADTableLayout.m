@@ -211,7 +211,7 @@ typedef struct _ColumnWidth {
 
 - (CGSize)collectionViewContentSize {
 	CGFloat width = [self originXColumnLast] + [self widthColumnLast];
-	CGFloat height = (self.heightRow * self.rowCount) + self.heightHeader;
+	CGFloat height = (self.heightRow * (CGFloat)self.rowCount) + self.heightHeader;
 	return CGSizeMake(width, height);
 }
 
@@ -264,7 +264,7 @@ typedef struct _ColumnWidth {
 														 andColumn: (NSUInteger)column {
 	CGFloat x = [self originXColumn:column];
 	CGFloat w = [self widthColumn:column];
-	CGRect f = CGRectMake(x, self.heightRow * row, w, self.heightRow);
+	CGRect f = CGRectMake(x, self.heightRow * (CGFloat)row, w, self.heightRow);
 	return [self layoutAttributesForItemAtRow: (NSUInteger)row
 									andColumn: (NSUInteger)column
 									withFrame: f];
@@ -299,7 +299,7 @@ typedef struct _ColumnWidth {
 
 - (CGRect)locationOfObjectAtRow:(NSUInteger)row andColumn:(NSUInteger)column {
 	return CGRectMake([self originXColumn:column],
-					  CGPointZero.y + self.heightHeader + (row * self.heightRow),
+					  CGPointZero.y + self.heightHeader + ((CGFloat)row * self.heightRow),
 					  [self widthColumn:column], self.heightRow);
 }
 

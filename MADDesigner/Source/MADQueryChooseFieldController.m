@@ -43,7 +43,7 @@ static inline double PreferredContentHeightForUpdate(NSUInteger, NSUInteger);
 static inline CGSize PreferredContentSizeForUpdate(NSUInteger, NSUInteger);
 
 static inline  double heightForSectionInfo(NSUInteger numTables, NSUInteger numFields) {
-	return ((numTables * MADHeaderHeight) + (numFields * MAD_44));
+	return (((double)numTables * MADHeaderHeight) + ((double)numFields * MAD_44));
 }
 
 static inline double PreferredContentHeightForUpdate(NSUInteger count, NSUInteger index) {
@@ -158,7 +158,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 					  [NSPredicate predicateWithFormat:@"NOT (inQueryTable.alias IN %@)", self.excludeTables]];
 		}
 		fields = [fields sortedArrayUsingComparator:^NSComparisonResult(RptqQueryField *a, RptqQueryField *b) {
-			NSComparisonResult byAlias = [a.inQueryTable.alias compare:b.inQueryTable.alias];
+			NSComparisonResult byAlias = [(a.inQueryTable.alias ?: @"") compare:(b.inQueryTable.alias ?: @"")];
 			if (byAlias != NSOrderedSame) return byAlias;
 			return [(a.databaseSchemaField.name ?: @"") compare:(b.databaseSchemaField.name ?: @"")];
 		}];

@@ -21,11 +21,10 @@
 #import <MAD/MADocument.h>
 
 #import <UIKit/UIStoryboard.h>
-#import <UIKit/UIPopoverController.h>
-#import <UIKit/UIStoryboardPopoverSegue.h>
+#import <UIKit/UIStoryboardSegue.h>
 #import <UIKit/UIImage.h>
 
-@interface MADQueryBuilderSplitViewController () <UISplitViewControllerDelegate, UIPopoverControllerDelegate>
+@interface MADQueryBuilderSplitViewController () <UISplitViewControllerDelegate>
 
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemEdit;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemSQL;
@@ -85,14 +84,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	if (@available(iOS 14.0, *)) {
-		self.preferredDisplayMode = UISplitViewControllerDisplayModeOneBesideSecondary;
-	} else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
-#pragma clang diagnostic pop
-	}
+	self.preferredDisplayMode = UISplitViewControllerDisplayModeOneBesideSecondary;
 }
 
 - (void)viewWillLayoutSubviews {
@@ -213,47 +205,21 @@
 
 // This method allows a client to update any bar button items etc.
 - (void)splitViewController:(UISplitViewController *)svc willChangeToDisplayMode:(UISplitViewControllerDisplayMode)displayMode {
-	if (@available(iOS 14.0, *)) {
-		switch (displayMode) {
-			case UISplitViewControllerDisplayModeAutomatic:
-			case UISplitViewControllerDisplayModeSecondaryOnly:
-			case UISplitViewControllerDisplayModeOneBesideSecondary:
-			case UISplitViewControllerDisplayModeOneOverSecondary:
-			case UISplitViewControllerDisplayModeTwoBesideSecondary:
-			case UISplitViewControllerDisplayModeTwoOverSecondary:
-			case UISplitViewControllerDisplayModeTwoDisplaceSecondary:
-			default:
-				break;
-		}
-	} else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		switch (displayMode) {
-			case UISplitViewControllerDisplayModeAutomatic:
-			case UISplitViewControllerDisplayModePrimaryHidden:
-			case UISplitViewControllerDisplayModeAllVisible:
-			case UISplitViewControllerDisplayModePrimaryOverlay:
-			default:
-				break;
-		}
-#pragma clang diagnostic pop
+	switch (displayMode) {
+		case UISplitViewControllerDisplayModeAutomatic:
+		case UISplitViewControllerDisplayModeSecondaryOnly:
+		case UISplitViewControllerDisplayModeOneBesideSecondary:
+		case UISplitViewControllerDisplayModeOneOverSecondary:
+		case UISplitViewControllerDisplayModeTwoBesideSecondary:
+		case UISplitViewControllerDisplayModeTwoOverSecondary:
+		case UISplitViewControllerDisplayModeTwoDisplaceSecondary:
+		default:
+			break;
 	}
-	
-	
-	
 }
 
 - (UISplitViewControllerDisplayMode)targetDisplayModeForActionInSplitViewController:(UISplitViewController *)svc {
-	if (@available(iOS 14.0, *)) {
-		return UISplitViewControllerDisplayModeOneBesideSecondary;
-	} else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-		return UISplitViewControllerDisplayModeAllVisible;
-#pragma clang diagnostic pop
-	}
-	
-	
+	return UISplitViewControllerDisplayModeOneBesideSecondary;
 }
 
 - (void)showViewController:(UIViewController *)vc sender:(id)sender {

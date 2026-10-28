@@ -813,6 +813,8 @@ Status key:
 - The document-browser thumbnail stayed blank after the viewer rewrote it
 - `MADStandard -standardStringForFileSize:` has dead code with a latent throw
 - `MADStandard` hides `+standardStringForDouble:` / `+standardStringForUnsignedLong:`
+- `MADOpenDocumentManager -removeDocumentWithUrl:` removed `self.openUrl` instead of `url`
+- `MADThumbnailView` loaded thumbnails at `DISPATCH_QUEUE_PRIORITY_BACKGROUND` and blocked on `dispatch_sync(dispatch_get_main_queue(), …)`
 
 ## MADSqlite3
 
@@ -1217,23 +1219,9 @@ bundle's header search path.
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
 - The barcode delegate's query-field accessors disagree with their declarations
-
-### AppDelegate's retry blocks capture themselves
-- **Status:** Open -- documented; a leak rather than a crash.
-- **What:** `tryOpen` and `tryRefresh` are `__block` blocks that reschedule themselves with
-  `dispatch_after` (`AppDelegate.m:205`, `:256`), so each block retains itself until the
-  retry chain ends.  These are the UI-test launch hooks; the cycle ends when the chain
-  stops, but while retries are failing the block and everything it captures stay alive.
-- **Where:** `MADDesigner/Source/AppDelegate.m:200-260`.
-
-### An assertion formats an integer with %@
-- **Status:** Open -- documented; debug-only.
-- **What:** `MADQueryViewController.m:605` asserts
-  `NSAssert(objectToDelete != nil, @"Need a non-nil value for %@", tableID)` where
-  `tableID` is an `int64_t`; `%@` expects an object.  `NSAssert` is compiled out of
-  Release builds, so this only bites in Debug, where the formatter will treat the integer
-  as a pointer.
-- **Where:** `MADDesigner/Source/MADQueryViewController.m:605`.
+- AppDelegate's retry blocks capture themselves
+- An assertion formats an integer with %@
+- `MADToolboxFormatViewController` multi-selection decimal-count check never evaluated to `YES`
 
 ### MADToolboxStyleViewController passes an uninitialized value to a setter
 - **Status:** Open -- documented from the analyzer run.

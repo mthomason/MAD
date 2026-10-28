@@ -112,12 +112,12 @@ static inline double xPoint(NSInteger i, double offset) { return (double)i * off
 				  _paragraphStyle, NSParagraphStyleAttributeName, nil];
 	CGFloat offsetInPoints = (72.0 / 2.54) / 10.0;   //One cm
 	CGMutablePathRef pathCmMarks = CGPathCreateMutable();
-	for (NSInteger i = (NSInteger)CGPointZero.x; i < rect.size.width / offsetInPoints; i++) {
+	for (NSInteger i = (NSInteger)CGPointZero.x; (double)i < rect.size.width / offsetInPoints; i++) {
 		@autoreleasepool {
 			if ((i % 10) == 0) {
 				locationRect = CGRectMake((CGFloat)xPoint(i, cmInPoints() / 10.0) - 5.0,
 										  1.0, 10.0, 5.0);
-				s = [[NSString alloc] initWithFormat:@"%Lf", (long)i / 10.0L];
+				s = [[NSString alloc] initWithFormat:@"%Lf", (long double)i / 10.0L];
 				[s drawInRect:locationRect withAttributes:attributes];
 				length = 2.0;
 				CGContextSetLineWidth(currentContext, lineWidth * 2.0);

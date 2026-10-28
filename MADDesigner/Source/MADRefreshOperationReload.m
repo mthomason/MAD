@@ -148,9 +148,9 @@ static void MADRefreshOperationReloadRunOnMain(dispatch_block_t block) {
 			// "Formatting page N." write ahead of the page position -updatePages: queues,
 			// so the position is still the last word.
 			[sself flushFormattingProgress];
-			NSObject <MADOperationRefreshReloadProtocol> *viewController = sself.viewController;
-			[viewController operation:sself updatePages:document.numberOfPages];
-			[viewController operation:nil finishReload:document];
+			NSObject <MADOperationRefreshReloadProtocol> *reloadViewController = sself.viewController;
+			[reloadViewController operation:sself updatePages:document.numberOfPages];
+			[reloadViewController operation:nil finishReload:document];
 		});
 	}
 

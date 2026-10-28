@@ -662,7 +662,7 @@ static inline UIEdgeInsets ScrollIndicatorContentInsets(CGRect presentedRect) {
 }
 
 - (CGFloat)sizeHeight {
-	CGFloat height = CGPointZero.y + (self.sectionViews.count + 2) * MTReportDesignerBufferPaddingVertical +
+	CGFloat height = CGPointZero.y + (CGFloat)(self.sectionViews.count + 2) * MTReportDesignerBufferPaddingVertical +
 							self.ruler.intrinsicContentSize.height;
 	MADDesignerSectionView *sectionView;
 	NSEnumerator <MADDesignerSectionView *> *sectionViews = self.sectionViews.objectEnumerator;

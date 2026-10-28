@@ -203,13 +203,19 @@ static const CGFloat MADSQLStatusHeight = 28.0;
 #pragma mark - The schema the importer validates against
 
 - (NSDictionary<NSString *, NSArray<NSString *> *> *)schemaDictionary {
+	MADocument *document = self.document;
 	NSMutableDictionary<NSString *, NSArray<NSString *> *> *schema = [NSMutableDictionary dictionary];
-	for (RptqDatabaseSchemaTable *table in self.document.activeDocumentModel.defaultDatabase.hasTables) {
+	for (RptqDatabaseSchemaTable *table in document.activeDocumentModel.defaultDatabase.hasTables) {
+		NSString *tableName = table.name;
+		if (tableName == nil) continue;
 		NSMutableArray<NSString *> *names = [NSMutableArray arrayWithCapacity:table.hasFields.count];
 		for (RptqDatabaseSchemaField *field in table.hasFields) {
-			[names addObject:field.name];
+			NSString *fieldName = field.name;
+			if (fieldName != nil) {
+				[names addObject:fieldName];
+			}
 		}
-		schema[table.name] = names;
+		schema[tableName] = names;
 	}
 	return schema;
 }
@@ -217,23 +223,30 @@ static const CGFloat MADSQLStatusHeight = 28.0;
 // The resolved select columns, for the probe's mismatch comparison: lowercase
 // bare name -> the schema field's data type.
 - (NSDictionary<NSString *, NSNumber *> *)expectedColumnsForStatement:(MADSQLStatement *)statement {
-	RptqDatabase *database = self.document.activeDocumentModel.defaultDatabase;
+	MADocument *document = self.document;
+	RptqDatabase *database = document.activeDocumentModel.defaultDatabase;
 	NSMutableDictionary<NSString *, NSNumber *> *expected = [NSMutableDictionary dictionary];
 
 	for (MADSQLColumnReference *column in statement.selectColumns) {
 		if (column.isWildcard) {
+			NSString *columnTable = column.table.lowercaseString;
+			if (columnTable == nil) continue;
 			for (RptqDatabaseSchemaTable *table in database.hasTables) {
-				if (![table.name.lowercaseString isEqualToString:column.table.lowercaseString]) continue;
+				if (![table.name.lowercaseString isEqualToString:columnTable]) continue;
 				for (RptqDatabaseSchemaField *field in table.hasFields) {
-					expected[field.name.lowercaseString] = @(field.dataType);
+					NSString *lowerName = field.name.lowercaseString;
+					if (lowerName != nil) {
+						expected[lowerName] = @(field.dataType);
+					}
 				}
 			}
 			continue;
 		}
 		for (RptqDatabaseSchemaTable *table in database.hasTables) {
 			for (RptqDatabaseSchemaField *field in table.hasFields) {
-				if (![field.name.lowercaseString isEqualToString:column.name.lowercaseString]) continue;
-				expected[field.name.lowercaseString] = @(field.dataType);
+				NSString *lowerName = field.name.lowercaseString;
+				if (lowerName == nil || ![lowerName isEqualToString:column.name.lowercaseString]) continue;
+				expected[lowerName] = @(field.dataType);
 			}
 		}
 	}
@@ -244,6 +257,7 @@ static const CGFloat MADSQLStatusHeight = 28.0;
 
 - (void)validate:(id)sender {
 	NSString *sql = self.editTextView.text;
+	MADocument *document = self.document;
 
 	// Structural: parse and resolve, offline, always.
 	MADSQLParser *parser = [[MADSQLParser alloc] initWithSQL:sql
@@ -256,7 +270,7 @@ static const CGFloat MADSQLStatusHeight = 28.0;
 		return;
 	}
 	MADSQLStatementResolver *resolver = [[MADSQLStatementResolver alloc] initWithStatement:statement
-																				  database:self.document.activeDocumentModel.defaultDatabase];
+																				  database:document.activeDocumentModel.defaultDatabase];
 	MADSQLQueryPlan *plan = [resolver resolveWithError:&error];
 	if (plan == nil) {
 		[self presentCompileError:error];
@@ -266,7 +280,7 @@ static const CGFloat MADSQLStatusHeight = 28.0;
 	self.statusLabel.text = NSLocalizedString(@"Validating…", @"Validating…");
 
 	// The server probe, when the database can be reached; advisory.
-	MADOperationValidateSQL *probe = [[MADOperationValidateSQL alloc] initWithDocument:self.document
+	MADOperationValidateSQL *probe = [[MADOperationValidateSQL alloc] initWithDocument:document
 																			 statement:sql
 																	 expectedColumns:[self expectedColumnsForStatement:statement]];
 	__weak MADViewControllerSQL *weakSelf = self;
