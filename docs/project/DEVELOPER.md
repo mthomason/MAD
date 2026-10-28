@@ -64,23 +64,23 @@ the newest one has no device of that name.)
 
 ## Test Databases (Docker)
 
-The live suites and the CLI fixtures use two containers, each created and
-maintained by a script beside its framework. Both scripts are idempotent:
+The live suites and the CLI fixtures use three containers, each created and
+maintained by a script beside its framework. All three scripts are idempotent:
 `up` creates the container when it is missing, starts it when it is stopped,
 and leaves it alone when the pinned image, port and data all match.
 
-|  | MySQL | SQL Server |
-|---|---|---|
-| container | `mad-mysql` | `mad-mssql` |
-| image | `mysql:8.4` (tag + digest) | `mcr.microsoft.com/mssql/server:2022-latest` (tag + digest) |
-| host port | `13306` (all interfaces) | `1433` (all interfaces) |
-| login | `root` / `root` | `sa` / `Root1@Root2` |
-| database | `employees` (300,024 employees) | `AdventureWorksLT2022` (295 products) |
-| volume | `mad-mysql-test-data` | `mad-mssql-data` |
-| script | `MADMySQL/TestDatabase/mysql-test-db.sh` | `MADTdsClient/TestDatabase/sqlserver-test-db.sh` |
-| pins | `db.conf`: image tag + digest, dataset commit + sha256 | `db.conf`: image tag + digest, backup URL + sha256 |
+|  | MySQL | SQL Server | PostgreSQL |
+|---|---|---|---|
+| container | `mad-mysql` | `mad-mssql` | `mad-postgres` |
+| image | `mysql:8.4` (tag + digest) | `mcr.microsoft.com/mssql/server:2022-latest` (tag + digest) | `postgres:17-bookworm` (tag + digest) |
+| host port | `13306` (all interfaces) | `1433` (all interfaces) | `5432` (all interfaces) |
+| login | `root` / `root` | `sa` / `Root1@Root2` | `mad` / `mad_test_pw` |
+| database | `employees` (300,024 employees) | `AdventureWorksLT2022` (295 products) | `chinook` (275 artists, 3,503 tracks) |
+| volume | `mad-mysql-test-data` | `mad-mssql-data` | `mad-postgres-test-data` |
+| script | `MADMySQL/TestDatabase/mysql-test-db.sh` | `MADTdsClient/TestDatabase/sqlserver-test-db.sh` | `MADPostgres/TestDatabase/postgres-test-db.sh` |
+| pins | `db.conf`: image tag + digest, dataset commit + sha256 | `db.conf`: image tag + digest, backup URL + sha256 | `db.conf`: image tag + digest, SQL URL + sha256 |
 
-Both scripts take the same verbs:
+All three scripts take the same verbs:
 
 ```
 <the framework's script> up       # create/start; load the data if missing (default)
@@ -119,16 +119,17 @@ xcodebuild test …` silently runs against 3306 instead. The scheme's
 environment is the only way in; the MADMySQL scheme sets
 `shouldUseLaunchSchemeArgsEnv = NO` so that its Test action's environment is
 the one the test process gets. (The same rule applies to the `MAD_TDS_TEST_*`
-variables in the `MADTdsClient` suite; its scheme sets `up`/`down` too.)
+and `MAD_PG_TEST_*` variables in the `MADTdsClient` and `MADPostgres` suites;
+their schemes set `up`/`down` too.)
 
 For a different server, either override the environment (`MAD_MYSQL_TEST_*`,
-`MAD_TDS_TEST_*`) or change the defaults in the test file; the scripts are the
-zero-configuration path. When no database can be provisioned, the live tests
-skip rather than fail.
+`MAD_TDS_TEST_*`, `MAD_PG_TEST_*`) or change the defaults in the test file; the
+scripts are the zero-configuration path. When no database can be provisioned,
+the live tests skip rather than fail.
 
 ## Docker: what runs, and what persists
 
-Only the two test servers are containers. The Linux build has no persistent
+Only the three test servers are containers. The Linux build has no persistent
 container: `./Linux/build.sh` runs `docker run --rm` for every test run, so
 nothing from it survives except the images it builds:
 
@@ -137,10 +138,10 @@ nothing from it survives except the images it builds:
   runs ctest;
 * `mad-cli:latest` — the CLI runtime image (283 MB; `Linux/README.md`).
 
-`docker ps -a` should therefore show `mad-mysql` and `mad-mssql` (running or
-stopped), and nothing else from this project. `./Linux/build.sh --clean`
-removes the three Linux images; the two scripts' `down`/`reset` manage the
-servers.
+`docker ps -a` should therefore show `mad-mysql`, `mad-mssql`, and
+`mad-postgres` (running or stopped), and nothing else from this project.
+`./Linux/build.sh --clean` removes the three Linux images; the three scripts'
+`down`/`reset` manage the servers.
 
 ## Common Commands
 

@@ -136,4 +136,20 @@ static NSString * const MADPostgresErrorDomain = @"MADDatabasePostgres";
 	return result;
 }
 
+- (NSString *)description {
+	const char *cHost = _pgConn != NULL ? PQhost(_pgConn) : NULL;
+	const char *cPort = _pgConn != NULL ? PQport(_pgConn) : NULL;
+	const char *cDb = _pgConn != NULL ? PQdb(_pgConn) : NULL;
+	NSString *host = (cHost != NULL && cHost[0] != '\0') ? @(cHost) : @"";
+	NSString *port = (cPort != NULL && cPort[0] != '\0') ? @(cPort) : @"";
+	NSString *db = (cDb != NULL && cDb[0] != '\0') ? @(cDb) : @"";
+	return [NSString stringWithFormat:@"<%@: %p; host = %@:%@; database = %@; connected = %@>",
+			NSStringFromClass([self class]),
+			self,
+			host,
+			port,
+			db,
+			[self isConnected] ? @"YES" : @"NO"];
+}
+
 @end
