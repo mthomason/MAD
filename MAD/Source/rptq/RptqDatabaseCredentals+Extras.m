@@ -40,6 +40,7 @@
 	switch (databaseType) {
 		
 		case MADDatabaseTypeMySQL:
+		case MADDatabaseTypePostgres:
 		case MADDatabaseTypeSqlite3:
 			result = [self.dbname copy];
 			break;
@@ -57,6 +58,10 @@
 			} else if ([self.driverID isEqualToString:[RptqDatabaseCredentals driverIDTDS]]) {
 				result = [self.dbname copy];
 				self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeTDS;
+				
+			} else if ([self.driverID isEqualToString:[RptqDatabaseCredentals driverIDPostgres]]) {
+				result = [self.dbname copy];
+				self.inDatabase.databaseDriverTypeEnum = MADDatabaseTypePostgres;
 				
 			} else if ([self.driverID isEqualToString:[RptqDatabaseCredentals driverIDSqlite3]]) {
 				result = [self.dbname copy];
@@ -93,6 +98,10 @@
 
 + (NSString *)driverIDTDS {
 	return [MADDatabaseConnection Identifier:MADDatabaseTypeTDS];
+}
+
++ (NSString *)driverIDPostgres {
+	return [MADDatabaseConnection Identifier:MADDatabaseTypePostgres];
 }
 
 + (NSString *)driverIDSqlite3 {

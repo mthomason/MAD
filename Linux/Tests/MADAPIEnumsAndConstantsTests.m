@@ -30,6 +30,7 @@ static void testDatabaseTypeRawValues(void) {
 	MAD_PASS((int)MADDatabaseTypeNone == (int)9, "None is 9");
 	MAD_PASS((int)MADDatabaseTypeSqlite3 == (int)10, "Sqlite3 is 10");
 	MAD_PASS((int)MADDatabaseTypeSample1 == (int)11, "Sample1 is 11");
+	MAD_PASS((int)MADDatabaseTypePostgres == (int)12, "Postgres is 12");
 }
 
 #pragma mark - MADQueryType string mapping

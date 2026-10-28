@@ -22,6 +22,9 @@
 	} else if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeTDS]]) {
 		category = MADDatabaseTypeTDS;
 		
+	} else if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypePostgres]]) {
+		category = MADDatabaseTypePostgres;
+		
 	} else if ([self.driverID isEqualToString: [MADDatabaseConnection Identifier:MADDatabaseTypeSqlite3]]) {
 		category = MADDatabaseTypeSqlite3;
 	
