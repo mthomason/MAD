@@ -1227,6 +1227,9 @@ bundle's header search path.
 - `MADFontSelectorViewController -setFamilyName:` calls itself recursively
 - The Refresh / Formatting / Page status label in the Viewer toolbar was unreadable on Liquid Glass
 - `MADTabBarController` recreated all three tab view controllers on every `-viewWillAppear:`
+- `MADDesignerViewController`: editing a dynamic label's field looked up the label by the field ID and anchored the popover at `CGRectZero`
+- `MADDesignerViewController -sectionForLabelTag:` and `-documentSectionViewWithIdentifier:` looked up the wrong section
+- `MADViewerController -showPrintDialog` inverted queue priority and `MADOperationLoadPrintPageRender -main` read an uninitialized `MADocument *` pointer
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 

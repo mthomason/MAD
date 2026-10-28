@@ -48,6 +48,10 @@
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseCredentals.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentElementLabelDataField.h>
+#import <MAD/RptqQueryField.h>
 #import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MADOperationCreateDocumentCreateDocument.h>
 #import <MAD/MADOperationCreateDocumentFirstTimeSetup.h>
@@ -100,6 +104,27 @@
 
 @interface MADQueryAddLinkJoinTypeController : UITableViewController
 @property (nonatomic, strong) MADocument *document;
+@end
+
+@interface MADDesignerSectionView : UICollectionView
+@property (nonatomic, assign) int64_t identifier;
+@end
+
+@interface MADDesignerScrollView : UIScrollView
+@property (nonatomic, strong) UIView *container;
+@end
+
+@interface MADDesignerView : UIView
+@property (nonatomic, weak) MADDesignerScrollView *scroller;
+@end
+
+@interface MADDesignerViewController : UIViewController
+@property (nonatomic, weak) MADocument *document;
+@property (nonatomic, assign) NSInteger lastSelectedSectionControlPanel;
+@property (nonatomic, copy) NSNumber *objectIdEditDynamicLabel;
+- (RptqDocumentSection *)sectionForLabelTag:(NSInteger)tag;
+- (MADDesignerSectionView *)documentSectionViewWithIdentifier:(NSInteger)identifier;
+- (void)tableViewControllerChooseFieldDidFinish:(id)controller withFieldID:(int64_t)fieldID;
 @end
 
 @interface MADDesignerUnitTests : XCTestCase
@@ -392,6 +417,67 @@
 	XCTAssertTrue([names containsObject:@"PlaylistTrack"], @"the PlaylistTrack table is missing: %@", names);
 
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
+}
+
+#pragma mark - App source: MADDesignerViewController regressions
+
+- (void)testSectionForLabelTagUsesPassedTagNotLastSelectedSectionControlPanel {
+	NSURL *tempURL = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+					  URLByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"mad"]];
+	MADocument *document = [[MADocument alloc] initWithFileURL:tempURL];
+	RptqDocument *rptqDoc = (RptqDocument *)[document.storeContext insertObjectForEntity:NSStringFromClass([RptqDocument class]) identifier:1];
+	RptqDocumentSection *headerSection = (RptqDocumentSection *)[document.storeContext insertObjectForEntity:NSStringFromClass([RptqDocumentSection class]) identifier:101];
+	RptqDocumentSection *pageHeaderSection = (RptqDocumentSection *)[document.storeContext insertObjectForEntity:NSStringFromClass([RptqDocumentSection class]) identifier:202];
+	rptqDoc.hasReportHeaderSection = headerSection;
+	rptqDoc.hasPageHeaderSection = pageHeaderSection;
+
+	MADDesignerViewController *designerVC = [[MADDesignerViewController alloc] init];
+	designerVC.document = document;
+	designerVC.lastSelectedSectionControlPanel = 0;
+
+	RptqDocumentSection *resolved = [designerVC sectionForLabelTag:1];
+	XCTAssertEqual(resolved.identifier, (int64_t)202);
+}
+
+- (void)testDocumentSectionViewWithIdentifierMatchesIdentifierPropertyNotViewTag {
+	MADDesignerViewController *designerVC = [[MADDesignerViewController alloc] init];
+	MADDesignerView *designerView = [[MADDesignerView alloc] initWithFrame:CGRectMake(0, 0, 320, 480)];
+	MADDesignerScrollView *scroller = [[MADDesignerScrollView alloc] initWithFrame:designerView.bounds];
+	UIView *container = [[UIView alloc] initWithFrame:scroller.bounds];
+	scroller.container = container;
+	[designerView addSubview:scroller];
+	designerView.scroller = scroller;
+	designerVC.view = designerView;
+
+	UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+	MADDesignerSectionView *sectionView = [[MADDesignerSectionView alloc] initWithFrame:CGRectMake(0, 0, 100, 40)
+																   collectionViewLayout:layout];
+	sectionView.identifier = 4242;
+	sectionView.tag = 0;
+	[designerView.scroller.container addSubview:sectionView];
+
+	MADDesignerSectionView *found = [designerVC documentSectionViewWithIdentifier:4242];
+	XCTAssertEqual(found, sectionView);
+}
+
+- (void)testChooseFieldDidFinishUpdatesEditedDynamicLabelFieldReference {
+	NSURL *tempURL = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+					  URLByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"mad"]];
+	MADocument *document = [[MADocument alloc] initWithFileURL:tempURL];
+	[document.storeContext insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqDocumentElementLabelDataField *label = (RptqDocumentElementLabelDataField *)[document.storeContext insertObjectForEntity:NSStringFromClass([RptqDocumentElementLabelDataField class]) identifier:5001];
+	RptqQueryField *field = (RptqQueryField *)[document.storeContext insertObjectForEntity:NSStringFromClass([RptqQueryField class]) identifier:6002];
+	XCTAssertNotNil(label);
+	XCTAssertNotNil(field);
+
+	MADDesignerViewController *designerVC = [[MADDesignerViewController alloc] init];
+	designerVC.document = document;
+	designerVC.objectIdEditDynamicLabel = @(5001);
+
+	[designerVC tableViewControllerChooseFieldDidFinish:nil withFieldID:6002];
+
+	XCTAssertEqual(label.referencesQueryField.identifier, (int64_t)6002);
+	XCTAssertNil(designerVC.objectIdEditDynamicLabel);
 }
 
 @end

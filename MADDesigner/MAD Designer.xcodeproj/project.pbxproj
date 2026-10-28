@@ -73,6 +73,12 @@
 		4C26B9FA1BAF14A500456DC8 /* MADDesignerSectionLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9E91BAF14A500456DC8 /* MADDesignerSectionLabel.m */; };
 		4C26B9FB1BAF14A500456DC8 /* MADDesignerSectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9EB1BAF14A500456DC8 /* MADDesignerSectionView.m */; };
 		4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9ED1BAF14A500456DC8 /* MADDesignerViewController.m */; };
+		4C3F00042EA0000100000004 /* MADDesignerViewController+ElementSaving.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F00032EA0000100000003 /* MADDesignerViewController+ElementSaving.m */; };
+		4C3F00072EA0000100000007 /* MADDesignerViewController+Toolbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F00062EA0000100000006 /* MADDesignerViewController+Toolbox.m */; };
+		4C3F000A2EA000010000000A /* MADDesignerViewController+CollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F00092EA0000100000009 /* MADDesignerViewController+CollectionView.m */; };
+		4C3F000E2EA000010000000E /* MADExplorerController+DocumentActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F000D2EA000010000000D /* MADExplorerController+DocumentActions.m */; };
+		4C3F00122EA0000100000012 /* MADQueryViewController+BuilderDelegates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F00112EA0000100000011 /* MADQueryViewController+BuilderDelegates.m */; };
+		4C3F00162EA0000100000016 /* MADViewerController+PrintingAndExport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F00152EA0000100000015 /* MADViewerController+PrintingAndExport.m */; };
 		4C26B9FD1BAF14A500456DC8 /* MADDesignerSectionBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9EF1BAF14A500456DC8 /* MADDesignerSectionBackground.m */; };
 		4C26B9FE1BAF14A500456DC8 /* MADDesignerSectionControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F11BAF14A500456DC8 /* MADDesignerSectionControl.m */; };
 		4C26BA001BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F51BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m */; };
@@ -575,6 +581,22 @@
 		4C26B9EB1BAF14A500456DC8 /* MADDesignerSectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionView.m; sourceTree = "<group>"; };
 		4C26B9EC1BAF14A500456DC8 /* MADDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerViewController.h; sourceTree = "<group>"; };
 		4C26B9ED1BAF14A500456DC8 /* MADDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerViewController.m; sourceTree = "<group>"; };
+		4C3F00012EA0000100000001 /* MADDesignerViewController_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerViewController_Private.h; sourceTree = "<group>"; };
+		4C3F00022EA0000100000002 /* MADDesignerViewController+ElementSaving.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADDesignerViewController+ElementSaving.h"; sourceTree = "<group>"; };
+		4C3F00032EA0000100000003 /* MADDesignerViewController+ElementSaving.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADDesignerViewController+ElementSaving.m"; sourceTree = "<group>"; };
+		4C3F00052EA0000100000005 /* MADDesignerViewController+Toolbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADDesignerViewController+Toolbox.h"; sourceTree = "<group>"; };
+		4C3F00062EA0000100000006 /* MADDesignerViewController+Toolbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADDesignerViewController+Toolbox.m"; sourceTree = "<group>"; };
+		4C3F00082EA0000100000008 /* MADDesignerViewController+CollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADDesignerViewController+CollectionView.h"; sourceTree = "<group>"; };
+		4C3F00092EA0000100000009 /* MADDesignerViewController+CollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADDesignerViewController+CollectionView.m"; sourceTree = "<group>"; };
+		4C3F000B2EA000010000000B /* MADExplorerController_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADExplorerController_Private.h; sourceTree = "<group>"; };
+		4C3F000C2EA000010000000C /* MADExplorerController+DocumentActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADExplorerController+DocumentActions.h"; sourceTree = "<group>"; };
+		4C3F000D2EA000010000000D /* MADExplorerController+DocumentActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADExplorerController+DocumentActions.m"; sourceTree = "<group>"; };
+		4C3F000F2EA000010000000F /* MADQueryViewController_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADQueryViewController_Private.h; sourceTree = "<group>"; };
+		4C3F00102EA0000100000010 /* MADQueryViewController+BuilderDelegates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADQueryViewController+BuilderDelegates.h"; sourceTree = "<group>"; };
+		4C3F00112EA0000100000011 /* MADQueryViewController+BuilderDelegates.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADQueryViewController+BuilderDelegates.m"; sourceTree = "<group>"; };
+		4C3F00132EA0000100000013 /* MADViewerController_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADViewerController_Private.h; sourceTree = "<group>"; };
+		4C3F00142EA0000100000014 /* MADViewerController+PrintingAndExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADViewerController+PrintingAndExport.h"; sourceTree = "<group>"; };
+		4C3F00152EA0000100000015 /* MADViewerController+PrintingAndExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MADViewerController+PrintingAndExport.m"; sourceTree = "<group>"; };
 		4C26B9EE1BAF14A500456DC8 /* MADDesignerSectionBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerSectionBackground.h; sourceTree = "<group>"; };
 		4C26B9EF1BAF14A500456DC8 /* MADDesignerSectionBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDesignerSectionBackground.m; sourceTree = "<group>"; };
 		4C26B9F01BAF14A500456DC8 /* MADDesignerSectionControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDesignerSectionControl.h; sourceTree = "<group>"; };
@@ -1268,6 +1290,13 @@
 				4CEA05A21ED0B0940062624F /* MADDesignerDisplayProtocol.h */,
 				4C26B9EC1BAF14A500456DC8 /* MADDesignerViewController.h */,
 				4C26B9ED1BAF14A500456DC8 /* MADDesignerViewController.m */,
+				4C3F00012EA0000100000001 /* MADDesignerViewController_Private.h */,
+				4C3F00022EA0000100000002 /* MADDesignerViewController+ElementSaving.h */,
+				4C3F00032EA0000100000003 /* MADDesignerViewController+ElementSaving.m */,
+				4C3F00052EA0000100000005 /* MADDesignerViewController+Toolbox.h */,
+				4C3F00062EA0000100000006 /* MADDesignerViewController+Toolbox.m */,
+				4C3F00082EA0000100000008 /* MADDesignerViewController+CollectionView.h */,
+				4C3F00092EA0000100000009 /* MADDesignerViewController+CollectionView.m */,
 				4C26B9E41BAF14A500456DC8 /* MADDesignerElementPickerViewController.h */,
 				4C26B9E51BAF14A500456DC8 /* MADDesignerElementPickerViewController.m */,
 				4C26B9E61BAF14A500456DC8 /* MADDesignerElementView.h */,
@@ -1636,6 +1665,9 @@
 				4CF304091D1E166900466560 /* MADIdentifierQueryViewSections.h */,
 				4C4020791BAE966000BAE5FC /* MADQueryViewController.h */,
 				4C40207A1BAE966000BAE5FC /* MADQueryViewController.m */,
+				4C3F000F2EA000010000000F /* MADQueryViewController_Private.h */,
+				4C3F00102EA0000100000010 /* MADQueryViewController+BuilderDelegates.h */,
+				4C3F00112EA0000100000011 /* MADQueryViewController+BuilderDelegates.m */,
 				4C539C2F1CB5607D002E4CD5 /* MADQueryViewDataSource.h */,
 				4C539C301CB5607D002E4CD5 /* MADQueryViewDataSource.m */,
 				4C235CD11D1F1C1A00D3D77C /* MADQueryViewDelegate.h */,
@@ -1704,6 +1736,9 @@
 				4C994F381BE082730058627A /* MADLabelStatus.m */,
 				4C4020F91BAE98C300BAE5FC /* MADViewerController.h */,
 				4C4020FA1BAE98C300BAE5FC /* MADViewerController.m */,
+				4C3F00132EA0000100000013 /* MADViewerController_Private.h */,
+				4C3F00142EA0000100000014 /* MADViewerController+PrintingAndExport.h */,
+				4C3F00152EA0000100000015 /* MADViewerController+PrintingAndExport.m */,
 				4C4020FD1BAE98C300BAE5FC /* MADDocumentPageController.h */,
 				4C4020FE1BAE98C300BAE5FC /* MADDocumentPageController.m */,
 				4C994F3A1BE28CF50058627A /* MADTextPosition.h */,
@@ -1712,6 +1747,9 @@
 				4C18BC731C7E29BD000DF79C /* MADPageViewAttributes.m */,
 				4C26B99C1BAF123A00456DC8 /* MADExplorerController.h */,
 				4C26B99D1BAF123A00456DC8 /* MADExplorerController.m */,
+				4C3F000B2EA000010000000B /* MADExplorerController_Private.h */,
+				4C3F000C2EA000010000000C /* MADExplorerController+DocumentActions.h */,
+				4C3F000D2EA000010000000D /* MADExplorerController+DocumentActions.m */,
 				4C26BA3E1BAF99F000456DC8 /* MADExplorerViewLayout.h */,
 				4C26BA3F1BAF99F000456DC8 /* MADExplorerViewLayout.m */,
 				4C26B99A1BAF123A00456DC8 /* MADExplorerSectionHeaderView.h */,
@@ -2452,6 +2490,12 @@
 				4C4020431BAE92F200BAE5FC /* NSDateFormatter+RFC_3339.m in Sources */,
 				4C8DE24E1BAFA88400AD1111 /* MADCellElement.m in Sources */,
 				4C26B9FC1BAF14A500456DC8 /* MADDesignerViewController.m in Sources */,
+				4C3F00042EA0000100000004 /* MADDesignerViewController+ElementSaving.m in Sources */,
+				4C3F00072EA0000100000007 /* MADDesignerViewController+Toolbox.m in Sources */,
+				4C3F000A2EA000010000000A /* MADDesignerViewController+CollectionView.m in Sources */,
+				4C3F000E2EA000010000000E /* MADExplorerController+DocumentActions.m in Sources */,
+				4C3F00122EA0000100000012 /* MADQueryViewController+BuilderDelegates.m in Sources */,
+				4C3F00162EA0000100000016 /* MADViewerController+PrintingAndExport.m in Sources */,
 				4C6D2EF51E6DE4F6008EFE5D /* MADSortOrderNavigationItem.m in Sources */,
 				4C26BA5F1BAF99F000456DC8 /* MTGroupByViewController.m in Sources */,
 				4CF824F52E77846B00BB70FD /* MADKeyChainGetCredentials.m in Sources */,

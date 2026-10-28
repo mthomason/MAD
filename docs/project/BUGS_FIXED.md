@@ -3271,6 +3271,56 @@ reference to "BUGS.md, the X entry" still lands.
   `self.viewControllers.count == 0`, and `-viewDidDisappear:` clears them only when
   `self.isMovingFromParentViewController || self.isBeingDismissed`.
 
+### `MADDesignerViewController`: editing a dynamic label's field looked up the label by the field ID and anchored the popover at `CGRectZero`
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADDesigner/Source/MADDesignerViewController+CollectionView.m`
+  (`-editDocumentObjectLabelDynamic:`) and
+  `MADDesigner/Source/MADDesignerViewController+ElementSaving.m`
+  (`-tableViewControllerChooseFieldDidFinish:withFieldID:`).
+- **Behavior:** `-editDocumentObjectLabelDynamic:` looked up `viewToEdit` in
+  `self.view.scroller.container.sectionLabels` (which is keyed by section identifier)
+  using the element's identifier, returning `nil` and anchoring the popover at
+  `CGRectZero`. Then, when the user chose a new field in
+  `-tableViewControllerChooseFieldDidFinish:withFieldID:`, it fetched
+  `+[RptqDocumentElementLabelDataField newDocumentElementWithIdentifier:field.identifier ...]`
+  instead of `self.objectIdEditDynamicLabel.longLongValue`, so the edited label element
+  was never found or updated.
+- **Now:** `-editDocumentObjectLabelDynamic:` looks up `viewToEdit` in
+  `self.elementViewsDictionary[@(object.identifier)]`, and
+  `-tableViewControllerChooseFieldDidFinish:withFieldID:` fetches the label element using
+  `self.objectIdEditDynamicLabel.longLongValue` and clears `self.objectIdEditDynamicLabel`.
+- **Test:** `MADDesignerUnitTests testChooseFieldDidFinishUpdatesEditedDynamicLabelFieldReference`.
+
+### `MADDesignerViewController -sectionForLabelTag:` and `-documentSectionViewWithIdentifier:` looked up the wrong section
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADDesigner/Source/MADDesignerViewController.m` (`-sectionForLabelTag:`
+  and `-documentSectionViewWithIdentifier:`).
+- **Behavior:** `-sectionForLabelTag:(NSInteger)tag` ignored its `tag` parameter and
+  queried `self.lastSelectedSectionControlPanel` instead.
+  `-documentSectionViewWithIdentifier:(NSInteger)identifier` compared
+  `((MADDesignerSectionView *)subview).tag == identifier`, but `MADDesignerSectionView`
+  stores its section ID in `.identifier` while `UIView.tag` remains `0`.
+- **Now:** `-sectionForLabelTag:` queries `(int64_t)tag`, and
+  `-documentSectionViewWithIdentifier:` compares
+  `((MADDesignerSectionView *)subview).identifier == identifier`.
+- **Test:** `MADDesignerUnitTests testSectionForLabelTagUsesPassedTagNotLastSelectedSectionControlPanel`
+  and `testDocumentSectionViewWithIdentifierMatchesIdentifierPropertyNotViewTag`.
+
+### `MADViewerController -showPrintDialog` inverted queue priority and `MADOperationLoadPrintPageRender -main` read an uninitialized `MADocument *` pointer
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADDesigner/Source/MADViewerController+PrintingAndExport.m`
+  (`-showPrintDialog` and `-[MADOperationLoadPrintPageRender main]`).
+- **Behavior:** `-showPrintDialog` dispatched a block to
+  `DISPATCH_QUEUE_PRIORITY_BACKGROUND` whose body immediately called
+  `dispatch_sync(dispatch_get_main_queue(), ...)`, causing a main-thread priority
+  inversion while doing no background work. In `MADOperationLoadPrintPageRender -main`,
+  local variable `MADocument *document;` was never initialized from `self.document`
+  before `document.printPageRenderer` was read and assigned.
+- **Now:** `-showPrintDialog` dispatches UI presentation with
+  `dispatch_async(dispatch_get_main_queue(), ...)`, and
+  `-[MADOperationLoadPrintPageRender main]` initializes
+  `MADocument *document = self.document;`.
+
 ## Linux build
 
 ### `mad refresh` over MySQL aborted: a category is not a symbol, so the linker dropped it
