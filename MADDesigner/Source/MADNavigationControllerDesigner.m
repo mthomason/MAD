@@ -57,7 +57,7 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-	return UIStatusBarStyleLightContent;
+	return UIStatusBarStyleDefault;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {

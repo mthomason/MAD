@@ -3213,6 +3213,64 @@ reference to "BUGS.md, the X entry" still lands.
   link builder excludes the table being linked, by alias).
 - **Found during the store migration.**
 
+### MADToolboxStyleViewController passes an uninitialized value to a setter
+- **Status:** Fixed 2026-10-28.
+- **What:** `core.CallAndMessage` reports that the argument to a property setter at
+  `MADToolboxStyleViewController.m:609` is uninitialized -- the value can be read before
+  any assignment on some paths.
+- **Where:** `MADDesigner/Source/MADToolboxStyleViewController.m:609`.
+- **Now:** `size` is initialized to `CGSizeZero` and `_stepperSizeHeight.value` /
+  `_stepperSizeWidth.value` read `sizeHolder.height` and `sizeHolder.width`, matching
+  the sibling margin, padding and border steppers above them.
+
+### The app passes possibly-nil values to non-null parameters
+- **Status:** Fixed 2026-10-28.
+- **What:** Three argument sites where a value that can be nil reaches a parameter the
+  declarations call non-null: `AppDelegate.m:210`, `MADQueryBuilderSplitViewController.m:151`,
+  `MADQueryChooseFieldController.m:169`.
+- **Where:** the file:line list above.
+- **Evidence:** `nullability.NullPassedToNonnull` in `xcodebuild analyze`.
+- **Now:** `AppDelegate.m` guards `rootClass` and `topClass` before calling
+  `NSStringFromClass`; `MADQueryBuilderSplitViewController.m` guards
+  `barButtonItemRevealQuery != nil` instead of passing a nil first argument to
+  `-[NSArray initWithObjects:]`; and `MADQueryChooseFieldController.m` checks
+  `current == nil` alongside the alias comparison so the first section array is
+  always allocated even when a field's `inQueryTable.alias` is nil.
+
+### `MADFontSelectorViewController -setFamilyName:` calls itself recursively
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADDesigner/Source/MADFontSelectorViewController.m:155`.
+- **Behavior:** `- (void)setFamilyName:(NSString *)familyName` wrote
+  `self.familyName = [familyName copy];`, invoking itself in an infinite recursion
+  whenever `setSelectedFamilyName:` or `self.familyName = ...` was called.
+- **Now:** `-setFamilyName:` assigns `_familyName = [familyName copy];`.
+
+### The Refresh / Formatting / Page status label in the Viewer toolbar was unreadable on Liquid Glass
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADDesigner/Source/MADLabelStatus.m:50-58`,
+  `MADCocoaExtensions/Source/MADLabelTitle.m:114`, and
+  `MADDesigner/Source/MADThemeManager.m`.
+- **Behavior:** `MADLabelStatus` and `MADLabelTitle` hardcoded
+  `NSForegroundColorAttributeName: [UIColor whiteColor]`, and `MADThemeManager`
+  configured opaque blue bars in Light Mode vs. dark blur in Dark Mode while forcing
+  white `UIBarButtonItem.tintColor`. On modern iOS with system/Liquid Glass bar
+  materials, white text and bar buttons had low or zero contrast in Light Mode.
+- **Now:** `MADThemeManager` uses `configureWithDefaultBackground` and semantic
+  dynamic colors (`labelColor`, `secondaryLabelColor`, `systemBlueColor`),
+  `MADLabelTitle` uses `[UIColor labelColor]`, and `MADLabelStatus` uses
+  `[UIColor labelColor]` and `[UIColor secondaryLabelColor]`.
+- **Test:** `MADCocoaExtensionsTests/MADLabelTitleTests`.
+
+### `MADTabBarController` recreated all three tab view controllers on every `-viewWillAppear:`
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADDesigner/Source/MADTabBarController.m:85-104,138-143`.
+- **Behavior:** `-viewWillAppear:` unconditionally instantiated and assigned new
+  Query, Designer, and Viewer view controllers, and `-viewDidDisappear:` cleared
+  `self.viewControllers = nil` even when a modal sheet was presented over the tab bar.
+- **Now:** `-viewWillAppear:` populates `self.viewControllers` only when
+  `self.viewControllers.count == 0`, and `-viewDidDisappear:` clears them only when
+  `self.isMovingFromParentViewController || self.isBeingDismissed`.
+
 ## Linux build
 
 ### `mad refresh` over MySQL aborted: a category is not a symbol, so the linker dropped it

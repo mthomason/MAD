@@ -34,7 +34,7 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-	return UIStatusBarStyleLightContent;
+	return UIStatusBarStyleDefault;
 }
 
 - (BOOL)canBecomeFirstResponder {
@@ -85,22 +85,24 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	MADocument *document = self.document;
-	NSMutableArray <__kindof UIViewController *> *tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
-	
-	MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
-	[tabBarViewControllers addObject: splitViewController];
-	
-	UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerDesigner = [UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeDesigner document:document];
-	[tabBarViewControllers addObject: navControllerDesigner];
-	
-	UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerViewer = [UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeViewer document:document];
-	[tabBarViewControllers addObject: navControllerViewer];
+	if (self.viewControllers.count == 0) {
+		MADocument *document = self.document;
+		NSMutableArray <__kindof UIViewController *> *tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
+		
+		MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
+		[tabBarViewControllers addObject: splitViewController];
+		
+		UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerDesigner = [UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeDesigner document:document];
+		[tabBarViewControllers addObject: navControllerDesigner];
+		
+		UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerViewer = [UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeViewer document:document];
+		[tabBarViewControllers addObject: navControllerViewer];
 
-	id <MADViewControllerStandardProtocol> delegate = self.viewControllerDelegate;
-	navControllerViewer.viewControllerDelegate = delegate;
-	splitViewController.viewControllerDelegate = delegate;
-	[self setViewControllers: tabBarViewControllers animated: animated];
+		id <MADViewControllerStandardProtocol> delegate = self.viewControllerDelegate;
+		navControllerViewer.viewControllerDelegate = delegate;
+		splitViewController.viewControllerDelegate = delegate;
+		[self setViewControllers: tabBarViewControllers animated: animated];
+	}
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size
@@ -137,9 +139,11 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear: animated];
-	[self setViewControllers: nil animated: animated];
-	[self.navigationItem setLeftBarButtonItem:nil animated:animated];
-	[self.navigationItem setRightBarButtonItem:nil animated:animated];;
+	if (self.isMovingFromParentViewController || self.isBeingDismissed) {
+		[self setViewControllers: nil animated: animated];
+		[self.navigationItem setLeftBarButtonItem:nil animated:animated];
+		[self.navigationItem setRightBarButtonItem:nil animated:animated];
+	}
 }
 
 /*- (id <UILayoutSupport>)topLayoutGuide {

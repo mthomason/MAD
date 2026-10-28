@@ -1222,21 +1222,11 @@ bundle's header search path.
 - AppDelegate's retry blocks capture themselves
 - An assertion formats an integer with %@
 - `MADToolboxFormatViewController` multi-selection decimal-count check never evaluated to `YES`
-
-### MADToolboxStyleViewController passes an uninitialized value to a setter
-- **Status:** Open -- documented from the analyzer run.
-- **What:** `core.CallAndMessage` reports that the argument to a property setter at
-  `MADToolboxStyleViewController.m:609` is uninitialized -- the value can be read before
-  any assignment on some paths.
-- **Where:** `MADDesigner/Source/MADToolboxStyleViewController.m:609`.
-
-### The app passes possibly-nil values to non-null parameters
-- **Status:** Open -- documented from the analyzer run.
-- **What:** Three argument sites where a value that can be nil reaches a parameter the
-  declarations call non-null: `AppDelegate.m:210`, `MADQueryBuilderSplitViewController.m:151`,
-  `MADQueryChooseFieldController.m:169`.
-- **Where:** the file:line list above.
-- **Evidence:** `nullability.NullPassedToNonnull` in `xcodebuild analyze`.
+- MADToolboxStyleViewController passes an uninitialized value to a setter
+- The app passes possibly-nil values to non-null parameters
+- `MADFontSelectorViewController -setFamilyName:` calls itself recursively
+- The Refresh / Formatting / Page status label in the Viewer toolbar was unreadable on Liquid Glass
+- `MADTabBarController` recreated all three tab view controllers on every `-viewWillAppear:`
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 

@@ -448,7 +448,7 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 		NSSet <NSNumber *> *userSelectedObjectIDs = _userSelectedObjectIDs;
 		RptqDocumentElement *documentObject;
 		
-		CGSize size;
+		CGSize size = CGSizeZero;
 		RptqStoreContext *context = self.document.storeContext;
 		for (objectId in userSelectedObjectIDs) {
 			
@@ -606,11 +606,11 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 		
 		displayNumber = numberOfSizeHeights == 1 ? sizeHolder.height : 0;
 		_labelSizeHeight.attributedText = [MADToolboxStrings sizeHeightForValue:displayNumber];
-		_stepperSizeHeight.value = size.height;
+		_stepperSizeHeight.value = sizeHolder.height;
 		
 		displayNumber = numberOfSizeWidths == 1 ? sizeHolder.width : 0;
 		_labelSizeWidth.attributedText = [MADToolboxStrings sizeWidthForValue:displayNumber];
-		_stepperSizeWidth.value = size.width;
+		_stepperSizeWidth.value = sizeHolder.width;
 		
 		UILabel *labelFontName = _labelFontName, *labelFontSize = _labelFontSize;
 		NSAttributedString *display;

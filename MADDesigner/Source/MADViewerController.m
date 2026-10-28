@@ -146,13 +146,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	UINavigationBar *appearanceProxy;
 	appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
 	appearanceProxy.barTintColor = nil;
-	appearanceProxy.tintColor = [MADColorEverydayApps newColorWhite];
+	appearanceProxy.tintColor = [UIColor systemBlueColor];
 }
 
 + (void)setNavigationBarAppearanceHighlighted {
 	NSArray <Class <UIAppearanceContainer>> *classes = [[NSArray alloc] initWithObjects: self, nil];
 	UINavigationBar *appearanceProxy = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:classes];
-	appearanceProxy.barTintColor = [MADColorEverydayApps newColorAnalogous4];
+	appearanceProxy.barTintColor = nil;
 	appearanceProxy.tintColor = [MADColorEverydayApps newColorRed];
 }
 

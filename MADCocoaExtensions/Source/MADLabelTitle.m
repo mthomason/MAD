@@ -111,7 +111,7 @@
 	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
 	paragraphStyle.alignment = NSTextAlignmentNatural;
 	[attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:fullRange];
-	[attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:fullRange];
+	[attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor labelColor] range:fullRange];
 	[attributedString addAttribute:NSKernAttributeName value:[NSNull null] range:fullRange];
 	
 	return attributedString;

@@ -24,7 +24,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="IOG-3q-Pa5" firstAttribute="top" secondItem="VIm-k8-3OZ" secondAttribute="top" id="Bf7-Qf-I4X" userLabel="Scroller Top to Superview Top"/>
                             <constraint firstItem="IOG-3q-Pa5" firstAttribute="leading" secondItem="VIm-k8-3OZ" secondAttribute="leading" id="DGD-vo-3bY" userLabel="Scroller Leading to Superview Leading"/>
@@ -65,7 +65,6 @@
                         <barButtonItem width="20" style="plain" systemItem="fixedSpace" id="HDt-8o-ngI"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="uNL-pS-3JN"/>
                         <barButtonItem systemItem="action" id="Mnl-SJ-Bua">
-                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="activity:" destination="ERc-MK-TMQ" id="kep-te-mAh"/>
                             </connections>
@@ -100,8 +99,6 @@
                         <rect key="frame" x="129" y="330" width="163" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="selectedImageTintColor" red="0.87058823529999996" green="0.14117647059999999" blue="0.28235294119999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VrE-5r-MlD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -319,7 +316,7 @@
     </scenes>
     <color key="tintColor" red="0.050980392159999999" green="0.61960784310000006" blue="0.84313725490000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
     <resources>
-        <systemColor name="groupTableViewBackgroundColor">
+        <systemColor name="systemGroupedBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondarySystemBackgroundColor">

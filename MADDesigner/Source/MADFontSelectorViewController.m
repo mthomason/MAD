@@ -72,8 +72,7 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 	[super viewDidLoad];
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
-	self.tableView.backgroundColor = [UIColor whiteColor];
-	self.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorRed];
+	self.tableView.backgroundColor = [UIColor systemBackgroundColor];
 	self.navigationController.navigationBar.alpha = 1.0;
 }
 
@@ -153,7 +152,7 @@ static inline UIEdgeInsets contentInset(CGFloat topGuideLength, CGFloat bottomGu
 }
 
 - (void)setFamilyName:(NSString *)familyName {
-	self.familyName = [familyName copy];
+	_familyName = [familyName copy];
 }
 
 - (void)setSelectedFamilyName:(NSString *)familyName {

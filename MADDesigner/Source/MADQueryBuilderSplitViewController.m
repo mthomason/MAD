@@ -46,17 +46,6 @@
 @synthesize document = _document, title = _title;
 @dynamic primaryViewController, secondaryViewController, primaryNavigationController, secondaryNavigationController;
 
-+ (void)initialize {
-	[super initialize];
-	if (self != [MADQueryBuilderSplitViewController self]) {
-		@autoreleasepool {
-			NSArray <Class <UIAppearanceContainer>> *classes = [[NSArray alloc] initWithObjects: self, nil];
-			UIBarButtonItem <UIAppearance> *appearanceProxy = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:classes];
-			appearanceProxy.tintColor = [UIColor whiteColor];
-		}
-	}
-}
-
 + (instancetype)newQueryBuilderSplitViewController:(MADocument *)document {
 	id controller = [[UIStoryboard storyboardWithName: @"MADQuery" bundle: [NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"MADIdentifierQueryBuilderSplitViewController"];
 	[((typeof(self))controller) setDocument: document];
@@ -64,7 +53,7 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-	return UIStatusBarStyleLightContent;
+	return UIStatusBarStyleDefault;
 }
 
 - (void)dealloc { }
@@ -90,7 +79,6 @@
 - (void)viewWillLayoutSubviews {
 	[super viewWillLayoutSubviews];
 	if (!_setupInitalLayout) {
-		_barButtonItemSQL.tintColor = [UIColor whiteColor];
 		_setupInitalLayout = YES;
 	}
 }
@@ -140,10 +128,9 @@
 	NSMutableArray<__kindof UIBarButtonItem *> *toolbarItemsLimited = toolbarItemsFull.mutableCopy;
 	toolbarItemsFull = nil;
 	
-	// !: nil passed to callee that requires a non-null 1st parameter
-	NSArray<__kindof UIBarButtonItem *> *toolbarItemsPremium = [[NSArray alloc] initWithObjects: barButtonItemRevealQuery, nil];
-	[toolbarItemsLimited removeObjectsInArray:toolbarItemsPremium];
-	toolbarItemsPremium = nil;
+	if (barButtonItemRevealQuery != nil) {
+		[toolbarItemsLimited removeObject:barButtonItemRevealQuery];
+	}
 	
 	[self setToolbarItems: toolbarItemsLimited animated: animate];
 	

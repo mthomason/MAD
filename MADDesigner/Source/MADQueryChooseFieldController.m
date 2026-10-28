@@ -166,7 +166,7 @@ static inline CGSize PreferredContentSizeForUpdate(NSUInteger count, NSUInteger 
 		NSString *currentAlias = nil;
 		NSMutableArray *current = nil;
 		for (RptqQueryField *field in fields) {
-			if (![field.inQueryTable.alias isEqualToString:currentAlias]) {
+			if (current == nil || ![field.inQueryTable.alias isEqualToString:currentAlias]) {
 				currentAlias = field.inQueryTable.alias;
 				current = [NSMutableArray array];
 				[sections addObject:current];

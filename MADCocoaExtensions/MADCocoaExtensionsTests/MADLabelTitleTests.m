@@ -48,7 +48,7 @@
 
 	XCTAssertEqual(attributed.length, (NSUInteger)6);
 	XCTAssertEqualObjects([attributed attribute:NSForegroundColorAttributeName atIndex:0 effectiveRange:NULL],
-						  [UIColor whiteColor]);
+						  [UIColor labelColor]);
 	XCTAssertEqualObjects([attributed attribute:NSKernAttributeName atIndex:0 effectiveRange:NULL], [NSNull null]);
 
 	NSParagraphStyle *paragraph = [attributed attribute:NSParagraphStyleAttributeName atIndex:0 effectiveRange:NULL];
