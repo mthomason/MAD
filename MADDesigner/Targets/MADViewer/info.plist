@@ -54,6 +54,8 @@
 	<string>8.0.351</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>MADRev</key>
 	<string>1376</string>
 	<key>NSHumanReadableCopyright</key>

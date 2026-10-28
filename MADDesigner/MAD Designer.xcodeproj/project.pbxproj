@@ -397,6 +397,40 @@
 		4CFEE8201BB7A3A300AFAA0A /* MADQueryValueFromFieldController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE81A1BB7A3A300AFAA0A /* MADQueryValueFromFieldController.m */; };
 		4CFEE8211BB7A3A300AFAA0A /* MADCellTextInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFEE81D1BB7A3A300AFAA0A /* MADCellTextInput.m */; };
 		4CFEE8281BB99DB200AFAA0A /* MADQuery.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEE8271BB99DB200AFAA0A /* MADQuery.storyboard */; };
+		4C3F00212EA0000100000021 /* MADStoreConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDEAD0000000000000000A2 /* MADStoreConverter.m */; };
+		4C3F00222EA0000100000022 /* MADStoreLegacyConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CDEAD0000000000000000A4 /* MADStoreLegacyConverter.m */; };
+		4C3F00232EA0000100000023 /* MADThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4B4B8F2DE34A170035A316 /* MADThemeManager.m */; };
+		4C3F00242EA0000100000024 /* MADSalesReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C401EC11BAE5E9000BAE5FC /* MADSalesReceipt.m */; };
+		4C3F00252EA0000100000025 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4020681BAE938500BAE5FC /* NSData+Base64.m */; };
+		4C3F00262EA0000100000026 /* MADViewerNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5478E81E5D7EC80043682E /* MADViewerNavigationBar.m */; };
+		4C3F00272EA0000100000027 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4C459A332E8F8B3100F078CF /* LaunchScreen.storyboard */; };
+		4C3F00302EA0000100000030 /* openssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0500000000000000B1 /* openssl.xcframework */; };
+		4C3F00312EA0000100000031 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160F24AC75E300EC794B /* MADFoundation.framework */; };
+		4C3F00322EA0000100000032 /* MADFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160F24AC75E300EC794B /* MADFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F00332EA0000100000033 /* MADFileManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160E24AC75E300EC794B /* MADFileManager.framework */; };
+		4C3F00342EA0000100000034 /* MADFileManager.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160E24AC75E300EC794B /* MADFileManager.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F00352EA0000100000035 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160824AC75E300EC794B /* MADAPI.framework */; };
+		4C3F00362EA0000100000036 /* MADAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160824AC75E300EC794B /* MADAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F00372EA0000100000037 /* MADBarcodes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160924AC75E300EC794B /* MADBarcodes.framework */; };
+		4C3F00382EA0000100000038 /* MADBarcodes.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160924AC75E300EC794B /* MADBarcodes.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F00392EA0000100000039 /* MADExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160C24AC75E300EC794B /* MADExplorer.framework */; };
+		4C3F003A2EA000010000003A /* MADExplorer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160C24AC75E300EC794B /* MADExplorer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F003B2EA000010000003B /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161224AC75E300EC794B /* MADTdsClient.framework */; };
+		4C3F003C2EA000010000003C /* MADTdsClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161224AC75E300EC794B /* MADTdsClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F003D2EA000010000003D /* MADTds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6895142CF1DCE300BD38DF /* MADTds.framework */; };
+		4C3F003E2EA000010000003E /* MADTds.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C6895142CF1DCE300BD38DF /* MADTds.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F003F2EA000010000003F /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161124AC75E300EC794B /* MADSqlite3.framework */; };
+		4C3F00402EA0000100000040 /* MADSqlite3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161124AC75E300EC794B /* MADSqlite3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F00412EA0000100000041 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161024AC75E300EC794B /* MADMySQL.framework */; };
+		4C3F00422EA0000100000042 /* MADMySQL.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161024AC75E300EC794B /* MADMySQL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F00432EA0000100000043 /* MADPostgres.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161324AC75E300EC799B /* MADPostgres.framework */; };
+		4C3F00442EA0000100000044 /* MADPostgres.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161324AC75E300EC799B /* MADPostgres.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F00452EA0000100000045 /* MAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160724AC75E300EC794B /* MAD.framework */; };
+		4C3F00462EA0000100000046 /* MAD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160724AC75E300EC794B /* MAD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F00472EA0000100000047 /* MADCocoaExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160A24AC75E300EC794B /* MADCocoaExtensions.framework */; };
+		4C3F00482EA0000100000048 /* MADCocoaExtensions.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160A24AC75E300EC794B /* MADCocoaExtensions.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C3F00492EA0000100000049 /* MADDataStructures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160B24AC75E300EC794B /* MADDataStructures.framework */; };
+		4C3F004A2EA000010000004A /* MADDataStructures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160B24AC75E300EC794B /* MADDataStructures.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -446,6 +480,19 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				4C3F00322EA0000100000032 /* MADFoundation.framework in Embed Frameworks */,
+				4C3F00342EA0000100000034 /* MADFileManager.framework in Embed Frameworks */,
+				4C3F00362EA0000100000036 /* MADAPI.framework in Embed Frameworks */,
+				4C3F00382EA0000100000038 /* MADBarcodes.framework in Embed Frameworks */,
+				4C3F003A2EA000010000003A /* MADExplorer.framework in Embed Frameworks */,
+				4C3F003C2EA000010000003C /* MADTdsClient.framework in Embed Frameworks */,
+				4C3F003E2EA000010000003E /* MADTds.framework in Embed Frameworks */,
+				4C3F00402EA0000100000040 /* MADSqlite3.framework in Embed Frameworks */,
+				4C3F00422EA0000100000042 /* MADMySQL.framework in Embed Frameworks */,
+				4C3F00442EA0000100000044 /* MADPostgres.framework in Embed Frameworks */,
+				4C3F00462EA0000100000046 /* MAD.framework in Embed Frameworks */,
+				4C3F00482EA0000100000048 /* MADCocoaExtensions.framework in Embed Frameworks */,
+				4C3F004A2EA000010000004A /* MADDataStructures.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1160,6 +1207,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C3F00302EA0000100000030 /* openssl.xcframework in Frameworks */,
+				4C3F00312EA0000100000031 /* MADFoundation.framework in Frameworks */,
+				4C3F00352EA0000100000035 /* MADAPI.framework in Frameworks */,
+				4C3F003F2EA000010000003F /* MADSqlite3.framework in Frameworks */,
+				4C3F00452EA0000100000045 /* MAD.framework in Frameworks */,
+				4C3F00332EA0000100000033 /* MADFileManager.framework in Frameworks */,
+				4C3F00472EA0000100000047 /* MADCocoaExtensions.framework in Frameworks */,
+				4C3F00372EA0000100000037 /* MADBarcodes.framework in Frameworks */,
+				4C3F00392EA0000100000039 /* MADExplorer.framework in Frameworks */,
+				4C3F003B2EA000010000003B /* MADTdsClient.framework in Frameworks */,
+				4C3F00412EA0000100000041 /* MADMySQL.framework in Frameworks */,
+				4C3F00432EA0000100000043 /* MADPostgres.framework in Frameworks */,
+				4C3F00492EA0000100000049 /* MADDataStructures.framework in Frameworks */,
+				4C3F003D2EA000010000003D /* MADTds.framework in Frameworks */,
 				4C611981199130700090ECC4 /* libc++.dylib in Frameworks */,
 				4CDA76B718257E5500E462F6 /* libz.dylib in Frameworks */,
 				4CF3B6EB180464CE004BE0AC /* Accelerate.framework in Frameworks */,
@@ -2318,7 +2379,6 @@
 			files = (
 				4CC3D8181BCB6DE700BDA5D3 /* Images.xcassets in Resources */,
 				4CC3D8191BCB6DE700BDA5D3 /* MADFeatures.plist in Resources */,
-				4C32A4AF1BB076FC00DD59A3 /* MAD Viewer.entitlements in Resources */,
 				4C453FC92E25DB4000641E6E /* MAD Designer.storekit in Resources */,
 				4C0E784A163B5AEC003B951E /* UIImageExportTypeMySQL.png in Resources */,
 				4C0E784B163B5AEC003B951E /* UIImageExportTypeMySQL@2x.png in Resources */,
@@ -2326,6 +2386,7 @@
 				4C0E784D163B5AEC003B959E /* UIImageExportTypePostgres@2x.png in Resources */,
 				4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
+				4C3F00272EA0000100000027 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2431,6 +2492,7 @@
 		};
 		4CF3B6EC18046614004BE0AC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -2449,11 +2511,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C3F00212EA0000100000021 /* MADStoreConverter.m in Sources */,
+				4C3F00222EA0000100000022 /* MADStoreLegacyConverter.m in Sources */,
 				4C0E773C163B5AEC003B951E /* MAD.xcdatamodeld in Sources */,
 				4C3DCBD41BCA000500ABE231 /* main.m in Sources */,
 				4C3DCC061BCA039B00ABE231 /* MADNavigationController.m in Sources */,
 				4C3DCBD11BC9FF2F00ABE231 /* MADViewerAppDelegate.m in Sources */,
 				4C3DCC071BCA03CD00ABE231 /* MADVerificationController.m in Sources */,
+				4C3F00232EA0000100000023 /* MADThemeManager.m in Sources */,
+				4C3F00242EA0000100000024 /* MADSalesReceipt.m in Sources */,
+				4C3F00252EA0000100000025 /* NSData+Base64.m in Sources */,
+				4C3F00262EA0000100000026 /* MADViewerNavigationBar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2760,11 +2828,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "Targets/MADViewer/SupportingFiles/MAD Viewer.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 25858PHWZ7;
 				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2782,21 +2851,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SDKROOT)/usr/lib",
-					"$(PROJECT_DIR)/../Compressor/library",
-					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
-					"$(PROJECT_DIR)/../Compressor/library/libpng",
-					"$(PROJECT_DIR)/../Compressor/library/openssl",
-					"$(PROJECT_DIR)",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.viewer;
 				PRODUCT_NAME = "MAD Viewer";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5C5FDDF5-C73B-4176-A6DA-E92017B632C3";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2805,11 +2867,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = "Targets/MADViewer/SupportingFiles/MAD Viewer.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2826,21 +2888,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SDKROOT)/usr/lib",
-					"$(PROJECT_DIR)/../Compressor/library",
-					"$(PROJECT_DIR)/../Compressor/library/libmysqlclient",
-					"$(PROJECT_DIR)/../Compressor/library/libpng",
-					"$(PROJECT_DIR)/../Compressor/library/openssl",
-					"$(PROJECT_DIR)",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.mad.viewer;
 				PRODUCT_NAME = "MAD Viewer";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7019972F-DCB4-4433-9890-79699F0713CA";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

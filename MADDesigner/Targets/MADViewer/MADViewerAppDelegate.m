@@ -118,6 +118,18 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 }
 
 
++ (NSString *)bundleVersionShortString {
+	return [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"] ?: @"";
+}
+
+
++ (NSString *)bundleGitCommitCount {
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"MADMeta" ofType:@"plist"];
+	NSDictionary *metaDictionary = path ? [NSDictionary dictionaryWithContentsOfFile:path] : nil;
+	return metaDictionary[@"MADGitCommitCount"] ?: @"";
+}
+
+
 - (NSString *)groupIdentifier { 
 	return @"";
 }
@@ -288,23 +300,27 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
     //[self.openFileViewController setRightBarButtonItemActivityIndicatorVisible:NO animated:YES];
 }
 
-- (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
+- (BOOL)application:(UIApplication *)application shouldSaveSecureApplicationState:(NSCoder *)coder {
     return NO;
 }
 
-- (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
+- (BOOL)application:(UIApplication *)application shouldRestoreSecureApplicationState:(NSCoder *)coder {
     return NO;
 }
 
 #pragma mark - Document Interaction Controller Delegate
 
 - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller {
-    return self.window.rootViewController;
+    UIViewController *root = self.window.rootViewController;
+    return root ?: [[UIViewController alloc] init];
 }
 
 - (void)documentInteractionControllerDidEndPreview:(UIDocumentInteractionController *)controller {
-    NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:controller.URL error:&error];
+    NSURL *url = controller.URL;
+    if (url != nil) {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] removeItemAtURL:url error:&error];
+    }
 }
 
 - (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
@@ -314,7 +330,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 #pragma mark - Convenience
 
 - (MADNavigationController *)navigationController {
-    return (MADNavigationController *)[UIApplication sharedApplication].windows.firstObject.rootViewController;
+    return (MADNavigationController *)self.window.rootViewController;
 }
 
 - (MADExplorerController *)openFileViewController {
