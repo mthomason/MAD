@@ -1161,7 +1161,7 @@ publication (README says it is built locally for now).
 
 ## 18. The post-launch steps — prompts 01–04
 
-**Status:** 01 and 02 done 2026-10-26; 03 is PR #7; 04 not started. The
+**Status:** 01, 02 and 04 done; 03 is PR #7. The
 prompts are in `~/Desktop/MADOpenSource-PostSteps/`.
 
 * **01 — publish the CLI image.** `.github/workflows/publish-image.yml`
@@ -1177,5 +1177,42 @@ prompts are in `~/Desktop/MADOpenSource-PostSteps/`.
   release checklist are `docs/project/SATELLITE_REPOS.md`. The `mad` CLI
   gained `--host`, `--port` and `--database` so a checked-in document can
   point at a CI database without being rewritten (`MAD_CLI.md` §3).
-* **04 — the PostgreSQL driver.** Not started; its prompt is the scope, and
-  it is independent of 01–03.
+* **04 — the PostgreSQL driver (`MADPostgres`) — done 2026-10-28 on `postgres-driver`.**
+  * **Phase A (the C client library, both platforms):** pinned PostgreSQL 17.11
+    (`libpq` + `libpgcommon`/`libpgport`, linked against OpenSSL) in
+    `Compressor/matrix.conf` (`Compressor/lib/recipes/postgres.sh` + verify) and
+    `Linux/libraries.conf` (`build_postgres` in `Linux/lib/libraries.sh`).
+    Permissive PostgreSQL Licence recorded in `ThirdParty/Licenses/postgres-LICENSE.txt`
+    and `docs/project/THIRD_PARTY_LICENSES.md`.
+  * **Phase B (`MADPostgres` framework on Apple):** `MADDatabaseTypePostgres = 12`
+    (`MADAPI`), `+Identifier` = `@"PostgreSQL"`, `MADDatabasePostgres`,
+    `MADDatabaseConnectionPostgres` (`+load` registration with
+    `MADDatabaseDriverRegistry`), `MADPostgresConnection` (thin `libpq` wrapper),
+    `MADDataTypePostgres` (PostgreSQL OID and type-name mapping to `MADDataType`),
+    and `MADPostgresConnectionViewController` (port 5432 default). Tables in
+    `public` are imported unqualified; tables in other non-system schemas are
+    qualified as `schema.table`, and identifier helpers quote each dot-separated
+    component with `"..."` (escaping embedded `"` as `""`). Offline unit suite:
+    21 tests in `MADPostgresTests.m`.
+  * **Phase C (Linux port + `MAD` Rptq dispatch):** `Linux/cmake/MADPostgresSources.cmake`,
+    `<MADPostgres/libpq-fe.h>` shim, whole-archive link entry on `mad` in
+    `Linux/CMakeLists.txt`, `RptqDatabaseCredentals+Postgres` in `MAD`, and the
+    ported MRC suite `Linux/Tests/MADPostgresTests.m` (17 tests).
+  * **Phase D (live tests + Chinook test container):** `MADPostgres/TestDatabase/postgres-test-db.sh`
+    (`postgres:17.4-bookworm`, checksum-verified Chinook PostgreSQL dataset on
+    `127.0.0.1:5432`, user `mad`, password `mad_test_pw`, database `chinook`),
+    `MADPostgresLiveTests.m` (14 live tests on Apple and Linux; skips cleanly
+    when unreachable), and credentials documented in `docs/project/DEVELOPER.md`.
+  * **Phase E (app integration + CLI):** `MADDriverSelectorController` (row 2:
+    `PostgreSQL Native Driver`, `UIImageExportTypePostgres`),
+    `MADQueryAddLinkJoinTypeController` (all join types enabled for
+    `MADDatabaseTypePostgres`), `MADOperationValidateSQL` semicolon-stripping for
+    `MADDatabaseTypePostgres`, `MADQueryFullTests` + `MADSQLParserTests` double-quote
+    coverage on Apple and Linux, and `MADPostgres` linked into `MAD Designer` and
+    `CLI/build.sh`.
+  * **Phase F (docs and fixtures):** `CLI/Fixtures/Postgres.chinook.mad` generated
+    via `MADFixtureMaker`, `Linux/verify-cli.sh --live` extended with the 25-row
+    PostgreSQL refresh check, and `Linux/README.md`, `CLI/Fixtures/README.md`,
+    `docs/tutorials/driver-authoring.md`, `docs/project/LIBRARIES.md`,
+    `docs/project/THIRD_PARTY_LICENSES.md`, `docs/project/BUGS.md`, and `AGENTS.md`
+    updated.

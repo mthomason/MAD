@@ -26,16 +26,17 @@ satisfies is *"return a schema and rows in table form"*
 anything that can be made to look like a table: a SQL database, a Web
 service, a file.
 
-The two production examples to crib from are `MADMySQL` (18 files,
-`MADMySQL/Source/`, subclass `MADDatabaseMySQL`) and `MADTdsClient`
-(SQL Server over FreeTDS). Sqlite3 is the third shipped driver
-(`MADSqlite3`), and the file-backed case (`+newDatabaseConnectionWithURL:`)
-shows in its connection class.
+The three server examples to crib from are `MADPostgres` (6 files,
+`MADPostgres/Source/`, subclass `MADDatabasePostgres` over `libpq`),
+`MADMySQL` (18 files, `MADMySQL/Source/`, subclass `MADDatabaseMySQL`) and
+`MADTdsClient` (SQL Server over FreeTDS). Sqlite3 is the fourth shipped
+driver (`MADSqlite3`), and the file-backed case
+(`+newDatabaseConnectionWithURL:`) shows in its connection class.
 
 ## Step 1 — the type constant
 
 Pick the next free `MADDatabaseType` value (`MADAPI/Source/MADDatabaseType.h`;
-shipped types are 1–11) or extend the enum. This is what the document
+shipped types are 1–12) or extend the enum. This is what the document
 stores, so it is a format constant: once documents exist with your type,
 the number is permanent.
 
@@ -103,8 +104,8 @@ create-document flow calls when it imports a database's schema into a new
 
 `+Identifier` is what `RptqDatabaseCredentals.driverID` holds, so it is a
 document-format constant — pick a stable spelling ("MySQL", "TDS",
-"Sqlite 3" are the shipped ones). A second class claiming a taken type is
-a programming error; the registry asserts it.
+"PostgreSQL", "Sqlite 3" are the shipped ones). A second class claiming a
+taken type is a programming error; the registry asserts it.
 
 ## Step 4 — link it so the registration runs
 
@@ -117,8 +118,8 @@ clear message rather than failing later with nil).
   static archive — categories and `+load` methods are otherwise dropped
   silently.
 * **Linux:** add your archive **whole-archived** to the `mad` target in
-  `Linux/CMakeLists.txt`, the way `madsqlite3`, `madmysql` and
-  `madtdsclient` are:
+  `Linux/CMakeLists.txt`, the way `madsqlite3`, `madmysql`, `madtdsclient`
+  and `madpostgres` are:
 
   ```cmake
   target_link_libraries(mad PUBLIC

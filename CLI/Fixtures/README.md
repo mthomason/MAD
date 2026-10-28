@@ -9,6 +9,7 @@ Documents the CLI's verbs are run against, beside the samples they come from
 | `Music.portable.mad` | `.../Reports/Music.dataset/Music.mad` | the same path on the larger sample (3503 rows) |
 | `MySQL.employees.mad` | the `employees` sample database, live (MySQL 8.4) | the MySQL driver path end to end: schema import, backtick SQL, a prepared-statement fetch |
 | `TDS.AdventureWorksLT2022.mad` | AdventureWorksLT2022, live (SQL Server 2022) | the TDS path end to end: schema-qualified tables, bracketed T-SQL, the freetds fetch |
+| `Postgres.chinook.mad` | Chinook, live (PostgreSQL 17) | the PostgreSQL path end to end: schema import, double-quoted SQL, the libpq fetch |
 
 ## Why the samples needed converting
 
@@ -23,9 +24,9 @@ They are also the read-side counterpart of the v0 samples: `mad inspect` reports
 fixture as v1 with `StoreContent/store.sqlite` and the sample as v0 with the legacy
 store, and both statements come from the same container reader.
 
-The two live fixtures are ordinary documents the app's create chain wrote against
+The three live fixtures are ordinary documents the app's create chain wrote against
 a real server, so their schemas are real ones (8 tables of `employees`, 12 of
-AdventureWorksLT) and their queries are real SELECTs.
+AdventureWorksLT, 11 of Chinook) and their queries are real SELECTs.
 
 ## How they were made
 
@@ -41,6 +42,9 @@ On the Mac, with the app's own code paths — nothing here is hand-written:
 
 	CLI/build.sh --make-fixture create tds mac 1433 sa 'Root1@Root2' AdventureWorksLT2022 "$PWD/CLI/Fixtures/TDS.AdventureWorksLT2022.mad"
 	CLI/build.sh --make-fixture select "$PWD/CLI/Fixtures/TDS.AdventureWorksLT2022.mad" "SalesLT.Product" "Name,ListPrice,Color"
+
+	CLI/build.sh --make-fixture create postgres mac 5432 mad mad_test_pw chinook "$PWD/CLI/Fixtures/Postgres.chinook.mad"
+	CLI/build.sh --make-fixture select "$PWD/CLI/Fixtures/Postgres.chinook.mad" track "name,composer,unit_price"
 
 `--make-fixture` compiles `MADFixtureMaker.m` (the same flags as the tool, plus the
 legacy converter and the value transformers) and runs it in the simulator:
@@ -75,8 +79,9 @@ checksum-verified datasets:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on 13306
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on 1433
+	MADPostgres/TestDatabase/postgres-test-db.sh up    # mad-postgres on 5432
 
-Both publish on every interface, so the documents' `mac` host name resolves
+All three publish on every interface, so the documents' `mac` host name resolves
 from the Mac and from inside the Linux image. The MySQL container is on 13306,
 not 3306, because the Oracle MySQL installer's launchd service may own 3306.
 `down` stops a server (the volumes keep the data); `reset` removes it and the

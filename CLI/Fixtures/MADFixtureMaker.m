@@ -15,7 +15,7 @@
 //      shipping samples, which are legacy documents, become portable fixtures:
 //      nothing off Apple can convert one (Core Data, docs/project/MAD_LINUX.md §5.1).
 //
-//    MADFixtureMaker create <mysql|tds> <host> <port> <user> <password> <database> <out.mad>
+//    MADFixtureMaker create <mysql|tds|postgres> <host> <port> <user> <password> <database> <out.mad>
 //      ...
 //      Runs the app's create-document chain against a live server: create the
 //      document, first-time setup, add the connection, import the schema, close
@@ -64,6 +64,7 @@
 
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
 #import <MADTdsClient/MADDatabaseConnectionSQLServer.h>
+#import <MADPostgres/MADDatabaseConnectionPostgres.h>
 
 #import <UIKit/UIDocument.h>
 
@@ -342,7 +343,7 @@ int main(int argc, const char *argv[]) {
 
 		if (argc >= 2 && strcmp(argv[1], "create") == 0) {
 			if (argc != 9) {
-				fprintf(stderr, "usage: MADFixtureMaker create <mysql|tds> <host> <port> <user> <password> <database> <out.mad>\n");
+				fprintf(stderr, "usage: MADFixtureMaker create <mysql|tds|postgres> <host> <port> <user> <password> <database> <out.mad>\n");
 				return 1;
 			}
 			NSString *driver = [NSString stringWithUTF8String: argv[2]];
@@ -359,8 +360,10 @@ int main(int argc, const char *argv[]) {
 			} else if ([driver isEqualToString: @"tds"]) {
 				connection = [[MADDatabaseConnectionSQLServer alloc] initWithHost: host server: host
 																		 database: database andPort: port];
+			} else if ([driver isEqualToString: @"postgres"]) {
+				connection = [[MADDatabaseConnectionPostgres alloc] initWithHost: host database: database andPort: port];
 			} else {
-				fprintf(stderr, "unknown driver '%s' (mysql or tds)\n", driver.UTF8String);
+				fprintf(stderr, "unknown driver '%s' (mysql, tds, or postgres)\n", driver.UTF8String);
 				return 1;
 			}
 
@@ -381,7 +384,7 @@ int main(int argc, const char *argv[]) {
 		}
 
 		fprintf(stderr, "usage: MADFixtureMaker portable <document.mad> <fixture.mad>\n"
-						"       MADFixtureMaker create <mysql|tds> <host> <port> <user> <password> <database> <out.mad>\n"
+						"       MADFixtureMaker create <mysql|tds|postgres> <host> <port> <user> <password> <database> <out.mad>\n"
 						"       MADFixtureMaker select <document.mad> <table> <field>[,<field>...]\n");
 		return 1;
 	}

@@ -21,6 +21,7 @@ software, and the LGPL additionally requires the written offer below.
 | `bzip2-LICENSE.txt` | bzip2 | `Compressor/build/bzip2/source/src/LICENSE` (pinned 1.0.8). |
 | `zlib-LICENSE.txt` | zlib | `Compressor/build/zlib/source/src/LICENSE` (pinned 1.3.2). |
 | `sqlite3-LICENSE.md` | SQLite | `Compressor/build/sqlite3/source/src/LICENSE.md` (pinned 3.53.3). |
+| `postgres-LICENSE.txt` | PostgreSQL `libpq` | `Compressor/build/postgres/source/src/COPYRIGHT` (pinned 17.11). |
 | `asn1c-BSD.txt` | asn1c runtime | The header comment in `MADDesigner/Source/ReceiptModuleAsn1c/asn_application.h`. |
 | `rwpng-BSD-2-Clause.txt` | pngquant `rwpng` | The header comment in `MADDesigner/Source/rwpng/rwpng.c`. |
 | `FontAwesome-OFL-1.1.txt` | FontAwesome.ttf (v4.3.0) | The canonical SIL OFL 1.1 text from openfontlicense.org. The 4.3.0 distribution carried no licence file, and the copyright line FA declared for that version was "Font Awesome by Dave Gandy - http://fontawesome.io". |

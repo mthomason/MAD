@@ -10,8 +10,9 @@
 #  Linux/README.md).  It also checks that the image really is the runtime layer:
 #  no compiler, no build tree, and the sample database in place.
 #
-#  --live additionally refreshes the MySQL and TDS fixtures, which needs the
-#  two containers documented in CLI/Fixtures/README.md and docs/project/DEVELOPER.md.
+#  --live additionally refreshes the MySQL, TDS and PostgreSQL fixtures, which
+#  needs the three containers documented in CLI/Fixtures/README.md and
+#  docs/project/DEVELOPER.md.
 #
 #  Exit code: 0 when every check passes, 1 otherwise.
 #
@@ -22,6 +23,7 @@ FIXTURES=/repo/CLI/Fixtures
 LONDON="${FIXTURES}/London.portable.mad"
 MYSQL_DOC="${FIXTURES}/MySQL.employees.mad"
 TDS_DOC="${FIXTURES}/TDS.AdventureWorksLT2022.mad"
+POSTGRES_DOC="${FIXTURES}/Postgres.chinook.mad"
 SAMPLE_DB="${HOME}/GNUstep/Library/ApplicationSupport/chinook.sqlite3"
 WORK="$(mktemp -d)"
 
@@ -182,6 +184,8 @@ if [[ "${1:-}" == "--live" ]]; then
 	check "refresh MySQL: 50 rows"	grep -q 'refreshed 50 rows' "${WORK}/mysql.txt"
 	output mad refresh "${TDS_DOC}" --credentials 'sa:Root1@Root2' --rows 20 --no-keychain > "${WORK}/tds.txt"
 	check "refresh TDS: 20 rows"	grep -q 'refreshed 20 rows' "${WORK}/tds.txt"
+	output mad refresh "${POSTGRES_DOC}" --credentials mad:mad_test_pw --rows 25 --no-keychain > "${WORK}/postgres.txt"
+	check "refresh Postgres: 25 rows"	grep -q 'refreshed 25 rows' "${WORK}/postgres.txt"
 
 	# The overrides reach the driver: the fixture's stored server is reachable,
 	# so a deliberately wrong override must fail in the refresh, not in the

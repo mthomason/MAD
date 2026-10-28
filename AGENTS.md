@@ -12,7 +12,7 @@
 
 _MAD Designer_ defines a `.mad` file type.  A document's definition lives in a portable SQLite store of our own (`docs/project/MAD_STORE_MIGRATION.md`, `docs/project/MAD_FORMAT.md`); the MAD framework does not link Core Data — Core Data survives only to convert legacy documents, in the application target (`MADDesigner/Source/MADStoreLegacy/`).
 
-It is BI software, and currently support access to MySQL and SQL Server databases.  It also uses Sqlite3 for example reports and internal data tables.
+It is BI software, and currently supports access to MySQL, SQL Server, and PostgreSQL databases.  It also uses Sqlite3 for example reports and internal data tables.
 
 The software is designed to be extensible.  Developers should be able to do the following:
 
@@ -52,16 +52,17 @@ Once this is complete, the user can go to the MAD Viewer screen and use the refr
 
 ## Project Structure
 
-* This is a large and complex project that currently includes a main project and thirteen (13x) frameworks
+* This is a large and complex project that currently includes a main project and fourteen (14x) frameworks
 	* `MADFoundation`: A base framework that defines classes used by all other frameworks.  This framework does not include any other frameworks, except references to `Foundation.framework` and `UIKit.framework`.  It includes important classes that can be abstracted away, such as `MADOperation` and `MADKeyChain`.
 	* `MADAPI`: This framework only has a reference to `MADFoundation` and `MADCocoaExtensions`.
-	* `MAD`: This framework defines `MADDatabase`, which is subclassed by custom database types (e.g. MySQL or SQL Server).  It also defines other core types.
+	* `MAD`: This framework defines `MADDatabase`, which is subclassed by custom database types (e.g. MySQL, SQL Server, or PostgreSQL).  It also defines other core types.
 	* `MADCocoaExtensions`: These are some core helper classes that are used all over the project.  It's useful classes, categories, and functions that are abstracted into this framework.
 	* `MADDataStructures`: This defines core data structures and algorithms. The data structures include a graph, tree, stack, and linked list.
 	* `MADFileManager`: This framework includes core file management classes for file coordination, file meta data, and storage state.
 	* `MADExplorer`: This framework holds some of the file explorer code.  Other code for the file explorer is in the main project.
 	* `MADMySQL`: The MySQL implementation of the `MADDatabase`.
 	* `MADTdsClient`: Implements `MADDatabaseSQLServer`, the SQL Server subclass of `MADDatabase`
+	* `MADPostgres`: Implements `MADDatabasePostgres`, the PostgreSQL subclass of `MADDatabase` over `libpq`.
 	* `MADSqlite3`: A wrapper around Sqlite3.
 	* `MADTds`: A base wrapper around the freetds project.
 	* `MADBarcodes`: This is used for the barcode element.  The framework is maintained, links zint 2.16.0 via the Compressor recipe, and backs the barcode element on Apple; it is deliberately excluded from the Linux build.
@@ -73,7 +74,7 @@ The code base also includes a custom scripting language in a file called `Scrimp
 
 The codebase also includes static library build scrips in a file called `Compressor`.  This is used to build the static libraries used by the project.  This is a very important part of the project.
 
-The codebase also includes `Linux`, the headless engine's build (`docs/project/MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all ten headless frameworks against them, and runs their ported suites — 124 executables, 1,270 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
+The codebase also includes `Linux`, the headless engine's build (`docs/project/MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all eleven headless frameworks against them, and runs their ported suites — 126 executables, 1,303 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
 
 ## Code Style Guidance
 
@@ -140,11 +141,11 @@ installed runtime (iOS 27.0), which has no iPhone 17 Pro device (26.0/26.1/26.5 
 the `name=iPhone 17 Pro` form fails with exit code 70.  The shared DerivedData path is
 required -- the frameworks reference each other via `BUILT_PRODUCTS_DIR`.
 
-`MADMySQL` and `MADTdsClient` each carry a second file -- `MADMySQLLiveTests.m` and
-`MADTdsClientLiveTests.m` -- that talks to a real database server and **skips** when one is
+`MADMySQL`, `MADTdsClient`, and `MADPostgres` each carry a second file -- `MADMySQLLiveTests.m`,
+`MADTdsClientLiveTests.m`, and `MADPostgresLiveTests.m` -- that talks to a real database server and **skips** when one is
 not reachable, so the suite still passes on a machine without a server. The credentials
-they expect are in `docs/project/DEVELOPER.md`, and each can be overridden with a `MAD_MYSQL_TEST_*` or
-`MAD_TDS_TEST_*` environment variable.
+they expect are in `docs/project/DEVELOPER.md`, and each can be overridden with a `MAD_MYSQL_TEST_*`,
+`MAD_TDS_TEST_*`, or `MAD_PG_TEST_*` environment variable.
 
 `MADFeedback`, `MADTds`, `Scrimpter`, and `Compressor` expose no shared test
 scheme, so the command above does not reach them.
