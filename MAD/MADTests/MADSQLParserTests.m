@@ -19,6 +19,7 @@
 #import <MADAPI/MADDatabase.h>
 #import <MADMySQL/MADDatabaseMySQL.h>
 #import <MADTdsClient/MADDatabaseSQLServer.h>
+#import <MADPostgres/MADDatabasePostgres.h>
 
 #import <MAD/MADSQLCompileError.h>
 #import <MAD/MADSQLParser.h>
@@ -93,6 +94,7 @@ static MADSQLParser *ParserForSQLWithQuotes(NSString *sql, NSString *quotes) {
 	XCTAssertEqualObjects([MADDatabase identifierQuoteCharacters], @"\"\"");
 	XCTAssertEqualObjects([MADDatabaseMySQL identifierQuoteCharacters], @"``");
 	XCTAssertEqualObjects([MADDatabaseSQLServer identifierQuoteCharacters], @"[]");
+	XCTAssertEqualObjects([MADDatabasePostgres identifierQuoteCharacters], @"\"\"");
 }
 
 #pragma mark - The tokenizer

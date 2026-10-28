@@ -49,6 +49,7 @@
 
 #import <MADMySQL/MADDatabaseMySQL.h>
 #import <MADTdsClient/MADDatabaseSQLServer.h>
+#import <MADPostgres/MADDatabasePostgres.h>
 
 #pragma mark - Test double
 
@@ -401,6 +402,23 @@
 	XCTAssertEqualObjects(sql,
 		@"SELECT\nTOP 10\n\t[Invoice0].[Amount],\n\t[Invoice0].[Name]\n"
 		@"FROM\n\t[Invoice] AS [Invoice0]");
+}
+
+- (void)testPostgresDialectSingleTableSql {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [self documentWithDatabaseAndQueryInContext:context];
+	RptqDatabaseSchemaTable *invoice = [self schemaTableNamed:@"Invoice" database:document.defaultDatabase context:context];
+	[self queryFieldNamed:@"Amount" type:MADDataTypeDecimal onSchemaTable:invoice database:document.defaultDatabase context:context];
+	[self queryFieldNamed:@"Name" type:MADDataTypeString onSchemaTable:invoice database:document.defaultDatabase context:context];
+	MADQueryFull *query = [self queryFullForDocument:document limit:10 database:[[MADDatabasePostgres alloc] init]];
+
+	NSError *error = nil;
+	NSString *sql = [query SQLOnlyActiveFields:NO managedObjectContext:context error:&error];
+
+	XCTAssertNil(error);
+	XCTAssertEqualObjects(sql,
+		@"SELECT\n\t\"Invoice0\".\"Amount\",\n\t\"Invoice0\".\"Name\"\n"
+		@"FROM\n\t\"Invoice\" AS \"Invoice0\"\nLIMIT 10");
 }
 
 #pragma mark - Golden SQL, joins

@@ -17,6 +17,7 @@
 #import <MADAPI/MADDatabase.h>
 #import <MADMySQL/MADDatabaseMySQL.h>
 #import <MADTdsClient/MADDatabaseSQLServer.h>
+#import <MADPostgres/MADDatabasePostgres.h>
 
 #pragma mark - App interfaces
 
@@ -59,9 +60,11 @@
 	NSString *base = [MADOperationValidateSQL probeSQLForStatement:statement database:[[MADDatabase alloc] init]];
 	NSString *mysql = [MADOperationValidateSQL probeSQLForStatement:statement database:[[MADDatabaseMySQL alloc] init]];
 	NSString *tds = [MADOperationValidateSQL probeSQLForStatement:statement database:[[MADDatabaseSQLServer alloc] init]];
+	NSString *postgres = [MADOperationValidateSQL probeSQLForStatement:statement database:[[MADDatabasePostgres alloc] init]];
 
 	XCTAssertEqualObjects(mysql, base);
 	XCTAssertEqualObjects(tds, base);
+	XCTAssertEqualObjects(postgres, base);
 	XCTAssertEqualObjects(base, @"SELECT * FROM (SELECT id FROM invoices) AS _mad_probe WHERE 1=0");
 }
 
