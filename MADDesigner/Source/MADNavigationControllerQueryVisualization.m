@@ -7,6 +7,7 @@
 //
 
 #import "MADNavigationControllerQueryVisualization.h"
+#import "MADThemeManager.h"
 #import <UIKit/UIViewControllerTransitionCoordinator.h>
 
 @implementation MADNavigationControllerQueryVisualization
@@ -19,6 +20,16 @@
 		
 	}
 	return self;
+}
+
+- (void)viewDidLoad {
+	[super viewDidLoad];
+	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
 }
 
 /*- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -43,7 +54,7 @@
 }*/
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-	return UIStatusBarStyleLightContent;
+	return UIStatusBarStyleDefault;
 }
 
 - (void)setDocument:(MADocument *)document {

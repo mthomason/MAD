@@ -109,10 +109,7 @@ typedef UITableViewController <MADToolboxControllerProtocol, MADToolboxDisplayPr
 	self.modalPresentationStyle = UIModalPresentationPopover;
 	self.modalTransitionStyle = self.segmentedControlActionStyle;
 	
-	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.translucent = YES;
-	self.segmentedControlScene.tintColor = [UIColor whiteColor];
-	self.navigationController.navigationBar.barTintColor = [MADColorEverydayApps newColorBlue];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

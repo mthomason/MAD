@@ -35,11 +35,11 @@
 			
 			classes = [[NSArray alloc] initWithObjects: [UISearchBar class], nil];
 			appearanceProxyButton = [UIButton appearanceWhenContainedInInstancesOfClasses: classes];
-			appearanceProxyButton.tintColor = [UIColor whiteColor];
+			appearanceProxyButton.tintColor = [UIColor systemBlueColor];
 			
 			appearanceProxyTextField = [UITextField appearanceWhenContainedInInstancesOfClasses:classes];
-			appearanceProxyTextField.tintColor = [UIColor whiteColor];
-			appearanceProxyTextField.textColor = [UIColor whiteColor];
+			appearanceProxyTextField.tintColor = [UIColor systemBlueColor];
+			appearanceProxyTextField.textColor = [UIColor labelColor];
 			
 			appearanceProxyImageView = [UIImageView appearanceWhenContainedInInstancesOfClasses:classes];;
 			
@@ -75,7 +75,7 @@
 	if (!self.isIconColorUpdated || !self.isClearButtonUpdated) {
 		
 		UIImage *image;
-		UIColor *whiteColor =  [UIColor whiteColor];
+		UIColor *iconColor = [UIColor secondaryLabelColor];
 		
 		UIView *subview;
 		NSArray<__kindof UIView *> *subviews;
@@ -92,7 +92,7 @@
 					image = ((UIImageView *)((UITextField *)subview2).leftView).image;
 					UIImage *imageRenderingTemplate = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 					((UIImageView *)((UITextField *)subview2).leftView).image = imageRenderingTemplate;
-					((UIImageView *)((UITextField *)subview2).leftView).tintColor = whiteColor.copy;
+					((UIImageView *)((UITextField *)subview2).leftView).tintColor = iconColor;
 					imageRenderingTemplate = nil;
 					
 				}

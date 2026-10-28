@@ -48,12 +48,12 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 	
 	// Pre-allocate attributes
 	_boldAttributes = @{
-		NSForegroundColorAttributeName: [UIColor whiteColor],
+		NSForegroundColorAttributeName: [UIColor labelColor],
 		NSFontAttributeName: [UIFont boldSystemFontOfSize:ToolbarFontPointSize]
 	};
 	
 	_lightAttributes = @{
-		NSForegroundColorAttributeName: [UIColor whiteColor],
+		NSForegroundColorAttributeName: [UIColor secondaryLabelColor],
 		NSFontAttributeName: [UIFont systemFontOfSize:ToolbarFontPointSize]
 	};
 	

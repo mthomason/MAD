@@ -586,7 +586,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 				if ([view isKindOfClass:[UIButton class]]) {
 					image = [((UIButton *)view).imageView.image
 							 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-					((UIButton *)view).tintColor = [UIColor whiteColor];
+					((UIButton *)view).tintColor = [UIColor secondaryLabelColor];
 					[((UIButton *)view) setImage:image forState:UIControlStateNormal];
 				}
 			}
@@ -646,7 +646,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-	return UIStatusBarStyleLightContent;
+	return UIStatusBarStyleDefault;
 }
 
 #pragma mark -
@@ -1370,10 +1370,10 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		searchViewHolder.autoresizingMask = MADViewAutoresizingFlexable();
 		[searchViewHolder addSubview:self.searchBar];
 		[searchViewHolder sizeToFit];
-		self.searchBar.translucent = NO;
+		self.searchBar.translucent = YES;
 		self.searchBar.backgroundColor = [UIColor clearColor];
-		self.searchBar.barTintColor = [UIColor whiteColor];
-		self.searchBar.tintColor = [UIColor whiteColor];
+		self.searchBar.barTintColor = nil;
+		self.searchBar.tintColor = [UIColor systemBlueColor];
 		
 		if (self.navigationItem.titleView != nil) {
 		

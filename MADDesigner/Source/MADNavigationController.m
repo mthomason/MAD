@@ -44,6 +44,13 @@
 	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+	[super traitCollectionDidChange:previousTraitCollection];
+	if (previousTraitCollection.userInterfaceStyle != self.traitCollection.userInterfaceStyle) {
+		[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
+	}
+}
+
 
 #pragma mark -
 #pragma mark IBActions
@@ -64,7 +71,7 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-	return UIStatusBarStyleLightContent;
+	return UIStatusBarStyleDefault;
 }
 
 #pragma mark -
