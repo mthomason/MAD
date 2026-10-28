@@ -4,7 +4,7 @@
 
 The `Compressor` project builds the third-party static libraries the _MAD Designer_
 application links (SQLite, zlib, OpenSSL, bzip2, libpng, libarchive, FreeTDS,
-MariaDB Connector/C, zint). Nothing third-party is committed: sources are downloaded on
+MariaDB Connector/C, PostgreSQL libpq, zint). Nothing third-party is committed: sources are downloaded on
 demand and built by recipes, and the artifacts are xcframeworks plus canonical
 include dirs, all gitignored.
 
@@ -47,7 +47,8 @@ Xcode target.
 
 **Version bumps carry per-recipe knowledge.** The mariadb recipe (static
 target name, install layout, auth-plugin types, the LibreSSL probe answer), the
-freetds recipe (installed-header patch) and the zint recipe (cmake flags) all
+freetds recipe (installed-header patch), the postgres recipe (client-only
+subtrees and merged `libpostgres.a` archive) and the zint recipe (cmake flags) all
 encode assumptions about the pinned version -- `docs/project/LIBRARIES.md` section 1 lists
 them. When a version bumps, re-check those.
 

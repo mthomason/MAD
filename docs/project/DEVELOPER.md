@@ -26,7 +26,7 @@ Compressor/build.sh --verify --all --platforms ios,simulator
 **Bump a library version:** edit its row in `Compressor/matrix.conf` (version,
 URL, sha256 of the new archive), then `Compressor/build.sh --rebuild <lib>` and
 run the consuming framework's test suite plus `--verify`. One library per commit.
-The mariadb, freetds and zint recipes carry per-version knowledge — see the
+The mariadb, freetds, postgres and zint recipes carry per-version knowledge — see the
 notes in `LIBRARIES.md` §1 before bumping those.
 
 ## Building on Linux (Phases B–D)
@@ -45,7 +45,7 @@ not on `PATH` by default and the script finds it.
 ./Linux/build.sh --rebuild    cold rebuild (~15-25 minutes)
 ```
 
-Nothing built there ships: it compiles the ten headless frameworks against
+Nothing built there ships: it compiles the eleven headless frameworks against
 GNUstep, runs ported versions of their tests plus a toolchain probe, and builds
 the `mad` CLI beside them. All six verbs run inside the image; `export --format
 pdf` refuses with its reason (the Linux PDF writer is deferred). The GNUstep
@@ -94,13 +94,14 @@ All three scripts take the same verbs:
 
 The iOS schemes call `up` from the Test action's pre-action and `down` from
 the post-action, so each server runs only while its suite does. `up` is also
-what to run before the Linux suite or the CLI's `--verify --live`; both
+what to run before the Linux suite or the CLI's `--verify --live`; all three
 containers publish on every interface because the Linux image and the CLI
 fixtures reach the Mac by name (`mac`), not by loopback.
 
 The first `up` is the slow one: MySQL pulls ~600 MB and imports ~168 MB of SQL
 (a few minutes); SQL Server pulls ~1.5 GB, starts, and restores the 8 MB
-AdventureWorks backup (a minute or two). Every later `up` takes seconds. If a
+AdventureWorks backup (a minute or two); PostgreSQL pulls ~160 MB and loads the
+Chinook SQL in a few seconds. Every later `up` takes seconds. If a
 container or volume is deleted, the next `up` rebuilds it from the pins in
 `db.conf`; nothing needs to be created by hand. The SQL Server image is
 `linux/amd64` only, so on Apple silicon Docker Desktop emulates it and prints a

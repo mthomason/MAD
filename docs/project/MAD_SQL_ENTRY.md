@@ -177,9 +177,9 @@ editor controller in the same storyboard seam.
 **One small API addition.** The lexer needs each dialect's identifier quoting (MySQL
 backticks, T-SQL brackets, double quotes) before a connection exists. Add
 `+ (NSString *)identifierQuoteCharacters` to `MADDatabase` (default: double quote), with
-per-driver overrides in `MADMySQL`/`MADTdsClient` — or, if preferred, a class method on the
-driver protocol resolved through `MADDatabaseDriverRegistry`. Either way it is a
-three-method addition.
+per-driver overrides in `MADMySQL`/`MADTdsClient` (`MADPostgres` uses the default double
+quote) — or, if preferred, a class method on the driver protocol resolved through
+`MADDatabaseDriverRegistry`. Either way it is a three-method addition.
 
 ## 5. The supported subset
 
@@ -413,7 +413,7 @@ the entered text.
 
 * **Golden SQL tests** in `MAD/MADTests` (extending `MADQueryFullTests.m`, which today
   asserts only fragments, `MADQueryFullTests.m:140-162`): fixed store fixtures → exact
-  expected SQL strings, per driver dialect (MySQL and TDS configs), covering alias naming
+  expected SQL strings, per driver dialect (MySQL, TDS, and PostgreSQL configs), covering alias naming
   and the drop-index form, every join type, every predicate operator with literal quoting,
   and the active-field ordering. These pin the generator the parser must round-trip, and
   they run in the Linux image too.

@@ -10,7 +10,7 @@ its elements — in one small file (under 100 KB), separate from the data it
 displays. Anyone who can read the file can run the report, refresh it against
 the database, and export it.
 
-The repository is one self-contained project: the iPad/iPhone apps, thirteen
+The repository is one self-contained project: the iPad/iPhone apps, fourteen
 frameworks, the headless engine with its Linux build and test suite, the `mad`
 command-line tool, and the build system that produces the third-party
 libraries. It is published under the MIT licence; the `.mad` format is an open
@@ -23,16 +23,16 @@ The engine is written by hand for the device it runs on:
 
 * **Written, not assembled.** The SQL generation, the data-table engine, the
   store, the layout model, and the renderer are first-party Objective-C
-  across the thirteen frameworks. Third-party code is limited to the wire --
-  MariaDB Connector/C, FreeTDS, and SQLite -- plus the barcode library. No
-  reporting SDK is being resold.
+  across the fourteen frameworks. Third-party code is limited to the wire --
+  MariaDB Connector/C, FreeTDS, libpq, and SQLite -- plus the barcode library.
+  No reporting SDK is being resold.
 * **Mobile-first means memory-budgeted.** A refresh reads the result set
   once into a SQLite row cache and computes from there, so aggregates and
   paginated rendering stay fast within a phone's memory. The definition is
   the cheap part: a `.mad` is under 100 KB.
 * **No reporting server required.** The definition travels and the device
   runs it -- native on Apple silicon, no tracking, no account. The headless
-  half of the same stack compiles on Linux and passes 1,270 tests in Docker.
+  half of the same stack compiles on Linux and passes 1,303 tests in Docker.
 
 The technical documentation is also served as a website at
 <https://docs.everydayapps.com>.
@@ -87,8 +87,8 @@ one command:
 ```
 
 The sample documents refresh against the Sqlite3 sample database that ships
-inside the image; the MySQL and SQL Server fixtures expect the test servers
-from [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).
+inside the image; the MySQL, SQL Server, and PostgreSQL fixtures expect the
+test servers from [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).
 
 ## In CI
 
@@ -123,11 +123,12 @@ source for other reports, so one document can span several databases -- is
 
 ## Database drivers
 
-MAD talks to databases through `MADDatabase` subclasses. Three drivers ship
+MAD talks to databases through `MADDatabase` subclasses. Four drivers ship
 today:
 
 * **MySQL / MariaDB** — `MADMySQL`, over MariaDB Connector/C;
 * **SQL Server** — `MADTdsClient`, over FreeTDS;
+* **PostgreSQL** — `MADPostgres`, over `libpq`;
 * **SQLite** — `MADSqlite3`, for sample documents and internal tables.
 
 A driver is a framework that subclasses `MADDatabase` and registers itself —
@@ -140,7 +141,7 @@ and return rows.
 
 ## Embedding the engine
 
-Ten of the thirteen frameworks are UIKit-free and build headlessly. The `mad`
+Eleven of the fourteen frameworks are UIKit-free and build headlessly. The `mad`
 CLI above is that engine wearing a command line: the verb set -- `inspect`,
 `schema`, `refresh`, `export` -- is the embedding surface, and an application
 that links `MAD`, a driver framework, and `MADSqlite3` has reporting with no
@@ -150,7 +151,7 @@ subclass, not a fork (see
 
 ## Build and test
 
-The iOS side is a workspace of thirteen frameworks plus the apps. Run a
+The iOS side is a workspace of fourteen frameworks plus the apps. Run a
 framework's suite against the iOS Simulator:
 
 ```sh
@@ -159,18 +160,18 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ```
 
-(`MADMySQL` and `MADTdsClient` also carry live suites that talk to a real
-database server and skip when one is not reachable — see
+(`MADMySQL`, `MADTdsClient`, and `MADPostgres` also carry live suites that talk
+to a real database server and skip when one is not reachable — see
 [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).)
 
 The headless engine is verified the same way on Linux. From the repository
 root, with Docker installed:
 
 ```sh
-./Linux/build.sh       # build the toolchain image, compile the ten frameworks, run the suites
+./Linux/build.sh       # build the toolchain image, compile the eleven frameworks, run the suites
 ```
 
-This runs 124 test executables and 1,270 tests inside the container, and
+This runs 126 test executables and 1,303 tests inside the container, and
 `--verify` adds the CLI's end-to-end checks against the checked-in fixtures
 and their pinned digests. See [`Linux/README.md`](Linux/README.md) for the
 image, the pins, and the GNUstep divergences the port found.
@@ -201,6 +202,6 @@ shipping it obliges us to do is recorded in
 
 ## Export compliance
 
-The MySQL and FreeTDS drivers use OpenSSL/TLS; no custom encryption is
-implemented. Under Apple's export compliance guidelines this is exempt
-encryption, and the app sets `ITSAppUsesNonExemptEncryption = NO`.
+The MySQL, FreeTDS, and PostgreSQL drivers use OpenSSL/TLS; no custom
+encryption is implemented. Under Apple's export compliance guidelines this is
+exempt encryption, and the app sets `ITSAppUsesNonExemptEncryption = NO`.

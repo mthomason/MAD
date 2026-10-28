@@ -166,9 +166,10 @@ UIKit decoupling lands (see `ROADMAP.md` Track 2).
 Header facts worth remembering: static-library xcframeworks do **not** reliably
 expose their headers, so every consumer names the canonical include dir
 explicitly (headers are also bundled into the xcframework for archival
-completeness). `zint.h` and `sqlite3.h` are Public framework headers whose file
-references point into the canonical include dirs, because public MAD headers
-import `<MADBarcodes/zint.h>` and `MADSqlite3` exports `sqlite3.h`.
+completeness). `zint.h`, `sqlite3.h` and `libpq-fe.h` (with its companion headers)
+are Public framework headers whose file references point into the canonical
+include dirs, because public MAD headers import `<MADBarcodes/zint.h>`,
+`MADSqlite3` exports `sqlite3.h`, and `MADPostgres` exports `libpq-fe.h`.
 
 The MAD Viewer target's legacy `LIBRARY_SEARCH_PATHS` list and Scrimpter (outside
 the workspace) are deliberately untouched: the viewer's link failure is a product
@@ -201,9 +202,9 @@ framework's test suite plus `--verify`. One library per commit. If the new
 version adds a cmake run-probe, the mariadb preset fails loudly and names it
 — answer it explicitly, never by guessing.
 
-**The zint/freetds/mariadb recipes carry per-version knowledge** (patches,
-installed-header edits, probe answers, plugin type names, install layout). When a
-version bumps, those are the places to re-check.
+**The zint/freetds/mariadb/postgres recipes carry per-version knowledge** (patches,
+installed-header edits, probe answers, plugin type names, install layout,
+client-only subtree lists). When a version bumps, those are the places to re-check.
 
 ---
 

@@ -5,7 +5,7 @@
 The headless engine's Linux build (see [`MAD_LINUX.md`](../docs/project/MAD_LINUX.md) §9 and
 this directory's [`README.md`](README.md)). One Docker image builds libobjc2,
 libdispatch, GNUstep and the C libraries the frameworks link from pinned
-sources on Ubuntu 24.04, compiles all ten headless frameworks against them,
+sources on Ubuntu 24.04, compiles all eleven headless frameworks against them,
 and runs their suites. Nothing here ships in the app; the CLI is Phase D's
 checkpoint, and Phase F's runtime image (`mad-cli:latest` locally, published
 as `ghcr.io/mthomason/mad`) is how it is run.
@@ -28,14 +28,14 @@ locally, `./Linux/build.sh --verify` is the repeatable check.
     The single place a component's version, source and hash lives.
 *   **`libraries.conf`** + **`lib/libraries.sh`** -- the same for the C
     libraries the frameworks link (sqlite3, openssl, freetds, zlib, bzip2,
-    libarchive, mysqlclient), built natively into `/usr/local`.
+    libarchive, mariadb, postgres), built natively into `/usr/local`.
 *   **`build.sh`** -- the entry point. Host modes (`--test`, `--runtime`,
     `--verify`, `--probe`, ...), plus the internal
     `--in-image configure|build|test|probe` steps the Dockerfile and CMD call.
 *   **`verify-cli.sh`** -- runs inside the runtime image (`--verify`): the
     six verbs, every export format's digest, `pdf`'s refusal, the writer's
     bytes, the exit codes, and a check that the image has no build tooling.
-    `--live` adds the MySQL and TDS refreshes.
+    `--live` adds the MySQL, TDS and PostgreSQL refreshes.
 *   **`lib/common.sh`**, **`lib/toolchain.sh`** -- fetch/build helpers and the
     per-component build knowledge, again mirroring Compressor.
 *   **`CMakeLists.txt`** + **`cmake/MADLinuxFramework.cmake`** -- the build:
@@ -71,11 +71,11 @@ The recipe MADFoundation was built with, in the order it was done:
     then `mad_add_framework(<library> <SOURCES_VAR> <test> ...)`. The function
     adds the compat prelude, builds the library ARC, and links the tests
     whole-archive (Apple's `-ObjC`) so categories survive the static archive.
-    Two frameworks need more: MADSqlite3 and MADTds get a second shim
-    directory for the library headers they expose as their own
-    (`<MADSqlite3/sqlite3.h>`, `<MADTds/sybdb.h>`), and MAD's shim is a
-    directory of symlinks because its Xcode target flattens every header as
-    `<MAD/Foo.h>`.
+    Three frameworks need more: MADSqlite3, MADTds and MADPostgres get a second
+    shim directory for the library headers they expose as their own
+    (`<MADSqlite3/sqlite3.h>`, `<MADTds/sybdb.h>`, `<MADPostgres/libpq-fe.h>`),
+    and MAD's shim is a directory of symlinks because its Xcode target flattens
+    every header as `<MAD/Foo.h>`.
 3.  **Tests.** Port the framework's Xcode suite into `Tests/`, one stand-alone
     executable per suite, and pass the names to `mad_add_framework`; ctest and
     `build.sh`'s MADTEST/NEED summary follow from that. `MADTestSupport.h`

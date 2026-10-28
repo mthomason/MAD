@@ -127,8 +127,8 @@ sources:
 The frameworks themselves gained small platform guards, all `#if __APPLE__`
 so the Apple paths are textually unchanged. The macOS suites are the proof
 they are behaviour-neutral: MADFoundation, MADDataStructures, MADFileManager,
-MADCocoaExtensions, MADAPI, MADSqlite3, MADMySQL, MADTdsClient and MAD are all
-green on the simulator, and the `MAD Designer` workspace builds.
+MADCocoaExtensions, MADAPI, MADSqlite3, MADMySQL, MADTdsClient, MADPostgres
+and MAD are all green on the simulator, and the `MAD Designer` workspace builds.
 
 ## The drivers are registered, not imported
 
@@ -139,8 +139,8 @@ driver's connection class conforms to `MADDatabaseDriver` and registers itself i
 driver up by `MADDatabaseType` instead of naming one. Which drivers a process has
 is therefore a matter of what it *links*.
 
-On Apple the host links the driver frameworks — the app and the CLI name MADMySQL
-and MADTdsClient, and `MAD.framework` no longer does, so its test bundle names them
+On Apple the host links the driver frameworks — the app and the CLI name MADMySQL,
+MADTdsClient and MADPostgres, and `MAD.framework` no longer does, so its test bundle names them
 too. On Linux the driver archives are **whole-archived** from the `mad` target
 (`$<LINK_LIBRARY:WHOLE_ARCHIVE,…>`, which propagates to every consumer): a static
 archive is searched, not loaded, so a member nothing references — a driver's
@@ -345,7 +345,7 @@ is build tooling and is not in the runtime image.
 ## The CLI runs here — Phase D
 
 `mad` is built by this CMakeLists from `CLI/Source` (the same sources
-`CLI/build.sh` builds for the iOS Simulator), links the ten frameworks
+`CLI/build.sh` builds for the iOS Simulator), links the eleven frameworks
 whole-archive, and runs in the image:
 
 	/build/mad inspect <document.mad>
@@ -540,7 +540,7 @@ The image carries:
   not a path, so this one file is what lets the checked-in London and Music
   fixtures refresh without extra setup.
 
-It leaves behind the compiler, cmake, git, the sources, the 124 test binaries,
+It leaves behind the compiler, cmake, git, the sources, the 126 test binaries,
 and the static archives and headers: the final stage is `ubuntu:24.04` plus
 the runtime libraries from apt, not the toolchain image. It is **283 MB on
 disk (66.5 MB compressed)**; the build image is 6.65 GB.
@@ -565,11 +565,11 @@ that user's own Application Support directory.
 `Linux/verify-cli.sh` in it with the repository mounted read-only: the six
 verbs, every export format against its pinned digest, `pdf`'s refusal, the
 `--reproducible` writer's bytes, the exit codes, and the image's own shape (no
-clang, cmake, git or build tree). 30 checks; it exits non-zero on any failure.
+clang, cmake, git or build tree). 41 checks; it exits non-zero on any failure.
 
 	./Linux/build.sh --verify
 	...
-	MADVERIFY 30 passed, 0 failed
+	MADVERIFY 41 passed, 0 failed
 
 `--live` adds the MySQL, TDS and PostgreSQL refreshes (50, 20 and 25 rows); start
 the three test containers first (`docs/project/DEVELOPER.md` has their scripts

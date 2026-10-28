@@ -40,19 +40,19 @@ any browser.
 
 * **Written, not assembled.** The SQL generation, the data-table engine,
   the store, the layout model, and the renderer are first-party
-  Objective-C across thirteen frameworks. Third-party code is limited to
-  the wire -- MariaDB Connector/C, FreeTDS, SQLite -- and the barcode
+  Objective-C across fourteen frameworks. Third-party code is limited to
+  the wire -- MariaDB Connector/C, FreeTDS, libpq, SQLite -- and the barcode
   library. No reporting SDK is being resold.
 * **Mobile-first, memory-budgeted.** A refresh reads the result set once
   into a SQLite row cache and computes from there, so aggregates and
   paginated rendering stay fast within a phone's memory.
-* **Embeddable.** Ten of the thirteen frameworks are UIKit-free and build
+* **Embeddable.** Eleven of the fourteen frameworks are UIKit-free and build
   headlessly. The `mad` CLI exposes the engine as verbs -- `inspect`,
   `schema`, `refresh`, `export` -- and drivers register themselves, so a
   new data source is a subclass, not a fork.
 * **Portable.** The `.mad` container is a bzip2 tar archive holding a
   portable SQLite store; no Apple framework is required to open it. The
-  headless build passes 1,270 tests on Linux, in Docker.
+  headless build passes 1,303 tests on Linux, in Docker.
 
 ## The `.mad` format
 
