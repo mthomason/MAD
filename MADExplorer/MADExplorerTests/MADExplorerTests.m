@@ -8,8 +8,10 @@
 
 #import <XCTest/XCTest.h>
 #import <UIKit/UIColor.h>
+#import <UIKit/UIDocument.h>
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
+#import <MADExplorer/MADOpenDocumentManager.h>
 #import <MADExplorer/MADThumbnailView.h>
 
 @interface MADExplorerTests : XCTestCase
@@ -75,6 +77,29 @@
 	view.thumbnailURL = url;
 	XCTAssertTrue([self waitForImageOfSize:CGSizeMake(4.0, 4.0) inView:view],
 				  @"re-setting the same path after the file changed must reload it");
+}
+
+- (void)testRemoveDocumentWithUrlRemovesRequestedURLNotActiveURL {
+	NSURL *firstURL = [NSURL fileURLWithPath:[self.directory stringByAppendingPathComponent:@"First.mad"]];
+	NSURL *secondURL = [NSURL fileURLWithPath:[self.directory stringByAppendingPathComponent:@"Second.mad"]];
+	UIDocument *firstDoc = [[UIDocument alloc] initWithFileURL:firstURL];
+	UIDocument *secondDoc = [[UIDocument alloc] initWithFileURL:secondURL];
+
+	MADOpenDocumentManager *manager = [[MADOpenDocumentManager alloc] init];
+	[manager setOpenDocument:firstDoc];
+	[manager setOpenDocument:secondDoc];
+	XCTAssertEqualObjects(manager.openUrl, secondURL);
+	XCTAssertEqual(manager.openDocument, secondDoc);
+
+	// Removing firstURL must leave secondDoc as the active openDocument.
+	[manager removeDocumentWithUrl:firstURL];
+	XCTAssertEqualObjects(manager.openUrl, secondURL);
+	XCTAssertEqual(manager.openDocument, secondDoc);
+
+	// Removing secondURL clears both openDocument and openUrl.
+	[manager removeDocumentWithUrl:secondURL];
+	XCTAssertNil(manager.openUrl);
+	XCTAssertNil(manager.openDocument);
 }
 
 @end

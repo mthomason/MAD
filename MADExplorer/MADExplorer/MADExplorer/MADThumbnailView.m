@@ -41,12 +41,12 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 
 - (void)setThumbnailToDefault {
 	MADThumbnailView * __weak weakself = self;
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+	dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
 		MADThumbnailView *sself = weakself;
 		if (sself) {
 			UIImage *result = [UIImage imageNamed:MADImageBlank];
 			MADThumbnailView * __weak wself = sself;
-			dispatch_sync(dispatch_get_main_queue(), ^{
+			dispatch_async(dispatch_get_main_queue(), ^{
 				MADThumbnailView *sself1 = wself;
 				if (sself1) {
 					sself1.image = result;
@@ -78,13 +78,13 @@ static NSString * const MADImageBlank = @"UIImageDocumentBlank";
 	self.lastChangeDate = modificationDate;
 	NSString *thumbnailPath = [path copy];
 
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+	dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
 
 		UIImage *thumbnail = [[UIImage alloc] initWithContentsOfFile:thumbnailPath];
 		if (!thumbnail) {
 			thumbnail = [UIImage imageNamed:MADImageBlank];
 		}
-		dispatch_sync(dispatch_get_main_queue(), ^{
+		dispatch_async(dispatch_get_main_queue(), ^{
 			self.image = thumbnail;
 			[self setNeedsDisplay];
 		});

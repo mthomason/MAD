@@ -404,7 +404,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                     
                     UIStepper *stepper = [[UIStepper alloc] init];
                     [stepper setWraps:NO];
-                    stepper.value = symbolHeight;		// Warning: Implicit conversion from 'NSInteger' (aka 'long') to 'double' may lose precision
+                    stepper.value = (double)symbolHeight;
                     CGPoint newCenter = CGPointMake(CGRectGetMidY(cell.contentView.bounds),
                                                   CGPointZero.x + cell.contentView.bounds.size.width - (stepper.bounds.size.width / 2.0000f) - 20.0000f);
                     [stepper addTarget:self action:@selector(didChangeSymbolHeight:) forControlEvents:UIControlEventValueChanged];
@@ -470,7 +470,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
                     
                     UIStepper *stepper = [[UIStepper alloc] init];
                     stepper.wraps = NO;
-                    stepper.value = self.borderWidth;	// Warning: Implicit conversion from 'NSInteger' (aka 'long') to 'double' may lose precision
+                    stepper.value = (double)self.borderWidth;
                     CGFloat centerY = CGRectGetMidY(cell.contentView.bounds);
                     CGFloat correctX = CGPointZero.x + cell.contentView.bounds.size.width - (stepper.bounds.size.width / 2.0000f) - 20.0000f;
                     [stepper addTarget:self action:@selector(didChangeBorderWidth:) forControlEvents:UIControlEventValueChanged];
@@ -955,7 +955,7 @@ static inline NSInteger tvs2dComponent(BOOL has2dComponent) {
     self.sampleBarcodeDataMaxicode = sampleData;
     id <MTViewControllerBarcodeOptionsDelegate> delegate = self.delegate;
     if (sampleData.count > 0) {
-        id result = [sampleData[0] allObjects].lastObject;		// Warning: Multiple methods named 'allObjects' found
+        id result = [(NSSet *)sampleData[0] allObjects].lastObject;
         [delegate barcodeMaxicodeDidSetPrimaryData:result];
     } else {
         [delegate barcodeMaxicodeDidSetPrimaryData:nil];

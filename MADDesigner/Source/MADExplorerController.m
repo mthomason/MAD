@@ -77,6 +77,7 @@
 
 #import <QuickLook/QLPreviewController.h>
 #import <MessageUI/MFMailComposeViewController.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 NSString * const MADUpgradeInstalledSamplesLondon               = @"MADUpgradeInstalledSamplesLondon";
@@ -91,7 +92,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 // NSString * const MADUtiPublicData                               = @"public.data";
 
 @interface MADExplorerController()
-	<NSFileManagerDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate, UIDocumentInteractionControllerDelegate, UIDocumentPickerDelegate, UITextFieldDelegate, UISearchBarDelegate, UIPopoverControllerDelegate, UIPopoverPresentationControllerDelegate, UIAdaptivePresentationControllerDelegate, MADExplorerProtocol, MADDocumentManagerProtocol, MADocumentDelegate, MADViewControllerStandardProtocol, MADOperationObserver, MADSaveFileProtocol>
+	<NSFileManagerDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate, UIDocumentInteractionControllerDelegate, UIDocumentPickerDelegate, UITextFieldDelegate, UISearchBarDelegate, UIPopoverPresentationControllerDelegate, UIAdaptivePresentationControllerDelegate, MADExplorerProtocol, MADDocumentManagerProtocol, MADocumentDelegate, MADViewControllerStandardProtocol, MADOperationObserver, MADSaveFileProtocol>
 
 @property (readwrite, nonatomic, strong) MADExplorerDataSource *fileExplorerDataSource;
 @property (readwrite, nonatomic, strong) MADExplorerViewDelegate *fileExplorerViewDelegate;
@@ -1478,8 +1479,9 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 }
 
 - (IBAction)actionDownload:(id)sender {
-	UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initWithDocumentTypes: [self supportedUTIs]
-																									inMode: UIDocumentPickerModeImport];
+	UTType *madType = [UTType typeWithIdentifier:MADUtiType] ?: UTTypeData;
+	UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:@[madType]
+																										 asCopy:YES];
 	picker.delegate = self;
 	[self presentViewController:picker animated:YES completion:nil];
 }

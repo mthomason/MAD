@@ -1547,6 +1547,33 @@ reference to "BUGS.md, the X entry" still lands.
 - **Now:** both are declared in `MADStandard.h`, and
   `MADStandardTests.m`'s test-only category is gone.
 
+### `MADOpenDocumentManager -removeDocumentWithUrl:` removed `self.openUrl` instead of `url`
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADExplorer/MADExplorer/MADExplorer/MADOpenDocumentManager.m:58-67`.
+- **Behavior:** `-removeDocumentWithUrl:` computed `absoluteString` from `self.openUrl.absoluteURL`
+  instead of `url.absoluteURL`, so calling it with a URL other than `self.openUrl` removed the
+  active document's entry from `self.openFiles` while leaving `self.openUrl` non-nil and leaving
+  `url`'s entry in `self.openFiles`.  In addition, `MADOpenDocumentManager` typed its document
+  accessor and storage as `UIManagedDocument *` even though `MADocument` now subclasses
+  `UIDocument` directly.
+- **Now:** `-removeDocumentWithUrl:` resolves `url.absoluteURL.absoluteString`, and
+  `MADOpenDocumentManager` types its document parameter and return value as `__kindof UIDocument *`.
+- **Test:** `MADExplorerTests -testRemoveDocumentWithUrlRemovesRequestedURLNotActiveURL`
+  (`MADExplorer/MADExplorerTests/MADExplorerTests.m`).
+
+### `MADThumbnailView` loaded thumbnails at `DISPATCH_QUEUE_PRIORITY_BACKGROUND` and blocked on `dispatch_sync(dispatch_get_main_queue(), …)`
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADExplorer/MADExplorer/MADExplorer/MADThumbnailView.m:42-92`.
+- **Behavior:** `-setThumbnailToDefault` and `-setThumbnailPath:` dispatched image decoding onto
+  `dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)` (`QOS_CLASS_BACKGROUND`) and
+  then called `dispatch_sync(dispatch_get_main_queue(), …)` to assign `self.image`.  Under Darwin's
+  QoS scheduler, `QOS_CLASS_BACKGROUND` is throttled to idle CPU (starving for >2 seconds while the
+  main thread pumps `NSRunLoop` in `MADExplorerTests -testSamePathRewriteReloadsTheImage`), and
+  synchronously blocking a background worker on the main thread risks priority inversion.
+- **Now:** Both methods decode on `QOS_CLASS_USER_INITIATED` and hop back to the main queue with
+  `dispatch_async(dispatch_get_main_queue(), …)`.
+- **Test:** `MADExplorerTests -testSamePathRewriteReloadsTheImage` (`0.225s`).
+
 ## MADSqlite3
 
 ### The cache's ORDER BY ignores column types, so text keys sort binary
@@ -2639,6 +2666,40 @@ reference to "BUGS.md, the X entry" still lands.
   the storyboard plus a document with a populated store, which the app's unit bundle has
   no fixture for.  Verified by the compiler (the warning above) and the app suite:
   74 unit tests and 33 UI tests, 0 failures, and the app builds.
+
+### AppDelegate's retry blocks capture themselves
+- **Status:** Fixed 2026-10-28.
+- **What:** `tryOpen` and `tryRefresh` are `__block` blocks that reschedule themselves with
+  `dispatch_after` (`AppDelegate.m:205`, `:256`), so each block retains itself until the
+  retry chain ends.  These are the UI-test launch hooks; the cycle ends when the chain
+  stops, but while retries are failing the block and everything it captures stay alive.
+- **Where:** `MADDesigner/Source/AppDelegate.m:200-260`.
+- **Now:** Each retry block reschedules through a `__weak __block dispatch_block_t` reference
+  and clears the strong `__block` holder once the retry finishes or reaches its attempt cap,
+  eliminating the `-Warc-retain-cycles` compiler warnings.
+
+### An assertion formats an integer with %@
+- **Status:** Fixed 2026-10-28.
+- **What:** `MADQueryViewController.m:605` asserts
+  `NSAssert(objectToDelete != nil, @"Need a non-nil value for %@", tableID)` where
+  `tableID` is an `int64_t`; `%@` expects an object.  `NSAssert` is compiled out of
+  Release builds, so this only bites in Debug, where the formatter will treat the integer
+  as a pointer.
+- **Where:** `MADDesigner/Source/MADQueryViewController.m:605`.
+- **Now:** The format specifier is `%lld` with `(long long)tableID`.
+
+### `MADToolboxFormatViewController` multi-selection decimal-count check never evaluated to `YES`
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADDesigner/Source/MADToolboxFormatViewController.m:152-170`.
+- **Behavior:** When more than one document element was selected, `allTheSame` was initialized
+  to `NO` and `lastInteger` was only assigned when `counter > 0`, so
+  `lastInteger == element.numericFormat.decimalCount && allTheSame` could never evaluate to `YES`
+  (noted in-source by `#warning Don't think BOOL allTheSame ever becomes "YES"`).  The decimal-count
+  label was therefore always blank for any multi-selection, even when every selected element had
+  the same decimal count.
+- **Now:** `allTheSame` starts as `self.userSelectedObjectIDs.count > 0`, `lastInteger` is
+  recorded on every iteration, and `allTheSame` is cleared to `NO` only when `counter > 0` and
+  `lastInteger != element.numericFormat.decimalCount`.
 - **Status:** Fixed
 - **Now:** store reads on the refresh path are marshalled onto the main queue
   (inline when already there), the store's owning queue.  In

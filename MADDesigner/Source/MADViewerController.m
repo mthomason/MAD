@@ -321,7 +321,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	// path through -operationDidFinish:, whose !_refreshing branch was written for this
 	// operation but never reached because nothing ever registered it.
 	buttonRefresh.enabled = NO;
-	[self.labelStatus updateRefreshStarted];
+	MADLabelStatus *labelStatus = self.labelStatus;
+	[labelStatus updateRefreshStarted];
 	[reload addObserver:self];
 	[self.refreshQueue addOperation:reload];
 
@@ -835,8 +836,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		if (pageViewController.viewControllers.count > 0) {
 			MADDocumentPageController *viewController = pageViewController.viewControllers[0];
 			pageViewController->_currentLocation.currentPage = viewController.pageViewAttributes.pageNumber - 1;
-			[self.labelStatus updatePageStatus: _currentLocation];
-			[pageViewController.pageSlider.pageSlider setValue: pageViewController->_currentLocation.currentPage
+			MADLabelStatus *labelStatus = self.labelStatus;
+			[labelStatus updatePageStatus: _currentLocation];
+			[pageViewController.pageSlider.pageSlider setValue: (float)pageViewController->_currentLocation.currentPage
 													  animated: YES];
 		}
 

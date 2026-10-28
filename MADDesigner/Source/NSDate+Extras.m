@@ -86,7 +86,7 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 }
 
 - (MTPair *)stringWithTimeIntervalSinceDate:(NSDate *)lastDate {
-	MTDateResolution resultResolution;
+	MTDateResolution resultResolution = MTDateResolutionDay;
 	
 	NSMutableString *text = [[NSMutableString alloc] initWithString:@"Updated "];
 	NSDate *now = [NSDate date];
@@ -215,7 +215,7 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 		
 		if (includedComponetsCounter < permittedComponents) {
 			NSTimeInterval ti = [lastDate timeIntervalSinceDate:now];
-			NSNumber *milliseconds = @((NSInteger)fabs(((ti - (NSInteger)ti) * 1000)));
+			NSNumber *milliseconds = @((NSInteger)fabs(((ti - (NSTimeInterval)(NSInteger)ti) * 1000.0)));
 			NSString *spelledOut = [NSNumberFormatter localizedStringFromNumber:milliseconds
 																	numberStyle:NSNumberFormatterSpellOutStyle];
 

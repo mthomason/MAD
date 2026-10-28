@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment version="4864" identifier="iOS"/>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -3400,7 +3400,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="IJP-lJ-cAL" kind="push" identifier="MTIdentiferSegueBarcodeExtrasMicroQrCodeError" id="vTg-QH-i1F"/>
+                                            <segue destination="IJP-lJ-cAL" kind="show" identifier="MTIdentiferSegueBarcodeExtrasMicroQrCodeError" id="vTg-QH-i1F"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Cg0-49-SDW" detailTextLabel="Dq6-g2-7mI" style="IBUITableViewCellStyleValue1" id="YGB-14-Kvc">
@@ -3427,7 +3427,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="QCh-j5-Ukj" kind="push" identifier="MTIdentiferSegueBarcodeExtrasMicroQrCodeSize" id="zgW-rS-7Ng"/>
+                                            <segue destination="QCh-j5-Ukj" kind="show" identifier="MTIdentiferSegueBarcodeExtrasMicroQrCodeSize" id="zgW-rS-7Ng"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -3766,7 +3766,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="AXb-tN-wR5" kind="push" id="xQ3-yM-haW"/>
+                                            <segue destination="AXb-tN-wR5" kind="show" id="xQ3-yM-haW"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>

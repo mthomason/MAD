@@ -145,26 +145,20 @@
 			RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: [userSelectedObjectIDs.anyObject longLongValue]
 																			   fromObjectContext: document.storeContext];
 			(self.labelNumberOfDecimals).attributedText = [self decimalsStringForNumberOfDecimals:element.numericFormat.decimalCount];
-			(self.stepperNumberOfDecimals).value = element.numericFormat.decimalCount;
+			(self.stepperNumberOfDecimals).value = (double)element.numericFormat.decimalCount;
 			
 		} else {
 
-			BOOL allTheSame = NO;
+			BOOL allTheSame = self.userSelectedObjectIDs.count > 0;
 			NSInteger lastInteger = 0;
 			NSUInteger counter = 0;
 			for (NSNumber *identifier in self.userSelectedObjectIDs) {
 				RptqDocumentElement *element = [RptqDocumentElement newDocumentElementWithIdentifier: identifier.longLongValue
 																				   fromObjectContext: document.storeContext];
-				if (counter > 0) {
-#warning Don't think BOOL allTheSame ever becomes "YES"
-					if (lastInteger == element.numericFormat.decimalCount && allTheSame) {  /// WTF: How does this work?  Don't think it ever gets in here!
-						allTheSame = YES;
-					} else {
-						allTheSame = NO;
-					}
-					
-					lastInteger = element.numericFormat.decimalCount;
+				if (counter > 0 && lastInteger != element.numericFormat.decimalCount) {
+					allTheSame = NO;
 				}
+				lastInteger = element.numericFormat.decimalCount;
 				counter++;
 			}
 			if (allTheSame) {
@@ -173,7 +167,7 @@
 				NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@""];
 				self.labelNumberOfDecimals.attributedText = attributedString;
 			}
-			self.stepperNumberOfDecimals.value = lastInteger;
+			self.stepperNumberOfDecimals.value = (double)lastInteger;
 		}
 
 	}

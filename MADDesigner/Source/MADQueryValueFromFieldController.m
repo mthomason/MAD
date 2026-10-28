@@ -110,7 +110,7 @@
 		//NSValue *keyboardFrameBeginUserInfoKey = userInfo[UIKeyboardFrameBeginUserInfoKey];
 		NSValue *keyboardFrameEndUserInfoKey = userInfo[UIKeyboardFrameEndUserInfoKey];
 		NSNumber *keyboardAnimationDurationUserInfoKey = userInfo[UIKeyboardAnimationDurationUserInfoKey];
-		NSTimeInterval duration = keyboardAnimationDurationUserInfoKey.longLongValue;
+		NSTimeInterval duration = keyboardAnimationDurationUserInfoKey.doubleValue;
 		NSNumber *keyboardAnimationCurveUserInfoKey = userInfo[UIKeyboardAnimationCurveUserInfoKey];
 		//CGRect keyboardFrameBegin = [keyboardFrameBeginUserInfoKey CGRectValue];
 		CGRect keyboardFrameEnd = [keyboardFrameEndUserInfoKey CGRectValue];

@@ -43,7 +43,7 @@
 		NSMutableSet *excluded = [NSMutableSet setWithArray:self.excludeResults];
 		NSMutableArray *filtered = [NSMutableArray arrayWithCapacity:tables.count];
 		for (RptqDatabaseSchemaTable *table in tables) {
-			if ([excluded containsObject:table.name]) continue;
+			if (table.name != nil && [excluded containsObject:(NSString * _Nonnull)table.name]) continue;
 			[filtered addObject:table];
 		}
 		tables = filtered;
