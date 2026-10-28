@@ -522,6 +522,77 @@ static void testFixpointRoundTrip(void) {
 	MAD_PASS_EQUAL(queryOfDocument(second).sqlSourceText, generatedSQL, "the entered text is stored verbatim");
 }
 
+static void testSchemaQualifiedTableApplyAndFixpointRoundTrip(void) {
+	MADHeadlessDocument *first = makeDocument();
+	RptqStoreContext *firstContext = first.storeContext;
+	RptqQuery *firstQuery = queryOfDocument(first);
+	RptqDatabase *firstDatabase = first.activeDocumentModel.defaultDatabase;
+	addSchemaTable(@"sales.orders", @[ @[ @"id", @(MADDataTypeInteger) ], @[ @"customer_id", @(MADDataTypeInteger) ], @[ @"total", @(MADDataTypeDecimal) ] ], firstDatabase, firstContext);
+
+	RptqQueryTable *customersTable = addQueryTable(@"customers", firstQuery, firstDatabase, firstContext);
+	RptqQueryTable *ordersTable = addQueryTable(@"sales.orders", firstQuery, firstDatabase, firstContext);
+
+	RptqQueryField *customersID = queryFieldNamed(@"id", customersTable);
+	RptqQueryField *ordersCustomerID = queryFieldNamed(@"customer_id", ordersTable);
+	RptqQueryLinks *link = [RptqQueryLinks newQueryLinksWithLeftField:customersID rightField:ordersCustomerID joinType:MADLinkTypeInnerJoin managedObjectContext:firstContext];
+	[firstQuery addHasQueryLinksObject:link];
+
+	RptqQueryField *ordersTotal = queryFieldNamed(@"total", ordersTable);
+	RptqQueryPredicate *totalPredicate = (RptqQueryPredicate *)[firstContext insertObjectForEntity:@"RptqQueryPredicate" identifier:0];
+	totalPredicate.comparson = (int16_t)MADPredicateOperatorGreaterThan;
+	totalPredicate.hasLeftField = ordersTotal;
+	totalPredicate.rigthFieldID = @"50";
+	[firstQuery addHasQueryPredicateObject:totalPredicate];
+
+	NSError *error = nil;
+	MAD_PASS([firstContext save:&error], "save failed: %s", [[error description] UTF8String]);
+
+	// Verify hand-written three-part SQL and dot-stripped drop-index aliases resolve
+	// and apply against a document with a schema-qualified table.
+	MADHeadlessDocument *handWritten = makeDocument();
+	addSchemaTable(@"sales.orders", @[ @[ @"id", @(MADDataTypeInteger) ], @[ @"customer_id", @(MADDataTypeInteger) ], @[ @"total", @(MADDataTypeDecimal) ] ], handWritten.activeDocumentModel.defaultDatabase, handWritten.storeContext);
+	MAD_PASS([handWritten.storeContext save:&error], "save failed: %s", [[error description] UTF8String]);
+
+	NSString *threePartSQL =
+		@"SELECT \"sales\".\"orders\".\"total\", \"customers\".\"name\" "
+		@"FROM \"customers\" INNER JOIN \"sales\".\"orders\" "
+		@"ON \"customers\".\"id\" = \"sales\".\"orders\".\"customer_id\" "
+		@"WHERE \"sales\".\"orders\".\"total\" > 50";
+	MAD_PASS(applyStatement(threePartSQL, handWritten, &error), "three-part apply succeeds: %s", [[error description] UTF8String]);
+	MAD_PASS(queryOfDocument(handWritten).hasQueryTables.count == (NSUInteger)2, "two query tables from three-part SQL");
+	MAD_PASS(queryOfDocument(handWritten).hasQueryLinks.count == (NSUInteger)1, "one link from three-part SQL");
+	MAD_PASS(queryOfDocument(handWritten).hasQueryPredicate.count == (NSUInteger)1, "one predicate from three-part SQL");
+
+	// Also verify the generator -> importer -> generator fixpoint with a second
+	// copy of the schema-qualified table (which emits the dot-stripped alias
+	// `salesorders1` via RptqQueryTable -queryAlias).
+	RptqQueryTable *ordersCopy = addQueryTable(@"sales.orders", firstQuery, firstDatabase, firstContext);
+	ordersCopy.dropIndex = 1;
+	RptqQueryField *ordersID = queryFieldNamed(@"id", ordersTable);
+	RptqQueryField *ordersCopyID = queryFieldNamed(@"id", ordersCopy);
+	RptqQueryLinks *selfLink = [RptqQueryLinks newQueryLinksWithLeftField:ordersID rightField:ordersCopyID joinType:MADLinkTypeInnerJoin managedObjectContext:firstContext];
+	[firstQuery addHasQueryLinksObject:selfLink];
+	MAD_PASS([firstContext save:&error], "save failed: %s", [[error description] UTF8String]);
+
+	MADSQLTestDataDelegate *dataDelegate = [[MADSQLTestDataDelegate alloc] init];
+	dataDelegate.database = [MADMock mockDatabase];
+	MADQueryFull *generator = [[MADQueryFull alloc] initWithQuery:firstQuery andQueryLimit:0];
+	generator.dataDelegate = dataDelegate;
+	NSString *generatedSQL = [generator SQLOnlyActiveFields:NO managedObjectContext:firstContext error:&error];
+	MAD_PASS(generatedSQL != nil, "%s", [[error description] UTF8String]);
+
+	MADHeadlessDocument *second = makeDocument();
+	addSchemaTable(@"sales.orders", @[ @[ @"id", @(MADDataTypeInteger) ], @[ @"customer_id", @(MADDataTypeInteger) ], @[ @"total", @(MADDataTypeDecimal) ] ], second.activeDocumentModel.defaultDatabase, second.storeContext);
+	MAD_PASS([second.storeContext save:&error], "save failed: %s", [[error description] UTF8String]);
+	MAD_PASS(applyStatement(generatedSQL, second, &error), "the apply succeeds: %s", [[error description] UTF8String]);
+
+	MADQueryFull *regenerated = [[MADQueryFull alloc] initWithQuery:queryOfDocument(second) andQueryLimit:0];
+	regenerated.dataDelegate = dataDelegate;
+	NSString *regeneratedSQL = [regenerated SQLOnlyActiveFields:NO managedObjectContext:second.storeContext error:&error];
+	MAD_PASS(regeneratedSQL != nil, "%s", [[error description] UTF8String]);
+	MAD_PASS_EQUAL(regeneratedSQL, generatedSQL, "the schema-qualified round trip is a fixpoint");
+}
+
 MAD_TEST_MAIN("MADSQLQueryCompilerTests",
 	MAD_TEST(testHappyPathApplyBuildsTheDesignersRows),
 	MAD_TEST(testApplyOverAPopulatedQueryReplacesItWithoutOrphans),
@@ -530,4 +601,5 @@ MAD_TEST_MAIN("MADSQLQueryCompilerTests",
 	MAD_TEST(testABarcodeElementOnADroppedTableBlocksTheApply),
 	MAD_TEST(testAGroupOnADroppedTableBlocksTheApply),
 	MAD_TEST(testAnElementOnAKeptTableDoesNotBlockTheApply),
-	MAD_TEST(testFixpointRoundTrip));
+	MAD_TEST(testFixpointRoundTrip),
+	MAD_TEST(testSchemaQualifiedTableApplyAndFixpointRoundTrip));

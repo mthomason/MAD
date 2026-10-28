@@ -253,6 +253,24 @@
 			column.line = name.line;
 			column.column = name.column;
 			[self advance];
+			if ([self matchSymbol:@"."]) {
+				column.table = [[NSString alloc] initWithFormat:@"%@.%@", token.text, name.text];
+				MADSQLToken *fieldToken = self.current;
+				if (fieldToken.kind == MADSQLTokenKindIdentifier || fieldToken.kind == MADSQLTokenKindQuotedIdentifier) {
+					column.name = fieldToken.text;
+					column.line = fieldToken.line;
+					column.column = fieldToken.column;
+					[self advance];
+				} else if ([self matchSymbol:@"*"]) {
+					column.name = @"*";
+					column.wildcard = YES;
+					column.line = fieldToken.line;
+					column.column = fieldToken.column;
+				} else {
+					[self fail:MADSQLCompileErrorSyntax at:fieldToken message:@"Expected a column name after the qualifier." error:error];
+					return nil;
+				}
+			}
 		} else if ([self matchSymbol:@"*"]) {
 			column.name = @"*";
 			column.wildcard = YES;
@@ -372,21 +390,33 @@
 	}
 	[self advance];
 
-	NSString *canonical = [self canonicalTableForName:token.text];
+	NSString *tableName = token.text;
+	if ([self matchSymbol:@"."]) {
+		MADSQLToken *tableToken = self.current;
+		if (tableToken.kind != MADSQLTokenKindIdentifier && tableToken.kind != MADSQLTokenKindQuotedIdentifier) {
+			[self fail:MADSQLCompileErrorSyntax at:tableToken message:@"Expected a table name after the schema qualifier." error:error];
+			return NO;
+		}
+		[self advance];
+		tableName = [[NSString alloc] initWithFormat:@"%@.%@", token.text, tableToken.text];
+	}
+
+	NSString *canonical = [self canonicalTableForName:tableName];
 	if (canonical == nil) {
 		[self fail:MADSQLCompileErrorUnknownTable at:token
-			 message:[[NSString alloc] initWithFormat:@"Unknown table '%@'.", token.text] error:error];
+			 message:[[NSString alloc] initWithFormat:@"Unknown table '%@'.", tableName] error:error];
 		return NO;
 	}
 
 	MADSQLFromItem *item = [MADSQLFromItem new];
-	item.tableName = token.text;
+	item.tableName = tableName;
 	item.line = token.line;
 	item.column = token.column;
 
-	// `[AS] alias`: the table's own name, or its drop-index form.  An implicit
-	// alias is a bare identifier -- never a keyword, or the clause keywords
-	// (WHERE, GROUP, ORDER, INNER, ...) would read as aliases.
+	// `[AS] alias`: the table's own name, or its drop-index form (on either the
+	// qualified canonical name or the dot-stripped form RptqQueryTable emits).
+	// An implicit alias is a bare identifier -- never a keyword, or the clause
+	// keywords (WHERE, GROUP, ORDER, INNER, ...) would read as aliases.
 	BOOL wroteAS = [self matchKeyword:@"AS"];
 	MADSQLToken *aliasToken = self.current;
 	BOOL isImplicitAlias = aliasToken.kind == MADSQLTokenKindQuotedIdentifier ||
@@ -394,17 +424,19 @@
 	if (isImplicitAlias) {
 		[self advance];
 		NSString *alias = aliasToken.text;
-		NSString *lowerName = canonical.lowercaseString;
-		NSString *lowerAlias = alias.lowercaseString;
-		BOOL isOwnName = [lowerAlias isEqualToString:lowerName];
-		BOOL isDropIndex = lowerAlias.length > lowerName.length &&
-			[lowerAlias hasPrefix:lowerName] &&
-			[lowerAlias rangeOfCharacterFromSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]
-										options:0
-										  range:NSMakeRange(lowerName.length, lowerAlias.length - lowerName.length)].location == NSNotFound;
-		if (!isOwnName && !isDropIndex) {
+		if ([self matchSymbol:@"."]) {
+			MADSQLToken *aliasTableToken = self.current;
+			if (aliasTableToken.kind != MADSQLTokenKindIdentifier && aliasTableToken.kind != MADSQLTokenKindQuotedIdentifier) {
+				[self fail:MADSQLCompileErrorSyntax at:aliasTableToken message:@"Expected an alias after '.'." error:error];
+				return NO;
+			}
+			[self advance];
+			alias = [[NSString alloc] initWithFormat:@"%@.%@", aliasToken.text, aliasTableToken.text];
+		}
+		if (![self isValidAlias:alias forCanonicalTableName:canonical]) {
+			NSString *dotless = [tableName stringByReplacingOccurrencesOfString:@"." withString:@""];
 			[self fail:MADSQLCompileErrorUnsupportedAlias at:aliasToken
-				 message:[[NSString alloc] initWithFormat:@"'%@' renames '%@'; the designer names tables itself -- use the table's own name or its %@0 form.", alias, token.text, token.text] error:error];
+				 message:[[NSString alloc] initWithFormat:@"'%@' renames '%@'; the designer names tables itself -- use the table's own name or its %@0 form.", alias, tableName, dotless] error:error];
 			return NO;
 		}
 		item.alias = alias;
@@ -422,6 +454,22 @@
 	}
 	[self.fromItems addObject:item];
 	return YES;
+}
+
+- (BOOL)alias:(NSString *)lowerAlias matchesTableName:(NSString *)lowerName {
+	if ([lowerAlias isEqualToString:lowerName]) return YES;
+	if (lowerAlias.length <= lowerName.length || ![lowerAlias hasPrefix:lowerName]) return NO;
+	return [lowerAlias rangeOfCharacterFromSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]
+									   options:0
+										 range:NSMakeRange(lowerName.length, lowerAlias.length - lowerName.length)].location == NSNotFound;
+}
+
+- (BOOL)isValidAlias:(NSString *)alias forCanonicalTableName:(NSString *)canonical {
+	NSString *lowerAlias = alias.lowercaseString;
+	NSString *lowerName = canonical.lowercaseString;
+	if ([self alias:lowerAlias matchesTableName:lowerName]) return YES;
+	NSString *dotlessName = [lowerName stringByReplacingOccurrencesOfString:@"." withString:@""];
+	return ![dotlessName isEqualToString:lowerName] && [self alias:lowerAlias matchesTableName:dotlessName];
 }
 
 // The join's right side: table [AS alias], then the one equi-ON condition.
@@ -650,6 +698,18 @@
 		column.line = name.line;
 		column.column = name.column;
 		[self advance];
+		if ([self matchSymbol:@"."]) {
+			column.table = [[NSString alloc] initWithFormat:@"%@.%@", token.text, name.text];
+			MADSQLToken *fieldToken = self.current;
+			if (fieldToken.kind != MADSQLTokenKindIdentifier && fieldToken.kind != MADSQLTokenKindQuotedIdentifier) {
+				[self fail:MADSQLCompileErrorSyntax at:fieldToken message:@"Expected a column name after the qualifier." error:error];
+				return nil;
+			}
+			column.name = fieldToken.text;
+			column.line = fieldToken.line;
+			column.column = fieldToken.column;
+			[self advance];
+		}
 	} else if ([self symbolIs:@"("]) {
 		[self fail:MADSQLCompileErrorUnsupportedExpression at:token
 			 message:@"Functions and expressions have no place in the model: a predicate side is a column or a literal." error:error];

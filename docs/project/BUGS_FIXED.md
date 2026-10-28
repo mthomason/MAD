@@ -145,6 +145,44 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### `MADSQLParser` rejects schema-qualified table names (`schema.table`) in `FROM`, `JOIN`, and three-part column references
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MAD/Source/sql/MADSQLParser.m:242-267` (`-parseSelectItemReturningError:`),
+  `:367-380` (`-parseFromItemReturningError:`), and `:630-655`
+  (`-parseColumnReferenceReturningError:`).
+- **Behavior:** `MADDatabaseSQLServer` (`MADTdsClient`) and `MADDatabasePostgres`
+  (`MADPostgres`, for tables outside `public`) store schema-qualified table names
+  such as `SalesLT.Product` or `sales.orders` in the document schema and emit each
+  dot-separated part as a separate quoted identifier (`[SalesLT].[Product].[Name]`,
+  `"sales"."orders"."id"`).  `MADSQLParser` reads only a single identifier token after
+  `FROM` or `JOIN` in `-parseFromItemReturningError:` (never consuming `.` + table) and
+  at most one `.` qualifier in `-parseSelectItemReturningError:` /
+  `-parseColumnReferenceReturningError:`, so pasting a statement generated for a
+  schema-qualified table fails to parse even when the schema dictionary holds
+  `"sales.orders"` or `"SalesLT.Product"`.  Tables in PostgreSQL's `public` schema are
+  stored unqualified and round-trip through `MADSQLParser` without issue.
+- **Why it is not changed here:** `MAD_SQL_ENTRY.md` §5 defines the parser grammar
+  around single-token table names and two-part `table.column` references; extending it
+  to optional `schema.table` / `schema.table.column` (plus drop-index alias checking on
+  the qualified canonical name) is a parser grammar change in `MAD` outside the
+  driver's scope.
+- **Now:** `MADSQLParser` consumes an optional `.` + table identifier after the first
+  identifier in `-parseFromItemReturningError:` (yielding `schema.table`), an optional
+  second `.` in `-parseSelectColumnReturningError:` (`schema.table.col` and
+  `schema.table.*`) and `-parseColumnReferenceReturningError:` (`schema.table.col`), and
+  an optional `.` in a table alias.  Drop-index alias validation in both `MADSQLParser`
+  and `MADSQLStatementResolver` accepts the table's own name or `<base><digits>` where
+  `<base>` is either the qualified canonical name (`sales.orders0`) or the dot-stripped
+  form emitted by `RptqQueryTable +queryAliasForSchemaTableName:dropIndex:`
+  (`salesorders0`).
+- **Test:** `MADSQLParserTests` (`testSchemaQualifiedTableAndThreePartColumnsParse`,
+  `testQuotedSchemaQualifiedTableAndThreePartColumnsParsePerDialect`,
+  `testSchemaQualifiedDropIndexAliasesParse`,
+  `testAnUnknownSchemaQualifiedTableIsRejected`,
+  `testAnUnknownThreePartColumnIsRejected`,
+  `testARenamedSchemaQualifiedAliasIsRejected`) and `MADSQLQueryCompilerTests
+  testSchemaQualifiedTableApplyAndFixpointRoundTrip`, plus their Linux ports.
+
 ### MADReportFormatter compares untyped values through id
 - **Status:** Fixed 2026-10-18 (commit `483a77259`).
 - **What:** `MADReportFormatter.m:219` and `:222` send `compare:` to a value held as `id`

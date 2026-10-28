@@ -194,10 +194,21 @@
 #pragma mark - Resolution
 
 // The copy index an alias names: 0 for the table's own name, the digits for
-// `name0`, `name1`, ...; -1 for anything else.
+// `name0`, `name1`, ... (matched against either the qualified canonical name or
+// the dot-stripped form RptqQueryTable emits); -1 for anything else.
 - (NSInteger)dropIndexForAlias:(NSString *)alias tableName:(NSString *)tableName {
-	NSString *lowerName = tableName.lowercaseString;
 	NSString *lowerAlias = alias.lowercaseString;
+	NSString *lowerName = tableName.lowercaseString;
+	NSInteger index = [self dropIndexForAlias:lowerAlias matchingBaseName:lowerName];
+	if (index >= 0) return index;
+	NSString *dotlessName = [lowerName stringByReplacingOccurrencesOfString:@"." withString:@""];
+	if (![dotlessName isEqualToString:lowerName]) {
+		return [self dropIndexForAlias:lowerAlias matchingBaseName:dotlessName];
+	}
+	return -1;
+}
+
+- (NSInteger)dropIndexForAlias:(NSString *)lowerAlias matchingBaseName:(NSString *)lowerName {
 	if ([lowerAlias isEqualToString:lowerName]) return 0;
 	if (lowerAlias.length <= lowerName.length || ![lowerAlias hasPrefix:lowerName]) return -1;
 	NSString *digits = [lowerAlias substringFromIndex:lowerName.length];

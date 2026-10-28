@@ -33,6 +33,8 @@ static NSDictionary *FixtureSchema(void) {
 		@"customers": @[ @"id", @"name" ],
 		@"invoices": @[ @"id", @"customer_id", @"amount" ],
 		@"lines": @[ @"id", @"invoice_id", @"sku" ],
+		@"sales.orders": @[ @"id", @"customer_id", @"total" ],
+		@"SalesLT.Product": @[ @"ProductID", @"Name" ],
 	};
 }
 
@@ -453,6 +455,83 @@ static void testATrailingSemicolonParses(void) {
 	MAD_PASS(statement.selectColumns.count == (NSUInteger)1, "the statement parses");
 }
 
+static void testSchemaQualifiedTableAndThreePartColumnsParse(void) {
+	MADSQLStatement *statement = ParseStatement(
+		@"SELECT sales.orders.total, sales.orders.*, customers.name "
+		@"FROM customers INNER JOIN sales.orders ON customers.id = sales.orders.customer_id "
+		@"WHERE sales.orders.total > 50 GROUP BY sales.orders.total, customers.name "
+		@"ORDER BY sales.orders.total DESC");
+
+	MAD_PASS(statement.selectColumns.count == (NSUInteger)3, "three select columns");
+	MAD_PASS_EQUAL(statement.selectColumns[0].table, @"sales.orders", "the first column's schema-qualified table");
+	MAD_PASS_EQUAL(statement.selectColumns[0].name, @"total", "the first column's name");
+	MAD_PASS(!statement.selectColumns[0].isWildcard, "the first column is not a wildcard");
+	MAD_PASS(statement.selectColumns[1].isWildcard, "the second column is a wildcard");
+	MAD_PASS_EQUAL(statement.selectColumns[1].table, @"sales.orders", "the wildcard's schema-qualified table");
+	MAD_PASS_EQUAL(statement.selectColumns[2].table, @"customers", "the third column's table");
+	MAD_PASS_EQUAL(statement.selectColumns[2].name, @"name", "the third column's name");
+
+	MAD_PASS(statement.fromItems.count == (NSUInteger)2, "the base table and the joined schema-qualified table");
+	MAD_PASS_EQUAL(statement.fromItems[0].tableName, @"customers", "the base table");
+	MAD_PASS_EQUAL(statement.fromItems[1].tableName, @"sales.orders", "the joined schema-qualified table");
+
+	MAD_PASS(statement.joins.count == (NSUInteger)1, "one join");
+	MAD_PASS_EQUAL(statement.joins[0].leftTable, @"customers", "the join's left table");
+	MAD_PASS_EQUAL(statement.joins[0].rightTable, @"sales.orders", "the join's right table");
+	MAD_PASS_EQUAL(statement.joins[0].rightColumn.table, @"sales.orders", "the right ON column's table");
+	MAD_PASS_EQUAL(statement.joins[0].rightColumn.name, @"customer_id", "the right ON column's name");
+
+	MAD_PASS(statement.predicates.count == (NSUInteger)1, "one predicate");
+	MAD_PASS_EQUAL(statement.predicates[0].leftColumn.table, @"sales.orders", "the predicate column's table");
+	MAD_PASS_EQUAL(statement.predicates[0].leftColumn.name, @"total", "the predicate column's name");
+
+	MAD_PASS(statement.groupByColumns.count == (NSUInteger)2, "two group columns");
+	MAD_PASS_EQUAL(statement.groupByColumns[0].table, @"sales.orders", "the first group column's table");
+	MAD_PASS_EQUAL(statement.groupByColumns[0].name, @"total", "the first group column's name");
+
+	MAD_PASS(statement.orderByTerms.count == (NSUInteger)1, "one order term");
+	MAD_PASS_EQUAL(statement.orderByTerms[0].column.table, @"sales.orders", "the order column's table");
+	MAD_PASS_EQUAL(statement.orderByTerms[0].column.name, @"total", "the order column's name");
+	MAD_PASS(!statement.orderByTerms[0].isAscending, "DESC is descending");
+}
+
+static void testQuotedSchemaQualifiedTableAndThreePartColumnsParsePerDialect(void) {
+	MADSQLStatement *pgStatement = ParseStatementWithQuotes(
+		@"SELECT \"sales\".\"orders\".\"total\" FROM \"sales\".\"orders\" WHERE \"sales\".\"orders\".\"id\" = 1",
+		@"\"\"");
+	MAD_PASS_EQUAL(pgStatement.selectColumns.firstObject.table, @"sales.orders", "PostgreSQL three-part select table");
+	MAD_PASS_EQUAL(pgStatement.selectColumns.firstObject.name, @"total", "PostgreSQL three-part select column");
+	MAD_PASS_EQUAL(pgStatement.fromItems.firstObject.tableName, @"sales.orders", "PostgreSQL two-part FROM table");
+	MAD_PASS_EQUAL(pgStatement.predicates.firstObject.leftColumn.table, @"sales.orders", "PostgreSQL three-part WHERE table");
+
+	MADSQLStatement *tsqlStatement = ParseStatementWithQuotes(
+		@"SELECT [SalesLT].[Product].[Name] FROM [SalesLT].[Product] WHERE [SalesLT].[Product].[ProductID] = 1",
+		@"[]");
+	MAD_PASS_EQUAL(tsqlStatement.selectColumns.firstObject.table, @"SalesLT.Product", "T-SQL three-part select table");
+	MAD_PASS_EQUAL(tsqlStatement.selectColumns.firstObject.name, @"Name", "T-SQL three-part select column");
+	MAD_PASS_EQUAL(tsqlStatement.fromItems.firstObject.tableName, @"SalesLT.Product", "T-SQL two-part FROM table");
+	MAD_PASS_EQUAL(tsqlStatement.predicates.firstObject.leftColumn.table, @"SalesLT.Product", "T-SQL three-part WHERE table");
+}
+
+static void testSchemaQualifiedDropIndexAliasesParse(void) {
+	// RptqQueryTable -queryAlias strips dots ("sales.orders" -> "salesorders0"),
+	// and hand-written drop-index aliases may keep the dot ("sales.orders0").
+	MADSQLStatement *stripped = ParseStatement(
+		@"SELECT salesorders0.id FROM sales.orders AS salesorders0 "
+		@"INNER JOIN sales.orders AS salesorders1 ON salesorders0.id = salesorders1.customer_id");
+	MAD_PASS(stripped.fromItems.count == (NSUInteger)2, "two copies with dot-stripped aliases");
+	MAD_PASS_EQUAL(stripped.fromItems[0].tableName, @"sales.orders", "the first copy's schema-qualified table");
+	MAD_PASS_EQUAL(stripped.fromItems[0].alias, @"salesorders0", "the first copy's dot-stripped alias");
+	MAD_PASS_EQUAL(stripped.fromItems[1].alias, @"salesorders1", "the second copy's dot-stripped alias");
+
+	MADSQLStatement *dotted = ParseStatement(
+		@"SELECT sales.orders0.id FROM sales.orders AS sales.orders0 "
+		@"INNER JOIN sales.orders AS sales.orders1 ON sales.orders0.id = sales.orders1.customer_id");
+	MAD_PASS(dotted.fromItems.count == (NSUInteger)2, "two copies with dotted aliases");
+	MAD_PASS_EQUAL(dotted.fromItems[0].alias, @"sales.orders0", "the first copy's dotted alias");
+	MAD_PASS_EQUAL(dotted.fromItems[1].alias, @"sales.orders1", "the second copy's dotted alias");
+}
+
 #pragma mark - The rejection table
 
 static void testORIsRejected(void) {
@@ -623,6 +702,21 @@ static void testAMultiLineRejectionCarriesItsLine(void) {
 					 MADSQLCompileErrorUnsupportedOR, 3, 18);
 }
 
+static void testAnUnknownSchemaQualifiedTableIsRejected(void) {
+	AssertParseFails(@"SELECT total FROM sales.missing",
+					 MADSQLCompileErrorUnknownTable, 1, 19);
+}
+
+static void testAnUnknownThreePartColumnIsRejected(void) {
+	AssertParseFails(@"SELECT sales.orders.nope FROM sales.orders",
+					 MADSQLCompileErrorUnknownColumn, 1, 21);
+}
+
+static void testARenamedSchemaQualifiedAliasIsRejected(void) {
+	AssertParseFails(@"SELECT o.total FROM sales.orders AS o",
+					 MADSQLCompileErrorUnsupportedAlias, 1, 37);
+}
+
 MAD_TEST_MAIN("MADSQLParserTests",
 	MAD_TEST(testIdentifierQuoteCharactersPerDriver),
 	MAD_TEST(testTokenizerTracksLineAndColumn),
@@ -656,6 +750,9 @@ MAD_TEST_MAIN("MADSQLParserTests",
 	MAD_TEST(testKeywordsAreCaseInsensitive),
 	MAD_TEST(testNumericLiteralsParse),
 	MAD_TEST(testATrailingSemicolonParses),
+	MAD_TEST(testSchemaQualifiedTableAndThreePartColumnsParse),
+	MAD_TEST(testQuotedSchemaQualifiedTableAndThreePartColumnsParsePerDialect),
+	MAD_TEST(testSchemaQualifiedDropIndexAliasesParse),
 	MAD_TEST(testORIsRejected),
 	MAD_TEST(testINIsRejected),
 	MAD_TEST(testLIKEIsRejected),
@@ -687,4 +784,7 @@ MAD_TEST_MAIN("MADSQLParserTests",
 	MAD_TEST(testASecondStatementIsRejected),
 	MAD_TEST(testSomethingThatIsNotASelectIsRejected),
 	MAD_TEST(testAnEmptyStatementIsRejected),
-	MAD_TEST(testAMultiLineRejectionCarriesItsLine));
+	MAD_TEST(testAMultiLineRejectionCarriesItsLine),
+	MAD_TEST(testAnUnknownSchemaQualifiedTableIsRejected),
+	MAD_TEST(testAnUnknownThreePartColumnIsRejected),
+	MAD_TEST(testARenamedSchemaQualifiedAliasIsRejected));

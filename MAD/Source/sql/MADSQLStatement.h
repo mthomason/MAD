@@ -24,10 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Values
 
-/// A column reference: `col`, `tbl.col` or `alias.col`, bare or qualified.
+/// A column reference: `col`, `tbl.col`, `schema.tbl.col` or `alias.col`, bare or qualified.
 @interface MADSQLColumnReference : NSObject
 
-/// The qualifier as written; nil when bare.
+/// The qualifier as written (`tbl`, `schema.tbl` or `alias`); nil when bare.
 @property (nonatomic, copy, nullable) NSString *table;
 /// The column name; `*` with -wildcard for `alias.*`.
 @property (nonatomic, copy) NSString *name;
@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - FROM
 
-/// One table of the FROM clause: `name [AS alias]`.
+/// One table of the FROM clause: `[schema.]name [AS alias]`.
 @interface MADSQLFromItem : NSObject
 
 @property (nonatomic, copy) NSString *tableName;
