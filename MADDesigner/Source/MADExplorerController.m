@@ -10,74 +10,8 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
-#import "MADExplorerController.h"
-#import "AppDelegate.h"
-#import "MADExplorerViewLayout.h"
-#import "MADAboutTableViewController.h"
-#import "MADDocumentInformationTableViewController.h"
-#import "MADExplorerSectionHeaderView.h"
-#import "MADSearchBar.h"
-#import "MADDesignerViewController.h"
-#import "MADDriverSelectorController.h"
-#import "MADStoreViewController.h"
-#import "MADNavigationController.h"
-#import "MADTabBarController.h"
-#import "MADOperationInstallSampleDatabase.h"
-#import "MADOperationInstallSampleDocument.h"
-//#import "MADVerificationController.h"		// Removed "Store" button for now.
-//#import "MTStoreKitController+Features.h"	// Removed "Store" button for now.
-#import "MADKeyChainSaveCredentials.h"
-#import "MADKeyChainGetCredentials.h"
-#import "MADColorTransformer.h"
-#import "MADLocaleTransformer.h"
-#import "MADThemeManager.h"
-#import <MADFoundation/madlog.h>
-
-#import <MAD/MADNotificationFileUpdate.h>
-
-#import <MADAPI/MADViewControllerStandardProtocol.h>
-#import <MADFileManager/MADFileUtilities.h>
-#import <MADFileManager/MADFileInfo.h>
-#import <MADFileManager/MADMetaData.h>
-#import <MADFileManager/MADFilesController.h>
-
-#import <MADCocoaExtensions/MADAlertController.h>
-#import <MADCocoaExtensions/UIColor+EverydayApps.h>
-#import <MADCocoaExtensions/NSError+Constructors.h>
-#import <MADCocoaExtensions/MADViewHelpers.h>
-#import <MADCocoaExtensions/NSNumberFormatter+MADExtensions.h>
-#import <MADCocoaExtensions/MFMailComposeViewController+MADExtensions.h>
-#import <MADCocoaExtensions/MTMath.h>
-#import <MADCocoaExtensions/MADLabelTitle.h>
-#import <MADCocoaExtensions/UIApplication+Helpers.h>
-
-#import <MADFoundation/MADBlockObserver.h>
-#import <MADFoundation/MADApplication.h>
-#import <MADFoundation/MADApplicationProtocol.h>
-#import <MADFoundation/MADURLFactory.h>
-#import <MADFoundation/MADOperation.h>
-#import <MADFoundation/MADOperationQueue.h>
-#import <MADFoundation/MADOperationObserver.h>
-#import <MADFoundation/MADCredential.h>
-
-#import <MADExplorer/MADExplorerProtocol.h>
-#import <MADExplorer/MADDocumentManagerProtocol.h>
-#import <MADExplorer/MADExplorerView.h>
-#import <MADExplorer/MADFileLocationManager.h>
-#import <MADExplorer/MADOpenDocumentManager.h>
-#import <MADExplorer/MADCollectionViewCellDocument.h>
-#import <MADExplorer/MADExplorerViewDelegate.h>
-#import <MADExplorer/MADLabelFileExplorerDocumentCellTitle.h>
-#import <MADExplorer/MADExplorerDataSource.h>
-
-#import <MAD/MADConstants.h>
-#import <MAD/MADAppLaunchContext.h>
-#import <MAD/MADDocumentProtocol.h>
-#import <MAD/MADocument.h>
-
-#import <QuickLook/QLPreviewController.h>
-#import <MessageUI/MFMailComposeViewController.h>
-#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import "MADExplorerController_Private.h"
+#import "MADExplorerController+DocumentActions.h"
 
 NSString * const MADUtiType                                     = @"com.everydayapps.productivity.mad";
 NSString * const MADUpgradeInstalledSamplesLondon               = @"MADUpgradeInstalledSamplesLondon";
@@ -88,61 +22,9 @@ static NSString * const MADAppConfigurationUserDefaultsSamplesInstalled     = @"
 static NSString * const MADNotificationCloudActivityStarted                 = @"MADNotificationCloudActivityStarted";
 static NSString * const MADNotificationCloudActivityCompleted               = @"MADNotificationCloudActivityCompleted";
 
-// FIXME: Get these from AppDelegate using a protocol/deletgate pattern... different for each version of file exploer.
-// NSString * const MADUtiPublicData                               = @"public.data";
-
-@interface MADExplorerController()
-	<NSFileManagerDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate, UIDocumentInteractionControllerDelegate, UIDocumentPickerDelegate, UITextFieldDelegate, UISearchBarDelegate, UIPopoverPresentationControllerDelegate, UIAdaptivePresentationControllerDelegate, MADExplorerProtocol, MADDocumentManagerProtocol, MADocumentDelegate, MADViewControllerStandardProtocol, MADOperationObserver, MADSaveFileProtocol>
-
-@property (readwrite, nonatomic, strong) MADExplorerDataSource *fileExplorerDataSource;
-@property (readwrite, nonatomic, strong) MADExplorerViewDelegate *fileExplorerViewDelegate;
-@property (readwrite, nonatomic, strong) MADOpenDocumentManager *activeDocumentManager;
-
-@property (nonatomic, weak) IBOutlet MADExplorerView *fileExplorerView;
-@property (nonatomic, strong) NSNumberFormatter *subtitleNumberFormatter;
-@property (nonatomic, strong) MADAppLaunchContext *pendingLaunchContext;
-
-@property (nonatomic, strong) IBOutlet UIBarButtonItem *barButtonItemAction;
-@property (nonatomic, strong) UIBarButtonItem *barButtonItemEdit;
-@property (nonatomic, strong) UIBarButtonItem *barButtonItemEditDone;
-@property (nonatomic, strong) UIBarButtonItem *barButtonItemDuplicate;
-@property (nonatomic, strong) MADTabBarController *tabController;
-
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemInformationDocument;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemTrash;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemInformation;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAbout;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemAddNewDocument;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemCloudDown;
-@property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemLicensing;
-
-@property (nonatomic, weak) UIPopoverPresentationController *infoPopoverPresentationController;
-@property (nonatomic, weak) UIPopoverPresentationController *aboutPopoverPresentationController;
-@property (nonatomic, weak) UIPopoverPresentationController *documentInformationPopoverPresentationController;
-
-@property (nonatomic, strong) MADSearchBar *searchBar;
-@property (nonatomic, strong) UIBarButtonItem *rightBarButtonItemHolderWhileActivity;
-@property (nonatomic, strong) MADExplorerSectionHeaderView *headerCloud;
-@property (nonatomic, strong) UIProgressView *progressViewFileManager;
-@property (nonatomic, strong) NSArray *defaultPassthroughViews;
-
-@end
-
-@implementation MADExplorerController {
-	
-	BOOL _cloudActivityRunning;
-	BOOL _cloudActivityRunningDisplay;
-	
-	BOOL _shouldShowAddDocumentPopover;
-	BOOL _aboutViewControllerOnScreen;
-	BOOL _infoControllerOnScreen;
-	
-	BOOL _isActivityIndicatorRightVisible;
-	BOOL _activityIndicatorRightVisible;
-	BOOL _updatingEnabled;
-	BOOL _getUserCloudPrefsFirstCall;
-
-}
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wprotocol"
+@implementation MADExplorerController
 
 #pragma mark -
 #pragma mark Helpers
@@ -216,7 +98,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: MADNotificationIdentifierFileUpdate
 												  object: nil];
-
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -246,7 +127,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 	}
 	return self;
-	
 }
 
 #pragma mark -
@@ -279,20 +159,13 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[opInstallDocB addObserver:self];
 	[operationQueueBackground addOperation:opInstallDocB];
 	
-	/// FIXME: Leaving this here for when I add storekit stuff back.
-	// Only call this when a user request to restore purchases.  Do not call this on launch or load.
-	//NSOperation *resetReceipt = [[NSInvocationOperation alloc] initWithTarget: [MADVerificationController sharedInstance]
-	//																 selector: @selector(resetReceipt)
-	//																   object: NULL];
-	//[operationQueueBackground addOperation:resetReceipt];
-	
 	NSOperation *getUserCloudPreferences = [[NSInvocationOperation alloc] initWithTarget: self.fileExplorerDataSource
 																				selector: @selector(updateCloudPreferences)
 																				  object: NULL];
 	[operationQueueBackground addOperation:getUserCloudPreferences];
 
 	self.barButtonItemEdit.accessibilityHint = NSLocalizedString(@"Enables document list edit mode.", @"Enables document list edit mode.");
-	self.barButtonItemAddNewDocument.accessibilityHint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");;
+	self.barButtonItemAddNewDocument.accessibilityHint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");
 	self.barButtonItemLicensing.accessibilityHint = NSLocalizedString(@"Displays the store.", @"Displays the store.");
 	self.barButtonItemTrash.accessibilityHint = NSLocalizedString(@"Deletes the selected documents.", @"Deletes the selected documents.");
 	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemTrash traitCollection:self.traitCollection];
@@ -311,7 +184,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 				   withReuseIdentifier: @"MADIdentifierOpenFileSectionHeader"];
 
 	NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
-	[toolbarButtons removeObject:_barButtonItemLicensing];	// Removing the store button.
+	[toolbarButtons removeObject:_barButtonItemLicensing];
 	[toolbarButtons removeObject:_barButtonItemAction];
 	[toolbarButtons removeObject:_barButtonItemCloudDown];
 	[toolbarButtons removeObject:_barButtonItemInformation];
@@ -359,7 +232,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 											 selector: @selector(handleFileUpdateNotification:)
 												 name: MADNotificationIdentifierFileUpdate
 											   object: nil];
-	
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -367,8 +239,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	
 	[self.navigationItem setRightBarButtonItem: _barButtonItemEdit
 									  animated: animated];
-	// Removed "Store" button for now.
-	//_barButtonItemLicensing.enabled = [SKPaymentQueue canMakePayments];
 
 	if ([self.toolbarItems containsObject: self.barButtonItemAction] == NO) {
 		NSMutableArray *toolbarButtons = self.toolbarItems.mutableCopy;
@@ -416,7 +286,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	_fileExplorerViewDelegate.editing = editing;
 }
 
-
 #pragma mark -
 #pragma mark Lazy Load
 
@@ -432,7 +301,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 			MADMetaData *metadata = [self metadataForItemAtIndexPath:indexPath];
 			[cell updateDisplayForMetaData:metadata editing:self.isEditing];
 			[cell invalidateIntrinsicContentSize];
-			//[self.collectionView.collectionViewLayout invalidateLayout];
 		}];
 		_fileExplorerDataSource = datasource;
 		
@@ -473,7 +341,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		__strong MADExplorerController *strongSelf = weakSelf;
 		if (!strongSelf) return;
 		
-		// Find the index path for the updated file URL
 		NSIndexPath *indexPathToReload = nil;
 		NSUInteger count = [strongSelf.fileExplorerDataSource count];
 		for (NSUInteger i = 0; i < count; i++) {
@@ -485,9 +352,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		}
 		
 		if (indexPathToReload) {
-			// Reload the specific item in the collection view
-			// [[strongSelf collectionView] reloadItemsAtIndexPaths:@[indexPathToReload]];
-			[[strongSelf collectionView] reloadData];  // For some reason `reloadItemsAtIndexPaths` is not working
+			[[strongSelf collectionView] reloadData];
 		}
 	}];
 }
@@ -495,7 +360,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark -
 #pragma mark MADDocumentManagerProtocol
 
-- (void)handleDidDisconnectFromClound:(id)sender {
+- (void)handleDidDisconnectFromClound:(id __unused)sender {
 	if (![MADFilesController isCloudDesired]) {
 		return;
 	}
@@ -524,9 +389,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (void)handleDidCompletedLongRunningActivity {
 	// FIXME: Hide activity indicator.
 }
-
-#pragma mark -
-#pragma mark MADDocumentManagerProtocol
 
 - (void)documentManagerDidChangeContent:(NSArray <NSIndexPath *> *)inserts
 								removes:(NSArray <NSIndexPath *> *)removes
@@ -574,8 +436,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
 					  ofObject:(id)object
-						change:(NSDictionary <NSKeyValueChangeKey, id> *)change
-					   context:(void *)context {
+						change:(NSDictionary <NSKeyValueChangeKey, id> * __unused)change
+					   context:(void * __unused)context {
 	
 	if ([keyPath isEqualToString: NSStringFromSelector(@selector(subviews))]) {
 		if ([object isKindOfClass:[UITextField class]]) {
@@ -638,7 +500,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
 		[self.collectionView.collectionViewLayout invalidateLayout];
 	}];
-
 }
 
 - (UIViewController *)childViewControllerForStatusBarHidden {
@@ -664,63 +525,21 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	return shouldReceiveTouch;
 }
 
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-//    BOOL result = YES;
-//    if (self.isEditing &&
-//        [gestureRecognizer.view isKindOfClass:[MADLabelFileExplorerDocumentCellTitle class]]) {
-//        result = NO;
-//    }
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer * __unused)gestureRecognizer {
 	return YES;
-}
-
-#pragma mark -
-#pragma mark UIDocumentInteractionControllerDelegate
-
-- (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *) controller {
-	id interactionController = self.navigationController;
-	return interactionController;
-}
-
-#pragma mark - MFMailComposeViewController delegate protocol
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller
-		  didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-	
-	[NSError presentError: error onViewController: self completion:^(BOOL __unused success) {
-		[self dismissViewControllerAnimated:YES completion:nil];
-	}];
 }
 
 #pragma mark -
 #pragma mark NSFileManager delegate protocol
 
-- (BOOL)fileManager:(NSFileManager *)fileManager shouldMoveItemAtURL:(NSURL *)srcURL
-			  toURL:(NSURL *)dstURL {
+- (BOOL)fileManager:(NSFileManager * __unused)fileManager shouldMoveItemAtURL:(NSURL * __unused)srcURL
+			  toURL:(NSURL * __unused)dstURL {
 	return YES;
 }
 
-- (BOOL)fileManager:(NSFileManager *)fileManager shouldProceedAfterError:(NSError *)error movingItemAtURL:(NSURL *)srcURL toURL:(NSURL *)dstURL {
+- (BOOL)fileManager:(NSFileManager * __unused)fileManager shouldProceedAfterError:(NSError * __unused)error movingItemAtURL:(NSURL * __unused)srcURL toURL:(NSURL *)dstURL {
 	return [dstURL.pathExtension.lowercaseString isEqualToString:@"png"];
 }
-
-#pragma mark -
-#pragma mark UIMenuController required methods
-/*
-- (BOOL)canBecomeFirstResponder {
-	return YES;
-}
-
-- (BOOL)canResignFirstResponder {
-	return YES;
-}
-
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-	BOOL result = NO;
-	if (@selector(handleDidTapCollectionView:) == action) {
-		result = YES;
-	}
-	return result;
-}*/
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate
@@ -732,22 +551,11 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark -
 #pragma mark Touch Event Handlers
 
-- (void)handleDidTapCollectionView:(UIGestureRecognizer *)sender {
+- (void)handleDidTapCollectionView:(UIGestureRecognizer * __unused)sender {
 	[self.searchBar resignFirstResponder];
 	if (self.isEditing) {
 		[self actionEdit:self];
 	}
-}
-
-#pragma mark -
-#pragma mark UIDocumentPickerDelegate
-
-- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
-	[controller removeFromParentViewController];
-}
-
-- (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {
-	[controller removeFromParentViewController];
 }
 
 - (void)showViewController:(UIViewController *)vc animated:(BOOL)animated {
@@ -787,7 +595,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark -
 #pragma mark Notification Handlers
 
-- (void)handleCloudActivityStarted:(NSNotification *)notification {
+- (void)handleCloudActivityStarted:(NSNotification * __unused)notification {
 	_cloudActivityRunning = YES;
 	NSTimer *timer = [NSTimer timerWithTimeInterval: 0.5000f
 											 target: self
@@ -797,7 +605,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[timer fire];
 }
 
-- (void)handleContentSizeCategoryDidChangeNotification:(NSNotification *)notification {
+- (void)handleContentSizeCategoryDidChangeNotification:(NSNotification * __unused)notification {
 	NSArray<__kindof UICollectionViewCell *> *visibleCells = self.collectionView.visibleCells;
 	for (MADCollectionViewCellDocument *cell in visibleCells) {
 		[cell handleContentSizeCategoryDidChangeNotification];
@@ -805,7 +613,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[self.view setNeedsLayout];
 }
 
-- (void)handleCloudActivityCompleted:(NSNotification *)notification {
+- (void)handleCloudActivityCompleted:(NSNotification * __unused)notification {
 	_cloudActivityRunning = NO;
 	_cloudActivityRunningDisplay = NO;
 	[self.headerCloud stopAnimating];
@@ -840,10 +648,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 }
 
 - (void)configureViewControllerWithLaunchContext:(MADAppLaunchContext *)launchContext {
-	/**
-	 If there is a list currently displayed; pop to the root view controller (this controller) and
-	 continue configuration from there. Otherwise, configure the view controller directly.
-	 */
 	if ([self.navigationController.topViewController isKindOfClass:[UINavigationController class]]) {
 		[self.navigationController popToRootViewControllerAnimated:NO];
 		self.pendingLaunchContext = launchContext;
@@ -851,7 +655,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	}
 }
 
-- (void)handleNotificationUbiquityIdentityDidChange:(NSNotification *)notification {
+- (void)handleNotificationUbiquityIdentityDidChange:(NSNotification * __unused)notification {
 	if (![MADFilesController isCloudDesired]) {
 		return;
 	}
@@ -933,7 +737,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (void)openDocumentAtURL:(NSURL *)url completion:(void (^)(void))completion {
 
 	MADocument *document = [[MADocument alloc] initWithFileURL:url];
-	document.limitResultsDesignMode = NO; // [MADStoreKitController sharedObject].isReportingLimited;  // Removed store feature for now.
+	document.limitResultsDesignMode = NO;
 	document.documentDelegate = self;
 	
 	[[NSNotificationCenter defaultCenter] addObserver: self
@@ -968,7 +772,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	MADTabBarController *tabBarController = [MADTabBarController newTabBarController:document prompt:title];
 	tabBarController.document = document;
 	tabBarController.viewControllerDelegate = self;
-	//tabBarController.navigationItem.prompt = title;
 	
 	[self.navigationController pushViewController:tabBarController animated:YES];
 }
@@ -976,17 +779,17 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark -
 #pragma mark UISearchBarDelegate
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField { }
+- (void)textFieldDidBeginEditing:(UITextField * __unused)textField { }
 
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar { }
+- (void)searchBarTextDidBeginEditing:(UISearchBar * __unused)searchBar { }
 
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope { }
+- (void)searchBar:(UISearchBar * __unused)searchBar selectedScopeButtonIndexDidChange:(NSInteger __unused)selectedScope { }
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText { }
+- (void)searchBar:(UISearchBar * __unused)searchBar textDidChange:(NSString * __unused)searchText { }
 
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar { }
+- (void)searchBarTextDidEndEditing:(UISearchBar * __unused)searchBar { }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar { }
+- (void)searchBarCancelButtonClicked:(UISearchBar * __unused)searchBar { }
 
 #pragma mark -
 #pragma mark UINibLoading
@@ -997,14 +800,12 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 }
 
 #pragma mark -
-#pragma mark - UITextFieldDelegate
+#pragma mark UITextFieldDelegate
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField { return YES; }
+- (BOOL)textFieldShouldReturn:(UITextField * __unused)textField { return YES; }
 
 #pragma mark -
 #pragma mark MADViewControllerStandardProtocol
-
-// This is where we are unloading the view controller, in a sane, and stable way.
 
 - (void)done:(id)sender {
 	_shouldShowAddDocumentPopover = YES;
@@ -1032,7 +833,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	}
 }
 
-- (void)viewControllerDidFinish:(id)sender {
+- (void)viewControllerDidFinish:(id __unused)sender {
 	[self dismissViewControllerAnimated:YES completion:nil];
 	_shouldShowAddDocumentPopover = YES;
 	[self.barButtonItemAddNewDocument setEnabled:YES];
@@ -1075,35 +876,20 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 			default:
 				break;
 		}
-
 	}
 }
 
 - (void)handleDocumentStateChangedNotificationClosed:(NSNotification *)notification {
 	[[NSNotificationCenter defaultCenter] removeObserver: self
 													name: UIDocumentStateChangedNotification
-												  object: /* `MADocument *` */ notification.object];
-
+												  object: notification.object];
 }
 
-- (void)handleDocumentStateChangedNotificationDisabled:(NSNotification *)notification { }
+- (void)handleDocumentStateChangedNotificationDisabled:(NSNotification * __unused)notification { }
 
-- (void)handleDocumentStateChangedNotificationConflict:(NSNotification *)notification { }
+- (void)handleDocumentStateChangedNotificationConflict:(NSNotification * __unused)notification { }
 
-- (void)handleDocumentStateChangedNotificationNormal:(NSNotification *)notification {
-/*
-	NSNotification *changeNotification;
-	MADocument *document;
-	SEL selector;
-	changeNotification = notification.copy;
-	document = changeNotification.object;
-	selector = @selector(openViewer);
-	id operation = [[NSInvocationOperation alloc] initWithTarget: self
-													 selector: selector
-													   object: nil];
-	
-	[[NSOperationQueue mainQueue] addOperation:operation];*/
-}
+- (void)handleDocumentStateChangedNotificationNormal:(NSNotification * __unused)notification { }
 
 - (void)handleDocumentStateChangedNotificationError:(NSNotification *)notification {
 	[self.fileExplorerViewDelegate collectionView:self.collectionView allowSelection:YES];
@@ -1117,9 +903,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark Private events handlers
 
 - (void)handleReloadAfterClose {
-	//NSArray <NSIndexPath *> *visibleItems = self.collectionView.indexPathsForVisibleItems;
 	self.collectionView.allowsSelection = YES;
-	//[self.collectionView reloadItemsAtIndexPaths:visibleItems];
 }
 
 #pragma mark - MADDocumentDelegate
@@ -1156,24 +940,22 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		return;
 	}
 	
-	// MADKeyChainGetCredentials is an NSOperation that handles its own asynchronicity (for UI).
 	MADKeyChainGetCredentials *getCredsOp = [[MADKeyChainGetCredentials alloc] initWithKey:key
-																			viewController:self]; // 'self' is the File Explorer VC
+																			viewController:self];
 	getCredsOp.name = [NSString stringWithFormat:@"Delegate.AsyncGetKeyChainCredsOp_for_%@", key];
 	
-	// Use a MADBlockObserver to get the result and call the completion handler
 	MADBlockObserver *observer = [[MADBlockObserver alloc] initWithFinishHandler:^(MADOperation * _Nonnull finishedOperation, NSArray<NSError *> * _Nullable opErrors) {
 		MADCredential *finalCredential = nil;
-		NSError *finalError = opErrors.firstObject; // Use the first error from the operation, if any
+		NSError *finalError = opErrors.firstObject;
 		
 		if ([finishedOperation isKindOfClass:[MADKeyChainGetCredentials class]]) {
 			MADKeyChainGetCredentials *op = (MADKeyChainGetCredentials *)finishedOperation;
-			if (op.credential && !finalError) { // Success if credential present and no primary error
-				finalCredential = [op.credential copy]; // Copy as per original intent
+			if (op.credential && !finalError) {
+				finalCredential = [op.credential copy];
 				MADLogInfo("%@ <%p> getCredentialsForKey: Op <%@> finished. Credential retrieved. Source: %d",
 						   NSStringFromClass([self class]), self, finishedOperation.name, (int)op.source);
 			} else {
-				if (!finalError) { // If op.credential is nil but no error reported by op, create one
+				if (!finalError) {
 					finalError = [NSError errorWithDomain:@"FileExplorerDomain"
 													 code:1002
 												 userInfo:@{NSLocalizedDescriptionKey:@"Credential operation completed without a credential and no specific error."}];
@@ -1189,542 +971,17 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 			}
 		}
 		
-		// Call the original completion handler.
-		// This will be on the thread the observer's finishHandler is called on (likely a background thread).
-		// If the caller of `getCredentialsForKey:completion:` (i.e., MADDatabase) needs this callback
-		// on a specific thread (e.g., its own operation's thread or main), it should handle that dispatch.
 		if (completion) {
 			completion(finalCredential, finalError);
 		}
 	}];
 	[getCredsOp addObserver:observer];
 	
-	// Add the operation to a shared background operation queue to execute.
-	// Replace with your actual shared queue. For example:
-	// [[AppSharedOperationQueues backgroundUtilityQueue] addOperation:getCredsOp];
-	// Creating a new one each time is also possible but less efficient if called frequently.
 	NSOperationQueue *backgroundQueue = [[NSOperationQueue alloc] init];
 	backgroundQueue.name = @"FileExplorer_CredentialFetchingQueue";
 	MADLogDebug("%@ <%p> getCredentialsForKey: Adding op <%@> to background queue <%@>.",
 				NSStringFromClass([self class]), self, getCredsOp.name, backgroundQueue.name);
 	[backgroundQueue addOperation:getCredsOp];
-	
-	// The method returns immediately; the result is delivered via the completion block.
-}
-
-#pragma mark -
-#pragma mark Actions
-
-- (IBAction)actionAddDocument:(id)sender {
-	
-	UINavigationController *navControl = [UINavigationController navigationControllerWithType: MADNavigationControllerTypeNewDocument];
-	[MADThemeManager applyAppearanceToNavigationController:navControl traitCollection:self.traitCollection];
-
-	navControl.modalPresentationStyle = UIModalPresentationFormSheet;
-	navControl.presentationController.delegate = self;
-	
-	MADDriverSelectorController *databaseDriverSelector = (MADDriverSelectorController *)navControl.topViewController;
-	databaseDriverSelector.delegate = self;
-	databaseDriverSelector.saveFileDelegate = self;
-	
-	self.definesPresentationContext = YES;
-	self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-	
-	UIPresentationController *pc = navControl.presentationController;
-	pc.presentedView.backgroundColor = [UIColor whiteColor];
-	[self showViewController:navControl animated:YES];
-}
-
-- (IBAction)actionInformation:(id)sender {
-	
-	if (_aboutViewControllerOnScreen) {
-		_aboutViewControllerOnScreen = NO;
-		[self dismissViewControllerAnimated:YES completion:nil];
-	}
-	if (_infoControllerOnScreen) {
-		_infoControllerOnScreen = NO;
-		[self dismissViewControllerAnimated:YES completion:nil];
-	} else {
-		UINavigationController *infoViewController = [UINavigationController navigationControllerWithType:MADNavigationControllerTypeInformation];
-		[MADThemeManager applyAppearanceToNavigationController:infoViewController traitCollection:self.traitCollection];
-
-		infoViewController.modalPresentationStyle = UIModalPresentationPopover;
-		infoViewController.preferredContentSize = CGSizeMake(420.0, 480.0);
-		
-		NSArray *passthoughViews = [self defaultPassthroughViews];
-		
-		UIPopoverPresentationController *ppc = infoViewController.popoverPresentationController;
-		ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray: passthoughViews];
-		ppc.backgroundColor = [UIColor clearColor];
-		ppc.delegate = self;
-		ppc.barButtonItem = sender;
-		
-		self.infoPopoverPresentationController = ppc;
-		
-		[self presentViewController:infoViewController animated:YES completion:nil];
-	}
-}
-
-- (IBAction)actionAbout:(id)sender {
-	
-	if (_infoControllerOnScreen) {
-		_infoControllerOnScreen = NO;
-		[self dismissViewControllerAnimated:YES completion:nil];
-	}
-	
-	if (_aboutViewControllerOnScreen) {
-		_aboutViewControllerOnScreen = NO;
-		[self dismissViewControllerAnimated:YES completion:nil];
-		
-	} else {
-		
-		_aboutViewControllerOnScreen = YES;
-		NSArray *passthoughViews = [self defaultPassthroughViews];
-		UITableViewController *aboutViewController = [MADAboutTableViewController newAboutTableViewController];
-		aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
-		
-		UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
-		ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray: passthoughViews];
-		ppc.backgroundColor = [UIColor clearColor];
-		ppc.delegate = self;
-		ppc.barButtonItem = sender;
-		
-		self.aboutPopoverPresentationController = ppc;
-		[self showViewController:aboutViewController animated: YES];
-	}
-}
-
-- (IBAction)actionDocumentInformation:(id)sender {
-	NSArray <NSIndexPath *> *selectedItems = [self.fileExplorerViewDelegate indexPathsForSelectedItems];
-	NSMutableArray <MADMetaData *> *metadataItems = [[NSMutableArray alloc] initWithCapacity:selectedItems.count];
-	
-	for (NSIndexPath *indexPath in selectedItems) {
-		MADMetaData *metadata = [self.fileExplorerDataSource metadataAtIndex: (NSUInteger)indexPath.item];
-		[metadataItems addObject:metadata];
-	}
-	
-	MADDocumentInformationTableViewController *documentInformation = [MADDocumentInformationTableViewController newDocumentInformationTableViewController];
-	documentInformation.modalPresentationStyle = UIModalPresentationPopover;
-	
-	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:documentInformation];
-	navController.modalPresentationStyle = UIModalPresentationPopover;
-	navController.presentationController.delegate = self;
-	[MADThemeManager applyAppearanceToNavigationController:navController traitCollection:self.traitCollection];
-
-	UIPopoverPresentationController *ppc = navController.popoverPresentationController;
-	if (ppc) {
-		ppc.barButtonItem = sender;
-		ppc.delegate = self;
-		NSArray *passthoughViews = [self defaultPassthroughViews];
-		ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray:passthoughViews];
-		ppc.backgroundColor = [UIColor clearColor];
-	}
-	
-	self.documentInformationPopoverPresentationController = ppc;
-	
-	documentInformation.metadataItems = metadataItems;
-	
-	[self presentViewController: navController animated: YES completion:^{
-		[self actionEdit:self];
-	}];
-
-}
-
-- (IBAction)actionStore:(id)sender {
-	
-	UINavigationController *licensing = [UINavigationController navigationControllerWithType: MADNavigationControllerTypeLicensing];
-	[MADThemeManager applyAppearanceToNavigationController:licensing traitCollection:self.traitCollection];
-	
-	licensing.providesPresentationContextTransitionStyle = YES;
-	licensing.definesPresentationContext = YES;
-	licensing.modalPresentationStyle = UIModalPresentationFormSheet;
-	licensing.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-	licensing.presentationController.delegate = self;
-	((MADStoreViewController *)licensing.viewControllers[0]).delegate = self;
-	self.fileExplorerViewDelegate.showingPopover = YES;
-	
-	self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
-	[self showViewController:licensing animated: YES];
-}
-
-- (IBAction)actionCancel:(id)sender {
-	[self dismissViewControllerAnimated:YES completion:nil];
-	[self.barButtonItemAddNewDocument setEnabled:YES];
-}
-
-- (IBAction)actionSearch:(id)sender {
-	
-	if (self.searchBar.isHidden) {
-		
-		self.searchBar.hidden = NO;
-		self.searchBar.showsCancelButton = NO;
-		self.searchBar.alpha = 0.0;
-		self.navigationItem.titleView.alpha = 1.0;
-		self.navigationItem.leftBarButtonItem.enabled = NO;
-		
-		self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
-		[self.searchBar sizeToFit];
-		
-		UIView *searchViewHolder = [[UIView alloc] initWithFrame:self.searchBar.bounds];
-		self.searchBar.autoresizingMask = MADViewAutoresizingFlexable();
-		searchViewHolder.autoresizingMask = MADViewAutoresizingFlexable();
-		[searchViewHolder addSubview:self.searchBar];
-		[searchViewHolder sizeToFit];
-		self.searchBar.translucent = YES;
-		self.searchBar.backgroundColor = [UIColor clearColor];
-		self.searchBar.barTintColor = nil;
-		self.searchBar.tintColor = [UIColor systemBlueColor];
-		
-		if (self.navigationItem.titleView != nil) {
-		
-			__weak MADExplorerController *weakSelf = self;
-			UIView *titleView = (UIView * _Nonnull)self.navigationItem.titleView;
-			[UIView transitionWithView: titleView
-							  duration: 0.2
-							   options: UIViewAnimationOptionCurveEaseOut
-							animations: ^{
-				__strong MADExplorerController *strongSelf = weakSelf;
-				if (strongSelf) {
-					strongSelf.searchBar.alpha = 1.0;
-					strongSelf.navigationItem.titleView.alpha = 0.0;
-					strongSelf.navigationItem.titleView = searchViewHolder;
-				}
-			} completion:^(BOOL __unused finished) {
-				__strong MADExplorerController *strongSelf = weakSelf;
-				if (strongSelf) {
-					if (strongSelf.searchBar.isFirstResponder == NO) {
-						[strongSelf.searchBar becomeFirstResponder];
-						strongSelf.searchBar.hidden = NO;
-					}
-				}
-			}];
-		}
-		
-	} else {
-		
-		if (self.searchBar.text.length > 0) {
-			self.searchBar.text = @"";
-		}
-		self.searchBar.hidden = YES;
-		self.searchBar.alpha = 1.0;
-		
-		self.navigationItem.titleView.alpha = 0.0;
-		self.navigationItem.leftBarButtonItem.enabled = YES;
-		
-		__weak MADExplorerController *weakSelf = self;
-		UIView *titleView = self.navigationItem.titleView;
-		
-		[UIView transitionWithView: titleView duration: 0.2 options: UIViewAnimationOptionCurveEaseOut animations:^{
-			__strong MADExplorerController *strongSelf = weakSelf;
-
-			if (strongSelf) {
-				strongSelf.searchBar.alpha = 0.0;
-				strongSelf.navigationItem.titleView.alpha = 1.0;
-				strongSelf.navigationItem.titleView = titleView;
-			}
-		} completion:^(BOOL finished) {
-			if (finished) {
-				__strong MADExplorerController *strongSelf = weakSelf;
-				if (strongSelf) {
-					strongSelf.searchBar.hidden = YES;
-				}
-			}
-		}];
-
-	}
-}
-
-- (IBAction)actionEdit:(id)sender {
-	BOOL startEdit = !self.isEditing;
-	[self setEditing:startEdit animated:YES];
-	if (startEdit) {
-		self.barButtonItemAddNewDocument.enabled = NO;
-		self.barButtonItemAbout.enabled = NO;
-		self.barButtonItemInformation.enabled = NO;
-		self.barButtonItemLicensing.enabled = NO;
-		self.collectionView.allowsSelection = YES;
-		self.collectionView.allowsMultipleSelection = YES;
-		for (MADCollectionViewCellDocument *cell in self.collectionView.visibleCells) {
-			cell.wobbling = YES;
-		}
-		[self.navigationItem setRightBarButtonItem: self.barButtonItemEditDone animated: YES];
-		
-	} else {
-		[self actionDone:nil];
-	}
-}
-
-- (IBAction)actionDone:(id)sender {
-
-	self.editing = NO;
-	self.barButtonItemAddNewDocument.enabled = YES;
-	self.barButtonItemAbout.enabled = YES;
-	self.barButtonItemLicensing.enabled = YES;
-	self.barButtonItemInformation.enabled = YES;
-	self.barButtonItemTrash.enabled = NO;
-	self.barButtonItemInformationDocument.enabled = NO;
-	self.barButtonItemDuplicate.enabled = NO;
-	self.barButtonItemAction.enabled = NO;
-
-	self.collectionView.allowsMultipleSelection = NO;
-	
-	[self.navigationItem setRightBarButtonItem:self.barButtonItemEdit animated:YES];
-	for (NSIndexPath *path in self.collectionView.indexPathsForSelectedItems) {
-		[self.collectionView deselectItemAtIndexPath:path animated:YES];
-	}
-	MADCollectionViewCellDocument *cell;
-	for (cell in self.collectionView.visibleCells) {
-		cell.wobbling = NO;
-	}
-}
-
-- (IBAction)actionDownload:(id)sender {
-	UTType *madType = [UTType typeWithIdentifier:MADUtiType] ?: UTTypeData;
-	UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:@[madType]
-																										 asCopy:YES];
-	picker.delegate = self;
-	[self presentViewController:picker animated:YES completion:nil];
-}
-
-- (IBAction)actionCut:(id)sender {
-	[super cut:sender];
-}
-
-- (IBAction)actionCopy:(id)sender {
-	[super copy:sender];
-}
-
-- (IBAction)actionPaste:(id)sender {
-	NSURL *url = [[UIPasteboard generalPasteboard].URL copy];
-	NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-	NSURL *destinationUrl = [MADURLFactory newURLWithUniqueFilenameForURL: url];
-
-	NSFileWrapper *fileWrapper = [[NSFileWrapper alloc] initWithSerializedRepresentation:data];
-	NSError *fileWrittingError = nil;
-	[fileWrapper writeToURL: destinationUrl
-					options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
-		originalContentsURL: url
-					  error: &fileWrittingError];
-	if (fileWrittingError != nil) {
-		os_log_error(GetDesignerLog(), "Error: %@", fileWrittingError);
-		NSError *error = nil;
-		[fileWrapper writeToURL: destinationUrl	// Try to write twice
-						options: NSFileWrapperWritingAtomic | NSFileWrapperWritingWithNameUpdating
-			originalContentsURL: url
-						  error: &error];
-		if (error != nil) {
-			os_log_error(GetDesignerLog(), "Error: %@", error);
-		}
-	}
-	
-	[self.collectionView reloadData];
-}
-
-- (IBAction)actionActivity:(id)sender {
-	
-	NSMutableArray *wrappedUrls = [[NSMutableArray alloc] initWithCapacity: self.fileExplorerDataSource.count];
-
-	NSArray<NSIndexPath *> *indexPaths = self.collectionView.indexPathsForSelectedItems;
-	MADMetaData *metadata;
-	NSURL *fileURL;
-	NSIndexPath *indexPath;
-	for (indexPath in indexPaths) {
-		metadata = [_fileExplorerDataSource metadataAtIndex:(NSUInteger)indexPath.item];
-		fileURL = [metadata.URL copy];
-		[wrappedUrls addObject:fileURL];
-	}
-	
-	//NSInteger numberOfItemsInSection = [self.collectionView numberOfItemsInSection:0];
-	//UICollectionViewCell *documentCell;
-	//for (NSInteger i=0; i<numberOfItemsInSection; i++) {
-	//    indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-	//    documentCell = [self.collectionView cellForItemAtIndexPath:indexPath];
-	//    documentCell.selected = NO;
-	//}
-	
-	NSArray *applicationActivities = [[NSArray alloc] init];
-	NSArray *excludedActivityTypes = [[NSArray alloc] initWithObjects: UIActivityTypeAssignToContact,
-									  UIActivityTypePostToFacebook,
-									  UIActivityTypePostToFlickr,
-									  UIActivityTypePostToTwitter,
-									  UIActivityTypePostToVimeo,
-									  UIActivityTypeAddToReadingList,
-									  UIActivityTypePostToTencentWeibo,
-									  UIActivityTypePostToWeibo,
-									  UIActivityTypeSaveToCameraRoll, nil];
-	UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems: wrappedUrls
-																						 applicationActivities: applicationActivities];
-	activityViewController.excludedActivityTypes = excludedActivityTypes;
-	activityViewController.modalPresentationStyle = UIModalPresentationPopover;
-	activityViewController.popoverPresentationController.barButtonItem = sender;
-	activityViewController.popoverPresentationController.delegate = self;
-
-	MADExplorerController * __weak weakself = self;
-	activityViewController.completionWithItemsHandler = ^(NSString *__unused activityType, BOOL __unused completed,
-														  NSArray *__unused returnedItems, NSError *__unused activityError) {
-	
-		for (UITableViewCell *cell in weakself.collectionView.visibleCells) {
-			cell.selected = NO;
-		}
-		
-	};
-	
-	[self presentViewController:activityViewController animated:YES completion:nil];
-}
-
-- (IBAction)actionDelete:(id)sender {
-
-	NSArray *selectedItems = self.collectionView.indexPathsForSelectedItems;
-	UIAlertController *alertController = [MADAlertController newAlertControllerDeleteItems:selectedItems.count
-																				   confirm:^(UIAlertAction *__unused action) {
-		
-		for (NSIndexPath *selectedItem in selectedItems) {
-			[self.fileExplorerDataSource removeItemAtIndex:(NSUInteger)selectedItem.item];
-		}
-		
-	} cancel:^(UIAlertAction *__unused action) { }];
-	
-	if ([sender isKindOfClass:[UIBarButtonItem class]]) {
-		alertController.popoverPresentationController.barButtonItem = sender;
-	}
-	[self presentViewController:alertController animated:YES completion:nil];
-}
-
-- (IBAction)actionDuplicate:(id)sender {
-	for (NSIndexPath *selectedItem in self.collectionView.indexPathsForSelectedItems) {
-		[_fileExplorerDataSource duplicateItemAtIndex:(NSUInteger)selectedItem.item];
-	}
-}
-
-- (IBAction)actionRename:(id)sender {
-	
-	if (self.isEditing)
-		return;
-		
-	MADCollectionViewCellDocument *cellDocument;
-	
-	if ([sender isKindOfClass:[MADCollectionViewCellDocument class]]) {
-		cellDocument = sender;
-		
-	} else if ([sender isKindOfClass:[UITapGestureRecognizer class]]) {
-		UIView *contentView = ((UITapGestureRecognizer *)sender).view.superview;
-		cellDocument = (MADCollectionViewCellDocument *)contentView.superview;
-	}
-	
-	NSAssert(cellDocument != nil, @"Null cell at %s.", __PRETTY_FUNCTION__);
-	
-	NSIndexPath *indexPath = [self.collectionView indexPathForCell:cellDocument];
-	MADMetaData *metaData = [self.fileExplorerDataSource metadataAtIndex: (NSUInteger)indexPath.item];
-	
-	NSString *textFieldText = [cellDocument.labelTitle.text copy];
-	
-	void (^handleRename)(UITextField *) = ^(UITextField *textField) {
-		textField.text = [textFieldText copy];
-		textField.clearButtonMode = UITextFieldViewModeAlways;
-		textField.delegate = self;
-	};
-	
-	void (^handleConfermation)(UIAlertAction *action, NSString *text) = ^(UIAlertAction *__unused action, NSString *text) {
-		NSString *name = [self.class safeFilenameWithDesiredFilename:text];
-		BOOL shortcircut = NO;
-		
-		//Test for input
-		if (name.length <= 0) {
-			UIAlertController *alertError = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Validation Error", @"Validation Error")
-																				message: NSLocalizedString(@"Filename not valid.", @"Filename not valid.")
-																		 preferredStyle: UIAlertControllerStyleAlert];
-			UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
-														 style: UIAlertActionStyleDefault
-													   handler: nil];
-			[alertError addAction:ok];
-			
-			[self showViewController:alertError animated: YES];
-			shortcircut = YES;
-		}
-		
-		//Check if file exist
-		NSURL *url = [metaData.URL copy];
-		if (!shortcircut && [self.class isUniqueFilename:name inDirectory:url]) {
-			UIAlertController *alertError = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"File Exist", @"File Exist")
-																		   message: NSLocalizedString(@"File already exist. Please choose a new name.", @"File already exist. Please choose a new name.")
-																	preferredStyle: UIAlertControllerStyleAlert];
-			UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
-														 style: UIAlertActionStyleDefault
-													   handler: nil];
-			[alertError addAction:ok];
-			[self showViewController:alertError animated: YES];
-			shortcircut = YES;
-		}
-		
-		if (!shortcircut && metaData.isUbiquitousItemDownloadingStatusNotDownloaded) {
-			
-			MADExplorerDataSource *fileExplorerDataSource = self.fileExplorerDataSource;
-			
-			void (^closeCompletion)(BOOL, NSURL *, NSURL *) = ^(BOOL successClose, NSURL *__unused fileURL, NSURL *__unused cleanupURL) {
-				if (successClose)
-					[fileExplorerDataSource rename:text
-								itemAtIndex:(NSUInteger)indexPath.item];
-			};
-			
-			MADocument *doc = [MADocument newManagedDocumentForURL:metaData.URL];
-			
-			void (^openCompletion)(BOOL) = ^(BOOL success) {
-				if (success) [MADocument close: doc completion:closeCompletion];
-			};
-			
-			[doc openWithCompletionHandler:openCompletion];
-			
-		} else {
-			[self.fileExplorerDataSource rename:text itemAtIndex:(NSUInteger)indexPath.item];
-		}
-	};
-	
-	UIAlertController *alert = [MADExplorerController alertRenameDocument: handleRename
-																  confirm: handleConfermation
-																   cancel: nil];
-	[self showViewController:alert animated: YES];
-	
-}
-
-- (IBAction)actionEmail:(MADCollectionViewCellDocument *)cell {
-	if ([MFMailComposeViewController canSendMail] == NO) {
-		id alert = [MADExplorerController alertNotConfiguredForEmail];
-		[self showViewController:alert animated: YES];
-		return;
-	}
-
-	NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
-	MADMetaData *metadata = [_fileExplorerDataSource metadataAtIndex:(NSUInteger)indexPath.item];
-	MADocument *documentReport = [MADocument newManagedDocumentForURL:metadata.URL];
-	
-	if (documentReport.documentState != UIDocumentStateClosed) {
-		
-		void (^handleCloseDocumentCompletion)(BOOL, NSURL *, NSURL *) = ^(BOOL success, NSURL *__unused fileURL, NSURL *__unused cleanupURL) {
-			if (success) { [self actionEmail:cell]; }
-		};
-		[MADocument close: documentReport completion:handleCloseDocumentCompletion];
-		
-	} else {
-		
-		NSString *mimeType = [self mimeTypeForDocumentUTI:documentReport.fileType];
-		NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with MAD Viewer.",
-																								 @"The attached document can be opened with MAD Viewer.")];
-		[messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
-		
-		MFMailComposeViewController	*mailComposer = [MFMailComposeViewController ma_newMailComposeViewControllerWithBody: messageBody
-																											  attachment: metadata.URL
-																												mimeType: mimeType
-																									  userInterfaceIdiom: self.traitCollection.userInterfaceIdiom];
-		mailComposer.mailComposeDelegate = self;
-		[self showViewController:mailComposer animated: YES];
-	}
-
-	
-}
-
-- (void)actionActivateEditMode:(UICollectionViewCell *)sender {
-	[self actionEdit:nil];
-	[self selectCell:sender];
 }
 
 - (void)selectCell:(UICollectionViewCell *)cell {
@@ -1747,30 +1004,6 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	}
 }
 
-+ (UIAlertController *)alertRenameDocument:(void (^)(UITextField *textField))textFieldConfig
-								   confirm:(void (^)(UIAlertAction *action, NSString *text))handlerConfirm
-									cancel:(void (^)(UIAlertAction *action))handlerCancel {
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Rename Document", @"Rename Document")
-																   message: NSLocalizedString(@"Please enter a new name for the document.", @"Please enter a new name for the document.")
-															preferredStyle: UIAlertControllerStyleAlert];
-	[alert addTextFieldWithConfigurationHandler:textFieldConfig];
-
-	UIAlertAction *actionDefault = [UIAlertAction actionWithTitle: NSLocalizedString(@"Rename", @"Rename")
-															style: UIAlertActionStyleDefault
-														  handler: ^(UIAlertAction *action) {
-		UITextField *textField = alert.textFields.firstObject;
-		NSString *newText = [textField.text copy];
-		handlerConfirm(action, newText);
-	}];
-	[alert addAction:actionDefault];
-
-	UIAlertAction *actionCancel = [UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
-											style: UIAlertActionStyleCancel
-										  handler: handlerCancel];
-	[alert addAction:actionCancel];
-	return alert;
-}
-
 #pragma mark -
 #pragma mark UIAdaptivePresentationControllerDelegate
 
@@ -1779,23 +1012,22 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 	UIModalPresentationStyle style = UIModalPresentationOverCurrentContext;
 	
-		if ([controller isEqual:self.documentInformationPopoverPresentationController]) {
-			
-			if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-				style = UIModalPresentationNone;
-			} else {
-				style = UIModalPresentationFullScreen;
-			}
-		} else if ([controller isEqual:self.infoPopoverPresentationController]) {
-			if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-				style = UIModalPresentationNone;
-			} else {
-				style = UIModalPresentationOverFullScreen;
-			}
-		} else if ([controller isEqual:self.aboutPopoverPresentationController]) {
-
+	if ([controller isEqual:self.documentInformationPopoverPresentationController]) {
+		
+		if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
 			style = UIModalPresentationNone;
+		} else {
+			style = UIModalPresentationFullScreen;
 		}
+	} else if ([controller isEqual:self.infoPopoverPresentationController]) {
+		if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			style = UIModalPresentationNone;
+		} else {
+			style = UIModalPresentationOverFullScreen;
+		}
+	} else if ([controller isEqual:self.aboutPopoverPresentationController]) {
+		style = UIModalPresentationNone;
+	}
 	
 	return style;
 }
@@ -1803,15 +1035,13 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark -
 #pragma mark UIPopoverPresentationControllerDelegate
 
-- (void)prepareForPopoverPresentation:(UIPopoverPresentationController *)controller {
+- (void)prepareForPopoverPresentation:(UIPopoverPresentationController * __unused)controller {
 	self.fileExplorerViewDelegate.showingPopover = YES;
-	//[self.collectionView reloadData];
 }
 
-- (BOOL)presentationControllerShouldDismiss:(UIPresentationController *)presentationController {
+- (BOOL)presentationControllerShouldDismiss:(UIPresentationController * __unused)presentationController {
 	return YES;
 }
-
 
 - (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController {
 	self.fileExplorerViewDelegate.showingPopover = NO;
@@ -1858,44 +1088,17 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 #pragma mark -
 #pragma mark MADOperationObserver
 
-- (void)operationDidStart:(MADOperation *)operation { }
+- (void)operationDidStart:(MADOperation * __unused)operation { }
 
-- (void)operation:(MADOperation *)operation didProduceOperation:(NSOperation *)newOperation { }
+- (void)operation:(MADOperation * __unused)operation didProduceOperation:(NSOperation * __unused)newOperation { }
 
 - (void)operationDidFinish:(MADOperation *)operation
-					errors:(NSArray<NSError *> *)errors {
+					errors:(NSArray<NSError *> * __unused)errors {
 	if ([operation isKindOfClass:[MADOperationInstallSampleDocument class]] && ((MADOperationInstallSampleDocument *)operation).sampleDocumentInstalled) {
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			[self.fileExplorerDataSource refresh];
 		}];
 	}
-}
-
-#pragma mark -
-#pragma mark Alert Controllers
-
-+ (UIAlertController *)alertNotConfiguredForEmail {
-	id alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Alert", @"Alert")
-												   message: NSLocalizedString(@"Device is not configured for email.", @"Device is not configured for email.")
-											preferredStyle: UIAlertControllerStyleAlert];
-	
-	UIAlertAction *ok = [UIAlertAction actionWithTitle: NSLocalizedString(@"Continue", @"Continue")
-												 style: UIAlertActionStyleDefault
-											   handler: nil];
-	[alert addAction:ok];
-	return alert;
-}
-
-+ (UIAlertController *)alertNotifyCloudSignOut:(void (^)(UIAlertAction *action))handler {
-	NSString *MADMessageCloudSignout = @"You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents.";
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"iCloud Sign Out", @"iCloud Sign Out")
-																			 message: NSLocalizedString(MADMessageCloudSignout, MADMessageCloudSignout)
-																	  preferredStyle: UIAlertControllerStyleAlert];
-	UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
-															style: UIAlertActionStyleDefault
-														  handler: handler];
-	[alertController addAction:actionConfirm];
-	return alertController;
 }
 
 #pragma mark -
@@ -1919,3 +1122,4 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 }
 
 @end
+#pragma clang diagnostic pop
