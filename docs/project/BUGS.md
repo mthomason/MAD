@@ -1293,33 +1293,9 @@ Found while doing ROADMAP §2.1. These are project-file defects, not source defe
 a reference in a `.pbxproj` that names a path which does not exist, or a build
 setting that names a platform no target can build for.
 
-### The MAD Viewer target has not linked since `09e0e7b8d`
-- **Status:** Still open
-- **Where:** the MAD Viewer target in
-  `MADDesigner/MAD Designer.xcodeproj/project.pbxproj`
-- **Behavior:** its build settings were left pointing into `MADStack/`, the directory
-  `09e0e7b8d` ("Project cleanup and reorganization") deleted —
-  `CODE_SIGN_ENTITLEMENTS` and `GCC_PREFIX_HEADER` at the Designer's old paths, and
-  `INFOPLIST_FILE = MADStack/MADViewer/info.plist`. The build stopped at
-  `ProcessProductPackaging` with *"Build input file cannot be found"*.
-- **Now:** those six settings (Debug and Release) point at the viewer's own files under
-  `Targets/MADViewer/`, which all exist, and the build reaches the link step.
-- **Still broken:** the link then fails on seven undefined classes — `MADApplication`,
-  `MADDesignerNavigationBar`, `MADNavigationControllerDesigner`,
-  `MADNavigationControllerViewer`, `MADSalesReceipt`, `MADThemeManager` and
-  `MADViewerNavigationBar`. They are the *Designer* target's own sources, and the
-  viewer target neither compiles them nor links a framework that contains them. What
-  the stand-alone viewer should be is a product decision, not a build-wiring repair,
-  so it is recorded rather than patched.
-- **When the viewer is repaired (2026-10-04):** it opens `.mad` documents, so it will
-  need the legacy-store conversion sources the app and CLI compile —
-  `MADDesigner/Source/MADStoreLegacy/MADStoreConverter.m` and
-  `MADStoreLegacyConverter.m` — and its framework search paths must reach
-  `MAD.framework`'s headers, which today they do not. Until then the converter is
-  compiled into the Designer target and the CLI only.
-
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- The MAD Viewer target has not linked since `09e0e7b8d`
 - Three library references named directories that were never created
 - Five library search paths named directories that were never created
 - The workspace pinned MADTds with an absolute path

@@ -3505,6 +3505,32 @@ reference to "BUGS.md, the X entry" still lands.
   advertise a platform no target can compile for. The XCFrameworks are ready for the
   day that decoupling lands; nothing here unblocks the app-side macOS work.
 
+### The MAD Viewer target has not linked since `09e0e7b8d`
+- **Status:** Fixed
+- **Where:** the MAD Viewer target in
+  `MADDesigner/MAD Designer.xcodeproj/project.pbxproj`,
+  `MADDesigner/Source/MADNavigationController.m`,
+  `MADDesigner/Targets/MADViewer/MADViewerAppDelegate.m`
+- **Behavior:** its build settings were left pointing into `MADStack/`, the directory
+  `09e0e7b8d` ("Project cleanup and reorganization") deleted —
+  `CODE_SIGN_ENTITLEMENTS` and `GCC_PREFIX_HEADER` at the Designer's old paths, and
+  `INFOPLIST_FILE = MADStack/MADViewer/info.plist`. The build stopped at
+  `ProcessProductPackaging` with *"Build input file cannot be found"*. Those six
+  settings were pointed at `Targets/MADViewer/`, reaching the link step, which then
+  failed on undefined classes (`MADApplication`, `MADDesignerNavigationBar`,
+  `MADNavigationControllerDesigner`, `MADNavigationControllerViewer`,
+  `MADSalesReceipt`, `MADThemeManager`, `MADViewerNavigationBar`) and missing
+  framework links.
+- **Now:** the `MAD Viewer` target compiles `MADStoreConverter.m`,
+  `MADStoreLegacyConverter.m`, `MADThemeManager.m`, `MADSalesReceipt.m`,
+  `NSData+Base64.m`, and `MADViewerNavigationBar.m`, links and embeds the workspace
+  frameworks plus `openssl.xcframework`, scopes the Designer-tab
+  `+documentNavigationControllerWithType:document:` factory in
+  `MADNavigationController.m` under `#if MAD_DESIGNER`, and implements the missing
+  `MADApplicationProtocol` methods on `MADViewerAppDelegate`.
+- **Verification:** `xcodebuild build -workspace Reports.xcworkspace -scheme "MAD Viewer"`
+  builds and links cleanly.
+
 ## Already fixed (for reference)
 
 ### MADFoundation batch: ten defects, each caller-audited first
