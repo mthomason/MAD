@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "2700"
+   version = "1.7">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES"
+      buildArchitectures = "Automatic">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4CA200602000000000000001"
+               BuildableName = "MADPostgres.framework"
+               BlueprintName = "MADPostgres"
+               ReferencedContainer = "container:MADPostgres.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "NO"
+      shouldAutocreateTestPlan = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Start the PostgreSQL test database"
+               scriptText = "SCRIPT=&quot;${SRCROOT}/TestDatabase/postgres-test-db.sh&quot;&#10;[ -x &quot;$SCRIPT&quot; ] || SCRIPT=&quot;$(dirname &quot;${WORKSPACE_PATH:-$PWD}&quot;)/MADPostgres/TestDatabase/postgres-test-db.sh&quot;&#10;if [ -x &quot;$SCRIPT&quot; ]; then&#10;  &quot;$SCRIPT&quot; up || echo &quot;note: the PostgreSQL test database did not start; the live tests skip.&quot;&#10;else&#10;  echo &quot;note: postgres-test-db.sh not found (SRCROOT=${SRCROOT}); the live tests skip without a server on 5432.&quot;&#10;fi&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "4CA200602000000000000001"
+                     BuildableName = "MADPostgres.framework"
+                     BlueprintName = "MADPostgres"
+                     ReferencedContainer = "container:MADPostgres.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4CA200702000000000000001"
+               BuildableName = "MADPostgresTests.xctest"
+               BlueprintName = "MADPostgresTests"
+               ReferencedContainer = "container:MADPostgres.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
+      <PostActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Stop the PostgreSQL test database"
+               scriptText = "SCRIPT=&quot;${SRCROOT}/TestDatabase/postgres-test-db.sh&quot;&#10;[ -x &quot;$SCRIPT&quot; ] || SCRIPT=&quot;$(dirname &quot;${WORKSPACE_PATH:-$PWD}&quot;)/MADPostgres/TestDatabase/postgres-test-db.sh&quot;&#10;if [ -x &quot;$SCRIPT&quot; ]; then&#10;  &quot;$SCRIPT&quot; down || true&#10;fi&#10;">
+               <EnvironmentBuildable>
+                  <BuildableReference
+                     BuildableIdentifier = "primary"
+                     BlueprintIdentifier = "4CA200602000000000000001"
+                     BuildableName = "MADPostgres.framework"
+                     BlueprintName = "MADPostgres"
+                     ReferencedContainer = "container:MADPostgres.xcodeproj">
+                  </BuildableReference>
+               </EnvironmentBuildable>
+            </ActionContent>
+         </ExecutionAction>
+      </PostActions>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      enableGPUValidationMode = "1"
+      allowLocationSimulation = "YES">
+      <MetalAPIValidationSettings
+         isEnabled = "No">
+      </MetalAPIValidationSettings>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "4CA200602000000000000001"
+            BuildableName = "MADPostgres.framework"
+            BlueprintName = "MADPostgres"
+            ReferencedContainer = "container:MADPostgres.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>

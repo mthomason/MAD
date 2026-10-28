@@ -25,6 +25,7 @@ typedef enum MADDatabaseType : int16_t {
 	MADDatabaseTypeNone                 = 9,
 	MADDatabaseTypeSqlite3              = 10,
 	MADDatabaseTypeSample1              = 11,
+	MADDatabaseTypePostgres             = 12,
 } MADDatabaseType;
 
 #endif /* MadApiMadDatabaseType_h */

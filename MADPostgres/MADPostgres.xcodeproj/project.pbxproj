@@ -1,0 +1,705 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4CA200012000000000000001 /* MADPostgres.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA200022000000000000001 /* MADPostgres.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA200032000000000000001 /* MADDatabasePostgres.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA200042000000000000001 /* MADDatabasePostgres.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA200052000000000000001 /* MADDatabasePostgres.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA200062000000000000001 /* MADDatabasePostgres.m */; };
+		4CA200072000000000000001 /* MADDatabaseConnectionPostgres.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA200082000000000000001 /* MADDatabaseConnectionPostgres.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA200092000000000000001 /* MADDatabaseConnectionPostgres.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2000A2000000000000001 /* MADDatabaseConnectionPostgres.m */; };
+		4CA2000B2000000000000001 /* MADPostgresConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA2000C2000000000000001 /* MADPostgresConnection.h */; };
+		4CA2000D2000000000000001 /* MADPostgresConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2000E2000000000000001 /* MADPostgresConnection.m */; };
+		4CA2000F2000000000000001 /* MADDataTypePostgres.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA200102000000000000001 /* MADDataTypePostgres.h */; };
+		4CA200112000000000000001 /* MADDataTypePostgres.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA200122000000000000001 /* MADDataTypePostgres.m */; };
+		4CA200132000000000000001 /* MADPostgresConnectionViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA200142000000000000001 /* MADPostgresConnectionViewController.h */; };
+		4CA200152000000000000001 /* MADPostgresConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA200162000000000000001 /* MADPostgresConnectionViewController.m */; };
+		4CA200172000000000000001 /* libpq-fe.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA200182000000000000001 /* libpq-fe.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA200192000000000000001 /* postgres_ext.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA2001A2000000000000001 /* postgres_ext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA2001B2000000000000001 /* pg_config_ext.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA2001C2000000000000001 /* pg_config_ext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA2001D2000000000000001 /* pg_type_d.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA2001E2000000000000001 /* pg_type_d.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA200212000000000000001 /* postgres.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA200222000000000000001 /* postgres.xcframework */; };
+		4CA200232000000000000001 /* openssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA200242000000000000001 /* openssl.xcframework */; };
+		4CA200252000000000000001 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA200262000000000000001 /* MADFoundation.framework */; };
+		4CA200272000000000000001 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA200282000000000000001 /* MADAPI.framework */; };
+		4CA200292000000000000001 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4CA2002A2000000000000001 /* PrivacyInfo.xcprivacy */; };
+		4CA2002B2000000000000001 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA2002C2000000000000001 /* Media.xcassets */; };
+		4CA2002D2000000000000001 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CA2002E2000000000000001 /* MADCreateDocument.storyboard */; };
+		4CA200312000000000000001 /* MADPostgres.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA200322000000000000001 /* MADPostgres.framework */; };
+		4CA200332000000000000001 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA200262000000000000001 /* MADFoundation.framework */; };
+		4CA200342000000000000001 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA200282000000000000001 /* MADAPI.framework */; };
+		4CA200352000000000000001 /* MADPostgresTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA200362000000000000001 /* MADPostgresTests.m */; };
+		4CA200372000000000000001 /* MADPostgresConnectionViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA200382000000000000001 /* MADPostgresConnectionViewControllerTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4CA200402000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CA200502000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CA200602000000000000001;
+			remoteInfo = MADPostgres;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4CA200022000000000000001 /* MADPostgres.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPostgres.h; sourceTree = "<group>"; };
+		4CA200042000000000000001 /* MADDatabasePostgres.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabasePostgres.h; sourceTree = "<group>"; };
+		4CA200062000000000000001 /* MADDatabasePostgres.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabasePostgres.m; sourceTree = "<group>"; };
+		4CA200082000000000000001 /* MADDatabaseConnectionPostgres.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseConnectionPostgres.h; sourceTree = "<group>"; };
+		4CA2000A2000000000000001 /* MADDatabaseConnectionPostgres.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseConnectionPostgres.m; sourceTree = "<group>"; };
+		4CA2000C2000000000000001 /* MADPostgresConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPostgresConnection.h; sourceTree = "<group>"; };
+		4CA2000E2000000000000001 /* MADPostgresConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPostgresConnection.m; sourceTree = "<group>"; };
+		4CA200102000000000000001 /* MADDataTypePostgres.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataTypePostgres.h; sourceTree = "<group>"; };
+		4CA200122000000000000001 /* MADDataTypePostgres.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDataTypePostgres.m; sourceTree = "<group>"; };
+		4CA200142000000000000001 /* MADPostgresConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPostgresConnectionViewController.h; sourceTree = "<group>"; };
+		4CA200162000000000000001 /* MADPostgresConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPostgresConnectionViewController.m; sourceTree = "<group>"; };
+		4CA200182000000000000001 /* libpq-fe.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "libpq-fe.h"; path = "../Compressor/library/postgres/include/libpq-fe.h"; sourceTree = SOURCE_ROOT; };
+		4CA2001A2000000000000001 /* postgres_ext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = postgres_ext.h; path = ../Compressor/library/postgres/include/postgres_ext.h; sourceTree = SOURCE_ROOT; };
+		4CA2001C2000000000000001 /* pg_config_ext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = pg_config_ext.h; path = ../Compressor/library/postgres/include/pg_config_ext.h; sourceTree = SOURCE_ROOT; };
+		4CA2001E2000000000000001 /* pg_type_d.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = pg_type_d.h; path = ../Compressor/library/postgres/include/pg_type_d.h; sourceTree = SOURCE_ROOT; };
+		4CA200222000000000000001 /* postgres.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = postgres.xcframework; path = ../Compressor/library/postgres.xcframework; sourceTree = "<group>"; };
+		4CA200242000000000000001 /* openssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = openssl.xcframework; path = ../Compressor/library/openssl.xcframework; sourceTree = "<group>"; };
+		4CA200262000000000000001 /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CA200282000000000000001 /* MADAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CA2002A2000000000000001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		4CA2002C2000000000000001 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		4CA2002E2000000000000001 /* MADCreateDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADCreateDocument.storyboard; sourceTree = "<group>"; };
+		4CA2002F2000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4CA200302000000000000001 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
+		4CA200322000000000000001 /* MADPostgres.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADPostgres.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CA200362000000000000001 /* MADPostgresTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPostgresTests.m; sourceTree = "<group>"; };
+		4CA200382000000000000001 /* MADPostgresConnectionViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPostgresConnectionViewControllerTests.m; sourceTree = "<group>"; };
+		4CA200392000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4CA2003A2000000000000001 /* MADPostgresTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADPostgresTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4CA200612000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA200212000000000000001 /* postgres.xcframework in Frameworks */,
+				4CA200232000000000000001 /* openssl.xcframework in Frameworks */,
+				4CA200252000000000000001 /* MADFoundation.framework in Frameworks */,
+				4CA200272000000000000001 /* MADAPI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CA200712000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA200312000000000000001 /* MADPostgres.framework in Frameworks */,
+				4CA200332000000000000001 /* MADFoundation.framework in Frameworks */,
+				4CA200342000000000000001 /* MADAPI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4CA200802000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				4CA200022000000000000001 /* MADPostgres.h */,
+				4CA200302000000000000001 /* AGENTS.md */,
+				4CA200812000000000000001 /* Source */,
+				4CA200822000000000000001 /* Resources */,
+				4CA200832000000000000001 /* MADPostgresTests */,
+				4CA200842000000000000001 /* Frameworks */,
+				4CA200852000000000000001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4CA200812000000000000001 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				4CA200042000000000000001 /* MADDatabasePostgres.h */,
+				4CA200062000000000000001 /* MADDatabasePostgres.m */,
+				4CA200082000000000000001 /* MADDatabaseConnectionPostgres.h */,
+				4CA2000A2000000000000001 /* MADDatabaseConnectionPostgres.m */,
+				4CA2000C2000000000000001 /* MADPostgresConnection.h */,
+				4CA2000E2000000000000001 /* MADPostgresConnection.m */,
+				4CA200102000000000000001 /* MADDataTypePostgres.h */,
+				4CA200122000000000000001 /* MADDataTypePostgres.m */,
+				4CA200142000000000000001 /* MADPostgresConnectionViewController.h */,
+				4CA200162000000000000001 /* MADPostgresConnectionViewController.m */,
+				4CA200182000000000000001 /* libpq-fe.h */,
+				4CA2001A2000000000000001 /* postgres_ext.h */,
+				4CA2001C2000000000000001 /* pg_config_ext.h */,
+				4CA2001E2000000000000001 /* pg_type_d.h */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		4CA200822000000000000001 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4CA2002F2000000000000001 /* Info.plist */,
+				4CA2002C2000000000000001 /* Media.xcassets */,
+				4CA2002A2000000000000001 /* PrivacyInfo.xcprivacy */,
+				4CA2002E2000000000000001 /* MADCreateDocument.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4CA200832000000000000001 /* MADPostgresTests */ = {
+			isa = PBXGroup;
+			children = (
+				4CA200362000000000000001 /* MADPostgresTests.m */,
+				4CA200382000000000000001 /* MADPostgresConnectionViewControllerTests.m */,
+				4CA200392000000000000001 /* Info.plist */,
+			);
+			path = MADPostgresTests;
+			sourceTree = "<group>";
+		};
+		4CA200842000000000000001 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4CA200222000000000000001 /* postgres.xcframework */,
+				4CA200242000000000000001 /* openssl.xcframework */,
+				4CA200282000000000000001 /* MADAPI.framework */,
+				4CA200262000000000000001 /* MADFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4CA200852000000000000001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CA200322000000000000001 /* MADPostgres.framework */,
+				4CA2003A2000000000000001 /* MADPostgresTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4CA200622000000000000001 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA200012000000000000001 /* MADPostgres.h in Headers */,
+				4CA200032000000000000001 /* MADDatabasePostgres.h in Headers */,
+				4CA200072000000000000001 /* MADDatabaseConnectionPostgres.h in Headers */,
+				4CA2000B2000000000000001 /* MADPostgresConnection.h in Headers */,
+				4CA2000F2000000000000001 /* MADDataTypePostgres.h in Headers */,
+				4CA200132000000000000001 /* MADPostgresConnectionViewController.h in Headers */,
+				4CA200172000000000000001 /* libpq-fe.h in Headers */,
+				4CA200192000000000000001 /* postgres_ext.h in Headers */,
+				4CA2001B2000000000000001 /* pg_config_ext.h in Headers */,
+				4CA2001D2000000000000001 /* pg_type_d.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4CA200602000000000000001 /* MADPostgres */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CA200912000000000000001 /* Build configuration list for PBXNativeTarget "MADPostgres" */;
+			buildPhases = (
+				4CA200652000000000000001 /* Ensure Libraries (Compressor) */,
+				4CA200632000000000000001 /* Sources */,
+				4CA200612000000000000001 /* Frameworks */,
+				4CA200622000000000000001 /* Headers */,
+				4CA200642000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MADPostgres;
+			productName = MADPostgres;
+			productReference = 4CA200322000000000000001 /* MADPostgres.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		4CA200702000000000000001 /* MADPostgresTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CA200922000000000000001 /* Build configuration list for PBXNativeTarget "MADPostgresTests" */;
+			buildPhases = (
+				4CA200722000000000000001 /* Sources */,
+				4CA200712000000000000001 /* Frameworks */,
+				4CA200732000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CA200412000000000000001 /* PBXTargetDependency */,
+			);
+			name = MADPostgresTests;
+			productName = MADPostgresTests;
+			productReference = 4CA2003A2000000000000001 /* MADPostgresTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4CA200502000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1150;
+				ORGANIZATIONNAME = "Everyday Apps LLC";
+				TargetAttributes = {
+					4CA200602000000000000001 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					4CA200702000000000000001 = {
+						CreatedOnToolsVersion = 7.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 4CA200902000000000000001 /* Build configuration list for PBXProject "MADPostgres" */;
+			compatibilityVersion = "Xcode 10.0";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				en,
+			);
+			mainGroup = 4CA200802000000000000001;
+			productRefGroup = 4CA200852000000000000001 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4CA200602000000000000001 /* MADPostgres */,
+				4CA200702000000000000001 /* MADPostgresTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4CA200642000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA200292000000000000001 /* PrivacyInfo.xcprivacy in Resources */,
+				4CA2002B2000000000000001 /* Media.xcassets in Resources */,
+				4CA2002D2000000000000001 /* MADCreateDocument.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CA200732000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4CA200652000000000000001 /* Ensure Libraries (Compressor) */ = {
+			alwaysOutOfDate = 1;
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Ensure Libraries (Compressor)";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "set -euo pipefail\n\"${SRCROOT}/../Compressor/build.sh\" --platforms ios,simulator postgres\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4CA200632000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA200052000000000000001 /* MADDatabasePostgres.m in Sources */,
+				4CA200092000000000000001 /* MADDatabaseConnectionPostgres.m in Sources */,
+				4CA2000D2000000000000001 /* MADPostgresConnection.m in Sources */,
+				4CA200112000000000000001 /* MADDataTypePostgres.m in Sources */,
+				4CA200152000000000000001 /* MADPostgresConnectionViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CA200722000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA200352000000000000001 /* MADPostgresTests.m in Sources */,
+				4CA200372000000000000001 /* MADPostgresConnectionViewControllerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4CA200412000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CA200602000000000000001 /* MADPostgres */;
+			targetProxy = 4CA200402000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4CA200A12000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LIBRARY_SEARCH_PATHS = "";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = "$(VALID_ARCHS)";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4CA200A22000000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_RAND = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_ASSIGN_ENUM = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_NULLABLE_TO_NONNULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_EXPLICIT_OWNERSHIP_TYPE = YES;
+				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_STRICT_SELECTOR_MATCH = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LIBRARY_SEARCH_PATHS = "";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "$(VALID_ARCHS)";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		4CA200A32000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetPostgresLog",
+					"$(inherited)",
+				);
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D3C58YS54A;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = D3C58YS54A;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = x86_64;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../Compressor/library/postgres/include\"",
+					"\"$(SRCROOT)/../Compressor/library/openssl/include\"",
+				);
+				INFOPLIST_FILE = Resources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.postgres;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Debug;
+		};
+		4CA200A42000000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetPostgresLog",
+					"$(inherited)",
+				);
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = D3C58YS54A;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = D3C58YS54A;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = x86_64;
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../Compressor/library/postgres/include\"",
+					"\"$(SRCROOT)/../Compressor/library/openssl/include\"",
+				);
+				INFOPLIST_FILE = Resources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.everydayapps.postgres;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
+			};
+			name = Release;
+		};
+		4CA200A52000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Source",
+					"$(SRCROOT)/../Compressor/library/postgres/include",
+				);
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3C58YS54A;
+				INFOPLIST_FILE = MADPostgresTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADPostgresTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+			};
+			name = Debug;
+		};
+		4CA200A62000000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Source",
+					"$(SRCROOT)/../Compressor/library/postgres/include",
+				);
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = D3C58YS54A;
+				INFOPLIST_FILE = MADPostgresTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = EverydayAppsLLC.MADPostgresTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4CA200902000000000000001 /* Build configuration list for PBXProject "MADPostgres" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CA200A12000000000000001 /* Debug */,
+				4CA200A22000000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CA200912000000000000001 /* Build configuration list for PBXNativeTarget "MADPostgres" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CA200A32000000000000001 /* Debug */,
+				4CA200A42000000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CA200922000000000000001 /* Build configuration list for PBXNativeTarget "MADPostgresTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CA200A52000000000000001 /* Debug */,
+				4CA200A62000000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4CA200502000000000000001 /* Project object */;
+}

@@ -98,6 +98,13 @@ os_log_t GetTdsLog(void) {
 	return log;
 }
 
+os_log_t GetPostgresLog(void) {
+	static os_log_t log;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{ log = MADLogCreate("madpostgres", "MADPostgres", NO); });
+	return log;
+}
+
 #else
 // The accessors exist off Apple only so the call sites that store a handle
 // (`os_log_t log = GetMadLog();`) still compile: every one is a no-op, and
@@ -115,6 +122,7 @@ MAD_LOG_NOOP_ACCESSOR(GetMySqlLog)
 MAD_LOG_NOOP_ACCESSOR(GetDesignerLog)
 MAD_LOG_NOOP_ACCESSOR(GetExplorerLog)
 MAD_LOG_NOOP_ACCESSOR(GetTdsLog)
+MAD_LOG_NOOP_ACCESSOR(GetPostgresLog)
 #undef MAD_LOG_NOOP_ACCESSOR
 
 // Strip os_log's privacy annotations -- "%{public}@", "%{private}d", any
