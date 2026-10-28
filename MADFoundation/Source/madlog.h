@@ -41,6 +41,7 @@ os_log_t GetMySqlLog(void);
 os_log_t GetDesignerLog(void);
 os_log_t GetExplorerLog(void);
 os_log_t GetTdsLog(void);
+os_log_t GetPostgresLog(void);
 
 #if __APPLE__
 

@@ -38,6 +38,9 @@
          location = "group:MADMySQL/MADMySQL.xcodeproj">
       </FileRef>
       <FileRef
+         location = "group:MADPostgres/MADPostgres.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:MADSqlite3/MADSqlite3.xcodeproj">
       </FileRef>
       <FileRef

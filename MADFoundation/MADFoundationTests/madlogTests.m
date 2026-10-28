@@ -29,4 +29,12 @@
 	XCTAssertEqual(GetFoundationLog(), GetFoundationLog());
 }
 
+- (void)testPostgresLogIsCreated {
+	os_log_t log = GetPostgresLog();
+
+	XCTAssertNotNil(log);
+	XCTAssertFalse(log == OS_LOG_DISABLED);
+	XCTAssertEqual(GetPostgresLog(), log);
+}
+
 @end

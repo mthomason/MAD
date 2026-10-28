@@ -36,6 +36,7 @@
 	XCTAssertEqual((int)MADDatabaseTypeNone, (int)9);
 	XCTAssertEqual((int)MADDatabaseTypeSqlite3, (int)10);
 	XCTAssertEqual((int)MADDatabaseTypeSample1, (int)11);
+	XCTAssertEqual((int)MADDatabaseTypePostgres, (int)12);
 }
 
 #pragma mark - MADQueryType string mapping
