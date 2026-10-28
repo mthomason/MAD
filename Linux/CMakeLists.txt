@@ -328,6 +328,7 @@ file(CREATE_LINK "${POSTGRES_INCLUDE_DIR}/pg_config_ext.h"
 file(CREATE_LINK "${POSTGRES_INCLUDE_DIR}/pg_type_d.h"
 	"${CMAKE_BINARY_DIR}/libpq-shim/MADPostgres/pg_type_d.h" SYMBOLIC)
 mad_add_framework(madpostgres MADPOSTGRES_SOURCES
+	MADPostgresLiveTests
 	MADPostgresTests
 )
 target_include_directories(madpostgres PUBLIC "${CMAKE_BINARY_DIR}/libpq-shim")

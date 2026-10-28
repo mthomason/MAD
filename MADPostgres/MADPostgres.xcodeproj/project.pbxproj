@@ -34,6 +34,7 @@
 		4CA200342000000000000001 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA200282000000000000001 /* MADAPI.framework */; };
 		4CA200352000000000000001 /* MADPostgresTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA200362000000000000001 /* MADPostgresTests.m */; };
 		4CA200372000000000000001 /* MADPostgresConnectionViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA200382000000000000001 /* MADPostgresConnectionViewControllerTests.m */; };
+		4CA2003B2000000000000001 /* MADPostgresLiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2003C2000000000000001 /* MADPostgresLiveTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		4CA200322000000000000001 /* MADPostgres.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MADPostgres.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA200362000000000000001 /* MADPostgresTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPostgresTests.m; sourceTree = "<group>"; };
 		4CA200382000000000000001 /* MADPostgresConnectionViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPostgresConnectionViewControllerTests.m; sourceTree = "<group>"; };
+		4CA2003C2000000000000001 /* MADPostgresLiveTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPostgresLiveTests.m; sourceTree = "<group>"; };
 		4CA200392000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CA2003A2000000000000001 /* MADPostgresTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADPostgresTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -153,6 +155,7 @@
 			children = (
 				4CA200362000000000000001 /* MADPostgresTests.m */,
 				4CA200382000000000000001 /* MADPostgresConnectionViewControllerTests.m */,
+				4CA2003C2000000000000001 /* MADPostgresLiveTests.m */,
 				4CA200392000000000000001 /* Info.plist */,
 			);
 			path = MADPostgresTests;
@@ -332,6 +335,7 @@
 			files = (
 				4CA200352000000000000001 /* MADPostgresTests.m in Sources */,
 				4CA200372000000000000001 /* MADPostgresConnectionViewControllerTests.m in Sources */,
+				4CA2003B2000000000000001 /* MADPostgresLiveTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

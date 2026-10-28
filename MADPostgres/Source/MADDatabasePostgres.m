@@ -608,16 +608,21 @@ intoResultTable:(id <MADDataTableWriting>)dataTable
 
 	if (status != PGRES_TUPLES_OK && status != PGRES_COMMAND_OK) {
 		const char *errText = res != NULL ? PQresultErrorMessage(res) : PQerrorMessage(conn.pgConn);
+		const char *sqlState = res != NULL ? PQresultErrorField(res, PG_DIAG_SQLSTATE) : NULL;
 		NSString *msg = (errText != NULL && errText[0] != '\0')
 			? [[NSString alloc] initWithUTF8String:errText]
 			: @"PostgreSQL query execution failed.";
+		NSString *sqlStateStr = (sqlState != NULL && sqlState[0] != '\0')
+			? [[NSString alloc] initWithUTF8String:sqlState]
+			: @"";
 		if (res != NULL) PQclear(res);
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:[self domain]
 										 code:4534
 									 userInfo:@{
 				NSLocalizedDescriptionKey : msg ?: @"PostgreSQL query execution failed.",
-				NSLocalizedFailureReasonErrorKey : msg ?: @"PostgreSQL query execution failed."
+				NSLocalizedFailureReasonErrorKey : msg ?: @"PostgreSQL query execution failed.",
+				@"PostgresSQLStateKey" : sqlStateStr ?: @"",
 			}];
 		}
 		return NO;
