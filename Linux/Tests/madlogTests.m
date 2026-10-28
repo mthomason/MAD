@@ -73,6 +73,7 @@ static void testHandleTypeAndConstants(void) {
 	MAD_PASS(OS_LOG_DEFAULT == NULL, "OS_LOG_DEFAULT is the no-op handle");
 	MAD_PASS(GetMadLog() == NULL, "the accessors are no-op handles");
 	MAD_PASS(GetTdsLog() == NULL, "every framework accessor is a no-op handle");
+	MAD_PASS(GetPostgresLog() == NULL, "the Postgres framework accessor is a no-op handle");
 }
 
 static void testOsLogCallsCompileAndEmit(void) {

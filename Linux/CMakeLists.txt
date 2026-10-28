@@ -117,6 +117,10 @@ find_library(FREETDS_LIBRARY sybdb REQUIRED)
 find_library(OPENSSL_SSL_LIBRARY ssl REQUIRED)
 find_library(OPENSSL_CRYPTO_LIBRARY crypto REQUIRED)
 find_library(MYSQL_LIBRARY mariadbclient REQUIRED)
+set(POSTGRES_INCLUDE_DIR "/usr/local/include")
+find_library(PQ_LIBRARY pq REQUIRED)
+find_library(PGCOMMON_LIBRARY pgcommon REQUIRED)
+find_library(PGPORT_LIBRARY pgport REQUIRED)
 find_library(ARCHIVE_LIBRARY archive REQUIRED)
 find_library(ZLIB_LIBRARY z REQUIRED)
 find_library(BZIP2_LIBRARY bz2 REQUIRED)
@@ -308,6 +312,28 @@ mad_add_framework(madmysql MADMYSQL_SOURCES
 )
 target_link_libraries(madmysql PUBLIC madfoundation madapi ${MYSQL_LIBRARY} ${ZLIB_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
+set(SOURCE_DIR "${REPO_ROOT}/MADPostgres/Source")
+include(cmake/MADPostgresSources.cmake)
+mad_make_include_shim(MADPostgres "${SOURCE_DIR}")
+# The framework imports libpq's headers as <MADPostgres/libpq-fe.h>; the
+# libraries layer installs them under /usr/local/include, so a second shim
+# directory exposes them under that name.
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/libpq-shim/MADPostgres")
+file(CREATE_LINK "${POSTGRES_INCLUDE_DIR}/libpq-fe.h"
+	"${CMAKE_BINARY_DIR}/libpq-shim/MADPostgres/libpq-fe.h" SYMBOLIC)
+file(CREATE_LINK "${POSTGRES_INCLUDE_DIR}/postgres_ext.h"
+	"${CMAKE_BINARY_DIR}/libpq-shim/MADPostgres/postgres_ext.h" SYMBOLIC)
+file(CREATE_LINK "${POSTGRES_INCLUDE_DIR}/pg_config_ext.h"
+	"${CMAKE_BINARY_DIR}/libpq-shim/MADPostgres/pg_config_ext.h" SYMBOLIC)
+file(CREATE_LINK "${POSTGRES_INCLUDE_DIR}/pg_type_d.h"
+	"${CMAKE_BINARY_DIR}/libpq-shim/MADPostgres/pg_type_d.h" SYMBOLIC)
+mad_add_framework(madpostgres MADPOSTGRES_SOURCES
+	MADPostgresTests
+)
+target_include_directories(madpostgres PUBLIC "${CMAKE_BINARY_DIR}/libpq-shim")
+target_link_libraries(madpostgres PUBLIC madfoundation madapi
+	${PQ_LIBRARY} ${PGCOMMON_LIBRARY} ${PGPORT_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
+
 set(SOURCE_DIR "${REPO_ROOT}/MAD/Source")
 include(cmake/MADSources.cmake)
 # MAD exposes its headers flattened as <MAD/Foo.h> -- the Xcode target copies
@@ -378,7 +404,7 @@ target_include_directories(mad PRIVATE
 	"${SOURCE_DIR}/rptq/autogen" "${SOURCE_DIR}/rptq/store" "${SOURCE_DIR}/sql" "${SOURCE_DIR}/paper")
 target_include_directories(mad PUBLIC
 	"${CMAKE_BINARY_DIR}/sqlite3-shim" "${CMAKE_BINARY_DIR}/sybdb-shim"
-	"${CMAKE_BINARY_DIR}/umbrella-shim")
+	"${CMAKE_BINARY_DIR}/umbrella-shim" "${CMAKE_BINARY_DIR}/libpq-shim")
 target_compile_options(mad PRIVATE -I/usr/include/libxml2)
 # The driver archives are whole-archived, not merely linked: a driver's work is
 # reached through its categories (MADMySQLFetch+DataTable, MADQuery+Sqlite3), and a
@@ -392,7 +418,9 @@ target_link_libraries(mad PUBLIC
 	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madsqlite3>"
 	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madmysql>"
 	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madtdsclient>"
-	${SQLITE3_LIBRARY} ${FREETDS_LIBRARY} ${MYSQL_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY}
+	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madpostgres>"
+	${SQLITE3_LIBRARY} ${FREETDS_LIBRARY} ${MYSQL_LIBRARY} ${PQ_LIBRARY} ${PGCOMMON_LIBRARY} ${PGPORT_LIBRARY}
+	${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY}
 	${ARCHIVE_LIBRARY} ${ZLIB_LIBRARY} ${BZIP2_LIBRARY})
 # Both suites install chinook.sqlite3 into the same per-user Application
 # Support directory and refresh the same London fixture into the same cache

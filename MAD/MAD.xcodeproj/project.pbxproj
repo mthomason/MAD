@@ -150,6 +150,7 @@
 		4C2915ED24AC72C000EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E124AC72C000EC794B /* MADFoundation.framework */; };
 		4C0DB0A1000000000000B001 /* MADMySQL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E224AC72C000EC794B /* MADMySQL.framework */; };
 		4C0DB0A1000000000000B002 /* MADTdsClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E424AC72C000EC794B /* MADTdsClient.framework */; };
+		4C0DB0A1000000000000B003 /* MADPostgres.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E624AC72C000EC794B /* MADPostgres.framework */; };
 		4C2915F124AC72C000EC794B /* MADSqlite3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915E324AC72C000EC794B /* MADSqlite3.framework */; };
 		4C3002481E2B8F0000B3E224 /* MADActivityIndicatorLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */; };
 		4C3002491E2B8F0000B3E224 /* MADActivityIndicatorLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3002471E2B8F0000B3E224 /* MADActivityIndicatorLabel.m */; };
@@ -761,6 +762,7 @@
 		4C2915E224AC72C000EC794B /* MADMySQL.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADMySQL.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2915E324AC72C000EC794B /* MADSqlite3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADSqlite3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2915E424AC72C000EC794B /* MADTdsClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADTdsClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C2915E624AC72C000EC794B /* MADPostgres.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADPostgres.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C3002461E2B8F0000B3E224 /* MADActivityIndicatorLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADActivityIndicatorLabel.h; sourceTree = "<group>"; };
 		4C3002471E2B8F0000B3E224 /* MADActivityIndicatorLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADActivityIndicatorLabel.m; sourceTree = "<group>"; };
 		4C3080DF1D053EB800A7D597 /* UIFontDescriptor+MADAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFontDescriptor+MADAdditions.h"; sourceTree = "<group>"; };
@@ -1273,6 +1275,7 @@
 				4CF7814F1BADE5EA0050A67D /* MAD.framework in Frameworks */,
 				4C0DB0A1000000000000B001 /* MADMySQL.framework in Frameworks */,
 				4C0DB0A1000000000000B002 /* MADTdsClient.framework in Frameworks */,
+				4C0DB0A1000000000000B003 /* MADPostgres.framework in Frameworks */,
 				4CDA7A0100000000000000A2 /* MADSqlite3.framework in Frameworks */,
 				4CDA7A0100000000000000A3 /* MADFoundation.framework in Frameworks */,
 				4CDA7A0100000000000000A4 /* MADAPI.framework in Frameworks */,
@@ -1871,6 +1874,7 @@
 				4C2915E224AC72C000EC794B /* MADMySQL.framework */,
 				4C2915E324AC72C000EC794B /* MADSqlite3.framework */,
 				4C2915E424AC72C000EC794B /* MADTdsClient.framework */,
+				4C2915E624AC72C000EC794B /* MADPostgres.framework */,
 				4CC284C31BADEBA500775B72 /* CoreText.framework */,
 				4C5259361D894ACC00FEF1A1 /* libiconv.2.tbd */,
 				4C5259321D894AA200FEF1A1 /* libxml2.tbd */,

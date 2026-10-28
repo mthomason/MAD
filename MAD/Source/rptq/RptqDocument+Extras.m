@@ -404,6 +404,16 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 				credentals.dbname = databaseConnection.database.copy;
 				break;
 			}
+
+			case MADDatabaseTypePostgres: {
+				MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection = (MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)database.databaseConnection;
+				credentals.port = databaseConnection.port;
+				credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypePostgres;
+				rptqDB.databaseDriverTypeEnum = MADDatabaseTypePostgres;
+				credentals.host = databaseConnection.server.copy;
+				credentals.dbname = databaseConnection.database.copy;
+				break;
+			}
 			
 			default:
 				break;

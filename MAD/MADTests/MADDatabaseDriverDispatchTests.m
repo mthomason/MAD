@@ -23,6 +23,8 @@
 
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
 #import <MADMySQL/MADDatabaseMySQL.h>
+#import <MADPostgres/MADDatabaseConnectionPostgres.h>
+#import <MADPostgres/MADDatabasePostgres.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 #import <MADTdsClient/MADDatabaseConnectionSQLServer.h>
@@ -30,6 +32,15 @@
 
 #import "MADDatabase+Constructor.h"
 #import "MADDatabaseConnection+Constructor.h"
+#import "MADStore.h"
+#import "RptqStoreContext.h"
+#import "RptqDatabase.h"
+#import "RptqDatabase+Extras.h"
+#import "RptqDatabaseCredentals.h"
+#import "RptqDatabaseCredentals+Extras.h"
+#import "RptqDatabaseCredentals+MADDatabaseConnection.h"
+#import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
 
 #pragma mark - Credentials double
 
@@ -63,11 +74,12 @@ static MADTestConnectionProperties *MADTestProperties(MADDatabaseType type) {
 #pragma mark - Registration
 
 - (void)testTheLinkedDriversRegisterThemselves {
-	// This bundle links the three drivers, so all three are here without anything
+	// This bundle links the four drivers, so all four are here without anything
 	// importing them (their +load registers each).
 	XCTAssertEqual([MADDatabaseDriverRegistry driverClassForType: MADDatabaseTypeMySQL], [MADDatabaseConnectionMySql class]);
 	XCTAssertEqual([MADDatabaseDriverRegistry driverClassForType: MADDatabaseTypeTDS], [MADDatabaseConnectionSQLServer class]);
 	XCTAssertEqual([MADDatabaseDriverRegistry driverClassForType: MADDatabaseTypeSqlite3], [MADDatabaseConnectionSqlite3 class]);
+	XCTAssertEqual([MADDatabaseDriverRegistry driverClassForType: MADDatabaseTypePostgres], [MADDatabaseConnectionPostgres class]);
 }
 
 - (void)testIdentifierIsTheStoredDriverName {
@@ -75,6 +87,7 @@ static MADTestConnectionProperties *MADTestProperties(MADDatabaseType type) {
 	XCTAssertEqualObjects([MADDatabaseConnection Identifier: MADDatabaseTypeMySQL], @"MySQL");
 	XCTAssertEqualObjects([MADDatabaseConnection Identifier: MADDatabaseTypeTDS], @"TDS");
 	XCTAssertEqualObjects([MADDatabaseConnection Identifier: MADDatabaseTypeSqlite3], @"Sqlite 3");
+	XCTAssertEqualObjects([MADDatabaseConnection Identifier: MADDatabaseTypePostgres], @"PostgreSQL");
 }
 
 #pragma mark - Connection construction
@@ -134,6 +147,41 @@ static MADTestConnectionProperties *MADTestProperties(MADDatabaseType type) {
 
 	MADDatabaseConnection *sqlite3 = [MADDatabaseConnection newDatabaseConnectionForUrl: [NSURL fileURLWithPath: @"/tmp/chinook.sqlite3"]];
 	XCTAssertEqual([[MADDatabase newDatabaseWithConnection: sqlite3] class], [MADDatabaseSqlite3 class]);
+
+	MADDatabaseConnection *postgres = [MADDatabaseConnection newDatabaseConnectionWithType: MADDatabaseTypePostgres
+																					  host: @"db.example.com"
+																				  database: @"chinook"
+																					  port: 5432];
+	XCTAssertEqual([postgres class], [MADDatabaseConnectionPostgres class]);
+	XCTAssertEqual([[MADDatabase newDatabaseWithConnection: postgres] class], [MADDatabasePostgres class]);
+}
+
+- (void)testRptqCredentialsAndDocumentStorePostgresConnection {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent:NSUUID.UUID.UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *url = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"test.sqlite"]];
+	MADStore *store = [MADStore storeWithURL:url];
+	[store openWithError:NULL];
+	RptqStoreContext *context = [RptqStoreContext contextWithStore:store];
+	[context loadAllWithError:NULL];
+
+	RptqDocument *doc = [RptqDocument newDocumentForManagedObjectContext:context];
+	MADDatabaseConnection *conn = [MADDatabaseConnection newDatabaseConnectionWithType:MADDatabaseTypePostgres
+																				  host:@"pg.example.com"
+																			  database:@"chinook"
+																				  port:5433];
+	MADDatabase *db = [MADDatabase newDatabaseWithConnection:conn];
+	[doc storeDatabaseConnectionDefination:db forManagedObjectContext:context];
+
+	RptqDatabase *storedDb = doc.defaultDatabase;
+	XCTAssertNotNil(storedDb);
+	XCTAssertEqual(storedDb.databaseDriverTypeEnum, MADDatabaseTypePostgres);
+	XCTAssertEqualObjects(storedDb.ownedByUser.driverID, @"PostgreSQL");
+	XCTAssertEqualObjects(storedDb.ownedByUser.host, @"pg.example.com");
+	XCTAssertEqualObjects(storedDb.ownedByUser.dbname, @"chinook");
+	XCTAssertEqual(storedDb.ownedByUser.port, 5433);
+	XCTAssertEqual(storedDb.ownedByUser.databaseType, MADDatabaseTypePostgres);
+	XCTAssertEqualObjects([storedDb.ownedByUser databaseSchemaName], @"Chinook");
 }
 
 @end
