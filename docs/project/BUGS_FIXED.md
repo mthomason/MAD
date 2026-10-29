@@ -3362,6 +3362,113 @@ reference to "BUGS.md, the X entry" still lands.
   floating toolbar pill.
 - **Test:** `MADDesignerUnitTests testTabBarAndViewerToolbarLayout`.
 
+### `MAD Viewer` launched to a black screen with a missing `UIScene` lifecycle manifest, uncompiled app sources, and unbundled storyboards and sample assets
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MADDesigner/Targets/MADViewer/info.plist`,
+  `MADDesigner/Targets/MADViewer/SupportingFiles/main.m`,
+  `MADDesigner/Source/AppDelegate.m`, `MADDesigner/Source/MADTabBarController.m`,
+  `MADDesigner/Source/MADExplorerNavigationItem.m`,
+  `MADDesigner/Source/MADExplorerController.m`,
+  `MADDesigner/Source/MADExplorerController+DocumentActions.m`,
+  `MADDesigner/Source/MADUpgradeManager.m`, and
+  `MADDesigner/MAD Designer.xcodeproj/project.pbxproj`.
+- **Behavior:** Launching the `MAD Viewer` app target logged
+  `"`UIScene` lifecycle will soon be required. Failure to adopt will result in an assert in the future."`
+  and displayed a solid black window. Specifically:
+  1. `MADDesigner/Targets/MADViewer/info.plist` had no `UIApplicationSceneManifest` and no
+     `UIMainStoryboardFile`, and `MADViewerAppDelegate.m` instantiated a manual `UIWindow` with no
+     `rootViewController`.
+  2. In `project.pbxproj`, `MAD Viewer`'s `Sources` build phase compiled only 7 files (missing
+     `AppDelegate.m`, `SceneDelegate.m`, `MADExplorerController.m`, `MADTabBarController.m`,
+     `MADViewerController.m`, and the rest of `MADDesigner/Source/`), its `Resources` build phase
+     bundled only 4 files (missing `MADExplorer.storyboard`, `MADDesigner.storyboard`,
+     `SampleDatabases.xcassets`, `FontAwesome.ttf`, and the about/store storyboards), and its
+     Debug configuration lacked `MAD DesignerDebug.entitlements` (`group.everydayapps.mad.local`).
+  3. `MADTabBarController` always created all 3 tabs (`MADQueryBuilderSplitViewController`,
+     `MADNavigationControllerDesigner`, and `MADNavigationControllerViewer`) and kept `UITabBar`
+     visible; `MADExplorerNavigationItem` hardcoded `"MAD Designer"` as its title; and
+     `MADExplorerController` left the `+` (Create New Document) bar button item visible.
+- **Now:** `MAD Viewer` shares `AppDelegate` and `SceneDelegate` with `MAD Designer` (retiring the
+  stale `MADViewerAppDelegate` copy and selecting viewer identifiers/names under `#if MAD_VIEWER`),
+  declares `UIApplicationSceneManifest` (`SceneDelegate` + `MADExplorer` storyboard) in
+  `MADDesigner/Targets/MADViewer/info.plist`, compiles the full shared source set and bundles all
+  required storyboards/assets/resources in `project.pbxproj`, titles the explorer `"MAD Viewer"`,
+  hides the `+` button in `MADExplorerController`, and configures `MADTabBarController` with a
+  hidden `UITabBar` and `[navControllerViewer]` as its sole child controller when `MAD_VIEWER` or
+  `[MADApplication isMADViewer]` is true.
+- **Test:** `MADDesignerUnitTests testMADViewerModeHidesTabBarOmitsDesignerTabsAndHidesAddDocumentButton`.
+
+### `MADNavigationController +documentNavigationControllerWithType:document:` threw `NSInternalInconsistencyException` for `MADNavigationControllerTypeViewer` in `MAD Viewer`
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MADDesigner/Source/MADNavigationController.m:20-23,149-182`.
+- **Behavior:** `+documentNavigationControllerWithType:document:` wrapped its entire `switch (type)`
+  block (including `case MADNavigationControllerTypeViewer:`) inside `#if MAD_DESIGNER`, falling
+  through to `@throw [NSException exceptionWithName:NSInternalInconsistencyException ...]` whenever
+  compiled into the `MAD Viewer` target (where `MAD_VIEWER=1` and `MAD_DESIGNER` is not defined).
+- **Why it matters:** Opening any document in `MAD Viewer` asks `MADTabBarController` to build the
+  viewer navigation controller via
+  `[UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeViewer document:document]`,
+  which unconditionally crashed with `NSInternalInconsistencyException`.
+- **Now:** `MADNavigationControllerViewer.h` is imported unconditionally and
+  `case MADNavigationControllerTypeViewer:` is compiled in both `MAD Designer` and `MAD Viewer`,
+  while `MADNavigationControllerTypeDesigner` and `MADNavigationControllerTypeQuery` remain scoped
+  to `#if MAD_DESIGNER`.
+- **Test:** `MADDesignerUnitTests testNavigationControllerViewerFactoryAndNavigationBar`.
+
+### `MADViewerController` set its Refresh button, Done button, and refresh activity indicator on the hidden `self.tabBarController.navigationItem` instead of `self.navigationItem`
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MADDesigner/Source/MADViewerController.m:203-204,225,421,442`.
+- **Behavior:** `-viewDidAppear:`, `-viewDidDisappear:`, `-setDisplayActive`, and
+  `-setDisplayInactive` mutated `self.tabBarController.navigationItem.rightBarButtonItem` and
+  `leftBarButtonItem`. However, `MADTabBarController -viewDidLoad` hides its enclosing navigation
+  controller's navigation bar (`[self.navigationController setNavigationBarHidden:YES animated:NO]`),
+  and the visible navigation bar in the viewer is `MADNavigationControllerViewer`'s `MADViewerNavigationBar`,
+  which displays `MADViewerController`'s own `self.navigationItem`.
+- **Why it matters:** When `-setDisplayInactive` started a refresh, the spinning
+  `UIActivityIndicatorView` was placed on the hidden `tabBarController.navigationItem` while the
+  visible navigation bar kept showing the static Refresh icon; and `-viewDidAppear:` /
+  `-setDisplayActive` wrote their fresh `buttonRefresh` and `buttonDone` items to the hidden
+  navigation item instead of the visible one.
+- **Now:** `-viewDidAppear:`, `-viewDidDisappear:`, `-setDisplayActive`, and `-setDisplayInactive`
+  all update `self.navigationItem`.
+- **Test:** `MADDesignerUnitTests testViewerControllerNavigationItemsSetOnOwnNavigationItem`.
+
+### `MADOperationInstallSampleDocument` checked `fileExistsAtPath:` before appending the `.mad` file extension, overwriting existing sample documents
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MADDesigner/Source/MADOperationInstallSampleDocument.m:60-85` (and the companion
+  `fileExistsAtPath:` guard in `MADDesigner/Source/MADOperationInstallSampleDatabase.m:51-77`).
+- **Behavior:** `MADOperationInstallSampleDocument -execute` built
+  `destination = [localDocumentsDirectory URLByAppendingPathComponent:_filename isDirectory:NO]`
+  (e.g. `.../Documents/London` without `.mad`), checked
+  `[[NSFileManager defaultManager] fileExistsAtPath:destination.path isDirectory:&isDirectory]`,
+  and only *after* `fileExistsAtPath:` returned `NO` appended
+  `destination = [destination URLByAppendingPathExtension:_fileExtension]` (`.../Documents/London.mad`)
+  and overwrote the file.
+- **Why it matters:** Because `Documents/London` (without `.mad`) never exists on disk, the upgrade
+  existence check always evaluated to `NO`, and launching `MAD Viewer` (or resetting `NSUserDefaults`)
+  overwrote any existing `London.mad` or `Music.mad` in the shared app group container. Conversely,
+  `MADOperationInstallSampleDatabase` trusted the `NSUserDefaults` boolean alone without checking
+  whether `chinook.sqlite3` actually existed on disk.
+- **Now:** `MADOperationInstallSampleDocument` appends `_fileExtension` to `destination` before
+  calling `fileExistsAtPath:`, and `MADOperationInstallSampleDatabase` verifies both the user-defaults
+  key and `fileExistsAtPath:` on `databaseURL.path`.
+- **Test:** `MADDesignerUnitTests testInstallSampleDocumentDoesNotOverwriteExistingFileWithExtension`.
+
+### `MADExplorerController -documentManagerDidChangeContent:removes:updates:completion:` called `performBatchUpdates:` on an unmounted `UICollectionView` (`window == nil`), crashing with `NSInternalInconsistencyException`
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MADDesigner/Source/MADExplorerController.m:402-415`.
+- **Behavior:** When `MADFilesController` finished enumerating files and delivered insertions to
+  `MADExplorerController -documentManagerDidChangeContent:removes:updates:completion:` while
+  `self.collectionView.window == nil` (before the collection view had ever been added to a window
+  or performed its initial layout), calling `[self.collectionView performBatchUpdates:completion:]`
+  caused `UICollectionView` to query `[dataSource collectionView:numberOfItemsInSection:0]` for the
+  first time at the start of the batch — after `fileMetaDatum` already held the inserted items —
+  and then apply `insertItemsAtIndexPaths:`, raising `NSInternalInconsistencyException`
+  (`Invalid batch updates detected`).
+- **Now:** When `self.collectionView.window == nil`, `-documentManagerDidChangeContent:removes:updates:completion:`
+  calls `[self.collectionView reloadData]` and invokes `completion(YES, nil)` directly.
+- **Test:** `MADDesignerUnitTests testMADViewerModeHidesTabBarOmitsDesignerTabsAndHidesAddDocumentButton`.
+
 ## Linux build
 
 ### `mad refresh` over MySQL aborted: a category is not a symbol, so the linker dropped it

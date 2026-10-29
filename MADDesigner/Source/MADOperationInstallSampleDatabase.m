@@ -39,15 +39,22 @@ static NSString * const MTDocumentExtentionSqlite3	= @"sqlite3";
 	NSError *error = nil;
 	NSDataAsset *sampleDB;
 
-	BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook];
-
-	if (installed) goto FINISH;
-
-	
 	fileURL = [MADOperationInstallSampleDatabase newApplicationBundleSampleDatabaseChinook];
 	databaseURL = [MADOperationInstallSampleDatabase newApplicationSupportSampleDatabaseChinook];
 	
 	if (databaseURL == nil) goto FINISH;
+
+	BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:databaseURL.path];
+	BOOL installed = [[NSUserDefaults standardUserDefaults] boolForKey:MADUpgradeInstalledChinook] && fileExists;
+
+	if (installed) goto FINISH;
+
+	if (fileExists) {
+		[[NSUserDefaults standardUserDefaults] setBool: YES
+												forKey: MADUpgradeInstalledChinook];
+		[[NSUserDefaults standardUserDefaults] synchronize];
+		goto FINISH;
+	}
 	
 	sampleDB = [[NSDataAsset alloc] initWithName:MTSampleDatabaseChinook];
 	installed = [sampleDB.data writeToURL:databaseURL options:NSDataWritingAtomic error:&error];

@@ -61,7 +61,10 @@
 #import <MAD/MADOperationDocumentCloseDocument.h>
 #import <MAD/MADOperationUniqueUrlForFilename.h>
 #import <MADFoundation/MADOperationQueue.h>
+#import <MADFoundation/MADApplication.h>
+#import <MADFoundation/MADURLFactory.h>
 #import <UIKit/NSDataAsset.h>
+#import <objc/runtime.h>
 
 // A fixed-URL stand-in for MADOperationUniqueUrlForFilename, so the chain can be
 // driven against a temp directory without the file explorer's URL machinery.
@@ -152,8 +155,45 @@
 
 @interface MADExplorerController : UICollectionViewController
 @property (nonatomic, weak) UIBarButtonItem *barButtonItemAbout;
+@property (nonatomic, weak) UIBarButtonItem *barButtonItemAddNewDocument;
 - (IBAction)actionAbout:(id)sender;
+- (IBAction)actionCancel:(id)sender;
+- (IBAction)actionDone:(id)sender;
+- (void)done:(id)sender;
 @end
+
+@interface MADExplorerNavigationItem : UINavigationItem
+@end
+
+@interface UINavigationController (MADDesignerUnitTestsConstructors)
+@property (nonatomic, strong) MADocument *document;
++ (UINavigationController *)documentNavigationControllerWithType:(short)type
+														document:(MADocument *)document;
+@end
+
+@interface MADViewerController : UIPageViewController
+@property (nonatomic, weak) UIBarButtonItem *barButtonItemRefresh;
++ (instancetype)newViewerController:(MADocument *)document;
+- (void)setDisplayActive;
+- (void)setDisplayInactive;
+@end
+
+@interface MADOperationInstallSampleDocument : MADOperation
+@property (nonatomic, assign) bool sampleDocumentInstalled;
+- (instancetype)initWithFilename:(NSString *)filename
+				   fileExtension:(NSString *)fileExtension
+				 groupIdentifier:(NSString *)groupIdentifier
+					 installFlag:(NSString *)installFlag;
+@end
+
+static BOOL MADUnitTestForceMADViewerMode = NO;
+static BOOL (*MADOriginalIsMADViewerIMP)(id, SEL) = NULL;
+static BOOL MADSwizzledIsMADViewer(id self, SEL _cmd) {
+	if (MADUnitTestForceMADViewerMode) {
+		return YES;
+	}
+	return MADOriginalIsMADViewerIMP ? MADOriginalIsMADViewerIMP(self, _cmd) : NO;
+}
 
 
 @interface MADDesignerViewController : UIViewController
@@ -654,6 +694,131 @@
 	[navController.topViewController beginAppearanceTransition:YES animated:NO];
 	[navController.topViewController endAppearanceTransition];
 	XCTAssertFalse(navController.isNavigationBarHidden);
+}
+
+#pragma mark - App source: MAD Viewer regressions
+
+- (void)testNavigationControllerViewerFactoryAndNavigationBar {
+	NSURL *tempURL = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+					  URLByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"mad"]];
+	MADocument *document = [[MADocument alloc] initWithFileURL:tempURL];
+	// MADNavigationControllerTypeViewer == 8
+	UINavigationController *viewerNav = [UINavigationController documentNavigationControllerWithType:8 document:document];
+	XCTAssertNotNil(viewerNav);
+	XCTAssertTrue([viewerNav isKindOfClass:NSClassFromString(@"MADNavigationControllerViewer")]);
+	XCTAssertTrue([viewerNav.navigationBar isKindOfClass:NSClassFromString(@"MADViewerNavigationBar")]);
+	XCTAssertEqual(viewerNav.document, document);
+}
+
+- (void)testViewerControllerNavigationItemsSetOnOwnNavigationItem {
+	NSURL *tempURL = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+					  URLByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"mad"]];
+	MADocument *document = [[MADocument alloc] initWithFileURL:tempURL];
+	MADViewerController *viewerVC = [MADViewerController newViewerController:document];
+	XCTAssertNotNil(viewerVC);
+	[viewerVC loadViewIfNeeded];
+
+	[viewerVC setDisplayInactive];
+	UIBarButtonItem *inactiveRightItem = viewerVC.navigationItem.rightBarButtonItem;
+	XCTAssertNotNil(inactiveRightItem);
+	XCTAssertTrue([inactiveRightItem.customView isKindOfClass:[UIActivityIndicatorView class]]);
+	UIActivityIndicatorView *spinner = (UIActivityIndicatorView *)inactiveRightItem.customView;
+	XCTAssertTrue(spinner.isAnimating);
+
+	[viewerVC setDisplayActive];
+	UIBarButtonItem *activeRightItem = viewerVC.navigationItem.rightBarButtonItem;
+	XCTAssertNotNil(activeRightItem);
+	XCTAssertNil(activeRightItem.customView);
+	XCTAssertEqual(activeRightItem, viewerVC.barButtonItemRefresh);
+	XCTAssertTrue(viewerVC.barButtonItemRefresh.isEnabled);
+}
+
+- (void)testInstallSampleDocumentDoesNotOverwriteExistingFileWithExtension {
+	NSString *flagKey = [NSString stringWithFormat:@"MADUnitTestInstallSampleFlag_%@", NSUUID.UUID.UUIDString];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:flagKey];
+
+	NSString *groupID = @"group.everydayapps.mad.local";
+	NSURL *docsDir = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:groupID];
+	XCTAssertNotNil(docsDir);
+	[[NSFileManager defaultManager] createDirectoryAtURL:docsDir withIntermediateDirectories:YES attributes:nil error:NULL];
+
+	NSURL *londonURL = [[docsDir URLByAppendingPathComponent:@"London" isDirectory:NO] URLByAppendingPathExtension:@"mad"];
+	NSData *originalBackup = [[NSData alloc] initWithContentsOfURL:londonURL];
+
+	NSData *sentinelData = [@"sentinel-london-content" dataUsingEncoding:NSUTF8StringEncoding];
+	XCTAssertTrue([sentinelData writeToURL:londonURL options:NSDataWritingAtomic error:NULL]);
+
+	MADOperationInstallSampleDocument *op = [[MADOperationInstallSampleDocument alloc] initWithFilename:@"London"
+																						  fileExtension:@"mad"
+																						groupIdentifier:groupID
+																							installFlag:flagKey];
+	XCTestExpectation *exp = [self expectationWithDescription:@"install sample document checks .mad extension"];
+	op.completionBlock = ^{
+		[exp fulfill];
+	};
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	[queue addOperation:op];
+	[self waitForExpectations:@[exp] timeout:10.0];
+
+	NSData *afterData = [[NSData alloc] initWithContentsOfURL:londonURL];
+	XCTAssertEqualObjects(afterData, sentinelData, @"Existing London.mad should not be overwritten");
+	XCTAssertTrue([[NSUserDefaults standardUserDefaults] boolForKey:flagKey]);
+
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:flagKey];
+	if (originalBackup != nil) {
+		[originalBackup writeToURL:londonURL options:NSDataWritingAtomic error:NULL];
+	} else {
+		[[NSFileManager defaultManager] removeItemAtURL:londonURL error:NULL];
+	}
+}
+
+- (void)testMADViewerModeHidesTabBarOmitsDesignerTabsAndHidesAddDocumentButton {
+	Method m = class_getClassMethod([MADApplication class], @selector(isMADViewer));
+	XCTAssertTrue(m != NULL);
+	if (MADOriginalIsMADViewerIMP == NULL) {
+		MADOriginalIsMADViewerIMP = (BOOL (*)(id, SEL))method_setImplementation(m, (IMP)MADSwizzledIsMADViewer);
+	}
+	MADUnitTestForceMADViewerMode = YES;
+	@try {
+		XCTAssertTrue([MADApplication isMADViewer]);
+
+		NSURL *tempURL = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+						  URLByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"mad"]];
+		MADocument *document = [[MADocument alloc] initWithFileURL:tempURL];
+		[document.storeContext insertObjectForEntity:@"RptqDocument" identifier:1];
+
+		MADTabBarController *tabBarVC = [MADTabBarController newTabBarController:document prompt:@"ViewerTest.mad"];
+		tabBarVC.document = document;
+		[tabBarVC loadViewIfNeeded];
+		[tabBarVC beginAppearanceTransition:YES animated:NO];
+		[tabBarVC endAppearanceTransition];
+
+		XCTAssertTrue(tabBarVC.tabBar.isHidden);
+		XCTAssertEqual(tabBarVC.edgesForExtendedLayout, UIRectEdgeBottom);
+		XCTAssertEqual(tabBarVC.viewControllers.count, (NSUInteger)1);
+		XCTAssertTrue([tabBarVC.viewControllers.firstObject isKindOfClass:NSClassFromString(@"MADNavigationControllerViewer")]);
+
+		UIStoryboard *explorerStoryboard = [UIStoryboard storyboardWithName:@"MADExplorer" bundle:[NSBundle mainBundle]];
+		UINavigationController *explorerNav = [explorerStoryboard instantiateInitialViewController];
+		MADExplorerController *explorerVC = (MADExplorerController *)explorerNav.topViewController;
+		[explorerVC loadViewIfNeeded];
+
+		XCTAssertEqualObjects(explorerVC.navigationItem.title, @"MAD Viewer");
+		XCTAssertNotNil(explorerVC.navigationItem.titleView);
+		XCTAssertEqualObjects([explorerVC.navigationItem.titleView valueForKey:@"text"], @"MAD Viewer");
+		XCTAssertNil(explorerVC.navigationItem.leftBarButtonItem);
+		XCTAssertFalse(explorerVC.barButtonItemAddNewDocument.isEnabled);
+
+		[explorerVC actionCancel:nil];
+		XCTAssertNil(explorerVC.navigationItem.leftBarButtonItem);
+		XCTAssertFalse(explorerVC.barButtonItemAddNewDocument.isEnabled);
+
+		[explorerVC actionDone:nil];
+		XCTAssertNil(explorerVC.navigationItem.leftBarButtonItem);
+		XCTAssertFalse(explorerVC.barButtonItemAddNewDocument.isEnabled);
+	} @finally {
+		MADUnitTestForceMADViewerMode = NO;
+	}
 }
 
 @end

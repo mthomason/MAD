@@ -58,8 +58,9 @@
 		
 	
 		NSURL *localDocumentsDirectory = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:_groupIdentifier];
-		NSURL *destination = [localDocumentsDirectory URLByAppendingPathComponent: _filename
-																	  isDirectory: NO];
+		NSURL *destination = [[localDocumentsDirectory URLByAppendingPathComponent: _filename
+																	   isDirectory: NO]
+							  URLByAppendingPathExtension: _fileExtension];
 		
 		// !!!: Do an extra check to hanle the case of upgrades.
 		BOOL isDirectory;
@@ -73,8 +74,6 @@
 			}
 			
 			if (!installed) {
-				destination = [destination URLByAppendingPathExtension: _fileExtension];
-				
 				NSError *error;
 				NSDataAsset *sampleDoc = [[NSDataAsset alloc] initWithName:_filename];
 				installed = [sampleDoc.data writeToURL:destination options:NSDataWritingAtomic error:&error];

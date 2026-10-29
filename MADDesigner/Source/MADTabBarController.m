@@ -11,6 +11,8 @@
 #import "MADQueryBuilderSplitViewController.h"
 #import "MADThemeManager.h"
 
+#import <MADFoundation/MADApplication.h>
+
 #import <UIKit/UIBarButtonItem.h>
 #import <UIKit/UINavigationBar.h>
 #import <UIKit/UINavigationController.h>
@@ -73,6 +75,13 @@
 	self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	self.modalPresentationStyle = UIModalPresentationOverFullScreen;
 	[self.navigationController setNavigationBarHidden:YES animated:NO];
+#if MAD_VIEWER
+	self.tabBar.hidden = YES;
+#else
+	if ([MADApplication isMADViewer]) {
+		self.tabBar.hidden = YES;
+	}
+#endif
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -85,23 +94,39 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
+#if MAD_VIEWER
+	BOOL isViewer = YES;
+#else
+	BOOL isViewer = [MADApplication isMADViewer];
+#endif
+	if (isViewer) {
+		self.tabBar.hidden = YES;
+	}
+
 	if (self.viewControllers.count == 0) {
 		MADocument *document = self.document;
-		NSMutableArray <__kindof UIViewController *> *tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
-		
-		MADQueryBuilderSplitViewController *splitViewController =  [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
-		[tabBarViewControllers addObject: splitViewController];
-		
-		UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerDesigner = [UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeDesigner document:document];
-		[tabBarViewControllers addObject: navControllerDesigner];
-		
-		UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerViewer = [UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeViewer document:document];
-		[tabBarViewControllers addObject: navControllerViewer];
-
 		id <MADViewControllerStandardProtocol> delegate = self.viewControllerDelegate;
+
+		UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerViewer = [UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeViewer document:document];
 		navControllerViewer.viewControllerDelegate = delegate;
-		splitViewController.viewControllerDelegate = delegate;
-		[self setViewControllers: tabBarViewControllers animated: animated];
+
+		if (isViewer) {
+			self.edgesForExtendedLayout = UIRectEdgeBottom;
+			[self setViewControllers:@[navControllerViewer] animated:animated];
+		} else {
+			NSMutableArray <__kindof UIViewController *> *tabBarViewControllers = [[NSMutableArray <__kindof UIViewController *> alloc] initWithCapacity: 3];
+			
+			MADQueryBuilderSplitViewController *splitViewController = [MADQueryBuilderSplitViewController newQueryBuilderSplitViewController:document];
+			splitViewController.viewControllerDelegate = delegate;
+			[tabBarViewControllers addObject: splitViewController];
+			
+			UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *navControllerDesigner = [UINavigationController documentNavigationControllerWithType:MADNavigationControllerTypeDesigner document:document];
+			[tabBarViewControllers addObject: navControllerDesigner];
+			
+			[tabBarViewControllers addObject: navControllerViewer];
+
+			[self setViewControllers: tabBarViewControllers animated: animated];
+		}
 	}
 }
 

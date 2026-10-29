@@ -75,7 +75,7 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 }
 
 + (NSString *)ubiquityIdentifier {
-	return ((NSDictionary *)[[NSBundle mainBundle] infoDictionary][@"NSUbiquitousContainers"]).allKeys[0];
+	return ((NSDictionary *)[[NSBundle mainBundle] infoDictionary][@"NSUbiquitousContainers"]).allKeys.firstObject;
 }
 
 + (NSString *)bundleGitCommitCount {
@@ -132,13 +132,31 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 	return localizedName;
 }
 
-- (NSString *)applicationIdentifier { return @"666001433"; }
+- (NSString *)applicationIdentifier {
+#if MAD_VIEWER
+	return @"666003759";
+#else
+	return @"666001433";
+#endif
+}
 
-- (NSString *)applicationBundleIdentifier { return @"com.everydayapps.mad.designer"; }
+- (NSString *)applicationBundleIdentifier {
+#if MAD_VIEWER
+	return @"com.everydayapps.mad.viewer";
+#else
+	return @"com.everydayapps.mad.designer";
+#endif
+}
 
 - (NSString *)trademark { return @"MAD"; }
 
-- (NSString *)applicationNameSufixPart { return @"Designer"; }
+- (NSString *)applicationNameSufixPart {
+#if MAD_VIEWER
+	return @"Viewer";
+#else
+	return @"Designer";
+#endif
+}
 
 - (NSString *)localizedApplicationNameSufixPart {
 	return NSLocalizedString([self applicationNameSufixPart], [self applicationNameSufixPart]);
@@ -230,9 +248,11 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 			UINavigationController *navController = (UINavigationController *)[self firstSceneWindow].rootViewController;
 			if ([navController.topViewController isKindOfClass:[MADTabBarController class]]) {
 				MADTabBarController *tabBarController = (MADTabBarController *)navController.topViewController;
-				if ([tabName isEqualToString:@"Designer"]) tabBarController.selectedIndex = 1;
-				else if ([tabName isEqualToString:@"Viewer"]) tabBarController.selectedIndex = 2;
-				else tabBarController.selectedIndex = 0;
+				if (tabBarController.viewControllers.count > 1) {
+					if ([tabName isEqualToString:@"Designer"]) tabBarController.selectedIndex = 1;
+					else if ([tabName isEqualToString:@"Viewer"] && tabBarController.viewControllers.count > 2) tabBarController.selectedIndex = 2;
+					else tabBarController.selectedIndex = 0;
+				}
 			}
 		});
 	}
@@ -250,8 +270,10 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 					  topClass != nil ? NSStringFromClass((Class _Nonnull)topClass) : @"<nil>");
 				if ([navController.topViewController isKindOfClass:[MADTabBarController class]]) {
 					MADTabBarController *tabBarController = (MADTabBarController *)navController.topViewController;
-					tabBarController.selectedIndex = 2;
-					UIViewController *viewerNav = tabBarController.viewControllers[2];
+					if (tabBarController.viewControllers.count > 0) {
+						tabBarController.selectedIndex = tabBarController.viewControllers.count - 1;
+					}
+					UIViewController *viewerNav = tabBarController.viewControllers.lastObject;
 					if ([viewerNav isKindOfClass:[UINavigationController class]]) {
 						UIViewController *top = ((UINavigationController *)viewerNav).topViewController;
 						if ([top isKindOfClass:[MADViewerController class]]) {

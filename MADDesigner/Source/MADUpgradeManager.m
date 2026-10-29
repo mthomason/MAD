@@ -47,7 +47,7 @@ const NSInteger currentMajorVersion = 8;
 	
 	installChinook = !gotChinook;
 	
-	if ([MADApplication isMADDesigner]) {
+	if ([MADApplication isMADDesigner] || [MADApplication isMADViewer]) {
 		NSNumber *samplesInstalled = [standardUserDefault objectForKey:MADUpgradeInstalledSamples];
 		installSamples = (samplesInstalled == nil);
 	}
