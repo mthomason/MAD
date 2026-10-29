@@ -134,6 +134,27 @@
 + (void)applyAppearanceToTabBarController:(UITabBarController *)tabBarController traitCollection:(UITraitCollection *)traitCollection;
 @end
 
+@interface MADTableViewCellBase : UITableViewCell
+@property (nonatomic, strong) UILabel *label;
+@end
+
+@interface MADAboutTableViewController : UITableViewController
++ (instancetype)newAboutTableViewController;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+@end
+
+@interface MADGettingStartedTableViewController : UITableViewController
+@end
+
+@interface MADAcknowledgementsViewController : UIViewController
++ (NSAttributedString *)acknowledgementsAttributedText;
+@end
+
+@interface MADExplorerController : UICollectionViewController
+@property (nonatomic, weak) UIBarButtonItem *barButtonItemAbout;
+- (IBAction)actionAbout:(id)sender;
+@end
+
 
 @interface MADDesignerViewController : UIViewController
 @property (nonatomic, weak) MADocument *document;
@@ -556,6 +577,83 @@
 	XCTAssertGreaterThanOrEqual(statusWin.size.height, 40.0);
 	XCTAssertLessThanOrEqual(CGRectGetMaxY(statusWin), CGRectGetMinY(tabBarWin) + 1.0);
 	XCTAssertGreaterThanOrEqual(CGRectGetMinY(statusWin), CGRectGetMaxY(dummyVC.view.frame) - 1.0);
+}
+
+- (void)testAboutAndAcknowledgementsViewControllers {
+	MADAboutTableViewController *aboutVC = [MADAboutTableViewController newAboutTableViewController];
+	XCTAssertNotNil(aboutVC);
+	[aboutVC loadViewIfNeeded];
+	aboutVC.view.frame = CGRectMake(0, 0, 320, 320);
+	[aboutVC.view layoutIfNeeded];
+
+	NSInteger rowCount = [aboutVC tableView:aboutVC.tableView numberOfRowsInSection:0];
+	XCTAssertEqual(rowCount, 6);
+
+	NSMutableArray<NSString *> *rowTexts = [NSMutableArray arrayWithCapacity:(NSUInteger)rowCount];
+	for (NSInteger r = 0; r < rowCount; r++) {
+		NSIndexPath *ip = [NSIndexPath indexPathForRow:r inSection:0];
+		MADTableViewCellBase *cell = (MADTableViewCellBase *)[aboutVC tableView:aboutVC.tableView cellForRowAtIndexPath:ip];
+		[cell layoutIfNeeded];
+		NSString *text = cell.label.text ?: cell.label.attributedText.string ?: @"";
+		[rowTexts addObject:text];
+
+		XCTAssertFalse([text localizedCaseInsensitiveContainsString:@"Everyday Apps"], @"Row %ld should not mention Everyday Apps: %@", (long)r, text);
+		XCTAssertFalse([text localizedCaseInsensitiveContainsString:@"Cincinnati"], @"Row %ld should not mention Cincinnati: %@", (long)r, text);
+		XCTAssertFalse([text containsString:@"®"], @"Row %ld should not claim a registered trademark: %@", (long)r, text);
+	}
+
+	XCTAssertEqualObjects(rowTexts[0], @"MAD Designer");
+	XCTAssertTrue([rowTexts[2] containsString:@"Copyright © 2012–2026 Michael Thomason"]);
+	XCTAssertTrue([rowTexts[3] containsString:@"Licensed under the MIT License"]);
+	XCTAssertTrue([rowTexts[3] containsString:@"not licensed under the MIT License"]);
+	XCTAssertEqualObjects(rowTexts[4], @"Overview");
+	XCTAssertEqualObjects(rowTexts[5], @"Acknowledgements");
+
+	NSAttributedString *ackText = [MADAcknowledgementsViewController acknowledgementsAttributedText];
+	XCTAssertNotNil(ackText);
+	NSString *ackString = ackText.string;
+	XCTAssertTrue([ackString containsString:@"MariaDB Connector/C"]);
+	XCTAssertTrue([ackString containsString:@"FreeTDS"]);
+	XCTAssertTrue([ackString containsString:@"PostgreSQL libpq"]);
+	XCTAssertTrue([ackString containsString:@"OpenSSL"]);
+	XCTAssertTrue([ackString containsString:@"libarchive"]);
+	XCTAssertTrue([ackString containsString:@"zint"]);
+	XCTAssertTrue([ackString containsString:@"Font Awesome"]);
+	XCTAssertTrue([ackString containsString:@"GNU LESSER GENERAL PUBLIC LICENSE"]);
+	XCTAssertTrue([ackString containsString:@"Apache License"]);
+
+	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:aboutVC];
+	[navController loadViewIfNeeded];
+	[aboutVC beginAppearanceTransition:YES animated:NO];
+	[aboutVC endAppearanceTransition];
+	XCTAssertTrue(navController.isNavigationBarHidden);
+
+	[aboutVC tableView:aboutVC.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+	XCTAssertEqual(navController.viewControllers.count, (NSUInteger)2);
+	XCTAssertTrue([navController.topViewController isKindOfClass:[MADGettingStartedTableViewController class]]);
+	MADGettingStartedTableViewController *overviewVC = (MADGettingStartedTableViewController *)navController.topViewController;
+	[overviewVC loadViewIfNeeded];
+	[overviewVC beginAppearanceTransition:YES animated:NO];
+	[overviewVC endAppearanceTransition];
+	XCTAssertFalse(navController.isNavigationBarHidden);
+	XCTAssertEqual([overviewVC tableView:overviewVC.tableView numberOfRowsInSection:0], 12);
+	MADTableViewCellBase *overviewCell0 = (MADTableViewCellBase *)[overviewVC tableView:overviewVC.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+	XCTAssertEqualObjects(overviewCell0.label.text, @"Mobile Analytics Document");
+
+	[navController popToRootViewControllerAnimated:NO];
+	[aboutVC beginAppearanceTransition:YES animated:NO];
+	[aboutVC endAppearanceTransition];
+	XCTAssertTrue(navController.isNavigationBarHidden);
+
+	[aboutVC tableView:aboutVC.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:5 inSection:0]];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+	XCTAssertEqual(navController.viewControllers.count, (NSUInteger)2);
+	XCTAssertTrue([navController.topViewController isKindOfClass:[MADAcknowledgementsViewController class]]);
+	[navController.topViewController loadViewIfNeeded];
+	[navController.topViewController beginAppearanceTransition:YES animated:NO];
+	[navController.topViewController endAppearanceTransition];
+	XCTAssertFalse(navController.isNavigationBarHidden);
 }
 
 @end

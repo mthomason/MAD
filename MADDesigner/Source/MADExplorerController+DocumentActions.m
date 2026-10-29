@@ -80,6 +80,7 @@
 		_infoControllerOnScreen = NO;
 		[self dismissViewControllerAnimated:YES completion:nil];
 	} else {
+		_infoControllerOnScreen = YES;
 		UINavigationController *infoViewController = [UINavigationController navigationControllerWithType:MADNavigationControllerTypeInformation];
 		[MADThemeManager applyAppearanceToNavigationController:infoViewController traitCollection:self.traitCollection];
 
@@ -116,16 +117,18 @@
 		_aboutViewControllerOnScreen = YES;
 		NSArray *passthoughViews = [self defaultPassthroughViews];
 		UITableViewController *aboutViewController = [MADAboutTableViewController newAboutTableViewController];
-		aboutViewController.modalPresentationStyle = UIModalPresentationPopover;
+		UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:aboutViewController];
+		navController.navigationBarHidden = YES;
+		navController.modalPresentationStyle = UIModalPresentationPopover;
 		
-		UIPopoverPresentationController *ppc = aboutViewController.popoverPresentationController;
+		UIPopoverPresentationController *ppc = navController.popoverPresentationController;
 		ppc.passthroughViews = [ppc.passthroughViews arrayByAddingObjectsFromArray: passthoughViews];
 		ppc.backgroundColor = [UIColor clearColor];
 		ppc.delegate = self;
 		ppc.barButtonItem = sender;
 		
 		self.aboutPopoverPresentationController = ppc;
-		[self showViewController:aboutViewController animated: YES];
+		[self showViewController:navController animated: YES];
 	}
 }
 
@@ -529,7 +532,7 @@
 		NSString *mimeType = [self mimeTypeForDocumentUTI:documentReport.fileType];
 		NSMutableString *messageBody = [[NSMutableString alloc] initWithString:NSLocalizedString(@"The attached document can be opened with MAD Viewer.",
 																								 @"The attached document can be opened with MAD Viewer.")];
-		[messageBody appendString:@"\n\nhttp://www.everydayapps.com/\n\n"];
+		[messageBody appendString:@"\n\n"];
 		
 		MFMailComposeViewController *mailComposer = [MFMailComposeViewController ma_newMailComposeViewControllerWithBody: messageBody
 																											  attachment: metadata.URL

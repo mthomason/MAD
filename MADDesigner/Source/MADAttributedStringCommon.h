@@ -14,7 +14,6 @@
 @interface MADAttributedStringCommon : NSObject
 
 + (NSAttributedString *)AttributedStringFollowOnTwitter;
-+ (NSAttributedString *)AttributedStringTrademarkStatement;
 
 @end
 
