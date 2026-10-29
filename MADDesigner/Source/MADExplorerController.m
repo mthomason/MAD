@@ -166,6 +166,15 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 	self.barButtonItemEdit.accessibilityHint = NSLocalizedString(@"Enables document list edit mode.", @"Enables document list edit mode.");
 	self.barButtonItemAddNewDocument.accessibilityHint = NSLocalizedString(@"Adds a new document.", @"Adds a new document.");
+#if MAD_VIEWER
+	self.barButtonItemAddNewDocument.enabled = NO;
+	self.navigationItem.leftBarButtonItem = nil;
+#else
+	if ([MADApplication isMADViewer]) {
+		self.barButtonItemAddNewDocument.enabled = NO;
+		self.navigationItem.leftBarButtonItem = nil;
+	}
+#endif
 	self.barButtonItemLicensing.accessibilityHint = NSLocalizedString(@"Displays the store.", @"Displays the store.");
 	self.barButtonItemTrash.accessibilityHint = NSLocalizedString(@"Deletes the selected documents.", @"Deletes the selected documents.");
 	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemTrash traitCollection:self.traitCollection];
@@ -394,6 +403,13 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 								removes:(NSArray <NSIndexPath *> *)removes
 								updates:(NSArray <NSIndexPath *> *)updates
 							 completion:(void (^)(BOOL, NSError *))completion {
+	if (self.collectionView.window == nil) {
+		[self.collectionView reloadData];
+		if (completion) {
+			completion(YES, nil);
+		}
+		return;
+	}
 
 	UICollectionView *__weak weakCollectionView = self.collectionView;
 	void (^batchUpdates)(void) = ^{
@@ -796,7 +812,17 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
-	[self.barButtonItemAddNewDocument setEnabled:YES];
+#if MAD_VIEWER
+	[self.barButtonItemAddNewDocument setEnabled:NO];
+	self.navigationItem.leftBarButtonItem = nil;
+#else
+	if ([MADApplication isMADViewer]) {
+		[self.barButtonItemAddNewDocument setEnabled:NO];
+		self.navigationItem.leftBarButtonItem = nil;
+	} else {
+		[self.barButtonItemAddNewDocument setEnabled:YES];
+	}
+#endif
 }
 
 #pragma mark -
@@ -810,7 +836,11 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (void)done:(id)sender {
 	_shouldShowAddDocumentPopover = YES;
 
-	self.barButtonItemAddNewDocument.enabled = YES;
+#if MAD_VIEWER
+	self.barButtonItemAddNewDocument.enabled = NO;
+#else
+	self.barButtonItemAddNewDocument.enabled = ![MADApplication isMADViewer];
+#endif
 	
 	MADocument *openDocument = self.activeDocumentManager.openDocument;
 	if (openDocument && !(openDocument.documentState & UIDocumentStateClosed)) {
@@ -836,7 +866,11 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 - (void)viewControllerDidFinish:(id __unused)sender {
 	[self dismissViewControllerAnimated:YES completion:nil];
 	_shouldShowAddDocumentPopover = YES;
-	[self.barButtonItemAddNewDocument setEnabled:YES];
+#if MAD_VIEWER
+	[self.barButtonItemAddNewDocument setEnabled:NO];
+#else
+	[self.barButtonItemAddNewDocument setEnabled:![MADApplication isMADViewer]];
+#endif
 	self.fileExplorerViewDelegate.showingPopover = NO;
 }
 

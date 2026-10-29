@@ -7,8 +7,8 @@
 //
 
 #import "MADNavigationController.h"
-#if MAD_DESIGNER
 #import "MADNavigationControllerViewer.h"
+#if MAD_DESIGNER
 #import "MADNavigationControllerDesigner.h"
 #import "MADDesignerNavigationBar.h"
 #endif
@@ -120,7 +120,6 @@
 
 + (UINavigationController <MADViewControllerDocumentProtocol> *)documentNavigationControllerWithType:(MADNavigationControllerType)type
 																							document:(MADocument *)document {
-#if MAD_DESIGNER
 	switch (type) {
 		case MADNavigationControllerTypeViewer: {
 			UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> *controller = [[MADNavigationControllerViewer alloc] initWithNavigationBarClass: [MADViewerNavigationBar class]
@@ -128,26 +127,20 @@
 			controller.document = document;
 			return controller;
 		}
+#if MAD_DESIGNER
 		case MADNavigationControllerTypeDesigner: {
 			UINavigationController <MADViewControllerDocumentProtocol, MADNavigationProtocol> * controller = [[MADNavigationControllerDesigner alloc] initWithNavigationBarClass: [MADDesignerNavigationBar class]
 																																									toolbarClass: nil];
 			controller.document = document;
 			return controller;
 		}
+#endif
 		default:
 			os_log_error(OS_LOG_DEFAULT, "Error: Unknown Navigation Controller Type");
 			@throw [NSException exceptionWithName: NSInternalInconsistencyException
 										   reason: @"MADNavigationController: newNavigationControllerWithType:document: called with unsupported type."
 										 userInfo: nil];
 	}
-#else
-	(void)type;
-	(void)document;
-	os_log_error(OS_LOG_DEFAULT, "Error: Unknown Navigation Controller Type");
-	@throw [NSException exceptionWithName: NSInternalInconsistencyException
-								   reason: @"MADNavigationController: newNavigationControllerWithType:document: called with unsupported type."
-								 userInfo: nil];
-#endif
 }
 
 @end

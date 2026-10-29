@@ -200,8 +200,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	buttonDone.enabled = YES;
 	self.barButtonItemRefresh = buttonRefresh;
 
-	[self.tabBarController.navigationItem setRightBarButtonItem: buttonRefresh animated: YES];
-	[self.tabBarController.navigationItem setLeftBarButtonItem: buttonDone animated: YES];
+	[self.navigationItem setRightBarButtonItem: buttonRefresh animated: YES];
+	[self.navigationItem setLeftBarButtonItem: buttonDone animated: YES];
 
 	// The reload below formats the report, and on a large document that takes a couple
 	// of seconds.  The refresh button has nothing to do until it finishes -- and a
@@ -222,7 +222,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	self.pageSlider.sliderDelegate = nil;
 	self.dataSource = nil;
 	self.delegate = nil;
-	[self.tabBarController.navigationItem setRightBarButtonItem:nil];
+	[self.navigationItem setRightBarButtonItem:nil];
 	[self timerDealloc];
 }
 
@@ -418,8 +418,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	[MADThemeManager applyAppearanceToBarButtonItem:buttonRefresh traitCollection:self.traitCollection];
 	buttonRefresh.enabled = YES;
 	self.barButtonItemRefresh = buttonRefresh;
-	[self.tabBarController.navigationItem setRightBarButtonItem: buttonRefresh
-													  animated: YES];
+	[self.navigationItem setRightBarButtonItem: buttonRefresh
+									  animated: YES];
 }
 
 - (void)setDisplayInactive {
@@ -439,8 +439,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 
 	UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
 	[activityIndicator startAnimating];
-	[self.tabBarController.navigationItem setRightBarButtonItem: barButtonItem
-													  animated: YES];
+	[self.navigationItem setRightBarButtonItem: barButtonItem
+									  animated: YES];
 }
 
 - (void)setPageingEnabled:(BOOL)enabled {

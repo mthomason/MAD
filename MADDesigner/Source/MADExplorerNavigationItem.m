@@ -7,6 +7,7 @@
 //
 
 #import "MADExplorerNavigationItem.h"
+#import <MADFoundation/MADApplication.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <UIKit/UIAccessibility.h>
 
@@ -14,13 +15,25 @@
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
+#if MAD_VIEWER
+		BOOL isViewer = YES;
+#else
+		BOOL isViewer = [MADApplication isMADViewer];
+#endif
+		NSString *title = isViewer
+			? NSLocalizedString(@"MAD Viewer", @"MAD Viewer")
+			: NSLocalizedString(@"MAD Designer", @"MAD Designer");
+		NSString *hint = isViewer
+			? NSLocalizedString(@"MAD Viewer is the mobile analytics document viewer.", @"MAD Viewer is the mobile analytics document viewer.")
+			: NSLocalizedString(@"MAD Designer is the mobile analytics document designer.", @"MAD Designer is the mobile analytics document designer.");
+
 		MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame: CGRectZero];
-		titleView.text = NSLocalizedString(@"MAD Designer", @"MAD Designer");
-		titleView.accessibilityHint = NSLocalizedString(@"MAD Designer is the mobile analytics document designer.", @"MAD Designer is the mobile analytics document designer.");
+		titleView.text = title;
+		titleView.accessibilityHint = hint;
 		titleView.accessibilityTraits = UIAccessibilityTraitHeader;
 		
 		self.titleView = titleView;
-		self.title = NSLocalizedString(@"MAD Designer", @"MAD Designer");
+		self.title = title;
 		self.hidesBackButton = YES;
 	}
 	return self;

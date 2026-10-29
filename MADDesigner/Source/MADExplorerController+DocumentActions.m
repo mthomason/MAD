@@ -186,7 +186,11 @@
 
 - (IBAction)actionCancel:(id __unused)sender {
 	[self dismissViewControllerAnimated:YES completion:nil];
-	[self.barButtonItemAddNewDocument setEnabled:YES];
+#if MAD_VIEWER
+	[self.barButtonItemAddNewDocument setEnabled:NO];
+#else
+	[self.barButtonItemAddNewDocument setEnabled:![MADApplication isMADViewer]];
+#endif
 }
 
 - (IBAction)actionSearch:(id __unused)sender {
@@ -246,7 +250,9 @@
 		self.searchBar.alpha = 1.0;
 		
 		self.navigationItem.titleView.alpha = 0.0;
-		self.navigationItem.leftBarButtonItem.enabled = YES;
+#if !MAD_VIEWER
+		self.navigationItem.leftBarButtonItem.enabled = ![MADApplication isMADViewer];
+#endif
 		
 		__weak MADExplorerController *weakSelf = self;
 		UIView *titleView = self.navigationItem.titleView;
@@ -293,7 +299,11 @@
 - (IBAction)actionDone:(id __unused)sender {
 
 	self.editing = NO;
-	self.barButtonItemAddNewDocument.enabled = YES;
+#if MAD_VIEWER
+	self.barButtonItemAddNewDocument.enabled = NO;
+#else
+	self.barButtonItemAddNewDocument.enabled = ![MADApplication isMADViewer];
+#endif
 	self.barButtonItemAbout.enabled = YES;
 	self.barButtonItemLicensing.enabled = YES;
 	self.barButtonItemInformation.enabled = YES;

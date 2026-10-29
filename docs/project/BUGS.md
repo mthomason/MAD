@@ -1114,9 +1114,10 @@ it skips rather than fails when no server is reachable.
 
 ## MAD Designer (app)
 
-Covered by the hosted `MADDesignerUnitTests` bundle (91 tests across
+Covered by the hosted `MADDesignerUnitTests` bundle (96 tests across
 `MADDesignerUnitTests.m`, `MADAppLogicTests.m`,
-`MADAppOperationConditionTests.m`, and `MADStatusLabelRefreshTests.m`). The bundle
+`MADAppOperationConditionTests.m`, `MADOperationValidateSQLTests.m`, and
+`MADStatusLabelRefreshTests.m`). The bundle
 is hosted by `MAD Designer.app` (TEST_HOST/BUNDLE_LOADER), so it reaches the app's
 own source through the running executable; the app's classes are declared locally
 in the test files rather than imported, because `MADDesigner/Source` is not on the
@@ -1232,6 +1233,11 @@ bundle's header search path.
 - `MADViewerController -showPrintDialog` inverted queue priority and `MADOperationLoadPrintPageRender -main` read an uninitialized `MADocument *` pointer
 - Unselected tab bar icons forced `UIImageRenderingModeAlwaysOriginal` on white PNG strokes, making them invisible in Light Mode and over white surfaces on Liquid Glass
 - `MADNavigationControllerViewer` and `MADNavigationControllerQueryBuilder` bottom toolbars overlapped the floating `UITabBar` on iOS 26 and squished `MADLabelStatus`
+- `MAD Viewer` launched to a black screen with a missing `UIScene` lifecycle manifest, uncompiled app sources, and unbundled storyboards and sample assets
+- `MADNavigationController +documentNavigationControllerWithType:document:` threw `NSInternalInconsistencyException` for `MADNavigationControllerTypeViewer` in `MAD Viewer`
+- `MADViewerController` set its Refresh button, Done button, and refresh activity indicator on the hidden `self.tabBarController.navigationItem` instead of `self.navigationItem`
+- `MADOperationInstallSampleDocument` checked `fileExistsAtPath:` before appending the `.mad` file extension, overwriting existing sample documents
+- `MADExplorerController -documentManagerDidChangeContent:removes:updates:completion:` called `performBatchUpdates:` on an unmounted `UICollectionView` (`window == nil`), crashing with `NSInternalInconsistencyException`
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
