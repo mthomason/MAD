@@ -45,21 +45,29 @@ jobs:
       - uses: docker/setup-buildx-action@v3
 
       - name: Build the toolchain stage (pinned by Linux/toolchain.conf; cached)
-        run: |
-          docker buildx build -f Linux/Dockerfile --target toolchain \
-            -t mad-linux-toolchain:1 \
-            --cache-from type=gha,scope=mad-linux \
-            --cache-to type=gha,mode=max,scope=mad-linux \
-            --load .
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Linux/Dockerfile
+          target: toolchain
+          tags: mad-linux-toolchain:1
+          cache-from: type=gha,scope=mad-linux
+          cache-to: type=gha,mode=max,scope=mad-linux
+          load: true
 
-      - name: Build the build stage and run the suites
-        run: |
-          docker buildx build -f Linux/Dockerfile --target build \
-            -t mad-linux:phase-b \
-            --cache-from type=gha,scope=mad-linux \
-            --cache-to type=gha,mode=max,scope=mad-linux \
-            --load .
-          ./Linux/build.sh --test
+      - name: Build the build stage (cached)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Linux/Dockerfile
+          target: build
+          tags: mad-linux:phase-b
+          cache-from: type=gha,scope=mad-linux
+          cache-to: type=gha,mode=max,scope=mad-linux
+          load: true
+
+      - name: Run the Linux suites
+        run: ./Linux/build.sh --test
 
       - name: Verify the runtime image end to end
         run: ./Linux/build.sh --verify

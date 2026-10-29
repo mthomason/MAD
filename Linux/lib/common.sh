@@ -69,33 +69,64 @@ cache_dir() { # -> echoes the download cache
 	echo "${MADLINUX_CACHE:-/var/cache/madlinux}"
 }
 
-fetch_archive() { # url sha256 -> echoes the path of the verified archive
-	local url="$1" sha="$2"
-	local dir file got
+fetch_archive() { # urls sha256 -> echoes the path of the verified archive
+	local urls="$1" sha="$2"
+	local dir first_url file got candidate_url attempt url_list
 	dir="$(cache_dir)"
-	file="${dir}/$(basename "${url}")"
+	first_url="${urls%%,*}"
+	file="${dir}/$(basename "${first_url}")"
 	mkdir -p "${dir}"
 	if [[ -f "${file}" ]]; then
 		[[ "$(sha256_file "${file}")" == "${sha}" ]] && { echo "${file}"; return 0; }
-		log "discarding ${file}: hash changed"
+		log "discarding ${file}: hash changed" >&2
 		/bin/rm -f "${file}"
 	fi
-	log "fetch $(basename "${url}")"
-	curl -fsSL --retry 3 --retry-delay 2 -o "${file}.part" "${url}" || die "download failed: ${url}"
-	got="$(sha256_file "${file}.part")"
-	[[ "${got}" == "${sha}" ]] || die "sha256 mismatch for ${url}: got ${got}, want ${sha}"
-	mv "${file}.part" "${file}"
-	echo "${file}"
+	IFS=',' read -ra url_list <<< "${urls}"
+	for candidate_url in "${url_list[@]}"; do
+		for attempt in 1 2 3; do
+			/bin/rm -f "${file}.part"
+			log "fetch $(basename "${file}") from ${candidate_url} (attempt ${attempt}/3)" >&2
+			if curl -fsSL --connect-timeout 20 --max-time 300 --retry 2 --retry-delay 2 -o "${file}.part" "${candidate_url}"; then
+				got="$(sha256_file "${file}.part")"
+				if [[ "${got}" == "${sha}" ]]; then
+					mv "${file}.part" "${file}"
+					echo "${file}"
+					return 0
+				fi
+				log "sha256 mismatch for ${candidate_url} (attempt ${attempt}/3): got ${got}, want ${sha}" >&2
+			else
+				log "download failed for ${candidate_url} (attempt ${attempt}/3)" >&2
+			fi
+			/bin/rm -f "${file}.part"
+			if [[ "${attempt}" -lt 3 ]]; then
+				sleep 3
+			fi
+		done
+		if [[ "${#url_list[@]}" -gt 1 ]]; then
+			log "trying next mirror for $(basename "${file}")" >&2
+		fi
+	done
+	die "failed to download and verify $(basename "${file}") (want sha256 ${sha}) from: ${urls}"
 }
 
 clone_pinned() { # name ref commit url -> echoes the checkout path (at commit)
 	local name="$1" ref="$2" commit="$3" url="$4"
-	local dir head
+	local dir head attempt
 	dir="$(cache_dir)/${name}"
 	mkdir -p "$(cache_dir)"
 	if [[ ! -d "${dir}" ]]; then
-		log "clone ${name} ${ref}"
-		git clone --quiet --recurse-submodules --branch "${ref}" "${url}" "${dir}" || die "clone failed: ${url}"
+		for attempt in 1 2 3; do
+			log "clone ${name} ${ref} (attempt ${attempt}/3)" >&2
+			if git clone --quiet --recurse-submodules --branch "${ref}" "${url}" "${dir}"; then
+				break
+			fi
+			log "clone failed for ${url} (attempt ${attempt}/3)" >&2
+			/bin/rm -rf "${dir}"
+			if [[ "${attempt}" -lt 3 ]]; then
+				sleep 3
+			fi
+		done
+		[[ -d "${dir}" ]] || die "clone failed: ${url}"
 	fi
 	git -C "${dir}" checkout --quiet "${commit}" || die "${name}: commit ${commit} is not in ${ref}"
 	git -C "${dir}" submodule update --init --recursive --quiet || die "${name}: submodule update failed"
