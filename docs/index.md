@@ -2,14 +2,9 @@
 title: MAD — Mobile Analytics Document
 ---
 
-**A report is a file.**
+**An open format and embeddable engine for relational reporting — where every report is a portable query graph, a materialized SQLite table, and a parametric layout.**
 
-MAD is an embedded reporting platform: the **MAD Designer** and **MAD
-Viewer** apps for iOS, the headless engine that runs them, and the open
-`.mad` document format. A `.mad` file holds a report's whole definition --
-the query, its tables and joins, and the layout of its elements -- in under
-100 KB. Anyone who can read the file can run the report against the
-database and export it.
+MAD is an embedded relational reporting platform for ad hoc query, reporting, and design: the **MAD Designer** and **MAD Viewer** apps for iOS, the headless engine that runs them on Linux and macOS, and the open `.mad` document format. A `.mad` file holds a report's whole definition — the database schema snapshot, the query graph (tables, joins, predicates, groupings), and the banded layout of its elements — in under 100 KB, cleanly separated from the materialized SQLite table (`.maddb` + `.mdcache`) it produces on refresh.
 
 The code is at
 [github.com/mthomason/MAD](https://github.com/mthomason/MAD), MIT-licensed;
@@ -38,21 +33,25 @@ any browser.
 
 ## Why MAD
 
-* **Written, not assembled.** The SQL generation, the data-table engine,
-  the store, the layout model, and the renderer are first-party
-  Objective-C across fourteen frameworks. Third-party code is limited to
-  the wire -- MariaDB Connector/C, FreeTDS, libpq, SQLite -- and the barcode
-  library. No reporting SDK is being resold.
+* **Interoperable by contract.** Instead of scattering one-off SQL scripts and
+  bespoke dashboard glue across an organization, a `.mad` file packages the
+  schema contract, the query AST, and the presentation layout into one
+  inspectable, diffable artifact that produces byte-identical SQL and exports
+  across Apple and Linux.
+* **Written, not assembled.** The SQL generation, the SQL parser, the
+  data-table engine, the store, the layout model, and the renderer are
+  first-party Objective-C across fourteen frameworks. Third-party code is
+  limited to the wire — MariaDB Connector/C, FreeTDS, `libpq`, SQLite — plus
+  `libarchive`/`bzip2` and `zint` for barcodes. No reporting SDK is being
+  resold.
 * **Mobile-first, memory-budgeted.** A refresh reads the result set once
-  into a SQLite row cache and computes from there, so aggregates and
-  paginated rendering stay fast within a phone's memory.
-* **Embeddable.** Eleven of the fourteen frameworks are UIKit-free and build
-  headlessly. The `mad` CLI exposes the engine as verbs -- `inspect`,
-  `schema`, `refresh`, `export` -- and drivers register themselves, so a
-  new data source is a subclass, not a fork.
-* **Portable.** The `.mad` container is a bzip2 tar archive holding a
-  portable SQLite store; no Apple framework is required to open it. The
-  headless build passes 1,303 tests on Linux, in Docker.
+  into a SQLite row cache (`MADDataTableFast`) and computes two-pass groupings
+  and aggregates from there, so paginated rendering stays fast within a
+  phone's memory.
+* **Embeddable and portable.** Eleven of the fourteen frameworks are
+  UIKit-free and build headlessly, passing 1,303 tests on Linux in Docker.
+  The `.mad` container is a bzip2 tar archive holding a portable SQLite store;
+  no Apple framework is required to open it.
 
 ## The `.mad` format
 
@@ -70,22 +69,23 @@ The open specification, one chapter per file:
 
 ## Using the engine
 
-* [Build and test](https://github.com/mthomason/MAD#build-and-test) --
+* [Build and test](https://github.com/mthomason/MAD#build-and-test) —
   the exact commands for the iOS suites and the Linux build.
-* [The `mad` CLI](https://github.com/mthomason/MAD#try-it) -- inspect,
+* [The `mad` CLI](https://github.com/mthomason/MAD#try-it) — inspect,
   refresh, and export a `.mad` from Docker in one line.
-* [mad-action](https://github.com/mthomason/mad-action) -- run a checked-in
+* [mad-action](https://github.com/mthomason/mad-action) — run a checked-in
   `.mad` in GitHub Actions and upload its export; `mthomason/mad-action@v1`.
-* [Driver-authoring tutorial](tutorials/driver-authoring.html) -- the
+* [Driver-authoring tutorial](tutorials/driver-authoring.html) — the
   intended first contribution: subclass `MADDatabase`, register the
   driver, return rows.
 
 ## The direction
 
-[Vision](vision.html) -- a report's result table becomes a data source
-for other reports, so one document can span several databases.
+[Vision](vision.html) — reports as composable database tables, multi-source
+queries in a single report, native UIKit data views beyond the paper paradigm,
+and converting legacy Crystal Reports (`.rpt`) into open `.mad` files.
 
 ---
 
-The **MAD Designer** app -- the report designer built on this engine -- has
+The **MAD Designer** app — the report designer built on this engine — has
 its own site at [mad.everydayapps.com](https://mad.everydayapps.com/).
