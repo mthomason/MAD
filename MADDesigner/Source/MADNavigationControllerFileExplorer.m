@@ -40,6 +40,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	self.delegate = self;
+	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {

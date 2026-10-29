@@ -15,10 +15,13 @@
 
 #import <Foundation/NSObject.h>
 #import <UIKit/UINavigationBar.h>
+#import <UIKit/UITabBar.h>
+#import <UIKit/UITabBarController.h>
 #import <UIKit/UIToolbar.h>
 #import <UIKit/UIViewController.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIResponder.h>
+#import <UIKit/UIWindow.h>
 
 @interface MADNavigationControllerQueryBuilder () <UINavigationControllerDelegate>
 	@property (nonatomic, weak) IBOutlet UIToolbar *bottomToolbar;
@@ -42,6 +45,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	self.hidesBarsWhenVerticallyCompact = NO;
+	[MADThemeManager applyAppearanceToNavigationController:self traitCollection:self.traitCollection];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -98,10 +102,34 @@
 
 - (void)viewDidLayoutSubviews {
 	[super viewDidLayoutSubviews];
-	//self.bottomToolbar.frame = CGRectMake(self.bottomToolbar.frame.origin.x,
-	//                                      self.viewControllers.firstObject.bottomLayoutGuide.length - self.bottomToolbar.frame.size.height,
-	//                                      self.bottomToolbar.frame.size.width,
-	//                                      self.bottomToolbar.frame.size.height);
+	UITabBar *tabBar = self.tabBarController.tabBar;
+	if (!tabBar || tabBar.isHidden || self.isToolbarHidden || !self.view.window) {
+		return;
+	}
+	CGRect tabBarFrame = [tabBar convertRect:tabBar.bounds toView:self.view];
+	if (CGRectIsEmpty(tabBarFrame) || CGRectGetMinY(tabBarFrame) >= CGRectGetMaxY(self.view.bounds)) {
+		return;
+	}
+	if (self.toolbar.superview == self.view) {
+		CGRect toolbarFrame = self.toolbar.frame;
+		CGFloat targetY = CGRectGetMinY(tabBarFrame) - CGRectGetHeight(toolbarFrame);
+		if (fabs(toolbarFrame.origin.y - targetY) > 0.5) {
+			toolbarFrame.origin.y = targetY;
+			self.toolbar.frame = toolbarFrame;
+		}
+	} else {
+		CGFloat bottomSafe = self.view.window.safeAreaInsets.bottom;
+		CGFloat shiftY = CGRectGetMinY(tabBarFrame) - (CGRectGetMaxY(self.view.bounds) - bottomSafe) - 4.0;
+		for (UIView *sub in self.view.subviews) {
+			if ([NSStringFromClass(sub.class) containsString:@"FloatingBar"]) {
+				CGRect f = sub.frame;
+				if (fabs(f.origin.y - shiftY) > 0.5) {
+					f.origin.y = shiftY;
+					sub.frame = f;
+				}
+			}
+		}
+	}
 }
 
 - (void)navigationController:(UINavigationController *)navigationController
