@@ -8,6 +8,8 @@
 
 #import "MADLabelStatus.h"
 #import <UIKit/NSAttributedString.h>
+#import <UIKit/NSLayoutAnchor.h>
+#import <UIKit/NSLayoutConstraint.h>
 #import <MADFoundation/madlog.h>
 
 static NSString * const MADTextReadRecords      = @"\nRead %@ records.";
@@ -45,6 +47,8 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 	self.autoresizingMask = UIViewAutoresizingFlexibleWidth |
 							UIViewAutoresizingFlexibleLeftMargin |
 							UIViewAutoresizingFlexibleRightMargin;
+	[self.widthAnchor constraintEqualToConstant:230.0].active = YES;
+	[self.heightAnchor constraintEqualToConstant:44.0].active = YES;
 	
 	// Pre-allocate attributes
 	_boldAttributes = @{
@@ -66,6 +70,10 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 	_statusMessage2 = [[NSMutableAttributedString alloc] initWithString:@" " attributes:_lightAttributes];
 	_statusMessage3 = [[NSMutableAttributedString alloc] initWithString:@" " attributes:_lightAttributes];
 	_display = [[NSMutableAttributedString alloc] initWithString:@" " attributes:_paragraphAttributes];
+}
+
+- (CGSize)intrinsicContentSize {
+	return CGSizeMake(230.0, 44.0);
 }
 
 - (void)updatePageStatus:(MADReportPosition)reportPosition {

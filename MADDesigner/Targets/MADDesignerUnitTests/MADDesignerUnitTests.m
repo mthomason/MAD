@@ -49,6 +49,7 @@
 #import <MAD/RptqDatabaseCredentals.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentElementLabelDataField.h>
 #import <MAD/RptqQueryField.h>
@@ -117,6 +118,22 @@
 @interface MADDesignerView : UIView
 @property (nonatomic, weak) MADDesignerScrollView *scroller;
 @end
+
+@interface MADLabelStatus : UILabel
+- (void)updateStatusWithTime:(NSString *)message;
+- (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs;
+- (void)updateStatusWithPageNumber:(NSString *)message;
+@end
+
+@interface MADTabBarController : UITabBarController
+@property (nonatomic, strong) MADocument *document;
++ (instancetype)newTabBarController:(MADocument *)document prompt:(NSString *)prompt;
+@end
+
+@interface MADThemeManager : NSObject
++ (void)applyAppearanceToTabBarController:(UITabBarController *)tabBarController traitCollection:(UITraitCollection *)traitCollection;
+@end
+
 
 @interface MADDesignerViewController : UIViewController
 @property (nonatomic, weak) MADocument *document;
@@ -478,6 +495,67 @@
 
 	XCTAssertEqual(label.referencesQueryField.identifier, (int64_t)6002);
 	XCTAssertNil(designerVC.objectIdEditDynamicLabel);
+}
+
+- (void)testTabBarAndViewerToolbarLayout {
+	NSURL *tempURL = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+					  URLByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"mad"]];
+	MADocument *document = [[MADocument alloc] initWithFileURL:tempURL];
+	[document.storeContext insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	UIWindowScene *scene = (UIWindowScene *)UIApplication.sharedApplication.connectedScenes.anyObject;
+	UIWindow *window = scene ? [[UIWindow alloc] initWithWindowScene:scene] : [[UIWindow alloc] initWithFrame:CGRectMake(0, 0, 402, 874)];
+	window.frame = CGRectMake(0, 0, 402, 874);
+	UINavigationController *rootNav = [[UINavigationController alloc] init];
+	window.rootViewController = rootNav;
+	[window makeKeyAndVisible];
+
+	MADTabBarController *tabBarVC = [MADTabBarController newTabBarController:document prompt:@"Test.mad"];
+	tabBarVC.document = document;
+	[rootNav pushViewController:tabBarVC animated:NO];
+	[window layoutIfNeeded];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.05]];
+
+	XCTAssertEqual(tabBarVC.tabBar.items.count, (NSUInteger)3);
+	for (UITabBarItem *item in tabBarVC.tabBar.items) {
+		XCTAssertNotNil(item.image);
+		XCTAssertEqual(item.image.renderingMode, UIImageRenderingModeAlwaysTemplate);
+		XCTAssertEqual(item.selectedImage.renderingMode, UIImageRenderingModeAlwaysTemplate);
+	}
+	XCTAssertEqualObjects(tabBarVC.tabBar.unselectedItemTintColor, [UIColor labelColor]);
+
+	UINavigationController *viewerNav = (UINavigationController *)tabBarVC.viewControllers[2];
+	UIViewController *dummyVC = [[UIViewController alloc] init];
+	dummyVC.edgesForExtendedLayout = UIRectEdgeNone;
+
+	MADLabelStatus *statusView = [[MADLabelStatus alloc] initWithFrame:CGRectMake(0, 0, 230, 44)];
+	[statusView updateStatusWithTime:@"Updated just now"];
+	[statusView updateRecordsReadStatusWithNumberOfRecordsRead:@(42)];
+	[statusView updateStatusWithPageNumber:@"\nPage 1 of 2 pages."];
+	UIBarButtonItem *statusItem = [[UIBarButtonItem alloc] initWithCustomView:statusView];
+	UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+	UIBarButtonItem *actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:nil action:nil];
+	dummyVC.toolbarItems = @[statusItem, flexItem, actionItem];
+	[viewerNav setViewControllers:@[dummyVC] animated:NO];
+
+	tabBarVC.selectedIndex = 2;
+	if ([tabBarVC.delegate respondsToSelector:@selector(tabBarController:didSelectViewController:)]) {
+		[tabBarVC.delegate tabBarController:tabBarVC didSelectViewController:viewerNav];
+	}
+	[viewerNav setToolbarHidden:NO animated:NO];
+
+	window.frame = CGRectMake(0, 0, 402, 875);
+	[window layoutIfNeeded];
+	window.frame = CGRectMake(0, 0, 402, 874);
+	[window layoutIfNeeded];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
+
+	CGRect statusWin = [statusView convertRect:statusView.bounds toView:window];
+	CGRect tabBarWin = [tabBarVC.tabBar convertRect:tabBarVC.tabBar.bounds toView:window];
+	XCTAssertGreaterThanOrEqual(statusWin.size.width, 200.0);
+	XCTAssertGreaterThanOrEqual(statusWin.size.height, 40.0);
+	XCTAssertLessThanOrEqual(CGRectGetMaxY(statusWin), CGRectGetMinY(tabBarWin) + 1.0);
+	XCTAssertGreaterThanOrEqual(CGRectGetMinY(statusWin), CGRectGetMaxY(dummyVC.view.frame) - 1.0);
 }
 
 @end

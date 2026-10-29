@@ -3321,6 +3321,47 @@ reference to "BUGS.md, the X entry" still lands.
   `-[MADOperationLoadPrintPageRender main]` initializes
   `MADocument *document = self.document;`.
 
+### Unselected tab bar icons forced `UIImageRenderingModeAlwaysOriginal` on white PNG strokes, making them invisible in Light Mode and over white surfaces on Liquid Glass
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADDesigner/Source/UIViewController+tabBarItem.m:32-38`,
+  `MADDesigner/Source/MADThemeManager.m:82-116`, and
+  `MADDesigner/Resources/Assets/Images.xcassets/UIBarButtonItem*8.imageset/Contents.json`.
+- **Behavior:** `UIViewController+tabBarItem` created `tabBarItem.image` with
+  `UIImageRenderingModeAlwaysOriginal` while creating `tabBarItem.selectedImage` with
+  `UIImageRenderingModeAutomatic`, and the three tab bar icon asset sets (`UIBarButtonItemDatabase8`,
+  `UIBarButtonItemMadDesigner8`, `UIBarButtonItemMadViewer8`) had no template rendering intent.
+  Because the underlying PNGs are white strokes with small red accents on a transparent background,
+  the selected tab was tinted blue by UIKit, whereas unselected tabs rendered raw white pixels on
+  the white Liquid Glass capsule in Light Mode (leaving only tiny red accents visible) and had
+  poor contrast in Dark Mode when floating over white content.
+- **Now:** Both `tabBarItem.image` and `tabBarItem.selectedImage` use
+  `UIImageRenderingModeAlwaysTemplate`, the three asset catalog image sets declare
+  `"template-rendering-intent" : "template"`, and `MADThemeManager` configures unselected tab
+  bar items with full-contrast `[UIColor labelColor]`.
+- **Test:** `MADDesignerUnitTests testTabBarAndViewerToolbarLayout`.
+
+### `MADNavigationControllerViewer` and `MADNavigationControllerQueryBuilder` bottom toolbars overlapped the floating `UITabBar` on iOS 26 and squished `MADLabelStatus`
+- **Status:** Fixed 2026-10-28.
+- **Where:** `MADDesigner/Source/MADNavigationControllerViewer.m`,
+  `MADDesigner/Source/MADNavigationControllerQueryBuilder.m`, and
+  `MADDesigner/Source/MADLabelStatus.m`.
+- **Behavior:** On iOS 26+, `UINavigationController` hosts its toolbar inside a private
+  `FloatingBarContainerView` positioned using only the window's bottom safe area inset,
+  ignoring the parent `UITabBarController`'s floating `UITabBar`. As a result, even though
+  `UINavigationController` reserved space above the tab bar when sizing `MADViewerController.view`,
+  the status toolbar itself was pinned at the bottom of the screen directly underneath the
+  floating `UITabBar`. Additionally, iOS 26 wraps `UIBarButtonItem.customView` (`MADLabelStatus`)
+  in `_UITAMICAdaptorView` inside `UIPlatformGlassInteractionView`, which compressed
+  `MADLabelStatus` to `38pt` wide because `MADLabelStatus` had no `-intrinsicContentSize` or
+  width/height constraints.
+- **Now:** `MADNavigationControllerViewer` and `MADNavigationControllerQueryBuilder` implement
+  `-viewDidLayoutSubviews` to position both classic `self.toolbar` (`self.toolbar.superview == self.view`)
+  and iOS 26's `FloatingBarContainerView` directly above `self.tabBarController.tabBar` when the
+  tab bar is visible, and `MADLabelStatus` provides `-intrinsicContentSize` (`230x44`) and
+  explicit width/height constraints so the 3-line status readout is not compressed inside the
+  floating toolbar pill.
+- **Test:** `MADDesignerUnitTests testTabBarAndViewerToolbarLayout`.
+
 ## Linux build
 
 ### `mad refresh` over MySQL aborted: a category is not a symbol, so the linker dropped it

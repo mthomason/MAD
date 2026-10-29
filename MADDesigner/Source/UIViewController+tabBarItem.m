@@ -32,8 +32,9 @@
 		if ([self.class conformsToProtocol:@protocol(MADTabBarImageProtocol)]) {
 			UIImage *image = [self.class TabBarImage];
 			if (image) {
-				tabBarItem.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-				tabBarItem.selectedImage = image;
+				UIImage *templateImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+				tabBarItem.image = templateImage;
+				tabBarItem.selectedImage = templateImage;
 			}
 		}
 		tabBarItem.title = self.title;

@@ -1114,7 +1114,7 @@ it skips rather than fails when no server is reachable.
 
 ## MAD Designer (app)
 
-Covered by the hosted `MADDesignerUnitTests` bundle (74 tests across
+Covered by the hosted `MADDesignerUnitTests` bundle (91 tests across
 `MADDesignerUnitTests.m`, `MADAppLogicTests.m`,
 `MADAppOperationConditionTests.m`, and `MADStatusLabelRefreshTests.m`). The bundle
 is hosted by `MAD Designer.app` (TEST_HOST/BUNDLE_LOADER), so it reaches the app's
@@ -1230,6 +1230,8 @@ bundle's header search path.
 - `MADDesignerViewController`: editing a dynamic label's field looked up the label by the field ID and anchored the popover at `CGRectZero`
 - `MADDesignerViewController -sectionForLabelTag:` and `-documentSectionViewWithIdentifier:` looked up the wrong section
 - `MADViewerController -showPrintDialog` inverted queue priority and `MADOperationLoadPrintPageRender -main` read an uninitialized `MADocument *` pointer
+- Unselected tab bar icons forced `UIImageRenderingModeAlwaysOriginal` on white PNG strokes, making them invisible in Light Mode and over white surfaces on Liquid Glass
+- `MADNavigationControllerViewer` and `MADNavigationControllerQueryBuilder` bottom toolbars overlapped the floating `UITabBar` on iOS 26 and squished `MADLabelStatus`
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 

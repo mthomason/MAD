@@ -88,7 +88,7 @@
 	
 	UIFont *tabFont = [UIFont systemFontOfSize:10 weight:UIFontWeightMedium];
 	NSDictionary *normalTextAttributes = @{
-		NSForegroundColorAttributeName: [UIColor secondaryLabelColor],
+		NSForegroundColorAttributeName: [UIColor labelColor],
 		NSFontAttributeName: tabFont
 	};
 	NSDictionary *selectedTextAttributes = @{
@@ -97,7 +97,7 @@
 	};
 	
 	[itemAppearance.normal setTitleTextAttributes:normalTextAttributes];
-	itemAppearance.normal.iconColor = [UIColor secondaryLabelColor];
+	itemAppearance.normal.iconColor = [UIColor labelColor];
 	
 	[itemAppearance.selected setTitleTextAttributes:selectedTextAttributes];
 	itemAppearance.selected.iconColor = [UIColor systemBlueColor];
@@ -107,9 +107,11 @@
 	tabBarAppearance.compactInlineLayoutAppearance = itemAppearance;
 	
 	tabBarController.tabBar.tintColor = [UIColor systemBlueColor];
-	tabBarController.tabBar.unselectedItemTintColor = [UIColor secondaryLabelColor];
+	tabBarController.tabBar.unselectedItemTintColor = [UIColor labelColor];
 	tabBarController.tabBar.standardAppearance = tabBarAppearance;
 	tabBarController.tabBar.scrollEdgeAppearance = tabBarAppearance;
+	[tabBarController.tabBar setNeedsLayout];
+	[tabBarController.view setNeedsLayout];
 }
 
 @end
