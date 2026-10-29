@@ -104,11 +104,13 @@ required checks are **Linux verification** and **DCO** — the job names in
 because a ruleset matches a check's context to its job name, not its
 workflow name.
 
-The flow:
+When the user asks to commit, push, or merge work, agents **must** follow this
+exact end-to-end sequence without needing the user to spell out each step:
 
-1. Work on a branch off `master`; commit there freely, each with
-   `git commit -s` (the DCO check fails the PR on any unsigned commit; to
-   sign an existing branch:
+1. **Create and work on a feature branch off `master`** (`git checkout -b <branch-name>`).
+   Never commit directly to `master`. Commit on the branch with `git commit -s`
+   so every commit carries a `Signed-off-by:` trailer (the DCO check fails the
+   PR on any unsigned commit; to sign an existing branch:
    `git rebase --exec 'git commit --amend --no-edit -s' <base>`).
 2. **Approval gate — push nothing until it passes.** Routine work (docs,
    comments, tests, small fixes whose behaviour existing tests pin) needs no
@@ -117,15 +119,24 @@ The flow:
    rewrites and renames, deletions — is described to the user and approved
    **in chat before the branch is pushed**. The repo is public: a pushed
    branch is visible to everyone.
-3. Push the branch, open the PR, and watch the checks:
-   `gh pr checks <n> --watch`, then merge with
-   `gh pr merge <n> --rebase --delete-branch` (the rebase merge keeps
-   `master` linear, and the local copies of the branch are deleted with the
-   remote).
-4. A merged push to `master` re-runs Linux verification and re-publishes
-   the `ghcr.io/mthomason/mad` image (`publish-image.yml`, `latest` + short
-   sha, amd64). The publication is automatic and public; the approval gate
-   covers it too.
+3. **Push the branch and open the PR against `master`:**
+   ```sh
+   git push -u origin <branch-name>
+   gh pr create --base master --head <branch-name> --title "<title>" --body "<summary>"
+   ```
+4. **Watch the required checks and rebase-merge once green:**
+   ```sh
+   gh pr checks <n> --watch
+   gh pr merge <n> --rebase --delete-branch
+   ```
+   The `--rebase` merge keeps `master` linear, and `--delete-branch` deletes
+   both the remote and local feature branch and switches the local checkout
+   back to `master`.
+5. **Post-merge verification on `master`:** A merged push to `master`
+   automatically re-runs **Linux verification** (`linux.yml`) and re-publishes
+   the `ghcr.io/mthomason/mad` container image (`publish-image.yml`, tagged
+   `latest` and `<short-sha>`, `linux/amd64`). The publication is automatic and
+   public; the approval gate covers it too.
 
 ## Testing
 

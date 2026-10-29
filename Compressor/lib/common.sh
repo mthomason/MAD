@@ -98,26 +98,45 @@ platform_install_dir() {
 	echo "${BUILD_DIR}/${LIB}/$1/install"
 }
 
-# fetch_source <url> <sha256|-> [basename]
+# fetch_source <urls> <sha256|-> [basename]
 #
 # Downloads the archive into the content-addressed media cache
 # (media/<sha256>-<basename>), verifies it, and extracts it into
-# build/<lib>/source.  With sha256 "-" the hash is computed and recorded in
-# RECORDED_SHA for pinning into matrix.conf, with a warning.
+# build/<lib>/source.  <urls> may be a single URL or a comma-separated list of
+# mirror URLs (primary,fallback) tried in order, with up to 3 attempts per URL.
+# With sha256 "-" the hash is computed and recorded in RECORDED_SHA for pinning
+# into matrix.conf, with a warning.
 fetch_source() {
-	local url="$1" sha="$2" basename="${3:-}"
-	basename="${basename:-$(basename "${url}")}"
+	local urls="$1" sha="$2" basename="${3:-}"
+	local first_url="${urls%%,*}"
+	basename="${basename:-$(basename "${first_url}")}"
 	local tmp="${MEDIA_DIR}/.tmp-${basename}"
 	local target="${MEDIA_DIR}/${sha}-${basename}"
 	local srcroot="${BUILD_DIR}/${LIB}/source"
+	local url_list candidate_url attempt actual
 
 	mkdir -p "${MEDIA_DIR}"
+	IFS=',' read -ra url_list <<< "${urls}"
 
 	if [[ "${sha}" == "-" ]]; then
 		if [[ ! -f "${MEDIA_DIR}/unpinned-${basename}" ]]; then
-			log "downloading ${url}"
-			curl -fsSL -o "${MEDIA_DIR}/unpinned-${basename}" "${url}" \
-				|| die "download failed: ${url} (first build needs network access; see docs/project/DEVELOPER.md)"
+			for candidate_url in "${url_list[@]}"; do
+				for attempt in 1 2 3; do
+					rm -f "${tmp}"
+					log "downloading ${candidate_url} (attempt ${attempt}/3)"
+					if curl -fsSL --connect-timeout 20 --max-time 300 --retry 2 --retry-delay 2 -o "${tmp}" "${candidate_url}"; then
+						mv "${tmp}" "${MEDIA_DIR}/unpinned-${basename}"
+						break 2
+					fi
+					log "download failed for ${candidate_url} (attempt ${attempt}/3)"
+					rm -f "${tmp}"
+					if [[ "${attempt}" -lt 3 ]]; then
+						sleep 3
+					fi
+				done
+			done
+			[[ -f "${MEDIA_DIR}/unpinned-${basename}" ]] \
+				|| die "download failed for ${basename} from: ${urls} (first build needs network access; see docs/project/DEVELOPER.md)"
 		fi
 		RECORDED_SHA="$(shasum -a 256 "${MEDIA_DIR}/unpinned-${basename}" | awk '{print $1}')"
 		log "WARNING: no sha256 pinned for ${basename}; computed ${RECORDED_SHA}"
@@ -125,14 +144,31 @@ fetch_source() {
 		target="${MEDIA_DIR}/unpinned-${basename}"
 	else
 		if [[ ! -f "${target}" ]]; then
-			log "downloading ${url}"
-			curl -fsSL -o "${tmp}" "${url}" \
-				|| die "download failed: ${url} (first build needs network access; see docs/project/DEVELOPER.md)"
-			local actual
-			actual="$(shasum -a 256 "${tmp}" | awk '{print $1}')"
-			[[ "${actual}" == "${sha}" ]] \
-				|| die "sha256 mismatch for ${basename}: expected ${sha}, got ${actual}"
-			mv "${tmp}" "${target}"
+			for candidate_url in "${url_list[@]}"; do
+				for attempt in 1 2 3; do
+					rm -f "${tmp}"
+					log "downloading ${candidate_url} (attempt ${attempt}/3)"
+					if curl -fsSL --connect-timeout 20 --max-time 300 --retry 2 --retry-delay 2 -o "${tmp}" "${candidate_url}"; then
+						actual="$(shasum -a 256 "${tmp}" | awk '{print $1}')"
+						if [[ "${actual}" == "${sha}" ]]; then
+							mv "${tmp}" "${target}"
+							break 2
+						fi
+						log "sha256 mismatch for ${candidate_url} (attempt ${attempt}/3): expected ${sha}, got ${actual}"
+					else
+						log "download failed for ${candidate_url} (attempt ${attempt}/3)"
+					fi
+					rm -f "${tmp}"
+					if [[ "${attempt}" -lt 3 ]]; then
+						sleep 3
+					fi
+				done
+				if [[ "${#url_list[@]}" -gt 1 ]]; then
+					log "trying next mirror for ${basename}"
+				fi
+			done
+			[[ -f "${target}" ]] \
+				|| die "failed to download and verify ${basename} (expected ${sha}) from: ${urls}"
 		fi
 	fi
 

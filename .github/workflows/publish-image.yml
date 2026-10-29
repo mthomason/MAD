@@ -42,13 +42,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Compute short SHA tag
+        id: vars
+        run: echo "short_sha=${GITHUB_SHA::8}" >> "$GITHUB_OUTPUT"
+
       - name: Build the runtime stage and push it to GHCR
-        run: |
-          docker buildx build -f Linux/Dockerfile --target runtime \
-            --platform linux/amd64 \
-            --provenance=false \
-            -t ghcr.io/mthomason/mad:latest \
-            -t "ghcr.io/mthomason/mad:${GITHUB_SHA::8}" \
-            --cache-from type=gha,scope=mad-linux \
-            --cache-to type=gha,mode=max,scope=mad-linux \
-            --push .
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Linux/Dockerfile
+          target: runtime
+          platforms: linux/amd64
+          provenance: false
+          tags: |
+            ghcr.io/mthomason/mad:latest
+            ghcr.io/mthomason/mad:${{ steps.vars.outputs.short_sha }}
+          cache-from: type=gha,scope=mad-linux
+          cache-to: type=gha,mode=max,scope=mad-linux
+          push: true
