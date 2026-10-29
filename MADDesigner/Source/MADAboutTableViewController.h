@@ -13,6 +13,12 @@
 
 @protocol MADViewControllerStandardProtocol;
 
+@interface MADAcknowledgementsViewController : UIViewController
+
++ (NSAttributedString *)acknowledgementsAttributedText;
+
+@end
+
 @interface MADAboutTableViewController : UITableViewController
 
 @property (nonatomic, weak) IBOutlet id <MADViewControllerStandardProtocol, UITableViewDelegate> delegate;

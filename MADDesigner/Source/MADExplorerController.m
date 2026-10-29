@@ -1052,6 +1052,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		popoverPresentationController.delegate = nil;
 	}
 	_aboutViewControllerOnScreen = NO;
+	_infoControllerOnScreen = NO;
 }
 
 #pragma mark -

@@ -229,17 +229,15 @@ repository": we are not committing their code, only the notices we are obliged t
 redistribute. Add a short `README` saying why the directory exists, so a future
 cleanup does not remove it.
 
-**C2. An Acknowledgements surface in the app.** The natural home is the existing
-About screen (`MADDesigner/Source/MADAboutTableViewController.m`, currently six
-rows) — add a seventh row pushing a text view rendering the notices. The draft
-text is in `THIRD_PARTY_LICENSES.md` §7 and is ready to use.
+**C2. An Acknowledgements surface in the app.** **Done 2026-10-28.** The About
+screen (`MADDesigner/Source/MADAboutTableViewController.m`) carries an
+**Acknowledgements** row that pushes `MADAcknowledgementsViewController`,
+rendering the component notices and the bundled licence texts.
 
-**C3. Bundle the texts.** Copy `ThirdParty/Licenses/` into the app's resources so
-the license texts travel with the binary, which is what Apache-2.0 §4(a) and the
-BSD conditions actually require.
-
-Hold C2 until Workstream A's decision is settled: the notice text differs
-depending on whether MySQL is replaced, licensed, or dropped.
+**C3. Bundle the texts.** **Done 2026-10-28.** `ThirdParty/Licenses/` is copied
+into the `MAD Designer` and `MAD Viewer` app bundles as `Licenses/` so the
+licence texts travel with the binary, which is what Apache-2.0 §4(a) and the
+BSD conditions require.
 
 ---
 
@@ -287,7 +285,7 @@ Neither blocks anything else.
 | 6 | Rewrite the Objective-C layer (A3) | step 4 |
 | 7 | Live-test against the local server, including `caching_sha2_password` (A4) | steps 5, 6 |
 | 8 | Retire mysqlclient (A5) | step 7 |
-| 9 | Acknowledgements screen and bundled texts (C2, C3) | step 8 |
+| 9 | ~~Acknowledgements screen and bundled texts (C2, C3)~~ | **done 2026-10-28** |
 | 10 | Relink kit and written offer (B5) | steps 2, 9 |
 | 11 | ~~Rewrite `NSOperation+Advanced` and `NSData+AES256` (D)~~ | done 2026-10-24 |
 | 12 | Fonts: OFL text, Larabie readme (E) | — |

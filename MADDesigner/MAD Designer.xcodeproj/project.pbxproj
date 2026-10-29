@@ -79,6 +79,8 @@
 		4C3F000E2EA000010000000E /* MADExplorerController+DocumentActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F000D2EA000010000000D /* MADExplorerController+DocumentActions.m */; };
 		4C3F00122EA0000100000012 /* MADQueryViewController+BuilderDelegates.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F00112EA0000100000011 /* MADQueryViewController+BuilderDelegates.m */; };
 		4C3F00162EA0000100000016 /* MADViewerController+PrintingAndExport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3F00152EA0000100000015 /* MADViewerController+PrintingAndExport.m */; };
+		4C3F002A2EA000010000002A /* Licenses in Resources */ = {isa = PBXBuildFile; fileRef = 4C3F00292EA0000100000029 /* Licenses */; };
+		4C3F002B2EA000010000002B /* Licenses in Resources */ = {isa = PBXBuildFile; fileRef = 4C3F00292EA0000100000029 /* Licenses */; };
 		4C26B9FD1BAF14A500456DC8 /* MADDesignerSectionBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9EF1BAF14A500456DC8 /* MADDesignerSectionBackground.m */; };
 		4C26B9FE1BAF14A500456DC8 /* MADDesignerSectionControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F11BAF14A500456DC8 /* MADDesignerSectionControl.m */; };
 		4C26BA001BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C26B9F51BAF14A500456DC8 /* MADDesignerSectionLayoutLine.m */; };
@@ -519,6 +521,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C3F00292EA0000100000029 /* Licenses */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Licenses; path = ../ThirdParty/Licenses; sourceTree = SOURCE_ROOT; };
 		A7F684831529DE32DF20727B /* MAD_STRATEGY.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = MAD_STRATEGY.md; path = ../docs/project/MAD_STRATEGY.md; sourceTree = SOURCE_ROOT; };
 		4CDEAD0000000000000000A1 /* MADStoreConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADStoreConverter.h; sourceTree = "<group>"; };
 		4CDEAD0000000000000000A2 /* MADStoreConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADStoreConverter.m; sourceTree = "<group>"; };
@@ -2016,6 +2019,7 @@
 		4C384E1914B29789007B4F48 = {
 			isa = PBXGroup;
 			children = (
+				4C3F00292EA0000100000029 /* Licenses */,
 				A7F684831529DE32DF20727B /* MAD_STRATEGY.md */,
 				4C63B02E306AB71200FE4ECE /* MAD DesignerDebug.entitlements */,
 				4C296A7B2EA4CEF6007DB66E /* Resources */,
@@ -2387,6 +2391,7 @@
 				4CD2FAA017F351A20015458B /* AppleIncRootCertificate.cer in Resources */,
 				4CD52A4B178A643900FC5D1C /* UIImageExportTypeSqlServer.png in Resources */,
 				4C3F00272EA0000100000027 /* LaunchScreen.storyboard in Resources */,
+				4C3F002B2EA000010000002B /* Licenses in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2394,6 +2399,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C3F002A2EA000010000002A /* Licenses in Resources */,
 				4CC3D72B1BCB6D9500BDA5D3 /* MADIcon320x320.png in Resources */,
 				4CC3D7601BCB6D9500BDA5D3 /* MADInfinity64@2x.png in Resources */,
 				4C8DE2861BAFB11800AD1111 /* MADCreateDocument.storyboard in Resources */,

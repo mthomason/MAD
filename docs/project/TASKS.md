@@ -487,16 +487,17 @@ covers the conversion of the two shipping samples and the existing user reports.
 ## 10. Third-party licence compliance
 
 **Status:** Open — prompt 2 of the open-source launch (MariaDB Connector/C swap)
-landed 2026-10-24, and the GHCR-publish prompt closed the container-image flag
-2026-10-26 (below); what remains is mechanical (the in-app Acknowledgements
-surface, plan C2, and the relink-kit script, plan §9.3 — both deferred by
-decisions already made). The register is `THIRD_PARTY_LICENSES.md` and the plan
-is `LICENSE_COMPLIANCE_PLAN.md`; read those first, this entry is only the
-queue. Done: the miniz copyright headers were corrected (2026-10-04); prompt 1
-landed 2026-10-24 (the two unlicensed rewrites — `NSOperation+CompletionBlock`
-and `NSData+AES256` with golden-vector-pinned ciphertext — the FreeTDS LGPL
-obligations with LGPL-3.0 elected, the MIT relicensing, and
-`ThirdParty/Licenses/`); prompt 2 landed 2026-10-24 (below).
+landed 2026-10-24, the GHCR-publish prompt closed the container-image flag
+2026-10-26 (below), and the in-app Acknowledgements surface + bundled licence
+texts (plan C2, C3) landed 2026-10-28; what remains is the relink-kit script
+(plan §9.3, deferred by owner decision). The register is
+`THIRD_PARTY_LICENSES.md` and the plan is `LICENSE_COMPLIANCE_PLAN.md`; read
+those first, this entry is only the queue. Done: the miniz copyright headers
+were corrected (2026-10-04); prompt 1 landed 2026-10-24 (the two unlicensed
+rewrites — `NSOperation+CompletionBlock` and `NSData+AES256` with
+golden-vector-pinned ciphertext — the FreeTDS LGPL obligations with LGPL-3.0
+elected, the MIT relicensing, and `ThirdParty/Licenses/`); prompt 2 landed
+2026-10-24 (below); C2/C3 landed 2026-10-28.
 
 The review found one blocker, three components with no licence grant at all, and a set of
 notice obligations the app does not currently meet (it ships no attributions).
@@ -550,9 +551,10 @@ LGPL-3.0 elected and recorded (it links OpenSSL 3, and Apache-2.0 is not compati
 with the v2 terms), the modified `sybdb.h` now carries its notice from the recipe,
 and the written relink offer is in `ThirdParty/Licenses/README.md` (the kit script
 is deferred by the owner's decision, plan §9.3). The OFL text for FontAwesome and
-the Larabie readme for CarbonBlock are committed. Still open: the in-app
-Acknowledgements surface (plan C2, held until D1) and the relink-kit script. The
-miniz headers were corrected on 2026-10-04.
+the Larabie readme for CarbonBlock are committed. The in-app Acknowledgements
+surface and bundled `ThirdParty/Licenses/` resource directory (plan C2, C3)
+landed 2026-10-28 in `MADAboutTableViewController`. Still open: the relink-kit
+script. The miniz headers were corrected on 2026-10-04.
 
 **Linux toolchain, flagged 2026-10-06 (see §11) — resolved 2026-10-26.** The
 Phase B image builds on

@@ -76,10 +76,11 @@ The link model matters for which obligations attach, so it is worth stating once
   ships.** At runtime the app links only Apple libraries (`libc++`, `libxml2`,
   `liblzma`, `libiconv`, `libobjc`, `libSystem`).
 * Consequence: every third-party library above is **statically linked into a
-  binary we distribute**, and there is **no third-party attribution surface in the
-  app at all** — the About screen
-  (`MADDesigner/Source/MADAboutTableViewController.m`, 6 rows) is entirely
-  first-party, and no `Acknowledgements` file exists in the repo or the bundle.
+  binary we distribute**. **Resolved 2026-10-28 (plan C2, C3):** the About
+  screen (`MADDesigner/Source/MADAboutTableViewController.m`) pushes an
+  `Acknowledgements` view controller (`MADAcknowledgementsViewController`) that
+  renders the component notices and the full licence texts bundled in
+  `ThirdParty/Licenses/` (`Licenses/` in the app bundle).
 
 ---
 
@@ -347,12 +348,14 @@ them if the repository is ever made public.*
 
 ## 5. The gaps, stated plainly
 
-1. The app ships **no third-party notices at all**, while shipping code whose
+1. ~~The app ships **no third-party notices at all**, while shipping code whose
    licenses require them (libarchive BSD-2, zint BSD-3, OpenSSL Apache-2.0, asn1c
    BSD, rwpng BSD-2, PostgreSQL libpq PostgreSQL License, FreeTDS LGPL, MariaDB
-   Connector/C LGPL). **The repository now carries the notices**
-   (`NOTICE`, `ThirdParty/Licenses/`, 2026-10-24); the in-app Acknowledgements
-   screen remains open (plan C2, after the MariaDB decision).
+   Connector/C LGPL).~~ **Fixed 2026-10-24 (repository) and 2026-10-28 (in-app,
+   plan C2/C3):** the repository carries `NOTICE` and `ThirdParty/Licenses/`,
+   the app targets bundle `ThirdParty/Licenses/` as `Licenses/`, and the About
+   screen's **Acknowledgements** row renders the notices and bundled licence
+   texts.
 2. ~~**No license texts are committed anywhere.**~~ **Fixed 2026-10-24:**
    `ThirdParty/Licenses/` holds every text from §7's table. `Compressor`
    deliberately commits nothing third-party, and that is the right default for
@@ -393,9 +396,12 @@ them if the repository is ever made public.*
 
 **P1 — compliance, should be done before shipping**
 
-4. Add a third-party notices surface to the app (About → Acknowledgements is the
-   natural home) and commit the license texts it displays. Draft text in §7.
-   **Open — plan C2, held until the MariaDB decision.**
+4. ~~Add a third-party notices surface to the app (About → Acknowledgements is the
+   natural home) and commit the license texts it displays. Draft text in §7.~~
+   **Done 2026-10-28 (plan C2, C3):** `MADAboutTableViewController` includes an
+   **Acknowledgements** row pushing `MADAcknowledgementsViewController`, and
+   `ThirdParty/Licenses/` is bundled in the `MAD Designer` and `MAD Viewer` app
+   resources.
 5. FreeTDS: add the LGPL notice and license text; mark the modified `sybdb.h`;
    elect LGPL-3.0 and record why; write the relink offer and make the build able
    to produce the corresponding object files. **Mostly done 2026-10-24: the
@@ -446,11 +452,25 @@ which case add the GPLv2 text and a written offer of the corresponding source.
 > Portions © 1994 The Regents of the University of California. Provided under the
 > PostgreSQL Licence.
 >
+> **MariaDB Connector/C** — © MariaDB Corporation Ab and contributors. This
+> library is free software; you can redistribute it and/or modify it under the
+> terms of the GNU Lesser General Public License as published by the Free
+> Software Foundation, either version 3 of the Licence, or (at your option) any
+> later version. A copy of the licence is included below, and the complete
+> corresponding source is available at <https://mariadb.org>. **To exercise your
+> right to relink this application against a modified MariaDB Connector/C,
+> contact mthomason@gmail.com to receive the object files and build materials
+> needed to do so (available for at least three years from the last distribution
+> of the application).**
+>
 > **asn1c runtime** — © 2004, 2006 Lev Walkin. Redistribution and modification
 > permitted subject to the BSD licence.
 >
 > **pngquant `rwpng`** — © 1998–2000 Greg Roelofs, © 2009–2014 Kornel Lesiński.
 > Provided under the BSD 2-Clause licence.
+>
+> **NSData+Base64** — © 2009–2011 Matt Gallagher. Provided under a permissive
+> licence with copyright notice retained.
 >
 > **miniz** — Rich Geldreich. Released into the public domain (Unlicense).
 >
@@ -458,10 +478,13 @@ which case add the GPLv2 text and a written offer of the corresponding source.
 > This library is free software; you can redistribute it and/or modify it under
 > the terms of the GNU Lesser General Public License as published by the Free
 > Software Foundation, either version 3 of the Licence, or (at your option) any
-> later version. A copy of the licence and the complete corresponding source for
-> FreeTDS are available at <https://www.freetds.org>. **To exercise your right to
-> relink this application against a modified FreeTDS, contact [address] to
-> receive the object files and build materials needed to do so.**
+> later version. One installed header (`sybdb.h`) is modified as marked in the
+> file. A copy of the licence is included below, and the complete corresponding
+> source for FreeTDS is available at <https://www.freetds.org>. **To exercise
+> your right to relink this application against a modified FreeTDS, contact
+> mthomason@gmail.com to receive the object files and build materials needed to
+> do so (available for at least three years from the last distribution of the
+> application).**
 >
 > **Font Awesome** — © Dave Gandy. The font is provided under the SIL Open Font
 > Licence 1.1.
