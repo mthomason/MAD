@@ -9,6 +9,8 @@
 #ifndef Reports_UIImage__MADDocument_h
 #define Reports_UIImage__MADDocument_h
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIImage.h>
 
 @class MADocument, MADPrintPageRenderer;
@@ -16,5 +18,6 @@
 @interface MADImageThumbnail : UIImage
 + (instancetype)newImageThumbnailWithRenderer:(MADPrintPageRenderer *)printPageRenderer;
 @end
+#endif
 
 #endif

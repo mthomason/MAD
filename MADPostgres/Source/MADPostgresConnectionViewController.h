@@ -9,10 +9,14 @@
 #ifndef MADPostgresConnectionViewController_h
 #define MADPostgresConnectionViewController_h
 
+#include <TargetConditionals.h>
+
+#if TARGET_OS_IPHONE
 #import <MADAPI/MADConnectionSQLGenericViewController.h>
 
 @interface MADPostgresConnectionViewController : MADConnectionSQLGenericViewController
 
 @end
+#endif
 
 #endif /* MADPostgresConnectionViewController_h */

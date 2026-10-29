@@ -145,6 +145,29 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### `MADDesignerLayout` multi-selection undo clobbers per-element previous values with a single scalar
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MAD/Source/MADDesignerLayout.m:157-555` (`-updateElements:setFontsize:`,
+  `-updateElements:setFontname:`, `-updateElements:setVerticalAlignment:`,
+  `-updateElements:setHorizontalAlignment:`, `-updateElements:setSizeWidth:`,
+  `-updateElements:setSizeHeight:`, and the `-updateElements:setMargin*`,
+  `-updateElements:setPadding*`, and `-updateElements:setBorder*` methods).
+- **Behavior:** Each bulk-update method loops over `identifiers`, overwrites a single
+  local `previous` scalar (`previous = element.fontsize;`, etc.), and then registers a
+  single undo block that applies that one `previous` value back to all `elementIDs`.
+  `-updateElements:setFontname:` (`:184`) captures only the *first* element's font name
+  (`if (previous == nil) previous = element.fontname.copy;`), whereas all the numeric/enum
+  setters capture only the *last* element's value (or `0.0` if `identifiers` is empty).
+- **Why it matters:** When a user selects two or more report elements that have different
+  sizes, fonts, alignments, margins, paddings, or borders and changes one property,
+  pressing Undo overwrites every selected element with one element's old value instead of
+  restoring each element's own prior state.
+- **Now:** `MADDesignerLayout` records each element's prior value in a dictionary keyed by
+  element identifier before applying the new value, and the undo/redo handler restores
+  each element's individual value while recording the inverse dictionary on the opposite
+  stack.
+- **Test:** `MADDesignerViewerTests testDesignerLayoutMultiSelectionUndoRestoresPerElementValues`.
+
 ### `MADSQLParser` rejects schema-qualified table names (`schema.table`) in `FROM`, `JOIN`, and three-part column references
 - **Status:** Fixed 2026-10-28.
 - **Where:** `MAD/Source/sql/MADSQLParser.m:242-267` (`-parseSelectItemReturningError:`),
@@ -1352,6 +1375,63 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MADFoundation
 
+### `MADURLFactory +newURLForLocalApplicationSupportDirectory` threw `NSInvalidArgumentException` without a bundle identifier, and `+groupRootURLForIdentifier:` targeted `~/Library/Group Containers` on macOS
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MADFoundation/Source/MADURLFactory.m:190` (`+groupRootURLForIdentifier:`)
+  and `:302-310` (`+newURLForLocalApplicationSupportDirectory`).
+- **Behavior:** Two related issues surfaced when running `MADFoundationTests` and
+  `MADTests` on native macOS:
+  1. `+newURLForLocalApplicationSupportDirectory` passed
+     `[[NSBundle mainBundle] bundleIdentifier]` directly to
+     `[appSupportDirectory URLByAppendingPathComponent:bundleIdentifier]`. In an
+     unbundled test host or command-line runner where `bundleIdentifier` is `nil`,
+     Apple Foundation threw `NSInvalidArgumentException` (`pathComponent` cannot be nil).
+  2. `+groupRootURLForIdentifier:` used `#if __APPLE__` around
+     `[[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:]`.
+     On macOS 15+, that method returns `~/Library/Group Containers/<groupID>` even for an
+     unentitled process, and creating directories inside `~/Library/Group Containers/`
+     triggers a blocking macOS TCC modal dialog (`mkdirat` blocks waiting for user
+     approval).
+- **Now:** `+newURLForLocalApplicationSupportDirectory` falls back to
+  `[MADApplication groupIdentifier]` when `bundleIdentifier.length == 0`, and
+  `+groupRootURLForIdentifier:` guards the App Group container lookup with
+  `#if defined(__APPLE__) && TARGET_OS_IPHONE` so macOS uses the standard per-user
+  `~/Library/Application Support`, `~/Documents`, and `~/Library/Caches` directories.
+- **Test:** `MADURLFactoryTests testLocalApplicationSupportDirectoryIncludesBundleIdentifier`
+  and `testApplicationDirectoryFallsBackToUserDirectoriesWhenGroupContainerIsUnavailable`.
+
+### `MADDataTable -cacheWithUrl:error:` passed `NSDataWritingFileProtectionCompleteUnlessOpen` on macOS, failing unentitled cache writes
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MADFoundation/Source/MADDataTable.m:218`.
+- **Behavior:** `-cacheWithUrl:error:` called
+  `[plistData writeToURL:url options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&writeError]`.
+  On macOS without a Data Protection entitlement, `NSDataWritingFileProtectionCompleteUnlessOpen`
+  causes `writeToURL:options:error:` to fail, breaking `MADDataTableVirtual` disk cache
+  writes.
+- **Now:** `NSDataWritingFileProtectionCompleteUnlessOpen` is guarded with
+  `#if defined(__APPLE__) && TARGET_OS_IPHONE`, while `NSDataWritingAtomic` is used on
+  macOS and Linux.
+- **Test:** `MADDataTableRegressionTests testVirtualTableCacheAndReloadFromDisk`.
+
+### `MADKeyChain` leaks every `CFDataRef` returned by `SecItemCopyMatching` in existence checks and mutating helpers
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MADFoundation/Source/MADKeyChain.m:155-159` (`+credentialsExist:`),
+  `:204-205` (`+saveToken:forKey:withDescription:`), `:221-223` (`+deleteKey:`), and
+  `:235-247` (`+deleteSavedPasswordForKey:error:`).
+- **Behavior:** All four methods construct a keychain query containing
+  `(__bridge id)kSecReturnData : @YES` and pass `(CFTypeRef *)&query...Data` to
+  `SecItemCopyMatching`. When an item exists (`errSecSuccess`), Security allocates and
+  returns a `+1`-retained `CFDataRef` holding the decrypted secret bytes. None of the
+  four methods ever reads that `CFDataRef` or calls `CFRelease` on it.
+- **Why it matters:** Every call to `+credentialsExist:`, `+saveToken:forKey:withDescription:`,
+  `+deleteKey:`, or `+deleteSavedPasswordForKey:error:` against an existing keychain entry
+  leaks a `CFDataRef` containing plaintext credential bytes on the process heap.
+- **Now:** `+saveToken:forKey:withDescription:` omits `kSecReturnData` and passes `NULL`
+  as the result pointer to `SecItemCopyMatching`, and `+credentialsExist:`, `+deleteKey:`,
+  and `+deleteSavedPasswordForKey:error:` release any non-NULL `CFDataRef` returned by
+  `SecItemCopyMatching`.
+- **Test:** `MADKeyChainTests testSaveCheckAndDeleteCredentialsRoundTrip`.
+
 ### MADDataTable's cache loader dereferenced a null error pointer
 - **Status:** Fixed
 - **Now:** both writes to `outError` in `-loadFromCacheWithUrl:error:` are guarded with
@@ -1575,6 +1655,22 @@ reference to "BUGS.md, the X entry" still lands.
 - **Test:** `MADExplorerTests -testSamePathRewriteReloadsTheImage` (`0.225s`).
 
 ## MADSqlite3
+
+### `MADDatabaseSqlite3` called `-endBulkInsert` unconditionally on zero-row `SELECT`s, raising `cannot commit - no transaction is active`
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MADSqlite3/Source/MADDatabaseSqlite3.m:545-605`
+  (`-executeSQL:fieldKeys:onConnection:intoResultTable:transactionSet:returnsResults:binaryBindings:withError:`).
+- **Behavior:** Inside the `if (returnsResults && dataTable != nil)` block,
+  `[dataTable beginBulkInsert]` is called inside `if (rowCounter == 0)` on the first
+  iteration of `while (sqlite3_step(statement) == SQLITE_ROW)` (`:583`), whereas
+  `[dataTable endBulkInsert]` was called unconditionally after the `while` loop (`:603`).
+  When a `SELECT` query returned 0 rows (`sqlite3_step` returned `SQLITE_DONE` on the
+  first step), `rowCounter` stayed 0, `[dataTable beginBulkInsert]` was never called, and
+  `[dataTable endBulkInsert]` executed `COMMIT TRANSACTION;` on `_databaseForInserts` when
+  no transaction was active, tripping `NSAssert` (`cannot commit - no transaction is active`).
+- **Now:** `[dataTable endBulkInsert]` is guarded with `if (rowCounter > 0)` so it is
+  only called when `[dataTable beginBulkInsert]` was entered.
+- **Test:** `MADDatabaseSqlite3DatabaseTests testDriverZeroRowSelectDoesNotCallUnpairedEndBulkInsert`.
 
 ### The cache's ORDER BY ignores column types, so text keys sort binary
 - **Status:** Fixed 2026-10-18 (commit `483a77259`).
@@ -1947,6 +2043,25 @@ reference to "BUGS.md, the X entry" still lands.
   the cross-platform gate for the libc call.
 
 ## MADBarcodes
+
+### `MADBarcode -drawInRect:` doubles `rect.origin` when `self.center` is `YES`
+- **Status:** Fixed 2026-10-29.
+- **Where:** `MADBarcodes/MADBarcodes/MADBarcodes/MADBarcode.m:566-571`
+- **Behavior:** `-drawInRect:` initializes `CGFloat x = rect.origin.x;` and
+  `CGFloat y = rect.origin.y;`, and then inside `if (self.center)` executes:
+  ```objc
+  x += CGRectGetMidX(rect) - (bitmapWidth * skewValue) / 2.0000f;
+  y += CGRectGetMidY(rect) - (bitmapHeight * skewValue) / 2.0000f;
+  ```
+  Because `CGRectGetMidX(rect)` is `rect.origin.x + rect.size.width / 2.0`, using `+=`
+  instead of `=` adds `rect.origin.x` and `rect.origin.y` a second time.
+- **Why it matters:** Whenever `self.center` is `YES` and `rect.origin` is non-zero (for
+  example, drawing a centered barcode directly into a page context at an element's frame
+  rather than into a zero-origin bounds rect), the barcode is shifted right by an extra
+  `rect.origin.x` and down by an extra `rect.origin.y`, drawing outside `rect`.
+- **Now:** the centered branch assigns `x = CGRectGetMidX(rect) - ...` and
+  `y = CGRectGetMidY(rect) - ...` directly.
+- **Test:** `MADBarcodeTests testCenteredDrawWithNonZeroOriginPaintsInsideTargetRect`.
 
 ### MADBarcode's type-name dictionary has a duplicate key
 - **Status:** Fixed 2026-10-20.

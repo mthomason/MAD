@@ -67,7 +67,12 @@
 // create path, and there is no such archive to hand it.  So this double answers those four
 // from the in-memory stack the test builds.  The original test cast a plain RptqDocument to
 // MADocument *, which is not a MADocument at all -- hence the unrecognized -filename.
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 @interface MADTestReportFormatterDocument : MADocument
+#else
+@interface MADTestReportFormatterDocument : MADHeadlessDocument
+#endif
 
 @property (nonatomic, strong) RptqStoreContext *testStoreContext;
 @property (nonatomic, strong) RptqDocument *testActiveDocumentModel;
@@ -84,6 +89,9 @@
 @end
 
 @implementation MADTestReportFormatterDocument
+#if !TARGET_OS_IPHONE
+@synthesize dataTable = _overrideDataTable;
+#endif
 
 - (RptqStoreContext *)storeContext { return self.testStoreContext; }
 - (RptqDocument *)activeDocumentModel { return self.testActiveDocumentModel; }

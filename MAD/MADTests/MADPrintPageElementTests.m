@@ -26,12 +26,19 @@
 //  off the definition.
 //
 
+#include <TargetConditionals.h>
 #import <XCTest/XCTest.h>
 
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+typedef NSFont MADElementTestFont;
+#else
 #import <UIKit/UIFont.h>
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/NSAttributedString.h>
+typedef UIFont MADElementTestFont;
+#endif
 #import <CoreGraphics/CGContext.h>
 #import <CoreGraphics/CGImage.h>
 
@@ -176,7 +183,7 @@
 
 @property (nonatomic, assign) MADPrintPageElementType testType;
 @property (nonatomic, copy) NSString *text;
-@property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) MADReferenceImage *image;
 @property (nonatomic, copy) NSString *fieldKey;
 @property (nonatomic, strong) NSObject <MADPrintPageRendererDataSourceProtocol> *testDatasource;
 @property (nonatomic, assign) BOOL calculateInMemory;
@@ -262,7 +269,7 @@
 
 - (NSDictionary <NSString *, id> *)fontAttributes:(MADDocumentObjectDataReference *)dataRef {
 	if (self.testFontAttributes == nil) {
-		self.testFontAttributes = @{ NSFontAttributeName : [UIFont systemFontOfSize: 12.0] };
+		self.testFontAttributes = @{ NSFontAttributeName : [MADElementTestFont systemFontOfSize: 12.0] };
 	}
 	return self.testFontAttributes;
 }
@@ -284,8 +291,12 @@
 // The two images are the same picture when both redraw to the same pixels in one
 // common format.  PNG bytes are not stable across a decode/re-encode, so comparing
 // the encodings would fail on the encoding, not the picture.
-- (NSData *)redrawnPixelsOfImage:(UIImage *)image {
+- (NSData *)redrawnPixelsOfImage:(MADReferenceImage *)image {
+#if TARGET_OS_OSX
+	CGImageRef cgImage = [image CGImageForProposedRect:NULL context:nil hints:nil];
+#else
 	CGImageRef cgImage = image.CGImage;
+#endif
 	if (!cgImage) return nil;
 	size_t width = CGImageGetWidth(cgImage), height = CGImageGetHeight(cgImage);
 	if (width == 0 || height == 0) return nil;
@@ -348,12 +359,20 @@
 	MADPrintPageElementText *element = [[MADPrintPageElementText alloc] initWithDefinition:definition];
 	element.text = @"Hello";
 
+#if TARGET_OS_OSX
+	NSImage *canvas = [[NSImage alloc] initWithSize:NSMakeSize(60.0, 20.0)];
+	[canvas lockFocus];
+	[element drawInRect:CGRectMake(0.0, 0.0, 60.0, 20.0)];
+	[canvas unlockFocus];
+	XCTAssertNotNil(canvas);
+#else
 	UIGraphicsBeginImageContextWithOptions(CGSizeMake(60.0, 20.0), NO, 1.0);
 	[element drawInRect:CGRectMake(0.0, 0.0, 60.0, 20.0)];
 	UIImage *canvas = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 
 	XCTAssertNotNil(canvas);
+#endif
 }
 
 #pragma mark - MADPrintPageElementTextStatic
@@ -387,12 +406,20 @@
 	MADDocumentObjectDataReference *reference = [self referenceForElement:label dataSource:nil];
 	MADPrintPageElement *element = [MADPrintPageElement newDocumentObject:reference];
 
+#if TARGET_OS_OSX
+	NSImage *canvas = [[NSImage alloc] initWithSize:NSMakeSize(60.0, 20.0)];
+	[canvas lockFocus];
+	[element drawInRect:CGRectMake(0.0, 0.0, 60.0, 20.0)];
+	[canvas unlockFocus];
+	XCTAssertNotNil(canvas);
+#else
 	UIGraphicsBeginImageContextWithOptions(CGSizeMake(60.0, 20.0), NO, 1.0);
 	[element drawInRect:CGRectMake(0.0, 0.0, 60.0, 20.0)];
 	UIImage *canvas = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 
 	XCTAssertNotNil(canvas);
+#endif
 }
 
 #pragma mark - MADPrintPageElementTextDynamic
@@ -449,9 +476,24 @@
 - (void)testImageElementAdoptsTheDefinitionImage {
 	RptqStoreContext *context = [self inMemoryContext];
 
+#if TARGET_OS_OSX
+	NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+																	pixelsWide:2
+																	pixelsHigh:2
+																 bitsPerSample:8
+															   samplesPerPixel:4
+																	  hasAlpha:YES
+																	  isPlanar:NO
+																colorSpaceName:NSCalibratedRGBColorSpace
+																   bytesPerRow:8
+																  bitsPerPixel:32];
+	NSImage *image = [[NSImage alloc] initWithSize:NSMakeSize(2.0, 2.0)];
+	[image addRepresentation:rep];
+#else
 	UIGraphicsBeginImageContextWithOptions(CGSizeMake(2.0, 2.0), NO, 1.0);
 	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
+#endif
 	XCTAssertNotNil(image);
 
 	RptqDocumentElementImage *element;
@@ -467,13 +509,20 @@
 	// The element adopts the definition's picture.  The image reaches it through the
 	// store's PNG wire format, so it is the same picture, not the same object.
 	id adopted = [drawingObject valueForKey:@"image"];
-	XCTAssertTrue([adopted isKindOfClass:[UIImage class]]);
-	XCTAssertTrue(CGSizeEqualToSize(((UIImage *)adopted).size, image.size));
+	XCTAssertTrue([adopted isKindOfClass:[MADReferenceImage class]]);
+	XCTAssertTrue(CGSizeEqualToSize(((MADReferenceImage *)adopted).size, image.size));
 	XCTAssertEqualObjects([self redrawnPixelsOfImage:adopted], [self redrawnPixelsOfImage:image]);
 
+#if TARGET_OS_OSX
+	NSImage *canvas = [[NSImage alloc] initWithSize:NSMakeSize(4.0, 4.0)];
+	[canvas lockFocus];
+	[drawingObject drawInRect:CGRectMake(0.0, 0.0, 4.0, 4.0)];
+	[canvas unlockFocus];
+#else
 	UIGraphicsBeginImageContextWithOptions(CGSizeMake(4.0, 4.0), NO, 1.0);
 	[drawingObject drawInRect:CGRectMake(0.0, 0.0, 4.0, 4.0)];
 	UIGraphicsEndImageContext();
+#endif
 }
 
 - (void)testImageElementWithNoItemImageDrawsNothing {

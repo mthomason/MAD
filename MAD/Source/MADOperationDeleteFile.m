@@ -6,6 +6,8 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import "MADOperationDeleteFile.h"
 
 #import <Foundation/NSArray.h>
@@ -66,3 +68,4 @@
 }
 
 @end
+#endif

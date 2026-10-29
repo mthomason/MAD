@@ -11,6 +11,14 @@
 
 #import <Foundation/NSObjCRuntime.h>
 #import <Foundation/NSDate.h>
+#if __APPLE__
+#import <TargetConditionals.h>
+#endif
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
+#import <Foundation/NSGeometry.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSValue.h>
+#endif
 #import <CoreGraphics/CGBase.h>
 #import <CoreGraphics/CGGeometry.h>
 #import <stdlib.h>
@@ -18,6 +26,51 @@
 
 #import <MADCocoaExtensions/MADCompassDirection.h>
 #import <MADCocoaExtensions/MADMathAlgebra.h>
+
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
+typedef NSEdgeInsets UIEdgeInsets;
+
+static const UIEdgeInsets UIEdgeInsetsZero __attribute__((unused)) = {0.0, 0.0, 0.0, 0.0};
+
+static inline UIEdgeInsets UIEdgeInsetsMake(CGFloat top, CGFloat left, CGFloat bottom, CGFloat right) {
+	UIEdgeInsets insets; insets.top = top; insets.left = left; insets.bottom = bottom; insets.right = right;
+	return insets;
+}
+
+static inline BOOL UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsets insets1, UIEdgeInsets insets2) {
+	return insets1.top == insets2.top && insets1.left == insets2.left
+		&& insets1.bottom == insets2.bottom && insets1.right == insets2.right;
+}
+
+static inline CGRect UIEdgeInsetsInsetRect(CGRect rect, UIEdgeInsets insets) {
+	return CGRectMake(rect.origin.x + insets.left,
+					  rect.origin.y + insets.top,
+					  rect.size.width - (insets.left + insets.right),
+					  rect.size.height - (insets.top + insets.bottom));
+}
+
+static inline NSString *NSStringFromCGPoint(CGPoint p) {
+	return [[NSString alloc] initWithFormat:@"{%g, %g}", (double)p.x, (double)p.y];
+}
+
+static inline NSString *NSStringFromCGSize(CGSize s) {
+	return [[NSString alloc] initWithFormat:@"{%g, %g}", (double)s.width, (double)s.height];
+}
+
+static inline NSString *NSStringFromCGRect(CGRect r) {
+	return [[NSString alloc] initWithFormat:@"{{%g, %g}, {%g, %g}}",
+			(double)r.origin.x, (double)r.origin.y, (double)r.size.width, (double)r.size.height];
+}
+
+@interface NSValue (MADCGGeometryExtensions)
++ (NSValue *)valueWithCGPoint:(CGPoint)point;
++ (NSValue *)valueWithCGSize:(CGSize)size;
++ (NSValue *)valueWithCGRect:(CGRect)rect;
+@property (nonatomic, readonly) CGPoint CGPointValue;
+@property (nonatomic, readonly) CGSize CGSizeValue;
+@property (nonatomic, readonly) CGRect CGRectValue;
+@end
+#endif
 
 extern const double MADZero;
 extern const double MAD_2;

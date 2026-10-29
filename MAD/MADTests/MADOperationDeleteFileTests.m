@@ -21,6 +21,8 @@
 //      and hands it to NSFileCoordinator; that is not exercised.
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <XCTest/XCTest.h>
 
 #import "MADOperationDeleteFile.h"
@@ -236,3 +238,4 @@
 }
 
 @end
+#endif

@@ -9,6 +9,8 @@
 #ifndef MAD_MADLabelTitle_h
 #define MAD_MADLabelTitle_h
 
+#import <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIView.h>
 
 @interface MADLabelTitle : UIView
@@ -16,5 +18,6 @@
 @property (nonatomic, copy) NSString *text;
 
 @end
+#endif
 
 #endif

@@ -6,6 +6,8 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import "UIDocument+Extras.h"
 #import <MADFileManager/MADFileUtilities.h>
 
@@ -41,3 +43,4 @@ typedef void(^MTPerformAsynchronousFileAccessUsingBlock)(void);
 }
 
 @end
+#endif

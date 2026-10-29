@@ -6,6 +6,8 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import "MADActivityIndicatorLabel.h"
 
 @implementation MADActivityIndicatorLabel
@@ -27,3 +29,4 @@
 }
 
 @end
+#endif

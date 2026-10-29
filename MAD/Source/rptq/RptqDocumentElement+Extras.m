@@ -45,10 +45,16 @@
 
 #import <MADFoundation/MADStringUtilities.h>
 
-#if __APPLE__
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 #import <UIKit/UIFontDescriptor.h>
-#endif
 #import <UIKit/UIGeometry.h>
+#elif defined(__APPLE__) && TARGET_OS_OSX
+#import <AppKit/NSFontDescriptor.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#else
+#import <UIKit/UIGeometry.h>
+#endif
 
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSNumberFormatter.h>
@@ -1024,7 +1030,7 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	}
 }
 
-#if __APPLE__
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 // The renderer's path: only MADPrintPageRenderer (not in the Linux
 // build) asks for one, and UIFontDescriptor is UIKit's.
 - (UIFontDescriptor *)fontDescriptor {
@@ -1040,8 +1046,20 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 	
 	return [[UIFontDescriptor alloc] initWithFontAttributes:fontAttributes];
 }
+#elif defined(__APPLE__) && TARGET_OS_OSX
+- (NSFontDescriptor *)fontDescriptor {
+	NSFontDescriptorSymbolicTraits traits = 0;
+	if (self.textStyle.italic) traits     |= NSFontDescriptorTraitItalic;
+	if (self.textStyle.bold)   traits     |= NSFontDescriptorTraitBold;
 
+	NSDictionary *fontAttributes = @{
+		NSFontFamilyAttribute: self.fontname ?: [MADFont defaultFamily],
+		NSFontSizeAttribute: @(self.fontsize),
+		NSFontTraitsAttribute: @{NSFontSymbolicTrait: @(traits)}
+	};
 
+	return [[NSFontDescriptor alloc] initWithFontAttributes:fontAttributes];
+}
 #endif
 
 - (id)debugQuickLookObject {

@@ -6,8 +6,13 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
+#include <TargetConditionals.h>
 #import "MADAccessibilityLine.h"
+#if defined(__APPLE__) && TARGET_OS_OSX
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#else
 #import <UIKit/UIGeometry.h>
+#endif
 
 // The one member the label reads off a text-carrying drawing object, declared here
 // rather than imported: the line takes any object, and the element family's headers

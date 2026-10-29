@@ -15,10 +15,15 @@
 //  boundary, so the picture set in memory is the picture read back after a reopen.
 //
 
+#include <TargetConditionals.h>
 #import <XCTest/XCTest.h>
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#else
 #import <UIKit/UIImage.h>
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIColor.h>
+#endif
 #import <CoreGraphics/CGContext.h>
 
 #import "MADDocumentObjectDataReference.h"
@@ -58,20 +63,56 @@
 	return [RptqStoreContext contextWithStore:store];
 }
 
-- (UIImage *)onePixelImage {
+- (MADElementImage *)onePixelImage {
+#if TARGET_OS_OSX
+	NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+																	pixelsWide:1
+																	pixelsHigh:1
+																 bitsPerSample:8
+															   samplesPerPixel:4
+																	  hasAlpha:YES
+																	  isPlanar:NO
+																colorSpaceName:NSCalibratedRGBColorSpace
+																   bytesPerRow:4
+																  bitsPerPixel:32];
+	[NSGraphicsContext saveGraphicsState];
+	[NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:rep]];
+	[[NSColor redColor] setFill];
+	NSRectFill(NSMakeRect(0, 0, 1, 1));
+	[NSGraphicsContext restoreGraphicsState];
+	NSImage *image = [[NSImage alloc] initWithSize:NSMakeSize(1, 1)];
+	[image addRepresentation:rep];
+	return image;
+#else
 	UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 1);
 	[[UIColor redColor] setFill];
 	UIRectFill(CGRectMake(0, 0, 1, 1));
 	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 	return image;
+#endif
+}
+
+- (NSData *)pngRepresentationOfImage:(MADElementImage *)image {
+#if TARGET_OS_OSX
+	CGImageRef cgImage = [image CGImageForProposedRect:NULL context:nil hints:nil];
+	if (!cgImage) return nil;
+	NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+	return [rep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+#else
+	return UIImagePNGRepresentation(image);
+#endif
 }
 
 // The two images are the same picture when both redraw to the same pixels in one
 // common format.  PNG bytes are not stable across a decode/re-encode, so comparing
 // the encodings would fail on the encoding, not the picture.
-- (NSData *)redrawnPixelsOfImage:(UIImage *)image {
+- (NSData *)redrawnPixelsOfImage:(MADElementImage *)image {
+#if TARGET_OS_OSX
+	CGImageRef cgImage = [image CGImageForProposedRect:NULL context:nil hints:nil];
+#else
 	CGImageRef cgImage = image.CGImage;
+#endif
 	if (!cgImage) return nil;
 	size_t width = CGImageGetWidth(cgImage), height = CGImageGetHeight(cgImage);
 	if (width == 0 || height == 0) return nil;
@@ -122,7 +163,7 @@
 - (void)testImageIsTheElementImageWhileInMemory {
 	RptqStoreContext *context = [self openContextAtPath:@"memory.sqlite"];
 	XCTAssertTrue([context loadAllWithError:NULL]);
-	UIImage *image = [self onePixelImage];
+	MADElementImage *image = [self onePixelImage];
 	RptqDocumentElementImage *element = (RptqDocumentElementImage *)[context insertObjectForEntity:@"RptqDocumentElementImage" identifier:0];
 	element.type = MADPrintPageElementTypeImage;
 	element.image = image;
@@ -131,14 +172,14 @@
 
 	// The setter stores the picture as PNG bytes and the getter decodes them, so the
 	// element hands back the same picture, not the same object.
-	XCTAssertTrue([reference.image isKindOfClass:[UIImage class]]);
+	XCTAssertTrue([reference.image isKindOfClass:[MADElementImage class]]);
 	XCTAssertEqualObjects([self redrawnPixelsOfImage:reference.image], [self redrawnPixelsOfImage:image]);
 }
 
 - (void)testTheStoredBlobIsTheImagesPNGData {
 	RptqStoreContext *context = [self openContextAtPath:@"wireformat.sqlite"];
 	XCTAssertTrue([context loadAllWithError:NULL]);
-	UIImage *image = [self onePixelImage];
+	MADElementImage *image = [self onePixelImage];
 	RptqDocumentElementImage *element = (RptqDocumentElementImage *)[context insertObjectForEntity:@"RptqDocumentElementImage" identifier:0];
 	element.type = MADPrintPageElementTypeImage;
 	element.image = image;
@@ -147,13 +188,13 @@
 	// would hand back is the PNG encoding of the image, not the image or NULL.
 	NSData *stored = [element.backingObject attributeValue:@"image"];
 	XCTAssertTrue([stored isKindOfClass:[NSData class]]);
-	XCTAssertEqualObjects(stored, UIImagePNGRepresentation(image));
+	XCTAssertEqualObjects(stored, [self pngRepresentationOfImage:image]);
 }
 
 - (void)testImageSurvivesSaveAndReopen {
 	RptqStoreContext *context = [self openContextAtPath:@"persistence.sqlite"];
 	XCTAssertTrue([context loadAllWithError:NULL]);
-	UIImage *image = [self onePixelImage];
+	MADElementImage *image = [self onePixelImage];
 	RptqDocumentElementImage *element = (RptqDocumentElementImage *)[context insertObjectForEntity:@"RptqDocumentElementImage" identifier:0];
 	element.type = MADPrintPageElementTypeImage;
 	element.image = image;
@@ -169,7 +210,7 @@
 
 	XCTAssertNotNil(readElement);
 	// The picture set before the save is the picture the reopened document hands back.
-	XCTAssertTrue([readElement.image isKindOfClass:[UIImage class]]);
+	XCTAssertTrue([readElement.image isKindOfClass:[MADElementImage class]]);
 	XCTAssertEqualObjects([self redrawnPixelsOfImage:readElement.image], [self redrawnPixelsOfImage:image]);
 }
 

@@ -10,6 +10,8 @@
 //  superview starts and stops the spinner.
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <XCTest/XCTest.h>
 #import <UIKit/UIView.h>
 #import <UIKit/UIActivityIndicatorView.h>
@@ -75,3 +77,4 @@
 }
 
 @end
+#endif

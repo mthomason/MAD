@@ -16,9 +16,15 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <TargetConditionals.h>
 
+#if TARGET_OS_IPHONE
 #import <UIKit/UIColor.h>
 #import <UIKit/UITraitCollection.h>
+#elif TARGET_OS_OSX
+#import <AppKit/NSColor.h>
+#import <AppKit/NSColorSpace.h>
+#endif
 
 #import <MADCocoaExtensions/UIColor+EverydayApps.h>
 
@@ -29,15 +35,21 @@
 
 #pragma mark - Helpers
 
-- (void)assertColor:(UIColor *)color
+- (void)assertColor:(MADPlatformColor *)color
 				red:(CGFloat)red
 			  green:(CGFloat)green
 			   blue:(CGFloat)blue
 			  alpha:(CGFloat)alpha
 			   line:(NSUInteger)line {
 	CGFloat r = 0, g = 0, b = 0, a = 0;
+#if TARGET_OS_IPHONE
 	BOOL converted = [color getRed:&r green:&g blue:&b alpha:&a];
 	XCTAssertTrue(converted, @"line %lu: color is not representable in sRGB", (unsigned long)line);
+#else
+	NSColor *srgb = [color colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+	XCTAssertNotNil(srgb, @"line %lu: color is not representable in sRGB", (unsigned long)line);
+	[srgb getRed:&r green:&g blue:&b alpha:&a];
+#endif
 	XCTAssertEqualWithAccuracy(r, red, 0.0001, @"line %lu", (unsigned long)line);
 	XCTAssertEqualWithAccuracy(g, green, 0.0001, @"line %lu", (unsigned long)line);
 	XCTAssertEqualWithAccuracy(b, blue, 0.0001, @"line %lu", (unsigned long)line);
@@ -73,6 +85,7 @@
 	MADAssertColor([MADColorEverydayApps newColorDisabledColor], [self byte:147], [self byte:149], [self byte:152], 0.33333333);
 }
 
+#if TARGET_OS_IPHONE
 #pragma mark - Dynamic colors
 
 - (void)testHeaderColorDarkModeIsTheSystemBackground {
@@ -110,5 +123,6 @@
 
 	XCTAssertEqualObjects(resolved, expected);
 }
+#endif
 
 @end

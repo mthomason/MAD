@@ -9,6 +9,8 @@
 #ifndef MADExtensions_MADMailComposeViewController_h
 #define MADExtensions_MADMailComposeViewController_h
 
+#import <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <MessageUI/MFMailComposeViewController.h>
 
 @interface MFMailComposeViewController (MADExtensions)
@@ -23,5 +25,6 @@
 									 userInterfaceIdiom:(UIUserInterfaceIdiom)userInterfaceIdiom;
 
 @end
+#endif
 
 #endif

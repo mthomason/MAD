@@ -7,6 +7,8 @@
 //
 
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import "MADOperationCreateDocumentFirstTimeSetup.h"
 #import "MADOperationCreateDocumentCreateDocument.h"
 
@@ -87,3 +89,4 @@ static void MADOperationCreateDocumentFirstTimeSetupRunOnMain(dispatch_block_t b
 }
 
 @end
+#endif

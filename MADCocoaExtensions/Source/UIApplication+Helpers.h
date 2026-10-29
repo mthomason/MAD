@@ -9,6 +9,8 @@
 #ifndef MADExtensions_UIApplication_Constructors_h
 #define MADExtensions_UIApplication_Constructors_h
 
+#import <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIViewController.h>
 
 @interface UIApplication (Helpers)
@@ -20,5 +22,6 @@
 - (UIBackgroundTaskIdentifier)requestBackgroundTask;
 
 @end
+#endif
 
 #endif

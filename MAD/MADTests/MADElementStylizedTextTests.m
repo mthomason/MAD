@@ -14,12 +14,25 @@
 //  header's nullability promises cannot happen.  See docs/project/BUGS.md.
 //
 
+#include <TargetConditionals.h>
 #import <XCTest/XCTest.h>
 
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+typedef NSFont MADTestFont;
+typedef NSFontDescriptorSymbolicTraits MADTestFontDescriptorSymbolicTraits;
+static const NSFontDescriptorSymbolicTraits MADTestFontTraitBold = NSFontDescriptorTraitBold;
+static const NSFontDescriptorSymbolicTraits MADTestFontTraitItalic = NSFontDescriptorTraitItalic;
+#else
 #import <UIKit/UIFont.h>
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/NSParagraphStyle.h>
+typedef UIFont MADTestFont;
+typedef UIFontDescriptorSymbolicTraits MADTestFontDescriptorSymbolicTraits;
+static const UIFontDescriptorSymbolicTraits MADTestFontTraitBold = UIFontDescriptorTraitBold;
+static const UIFontDescriptorSymbolicTraits MADTestFontTraitItalic = UIFontDescriptorTraitItalic;
+#endif
 
 #import <MAD/MADAlignment.h>
 
@@ -67,7 +80,7 @@
 	XCTAssertEqualObjects(attributes[NSUnderlineStyleAttributeName], @(NSUnderlineStyleNone));
 	XCTAssertEqualObjects(attributes[NSStrikethroughStyleAttributeName], @(NSUnderlineStyleNone));
 
-	UIFont *font = attributes[NSFontAttributeName];
+	MADTestFont *font = attributes[NSFontAttributeName];
 	XCTAssertEqual(font.pointSize, 12.0);
 }
 
@@ -78,11 +91,11 @@
 	style.italic = YES;
 
 	MADElementStylizedText *stylized = [self stylizedTextWithStyle:style alignment:MADHorizontalAlignmentLeft];
-	UIFont *font = stylized.fontAttributes[NSFontAttributeName];
-	UIFontDescriptorSymbolicTraits traits = font.fontDescriptor.symbolicTraits;
+	MADTestFont *font = stylized.fontAttributes[NSFontAttributeName];
+	MADTestFontDescriptorSymbolicTraits traits = font.fontDescriptor.symbolicTraits;
 
-	XCTAssertTrue((traits & UIFontDescriptorTraitBold) != 0);
-	XCTAssertTrue((traits & UIFontDescriptorTraitItalic) != 0);
+	XCTAssertTrue((traits & MADTestFontTraitBold) != 0);
+	XCTAssertTrue((traits & MADTestFontTraitItalic) != 0);
 }
 
 - (void)testUnderlineAndStrikethrough {

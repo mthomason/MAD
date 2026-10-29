@@ -16,6 +16,8 @@
 //      path is left alone.
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <XCTest/XCTest.h>
 
 #import "MADOperationCreateDocumentFirstTimeSetup.h"
@@ -155,3 +157,4 @@
 }
 
 @end
+#endif

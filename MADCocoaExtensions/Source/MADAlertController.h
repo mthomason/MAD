@@ -9,6 +9,8 @@
 #ifndef MAD_Designer_MADAlertController_h
 #define MAD_Designer_MADAlertController_h
 
+#import <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIAlertController.h>
 
 @interface MADAlertController : NSObject
@@ -28,5 +30,6 @@
 								  cancel:(void (^)(UIAlertAction *action))handlerCancel;
 
 @end
+#endif
 
 #endif

@@ -21,7 +21,12 @@
 #import <Foundation/NSURL.h>
 #import <dispatch/dispatch.h>
 #if __APPLE__
+#import <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIScreen.h>
+#elif TARGET_OS_OSX
+#import <AppKit/NSScreen.h>
+#endif
 #endif
 #import "madlog.h"
 
@@ -34,8 +39,11 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 @implementation MADURLFactory
 
 + (BOOL)isRetinaDisplay {
-#if __APPLE__
+#if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
 	return [UIScreen mainScreen].scale > 1.0;
+#elif defined(TARGET_OS_OSX) && TARGET_OS_OSX
+	NSScreen *screen = [NSScreen mainScreen];
+	return screen ? (screen.backingScaleFactor > 1.0) : YES;
 #else
 	// No screen to ask off Apple; the @2x thumbnail name is what the Apple
 	// targets write, so the headless build reads the same file.
@@ -179,7 +187,7 @@ static NSString * const MADPathComponentTemporary  = @"Temporary";
 + (NSURL *)newURLForLocalDirectoryForGroupIdentifier:(NSString *)groupID
 									   pathComponent:(NSString *)pathComponent
 								 alternativeSelector:(SEL)alternativeSelector {
-#if __APPLE__
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 	NSURL *groupUrl = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier: groupID];
 	NSAssert(groupUrl != nil, @"containerURLForSecurityApplicationGroupIdentifier returned nil "
 							  @"for %@.  Maybe the fucking entitlment file is missing?!?!", groupID);
@@ -292,6 +300,9 @@ static NSURL *urlForCacheDirectory;
 		}
 		
 		NSString *bundleIdentifier = [NSBundle mainBundle].bundleIdentifier.copy;
+		if (bundleIdentifier.length == 0) {
+			bundleIdentifier = [MADApplication groupIdentifier];
+		}
 		appSupportDirectoryForApp = [appSupportDirectory URLByAppendingPathComponent:bundleIdentifier];
 		NSString *path = ((NSURL *)appSupportDirectoryForApp).path;
 		fileExist = [[NSFileManager defaultManager] fileExistsAtPath: path isDirectory: &isDirectory];

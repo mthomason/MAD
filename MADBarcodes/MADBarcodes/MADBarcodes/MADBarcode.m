@@ -74,10 +74,14 @@
 #import "MADBarcodeUniversalProductCodeUpce.h"
 #import "MADBarcodeUspsIntelligentMail.h"
 
+#if TARGET_OS_IPHONE
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/UIColor.h>
+#elif TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#endif
 #import <CoreGraphics/CGColorSpace.h>
 #import <CoreGraphics/CGDataProvider.h>
 #import <CoreGraphics/CGImage.h>
@@ -115,7 +119,7 @@ static NSString * const MADBarcodeCodingKeyRotate				= @"rotate";
 // opaque.  A CGImage consumes that layout directly; this class never sets
 // fgcolour/bgcolour, so the bytes already are the black and white the paint
 // loop used to clamp to.
-static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) {
+static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) {
 	if (symbol->bitmap == NULL || symbol->bitmap_width <= 0 || symbol->bitmap_height <= 0) {
 		return nil;
 	}
@@ -134,9 +138,14 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 	if (cgImage == NULL) {
 		return nil;
 	}
-	UIImage *image = [UIImage imageWithCGImage:cgImage
-										 scale:1.0
-								   orientation:UIImageOrientationUp];
+#if TARGET_OS_IPHONE
+	MADBarcodeImage *image = [UIImage imageWithCGImage:cgImage
+												 scale:1.0
+										   orientation:UIImageOrientationUp];
+#elif TARGET_OS_OSX
+	MADBarcodeImage *image = [[NSImage alloc] initWithCGImage:cgImage
+														 size:NSMakeSize((CGFloat)width, (CGFloat)height)];
+#endif
 	CGImageRelease(cgImage);
 	return image;
 }
@@ -157,7 +166,7 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 // The rendering primitive behind -renderedImage, and the only caller that can
 // see the message from the same zint pass that failed.  MADBarcodeCache
 // declares it too, to keep it off the public header.
-- (UIImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessage;
+- (MADBarcodeImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessage;
 
 @end
 
@@ -503,7 +512,7 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 
 - (void)drawInRect:(CGRect)rect {
 	MADBarcodeCache *cache = [MADBarcodeCache sharedCache];
-	UIImage *image = [cache imageForBarcode:self];
+	MADBarcodeImage *image = [cache imageForBarcode:self];
 
 	if (image == nil) {
 		if (self.showErrorMessage) {
@@ -566,8 +575,8 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 	CGFloat x = rect.origin.x;
 	CGFloat y = rect.origin.y;
 	if (self.center) {
-		x += CGRectGetMidX(rect) - (bitmapWidth * skewValue) / 2.0000f;
-		y += CGRectGetMidY(rect) - (bitmapHeight * skewValue) / 2.0000f;
+		x = CGRectGetMidX(rect) - (bitmapWidth * skewValue) / 2.0000f;
+		y = CGRectGetMidY(rect) - (bitmapHeight * skewValue) / 2.0000f;
 	}
 
 	[image drawInRect:CGRectMake(x, y, bitmapWidth * skewValue, bitmapHeight * skewValue)];
@@ -599,11 +608,11 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 	return key;
 }
 
-- (UIImage *)renderedImage {
+- (MADBarcodeImage *)renderedImage {
 	return [self renderedImageWithErrorMessage:NULL];
 }
 
-- (UIImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessageOut {
+- (MADBarcodeImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessageOut {
 	struct zint_symbol *barcode = ZBarcode_Create();
 
 	if (barcode == NULL) {
@@ -736,7 +745,7 @@ static UIImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) 
 		}
 	}
 
-	UIImage *image = nil;
+	MADBarcodeImage *image = nil;
 	if (success == 0 && errorMessage == nil) {
 		image = MADBarcodeImageFromZintBitmap(barcode);
 	}

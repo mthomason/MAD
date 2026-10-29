@@ -16,7 +16,16 @@
 #import <MAD/MADConstants.h>
 
 #import <CoreGraphics/CoreGraphics.h>
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+typedef UIColor MADConverterColor;
+typedef UIImage MADConverterImage;
+#elif TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+typedef NSColor MADConverterColor;
+typedef NSImage MADConverterImage;
+#endif
 #import <string.h>
 
 NSString * const MADStoreConverterErrorDomain = @"MADStoreConverterErrorDomain";
@@ -45,16 +54,28 @@ static BOOL MADStoreIsColorAttribute(NSString *name) {
 /// value transformer is registered, and otherwise the archived bytes it would have
 /// read.  The converter works either way rather than depending on which bundle
 /// happened to register the transformer.
-static UIColor *MADStoreColor(id value) {
-	if ([value isKindOfClass:[UIColor class]]) return value;
+static MADConverterColor *MADStoreColor(id value) {
+	if ([value isKindOfClass:[MADConverterColor class]]) return value;
 	if ([value isKindOfClass:[NSData class]]) {
-		return [NSKeyedUnarchiver unarchivedObjectOfClass:[UIColor class] fromData:value error:NULL];
+		return [NSKeyedUnarchiver unarchivedObjectOfClass:[MADConverterColor class] fromData:value error:NULL];
 	}
 	return nil;
 }
 
 static NSData *MADStorePNGData(id value) {
+#if TARGET_OS_IPHONE
 	if ([value isKindOfClass:[UIImage class]]) return UIImagePNGRepresentation((UIImage *)value);
+#elif TARGET_OS_OSX
+	if ([value isKindOfClass:[NSImage class]]) {
+		NSImage *image = (NSImage *)value;
+		CGImageRef cgImage = [image CGImageForProposedRect:NULL context:nil hints:nil];
+		if (cgImage != NULL) {
+			NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+			return [rep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+		}
+		return nil;
+	}
+#endif
 	// MADPngImageTransformer stores PNG bytes in the first place, so raw data is
 	// already the portable form.
 	if ([value isKindOfClass:[NSData class]]) return value;
@@ -73,7 +94,8 @@ static NSString *MADStoreLocaleIdentifier(id value) {
 
 /// RGBA in sRGB.  A colour UIKit cannot describe in RGB at all -- a pattern, or an
 /// extended range -- is converted into the space the report renders in.
-static BOOL MADStoreColorComponents(UIColor *color, CGFloat *components) {
+static BOOL MADStoreColorComponents(MADConverterColor *color, CGFloat *components) {
+#if TARGET_OS_IPHONE
 	if ([color getRed:&components[0] green:&components[1] blue:&components[2] alpha:&components[3]]) return YES;
 
 	CGColorSpaceRef space = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
@@ -83,10 +105,16 @@ static BOOL MADStoreColorComponents(UIColor *color, CGFloat *components) {
 	UIColor *srgb = [UIColor colorWithCGColor:converted];
 	CGColorRelease(converted);
 	return [srgb getRed:&components[0] green:&components[1] blue:&components[2] alpha:&components[3]];
+#elif TARGET_OS_OSX
+	NSColor *srgb = [color colorUsingColorSpace:NSColorSpace.sRGBColorSpace];
+	if (!srgb) return NO;
+	[srgb getRed:&components[0] green:&components[1] blue:&components[2] alpha:&components[3]];
+	return YES;
+#endif
 }
 
 static void MADStoreWriteColor(id value, NSString *name, MADStoreObject *row) {
-	UIColor *color = MADStoreColor(value);
+	MADConverterColor *color = MADStoreColor(value);
 	if (!color) return;
 	CGFloat components[4] = { 0, 0, 0, 0 };
 	if (!MADStoreColorComponents(color, components)) return;

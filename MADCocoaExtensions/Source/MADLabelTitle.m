@@ -7,6 +7,7 @@
 //
 
 #import "MADLabelTitle.h"
+#if TARGET_OS_IPHONE
 #import "MADViewHelpers.h"
 
 #import <UIKit/UILabel.h>
@@ -119,3 +120,4 @@
 
 
 @end
+#endif

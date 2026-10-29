@@ -17,7 +17,9 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <TargetConditionals.h>
 
+#if TARGET_OS_IPHONE
 #import <UIKit/UIAlertController.h>
 
 #import <MADCocoaExtensions/MADAlertController.h>
@@ -158,3 +160,4 @@
 }
 
 @end
+#endif

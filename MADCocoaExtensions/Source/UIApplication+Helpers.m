@@ -7,6 +7,7 @@
 //
 
 #import "UIApplication+Helpers.h"
+#if TARGET_OS_IPHONE
 #import <UIKit/UIWindow.h>
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIWindowScene.h>
@@ -51,3 +52,4 @@
 }
 
 @end
+#endif

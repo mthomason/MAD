@@ -36,7 +36,7 @@
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 
-@class MADDataTableFast, MADDatabase, MADQueryFull, MADReportFormatter, RptqStoreContext;
+@class MADCredential, MADDataTableFast, MADDatabase, MADDatabaseConnection, MADQueryFull, MADReportFormatter, RptqStoreContext;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,7 +45,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// Opens `url`: unarchives the container, opens the portable store inside it
 /// (converting a legacy store when that is all the document has) and leaves the
 /// document ready to be queried.  Answers nil, with `error`, when it cannot.
-+ (instancetype)documentWithContentsOfURL:(NSURL *)url error:(NSError * _Nullable __autoreleasing *)error;
++ (nullable instancetype)documentWithContentsOfURL:(NSURL *)url error:(NSError * _Nullable __autoreleasing *)error;
+
+/// Creates a new `.mad` document at `url` from `databaseConnection` and optional
+/// `credentials`: initializes the portable store, connects to the source database,
+/// imports its table and field schema, and writes the `.mad` archive to `url`.
++ (nullable instancetype)createDocumentAtURL:(NSURL *)url
+					  withDatabaseConnection:(MADDatabaseConnection *)databaseConnection
+								 credentials:(nullable MADCredential *)credentials
+									   error:(NSError * _Nullable __autoreleasing *)outError;
 
 /// The same, without the open: the accessors read the store lazily.
 - (instancetype)initWithFileURL:(NSURL *)url;
@@ -70,6 +78,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)writeToURL:(NSURL *)url
 	  reproducible:(BOOL)reproducible
 			 error:(NSError * _Nullable __autoreleasing *)error;
+
+/// Resets cached query and paper objects after query or layout edits so the next
+/// refresh or render reflects the updated store state.
+- (void)invalidateQueryAndModelCaches;
 
 @end
 

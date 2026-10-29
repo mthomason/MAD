@@ -7,7 +7,14 @@
 //
 
 #import "MADColorTransformer.h"
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_OSX
+#import <AppKit/NSColor.h>
+typedef NSColor MADTransformedColor;
+#else
 #import <UIKit/UIColor.h>
+typedef UIColor MADTransformedColor;
+#endif
 
 @implementation MADColorTransformer
 
@@ -19,7 +26,7 @@
 }
 
 + (Class)transformedValueClass {
-	return [UIColor class];
+	return [MADTransformedColor class];
 }
 
 + (BOOL)supportsSecureCoding {
@@ -27,7 +34,7 @@
 }
 
 + (NSSet<Class> *)allowedTopLevelClasses {
-	return [NSSet setWithObjects:[UIColor class], nil];
+	return [NSSet setWithObjects:[MADTransformedColor class], nil];
 }
 
 @end

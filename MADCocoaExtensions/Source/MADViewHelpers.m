@@ -8,6 +8,7 @@
 
 #include "MADViewHelpers.h"
 
+#if TARGET_OS_IPHONE
 void MADViewSafeAreaInserts(UIView *view, UIEdgeInsets *safeAreaInsets) {
 	if (@available(iOS 11.0, tvOS 11.0, *)) {
 		*safeAreaInsets = view.safeAreaInsets;
@@ -15,3 +16,4 @@ void MADViewSafeAreaInserts(UIView *view, UIEdgeInsets *safeAreaInsets) {
 		*safeAreaInsets = UIEdgeInsetsZero;
 	}
 }
+#endif

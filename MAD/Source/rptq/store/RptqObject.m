@@ -11,10 +11,16 @@
 
 #import <objc/runtime.h>
 
+#include <TargetConditionals.h>
+
 #if __APPLE__
 #import <CoreGraphics/CGColor.h>
 #import <CoreGraphics/CGColorSpace.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIColor.h>
+#elif TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#endif
 #endif
 
 #pragma mark - Colours
@@ -50,7 +56,7 @@ static void RptqReadColorComponents(MADStoreObject *row, NSString *key, double c
 	components[3] = alpha != nil ? alpha.doubleValue : 1.0;
 }
 
-#if __APPLE__
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 static BOOL RptqColorComponentsFromValue(id value, double components[4]) {
 	if (![value isKindOfClass:[UIColor class]]) return NO;
 	UIColor *color = value;
@@ -72,6 +78,30 @@ static BOOL RptqColorComponentsFromValue(id value, double components[4]) {
 	components[3] = alpha;
 	return YES;
 }
+#elif defined(__APPLE__) && TARGET_OS_OSX
+static BOOL RptqColorComponentsFromValue(id value, double components[4]) {
+	if ([value isKindOfClass:[NSColor class]]) {
+		NSColor *color = [(NSColor *)value colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+		if (!color) return NO;
+		CGFloat red = 0.0, green = 0.0, blue = 0.0, alpha = 0.0;
+		[color getRed:&red green:&green blue:&blue alpha:&alpha];
+		components[0] = red;
+		components[1] = green;
+		components[2] = blue;
+		components[3] = alpha;
+		return YES;
+	}
+	if ([value isKindOfClass:[NSArray class]]) {
+		NSArray *array = value;
+		if (array.count != 4) return NO;
+		for (NSUInteger index = 0; index < 4; index++) {
+			if (![array[index] isKindOfClass:[NSNumber class]]) return NO;
+			components[index] = [array[index] doubleValue];
+		}
+		return YES;
+	}
+	return NO;
+}
 #else
 static BOOL RptqColorComponentsFromValue(id value, double components[4]) {
 	if (![value isKindOfClass:[NSArray class]]) return NO;
@@ -86,8 +116,10 @@ static BOOL RptqColorComponentsFromValue(id value, double components[4]) {
 #endif
 
 static id RptqColorValue(const double components[4]) {
-#if __APPLE__
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 	return [UIColor colorWithRed:components[0] green:components[1] blue:components[2] alpha:components[3]];
+#elif defined(__APPLE__) && TARGET_OS_OSX
+	return [NSColor colorWithRed:components[0] green:components[1] blue:components[2] alpha:components[3]];
 #else
 	return @[ @(components[0]), @(components[1]), @(components[2]), @(components[3]) ];
 #endif

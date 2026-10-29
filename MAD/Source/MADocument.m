@@ -10,6 +10,8 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import "MADocument.h"
 #import <MAD/RptqStoreContext.h>
 #import "MADModel.h"
@@ -1315,3 +1317,4 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 }
 
 @end
+#endif

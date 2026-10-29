@@ -10,12 +10,16 @@
 #define MAD_CocoaExtensions_MADColorSocial_h
 
 #import <MADCocoaExtensions/MADColor.h>
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
+#import <AppKit/NSColor.h>
+#else
 #import <UIKit/UIColor.h>
+#endif
 
 @interface MADColorSocial : MADColor
 
-// Returns a plain UIColor: newColorWitColors() builds a UIColor, not a MADColor.
-+ (UIColor *)newBlueTwitter;
+// Returns a plain platform color: newColorWitColors() builds a UIColor/NSColor, not a MADColor.
++ (MADPlatformColor *)newBlueTwitter;
 
 @end
 

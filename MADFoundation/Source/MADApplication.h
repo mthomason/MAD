@@ -12,9 +12,12 @@
 #import <Foundation/NSObject.h>
 
 #if __APPLE__
+#import <TargetConditionals.h>
+#endif
+#if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
 #import <UIKit/UIApplication.h>
 #else
-// No UIKit off Apple; the protocol qualifier is what the signatures below
+// No UIKit off iOS; the protocol qualifier is what the signatures below
 // need, and MADApplicationProtocol supplies the methods actually messaged.
 @protocol UIApplicationDelegate;
 #endif

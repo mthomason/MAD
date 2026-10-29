@@ -54,7 +54,10 @@
 
 // The page's margins, and nothing else from UIKit: this file is in the Linux build
 // too now, where the four-edge struct comes from the compat shim (Linux/Compat).
+#include <TargetConditionals.h>
+#if !(defined(__APPLE__) && TARGET_OS_OSX)
 #import <UIKit/UIGeometry.h>
+#endif
 
 static inline UIEdgeInsets MADEdgeInsetsQuarterInch(void);
 static inline UIEdgeInsets MADEdgeInsetsEmpty(void);

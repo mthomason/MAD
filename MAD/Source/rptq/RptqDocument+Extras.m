@@ -30,7 +30,13 @@
 #import "RptqDocumentElementLabelLink.h"
 #import "RptqDocumentElementAggregate+Extras.h"
 #if __APPLE__
+#include <TargetConditionals.h>
 #import "RptqDocumentElementBarcode+Extras.h"
+#if TARGET_OS_IPHONE
+#import <UIKit/UIImage.h>
+#elif TARGET_OS_OSX
+#import <AppKit/NSImage.h>
+#endif
 #endif
 #import "RptqDocumentElementFormula+Extras.h"
 #import "RptqDataHelper.h"
@@ -49,10 +55,6 @@
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
-
-#if __APPLE__
-#import <UIKit/UIImage.h>
-#endif
 
 static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeHeader(NSUInteger);
 static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger, NSUInteger);
@@ -389,7 +391,9 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 			case MADDatabaseTypeSqlite3: {
 				MADDatabaseConnection *databaseConnection;
 				databaseConnection = database.databaseConnection;
-				credentals.dbname = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl.path.lastPathComponent.copy;
+				NSURL *sqliteURL = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl;
+				credentals.dbname = sqliteURL.path.lastPathComponent.copy;
+				credentals.host = sqliteURL.path.copy;
 				credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeSqlite3;
 				break;
 			}
@@ -571,7 +575,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 #if __APPLE__
 		case MADPrintPageElementTypeImage: {
 			
-			UIImage *image = defination[MTDocumentObjectDefinationObject];
+			MADElementImage *image = defination[MTDocumentObjectDefinationObject];
 			
 			reportObject = (RptqDocumentElement *)[managedObjectContext insertObjectForEntity:NSStringFromClass([RptqDocumentElementImage class]) identifier:0];
 			((RptqDocumentElementImage *)reportObject).image = image; // This sets the original image data and sizeValue to image.size

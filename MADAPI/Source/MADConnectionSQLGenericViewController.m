@@ -12,6 +12,7 @@
 
 #import "MADConnectionSQLGenericViewController.h"
 
+#if TARGET_OS_IPHONE
 #import <MADFoundation/MADProgress.h>
 #import <MADFoundation/MADNotificationProgress.h>
 #import <MADFoundation/MADKeyChain.h>
@@ -416,3 +417,4 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 }
 
 @end
+#endif

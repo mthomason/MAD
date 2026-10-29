@@ -11,6 +11,7 @@
 #endif
 
 #import "NSError+Constructors.h"
+#if TARGET_OS_IPHONE
 #import <MADFoundation/madlog.h>
 #import "UIApplication+Helpers.h"
 
@@ -58,3 +59,4 @@ typedef void (^MTBlockErrorDismiss)(NSInteger buttonIndex);
 }
 
 @end
+#endif

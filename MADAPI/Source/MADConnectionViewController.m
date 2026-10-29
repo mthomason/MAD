@@ -11,6 +11,8 @@
 #endif
 
 #import "MADConnectionViewController.h"
+
+#if TARGET_OS_IPHONE
 #import "MADViewControllerStandardProtocol.h"
 #import "MADDatabaseConnection.h"
 #import "MADErrorContainer.h"
@@ -333,3 +335,4 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 }
 
 @end
+#endif

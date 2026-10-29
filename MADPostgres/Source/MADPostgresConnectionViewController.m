@@ -11,6 +11,8 @@
 #endif
 
 #import "MADPostgresConnectionViewController.h"
+
+#if TARGET_OS_IPHONE
 #import "MADDatabaseConnectionPostgres.h"
 
 @implementation MADPostgresConnectionViewController
@@ -35,3 +37,4 @@
 }
 
 @end
+#endif

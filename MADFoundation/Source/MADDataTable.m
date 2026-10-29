@@ -27,6 +27,9 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSEnumerator.h>
 #import <MADFoundation/MADDataColumn.h>
+#if __APPLE__
+#import <TargetConditionals.h>
+#endif
 #import "madlog.h"
 
 NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorDomain";
@@ -215,18 +218,21 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 
 	NSError *errorWriting = NULL;
 
-#if __APPLE__
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 	NSDataWritingOptions writeOptions = (NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen);
 #else
-	// File protection is an iOS concept with no GNUstep equivalent -- and
-	// GNUstep has no NSDataWritingOptions typedef either; a plain atomic write
-	// is the portable spelling of the same intent.
+	// File protection is an iOS concept with no macOS (without Data Protection
+	// entitlement) or GNUstep equivalent -- and GNUstep has no NSDataWritingOptions
+	// typedef either; a plain atomic write is the portable spelling of the same intent.
 	NSUInteger writeOptions = NSDataWritingAtomic;
 #endif
 
 	BOOL success = [cache writeToURL: url
 							 options: writeOptions
 							   error: &errorWriting];
+	if (!success && outError != NULL && errorWriting != nil) {
+		*outError = errorWriting;
+	}
 
 	NSAssert((!success || errorWriting == NULL), @"%s %@", __PRETTY_FUNCTION__, errorWriting);
 

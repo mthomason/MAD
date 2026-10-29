@@ -26,11 +26,18 @@
 #import <Foundation/NSString.h>
 
 #if __APPLE__
+#include <TargetConditionals.h>
 
 #import "MADPrintPageRenderer.h"
 
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#import <CoreGraphics/CGPDFContext.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#else
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIGeometry.h>
+#endif
 
 #pragma mark - Deterministic PDF metadata
 
@@ -197,12 +204,42 @@ static void MADReportExporterPinPDFMetadata(NSURL *url) {
 	CGRect trimBox = [MADReportPageBuilder pageTrimBox];
 
 	NSDictionary *pdfOptions = @{ (__bridge NSString *)kCGPDFContextCreator: @"MAD® Designer" };
-	NSDictionary *boxInfo = @{ (__bridge NSString *)kCGPDFContextTrimBox: [NSValue valueWithCGRect: trimBox] };
 
 	// The renderer draws from the document's own formatter -- not from a second one
 	// built alongside it -- so the document's is the one the preparation formatted.
 	MADPrintPageRenderer *renderer = [[MADPrintPageRenderer alloc] initWithDataSource: renderDocument];
 
+#if TARGET_OS_OSX
+	CGContextRef pdfContext = CGPDFContextCreateWithURL((__bridge CFURLRef)url, &letterRect, (__bridge CFDictionaryRef)pdfOptions);
+	if (pdfContext != NULL) {
+		CFDataRef mediaBoxData = CFDataCreate(kCFAllocatorDefault, (const UInt8 *)&letterRect, sizeof(CGRect));
+		CFDataRef trimBoxData = CFDataCreate(kCFAllocatorDefault, (const UInt8 *)&trimBox, sizeof(CGRect));
+		NSDictionary *macPageInfo = @{
+			(__bridge NSString *)kCGPDFContextMediaBox: (__bridge id)mediaBoxData,
+			(__bridge NSString *)kCGPDFContextTrimBox: (__bridge id)trimBoxData
+		};
+		if (mediaBoxData != NULL) CFRelease(mediaBoxData);
+		if (trimBoxData != NULL) CFRelease(trimBoxData);
+		for (NSUInteger page = 0; page < reportFormatter.numberOfPages; page++) {
+			@autoreleasepool {
+				CGPDFContextBeginPage(pdfContext, (__bridge CFDictionaryRef)macPageInfo);
+				CGContextSaveGState(pdfContext);
+				CGContextTranslateCTM(pdfContext, 0.0, letterRect.size.height);
+				CGContextScaleCTM(pdfContext, 1.0, -1.0);
+				[NSGraphicsContext saveGraphicsState];
+				NSGraphicsContext *nsContext = [NSGraphicsContext graphicsContextWithCGContext:pdfContext flipped:YES];
+				[NSGraphicsContext setCurrentContext:nsContext];
+				[renderer drawPageAtIndex:(NSInteger)page inRect:trimBox];
+				[NSGraphicsContext restoreGraphicsState];
+				CGContextRestoreGState(pdfContext);
+				CGPDFContextEndPage(pdfContext);
+			}
+		}
+		CGPDFContextClose(pdfContext);
+		CGContextRelease(pdfContext);
+	}
+#else
+	NSDictionary *boxInfo = @{ (__bridge NSString *)kCGPDFContextTrimBox: [NSValue valueWithCGRect: trimBox] };
 	UIGraphicsBeginPDFContextToFile(url.path, letterRect, pdfOptions);
 	for (NSUInteger page = 0; page < reportFormatter.numberOfPages; page++) {
 		@autoreleasepool {
@@ -211,6 +248,7 @@ static void MADReportExporterPinPDFMetadata(NSURL *url) {
 		}
 	}
 	UIGraphicsEndPDFContext();
+#endif
 
 	if (options & MADReportExportOptionsDeterministic) {
 		MADReportExporterPinPDFMetadata(url);

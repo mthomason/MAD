@@ -19,7 +19,9 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <TargetConditionals.h>
 
+#if TARGET_OS_IPHONE
 #import <MessageUI/MFMailComposeViewController.h>
 
 #import <MADCocoaExtensions/MFMailComposeViewController+MADExtensions.h>
@@ -135,3 +137,4 @@
 }
 
 @end
+#endif

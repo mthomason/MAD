@@ -11,6 +11,8 @@
 #ifndef Reports_MADocument_h
 #define Reports_MADocument_h
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <MADFoundation/MADDataProtocol.h>
 #import <MADFoundation/MADCacheProtocol.h>
 
@@ -127,5 +129,6 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 - (void)resetSectionLayoutManagers;
 
 @end
+#endif
 
 #endif

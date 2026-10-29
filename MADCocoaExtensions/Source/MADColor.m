@@ -7,7 +7,11 @@
 //
 
 #import "MADColor.h"
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
+#import <AppKit/NSColor.h>
+#else
 #import <UIKit/UIColor.h>
+#endif
 #import <CoreGraphics/CGColorSpace.h>
 
 const CGFloat MADF255 = 255.00000000f;
@@ -18,21 +22,29 @@ static inline Byte byteFromColor(CGFloat color) {
 	return (Byte)(color * 0xFF) & 0xFF;
 };
 
-UIColor *newColorWitColors(CGFloat r, CGFloat g, CGFloat b) {
+MADPlatformColor *newColorWitColors(CGFloat r, CGFloat g, CGFloat b) {
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
+	return [NSColor colorWithSRGBRed:r/MADF255 green:g/MADF255 blue:b/MADF255 alpha:1.00000000f];
+#else
 	return [[UIColor alloc] initWithRed:r/MADF255 green:g/MADF255 blue:b/MADF255 alpha:1.00000000f];
+#endif
 }
 
-UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, CGFloat a) {
+MADPlatformColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, CGFloat a) {
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
+	return [NSColor colorWithSRGBRed:r/MADF255 green:g/MADF255 blue:b/MADF255 alpha:a];
+#else
 	return [[UIColor alloc] initWithRed:r/MADF255 green:g/MADF255 blue:b/MADF255 alpha:a];
+#endif
 }
 
 @interface MADColor ()
-	@property (nonatomic, copy, readwrite) UIColor *color;
+	@property (nonatomic, copy, readwrite) MADPlatformColor *color;
 @end
 
 @implementation MADColor
 
-- (instancetype)initWithColor:(UIColor *)color {
+- (instancetype)initWithColor:(MADPlatformColor *)color {
 	if (self = [super init]) {
 		_color = color.copy;
 	}
@@ -232,9 +244,15 @@ UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, CGFloat a) {
 
 - (CGFloat)luminance {
 	NSAssert(self.canProvideRGBComponents, @"Must be a RGB color to use -luminance");
-	CGFloat r, g, b;
+	CGFloat r = 0.0f, g = 0.0f, b = 0.0f;
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
+	if (!self.canProvideRGBComponents)
+		return 0.0f;
+	[self.color getRed:&r green:&g blue:&b alpha:NULL];
+#else
 	if (![self.color getRed: &r green: &g blue: &b alpha:NULL])
 		return 0.0f;
+#endif
 	
 	// http://en.wikipedia.org/wiki/Luma_(video)
 	// Y = 0.2126 R + 0.7152 G + 0.0722 B

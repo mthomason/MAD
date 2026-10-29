@@ -11,7 +11,9 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <TargetConditionals.h>
 
+#if TARGET_OS_IPHONE
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIFont.h>
 #import <UIKit/UILabel.h>
@@ -97,3 +99,4 @@
 }
 
 @end
+#endif

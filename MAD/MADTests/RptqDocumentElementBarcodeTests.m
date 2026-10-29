@@ -14,9 +14,14 @@
 //  MADBarcode property names; the barcode headers are never imported here.
 //
 
+#include <TargetConditionals.h>
 #import <XCTest/XCTest.h>
 
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#else
 #import <UIKit/UIColor.h>
+#endif
 
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseField.h>
@@ -157,26 +162,40 @@
 
 	RptqDocumentElementBarcode *element = [self barcodeWithSource:source inContext:context];
 
-	UIColor *background = element.backgroundColor;
+	MADElementColor *background = element.backgroundColor;
 	XCTAssertNotNil(background);
 	CGFloat backgroundRed = 0.0, backgroundGreen = 0.0, backgroundBlue = 0.0, backgroundAlpha = 0.0;
+#if TARGET_OS_OSX
+	NSColor *srgbBg = [background colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+	XCTAssertNotNil(srgbBg);
+	[srgbBg getRed:&backgroundRed green:&backgroundGreen blue:&backgroundBlue alpha:&backgroundAlpha];
+	BOOL hasBackgroundComponents = (srgbBg != nil);
+#else
 	BOOL hasBackgroundComponents = [background getRed:&backgroundRed
 												green:&backgroundGreen
 												 blue:&backgroundBlue
 												alpha:&backgroundAlpha];
+#endif
 	XCTAssertTrue(hasBackgroundComponents);
 	XCTAssertEqualWithAccuracy(backgroundRed, 1.0, 0.0001);
 	XCTAssertEqualWithAccuracy(backgroundGreen, 1.0, 0.0001);
 	XCTAssertEqualWithAccuracy(backgroundBlue, 1.0, 0.0001);
 	XCTAssertEqualWithAccuracy(backgroundAlpha, 1.0, 0.0001);
 
-	UIColor *foreground = element.foregroundColor;
+	MADElementColor *foreground = element.foregroundColor;
 	XCTAssertNotNil(foreground);
 	CGFloat foregroundRed = 1.0, foregroundGreen = 1.0, foregroundBlue = 1.0, foregroundAlpha = 0.0;
+#if TARGET_OS_OSX
+	NSColor *srgbFg = [foreground colorUsingColorSpace:[NSColorSpace sRGBColorSpace]];
+	XCTAssertNotNil(srgbFg);
+	[srgbFg getRed:&foregroundRed green:&foregroundGreen blue:&foregroundBlue alpha:&foregroundAlpha];
+	BOOL hasForegroundComponents = (srgbFg != nil);
+#else
 	BOOL hasForegroundComponents = [foreground getRed:&foregroundRed
 												green:&foregroundGreen
 												 blue:&foregroundBlue
 												alpha:&foregroundAlpha];
+#endif
 	XCTAssertTrue(hasForegroundComponents);
 	XCTAssertEqualWithAccuracy(foregroundRed, 0.0, 0.0001);
 	XCTAssertEqualWithAccuracy(foregroundGreen, 0.0, 0.0001);

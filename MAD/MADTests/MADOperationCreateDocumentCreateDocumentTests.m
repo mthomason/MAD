@@ -16,6 +16,8 @@
 //      framework's contract, so it is left unexercised.
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <XCTest/XCTest.h>
 
 #import "MADOperationCreateDocumentCreateDocument.h"
@@ -224,3 +226,4 @@
 // touch UIDocument's archive machinery.
 
 @end
+#endif

@@ -10,21 +10,30 @@
 #define MADCocoaExtensions__MADColor_h
 
 #import <Foundation/NSObject.h>
+#if __APPLE__
+#import <TargetConditionals.h>
+#endif
 #import <CoreGraphics/CGBase.h>
 #import <CoreGraphics/CGColorSpace.h>
 
 extern const CGFloat MADF255;
 
+#if defined(TARGET_OS_OSX) && TARGET_OS_OSX
+@class NSColor;
+typedef NSColor MADPlatformColor;
+#else
 @class UIColor;
+typedef UIColor MADPlatformColor;
+#endif
 
-UIColor *newColorWitColors(CGFloat r, CGFloat g, CGFloat b);
-UIColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, CGFloat a);
+MADPlatformColor *newColorWitColors(CGFloat r, CGFloat g, CGFloat b);
+MADPlatformColor *newColorWithColorsAlpha(CGFloat r, CGFloat g, CGFloat b, CGFloat a);
 
 @interface MADColor : NSObject <NSCopying>
 
-- (instancetype)initWithColor:(UIColor *)color;
+- (instancetype)initWithColor:(MADPlatformColor *)color;
 
-@property (nonatomic, copy, readonly) UIColor *color;
+@property (nonatomic, copy, readonly) MADPlatformColor *color;
 
 @property (nonatomic, readonly) NSString *hexStringValue;
 

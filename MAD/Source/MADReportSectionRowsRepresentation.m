@@ -7,7 +7,7 @@
 //
 
 #import "MADReportSectionRowsRepresentation.h"
-#import <UIKit/UIGeometry.h>
+#import <CoreGraphics/CGGeometry.h>
 #import "MADReportLineRepresentation.h"
 
 typedef NSMutableSet <MADReportLineRepresentation *>  MADMutableSetReportLines;

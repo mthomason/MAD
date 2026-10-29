@@ -6,8 +6,13 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
+#include <TargetConditionals.h>
 #import "MADAppLaunchContext.h"
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 #import <UIKit/UIDocument.h>
+#else
+static NSString * const NSUserActivityDocumentURLKey = @"NSUserActivityDocumentURL";
+#endif
 #import <Foundation/NSException.h>
 #import <Foundation/NSUserActivity.h>
 #import <Foundation/NSDictionary.h>

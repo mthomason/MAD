@@ -99,6 +99,12 @@
 #pragma mark -
 #pragma mark Convience Constructor
 
+#if defined(__APPLE__) && TARGET_OS_OSX
++ (instancetype)layoutAttributesForCellWithIndexPath:(NSIndexPath *)indexPath {
+	return [self layoutAttributesForItemWithIndexPath:indexPath];
+}
+#endif
+
 + (instancetype)newSectionLayoutAttributesWithIndex:(NSIndexPath *)indexPath
 										   objectID:(int64_t)objectID
 											andRect:(CGRect)rect {

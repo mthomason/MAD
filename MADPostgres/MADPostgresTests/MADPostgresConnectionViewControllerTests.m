@@ -7,7 +7,9 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <TargetConditionals.h>
 
+#if TARGET_OS_IPHONE
 #import <MADAPI/MADDatabaseConnection.h>
 
 #import "MADPostgresConnectionViewController.h"
@@ -52,3 +54,4 @@
 }
 
 @end
+#endif

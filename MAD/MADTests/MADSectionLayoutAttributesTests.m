@@ -21,9 +21,15 @@
 //  These tests need only UIKit: no store, no data source.
 //
 
+#include <TargetConditionals.h>
 #import <XCTest/XCTest.h>
 
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#else
 #import <UIKit/UIKit.h>
+#endif
 
 #import "MADSectionLayoutAttributes.h"
 

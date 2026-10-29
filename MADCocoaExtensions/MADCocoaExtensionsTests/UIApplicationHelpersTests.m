@@ -13,7 +13,9 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <TargetConditionals.h>
 
+#if TARGET_OS_IPHONE
 #import <UIKit/UIApplication.h>
 #import <UIKit/UIWindow.h>
 
@@ -40,3 +42,4 @@
 }
 
 @end
+#endif

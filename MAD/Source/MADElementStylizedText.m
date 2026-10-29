@@ -16,10 +16,15 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
 
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#else
 #import <UIKit/UIFontDescriptor.h>
 #import <UIKit/UIFont.h>
 #import <UIKit/NSParagraphStyle.h>
 #import <UIKit/NSAttributedString.h>
+#endif
 
 @interface MADElementStylizedText ()
 
@@ -42,14 +47,21 @@
 	
 	if (self = [super init]) {
 		
-		UIFontDescriptor *fontDescriptor = [UIFontDescriptor newFontDescriptorForFontName: fontname
-																				 fontSize: fontsize
-																					 bold: textStyle.bold
-																				   italic: textStyle.italic];
+		MADPlatformFontDescriptor *fontDescriptor = [MADPlatformFontDescriptor newFontDescriptorForFontName: fontname
+																								   fontSize: fontsize
+																									   bold: textStyle.bold
+																									 italic: textStyle.italic];
 		
-		
+#if defined(__APPLE__) && TARGET_OS_OSX
+		NSFont *customFont = [NSFont fontWithDescriptor: fontDescriptor
+												   size: 0.0];
+		if (customFont == nil) {
+			customFont = [NSFont systemFontOfSize: (fontsize > 0.0 ? fontsize : 12.0)];
+		}
+#else
 		UIFont *customFont = [UIFont fontWithDescriptor: fontDescriptor
 												   size: 0.0];
+#endif
 		
 		
 		NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];

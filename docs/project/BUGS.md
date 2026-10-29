@@ -348,6 +348,7 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADDesignerLayout` multi-selection undo clobbers per-element previous values with a single scalar
 - `MADSQLParser` rejects schema-qualified table names (`schema.table`) in `FROM`, `JOIN`, and three-part column references
 - `MADSectionLayout` reads CFNumbers at the wrong widths, corrupting adjacent ivars
 - `digit_count_*_int`: `INT_MIN` collapsed onto `INT_MAX`
@@ -502,6 +503,9 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADURLFactory +newURLForLocalApplicationSupportDirectory` threw `NSInvalidArgumentException` without a bundle identifier, and `+groupRootURLForIdentifier:` targeted `~/Library/Group Containers` on macOS
+- `MADDataTable -cacheWithUrl:error:` passed `NSDataWritingFileProtectionCompleteUnlessOpen` on macOS, failing unentitled cache writes
+- `MADKeyChain` leaks every `CFDataRef` returned by `SecItemCopyMatching` in existence checks and mutating helpers
 - MADDataTable's cache loader dereferenced a null error pointer
 - `MADOperationConditionResultTests`: the async-path assertion raced the dispatch_group
 - Framework targets dropped `$(inherited)`, so `DEBUG` never reached framework code
@@ -873,6 +877,7 @@ wrong answer.
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADDatabaseSqlite3` called `-endBulkInsert` unconditionally on zero-row `SELECT`s, raising `cannot commit - no transaction is active`
 - `MADArrayCaching` could build a cache URL from an empty identifier
 - `MADDataTableFast` passed possibly-nil values into paths that raise
 - `MADQueryCacheAddRow` built its placeholder list with `strcat`
@@ -892,6 +897,7 @@ wrong answer.
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADBarcode -drawInRect:` doubles `rect.origin` when `self.center` is `YES`
 - MADBarcode's type-name dictionary has a duplicate key
 - Two symbology classes initialize with another class's type
 - `MADBarcodeInternationalStandardBookNumberIsbn +type` calls itself

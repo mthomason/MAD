@@ -25,9 +25,15 @@
 //  its rows; the fixture below builds those in a real in-memory store.
 //
 
+#include <TargetConditionals.h>
 #import <XCTest/XCTest.h>
 
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#else
 #import <UIKit/UIKit.h>
+#endif
 
 #import "MADSectionLayoutManager.h"
 #import "MADSectionLayoutAttributes.h"

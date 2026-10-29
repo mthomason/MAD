@@ -12,7 +12,10 @@
 
 #import "MADDatabaseConnectionSqlite3.h"
 #import "MADDatabaseSqlite3.h"
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSCoder.h>
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSURL.h>
 
 #import <MADFoundation/MADURLFactory.h>
@@ -58,11 +61,32 @@
 @dynamic identifier;
 
 + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
-	// FIXME: When we start using Sqlite3 for users to make there own, we will also have to search
-	//          the users documents directory.  Right now, only chinook.sqlite3 should be in the sqlite3 files types.
-	//          Also hacked as fuck, because I'm using the mysql storage place to do this, but fuck it!
-	NSURL *dbUrl = [[MADURLFactory newURLLocalApplicationSupportDirectoryForGroupID: [MADApplication groupIdentifier]] URLByAppendingPathComponent: credentals.database
-																																	   isDirectory: NO];
+	NSFileManager *fm = [NSFileManager defaultManager];
+	if (credentals.host.length > 0 && [credentals.host hasPrefix:@"/"] && [fm fileExistsAtPath:credentals.host]) {
+		return [[self alloc] initWithUrl:[NSURL fileURLWithPath:credentals.host isDirectory:NO]];
+	}
+	if (credentals.database.length > 0 && [credentals.database hasPrefix:@"/"] && [fm fileExistsAtPath:credentals.database]) {
+		return [[self alloc] initWithUrl:[NSURL fileURLWithPath:credentals.database isDirectory:NO]];
+	}
+	NSString *groupID = [MADApplication groupIdentifier];
+	NSURL *baseDir = nil;
+#if __APPLE__
+	if (groupID.length > 0 && [fm containerURLForSecurityApplicationGroupIdentifier:groupID] != nil) {
+		baseDir = [MADURLFactory newURLLocalApplicationSupportDirectoryForGroupID:groupID];
+	} else {
+		baseDir = [MADURLFactory newURLForLocalApplicationSupportDirectory];
+	}
+#else
+	baseDir = [MADURLFactory newURLLocalApplicationSupportDirectoryForGroupID:groupID];
+#endif
+	NSURL *dbUrl = credentals.database.length > 0 ? [baseDir URLByAppendingPathComponent:credentals.database isDirectory:NO] : baseDir;
+	if (credentals.database.length > 0 && ![fm fileExistsAtPath:dbUrl.path]) {
+		NSURL *bundled = [[NSBundle mainBundle] URLForResource:credentals.database.stringByDeletingPathExtension
+												 withExtension:credentals.database.pathExtension];
+		if (bundled != nil) {
+			dbUrl = bundled;
+		}
+	}
 	return [[self alloc] initWithUrl:dbUrl];
 }
 

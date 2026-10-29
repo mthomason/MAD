@@ -9,6 +9,7 @@
 #ifndef Barcodes_MADBarcode_h
 #define Barcodes_MADBarcode_h
 
+#import <TargetConditionals.h>
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
@@ -16,7 +17,13 @@
 #import <MADBarcodes/MADBarcodeSizingMode.h>
 
 @class MADColor;
+#if TARGET_OS_IPHONE
 @class UIImage;
+typedef UIImage MADBarcodeImage;
+#elif TARGET_OS_OSX
+@class NSImage;
+typedef NSImage MADBarcodeImage;
+#endif
 
 @interface MADBarcode : NSObject <MADBarcodeProtocol, NSSecureCoding>
 	
@@ -48,7 +55,7 @@
 
 	// The encoded symbol as one image, in zint's natural orientation and at one
 	// point per bitmap pixel.  nil when zint refuses the inputs.
-	- (UIImage *)renderedImage;
+	- (MADBarcodeImage *)renderedImage;
 
 	// Canonical key over every value that changes what -renderedImage or
 	// -drawInRect: produces, for MADBarcodeCache.

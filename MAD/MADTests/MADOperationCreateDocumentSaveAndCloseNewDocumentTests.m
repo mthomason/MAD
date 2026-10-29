@@ -11,6 +11,8 @@
 //  plain close operation in MADOperationDocumentCloseDocumentTests.m.
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <XCTest/XCTest.h>
 
 #import "MADOperationCreateDocumentSaveAndCloseNewDocument.h"
@@ -131,3 +133,4 @@
 }
 
 @end
+#endif

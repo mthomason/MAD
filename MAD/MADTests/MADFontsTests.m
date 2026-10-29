@@ -9,8 +9,13 @@
 //  list is non-empty, complete, and not in descending order.
 //
 
+#include <TargetConditionals.h>
 #import <XCTest/XCTest.h>
+#if TARGET_OS_OSX
+#import <AppKit/NSFontManager.h>
+#else
 #import <UIKit/UIFont.h>
+#endif
 
 #import "MADFonts.h"
 
@@ -21,12 +26,17 @@
 
 - (void)testFamilyNamesSnapshotTheSystemFamilies {
 	MADFonts *fonts = [[MADFonts alloc] init];
+#if TARGET_OS_OSX
+	NSArray<NSString *> *systemFamilies = [[NSFontManager sharedFontManager] availableFontFamilies];
+#else
+	NSArray<NSString *> *systemFamilies = [UIFont familyNames];
+#endif
 
 	XCTAssertNotNil(fonts.familyNames);
 	XCTAssertGreaterThan(fonts.familyNames.count, (NSUInteger)0);
-	XCTAssertEqual(fonts.familyNames.count, [UIFont familyNames].count);
+	XCTAssertEqual(fonts.familyNames.count, systemFamilies.count);
 	for (NSString *familyName in fonts.familyNames) {
-		XCTAssertTrue([[UIFont familyNames] containsObject:familyName], @"unexpected family %@", familyName);
+		XCTAssertTrue([systemFamilies containsObject:familyName], @"unexpected family %@", familyName);
 	}
 }
 
