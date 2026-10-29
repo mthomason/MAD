@@ -20,7 +20,7 @@
 #import <MAD/MADQueryFull.h>
 #import <MAD/MADDatabase+Constructor.h>
 
-#if __APPLE__
+#if TARGET_OS_IPHONE
 // The rendering side of a document, which only a MADocument has: the report
 // formatter that draws the report and the section layout managers that measure it.
 // MADReportFormatter, MADSectionLayoutManager and MADocument are all excluded from
@@ -112,7 +112,7 @@ static void MADOperationRefreshInitializeRunOnMain(dispatch_block_t block) {
 
 	document.database.delegate = (id <MADDatabaseResultsProtocol>)doc;
 
-#if __APPLE__
+#if TARGET_OS_IPHONE
 	// A document that renders gets its formatter here, before the refresh runs:
 	// MADOperationRefresh sets -refreshed on the way out and MADocument keeps that
 	// flag on the formatter.  A headless document keeps its own.

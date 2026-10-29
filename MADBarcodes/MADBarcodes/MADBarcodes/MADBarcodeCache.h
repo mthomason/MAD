@@ -9,11 +9,18 @@
 #ifndef MADBarcodes_MADBarcodeCache_h
 #define MADBarcodes_MADBarcodeCache_h
 
+#import <TargetConditionals.h>
 #import <Foundation/NSObject.h>
 #import <Foundation/NSString.h>
 
 @class MADBarcode;
+#if TARGET_OS_IPHONE
 @class UIImage;
+typedef UIImage MADBarcodeImage;
+#elif TARGET_OS_OSX
+@class NSImage;
+typedef NSImage MADBarcodeImage;
+#endif
 
 // Rendered barcode images, keyed by MADBarcode's -renderCacheKey.  A report
 // draws one barcode per detail row and values repeat, so a hit replaces the
@@ -25,7 +32,7 @@
 // The rendered image, rendering and storing it on a miss.  nil when the
 // barcode cannot be encoded; the message from that attempt is kept for
 // -errorMessageForBarcode:.
-- (UIImage *)imageForBarcode:(MADBarcode *)barcode;
+- (MADBarcodeImage *)imageForBarcode:(MADBarcode *)barcode;
 
 // The message from the failed render stored by -imageForBarcode:, or nil.
 - (NSString *)errorMessageForBarcode:(MADBarcode *)barcode;

@@ -9,8 +9,10 @@
 #ifndef MAD_Designer_MADTextField_h
 #define MAD_Designer_MADTextField_h
 
+#import <TargetConditionals.h>
 #import <Foundation/NSObject.h>
 
+#if TARGET_OS_IPHONE
 @class UITextField;
 
 typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
@@ -21,5 +23,6 @@ typedef void (^MADTextFieldConfigurationHandler)(UITextField *textField);
 @property (readonly, nonatomic, copy) MADTextFieldConfigurationHandler handleConfigureUsername;
 
 @end
+#endif
 
 #endif

@@ -11,6 +11,8 @@
 #endif
 
 #import "MADMySQLConnectionViewController.h"
+
+#if TARGET_OS_IPHONE
 #import "MADDatabaseConnectionMySql.h"
 
 @implementation MADMySQLConnectionViewController
@@ -35,3 +37,4 @@
 }
 
 @end
+#endif

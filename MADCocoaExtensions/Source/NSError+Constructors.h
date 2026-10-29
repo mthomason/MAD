@@ -9,8 +9,10 @@
 #ifndef Reports_NSError_Constructors_h
 #define Reports_NSError_Constructors_h
 
+#import <TargetConditionals.h>
 #import <Foundation/NSError.h>
 
+#if TARGET_OS_IPHONE
 @class UIViewController;
 
 @interface NSError (Constructors)
@@ -20,5 +22,6 @@
 		  completion:(void (^)(BOOL success))completion;
 
 @end
+#endif
 
 #endif

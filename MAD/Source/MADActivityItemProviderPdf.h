@@ -9,6 +9,8 @@
 #ifndef Reports_MADActivityItemProviderPdf_h
 #define Reports_MADActivityItemProviderPdf_h
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIActivityItemProvider.h>
 
 @protocol MADActivityItemProviderDelegate;
@@ -22,5 +24,6 @@
 @property (nonatomic, weak, readonly) UIActivityViewController *activityViewController;
 
 @end
+#endif
 
 #endif

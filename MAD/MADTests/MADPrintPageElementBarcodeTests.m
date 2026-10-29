@@ -17,9 +17,14 @@
 //  no input; type 0 is not a case in +newBarcodeWithType:, so the factory returns nil.
 //
 
+#include <TargetConditionals.h>
 #import <XCTest/XCTest.h>
 
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#else
 #import <UIKit/UIKit.h>
+#endif
 
 #import "MADDocumentObjectDataReference.h"
 #import "MADDocumentObjectDataReferenceBarcode.h"
@@ -245,12 +250,20 @@
 	// Drawing a real Code 39 barcode needs the zint context; the element's own contract
 	// is only that it does not stash state of its own, so drawing into an image context
 	// is enough to show the forward does not throw.
+#if TARGET_OS_OSX
+	NSImage *image = [[NSImage alloc] initWithSize:NSMakeSize(80.0, 30.0)];
+	[image lockFocus];
+	[element drawInRect:CGRectMake(0.0, 0.0, 80.0, 30.0)];
+	[image unlockFocus];
+	XCTAssertNotNil(image);
+#else
 	UIGraphicsBeginImageContextWithOptions(CGSizeMake(80.0, 30.0), NO, 1.0);
 	[element drawInRect:CGRectMake(0.0, 0.0, 80.0, 30.0)];
 	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 
 	XCTAssertNotNil(image);
+#endif
 }
 
 #pragma mark - Text

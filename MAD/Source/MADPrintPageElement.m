@@ -13,9 +13,12 @@
 
 #import <Foundation/NSString.h>
 
-#if __APPLE__
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 #import <UIKit/UIImage.h>
 #import <UIKit/NSStringDrawing.h>
+#elif defined(__APPLE__) && TARGET_OS_OSX
+#import <AppKit/AppKit.h>
 #else
 // No UIKit: the element family is still the render half's shape everywhere -- a
 // format reads the text these classes resolve -- but nothing draws, so the image
@@ -28,7 +31,7 @@
 @end
 
 @interface MADPrintPageElementImage ()
-@property (nonatomic, strong) UIImage *image;
+@property (nonatomic, strong) MADReferenceImage *image;
 @end
 
 

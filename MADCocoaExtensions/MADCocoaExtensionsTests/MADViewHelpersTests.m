@@ -10,7 +10,9 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <TargetConditionals.h>
 
+#if TARGET_OS_IPHONE
 #import <UIKit/UIView.h>
 
 #import <MADCocoaExtensions/MADViewHelpers.h>
@@ -38,3 +40,4 @@
 }
 
 @end
+#endif

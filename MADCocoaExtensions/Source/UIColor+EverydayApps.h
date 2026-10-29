@@ -13,18 +13,18 @@
 
  @interface MADColorEverydayApps : MADColor
  
-+ (UIColor *)newColorBlueDark;
-+ (UIColor *)newColorBlueLightBackground;
-+ (UIColor *)newColorBlackSeventyFivePercent;
-+ (UIColor *)newColorBlackTwentyFivePercent;
-+ (UIColor *)newColorHeaderColor;
-+ (UIColor *)newColorBlue;
-+ (UIColor *)newColorRed;
-+ (UIColor *)newColorWhite;
-+ (UIColor *)blueHeaderSecondaryColor;
-+ (UIColor *)newColorDisabledColor;
-+ (UIColor *)newColorAnalogous4;
-+ (UIColor *)newColorBorderColor;
++ (MADPlatformColor *)newColorBlueDark;
++ (MADPlatformColor *)newColorBlueLightBackground;
++ (MADPlatformColor *)newColorBlackSeventyFivePercent;
++ (MADPlatformColor *)newColorBlackTwentyFivePercent;
++ (MADPlatformColor *)newColorHeaderColor;
++ (MADPlatformColor *)newColorBlue;
++ (MADPlatformColor *)newColorRed;
++ (MADPlatformColor *)newColorWhite;
++ (MADPlatformColor *)blueHeaderSecondaryColor;
++ (MADPlatformColor *)newColorDisabledColor;
++ (MADPlatformColor *)newColorAnalogous4;
++ (MADPlatformColor *)newColorBorderColor;
 
 @end
 

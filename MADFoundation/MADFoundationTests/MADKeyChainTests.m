@@ -58,4 +58,23 @@
 	XCTAssertEqualObjects(query[(__bridge NSString *)kSecReturnData], @YES);
 }
 
+- (void)testSaveCheckAndDeleteCredentialsRoundTrip {
+	NSString *key = [NSString stringWithFormat:@"mad.test.keychain.%@", NSUUID.UUID.UUIDString];
+	NSError *deleteError = nil;
+	[MADKeyChain deleteSavedPasswordForKey:key error:&deleteError];
+
+	OSStatus saveStatus = [MADKeyChain saveUsername:@"alice" andPassword:@"s3cret" forKey:key];
+	if (saveStatus == errSecMissingEntitlement) {
+		return;
+	}
+	XCTAssertEqual(saveStatus, errSecSuccess);
+	XCTAssertTrue([MADKeyChain credentialsExist:key]);
+
+	// Updating an existing credential exercises the update branch of +saveToken:forKey:withDescription:.
+	XCTAssertEqual([MADKeyChain savePassword:@"s3cret-2" forKey:key], errSecSuccess);
+	XCTAssertTrue([MADKeyChain deleteSavedPasswordForKey:key error:&deleteError]);
+	XCTAssertNil(deleteError);
+	XCTAssertFalse([MADKeyChain credentialsExist:key]);
+}
+
 @end

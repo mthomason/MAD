@@ -14,10 +14,14 @@
 #import "RptqDocumentSection+Extras.h"
 #import <MADFoundation/madlog.h>
 
-#if __APPLE__
-// NSIndexPath's item/section additions are UIKit's on Apple (reached through
-// UICollectionView.h); GNUstep's Foundation carries them itself.
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+// NSIndexPath's item/section additions are UIKit's on iOS (reached through
+// UICollectionView.h); AppKit's NSCollectionView.h provides them on macOS;
+// GNUstep's Foundation carries them itself.
 #import <UIKit/UICollectionView.h>
+#elif defined(__APPLE__) && TARGET_OS_OSX
+#import <AppKit/NSCollectionView.h>
 #endif
 
 #import <Foundation/NSSortDescriptor.h>

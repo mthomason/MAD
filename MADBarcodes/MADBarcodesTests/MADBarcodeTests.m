@@ -14,8 +14,12 @@
 
 #import <XCTest/XCTest.h>
 
+#if TARGET_OS_IPHONE
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIColor.h>
+#elif TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+#endif
 
 #import "MADBarcode.h"
 #import "MADBarcodeCache.h"
@@ -193,12 +197,23 @@
 												 kCGImageAlphaPremultipliedLast);
 	CGColorSpaceRelease(space);
 
+#if TARGET_OS_IPHONE
 	CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+#elif TARGET_OS_OSX
+	CGContextSetFillColorWithColor(context, [NSColor whiteColor].CGColor);
+#endif
 	CGContextFillRect(context, CGRectMake(0, 0, size.width, size.height));
 
+#if TARGET_OS_IPHONE
 	UIGraphicsPushContext(context);
 	[barcode drawInRect:CGRectMake(0, 0, size.width, size.height)];
 	UIGraphicsPopContext();
+#elif TARGET_OS_OSX
+	[NSGraphicsContext saveGraphicsState];
+	[NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithCGContext:context flipped:YES]];
+	[barcode drawInRect:CGRectMake(0, 0, size.width, size.height)];
+	[NSGraphicsContext restoreGraphicsState];
+#endif
 
 	BOOL painted = NO;
 	for (size_t i = 0; i < width * height * 4 && !painted; i += 4) {
@@ -215,6 +230,54 @@
 	barcode.input = @"TEST";
 
 	XCTAssertTrue([self drawBarcode:barcode intoSize:CGSizeMake(220, 110)]);
+}
+
+- (void)testCenteredDrawWithNonZeroOriginPaintsInsideTargetRect {
+	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	barcode.input = @"TEST";
+	barcode.center = YES;
+
+	size_t width = 400;
+	size_t height = 200;
+	unsigned char *pixels = calloc(width * height * 4, 1);
+	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+	CGContextRef context = CGBitmapContextCreate(pixels, width, height, 8, width * 4, space,
+												 kCGImageAlphaPremultipliedLast);
+	CGColorSpaceRelease(space);
+
+#if TARGET_OS_IPHONE
+	CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+#elif TARGET_OS_OSX
+	CGContextSetFillColorWithColor(context, [NSColor whiteColor].CGColor);
+#endif
+	CGContextFillRect(context, CGRectMake(0, 0, width, height));
+
+	CGRect targetRect = CGRectMake(180, 80, 220, 110);
+#if TARGET_OS_IPHONE
+	UIGraphicsPushContext(context);
+	[barcode drawInRect:targetRect];
+	UIGraphicsPopContext();
+#elif TARGET_OS_OSX
+	[NSGraphicsContext saveGraphicsState];
+	[NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithCGContext:context flipped:YES]];
+	[barcode drawInRect:targetRect];
+	[NSGraphicsContext restoreGraphicsState];
+#endif
+
+	BOOL paintedInTarget = NO;
+	for (size_t row = 80; row < 190 && !paintedInTarget; row++) {
+		for (size_t col = 180; col < 400 && !paintedInTarget; col++) {
+			size_t idx = (row * width + col) * 4;
+			if (pixels[idx] != 255 || pixels[idx + 1] != 255 || pixels[idx + 2] != 255) {
+				paintedInTarget = YES;
+			}
+		}
+	}
+
+	CGContextRelease(context);
+	free(pixels);
+	XCTAssertTrue(paintedInTarget,
+				  @"centered draw with non-zero rect.origin must stay inside targetRect");
 }
 
 - (void)testOverlongPrimaryDataIsRefused {
@@ -265,7 +328,7 @@
 								 (CGFloat)reference->bitmap_height);
 	ZBarcode_Delete(reference);
 
-	UIImage *image = [barcode renderedImage];
+	MADBarcodeImage *image = [barcode renderedImage];
 
 	XCTAssertNotNil(image);
 	XCTAssertEqualWithAccuracy(image.size.width, expected.width, 0.5);
@@ -287,8 +350,8 @@
 	MADBarcode *second = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
 	second.input = @"TEST";
 
-	UIImage *firstImage = [[MADBarcodeCache sharedCache] imageForBarcode:first];
-	UIImage *secondImage = [[MADBarcodeCache sharedCache] imageForBarcode:second];
+	MADBarcodeImage *firstImage = [[MADBarcodeCache sharedCache] imageForBarcode:first];
+	MADBarcodeImage *secondImage = [[MADBarcodeCache sharedCache] imageForBarcode:second];
 
 	XCTAssertNotNil(firstImage);
 	XCTAssertTrue(firstImage == secondImage,
@@ -301,8 +364,8 @@
 	MADBarcode *second = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
 	second.input = @"OTHER";
 
-	UIImage *firstImage = [[MADBarcodeCache sharedCache] imageForBarcode:first];
-	UIImage *secondImage = [[MADBarcodeCache sharedCache] imageForBarcode:second];
+	MADBarcodeImage *firstImage = [[MADBarcodeCache sharedCache] imageForBarcode:first];
+	MADBarcodeImage *secondImage = [[MADBarcodeCache sharedCache] imageForBarcode:second];
 
 	XCTAssertNotNil(firstImage);
 	XCTAssertNotNil(secondImage);
@@ -322,9 +385,9 @@
 	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
 	barcode.input = @"TEST";
 
-	UIImage *firstImage = [[MADBarcodeCache sharedCache] imageForBarcode:barcode];
+	MADBarcodeImage *firstImage = [[MADBarcodeCache sharedCache] imageForBarcode:barcode];
 	[[MADBarcodeCache sharedCache] flush];
-	UIImage *secondImage = [[MADBarcodeCache sharedCache] imageForBarcode:barcode];
+	MADBarcodeImage *secondImage = [[MADBarcodeCache sharedCache] imageForBarcode:barcode];
 
 	XCTAssertNotNil(firstImage);
 	XCTAssertNotNil(secondImage);

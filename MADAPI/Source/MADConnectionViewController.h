@@ -9,6 +9,9 @@
 #ifndef MADAPI_MADConnectionViewController_h
 #define MADAPI_MADConnectionViewController_h
 
+#include <TargetConditionals.h>
+
+#if TARGET_OS_IPHONE
 #import <MADAPI/MADDatabaseType.h>
 #import <MADCocoaExtensions/MADLabelTitle.h>
 #import <MADCocoaExtensions/MADAlertController.h>
@@ -39,5 +42,6 @@
 	- (void)enableTextFields;
 
 @end
+#endif
 
 #endif

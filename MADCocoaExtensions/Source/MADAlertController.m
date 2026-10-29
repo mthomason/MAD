@@ -7,6 +7,7 @@
 //
 
 #import "MADAlertController.h"
+#if TARGET_OS_IPHONE
 #import "MADAlertControllerAlertRemovedProtocol.h"
 #import "MADTextField.h"
 
@@ -150,3 +151,4 @@
 }
 
 @end
+#endif

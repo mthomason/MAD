@@ -6,6 +6,8 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import "MADOperationCreateDocumentCreateDocument.h"
 #import "MADOperationUniqueUrlForFilename.h"
 #import <MADFoundation/madlog.h>
@@ -103,3 +105,4 @@
 }
 
 @end
+#endif

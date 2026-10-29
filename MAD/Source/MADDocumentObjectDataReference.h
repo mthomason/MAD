@@ -9,6 +9,7 @@
 #ifndef MAD_MADDocumentObjectDataReference_h
 #define MAD_MADDocumentObjectDataReference_h
 
+#include <TargetConditionals.h>
 #import <Foundation/NSObject.h>
 #import <Foundation/NSValue.h>
 #import <MADFoundation/MADDataType.h>
@@ -19,7 +20,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol MADPrintPageRendererDataSourceProtocol, MADBarcodeProtocol;
-@class RptqDocumentElement, MADDocumentObjectDataReference, MADElementStylizedText, NSMutableDictionary, UIImage;
+@class RptqDocumentElement, MADDocumentObjectDataReference, MADElementStylizedText, NSMutableDictionary;
+
+#if defined(__APPLE__) && TARGET_OS_OSX
+@class NSImage;
+typedef NSImage MADReferenceImage;
+#else
+@class UIImage;
+typedef UIImage MADReferenceImage;
+#endif
 
 @protocol MADDocumentObjectDataReferenceProtocol <NSObject>
 @required
@@ -71,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MADDocumentObjectDataReferenceImage : MADDocumentObjectDataReference
 
-@property (nullable, nonatomic, copy, readonly) UIImage *image;
+@property (nullable, nonatomic, copy, readonly) MADReferenceImage *image;
 
 @end
 

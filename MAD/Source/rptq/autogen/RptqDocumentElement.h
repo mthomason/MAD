@@ -9,10 +9,19 @@
 #ifndef MAD_RptqDocumentElement_NSManagedObject_h
 #define MAD_RptqDocumentElement_NSManagedObject_h
 
+#include <TargetConditionals.h>
 #import <MAD/RptqObject.h>
 
 @class RptqDocumentSectionRows, RptqPoint, RptqDirectionalAsymmetry, RptqRect,
-       RptqBorder, RptqTextStyle, RptqAlignment, RptqNumericFormat, UIColor;
+       RptqBorder, RptqTextStyle, RptqAlignment, RptqNumericFormat;
+
+#if defined(__APPLE__) && TARGET_OS_OSX
+@class NSColor;
+typedef NSColor MADElementColor;
+#else
+@class UIColor;
+typedef UIColor MADElementColor;
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,8 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int64_t dropIndex;
 @property (nonatomic) double fontsize;
 @property (nullable, nonatomic, copy) NSString *fontname;
-@property (nullable, nonatomic, retain) UIColor *backgroundColor;
-@property (nullable, nonatomic, retain) UIColor *foregroundColor;
+@property (nullable, nonatomic, retain) MADElementColor *backgroundColor;
+@property (nullable, nonatomic, retain) MADElementColor *foregroundColor;
 @property (nullable, nonatomic, retain) RptqDocumentSectionRows *inSectionRow;
 @property (nullable, nonatomic, retain) RptqPoint *dropPoint;
 @property (nullable, nonatomic, retain) RptqDirectionalAsymmetry *padding;

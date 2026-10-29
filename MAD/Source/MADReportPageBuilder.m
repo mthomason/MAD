@@ -40,7 +40,12 @@
 #import <CoreFoundation/CFNumber.h>
 
 // The page's four-edge insets; the compat shim answers this off Apple too.
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_OSX
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#else
 #import <UIKit/UIGeometry.h>
+#endif
 
 static inline CGRect ElementBounds(CGRect, CGPoint);
 static inline CGFloat HeightWithVisibility(CGFloat, BOOL);

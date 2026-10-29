@@ -8,11 +8,28 @@
 
 #import "UIFontDescriptor+MADAdditions.h"
 
+#if defined(__APPLE__) && TARGET_OS_OSX
+@implementation NSFontDescriptor (MADAdditions)
+#else
 @implementation UIFontDescriptor (MADAdditions)
+#endif
 
 + (instancetype)newFontDescriptorForFontName:(NSString *) fontName
 									fontSize:(double) fontSize
 										bold:(BOOL)bold italic:(BOOL)italic {
+#if defined(__APPLE__) && TARGET_OS_OSX
+	NSFontDescriptorSymbolicTraits traits = 0;
+	if (bold)   traits     |= NSFontDescriptorTraitBold;
+	if (italic) traits     |= NSFontDescriptorTraitItalic;
+
+	NSDictionary *traitsDict = @{NSFontSymbolicTrait: @(traits)};
+	NSDictionary *attributes = @{
+		NSFontFamilyAttribute: fontName,
+		NSFontTraitsAttribute: traitsDict,
+		NSFontSizeAttribute: @(fontSize)
+	};
+	return [[NSFontDescriptor alloc] initWithFontAttributes:attributes];
+#else
 	UIFontDescriptorSymbolicTraits traits = 0;
 	if (bold)   traits     |= UIFontDescriptorTraitBold;
 	if (italic) traits     |= UIFontDescriptorTraitItalic;
@@ -24,6 +41,7 @@
 		UIFontDescriptorSizeAttribute: @(fontSize)
 	};
 	return [[UIFontDescriptor alloc] initWithFontAttributes:attributes];
+#endif
 }
 
 @end

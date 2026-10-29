@@ -7,6 +7,7 @@
 //
 
 #import "MFMailComposeViewController+MADExtensions.h"
+#if TARGET_OS_IPHONE
 #import "UIColor+EverydayApps.h"
 
 @implementation MFMailComposeViewController (MADExtensions)
@@ -50,3 +51,4 @@
 }
 
 @end
+#endif

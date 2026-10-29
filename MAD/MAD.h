@@ -6,12 +6,16 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
+#include <TargetConditionals.h>
+#import <Foundation/Foundation.h>
 #import <Foundation/NSObjCRuntime.h>
 
 FOUNDATION_EXPORT double MADVersionNumber;
 FOUNDATION_EXPORT const unsigned char MADVersionString[];
 
+#if TARGET_OS_IPHONE
 #import <MAD/MADocument.h>
+#endif
 #import <MAD/MADActivityProtocol.h>
 #import <MAD/MADActivityItemProviderDelegate.h>
 
@@ -132,7 +136,9 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADDocumentTextRepresentationProtocol.h>
 #import <MAD/MADElementStylizedText.h>
 #import <MAD/MADFonts.h>
+#if TARGET_OS_IPHONE
 #import <MAD/MADImageThumbnail.h>
+#endif
 #import <MAD/MADHeadlessDocument.h>
 #import <MAD/MADKeyChainKeyValueProtocol.h>
 #import <MAD/MADModel.h>
@@ -150,6 +156,7 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADNotificationProtocol.h>
 #import <MAD/MADOperationBackgroundTaskBegin.h>
 #import <MAD/MADOperationBackgroundTaskEnd.h>
+#if TARGET_OS_IPHONE
 #import <MAD/MADOperationCreateDocumentAddConnection.h>
 #import <MAD/MADOperationCreateDocumentCreateDocument.h>
 #import <MAD/MADOperationCreateDocumentFirstTimeSetup.h>
@@ -157,6 +164,7 @@ FOUNDATION_EXPORT const unsigned char MADVersionString[];
 #import <MAD/MADOperationCreateDocumentSaveAndCloseNewDocument.h>
 #import <MAD/MADOperationDeleteFile.h>
 #import <MAD/MADOperationDocumentCloseDocument.h>
+#endif
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MADOperationHoldsPasswordProtocol.h>
 #import <MAD/MADOperationHoldsUsernameProtocol.h>

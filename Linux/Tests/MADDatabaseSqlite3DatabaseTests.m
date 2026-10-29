@@ -599,6 +599,44 @@ static void testDriverFillsAWritePortWithNoDataTableBehindIt(void) {
 	removeTempDirectory(tempDirectory);
 }
 
+static void testDriverZeroRowSelectDoesNotCallUnpairedEndBulkInsert(void) {
+	NSURL *tempDirectory = makeTempDirectory();
+	NSURL *databaseURL = [tempDirectory URLByAppendingPathComponent:@"test.sqlite"];
+	createPeopleTable(databaseURL);
+	MADDatabaseSqlite3 *database = makeOpenDatabase(databaseURL);
+
+	MADWritePortRecorder *recorder = [[MADWritePortRecorder alloc] init];
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT name, age FROM people WHERE age < 0"
+							  fieldKeys:@[@"name", @"age"]
+						   onConnection:nil
+						intoResultTable:recorder
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	MAD_PASS(success, "zero-row select failed: %s", [[error description] UTF8String]);
+	MAD_PASS(recorder.beginBulkInsertCount == (NSUInteger)0, "zero-row select must not begin bulk insert");
+	MAD_PASS(recorder.endBulkInsertCount == (NSUInteger)0, "zero-row select must not end bulk insert");
+	MAD_PASS_EQUAL(recorder.callLog, (@[@"removeAllObjects"]), "zero-row select clears the destination table");
+
+	MADArrayCachingDirectoryDouble *cacheDouble = [[MADArrayCachingDirectoryDouble alloc] init];
+	cacheDouble.directory = tempDirectory;
+	MADDataTableFast *fastTable = [[MADDataTableFast alloc] initWithId:99 fromCache:YES];
+	fastTable.cacheDelegate = cacheDouble;
+	success = [database executeSQL:@"SELECT name, age FROM people WHERE age < 0"
+						 fieldKeys:@[@"name", @"age"]
+					  onConnection:nil
+				   intoResultTable:fastTable
+					transactionSet:NO
+					returnsResults:YES
+					binaryBindings:nil
+						 withError:&error];
+	MAD_PASS(success, "zero-row select into MADDataTableFast failed: %s", [[error description] UTF8String]);
+	MAD_PASS([fastTable count] == (NSUInteger)0, "fast table remains empty");
+	removeTempDirectory(tempDirectory);
+}
+
 #pragma mark - Checkpoint
 
 // The document save path folds a store's WAL before archiving so a reader that
@@ -656,4 +694,5 @@ MAD_TEST_MAIN("MADDatabaseSqlite3DatabaseTests",
 	MAD_TEST(testCopyPlistStoresTheCacheFileNameNotAnAbsoluteUrl),
 	MAD_TEST(testLoadWithPlistResolvesAStoredFileNameInTheDirectoryInUseNow),
 	MAD_TEST(testDriverFillsAWritePortWithNoDataTableBehindIt),
+	MAD_TEST(testDriverZeroRowSelectDoesNotCallUnpairedEndBulkInsert),
 	MAD_TEST(testCheckpointStoreAtURLFoldsTheWal));

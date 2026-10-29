@@ -9,18 +9,29 @@
 #ifndef Reports_MADPrintPageRendererReport_h
 #define Reports_MADPrintPageRendererReport_h
 
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 #import <UIKit/UIPrintPageRenderer.h>
+typedef UIPrintPageRenderer MADPlatformPrintPageRenderer;
+#else
+#import <Foundation/NSObject.h>
+#import <CoreGraphics/CGGeometry.h>
+#import <CoreGraphics/CGContext.h>
+typedef NSObject MADPlatformPrintPageRenderer;
+#endif
 
-@class UIImage, MADReportTextRepresentation, MADReportFormatter, MADDataTableFast, MADocument, MADReportPageRepresentation;
+@class MADReportTextRepresentation, MADReportFormatter, MADDataTableFast, MADocument, MADReportPageRepresentation;
 @protocol MADPrintPageRendererDataSourceProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MADPrintPageRenderer : UIPrintPageRenderer
+@interface MADPrintPageRenderer : MADPlatformPrintPageRenderer
 
 @property (nonatomic, strong, readonly) MADReportTextRepresentation *textRepresentation;
 
 - (instancetype)initWithDataSource:(NSObject <MADPrintPageRendererDataSourceProtocol> *)datasource;
+- (NSInteger)numberOfPages;
+- (void)drawPageAtIndex:(NSInteger)index inRect:(CGRect)pageRect;
 - (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect withTransparentBackground:(BOOL)transparentBackground;
 
 /// The page's walk, with the drawing optional: a context draws the page into the

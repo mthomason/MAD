@@ -290,7 +290,7 @@
 @dynamic item;
 @dynamic image;
 
-- (UIImage *)image {
+- (MADReferenceImage *)image {
 	return self.item.image;
 }
 

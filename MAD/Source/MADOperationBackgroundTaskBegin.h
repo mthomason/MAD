@@ -9,7 +9,13 @@
 #ifndef MAD_Designer_MADOperationBackgroundTaskBegin_h
 #define MAD_Designer_MADOperationBackgroundTaskBegin_h
 
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 #import <UIKit/UIApplication.h>
+#else
+#import <Foundation/NSObjCRuntime.h>
+typedef NSUInteger UIBackgroundTaskIdentifier;
+#endif
 #import <MADFoundation/MADOperation.h>
 
 @protocol MADOperationBackgroundTaskProtocol <NSObject>

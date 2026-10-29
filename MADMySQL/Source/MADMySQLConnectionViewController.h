@@ -9,10 +9,14 @@
 #ifndef MADMySQL_MADConnectionViewController_h
 #define MADMySQL_MADConnectionViewController_h
 
+#include <TargetConditionals.h>
+
+#if TARGET_OS_IPHONE
 #import <MADAPI/MADConnectionSQLGenericViewController.h>
 
 @interface MADMySQLConnectionViewController : MADConnectionSQLGenericViewController
 
 @end
+#endif
 
 #endif

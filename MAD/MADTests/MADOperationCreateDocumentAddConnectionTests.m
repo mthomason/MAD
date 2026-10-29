@@ -13,6 +13,8 @@
 //  dependency at all the operation still reports success (see the quirk test).
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <XCTest/XCTest.h>
 
 #import "MADOperationCreateDocumentAddConnection.h"
@@ -166,3 +168,4 @@
 }
 
 @end
+#endif

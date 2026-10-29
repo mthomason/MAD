@@ -18,6 +18,12 @@
 #import "RptqQueryField+Extras.h"
 #import "RptqDataHelper.h"
 
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+#import <UIKit/UIColor.h>
+#elif defined(__APPLE__) && TARGET_OS_OSX
+#import <AppKit/NSColor.h>
+#endif
 #import <MADFoundation/MADDataType.h>
 #import <MADBarcodes/MADBarcodes.h>
 #import <MADBarcodes/MADBarcodeType.h>
@@ -86,8 +92,8 @@
 		reportObject.add2dComponent = barcode.has2dComponentEnabled;
 		reportObject.barcodeBorderStyle = barcode.barcodeBorderStyle;
 		reportObject.barcodeBorderWidth = barcode.barcodeBorderWidth;
-		reportObject.backgroundColor = [UIColor whiteColor];
-		reportObject.foregroundColor = [UIColor blackColor];
+		reportObject.backgroundColor = [MADElementColor whiteColor];
+		reportObject.foregroundColor = [MADElementColor blackColor];
 		reportObject.barcodeHeight = barcode.barcodeHeight;
 		reportObject.humanReadable = barcode.humanReadable;
 		reportObject.option1 = barcode.option1;

@@ -9,6 +9,9 @@
 #ifndef MADAPI_MADConnectionSQLGenericViewController_h
 #define MADAPI_MADConnectionSQLGenericViewController_h
 
+#include <TargetConditionals.h>
+
+#if TARGET_OS_IPHONE
 #import <MADAPI/MADConnectionViewController.h>
 
 @interface MADConnectionSQLGenericViewController : MADConnectionViewController
@@ -18,5 +21,6 @@
 	@property (nonatomic, weak) IBOutlet UITextField *textFieldDatabase;
 
 @end
+#endif
 
 #endif

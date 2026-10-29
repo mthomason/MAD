@@ -562,6 +562,42 @@
 	}
 }
 
+- (void)testDriverZeroRowSelectDoesNotCallUnpairedEndBulkInsert {
+	[self createPeopleTable];
+	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
+
+	MADWritePortRecorder *recorder = [[MADWritePortRecorder alloc] init];
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT name, age FROM people WHERE age < 0"
+							  fieldKeys:@[@"name", @"age"]
+						   onConnection:nil
+						intoResultTable:recorder
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	XCTAssertTrue(success, @"zero-row select failed: %@", error);
+	XCTAssertEqual(recorder.beginBulkInsertCount, (NSUInteger)0);
+	XCTAssertEqual(recorder.endBulkInsertCount, (NSUInteger)0);
+	XCTAssertEqualObjects(recorder.callLog, (@[@"removeAllObjects"]));
+
+	MADArrayCachingDirectoryDouble *cacheDouble = [[MADArrayCachingDirectoryDouble alloc] init];
+	cacheDouble.directory = self.tempDirectory;
+	MADDataTableFast *fastTable = [[MADDataTableFast alloc] initWithId:99 fromCache:YES];
+	fastTable.cacheDelegate = cacheDouble;
+	NSArray<NSString *> *keys = @[@"name", @"age"];
+	XCTAssertNoThrow((success = [database executeSQL:@"SELECT name, age FROM people WHERE age < 0"
+										   fieldKeys:keys
+										onConnection:nil
+									 intoResultTable:fastTable
+									  transactionSet:NO
+									  returnsResults:YES
+									  binaryBindings:nil
+										   withError:&error]));
+	XCTAssertTrue(success, @"zero-row select into MADDataTableFast failed: %@", error);
+	XCTAssertEqual([fastTable count], (NSUInteger)0);
+}
+
 #pragma mark - Checkpoint
 
 // The document save path folds a store's WAL before archiving so a reader that

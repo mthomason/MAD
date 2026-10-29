@@ -23,7 +23,12 @@
 
 #import <XCTest/XCTest.h>
 
+#import <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIScreen.h>
+#elif TARGET_OS_OSX
+#import <AppKit/NSScreen.h>
+#endif
 
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADURLFactory.h>
@@ -108,6 +113,7 @@
 
 - (void)testDocumentsDirectoryForGroupIdentifier {
 	NSString *group = [MADApplication groupIdentifier];
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 	NSURL *container = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:group];
 
 	if (container == nil) {
@@ -128,6 +134,13 @@
 	NSURL *document = [MADURLFactory newURLLocalDocumentWithName:@"Report" extention:@"mad" fileGroup:group];
 	XCTAssertEqualObjects(document.lastPathComponent, @"Report.mad");
 	XCTAssertEqualObjects(document.URLByDeletingLastPathComponent.path, documents.path);
+#else
+	NSURL *documents = [MADURLFactory newURLLocalDocumentsDirectoryForGroupIdentifier:group];
+	XCTAssertEqualObjects(documents.path, [MADURLFactory newURLForLocalDocumentsDirectory].path);
+	NSURL *document = [MADURLFactory newURLLocalDocumentWithName:@"Report" extention:@"mad" fileGroup:group];
+	XCTAssertEqualObjects(document.lastPathComponent, @"Report.mad");
+	XCTAssertEqualObjects(document.URLByDeletingLastPathComponent.path, documents.path);
+#endif
 }
 
 #pragma mark - Cache subdirectories
@@ -195,7 +208,13 @@
 	[self.createdDirectories addObject:[url URLByDeletingLastPathComponent]];
 
 	// The handle is the document's basename; the retina suffix follows the screen.
-	NSString *expectedName = [UIScreen mainScreen].scale > 1.0 ? @"My Report@2x.png" : @"My Report.png";
+#if TARGET_OS_IPHONE
+	BOOL retina = [UIScreen mainScreen].scale > 1.0;
+#elif TARGET_OS_OSX
+	NSScreen *screen = [NSScreen mainScreen];
+	BOOL retina = screen ? (screen.backingScaleFactor > 1.0) : YES;
+#endif
+	NSString *expectedName = retina ? @"My Report@2x.png" : @"My Report.png";
 	XCTAssertEqualObjects(url.lastPathComponent, expectedName);
 }
 

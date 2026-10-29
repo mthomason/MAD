@@ -10,6 +10,8 @@
 //  keeps it stretched across the panel while staying at the bottom.
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <XCTest/XCTest.h>
 #import <UIKit/UILabel.h>
 
@@ -35,3 +37,4 @@
 }
 
 @end
+#endif

@@ -9,8 +9,13 @@
 //  at zero size and zero insets and just round-trips what is set.
 //
 
+#include <TargetConditionals.h>
 #import <XCTest/XCTest.h>
+#if TARGET_OS_OSX
+#import <MADCocoaExtensions/CGGeometry+Extras.h>
+#else
 #import <UIKit/UIGeometry.h>
+#endif
 
 #import "MADPageOptions.h"
 

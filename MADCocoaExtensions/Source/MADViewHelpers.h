@@ -9,6 +9,8 @@
 #ifndef MADViewHelpers_h
 #define MADViewHelpers_h
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIView.h>
 
 static inline enum UIViewAutoresizing MADViewAutoresizingFlexable(void);
@@ -18,5 +20,6 @@ void MADViewSafeAreaInserts(UIView *view, UIEdgeInsets *safeAreaInsets);
 static inline enum UIViewAutoresizing MADViewAutoresizingFlexable(void) {
 	return UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
+#endif
 
 #endif /* MADViewHelpers_h */

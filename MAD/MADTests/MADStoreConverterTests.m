@@ -17,7 +17,16 @@
 #import <CoreData/CoreData.h>
 #import <sqlite3.h>
 #import <string.h>
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+typedef UIColor MADTestConverterColor;
+typedef UIImage MADTestConverterImage;
+#elif TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+typedef NSColor MADTestConverterColor;
+typedef NSImage MADTestConverterImage;
+#endif
 
 #import "MADStoreConverter.h"
 #import <MAD/MADStore.h>
@@ -454,15 +463,37 @@ static NSInteger SQLiteUserVersion(NSURL *url) {
 	NSManagedObject *label = [NSEntityDescription insertNewObjectForEntityForName:@"RptqDocumentElementLabel"
 														  inManagedObjectContext:context];
 	[label setValue:@7 forKey:@"identifier"];
-	[label setValue:[UIColor colorWithRed:0.25 green:0.5 blue:0.75 alpha:1.0] forKey:@"backgroundColor"];
-	[label setValue:[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.5] forKey:@"foregroundColor"];
+	[label setValue:[MADTestConverterColor colorWithRed:0.25 green:0.5 blue:0.75 alpha:1.0] forKey:@"backgroundColor"];
+	[label setValue:[MADTestConverterColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.5] forKey:@"foregroundColor"];
 
 	// A one-pixel image, so the PNG bytes are a fixed, checkable thing.
+#if TARGET_OS_IPHONE
 	UIGraphicsBeginImageContextWithOptions(CGSizeMake(1, 1), NO, 1);
 	[[UIColor redColor] setFill];
 	UIRectFill(CGRectMake(0, 0, 1, 1));
-	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+	MADTestConverterImage *image = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
+	NSData *expectedPNG = UIImagePNGRepresentation(image);
+#elif TARGET_OS_OSX
+	NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+																	pixelsWide:1
+																	pixelsHigh:1
+																 bitsPerSample:8
+															   samplesPerPixel:4
+																	  hasAlpha:YES
+																	  isPlanar:NO
+																colorSpaceName:NSCalibratedRGBColorSpace
+																   bytesPerRow:0
+																  bitsPerPixel:0];
+	[NSGraphicsContext saveGraphicsState];
+	[NSGraphicsContext setCurrentContext:[NSGraphicsContext graphicsContextWithBitmapImageRep:rep]];
+	[[NSColor redColor] setFill];
+	NSRectFill(NSMakeRect(0, 0, 1, 1));
+	[NSGraphicsContext restoreGraphicsState];
+	MADTestConverterImage *image = [[NSImage alloc] initWithSize:NSMakeSize(1, 1)];
+	[image addRepresentation:rep];
+	NSData *expectedPNG = [rep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+#endif
 
 	NSManagedObject *imageElement = [NSEntityDescription insertNewObjectForEntityForName:@"RptqDocumentElementImage"
 																 inManagedObjectContext:context];
@@ -493,8 +524,12 @@ static NSInteger SQLiteUserVersion(NSURL *url) {
 	MADStoreObject *storedImage = [read objectForEntity:@"RptqDocumentElementImage" identifier:8];
 	NSData *png = [storedImage attributeValue:@"image"];
 	XCTAssertTrue([png isKindOfClass:[NSData class]]);
-	XCTAssertEqualObjects(png, UIImagePNGRepresentation(image), @"the image is not the PNG the model held");
+	XCTAssertEqualObjects(png, expectedPNG, @"the image is not the PNG the model held");
+#if TARGET_OS_IPHONE
 	XCTAssertNotNil([UIImage imageWithData:png], @"the bytes are not a readable PNG");
+#elif TARGET_OS_OSX
+	XCTAssertNotNil([[NSImage alloc] initWithData:png], @"the bytes are not a readable PNG");
+#endif
 
 	// RptqNumericFormat has no identifier in the model; the store mints one.  The
 	// elements build their own satellites on insert, so the one locale is looked for

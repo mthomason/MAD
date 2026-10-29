@@ -6,6 +6,8 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import "MADImageThumbnail.h"
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UITraitCollection.h>
@@ -139,3 +141,4 @@ __attribute__((unused)) static inline CGFloat cornerRadiusForHorizontalSizeClass
 }
 
 @end
+#endif

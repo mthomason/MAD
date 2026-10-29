@@ -10,6 +10,8 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import "MADActivityItemProviderPdf.h"
 #import "MADActivityItemProviderDelegate.h"
 
@@ -214,3 +216,4 @@ static inline CGRect PdfTrimBox(CGRect rect) { return UIEdgeInsetsInsetRect(rect
 }
 
 @end
+#endif

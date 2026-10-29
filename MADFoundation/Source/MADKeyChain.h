@@ -37,6 +37,7 @@ extern NSString * const MADKeyChainPasswordAccountDesc;
 
 + (OSStatus)deleteKey:(NSString *)key;
 + (bool)deleteSavedPasswordForKey:(NSString *)key error:(NSError * __autoreleasing *)error;
++ (BOOL)credentialsExist:(NSString *)key;
 
 @end
 

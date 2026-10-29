@@ -11,6 +11,8 @@
 #endif
 
 #import "MADTdsConnectionViewController.h"
+
+#if TARGET_OS_IPHONE
 #import "MADDatabaseConnectionSQLServer.h"
 
 @implementation MADTdsConnectionViewController
@@ -38,3 +40,4 @@
 }
 
 @end
+#endif

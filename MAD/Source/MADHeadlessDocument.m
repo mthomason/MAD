@@ -54,7 +54,11 @@
 
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseField.h>
+#import <MADAPI/MADDatabaseTable.h>
+#import <MADAPI/MADErrorContainer.h>
 #import <MADAPI/MADQuery.h>
+#import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/madlog.h>
 #import <MADSqlite3/MADDataTableFast.h>
@@ -80,6 +84,88 @@
 	MADHeadlessDocument *document = [[self alloc] initWithFileURL: url];
 	if (![document readFromURL: url error: error]) {
 		return nil;	// ! nil returned from a method that is expected to return a non-null value
+	}
+	return document;
+}
+
++ (nullable instancetype)createDocumentAtURL:(NSURL *)url
+					  withDatabaseConnection:(MADDatabaseConnection *)databaseConnection
+								 credentials:(nullable MADCredential *)credentials
+									   error:(NSError * _Nullable __autoreleasing *)outError {
+	if (url == nil || databaseConnection == nil) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADHeadlessDocument"
+											code:10
+										userInfo:@{ NSLocalizedDescriptionKey: @"A file URL and database connection are required to create a document." }];
+		}
+		return nil;
+	}
+
+	MADHeadlessDocument *document = [[self alloc] initWithFileURL:url];
+	[[NSFileManager defaultManager] removeItemAtURL:document.documentStore.gutsURL error:NULL];
+	if (![document.documentStore openWithError:outError]) {
+		return nil;
+	}
+
+	[document updateDatabaseWithConnection:databaseConnection];
+	RptqStoreContext *context = document.storeContext;
+	RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext:context];
+	if (rptqDocument == nil) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADHeadlessDocument"
+											code:11
+										userInfo:@{ NSLocalizedDescriptionKey: @"Could not initialize the document model in the portable store." }];
+		}
+		return nil;
+	}
+
+	[rptqDocument storeDatabaseConnectionDefination:document.database forManagedObjectContext:context];
+
+	NSError *dbConnectionError = nil;
+	id actualDBConnection = [document.database connectWithConnection:databaseConnection
+														  credentals:credentials
+													 connectionError:&dbConnectionError];
+	if (dbConnectionError != nil || actualDBConnection == nil) {
+		if (outError != NULL) {
+			*outError = dbConnectionError ?: [NSError errorWithDomain:@"MADHeadlessDocument"
+																 code:12
+															 userInfo:@{ NSLocalizedDescriptionKey: @"Failed to connect to the source database." }];
+		}
+		return nil;
+	}
+
+	NSError *getTableErr = nil;
+	NSArray <MADDatabaseTable *> *resultTables = [document.database getTablesFromConnection:actualDBConnection
+																					  error:&getTableErr];
+	if (getTableErr != nil) {
+		[document.database closeConnection:actualDBConnection];
+		if (outError != NULL) {
+			*outError = getTableErr;
+		}
+		return nil;
+	}
+
+	NSMutableDictionary <NSString *, NSArray <MADDatabaseField *> *> *tablesAndFields =
+		[[NSMutableDictionary alloc] initWithCapacity:resultTables.count];
+	for (MADDatabaseTable *databaseTable in resultTables) {
+		NSString *tableName = [databaseTable.name copy];
+		if (tableName.length == 0) continue;
+		NSError *getFieldsError = nil;
+		NSArray <MADDatabaseField *> *fieldsForTable = [document.database fieldsForTable:tableName
+																			  connection:actualDBConnection
+																				   error:&getFieldsError];
+		if (fieldsForTable != nil) {
+			tablesAndFields[tableName] = fieldsForTable;
+		}
+	}
+
+	[rptqDocument storeTablesAndFieldsForTables:resultTables
+								  fieldsByTable:tablesAndFields
+						andManagedObjectContext:context];
+	[document.database closeConnection:actualDBConnection];
+
+	if (![document writeToURL:url reproducible:NO error:outError]) {
+		return nil;
 	}
 	return document;
 }
@@ -517,6 +603,12 @@
 		[query removeHasQueryPredicateObject:predicate];
 		[context deleteObject:predicate error:NULL];
 	}
+}
+
+- (void)invalidateQueryAndModelCaches {
+	_mainQuery = nil;
+	_activeDocumentModel = nil;
+	_paper = nil;
 }
 
 @end

@@ -13,13 +13,17 @@
 #import "MADBarcodeCache.h"
 #import "MADBarcode.h"
 
+#if TARGET_OS_IPHONE
 #import <UIKit/UIImage.h>
+#elif TARGET_OS_OSX
+#import <AppKit/NSImage.h>
+#endif
 
 // The rendering primitive behind -[MADBarcode renderedImage] also reports the
 // message from the failed zint pass, so a miss costs one encode whether it
 // succeeds or not.  It stays off MADBarcode.h; MADBarcode.m declares it too.
 @interface MADBarcode (MADBarcodeCacheRendering)
-- (UIImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessage;
+- (MADBarcodeImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessage;
 @end
 
 // NSCache never evicts without a limit, and a report can carry thousands of
@@ -28,7 +32,7 @@
 static const NSUInteger MADBarcodeCacheTotalCostLimit = 64 * 1024 * 1024;
 
 @implementation MADBarcodeCache {
-	NSCache<NSString *, UIImage *> *_images;
+	NSCache<NSString *, MADBarcodeImage *> *_images;
 	NSCache<NSString *, NSString *> *_errors;
 }
 
@@ -50,9 +54,9 @@ static const NSUInteger MADBarcodeCacheTotalCostLimit = 64 * 1024 * 1024;
 	return self;
 }
 
-- (UIImage *)imageForBarcode:(MADBarcode *)barcode {
+- (MADBarcodeImage *)imageForBarcode:(MADBarcode *)barcode {
 	NSString *key = barcode.renderCacheKey;
-	UIImage *image = [_images objectForKey:key];
+	MADBarcodeImage *image = [_images objectForKey:key];
 	if (image != nil) {
 		return image;
 	}
@@ -63,7 +67,11 @@ static const NSUInteger MADBarcodeCacheTotalCostLimit = 64 * 1024 * 1024;
 	NSString *errorMessage = nil;
 	image = [barcode renderedImageWithErrorMessage:&errorMessage];
 	if (image != nil) {
+#if TARGET_OS_IPHONE
 		CGImageRef cgImage = image.CGImage;
+#elif TARGET_OS_OSX
+		CGImageRef cgImage = [image CGImageForProposedRect:NULL context:nil hints:nil];
+#endif
 		NSUInteger cost = (NSUInteger)(CGImageGetBytesPerRow(cgImage) * CGImageGetHeight(cgImage));
 		[_images setObject:image forKey:key cost:cost];
 	} else if (errorMessage != nil) {

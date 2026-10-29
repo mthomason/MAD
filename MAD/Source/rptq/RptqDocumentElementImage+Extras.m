@@ -17,8 +17,11 @@
 
 #import <Foundation/NSSortDescriptor.h>
 
-#if __APPLE__
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 #import <UIKit/UIImage.h>
+#elif defined(__APPLE__) && TARGET_OS_OSX
+#import <AppKit/AppKit.h>
 #endif
 
 #import "RptqDocument.h"
@@ -30,7 +33,7 @@
 
 #pragma mark - Overrides
 
-#if __APPLE__
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 
 // The store's Blob column holds PNG bytes -- what the legacy converter writes
 // (MADStorePNGData) and what MADPngImageTransformer produced before it -- while the
@@ -47,6 +50,26 @@
 - (void)setImage:(UIImage *)image {
 	// The attribute is optional, so an image with no representation clears the column.
 	[self setValue:(image ? UIImagePNGRepresentation(image) : nil) forUndefinedKey:@"image"];
+}
+
+#elif defined(__APPLE__) && TARGET_OS_OSX
+
+- (NSImage *)image {
+	id value = [self valueForUndefinedKey:@"image"];
+	if ([value isKindOfClass:[NSData class]]) return [[NSImage alloc] initWithData:value];
+	return [value isKindOfClass:[NSImage class]] ? value : nil;
+}
+
+- (void)setImage:(NSImage *)image {
+	NSData *pngData = nil;
+	if (image != nil) {
+		CGImageRef cgImage = [image CGImageForProposedRect:NULL context:nil hints:nil];
+		if (cgImage != NULL) {
+			NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+			pngData = [rep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+		}
+	}
+	[self setValue:pngData forUndefinedKey:@"image"];
 }
 
 #endif

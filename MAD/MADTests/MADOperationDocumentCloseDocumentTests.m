@@ -14,6 +14,8 @@
 //  and the fixture's store is healthy.
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <XCTest/XCTest.h>
 
 #import "MADOperationDocumentCloseDocument.h"
@@ -173,3 +175,4 @@
 }
 
 @end
+#endif

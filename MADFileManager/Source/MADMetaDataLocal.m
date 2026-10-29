@@ -13,7 +13,6 @@
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSMetadataAttributes.h>
 #if __APPLE__
-#import <MobileCoreServices/UTType.h>
 #import <UniformTypeIdentifiers/UTType.h>
 #endif
 

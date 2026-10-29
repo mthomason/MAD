@@ -68,6 +68,22 @@
    </Group>
    <Group
       location = "container:"
+      name = "Mac">
+      <FileRef
+         location = "group:Mac/Source">
+      </FileRef>
+      <FileRef
+         location = "group:Mac/Resources">
+      </FileRef>
+      <FileRef
+         location = "group:Mac/Tests">
+      </FileRef>
+      <FileRef
+         location = "group:Mac/build.sh">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
       name = "Linux">
       <FileRef
          location = "group:Linux/README.md">

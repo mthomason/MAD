@@ -16,6 +16,8 @@
 //  weak and normally supplied by the open report.
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <XCTest/XCTest.h>
 #import <UIKit/UIActivityItemProvider.h>
 #import <UIKit/UIActivityViewController.h>
@@ -116,3 +118,4 @@
 }
 
 @end
+#endif

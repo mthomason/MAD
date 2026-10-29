@@ -10,7 +10,7 @@
 
 @implementation MADColorSocial
 
-+ (UIColor *)newBlueTwitter {
++ (MADPlatformColor *)newBlueTwitter {
 	return newColorWitColors(0.0000f, 172.0000f, 237.0000f);
 }
 

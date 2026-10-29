@@ -156,6 +156,9 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 	NSDictionary *queryUsername = [MADKeyChain queryUsernameDefination:key];
 	OSStatus queryUsernameStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername,
 													   (CFTypeRef *)&queryUsernameData);
+	if (queryUsernameData != NULL) {
+		CFRelease(queryUsernameData);
+	}
 	return errSecItemNotFound != queryUsernameStatus;
 }
 
@@ -198,11 +201,15 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 		(__bridge NSString *)(kSecClass) : (__bridge NSString *)kSecClassGenericPassword,
 		(__bridge NSString *)(kSecAttrService) : key,
 		(__bridge NSString *)(kSecAttrAccount) : description,
-		(__bridge NSString *)(kSecReturnData) : @YES
+		(__bridge id)kSecReturnData : @YES
 	};
 
 	CFDataRef queryUsernameData = NULL;
-	OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef) query, (CFTypeRef *)&queryUsernameData);
+	OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef) query,
+										  (CFTypeRef *)&queryUsernameData);
+	if (queryUsernameData != NULL) {
+		CFRelease(queryUsernameData);
+	}
 	
 	if (status == errSecItemNotFound) {
 		NSDictionary *queryAddUsername = [MADKeyChain queryAdd: token forKey: key withDescription: description];
@@ -221,6 +228,9 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 	CFDataRef queryData = NULL;
 	OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) query,
 												(CFTypeRef *)&queryData);
+	if (queryData != NULL) {
+		CFRelease(queryData);
+	}
 	if (deleteStatus == errSecSuccess) {
 		deleteStatus = SecItemDelete((__bridge CFDictionaryRef)query);
 	}
@@ -236,6 +246,9 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 	
 	NSError *deleteError = nil;
 	OSStatus deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryUsername, (CFTypeRef *)&queryUsernameData);
+	if (queryUsernameData != NULL) {
+		CFRelease(queryUsernameData);
+	}
 	if (deleteStatus == errSecSuccess) {
 		deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryUsername);
 		if (deleteStatus != errSecSuccess) {
@@ -245,6 +258,9 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 	
 	deleteStatus = SecItemCopyMatching((__bridge CFDictionaryRef) queryPassword,
 									   (CFTypeRef *)&queryPasswordData);
+	if (queryPasswordData != NULL) {
+		CFRelease(queryPasswordData);
+	}
 	if (deleteStatus == errSecSuccess) {
 		deleteStatus = SecItemDelete((__bridge CFDictionaryRef)queryPassword);
 		if (deleteStatus != errSecSuccess && deleteError == nil) {

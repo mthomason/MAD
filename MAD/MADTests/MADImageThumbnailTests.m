@@ -26,6 +26,8 @@
 //  the renderer path are covered directly.
 //
 
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <XCTest/XCTest.h>
 
 #import <UIKit/UIKit.h>
@@ -326,3 +328,4 @@
 }
 
 @end
+#endif

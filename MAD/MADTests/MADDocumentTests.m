@@ -11,11 +11,13 @@
 
 #import <XCTest/XCTest.h>
 #import <CoreData/CoreData.h>
+#include <TargetConditionals.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIColor.h>
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
-
 #import <MAD/MADocument.h>
+#endif
 #import <MAD/MADStore.h>
 #import <MAD/MADStoreGraph.h>
 #import <MAD/RptqStoreContext.h>
@@ -77,6 +79,7 @@
 	return document;
 }
 
+#if TARGET_OS_IPHONE
 #pragma mark - -paperSize
 
 // -paperSize used to read the _paper ivar, which stays nil until the lazy -paper
@@ -110,6 +113,7 @@
 				  @"-paperSize is not the letter paper the model asks for");
 	XCTAssertEqual(document.paper.paperType, MTPaperTypeLetter);
 }
+#endif
 
 #pragma mark - RptqDocumentElement -formattedString:forValue:
 
@@ -334,6 +338,7 @@
 	[fileManager removeItemAtURL: secondURL error: NULL];
 }
 
+#if TARGET_OS_IPHONE
 #pragma mark - The document path: convert on open, save, reopen
 
 - (NSURL *)newTestDirectory {
@@ -488,6 +493,7 @@
 
 	[[NSFileManager defaultManager] removeItemAtURL:documentURL.URLByDeletingLastPathComponent error:NULL];
 }
+#endif
 
 #pragma mark - Model projections
 
@@ -533,6 +539,7 @@
 						  @"fields come back sorted by name");
 }
 
+#if TARGET_OS_IPHONE
 #pragma mark - Undo
 
 // document.undoManager must be live, and a designer edit (updateElements:setBold: and
@@ -608,6 +615,7 @@
 	XCTAssertFalse([[NSFileCoordinator filePresenters] containsObject:document],
 				   @"the closed document holds no file presenter");
 }
+#endif
 
 // The section's displayHeight is the maximum calculated height of its elements --
 // rect.origin.y + rect.size.height, plus the margin, padding and border edges --
@@ -684,6 +692,7 @@
 				   @"the taller writes must not spill into the adjacent ivars");
 }
 
+#if TARGET_OS_IPHONE
 // The viewer writes the thumbnail to the cache; the Core Data-era -thumbnail
 // property never had a writer, so the file attribute that gives the document
 // its Files-app icon was always empty.
@@ -715,5 +724,6 @@
 
 	[[NSFileManager defaultManager] removeItemAtURL:thumbnailURL error:NULL];
 }
+#endif
 
 @end

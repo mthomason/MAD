@@ -10,6 +10,7 @@
 #warning Compile this file with ARC using the -fobjc-arc flag.
 #endif
 
+#include <TargetConditionals.h>
 #import "MADPrintPageRenderer.h"
 
 #import "RptqDocument.h"
@@ -32,7 +33,9 @@
 #import "RptqDocumentElementLabel.h"
 #import "RptqDocumentElementLabelDataField+Extras.h"
 #import "RptqDocumentElementImage.h"
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 #import "MADocument.h"
+#endif
 #import "MADParameters+QueryCacheAggregate.h"
 #import "MADElementStylizedText.h"
 #import "MADPrintPageRendererDataSource.h"
@@ -63,11 +66,23 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabaseField.h>
 
+#if defined(__APPLE__) && TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+typedef NSColor MADRendererColor;
+static inline CGContextRef MADRendererGetCurrentContext(void) {
+	return [NSGraphicsContext currentContext].CGContext;
+}
+#else
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 #import <UIKit/NSStringDrawing.h>
 #import <UIKit/UIInterface.h>
 #import <UIKit/NSParagraphStyle.h>
+typedef UIColor MADRendererColor;
+static inline CGContextRef MADRendererGetCurrentContext(void) {
+	return UIGraphicsGetCurrentContext();
+}
+#endif
 
 #import <MADFoundation/madlog.h>
 
@@ -116,7 +131,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 #pragma mark Helpers Drawing
 
 + (void)drawWhiteCanvas:(CGContextRef)ctx pageRect:(CGRect)pageRect {
-	[[UIColor whiteColor] setFill];
+	[[MADRendererColor whiteColor] setFill];
 	CGPathRef path = CGPathCreateWithRect(pageRect, NULL);
 	CGContextAddPath(ctx, path);
 	CGContextDrawPath(ctx, kCGPathFill);
@@ -170,38 +185,38 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 #pragma mark -
 #pragma mark Drawing Helpers
 
-+ (UIColor *)backgroundColorForDocumentSectionType:(MADDocumentSectionType)type {
++ (MADRendererColor *)backgroundColorForDocumentSectionType:(MADDocumentSectionType)type {
 	switch (type) {
 		case MADDocumentSectionTypeBody:
-			return [UIColor redColor];
+			return [MADRendererColor redColor];
 			break;
 			
 		case MADDocumentSectionTypeGroupFooter:
-			return [UIColor purpleColor];
+			return [MADRendererColor purpleColor];
 			break;
 			
 		case MADDocumentSectionTypeGroupHeader:
-			return [UIColor yellowColor];
+			return [MADRendererColor yellowColor];
 			break;
 			
 		case MADDocumentSectionTypePageFooter:
-			return [UIColor grayColor];
+			return [MADRendererColor grayColor];
 			break;
 			
 		case MADDocumentSectionTypePageHeader:
-			return [UIColor greenColor];
+			return [MADRendererColor greenColor];
 			break;
 			
 		case MADDocumentSectionTypeReportFooter:
-			return [UIColor brownColor];
+			return [MADRendererColor brownColor];
 			break;
 			
 		case MADDocumentSectionTypeReportHeader:
-			return [UIColor blueColor];
+			return [MADRendererColor blueColor];
 			break;
 			
 		default:
-			return [UIColor magentaColor];
+			return [MADRendererColor magentaColor];
 			break;
 	}
 }
@@ -209,40 +224,40 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 - (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection
 									  inRect:(CGRect)rect {
 
-	CGContextRef ctx = UIGraphicsGetCurrentContext();
-	[[UIColor whiteColor] setFill];
+	CGContextRef ctx = MADRendererGetCurrentContext();
+	[[MADRendererColor whiteColor] setFill];
 	
 	switch ([documentSection getDocumentSectionType]) {
 		case MADDocumentSectionTypeBody:
-			[[UIColor redColor] setFill];
+			[[MADRendererColor redColor] setFill];
 			break;
 			
 		case MADDocumentSectionTypeGroupFooter:
-			[[UIColor purpleColor] setFill];
+			[[MADRendererColor purpleColor] setFill];
 			break;
 			
 		case MADDocumentSectionTypeGroupHeader:
-			[[UIColor yellowColor] setFill];
+			[[MADRendererColor yellowColor] setFill];
 			break;
 			
 		case MADDocumentSectionTypePageFooter:
-			[[UIColor grayColor] setFill];
+			[[MADRendererColor grayColor] setFill];
 			break;
 			
 		case MADDocumentSectionTypePageHeader:
-			[[UIColor greenColor] setFill];
+			[[MADRendererColor greenColor] setFill];
 			break;
 			
 		case MADDocumentSectionTypeReportFooter:
-			[[UIColor brownColor] setFill];
+			[[MADRendererColor brownColor] setFill];
 			break;
 			
 		case MADDocumentSectionTypeReportHeader:
-			[[UIColor blueColor] setFill];
+			[[MADRendererColor blueColor] setFill];
 			break;
 			
 		default:
-			[[UIColor magentaColor] setFill];
+			[[MADRendererColor magentaColor] setFill];
 			break;
 	}
 	
@@ -259,7 +274,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 - (void)drawPageAtIndex:(NSUInteger)index inRect:(CGRect)pageRect
 					   withTransparentBackground:(BOOL)transparentBackground {
 
-	CGContextRef ctx = UIGraphicsGetCurrentContext();
+	CGContextRef ctx = MADRendererGetCurrentContext();
 	// The header's contract: a transparent page is the page's own drawing over
 	// whatever the caller's context already holds, with no white canvas behind it.
 	if (!transparentBackground) [MADPrintPageRenderer drawWhiteCanvas: ctx pageRect: pageRect];
@@ -312,7 +327,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 }
 
 + (void)setBackgroundColorForSectionType:(MADDocumentSectionType)type inRect:(CGRect)rect {
-	CGContextRef ctx = UIGraphicsGetCurrentContext();
+	CGContextRef ctx = MADRendererGetCurrentContext();
 	[[self backgroundColorForDocumentSectionType:type] setFill];
 	CGPathRef path = CGPathCreateWithRect(rect, NULL);
 	CGContextAddPath(ctx, path);
@@ -331,6 +346,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 	[self drawPageAtIndex: (unsigned long)labs(index) inRect: pageRect withTransparentBackground: NO];
 }
 
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 - (void)drawHeaderForPageAtIndex:(NSInteger)index inRect:(CGRect)headerRect {
 	[super drawHeaderForPageAtIndex: index
 							 inRect: headerRect];
@@ -345,6 +361,7 @@ static NSString * const MTCachedSizeVertical = @"MTCachedSizeVertical";
 	[super drawFooterForPageAtIndex: index
 							 inRect: footerRect];
 }
+#endif
 
 #pragma mark
 

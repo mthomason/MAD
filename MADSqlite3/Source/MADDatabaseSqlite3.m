@@ -600,7 +600,9 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 			rowCounter++;
 		}
 		
-		[dataTable endBulkInsert];
+		if (rowCounter > 0) {
+			[dataTable endBulkInsert];
+		}
 	}
 	
 	if (!returnsResults) {

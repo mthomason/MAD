@@ -22,9 +22,16 @@
 //      NO, which is what the header's contract (and MADImageThumbnail's YES) asks.
 //
 
+#include <TargetConditionals.h>
 #import <XCTest/XCTest.h>
 
+#if TARGET_OS_OSX
+#import <AppKit/AppKit.h>
+typedef NSColor MADTestRendererColor;
+#else
 #import <UIKit/UIKit.h>
+typedef UIColor MADTestRendererColor;
+#endif
 
 #import "MADPrintPageRenderer.h"
 #import "MADPrintPageRendererDataSource.h"
@@ -39,7 +46,7 @@
 // test-only category is the deliberate bridge.  -debugQuickLookObject is bridged too.
 @interface MADPrintPageRenderer (TestHelpers)
 + (void)drawWhiteCanvas:(CGContextRef)ctx pageRect:(CGRect)pageRect;
-+ (UIColor *)backgroundColorForDocumentSectionType:(MADDocumentSectionType)type;
++ (MADTestRendererColor *)backgroundColorForDocumentSectionType:(MADDocumentSectionType)type;
 - (void)setBackgroundColorForDocumentSection:(RptqDocumentSection *)documentSection
 									  inRect:(CGRect)rect;
 - (id)debugQuickLookObject;
@@ -134,9 +141,17 @@ typedef struct {
 											 (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
 	CGColorSpaceRelease(space);
 	XCTAssertNotEqual(ctx, NULL);
+#if TARGET_OS_OSX
+	[NSGraphicsContext saveGraphicsState];
+	NSGraphicsContext *nsCtx = [NSGraphicsContext graphicsContextWithCGContext:ctx flipped:YES];
+	[NSGraphicsContext setCurrentContext:nsCtx];
+	draw();
+	[NSGraphicsContext restoreGraphicsState];
+#else
 	UIGraphicsPushContext(ctx);
 	draw();
 	UIGraphicsPopContext();
+#endif
 	CGContextRelease(ctx);
 
 	MADRendererTestPixel pixel = { bytes[0], bytes[1], bytes[2], bytes[3] };
@@ -206,24 +221,24 @@ typedef struct {
 
 - (void)testBackgroundColorForDocumentSectionTypeMapsEveryType {
 	XCTAssertEqualObjects([MADPrintPageRenderer backgroundColorForDocumentSectionType:MADDocumentSectionTypeBody],
-						  [UIColor redColor]);
+						  [MADTestRendererColor redColor]);
 	XCTAssertEqualObjects([MADPrintPageRenderer backgroundColorForDocumentSectionType:MADDocumentSectionTypeGroupFooter],
-						  [UIColor purpleColor]);
+						  [MADTestRendererColor purpleColor]);
 	XCTAssertEqualObjects([MADPrintPageRenderer backgroundColorForDocumentSectionType:MADDocumentSectionTypeGroupHeader],
-						  [UIColor yellowColor]);
+						  [MADTestRendererColor yellowColor]);
 	XCTAssertEqualObjects([MADPrintPageRenderer backgroundColorForDocumentSectionType:MADDocumentSectionTypePageFooter],
-						  [UIColor grayColor]);
+						  [MADTestRendererColor grayColor]);
 	XCTAssertEqualObjects([MADPrintPageRenderer backgroundColorForDocumentSectionType:MADDocumentSectionTypePageHeader],
-						  [UIColor greenColor]);
+						  [MADTestRendererColor greenColor]);
 	XCTAssertEqualObjects([MADPrintPageRenderer backgroundColorForDocumentSectionType:MADDocumentSectionTypeReportFooter],
-						  [UIColor brownColor]);
+						  [MADTestRendererColor brownColor]);
 	XCTAssertEqualObjects([MADPrintPageRenderer backgroundColorForDocumentSectionType:MADDocumentSectionTypeReportHeader],
-						  [UIColor blueColor]);
+						  [MADTestRendererColor blueColor]);
 	// Unknown, and anything outside the enum, is the magenta catch-all.
 	XCTAssertEqualObjects([MADPrintPageRenderer backgroundColorForDocumentSectionType:MADDocumentSectionTypeUnknown],
-						  [UIColor magentaColor]);
+						  [MADTestRendererColor magentaColor]);
 	XCTAssertEqualObjects([MADPrintPageRenderer backgroundColorForDocumentSectionType:(MADDocumentSectionType)99],
-						  [UIColor magentaColor]);
+						  [MADTestRendererColor magentaColor]);
 }
 
 - (void)testSetBackgroundColorForDocumentSectionFillsWithTheSectionColour {
@@ -253,7 +268,12 @@ typedef struct {
 
 - (void)testDrawWhiteCanvasFillsThePageRectWithOpaqueWhite {
 	MADRendererTestPixel pixel = [self pixelAfterDrawing:^ {
-		[MADPrintPageRenderer drawWhiteCanvas:UIGraphicsGetCurrentContext()
+#if TARGET_OS_OSX
+		CGContextRef currentCtx = [NSGraphicsContext currentContext].CGContext;
+#else
+		CGContextRef currentCtx = UIGraphicsGetCurrentContext();
+#endif
+		[MADPrintPageRenderer drawWhiteCanvas:currentCtx
 									 pageRect:CGRectMake(0.0, 0.0, 1.0, 1.0)];
 	}];
 

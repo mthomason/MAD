@@ -9,9 +9,16 @@
 #ifndef MAD_RptqDocumentElementImage_h
 #define MAD_RptqDocumentElementImage_h
 
+#include <TargetConditionals.h>
 #import <MAD/RptqDocumentElement.h>
 
+#if defined(__APPLE__) && TARGET_OS_OSX
+@class NSImage;
+typedef NSImage MADElementImage;
+#else
 @class UIImage;
+typedef UIImage MADElementImage;
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RptqDocumentElementImage (CoreDataProperties)
 
-@property (nullable, nonatomic, retain) UIImage *image;
+@property (nullable, nonatomic, retain) MADElementImage *image;
 
 @end
 
