@@ -1,3 +1,5 @@
+**English** | [简体中文](README_zh.md)
+
 # MADTds Framework
 
 **MADTds** is a framework for iOS that wraps around `sybdb.h` from the FreeTDS library. It simplifies integrating and using Sybase databases in iOS projects. This framework provides a native Objective-C API, making it easier to interact with Sybase databases in iOS applications.

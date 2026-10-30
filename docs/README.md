@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # The `.mad` Document Format
 
 This document defines what a `.mad` file is. It describes the format **as it exists

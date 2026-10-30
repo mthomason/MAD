@@ -1,3 +1,5 @@
+**English** | [简体中文](README_zh.md)
+
 # CLI fixtures
 
 Documents the CLI's verbs are run against, beside the samples they come from

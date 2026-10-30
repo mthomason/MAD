@@ -1,3 +1,5 @@
+**English** | [简体中文](README_zh.md)
+
 # MAD (Mobile Analytics Document)
 
 **An open format and embeddable engine for relational reporting — where every report is a portable query graph, a materialized SQLite table, and a parametric layout.**

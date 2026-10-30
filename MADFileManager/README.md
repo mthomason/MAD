@@ -1,3 +1,4 @@
+**English** | [简体中文](README_zh.md)
 
 ## Details on iCloud
 

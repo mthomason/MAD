@@ -1,3 +1,5 @@
+**English** | [简体中文](CONTRIBUTING_zh.md)
+
 # Contributing to MAD
 
 Thanks for being here. MAD (Mobile Analytics Document) is the project — the
