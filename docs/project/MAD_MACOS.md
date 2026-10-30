@@ -228,21 +228,45 @@ Built under `Mac/` (`Mac/Source/`, `Mac/Resources/`, `Mac/Tests/`, `Mac/build.sh
    - **SQL Query mode**: Full-width SQL statement editor displaying generated or entered
      SQL and supporting validation, compilation, and application (`MADSQLParser` +
      `MADSQLStatementResolver` + `MADSQLQueryCompiler`).
-4. **MAD Designer Workspace (`MADMacDesignerViewController` + `MADMacDesignerCanvasView`):**
-   - Left sidebar: Report Sections list (`Report Header`, `Page Header`, query group
-     headers, `Report Detail`, query group footers, `Page Footer`, `Report Footer`) and
-     one-click element insertion (**Static Label**, **Data Field**, **Aggregate**,
-     **Barcode**, **Image**, **Line**).
-   - Center interactive canvas (`MADMacDesignerCanvasView`): Flipped, zoomable `NSView`
-     canvas rendering paper margins, section bands, grid lines, and elements with mouse
-     selection, `Shift`-click multi-selection, drag-to-move, bottom-right resize handles,
-     arrow-key nudging, and `Delete`, all wired through `MADDesignerLayout` +
-     `NSUndoManager`.
-   - Right inspector sidebar: Live controls for section height/visibility/form-feed,
-     element geometry (`X`, `Y`, `W`, `H`), static text, bound query field, aggregate
-     function (`COUNT`, `SUM`, `AVG`, `MIN`, `MAX`, `STDDEV`, `VAR`), barcode symbology,
-     font family/size/alignment, text & background colors (`NSColorWell`), borders, and
-     page orientation.
+4. **MAD Designer Workspace (`MADMacDesignerViewController` + `MADMacDesignerCanvasView` + `MADMacDesignerMinimapView`):**
+   - **Top Workspace Bar (`38pt` height):** Provides clickable and draggable SF Symbol
+     element palette items (**Label**, **Data Field**, **Aggregate**, **Barcode**,
+     **Image**, **Line**), quick multi-element alignment controls (`Left`, `Center`,
+     `Right`, `Top`, `Middle`, `Bottom`), **Size to Fit**, **Grid** / **Snap** /
+     **Rulers** toggles, and a **Zoom** slider with one-click `100%` reset.
+   - **User-Resizable 3-Pane Split View (`NSSplitViewDelegate`):** Left navigator sidebar
+     defaults to `220pt` (`180–340pt`), right inspector defaults to `260pt`
+     (`220–380pt`), and both sidebars hold their widths across window resizes while
+     preserving user divider adjustments.
+   - **Left Sidebar (Minimap + Bands + Query Fields Browser):**
+     - **Interactive Page & Section Minimap (`MADMacDesignerMinimapView`):** Draws
+       proportional report bands with color-coded stripes, live miniature element blocks,
+       and a blue viewport rectangle; clicking or dragging jumps to and selects the band.
+     - **Report Bands Outline:** Lists all report and group sections with element counts,
+       heights, and page-break indicators; double-clicking toggles band visibility.
+     - **Query Fields Browser:** Filterable list (`NSSearchField`) of all `RptqQueryField`
+       columns; dragging a field onto any section band on the canvas (or double-clicking)
+       inserts a bound `RptqDocumentElementLabelDataField`.
+   - **Center Interactive Canvas (`MADMacDesignerCanvasView`):** Flipped, zoomable
+     `NSView` canvas with horizontal/vertical rulers, paper margins, color-coded section
+     bands, section height drag handles, smart alignment guides, grid snapping, marquee
+     selection, `Shift`-click multi-selection, 8-point resize handles, inline double-click
+     label editing, smart non-overlapping element placement
+     (`-nextAvailableOriginInSection:forElementSize:`), and cross-section drag-and-drop
+     (`-moveElement:toSection:atOrigin:`) with live target band highlighting and full
+     `NSUndoManager` integration.
+   - **Right Inspector Sidebar (Clearly Divided & Scrollable):**
+     - **Card 1 (`1 · PAGE & SELECTED SECTION`):** Paper size, selected band badge,
+       band height (`pt`) with **Fit** button, **Visible in Report**, and **Page Break
+       After Section**.
+     - **Prominent Visual Divider + Section 2 (`2 · SELECTED ELEMENT INSPECTOR`):**
+       4 grouped inspector cards (**Element & Band Assignment** with cross-section move
+       popup, **Duplicate**, and **Delete**; **Content & Data Binding** with static text,
+       query field binding, aggregate function & scope, currency formatting, and barcode
+       options; **Typography & Appearance** with font family/size, bold/italic/underline/
+       strikethrough, horizontal/vertical alignment, and text/background colors; and
+       **Position, Size & Box Model** with `X`, `Y`, `W`, `H` synchronized across both
+       `rect.origin` and `dropPoint`, plus borders, padding, and margin).
 5. **MAD Viewer Workspace (`MADMacViewerViewController`):**
    - Three preview tabs: **Paginated Report (PDF)** (`PDFView`), **HTML Preview**
      (`WKWebView`), and **Cached Data Grid** (`NSTableView`), plus one-click export to all

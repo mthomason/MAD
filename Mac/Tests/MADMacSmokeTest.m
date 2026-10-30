@@ -23,6 +23,8 @@
 #import "MADMacDocument.h"
 #import "MADMacWindowController.h"
 #import "MADMacQueryViewController.h"
+#import "MADMacDesignerViewController.h"
+#import "MADMacDesignerCanvasView.h"
 #import "MADocumentDesignerProtocol.h"
 #import "MADSQLQueryCompiler.h"
 #import "MADSQLStatementResolver.h"
@@ -519,9 +521,137 @@ int main(int argc, const char * argv[]) {
 			fprintf(stderr, "FAIL: Modifying link type to Inner Join did not update link or generated SQL: %s\n", sqlTextView.string.UTF8String);
 			return 39;
 		}
+		printf("PASS: Verified Visual Query Designer: mutually exclusive Designer/SQL modes, fixed 200px user-resizable table list, floating table cards, Left Outer Join field connection, and link type modification\n");
+
+		// 5. Test Redesigned Report Designer (MADMacDesignerViewController & MADMacDesignerCanvasView)
+		[qWC switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+		[qWC.window setFrame:NSMakeRect(0.0, 0.0, 1360.0, 860.0) display:YES];
+		[qWC.window layoutIfNeeded];
+
+		MADMacDesignerViewController *dVC = qWC.designerViewController;
+		MADMacDesignerCanvasView *dCanvas = dVC.canvasView;
+		NSSplitView *dMainSplit = [dVC valueForKey:@"mainSplitView"];
+		NSView *dLeftSidebar = [dVC valueForKey:@"leftSidebarView"];
+		NSView *dCenterContainer = [dVC valueForKey:@"centerCanvasContainerView"];
+		NSView *dRightInspector = [dVC valueForKey:@"rightInspectorContainerView"];
+
+		// 5a. Verify 3-pane split view defaults (left=220pt, right=260pt) and user resizability
+		if (fabs(dVC.leftSidebarWidth - 220.0) > 1.5 || fabs(NSWidth(dLeftSidebar.frame) - 220.0) > 1.5 ||
+			fabs(dVC.rightInspectorWidth - 260.0) > 1.5 || fabs(NSWidth(dRightInspector.frame) - 260.0) > 1.5) {
+			fprintf(stderr, "FAIL: Designer initial split widths unexpected (left=%.1f, right=%.1f)\n",
+					NSWidth(dLeftSidebar.frame), NSWidth(dRightInspector.frame));
+			return 40;
+		}
+		CGFloat initialCenterWidth = NSWidth(dCenterContainer.frame);
+		[qWC.window setFrame:NSMakeRect(0.0, 0.0, 1560.0, 920.0) display:YES];
+		[qWC.window layoutIfNeeded];
+		if (fabs(NSWidth(dLeftSidebar.frame) - 220.0) > 1.5 ||
+			fabs(NSWidth(dRightInspector.frame) - 260.0) > 1.5 ||
+			NSWidth(dCenterContainer.frame) <= initialCenterWidth + 100.0) {
+			fprintf(stderr, "FAIL: Window resize did not keep Designer sidebars fixed (left=%.1f, right=%.1f)\n",
+					NSWidth(dLeftSidebar.frame), NSWidth(dRightInspector.frame));
+			return 41;
+		}
+		// User drags right inspector divider to make right inspector 300pt wide
+		CGFloat totalSplitW = NSWidth(dMainSplit.bounds);
+		CGFloat dThick = dMainSplit.dividerThickness;
+		[dMainSplit setPosition:(totalSplitW - dThick - 300.0) ofDividerAtIndex:1];
+		[dMainSplit adjustSubviews];
+		if (fabs(dVC.rightInspectorWidth - 300.0) > 2.0 || fabs(NSWidth(dRightInspector.frame) - 300.0) > 2.0) {
+			fprintf(stderr, "FAIL: Right inspector divider could not be resized to 300pt (got %.1f)\n",
+					NSWidth(dRightInspector.frame));
+			return 42;
+		}
+		[qWC.window setFrame:NSMakeRect(0.0, 0.0, 1400.0, 860.0) display:YES];
+		[qWC.window layoutIfNeeded];
+		if (fabs(NSWidth(dRightInspector.frame) - 300.0) > 2.0) {
+			fprintf(stderr, "FAIL: Window resize snapped right inspector back instead of keeping 300pt (got %.1f)\n",
+					NSWidth(dRightInspector.frame));
+			return 43;
+		}
+
+		// 5b. Verify minimap view is wired to canvasView
+		if (dVC.minimapView == nil || dVC.minimapView.canvasView != dCanvas) {
+			fprintf(stderr, "FAIL: Designer minimapView is missing or not connected to canvasView\n");
+			return 44;
+		}
+
+		// 5c. Verify adding multiple elements does NOT stack them at (0, 0)
+		RptqDocumentSection *detailSec = qMacDoc.rptqDocument.hasDetailSection;
+		dCanvas.selectedSection = detailSec;
+		[dVC addStaticLabelAction:nil];
+		RptqDocumentElement *el1 = dCanvas.primarySelectedElement;
+		[dVC addDataFieldAction:nil];
+		RptqDocumentElement *el2 = dCanvas.primarySelectedElement;
+		[dVC addAggregateAction:nil];
+		RptqDocumentElement *el3 = dCanvas.primarySelectedElement;
+		if (el1 == nil || el2 == nil || el3 == nil || el1 == el2 || el2 == el3) {
+			fprintf(stderr, "FAIL: Failed to insert three distinct elements into Detail section\n");
+			return 45;
+		}
+		NSRect r1 = [dCanvas elementRectInSectionContent:el1];
+		NSRect r2 = [dCanvas elementRectInSectionContent:el2];
+		NSRect r3 = [dCanvas elementRectInSectionContent:el3];
+		if (NSEqualPoints(r1.origin, r2.origin) || NSEqualPoints(r2.origin, r3.origin) ||
+			NSIntersectsRect(NSInsetRect(r1, 1.0, 1.0), NSInsetRect(r2, 1.0, 1.0))) {
+			fprintf(stderr, "FAIL: Inserted elements stacked or overlapped: r1=(%.1f,%.1f) r2=(%.1f,%.1f) r3=(%.1f,%.1f)\n",
+					r1.origin.x, r1.origin.y, r2.origin.x, r2.origin.y, r3.origin.x, r3.origin.y);
+			return 46;
+		}
+
+		// 5d. Verify changing X (pt) and Y (pt) updates element position and does NOT reset to origin
+		[dCanvas selectElement:el1 extendSelection:NO];
+		NSTextField *posXField = [dVC valueForKey:@"posXField"];
+		NSTextField *posYField = [dVC valueForKey:@"posYField"];
+		posXField.doubleValue = 184.0;
+		posYField.doubleValue = 28.0;
+		[dVC performSelector:@selector(elementGeometryEdited:) withObject:posXField];
+		NSRect movedRect = [dCanvas elementRectInSectionContent:el1];
+		if (fabs(movedRect.origin.x - 184.0) > 0.5 || fabs(movedRect.origin.y - 28.0) > 0.5 ||
+			fabs(el1.rect.origin.x - 184.0) > 0.5 || fabs(el1.dropPoint.x - 184.0) > 0.5 ||
+			fabs(posXField.doubleValue - 184.0) > 0.5) {
+			fprintf(stderr, "FAIL: Editing X/Y in inspector did not persist (rect=(%.1f,%.1f), field=%.1f)\n",
+					movedRect.origin.x, movedRect.origin.y, posXField.doubleValue);
+			return 47;
+		}
+		// Verify Undo & Redo of X/Y move
+		[qMacDoc.undoManager undo];
+		NSRect undoneRect = [dCanvas elementRectInSectionContent:el1];
+		if (fabs(undoneRect.origin.x - r1.origin.x) > 0.5 || fabs(undoneRect.origin.y - r1.origin.y) > 0.5) {
+			fprintf(stderr, "FAIL: Undo of element geometry edit did not restore original origin (%.1f, %.1f)\n",
+					undoneRect.origin.x, undoneRect.origin.y);
+			return 48;
+		}
+		[qMacDoc.undoManager redo];
+		NSRect redoneRect = [dCanvas elementRectInSectionContent:el1];
+		if (fabs(redoneRect.origin.x - 184.0) > 0.5 || fabs(redoneRect.origin.y - 28.0) > 0.5) {
+			fprintf(stderr, "FAIL: Redo of element geometry edit did not re-apply (184, 28)\n");
+			return 49;
+		}
+
+		// 5e. Verify moving element across sections (Detail -> Page Header) and Undo/Redo
+		RptqDocumentSection *pageHeaderSec = qMacDoc.rptqDocument.hasPageHeaderSection;
+		[dCanvas selectElement:el1 extendSelection:NO];
+		if (![dVC moveSelectedElementsToSection:pageHeaderSec] ||
+			[dCanvas sectionContainingElement:el1] != pageHeaderSec ||
+			[[dCanvas elementsInSection:detailSec] containsObject:el1]) {
+			fprintf(stderr, "FAIL: Moving element from Detail to Page Header failed\n");
+			return 50;
+		}
+		[qMacDoc.undoManager undo];
+		if ([dCanvas sectionContainingElement:el1] != detailSec ||
+			![[dCanvas elementsInSection:detailSec] containsObject:el1]) {
+			fprintf(stderr, "FAIL: Undo of cross-section move did not return element to Detail section\n");
+			return 51;
+		}
+		[qMacDoc.undoManager redo];
+		if ([dCanvas sectionContainingElement:el1] != pageHeaderSec) {
+			fprintf(stderr, "FAIL: Redo of cross-section move did not return element to Page Header\n");
+			return 52;
+		}
 
 		[fm removeItemAtURL:qDocURL error:NULL];
-		printf("PASS: Verified Visual Query Designer: mutually exclusive Designer/SQL modes, fixed 200px user-resizable table list, floating table cards, Left Outer Join field connection, and link type modification\n");
+		printf("PASS: Verified Report Designer: resizable 3-pane split view, interactive minimap, non-stacking element insertion, persistent X/Y positioning with Undo/Redo, and cross-section element movement\n");
 	}
 	return 0;
 }
