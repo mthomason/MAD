@@ -8,6 +8,7 @@
 #import "MADMacAppDelegate.h"
 #import "MADMacConnectionWindowController.h"
 #import "MADMacDocument.h"
+#import "MADMacDocumentController.h"
 #import "MADMacWindowController.h"
 #import "MADStoreLegacyConverter.h"
 
@@ -22,7 +23,6 @@
 
 @interface MADMacAppDelegate ()
 
-@property (nonatomic, strong, nullable) NSWindow *welcomeWindow;
 @property (nonatomic, strong, nullable) MADMacConnectionWindowController *connectionWindowController;
 
 @end
@@ -30,6 +30,8 @@
 @implementation MADMacAppDelegate
 
 - (void)applicationWillFinishLaunching:(NSNotification *) __unused notification {
+	(void)[[MADMacDocumentController alloc] init];
+
 	// Ensure driver, exporter, and legacy store converter classes are linked and registered.
 	[MADLegacyStoreConversion setConverter:[[MADStoreLegacyConverter alloc] init]];
 	(void)[MADDatabaseConnectionSqlite3 class];
@@ -37,14 +39,13 @@
 	(void)[MADDatabaseConnectionSQLServer class];
 	(void)[MADDatabaseConnectionPostgres class];
 
-	[self installBundledChinookSampleIfNeeded];
 	[self buildMainMenu];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *) __unused notification {
 	[NSApp activateIgnoringOtherApps:YES];
 	if ([NSDocumentController sharedDocumentController].documents.count == 0) {
-		[self showWelcomeWindow:nil];
+		[[NSDocumentController sharedDocumentController] openDocument:nil];
 	}
 }
 
@@ -54,22 +55,9 @@
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *) __unused sender hasVisibleWindows:(BOOL)flag {
 	if (!flag) {
-		[self showWelcomeWindow:nil];
+		[[NSDocumentController sharedDocumentController] openDocument:nil];
 	}
 	return YES;
-}
-
-- (void)installBundledChinookSampleIfNeeded {
-	NSString *bundled = [[NSBundle mainBundle] pathForResource:@"chinook" ofType:@"sqlite3"];
-	if (bundled.length == 0 || ![[NSFileManager defaultManager] fileExistsAtPath:bundled]) {
-		return;
-	}
-	NSURL *supportDir = [MADURLFactory newURLLocalApplicationSupportDirectoryForGroupID:[MADApplication groupIdentifier]];
-	[[NSFileManager defaultManager] createDirectoryAtURL:supportDir withIntermediateDirectories:YES attributes:nil error:NULL];
-	NSURL *dest = [supportDir URLByAppendingPathComponent:@"chinook.sqlite3"];
-	if (![[NSFileManager defaultManager] fileExistsAtPath:dest.path]) {
-		[[NSFileManager defaultManager] copyItemAtURL:[NSURL fileURLWithPath:bundled] toURL:dest error:NULL];
-	}
 }
 
 #pragma mark - Main Menu
@@ -84,8 +72,6 @@
 	NSMenu *appMenu = [[NSMenu alloc] initWithTitle:@"MAD Designer"];
 	[appMenu addItemWithTitle:@"About MAD Designer" action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@""];
 	[appMenu addItem:[NSMenuItem separatorItem]];
-	[appMenu addItemWithTitle:@"Welcome Window" action:@selector(showWelcomeWindow:) keyEquivalent:@"0"];
-	[appMenu addItem:[NSMenuItem separatorItem]];
 	[appMenu addItemWithTitle:@"Hide MAD Designer" action:@selector(hide:) keyEquivalent:@"h"];
 	[appMenu addItemWithTitle:@"Quit MAD Designer" action:@selector(terminate:) keyEquivalent:@"q"];
 	[appMenuItem setSubmenu:appMenu];
@@ -94,16 +80,8 @@
 	NSMenuItem *fileMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:fileMenuItem];
 	NSMenu *fileMenu = [[NSMenu alloc] initWithTitle:@"File"];
-	[fileMenu addItemWithTitle:@"New From Database Connection…" action:@selector(newDocumentFromDatabase:) keyEquivalent:@"n"];
+	[fileMenu addItemWithTitle:@"New Document…" action:@selector(newDocument:) keyEquivalent:@"n"];
 	[fileMenu addItemWithTitle:@"Open…" action:@selector(openDocument:) keyEquivalent:@"o"];
-
-	NSMenuItem *samplesItem = [[NSMenuItem alloc] initWithTitle:@"Open Sample Report" action:NULL keyEquivalent:@""];
-	NSMenu *samplesMenu = [[NSMenu alloc] initWithTitle:@"Open Sample Report"];
-	[samplesMenu addItemWithTitle:@"London Report (Chinook SQLite)" action:@selector(openLondonSample:) keyEquivalent:@""];
-	[samplesMenu addItemWithTitle:@"Music Catalog Report (Chinook SQLite)" action:@selector(openMusicSample:) keyEquivalent:@""];
-	samplesItem.submenu = samplesMenu;
-	[fileMenu addItem:samplesItem];
-
 	[fileMenu addItem:[NSMenuItem separatorItem]];
 	[fileMenu addItemWithTitle:@"Close" action:@selector(performClose:) keyEquivalent:@"w"];
 	[fileMenu addItemWithTitle:@"Save" action:@selector(saveDocument:) keyEquivalent:@"s"];
@@ -153,69 +131,13 @@
 	[NSApp setWindowsMenu:windowMenu];
 }
 
-#pragma mark - Welcome Window
-
-- (void)showWelcomeWindow:(nullable id) __unused sender {
-	if (_welcomeWindow == nil) {
-		NSRect frame = NSMakeRect(0, 0, 520, 320);
-		NSWindowStyleMask style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable;
-		_welcomeWindow = [[NSWindow alloc] initWithContentRect:frame
-													 styleMask:style
-													   backing:NSBackingStoreBuffered
-														 defer:NO];
-		_welcomeWindow.title = @"Welcome to MAD Designer for macOS";
-		_welcomeWindow.releasedWhenClosed = NO;
-		[_welcomeWindow center];
-
-		NSView *content = _welcomeWindow.contentView;
-
-		NSTextField *title = [NSTextField labelWithString:@"MAD Designer"];
-		title.font = [NSFont boldSystemFontOfSize:24.0];
-		title.frame = NSMakeRect(32, 256, 456, 34);
-		[content addSubview:title];
-
-		NSTextField *subtitle = [NSTextField labelWithString:@"Mobile Analytics Document Designer & Business Intelligence Engine\nSQLite 3 • MySQL / MariaDB • SQL Server • PostgreSQL"];
-		subtitle.font = [NSFont systemFontOfSize:13.0];
-		subtitle.textColor = [NSColor secondaryLabelColor];
-		subtitle.frame = NSMakeRect(32, 208, 456, 40);
-		[content addSubview:subtitle];
-
-		NSButton *newBtn = [NSButton buttonWithTitle:@"New Report from Database Connection…"
-											  target:self
-											  action:@selector(newDocumentFromDatabase:)];
-		newBtn.frame = NSMakeRect(32, 152, 456, 32);
-		[content addSubview:newBtn];
-
-		NSButton *openBtn = [NSButton buttonWithTitle:@"Open Existing .mad Report…"
-											   target:self
-											   action:@selector(openExistingDocumentFromWelcome:)];
-		openBtn.frame = NSMakeRect(32, 112, 456, 32);
-		[content addSubview:openBtn];
-
-		NSButton *londonBtn = [NSButton buttonWithTitle:@"Open Sample Report: London.mad (Chinook SQLite)"
-												 target:self
-												 action:@selector(openLondonSample:)];
-		londonBtn.frame = NSMakeRect(32, 64, 456, 32);
-		[content addSubview:londonBtn];
-
-		NSButton *musicBtn = [NSButton buttonWithTitle:@"Open Sample Report: Music.mad (Chinook SQLite)"
-												target:self
-												action:@selector(openMusicSample:)];
-		musicBtn.frame = NSMakeRect(32, 24, 456, 32);
-		[content addSubview:musicBtn];
-	}
-	[_welcomeWindow makeKeyAndOrderFront:nil];
-}
-
 #pragma mark - Actions
 
-- (void)openExistingDocumentFromWelcome:(nullable id)sender {
-	[_welcomeWindow orderOut:nil];
-	[[NSDocumentController sharedDocumentController] openDocument:sender];
-}
-
 - (void)newDocumentFromDatabase:(nullable id) __unused sender {
-	[_welcomeWindow orderOut:nil];
+	MADMacDocumentController *docController = (MADMacDocumentController *)[NSDocumentController sharedDocumentController];
+	if ([docController respondsToSelector:@selector(dismissOpenPanelIfNeeded)]) {
+		[docController dismissOpenPanelIfNeeded];
+	}
 	_connectionWindowController = [[MADMacConnectionWindowController alloc] init];
 	__weak typeof(self) weakSelf = self;
 	_connectionWindowController.onDocumentCreated = ^(MADHeadlessDocument *headlessDoc, NSURL *savedURL) {
@@ -230,35 +152,6 @@
 		weakSelf.connectionWindowController = nil;
 	};
 	[_connectionWindowController showWindow:self];
-}
-
-- (void)openBundledSampleNamed:(NSString *)sampleName {
-	[_welcomeWindow orderOut:nil];
-	[self installBundledChinookSampleIfNeeded];
-
-	NSString *samplePath = [[NSBundle mainBundle] pathForResource:sampleName ofType:@"mad"];
-	if (samplePath.length == 0 || ![[NSFileManager defaultManager] fileExistsAtPath:samplePath]) {
-		return;
-	}
-
-	NSString *tmpPath = [NSTemporaryDirectory() stringByAppendingPathComponent:
-						 [NSString stringWithFormat:@"%@.mad", sampleName]];
-	NSURL *workingURL = [NSURL fileURLWithPath:tmpPath];
-	[[NSFileManager defaultManager] removeItemAtURL:workingURL error:NULL];
-	[[NSFileManager defaultManager] copyItemAtURL:[NSURL fileURLWithPath:samplePath] toURL:workingURL error:NULL];
-
-	[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:workingURL
-																		   display:YES
-																 completionHandler:^(NSDocument * _Nullable __unused document, BOOL __unused documentWasAlreadyOpen, NSError * _Nullable __unused error) {
-	}];
-}
-
-- (void)openLondonSample:(nullable id) __unused sender {
-	[self openBundledSampleNamed:@"London"];
-}
-
-- (void)openMusicSample:(nullable id) __unused sender {
-	[self openBundledSampleNamed:@"Music"];
 }
 
 - (nullable MADMacWindowController *)activeWindowController {

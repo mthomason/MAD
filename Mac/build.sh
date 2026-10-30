@@ -105,12 +105,7 @@ assemble_app_bundle() {
 		"${REPO_ROOT}/MADDesigner/Resources/MADFileDefinition/MAD.xcdatamodeld" \
 		"${RESOURCES_DIR}/MAD.momd"
 
-	# 4. Bundle sample reports & Chinook SQLite database
-	cp "${REPO_ROOT}/CLI/Fixtures/London.portable.mad" "${RESOURCES_DIR}/London.mad"
-	cp "${REPO_ROOT}/CLI/Fixtures/Music.portable.mad" "${RESOURCES_DIR}/Music.mad"
-	cp "${REPO_ROOT}/MADDesigner/Resources/Assets/Samples.xcassets/Data/chinook.dataset/chinook.sqlite3" "${RESOURCES_DIR}/chinook.sqlite3"
-
-	# 5. Compile native AppKit executable
+	# 4. Compile native AppKit executable
 	echo "==> Compiling ${APP_NAME} (AppKit, arm64-apple-macos${DEPLOYMENT_TARGET})..."
 	# shellcheck disable=SC2046
 	xcrun --sdk macosx clang \
@@ -157,6 +152,7 @@ run_smoke_test() {
 		-fobjc-arc \
 		-g -O0 \
 		-target "arm64-apple-macos${DEPLOYMENT_TARGET}" \
+		-I "${SCRIPT_DIR}/Source" \
 		-I "${REPO_ROOT}/MAD/Source" \
 		-I "${REPO_ROOT}/MAD/Source/sql" \
 		-I "${REPO_ROOT}/MAD/Source/rptq" \
@@ -171,14 +167,27 @@ run_smoke_test() {
 		$(framework_flags) \
 		-framework Cocoa \
 		-framework CoreData \
+		-framework UniformTypeIdentifiers \
+		-framework Quartz \
+		-framework WebKit \
 		-Wl,-rpath,"${FRAMEWORKS_DIR}" \
+		-Wl,-sectcreate,__TEXT,__info_plist,"${CONTENTS_DIR}/Info.plist" \
 		"${SCRIPT_DIR}/Tests/MADMacSmokeTest.m" \
+		"${SCRIPT_DIR}/Source/MADMacDocumentController.m" \
+		"${SCRIPT_DIR}/Source/MADMacAppDelegate.m" \
+		"${SCRIPT_DIR}/Source/MADMacDocument.m" \
+		"${SCRIPT_DIR}/Source/MADMacWindowController.m" \
+		"${SCRIPT_DIR}/Source/MADMacConnectionWindowController.m" \
+		"${SCRIPT_DIR}/Source/MADMacQueryViewController.m" \
+		"${SCRIPT_DIR}/Source/MADMacDesignerViewController.m" \
+		"${SCRIPT_DIR}/Source/MADMacViewerViewController.m" \
+		"${SCRIPT_DIR}/Source/MADMacDesignerCanvasView.m" \
 		"${TRANSFORMERS[@]}" \
 		"${LEGACY_SOURCES[@]}" \
 		-o "${smoke_bin}"
 
 	codesign --force --sign - "${smoke_bin}"
-	"${smoke_bin}" "${APP_BUNDLE}"
+	"${smoke_bin}" "${APP_BUNDLE}" "${REPO_ROOT}"
 }
 
 package_release_artifacts() {

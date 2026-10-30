@@ -17,6 +17,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import <MAD/MAD.h>
+#import "MADMacDocumentController.h"
+#import "MADMacAppDelegate.h"
+#import "MADMacDocument.h"
 #import "MADocumentDesignerProtocol.h"
 #import "MADSQLQueryCompiler.h"
 #import "MADSQLStatementResolver.h"
@@ -26,6 +29,7 @@
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 #import <MADBarcodes/MADBarcodes.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 @interface MADSmokeDesignerHost : NSObject <MADocumentDesignerProtocol>
 @property (strong, null_resettable) NSUndoManager *undoManager;
@@ -91,8 +95,20 @@ int main(int argc, const char * argv[]) {
 		NSString *musicPath = [resourcesPath stringByAppendingPathComponent:@"Music.mad"];
 
 		NSFileManager *fm = [NSFileManager defaultManager];
-		if (![fm fileExistsAtPath:chinookPath] || ![fm fileExistsAtPath:londonPath] || ![fm fileExistsAtPath:musicPath]) {
-			fprintf(stderr, "FAIL: Missing bundled resources in %s\n", resourcesPath.UTF8String);
+		if ([fm fileExistsAtPath:chinookPath] || [fm fileExistsAtPath:londonPath] || [fm fileExistsAtPath:musicPath]) {
+			fprintf(stderr, "FAIL: Bundled app contains sample reports or databases when it should not: %s\n", resourcesPath.UTF8String);
+			return 2;
+		}
+		printf("PASS: App bundle contains no bundled sample reports or sample databases\n");
+
+		NSString *repoRoot = argc >= 3 ? [NSString stringWithUTF8String:argv[2]] : nil;
+		if (repoRoot.length == 0) {
+			repoRoot = [[[NSProcessInfo processInfo] environment] objectForKey:@"MAD_REPO_ROOT"] ?: @"..";
+		}
+		NSString *sampleChinookPath = [repoRoot stringByAppendingPathComponent:@"MADDesigner/Resources/Assets/Samples.xcassets/Data/chinook.dataset/chinook.sqlite3"];
+		NSString *sampleLondonPath = [repoRoot stringByAppendingPathComponent:@"CLI/Fixtures/London.portable.mad"];
+		if (![fm fileExistsAtPath:sampleChinookPath] || ![fm fileExistsAtPath:sampleLondonPath]) {
+			fprintf(stderr, "FAIL: Missing test fixtures at repo root %s\n", repoRoot.UTF8String);
 			return 2;
 		}
 
@@ -101,11 +117,11 @@ int main(int argc, const char * argv[]) {
 		[fm createDirectoryAtURL:supportDir withIntermediateDirectories:YES attributes:nil error:NULL];
 		NSURL *installedChinook = [supportDir URLByAppendingPathComponent:@"chinook.sqlite3"];
 		[fm removeItemAtURL:installedChinook error:NULL];
-		[fm copyItemAtURL:[NSURL fileURLWithPath:chinookPath] toURL:installedChinook error:NULL];
+		[fm copyItemAtURL:[NSURL fileURLWithPath:sampleChinookPath] toURL:installedChinook error:NULL];
 
 		// 1. Open and refresh London.mad, export all formats
 		NSError *err = nil;
-		MADHeadlessDocument *london = [MADHeadlessDocument documentWithContentsOfURL:[NSURL fileURLWithPath:londonPath] error:&err];
+		MADHeadlessDocument *london = [MADHeadlessDocument documentWithContentsOfURL:[NSURL fileURLWithPath:sampleLondonPath] error:&err];
 		if (london == nil) {
 			fprintf(stderr, "FAIL: Could not open London.mad: %s\n", err.localizedDescription.UTF8String);
 			return 3;
@@ -261,6 +277,75 @@ int main(int argc, const char * argv[]) {
 		printf("PASS: Created, SQL-compiled, designed, undo-verified, refreshed (%lu rows) & exported PDF (%lu bytes)\n",
 			   (unsigned long)[created.dataTable numberOfRows],
 			   (unsigned long)createdPdfBytes.length);
+
+		// 3. Test modern macOS launch flows
+		// Ensure shared document controller is MADMacDocumentController
+		(void)[[MADMacDocumentController alloc] init];
+		NSDocumentController *sharedDocCtrl = [NSDocumentController sharedDocumentController];
+		if (![sharedDocCtrl isKindOfClass:[MADMacDocumentController class]]) {
+			fprintf(stderr, "FAIL: Shared document controller is not MADMacDocumentController\n");
+			return 14;
+		}
+		MADMacDocumentController *macDocCtrl = (MADMacDocumentController *)sharedDocCtrl;
+
+		// 3a. Verify open panel configuration and direct "New Document" button (not hidden behind "Options")
+		NSOpenPanel *testPanel = [NSOpenPanel openPanel];
+		[macDocCtrl beginOpenPanel:testPanel forTypes:nil completionHandler:^(NSInteger __unused result) {}];
+
+		if (macDocCtrl.activeOpenPanel != testPanel) {
+			fprintf(stderr, "FAIL: activeOpenPanel was not tracked by MADMacDocumentController\n");
+			return 15;
+		}
+		if (testPanel.accessoryView != nil) {
+			fprintf(stderr, "FAIL: openPanel should not use accessoryView (which hides 'New Document' behind 'Options')\n");
+			return 16;
+		}
+
+		NSButton *newDocBtn = [macDocCtrl newDocumentButtonForOpenPanel:testPanel];
+		if (newDocBtn == nil || newDocBtn.isHidden || ![newDocBtn.title isEqualToString:@"New Document"]) {
+			fprintf(stderr, "FAIL: openPanel missing visible 'New Document' button in bottom bar\n");
+			return 17;
+		}
+		if (![newDocBtn.bezelColor isEqual:[NSColor controlAccentColor]]) {
+			fprintf(stderr, "FAIL: 'New Document' button is not highlighted with controlAccentColor\n");
+			return 17;
+		}
+
+		// 3b. Verify clicking "New Document" dismisses open panel
+		[macDocCtrl newDocumentFromOpenPanel:newDocBtn];
+		if (macDocCtrl.activeOpenPanel != nil) {
+			fprintf(stderr, "FAIL: newDocumentFromOpenPanel did not dismiss activeOpenPanel\n");
+			return 18;
+		}
+
+		// 3c. Verify launch paths via MADMacAppDelegate:
+		MADMacAppDelegate *appDelegate = [[MADMacAppDelegate alloc] init];
+		[appDelegate applicationWillFinishLaunching:[NSNotification notificationWithName:@"launch" object:NSApp]];
+
+		// Scenario A: When launched with a document, applicationDidFinishLaunching does NOT present open panel
+		MADMacDocument *openDoc = [[MADMacDocument alloc] init];
+		openDoc.fileURL = [NSURL fileURLWithPath:sampleLondonPath];
+		[openDoc adoptHeadlessDocument:london];
+		[sharedDocCtrl addDocument:openDoc];
+
+		[macDocCtrl dismissOpenPanelIfNeeded];
+		[appDelegate applicationDidFinishLaunching:[NSNotification notificationWithName:@"launch" object:NSApp]];
+		if (macDocCtrl.activeOpenPanel != nil) {
+			fprintf(stderr, "FAIL: applicationDidFinishLaunching presented open panel even though document was open\n");
+			return 19;
+		}
+		[sharedDocCtrl removeDocument:openDoc];
+
+		// Scenario B: When launched without a document (documents.count == 0), applicationDidFinishLaunching presents open panel
+		[macDocCtrl dismissOpenPanelIfNeeded];
+		[appDelegate applicationDidFinishLaunching:[NSNotification notificationWithName:@"launch" object:NSApp]];
+		if (macDocCtrl.activeOpenPanel == nil) {
+			fprintf(stderr, "FAIL: applicationDidFinishLaunching did not present open panel when no documents open\n");
+			return 20;
+		}
+		[macDocCtrl dismissOpenPanelIfNeeded];
+
+		printf("PASS: Verified modern macOS launch: opens document when provided, opens file dialog with 'New Document' button when launched empty\n");
 	}
 	return 0;
 }

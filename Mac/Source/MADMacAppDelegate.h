@@ -15,8 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MADMacAppDelegate : NSObject <NSApplicationDelegate>
 
 - (void)newDocumentFromDatabase:(nullable id)sender;
-- (void)openLondonSample:(nullable id)sender;
-- (void)openMusicSample:(nullable id)sender;
 
 @end
 
