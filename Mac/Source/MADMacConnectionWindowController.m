@@ -32,7 +32,6 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 @property (nonatomic, strong) NSPopUpButton *driverPopup;
 @property (nonatomic, strong) NSTextField *sqlitePathField;
 @property (nonatomic, strong) NSButton *browseSQLiteButton;
-@property (nonatomic, strong) NSButton *useChinookButton;
 
 @property (nonatomic, strong) NSTextField *hostField;
 @property (nonatomic, strong) NSTextField *portField;
@@ -88,7 +87,7 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 
 	_driverPopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(160, 334, 356, 26) pullsDown:NO];
 	[_driverPopup addItemsWithTitles:@[
-		@"SQLite 3 (Local File or Sample Database)",
+		@"SQLite 3",
 		@"MySQL / MariaDB",
 		@"Microsoft SQL Server (FreeTDS)",
 		@"PostgreSQL (libpq)"
@@ -110,12 +109,6 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 											 action:@selector(browseSQLiteFile:)];
 	_browseSQLiteButton.frame = NSMakeRect(426, 290, 90, 28);
 	[content addSubview:_browseSQLiteButton];
-
-	_useChinookButton = [NSButton buttonWithTitle:@"Use Bundled Chinook Sample Database (chinook.sqlite3)"
-										   target:self
-										   action:@selector(useChinookDatabase:)];
-	_useChinookButton.frame = NSMakeRect(160, 260, 356, 24);
-	[content addSubview:_useChinookButton];
 
 	// Server database fields
 	[content addSubview:[self makeLabel:@"Host / Address:"
@@ -188,8 +181,6 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	_createButton.frame = NSMakeRect(424, 12, 100, 28);
 	_createButton.keyEquivalent = @"\r";
 	[content addSubview:_createButton];
-
-	[self useChinookDatabase:nil];
 }
 
 - (void)driverPopupChanged:(id) __unused sender {
@@ -202,7 +193,6 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 
 	_sqlitePathField.enabled = isSQLite;
 	_browseSQLiteButton.enabled = isSQLite;
-	_useChinookButton.enabled = isSQLite;
 
 	_hostField.enabled = !isSQLite;
 	_portField.enabled = !isSQLite;
@@ -216,39 +206,13 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 			break;
 		case MADMacDatabaseKindMySQL:
 			_portField.stringValue = @"3306";
-			if (_databaseField.stringValue.length == 0) _databaseField.stringValue = @"Chinook";
 			break;
 		case MADMacDatabaseKindSQLServer:
 			_portField.stringValue = @"1433";
-			if (_databaseField.stringValue.length == 0) _databaseField.stringValue = @"Chinook";
 			break;
 		case MADMacDatabaseKindPostgreSQL:
 			_portField.stringValue = @"5432";
-			if (_databaseField.stringValue.length == 0) _databaseField.stringValue = @"chinook";
 			break;
-	}
-}
-
-- (nullable NSString *)resolvedChinookPath {
-	NSString *bundled = [[NSBundle mainBundle] pathForResource:@"chinook" ofType:@"sqlite3"];
-	if (bundled.length > 0 && [[NSFileManager defaultManager] fileExistsAtPath:bundled]) {
-		return bundled;
-	}
-	NSURL *supportDir = [MADURLFactory newURLLocalApplicationSupportDirectoryForGroupID:[MADApplication groupIdentifier]];
-	NSURL *installed = [supportDir URLByAppendingPathComponent:@"chinook.sqlite3"];
-	if (installed.path.length > 0 && [[NSFileManager defaultManager] fileExistsAtPath:installed.path]) {
-		return installed.path;
-	}
-	return nil;
-}
-
-- (void)useChinookDatabase:(id) __unused sender {
-	NSString *chinook = [self resolvedChinookPath];
-	if (chinook != nil) {
-		_sqlitePathField.stringValue = chinook;
-		_statusLabel.stringValue = @"Selected bundled Chinook SQLite3 sample database.";
-	} else {
-		_statusLabel.stringValue = @"Locate a SQLite3 database file using Browse…";
 	}
 }
 
