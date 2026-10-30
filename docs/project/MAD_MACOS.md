@@ -209,12 +209,25 @@ Built under `Mac/` (`Mac/Source/`, `Mac/Resources/`, `Mac/Tests/`, `Mac/build.sh
      with **Test Connection**, `MADKeyChain` password storage, and **Create Report…**
      (`NSSavePanel`).
 3. **MAD Query Workspace (`MADMacQueryViewController`):**
-   - Left pane: Database Schema Tables, Query Tables (`Add`/`Remove`), Query Fields, and
-     tabbed visual editors for **Joins** (`INNER`, `LEFT OUTER`, `RIGHT OUTER`,
-     `FULL OUTER`), **WHERE Filters**, and **GROUP BY** clauses.
-   - Right pane: **SQL Studio** displaying live generated SQL and supporting direct SQL
-     entry (`MADSQLParser` + `MADSQLStatementResolver` + `MADSQLQueryCompiler`), plus a
-     live **Cached Result Set Preview** (`NSTableView` over `MADDataTableFast`).
+   - Mutually exclusive **Query Designer** and **SQL Query** workspace modes (toggled in
+     the workspace header bar so visual query design and manual SQL entry are never
+     shown simultaneously).
+   - **Query Designer mode**: A `200px` left-hand **Database Tables** list (user-resizable
+     via `NSSplitViewDelegate` without snapping back, and held at a fixed width when the
+     window is resized so the visual canvas resizes instead) paired with an interactive
+     right-hand visual canvas (`MADMacQueryCanvasView`). Double-clicking a schema table
+     adds it to the query (populating all `RptqQueryField` rows) and displays it as a
+     draggable, resizable floating AppKit table card (`MADMacQueryTableCardView` +
+     `MADMacQueryFieldTableView`) styled with topological root/child headers (`MTGraph`),
+     and dragging from a field in one table card to a field in another creates a default
+     **Left Outer Join** (`MADLinkTypeLeftOuterJoin`) drawn via Bezier connectors and
+     join-type badges (`MADMacQueryLinksOverlayView`, matching iPad's `MADConnectorView`).
+     Clicking or right-clicking a visual join connector opens a join inspector popover or
+     context menu to change the link type, swap direction, or delete the link; header
+     popovers provide **Filters (WHERE)** and **Groupings (GROUP BY)** editors.
+   - **SQL Query mode**: Full-width SQL statement editor displaying generated or entered
+     SQL and supporting validation, compilation, and application (`MADSQLParser` +
+     `MADSQLStatementResolver` + `MADSQLQueryCompiler`).
 4. **MAD Designer Workspace (`MADMacDesignerViewController` + `MADMacDesignerCanvasView`):**
    - Left sidebar: Report Sections list (`Report Header`, `Page Header`, query group
      headers, `Report Detail`, query group footers, `Page Footer`, `Report Footer`) and

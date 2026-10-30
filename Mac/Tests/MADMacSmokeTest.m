@@ -22,6 +22,7 @@
 #import "MADMacConnectionWindowController.h"
 #import "MADMacDocument.h"
 #import "MADMacWindowController.h"
+#import "MADMacQueryViewController.h"
 #import "MADocumentDesignerProtocol.h"
 #import "MADSQLQueryCompiler.h"
 #import "MADSQLStatementResolver.h"
@@ -378,6 +379,149 @@ int main(int argc, const char * argv[]) {
 		[macDocCtrl dismissOpenPanelIfNeeded];
 
 		printf("PASS: Verified modern macOS launch: opens document when provided, opens file dialog with 'New Document' button when launched empty\n");
+
+		// 4. Test Redesigned Visual Query Designer (MADMacQueryViewController)
+		NSString *qDocPath = [NSTemporaryDirectory() stringByAppendingPathComponent:
+							  [NSString stringWithFormat:@"smoke-query-designer-%@.mad", NSUUID.UUID.UUIDString]];
+		NSURL *qDocURL = [NSURL fileURLWithPath:qDocPath];
+		MADHeadlessDocument *qHeadless = [MADHeadlessDocument createDocumentAtURL:qDocURL
+														   withDatabaseConnection:conn
+																	  credentials:nil
+																			error:&err];
+		if (qHeadless == nil) {
+			fprintf(stderr, "FAIL: Could not create document for Query Designer test: %s\n", err.localizedDescription.UTF8String);
+			return 24;
+		}
+		MADMacDocument *qMacDoc = [[MADMacDocument alloc] init];
+		qMacDoc.fileURL = qDocURL;
+		[qMacDoc adoptHeadlessDocument:qHeadless];
+		[qMacDoc makeWindowControllers];
+		MADMacWindowController *qWC = qMacDoc.windowControllers.firstObject;
+		[qWC switchToWorkspaceTab:MADMacWorkspaceTabQuery];
+		[qWC.window layoutIfNeeded];
+
+		MADMacQueryViewController *qVC = qWC.queryViewController;
+		NSSplitView *designerSplit = [qVC valueForKey:@"designerSplitView"];
+		NSView *schemaSidebar = [qVC valueForKey:@"schemaSidebarView"];
+		NSView *canvasContainer = [qVC valueForKey:@"canvasContainerView"];
+		NSView *sqlEditorContainer = [qVC valueForKey:@"sqlEditorContainerView"];
+		NSTextView *sqlTextView = [qVC valueForKey:@"sqlTextView"];
+
+		// 4a. Mutually exclusive modes: Query Designer vs SQL Query
+		if (qVC.workspaceMode != MADMacQueryWorkspaceModeDesigner || designerSplit.isHidden || !sqlEditorContainer.isHidden) {
+			fprintf(stderr, "FAIL: Query Designer did not start in mutually exclusive Designer mode\n");
+			return 25;
+		}
+		[qVC switchToMode:MADMacQueryWorkspaceModeSQL];
+		if (qVC.workspaceMode != MADMacQueryWorkspaceModeSQL || !designerSplit.isHidden || sqlEditorContainer.isHidden) {
+			fprintf(stderr, "FAIL: Switching to SQL mode did not hide visual designer and show SQL editor\n");
+			return 26;
+		}
+		[qVC switchToMode:MADMacQueryWorkspaceModeDesigner];
+		if (qVC.workspaceMode != MADMacQueryWorkspaceModeDesigner || designerSplit.isHidden || !sqlEditorContainer.isHidden) {
+			fprintf(stderr, "FAIL: Switching back to Designer mode did not hide SQL editor and show visual designer\n");
+			return 27;
+		}
+
+		// 4b. Left-hand table list (~200px fixed width on window resize, user-resizable without snapping back)
+		if (fabs(qVC.schemaSidebarWidth - 200.0) > 1.0 || fabs(NSWidth(schemaSidebar.frame) - 200.0) > 1.0) {
+			fprintf(stderr, "FAIL: Schema table list initial width is %.1f (expected 200.0)\n", NSWidth(schemaSidebar.frame));
+			return 28;
+		}
+		CGFloat initialCanvasWidth = NSWidth(canvasContainer.frame);
+		[qWC.window setFrame:NSMakeRect(0.0, 0.0, 1560.0, 920.0) display:YES];
+		[qWC.window layoutIfNeeded];
+		if (fabs(NSWidth(schemaSidebar.frame) - 200.0) > 1.0 || NSWidth(canvasContainer.frame) <= initialCanvasWidth + 100.0) {
+			fprintf(stderr, "FAIL: Window resize did not keep left table list fixed at 200px (got %.1f) while resizing canvas\n",
+					NSWidth(schemaSidebar.frame));
+			return 29;
+		}
+		[designerSplit setPosition:260.0 ofDividerAtIndex:0];
+		[designerSplit adjustSubviews];
+		if (fabs(qVC.schemaSidebarWidth - 260.0) > 1.5 || fabs(NSWidth(schemaSidebar.frame) - 260.0) > 1.5) {
+			fprintf(stderr, "FAIL: User resize of table list divider snapped back instead of staying at 260px (got %.1f)\n",
+					NSWidth(schemaSidebar.frame));
+			return 30;
+		}
+		[qWC.window setFrame:NSMakeRect(0.0, 0.0, 1360.0, 840.0) display:YES];
+		[qWC.window layoutIfNeeded];
+		if (fabs(NSWidth(schemaSidebar.frame) - 260.0) > 1.5) {
+			fprintf(stderr, "FAIL: Window resize after user divider adjustment did not preserve 260px width (got %.1f)\n",
+					NSWidth(schemaSidebar.frame));
+			return 31;
+		}
+
+		// 4c. Double-click / add two tables (Customer and Invoice) -> floating AppKit table views on canvas
+		RptqDatabaseSchemaTable *customerSchema = nil;
+		RptqDatabaseSchemaTable *invoiceSchema = nil;
+		for (RptqDatabaseSchemaTable *st in qMacDoc.rptqDatabase.hasTables) {
+			if ([st.name isEqualToString:@"Customer"]) customerSchema = st;
+			if ([st.name isEqualToString:@"Invoice"]) invoiceSchema = st;
+		}
+		if (customerSchema == nil || invoiceSchema == nil) {
+			fprintf(stderr, "FAIL: Missing Customer or Invoice schema table in Chinook\n");
+			return 32;
+		}
+		RptqQueryTable *qtCustomer = [qVC addSchemaTableToQuery:customerSchema];
+		RptqQueryTable *qtInvoice = [qVC addSchemaTableToQuery:invoiceSchema];
+		if (qtCustomer == nil || qtInvoice == nil ||
+			qtCustomer.hasQueryFields.count != customerSchema.hasFields.count ||
+			qtInvoice.hasQueryFields.count != invoiceSchema.hasFields.count) {
+			fprintf(stderr, "FAIL: Adding tables to query did not populate RptqQueryField children\n");
+			return 33;
+		}
+		NSView *customerCard = [qVC tableCardViewForQueryTableID:qtCustomer.identifier];
+		NSView *invoiceCard = [qVC tableCardViewForQueryTableID:qtInvoice.identifier];
+		if (customerCard == nil || invoiceCard == nil) {
+			fprintf(stderr, "FAIL: Floating table card views were not created on the visual canvas\n");
+			return 34;
+		}
+
+		// 4d. Connect Customer.CustomerId to Invoice.CustomerId -> default Left Outer Join
+		RptqQueryField *custIdField = nil;
+		RptqQueryField *invCustIdField = nil;
+		for (RptqQueryField *qf in qtCustomer.hasQueryFields) {
+			if ([qf.databaseSchemaField.name isEqualToString:@"CustomerId"]) {
+				custIdField = qf;
+				break;
+			}
+		}
+		for (RptqQueryField *qf in qtInvoice.hasQueryFields) {
+			if ([qf.databaseSchemaField.name isEqualToString:@"CustomerId"]) {
+				invCustIdField = qf;
+				break;
+			}
+		}
+		RptqQueryLinks *joinLink = [qVC connectQueryField:custIdField toQueryField:invCustIdField];
+		if (joinLink == nil || joinLink.type != MADLinkTypeLeftOuterJoin || qMacDoc.rptqQuery.hasQueryLinks.count != 1) {
+			fprintf(stderr, "FAIL: Connecting fields did not create a default Left Outer Join link\n");
+			return 35;
+		}
+		BOOL custIsRoot = [[customerCard valueForKey:@"isRootTable"] boolValue];
+		BOOL invIsRoot = [[invoiceCard valueForKey:@"isRootTable"] boolValue];
+		if (!custIsRoot || invIsRoot) {
+			fprintf(stderr, "FAIL: Topological root/child classification failed (custIsRoot=%d, invIsRoot=%d)\n", custIsRoot, invIsRoot);
+			return 36;
+		}
+		if (![sqlTextView.string containsString:@"LEFT OUTER JOIN"]) {
+			fprintf(stderr, "FAIL: Generated SQL does not contain LEFT OUTER JOIN: %s\n", sqlTextView.string.UTF8String);
+			return 37;
+		}
+
+		// 4e. Select visual link and modify link type to Inner Join
+		[qVC selectQueryLink:joinLink showPopover:NO];
+		if (qVC.selectedLinkIdentifier != joinLink.identifier) {
+			fprintf(stderr, "FAIL: Selecting visual link did not update selectedLinkIdentifier\n");
+			return 38;
+		}
+		[qVC updateQueryLink:joinLink joinType:MADLinkTypeInnerJoin];
+		if (joinLink.type != MADLinkTypeInnerJoin || ![sqlTextView.string containsString:@"INNER JOIN"]) {
+			fprintf(stderr, "FAIL: Modifying link type to Inner Join did not update link or generated SQL: %s\n", sqlTextView.string.UTF8String);
+			return 39;
+		}
+
+		[fm removeItemAtURL:qDocURL error:NULL];
+		printf("PASS: Verified Visual Query Designer: mutually exclusive Designer/SQL modes, fixed 200px user-resizable table list, floating table cards, Left Outer Join field connection, and link type modification\n");
 	}
 	return 0;
 }
