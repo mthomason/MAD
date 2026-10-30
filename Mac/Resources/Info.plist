@@ -21,6 +21,7 @@
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
+				<string>com.everydayapps.productivity.mad</string>
 				<string>com.thomason.report.mad</string>
 			</array>
 			<key>LSTypeIsPackage</key>
@@ -55,6 +56,28 @@
 	<string>NSApplication</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Mobile Analytics Document</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.everydayapps.productivity.mad</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mad</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.everydayapps.mad</string>
+				</array>
+			</dict>
+		</dict>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>

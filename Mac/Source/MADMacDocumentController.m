@@ -7,7 +7,12 @@
 
 #import "MADMacDocumentController.h"
 #import "MADMacAppDelegate.h"
+#import "MADMacDocument.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+
+static NSString * const MADDocumentUTIPrimary = @"com.everydayapps.productivity.mad";
+static NSString * const MADDocumentUTILegacyMac = @"com.thomason.report.mad";
+static NSString * const MADDocumentFilenameExtension = @"mad";
 
 @interface NSOpenPanel (MADMacNewDocumentButton)
 
@@ -41,6 +46,72 @@
 	return [super init];
 }
 
++ (NSArray<UTType *> *)allowedMadContentTypes {
+	NSMutableOrderedSet<UTType *> *types = [[NSMutableOrderedSet alloc] init];
+
+	NSArray<UTType *> *tagTypes = [UTType typesWithTag:MADDocumentFilenameExtension
+											  tagClass:UTTagClassFilenameExtension
+									  conformingToType:nil];
+	if (tagTypes.count > 0) {
+		[types addObjectsFromArray:tagTypes];
+	}
+
+	UTType *extType = [UTType typeWithFilenameExtension:MADDocumentFilenameExtension];
+	if (extType != nil) {
+		[types addObject:extType];
+	}
+
+	UTType *primaryType = [UTType typeWithIdentifier:MADDocumentUTIPrimary];
+	if (primaryType != nil) {
+		[types addObject:primaryType];
+	}
+
+	UTType *legacyMacType = [UTType typeWithIdentifier:MADDocumentUTILegacyMac];
+	if (legacyMacType != nil) {
+		[types addObject:legacyMacType];
+	}
+
+	return types.array;
+}
+
++ (NSArray<NSString *> *)allowedMadTypeIdentifiers {
+	NSMutableOrderedSet<NSString *> *identifiers = [[NSMutableOrderedSet alloc] init];
+	for (UTType *type in [self allowedMadContentTypes]) {
+		if (type.identifier.length > 0) {
+			[identifiers addObject:type.identifier];
+		}
+	}
+	[identifiers addObject:MADDocumentUTIPrimary];
+	[identifiers addObject:MADDocumentUTILegacyMac];
+	[identifiers addObject:MADDocumentFilenameExtension];
+	return identifiers.array;
+}
+
+- (nullable NSString *)typeForContentsOfURL:(NSURL *)url error:(NSError * _Nullable __autoreleasing *)outError {
+	if ([[url.pathExtension lowercaseString] isEqualToString:MADDocumentFilenameExtension]) {
+		return MADDocumentUTIPrimary;
+	}
+	return [super typeForContentsOfURL:url error:outError];
+}
+
+- (nullable Class)documentClassForType:(NSString *)documentTypeName {
+	Class docClass = [super documentClassForType:documentTypeName];
+	if (docClass != Nil) {
+		return docClass;
+	}
+	if ([documentTypeName isEqualToString:MADDocumentUTIPrimary] ||
+		[documentTypeName isEqualToString:MADDocumentUTILegacyMac] ||
+		[documentTypeName isEqualToString:@"Mobile Analytics Document"] ||
+		[[documentTypeName lowercaseString] isEqualToString:MADDocumentFilenameExtension]) {
+		return [MADMacDocument class];
+	}
+	UTType *utType = [UTType typeWithIdentifier:documentTypeName];
+	if (utType != nil && [[utType.preferredFilenameExtension lowercaseString] isEqualToString:MADDocumentFilenameExtension]) {
+		return [MADMacDocument class];
+	}
+	return Nil;
+}
+
 - (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)item {
 	if (item.action == @selector(newDocument:)) {
 		return YES;
@@ -49,8 +120,9 @@
 }
 
 - (void)dismissOpenPanelIfNeeded {
-	if (_activeOpenPanel != nil && _activeOpenPanel.isVisible) {	// Weak instance variable '_activeOpenPanel' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
-		[_activeOpenPanel cancel:nil];
+	NSOpenPanel *panel = _activeOpenPanel;
+	if (panel != nil && panel.isVisible) {
+		[panel cancel:nil];
 		_activeOpenPanel = nil;
 	}
 }
@@ -95,8 +167,9 @@
 }
 
 - (IBAction)openDocument:(nullable id)sender {
-	if (_activeOpenPanel != nil && _activeOpenPanel.isVisible) {	// Weak instance variable '_activeOpenPanel' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
-		[_activeOpenPanel makeKeyAndOrderFront:nil];
+	NSOpenPanel *panel = _activeOpenPanel;
+	if (panel != nil && panel.isVisible) {
+		[panel makeKeyAndOrderFront:nil];
 		return;
 	}
 	[super openDocument:sender];
@@ -110,11 +183,7 @@
 	}
 }
 
-- (void)beginOpenPanel:(NSOpenPanel *)openPanel
-			  forTypes:(nullable NSArray<NSString *> *)inTypes
-	 completionHandler:(void (^)(NSInteger result))completionHandler {
-	_activeOpenPanel = openPanel;
-
+- (void)configureOpenPanelForMadDocuments:(NSOpenPanel *)openPanel {
 	openPanel.title = @"Open Report";
 	openPanel.prompt = @"Open";
 	openPanel.canChooseFiles = YES;
@@ -122,24 +191,46 @@
 	openPanel.allowsMultipleSelection = NO;
 	openPanel.allowsOtherFileTypes = NO;
 
-	UTType *madType = [UTType typeWithFilenameExtension:@"mad"];
-	if (madType != nil) {
-		openPanel.allowedContentTypes = @[madType];
+	NSArray<UTType *> *madTypes = [[self class] allowedMadContentTypes];
+	if (madTypes.count > 0) {
+		openPanel.allowedContentTypes = madTypes;
 	}
 
 	[self configureNewDocumentButtonForOpenPanel:openPanel];
+}
+
+- (NSInteger)runModalOpenPanel:(NSOpenPanel *)openPanel
+					  forTypes:(nullable NSArray<NSString *> *) __unused types {
+	_activeOpenPanel = openPanel;
+	[self configureOpenPanelForMadDocuments:openPanel];
+	NSArray<NSString *> *allowedTypeIdentifiers = [[self class] allowedMadTypeIdentifiers];
+	NSInteger result = [super runModalOpenPanel:openPanel forTypes:allowedTypeIdentifiers];
+	if (_activeOpenPanel == openPanel) {
+		_activeOpenPanel = nil;
+	}
+	return result;
+}
+
+- (void)beginOpenPanel:(NSOpenPanel *)openPanel
+			  forTypes:(nullable NSArray<NSString *> *) __unused inTypes
+	 completionHandler:(void (^)(NSInteger result))completionHandler {
+	_activeOpenPanel = openPanel;
+
+	[self configureOpenPanelForMadDocuments:openPanel];
+	NSArray<NSString *> *allowedTypeIdentifiers = [[self class] allowedMadTypeIdentifiers];
 
 	__weak typeof(self) weakSelf = self;
 	[super beginOpenPanel:openPanel
-				 forTypes:inTypes
+				 forTypes:allowedTypeIdentifiers
 		completionHandler:^(NSInteger result) {
-			if (weakSelf.activeOpenPanel == openPanel) {	// Weak variable 'weakSelf' is accessed multiple times in this block but may be unpredictably set to nil; assign to a strong variable to keep the object alive
-				weakSelf.activeOpenPanel = nil;
+			typeof(self) strongSelf = weakSelf;
+			if (strongSelf != nil && strongSelf.activeOpenPanel == openPanel) {
+				strongSelf.activeOpenPanel = nil;
 			}
 			completionHandler(result);
 		}];
 
-	[self configureNewDocumentButtonForOpenPanel:openPanel];
+	[self configureOpenPanelForMadDocuments:openPanel];
 }
 
 - (void)newDocumentFromOpenPanel:(id)sender {
