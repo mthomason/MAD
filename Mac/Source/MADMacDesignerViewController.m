@@ -320,7 +320,7 @@
 #pragma mark - Reload & Sync
 
 - (void)reloadFromDocument {
-	_sections = [_document orderedSections] ?: @[];
+	_sections = [_document orderedSections] ?: @[];	// Weak instance variable '_document' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 
 	NSMutableArray<RptqQueryField *> *qFields = [[NSMutableArray alloc] init];
 	for (RptqQueryTable *qt in _document.rptqQuery.hasQueryTables) {
@@ -393,10 +393,10 @@
 	_heightField.stringValue = [NSString stringWithFormat:@"%.0f", MAX(16.0, el.rect.size.height)];
 
 	if (el.fontname.length > 0) {
-		if ([_fontFamilyPopup itemWithTitle:el.fontname] == nil) {
-			[_fontFamilyPopup addItemWithTitle:el.fontname];
+		if ([_fontFamilyPopup itemWithTitle:el.fontname] == nil) {	// Warning: Implicit conversion from nullable pointer 'NSString * _Nullable' to non-nullable pointer type 'NSString * _Nonnull'
+			[_fontFamilyPopup addItemWithTitle:el.fontname];	// Warning: Implicit conversion from nullable pointer 'NSString * _Nullable' to non-nullable pointer type 'NSString * _Nonnull'
 		}
-		[_fontFamilyPopup selectItemWithTitle:el.fontname];
+		[_fontFamilyPopup selectItemWithTitle:el.fontname];		// Warning: Implicit conversion from nullable pointer 'NSString * _Nullable' to non-nullable pointer type 'NSString * _Nonnull'
 	}
 	_fontSizeField.stringValue = [NSString stringWithFormat:@"%.1f", el.fontsize > 0 ? el.fontsize : 12.0];
 	_boldCheckbox.state = el.textStyle.bold ? NSControlStateValueOn : NSControlStateValueOff;
@@ -458,7 +458,7 @@
 
 - (void)addStaticLabelElement:(nullable id) __unused sender {
 	RptqDocumentSection *section = [self targetSectionForInsertion];
-	RptqStoreContext *ctx = _document.managedObjectContext;
+	RptqStoreContext *ctx = _document.managedObjectContext;	// Warning: Weak instance variable '_document' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 	if (section == nil || ctx == nil) return;
 	[self ensureSectionHasRow:section];
 
@@ -474,7 +474,7 @@
 
 - (void)addDataFieldElement:(nullable id) __unused sender {
 	RptqDocumentSection *section = [self targetSectionForInsertion];
-	RptqStoreContext *ctx = _document.managedObjectContext;
+	RptqStoreContext *ctx = _document.managedObjectContext;	// Warning: Weak instance variable '_document' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 	if (section == nil || ctx == nil) return;
 	[self ensureSectionHasRow:section];
 
@@ -498,7 +498,7 @@
 
 - (void)addAggregateElement:(nullable id) __unused sender {
 	RptqDocumentSection *section = [self targetSectionForInsertion];
-	RptqStoreContext *ctx = _document.managedObjectContext;
+	RptqStoreContext *ctx = _document.managedObjectContext;		// Warning: Weak instance variable '_document' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 	if (section == nil || ctx == nil) return;
 	[self ensureSectionHasRow:section];
 
@@ -519,7 +519,7 @@
 
 - (void)addBarcodeElement:(nullable id) __unused sender {
 	RptqDocumentSection *section = [self targetSectionForInsertion];
-	RptqStoreContext *ctx = _document.managedObjectContext;
+	RptqStoreContext *ctx = _document.managedObjectContext;		// Warning: Weak instance variable '_document' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 	if (section == nil || ctx == nil) return;
 	[self ensureSectionHasRow:section];
 
@@ -540,7 +540,7 @@
 
 - (void)addImageElement:(nullable id) __unused sender {
 	RptqDocumentSection *section = [self targetSectionForInsertion];
-	RptqStoreContext *ctx = _document.managedObjectContext;
+	RptqStoreContext *ctx = _document.managedObjectContext;		// Warning: Weak instance variable '_document' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 	if (section == nil || ctx == nil) return;
 
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
@@ -549,7 +549,7 @@
 	panel.canChooseDirectories = NO;
 	if ([panel runModal] != NSModalResponseOK || panel.URL == nil) return;
 
-	NSImage *image = [[NSImage alloc] initWithContentsOfURL:panel.URL];
+	NSImage *image = [[NSImage alloc] initWithContentsOfURL:panel.URL];		// Warning: Implicit conversion from nullable pointer 'NSURL * _Nullable' to non-nullable pointer type 'NSURL * _Nonnull'
 	if (image == nil) return;
 
 	[self ensureSectionHasRow:section];
@@ -594,7 +594,7 @@
 
 	[el setOriginPoint:CGPointMake(MAX(0.0, _posXField.doubleValue), MAX(0.0, _posYField.doubleValue))];
 	NSSet<NSNumber *> *ids = [_canvasView.selectedElementIdentifiers copy];
-	[_document.designerLayout updateElements:ids setSizeWidth:MAX(16.0f, _widthField.floatValue)];
+	[_document.designerLayout updateElements:ids setSizeWidth:MAX(16.0f, _widthField.floatValue)];		// Warning: Weak instance variable '_document' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 	[_document.designerLayout updateElements:ids setSizeHeight:MAX(12.0f, _heightField.floatValue)];
 	[_document notifyDocumentMutated];
 }
@@ -604,7 +604,7 @@
 	NSSet<NSNumber *> *ids = [_canvasView.selectedElementIdentifiers copy];
 	if (ids.count == 0) return;
 
-	MADDesignerLayout *layout = _document.designerLayout;
+	MADDesignerLayout *layout = _document.designerLayout;		// Warning: Weak instance variable '_document' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 	NSString *fontName = _fontFamilyPopup.selectedItem.title ?: @"Helvetica";
 	[layout updateElements:ids setFontname:fontName];
 	[layout updateElements:ids setFontsize:MAX(6.0, _fontSizeField.doubleValue)];
@@ -690,7 +690,7 @@
 - (void)canvasViewSelectionDidChange:(id) __unused sender {
 	[self syncInspectorFromSelection];
 	if (_canvasView.selectedSection != nil) {
-		NSUInteger idx = [_sections indexOfObject:_canvasView.selectedSection];
+		NSUInteger idx = [_sections indexOfObject:_canvasView.selectedSection];		// Warning: Implicit conversion from nullable pointer 'RptqDocumentSection * _Nullable' to non-nullable pointer type 'RptqDocumentSection * _Nonnull'
 		if (idx != NSNotFound) {
 			[_sectionsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:idx] byExtendingSelection:NO];
 		}

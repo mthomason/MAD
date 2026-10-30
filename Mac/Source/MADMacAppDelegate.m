@@ -95,8 +95,8 @@
 	NSMenuItem *editMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:editMenuItem];
 	NSMenu *editMenu = [[NSMenu alloc] initWithTitle:@"Edit"];
-	[editMenu addItemWithTitle:@"Undo" action:@selector(undo:) keyEquivalent:@"z"];
-	[editMenu addItemWithTitle:@"Redo" action:@selector(redo:) keyEquivalent:@"Z"];
+	[editMenu addItemWithTitle:@"Undo" action:@selector(undo:) keyEquivalent:@"z"];	// Undeclared selector 'undo:'
+	[editMenu addItemWithTitle:@"Redo" action:@selector(redo:) keyEquivalent:@"Z"];	// Undeclared selector 'redo:'
 	[editMenu addItem:[NSMenuItem separatorItem]];
 	[editMenu addItemWithTitle:@"Cut" action:@selector(cut:) keyEquivalent:@"x"];
 	[editMenu addItemWithTitle:@"Copy" action:@selector(copy:) keyEquivalent:@"c"];
