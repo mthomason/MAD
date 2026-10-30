@@ -17,6 +17,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <MAD/MAD.h>
+#import "MADMacAboutWindowController.h"
 #import "MADMacDocumentController.h"
 #import "MADMacAppDelegate.h"
 #import "MADMacConnectionWindowController.h"
@@ -805,6 +806,136 @@ int main(int argc, const char * argv[]) {
 			return 65;
 		}
 		printf("PASS: Verified Report Viewer: toolbar icons, bottom status bar with singular/plural grammar, framed fixed-size page with zoom, page size persistence across refresh, and export dialog format selector\n");
+
+		// 7. Test About Screen, Overview, Licensing, and Third-Party Acknowledgements (MADMacAboutWindowController)
+		NSBundle *packagedAppBundle = [NSBundle bundleWithPath:appPath];
+		if (packagedAppBundle == nil) {
+			fprintf(stderr, "FAIL: Could not load NSBundle for packaged app at %s\n", appPath.UTF8String);
+			return 66;
+		}
+		for (NSDictionary<NSString *, NSString *> *licenseEntry in [MADMacAboutWindowController bundledLicenseFiles]) {
+			NSString *licenseFile = licenseEntry[@"file"];
+			NSString *bundledLicensePath = [packagedAppBundle pathForResource:licenseFile ofType:nil inDirectory:@"Licenses"];
+			if (bundledLicensePath.length == 0 || ![fm fileExistsAtPath:bundledLicensePath]) {
+				fprintf(stderr, "FAIL: Packaged app bundle missing third-party license file Licenses/%s\n", licenseFile.UTF8String);
+				return 67;
+			}
+		}
+
+		// Verify App Menu "About MAD Designer" and Help menu items are wired to MADMacAppDelegate
+		NSMenu *mainMenu = [NSApp mainMenu];
+		NSMenu *appSubmenu = [mainMenu itemAtIndex:0].submenu;
+		NSMenuItem *aboutMenuItem = [appSubmenu itemWithTitle:@"About MAD Designer"];
+		if (aboutMenuItem == nil || aboutMenuItem.action != @selector(showAboutWindow:) || aboutMenuItem.target != appDelegate) {
+			fprintf(stderr, "FAIL: 'About MAD Designer' menu item is not wired to showAboutWindow: on MADMacAppDelegate\n");
+			return 68;
+		}
+
+		[appDelegate showAboutWindow:nil];
+		MADMacAboutWindowController *aboutWC = appDelegate.aboutWindowController;
+		if (aboutWC == nil || aboutWC.window == nil) {
+			fprintf(stderr, "FAIL: MADMacAboutWindowController was not created by showAboutWindow:\n");
+			return 69;
+		}
+		[aboutWC.window layoutIfNeeded];
+
+		if (![aboutWC.titleLabel.stringValue isEqualToString:@"MAD Designer"] ||
+			![aboutWC.versionLabel.stringValue containsString:@"v9.0"] ||
+			![aboutWC.versionLabel.stringValue containsString:@"r4433"] ||
+			![aboutWC.copyrightLabel.stringValue containsString:@"Copyright © 2012–2026 Michael Thomason"] ||
+			![aboutWC.licenseSummaryLabel.stringValue containsString:@"Licensed under the MIT License"] ||
+			![aboutWC.licenseSummaryLabel.stringValue containsString:@"not licensed under the MIT License"]) {
+			fprintf(stderr, "FAIL: About window header labels missing required metadata: title='%s' version='%s' copyright='%s'\n",
+					aboutWC.titleLabel.stringValue.UTF8String,
+					aboutWC.versionLabel.stringValue.UTF8String,
+					aboutWC.copyrightLabel.stringValue.UTF8String);
+			return 70;
+		}
+
+		// 7a. Verify Overview tab content matches iOS Overview (MADGettingStartedTableViewController)
+		[appDelegate showAboutOverview:nil];
+		NSString *overviewText = aboutWC.overviewTextView.string;
+		NSArray<NSString *> *expectedOverviewPhrases = @[
+			@"Mobile Analytics Document",
+			@"MAD Designer is open-source business intelligence software by Michael Thomason.",
+			@"A .mad file stores a report's schema snapshot, query definition, and visual layout in one compact, portable document.",
+			@"MySQL / MariaDB, Microsoft SQL Server, and PostgreSQL",
+			@"Workflow",
+			@"1. Connect a Data Source",
+			@"2. Build the Query (MAD Query)",
+			@"3. Lay Out the Report (MAD Designer)",
+			@"4. View & Export (MAD Viewer)",
+			@"PDF, HTML, CSV, JSON, or plain text"
+		];
+		for (NSString *phrase in expectedOverviewPhrases) {
+			if (![overviewText containsString:phrase]) {
+				fprintf(stderr, "FAIL: About Overview tab missing expected text: '%s'\n", phrase.UTF8String);
+				return 71;
+			}
+		}
+
+		// 7b. Verify License & Notice tab content (MIT license, NOTICE, and LGPL-3.0 relink offer)
+		[appDelegate showAboutLicensing:nil];
+		NSString *licensingText = aboutWC.licensingTextView.string;
+		NSArray<NSString *> *expectedLicensingPhrases = @[
+			@"Licensed under the MIT License",
+			@"not licensed under the MIT License",
+			@"FreeTDS 1.4.27",
+			@"MariaDB Connector/C 3.4.11",
+			@"LGPL-3.0",
+			@"mthomason@gmail.com",
+			@"Permission is hereby granted, free of charge"
+		];
+		for (NSString *phrase in expectedLicensingPhrases) {
+			if (![licensingText containsString:phrase]) {
+				fprintf(stderr, "FAIL: About Licensing tab missing expected text: '%s'\n", phrase.UTF8String);
+				return 72;
+			}
+		}
+
+		// 7c. Verify Third-Party Acknowledgements tab content (all 16 components + full bundled license texts)
+		[appDelegate showAboutAcknowledgements:nil];
+		NSString *ackText = aboutWC.acknowledgementsTextView.string;
+		NSArray<NSString *> *expectedAckPhrases = @[
+			@"Open Source Components",
+			@"SQLite",
+			@"zlib",
+			@"bzip2",
+			@"libpng",
+			@"libarchive",
+			@"zint",
+			@"OpenSSL",
+			@"PostgreSQL libpq",
+			@"MariaDB Connector/C",
+			@"FreeTDS",
+			@"asn1c runtime",
+			@"pngquant rwpng",
+			@"NSData+Base64",
+			@"miniz",
+			@"Font Awesome",
+			@"Carbon Block",
+			@"License Texts",
+			@"GNU LESSER GENERAL PUBLIC LICENSE",
+			@"Apache License"
+		];
+		for (NSString *phrase in expectedAckPhrases) {
+			if (![ackText containsString:phrase]) {
+				fprintf(stderr, "FAIL: About Acknowledgements tab missing expected text: '%s'\n", phrase.UTF8String);
+				return 73;
+			}
+		}
+
+		// 7d. Verify selecting an individual component in the Acknowledgements sidebar filters to that component
+		[aboutWC selectComponentAtIndex:9]; // MariaDB Connector/C (1-based index in table after "All Components & Licenses")
+		NSString *singleCompText = aboutWC.acknowledgementsTextView.string;
+		if (![singleCompText containsString:@"MariaDB Connector/C"] ||
+			![singleCompText containsString:@"GNU LESSER GENERAL PUBLIC LICENSE"]) {
+			fprintf(stderr, "FAIL: Selecting MariaDB Connector/C in component sidebar did not display its attribution and LGPL-3.0 text\n");
+			return 74;
+		}
+		[aboutWC selectComponentAtIndex:0];
+		[aboutWC.window close];
+		printf("PASS: Verified About Window: header metadata, Overview workflow, MIT/NOTICE/LGPL relink licensing, all 16 third-party component attributions, and 12 bundled license texts\n");
 	}
 	return 0;
 }

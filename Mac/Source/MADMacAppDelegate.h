@@ -10,11 +10,19 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class MADMacAboutWindowController;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MADMacAppDelegate : NSObject <NSApplicationDelegate>
 
+@property (nonatomic, strong, readonly) MADMacAboutWindowController *aboutWindowController;
+
 - (void)newDocumentFromDatabase:(nullable id)sender;
+- (void)showAboutWindow:(nullable id)sender;
+- (void)showAboutOverview:(nullable id)sender;
+- (void)showAboutLicensing:(nullable id)sender;
+- (void)showAboutAcknowledgements:(nullable id)sender;
 
 @end
 

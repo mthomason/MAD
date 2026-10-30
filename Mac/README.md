@@ -18,7 +18,8 @@ You can also build, run, and debug the application directly in Xcode by opening 
 ## Layout
 
 * `Mac/Source/` — `AppKit` application, `NSDocument` architecture, and the three workspaces:
-  * `MADMacAppDelegate.{h,m}` — application lifecycle, driver/converter registration, and main menu bar (`File`, `Edit`, `View`, `Report`, `Window`).
+  * `MADMacAppDelegate.{h,m}` — application lifecycle, driver/converter registration, and main menu bar (`MAD Designer`, `File`, `Edit`, `View`, `Report`, `Window`, `Help`).
+  * `MADMacAboutWindowController.{h,m}` — native **About MAD Designer** window (`Overview`, `License & Notice`, and `Acknowledgements` with component sidebar and bundled third-party license texts).
   * `MADMacDocumentController.{h,m}` — `NSDocumentController` subclass configuring the standard Open Panel with `.mad` `UTType` filters (`com.everydayapps.productivity.mad` and `com.thomason.report.mad`) and a primary **New Document** button.
   * `MADMacDocument.{h,m}` — `NSDocument` wrapper over `MADHeadlessDocument`, `MADDesignerLayout` (`NSUndoManager`), `MADSectionsLayout`, asynchronous refresh (`MADOperationQueue`), and export.
   * `MADMacWindowController.{h,m}` — main document window with the centered **Workspace** segmented control (`MAD Query`, `MAD Designer`, `MAD Viewer`).
