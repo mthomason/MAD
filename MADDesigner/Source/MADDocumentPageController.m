@@ -28,33 +28,16 @@
 #import <UIKit/UIAccessibility.h>
 #import <UIKit/UINavigationController.h>
 
-static const CGFloat PageEdgeInsetMargin = 3.0;
+static const CGFloat PageEdgeInsetMargin = 16.0;
 
 static inline UIEdgeInsets boundsInsets(CGFloat, CGFloat);
-static inline CGFloat zoomScale(CGFloat, CGFloat, CGFloat);
 static inline CGFloat EdgeInsetForScrollIndicator(CGFloat, CGFloat, CGFloat, CGFloat);
-static inline CGFloat MaximumZoomScaleForPaper(CGSize, CGSize, CGFloat);
-static inline CGFloat MinimumZoomScaleForPaper(CGSize, CGSize, CGFloat);
 static inline CGPoint documentCenterPoint(CGSize, CGSize, CGFloat);
-
-static inline CGFloat zoomScale(CGFloat l1, CGFloat l2, CGFloat m) {
-	return 1.0 +  ( l2 - l1 - (m * 2.0) )  / l1;
-}
 
 static inline CGFloat EdgeInsetForScrollIndicator(CGFloat parentViewLength, CGFloat subViewLength,
 												  CGFloat layoutGuideLength, CGFloat margin) {
 	return parentViewLength > subViewLength ?
 	((parentViewLength - subViewLength) / 2.0) + margin : layoutGuideLength + margin;
-}
-
-static inline CGFloat MaximumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
-	return MAX(zoomScale(paper.width, container.width, margin),
-			   zoomScale(paper.height, container.height, margin));
-}
-
-static inline CGFloat MinimumZoomScaleForPaper(CGSize paper, CGSize container, CGFloat margin) {
-	return MIN(zoomScale(paper.width, container.width, margin),
-			   zoomScale(paper.height, container.height, margin));
 }
 
 static inline CGPoint documentCenterPoint(CGSize scrollerBoundsSize, CGSize contentSize, CGFloat margin) {
@@ -148,20 +131,26 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	self.edgesForExtendedLayout = UIRectEdgeNone;
+	self.view.backgroundColor = [UIColor secondarySystemBackgroundColor];
 
 	MTPaper *paper = self.document.paper;
 	
-	MADDocumentScroller *documentScroller = [[MADDocumentScroller alloc] initWithFrame:self.view.frame];
+	MADDocumentScroller *documentScroller = [[MADDocumentScroller alloc] initWithFrame:self.view.bounds];
+	documentScroller.backgroundColor = [UIColor secondarySystemBackgroundColor];
 	documentScroller.contentSize = paper.paperSize;
 	documentScroller.contentInset = UIEdgeInsetsMake(PageEdgeInsetMargin, PageEdgeInsetMargin,
 											   PageEdgeInsetMargin, PageEdgeInsetMargin);
 	documentScroller.autoresizingMask = MADViewAutoresizingFlexable();
 	documentScroller.translatesAutoresizingMaskIntoConstraints = YES;
+	documentScroller.autoresizesSubviews = NO;
+	documentScroller.minimumZoomScale = 0.25;
+	documentScroller.maximumZoomScale = 4.0;
+	documentScroller.bouncesZoom = YES;
 	documentScroller.delegate = self;
 	
 	MADReportPageView *documentView = [[MADReportPageView alloc] initWithFrame:paper.bounds];
 	documentView.backgroundColor = [UIColor whiteColor];
-	documentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+	documentView.autoresizingMask = UIViewAutoresizingNone;
 	documentView.translatesAutoresizingMaskIntoConstraints = YES;
 	documentView.delegatePage = self;
 	[documentScroller addSubview:documentView];
@@ -209,12 +198,19 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 		documentScroller.scrollIndicatorInsets = [MADDocumentPageController ScrollIndicatorInset: documentScroller
 																						  bounds: scrollIndicatorInsets];
 		
-		MADocument *document = self.document;
-		documentScroller.maximumZoomScale = MaximumZoomScaleForPaper(document.paper.paperSize, documentScroller.bounds.size, PageEdgeInsetMargin);
-		documentScroller.minimumZoomScale = MinimumZoomScaleForPaper(document.paper.paperSize, documentScroller.bounds.size, PageEdgeInsetMargin);
-		
-		[documentScroller setZoomScale: self.pageViewAttributes.zoomScaleInital animated:NO];
-		documentView.contentScaleFactor = self.pageViewAttributes.contentScaleFactor;
+		documentScroller.minimumZoomScale = 0.25;
+		documentScroller.maximumZoomScale = 4.0;
+		CGFloat initialZoom = self.pageViewAttributes.zoomScaleInital > 0.0 ? (CGFloat)self.pageViewAttributes.zoomScaleInital : 1.0;
+		[documentScroller setZoomScale: initialZoom animated:NO];
+		CGFloat displayScale = documentScroller.traitCollection.displayScale > 0.0 ? documentScroller.traitCollection.displayScale : 2.0;
+		documentView.contentScaleFactor = self.pageViewAttributes.contentScaleFactor > 0.0
+			? (CGFloat)self.pageViewAttributes.contentScaleFactor
+			: (displayScale * initialZoom);
+		[MADDocumentPageController centerDocumentView: documentView
+									 insideScrollView: documentScroller
+									   topLayoutGuide: safeAreaInsets.top
+									bottomLayoutGuide: safeAreaInsets.bottom
+											   margin: PageEdgeInsetMargin];
 	}
 }
 
@@ -222,27 +218,24 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 	[super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 	
 	MADDocumentScroller *documentScroller = self.documentScroller;
-	CGPoint currentContentOffset = documentScroller.contentOffset;
-	CGPoint nextContentOffset = CGPointMake((size.width != documentScroller.contentSize.width)?(size.width - documentScroller.contentSize.width) / 2.0 : 0.0,
-											currentContentOffset.y);
+	UIView *documentView = self.documentView;
 	
 	[coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
-		
 		UIEdgeInsets safeAreaInsets;
 		MADViewSafeAreaInserts(self.view, &safeAreaInsets);
-		
-		UIEdgeInsets safeBoundsInsets = boundsInsets(safeAreaInsets.top, safeAreaInsets.bottom);
-		
-		documentScroller.scrollIndicatorInsets = [MADDocumentPageController ScrollIndicatorInset: self.documentScroller bounds: safeBoundsInsets];
-		documentScroller.contentOffset = nextContentOffset;
-		documentScroller.bounds = MADRectOfSize(size);
-		
+		[MADDocumentPageController centerDocumentView: documentView
+									 insideScrollView: documentScroller
+									   topLayoutGuide: safeAreaInsets.top
+									bottomLayoutGuide: safeAreaInsets.bottom
+											   margin: PageEdgeInsetMargin];
 	} completion:^(id<UIViewControllerTransitionCoordinatorContext> __unused context) {
-		
-		MADocument *document = self.document;
-		documentScroller.maximumZoomScale = MaximumZoomScaleForPaper(document.paper.paperSize, documentScroller.bounds.size, PageEdgeInsetMargin);
-		documentScroller.minimumZoomScale = MinimumZoomScaleForPaper(document.paper.paperSize, documentScroller.bounds.size, PageEdgeInsetMargin);
-		
+		UIEdgeInsets safeAreaInsets;
+		MADViewSafeAreaInserts(self.view, &safeAreaInsets);
+		[MADDocumentPageController centerDocumentView: documentView
+									 insideScrollView: documentScroller
+									   topLayoutGuide: safeAreaInsets.top
+									bottomLayoutGuide: safeAreaInsets.bottom
+											   margin: PageEdgeInsetMargin];
 	}];
 }
 

@@ -78,6 +78,8 @@
 	MADReportFormatter *_reportFormatter;
 	MADDocumentRenderDataSource *_renderDataSource;
 	MTPaper *_paper;
+	BOOL _hasExplicitPaperType;
+	MTPaperType _explicitPaperType;
 }
 
 + (instancetype)documentWithContentsOfURL:(NSURL *)url error:(NSError * __autoreleasing *)error {
@@ -416,9 +418,16 @@
 
 - (MTPaper *)paper {
 	if (_paper == nil) {
-		_paper = [[MTPaper alloc] initWithType: self.activeDocumentModel.paperType];
+		MTPaperType paperType = _hasExplicitPaperType ? _explicitPaperType : self.activeDocumentModel.paperType;
+		_paper = [[MTPaper alloc] initWithType: paperType];
 	}
 	return _paper;
+}
+
+- (void)setPaperType:(MTPaperType)paperType {
+	_hasExplicitPaperType = YES;
+	_explicitPaperType = paperType;
+	_paper = [[MTPaper alloc] initWithType: paperType];
 }
 
 - (CGSize)paperSize {
@@ -608,7 +617,9 @@
 - (void)invalidateQueryAndModelCaches {
 	_mainQuery = nil;
 	_activeDocumentModel = nil;
-	_paper = nil;
+	if (!_hasExplicitPaperType) {
+		_paper = nil;
+	}
 }
 
 @end

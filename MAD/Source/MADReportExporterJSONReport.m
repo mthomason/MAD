@@ -112,7 +112,7 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 	}
 
 	MADReportPageBuilder *builder = [MADReportPageBuilder builderForDocument: renderDocument];
-	CGRect trimBox = [MADReportPageBuilder pageTrimBox];
+	CGRect trimBox = [MADReportPageBuilder pageTrimBoxForDocument: renderDocument];
 	MADReportFormatter *reportFormatter = renderDocument.reportFormatter;
 
 	[json appendString: @"    \"pages\": ["];

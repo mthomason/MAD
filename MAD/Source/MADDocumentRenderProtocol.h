@@ -28,10 +28,11 @@
 #import <MADFoundation/MADDataProtocol.h>
 
 #import <MAD/MADDocumentDataProtocol.h>
+#import <MAD/MADPaperType.h>
 #import <MAD/MADPrintPageRendererDataSource.h>
 #import <MAD/MADReportFormatterDataSourceProtocol.h>
 
-@class MADReportFormatter;
+@class MADReportFormatter, MTPaper;
 
 @protocol MADDocumentRenderProtocol <MADDocumentDataProtocol, MADDataProtocol, MADCacheProtocol,
 									  MADPrintPageRendererDataSourceProtocol, MADReportFormatterDataSource>
@@ -56,6 +57,12 @@
 /// with nothing, and the formatter calls it either way (MADReportFormatter
 /// -formatDocument).
 - (void)resetSectionLayoutManagers;
+
+@optional
+
+@property (readonly, nonatomic, strong) MTPaper *paper;
+@property (readonly, nonatomic) CGSize paperSize;
+- (void)setPaperType:(MTPaperType)paperType;
 
 @end
 

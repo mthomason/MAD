@@ -22,6 +22,8 @@
 #import <MAD/MADPrintPageRenderer.h>
 
 #import <UIKit/UILabel.h>
+#import <UIKit/UIColor.h>
+#import <QuartzCore/QuartzCore.h>
 
 static const CGFloat PageCounterWidth = 99.0;
 static const CGFloat PageCounterHeight = 33.0;
@@ -81,7 +83,7 @@ static const CGFloat PageCounterBuffer = 10.0;
 		id <MADReportPageViewProtocol> delegatePage = self.delegatePage;
 		MADPrintPageRenderer * _Nullable printPageRenderer = [delegatePage printPageRenderer];
 		if (printPageRenderer == nil) return;
-		[printPageRenderer drawPageAtIndex:((NSInteger)delegatePage.pageNumber) - 1 inRect:rect];
+		[printPageRenderer drawPageAtIndex:((NSInteger)delegatePage.pageNumber) - 1 inRect:self.bounds];
 		
 		if (delegatePage.pageNumber != 1) return;
 		
@@ -128,6 +130,14 @@ static const CGFloat PageCounterBuffer = 10.0;
 	_displaysPageCounter = NO;
 	_drawBlankPage = NO;
 	_firstTime = YES;
+	self.backgroundColor = [UIColor whiteColor];
+	self.clipsToBounds = NO;
+	self.layer.borderWidth = 1.0;
+	self.layer.borderColor = [UIColor colorWithWhite:0.0 alpha:0.22].CGColor;
+	self.layer.shadowColor = [UIColor blackColor].CGColor;
+	self.layer.shadowOpacity = 0.18f;
+	self.layer.shadowRadius = 8.0;
+	self.layer.shadowOffset = CGSizeMake(0.0, 2.0);
 }
 
 #pragma mark -

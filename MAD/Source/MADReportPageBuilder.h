@@ -39,11 +39,14 @@ typedef void (^MADReportPageElementDrawBlock)(__kindof MADPrintPageElement *elem
 
 @interface MADReportPageBuilder : NSObject
 
-/// The page every render-side format lays out on: US Letter, and the 1pt trim the
-/// CLI's PDF export has always drawn inside.  One definition, so the PDF, json-report
-/// and the HTML formats agree about where a page ends and an element sits.
+/// The page every render-side format lays out on: US Letter by default, or the
+/// document's active paper size when one is set, and the 1pt trim the CLI's PDF export
+/// has always drawn inside.  One definition, so the PDF, json-report and the HTML
+/// formats agree about where a page ends and an element sits.
 + (CGRect)pageBounds;
 + (CGRect)pageTrimBox;
++ (CGRect)pageBoundsForDocument:(nullable id <MADDocumentRenderProtocol>)document;
++ (CGRect)pageTrimBoxForDocument:(nullable id <MADDocumentRenderProtocol>)document;
 
 /// The sequence every render-side format runs before it reads a page: ready the rows,
 /// size the formatter to the page and the printable rect, lay the report out.  It is

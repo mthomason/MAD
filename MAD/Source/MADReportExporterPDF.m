@@ -200,8 +200,8 @@ static void MADReportExporterPinPDFMetadata(NSURL *url) {
 	[MADReportPageBuilder prepareDocumentForRender: renderDocument];
 	MADReportFormatter *reportFormatter = renderDocument.reportFormatter;
 
-	CGRect letterRect = [MADReportPageBuilder pageBounds];
-	CGRect trimBox = [MADReportPageBuilder pageTrimBox];
+	CGRect letterRect = [MADReportPageBuilder pageBoundsForDocument: renderDocument];
+	CGRect trimBox = [MADReportPageBuilder pageTrimBoxForDocument: renderDocument];
 
 	NSDictionary *pdfOptions = @{ (__bridge NSString *)kCGPDFContextCreator: @"MAD® Designer" };
 

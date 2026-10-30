@@ -15,6 +15,7 @@
 #import "MADOperationRefreshReloadProtocol.h"
 
 #import <MAD/MADActivityProtocol.h>
+#import <MAD/MADPaperType.h>
 
 #import <UIKit/UIPageViewController.h>
 
@@ -23,9 +24,12 @@
 @interface MADViewerController : UIPageViewController <MADViewControllerDocumentProtocol, MADTabBarImageProtocol, MADOperationRefreshReloadProtocol>
 
 @property (nonatomic, weak) id <MADViewControllerStandardProtocol> viewControllerDelegate;
+@property (nonatomic, assign) MTPaperType selectedPaperType;
+@property (nonatomic, assign, readonly) MTPaperType renderedPaperType;
 
 + (instancetype)newViewerController:(MADocument *)document;
 
+- (void)selectPaperType:(MTPaperType)paperType;
 - (IBAction)refresh:(id)sender;
 - (IBAction)zoomToActualSize:(id)sender;
 - (IBAction)zoomToFit:(id)sender;

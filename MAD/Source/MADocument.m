@@ -143,6 +143,8 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 
 @property (nonatomic, readwrite, strong) MADModelDocument *documentModel;
 @property (nonatomic, readwrite, strong) MTPaper *paper;
+@property (nonatomic, readwrite, assign) BOOL hasExplicitPaperType;
+@property (nonatomic, readwrite, assign) MTPaperType explicitPaperType;
 
 @property (nonatomic, readwrite, copy) NSURL *urlDataTableCache;
 // Where this document's files are (the guts, the store inside them, the cache): the
@@ -991,15 +993,23 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 
 - (MTPaper *)paper {
 	if (_paper == nil) {
-		RptqDocument *document = [self activeDocumentModel];
-		MTPaper *paper = [[MTPaper alloc] initWithType: document.paperType];
+		MTPaperType paperType = self.hasExplicitPaperType ? self.explicitPaperType : [self activeDocumentModel].paperType;
+		MTPaper *paper = [[MTPaper alloc] initWithType: paperType];
 		self.paper = paper;
 	}
 	return _paper;
 }
 
+- (void)setPaperType:(MTPaperType)paperType {
+	self.hasExplicitPaperType = YES;
+	self.explicitPaperType = paperType;
+	self.paper = [[MTPaper alloc] initWithType: paperType];
+}
+
 - (void)resetPaper {
-	self.paper = nil;
+	if (!self.hasExplicitPaperType) {
+		self.paper = nil;
+	}
 }
 
 - (NSURL *)portableStoreURL {

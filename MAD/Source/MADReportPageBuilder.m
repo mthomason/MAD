@@ -14,6 +14,7 @@
 
 #import "MADReportPageBuilder.h"
 
+#import "MADDocumentRenderProtocol.h"
 #import "MADocumentSectionType.h"
 #import "MADDocumentObjectDataReference.h"
 #import "MADPrintPageElement.h"
@@ -100,6 +101,20 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	return UIEdgeInsetsInsetRect([self pageBounds], UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0));
 }
 
++ (CGRect)pageBoundsForDocument:(id <MADDocumentRenderProtocol>)document {
+	if (document != nil && [document respondsToSelector: @selector(paperSize)]) {
+		CGSize size = document.paperSize;
+		if (size.width > 0.0 && size.height > 0.0) {
+			return CGRectMake(0.0, 0.0, size.width, size.height);
+		}
+	}
+	return [self pageBounds];
+}
+
++ (CGRect)pageTrimBoxForDocument:(id <MADDocumentRenderProtocol>)document {
+	return UIEdgeInsetsInsetRect([self pageBoundsForDocument: document], UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0));
+}
+
 + (void)prepareDocumentForRender:(id <MADDocumentRenderProtocol>)document {
 	// The reload the viewer runs after a refresh, which the CLI has no view controller
 	// to run for it: sort the rows, then lay the report out.  MADPrintPageRenderer
@@ -107,11 +122,13 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	// it -- so this is the formatter that has to be formatted.
 	[document prepareForQuery];
 
+	CGRect bounds = [self pageBoundsForDocument: document];
+	CGRect trimBox = [self pageTrimBoxForDocument: document];
 	MADReportFormatter *reportFormatter = document.reportFormatter;
 	reportFormatter.overrideIdentifier = @"madpreview";
 	reportFormatter.didRefresh = YES;
-	reportFormatter.layoutSize = [self pageBounds].size;
-	[reportFormatter setMarginUsingPrintableRect: [self pageTrimBox]];
+	reportFormatter.layoutSize = bounds.size;
+	[reportFormatter setMarginUsingPrintableRect: trimBox];
 	[document format];
 }
 

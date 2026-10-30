@@ -245,6 +245,52 @@ static inline BOOL MTPaperTypeIsKnown(MTPaperType papertype) {
 	return MTPaperSizeForType(papertype);
 }
 
++ (NSArray<NSNumber *> *)standardPaperTypes {
+	return @[
+		@(MTPaperTypeLetter),
+		@(MTPaperTypeLegal),
+		@(MTPaperTypeGovernmentLetter),
+		@(MTPaperTypeA4),
+		@(MTPaperTypeA3),
+		@(MTPaperTypeA5),
+		@(MTPaperTypeB4),
+		@(MTPaperTypeB5),
+	];
+}
+
++ (NSString *)displayNameForPaperType:(MTPaperType)papertype {
+	switch (papertype) {
+		case MTPaperTypeLetter:				return @"US Letter (8.5 × 11 in)";
+		case MTPaperTypeLegal:				return @"US Legal (8.5 × 14 in)";
+		case MTPaperTypeGovernmentLetter:	return @"Government Letter (8.0 × 10.5 in)";
+		case MTPaperTypeGovernmentLegal:	return @"Government Legal (8.5 × 13 in)";
+		case MTPaperTypeA3:					return @"A3 (297 × 420 mm)";
+		case MTPaperTypeA4:					return @"A4 (210 × 297 mm)";
+		case MTPaperTypeA5:					return @"A5 (148 × 210 mm)";
+		case MTPaperTypeB4:					return @"B4 (250 × 353 mm)";
+		case MTPaperTypeB5:					return @"B5 (176 × 250 mm)";
+		default: {
+			CGSize s = MTPaperSizeForType(papertype);
+			return [NSString stringWithFormat:@"Paper (%.0f × %.0f pt)", s.width, s.height];
+		}
+	}
+}
+
++ (NSString *)shortDisplayNameForPaperType:(MTPaperType)papertype {
+	switch (papertype) {
+		case MTPaperTypeLetter:				return @"US Letter";
+		case MTPaperTypeLegal:				return @"US Legal";
+		case MTPaperTypeGovernmentLetter:	return @"Gov Letter";
+		case MTPaperTypeGovernmentLegal:	return @"Gov Legal";
+		case MTPaperTypeA3:					return @"A3";
+		case MTPaperTypeA4:					return @"A4";
+		case MTPaperTypeA5:					return @"A5";
+		case MTPaperTypeB4:					return @"B4";
+		case MTPaperTypeB5:					return @"B5";
+		default:							return @"US Letter";
+	}
+}
+
 - (instancetype)initWithType:(MTPaperType)papertype {
 	if (self = [super init]) {
 		_paperType = MTPaperTypeIsKnown(papertype) ? papertype : MTPaperTypeLetter;
@@ -258,6 +304,14 @@ static inline BOOL MTPaperTypeIsKnown(MTPaperType papertype) {
 
 - (CGRect)bounds {
 	return CGRectBoundsForSize(self.paperSize);
+}
+
+- (NSString *)displayName {
+	return [MTPaper displayNameForPaperType:self.paperType];
+}
+
+- (NSString *)shortDisplayName {
+	return [MTPaper shortDisplayNameForPaperType:self.paperType];
 }
 
 @end
