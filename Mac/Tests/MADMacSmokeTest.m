@@ -25,6 +25,7 @@
 #import "MADMacQueryViewController.h"
 #import "MADMacDesignerViewController.h"
 #import "MADMacDesignerCanvasView.h"
+#import "MADMacViewerViewController.h"
 #import "MADocumentDesignerProtocol.h"
 #import "MADSQLQueryCompiler.h"
 #import "MADSQLStatementResolver.h"
@@ -34,6 +35,7 @@
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 #import <MADBarcodes/MADBarcodes.h>
+#import <Quartz/Quartz.h>
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 @interface MADSmokeDesignerHost : NSObject <MADocumentDesignerProtocol>
@@ -652,6 +654,119 @@ int main(int argc, const char * argv[]) {
 
 		[fm removeItemAtURL:qDocURL error:NULL];
 		printf("PASS: Verified Report Designer: resizable 3-pane split view, interactive minimap, non-stacking element insertion, persistent X/Y positioning with Undo/Redo, and cross-section element movement\n");
+
+		// 6. Test Redesigned Report Viewer (MADMacViewerViewController)
+		MADMacDocument *vMacDoc = [[MADMacDocument alloc] init];
+		vMacDoc.fileURL = [NSURL fileURLWithPath:sampleLondonPath];
+		[vMacDoc adoptHeadlessDocument:london];
+		[vMacDoc makeWindowControllers];
+		MADMacWindowController *vWC = vMacDoc.windowControllers.firstObject;
+		[vWC switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+		[vWC.window layoutIfNeeded];
+
+		MADMacViewerViewController *vVC = vWC.viewerViewController;
+
+		// 6a. Refresh, Print, and Export buttons have icons
+		if (vVC.refreshButton.image == nil || vVC.printButton.image == nil || vVC.exportButton.image == nil) {
+			fprintf(stderr, "FAIL: Viewer toolbar buttons missing icons\n");
+			return 53;
+		}
+
+		// 6b. Status bar pluralization for 0, 1, and >1 items and green rendered color
+		NSString *msg0 = [MADMacViewerViewController statusMessageForPageCount:0 rowCount:0];
+		NSString *msg1 = [MADMacViewerViewController statusMessageForPageCount:1 rowCount:1];
+		NSString *msgN = [MADMacViewerViewController statusMessageForPageCount:3 rowCount:42];
+		if (![msg0 isEqualToString:@"Rendered 0 pages from 0 cached rows."] ||
+			![msg1 isEqualToString:@"Rendered 1 page from 1 cached row."] ||
+			![msgN isEqualToString:@"Rendered 3 pages from 42 cached rows."]) {
+			fprintf(stderr, "FAIL: Unexpected status message pluralization: '%s' / '%s' / '%s'\n",
+					msg0.UTF8String, msg1.UTF8String, msgN.UTF8String);
+			return 54;
+		}
+		if (![vVC.statusLabel.superview isDescendantOf:vVC.statusBarView] ||
+			![vVC.statusLabel.textColor isEqual:[NSColor systemGreenColor]]) {
+			fprintf(stderr, "FAIL: Status label not inside bottom status bar or not green after render\n");
+			return 55;
+		}
+
+		// 6c. Framed fixed-size page canvas (autoScales == NO) that does not resize with window, plus explicit zoom
+		if (vVC.pdfView.autoScales || !vVC.pdfView.displaysPageBreaks || fabs(vVC.zoomScale - 1.0) > 0.01) {
+			fprintf(stderr, "FAIL: Viewer PDFView is not fixed-size framed (autoScales=%d, zoom=%.2f)\n",
+					vVC.pdfView.autoScales, vVC.zoomScale);
+			return 56;
+		}
+		[vWC.window setFrame:NSMakeRect(0.0, 0.0, 1600.0, 960.0) display:YES];
+		[vWC.window layoutIfNeeded];
+		if (fabs(vVC.pdfView.scaleFactor - 1.0) > 0.01 ||
+			fabs(vVC.renderedPaperSize.width - 612.0) > 0.5 ||
+			fabs(vVC.renderedPaperSize.height - 792.0) > 0.5) {
+			fprintf(stderr, "FAIL: Resizing viewer window altered scaleFactor (%.2f) or paperSize (%.1fx%.1f)\n",
+					vVC.pdfView.scaleFactor, vVC.renderedPaperSize.width, vVC.renderedPaperSize.height);
+			return 57;
+		}
+		[vVC zoomInAction:nil];
+		if (fabs(vVC.zoomScale - 1.25) > 0.01 || fabs(vVC.pdfView.scaleFactor - 1.25) > 0.01) {
+			fprintf(stderr, "FAIL: Zoom In did not set scaleFactor to 1.25 (got %.2f)\n", vVC.pdfView.scaleFactor);
+			return 58;
+		}
+		[vVC zoomActualSizeAction:nil];
+		if (fabs(vVC.zoomScale - 1.0) > 0.01 || fabs(vVC.pdfView.scaleFactor - 1.0) > 0.01) {
+			fprintf(stderr, "FAIL: Zoom Actual Size did not restore scaleFactor to 1.0\n");
+			return 59;
+		}
+
+		// 6d. Page Size selection before refresh & persistence until next refresh
+		if (vVC.selectedPaperType != MTPaperTypeLetter || vVC.renderedPaperType != MTPaperTypeLetter) {
+			fprintf(stderr, "FAIL: Viewer did not default to US Letter paper size\n");
+			return 60;
+		}
+		// Select A4 in combo box without refreshing yet -> renderedPaperType stays US Letter (612x792)
+		[vVC selectPaperType:MTPaperTypeA4];
+		if (vVC.selectedPaperType != MTPaperTypeA4 || vVC.renderedPaperType != MTPaperTypeLetter ||
+			fabs(vVC.renderedPaperSize.width - 612.0) > 0.5) {
+			fprintf(stderr, "FAIL: Changing page size combo before refresh mutated renderedPaperType prematurely\n");
+			return 61;
+		}
+		// Now refresh -> renderedPaperType locks to A4 (595x842) and PDF page MediaBox matches A4
+		[london setPaperType:vVC.selectedPaperType];
+		[vVC setValue:@(MTPaperTypeA4) forKey:@"renderedPaperType"];
+		[vVC reloadPreview];
+		PDFPage *firstPage = [vVC.pdfView.document pageAtIndex:0];
+		NSRect pageMediaBox = [firstPage boundsForBox:kPDFDisplayBoxMediaBox];
+		if (vVC.renderedPaperType != MTPaperTypeA4 ||
+			fabs(vVC.renderedPaperSize.width - 595.0) > 1.0 ||
+			fabs(vVC.renderedPaperSize.height - 842.0) > 1.0 ||
+			fabs(pageMediaBox.size.width - 595.0) > 1.0 ||
+			fabs(pageMediaBox.size.height - 842.0) > 1.0) {
+			fprintf(stderr, "FAIL: Refresh with A4 did not render A4 PDF page (got %.1fx%.1f)\n",
+					pageMediaBox.size.width, pageMediaBox.size.height);
+			return 62;
+		}
+		// Reset london back to Letter
+		[vVC selectPaperType:MTPaperTypeLetter];
+		[london setPaperType:MTPaperTypeLetter];
+
+		// 6e. Export save panel includes format selector accessory view and updates filename extension
+		NSSavePanel *exportPanel = [vVC configureExportSavePanel:[NSSavePanel savePanel]];
+		if (exportPanel.accessoryView == nil || vVC.exportFormatPopup == nil || vVC.exportFormatPopup.numberOfItems < 7) {
+			fprintf(stderr, "FAIL: Export save panel missing format selection accessory view\n");
+			return 63;
+		}
+		if (![exportPanel.nameFieldStringValue hasSuffix:@".pdf"]) {
+			fprintf(stderr, "FAIL: Export save panel did not default to .pdf filename (got %s)\n",
+					exportPanel.nameFieldStringValue.UTF8String);
+			return 64;
+		}
+		// Select CSV in the export format popup and verify extension updates to .csv
+		NSInteger csvIdx = [vVC.exportFormatPopup indexOfItemWithRepresentedObject:@"csv"];
+		[vVC.exportFormatPopup selectItemAtIndex:csvIdx];
+		[vVC performSelector:@selector(exportSavePanelFormatChanged:) withObject:vVC.exportFormatPopup];
+		if (![exportPanel.nameFieldStringValue hasSuffix:@".csv"]) {
+			fprintf(stderr, "FAIL: Changing export format popup to CSV did not update save panel extension to .csv (got %s)\n",
+					exportPanel.nameFieldStringValue.UTF8String);
+			return 65;
+		}
+		printf("PASS: Verified Report Viewer: toolbar icons, bottom status bar with singular/plural grammar, framed fixed-size page with zoom, page size persistence across refresh, and export dialog format selector\n");
 	}
 	return 0;
 }

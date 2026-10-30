@@ -134,7 +134,8 @@ static inline CGRect PdfTrimBox(CGRect rect) { return UIEdgeInsetsInsetRect(rect
 		
 		MADocument *sdocument = weakdoc;
 		NSDictionary <NSString *, NSString *> *options = [[NSDictionary alloc] initWithObjectsAndKeys: @"MAD® Designer", (NSString *)kCGPDFContextCreator, nil];
-		CGRect letterRect = [[MTPaper alloc] initWithType: MTPaperTypeLetter].bounds;
+		MTPaper *activePaper = sdocument.paper ?: [[MTPaper alloc] initWithType: MTPaperTypeLetter];
+		CGRect letterRect = activePaper.bounds;
 		NSArray *sortDescriptors = sdocument.sortDescriptors;
 		
 		[sdocument.dataTable sortUsingDescriptors:sortDescriptors];

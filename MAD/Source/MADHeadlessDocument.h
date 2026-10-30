@@ -30,13 +30,14 @@
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADDocumentRenderProtocol.h>
 #import <MAD/MADDocumentStore.h>
+#import <MAD/MADPaperType.h>
 #import <MAD/MADSQLQueryCompiler.h>
 
 #import <MADAPI/MADDatabaseResultsProtocol.h>
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataProtocol.h>
 
-@class MADCredential, MADDataTableFast, MADDatabase, MADDatabaseConnection, MADQueryFull, MADReportFormatter, RptqStoreContext;
+@class MADCredential, MADDataTableFast, MADDatabase, MADDatabaseConnection, MADQueryFull, MADReportFormatter, MTPaper, RptqStoreContext;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -65,6 +66,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)readFromURL:(NSURL *)url error:(NSError * _Nullable __autoreleasing *)error;
 
 @property (readonly, nonatomic, strong) MADDocumentStore *documentStore;
+@property (readonly, nonatomic, strong) MTPaper *paper;
+@property (readonly, nonatomic) CGSize paperSize;
+
+- (void)setPaperType:(MTPaperType)paperType;
 
 /// Writes the document to `url`: the store as it stands, then the guts directory
 /// archived over it with the v1 header.  MADocument's own save

@@ -57,6 +57,8 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 @property (readonly, nonatomic)             NSUInteger numberOfResults;
 @property (readonly, nonatomic)             CGSize paperSize;
 
+- (void)setPaperType:(MTPaperType)paperType;
+
 @property (readwrite, nonatomic, weak)      id <MADActivityProtocol> activityDelegate;
 @property (readwrite, nonatomic, weak)      id <MADocumentDelegate> documentDelegate;
 @property (readwrite, nonatomic, weak)      NSObject <MADDocumentStatusProtocol> *documentStatusProtocol;

@@ -98,6 +98,8 @@
 
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemActivity;
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *barButtonItemRefresh;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemPaperSize;
+@property (nonatomic, assign, readwrite) MTPaperType renderedPaperType;
 
 @property (nonatomic, strong) MADPrintPageRenderer *printPageRendererReport;
 @property (nonatomic, strong) MADActivityItemProviderPdf *activityItemProviderPdf;

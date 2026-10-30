@@ -173,9 +173,26 @@
 
 @interface MADViewerController : UIPageViewController
 @property (nonatomic, weak) UIBarButtonItem *barButtonItemRefresh;
+@property (nonatomic, strong) UIBarButtonItem *barButtonItemPaperSize;
+@property (nonatomic, assign) MTPaperType selectedPaperType;
+@property (nonatomic, assign, readonly) MTPaperType renderedPaperType;
 + (instancetype)newViewerController:(MADocument *)document;
+- (void)selectPaperType:(MTPaperType)paperType;
 - (void)setDisplayActive;
 - (void)setDisplayInactive;
+@end
+
+@interface MADPageViewAttributes : NSObject
+- (instancetype)initWithCurrentPage:(NSUInteger)currentPageNumber
+							  total:(NSUInteger)numberOfPages
+							   size:(CGSize)size;
+@end
+
+@interface MADDocumentPageController : UIViewController
+@property (readonly, nonatomic, weak) UIView *documentView;
+@property (readonly, nonatomic, weak) UIScrollView *documentScroller;
++ (instancetype)newDocumentPageController:(MADocument *)document
+						   pageAttributes:(MADPageViewAttributes *)pageAttributes;
 @end
 
 @interface MADOperationInstallSampleDocument : MADOperation
@@ -731,6 +748,70 @@ static BOOL MADSwizzledIsMADViewer(id self, SEL _cmd) {
 	XCTAssertNil(activeRightItem.customView);
 	XCTAssertEqual(activeRightItem, viewerVC.barButtonItemRefresh);
 	XCTAssertTrue(viewerVC.barButtonItemRefresh.isEnabled);
+	XCTAssertNotNil(viewerVC.barButtonItemPaperSize);
+	XCTAssertNotNil(viewerVC.barButtonItemPaperSize.menu);
+}
+
+- (void)testViewerPageSizeSelectionAndOrientationInvariance {
+	NSURL *tempURL = [[NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES]
+					  URLByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"mad"]];
+	MADocument *document = [[MADocument alloc] initWithFileURL:tempURL];
+	[document.storeContext insertObjectForEntity:@"RptqDocument" identifier:1];
+	MADViewerController *viewerVC = [MADViewerController newViewerController:document];
+	[viewerVC loadViewIfNeeded];
+
+	// Default paper type is US Letter across apps
+	XCTAssertEqual(viewerVC.selectedPaperType, MTPaperTypeLetter);
+	XCTAssertEqual(viewerVC.renderedPaperType, MTPaperTypeLetter);
+	XCTAssertEqualWithAccuracy(document.paperSize.width, 612.0, 0.5);
+	XCTAssertEqualWithAccuracy(document.paperSize.height, 792.0, 0.5);
+
+	// Selecting A4 updates selectedPaperType and button title, but does not change renderedPaperType until refresh
+	[viewerVC selectPaperType:MTPaperTypeA4];
+	XCTAssertEqual(viewerVC.selectedPaperType, MTPaperTypeA4);
+	XCTAssertEqual(viewerVC.renderedPaperType, MTPaperTypeLetter);
+	XCTAssertEqualObjects(viewerVC.barButtonItemPaperSize.title, @"A4");
+
+	// Apply A4 on document as refresh does, then verify framed page view is rotation-invariant
+	[document setPaperType:MTPaperTypeA4];
+	XCTAssertEqualWithAccuracy(document.paperSize.width, 595.0, 1.0);
+	XCTAssertEqualWithAccuracy(document.paperSize.height, 842.0, 1.0);
+
+	MADPageViewAttributes *attrs = [[MADPageViewAttributes alloc] initWithCurrentPage:1
+																				total:1
+																				 size:document.paperSize];
+	MADDocumentPageController *pageVC = [MADDocumentPageController newDocumentPageController:document
+																			  pageAttributes:attrs];
+	// Start in Portrait (390 x 844)
+	pageVC.view.frame = CGRectMake(0.0, 0.0, 390.0, 844.0);
+	[pageVC loadViewIfNeeded];
+	[pageVC.view setNeedsLayout];
+	[pageVC.view layoutIfNeeded];
+
+	XCTAssertEqual(pageVC.documentView.autoresizingMask, UIViewAutoresizingNone);
+	XCTAssertFalse(pageVC.documentScroller.autoresizesSubviews);
+	XCTAssertGreaterThan(pageVC.documentView.layer.borderWidth, 0.0);
+	XCTAssertGreaterThan(pageVC.documentView.layer.shadowOpacity, 0.0f);
+	XCTAssertEqualWithAccuracy(pageVC.documentView.bounds.size.width, document.paperSize.width, 0.5);
+	XCTAssertEqualWithAccuracy(pageVC.documentView.bounds.size.height, document.paperSize.height, 0.5);
+	CGFloat portraitZoom = pageVC.documentScroller.zoomScale;
+	XCTAssertEqualWithAccuracy(portraitZoom, 1.0, 0.01);
+
+	// Rotate to Landscape (844 x 390) -> page size and zoomScale must not change or distort
+	pageVC.view.frame = CGRectMake(0.0, 0.0, 844.0, 390.0);
+	[pageVC.view setNeedsLayout];
+	[pageVC.view layoutIfNeeded];
+	XCTAssertEqualWithAccuracy(pageVC.documentView.bounds.size.width, document.paperSize.width, 0.5);
+	XCTAssertEqualWithAccuracy(pageVC.documentView.bounds.size.height, document.paperSize.height, 0.5);
+	XCTAssertEqualWithAccuracy(pageVC.documentScroller.zoomScale, portraitZoom, 0.01);
+
+	// Rotate back to Portrait (390 x 844) -> still unchanged
+	pageVC.view.frame = CGRectMake(0.0, 0.0, 390.0, 844.0);
+	[pageVC.view setNeedsLayout];
+	[pageVC.view layoutIfNeeded];
+	XCTAssertEqualWithAccuracy(pageVC.documentView.bounds.size.width, document.paperSize.width, 0.5);
+	XCTAssertEqualWithAccuracy(pageVC.documentView.bounds.size.height, document.paperSize.height, 0.5);
+	XCTAssertEqualWithAccuracy(pageVC.documentScroller.zoomScale, portraitZoom, 0.01);
 }
 
 - (void)testInstallSampleDocumentDoesNotOverwriteExistingFileWithExtension {

@@ -95,6 +95,8 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		_pageIsAnimating = NO;
 		_updatingOfTimerIsPaused = NO;
 		_lastCacheDate = nil;
+		_selectedPaperType = MTPaperTypeLetter;
+		_renderedPaperType = MTPaperTypeLetter;
 		
 		MADOperationQueue *refreshQueue = [[MADOperationQueue alloc] init];
 		self.refreshQueue = refreshQueue;
@@ -118,6 +120,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	self.edgesForExtendedLayout = UIRectEdgeNone;
 	
 	_currentLocation = MADReportPositionMake(0, 0);
+	if (_selectedPaperType == 0) _selectedPaperType = MTPaperTypeLetter;
+	if (_renderedPaperType == 0) _renderedPaperType = MTPaperTypeLetter;
+	[self rebuildPaperSizeBarButtonItem];
 	
 	_refreshing = NO;
 	_startedRefresh = NO;
@@ -149,6 +154,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	[self updateNavigationPrompt:animated];
 
 	MADocument *document = self.document;
+	[document setPaperType:self.renderedPaperType];
 	
 	MADRefreshOperationReload *reload = [[MADRefreshOperationReload alloc] initWithDocument: document
 																			 viewController: self];
@@ -199,8 +205,9 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	buttonRefresh.enabled = YES;
 	buttonDone.enabled = YES;
 	self.barButtonItemRefresh = buttonRefresh;
+	[self rebuildPaperSizeBarButtonItem];
 
-	[self.navigationItem setRightBarButtonItem: buttonRefresh animated: YES];
+	[self.navigationItem setRightBarButtonItems: @[buttonRefresh, self.barButtonItemPaperSize] animated: YES];
 	[self.navigationItem setLeftBarButtonItem: buttonDone animated: YES];
 
 	// The reload below formats the report, and on a large document that takes a couple
@@ -364,7 +371,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 
 		MADDocumentScroller *documentScroller = visiblePageViewController.documentScroller;
 		MADPageViewAttributes *pageAttributes = [[MADPageViewAttributes alloc] initWithPosition: _currentLocation
-																						   size: documentScroller.contentSize];
+																						   size: self.document.paperSize];
 		pageAttributes.zoomScaleInital = documentScroller.zoomScale;
 		pageAttributes.contentOffsetInital = documentScroller.contentOffset;
 		pageAttributes.contentScaleFactor = visiblePageViewController.documentView.contentScaleFactor;
@@ -418,8 +425,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	[MADThemeManager applyAppearanceToBarButtonItem:buttonRefresh traitCollection:self.traitCollection];
 	buttonRefresh.enabled = YES;
 	self.barButtonItemRefresh = buttonRefresh;
-	[self.navigationItem setRightBarButtonItem: buttonRefresh
-									  animated: YES];
+	[self rebuildPaperSizeBarButtonItem];
+	self.barButtonItemPaperSize.enabled = YES;
+	[self.navigationItem setRightBarButtonItems: @[buttonRefresh, self.barButtonItemPaperSize]
+									   animated: YES];
 }
 
 - (void)setDisplayInactive {
@@ -431,6 +440,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	_updatingOfTimerIsPaused = NO;
 
 	self.barButtonItemRefresh.enabled = NO;
+	self.barButtonItemPaperSize.enabled = NO;
 
 	UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleMedium];
 	activityIndicator.hidden = NO;
@@ -439,8 +449,13 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 
 	UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
 	[activityIndicator startAnimating];
-	[self.navigationItem setRightBarButtonItem: barButtonItem
-									  animated: YES];
+	if (self.barButtonItemPaperSize != nil) {
+		[self.navigationItem setRightBarButtonItems: @[barButtonItem, self.barButtonItemPaperSize]
+										   animated: YES];
+	} else {
+		[self.navigationItem setRightBarButtonItem: barButtonItem
+										  animated: YES];
+	}
 }
 
 - (void)setPageingEnabled:(BOOL)enabled {
@@ -460,12 +475,47 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 #pragma mark -
 #pragma mark Actions
 
+- (void)selectPaperType:(MTPaperType)paperType {
+	_selectedPaperType = paperType;
+	[self rebuildPaperSizeBarButtonItem];
+}
+
+- (void)rebuildPaperSizeBarButtonItem {
+	MTPaperType currentSelected = _selectedPaperType ?: MTPaperTypeLetter;
+	NSMutableArray<UIMenuElement *> *actions = [[NSMutableArray alloc] init];
+	__weak typeof(self) weakSelf = self;
+	for (NSNumber *typeNum in [MTPaper standardPaperTypes]) {
+		MTPaperType type = (MTPaperType)typeNum.integerValue;
+		NSString *title = [MTPaper displayNameForPaperType:type];
+		UIAction *action = [UIAction actionWithTitle:title
+											   image:nil
+										  identifier:nil
+											 handler:^(__kindof UIAction * __unused act) {
+			[weakSelf selectPaperType:type];
+		}];
+		action.state = (type == currentSelected) ? UIMenuElementStateOn : UIMenuElementStateOff;
+		[actions addObject:action];
+	}
+	UIMenu *menu = [UIMenu menuWithTitle:@"Page Size" children:actions];
+	NSString *buttonTitle = [MTPaper shortDisplayNameForPaperType:currentSelected];
+	if (self.barButtonItemPaperSize == nil) {
+		self.barButtonItemPaperSize = [[UIBarButtonItem alloc] initWithTitle:buttonTitle menu:menu];
+	} else {
+		self.barButtonItemPaperSize.title = buttonTitle;
+		self.barButtonItemPaperSize.menu = menu;
+	}
+	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemPaperSize traitCollection:self.traitCollection];
+}
+
 - (IBAction)refresh:(id __unused)sender {
 	_didRefreshBeforeReaload = YES;
 	
 	if (_refreshing == NO) {
 		_startedRefresh = YES;
 		_refreshing = YES;
+
+		_renderedPaperType = _selectedPaperType ?: MTPaperTypeLetter;
+		[self.document setPaperType:_renderedPaperType];
 
 		[self setDisplayInactive];
 
@@ -489,9 +539,21 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 	}
 }
 
-- (IBAction)zoomToActualSize:(id __unused)sender { }
+- (IBAction)zoomToActualSize:(id __unused)sender {
+	MADDocumentPageController *visiblePage = [self visiblePageViewController];
+	[visiblePage.documentScroller setZoomScale:1.0 animated:YES];
+}
 
-- (IBAction)zoomToFit:(id __unused)sender { }
+- (IBAction)zoomToFit:(id __unused)sender {
+	MADDocumentPageController *visiblePage = [self visiblePageViewController];
+	CGSize paperSize = self.document.paperSize;
+	CGSize boundsSize = visiblePage.documentScroller.bounds.size;
+	if (paperSize.width > 0.0 && paperSize.height > 0.0 && boundsSize.width > 40.0 && boundsSize.height > 40.0) {
+		CGFloat fitScale = MIN((boundsSize.width - 32.0) / paperSize.width,
+							   (boundsSize.height - 32.0) / paperSize.height);
+		[visiblePage.documentScroller setZoomScale:MAX(0.25, MIN(4.0, fitScale)) animated:YES];
+	}
+}
 
 - (IBAction)zoomToFullScreen:(id __unused)sender { }
 
@@ -519,7 +581,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		MADPageViewAttributes *pageAttributes;
 		pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: visiblePageNumber + 1
 																	  total: _currentLocation.totalPages
-																	   size: documentScroller.contentSize];
+																	   size: self.document.paperSize];
 		pageAttributes.zoomScaleInital = documentScroller.zoomScale;
 		pageAttributes.contentOffsetInital = documentScroller.contentOffset;
 		pageAttributes.contentScaleFactor = pageViewControllerLast.documentView.contentScaleFactor;
@@ -550,7 +612,7 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		MADPageViewAttributes *pageAttributes;
 		pageAttributes = [[MADPageViewAttributes alloc] initWithCurrentPage: visiblePageNumber - 1
 																	  total: _currentLocation.totalPages
-																	   size: documentScroller.contentSize];
+																	   size: self.document.paperSize];
 		pageAttributes.zoomScaleInital = documentScroller.zoomScale;
 		pageAttributes.contentOffsetInital = documentScroller.contentOffset;
 		pageAttributes.contentScaleFactor = pageViewControllerPrevious.documentView.contentScaleFactor;

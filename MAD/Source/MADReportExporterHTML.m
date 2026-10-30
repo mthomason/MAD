@@ -84,7 +84,8 @@ static NSString *MADReportExporterFontName(NSString *);
 
 	id <MADDocumentRenderProtocol> renderDocument = (id <MADDocumentRenderProtocol>)document;
 	MADReportPageBuilder *builder = [MADReportPageBuilder builderForDocument: renderDocument];
-	CGRect trimBox = [MADReportPageBuilder pageTrimBox];
+	CGRect pageBounds = [MADReportPageBuilder pageBoundsForDocument: renderDocument];
+	CGRect trimBox = [MADReportPageBuilder pageTrimBoxForDocument: renderDocument];
 	MADReportFormatter *reportFormatter = renderDocument.reportFormatter;
 
 	NSMutableString *html = [[NSMutableString alloc] init];
@@ -92,7 +93,7 @@ static NSString *MADReportExporterFontName(NSString *);
 	[html appendFormat: @"<title>%@</title>\n", [MADReportExporterHTML escapedString: renderDocument.filename]];
 	[html appendString: @"<style>\n"];
 	[html appendString: @"@page { size: "];
-	[self appendPageSize: [MADReportPageBuilder pageBounds].size toHTML: html];
+	[self appendPageSize: pageBounds.size toHTML: html];
 	[html appendString: @"; margin: 0 }\n"];
 	[html appendString: @"html, body { margin: 0; padding: 0 }\n"];
 	[html appendString: @"body { background: #fff; color: #000 }\n"];
@@ -113,7 +114,7 @@ static NSString *MADReportExporterFontName(NSString *);
 		@autoreleasepool {
 			page = [builder buildPageAtIndex: pageIndex inPageRect: trimBox draw: NULL];
 		}
-		[self appendPage: page index: pageIndex toHTML: html];
+		[self appendPage: page index: pageIndex pageSize: pageBounds.size toHTML: html];
 	}
 
 	[html appendString: @"</body>\n</html>\n"];
@@ -123,10 +124,10 @@ static NSString *MADReportExporterFontName(NSString *);
 
 #pragma mark - Pages
 
-- (void)appendPage:(MADReportPageRepresentation *)page index:(NSUInteger)pageIndex toHTML:(NSMutableString *)html {
+- (void)appendPage:(MADReportPageRepresentation *)page index:(NSUInteger)pageIndex pageSize:(CGSize)pageSize toHTML:(NSMutableString *)html {
 
 	[html appendFormat: @"<div class=\"page\" data-index=\"%lu\" style=\"", (unsigned long)pageIndex];
-	[self appendSize: [MADReportPageBuilder pageBounds].size toHTML: html];
+	[self appendSize: pageSize toHTML: html];
 	[html appendString: @"\">\n"];
 
 	for (MADReportSectionRepresentation *section in [page allSections]) {
