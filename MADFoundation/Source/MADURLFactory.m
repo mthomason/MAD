@@ -300,10 +300,14 @@ static NSURL *urlForCacheDirectory;
 		}
 		
 		NSString *bundleIdentifier = [NSBundle mainBundle].bundleIdentifier.copy;
+#if __APPLE__
 		if (bundleIdentifier.length == 0) {
 			bundleIdentifier = [MADApplication groupIdentifier];
 		}
-		appSupportDirectoryForApp = [appSupportDirectory URLByAppendingPathComponent:bundleIdentifier];
+#endif
+		appSupportDirectoryForApp = (bundleIdentifier.length > 0)
+			? [appSupportDirectory URLByAppendingPathComponent:bundleIdentifier]
+			: appSupportDirectory;
 		NSString *path = ((NSURL *)appSupportDirectoryForApp).path;
 		fileExist = [[NSFileManager defaultManager] fileExistsAtPath: path isDirectory: &isDirectory];
 		
