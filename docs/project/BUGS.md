@@ -346,6 +346,67 @@ Status key:
 - **Test:** `MADElementStylizedTextTests testNilFontNameThrows` pins the current
   throw.
 
+### `RptqStoreContext -setRelationship:value:onObject:` does not unlink old inverse targets when replacing or clearing a relationship
+- **Status:** Confirmed (found during the macOS Report Designer implementation)
+- **Where:** `MAD/Source/rptq/store/RptqStoreContext.m:324-363`
+- **Behavior:** Two related omissions in `-setRelationship:value:onObject:`:
+  1. In the to-one branch (`!relationship.isToMany`, `:324-342`), when `value` is `nil`
+     (`targetIdentifier == 0`), the method clears the forward reference on `object` and
+     returns early at `:328` without removing `object.identifier` from the previous
+     target's inverse collection (or clearing its inverse to-one reference) and without
+     marking the previous target dirty.  Similarly, when `value` is replaced with a new
+     target (`object.inSectionRow = newRow`), `object.identifier` is appended to the new
+     target's inverse collection (`newRow.hasObjects`) without being removed from the
+     old target's inverse collection (`oldRow.hasObjects`).
+  2. In the to-many branch (`relationship.isToMany`, `:344-362`), replacing a collection
+     updates the inverse reference on the new members but never clears the inverse
+     reference on members removed from the collection.
+- **Why it matters:** Moving an `RptqDocumentElement` between sections via
+  `element.inSectionRow = targetRow` alone (or deleting it via
+  `element.inSectionRow = nil`) leaves the element in the old `RptqDocumentSectionRows`'s
+  `hasObjects` collection, causing the element to appear in both sections (or remain in
+  its old section after deletion) until the caller explicitly removes it from
+  `oldRow.hasObjects` via `-removeHasObjectsObject:`.
+
+### `RptqDocumentSection -addDocumentObject:withDropPoint:managedObjectContext:` writes `rect.origin` and leaves `dropPoint` at `(0, 0)`
+- **Status:** Quirk / defect (found during the macOS Report Designer implementation)
+- **Where:** `MAD/Source/rptq/RptqDocumentSection+Extras.m:472-489`,
+  `MAD/Source/rptq/RptqDocumentElement+Extras.m:578-596`
+- **Behavior:** Despite the parameter name `withDropPoint:(CGPoint)origin`,
+  `-addDocumentObject:withDropPoint:managedObjectContext:` calls
+  `[documentObject setOriginPoint:origin]` (`:476`), which writes `self.rect.origin.x`
+  and `self.rect.origin.y` (`RptqDocumentElement+Extras.m:593-596`) and leaves
+  `documentObject.dropPoint` (`x`, `y`) at `(0, 0)`.  Meanwhile,
+  `-[RptqDocumentElement placementPoint]` (`:578-581`) and the commented-out
+  `-[RptqDocumentSection layoutHeightCalculated]` (`:503`) read `self.dropPoint`.
+- **Why it matters:** Any caller or inspector that reads `element.dropPoint` (or
+  `-placementPoint`) while writing element coordinates through `-setOriginPoint:` or
+  `-addDocumentObject:withDropPoint:managedObjectContext:` always reads `(0, 0)` back,
+  pinning elements to the origin.  In the macOS Report Designer, both `rect.origin` and
+  `dropPoint` are now kept synchronized (`MADMacDesignerCanvasView
+  -setElement:originInSectionContent:`).
+
+### `RptqDocumentElementAggregate -updateAggregateFunctionWithFunctionType:…` looks up `aggregateObjectID` in `RptqDocumentElement` instead of `RptqQueryField`
+- **Status:** Confirmed (found during the macOS Report Designer implementation)
+- **Where:** `MAD/Source/rptq/RptqDocumentElementAggregate+Extras.m:144-162`
+- **Behavior:** Line 144 faults the target of `aggregateObjectID` with:
+  ```objc
+  RptqObject *object = [storeContext objectForEntity:NSStringFromClass([RptqDocumentElement class])
+                                          identifier:aggregateObjectID];
+  ```
+  and then at `:155-156`, when `inputType == MTAggregateFunctionInputTypeField`, casts
+  `object` to `(RptqQueryField *)object` and assigns `self.aggregateField = (RptqQueryField *)object`.
+  In the portable store (`MADStoreSchema.m`), `RptqQueryField` and `RptqDocumentElement`
+  live in separate tables with independent primary-key sequences (`1, 2, 3…`).  Looking
+  up `aggregateObjectID` in `RptqDocumentElement` either returns `nil` (when no document
+  element has that identifier, leaving `aggregateField` unbound) or returns an unrelated
+  `RptqDocumentElement` that happens to share the same integer identifier.
+- **Why it matters:** Binding an aggregate element to a query field through
+  `-updateAggregateFunctionWithFunctionType:inputType:groupType:aggregateObjectID:groupNumber:`
+  silently corrupts or drops `self.aggregateField`.  The macOS Report Designer assigns
+  `agg.functionType`, `agg.groupType`, `agg.groupNumber`, and `agg.aggregateField`
+  directly instead of calling this helper.
+
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
 - `MADDesignerLayout` multi-selection undo clobbers per-element previous values with a single scalar
@@ -1222,6 +1283,27 @@ bundle's header search path.
 - **Where:** `MADDesigner/Source/MADVerificationController.m:475-489`.
 - **Reproduction:** the analyzer reports both the deprecation and the leak on every
   `xcodebuild analyze` of the app scheme.
+
+### `MADToolboxStyleViewController -updateDisplay` miscounts distinct box-model and font-size values across a multi-selection
+- **Status:** Confirmed (found during the macOS Report Designer audit)
+- **Where:** `MADDesigner/Source/MADToolboxStyleViewController.m:460-614`
+- **Behavior:** Before looping over `self.userSelectedObjectIDs`, `borderHolder`,
+  `marginHolder`, `paddingHolder`, and `sizeHolder` are zero-initialised (`{0, 0, 0, 0}`
+  and `0.0`), and each counter (`numberOfBorderTop`, `numberOfMarginLeft`,
+  `numberOfPaddingTop`, `numberOfFontSize`, etc.) only increments when
+  `documentObject.<prop> != holder.<prop>`.  Consequences:
+  1. When a single element (or multiple elements) has a property equal to `0` (e.g.
+     `border.width.top == 0`, the default for new elements), `documentObject.border.width.top != borderHolder.top`
+     is `NO`, so `numberOfBorderTop` stays `0` rather than `1`.
+  2. When the first selected element has a non-zero value (e.g. `2.0`, incrementing the
+     counter to `1` and setting `holder = 2.0`), a second selected element with `0.0`
+     increments the counter to `2` and sets `holder = 0.0`, and a third selected element
+     with `2.0` increments the counter to `3` even though only two distinct values exist;
+     conversely, if the first element has `0.0` and the second has `2.0`, the counter is
+     `1` instead of `2` (failing to detect the mixed selection).
+- **Why it matters:** Multi-element selection in the iOS style inspector misreports
+  whether selected elements share a uniform border, margin, or padding value whenever
+  any selected element has `0` for that edge.
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
