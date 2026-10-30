@@ -87,10 +87,10 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 
 	_driverPopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(160, 334, 356, 26) pullsDown:NO];
 	[_driverPopup addItemsWithTitles:@[
-		@"SQLite 3",
-		@"MySQL / MariaDB",
-		@"Microsoft SQL Server (FreeTDS)",
-		@"PostgreSQL (libpq)"
+		@"SQLite",
+		@"MySQL",
+		@"Microsoft SQL Server",
+		@"PostgreSQL"
 	]];
 	_driverPopup.target = self;
 	_driverPopup.action = @selector(driverPopupChanged:);

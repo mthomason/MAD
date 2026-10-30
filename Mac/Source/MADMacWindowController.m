@@ -12,9 +12,6 @@
 #import "MADMacViewerViewController.h"
 
 static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspace";
-static NSToolbarItemIdentifier const kToolbarItemRefresh = @"MADToolbarRefresh";
-static NSToolbarItemIdentifier const kToolbarItemExport = @"MADToolbarExport";
-static NSToolbarItemIdentifier const kToolbarItemPrint = @"MADToolbarPrint";
 
 @interface MADMacWindowController ()
 
@@ -60,6 +57,14 @@ static NSToolbarItemIdentifier const kToolbarItemPrint = @"MADToolbarPrint";
 	toolbar.delegate = self;
 	toolbar.displayMode = NSToolbarDisplayModeIconAndLabel;
 	toolbar.allowsUserCustomization = NO;
+	if (@available(macOS 13.0, *)) {
+		toolbar.centeredItemIdentifiers = [NSSet setWithObject:kToolbarItemWorkspace];
+	} else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+		toolbar.centeredItemIdentifier = kToolbarItemWorkspace;
+#pragma clang diagnostic pop
+	}
 	self.window.toolbar = toolbar;
 }
 
@@ -119,50 +124,34 @@ static NSToolbarItemIdentifier const kToolbarItemPrint = @"MADToolbarPrint";
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarAllowedItemIdentifiers:(NSToolbar *) __unused toolbar {
 	return @[
-		kToolbarItemWorkspace,
 		NSToolbarFlexibleSpaceItemIdentifier,
-		kToolbarItemRefresh,
-		kToolbarItemExport,
-		kToolbarItemPrint,
+		kToolbarItemWorkspace,
 	];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarDefaultItemIdentifiers:(NSToolbar *) __unused toolbar {
 	return @[
+		NSToolbarFlexibleSpaceItemIdentifier,
 		kToolbarItemWorkspace,
 		NSToolbarFlexibleSpaceItemIdentifier,
-		kToolbarItemRefresh,
-		kToolbarItemExport,
-		kToolbarItemPrint,
 	];
 }
 
 - (nullable NSToolbarItem *)toolbar:(NSToolbar *) __unused toolbar
 			  itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier
 		  willBeInsertedIntoToolbar:(BOOL) __unused flag {
-	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
-	if ([itemIdentifier isEqualToString:kToolbarItemWorkspace]) {
-		_workspaceSegmentedControl = [NSSegmentedControl segmentedControlWithLabels:@[
-			@"MAD Query",
-			@"MAD Designer",
-			@"MAD Viewer"
-		] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(workspaceSegmentAction:)];
-		_workspaceSegmentedControl.selectedSegment = MADMacWorkspaceTabDesigner;
-		item.label = @"Workspace";
-		item.view = _workspaceSegmentedControl;
-	} else if ([itemIdentifier isEqualToString:kToolbarItemRefresh]) {
-		NSButton *btn = [NSButton buttonWithTitle:@"Refresh Data" target:self action:@selector(refreshReportAction:)];
-		item.label = @"Refresh";
-		item.view = btn;
-	} else if ([itemIdentifier isEqualToString:kToolbarItemExport]) {
-		NSButton *btn = [NSButton buttonWithTitle:@"Export…" target:self action:@selector(exportReportAction:)];
-		item.label = @"Export";
-		item.view = btn;
-	} else if ([itemIdentifier isEqualToString:kToolbarItemPrint]) {
-		NSButton *btn = [NSButton buttonWithTitle:@"Print…" target:self action:@selector(printReportAction:)];
-		item.label = @"Print";
-		item.view = btn;
+	if (![itemIdentifier isEqualToString:kToolbarItemWorkspace]) {
+		return nil;
 	}
+	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+	_workspaceSegmentedControl = [NSSegmentedControl segmentedControlWithLabels:@[
+		@"MAD Query",
+		@"MAD Designer",
+		@"MAD Viewer"
+	] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(workspaceSegmentAction:)];
+	_workspaceSegmentedControl.selectedSegment = MADMacWorkspaceTabDesigner;
+	item.label = @"Workspace";
+	item.view = _workspaceSegmentedControl;
 	return item;
 }
 

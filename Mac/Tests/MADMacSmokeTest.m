@@ -19,7 +19,9 @@
 #import <MAD/MAD.h>
 #import "MADMacDocumentController.h"
 #import "MADMacAppDelegate.h"
+#import "MADMacConnectionWindowController.h"
 #import "MADMacDocument.h"
+#import "MADMacWindowController.h"
 #import "MADocumentDesignerProtocol.h"
 #import "MADSQLQueryCompiler.h"
 #import "MADSQLStatementResolver.h"
@@ -327,6 +329,36 @@ int main(int argc, const char * argv[]) {
 		openDoc.fileURL = [NSURL fileURLWithPath:sampleLondonPath];
 		[openDoc adoptHeadlessDocument:london];
 		[sharedDocCtrl addDocument:openDoc];
+
+		[openDoc makeWindowControllers];
+		MADMacWindowController *wc = openDoc.windowControllers.firstObject;
+		[wc.window layoutIfNeeded];
+		NSToolbar *toolbar = wc.window.toolbar;
+		for (NSToolbarItem *item in toolbar.items) {
+			if ([item.itemIdentifier isEqualToString:@"MADToolbarRefresh"] ||
+				[item.itemIdentifier isEqualToString:@"MADToolbarExport"] ||
+				[item.itemIdentifier isEqualToString:@"MADToolbarPrint"]) {
+				fprintf(stderr, "FAIL: Toolbar still contains removed item %s\n", item.itemIdentifier.UTF8String);
+				return 21;
+			}
+			if ([item.itemIdentifier isEqualToString:@"MADToolbarWorkspace"] && item.view != nil) {
+				NSRect rectInWindow = [item.view convertRect:item.view.bounds toView:nil];
+				CGFloat midX = NSMidX(rectInWindow);
+				CGFloat winMidX = wc.window.frame.size.width * 0.5;
+				if (fabs(midX - winMidX) > 2.0) {
+					fprintf(stderr, "FAIL: Workspace segmented control not centered (midX=%.1f vs window midX=%.1f)\n", midX, winMidX);
+					return 22;
+				}
+			}
+		}
+
+		MADMacConnectionWindowController *connWC = [[MADMacConnectionWindowController alloc] init];
+		NSPopUpButton *driverPopup = [connWC valueForKey:@"driverPopup"];
+		NSArray<NSString *> *expectedDrivers = @[@"SQLite", @"MySQL", @"Microsoft SQL Server", @"PostgreSQL"];
+		if (![driverPopup.itemTitles isEqualToArray:expectedDrivers]) {
+			fprintf(stderr, "FAIL: Unexpected driver popup titles: %s\n", driverPopup.itemTitles.description.UTF8String);
+			return 23;
+		}
 
 		[macDocCtrl dismissOpenPanelIfNeeded];
 		[appDelegate applicationDidFinishLaunching:[NSNotification notificationWithName:@"launch" object:NSApp]];

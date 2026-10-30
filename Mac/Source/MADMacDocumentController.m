@@ -49,7 +49,7 @@
 }
 
 - (void)dismissOpenPanelIfNeeded {
-	if (_activeOpenPanel != nil && _activeOpenPanel.isVisible) {
+	if (_activeOpenPanel != nil && _activeOpenPanel.isVisible) {	// Weak instance variable '_activeOpenPanel' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 		[_activeOpenPanel cancel:nil];
 		_activeOpenPanel = nil;
 	}
@@ -95,7 +95,7 @@
 }
 
 - (IBAction)openDocument:(nullable id)sender {
-	if (_activeOpenPanel != nil && _activeOpenPanel.isVisible) {
+	if (_activeOpenPanel != nil && _activeOpenPanel.isVisible) {	// Weak instance variable '_activeOpenPanel' is accessed multiple times in this method but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 		[_activeOpenPanel makeKeyAndOrderFront:nil];
 		return;
 	}
@@ -133,7 +133,7 @@
 	[super beginOpenPanel:openPanel
 				 forTypes:inTypes
 		completionHandler:^(NSInteger result) {
-			if (weakSelf.activeOpenPanel == openPanel) {
+			if (weakSelf.activeOpenPanel == openPanel) {	// Weak variable 'weakSelf' is accessed multiple times in this block but may be unpredictably set to nil; assign to a strong variable to keep the object alive
 				weakSelf.activeOpenPanel = nil;
 			}
 			completionHandler(result);
