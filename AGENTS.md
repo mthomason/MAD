@@ -4,9 +4,8 @@
 
 **MAD (Mobile Analytics Document)** is a mobile analytic document designer: the `MAD Designer` app, where a report is built, the `MAD Viewer` app, where it is read, and the portable report-definition format plus the engine that renders it.  It provides ad hoc query, reporting, and design.  It is business intelligence (BI) software.
 
-* It is built for iOS using Objective-C
-* It targets a minimum version of iOS 15
-* It is built for iPhone, iPad, and My Mac (Designed for iPad)
+* It is built for iOS (`UIKit`, minimum iOS 15) and native macOS (`AppKit`, minimum macOS 12.0) using Objective-C
+* It is built for iPhone, iPad, and native Mac (`Mac/` and the `MAD Designer Mac` target)
 
 ## Project Overview
 
@@ -68,7 +67,9 @@ Once this is complete, the user can go to the MAD Viewer screen and use the refr
 	* `MADBarcodes`: This is used for the barcode element.  The framework is maintained, links zint 2.16.0 via the Compressor recipe, and backs the barcode element on Apple; it is deliberately excluded from the Linux build.
 	* `MADFeedback`: This is a framework to allow user feedback.  `MADFeedback` is currently unused and unmaintained.
 
-The core app is in `MADDesigner`.  Its source is in `MADDesigner/Source`, and its targets -- the app itself, the stand-alone viewer, and the unit and UI test bundles -- are in `MADDesigner/Targets`.
+The core iOS app is in `MADDesigner`.  Its source is in `MADDesigner/Source`, and its targets -- the iOS app itself, the native macOS app (`MAD Designer Mac`), the stand-alone viewer, and the unit and UI test bundles -- are in `MADDesigner/Targets`.
+
+The native macOS (`AppKit`) application lives in `Mac` (`Mac/Source`, `Mac/Resources`, `Mac/Tests`, `Mac/build.sh`).  It links twelve of the fourteen frameworks compiled natively for `macosx` (`MACOSX_DEPLOYMENT_TARGET = 12.0`), provides a native `NSDocument` workflow across the `MAD Query`, `MAD Designer`, and `MAD Viewer` workspaces, and packages `MAD Designer.app`, `.zip`, and `.dmg` artifacts via `./Mac/build.sh --smoke-test --package`.  See `docs/macos.md`, `Mac/README.md`, and `docs/project/MAD_MACOS.md`.
 
 The code base also includes a custom scripting language in a file called `Scrimpter`, which was going to be used for adding formula elements to the project, but it is currently not used.
 
@@ -198,6 +199,9 @@ the headless side.
   work starts, the implementing agent must ask the user to choose the engine (§8).
 * `docs/archive/MAD_BARCODES.md` -- the barcode element's modernization and re-integration
   design: complete and archived 2026-10-22 (docs/project/TASKS.md §15); kept for reference.
+* `docs/macos.md` -- the user and developer guide for the native macOS (`AppKit`) application, served on the documentation site (`macos.html`).
+* `docs/project/MAD_MACOS.md` -- the multiplatform framework portability audit (`iphoneos`, `iphonesimulator`, `macosx`) and native macOS architecture record.
+* `Mac/README.md` -- the native macOS build, layout, and smoke-test guide (`./Mac/build.sh`).
 * `docs/project/MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
   Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
 * `docs/project/MAD_PDF_LINUX.md` -- the Linux PDF writer: status (deferred, blocked on the user's

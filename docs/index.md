@@ -4,7 +4,7 @@ title: MAD — Mobile Analytics Document
 
 **An open format and embeddable engine for relational reporting — where every report is a portable query graph, a materialized SQLite table, and a parametric layout.**
 
-MAD is an embedded relational reporting platform for ad hoc query, reporting, and design: the **MAD Designer** and **MAD Viewer** apps for iOS, the headless engine that runs them on Linux and macOS, and the open `.mad` document format. A `.mad` file holds a report's whole definition — the database schema snapshot, the query graph (tables, joins, predicates, groupings), and the banded layout of its elements — in under 100 KB, cleanly separated from the materialized SQLite table (`.maddb` + `.mdcache`) it produces on refresh.
+MAD is an embedded relational reporting platform for ad hoc query, reporting, and design: the **MAD Designer** and **MAD Viewer** apps for iOS and native macOS (`AppKit`), the headless engine that runs them on Linux and macOS, and the open `.mad` document format. A `.mad` file holds a report's whole definition — the database schema snapshot, the query graph (tables, joins, predicates, groupings), and the banded layout of its elements — in under 100 KB, cleanly separated from the materialized SQLite table (`.maddb` + `.mdcache`) it produces on refresh.
 
 The code is at
 [github.com/mthomason/MAD](https://github.com/mthomason/MAD), MIT-licensed;
@@ -13,7 +13,13 @@ the names and app artwork are not covered by that licence (see
 
 ## See it
 
-MAD Designer, from choosing a data source to reading the finished report in
+**[MAD Designer for macOS](macos.html)** — native `AppKit` desktop application (`NSDocument`, visual table/join query canvas, interactive section minimap and banded report designer, and paginated PDF/HTML/CSV/JSON report viewer):
+
+![MAD Query workspace in the native macOS application](assets/macos-native-mad-query.png)
+
+![MAD Designer workspace in the native macOS application](assets/macos-native-mad-designer.png)
+
+**MAD Designer for iOS**, from choosing a data source to reading the finished report in
 MAD Viewer:
 
 <video controls playsinline preload="metadata" width="360"
@@ -23,7 +29,7 @@ MAD Viewer:
   <a href="assets/app-preview.mp4">app preview</a> is a plain MP4.
 </video>
 
-The same engine headless: `inspect`, `schema`, `query`, `refresh`, and
+**The same engine headless on Linux**: `inspect`, `schema`, `query`, `refresh`, and
 `export` through the `mad` CLI, with no database server and no credentials:
 
 ![The mad CLI inspecting, querying, refreshing and exporting a .mad document](assets/mad-cli-demo.gif)
@@ -69,8 +75,11 @@ The open specification, one chapter per file:
 
 ## Using the engine
 
+* [MAD Designer for macOS](macos.html) — the native `AppKit` desktop app:
+  visual query canvas, banded report designer with minimap and inspector,
+  paginated viewer, and how to build or package it from source.
 * [Build and test](https://github.com/mthomason/MAD#build-and-test) —
-  the exact commands for the iOS suites and the Linux build.
+  the exact commands for the iOS suites, the native macOS suites, and the Linux build.
 * [The `mad` CLI](https://github.com/mthomason/MAD#try-it) — inspect,
   refresh, and export a `.mad` from Docker in one line.
 * [mad-action](https://github.com/mthomason/mad-action) — run a checked-in

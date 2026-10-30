@@ -116,8 +116,7 @@ plus Linux for the eleven headless frameworks):
     - Guard the 22 iOS-only `UIDocument` (`MADocument`), `UIView`, and
       `UICollectionViewLayout` files with `#if TARGET_OS_IPHONE`.
 
-`MADExplorer` remains iOS-only (macOS uses `NSDocumentController`, Finder, `NSOpenPanel`,
-and a native Welcome window). `MADFeedback` and `Scrimpter` remain unused per
+`MADExplorer` remains iOS-only (macOS uses `NSDocumentController`, Finder, and `NSOpenPanel` with a primary **New Document** button). `MADFeedback` and `Scrimpter` remain unused per
 `AGENTS.md`.
 
 ---
@@ -195,20 +194,16 @@ and a native Welcome window). `MADFeedback` and `Scrimpter` remain unused per
 
 ### Phase 3: Native macOS Application (`Mac/`) (Completed)
 
-Built under `Mac/` (`Mac/Source/`, `Mac/Resources/`, `Mac/Tests/`, `Mac/build.sh`):
+Built under `Mac/` (`Mac/Source/`, `Mac/Resources/`, `Mac/Tests/`, `Mac/build.sh`) and integrated into `MAD Designer.xcodeproj` via the **`MAD Designer Mac`** target and shared scheme:
 
-1. **Application Lifecycle & Sample Reports (`MADMacAppDelegate`):**
-   - Installs bundled `chinook.sqlite3`, `London.mad`, and `Music.mad` into
-     `~/Library/Application Support/group.com.thomason.report.local/`, provides a native
-     macOS main menu (`File`, `Edit` with `Undo`/`Redo`, `View` workspace switching,
-     `Window`, `Help`), **Open Sample Report** (`London.mad`, `Music.mad`), and a
-     **New Report from Database Connection…** (`Cmd+Shift+N`) assistant.
+1. **Application Lifecycle & Document Controller (`MADMacAppDelegate` & `MADMacDocumentController`):**
+   - Registers all four database drivers and `MADStoreLegacyConverter`, builds the native macOS main menu (`MAD Designer`, `File`, `Edit` with `Undo`/`Redo`, `View` workspace switching `Cmd+1`/`Cmd+2`/`Cmd+3`, `Report` refresh `Cmd+R`, `Window`), and presents the standard `NSOpenPanel` on launch when no document is open.
+   - `MADMacDocumentController` configures `NSOpenPanel` with all `.mad` `UTType` identifiers (`com.everydayapps.productivity.mad` and `com.thomason.report.mad`) so existing `.mad` files are never dimmed out, and places a primary **New Document** button directly in the bottom-left bar of the Open Panel.
 2. **Database Connection & Schema Import Assistant (`MADMacConnectionWindowController`):**
-   - Supports **SQLite3** (bundled Chinook database or custom `.sqlite3`/`.db` file via
-     `NSOpenPanel`), **MySQL / MariaDB**, **Microsoft SQL Server**, and **PostgreSQL**,
-     with **Test Connection**, `MADKeyChain` password storage, and **Create Report…**
-     (`NSSavePanel`).
-3. **MAD Query Workspace (`MADMacQueryViewController`):**
+   - Supports **SQLite** (custom `.sqlite3`/`.db` file via `NSOpenPanel`), **MySQL**, **Microsoft SQL Server**, and **PostgreSQL**, with **Test Connection**, `MADKeyChain` password storage, and **Create Document…** (`NSSavePanel`).
+3. **Main Document Window (`MADMacWindowController`):**
+   - Centers the **Workspace** segmented control (**MAD Query**, **MAD Designer**, **MAD Viewer**) in the window toolbar.
+4. **MAD Query Workspace (`MADMacQueryViewController`):**
    - Mutually exclusive **Query Designer** and **SQL Query** workspace modes (toggled in
      the workspace header bar so visual query design and manual SQL entry are never
      shown simultaneously).
@@ -224,11 +219,11 @@ Built under `Mac/` (`Mac/Source/`, `Mac/Resources/`, `Mac/Tests/`, `Mac/build.sh
      join-type badges (`MADMacQueryLinksOverlayView`, matching iPad's `MADConnectorView`).
      Clicking or right-clicking a visual join connector opens a join inspector popover or
      context menu to change the link type, swap direction, or delete the link; header
-     popovers provide **Filters (WHERE)** and **Groupings (GROUP BY)** editors.
+     popovers provide **Filters (WHERE)**, **Groupings (GROUP BY)**, and **Arrange Tables**.
    - **SQL Query mode**: Full-width SQL statement editor displaying generated or entered
      SQL and supporting validation, compilation, and application (`MADSQLParser` +
      `MADSQLStatementResolver` + `MADSQLQueryCompiler`).
-4. **MAD Designer Workspace (`MADMacDesignerViewController` + `MADMacDesignerCanvasView` + `MADMacDesignerMinimapView`):**
+5. **MAD Designer Workspace (`MADMacDesignerViewController` + `MADMacDesignerCanvasView` + `MADMacDesignerMinimapView`):**
    - **Top Workspace Bar (`38pt` height):** Provides clickable and draggable SF Symbol
      element palette items (**Label**, **Data Field**, **Aggregate**, **Barcode**,
      **Image**, **Line**), quick multi-element alignment controls (`Left`, `Center`,
@@ -257,8 +252,8 @@ Built under `Mac/` (`Mac/Source/`, `Mac/Resources/`, `Mac/Tests/`, `Mac/build.sh
      `NSUndoManager` integration.
    - **Right Inspector Sidebar (Clearly Divided & Scrollable):**
      - **Card 1 (`1 · PAGE & SELECTED SECTION`):** Paper size, selected band badge,
-       band height (`pt`) with **Fit** button, **Visible in Report**, and **Page Break
-       After Section**.
+       band height (`pt`) with **Fit Height** button, **Section Visible**, and **Page Break
+       After**.
      - **Prominent Visual Divider + Section 2 (`2 · SELECTED ELEMENT INSPECTOR`):**
        4 grouped inspector cards (**Element & Band Assignment** with cross-section move
        popup, **Duplicate**, and **Delete**; **Content & Data Binding** with static text,
@@ -267,11 +262,10 @@ Built under `Mac/` (`Mac/Source/`, `Mac/Resources/`, `Mac/Tests/`, `Mac/build.sh
        strikethrough, horizontal/vertical alignment, and text/background colors; and
        **Position, Size & Box Model** with `X`, `Y`, `W`, `H` synchronized across both
        `rect.origin` and `dropPoint`, plus borders, padding, and margin).
-5. **MAD Viewer Workspace (`MADMacViewerViewController`):**
-   - Three preview tabs: **Paginated Report (PDF)** (`PDFView`), **HTML Preview**
-     (`WKWebView`), and **Cached Data Grid** (`NSTableView`), plus one-click export to all
-     7 registered formats (`PDF`, `HTML`, `HTML Flow`, `CSV`, `JSON`, `JSON Report`,
-     `Plain Text`) and native `NSPrintOperation` printing (`Cmd+P`).
+6. **MAD Viewer Workspace (`MADMacViewerViewController`):**
+   - **Top Viewer Toolbar (`40pt` height):** **Page Size** popup (`MTPaper` standard paper types: `US Letter`, `US Legal`, `US Tabloid`, `A3`, `A4`, `A5`, `B4`, `B5`, `JIS B4`, `JIS B5`), **Refresh** (`Cmd+R`), **Zoom** controls (`-`, `100%`, `+`), **Page Navigation** (`Previous`, `Page N of M`, `Next`), **Print…** (`Cmd+P` via `NSPrintOperation`), and **Export…** (`Cmd+E`).
+   - **Framed Paginated Preview (`PDFView`):** Renders paginated PDF pages at the selected paper size from the local SQLite table cache (`MADDataTableFast`) with page shadows and a bottom status bar (`statusBarView`) displaying rendered page count, cached row count, and paper dimensions.
+   - **Multi-Format Export (`NSSavePanel`):** Configures an accessory format popup supporting all 7 registered exporters (`PDF`, `HTML`, `HTML Flow`, `CSV`, `JSON`, `JSON Report`, `Plain Text`) and dynamically updates the save panel's allowed file extension.
 
 ### Phase 4: Build, Smoke Verification & GitHub Release Packaging (Completed)
 
@@ -281,6 +275,8 @@ Built under `Mac/` (`Mac/Source/`, `Mac/Resources/`, `Mac/Tests/`, `Mac/build.sh
 
 Produces:
 - `Mac/build/MAD Designer.app` (standalone native macOS app bundle with all 12
-  frameworks, legacy Core Data `.momd` models, and sample reports embedded and signed)
+  frameworks and legacy Core Data `.momd` models embedded and signed)
 - `Mac/build/MAD-Designer-macOS.zip`
 - `Mac/build/MAD-Designer-macOS.dmg`
+
+Public user and developer documentation for the native macOS application is published in [`docs/macos.md`](../macos.md) (with screenshots at `docs/assets/macos-native-mad-query.png` and `docs/assets/macos-native-mad-designer.png`) and [`Mac/README.md`](../../Mac/README.md).

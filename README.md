@@ -2,11 +2,11 @@
 
 **An open format and embeddable engine for relational reporting — where every report is a portable query graph, a materialized SQLite table, and a parametric layout.**
 
-MAD is a relational reporting platform built from scratch in Objective-C for ad hoc query, reporting, and design: the **MAD Designer** app, where queries and layouts are built visually or from SQL; the **MAD Viewer** app, where reports are read and refreshed; the headless **`mad` CLI and engine** that run on Linux and macOS; and the open **`.mad` specification**.
+MAD is a relational reporting platform built from scratch in Objective-C for ad hoc query, reporting, and design: the **MAD Designer** app for iOS and native macOS (`AppKit`), where queries and layouts are built visually or from SQL; the **MAD Viewer** app, where reports are read and refreshed; the headless **`mad` CLI and engine** that run on Linux and macOS; and the open **`.mad` specification**.
 
-A `.mad` file holds a report's entire definition — the database schema snapshot, the relational query graph (tables, joins, predicates, groupings), and the banded layout tree — in a single file under 100 KB, cleanly separated from the data it displays. A report is an executable file, not a server: any runtime that speaks `.mad` can inspect the schema, compile deterministic SQL for the target database, materialize the result set into a local SQLite table, and render it to native UIKit views, paginated HTML, PDF, CSV, or JSON.
+A `.mad` file holds a report's entire definition — the database schema snapshot, the relational query graph (tables, joins, predicates, groupings), and the banded layout tree — in a single file under 100 KB, cleanly separated from the data it displays. A report is an executable file, not a server: any runtime that speaks `.mad` can inspect the schema, compile deterministic SQL for the target database, materialize the result set into a local SQLite table, and render it to native AppKit/UIKit views, paginated HTML, PDF, CSV, or JSON.
 
-The repository is one self-contained project: the iPad/iPhone apps, fourteen frameworks, the headless engine with its Linux build and test suite (126 test executables, 1,303 tests), the `mad` command-line tool, and the build system (`Compressor`) that compiles the third-party C libraries from pinned sources. The code is published under the MIT licence; the `.mad` format is an open specification (see [`docs/`](docs/)), though the project's names and app artwork are not covered by the licence grant (see [`NOTICE`](NOTICE)).
+The repository is one self-contained project: the iPad/iPhone apps, the native macOS (`AppKit`) desktop app (`Mac/`), fourteen frameworks (twelve multiplatform across iOS, iOS Simulator, and native macOS; eleven headless on Linux), the headless Linux build and test suite (126 test executables, 1,303 tests), the `mad` command-line tool, and the build system (`Compressor`) that compiles the third-party C libraries from pinned sources. The code is published under the MIT licence; the `.mad` format is an open specification (see [`docs/`](docs/)), though the project's names and app artwork are not covered by the licence grant (see [`NOTICE`](NOTICE)).
 
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
@@ -16,7 +16,7 @@ Today, any developer can ask an LLM to generate a one-off SQL script and a React
 
 MAD solves the reporting problem at the **format and engine level**:
 
-* **Interoperability through a shared contract.** Instead of scattering ad hoc SQL and UI glue code across bespoke scripts, a `.mad` document packages the schema contract, the query AST, and the presentation layout into one inspectable, diffable, versioned artifact. The same 80 KB file opens natively on an iPad in the field, runs headlessly in a Linux Docker container, executes in GitHub Actions, or embeds inside another application — producing byte-identical SQL and exports across Apple and Linux.
+* **Interoperability through a shared contract.** Instead of scattering ad hoc SQL and UI glue code across bespoke scripts, a `.mad` document packages the schema contract, the query AST, and the presentation layout into one inspectable, diffable, versioned artifact. The same 80 KB file opens natively on macOS and iPad, runs headlessly in a Linux Docker container, executes in GitHub Actions, or embeds inside another application — producing byte-identical SQL and exports across Apple and Linux.
 * **Deterministic SQL and two-pass local math.** Neither the end user nor an AI model needs to hand-write dialect-specific SQL or compute totals in application code. The engine validates the query graph against the document's schema snapshot, compiles deterministic SQL for the wire driver, pulls the result set once into a local SQLite row cache (`MADDataTableFast`), and computes groupings, sort keys, and header/footer aggregates locally in two passes.
 * **Written, not assembled.** The SQL generator, the SQL parser, the data-table engine, the portable store, the layout model, and the page renderer are first-party Objective-C across fourteen frameworks. Third-party code is strictly limited to the wire — MariaDB Connector/C, FreeTDS, `libpq`, and SQLite — plus `libarchive`/`bzip2` and `zint` for barcodes. No proprietary reporting SDK is being resold.
 * **Mobile-first means memory-budgeted.** Because the result set is materialized into an indexed SQLite table on disk and pages are formatted into a geometry-keyed cache, a phone or a small container can paginate and aggregate hundred-thousand-row reports without holding the dataset in RAM.
@@ -25,11 +25,17 @@ The technical documentation and format specification are also served at <https:/
 
 ## See it
 
-MAD Designer, from choosing a data source to reading the finished report in MAD Viewer (28 seconds; [video](https://docs.everydayapps.com/assets/app-preview.mp4)):
+**[MAD Designer for macOS](docs/macos.md)** — the native `AppKit` desktop application (`Mac/`), showing the **MAD Query** visual relationship canvas and the **MAD Designer** banded layout workspace:
+
+![MAD Query workspace in the native macOS application](docs/assets/macos-native-mad-query.png)
+
+![MAD Designer workspace in the native macOS application](docs/assets/macos-native-mad-designer.png)
+
+**MAD Designer for iOS**, from choosing a data source to reading the finished report in MAD Viewer (28 seconds; [video](https://docs.everydayapps.com/assets/app-preview.mp4)):
 
 [![MAD Designer app preview](docs/assets/app-preview-poster.png)](https://docs.everydayapps.com/assets/app-preview.mp4)
 
-The same engine running headlessly on Linux: `inspect`, `schema`, `query`, `refresh`, and `export` through the `mad` CLI, with no reporting server:
+**The same engine running headlessly on Linux**: `inspect`, `schema`, `query`, `refresh`, and `export` through the `mad` CLI, with no reporting server:
 
 ![The mad CLI inspecting, querying, refreshing and exporting a .mad document](docs/assets/mad-cli-demo.gif)
 
@@ -118,9 +124,45 @@ A driver is a framework that subclasses `MADDatabase` and registers itself with 
 
 Eleven of the fourteen frameworks are UIKit-free and build headlessly. The `mad` CLI above is that engine wearing a command line: the verb set — `inspect`, `schema`, `query`, `refresh`, `export`, `write` — is the embedding surface, and an application that links `MAD`, a driver framework, and `MADSqlite3` has relational reporting with no server in the loop. Drivers and export formats (`<MADReportExporting>` / `MADReportExporterRegistry`) self-register, so adding a data source or an output format is a subclass, not a fork.
 
+## Native macOS application
+
+The native macOS desktop app ([`docs/macos.md`](docs/macos.md), [`Mac/`](Mac/)) is built directly with `AppKit` (`macosx` SDK, `MACOSX_DEPLOYMENT_TARGET = 12.0`) over the twelve multiplatform MAD frameworks and the ten universal (`arm64` + `x86_64`) static C libraries compiled by `Compressor`:
+
+* **Native `NSDocument` architecture (`MADMacDocument` / `MADMacDocumentController`):** Opens and saves `.mad` archives natively from Finder or the standard Open Panel (with an integrated **New Document** button), automatically migrates legacy Core Data `.mad` files via `MADStoreConverter`, and integrates `MADDesignerLayout` directly with `NSDocument.undoManager` (`Cmd+Z` / `Cmd+Shift+Z`).
+* **Database Connection & Schema Import Assistant (`MADMacConnectionWindowController`):** Connects to **SQLite**, **MySQL / MariaDB**, **Microsoft SQL Server**, or **PostgreSQL**, verifies connectivity, stores credentials in the macOS Keychain (`MADKeyChain`), and imports table and column schemas into a new `.mad` document.
+* **Three integrated workspaces** (`Cmd+1`, `Cmd+2`, `Cmd+3`):
+  1. **MAD Query (`MADMacQueryViewController`):** Toggles between the interactive **Query Designer** (draggable table cards, Bezier join connectors with clickable join-type badges, `WHERE` filter and `GROUP BY` popovers) and the **SQL Query** editor (`MADSQLParser` + `MADSQLQueryCompiler`).
+  2. **MAD Designer (`MADMacDesignerViewController`):** Three-pane split view with an interactive **Page & Section Minimap**, **Report Bands** outline, searchable **Query Fields** drag source, zoomable/ruled design canvas (`MADMacDesignerCanvasView`) with cross-section drag-and-drop and smart alignment guides, and a dual-card **Page & Element Inspector**.
+  3. **MAD Viewer (`MADMacViewerViewController`):** Live data refresh (`Cmd+R`), instant **Page Size** re-pagination (`US Letter`, `Legal`, `Tabloid`, `A3`, `A4`, `A5`, `B4`, `B5`, `JIS B4`, `JIS B5`), framed `PDFView` preview, native `NSPrintOperation` printing (`Cmd+P`), and export (`Cmd+E`) to **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report**, and **Plain Text**.
+
+See [`docs/macos.md`](docs/macos.md) for the full guide and [`docs/project/MAD_MACOS.md`](docs/project/MAD_MACOS.md) for the multiplatform portability audit.
+
 ## Build and test
 
-The iOS side is a workspace of fourteen frameworks plus the apps. Run a framework's suite against the iOS Simulator:
+The workspace (`Reports.xcworkspace`) builds the fourteen frameworks, the iOS apps, and the native macOS app (`MAD Designer Mac`).
+
+### Native macOS
+
+Build, run the end-to-end smoke test suite, and package `.zip` and `.dmg` release artifacts from the repository root:
+
+```sh
+./Mac/build.sh                     # build 12 macOS frameworks + Mac/build/MAD Designer.app
+./Mac/build.sh --no-frameworks     # rebuild only MAD Designer.app (fast iteration)
+./Mac/build.sh --smoke-test        # build and run the end-to-end macOS smoke suite
+./Mac/build.sh --package           # create Mac/build/MAD-Designer-macOS.zip and .dmg
+```
+
+You can also build and debug interactively in Xcode using the shared **`MAD Designer Mac`** scheme, or run any framework's unit test suite natively on macOS:
+
+```sh
+xcodebuild test -workspace Reports.xcworkspace -scheme MAD \
+	-destination 'platform=macOS,arch=arm64' \
+	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
+```
+
+### iOS Simulator
+
+Run a framework's suite against the iOS Simulator:
 
 ```sh
 xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
@@ -129,6 +171,8 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 ```
 
 (`MADMySQL`, `MADTdsClient`, and `MADPostgres` also carry live suites that talk to a real database server and skip when one is not reachable — see [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).)
+
+### Linux (Headless Engine & CLI)
 
 The headless engine is verified the same way on Linux. From the repository root, with Docker installed:
 
