@@ -718,6 +718,11 @@
 		4C3F11802EA0000100000180 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD696FF1AD92458008A9ED3 /* QuickLook.framework */; };
 		4C3F11812EA0000100000181 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1CC25724C5ED300027A454 /* CoreServices.framework */; };
 		4C9A00202EA0000000000001 /* MADMacAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000002 /* MADMacAppDelegate.m */; };
+		4C9A00202EA0000000000011 /* MADMacAboutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000017 /* MADMacAboutWindowController.m */; };
+		4C9A00222EA0000000000001 /* Licenses in Resources */ = {isa = PBXBuildFile; fileRef = 4C3F00292EA0000100000029 /* Licenses */; };
+		4C9A00222EA0000000000002 /* MADMeta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CBC501C1E1B508800B067AD /* MADMeta.plist */; };
+		4C9A00222EA0000000000003 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000018 /* LICENSE */; };
+		4C9A00222EA0000000000004 /* NOTICE in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000019 /* NOTICE */; };
 		4C9A00202EA0000000000002 /* MADMacConnectionWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000004 /* MADMacConnectionWindowController.m */; };
 		4C9A00202EA0000000000003 /* MADMacDesignerCanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000006 /* MADMacDesignerCanvasView.m */; };
 		4C9A00202EA0000000000004 /* MADMacDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000008 /* MADMacDesignerViewController.m */; };
@@ -1555,6 +1560,10 @@
 		4C9A00082EA0000000000001 /* MAD Designer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MAD Designer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C9A00102EA0000000000001 /* MADMacAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacAppDelegate.h; sourceTree = "<group>"; };
 		4C9A00102EA0000000000002 /* MADMacAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacAppDelegate.m; sourceTree = "<group>"; };
+		4C9A00102EA0000000000016 /* MADMacAboutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacAboutWindowController.h; sourceTree = "<group>"; };
+		4C9A00102EA0000000000017 /* MADMacAboutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacAboutWindowController.m; sourceTree = "<group>"; };
+		4C9A00102EA0000000000018 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = SOURCE_ROOT; };
+		4C9A00102EA0000000000019 /* NOTICE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = NOTICE; path = ../NOTICE; sourceTree = SOURCE_ROOT; };
 		4C9A00102EA0000000000003 /* MADMacConnectionWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacConnectionWindowController.h; sourceTree = "<group>"; };
 		4C9A00102EA0000000000004 /* MADMacConnectionWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacConnectionWindowController.m; sourceTree = "<group>"; };
 		4C9A00102EA0000000000005 /* MADMacDesignerCanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacDesignerCanvasView.h; sourceTree = "<group>"; };
@@ -2611,6 +2620,8 @@
 		4C9A00002EA0000000000002 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4C9A00102EA0000000000016 /* MADMacAboutWindowController.h */,
+				4C9A00102EA0000000000017 /* MADMacAboutWindowController.m */,
 				4C9A00102EA0000000000001 /* MADMacAppDelegate.h */,
 				4C9A00102EA0000000000002 /* MADMacAppDelegate.m */,
 				4C9A00102EA0000000000003 /* MADMacConnectionWindowController.h */,
@@ -2738,6 +2749,7 @@
 				4C9A00032EA0000000000001 /* Ensure Libraries (Compressor) */,
 				4C9A00042EA0000000000001 /* Sources */,
 				4C9A00052EA0000000000001 /* Frameworks */,
+				4C9A00062EA0000000000001 /* Resources */,
 				4C9A00072EA0000000000001 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -2976,6 +2988,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C9A00062EA0000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C9A00222EA0000000000001 /* Licenses in Resources */,
+				4C9A00222EA0000000000002 /* MADMeta.plist in Resources */,
+				4C9A00222EA0000000000003 /* LICENSE in Resources */,
+				4C9A00222EA0000000000004 /* NOTICE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3608,6 +3631,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C9A00202EA0000000000011 /* MADMacAboutWindowController.m in Sources */,
 				4C9A00202EA0000000000001 /* MADMacAppDelegate.m in Sources */,
 				4C9A00202EA0000000000002 /* MADMacConnectionWindowController.m in Sources */,
 				4C9A00202EA0000000000003 /* MADMacDesignerCanvasView.m in Sources */,

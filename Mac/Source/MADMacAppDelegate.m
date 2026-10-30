@@ -6,6 +6,7 @@
 //
 
 #import "MADMacAppDelegate.h"
+#import "MADMacAboutWindowController.h"
 #import "MADMacConnectionWindowController.h"
 #import "MADMacDocument.h"
 #import "MADMacDocumentController.h"
@@ -24,6 +25,7 @@
 @interface MADMacAppDelegate ()
 
 @property (nonatomic, strong, nullable) MADMacConnectionWindowController *connectionWindowController;
+@property (nonatomic, strong, readwrite) MADMacAboutWindowController *aboutWindowController;
 
 @end
 
@@ -70,7 +72,8 @@
 	NSMenuItem *appMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:appMenuItem];
 	NSMenu *appMenu = [[NSMenu alloc] initWithTitle:@"MAD Designer"];
-	[appMenu addItemWithTitle:@"About MAD Designer" action:@selector(orderFrontStandardAboutPanel:) keyEquivalent:@""];
+	NSMenuItem *aboutItem = [appMenu addItemWithTitle:@"About MAD Designer" action:@selector(showAboutWindow:) keyEquivalent:@""];
+	aboutItem.target = self;
 	[appMenu addItem:[NSMenuItem separatorItem]];
 	[appMenu addItemWithTitle:@"Hide MAD Designer" action:@selector(hide:) keyEquivalent:@"h"];
 	[appMenu addItemWithTitle:@"Quit MAD Designer" action:@selector(terminate:) keyEquivalent:@"q"];
@@ -129,9 +132,49 @@
 	[windowMenu addItemWithTitle:@"Zoom" action:@selector(performZoom:) keyEquivalent:@""];
 	[windowMenuItem setSubmenu:windowMenu];
 	[NSApp setWindowsMenu:windowMenu];
+
+	// Help Menu
+	NSMenuItem *helpMenuItem = [[NSMenuItem alloc] init];
+	[menubar addItem:helpMenuItem];
+	NSMenu *helpMenu = [[NSMenu alloc] initWithTitle:@"Help"];
+	NSMenuItem *overviewHelpItem = [helpMenu addItemWithTitle:@"MAD Designer Overview" action:@selector(showAboutOverview:) keyEquivalent:@""];
+	overviewHelpItem.target = self;
+	NSMenuItem *licensingHelpItem = [helpMenu addItemWithTitle:@"Licensing & Relink Notice" action:@selector(showAboutLicensing:) keyEquivalent:@""];
+	licensingHelpItem.target = self;
+	NSMenuItem *ackHelpItem = [helpMenu addItemWithTitle:@"Third-Party Acknowledgements" action:@selector(showAboutAcknowledgements:) keyEquivalent:@""];
+	ackHelpItem.target = self;
+	[helpMenuItem setSubmenu:helpMenu];
+	[NSApp setHelpMenu:helpMenu];
 }
 
 #pragma mark - Actions
+
+- (MADMacAboutWindowController *)aboutWindowController {
+	if (_aboutWindowController == nil) {
+		_aboutWindowController = [[MADMacAboutWindowController alloc] init];
+	}
+	return _aboutWindowController;
+}
+
+- (void)showAboutWindow:(nullable id)sender {
+	[self.aboutWindowController showWindow:sender];
+	[self.aboutWindowController.window makeKeyAndOrderFront:sender];
+}
+
+- (void)showAboutOverview:(nullable id)sender {
+	[self.aboutWindowController switchToTab:MADMacAboutTabOverview];
+	[self showAboutWindow:sender];
+}
+
+- (void)showAboutLicensing:(nullable id)sender {
+	[self.aboutWindowController switchToTab:MADMacAboutTabLicensing];
+	[self showAboutWindow:sender];
+}
+
+- (void)showAboutAcknowledgements:(nullable id)sender {
+	[self.aboutWindowController switchToTab:MADMacAboutTabAcknowledgements];
+	[self showAboutWindow:sender];
+}
 
 - (void)newDocumentFromDatabase:(nullable id) __unused sender {
 	MADMacDocumentController *docController = (MADMacDocumentController *)[NSDocumentController sharedDocumentController];

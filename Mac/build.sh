@@ -105,6 +105,13 @@ assemble_app_bundle() {
 		"${REPO_ROOT}/MADDesigner/Resources/MADFileDefinition/MAD.xcdatamodeld" \
 		"${RESOURCES_DIR}/MAD.momd"
 
+	# 3b. Bundle third-party license texts, notices, metadata, and icon
+	cp -R "${REPO_ROOT}/ThirdParty/Licenses" "${RESOURCES_DIR}/Licenses"
+	cp "${REPO_ROOT}/LICENSE" "${RESOURCES_DIR}/LICENSE"
+	cp "${REPO_ROOT}/NOTICE" "${RESOURCES_DIR}/NOTICE"
+	cp "${REPO_ROOT}/MADDesigner/Resources/Assets/MADMeta.plist" "${RESOURCES_DIR}/MADMeta.plist"
+	cp "${REPO_ROOT}/MADDesigner/Resources/Assets/Images.xcassets/AppIcon.appiconset/Icon-1024-Designer-Modern.png" "${RESOURCES_DIR}/AppIcon.png"
+
 	# 4. Compile native AppKit executable
 	echo "==> Compiling ${APP_NAME} (AppKit, arm64-apple-macos${DEPLOYMENT_TARGET})..."
 	# shellcheck disable=SC2046
@@ -173,6 +180,7 @@ run_smoke_test() {
 		-Wl,-rpath,"${FRAMEWORKS_DIR}" \
 		-Wl,-sectcreate,__TEXT,__info_plist,"${CONTENTS_DIR}/Info.plist" \
 		"${SCRIPT_DIR}/Tests/MADMacSmokeTest.m" \
+		"${SCRIPT_DIR}/Source/MADMacAboutWindowController.m" \
 		"${SCRIPT_DIR}/Source/MADMacDocumentController.m" \
 		"${SCRIPT_DIR}/Source/MADMacAppDelegate.m" \
 		"${SCRIPT_DIR}/Source/MADMacDocument.m" \
