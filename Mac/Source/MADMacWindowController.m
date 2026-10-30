@@ -143,9 +143,9 @@ static NSToolbarItemIdentifier const kToolbarItemPrint = @"MADToolbarPrint";
 	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 	if ([itemIdentifier isEqualToString:kToolbarItemWorkspace]) {
 		_workspaceSegmentedControl = [NSSegmentedControl segmentedControlWithLabels:@[
-			@"1. MAD Query",
-			@"2. MAD Designer",
-			@"3. MAD Viewer"
+			@"MAD Query",
+			@"MAD Designer",
+			@"MAD Viewer"
 		] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(workspaceSegmentAction:)];
 		_workspaceSegmentedControl.selectedSegment = MADMacWorkspaceTabDesigner;
 		item.label = @"Workspace";
