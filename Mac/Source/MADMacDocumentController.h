@@ -10,9 +10,17 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class UTType;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MADMacDocumentController : NSDocumentController
+
+/// Returns all UTType instances recognized as .mad report documents.
++ (NSArray<UTType *> *)allowedMadContentTypes;
+
+/// Returns all UTI and filename-extension strings recognized as .mad report documents.
++ (NSArray<NSString *> *)allowedMadTypeIdentifiers;
 
 /// Returns the currently active open panel, if one is currently visible.
 @property (nonatomic, weak, readonly, nullable) NSOpenPanel *activeOpenPanel;

@@ -297,7 +297,7 @@ int main(int argc, const char * argv[]) {
 
 		// 3a. Verify open panel configuration and direct "New Document" button (not hidden behind "Options")
 		NSOpenPanel *testPanel = [NSOpenPanel openPanel];
-		[macDocCtrl beginOpenPanel:testPanel forTypes:nil completionHandler:^(NSInteger __unused result) {}];
+		[macDocCtrl beginOpenPanel:testPanel forTypes:@[@"com.thomason.report.mad"] completionHandler:^(NSInteger __unused result) {}];
 
 		if (macDocCtrl.activeOpenPanel != testPanel) {
 			fprintf(stderr, "FAIL: activeOpenPanel was not tracked by MADMacDocumentController\n");
@@ -305,6 +305,44 @@ int main(int argc, const char * argv[]) {
 		}
 		if (testPanel.accessoryView != nil) {
 			fprintf(stderr, "FAIL: openPanel should not use accessoryView (which hides 'New Document' behind 'Options')\n");
+			return 16;
+		}
+
+		// Verify existing .mad files on disk match testPanel.allowedContentTypes (not dimmed out in NSOpenPanel)
+		NSURL *sampleLondonURL = [NSURL fileURLWithPath:sampleLondonPath];
+		UTType *fileContentType = nil;
+		[sampleLondonURL getResourceValue:&fileContentType forKey:NSURLContentTypeKey error:NULL];
+		BOOL matchesAllowedType = NO;
+		for (UTType *allowedType in testPanel.allowedContentTypes) {
+			if ((fileContentType != nil && [fileContentType conformsToType:allowedType]) ||
+				[allowedType.identifier isEqualToString:@"com.everydayapps.productivity.mad"]) {
+				matchesAllowedType = YES;
+				break;
+			}
+		}
+		if (!matchesAllowedType) {
+			fprintf(stderr, "FAIL: openPanel.allowedContentTypes (%s) does not match .mad file UTType (%s)\n",
+					testPanel.allowedContentTypes.description.UTF8String,
+					fileContentType.identifier.UTF8String);
+			return 16;
+		}
+
+		// Verify NSDocumentController can resolve document type, document class, and instantiate MADMacDocument from URL
+		NSString *resolvedType = [macDocCtrl typeForContentsOfURL:sampleLondonURL error:&err];
+		Class resolvedDocClass = resolvedType != nil ? [macDocCtrl documentClassForType:resolvedType] : Nil;
+		if (resolvedDocClass != [MADMacDocument class]) {
+			fprintf(stderr, "FAIL: documentClassForType:(%s) returned %s instead of MADMacDocument\n",
+					resolvedType.UTF8String,
+					resolvedDocClass ? NSStringFromClass(resolvedDocClass).UTF8String : "Nil");
+			return 16;
+		}
+		__kindof NSDocument *openedViaController = [macDocCtrl makeDocumentWithContentsOfURL:sampleLondonURL
+																					  ofType:resolvedType
+																					   error:&err];
+		if (![openedViaController isKindOfClass:[MADMacDocument class]] ||
+			((MADMacDocument *)openedViaController).headlessDocument == nil) {
+			fprintf(stderr, "FAIL: makeDocumentWithContentsOfURL failed for existing .mad file: %s\n",
+					err.localizedDescription.UTF8String);
 			return 16;
 		}
 
