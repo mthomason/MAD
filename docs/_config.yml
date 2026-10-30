@@ -1,0 +1,31 @@
+# The documentation site's Jekyll configuration (GitHub Pages, source: /docs).
+# English pages live at the site root; the Simplified Chinese translation
+# mirrors them under zh/.  Both trees share the theme, the layouts, and the
+# language switcher in _layouts/default.html.
+
+title: MAD
+description: >-
+  An open format and embeddable engine for relational reporting — where every
+  report is a portable query graph, a materialized SQLite table, and a
+  parametric layout.
+theme: jekyll-theme-primer
+lang: en-US
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
+  - jekyll-readme-index
+  - jekyll-default-layout
+  - jekyll-titles-from-headings
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+  - scope:
+      path: "zh"
+    values:
+      lang: zh-CN
+      locale: zh_CN

@@ -1,3 +1,5 @@
+**English** | [简体中文](README_zh.md)
+
 # Mac — the native macOS (`AppKit`) application
 
 `Mac/` contains the native macOS (`AppKit`, `macosx` SDK, `MACOSX_DEPLOYMENT_TARGET = 12.0`) frontend for **MAD Designer**, built over the twelve multiplatform MAD frameworks (`MADFoundation`, `MADDataStructures`, `MADCocoaExtensions`, `MADFileManager`, `MADAPI`, `MADSqlite3`, `MADTds`, `MADTdsClient`, `MADMySQL`, `MADPostgres`, `MADBarcodes`, and `MAD`) and the ten universal (`arm64` + `x86_64`) static C libraries built by `Compressor`.
