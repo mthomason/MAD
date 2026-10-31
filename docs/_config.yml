@@ -1,7 +1,7 @@
 # The documentation site's Jekyll configuration (GitHub Pages, source: /docs).
-# English pages live at the site root; the Simplified Chinese translation
-# mirrors them under zh/.  Both trees share the theme, the layouts, and the
-# language switcher in _layouts/default.html.
+# English pages live at the site root; the Simplified Chinese and Japanese
+# translations mirror them under zh/ and ja/.  All trees share the theme, the
+# layouts, and the language switcher in _layouts/default.html.
 
 title: MAD
 description: >-
@@ -10,6 +10,12 @@ description: >-
   parametric layout.
 theme: jekyll-theme-primer
 lang: en-US
+
+exclude:
+  - project
+  - archive
+  - zh/project
+  - zh/archive
 
 plugins:
   - jekyll-seo-tag
@@ -29,3 +35,8 @@ defaults:
     values:
       lang: zh-CN
       locale: zh_CN
+  - scope:
+      path: "ja"
+    values:
+      lang: ja-JP
+      locale: ja_JP
