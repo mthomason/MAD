@@ -1,6 +1,6 @@
 ---
 layout: default
-title: MAD — Mobile Analytics Document
+title: MAD — モバイル分析ドキュメント (Mobile Analytics Document)
 lang: ja-JP
 ---
 
