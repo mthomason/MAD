@@ -1,4 +1,4 @@
-[English](README.md) | **简体中文**
+[English](README.md) | **简体中文** | [日本語](README_ja.md)
 
 ## 关于 iCloud 的细节
 

@@ -1,4 +1,4 @@
-[English](CONTRIBUTING.md) | **简体中文**
+[English](CONTRIBUTING.md) | **简体中文** | [日本語](CONTRIBUTING_ja.md)
 
 # 为 MAD 做贡献
 

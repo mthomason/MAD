@@ -1,4 +1,4 @@
-[English](README.md) | **简体中文**
+[English](README.md) | **简体中文** | [日本語](README_ja.md)
 
 # Mac —— 原生 macOS（`AppKit`）应用
 
