@@ -110,7 +110,8 @@ assemble_app_bundle() {
 	cp "${REPO_ROOT}/LICENSE" "${RESOURCES_DIR}/LICENSE"
 	cp "${REPO_ROOT}/NOTICE" "${RESOURCES_DIR}/NOTICE"
 	cp "${REPO_ROOT}/MADDesigner/Resources/Assets/MADMeta.plist" "${RESOURCES_DIR}/MADMeta.plist"
-	cp "${REPO_ROOT}/MADDesigner/Resources/Assets/Images.xcassets/AppIcon.appiconset/Icon-1024-Designer-Modern.png" "${RESOURCES_DIR}/AppIcon.png"
+	cp "${SCRIPT_DIR}/Resources/AppIcon.icns" "${RESOURCES_DIR}/AppIcon.icns"
+	cp "${REPO_ROOT}/docs/assets/mad-designer-macos-icon-512.png" "${RESOURCES_DIR}/AppIcon.png"
 
 	# 4. Compile native AppKit executable
 	echo "==> Compiling ${APP_NAME} (AppKit, arm64-apple-macos${DEPLOYMENT_TARGET})..."

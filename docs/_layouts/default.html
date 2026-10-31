@@ -40,6 +40,14 @@
     <link rel="alternate" hreflang="ja-JP" href="{{ japanese_url | absolute_url }}">
     <link rel="alternate" hreflang="pt-BR" href="{{ portuguese_url | absolute_url }}">
     <link rel="alternate" hreflang="x-default" href="{{ english_url | absolute_url }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ "/assets/favicon-96x96.png" | relative_url }}">
+    <link rel="icon" type="image/png" sizes="48x48" href="{{ "/assets/favicon-48x48.png" | relative_url }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ "/assets/favicon-32x32.png" | relative_url }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ "/assets/favicon-16x16.png" | relative_url }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ "/assets/apple-touch-icon.png" | relative_url }}">
+    <link rel="shortcut icon" href="{{ "/favicon.ico" | relative_url }}">
+    <link rel="manifest" href="{{ "/site.webmanifest" | relative_url }}">
+    <meta name="theme-color" content="#0AA0D5">
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
     {% include head-custom.html %}
   </head>
@@ -70,7 +78,7 @@
       </nav>
 
       {% if site.title and site.title != page.title %}
-      <h1><a href="{% if is_zh %}{{ "/zh/" | relative_url }}{% elsif is_ja %}{{ "/ja/" | relative_url }}{% elsif is_pt %}{{ "/pt-br/" | relative_url }}{% else %}{{ "/" | absolute_url }}{% endif %}">{{ site.title }}</a></h1>
+      <h1><a href="{% if is_zh %}{{ "/zh/" | relative_url }}{% elsif is_ja %}{{ "/ja/" | relative_url }}{% elsif is_pt %}{{ "/pt-br/" | relative_url }}{% else %}{{ "/" | absolute_url }}{% endif %}"><img src="{{ "/assets/mad-designer-macos-icon-128.png" | relative_url }}" alt="MAD Designer icon" width="36" height="36" style="vertical-align: middle; margin-right: 8px;" />{{ site.title }}</a></h1>
       {% endif %}
 
       {{ content }}

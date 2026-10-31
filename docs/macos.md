@@ -1,9 +1,12 @@
 ---
 layout: default
 title: MAD Designer for macOS
+description: >-
+  Native macOS (AppKit) relational report designer and viewer for SQLite, MySQL, MariaDB, PostgreSQL, and SQL Server — visual query canvas, banded report designer with minimap, and PDF/HTML/CSV/JSON export.
+image: /assets/macos-native-mad-designer.png
 ---
 
-# MAD Designer for macOS
+# <a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="assets/mad-designer-macos-icon-256.png" alt="MAD Designer for macOS icon" width="48" height="48" style="vertical-align: middle; margin-right: 10px;" /></a>MAD Designer for macOS
 
 **MAD Designer for macOS** is a native `AppKit` desktop application (`macosx` SDK, `MACOSX_DEPLOYMENT_TARGET = 12.0`) for creating, querying, laying out, refreshing, printing, and exporting Mobile Analytics Documents (`.mad`). It links the same first-party Objective-C frameworks and universal static C libraries (`Compressor`) that power the iOS apps and the headless engine.
 

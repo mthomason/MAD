@@ -558,12 +558,12 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 
 	_appIconImageView = [[NSImageView alloc] initWithFrame:NSMakeRect(24, headerHeight - 92, 72, 72)];
 	_appIconImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
-	NSString *iconPath = [_resourceBundle pathForResource:@"AppIcon" ofType:@"png"];
+	NSString *iconPath = [_resourceBundle pathForResource:@"AppIcon" ofType:@"icns"];
+	if (iconPath.length == 0) {
+		iconPath = [_resourceBundle pathForResource:@"AppIcon" ofType:@"png"];
+	}
 	NSImage *iconImage = iconPath.length > 0 ? [[NSImage alloc] initWithContentsOfFile:iconPath] : [NSApp applicationIconImage];
 	_appIconImageView.image = iconImage;
-	_appIconImageView.wantsLayer = YES;
-	_appIconImageView.layer.cornerRadius = 16.0;
-	_appIconImageView.layer.masksToBounds = YES;
 	[headerView addSubview:_appIconImageView];
 
 	NSString *displayName = [MADMacAboutWindowController bundleDisplayNameForBundle:_resourceBundle];

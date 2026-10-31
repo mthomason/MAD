@@ -1,6 +1,6 @@
 [English](README.md) | [简体中文](README_zh.md) | **日本語** | [Português (Brasil)](README_pt-BR.md)
 
-# Mac — ネイティブmacOS（`AppKit`）アプリケーション
+# <a href="../StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../docs/assets/mad-designer-macos-icon-256.png" alt="MAD Designer アイコン" width="44" height="44" align="absmiddle" /></a> Mac — ネイティブmacOS（`AppKit`）アプリケーション
 
 `Mac/`には、12個のマルチプラットフォームMADフレームワーク（`MADFoundation`、`MADDataStructures`、`MADCocoaExtensions`、`MADFileManager`、`MADAPI`、`MADSqlite3`、`MADTds`、`MADTdsClient`、`MADMySQL`、`MADPostgres`、`MADBarcodes`、および`MAD`）と`Compressor`がビルドする10個のユニバーサル（`arm64` + `x86_64`）静的Cライブラリの上に構築された、**MAD Designer**のネイティブmacOS（`AppKit`、`macosx` SDK、`MACOSX_DEPLOYMENT_TARGET = 12.0`）フロントエンドが格納されています。
 

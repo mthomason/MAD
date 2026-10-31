@@ -813,6 +813,16 @@ int main(int argc, const char * argv[]) {
 			fprintf(stderr, "FAIL: Could not load NSBundle for packaged app at %s\n", appPath.UTF8String);
 			return 66;
 		}
+		NSString *bundleIconFile = [packagedAppBundle objectForInfoDictionaryKey:@"CFBundleIconFile"];
+		NSString *icnsPath = [packagedAppBundle pathForResource:@"AppIcon" ofType:@"icns"];
+		NSImage *icnsImage = icnsPath.length > 0 ? [[NSImage alloc] initWithContentsOfFile:icnsPath] : nil;
+		if (![bundleIconFile isEqualToString:@"AppIcon"] || icnsImage == nil || icnsImage.representations.count < 5) {
+			fprintf(stderr, "FAIL: Packaged app bundle missing valid AppIcon.icns or CFBundleIconFile metadata (iconFile='%s', icnsPath='%s', reps=%lu)\n",
+					bundleIconFile.UTF8String ?: "(null)",
+					icnsPath.UTF8String ?: "(null)",
+					(unsigned long)icnsImage.representations.count);
+			return 66;
+		}
 		for (NSDictionary<NSString *, NSString *> *licenseEntry in [MADMacAboutWindowController bundledLicenseFiles]) {
 			NSString *licenseFile = licenseEntry[@"file"];
 			NSString *bundledLicensePath = [packagedAppBundle pathForResource:licenseFile ofType:nil inDirectory:@"Licenses"];

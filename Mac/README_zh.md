@@ -1,6 +1,6 @@
 [English](README.md) | **简体中文** | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md)
 
-# Mac —— 原生 macOS（`AppKit`）应用
+# <a href="../StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../docs/assets/mad-designer-macos-icon-256.png" alt="MAD Designer 图标" width="44" height="44" align="absmiddle" /></a> Mac —— 原生 macOS（`AppKit`）应用
 
 `Mac/` 包含 **MAD Designer** 的原生 macOS 前端（`AppKit`、`macosx` SDK、`MACOSX_DEPLOYMENT_TARGET = 12.0`），它构建在十二个多平台 MAD 框架（`MADFoundation`、`MADDataStructures`、`MADCocoaExtensions`、`MADFileManager`、`MADAPI`、`MADSqlite3`、`MADTds`、`MADTdsClient`、`MADMySQL`、`MADPostgres`、`MADBarcodes` 和 `MAD`）以及由 `Compressor` 构建的十个通用（`arm64` + `x86_64`）静态 C 库之上。
 

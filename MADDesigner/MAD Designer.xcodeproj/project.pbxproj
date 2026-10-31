@@ -767,6 +767,7 @@
 		4C9A00222EA000000000000A /* MADPostgres.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29161324AC75E300EC799B /* MADPostgres.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C9A00222EA000000000000B /* MADBarcodes.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160924AC75E300EC794B /* MADBarcodes.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C9A00222EA000000000000C /* MAD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4C29160724AC75E300EC794B /* MAD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4C9A00232EA0000000000001 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA000000000001A /* AppIcon.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1582,6 +1583,7 @@
 		4C9A00102EA0000000000010 /* MADMacWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacWindowController.m; sourceTree = "<group>"; };
 		4C9A00102EA0000000000011 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4C9A00102EA0000000000012 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C9A00102EA000000000001A /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		4C9A00102EA0000000000013 /* MADMacSmokeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacSmokeTest.m; sourceTree = "<group>"; };
 		4C9A00102EA0000000000020 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4C9A00102EA0000000000021 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -2648,6 +2650,7 @@
 		4C9A00002EA0000000000003 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4C9A00102EA000000000001A /* AppIcon.icns */,
 				4C9A00102EA0000000000012 /* Info.plist */,
 			);
 			path = Resources;
@@ -2995,6 +2998,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C9A00232EA0000000000001 /* AppIcon.icns in Resources */,
 				4C9A00222EA0000000000001 /* Licenses in Resources */,
 				4C9A00222EA0000000000002 /* MADMeta.plist in Resources */,
 				4C9A00222EA0000000000003 /* LICENSE in Resources */,

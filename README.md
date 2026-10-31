@@ -1,6 +1,6 @@
 **English** | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md)
 
-# MAD (Mobile Analytics Document)
+# <a href="StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="docs/assets/mad-designer-macos-icon-256.png" alt="MAD Designer icon" width="44" height="44" align="absmiddle" /></a> MAD (Mobile Analytics Document)
 
 **An open format and embeddable engine for relational reporting — where every report is a portable query graph, a materialized SQLite table, and a parametric layout.**
 

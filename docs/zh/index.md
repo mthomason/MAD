@@ -1,10 +1,13 @@
 ---
 layout: default
 title: MAD — 移动分析文档
+description: >-
+  面向关系型报表的开放格式与可嵌入引擎——适用于原生 macOS（AppKit）与 iOS 的 MAD Designer 和 MAD Viewer、面向 Linux 与 macOS 的无头 mad CLI，以及开放的 .mad 规范。
+image: /assets/mad-icons-banner.png
 lang: zh-CN
 ---
 
-**面向关系型报表的开放格式与可嵌入引擎——在这里，每一份报表都是一个可移植的查询图、一张物化的 SQLite 表和一套参数化布局。**
+<p><a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../assets/mad-designer-macos-icon-256.png" alt="MAD Designer 图标" width="64" height="64" align="left" style="margin-right: 16px; margin-bottom: 8px;" /></a><strong>面向关系型报表的开放格式与可嵌入引擎——在这里，每一份报表都是一个可移植的查询图、一张物化的 SQLite 表和一套参数化布局。</strong></p>
 
 MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席查询、报表和设计：面向 iOS 与原生 macOS（`AppKit`）的 **MAD Designer** 和 **MAD Viewer** 应用，在 Linux 与 macOS 上以无头方式运行它们的引擎，以及开放的 `.mad` 文档格式。一个 `.mad` 文件在不到 100 KB 的体积内保存报表的完整定义——数据库架构快照、查询图（表、连接、谓词、分组）以及各元素的带区布局——并与刷新时生成的物化 SQLite 表（`.maddb` + `.mdcache`）清晰分离。
 

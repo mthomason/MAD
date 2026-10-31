@@ -5,10 +5,21 @@
 # _layouts/default.html.
 
 title: MAD
+tagline: Mobile Analytics Document — Open Relational Reporting Format, Engine, and Native macOS & iOS Designer
 description: >-
   An open format and embeddable engine for relational reporting — where every
   report is a portable query graph, a materialized SQLite table, and a
   parametric layout.
+url: https://docs.everydayapps.com
+logo: /assets/mad-designer-icon-512.png
+author:
+  name: Michael Thomason
+  url: https://github.com/mthomason
+social:
+  name: MAD — Mobile Analytics Document
+  links:
+    - https://github.com/mthomason/MAD
+    - https://mad.everydayapps.com
 theme: jekyll-theme-primer
 lang: en-US
 
@@ -31,6 +42,7 @@ defaults:
       path: ""
     values:
       layout: default
+      image: /assets/macos-native-mad-designer.png
   - scope:
       path: "zh"
     values:

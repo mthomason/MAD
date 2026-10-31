@@ -13,6 +13,8 @@
 			<array>
 				<string>mad</string>
 			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>AppIcon</string>
 			<key>CFBundleTypeName</key>
 			<string>Mobile Analytics Document</string>
 			<key>CFBundleTypeRole</key>
@@ -32,6 +34,10 @@
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>

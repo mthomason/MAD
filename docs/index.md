@@ -1,8 +1,11 @@
 ---
 title: MAD — Mobile Analytics Document
+description: >-
+  An open format and embeddable engine for relational reporting — MAD Designer & MAD Viewer for native macOS (AppKit) and iOS, the headless mad CLI for Linux and macOS, and the open .mad specification.
+image: /assets/mad-icons-banner.png
 ---
 
-**An open format and embeddable engine for relational reporting — where every report is a portable query graph, a materialized SQLite table, and a parametric layout.**
+<p><a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="assets/mad-designer-macos-icon-256.png" alt="MAD Designer icon" width="64" height="64" align="left" style="margin-right: 16px; margin-bottom: 8px;" /></a><strong>An open format and embeddable engine for relational reporting — where every report is a portable query graph, a materialized SQLite table, and a parametric layout.</strong></p>
 
 MAD is an embedded relational reporting platform for ad hoc query, reporting, and design: the **MAD Designer** and **MAD Viewer** apps for iOS and native macOS (`AppKit`), the headless engine that runs them on Linux and macOS, and the open `.mad` document format. A `.mad` file holds a report's whole definition — the database schema snapshot, the query graph (tables, joins, predicates, groupings), and the banded layout of its elements — in under 100 KB, cleanly separated from the materialized SQLite table (`.maddb` + `.mdcache`) it produces on refresh.
 

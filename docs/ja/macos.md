@@ -1,10 +1,13 @@
 ---
 layout: default
 title: MAD Designer for macOS
+description: >-
+  SQLite、MySQL、MariaDB、PostgreSQL、およびSQL Serverに対応するネイティブmacOS（AppKit）リレーショナルレポートデザイナー＆ビューア——ビジュアルクエリキャンバス、ミニマップ付きバンド型レポートデザイナー、PDF/HTML/CSV/JSONエクスポート。
+image: /assets/macos-native-mad-designer.png
 lang: ja-JP
 ---
 
-# MAD Designer for macOS
+# <a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../assets/mad-designer-macos-icon-256.png" alt="MAD Designer for macOS アイコン" width="48" height="48" style="vertical-align: middle; margin-right: 10px;" /></a>MAD Designer for macOS
 
 **MAD Designer for macOS**は、Mobile Analytics Document（`.mad`）の作成、クエリ設計、レイアウト編集、データ更新、印刷、およびエクスポートを行うネイティブ`AppKit`デスクトップアプリケーション（`macosx` SDK、`MACOSX_DEPLOYMENT_TARGET = 12.0`）です。iOSアプリやヘッドレスエンジンを支えているものと同じファーストパーティのObjective-Cフレームワーク群およびユニバーサル静的Cライブラリ（`Compressor`）をリンクしています。
 
