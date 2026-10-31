@@ -1,6 +1,6 @@
 **English** | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md)
 
-# Mac — the native macOS (`AppKit`) application
+# <a href="../StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../docs/assets/mad-designer-macos-icon-256.png" alt="MAD Designer icon" width="44" height="44" align="absmiddle" /></a> Mac — the native macOS (`AppKit`) application
 
 `Mac/` contains the native macOS (`AppKit`, `macosx` SDK, `MACOSX_DEPLOYMENT_TARGET = 12.0`) frontend for **MAD Designer**, built over the twelve multiplatform MAD frameworks (`MADFoundation`, `MADDataStructures`, `MADCocoaExtensions`, `MADFileManager`, `MADAPI`, `MADSqlite3`, `MADTds`, `MADTdsClient`, `MADMySQL`, `MADPostgres`, `MADBarcodes`, and `MAD`) and the ten universal (`arm64` + `x86_64`) static C libraries built by `Compressor`.
 

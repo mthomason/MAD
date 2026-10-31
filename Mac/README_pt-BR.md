@@ -1,6 +1,6 @@
 [English](README.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | **Português (Brasil)**
 
-# Mac — o aplicativo nativo para macOS (`AppKit`)
+# <a href="../StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../docs/assets/mad-designer-macos-icon-256.png" alt="Ícone do MAD Designer" width="44" height="44" align="absmiddle" /></a> Mac — o aplicativo nativo para macOS (`AppKit`)
 
 `Mac/` contém o frontend nativo para macOS (`AppKit`, SDK `macosx`, `MACOSX_DEPLOYMENT_TARGET = 12.0`) do **MAD Designer**, construído sobre os doze frameworks MAD multiplataforma (`MADFoundation`, `MADDataStructures`, `MADCocoaExtensions`, `MADFileManager`, `MADAPI`, `MADSqlite3`, `MADTds`, `MADTdsClient`, `MADMySQL`, `MADPostgres`, `MADBarcodes` e `MAD`) e as dez bibliotecas C estáticas universais (`arm64` + `x86_64`) compiladas pelo `Compressor`.
 

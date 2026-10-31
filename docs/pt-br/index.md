@@ -1,10 +1,13 @@
 ---
 layout: default
 title: MAD — Documento Analítico Móvel (Mobile Analytics Document)
+description: >-
+  Um formato aberto e uma engine embarcável para relatórios relacionais — MAD Designer e MAD Viewer para macOS nativo (AppKit) e iOS, a CLI headless mad para Linux e macOS, e a especificação aberta .mad.
+image: /assets/mad-icons-banner.png
 lang: pt-BR
 ---
 
-**Um formato aberto e uma engine embarcável para relatórios relacionais — onde cada relatório é um grafo de consulta portável, uma tabela SQLite materializada e um layout paramétrico.**
+<p><a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../assets/mad-designer-macos-icon-256.png" alt="Ícone do MAD Designer" width="64" height="64" align="left" style="margin-right: 16px; margin-bottom: 8px;" /></a><strong>Um formato aberto e uma engine embarcável para relatórios relacionais — onde cada relatório é um grafo de consulta portável, uma tabela SQLite materializada e um layout paramétrico.</strong></p>
 
 O MAD é uma plataforma embarcada de relatórios relacionais para consultas ad hoc, geração de relatórios e design: os aplicativos **MAD Designer** e **MAD Viewer** para iOS e macOS nativo (`AppKit`), a engine headless que os executa em Linux e macOS, e o formato aberto de documento `.mad`. Um arquivo `.mad` armazena toda a definição de um relatório — o snapshot do esquema do banco de dados, o grafo de consulta (tabelas, joins, predicados, agrupamentos) e o layout em bandas de seus elementos — em menos de 100 KB, claramente separado da tabela SQLite materializada (`.maddb` + `.mdcache`) que ele produz ao atualizar os dados.
 

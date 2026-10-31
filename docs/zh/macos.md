@@ -1,10 +1,13 @@
 ---
 layout: default
 title: 适用于 macOS 的 MAD Designer
+description: >-
+  适用于 SQLite、MySQL、MariaDB、PostgreSQL 和 SQL Server 的原生 macOS（AppKit）关系型报表设计器与查看器——可视化查询画布、带缩略图的带区报表设计器，以及 PDF/HTML/CSV/JSON 导出。
+image: /assets/macos-native-mad-designer.png
 lang: zh-CN
 ---
 
-# 适用于 macOS 的 MAD Designer
+# <a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../assets/mad-designer-macos-icon-256.png" alt="适用于 macOS 的 MAD Designer 图标" width="48" height="48" style="vertical-align: middle; margin-right: 10px;" /></a>适用于 macOS 的 MAD Designer
 
 **MAD Designer for macOS** 是一款原生 `AppKit` 桌面应用（`macosx` SDK，`MACOSX_DEPLOYMENT_TARGET = 12.0`），用于创建、查询、布局、刷新、打印和导出移动分析文档（`.mad`）。它链接与 iOS 应用和无头引擎相同的第一方 Objective-C 框架和通用静态 C 库（`Compressor`）。
 
