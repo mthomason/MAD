@@ -2,12 +2,16 @@
 {% assign page_lang = page.lang | default: site.lang | default: "en-US" %}
 {% assign is_zh = false %}
 {% assign is_ja = false %}
+{% assign is_pt = false %}
 {% if page_lang contains "zh" %}{% assign is_zh = true %}{% endif %}
 {% if page_lang contains "ja" %}{% assign is_ja = true %}{% endif %}
+{% if page_lang contains "pt" %}{% assign is_pt = true %}{% endif %}
 {% if is_zh %}
   {% assign base_url = page.url | remove_first: "/zh" %}
 {% elsif is_ja %}
   {% assign base_url = page.url | remove_first: "/ja" %}
+{% elsif is_pt %}
+  {% assign base_url = page.url | remove_first: "/pt-br" %}
 {% else %}
   {% assign base_url = page.url %}
 {% endif %}
@@ -15,12 +19,15 @@
 {% assign english_candidate = base_url %}
 {% assign chinese_candidate = "/zh" | append: base_url %}
 {% assign japanese_candidate = "/ja" | append: base_url %}
+{% assign portuguese_candidate = "/pt-br" | append: base_url %}
 {% assign english_match = site.pages | where: "url", english_candidate | first %}
 {% assign chinese_match = site.pages | where: "url", chinese_candidate | first %}
 {% assign japanese_match = site.pages | where: "url", japanese_candidate | first %}
+{% assign portuguese_match = site.pages | where: "url", portuguese_candidate | first %}
 {% if english_match %}{% assign english_url = english_candidate %}{% else %}{% assign english_url = "/" %}{% endif %}
 {% if chinese_match %}{% assign chinese_url = chinese_candidate %}{% else %}{% assign chinese_url = "/zh/" %}{% endif %}
 {% if japanese_match %}{% assign japanese_url = japanese_candidate %}{% else %}{% assign japanese_url = "/ja/" %}{% endif %}
+{% if portuguese_match %}{% assign portuguese_url = portuguese_candidate %}{% else %}{% assign portuguese_url = "/pt-br/" %}{% endif %}
 <html lang="{{ page_lang }}">
   <head>
     <meta charset="UTF-8">
@@ -31,6 +38,7 @@
     <link rel="alternate" hreflang="en" href="{{ english_url | absolute_url }}">
     <link rel="alternate" hreflang="zh-CN" href="{{ chinese_url | absolute_url }}">
     <link rel="alternate" hreflang="ja-JP" href="{{ japanese_url | absolute_url }}">
+    <link rel="alternate" hreflang="pt-BR" href="{{ portuguese_url | absolute_url }}">
     <link rel="alternate" hreflang="x-default" href="{{ english_url | absolute_url }}">
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
     {% include head-custom.html %}
@@ -42,19 +50,27 @@
         <a href="{{ english_url | relative_url }}" lang="en" hreflang="en">English</a>
         <span aria-current="page" lang="zh-CN">简体中文</span>
         <a href="{{ japanese_url | relative_url }}" lang="ja-JP" hreflang="ja-JP">日本語</a>
+        <a href="{{ portuguese_url | relative_url }}" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a>
         {% elsif is_ja %}
         <a href="{{ english_url | relative_url }}" lang="en" hreflang="en">English</a>
         <a href="{{ chinese_url | relative_url }}" lang="zh-CN" hreflang="zh-CN">简体中文</a>
         <span aria-current="page" lang="ja-JP">日本語</span>
+        <a href="{{ portuguese_url | relative_url }}" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a>
+        {% elsif is_pt %}
+        <a href="{{ english_url | relative_url }}" lang="en" hreflang="en">English</a>
+        <a href="{{ chinese_url | relative_url }}" lang="zh-CN" hreflang="zh-CN">简体中文</a>
+        <a href="{{ japanese_url | relative_url }}" lang="ja-JP" hreflang="ja-JP">日本語</a>
+        <span aria-current="page" lang="pt-BR">Português (Brasil)</span>
         {% else %}
         <span aria-current="page" lang="en">English</span>
         <a href="{{ chinese_url | relative_url }}" lang="zh-CN" hreflang="zh-CN">简体中文</a>
         <a href="{{ japanese_url | relative_url }}" lang="ja-JP" hreflang="ja-JP">日本語</a>
+        <a href="{{ portuguese_url | relative_url }}" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a>
         {% endif %}
       </nav>
 
       {% if site.title and site.title != page.title %}
-      <h1><a href="{% if is_zh %}{{ "/zh/" | relative_url }}{% elsif is_ja %}{{ "/ja/" | relative_url }}{% else %}{{ "/" | absolute_url }}{% endif %}">{{ site.title }}</a></h1>
+      <h1><a href="{% if is_zh %}{{ "/zh/" | relative_url }}{% elsif is_ja %}{{ "/ja/" | relative_url }}{% elsif is_pt %}{{ "/pt-br/" | relative_url }}{% else %}{{ "/" | absolute_url }}{% endif %}">{{ site.title }}</a></h1>
       {% endif %}
 
       {{ content }}
@@ -63,10 +79,12 @@
       <p class="translation-note"><small>本页为英文原文的简体中文翻译；如有出入，以<a href="{{ english_url | relative_url }}" hreflang="en">英文原文</a>为准。</small></p>
       {% elsif is_ja %}
       <p class="translation-note"><small>このページは英語原文の日本語翻訳です。内容に相違がある場合は、<a href="{{ english_url | relative_url }}" hreflang="en">英語原文</a>が優先されます。</small></p>
+      {% elsif is_pt %}
+      <p class="translation-note"><small>Esta página é uma tradução para o português do Brasil do original em inglês; em caso de divergência, prevalece a <a href="{{ english_url | relative_url }}" hreflang="en">versão original em inglês</a>.</small></p>
       {% endif %}
 
       <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
-        {% if is_zh %}本站点为开源项目。<a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">改进此页</a>。{% elsif is_ja %}このサイトはオープンソースです。<a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">このページを改善する</a>。{% else %}This site is open source. <a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">Improve this page</a>.{% endif %}
+        {% if is_zh %}本站点为开源项目。<a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">改进此页</a>。{% elsif is_ja %}このサイトはオープンソースです。<a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">このページを改善する</a>。{% elsif is_pt %}Este site é open source. <a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">Melhore esta página</a>.{% else %}This site is open source. <a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">Improve this page</a>.{% endif %}
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>

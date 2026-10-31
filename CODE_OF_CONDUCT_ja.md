@@ -1,4 +1,4 @@
-[English](CODE_OF_CONDUCT.md) | [简体中文](CODE_OF_CONDUCT_zh.md) | **日本語**
+[English](CODE_OF_CONDUCT.md) | [简体中文](CODE_OF_CONDUCT_zh.md) | **日本語** | [Português (Brasil)](CODE_OF_CONDUCT_pt-BR.md)
 
 # Contributor Covenant 行動規範
 

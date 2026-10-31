@@ -1,4 +1,4 @@
-[English](SECURITY.md) | [简体中文](SECURITY_zh.md) | **日本語**
+[English](SECURITY.md) | [简体中文](SECURITY_zh.md) | **日本語** | [Português (Brasil)](SECURITY_pt-BR.md)
 
 # セキュリティポリシー
 
