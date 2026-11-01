@@ -15,7 +15,6 @@ O repositório é um projeto único e autocontido: os aplicativos para iPad/iPho
 > **Experimente o MAD Designer no macOS (macOS 12.0+, Apple Silicon):**
 > * **Homebrew:** `brew install --cask mthomason/tap/mad-designer`
 > * **Download Direto:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) *(para downloads diretos, execute `xattr -cr "/Applications/MAD Designer.app"` uma vez após copiar para `/Applications`)*
-> * **Relatórios de Exemplo (sem necessidade de servidor de banco de dados):** [**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad) · [**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)
 
 ## Por que o MAD
 

@@ -12,7 +12,7 @@ Para a visão geral dos workspaces voltada ao usuário e capturas de tela, consu
 brew install --cask mthomason/tap/mad-designer
 ```
 
-Ou baixe diretamente [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) e os relatórios de exemplo ([**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad), [**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)) na [release `v9.1.0-macos`](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos).
+Ou baixe diretamente [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) na [release `v9.1.0-macos`](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos).
 
 ## Compilando e Executando a partir do Código-Fonte
 

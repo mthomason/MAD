@@ -20,7 +20,6 @@ Every `.mad` file created or edited on macOS is byte-compatible with the iPad/iP
   ```
 * **Direct Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip)
   *(If you download the `.dmg` or `.zip` in a browser, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications` to clear the macOS Gatekeeper quarantine flag.)*
-* **Sample `.mad` Reports (embedded SQLite data, no database server required):** [**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad) · [**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)
 
 ---
 

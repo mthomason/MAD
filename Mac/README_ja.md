@@ -12,7 +12,7 @@
 brew install --cask mthomason/tap/mad-designer
 ```
 
-または、[`v9.1.0-macos`リリース](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos)から[**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip)およびサンプルレポート（[**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad)、[**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)）を直接ダウンロードできます。
+または、[`v9.1.0-macos`リリース](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos)から[**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip)を直接ダウンロードできます。
 
 ## ソースからのビルドと実行
 

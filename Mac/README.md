@@ -12,7 +12,7 @@ For the user-facing workspace overview and screenshots, see [`docs/macos.md`](..
 brew install --cask mthomason/tap/mad-designer
 ```
 
-Or download [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) and sample reports ([**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad), [**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)) from the [`v9.1.0-macos` release](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos).
+Or download [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) from the [`v9.1.0-macos` release](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos).
 
 ## Building & Running from Source
 
