@@ -13,6 +13,11 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 
 代码位于 [github.com/mthomason/MAD](https://github.com/mthomason/MAD)，采用 MIT 许可证；项目名称与应用美术资源不在该许可证的授权范围内（参见 [NOTICE](https://github.com/mthomason/MAD/blob/master/NOTICE)）。
 
+> **在 macOS 上试用 MAD Designer（macOS 12.0+，Apple Silicon）：**
+> * **Homebrew 安装：** `brew install --cask mthomason/tap/mad-designer`
+> * **直接下载：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) *（浏览器直接下载拖入 `/Applications` 后，首次打开前可在终端执行一次 `xattr -cr "/Applications/MAD Designer.app"`）*
+> * **示例报表（内置 SQLite 数据，无需数据库服务器）：** [**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad) · [**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)
+
 ## 看看效果
 
 **[适用于 macOS 的 MAD Designer](macos.html)**——原生 `AppKit` 桌面应用（`NSDocument`、可视化的表与连接查询画布、可交互的节区缩略图与带区报表设计器，以及分页的 PDF/HTML/CSV/JSON 报表查看器）：

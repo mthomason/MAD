@@ -14,6 +14,11 @@ The code is at
 the names and app artwork are not covered by that licence (see
 [NOTICE](https://github.com/mthomason/MAD/blob/master/NOTICE)).
 
+> **Try MAD Designer on macOS (macOS 12.0+, Apple Silicon):**
+> * **Homebrew:** `brew install --cask mthomason/tap/mad-designer`
+> * **Direct Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) *(for direct downloads, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications`)*
+> * **Sample Reports (no database server required):** [**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad) · [**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)
+
 ## See it
 
 **[MAD Designer for macOS](macos.html)** — native `AppKit` desktop application (`NSDocument`, visual table/join query canvas, interactive section minimap and banded report designer, and paginated PDF/HTML/CSV/JSON report viewer):

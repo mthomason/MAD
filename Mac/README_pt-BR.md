@@ -6,7 +6,15 @@
 
 Para a visão geral dos workspaces voltada ao usuário e capturas de tela, consulte [`docs/macos.md`](../docs/pt-br/macos.md). Para a auditoria de portabilidade framework por framework e o registro arquitetural, consulte [`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md).
 
-## Executando
+## Instalando uma Versão Pré-Compilada
+
+```sh
+brew install --cask mthomason/tap/mad-designer
+```
+
+Ou baixe diretamente [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) e os relatórios de exemplo ([**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad), [**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)) na [release `v9.1.0-macos`](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos).
+
+## Compilando e Executando a partir do Código-Fonte
 
 ```sh
 ./Mac/build.sh                     # build 12 macOS frameworks + Mac/build/MAD Designer.app

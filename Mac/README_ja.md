@@ -6,7 +6,15 @@
 
 ユーザー向けのワークスペース概要およびスクリーンショットについては[`docs/macos.md`](../docs/ja/macos.md)を参照してください。フレームワークごとのマルチプラットフォーム移植監査およびアーキテクチャ記録については[`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md)を参照してください。
 
-## 実行方法
+## ビルド済みリリースのインストール
+
+```sh
+brew install --cask mthomason/tap/mad-designer
+```
+
+または、[`v9.1.0-macos`リリース](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos)から[**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip)およびサンプルレポート（[**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad)、[**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)）を直接ダウンロードできます。
+
+## ソースからのビルドと実行
 
 ```sh
 ./Mac/build.sh                     # build 12 macOS frameworks + Mac/build/MAD Designer.app
