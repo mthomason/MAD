@@ -13,6 +13,16 @@ O **MAD Designer para macOS** é um aplicativo desktop nativo em `AppKit` (SDK `
 
 Cada arquivo `.mad` criado ou editado no macOS é compatível byte a byte com os aplicativos para iPad/iPhone, com a CLI `mad` no Linux e com a GitHub Action [`mad-action`](https://github.com/mthomason/mad-action).
 
+## Download e Instalação
+
+* **Homebrew (macOS 12.0+, Apple Silicon):**
+  ```sh
+  brew install --cask mthomason/tap/mad-designer
+  ```
+* **Download Direto:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip)
+  *(Se você baixar o `.dmg` ou `.zip` pelo navegador, execute `xattr -cr "/Applications/MAD Designer.app"` uma vez no Terminal após copiar para `/Applications` para limpar o atributo de quarentena do macOS Gatekeeper.)*
+* **Relatórios `.mad` de Exemplo (dados SQLite embutidos, sem necessidade de servidor de banco de dados):** [**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad) · [**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)
+
 ---
 
 ## Workspaces

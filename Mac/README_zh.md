@@ -6,7 +6,15 @@
 
 面向用户的工作区概览和截图参见 [`docs/macos.md`](../docs/zh/macos.md)。逐框架的可移植性审计和架构记录参见 [`docs/project/MAD_MACOS.md`](../docs/zh/project/MAD_MACOS.md)。
 
-## 运行
+## 安装预构建发布版
+
+```sh
+brew install --cask mthomason/tap/mad-designer
+```
+
+或者从 [`v9.1.0-macos` 发布页](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos) 直接下载 [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) 以及示例报表（[**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad)、[**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)）。
+
+## 从源码构建与运行
 
 ```sh
 ./Mac/build.sh                     # build 12 macOS frameworks + Mac/build/MAD Designer.app

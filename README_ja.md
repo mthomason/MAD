@@ -12,6 +12,11 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
+> **macOSでMAD Designerを試す（macOS 12.0以降、Apple Silicon）：**
+> * **Homebrew：** `brew install --cask mthomason/tap/mad-designer`
+> * **直接ダウンロード：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) *（直接ダウンロードして`/Applications`へ配置した場合は、初回起動前に一度`xattr -cr "/Applications/MAD Designer.app"`を実行してください）*
+> * **サンプルレポート（データベースサーバー不要）：** [**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad) · [**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)
+
 ## なぜMADなのか
 
 今日では、どの開発者もLLMに頼めば10分で使い捨てのSQLスクリプトとReactテーブルを生成できます。しかし半年後には、40個の個別ミニアプリ、`customers`と`invoices`の`INNER JOIN`に対する40通りの非互換な定義、ハードコードされたデータベース認証情報、ハルシネーションによる誤った集計ロジックが乱立し、モバイル、デスクトップ、CIパイプライン、外部パートナー間の相互運用性はゼロになります。

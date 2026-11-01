@@ -12,6 +12,11 @@ The repository is one self-contained project: the iPad/iPhone apps, the native m
 
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
+> **Try MAD Designer on macOS (macOS 12.0+, Apple Silicon):**
+> * **Homebrew:** `brew install --cask mthomason/tap/mad-designer`
+> * **Direct Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) *(for direct downloads, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications`)*
+> * **Sample Reports (no database server required):** [**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad) · [**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)
+
 ## Why MAD
 
 Today, any developer can ask an LLM to generate a one-off SQL script and a React table in ten minutes. Six months later, the organization has forty bespoke mini-apps, forty incompatible definitions of an `INNER JOIN` between `customers` and `invoices`, hardcoded database credentials, hallucinated aggregate math, and zero interoperability between mobile, desktop, CI pipelines, and external partners.
