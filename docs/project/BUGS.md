@@ -409,6 +409,7 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `RptqDocument -storeDatabaseConnectionDefination:forManagedObjectContext:` dropped `credentals.key`, `databaseDriverTypeEnum`, and TDS `host`, and `MADMacDocument` refresh neither supplied server credentials nor surfaced refresh errors
 - `MADDesignerLayout` multi-selection undo clobbers per-element previous values with a single scalar
 - `MADSQLParser` rejects schema-qualified table names (`schema.table`) in `FROM`, `JOIN`, and three-part column references
 - `MADSectionLayout` reads CFNumbers at the wrong widths, corrupting adjacent ivars
@@ -938,6 +939,7 @@ wrong answer.
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADDatabaseSqlite3` opened source databases with `SQLITE_OPEN_CREATE` and tripped `NSAssert` on a missing directory, or created a 0-byte `.sqlite3` file with no tables
 - `MADDatabaseSqlite3` called `-endBulkInsert` unconditionally on zero-row `SELECT`s, raising `cannot commit - no transaction is active`
 - `MADArrayCaching` could build a cache URL from an empty identifier
 - `MADDataTableFast` passed possibly-nil values into paths that raise

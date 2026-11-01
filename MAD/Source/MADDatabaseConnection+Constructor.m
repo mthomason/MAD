@@ -47,7 +47,16 @@ static Class <MADDatabaseDriver> MADDriverForType(MADDatabaseType databaseType) 
 }
 
 + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals {
-	return [MADDriverForType(credentals.databaseType) newDatabaseConnection: credentals];
+	return [self newDatabaseConnection:credentals documentURL:nil];
+}
+
++ (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals
+						  documentURL:(NSURL *)documentURL {
+	Class <MADDatabaseDriver> driver = MADDriverForType(credentals.databaseType);
+	if (documentURL != nil && [(id)driver respondsToSelector:@selector(newDatabaseConnection:documentURL:)]) {
+		return [driver newDatabaseConnection:credentals documentURL:documentURL];
+	}
+	return [driver newDatabaseConnection:credentals];
 }
 
 + (NSString *)Identifier:(MADDatabaseType)databaseType {

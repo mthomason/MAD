@@ -24,10 +24,6 @@
 
 	[result setDatabaseConnection: connection];
 
-	if ([result respondsToSelector: @selector(openDatabase)]) {
-		[result openDatabase];
-	}
-
 	return result;
 }
 

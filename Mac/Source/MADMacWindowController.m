@@ -10,6 +10,7 @@
 #import "MADMacQueryViewController.h"
 #import "MADMacDesignerViewController.h"
 #import "MADMacViewerViewController.h"
+#import "MADMacConnectionWindowController.h"
 
 static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspace";
 
@@ -19,6 +20,7 @@ static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspa
 @property (nonatomic, strong, readwrite) MADMacQueryViewController *queryViewController;
 @property (nonatomic, strong, readwrite) MADMacDesignerViewController *designerViewController;
 @property (nonatomic, strong, readwrite) MADMacViewerViewController *viewerViewController;
+@property (nonatomic, strong, readwrite, nullable) MADMacConnectionWindowController *activeConnectionSheetController;
 
 @property (nonatomic, strong) NSSegmentedControl *workspaceSegmentedControl;
 @property (nonatomic, strong) NSTabView *workspaceTabView;
@@ -118,6 +120,38 @@ static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspa
 - (void)printReportAction:(nullable id)sender {
 	[self switchToWorkspaceTab:MADMacWorkspaceTabViewer];
 	[_viewerViewController printReportAction:sender];
+}
+
+- (void)editDatabaseConnectionAction:(nullable id) __unused sender {
+	[self presentConnectionSettingsWithPrompt:nil onUpdated:nil];
+}
+
+- (MADMacConnectionWindowController *)presentConnectionSettingsWithPrompt:(nullable NSString *)prompt
+																onUpdated:(nullable void (^)(void))onUpdated {
+	MADMacConnectionWindowController *connWC =
+		[[MADMacConnectionWindowController alloc] initWithDocument:_madDocument
+													  statusPrompt:prompt];
+	_activeConnectionSheetController = connWC;
+	__weak typeof(self) weakSelf = self;
+	connWC.onConnectionUpdated = ^(MADDatabaseConnection * __unused conn, MADCredential * __unused creds) {
+		__strong typeof(weakSelf) strongSelf = weakSelf;
+		if (strongSelf == nil) return;
+		strongSelf.activeConnectionSheetController = nil;
+		[strongSelf.queryViewController reloadFromDocument];
+		[strongSelf.designerViewController reloadFromDocument];
+		if (onUpdated != nil) {
+			onUpdated();
+		} else {
+			[strongSelf refreshReportAction:nil];
+		}
+	};
+
+	if (self.window != nil && self.window.isVisible) {
+		[self.window beginSheet:connWC.window completionHandler:^(NSModalResponse __unused returnCode) {
+			weakSelf.activeConnectionSheetController = nil;
+		}];
+	}
+	return connWC;
 }
 
 #pragma mark - NSToolbarDelegate

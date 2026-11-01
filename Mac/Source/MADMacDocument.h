@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSNotificationName const MADMacDocumentDidMutateNotification;
 extern NSNotificationName const MADMacDocumentDidRefreshNotification;
 
+@class MADCredential, MADDatabaseConnection;
+
 @interface MADMacDocument : NSDocument <MADocumentDesignerProtocol>
 
 @property (nonatomic, strong, readonly, nullable) MADHeadlessDocument *headlessDocument;
@@ -27,8 +29,22 @@ extern NSNotificationName const MADMacDocumentDidRefreshNotification;
 @property (nonatomic, strong, readonly, nullable) RptqDatabase *rptqDatabase;
 @property (nonatomic, strong, readonly, nullable) RptqQuery *rptqQuery;
 
+/// In-memory session credentials for the active document (used before or in addition to Keychain lookup).
+@property (nonatomic, strong, nullable) MADCredential *sessionCredentials;
+
 /// Adopts an already-created MADHeadlessDocument (e.g., from MADMacConnectionWindowController).
 - (void)adoptHeadlessDocument:(MADHeadlessDocument *)headlessDocument;
+
+/// Updates the document's database connection and credentials in both the Rptq store
+/// and the active MADHeadlessDocument, optionally saving credentials to Keychain,
+/// and marks the document dirty.
+- (void)updateDatabaseConnection:(MADDatabaseConnection *)connection
+					 credentials:(nullable MADCredential *)credentials
+				  saveToKeychain:(BOOL)saveToKeychain;
+
+/// Resolves the best available credentials for `connection` (checking sessionCredentials,
+/// then MADKeyChain under connection.connectionString, credRow.key, and connection.identifier).
+- (nullable MADCredential *)resolvedCredentialsForDatabaseConnection:(nullable MADDatabaseConnection *)connection;
 
 /// Rebuilds the MADSectionsLayout snapshot after query grouping or section edits.
 - (void)rebuildSectionsLayout;

@@ -29,6 +29,8 @@
 #import "MTPaper.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqDatabase.h"
+#import "RptqDatabaseCredentals.h"
+#import "RptqDatabaseCredentals+Extras.h"
 #import "RptqDatabaseCredentals+MADDatabaseConnection.h"
 #import "RptqDocument+Extras.h"
 #import "RptqDocument.h"
@@ -54,6 +56,7 @@
 
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 #import <MADAPI/MADDatabaseField.h>
 #import <MADAPI/MADDatabaseTable.h>
 #import <MADAPI/MADErrorContainer.h>
@@ -330,7 +333,7 @@
 		// (RptqDatabaseCredentals+MADDatabaseConnection.h), which the compiler
 		// cannot see from the class alone -- the same cast the app makes.
 		NSObject <MADConnectionsPropertiesProtocol> *user = (NSObject <MADConnectionsPropertiesProtocol> *)database.ownedByUser;
-		MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: user];
+		MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: user documentURL: self.fileURL];
 		MADDatabase *db = [MADDatabase newDatabaseWithConnection: connection];
 		db.delegate = self;
 		self.database = db;
@@ -347,6 +350,51 @@
 
 - (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection {
 	self.database = [MADDatabase newDatabaseWithConnection: databaseConnection];
+}
+
+- (void)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection {
+	if (databaseConnection == nil) {
+		return;
+	}
+	[self updateDatabaseWithConnection: databaseConnection];
+
+	RptqDocument *docModel = self.activeDocumentModel;
+	RptqDatabase *rptqDB = docModel.defaultDatabase ?: docModel.hasDatabaseSchemas.anyObject;
+	if (rptqDB != nil) {
+		RptqDatabaseCredentals *credentals = rptqDB.ownedByUser;
+		if (credentals == nil && self.storeContext != nil) {
+			credentals = [RptqDatabaseCredentals newDatabaseCredental: self.storeContext];
+			rptqDB.ownedByUser = credentals;
+		}
+		rptqDB.databaseDriverTypeEnum = databaseConnection.databaseType;
+		if (credentals != nil) {
+			credentals.driverID = [databaseConnection.identifier copy];
+			credentals.key = [databaseConnection.connectionString copy];
+			switch (databaseConnection.databaseType) {
+				case MADDatabaseTypeSqlite3: {
+					NSURL *sqliteURL = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl;
+					credentals.dbname = [sqliteURL.path.lastPathComponent copy];
+					credentals.host = [sqliteURL.path copy];
+					credentals.server = nil;
+					credentals.port = 0;
+					break;
+				}
+				case MADDatabaseTypeMySQL:
+				case MADDatabaseTypePostgres:
+				case MADDatabaseTypeTDS: {
+					MADDatabaseConnection <MADConnectionsPropertiesProtocol> *conn =
+						(MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)databaseConnection;
+					credentals.port = conn.port;
+					credentals.host = conn.host.length > 0 ? [conn.host copy] : [conn.server copy];
+					credentals.server = [conn.server copy];
+					credentals.dbname = [conn.database copy];
+					break;
+				}
+				default:
+					break;
+			}
+		}
+	}
 }
 
 - (NSArray *)sortDescriptors {

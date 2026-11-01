@@ -10,7 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class MADMacDocument, MADMacQueryViewController, MADMacDesignerViewController, MADMacViewerViewController;
+@class MADMacDocument, MADMacQueryViewController, MADMacDesignerViewController, MADMacViewerViewController, MADMacConnectionWindowController;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,12 +26,16 @@ typedef NS_ENUM(NSInteger, MADMacWorkspaceTab) {
 @property (nonatomic, strong, readonly) MADMacQueryViewController *queryViewController;
 @property (nonatomic, strong, readonly) MADMacDesignerViewController *designerViewController;
 @property (nonatomic, strong, readonly) MADMacViewerViewController *viewerViewController;
+@property (nonatomic, strong, readonly, nullable) MADMacConnectionWindowController *activeConnectionSheetController;
 
 - (instancetype)initWithDocument:(MADMacDocument *)document;
 - (void)switchToWorkspaceTab:(MADMacWorkspaceTab)tab;
 - (void)refreshReportAction:(nullable id)sender;
 - (void)exportReportAction:(nullable id)sender;
 - (void)printReportAction:(nullable id)sender;
+- (void)editDatabaseConnectionAction:(nullable id)sender;
+- (MADMacConnectionWindowController *)presentConnectionSettingsWithPrompt:(nullable NSString *)prompt
+																onUpdated:(nullable void (^)(void))onUpdated;
 
 @end
 

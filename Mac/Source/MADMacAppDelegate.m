@@ -90,6 +90,8 @@
 	[fileMenu addItemWithTitle:@"Save" action:@selector(saveDocument:) keyEquivalent:@"s"];
 	[fileMenu addItemWithTitle:@"Save As…" action:@selector(saveDocumentAs:) keyEquivalent:@"S"];
 	[fileMenu addItem:[NSMenuItem separatorItem]];
+	[fileMenu addItemWithTitle:@"Database Connection…" action:@selector(editCurrentDatabaseConnection:) keyEquivalent:@""];
+	[fileMenu addItem:[NSMenuItem separatorItem]];
 	[fileMenu addItemWithTitle:@"Export Report…" action:@selector(exportCurrentReport:) keyEquivalent:@"e"];
 	[fileMenu addItemWithTitle:@"Print…" action:@selector(printCurrentReport:) keyEquivalent:@"p"];
 	[fileMenuItem setSubmenu:fileMenu];
@@ -122,6 +124,8 @@
 	[menubar addItem:reportMenuItem];
 	NSMenu *reportMenu = [[NSMenu alloc] initWithTitle:@"Report"];
 	[reportMenu addItemWithTitle:@"Refresh Report Data" action:@selector(refreshCurrentReport:) keyEquivalent:@"r"];
+	[reportMenu addItem:[NSMenuItem separatorItem]];
+	[reportMenu addItemWithTitle:@"Database Connection…" action:@selector(editCurrentDatabaseConnection:) keyEquivalent:@""];
 	[reportMenuItem setSubmenu:reportMenu];
 
 	// Window Menu
@@ -183,9 +187,11 @@
 	}
 	_connectionWindowController = [[MADMacConnectionWindowController alloc] init];
 	__weak typeof(self) weakSelf = self;
+	__weak MADMacConnectionWindowController *weakConnWC = _connectionWindowController;
 	_connectionWindowController.onDocumentCreated = ^(MADHeadlessDocument *headlessDoc, NSURL *savedURL) {
 		MADMacDocument *doc = [[MADMacDocument alloc] init];
 		doc.fileURL = savedURL;
+		doc.sessionCredentials = weakConnWC.lastCredentials;
 		[doc adoptHeadlessDocument:headlessDoc];
 		[[NSDocumentController sharedDocumentController] addDocument:doc];
 		[doc makeWindowControllers];
@@ -227,6 +233,10 @@
 
 - (void)printCurrentReport:(nullable id)sender {
 	[[self activeWindowController] printReportAction:sender];
+}
+
+- (void)editCurrentDatabaseConnection:(nullable id)sender {
+	[[self activeWindowController] editDatabaseConnectionAction:sender];
 }
 
 @end

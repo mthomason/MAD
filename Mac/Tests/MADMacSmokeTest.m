@@ -34,7 +34,10 @@
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADURLFactory.h>
 #import <MADSqlite3/MADDataTableFast.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
+#import <MADMySQL/MADDatabaseConnectionMySql.h>
+#import <MADFoundation/MADCredential.h>
 #import <MADBarcodes/MADBarcodes.h>
 #import <Quartz/Quartz.h>
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
@@ -90,7 +93,10 @@ static BOOL RunRefreshSynchronous(MADHeadlessDocument *doc) {
 	return doc.refreshed;
 }
 
+static NSMutableArray *sRetainedPanels = nil;
+
 int main(int argc, const char * argv[]) {
+	sRetainedPanels = [[NSMutableArray alloc] init];
 	@autoreleasepool {
 		if (argc < 2) {
 			fprintf(stderr, "Usage: mad-mac-smoke-test <path-to-MAD Designer.app>\n");
@@ -298,6 +304,7 @@ int main(int argc, const char * argv[]) {
 
 		// 3a. Verify open panel configuration and direct "New Document" button (not hidden behind "Options")
 		NSOpenPanel *testPanel = [NSOpenPanel openPanel];
+		[sRetainedPanels addObject:testPanel];
 		[macDocCtrl beginOpenPanel:testPanel forTypes:@[@"com.thomason.report.mad"] completionHandler:^(NSInteger __unused result) {}];
 
 		if (macDocCtrl.activeOpenPanel != testPanel) {
@@ -419,6 +426,7 @@ int main(int argc, const char * argv[]) {
 			fprintf(stderr, "FAIL: applicationDidFinishLaunching did not present open panel when no documents open\n");
 			return 20;
 		}
+		[sRetainedPanels addObject:macDocCtrl.activeOpenPanel];
 		[macDocCtrl dismissOpenPanelIfNeeded];
 
 		printf("PASS: Verified modern macOS launch: opens document when provided, opens file dialog with 'New Document' button when launched empty\n");
@@ -787,6 +795,7 @@ int main(int argc, const char * argv[]) {
 
 		// 6e. Export save panel includes format selector accessory view and updates filename extension
 		NSSavePanel *exportPanel = [vVC configureExportSavePanel:[NSSavePanel savePanel]];
+		[sRetainedPanels addObject:exportPanel];
 		if (exportPanel.accessoryView == nil || vVC.exportFormatPopup == nil || vVC.exportFormatPopup.numberOfItems < 7) {
 			fprintf(stderr, "FAIL: Export save panel missing format selection accessory view\n");
 			return 63;
@@ -946,6 +955,230 @@ int main(int argc, const char * argv[]) {
 		[aboutWC selectComponentAtIndex:0];
 		[aboutWC.window close];
 		printf("PASS: Verified About Window: header metadata, Overview workflow, MIT/NOTICE/LGPL relink licensing, all 16 third-party component attributions, and 12 bundled license texts\n");
+
+		// Remove temporary Application Support chinook copy before running datasource & path resolution tests
+		[fm removeItemAtURL:installedChinook error:NULL];
+		NSURL *localAppSupport = [MADURLFactory newURLForLocalApplicationSupportDirectory];
+		if (localAppSupport != nil) {
+			[fm removeItemAtURL:[localAppSupport URLByAppendingPathComponent:@"chinook.sqlite3"] error:NULL];
+		}
+
+		// 8. Verify Data Source & Connection UX (Parts A–D)
+		NSString *dsTestDir = [NSTemporaryDirectory() stringByAppendingPathComponent:
+							   [NSString stringWithFormat:@"mad-ds-smoke-%@", NSUUID.UUID.UUIDString]];
+		[fm createDirectoryAtPath:dsTestDir withIntermediateDirectories:YES attributes:nil error:NULL];
+
+		// 8a. Missing SQLite file must NOT create a 0-byte file on disk, and 0-byte artifacts must be removed
+		NSURL *missingSqliteURL = [NSURL fileURLWithPath:[dsTestDir stringByAppendingPathComponent:@"nonexistent.sqlite3"]];
+		MADDatabaseConnectionSqlite3 *missingConn = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:missingSqliteURL];
+		MADDatabase *missingDb = [MADDatabase newDatabaseWithConnection:missingConn];
+		if ([fm fileExistsAtPath:missingSqliteURL.path]) {
+			fprintf(stderr, "FAIL: +newDatabaseWithConnection: created a file at missing SQLite path %s\n", missingSqliteURL.path.UTF8String);
+			return 80;
+		}
+		NSError *missingConnErr = nil;
+		id missingHandle = [missingDb connectWithConnection:missingConn credentals:nil connectionError:&missingConnErr];
+		if (missingHandle != nil || missingConnErr == nil ||
+			![missingConnErr.domain isEqualToString:MADDatabaseSqlite3ErrorDomain] ||
+			missingConnErr.code != MADDatabaseSqlite3ErrorFileNotFound ||
+			[fm fileExistsAtPath:missingSqliteURL.path]) {
+			fprintf(stderr, "FAIL: Connecting to missing SQLite file did not fail cleanly without creating 0-byte file (handle=%p err=%s exists=%d)\n",
+					missingHandle, missingConnErr.description.UTF8String, [fm fileExistsAtPath:missingSqliteURL.path]);
+			return 81;
+		}
+
+		NSURL *zeroByteURL = [NSURL fileURLWithPath:[dsTestDir stringByAppendingPathComponent:@"zerobyte.sqlite3"]];
+		[[NSData data] writeToURL:zeroByteURL atomically:YES];
+		MADDatabaseConnectionSqlite3 *zeroConn = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:zeroByteURL];
+		MADDatabase *zeroDb = [MADDatabase newDatabaseWithConnection:zeroConn];
+		NSError *zeroErr = nil;
+		id zeroHandle = [zeroDb connectWithConnection:zeroConn credentals:nil connectionError:&zeroErr];
+		if (zeroHandle != nil || zeroErr.code != MADDatabaseSqlite3ErrorFileNotFound || [fm fileExistsAtPath:zeroByteURL.path]) {
+			fprintf(stderr, "FAIL: 0-byte SQLite artifact was not rejected and cleaned up\n");
+			return 82;
+		}
+
+		// 8b. Sibling .sqlite3 resolution next to .mad document + Locate File recovery flow
+		NSURL *siblingMadURL = [NSURL fileURLWithPath:[dsTestDir stringByAppendingPathComponent:@"LondonSibling.mad"]];
+		NSURL *siblingChinookURL = [NSURL fileURLWithPath:[dsTestDir stringByAppendingPathComponent:@"chinook.sqlite3"]];
+		[fm copyItemAtURL:[NSURL fileURLWithPath:sampleLondonPath] toURL:siblingMadURL error:NULL];
+		[fm copyItemAtURL:[NSURL fileURLWithPath:sampleChinookPath] toURL:siblingChinookURL error:NULL];
+
+		NSError *sibOpenErr = nil;
+		MADMacDocument *sibDoc = [[MADMacDocument alloc] initWithContentsOfURL:siblingMadURL ofType:@"com.thomason.mad" error:&sibOpenErr];
+		if (sibDoc == nil) {
+			fprintf(stderr, "FAIL: Could not open sibling London.mad: %s\n", sibOpenErr.localizedDescription.UTF8String);
+			return 83;
+		}
+		MADMacViewerViewController *sibViewer = [[MADMacViewerViewController alloc] initWithDocument:sibDoc];
+		(void)sibViewer.view;
+
+		__block BOOL sibRefreshOK = NO;
+		__block NSError *sibRefreshErr = nil;
+		__block BOOL sibRefreshDone = NO;
+		[sibDoc refreshDataWithPassword:nil completion:^(BOOL success, NSError * _Nullable error) {
+			sibRefreshOK = success;
+			sibRefreshErr = error;
+			sibRefreshDone = YES;
+		}];
+		NSDate *sibDeadline = [NSDate dateWithTimeIntervalSinceNow:15.0];
+		while (!sibRefreshDone && sibDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+		}
+		if (!sibRefreshOK || [sibDoc.headlessDocument.dataTable numberOfRows] != 76) {
+			fprintf(stderr, "FAIL: Sibling chinook.sqlite3 resolution failed (ok=%d rows=%lu err=%s)\n",
+					sibRefreshOK, (unsigned long)[sibDoc.headlessDocument.dataTable numberOfRows],
+					sibRefreshErr.description.UTF8String);
+			return 84;
+		}
+
+		// Move chinook.sqlite3 to a different folder to trigger missing-file error and test Locate File recovery
+		NSURL *relocatedChinookURL = [NSURL fileURLWithPath:[dsTestDir stringByAppendingPathComponent:@"relocated/custom_chinook.sqlite3"]];
+		[fm createDirectoryAtURL:[relocatedChinookURL URLByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL];
+		[fm moveItemAtURL:siblingChinookURL toURL:relocatedChinookURL error:NULL];
+
+		// Re-open document so database connection points to the now-missing sibling path
+		MADMacDocument *missingSibDoc = [[MADMacDocument alloc] initWithContentsOfURL:siblingMadURL ofType:@"com.thomason.mad" error:&sibOpenErr];
+		MADMacViewerViewController *missingSibViewer = [[MADMacViewerViewController alloc] initWithDocument:missingSibDoc];
+		(void)missingSibViewer.view;
+
+		[missingSibViewer refreshReportAction:nil];
+		sibDeadline = [NSDate dateWithTimeIntervalSinceNow:10.0];
+		while (missingSibViewer.lastRefreshError == nil && sibDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+		}
+		if (missingSibViewer.lastRefreshError == nil ||
+			missingSibViewer.lastRefreshError.code != MADDatabaseSqlite3ErrorFileNotFound ||
+			[fm fileExistsAtPath:siblingChinookURL.path]) {
+			fprintf(stderr, "FAIL: Missing sibling SQLite file did not report MADDatabaseSqlite3ErrorFileNotFound (err=%s exists=%d)\n",
+					missingSibViewer.lastRefreshError.description.UTF8String, [fm fileExistsAtPath:siblingChinookURL.path]);
+			return 85;
+		}
+
+		__block BOOL locateDone = NO;
+		__block BOOL locateOK = NO;
+		[missingSibViewer locateMissingSQLiteDatabaseWithURL:relocatedChinookURL completion:^(BOOL success, NSError * _Nullable __unused error) {
+			locateOK = success;
+			locateDone = YES;
+		}];
+		sibDeadline = [NSDate dateWithTimeIntervalSinceNow:15.0];
+		while (!locateDone && sibDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+		}
+		if (!locateOK ||
+			[missingSibDoc.headlessDocument.dataTable numberOfRows] != 76 ||
+			![missingSibDoc.rptqDatabase.ownedByUser.host isEqualToString:relocatedChinookURL.path] ||
+			![missingSibDoc.rptqDatabase.ownedByUser.dbname isEqualToString:@"custom_chinook.sqlite3"]) {
+			fprintf(stderr, "FAIL: locateMissingSQLiteDatabaseWithURL: did not update credentials and refresh 76 rows (ok=%d rows=%lu host=%s)\n",
+					locateOK, (unsigned long)[missingSibDoc.headlessDocument.dataTable numberOfRows],
+					missingSibDoc.rptqDatabase.ownedByUser.host.UTF8String);
+			return 86;
+		}
+
+		// 8c. Server credential resolution & missing-credentials error propagation
+		MADDatabaseConnectionMySql *mysqlConn = [[MADDatabaseConnectionMySql alloc] initWithHost:@"127.0.0.1"
+																						database:@"chinook_unauth_test"
+																						 andPort:3306];
+		[sibDoc updateDatabaseConnection:mysqlConn credentials:nil saveToKeychain:NO];
+		__block BOOL mysqlRefreshDone = NO;
+		__block BOOL mysqlRefreshOK = YES;
+		__block NSError *mysqlRefreshErr = nil;
+		[sibDoc refreshDataWithPassword:nil completion:^(BOOL success, NSError * _Nullable error) {
+			mysqlRefreshOK = success;
+			mysqlRefreshErr = error;
+			mysqlRefreshDone = YES;
+		}];
+		sibDeadline = [NSDate dateWithTimeIntervalSinceNow:10.0];
+		while (!mysqlRefreshDone && sibDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+		}
+		if (mysqlRefreshOK ||
+			![mysqlRefreshErr.domain isEqualToString:@"com.everydayapps.operation.refresh"] ||
+			mysqlRefreshErr.code != 3) {
+			fprintf(stderr, "FAIL: Server refresh without credentials did not propagate errMissingCredentials (3): err=%s\n",
+					mysqlRefreshErr.description.UTF8String);
+			return 87;
+		}
+
+		MADCredential *sessionCred = [[MADCredential alloc] initWithUsername:@"testuser" andPassword:@"testpass"];
+		[sibDoc updateDatabaseConnection:mysqlConn credentials:sessionCred saveToKeychain:NO];
+		MADCredential *resolvedCred = [sibDoc resolvedCredentialsForDatabaseConnection:mysqlConn];
+		if (![resolvedCred.username isEqualToString:@"testuser"] || ![resolvedCred.password isEqualToString:@"testpass"]) {
+			fprintf(stderr, "FAIL: MADMacDocument did not resolve session credentials for server connection\n");
+			return 88;
+		}
+
+		// 8d. MADMacConnectionWindowController dynamic visibility, no-copy SQLite URL, and Edit mode
+		MADMacConnectionWindowController *dynWC = [[MADMacConnectionWindowController alloc] init];
+		NSPopUpButton *dynPopup = [dynWC valueForKey:@"driverPopup"];
+		NSTextField *sqliteField = [dynWC valueForKey:@"sqlitePathField"];
+		NSTextField *hostField = [dynWC valueForKey:@"hostField"];
+		NSTextField *serverField = [dynWC valueForKey:@"serverInstanceField"];
+		NSTextField *dbField = [dynWC valueForKey:@"databaseField"];
+		NSTextField *userField = [dynWC valueForKey:@"usernameField"];
+		NSSecureTextField *passField = [dynWC valueForKey:@"passwordField"];
+		NSButton *keychainCheck = [dynWC valueForKey:@"saveKeychainCheckbox"];
+
+		// SQLite selected (index 0): only SQLite controls visible; server controls hidden
+		[dynPopup selectItemAtIndex:0];
+		[dynWC driverPopupChanged:dynPopup];
+		if (sqliteField.isHidden || !hostField.isHidden || !serverField.isHidden ||
+			!dbField.isHidden || !userField.isHidden || !passField.isHidden || !keychainCheck.isHidden) {
+			fprintf(stderr, "FAIL: SQLite driver selection did not hide server fields\n");
+			return 89;
+		}
+
+		// MySQL selected (index 1): server fields visible, Server Instance & SQLite hidden
+		[dynPopup selectItemAtIndex:1];
+		[dynWC driverPopupChanged:dynPopup];
+		if (!sqliteField.isHidden || hostField.isHidden || !serverField.isHidden ||
+			dbField.isHidden || userField.isHidden || passField.isHidden || keychainCheck.isHidden) {
+			fprintf(stderr, "FAIL: MySQL driver selection did not show server fields and hide Server Instance / SQLite\n");
+			return 90;
+		}
+
+		// SQL Server selected (index 2): Server Instance visible too
+		[dynPopup selectItemAtIndex:2];
+		[dynWC driverPopupChanged:dynPopup];
+		if (!sqliteField.isHidden || hostField.isHidden || serverField.isHidden ||
+			dbField.isHidden || userField.isHidden || passField.isHidden || keychainCheck.isHidden) {
+			fprintf(stderr, "FAIL: SQL Server driver selection did not show Server Instance field\n");
+			return 91;
+		}
+
+		// Verify SQLite connection building does NOT copy file into Application Support
+		[dynPopup selectItemAtIndex:0];
+		[dynWC driverPopupChanged:dynPopup];
+		sqliteField.stringValue = relocatedChinookURL.path;
+		NSError *buildConnErr = nil;
+		MADDatabaseConnection *builtSqliteConn = [dynWC buildConnectionWithCredentials:NULL error:&buildConnErr];
+		NSURL *copiedInAppSupport = [supportDir URLByAppendingPathComponent:@"custom_chinook.sqlite3"];
+		if (![builtSqliteConn isKindOfClass:[MADDatabaseConnectionSqlite3 class]] ||
+			![((MADDatabaseConnectionSqlite3 *)builtSqliteConn).databaseUrl.path isEqualToString:relocatedChinookURL.path] ||
+			[fm fileExistsAtPath:copiedInAppSupport.path]) {
+			fprintf(stderr, "FAIL: buildConnectionWithCredentials: did not reference SQLite file in place or copied it to Application Support\n");
+			return 92;
+		}
+
+		// Verify Edit / Reconnect mode on MADMacConnectionWindowController updates document back to SQLite
+		MADMacConnectionWindowController *editWC =
+			[[MADMacConnectionWindowController alloc] initWithDocument:sibDoc
+														  statusPrompt:@"Reconnect to SQLite"];
+		NSPopUpButton *editPopup = [editWC valueForKey:@"driverPopup"];
+		NSTextField *editSqliteField = [editWC valueForKey:@"sqlitePathField"];
+		[editPopup selectItemAtIndex:0];
+		[editWC driverPopupChanged:editPopup];
+		editSqliteField.stringValue = relocatedChinookURL.path;
+		NSError *applyErr = nil;
+		if (![editWC applyToEditingDocumentAndError:&applyErr] ||
+			sibDoc.headlessDocument.database.databaseConnection.databaseType != MADDatabaseTypeSqlite3) {
+			fprintf(stderr, "FAIL: Edit mode applyToEditingDocumentAndError: failed: %s\n",
+					applyErr.description.UTF8String);
+			return 93;
+		}
+
+		[fm removeItemAtPath:dsTestDir error:NULL];
+		printf("PASS: Verified Data Source & Connection UX: no 0-byte SQLite file creation, sibling resolution, Locate File recovery, server credential propagation, and dynamic driver-specific connection dialog\n");
 	}
 	return 0;
 }

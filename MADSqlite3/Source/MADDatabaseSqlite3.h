@@ -18,6 +18,14 @@
 
 BOOL Sqlite3StepResultOK(int result);
 
+extern NSString * const MADDatabaseSqlite3ErrorDomain;
+
+typedef NS_ENUM(NSInteger, MADDatabaseSqlite3ErrorCode) {
+	MADDatabaseSqlite3ErrorExecuteFailed = 4784,
+	MADDatabaseSqlite3ErrorConnectFailed = 4832,
+	MADDatabaseSqlite3ErrorFileNotFound  = 4833,
+};
+
 @class MADDatabaseDataBinding;
 
 @interface MADDatabaseSqlite3 : MADDatabase <MADDatabaseCacheProtocol> {

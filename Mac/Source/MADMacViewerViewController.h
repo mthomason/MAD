@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat zoomScale;
 
 @property (nonatomic, strong, readonly) NSButton *refreshButton;
+@property (nonatomic, strong, readonly) NSButton *connectionButton;
 @property (nonatomic, strong, readonly) NSButton *exportButton;
 @property (nonatomic, strong, readonly) NSButton *printButton;
 @property (nonatomic, strong, readonly) NSPopUpButton *pageSizePopup;
@@ -31,12 +32,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) PDFView *pdfView;
 @property (nonatomic, strong, readonly) NSView *statusBarView;
 @property (nonatomic, strong, readonly) NSTextField *statusLabel;
+@property (nonatomic, strong, readonly, nullable) NSError *lastRefreshError;
 
 - (instancetype)initWithDocument:(MADMacDocument *)document;
 - (void)reloadPreview;
 - (void)refreshReportAction:(nullable id)sender;
 - (void)exportReportAction:(nullable id)sender;
 - (void)printReportAction:(nullable id)sender;
+- (void)editDatabaseConnectionAction:(nullable id)sender;
+- (void)locateMissingSQLiteDatabaseWithURL:(NSURL *)url
+								completion:(nullable void (^)(BOOL success, NSError * _Nullable error))completion;
 
 - (void)zoomInAction:(nullable id)sender;
 - (void)zoomOutAction:(nullable id)sender;
