@@ -12,7 +12,7 @@
 brew install --cask mthomason/tap/mad-designer
 ```
 
-或者从 [`v9.1.0-macos` 发布页](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos) 直接下载 [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) 以及示例报表（[**London.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/London.mad)、[**Music.mad**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/Music.mad)）。
+或者从 [`v9.1.0-macos` 发布页](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos) 直接下载 [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip)。
 
 ## 从源码构建与运行
 
