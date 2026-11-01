@@ -17,6 +17,12 @@
 
 - (instancetype)initWithUrl:(NSURL *)url;
 
++ (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals
+						  documentURL:(NSURL *)documentURL;
+
++ (NSURL *)resolvedDatabaseURLForCredentials:(NSObject <MADConnectionsPropertiesProtocol> *)credentals
+								 documentURL:(NSURL *)documentURL;
+
 @end
 
 #endif

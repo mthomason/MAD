@@ -58,6 +58,10 @@
 /// A connection to a file; only a file-backed driver answers.
 + (instancetype)newDatabaseConnectionWithURL:(NSURL *)url;
 
+/// A connection carrying the given credentials, resolved relative to a document URL when applicable.
++ (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentials
+						  documentURL:(NSURL *)documentURL;
+
 @end
 
 @interface MADDatabaseDriverRegistry : NSObject

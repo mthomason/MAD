@@ -88,6 +88,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// refresh or render reflects the updated store state.
 - (void)invalidateQueryAndModelCaches;
 
+/// Updates both the persisted `RptqDatabaseCredentals` row in `storeContext` and
+/// the active `database` instance to reflect `databaseConnection`.
+- (void)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -141,7 +141,10 @@ static NSString * const MADDocumentFilenameExtension = @"mad";
 	openPanel.accessoryView = nil;
 	openPanel.canCreateDirectories = NO;
 	if ([openPanel respondsToSelector:@selector(_setShowNewDocumentButton:)]) {
-		[openPanel _setShowNewDocumentButton:YES];
+		BOOL alreadyShown = [openPanel respondsToSelector:@selector(_showNewDocumentButton)] && [openPanel _showNewDocumentButton];
+		if (!alreadyShown) {
+			[openPanel _setShowNewDocumentButton:YES];
+		}
 	}
 	NSButton *newDocButton = nil;
 	if ([openPanel respondsToSelector:@selector(_newDocumentButton)]) {

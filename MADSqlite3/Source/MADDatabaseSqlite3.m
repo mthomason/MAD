@@ -41,6 +41,8 @@
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSNull.h>
 #import <Foundation/NSData.h>
 #import <Foundation/NSCalendar.h>
@@ -59,6 +61,7 @@
 // a string when no such column exists.  Values do not come through these; they go through
 // -newSafeLiteral:, which this class inherits from MADDatabase -- single quotes with the
 // interior doubled, which is SQLite's own escaping.  There is deliberately no override.
+NSString * const MADDatabaseSqlite3ErrorDomain = @"MADDatabaseSqlite3";
 NSString * const MADDatabaseSqlite3SafeQuote = @"\"";
 NSString * const MADDatabaseSqlite3SafeFormatIdentifier = @"\"%@\"";
 NSString * const MADDatabaseSqlite3SafeFormatField = @"\"%@\".\"%@\"";
@@ -236,41 +239,80 @@ void sqliteLog(void *foo, const char* statement) {
 									SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX];
 }
 
-- (void)openDatabaseWithFlags:(int)flags {
-	//NSError *error = nil;
-	//Open conneciton... closed in dealloc.
-	if (!_isOpen) {
-		const char *path = self.databaseConnection.databaseUrl.path.UTF8String;
-		int sqlite3_open = sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL);
-		BOOL databaseOpen = sqlite3_open == SQLITE_OK;
-		// The path belongs in the message: SQLITE_CANTOPEN is what a stale or missing
-		// directory reports, and without the path the failure says only "unable to open
-		// database file" -- which names neither the file nor the reason.  See docs/project/BUGS.md.
-		NSAssert(databaseOpen, @"openDatabaseWithFlags failed (%s) for %s.",
-				 (char *)sqlite3_errmsg(_database), path != NULL ? path : "(no path)");
+- (BOOL)openDatabaseWithFlags:(int)flags error:(NSError * __autoreleasing *)outError {
+	if (_isOpen && _database != NULL) {
+		return YES;
+	}
+	NSString *pathString = self.databaseConnection.databaseUrl.path;
+	if (pathString.length == 0) {
+		NSError *error = [NSError errorWithDomain:MADDatabaseSqlite3ErrorDomain
+											 code:MADDatabaseSqlite3ErrorFileNotFound
+										 userInfo:@{
+			NSLocalizedDescriptionKey: NSLocalizedString(@"Database file could not be found.", @"Database file could not be found."),
+			NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"No SQLite database file path is configured for this report.", @"No SQLite database file path is configured for this report."),
+		}];
+		os_log_error(GetSqlite3Log(), "Error: %@", error);
+		if (outError != NULL) {
+			*outError = error;
+		}
+		return NO;
+	}
 
-		if (databaseOpen) {
-			databaseOpen = sqlite3_extended_result_codes((struct sqlite3 *)_database, YES) == SQLITE_OK;
-			NSAssert(databaseOpen, @"Error: failed to extend result codes: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
-			databaseOpen = sqlite3_create_collation_v2((struct sqlite3 *)_database, "LSASC",
-										SQLITE_UTF8, (struct sqlite3 *)_database,
-										compare_string_utf8_localized_asc_collation, NULL) == SQLITE_OK;
-			NSAssert(databaseOpen, @"Error: failed to create collation: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
-			
+	const char *path = pathString.UTF8String;
+	int sqlite3_open = sqlite3_open_v2(path, ((struct sqlite3 **)&_database), flags, NULL);
+	BOOL databaseOpen = (sqlite3_open == SQLITE_OK && _database != NULL);
+	if (databaseOpen) {
+		databaseOpen = sqlite3_extended_result_codes((struct sqlite3 *)_database, YES) == SQLITE_OK;
+		NSAssert(databaseOpen, @"Error: failed to extend result codes: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
+		databaseOpen = sqlite3_create_collation_v2((struct sqlite3 *)_database, "LSASC",
+									SQLITE_UTF8, (struct sqlite3 *)_database,
+									compare_string_utf8_localized_asc_collation, NULL) == SQLITE_OK;
+		NSAssert(databaseOpen, @"Error: failed to create collation: '%s, %s'.", __PRETTY_FUNCTION__, sqlite3_errmsg((struct sqlite3 *)_database));
+		
 #ifdef MAD_MTDatabaseSqlite3_DEBUG
 #warning Tracing enabled
-			sqlite3_trace((struct sqlite3 *)_database, sqliteLog, NULL);
+		sqlite3_trace((struct sqlite3 *)_database, sqliteLog, NULL);
 #endif
-
-		} else {
-			NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:4832 userInfo:@{
-				NSLocalizedDescriptionKey: NSLocalizedString(@"Connect Failed", @"Connect Failed"),
-				NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding] ?: @"",
-			}];
-			os_log_error(GetSqlite3Log(), "Error: %@", error);
-		}
 		_isOpen = YES;
+		return YES;
+	} else {
+		const char *errStr = _database != NULL ? sqlite3_errmsg((struct sqlite3 *)_database) : "unable to open database file";
+		NSString *failureReason = [NSString stringWithFormat:@"%s (%@)", errStr ?: "unable to open database file", pathString];
+		if (_database != NULL) {
+			sqlite3_close_v2((struct sqlite3 *)_database);
+			_database = NULL;
+		}
+		_isOpen = NO;
+		NSError *error = [NSError errorWithDomain:MADDatabaseSqlite3ErrorDomain
+											 code:MADDatabaseSqlite3ErrorConnectFailed
+										 userInfo:@{
+			NSLocalizedDescriptionKey: NSLocalizedString(@"Connect Failed", @"Connect Failed"),
+			NSLocalizedFailureReasonErrorKey: failureReason,
+			NSFilePathErrorKey: pathString,
+		}];
+		os_log_error(GetSqlite3Log(), "Error: %@", error);
+		if (outError != NULL) {
+			*outError = error;
+		}
+		return NO;
 	}
+}
+
+- (void)openDatabaseWithFlags:(int)flags {
+	[self openDatabaseWithFlags:flags error:NULL];
+}
+
+- (void)closeDatabaseConnectionIfOpen {
+	if (_bulkStatement != NULL) {
+		sqlite3_clear_bindings(_bulkStatement);
+		sqlite3_finalize(_bulkStatement);
+		_bulkStatement = NULL;
+	}
+	if (_database != NULL) {
+		sqlite3_close_v2((struct sqlite3 *)_database);
+		_database = NULL;
+	}
+	_isOpen = NO;
 }
 
 - (void)dealloc {
@@ -290,16 +332,85 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (id)connectWithConnection:(MADDatabaseConnection *)connection
-				 credentals:(MADCredential *)credentals
+				 credentals:(MADCredential *__unused)credentals
 			connectionError:(NSError * __autoreleasing *)error {
-	[self openDatabase];
+	if (connection != nil && [connection conformsToProtocol:@protocol(MADDatabaseConnectionsPropertiesURL)]) {
+		NSURL *newURL = ((MADDatabaseConnection <MADDatabaseConnectionsPropertiesURL> *)connection).databaseUrl;
+		NSURL *curURL = self.databaseConnection.databaseUrl;
+		if (curURL == nil || (newURL != nil && ![curURL isEqual:newURL])) {
+			[self closeDatabaseConnectionIfOpen];
+		}
+		self.databaseConnection = (MADDatabaseConnection <MADDatabaseConnectionsPropertiesURL> *)connection;
+	}
+
+	NSString *filePath = self.databaseConnection.databaseUrl.path;
+	NSFileManager *fm = [NSFileManager defaultManager];
+	BOOL isDir = NO;
+	BOOL fileExists = (filePath.length > 0 && [fm fileExistsAtPath:filePath isDirectory:&isDir] && !isDir);
+	if (fileExists) {
+		NSDictionary *attrs = [fm attributesOfItemAtPath:filePath error:nil];
+		if ([attrs fileSize] == 0) {
+			// A 0-byte file at a source database path is an empty artifact (never a valid
+			// SQLite database with schema); remove it and treat the file as missing.
+			[self closeDatabaseConnectionIfOpen];
+			[fm removeItemAtPath:filePath error:nil];
+			fileExists = NO;
+		}
+	}
+
+	if (!fileExists) {
+		[self closeDatabaseConnectionIfOpen];
+		NSString *fileName = filePath.lastPathComponent.length > 0 ? filePath.lastPathComponent : @"SQLite database";
+		NSString *desc = [NSString stringWithFormat:@"Database file “%@” could not be found.", fileName];
+		NSString *reason = filePath.length > 0
+			? [NSString stringWithFormat:@"No SQLite database file exists at %@.", filePath]
+			: @"No SQLite database file path is configured for this report.";
+		NSError *missingError = [NSError errorWithDomain:MADDatabaseSqlite3ErrorDomain
+													code:MADDatabaseSqlite3ErrorFileNotFound
+												userInfo:@{
+			NSLocalizedDescriptionKey: desc,
+			NSLocalizedFailureReasonErrorKey: reason,
+			NSFilePathErrorKey: filePath ?: @"",
+		}];
+		os_log_error(GetSqlite3Log(), "Error: %@", missingError);
+		if (error != NULL) {
+			*error = missingError;
+		}
+		return nil;
+	}
+
+	NSError *openErr = nil;
+	BOOL opened = [self openDatabaseWithFlags:(SQLITE_OPEN_READWRITE | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX)
+										error:&openErr];
+	if (!opened) {
+		openErr = nil;
+		opened = [self openDatabaseWithFlags:(SQLITE_OPEN_READONLY | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX)
+									   error:&openErr];
+	}
+	if (!opened) {
+		if (error != NULL) {
+			*error = openErr;
+		}
+		return nil;
+	}
+
 	// The open handle lives on the driver; the callers that take a connection
 	// object (the create-document chain among them) treat a nil return as a
 	// failed connection, so hand back the driver itself as the handle.
 	return self;
 }
 
+- (BOOL)ensureConnectedWithError:(NSError * __autoreleasing *)error {
+	if (_isOpen && _database != NULL) {
+		return YES;
+	}
+	return [self connectWithConnection:self.databaseConnection credentals:nil connectionError:error] != nil;
+}
+
 - (BOOL)tableExist:(NSString *)tablename {
+	if (![self ensureConnectedWithError:NULL]) {
+		return NO;
+	}
 	BOOL exist = NO;
 	sqlite3_stmt *statement = NULL;
 	const char *queryc = "SELECT count(tbl_name) FROM sqlite_master WHERE type = 'table' AND name = ?;";
@@ -317,9 +428,14 @@ void sqliteLog(void *foo, const char* statement) {
 }
 
 - (void)getTables:(void (^)(BOOL success, NSError *error, NSArray <MADDatabaseTable *> *tables))completion {
+	NSError *connErr = nil;
+	if (![self ensureConnectedWithError:&connErr]) {
+		if (completion) completion(NO, connErr, @[]);
+		return;
+	}
 	NSMutableArray <MADDatabaseTable *> *result = [[NSMutableArray alloc] init];
 	BOOL success = NO;
-	sqlite3_stmt *statement;
+	sqlite3_stmt *statement = NULL;
 	NSString *queryStart = @"SELECT tbl_name FROM main.sqlite_master WHERE type='table';";
 	char *sql = sqlite3_mprintf("%s", queryStart.UTF8String);
 
@@ -510,13 +626,15 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 
 - (BOOL)executeSQL:(NSString *)sql
 		 fieldKeys:(NSArray *)fieldKeys
-	  onConnection:(id)dbconn
+	  onConnection:(id __unused)dbconn
    intoResultTable:(id <MADDataTableWriting>)dataTable
 	transactionSet:(BOOL)partOfTransactionSet
 	returnsResults:(BOOL)returnsResults
 	binaryBindings:(NSArray *)binaryBindings
 		 withError:(NSError * __autoreleasing *)resultError {
-	
+	if (![self ensureConnectedWithError:resultError]) {
+		return NO;
+	}
 	BOOL success = NO;
 	sqlite3_stmt *statement = partOfTransactionSet ? _bulkStatement : NULL;
 	char *errorMessage = NULL;
@@ -663,6 +781,9 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 						withError: &executeError];
 		if (executeError != nil) {
 			os_log_error(GetSqlite3Log(), "Error: %@", executeError.localizedDescription);
+			if (error != NULL) {
+				*error = executeError;
+			}
 		}
 	}
 	
@@ -860,18 +981,23 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 	_bulkStatement = NULL;
 	sqlite3_close_v2(_database);
 	_database = NULL;
-	
+	_isOpen = NO;
 }
 
 #pragma mark -
 #pragma mark Reading Tables
 
-- (void)enumerateTablesFromConnection:(id)process
+- (void)enumerateTablesFromConnection:(id __unused)process
 						   usingBlock:(void (^)(MADDatabaseTable *obj, NSUInteger index, BOOL *stop))block
 						   completion:(void (^)(BOOL, NSError *, NSArray *))completion {
+	NSError *connErr = nil;
+	if (![self ensureConnectedWithError:&connErr]) {
+		if (completion) completion(NO, connErr, @[]);
+		return;
+	}
 	NSMutableArray *result = [[NSMutableArray alloc] init];
 	BOOL success = NO;
-	sqlite3_stmt *statement;
+	sqlite3_stmt *statement = NULL;
 	char *sql = sqlite3_mprintf("SELECT tbl_name FROM main.sqlite_master WHERE type='table';");
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
 		success = YES;
@@ -898,7 +1024,7 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 	
 }
 
-- (void)getTablesFromConnection:(id)process
+- (void)getTablesFromConnection:(id __unused)process
 					 completion:(void (^)(BOOL, NSError *, NSArray *))completion {
 	[self getTables:^(BOOL success, NSError *error, NSArray *tables) {
 		if (error != nil) {
@@ -908,10 +1034,13 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 	}];
 }
 
-- (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id)dbconn
+- (NSArray <MADDatabaseTable *> *)getTablesFromConnection:(id __unused)dbconn
 												   error:(NSError *__autoreleasing *)error {
+	if (![self ensureConnectedWithError:error]) {
+		return nil;
+	}
 	NSMutableArray *result = [[NSMutableArray alloc] init];
-	sqlite3_stmt *statement;
+	sqlite3_stmt *statement = NULL;
 	char *sql = sqlite3_mprintf("SELECT tbl_name FROM main.sqlite_master WHERE type='table';");
 	
 	if (sqlite3_prepare_v2(_database, sql, -1, &statement, NULL) == SQLITE_OK) {
@@ -934,8 +1063,11 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 #pragma mark Reading Fields
 
 - (NSArray <MADDatabaseField *> *)fieldsForTable: (NSString *)tableName
-									  connection: (id)process
+									  connection: (id __unused)process
 										   error: (NSError * __autoreleasing *)error {
+	if (![self ensureConnectedWithError:error]) {
+		return nil;
+	}
 	NSMutableArray * __autoreleasing result = [[NSMutableArray alloc] init];
 	sqlite3_stmt *statement = NULL;
 	// table_info columns: cid, name, type, notnull, dflt_value, pk.

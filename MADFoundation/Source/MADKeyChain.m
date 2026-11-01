@@ -162,6 +162,44 @@ NSString * const MADKeyChainPasswordAccountDesc = @"Client Database Password";
 	return errSecItemNotFound != queryUsernameStatus;
 }
 
++ (NSString *)usernameForKey:(NSString *)key {
+	if (key.length == 0) {
+		return nil;
+	}
+	CFDataRef queryUsernameData = NULL;
+	NSDictionary *queryUsername = [MADKeyChain queryUsernameDefination:key];
+	OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)queryUsername, (CFTypeRef *)&queryUsernameData);
+	NSString *username = nil;
+	if (status == errSecSuccess && queryUsernameData != NULL) {
+		username = [[NSString alloc] initWithBytes:CFDataGetBytePtr(queryUsernameData)
+											length:(NSUInteger)CFDataGetLength(queryUsernameData)
+										  encoding:NSUTF8StringEncoding];
+	}
+	if (queryUsernameData != NULL) {
+		CFRelease(queryUsernameData);
+	}
+	return username;
+}
+
++ (NSString *)passwordForKey:(NSString *)key {
+	if (key.length == 0) {
+		return nil;
+	}
+	CFDataRef queryPasswordData = NULL;
+	NSDictionary *queryPassword = [MADKeyChain queryPasswordDefination:key];
+	OSStatus status = SecItemCopyMatching((__bridge CFDictionaryRef)queryPassword, (CFTypeRef *)&queryPasswordData);
+	NSString *password = nil;
+	if (status == errSecSuccess && queryPasswordData != NULL) {
+		password = [[NSString alloc] initWithBytes:CFDataGetBytePtr(queryPasswordData)
+											length:(NSUInteger)CFDataGetLength(queryPasswordData)
+										  encoding:NSUTF8StringEncoding];
+	}
+	if (queryPasswordData != NULL) {
+		CFRelease(queryPasswordData);
+	}
+	return password;
+}
+
 - (id)copyWithZone:(NSZone *)zone {
 	return self;
 }

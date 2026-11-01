@@ -22,6 +22,9 @@
 
 + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals;
 
++ (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals
+						  documentURL:(NSURL *)documentURL;
+
 + (NSString *)Identifier:(MADDatabaseType)databaseType;
 
 @end

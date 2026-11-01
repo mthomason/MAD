@@ -7,9 +7,16 @@
 
 #import "MADMacViewerViewController.h"
 #import "MADMacDocument.h"
+#import "MADMacWindowController.h"
+#import "MADMacConnectionWindowController.h"
 
 #import <MAD/MAD.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 #import <MADSqlite3/MADDataTableFast.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
+#import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 #import <Quartz/Quartz.h>
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
@@ -19,6 +26,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 @interface MADMacViewerViewController ()
 
 @property (nonatomic, strong, readwrite) NSButton *refreshButton;
+@property (nonatomic, strong, readwrite) NSButton *connectionButton;
 @property (nonatomic, strong, readwrite) NSButton *exportButton;
 @property (nonatomic, strong, readwrite) NSButton *printButton;
 @property (nonatomic, strong, readwrite) NSPopUpButton *pageSizePopup;
@@ -26,6 +34,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 @property (nonatomic, strong, readwrite) PDFView *pdfView;
 @property (nonatomic, strong, readwrite) NSView *statusBarView;
 @property (nonatomic, strong, readwrite) NSTextField *statusLabel;
+@property (nonatomic, strong, readwrite, nullable) NSError *lastRefreshError;
 
 @property (nonatomic, strong) NSProgressIndicator *spinner;
 @property (nonatomic, strong) NSTextField *paperStatusLabel;
@@ -124,6 +133,15 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	_refreshButton.imagePosition = NSImageLeft;
 	_refreshButton.bezelStyle = NSBezelStyleRounded;
 
+	_connectionButton = [NSButton buttonWithTitle:@"Connection…"
+										   target:self
+										   action:@selector(editDatabaseConnectionAction:)];
+	_connectionButton.image = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
+										accessibilityDescription:@"Database Connection"];
+	_connectionButton.imagePosition = NSImageLeft;
+	_connectionButton.bezelStyle = NSBezelStyleRounded;
+	_connectionButton.toolTip = @"Configure Database Connection Settings…";
+
 	// Zoom controls
 	_zoomOutButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"minus.magnifyingglass"
 														 accessibilityDescription:@"Zoom Out"]
@@ -192,6 +210,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 		pageSizeLabel,
 		_pageSizePopup,
 		_refreshButton,
+		_connectionButton,
 		spacerLeft,
 		_zoomOutButton,
 		_zoomLabelButton,
@@ -408,7 +427,185 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 
 #pragma mark - Refresh & Render
 
-- (void)refreshReportAction:(id) __unused sender {
+- (NSString *)formattedMessageForError:(nullable NSError *)error fallback:(NSString *)fallback {
+	if (error == nil) {
+		return fallback;
+	}
+	NSString *desc = error.localizedDescription ?: fallback;
+	NSString *reason = error.localizedFailureReason;
+	if (reason.length > 0 && ![reason isEqualToString:desc] && ![desc containsString:reason]) {
+		return [NSString stringWithFormat:@"%@ — %@", desc, reason];
+	}
+	return desc;
+}
+
+- (BOOL)isAuthenticationError:(nullable NSError *)error {
+	if (error == nil) {
+		return NO;
+	}
+	if ([error.domain isEqualToString:@"com.everydayapps.operation.refresh"] && error.code == 3) {
+		return YES;
+	}
+	NSString *combined = [[NSString stringWithFormat:@"%@ %@",
+						   error.localizedDescription ?: @"",
+						   error.localizedFailureReason ?: @""] lowercaseString];
+	return ([combined containsString:@"access denied"] ||
+			[combined containsString:@"authentication"] ||
+			[combined containsString:@"password"] ||
+			[combined containsString:@"login failed"] ||
+			[combined containsString:@"credentials"] ||
+			[combined containsString:@"fe_sendauth"]);
+}
+
+- (void)editDatabaseConnectionAction:(nullable id) __unused sender {
+	NSWindowController *wc = self.view.window.windowController;
+	if ([wc isKindOfClass:[MADMacWindowController class]]) {
+		__weak typeof(self) weakSelf = self;
+		[(MADMacWindowController *)wc presentConnectionSettingsWithPrompt:nil onUpdated:^{
+			[weakSelf performRefreshWithSuccessHandler:nil];
+		}];
+	}
+}
+
+- (void)locateMissingSQLiteDatabaseWithURL:(NSURL *)url
+								completion:(nullable void (^)(BOOL success, NSError * _Nullable error))completion {
+	if (url == nil || _document == nil) {
+		if (completion) {
+			completion(NO, [NSError errorWithDomain:@"MADMacViewer" code:1 userInfo:@{ NSLocalizedDescriptionKey: @"No SQLite file URL selected." }]);
+		}
+		return;
+	}
+	MADDatabaseConnectionSqlite3 *newConn = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+	[_document updateDatabaseConnection:newConn credentials:nil saveToKeychain:NO];
+
+	__weak typeof(self) weakSelf = self;
+	[_document refreshDataWithPassword:nil completion:^(BOOL success, NSError * _Nullable error) {
+		__strong typeof(weakSelf) strongSelf = weakSelf;
+		if (strongSelf != nil) {
+			if (success) {
+				strongSelf.lastRefreshError = nil;
+				[strongSelf reloadPreview];
+			} else {
+				strongSelf.lastRefreshError = error;
+				strongSelf.statusLabel.stringValue = [strongSelf formattedMessageForError:error fallback:@"Refresh failed."];
+				strongSelf.statusLabel.textColor = [NSColor systemRedColor];
+			}
+		}
+		if (completion) {
+			completion(success, error);
+		}
+	}];
+}
+
+- (void)handleRefreshFailureWithError:(nullable NSError *)error
+					   onRetrySuccess:(nullable void (^)(void))onRetrySuccess {
+	_lastRefreshError = error;
+	_statusLabel.stringValue = [self formattedMessageForError:error fallback:@"Refresh failed."];
+	_statusLabel.textColor = [NSColor systemRedColor];
+
+	MADHeadlessDocument *doc = _document.headlessDocument;
+	MADDatabaseConnection *conn = doc.database.databaseConnection;
+	BOOL isSQLite = (conn.databaseType == MADDatabaseTypeSqlite3);
+
+	NSWindow *win = self.view.window;
+	MADMacWindowController *wc = [win.windowController isKindOfClass:[MADMacWindowController class]]
+		? (MADMacWindowController *)win.windowController
+		: nil;
+
+	// Case 1: SQLite File Not Found
+	if (isSQLite && ([error.domain isEqualToString:MADDatabaseSqlite3ErrorDomain] &&
+					 (error.code == MADDatabaseSqlite3ErrorFileNotFound || error.code == MADDatabaseSqlite3ErrorConnectFailed))) {
+		if (win == nil || !win.isVisible) {
+			return;
+		}
+		NSString *expectedPath = error.userInfo[NSFilePathErrorKey];
+		if (expectedPath.length == 0 && [conn conformsToProtocol:@protocol(MADDatabaseConnectionsPropertiesURL)]) {
+			expectedPath = ((id <MADDatabaseConnectionsPropertiesURL>)conn).databaseUrl.path;
+		}
+		if (expectedPath.length == 0) {
+			expectedPath = _document.rptqDatabase.ownedByUser.host ?: _document.rptqDatabase.ownedByUser.dbname ?: @"database.sqlite3";
+		}
+		NSString *fileName = expectedPath.lastPathComponent.length > 0 ? expectedPath.lastPathComponent : @"SQLite database";
+
+		NSAlert *alert = [[NSAlert alloc] init];
+		alert.alertStyle = NSAlertStyleWarning;
+		alert.messageText = [NSString stringWithFormat:@"Database File “%@” Could Not Be Found", fileName];
+		alert.informativeText = [NSString stringWithFormat:@"MAD Designer could not find the SQLite database file for this report at:\n%@\n\nWould you like to locate the database file on your Mac?", expectedPath];
+		[alert addButtonWithTitle:@"Locate File…"];
+		[alert addButtonWithTitle:@"Cancel"];
+
+		__weak typeof(self) weakSelf = self;
+		[alert beginSheetModalForWindow:win completionHandler:^(NSModalResponse returnCode) {
+			__strong typeof(weakSelf) strongSelf = weakSelf;
+			if (strongSelf == nil || returnCode != NSAlertFirstButtonReturn) {
+				return;
+			}
+			NSOpenPanel *panel = [NSOpenPanel openPanel];
+			panel.title = [NSString stringWithFormat:@"Locate “%@”", fileName];
+			panel.message = [NSString stringWithFormat:@"Select the SQLite database file “%@” for this report.", fileName];
+			panel.canChooseFiles = YES;
+			panel.canChooseDirectories = NO;
+			panel.allowsMultipleSelection = NO;
+			if (strongSelf.document.fileURL.isFileURL) {
+				panel.directoryURL = [strongSelf.document.fileURL URLByDeletingLastPathComponent];
+			}
+			[panel beginSheetModalForWindow:win completionHandler:^(NSModalResponse panelResp) {
+				if (panelResp == NSModalResponseOK && panel.URL != nil) {
+					[strongSelf locateMissingSQLiteDatabaseWithURL:panel.URL completion:^(BOOL ok, NSError * _Nullable retryErr) {
+						if (ok && onRetrySuccess) {
+							onRetrySuccess();
+						} else if (!ok && retryErr != nil) {
+							[strongSelf handleRefreshFailureWithError:retryErr onRetrySuccess:onRetrySuccess];
+						}
+					}];
+				}
+			}];
+		}];
+		return;
+	}
+
+	// Case 2: Server Database Needs Credentials or Authentication Failed
+	if (!isSQLite && [self isAuthenticationError:error]) {
+		if (wc != nil && win != nil && win.isVisible) {
+			NSString *prompt = [self formattedMessageForError:error fallback:@"Enter credentials to connect to the database server."];
+			__weak typeof(self) weakSelf = self;
+			[wc presentConnectionSettingsWithPrompt:prompt onUpdated:^{
+				[weakSelf performRefreshWithSuccessHandler:onRetrySuccess];
+			}];
+		}
+		return;
+	}
+
+	// Case 3: Server Database Unreachable / Network Error / SQL Error
+	if (win != nil && win.isVisible) {
+		NSAlert *alert = [[NSAlert alloc] init];
+		alert.alertStyle = NSAlertStyleWarning;
+		alert.messageText = error.localizedDescription ?: @"Could Not Refresh Report Data";
+		NSString *reason = error.localizedFailureReason;
+		alert.informativeText = (reason.length > 0 && ![reason isEqualToString:alert.messageText])
+			? reason
+			: @"Check that the database server is reachable and your connection settings are valid.";
+		[alert addButtonWithTitle:@"Connection Settings…"];
+		[alert addButtonWithTitle:@"Retry"];
+		[alert addButtonWithTitle:@"Cancel"];
+
+		__weak typeof(self) weakSelf = self;
+		[alert beginSheetModalForWindow:win completionHandler:^(NSModalResponse returnCode) {
+			__strong typeof(weakSelf) strongSelf = weakSelf;
+			if (strongSelf == nil) return;
+			if (returnCode == NSAlertFirstButtonReturn && wc != nil) {
+				NSString *prompt = [strongSelf formattedMessageForError:error fallback:nil];
+				[wc presentConnectionSettingsWithPrompt:prompt onUpdated:^{
+					[strongSelf performRefreshWithSuccessHandler:onRetrySuccess];
+				}];
+			} else if (returnCode == NSAlertSecondButtonReturn) {
+				[strongSelf performRefreshWithSuccessHandler:onRetrySuccess];
+			}
+		}];
+	}
+}
+
+- (void)performRefreshWithSuccessHandler:(nullable void (^)(void))onSuccess {
 	MADHeadlessDocument *doc = _document.headlessDocument;
 	if (doc == nil) return;
 
@@ -426,12 +623,19 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 		if (!strongSelf) return;
 		[strongSelf.spinner stopAnimation:nil];
 		if (!success) {
-			strongSelf.statusLabel.stringValue = error.localizedDescription ?: @"Refresh failed.";
-			strongSelf.statusLabel.textColor = [NSColor systemRedColor];
+			[strongSelf handleRefreshFailureWithError:error onRetrySuccess:onSuccess];
 			return;
 		}
+		strongSelf.lastRefreshError = nil;
 		[strongSelf reloadPreview];
+		if (onSuccess) {
+			onSuccess();
+		}
 	}];
+}
+
+- (void)refreshReportAction:(id) __unused sender {
+	[self performRefreshWithSuccessHandler:nil];
 }
 
 - (void)reloadPreview {
@@ -541,16 +745,8 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	if (doc == nil) return;
 
 	if (!doc.refreshed) {
-		_renderedPaperType = _selectedPaperType ?: MTPaperTypeLetter;
-		[doc setPaperType:_renderedPaperType];
-		_renderedPaperSize = doc.paperSize;
 		__weak typeof(self) weakSelf = self;
-		[_document refreshDataWithPassword:nil completion:^(BOOL success, NSError * _Nullable error) {
-			if (!success) {
-				if (error) [NSApp presentError:error];
-				return;
-			}
-			[weakSelf reloadPreview];
+		[self performRefreshWithSuccessHandler:^{
 			[weakSelf presentExportPanel];
 		}];
 		return;

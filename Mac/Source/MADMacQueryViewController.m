@@ -7,6 +7,7 @@
 
 #import "MADMacQueryViewController.h"
 #import "MADMacDocument.h"
+#import "MADMacWindowController.h"
 
 #import <MAD/MAD.h>
 #import "MADSQLQueryCompiler.h"
@@ -1214,8 +1215,16 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	_arrangeButton = [NSButton buttonWithTitle:@"Arrange Tables"
 										target:self
 										action:@selector(autoArrangeTablesAction:)];
+	NSButton *connectionBtn = [NSButton buttonWithTitle:@"Database Connection…"
+												 target:self
+												 action:@selector(editDatabaseConnectionAction:)];
+	if (@available(macOS 11.0, *)) {
+		connectionBtn.image = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
+										accessibilityDescription:@"Database Connection"];
+		connectionBtn.imagePosition = NSImageLeft;
+	}
 
-	_designerHeaderControls = [NSStackView stackViewWithViews:@[_filtersButton, _groupsButton, _arrangeButton]];
+	_designerHeaderControls = [NSStackView stackViewWithViews:@[_filtersButton, _groupsButton, _arrangeButton, connectionBtn]];
 	_designerHeaderControls.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	_designerHeaderControls.spacing = 8.0;
 	_designerHeaderControls.translatesAutoresizingMaskIntoConstraints = NO;
@@ -1251,6 +1260,13 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		[_sqlHeaderControls.trailingAnchor constraintEqualToAnchor:bar.trailingAnchor constant:-12.0],
 		[_sqlHeaderControls.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
 	]];
+}
+
+- (void)editDatabaseConnectionAction:(id)sender {
+	NSWindowController *wc = self.view.window.windowController;
+	if ([wc isKindOfClass:[MADMacWindowController class]]) {
+		[(MADMacWindowController *)wc editDatabaseConnectionAction:sender];
+	}
 }
 
 - (void)populateSchemaSidebar:(NSView *)sidebar {

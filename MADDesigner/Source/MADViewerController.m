@@ -755,6 +755,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 		void (^presentErrorsBlock)(void) = ^{
 			for (NSError *error in errors) {
 				NSString *message = error.localizedDescription ?: @"An unknown error occurred.";
+				NSString *reason = error.localizedFailureReason;
+				if (reason.length > 0 && ![reason isEqualToString:message] && ![message containsString:reason]) {
+					message = [NSString stringWithFormat:@"%@\n\n%@", message, reason];
+				}
 				UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
 																			   message:message
 																		preferredStyle:UIAlertControllerStyleAlert];

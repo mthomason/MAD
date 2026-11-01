@@ -145,6 +145,35 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### `RptqDocument -storeDatabaseConnectionDefination:forManagedObjectContext:` dropped `credentals.key`, `databaseDriverTypeEnum`, and TDS `host`, and `MADMacDocument` refresh neither supplied server credentials nor surfaced refresh errors
+- **Status:** Fixed 2026-10-31.
+- **Where:** `MAD/Source/rptq/RptqDocument+Extras.m:208-235`, `MADFoundation/Source/MADKeyChain.m`,
+  `Mac/Source/MADMacDocument.m` (`-refreshDataWithPassword:completion:`).
+- **Behavior:** Three related defects broke refreshing MySQL, PostgreSQL, and SQL Server
+  documents on macOS:
+  1. `-[RptqDocument storeDatabaseConnectionDefination:forManagedObjectContext:]` persisted
+     `username`, `host`, `database`, and `port` on `RptqDatabaseCredentals`, but never set
+     `credentals.key = database.databaseConnection.connectionString` or
+     `rptqDB.databaseDriverTypeEnum`, and for TDS (`MADDatabaseTypeTds`) overwrote
+     `credentals.host` with `databaseConnection.server` instead of `databaseConnection.host`.
+  2. `-[MADMacDocument refreshDataWithPassword:completion:]` enqueued `MADOperationRefresh`
+     without attaching a `<MADOperationHoldsCredentialsProtocol>` dependency, so
+     `MADOperationRefresh -execute` saw `credential == nil` for every database whose
+     `requiresCredentials` is `YES` (`MADDatabaseMySQL`, `MADDatabasePostgres`,
+     `MADDatabaseSQLServer`) and aborted with `errMissingCredentials`.
+  3. `refreshOp.completionBlock` called `completion(YES, nil)` unconditionally without
+     inspecting `refreshOp.errors`, so any missing-credentials, connection, or SQL error was
+     silently swallowed and reported as a successful 0-row refresh.
+- **Now:** `RptqDocument -storeDatabaseConnectionDefination:forManagedObjectContext:` writes
+  `credentals.key = [database.databaseConnection.connectionString copy]`, sets
+  `rptqDB.databaseDriverTypeEnum`, and preserves `databaseConnection.host` for TDS;
+  `MADKeyChain` exposes `+usernameForKey:` and `+passwordForKey:`; and
+  `MADMacDocument -refreshDataWithPassword:completion:` resolves credentials from
+  `sessionCredentials`, `MADKeyChain`, or the `password` parameter, attaches a
+  `<MADOperationHoldsCredentialsProtocol>` dependency operation to `refreshOp`, and forwards
+  `refreshOp.errors.firstObject` to `completion(NO, firstErr)`.
+- **Test:** `mad-mac-smoke-test` Section 8 (`Mac/Tests/MADMacSmokeTest.m`).
+
 ### `MADDesignerLayout` multi-selection undo clobbers per-element previous values with a single scalar
 - **Status:** Fixed 2026-10-29.
 - **Where:** `MAD/Source/MADDesignerLayout.m:157-555` (`-updateElements:setFontsize:`,
@@ -1655,6 +1684,38 @@ reference to "BUGS.md, the X entry" still lands.
 - **Test:** `MADExplorerTests -testSamePathRewriteReloadsTheImage` (`0.225s`).
 
 ## MADSqlite3
+
+### `MADDatabaseSqlite3` opened source databases with `SQLITE_OPEN_CREATE` and tripped `NSAssert` on a missing directory, or created a 0-byte `.sqlite3` file with no tables
+- **Status:** Fixed 2026-10-31.
+- **Where:** `MADSqlite3/Source/MADDatabaseSqlite3.m` (`-connectWithConnection:credentals:connectionError:`),
+  `MAD/Source/MADDatabase+Constructor.m` (`+newDatabaseWithConnection:`),
+  `MADSqlite3/Source/MADDatabaseConnectionSqlite3.m` (`+resolvedDatabaseURLForCredentials:documentURL:`).
+- **Behavior:** `+newDatabaseWithConnection:` called `[(MADDatabaseSqlite3 *)result openDatabase]`
+  during descriptor construction, and `-connectWithConnection:credentals:connectionError:` called
+  `[self openDatabase]` (`SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE`) when `self.databaseHandle == NULL`.
+  When a `.mad` report referenced a SQLite file in a directory that existed on the user's machine
+  (e.g. `Application Support`) where the `.sqlite3` file was absent, `sqlite3_open_v2` silently
+  created a 0-byte file at that path, causing `SELECT` queries during refresh to fail with
+  `no such table: <TableName>` while polluting disk with an empty file that broke subsequent opens.
+  When the parent directory itself did not exist (e.g. a path from another machine or a deleted
+  folder), `sqlite3_open_v2` returned `SQLITE_CANTOPEN` and `-openDatabaseWithFlags:` tripped
+  `NSAssert(errorCode == SQLITE_OK, ...)` and crashed the app.
+- **Now:** `+newDatabaseWithConnection:` assigns `result.databaseConnection = connection` without
+  eagerly opening the file on disk. `-connectWithConnection:credentals:connectionError:` checks
+  that the target file exists and is non-empty (`fileSize > 0`), deletes any 0-byte artifact left
+  by older builds, and when the file is missing returns `nil` with a structured `NSError` in
+  `MADDatabaseSqlite3ErrorDomain` (`MADDatabaseSqlite3ErrorFileNotFound = 4833`) without calling
+  `sqlite3_open_v2` or tripping `NSAssert`. When the file exists and is non-empty, it opens with
+  `SQLITE_OPEN_READWRITE | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX` (or falls back to
+  `SQLITE_OPEN_READONLY` for read-only files), never passing `SQLITE_OPEN_CREATE` for a source
+  database. Internal cache databases (`MADDataTableFast`, `MADArrayCaching`) continue to call
+  `-openDatabase` / `-openDatabaseWithFlags:` directly with `SQLITE_OPEN_CREATE`. In addition,
+  `MADDatabaseConnectionSqlite3 +resolvedDatabaseURLForCredentials:documentURL:` resolves source
+  SQLite files across the stored path, the `.mad` document's sibling directory, `Application Support`,
+  and the app bundle resources.
+- **Test:** `MADDatabaseSqlite3DatabaseTests testConnectToMissingFileDoesNotCreateZeroByteFileAndPopulatesError`
+  and `testConnectToExistingZeroByteFileRemovesArtifactAndFailsCleanly` (both iOS and `Linux/Tests`),
+  plus `mad-mac-smoke-test` Section 8.
 
 ### `MADDatabaseSqlite3` called `-endBulkInsert` unconditionally on zero-row `SELECT`s, raising `cannot commit - no transaction is active`
 - **Status:** Fixed 2026-10-29.

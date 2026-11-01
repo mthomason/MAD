@@ -71,6 +71,7 @@
 #import "MADParameters+QueryCacheAggregate.h"
 #import "NSPredicate+Creators.h"
 #import "MADDatabase+Constructor.h"
+#import "MADDatabaseConnection+Constructor.h"
 #import "MADQuery+Extras.h"
 #import "miniz.h"
 #import <MADFoundation/madlog.h>
@@ -1254,7 +1255,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 
 - (void)initializeMainDatabase:(RptqDocument *)document {
 	RptqDatabase *database = document.hasDatabaseSchemas.anyObject;
-	MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: database.ownedByUser];
+	MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: database.ownedByUser documentURL: self.fileURL];
 	MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
 	db.delegate = self;
 	self.database = db;

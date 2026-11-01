@@ -10,6 +10,7 @@
 
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADKeyChain.h>
+#import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseConnection.h>
@@ -17,6 +18,30 @@
 
 NSNotificationName const MADMacDocumentDidMutateNotification = @"MADMacDocumentDidMutateNotification";
 NSNotificationName const MADMacDocumentDidRefreshNotification = @"MADMacDocumentDidRefreshNotification";
+
+@interface MADMacCredentialsOperation : MADOperation <MADOperationHoldsCredentialsProtocol>
+@property (nonatomic, strong, nullable) MADCredential *credentials;
+@property (nonatomic, assign) BOOL gotCredentials;
+@property (nonatomic, assign) BOOL manuallyInputtedCredentials;
+- (instancetype)initWithCredentials:(nullable MADCredential *)credentials;
+@end
+
+@implementation MADMacCredentialsOperation
+
+- (instancetype)initWithCredentials:(nullable MADCredential *)credentials {
+	if (self = [super init]) {
+		_credentials = [credentials copy];
+		_gotCredentials = (credentials != nil && (credentials.username.length > 0 || credentials.password.length > 0));
+		_manuallyInputtedCredentials = NO;
+	}
+	return self;
+}
+
+- (void)execute {
+	[self finish];
+}
+
+@end
 
 @interface MADMacDocument ()
 
@@ -198,6 +223,71 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	}
 }
 
+#pragma mark - Connection & Credentials
+
+- (void)updateDatabaseConnection:(MADDatabaseConnection *)connection
+					 credentials:(nullable MADCredential *)credentials
+				  saveToKeychain:(BOOL)saveToKeychain {
+	if (connection == nil || _headlessDocument == nil) {
+		return;
+	}
+	[_headlessDocument applyDatabaseConnection:connection];
+	self.sessionCredentials = credentials;
+
+	if ([connection requiresCredentials] && credentials != nil) {
+		NSString *key = connection.connectionString;
+		if (saveToKeychain && key.length > 0) {
+			if (credentials.username.length > 0 && credentials.password.length > 0) {
+				[MADKeyChain saveUsername:credentials.username andPassword:credentials.password forKey:key];
+			} else if (credentials.username.length > 0) {
+				[MADKeyChain saveUsername:credentials.username forKey:key];
+			}
+		}
+	}
+	[self notifyDocumentMutated];
+}
+
+- (nullable MADCredential *)resolvedCredentialsForDatabaseConnection:(nullable MADDatabaseConnection *)connection {
+	MADDatabaseConnection *conn = connection ?: _headlessDocument.database.databaseConnection;
+	NSString *username = self.sessionCredentials.username;
+	NSString *password = self.sessionCredentials.password;
+
+	RptqDatabaseCredentals *credRow = self.rptqDatabase.ownedByUser;
+	NSMutableArray<NSString *> *candidateKeys = [[NSMutableArray alloc] init];
+	if (conn.connectionString.length > 0) {
+		[candidateKeys addObject:conn.connectionString];
+	}
+	if (credRow.key.length > 0 && ![candidateKeys containsObject:credRow.key]) {
+		[candidateKeys addObject:credRow.key];
+	}
+	if (conn.identifier.length > 0 && ![candidateKeys containsObject:conn.identifier]) {
+		[candidateKeys addObject:conn.identifier];
+	}
+
+	for (NSString *key in candidateKeys) {
+		if (username.length == 0) {
+			NSString *savedUser = [MADKeyChain usernameForKey:key];
+			if (savedUser.length > 0) {
+				username = savedUser;
+			}
+		}
+		if (password.length == 0) {
+			NSString *savedPass = [MADKeyChain passwordForKey:key];
+			if (savedPass.length > 0) {
+				password = savedPass;
+			}
+		}
+		if (username.length > 0 && password.length > 0) {
+			break;
+		}
+	}
+
+	if (username.length == 0 && password.length == 0) {
+		return nil;
+	}
+	return [[MADCredential alloc] initWithUsername:username ?: @"" andPassword:password ?: @""];
+}
+
 #pragma mark - Refresh & Export
 
 - (void)refreshDataWithPassword:(nullable NSString *)passwordOverride
@@ -214,10 +304,30 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	}
 
 	[doc invalidateQueryAndModelCaches];
+	doc.refreshed = NO;
+
+	// Ensure doc.database is initialized before checking requiresCredentials.
+	MADDatabase *db = doc.database;
+	MADDatabaseConnection *conn = db.databaseConnection;
 	RptqQuery *query = self.rptqQuery;
-	RptqDatabaseCredentals *credRow = query.inDatabase.ownedByUser;
-	if (passwordOverride.length > 0 && credRow.key.length > 0) {
-		[MADKeyChain savePassword:passwordOverride forKey:credRow.key];
+	RptqDatabaseCredentals *credRow = query.inDatabase.ownedByUser ?: self.rptqDatabase.ownedByUser;
+
+	MADCredential *resolvedCred = nil;
+	if ([conn requiresCredentials]) {
+		resolvedCred = [self resolvedCredentialsForDatabaseConnection:conn];
+		if (passwordOverride.length > 0) {
+			NSString *user = resolvedCred.username ?: @"";
+			resolvedCred = [[MADCredential alloc] initWithUsername:user andPassword:passwordOverride];
+			self.sessionCredentials = resolvedCred;
+			NSString *key = conn.connectionString.length > 0 ? conn.connectionString : credRow.key;
+			if (key.length > 0) {
+				if (user.length > 0) {
+					[MADKeyChain saveUsername:user andPassword:passwordOverride forKey:key];
+				} else {
+					[MADKeyChain savePassword:passwordOverride forKey:key];
+				}
+			}
+		}
 	}
 
 	MADOperationRefreshInitializeMainDataTable *initTable =
@@ -231,14 +341,31 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	[refreshOp addDependency:initTable];
 	[refreshOp addDependency:initOp];
 
+	MADMacCredentialsOperation *credOp = nil;
+	if ([conn requiresCredentials] && resolvedCred != nil &&
+		(resolvedCred.username.length > 0 || resolvedCred.password.length > 0)) {
+		credOp = [[MADMacCredentialsOperation alloc] initWithCredentials:resolvedCred];
+		[refreshOp addDependency:credOp];
+	}
+
 	__weak typeof(self) weakSelf = self;
+	__weak MADOperationRefresh *weakRefreshOp = refreshOp;
+	__weak MADOperationRefreshInitialize *weakInitOp = initOp;
+	__weak MADOperationRefreshInitializeMainDataTable *weakInitTable = initTable;
 	refreshOp.completionBlock = ^{
+		MADOperationRefresh *strongRefreshOp = weakRefreshOp;
+		MADOperationRefreshInitialize *strongInitOp = weakInitOp;
+		MADOperationRefreshInitializeMainDataTable *strongInitTable = weakInitTable;
+		NSArray<NSError *> *refreshErrors = [strongRefreshOp.errors copy];
+		NSError *firstErr = refreshErrors.firstObject
+			?: strongInitOp.errors.firstObject
+			?: strongInitTable.errors.firstObject;
 		dispatch_async(dispatch_get_main_queue(), ^{
 			typeof(self) strongSelf = weakSelf;
 			if (strongSelf == nil) return;
-			BOOL ok = doc.refreshed;
-			NSError *err = nil;
-			if (!ok) {
+			BOOL ok = doc.refreshed && refreshErrors.count == 0 && firstErr == nil;
+			NSError *err = firstErr;
+			if (!ok && err == nil) {
 				err = [NSError errorWithDomain:@"MADMacDocument"
 										  code:3
 									  userInfo:@{ NSLocalizedDescriptionKey: @"Could not refresh report data. Check the query and database connection settings." }];
@@ -253,6 +380,9 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 
 	[_refreshQueue addOperation:initTable];
 	[_refreshQueue addOperation:initOp];
+	if (credOp != nil) {
+		[_refreshQueue addOperation:credOp];
+	}
 	[_refreshQueue addOperation:refreshOp];
 }
 

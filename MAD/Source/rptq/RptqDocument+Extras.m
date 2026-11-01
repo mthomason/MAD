@@ -377,13 +377,14 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 	credentals.driverID = databaseIdentifier;
 
 	if (database.databaseConnection != nil) {
-		
+		credentals.key = [database.databaseConnection.connectionString copy];
 		switch (database.databaseConnection.databaseType) {
 			case MADDatabaseTypeMySQL: {
 				MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection = (MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)database.databaseConnection;
 				credentals.port = databaseConnection.port;
-				credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
-				credentals.host = databaseConnection.server.copy;
+				rptqDB.databaseDriverTypeEnum = MADDatabaseTypeMySQL;
+				credentals.host = databaseConnection.host.length > 0 ? databaseConnection.host.copy : databaseConnection.server.copy;
+				credentals.server = databaseConnection.server.copy;
 				credentals.dbname = databaseConnection.database.copy;
 				break;
 			}
@@ -394,7 +395,7 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 				NSURL *sqliteURL = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl;
 				credentals.dbname = sqliteURL.path.lastPathComponent.copy;
 				credentals.host = sqliteURL.path.copy;
-				credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeSqlite3;
+				rptqDB.databaseDriverTypeEnum = MADDatabaseTypeSqlite3;
 				break;
 			}
 
@@ -402,9 +403,9 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 				MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection;
 				databaseConnection = (MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)database.databaseConnection;
 				credentals.port = databaseConnection.port;
-				credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypeTDS;
+				rptqDB.databaseDriverTypeEnum = MADDatabaseTypeTDS;
 				credentals.server = databaseConnection.server.copy;
-				credentals.host = databaseConnection.server.copy;
+				credentals.host = databaseConnection.host.length > 0 ? databaseConnection.host.copy : databaseConnection.server.copy;
 				credentals.dbname = databaseConnection.database.copy;
 				break;
 			}
@@ -412,9 +413,9 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 			case MADDatabaseTypePostgres: {
 				MADDatabaseConnection <MADConnectionsPropertiesProtocol> *databaseConnection = (MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)database.databaseConnection;
 				credentals.port = databaseConnection.port;
-				credentals.inDatabase.databaseDriverTypeEnum = MADDatabaseTypePostgres;
 				rptqDB.databaseDriverTypeEnum = MADDatabaseTypePostgres;
-				credentals.host = databaseConnection.server.copy;
+				credentals.host = databaseConnection.host.length > 0 ? databaseConnection.host.copy : databaseConnection.server.copy;
+				credentals.server = databaseConnection.server.copy;
 				credentals.dbname = databaseConnection.database.copy;
 				break;
 			}

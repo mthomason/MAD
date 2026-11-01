@@ -11,14 +11,17 @@
 #import <MADFoundation/madlog.h>
 
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 #import <MADAPI/MADDatabase.h>
 
 #import <MADFoundation/MADDataTable.h>
 
 #import <MAD/MADDocumentDataProtocol.h>
+#import <MAD/MADHeadlessDocument.h>
 #import <MAD/RptqStoreContext.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/MADDatabase+Constructor.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
 
 #if TARGET_OS_IPHONE
 // The rendering side of a document, which only a MADocument has: the report
@@ -99,8 +102,25 @@ static void MADOperationRefreshInitializeRunOnMain(dispatch_block_t block) {
 
 		if (document.database == nil) {
 			RptqDatabaseCredentals *rptqUser = rptqQuery.inDatabase.ownedByUser;
-			MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnection:rptqUser];
+			NSURL *docURL = [document respondsToSelector:@selector(fileURL)] ? [(id)document fileURL] : nil;
+			MADDatabaseConnection *databaseConnection = [MADDatabaseConnection newDatabaseConnection:rptqUser documentURL:docURL];
 			[document updateDatabaseWithConnection:databaseConnection];
+		} else if (document.database.databaseConnection.databaseType == MADDatabaseTypeSqlite3 &&
+				   [document.database.databaseConnection conformsToProtocol:@protocol(MADDatabaseConnectionsPropertiesURL)]) {
+			NSURL *curUrl = ((id <MADDatabaseConnectionsPropertiesURL>)document.database.databaseConnection).databaseUrl;
+			NSString *curPath = curUrl.path;
+			NSFileManager *fm = [NSFileManager defaultManager];
+			BOOL existsNonEmpty = (curPath.length > 0 && [fm fileExistsAtPath:curPath] && [[fm attributesOfItemAtPath:curPath error:nil] fileSize] > 0);
+			if (!existsNonEmpty) {
+				RptqDatabaseCredentals *rptqUser = rptqQuery.inDatabase.ownedByUser;
+				NSURL *docURL = [document respondsToSelector:@selector(fileURL)] ? [(id)document fileURL] : nil;
+				if (rptqUser != nil) {
+					MADDatabaseConnection *resolved = [MADDatabaseConnection newDatabaseConnection:rptqUser documentURL:docURL];
+					if (resolved != nil) {
+						[document updateDatabaseWithConnection:resolved];
+					}
+				}
+			}
 		}
 
 		if (rptqDatabase == nil || rptqQuery == nil) {

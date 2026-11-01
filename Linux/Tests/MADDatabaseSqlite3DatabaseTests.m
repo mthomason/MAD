@@ -671,6 +671,43 @@ static void testCheckpointStoreAtURLFoldsTheWal(void) {
 	removeTempDirectory(tempDirectory);
 }
 
+static void testConnectWithConnectionToMissingFileDoesNotCreateZeroByteFile(void) {
+	NSURL *tempDirectory = makeTempDirectory();
+	NSURL *missingURL = [tempDirectory URLByAppendingPathComponent:@"missing_source.sqlite3"];
+	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:missingURL];
+	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
+	database.databaseConnection = connection;
+
+	NSError *error = nil;
+	id handle = [database connectWithConnection:connection credentals:nil connectionError:&error];
+	MAD_PASS(handle == nil, "connectWithConnection returns nil for a missing source file");
+	MAD_PASS(error != nil, "connectWithConnection populates error for a missing source file");
+	MAD_PASS_EQUAL(error.domain, MADDatabaseSqlite3ErrorDomain, "error domain is MADDatabaseSqlite3ErrorDomain");
+	MAD_PASS(error.code == MADDatabaseSqlite3ErrorFileNotFound, "error code is MADDatabaseSqlite3ErrorFileNotFound");
+	MAD_PASS(![[NSFileManager defaultManager] fileExistsAtPath:missingURL.path],
+			 "connectWithConnection must never create a 0-byte file at a missing source path");
+	removeTempDirectory(tempDirectory);
+}
+
+static void testConnectWithConnectionRemovesPreExistingZeroByteArtifact(void) {
+	NSURL *tempDirectory = makeTempDirectory();
+	NSURL *zeroURL = [tempDirectory URLByAppendingPathComponent:@"zero_artifact.sqlite3"];
+	[[NSData data] writeToURL:zeroURL atomically:YES];
+	MAD_PASS([[NSFileManager defaultManager] fileExistsAtPath:zeroURL.path], "0-byte artifact exists before connect");
+
+	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:zeroURL];
+	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
+	database.databaseConnection = connection;
+
+	NSError *error = nil;
+	id handle = [database connectWithConnection:connection credentals:nil connectionError:&error];
+	MAD_PASS(handle == nil, "connectWithConnection rejects 0-byte artifact");
+	MAD_PASS(error != nil && error.code == MADDatabaseSqlite3ErrorFileNotFound, "0-byte artifact reports FileNotFound");
+	MAD_PASS(![[NSFileManager defaultManager] fileExistsAtPath:zeroURL.path],
+			 "0-byte artifact is removed from disk");
+	removeTempDirectory(tempDirectory);
+}
+
 MAD_TEST_MAIN("MADDatabaseSqlite3DatabaseTests",
 	MAD_TEST(testDatabaseHandleNilBeforeOpen),
 	MAD_TEST(testOpenDatabaseCreatesHandleAndFile),
@@ -695,4 +732,6 @@ MAD_TEST_MAIN("MADDatabaseSqlite3DatabaseTests",
 	MAD_TEST(testLoadWithPlistResolvesAStoredFileNameInTheDirectoryInUseNow),
 	MAD_TEST(testDriverFillsAWritePortWithNoDataTableBehindIt),
 	MAD_TEST(testDriverZeroRowSelectDoesNotCallUnpairedEndBulkInsert),
-	MAD_TEST(testCheckpointStoreAtURLFoldsTheWal));
+	MAD_TEST(testCheckpointStoreAtURLFoldsTheWal),
+	MAD_TEST(testConnectWithConnectionToMissingFileDoesNotCreateZeroByteFile),
+	MAD_TEST(testConnectWithConnectionRemovesPreExistingZeroByteArtifact));

@@ -632,4 +632,38 @@
 	sqlite3_close(database);
 }
 
+- (void)testConnectWithConnectionToMissingFileDoesNotCreateZeroByteFile {
+	NSURL *missingURL = [self.tempDirectory URLByAppendingPathComponent:@"missing_source.sqlite3"];
+	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:missingURL];
+	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
+	database.databaseConnection = connection;
+
+	NSError *error = nil;
+	id handle = [database connectWithConnection:connection credentals:nil connectionError:&error];
+	XCTAssertNil(handle);
+	XCTAssertNotNil(error);
+	XCTAssertEqualObjects(error.domain, MADDatabaseSqlite3ErrorDomain);
+	XCTAssertEqual(error.code, MADDatabaseSqlite3ErrorFileNotFound);
+	XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:missingURL.path],
+				   @"connectWithConnection must never create a 0-byte file at a missing source path");
+}
+
+- (void)testConnectWithConnectionRemovesPreExistingZeroByteArtifact {
+	NSURL *zeroURL = [self.tempDirectory URLByAppendingPathComponent:@"zero_artifact.sqlite3"];
+	[[NSData data] writeToURL:zeroURL atomically:YES];
+	XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:zeroURL.path]);
+
+	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:zeroURL];
+	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
+	database.databaseConnection = connection;
+
+	NSError *error = nil;
+	id handle = [database connectWithConnection:connection credentals:nil connectionError:&error];
+	XCTAssertNil(handle);
+	XCTAssertNotNil(error);
+	XCTAssertEqual(error.code, MADDatabaseSqlite3ErrorFileNotFound);
+	XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:zeroURL.path],
+				   @"a 0-byte artifact at the source path is removed and treated as missing");
+}
+
 @end
