@@ -1,4 +1,4 @@
-[English](README.md) | [简体中文](README_zh.md) | **日本語** | [Português (Brasil)](README_pt-BR.md)
+[English](README.md) | [简体中文](README_zh.md) | **日本語** | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md)
 
 # <a href="../StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../docs/assets/mad-designer-macos-icon-256.png" alt="MAD Designer アイコン" width="44" height="44" align="absmiddle" /></a> Mac — ネイティブmacOS（`AppKit`）アプリケーション
 

@@ -1,4 +1,4 @@
-[English](README.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | **Português (Brasil)**
+[English](README.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | **Português (Brasil)** | [Deutsch](README_de.md)
 
 > **Uma nota do autor sobre programação agêntica e LLMs** — [Leia aqui](Note%20from%20Author%20on%20Agentic%20Programming%20and%20LLMs_pt-BR.md)
 
