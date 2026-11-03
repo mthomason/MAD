@@ -84,8 +84,8 @@ five in links, in the order `English`, `简体中文`, `日本語`, `Português 
 ```
 
 A new language adds one more entry to that banner in every existing file — six files per
-document, 66 banner edits for the 11 documents. (The author note is the one document
-without a banner.)
+document for the ten banner-bearing documents, 60 banner edits. (The author note is the
+eleventh document and has no banner.)
 
 ## Naming and front matter
 
