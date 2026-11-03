@@ -1,6 +1,7 @@
 # The documentation site's Jekyll configuration (GitHub Pages, source: /docs).
-# English pages live at the site root; the Simplified Chinese, Japanese, and
-# Brazilian Portuguese translations mirror them under zh/, ja/, and pt-br/.
+# English pages live at the site root; the Simplified Chinese, Japanese,
+# Brazilian Portuguese, and German translations mirror them under zh/, ja/,
+# pt-br/, and de/.
 # All trees share the theme, the layouts, and the language switcher in
 # _layouts/default.html.
 
@@ -58,3 +59,8 @@ defaults:
     values:
       lang: pt-BR
       locale: pt_BR
+  - scope:
+      path: "de"
+    values:
+      lang: de-DE
+      locale: de_DE

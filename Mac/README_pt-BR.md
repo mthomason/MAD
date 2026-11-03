@@ -1,4 +1,4 @@
-[English](README.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | **Português (Brasil)**
+[English](README.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | **Português (Brasil)** | [Deutsch](README_de.md)
 
 # <a href="../StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../docs/assets/mad-designer-macos-icon-256.png" alt="Ícone do MAD Designer" width="44" height="44" align="absmiddle" /></a> Mac — o aplicativo nativo para macOS (`AppKit`)
 
