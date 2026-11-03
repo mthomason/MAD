@@ -153,4 +153,7 @@
          location = "group:docs">
       </FileRef>
    </Group>
+   <FileRef
+      location = "group:Note from Author on Agentic Programming and LLMs.md">
+   </FileRef>
 </Workspace>
