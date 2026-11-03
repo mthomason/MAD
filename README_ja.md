@@ -1,4 +1,4 @@
-[English](README.md) | [简体中文](README_zh.md) | **日本語** | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md)
+[English](README.md) | [简体中文](README_zh.md) | **日本語** | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md) | [Español](README_es.md)
 
 > **エージェント型プログラミングと LLM に関する著者からの注記** — [こちらからお読みください](Note%20from%20Author%20on%20Agentic%20Programming%20and%20LLMs_ja.md)
 

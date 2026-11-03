@@ -16,6 +16,7 @@ excludes from the published site.
 | `ja` | `ja-JP` | `ja-JP` | `ja_JP` | `docs/ja/` | `_ja` | `日本語` | Complete |
 | `pt-br` | `pt-BR` | `pt-BR` | `pt_BR` | `docs/pt-br/` | `_pt-BR` | `Português (Brasil)` | Complete |
 | `de` | `de-DE` | `de-DE` | `de_DE` | `docs/de/` | `_de` | `Deutsch` | Complete |
+| `es` | `es-419` | `es-419` | `es_419` | `docs/es/` | `_es` | `Español` | Complete |
 
 English is the source. A translation is complete when every document in the public set
 below exists in it, and the validation checklist in this file passes.
@@ -26,7 +27,7 @@ the directory is a URL path segment.
 
 ## The canonical public set
 
-Five languages × 25 documents. A new public page must be added to every language at the
+Six languages × 25 documents. A new public page must be added to every language at the
 same time. A page that is missing from a language is not an error the switcher reports:
 the per-page counterpart lookup falls back to that language's landing page, so the reader
 silently lands somewhere else. Add the page rather than accept the fallback.
@@ -51,7 +52,8 @@ silently lands somewhere else. Add the page rather than accept the fallback.
 | `docs/tutorials/driver-authoring.md` | `/tutorials/driver-authoring.html` |
 
 Each translated page mirrors its source's path under the language directory:
-`docs/de/01-document.md` serves `/de/01-document.html`.
+`docs/de/01-document.md` serves `/de/01-document.html`, and `docs/es/01-document.md`
+serves `/es/01-document.html`.
 
 `docs/assets/london.html` is an exported sample report, not a documentation page, and is
 not translated.
@@ -74,22 +76,23 @@ not translated.
 
 These files sit outside the Jekyll source, so they are plain Markdown on GitHub. Each one
 opens with the same language banner, with the current language in bold and the other
-four in links, in the order `English`, `简体中文`, `日本語`, `Português (Brasil)`,
-`Deutsch`:
+five in links, in the order `English`, `简体中文`, `日本語`, `Português (Brasil)`,
+`Deutsch`, `Español`:
 
 ```markdown
-**English** | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md)
+**English** | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md) | [Español](README_es.md)
 ```
 
-A new language adds one more entry to that banner in every existing file — five files per
-document, 55 banner edits for the 11 documents.
+A new language adds one more entry to that banner in every existing file — six files per
+document, 66 banner edits for the 11 documents. (The author note is the one document
+without a banner.)
 
 ## Naming and front matter
 
 * **Website tree.** `docs/<lang>/<same relative path as the English source>`. `docs/zh/`,
-  `docs/ja/`, `docs/pt-br/`, `docs/de/`.
+  `docs/ja/`, `docs/pt-br/`, `docs/de/`, `docs/es/`.
 * **Front matter.** Every translated website page carries an explicit `lang:` matching
-  its BCP-47 tag (`zh-CN`, `ja-JP`, `pt-BR`, `de-DE`). `_config.yml` also applies a
+  its BCP-47 tag (`zh-CN`, `ja-JP`, `pt-BR`, `de-DE`, `es-419`). `_config.yml` also applies a
   directory-wide default, but the explicit value is what the layout and the SEO tag read,
   and it keeps a page correct if it is ever moved.
 * **Layout.** Keep `layout: default` exactly where the English source has it. The
@@ -108,15 +111,16 @@ The switcher, the `hreflang` set, the translation notice, and the footer all liv
 `docs/_layouts/default.html`; no page carries them itself.
 
 * **Order**, fixed and identical in every language: `English`, `简体中文`, `日本語`,
-  `Português (Brasil)`, `Deutsch`. The current language is a `<span aria-current="page">`,
-  not a link.
+  `Português (Brasil)`, `Deutsch`, `Español`. The current language is a
+  `<span aria-current="page">`, not a link.
 * **Counterpart lookup.** The layout strips the page's own language prefix to get
   `base_url`, appends each other language's prefix, and looks the result up in
   `site.pages` by `url`. A hit links to that exact page; a miss — the page is not
   translated yet — falls back to the other language's landing page (`/zh/`, `/ja/`,
-  `/pt-br/`, `/de/`, or `/` for English).
-* **`hreflang`.** `<link rel="alternate">` for `en`, `zh-CN`, `ja-JP`, `pt-BR`, and
-  `de-DE`, plus `x-default` pointing at the English URL. These use the same
+  `/pt-br/`, `/de/`, `/es/`, or `/` for English).
+* **`hreflang`.** `<link rel="alternate">` for `en`, `zh-CN`, `ja-JP`, `pt-BR`,
+  `de-DE`, and `es-419`, plus a neutral `es` alternate pointing at the same Spanish URL
+  and `x-default` pointing at the English URL. These use the same
   lookup-and-fallback result as the switcher, so a missing translation never produces a
   dead `hreflang`.
 * **Translation notice.** Below the content, one sentence per language stating that the
@@ -226,10 +230,11 @@ Run from the repository root unless a step says otherwise.
    against each language directory:
 
    ```sh
-   for d in zh ja pt-br de; do
+   for d in zh ja pt-br de es; do
      echo "== $d"
      diff <(cd /tmp/madsite && find . -name '*.html' -not -path './assets/*' -not -path "./$d/*" \
-             -not -path './zh/*' -not -path './ja/*' -not -path './pt-br/*' -not -path './de/*' | sort) \
+             -not -path './zh/*' -not -path './ja/*' -not -path './pt-br/*' -not -path './de/*' \
+             -not -path './es/*' | sort) \
           <(cd /tmp/madsite/$d && find . -name '*.html' | sort)
    done
    ```
@@ -253,7 +258,7 @@ Run from the repository root unless a step says otherwise.
 
    ```sh
    for f in docs/*.md; do
-     t="${f/docs/docs/zh}"     # or ja/, pt-br/, de/
+     t="${f/docs/docs/zh}"     # or ja/, pt-br/, de/, es/
      printf '%-40s en:%s/%s/%s  zh:%s/%s/%s\n' "$f" \
        "$(grep -c '^#' "$f")" "$(grep -c '^|' "$f")" "$(grep -c '^```' "$f")" \
        "$(grep -c '^#' "$t")" "$(grep -c '^|' "$t")" "$(grep -c '^```' "$t")"
@@ -263,10 +268,12 @@ Run from the repository root unless a step says otherwise.
    Blank lines inside tables and intentional extra notes can add a heading or a row; read
    any delta rather than assuming it is none.
 
-7. **Check the switcher and `hreflang`.** On a built page, the six `rel="alternate"`
-   links should point at five existing pages plus `x-default` (English). Spot-check one
-   page per language in both directions, and check that the fallback for an
-   untranslated page lands on that language's landing page rather than a 404.
+7. **Check the switcher and `hreflang`.** On a built page, the eight `rel="alternate"`
+   links should point at six existing pages (`en`, `zh-CN`, `ja-JP`, `pt-BR`, `de-DE`,
+   `es-419`), the neutral `es` alternate (the same Spanish URL), and `x-default`
+   (English). Spot-check one page per language in both directions, and check that the
+   fallback for an untranslated page lands on that language's landing page rather than
+   a 404.
 
 For the bug registers specifically, parity is a count check:
 
@@ -278,34 +285,38 @@ done
 
 ## Adding the next language
 
-Spanish (`es-ES`, directory `docs/es/`, suffix `_es`, label `Español`) is the next one
-planned. The same steps apply to any language.
+Spanish (`es-419`, directory `docs/es/`, suffix `_es`, label `Español`) was the last one
+added, on 2026-11-03, and followed these steps. The same steps apply to any language;
+substitute its tag, directory, suffix, and label.
 
-1. **Create `docs/es/`** and translate the 14 website pages, mirroring the English
-   relative paths. Each page gets `lang: es-ES` in its front matter.
+1. **Create `docs/<lang>/`** and translate the 14 website pages, mirroring the English
+   relative paths. Each page gets its BCP-47 tag as `lang:` in its front matter — for
+   Spanish, `lang: es-419` on every page.
 2. **Add a `_config.yml` default** so pages without an explicit `lang` still resolve:
 
    ```yaml
      - scope:
          path: "es"
        values:
-         lang: es-ES
-         locale: es_ES
+         lang: es-419
+         locale: es_419
    ```
 
    The `*/project` and `*/archive` exclusions already cover the new directory.
 3. **Add the layout branch** in `docs/_layouts/default.html`: an `is_es` flag, a
    `base_url` strip for `/es`, an `es` candidate and match with a `/es/` fallback, the
-   `hreflang="es-ES"` link, the translation notice, and the footer string.
+   `hreflang="es-419"` link (plus the neutral `hreflang="es"` alternate pointing at the
+   same URL, when the variant is regional), the translation notice, and the footer string.
 4. **Add the switcher entry in every existing branch.** The layout has one `<nav>` block
-   per language (English, Chinese, Japanese, Portuguese, German) plus the new one; each
-   must list `Español` in the fixed order, and the Spanish block must list the other five.
+   per language (English, Chinese, Japanese, Portuguese, German, Spanish); each must list
+   the new label in the fixed order, and the new block must list the other languages.
 5. **Add the root files.** Eleven new files — `README_es.md`, `CONTRIBUTING_es.md`,
    `CODE_OF_CONDUCT_es.md`, `SECURITY_es.md`, the author note, and the six folder
-   READMEs — and add `Español` to the banner of all 55 existing files (11 documents ×
-   5 languages). Translate the titles and descriptions of the website pages as well.
-6. **Update this manifest**: the languages table, the status column, and the "next
-   language" note.
+   READMEs — and add the label to the banner of all 66 existing files (11 documents ×
+   6 languages; the author note has no banner). Translate the titles and descriptions of
+   the website pages as well.
+6. **Update this manifest**: the languages table, the status column, the switcher order,
+   the `hreflang` set, and this section.
 7. **Validate**: build, links, page counts, code-block identity, heading/table/fence
    parity, and the switcher in all directions. A new language is not done until every
-   check in the validation checklist passes for all six.
+   check in the validation checklist passes for all seven.

@@ -1,4 +1,4 @@
-**English** | [简体中文](CONTRIBUTING_zh.md) | [日本語](CONTRIBUTING_ja.md) | [Português (Brasil)](CONTRIBUTING_pt-BR.md) | [Deutsch](CONTRIBUTING_de.md)
+**English** | [简体中文](CONTRIBUTING_zh.md) | [日本語](CONTRIBUTING_ja.md) | [Português (Brasil)](CONTRIBUTING_pt-BR.md) | [Deutsch](CONTRIBUTING_de.md) | [Español](CONTRIBUTING_es.md)
 
 # Contributing to MAD
 

@@ -1,4 +1,4 @@
-**English** | [简体中文](CODE_OF_CONDUCT_zh.md) | [日本語](CODE_OF_CONDUCT_ja.md) | [Português (Brasil)](CODE_OF_CONDUCT_pt-BR.md) | [Deutsch](CODE_OF_CONDUCT_de.md)
+**English** | [简体中文](CODE_OF_CONDUCT_zh.md) | [日本語](CODE_OF_CONDUCT_ja.md) | [Português (Brasil)](CODE_OF_CONDUCT_pt-BR.md) | [Deutsch](CODE_OF_CONDUCT_de.md) | [Español](CODE_OF_CONDUCT_es.md)
 
 # Contributor Covenant Code of Conduct
 

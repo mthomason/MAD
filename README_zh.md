@@ -1,4 +1,4 @@
-[English](README.md) | **简体中文** | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md)
+[English](README.md) | **简体中文** | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md) | [Español](README_es.md)
 
 > **作者关于智能体编程与 LLM 的说明** — [点击阅读](Note%20from%20Author%20on%20Agentic%20Programming%20and%20LLMs_zh.md)
 
