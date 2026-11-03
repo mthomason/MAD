@@ -228,6 +228,10 @@ the headless side.
 * `docs/project/MAD_STORE_MIGRATION.md` -- the plan to move the `.mad` store off Core Data to a portable
   SQLite schema of our own.
 * `docs/project/DEVELOPER.md` -- test database credentials and common build commands.
+* `docs/project/LOCALIZATION.md` -- the documentation localization contract: the five
+  languages, the 25 public documents that must exist in each, the naming and front-matter
+  rules, the language switcher, the excluded internal record trees, and the validation
+  checklist for adding the next language.
 * `docs/project/TODO.md` -- the product wishlist: features and ideas.
 * `README.md` -- build notes and the export-compliance statement.
 * `docs/project/APPSTORE.md` -- the App Store promotional text and description currently in use.

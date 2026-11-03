@@ -15,8 +15,8 @@ lang: zh-CN
 
 ---
 
-**`.mad` 格式是一份开放规范。** 任何人都可以阅读并实现它。MIT 许可证覆盖本项目的代码。“MAD”“MAD Designer”和“MAD Viewer”这些名称，以及应用图标和其他产品美术资源，归作者所有且未授予许可；对 `.mad` 文件及本项目的描述性引用是受欢迎的。参见 [`../../LICENSE`](../../LICENSE)、[`../../NOTICE`](../../NOTICE)
-和 [`project/THIRD_PARTY_LICENSES.md`](project/THIRD_PARTY_LICENSES.md)。
+**`.mad` 格式是一份开放规范。** 任何人都可以阅读并实现它。MIT 许可证覆盖本项目的代码。“MAD”“MAD Designer”和“MAD Viewer”这些名称，以及应用图标和其他产品美术资源，归作者所有且未授予许可；对 `.mad` 文件及本项目的描述性引用是受欢迎的。参见 [`../../LICENSE`](https://github.com/mthomason/MAD/blob/master/LICENSE)、[`../../NOTICE`](https://github.com/mthomason/MAD/blob/master/NOTICE)
+和 [`project/THIRD_PARTY_LICENSES.md`](https://github.com/mthomason/MAD/blob/master/docs/project/THIRD_PARTY_LICENSES.md)。
 
 规范按每个文件一章组织。第 1–6 章描述随版本发布的格式；第 7 章是规范性目标（`v1`）；第 8–9 章是开放问题以及各项主张的验证方式：
 

@@ -24,11 +24,16 @@ social:
 theme: jekyll-theme-primer
 lang: en-US
 
+# Internal records are excluded for every language tree. The bare entries cover
+# the English root; the globs cover the per-language mirrors (zh/, ja/, pt-br/,
+# de/, and any language added later). Jekyll matches exclude entries with
+# File.fnmatch?, where "*/project" matches any path that ends in /project (and
+# does not match the bare root name, which the entry above it covers).
 exclude:
   - project
   - archive
-  - zh/project
-  - zh/archive
+  - "*/project"
+  - "*/archive"
 
 plugins:
   - jekyll-seo-tag
