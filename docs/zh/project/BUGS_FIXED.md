@@ -62,6 +62,34 @@ lang: zh-CN
 
 ## MAD（框架）
 
+### `RptqDocument -storeDatabaseConnectionDefination:forManagedObjectContext:` 丢弃了 `credentals.key`、`databaseDriverTypeEnum` 与 TDS `host`，且 `MADMacDocument` 刷新既不提供服务器凭据，也不暴露刷新错误
+- **状态：** 已修复 2026-10-31。
+- **位置：** `MAD/Source/rptq/RptqDocument+Extras.m:208-235`、`MADFoundation/Source/MADKeyChain.m`、
+  `Mac/Source/MADMacDocument.m`（`-refreshDataWithPassword:completion:`）。
+- **行为：** 三个彼此相关的缺陷使 MySQL、PostgreSQL 和 SQL Server 文档在 macOS 上无法刷新：
+  1. `-[RptqDocument storeDatabaseConnectionDefination:forManagedObjectContext:]` 在
+     `RptqDatabaseCredentals` 上持久化了 `username`、`host`、`database` 和 `port`，却从未设置
+     `credentals.key = database.databaseConnection.connectionString` 或
+     `rptqDB.databaseDriverTypeEnum`；对 TDS（`MADDatabaseTypeTds`）它还用
+     `databaseConnection.server` 覆写了 `credentals.host`，而不是 `databaseConnection.host`。
+  2. `-[MADMacDocument refreshDataWithPassword:completion:]` 排入了 `MADOperationRefresh`，
+     却没有附加 `<MADOperationHoldsCredentialsProtocol>` 依赖，因此
+     `MADOperationRefresh -execute` 对每个 `requiresCredentials` 为 `YES` 的数据库
+     （`MADDatabaseMySQL`、`MADDatabasePostgres`、`MADDatabaseSQLServer`）都看到
+     `credential == nil`，并以 `errMissingCredentials` 中止。
+  3. `refreshOp.completionBlock` 无条件调用 `completion(YES, nil)`，从不检查
+     `refreshOp.errors`，因此任何缺失凭据、连接或 SQL 错误都被静默吞掉，并被报告为
+     成功的 0 行刷新。
+- **现状：** `RptqDocument -storeDatabaseConnectionDefination:forManagedObjectContext:` 写入
+  `credentals.key = [database.databaseConnection.connectionString copy]`，设置
+  `rptqDB.databaseDriverTypeEnum`，并为 TDS 保留 `databaseConnection.host`；
+  `MADKeyChain` 暴露 `+usernameForKey:` 和 `+passwordForKey:`；
+  `MADMacDocument -refreshDataWithPassword:completion:` 从 `sessionCredentials`、
+  `MADKeyChain` 或 `password` 参数解析凭据，给 `refreshOp` 附加一个
+  `<MADOperationHoldsCredentialsProtocol>` 依赖操作，并把 `refreshOp.errors.firstObject`
+  转发给 `completion(NO, firstErr)`。
+- **测试：** `mad-mac-smoke-test` 第 8 节（`Mac/Tests/MADMacSmokeTest.m`）。
+
 ### `MADDesignerLayout` 的多选撤销用单个标量覆盖每个元素的先前值
 - **状态：** 已修复 2026-10-29。
 - **位置：** `MAD/Source/MADDesignerLayout.m:157-555`（`-updateElements:setFontsize:`、`-updateElements:setFontname:`、`-updateElements:setVerticalAlignment:`、`-updateElements:setHorizontalAlignment:`、`-updateElements:setSizeWidth:`、`-updateElements:setSizeHeight:`，以及 `-updateElements:setMargin*`、`-updateElements:setPadding*` 和 `-updateElements:setBorder*` 系列方法）。
@@ -867,6 +895,38 @@ lang: zh-CN
 - **测试：** `MADExplorerTests -testSamePathRewriteReloadsTheImage`（`0.225s`）。
 
 ## MADSqlite3
+
+### `MADDatabaseSqlite3` 用 `SQLITE_OPEN_CREATE` 打开源数据库，在目录缺失时触发 `NSAssert`，或创建了一个没有表的 0 字节 `.sqlite3` 文件
+- **状态：** 已修复 2026-10-31。
+- **位置：** `MADSqlite3/Source/MADDatabaseSqlite3.m`（`-connectWithConnection:credentals:connectionError:`）、
+  `MAD/Source/MADDatabase+Constructor.m`（`+newDatabaseWithConnection:`）、
+  `MADSqlite3/Source/MADDatabaseConnectionSqlite3.m`（`+resolvedDatabaseURLForCredentials:documentURL:`）。
+- **行为：** `+newDatabaseWithConnection:` 在构造描述符期间调用了
+  `[(MADDatabaseSqlite3 *)result openDatabase]`，而
+  `-connectWithConnection:credentals:connectionError:` 在 `self.databaseHandle == NULL` 时调用了
+  `[self openDatabase]`（`SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE`）。
+  当一份 `.mad` 报表引用的是用户机器上目录存在（例如 `Application Support`）而
+  `.sqlite3` 文件缺失的 SQLite 文件时，`sqlite3_open_v2` 会在该路径上静默创建一个
+  0 字节文件，导致刷新期间的 `SELECT` 查询以
+  `no such table: <TableName>` 失败，同时在磁盘上留下一个会破坏后续打开的空文件。
+  当父目录本身不存在时（例如来自另一台机器的路径，或被删除的文件夹），`sqlite3_open_v2`
+  返回 `SQLITE_CANTOPEN`，`-openDatabaseWithFlags:` 触发
+  `NSAssert(errorCode == SQLITE_OK, ...)` 并让应用崩溃。
+- **现状：** `+newDatabaseWithConnection:` 只把 `result.databaseConnection = connection` 赋值，
+  不再急于打开磁盘上的文件。`-connectWithConnection:credentals:connectionError:` 会检查
+  目标文件存在且非空（`fileSize > 0`），删除旧版本留下的任何 0 字节产物，文件缺失时
+  返回 `nil`，并在 `MADDatabaseSqlite3ErrorDomain` 中给出结构化 `NSError`
+  （`MADDatabaseSqlite3ErrorFileNotFound = 4833`），既不调用 `sqlite3_open_v2`，也不触发
+  `NSAssert`。文件存在且非空时，它以
+  `SQLITE_OPEN_READWRITE | SQLITE_OPEN_SHAREDCACHE | SQLITE_OPEN_FULLMUTEX` 打开（只读文件则回退到
+  `SQLITE_OPEN_READONLY`），绝不为源数据库传入 `SQLITE_OPEN_CREATE`。内部缓存数据库
+  （`MADDataTableFast`、`MADArrayCaching`）仍直接以 `SQLITE_OPEN_CREATE` 调用
+  `-openDatabase` / `-openDatabaseWithFlags:`。此外，
+  `MADDatabaseConnectionSqlite3 +resolvedDatabaseURLForCredentials:documentURL:` 会在存储的路径、
+  `.mad` 文档的同级目录、`Application Support` 和应用包资源之间解析源 SQLite 文件。
+- **测试：** `MADDatabaseSqlite3DatabaseTests testConnectToMissingFileDoesNotCreateZeroByteFileAndPopulatesError`
+  和 `testConnectToExistingZeroByteFileRemovesArtifactAndFailsCleanly`（iOS 与 `Linux/Tests` 均有），
+  外加 `mad-mac-smoke-test` 第 8 节。
 
 ### `MADDatabaseSqlite3` 在零行 `SELECT` 上无条件调用 `-endBulkInsert`，抛出 `cannot commit - no transaction is active`
 - **状态：** 已于 2026-10-29 修复。

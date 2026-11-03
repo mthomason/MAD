@@ -381,6 +381,7 @@ lang: zh-CN
 
 *已归档（已修复；全文、测试及任何提交哈希见 [`BUGS_FIXED.md`](BUGS_FIXED.md)）：*
 
+- `RptqDocument -storeDatabaseConnectionDefination:forManagedObjectContext:` 丢弃了 `credentals.key`、`databaseDriverTypeEnum` 与 TDS `host`，且 `MADMacDocument` 刷新既不提供服务器凭据，也不暴露刷新错误
 - `MADDesignerLayout` 的多选撤销用单个标量覆盖每个元素的先前值
 - `MADSQLParser` 在 `FROM`、`JOIN` 和三段式列引用中拒绝架构限定的表名（`schema.table`）
 - `MADSectionLayout` 以错误的宽度读取 CFNumber，破坏了相邻的实例变量
@@ -889,6 +890,7 @@ lang: zh-CN
 
 *已归档（已修复；全文、测试及任何提交哈希见 [`BUGS_FIXED.md`](BUGS_FIXED.md)）：*
 
+- `MADDatabaseSqlite3` 用 `SQLITE_OPEN_CREATE` 打开源数据库，在目录缺失时触发 `NSAssert`，或创建了一个没有表的 0 字节 `.sqlite3` 文件
 - `MADDatabaseSqlite3` 在零行 `SELECT` 上无条件调用 `-endBulkInsert`，抛出 `cannot commit - no transaction is active`
 - `MADArrayCaching` 可能从空标识符构建缓存 URL
 - `MADDataTableFast` 把可能为 nil 的值传入会抛出的路径

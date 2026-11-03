@@ -28,8 +28,8 @@ Everything in the first half is measured, not inferred. The two samples are
 it. The MIT licence covers the project's code. The names "MAD", "MAD Designer"
 and "MAD Viewer", and the application icons and other product artwork, are the
 author's and are not licensed; descriptive references to `.mad` files and to
-this project are welcome. See [`../LICENSE`](../LICENSE), [`../NOTICE`](../NOTICE)
-and [`../project/THIRD_PARTY_LICENSES.md`](../project/THIRD_PARTY_LICENSES.md).
+this project are welcome. See [`../LICENSE`](https://github.com/mthomason/MAD/blob/master/LICENSE), [`../NOTICE`](https://github.com/mthomason/MAD/blob/master/NOTICE)
+and [`../project/THIRD_PARTY_LICENSES.md`](https://github.com/mthomason/MAD/blob/master/docs/project/THIRD_PARTY_LICENSES.md).
 
 The spec is organised as one chapter per file. Chapters 1-6 describe the format as
 it ships; chapter 7 is the normative target (`v1`); chapters 8-9 are the open
