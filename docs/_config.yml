@@ -1,7 +1,7 @@
 # The documentation site's Jekyll configuration (GitHub Pages, source: /docs).
 # English pages live at the site root; the Simplified Chinese, Japanese,
-# Brazilian Portuguese, and German translations mirror them under zh/, ja/,
-# pt-br/, and de/.
+# Brazilian Portuguese, German, and Latin American Spanish translations mirror
+# them under zh/, ja/, pt-br/, de/, and es/.
 # All trees share the theme, the layouts, and the language switcher in
 # _layouts/default.html.
 
@@ -26,7 +26,7 @@ lang: en-US
 
 # Internal records are excluded for every language tree. The bare entries cover
 # the English root; the globs cover the per-language mirrors (zh/, ja/, pt-br/,
-# de/, and any language added later). Jekyll matches exclude entries with
+# de/, es/, and any language added later). Jekyll matches exclude entries with
 # File.fnmatch?, where "*/project" matches any path that ends in /project (and
 # does not match the bare root name, which the entry above it covers).
 exclude:
@@ -69,3 +69,8 @@ defaults:
     values:
       lang: de-DE
       locale: de_DE
+  - scope:
+      path: "es"
+    values:
+      lang: es-419
+      locale: es_419

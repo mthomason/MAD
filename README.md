@@ -1,4 +1,4 @@
-**English** | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md)
+**English** | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md) | [Español](README_es.md)
 
 > **A note from the author on agentic programming and LLMs** — [Read it here](Note%20from%20Author%20on%20Agentic%20Programming%20and%20LLMs.md)
 
