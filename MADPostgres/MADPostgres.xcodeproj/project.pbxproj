@@ -48,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0EFF61A728EAB91476E7C3D5 /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/MADCreateDocument.strings; sourceTree = "<group>"; };
+		24C93315FB0D6CDD09177553 /* ja */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/MADCreateDocument.strings; sourceTree = "<group>"; };
 		4C1C0C200000000000000003 /* Base */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MADCreateDocument.storyboard; sourceTree = "<group>"; };
 		4CA200022000000000000001 /* MADPostgres.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADPostgres.h; sourceTree = "<group>"; };
 		4CA200042000000000000001 /* MADDatabasePostgres.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabasePostgres.h; sourceTree = "<group>"; };
@@ -78,6 +80,9 @@
 		4CA200392000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4CA2003A2000000000000001 /* MADPostgresTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADPostgresTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA2003C2000000000000001 /* MADPostgresLiveTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADPostgresLiveTests.m; sourceTree = "<group>"; };
+		66640181D0F92D0A58057414 /* pt-BR */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/MADCreateDocument.strings"; sourceTree = "<group>"; };
+		B74ADBCC351E440E114181D1 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MADCreateDocument.strings"; sourceTree = "<group>"; };
+		C0CE54BAB51B5AD853A9B4CF /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MADCreateDocument.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,6 +272,11 @@
 				English,
 				en,
 				Base,
+				de,
+				es,
+				ja,
+				"pt-BR",
+				"zh-Hans",
 			);
 			mainGroup = 4CA200802000000000000001;
 			productRefGroup = 4CA200852000000000000001 /* Products */;
@@ -355,6 +365,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				4C1C0C200000000000000003 /* Base */,
+				C0CE54BAB51B5AD853A9B4CF /* de */,
+				0EFF61A728EAB91476E7C3D5 /* es */,
+				24C93315FB0D6CDD09177553 /* ja */,
+				66640181D0F92D0A58057414 /* pt-BR */,
+				B74ADBCC351E440E114181D1 /* zh-Hans */,
 			);
 			name = MADCreateDocument.storyboard;
 			sourceTree = "<group>";

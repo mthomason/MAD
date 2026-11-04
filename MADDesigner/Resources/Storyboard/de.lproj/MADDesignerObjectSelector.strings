@@ -1,0 +1,40 @@
+/*
+  MADDesignerObjectSelector.strings — German translation of MADDesigner/Storyboard/MADDesignerObjectSelector.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UITextField"; placeholder = "Enter Text to Display"; ObjectID = "0ug-fW-EyC"; */
+"0ug-fW-EyC.placeholder" = "Anzuzeigenden Text eingeben";
+
+/* Class = "UILabel"; text = "Not Selected"; ObjectID = "4eJ-yw-hzS"; */
+"4eJ-yw-hzS.text" = "Nicht ausgewählt";
+
+/* Class = "UINavigationItem"; title = "New Aggregate Function"; ObjectID = "DAn-XA-h3m"; */
+"DAn-XA-h3m.title" = "Neue Aggregatfunktion";
+
+/* Class = "UINavigationItem"; title = "Document Objects"; ObjectID = "PdH-MB-Zm5"; */
+"PdH-MB-Zm5.title" = "Dokumentobjekte";
+
+/* Class = "UILabel"; text = "A dynamic data field label."; ObjectID = "eGq-zK-hAA"; */
+"eGq-zK-hAA.text" = "Eine Beschriftung für ein dynamisches Datenfeld.";
+
+/* Class = "UILabel"; text = "Data Label"; ObjectID = "jBl-vr-TJ3"; */
+"jBl-vr-TJ3.text" = "Datenbeschriftung";
+
+/* Class = "UINavigationItem"; title = "Select Field"; ObjectID = "miZ-qc-DOx"; */
+"miZ-qc-DOx.title" = "Feld auswählen";
+
+/* Class = "UINavigationItem"; title = "Aggregate Functions"; ObjectID = "mvx-Om-kho"; */
+"mvx-Om-kho.title" = "Aggregatfunktionen";
+
+/* Class = "UINavigationItem"; title = "New Static Label"; ObjectID = "nzT-Eb-MlX"; */
+"nzT-Eb-MlX.title" = "Neue statische Beschriftung";
+
+/* Class = "UILabel"; text = "Page"; ObjectID = "oGn-Rk-1gb"; */
+"oGn-Rk-1gb.text" = "Seite";
+
+/* Class = "UINavigationItem"; title = "Select Field"; ObjectID = "qpy-ah-ljW"; */
+"qpy-ah-ljW.title" = "Feld auswählen";
+
+/* Class = "UINavigationItem"; title = "Group By"; ObjectID = "rWH-dO-cQL"; */
+"rWH-dO-cQL.title" = "Group By";

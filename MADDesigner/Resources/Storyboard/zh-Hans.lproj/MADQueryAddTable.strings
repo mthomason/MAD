@@ -1,0 +1,10 @@
+/*
+  MADQueryAddTable.strings — Simplified Chinese translation of MADDesigner/Storyboard/MADQueryAddTable.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UIBarButtonItem"; title = "Cancel"; ObjectID = "Zyc-vz-Rca"; */
+"Zyc-vz-Rca.title" = "取消";
+
+/* Class = "UINavigationItem"; title = "Add Table"; ObjectID = "enE-7g-Ohw"; */
+"enE-7g-Ohw.title" = "添加表";

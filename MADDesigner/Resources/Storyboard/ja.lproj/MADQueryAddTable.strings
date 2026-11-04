@@ -1,0 +1,10 @@
+/*
+  MADQueryAddTable.strings — Japanese translation of MADDesigner/Storyboard/MADQueryAddTable.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UIBarButtonItem"; title = "Cancel"; ObjectID = "Zyc-vz-Rca"; */
+"Zyc-vz-Rca.title" = "キャンセル";
+
+/* Class = "UINavigationItem"; title = "Add Table"; ObjectID = "enE-7g-Ohw"; */
+"enE-7g-Ohw.title" = "テーブルを追加";

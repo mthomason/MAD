@@ -1,0 +1,43 @@
+/*
+  MADQueryAddJoin.strings — Simplified Chinese translation of MADDesigner/Storyboard/MADQueryAddJoin.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "Left Field"; ObjectID = "03H-0V-n10"; */
+"03H-0V-n10.text" = "左侧字段";
+
+/* Class = "UILabel"; text = "Join Type"; ObjectID = "0sR-bu-3wQ"; */
+"0sR-bu-3wQ.text" = "联接类型";
+
+/* Class = "UILabel"; text = "required"; ObjectID = "5X8-kN-DN1"; */
+"5X8-kN-DN1.text" = "必填";
+
+/* Class = "UILabel"; text = "Left Outer Join"; ObjectID = "May-ug-2Id"; */
+"May-ug-2Id.text" = "左外联接";
+
+/* Class = "UILabel"; text = "Right Field"; ObjectID = "O0a-tI-Smu"; */
+"O0a-tI-Smu.text" = "右侧字段";
+
+/* Class = "UILabel"; text = "Equi-Join"; ObjectID = "XQP-1Z-YYE"; */
+"XQP-1Z-YYE.text" = "等值联接";
+
+/* Class = "UILabel"; text = "Cross Join"; ObjectID = "XUp-F6-3Vv"; */
+"XUp-F6-3Vv.text" = "交叉联接";
+
+/* Class = "UILabel"; text = "Full Outer Join"; ObjectID = "bE4-rF-xyk"; */
+"bE4-rF-xyk.text" = "全外联接";
+
+/* Class = "UILabel"; text = "Right Outer Join"; ObjectID = "hrP-Lh-hLK"; */
+"hrP-Lh-hLK.text" = "右外联接";
+
+/* Class = "UILabel"; text = "required"; ObjectID = "w1a-4c-yw8"; */
+"w1a-4c-yw8.text" = "必填";
+
+/* Class = "UINavigationItem"; title = "Select Join Type"; ObjectID = "xvK-mw-QOs"; */
+"xvK-mw-QOs.title" = "选择联接类型";
+
+/* Class = "UILabel"; text = "Inner-Join"; ObjectID = "y1r-ex-R2J"; */
+"y1r-ex-R2J.text" = "内联接";
+
+/* Class = "UINavigationItem"; title = "Link Builder"; ObjectID = "zSH-nd-zCJ"; */
+"zSH-nd-zCJ.title" = "链接构建器";

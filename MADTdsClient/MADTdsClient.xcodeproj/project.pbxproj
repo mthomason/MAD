@@ -63,6 +63,11 @@
 		4C6C0A0B1F5D32AB00EDA039 /* MADTdsConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADTdsConnectionViewController.m; sourceTree = "<group>"; };
 		4CAA00112000000000000011 /* MADTdsClientLiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADTdsClientLiveTests.m; sourceTree = "<group>"; };
 		4CBF04422E85197500812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
+		6D79C22B1C069E0C5A433D0E /* pt-BR */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/MADCreateDocument.strings"; sourceTree = "<group>"; };
+		B8983F8A4541890E3DF1DA81 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MADCreateDocument.strings"; sourceTree = "<group>"; };
+		BBBAB3BA37B866B7C50C87A3 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MADCreateDocument.strings; sourceTree = "<group>"; };
+		D106BD5D4F8EEB3D94919A28 /* ja */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/MADCreateDocument.strings; sourceTree = "<group>"; };
+		F2F24E9CD856BFDE3BA9007F /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/MADCreateDocument.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,6 +243,11 @@
 				English,
 				en,
 				Base,
+				de,
+				es,
+				ja,
+				"pt-BR",
+				"zh-Hans",
 			);
 			mainGroup = 4C66C13D1BA887D500663575;
 			productRefGroup = 4C66C1481BA887D500663575 /* Products */;
@@ -305,6 +315,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				4C1C0C200000000000000002 /* Base */,
+				BBBAB3BA37B866B7C50C87A3 /* de */,
+				F2F24E9CD856BFDE3BA9007F /* es */,
+				D106BD5D4F8EEB3D94919A28 /* ja */,
+				6D79C22B1C069E0C5A433D0E /* pt-BR */,
+				B8983F8A4541890E3DF1DA81 /* zh-Hans */,
 			);
 			name = MADCreateDocument.storyboard;
 			sourceTree = "<group>";

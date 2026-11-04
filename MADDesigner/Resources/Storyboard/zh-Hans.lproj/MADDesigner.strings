@@ -1,0 +1,16 @@
+/*
+  MADDesigner.strings — Simplified Chinese translation of MADDesigner/Storyboard/MADDesigner.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UINavigationItem"; title = "Layout Settings"; ObjectID = "O59-Rl-eSl"; */
+"O59-Rl-eSl.title" = "布局设置";
+
+/* Class = "UILabel"; text = "Form Feed"; ObjectID = "abz-yC-AFZ"; */
+"abz-yC-AFZ.text" = "换页符";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "c2W-9c-j0G"; */
+"c2W-9c-j0G.text" = "标签";
+
+/* Class = "UILabel"; text = "Visible"; ObjectID = "yZq-8w-W5I"; */
+"yZq-8w-W5I.text" = "可见";

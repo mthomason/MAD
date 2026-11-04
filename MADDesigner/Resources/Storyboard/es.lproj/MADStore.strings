@@ -1,0 +1,52 @@
+/*
+  MADStore.strings — Spanish translation of MADDesigner/Storyboard/MADStore.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "How rare is that?"; ObjectID = "4qJ-60-cYL"; */
+"4qJ-60-cYL.text" = "¿Qué tan poco común es eso?";
+
+/* Class = "UINavigationItem"; title = "Transaction History"; ObjectID = "7RX-ff-Tny"; */
+"7RX-ff-Tny.title" = "Historial de transacciones";
+
+/* Class = "UILabel"; text = "Purchase Date"; ObjectID = "CRp-nc-rgI"; */
+"CRp-nc-rgI.text" = "Fecha de compra";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "G5E-SB-qyi"; */
+"G5E-SB-qyi.text" = "Etiqueta";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "GkZ-VC-f3T"; */
+"GkZ-VC-f3T.text" = "Etiqueta";
+
+/* Class = "UIBarButtonItem"; title = "Restore"; ObjectID = "LaF-6E-3vB"; */
+"LaF-6E-3vB.title" = "Restaurar";
+
+/* Class = "UITableViewController"; title = "In App Purchases"; ObjectID = "SMd-og-dLO"; */
+"SMd-og-dLO.title" = "Compras dentro de la app";
+
+/* Class = "UIBarButtonItem"; title = "Transactions"; ObjectID = "a0f-zm-1by"; */
+"a0f-zm-1by.title" = "Transacciones";
+
+/* Class = "UILabel"; text = "Product"; ObjectID = "c1O-ly-tdq"; */
+"c1O-ly-tdq.text" = "Producto";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "cgk-2T-cE7"; */
+"cgk-2T-cE7.text" = "Etiqueta";
+
+/* Class = "UILabel"; text = "Cancellation Date"; ObjectID = "dEq-xd-aEd"; */
+"dEq-xd-aEd.text" = "Fecha de cancelación";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "gGM-HA-Ecj"; */
+"gGM-HA-Ecj.text" = "Etiqueta";
+
+/* Class = "UICollectionViewController"; title = "Power Up"; ObjectID = "h0c-bN-5Vg"; */
+"h0c-bN-5Vg.title" = "Mejoras";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "o5M-TA-2sR"; */
+"o5M-TA-2sR.text" = "Etiqueta";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "oCu-UR-P5f"; */
+"oCu-UR-P5f.text" = "Etiqueta";
+
+/* Class = "UILabel"; text = "Product"; ObjectID = "sHp-dx-m7o"; */
+"sHp-dx-m7o.text" = "Producto";

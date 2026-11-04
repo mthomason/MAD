@@ -1,0 +1,28 @@
+/*
+  MADCreateDocument.strings — Simplified Chinese translation of MADPostgres/MADCreateDocument.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "Database"; ObjectID = "1rg-dK-NrM"; */
+"1rg-dK-NrM.text" = "数据库";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "6L0-3n-H0b"; */
+"6L0-3n-H0b.text" = "名称";
+
+/* Class = "UITextField"; text = "Document"; ObjectID = "Hla-vG-6Br"; */
+"Hla-vG-6Br.text" = "文档";
+
+/* Class = "UILabel"; text = "Port"; ObjectID = "LVz-ct-FGs"; */
+"LVz-ct-FGs.text" = "端口";
+
+/* Class = "UITableViewSection"; headerTitle = "Document Settings"; ObjectID = "LmX-El-ITf"; */
+"LmX-El-ITf.headerTitle" = "文档设置";
+
+/* Class = "UINavigationItem"; title = "Connection Setup"; ObjectID = "NDP-yE-RF0"; */
+"NDP-yE-RF0.title" = "连接设置";
+
+/* Class = "UILabel"; text = "Host"; ObjectID = "arP-8e-rkb"; */
+"arP-8e-rkb.text" = "主机";
+
+/* Class = "UITableViewSection"; headerTitle = "Database Settings"; ObjectID = "cO6-fm-mQE"; */
+"cO6-fm-mQE.headerTitle" = "数据库设置";

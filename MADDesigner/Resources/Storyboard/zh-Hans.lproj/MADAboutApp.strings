@@ -1,0 +1,10 @@
+/*
+  MADAboutApp.strings — Simplified Chinese translation of MADDesigner/Storyboard/MADAboutApp.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UINavigationItem"; title = "What is MAD?"; ObjectID = "N37-3x-PRo"; */
+"N37-3x-PRo.title" = "MAD 是什么？";
+
+/* Class = "UINavigationItem"; title = "Information"; ObjectID = "vrB-kM-Xtz"; */
+"vrB-kM-Xtz.title" = "信息";

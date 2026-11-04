@@ -1,0 +1,7 @@
+/*
+  MADQuerySelectField.strings — Brazilian Portuguese translation of MADDesigner/Storyboard/MADQuerySelectField.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UINavigationItem"; title = "Select Field"; ObjectID = "UP6-f2-0bs"; */
+"UP6-f2-0bs.title" = "Selecionar Campo";

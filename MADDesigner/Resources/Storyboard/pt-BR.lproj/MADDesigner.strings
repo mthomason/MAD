@@ -1,0 +1,16 @@
+/*
+  MADDesigner.strings — Brazilian Portuguese translation of MADDesigner/Storyboard/MADDesigner.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UINavigationItem"; title = "Layout Settings"; ObjectID = "O59-Rl-eSl"; */
+"O59-Rl-eSl.title" = "Ajustes de layout";
+
+/* Class = "UILabel"; text = "Form Feed"; ObjectID = "abz-yC-AFZ"; */
+"abz-yC-AFZ.text" = "Avanço de Formulário";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "c2W-9c-j0G"; */
+"c2W-9c-j0G.text" = "Rótulo";
+
+/* Class = "UILabel"; text = "Visible"; ObjectID = "yZq-8w-W5I"; */
+"yZq-8w-W5I.text" = "Visível";

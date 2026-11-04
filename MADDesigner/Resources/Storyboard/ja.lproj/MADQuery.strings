@@ -1,0 +1,10 @@
+/*
+  MADQuery.strings — Japanese translation of MADDesigner/Storyboard/MADQuery.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "Datasource"; ObjectID = "8Vr-cR-h2s"; */
+"8Vr-cR-h2s.text" = "データソース";
+
+/* Class = "UINavigationItem"; title = "Generated Query"; ObjectID = "pAq-dE-kx0"; */
+"pAq-dE-kx0.title" = "生成されたクエリ";
