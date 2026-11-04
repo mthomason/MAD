@@ -13,6 +13,7 @@
 #import "MADDataTable.h"
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSValue.h>
 #import <Foundation/NSNull.h>
@@ -138,7 +139,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 
 - (BOOL)loadFromCacheWithUrl:(nonnull NSURL *)url error:(NSError * _Nullable __autoreleasing * _Nullable)outError {
 	if (!url) {
-		NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"URL is nil.",
+		NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"URL is nil.", @"Error when a data-table file URL is missing."),
 								   NSURLErrorKey: url ?: [NSNull null]};
 		@throw [NSError errorWithDomain:NSStringFromClass([MADDataTable class])
 								   code:-213
@@ -150,7 +151,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 	BOOL fileExistAtPath = [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isFileDirectory];
 	if (!path || !fileExistAtPath) {
 		if (outError) {
-			NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"File does not exist.",
+			NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"File does not exist.", @"Error when a data-table file is missing."),
 									   NSURLErrorKey: url ?: [NSNull null]};
 			*outError = [NSError errorWithDomain:NSStringFromClass([MADDataTable class])
 											code:-215
@@ -179,7 +180,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 		if (outError) {
 			*outError = [plistError copy] ?: [NSError errorWithDomain:MADDataTableErrorDomain
 																 code:-2
-															 userInfo:@{NSLocalizedDescriptionKey: @"Failed to deserialize property list."}];
+															 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Failed to deserialize property list.", @"Error when a data-table property list cannot be read.")}];
 		}
 		MADLogError("Failed to deserialize plist from cache at path: %@, error: %@", path, plistError);
 		return NO;
@@ -200,7 +201,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 
 - (BOOL)cacheWithUrl:(nonnull NSURL *)url error:(NSError * _Nullable __autoreleasing * _Nullable)outError {
 	if (!url) {
-		NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"URL is nil.",
+		NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"URL is nil.", @"Error when a data-table file URL is missing."),
 								   NSURLErrorKey: url ?: [NSNull null]};
 		@throw [NSError errorWithDomain:NSStringFromClass([MADDataTable class])
 								   code:-22
@@ -263,7 +264,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 		if (outError) {
 			*outError = [NSError errorWithDomain:MADDataTableErrorDomain
 											code:-4
-										userInfo:@{NSLocalizedDescriptionKey: @"Invalid plist format."}];
+										userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid plist format.", @"Error when a data-table property list has the wrong format.")}];
 		}
 		return NO;
 	}
@@ -276,7 +277,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 		if (outError) {
 			*outError = [NSError errorWithDomain:MADDataTableErrorDomain
 											code:-5
-										userInfo:@{NSLocalizedDescriptionKey: @"Missing or invalid column keys."}];
+										userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Missing or invalid column keys.", @"Error when a data-table property list has no usable column names.")}];
 		}
 		return NO;
 	}
@@ -300,7 +301,7 @@ NSString * const MADDataTableErrorDomain = @"com.everydayapps.MADDataTableErrorD
 		if (outError) {
 			*outError = [NSError errorWithDomain:MADDataTableErrorDomain
 											code:-6
-										userInfo:@{NSLocalizedDescriptionKey: @"Missing or invalid column data."}];
+										userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Missing or invalid column data.", @"Error when a data-table property list has no usable column data.")}];
 		}
 		return NO;
 	}

@@ -391,8 +391,8 @@ static int MADHexNibble(char c) {
 			*outError = [NSError errorWithDomain:[self domain]
 											code:3492
 										userInfo:@{
-				NSLocalizedDescriptionKey : @"Connection is empty.",
-				NSLocalizedFailureReasonErrorKey : @"Connection Error"
+				NSLocalizedDescriptionKey : NSLocalizedString(@"Connection is empty.", @"Error when a PostgreSQL operation has no connection."),
+				NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Connection Error", @"Failure reason for a PostgreSQL connection error.")
 			}];
 		}
 		return @[];
@@ -478,8 +478,8 @@ static int MADHexNibble(char c) {
 			*error = [NSError errorWithDomain:[self domain]
 										 code:3492
 									 userInfo:@{
-				NSLocalizedDescriptionKey : @"Connection is empty.",
-				NSLocalizedFailureReasonErrorKey : @"Connection Error"
+				NSLocalizedDescriptionKey : NSLocalizedString(@"Connection is empty.", @"Error when a PostgreSQL operation has no connection."),
+				NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Connection Error", @"Failure reason for a PostgreSQL connection error.")
 			}];
 		}
 		return @[];
@@ -595,8 +595,8 @@ intoResultTable:(id <MADDataTableWriting>)dataTable
 			*error = [NSError errorWithDomain:[self domain]
 										 code:3492
 									 userInfo:@{
-				NSLocalizedDescriptionKey : @"Connection is empty.",
-				NSLocalizedFailureReasonErrorKey : @"Connection Error"
+				NSLocalizedDescriptionKey : NSLocalizedString(@"Connection is empty.", @"Error when a PostgreSQL operation has no connection."),
+				NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Connection Error", @"Failure reason for a PostgreSQL connection error.")
 			}];
 		}
 		return NO;
@@ -724,8 +724,8 @@ intoResultTable:(id <MADDataTableWriting>)dataTable
 			*error = [NSError errorWithDomain:[self domain]
 										 code:3492
 									 userInfo:@{
-				NSLocalizedDescriptionKey : @"Missing query or destination table.",
-				NSLocalizedFailureReasonErrorKey : @"Query Error"
+				NSLocalizedDescriptionKey : NSLocalizedString(@"Missing query or destination table.", @"Error when a PostgreSQL fetch has no query or destination table."),
+				NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Query Error", @"Failure reason for a PostgreSQL query error.")
 			}];
 		}
 		return NO;

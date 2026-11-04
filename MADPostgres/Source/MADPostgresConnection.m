@@ -14,6 +14,7 @@
 #import "MADDatabaseConnectionPostgres.h"
 
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 #import <string.h>
@@ -81,9 +82,9 @@ static NSString * const MADPostgresErrorDomain = @"MADDatabasePostgres";
 		const char *rawErr = _pgConn != NULL ? PQerrorMessage(_pgConn) : "PQconnectdbParams returned NULL";
 		NSString *msg = (rawErr != NULL && rawErr[0] != '\0')
 			? [[NSString alloc] initWithUTF8String:rawErr]
-			: @"PostgreSQL connection failed.";
+			: NSLocalizedString(@"PostgreSQL connection failed.", @"Error when a PostgreSQL connection attempt fails.");
 		if (msg == nil) {
-			msg = @"PostgreSQL connection failed.";
+			msg = NSLocalizedString(@"PostgreSQL connection failed.", @"Error when a PostgreSQL connection attempt fails.");
 		}
 		self.errorMessage = msg;
 		if (_pgConn != NULL) {
@@ -94,7 +95,7 @@ static NSString * const MADPostgresErrorDomain = @"MADDatabasePostgres";
 			*error = [NSError errorWithDomain:MADPostgresErrorDomain
 										 code:1002
 									 userInfo:@{
-				NSLocalizedDescriptionKey : @"PostgreSQL connection failed.",
+				NSLocalizedDescriptionKey : NSLocalizedString(@"PostgreSQL connection failed.", @"Error when a PostgreSQL connection attempt fails."),
 				NSLocalizedFailureReasonErrorKey : msg,
 				@"PostgresHostnameKey" : host ?: @"",
 				@"PostgresDatabaseKey" : database ?: @"",

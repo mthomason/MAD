@@ -10,6 +10,7 @@
 #import "MADMySQLConnection.h"
 
 #import <Foundation/NSString.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
 
@@ -49,7 +50,7 @@ static NSString *const MADMySQLExceptionConnectionKey = @"MADMySQLConnection";
 	NSString *description = [[NSString alloc] initWithFormat:@"MySQL says: %s", serverMessage];
 	NSDictionary *userInfo = @{
 		NSLocalizedDescriptionKey: description,
-		NSLocalizedFailureReasonErrorKey: @"Executing Error",
+		NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Executing Error", @"Failure reason when a MySQL statement cannot execute."),
 	};
 	return [NSError errorWithDomain:domain code:code userInfo:userInfo];
 }
