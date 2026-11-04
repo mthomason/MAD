@@ -345,8 +345,8 @@ static const CGFloat MADSQLStatusHeight = 28.0;
 	// The apply is the document's new state: mark it dirty and autosave, the
 	// way the add-table flow does; the query UI and the visualization update
 	// through the store's own notifications.
-	self.statusLabel.text = [[NSString alloc] initWithFormat:
-		NSLocalizedString(@"Applied: %1$lu table(s), %2$lu join(s), %3$lu predicate(s), %4$lu group(s).", @"Status after applying the SQL to the query. Four counts: tables, joins, predicates, groups."),
+	self.statusLabel.text = [NSString localizedStringWithFormat:
+		NSLocalizedString(@"Applied: %1$lu tables, %2$lu joins, %3$lu predicates, %4$lu groups.", @"Status after applying the SQL to the query. Four counts: tables, joins, predicates, groups."),
 		(unsigned long)plan.tables.count, (unsigned long)plan.links.count,
 		(unsigned long)plan.predicates.count, (unsigned long)plan.groups.count];
 	[doc updateChangeCount:UIDocumentChangeDone];

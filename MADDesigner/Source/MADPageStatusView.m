@@ -36,7 +36,9 @@
 }
 
 - (void)setPage:(NSUInteger)page ofTotal:(NSUInteger)total {
-	self.labelView.text = [NSString stringWithFormat: @"%lu of %lu", page, total];
+	self.labelView.text = [[NSString alloc] initWithFormat:
+		NSLocalizedString(@"%1$lu of %2$lu", @"Page status; %1$lu is the current page, %2$lu the total."),
+		(unsigned long)page, (unsigned long)total];
 }
 
 @end

@@ -756,10 +756,10 @@ MySQL/PostgreSQL wrappers (12). The only raw UI literals left are the Mac's
 204, which Phase 5 owns. The locale formatters are fixed:
 `ma_twoDecimalPlacesFormatter` no longer pins separators, and `MADStandard`'s
 file size uses `NSNumberFormatter` with the localized `%@ MB` key. Next:
-plurals (the delete alert and the records/page status line are done, with a
-grouped-number substitution pattern; the date components, SQL counts, page
-status view, and PDF/document page counts remain), accessibility, and the
-storyboard strings.
+plurals (the delete alert, records/page status line, applied-SQL counts, and
+page status are done, using grouped-number and multi-substitution patterns;
+the date components and PDF/document page counts remain), accessibility, and
+the storyboard strings.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 
