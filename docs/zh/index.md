@@ -21,9 +21,9 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 
 **[适用于 macOS 的 MAD Designer](macos.html)**——原生 `AppKit` 桌面应用（`NSDocument`、可视化的表与连接查询画布、可交互的节区缩略图与带区报表设计器，以及分页的 PDF/HTML/CSV/JSON 报表查看器）：
 
-![原生 macOS 应用中的 MAD Query 工作区](../assets/macos-native-mad-query.png)
+![原生 macOS 应用中的 MAD Query 工作区](../assets/macos-native-mad-query-zh-CN.png)
 
-![原生 macOS 应用中的 MAD Designer 工作区](../assets/macos-native-mad-designer.png)
+![原生 macOS 应用中的 MAD Designer 工作区](../assets/macos-native-mad-designer-zh-CN.png)
 
 **适用于 iOS 的 MAD Designer**，从选择数据源到在 MAD Viewer 中阅读完成的报表：
 

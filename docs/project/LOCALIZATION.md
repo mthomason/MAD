@@ -193,7 +193,10 @@ Run from the repository root unless a step says otherwise.
    The build must exit 0. Deprecation warnings from `jekyll-theme-primer` are expected.
 
 2. **Check internal links and images.** Zero broken internal `href`/`src` across the
-   built site:
+   built site. Localized pages point at language-suffixed screenshots
+   (`macos-native-mad-query-de.png`, `...-pt-BR.png`, `...-zh-CN.png`); the English
+   pages and `README.md` keep the unsuffixed copies. A new language supplies its two
+   screenshots in the same pass as its pages.
 
    ```sh
    python3 - <<'PY'

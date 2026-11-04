@@ -3,7 +3,7 @@ layout: default
 title: MAD Designer for macOS
 description: >-
   SQLite、MySQL、MariaDB、PostgreSQL、およびSQL Serverに対応するネイティブmacOS（AppKit）リレーショナルレポートデザイナー＆ビューア——ビジュアルクエリキャンバス、ミニマップ付きバンド型レポートデザイナー、PDF/HTML/CSV/JSONエクスポート。
-image: /assets/macos-native-mad-designer.png
+image: /assets/macos-native-mad-designer-ja.png
 lang: ja-JP
 ---
 
@@ -30,7 +30,7 @@ macOS上で作成または編集されたすべての`.mad`ファイルは、iPa
 
 ### 1. MAD Query (`Cmd+1`)
 
-![Database Tablesリスト、視覚的なテーブルカード、およびLEFT OUTER結合コネクタを表示するmacOS上のMAD Queryワークスペース](../assets/macos-native-mad-query.png)
+![Database Tablesリスト、視覚的なテーブルカード、およびLEFT OUTER結合コネクタを表示するmacOS上のMAD Queryワークスペース](../assets/macos-native-mad-query-ja.png)
 
 **MAD Query**ワークスペース（`MADMacQueryViewController`）は、`RptqQuery`に保存されるリレーショナルクエリグラフを構築します。ワークスペースバーのトグルで、クエリの2つの排他的なビューを切り替えることができます：
 
@@ -47,7 +47,7 @@ macOS上で作成または編集されたすべての`.mad`ファイルは、iPa
 
 ### 2. MAD Designer (`Cmd+2`)
 
-![Page & Section Minimap、Report Bands、Query Fields、バンド型デザインキャンバス、およびInspectorを表示するmacOS上のMAD Designerワークスペース](../assets/macos-native-mad-designer.png)
+![Page & Section Minimap、Report Bands、Query Fields、バンド型デザインキャンバス、およびInspectorを表示するmacOS上のMAD Designerワークスペース](../assets/macos-native-mad-designer-ja.png)
 
 **MAD Designer**ワークスペース（`MADMacDesignerViewController`）は、ユーザーがリサイズ可能な3ペイン分割ビュー内でレポートのパラメトリックなバンドと要素をレイアウトします：
 

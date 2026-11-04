@@ -21,9 +21,9 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 
 **[MAD Designer for macOS](macos.html)**——ネイティブ`AppKit`デスクトップアプリケーション（`NSDocument`、視覚的なテーブル／結合クエリキャンバス、インタラクティブなセクションミニマップおよびバンド型レポートデザイナー、ページ分割されたPDF/HTML/CSV/JSONレポートビューアを搭載）：
 
-![ネイティブmacOSアプリケーションのMAD Queryワークスペース](../assets/macos-native-mad-query.png)
+![ネイティブmacOSアプリケーションのMAD Queryワークスペース](../assets/macos-native-mad-query-ja.png)
 
-![ネイティブmacOSアプリケーションのMAD Designerワークスペース](../assets/macos-native-mad-designer.png)
+![ネイティブmacOSアプリケーションのMAD Designerワークスペース](../assets/macos-native-mad-designer-ja.png)
 
 **MAD Designer for iOS**——データソースの選択からMAD Viewerで完成したレポートを閲覧するまで：
 

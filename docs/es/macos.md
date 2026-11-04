@@ -3,7 +3,7 @@ layout: default
 title: MAD Designer para macOS
 description: >-
   Diseñador y visor nativo de informes relacionales para macOS (AppKit) con SQLite, MySQL, MariaDB, PostgreSQL y SQL Server — lienzo visual de consultas, diseñador de informes por bandas con minimapa y exportación a PDF/HTML/CSV/JSON.
-image: /assets/macos-native-mad-designer.png
+image: /assets/macos-native-mad-designer-es.png
 lang: es-419
 ---
 
@@ -38,7 +38,7 @@ ventana (`Cmd+1`, `Cmd+2`, `Cmd+3`) que alterna entre las tres etapas de generac
 
 ### 1. MAD Query (`Cmd+1`)
 
-![Espacio de trabajo MAD Query en macOS con la lista Database Tables, las tarjetas visuales de tablas y los conectores de join LEFT OUTER](../assets/macos-native-mad-query.png)
+![Espacio de trabajo MAD Query en macOS con la lista Database Tables, las tarjetas visuales de tablas y los conectores de join LEFT OUTER](../assets/macos-native-mad-query-es.png)
 
 El espacio de trabajo **MAD Query** (`MADMacQueryViewController`) construye el grafo de consultas
 relacional que se almacena en `RptqQuery`. Un conmutador de la barra del espacio de trabajo alterna entre dos vistas mutuamente excluyentes de la consulta:
@@ -57,7 +57,7 @@ relacional que se almacena en `RptqQuery`. Un conmutador de la barra del espacio
 
 ### 2. MAD Designer (`Cmd+2`)
 
-![Espacio de trabajo MAD Designer en macOS con el minimapa de página y secciones, las bandas de informe, los campos de consulta, el lienzo de diseño por bandas y el inspector](../assets/macos-native-mad-designer.png)
+![Espacio de trabajo MAD Designer en macOS con el minimapa de página y secciones, las bandas de informe, los campos de consulta, el lienzo de diseño por bandas y el inspector](../assets/macos-native-mad-designer-es.png)
 
 El espacio de trabajo **MAD Designer** (`MADMacDesignerViewController`) maqueta las bandas y los
 elementos paramétricos del informe dentro de una vista dividida en tres paneles redimensionable por el usuario:

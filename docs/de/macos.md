@@ -3,7 +3,7 @@ layout: default
 title: MAD Designer für macOS
 description: >-
   Nativer relationaler Berichtsdesigner und -betrachter für macOS (AppKit) für SQLite, MySQL, MariaDB, PostgreSQL und SQL Server — visuelle Abfrageleinwand, bandbasierter Berichtsdesigner mit Minimap und Export nach PDF/HTML/CSV/JSON.
-image: /assets/macos-native-mad-designer.png
+image: /assets/macos-native-mad-designer-de.png
 lang: de-DE
 ---
 
@@ -40,7 +40,7 @@ Steuerelement **Workspace** in der Fenstersymbolleiste (`Cmd+1`, `Cmd+2`,
 
 ### 1. MAD Query (`Cmd+1`)
 
-![Arbeitsbereich MAD Query unter macOS mit der Liste Database Tables, den visuellen Tabellenkarten und LEFT-OUTER-Join-Verbindungen](../assets/macos-native-mad-query.png)
+![Arbeitsbereich MAD Query unter macOS mit der Liste Database Tables, den visuellen Tabellenkarten und LEFT-OUTER-Join-Verbindungen](../assets/macos-native-mad-query-de.png)
 
 Der Arbeitsbereich **MAD Query** (`MADMacQueryViewController`) baut den
 relationalen Abfragegraphen, der in `RptqQuery` gespeichert wird. Ein Umschalter
@@ -83,7 +83,7 @@ ausschließenden Ansichten der Abfrage:
 
 ### 2. MAD Designer (`Cmd+2`)
 
-![Arbeitsbereich MAD Designer unter macOS mit der Minimap für Seite & Bereiche, den Berichtsbändern, den Abfragefeldern, der bandbasierten Design-Leinwand und dem Inspector](../assets/macos-native-mad-designer.png)
+![Arbeitsbereich MAD Designer unter macOS mit der Minimap für Seite & Bereiche, den Berichtsbändern, den Abfragefeldern, der bandbasierten Design-Leinwand und dem Inspector](../assets/macos-native-mad-designer-de.png)
 
 Der Arbeitsbereich **MAD Designer** (`MADMacDesignerViewController`) legt die
 parametrischen Bänder und Elemente des Berichts in einer vom Benutzer in der
