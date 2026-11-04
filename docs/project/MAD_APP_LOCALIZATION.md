@@ -521,6 +521,20 @@ python3 -I scripts/localization/audit.py --report    # every finding, with lines
 python3 -I scripts/localization/audit.py --write-baseline   # after review
 ```
 
+Some UI keys are defined once as `NSString * const` and passed by name. The
+standard extractors cannot see through the symbol, so
+`sync_constants.py` adds those keys to the catalog as `manual` entries:
+
+```sh
+python3 -I scripts/localization/sync_constants.py          # seed the catalog
+python3 -I scripts/localization/sync_constants.py --check  # CI check
+```
+
+The policy stays: a constant is acceptable for a string used repeatedly; a new
+one-off string uses a literal at the call site. The Linux workflow runs the
+sync's tests and the `--check` form. Unresolved symbols are reported but do not
+fail the check, because a definition can live outside the scanned roots.
+
 Current run (2026-11-04, after the Phase 2 runtime-key fixes and the Mac
 selector expansion; 1536 files scanned). `MADDataStructures` is included;
 `MADFeedback` is excluded because it is neither embedded nor maintained.
@@ -724,8 +738,9 @@ strings are fixed (27 baseline entries removed). Non-literal calls are 81,
 made up of 55 unique entries: 53 constant symbols plus `MADMessageCloudSignout`
 and `MADTextFreeGift`, whose definitions the audit does not resolve. The audit
 now covers the AppKit constructors and properties the Mac app uses, and
-baseline entries carry occurrence counts. Next: the 55 non-literal keys, then
-the 318 unique raw UI literals, module by module.
+baseline entries carry occurrence counts. `sync_constants.py` seeds the 53
+resolved constant keys into the catalog; the two unresolved names still need
+handling. Next: the 318 unique raw UI literals, module by module.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 

@@ -1,18 +1,230 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "Choose Storage Option" : {
-      "comment" : "Title of the alert that asks where new documents are stored.",
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Speicherort wählen"
+  "sourceLanguage": "en",
+  "strings": {
+    "\nFormatting page %@.": {
+      "comment": "Defined as MADTextFormattingPage in MADDesigner/Source/MADLabelStatus.m.",
+      "extractionState": "manual"
+    },
+    "\nFormatting…": {
+      "comment": "Defined as MADTextFormatting in MADDesigner/Source/MADLabelStatus.m.",
+      "extractionState": "manual"
+    },
+    "\nNothing to display.": {
+      "comment": "Defined as MADTextNothingToDisplay in MADDesigner/Source/MADLabelStatus.m.",
+      "extractionState": "manual"
+    },
+    "\nPage %1$@ of %2$@ pages.": {
+      "comment": "Defined as MADTextPageXofY in MADDesigner/Source/MADLabelStatus.m.",
+      "extractionState": "manual"
+    },
+    "\nRead %@ records.": {
+      "comment": "Defined as MADTextReadRecords in MADDesigner/Source/MADLabelStatus.m.",
+      "extractionState": "manual"
+    },
+    "\nRefreshing…": {
+      "comment": "Defined as MADTextRefreshing in MADDesigner/Source/MADLabelStatus.m.",
+      "extractionState": "manual"
+    },
+    "%@ day ": {
+      "comment": "Defined as FormatDay in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ days ": {
+      "comment": "Defined as FormatDays in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ hour ": {
+      "comment": "Defined as FormatHour in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ hours ": {
+      "comment": "Defined as FormatHours in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ millisecond ": {
+      "comment": "Defined as FormatMillisecond in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ milliseconds ": {
+      "comment": "Defined as FormatMilliseconds in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ minute ": {
+      "comment": "Defined as FormatMinute in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ minutes ": {
+      "comment": "Defined as FormatMinutes in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ month ": {
+      "comment": "Defined as FormatMonth in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ months ": {
+      "comment": "Defined as FormatMonths in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ second ": {
+      "comment": "Defined as FormatSecond in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ seconds ": {
+      "comment": "Defined as FormatSeconds in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ week ": {
+      "comment": "Defined as FormatWeek in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ weeks ": {
+      "comment": "Defined as FormatWeeks in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ year ": {
+      "comment": "Defined as FormatYear in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "%@ years ": {
+      "comment": "Defined as FormatYears in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "Accending": {
+      "comment": "Defined as TextAccending in MADDesigner/Source/MADQueryBuilderAddGroupViewController.m.",
+      "extractionState": "manual"
+    },
+    "Choose Storage Option": {
+      "comment": "Title of the alert that asks where new documents are stored.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speicherort wählen"
           }
         }
       }
+    },
+    "Continue": {
+      "comment": "Defined as MADButtonContinue in MADDesigner/Source/MADOperationPromptPassword.m.",
+      "extractionState": "manual"
+    },
+    "Cycle encountered.": {
+      "comment": "Defined as TextCycleEncountered in MADDataStructures/Source/MTGraph.m.",
+      "extractionState": "manual"
+    },
+    "Database Information": {
+      "comment": "Defined as TextHeaderInformation in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
+      "extractionState": "manual"
+    },
+    "Decending": {
+      "comment": "Defined as TextDecending in MADDesigner/Source/MADQueryBuilderAddGroupViewController.m.",
+      "extractionState": "manual"
+    },
+    "Default": {
+      "comment": "Defined as TextDefault in MADDesigner/Source/MADQueryBuilderAddGroupViewController.m.",
+      "extractionState": "manual"
+    },
+    "Form Feed": {
+      "comment": "Defined as MADTextFormFeed in MADDesigner/Source/MADDesignerSectionLayoutController.m.",
+      "extractionState": "manual"
+    },
+    "Grouped By": {
+      "comment": "Defined as TextHeaderGroups in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
+      "extractionState": "manual"
+    },
+    "Groups": {
+      "comment": "Defined as MADTextQueryGroups in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
+      "extractionState": "manual"
+    },
+    "Having Specified Criteria": {
+      "comment": "Defined as TextHeaderPredicate in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
+      "extractionState": "manual"
+    },
+    "It's Yours": {
+      "comment": "Defined as MADTextYouItsYours in MADDesigner/Source/MADStoreViewController.m.",
+      "extractionState": "manual"
+    },
+    "Joins": {
+      "comment": "Defined as TextHeaderLink in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
+      "extractionState": "manual"
+    },
+    "Limit Query Result": {
+      "comment": "Defined as TextHeaderSettings in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
+      "extractionState": "manual"
+    },
+    "Link the Tables": {
+      "comment": "Defined as MADTextQueryLinks in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
+      "extractionState": "manual"
+    },
+    "No Cache": {
+      "comment": "Defined as MADTextNoCache in MADDesigner/Source/MADLabelStatus.m.",
+      "extractionState": "manual"
+    },
+    "Not Downloaded": {
+      "comment": "Defined as MADTextNotDownloaded in MADExplorer/MADExplorer/MADExplorer/MADExplorerCellTitle.m.",
+      "extractionState": "manual"
+    },
+    "Password": {
+      "comment": "Defined as MADTitlePassword in MADDesigner/Source/MADOperationPromptPassword.m.",
+      "extractionState": "manual"
+    },
+    "Please enter your password.": {
+      "comment": "Defined as MADMessagePassword in MADDesigner/Source/MADOperationPromptPassword.m.",
+      "extractionState": "manual"
+    },
+    "Predicate": {
+      "comment": "Defined as MADTextQueryPredicate in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
+      "extractionState": "manual"
+    },
+    "Reporting Mode": {
+      "comment": "Defined as MADTextQueryReportingMode in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
+      "extractionState": "manual"
+    },
+    "Select Tables to Use": {
+      "comment": "Defined as MADTextQuerySelectTables in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
+      "extractionState": "manual"
+    },
+    "Setup Data Source": {
+      "comment": "Defined as MADTextQuerySetupDatasource in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
+      "extractionState": "manual"
+    },
+    "Tables": {
+      "comment": "Defined as TextHeaderTable in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
+      "extractionState": "manual"
+    },
+    "Toggles database field visibility.": {
+      "comment": "Defined as TextAccessibilityHint in MADDesigner/Source/MADDatabaseTableSectionHeaderView.m.",
+      "extractionState": "manual"
+    },
+    "Toggles form feed.": {
+      "comment": "Defined as MADTextFormFeedHint in MADDesigner/Source/MADDesignerSectionLayoutController.m.",
+      "extractionState": "manual"
+    },
+    "Toggles visibility.": {
+      "comment": "Defined as MADTextVisibleHint in MADDesigner/Source/MADDesignerSectionLayoutController.m.",
+      "extractionState": "manual"
+    },
+    "Visible": {
+      "comment": "Defined as MADTextVisible in MADDesigner/Source/MADDesignerSectionLayoutController.m.",
+      "extractionState": "manual"
+    },
+    "Yes": {
+      "comment": "Defined as TextYes in MADDesigner/Source/MADOperationPromptPolarQuestion.m.",
+      "extractionState": "manual"
+    },
+    "You Got It": {
+      "comment": "Defined as MADTextYouGotIt in MADDesigner/Source/MADStoreViewController.m.",
+      "extractionState": "manual"
+    },
+    "You already got this feature. Make sure to collect them all.": {
+      "comment": "Defined as MADTextAlready in MADDesigner/Source/MADStoreViewController.m.",
+      "extractionState": "manual"
+    },
+    "ago.": {
+      "comment": "Defined as TextAgo in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
     }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
