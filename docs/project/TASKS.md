@@ -1251,10 +1251,12 @@ Phase 0 and Phase 1 are complete:
 
 Phase 2 has started: the 20 runtime-value keys and the two format strings are
 fixed, the audit baseline was regenerated, and `sync_catalog.py` seeded the
-430 literal keys plus the 53 resolved constants (477 entries) into the catalog.
+439 literal keys plus the 36 resolved constants (469 entries) into the catalog.
 Every iOS-side raw UI literal is wrapped: the app target, the MAD framework
 (including the SQL parser messages, D12), MADFoundation, and the MySQL and
-PostgreSQL wrappers. Not done yet: the Mac's 204 literals (Phase 5), plurals,
-the locale formatters, accessibility, the storyboard strings, translating the
-app, consolidating barcode names, and licence text. See the plan's Phase 2
+PostgreSQL wrappers. The delete alert, status line, applied-SQL counts, page
+status, date formatter, and locale number/file-size formatters are done. Not
+done yet: the Mac's 204 literals (Phase 5), the PDF/document plural counts,
+accessibility, the storyboard strings, translating the app, consolidating
+barcode names, and licence text. See the plan's Phase 2
 onward.

@@ -438,6 +438,7 @@ standard handoff.
 | **D10 — Platform timing** | iOS first. macOS bundle infrastructure is built in parallel, but macOS string translation follows iOS. |
 | **D11 — Barcode names** | Consolidate the 65 dictionary entries and 66 `self.name` assignments into one table before translating. |
 | **D12 — SQL parser messages** | Translate all of the app's own parser and validation messages, not just the common ones. They need a technical glossary and a review pass. |
+| **D13 — Date formatter** | Keep `MADDateFromTimeFormatter`'s component-selection algorithm and cached spell-out formatter. Localize only the unit and sentence layer; do not replace it with `NSDateComponentsFormatter`/`NSRelativeDateTimeFormatter`. Measured cost is ~11 µs per call. |
 
 Still open, and not blocking Phase 0-1: SQL data-type names (§11.6), the
 parser/validation messages (§11.7), workspace brand names (§11.8), and a
@@ -552,16 +553,16 @@ selector expansion; 1536 files scanned). `MADDataStructures` is included;
 
 | Measure | Count |
 | --- | ---: |
-| `NSLocalizedString` calls | 685 |
-| literal first argument | 604 |
+| `NSLocalizedString` calls | 673 |
+| literal first argument | 613 |
 | non-literal first argument | 81 |
-| unique literal keys | 430 |
+| unique literal keys | 439 |
 | literal keys containing format specifiers | 30 (multi-argument 2, both positional) |
 | raw UI literals | 204 occurrences / 200 unique |
 | format strings without positional specifiers | 0 |
 | `appendString:`/`stringByAppendingString:` near UI | 42 (warning) |
 
-The 255 baseline entries are 200 `raw-ui-literal` and 55 `nonliteral-key`;
+The 238 baseline entries are 200 `raw-ui-literal` and 38 `nonliteral-key`;
 warnings are reported but never fail an otherwise clean check. Entries carry an
 occurrence count, so adding a second copy of an already-baselined string in the
 same file fails the run. The first Phase 1 run, before these changes and with
@@ -724,12 +725,13 @@ Work module by module, in this order:
    assignments first, then localize one table.
 5. Storyboard strings: export, review, and mark brand/sample/technical strings
    do-not-translate.
-6. Plurals: replace the nine hand-rolled plural sites (`NSDate+Extras.m`,
+6. Plurals: replace the hand-rolled plural sites (`NSDate+Extras.m`,
    `MADLabelStatus.m`, `MADAlertController.m`, `MADViewControllerSQL.m`,
    `MADActivityItemProviderPdf.m`, `MADocument.m`, `MADPageStatusView.m`) with
-   catalog plural rules and `localizedStringWithFormat:`; use
-   `NSDateComponentsFormatter`/`NSRelativeDateTimeFormatter` where that removes
-   a hand-built sentence.
+   catalog plural rules and `localizedStringWithFormat:`. The date formatter
+   keeps its own component selection and millisecond fallback (D13); the Cocoa
+   relative formatters cannot express them, and the measured cost is already
+   low.
 7. Format strings and numbers: convert `%1@`/`%2@` to `%1$@`/`%2$@`; add
    positional specifiers wherever an argument can be reordered; replace the
    hardcoded separators in `NSNumberFormatter+MADExtensions.m` and the
@@ -756,10 +758,9 @@ MySQL/PostgreSQL wrappers (12). The only raw UI literals left are the Mac's
 204, which Phase 5 owns. The locale formatters are fixed:
 `ma_twoDecimalPlacesFormatter` no longer pins separators, and `MADStandard`'s
 file size uses `NSNumberFormatter` with the localized `%@ MB` key. Next:
-plurals (the delete alert, records/page status line, applied-SQL counts, and
-page status are done, using grouped-number and multi-substitution patterns;
-the date components and PDF/document page counts remain), accessibility, and
-the storyboard strings.
+plurals (the delete alert, records/page status line, applied-SQL counts,
+page status, and the date formatter are done; the PDF/document page counts
+remain), accessibility, and the storyboard strings.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 

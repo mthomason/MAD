@@ -470,9 +470,14 @@ static NSData *MADAES256GoldenIV(void) {
 	XCTAssertEqual([MADDateFromTimeFormatter timeIntervalForResolution:(MTDateResolution)99], 86400.0);
 }
 
+- (BOOL)isEnglishProcess {
+	return [[[NSBundle mainBundle] preferredLocalizations].firstObject hasPrefix:@"en"];
+}
+
 // Only one component is ever printed, so a timestamp two hours old reports hours and
 // nothing smaller.
 - (void)testRelativeTimeStringForARecentTimestamp {
+	if (![self isEnglishProcess]) return;
 	MADDateFromTimeFormatter *formatter = [[MADDateFromTimeFormatter alloc] init];
 	NSDate *twoHoursAgo = [NSDate dateWithTimeIntervalSinceNow:-7200];
 
@@ -486,6 +491,7 @@ static NSData *MADAES256GoldenIV(void) {
 }
 
 - (void)testRelativeTimeStringForADistantTimestampReportsYears {
+	if (![self isEnglishProcess]) return;
 	MADDateFromTimeFormatter *formatter = [[MADDateFromTimeFormatter alloc] init];
 	// Three years by days is two calendar years and a remainder, which keeps the year
 	// component past 1 whatever the leap and daylight-saving arithmetic does.
@@ -495,6 +501,70 @@ static NSData *MADAES256GoldenIV(void) {
 
 	XCTAssertTrue([result.former containsString:@"years"], @"Got: %@", result.former);
 	XCTAssertEqualObjects(result.latter, @(MTDateResolutionYear));
+}
+
+- (void)testRelativeTimeStringForOneHourIsSingular {
+	if (![self isEnglishProcess]) return;
+	MADDateFromTimeFormatter *formatter = [[MADDateFromTimeFormatter alloc] init];
+	NSDate *oneHourAgo = [NSDate dateWithTimeIntervalSinceNow:-3600];
+
+	MTPair *result = [formatter stringWithTimeIntervalSinceDate:oneHourAgo];
+
+	XCTAssertTrue([result.former containsString:@"one hour"], @"Got: %@", result.former);
+	XCTAssertFalse([result.former containsString:@"one hours"], @"Got: %@", result.former);
+	XCTAssertEqualObjects(result.latter, @(MTDateResolutionHour));
+}
+
+- (void)testRelativeTimeStringForOneYearIsSingular {
+	if (![self isEnglishProcess]) return;
+	MADDateFromTimeFormatter *formatter = [[MADDateFromTimeFormatter alloc] init];
+	NSDate *oneYearAgo = [NSDate dateWithTimeIntervalSinceNow:-(400 * 24 * 3600)];
+
+	MTPair *result = [formatter stringWithTimeIntervalSinceDate:oneYearAgo];
+
+	XCTAssertTrue([result.former containsString:@"one year"], @"Got: %@", result.former);
+	XCTAssertFalse([result.former containsString:@"one years"], @"Got: %@", result.former);
+	XCTAssertEqualObjects(result.latter, @(MTDateResolutionYear));
+}
+
+- (void)testRelativeTimeStringForSubSecondIntervalReportsMilliseconds {
+	if (![self isEnglishProcess]) return;
+	MADDateFromTimeFormatter *formatter = [[MADDateFromTimeFormatter alloc] init];
+	NSDate *justNow = [NSDate dateWithTimeIntervalSinceNow:-0.5];
+
+	MTPair *result = [formatter stringWithTimeIntervalSinceDate:justNow];
+
+	XCTAssertTrue([result.former containsString:@"millisecond"], @"Got: %@", result.former);
+	XCTAssertEqualObjects(result.latter, @(MTDateResolutionMillisecond));
+}
+
+// Only meaningful under the German scheme; the sentence wrapper moves "ago"
+// from a suffix to the "Vor ... aktualisiert." frame.
+- (void)testRelativeTimeStringReordersInGerman {
+	NSString *language = [NSBundle mainBundle].preferredLocalizations.firstObject;
+	if (![language hasPrefix:@"de"]) {
+		return;
+	}
+
+	MADDateFromTimeFormatter *formatter = [[MADDateFromTimeFormatter alloc] init];
+	NSDate *twoYearsAgo = [NSDate dateWithTimeIntervalSinceNow:-(2.5 * 365 * 24 * 3600)];
+	MTPair *result = [formatter stringWithTimeIntervalSinceDate:twoYearsAgo];
+
+	XCTAssertTrue([result.former hasPrefix:@"Vor "], @"Got: %@", result.former);
+	XCTAssertTrue([result.former hasSuffix:@" aktualisiert."], @"Got: %@", result.former);
+	XCTAssertTrue([result.former containsString:@"Jahre"], @"Got: %@", result.former);
+}
+
+// The viewer calls this on a timer; keep the current cost visible.
+- (void)testDateFormatterPerformance {
+	MADDateFromTimeFormatter *formatter = [[MADDateFromTimeFormatter alloc] init];
+	NSDate *twoHoursAgo = [NSDate dateWithTimeIntervalSinceNow:-7200];
+
+	[self measureBlock:^{
+		for (NSUInteger i = 0; i < 1000; i++) {
+			(void)[formatter stringWithTimeIntervalSinceDate:twoHoursAgo];
+		}
+	}];
 }
 
 @end

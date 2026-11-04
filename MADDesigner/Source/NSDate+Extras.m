@@ -13,59 +13,10 @@
 #import <Foundation/NSNumberFormatter.h>
 #import <math.h>
 
-static NSString * const FormatYear          = @"%@ year ";
-static NSString * const FormatYears         = @"%@ years ";
-static NSString * const FormatMonth         = @"%@ month ";
-static NSString * const FormatMonths        = @"%@ months ";
-static NSString * const FormatWeek          = @"%@ week ";
-static NSString * const FormatWeeks         = @"%@ weeks ";
-static NSString * const FormatDay           = @"%@ day ";
-static NSString * const FormatDays          = @"%@ days ";
-static NSString * const FormatHour          = @"%@ hour ";
-static NSString * const FormatHours         = @"%@ hours ";
-static NSString * const FormatMinute        = @"%@ minute ";
-static NSString * const FormatMinutes       = @"%@ minutes ";
-static NSString * const FormatSecond        = @"%@ second ";
-static NSString * const FormatSeconds       = @"%@ seconds ";
-static NSString * const FormatMillisecond   = @"%@ millisecond ";
-static NSString * const FormatMilliseconds  = @"%@ milliseconds ";
-static NSString * const TextAgo = @"ago.";
-
 static inline NSCalendarUnit calUnitsAll(void);
-static inline NSString *newStringLocalizedFormatYears(NSInteger);
-static inline NSString *newStringLocalizedFormatMonths(NSInteger);
-static inline NSString *newStringLocalizedFormatSeconds(NSInteger) __attribute__((unused));
-static inline NSString *newStringLocalizedFormatMilliseconds(NSInteger);
-static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger) __attribute__((unused));
-
 static inline NSCalendarUnit calUnitsAll(void) {
 	return NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekOfMonth |
 			NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
-}
-
-static inline NSString *newStringLocalizedFormatYears(NSInteger i) {
-	return i == 1 ? NSLocalizedString(FormatYear, FormatYear) :
-					NSLocalizedString(FormatYears, FormatYears);
-}
-
-static inline NSString *newStringLocalizedFormatMonths(NSInteger i) {
-	return i == 1 ? NSLocalizedString(FormatMonth, FormatMonth) :
-					NSLocalizedString(FormatMonths, FormatMonths);
-}
-
-static inline NSString *newStringLocalizedFormatSeconds(NSInteger i) {
-	return i == 1 ? NSLocalizedString(FormatSecond, FormatSecond) :
-					NSLocalizedString(FormatSeconds, FormatSeconds);
-}
-
-static inline NSString *newStringLocalizedFormatMilliseconds(NSInteger i) {
-	return i == 1 ? NSLocalizedString(FormatMillisecond, FormatMillisecond) :
-					NSLocalizedString(FormatMilliseconds, FormatMilliseconds);
-}
-
-static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
-	return i == 1 ? NSLocalizedString(FormatMinute, FormatMinute) :
-					NSLocalizedString(FormatMinutes, FormatMinutes);
 }
 
 @interface MADDateFromTimeFormatter()
@@ -85,38 +36,39 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 	return self;
 }
 
+- (NSString *)localizedUnitWithMagnitude:(NSInteger)magnitude format:(NSString *)format {
+	NSString *spelled = [self.formatter stringFromNumber:@(magnitude)];
+	return [NSString localizedStringWithFormat:format, (long long)magnitude, spelled];
+}
+
 - (MTPair *)stringWithTimeIntervalSinceDate:(NSDate *)lastDate {
 	MTDateResolution resultResolution = MTDateResolutionDay;
-	
-	NSMutableString *text = [[NSMutableString alloc] initWithString:@"Updated "];
+
+	NSMutableString *unit = [[NSMutableString alloc] init];
 	NSDate *now = [NSDate date];
 	NSDateComponents *aDateComponents = [[NSCalendar currentCalendar] components: calUnitsAll()
 																		fromDate: now
 																		  toDate: lastDate
 																		 options: 0];
-	
+
 	BOOL forceInclude = YES;
 	BOOL printedOne = NO;
 	int_fast8_t includedComponetsCounter = 0;
 	static const int_fast8_t permittedComponents = 1;
-	NSString *format;
-	
+
 	if (forceInclude && aDateComponents.year != 0) {
-		NSNumber *year = @(ABS(aDateComponents.year));
-		NSString *spelledOut = [self.formatter stringFromNumber: year];
-		[text appendFormat:newStringLocalizedFormatYears(aDateComponents.year), spelledOut];
+		[unit appendString:[self localizedUnitWithMagnitude:ABS(aDateComponents.year)
+			format:NSLocalizedString(@"%lld years", @"Relative time unit: years.")]];
 		printedOne = YES;
 		forceInclude = YES;
 		includedComponetsCounter++;
 		resultResolution = MTDateResolutionYear;
 	}
-	
+
 	if ((forceInclude && aDateComponents.month != 0) || (forceInclude && printedOne)) {
 		if (includedComponetsCounter < permittedComponents) {
-			NSNumber *month = @(ABS(aDateComponents.month));
-			NSString *spelledOut = [self.formatter stringFromNumber: month];
-			format = newStringLocalizedFormatMonths(aDateComponents.month);
-			[text appendFormat:format, spelledOut];
+			[unit appendString:[self localizedUnitWithMagnitude:ABS(aDateComponents.month)
+				format:NSLocalizedString(@"%lld months", @"Relative time unit: months.")]];
 			printedOne = YES;
 			forceInclude = YES;
 			resultResolution = MTDateResolutionMonth;
@@ -125,31 +77,24 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 		}
 		includedComponetsCounter++;
 	}
-	
+
 	if ((forceInclude && aDateComponents.weekOfMonth != 0) || (forceInclude && printedOne)) {
 		if (includedComponetsCounter < permittedComponents) {
-			NSNumber *week = @(ABS(aDateComponents.weekOfMonth));
-			NSString *spelledOut = [self.formatter stringFromNumber: week];
-			format = aDateComponents.weekOfMonth == 1 ? NSLocalizedString(FormatWeek, FormatWeek) :
-														NSLocalizedString(FormatWeeks, FormatWeeks);
-			[text appendFormat:format, spelledOut];
+			[unit appendString:[self localizedUnitWithMagnitude:ABS(aDateComponents.weekOfMonth)
+				format:NSLocalizedString(@"%lld weeks", @"Relative time unit: weeks.")]];
 			printedOne = YES;
 			forceInclude = YES;
 			resultResolution = MTDateResolutionWeek;
-			week = week;
 		} else {
 			forceInclude = NO;
 		}
 		includedComponetsCounter++;
 	}
-	
+
 	if ((forceInclude && aDateComponents.day != 0) || (forceInclude && printedOne)) {
 		if (includedComponetsCounter < permittedComponents) {
-			NSNumber *day = @(ABS(aDateComponents.day));
-			NSString *spelledOut = [self.formatter stringFromNumber: day];
-			format = aDateComponents.day == 1 ? NSLocalizedString(FormatDay, FormatDay) :
-												NSLocalizedString(FormatDays, FormatDays);
-			[text appendFormat:format, spelledOut];
+			[unit appendString:[self localizedUnitWithMagnitude:ABS(aDateComponents.day)
+				format:NSLocalizedString(@"%lld days", @"Relative time unit: days.")]];
 			printedOne = YES;
 			forceInclude = YES;
 			resultResolution = MTDateResolutionDay;
@@ -158,15 +103,11 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 		}
 		includedComponetsCounter++;
 	}
-	
+
 	if ((forceInclude && aDateComponents.hour != 0) || (forceInclude && printedOne)) {
 		if (includedComponetsCounter < permittedComponents) {
-			NSNumber *hour = @(ABS(aDateComponents.hour));
-			NSString *spelledOut = [NSNumberFormatter localizedStringFromNumber:hour
-																	numberStyle:NSNumberFormatterSpellOutStyle];
-			format = aDateComponents.hour == 1 ? NSLocalizedString(FormatHour, FormatHour) :
-												 NSLocalizedString(FormatHours, FormatHours);
-			[text appendFormat:format, spelledOut];
+			[unit appendString:[self localizedUnitWithMagnitude:ABS(aDateComponents.hour)
+				format:NSLocalizedString(@"%lld hours", @"Relative time unit: hours.")]];
 			printedOne = YES;
 			forceInclude = YES;
 			resultResolution = MTDateResolutionHour;
@@ -175,15 +116,11 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 		}
 		includedComponetsCounter++;
 	}
-	
+
 	if ((forceInclude && aDateComponents.minute != 0) || (forceInclude && printedOne)) {
 		if (includedComponetsCounter < permittedComponents) {
-			format = aDateComponents.minute == 1 ? NSLocalizedString(FormatMinute, FormatMinute) :
-												   NSLocalizedString(FormatMinutes, FormatMinutes);
-			NSNumber *minute = @(ABS(aDateComponents.minute));
-			NSString *spelledOut = [NSNumberFormatter localizedStringFromNumber:minute
-																	numberStyle:NSNumberFormatterSpellOutStyle];
-			[text appendFormat:format, spelledOut];
+			[unit appendString:[self localizedUnitWithMagnitude:ABS(aDateComponents.minute)
+				format:NSLocalizedString(@"%lld minutes", @"Relative time unit: minutes.")]];
 			printedOne = YES;
 			forceInclude = YES;
 			resultResolution = MTDateResolutionMinute;
@@ -192,16 +129,11 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 		}
 		includedComponetsCounter++;
 	}
-	
+
 	if ((forceInclude && aDateComponents.second != 0) || (forceInclude && printedOne)) {
 		if (includedComponetsCounter < permittedComponents) {
-			format = aDateComponents.second == 1 ? NSLocalizedString(FormatSecond, FormatSecond) :
-												   NSLocalizedString(FormatSeconds, FormatSeconds);
-			NSNumber *second = @(ABS(aDateComponents.second));
-			NSString *spelledOut = [NSNumberFormatter localizedStringFromNumber:second
-																	numberStyle:NSNumberFormatterSpellOutStyle];
-			//NSString *spelledOut = [self.formatter stringFromNumber: second];
-			[text appendFormat:format, spelledOut];
+			[unit appendString:[self localizedUnitWithMagnitude:ABS(aDateComponents.second)
+				format:NSLocalizedString(@"%lld seconds", @"Relative time unit: seconds.")]];
 			printedOne = YES;
 			forceInclude = YES;
 			resultResolution = MTDateResolutionSecond;
@@ -210,26 +142,22 @@ static inline NSString *newStringLocalizedFormatFormatMinutes(NSInteger i) {
 		}
 		includedComponetsCounter++;
 	}
-	
+
 	if ((forceInclude && printedOne) || includedComponetsCounter == 0) {
-		
 		if (includedComponetsCounter < permittedComponents) {
 			NSTimeInterval ti = [lastDate timeIntervalSinceDate:now];
-			NSNumber *milliseconds = @((NSInteger)fabs(((ti - (NSTimeInterval)(NSInteger)ti) * 1000.0)));
-			NSString *spelledOut = [NSNumberFormatter localizedStringFromNumber:milliseconds
-																	numberStyle:NSNumberFormatterSpellOutStyle];
-
-			format = newStringLocalizedFormatMilliseconds(milliseconds.integerValue);
-			[text appendFormat:format, spelledOut];
+			NSInteger magnitude = (NSInteger)fabs(((ti - (NSTimeInterval)(NSInteger)ti) * 1000.0));
+			[unit appendString:[self localizedUnitWithMagnitude:magnitude
+				format:NSLocalizedString(@"%lld milliseconds", @"Relative time unit: milliseconds.")]];
 			resultResolution = MTDateResolutionMillisecond;
 		}
 		includedComponetsCounter++;
 	}
-	
-	[text appendString: NSLocalizedString(TextAgo, TextAgo)];
-	
+
+	NSString *resultText = [NSString localizedStringWithFormat:
+		NSLocalizedString(@"Updated %@ ago.", @"Relative update time; %@ is the duration, e.g. two hours."),
+		unit];
 	NSNumber *resultType = [[NSNumber alloc] initWithShort: resultResolution];
-	NSString *resultText = [text copy];
 	return [[MTPair alloc] initWithFormer:resultText andLatter:resultType];
 }
 
