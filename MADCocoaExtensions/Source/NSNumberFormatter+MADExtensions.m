@@ -14,8 +14,7 @@
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
 	formatter.maximumFractionDigits = 2;
-	formatter.decimalSeparator = @".";
-	formatter.groupingSeparator = @",";
+	// Use the user's locale; never pin "." and "," here.
 	return formatter;
 }
 

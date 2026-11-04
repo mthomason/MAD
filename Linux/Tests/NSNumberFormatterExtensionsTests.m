@@ -16,8 +16,12 @@ static void testTwoDecimalPlacesFormatter(void) {
 	MAD_PASS(formatter != nil, "the formatter exists");
 	MAD_PASS(formatter.numberStyle == NSNumberFormatterDecimalStyle, "the style is decimal");
 	MAD_PASS(formatter.maximumFractionDigits == (NSUInteger)2, "two fraction digits");
-	MAD_PASS_EQUAL(formatter.decimalSeparator, @".", "the decimal separator is a period");
-	MAD_PASS_EQUAL(formatter.groupingSeparator, @",", "the grouping separator is a comma");
+	NSNumberFormatter *reference = [[NSNumberFormatter alloc] init];
+	reference.numberStyle = NSNumberFormatterDecimalStyle;
+	MAD_PASS_EQUAL(formatter.decimalSeparator, reference.decimalSeparator,
+		"the factory does not pin the decimal separator");
+	MAD_PASS_EQUAL(formatter.groupingSeparator, reference.groupingSeparator,
+		"the factory does not pin the grouping separator");
 }
 
 MAD_TEST_MAIN("NSNumberFormatterExtensionsTests",

@@ -7,6 +7,8 @@
 //
 
 #import "MADStandard.h"
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSNumberFormatter.h>
 #import <Foundation/NSString.h>
 #include <string>
 #include <cmath>
@@ -28,26 +30,17 @@
 }
 
 + (NSString *)standardStringForFileSize:(unsigned long long)filesize {
-	const std::string decimal = ".", mb = " MB";
-	const double roundFactor = 1000.0, bitsToMBFactor = 1000000.0;
-	std::string filesize_str;
-	// Implicit conversion from 'unsigned long long' to 'double' may lose precision
-	filesize_str = std::to_string((round((filesize / bitsToMBFactor) * roundFactor) / roundFactor));
-	
-	size_t dec_locatoin = filesize_str.find_first_of(decimal);
-	size_t range_end = dec_locatoin + 4;
-	// std::to_string(double) always leaves six fractional digits, so this pad is not
-	// reached for any value this method can be given. It exists so the substr below
-	// stays in range if the format ever shortens. The old call passed range_end as the
-	// *subpos* of the one-character "0", which would have thrown std::out_of_range.
-	if (filesize_str.length() < range_end) {
-		filesize_str.append(range_end - filesize_str.length(), '0');
-	}
-	std::string substring = filesize_str.substr(0, range_end);
-	substring.append(mb);
-	const char *c_str = substring.c_str();
-	id result = [[NSString alloc] initWithUTF8String: c_str];
-	return result;
+	// The user's locale supplies the decimal and grouping separators; the unit
+	// is part of the localized format so it can be translated or reordered.
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.minimumFractionDigits = 3;
+	formatter.maximumFractionDigits = 3;
+	double megabytes = round((filesize / 1000000.0) * 1000.0) / 1000.0;
+	NSString *number = [formatter stringFromNumber:@(megabytes)];
+	return [[NSString alloc] initWithFormat:
+		NSLocalizedString(@"%@ MB", @"File size in megabytes; %@ is the formatted number."),
+		number];
 }
 
 @end
