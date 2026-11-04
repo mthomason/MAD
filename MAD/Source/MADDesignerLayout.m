@@ -82,8 +82,9 @@
 }
 
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setBold:(BOOL)bold {
-	NSString *actionName = NSLocalizedString(bold ? @"Bold" : @"Disable Bold",
-											 bold ? @"Bold" : @"Disable Bold");
+	NSString *actionName = bold
+		? NSLocalizedString(@"Bold", @"Undo action name: apply bold to the selected elements.")
+		: NSLocalizedString(@"Disable Bold", @"Undo action name: remove bold from the selected elements.");
 	[self _updateElements:identifiers
 			 uniformValue:@(bold)
 			   actionName:actionName
@@ -92,8 +93,9 @@
 }
 
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setItalic:(BOOL)italic {
-	NSString *actionName = NSLocalizedString(italic ? @"Italic" : @"Disable Italic",
-											 italic ? @"Italic" : @"Disable Italic");
+	NSString *actionName = italic
+		? NSLocalizedString(@"Italic", @"Undo action name: apply italic to the selected elements.")
+		: NSLocalizedString(@"Disable Italic", @"Undo action name: remove italic from the selected elements.");
 	[self _updateElements:identifiers
 			 uniformValue:@(italic)
 			   actionName:actionName
@@ -102,8 +104,9 @@
 }
 
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setStrikethrough:(BOOL)strikethrough {
-	NSString *actionName = NSLocalizedString(strikethrough ? @"Strikethrough" : @"Disable Strikethrough",
-											 strikethrough ? @"Strikethrough" : @"Disable Strikethrough");
+	NSString *actionName = strikethrough
+		? NSLocalizedString(@"Strikethrough", @"Undo action name: apply strikethrough to the selected elements.")
+		: NSLocalizedString(@"Disable Strikethrough", @"Undo action name: remove strikethrough from the selected elements.");
 	[self _updateElements:identifiers
 			 uniformValue:@(strikethrough)
 			   actionName:actionName
@@ -112,8 +115,9 @@
 }
 
 - (void)updateElements:(NSSet <NSNumber *> *)identifiers setUnderline:(BOOL)underline {
-	NSString *actionName = NSLocalizedString(underline ? @"Underline" : @"Disable Underline",
-											 underline ? @"Underline" : @"Disable Underline");
+	NSString *actionName = underline
+		? NSLocalizedString(@"Underline", @"Undo action name: apply underline to the selected elements.")
+		: NSLocalizedString(@"Disable Underline", @"Undo action name: remove underline from the selected elements.");
 	[self _updateElements:identifiers
 			 uniformValue:@(underline)
 			   actionName:actionName

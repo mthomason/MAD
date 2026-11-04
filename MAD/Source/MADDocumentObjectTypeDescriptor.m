@@ -35,22 +35,22 @@ NSString * const MADDocumentObjectTypeAddDetailBarcode     = @"Add a barcode ele
 + (NSString *)humanReadableStringForType:(MADPrintPageElementType)type {
 	switch (type) {
 		case MADPrintPageElementTypeLabelDynamic:
-			return MADDocumentObjectTypeTitleDynamic;
+			return NSLocalizedString(@"Data Label", @"Title of a dynamic data label element.");
 			break;
 		case MADPrintPageElementTypeLabelStatic:
-			return MADDocumentObjectTypeTitleStatic;
+			return NSLocalizedString(@"Static Label", @"Title of a static text element.");
 			break;
 		case MADPrintPageElementTypeAggregate:
-			return MADDocumentObjectTypeTitleAggregate;
+			return NSLocalizedString(@"Aggregate", @"Title of a grouping element.");
 			break;
 		case MADPrintPageElementTypeImage:
-			return MADDocumentObjectTypeTitleImage;
+			return NSLocalizedString(@"Image", @"Title of a static image element.");
 			break;
 		case MADPrintPageElementTypeWhtiespace:
-			return MADDocumentObjectTypeTitleWhitespace;
+			return NSLocalizedString(@"Whitespace", @"Title of an empty spacer element.");
 			break;
 		case MADPrintPageElementTypeBarcode:
-			return MADDocumentObjectTypeTitleBarcode;
+			return NSLocalizedString(@"Barcode", @"Title of a barcode element.");
 			break;
 		default:
 			return @"";
@@ -61,22 +61,22 @@ NSString * const MADDocumentObjectTypeAddDetailBarcode     = @"Add a barcode ele
 + (NSString *)humanReadableDetailStringForType:(MADPrintPageElementType)type {
 	switch (type) {
 		case MADPrintPageElementTypeLabelDynamic:
-			return MADDocumentObjectTypeDetailDynamic;
+			return NSLocalizedString(@"A dynamic data field label.", @"Description of a dynamic data label element.");
 			break;
 		case MADPrintPageElementTypeLabelStatic:
-			return MADDocumentObjectTypeDetailStatic;
+			return NSLocalizedString(@"A static text document object.", @"Description of a static text element.");
 			break;
 		case MADPrintPageElementTypeAggregate:
-			return MADDocumentObjectTypeDetailAggregate;
+			return NSLocalizedString(@"A grouping of data.", @"Description of a grouping element.");
 			break;
 		case MADPrintPageElementTypeImage:
-			return MADDocumentObjectTypeDetailImage;
+			return NSLocalizedString(@"A static image.", @"Description of a static image element.");
 			break;
 		case MADPrintPageElementTypeWhtiespace:
-			return MADDocumentObjectTypeDetailWhitespace;
+			return NSLocalizedString(@"An empty element.", @"Description of an empty spacer element.");
 			break;
 		case MADPrintPageElementTypeBarcode:
-			return MADDocumentObjectTypeDetailBarcode;
+			return NSLocalizedString(@"A barcode element.", @"Description of a barcode element.");
 			break;
 		default:
 			return @"";
@@ -87,22 +87,22 @@ NSString * const MADDocumentObjectTypeAddDetailBarcode     = @"Add a barcode ele
 + (NSString *)humanReadableAddDetailStringForType:(MADPrintPageElementType)type {
 	switch (type) {
 		case MADPrintPageElementTypeLabelDynamic:
-			return MADDocumentObjectTypeAddDetailDynamic;
+			return NSLocalizedString(@"Add a dynamic data field label.", @"Action to add a dynamic data label element.");
 			break;
 		case MADPrintPageElementTypeLabelStatic:
-			return MADDocumentObjectTypeAddDetailStatic;
+			return NSLocalizedString(@"Add a static text document object.", @"Action to add a static text element.");
 			break;
 		case MADPrintPageElementTypeAggregate:
-			return MADDocumentObjectTypeAddDetailAggregate;
+			return NSLocalizedString(@"Add a grouping of data.", @"Action to add a grouping element.");
 			break;
 		case MADPrintPageElementTypeImage:
-			return MADDocumentObjectTypeAddDetailImage;
+			return NSLocalizedString(@"Add a static image.", @"Action to add a static image element.");
 			break;
 		case MADPrintPageElementTypeWhtiespace:
-			return MADDocumentObjectTypeAddDetailWhitespace;
+			return NSLocalizedString(@"Add an empty element.", @"Action to add an empty spacer element.");
 			break;
 		case MADPrintPageElementTypeBarcode:
-			return MADDocumentObjectTypeAddDetailBarcode;
+			return NSLocalizedString(@"Add a barcode element.", @"Action to add a barcode element.");
 			break;
 		default:
 			return @"";
@@ -111,15 +111,15 @@ NSString * const MADDocumentObjectTypeAddDetailBarcode     = @"Add a barcode ele
 }
 
 + (NSString *)localizedStringForType:(MADPrintPageElementType)type {
-	return NSLocalizedString([self humanReadableStringForType:type], [self humanReadableStringForType:type]);
+	return [self humanReadableStringForType:type];
 }
 
 + (NSString *)localizedDetailStringForType:(MADPrintPageElementType)type {
-	return NSLocalizedString([self humanReadableDetailStringForType:type], [self humanReadableDetailStringForType:type]);
+	return [self humanReadableDetailStringForType:type];
 }
 
 + (NSString *)localizedAddDetailStringForType:(MADPrintPageElementType)type {
-	return NSLocalizedString([self humanReadableAddDetailStringForType:type], [self humanReadableAddDetailStringForType:type]);
+	return [self humanReadableAddDetailStringForType:type];
 }
 
 @end

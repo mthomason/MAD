@@ -266,7 +266,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 		case 0:
 			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
 			cell.label.textColor = [MADColorEverydayApps newColorRed];
-			cell.label.text = NSLocalizedString([AppDelegate bundleDisplayName], [AppDelegate bundleDisplayName]);
+			cell.label.text = [AppDelegate bundleDisplayName];
 			cell.userInteractionEnabled = NO;
 			cell.marginStyle = MADTableViewCellMarginStyleTop;
 			break;
@@ -288,7 +288,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 
 		case 2:
 			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-			cell.label.text = NSLocalizedString([AppDelegate humanReadableCopyright], [AppDelegate humanReadableCopyright]);
+			cell.label.text = [AppDelegate humanReadableCopyright];
 			cell.label.textColor = [UIColor secondaryLabelColor];
 			cell.userInteractionEnabled = NO;
 			cell.marginStyle = MADTableViewCellMarginStyleMiddle;

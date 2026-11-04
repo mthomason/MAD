@@ -4,92 +4,8 @@
 	"entries": [
 		{
 			"category": "format-no-positional",
-			"file": "MADDesigner/Source/MADViewControllerSQL.m",
-			"text": "Applied: %lu table(s), %lu join(s), %lu predicate(s), %lu group(s).",
-			"reason": ""
-		},
-		{
-			"category": "format-no-positional",
 			"file": "MADFeedback/MADFeedback/MADFeedbackUncaughtExceptionHandler.m",
 			"text": "You can try to continue but the application may be unstable.\n\nDebug details follow:\n%@\n%@",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MAD/Source/MADDesignerLayout.m",
-			"text": "bold ? @\"Bold\" : @\"Disable Bold\"",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MAD/Source/MADDesignerLayout.m",
-			"text": "italic ? @\"Italic\" : @\"Disable Italic\"",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MAD/Source/MADDesignerLayout.m",
-			"text": "strikethrough ? @\"Strikethrough\" : @\"Disable Strikethrough\"",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MAD/Source/MADDesignerLayout.m",
-			"text": "underline ? @\"Underline\" : @\"Disable Underline\"",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MAD/Source/MADDocumentObjectTypeDescriptor.m",
-			"text": "[self humanReadableAddDetailStringForType:type]",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MAD/Source/MADDocumentObjectTypeDescriptor.m",
-			"text": "[self humanReadableDetailStringForType:type]",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MAD/Source/MADDocumentObjectTypeDescriptor.m",
-			"text": "[self humanReadableStringForType:type]",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MAD/Source/rptq/RptqQueryLinks+Extras.m",
-			"text": "name",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADAPI/Source/MADConnectionSQLGenericViewController.m",
-			"text": "databaseSettings",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADCocoaExtensions/Source/MADTextField.m",
-			"text": "token",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/AppDelegate.m",
-			"text": "[self applicationNameSufixPart]",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADAboutTableViewController.m",
-			"text": "[AppDelegate bundleDisplayName]",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADAboutTableViewController.m",
-			"text": "[AppDelegate humanReadableCopyright]",
 			"reason": ""
 		},
 		{
@@ -120,78 +36,6 @@
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
 			"text": "MADTextVisibleHint",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeAddDetailAggregate",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeAddDetailBarcode",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeAddDetailDynamic",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeAddDetailImage",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeAddDetailStatic",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeAddDetailWhitespace",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeTitleAggregate",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeTitleBarcode",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeTitleDynamic",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeTitleImage",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeTitleStatic",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADDocumentObjectCollectionViewCell.m",
-			"text": "MADDocumentObjectTypeTitleWhitespace",
 			"reason": ""
 		},
 		{
@@ -354,12 +198,6 @@
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
 			"text": "TextHeaderTable",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADDesigner/Source/MADReportPageView.m",
-			"text": "pageNumberString",
 			"reason": ""
 		},
 		{

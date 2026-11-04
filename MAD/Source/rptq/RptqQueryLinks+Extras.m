@@ -86,8 +86,8 @@
 }
 
 + (NSString *)newLocalizedNameForLinkType:(MADLinkType)type {
-	NSString *name = [self NamesForLinkType:type];
-	return NSLocalizedString(name, name);
+	// -NamesForLinkType: already localizes each literal.
+	return [self NamesForLinkType:type];
 }
 
 

@@ -116,22 +116,24 @@
 }
 
 
-+ (NSString *)TitleDynamic      { return NSLocalizedString(MADDocumentObjectTypeTitleDynamic, MADDocumentObjectTypeTitleDynamic); }
-+ (NSString *)DetailDynamic     { return NSLocalizedString(MADDocumentObjectTypeAddDetailDynamic, MADDocumentObjectTypeAddDetailDynamic); }
+// The strings live in MADDocumentObjectTypeDescriptor so there is one table.
 
-+ (NSString *)TitleStatic       { return NSLocalizedString(MADDocumentObjectTypeTitleStatic, MADDocumentObjectTypeTitleStatic); }
-+ (NSString *)DetailStatic      { return NSLocalizedString(MADDocumentObjectTypeAddDetailStatic, MADDocumentObjectTypeAddDetailStatic); }
++ (NSString *)TitleDynamic      { return [MADDocumentObjectTypeDescriptor localizedStringForType:MADPrintPageElementTypeLabelDynamic]; }
++ (NSString *)DetailDynamic     { return [MADDocumentObjectTypeDescriptor localizedAddDetailStringForType:MADPrintPageElementTypeLabelDynamic]; }
 
-+ (NSString *)TitleWhitespace   { return NSLocalizedString(MADDocumentObjectTypeTitleWhitespace, MADDocumentObjectTypeTitleWhitespace); }
-+ (NSString *)DetailWhitespace  { return NSLocalizedString(MADDocumentObjectTypeAddDetailWhitespace, MADDocumentObjectTypeAddDetailWhitespace); }
++ (NSString *)TitleStatic       { return [MADDocumentObjectTypeDescriptor localizedStringForType:MADPrintPageElementTypeLabelStatic]; }
++ (NSString *)DetailStatic      { return [MADDocumentObjectTypeDescriptor localizedAddDetailStringForType:MADPrintPageElementTypeLabelStatic]; }
 
-+ (NSString *)TitleAggregate    { return NSLocalizedString(MADDocumentObjectTypeTitleAggregate, MADDocumentObjectTypeTitleAggregate); }
-+ (NSString *)DetailAggregate   { return NSLocalizedString(MADDocumentObjectTypeAddDetailAggregate, MADDocumentObjectTypeAddDetailAggregate); }
++ (NSString *)TitleWhitespace   { return [MADDocumentObjectTypeDescriptor localizedStringForType:MADPrintPageElementTypeWhtiespace]; }
++ (NSString *)DetailWhitespace  { return [MADDocumentObjectTypeDescriptor localizedAddDetailStringForType:MADPrintPageElementTypeWhtiespace]; }
 
-+ (NSString *)TitleImage        { return NSLocalizedString(MADDocumentObjectTypeTitleImage, MADDocumentObjectTypeTitleImage); }
-+ (NSString *)DetailImage       { return NSLocalizedString(MADDocumentObjectTypeAddDetailImage, MADDocumentObjectTypeAddDetailImage); }
++ (NSString *)TitleAggregate    { return [MADDocumentObjectTypeDescriptor localizedStringForType:MADPrintPageElementTypeAggregate]; }
++ (NSString *)DetailAggregate   { return [MADDocumentObjectTypeDescriptor localizedAddDetailStringForType:MADPrintPageElementTypeAggregate]; }
 
-+ (NSString *)TitleBarcode      { return NSLocalizedString(MADDocumentObjectTypeTitleBarcode, MADDocumentObjectTypeTitleBarcode); }
-+ (NSString *)DetailBarcode     { return NSLocalizedString(MADDocumentObjectTypeAddDetailBarcode, MADDocumentObjectTypeAddDetailBarcode); }
++ (NSString *)TitleImage        { return [MADDocumentObjectTypeDescriptor localizedStringForType:MADPrintPageElementTypeImage]; }
++ (NSString *)DetailImage       { return [MADDocumentObjectTypeDescriptor localizedAddDetailStringForType:MADPrintPageElementTypeImage]; }
+
++ (NSString *)TitleBarcode      { return [MADDocumentObjectTypeDescriptor localizedStringForType:MADPrintPageElementTypeBarcode]; }
++ (NSString *)DetailBarcode     { return [MADDocumentObjectTypeDescriptor localizedAddDetailStringForType:MADPrintPageElementTypeBarcode]; }
 
 @end

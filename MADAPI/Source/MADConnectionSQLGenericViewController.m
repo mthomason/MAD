@@ -147,7 +147,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	self.actionSaveTarget = self.navigationItem.rightBarButtonItem.target;
 	
 	self.navigationItem.prompt = NSLocalizedString(@"Each report requires a database connection.", @"Each report requires a database connection.");
-	self.title = NSLocalizedString(@"Database Settings", @"Database Settings");
+	self.title = NSLocalizedString(@"Database Settings", @"Title of the database settings screen.");
 	
 	self.clearsSelectionOnViewWillAppear = YES;
 	
@@ -158,8 +158,7 @@ typedef void (^MADBlockCompletionStatus)(BOOL);
 	self.textFieldReportName.clearButtonMode = UITextFieldViewModeAlways;
 	
 	MADLabelTitle *titleView = [[MADLabelTitle alloc] initWithFrame:CGRectZero];
-	NSString *databaseSettings = @"Database Settings";
-	titleView.text = NSLocalizedString(databaseSettings, databaseSettings);
+	titleView.text = NSLocalizedString(@"Database Settings", @"Title of the database settings screen.");
 	self.navigationItem.titleView = titleView;
 	
 }
