@@ -376,7 +376,7 @@ def audit_text(relative_path, text):
 			if code_only[match.start("keyword")] == " ":
 				continue
 			_end, body = adjacent_literal_body(no_comments, match.start("literal"))
-			if not body.strip() or not has_letters(body):
+			if not body.strip() or not has_letters(decode_literal(body)):
 				continue
 			text_value = "%s = %s" % (match.group("keyword"), body)
 			findings.append(Finding(
@@ -395,7 +395,7 @@ def audit_text(relative_path, text):
 			body = no_comments[bracket + 1:end]
 			for literal in _LITERAL_PREFIX_RE.finditer(body):
 				raw = _raw_body(literal.group(1))
-				if not has_letters(raw):
+				if not has_letters(decode_literal(raw)):
 					continue
 				position = bracket + 1 + literal.start()
 				text_value = "%s = %s" % (match.group("keyword"), raw)

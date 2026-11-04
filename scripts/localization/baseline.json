@@ -998,62 +998,6 @@
 		},
 		{
 			"category": "raw-ui-literal",
-			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
-			"text": "setTitle = \\uf032",
-			"count": 3,
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
-			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
-			"text": "setTitle = \\uf033",
-			"count": 3,
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
-			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
-			"text": "setTitle = \\uf036",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
-			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
-			"text": "setTitle = \\uf037",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
-			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
-			"text": "setTitle = \\uf038",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
-			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
-			"text": "setTitle = \\uf039",
-			"count": 1,
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
-			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
-			"text": "setTitle = \\uf0cc",
-			"count": 3,
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
-			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
-			"text": "setTitle = \\uf0cd",
-			"count": 3,
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADViewerController.m",
 			"text": "actionWithTitle = OK",
 			"count": 1,
