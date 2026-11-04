@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,445 +11,6 @@
 		4C00A3771F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C00A3741F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m */; };
 		4C00A3781F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */; };
 		4C2915A224AC634900EC794B /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915A124AC634900EC794B /* MADFoundation.framework */; };
-		4CA100012000000000000001 /* MADMySQLLiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA100022000000000000002 /* MADMySQLLiveTests.m */; };
-		4CA1000520000000000000A1 /* MADMySQLInsertTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000520000000000000B1 /* MADMySQLInsertTests.m */; };
-		4CA1000620000000000000A1 /* MADMySQLUpdateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000620000000000000B1 /* MADMySQLUpdateTests.m */; };
-		4CA1000720000000000000A1 /* MADMySQLDeleteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000720000000000000B1 /* MADMySQLDeleteTests.m */; };
-		4CA1000820000000000000A1 /* MADMySQLTruncateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000820000000000000B1 /* MADMySQLTruncateTests.m */; };
-		4CA1000920000000000000A1 /* MADMySQLSupportTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000920000000000000B1 /* MADMySQLSupportTypesTests.m */; };
-		4CA1000A20000000000000A1 /* MADMySQLFetchFieldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000A20000000000000B1 /* MADMySQLFetchFieldTests.m */; };
-		4CA1000B20000000000000A1 /* MADMySQLExceptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000B20000000000000B1 /* MADMySQLExceptionTests.m */; };
-		4CA1000C20000000000000A1 /* MADMySQLConnectionViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000C20000000000000B1 /* MADMySQLConnectionViewControllerTests.m */; };
-		4CA100032000000000000003 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915A124AC634900EC794B /* MADFoundation.framework */; };
-		4CA100042000000000000004 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5D022724B8692D006D1A90 /* MADAPI.framework */; };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		4CDA7B0500000000000000B2 /* mariadb.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0500000000000000B1 /* mariadb.xcframework */; };
 		4C4F062D1F57C20100E09E54 /* MADDatabaseMySQL.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C4F06291F57C20100E09E54 /* MADDatabaseMySQL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C4F062E1F57C20100E09E54 /* MADDatabaseMySQL.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F062A1F57C20100E09E54 /* MADDatabaseMySQL.m */; };
 		4C4F06301F57C20100E09E54 /* MADMySQLFetch+DataTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F062C1F57C20100E09E54 /* MADMySQLFetch+DataTable.m */; };
@@ -501,154 +62,24 @@
 		4C9374011BAD2A8300D6BD62 /* MADMySQLRollbackException.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E51BAD2A8300D6BD62 /* MADMySQLRollbackException.m */; };
 		4C9374021BAD2A8300D6BD62 /* MADMySQLServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E61BAD2A8300D6BD62 /* MADMySQLServer.m */; };
 		4C9374031BAD2A8300D6BD62 /* MADMySQLUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9373E71BAD2A8300D6BD62 /* MADMySQLUpdate.m */; };
+		4CA100012000000000000001 /* MADMySQLLiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA100022000000000000002 /* MADMySQLLiveTests.m */; };
+		4CA100032000000000000003 /* MADFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C2915A124AC634900EC794B /* MADFoundation.framework */; };
+		4CA100042000000000000004 /* MADAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5D022724B8692D006D1A90 /* MADAPI.framework */; };
+		4CA1000520000000000000A1 /* MADMySQLInsertTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000520000000000000B1 /* MADMySQLInsertTests.m */; };
+		4CA1000620000000000000A1 /* MADMySQLUpdateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000620000000000000B1 /* MADMySQLUpdateTests.m */; };
+		4CA1000720000000000000A1 /* MADMySQLDeleteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000720000000000000B1 /* MADMySQLDeleteTests.m */; };
+		4CA1000820000000000000A1 /* MADMySQLTruncateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000820000000000000B1 /* MADMySQLTruncateTests.m */; };
+		4CA1000920000000000000A1 /* MADMySQLSupportTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000920000000000000B1 /* MADMySQLSupportTypesTests.m */; };
+		4CA1000A20000000000000A1 /* MADMySQLFetchFieldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000A20000000000000B1 /* MADMySQLFetchFieldTests.m */; };
+		4CA1000B20000000000000A1 /* MADMySQLExceptionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000B20000000000000B1 /* MADMySQLExceptionTests.m */; };
+		4CA1000C20000000000000A1 /* MADMySQLConnectionViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA1000C20000000000000B1 /* MADMySQLConnectionViewControllerTests.m */; };
 		4CA7C3252EA491DE00475743 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA7C3242EA491DE00475743 /* Media.xcassets */; };
+		4CDA7B0500000000000000B2 /* mariadb.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0500000000000000B1 /* mariadb.xcframework */; };
 		4CDA7B0600000000000000B2 /* openssl.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0600000000000000B1 /* openssl.xcframework */; };
 		4CDA7B0600000000000000B5 /* zlib.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDA7B0600000000000000B4 /* zlib.xcframework */; };
 		4CDCEF261D8D859A00A5A32E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CDCEF251D8D859A00A5A32E /* libc++.tbd */; };
 		4CE0F5061F5D52AE00D828E1 /* MADCreateDocument.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */; platformFilters = (ios, maccatalyst, ); };
 		4CE4DE152E92EB430093BEBC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4CE4DE142E92EB430093BEBC /* PrivacyInfo.xcprivacy */; };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -665,456 +96,8 @@
 		4C00A3731F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseConnectionMySql.h; sourceTree = "<group>"; };
 		4C00A3741F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseConnectionMySql.m; sourceTree = "<group>"; };
 		4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMySQLFetchProtocol.h; sourceTree = "<group>"; };
+		4C1C0C200000000000000001 /* Base */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MADCreateDocument.storyboard; sourceTree = "<group>"; };
 		4C2915A124AC634900EC794B /* MADFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MADFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		4CDA7B0500000000000000B1 /* mariadb.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = mariadb.xcframework; path = ../Compressor/library/mariadb.xcframework; sourceTree = "<group>"; };
 		4C4F06291F57C20100E09E54 /* MADDatabaseMySQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseMySQL.h; sourceTree = "<group>"; };
 		4C4F062A1F57C20100E09E54 /* MADDatabaseMySQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseMySQL.m; sourceTree = "<group>"; };
 		4C4F062B1F57C20100E09E54 /* MADMySQLFetch+DataTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MADMySQLFetch+DataTable.h"; sourceTree = "<group>"; };
@@ -1127,15 +110,6 @@
 		4C7014971BACDC6800301713 /* MADMySQL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MADMySQL.h; sourceTree = "<group>"; };
 		4C70149E1BACDC6800301713 /* MADMySQLTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MADMySQLTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C7014A31BACDC6800301713 /* MADMySQLTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLTests.m; sourceTree = "<group>"; };
-		4CA100022000000000000002 /* MADMySQLLiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLLiveTests.m; sourceTree = "<group>"; };
-		4CA1000520000000000000B1 /* MADMySQLInsertTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLInsertTests.m; sourceTree = "<group>"; };
-		4CA1000620000000000000B1 /* MADMySQLUpdateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLUpdateTests.m; sourceTree = "<group>"; };
-		4CA1000720000000000000B1 /* MADMySQLDeleteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLDeleteTests.m; sourceTree = "<group>"; };
-		4CA1000820000000000000B1 /* MADMySQLTruncateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLTruncateTests.m; sourceTree = "<group>"; };
-		4CA1000920000000000000B1 /* MADMySQLSupportTypesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLSupportTypesTests.m; sourceTree = "<group>"; };
-		4CA1000A20000000000000B1 /* MADMySQLFetchFieldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLFetchFieldTests.m; sourceTree = "<group>"; };
-		4CA1000B20000000000000B1 /* MADMySQLExceptionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLExceptionTests.m; sourceTree = "<group>"; };
-		4CA1000C20000000000000B1 /* MADMySQLConnectionViewControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLConnectionViewControllerTests.m; sourceTree = "<group>"; };
 		4C7014A51BACDC6800301713 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C9372F71BAD244800D6BD62 /* MADDataTypeMySQL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDataTypeMySQL.h; sourceTree = "<group>"; };
 		4C9372F81BAD244800D6BD62 /* MADDataTypeMySQL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDataTypeMySQL.m; sourceTree = "<group>"; };
@@ -1167,156 +141,23 @@
 		4C9373E51BAD2A8300D6BD62 /* MADMySQLRollbackException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMySQLRollbackException.m; sourceTree = "<group>"; };
 		4C9373E61BAD2A8300D6BD62 /* MADMySQLServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMySQLServer.m; sourceTree = "<group>"; };
 		4C9373E71BAD2A8300D6BD62 /* MADMySQLUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMySQLUpdate.m; sourceTree = "<group>"; };
+		4CA100022000000000000002 /* MADMySQLLiveTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLLiveTests.m; sourceTree = "<group>"; };
+		4CA1000520000000000000B1 /* MADMySQLInsertTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLInsertTests.m; sourceTree = "<group>"; };
+		4CA1000620000000000000B1 /* MADMySQLUpdateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLUpdateTests.m; sourceTree = "<group>"; };
+		4CA1000720000000000000B1 /* MADMySQLDeleteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLDeleteTests.m; sourceTree = "<group>"; };
+		4CA1000820000000000000B1 /* MADMySQLTruncateTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLTruncateTests.m; sourceTree = "<group>"; };
+		4CA1000920000000000000B1 /* MADMySQLSupportTypesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLSupportTypesTests.m; sourceTree = "<group>"; };
+		4CA1000A20000000000000B1 /* MADMySQLFetchFieldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLFetchFieldTests.m; sourceTree = "<group>"; };
+		4CA1000B20000000000000B1 /* MADMySQLExceptionTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLExceptionTests.m; sourceTree = "<group>"; };
+		4CA1000C20000000000000B1 /* MADMySQLConnectionViewControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MADMySQLConnectionViewControllerTests.m; sourceTree = "<group>"; };
 		4CA7C3242EA491DE00475743 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		4CA7C3262EA491EF00475743 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4CBF043F2E8518E800812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
+		4CDA7B0500000000000000B1 /* mariadb.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = mariadb.xcframework; path = ../Compressor/library/mariadb.xcframework; sourceTree = "<group>"; };
 		4CDA7B0600000000000000B1 /* openssl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = openssl.xcframework; path = ../Compressor/library/openssl.xcframework; sourceTree = "<group>"; };
 		4CDA7B0600000000000000B4 /* zlib.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = zlib.xcframework; path = ../Compressor/library/zlib.xcframework; sourceTree = "<group>"; };
-		4CBF043F2E8518E800812022 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		4CDCEF251D8D859A00A5A32E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MADCreateDocument.storyboard; sourceTree = "<group>"; };
 		4CE4DE142E92EB430093BEBC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1347,40 +188,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		4C54AFA51D8C4B3900FE8B73 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1440,7 +247,6 @@
 		4C865F431DA5276B0057678C /* mariadb */ = {
 			isa = PBXGroup;
 			children = (
-
 			);
 			name = mariadb;
 			sourceTree = "<group>";
@@ -1457,7 +263,6 @@
 				4C00A3741F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m */,
 				4C9372F71BAD244800D6BD62 /* MADDataTypeMySQL.h */,
 				4C9372F81BAD244800D6BD62 /* MADDataTypeMySQL.m */,
-
 				4C9373CD1BAD2A8300D6BD62 /* MADMySQLConnection.h */,
 				4C9373D31BAD2A8300D6BD62 /* MADMySQLConnection.m */,
 				4C9373CC1BAD2A8300D6BD62 /* MADMySQLCommitException.h */,
@@ -1506,13 +311,10 @@
 		4CF85F392DD0AA6C00FCA47D /* openssl */ = {
 			isa = PBXGroup;
 			children = (
-
 			);
 			path = openssl;
 			sourceTree = "<group>";
 		};
-
-
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1524,7 +326,6 @@
 				4C9372F91BAD244800D6BD62 /* MADDataTypeMySQL.h in Headers */,
 				4C00A3781F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h in Headers */,
 				4C00A3761F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h in Headers */,
-
 				4C9373EA1BAD2A8300D6BD62 /* MADMySQLFetch.h in Headers */,
 				4C4F062D1F57C20100E09E54 /* MADDatabaseMySQL.h in Headers */,
 				4C9373E91BAD2A8300D6BD62 /* MADMySQLConnection.h in Headers */,
@@ -1599,6 +400,7 @@
 			knownRegions = (
 				English,
 				en,
+				Base,
 			);
 			mainGroup = 4C70148A1BACDC6800301713;
 			productRefGroup = 4C7014951BACDC6800301713 /* Products */;
@@ -1654,8 +456,8 @@
 
 /* Begin PBXShellScriptBuildPhase section */
 		4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */ = {
-			alwaysOutOfDate = 1;
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -1680,7 +482,6 @@
 				4C9374001BAD2A8300D6BD62 /* MADMySQLLiteral.m in Sources */,
 				4C9373FE1BAD2A8300D6BD62 /* MADMySQLException.m in Sources */,
 				4C9373EB1BAD2A8300D6BD62 /* MADMySQLFetch.m in Sources */,
-
 				4C9373FF1BAD2A8300D6BD62 /* MADMySQLIndex.m in Sources */,
 				4C9374031BAD2A8300D6BD62 /* MADMySQLUpdate.m in Sources */,
 				4C9374021BAD2A8300D6BD62 /* MADMySQLServer.m in Sources */,
@@ -1724,6 +525,17 @@
 			targetProxy = 4C7014A01BACDC6800301713 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4CE0F5051F5D52AE00D828E1 /* MADCreateDocument.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C1C0C200000000000000001 /* Base */,
+			);
+			name = MADCreateDocument.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		4C7014A61BACDC6800301713 /* Debug */ = {
@@ -1804,13 +616,11 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-lc++",
-				);
+				OTHER_LDFLAGS = "-lc++";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1893,12 +703,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"-lc++",
-				);
+				OTHER_LDFLAGS = "-lc++";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1913,13 +721,8 @@
 		4C7014A91BACDC6800301713 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"MADLOG_ACCESSOR=GetMySqlLog",
-					"$(inherited)",
-				);
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
@@ -1932,8 +735,13 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				EXCLUDED_ARCHS = x86_64;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetMySqlLog",
+					"$(inherited)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../Compressor/library/mariadb/include\"",
 					"\"$(SRCROOT)/../Compressor/library/openssl/include\"",
@@ -1965,13 +773,8 @@
 		4C7014AA1BACDC6800301713 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"MADLOG_ACCESSOR=GetMySqlLog",
-					"$(inherited)",
-				);
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
@@ -1984,8 +787,13 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_BITCODE = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				EXCLUDED_ARCHS = x86_64;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"MADLOG_ACCESSOR=GetMySqlLog",
+					"$(inherited)",
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../Compressor/library/mariadb/include\"",
 					"\"$(SRCROOT)/../Compressor/library/openssl/include\"",
@@ -2016,15 +824,15 @@
 		4C7014AC1BACDC6800301713 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Source",
-					"$(SRCROOT)/../Compressor/library/mariadb/include",
-				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D3C58YS54A;
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Source",
+					"$(SRCROOT)/../Compressor/library/mariadb/include",
+				);
 				INFOPLIST_FILE = MADMySQLTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2044,15 +852,15 @@
 		4C7014AD1BACDC6800301713 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Source",
-					"$(SRCROOT)/../Compressor/library/mariadb/include",
-				);
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D3C58YS54A;
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Source",
+					"$(SRCROOT)/../Compressor/library/mariadb/include",
+				);
 				INFOPLIST_FILE = MADMySQLTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
