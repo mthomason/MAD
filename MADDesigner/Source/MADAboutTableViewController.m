@@ -250,7 +250,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return 6;
+	return 7;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -303,6 +303,14 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 			break;
 
 		case 4:
+			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+			cell.label.text = NSLocalizedString(@"These translations are machine-assisted and may contain errors. Report them at https://github.com/mthomason/MAD/issues.", @"Machine-assisted translation notice. Keep MAD and the URL verbatim.");
+			cell.label.textColor = [UIColor secondaryLabelColor];
+			cell.userInteractionEnabled = NO;
+			cell.marginStyle = MADTableViewCellMarginStyleMiddle;
+			break;
+
+		case 5:
 			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
 			cell.label.text = NSLocalizedString(@"Overview", @"Overview");
 			cell.label.textColor = [UIColor labelColor];
@@ -312,7 +320,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 			cell.marginStyle = MADTableViewCellMarginStyleMiddle;
 			break;
 
-		case 5:
+		case 6:
 			cell.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
 			cell.label.text = NSLocalizedString(@"Acknowledgements", @"Acknowledgements");
 			cell.label.textColor = [UIColor labelColor];
@@ -333,9 +341,9 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	UIViewController *detailVC = nil;
-	if (indexPath.row == 4) {
+	if (indexPath.row == 5) {
 		detailVC = [[MADGettingStartedTableViewController alloc] initWithStyle:UITableViewStylePlain];
-	} else if (indexPath.row == 5) {
+	} else if (indexPath.row == 6) {
 		detailVC = [[MADAcknowledgementsViewController alloc] init];
 	}
 	if (detailVC != nil) {

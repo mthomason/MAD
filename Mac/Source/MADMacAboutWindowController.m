@@ -229,6 +229,8 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 	appendSubheading(NSLocalizedString(@"Export Formats", @"About overview heading for the export formats."));
 	appendBody(NSLocalizedString(@"• PDF Document (.pdf), HTML Page (.html), HTML Flow (.html), CSV Spreadsheet (.csv), JSON Data (.json), JSON Full Report (.json), and Plain Text (.txt).", @"About overview list of export formats. Format names and file extensions are not translated."));
 
+	appendBody(NSLocalizedString(@"These translations are machine-assisted and may contain errors. Report them at https://github.com/mthomason/MAD/issues.", @"Machine-assisted translation notice. Keep MAD and the URL verbatim."));
+
 	return result;
 }
 

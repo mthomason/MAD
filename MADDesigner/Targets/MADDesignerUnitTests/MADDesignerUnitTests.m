@@ -644,7 +644,7 @@ static BOOL MADSwizzledIsMADViewer(id self, SEL _cmd) {
 	[aboutVC.view layoutIfNeeded];
 
 	NSInteger rowCount = [aboutVC tableView:aboutVC.tableView numberOfRowsInSection:0];
-	XCTAssertEqual(rowCount, 6);
+	XCTAssertEqual(rowCount, 7);
 
 	NSMutableArray<NSString *> *rowTexts = [NSMutableArray arrayWithCapacity:(NSUInteger)rowCount];
 	for (NSInteger r = 0; r < rowCount; r++) {
@@ -663,8 +663,10 @@ static BOOL MADSwizzledIsMADViewer(id self, SEL _cmd) {
 	XCTAssertTrue([rowTexts[2] containsString:@"Copyright © 2012–2026 Michael Thomason"]);
 	XCTAssertTrue([rowTexts[3] containsString:@"Licensed under the MIT License"]);
 	XCTAssertTrue([rowTexts[3] containsString:@"not licensed under the MIT License"]);
-	XCTAssertEqualObjects(rowTexts[4], @"Overview");
-	XCTAssertEqualObjects(rowTexts[5], @"Acknowledgements");
+	XCTAssertTrue([rowTexts[4] containsString:@"machine-assisted"]);
+	XCTAssertTrue([rowTexts[4] containsString:@"https://github.com/mthomason/MAD/issues"]);
+	XCTAssertEqualObjects(rowTexts[5], @"Overview");
+	XCTAssertEqualObjects(rowTexts[6], @"Acknowledgements");
 
 	NSAttributedString *ackText = [MADAcknowledgementsViewController acknowledgementsAttributedText];
 	XCTAssertNotNil(ackText);
@@ -685,7 +687,7 @@ static BOOL MADSwizzledIsMADViewer(id self, SEL _cmd) {
 	[aboutVC endAppearanceTransition];
 	XCTAssertTrue(navController.isNavigationBarHidden);
 
-	[aboutVC tableView:aboutVC.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:4 inSection:0]];
+	[aboutVC tableView:aboutVC.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:5 inSection:0]];
 	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
 	XCTAssertEqual(navController.viewControllers.count, (NSUInteger)2);
 	XCTAssertTrue([navController.topViewController isKindOfClass:[MADGettingStartedTableViewController class]]);
@@ -703,7 +705,7 @@ static BOOL MADSwizzledIsMADViewer(id self, SEL _cmd) {
 	[aboutVC endAppearanceTransition];
 	XCTAssertTrue(navController.isNavigationBarHidden);
 
-	[aboutVC tableView:aboutVC.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:5 inSection:0]];
+	[aboutVC tableView:aboutVC.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:6 inSection:0]];
 	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
 	XCTAssertEqual(navController.viewControllers.count, (NSUInteger)2);
 	XCTAssertTrue([navController.topViewController isKindOfClass:[MADAcknowledgementsViewController class]]);

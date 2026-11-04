@@ -33,9 +33,14 @@
 		[defaults boolForKey:@"NSSurroundLocalizedStrings"];
 }
 
-// The plural rules live in the source-language entry until a language is
-// translated.  Under another language the untranslated key is returned as-is,
-// so these assertions only mean something in English without pseudo modes.
+- (BOOL)doubleLengthPseudoLocalization {
+	return [[NSUserDefaults standardUserDefaults] boolForKey:@"NSDoubleLocalizedStrings"];
+}
+
+// These two tests assert exact English copy.  The catalog now carries plural
+// rules for every shipped language too, but the assertions are pinned to the
+// source strings, so they only mean something in an English process language
+// without a pseudo mode.
 - (void)skipUnlessSourceLanguagePluralRules {
 	XCTSkipUnless([[self preferredLanguage] hasPrefix:@"en"] && ![self pseudoLocalizationEnabled],
 				  @"English source-language plural rules");
@@ -64,11 +69,18 @@
 }
 
 - (void)testGermanCatalogValueFromTheGermanBundle {
+	if ([self pseudoLocalizationEnabled] && ![self doubleLengthPseudoLocalization]) {
+		XCTSkip(@"accented pseudo-localization changes the exact copy");
+	}
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"de" ofType:@"lproj"];
 	XCTAssertNotNil(path, @"de.lproj must be in the app bundle");
 	NSBundle *german = [NSBundle bundleWithPath:path];
 	NSString *value = [german localizedStringForKey:@"Choose Storage Option" value:nil table:nil];
-	XCTAssertEqualObjects(value, @"Speicherort wählen",
+	NSString *expected = @"Speicherort wählen";
+	if ([self doubleLengthPseudoLocalization]) {
+		expected = [expected stringByAppendingFormat:@" %@", expected];
+	}
+	XCTAssertEqualObjects(value, expected,
 		@"The German table must carry the key even under an English process language");
 }
 
@@ -110,6 +122,13 @@
 
 	NSString *language = [self preferredLanguage];
 	NSString *expected = [language hasPrefix:@"de"] ? @"Generierte Abfrage" : @"Generated Query";
+	if ([self doubleLengthPseudoLocalization]) {
+		expected = [expected stringByAppendingFormat:@" %@", expected];
+	} else if ([self pseudoLocalizationEnabled]) {
+		XCTAssertNotEqualObjects(controller.navigationItem.title, @"Generated Query",
+			@"Accented pseudo-localization must change the storyboard copy");
+		return;
+	}
 	XCTAssertEqualObjects(controller.navigationItem.title, expected,
 		@"The storyboard title must come from the %@ table", language);
 }
