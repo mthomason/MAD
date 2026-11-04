@@ -89,6 +89,10 @@
       "comment": "Like '5.2 points.'",
       "extractionState": "manual"
     },
+    "%1$lu of %2$lu": {
+      "comment": "Page status; %1$lu is the current page, %2$lu the total.",
+      "extractionState": "manual"
+    },
     "%@ MB": {
       "comment": "File size in megabytes; %@ is the formatted number.",
       "extractionState": "manual"
@@ -309,9 +313,99 @@
       "comment": "Description of an empty spacer element.",
       "extractionState": "manual"
     },
-    "Applied: %1$lu table(s), %2$lu join(s), %3$lu predicate(s), %4$lu group(s).": {
-      "comment": "Status after applying the SQL to the query. Four counts: tables, joins, predicates, groups.",
-      "extractionState": "manual"
+    "Applied: %1$lu tables, %2$lu joins, %3$lu predicates, %4$lu groups.": {
+      "comment": "Status after applying SQL to the query. Four counts: tables, joins, predicates, groups.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applied: %1$#@tables@, %2$#@joins@, %3$#@predicates@, %4$#@groups@."
+          },
+          "substitutions": {
+            "groups": {
+              "argNum": 4,
+              "formatSpecifier": "lu",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu group"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu groups"
+                    }
+                  }
+                }
+              }
+            },
+            "joins": {
+              "argNum": 2,
+              "formatSpecifier": "lu",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu join"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu joins"
+                    }
+                  }
+                }
+              }
+            },
+            "predicates": {
+              "argNum": 3,
+              "formatSpecifier": "lu",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu predicate"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu predicates"
+                    }
+                  }
+                }
+              }
+            },
+            "tables": {
+              "argNum": 1,
+              "formatSpecifier": "lu",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu table"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu tables"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Apply": {
       "comment": "Localized UI string.",

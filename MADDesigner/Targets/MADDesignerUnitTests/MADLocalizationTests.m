@@ -78,6 +78,19 @@
 	XCTAssertEqualObjects(many.actions.lastObject.title, @"Remove 2 items");
 }
 
+- (void)testAppliedSQLCountsUsePluralRules {
+	NSString *key = @"Applied: %1$lu tables, %2$lu joins, %3$lu predicates, %4$lu groups.";
+	NSString *one = [NSString localizedStringWithFormat:NSLocalizedString(key, nil),
+		1UL, 1UL, 1UL, 1UL];
+	XCTAssertEqualObjects(one,
+		@"Applied: 1 table, 1 join, 1 predicate, 1 group.");
+
+	NSString *many = [NSString localizedStringWithFormat:NSLocalizedString(key, nil),
+		2UL, 3UL, 4UL, 5UL];
+	XCTAssertEqualObjects(many,
+		@"Applied: 2 tables, 3 joins, 4 predicates, 5 groups.");
+}
+
 - (void)testStoryboardNavigationTitleFollowsPreferredLanguage {
 	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQuery"
 		bundle:[NSBundle mainBundle]];
