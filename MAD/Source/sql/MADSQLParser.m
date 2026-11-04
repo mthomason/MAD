@@ -6,6 +6,7 @@
 //
 
 #import "MADSQLParser.h"
+#import <Foundation/NSBundle.h>
 #import "MADSQLCompileError.h"
 #import "MADSQLStatement.h"
 #import "MADSQLTokenizer.h"

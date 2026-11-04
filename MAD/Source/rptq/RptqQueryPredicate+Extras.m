@@ -24,6 +24,7 @@
 #import <CoreFoundation/CFNumber.h>
 
 #import <Foundation/NSSortDescriptor.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSError.h>
 

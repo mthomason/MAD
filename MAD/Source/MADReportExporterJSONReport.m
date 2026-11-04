@@ -27,6 +27,7 @@
 #import <MAD/MADDocumentObjectType.h>
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
