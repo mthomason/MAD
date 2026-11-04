@@ -862,9 +862,20 @@ entries, 62 marked `shouldTranslate: false`), in every app and driver storyboard
 and xib that has translatable entries, in `Settings.bundle`, and in the Mac
 bundle through the shared catalog. The glossary in §12 was fixed first. The
 machine-assisted notice required by D14 is on the iOS About table and the Mac
-About overview. Not done: the screenshot matrix, VoiceOver/Voice Control
-sessions, Dynamic Type, and any truncation fix. Those are QA work, not
-translation work, and no human has reviewed the copy.
+About overview.
+
+**Screenshots (2026-11-04):** the user captured the macOS Query and Designer
+workspaces in each of the five languages. They live in `docs/assets` with
+language-suffixed names (`macos-native-mad-query-de.png`, `...-pt-BR.png`,
+`...-zh-CN.png`, and the designer pair) and are referenced by the localized
+`index.md` and `macos.md` pages, including their social images. The captures
+show the shipped localized chrome, including the canvas band summary
+(`Arbeitsbereich`, `1 Element`, `Ausgeblendet`).
+
+Not done: the de/es/pt-BR designer captures still show clipped labels from the
+fixed-width layout; the truncation fixes, VoiceOver/Voice Control sessions, the
+Dynamic Type check, and a full language-matrix QA pass remain open. Those are
+QA work, not translation work, and no human has reviewed the copy.
 
 ### Phase 4 — Remaining languages (1-2 weeks engineering + vendor time)
 
@@ -875,9 +886,9 @@ screenshots.
 **Status 2026-11-04 — translated in the same pass.** The new pipeline applies a
 per-language glossary to the whole catalog, so all four languages were drafted
 with German rather than after it. Each has the five-language completeness the
-checker enforces. The "review each language in-app" and screenshot steps were
-not performed; D14 records why, and the About screens say the translations are
-machine-assisted.
+checker enforces. The screenshot step is done for the localized pages (Phase 3
+status); the in-app review was not performed. D14 records why, and the About
+screens say the translations are machine-assisted.
 
 ### Phase 5 — macOS parity (1 week, can run in parallel with Phase 2-4)
 
