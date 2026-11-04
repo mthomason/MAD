@@ -1268,7 +1268,7 @@ translations yet). The barcode display names are consolidated into the table in
 are gone. The catalog held 783 entries at that point.
 
 Continuation (2026-11-04): the translation pass landed on the same branch. The
-catalog now holds 784 entries, fully translated into `de`, `es`, `ja`, `pt-BR`,
+catalog now holds 787 entries, fully translated into `de`, `es`, `ja`, `pt-BR`,
 and `zh-Hans` (62 brand/technical entries marked `shouldTranslate: false`; the
 11 plural entries carry the categories their language requires). Every app,
 xib, and live-driver storyboard has `<lang>.lproj` files for the entries it
