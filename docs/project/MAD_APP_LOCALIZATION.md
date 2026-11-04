@@ -753,8 +753,10 @@ with the two unresolved names still needing handling. Every iOS-side raw UI
 literal is wrapped: the app target (27), the MAD framework (75, including all
 47 SQL parser and resolver messages per D12), MADFoundation (10) and the
 MySQL/PostgreSQL wrappers (12). The only raw UI literals left are the Mac's
-204, which Phase 5 owns. Next here: plurals, the locale formatters,
-accessibility, and the storyboard strings.
+204, which Phase 5 owns. The locale formatters are fixed:
+`ma_twoDecimalPlacesFormatter` no longer pins separators, and `MADStandard`'s
+file size uses `NSNumberFormatter` with the localized `%@ MB` key. Next:
+plurals, accessibility, and the storyboard strings.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 
