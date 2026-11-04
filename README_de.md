@@ -35,9 +35,9 @@ Die technische Dokumentation und die Format-Spezifikation werden auch unter <htt
 
 **[MAD Designer für macOS](docs/de/macos.md)** — die native `AppKit`-Desktopanwendung (`Mac/`), mit der visuellen Beziehungsleinwand **MAD Query** und dem bandbasierten Layout-Arbeitsbereich **MAD Designer**:
 
-![Arbeitsbereich MAD Query in der nativen macOS-Anwendung](docs/assets/macos-native-mad-query.png)
+![Arbeitsbereich MAD Query in der nativen macOS-Anwendung](docs/assets/macos-native-mad-query-de.png)
 
-![Arbeitsbereich MAD Designer in der nativen macOS-Anwendung](docs/assets/macos-native-mad-designer.png)
+![Arbeitsbereich MAD Designer in der nativen macOS-Anwendung](docs/assets/macos-native-mad-designer-de.png)
 
 **MAD Designer für iOS**, von der Auswahl einer Datenquelle bis zum fertigen Bericht in MAD Viewer (28 Sekunden; [Video](https://docs.everydayapps.com/assets/app-preview.mp4)):
 
@@ -48,6 +48,16 @@ Die technische Dokumentation und die Format-Spezifikation werden auch unter <htt
 ![Die mad-CLI beim Inspizieren, Abfragen, Aktualisieren und Exportieren eines .mad-Dokuments](docs/assets/mad-cli-demo.gif)
 
 Der [exportierte Bericht](https://docs.everydayapps.com/assets/london.html) der Aufzeichnung ist reines HTML und lässt sich in jedem Browser öffnen.
+
+## Lokalisierung
+
+Die iOS- und macOS-Anwendungen sind vollständig in **Englisch, Deutsch, Spanisch, Japanisch, brasilianisches Portugiesisch und vereinfachtes Chinesisch** lokalisiert. Die Oberfläche folgt der Systemsprache, und die Dokumentation ist in dieselben Sprachen übersetzt. Marken- und Produktnamen, SQL-Bezeichner, Datenbank- und Schriftnamen sowie Lizenztexte bleiben bewusst auf Englisch. Die Übersetzungen wurden maschinell erstellt; Korrekturen sind im [Issue-Tracker](https://github.com/mthomason/MAD/issues) willkommen.
+
+## Datenschutz
+
+MAD respektiert Ihre Privatsphäre. Die Anwendungen enthalten keinen Analyse-, Telemetrie- oder Tracking-Code und zeichnen Ihre Dateien weder auf noch kopieren sie sie. Die einzigen Netzwerkverbindungen sind die von Ihnen konfigurierten Datenbankverbindungen; Berichtsdaten verbleiben im lokalen SQLite-Cache und den Begleitdateien des Dokuments.
+
+Unter macOS kann die App Zugriff auf **Dokumente**, **Schreibtisch**, **Downloads** oder einen anderen Ordner anfordern. Diese Aufforderung stammt aus dem standardmäßigen macOS-Öffnen-Dialog, mit dem ein `.mad`-Bericht (oder eine SQLite-Datenbankdatei) ausgewählt wird: macOS gewährt Zugriff auf den Ordner, damit der Dialog seinen Inhalt anzeigen kann, und die App liest nur die von Ihnen ausgewählte Datei. Dies ist Standardverhalten von macOS-Anwendungen — MAD scannt, zeichnet, kopiert oder verfolgt dabei nichts.
 
 ## Im Inneren des `.mad`-Formats
 

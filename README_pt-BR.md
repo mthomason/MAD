@@ -35,9 +35,9 @@ A documentação técnica e a especificação do formato também estão disponí
 
 **[MAD Designer para macOS](docs/pt-br/macos.md)** — o aplicativo desktop nativo em `AppKit` (`Mac/`), mostrando o canvas visual de relacionamentos do **MAD Query** e o workspace de layout em bandas do **MAD Designer**:
 
-![Workspace MAD Query no aplicativo nativo para macOS](docs/assets/macos-native-mad-query.png)
+![Workspace MAD Query no aplicativo nativo para macOS](docs/assets/macos-native-mad-query-pt-BR.png)
 
-![Workspace MAD Designer no aplicativo nativo para macOS](docs/assets/macos-native-mad-designer.png)
+![Workspace MAD Designer no aplicativo nativo para macOS](docs/assets/macos-native-mad-designer-pt-BR.png)
 
 **MAD Designer para iOS**, da escolha de uma fonte de dados até a leitura do relatório finalizado no MAD Viewer (28 segundos; [vídeo](https://docs.everydayapps.com/assets/app-preview.mp4)):
 
@@ -48,6 +48,16 @@ A documentação técnica e a especificação do formato também estão disponí
 ![A CLI mad inspecionando, consultando, atualizando e exportando um documento .mad](docs/assets/mad-cli-demo.gif)
 
 O [relatório exportado](https://docs.everydayapps.com/assets/london.html) da gravação é HTML puro, podendo ser aberto em qualquer navegador.
+
+## Localização
+
+Os aplicativos para iOS e macOS estão totalmente localizados em **inglês, alemão, espanhol, japonês, português do Brasil e chinês simplificado**. A interface segue o idioma do sistema, e a documentação está traduzida para os mesmos idiomas. Nomes de marcas e produtos, identificadores SQL, nomes de bancos de dados e fontes, e textos de licença permanecem em inglês por design. As traduções são assistidas por máquina; correções são bem-vindas no [rastreador de problemas](https://github.com/mthomason/MAD/issues).
+
+## Privacidade
+
+O MAD respeita sua privacidade. Os aplicativos não contêm código de análise, telemetria ou rastreamento e não gravam nem copiam seus arquivos. As únicas conexões de rede são as conexões de banco de dados que você configura; os dados do relatório permanecem no cache SQLite local e nos arquivos complementares do documento.
+
+No macOS, o aplicativo pode solicitar acesso a **Documentos**, **Mesa**, **Downloads** ou outra pasta. Esse pedido vem do painel de abertura padrão do macOS usado para escolher um relatório `.mad` (ou um arquivo de banco de dados SQLite): o macOS concede acesso à pasta para que o painel mostre seu conteúdo, e o aplicativo lê apenas o arquivo selecionado. Esse é o comportamento padrão dos aplicativos para macOS — o MAD não está verificando, gravando, copiando nem rastreando nada.
 
 ## Por dentro do Formato `.mad`
 
