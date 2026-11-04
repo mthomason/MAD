@@ -232,8 +232,11 @@ CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES
 That is the Clang static analyzer's `NonLocalizedStringChecker`. It is an
 **Analyze-action** check, not a build warning; it only runs under
 `xcodebuild analyze`. The companion setting,
-`CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT`, is off. No target sets
-`LOCALIZATION_PREFERS_STRING_CATALOGS`.
+`CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT`, is also `YES`, set on both
+project-level configurations (`4C384E46` Debug and `4C384E47` Release), so
+every target inherits it; an earlier draft of this report said it was off and
+was wrong. No target set `LOCALIZATION_PREFERS_STRING_CATALOGS` before this
+branch.
 
 The app project declares 33 `knownRegions`, including `ar` and `he`, but there
 are no localized resources behind them. Nothing in CI runs the analyzer or any
@@ -600,7 +603,9 @@ recorded baseline and the two inventory reconciliations are §5.3.1.
 * Add the languages and localized resources to the Mac bundle in
   `Mac/build.sh`, plus `CFBundleLocalizations` and `InfoPlist.strings`.
 * Add `Settings.bundle` localization.
-* Enable `CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT`.
+* Verify `CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT` per target. It is
+  already `YES` at the project level (see §2.4); there is nothing to enable
+  unless a target overrides it.
 * Add the audit script to CI and a make/run target; add a pseudo-localization
   scheme (or two) and a screenshot capture harness.
 * Prove the pipeline with one throwaway German string in both apps.
@@ -629,9 +634,10 @@ a single-language resource.
 
 Remaining for Phase 1: the other 17 app storyboards and 3 xibs; the three live
 driver storyboards; `Settings.bundle`; `InfoPlist.strings` for both bundles;
-`CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT`; the pseudo-localization scheme
-and screenshot harness; and broadening `CFBundleLocalizations` as each language
-lands. The 22 storyboards in the plan's count are the 18 app storyboards plus
+the pseudo-localization scheme and screenshot harness; and broadening
+`CFBundleLocalizations` as each language lands. The
+`CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT` item needs only a per-target
+check: it is already `YES` at the project level (§2.4). The 22 storyboards in the plan's count are the 18 app storyboards plus
 three live driver copies plus the dead MADAPI copy; the dead copy is not
 converted.
 
