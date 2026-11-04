@@ -23,9 +23,9 @@ die Namen und das App-Artwork sind von dieser Lizenz nicht abgedeckt (siehe
 
 **[MAD Designer für macOS](macos.html)** — native `AppKit`-Desktopanwendung (`NSDocument`, visuelle Abfrageleinwand für Tabellen und Joins, interaktive Minimap der Bereiche und bandbasierter Berichtsdesigner sowie seitenweise Anzeige von PDF/HTML/CSV/JSON-Berichten):
 
-![Arbeitsbereich MAD Query in der nativen macOS-Anwendung](../assets/macos-native-mad-query.png)
+![Arbeitsbereich MAD Query in der nativen macOS-Anwendung](../assets/macos-native-mad-query-de.png)
 
-![Arbeitsbereich MAD Designer in der nativen macOS-Anwendung](../assets/macos-native-mad-designer.png)
+![Arbeitsbereich MAD Designer in der nativen macOS-Anwendung](../assets/macos-native-mad-designer-de.png)
 
 **MAD Designer für iOS**, von der Auswahl einer Datenquelle bis zum fertigen
 Bericht in MAD Viewer:
