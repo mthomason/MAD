@@ -71,81 +71,137 @@
 	// App Menu
 	NSMenuItem *appMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:appMenuItem];
-	NSMenu *appMenu = [[NSMenu alloc] initWithTitle:@"MAD Designer"];
-	NSMenuItem *aboutItem = [appMenu addItemWithTitle:@"About MAD Designer" action:@selector(showAboutWindow:) keyEquivalent:@""];
+	NSMenu *appMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"MAD Designer", @"Application name. A brand; do not translate.")];
+	NSMenuItem *aboutItem = [appMenu addItemWithTitle:NSLocalizedString(@"About MAD Designer", @"Application menu item that opens the About window. MAD Designer is a brand.")
+												action:@selector(showAboutWindow:)
+										 keyEquivalent:@""];
 	aboutItem.target = self;
 	[appMenu addItem:[NSMenuItem separatorItem]];
-	[appMenu addItemWithTitle:@"Hide MAD Designer" action:@selector(hide:) keyEquivalent:@"h"];
-	[appMenu addItemWithTitle:@"Quit MAD Designer" action:@selector(terminate:) keyEquivalent:@"q"];
+	[appMenu addItemWithTitle:NSLocalizedString(@"Hide MAD Designer", @"Application menu item that hides the app. MAD Designer is a brand.")
+						action:@selector(hide:)
+				 keyEquivalent:@"h"];
+	[appMenu addItemWithTitle:NSLocalizedString(@"Quit MAD Designer", @"Application menu item that quits the app. MAD Designer is a brand.")
+						action:@selector(terminate:)
+				 keyEquivalent:@"q"];
 	[appMenuItem setSubmenu:appMenu];
 
 	// File Menu
 	NSMenuItem *fileMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:fileMenuItem];
-	NSMenu *fileMenu = [[NSMenu alloc] initWithTitle:@"File"];
-	[fileMenu addItemWithTitle:@"New Document…" action:@selector(newDocument:) keyEquivalent:@"n"];
-	[fileMenu addItemWithTitle:@"Open…" action:@selector(openDocument:) keyEquivalent:@"o"];
+	NSMenu *fileMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"File", @"File menu title.")];
+	[fileMenu addItemWithTitle:NSLocalizedString(@"New Document…", @"File menu item that starts a new report.")
+						action:@selector(newDocument:)
+				 keyEquivalent:@"n"];
+	[fileMenu addItemWithTitle:NSLocalizedString(@"Open…", @"File menu item that opens an existing report.")
+						action:@selector(openDocument:)
+				 keyEquivalent:@"o"];
 	[fileMenu addItem:[NSMenuItem separatorItem]];
-	[fileMenu addItemWithTitle:@"Close" action:@selector(performClose:) keyEquivalent:@"w"];
-	[fileMenu addItemWithTitle:@"Save" action:@selector(saveDocument:) keyEquivalent:@"s"];
-	[fileMenu addItemWithTitle:@"Save As…" action:@selector(saveDocumentAs:) keyEquivalent:@"S"];
+	[fileMenu addItemWithTitle:NSLocalizedString(@"Close", @"File menu item that closes the window.")
+						action:@selector(performClose:)
+				 keyEquivalent:@"w"];
+	[fileMenu addItemWithTitle:NSLocalizedString(@"Save", @"File menu item that saves the report.")
+						action:@selector(saveDocument:)
+				 keyEquivalent:@"s"];
+	[fileMenu addItemWithTitle:NSLocalizedString(@"Save As…", @"File menu item that saves the report under a new name.")
+						action:@selector(saveDocumentAs:)
+				 keyEquivalent:@"S"];
 	[fileMenu addItem:[NSMenuItem separatorItem]];
-	[fileMenu addItemWithTitle:@"Database Connection…" action:@selector(editCurrentDatabaseConnection:) keyEquivalent:@""];
+	[fileMenu addItemWithTitle:NSLocalizedString(@"Database Connection…", @"Menu item that edits the database connection settings.")
+						action:@selector(editCurrentDatabaseConnection:)
+				 keyEquivalent:@""];
 	[fileMenu addItem:[NSMenuItem separatorItem]];
-	[fileMenu addItemWithTitle:@"Export Report…" action:@selector(exportCurrentReport:) keyEquivalent:@"e"];
-	[fileMenu addItemWithTitle:@"Print…" action:@selector(printCurrentReport:) keyEquivalent:@"p"];
+	[fileMenu addItemWithTitle:NSLocalizedString(@"Export Report…", @"File menu item that exports the rendered report.")
+						action:@selector(exportCurrentReport:)
+				 keyEquivalent:@"e"];
+	[fileMenu addItemWithTitle:NSLocalizedString(@"Print…", @"File menu item that prints the rendered report.")
+						action:@selector(printCurrentReport:)
+				 keyEquivalent:@"p"];
 	[fileMenuItem setSubmenu:fileMenu];
 
 	// Edit Menu
 	NSMenuItem *editMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:editMenuItem];
-	NSMenu *editMenu = [[NSMenu alloc] initWithTitle:@"Edit"];
-	[editMenu addItemWithTitle:@"Undo" action:@selector(undo:) keyEquivalent:@"z"];	// Undeclared selector 'undo:'
-	[editMenu addItemWithTitle:@"Redo" action:@selector(redo:) keyEquivalent:@"Z"];	// Undeclared selector 'redo:'
+	NSMenu *editMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Edit", @"Edit menu title.")];
+	[editMenu addItemWithTitle:NSLocalizedString(@"Undo", @"Edit menu item that undoes the last change.")
+						action:@selector(undo:)
+				 keyEquivalent:@"z"];	// Undeclared selector 'undo:'
+	[editMenu addItemWithTitle:NSLocalizedString(@"Redo", @"Edit menu item that redoes the last undone change.")
+						action:@selector(redo:)
+				 keyEquivalent:@"Z"];	// Undeclared selector 'redo:'
 	[editMenu addItem:[NSMenuItem separatorItem]];
-	[editMenu addItemWithTitle:@"Cut" action:@selector(cut:) keyEquivalent:@"x"];
-	[editMenu addItemWithTitle:@"Copy" action:@selector(copy:) keyEquivalent:@"c"];
-	[editMenu addItemWithTitle:@"Paste" action:@selector(paste:) keyEquivalent:@"v"];
-	[editMenu addItemWithTitle:@"Delete" action:@selector(delete:) keyEquivalent:@""];
-	[editMenu addItemWithTitle:@"Select All" action:@selector(selectAll:) keyEquivalent:@"a"];
+	[editMenu addItemWithTitle:NSLocalizedString(@"Cut", @"Edit menu item that cuts the selection.")
+						action:@selector(cut:)
+				 keyEquivalent:@"x"];
+	[editMenu addItemWithTitle:NSLocalizedString(@"Copy", @"Edit menu item that copies the selection.")
+						action:@selector(copy:)
+				 keyEquivalent:@"c"];
+	[editMenu addItemWithTitle:NSLocalizedString(@"Paste", @"Edit menu item that pastes the clipboard.")
+						action:@selector(paste:)
+				 keyEquivalent:@"v"];
+	[editMenu addItemWithTitle:NSLocalizedString(@"Delete", @"Edit menu item that deletes the selection.")
+						action:@selector(delete:)
+				 keyEquivalent:@""];
+	[editMenu addItemWithTitle:NSLocalizedString(@"Select All", @"Edit menu item that selects everything.")
+						action:@selector(selectAll:)
+				 keyEquivalent:@"a"];
 	[editMenuItem setSubmenu:editMenu];
 
 	// View Menu
 	NSMenuItem *viewMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:viewMenuItem];
-	NSMenu *viewMenu = [[NSMenu alloc] initWithTitle:@"View"];
-	[viewMenu addItemWithTitle:@"MAD Query Workspace" action:@selector(showQueryWorkspace:) keyEquivalent:@"1"];
-	[viewMenu addItemWithTitle:@"MAD Designer Workspace" action:@selector(showDesignerWorkspace:) keyEquivalent:@"2"];
-	[viewMenu addItemWithTitle:@"MAD Viewer Workspace" action:@selector(showViewerWorkspace:) keyEquivalent:@"3"];
+	NSMenu *viewMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"View", @"View menu title.")];
+	[viewMenu addItemWithTitle:NSLocalizedString(@"MAD Query Workspace", @"View menu item that shows the query workspace. MAD Query is a brand.")
+						action:@selector(showQueryWorkspace:)
+				 keyEquivalent:@"1"];
+	[viewMenu addItemWithTitle:NSLocalizedString(@"MAD Designer Workspace", @"View menu item that shows the layout workspace. MAD Designer is a brand.")
+						action:@selector(showDesignerWorkspace:)
+				 keyEquivalent:@"2"];
+	[viewMenu addItemWithTitle:NSLocalizedString(@"MAD Viewer Workspace", @"View menu item that shows the report viewer. MAD Viewer is a brand.")
+						action:@selector(showViewerWorkspace:)
+				 keyEquivalent:@"3"];
 	[viewMenuItem setSubmenu:viewMenu];
 
 	// Report Menu
 	NSMenuItem *reportMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:reportMenuItem];
-	NSMenu *reportMenu = [[NSMenu alloc] initWithTitle:@"Report"];
-	[reportMenu addItemWithTitle:@"Refresh Report Data" action:@selector(refreshCurrentReport:) keyEquivalent:@"r"];
+	NSMenu *reportMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Report", @"Report menu title.")];
+	[reportMenu addItemWithTitle:NSLocalizedString(@"Refresh Report Data", @"Report menu item that re-runs the query and re-renders the report.")
+						  action:@selector(refreshCurrentReport:)
+				   keyEquivalent:@"r"];
 	[reportMenu addItem:[NSMenuItem separatorItem]];
-	[reportMenu addItemWithTitle:@"Database Connection…" action:@selector(editCurrentDatabaseConnection:) keyEquivalent:@""];
+	[reportMenu addItemWithTitle:NSLocalizedString(@"Database Connection…", @"Menu item that edits the database connection settings.")
+						  action:@selector(editCurrentDatabaseConnection:)
+				   keyEquivalent:@""];
 	[reportMenuItem setSubmenu:reportMenu];
 
 	// Window Menu
 	NSMenuItem *windowMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:windowMenuItem];
-	NSMenu *windowMenu = [[NSMenu alloc] initWithTitle:@"Window"];
-	[windowMenu addItemWithTitle:@"Minimize" action:@selector(performMiniaturize:) keyEquivalent:@"m"];
-	[windowMenu addItemWithTitle:@"Zoom" action:@selector(performZoom:) keyEquivalent:@""];
+	NSMenu *windowMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Window", @"Window menu title.")];
+	[windowMenu addItemWithTitle:NSLocalizedString(@"Minimize", @"Window menu item that minimizes the window.")
+						  action:@selector(performMiniaturize:)
+				   keyEquivalent:@"m"];
+	[windowMenu addItemWithTitle:NSLocalizedString(@"Zoom", @"Window menu item that zooms the window.")
+						  action:@selector(performZoom:)
+				   keyEquivalent:@""];
 	[windowMenuItem setSubmenu:windowMenu];
 	[NSApp setWindowsMenu:windowMenu];
 
 	// Help Menu
 	NSMenuItem *helpMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:helpMenuItem];
-	NSMenu *helpMenu = [[NSMenu alloc] initWithTitle:@"Help"];
-	NSMenuItem *overviewHelpItem = [helpMenu addItemWithTitle:@"MAD Designer Overview" action:@selector(showAboutOverview:) keyEquivalent:@""];
+	NSMenu *helpMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Help", @"Help menu title.")];
+	NSMenuItem *overviewHelpItem = [helpMenu addItemWithTitle:NSLocalizedString(@"MAD Designer Overview", @"Help menu item that shows the About overview. MAD Designer is a brand.")
+													   action:@selector(showAboutOverview:)
+												keyEquivalent:@""];
 	overviewHelpItem.target = self;
-	NSMenuItem *licensingHelpItem = [helpMenu addItemWithTitle:@"Licensing & Relink Notice" action:@selector(showAboutLicensing:) keyEquivalent:@""];
+	NSMenuItem *licensingHelpItem = [helpMenu addItemWithTitle:NSLocalizedString(@"Licensing & Relink Notice", @"Help menu item that shows the licence and relink notice.")
+														 action:@selector(showAboutLicensing:)
+												  keyEquivalent:@""];
 	licensingHelpItem.target = self;
-	NSMenuItem *ackHelpItem = [helpMenu addItemWithTitle:@"Third-Party Acknowledgements" action:@selector(showAboutAcknowledgements:) keyEquivalent:@""];
+	NSMenuItem *ackHelpItem = [helpMenu addItemWithTitle:NSLocalizedString(@"Third-Party Acknowledgements", @"Help menu item that lists third-party components.")
+												   action:@selector(showAboutAcknowledgements:)
+											keyEquivalent:@""];
 	ackHelpItem.target = self;
 	[helpMenuItem setSubmenu:helpMenu];
 	[NSApp setHelpMenu:helpMenu];

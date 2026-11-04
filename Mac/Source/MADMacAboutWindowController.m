@@ -140,7 +140,7 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 }
 
 + (NSString *)mitLicenseAndBrandNoticeText {
-	return @"Licensed under the MIT License. The names \"MAD\", \"MAD Designer\", and \"MAD Viewer\" and the application icons and artwork are not licensed under the MIT License; all rights in them are reserved by Michael Thomason.";
+	return NSLocalizedString(@"Licensed under the MIT License. The names \"MAD\", \"MAD Designer\", and \"MAD Viewer\" and the application icons and artwork are not licensed under the MIT License; all rights in them are reserved by Michael Thomason.", @"MIT licence and reserved brand/artwork notice. Keep the licence name and the product names in English.");
 }
 
 #pragma mark - Content Builders
@@ -199,35 +199,35 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 		[result appendAttributedString:[[NSAttributedString alloc] initWithString:[paragraph stringByAppendingString:@"\n\n"] attributes:bodyAttrs]];
 	};
 
-	appendHeading(@"Mobile Analytics Document");
-	appendBody(@"MAD Designer is open-source business intelligence software by Michael Thomason.");
-	appendBody(@"MAD is an open-source mobile business intelligence and report-design system. A .mad file stores a report's schema snapshot, query definition, and visual layout in one compact, portable document.");
-	appendBody(@"MAD Designer connects natively to MySQL / MariaDB, Microsoft SQL Server, and PostgreSQL databases, and uses SQLite for portable sample documents and local row caching.");
+	appendHeading(NSLocalizedString(@"Mobile Analytics Document", @"About overview heading: the report file format."));
+	appendBody(NSLocalizedString(@"MAD Designer is open-source business intelligence software by Michael Thomason.", @"About overview paragraph. MAD Designer is a brand."));
+	appendBody(NSLocalizedString(@"MAD is an open-source mobile business intelligence and report-design system. A .mad file stores a report's schema snapshot, query definition, and visual layout in one compact, portable document.", @"About overview paragraph. MAD is a brand."));
+	appendBody(NSLocalizedString(@"MAD Designer connects natively to MySQL / MariaDB, Microsoft SQL Server, and PostgreSQL databases, and uses SQLite for portable sample documents and local row caching.", @"About overview paragraph. Database product names are brands."));
 
-	appendHeading(@"Workflow");
+	appendHeading(NSLocalizedString(@"Workflow", @"About overview heading for the four-step workflow."));
 
-	appendSubheading(@"1. Connect a Data Source");
-	appendBody(@"Tap + in the file explorer (or click New Document on macOS) and choose a database driver. MAD reads the database schema and creates a new .mad document. Database credentials can be saved in your Keychain and are never stored inside the .mad file.");
+	appendSubheading(NSLocalizedString(@"1. Connect a Data Source", @"About overview step 1."));
+	appendBody(NSLocalizedString(@"Tap + in the file explorer (or click New Document on macOS) and choose a database driver. MAD reads the database schema and creates a new .mad document. Database credentials can be saved in your Keychain and are never stored inside the .mad file.", @"About overview step 1 description."));
 
-	appendSubheading(@"2. Build the Query (MAD Query)");
-	appendBody(@"Add tables, joins, filter predicates, groupings, and sort order visually, or paste a SQL SELECT statement directly. MAD generates the database-specific SQL automatically.");
+	appendSubheading(NSLocalizedString(@"2. Build the Query (MAD Query)", @"About overview step 2. MAD Query is a brand."));
+	appendBody(NSLocalizedString(@"Add tables, joins, filter predicates, groupings, and sort order visually, or paste a SQL SELECT statement directly. MAD generates the database-specific SQL automatically.", @"About overview step 2 description. SQL is not translated."));
 
-	appendSubheading(@"3. Lay Out the Report (MAD Designer)");
-	appendBody(@"Place data fields, static labels, aggregate functions, barcodes, and shapes across Report Header, Page Header, Group Headers and Footers, Detail, Page Footer, and Report Footer sections.");
+	appendSubheading(NSLocalizedString(@"3. Lay Out the Report (MAD Designer)", @"About overview step 3. MAD Designer is a brand."));
+	appendBody(NSLocalizedString(@"Place data fields, static labels, aggregate functions, barcodes, and shapes across Report Header, Page Header, Group Headers and Footers, Detail, Page Footer, and Report Footer sections.", @"About overview step 3 description. Section names match the designer."));
 
-	appendSubheading(@"4. View & Export (MAD Viewer)");
-	appendBody(@"Refresh the report against live data, browse paginated output, print, or export to PDF, HTML, CSV, JSON, or plain text.");
+	appendSubheading(NSLocalizedString(@"4. View & Export (MAD Viewer)", @"About overview step 4. MAD Viewer is a brand."));
+	appendBody(NSLocalizedString(@"Refresh the report against live data, browse paginated output, print, or export to PDF, HTML, CSV, JSON, or plain text.", @"About overview step 4 description. Format names are not translated."));
 
-	appendHeading(@"Supported Capabilities");
+	appendHeading(NSLocalizedString(@"Supported Capabilities", @"About overview heading."));
 
-	appendSubheading(@"Database Drivers");
-	appendBody(@"• SQLite 3 (local .sqlite3 / .db files and embedded row caching)\n• MySQL & MariaDB (via MariaDB Connector/C over TLS)\n• Microsoft SQL Server (via FreeTDS over TDS / TLS)\n• PostgreSQL (via PostgreSQL libpq)");
+	appendSubheading(NSLocalizedString(@"Database Drivers", @"About overview heading for the supported database list."));
+	appendBody(NSLocalizedString(@"• SQLite 3 (local .sqlite3 / .db files and embedded row caching)\n• MySQL & MariaDB (via MariaDB Connector/C over TLS)\n• Microsoft SQL Server (via FreeTDS over TDS / TLS)\n• PostgreSQL (via PostgreSQL libpq)", @"About overview list of database drivers. Product and library names are brands; do not translate them."));
 
-	appendSubheading(@"Report Sections & Elements");
-	appendBody(@"• Parametric Bands: Report Header, Page Header, Group Header(s), Report Detail, Group Footer(s), Page Footer, and Report Footer.\n• Elements: Static Labels, Bound Data Fields, Group & Report Aggregates (SUM, COUNT, AVG, MIN, MAX, STDDEV, VARIANCE), Barcodes (powered by zint), Images, and Lines.");
+	appendSubheading(NSLocalizedString(@"Report Sections & Elements", @"About overview heading for the report model."));
+	appendBody(NSLocalizedString(@"• Parametric Bands: Report Header, Page Header, Group Header(s), Report Detail, Group Footer(s), Page Footer, and Report Footer.\n• Elements: Static Labels, Bound Data Fields, Group & Report Aggregates (SUM, COUNT, AVG, MIN, MAX, STDDEV, VARIANCE), Barcodes (powered by zint), Images, and Lines.", @"About overview list of report sections and element types. Keep the SQL aggregate names (SUM, COUNT, …) as they are."));
 
-	appendSubheading(@"Export Formats");
-	appendBody(@"• PDF Document (.pdf), HTML Page (.html), HTML Flow (.html), CSV Spreadsheet (.csv), JSON Data (.json), JSON Full Report (.json), and Plain Text (.txt).");
+	appendSubheading(NSLocalizedString(@"Export Formats", @"About overview heading for the export formats."));
+	appendBody(NSLocalizedString(@"• PDF Document (.pdf), HTML Page (.html), HTML Flow (.html), CSV Spreadsheet (.csv), JSON Data (.json), JSON Full Report (.json), and Plain Text (.txt).", @"About overview list of export formats. Format names and file extensions are not translated."));
 
 	return result;
 }
@@ -247,7 +247,7 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 		[result appendAttributedString:[[NSAttributedString alloc] initWithString:[title stringByAppendingString:@"\n\n"] attributes:headingAttrs]];
 	};
 
-	appendHeading(@"Licensing & Product Marks Notice");
+	appendHeading(NSLocalizedString(@"Licensing & Product Marks Notice", @"About licensing tab heading. The notice beneath it stays in English."));
 	[result appendAttributedString:[[NSAttributedString alloc] initWithString:[[self mitLicenseAndBrandNoticeText] stringByAppendingString:@"\n\n"] attributes:bodyAttrs]];
 
 	NSString *noticeText = [self textContentsOfResource:@"NOTICE" inDirectory:nil bundle:bundle];
@@ -500,7 +500,7 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 												   styleMask:style
 													 backing:NSBackingStoreBuffered
 													   defer:NO];
-	window.title = @"About MAD Designer";
+	window.title = NSLocalizedString(@"About MAD Designer", @"About window title. MAD Designer is a brand.");
 	window.minSize = NSMakeSize(640, 480);
 	window.releasedWhenClosed = NO;
 	[window center];
@@ -581,7 +581,7 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 	_versionLabel.textColor = [NSColor labelColor];
 	[headerView addSubview:_versionLabel];
 
-	_subtitleLabel = [NSTextField labelWithString:@"MAD Designer is open-source business intelligence software by Michael Thomason."];
+	_subtitleLabel = [NSTextField labelWithString:NSLocalizedString(@"MAD Designer is open-source business intelligence software by Michael Thomason.", @"About window subtitle. MAD Designer is a brand.")];
 	_subtitleLabel.frame = NSMakeRect(112, headerHeight - 80, NSWidth(bounds) - 136, 18);
 	_subtitleLabel.autoresizingMask = NSViewWidthSizable;
 	_subtitleLabel.font = [NSFont systemFontOfSize:12.5];
@@ -602,7 +602,7 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 	_licenseSummaryLabel.textColor = [NSColor secondaryLabelColor];
 	[headerView addSubview:_licenseSummaryLabel];
 
-	_gitHubButton = [NSButton buttonWithTitle:@"Source Code on GitHub"
+	_gitHubButton = [NSButton buttonWithTitle:NSLocalizedString(@"Source Code on GitHub", @"About window button that opens the source repository. GitHub is a brand.")
 									   target:self
 									   action:@selector(openGitHubAction:)];
 	_gitHubButton.bezelStyle = NSBezelStyleRounded;
@@ -618,9 +618,9 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 	// 2. Segmented Tab Bar
 	CGFloat segBarY = NSHeight(bounds) - headerHeight - 42.0;
 	_sectionSegmentedControl = [NSSegmentedControl segmentedControlWithLabels:@[
-		@"Overview",
-		@"License & Notice",
-		@"Acknowledgements"
+		NSLocalizedString(@"Overview", @"About window tab that shows the product overview."),
+		NSLocalizedString(@"License & Notice", @"About window tab that shows the licence and product-marks notice."),
+		NSLocalizedString(@"Acknowledgements", @"About window tab that lists third-party components.")
 	] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(sectionSegmentedControlChanged:)];
 	_sectionSegmentedControl.frame = NSMakeRect((NSWidth(bounds) - 420.0) * 0.5, segBarY + 6.0, 420.0, 28.0);
 	_sectionSegmentedControl.autoresizingMask = NSViewMinXMargin | NSViewMaxXMargin | NSViewMinYMargin;
@@ -754,7 +754,7 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 		cell.lineBreakMode = NSLineBreakByTruncatingTail;
 	}
 	if (row == 0) {
-		cell.stringValue = @"All Components & Licenses";
+		cell.stringValue = NSLocalizedString(@"All Components & Licenses", @"Acknowledgements table row that selects every component and licence text.");
 		cell.font = [NSFont boldSystemFontOfSize:12.0];
 	} else {
 		NSArray<NSDictionary<NSString *, NSString *> *> *components = [MADMacAboutWindowController thirdPartyComponents];

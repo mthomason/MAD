@@ -244,7 +244,7 @@ static const CGFloat kCardFieldRowHeight = 20.0;
 		_removeButton.autoresizingMask = NSViewMinXMargin | NSViewMaxYMargin;
 		_removeButton.target = self;
 		_removeButton.action = @selector(handleRemoveTableButton:);
-		_removeButton.toolTip = @"Remove table from query";
+		_removeButton.toolTip = NSLocalizedString(@"Remove table from query", @"Tooltip for the table card's remove button.");
 		[self addSubview:_removeButton];
 
 		NSRect scrollFrame = NSMakeRect(1.0, kCardTitleBarHeight, frame.size.width - 2.0, frame.size.height - kCardTitleBarHeight - 8.0);
@@ -1041,7 +1041,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	}
 
 	if (_queryTables.count == 0) {
-		NSString *emptyMsg = @"Double-click a table on the left to add it to the visual query designer.\nDrag from a field in one table to a field in another table to create a Left Outer Join.";
+		NSString *emptyMsg = NSLocalizedString(@"Double-click a table on the left to add it to the visual query designer.\nDrag from a field in one table to a field in another table to create a Left Outer Join.", @"Empty-state hint on the query canvas. Left Outer Join is SQL; keep it in English.");
 		NSMutableParagraphStyle *pStyle = [[NSMutableParagraphStyle alloc] init];
 		pStyle.alignment = NSTextAlignmentCenter;
 		pStyle.lineSpacing = 4.0;
@@ -1199,28 +1199,31 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (void)populateTopBar:(NSView *)bar {
-	_modeSegmentedControl = [NSSegmentedControl segmentedControlWithLabels:@[@"Query Designer", @"SQL Query"]
+	_modeSegmentedControl = [NSSegmentedControl segmentedControlWithLabels:@[
+		NSLocalizedString(@"Query Designer", @"Query workspace segment that shows the visual table designer."),
+		NSLocalizedString(@"SQL Query", @"Query workspace segment that shows the SQL text editor.")
+	]
 															  trackingMode:NSSegmentSwitchTrackingSelectOne
 																	target:self
 																	action:@selector(modeSegmentChanged:)];
 	_modeSegmentedControl.selectedSegment = MADMacQueryWorkspaceModeDesigner;
 	_modeSegmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
 
-	_filtersButton = [NSButton buttonWithTitle:@"Filters (WHERE)"
+	_filtersButton = [NSButton buttonWithTitle:NSLocalizedString(@"Filters (WHERE)", @"Query toolbar button that opens the filter editor. WHERE is SQL.")
 										target:self
 										action:@selector(toggleFiltersPopover:)];
-	_groupsButton = [NSButton buttonWithTitle:@"Groupings (GROUP BY)"
+	_groupsButton = [NSButton buttonWithTitle:NSLocalizedString(@"Groupings (GROUP BY)", @"Query toolbar button that opens the grouping editor. GROUP BY is SQL.")
 									   target:self
 									   action:@selector(toggleGroupsPopover:)];
-	_arrangeButton = [NSButton buttonWithTitle:@"Arrange Tables"
+	_arrangeButton = [NSButton buttonWithTitle:NSLocalizedString(@"Arrange Tables", @"Query toolbar button that lays the table cards out automatically.")
 										target:self
 										action:@selector(autoArrangeTablesAction:)];
-	NSButton *connectionBtn = [NSButton buttonWithTitle:@"Database Connection…"
+	NSButton *connectionBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Database Connection…", @"Query toolbar button that edits the database connection.")
 												 target:self
 												 action:@selector(editDatabaseConnectionAction:)];
 	if (@available(macOS 11.0, *)) {
 		connectionBtn.image = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
-										accessibilityDescription:@"Database Connection"];
+										accessibilityDescription:NSLocalizedString(@"Database Connection", @"Accessibility description for the connection button icon.")];
 		connectionBtn.imagePosition = NSImageLeft;
 	}
 
@@ -1229,13 +1232,13 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	_designerHeaderControls.spacing = 8.0;
 	_designerHeaderControls.translatesAutoresizingMaskIntoConstraints = NO;
 
-	NSButton *revertSQLBtn = [NSButton buttonWithTitle:@"Revert to Generated SQL"
+	NSButton *revertSQLBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Revert to Generated SQL", @"SQL toolbar button that replaces the text with the SQL generated from the visual query.")
 												target:self
 												action:@selector(syncSQLFromVisualQuery:)];
-	NSButton *validateSQLBtn = [NSButton buttonWithTitle:@"Validate SQL"
+	NSButton *validateSQLBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Validate SQL", @"SQL toolbar button that checks the statement without applying it.")
 												  target:self
 												  action:@selector(validateSQLAction:)];
-	NSButton *applySQLBtn = [NSButton buttonWithTitle:@"Compile & Apply SQL"
+	NSButton *applySQLBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Compile & Apply SQL", @"SQL toolbar button that parses the statement and applies it to the query.")
 											   target:self
 											   action:@selector(compileAndApplySQL:)];
 	applySQLBtn.bezelColor = [NSColor controlAccentColor];
@@ -1274,7 +1277,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	CGFloat headerH = 26.0;
 	CGFloat footerH = 30.0;
 
-	NSTextField *headerLabel = [NSTextField labelWithString:@"Database Tables"];
+	NSTextField *headerLabel = [NSTextField labelWithString:NSLocalizedString(@"Database Tables", @"Schema sidebar heading.")];
 	headerLabel.font = [NSFont boldSystemFontOfSize:12.0];
 	headerLabel.frame = NSMakeRect(10.0, b.size.height - headerH + 3.0, b.size.width - 20.0, 20.0);
 	headerLabel.autoresizingMask = NSViewWidthSizable | NSViewMinYMargin;
@@ -1298,7 +1301,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	_schemaTablesTable.doubleAction = @selector(handleDoubleClickSchemaTable:);
 
 	NSTableColumn *col = [[NSTableColumn alloc] initWithIdentifier:@"schema"];
-	col.title = @"Database Tables";
+	col.title = NSLocalizedString(@"Database Tables", @"Schema sidebar heading.");
 	col.width = b.size.width;
 	col.minWidth = 100.0;
 	col.resizingMask = NSTableColumnAutoresizingMask;
@@ -1312,7 +1315,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	footerSep.autoresizingMask = NSViewWidthSizable | NSViewMaxYMargin;
 	[sidebar addSubview:footerSep];
 
-	NSButton *addBtn = [NSButton buttonWithTitle:@"+ Add Table to Query"
+	NSButton *addBtn = [NSButton buttonWithTitle:NSLocalizedString(@"+ Add Table to Query", @"Schema sidebar button that adds the selected table to the query.")
 										  target:self
 										  action:@selector(addSelectedSchemaTable:)];
 	addBtn.controlSize = NSControlSizeSmall;
@@ -1339,11 +1342,14 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (void)populateSQLEditorContainer:(NSView *)container {
-	NSTextField *titleLabel = [NSTextField labelWithString:@"SQL Query Statement"];
+	NSTextField *titleLabel = [NSTextField labelWithString:NSLocalizedString(@"SQL Query Statement", @"Heading above the SQL text editor.")];
 	titleLabel.font = [NSFont boldSystemFontOfSize:13.0];
 	titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
-	_sqlSourceTabControl = [NSSegmentedControl segmentedControlWithLabels:@[@"Generated SQL", @"As Entered"]
+	_sqlSourceTabControl = [NSSegmentedControl segmentedControlWithLabels:@[
+		NSLocalizedString(@"Generated SQL", @"SQL editor tab that shows the generated statement."),
+		NSLocalizedString(@"As Entered", @"SQL editor tab that shows the statement the user pasted.")
+	]
 															 trackingMode:NSSegmentSwitchTrackingSelectOne
 																   target:self
 																   action:@selector(sqlSourceTabChanged:)];
@@ -1366,7 +1372,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	_sqlTextView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
 	sqlScroll.documentView = _sqlTextView;
 
-	_sqlStatusLabel = [NSTextField labelWithString:@"Enter a SELECT statement and click Compile & Apply SQL to update the query."];
+	_sqlStatusLabel = [NSTextField labelWithString:NSLocalizedString(@"Enter a SELECT statement and click Compile & Apply SQL to update the query.", @"Hint above the SQL text editor. The button name matches the toolbar.")];
 	_sqlStatusLabel.font = [NSFont systemFontOfSize:12.0];
 	_sqlStatusLabel.textColor = [NSColor secondaryLabelColor];
 	_sqlStatusLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -1590,11 +1596,11 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 	// Update top bar button badges
 	_filtersButton.title = _queryPredicates.count > 0
-		? [NSString stringWithFormat:@"Filters (%lu)", (unsigned long)_queryPredicates.count]
-		: @"Filters (WHERE)";
+		? [[NSString alloc] initWithFormat:NSLocalizedString(@"Filters (%lu)", @"Query toolbar button with the active filter count. %lu is the count."), (unsigned long)_queryPredicates.count]
+		: NSLocalizedString(@"Filters (WHERE)", @"Query toolbar button that opens the filter editor. WHERE is SQL.");
 	_groupsButton.title = _queryGroups.count > 0
-		? [NSString stringWithFormat:@"Groupings (%lu)", (unsigned long)_queryGroups.count]
-		: @"Groupings (GROUP BY)";
+		? [[NSString alloc] initWithFormat:NSLocalizedString(@"Groupings (%lu)", @"Query toolbar button with the active grouping count. %lu is the count."), (unsigned long)_queryGroups.count]
+		: NSLocalizedString(@"Groupings (GROUP BY)", @"Query toolbar button that opens the grouping editor. GROUP BY is SQL.");
 
 	[self refreshClausePopoverControls];
 	[self syncSQLFromVisualQuery:nil];
@@ -1843,7 +1849,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 						   link.hasRightField.inQueryTable.alias ?: link.tableRightID ?: @"",
 						   link.hasRightField.databaseSchemaField.name ?: link.fieldRightID ?: @""];
 
-	NSTextField *titleLbl = [NSTextField labelWithString:@"Table Join Relationship"];
+	NSTextField *titleLbl = [NSTextField labelWithString:NSLocalizedString(@"Table Join Relationship", @"Heading of the join editor popover.")];
 	titleLbl.font = [NSFont boldSystemFontOfSize:12.5];
 
 	NSTextField *fieldsLbl = [NSTextField labelWithString:[NSString stringWithFormat:@"%@  →  %@", leftDesc, rightDesc]];
@@ -1851,7 +1857,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	fieldsLbl.textColor = [NSColor secondaryLabelColor];
 	fieldsLbl.lineBreakMode = NSLineBreakByTruncatingMiddle;
 
-	NSTextField *typeLbl = [NSTextField labelWithString:@"Join Type:"];
+	NSTextField *typeLbl = [NSTextField labelWithString:NSLocalizedString(@"Join Type:", @"Join editor label for the join-type popup.")];
 	typeLbl.font = [NSFont systemFontOfSize:12.0];
 
 	NSPopUpButton *joinPopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 180.0, 24.0) pullsDown:NO];
@@ -1875,13 +1881,13 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	typeRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	typeRow.spacing = 8.0;
 
-	NSButton *swapBtn = [NSButton buttonWithTitle:@"⇄ Swap Direction"
+	NSButton *swapBtn = [NSButton buttonWithTitle:NSLocalizedString(@"⇄ Swap Direction", @"Join editor button that swaps the left and right tables. Keep the arrow glyph.")
 										   target:self
 										   action:@selector(handleLinkPopoverSwap:)];
 	swapBtn.controlSize = NSControlSizeSmall;
 	swapBtn.tag = (NSInteger)link.identifier;
 
-	NSButton *deleteBtn = [NSButton buttonWithTitle:@"Delete Join"
+	NSButton *deleteBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Delete Join", @"Join editor button that removes the join.")
 											 target:self
 											 action:@selector(handleLinkPopoverDelete:)];
 	deleteBtn.controlSize = NSControlSizeSmall;
@@ -1946,7 +1952,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 #pragma mark - Context Menus for Links & Fields
 
 - (NSMenu *)contextMenuForQueryLink:(RptqQueryLinks *)link {
-	NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Join Link"];
+	NSMenu *menu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Join Link", @"Context menu title for a join link.")];
 	for (NSNumber *typeNum in [self supportedJoinTypesForCurrentDatabase]) {
 		MADLinkType t = (MADLinkType)typeNum.shortValue;
 		NSString *title = [RptqQueryLinks newLocalizedNameForLinkType:t] ?: @"Left Outer Join";
@@ -1961,14 +1967,14 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	}
 	[menu addItem:[NSMenuItem separatorItem]];
 
-	NSMenuItem *swapItem = [[NSMenuItem alloc] initWithTitle:@"Swap Left / Right Direction"
+	NSMenuItem *swapItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Swap Left / Right Direction", @"Context menu item that swaps the join direction.")
 													  action:@selector(handleContextMenuSwapLink:)
 											   keyEquivalent:@""];
 	swapItem.target = self;
 	swapItem.representedObject = link;
 	[menu addItem:swapItem];
 
-	NSMenuItem *delItem = [[NSMenuItem alloc] initWithTitle:@"Delete Join Link"
+	NSMenuItem *delItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Delete Join Link", @"Context menu item that deletes the join.")
 													 action:@selector(handleContextMenuDeleteLink:)
 											  keyEquivalent:@""];
 	delItem.target = self;
@@ -1999,17 +2005,17 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (NSMenu *)contextMenuForQueryField:(RptqQueryField *)field inCard:(MADMacQueryTableCardView *)card {
-	NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Field"];
+	NSMenu *menu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Field", @"Context menu title for a query field.")];
 	NSString *fieldTitle = [NSString stringWithFormat:@"%@.%@",
 							card.queryTable.alias ?: card.queryTable.databaseSchemaTable.name ?: @"",
 							field.databaseSchemaField.name ?: @""];
 
 	// Submenu to create a Left Outer Join to a field in another table
 	if (_queryTables.count > 1) {
-		NSMenuItem *connectMenuParent = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Link %@ (Left Outer Join) to", fieldTitle]
+		NSMenuItem *connectMenuParent = [[NSMenuItem alloc] initWithTitle:[[NSString alloc] initWithFormat:NSLocalizedString(@"Link %1$@ (Left Outer Join) to", @"Context submenu title that creates a join from the field. %1$@ is the field name. Left Outer Join is SQL."), fieldTitle]
 																   action:nil
 															keyEquivalent:@""];
-		NSMenu *connectSubmenu = [[NSMenu alloc] initWithTitle:@"Link to Field"];
+		NSMenu *connectSubmenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Link to Field", @"Context menu item that starts a join from this field.")];
 		for (RptqQueryTable *otherTable in _queryTables) {
 			if (otherTable.identifier == card.queryTable.identifier) continue;
 			MADMacQueryTableCardView *otherCard = _canvasView.cardsByTableID[@(otherTable.identifier)];
@@ -2031,14 +2037,14 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		[menu addItem:[NSMenuItem separatorItem]];
 	}
 
-	NSMenuItem *grpAsc = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Group By %@ (Ascending)", fieldTitle]
+	NSMenuItem *grpAsc = [[NSMenuItem alloc] initWithTitle:[[NSString alloc] initWithFormat:NSLocalizedString(@"Group By %@ (Ascending)", @"Context menu item that groups by the field ascending. %@ is the field name. Group By is SQL."), fieldTitle]
 													action:@selector(handleContextMenuGroupFieldAsc:)
 											 keyEquivalent:@""];
 	grpAsc.target = self;
 	grpAsc.representedObject = field;
 	[menu addItem:grpAsc];
 
-	NSMenuItem *grpDesc = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Group By %@ (Descending)", fieldTitle]
+	NSMenuItem *grpDesc = [[NSMenuItem alloc] initWithTitle:[[NSString alloc] initWithFormat:NSLocalizedString(@"Group By %@ (Descending)", @"Context menu item that groups by the field descending. %@ is the field name. Group By is SQL."), fieldTitle]
 													 action:@selector(handleContextMenuGroupFieldDesc:)
 											  keyEquivalent:@""];
 	grpDesc.target = self;
@@ -2046,7 +2052,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	[menu addItem:grpDesc];
 
 	[menu addItem:[NSMenuItem separatorItem]];
-	NSMenuItem *remTable = [[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Remove Table '%@' from Query", card.queryTable.alias ?: @""]
+	NSMenuItem *remTable = [[NSMenuItem alloc] initWithTitle:[[NSString alloc] initWithFormat:NSLocalizedString(@"Remove Table '%@' from Query", @"Context menu item that removes the table from the query. %@ is the table alias."), card.queryTable.alias ?: @""]
 													  action:@selector(handleContextMenuRemoveTable:)
 											   keyEquivalent:@""];
 	remTable.target = self;
@@ -2125,11 +2131,11 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		_predicateOperatorPopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 68.0, 24.0) pullsDown:NO];
 		[_predicateOperatorPopup addItemsWithTitles:@[@"=", @"!=", @"<", @"<=", @">", @">="]];
 		_predicateValueField = [[NSTextField alloc] initWithFrame:NSMakeRect(0.0, 0.0, 120.0, 24.0)];
-		_predicateValueField.placeholderString = @"Value";
+		_predicateValueField.placeholderString = NSLocalizedString(@"Value", @"Filter editor placeholder for the compared value.");
 		[_predicateValueField.widthAnchor constraintGreaterThanOrEqualToConstant:110.0].active = YES;
 
-		NSButton *addBtn = [NSButton buttonWithTitle:@"+ Add" target:self action:@selector(addPredicateAction:)];
-		NSButton *remBtn = [NSButton buttonWithTitle:@"- Remove" target:self action:@selector(removePredicateAction:)];
+		NSButton *addBtn = [NSButton buttonWithTitle:NSLocalizedString(@"+ Add", @"Filter editor button that adds a filter.") target:self action:@selector(addPredicateAction:)];
+		NSButton *remBtn = [NSButton buttonWithTitle:NSLocalizedString(@"- Remove", @"Filter or grouping editor button that removes the selected row.") target:self action:@selector(removePredicateAction:)];
 
 		NSStackView *topRow = [NSStackView stackViewWithViews:@[_predicateFieldPopup, _predicateOperatorPopup, _predicateValueField, addBtn, remBtn]];
 		topRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
@@ -2142,7 +2148,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		_predicatesTable.delegate = self;
 		_predicatesTable.dataSource = self;
 		NSTableColumn *col = [[NSTableColumn alloc] initWithIdentifier:@"pred"];
-		col.title = @"Active WHERE Filters";
+		col.title = NSLocalizedString(@"Active WHERE Filters", @"Filter editor title. WHERE is SQL.");
 		col.width = 440.0;
 		[_predicatesTable addTableColumn:col];
 
@@ -2183,10 +2189,10 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 		_groupFieldPopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 180.0, 24.0) pullsDown:NO];
 		_groupSortPopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(0.0, 0.0, 110.0, 24.0) pullsDown:NO];
-		[_groupSortPopup addItemsWithTitles:@[@"Ascending", @"Descending"]];
+		[_groupSortPopup addItemsWithTitles:@[NSLocalizedString(@"Ascending", @"Sort direction."), NSLocalizedString(@"Descending", @"Sort direction.")]];
 
-		NSButton *addBtn = [NSButton buttonWithTitle:@"+ Add Group" target:self action:@selector(addGroupAction:)];
-		NSButton *remBtn = [NSButton buttonWithTitle:@"- Remove" target:self action:@selector(removeSelectedGroupAction:)];
+		NSButton *addBtn = [NSButton buttonWithTitle:NSLocalizedString(@"+ Add Group", @"Grouping editor button that adds a grouping level.") target:self action:@selector(addGroupAction:)];
+		NSButton *remBtn = [NSButton buttonWithTitle:NSLocalizedString(@"- Remove", @"Filter or grouping editor button that removes the selected row.") target:self action:@selector(removeSelectedGroupAction:)];
 
 		NSStackView *topRow = [NSStackView stackViewWithViews:@[_groupFieldPopup, _groupSortPopup, addBtn, remBtn]];
 		topRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
@@ -2199,7 +2205,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		_groupsTable.delegate = self;
 		_groupsTable.dataSource = self;
 		NSTableColumn *col = [[NSTableColumn alloc] initWithIdentifier:@"group"];
-		col.title = @"Report Grouping Levels (GROUP BY)";
+		col.title = NSLocalizedString(@"Report Grouping Levels (GROUP BY)", @"Grouping editor title. GROUP BY is SQL.");
 		col.width = 400.0;
 		[_groupsTable addTableColumn:col];
 
@@ -2336,7 +2342,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	NSString *sql = [_sqlTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	if (sql.length == 0) {
 		_sqlStatusLabel.textColor = [NSColor systemRedColor];
-		_sqlStatusLabel.stringValue = @"Enter a SELECT statement to validate.";
+		_sqlStatusLabel.stringValue = NSLocalizedString(@"Enter a SELECT statement to validate.", @"Status line when Validate SQL is clicked with an empty editor.");
 		return;
 	}
 	RptqDatabase *db = _document.rptqDatabase;
@@ -2347,18 +2353,18 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	MADSQLStatement *statement = [parser parseStatement:&err];
 	if (statement == nil) {
 		_sqlStatusLabel.textColor = [NSColor systemRedColor];
-		_sqlStatusLabel.stringValue = [NSString stringWithFormat:@"SQL Parse Error: %@", err.localizedDescription];
+		_sqlStatusLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"SQL Parse Error: %@", @"SQL editor status after a parse failure. %@ is the parser's message."), err.localizedDescription];
 		return;
 	}
 	MADSQLStatementResolver *resolver = [[MADSQLStatementResolver alloc] initWithStatement:statement database:db];
 	MADSQLQueryPlan *plan = [resolver resolveWithError:&err];
 	if (plan == nil) {
 		_sqlStatusLabel.textColor = [NSColor systemRedColor];
-		_sqlStatusLabel.stringValue = [NSString stringWithFormat:@"SQL Resolve Error: %@", err.localizedDescription];
+		_sqlStatusLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"SQL Resolve Error: %@", @"SQL editor status after a resolve failure. %@ is the resolver's message."), err.localizedDescription];
 		return;
 	}
 	_sqlStatusLabel.textColor = [NSColor systemGreenColor];
-	_sqlStatusLabel.stringValue = [NSString stringWithFormat:@"Valid SQL: %lu table(s), %lu join(s), %lu filter(s), %lu group(s).",
+	_sqlStatusLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"Valid SQL: %1$lu tables, %2$lu joins, %3$lu filters, %4$lu groups.", @"SQL editor status after a successful validation. Four counts: tables, joins, filters, groupings."),
 								   (unsigned long)plan.tables.count,
 								   (unsigned long)plan.links.count,
 								   (unsigned long)plan.predicates.count,
@@ -2382,7 +2388,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	MADSQLStatement *statement = [parser parseStatement:&parseError];
 	if (statement == nil) {
 		_sqlStatusLabel.textColor = [NSColor systemRedColor];
-		_sqlStatusLabel.stringValue = [NSString stringWithFormat:@"SQL Parse Error: %@", parseError.localizedDescription];
+		_sqlStatusLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"SQL Parse Error: %@", @"SQL editor status after a parse failure. %@ is the parser's message."), parseError.localizedDescription];
 		return;
 	}
 
@@ -2391,7 +2397,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	MADSQLQueryPlan *plan = [resolver resolveWithError:&resolveError];
 	if (plan == nil) {
 		_sqlStatusLabel.textColor = [NSColor systemRedColor];
-		_sqlStatusLabel.stringValue = [NSString stringWithFormat:@"SQL Resolve Error: %@", resolveError.localizedDescription];
+		_sqlStatusLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"SQL Resolve Error: %@", @"SQL editor status after a resolve failure. %@ is the resolver's message."), resolveError.localizedDescription];
 		return;
 	}
 
@@ -2402,16 +2408,15 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 																	  context:ctx];
 	if (![compiler applyWithError:&applyError]) {
 		_sqlStatusLabel.textColor = [NSColor systemRedColor];
-		_sqlStatusLabel.stringValue = [NSString stringWithFormat:@"SQL Apply Error: %@", applyError.localizedDescription];
+		_sqlStatusLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"SQL Apply Error: %@", @"SQL editor status after applying the statement failed. %@ is the error message."), applyError.localizedDescription];
 		return;
 	}
 
 	_sqlStatusLabel.textColor = [NSColor systemGreenColor];
-	_sqlStatusLabel.stringValue = [NSString stringWithFormat:@"Applied: %lu table(s), %lu join(s), %lu filter(s), %lu group(s).",
-								   (unsigned long)plan.tables.count,
-								   (unsigned long)plan.links.count,
-								   (unsigned long)plan.predicates.count,
-								   (unsigned long)plan.groups.count];
+	_sqlStatusLabel.stringValue = [NSString localizedStringWithFormat:
+		NSLocalizedString(@"Applied: %1$lu tables, %2$lu joins, %3$lu predicates, %4$lu groups.", @"Status after applying the SQL to the query. Four counts: tables, joins, predicates, groups."),
+		(unsigned long)plan.tables.count, (unsigned long)plan.links.count,
+		(unsigned long)plan.predicates.count, (unsigned long)plan.groups.count];
 	[_document notifyDocumentMutated];
 }
 
@@ -2468,7 +2473,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		cell.font = isSchemaInQuery
 			? [NSFont systemFontOfSize:12.0 weight:NSFontWeightSemibold]
 			: [NSFont systemFontOfSize:12.0 weight:NSFontWeightRegular];
-		cell.toolTip = @"Double-click to add table to query";
+		cell.toolTip = NSLocalizedString(@"Double-click to add table to query", @"Tooltip on a schema table row.");
 	} else {
 		cell.font = [NSFont systemFontOfSize:12.0];
 	}

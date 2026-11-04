@@ -85,12 +85,28 @@
       "comment": "Defined as MADTextRefreshing in MADDesigner/Source/MADLabelStatus.m.",
       "extractionState": "manual"
     },
+    " (Hidden)": {
+      "comment": "Suffix on a hidden report band name. Keep the leading space.",
+      "extractionState": "manual"
+    },
     "%#.1f pt": {
       "comment": "Like '5.2 points.'",
       "extractionState": "manual"
     },
+    "%1$@ (%2$@)": {
+      "comment": "Export format menu fallback. %1$@ is the upper-cased format identifier, %2$@ is the file extension.",
+      "extractionState": "manual"
+    },
+    "%1$lu Elements Selected (%2$@)": {
+      "comment": "Inspector badge when several elements are selected. %1$lu is the count, %2$@ the kind.",
+      "extractionState": "manual"
+    },
     "%1$lu of %2$lu": {
       "comment": "Page status; %1$lu is the current page, %2$lu the total.",
+      "extractionState": "manual"
+    },
+    "%1$lu · %2$.0fpt%3$@": {
+      "comment": "Band size summary: element count, height in points, and an optional form-feed glyph. %3$@ may be empty.",
       "extractionState": "manual"
     },
     "%@ MB": {
@@ -397,8 +413,60 @@
         }
       }
     },
+    "%lu cached rows": {
+      "comment": "Status line: the report cached several rows. %lu is the count.",
+      "extractionState": "manual"
+    },
+    "%lu pages": {
+      "comment": "Status line: the rendered report has several pages. %lu is the count.",
+      "extractionState": "manual"
+    },
+    "(Unbound)": {
+      "comment": "Field popup item for an element that is not bound to a field.",
+      "extractionState": "manual"
+    },
+    "+ Add": {
+      "comment": "Filter editor button that adds a filter.",
+      "extractionState": "manual"
+    },
+    "+ Add Group": {
+      "comment": "Grouping editor button that adds a grouping level.",
+      "extractionState": "manual"
+    },
+    "+ Add Table to Query": {
+      "comment": "Schema sidebar button that adds the selected table to the query.",
+      "extractionState": "manual"
+    },
+    "- Remove": {
+      "comment": "Filter or grouping editor button that removes the selected row.",
+      "extractionState": "manual"
+    },
+    "/path/to/database.sqlite3": {
+      "comment": "Example file path placeholder. Technical; do not translate.",
+      "extractionState": "manual"
+    },
+    "1 cached row": {
+      "comment": "Status line: the report cached one row.",
+      "extractionState": "manual"
+    },
+    "1 page": {
+      "comment": "Status line: the rendered report has one page.",
+      "extractionState": "manual"
+    },
+    "1 · PAGE & SELECTED SECTION": {
+      "comment": "Inspector card title. Keep the leading number.",
+      "extractionState": "manual"
+    },
     "1. Connect a Data Source": {
       "comment": "Step 1 heading",
+      "extractionState": "manual"
+    },
+    "127.0.0.1 or db.example.com": {
+      "comment": "Example host placeholder. Technical; do not translate.",
+      "extractionState": "manual"
+    },
+    "2 · SELECTED ELEMENT INSPECTOR": {
+      "comment": "Inspector card title. Keep the leading number.",
       "extractionState": "manual"
     },
     "2. Build the Query (MAD Query)": {
@@ -441,16 +509,32 @@
       "comment": "Description of a static text element.",
       "extractionState": "manual"
     },
+    "A4 (210 × 297 mm)": {
+      "comment": "Paper size name. Keep A4 and the dimensions.",
+      "extractionState": "manual"
+    },
     "About": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "About MAD Designer": {
+      "comment": "Application menu item that opens the About window. MAD Designer is a brand.",
       "extractionState": "manual"
     },
     "Accending": {
       "comment": "Defined as TextAccending in MADDesigner/Source/MADQueryBuilderAddGroupViewController.m.",
       "extractionState": "manual"
     },
+    "Access to this feature is a free gift for charter members. That's you! How rare is that?": {
+      "comment": "Alert body for a charter member collecting a free feature.",
+      "extractionState": "manual"
+    },
     "Acknowledgements": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Active WHERE Filters": {
+      "comment": "Filter editor title. WHERE is SQL.",
       "extractionState": "manual"
     },
     "Add": {
@@ -539,6 +623,14 @@
     },
     "Alert": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Align Selected Elements (Left, Center, Right, Top, Middle, Bottom)": {
+      "comment": "Tooltip for the six alignment buttons, in their left-to-right order.",
+      "extractionState": "manual"
+    },
+    "All Components & Licenses": {
+      "comment": "Acknowledgements table row that selects every component and licence text.",
       "extractionState": "manual"
     },
     "Ambiguous": {
@@ -671,16 +763,40 @@
         }
       }
     },
+    "ArialMT": {
+      "comment": "Font family name. Technical; do not translate.",
+      "extractionState": "manual"
+    },
     "Arithmetic has no place in the select list: the model holds column references.": {
       "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Arrange Tables": {
+      "comment": "Query toolbar button that lays the table cards out automatically.",
+      "extractionState": "manual"
+    },
+    "As Entered": {
+      "comment": "SQL editor tab that shows the statement the user pasted.",
       "extractionState": "manual"
     },
     "As entered": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Ascending": {
+      "comment": "Sort direction.",
+      "extractionState": "manual"
+    },
     "Automatic": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Avenir-Book": {
+      "comment": "Font family name. Technical; do not translate.",
+      "extractionState": "manual"
+    },
+    "B": {
+      "comment": "Typography checkbox: bold. A one-letter style abbreviation; do not translate.",
       "extractionState": "manual"
     },
     "BETWEEN has no place in the model: a predicate holds one comparison.": {
@@ -693,6 +809,18 @@
     },
     "Bad Query": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Band": {
+      "comment": "Inspector row label for the report band assignment.",
+      "extractionState": "manual"
+    },
+    "Band: %@": {
+      "comment": "Inspector badge with the selected band name.",
+      "extractionState": "manual"
+    },
+    "Band: Report Detail": {
+      "comment": "Inspector badge placeholder before a band is selected.",
       "extractionState": "manual"
     },
     "Barcode": {
@@ -727,6 +855,10 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Bind Bars": {
+      "comment": "Barcode border style: bars only.",
+      "extractionState": "manual"
+    },
     "Bit": {
       "comment": "Bit data type.",
       "extractionState": "manual"
@@ -751,6 +883,10 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Border T/B/L/R": {
+      "comment": "Inspector row label for the four border widths: top, bottom, left, right.",
+      "extractionState": "manual"
+    },
     "Border Top": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -759,8 +895,28 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Bottom Border (pt)": {
+      "comment": "Tooltip for the bottom border width field, in points.",
+      "extractionState": "manual"
+    },
+    "Box Frame": {
+      "comment": "Barcode border style: a full frame.",
+      "extractionState": "manual"
+    },
+    "CONTENT & DATA BINDING": {
+      "comment": "Inspector card title for the element content and data binding.",
+      "extractionState": "manual"
+    },
+    "COUNT": {
+      "comment": "Aggregate function name. SQL; do not translate.",
+      "extractionState": "manual"
+    },
     "CROSS joins have no place in the model: a link names one field pair.": {
       "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "CSV Spreadsheet (.%@)": {
+      "comment": "Export format menu: CSV. Keep CSV and the file extension. %@ is the extension.",
       "extractionState": "manual"
     },
     "Cancel": {
@@ -771,12 +927,32 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Center": {
+      "comment": "Horizontal alignment: centre.",
+      "extractionState": "manual"
+    },
     "Change": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
     "Charter Member (since version %@)": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Check that the database server is reachable and your connection settings are valid.": {
+      "comment": "Refresh alert body suggesting the likely causes.",
+      "extractionState": "manual"
+    },
+    "Choose File…": {
+      "comment": "Connection form button that opens a file chooser.",
+      "extractionState": "manual"
+    },
+    "Choose Image…": {
+      "comment": "Inspector button that opens an image chooser.",
+      "extractionState": "manual"
+    },
+    "Choose SQLite 3 Database": {
+      "comment": "Open panel title for choosing a SQLite database file. SQLite is a brand.",
       "extractionState": "manual"
     },
     "Choose Storage Option": {
@@ -791,6 +967,10 @@
         }
       }
     },
+    "Choose a database driver and configure the source to import its schema.": {
+      "comment": "Connection window subtitle when creating a report.",
+      "extractionState": "manual"
+    },
     "Choose a feature to purchase.": {
       "comment": "Hint",
       "extractionState": "manual"
@@ -803,8 +983,48 @@
       "comment": "Hint",
       "extractionState": "manual"
     },
+    "Click a band to jump & select": {
+      "comment": "Designer minimap hint.",
+      "extractionState": "manual"
+    },
+    "Click to insert or drag onto any section to place a Barcode": {
+      "comment": "Tooltip for the barcode palette button.",
+      "extractionState": "manual"
+    },
+    "Click to insert or drag onto any section to place a Static Label": {
+      "comment": "Tooltip for the static-label palette button.",
+      "extractionState": "manual"
+    },
+    "Click to insert or drag onto any section to place a Summary Aggregate": {
+      "comment": "Tooltip for the aggregate palette button.",
+      "extractionState": "manual"
+    },
+    "Click to insert or drag onto any section to place a bound Data Field": {
+      "comment": "Tooltip for the data-field palette button.",
+      "extractionState": "manual"
+    },
+    "Click to insert or drag onto any section to place a horizontal rule": {
+      "comment": "Tooltip for the horizontal-rule palette button.",
+      "extractionState": "manual"
+    },
+    "Click to insert or drag onto any section to place an Image": {
+      "comment": "Tooltip for the image palette button.",
+      "extractionState": "manual"
+    },
+    "Click to reset zoom to 100%": {
+      "comment": "Tooltip for the zoom percentage button.",
+      "extractionState": "manual"
+    },
+    "Close": {
+      "comment": "File menu item that closes the window.",
+      "extractionState": "manual"
+    },
     "Cloud": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Colors": {
+      "comment": "Inspector row label for the foreground and background colours.",
       "extractionState": "manual"
     },
     "Column aliases are the designer's own; name the column.": {
@@ -815,8 +1035,16 @@
       "comment": "SQL statement validation message for a pasted statement.",
       "extractionState": "manual"
     },
+    "Compile & Apply SQL": {
+      "comment": "SQL toolbar button that parses the statement and applies it to the query.",
+      "extractionState": "manual"
+    },
     "Condition failed with an unspecified error.": {
       "comment": "Description when an operation condition fails without details.",
+      "extractionState": "manual"
+    },
+    "Configure Database Connection Settings…": {
+      "comment": "Tooltip for the connection button.",
       "extractionState": "manual"
     },
     "Confirm": {
@@ -827,16 +1055,48 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Connected! Found %lu schema tables.": {
+      "comment": "Connection status line: the test succeeded. %lu is the number of tables read.",
+      "extractionState": "manual"
+    },
+    "Connecting and importing database schema…": {
+      "comment": "Connection status line while the new report is created.",
+      "extractionState": "manual"
+    },
     "Connection Error": {
       "comment": "Failure reason for a PostgreSQL connection error.",
+      "extractionState": "manual"
+    },
+    "Connection Settings…": {
+      "comment": "Refresh alert button that opens the database connection settings.",
+      "extractionState": "manual"
+    },
+    "Connection failed.": {
+      "comment": "Connection status line: the connection failed with no more specific reason.",
       "extractionState": "manual"
     },
     "Connection is empty.": {
       "comment": "Error when a PostgreSQL operation has no connection.",
       "extractionState": "manual"
     },
+    "Connection…": {
+      "comment": "Viewer button that opens the database connection settings.",
+      "extractionState": "manual"
+    },
+    "Content for line number": {
+      "comment": "VoiceOver page content for the rendered report page.",
+      "extractionState": "manual"
+    },
     "Continue": {
       "comment": "Defined as MADButtonContinue in MADDesigner/Source/MADOperationPromptPassword.m.",
+      "extractionState": "manual"
+    },
+    "Copy": {
+      "comment": "Edit menu item that copies the selection.",
+      "extractionState": "manual"
+    },
+    "Could Not Refresh Report Data": {
+      "comment": "Refresh alert title when there is no more specific error message.",
       "extractionState": "manual"
     },
     "Could not get credentials.": {
@@ -847,12 +1107,28 @@
       "comment": "Error when the portable store cannot be initialized.",
       "extractionState": "manual"
     },
+    "Could not refresh report data. Check the query and database connection settings.": {
+      "comment": "Error: the report refresh failed with no more specific reason.",
+      "extractionState": "manual"
+    },
     "Could not run this query.": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
     "Count": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Courier": {
+      "comment": "Font family name. Technical; do not translate.",
+      "extractionState": "manual"
+    },
+    "Create Document…": {
+      "comment": "Connection window primary button when creating a report.",
+      "extractionState": "manual"
+    },
+    "Create a New Mobile Analytics Document (.mad)": {
+      "comment": "Connection window title when creating a report. Mobile Analytics Document is the file type name.",
       "extractionState": "manual"
     },
     "Credential operation completed without a credential and no specific error.": {
@@ -879,12 +1155,20 @@
       "comment": "Barcode option: a custom value rather than the automatic default.",
       "extractionState": "manual"
     },
+    "Cut": {
+      "comment": "Edit menu item that cuts the selection.",
+      "extractionState": "manual"
+    },
     "Cycle encountered.": {
       "comment": "Defined as TextCycleEncountered in MADDataStructures/Source/MTGraph.m.",
       "extractionState": "manual"
     },
     "DISTINCT has no place in the model: the query designer's fields are the select list.": {
       "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Data Field": {
+      "comment": "Designer palette button that inserts a field bound to the query.",
       "extractionState": "manual"
     },
     "Data Label": {
@@ -895,12 +1179,44 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Database Connection": {
+      "comment": "Accessibility description for the connection window icon.",
+      "extractionState": "manual"
+    },
+    "Database Connection Settings": {
+      "comment": "Connection window title when editing an existing report's connection.",
+      "extractionState": "manual"
+    },
+    "Database Connection…": {
+      "comment": "Query toolbar button that edits the database connection.",
+      "extractionState": "manual"
+    },
+    "Database Driver:": {
+      "comment": "Connection form label for the driver popup.",
+      "extractionState": "manual"
+    },
+    "Database Drivers": {
+      "comment": "About overview heading for the supported database list.",
+      "extractionState": "manual"
+    },
+    "Database File “%@” Could Not Be Found": {
+      "comment": "Refresh alert title. %@ is the missing SQLite file name.",
+      "extractionState": "manual"
+    },
     "Database Information": {
       "comment": "Defined as TextHeaderInformation in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
       "extractionState": "manual"
     },
+    "Database Name:": {
+      "comment": "Connection form label for the database name.",
+      "extractionState": "manual"
+    },
     "Database Settings": {
       "comment": "Title of the database settings screen.",
+      "extractionState": "manual"
+    },
+    "Database Tables": {
+      "comment": "Schema sidebar heading.",
       "extractionState": "manual"
     },
     "Database connection not provided for connection test.": {
@@ -915,12 +1231,24 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Database password": {
+      "comment": "Placeholder for the database password field.",
+      "extractionState": "manual"
+    },
+    "Database user": {
+      "comment": "Placeholder for the database user name field.",
+      "extractionState": "manual"
+    },
     "Date": {
       "comment": "Date data type.",
       "extractionState": "manual"
     },
     "Date Time": {
       "comment": "Date data type.",
+      "extractionState": "manual"
+    },
+    "Dec:": {
+      "comment": "Inspector label for the decimal-place count.",
       "extractionState": "manual"
     },
     "Decending": {
@@ -947,12 +1275,28 @@
       "comment": "Context menu action: delete the selected document element.",
       "extractionState": "manual"
     },
+    "Delete Element": {
+      "comment": "Undo action name for deleting elements.",
+      "extractionState": "manual"
+    },
+    "Delete Join": {
+      "comment": "Join editor button that removes the join.",
+      "extractionState": "manual"
+    },
+    "Delete Join Link": {
+      "comment": "Context menu item that deletes the join.",
+      "extractionState": "manual"
+    },
     "Delete saved credentials?": {
       "comment": "Alert title asking whether to delete saved credentials.",
       "extractionState": "manual"
     },
     "Deletes the selected documents.": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Descending": {
+      "comment": "Sort direction.",
       "extractionState": "manual"
     },
     "Design the layout for your report.": {
@@ -965,6 +1309,10 @@
     },
     "Designer": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Designer Context Menu": {
+      "comment": "Title of the designer canvas context menu. Never shown to the user.",
       "extractionState": "manual"
     },
     "Designer Mode (limited)": {
@@ -1015,6 +1363,10 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Document Information": {
+      "comment": "VoiceOver label for the information bar button, which has an icon only.",
+      "extractionState": "manual"
+    },
     "Document object not found for save and close.": {
       "comment": "Error when save-and-close cannot find its document.",
       "extractionState": "manual"
@@ -1027,16 +1379,52 @@
       "comment": "Date data type.",
       "extractionState": "manual"
     },
+    "Double-click a table on the left to add it to the visual query designer.\nDrag from a field in one table to a field in another table to create a Left Outer Join.": {
+      "comment": "Empty-state hint on the query canvas. Left Outer Join is SQL; keep it in English.",
+      "extractionState": "manual"
+    },
+    "Double-click to add table to query": {
+      "comment": "Tooltip on a schema table row.",
+      "extractionState": "manual"
+    },
+    "Download": {
+      "comment": "VoiceOver label for the iCloud download bar button, which has an icon only.",
+      "extractionState": "manual"
+    },
     "Downloading": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Downloads the selected iCloud document.": {
+      "comment": "VoiceOver hint for the iCloud download bar button.",
+      "extractionState": "manual"
+    },
+    "Drag onto any band or double-click to insert": {
+      "comment": "Designer sidebar hint under the query field list.",
+      "extractionState": "manual"
+    },
+    "Drag onto any report section on the canvas, or double-click to insert into the selected section": {
+      "comment": "Tooltip on a query field row in the designer sidebar.",
       "extractionState": "manual"
     },
     "Drawing page %1$@ of %2$@.": {
       "comment": "Progress while drawing a PDF; current and total pages.",
       "extractionState": "manual"
     },
+    "Duplicate": {
+      "comment": "Inspector button that duplicates the selected elements.",
+      "extractionState": "manual"
+    },
     "Duplicates the selected documents.": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "ELEMENT & BAND ASSIGNMENT": {
+      "comment": "Inspector card title for the element identity and band assignment.",
+      "extractionState": "manual"
+    },
+    "Each Page": {
+      "comment": "Aggregate scope: one value per page.",
       "extractionState": "manual"
     },
     "Each report requires a database connection.": {
@@ -1051,6 +1439,14 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Edit Label Text": {
+      "comment": "Undo action name for editing a label text.",
+      "extractionState": "manual"
+    },
+    "Element": {
+      "comment": "Generic document element name.",
+      "extractionState": "manual"
+    },
     "Empty Query": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -1061,6 +1457,22 @@
     },
     "Enables document list edit mode.": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Enter a SELECT statement and click Compile & Apply SQL to update the query.": {
+      "comment": "Hint above the SQL text editor. The button name matches the toolbar.",
+      "extractionState": "manual"
+    },
+    "Enter a SELECT statement to validate.": {
+      "comment": "Status line when Validate SQL is clicked with an empty editor.",
+      "extractionState": "manual"
+    },
+    "Enter credentials to connect to the database server.": {
+      "comment": "Prompt shown when the database server rejected the credentials.",
+      "extractionState": "manual"
+    },
+    "Entire Report": {
+      "comment": "Aggregate scope: one value for the whole report.",
       "extractionState": "manual"
     },
     "Enum": {
@@ -1093,6 +1505,10 @@
     },
     "Executing Error": {
       "comment": "Failure reason when a MySQL statement cannot execute.",
+      "extractionState": "manual"
+    },
+    "Executing SQL query and formatting report pages…": {
+      "comment": "Viewer status line while refresh and rendering are running.",
       "extractionState": "manual"
     },
     "Expected ')' to close the predicate.": {
@@ -1171,6 +1587,38 @@
       "comment": "SQL statement validation message for a pasted statement.",
       "extractionState": "manual"
     },
+    "Export Format:": {
+      "comment": "Export save panel label for the format popup.",
+      "extractionState": "manual"
+    },
+    "Export Formats": {
+      "comment": "About overview heading for the export formats.",
+      "extractionState": "manual"
+    },
+    "Export Report": {
+      "comment": "Accessibility description for the export button icon.",
+      "extractionState": "manual"
+    },
+    "Export Report…": {
+      "comment": "File menu item that exports the rendered report.",
+      "extractionState": "manual"
+    },
+    "Exported %1$@ to %2$@": {
+      "comment": "Viewer status line after a successful export. %1$@ is the format, %2$@ the file name.",
+      "extractionState": "manual"
+    },
+    "Exporter unavailable.": {
+      "comment": "Error: the chosen export format is not available on this system.",
+      "extractionState": "manual"
+    },
+    "Export…": {
+      "comment": "Viewer button that exports the rendered report.",
+      "extractionState": "manual"
+    },
+    "FIRST": {
+      "comment": "Aggregate function name. SQL; do not translate.",
+      "extractionState": "manual"
+    },
     "Failed to add null value.": {
       "comment": "Error when a null value is added to a report section.",
       "extractionState": "manual"
@@ -1187,6 +1635,10 @@
       "comment": "Error when a headless document cannot reach its database.",
       "extractionState": "manual"
     },
+    "Failed to create document.": {
+      "comment": "Connection status line: the document could not be created.",
+      "extractionState": "manual"
+    },
     "Failed to deserialize property list.": {
       "comment": "Error when a data-table property list cannot be read.",
       "extractionState": "manual"
@@ -1199,6 +1651,10 @@
       "comment": "Alert body when a document cannot be opened; %@ is the underlying message.",
       "extractionState": "manual"
     },
+    "Field": {
+      "comment": "Inspector row label for the bound query field.",
+      "extractionState": "manual"
+    },
     "Field Selector": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -1209,6 +1665,10 @@
     },
     "Fields not found.": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "File": {
+      "comment": "File menu title.",
       "extractionState": "manual"
     },
     "File Exist": {
@@ -1227,8 +1687,32 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Fill": {
+      "comment": "Inspector checkbox that fills the element background.",
+      "extractionState": "manual"
+    },
+    "Filter query fields…": {
+      "comment": "Search field placeholder that filters the query field list.",
+      "extractionState": "manual"
+    },
+    "Filters (%lu)": {
+      "comment": "Query toolbar button with the active filter count. %lu is the count.",
+      "extractionState": "manual"
+    },
+    "Filters (WHERE)": {
+      "comment": "Query toolbar button that opens the filter editor. WHERE is SQL.",
+      "extractionState": "manual"
+    },
     "First": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Fit Band Height to Elements": {
+      "comment": "Context menu item that fits the band height to its elements.",
+      "extractionState": "manual"
+    },
+    "Fit Height": {
+      "comment": "Inspector button that fits the band height to its elements.",
       "extractionState": "manual"
     },
     "Float": {
@@ -1241,6 +1725,10 @@
     },
     "Follow us on Twitter.": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Font": {
+      "comment": "Inspector row label for the font family.",
       "extractionState": "manual"
     },
     "Font Name %@": {
@@ -1283,6 +1771,10 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Function": {
+      "comment": "Inspector row label for the aggregate function.",
+      "extractionState": "manual"
+    },
     "Function Selector": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -1299,8 +1791,16 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Generated SQL": {
+      "comment": "SQL editor tab that shows the generated statement.",
+      "extractionState": "manual"
+    },
     "Geometry": {
       "comment": "Date data type.",
+      "extractionState": "manual"
+    },
+    "Georgia": {
+      "comment": "Font family name. Technical; do not translate.",
       "extractionState": "manual"
     },
     "Greater Than": {
@@ -1311,12 +1811,32 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Grid": {
+      "comment": "Designer toolbar toggle that shows the alignment grid.",
+      "extractionState": "manual"
+    },
+    "Group": {
+      "comment": "Generic grouping band name.",
+      "extractionState": "manual"
+    },
+    "Group #%1$d (%2$@)": {
+      "comment": "Aggregate scope: one value per group. %1$d is the group level, %2$@ the band name.",
+      "extractionState": "manual"
+    },
     "Group %@": {
       "comment": "Like 'Group Three.'",
       "extractionState": "manual"
     },
     "Group By": {
       "comment": "Title of form that allows you to choose an item to group other items by...",
+      "extractionState": "manual"
+    },
+    "Group By %@ (Ascending)": {
+      "comment": "Context menu item that groups by the field ascending. %@ is the field name. Group By is SQL.",
+      "extractionState": "manual"
+    },
+    "Group By %@ (Descending)": {
+      "comment": "Context menu item that groups by the field descending. %@ is the field name. Group By is SQL.",
       "extractionState": "manual"
     },
     "Group By Selector": {
@@ -1363,8 +1883,32 @@
       "comment": "Defined as TextHeaderGroups in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
       "extractionState": "manual"
     },
+    "Groupings (%lu)": {
+      "comment": "Query toolbar button with the active grouping count. %lu is the count.",
+      "extractionState": "manual"
+    },
+    "Groupings (GROUP BY)": {
+      "comment": "Query toolbar button that opens the grouping editor. GROUP BY is SQL.",
+      "extractionState": "manual"
+    },
     "Groups": {
       "comment": "Defined as MADTextQueryGroups in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
+      "extractionState": "manual"
+    },
+    "H-Align": {
+      "comment": "Inspector row label for horizontal alignment.",
+      "extractionState": "manual"
+    },
+    "H:": {
+      "comment": "Inspector label for the height in points.",
+      "extractionState": "manual"
+    },
+    "HTML Flow (.%@)": {
+      "comment": "Export format menu: flowing HTML. Keep HTML and the file extension. %@ is the extension.",
+      "extractionState": "manual"
+    },
+    "HTML Page (.%@)": {
+      "comment": "Export format menu: one HTML page. Keep HTML and the file extension. %@ is the extension.",
       "extractionState": "manual"
     },
     "Having Specified Criteria": {
@@ -1379,8 +1923,44 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Height (pt)": {
+      "comment": "Inspector row label. pt is points.",
+      "extractionState": "manual"
+    },
+    "Help": {
+      "comment": "Help menu title.",
+      "extractionState": "manual"
+    },
+    "Helvetica": {
+      "comment": "Font family name. Technical; do not translate.",
+      "extractionState": "manual"
+    },
+    "HelveticaNeue": {
+      "comment": "Font family name. Technical; do not translate.",
+      "extractionState": "manual"
+    },
+    "Hidden": {
+      "comment": "Band size summary for a hidden band.",
+      "extractionState": "manual"
+    },
+    "Hide MAD Designer": {
+      "comment": "Application menu item that hides the app. MAD Designer is a brand.",
+      "extractionState": "manual"
+    },
     "Horizontal Alignment": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Host / Address:": {
+      "comment": "Connection form label for the server host name.",
+      "extractionState": "manual"
+    },
+    "Host and Database Name are required.": {
+      "comment": "Error: the connection form is missing its host or database name.",
+      "extractionState": "manual"
+    },
+    "I": {
+      "comment": "Typography checkbox: italic. A one-letter style abbreviation; do not translate.",
       "extractionState": "manual"
     },
     "IN has no place in the model: a predicate holds one comparison.": {
@@ -1395,8 +1975,36 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Info": {
+      "comment": "Report band list column header for the size summary.",
+      "extractionState": "manual"
+    },
     "Inner-Join": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Insert Aggregate": {
+      "comment": "Context menu item that inserts an aggregate.",
+      "extractionState": "manual"
+    },
+    "Insert Barcode": {
+      "comment": "Context menu item that inserts a barcode.",
+      "extractionState": "manual"
+    },
+    "Insert Data Field": {
+      "comment": "Context menu item that inserts a data field.",
+      "extractionState": "manual"
+    },
+    "Insert Element": {
+      "comment": "Undo action name for inserting an element.",
+      "extractionState": "manual"
+    },
+    "Insert Static Label": {
+      "comment": "Context menu item that inserts a static label.",
+      "extractionState": "manual"
+    },
+    "Insert:": {
+      "comment": "Designer toolbar label before the element palette buttons.",
       "extractionState": "manual"
     },
     "Int24": {
@@ -1409,6 +2017,10 @@
     },
     "Internal Error": {
       "comment": "Failure reason for an internal operation-condition error.",
+      "extractionState": "manual"
+    },
+    "Invalid connection settings.": {
+      "comment": "Connection status line: the settings are incomplete or invalid.",
       "extractionState": "manual"
     },
     "Invalid plist format.": {
@@ -1427,6 +2039,22 @@
       "comment": "Undo action name: apply italic to the selected elements.",
       "extractionState": "manual"
     },
+    "JSON Data (.%@)": {
+      "comment": "Export format menu: JSON data. Keep JSON and the file extension. %@ is the extension.",
+      "extractionState": "manual"
+    },
+    "JSON Full Report (.%@)": {
+      "comment": "Export format menu: JSON with layout. Keep JSON and the file extension. %@ is the extension.",
+      "extractionState": "manual"
+    },
+    "Join Link": {
+      "comment": "Context menu title for a join link.",
+      "extractionState": "manual"
+    },
+    "Join Type:": {
+      "comment": "Join editor label for the join-type popup.",
+      "extractionState": "manual"
+    },
     "Joins": {
       "comment": "Defined as TextHeaderLink in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
       "extractionState": "manual"
@@ -1439,6 +2067,10 @@
       "comment": "Error when a credential lookup has no key.",
       "extractionState": "manual"
     },
+    "LAST": {
+      "comment": "Aggregate function name. SQL; do not translate.",
+      "extractionState": "manual"
+    },
     "LIKE has no place in the model: a predicate holds one of six comparisons.": {
       "comment": "SQL statement validation message for a pasted statement.",
       "extractionState": "manual"
@@ -1447,12 +2079,24 @@
       "comment": "SQL statement validation message for a pasted statement.",
       "extractionState": "manual"
     },
+    "Label": {
+      "comment": "Designer palette button that inserts a static label.",
+      "extractionState": "manual"
+    },
+    "Label or barcode text…": {
+      "comment": "Inspector text field placeholder for label and barcode content.",
+      "extractionState": "manual"
+    },
     "Last": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
     "Left": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Left Border (pt)": {
+      "comment": "Tooltip for the left border width field, in points.",
       "extractionState": "manual"
     },
     "Left Outer Join": {
@@ -1467,6 +2111,10 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "License & Notice": {
+      "comment": "About window tab that shows the licence and product-marks notice.",
+      "extractionState": "manual"
+    },
     "License Texts": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -1475,12 +2123,32 @@
       "comment": "MIT license and reserved brand/artwork notice",
       "extractionState": "manual"
     },
+    "Licensing & Product Marks Notice": {
+      "comment": "About licensing tab heading. The notice beneath it stays in English.",
+      "extractionState": "manual"
+    },
+    "Licensing & Relink Notice": {
+      "comment": "Help menu item that shows the licence and relink notice.",
+      "extractionState": "manual"
+    },
     "Limit Query Result": {
       "comment": "Defined as TextHeaderSettings in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
       "extractionState": "manual"
     },
+    "Line": {
+      "comment": "Designer palette button that inserts a horizontal rule.",
+      "extractionState": "manual"
+    },
+    "Link %1$@ (Left Outer Join) to": {
+      "comment": "Context submenu title that creates a join from the field. %1$@ is the field name. Left Outer Join is SQL.",
+      "extractionState": "manual"
+    },
     "Link the Tables": {
       "comment": "Defined as MADTextQueryLinks in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
+      "extractionState": "manual"
+    },
+    "Link to Field": {
+      "comment": "Context menu item that starts a join from this field.",
       "extractionState": "manual"
     },
     "Local": {
@@ -1491,12 +2159,24 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Locate File…": {
+      "comment": "Refresh alert button that opens a file chooser for the missing database.",
+      "extractionState": "manual"
+    },
+    "Locate “%@”": {
+      "comment": "Open panel title when locating a missing database. %@ is the file name.",
+      "extractionState": "manual"
+    },
     "Long": {
       "comment": "Image data type.",
       "extractionState": "manual"
     },
     "Long Long": {
       "comment": "Image data type.",
+      "extractionState": "manual"
+    },
+    "M:": {
+      "comment": "Inspector label for the margin in points.",
       "extractionState": "manual"
     },
     "MAD Barcodes": {
@@ -1507,8 +2187,20 @@
       "comment": "Title for the store... list program features. ",
       "extractionState": "manual"
     },
+    "MAD Designer Overview": {
+      "comment": "Help menu item that shows the About overview. MAD Designer is a brand.",
+      "extractionState": "manual"
+    },
+    "MAD Designer Workspace": {
+      "comment": "View menu item that shows the layout workspace. MAD Designer is a brand.",
+      "extractionState": "manual"
+    },
     "MAD Designer connects natively to MySQL / MariaDB, Microsoft SQL Server, and PostgreSQL databases, and uses SQLite for portable sample documents and local row caching.": {
       "comment": "Overview paragraph 2",
+      "extractionState": "manual"
+    },
+    "MAD Designer could not find the SQLite database file for this report at:\n%@\n\nWould you like to locate the database file on your Mac?": {
+      "comment": "Refresh alert body. %@ is the expected file path. The last sentence asks whether to open a file chooser.",
       "extractionState": "manual"
     },
     "MAD Designer is open-source business intelligence software by Michael Thomason.": {
@@ -1539,8 +2231,16 @@
       "comment": "Title for the store... list program features. ",
       "extractionState": "manual"
     },
+    "MAD Query Workspace": {
+      "comment": "View menu item that shows the query workspace. MAD Query is a brand.",
+      "extractionState": "manual"
+    },
     "MAD Viewer": {
       "comment": "Title for the store... list program features. ",
+      "extractionState": "manual"
+    },
+    "MAD Viewer Workspace": {
+      "comment": "View menu item that shows the report viewer. MAD Viewer is a brand.",
       "extractionState": "manual"
     },
     "MAD Viewer is the mobile analytics document viewer.": {
@@ -1553,6 +2253,18 @@
     },
     "MAD.momd was not found in the bundle.": {
       "comment": "Error when the legacy document converter cannot find its Core Data model.",
+      "extractionState": "manual"
+    },
+    "MAX": {
+      "comment": "Aggregate function name. SQL; do not translate.",
+      "extractionState": "manual"
+    },
+    "MEAN (AVG)": {
+      "comment": "Aggregate function name. AVG is SQL; do not translate.",
+      "extractionState": "manual"
+    },
+    "MIN": {
+      "comment": "Aggregate function name. SQL; do not translate.",
       "extractionState": "manual"
     },
     "Margin Bottom": {
@@ -1583,8 +2295,24 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Menlo-Regular": {
+      "comment": "Font family name. Technical; do not translate.",
+      "extractionState": "manual"
+    },
+    "Microsoft SQL Server": {
+      "comment": "Database driver name. A Microsoft brand; do not translate.",
+      "extractionState": "manual"
+    },
+    "Middle": {
+      "comment": "Vertical alignment: middle.",
+      "extractionState": "manual"
+    },
     "Min": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Minimize": {
+      "comment": "Window menu item that minimizes the window.",
       "extractionState": "manual"
     },
     "Minimum": {
@@ -1619,6 +2347,26 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Move / Resize Element": {
+      "comment": "Undo action name for moving or resizing an element.",
+      "extractionState": "manual"
+    },
+    "Move Element to Section": {
+      "comment": "Undo action name for moving an element to another band.",
+      "extractionState": "manual"
+    },
+    "Move the selected element(s) to another report section": {
+      "comment": "Tooltip for the band assignment popup.",
+      "extractionState": "manual"
+    },
+    "Move to Band": {
+      "comment": "Context submenu title that moves the element to another band.",
+      "extractionState": "manual"
+    },
+    "MySQL": {
+      "comment": "Database driver name. A brand; do not translate.",
+      "extractionState": "manual"
+    },
     "MySQL Native Driver": {
       "comment": "Selection Label 'MySQL Native Driver'",
       "extractionState": "manual"
@@ -1635,8 +2383,28 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "New Document": {
+      "comment": "Open panel button that starts a new report from a database.",
+      "extractionState": "manual"
+    },
+    "New Document…": {
+      "comment": "File menu item that starts a new report.",
+      "extractionState": "manual"
+    },
     "New Report": {
       "comment": "Title of form that allows you to choose the name of a database field.",
+      "extractionState": "manual"
+    },
+    "New Report from Database Connection": {
+      "comment": "Connection window title when creating a report.",
+      "extractionState": "manual"
+    },
+    "Next Page": {
+      "comment": "Accessibility description for the next-page icon.",
+      "extractionState": "manual"
+    },
+    "No Border": {
+      "comment": "Barcode border style: none.",
       "extractionState": "manual"
     },
     "No Cache": {
@@ -1651,12 +2419,36 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "No SQLite file URL selected.": {
+      "comment": "Error: the user must choose a SQLite database file.",
+      "extractionState": "manual"
+    },
+    "No active document to export.": {
+      "comment": "Error: an export was requested with no open report.",
+      "extractionState": "manual"
+    },
+    "No active report store to write.": {
+      "comment": "Error: the document has no open report store.",
+      "extractionState": "manual"
+    },
     "No barcode data.": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "No document is open.": {
+      "comment": "Error: an action needs an open report.",
+      "extractionState": "manual"
+    },
+    "No element selected.\n\nClick an element on the canvas to inspect and style it, or drag a Query Field from the left sidebar onto any report band.": {
+      "comment": "Inspector hint shown when no element is selected.",
+      "extractionState": "manual"
+    },
     "No model version in MAD.momd matches the legacy store.": {
       "comment": "Error when no legacy Core Data model matches the store being converted.",
+      "extractionState": "manual"
+    },
+    "No valid SQLite database file exists at %@.": {
+      "comment": "Error: the chosen SQLite file is missing or empty. %@ is the path.",
       "extractionState": "manual"
     },
     "No where clause.": {
@@ -1679,6 +2471,10 @@
       "comment": "Failure reason when an operation condition is not met.",
       "extractionState": "manual"
     },
+    "Not yet refreshed. Click “Refresh” to query the database and render the report.": {
+      "comment": "Viewer status line before the first refresh. The quoted word matches the Refresh button.",
+      "extractionState": "manual"
+    },
     "Nothing": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -1695,6 +2491,10 @@
       "comment": "Number data type.",
       "extractionState": "manual"
     },
+    "Numeric": {
+      "comment": "Inspector checkbox that formats the value as a number.",
+      "extractionState": "manual"
+    },
     "OK": {
       "comment": "Alert button that dismisses the message.",
       "extractionState": "manual"
@@ -1707,8 +2507,16 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Open": {
+      "comment": "Open panel confirm button; opens the selected report.",
+      "extractionState": "manual"
+    },
     "Open Failure": {
       "comment": "Alert title when a document cannot be opened.",
+      "extractionState": "manual"
+    },
+    "Open Report": {
+      "comment": "Open panel title.",
       "extractionState": "manual"
     },
     "Open Source Components": {
@@ -1719,8 +2527,28 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Open…": {
+      "comment": "File menu item that opens an existing report.",
+      "extractionState": "manual"
+    },
+    "Optional named instance (defaults to Host)": {
+      "comment": "Placeholder for the SQL Server named instance field.",
+      "extractionState": "manual"
+    },
+    "Options": {
+      "comment": "Inspector row label for the barcode options.",
+      "extractionState": "manual"
+    },
     "Overview": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "PAGE & SECTION MINIMAP": {
+      "comment": "Designer sidebar heading for the page and section minimap.",
+      "extractionState": "manual"
+    },
+    "PDF Document (.%@)": {
+      "comment": "Export format menu: PDF. Keep PDF and the file extension. %@ is the extension.",
       "extractionState": "manual"
     },
     "PDF needs a document that renders (MADDocumentRenderProtocol).": {
@@ -1729,6 +2557,14 @@
     },
     "PDF needs a file to write to.": {
       "comment": "Error when the PDF export has no output file.",
+      "extractionState": "manual"
+    },
+    "POSITION, SIZE & BOX MODEL": {
+      "comment": "Inspector card title for position, size, border, padding and margin.",
+      "extractionState": "manual"
+    },
+    "Pad / Margin": {
+      "comment": "Inspector row label for padding and margin in points.",
       "extractionState": "manual"
     },
     "Padding Bottom": {
@@ -1751,8 +2587,20 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Page %1$lu of %2$lu": {
+      "comment": "Viewer page-number label. %1$lu is the current page, %2$lu the total.",
+      "extractionState": "manual"
+    },
     "Page %@": {
       "comment": "Accessibility label for a report page; %@ is the page number, spelled out.",
+      "extractionState": "manual"
+    },
+    "Page 0 of 0": {
+      "comment": "Viewer page-number placeholder before a report is rendered.",
+      "extractionState": "manual"
+    },
+    "Page Break After": {
+      "comment": "Inspector checkbox that starts a new page after the band.",
       "extractionState": "manual"
     },
     "Page Footer": {
@@ -1763,16 +2611,40 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Page Size:": {
+      "comment": "Viewer toolbar label for the paper-size popup.",
+      "extractionState": "manual"
+    },
+    "Paper": {
+      "comment": "Inspector row label for the paper size.",
+      "extractionState": "manual"
+    },
     "Password": {
       "comment": "Defined as MADTitlePassword in MADDesigner/Source/MADOperationPromptPassword.m.",
+      "extractionState": "manual"
+    },
+    "Password:": {
+      "comment": "Connection form label for the database password.",
       "extractionState": "manual"
     },
     "Password: ": {
       "comment": "Label before the password field.",
       "extractionState": "manual"
     },
+    "Paste": {
+      "comment": "Edit menu item that pastes the clipboard.",
+      "extractionState": "manual"
+    },
     "Place data fields, static labels, aggregate functions, barcodes, and shapes across Report Header, Page Header, Group Headers and Footers, Detail, Page Footer, and Report Footer sections.": {
       "comment": "Step 3 body",
+      "extractionState": "manual"
+    },
+    "Plain Text (.%@)": {
+      "comment": "Export format menu: plain text. %@ is the file extension.",
+      "extractionState": "manual"
+    },
+    "Please choose an existing SQLite database file.": {
+      "comment": "Error: no SQLite database file was chosen.",
       "extractionState": "manual"
     },
     "Please enter a new name for the document.": {
@@ -1789,6 +2661,14 @@
     },
     "Please enter your password.": {
       "comment": "Defined as MADMessagePassword in MADDesigner/Source/MADOperationPromptPassword.m.",
+      "extractionState": "manual"
+    },
+    "Port:": {
+      "comment": "Connection form label for the server port number.",
+      "extractionState": "manual"
+    },
+    "PostgreSQL": {
+      "comment": "Database driver name. A brand; do not translate.",
       "extractionState": "manual"
     },
     "PostgreSQL Native Driver": {
@@ -1811,8 +2691,20 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Previous Page": {
+      "comment": "Accessibility description for the previous-page icon.",
+      "extractionState": "manual"
+    },
     "Print Preview": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Print Report": {
+      "comment": "Accessibility description for the print button icon.",
+      "extractionState": "manual"
+    },
+    "Print…": {
+      "comment": "File menu item that prints the rendered report.",
       "extractionState": "manual"
     },
     "Problem Closing Document": {
@@ -1827,12 +2719,48 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "QUERY FIELDS (DRAG TO CANVAS)": {
+      "comment": "Designer sidebar heading for the query field list.",
+      "extractionState": "manual"
+    },
     "Query": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Query Designer": {
+      "comment": "Query workspace segment that shows the visual table designer.",
+      "extractionState": "manual"
+    },
     "Query Error": {
       "comment": "Failure reason for a PostgreSQL query error.",
+      "extractionState": "manual"
+    },
+    "Quit MAD Designer": {
+      "comment": "Application menu item that quits the app. MAD Designer is a brand.",
+      "extractionState": "manual"
+    },
+    "REPORT BANDS": {
+      "comment": "Designer sidebar heading for the report band list.",
+      "extractionState": "manual"
+    },
+    "Redo": {
+      "comment": "Edit menu item that redoes the last undone change.",
+      "extractionState": "manual"
+    },
+    "Refresh": {
+      "comment": "Viewer button that re-runs the query and re-renders the report.",
+      "extractionState": "manual"
+    },
+    "Refresh Report": {
+      "comment": "Accessibility description for the refresh button icon.",
+      "extractionState": "manual"
+    },
+    "Refresh Report Data": {
+      "comment": "Report menu item that re-runs the query and re-renders the report.",
+      "extractionState": "manual"
+    },
+    "Refresh failed.": {
+      "comment": "Viewer status line: the refresh failed with no more specific reason.",
       "extractionState": "manual"
     },
     "Refresh the report against live data, browse paginated output, print, or export to PDF, HTML, CSV, JSON, or plain text.": {
@@ -1871,6 +2799,14 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Remove Table '%@' from Query": {
+      "comment": "Context menu item that removes the table from the query. %@ is the table alias.",
+      "extractionState": "manual"
+    },
+    "Remove table from query": {
+      "comment": "Tooltip for the table card's remove button.",
+      "extractionState": "manual"
+    },
     "Rename": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -1881,6 +2817,14 @@
     },
     "Renames document.": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Rendered %1$@ from %2$@.": {
+      "comment": "Status line after rendering. %1$@ is the page count phrase, %2$@ is the cached-row count phrase.",
+      "extractionState": "manual"
+    },
+    "Rendered Page Size: %@": {
+      "comment": "Viewer status line. %@ is a paper name such as A4.",
       "extractionState": "manual"
     },
     "Report": {
@@ -1895,8 +2839,16 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Report Grouping Levels (GROUP BY)": {
+      "comment": "Grouping editor title. GROUP BY is SQL.",
+      "extractionState": "manual"
+    },
     "Report Header": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Report Sections & Elements": {
+      "comment": "About overview heading for the report model.",
       "extractionState": "manual"
     },
     "Reporting Mode": {
@@ -1907,8 +2859,28 @@
       "comment": "Shows that this field is required.",
       "extractionState": "manual"
     },
+    "Reset Zoom to 100% (Actual Page Size)": {
+      "comment": "Tooltip for the zoom percentage button.",
+      "extractionState": "manual"
+    },
+    "Resize Section": {
+      "comment": "Undo action name for resizing a band.",
+      "extractionState": "manual"
+    },
+    "Resize selected element(s) to fit their text content": {
+      "comment": "Tooltip for the Size to Fit button.",
+      "extractionState": "manual"
+    },
     "Restored purchases for your account.": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Retry": {
+      "comment": "Refresh alert button that tries the refresh again.",
+      "extractionState": "manual"
+    },
+    "Revert to Generated SQL": {
+      "comment": "SQL toolbar button that replaces the text with the SQL generated from the visual query.",
       "extractionState": "manual"
     },
     "Revert to generated": {
@@ -1919,12 +2891,76 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Right Border (pt)": {
+      "comment": "Tooltip for the right border width field, in points.",
+      "extractionState": "manual"
+    },
     "Right Outer Join": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Rulers": {
+      "comment": "Designer toolbar toggle that shows the rulers.",
+      "extractionState": "manual"
+    },
+    "S": {
+      "comment": "Typography checkbox: strikethrough. A one-letter style abbreviation; do not translate.",
+      "extractionState": "manual"
+    },
+    "SQL Apply Error: %@": {
+      "comment": "SQL editor status after applying the statement failed. %@ is the error message.",
+      "extractionState": "manual"
+    },
+    "SQL Parse Error: %@": {
+      "comment": "SQL editor status after a parse failure. %@ is the parser's message.",
+      "extractionState": "manual"
+    },
+    "SQL Query": {
+      "comment": "Query workspace segment that shows the SQL text editor.",
+      "extractionState": "manual"
+    },
+    "SQL Query Statement": {
+      "comment": "Heading above the SQL text editor.",
+      "extractionState": "manual"
+    },
+    "SQL Resolve Error: %@": {
+      "comment": "SQL editor status after a resolve failure. %@ is the resolver's message.",
+      "extractionState": "manual"
+    },
+    "SQLite": {
+      "comment": "Database driver name. A brand; do not translate.",
+      "extractionState": "manual"
+    },
+    "SQLite File:": {
+      "comment": "Connection form label for the SQLite file path. SQLite is a brand.",
+      "extractionState": "manual"
+    },
+    "SUM": {
+      "comment": "Aggregate function name. SQL; do not translate.",
+      "extractionState": "manual"
+    },
+    "Save": {
+      "comment": "File menu item that saves the report.",
+      "extractionState": "manual"
+    },
+    "Save & Refresh": {
+      "comment": "Connection window primary button when editing a connection.",
+      "extractionState": "manual"
+    },
+    "Save As…": {
+      "comment": "File menu item that saves the report under a new name.",
+      "extractionState": "manual"
+    },
     "Save Credentials": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Save New Mobile Analytics Document (.mad)": {
+      "comment": "Save panel title when creating a report. Mobile Analytics Document is the file type name.",
+      "extractionState": "manual"
+    },
+    "Save password in Keychain": {
+      "comment": "Connection form checkbox. Use Apple's localized name for Keychain.",
       "extractionState": "manual"
     },
     "Save to KeyChain": {
@@ -1935,12 +2971,28 @@
       "comment": "Status when the schema import is cancelled.",
       "extractionState": "manual"
     },
+    "Scope": {
+      "comment": "Inspector row label for the aggregate scope.",
+      "extractionState": "manual"
+    },
     "Scrolled to %@.": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Section": {
+      "comment": "Report band list column header.",
+      "extractionState": "manual"
+    },
+    "Section Visible": {
+      "comment": "Inspector checkbox that hides or shows the band.",
+      "extractionState": "manual"
+    },
     "Section: %d": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Select All": {
+      "comment": "Edit menu item that selects everything.",
       "extractionState": "manual"
     },
     "Select Field": {
@@ -1959,6 +3011,10 @@
       "comment": "Title for the select value screen. This is to static value to use to filter the report.",
       "extractionState": "manual"
     },
+    "Select a database source to import its schema into a new .mad document.": {
+      "comment": "Connection window status prompt when creating a report.",
+      "extractionState": "manual"
+    },
     "Select a field.": {
       "comment": "Hint",
       "extractionState": "manual"
@@ -1971,12 +3027,24 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Select an existing .sqlite3 or .db database file on your Mac.": {
+      "comment": "Connection form hint under the SQLite file field. Keep the file extensions.",
+      "extractionState": "manual"
+    },
+    "Select the SQLite database file “%@” for this report.": {
+      "comment": "Open panel message when locating a missing database. %@ is the file name.",
+      "extractionState": "manual"
+    },
     "Selects document named %@.": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
     "Selects field.": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Server Instance:": {
+      "comment": "Connection form label for the SQL Server named instance.",
       "extractionState": "manual"
     },
     "Set": {
@@ -1995,8 +3063,20 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Show Text": {
+      "comment": "Inspector checkbox that prints the barcode value below the bars.",
+      "extractionState": "manual"
+    },
     "Shows toolbox.": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Shrink or expand section height to snugly fit its elements": {
+      "comment": "Tooltip for the Fit Height button.",
+      "extractionState": "manual"
+    },
+    "Size (pt)": {
+      "comment": "Inspector row label for the font size in points.",
       "extractionState": "manual"
     },
     "Size Height": {
@@ -2005,6 +3085,18 @@
     },
     "Size Width": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Size to Fit": {
+      "comment": "Designer toolbar button that resizes the selected elements to their text.",
+      "extractionState": "manual"
+    },
+    "Size to Fit Content": {
+      "comment": "Context menu item that resizes the element to its text.",
+      "extractionState": "manual"
+    },
+    "Snap": {
+      "comment": "Designer toolbar toggle that snaps elements to the grid.",
       "extractionState": "manual"
     },
     "Software activated.": {
@@ -2035,6 +3127,10 @@
       "comment": "String data type.",
       "extractionState": "manual"
     },
+    "Style": {
+      "comment": "Inspector row label for the bold/italic/underline/strikethrough toggles.",
+      "extractionState": "manual"
+    },
     "Subqueries have no place in the model: FROM names schema tables.": {
       "comment": "SQL statement validation message for a pasted statement.",
       "extractionState": "manual"
@@ -2047,24 +3143,64 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Summary Aggregate": {
+      "comment": "Element type name: an aggregate value.",
+      "extractionState": "manual"
+    },
+    "Supported Capabilities": {
+      "comment": "About overview heading.",
+      "extractionState": "manual"
+    },
+    "Swap Left / Right Direction": {
+      "comment": "Context menu item that swaps the join direction.",
+      "extractionState": "manual"
+    },
+    "Symbology": {
+      "comment": "Inspector row label for the barcode symbology.",
+      "extractionState": "manual"
+    },
     "Syncing": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "TYPOGRAPHY & APPEARANCE": {
+      "comment": "Inspector card title for typography and colours.",
       "extractionState": "manual"
     },
     "Table %@ not Added.": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Table Join Relationship": {
+      "comment": "Heading of the join editor popover.",
+      "extractionState": "manual"
+    },
     "Tables": {
       "comment": "Defined as TextHeaderTable in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
+      "extractionState": "manual"
+    },
+    "Tap + in the file explorer (or click New Document on macOS) and choose a database driver. MAD reads the database schema and creates a new .mad document. Database credentials can be saved in your Keychain and are never stored inside the .mad file.": {
+      "comment": "About overview step 1 description.",
       "extractionState": "manual"
     },
     "Tap + in the file explorer and choose a database driver. MAD reads the database schema and creates a new .mad document. Database credentials can be saved in your Keychain and are never stored inside the .mad file.": {
       "comment": "Step 1 body",
       "extractionState": "manual"
     },
+    "Test Connection": {
+      "comment": "Connection window button that tests the settings.",
+      "extractionState": "manual"
+    },
     "Test Failed": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Testing database connection…": {
+      "comment": "Connection status line while the test runs.",
+      "extractionState": "manual"
+    },
+    "Text": {
+      "comment": "Inspector row label for the label text.",
       "extractionState": "manual"
     },
     "The ON condition's columns do not resolve.": {
@@ -2139,6 +3275,10 @@
       "comment": "Error when an export has no document.",
       "extractionState": "manual"
     },
+    "Third-Party Acknowledgements": {
+      "comment": "Help menu item that lists third-party components.",
+      "extractionState": "manual"
+    },
     "This application includes the following open source software:\n\n": {
       "comment": "Acknowledgements intro",
       "extractionState": "manual"
@@ -2153,6 +3293,10 @@
     },
     "Time Stamp": {
       "comment": "Number data type.",
+      "extractionState": "manual"
+    },
+    "TimesNewRomanPSMT": {
+      "comment": "Font family name. Technical; do not translate.",
       "extractionState": "manual"
     },
     "Toggles database field visibility.": {
@@ -2171,6 +3315,10 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Top Border (pt)": {
+      "comment": "Tooltip for the top border width field, in points.",
+      "extractionState": "manual"
+    },
     "Transaction Complete": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -2183,12 +3331,24 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "U": {
+      "comment": "Typography checkbox: underline. A one-letter style abbreviation; do not translate.",
+      "extractionState": "manual"
+    },
     "UNION has no place in the model: one document query holds one SELECT.": {
       "comment": "SQL statement validation message for a pasted statement.",
       "extractionState": "manual"
     },
     "URL is nil.": {
       "comment": "Error when a data-table file URL is missing.",
+      "extractionState": "manual"
+    },
+    "US Legal (8.5 × 14 in)": {
+      "comment": "Paper size name. Keep US Legal and the dimensions.",
+      "extractionState": "manual"
+    },
+    "US Letter (8.5 × 11 in)": {
+      "comment": "Paper size name. Keep US Letter and the dimensions.",
       "extractionState": "manual"
     },
     "Undefined": {
@@ -2215,6 +3375,14 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Unknown export format '%@'.": {
+      "comment": "Error: the export format identifier is not registered. %@ is the identifier.",
+      "extractionState": "manual"
+    },
+    "Update the data source location or server credentials for this report.": {
+      "comment": "Connection window subtitle when editing an existing connection.",
+      "extractionState": "manual"
+    },
     "Updated %@ ago.": {
       "comment": "Relative update time; %@ is the duration, e.g. two hours.",
       "extractionState": "manual",
@@ -2227,12 +3395,28 @@
         }
       }
     },
+    "Username:": {
+      "comment": "Connection form label for the database user name.",
+      "extractionState": "manual"
+    },
     "Username: ": {
       "comment": "Label before the username field.",
       "extractionState": "manual"
     },
+    "V-Align": {
+      "comment": "Inspector row label for vertical alignment.",
+      "extractionState": "manual"
+    },
+    "Valid SQL: %1$lu tables, %2$lu joins, %3$lu filters, %4$lu groups.": {
+      "comment": "SQL editor status after a successful validation. Four counts: tables, joins, filters, groupings.",
+      "extractionState": "manual"
+    },
     "Validate": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Validate SQL": {
+      "comment": "SQL toolbar button that checks the statement without applying it.",
       "extractionState": "manual"
     },
     "Validated by structure only.": {
@@ -2247,8 +3431,20 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Value": {
+      "comment": "Filter editor placeholder for the compared value.",
+      "extractionState": "manual"
+    },
     "Var Char": {
       "comment": "Number data type.",
+      "extractionState": "manual"
+    },
+    "Verify or update the connection settings, then click Save & Refresh.": {
+      "comment": "Connection window status prompt when editing an existing connection.",
+      "extractionState": "manual"
+    },
+    "Verifying database connection…": {
+      "comment": "Connection status line while saving the settings.",
       "extractionState": "manual"
     },
     "Vertical Alignment": {
@@ -2267,6 +3463,10 @@
       "comment": "Defined as MADTextVisible in MADDesigner/Source/MADDesignerSectionLayoutController.m.",
       "extractionState": "manual"
     },
+    "W / H (pt)": {
+      "comment": "Inspector row label for the size in points.",
+      "extractionState": "manual"
+    },
     "Warning: Invalid Option.": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -2283,6 +3483,10 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Window": {
+      "comment": "Window menu title.",
+      "extractionState": "manual"
+    },
     "Workflow": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -2297,6 +3501,14 @@
     },
     "Would you like to save your password?": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "X / Y (pt)": {
+      "comment": "Inspector row label for the position in points.",
+      "extractionState": "manual"
+    },
+    "Y:": {
+      "comment": "Inspector label for the vertical position in points.",
       "extractionState": "manual"
     },
     "Year": {
@@ -2319,8 +3531,32 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents.": {
+      "comment": "iCloud sign-out alert body. iCloud is a brand.",
+      "extractionState": "manual"
+    },
+    "Zoom": {
+      "comment": "Window menu item that zooms the window.",
+      "extractionState": "manual"
+    },
+    "Zoom In": {
+      "comment": "Accessibility description for the zoom-in icon.",
+      "extractionState": "manual"
+    },
+    "Zoom Out": {
+      "comment": "Accessibility description for the zoom-out icon.",
+      "extractionState": "manual"
+    },
+    "[Data Field]": {
+      "comment": "Canvas placeholder text for a newly inserted data field.",
+      "extractionState": "manual"
+    },
     "`*` names every column; name them, or use `alias.*`.": {
       "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "e.g. Chinook, Northwind, postgres": {
+      "comment": "Example database names. The names are sample databases; keep them as they are.",
       "extractionState": "manual"
     },
     "iCloud": {
@@ -2353,6 +3589,22 @@
     },
     "v%@": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "• PDF Document (.pdf), HTML Page (.html), HTML Flow (.html), CSV Spreadsheet (.csv), JSON Data (.json), JSON Full Report (.json), and Plain Text (.txt).": {
+      "comment": "About overview list of export formats. Format names and file extensions are not translated.",
+      "extractionState": "manual"
+    },
+    "• Parametric Bands: Report Header, Page Header, Group Header(s), Report Detail, Group Footer(s), Page Footer, and Report Footer.\n• Elements: Static Labels, Bound Data Fields, Group & Report Aggregates (SUM, COUNT, AVG, MIN, MAX, STDDEV, VARIANCE), Barcodes (powered by zint), Images, and Lines.": {
+      "comment": "About overview list of report sections and element types. Keep the SQL aggregate names (SUM, COUNT, …) as they are.",
+      "extractionState": "manual"
+    },
+    "• SQLite 3 (local .sqlite3 / .db files and embedded row caching)\n• MySQL & MariaDB (via MariaDB Connector/C over TLS)\n• Microsoft SQL Server (via FreeTDS over TDS / TLS)\n• PostgreSQL (via PostgreSQL libpq)": {
+      "comment": "About overview list of database drivers. Product and library names are brands; do not translate them.",
+      "extractionState": "manual"
+    },
+    "⇄ Swap Direction": {
+      "comment": "Join editor button that swaps the left and right tables. Keep the arrow glyph.",
       "extractionState": "manual"
     }
   },
