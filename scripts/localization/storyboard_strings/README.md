@@ -44,5 +44,25 @@ The keys are Interface Builder object IDs (`"5gw-CY-Adb.text"`). They are
 stable as long as the storyboard object IDs are not regenerated, so do not
 recreate a storyboard from scratch after its translations exist.
 
+## The shipped languages
+
+The five translated languages (`de`, `es`, `ja`, `pt-BR`, `zh-Hans`) carry a
+file for every resource that has at least one translatable entry: the 16 app
+storyboards and xibs that do, the three driver `MADCreateDocument` storyboards,
+and no file where every entry is marked do-not-translate. The translations are
+machine-assisted and unreviewed (D14); each generated file's header points at
+the issue tracker.
+
+The exporter's `DO NOT TRANSLATE` comment is the first layer. The translation
+pass applied a second, explicit exclusion for names the exporter cannot know:
+barcode symbologies such as `QR Code` and `PDF417`, the font families it does
+not list, and numeric sample values. It also omitted any entry the catalog
+marks `shouldTranslate: false`, and reused the catalog translation for a label
+that is also an app string, so the two stay consistent.
+
+`scripts/localization/check_translations.py` checks every translated storyboard
+entry against this template: it rejects an unknown object ID, an empty value,
+and a changed format specifier. CI runs it beside the audit and catalog checks.
+
 `MADDesigner/Resources/Storyboard/de.lproj/MADQuery.strings` is the first
-worked example: two German entries, everything else left to the Base value.
+worked example; its German values were later folded into the full set.
