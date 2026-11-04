@@ -1,0 +1,85 @@
+/*
+  MADDesignerToolbox.strings — Simplified Chinese translation of MADDesigner/Storyboard/MADDesignerToolbox.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "Bottom"; ObjectID = "8KX-xI-5eR"; */
+"8KX-xI-5eR.text" = "底部";
+
+/* Class = "UILabel"; text = "Top"; ObjectID = "9rW-0M-JUU"; */
+"9rW-0M-JUU.text" = "顶部";
+
+/* Class = "UILabel"; text = "Right"; ObjectID = "AHY-f3-C29"; */
+"AHY-f3-C29.text" = "右";
+
+/* Class = "UILabel"; text = "Size"; ObjectID = "C3C-gS-Vco"; */
+"C3C-gS-Vco.text" = "尺寸";
+
+/* Class = "UILabel"; text = "Currency Local"; ObjectID = "DDR-qy-KoC"; */
+"DDR-qy-KoC.text" = "货币区域";
+
+/* Class = "UILabel"; text = "Currency"; ObjectID = "Knw-Oy-RqO"; */
+"Knw-Oy-RqO.text" = "货币";
+
+/* Class = "UILabel"; text = "Left"; ObjectID = "KyK-Pp-3lM"; */
+"KyK-Pp-3lM.text" = "左";
+
+/* Class = "UILabel"; text = "Font Name"; ObjectID = "LGd-yZ-pnR"; */
+"LGd-yZ-pnR.text" = "字体名称";
+
+/* Class = "UILabel"; text = "Left"; ObjectID = "LV4-td-6U2"; */
+"LV4-td-6U2.text" = "左";
+
+/* Class = "UILabel"; text = "Top"; ObjectID = "Lov-Dc-2te"; */
+"Lov-Dc-2te.text" = "顶部";
+
+/* Class = "UILabel"; text = "Margin"; ObjectID = "UVi-Q6-MQZ"; */
+"UVi-Q6-MQZ.text" = "外边距";
+
+/* Class = "UILabel"; text = "Left"; ObjectID = "XP6-B5-9Ai"; */
+"XP6-B5-9Ai.text" = "左";
+
+/* Class = "UILabel"; text = "Padding"; ObjectID = "ac2-MK-MkW"; */
+"ac2-MK-MkW.text" = "内边距";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "acg-cx-hN0"; */
+"acg-cx-hN0.text" = "标签";
+
+/* Class = "UILabel"; text = "Border"; ObjectID = "aoj-Ql-fjp"; */
+"aoj-Ql-fjp.text" = "边框";
+
+/* Class = "UISegmentedControl"; eJs-Au-RN1.segmentTitles[0] = "Style"; ObjectID = "eJs-Au-RN1"; */
+"eJs-Au-RN1.segmentTitles[0]" = "样式";
+
+/* Class = "UISegmentedControl"; eJs-Au-RN1.segmentTitles[1] = "Layout"; ObjectID = "eJs-Au-RN1"; */
+"eJs-Au-RN1.segmentTitles[1]" = "布局";
+
+/* Class = "UISegmentedControl"; eJs-Au-RN1.segmentTitles[2] = "Format"; ObjectID = "eJs-Au-RN1"; */
+"eJs-Au-RN1.segmentTitles[2]" = "格式";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "eKb-JZ-AYv"; */
+"eKb-JZ-AYv.text" = "标签";
+
+/* Class = "UITableViewSection"; headerTitle = "Numeric"; ObjectID = "f0v-QC-Cq8"; */
+"f0v-QC-Cq8.headerTitle" = "数值";
+
+/* Class = "UILabel"; text = "Right"; ObjectID = "mQl-kW-Cqc"; */
+"mQl-kW-Cqc.text" = "右";
+
+/* Class = "UILabel"; text = "Font Size"; ObjectID = "nJS-5c-syx"; */
+"nJS-5c-syx.text" = "字体大小";
+
+/* Class = "UILabel"; text = "Bottom"; ObjectID = "qhd-YZ-sEJ"; */
+"qhd-YZ-sEJ.text" = "底部";
+
+/* Class = "UILabel"; text = "Bottom"; ObjectID = "shV-Fk-flU"; */
+"shV-Fk-flU.text" = "底部";
+
+/* Class = "UILabel"; text = "Decimals"; ObjectID = "tA5-5B-Mmf"; */
+"tA5-5B-Mmf.text" = "小数位数";
+
+/* Class = "UILabel"; text = "Top"; ObjectID = "w6s-kc-U1q"; */
+"w6s-kc-U1q.text" = "顶部";
+
+/* Class = "UILabel"; text = "Right"; ObjectID = "y6k-SA-Fsm"; */
+"y6k-SA-Fsm.text" = "右";

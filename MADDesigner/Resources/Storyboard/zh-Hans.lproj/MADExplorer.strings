@@ -1,0 +1,13 @@
+/*
+  MADExplorer.strings — Simplified Chinese translation of MADDesigner/Storyboard/MADExplorer.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UIBarButtonItem"; title = "Information"; ObjectID = "6Un-o8-5Jw"; */
+"6Un-o8-5Jw.title" = "信息";
+
+/* Class = "UIBarButtonItem"; title = "About"; ObjectID = "G1q-mJ-H8h"; */
+"G1q-mJ-H8h.title" = "关于";
+
+/* Class = "UIBarButtonItem"; title = "Store"; ObjectID = "JzB-Jd-m01"; */
+"JzB-Jd-m01.title" = "商店";

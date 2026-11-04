@@ -1,0 +1,10 @@
+/*
+  MADCreateDocument.strings — Simplified Chinese translation of MADDesigner/Storyboard/MADCreateDocument.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UINavigationItem"; prompt = "Choose a datasource."; ObjectID = "lQ4-vV-jEi"; */
+"lQ4-vV-jEi.prompt" = "选择数据源。";
+
+/* Class = "UINavigationItem"; title = "New Report"; ObjectID = "lQ4-vV-jEi"; */
+"lQ4-vV-jEi.title" = "新建报表";

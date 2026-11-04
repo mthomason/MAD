@@ -1,0 +1,85 @@
+/*
+  MADDesignerToolbox.strings — Brazilian Portuguese translation of MADDesigner/Storyboard/MADDesignerToolbox.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "Bottom"; ObjectID = "8KX-xI-5eR"; */
+"8KX-xI-5eR.text" = "Inferior";
+
+/* Class = "UILabel"; text = "Top"; ObjectID = "9rW-0M-JUU"; */
+"9rW-0M-JUU.text" = "Superior";
+
+/* Class = "UILabel"; text = "Right"; ObjectID = "AHY-f3-C29"; */
+"AHY-f3-C29.text" = "Direita";
+
+/* Class = "UILabel"; text = "Size"; ObjectID = "C3C-gS-Vco"; */
+"C3C-gS-Vco.text" = "Tamanho";
+
+/* Class = "UILabel"; text = "Currency Local"; ObjectID = "DDR-qy-KoC"; */
+"DDR-qy-KoC.text" = "Moeda local";
+
+/* Class = "UILabel"; text = "Currency"; ObjectID = "Knw-Oy-RqO"; */
+"Knw-Oy-RqO.text" = "Moeda";
+
+/* Class = "UILabel"; text = "Left"; ObjectID = "KyK-Pp-3lM"; */
+"KyK-Pp-3lM.text" = "Esquerda";
+
+/* Class = "UILabel"; text = "Font Name"; ObjectID = "LGd-yZ-pnR"; */
+"LGd-yZ-pnR.text" = "Nome da fonte";
+
+/* Class = "UILabel"; text = "Left"; ObjectID = "LV4-td-6U2"; */
+"LV4-td-6U2.text" = "Esquerda";
+
+/* Class = "UILabel"; text = "Top"; ObjectID = "Lov-Dc-2te"; */
+"Lov-Dc-2te.text" = "Superior";
+
+/* Class = "UILabel"; text = "Margin"; ObjectID = "UVi-Q6-MQZ"; */
+"UVi-Q6-MQZ.text" = "Margem";
+
+/* Class = "UILabel"; text = "Left"; ObjectID = "XP6-B5-9Ai"; */
+"XP6-B5-9Ai.text" = "Esquerda";
+
+/* Class = "UILabel"; text = "Padding"; ObjectID = "ac2-MK-MkW"; */
+"ac2-MK-MkW.text" = "Preenchimento";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "acg-cx-hN0"; */
+"acg-cx-hN0.text" = "Rótulo";
+
+/* Class = "UILabel"; text = "Border"; ObjectID = "aoj-Ql-fjp"; */
+"aoj-Ql-fjp.text" = "Borda";
+
+/* Class = "UISegmentedControl"; eJs-Au-RN1.segmentTitles[0] = "Style"; ObjectID = "eJs-Au-RN1"; */
+"eJs-Au-RN1.segmentTitles[0]" = "Estilo";
+
+/* Class = "UISegmentedControl"; eJs-Au-RN1.segmentTitles[1] = "Layout"; ObjectID = "eJs-Au-RN1"; */
+"eJs-Au-RN1.segmentTitles[1]" = "Layout";
+
+/* Class = "UISegmentedControl"; eJs-Au-RN1.segmentTitles[2] = "Format"; ObjectID = "eJs-Au-RN1"; */
+"eJs-Au-RN1.segmentTitles[2]" = "Formatar";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "eKb-JZ-AYv"; */
+"eKb-JZ-AYv.text" = "Rótulo";
+
+/* Class = "UITableViewSection"; headerTitle = "Numeric"; ObjectID = "f0v-QC-Cq8"; */
+"f0v-QC-Cq8.headerTitle" = "Numérico";
+
+/* Class = "UILabel"; text = "Right"; ObjectID = "mQl-kW-Cqc"; */
+"mQl-kW-Cqc.text" = "Direita";
+
+/* Class = "UILabel"; text = "Font Size"; ObjectID = "nJS-5c-syx"; */
+"nJS-5c-syx.text" = "Tamanho da Fonte";
+
+/* Class = "UILabel"; text = "Bottom"; ObjectID = "qhd-YZ-sEJ"; */
+"qhd-YZ-sEJ.text" = "Inferior";
+
+/* Class = "UILabel"; text = "Bottom"; ObjectID = "shV-Fk-flU"; */
+"shV-Fk-flU.text" = "Inferior";
+
+/* Class = "UILabel"; text = "Decimals"; ObjectID = "tA5-5B-Mmf"; */
+"tA5-5B-Mmf.text" = "Casas Decimais";
+
+/* Class = "UILabel"; text = "Top"; ObjectID = "w6s-kc-U1q"; */
+"w6s-kc-U1q.text" = "Superior";
+
+/* Class = "UILabel"; text = "Right"; ObjectID = "y6k-SA-Fsm"; */
+"y6k-SA-Fsm.text" = "Direita";

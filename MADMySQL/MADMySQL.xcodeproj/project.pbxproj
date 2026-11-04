@@ -93,6 +93,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2117335009027CF4D0766B42 /* es */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/MADCreateDocument.strings; sourceTree = "<group>"; };
 		4C00A3731F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADDatabaseConnectionMySql.h; sourceTree = "<group>"; };
 		4C00A3741F5934AD00F6A6C1 /* MADDatabaseConnectionMySql.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADDatabaseConnectionMySql.m; sourceTree = "<group>"; };
 		4C00A3751F5934AD00F6A6C1 /* MADMySQLFetchProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMySQLFetchProtocol.h; sourceTree = "<group>"; };
@@ -158,6 +159,10 @@
 		4CDA7B0600000000000000B4 /* zlib.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = zlib.xcframework; path = ../Compressor/library/zlib.xcframework; sourceTree = "<group>"; };
 		4CDCEF251D8D859A00A5A32E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		4CE4DE142E92EB430093BEBC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		5F1B8D9FEE4EAFFC8FBF14BE /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MADCreateDocument.strings"; sourceTree = "<group>"; };
+		6BD608C533BC0BAE4584FED8 /* ja */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/MADCreateDocument.strings; sourceTree = "<group>"; };
+		7D97FD0D3A7914E1941C0CE8 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MADCreateDocument.strings; sourceTree = "<group>"; };
+		FD951FEF2950980E4DB08435 /* pt-BR */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/MADCreateDocument.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -401,6 +406,11 @@
 				English,
 				en,
 				Base,
+				de,
+				es,
+				ja,
+				"pt-BR",
+				"zh-Hans",
 			);
 			mainGroup = 4C70148A1BACDC6800301713;
 			productRefGroup = 4C7014951BACDC6800301713 /* Products */;
@@ -531,6 +541,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				4C1C0C200000000000000001 /* Base */,
+				7D97FD0D3A7914E1941C0CE8 /* de */,
+				2117335009027CF4D0766B42 /* es */,
+				6BD608C533BC0BAE4584FED8 /* ja */,
+				FD951FEF2950980E4DB08435 /* pt-BR */,
+				5F1B8D9FEE4EAFFC8FBF14BE /* zh-Hans */,
 			);
 			name = MADCreateDocument.storyboard;
 			sourceTree = "<group>";

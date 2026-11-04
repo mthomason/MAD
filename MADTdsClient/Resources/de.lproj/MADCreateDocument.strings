@@ -1,0 +1,28 @@
+/*
+  MADCreateDocument.strings — German translation of MADTdsClient/MADCreateDocument.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "Schema"; ObjectID = "1rg-dK-NrM"; */
+"1rg-dK-NrM.text" = "Schema";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "6L0-3n-H0b"; */
+"6L0-3n-H0b.text" = "Name";
+
+/* Class = "UITextField"; text = "Document"; ObjectID = "Hla-vG-6Br"; */
+"Hla-vG-6Br.text" = "Dokument";
+
+/* Class = "UILabel"; text = "Port"; ObjectID = "LVz-ct-FGs"; */
+"LVz-ct-FGs.text" = "Port";
+
+/* Class = "UITableViewSection"; headerTitle = "Document Settings"; ObjectID = "LmX-El-ITf"; */
+"LmX-El-ITf.headerTitle" = "Dokumenteinstellungen";
+
+/* Class = "UINavigationItem"; title = "Connection Setup"; ObjectID = "NDP-yE-RF0"; */
+"NDP-yE-RF0.title" = "Verbindungseinrichtung";
+
+/* Class = "UILabel"; text = "Host"; ObjectID = "arP-8e-rkb"; */
+"arP-8e-rkb.text" = "Host";
+
+/* Class = "UITableViewSection"; headerTitle = "Database Settings"; ObjectID = "cO6-fm-mQE"; */
+"cO6-fm-mQE.headerTitle" = "Datenbankeinstellungen";

@@ -1,0 +1,226 @@
+/*
+  MADBarcodeDesigner.strings — German translation of MADDesigner/Storyboard/MADBarcodeDesigner.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "Standard"; ObjectID = "0vg-PG-xCC"; */
+"0vg-PG-xCC.text" = "Standard";
+
+/* Class = "UINavigationItem"; title = "Minimum Error Correction"; ObjectID = "3tw-1e-Dap"; */
+"3tw-1e-Dap.title" = "Minimale Fehlerkorrektur";
+
+/* Class = "UILabel"; text = "Automatic"; ObjectID = "449-6e-vlv"; */
+"449-6e-vlv.text" = "Automatisch";
+
+/* Class = "UILabel"; text = "Automatic"; ObjectID = "4mf-qJ-mCj"; */
+"4mf-qJ-mCj.text" = "Automatisch";
+
+/* Class = "UILabel"; text = "Datasource"; ObjectID = "7rE-yY-lgW"; */
+"7rE-yY-lgW.text" = "Datenquelle";
+
+/* Class = "UILabel"; text = "Error Correction Capacity"; ObjectID = "AAE-z2-MfF"; */
+"AAE-z2-MfF.text" = "Fehlerkorrekturkapazität";
+
+/* Class = "UILabel"; text = "Automatic"; ObjectID = "ASp-LM-OfM"; */
+"ASp-LM-OfM.text" = "Automatisch";
+
+/* Class = "UILabel"; text = "Type"; ObjectID = "AXo-Me-kcW"; */
+"AXo-Me-kcW.text" = "Typ";
+
+/* Class = "UILabel"; text = "Near"; ObjectID = "BRd-v9-aAt"; */
+"BRd-v9-aAt.text" = "Nah";
+
+/* Class = "UINavigationItem"; title = "Size"; ObjectID = "BjP-cK-gTX"; */
+"BjP-cK-gTX.title" = "Größe";
+
+/* Class = "UILabel"; text = "Symbol height"; ObjectID = "CAe-jb-b1K"; */
+"CAe-jb-b1K.text" = "Symbolhöhe";
+
+/* Class = "UILabel"; text = "Add error correction"; ObjectID = "Cg0-49-SDW"; */
+"Cg0-49-SDW.text" = "Fehlerkorrektur hinzufügen";
+
+/* Class = "UILabel"; text = "Format"; ObjectID = "DMs-uM-bfQ"; */
+"DMs-uM-bfQ.text" = "Formatieren";
+
+/* Class = "UINavigationItem"; title = "Select Field"; ObjectID = "F1H-4M-61t"; */
+"F1H-4M-61t.title" = "Feld auswählen";
+
+/* Class = "UILabel"; text = "No border"; ObjectID = "H0s-85-FR1"; */
+"H0s-85-FR1.text" = "Kein Rahmen";
+
+/* Class = "UILabel"; text = "Automatic"; ObjectID = "HYC-uJ-SIz"; */
+"HYC-uJ-SIz.text" = "Automatisch";
+
+/* Class = "UINavigationItem"; title = "Minimum Error Correction"; ObjectID = "J1K-Ye-5uF"; */
+"J1K-Ye-5uF.title" = "Minimale Fehlerkorrektur";
+
+/* Class = "UILabel"; text = "Add error correction"; ObjectID = "J9Q-Al-Jye"; */
+"J9Q-Al-Jye.text" = "Fehlerkorrektur hinzufügen";
+
+/* Class = "UILabel"; text = "Show error messages"; ObjectID = "JFZ-aF-28h"; */
+"JFZ-aF-28h.text" = "Fehlermeldungen anzeigen";
+
+/* Class = "UITableViewSection"; headerTitle = "Number of Data Columns"; ObjectID = "KCk-VE-DsC"; */
+"KCk-VE-DsC.headerTitle" = "Anzahl der Datenspalten";
+
+/* Class = "UINavigationItem"; title = "Format"; ObjectID = "Lcg-UI-twl"; */
+"Lcg-UI-twl.title" = "Formatieren";
+
+/* Class = "UILabel"; text = "Automatic"; ObjectID = "NcK-4Z-M8S"; */
+"NcK-4Z-M8S.text" = "Automatisch";
+
+/* Class = "UILabel"; text = "Show human readable text"; ObjectID = "OEJ-AG-Zw4"; */
+"OEJ-AG-Zw4.text" = "Lesbaren Text anzeigen";
+
+/* Class = "UILabel"; text = "Adjust to size"; ObjectID = "OJk-Fe-qZq"; */
+"OJk-Fe-qZq.text" = "An Größe anpassen";
+
+/* Class = "UILabel"; text = "Foreground color"; ObjectID = "OKP-CT-mtg"; */
+"OKP-CT-mtg.text" = "Vordergrundfarbe";
+
+/* Class = "UITableViewSection"; headerTitle = "Specific size"; ObjectID = "Osc-xj-JlQ"; */
+"Osc-xj-JlQ.headerTitle" = "Bestimmte Größe";
+
+/* Class = "UILabel"; text = "Automatic"; ObjectID = "PHj-Ux-Gwd"; */
+"PHj-Ux-Gwd.text" = "Automatisch";
+
+/* Class = "UITableViewSection"; headerTitle = "Primary Data"; ObjectID = "Phy-4t-5sn"; */
+"Phy-4t-5sn.headerTitle" = "Primärdaten";
+
+/* Class = "UINavigationItem"; title = "Barcode Type"; ObjectID = "QQk-AH-gJA"; */
+"QQk-AH-gJA.title" = "Barcode-Typ";
+
+/* Class = "UILabel"; text = "Truncated"; ObjectID = "R5F-tq-ama"; */
+"R5F-tq-ama.text" = "Abgeschnitten";
+
+/* Class = "UILabel"; text = "Suppress Rectangular Symbols in Automatic Mode"; ObjectID = "RFu-13-Z8t"; */
+"RFu-13-Z8t.text" = "Rechteckige Symbole im automatischen Modus unterdrücken";
+
+/* Class = "UITableViewSection"; headerTitle = "Number of Data Columns"; ObjectID = "UKY-hr-khm"; */
+"UKY-hr-khm.headerTitle" = "Anzahl der Datenspalten";
+
+/* Class = "UILabel"; text = "Automatic resizing"; ObjectID = "VFw-dN-RVt"; */
+"VFw-dN-RVt.text" = "Automatische Größenanpassung";
+
+/* Class = "UILabel"; text = "Automatic resizing"; ObjectID = "VG6-02-8we"; */
+"VG6-02-8we.text" = "Automatische Größenanpassung";
+
+/* Class = "UITableViewSection"; headerTitle = "Check Digit"; ObjectID = "WAZ-Wt-mlB"; */
+"WAZ-Wt-mlB.headerTitle" = "Prüfziffer";
+
+/* Class = "UILabel"; text = "Automatic resizing"; ObjectID = "WAc-qN-cPD"; */
+"WAc-qN-cPD.text" = "Automatische Größenanpassung";
+
+/* Class = "UILabel"; text = "Width"; ObjectID = "Wah-0t-wp3"; */
+"Wah-0t-wp3.text" = "Breite";
+
+/* Class = "UILabel"; text = "Primary Data"; ObjectID = "XT9-FS-bGi"; */
+"XT9-FS-bGi.text" = "Primärdaten";
+
+/* Class = "UILabel"; text = "None"; ObjectID = "Y6M-ad-dZE"; */
+"Y6M-ad-dZE.text" = "Keine";
+
+/* Class = "UINavigationItem"; title = "Minimum Error Correction"; ObjectID = "YNh-Q1-gg0"; */
+"YNh-Q1-gg0.title" = "Minimale Fehlerkorrektur";
+
+/* Class = "UILabel"; text = "Second Component"; ObjectID = "YbX-lS-IvW"; */
+"YbX-lS-IvW.text" = "Zweite Komponente";
+
+/* Class = "UILabel"; text = "Adjust to size"; ObjectID = "Ywu-Lb-NiH"; */
+"Ywu-Lb-NiH.text" = "An Größe anpassen";
+
+/* Class = "UILabel"; text = "Standard"; ObjectID = "apc-3f-9fb"; */
+"apc-3f-9fb.text" = "Standard";
+
+/* Class = "UITableViewSection"; headerTitle = "Specific size"; ObjectID = "bLu-Xv-7Tc"; */
+"bLu-Xv-7Tc.headerTitle" = "Bestimmte Größe";
+
+/* Class = "UITableViewSection"; headerTitle = "Size"; ObjectID = "c2d-eH-s0B"; */
+"c2d-eH-s0B.headerTitle" = "Größe";
+
+/* Class = "UITableViewSection"; headerTitle = "Number of Channels"; ObjectID = "cXS-yg-UJg"; */
+"cXS-yg-UJg.headerTitle" = "Anzahl der Kanäle";
+
+/* Class = "UINavigationItem"; title = "Number of Data Columns"; ObjectID = "eU5-Wd-crb"; */
+"eU5-Wd-crb.title" = "Anzahl der Datenspalten";
+
+/* Class = "UILabel"; text = "Automatic"; ObjectID = "eYG-r9-YfP"; */
+"eYG-r9-YfP.text" = "Automatisch";
+
+/* Class = "UILabel"; text = "Border"; ObjectID = "epq-VI-XLD"; */
+"epq-VI-XLD.text" = "Rahmen";
+
+/* Class = "UILabel"; text = "Type"; ObjectID = "gXu-yw-xyL"; */
+"gXu-yw-xyL.text" = "Typ";
+
+/* Class = "UILabel"; text = "Barcode type details"; ObjectID = "hwJ-PK-DQB"; */
+"hwJ-PK-DQB.text" = "Details zum Barcode-Typ";
+
+/* Class = "UINavigationItem"; title = "Select Field"; ObjectID = "hwa-O6-aEZ"; */
+"hwa-O6-aEZ.title" = "Feld auswählen";
+
+/* Class = "UITableViewSection"; headerTitle = "Symbol Size"; ObjectID = "j5A-Lx-bMo"; */
+"j5A-Lx-bMo.headerTitle" = "Symbolgröße";
+
+/* Class = "UILabel"; text = "Field"; ObjectID = "jbY-w9-u2t"; */
+"jbY-w9-u2t.text" = "Feld";
+
+/* Class = "UINavigationItem"; title = "Type"; ObjectID = "lNa-8l-TK3"; */
+"lNa-8l-TK3.title" = "Typ";
+
+/* Class = "UINavigationItem"; title = "Error Correction Capacity"; ObjectID = "mfL-IO-DHp"; */
+"mfL-IO-DHp.title" = "Fehlerkorrekturkapazität";
+
+/* Class = "UILabel"; text = "Add error correction"; ObjectID = "nrf-Jb-91q"; */
+"nrf-Jb-91q.text" = "Fehlerkorrektur hinzufügen";
+
+/* Class = "UINavigationItem"; title = "Error Correction"; ObjectID = "oGE-NY-h6d"; */
+"oGE-NY-h6d.title" = "Fehlerkorrektur";
+
+/* Class = "UINavigationItem"; title = "Select Field"; ObjectID = "ogJ-gN-r2E"; */
+"ogJ-gN-r2E.title" = "Feld auswählen";
+
+/* Class = "UINavigationItem"; title = "Barcode Designer"; ObjectID = "qE6-Yb-GcH"; */
+"qE6-Yb-GcH.title" = "Barcode-Designer";
+
+/* Class = "UILabel"; text = "Background color"; ObjectID = "rS8-Ko-vlP"; */
+"rS8-Ko-vlP.text" = "Hintergrundfarbe";
+
+/* Class = "UITableViewSection"; headerTitle = "Specific size"; ObjectID = "sNy-tq-WJl"; */
+"sNy-tq-WJl.headerTitle" = "Bestimmte Größe";
+
+/* Class = "UITableViewSection"; headerTitle = "Specific size"; ObjectID = "spY-MF-TkQ"; */
+"spY-MF-TkQ.headerTitle" = "Bestimmte Größe";
+
+/* Class = "UILabel"; text = "Adjust to size"; ObjectID = "tC2-pv-vgr"; */
+"tC2-pv-vgr.text" = "An Größe anpassen";
+
+/* Class = "UINavigationItem"; title = "Size"; ObjectID = "uDs-39-jfS"; */
+"uDs-39-jfS.title" = "Größe";
+
+/* Class = "UILabel"; text = "Adjust to size"; ObjectID = "vPb-s9-id9"; */
+"vPb-s9-id9.text" = "An Größe anpassen";
+
+/* Class = "UILabel"; text = "Add minimum error correction"; ObjectID = "w0g-rt-R7V"; */
+"w0g-rt-R7V.text" = "Minimale Fehlerkorrektur hinzufügen";
+
+/* Class = "UILabel"; text = "Automatic resizing"; ObjectID = "wDS-pX-BVh"; */
+"wDS-pX-BVh.text" = "Automatische Größenanpassung";
+
+/* Class = "UITableViewSection"; headerTitle = "Specific size"; ObjectID = "yKZ-6v-iqz"; */
+"yKZ-6v-iqz.headerTitle" = "Bestimmte Größe";
+
+/* Class = "UINavigationItem"; title = "Size"; ObjectID = "ygK-2i-lXU"; */
+"ygK-2i-lXU.title" = "Größe";
+
+/* Class = "UINavigationItem"; title = "Size"; ObjectID = "ywV-E4-tvD"; */
+"ywV-E4-tvD.title" = "Größe";
+
+/* Class = "UILabel"; text = "Barcode Type"; ObjectID = "yyU-bl-MFi"; */
+"yyU-bl-MFi.text" = "Barcode-Typ";
+
+/* Class = "UITableViewSection"; headerTitle = "Encoding Mode"; ObjectID = "z88-NH-9V2"; */
+"z88-NH-9V2.headerTitle" = "Kodierungsmodus";
+
+/* Class = "UILabel"; text = "Number of Data Columns"; ObjectID = "zng-2F-GOJ"; */
+"zng-2F-GOJ.text" = "Anzahl der Datenspalten";

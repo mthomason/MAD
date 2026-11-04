@@ -1,0 +1,58 @@
+/*
+  MADQueryAddPredicate.strings — Brazilian Portuguese translation of MADDesigner/Storyboard/MADQueryAddPredicate.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "required"; ObjectID = "1r0-M1-76V"; */
+"1r0-M1-76V.text" = "obrigatório";
+
+/* Class = "UILabel"; text = "Value"; ObjectID = "6RV-hn-BRT"; */
+"6RV-hn-BRT.text" = "Valor";
+
+/* Class = "UILabel"; text = "required"; ObjectID = "7gC-xK-GMA"; */
+"7gC-xK-GMA.text" = "obrigatório";
+
+/* Class = "UINavigationItem"; title = "Add Predicate"; ObjectID = "8Ma-0r-tth"; */
+"8Ma-0r-tth.title" = "Adicionar Predicado";
+
+/* Class = "UILabel"; text = "Field-Operator-Value"; ObjectID = "AAZ-37-Wdb"; */
+"AAZ-37-Wdb.text" = "Campo-operador-valor";
+
+/* Class = "UILabel"; text = "required"; ObjectID = "Awf-Q1-ICu"; */
+"Awf-Q1-ICu.text" = "obrigatório";
+
+/* Class = "UITextField"; placeholder = "Enter Text to Display"; ObjectID = "LCf-g6-1kA"; */
+"LCf-g6-1kA.placeholder" = "Digite o texto a exibir";
+
+/* Class = "UILabel"; text = "Field"; ObjectID = "RUC-ql-ovx"; */
+"RUC-ql-ovx.text" = "Campo";
+
+/* Class = "UILabel"; text = "required"; ObjectID = "Ycr-T4-DxU"; */
+"Ycr-T4-DxU.text" = "obrigatório";
+
+/* Class = "UILabel"; text = "required"; ObjectID = "ZWC-AT-lTp"; */
+"ZWC-AT-lTp.text" = "obrigatório";
+
+/* Class = "UILabel"; text = "Operator"; ObjectID = "b1Y-EW-oYc"; */
+"b1Y-EW-oYc.text" = "Operador";
+
+/* Class = "UILabel"; text = "Operator"; ObjectID = "bo0-it-CNq"; */
+"bo0-it-CNq.text" = "Operador";
+
+/* Class = "UILabel"; text = "Field"; ObjectID = "dSb-t1-tjO"; */
+"dSb-t1-tjO.text" = "Campo";
+
+/* Class = "UINavigationItem"; title = "Add Predicate"; ObjectID = "eIf-17-svD"; */
+"eIf-17-svD.title" = "Adicionar Predicado";
+
+/* Class = "UINavigationItem"; title = "Predicate Format"; ObjectID = "pJs-GH-7lq"; */
+"pJs-GH-7lq.title" = "Formato do Predicado";
+
+/* Class = "UILabel"; text = "Field-Operator-Field"; ObjectID = "vi5-qk-Qd0"; */
+"vi5-qk-Qd0.text" = "Campo-operador-campo";
+
+/* Class = "UILabel"; text = "required"; ObjectID = "wYd-FB-Wac"; */
+"wYd-FB-Wac.text" = "obrigatório";
+
+/* Class = "UILabel"; text = "Field"; ObjectID = "zWU-f5-11P"; */
+"zWU-f5-11P.text" = "Campo";

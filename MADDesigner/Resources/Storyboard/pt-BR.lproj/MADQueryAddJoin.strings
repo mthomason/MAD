@@ -1,0 +1,43 @@
+/*
+  MADQueryAddJoin.strings — Brazilian Portuguese translation of MADDesigner/Storyboard/MADQueryAddJoin.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "Left Field"; ObjectID = "03H-0V-n10"; */
+"03H-0V-n10.text" = "Campo esquerdo";
+
+/* Class = "UILabel"; text = "Join Type"; ObjectID = "0sR-bu-3wQ"; */
+"0sR-bu-3wQ.text" = "Tipo de junção";
+
+/* Class = "UILabel"; text = "required"; ObjectID = "5X8-kN-DN1"; */
+"5X8-kN-DN1.text" = "obrigatório";
+
+/* Class = "UILabel"; text = "Left Outer Join"; ObjectID = "May-ug-2Id"; */
+"May-ug-2Id.text" = "Junção externa esquerda";
+
+/* Class = "UILabel"; text = "Right Field"; ObjectID = "O0a-tI-Smu"; */
+"O0a-tI-Smu.text" = "Campo direito";
+
+/* Class = "UILabel"; text = "Equi-Join"; ObjectID = "XQP-1Z-YYE"; */
+"XQP-1Z-YYE.text" = "Equijunção";
+
+/* Class = "UILabel"; text = "Cross Join"; ObjectID = "XUp-F6-3Vv"; */
+"XUp-F6-3Vv.text" = "Junção cruzada";
+
+/* Class = "UILabel"; text = "Full Outer Join"; ObjectID = "bE4-rF-xyk"; */
+"bE4-rF-xyk.text" = "Junção externa completa";
+
+/* Class = "UILabel"; text = "Right Outer Join"; ObjectID = "hrP-Lh-hLK"; */
+"hrP-Lh-hLK.text" = "Junção externa direita";
+
+/* Class = "UILabel"; text = "required"; ObjectID = "w1a-4c-yw8"; */
+"w1a-4c-yw8.text" = "obrigatório";
+
+/* Class = "UINavigationItem"; title = "Select Join Type"; ObjectID = "xvK-mw-QOs"; */
+"xvK-mw-QOs.title" = "Selecionar tipo de junção";
+
+/* Class = "UILabel"; text = "Inner-Join"; ObjectID = "y1r-ex-R2J"; */
+"y1r-ex-R2J.text" = "Junção interna";
+
+/* Class = "UINavigationItem"; title = "Link Builder"; ObjectID = "zSH-nd-zCJ"; */
+"zSH-nd-zCJ.title" = "Construtor de vínculos";

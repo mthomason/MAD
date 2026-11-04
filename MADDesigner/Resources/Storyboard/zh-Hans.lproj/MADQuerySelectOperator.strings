@@ -1,0 +1,22 @@
+/*
+  MADQuerySelectOperator.strings — Simplified Chinese translation of MADDesigner/Storyboard/MADQuerySelectOperator.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "Not Equal"; ObjectID = "Gp1-00-zOA"; */
+"Gp1-00-zOA.text" = "不等于";
+
+/* Class = "UILabel"; text = "Less Than or Equal To"; ObjectID = "KeG-gd-cGT"; */
+"KeG-gd-cGT.text" = "小于或等于";
+
+/* Class = "UILabel"; text = "Greater Than"; ObjectID = "bG5-O3-Voh"; */
+"bG5-O3-Voh.text" = "大于";
+
+/* Class = "UILabel"; text = "Greater Than or Equal To"; ObjectID = "eno-o4-XOz"; */
+"eno-o4-XOz.text" = "大于或等于";
+
+/* Class = "UILabel"; text = "Less Than"; ObjectID = "vU3-Dw-0Q6"; */
+"vU3-Dw-0Q6.text" = "小于";
+
+/* Class = "UILabel"; text = "Equal"; ObjectID = "zMg-Zq-Yeq"; */
+"zMg-Zq-Yeq.text" = "等于";

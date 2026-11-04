@@ -1,0 +1,10 @@
+/*
+  MADCreateDocument.strings — Japanese translation of MADDesigner/Storyboard/MADCreateDocument.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UINavigationItem"; prompt = "Choose a datasource."; ObjectID = "lQ4-vV-jEi"; */
+"lQ4-vV-jEi.prompt" = "データソースを選択してください。";
+
+/* Class = "UINavigationItem"; title = "New Report"; ObjectID = "lQ4-vV-jEi"; */
+"lQ4-vV-jEi.title" = "新規レポート";

@@ -1,0 +1,10 @@
+/*
+  MADAboutApp.strings — Spanish translation of MADDesigner/Storyboard/MADAboutApp.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UINavigationItem"; title = "What is MAD?"; ObjectID = "N37-3x-PRo"; */
+"N37-3x-PRo.title" = "¿Qué es MAD?";
+
+/* Class = "UINavigationItem"; title = "Information"; ObjectID = "vrB-kM-Xtz"; */
+"vrB-kM-Xtz.title" = "Información";

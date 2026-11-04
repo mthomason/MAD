@@ -1,0 +1,31 @@
+/*
+  MADQueryAddGroup.strings — Simplified Chinese translation of MADDesigner/Storyboard/MADQueryAddGroup.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UINavigationItem"; title = "Add Group"; ObjectID = "04q-CH-mPO"; */
+"04q-CH-mPO.title" = "添加分组";
+
+/* Class = "UILabel"; text = "Ascending"; ObjectID = "4jZ-As-br9"; */
+"4jZ-As-br9.text" = "升序";
+
+/* Class = "UILabel"; text = "Sort"; ObjectID = "8zK-CY-dZj"; */
+"8zK-CY-dZj.text" = "排序";
+
+/* Class = "UILabel"; text = "Sort Asc or Desc"; ObjectID = "OON-CQ-oP7"; */
+"OON-CQ-oP7.text" = "升序或降序";
+
+/* Class = "UILabel"; text = "Field"; ObjectID = "Oly-QI-HQa"; */
+"Oly-QI-HQa.text" = "字段";
+
+/* Class = "UILabel"; text = "Decending"; ObjectID = "TcJ-dS-TZh"; */
+"TcJ-dS-TZh.text" = "降序";
+
+/* Class = "UINavigationItem"; title = "Sort Orders"; ObjectID = "Xtx-Xa-bKb"; */
+"Xtx-Xa-bKb.title" = "排序顺序";
+
+/* Class = "UINavigationItem"; title = "Select Field"; ObjectID = "cQG-4E-ihk"; */
+"cQG-4E-ihk.title" = "选择字段";
+
+/* Class = "UILabel"; text = "Field Name"; ObjectID = "dMw-oX-txR"; */
+"dMw-oX-txR.text" = "字段名称";

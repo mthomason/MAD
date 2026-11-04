@@ -1,0 +1,7 @@
+/*
+  MADTableViewHeader.strings — German translation of MADDesigner/Nibs/MADTableViewHeader.strings.
+  Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues.
+*/
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Yfc-Ou-6d5"; */
+"Yfc-Ou-6d5.text" = "Beschriftung";
