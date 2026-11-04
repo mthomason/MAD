@@ -548,11 +548,11 @@ selector expansion; 1536 files scanned). `MADDataStructures` is included;
 | non-literal first argument | 81 |
 | unique literal keys | 330 |
 | literal keys containing format specifiers | 29 (multi-argument 2, both positional) |
-| raw UI literals | 344 occurrences / 318 unique |
+| raw UI literals | 328 occurrences / 310 unique |
 | format strings without positional specifiers | 0 |
 | `appendString:`/`stringByAppendingString:` near UI | 42 (warning) |
 
-The 373 baseline entries are 318 `raw-ui-literal` and 55 `nonliteral-key`;
+The 365 baseline entries are 310 `raw-ui-literal` and 55 `nonliteral-key`;
 warnings are reported but never fail an otherwise clean check. Entries carry an
 occurrence count, so adding a second copy of an already-baselined string in the
 same file fails the run. The first Phase 1 run, before these changes and with
@@ -740,7 +740,7 @@ and `MADTextFreeGift`, whose definitions the audit does not resolve. The audit
 now covers the AppKit constructors and properties the Mac app uses, and
 baseline entries carry occurrence counts. `sync_constants.py` seeds the 53
 resolved constant keys into the catalog; the two unresolved names still need
-handling. Next: the 318 unique raw UI literals, module by module.
+handling. Next: the 310 unique raw UI literals, module by module.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 

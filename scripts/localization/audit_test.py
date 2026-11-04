@@ -139,11 +139,11 @@ field.placeholderString = @"Type here";
 		])
 
 	def test_glyph_and_numeric_literals_are_ignored(self):
-		self.write("MADDesigner/Source/Glyphs.m", """\
-label.text = @"✓";
-label2.text = @"100%";
-label3.text = @"Menu";
-""")
+		self.write("MADDesigner/Source/Glyphs.m",
+			'label.text = @"✓";\n'
+			'label2.text = @"100%";\n'
+			'label3.text = @"Menu";\n'
+			'[button setTitle:@"' + chr(92) + 'uf036" forState:0];\n')
 		report = self.results()
 		texts = sorted(f["text"] for f in self.by_category(report, "raw-ui-literal"))
 		self.assertEqual(texts, ["text = Menu"])
