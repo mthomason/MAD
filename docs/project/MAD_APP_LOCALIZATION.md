@@ -588,29 +588,29 @@ one-off string uses a literal at the call site. The Linux workflow runs the
 sync's tests and the `--check` form. Unresolved symbols are reported but do not
 fail the check, because a definition can live outside the scanned roots.
 
-Current run (2026-11-04, after the Mac wrapping and the barcode-name
-consolidation; 1536 files scanned). `MADDataStructures` is included;
+Current run (2026-11-04, after the Mac wrapping, the barcode-name
+consolidation, and the localization pass; 1536 files scanned). `MADDataStructures` is included;
 `MADFeedback` is excluded because it is neither embedded nor maintained.
 `Compressor`, `ThirdParty`, build trees, `Archive`/`Archived`,
 `ReceiptModuleAsn1c`, and test bundles are excluded:
 
 | Measure | Count |
 | --- | ---: |
-| `NSLocalizedString` calls | 1078 |
-| literal first argument | 1020 |
+| `NSLocalizedString` calls | 1084 |
+| literal first argument | 1026 |
 | non-literal first argument | 58 |
-| unique literal keys | 753 |
-| literal keys containing format specifiers | 75 (multi-argument 12, all positional) |
+| unique literal keys | 757 |
+| literal keys containing format specifiers | 76 (multi-argument 13, all positional) |
 | raw UI literals | 0 |
 | format strings without positional specifiers | 0 |
-| `appendString:`/`stringByAppendingString:` near UI | 84 (warning) |
+| `appendString:`/`stringByAppendingString:` near UI | 85 (warning) |
 
 The 36 baseline entries are all `nonliteral-key`; the `raw-ui-literal` category
 is empty. Warnings are reported but never fail an otherwise clean check. Entries
 carry an occurrence count, so adding a second copy of an already-baselined
 string in the same file fails the run. The first Phase 1 run, before these
 changes and with `MADFeedback` in scope, was 1505 files / 564 calls / 246
-entries. The 84 warning sites grew with the Mac code, where more sentences are
+entries. The 85 warning sites grew with the Mac code, where more sentences are
 assembled next to a label.
 
 Two reconciliations with §2:
@@ -816,7 +816,7 @@ About chrome and its Overview prose, alerts, tooltips, and accessibility
 descriptions all go through `NSLocalizedString` with a real comment. Licence
 bodies, copyright lines, component notices, and the SQL/format/font/symbology
 technical names stay English under a do-not-translate comment. The shared
-catalog now holds 783 entries (753 literal keys and 36 resolved constants; the
+catalog now holds 787 entries (757 literal keys and 36 resolved constants; the
 two former unresolved names are inlined as literals at their one use each).
 `./Mac/build.sh` and its smoke suite pass, and the built bundle carries
 `en.lproj` and `de.lproj`.
@@ -857,7 +857,7 @@ compounds), **Spanish is the largest reach**. Recommended: German first.
 translation checks; no human review is performed. No clipped-text claim is
 made, because no screenshot pass was run.
 
-**Status 2026-11-04 — translated.** German is complete in the catalog (784
+**Status 2026-11-04 — translated.** German is complete in the catalog (787
 entries, 62 marked `shouldTranslate: false`), in every app and driver storyboard
 and xib that has translatable entries, in `Settings.bundle`, and in the Mac
 bundle through the shared catalog. The glossary in §12 was fixed first. The
