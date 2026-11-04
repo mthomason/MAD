@@ -184,7 +184,7 @@ static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspa
 		@"MAD Viewer"
 	] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(workspaceSegmentAction:)];
 	_workspaceSegmentedControl.selectedSegment = MADMacWorkspaceTabDesigner;
-	item.label = @"Workspace";
+	item.label = NSLocalizedString(@"Workspace", @"Toolbar item label for the workspace switcher.");
 	item.view = _workspaceSegmentedControl;
 	return item;
 }
