@@ -14,6 +14,7 @@
 #import "MADReportExportWriter.h"
 
 #import <Foundation/NSData.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSFileHandle.h>

@@ -9,6 +9,7 @@
 #include <TargetConditionals.h>
 #if TARGET_OS_IPHONE
 #import "MADOperationCreateDocumentSaveAndCloseNewDocument.h"
+#import <Foundation/NSBundle.h>
 #import <MADFoundation/madlog.h>
 #import <MAD/MADocument.h>
 #import "MADOperationCreateDocumentCreateDocument.h"

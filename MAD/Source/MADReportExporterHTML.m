@@ -28,6 +28,7 @@
 #import <MAD/MADReportLineStyle.h>
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>

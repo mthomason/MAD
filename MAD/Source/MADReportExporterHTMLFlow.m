@@ -30,6 +30,7 @@
 #import <MAD/MADReportLineStyle.h>
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSSet.h>

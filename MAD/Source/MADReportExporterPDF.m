@@ -22,6 +22,7 @@
 #import <MAD/MADDocumentRenderProtocol.h>
 
 #import <Foundation/NSData.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 

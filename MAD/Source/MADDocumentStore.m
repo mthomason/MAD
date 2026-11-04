@@ -21,6 +21,7 @@
 #import <MADFoundation/madlog.h>
 
 #import <Foundation/NSFileManager.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSURL.h>
 
 static NSString * const MADDocumentStoreContentDirectory	= @"StoreContent";

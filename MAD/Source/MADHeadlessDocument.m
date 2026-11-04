@@ -68,6 +68,7 @@
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 
 #import <Foundation/NSFileManager.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSURL.h>
 
 @implementation MADHeadlessDocument {

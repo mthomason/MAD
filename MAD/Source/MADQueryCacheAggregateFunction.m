@@ -15,6 +15,7 @@
 #import <MADSqlite3/MADQuery+Sqlite3.h>
 
 #import <Foundation/NSException.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 
 static inline NSString *NSStringForAggregateFunctionType(MTAggregateFunctionType);
