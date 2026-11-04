@@ -182,7 +182,10 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemAction traitCollection:self.traitCollection];
 	self.barButtonItemDuplicate.accessibilityHint = NSLocalizedString(@"Duplicates the selected documents.", @"Duplicates the selected documents.");
 	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemDuplicate traitCollection:self.traitCollection];
+	self.barButtonItemInformationDocument.accessibilityLabel = NSLocalizedString(@"Document Information", @"VoiceOver label for the information bar button, which has an icon only.");
 	self.barButtonItemInformationDocument.accessibilityHint = NSLocalizedString(@"Displays selected document details.", @"Displays selected document details.");
+	self.barButtonItemCloudDown.accessibilityLabel = NSLocalizedString(@"Download", @"VoiceOver label for the iCloud download bar button, which has an icon only.");
+	self.barButtonItemCloudDown.accessibilityHint = NSLocalizedString(@"Downloads the selected iCloud document.", @"VoiceOver hint for the iCloud download bar button.");
 	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemInformationDocument traitCollection:self.traitCollection];
 	self.barButtonItemInformation.accessibilityHint = NSLocalizedString(@"Displays selected document details.", @"Displays selected document details.");
 	[MADThemeManager applyAppearanceToBarButtonItem:self.barButtonItemInformation traitCollection:self.traitCollection];

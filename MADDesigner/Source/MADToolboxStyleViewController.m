@@ -38,6 +38,7 @@
 
 #import <UIKit/NSAttributedString.h>
 #import <UIKit/UIStepper.h>
+#import <UIKit/UIAccessibility.h>
 #import <UIKit/UISegmentedControl.h>
 #import <UIKit/UILabel.h>
 #import <UIKit/UIButton.h>
@@ -163,9 +164,16 @@ static inline BOOL ControlStateIsOn(MTControlState controlState) {
 	[segmentedControlHorizontalAlignment setTitle:@"\uf037" forSegmentAtIndex:1];
 	[segmentedControlHorizontalAlignment setTitle:@"\uf038" forSegmentAtIndex:2];
 	[segmentedControlHorizontalAlignment setTitle:@"\uf039" forSegmentAtIndex:3];
+	segmentedControlHorizontalAlignment.accessibilityLabel = NSLocalizedString(@"Horizontal Alignment", @"VoiceOver label for the four-segment horizontal alignment control, which draws glyphs.");
 
 	self.tableView.delegate = self;
-		
+
+	// The buttons draw Font Awesome glyphs, which VoiceOver cannot read.
+	self.buttonBold.accessibilityLabel = NSLocalizedString(@"Bold", @"Style toolbar button label for bold text.");
+	self.buttonItalic.accessibilityLabel = NSLocalizedString(@"Italic", @"Style toolbar button label for italic text.");
+	self.buttonStrike.accessibilityLabel = NSLocalizedString(@"Strikethrough", @"Style toolbar button label for struck-through text.");
+	self.buttonUnderline.accessibilityLabel = NSLocalizedString(@"Underline", @"Style toolbar button label for underlined text.");
+
 	self.buttonBold.layer.borderColor = self.view.tintColor.CGColor;
 	self.buttonBold.layer.cornerRadius = CornerRadius;
 	self.buttonBold.layer.borderWidth = BorderWidth;
