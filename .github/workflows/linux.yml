@@ -42,6 +42,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Pure Python on purpose: the localization audit needs no Xcode, so the
+      # Linux gate can catch new unwrapped strings before the container build.
+      - name: Test the localization audit
+        run: python3 -I scripts/localization/audit_test.py
+
+      - name: Audit localization strings
+        run: python3 -I scripts/localization/audit.py
+
       - uses: docker/setup-buildx-action@v3
 
       - name: Build the toolchain stage (pinned by Linux/toolchain.conf; cached)

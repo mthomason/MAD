@@ -232,6 +232,10 @@ the headless side.
   languages, the 25 public documents that must exist in each, the naming and front-matter
   rules, the language switcher, the excluded internal record trees, and the validation
   checklist for adding the next language.
+* `docs/project/MAD_APP_LOCALIZATION.md` -- the plan to localize the iOS and macOS
+  applications: the measured string inventory, the String Catalog strategy, the
+  storyboard and framework-bundle findings, the licence-text policy, the phases, and the
+  open decisions.
 * `docs/project/TODO.md` -- the product wishlist: features and ideas.
 * `README.md` -- build notes and the export-compliance statement.
 * `docs/project/APPSTORE.md` -- the App Store promotional text and description currently in use.

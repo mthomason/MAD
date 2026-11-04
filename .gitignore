@@ -311,3 +311,7 @@ _site/
 
 # Claude Code local settings (machine-specific permission grants)
 .claude/settings.local.json
+
+# Python bytecode
+__pycache__/
+*.pyc

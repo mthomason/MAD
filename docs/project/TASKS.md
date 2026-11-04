@@ -1218,3 +1218,31 @@ prompts are in `~/Desktop/MADOpenSource-PostSteps/`.
     `docs/tutorials/driver-authoring.md`, `docs/project/LIBRARIES.md`,
     `docs/project/THIRD_PARTY_LICENSES.md`, `docs/project/BUGS.md`, and `AGENTS.md`
     updated.
+
+## 19. Application localization — Phase 0 and Phase 1 foundation
+
+**Status:** In progress on `feature/app-localization-foundation` (started 2026-11-04).
+
+The plan, inventory, decisions, and phases are in
+[`MAD_APP_LOCALIZATION.md`](MAD_APP_LOCALIZATION.md). The user has confirmed the
+language set (`de`, `es`, `ja`, `pt-BR`, `zh-Hans`), `es` as the Spanish bundle
+code, AI-drafted translations reviewed by the user, iOS first with macOS
+infrastructure in parallel, keeping the per-driver storyboards, and consolidating
+the barcode names before translating.
+
+This session builds the foundation only:
+
+* `scripts/localization/audit.py`, its unittest suite, and
+  `scripts/localization/baseline.json` — the text-based audit, runnable without
+  Xcode and wired into the Linux workflow.
+* One `Localizable.xcstrings` in both iOS app targets, with
+  `LOCALIZATION_PREFERS_STRING_CATALOGS = YES`, proved by a German key reaching
+  the built app.
+* `MADQuery.storyboard` moved to `Base.lproj` with a German `.strings`, proved
+  in the simulator.
+* `Mac/build.sh` compiling one catalog into `Contents/Resources/de.lproj` and
+  `CFBundleLocalizations` in the Mac `Info.plist`.
+
+Not in this session: translating the app, converting the other 21 storyboards,
+consolidating barcode names, licence text, or the 413 Mac strings. See the plan's
+Phase 2 onward.
