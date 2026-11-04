@@ -35,9 +35,9 @@ MADはレポーティングの課題を**フォーマットとエンジンのレ
 
 **[MAD Designer for macOS](docs/ja/macos.md)**——**MAD Query**のビジュアルリレーションシップキャンバスと**MAD Designer**のバンド型レイアウトワークスペースを備えたネイティブ`AppKit`デスクトップアプリケーション（`Mac/`）：
 
-![ネイティブmacOSアプリケーションのMAD Queryワークスペース](docs/assets/macos-native-mad-query.png)
+![ネイティブmacOSアプリケーションのMAD Queryワークスペース](docs/assets/macos-native-mad-query-ja.png)
 
-![ネイティブmacOSアプリケーションのMAD Designerワークスペース](docs/assets/macos-native-mad-designer.png)
+![ネイティブmacOSアプリケーションのMAD Designerワークスペース](docs/assets/macos-native-mad-designer-ja.png)
 
 **MAD Designer for iOS**——データソースの選択からMAD Viewerで完成したレポートを閲覧するまで（28秒、[動画](https://docs.everydayapps.com/assets/app-preview.mp4)）：
 
@@ -48,6 +48,16 @@ MADはレポーティングの課題を**フォーマットとエンジンのレ
 ![.madドキュメントの検査、クエリ確認、更新、エクスポートを行うmad CLI](docs/assets/mad-cli-demo.gif)
 
 録画内で生成された[エクスポート済みレポート](https://docs.everydayapps.com/assets/london.html)はプレーンなHTMLであり、任意のブラウザで開くことができます。
+
+## ローカライズ
+
+iOS および macOS アプリケーションは、**英語、ドイツ語、スペイン語、日本語、ブラジルポルトガル語、簡体字中国語**に完全対応しています。インターフェースはシステム言語に従い、ドキュメントも同じ言語に翻訳されています。ブランド名と製品名、SQL 識別子、データベース名とフォント名、ライセンス本文は設計上英語のままです。翻訳は機械支援によるもので、修正は[イシュートラッカー](https://github.com/mthomason/MAD/issues)で受け付けています。
+
+## プライバシー
+
+MAD はユーザーのプライバシーを尊重します。アプリケーションには分析、テレメトリ、トラッキングのコードは含まれておらず、ユーザーのファイルを記録したりコピーしたりすることもありません。ネットワーク接続は、ユーザーが設定したデータベース接続のみです。レポートのデータは文書のローカル SQLite キャッシュとコンパニオンファイルに保持されます。
+
+macOS では、アプリが**書類**、**デスクトップ**、**ダウンロード**などのフォルダへのアクセスを求めることがあります。このプロンプトは、`.mad` レポート（または SQLite データベースファイル）を選択する標準の macOS オープンパネルによるものです。パネルが内容を表示できるよう macOS がフォルダへのアクセスを許可し、アプリは選択したファイルだけを読み取ります。これは macOS アプリケーションの標準的な動作であり、MAD が何かをスキャン、記録、コピー、追跡しているわけではありません。
 
 ## `.mad`フォーマットの内部構造
 

@@ -35,9 +35,9 @@ MAD 在**格式和引擎层面**解决报表问题：
 
 **[适用于 macOS 的 MAD Designer](docs/zh/macos.md)**——原生 `AppKit` 桌面应用（`Mac/`），展示 **MAD Query** 可视化关系画布和 **MAD Designer** 带区布局工作区：
 
-![原生 macOS 应用中的 MAD Query 工作区](docs/assets/macos-native-mad-query.png)
+![原生 macOS 应用中的 MAD Query 工作区](docs/assets/macos-native-mad-query-zh-CN.png)
 
-![原生 macOS 应用中的 MAD Designer 工作区](docs/assets/macos-native-mad-designer.png)
+![原生 macOS 应用中的 MAD Designer 工作区](docs/assets/macos-native-mad-designer-zh-CN.png)
 
 **适用于 iOS 的 MAD Designer**，从选择数据源到在 MAD Viewer 中阅读完成的报表（28 秒；[视频](https://docs.everydayapps.com/assets/app-preview.mp4)）：
 
@@ -48,6 +48,16 @@ MAD 在**格式和引擎层面**解决报表问题：
 ![mad CLI 正在检查、查询、刷新并导出一个 .mad 文档](docs/assets/mad-cli-demo.gif)
 
 录像中[导出的报表](https://docs.everydayapps.com/assets/london.html)是纯 HTML，可在任意浏览器中打开。
+
+## 本地化
+
+iOS 和 macOS 应用程序已完整本地化为**英语、德语、西班牙语、日语、巴西葡萄牙语和简体中文**。界面跟随系统语言，文档也已翻译为相同语言。品牌和产品名称、SQL 标识符、数据库和字体名称以及许可证文本按设计保留英文。翻译由机器辅助生成，欢迎在[问题跟踪器](https://github.com/mthomason/MAD/issues)中报告更正。
+
+## 隐私
+
+MAD 尊重您的隐私。应用程序不包含分析、遥测或跟踪代码，也不会记录或复制您的文件。唯一的网络连接是您配置的数据库连接；报表数据保留在文档的本地 SQLite 缓存和配套文件中。
+
+在 macOS 上，应用程序可能会请求访问**文稿**、**桌面**、**下载**或其他文件夹。该提示来自用于选择 `.mad` 报表（或 SQLite 数据库文件）的标准 macOS 打开面板：macOS 授予该文件夹的访问权限，以便面板显示其内容，而应用程序只读取您选择的文件。这是 macOS 应用程序的标准行为——MAD 不会扫描、记录、复制或跟踪任何内容。
 
 ## 深入 `.mad` 格式
 

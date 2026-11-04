@@ -35,9 +35,9 @@ La documentación técnica y la especificación del formato también se publican
 
 **[MAD Designer para macOS](docs/es/macos.md)** — la aplicación de escritorio nativa de `AppKit` (`Mac/`), que muestra el lienzo visual de relaciones de **MAD Query** y el espacio de trabajo de diseño por bandas de **MAD Designer**:
 
-![Espacio de trabajo MAD Query en la aplicación nativa de macOS](docs/assets/macos-native-mad-query.png)
+![Espacio de trabajo MAD Query en la aplicación nativa de macOS](docs/assets/macos-native-mad-query-es.png)
 
-![Espacio de trabajo MAD Designer en la aplicación nativa de macOS](docs/assets/macos-native-mad-designer.png)
+![Espacio de trabajo MAD Designer en la aplicación nativa de macOS](docs/assets/macos-native-mad-designer-es.png)
 
 **MAD Designer para iOS**, desde la elección de una fuente de datos hasta la lectura del informe terminado en MAD Viewer (28 segundos; [vídeo](https://docs.everydayapps.com/assets/app-preview.mp4)):
 
@@ -48,6 +48,16 @@ La documentación técnica y la especificación del formato también se publican
 ![La CLI mad inspeccionando, consultando, actualizando y exportando un documento .mad](docs/assets/mad-cli-demo.gif)
 
 El [informe exportado](https://docs.everydayapps.com/assets/london.html) de la grabación es HTML simple, y se abre en cualquier navegador.
+
+## Localización
+
+Las aplicaciones de iOS y macOS están totalmente localizadas al **inglés, alemán, español, japonés, portugués de Brasil y chino simplificado**. La interfaz sigue el idioma del sistema y la documentación está traducida a los mismos idiomas. Los nombres de marcas y productos, los identificadores SQL, los nombres de bases de datos y fuentes, y los textos de licencia permanecen en inglés por diseño. Las traducciones son asistidas por máquina; las correcciones son bienvenidas en el [gestor de incidencias](https://github.com/mthomason/MAD/issues).
+
+## Privacidad
+
+MAD respeta su privacidad. Las aplicaciones no contienen código de análisis, telemetría ni seguimiento, y no graban ni copian sus archivos. Las únicas conexiones de red son las conexiones de base de datos que usted configura; los datos del informe permanecen en la caché SQLite local y en los archivos complementarios del documento.
+
+En macOS, la aplicación puede solicitar acceso a **Documentos**, **Escritorio**, **Descargas** u otra carpeta. Esa solicitud proviene del panel de apertura estándar de macOS que se usa para elegir un informe `.mad` (o un archivo de base de datos SQLite): macOS concede acceso a la carpeta para que el panel muestre su contenido, y la aplicación solo lee el archivo que usted selecciona. Es el comportamiento estándar de las aplicaciones de macOS: MAD no está escaneando, grabando, copiando ni rastreando nada.
 
 ## Dentro del formato `.mad`
 
