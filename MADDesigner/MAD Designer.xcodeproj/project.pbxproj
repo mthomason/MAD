@@ -771,6 +771,7 @@
 		4C9A00232EA0000000000001 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA000000000001A /* AppIcon.icns */; };
 		4C1C0C012EA1000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4C1C0C012EA1000000000001 /* Localizable.xcstrings */; };
 		4C1C0C012EA1000000000003 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4C1C0C012EA1000000000001 /* Localizable.xcstrings */; };
+		4C9A00C02EA2000000000001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4C1C0C012EA1000000000001 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -3088,6 +3089,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C9A00232EA0000000000001 /* AppIcon.icns in Resources */,
+				4C9A00C02EA2000000000001 /* Localizable.xcstrings in Resources */,
 				4C1C0C4A2EA1000000000001 /* Licenses in Resources */,
 				4C1C0C4A2EA1000000000002 /* MADMeta.plist in Resources */,
 				4C1C0C4A2EA1000000000003 /* LICENSE in Resources */,
@@ -4547,6 +4549,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -4604,6 +4607,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (

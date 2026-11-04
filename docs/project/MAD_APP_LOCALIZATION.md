@@ -895,17 +895,21 @@ The Mac app is small but has the most raw strings (~413):
   it with an explicit `en` bundle).
 * Add formatters for inspector values, ports and percentages.
 
-**Status 2026-11-04 — wrapping complete.** Every Mac user-facing literal the
-audit can see is wrapped, along with the helper-passed labels, inspector rows,
-tooltips, and accessibility descriptions. The AppKit alert and constructor
-strings, menus, About chrome, and export format names are in. The About legal
-text, component notices, licence names, and copyright stay verbatim. The
-bundle already compiles the shared catalog and carries all five translated
-`<lang>.lproj` folders plus `en.lproj`; `CFBundleLocalizations` names all six.
-Still open: the smoke test is not locale-aware, the English substring matching in
+**Status 2026-11-04 — wrapping and translation complete.** Every Mac
+user-facing literal the audit can see is wrapped, along with the helper-passed
+labels, inspector rows, tooltips, and accessibility descriptions. The AppKit
+alert and constructor strings, menus, About chrome, and export format names are
+in. The About legal text, component notices, licence names, and copyright stay
+verbatim. Both Mac build paths compile the shared catalog: `Mac/build.sh` for
+the packaged app, and now the `MAD Designer Mac` target in
+`MAD Designer.xcodeproj`, whose Resources phase carries `Localizable.xcstrings`
+with `LOCALIZATION_PREFERS_STRING_CATALOGS = YES`, so Xcode's Run action serves
+the same strings. The bundle carries all five translated `<lang>.lproj` folders
+plus `en.lproj`; `CFBundleLocalizations` names all six. Still open: the smoke
+test is not locale-aware, the English substring matching in
 `MADMacViewerViewController.m` is untouched (driver messages stay English, so
-it still matches), the inspector values and percentages are still C-locale
-`%f`/`%ld`, and no Mac string is translated.
+it still matches), and the inspector values and percentages are still C-locale
+`%f`/`%ld`.
 
 ### Phase 6 — Ongoing
 
