@@ -13,6 +13,7 @@
 #import <MADFoundation/MADOperationCondition.h>
 #import <MADFoundation/MADOperationConditionResult.h>
 #import <Foundation/NSPredicate.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSKeyValueCoding.h>
 #import <Foundation/NSError.h>
 #import <dispatch/dispatch.h>
@@ -53,7 +54,7 @@ NSString * _Nonnull const MADOperationConditionKey = @"OperationCondition";
 + (nonnull instancetype)newOperationConditionResultFailedNotSatisfied:(nonnull NSString *)name {
 	MADLogDebug("MADOperationConditionResult: created 'failed' (not satisfied) for condition name: \"%@\"", name);
 	NSError *error = [NSError errorWithDomain:@"MADOperationCondition" code:-82795 userInfo:@{
-		NSLocalizedFailureReasonErrorKey: @"Not Satisfied",
+		NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Not Satisfied", @"Failure reason when an operation condition is not met."),
 		NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Condition '%@' not Satisfied", name],
 		MADOperationConditionKey: name
 	}];
@@ -65,8 +66,8 @@ NSString * _Nonnull const MADOperationConditionKey = @"OperationCondition";
 		// This situation (a "failed" result created with a nil error) might indicate a programming error.
 		MADLogError("MADOperationConditionResult: newOperationConditionResultFailed called with nil error. Creating generic failure for programming issue tracking. This should be investigated.");
 		error = [NSError errorWithDomain:NSStringFromClass(self) code:32874 userInfo:@{
-			NSLocalizedFailureReasonErrorKey: @"Internal Error",
-			NSLocalizedDescriptionKey: @"Condition failed with an unspecified error."
+			NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Internal Error", @"Failure reason for an internal operation-condition error."),
+			NSLocalizedDescriptionKey: NSLocalizedString(@"Condition failed with an unspecified error.", @"Description when an operation condition fails without details.")
 		}];
 	}
 	MADLogDebug("MADOperationConditionResult: created 'failed' with error: %@", error);

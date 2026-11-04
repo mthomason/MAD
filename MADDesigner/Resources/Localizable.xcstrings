@@ -405,12 +405,24 @@
       "comment": "SQL statement validation message for a pasted statement.",
       "extractionState": "manual"
     },
+    "Condition failed with an unspecified error.": {
+      "comment": "Description when an operation condition fails without details.",
+      "extractionState": "manual"
+    },
     "Confirm": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
     "Connect Failed": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Connection Error": {
+      "comment": "Failure reason for a PostgreSQL connection error.",
+      "extractionState": "manual"
+    },
+    "Connection is empty.": {
+      "comment": "Error when a PostgreSQL operation has no connection.",
       "extractionState": "manual"
     },
     "Continue": {
@@ -665,6 +677,10 @@
       "comment": "Placeholder text on a report element whose query has no datasource.",
       "extractionState": "manual"
     },
+    "Executing Error": {
+      "comment": "Failure reason when a MySQL statement cannot execute.",
+      "extractionState": "manual"
+    },
     "Expected ')' to close the predicate.": {
       "comment": "SQL statement validation message for a pasted statement.",
       "extractionState": "manual"
@@ -757,6 +773,10 @@
       "comment": "Error when a headless document cannot reach its database.",
       "extractionState": "manual"
     },
+    "Failed to deserialize property list.": {
+      "comment": "Error when a data-table property list cannot be read.",
+      "extractionState": "manual"
+    },
     "Failed to establish database connection for schema import (nil connection object).": {
       "comment": "Error when schema import cannot establish a connection.",
       "extractionState": "manual"
@@ -783,6 +803,10 @@
     },
     "File already exist. Please choose a new name.": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "File does not exist.": {
+      "comment": "Error when a data-table file is missing.",
       "extractionState": "manual"
     },
     "Filename not valid.": {
@@ -969,6 +993,14 @@
       "comment": "Image data type.",
       "extractionState": "manual"
     },
+    "Internal Error": {
+      "comment": "Failure reason for an internal operation-condition error.",
+      "extractionState": "manual"
+    },
+    "Invalid plist format.": {
+      "comment": "Error when a data-table property list has the wrong format.",
+      "extractionState": "manual"
+    },
     "Issues Encounterd": {
       "comment": "Alert Title 'Issues Encounterd'.",
       "extractionState": "manual"
@@ -1153,6 +1185,18 @@
       "comment": "Failure reason when a predicate has no field.",
       "extractionState": "manual"
     },
+    "Missing or invalid column data.": {
+      "comment": "Error when a data-table property list has no usable column data.",
+      "extractionState": "manual"
+    },
+    "Missing or invalid column keys.": {
+      "comment": "Error when a data-table property list has no usable column names.",
+      "extractionState": "manual"
+    },
+    "Missing query or destination table.": {
+      "comment": "Error when a PostgreSQL fetch has no query or destination table.",
+      "extractionState": "manual"
+    },
     "Missing results": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
@@ -1215,6 +1259,10 @@
     },
     "Not Equal": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Not Satisfied": {
+      "comment": "Failure reason when an operation condition is not met.",
       "extractionState": "manual"
     },
     "Nothing": {
@@ -1333,6 +1381,10 @@
       "comment": "Selection Label 'PostgreSQL Native Driver'",
       "extractionState": "manual"
     },
+    "PostgreSQL connection failed.": {
+      "comment": "Error when a PostgreSQL connection attempt fails.",
+      "extractionState": "manual"
+    },
     "Predicate": {
       "comment": "Defined as MADTextQueryPredicate in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
       "extractionState": "manual"
@@ -1363,6 +1415,10 @@
     },
     "Query": {
       "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Query Error": {
+      "comment": "Failure reason for a PostgreSQL query error.",
       "extractionState": "manual"
     },
     "Refresh the report against live data, browse paginated output, print, or export to PDF, HTML, CSV, JSON, or plain text.": {
@@ -1699,6 +1755,10 @@
     },
     "UNION has no place in the model: one document query holds one SELECT.": {
       "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "URL is nil.": {
+      "comment": "Error when a data-table file URL is missing.",
       "extractionState": "manual"
     },
     "Undefined": {

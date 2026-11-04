@@ -17,6 +17,7 @@
 #import <MADFoundation/MADDataTable.h>
 
 #import <Foundation/NSDictionary.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSSet.h>
@@ -92,8 +93,8 @@ char *mySqlTypeForBindingAtPosition(MYSQL_BIND *bindings, int position);
 
 	if (!connection) {
 		errorFetch = [NSError errorWithDomain:[self domain] code:3492 userInfo:@{
-			NSLocalizedDescriptionKey : @"Connection is empty.",
-			NSLocalizedFailureReasonErrorKey : @"Connection Error"
+			NSLocalizedDescriptionKey : NSLocalizedString(@"Connection is empty.", @"Error when a MySQL fetch has no connection."),
+			NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Connection Error", @"Failure reason for a MySQL connection error.")
 		}];
 		// Without this the caller sees a nil error for a nil connection and cannot
 		// tell the call apart from a successful one.

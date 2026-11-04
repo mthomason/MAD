@@ -552,16 +552,16 @@ selector expansion; 1536 files scanned). `MADDataStructures` is included;
 
 | Measure | Count |
 | --- | ---: |
-| `NSLocalizedString` calls | 661 |
-| literal first argument | 580 |
+| `NSLocalizedString` calls | 685 |
+| literal first argument | 604 |
 | non-literal first argument | 81 |
-| unique literal keys | 415 |
+| unique literal keys | 430 |
 | literal keys containing format specifiers | 30 (multi-argument 2, both positional) |
-| raw UI literals | 226 occurrences / 217 unique |
+| raw UI literals | 204 occurrences / 200 unique |
 | format strings without positional specifiers | 0 |
 | `appendString:`/`stringByAppendingString:` near UI | 42 (warning) |
 
-The 272 baseline entries are 217 `raw-ui-literal` and 55 `nonliteral-key`;
+The 255 baseline entries are 200 `raw-ui-literal` and 55 `nonliteral-key`;
 warnings are reported but never fail an otherwise clean check. Entries carry an
 occurrence count, so adding a second copy of an already-baselined string in the
 same file fails the run. The first Phase 1 run, before these changes and with
@@ -748,11 +748,13 @@ made up of 55 unique entries: 53 constant symbols plus `MADMessageCloudSignout`
 and `MADTextFreeGift`, whose definitions the audit does not resolve. The audit
 now covers the AppKit constructors and properties the Mac app uses, and
 baseline entries carry occurrence counts. `sync_catalog.py` seeded the catalog
-from the source: 415 literal keys plus the 53 resolved constants (462 entries),
-with the two unresolved names still needing handling. Both the app target (27
-raw UI literals) and the MAD framework (75, including all 47 SQL parser and
-resolver messages per D12) are wrapped. Next are Foundation and the drivers
-(22), then the Mac's 204 in Phase 5.
+from the source: 430 literal keys plus the 53 resolved constants (477 entries),
+with the two unresolved names still needing handling. Every iOS-side raw UI
+literal is wrapped: the app target (27), the MAD framework (75, including all
+47 SQL parser and resolver messages per D12), MADFoundation (10) and the
+MySQL/PostgreSQL wrappers (12). The only raw UI literals left are the Mac's
+204, which Phase 5 owns. Next here: plurals, the locale formatters,
+accessibility, and the storyboard strings.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 
