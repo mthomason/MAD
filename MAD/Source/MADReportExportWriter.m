@@ -31,7 +31,7 @@
 	if (data == nil) {
 		if (error) *error = [NSError errorWithDomain: @"MADReportExport"
 											   code: 1
-										   userInfo: @{ NSLocalizedDescriptionKey: @"The export could not be encoded as UTF-8." }];
+										   userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"The export could not be encoded as UTF-8.", @"Error when the exported text cannot be encoded.") }];
 		return NO;
 	}
 	return [self writeData: data toURL: url error: error];

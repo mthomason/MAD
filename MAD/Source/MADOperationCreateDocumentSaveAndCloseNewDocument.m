@@ -36,7 +36,7 @@
 	if (document == nil) {
 		NSError *error = [NSError errorWithDomain:NSStringFromClass([self class])
 											 code:347
-										 userInfo:@{NSLocalizedDescriptionKey: @"Document object not found for save and close."}];
+										 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Document object not found for save and close.", @"Error when save-and-close cannot find its document.")}];
 		[self finishWithError:error];
 		return;
 	}
@@ -50,7 +50,7 @@
 		} else {
 			NSError *error = [NSError errorWithDomain:NSStringFromClass(strongself.class)
 												 code: 893
-											 userInfo:@{NSLocalizedDescriptionKey: @"Failed to close the new document."}];
+											 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Failed to close the new document.", @"Error when the new document cannot be closed.")}];
 			[strongself finishWithError:error];
 		}
 	}];

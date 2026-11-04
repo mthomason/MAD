@@ -153,7 +153,7 @@
 		
 		if (!datasource) {
 			os_log_error(GetMadLog(), "MADPrintPageElementAggregate (self: %p, definition: %p): Datasource is NIL in definition.", self, definition);
-			self.text = @"Error: No Datasource";
+			self.text = NSLocalizedString(@"Error: No Datasource", @"Placeholder text on a report element whose query has no datasource.");
 			return self;
 		}
 		

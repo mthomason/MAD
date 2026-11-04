@@ -2,7 +2,7 @@
 # Copyright © 2026 Michael Thomason. SPDX-License-Identifier: MIT
 """Tests for the constant-key catalog sync.
 
-Run with: python3 -I scripts/localization/sync_constants_test.py
+Run with: python3 -I scripts/localization/sync_catalog_test.py
 """
 
 import json
@@ -13,7 +13,7 @@ import unittest
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-SYNC = HERE / "sync_constants.py"
+SYNC = HERE / "sync_catalog.py"
 
 
 class SyncConstantsTest(unittest.TestCase):
@@ -86,6 +86,17 @@ NSString * value = NSLocalizedString(LocalTitle, nil);
 		self.assertEqual(self.run_sync().returncode, 0)
 		after = self.run_sync("--check")
 		self.assertEqual(after.returncode, 0, after.stderr + after.stdout)
+
+	def test_adds_literal_keys_with_call_site_comments(self):
+		self.write("MADDesigner/Source/Titles.m",
+			'NSString *a = NSLocalizedString(@"Literal Title", @"Context for the title.");\n'
+			'NSString *b = NSLocalizedString(@"No Comment", nil);\n')
+		result = self.run_sync()
+		self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+		data = self.catalog_data()
+		self.assertEqual(data["strings"]["Literal Title"]["comment"], "Context for the title.")
+		self.assertEqual(data["strings"]["Literal Title"]["extractionState"], "manual")
+		self.assertEqual(data["strings"]["No Comment"]["comment"], "Localized UI string.")
 
 	def test_unresolved_symbol_is_reported_but_not_fatal(self):
 		self.write("MADDesigner/Source/Constants.m",

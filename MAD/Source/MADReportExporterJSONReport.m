@@ -85,8 +85,7 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 			*error = [NSError errorWithDomain: @"MADReportExport"
 										 code: 3
 									 userInfo: @{ NSLocalizedDescriptionKey:
-					 @"the report's rendered structure needs a document that renders (MADDocumentRenderProtocol); "
-					 @"--format json is the data half and needs no more." }];
+					 NSLocalizedString(@"the report's rendered structure needs a document that renders (MADDocumentRenderProtocol); " @"--format json is the data half and needs no more.", @"Error when the JSON report export has no renderable document.") }];
 		}
 		return NO;
 	}

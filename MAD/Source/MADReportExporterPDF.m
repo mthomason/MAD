@@ -180,7 +180,7 @@ static void MADReportExporterPinPDFMetadata(NSURL *url) {
 			*error = [NSError errorWithDomain: @"MADReportExport"
 										 code: 3
 									 userInfo: @{ NSLocalizedDescriptionKey:
-					 @"PDF needs a document that renders (MADDocumentRenderProtocol)." }];
+					 NSLocalizedString(@"PDF needs a document that renders (MADDocumentRenderProtocol).", @"Error when the PDF export has no renderable document.") }];
 		}
 		return NO;
 	}
@@ -188,7 +188,7 @@ static void MADReportExporterPinPDFMetadata(NSURL *url) {
 		if (error) {
 			*error = [NSError errorWithDomain: @"MADReportExport"
 										 code: 4
-									 userInfo: @{ NSLocalizedDescriptionKey: @"PDF needs a file to write to." }];
+									 userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"PDF needs a file to write to.", @"Error when the PDF export has no output file.") }];
 		}
 		return NO;
 	}
@@ -258,7 +258,7 @@ static void MADReportExporterPinPDFMetadata(NSURL *url) {
 		if (error) {
 			*error = [NSError errorWithDomain: @"MADReportExport"
 										 code: 5
-									 userInfo: @{ NSLocalizedDescriptionKey: @"No PDF was written." }];
+									 userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"No PDF was written.", @"Error when the PDF export produced no file.") }];
 		}
 		return NO;
 	}
