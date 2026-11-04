@@ -1255,8 +1255,16 @@ fixed, the audit baseline was regenerated, and `sync_catalog.py` seeded the
 Every iOS-side raw UI literal is wrapped: the app target, the MAD framework
 (including the SQL parser messages, D12), MADFoundation, and the MySQL and
 PostgreSQL wrappers. The delete alert, status line, applied-SQL counts, page
-status, date formatter, and locale number/file-size formatters are done. Not
-done yet: the Mac's 204 literals (Phase 5), the PDF/document plural counts,
-accessibility, the storyboard strings, translating the app, consolidating
-barcode names, and licence text. See the plan's Phase 2
+status, date formatter, and locale number/file-size formatters are done.
+
+Continuation (2026-11-04): the Mac app's 204 raw literals are wrapped too, so
+the audit reports zero raw UI literals; `./Mac/build.sh` and its smoke suite
+pass, and the bundle carries `en.lproj` and `de.lproj`. The VoiceOver page
+content and the icon-only toolbar controls have labels and hints. Every app and
+live-driver storyboard and xib is exported to
+`scripts/localization/storyboard_strings/` with do-not-translate markers (no
+translations yet). The barcode display names are consolidated into the table in
+`MADBarcode.m` (D11), and `-name` is computed from it. The two unresolved keys
+are gone. The catalog holds 783 entries. Not done yet: the PDF/document plural
+counts, translating any language, and the licence text. See the plan's Phase 2
 onward.

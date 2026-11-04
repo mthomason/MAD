@@ -436,7 +436,7 @@ standard handoff.
 | **D5 — Driver storyboards** | **Do not consolidate.** One `MADCreateDocument` storyboard per driver is a deliberate pattern: a developer adding a database driver adds that driver's storyboard. The near-identical strings (username, password, …) may be shared in translation, but the resources stay per framework. |
 | **D7 — Translation route** | AI drafts; the user reviews every language and takes the screenshots. The agent does not produce the screenshot pack. |
 | **D10 — Platform timing** | iOS first. macOS bundle infrastructure is built in parallel, but macOS string translation follows iOS. |
-| **D11 — Barcode names** | Consolidate the 65 dictionary entries and 66 `self.name` assignments into one table before translating. |
+| **D11 — Barcode names** | Consolidate the 65 dictionary entries and 66 `self.name` assignments into one table before translating. (Done 2026-11-04: `-name` is computed from the table; see the Phase 2 status.) |
 | **D12 — SQL parser messages** | Translate all of the app's own parser and validation messages, not just the common ones. They need a technical glossary and a review pass. |
 | **D13 — Date formatter** | Keep `MADDateFromTimeFormatter`'s component-selection algorithm and cached spell-out formatter. Localize only the unit and sentence layer; do not replace it with `NSDateComponentsFormatter`/`NSRelativeDateTimeFormatter`. Measured cost is ~11 µs per call. |
 
@@ -545,28 +545,30 @@ one-off string uses a literal at the call site. The Linux workflow runs the
 sync's tests and the `--check` form. Unresolved symbols are reported but do not
 fail the check, because a definition can live outside the scanned roots.
 
-Current run (2026-11-04, after the Phase 2 runtime-key fixes and the Mac
-selector expansion; 1536 files scanned). `MADDataStructures` is included;
+Current run (2026-11-04, after the Mac wrapping and the barcode-name
+consolidation; 1536 files scanned). `MADDataStructures` is included;
 `MADFeedback` is excluded because it is neither embedded nor maintained.
 `Compressor`, `ThirdParty`, build trees, `Archive`/`Archived`,
 `ReceiptModuleAsn1c`, and test bundles are excluded:
 
 | Measure | Count |
 | --- | ---: |
-| `NSLocalizedString` calls | 673 |
-| literal first argument | 613 |
-| non-literal first argument | 81 |
-| unique literal keys | 439 |
-| literal keys containing format specifiers | 30 (multi-argument 2, both positional) |
-| raw UI literals | 204 occurrences / 200 unique |
+| `NSLocalizedString` calls | 1078 |
+| literal first argument | 1020 |
+| non-literal first argument | 58 |
+| unique literal keys | 753 |
+| literal keys containing format specifiers | 75 (multi-argument 12, all positional) |
+| raw UI literals | 0 |
 | format strings without positional specifiers | 0 |
-| `appendString:`/`stringByAppendingString:` near UI | 42 (warning) |
+| `appendString:`/`stringByAppendingString:` near UI | 84 (warning) |
 
-The 238 baseline entries are 200 `raw-ui-literal` and 38 `nonliteral-key`;
-warnings are reported but never fail an otherwise clean check. Entries carry an
-occurrence count, so adding a second copy of an already-baselined string in the
-same file fails the run. The first Phase 1 run, before these changes and with
-`MADFeedback` in scope, was 1505 files / 564 calls / 246 entries.
+The 36 baseline entries are all `nonliteral-key`; the `raw-ui-literal` category
+is empty. Warnings are reported but never fail an otherwise clean check. Entries
+carry an occurrence count, so adding a second copy of an already-baselined
+string in the same file fails the run. The first Phase 1 run, before these
+changes and with `MADFeedback` in scope, was 1505 files / 564 calls / 246
+entries. The 84 warning sites grew with the Mac code, where more sentences are
+assembled next to a label.
 
 Two reconciliations with §2:
 
@@ -579,14 +581,16 @@ Two reconciliations with §2:
   (111) and the barcode count matched exactly. The current counts differ because
   the Phase 2 fixes changed the call sites and the scope changed.
 
-The `raw-ui-literal` category is still narrower than the full inventory. It
-catches a literal passed directly to a known UIKit, NSAlert, or AppKit API, a
-literal stored in a UI property, and an `NSError` description key. It does not
-catch display-name tables (barcode, paper, document-object, SQL type) or
-sentences built through a helper; those remain Phase 2 work and are why the
-baseline is a floor, not the full inventory. The AppKit selector set is in
-`audit.py`; a new AppKit constructor or property must be added there and
-covered by a test in `audit_test.py`.
+The `raw-ui-literal` category catches a literal passed directly to a known
+UIKit, NSAlert, or AppKit API, a literal stored in a UI property, and an
+`NSError` description key. It skips a literal that is already an argument of
+`NSLocalizedString`, including one inside an `addItemsWithTitles:@[...]` array,
+so wrapped items are not reported twice. It does not catch display-name tables
+(barcode, paper, document-object, SQL type) or sentences built through a
+helper; those remain review work, and the zero is a statement about this
+category, not a completeness proof. The AppKit selector set is in `audit.py`;
+a new AppKit constructor or property must be added there and covered by a test
+in `audit_test.py`.
 
 The "59 format-bearing keys" in §2 counted call sites including constant keys.
 The audit inspects literal keys only: 29 unique keys now, and both
@@ -762,6 +766,38 @@ plurals (the delete alert, records/page status line, applied-SQL counts,
 page status, and the date formatter are done; the PDF/document page counts
 remain), accessibility, and the storyboard strings.
 
+**Status 2026-11-04 — Phases 2 and 5 continued.** The Mac app's 204 raw UI
+literals are wrapped, so the audit's `raw-ui-literal` category is now empty;
+menus, workspace chrome, the inspector, the connection and export panels, the
+About chrome and its Overview prose, alerts, tooltips, and accessibility
+descriptions all go through `NSLocalizedString` with a real comment. Licence
+bodies, copyright lines, component notices, and the SQL/format/font/symbology
+technical names stay English under a do-not-translate comment. The shared
+catalog now holds 783 entries (753 literal keys and 36 resolved constants; the
+two former unresolved names are inlined as literals at their one use each).
+`./Mac/build.sh` and its smoke suite pass, and the built bundle carries
+`en.lproj` and `de.lproj`.
+
+Accessibility: `MADDocumentPageController`'s VoiceOver page content is
+localized; the Font Awesome style buttons, the horizontal-alignment control,
+and the two icon-only explorer bar buttons carry labels and hints.
+
+Storyboards: `scripts/localization/export_storyboard_strings.py` exports every
+app and live-driver storyboard and xib to UTF-8 under
+`scripts/localization/storyboard_strings/` (514 entries, 280 marked
+do-not-translate), and its README records the add-a-language step. Nothing is
+translated yet; the first German `.strings` remains `MADQuery`'s.
+
+Barcode names: D11 is done. The 65-entry table in `MADBarcode.m` is now the
+single source; `-name` is computed from `barcodeType`, the 66 `self.name`
+assignments and the archived name are gone, and the table gained the PDF417
+truncated and HIBC variants. The EAN128 entry now says `Code 128 (GS1-128)`,
+matching the class and the test that pins it. `MADBarcodes`' 30 tests pass.
+
+The `MAD Designer German` scheme's own plural tests now skip outside an English
+process language: their plural rules live only in the source-language entry
+until a language is translated.
+
 ### Phase 3 — Pilot language (1-2 weeks)
 
 Translate one language end to end. **German is the best stress test** (long
@@ -797,6 +833,18 @@ The Mac app is small but has the most raw strings (~413):
 * Make the smoke test locale-aware (compare through `NSLocalizedString`, or run
   it with an explicit `en` bundle).
 * Add formatters for inspector values, ports and percentages.
+
+**Status 2026-11-04 — wrapping complete.** Every Mac user-facing literal the
+audit can see is wrapped, along with the helper-passed labels, inspector rows,
+tooltips, and accessibility descriptions. The AppKit alert and constructor
+strings, menus, About chrome, and export format names are in. The About legal
+text, component notices, licence names, and copyright stay verbatim. The
+bundle already compiles the shared catalog and carries `en.lproj` and
+`de.lproj`; `CFBundleLocalizations` names both. Still open: the smoke test is
+not locale-aware, the English substring matching in
+`MADMacViewerViewController.m` is untouched (driver messages stay English, so
+it still matches), the inspector values and percentages are still C-locale
+`%f`/`%ld`, and no Mac string is translated.
 
 ### Phase 6 — Ongoing
 
