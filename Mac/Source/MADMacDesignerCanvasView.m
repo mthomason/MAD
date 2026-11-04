@@ -790,7 +790,7 @@ static const CGFloat kSnapThreshold = 4.5;
 	MADMacDocument *doc = self.document;
 	NSString *title = doc ? [doc displayTitleForSection:section] : ([section localizedDisplayName] ?: @"Section");
 	if (!section.visibility) {
-		title = [title stringByAppendingString:@" (Hidden)"];
+		title = [title stringByAppendingString:NSLocalizedString(@" (Hidden)", @"Suffix on a hidden report band name. Keep the leading space.")];
 	}
 	NSDictionary *titleAttrs = @{
 		NSFontAttributeName: [NSFont systemFontOfSize:11.0 weight:isSelectedSec ? NSFontWeightSemibold : NSFontWeightMedium],
@@ -799,11 +799,12 @@ static const CGFloat kSnapThreshold = 4.5;
 	[title drawAtPoint:NSMakePoint(NSMaxX(badgeRect) + 8.0, headerRect.origin.y + 4.5) withAttributes:titleAttrs];
 
 	NSUInteger count = [self elementsInSection:section].count;
-	NSString *metaText = [NSString stringWithFormat:@"%lu %@ · %.0f pt%@",
-						  (unsigned long)count,
-						  count == 1 ? @"item" : @"items",
-						  contentRect.size.height,
-						  [section producesFormFeed] ? @" · Page Break" : @""];
+	NSString *pageBreakSuffix = [section producesFormFeed]
+		? NSLocalizedString(@" · Page Break", @"Suffix on a band that starts a new page. Keep the leading separator.")
+		: @"";
+	NSString *metaText = [NSString localizedStringWithFormat:
+		NSLocalizedString(@"%1$lu items · %2$.0f pt%3$@", @"Band summary on the designer canvas. %1$lu is the element count (selects singular/plural); %2$.0f is the height in points; %3$@ is an optional suffix such as a page break."),
+		(unsigned long)count, contentRect.size.height, pageBreakSuffix];
 	NSDictionary *metaAttrs = @{
 		NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:10.0 weight:NSFontWeightRegular],
 		NSForegroundColorAttributeName: [NSColor secondaryLabelColor]

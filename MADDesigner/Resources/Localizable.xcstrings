@@ -505,6 +505,42 @@
         }
       }
     },
+    " · Page Break": {
+      "comment": "Suffix on a band that starts a new page. Keep the leading separator.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · Seitenumbruch"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · Salto de página"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · 改ページ"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · Quebra de página"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · 分页"
+          }
+        }
+      }
+    },
     "%#.1f pt": {
       "comment": "Like '5.2 points.'",
       "extractionState": "manual",
@@ -609,6 +645,168 @@
           "stringUnit": {
             "state": "translated",
             "value": "已选择 %1$lu 个元素（%2$@）"
+          }
+        }
+      }
+    },
+    "%1$lu items · %2$.0f pt%3$@": {
+      "comment": "Band summary on the designer canvas. %1$lu is the element count (selects singular/plural); %2$.0f is the height in points; %3$@ is an optional suffix such as a page break.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$#@items@ · %2$.0f pt%3$@"
+          },
+          "substitutions": {
+            "items": {
+              "argNum": 1,
+              "formatSpecifier": "lu",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu Element"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu Elemente"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$#@items@ · %2$.0f pt%3$@"
+          },
+          "substitutions": {
+            "items": {
+              "argNum": 1,
+              "formatSpecifier": "lu",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu item"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu items"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$#@items@ · %2$.0f pt%3$@"
+          },
+          "substitutions": {
+            "items": {
+              "argNum": 1,
+              "formatSpecifier": "lu",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu elemento"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu elementos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$#@items@ · %2$.0f pt%3$@"
+          },
+          "substitutions": {
+            "items": {
+              "argNum": 1,
+              "formatSpecifier": "lu",
+              "variations": {
+                "plural": {
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu 要素"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$#@items@ · %2$.0f pt%3$@"
+          },
+          "substitutions": {
+            "items": {
+              "argNum": 1,
+              "formatSpecifier": "lu",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu elemento"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu elementos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$#@items@ · %2$.0f pt%3$@"
+          },
+          "substitutions": {
+            "items": {
+              "argNum": 1,
+              "formatSpecifier": "lu",
+              "variations": {
+                "plural": {
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%lu 个元素"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -27156,6 +27354,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "工作流程"
+          }
+        }
+      }
+    },
+    "Workspace": {
+      "comment": "Toolbar item label for the workspace switcher.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arbeitsbereich"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espacio de trabajo"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワークスペース"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Área de trabalho"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工作区"
           }
         }
       }
