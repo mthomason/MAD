@@ -12,11 +12,11 @@
 #import <UIKit/NSLayoutConstraint.h>
 #import <MADFoundation/madlog.h>
 
-static NSString * const MADTextReadRecords      = @"\nRead %@ records.";
+static NSString * const MADTextReadRecords      = @"\nRead %lld records.";
 static NSString * const MADTextRefreshing       = @"\nRefreshing…";
 static NSString * const MADTextFormatting       = @"\nFormatting…";
 static NSString * const MADTextFormattingPage   = @"\nFormatting page %@.";
-static NSString * const MADTextPageXofY         = @"\nPage %1$@ of %2$@ pages.";
+static NSString * const MADTextPageXofY         = @"\nPage %1$lld of %2$lld pages.";
 static NSString * const MADTextNothingToDisplay = @"\nNothing to display.";
 static NSString * const MADTextNoCache          = @"No Cache";
 static const CGFloat ToolbarFontPointSize       = 8.0;
@@ -85,9 +85,13 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 	if (reportPosition.totalPages == 0) {
 		localizedPageOfPages = NSLocalizedString(MADTextNothingToDisplay, MADTextNothingToDisplay);
 	} else {
-		NSString *start = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.currentPage + 1) numberStyle:NSNumberFormatterDecimalStyle];
-		NSString *end = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.totalPages) numberStyle:NSNumberFormatterDecimalStyle];
-		localizedPageOfPages = [NSString stringWithFormat:NSLocalizedString(MADTextPageXofY, MADTextPageXofY), start, end];
+		NSString *page = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.currentPage + 1)
+														 numberStyle:NSNumberFormatterDecimalStyle];
+		NSString *total = [NSNumberFormatter localizedStringFromNumber:@(reportPosition.totalPages)
+														  numberStyle:NSNumberFormatterDecimalStyle];
+		localizedPageOfPages = [NSString localizedStringWithFormat:
+			NSLocalizedString(MADTextPageXofY, MADTextPageXofY),
+			(long long)reportPosition.totalPages, page, total];
 	}
 
 	__weak MADLabelStatus *weakSelf = self;
@@ -127,9 +131,11 @@ static const CGFloat ToolbarFontPointSize       = 8.0;
 }
 
 - (void)updateRecordsReadStatusWithNumberOfRecordsRead:(NSNumber *)numberOfRecs {
-	NSString *decimalString = [NSNumberFormatter localizedStringFromNumber:numberOfRecs
-																numberStyle:NSNumberFormatterDecimalStyle];
-	NSString *readRecords = [NSString stringWithFormat:NSLocalizedString(MADTextReadRecords, MADTextReadRecords), decimalString];
+	NSString *grouped = [NSNumberFormatter localizedStringFromNumber:numberOfRecs
+														 numberStyle:NSNumberFormatterDecimalStyle];
+	NSString *readRecords = [NSString localizedStringWithFormat:
+		NSLocalizedString(MADTextReadRecords, MADTextReadRecords),
+		(long long)numberOfRecs.unsignedLongLongValue, grouped];
 	
 	__weak MADLabelStatus *weakSelf = self;
 	dispatch_async(dispatch_get_main_queue(), ^{

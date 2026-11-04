@@ -13,13 +13,73 @@
       "comment": "Defined as MADTextNothingToDisplay in MADDesigner/Source/MADLabelStatus.m.",
       "extractionState": "manual"
     },
-    "\nPage %1$@ of %2$@ pages.": {
-      "comment": "Defined as MADTextPageXofY in MADDesigner/Source/MADLabelStatus.m.",
-      "extractionState": "manual"
+    "\nPage %1$lld of %2$lld pages.": {
+      "comment": "Status line. Argument 1 is the total page count (selects singular/plural); argument 2 is the grouped current page; argument 3 is the grouped total.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\nPage %2$@ of %3$@ %#@pages@."
+          },
+          "substitutions": {
+            "pages": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "page"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "pages"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    "\nRead %@ records.": {
-      "comment": "Defined as MADTextReadRecords in MADDesigner/Source/MADLabelStatus.m.",
-      "extractionState": "manual"
+    "\nRead %lld records.": {
+      "comment": "Status line. Argument 1 is the count (selects singular/plural); argument 2 is the grouped number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\nRead %2$@ %#@count@."
+          },
+          "substitutions": {
+            "count": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "record"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "records"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "\nRefreshing…": {
       "comment": "Defined as MADTextRefreshing in MADDesigner/Source/MADLabelStatus.m.",
@@ -257,13 +317,29 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
-    "Are you sure you would like to delete %@ item?  This action is final.": {
-      "comment": "Delete message template (singular)",
-      "extractionState": "manual"
-    },
-    "Are you sure you would like to delete %@ items?  This action is final.": {
-      "comment": "Delete message template (plural)",
-      "extractionState": "manual"
+    "Are you sure you would like to delete %lld items?  This action is final.": {
+      "comment": "Delete confirmation; %lld is the number of items.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Are you sure you would like to delete %lld item?  This action is final."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Are you sure you would like to delete %lld items?  This action is final."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Arithmetic has no place in the select list: the model holds column references.": {
       "comment": "SQL statement validation message for a pasted statement.",
@@ -1433,13 +1509,29 @@
       "comment": "Remove button title.",
       "extractionState": "manual"
     },
-    "Remove %@ item": {
-      "comment": "Remove %@ item (singular)",
-      "extractionState": "manual"
-    },
-    "Remove %@ items": {
-      "comment": "Remove %@ items (plural)",
-      "extractionState": "manual"
+    "Remove %lld items": {
+      "comment": "Destructive button; %lld is the number of items.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Remove %lld item"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Remove %lld items"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Remove Saved Password": {
       "comment": "Localized UI string.",
