@@ -152,13 +152,13 @@ static NSString * const MADDocumentFilenameExtension = @"mad";
 	}
 	if (newDocButton == nil) {
 		if (_fallbackNewDocumentButton == nil) {
-			_fallbackNewDocumentButton = [NSButton buttonWithTitle:@"New Document"
+			_fallbackNewDocumentButton = [NSButton buttonWithTitle:NSLocalizedString(@"New Document", @"Open panel button that starts a new report from a database.")
 															target:self
 															action:@selector(newDocumentFromOpenPanel:)];
 		}
 		newDocButton = _fallbackNewDocumentButton;
 	}
-	newDocButton.title = @"New Document";
+	newDocButton.title = NSLocalizedString(@"New Document", @"Open panel button that starts a new report from a database.");
 	newDocButton.bezelStyle = NSBezelStyleRounded;
 	newDocButton.bezelColor = [NSColor controlAccentColor];
 	if (@available(macOS 26.0, *)) {
@@ -187,8 +187,8 @@ static NSString * const MADDocumentFilenameExtension = @"mad";
 }
 
 - (void)configureOpenPanelForMadDocuments:(NSOpenPanel *)openPanel {
-	openPanel.title = @"Open Report";
-	openPanel.prompt = @"Open";
+	openPanel.title = NSLocalizedString(@"Open Report", @"Open panel title.");
+	openPanel.prompt = NSLocalizedString(@"Open", @"Open panel confirm button; opens the selected report.");
 	openPanel.canChooseFiles = YES;
 	openPanel.canChooseDirectories = NO;
 	openPanel.allowsMultipleSelection = NO;

@@ -102,7 +102,9 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 												   styleMask:style
 													 backing:NSBackingStoreBuffered
 													   defer:NO];
-	window.title = (document != nil) ? @"Database Connection Settings" : @"New Report from Database Connection";
+	window.title = (document != nil)
+		? NSLocalizedString(@"Database Connection Settings", @"Connection window title when editing an existing report's connection.")
+		: NSLocalizedString(@"New Report from Database Connection", @"Connection window title when creating a report.");
 	window.releasedWhenClosed = NO;
 
 	if (self = [super initWithWindow:window]) {
@@ -144,7 +146,7 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	_headerIconView = [[NSImageView alloc] initWithFrame:NSMakeRect(24, 16, 32, 32)];
 	if (@available(macOS 11.0, *)) {
 		NSImage *icon = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
-								  accessibilityDescription:@"Database Connection"];
+								  accessibilityDescription:NSLocalizedString(@"Database Connection", @"Accessibility description for the connection window icon.")];
 		NSImageSymbolConfiguration *cfg = [NSImageSymbolConfiguration configurationWithPointSize:24.0
 																						  weight:NSFontWeightMedium];
 		_headerIconView.image = [icon imageWithSymbolConfiguration:cfg] ?: icon;
@@ -153,8 +155,8 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	[content addSubview:_headerIconView];
 
 	NSString *headerTitle = isEditMode
-		? @"Database Connection Settings"
-		: @"Create a New Mobile Analytics Document (.mad)";
+		? NSLocalizedString(@"Database Connection Settings", @"Connection window title when editing an existing report's connection.")
+		: NSLocalizedString(@"Create a New Mobile Analytics Document (.mad)", @"Connection window title when creating a report. Mobile Analytics Document is the file type name.");
 	_headerTitleLabel = [self makeLabel:headerTitle
 								  frame:NSMakeRect(66, 14, 450, 20)
 								   bold:YES
@@ -162,8 +164,8 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	[content addSubview:_headerTitleLabel];
 
 	NSString *headerSubtitle = isEditMode
-		? @"Update the data source location or server credentials for this report."
-		: @"Choose a database driver and configure the source to import its schema.";
+		? NSLocalizedString(@"Update the data source location or server credentials for this report.", @"Connection window subtitle when editing an existing connection.")
+		: NSLocalizedString(@"Choose a database driver and configure the source to import its schema.", @"Connection window subtitle when creating a report.");
 	_headerSubtitleLabel = [self makeLabel:headerSubtitle
 									 frame:NSMakeRect(66, 34, 450, 18)
 									  bold:NO
@@ -186,7 +188,7 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	[content addSubview:_formContainerBox];
 
 	// Driver selector row
-	_driverLabel = [self makeLabel:@"Database Driver:"
+	_driverLabel = [self makeLabel:NSLocalizedString(@"Database Driver:", @"Connection form label for the driver popup.")
 							 frame:NSMakeRect(16, 16, 126, 20)
 							  bold:NO
 						 alignment:NSTextAlignmentRight];
@@ -194,10 +196,10 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 
 	_driverPopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(150, 12, 330, 26) pullsDown:NO];
 	[_driverPopup addItemsWithTitles:@[
-		@"SQLite",
-		@"MySQL",
-		@"Microsoft SQL Server",
-		@"PostgreSQL"
+		NSLocalizedString(@"SQLite", @"Database driver name. A brand; do not translate."),
+		NSLocalizedString(@"MySQL", @"Database driver name. A brand; do not translate."),
+		NSLocalizedString(@"Microsoft SQL Server", @"Database driver name. A Microsoft brand; do not translate."),
+		NSLocalizedString(@"PostgreSQL", @"Database driver name. A brand; do not translate.")
 	]];
 	_driverPopup.target = self;
 	_driverPopup.action = @selector(driverPopupChanged:);
@@ -208,24 +210,24 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	[_formContentView addSubview:_driverDivider];
 
 	// SQLite controls
-	_sqliteLabel = [self makeLabel:@"SQLite File:"
+	_sqliteLabel = [self makeLabel:NSLocalizedString(@"SQLite File:", @"Connection form label for the SQLite file path. SQLite is a brand.")
 							 frame:NSMakeRect(16, 64, 126, 20)
 							  bold:NO
 						 alignment:NSTextAlignmentRight];
 	[_formContentView addSubview:_sqliteLabel];
 
 	_sqlitePathField = [[NSTextField alloc] initWithFrame:NSMakeRect(150, 60, 232, 24)];
-	_sqlitePathField.placeholderString = @"/path/to/database.sqlite3";
+	_sqlitePathField.placeholderString = NSLocalizedString(@"/path/to/database.sqlite3", @"Example file path placeholder. Technical; do not translate.");
 	_sqlitePathField.lineBreakMode = NSLineBreakByTruncatingMiddle;
 	[_formContentView addSubview:_sqlitePathField];
 
-	_browseSQLiteButton = [NSButton buttonWithTitle:@"Choose File…"
+	_browseSQLiteButton = [NSButton buttonWithTitle:NSLocalizedString(@"Choose File…", @"Connection form button that opens a file chooser.")
 											 target:self
 											 action:@selector(browseSQLiteFile:)];
 	_browseSQLiteButton.frame = NSMakeRect(388, 58, 96, 28);
 	[_formContentView addSubview:_browseSQLiteButton];
 
-	_sqliteHintLabel = [self makeLabel:@"Select an existing .sqlite3 or .db database file on your Mac."
+	_sqliteHintLabel = [self makeLabel:NSLocalizedString(@"Select an existing .sqlite3 or .db database file on your Mac.", @"Connection form hint under the SQLite file field. Keep the file extensions.")
 								 frame:NSMakeRect(150, 88, 330, 16)
 								  bold:NO
 							 alignment:NSTextAlignmentLeft];
@@ -234,7 +236,7 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	[_formContentView addSubview:_sqliteHintLabel];
 
 	// Server controls
-	_hostLabel = [self makeLabel:@"Host / Address:"
+	_hostLabel = [self makeLabel:NSLocalizedString(@"Host / Address:", @"Connection form label for the server host name.")
 						   frame:NSMakeRect(16, 64, 126, 20)
 							bold:NO
 					   alignment:NSTextAlignmentRight];
@@ -242,10 +244,10 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 
 	_hostField = [[NSTextField alloc] initWithFrame:NSMakeRect(150, 60, 212, 24)];
 	_hostField.stringValue = @"127.0.0.1";
-	_hostField.placeholderString = @"127.0.0.1 or db.example.com";
+	_hostField.placeholderString = NSLocalizedString(@"127.0.0.1 or db.example.com", @"Example host placeholder. Technical; do not translate.");
 	[_formContentView addSubview:_hostField];
 
-	_portLabel = [self makeLabel:@"Port:"
+	_portLabel = [self makeLabel:NSLocalizedString(@"Port:", @"Connection form label for the server port number.")
 						   frame:NSMakeRect(366, 64, 38, 20)
 							bold:NO
 					   alignment:NSTextAlignmentRight];
@@ -255,47 +257,47 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	_portField.stringValue = @"3306";
 	[_formContentView addSubview:_portField];
 
-	_serverInstanceLabel = [self makeLabel:@"Server Instance:"
+	_serverInstanceLabel = [self makeLabel:NSLocalizedString(@"Server Instance:", @"Connection form label for the SQL Server named instance.")
 									 frame:NSMakeRect(16, 98, 126, 20)
 									  bold:NO
 								 alignment:NSTextAlignmentRight];
 	[_formContentView addSubview:_serverInstanceLabel];
 
 	_serverInstanceField = [[NSTextField alloc] initWithFrame:NSMakeRect(150, 94, 330, 24)];
-	_serverInstanceField.placeholderString = @"Optional named instance (defaults to Host)";
+	_serverInstanceField.placeholderString = NSLocalizedString(@"Optional named instance (defaults to Host)", @"Placeholder for the SQL Server named instance field.");
 	[_formContentView addSubview:_serverInstanceField];
 
-	_databaseLabel = [self makeLabel:@"Database Name:"
+	_databaseLabel = [self makeLabel:NSLocalizedString(@"Database Name:", @"Connection form label for the database name.")
 							   frame:NSMakeRect(16, 132, 126, 20)
 								bold:NO
 						   alignment:NSTextAlignmentRight];
 	[_formContentView addSubview:_databaseLabel];
 
 	_databaseField = [[NSTextField alloc] initWithFrame:NSMakeRect(150, 128, 330, 24)];
-	_databaseField.placeholderString = @"e.g. Chinook, Northwind, postgres";
+	_databaseField.placeholderString = NSLocalizedString(@"e.g. Chinook, Northwind, postgres", @"Example database names. The names are sample databases; keep them as they are.");
 	[_formContentView addSubview:_databaseField];
 
-	_usernameLabel = [self makeLabel:@"Username:"
+	_usernameLabel = [self makeLabel:NSLocalizedString(@"Username:", @"Connection form label for the database user name.")
 							   frame:NSMakeRect(16, 166, 126, 20)
 								bold:NO
 						   alignment:NSTextAlignmentRight];
 	[_formContentView addSubview:_usernameLabel];
 
 	_usernameField = [[NSTextField alloc] initWithFrame:NSMakeRect(150, 162, 330, 24)];
-	_usernameField.placeholderString = @"Database user";
+	_usernameField.placeholderString = NSLocalizedString(@"Database user", @"Placeholder for the database user name field.");
 	[_formContentView addSubview:_usernameField];
 
-	_passwordLabel = [self makeLabel:@"Password:"
+	_passwordLabel = [self makeLabel:NSLocalizedString(@"Password:", @"Connection form label for the database password.")
 							   frame:NSMakeRect(16, 200, 126, 20)
 								bold:NO
 						   alignment:NSTextAlignmentRight];
 	[_formContentView addSubview:_passwordLabel];
 
 	_passwordField = [[NSSecureTextField alloc] initWithFrame:NSMakeRect(150, 196, 330, 24)];
-	_passwordField.placeholderString = @"Database password";
+	_passwordField.placeholderString = NSLocalizedString(@"Database password", @"Placeholder for the database password field.");
 	[_formContentView addSubview:_passwordField];
 
-	_saveKeychainCheckbox = [NSButton checkboxWithTitle:@"Save password in Keychain"
+	_saveKeychainCheckbox = [NSButton checkboxWithTitle:NSLocalizedString(@"Save password in Keychain", @"Connection form checkbox. Use Apple's localized name for Keychain.")
 												 target:nil
 												 action:nil];
 	_saveKeychainCheckbox.frame = NSMakeRect(150, 228, 260, 20);
@@ -311,8 +313,8 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	NSString *defaultStatus = _initialStatusPrompt.length > 0
 		? _initialStatusPrompt
 		: (isEditMode
-			? @"Verify or update the connection settings, then click Save & Refresh."
-			: @"Select a database source to import its schema into a new .mad document.");
+			? NSLocalizedString(@"Verify or update the connection settings, then click Save & Refresh.", @"Connection window status prompt when editing an existing connection.")
+			: NSLocalizedString(@"Select a database source to import its schema into a new .mad document.", @"Connection window status prompt when creating a report."));
 	_statusLabel = [[NSTextField alloc] initWithFrame:NSMakeRect(46, 210, 474, 34)];
 	_statusLabel.editable = NO;
 	_statusLabel.selectable = YES;
@@ -327,20 +329,22 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	[content addSubview:_statusLabel];
 
 	// Bottom Buttons
-	_cancelButton = [NSButton buttonWithTitle:@"Cancel"
+	_cancelButton = [NSButton buttonWithTitle:NSLocalizedString(@"Cancel", @"Connection window button that closes without saving.")
 									   target:self
 									   action:@selector(cancelAction:)];
 	_cancelButton.frame = NSMakeRect(172, 250, 96, 28);
 	_cancelButton.keyEquivalent = @"\033";
 	[content addSubview:_cancelButton];
 
-	_testButton = [NSButton buttonWithTitle:@"Test Connection"
+	_testButton = [NSButton buttonWithTitle:NSLocalizedString(@"Test Connection", @"Connection window button that tests the settings.")
 									 target:self
 									 action:@selector(testConnectionAction:)];
 	_testButton.frame = NSMakeRect(276, 250, 124, 28);
 	[content addSubview:_testButton];
 
-	NSString *primaryTitle = isEditMode ? @"Save & Refresh" : @"Create Document…";
+	NSString *primaryTitle = isEditMode
+		? NSLocalizedString(@"Save & Refresh", @"Connection window primary button when editing a connection.")
+		: NSLocalizedString(@"Create Document…", @"Connection window primary button when creating a report.");
 	_createButton = [NSButton buttonWithTitle:primaryTitle
 									   target:self
 									   action:@selector(createDocumentAction:)];
@@ -558,7 +562,7 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 
 - (void)browseSQLiteFile:(id) __unused sender {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
-	panel.title = @"Choose SQLite 3 Database";
+	panel.title = NSLocalizedString(@"Choose SQLite 3 Database", @"Open panel title for choosing a SQLite database file. SQLite is a brand.");
 	panel.canChooseFiles = YES;
 	panel.canChooseDirectories = NO;
 	panel.allowsMultipleSelection = NO;
@@ -603,8 +607,8 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 			}
 			if (outError != NULL) {
 				NSString *msg = (path.length == 0)
-					? @"Please choose an existing SQLite database file."
-					: [NSString stringWithFormat:@"No valid SQLite database file exists at %@.", path];
+					? NSLocalizedString(@"Please choose an existing SQLite database file.", @"Error: no SQLite database file was chosen.")
+					: [[NSString alloc] initWithFormat:NSLocalizedString(@"No valid SQLite database file exists at %@.", @"Error: the chosen SQLite file is missing or empty. %@ is the path."), path];
 				*outError = [NSError errorWithDomain:@"MADMacConnection"
 												code:1
 											userInfo:@{ NSLocalizedDescriptionKey: msg }];
@@ -628,7 +632,7 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain:@"MADMacConnection"
 											code:2
-										userInfo:@{ NSLocalizedDescriptionKey: @"Host and Database Name are required." }];
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"Host and Database Name are required.", @"Error: the connection form is missing its host or database name.") }];
 		}
 		return nil;
 	}
@@ -667,13 +671,13 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	MADDatabaseConnection *conn = [self buildConnectionWithCredentials:&creds error:&buildError];
 	if (conn == nil) {
 		_statusLabel.textColor = [NSColor systemRedColor];
-		_statusLabel.stringValue = [self formattedMessageForError:buildError fallback:@"Invalid connection settings."];
+		_statusLabel.stringValue = [self formattedMessageForError:buildError fallback:NSLocalizedString(@"Invalid connection settings.", @"Connection status line: the settings are incomplete or invalid.")];
 		return;
 	}
 
 	[_spinner startAnimation:nil];
 	_statusLabel.textColor = [NSColor secondaryLabelColor];
-	_statusLabel.stringValue = @"Testing database connection…";
+	_statusLabel.stringValue = NSLocalizedString(@"Testing database connection…", @"Connection status line while the test runs.");
 
 	MADDatabase *db = [MADDatabase newDatabaseWithConnection:conn];
 	NSError *connError = nil;
@@ -685,10 +689,10 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 		NSArray *tables = [db getTablesFromConnection:handle error:&tableError];
 		[db closeConnection:handle];
 		_statusLabel.textColor = [NSColor systemGreenColor];
-		_statusLabel.stringValue = [NSString stringWithFormat:@"Connected! Found %lu schema tables.", (unsigned long)tables.count];
+		_statusLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"Connected! Found %lu schema tables.", @"Connection status line: the test succeeded. %lu is the number of tables read."), (unsigned long)tables.count];
 	} else {
 		_statusLabel.textColor = [NSColor systemRedColor];
-		_statusLabel.stringValue = [self formattedMessageForError:connError fallback:@"Connection failed."];
+		_statusLabel.stringValue = [self formattedMessageForError:connError fallback:NSLocalizedString(@"Connection failed.", @"Connection status line: the connection failed with no more specific reason.")];
 	}
 }
 
@@ -701,14 +705,14 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	MADDatabaseConnection *conn = [self buildConnectionWithCredentials:&creds error:&buildError];
 	if (conn == nil) {
 		_statusLabel.textColor = [NSColor systemRedColor];
-		_statusLabel.stringValue = [self formattedMessageForError:buildError fallback:@"Invalid connection settings."];
+		_statusLabel.stringValue = [self formattedMessageForError:buildError fallback:NSLocalizedString(@"Invalid connection settings.", @"Connection status line: the settings are incomplete or invalid.")];
 		if (outError != NULL) *outError = buildError;
 		return NO;
 	}
 
 	[_spinner startAnimation:nil];
 	_statusLabel.textColor = [NSColor secondaryLabelColor];
-	_statusLabel.stringValue = @"Verifying database connection…";
+	_statusLabel.stringValue = NSLocalizedString(@"Verifying database connection…", @"Connection status line while saving the settings.");
 
 	MADDatabase *db = [MADDatabase newDatabaseWithConnection:conn];
 	NSError *connError = nil;
@@ -717,7 +721,7 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 
 	if (handle == nil || connError != nil) {
 		_statusLabel.textColor = [NSColor systemRedColor];
-		_statusLabel.stringValue = [self formattedMessageForError:connError fallback:@"Connection failed."];
+		_statusLabel.stringValue = [self formattedMessageForError:connError fallback:NSLocalizedString(@"Connection failed.", @"Connection status line: the connection failed with no more specific reason.")];
 		if (outError != NULL) *outError = connError;
 		return NO;
 	}
@@ -758,12 +762,12 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	MADDatabaseConnection *conn = [self buildConnectionWithCredentials:&creds error:&buildError];
 	if (conn == nil) {
 		_statusLabel.textColor = [NSColor systemRedColor];
-		_statusLabel.stringValue = [self formattedMessageForError:buildError fallback:@"Invalid connection settings."];
+		_statusLabel.stringValue = [self formattedMessageForError:buildError fallback:NSLocalizedString(@"Invalid connection settings.", @"Connection status line: the settings are incomplete or invalid.")];
 		return;
 	}
 
 	NSSavePanel *savePanel = [NSSavePanel savePanel];
-	savePanel.title = @"Save New Mobile Analytics Document (.mad)";
+	savePanel.title = NSLocalizedString(@"Save New Mobile Analytics Document (.mad)", @"Save panel title when creating a report. Mobile Analytics Document is the file type name.");
 	savePanel.nameFieldStringValue = @"Untitled Report.mad";
 	savePanel.canCreateDirectories = YES;
 	if ([savePanel runModal] != NSModalResponseOK || savePanel.URL == nil) {
@@ -777,7 +781,7 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 
 	[_spinner startAnimation:nil];
 	_statusLabel.textColor = [NSColor secondaryLabelColor];
-	_statusLabel.stringValue = @"Connecting and importing database schema…";
+	_statusLabel.stringValue = NSLocalizedString(@"Connecting and importing database schema…", @"Connection status line while the new report is created.");
 
 	NSError *createError = nil;
 	MADHeadlessDocument *doc = [MADHeadlessDocument createDocumentAtURL:destURL
@@ -788,7 +792,7 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 
 	if (doc == nil) {
 		_statusLabel.textColor = [NSColor systemRedColor];
-		_statusLabel.stringValue = [self formattedMessageForError:createError fallback:@"Failed to create document."];
+		_statusLabel.stringValue = [self formattedMessageForError:createError fallback:NSLocalizedString(@"Failed to create document.", @"Connection status line: the document could not be created.")];
 		return;
 	}
 

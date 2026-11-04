@@ -281,40 +281,40 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	bar.wantsLayer = YES;
 	bar.layer.backgroundColor = [NSColor windowBackgroundColor].CGColor;
 
-	NSTextField *insertLbl = [NSTextField labelWithString:@"Insert:"];
+	NSTextField *insertLbl = [NSTextField labelWithString:NSLocalizedString(@"Insert:", @"Designer toolbar label before the element palette buttons.")];
 	insertLbl.font = [NSFont systemFontOfSize:11.0 weight:NSFontWeightSemibold];
 	insertLbl.textColor = [NSColor secondaryLabelColor];
 
-	MADMacDraggablePaletteButton *lblBtn = [self makePaletteButtonWithTitle:@"Label"
+	MADMacDraggablePaletteButton *lblBtn = [self makePaletteButtonWithTitle:NSLocalizedString(@"Label", @"Designer palette button that inserts a static label.")
 																 symbolName:@"textformat"
 																	   kind:MADMacPaletteElementKindLabel
 																	 action:@selector(addStaticLabelAction:)
-																	toolTip:@"Click to insert or drag onto any section to place a Static Label"];
-	MADMacDraggablePaletteButton *dataBtn = [self makePaletteButtonWithTitle:@"Data Field"
+																	toolTip:NSLocalizedString(@"Click to insert or drag onto any section to place a Static Label", @"Tooltip for the static-label palette button.")];
+	MADMacDraggablePaletteButton *dataBtn = [self makePaletteButtonWithTitle:NSLocalizedString(@"Data Field", @"Designer palette button that inserts a field bound to the query.")
 																  symbolName:@"tablecells"
 																		kind:MADMacPaletteElementKindDataField
 																	  action:@selector(addDataFieldAction:)
-																	 toolTip:@"Click to insert or drag onto any section to place a bound Data Field"];
-	MADMacDraggablePaletteButton *aggBtn = [self makePaletteButtonWithTitle:@"Aggregate"
+																	 toolTip:NSLocalizedString(@"Click to insert or drag onto any section to place a bound Data Field", @"Tooltip for the data-field palette button.")];
+	MADMacDraggablePaletteButton *aggBtn = [self makePaletteButtonWithTitle:NSLocalizedString(@"Aggregate", @"Designer palette button that inserts an aggregate.")
 																 symbolName:@"sum"
 																	   kind:MADMacPaletteElementKindAggregate
 																	 action:@selector(addAggregateAction:)
-																	toolTip:@"Click to insert or drag onto any section to place a Summary Aggregate"];
-	MADMacDraggablePaletteButton *bcBtn = [self makePaletteButtonWithTitle:@"Barcode"
+																	toolTip:NSLocalizedString(@"Click to insert or drag onto any section to place a Summary Aggregate", @"Tooltip for the aggregate palette button.")];
+	MADMacDraggablePaletteButton *bcBtn = [self makePaletteButtonWithTitle:NSLocalizedString(@"Barcode", @"Designer palette button that inserts a barcode.")
 																symbolName:@"barcode"
 																	  kind:MADMacPaletteElementKindBarcode
 																	action:@selector(addBarcodeAction:)
-																   toolTip:@"Click to insert or drag onto any section to place a Barcode"];
-	MADMacDraggablePaletteButton *imgBtn = [self makePaletteButtonWithTitle:@"Image"
+																   toolTip:NSLocalizedString(@"Click to insert or drag onto any section to place a Barcode", @"Tooltip for the barcode palette button.")];
+	MADMacDraggablePaletteButton *imgBtn = [self makePaletteButtonWithTitle:NSLocalizedString(@"Image", @"Designer palette button that inserts an image.")
 																 symbolName:@"photo"
 																	   kind:MADMacPaletteElementKindImage
 																	 action:@selector(addImageAction:)
-																	toolTip:@"Click to insert or drag onto any section to place an Image"];
-	MADMacDraggablePaletteButton *lineBtn = [self makePaletteButtonWithTitle:@"Line"
+																	toolTip:NSLocalizedString(@"Click to insert or drag onto any section to place an Image", @"Tooltip for the image palette button.")];
+	MADMacDraggablePaletteButton *lineBtn = [self makePaletteButtonWithTitle:NSLocalizedString(@"Line", @"Designer palette button that inserts a horizontal rule.")
 																  symbolName:@"minus"
 																		kind:MADMacPaletteElementKindLineRule
 																	  action:@selector(addLineRuleAction:)
-																	 toolTip:@"Click to insert or drag onto any section to place a horizontal rule"];
+																	 toolTip:NSLocalizedString(@"Click to insert or drag onto any section to place a horizontal rule", @"Tooltip for the horizontal-rule palette button.")];
 
 	NSBox *sep1 = [[NSBox alloc] init];
 	sep1.boxType = NSBoxSeparator;
@@ -326,13 +326,13 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 																			target:self
 																			action:@selector(quickAlignToolbarAction:)];
 	alignBtns.controlSize = NSControlSizeSmall;
-	alignBtns.toolTip = @"Align Selected Elements (Left, Center, Right, Top, Middle, Bottom)";
+	alignBtns.toolTip = NSLocalizedString(@"Align Selected Elements (Left, Center, Right, Top, Middle, Bottom)", @"Tooltip for the six alignment buttons, in their left-to-right order.");
 
-	NSButton *fitBtn = [NSButton buttonWithTitle:@"Size to Fit" target:self action:@selector(sizeSelectedElementsToFitAction:)];
+	NSButton *fitBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Size to Fit", @"Designer toolbar button that resizes the selected elements to their text.") target:self action:@selector(sizeSelectedElementsToFitAction:)];
 	fitBtn.bezelStyle = NSBezelStyleTexturedRounded;
 	fitBtn.controlSize = NSControlSizeSmall;
 	fitBtn.font = [NSFont systemFontOfSize:11.0];
-	fitBtn.toolTip = @"Resize selected element(s) to fit their text content";
+	fitBtn.toolTip = NSLocalizedString(@"Resize selected element(s) to fit their text content", @"Tooltip for the Size to Fit button.");
 
 	NSStackView *leftStack = [NSStackView stackViewWithViews:@[
 		insertLbl, lblBtn, dataBtn, aggBtn, bcBtn, imgBtn, lineBtn, sep1, alignBtns, fitBtn
@@ -343,17 +343,17 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	leftStack.translatesAutoresizingMaskIntoConstraints = NO;
 	[bar addSubview:leftStack];
 
-	_gridToggleBtn = [NSButton checkboxWithTitle:@"Grid" target:self action:@selector(toggleGridAction:)];
+	_gridToggleBtn = [NSButton checkboxWithTitle:NSLocalizedString(@"Grid", @"Designer toolbar toggle that shows the alignment grid.") target:self action:@selector(toggleGridAction:)];
 	_gridToggleBtn.controlSize = NSControlSizeSmall;
 	_gridToggleBtn.font = [NSFont systemFontOfSize:11.0];
 	_gridToggleBtn.state = NSControlStateValueOn;
 
-	_snapToggleBtn = [NSButton checkboxWithTitle:@"Snap" target:self action:@selector(toggleSnapAction:)];
+	_snapToggleBtn = [NSButton checkboxWithTitle:NSLocalizedString(@"Snap", @"Designer toolbar toggle that snaps elements to the grid.") target:self action:@selector(toggleSnapAction:)];
 	_snapToggleBtn.controlSize = NSControlSizeSmall;
 	_snapToggleBtn.font = [NSFont systemFontOfSize:11.0];
 	_snapToggleBtn.state = NSControlStateValueOn;
 
-	_rulersToggleBtn = [NSButton checkboxWithTitle:@"Rulers" target:self action:@selector(toggleRulersAction:)];
+	_rulersToggleBtn = [NSButton checkboxWithTitle:NSLocalizedString(@"Rulers", @"Designer toolbar toggle that shows the rulers.") target:self action:@selector(toggleRulersAction:)];
 	_rulersToggleBtn.controlSize = NSControlSizeSmall;
 	_rulersToggleBtn.font = [NSFont systemFontOfSize:11.0];
 	_rulersToggleBtn.state = NSControlStateValueOn;
@@ -367,7 +367,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	_zoomPercentButton.showsBorderOnlyWhileMouseInside = YES;
 	_zoomPercentButton.controlSize = NSControlSizeSmall;
 	_zoomPercentButton.font = [NSFont monospacedDigitSystemFontOfSize:11.0 weight:NSFontWeightMedium];
-	_zoomPercentButton.toolTip = @"Click to reset zoom to 100%";
+	_zoomPercentButton.toolTip = NSLocalizedString(@"Click to reset zoom to 100%", @"Tooltip for the zoom percentage button.");
 
 	NSStackView *rightStack = [NSStackView stackViewWithViews:@[
 		_gridToggleBtn, _snapToggleBtn, _rulersToggleBtn, _zoomSlider, _zoomPercentButton
@@ -397,12 +397,12 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 }
 
 - (void)populateLeftSidebar:(NSView *)container {
-	NSTextField *minimapHeader = [NSTextField labelWithString:@"PAGE & SECTION MINIMAP"];
+	NSTextField *minimapHeader = [NSTextField labelWithString:NSLocalizedString(@"PAGE & SECTION MINIMAP", @"Designer sidebar heading for the page and section minimap.")];
 	minimapHeader.font = [NSFont systemFontOfSize:10.0 weight:NSFontWeightBold];
 	minimapHeader.textColor = [NSColor secondaryLabelColor];
 	minimapHeader.translatesAutoresizingMaskIntoConstraints = NO;
 
-	NSTextField *minimapSub = [NSTextField labelWithString:@"Click a band to jump & select"];
+	NSTextField *minimapSub = [NSTextField labelWithString:NSLocalizedString(@"Click a band to jump & select", @"Designer minimap hint.")];
 	minimapSub.font = [NSFont systemFontOfSize:9.5];
 	minimapSub.textColor = [NSColor tertiaryLabelColor];
 	minimapSub.translatesAutoresizingMaskIntoConstraints = NO;
@@ -413,7 +413,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	_minimapView.layer.cornerRadius = 5.0;
 	_minimapView.layer.masksToBounds = YES;
 
-	NSTextField *sectionsHeader = [NSTextField labelWithString:@"REPORT BANDS"];
+	NSTextField *sectionsHeader = [NSTextField labelWithString:NSLocalizedString(@"REPORT BANDS", @"Designer sidebar heading for the report band list.")];
 	sectionsHeader.font = [NSFont systemFontOfSize:10.0 weight:NSFontWeightBold];
 	sectionsHeader.textColor = [NSColor secondaryLabelColor];
 	sectionsHeader.translatesAutoresizingMaskIntoConstraints = NO;
@@ -428,12 +428,12 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	_sectionsTableView.target = self;
 
 	NSTableColumn *secNameCol = [[NSTableColumn alloc] initWithIdentifier:@"SectionName"];
-	secNameCol.title = @"Section";
+	secNameCol.title = NSLocalizedString(@"Section", @"Report band list column header.");
 	secNameCol.width = 128.0;
 	[_sectionsTableView addTableColumn:secNameCol];
 
 	NSTableColumn *secMetaCol = [[NSTableColumn alloc] initWithIdentifier:@"SectionMeta"];
-	secMetaCol.title = @"Info";
+	secMetaCol.title = NSLocalizedString(@"Info", @"Report band list column header for the size summary.");
 	secMetaCol.width = 68.0;
 	[_sectionsTableView addTableColumn:secMetaCol];
 
@@ -443,13 +443,13 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	sectionsScroll.borderType = NSBezelBorder;
 	sectionsScroll.translatesAutoresizingMaskIntoConstraints = NO;
 
-	NSTextField *fieldsHeader = [NSTextField labelWithString:@"QUERY FIELDS (DRAG TO CANVAS)"];
+	NSTextField *fieldsHeader = [NSTextField labelWithString:NSLocalizedString(@"QUERY FIELDS (DRAG TO CANVAS)", @"Designer sidebar heading for the query field list.")];
 	fieldsHeader.font = [NSFont systemFontOfSize:10.0 weight:NSFontWeightBold];
 	fieldsHeader.textColor = [NSColor secondaryLabelColor];
 	fieldsHeader.translatesAutoresizingMaskIntoConstraints = NO;
 
 	_queryFieldsSearchField = [[NSSearchField alloc] initWithFrame:NSZeroRect];
-	_queryFieldsSearchField.placeholderString = @"Filter query fields…";
+	_queryFieldsSearchField.placeholderString = NSLocalizedString(@"Filter query fields…", @"Search field placeholder that filters the query field list.");
 	_queryFieldsSearchField.controlSize = NSControlSizeSmall;
 	_queryFieldsSearchField.font = [NSFont systemFontOfSize:11.0];
 	_queryFieldsSearchField.delegate = self;
@@ -467,7 +467,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	[_queryFieldsTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:YES];
 
 	NSTableColumn *fieldCol = [[NSTableColumn alloc] initWithIdentifier:@"QueryFieldName"];
-	fieldCol.title = @"Field";
+	fieldCol.title = NSLocalizedString(@"Field", @"Query field list column header.");
 	fieldCol.width = 190.0;
 	[_queryFieldsTableView addTableColumn:fieldCol];
 
@@ -477,7 +477,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	fieldsScroll.borderType = NSBezelBorder;
 	fieldsScroll.translatesAutoresizingMaskIntoConstraints = NO;
 
-	NSTextField *fieldsHint = [NSTextField labelWithString:@"Drag onto any band or double-click to insert"];
+	NSTextField *fieldsHint = [NSTextField labelWithString:NSLocalizedString(@"Drag onto any band or double-click to insert", @"Designer sidebar hint under the query field list.")];
 	fieldsHint.font = [NSFont systemFontOfSize:9.5];
 	fieldsHint.textColor = [NSColor tertiaryLabelColor];
 	fieldsHint.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -665,50 +665,50 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	// SECTION 1: DOCUMENT PAGE & SELECTED SECTION INSPECTOR
 	// =========================================================================
 	NSStackView *sectionCardStack = nil;
-	NSBox *sectionCard = [self makeInspectorCardBoxWithTitle:@"1 · PAGE & SELECTED SECTION" stackOut:&sectionCardStack];
+	NSBox *sectionCard = [self makeInspectorCardBoxWithTitle:NSLocalizedString(@"1 · PAGE & SELECTED SECTION", @"Inspector card title. Keep the leading number.") stackOut:&sectionCardStack];
 
 	_paperSizePopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
 	[_paperSizePopup addItemsWithTitles:@[
-		@"US Letter (8.5 × 11 in)",
-		@"US Legal (8.5 × 14 in)",
-		@"A4 (210 × 297 mm)"
+		NSLocalizedString(@"US Letter (8.5 × 11 in)", @"Paper size name. Keep US Letter and the dimensions."),
+		NSLocalizedString(@"US Legal (8.5 × 14 in)", @"Paper size name. Keep US Legal and the dimensions."),
+		NSLocalizedString(@"A4 (210 × 297 mm)", @"Paper size name. Keep A4 and the dimensions.")
 	]];
 	_paperSizePopup.target = self;
 	_paperSizePopup.action = @selector(paperSizeChanged:);
-	[sectionCardStack addArrangedSubview:[self makeInspectorRowWithLabel:@"Paper" control:_paperSizePopup]];
+	[sectionCardStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"Paper", @"Inspector row label for the paper size.") control:_paperSizePopup]];
 
 	NSBox *secInnerSep = [[NSBox alloc] init];
 	secInnerSep.boxType = NSBoxSeparator;
 	[sectionCardStack addArrangedSubview:secInnerSep];
 	[secInnerSep.widthAnchor constraintEqualToAnchor:sectionCardStack.widthAnchor].active = YES;
 
-	_selectedSectionBadgeLabel = [NSTextField labelWithString:@"Band: Report Detail"];
+	_selectedSectionBadgeLabel = [NSTextField labelWithString:NSLocalizedString(@"Band: Report Detail", @"Inspector badge placeholder before a band is selected.")];
 	_selectedSectionBadgeLabel.font = [NSFont systemFontOfSize:11.5 weight:NSFontWeightSemibold];
 	_selectedSectionBadgeLabel.textColor = [NSColor controlAccentColor];
 	_selectedSectionBadgeLabel.lineBreakMode = NSLineBreakByTruncatingTail;
 	[sectionCardStack addArrangedSubview:_selectedSectionBadgeLabel];
 
 	_sectionHeightField = [self makeNumericInputFieldWithAction:@selector(sectionHeightFieldEdited:)];
-	NSButton *autoFitSecBtn = [NSButton buttonWithTitle:@"Fit Height"
+	NSButton *autoFitSecBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Fit Height", @"Inspector button that fits the band height to its elements.")
 												 target:self
 												 action:@selector(autoFitSelectedSectionHeightAction:)];
 	autoFitSecBtn.bezelStyle = NSBezelStyleRounded;
 	autoFitSecBtn.controlSize = NSControlSizeSmall;
 	autoFitSecBtn.font = [NSFont systemFontOfSize:10.5];
-	autoFitSecBtn.toolTip = @"Shrink or expand section height to snugly fit its elements";
+	autoFitSecBtn.toolTip = NSLocalizedString(@"Shrink or expand section height to snugly fit its elements", @"Tooltip for the Fit Height button.");
 
 	NSStackView *secHeightControls = [NSStackView stackViewWithViews:@[_sectionHeightField, autoFitSecBtn]];
 	secHeightControls.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	secHeightControls.spacing = 4.0;
-	[sectionCardStack addArrangedSubview:[self makeInspectorRowWithLabel:@"Height (pt)" control:secHeightControls]];
+	[sectionCardStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"Height (pt)", @"Inspector row label. pt is points.") control:secHeightControls]];
 
-	_sectionVisibleCheck = [NSButton checkboxWithTitle:@"Section Visible"
+	_sectionVisibleCheck = [NSButton checkboxWithTitle:NSLocalizedString(@"Section Visible", @"Inspector checkbox that hides or shows the band.")
 												target:self
 												action:@selector(sectionVisibleChanged:)];
 	_sectionVisibleCheck.controlSize = NSControlSizeSmall;
 	_sectionVisibleCheck.font = [NSFont systemFontOfSize:11.0];
 
-	_sectionPageBreakCheck = [NSButton checkboxWithTitle:@"Page Break After"
+	_sectionPageBreakCheck = [NSButton checkboxWithTitle:NSLocalizedString(@"Page Break After", @"Inspector checkbox that starts a new page after the band.")
 												  target:self
 												  action:@selector(sectionPageBreakChanged:)];
 	_sectionPageBreakCheck.controlSize = NSControlSizeSmall;
@@ -730,13 +730,13 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	[rootStack addArrangedSubview:majorDivider];
 	[majorDivider.widthAnchor constraintEqualToAnchor:rootStack.widthAnchor constant:-20.0].active = YES;
 
-	NSTextField *elemMajorHeader = [NSTextField labelWithString:@"2 · SELECTED ELEMENT INSPECTOR"];
+	NSTextField *elemMajorHeader = [NSTextField labelWithString:NSLocalizedString(@"2 · SELECTED ELEMENT INSPECTOR", @"Inspector card title. Keep the leading number.")];
 	elemMajorHeader.font = [NSFont systemFontOfSize:10.5 weight:NSFontWeightBold];
 	elemMajorHeader.textColor = [NSColor labelColor];
 	[rootStack addArrangedSubview:elemMajorHeader];
 
 	_noElementSelectedHintLabel = [NSTextField wrappingLabelWithString:
-		@"No element selected.\n\nClick an element on the canvas to inspect and style it, or drag a Query Field from the left sidebar onto any report band."];
+		NSLocalizedString(@"No element selected.\n\nClick an element on the canvas to inspect and style it, or drag a Query Field from the left sidebar onto any report band.", @"Inspector hint shown when no element is selected.")];
 	_noElementSelectedHintLabel.font = [NSFont systemFontOfSize:11.0];
 	_noElementSelectedHintLabel.textColor = [NSColor secondaryLabelColor];
 	[rootStack addArrangedSubview:_noElementSelectedHintLabel];
@@ -754,9 +754,9 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	// CARD 2A: ELEMENT IDENTITY & SECTION ASSIGNMENT
 	// -------------------------------------------------------------------------
 	NSStackView *idCardStack = nil;
-	NSBox *idCard = [self makeInspectorCardBoxWithTitle:@"ELEMENT & BAND ASSIGNMENT" stackOut:&idCardStack];
+	NSBox *idCard = [self makeInspectorCardBoxWithTitle:NSLocalizedString(@"ELEMENT & BAND ASSIGNMENT", @"Inspector card title for the element identity and band assignment.") stackOut:&idCardStack];
 
-	_elementTypeBadgeLabel = [NSTextField labelWithString:@"Static Label"];
+	_elementTypeBadgeLabel = [NSTextField labelWithString:NSLocalizedString(@"Static Label", @"Element type name: a text label that does not come from the query.")];
 	_elementTypeBadgeLabel.font = [NSFont systemFontOfSize:11.5 weight:NSFontWeightSemibold];
 	_elementTypeBadgeLabel.textColor = [NSColor controlAccentColor];
 	_elementTypeBadgeLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -765,15 +765,15 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	_elementSectionPopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
 	_elementSectionPopup.target = self;
 	_elementSectionPopup.action = @selector(elementSectionAssignmentChanged:);
-	_elementSectionPopup.toolTip = @"Move the selected element(s) to another report section";
-	[idCardStack addArrangedSubview:[self makeInspectorRowWithLabel:@"Band" control:_elementSectionPopup]];
+	_elementSectionPopup.toolTip = NSLocalizedString(@"Move the selected element(s) to another report section", @"Tooltip for the band assignment popup.");
+	[idCardStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"Band", @"Inspector row label for the report band assignment.") control:_elementSectionPopup]];
 
-	NSButton *dupBtn = [NSButton buttonWithTitle:@"Duplicate" target:self action:@selector(duplicateSelectedElementsAction:)];
+	NSButton *dupBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Duplicate", @"Inspector button that duplicates the selected elements.") target:self action:@selector(duplicateSelectedElementsAction:)];
 	dupBtn.bezelStyle = NSBezelStyleRounded;
 	dupBtn.controlSize = NSControlSizeSmall;
 	dupBtn.font = [NSFont systemFontOfSize:11.0];
 
-	NSButton *delBtn = [NSButton buttonWithTitle:@"Delete" target:self action:@selector(deleteSelectedElementsAction:)];
+	NSButton *delBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Delete", @"Inspector button that deletes the selected elements.") target:self action:@selector(deleteSelectedElementsAction:)];
 	delBtn.bezelStyle = NSBezelStyleRounded;
 	delBtn.controlSize = NSControlSizeSmall;
 	delBtn.font = [NSFont systemFontOfSize:11.0];
@@ -793,39 +793,47 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	// CARD 2B: CONTENT & DATA BINDING (Contextual to Element Type)
 	// -------------------------------------------------------------------------
 	NSStackView *bindingStack = nil;
-	_contentBindingCard = [self makeInspectorCardBoxWithTitle:@"CONTENT & DATA BINDING" stackOut:&bindingStack];
+	_contentBindingCard = [self makeInspectorCardBoxWithTitle:NSLocalizedString(@"CONTENT & DATA BINDING", @"Inspector card title for the element content and data binding.") stackOut:&bindingStack];
 
 	_elementTextField = [[NSTextField alloc] initWithFrame:NSZeroRect];
-	_elementTextField.placeholderString = @"Label or barcode text…";
+	_elementTextField.placeholderString = NSLocalizedString(@"Label or barcode text…", @"Inspector text field placeholder for label and barcode content.");
 	_elementTextField.target = self;
 	_elementTextField.action = @selector(elementTextEdited:);
-	_staticTextRow = [self makeInspectorRowWithLabel:@"Text" control:_elementTextField];
+	_staticTextRow = [self makeInspectorRowWithLabel:NSLocalizedString(@"Text", @"Inspector row label for the label text.") control:_elementTextField];
 	[bindingStack addArrangedSubview:_staticTextRow];
 
 	_queryFieldPopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
 	_queryFieldPopup.target = self;
 	_queryFieldPopup.action = @selector(queryFieldChanged:);
-	_queryFieldRow = [self makeInspectorRowWithLabel:@"Field" control:_queryFieldPopup];
+	_queryFieldRow = [self makeInspectorRowWithLabel:NSLocalizedString(@"Field", @"Inspector row label for the bound query field.") control:_queryFieldPopup];
 	[bindingStack addArrangedSubview:_queryFieldRow];
 
 	_aggregateTypePopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
-	[_aggregateTypePopup addItemsWithTitles:@[@"SUM", @"MEAN (AVG)", @"COUNT", @"FIRST", @"LAST", @"MIN", @"MAX"]];
+	[_aggregateTypePopup addItemsWithTitles:@[
+		NSLocalizedString(@"SUM", @"Aggregate function name. SQL; do not translate."),
+		NSLocalizedString(@"MEAN (AVG)", @"Aggregate function name. AVG is SQL; do not translate."),
+		NSLocalizedString(@"COUNT", @"Aggregate function name. SQL; do not translate."),
+		NSLocalizedString(@"FIRST", @"Aggregate function name. SQL; do not translate."),
+		NSLocalizedString(@"LAST", @"Aggregate function name. SQL; do not translate."),
+		NSLocalizedString(@"MIN", @"Aggregate function name. SQL; do not translate."),
+		NSLocalizedString(@"MAX", @"Aggregate function name. SQL; do not translate.")
+	]];
 	_aggregateTypePopup.target = self;
 	_aggregateTypePopup.action = @selector(aggregateTypeChanged:);
-	_aggregateFunctionRow = [self makeInspectorRowWithLabel:@"Function" control:_aggregateTypePopup];
+	_aggregateFunctionRow = [self makeInspectorRowWithLabel:NSLocalizedString(@"Function", @"Inspector row label for the aggregate function.") control:_aggregateTypePopup];
 	[bindingStack addArrangedSubview:_aggregateFunctionRow];
 
 	_aggregateScopePopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
 	_aggregateScopePopup.target = self;
 	_aggregateScopePopup.action = @selector(aggregateScopeChanged:);
-	_aggregateScopeRow = [self makeInspectorRowWithLabel:@"Scope" control:_aggregateScopePopup];
+	_aggregateScopeRow = [self makeInspectorRowWithLabel:NSLocalizedString(@"Scope", @"Inspector row label for the aggregate scope.") control:_aggregateScopePopup];
 	[bindingStack addArrangedSubview:_aggregateScopeRow];
 
-	_numericFormatCheck = [NSButton checkboxWithTitle:@"Numeric" target:self action:@selector(numericFormatChanged:)];
+	_numericFormatCheck = [NSButton checkboxWithTitle:NSLocalizedString(@"Numeric", @"Inspector checkbox that formats the value as a number.") target:self action:@selector(numericFormatChanged:)];
 	_numericFormatCheck.controlSize = NSControlSizeSmall;
 	_numericFormatCheck.font = [NSFont systemFontOfSize:11.0];
 
-	NSTextField *decLbl = [NSTextField labelWithString:@"Dec:"];
+	NSTextField *decLbl = [NSTextField labelWithString:NSLocalizedString(@"Dec:", @"Inspector label for the decimal-place count.")];
 	decLbl.font = [NSFont systemFontOfSize:11.0];
 	decLbl.textColor = [NSColor secondaryLabelColor];
 	_decimalsField = [self makeNumericInputFieldWithAction:@selector(numericFormatChanged:)];
@@ -834,7 +842,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	NSStackView *numFormatControls = [NSStackView stackViewWithViews:@[_numericFormatCheck, decLbl, _decimalsField]];
 	numFormatControls.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	numFormatControls.spacing = 4.0;
-	_numericFormatRow = [self makeInspectorRowWithLabel:@"Format" control:numFormatControls];
+	_numericFormatRow = [self makeInspectorRowWithLabel:NSLocalizedString(@"Format", @"Inspector row label for the number format.") control:numFormatControls];
 	[bindingStack addArrangedSubview:_numericFormatRow];
 
 	_barcodeSymbologyPopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
@@ -849,25 +857,29 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	}
 	_barcodeSymbologyPopup.target = self;
 	_barcodeSymbologyPopup.action = @selector(barcodeSymbologyChanged:);
-	_barcodeSymbologyRow = [self makeInspectorRowWithLabel:@"Symbology" control:_barcodeSymbologyPopup];
+	_barcodeSymbologyRow = [self makeInspectorRowWithLabel:NSLocalizedString(@"Symbology", @"Inspector row label for the barcode symbology.") control:_barcodeSymbologyPopup];
 	[bindingStack addArrangedSubview:_barcodeSymbologyRow];
 
-	_barcodeHumanReadableCheck = [NSButton checkboxWithTitle:@"Show Text" target:self action:@selector(barcodeOptionsChanged:)];
+	_barcodeHumanReadableCheck = [NSButton checkboxWithTitle:NSLocalizedString(@"Show Text", @"Inspector checkbox that prints the barcode value below the bars.") target:self action:@selector(barcodeOptionsChanged:)];
 	_barcodeHumanReadableCheck.controlSize = NSControlSizeSmall;
 	_barcodeHumanReadableCheck.font = [NSFont systemFontOfSize:11.0];
 	_barcodeBorderPopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
-	[_barcodeBorderPopup addItemsWithTitles:@[@"No Border", @"Bind Bars", @"Box Frame"]];
+	[_barcodeBorderPopup addItemsWithTitles:@[
+		NSLocalizedString(@"No Border", @"Barcode border style: none."),
+		NSLocalizedString(@"Bind Bars", @"Barcode border style: bars only."),
+		NSLocalizedString(@"Box Frame", @"Barcode border style: a full frame.")
+	]];
 	_barcodeBorderPopup.target = self;
 	_barcodeBorderPopup.action = @selector(barcodeOptionsChanged:);
 	NSStackView *bcOptControls = [NSStackView stackViewWithViews:@[_barcodeHumanReadableCheck, _barcodeBorderPopup]];
 	bcOptControls.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	bcOptControls.spacing = 6.0;
-	_barcodeOptionsRow = [self makeInspectorRowWithLabel:@"Options" control:bcOptControls];
+	_barcodeOptionsRow = [self makeInspectorRowWithLabel:NSLocalizedString(@"Options", @"Inspector row label for the barcode options.") control:bcOptControls];
 	[bindingStack addArrangedSubview:_barcodeOptionsRow];
 
-	_chooseImageButton = [NSButton buttonWithTitle:@"Choose Image…" target:self action:@selector(chooseImageFileAction:)];
+	_chooseImageButton = [NSButton buttonWithTitle:NSLocalizedString(@"Choose Image…", @"Inspector button that opens an image chooser.") target:self action:@selector(chooseImageFileAction:)];
 	_chooseImageButton.bezelStyle = NSBezelStyleRounded;
-	_imagePickerRow = [self makeInspectorRowWithLabel:@"Image" control:_chooseImageButton];
+	_imagePickerRow = [self makeInspectorRowWithLabel:NSLocalizedString(@"Image", @"Inspector row label for the image file.") control:_chooseImageButton];
 	[bindingStack addArrangedSubview:_imagePickerRow];
 
 	[_elementInspectorCardsStack addArrangedSubview:_contentBindingCard];
@@ -877,49 +889,63 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	// CARD 2C: TYPOGRAPHY, ALIGNMENT & COLORS
 	// -------------------------------------------------------------------------
 	NSStackView *typoStack = nil;
-	NSBox *typoCard = [self makeInspectorCardBoxWithTitle:@"TYPOGRAPHY & APPEARANCE" stackOut:&typoStack];
+	NSBox *typoCard = [self makeInspectorCardBoxWithTitle:NSLocalizedString(@"TYPOGRAPHY & APPEARANCE", @"Inspector card title for typography and colours.") stackOut:&typoStack];
 
 	_fontFamilyPopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
 	[_fontFamilyPopup addItemsWithTitles:@[
-		@"Helvetica", @"HelveticaNeue", @"ArialMT", @"Courier",
-		@"TimesNewRomanPSMT", @"Avenir-Book", @"Menlo-Regular", @"Georgia"
+		NSLocalizedString(@"Helvetica", @"Font family name. Technical; do not translate."),
+		NSLocalizedString(@"HelveticaNeue", @"Font family name. Technical; do not translate."),
+		NSLocalizedString(@"ArialMT", @"Font family name. Technical; do not translate."),
+		NSLocalizedString(@"Courier", @"Font family name. Technical; do not translate."),
+		NSLocalizedString(@"TimesNewRomanPSMT", @"Font family name. Technical; do not translate."),
+		NSLocalizedString(@"Avenir-Book", @"Font family name. Technical; do not translate."),
+		NSLocalizedString(@"Menlo-Regular", @"Font family name. Technical; do not translate."),
+		NSLocalizedString(@"Georgia", @"Font family name. Technical; do not translate.")
 	]];
 	_fontFamilyPopup.target = self;
 	_fontFamilyPopup.action = @selector(typographyChanged:);
-	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:@"Font" control:_fontFamilyPopup]];
+	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"Font", @"Inspector row label for the font family.") control:_fontFamilyPopup]];
 
 	_fontSizeField = [self makeNumericInputFieldWithAction:@selector(typographyChanged:)];
-	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:@"Size (pt)" control:_fontSizeField]];
+	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"Size (pt)", @"Inspector row label for the font size in points.") control:_fontSizeField]];
 
-	_boldCheck = [NSButton checkboxWithTitle:@"B" target:self action:@selector(typographyChanged:)];
+	_boldCheck = [NSButton checkboxWithTitle:NSLocalizedString(@"B", @"Typography checkbox: bold. A one-letter style abbreviation; do not translate.") target:self action:@selector(typographyChanged:)];
 	_boldCheck.font = [NSFont boldSystemFontOfSize:11.0];
 	_boldCheck.controlSize = NSControlSizeSmall;
-	_italicCheck = [NSButton checkboxWithTitle:@"I" target:self action:@selector(typographyChanged:)];
+	_italicCheck = [NSButton checkboxWithTitle:NSLocalizedString(@"I", @"Typography checkbox: italic. A one-letter style abbreviation; do not translate.") target:self action:@selector(typographyChanged:)];
 	_italicCheck.font = [NSFontManager.sharedFontManager convertFont:[NSFont systemFontOfSize:11.0] toHaveTrait:NSItalicFontMask];
 	_italicCheck.controlSize = NSControlSizeSmall;
-	_underlineCheck = [NSButton checkboxWithTitle:@"U" target:self action:@selector(typographyChanged:)];
+	_underlineCheck = [NSButton checkboxWithTitle:NSLocalizedString(@"U", @"Typography checkbox: underline. A one-letter style abbreviation; do not translate.") target:self action:@selector(typographyChanged:)];
 	_underlineCheck.font = [NSFont systemFontOfSize:11.0];
 	_underlineCheck.controlSize = NSControlSizeSmall;
-	_strikethroughCheck = [NSButton checkboxWithTitle:@"S" target:self action:@selector(typographyChanged:)];
+	_strikethroughCheck = [NSButton checkboxWithTitle:NSLocalizedString(@"S", @"Typography checkbox: strikethrough. A one-letter style abbreviation; do not translate.") target:self action:@selector(typographyChanged:)];
 	_strikethroughCheck.font = [NSFont systemFontOfSize:11.0];
 	_strikethroughCheck.controlSize = NSControlSizeSmall;
 
 	NSStackView *styleChecks = [NSStackView stackViewWithViews:@[_boldCheck, _italicCheck, _underlineCheck, _strikethroughCheck]];
 	styleChecks.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	styleChecks.spacing = 8.0;
-	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:@"Style" control:styleChecks]];
+	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"Style", @"Inspector row label for the bold/italic/underline/strikethrough toggles.") control:styleChecks]];
 
-	_hAlignControl = [NSSegmentedControl segmentedControlWithLabels:@[@"Left", @"Center", @"Right"]
+	_hAlignControl = [NSSegmentedControl segmentedControlWithLabels:@[
+		NSLocalizedString(@"Left", @"Horizontal alignment: left."),
+		NSLocalizedString(@"Center", @"Horizontal alignment: centre."),
+		NSLocalizedString(@"Right", @"Horizontal alignment: right.")
+	]
 													   trackingMode:NSSegmentSwitchTrackingSelectOne
 															 target:self
 															 action:@selector(alignmentChanged:)];
-	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:@"H-Align" control:_hAlignControl]];
+	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"H-Align", @"Inspector row label for horizontal alignment.") control:_hAlignControl]];
 
-	_vAlignControl = [NSSegmentedControl segmentedControlWithLabels:@[@"Top", @"Middle", @"Bottom"]
+	_vAlignControl = [NSSegmentedControl segmentedControlWithLabels:@[
+		NSLocalizedString(@"Top", @"Vertical alignment: top."),
+		NSLocalizedString(@"Middle", @"Vertical alignment: middle."),
+		NSLocalizedString(@"Bottom", @"Vertical alignment: bottom.")
+	]
 													   trackingMode:NSSegmentSwitchTrackingSelectOne
 															 target:self
 															 action:@selector(alignmentChanged:)];
-	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:@"V-Align" control:_vAlignControl]];
+	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"V-Align", @"Inspector row label for vertical alignment.") control:_vAlignControl]];
 
 	_fgColorWell = [[NSColorWell alloc] initWithFrame:NSMakeRect(0, 0, 38, 22)];
 	_fgColorWell.target = self;
@@ -927,7 +953,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	[_fgColorWell.widthAnchor constraintEqualToConstant:40.0].active = YES;
 	[_fgColorWell.heightAnchor constraintEqualToConstant:22.0].active = YES;
 
-	_hasBgColorCheck = [NSButton checkboxWithTitle:@"Fill" target:self action:@selector(colorChanged:)];
+	_hasBgColorCheck = [NSButton checkboxWithTitle:NSLocalizedString(@"Fill", @"Inspector checkbox that fills the element background.") target:self action:@selector(colorChanged:)];
 	_hasBgColorCheck.controlSize = NSControlSizeSmall;
 	_hasBgColorCheck.font = [NSFont systemFontOfSize:11.0];
 
@@ -940,7 +966,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	NSStackView *colorRowControls = [NSStackView stackViewWithViews:@[_fgColorWell, _hasBgColorCheck, _bgColorWell]];
 	colorRowControls.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	colorRowControls.spacing = 6.0;
-	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:@"Colors" control:colorRowControls]];
+	[typoStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"Colors", @"Inspector row label for the foreground and background colours.") control:colorRowControls]];
 
 	[_elementInspectorCardsStack addArrangedSubview:typoCard];
 	[typoCard.widthAnchor constraintEqualToAnchor:_elementInspectorCardsStack.widthAnchor].active = YES;
@@ -949,39 +975,39 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	// CARD 2D: POSITION, SIZE & BOX MODEL (Borders, Padding, Margin)
 	// -------------------------------------------------------------------------
 	NSStackView *geomStack = nil;
-	NSBox *geomCard = [self makeInspectorCardBoxWithTitle:@"POSITION, SIZE & BOX MODEL" stackOut:&geomStack];
+	NSBox *geomCard = [self makeInspectorCardBoxWithTitle:NSLocalizedString(@"POSITION, SIZE & BOX MODEL", @"Inspector card title for position, size, border, padding and margin.") stackOut:&geomStack];
 
 	_posXField = [self makeNumericInputFieldWithAction:@selector(elementGeometryEdited:)];
 	_posYField = [self makeNumericInputFieldWithAction:@selector(elementGeometryEdited:)];
 	_widthField = [self makeNumericInputFieldWithAction:@selector(elementGeometryEdited:)];
 	_heightField = [self makeNumericInputFieldWithAction:@selector(elementGeometryEdited:)];
 
-	NSTextField *yLbl = [NSTextField labelWithString:@"Y:"];
+	NSTextField *yLbl = [NSTextField labelWithString:NSLocalizedString(@"Y:", @"Inspector label for the vertical position in points.")];
 	yLbl.font = [NSFont systemFontOfSize:11.0];
 	yLbl.textColor = [NSColor secondaryLabelColor];
 	NSStackView *xyRow = [NSStackView stackViewWithViews:@[_posXField, yLbl, _posYField]];
 	xyRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	xyRow.spacing = 4.0;
 	xyRow.distribution = NSStackViewDistributionFillProportionally;
-	[geomStack addArrangedSubview:[self makeInspectorRowWithLabel:@"X / Y (pt)" control:xyRow]];
+	[geomStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"X / Y (pt)", @"Inspector row label for the position in points.") control:xyRow]];
 
-	NSTextField *hLbl = [NSTextField labelWithString:@"H:"];
+	NSTextField *hLbl = [NSTextField labelWithString:NSLocalizedString(@"H:", @"Inspector label for the height in points.")];
 	hLbl.font = [NSFont systemFontOfSize:11.0];
 	hLbl.textColor = [NSColor secondaryLabelColor];
 	NSStackView *whRow = [NSStackView stackViewWithViews:@[_widthField, hLbl, _heightField]];
 	whRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	whRow.spacing = 4.0;
 	whRow.distribution = NSStackViewDistributionFillProportionally;
-	[geomStack addArrangedSubview:[self makeInspectorRowWithLabel:@"W / H (pt)" control:whRow]];
+	[geomStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"W / H (pt)", @"Inspector row label for the size in points.") control:whRow]];
 
 	_borderTopField = [self makeNumericInputFieldWithAction:@selector(elementBoxModelEdited:)];
-	_borderTopField.toolTip = @"Top Border (pt)";
+	_borderTopField.toolTip = NSLocalizedString(@"Top Border (pt)", @"Tooltip for the top border width field, in points.");
 	_borderBottomField = [self makeNumericInputFieldWithAction:@selector(elementBoxModelEdited:)];
-	_borderBottomField.toolTip = @"Bottom Border (pt)";
+	_borderBottomField.toolTip = NSLocalizedString(@"Bottom Border (pt)", @"Tooltip for the bottom border width field, in points.");
 	_borderLeftField = [self makeNumericInputFieldWithAction:@selector(elementBoxModelEdited:)];
-	_borderLeftField.toolTip = @"Left Border (pt)";
+	_borderLeftField.toolTip = NSLocalizedString(@"Left Border (pt)", @"Tooltip for the left border width field, in points.");
 	_borderRightField = [self makeNumericInputFieldWithAction:@selector(elementBoxModelEdited:)];
-	_borderRightField.toolTip = @"Right Border (pt)";
+	_borderRightField.toolTip = NSLocalizedString(@"Right Border (pt)", @"Tooltip for the right border width field, in points.");
 
 	NSStackView *bordersGrid = [NSStackView stackViewWithViews:@[
 		_borderTopField, _borderBottomField, _borderLeftField, _borderRightField
@@ -989,18 +1015,18 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	bordersGrid.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	bordersGrid.spacing = 3.0;
 	bordersGrid.distribution = NSStackViewDistributionFillEqually;
-	[geomStack addArrangedSubview:[self makeInspectorRowWithLabel:@"Border T/B/L/R" control:bordersGrid]];
+	[geomStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"Border T/B/L/R", @"Inspector row label for the four border widths: top, bottom, left, right.") control:bordersGrid]];
 
 	_paddingAllField = [self makeNumericInputFieldWithAction:@selector(elementBoxModelEdited:)];
 	_marginAllField = [self makeNumericInputFieldWithAction:@selector(elementBoxModelEdited:)];
-	NSTextField *mLbl = [NSTextField labelWithString:@"M:"];
+	NSTextField *mLbl = [NSTextField labelWithString:NSLocalizedString(@"M:", @"Inspector label for the margin in points.")];
 	mLbl.font = [NSFont systemFontOfSize:11.0];
 	mLbl.textColor = [NSColor secondaryLabelColor];
 	NSStackView *padMarRow = [NSStackView stackViewWithViews:@[_paddingAllField, mLbl, _marginAllField]];
 	padMarRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	padMarRow.spacing = 4.0;
 	padMarRow.distribution = NSStackViewDistributionFillProportionally;
-	[geomStack addArrangedSubview:[self makeInspectorRowWithLabel:@"Pad / Margin" control:padMarRow]];
+	[geomStack addArrangedSubview:[self makeInspectorRowWithLabel:NSLocalizedString(@"Pad / Margin", @"Inspector row label for padding and margin in points.") control:padMarRow]];
 
 	[_elementInspectorCardsStack addArrangedSubview:geomCard];
 	[geomCard.widthAnchor constraintEqualToAnchor:_elementInspectorCardsStack.widthAnchor].active = YES;
@@ -1187,7 +1213,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 
 	// 1. Query field popup
 	[_queryFieldPopup removeAllItems];
-	[_queryFieldPopup addItemWithTitle:@"(Unbound)"];
+	[_queryFieldPopup addItemWithTitle:NSLocalizedString(@"(Unbound)", @"Field popup item for an element that is not bound to a field.")];
 	_queryFieldPopup.lastItem.tag = 0;
 	for (RptqQueryField *qf in [self allQueryFields]) {
 		[_queryFieldPopup addItemWithTitle:[self displayLabelForQueryField:qf]];
@@ -1199,22 +1225,22 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	NSArray<RptqDocumentSection *> *sections = [_canvasView orderedSections];
 	for (NSUInteger i = 0; i < sections.count; i++) {
 		RptqDocumentSection *sec = sections[i];
-		NSString *title = doc ? [doc displayTitleForSection:sec] : ([sec localizedDisplayName] ?: @"Section");
+		NSString *title = doc ? [doc displayTitleForSection:sec] : ([sec localizedDisplayName] ?: NSLocalizedString(@"Section", @"Generic report band name."));
 		[_elementSectionPopup addItemWithTitle:title];
 		_elementSectionPopup.lastItem.tag = (NSInteger)i;
 	}
 
 	// 3. Aggregate Scope ("For Each") popup
 	[_aggregateScopePopup removeAllItems];
-	[_aggregateScopePopup addItemWithTitle:@"Entire Report"];
+	[_aggregateScopePopup addItemWithTitle:NSLocalizedString(@"Entire Report", @"Aggregate scope: one value for the whole report.")];
 	_aggregateScopePopup.lastItem.tag = 0; // MTAggregateGroupByTypeReport
-	[_aggregateScopePopup addItemWithTitle:@"Each Page"];
+	[_aggregateScopePopup addItemWithTitle:NSLocalizedString(@"Each Page", @"Aggregate scope: one value per page.")];
 	_aggregateScopePopup.lastItem.tag = -1; // MTAggregateGroupByTypePage
 	int32_t groupIndex = 1;
 	for (RptqDocumentSection *sec in sections) {
 		if ((MADDocumentSectionType)sec.type == MADDocumentSectionTypeGroupHeader) {
-			NSString *secTitle = doc ? [doc displayTitleForSection:sec] : @"Group";
-			NSString *gTitle = [NSString stringWithFormat:@"Group #%d (%@)", groupIndex, secTitle];
+			NSString *secTitle = doc ? [doc displayTitleForSection:sec] : NSLocalizedString(@"Group", @"Generic grouping band name.");
+			NSString *gTitle = [[NSString alloc] initWithFormat:NSLocalizedString(@"Group #%1$d (%2$@)", @"Aggregate scope: one value per group. %1$d is the group level, %2$@ the band name."), groupIndex, secTitle];
 			[_aggregateScopePopup addItemWithTitle:gTitle];
 			_aggregateScopePopup.lastItem.tag = groupIndex; // MTAggregateGroupByTypeSection, groupNumber = groupIndex
 			groupIndex++;
@@ -1246,8 +1272,8 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 		if ([tableColumn.identifier isEqualToString:@"SectionName"]) {
 			NSTextField *lbl = [NSTextField labelWithString:@""];
 			NSString *prefix = isGroup ? @"  • " : @"● ";
-			NSString *name = doc ? [doc displayTitleForSection:sec] : ([sec localizedDisplayName] ?: @"Section");
-			if (!sec.visibility) name = [name stringByAppendingString:@" (Hidden)"];
+			NSString *name = doc ? [doc displayTitleForSection:sec] : ([sec localizedDisplayName] ?: NSLocalizedString(@"Section", @"Generic report band name."));
+			if (!sec.visibility) name = [name stringByAppendingString:NSLocalizedString(@" (Hidden)", @"Suffix on a hidden report band name. Keep the leading space.")];
 			NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:[prefix stringByAppendingString:name]];
 			NSColor *dotColor = [sec isEqual:_canvasView.selectedSection]
 				? [NSColor controlAccentColor]
@@ -1261,8 +1287,8 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 			NSUInteger count = [_canvasView elementsInSection:sec].count;
 			CGFloat h = sec.layoutHeight > 0 ? (CGFloat)sec.layoutHeight : MAX(36.0, (CGFloat)sec.height - 44.0);
 			NSString *meta = sec.visibility
-				? [NSString stringWithFormat:@"%lu · %.0fpt%@", (unsigned long)count, h, [sec producesFormFeed] ? @" ⇥" : @""]
-				: @"Hidden";
+				? [[NSString alloc] initWithFormat:NSLocalizedString(@"%1$lu · %2$.0fpt%3$@", @"Band size summary: element count, height in points, and an optional form-feed glyph. %3$@ may be empty."), (unsigned long)count, h, [sec producesFormFeed] ? @" ⇥" : @""]
+				: NSLocalizedString(@"Hidden", @"Band size summary for a hidden band.");
 			NSTextField *lbl = [NSTextField labelWithString:meta];
 			lbl.font = [NSFont monospacedDigitSystemFontOfSize:10.0 weight:NSFontWeightRegular];
 			lbl.textColor = [NSColor secondaryLabelColor];
@@ -1277,7 +1303,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 		NSTextField *lbl = [NSTextField labelWithString:[self displayLabelForQueryField:qf]];
 		lbl.font = [NSFont systemFontOfSize:11.0 weight:NSFontWeightRegular];
 		lbl.lineBreakMode = NSLineBreakByTruncatingTail;
-		lbl.toolTip = @"Drag onto any report section on the canvas, or double-click to insert into the selected section";
+		lbl.toolTip = NSLocalizedString(@"Drag onto any report section on the canvas, or double-click to insert into the selected section", @"Tooltip on a query field row in the designer sidebar.");
 		return lbl;
 	}
 	return nil;
@@ -1365,8 +1391,8 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 		if (idx != NSNotFound) {
 			[_sectionsTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:idx] byExtendingSelection:NO];
 		}
-		NSString *secTitle = doc ? [doc displayTitleForSection:sec] : ([sec localizedDisplayName] ?: @"Section");
-		_selectedSectionBadgeLabel.stringValue = [NSString stringWithFormat:@"Band: %@", secTitle];
+		NSString *secTitle = doc ? [doc displayTitleForSection:sec] : ([sec localizedDisplayName] ?: NSLocalizedString(@"Section", @"Generic report band name."));
+		_selectedSectionBadgeLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"Band: %@", @"Inspector badge with the selected band name."), secTitle];
 		CGFloat totalH = sec.layoutHeight > 0 ? (CGFloat)sec.layoutHeight : MAX(36.0, (CGFloat)sec.height - 44.0);
 		_sectionHeightField.stringValue = [NSString stringWithFormat:@"%.0f", totalH];
 		_sectionVisibleCheck.state = sec.visibility ? NSControlStateValueOn : NSControlStateValueOff;
@@ -1386,14 +1412,14 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 		BOOL isBarcode = [el isKindOfClass:[RptqDocumentElementBarcode class]];
 		BOOL isImg = [el isKindOfClass:[RptqDocumentElementImage class]];
 
-		NSString *kindName = @"Element";
-		if (isLabel) kindName = @"Static Label";
-		else if (isData) kindName = @"Data Field";
-		else if (isAgg) kindName = @"Summary Aggregate";
-		else if (isBarcode) kindName = @"Barcode";
-		else if (isImg) kindName = @"Image";
+		NSString *kindName = NSLocalizedString(@"Element", @"Generic document element name.");
+		if (isLabel) kindName = NSLocalizedString(@"Static Label", @"Element type name: a text label that does not come from the query.");
+		else if (isData) kindName = NSLocalizedString(@"Data Field", @"Element type name: a field bound to the query.");
+		else if (isAgg) kindName = NSLocalizedString(@"Summary Aggregate", @"Element type name: an aggregate value.");
+		else if (isBarcode) kindName = NSLocalizedString(@"Barcode", @"Element type name: a barcode.");
+		else if (isImg) kindName = NSLocalizedString(@"Image", @"Element type name: an image.");
 		if (selectedSet.count > 1) {
-			_elementTypeBadgeLabel.stringValue = [NSString stringWithFormat:@"%lu Elements Selected (%@)", (unsigned long)selectedSet.count, kindName];
+			_elementTypeBadgeLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"%1$lu Elements Selected (%2$@)", @"Inspector badge when several elements are selected. %1$lu is the count, %2$@ the kind."), (unsigned long)selectedSet.count, kindName];
 		} else {
 			_elementTypeBadgeLabel.stringValue = kindName;
 		}
@@ -1581,7 +1607,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	RptqStoreContext *ctx = doc.managedObjectContext;
 	RptqDocumentElementLabel *lbl = (RptqDocumentElementLabel *)[ctx insertObjectForEntity:NSStringFromClass([RptqDocumentElementLabel class]) identifier:0];
 	lbl.type = MADPrintPageElementTypeLabelStatic;
-	lbl.text = @"Static Label";
+	lbl.text = NSLocalizedString(@"Static Label", @"Canvas placeholder text for a newly inserted static label.");
 	[self attachElement:lbl toSection:targetSec atPoint:origin withSize:NSMakeSize(124.0, 22.0)];
 	return lbl;
 }
@@ -1606,7 +1632,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 		dl.tableID = bound.inQueryTable.alias ?: bound.inQueryTable.databaseSchemaTable.name;
 		dl.text = [NSString stringWithFormat:@"[%@.%@]", dl.tableID ?: @"", dl.fieldID ?: @""];
 	} else {
-		dl.text = @"[Data Field]";
+		dl.text = NSLocalizedString(@"[Data Field]", @"Canvas placeholder text for a newly inserted data field.");
 	}
 	[self attachElement:dl toSection:targetSec atPoint:origin withSize:NSMakeSize(140.0, 22.0)];
 	return dl;
@@ -1964,7 +1990,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	NSRect elRect = [_canvasView elementRectInSectionContent:element];
 	[[um prepareWithInvocationTarget:self] undoInsertedElement:element inSection:section atOrigin:elRect.origin];
 	if (!um.isUndoing) {
-		[um setActionName:@"Insert Element"];
+		[um setActionName:NSLocalizedString(@"Insert Element", @"Undo action name for inserting an element.")];
 	}
 }
 
@@ -1975,7 +2001,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	if (!um) return;
 	[[um prepareWithInvocationTarget:self] restoreRemovedElement:element toSection:section atOrigin:origin];
 	if (!um.isUndoing) {
-		[um setActionName:@"Delete Element"];
+		[um setActionName:NSLocalizedString(@"Delete Element", @"Undo action name for deleting elements.")];
 	}
 }
 
@@ -2425,7 +2451,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	if (um && inverseChanges.count > 0) {
 		[[um prepareWithInvocationTarget:self] applyElementGeometryChanges:inverseChanges isUndoOrRedo:YES];
 		if (!um.isUndoing) {
-			[um setActionName:@"Move / Resize Element"];
+			[um setActionName:NSLocalizedString(@"Move / Resize Element", @"Undo action name for moving or resizing an element.")];
 		}
 	}
 
@@ -2472,7 +2498,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	if (um && inverseMoves.count > 0) {
 		[[um prepareWithInvocationTarget:self] applyCrossSectionElementMoves:inverseMoves isUndoOrRedo:YES];
 		if (!um.isUndoing) {
-			[um setActionName:@"Move Element to Section"];
+			[um setActionName:NSLocalizedString(@"Move Element to Section", @"Undo action name for moving an element to another band.")];
 		}
 	}
 
@@ -2507,7 +2533,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 															  newHeight:oldHeight
 														   isUndoOrRedo:YES];
 		if (!um.isUndoing) {
-			[um setActionName:@"Resize Section"];
+			[um setActionName:NSLocalizedString(@"Resize Section", @"Undo action name for resizing a band.")];
 		}
 	}
 	[doc notifyDocumentMutated];
@@ -2581,7 +2607,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 															newText:oldText
 													   isUndoOrRedo:YES];
 		if (!um.isUndoing) {
-			[um setActionName:@"Edit Label Text"];
+			[um setActionName:NSLocalizedString(@"Edit Label Text", @"Undo action name for editing a label text.")];
 		}
 	}
 	[doc notifyDocumentMutated];
@@ -2594,18 +2620,18 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 					   inSection:(RptqDocumentSection *)section
 					   withEvent:(NSEvent *)event {
 	MADMacDocument *doc = self.madDocument;
-	NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Designer Context Menu"];
+	NSMenu *menu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Designer Context Menu", @"Title of the designer canvas context menu. Never shown to the user.")];
 	if (element) {
-		[menu addItemWithTitle:@"Duplicate" action:@selector(duplicateSelectedElementsAction:) keyEquivalent:@""];
-		[menu addItemWithTitle:@"Size to Fit Content" action:@selector(sizeSelectedElementsToFitAction:) keyEquivalent:@""];
+		[menu addItemWithTitle:NSLocalizedString(@"Duplicate", @"Context menu item that duplicates the selection.") action:@selector(duplicateSelectedElementsAction:) keyEquivalent:@""];
+		[menu addItemWithTitle:NSLocalizedString(@"Size to Fit Content", @"Context menu item that resizes the element to its text.") action:@selector(sizeSelectedElementsToFitAction:) keyEquivalent:@""];
 
-		NSMenuItem *moveItem = [[NSMenuItem alloc] initWithTitle:@"Move to Band" action:nil keyEquivalent:@""];
-		NSMenu *moveSubmenu = [[NSMenu alloc] initWithTitle:@"Move to Band"];
+		NSMenuItem *moveItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Move to Band", @"Context submenu title that moves the element to another band.") action:nil keyEquivalent:@""];
+		NSMenu *moveSubmenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Move to Band", @"Context submenu title that moves the element to another band.")];
 		NSArray<RptqDocumentSection *> *sections = [_canvasView orderedSections];
 		RptqDocumentSection *curSec = [_canvasView sectionContainingElement:element];
 		for (NSUInteger i = 0; i < sections.count; i++) {
 			RptqDocumentSection *sec = sections[i];
-			NSString *secTitle = doc ? [doc displayTitleForSection:sec] : ([sec localizedDisplayName] ?: @"Section");
+			NSString *secTitle = doc ? [doc displayTitleForSection:sec] : ([sec localizedDisplayName] ?: NSLocalizedString(@"Section", @"Generic report band name."));
 			NSMenuItem *secItem = [[NSMenuItem alloc] initWithTitle:secTitle
 															 action:@selector(contextMenuMoveToSectionAction:)
 													  keyEquivalent:@""];
@@ -2618,19 +2644,19 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 		[menu addItem:moveItem];
 
 		[menu addItem:[NSMenuItem separatorItem]];
-		NSMenuItem *delItem = [[NSMenuItem alloc] initWithTitle:@"Delete"
+		NSMenuItem *delItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Delete", @"Context menu item that deletes the selection.")
 														 action:@selector(deleteSelectedElementsAction:)
 												  keyEquivalent:@""];
 		delItem.target = self;
 		[menu addItem:delItem];
 	} else if (section) {
 		_canvasView.selectedSection = section;
-		[menu addItemWithTitle:@"Insert Static Label" action:@selector(addStaticLabelAction:) keyEquivalent:@""];
-		[menu addItemWithTitle:@"Insert Data Field" action:@selector(addDataFieldAction:) keyEquivalent:@""];
-		[menu addItemWithTitle:@"Insert Aggregate" action:@selector(addAggregateAction:) keyEquivalent:@""];
-		[menu addItemWithTitle:@"Insert Barcode" action:@selector(addBarcodeAction:) keyEquivalent:@""];
+		[menu addItemWithTitle:NSLocalizedString(@"Insert Static Label", @"Context menu item that inserts a static label.") action:@selector(addStaticLabelAction:) keyEquivalent:@""];
+		[menu addItemWithTitle:NSLocalizedString(@"Insert Data Field", @"Context menu item that inserts a data field.") action:@selector(addDataFieldAction:) keyEquivalent:@""];
+		[menu addItemWithTitle:NSLocalizedString(@"Insert Aggregate", @"Context menu item that inserts an aggregate.") action:@selector(addAggregateAction:) keyEquivalent:@""];
+		[menu addItemWithTitle:NSLocalizedString(@"Insert Barcode", @"Context menu item that inserts a barcode.") action:@selector(addBarcodeAction:) keyEquivalent:@""];
 		[menu addItem:[NSMenuItem separatorItem]];
-		[menu addItemWithTitle:@"Fit Band Height to Elements" action:@selector(autoFitSelectedSectionHeightAction:) keyEquivalent:@""];
+		[menu addItemWithTitle:NSLocalizedString(@"Fit Band Height to Elements", @"Context menu item that fits the band height to its elements.") action:@selector(autoFitSelectedSectionHeightAction:) keyEquivalent:@""];
 	}
 	for (NSMenuItem *item in menu.itemArray) {
 		if (!item.target) item.target = self;

@@ -57,23 +57,23 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 + (NSString *)statusMessageForPageCount:(NSUInteger)pageCount
 							   rowCount:(NSUInteger)rowCount {
 	NSString *pageText = (pageCount == 1)
-		? @"1 page"
-		: [NSString stringWithFormat:@"%lu pages", (unsigned long)pageCount];
+		? NSLocalizedString(@"1 page", @"Status line: the rendered report has one page.")
+		: [[NSString alloc] initWithFormat:NSLocalizedString(@"%lu pages", @"Status line: the rendered report has several pages. %lu is the count."), (unsigned long)pageCount];
 	NSString *rowText = (rowCount == 1)
-		? @"1 cached row"
-		: [NSString stringWithFormat:@"%lu cached rows", (unsigned long)rowCount];
-	return [NSString stringWithFormat:@"Rendered %@ from %@.", pageText, rowText];
+		? NSLocalizedString(@"1 cached row", @"Status line: the report cached one row.")
+		: [[NSString alloc] initWithFormat:NSLocalizedString(@"%lu cached rows", @"Status line: the report cached several rows. %lu is the count."), (unsigned long)rowCount];
+	return [[NSString alloc] initWithFormat:NSLocalizedString(@"Rendered %1$@ from %2$@.", @"Status line after rendering. %1$@ is the page count phrase, %2$@ is the cached-row count phrase."), pageText, rowText];
 }
 
 + (NSString *)friendlyTitleForExporterFormat:(NSString *)formatName extension:(NSString *)ext {
-	if ([formatName isEqualToString:@"pdf"]) return [NSString stringWithFormat:@"PDF Document (.%@)", ext];
-	if ([formatName isEqualToString:@"html"]) return [NSString stringWithFormat:@"HTML Page (.%@)", ext];
-	if ([formatName isEqualToString:@"html-flow"]) return [NSString stringWithFormat:@"HTML Flow (.%@)", ext];
-	if ([formatName isEqualToString:@"csv"]) return [NSString stringWithFormat:@"CSV Spreadsheet (.%@)", ext];
-	if ([formatName isEqualToString:@"json"]) return [NSString stringWithFormat:@"JSON Data (.%@)", ext];
-	if ([formatName isEqualToString:@"json-report"]) return [NSString stringWithFormat:@"JSON Full Report (.%@)", ext];
-	if ([formatName isEqualToString:@"text"]) return [NSString stringWithFormat:@"Plain Text (.%@)", ext];
-	return [NSString stringWithFormat:@"%@ (.%@)", formatName.uppercaseString, ext];
+	if ([formatName isEqualToString:@"pdf"]) return [[NSString alloc] initWithFormat:NSLocalizedString(@"PDF Document (.%@)", @"Export format menu: PDF. Keep PDF and the file extension. %@ is the extension."), ext];
+	if ([formatName isEqualToString:@"html"]) return [[NSString alloc] initWithFormat:NSLocalizedString(@"HTML Page (.%@)", @"Export format menu: one HTML page. Keep HTML and the file extension. %@ is the extension."), ext];
+	if ([formatName isEqualToString:@"html-flow"]) return [[NSString alloc] initWithFormat:NSLocalizedString(@"HTML Flow (.%@)", @"Export format menu: flowing HTML. Keep HTML and the file extension. %@ is the extension."), ext];
+	if ([formatName isEqualToString:@"csv"]) return [[NSString alloc] initWithFormat:NSLocalizedString(@"CSV Spreadsheet (.%@)", @"Export format menu: CSV. Keep CSV and the file extension. %@ is the extension."), ext];
+	if ([formatName isEqualToString:@"json"]) return [[NSString alloc] initWithFormat:NSLocalizedString(@"JSON Data (.%@)", @"Export format menu: JSON data. Keep JSON and the file extension. %@ is the extension."), ext];
+	if ([formatName isEqualToString:@"json-report"]) return [[NSString alloc] initWithFormat:NSLocalizedString(@"JSON Full Report (.%@)", @"Export format menu: JSON with layout. Keep JSON and the file extension. %@ is the extension."), ext];
+	if ([formatName isEqualToString:@"text"]) return [[NSString alloc] initWithFormat:NSLocalizedString(@"Plain Text (.%@)", @"Export format menu: plain text. %@ is the file extension."), ext];
+	return [[NSString alloc] initWithFormat:NSLocalizedString(@"%1$@ (%2$@)", @"Export format menu fallback. %1$@ is the upper-cased format identifier, %2$@ is the file extension."), formatName.uppercaseString, ext];
 }
 
 - (instancetype)initWithDocument:(MADMacDocument *)document {
@@ -110,7 +110,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	topSep.autoresizingMask = NSViewWidthSizable | NSViewMaxYMargin;
 	[topBar addSubview:topSep];
 
-	NSTextField *pageSizeLabel = [NSTextField labelWithString:@"Page Size:"];
+	NSTextField *pageSizeLabel = [NSTextField labelWithString:NSLocalizedString(@"Page Size:", @"Viewer toolbar label for the paper-size popup.")];
 	pageSizeLabel.font = [NSFont systemFontOfSize:12 weight:NSFontWeightMedium];
 	pageSizeLabel.textColor = [NSColor secondaryLabelColor];
 
@@ -125,79 +125,79 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	}
 	[self syncPageSizePopupSelection];
 
-	_refreshButton = [NSButton buttonWithTitle:@"Refresh"
+	_refreshButton = [NSButton buttonWithTitle:NSLocalizedString(@"Refresh", @"Viewer button that re-runs the query and re-renders the report.")
 										target:self
 										action:@selector(refreshReportAction:)];
 	_refreshButton.image = [NSImage imageWithSystemSymbolName:@"arrow.clockwise"
-									 accessibilityDescription:@"Refresh Report"];
+									 accessibilityDescription:NSLocalizedString(@"Refresh Report", @"Accessibility description for the refresh button icon.")];
 	_refreshButton.imagePosition = NSImageLeft;
 	_refreshButton.bezelStyle = NSBezelStyleRounded;
 
-	_connectionButton = [NSButton buttonWithTitle:@"Connection…"
+	_connectionButton = [NSButton buttonWithTitle:NSLocalizedString(@"Connection…", @"Viewer button that opens the database connection settings.")
 										   target:self
 										   action:@selector(editDatabaseConnectionAction:)];
 	_connectionButton.image = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
-										accessibilityDescription:@"Database Connection"];
+										accessibilityDescription:NSLocalizedString(@"Database Connection", @"Accessibility description for the connection button icon.")];
 	_connectionButton.imagePosition = NSImageLeft;
 	_connectionButton.bezelStyle = NSBezelStyleRounded;
-	_connectionButton.toolTip = @"Configure Database Connection Settings…";
+	_connectionButton.toolTip = NSLocalizedString(@"Configure Database Connection Settings…", @"Tooltip for the connection button.");
 
 	// Zoom controls
 	_zoomOutButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"minus.magnifyingglass"
-														 accessibilityDescription:@"Zoom Out"]
+														 accessibilityDescription:NSLocalizedString(@"Zoom Out", @"Accessibility description for the zoom-out icon.")]
 										target:self
 										action:@selector(zoomOutAction:)];
 	_zoomOutButton.bezelStyle = NSBezelStyleRounded;
-	_zoomOutButton.toolTip = @"Zoom Out";
+	_zoomOutButton.toolTip = NSLocalizedString(@"Zoom Out", @"Tooltip for the zoom-out button.");
 
 	_zoomLabelButton = [NSButton buttonWithTitle:@"100%"
 										  target:self
 										  action:@selector(zoomActualSizeAction:)];
 	_zoomLabelButton.bezelStyle = NSBezelStyleRounded;
 	_zoomLabelButton.font = [NSFont monospacedDigitSystemFontOfSize:11 weight:NSFontWeightMedium];
-	_zoomLabelButton.toolTip = @"Reset Zoom to 100% (Actual Page Size)";
+	_zoomLabelButton.toolTip = NSLocalizedString(@"Reset Zoom to 100% (Actual Page Size)", @"Tooltip for the zoom percentage button.");
 
 	_zoomInButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"plus.magnifyingglass"
-														accessibilityDescription:@"Zoom In"]
+														accessibilityDescription:NSLocalizedString(@"Zoom In", @"Accessibility description for the zoom-in icon.")]
 									   target:self
 									   action:@selector(zoomInAction:)];
 	_zoomInButton.bezelStyle = NSBezelStyleRounded;
-	_zoomInButton.toolTip = @"Zoom In";
+	_zoomInButton.toolTip = NSLocalizedString(@"Zoom In", @"Tooltip for the zoom-in button.");
 
 	// Page navigation controls
 	_prevPageButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"chevron.left"
-														  accessibilityDescription:@"Previous Page"]
+														  accessibilityDescription:NSLocalizedString(@"Previous Page", @"Accessibility description for the previous-page icon.")]
 										 target:self
 										 action:@selector(previousPageAction:)];
 	_prevPageButton.bezelStyle = NSBezelStyleRounded;
-	_prevPageButton.toolTip = @"Previous Page";
+	_prevPageButton.toolTip = NSLocalizedString(@"Previous Page", @"Tooltip for the previous-page button.");
 
-	_pageNumberLabel = [NSTextField labelWithString:@"Page 0 of 0"];
+	_pageNumberLabel = [NSTextField labelWithString:NSLocalizedString(@"Page 0 of 0", @"Viewer page-number placeholder before a report is rendered.")];
 	_pageNumberLabel.font = [NSFont monospacedDigitSystemFontOfSize:12 weight:NSFontWeightRegular];
 	_pageNumberLabel.textColor = [NSColor secondaryLabelColor];
 	_pageNumberLabel.alignment = NSTextAlignmentCenter;
 
 	_nextPageButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"chevron.right"
-														  accessibilityDescription:@"Next Page"]
+														  accessibilityDescription:NSLocalizedString(@"Next Page", @"Accessibility description for the next-page icon.")]
 										 target:self
 										 action:@selector(nextPageAction:)];
 	_nextPageButton.bezelStyle = NSBezelStyleRounded;
-	_nextPageButton.toolTip = @"Next Page";
+	_nextPageButton.toolTip = NSLocalizedString(@"Next Page", @"Tooltip for the next-page button.");
 
 	// Print & Export buttons with icons
-	_printButton = [NSButton buttonWithTitle:@"Print…"
+	_printButton = [NSButton buttonWithTitle:NSLocalizedString(@"Print…", @"Viewer button that prints the rendered report.")
 									  target:self
 									  action:@selector(printReportAction:)];
 	_printButton.image = [NSImage imageWithSystemSymbolName:@"printer"
-								   accessibilityDescription:@"Print Report"];
+								   accessibilityDescription:NSLocalizedString(@"Print Report", @"Accessibility description for the print button icon.")];
 	_printButton.imagePosition = NSImageLeft;
 	_printButton.bezelStyle = NSBezelStyleRounded;
 
-	_exportButton = [NSButton buttonWithTitle:@"Export…"
+	_exportButton = [NSButton buttonWithTitle:NSLocalizedString(@"Export…", @"Viewer button that exports the rendered report.")
 									   target:self
 									   action:@selector(exportReportAction:)];
 	_exportButton.image = [NSImage imageWithSystemSymbolName:@"square.and.arrow.up"
-									accessibilityDescription:@"Export Report"];
+									accessibilityDescription:NSLocalizedString(@"Export Report", @"Accessibility description for the export button icon.")];
 	_exportButton.imagePosition = NSImageLeft;
 	_exportButton.bezelStyle = NSBezelStyleRounded;
 
@@ -271,12 +271,12 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	_spinner.controlSize = NSControlSizeSmall;
 	_spinner.displayedWhenStopped = NO;
 
-	_statusLabel = [NSTextField labelWithString:@"Not yet refreshed. Click “Refresh” to query the database and render the report."];
+	_statusLabel = [NSTextField labelWithString:NSLocalizedString(@"Not yet refreshed. Click “Refresh” to query the database and render the report.", @"Viewer status line before the first refresh. The quoted word matches the Refresh button.")];
 	_statusLabel.font = [NSFont systemFontOfSize:12];
 	_statusLabel.textColor = [NSColor secondaryLabelColor];
 	_statusLabel.lineBreakMode = NSLineBreakByTruncatingTail;
 
-	_paperStatusLabel = [NSTextField labelWithString:[NSString stringWithFormat:@"Rendered Page Size: %@", [MTPaper displayNameForPaperType:_renderedPaperType]]];
+	_paperStatusLabel = [NSTextField labelWithString:[[NSString alloc] initWithFormat:NSLocalizedString(@"Rendered Page Size: %@", @"Viewer status line. %@ is a paper name such as A4."), [MTPaper displayNameForPaperType:_renderedPaperType]]];
 	_paperStatusLabel.font = [NSFont systemFontOfSize:11 weight:NSFontWeightMedium];
 	_paperStatusLabel.textColor = [NSColor secondaryLabelColor];
 
@@ -409,19 +409,19 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	PDFDocument *pdfDoc = _pdfView.document;
 	NSUInteger totalPages = pdfDoc != nil ? pdfDoc.pageCount : 0;
 	if (totalPages == 0) {
-		_pageNumberLabel.stringValue = @"Page 0 of 0";
+		_pageNumberLabel.stringValue = NSLocalizedString(@"Page 0 of 0", @"Viewer page-number placeholder before a report is rendered.");
 		_prevPageButton.enabled = NO;
 		_nextPageButton.enabled = NO;
 	} else {
 		PDFPage *curPage = _pdfView.currentPage;
 		NSUInteger curIdx = curPage != nil ? [pdfDoc indexForPage:curPage] + 1 : 1;
-		_pageNumberLabel.stringValue = [NSString stringWithFormat:@"Page %lu of %lu",
+		_pageNumberLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"Page %1$lu of %2$lu", @"Viewer page-number label. %1$lu is the current page, %2$lu the total."),
 										(unsigned long)curIdx,
 										(unsigned long)totalPages];
 		_prevPageButton.enabled = _pdfView.canGoToPreviousPage;
 		_nextPageButton.enabled = _pdfView.canGoToNextPage;
 	}
-	_paperStatusLabel.stringValue = [NSString stringWithFormat:@"Rendered Page Size: %@",
+	_paperStatusLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"Rendered Page Size: %@", @"Viewer status line. %@ is a paper name such as A4."),
 									 [MTPaper displayNameForPaperType:_renderedPaperType]];
 }
 
@@ -471,7 +471,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 								completion:(nullable void (^)(BOOL success, NSError * _Nullable error))completion {
 	if (url == nil || _document == nil) {
 		if (completion) {
-			completion(NO, [NSError errorWithDomain:@"MADMacViewer" code:1 userInfo:@{ NSLocalizedDescriptionKey: @"No SQLite file URL selected." }]);
+			completion(NO, [NSError errorWithDomain:@"MADMacViewer" code:1 userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"No SQLite file URL selected.", @"Error: the user must choose a SQLite database file.") }]);
 		}
 		return;
 	}
@@ -487,7 +487,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 				[strongSelf reloadPreview];
 			} else {
 				strongSelf.lastRefreshError = error;
-				strongSelf.statusLabel.stringValue = [strongSelf formattedMessageForError:error fallback:@"Refresh failed."];
+				strongSelf.statusLabel.stringValue = [strongSelf formattedMessageForError:error fallback:NSLocalizedString(@"Refresh failed.", @"Viewer status line: the refresh failed with no more specific reason.")];
 				strongSelf.statusLabel.textColor = [NSColor systemRedColor];
 			}
 		}
@@ -500,7 +500,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 - (void)handleRefreshFailureWithError:(nullable NSError *)error
 					   onRetrySuccess:(nullable void (^)(void))onRetrySuccess {
 	_lastRefreshError = error;
-	_statusLabel.stringValue = [self formattedMessageForError:error fallback:@"Refresh failed."];
+	_statusLabel.stringValue = [self formattedMessageForError:error fallback:NSLocalizedString(@"Refresh failed.", @"Viewer status line: the refresh failed with no more specific reason.")];
 	_statusLabel.textColor = [NSColor systemRedColor];
 
 	MADHeadlessDocument *doc = _document.headlessDocument;
@@ -529,10 +529,10 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 
 		NSAlert *alert = [[NSAlert alloc] init];
 		alert.alertStyle = NSAlertStyleWarning;
-		alert.messageText = [NSString stringWithFormat:@"Database File “%@” Could Not Be Found", fileName];
-		alert.informativeText = [NSString stringWithFormat:@"MAD Designer could not find the SQLite database file for this report at:\n%@\n\nWould you like to locate the database file on your Mac?", expectedPath];
-		[alert addButtonWithTitle:@"Locate File…"];
-		[alert addButtonWithTitle:@"Cancel"];
+		alert.messageText = [[NSString alloc] initWithFormat:NSLocalizedString(@"Database File “%@” Could Not Be Found", @"Refresh alert title. %@ is the missing SQLite file name."), fileName];
+		alert.informativeText = [[NSString alloc] initWithFormat:NSLocalizedString(@"MAD Designer could not find the SQLite database file for this report at:\n%@\n\nWould you like to locate the database file on your Mac?", @"Refresh alert body. %@ is the expected file path. The last sentence asks whether to open a file chooser."), expectedPath];
+		[alert addButtonWithTitle:NSLocalizedString(@"Locate File…", @"Refresh alert button that opens a file chooser for the missing database.")];
+		[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Refresh alert button that dismisses the alert.")];
 
 		__weak typeof(self) weakSelf = self;
 		[alert beginSheetModalForWindow:win completionHandler:^(NSModalResponse returnCode) {
@@ -541,8 +541,8 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 				return;
 			}
 			NSOpenPanel *panel = [NSOpenPanel openPanel];
-			panel.title = [NSString stringWithFormat:@"Locate “%@”", fileName];
-			panel.message = [NSString stringWithFormat:@"Select the SQLite database file “%@” for this report.", fileName];
+			panel.title = [[NSString alloc] initWithFormat:NSLocalizedString(@"Locate “%@”", @"Open panel title when locating a missing database. %@ is the file name."), fileName];
+			panel.message = [[NSString alloc] initWithFormat:NSLocalizedString(@"Select the SQLite database file “%@” for this report.", @"Open panel message when locating a missing database. %@ is the file name."), fileName];
 			panel.canChooseFiles = YES;
 			panel.canChooseDirectories = NO;
 			panel.allowsMultipleSelection = NO;
@@ -567,7 +567,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	// Case 2: Server Database Needs Credentials or Authentication Failed
 	if (!isSQLite && [self isAuthenticationError:error]) {
 		if (wc != nil && win != nil && win.isVisible) {
-			NSString *prompt = [self formattedMessageForError:error fallback:@"Enter credentials to connect to the database server."];
+			NSString *prompt = [self formattedMessageForError:error fallback:NSLocalizedString(@"Enter credentials to connect to the database server.", @"Prompt shown when the database server rejected the credentials.")];
 			__weak typeof(self) weakSelf = self;
 			[wc presentConnectionSettingsWithPrompt:prompt onUpdated:^{
 				[weakSelf performRefreshWithSuccessHandler:onRetrySuccess];
@@ -580,14 +580,14 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	if (win != nil && win.isVisible) {
 		NSAlert *alert = [[NSAlert alloc] init];
 		alert.alertStyle = NSAlertStyleWarning;
-		alert.messageText = error.localizedDescription ?: @"Could Not Refresh Report Data";
+		alert.messageText = error.localizedDescription ?: NSLocalizedString(@"Could Not Refresh Report Data", @"Refresh alert title when there is no more specific error message.");
 		NSString *reason = error.localizedFailureReason;
 		alert.informativeText = (reason.length > 0 && ![reason isEqualToString:alert.messageText])
 			? reason
-			: @"Check that the database server is reachable and your connection settings are valid.";
-		[alert addButtonWithTitle:@"Connection Settings…"];
-		[alert addButtonWithTitle:@"Retry"];
-		[alert addButtonWithTitle:@"Cancel"];
+			: NSLocalizedString(@"Check that the database server is reachable and your connection settings are valid.", @"Refresh alert body suggesting the likely causes.");
+		[alert addButtonWithTitle:NSLocalizedString(@"Connection Settings…", @"Refresh alert button that opens the database connection settings.")];
+		[alert addButtonWithTitle:NSLocalizedString(@"Retry", @"Refresh alert button that tries the refresh again.")];
+		[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Refresh alert button that dismisses the alert.")];
 
 		__weak typeof(self) weakSelf = self;
 		[alert beginSheetModalForWindow:win completionHandler:^(NSModalResponse returnCode) {
@@ -614,7 +614,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	_renderedPaperSize = doc.paperSize;
 
 	[_spinner startAnimation:nil];
-	_statusLabel.stringValue = @"Executing SQL query and formatting report pages…";
+	_statusLabel.stringValue = NSLocalizedString(@"Executing SQL query and formatting report pages…", @"Viewer status line while refresh and rendering are running.");
 	_statusLabel.textColor = [NSColor secondaryLabelColor];
 
 	__weak typeof(self) weakSelf = self;
@@ -642,7 +642,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	MADHeadlessDocument *doc = _document.headlessDocument;
 	if (doc == nil || !doc.refreshed) {
 		_pdfView.document = nil;
-		_statusLabel.stringValue = @"Not yet refreshed. Click “Refresh” to query the database and render the report.";
+		_statusLabel.stringValue = NSLocalizedString(@"Not yet refreshed. Click “Refresh” to query the database and render the report.", @"Viewer status line before the first refresh. The quoted word matches the Refresh button.");
 		_statusLabel.textColor = [NSColor secondaryLabelColor];
 		[self updateZoomAndPageControls];
 		return;
@@ -686,7 +686,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	_activeExportSavePanel = panel;
 
 	NSView *accessory = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 360, 44)];
-	NSTextField *formatLabel = [NSTextField labelWithString:@"Export Format:"];
+	NSTextField *formatLabel = [NSTextField labelWithString:NSLocalizedString(@"Export Format:", @"Export save panel label for the format popup.")];
 	formatLabel.font = [NSFont systemFontOfSize:13 weight:NSFontWeightMedium];
 	formatLabel.frame = NSMakeRect(16, 12, 100, 20);
 
@@ -777,7 +777,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 								error:&err]) {
 			if (err) [NSApp presentError:err];
 		} else {
-			strongSelf.statusLabel.stringValue = [NSString stringWithFormat:@"Exported %@ to %@",
+			strongSelf.statusLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"Exported %1$@ to %2$@", @"Viewer status line after a successful export. %1$@ is the format, %2$@ the file name."),
 												  formatName.uppercaseString,
 												  panel.URL.lastPathComponent];
 			strongSelf.statusLabel.textColor = [NSColor systemGreenColor];

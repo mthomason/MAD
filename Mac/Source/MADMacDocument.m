@@ -128,7 +128,7 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain:@"MADMacDocument"
 											code:1
-										userInfo:@{ NSLocalizedDescriptionKey: @"No active report store to write." }];
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"No active report store to write.", @"Error: the document has no open report store.") }];
 		}
 		return NO;
 	}
@@ -201,25 +201,29 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	if (section == nil) return @"";
 	switch (section.type) {
 		case MADDocumentSectionTypeReportHeader:
-			return @"Report Header";
+			return NSLocalizedString(@"Report Header", @"Report band name; matches the designer's band list.");
 		case MADDocumentSectionTypePageHeader:
-			return @"Page Header";
+			return NSLocalizedString(@"Page Header", @"Report band name; matches the designer's band list.");
 		case MADDocumentSectionTypeBody:
-			return @"Report Detail";
+			return NSLocalizedString(@"Report Detail", @"Report band name; the repeated detail band.");
 		case MADDocumentSectionTypePageFooter:
-			return @"Page Footer";
+			return NSLocalizedString(@"Page Footer", @"Report band name; matches the designer's band list.");
 		case MADDocumentSectionTypeReportFooter:
-			return @"Report Footer";
+			return NSLocalizedString(@"Report Footer", @"Report band name; matches the designer's band list.");
 		case MADDocumentSectionTypeGroupHeader: {
 			NSString *field = [section.inGroup fieldNameNice];
-			return field.length > 0 ? [NSString stringWithFormat:@"Group Header (%@)", field] : @"Group Header";
+			return field.length > 0
+				? [[NSString alloc] initWithFormat:NSLocalizedString(@"Group Header (%@)", @"Report band name with the grouping field, e.g. Group Header (Region)."), field]
+				: NSLocalizedString(@"Group Header", @"Report band name; matches the designer's band list.");
 		}
 		case MADDocumentSectionTypeGroupFooter: {
 			NSString *field = [section.inGroup fieldNameNice];
-			return field.length > 0 ? [NSString stringWithFormat:@"Group Footer (%@)", field] : @"Group Footer";
+			return field.length > 0
+				? [[NSString alloc] initWithFormat:NSLocalizedString(@"Group Footer (%@)", @"Report band name with the grouping field, e.g. Group Footer (Region)."), field]
+				: NSLocalizedString(@"Group Footer", @"Report band name; matches the designer's band list.");
 		}
 		default:
-			return [section localizedDisplayName] ?: @"Section";
+			return [section localizedDisplayName] ?: NSLocalizedString(@"Section", @"Generic report band name.");
 	}
 }
 
@@ -297,7 +301,7 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 		if (completion) {
 			NSError *err = [NSError errorWithDomain:@"MADMacDocument"
 											   code:2
-										   userInfo:@{ NSLocalizedDescriptionKey: @"No document is open." }];
+										   userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"No document is open.", @"Error: an action needs an open report.") }];
 			completion(NO, err);
 		}
 		return;
@@ -368,7 +372,7 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 			if (!ok && err == nil) {
 				err = [NSError errorWithDomain:@"MADMacDocument"
 										  code:3
-									  userInfo:@{ NSLocalizedDescriptionKey: @"Could not refresh report data. Check the query and database connection settings." }];
+									  userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"Could not refresh report data. Check the query and database connection settings.", @"Error: the report refresh failed with no more specific reason.") }];
 			}
 			[[NSNotificationCenter defaultCenter] postNotificationName:MADMacDocumentDidRefreshNotification
 																object:strongSelf];
@@ -393,7 +397,7 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:@"MADMacDocument"
 										 code:4
-									 userInfo:@{ NSLocalizedDescriptionKey: @"No active document to export." }];
+									 userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"No active document to export.", @"Error: an export was requested with no open report.") }];
 		}
 		return NO;
 	}
@@ -402,7 +406,7 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:@"MADMacDocument"
 										 code:5
-									 userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Unknown export format '%@'.", format] }];
+									 userInfo:@{ NSLocalizedDescriptionKey: [[NSString alloc] initWithFormat:NSLocalizedString(@"Unknown export format '%@'.", @"Error: the export format identifier is not registered. %@ is the identifier."), format] }];
 		}
 		return NO;
 	}
@@ -410,7 +414,7 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:@"MADMacDocument"
 										 code:6
-									 userInfo:@{ NSLocalizedDescriptionKey: [exporterClass unavailableReason] ?: @"Exporter unavailable." }];
+									 userInfo:@{ NSLocalizedDescriptionKey: [exporterClass unavailableReason] ?: NSLocalizedString(@"Exporter unavailable.", @"Error: the chosen export format is not available on this system.") }];
 		}
 		return NO;
 	}
