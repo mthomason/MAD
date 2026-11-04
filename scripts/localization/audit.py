@@ -348,6 +348,16 @@ def audit_text(relative_path, text):
 	}
 	no_comments, code_only = mask_source(text)
 
+	# Every argument span of an NSLocalizedString call.  A literal inside one is
+	# already being localized, so the array scan must not report it again.
+	wrapped_spans = []
+	for call in CALL_RE.finditer(code_only):
+		close_index, _wrapped_args = _split_arguments(no_comments, call.end() - 1)
+		wrapped_spans.append((call.start(), close_index))
+
+	def is_wrapped(position):
+		return any(start <= position <= end for start, end in wrapped_spans)
+
 	for call in CALL_RE.finditer(code_only):
 		open_index = call.end() - 1
 		_close_index, args = _split_arguments(no_comments, open_index)
@@ -375,6 +385,8 @@ def audit_text(relative_path, text):
 		for match in pattern.finditer(no_comments):
 			if code_only[match.start("keyword")] == " ":
 				continue
+			if is_wrapped(match.start("literal")):
+				continue
 			_end, body = adjacent_literal_body(no_comments, match.start("literal"))
 			if not body.strip() or not has_letters(decode_literal(body)):
 				continue
@@ -398,6 +410,8 @@ def audit_text(relative_path, text):
 				if not has_letters(decode_literal(raw)):
 					continue
 				position = bracket + 1 + literal.start()
+				if is_wrapped(position):
+					continue
 				text_value = "%s = %s" % (match.group("keyword"), raw)
 				findings.append(Finding(
 					"raw-ui-literal", relative_path,

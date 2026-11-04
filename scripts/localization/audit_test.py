@@ -138,6 +138,17 @@ field.placeholderString = @"Type here";
 			"toolTip = Helpful",
 		])
 
+	def test_wrapped_array_items_are_not_reported(self):
+		self.write("Mac/Source/Array.m", r"""[popup addItemsWithTitles:@[
+	NSLocalizedString(@"One", @"First item."),
+	NSLocalizedString(@"Two", @"Second item.")
+]];
+[popup addItemsWithTitles:@[@"Raw", NSLocalizedString(@"Wrapped", nil)]];
+""")
+		report = self.results()
+		texts = sorted(f["text"] for f in self.by_category(report, "raw-ui-literal"))
+		self.assertEqual(texts, ["addItemsWithTitles = Raw"])
+
 	def test_glyph_and_numeric_literals_are_ignored(self):
 		self.write("MADDesigner/Source/Glyphs.m",
 			'label.text = @"✓";\n'
