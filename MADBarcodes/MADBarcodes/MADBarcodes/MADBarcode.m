@@ -192,6 +192,17 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 	return [MADBarcode newBarcodeNameForType:self.barcodeType];
 }
 
+// -name is read for every barcode that is edited or archived, so the table is
+// built once rather than per lookup.
++ (NSDictionary *)cachedDictionaryNames {
+	static NSDictionary *names;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		names = [self newDictionaryNames];
+	});
+	return names;
+}
+
 - (instancetype)init {
 	if (self = [super init]) {
 		//MADColor *blackColor = [[MADColor alloc] initWithColor:[UIColor blackColor]];
@@ -837,7 +848,7 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 
 + (NSString *)newBarcodeNameForType:(MADBarcodeType)type {
 	NSNumber *typeWrapper = [[NSNumber alloc] initWithUnsignedInteger: (NSUInteger)type];
-	NSDictionary *names = [MADBarcode newDictionaryNames];
+	NSDictionary *names = [MADBarcode cachedDictionaryNames];
 	NSString *name = names[typeWrapper];
 	return name.copy;
 }
