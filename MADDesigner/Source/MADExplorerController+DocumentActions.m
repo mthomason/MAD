@@ -595,9 +595,8 @@
 }
 
 + (UIAlertController *)alertNotifyCloudSignOut:(void (^)(UIAlertAction *action))handler {
-	NSString *MADMessageCloudSignout = @"You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents.";
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"iCloud Sign Out", @"iCloud Sign Out")
-																			 message: NSLocalizedString(MADMessageCloudSignout, MADMessageCloudSignout)
+																			 message: NSLocalizedString(@"You have signed out of the iCloud account previously used to store documents. Sign back in to access those documents.", @"iCloud sign-out alert body. iCloud is a brand.")
 																	  preferredStyle: UIAlertControllerStyleAlert];
 	UIAlertAction *actionConfirm = [UIAlertAction actionWithTitle: NSLocalizedString(@"Dismiss", @"Dismiss")
 															style: UIAlertActionStyleDefault

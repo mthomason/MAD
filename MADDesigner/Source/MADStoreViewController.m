@@ -24,8 +24,6 @@
 
 static NSString * const MADTextYouGotIt     = @"You Got It";
 static NSString * const MADTextYouItsYours  = @"It's Yours";
-static NSString * const MADTextFreeGift     = @"Access to this feature is a free gift for charter "
-                                              @"members. That's you! How rare is that?";
 static NSString * const MADTextAlready      = @"You already got this feature. Make sure to collect them all.";
 
 @interface MADStoreViewController () <MADViewControllerStandardProtocol>
@@ -192,7 +190,7 @@ static NSString * const MADTextAlready      = @"You already got this feature. Ma
 	SKProduct *product = [MADStoreKitController sharedObject].products[(NSUInteger)indexPath.item];
 	if (self.charterMember && [MADVerificationController charterMemberGiftLookup:product.productIdentifier]) {
 		UIAlertController *alert = [MADAlertController newAlertControllerErrorDisplayErrorWithTitle: NSLocalizedString(MADTextYouGotIt, MADTextYouGotIt)
-																							message: NSLocalizedString(MADTextFreeGift, MADTextFreeGift)
+																							message: NSLocalizedString(@"Access to this feature is a free gift for charter members. That's you! How rare is that?", @"Alert body for a charter member collecting a free feature.")
 																					  andCompletion: nil];
 		[self presentViewController:alert animated:YES completion:nil];
 	} else {

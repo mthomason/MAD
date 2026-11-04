@@ -286,7 +286,7 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 - (NSInteger)accessibilityLineNumberForPoint:(CGPoint)point { return 1; }
 
 - (NSString * _Nullable)accessibilityContentForLineNumber:(NSInteger)lineNumber {
-	return @"Content for line number";
+	return NSLocalizedString(@"Content for line number", @"VoiceOver page content for the rendered report page.");
 }
 
 - (CGRect)accessibilityFrameForLineNumber:(NSInteger)lineNumber {
@@ -294,7 +294,7 @@ static inline UIEdgeInsets boundsInsets(CGFloat topLayoutGuide, CGFloat bottomLa
 }
 
 - (NSString * _Nullable)accessibilityPageContent {
-	return @"Content for line number";
+	return NSLocalizedString(@"Content for line number", @"VoiceOver page content for the rendered report page.");
 }
 
 #pragma mark -

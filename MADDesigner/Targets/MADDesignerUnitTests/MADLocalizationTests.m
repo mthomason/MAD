@@ -33,6 +33,14 @@
 		[defaults boolForKey:@"NSSurroundLocalizedStrings"];
 }
 
+// The plural rules live in the source-language entry until a language is
+// translated.  Under another language the untranslated key is returned as-is,
+// so these assertions only mean something in English without pseudo modes.
+- (void)skipUnlessSourceLanguagePluralRules {
+	XCTSkipUnless([[self preferredLanguage] hasPrefix:@"en"] && ![self pseudoLocalizationEnabled],
+				  @"English source-language plural rules");
+}
+
 - (void)testStringCatalogServesPreferredLanguage {
 	NSString *value = NSLocalizedString(@"Choose Storage Option", nil);
 	if ([self pseudoLocalizationEnabled]) {
@@ -65,6 +73,7 @@
 }
 
 - (void)testDeleteItemsAlertUsesPluralRules {
+	[self skipUnlessSourceLanguagePluralRules];
 	void (^handler)(UIAlertAction *) = ^(UIAlertAction * __unused action) { };
 	UIAlertController *one = [MADAlertController newAlertControllerDeleteItems:1
 		confirm:handler cancel:handler];
@@ -79,6 +88,7 @@
 }
 
 - (void)testAppliedSQLCountsUsePluralRules {
+	[self skipUnlessSourceLanguagePluralRules];
 	NSString *key = @"Applied: %1$lu tables, %2$lu joins, %3$lu predicates, %4$lu groups.";
 	NSString *one = [NSString localizedStringWithFormat:NSLocalizedString(key, nil),
 		1UL, 1UL, 1UL, 1UL];
