@@ -38,9 +38,9 @@ DEFAULT_ROOTS = (
 	"MADAPI",
 	"MADBarcodes",
 	"MADCocoaExtensions",
+	"MADDataStructures",
 	"MADDesigner",
 	"MADExplorer",
-	"MADFeedback",
 	"MADFileManager",
 	"MADFoundation",
 	"MADMySQL",
@@ -63,16 +63,25 @@ EXCLUDED_DIR_SUFFIXES = ("Tests",)
 CALL_RE = re.compile(r"\bNSLocalizedString\s*\(")
 WINDOW_LINES = 30
 
-# Selectors whose first string argument is user-facing UI copy.
+# Selectors whose first string argument is user-facing UI copy.  The list
+# covers UIKit/NSAlert and the AppKit constructors the Mac app actually uses.
 UI_SELECTOR_RE = re.compile(
 	r"(?P<keyword>"
 	r"alertControllerWithTitle|actionWithTitle|setTitle|setText|setPlaceholder|"
-	r"initWithTitle|setMessageText|setInformativeText|addButtonWithTitle|message"
+	r"initWithTitle|setMessageText|setInformativeText|addButtonWithTitle|message|"
+	r"addItemWithTitle|buttonWithTitle|labelWithString|checkboxWithTitle|"
+	r"radioButtonWithTitle|setAccessibilityLabel|setAccessibilityHelp|"
+	r"setPlaceholderString|setToolTip|setStringValue"
 	r")\s*:\s*@(?P<literal>\"(?:[^\"\\]|\\.)*\")"
 )
 UI_PROPERTY_RE = re.compile(
 	r"\.(?P<keyword>accessibilityLabel|accessibilityHint|accessibilityValue|"
-	r"placeholder|text|title)\s*=\s*@(?P<literal>\"(?:[^\"\\]|\\.)*\")"
+	r"placeholder|placeholderString|stringValue|toolTip|text|title)"
+	r"\s*=\s*@(?P<literal>\"(?:[^\"\\]|\\.)*\")"
+)
+# Array-of-titles selectors need every element, not just the first literal.
+UI_ARRAY_SELECTOR_RE = re.compile(
+	r"(?P<keyword>addItemsWithTitles|initWithTitles)\s*:\s*@\["
 )
 UI_ERROR_KEY_RE = re.compile(
 	r"\b(?P<keyword>NSLocalizedDescriptionKey|NSLocalizedFailureReasonErrorKey|"
@@ -300,6 +309,30 @@ def adjacent_literal_body(text, quote_index):
 	return position, "".join(bodies)
 
 
+def array_literal_end(text, bracket_index):
+	"""Return the index of the ']' that closes the '[' at *bracket_index*."""
+	depth = 0
+	i = bracket_index
+	while i < len(text):
+		char = text[i]
+		if char == '"':
+			i = _scan_quoted(text, i, '"')
+			continue
+		if char == "[":
+			depth += 1
+		elif char == "]":
+			depth -= 1
+			if depth == 0:
+				return i
+		i += 1
+	return -1
+
+
+def has_letters(value):
+	"""True when a string has Latin letters; glyphs, numbers and symbols do not."""
+	return re.search(r"[A-Za-z]", value) is not None
+
+
 def audit_text(relative_path, text):
 	"""Return (findings, stats) for one source file."""
 	findings = []
@@ -343,7 +376,7 @@ def audit_text(relative_path, text):
 			if code_only[match.start("keyword")] == " ":
 				continue
 			_end, body = adjacent_literal_body(no_comments, match.start("literal"))
-			if not body.strip():
+			if not body.strip() or not has_letters(body):
 				continue
 			text_value = "%s = %s" % (match.group("keyword"), body)
 			findings.append(Finding(
@@ -351,9 +384,30 @@ def audit_text(relative_path, text):
 				_line_of(no_comments, match.start()), text_value,
 			))
 
+	def scan_arrays():
+		for match in UI_ARRAY_SELECTOR_RE.finditer(no_comments):
+			if code_only[match.start("keyword")] == " ":
+				continue
+			bracket = match.end() - 1
+			end = array_literal_end(no_comments, bracket)
+			if end < 0:
+				continue
+			body = no_comments[bracket + 1:end]
+			for literal in _LITERAL_PREFIX_RE.finditer(body):
+				raw = _raw_body(literal.group(1))
+				if not has_letters(raw):
+					continue
+				position = bracket + 1 + literal.start()
+				text_value = "%s = %s" % (match.group("keyword"), raw)
+				findings.append(Finding(
+					"raw-ui-literal", relative_path,
+					_line_of(no_comments, position), text_value,
+				))
+
 	scan_ui(UI_SELECTOR_RE)
 	scan_ui(UI_PROPERTY_RE)
 	scan_ui(UI_ERROR_KEY_RE)
+	scan_arrays()
 
 	lines = no_comments.split("\n")
 	for match in CONCAT_RE.finditer(code_only):
@@ -436,21 +490,27 @@ def load_baseline(path):
 		raise ValueError("unsupported baseline version: %r" % (data.get("version"),))
 	entries = data.get("entries", [])
 	return {
-		(entry["category"], entry["file"], entry["text"])
+		(entry["category"], entry["file"], entry["text"]): entry.get("count", 1)
 		for entry in entries
 	}
 
 
 def baseline_entries(findings):
-	seen = {}
+	counts = {}
 	for finding in findings:
 		if finding.category not in OFFENDER_CATEGORIES:
 			continue
-		seen[finding.key()] = finding
+		counts[finding.key()] = counts.get(finding.key(), 0) + 1
 	entries = []
-	for key in sorted(seen):
+	for key in sorted(counts):
 		category, file, text = key
-		entries.append({"category": category, "file": file, "text": text, "reason": ""})
+		entries.append({
+			"category": category,
+			"file": file,
+			"text": text,
+			"count": counts[key],
+			"reason": "",
+		})
 	return entries
 
 
@@ -467,7 +527,7 @@ def write_baseline(path, findings):
 	path.write_text(json.dumps(payload, indent="\t", ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def print_report(findings, counts, baseline, new, stale, fail_on_warnings=False):
+def print_report(findings, counts, baseline, new, excess, stale, fail_on_warnings=False):
 	print("Localization audit")
 	print("  files scanned:              %d" % counts["files"])
 	print("  NSLocalizedString calls:    %d (literal %d, non-literal %d)" % (
@@ -484,11 +544,18 @@ def print_report(findings, counts, baseline, new, stale, fail_on_warnings=False)
 		print("  baseline entries matched:   %d" % (len(baseline) - len(stale)))
 		print("  baseline entries stale:     %d" % len(stale))
 
-	if new:
+	if new or excess:
 		print("")
-		print("NEW localization findings (%d):" % len(new))
-		for finding in new:
-			print("  %s:%d: %s: %s" % (finding.file, finding.line, finding.category, finding.text))
+		if new:
+			print("NEW localization findings (%d):" % len(new))
+			for finding in new:
+				print("  %s:%d: %s: %s" % (finding.file, finding.line, finding.category, finding.text))
+		if excess:
+			print("OCCURRENCES OVER BASELINE (%d):" % len(excess))
+			for key, now, before in excess:
+				category, file, text = key
+				print("  %s: %s: %s (now %d, baseline %d)" % (
+					file, category, text, now, before))
 		return 1
 	if fail_on_warnings and counts["string_concat_near_ui"]:
 		print("")
@@ -520,33 +587,53 @@ def main(argv=None):
 
 	if args.write_baseline:
 		write_baseline(baseline_path, findings)
-		new, stale = [], []
-		baseline = load_baseline(baseline_path) if baseline_path.exists() else set()
+		new, excess, stale = [], [], []
+		baseline = load_baseline(baseline_path) if baseline_path.exists() else {}
 	else:
 		if not baseline_path.exists():
 			print("ERROR: baseline not found: %s" % baseline_path, file=sys.stderr)
 			print("Run with --write-baseline after reviewing the findings.", file=sys.stderr)
 			return 2
 		baseline = load_baseline(baseline_path)
-		seen = {finding.key() for finding in findings if finding.category in OFFENDER_CATEGORIES}
+		current = {}
+		for finding in findings:
+			if finding.category not in OFFENDER_CATEGORIES:
+				continue
+			current[finding.key()] = current.get(finding.key(), 0) + 1
+		new_keys = {key for key in current if key not in baseline}
 		new = [
 			finding for finding in findings
-			if finding.category in OFFENDER_CATEGORIES and finding.key() not in baseline
+			if finding.category in OFFENDER_CATEGORIES and finding.key() in new_keys
 		]
-		stale = sorted(baseline - seen)
+		excess = [
+			(key, current[key], baseline[key])
+			for key in sorted(current)
+			if key in baseline and current[key] > baseline[key]
+		]
+		stale = sorted(set(baseline) - set(current))
 
 	if args.json:
 		payload = {
 			"counts": counts,
 			"findings": [finding.as_dict() for finding in findings],
 			"new": [finding.as_dict() for finding in new],
+			"excess": [
+				{
+					"category": key[0],
+					"file": key[1],
+					"text": key[2],
+					"count": now,
+					"baseline": before,
+				}
+				for key, now, before in excess
+			],
 			"stale": [list(item) for item in stale],
 			"baseline": str(baseline_path),
 		}
 		print(json.dumps(payload, indent="\t", ensure_ascii=False))
 		if args.write_baseline:
 			return 0
-		if new:
+		if new or excess:
 			return 1
 		if args.fail_on_warnings and counts["string_concat_near_ui"]:
 			return 1
@@ -557,7 +644,7 @@ def main(argv=None):
 			print("%s:%d: %s: %s" % (finding.file, finding.line, finding.category, finding.text))
 		print("")
 
-	return print_report(findings, counts, baseline, new, stale, args.fail_on_warnings)
+	return print_report(findings, counts, baseline, new, excess, stale, args.fail_on_warnings)
 
 
 if __name__ == "__main__":

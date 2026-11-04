@@ -3,1317 +3,2614 @@
 	"description": "Known and accepted localization-audit findings. Review before regenerating: python3 -I scripts/localization/audit.py --write-baseline",
 	"entries": [
 		{
-			"category": "format-no-positional",
-			"file": "MADFeedback/MADFeedback/MADFeedbackUncaughtExceptionHandler.m",
-			"text": "You can try to continue but the application may be unstable.\n\nDebug details follow:\n%@\n%@",
+			"category": "nonliteral-key",
+			"file": "MADDataStructures/Source/MTGraph.m",
+			"text": "TextCycleEncountered",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADDatabaseTableSectionHeaderView.m",
 			"text": "TextAccessibilityHint",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
 			"text": "MADTextFormFeed",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
 			"text": "MADTextFormFeedHint",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
 			"text": "MADTextVisible",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADDesignerSectionLayoutController.m",
 			"text": "MADTextVisibleHint",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADExplorerController+DocumentActions.m",
 			"text": "MADMessageCloudSignout",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADLabelStatus.m",
 			"text": "MADTextFormatting",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADLabelStatus.m",
 			"text": "MADTextFormattingPage",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADLabelStatus.m",
 			"text": "MADTextNoCache",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADLabelStatus.m",
 			"text": "MADTextNothingToDisplay",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADLabelStatus.m",
 			"text": "MADTextPageXofY",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADLabelStatus.m",
 			"text": "MADTextReadRecords",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADLabelStatus.m",
 			"text": "MADTextRefreshing",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADOperationPromptError.m",
 			"text": "TextYes",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADOperationPromptPassword.m",
 			"text": "MADButtonContinue",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADOperationPromptPassword.m",
 			"text": "MADMessagePassword",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADOperationPromptPassword.m",
 			"text": "MADTitlePassword",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryBuilderAddGroupViewController.m",
 			"text": "TextAccending",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryBuilderAddGroupViewController.m",
 			"text": "TextDecending",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryBuilderAddGroupViewController.m",
 			"text": "TextDefault",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
 			"text": "MADTextQueryGroups",
+			"count": 4,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
 			"text": "MADTextQueryLinks",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
 			"text": "MADTextQueryPredicate",
+			"count": 4,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
 			"text": "MADTextQueryReportingMode",
+			"count": 3,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
 			"text": "MADTextQuerySelectTables",
+			"count": 6,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewControllerTableLayout.m",
 			"text": "MADTextQuerySetupDatasource",
+			"count": 6,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
 			"text": "TextHeaderGroups",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
 			"text": "TextHeaderInformation",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
 			"text": "TextHeaderLink",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
 			"text": "TextHeaderPredicate",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
 			"text": "TextHeaderSettings",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADQueryViewSectionDelegate.m",
 			"text": "TextHeaderTable",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADStoreViewController.m",
 			"text": "MADTextAlready",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADStoreViewController.m",
 			"text": "MADTextFreeGift",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADStoreViewController.m",
 			"text": "MADTextYouGotIt",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/MADStoreViewController.m",
 			"text": "MADTextYouItsYours",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatDay",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatDays",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatHour",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatHours",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatMillisecond",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatMilliseconds",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatMinute",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatMinutes",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatMonth",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatMonths",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatSecond",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatSeconds",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatWeek",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatWeeks",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatYear",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "FormatYears",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADDesigner/Source/NSDate+Extras.m",
 			"text": "TextAgo",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "nonliteral-key",
 			"file": "MADExplorer/MADExplorer/MADExplorer/MADExplorerViewDelegate.m",
 			"text": "MADTextNotDownloaded",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADFeedback/MADFeedback/MADAlertControllerFeedback.m",
-			"text": "cancel",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADFeedback/MADFeedback/MADAlertControllerFeedback.m",
-			"text": "message",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADFeedback/MADFeedback/MADAlertControllerFeedback.m",
-			"text": "title",
-			"reason": ""
-		},
-		{
-			"category": "nonliteral-key",
-			"file": "MADFeedback/MADFeedback/MADAlertControllerFeedback.m",
-			"text": "yes",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADDocumentStore.m",
 			"text": "NSLocalizedDescriptionKey = This document was written before the portable store and no legacy converter is available in this build.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADHeadlessDocument.m",
 			"text": "NSLocalizedDescriptionKey = A file URL and database connection are required to create a document.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADHeadlessDocument.m",
 			"text": "NSLocalizedDescriptionKey = Could not initialize the document model in the portable store.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADHeadlessDocument.m",
 			"text": "NSLocalizedDescriptionKey = Failed to connect to the source database.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADHeadlessDocument.m",
 			"text": "NSLocalizedDescriptionKey = The document is not open; nothing to write.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADOperationCreateDocumentImportSchema.m",
 			"text": "NSLocalizedDescriptionKey = Database connection not provided for schema import.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADOperationCreateDocumentImportSchema.m",
 			"text": "NSLocalizedDescriptionKey = Document object not found for schema import.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADOperationCreateDocumentImportSchema.m",
 			"text": "NSLocalizedDescriptionKey = Failed to establish database connection for schema import (nil connection object).",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADOperationCreateDocumentImportSchema.m",
 			"text": "NSLocalizedDescriptionKey = Schema import was cancelled.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADOperationCreateDocumentSaveAndCloseNewDocument.m",
 			"text": "NSLocalizedDescriptionKey = Document object not found for save and close.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADOperationCreateDocumentSaveAndCloseNewDocument.m",
 			"text": "NSLocalizedDescriptionKey = Failed to close the new document.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADPrintPageElement.m",
 			"text": "text = Error: No Datasource",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADQueryCacheAggregateFunction.m",
 			"text": "NSLocalizedDescriptionKey = No where clause.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportExportSource.m",
 			"text": "NSLocalizedDescriptionKey = The document's query generated no SQL.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportExportSource.m",
 			"text": "NSLocalizedDescriptionKey = There is no document to export.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportExportWriter.m",
 			"text": "NSLocalizedDescriptionKey = The export could not be encoded as UTF-8.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportExporterHTML.m",
 			"text": "NSLocalizedDescriptionKey = the facsimile needs a document that renders (MADDocumentRenderProtocol); --format html-flow is the reflowable one and needs no more.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportExporterHTMLFlow.m",
 			"text": "NSLocalizedDescriptionKey = the report's sections need a document that renders (MADDocumentRenderProtocol); --format json is the data half and needs no more.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportExporterJSONReport.m",
 			"text": "NSLocalizedDescriptionKey = the report's rendered structure needs a document that renders (MADDocumentRenderProtocol); --format json is the data half and needs no more.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportExporterPDF.m",
 			"text": "NSLocalizedDescriptionKey = No PDF was written.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportExporterPDF.m",
 			"text": "NSLocalizedDescriptionKey = PDF needs a document that renders (MADDocumentRenderProtocol).",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportExporterPDF.m",
 			"text": "NSLocalizedDescriptionKey = PDF needs a file to write to.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportSectionRepresentation.m",
 			"text": "NSLocalizedDescriptionKey = Failed to add null value.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/MADReportSectionRepresentation.m",
 			"text": "NSLocalizedFailureReasonErrorKey = Error",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/rptq/RptqQueryPredicate+Extras.m",
 			"text": "NSLocalizedFailureReasonErrorKey = Error",
+			"count": 3,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/rptq/RptqQueryPredicate+Extras.m",
 			"text": "NSLocalizedFailureReasonErrorKey = Missing field.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Arithmetic has no place in the select list: the model holds column references.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = BETWEEN has no place in the model: a predicate holds one comparison.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = CROSS joins have no place in the model: a link names one field pair.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Column aliases are the designer's own; name the column.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Comma joins have no place in the model: every join carries its link.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = DISTINCT has no place in the model: the query designer's fields are the select list.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected ')' to close the predicate.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected BY after GROUP.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected BY after ORDER.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected FROM after the select list.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected JOIN after FULL.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected JOIN after INNER.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected JOIN after LEFT.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected JOIN after RIGHT.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected ON after the joined table.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected a column name after the qualifier.",
+			"count": 4,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected a column or a literal.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected a column reference in the select list.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected a column reference.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected a comparison operator.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected a table name after FROM.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected a table name after the schema qualifier.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected a table name.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected an alias after '.'.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Expected an alias after AS.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Functions and expressions have no place in the model: a predicate side is a column or a literal.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Functions and expressions have no place in the select list: the model holds column references.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = IN has no place in the model: a predicate holds one comparison.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = LIKE has no place in the model: a predicate holds one of six comparisons.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = LIMIT is the app's own: the designer and reporting modes apply it, never the query.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = NATURAL joins have no place in the model: a link names one field pair.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = NOT has no place in the model: a predicate holds one comparison, not its negation.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = OR has no place in the model: predicates AND together, flat.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Subqueries have no place in the model: FROM names schema tables.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = Subqueries have no place in the model: a predicate side is a column or a literal.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = The link model holds one `left = right` condition per join -- split the extra conditions into the WHERE clause.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = The link model holds one `left = right` condition per join.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = The model has no free sort: every ORDER BY column must be a GROUP BY column.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = The statement does not end where the subset ends -- one SELECT, nothing after it.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = The statement does not start with SELECT.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = UNION has no place in the model: one document query holds one SELECT.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLParser.m",
 			"text": "message = `*` names every column; name them, or use `alias.*`.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLStatementResolver.m",
 			"text": "message = A GROUP BY column does not resolve.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MAD/Source/sql/MADSQLStatementResolver.m",
 			"text": "message = The ON condition's columns do not resolve.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADCellElement.m",
 			"text": "actionWithTitle = Delete",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADCellElement.m",
 			"text": "actionWithTitle = Edit",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADCellElement.m",
 			"text": "actionWithTitle = Format",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADExplorerController.m",
 			"text": "NSLocalizedDescriptionKey = Credential operation completed without a credential and no specific error.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADExplorerController.m",
 			"text": "NSLocalizedDescriptionKey = Keychain key was missing or empty.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADExplorerController.m",
 			"text": "NSLocalizedDescriptionKey = Unexpected operation type finished.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADExplorerController.m",
 			"text": "alertControllerWithTitle = Open Failure",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADOperationCreateDocument.m",
 			"text": "initWithTitle = Delete saved credentials?",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADOperationCreateDocument.m",
 			"text": "message = Would you like to remove the saved credentials",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADOperationDatabaseTestConnection.m",
 			"text": "NSLocalizedDescriptionKey = Database connection not provided for connection test.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADOperationValidateSQL.m",
 			"text": "NSLocalizedDescriptionKey = The document is gone.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADOperationValidateSQL.m",
 			"text": "NSLocalizedDescriptionKey = The probe failed",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADOperationValidateSQL.m",
 			"text": "NSLocalizedFailureReasonErrorKey = The database driver reported no error.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADStoreKitController.m",
 			"text": "NSLocalizedDescriptionKey = Product Load Failed",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADStoreKitController.m",
 			"text": "NSLocalizedFailureReasonErrorKey = Try again later.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADStoreLegacy/MADStoreConverter.m",
 			"text": "NSLocalizedDescriptionKey = MAD.momd was not found in the bundle.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADStoreLegacy/MADStoreConverter.m",
 			"text": "NSLocalizedDescriptionKey = No model version in MAD.momd matches the legacy store.",
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
-			"file": "MADDesigner/Source/MADStoreViewController.m",
-			"text": "text = ✓",
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
-			"file": "MADDesigner/Source/MADStoreViewController.m",
-			"text": "text = ",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
 			"text": "setTitle = \\uf032",
+			"count": 3,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
 			"text": "setTitle = \\uf033",
+			"count": 3,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
 			"text": "setTitle = \\uf036",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
 			"text": "setTitle = \\uf037",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
 			"text": "setTitle = \\uf038",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
 			"text": "setTitle = \\uf039",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
 			"text": "setTitle = \\uf0cc",
+			"count": 3,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADToolboxStyleViewController.m",
 			"text": "setTitle = \\uf0cd",
+			"count": 3,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADViewerController.m",
 			"text": "actionWithTitle = OK",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/MADViewerController.m",
 			"text": "alertControllerWithTitle = Error",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/barcodes/MTTableViewControllerBarcodeExtraAztec.m",
 			"text": "text = Custom",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/barcodes/MTTableViewControllerBarcodeExtraGridMatrix.m",
 			"text": "text = Custom",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/barcodes/MTTableViewControllerBarcodeExtraMicroQrCode.m",
 			"text": "text = Custom",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADDesigner/Source/barcodes/MTTableViewControllerBarcodeExtraQrCode.m",
 			"text": "text = Custom",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADFoundation/Source/MADDataTable.m",
 			"text": "NSLocalizedDescriptionKey = Failed to deserialize property list.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADFoundation/Source/MADDataTable.m",
 			"text": "NSLocalizedDescriptionKey = File does not exist.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADFoundation/Source/MADDataTable.m",
 			"text": "NSLocalizedDescriptionKey = Invalid plist format.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADFoundation/Source/MADDataTable.m",
 			"text": "NSLocalizedDescriptionKey = Missing or invalid column data.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADFoundation/Source/MADDataTable.m",
 			"text": "NSLocalizedDescriptionKey = Missing or invalid column keys.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADFoundation/Source/MADDataTable.m",
 			"text": "NSLocalizedDescriptionKey = URL is nil.",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADFoundation/Source/MADOperationConditionResult.m",
 			"text": "NSLocalizedDescriptionKey = Condition failed with an unspecified error.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADFoundation/Source/MADOperationConditionResult.m",
 			"text": "NSLocalizedFailureReasonErrorKey = Internal Error",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADFoundation/Source/MADOperationConditionResult.m",
 			"text": "NSLocalizedFailureReasonErrorKey = Not Satisfied",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADMySQL/Source/MADMySQLException.m",
 			"text": "NSLocalizedFailureReasonErrorKey = Executing Error",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADMySQL/Source/MADMySQLFetch+DataTable.m",
 			"text": "NSLocalizedDescriptionKey = Connection is empty.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADMySQL/Source/MADMySQLFetch+DataTable.m",
 			"text": "NSLocalizedFailureReasonErrorKey = Connection Error",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADPostgres/Source/MADDatabasePostgres.m",
 			"text": "NSLocalizedDescriptionKey = Connection is empty.",
+			"count": 3,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADPostgres/Source/MADDatabasePostgres.m",
 			"text": "NSLocalizedDescriptionKey = Missing query or destination table.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADPostgres/Source/MADDatabasePostgres.m",
 			"text": "NSLocalizedFailureReasonErrorKey = Connection Error",
+			"count": 3,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADPostgres/Source/MADDatabasePostgres.m",
 			"text": "NSLocalizedFailureReasonErrorKey = Query Error",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "MADPostgres/Source/MADPostgresConnection.m",
 			"text": "NSLocalizedDescriptionKey = PostgreSQL connection failed.",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAboutWindowController.m",
+			"text": "buttonWithTitle = Source Code on GitHub",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAboutWindowController.m",
+			"text": "labelWithString = MAD Designer is open-source business intelligence software by Michael Thomason.",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAboutWindowController.m",
+			"text": "stringValue = All Components & Licenses",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacAboutWindowController.m",
 			"text": "title = About MAD Designer",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = About MAD Designer",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Close",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Copy",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Cut",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Database Connection…",
+			"count": 2,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Delete",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Export Report…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Hide MAD Designer",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Licensing & Relink Notice",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = MAD Designer Overview",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = MAD Designer Workspace",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = MAD Query Workspace",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = MAD Viewer Workspace",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Minimize",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = New Document…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Open…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Paste",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Print…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Quit MAD Designer",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Redo",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Refresh Report Data",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Save",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Save As…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Select All",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Third-Party Acknowledgements",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Undo",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacAppDelegate.m",
+			"text": "addItemWithTitle = Zoom",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacAppDelegate.m",
 			"text": "initWithTitle = Edit",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacAppDelegate.m",
 			"text": "initWithTitle = File",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacAppDelegate.m",
 			"text": "initWithTitle = Help",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacAppDelegate.m",
 			"text": "initWithTitle = MAD Designer",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacAppDelegate.m",
 			"text": "initWithTitle = Report",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacAppDelegate.m",
 			"text": "initWithTitle = View",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacAppDelegate.m",
 			"text": "initWithTitle = Window",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacConnectionWindowController.m",
 			"text": "NSLocalizedDescriptionKey = Host and Database Name are required.",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "addItemsWithTitles = Microsoft SQL Server",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "addItemsWithTitles = MySQL",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "addItemsWithTitles = PostgreSQL",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "addItemsWithTitles = SQLite",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "buttonWithTitle = Cancel",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "buttonWithTitle = Choose File…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "buttonWithTitle = Test Connection",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "checkboxWithTitle = Save password in Keychain",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "placeholderString = /path/to/database.sqlite3",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "placeholderString = 127.0.0.1 or db.example.com",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "placeholderString = Database password",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "placeholderString = Database user",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "placeholderString = Optional named instance (defaults to Host)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "placeholderString = e.g. Chinook, Northwind, postgres",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "stringValue = Connecting and importing database schema…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "stringValue = Testing database connection…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacConnectionWindowController.m",
+			"text": "stringValue = Verifying database connection…",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacConnectionWindowController.m",
 			"text": "title = Choose SQLite 3 Database",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacConnectionWindowController.m",
 			"text": "title = Save New Mobile Analytics Document (.mad)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemWithTitle = (Unbound)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemWithTitle = Duplicate",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemWithTitle = Each Page",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemWithTitle = Entire Report",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemWithTitle = Fit Band Height to Elements",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemWithTitle = Insert Aggregate",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemWithTitle = Insert Barcode",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemWithTitle = Insert Data Field",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemWithTitle = Insert Static Label",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemWithTitle = Size to Fit Content",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = A4 (210 × 297 mm)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = ArialMT",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = Avenir-Book",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = Bind Bars",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = Box Frame",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = COUNT",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = Courier",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = FIRST",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = Georgia",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = Helvetica",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = HelveticaNeue",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = LAST",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = MAX",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = MEAN (AVG)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = MIN",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = Menlo-Regular",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = No Border",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = SUM",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = TimesNewRomanPSMT",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = US Legal (8.5 × 14 in)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "addItemsWithTitles = US Letter (8.5 × 11 in)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "buttonWithTitle = Choose Image…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "buttonWithTitle = Delete",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "buttonWithTitle = Duplicate",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "buttonWithTitle = Fit Height",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "buttonWithTitle = Size to Fit",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = B",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = Fill",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = Grid",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = I",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = Numeric",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = Page Break After",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = Rulers",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = S",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = Section Visible",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = Show Text",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = Snap",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "checkboxWithTitle = U",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDesignerViewController.m",
 			"text": "initWithTitle = Delete",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDesignerViewController.m",
 			"text": "initWithTitle = Designer Context Menu",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDesignerViewController.m",
 			"text": "initWithTitle = Move to Band",
+			"count": 2,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = 2 · SELECTED ELEMENT INSPECTOR",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = Band: Report Detail",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = Click a band to jump & select",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = Dec:",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = Drag onto any band or double-click to insert",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = H:",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = Insert:",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = M:",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = PAGE & SECTION MINIMAP",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = QUERY FIELDS (DRAG TO CANVAS)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = REPORT BANDS",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = Static Label",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "labelWithString = Y:",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "placeholderString = Filter query fields…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "placeholderString = Label or barcode text…",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDesignerViewController.m",
 			"text": "text = Static Label",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDesignerViewController.m",
 			"text": "text = [Data Field]",
-			"reason": ""
-		},
-		{
-			"category": "raw-ui-literal",
-			"file": "Mac/Source/MADMacDesignerViewController.m",
-			"text": "title = 100%",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDesignerViewController.m",
 			"text": "title = Field",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDesignerViewController.m",
 			"text": "title = Info",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDesignerViewController.m",
 			"text": "title = Section",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "toolTip = Align Selected Elements (Left, Center, Right, Top, Middle, Bottom)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "toolTip = Bottom Border (pt)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "toolTip = Click to reset zoom to 100%",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "toolTip = Drag onto any report section on the canvas, or double-click to insert into the selected section",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "toolTip = Left Border (pt)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "toolTip = Move the selected element(s) to another report section",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "toolTip = Resize selected element(s) to fit their text content",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "toolTip = Right Border (pt)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "toolTip = Shrink or expand section height to snugly fit its elements",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDesignerViewController.m",
+			"text": "toolTip = Top Border (pt)",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDocument.m",
 			"text": "NSLocalizedDescriptionKey = Could not refresh report data. Check the query and database connection settings.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDocument.m",
 			"text": "NSLocalizedDescriptionKey = No active document to export.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDocument.m",
 			"text": "NSLocalizedDescriptionKey = No active report store to write.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDocument.m",
 			"text": "NSLocalizedDescriptionKey = No document is open.",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacDocumentController.m",
+			"text": "buttonWithTitle = New Document",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDocumentController.m",
 			"text": "title = New Document",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacDocumentController.m",
 			"text": "title = Open Report",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "addItemsWithTitles = Ascending",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "addItemsWithTitles = Descending",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = + Add",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = + Add Group",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = + Add Table to Query",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = - Remove",
+			"count": 2,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = Arrange Tables",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = Compile & Apply SQL",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = Database Connection…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = Delete Join",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = Filters (WHERE)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = Groupings (GROUP BY)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = Revert to Generated SQL",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = Validate SQL",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "buttonWithTitle = ⇄ Swap Direction",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacQueryViewController.m",
 			"text": "initWithTitle = Delete Join Link",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacQueryViewController.m",
 			"text": "initWithTitle = Field",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacQueryViewController.m",
 			"text": "initWithTitle = Join Link",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacQueryViewController.m",
 			"text": "initWithTitle = Link to Field",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacQueryViewController.m",
 			"text": "initWithTitle = Swap Left / Right Direction",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "labelWithString = Database Tables",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "labelWithString = Enter a SELECT statement and click Compile & Apply SQL to update the query.",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "labelWithString = Join Type:",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "labelWithString = SQL Query Statement",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "labelWithString = Table Join Relationship",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "placeholderString = Value",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "stringValue = Enter a SELECT statement to validate.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacQueryViewController.m",
 			"text": "title = Active WHERE Filters",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacQueryViewController.m",
 			"text": "title = Database Tables",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacQueryViewController.m",
 			"text": "title = Report Grouping Levels (GROUP BY)",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacQueryViewController.m",
-			"text": "title = ×",
+			"text": "toolTip = Double-click to add table to query",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacQueryViewController.m",
+			"text": "toolTip = Remove table from query",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacViewerViewController.m",
 			"text": "NSLocalizedDescriptionKey = No SQLite file URL selected.",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacViewerViewController.m",
 			"text": "addButtonWithTitle = Cancel",
+			"count": 2,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacViewerViewController.m",
 			"text": "addButtonWithTitle = Connection Settings…",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacViewerViewController.m",
 			"text": "addButtonWithTitle = Locate File…",
+			"count": 1,
 			"reason": ""
 		},
 		{
 			"category": "raw-ui-literal",
 			"file": "Mac/Source/MADMacViewerViewController.m",
 			"text": "addButtonWithTitle = Retry",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "buttonWithTitle = Connection…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "buttonWithTitle = Export…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "buttonWithTitle = Print…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "buttonWithTitle = Refresh",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "labelWithString = Export Format:",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "labelWithString = Not yet refreshed. Click “Refresh” to query the database and render the report.",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "labelWithString = Page 0 of 0",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "labelWithString = Page Size:",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "stringValue = Executing SQL query and formatting report pages…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "stringValue = Not yet refreshed. Click “Refresh” to query the database and render the report.",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "stringValue = Page 0 of 0",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "toolTip = Configure Database Connection Settings…",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "toolTip = Next Page",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "toolTip = Previous Page",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "toolTip = Reset Zoom to 100% (Actual Page Size)",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "toolTip = Zoom In",
+			"count": 1,
+			"reason": ""
+		},
+		{
+			"category": "raw-ui-literal",
+			"file": "Mac/Source/MADMacViewerViewController.m",
+			"text": "toolTip = Zoom Out",
+			"count": 1,
 			"reason": ""
 		}
 	]

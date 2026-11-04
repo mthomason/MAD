@@ -75,10 +75,11 @@ a constant or macro (65 symbols), and 20 take a runtime value. The Mac app adds
 
 `MADFeedback` is not embedded in either app, so it is out of scope. `MADTds` is
 a thin wrapper with one alert title and a constructed error message
-(`MADTdsDb.m:28-34`). `MADFileManager` has no `NSLocalizedString` calls at all,
-yet it authors file-operation errors such as
-`Cloud storage is not available off Apple.` and
-`Error creating directory! %@`; those need wrapping in Phase 2.
+(`MADTdsDb.m:28-34`). `MADFileManager` has no `NSLocalizedString` calls at all.
+Its two localization-shaped strings are not user-facing: `Cloud storage is not
+available off Apple.` is an `@throw` reason in the non-Apple branch
+(`MADFileCoordinator.m:61,86`), and `Error creating directory! %@` is an
+`NSAssert` (`MADFileUtilities.m:652`). The audit excludes both deliberately.
 
 Two kinds of call site need work before translation:
 
@@ -239,15 +240,18 @@ was wrong. No target set `LOCALIZATION_PREFERS_STRING_CATALOGS` before this
 branch.
 
 The app project declares 33 `knownRegions`, including `ar` and `he`, but there
-are no localized resources behind them. Nothing in CI runs the analyzer or any
-localization check; the Linux workflow is the only required check.
+are no localized resources behind them. The Linux workflow now runs the
+localization audit's tests and check; the Clang analyzer is still not run in CI.
 
 ### 2.5 Tests
 
 Several unit-test assertions compare exact English copy (for example
-`MADDesignerUnitTests.m:379,699,773,887,889`). There is no test that exercises a
-non-English language, a missing-key fallback, or a pseudo-language. The iOS UI
-tests set no `-AppleLanguages` launch argument.
+`MADDesignerUnitTests.m:379,699,773,887,889`). The branch adds
+`MADLocalizationTests`, the `MAD Designer German` scheme, and the Accented and
+Double-Length pseudo schemes, so the catalog value, the German storyboard
+title, and both pseudo modes are exercised. The iOS UI tests still set no
+`-AppleLanguages` launch argument, and CI runs no iOS suite (the Linux job
+remains the only required gate).
 
 **Planning estimate after deduplication:** roughly 900-1,100 unique keys, or
 about 4,500-5,500 translated strings across five languages. The dominant blocks
@@ -517,46 +521,52 @@ python3 -I scripts/localization/audit.py --report    # every finding, with lines
 python3 -I scripts/localization/audit.py --write-baseline   # after review
 ```
 
-First run over the shipped sources (1505 files scanned; `Compressor`,
-`ThirdParty`, build trees, `Archive`/`Archived`, `ReceiptModuleAsn1c`, and test
-bundles excluded):
+Current run (2026-11-04, after the Phase 2 runtime-key fixes and the Mac
+selector expansion; 1536 files scanned). `MADDataStructures` is included;
+`MADFeedback` is excluded because it is neither embedded nor maintained.
+`Compressor`, `ThirdParty`, build trees, `Archive`/`Archived`,
+`ReceiptModuleAsn1c`, and test bundles are excluded:
 
 | Measure | Count |
 | --- | ---: |
-| `NSLocalizedString` calls | 564 |
-| literal first argument | 453 |
-| non-literal first argument | 111 |
-| unique literal keys | 310 |
-| literal keys containing format specifiers | 30 (41 occurrences) |
-| multi-argument format keys | 3 (1 with positional specifiers) |
-| raw UI literals | 184 occurrences / 160 unique |
-| format strings without positional specifiers | 2 |
-| `appendString:`/`stringByAppendingString:` near UI | 43 (warning) |
+| `NSLocalizedString` calls | 558 |
+| literal first argument | 477 |
+| non-literal first argument | 81 |
+| unique literal keys | 330 |
+| literal keys containing format specifiers | 29 (multi-argument 2, both positional) |
+| raw UI literals | 344 occurrences / 318 unique |
+| format strings without positional specifiers | 0 |
+| `appendString:`/`stringByAppendingString:` near UI | 42 (warning) |
 
-The 246 baseline entries are 160 `raw-ui-literal`, 84 `nonliteral-key`, and 2
-`format-no-positional`; warnings are reported but never fail the check.
+The 373 baseline entries are 318 `raw-ui-literal` and 55 `nonliteral-key`;
+warnings are reported but never fail an otherwise clean check. Entries carry an
+occurrence count, so adding a second copy of an already-baselined string in the
+same file fails the run. The first Phase 1 run, before these changes and with
+`MADFeedback` in scope, was 1505 files / 564 calls / 246 entries.
 
 Two reconciliations with §2:
 
 * **`MADBarcodes` is 9 active calls in one file**, as the table says. A plain
   `grep` reports 16 because `MADBarcodeView.m:31-110` is a block comment; the
   audit strips comments, so the 7 commented-out calls are not counted.
-* **`MAD/Source` has 125 calls, not 124** (the table's `MAD` row). That is the
-  only drift found: total iOS/shared calls are 560 (or 564 including the Mac's
-  3 and `MADTds`'s 1), not 559. The non-literal split (111) and the barcode
-  count match exactly.
+* **`MAD/Source` has 125 calls, not 124** (the table's `MAD` row). That was
+  the only drift found in the first run: total iOS/shared calls were 560 (or
+  564 including the Mac's 3 and `MADTds`'s 1), not 559. The non-literal split
+  (111) and the barcode count matched exactly. The current counts differ because
+  the Phase 2 fixes changed the call sites and the scope changed.
 
-The `raw-ui-literal` category is deliberately narrower than §2's "roughly 330
-hardcoded source literals". It catches a literal passed directly to a known UI
-API or stored in a UI property, or an `NSError` description key. It does not
+The `raw-ui-literal` category is still narrower than the full inventory. It
+catches a literal passed directly to a known UIKit, NSAlert, or AppKit API, a
+literal stored in a UI property, and an `NSError` description key. It does not
 catch display-name tables (barcode, paper, document-object, SQL type) or
 sentences built through a helper; those remain Phase 2 work and are why the
-baseline is a floor, not the full inventory.
+baseline is a floor, not the full inventory. The AppKit selector set is in
+`audit.py`; a new AppKit constructor or property must be added there and
+covered by a test in `audit_test.py`.
 
-The "59 format-bearing keys" in §2 counts call sites including constant keys.
-The audit can inspect only literal keys: 30 unique keys, 41 literal call
-sites, and exactly one multi-argument key that uses `%n$` (matching §2's "only
-one uses valid positional specifiers").
+The "59 format-bearing keys" in §2 counted call sites including constant keys.
+The audit inspects literal keys only: 29 unique keys now, and both
+multi-argument keys use positional specifiers after the Phase 2 fix.
 
 ### 5.4 Runtime detection
 
@@ -619,7 +629,7 @@ recorded baseline and the two inventory reconciliations are §5.3.1.
 "hello" renders in iOS and macOS; the audit runs in CI; no storyboard is still
 a single-language resource.
 
-**Status 2026-11-04 — first half proved, not complete.** Landed on
+**Status 2026-11-04 — complete.** Landed on
 `feature/app-localization-foundation`:
 
 * `MADDesigner/Resources/Localizable.xcstrings`, in both the `MAD Designer` and
@@ -650,16 +660,29 @@ verified in the unit test: the catalog value becomes accented
 (`Choose Storage Option Choose Storage Option`). This is the runtime tool for
 finding unwrapped strings; the Xcode scheme menu just sets these defaults.
 
+The third shared scheme, **MAD Designer German**, passes
+`-AppleLanguages (de)` and `-AppleLocale de_DE` on both the Run and Test
+actions. `MADLocalizationTests` uses it to assert the German catalog value and
+the loaded storyboard's navigation title (`Generierte Abfrage`), and it reads
+the German bundle directly so the German assertions also run under an English
+process language.
+
+Xcode upgraded all three driver projects from `objectVersion 51` to `55` while
+building them; `MADMySQL` additionally normalized two `OTHER_LDFLAGS` arrays to
+the equivalent `"-lc++"` string. No target, phase, resource, or setting was
+lost; `plutil -lint` passes and each driver framework builds.
+
 Remaining for Phase 1: `InfoPlist.strings` for the genuinely translatable
 top-level keys (the display name is a brand and the copyright is legal text,
 so this may stay empty for now; the nested document-type names are not
 coverable this way — see D4) and broadening `CFBundleLocalizations` as each
 language lands. The screenshot pass belongs to the user (D9), so no agent-built
 capture harness is planned; the pseudo schemes and the `-UITestOpenSample` /
-`-UITestSelectTab` hooks are the manual tooling. The `CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT` item needs
-only a per-target check: it is already `YES` at the project level (§2.4). The 22 storyboards in the plan's count are the 18 app storyboards plus
-three live driver copies plus the dead MADAPI copy; the dead copy is not
-converted.
+`-UITestSelectTab` hooks are the manual tooling. The
+`CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT` item needs only a per-target
+check: it is already `YES` at the project level (§2.4). The 22 storyboards in
+the plan's count are the 18 app storyboards plus three live driver copies plus
+the dead MADAPI copy; the dead copy is not converted.
 
 ### Phase 2 — Instrument the strings (4-6 weeks)
 
@@ -695,6 +718,14 @@ Work module by module, in this order:
 **Exit:** the audit reports no unwrapped user-facing literal outside the
 allowlist; every `NSLocalizedString` key has a useful comment; the pseudo-
 language run shows no plain English on screen except brand/technical strings.
+
+**Status 2026-11-04 — started.** The runtime-value keys and the two format
+strings are fixed (27 baseline entries removed). Non-literal calls are 81,
+made up of 55 unique entries: 53 constant symbols plus `MADMessageCloudSignout`
+and `MADTextFreeGift`, whose definitions the audit does not resolve. The audit
+now covers the AppKit constructors and properties the Mac app uses, and
+baseline entries carry occurrence counts. Next: the 55 non-literal keys, then
+the 318 unique raw UI literals, module by module.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 
