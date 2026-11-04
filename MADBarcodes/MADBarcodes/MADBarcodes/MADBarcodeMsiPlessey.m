@@ -11,7 +11,6 @@
 
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
 	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
@@ -27,7 +26,6 @@
 		
 		self.barcodeType = [MADBarcodeMsiPlessey type];
 		self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasMsiPlessey";
-		self.name = @"MSI Plessey";
 		self.has2dComponent = NO;
 		self.hasOptionalInput = YES;
 		

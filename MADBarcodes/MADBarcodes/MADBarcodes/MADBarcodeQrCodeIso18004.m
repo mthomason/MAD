@@ -10,7 +10,6 @@
 
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
@@ -25,7 +24,6 @@
 	if (self = [super init]) {
 		
 		self.barcodeType = [MADBarcodeQrCodeIso18004 type];
-		self.name = @"QR Code (ISO 18004)";
 		self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasQrCode";
 		self.has2dComponent = NO;
 		self.hasOptionalInput = YES;

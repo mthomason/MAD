@@ -10,7 +10,6 @@
 
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
@@ -27,7 +26,6 @@
 		
 		self.barcodeType = [MADBarcodeDatabarExpandedStacked type];
 		self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasDataBarExpandedStacked";
-		self.name = @"Databar Expanded Stacked";
 		self.has2dComponent = YES;
 		self.hasOptionalInput = YES;
 		

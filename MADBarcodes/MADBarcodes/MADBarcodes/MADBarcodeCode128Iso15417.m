@@ -10,7 +10,6 @@
 
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
 	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
 	@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -23,7 +22,6 @@
 	if (self = [super init]) {
 		
 		self.barcodeType = [MADBarcodeCode128Iso15417 type];
-		self.name = @"Code 128 (ISO 15417)";
 		self.has2dComponent = YES;
 		self.hasOptionalInput = NO;
 		
@@ -48,7 +46,6 @@
 	if (self = [super init]) {
 		
 		self.barcodeType = [MADBarcodeCode128SubsetB type];
-		self.name = @"Code 128 (Subset C Suppression)";
 		self.has2dComponent = YES;
 		self.hasOptionalInput = NO;
 		
@@ -73,7 +70,6 @@
 	if (self = [super init]) {
 		
 		self.barcodeType = [MADBarcodeCode128Ean14 type];
-		self.name = @"Code 128 (EAN-14)";
 		self.has2dComponent = YES;
 		self.hasOptionalInput = NO;
 		
@@ -98,7 +94,6 @@
 	if (self = [super init]) {
 		
 		self.barcodeType = [MADBarcodeCode128Nve18 type];
-		self.name = @"Code 128 (HBIC)";
 		self.has2dComponent = YES;
 		self.hasOptionalInput = NO;
 		
@@ -123,7 +118,6 @@
 	if (self = [super init]) {
 		
 		self.barcodeType = [MADBarcodeCode128Hibc type];
-		self.name = @"Code 128 (GS1-128)";
 		self.has2dComponent = YES;
 		self.hasOptionalInput = NO;
 		
@@ -148,7 +142,6 @@
 	if (self = [super init]) {
 
 		self.barcodeType = [MADBarcodeCode128Ean128 type];
-		self.name = @"Code 128 (GS1-128)";
 		self.has2dComponent = YES;
 		self.hasOptionalInput = NO;
 		

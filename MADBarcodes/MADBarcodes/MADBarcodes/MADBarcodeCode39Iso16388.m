@@ -10,7 +10,6 @@
 
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
 	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
 	@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -23,7 +22,6 @@
 	if (self = [super init]) {
 		
 		self.barcodeType = MADBarcodeTypeCODE39;
-		self.name = @"Code 39 (ISO 16388)";
 		self.has2dComponent = NO;
 		self.hasOptionalInput = YES;
 		
@@ -49,7 +47,6 @@
 	if (self = [super init]) {
 		
 		self.barcodeType = MADBarcodeTypeHibc39;
-		self.name = @"Code 39 (HBIC)";
 		self.has2dComponent = NO;
 		self.hasOptionalInput = NO;
 		

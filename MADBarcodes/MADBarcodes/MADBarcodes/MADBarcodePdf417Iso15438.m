@@ -8,13 +8,8 @@
 
 #import "MADBarcodePdf417Iso15438.h"
 
-NSString * const MADStringDisplayPdf417	 = @"PDF417 (ISO 15438)";
-NSString * const MADStringDisplayPdfTrunc   = @"PDF417 Trunc";
-NSString * const MADStringDisplayPdfHibc	= @"HIBC PDF";
-
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
 	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
@@ -30,7 +25,6 @@ NSString * const MADStringDisplayPdfHibc	= @"HIBC PDF";
 		
 		self.barcodeType = MADBarcodeTypePdf417;
 		self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasPdf417";
-		self.name = MADStringDisplayPdf417;
 		self.has2dComponent = NO;
 		self.hasOptionalInput = YES;
 		
@@ -48,15 +42,12 @@ NSString * const MADStringDisplayPdfHibc	= @"HIBC PDF";
 	switch (format) {
 		case 1:
 			self.barcodeType = MADBarcodeTypePdf417;
-			self.name = MADStringDisplayPdf417;
 			break;
 		case 2:
 			self.barcodeType = MADBarcodeTypePdf417Trunc;
-			self.name = MADStringDisplayPdfTrunc;
 			break;
 		case 3:
 			self.barcodeType = MADBarcodeTypeHibcPdf;
-			self.name = MADStringDisplayPdfHibc;
 			break;
 		default:
 			break;

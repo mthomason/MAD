@@ -11,7 +11,6 @@
 
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
@@ -28,7 +27,6 @@
 		
 		self.barcodeType = MADBarcodeTypeMaxicode;
 		self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasMaxicode";
-		self.name = @"Maxicode (ISO 16023)";
 		self.has2dComponent = NO;
 		self.hasOptionalInput = YES;
 		self.option1 = -1;

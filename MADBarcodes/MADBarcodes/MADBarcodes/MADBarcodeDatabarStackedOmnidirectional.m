@@ -10,7 +10,6 @@
 
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
 	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
 	@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -22,7 +21,6 @@
 - (instancetype)init {
 	if (self = [super init]) {
 		self.barcodeType = [MADBarcodeDatabarStackedOmnidirectional type];
-		self.name = @"Databar Stacked Omnidirectional";
 		self.has2dComponent = YES;
 		self.hasOptionalInput = NO;
 	}
