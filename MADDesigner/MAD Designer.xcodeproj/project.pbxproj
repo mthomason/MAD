@@ -720,10 +720,10 @@
 		4C3F11812EA0000100000181 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1CC25724C5ED300027A454 /* CoreServices.framework */; };
 		4C9A00202EA0000000000001 /* MADMacAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000002 /* MADMacAppDelegate.m */; };
 		4C9A00202EA0000000000011 /* MADMacAboutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000017 /* MADMacAboutWindowController.m */; };
-		4C9A00222EA0000000000001 /* Licenses in Resources */ = {isa = PBXBuildFile; fileRef = 4C3F00292EA0000100000029 /* Licenses */; };
-		4C9A00222EA0000000000002 /* MADMeta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CBC501C1E1B508800B067AD /* MADMeta.plist */; };
-		4C9A00222EA0000000000003 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000018 /* LICENSE */; };
-		4C9A00222EA0000000000004 /* NOTICE in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000019 /* NOTICE */; };
+		4C1C0C4A2EA1000000000001 /* Licenses in Resources */ = {isa = PBXBuildFile; fileRef = 4C3F00292EA0000100000029 /* Licenses */; };
+		4C1C0C4A2EA1000000000002 /* MADMeta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4CBC501C1E1B508800B067AD /* MADMeta.plist */; };
+		4C1C0C4A2EA1000000000003 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000018 /* LICENSE */; };
+		4C1C0C4A2EA1000000000004 /* NOTICE in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000019 /* NOTICE */; };
 		4C9A00202EA0000000000002 /* MADMacConnectionWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000004 /* MADMacConnectionWindowController.m */; };
 		4C9A00202EA0000000000003 /* MADMacDesignerCanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000006 /* MADMacDesignerCanvasView.m */; };
 		4C9A00202EA0000000000004 /* MADMacDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000008 /* MADMacDesignerViewController.m */; };
@@ -3009,10 +3009,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C9A00232EA0000000000001 /* AppIcon.icns in Resources */,
-				4C9A00222EA0000000000001 /* Licenses in Resources */,
-				4C9A00222EA0000000000002 /* MADMeta.plist in Resources */,
-				4C9A00222EA0000000000003 /* LICENSE in Resources */,
-				4C9A00222EA0000000000004 /* NOTICE in Resources */,
+				4C1C0C4A2EA1000000000001 /* Licenses in Resources */,
+				4C1C0C4A2EA1000000000002 /* MADMeta.plist in Resources */,
+				4C1C0C4A2EA1000000000003 /* LICENSE in Resources */,
+				4C1C0C4A2EA1000000000004 /* NOTICE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
