@@ -97,69 +97,305 @@
       "comment": "File size in megabytes; %@ is the formatted number.",
       "extractionState": "manual"
     },
-    "%@ day ": {
-      "comment": "Defined as FormatDay in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
+    "%lld days": {
+      "comment": "Relative time unit: days. Argument 1 selects singular/plural; argument 2 is the spelled-out number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ %#@unit@"
+          },
+          "substitutions": {
+            "unit": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "day"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "days"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    "%@ days ": {
-      "comment": "Defined as FormatDays in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
+    "%lld hours": {
+      "comment": "Relative time unit: hours. Argument 1 selects singular/plural; argument 2 is the spelled-out number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ %#@unit@"
+          },
+          "substitutions": {
+            "unit": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "hour"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "hours"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    "%@ hour ": {
-      "comment": "Defined as FormatHour in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
+    "%lld milliseconds": {
+      "comment": "Relative time unit: milliseconds. Argument 1 selects singular/plural; argument 2 is the spelled-out number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ %#@unit@"
+          },
+          "substitutions": {
+            "unit": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "millisecond"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "milliseconds"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    "%@ hours ": {
-      "comment": "Defined as FormatHours in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
+    "%lld minutes": {
+      "comment": "Relative time unit: minutes. Argument 1 selects singular/plural; argument 2 is the spelled-out number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ %#@unit@"
+          },
+          "substitutions": {
+            "unit": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "minute"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "minutes"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    "%@ millisecond ": {
-      "comment": "Defined as FormatMillisecond in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
+    "%lld months": {
+      "comment": "Relative time unit: months. Argument 1 selects singular/plural; argument 2 is the spelled-out number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ %#@unit@"
+          },
+          "substitutions": {
+            "unit": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "month"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "months"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    "%@ milliseconds ": {
-      "comment": "Defined as FormatMilliseconds in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
+    "%lld seconds": {
+      "comment": "Relative time unit: seconds. Argument 1 selects singular/plural; argument 2 is the spelled-out number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ %#@unit@"
+          },
+          "substitutions": {
+            "unit": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "second"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "seconds"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    "%@ minute ": {
-      "comment": "Defined as FormatMinute in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
+    "%lld weeks": {
+      "comment": "Relative time unit: weeks. Argument 1 selects singular/plural; argument 2 is the spelled-out number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ %#@unit@"
+          },
+          "substitutions": {
+            "unit": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "week"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "weeks"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    "%@ minutes ": {
-      "comment": "Defined as FormatMinutes in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
-    },
-    "%@ month ": {
-      "comment": "Defined as FormatMonth in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
-    },
-    "%@ months ": {
-      "comment": "Defined as FormatMonths in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
-    },
-    "%@ second ": {
-      "comment": "Defined as FormatSecond in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
-    },
-    "%@ seconds ": {
-      "comment": "Defined as FormatSeconds in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
-    },
-    "%@ week ": {
-      "comment": "Defined as FormatWeek in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
-    },
-    "%@ weeks ": {
-      "comment": "Defined as FormatWeeks in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
-    },
-    "%@ year ": {
-      "comment": "Defined as FormatYear in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
-    },
-    "%@ years ": {
-      "comment": "Defined as FormatYears in MADDesigner/Source/NSDate+Extras.m.",
-      "extractionState": "manual"
+    "%lld years": {
+      "comment": "Relative time unit: years. Argument 1 selects singular/plural; argument 2 is the spelled-out number.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ %#@unit@"
+          },
+          "substitutions": {
+            "unit": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Jahr"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Jahre"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ %#@unit@"
+          },
+          "substitutions": {
+            "unit": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "year"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "years"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "1. Connect a Data Source": {
       "comment": "Step 1 heading",
@@ -1975,6 +2211,18 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Updated %@ ago.": {
+      "comment": "Relative update time; %@ is the duration, e.g. two hours.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vor %@ aktualisiert."
+          }
+        }
+      }
+    },
     "Username: ": {
       "comment": "Label before the username field.",
       "extractionState": "manual"
@@ -2069,10 +2317,6 @@
     },
     "`*` names every column; name them, or use `alias.*`.": {
       "comment": "SQL statement validation message for a pasted statement.",
-      "extractionState": "manual"
-    },
-    "ago.": {
-      "comment": "Defined as TextAgo in MADDesigner/Source/NSDate+Extras.m.",
       "extractionState": "manual"
     },
     "iCloud": {
