@@ -11,6 +11,7 @@
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSException.h>
+#import <objc/runtime.h>
 
 // The driver is looked up, not imported: which drivers a process has is a matter
 // of what it links, and the registry is what a driver says there
@@ -53,8 +54,19 @@ static Class <MADDatabaseDriver> MADDriverForType(MADDatabaseType databaseType) 
 + (instancetype)newDatabaseConnection:(NSObject <MADConnectionsPropertiesProtocol> *)credentals
 						  documentURL:(NSURL *)documentURL {
 	Class <MADDatabaseDriver> driver = MADDriverForType(credentals.databaseType);
-	if (documentURL != nil && [(id)driver respondsToSelector:@selector(newDatabaseConnection:documentURL:)]) {
-		return [driver newDatabaseConnection:credentals documentURL:documentURL];
+	if (documentURL != nil) {
+		// Every driver inherits this category method, so respondsToSelector: is
+		// true even for a driver that does not answer the optional message.
+		// Dispatching to such a driver calls this method again with the same
+		// class -- unbounded recursion -- so compare the implementation a driver
+		// actually resolves against this one.
+		SEL selector = @selector(newDatabaseConnection:documentURL:);
+		Method driverMethod = class_getClassMethod((Class)driver, selector);
+		Method baseMethod = class_getClassMethod([MADDatabaseConnection class], selector);
+		if (driverMethod != NULL && baseMethod != NULL &&
+			method_getImplementation(driverMethod) != method_getImplementation(baseMethod)) {
+			return [driver newDatabaseConnection:credentals documentURL:documentURL];
+		}
 	}
 	return [driver newDatabaseConnection:credentals];
 }
