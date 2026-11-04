@@ -49,6 +49,16 @@ The technical documentation and format specification are also served at <https:/
 
 The recording's [exported report](https://docs.everydayapps.com/assets/london.html) is plain HTML, opened in any browser.
 
+## Localization
+
+The iOS and macOS applications are fully localized into **English, German, Spanish, Japanese, Brazilian Portuguese, and Simplified Chinese**. The interface follows the system language, and the documentation is translated into the same languages. Brand and product names, SQL identifiers, database and font names, and licence text remain in English by design. The translations are machine-assisted; corrections are welcome at the [issue tracker](https://github.com/mthomason/MAD/issues).
+
+## Privacy
+
+MAD respects your privacy. The applications contain no analytics, telemetry, or tracking code, and they do not record or copy your files. The only network connections they make are the database connections you configure; report data stays in the document's local SQLite cache and companion files.
+
+On macOS, the app may ask for access to **Documents**, **Desktop**, **Downloads**, or another folder. That prompt comes from the standard macOS Open panel used to choose a `.mad` report (or a SQLite database file): macOS grants access to the folder so the panel can display its contents, and the app reads only the file you select. This is standard behaviour for macOS applications — it is not MAD scanning, recording, copying, or tracking anything.
+
 ## Inside the `.mad` Format
 
 A `.mad` file is not a static printout like a PDF, and it is not a dump of row data. It is a **declarative program** that turns a database connection into a typed table and a formatted view.
