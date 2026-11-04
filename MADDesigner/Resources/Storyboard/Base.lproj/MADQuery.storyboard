@@ -11,7 +11,7 @@
         <!--Generated Query-->
         <scene sceneID="RZZ-HD-foi">
             <objects>
-                <viewController id="fBG-n5-WzK" customClass="MADViewControllerSQL" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MADIdentifierSQLViewController" id="fBG-n5-WzK" customClass="MADViewControllerSQL" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dWa-kE-hHF"/>
                         <viewControllerLayoutGuide type="bottom" id="yvq-YF-d1q"/>

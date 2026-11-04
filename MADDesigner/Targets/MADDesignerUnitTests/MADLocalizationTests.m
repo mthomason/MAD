@@ -35,8 +35,15 @@
 - (void)testStringCatalogServesPreferredLanguage {
 	NSString *value = NSLocalizedString(@"Choose Storage Option", nil);
 	if ([self pseudoLocalizationEnabled]) {
-		XCTAssertNotEqualObjects(value, @"Choose Storage Option",
-			@"Pseudo-localization must transform the catalog value");
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		if ([defaults boolForKey:@"NSDoubleLocalizedStrings"]) {
+			XCTAssertEqualObjects(value, @"Choose Storage Option Choose Storage Option",
+				@"Double-length must repeat the catalog value");
+		} else {
+			XCTAssertNotEqualObjects(value, @"Choose Storage Option");
+			XCTAssertGreaterThan(value.length, @"Choose Storage Option".length,
+				@"Accented pseudo-localization must add marks, not just change a character");
+		}
 		NSLog(@"MADLocalizationTests: pseudo value = %@", value);
 		return;
 	}
@@ -45,6 +52,28 @@
 	NSString *expected = [language hasPrefix:@"de"] ? @"Speicherort wählen" : @"Choose Storage Option";
 	XCTAssertEqualObjects(value, expected,
 		@"The compiled String Catalog must serve %@", language);
+}
+
+- (void)testGermanCatalogValueFromTheGermanBundle {
+	NSString *path = [[NSBundle mainBundle] pathForResource:@"de" ofType:@"lproj"];
+	XCTAssertNotNil(path, @"de.lproj must be in the app bundle");
+	NSBundle *german = [NSBundle bundleWithPath:path];
+	NSString *value = [german localizedStringForKey:@"Choose Storage Option" value:nil table:nil];
+	XCTAssertEqualObjects(value, @"Speicherort wählen",
+		@"The German table must carry the key even under an English process language");
+}
+
+- (void)testStoryboardNavigationTitleFollowsPreferredLanguage {
+	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MADQuery"
+		bundle:[NSBundle mainBundle]];
+	UIViewController *controller = [storyboard instantiateViewControllerWithIdentifier:
+		@"MADIdentifierSQLViewController"];
+	XCTAssertNotNil(controller);
+
+	NSString *language = [self preferredLanguage];
+	NSString *expected = [language hasPrefix:@"de"] ? @"Generierte Abfrage" : @"Generated Query";
+	XCTAssertEqualObjects(controller.navigationItem.title, expected,
+		@"The storyboard title must come from the %@ table", language);
 }
 
 - (void)testMADQueryStoryboardLoads {
