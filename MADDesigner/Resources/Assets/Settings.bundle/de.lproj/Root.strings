@@ -1,4 +1,4 @@
-/* Titles in Root.plist. Draft translations pending review. */
+/* Titles in Root.plist. Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues. */
 "MAD Settings" = "MAD-Einstellungen";
 "Query Settings" = "Abfrageeinstellungen";
 "Limit Results (10,000 rows)" = "Ergebnisse begrenzen (10.000 Zeilen)";

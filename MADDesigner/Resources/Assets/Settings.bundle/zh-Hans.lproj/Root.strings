@@ -1,0 +1,4 @@
+/* Titles in Root.plist. Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues. */
+"MAD Settings" = "MAD 设置";
+"Query Settings" = "查询设置";
+"Limit Results (10,000 rows)" = "限制结果（10,000 行）";

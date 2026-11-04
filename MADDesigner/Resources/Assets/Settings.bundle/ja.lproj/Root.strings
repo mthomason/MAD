@@ -1,0 +1,4 @@
+/* Titles in Root.plist. Machine-assisted translation; report errors at https://github.com/mthomason/MAD/issues. */
+"MAD Settings" = "MADの設定";
+"Query Settings" = "クエリ設定";
+"Limit Results (10,000 rows)" = "結果を制限（10,000 行）";
