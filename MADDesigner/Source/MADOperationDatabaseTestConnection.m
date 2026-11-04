@@ -88,7 +88,7 @@
 		MADLogError("MADOperationDatabaseTestConnection <%p:%@> databaseConnection is nil. Cannot proceed. Finishing with error.", self, self.name);
 		self.error = [NSError errorWithDomain:NSStringFromClass([self class])
 										 code:-2001
-									 userInfo:@{NSLocalizedDescriptionKey: @"Database connection not provided for connection test."}];
+									 userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Database connection not provided for connection test.", @"Error when the connection test has no connection object.")}];
 		self.success = NO;
 		[self finishWithError:self.error];
 		return;

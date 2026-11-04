@@ -759,10 +759,10 @@ static const CGFloat MADBarButtonItemsMargin = 8.0;
 				if (reason.length > 0 && ![reason isEqualToString:message] && ![message containsString:reason]) {
 					message = [NSString stringWithFormat:@"%@\n\n%@", message, reason];
 				}
-				UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
+				UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"Alert title for a refresh or load failure.")
 																			   message:message
 																		preferredStyle:UIAlertControllerStyleAlert];
-				UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+				UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"Alert button that dismisses the message.")
 																   style:UIAlertActionStyleDefault
 																 handler:nil];
 				[alert addAction:okAction];

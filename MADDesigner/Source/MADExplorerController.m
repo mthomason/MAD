@@ -927,8 +927,8 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 
 - (void)handleDocumentStateChangedNotificationError:(NSNotification *)notification {
 	[self.fileExplorerViewDelegate collectionView:self.collectionView allowSelection:YES];
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Open Failure"
-																   message: [NSString stringWithFormat: @"Failed to open with message:\n\t%@", notification.userInfo]
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Open Failure", @"Alert title when a document cannot be opened.")
+																   message:[[NSString alloc] initWithFormat:NSLocalizedString(@"Failed to open with message:\n\t%@", @"Alert body when a document cannot be opened; %@ is the underlying message."), notification.userInfo]
 															preferredStyle: UIAlertControllerStyleAlert];
 	[self presentViewController:alert animated:YES completion:nil];
 }
@@ -968,7 +968,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 		if (completion) {
 			NSError *keyError = [NSError errorWithDomain:@"FileExplorerDomain"
 													code:1001
-												userInfo:@{NSLocalizedDescriptionKey:@"Keychain key was missing or empty."}];
+												userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Keychain key was missing or empty.", @"Error when a credential lookup has no key.")}];
 			completion(nil, keyError);
 		}
 		return;
@@ -992,7 +992,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 				if (!finalError) {
 					finalError = [NSError errorWithDomain:@"FileExplorerDomain"
 													 code:1002
-												 userInfo:@{NSLocalizedDescriptionKey:@"Credential operation completed without a credential and no specific error."}];
+												 userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Credential operation completed without a credential and no specific error.", @"Error when a credential operation returns neither a credential nor an error.")}];
 				}
 				MADLogError("%@ <%p> getCredentialsForKey: Op <%@> finished. Credential retrieval failed or op had errors. Error: %@",
 							NSStringFromClass([self class]), self, finishedOperation.name, finalError);
@@ -1001,7 +1001,7 @@ static NSString * const MADNotificationCloudActivityCompleted               = @"
 			MADLogInfo("%@ <%p> getCredentialsForKey: Finished operation was not MADKeyChainGetCredentials? Op: %@. Aggregated errors: %@",
 					   NSStringFromClass([self class]), self, finishedOperation, opErrors);
 			if (!finalError) {
-				finalError = [NSError errorWithDomain:@"FileExplorerDomain" code:1003 userInfo:@{NSLocalizedDescriptionKey:@"Unexpected operation type finished."}];
+				finalError = [NSError errorWithDomain:@"FileExplorerDomain" code:1003 userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Unexpected operation type finished.", @"Error when the credential queue finishes an unexpected operation.")}];
 			}
 		}
 		

@@ -335,7 +335,7 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 		if (error) {
 			*error = [NSError errorWithDomain:MADStoreConverterErrorDomain
 										 code:MADStoreConverterErrorModelMissing
-									 userInfo:@{ NSLocalizedDescriptionKey: @"MAD.momd was not found in the bundle." }];
+									 userInfo:@{ NSLocalizedDescriptionKey:NSLocalizedString(@"MAD.momd was not found in the bundle.", @"Error when the legacy document converter cannot find its Core Data model.") }];
 		}
 		return nil;
 	}
@@ -352,7 +352,7 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 	if (error) {
 		*error = [NSError errorWithDomain:MADStoreConverterErrorDomain
 									 code:MADStoreConverterErrorModelMissing
-								 userInfo:@{ NSLocalizedDescriptionKey: @"No model version in MAD.momd matches the legacy store." }];
+								 userInfo:@{ NSLocalizedDescriptionKey:NSLocalizedString(@"No model version in MAD.momd matches the legacy store.", @"Error when no legacy Core Data model matches the store being converted.") }];
 	}
 	return nil;
 }

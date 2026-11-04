@@ -42,7 +42,7 @@
 	return [UIContextMenuConfiguration configurationWithIdentifier:nil
 												   previewProvider:nil
 													actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull __unused suggestedActions) {
-		UIAction *edit = [UIAction actionWithTitle:@"Edit"
+		UIAction *edit = [UIAction actionWithTitle:NSLocalizedString(@"Edit", @"Context menu action: edit the selected document element.")
 											 image:[UIImage systemImageNamed:@"pencil"]
 										identifier:nil
 										   handler:^(__kindof UIAction * _Nonnull __unused action) {
@@ -51,7 +51,7 @@
 					[delegate editDocumentObjectRepresentedByCell:self];
 			}
 		}];
-		UIAction *delete = [UIAction actionWithTitle:@"Delete"
+		UIAction *delete = [UIAction actionWithTitle:NSLocalizedString(@"Delete", @"Context menu action: delete the selected document element.")
 											   image:[UIImage systemImageNamed:@"trash"]
 										  identifier:nil
 											 handler:^(__kindof UIAction * _Nonnull __unused action) {
@@ -60,7 +60,7 @@
 					[delegate deleteDocumentObjectRepresentedByCell:self];
 			}
 		}];
-		UIAction *format = [UIAction actionWithTitle:@"Format"
+		UIAction *format = [UIAction actionWithTitle:NSLocalizedString(@"Format", @"Context menu action: format the selected document element.")
 											   image:[UIImage systemImageNamed:@"paintbrush"]
 										  identifier:nil
 											 handler:^(__kindof UIAction * _Nonnull __unused action) {
