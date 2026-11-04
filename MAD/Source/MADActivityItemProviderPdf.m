@@ -182,7 +182,9 @@ static inline CGRect PdfTrimBox(CGRect rect) { return UIEdgeInsetsInsetRect(rect
 			NSString *page  = [NSNumberFormatter localizedStringFromNumber: @(i+1)
 															   numberStyle: NSNumberFormatterDecimalStyle];
 
-			NSString *text = [[NSString alloc] initWithFormat:@"Drawing page %@ of %@.", page, totalPages];
+			NSString *text = [[NSString alloc] initWithFormat:
+				NSLocalizedString(@"Drawing page %1$@ of %2$@.", @"Progress while drawing a PDF; current and total pages."),
+				page, totalPages];
 			
 			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 				activityView.status.text = text.copy;
