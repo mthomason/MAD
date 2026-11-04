@@ -10,7 +10,6 @@
 
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
@@ -26,7 +25,6 @@
 	if (self = [super init]) {
 		self.barcodeType = [MADBarcodeDataMatrixIso16022 type];
 		self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasDataMatrix";
-		self.name = @"Data Matrix (ISO 16022)";
 		self.has2dComponent = NO;
 		self.hasOptionalInput = YES;
 	}

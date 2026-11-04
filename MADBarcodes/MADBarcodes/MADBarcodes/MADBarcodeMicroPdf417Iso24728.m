@@ -10,7 +10,6 @@
 
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, strong, readwrite) NSString *detailsSegueIdentifer;
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
 	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
@@ -26,7 +25,6 @@
 		
 		self.barcodeType = [MADBarcodeMicroPdf417Iso24728 type];
 		self.detailsSegueIdentifer = @"MTIdentiferSegueBarcodeExtrasMicroPdf417";
-		self.name = @"MicroPDF417 (ISO 24728)";
 		self.has2dComponent = NO;
 		self.hasOptionalInput = YES;
 		

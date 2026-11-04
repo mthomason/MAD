@@ -10,7 +10,6 @@
 
 @interface MADBarcode ()
 
-	@property (nonatomic, strong, readwrite) NSString *name;
 	@property (nonatomic, assign, readwrite) int16_t barcodeType;
 	@property (nonatomic, assign, readwrite) BOOL has2dComponent;
 	@property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -24,7 +23,6 @@
 	if (self = [super init]) {
 		
 		self.barcodeType = [MADBarcodeUniversalProductCodeUpca type];
-		self.name = @"Universal Product Code (UPC-A)";
 		self.has2dComponent = YES;
 		self.hasOptionalInput = NO;
 		

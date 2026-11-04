@@ -10,7 +10,6 @@
 
 @interface MADBarcode ()
 
-@property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, assign, readwrite) int16_t barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -22,7 +21,6 @@
 - (instancetype)init {
 	if (self = [super init]) {
 		self.barcodeType = [MADBarcodeAusreDirect type];
-		self.name = @"Australia Post Redirect Code";
 		self.has2dComponent = NO;
 		self.hasOptionalInput = NO;
 	}

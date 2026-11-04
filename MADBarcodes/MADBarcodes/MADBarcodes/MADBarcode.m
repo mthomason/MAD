@@ -92,7 +92,6 @@ typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 	MADBarcodeDataTypeGs1 = GS1_MODE
 };
 
-static NSString * const MADBarcodeCodingKeyName					= @"name";
 static NSString * const MADBarcodeCodingKeyDetailsSegue			= @"detailsSegueIdentifer";
 static NSString * const MADBarcodeCodingKeyBarcodeType			= @"barcodeType";
 static NSString * const MADBarcodeCodingKeyBorderStyle			= @"barcodeBorderStyle";
@@ -155,7 +154,6 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 
 @property (nonatomic, assign) CGFloat rotate;
 
-@property (nonatomic, strong, readwrite) NSString *name;
 @property (nonatomic, assign, readwrite) int16_t barcodeType;
 @property (nonatomic, assign, readwrite) BOOL has2dComponent;
 @property (nonatomic, assign, readwrite) BOOL hasOptionalInput;
@@ -186,6 +184,13 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 @synthesize scale = _scale;
 
 - (void)dealloc { }
+
+// The display name is derived from the type, so the symbology table is the one
+// place a name is written.  A type the table does not list (the base class's
+// own type 0, or an unknown one) has no name.
+- (NSString *)name {
+	return [MADBarcode newBarcodeNameForType:self.barcodeType];
+}
 
 - (instancetype)init {
 	if (self = [super init]) {
@@ -455,8 +460,6 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [self init]) {
-		_name = [[coder decodeObjectOfClass:[NSString class]
-									 forKey:MADBarcodeCodingKeyName] copy];
 		_detailsSegueIdentifer = [[coder decodeObjectOfClass:[NSString class]
 													 forKey:MADBarcodeCodingKeyDetailsSegue] copy];
 		_barcodeType = (int16_t)[coder decodeIntegerForKey:MADBarcodeCodingKeyBarcodeType];
@@ -486,7 +489,6 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeObject:	self.name					forKey:MADBarcodeCodingKeyName];
 	[coder encodeObject:	self.detailsSegueIdentifer	forKey:MADBarcodeCodingKeyDetailsSegue];
 	[coder encodeInteger:	self.barcodeType			forKey:MADBarcodeCodingKeyBarcodeType];
 	[coder encodeInteger:	self.barcodeBorderStyle		forKey:MADBarcodeCodingKeyBorderStyle];
@@ -774,7 +776,7 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 				   @BARCODE_CODE128			: @"Code 128 (ISO 15417)",
 				   @(MADBarcodeTypeCode128b)	: @"Code 128 (Subset C Suppression)",
 				   @(MADBarcodeTypeHibc128)	: @"Code 128 (HBIC)",
-				   @(MADBarcodeTypeEAN128)	: @"Code 128 (HBIC)",
+				   @(MADBarcodeTypeEAN128)	: @"Code 128 (GS1-128)",
 				   @BARCODE_CODE16K			: @"Code 16k",
 				   @BARCODE_C25LOGIC		: @"Code 2 of 5 Data Logic",
 				   @BARCODE_C25IATA			: @"Code 2 of 5 IATA",
@@ -814,6 +816,8 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 				   @BARCODE_MSI_PLESSEY		: @"MSI Plessey",
 				   @BARCODE_NVE18			: @"NVE-18",
 				   @BARCODE_PDF417			: @"PDF417 (ISO 15438)",
+				   @BARCODE_PDF417TRUNC		: @"PDF417 Truncated",
+				   @BARCODE_HIBC_PDF		: @"HIBC PDF 417",
 				   @BARCODE_PHARMA			: @"Pharmacode",
 				   @BARCODE_PHARMA_TWO		: @"Pharmacode 2-track",
 				   @BARCODE_PZN				: @"Pharma Zentralnummer (PZN)",
