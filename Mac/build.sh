@@ -113,6 +113,15 @@ assemble_app_bundle() {
 	cp "${SCRIPT_DIR}/Resources/AppIcon.icns" "${RESOURCES_DIR}/AppIcon.icns"
 	cp "${REPO_ROOT}/docs/assets/mad-designer-macos-icon-512.png" "${RESOURCES_DIR}/AppIcon.png"
 
+	# 3c. Compile the shared String Catalog into Contents/Resources/<lang>.lproj
+	echo "==> Compiling localization catalog..."
+	local catalog="${REPO_ROOT}/MADDesigner/Resources/Localizable.xcstrings"
+	if [[ ! -f "${catalog}" ]]; then
+		echo "ERROR: Missing ${catalog}." >&2
+		exit 1
+	fi
+	xcrun xcstringstool compile "${catalog}" --output-directory "${RESOURCES_DIR}"
+
 	# 4. Compile native AppKit executable
 	echo "==> Compiling ${APP_NAME} (AppKit, arm64-apple-macos${DEPLOYMENT_TARGET})..."
 	# shellcheck disable=SC2046
