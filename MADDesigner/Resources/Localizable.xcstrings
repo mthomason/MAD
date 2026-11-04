@@ -25,6 +25,10 @@
       "comment": "Defined as MADTextRefreshing in MADDesigner/Source/MADLabelStatus.m.",
       "extractionState": "manual"
     },
+    "%#.1f pt": {
+      "comment": "Like '5.2 points.'",
+      "extractionState": "manual"
+    },
     "%@ day ": {
       "comment": "Defined as FormatDay in MADDesigner/Source/NSDate+Extras.m.",
       "extractionState": "manual"
@@ -89,8 +93,280 @@
       "comment": "Defined as FormatYears in MADDesigner/Source/NSDate+Extras.m.",
       "extractionState": "manual"
     },
+    "1. Connect a Data Source": {
+      "comment": "Step 1 heading",
+      "extractionState": "manual"
+    },
+    "2. Build the Query (MAD Query)": {
+      "comment": "Step 2 heading",
+      "extractionState": "manual"
+    },
+    "3. Lay Out the Report (MAD Designer)": {
+      "comment": "Step 3 heading",
+      "extractionState": "manual"
+    },
+    "4. View & Export (MAD Viewer)": {
+      "comment": "Step 4 heading",
+      "extractionState": "manual"
+    },
+    "A GROUP BY column does not resolve.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "A barcode element.": {
+      "comment": "Description of a barcode element.",
+      "extractionState": "manual"
+    },
+    "A dynamic data field label.": {
+      "comment": "Description of a dynamic data label element.",
+      "extractionState": "manual"
+    },
+    "A file URL and database connection are required to create a document.": {
+      "comment": "Error when a headless document is created without its inputs.",
+      "extractionState": "manual"
+    },
+    "A grouping of data.": {
+      "comment": "Description of a grouping element.",
+      "extractionState": "manual"
+    },
+    "A static image.": {
+      "comment": "Description of a static image element.",
+      "extractionState": "manual"
+    },
+    "A static text document object.": {
+      "comment": "Description of a static text element.",
+      "extractionState": "manual"
+    },
+    "About": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
     "Accending": {
       "comment": "Defined as TextAccending in MADDesigner/Source/MADQueryBuilderAddGroupViewController.m.",
+      "extractionState": "manual"
+    },
+    "Acknowledgements": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Add": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Add Group": {
+      "comment": "Title for the add group screen. ",
+      "extractionState": "manual"
+    },
+    "Add Predicate": {
+      "comment": "Title for the add predicate screen. ",
+      "extractionState": "manual"
+    },
+    "Add Table": {
+      "comment": "Title for the add table screen. ",
+      "extractionState": "manual"
+    },
+    "Add a barcode element.": {
+      "comment": "Action to add a barcode element.",
+      "extractionState": "manual"
+    },
+    "Add a condition to your report.": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
+    "Add a dynamic data field label.": {
+      "comment": "Action to add a dynamic data label element.",
+      "extractionState": "manual"
+    },
+    "Add a grouping of data.": {
+      "comment": "Action to add a grouping element.",
+      "extractionState": "manual"
+    },
+    "Add a static image.": {
+      "comment": "Action to add a static image element.",
+      "extractionState": "manual"
+    },
+    "Add a static text document object.": {
+      "comment": "Action to add a static text element.",
+      "extractionState": "manual"
+    },
+    "Add an empty element.": {
+      "comment": "Action to add an empty spacer element.",
+      "extractionState": "manual"
+    },
+    "Add tables to the query and data fields to the designer to generate a query.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Add tables, joins, filter predicates, groupings, and sort order visually, or paste a SQL SELECT statement directly. MAD generates the database-specific SQL automatically.": {
+      "comment": "Step 2 body",
+      "extractionState": "manual"
+    },
+    "Adds a new document.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Adds a new query grouping.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Adds a new table join.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Adds a new table.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Adds a predicate to filter the query results.": {
+      "comment": "Hint for query predicate.",
+      "extractionState": "manual"
+    },
+    "Aggregate": {
+      "comment": "Title of a grouping element.",
+      "extractionState": "manual"
+    },
+    "Aggregate Function": {
+      "comment": "Title of form to create a non changing text label document object.",
+      "extractionState": "manual"
+    },
+    "Aggregate Functions": {
+      "comment": "Title of form that allows you to choose a type of aggregate function (count, first, last, max, min, avg, sum).",
+      "extractionState": "manual"
+    },
+    "Alert": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Ambiguous": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "An empty element.": {
+      "comment": "Description of an empty spacer element.",
+      "extractionState": "manual"
+    },
+    "Applied: %1$lu table(s), %2$lu join(s), %3$lu predicate(s), %4$lu group(s).": {
+      "comment": "Status after applying the SQL to the query. Four counts: tables, joins, predicates, groups.",
+      "extractionState": "manual"
+    },
+    "Apply": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Are you sure you would like to delete %@ item?  This action is final.": {
+      "comment": "Delete message template (singular)",
+      "extractionState": "manual"
+    },
+    "Are you sure you would like to delete %@ items?  This action is final.": {
+      "comment": "Delete message template (plural)",
+      "extractionState": "manual"
+    },
+    "Arithmetic has no place in the select list: the model holds column references.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "As entered": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Automatic": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "BETWEEN has no place in the model: a predicate holds one comparison.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Bad Process": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Bad Query": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Barcode": {
+      "comment": "Title of a barcode element.",
+      "extractionState": "manual"
+    },
+    "Barcode error: Encoding problem.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Barcode error: File access.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Barcode error: Invalid check.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Barcode error: Invalid data.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Barcode error: Memory error.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Barcode error: Primary data too long.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Barcode error: To long.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Bit": {
+      "comment": "Bit data type.",
+      "extractionState": "manual"
+    },
+    "Blob": {
+      "comment": "Blob data type.",
+      "extractionState": "manual"
+    },
+    "Bold": {
+      "comment": "Undo action name: apply bold to the selected elements.",
+      "extractionState": "manual"
+    },
+    "Border Bottom": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Border Left": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Border Right": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Border Top": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Bottom": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "CROSS joins have no place in the model: a link names one field pair.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Cancel": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Caught an Error": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Change": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Charter Member (since version %@)": {
+      "comment": "Localized UI string.",
       "extractionState": "manual"
     },
     "Choose Storage Option": {
@@ -105,28 +381,544 @@
         }
       }
     },
+    "Choose a feature to purchase.": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
+    "Choose a table to include in the query.": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
+    "Choose the type of connection to use.": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
+    "Cloud": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Column aliases are the designer's own; name the column.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Comma joins have no place in the model: every join carries its link.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Confirm": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Connect Failed": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
     "Continue": {
       "comment": "Defined as MADButtonContinue in MADDesigner/Source/MADOperationPromptPassword.m.",
+      "extractionState": "manual"
+    },
+    "Could not get credentials.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Could not initialize the document model in the portable store.": {
+      "comment": "Error when the portable store cannot be initialized.",
+      "extractionState": "manual"
+    },
+    "Could not run this query.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Count": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Credential operation completed without a credential and no specific error.": {
+      "comment": "Error when a credential operation returns neither a credential nor an error.",
+      "extractionState": "manual"
+    },
+    "Credentials": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Credentials not found.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Credentials required": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Cross Join": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Custom": {
+      "comment": "Barcode option: a custom value rather than the automatic default.",
       "extractionState": "manual"
     },
     "Cycle encountered.": {
       "comment": "Defined as TextCycleEncountered in MADDataStructures/Source/MTGraph.m.",
       "extractionState": "manual"
     },
+    "DISTINCT has no place in the model: the query designer's fields are the select list.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Data Label": {
+      "comment": "Title of a dynamic data label element.",
+      "extractionState": "manual"
+    },
+    "Data Object Selector": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
     "Database Information": {
       "comment": "Defined as TextHeaderInformation in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
+      "extractionState": "manual"
+    },
+    "Database Settings": {
+      "comment": "Title of the database settings screen.",
+      "extractionState": "manual"
+    },
+    "Database connection not provided for connection test.": {
+      "comment": "Error when the connection test has no connection object.",
+      "extractionState": "manual"
+    },
+    "Database connection not provided for schema import.": {
+      "comment": "Error when schema import has no database connection.",
+      "extractionState": "manual"
+    },
+    "Database file could not be found.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Date": {
+      "comment": "Date data type.",
+      "extractionState": "manual"
+    },
+    "Date Time": {
+      "comment": "Date data type.",
       "extractionState": "manual"
     },
     "Decending": {
       "comment": "Defined as TextDecending in MADDesigner/Source/MADQueryBuilderAddGroupViewController.m.",
       "extractionState": "manual"
     },
+    "Decimal": {
+      "comment": "Date data type.",
+      "extractionState": "manual"
+    },
+    "Decimals": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
     "Default": {
       "comment": "Defined as TextDefault in MADDesigner/Source/MADQueryBuilderAddGroupViewController.m.",
       "extractionState": "manual"
     },
+    "Define a grouping the query and report.": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
+    "Delete": {
+      "comment": "Context menu action: delete the selected document element.",
+      "extractionState": "manual"
+    },
+    "Delete saved credentials?": {
+      "comment": "Alert title asking whether to delete saved credentials.",
+      "extractionState": "manual"
+    },
+    "Deletes the selected documents.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Design the layout for your report.": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
+    "Design the query for your report.": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
+    "Designer": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Designer Mode (limited)": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Device is not configured for email.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Disable Bold": {
+      "comment": "Undo action name: remove bold from the selected elements.",
+      "extractionState": "manual"
+    },
+    "Disable Italic": {
+      "comment": "Undo action name: remove italic from the selected elements.",
+      "extractionState": "manual"
+    },
+    "Disable Strikethrough": {
+      "comment": "Undo action name: remove strikethrough from the selected elements.",
+      "extractionState": "manual"
+    },
+    "Disable Underline": {
+      "comment": "Undo action name: remove underline from the selected elements.",
+      "extractionState": "manual"
+    },
+    "Dismiss": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Dismissing toolbox.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Displays selected document details.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Displays the store.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Do you want to store documents in iCloud or only on this device?": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Document %@.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Document object not found for save and close.": {
+      "comment": "Error when save-and-close cannot find its document.",
+      "extractionState": "manual"
+    },
+    "Document object not found for schema import.": {
+      "comment": "Error when schema import cannot find its document.",
+      "extractionState": "manual"
+    },
+    "Double": {
+      "comment": "Date data type.",
+      "extractionState": "manual"
+    },
+    "Downloading": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Duplicates the selected documents.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Each report requires a database connection.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Edit": {
+      "comment": "Context menu action: edit the selected document element.",
+      "extractionState": "manual"
+    },
+    "Edit Label": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Empty Query": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Empty query while using \"only active fields.\" You may need to reference some query fields.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Enables document list edit mode.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Enum": {
+      "comment": "Date data type.",
+      "extractionState": "manual"
+    },
+    "Equal": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Equi-Join": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Error": {
+      "comment": "Generic failure reason for a report section operation.",
+      "extractionState": "manual"
+    },
+    "Error Clear Bindings": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Error Reset": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Error: No Datasource": {
+      "comment": "Placeholder text on a report element whose query has no datasource.",
+      "extractionState": "manual"
+    },
+    "Expected ')' to close the predicate.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected BY after GROUP.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected BY after ORDER.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected FROM after the select list.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected JOIN after FULL.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected JOIN after INNER.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected JOIN after LEFT.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected JOIN after RIGHT.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected ON after the joined table.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected a column name after the qualifier.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected a column or a literal.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected a column reference in the select list.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected a column reference.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected a comparison operator.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected a table name after FROM.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected a table name after the schema qualifier.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected a table name.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected an alias after '.'.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Expected an alias after AS.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Failed to add null value.": {
+      "comment": "Error when a null value is added to a report section.",
+      "extractionState": "manual"
+    },
+    "Failed to close the document.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Failed to close the new document.": {
+      "comment": "Error when the new document cannot be closed.",
+      "extractionState": "manual"
+    },
+    "Failed to connect to the source database.": {
+      "comment": "Error when a headless document cannot reach its database.",
+      "extractionState": "manual"
+    },
+    "Failed to establish database connection for schema import (nil connection object).": {
+      "comment": "Error when schema import cannot establish a connection.",
+      "extractionState": "manual"
+    },
+    "Failed to open with message:\n\t%@": {
+      "comment": "Alert body when a document cannot be opened; %@ is the underlying message.",
+      "extractionState": "manual"
+    },
+    "Field Selector": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Field: %@": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Fields not found.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "File Exist": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "File already exist. Please choose a new name.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Filename not valid.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "First": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Float": {
+      "comment": "Date data type.",
+      "extractionState": "manual"
+    },
+    "Follow": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Follow us on Twitter.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Font Name %@": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Font Size": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Font size": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Footer": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
     "Form Feed": {
       "comment": "Defined as MADTextFormFeed in MADDesigner/Source/MADDesignerSectionLayoutController.m.",
+      "extractionState": "manual"
+    },
+    "Format": {
+      "comment": "Context menu action: format the selected document element.",
+      "extractionState": "manual"
+    },
+    "Formatted page %@.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Formatting report.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Formula Selector": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Full Outer Join": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Function Selector": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Functions and expressions have no place in the model: a predicate side is a column or a literal.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Functions and expressions have no place in the select list: the model holds column references.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Generated": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Geometry": {
+      "comment": "Date data type.",
+      "extractionState": "manual"
+    },
+    "Greater Than": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Greater Than or Equal To": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Group %@": {
+      "comment": "Like 'Group Three.'",
+      "extractionState": "manual"
+    },
+    "Group By": {
+      "comment": "Title of form that allows you to choose an item to group other items by...",
+      "extractionState": "manual"
+    },
+    "Group By Selector": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Group Footer": {
+      "comment": "\"Group Footer\"",
+      "extractionState": "manual"
+    },
+    "Group Footer %lu": {
+      "comment": "Group Footer #",
+      "extractionState": "manual"
+    },
+    "Group Footer (%@)": {
+      "comment": "\"Group Footer\"",
+      "extractionState": "manual"
+    },
+    "Group Footer - (%@)": {
+      "comment": "\"Group Footer 1\"",
+      "extractionState": "manual"
+    },
+    "Group Footer - (%lu)": {
+      "comment": "\"Group Footer 1\"",
+      "extractionState": "manual"
+    },
+    "Group Header": {
+      "comment": "\"Group Header\"",
+      "extractionState": "manual"
+    },
+    "Group Header %lu": {
+      "comment": "Group Header #",
+      "extractionState": "manual"
+    },
+    "Group Header (%@)": {
+      "comment": "\"Group Header 1\"",
+      "extractionState": "manual"
+    },
+    "Group Header (%lu)": {
+      "comment": "\"Group Header 1\"",
       "extractionState": "manual"
     },
     "Grouped By": {
@@ -141,12 +933,100 @@
       "comment": "Defined as TextHeaderPredicate in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
       "extractionState": "manual"
     },
+    "Header": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Height": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Horizontal Alignment": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "IN has no place in the model: a predicate holds one comparison.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Image": {
+      "comment": "Title of a static image element.",
+      "extractionState": "manual"
+    },
+    "Importing schema.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Inner-Join": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Int24": {
+      "comment": "Image data type.",
+      "extractionState": "manual"
+    },
+    "Integer": {
+      "comment": "Image data type.",
+      "extractionState": "manual"
+    },
+    "Issues Encounterd": {
+      "comment": "Alert Title 'Issues Encounterd'.",
+      "extractionState": "manual"
+    },
     "It's Yours": {
       "comment": "Defined as MADTextYouItsYours in MADDesigner/Source/MADStoreViewController.m.",
       "extractionState": "manual"
     },
+    "Italic": {
+      "comment": "Undo action name: apply italic to the selected elements.",
+      "extractionState": "manual"
+    },
     "Joins": {
       "comment": "Defined as TextHeaderLink in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
+      "extractionState": "manual"
+    },
+    "Keep": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Keychain key was missing or empty.": {
+      "comment": "Error when a credential lookup has no key.",
+      "extractionState": "manual"
+    },
+    "LIKE has no place in the model: a predicate holds one of six comparisons.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "LIMIT is the app's own: the designer and reporting modes apply it, never the query.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Last": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Left": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Left Outer Join": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Less Than": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Less Than or Equal To": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "License Texts": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Licensed under the MIT License. The names \"MAD\", \"MAD Designer\", and \"MAD Viewer\" and the application icons and artwork are not licensed under the MIT License; all rights in them are reserved by Michael Thomason.": {
+      "comment": "MIT license and reserved brand/artwork notice",
       "extractionState": "manual"
     },
     "Limit Query Result": {
@@ -157,40 +1037,636 @@
       "comment": "Defined as MADTextQueryLinks in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
       "extractionState": "manual"
     },
+    "Local": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Local Only": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Long": {
+      "comment": "Image data type.",
+      "extractionState": "manual"
+    },
+    "Long Long": {
+      "comment": "Image data type.",
+      "extractionState": "manual"
+    },
+    "MAD Barcodes": {
+      "comment": "Title of the barcode creator.",
+      "extractionState": "manual"
+    },
+    "MAD Designer": {
+      "comment": "Title for the store... list program features. ",
+      "extractionState": "manual"
+    },
+    "MAD Designer connects natively to MySQL / MariaDB, Microsoft SQL Server, and PostgreSQL databases, and uses SQLite for portable sample documents and local row caching.": {
+      "comment": "Overview paragraph 2",
+      "extractionState": "manual"
+    },
+    "MAD Designer is open-source business intelligence software by Michael Thomason.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "MAD Designer is the mobile analytics document designer.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "MAD Designer: An Overview": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "MAD Document %@.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "MAD Features": {
+      "comment": "Title for the store... list program features. ",
+      "extractionState": "manual"
+    },
+    "MAD Objects": {
+      "comment": "Title of the document object select",
+      "extractionState": "manual"
+    },
+    "MAD Query": {
+      "comment": "Title for the store... list program features. ",
+      "extractionState": "manual"
+    },
+    "MAD Viewer": {
+      "comment": "Title for the store... list program features. ",
+      "extractionState": "manual"
+    },
+    "MAD Viewer is the mobile analytics document viewer.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "MAD is an open-source mobile business intelligence and report-design system. A .mad file stores a report's schema snapshot, query definition, and visual layout in one compact, portable document.": {
+      "comment": "Overview paragraph 1",
+      "extractionState": "manual"
+    },
+    "MAD.momd was not found in the bundle.": {
+      "comment": "Error when the legacy document converter cannot find its Core Data model.",
+      "extractionState": "manual"
+    },
+    "Margin Bottom": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Margin Left": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Margin Right": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Margin Top": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Max": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Maximum": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Mean": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Min": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Minimum": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Missing connection or credentials.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Missing field.": {
+      "comment": "Failure reason when a predicate has no field.",
+      "extractionState": "manual"
+    },
+    "Missing results": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Mobile Analytics Document": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "MySQL Native Driver": {
+      "comment": "Selection Label 'MySQL Native Driver'",
+      "extractionState": "manual"
+    },
+    "NATURAL joins have no place in the model: a link names one field pair.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "NOT has no place in the model: a predicate holds one comparison, not its negation.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Natural Join": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "New Report": {
+      "comment": "Title of form that allows you to choose the name of a database field.",
+      "extractionState": "manual"
+    },
     "No Cache": {
       "comment": "Defined as MADTextNoCache in MADDesigner/Source/MADLabelStatus.m.",
+      "extractionState": "manual"
+    },
+    "No PDF was written.": {
+      "comment": "Error when the PDF export produced no file.",
+      "extractionState": "manual"
+    },
+    "No SQLite database file path is configured for this report.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "No barcode data.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "No model version in MAD.momd matches the legacy store.": {
+      "comment": "Error when no legacy Core Data model matches the store being converted.",
+      "extractionState": "manual"
+    },
+    "No where clause.": {
+      "comment": "Error when an aggregate query has no WHERE clause.",
+      "extractionState": "manual"
+    },
+    "None": {
+      "comment": "Localized UI string.",
       "extractionState": "manual"
     },
     "Not Downloaded": {
       "comment": "Defined as MADTextNotDownloaded in MADExplorer/MADExplorer/MADExplorer/MADExplorerCellTitle.m.",
       "extractionState": "manual"
     },
+    "Not Equal": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Nothing": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Nothing Selected": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Notice": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Number": {
+      "comment": "Number data type.",
+      "extractionState": "manual"
+    },
+    "OK": {
+      "comment": "Alert button that dismisses the message.",
+      "extractionState": "manual"
+    },
+    "OR has no place in the model: predicates AND together, flat.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Object Selector": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Open Failure": {
+      "comment": "Alert title when a document cannot be opened.",
+      "extractionState": "manual"
+    },
+    "Open Source Components": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Opens document named %@.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Overview": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "PDF needs a document that renders (MADDocumentRenderProtocol).": {
+      "comment": "Error when the PDF export has no renderable document.",
+      "extractionState": "manual"
+    },
+    "PDF needs a file to write to.": {
+      "comment": "Error when the PDF export has no output file.",
+      "extractionState": "manual"
+    },
+    "Padding Bottom": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Padding Left": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Padding Right": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Padding Top": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Page": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Page %@": {
+      "comment": "Accessibility label for a report page; %@ is the page number, spelled out.",
+      "extractionState": "manual"
+    },
+    "Page Footer": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Page Header": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
     "Password": {
       "comment": "Defined as MADTitlePassword in MADDesigner/Source/MADOperationPromptPassword.m.",
+      "extractionState": "manual"
+    },
+    "Password: ": {
+      "comment": "Label before the password field.",
+      "extractionState": "manual"
+    },
+    "Place data fields, static labels, aggregate functions, barcodes, and shapes across Report Header, Page Header, Group Headers and Footers, Detail, Page Footer, and Report Footer sections.": {
+      "comment": "Step 3 body",
+      "extractionState": "manual"
+    },
+    "Please enter a new name for the document.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Please enter updated text.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Please enter your credentials.": {
+      "comment": "Localized UI string.",
       "extractionState": "manual"
     },
     "Please enter your password.": {
       "comment": "Defined as MADMessagePassword in MADDesigner/Source/MADOperationPromptPassword.m.",
       "extractionState": "manual"
     },
+    "PostgreSQL Native Driver": {
+      "comment": "Selection Label 'PostgreSQL Native Driver'",
+      "extractionState": "manual"
+    },
     "Predicate": {
       "comment": "Defined as MADTextQueryPredicate in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
+      "extractionState": "manual"
+    },
+    "Predicate Format": {
+      "comment": "Title for the predicate format screen.",
+      "extractionState": "manual"
+    },
+    "Preforms an action on the selected document.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Print Preview": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Problem Closing Document": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Product Load Failed": {
+      "comment": "Error title when the App Store product list cannot be loaded.",
+      "extractionState": "manual"
+    },
+    "Purchases Restored": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Query": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Refresh the report against live data, browse paginated output, print, or export to PDF, HTML, CSV, JSON, or plain text.": {
+      "comment": "Step 4 body",
+      "extractionState": "manual"
+    },
+    "Remove": {
+      "comment": "Remove button title.",
+      "extractionState": "manual"
+    },
+    "Remove %@ item": {
+      "comment": "Remove %@ item (singular)",
+      "extractionState": "manual"
+    },
+    "Remove %@ items": {
+      "comment": "Remove %@ items (plural)",
+      "extractionState": "manual"
+    },
+    "Remove Saved Password": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Rename": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Rename Document": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Renames document.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Report": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Report Detail": {
+      "comment": " Report Detail",
+      "extractionState": "manual"
+    },
+    "Report Footer": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Report Header": {
+      "comment": "Localized UI string.",
       "extractionState": "manual"
     },
     "Reporting Mode": {
       "comment": "Defined as MADTextQueryReportingMode in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
       "extractionState": "manual"
     },
+    "Required": {
+      "comment": "Shows that this field is required.",
+      "extractionState": "manual"
+    },
+    "Restored purchases for your account.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Revert to generated": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Right": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Right Outer Join": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Save Credentials": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Save to KeyChain": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Schema import was cancelled.": {
+      "comment": "Status when the schema import is cancelled.",
+      "extractionState": "manual"
+    },
+    "Scrolled to %@.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Section: %d": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Select Field": {
+      "comment": "Title of form that allows you to choose the name of a database field.",
+      "extractionState": "manual"
+    },
+    "Select Operator": {
+      "comment": "Title for the select operator screen. This is to select a mathmatical operator... like equal or greater than.",
+      "extractionState": "manual"
+    },
     "Select Tables to Use": {
       "comment": "Defined as MADTextQuerySelectTables in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
+      "extractionState": "manual"
+    },
+    "Select Value": {
+      "comment": "Title for the select value screen. This is to static value to use to filter the report.",
+      "extractionState": "manual"
+    },
+    "Select a field.": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
+    "Select a filter value.": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
+    "Select a sort order.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Selects document named %@.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Selects field.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Set": {
+      "comment": "Number data type.",
       "extractionState": "manual"
     },
     "Setup Data Source": {
       "comment": "Defined as MADTextQuerySetupDatasource in MADDesigner/Source/MADQueryViewControllerTableLayout.m.",
       "extractionState": "manual"
     },
+    "Short": {
+      "comment": "Number data type.",
+      "extractionState": "manual"
+    },
+    "Should we remove the password saved in your keychain?": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Shows toolbox.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Size Height": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Size Width": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Software activated.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Sort Order": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Source Code on GitHub": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Sql Server / TDS Driver": {
+      "comment": "Selection Label 'Sql Server / TDS Driver'",
+      "extractionState": "manual"
+    },
+    "Static Label": {
+      "comment": "Title of button to create a non-changing (static) text-label-document-object.",
+      "extractionState": "manual"
+    },
+    "Strikethrough": {
+      "comment": "Undo action name: apply strikethrough to the selected elements.",
+      "extractionState": "manual"
+    },
+    "String": {
+      "comment": "String data type.",
+      "extractionState": "manual"
+    },
+    "Subqueries have no place in the model: FROM names schema tables.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Subqueries have no place in the model: a predicate side is a column or a literal.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Sum": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Syncing": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Table %@ not Added.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
     "Tables": {
       "comment": "Defined as TextHeaderTable in MADDesigner/Source/MADQueryViewSectionDelegate.m.",
+      "extractionState": "manual"
+    },
+    "Tap + in the file explorer and choose a database driver. MAD reads the database schema and creates a new .mad document. Database credentials can be saved in your Keychain and are never stored inside the .mad file.": {
+      "comment": "Step 1 body",
+      "extractionState": "manual"
+    },
+    "Test Failed": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "The ON condition's columns do not resolve.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "The attached document can be opened with MAD Viewer.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "The database driver reported no error.": {
+      "comment": "Failure reason when the SQL validation probe fails without a driver error.",
+      "extractionState": "manual"
+    },
+    "The database requires credentials and none were supplied.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "The document is gone.": {
+      "comment": "Error when SQL validation runs after its document closed.",
+      "extractionState": "manual"
+    },
+    "The document is not open; nothing to write.": {
+      "comment": "Error when saving a closed headless document.",
+      "extractionState": "manual"
+    },
+    "The document's query generated no SQL.": {
+      "comment": "Error when the document query produced no SQL to export.",
+      "extractionState": "manual"
+    },
+    "The export could not be encoded as UTF-8.": {
+      "comment": "Error when the exported text cannot be encoded.",
+      "extractionState": "manual"
+    },
+    "The link model holds one `left = right` condition per join -- split the extra conditions into the WHERE clause.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "The link model holds one `left = right` condition per join.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "The model has no free sort: every ORDER BY column must be a GROUP BY column.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "The probe failed": {
+      "comment": "Error title when the SQL validation probe fails without a driver error.",
+      "extractionState": "manual"
+    },
+    "The query failed": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "The server validated the statement.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "The statement does not end where the subset ends -- one SELECT, nothing after it.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "The statement does not start with SELECT.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "The statement was rejected": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "There is no document to export.": {
+      "comment": "Error when an export has no document.",
+      "extractionState": "manual"
+    },
+    "This application includes the following open source software:\n\n": {
+      "comment": "Acknowledgements intro",
+      "extractionState": "manual"
+    },
+    "This document was written before the portable store and no legacy converter is available in this build.": {
+      "comment": "Error opening a legacy document when this build has no converter.",
+      "extractionState": "manual"
+    },
+    "Time": {
+      "comment": "Number data type.",
+      "extractionState": "manual"
+    },
+    "Time Stamp": {
+      "comment": "Number data type.",
       "extractionState": "manual"
     },
     "Toggles database field visibility.": {
@@ -205,8 +1681,124 @@
       "comment": "Defined as MADTextVisibleHint in MADDesigner/Source/MADDesignerSectionLayoutController.m.",
       "extractionState": "manual"
     },
+    "Top": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Transaction Complete": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Try again later.": {
+      "comment": "Failure reason when the App Store product list cannot be loaded.",
+      "extractionState": "manual"
+    },
+    "Twitter Follow": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "UNION has no place in the model: one document query holds one SELECT.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
+    "Undefined": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Underline": {
+      "comment": "Undo action name: apply underline to the selected elements.",
+      "extractionState": "manual"
+    },
+    "Undo": {
+      "comment": "Undo Button Title",
+      "extractionState": "manual"
+    },
+    "Unexpected operation type finished.": {
+      "comment": "Error when the credential queue finishes an unexpected operation.",
+      "extractionState": "manual"
+    },
+    "Unknown": {
+      "comment": "Number data type.",
+      "extractionState": "manual"
+    },
+    "Unknown error.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Username: ": {
+      "comment": "Label before the username field.",
+      "extractionState": "manual"
+    },
+    "Validate": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Validated by structure only.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Validating…": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Validation Error": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Var Char": {
+      "comment": "Number data type.",
+      "extractionState": "manual"
+    },
+    "Vertical Alignment": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "View": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "View your report.": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
     "Visible": {
       "comment": "Defined as MADTextVisible in MADDesigner/Source/MADDesignerSectionLayoutController.m.",
+      "extractionState": "manual"
+    },
+    "Warning: Invalid Option.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "What type of predicate would you like to use?": {
+      "comment": "Hint",
+      "extractionState": "manual"
+    },
+    "Whitespace": {
+      "comment": "Title of an empty spacer element.",
+      "extractionState": "manual"
+    },
+    "Width": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Workflow": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Would you like to remove the saved credentials": {
+      "comment": "Alert body asking whether to delete saved credentials.",
+      "extractionState": "manual"
+    },
+    "Would you like to save the credentials to your key chain?": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Would you like to save your password?": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "Year": {
+      "comment": "Number data type.",
       "extractionState": "manual"
     },
     "Yes": {
@@ -221,8 +1813,48 @@
       "comment": "Defined as MADTextAlready in MADDesigner/Source/MADStoreViewController.m.",
       "extractionState": "manual"
     },
+    "You are connecting to %1$@ datasource named %2$@.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "`*` names every column; name them, or use `alias.*`.": {
+      "comment": "SQL statement validation message for a pasted statement.",
+      "extractionState": "manual"
+    },
     "ago.": {
       "comment": "Defined as TextAgo in MADDesigner/Source/NSDate+Extras.m.",
+      "extractionState": "manual"
+    },
+    "iCloud": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "iCloud Sign Out": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "missing grouping field": {
+      "comment": "Designer label for a query group with no resolvable grouping field",
+      "extractionState": "manual"
+    },
+    "r%@": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual"
+    },
+    "the facsimile needs a document that renders (MADDocumentRenderProtocol); --format html-flow is the reflowable one and needs no more.": {
+      "comment": "Error when the HTML facsimile export has no renderable document.",
+      "extractionState": "manual"
+    },
+    "the report's rendered structure needs a document that renders (MADDocumentRenderProtocol); --format json is the data half and needs no more.": {
+      "comment": "Error when the JSON report export has no renderable document.",
+      "extractionState": "manual"
+    },
+    "the report's sections need a document that renders (MADDocumentRenderProtocol); --format json is the data half and needs no more.": {
+      "comment": "Error when the HTML flow export has no renderable document.",
+      "extractionState": "manual"
+    },
+    "v%@": {
+      "comment": "Localized UI string.",
       "extractionState": "manual"
     }
   },

@@ -308,6 +308,12 @@ xcrun xcstringstool compile Localizable.xcstrings --output-directory /tmp/out
 # → /tmp/out/<lang>.lproj/Localizable.strings
 ```
 
+**Caveat, verified 2026-11-04:** `sync` updates entries that already exist and
+marks removed keys stale, but on this toolchain it does **not** add new keys.
+`scripts/localization/sync_catalog.py` is the seeding step: it adds every
+literal key and every used constant, then `xcstringstool sync` can maintain
+existing entries and `compile` builds the products.
+
 Fallback if the ObjC integration proves awkward: keep the catalog as the source
 of truth and compile it to `.strings`/`.stringsdict` with `xcstringstool compile`
 (or use `genstrings` plus an import script). No information is lost by keeping
@@ -431,6 +437,7 @@ standard handoff.
 | **D7 — Translation route** | AI drafts; the user reviews every language and takes the screenshots. The agent does not produce the screenshot pack. |
 | **D10 — Platform timing** | iOS first. macOS bundle infrastructure is built in parallel, but macOS string translation follows iOS. |
 | **D11 — Barcode names** | Consolidate the 65 dictionary entries and 66 `self.name` assignments into one table before translating. |
+| **D12 — SQL parser messages** | Translate all of the app's own parser and validation messages, not just the common ones. They need a technical glossary and a review pass. |
 
 Still open, and not blocking Phase 0-1: SQL data-type names (§11.6), the
 parser/validation messages (§11.7), workspace brand names (§11.8), and a
@@ -521,13 +528,15 @@ python3 -I scripts/localization/audit.py --report    # every finding, with lines
 python3 -I scripts/localization/audit.py --write-baseline   # after review
 ```
 
-Some UI keys are defined once as `NSString * const` and passed by name. The
-standard extractors cannot see through the symbol, so
-`sync_constants.py` adds those keys to the catalog as `manual` entries:
+`sync_catalog.py` is the seeding step for both kinds of source key: every
+literal `NSLocalizedString(@"Key", @"Context.")` key (using the context as the
+comment when it is meaningful) and every used
+`NSString * const NAME = @"Key";` definition (with the symbol and file as the
+comment). It preserves existing entries and translations.
 
 ```sh
-python3 -I scripts/localization/sync_constants.py          # seed the catalog
-python3 -I scripts/localization/sync_constants.py --check  # CI check
+python3 -I scripts/localization/sync_catalog.py          # seed the catalog
+python3 -I scripts/localization/sync_catalog.py --check  # CI check
 ```
 
 The policy stays: a constant is acceptable for a string used repeatedly; a new
@@ -543,16 +552,16 @@ selector expansion; 1536 files scanned). `MADDataStructures` is included;
 
 | Measure | Count |
 | --- | ---: |
-| `NSLocalizedString` calls | 586 |
-| literal first argument | 505 |
+| `NSLocalizedString` calls | 661 |
+| literal first argument | 580 |
 | non-literal first argument | 81 |
-| unique literal keys | 347 |
+| unique literal keys | 415 |
 | literal keys containing format specifiers | 30 (multi-argument 2, both positional) |
-| raw UI literals | 301 occurrences / 287 unique |
+| raw UI literals | 226 occurrences / 217 unique |
 | format strings without positional specifiers | 0 |
 | `appendString:`/`stringByAppendingString:` near UI | 42 (warning) |
 
-The 342 baseline entries are 287 `raw-ui-literal` and 55 `nonliteral-key`;
+The 272 baseline entries are 217 `raw-ui-literal` and 55 `nonliteral-key`;
 warnings are reported but never fail an otherwise clean check. Entries carry an
 occurrence count, so adding a second copy of an already-baselined string in the
 same file fails the run. The first Phase 1 run, before these changes and with
@@ -738,11 +747,12 @@ strings are fixed (27 baseline entries removed). Non-literal calls are 81,
 made up of 55 unique entries: 53 constant symbols plus `MADMessageCloudSignout`
 and `MADTextFreeGift`, whose definitions the audit does not resolve. The audit
 now covers the AppKit constructors and properties the Mac app uses, and
-baseline entries carry occurrence counts. `sync_constants.py` seeds the 53
-resolved constant keys into the catalog; the two unresolved names still need
-handling. The app target is wrapped: its 27 raw UI literals are now
-`NSLocalizedString` calls, and its baseline is empty. Next are the MAD
-framework's 75, then Foundation and the drivers, and the Mac's 204 in Phase 5.
+baseline entries carry occurrence counts. `sync_catalog.py` seeded the catalog
+from the source: 415 literal keys plus the 53 resolved constants (462 entries),
+with the two unresolved names still needing handling. Both the app target (27
+raw UI literals) and the MAD framework (75, including all 47 SQL parser and
+resolver messages per D12) are wrapped. Next are Foundation and the drivers
+(22), then the Mac's 204 in Phase 5.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 
@@ -784,8 +794,9 @@ The Mac app is small but has the most raw strings (~413):
 
 * Every new user-facing string goes through `NSLocalizedString` with a comment;
   CI's audit fails on new unwrapped literals.
-* Run `xcstringstool sync` after adding keys; never rename an English key
-  without updating all languages in the same PR.
+* Run `sync_catalog.py` after adding keys (`xcstringstool sync` only updates
+  entries that already exist); never rename an English key without updating all
+  languages in the same PR.
 * Re-run the pseudo-language screenshot pass each release.
 * App Store metadata (name, subtitle, keywords, screenshots, privacy answers)
   is a separate content workstream; it is not produced by the app bundle.
@@ -901,7 +912,8 @@ open; none of them blocks Phase 0 or 1.
    or translate with a glossary?
 7. **The app's own SQL parser/validation messages** ("The statement does not
    start with SELECT."): translate now or keep English in v1? They are
-   user-facing but highly technical.
+   user-facing but highly technical. — **Answered: translate all of them
+   (D12).**
 8. **Workspace names** (`MAD Query`, `MAD Designer`, `MAD Viewer`): keep as
    brands (recommended) or translate the generic part?
 9. **A language override in app settings** for support/testing? Not required by

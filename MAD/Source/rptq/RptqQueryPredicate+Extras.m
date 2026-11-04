@@ -57,7 +57,7 @@ static os_log_t rptq_log;
 		os_log_error(rptq_log, "%s Missing field.", __PRETTY_FUNCTION__);
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:[self domain] code:2340 userInfo:@{
-				NSLocalizedFailureReasonErrorKey: @"Missing field.",
+				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Missing field.", @"Failure reason when a predicate has no field."),
 				NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: Missing field.", NSStringFromClass([self class])]
 			}];
 		}
@@ -97,7 +97,7 @@ static os_log_t rptq_log;
 		os_log_error(rptq_log, "%{public}@", message);
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:[self domain] code:2341 userInfo:@{
-				NSLocalizedFailureReasonErrorKey: @"Error",
+				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Generic failure reason for a predicate operation."),
 				NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: Missing field.", NSStringFromClass([self class])]
 			}];
 		}
@@ -130,7 +130,7 @@ static os_log_t rptq_log;
 		os_log_error(rptq_log, "%{public}@", message);
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:[self domain] code:2342 userInfo:@{
-				NSLocalizedFailureReasonErrorKey: @"Error",
+				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Generic failure reason for a predicate operation."),
 				NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: Missing value.", NSStringFromClass([self class])]
 			}];
 		}
@@ -155,7 +155,7 @@ static os_log_t rptq_log;
 		os_log_error(rptq_log, "%{public}@", message);
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:[self domain] code:2343 userInfo:@{
-				NSLocalizedFailureReasonErrorKey: @"Error",
+				NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Generic failure reason for a predicate operation."),
 				NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: Missing value or field.", NSStringFromClass([self class])]
 			}];
 		}

@@ -111,7 +111,7 @@ static inline NSString *NSStringForAggregateFunctionType(MTAggregateFunctionType
 		if (error != nil) {
 			*error = [NSError errorWithDomain:NSStringFromClass([self class])
 										 code:0
-									 userInfo:@{NSLocalizedDescriptionKey: @"No where clause."}];
+									 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"No where clause.", @"Error when an aggregate query has no WHERE clause.")}];
 		}
 	}
 	return sql;

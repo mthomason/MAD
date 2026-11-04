@@ -84,11 +84,11 @@
 
 	// SELECT [the select list]
 	if (![self matchKeyword:@"SELECT"]) {
-		return [self fail:MADSQLCompileErrorSyntax at:self.current message:@"The statement does not start with SELECT." error:error];
+		return [self fail:MADSQLCompileErrorSyntax at:self.current message:NSLocalizedString(@"The statement does not start with SELECT.", @"SQL statement validation message for a pasted statement.") error:error];
 	}
 	if ([self keywordIs:@"DISTINCT"]) {
 		return [self fail:MADSQLCompileErrorUnsupportedDISTINCT at:self.current
-				   message:@"DISTINCT has no place in the model: the query designer's fields are the select list." error:error];
+				   message:NSLocalizedString(@"DISTINCT has no place in the model: the query designer's fields are the select list.", @"SQL statement validation message for a pasted statement.") error:error];
 	}
 
 	// The select list: column references and alias.* -- validated after FROM,
@@ -100,14 +100,14 @@
 		if ([self matchSymbol:@","]) continue;
 		if ([self symbolIs:@"+"] || [self symbolIs:@"-"] || [self symbolIs:@"/"]) {
 			return [self fail:MADSQLCompileErrorUnsupportedExpression at:self.current
-					   message:@"Arithmetic has no place in the select list: the model holds column references." error:error];
+					   message:NSLocalizedString(@"Arithmetic has no place in the select list: the model holds column references.", @"SQL statement validation message for a pasted statement.") error:error];
 		}
 		break;
 	}
 
 	// FROM
 	if (![self matchKeyword:@"FROM"]) {
-		return [self fail:MADSQLCompileErrorSyntax at:self.current message:@"Expected FROM after the select list." error:error];
+		return [self fail:MADSQLCompileErrorSyntax at:self.current message:NSLocalizedString(@"Expected FROM after the select list.", @"SQL statement validation message for a pasted statement.") error:error];
 	}
 	if (![self parseFromClauseReturningError:error]) return nil;
 
@@ -123,7 +123,7 @@
 		if ([self keywordIs:@"GROUP"] && !sawGroup) {
 			[self advance];
 			if (![self matchKeyword:@"BY"]) {
-				return [self fail:MADSQLCompileErrorSyntax at:self.current message:@"Expected BY after GROUP." error:error];
+				return [self fail:MADSQLCompileErrorSyntax at:self.current message:NSLocalizedString(@"Expected BY after GROUP.", @"SQL statement validation message for a pasted statement.") error:error];
 			}
 			sawGroup = YES;
 			groupByColumns = [self parseColumnListReturningError:error];
@@ -133,7 +133,7 @@
 		if ([self keywordIs:@"ORDER"] && !sawOrder) {
 			[self advance];
 			if (![self matchKeyword:@"BY"]) {
-				return [self fail:MADSQLCompileErrorSyntax at:self.current message:@"Expected BY after ORDER." error:error];
+				return [self fail:MADSQLCompileErrorSyntax at:self.current message:NSLocalizedString(@"Expected BY after ORDER.", @"SQL statement validation message for a pasted statement.") error:error];
 			}
 			sawOrder = YES;
 			orderByTerms = [self parseOrderListReturningError:error];
@@ -145,17 +145,17 @@
 
 	if ([self keywordIs:@"UNION"]) {
 		return [self fail:MADSQLCompileErrorUnsupportedUNION at:self.current
-				   message:@"UNION has no place in the model: one document query holds one SELECT." error:error];
+				   message:NSLocalizedString(@"UNION has no place in the model: one document query holds one SELECT.", @"SQL statement validation message for a pasted statement.") error:error];
 	}
 	if ([self keywordIs:@"LIMIT"]) {
 		return [self fail:MADSQLCompileErrorUnsupportedLIMIT at:self.current
-				   message:@"LIMIT is the app's own: the designer and reporting modes apply it, never the query." error:error];
+				   message:NSLocalizedString(@"LIMIT is the app's own: the designer and reporting modes apply it, never the query.", @"SQL statement validation message for a pasted statement.") error:error];
 	}
 
 	[self matchSymbol:@";"];
 	if (self.current.kind != MADSQLTokenKindEnd) {
 		return [self fail:MADSQLCompileErrorSyntax at:self.current
-				   message:@"The statement does not end where the subset ends -- one SELECT, nothing after it." error:error];
+				   message:NSLocalizedString(@"The statement does not end where the subset ends -- one SELECT, nothing after it.", @"SQL statement validation message for a pasted statement.") error:error];
 	}
 
 	// The name checks the FROM set makes possible: columns, and ORDER BY inside
@@ -232,11 +232,11 @@
 	MADSQLToken *token = self.current;
 	if (token.kind == MADSQLTokenKindSymbol && [token.text isEqualToString:@"*"]) {
 		[self fail:MADSQLCompileErrorUnsupportedExpression at:token
-			 message:@"`*` names every column; name them, or use `alias.*`." error:error];
+			 message:NSLocalizedString(@"`*` names every column; name them, or use `alias.*`.", @"SQL statement validation message for a pasted statement.") error:error];
 		return nil;
 	}
 	if (token.kind != MADSQLTokenKindIdentifier && token.kind != MADSQLTokenKindQuotedIdentifier) {
-		[self fail:MADSQLCompileErrorSyntax at:token message:@"Expected a column reference in the select list." error:error];
+		[self fail:MADSQLCompileErrorSyntax at:token message:NSLocalizedString(@"Expected a column reference in the select list.", @"SQL statement validation message for a pasted statement.") error:error];
 		return nil;
 	}
 	[self advance];
@@ -267,7 +267,7 @@
 					column.line = fieldToken.line;
 					column.column = fieldToken.column;
 				} else {
-					[self fail:MADSQLCompileErrorSyntax at:fieldToken message:@"Expected a column name after the qualifier." error:error];
+					[self fail:MADSQLCompileErrorSyntax at:fieldToken message:NSLocalizedString(@"Expected a column name after the qualifier.", @"SQL statement validation message for a pasted statement.") error:error];
 					return nil;
 				}
 			}
@@ -277,7 +277,7 @@
 			column.line = name.line;
 			column.column = name.column;
 		} else {
-			[self fail:MADSQLCompileErrorSyntax at:name message:@"Expected a column name after the qualifier." error:error];
+			[self fail:MADSQLCompileErrorSyntax at:name message:NSLocalizedString(@"Expected a column name after the qualifier.", @"SQL statement validation message for a pasted statement.") error:error];
 			return nil;
 		}
 	} else {
@@ -287,12 +287,12 @@
 	// A function call, an alias, or anything else the model cannot hold.
 	if ([self symbolIs:@"("]) {
 		[self fail:MADSQLCompileErrorUnsupportedExpression at:token
-			 message:@"Functions and expressions have no place in the select list: the model holds column references." error:error];
+			 message:NSLocalizedString(@"Functions and expressions have no place in the select list: the model holds column references.", @"SQL statement validation message for a pasted statement.") error:error];
 		return nil;
 	}
 	if ([self keywordIs:@"AS"]) {
 		[self fail:MADSQLCompileErrorUnsupportedSelectAlias at:self.current
-			 message:@"Column aliases are the designer's own; name the column." error:error];
+			 message:NSLocalizedString(@"Column aliases are the designer's own; name the column.", @"SQL statement validation message for a pasted statement.") error:error];
 		return nil;
 	}
 
@@ -308,9 +308,9 @@
 		[self advance];
 		if ([self keywordIs:@"SELECT"]) {
 			[self fail:MADSQLCompileErrorUnsupportedSubquery at:self.current
-				 message:@"Subqueries have no place in the model: FROM names schema tables." error:error];
+				 message:NSLocalizedString(@"Subqueries have no place in the model: FROM names schema tables.", @"SQL statement validation message for a pasted statement.") error:error];
 		} else {
-			[self fail:MADSQLCompileErrorSyntax at:paren message:@"Expected a table name after FROM." error:error];
+			[self fail:MADSQLCompileErrorSyntax at:paren message:NSLocalizedString(@"Expected a table name after FROM.", @"SQL statement validation message for a pasted statement.") error:error];
 		}
 		return NO;
 	}
@@ -322,18 +322,18 @@
 
 		if ([self symbolIs:@","]) {
 			[self fail:MADSQLCompileErrorUnsupportedCommaJoin at:token
-				 message:@"Comma joins have no place in the model: every join carries its link." error:error];
+				 message:NSLocalizedString(@"Comma joins have no place in the model: every join carries its link.", @"SQL statement validation message for a pasted statement.") error:error];
 			return NO;
 		}
 
 		if ([self keywordIs:@"NATURAL"]) {
 			[self fail:MADSQLCompileErrorUnsupportedNaturalCrossJoin at:token
-				 message:@"NATURAL joins have no place in the model: a link names one field pair." error:error];
+				 message:NSLocalizedString(@"NATURAL joins have no place in the model: a link names one field pair.", @"SQL statement validation message for a pasted statement.") error:error];
 			return NO;
 		}
 		if ([self keywordIs:@"CROSS"]) {
 			[self fail:MADSQLCompileErrorUnsupportedNaturalCrossJoin at:token
-				 message:@"CROSS joins have no place in the model: a link names one field pair." error:error];
+				 message:NSLocalizedString(@"CROSS joins have no place in the model: a link names one field pair.", @"SQL statement validation message for a pasted statement.") error:error];
 			return NO;
 		}
 
@@ -341,7 +341,7 @@
 		if ([self keywordIs:@"INNER"]) {
 			[self advance];
 			if (![self matchKeyword:@"JOIN"]) {
-				[self fail:MADSQLCompileErrorSyntax at:self.current message:@"Expected JOIN after INNER." error:error];
+				[self fail:MADSQLCompileErrorSyntax at:self.current message:NSLocalizedString(@"Expected JOIN after INNER.", @"SQL statement validation message for a pasted statement.") error:error];
 				return NO;
 			}
 			type = MADLinkTypeInnerJoin;
@@ -349,7 +349,7 @@
 			[self advance];
 			[self matchKeyword:@"OUTER"];
 			if (![self matchKeyword:@"JOIN"]) {
-				[self fail:MADSQLCompileErrorSyntax at:self.current message:@"Expected JOIN after LEFT." error:error];
+				[self fail:MADSQLCompileErrorSyntax at:self.current message:NSLocalizedString(@"Expected JOIN after LEFT.", @"SQL statement validation message for a pasted statement.") error:error];
 				return NO;
 			}
 			type = MADLinkTypeLeftOuterJoin;
@@ -357,7 +357,7 @@
 			[self advance];
 			[self matchKeyword:@"OUTER"];
 			if (![self matchKeyword:@"JOIN"]) {
-				[self fail:MADSQLCompileErrorSyntax at:self.current message:@"Expected JOIN after RIGHT." error:error];
+				[self fail:MADSQLCompileErrorSyntax at:self.current message:NSLocalizedString(@"Expected JOIN after RIGHT.", @"SQL statement validation message for a pasted statement.") error:error];
 				return NO;
 			}
 			type = MADLinkTypeRightOuterJoin;
@@ -365,7 +365,7 @@
 			[self advance];
 			[self matchKeyword:@"OUTER"];
 			if (![self matchKeyword:@"JOIN"]) {
-				[self fail:MADSQLCompileErrorSyntax at:self.current message:@"Expected JOIN after FULL." error:error];
+				[self fail:MADSQLCompileErrorSyntax at:self.current message:NSLocalizedString(@"Expected JOIN after FULL.", @"SQL statement validation message for a pasted statement.") error:error];
 				return NO;
 			}
 			type = MADLinkTypeFullOuterJoin;
@@ -385,7 +385,7 @@
 - (BOOL)parseFromItemReturningError:(NSError * __autoreleasing *)error {
 	MADSQLToken *token = self.current;
 	if (token.kind != MADSQLTokenKindIdentifier && token.kind != MADSQLTokenKindQuotedIdentifier) {
-		[self fail:MADSQLCompileErrorSyntax at:token message:@"Expected a table name." error:error];
+		[self fail:MADSQLCompileErrorSyntax at:token message:NSLocalizedString(@"Expected a table name.", @"SQL statement validation message for a pasted statement.") error:error];
 		return NO;
 	}
 	[self advance];
@@ -394,7 +394,7 @@
 	if ([self matchSymbol:@"."]) {
 		MADSQLToken *tableToken = self.current;
 		if (tableToken.kind != MADSQLTokenKindIdentifier && tableToken.kind != MADSQLTokenKindQuotedIdentifier) {
-			[self fail:MADSQLCompileErrorSyntax at:tableToken message:@"Expected a table name after the schema qualifier." error:error];
+			[self fail:MADSQLCompileErrorSyntax at:tableToken message:NSLocalizedString(@"Expected a table name after the schema qualifier.", @"SQL statement validation message for a pasted statement.") error:error];
 			return NO;
 		}
 		[self advance];
@@ -427,7 +427,7 @@
 		if ([self matchSymbol:@"."]) {
 			MADSQLToken *aliasTableToken = self.current;
 			if (aliasTableToken.kind != MADSQLTokenKindIdentifier && aliasTableToken.kind != MADSQLTokenKindQuotedIdentifier) {
-				[self fail:MADSQLCompileErrorSyntax at:aliasTableToken message:@"Expected an alias after '.'." error:error];
+				[self fail:MADSQLCompileErrorSyntax at:aliasTableToken message:NSLocalizedString(@"Expected an alias after '.'.", @"SQL statement validation message for a pasted statement.") error:error];
 				return NO;
 			}
 			[self advance];
@@ -443,7 +443,7 @@
 		item.aliasLine = aliasToken.line;
 		item.aliasColumn = aliasToken.column;
 	} else if (wroteAS) {
-		[self fail:MADSQLCompileErrorSyntax at:aliasToken message:@"Expected an alias after AS." error:error];
+		[self fail:MADSQLCompileErrorSyntax at:aliasToken message:NSLocalizedString(@"Expected an alias after AS.", @"SQL statement validation message for a pasted statement.") error:error];
 		return NO;
 	}
 
@@ -484,7 +484,7 @@
 	join.column = rightItem.column;
 
 	if (![self matchKeyword:@"ON"]) {
-		[self fail:MADSQLCompileErrorSyntax at:self.current message:@"Expected ON after the joined table." error:error];
+		[self fail:MADSQLCompileErrorSyntax at:self.current message:NSLocalizedString(@"Expected ON after the joined table.", @"SQL statement validation message for a pasted statement.") error:error];
 		return NO;
 	}
 
@@ -495,7 +495,7 @@
 	// multi-condition or non-equi shape, or a literal side.
 	if (![self symbolIs:@"="]) {
 		[self fail:MADSQLCompileErrorUnsupportedOnCondition at:self.current
-			 message:@"The link model holds one `left = right` condition per join." error:error];
+			 message:NSLocalizedString(@"The link model holds one `left = right` condition per join.", @"SQL statement validation message for a pasted statement.") error:error];
 		return NO;
 	}
 	[self advance];
@@ -514,7 +514,7 @@
 
 	if ([self keywordIs:@"AND"] || [self keywordIs:@"OR"]) {
 		[self fail:MADSQLCompileErrorUnsupportedOnCondition at:self.current
-			 message:@"The link model holds one `left = right` condition per join -- split the extra conditions into the WHERE clause." error:error];
+			 message:NSLocalizedString(@"The link model holds one `left = right` condition per join -- split the extra conditions into the WHERE clause.", @"SQL statement validation message for a pasted statement.") error:error];
 		return NO;
 	}
 
@@ -558,7 +558,7 @@
 	for (;;) {
 		if ([self keywordIs:@"NOT"]) {
 			[self fail:MADSQLCompileErrorUnsupportedNOT at:self.current
-				 message:@"NOT has no place in the model: a predicate holds one comparison, not its negation." error:error];
+				 message:NSLocalizedString(@"NOT has no place in the model: a predicate holds one comparison, not its negation.", @"SQL statement validation message for a pasted statement.") error:error];
 			return NO;
 		}
 
@@ -570,14 +570,14 @@
 
 		if (parenthesized) {
 			if (![self matchSymbol:@")"]) {
-				[self fail:MADSQLCompileErrorSyntax at:self.current message:@"Expected ')' to close the predicate." error:error];
+				[self fail:MADSQLCompileErrorSyntax at:self.current message:NSLocalizedString(@"Expected ')' to close the predicate.", @"SQL statement validation message for a pasted statement.") error:error];
 				return NO;
 			}
 		}
 
 		if ([self keywordIs:@"OR"]) {
 			[self fail:MADSQLCompileErrorUnsupportedOR at:self.current
-				 message:@"OR has no place in the model: predicates AND together, flat." error:error];
+				 message:NSLocalizedString(@"OR has no place in the model: predicates AND together, flat.", @"SQL statement validation message for a pasted statement.") error:error];
 			return NO;
 		}
 		if ([self keywordIs:@"AND"]) {
@@ -609,18 +609,18 @@
 	else if ([self symbolIs:@"<="]) operator = MADPredicateOperatorLessThanOrEqualTo;
 	else if ([self keywordIs:@"IN"]) {
 		[self fail:MADSQLCompileErrorUnsupportedIN at:operatorToken
-			 message:@"IN has no place in the model: a predicate holds one comparison." error:error];
+			 message:NSLocalizedString(@"IN has no place in the model: a predicate holds one comparison.", @"SQL statement validation message for a pasted statement.") error:error];
 		return nil;
 	} else if ([self keywordIs:@"LIKE"]) {
 		[self fail:MADSQLCompileErrorUnsupportedLIKE at:operatorToken
-			 message:@"LIKE has no place in the model: a predicate holds one of six comparisons." error:error];
+			 message:NSLocalizedString(@"LIKE has no place in the model: a predicate holds one of six comparisons.", @"SQL statement validation message for a pasted statement.") error:error];
 		return nil;
 	} else if ([self keywordIs:@"BETWEEN"]) {
 		[self fail:MADSQLCompileErrorUnsupportedBETWEEN at:operatorToken
-			 message:@"BETWEEN has no place in the model: a predicate holds one comparison." error:error];
+			 message:NSLocalizedString(@"BETWEEN has no place in the model: a predicate holds one comparison.", @"SQL statement validation message for a pasted statement.") error:error];
 		return nil;
 	} else {
-		[self fail:MADSQLCompileErrorSyntax at:operatorToken message:@"Expected a comparison operator." error:error];
+		[self fail:MADSQLCompileErrorSyntax at:operatorToken message:NSLocalizedString(@"Expected a comparison operator.", @"SQL statement validation message for a pasted statement.") error:error];
 		return nil;
 	}
 	[self advance];
@@ -646,9 +646,9 @@
 		[self advance];
 		if ([self keywordIs:@"SELECT"]) {
 			[self fail:MADSQLCompileErrorUnsupportedSubquery at:self.current
-				 message:@"Subqueries have no place in the model: a predicate side is a column or a literal." error:error];
+				 message:NSLocalizedString(@"Subqueries have no place in the model: a predicate side is a column or a literal.", @"SQL statement validation message for a pasted statement.") error:error];
 		} else {
-			[self fail:MADSQLCompileErrorSyntax at:token message:@"Expected a column or a literal." error:error];
+			[self fail:MADSQLCompileErrorSyntax at:token message:NSLocalizedString(@"Expected a column or a literal.", @"SQL statement validation message for a pasted statement.") error:error];
 		}
 		return nil;
 	}
@@ -678,7 +678,7 @@
 - (MADSQLColumnReference *)parseColumnReferenceReturningError:(NSError * __autoreleasing *)error {
 	MADSQLToken *token = self.current;
 	if (token.kind != MADSQLTokenKindIdentifier && token.kind != MADSQLTokenKindQuotedIdentifier) {
-		[self fail:MADSQLCompileErrorSyntax at:token message:@"Expected a column reference." error:error];
+		[self fail:MADSQLCompileErrorSyntax at:token message:NSLocalizedString(@"Expected a column reference.", @"SQL statement validation message for a pasted statement.") error:error];
 		return nil;
 	}
 	[self advance];
@@ -691,7 +691,7 @@
 		column.table = token.text;
 		MADSQLToken *name = self.current;
 		if (name.kind != MADSQLTokenKindIdentifier && name.kind != MADSQLTokenKindQuotedIdentifier) {
-			[self fail:MADSQLCompileErrorSyntax at:name message:@"Expected a column name after the qualifier." error:error];
+			[self fail:MADSQLCompileErrorSyntax at:name message:NSLocalizedString(@"Expected a column name after the qualifier.", @"SQL statement validation message for a pasted statement.") error:error];
 			return nil;
 		}
 		column.name = name.text;
@@ -702,7 +702,7 @@
 			column.table = [[NSString alloc] initWithFormat:@"%@.%@", token.text, name.text];
 			MADSQLToken *fieldToken = self.current;
 			if (fieldToken.kind != MADSQLTokenKindIdentifier && fieldToken.kind != MADSQLTokenKindQuotedIdentifier) {
-				[self fail:MADSQLCompileErrorSyntax at:fieldToken message:@"Expected a column name after the qualifier." error:error];
+				[self fail:MADSQLCompileErrorSyntax at:fieldToken message:NSLocalizedString(@"Expected a column name after the qualifier.", @"SQL statement validation message for a pasted statement.") error:error];
 				return nil;
 			}
 			column.name = fieldToken.text;
@@ -712,7 +712,7 @@
 		}
 	} else if ([self symbolIs:@"("]) {
 		[self fail:MADSQLCompileErrorUnsupportedExpression at:token
-			 message:@"Functions and expressions have no place in the model: a predicate side is a column or a literal." error:error];
+			 message:NSLocalizedString(@"Functions and expressions have no place in the model: a predicate side is a column or a literal.", @"SQL statement validation message for a pasted statement.") error:error];
 		return nil;
 	} else {
 		column.name = token.text;
@@ -852,7 +852,7 @@
 		if (![groupSet containsObject:identity]) {
 			MADSQLToken *nameToken = [self tokenAtLine:term.column.line column:term.column.column];
 			[self fail:MADSQLCompileErrorOrderByOutsideGroupBy at:nameToken
-				 message:@"The model has no free sort: every ORDER BY column must be a GROUP BY column." error:error];
+				 message:NSLocalizedString(@"The model has no free sort: every ORDER BY column must be a GROUP BY column.", @"SQL statement validation message for a pasted statement.") error:error];
 			return NO;
 		}
 	}

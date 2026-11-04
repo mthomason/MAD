@@ -90,8 +90,7 @@ static NSString *MADReportExporterFlowCSSAlignment(MADHorizontalAlignment);
 			*error = [NSError errorWithDomain: @"MADReportExport"
 										 code: 3
 									 userInfo: @{ NSLocalizedDescriptionKey:
-					 @"the report's sections need a document that renders (MADDocumentRenderProtocol); "
-					 @"--format json is the data half and needs no more." }];
+					 NSLocalizedString(@"the report's sections need a document that renders (MADDocumentRenderProtocol); " @"--format json is the data half and needs no more.", @"Error when the HTML flow export has no renderable document.") }];
 		}
 		return NO;
 	}

@@ -124,7 +124,7 @@ static NSString * const MADDocumentStoreFileName			= @"store.sqlite";
 			*error = [NSError errorWithDomain: MADLegacyStoreConversionErrorDomain
 										 code: MADLegacyStoreConversionErrorConverterUnavailable
 									 userInfo: @{ NSLocalizedDescriptionKey:
-						 @"This document was written before the portable store and no legacy converter is available in this build." }];
+						 NSLocalizedString(@"This document was written before the portable store and no legacy converter is available in this build.", @"Error opening a legacy document when this build has no converter.") }];
 		}
 		return NO;
 	}

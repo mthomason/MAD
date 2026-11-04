@@ -10,6 +10,7 @@
 #import "MADReportSectionRowsRepresentation.h"
 
 #import <Foundation/NSArray.h>
+#import <Foundation/NSBundle.h>
 #import <Foundation/NSException.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSDictionary.h>
@@ -48,8 +49,8 @@
 		[_rows addObject:row];
 	} @catch (NSException *exception) {
 		*error = [NSError errorWithDomain:NSStringFromClass([self class]) code:49832 userInfo:@{
-			NSLocalizedFailureReasonErrorKey: @"Error",
-			NSLocalizedDescriptionKey: @"Failed to add null value."
+			NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Error", @"Generic failure reason for a report section operation."),
+			NSLocalizedDescriptionKey: NSLocalizedString(@"Failed to add null value.", @"Error when a null value is added to a report section.")
 		}];
 		success = false;
 	} @finally { }

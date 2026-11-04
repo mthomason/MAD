@@ -83,7 +83,7 @@
 		MADLogError("MADOperationCreateDocumentImportSchema <%p:%@> databaseConnection is nil. Cannot proceed. Finishing with error.", self, self.name);
 		NSError *configError = [NSError errorWithDomain:NSStringFromClass([self class])
 												   code:-1001
-											   userInfo:@{NSLocalizedDescriptionKey: @"Database connection not provided for schema import."}];
+											   userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Database connection not provided for schema import.", @"Error when schema import has no database connection.")}];
 		[self finishWithError:configError];
 		return;
 	}
@@ -150,7 +150,7 @@
 		MADLogError("MADOperationCreateDocumentImportSchema <%p:%@> Failed to find MADocument from dependencies. Cannot proceed.", self, self.name);
 		NSError *docError = [NSError errorWithDomain:NSStringFromClass([self class])
 												code:-1000
-											userInfo:@{NSLocalizedDescriptionKey: @"Document object not found for schema import."}];
+											userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Document object not found for schema import.", @"Error when schema import cannot find its document.")}];
 		[self finishWithError:docError];
 		return;
 	}
@@ -208,7 +208,7 @@
 			// Create a generic error if dbConnectionError was also nil
 			operationError = [NSError errorWithDomain:NSStringFromClass([strongSelf class])
 												 code:-1002
-											 userInfo:@{NSLocalizedDescriptionKey: @"Failed to establish database connection for schema import (nil connection object)."}];
+											 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Failed to establish database connection for schema import (nil connection object).", @"Error when schema import cannot establish a connection.")}];
 			return; // Exit performBlockAndWait's block
 		}
 		
@@ -326,7 +326,7 @@
 		self.success = NO;
 		// Ensure an error is reported if cancelled mid-process
 		if (!operationError) {
-			operationError = [NSError errorWithDomain:NSStringFromClass([self class]) code:NSUserCancelledError userInfo:@{NSLocalizedDescriptionKey:@"Schema import was cancelled."}];
+			operationError = [NSError errorWithDomain:NSStringFromClass([self class]) code:NSUserCancelledError userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Schema import was cancelled.", @"Status when the schema import is cancelled.")}];
 		}
 		_displayError = [operationError copy];
 		[self finishWithError:operationError];

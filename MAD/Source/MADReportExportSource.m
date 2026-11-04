@@ -73,7 +73,7 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 		if (error) {
 			*error = [NSError errorWithDomain: @"MADReportExport"
 										 code: 1
-									 userInfo: @{ NSLocalizedDescriptionKey: @"There is no document to export." }];
+									 userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"There is no document to export.", @"Error when an export has no document.") }];
 		}
 		return nil;
 	}
@@ -86,7 +86,7 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 		if (error) {
 			*error = sqlError ?: [NSError errorWithDomain: @"MADReportExport"
 													 code: 2
-												 userInfo: @{ NSLocalizedDescriptionKey: @"The document's query generated no SQL." }];
+												 userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"The document's query generated no SQL.", @"Error when the document query produced no SQL to export.") }];
 		}
 		return nil;
 	}

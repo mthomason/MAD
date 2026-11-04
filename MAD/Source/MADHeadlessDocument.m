@@ -101,7 +101,7 @@
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain:@"MADHeadlessDocument"
 											code:10
-										userInfo:@{ NSLocalizedDescriptionKey: @"A file URL and database connection are required to create a document." }];
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"A file URL and database connection are required to create a document.", @"Error when a headless document is created without its inputs.") }];
 		}
 		return nil;
 	}
@@ -119,7 +119,7 @@
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain:@"MADHeadlessDocument"
 											code:11
-										userInfo:@{ NSLocalizedDescriptionKey: @"Could not initialize the document model in the portable store." }];
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"Could not initialize the document model in the portable store.", @"Error when the portable store cannot be initialized.") }];
 		}
 		return nil;
 	}
@@ -134,7 +134,7 @@
 		if (outError != NULL) {
 			*outError = dbConnectionError ?: [NSError errorWithDomain:@"MADHeadlessDocument"
 																 code:12
-															 userInfo:@{ NSLocalizedDescriptionKey: @"Failed to connect to the source database." }];
+															 userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"Failed to connect to the source database.", @"Error when a headless document cannot reach its database.") }];
 		}
 		return nil;
 	}
@@ -229,7 +229,7 @@
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain: @"MADHeadlessDocument"
 											code: 3
-										userInfo: @{ NSLocalizedDescriptionKey: @"The document is not open; nothing to write." }];
+										userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"The document is not open; nothing to write.", @"Error when saving a closed headless document.") }];
 		}
 		return NO;
 	}

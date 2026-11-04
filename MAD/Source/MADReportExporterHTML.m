@@ -76,8 +76,7 @@ static NSString *MADReportExporterFontName(NSString *);
 			*error = [NSError errorWithDomain: @"MADReportExport"
 										 code: 3
 									 userInfo: @{ NSLocalizedDescriptionKey:
-					 @"the facsimile needs a document that renders (MADDocumentRenderProtocol); "
-					 @"--format html-flow is the reflowable one and needs no more." }];
+					 NSLocalizedString(@"the facsimile needs a document that renders (MADDocumentRenderProtocol); " @"--format html-flow is the reflowable one and needs no more.", @"Error when the HTML facsimile export has no renderable document.") }];
 		}
 		return NO;
 	}

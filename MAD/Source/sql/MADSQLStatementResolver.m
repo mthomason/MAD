@@ -125,7 +125,7 @@
 		MADSQLPlanTable *rightTable = [self planTableForColumn:join.rightColumn];
 		if (leftTable == nil || rightTable == nil) {
 			return [self fail:MADSQLCompileErrorUnknownColumn line:join.leftColumn.line column:join.leftColumn.column
-					   message:@"The ON condition's columns do not resolve." error:error];
+					   message:NSLocalizedString(@"The ON condition's columns do not resolve.", @"SQL statement validation message for a pasted statement.") error:error];
 		}
 
 		MADSQLPlanLink *link = [MADSQLPlanLink new];
@@ -163,7 +163,7 @@
 		MADSQLPlanTable *planTable = [self planTableForColumn:column];
 		if (planTable == nil) {
 			return [self fail:MADSQLCompileErrorUnknownColumn line:column.line column:column.column
-					   message:@"A GROUP BY column does not resolve." error:error];
+					   message:NSLocalizedString(@"A GROUP BY column does not resolve.", @"SQL statement validation message for a pasted statement.") error:error];
 		}
 
 		MADSQLPlanGroup *group = [MADSQLPlanGroup new];
