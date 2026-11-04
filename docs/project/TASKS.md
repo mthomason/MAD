@@ -1265,6 +1265,18 @@ live-driver storyboard and xib is exported to
 `scripts/localization/storyboard_strings/` with do-not-translate markers (no
 translations yet). The barcode display names are consolidated into the table in
 `MADBarcode.m` (D11), and `-name` is computed from it. The two unresolved keys
-are gone. The catalog holds 783 entries. Not done yet: the PDF/document plural
-counts, translating any language, and the licence text. See the plan's Phase 2
-onward.
+are gone. The catalog held 783 entries at that point.
+
+Continuation (2026-11-04): the translation pass landed on the same branch. The
+catalog now holds 784 entries, fully translated into `de`, `es`, `ja`, `pt-BR`,
+and `zh-Hans` (62 brand/technical entries marked `shouldTranslate: false`; the
+11 plural entries carry the categories their language requires). Every app,
+xib, and live-driver storyboard has `<lang>.lproj` files for the entries it
+needs, added to the owning project's variant group; `Settings.bundle` carries
+all five languages; `CFBundleLocalizations` names all six languages on iOS and
+macOS. `scripts/localization/check_translations.py` and its tests enforce
+format-specifier preservation, plural categories, no empty values, and the
+language set in CI. The translations are machine-assisted and unreviewed (D14):
+the iOS and Mac About screens carry a notice and point at the issue tracker. No
+screenshot, VoiceOver, Dynamic Type, or truncation pass was run, and the
+PDF/document page-count plurals remain. See the plan's Phase 3 and 4 status.

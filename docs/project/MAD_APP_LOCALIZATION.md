@@ -434,15 +434,33 @@ standard handoff.
 | **D1 — Languages** | Ship all five translations: `de`, `es`, `ja`, `pt-BR`, `zh-Hans`; `en` stays the source and development region. |
 | **D1 — Spanish code** | `es` (generic), carrying the `es-419` copy. `es-419` is not a separate bundle; `es` matches Spain too. |
 | **D5 — Driver storyboards** | **Do not consolidate.** One `MADCreateDocument` storyboard per driver is a deliberate pattern: a developer adding a database driver adds that driver's storyboard. The near-identical strings (username, password, …) may be shared in translation, but the resources stay per framework. |
-| **D7 — Translation route** | AI drafts; the user reviews every language and takes the screenshots. The agent does not produce the screenshot pack. |
+| **D7 — Translation route** | Superseded by D14: AI drafts; no human review is performed, and the machine-assisted notice is shown. |
 | **D10 — Platform timing** | iOS first. macOS bundle infrastructure is built in parallel, but macOS string translation follows iOS. |
 | **D11 — Barcode names** | Consolidate the 65 dictionary entries and 66 `self.name` assignments into one table before translating. (Done 2026-11-04: `-name` is computed from the table; see the Phase 2 status.) |
 | **D12 — SQL parser messages** | Translate all of the app's own parser and validation messages, not just the common ones. They need a technical glossary and a review pass. |
 | **D13 — Date formatter** | Keep `MADDateFromTimeFormatter`'s component-selection algorithm and cached spell-out formatter. Localize only the unit and sentence layer; do not replace it with `NSDateComponentsFormatter`/`NSRelativeDateTimeFormatter`. Measured cost is ~11 µs per call. |
 
-Still open, and not blocking Phase 0-1: SQL data-type names (§11.6), the
-parser/validation messages (§11.7), workspace brand names (§11.8), and a
-language override in settings (§11.9).
+### D14 — Translation review (2026-11-04, supersedes D7)
+
+D7 called for AI-drafted translations with a native-speaker review pass. The
+user cannot verify the translations, so that review will not happen. The chosen
+route is to **ship AI-drafted translations unreviewed**, in all five languages,
+with two visible mitigations:
+
+* A machine-assisted notice on the iOS and macOS About screens, in each
+  language, saying the translations are machine-assisted and may contain
+  errors, and pointing at <https://github.com/mthomason/MAD/issues>.
+* A public issue tracker as the correction path.
+
+The documentation and the app must never claim that a human reviewed the copy.
+The English source remains authoritative; a reported error is fixed in the
+catalog and all languages in the same change. This decision does not relax the
+string rules: format specifiers, brands, licence text, and technical names are
+still handled exactly as D6 and §3 require.
+
+Still open, and not blocking Phase 0-1: SQL data-type names (§11.6), workspace
+brand names (§11.8), and a language override in settings (§11.9). The
+parser/validation messages are answered by D12.
 
 ## 5. Finding the strings: what the tools can and cannot do
 
@@ -539,6 +557,31 @@ comment). It preserves existing entries and translations.
 python3 -I scripts/localization/sync_catalog.py          # seed the catalog
 python3 -I scripts/localization/sync_catalog.py --check  # CI check
 ```
+
+`check_translations.py` is the mechanical gate on the translation products. It
+checks the catalog and every translated storyboard/xib `.strings` file against
+the English source:
+
+```sh
+python3 -I scripts/localization/check_translations_test.py
+python3 -I scripts/localization/check_translations.py
+python3 -I scripts/localization/check_translations.py --require-complete  # local
+```
+
+It fails on a changed format specifier (same tokens, same order), a plural
+entry missing a required category (`one` and `other` for de/es/pt-BR, `other`
+only for ja/zh-Hans), an empty value, or a language code outside the five.
+`--require-complete` additionally fails when an entry that should be translated
+lacks one of the five languages; CI does not use it, so a new source key can
+land before its translations do. The Linux workflow runs the test and the
+default check next to the audit and the catalog sync.
+
+Measured 2026-11-04: `shouldTranslate: false` removes the entry from every
+non-English table except the two format-only keys `r%@` and `v%@`, which
+`xcstringstool compile` still emits with the key as the value. They display
+correctly in English; a pseudo-localization run may double or accent them. The
+catalog keeps the flags, and the checker does not treat the two emissions as
+translations.
 
 The policy stays: a constant is acceptable for a string used repeatedly; a new
 one-off string uses a literal at the call site. The Linux workflow runs the
@@ -785,8 +828,9 @@ and the two icon-only explorer bar buttons carry labels and hints.
 Storyboards: `scripts/localization/export_storyboard_strings.py` exports every
 app and live-driver storyboard and xib to UTF-8 under
 `scripts/localization/storyboard_strings/` (514 entries, 280 marked
-do-not-translate), and its README records the add-a-language step. Nothing is
-translated yet; the first German `.strings` remains `MADQuery`'s.
+do-not-translate), and its README records the add-a-language step. The
+translation pass replaced the first German `.strings` with a full set; see
+Phase 3.
 
 Barcode names: D11 is done. The 65-entry table in `MADBarcode.m` is now the
 single source; `-name` is computed from `barcodeType`, the 66 `self.name`
@@ -794,9 +838,9 @@ assignments and the archived name are gone, and the table gained the PDF417
 truncated and HIBC variants. The EAN128 entry now says `Code 128 (GS1-128)`,
 matching the class and the test that pins it. `MADBarcodes`' 30 tests pass.
 
-The `MAD Designer German` scheme's own plural tests now skip outside an English
-process language: their plural rules live only in the source-language entry
-until a language is translated.
+The `MAD Designer German` scheme's own plural tests skip outside an English
+process language to keep their assertions deterministic. The German plural
+rules now exist as well, so a future change can assert them in place.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 
@@ -809,14 +853,31 @@ compounds), **Spanish is the largest reach**. Recommended: German first.
 * Run VoiceOver, Voice Control, and the largest Dynamic Type size.
 * Refine the glossary and the translator's screenshot pack.
 
-**Exit:** German is complete and reviewed; no clipped text on the pilot screens;
-the process for handoff/merge is written down.
+**Exit (revised by D14):** German is mechanically complete and passes the
+translation checks; no human review is performed. No clipped-text claim is
+made, because no screenshot pass was run.
+
+**Status 2026-11-04 — translated.** German is complete in the catalog (784
+entries, 62 marked `shouldTranslate: false`), in every app and driver storyboard
+and xib that has translatable entries, in `Settings.bundle`, and in the Mac
+bundle through the shared catalog. The glossary in §12 was fixed first. The
+machine-assisted notice required by D14 is on the iOS About table and the Mac
+About overview. Not done: the screenshot matrix, VoiceOver/Voice Control
+sessions, Dynamic Type, and any truncation fix. Those are QA work, not
+translation work, and no human has reviewed the copy.
 
 ### Phase 4 — Remaining languages (1-2 weeks engineering + vendor time)
 
 Spanish, Japanese, Brazilian Portuguese, and Simplified Chinese. Reuse the
 pilot's corrections; review each language in-app; capture the language-matrix
 screenshots.
+
+**Status 2026-11-04 — translated in the same pass.** The new pipeline applies a
+per-language glossary to the whole catalog, so all four languages were drafted
+with German rather than after it. Each has the five-language completeness the
+checker enforces. The "review each language in-app" and screenshot steps were
+not performed; D14 records why, and the About screens say the translations are
+machine-assisted.
 
 ### Phase 5 — macOS parity (1 week, can run in parallel with Phase 2-4)
 
@@ -839,9 +900,9 @@ audit can see is wrapped, along with the helper-passed labels, inspector rows,
 tooltips, and accessibility descriptions. The AppKit alert and constructor
 strings, menus, About chrome, and export format names are in. The About legal
 text, component notices, licence names, and copyright stay verbatim. The
-bundle already compiles the shared catalog and carries `en.lproj` and
-`de.lproj`; `CFBundleLocalizations` names both. Still open: the smoke test is
-not locale-aware, the English substring matching in
+bundle already compiles the shared catalog and carries all five translated
+`<lang>.lproj` folders plus `en.lproj`; `CFBundleLocalizations` names all six.
+Still open: the smoke test is not locale-aware, the English substring matching in
 `MADMacViewerViewController.m` is untouched (driver messages stay English, so
 it still matches), the inspector values and percentages are still C-locale
 `%f`/`%ld`, and no Mac string is translated.
@@ -902,6 +963,12 @@ approach and avoids the question entirely. On the Mac, `InfoPlist.strings` can
 carry the copyright line unchanged if it ever needs to be in a localized table;
 it should not be machine-translated.
 
+D14 adds a second sentence to the About chrome, in all five languages:
+"These translations are machine-assisted and may contain errors. Report them
+at https://github.com/mthomason/MAD/issues." The iOS About table has it as its
+own row above `Overview`; the Mac About overview has it as the last paragraph.
+The URL and the product names stay verbatim.
+
 ## 9. Quality assurance
 
 * **Pseudo-localization:** Double-Length and Accented runs on every screen, on
@@ -960,7 +1027,8 @@ open; none of them blocks Phase 0 or 1.
    American, falls back for Spain)? The docs use `es-419`. — **Answered: `es`
    with the es-419 copy (D9).**
 3. **Translation route:** AI draft + native review, or a professional vendor?
-   — **Answered: AI draft, user reviews and takes screenshots (D9).**
+   — **Answered: AI draft; the review step is dropped and the limitation is
+   disclosed in the app (D14, superseding D7).**
 4. **Timing:** iOS first, then macOS? Or both in parallel? The Mac work is
    independent, though its 413 strings are the largest single block. —
    **Answered: iOS first, macOS infrastructure in parallel (D9).**
@@ -981,6 +1049,76 @@ open; none of them blocks Phase 0 or 1.
     `self.name` assignments) before translating? Recommended; otherwise every
     name is translated twice and the copies drift. — **Answered: consolidate
     before translating (D9).**
+
+## 12. Translation glossary
+
+The glossary is the consistency contract for all five languages. It was fixed
+before the first translation pass (2026-11-04) and is used by every entry in
+`Localizable.xcstrings`, the storyboard `.strings` files, and `Settings.bundle`.
+A term not listed here follows the meaning in the entry's `comment`.
+
+| English | `de` | `es` | `ja` | `pt-BR` | `zh-Hans` |
+| --- | --- | --- | --- | --- | --- |
+| query | Abfrage | consulta | クエリ | consulta | 查询 |
+| data source / datasource | Datenquelle | origen de datos | データソース | fonte de dados | 数据源 |
+| grouping | Gruppierung | agrupación | グループ化 | agrupamento | 分组 |
+| aggregate | Aggregat | agregado | 集計 | agregado | 聚合 |
+| aggregate function | Aggregatfunktion | función de agregado | 集計関数 | função de agregação | 聚合函数 |
+| predicate | Prädikat | predicado | 述語 | predicado | 谓词 |
+| join | Join | unión | 結合 | junção | 联接 |
+| band | Band | banda | バンド | faixa | 带区 |
+| section | Abschnitt | sección | セクション | seção | 区域 |
+| detail | Detail | detalle | 詳細 | detalhe | 明细 |
+| record | Datensatz | registro | レコード | registro | 记录 |
+| field | Feld | campo | フィールド | campo | 字段 |
+| row | Zeile | fila | 行 | linha | 行 |
+| page | Seite | página | ページ | página | 页面 |
+| report | Bericht | informe | レポート | relatório | 报表 |
+| report header | Berichtskopf | encabezado del informe | レポートヘッダー | cabeçalho do relatório | 报表页眉 |
+| page header | Seitenkopf | encabezado de página | ページヘッダー | cabeçalho da página | 页眉 |
+| group header | Gruppenkopf | encabezado de grupo | グループヘッダー | cabeçalho do grupo | 组页眉 |
+| report detail | Berichtsdetail | detalle del informe | レポート詳細 | detalhe do relatório | 报表明细 |
+| group footer | Gruppenfuß | pie de grupo | グループフッター | rodapé do grupo | 组页脚 |
+| page footer | Seitenfuß | pie de página | ページフッター | rodapé da página | 页脚 |
+| report footer | Berichtsfuß | pie del informe | レポートフッター | rodapé do relatório | 报表页脚 |
+| schema | Schema | esquema | スキーマ | esquema | 架构 |
+| statement | Anweisung | instrucción | ステートメント | instrução | 语句 |
+| select list | Auswahlliste | lista de selección | 選択リスト | lista de seleção | 选择列表 |
+| connection | Verbindung | conexión | 接続 | conexão | 连接 |
+| credential(s) | Anmeldedaten | credenciales | 認証情報 | credenciais | 凭据 |
+| Keychain | Schlüsselbund | llavero | キーチェーン | chaveiro | 钥匙串 |
+| element | Element | elemento | 要素 | elemento | 元素 |
+| label | Beschriftung | etiqueta | ラベル | rótulo | 标签 |
+| barcode | Barcode | código de barras | バーコード | código de barras | 条码 |
+| symbology | Symbologie | simbología | シンボル体系 | simbologia | 符号体系 |
+| export | exportieren | exportar | 書き出す | exportar | 导出 |
+| refresh | aktualisieren | actualizar | 更新 | atualizar | 刷新 |
+| sort order | Sortierreihenfolge | orden de clasificación | 並べ替え順序 | ordem de classificação | 排序顺序 |
+| alignment | Ausrichtung | alineación | 配置 | alinhamento | 对齐 |
+| border | Rahmen | borde | 境界線 | borda | 边框 |
+| margin | Rand | margen | マージン | margem | 外边距 |
+| padding | Innenabstand | relleno | パディング | preenchimento | 内边距 |
+| workspace | Arbeitsbereich | espacio de trabajo | ワークスペース | área de trabalho | 工作区 |
+| viewer | Betrachter | visor | ビューア | visualizador | 查看器 |
+
+Conventions applied on top of the glossary:
+
+* German uses the infinitive for actions (`Speichern`, `Abbrechen`) and the
+  formal `Sie` in sentences. Spanish is neutral Latin American (`es-419` copy in
+  the `es` bundle), avoiding region-specific vocabulary and `tú`. Japanese uses
+  `です`/`ます` in sentences and noun phrases for labels. Portuguese is
+  Brazilian. Chinese is Simplified and concise.
+* Product and brand names (`MAD`, `MAD Designer`, `MAD Viewer`, `MAD Query`,
+  `SQL`, `MySQL`, `MariaDB`, `PostgreSQL`, `SQL Server`, `SQLite`, `iCloud`,
+  `GitHub`) stay verbatim in every language, including their position inside a
+  translated sentence.
+* SQL identifiers, SQL aggregate names, SQL data-type names, font names, barcode
+  symbology names, file extensions, export-format acronyms, and one-letter style
+  abbreviations stay verbatim.
+* A format specifier is copied byte for byte. A translated sentence may reorder
+  the *arguments* (the `%n$` prefix makes that safe) but never the specifier
+  itself. `%%` stays `%%`.
+* The `pt` unit for points stays `pt` in every language.
 
 ## Appendix A — Inventory commands
 
