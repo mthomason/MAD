@@ -112,6 +112,65 @@ NSString *doc = @"call setTitle:@\\"Not UI\\" to see it";
 		report = self.results()
 		self.assertEqual(self.by_category(report, "raw-ui-literal"), [])
 
+	def test_appkit_ui_literals(self):
+		self.write("Mac/Source/AppKit.m", r"""[self.menu addItemWithTitle:@"Open" action:nil keyEquivalent:@"o"];
+NSButton *b = [NSButton buttonWithTitle:@"Save" target:nil action:nil];
+NSTextField *l = [NSTextField labelWithString:@"Name"];
+button.toolTip = @"Helpful";
+field.stringValue = @"Value";
+field.placeholderString = @"Type here";
+[p addItemsWithTitles:@[@"One", @"Two"]];
+[view setAccessibilityLabel:@"Chart"];
+[view setAccessibilityHelp:@"Explains the chart"];
+""")
+		report = self.results()
+		texts = sorted(f["text"] for f in self.by_category(report, "raw-ui-literal"))
+		self.assertEqual(texts, [
+			"addItemWithTitle = Open",
+			"addItemsWithTitles = One",
+			"addItemsWithTitles = Two",
+			"buttonWithTitle = Save",
+			"labelWithString = Name",
+			"placeholderString = Type here",
+			"setAccessibilityHelp = Explains the chart",
+			"setAccessibilityLabel = Chart",
+			"stringValue = Value",
+			"toolTip = Helpful",
+		])
+
+	def test_glyph_and_numeric_literals_are_ignored(self):
+		self.write("MADDesigner/Source/Glyphs.m", """\
+label.text = @"✓";
+label2.text = @"100%";
+label3.text = @"Menu";
+""")
+		report = self.results()
+		texts = sorted(f["text"] for f in self.by_category(report, "raw-ui-literal"))
+		self.assertEqual(texts, ["text = Menu"])
+
+	def test_data_structures_scanned_and_feedback_not(self):
+		self.write("MADDataStructures/Source/Graph.m",
+			'NSString *s = NSLocalizedString(TextCycleEncountered, nil);\n')
+		self.write("MADFeedback/MADFeedback/Feedback.m",
+			'[button setTitle:@"Feedback" forState:0];\n')
+		report = self.results()
+		texts = [f["text"] for f in self.by_category(report, "nonliteral-key")]
+		self.assertEqual(texts, ["TextCycleEncountered"])
+		self.assertEqual(self.by_category(report, "raw-ui-literal"), [])
+
+	def test_duplicate_occurrence_over_baseline_fails(self):
+		self.write("MADDesigner/Source/UI.m",
+			'[button setTitle:@"OK" forState:0];\n')
+		self.assertEqual(self.run_cli("--write-baseline").returncode, 0)
+
+		self.write("MADDesigner/Source/UI.m",
+			'[button setTitle:@"OK" forState:0];\n'
+			'[button setTitle:@"OK" forState:0];\n')
+		result = self.run_cli()
+		self.assertEqual(result.returncode, 1)
+		self.assertIn("OK", result.stdout)
+		self.assertIn("2", result.stdout)
+
 	def test_format_strings_without_positional_specifiers(self):
 		self.write("MAD/Source/Format.m", """\
 NSLocalizedString(@"%@ of %@", nil);

@@ -1230,19 +1230,26 @@ code, AI-drafted translations reviewed by the user, iOS first with macOS
 infrastructure in parallel, keeping the per-driver storyboards, and consolidating
 the barcode names before translating.
 
-This session builds the foundation only:
+Phase 0 and Phase 1 are complete:
 
 * `scripts/localization/audit.py`, its unittest suite, and
   `scripts/localization/baseline.json` — the text-based audit, runnable without
-  Xcode and wired into the Linux workflow.
+  Xcode and wired into the Linux workflow. It covers UIKit, NSAlert, and the
+  AppKit constructors/properties the Mac app uses; baseline entries carry
+  occurrence counts.
 * One `Localizable.xcstrings` in both iOS app targets, with
   `LOCALIZATION_PREFERS_STRING_CATALOGS = YES`, proved by a German key reaching
   the built app.
-* `MADQuery.storyboard` moved to `Base.lproj` with a German `.strings`, proved
-  in the simulator.
-* `Mac/build.sh` compiling one catalog into `Contents/Resources/de.lproj` and
-  `CFBundleLocalizations` in the Mac `Info.plist`.
+* All 18 app storyboards and 3 xibs in `Base.lproj`; `MADQuery.storyboard`
+  carries German `.strings`. The three live driver storyboards are
+  `Base.lproj` in their own framework projects.
+* `Settings.bundle/de.lproj/Root.strings`, `CFBundleLocalizations` on both iOS
+  and Mac bundles, and the Mac catalog compile in `Mac/build.sh`.
+* Shared `MAD Designer German`, Pseudo Accented, and Pseudo Double-Length
+  schemes, with tests that assert the German catalog value, the loaded
+  storyboard title, and both pseudo modes.
 
-Not in this session: translating the app, converting the other 21 storyboards,
-consolidating barcode names, licence text, or the 413 Mac strings. See the plan's
-Phase 2 onward.
+Phase 2 has started: the 20 runtime-value keys and the two format strings are
+fixed, and the audit baseline was regenerated. Not done yet: translating the
+app, consolidating barcode names, licence text, the 413 Mac strings, and the
+rest of Phase 2. See the plan's Phase 2 onward.
