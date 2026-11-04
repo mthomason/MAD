@@ -25,10 +25,25 @@
 	return language;
 }
 
+- (BOOL)pseudoLocalizationEnabled {
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	return [defaults boolForKey:@"NSAccentuateLocalizedStrings"] ||
+		[defaults boolForKey:@"NSDoubleLocalizedStrings"] ||
+		[defaults boolForKey:@"NSSurroundLocalizedStrings"];
+}
+
 - (void)testStringCatalogServesPreferredLanguage {
+	NSString *value = NSLocalizedString(@"Choose Storage Option", nil);
+	if ([self pseudoLocalizationEnabled]) {
+		XCTAssertNotEqualObjects(value, @"Choose Storage Option",
+			@"Pseudo-localization must transform the catalog value");
+		NSLog(@"MADLocalizationTests: pseudo value = %@", value);
+		return;
+	}
+
 	NSString *language = [self preferredLanguage];
 	NSString *expected = [language hasPrefix:@"de"] ? @"Speicherort wählen" : @"Choose Storage Option";
-	XCTAssertEqualObjects(NSLocalizedString(@"Choose Storage Option", nil), expected,
+	XCTAssertEqualObjects(value, expected,
 		@"The compiled String Catalog must serve %@", language);
 }
 

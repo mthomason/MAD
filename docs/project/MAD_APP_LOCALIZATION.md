@@ -611,7 +611,8 @@ recorded baseline and the two inventory reconciliations are §5.3.1.
   already `YES` at the project level (see §2.4); there is nothing to enable
   unless a target overrides it.
 * Add the audit script to CI and a make/run target; add a pseudo-localization
-  scheme (or two) and a screenshot capture harness.
+  scheme (or two). The screenshot pass is the user's (D9), so no agent-built
+  capture harness.
 * Prove the pipeline with one throwaway German string in both apps.
 
 **Exit:** a build of each app contains the expected `.lproj` folders; a German
@@ -640,16 +641,23 @@ Also landed after the first proof: all 17 remaining app storyboards and the 3
 xibs are in `Base.lproj` (both app targets compile all 21 resources, nothing
 left at the bundle root); the three live driver storyboards are in their own
 projects' `Base.lproj`; `Settings.bundle/de.lproj/Root.strings` carries the
-three German titles; and both iOS `Info.plist`s declare
-`CFBundleLocalizations` (`en`, `de`).
+three German titles; both iOS `Info.plist`s declare `CFBundleLocalizations`
+(`en`, `de`); and two shared schemes, **MAD Designer Pseudo Accented** and
+**MAD Designer Pseudo Double-Length**, pass
+`-NSAccentuateLocalizedStrings` / `-NSDoubleLocalizedStrings`. Both were
+verified in the unit test: the catalog value becomes accented
+(`Çh̃o̥o̥şë S̈t̃o̥r̀a̧ģë O̧p̊t̃i̥o̥ñ`) and doubled
+(`Choose Storage Option Choose Storage Option`). This is the runtime tool for
+finding unwrapped strings; the Xcode scheme menu just sets these defaults.
 
 Remaining for Phase 1: `InfoPlist.strings` for the genuinely translatable
 top-level keys (the display name is a brand and the copyright is legal text,
 so this may stay empty for now; the nested document-type names are not
-coverable this way — see D4); the pseudo-localization scheme and screenshot
-harness; and broadening `CFBundleLocalizations` as each language lands. The
-`CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT` item needs only a per-target
-check: it is already `YES` at the project level (§2.4). The 22 storyboards in the plan's count are the 18 app storyboards plus
+coverable this way — see D4) and broadening `CFBundleLocalizations` as each
+language lands. The screenshot pass belongs to the user (D9), so no agent-built
+capture harness is planned; the pseudo schemes and the `-UITestOpenSample` /
+`-UITestSelectTab` hooks are the manual tooling. The `CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT` item needs
+only a per-target check: it is already `YES` at the project level (§2.4). The 22 storyboards in the plan's count are the 18 app storyboards plus
 three live driver copies plus the dead MADAPI copy; the dead copy is not
 converted.
 
