@@ -21,8 +21,12 @@
 	XCTAssertNotNil(formatter);
 	XCTAssertEqual(formatter.numberStyle, NSNumberFormatterDecimalStyle);
 	XCTAssertEqual(formatter.maximumFractionDigits, (NSUInteger)2);
-	XCTAssertEqualObjects(formatter.decimalSeparator, @".");
-	XCTAssertEqualObjects(formatter.groupingSeparator, @",");
+
+	// The factory must not pin separators; a plain formatter carries the locale.
+	NSNumberFormatter *reference = [[NSNumberFormatter alloc] init];
+	reference.numberStyle = NSNumberFormatterDecimalStyle;
+	XCTAssertEqualObjects(formatter.decimalSeparator, reference.decimalSeparator);
+	XCTAssertEqualObjects(formatter.groupingSeparator, reference.groupingSeparator);
 }
 
 @end

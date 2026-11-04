@@ -29,6 +29,10 @@
       "comment": "Like '5.2 points.'",
       "extractionState": "manual"
     },
+    "%@ MB": {
+      "comment": "File size in megabytes; %@ is the formatted number.",
+      "extractionState": "manual"
+    },
     "%@ day ": {
       "comment": "Defined as FormatDay in MADDesigner/Source/NSDate+Extras.m.",
       "extractionState": "manual"
