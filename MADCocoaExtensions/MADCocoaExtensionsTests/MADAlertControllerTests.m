@@ -118,35 +118,29 @@
 
 #pragma mark - Destructive confirmation
 
-- (NSString *)spelledNumber:(NSUInteger)count {
-	return [NSNumberFormatter localizedStringFromNumber:@(count) numberStyle:NSNumberFormatterSpellOutStyle];
-}
-
-- (void)testDeleteItemsUsesPluralWording {
+- (void)testDeleteItemsBuildsAlert {
 	UIAlertController *alert = [MADAlertController newAlertControllerDeleteItems:4
-																		 confirm:^(UIAlertAction *action) {}
-																		  cancel:^(UIAlertAction *action) {}];
-	NSString *spelled = [self spelledNumber:4];
-	NSString *expectedTitle = [NSString stringWithFormat:@"Remove %@ items", spelled];
+																		 confirm:^(UIAlertAction * __unused action) {}
+																		  cancel:^(UIAlertAction * __unused action) {}];
 
 	XCTAssertEqual(alert.preferredStyle, UIAlertControllerStyleActionSheet);
 	XCTAssertEqualObjects(alert.title, @"Confirm");
-	XCTAssertTrue([alert.message containsString:spelled]);
+	// This bundle has no catalog, so the raw %lld key is the fallback.
+	XCTAssertTrue([alert.message containsString:@"4 items"]);
 	XCTAssertEqual(alert.actions.count, (NSUInteger)2);
 	// Cancel is added first, the destructive action second.
 	XCTAssertEqual(alert.actions[0].style, UIAlertActionStyleCancel);
 	XCTAssertEqual(alert.actions[1].style, UIAlertActionStyleDestructive);
-	XCTAssertEqualObjects(alert.actions[1].title, expectedTitle);
+	XCTAssertEqualObjects(alert.actions[1].title, @"Remove 4 items");
 }
 
-- (void)testDeleteSingleItemUsesSingularWording {
+- (void)testDeleteSingleItemBuildsAlert {
 	UIAlertController *alert = [MADAlertController newAlertControllerDeleteItems:1
-																		 confirm:^(UIAlertAction *action) {}
-																		  cancel:^(UIAlertAction *action) {}];
-	NSString *spelled = [self spelledNumber:1];
-	NSString *expectedTitle = [NSString stringWithFormat:@"Remove %@ item", spelled];
-
-	XCTAssertEqualObjects(alert.actions[1].title, expectedTitle);
+																		 confirm:^(UIAlertAction * __unused action) {}
+																		  cancel:^(UIAlertAction * __unused action) {}];
+	XCTAssertEqual(alert.actions.count, (NSUInteger)2);
+	// The singular catalog rule is tested in MADDesignerUnitTests/MADLocalizationTests,
+	// where the app bundle supplies the catalog.
 }
 
 #pragma mark - Completion notice

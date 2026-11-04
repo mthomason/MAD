@@ -12,6 +12,7 @@
 
 #import <XCTest/XCTest.h>
 #import <UIKit/UIKit.h>
+#import <MADCocoaExtensions/MADAlertController.h>
 
 @interface MADLocalizationTests : XCTestCase
 
@@ -61,6 +62,20 @@
 	NSString *value = [german localizedStringForKey:@"Choose Storage Option" value:nil table:nil];
 	XCTAssertEqualObjects(value, @"Speicherort wählen",
 		@"The German table must carry the key even under an English process language");
+}
+
+- (void)testDeleteItemsAlertUsesPluralRules {
+	void (^handler)(UIAlertAction *) = ^(UIAlertAction * __unused action) { };
+	UIAlertController *one = [MADAlertController newAlertControllerDeleteItems:1
+		confirm:handler cancel:handler];
+	XCTAssertEqualObjects(one.message,
+		@"Are you sure you would like to delete 1 item?  This action is final.");
+
+	UIAlertController *many = [MADAlertController newAlertControllerDeleteItems:2
+		confirm:handler cancel:handler];
+	XCTAssertEqualObjects(many.message,
+		@"Are you sure you would like to delete 2 items?  This action is final.");
+	XCTAssertEqualObjects(many.actions.lastObject.title, @"Remove 2 items");
 }
 
 - (void)testStoryboardNavigationTitleFollowsPreferredLanguage {

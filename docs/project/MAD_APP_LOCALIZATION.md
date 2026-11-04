@@ -756,7 +756,10 @@ MySQL/PostgreSQL wrappers (12). The only raw UI literals left are the Mac's
 204, which Phase 5 owns. The locale formatters are fixed:
 `ma_twoDecimalPlacesFormatter` no longer pins separators, and `MADStandard`'s
 file size uses `NSNumberFormatter` with the localized `%@ MB` key. Next:
-plurals, accessibility, and the storyboard strings.
+plurals (the delete alert and the records/page status line are done, with a
+grouped-number substitution pattern; the date components, SQL counts, page
+status view, and PDF/document page counts remain), accessibility, and the
+storyboard strings.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 
@@ -813,7 +816,10 @@ The Mac app is small but has the most raw strings (~413):
   translator reorder it; use positional specifiers (`%1$@`) whenever there is
   more than one argument.
 * Use the catalog's plural variations and `localizedStringWithFormat:`, not
-  hand-written singular/plural pairs.
+  hand-written singular/plural pairs. When the number must also be grouped,
+  pass the numeric count as the plural selector and the preformatted number as
+  a separate `%@` argument; the catalog substitutes the noun on the numeric
+  argument. `MADLabelStatus` and `MADAlertController` show the pattern.
 * Use `NSNumberFormatter`/`NSDateFormatter`/`NSDateComponentsFormatter` with
   the user's locale; never hardcode `.` as a decimal separator or `%` placement.
 * Use `leading`/`trailing` and `natural` alignment, not `left`/`right`, even

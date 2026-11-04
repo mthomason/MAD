@@ -85,26 +85,24 @@
 											 confirm:(void (^)(UIAlertAction *action))handlerConfirm
 											  cancel:(void (^)(UIAlertAction *action))handlerCancel {
 
-	NSString *messageTemplate = itemCount > 1 ? NSLocalizedString(@"Are you sure you would like to delete %@ items?  This action is final.",
-																  @"Delete message template (plural)") :
-												NSLocalizedString(@"Are you sure you would like to delete %@ item?  This action is final.",
-																  @"Delete message template (singular)");
-
-	NSString *numberStr = [NSNumberFormatter localizedStringFromNumber: [NSNumber numberWithUnsignedInteger: itemCount]
-														   numberStyle: NSNumberFormatterSpellOutStyle];
+	NSString *message = [NSString localizedStringWithFormat:
+		NSLocalizedString(@"Are you sure you would like to delete %lld items?  This action is final.",
+			@"Delete confirmation; %lld is the number of items."),
+		(long long)itemCount];
 
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle: NSLocalizedString(@"Confirm", @"Confirm")
-																   message: [NSString stringWithFormat:messageTemplate, numberStr]
+																   message: message
 															preferredStyle: UIAlertControllerStyleActionSheet];
 
 	[alert addAction:[UIAlertAction actionWithTitle: NSLocalizedString(@"Cancel", @"Cancel")
 											  style: UIAlertActionStyleCancel
 											handler: handlerCancel]];
 
-	NSString *titleDestructiveTemplate = itemCount > 1 ? NSLocalizedString(@"Remove %@ items", @"Remove %@ items (plural)") :
-														 NSLocalizedString(@"Remove %@ item", @"Remove %@ item (singular)");
+	NSString *titleDestructive = [NSString localizedStringWithFormat:
+		NSLocalizedString(@"Remove %lld items", @"Destructive button; %lld is the number of items."),
+		(long long)itemCount];
 
-	[alert addAction:[UIAlertAction actionWithTitle: [NSString stringWithFormat:titleDestructiveTemplate, numberStr]
+	[alert addAction:[UIAlertAction actionWithTitle: titleDestructive
 											  style: UIAlertActionStyleDestructive
 											handler: handlerConfirm]];
 	return alert;
