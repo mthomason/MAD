@@ -99,6 +99,40 @@ static MADTestConnectionProperties *MADTestProperties(MADDatabaseType type) {
 	XCTAssertEqual(connection.databaseType, MADDatabaseTypeMySQL);
 }
 
+- (void)testDocumentURLConstructionDoesNotRecurseForAServerDriver {
+	// Only the file-backed driver overrides the optional two-argument message.
+	// Every driver inherits the category method, so a respondsToSelector: guard
+	// sent these back into the category and recursed until the stack ended.
+	NSURL *documentURL = [NSURL fileURLWithPath: @"/tmp/report.mad"];
+
+	MADDatabaseConnection *mysql = [MADDatabaseConnection newDatabaseConnection: MADTestProperties(MADDatabaseTypeMySQL)
+																	documentURL: documentURL];
+	XCTAssertEqual([mysql class], [MADDatabaseConnectionMySql class]);
+	XCTAssertEqual(mysql.databaseType, MADDatabaseTypeMySQL);
+
+	MADDatabaseConnection *tds = [MADDatabaseConnection newDatabaseConnection: MADTestProperties(MADDatabaseTypeTDS)
+																  documentURL: documentURL];
+	XCTAssertEqual([tds class], [MADDatabaseConnectionSQLServer class]);
+
+	MADDatabaseConnection *postgres = [MADDatabaseConnection newDatabaseConnection: MADTestProperties(MADDatabaseTypePostgres)
+																	   documentURL: documentURL];
+	XCTAssertEqual([postgres class], [MADDatabaseConnectionPostgres class]);
+}
+
+- (void)testDocumentURLConstructionReachesTheFileDriver {
+	// SQLite is the optional-message implementer: the document URL decides the
+	// file, so its own method must be the one that answers.
+	NSURL *documentURL = [NSURL fileURLWithPath: @"/tmp/reports/sample.mad"];
+	MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: MADTestProperties(MADDatabaseTypeSqlite3)
+																		documentURL: documentURL];
+
+	XCTAssertEqual([connection class], [MADDatabaseConnectionSqlite3 class]);
+	XCTAssertTrue([((MADDatabaseConnectionSqlite3 *)connection).databaseUrl isFileURL]);
+	XCTAssertEqualObjects(((MADDatabaseConnectionSqlite3 *)connection).databaseUrl.lastPathComponent, @"chinook");
+	XCTAssertEqualObjects(((MADDatabaseConnectionSqlite3 *)connection).databaseUrl.URLByDeletingLastPathComponent.path,
+						  @"/tmp/reports");
+}
+
 - (void)testHostPortConstructionDispatchesToTheDriver {
 	MADDatabaseConnection *mysql = [MADDatabaseConnection newDatabaseConnectionWithType: MADDatabaseTypeMySQL
 																				  host: @"db.example.com"

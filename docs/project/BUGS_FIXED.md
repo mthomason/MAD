@@ -145,6 +145,29 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### `+[MADDatabaseConnection newDatabaseConnection:documentURL:]` recursed until the stack ended for every non-SQLite driver
+- **Status:** Fixed 2026-11-04.
+- **Where:** `MAD/Source/MADDatabaseConnection+Constructor.m:53-72`; the optional
+  two-argument message is implemented only by
+  `MADSqlite3/Source/MADDatabaseConnectionSqlite3.m:168-176`.
+- **Behavior:** The optional `MADDatabaseDriver` message
+  `+newDatabaseConnection:documentURL:` has the same selector as the category method
+  that dispatches it. Every driver class subclasses `MADDatabaseConnection` and so
+  inherits that category method; `[(id)driver respondsToSelector:...]` was therefore
+  true for MySQL, TDS, and PostgreSQL too, and the constructor sent the message back
+  to the same class. It resolved to the category again with the same
+  `credentals.databaseType`, recursing until the stack guard ended the process
+  (SIGSEGV in `RptqSelectorName`). Opening any `.mad` whose stored database type was
+  a server driver crashed before the document window appeared; the macOS app
+  reproduced it when LaunchServices opened a document.
+- **Now:** the constructor resolves the class method the driver actually implements
+  and takes the two-argument path only when its implementation differs from the
+  category's; otherwise it calls the required one-argument
+  `+newDatabaseConnection:`.
+- **Test:** `MADDatabaseDriverDispatchTests
+  testDocumentURLConstructionDoesNotRecurseForAServerDriver` and
+  `testDocumentURLConstructionReachesTheFileDriver`.
+
 ### `RptqDocument -storeDatabaseConnectionDefination:forManagedObjectContext:` dropped `credentals.key`, `databaseDriverTypeEnum`, and TDS `host`, and `MADMacDocument` refresh neither supplied server credentials nor surfaced refresh errors
 - **Status:** Fixed 2026-10-31.
 - **Where:** `MAD/Source/rptq/RptqDocument+Extras.m:208-235`, `MADFoundation/Source/MADKeyChain.m`,

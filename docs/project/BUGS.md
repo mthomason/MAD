@@ -32,6 +32,10 @@ Status key:
 
 ## MAD (framework)
 
+*Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
+
+- `+[MADDatabaseConnection newDatabaseConnection:documentURL:]` recursed until the stack ended for every non-SQLite driver
+
 ### The document thumbnail uses the deprecated QuickLook file-attribute keys
 - **Status:** Open -- kept deliberately, behind a scoped pragma.
 - **What:** `MAD/Source/MADocument.m -fileAttributesToWriteToURL:forSaveOperation:error:`
