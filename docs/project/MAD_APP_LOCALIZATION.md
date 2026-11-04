@@ -343,9 +343,13 @@ extraction state to spot stale keys. For genuinely ambiguous short strings
   bundles. Each needs its own `Base.lproj` + per-language `.strings` in that
   framework's resources.
 * **App-bundle storyboards** for the 18 app storyboards and 3 xibs.
-* **`InfoPlist.strings`** in the app bundle and the Mac bundle for
-  `CFBundleDisplayName`, `CFBundleTypeName`, `UTTypeDescription`, and
-  `NSHumanReadableCopyright`.
+* **`InfoPlist.strings`** in the app bundle and the Mac bundle for top-level
+  keys only: `CFBundleDisplayName`, `CFBundleName`, and
+  `NSHumanReadableCopyright`. `CFBundleTypeName` and `UTTypeDescription` are
+  nested inside document-type dictionaries, which `InfoPlist.strings` does not
+  localize; keep the English "Mobile Analytics Document" for now (it is a
+  technical document-type label) or localize it in code if the user asks.
+  `CFBundleLocalizations` declares the supported languages on both platforms.
 * **`Settings.bundle/<lang>.lproj/Root.strings`** for the three settings
   strings.
 
@@ -632,10 +636,18 @@ a single-language resource.
   `CFBundleLocalizations` (`en`, `de`). `./Mac/build.sh --no-frameworks`
   produces both `.lproj` folders and a valid signature.
 
-Remaining for Phase 1: the other 17 app storyboards and 3 xibs; the three live
-driver storyboards; `Settings.bundle`; `InfoPlist.strings` for both bundles;
-the pseudo-localization scheme and screenshot harness; and broadening
-`CFBundleLocalizations` as each language lands. The
+Also landed after the first proof: all 17 remaining app storyboards and the 3
+xibs are in `Base.lproj` (both app targets compile all 21 resources, nothing
+left at the bundle root); the three live driver storyboards are in their own
+projects' `Base.lproj`; `Settings.bundle/de.lproj/Root.strings` carries the
+three German titles; and both iOS `Info.plist`s declare
+`CFBundleLocalizations` (`en`, `de`).
+
+Remaining for Phase 1: `InfoPlist.strings` for the genuinely translatable
+top-level keys (the display name is a brand and the copyright is legal text,
+so this may stay empty for now; the nested document-type names are not
+coverable this way — see D4); the pseudo-localization scheme and screenshot
+harness; and broadening `CFBundleLocalizations` as each language lands. The
 `CLANG_ANALYZER_LOCALIZABILITY_EMPTY_CONTEXT` item needs only a per-target
 check: it is already `YES` at the project level (§2.4). The 22 storyboards in the plan's count are the 18 app storyboards plus
 three live driver copies plus the dead MADAPI copy; the dead copy is not
