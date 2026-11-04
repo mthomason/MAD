@@ -105,7 +105,7 @@ static NSString *MADValidateSQLDataTypeName(MADDataType type) {
 	if (document == nil) {
 		NSError *error = [NSError errorWithDomain:MADOperationValidateSQLErrorDomain
 											 code:errNoDocument
-										 userInfo:@{ NSLocalizedDescriptionKey: @"The document is gone." }];
+										 userInfo:@{ NSLocalizedDescriptionKey:NSLocalizedString(@"The document is gone.", @"Error when SQL validation runs after its document closed.") }];
 		[self finishWithError:error];
 		return;
 	}
@@ -157,8 +157,8 @@ static NSString *MADValidateSQLDataTypeName(MADDataType type) {
 		if (error == nil) {
 			error = [NSError errorWithDomain:MADOperationValidateSQLErrorDomain
 										code:errExecute
-									userInfo:@{ NSLocalizedDescriptionKey: @"The probe failed",
-												NSLocalizedFailureReasonErrorKey: @"The database driver reported no error." }];
+									userInfo:@{ NSLocalizedDescriptionKey:NSLocalizedString(@"The probe failed", @"Error title when the SQL validation probe fails without a driver error."),
+												NSLocalizedFailureReasonErrorKey:NSLocalizedString(@"The database driver reported no error.", @"Failure reason when the SQL validation probe fails without a driver error.") }];
 		}
 		[self finishWithError:error];
 		return;

@@ -74,12 +74,12 @@
 		NSInteger initalErrorCorrecion = [delegate barcodeAztecInitalErrorCorrection];
 		if (initalErrorCorrecion == 0) {
 			cellError.detailTextLabel.text = NSLocalizedString(@"Automatic", @"Automatic");
-			cellSize.detailTextLabel.text = @"Custom";
+			cellSize.detailTextLabel.text = NSLocalizedString(@"Custom", @"Barcode option: a custom value rather than the automatic default.");
 		}
 		NSInteger initalSize = [delegate barcodeAztecInitalSize];
 		if (initalSize == 0) {
 			cellSize.detailTextLabel.text = NSLocalizedString(@"Automatic", @"Automatic");
-			cellError.detailTextLabel.text = @"Custom";
+			cellError.detailTextLabel.text = NSLocalizedString(@"Custom", @"Barcode option: a custom value rather than the automatic default.");
 		}
 	}
 	[cellSize setNeedsLayout];

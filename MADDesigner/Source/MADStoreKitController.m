@@ -121,8 +121,8 @@ NSString * const MTStoreKitIdentifierReceiptInApp                       = @"inap
 #endif
 
 	} else if (self.products.count == 0) {
-		NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : @"Product Load Failed",
-									NSLocalizedFailureReasonErrorKey : @"Try again later."};
+		NSDictionary *errorInfo = @{NSLocalizedDescriptionKey : NSLocalizedString(@"Product Load Failed", @"Error title when the App Store product list cannot be loaded."),
+									NSLocalizedFailureReasonErrorKey : NSLocalizedString(@"Try again later.", @"Failure reason when the App Store product list cannot be loaded.")};
 		completion(NO, [NSError errorWithDomain:@"MTStoreKitController" code:5 userInfo:errorInfo]);
 	} else {
 		completion(YES, nil);

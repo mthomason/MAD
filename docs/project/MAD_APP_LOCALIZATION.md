@@ -543,16 +543,16 @@ selector expansion; 1536 files scanned). `MADDataStructures` is included;
 
 | Measure | Count |
 | --- | ---: |
-| `NSLocalizedString` calls | 558 |
-| literal first argument | 477 |
+| `NSLocalizedString` calls | 586 |
+| literal first argument | 505 |
 | non-literal first argument | 81 |
-| unique literal keys | 330 |
-| literal keys containing format specifiers | 29 (multi-argument 2, both positional) |
-| raw UI literals | 328 occurrences / 310 unique |
+| unique literal keys | 347 |
+| literal keys containing format specifiers | 30 (multi-argument 2, both positional) |
+| raw UI literals | 301 occurrences / 287 unique |
 | format strings without positional specifiers | 0 |
 | `appendString:`/`stringByAppendingString:` near UI | 42 (warning) |
 
-The 365 baseline entries are 310 `raw-ui-literal` and 55 `nonliteral-key`;
+The 342 baseline entries are 287 `raw-ui-literal` and 55 `nonliteral-key`;
 warnings are reported but never fail an otherwise clean check. Entries carry an
 occurrence count, so adding a second copy of an already-baselined string in the
 same file fails the run. The first Phase 1 run, before these changes and with
@@ -740,7 +740,9 @@ and `MADTextFreeGift`, whose definitions the audit does not resolve. The audit
 now covers the AppKit constructors and properties the Mac app uses, and
 baseline entries carry occurrence counts. `sync_constants.py` seeds the 53
 resolved constant keys into the catalog; the two unresolved names still need
-handling. Next: the 310 unique raw UI literals, module by module.
+handling. The app target is wrapped: its 27 raw UI literals are now
+`NSLocalizedString` calls, and its baseline is empty. Next are the MAD
+framework's 75, then Foundation and the drivers, and the Mac's 204 in Phase 5.
 
 ### Phase 3 — Pilot language (1-2 weeks)
 

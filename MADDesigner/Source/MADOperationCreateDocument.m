@@ -226,8 +226,8 @@
 		[operationGetUsername addDependency: testConnectionOperationCredentials];
 
 		//If connection failed and credentals are saved, prompt to delete credentals.
-		MADOperationPromptPolarQuestion *promptDeleteCredntials = [[MADOperationPromptPolarQuestion alloc] initWithTitle: @"Delete saved credentials?"
-																												 message: @"Would you like to remove the saved credentials"
+		MADOperationPromptPolarQuestion *promptDeleteCredntials = [[MADOperationPromptPolarQuestion alloc] initWithTitle:NSLocalizedString(@"Delete saved credentials?", @"Alert title asking whether to delete saved credentials.")
+																												 message:NSLocalizedString(@"Would you like to remove the saved credentials", @"Alert body asking whether to delete saved credentials.")
 																										  viewController: viewController];
 		promptDeleteCredntials.name = @"com.everydayapps.mad.operation.credentials.prompt.delete";
 		[promptDeleteCredntials addDependency: operationGetUsername];

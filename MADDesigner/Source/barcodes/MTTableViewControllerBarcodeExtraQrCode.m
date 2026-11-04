@@ -63,12 +63,12 @@
 		NSInteger initalErrorCorrecion = [delegate barcodeQrCodeInitalErrorCorrection];
 		if (initalErrorCorrecion == 0) {
 			cellError.detailTextLabel.text = automatic;
-			cellSize.detailTextLabel.text = @"Custom";
+			cellSize.detailTextLabel.text = NSLocalizedString(@"Custom", @"Barcode option: a custom value rather than the automatic default.");
 		}
 		NSInteger initalSize = [delegate barcodeQrCodeInitalSize];
 		if (initalSize == 0) {
 			cellSize.detailTextLabel.text = automatic;
-			cellError.detailTextLabel.text = @"Custom";
+			cellError.detailTextLabel.text = NSLocalizedString(@"Custom", @"Barcode option: a custom value rather than the automatic default.");
 		}
 	}
 	[cellSize setNeedsLayout];
