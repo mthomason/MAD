@@ -29,6 +29,8 @@ extern NSString * const MADDocumentObjectTypeAddDetailBarcode;
 @interface MADDocumentObjectTypeDescriptor : NSObject
 
 + (NSString *)localizedStringForType:(MADPrintPageElementType)type;
++ (NSString *)localizedDetailStringForType:(MADPrintPageElementType)type;
++ (NSString *)localizedAddDetailStringForType:(MADPrintPageElementType)type;
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)new NS_UNAVAILABLE;

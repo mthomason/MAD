@@ -159,7 +159,8 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 }
 
 - (NSString *)localizedApplicationNameSufixPart {
-	return NSLocalizedString([self applicationNameSufixPart], [self applicationNameSufixPart]);
+	// "Designer" and "Viewer" are part of the product name and stay English.
+	return [self applicationNameSufixPart];
 }
 
 - (NSString *)versionNumber {

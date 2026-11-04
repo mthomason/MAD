@@ -24,10 +24,9 @@
 	if (self = [super init]) {
 		self.handleConfigureUsername = ^(UITextField *textField) {
 			UILabel *username = [[UILabel alloc] init];
-			NSString *token = @"Username: ";
 			username.textColor = [UIColor lightGrayColor];
 			username.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-			username.text = NSLocalizedString(token, token);
+			username.text = NSLocalizedString(@"Username: ", @"Label before the username field.");
 			[username sizeToFit];
 			textField.leftView = username;
 			textField.secureTextEntry = NO;
@@ -38,10 +37,9 @@
 		};
 		self.handleConfigurePassword = ^(UITextField *textField) {
 			UILabel *password = [[UILabel alloc] init];
-			NSString *token = @"Password: ";
 			password.textColor = [UIColor lightGrayColor];
 			password.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-			password.text = NSLocalizedString(token, token);
+			password.text = NSLocalizedString(@"Password: ", @"Label before the password field.");
 			[password sizeToFit];
 			textField.leftView = password;
 			textField.secureTextEntry = YES;

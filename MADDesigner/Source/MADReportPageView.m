@@ -357,9 +357,9 @@ static const CGFloat PageCounterBuffer = 10.0;
 	
 	pageNumberString = [NSNumberFormatter localizedStringFromNumber: pageNumberWrapper
 															numberStyle: NSNumberFormatterSpellOutStyle];
-	formatString = NSLocalizedString(pageNumberString, pageNumberString);
+	formatString = NSLocalizedString(@"Page %@", @"Accessibility label for a report page; %@ is the page number, spelled out.");
 	pageNumberStringCaps = pageNumberString.capitalizedString;
-	return [NSString stringWithFormat:formatString, pageNumberStringCaps];
+	return [[NSString alloc] initWithFormat:formatString, pageNumberStringCaps];
 }
 
 @end
