@@ -1031,6 +1031,10 @@
       "comment": "Localized UI string.",
       "extractionState": "manual"
     },
+    "Drawing page %1$@ of %2$@.": {
+      "comment": "Progress while drawing a PDF; current and total pages.",
+      "extractionState": "manual"
+    },
     "Duplicates the selected documents.": {
       "comment": "Localized UI string.",
       "extractionState": "manual"
