@@ -29,7 +29,7 @@ Each open `.mad` document runs in a native `NSDocument` window (`MADMacDocument`
 
 ### 1. MAD Query (`Cmd+1`)
 
-![MAD Query workspace on macOS showing the Database Tables list, visual table cards, and LEFT OUTER join connectors](assets/macos-native-mad-query.png)
+![MAD Query workspace on macOS showing the Database Tables list, visual table cards, and LEFT OUTER join connectors](assets/macos-native-mad-query.webp)
 
 The **MAD Query** workspace (`MADMacQueryViewController`) builds the relational query graph stored in `RptqQuery`. A toggle in the workspace bar switches between two mutually exclusive views of the query:
 
@@ -46,7 +46,7 @@ The **MAD Query** workspace (`MADMacQueryViewController`) builds the relational 
 
 ### 2. MAD Designer (`Cmd+2`)
 
-![MAD Designer workspace on macOS showing the Page & Section Minimap, Report Bands, Query Fields, banded design canvas, and Inspector](assets/macos-native-mad-designer.png)
+![MAD Designer workspace on macOS showing the Page & Section Minimap, Report Bands, Query Fields, banded design canvas, and Inspector](assets/macos-native-mad-designer.webp)
 
 The **MAD Designer** workspace (`MADMacDesignerViewController`) lays out the report's parametric bands and elements inside a user-resizable three-pane split view:
 

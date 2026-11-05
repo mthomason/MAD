@@ -68,7 +68,7 @@ any browser.
 
 ## The `.mad` format
 
-The open specification, one chapter per file:
+Read the [introduction to the specification](README.html) first, or jump to a chapter:
 
 [What a document is](01-document.html) ·
 [The container](02-container.html) ·

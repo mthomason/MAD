@@ -69,7 +69,7 @@ cualquier navegador.
 
 ## El formato `.mad`
 
-La especificación abierta, un capítulo por archivo:
+Lea primero la [introducción a la especificación](README.html) o vaya directamente a un capítulo:
 
 [Qué es un documento](01-document.html) ·
 [El contenedor](02-container.html) ·

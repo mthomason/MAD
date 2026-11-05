@@ -70,7 +70,7 @@ und lässt sich in jedem Browser öffnen.
 
 ## Das `.mad`-Format
 
-Die offene Spezifikation, ein Kapitel pro Datei:
+Lesen Sie zuerst die [Einführung in die Spezifikation](README.html) oder springen Sie direkt zu einem Kapitel:
 
 [Was ein Dokument ist](01-document.html) ·
 [Der Container](02-container.html) ·
