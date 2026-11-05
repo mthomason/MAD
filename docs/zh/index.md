@@ -48,7 +48,7 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 
 ## `.mad` 格式
 
-开放规范，每个文件一章：
+先阅读[规范简介](README.html)，或直接跳到某一章：
 
 [文档是什么](01-document.html) ·
 [容器](02-container.html) ·

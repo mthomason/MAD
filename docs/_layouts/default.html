@@ -66,6 +66,7 @@
     <link rel="manifest" href="{{ "/site.webmanifest" | relative_url }}">
     <meta name="theme-color" content="#0AA0D5">
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="{{ "/assets/css/site.css?v=" | append: site.github.build_revision | relative_url }}">
     {% include head-custom.html %}
   </head>
   <body>
@@ -136,6 +137,13 @@
 
       <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
         {% if is_zh %}本站点为开源项目。<a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">改进此页</a>。{% elsif is_ja %}このサイトはオープンソースです。<a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">このページを改善する</a>。{% elsif is_pt %}Este site é open source. <a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">Melhore esta página</a>.{% elsif is_de %}Diese Website ist Open Source. <a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">Diese Seite verbessern</a>.{% elsif is_es %}Este sitio es de código abierto. <a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">Mejora esta página</a>.{% else %}This site is open source. <a href="https://github.com/mthomason/MAD/edit/master/docs/{{ page.path }}">Improve this page</a>.{% endif %}
+      </div>
+    </div>
+    <div id="analytics-consent" class="analytics-consent" role="region" aria-label="{% if is_zh %}分析 Cookie{% elsif is_ja %}分析 Cookie{% elsif is_pt %}Cookies de análise{% elsif is_de %}Analyse-Cookies{% elsif is_es %}Cookies de análisis{% else %}Analytics cookies{% endif %}" hidden>
+      <p>{% if is_zh %}本站使用 Google Analytics 了解文档的使用情况。您可以接受或拒绝分析 Cookie。{% elsif is_ja %}このサイトはドキュメントの利用状況を把握するために Google Analytics を使用しています。分析 Cookie を許可または拒否できます。{% elsif is_pt %}Este site usa o Google Analytics para entender como a documentação é usada. Aceite ou recuse os cookies de análise.{% elsif is_de %}Diese Website verwendet Google Analytics, um die Nutzung der Dokumentation zu verstehen. Sie können Analyse-Cookies zustimmen oder ablehnen.{% elsif is_es %}Este sitio usa Google Analytics para entender cómo se utiliza la documentación. Puede aceptar o rechazar las cookies de análisis.{% else %}This site uses Google Analytics to understand how the documentation is used. You can accept or decline analytics cookies.{% endif %}</p>
+      <div class="analytics-consent-actions">
+        <button type="button" data-consent="granted">{% if is_zh %}接受{% elsif is_ja %}許可{% elsif is_pt %}Aceitar{% elsif is_de %}Zustimmen{% elsif is_es %}Aceptar{% else %}Accept{% endif %}</button>
+        <button type="button" data-consent="denied">{% if is_zh %}拒绝{% elsif is_ja %}拒否{% elsif is_pt %}Recusar{% elsif is_de %}Ablehnen{% elsif is_es %}Rechazar{% else %}Decline{% endif %}</button>
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>

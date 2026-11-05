@@ -12,6 +12,10 @@ description: >-
   report is a portable query graph, a materialized SQLite table, and a
   parametric layout.
 url: https://docs.everydayapps.com
+# Google Analytics 4 measurement ID. The tag is emitted by
+# _includes/head-custom.html with Consent Mode v2 defaults; the banner it
+# allows is shown only to EEA/UK/CH timezones (see that file).
+google_analytics_ga4: G-AD8V5X9SLR
 logo: /assets/mad-designer-icon-512.png
 author:
   name: Michael Thomason

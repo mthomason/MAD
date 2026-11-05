@@ -30,7 +30,7 @@ lang: zh-CN
 
 ### 1. MAD Query（`Cmd+1`）
 
-![macOS 上的 MAD Query 工作区，显示数据库表列表、可视化表卡片和 LEFT OUTER 连接线](../assets/macos-native-mad-query-zh-CN.png)
+![macOS 上的 MAD Query 工作区，显示数据库表列表、可视化表卡片和 LEFT OUTER 连接线](../assets/macos-native-mad-query-zh-CN.webp)
 
 **MAD Query** 工作区（`MADMacQueryViewController`）构建存储在 `RptqQuery` 中的关系查询图。工作区栏中的切换开关在查询的两种互斥视图之间切换：
 
@@ -47,7 +47,7 @@ lang: zh-CN
 
 ### 2. MAD Designer（`Cmd+2`）
 
-![macOS 上的 MAD Designer 工作区，显示页面与节区缩略图、报表带区、查询字段、带区设计画布和检查器](../assets/macos-native-mad-designer-zh-CN.png)
+![macOS 上的 MAD Designer 工作区，显示页面与节区缩略图、报表带区、查询字段、带区设计画布和检查器](../assets/macos-native-mad-designer-zh-CN.webp)
 
 **MAD Designer** 工作区（`MADMacDesignerViewController`）在用户可调整大小的三栏分割视图中布置报表的参数化带区和元素：
 

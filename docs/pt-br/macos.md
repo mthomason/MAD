@@ -30,7 +30,7 @@ Cada documento `.mad` aberto roda em uma janela `NSDocument` nativa (`MADMacDocu
 
 ### 1. MAD Query (`Cmd+1`)
 
-![Workspace MAD Query no macOS mostrando a lista Database Tables, os cartões visuais de tabelas e os conectores de join LEFT OUTER](../assets/macos-native-mad-query-pt-BR.png)
+![Workspace MAD Query no macOS mostrando a lista Database Tables, os cartões visuais de tabelas e os conectores de join LEFT OUTER](../assets/macos-native-mad-query-pt-BR.webp)
 
 O workspace **MAD Query** (`MADMacQueryViewController`) constrói o grafo de consulta relacional armazenado em `RptqQuery`. Um seletor na barra do workspace alterna entre duas visualizações mutuamente exclusivas da consulta:
 
@@ -47,7 +47,7 @@ O workspace **MAD Query** (`MADMacQueryViewController`) constrói o grafo de con
 
 ### 2. MAD Designer (`Cmd+2`)
 
-![Workspace MAD Designer no macOS mostrando Page & Section Minimap, Report Bands, Query Fields, canvas de design em bandas e Inspector](../assets/macos-native-mad-designer-pt-BR.png)
+![Workspace MAD Designer no macOS mostrando Page & Section Minimap, Report Bands, Query Fields, canvas de design em bandas e Inspector](../assets/macos-native-mad-designer-pt-BR.webp)
 
 O workspace **MAD Designer** (`MADMacDesignerViewController`) diagrama as bandas paramétricas e os elementos do relatório dentro de uma split view de três painéis redimensionáveis pelo usuário:
 

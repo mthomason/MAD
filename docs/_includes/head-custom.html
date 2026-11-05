@@ -1,0 +1,77 @@
+{% assign ga4_id = site.google_analytics_ga4 %}
+{% if ga4_id %}
+<!-- Google Analytics 4 with Consent Mode v2. Analytics storage is denied
+     until a visitor in the EEA, the UK, or Switzerland accepts. -->
+<script>
+(function () {
+	var key = 'mad-analytics-consent';
+	var granted = false;
+	try {
+		granted = window.localStorage.getItem(key) === 'granted';
+	} catch (e) {}
+	window.dataLayer = window.dataLayer || [];
+	window.gtag = function () { window.dataLayer.push(arguments); };
+	window.gtag('consent', 'default', {
+		'ad_storage': 'denied',
+		'ad_user_data': 'denied',
+		'ad_personalization': 'denied',
+		'analytics_storage': granted ? 'granted' : 'denied'
+	});
+	window.gtag('js', new Date());
+	window.gtag('config', '{{ ga4_id }}', {
+		'allow_google_signals': false,
+		'allow_ad_personalization_signals': false
+	});
+})();
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ ga4_id }}"></script>
+<script>
+(function () {
+	var key = 'mad-analytics-consent';
+	var stored = null;
+	try {
+		stored = window.localStorage.getItem(key);
+	} catch (e) {}
+	if (stored === 'granted' || stored === 'denied') {
+		return;
+	}
+
+	// Consent is only required in the EEA, the UK, and Switzerland. The
+	// timezone is an approximation, but it keeps a banner off every other
+	// visitor's screen without a third-party geolocation service.
+	var timezone = '';
+	try {
+		timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+	} catch (e) {}
+	var consentRegions = /^(Europe\/(Amsterdam|Andorra|Athens|Belfast|Berlin|Bratislava|Brussels|Bucharest|Budapest|Busingen|Copenhagen|Dublin|Gibraltar|Guernsey|Helsinki|Isle_of_Man|Jersey|Lisbon|Ljubljana|London|Luxembourg|Madrid|Malta|Mariehamn|Monaco|Oslo|Paris|Prague|Riga|Rome|San_Marino|Sofia|Stockholm|Tallinn|Vaduz|Vatican|Vienna|Vilnius|Warsaw|Zagreb|Zurich)|Atlantic\/(Canary|Faroe|Madeira|Reykjavik)|Africa\/(Ceuta|Melilla)|Asia\/(Famagusta|Nicosia)|Arctic\/Longyearbyen)$/;
+	if (!consentRegions.test(timezone)) {
+		return;
+	}
+
+	document.addEventListener('DOMContentLoaded', function () {
+		var banner = document.getElementById('analytics-consent');
+		if (!banner) {
+			return;
+		}
+		banner.hidden = false;
+
+		function choose(value) {
+			try {
+				window.localStorage.setItem(key, value);
+			} catch (e) {}
+			if (typeof window.gtag === 'function') {
+				window.gtag('consent', 'update', { 'analytics_storage': value });
+			}
+			banner.hidden = true;
+		}
+
+		banner.addEventListener('click', function (event) {
+			var button = event.target.closest('[data-consent]');
+			if (button) {
+				choose(button.getAttribute('data-consent'));
+			}
+		});
+	});
+})();
+</script>
+{% endif %}
