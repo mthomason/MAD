@@ -1,7 +1,10 @@
 {% assign ga4_id = site.google_analytics_ga4 %}
 {% if ga4_id %}
-<!-- Google Analytics 4 with Consent Mode v2. Analytics storage is denied
-     until a visitor in the EEA, the UK, or Switzerland accepts. -->
+<!-- Google Analytics 4 with Consent Mode v2. Storage is denied only for
+     visitors Google geolocates to the EEA, the UK, or Switzerland; everyone
+     else gets the granted default. A visitor in a consent region grants
+     storage by accepting the banner, and the choice is remembered in
+     localStorage. -->
 <script>
 (function () {
 	var key = 'mad-analytics-consent';
@@ -9,13 +12,34 @@
 	try {
 		granted = window.localStorage.getItem(key) === 'granted';
 	} catch (e) {}
+
+	// The regions where consent is required before storage: the EEA member
+	// states, the UK, and Switzerland, as ISO 3166-1 alpha-2 codes. Google
+	// matches these against the visitor's IP, not their timezone.
+	var consentRegions = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI',
+		'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL',
+		'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'GB', 'CH'];
+
 	window.dataLayer = window.dataLayer || [];
 	window.gtag = function () { window.dataLayer.push(arguments); };
+
+	// The region-specific default must come first; the default without a
+	// region is the fallback for everyone else. Google applies the most
+	// specific matching default, so consent-region visitors stay denied
+	// while the rest of the world is measured.
+	var stored = granted ? 'granted' : 'denied';
 	window.gtag('consent', 'default', {
-		'ad_storage': 'denied',
-		'ad_user_data': 'denied',
-		'ad_personalization': 'denied',
-		'analytics_storage': granted ? 'granted' : 'denied'
+		'ad_storage': stored,
+		'ad_user_data': stored,
+		'ad_personalization': stored,
+		'analytics_storage': stored,
+		'region': consentRegions
+	});
+	window.gtag('consent', 'default', {
+		'ad_storage': 'granted',
+		'ad_user_data': 'granted',
+		'ad_personalization': 'granted',
+		'analytics_storage': 'granted'
 	});
 	window.gtag('js', new Date());
 	window.gtag('config', '{{ ga4_id }}', {
@@ -60,7 +84,15 @@
 				window.localStorage.setItem(key, value);
 			} catch (e) {}
 			if (typeof window.gtag === 'function') {
-				window.gtag('consent', 'update', { 'analytics_storage': value });
+				// The site runs no ads, so the ad signals follow the same
+				// choice as analytics storage; otherwise Google would report
+				// every consent-region visitor as an ad-signal denial.
+				window.gtag('consent', 'update', {
+					'ad_storage': value,
+					'ad_user_data': value,
+					'ad_personalization': value,
+					'analytics_storage': value
+				});
 			}
 			banner.hidden = true;
 		}
