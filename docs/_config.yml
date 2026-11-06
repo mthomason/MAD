@@ -13,8 +13,9 @@ description: >-
   parametric layout.
 url: https://docs.everydayapps.com
 # Google Analytics 4 measurement ID. The tag is emitted by
-# _includes/head-custom.html with Consent Mode v2 defaults; the banner it
-# allows is shown only to EEA/UK/CH timezones (see that file).
+# _includes/head-custom.html with Consent Mode v2 defaults: storage is denied
+# only in the EEA, the UK, and Switzerland (matched by Google on IP), and the
+# banner that asks is shown to EEA/UK/CH timezones (see that file).
 google_analytics_ga4: G-JZX1KC1NKC
 logo: /assets/mad-designer-icon-512.png
 author:
