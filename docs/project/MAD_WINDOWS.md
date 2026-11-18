@@ -298,9 +298,53 @@ or byte-neutral on Linux; the Linux CI and Apple suites are the gates):
 11) and GNUstep's Windows 10 1903+ baseline; tested on Windows 11 Enterprise
 26H2 (build 26300). Windows 7/8 are not supported by .NET 10.
 
+## 8. Third-party licensing and the Windows About page
+
+The Windows engine is a third distribution surface, registered in
+`docs/project/THIRD_PARTY_LICENSES.md` §10. It adds the GNUstep runtime to the
+compliance surface:
+
+* **GNUstep Base, gnustep-corebase and the libiconv library** are
+  LGPL-2.1-or-later. The Windows distribution must carry the LGPL-2.1 text, the
+  notice, and the written relink offer in `ThirdParty/Licenses/README.md`.
+* **libobjc2 (including libBlocksRuntime) and libffi** are MIT; retain the
+  notices.
+* **libdispatch** is Apache-2.0 with the Swift runtime exception; ship the full
+  text.
+* **FreeTDS and MariaDB Connector/C** are statically linked under the existing
+  LGPL-3.0 election; the FreeTDS `sybdb.h` edit is marked, and the existing
+  relink offer now names the Windows engine.
+* **The C libraries** (SQLite, zlib, bzip2, libarchive, OpenSSL, libpq) use the
+  existing entries and texts in `ThirdParty/Licenses/`.
+* **gnustep-make** is GPL-3.0-or-later build tooling and is not distributed; its
+  `Testing.h` is compiled only into test binaries, which are not shipped. The
+  libiconv `iconv` tools and the gnustep-corebase test programs are likewise not
+  distributed. The GNUstep Base command-line tools (`gdomap`, `gdnc`,
+  `defaults`, `plutil`, `gspath`) are GPL-3.0-or-later and are not part of
+  `mad.exe`; do not package them without the GPL text and a corresponding-source
+  offer.
+
+The exact DLL/static split is measured from the built `mad.exe` with
+`dumpbin /dependents` (or `llvm-objdump -p`) and recorded in the Phase 3b
+report; it is not inferred from the toolchain layout. The build and any package
+must copy `ThirdParty/Licenses/` and `NOTICE`.
+
+The WPF **About** window (Phase 5 shell proof, completed in Phase 6) must mirror
+the Mac's three tabs — Overview, License & Notice, and Acknowledgements — and
+list every component above, with the texts from `ThirdParty/Licenses/Windows/`
+and the shared root texts and the LGPL written offer. The Acknowledgements list is the Windows component list, not
+the Apple app's; the License & Notice tab carries the MIT/brand notice and the
+Windows relink offer. The existing iOS and macOS About screens stay Apple-only:
+they list the C libraries the Apple app links and must not claim the Apple app
+links the GNUstep runtime. The public `docs/windows.md` and `README.md` wording
+is Phase 6 and must follow the five-language documentation contract.
+
 ## Related documents
 
 * `docs/project/MAD_LINUX.md` and `Linux/README.md` — the Linux build this
   Windows build mirrors.
 * `docs/project/MAD_MACOS.md` and `Mac/README.md` — the native macOS application
   whose behaviour the WPF app will mirror.
+* `docs/project/THIRD_PARTY_LICENSES.md` §10 — the Windows engine's licensing
+  register; `ThirdParty/Licenses/` and `ThirdParty/Licenses/Windows/` — the
+  texts and the written relink offer.

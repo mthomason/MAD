@@ -1,20 +1,22 @@
 # Third-Party Software: Use and License Compliance
 
-This document records every third-party component in _MAD Designer_ — and in
-the published `mad` container image (§9) — how each one
-reaches the shipped app or image, and what its license requires. It is the compliance
-register for the project: when a library is added, removed or version-bumped, the
-entry here changes with it. The remediation plan that works through the findings
-below is `LICENSE_COMPLIANCE_PLAN.md`.
+This document records every third-party component in _MAD Designer_ — in the
+published `mad` container image (§9) and in the native Windows engine (§10) — how
+each one reaches the shipped app, image or Windows binary, and what its license
+requires. It is the compliance register for the project: when a library is added,
+removed or version-bumped, the entry here changes with it. The remediation plan
+that works through the findings below is `LICENSE_COMPLIANCE_PLAN.md`.
 
 **This is an engineering-level compliance review, not legal advice.** The
 conclusions below follow the plain text of each license and the standard
 interpretations published by its steward (FSF, Apache Foundation, Oracle). Items
 marked **unresolved** need either a written grant or a decision from the owner.
 
-Scope: the `Compressor` library matrix (`Compressor/matrix.conf`), and the
-third-party source committed to the git tree. It does not cover Apple SDK
-frameworks, which carry no redistribution obligation.
+Scope: the `Compressor` library matrix (`Compressor/matrix.conf`), the
+third-party source committed to the git tree, the Linux runtime image (§9) and
+the native Windows engine (§10). It does not cover Apple SDK frameworks, the
+Windows SDK/UCRT, or the build toolchain, which carry no redistribution
+obligation (except as noted in §10).
 
 ---
 
@@ -59,7 +61,9 @@ possibly three more.**
 The published container image (`ghcr.io/mthomason/mad`) is a second
 distribution surface with components of its own — GNUstep Base, the
 source-built runtimes, and the same C libraries as above, statically linked
-into the `mad` binary. It is registered in §9.
+into the `mad` binary. It is registered in §9. The native Windows engine is a
+third surface; its GNUstep runtime, C-library linkage, texts and written relink
+offer are registered in §10.
 
 ---
 
@@ -413,6 +417,11 @@ them if the repository is ever made public.*
 7. Add the OFL text alongside FontAwesome, and the Larabie readme alongside
    CarbonBlock. **Done 2026-10-24 — both texts are committed in
    `ThirdParty/Licenses/`, with provenance recorded there.**
+8. **Windows engine (Phase 3b/6).** Register the GNUstep runtime (§10), add the
+   LGPL-2.1/MIT/Apache texts under `ThirdParty/Licenses/Windows/`, extend the
+   written relink offer to the Windows engine, ship `ThirdParty/Licenses` and
+   `NOTICE`, and build the WPF About window from the register. The iOS/macOS
+   About screens remain Apple-only.
 
 ---
 
@@ -492,6 +501,51 @@ which case add the GPLv2 text and a written offer of the corresponding source.
 > **Carbon Block** — © 1999 Ray Larabie. Freeware, used under the terms
 > accompanying the font.
 
+For the **native Windows engine's About window**, use the C-library notices
+above and add the GNUstep runtime block below. The iOS/macOS About screens must
+not show this block as though the Apple app linked GNUstep.
+
+> ### Native Windows engine runtime
+>
+> **GNUstep Base** — © Free Software Foundation, Inc. and the GNUstep
+> contributors. This library is free software; you can redistribute it and/or
+> modify it under the terms of the GNU Lesser General Public License, version
+> 2.1 or later. A copy of the licence is included below. **To exercise your
+> right to relink the Windows engine against a modified GNUstep Base, contact
+> mthomason@gmail.com to receive the object files and build materials needed to
+> do so (available for at least three years from the last distribution of the
+> Windows engine).**
+>
+> **gnustep-corebase** — © Free Software Foundation, Inc. and the GNUstep
+> contributors. The library is free software under the GNU Lesser General
+> Public License, version 2.1 or later. The same relink offer applies.
+>
+> **libiconv (library)** — © Free Software Foundation, Inc. The library is free
+> software under the GNU Lesser General Public License, version 2.1 or later.
+> The `iconv` tools are GPL-licensed and are not shipped with the Windows
+> engine. The same relink offer applies to the library.
+>
+> **libobjc2 (including libBlocksRuntime)** — © 2009 David Chisnall. Provided
+> under the MIT licence; the copyright and permission notice are retained.
+>
+> **libdispatch** — © Apple Inc. and the Swift project authors. Provided under
+> the Apache License 2.0 with the Swift runtime exception. A copy of the licence
+> and the exception is included below.
+>
+> **libffi** — © 1996–2026 Anthony Green, Red Hat, Inc. and others. Provided
+> under the MIT licence; the copyright and permission notice are retained.
+>
+> **gnustep-make** is GPL-3.0-or-later build tooling and is not distributed with
+> the Windows engine. Its `Testing.h` is compiled only into test binaries, which
+> are not shipped. The GNUstep Base command-line tools (`gdomap`, `gdnc`,
+> `defaults`, `plutil`, `gspath`) are GPL-3.0-or-later and are not part of
+> `mad.exe`.
+>
+> **The C libraries** — SQLite, zlib, bzip2, libarchive, OpenSSL, FreeTDS,
+> MariaDB Connector/C and PostgreSQL `libpq` — are the components and notices
+> listed above; FreeTDS and MariaDB Connector/C carry the LGPL-3.0 election and
+> the written relink offer.
+
 Plus, in the repository, the full licence texts for each of the above, which are
 the ones read for this review. **Committed 2026-10-24 in `ThirdParty/Licenses/`,**
 one file per component; the provenance of each committed file (including the
@@ -509,6 +563,10 @@ recorded in `ThirdParty/Licenses/README.md`. The paths each text was read from:
 | zlib | `Compressor/build/zlib/source/src/LICENSE` |
 | sqlite3 | `Compressor/build/sqlite3/source/src/LICENSE.md` |
 | postgres | `Compressor/build/postgres/source/src/COPYRIGHT` |
+| GNUstep Base, libiconv, gnustep-corebase | `ThirdParty/Licenses/Windows/LGPL-2.1.txt` (from the pinned `COPYING.LIB` at each revision) |
+| libobjc2 | `ThirdParty/Licenses/Windows/libobjc2-MIT.txt` |
+| libdispatch | `ThirdParty/Licenses/Windows/libdispatch-Apache-2.0-with-Swift-exception.txt` |
+| libffi | `ThirdParty/Licenses/Windows/libffi-MIT.txt` |
 | asn1c | BSD text in `MADDesigner/Source/ReceiptModuleAsn1c/asn_application.h` |
 | rwpng | BSD text in `MADDesigner/Source/rwpng/rwpng.c` |
 | FontAwesome | SIL OFL 1.1 text |
@@ -567,6 +625,56 @@ would create this obligation; it is closed there.
 
 ---
 
+## 10. The native Windows engine
+
+The native Windows engine (`Windows/`, built by `Windows/Engine/build.ps1`) is a
+third distribution surface. It links the headless frameworks against a
+source-built GNUstep runtime and the same C libraries as the Apple app and Linux
+image. It is registered here because `mad.exe` and the future WPF app will ship
+the GNUstep DLLs and the C-library notices; the Apple app's About screen does
+not apply to them.
+
+| Component | Pin / version | Licence | How it reaches the Windows build | What it requires |
+|---|---|---|---|---|
+| GNUstep Base | `24654296…` (11-14 pin; 1.31.x line) | LGPL-2.1-or-later | DLL or static from `%PREFIX%\x64\Release`; exact dependency measured by `dumpbin /dependents` on `mad.exe` | notice, LGPL-2.1 text and relink offer |
+| libobjc2 (incl. libBlocksRuntime) | `a21ae931…` (2.3 line) | MIT | DLL or static from the toolchain; exact split measured by `dumpbin` | retain the copyright/permission notice |
+| libdispatch | `22798930…` (6.1.3 line) | Apache-2.0 with the Swift runtime exception | DLL or static from the toolchain; exact split measured by `dumpbin` | Apache-2.0 text with the exception |
+| libffi | v3.8.0 | MIT | runtime dependency of the GNUstep toolchain; exact split measured by `dumpbin` | retain the notice |
+| libiconv (library) | v1.19 (`a536e24a…`, kiyolee/libiconv-win-build) | LGPL-2.1-or-later | DLL or static from the toolchain; exact split measured by `dumpbin`; the `iconv` tools are GPL and are not shipped | notice, LGPL-2.1 text and relink offer |
+| gnustep-corebase (library) | `67a6f906…` | LGPL-2.1-or-later | built by the toolchain; whether it is a direct DLL dependency is recorded by the `dumpbin` check | notice, LGPL-2.1 text and relink offer; its test programs (GPL) are not shipped |
+| GNUstep Base command-line tools (`gdomap`, `gdnc`, `defaults`, `plutil`, `gspath`) | same GNUstep Base pin | GPL-3.0-or-later | **not part of `mad.exe`; do not package them** | if a package ever includes them, it must carry the GPL-3.0 text and a corresponding-source offer; the current Windows package does not |
+| gnustep-make | `e7c0730d…` | GPL-3.0-or-later | **build tooling only — not distributed** | nothing; its `Testing.h` is compiled only into test binaries, which are not shipped |
+| SQLite, zlib, bzip2, libarchive | §3.1 pins | as registered | static `.lib` linked into `mad.exe` | the same permissive terms as the app |
+| OpenSSL 3.5.9, FreeTDS 1.4.27, MariaDB Connector/C 3.4.11, libpq 17.11 | §3.1, §3.3–§3.4 pins | Apache-2.0; LGPL-3.0 election; LGPL-3.0 election; PostgreSQL License | static `.lib` linked into `mad.exe` | the same texts and relink mechanism as the app/image; FreeTDS's modified `sybdb.h` is marked |
+| Clang/LLVM 20.1.8, lld, Visual Studio 2026, Windows SDK, CMake, Ninja, NASM, MSYS2, Perl | `Windows/Engine/toolchain.conf` | build tooling | not distributed | nothing |
+| the Windows/UCRT runtime | Microsoft | OS component | resolved by the OS | none |
+
+The Windows packages must copy `ThirdParty/Licenses/` (including
+`ThirdParty/Licenses/Windows/`) and `NOTICE` beside `mad.exe` or into the app
+package; a build without them is not releasable. The Windows-specific texts are
+`ThirdParty/Licenses/Windows/LGPL-2.1.txt`,
+`libobjc2-MIT.txt`, `libdispatch-Apache-2.0-with-Swift-exception.txt` and
+`libffi-MIT.txt`. The C-library texts are the root `ThirdParty/Licenses/` files
+already used by the Apple app. The written relink offer in
+`ThirdParty/Licenses/README.md` names the Windows engine and covers GNUstep Base,
+libiconv, gnustep-corebase, FreeTDS and MariaDB Connector/C.
+
+The WPF **About** window is a Phase 5/6 deliverable: the shell proof opens it and
+it must render the Windows component list and the texts above, including the
+LGPL relink offer, from this register and `ThirdParty/Licenses/Windows/`. The iOS
+and macOS About screens stay Apple-only and must not claim the Apple app links
+GNUstep. The public `docs/windows.md` and the `README.md` wording are also Phase
+6, subject to the five-language contract in `LOCALIZATION.md`.
+
+The exact DLL/static split is not inferred: `Windows/Engine/build.ps1` records
+`dumpbin /dependents` (or `llvm-objdump -p`) for `mad.exe` and the GNUstep DLLs
+in the Phase 3b/6 build report, and this section is updated if that split
+changes. The GNUstep Base command-line tools are GPL-3.0-or-later; keep them
+out of the Windows package unless the GPL text and corresponding-source offer
+are added. The library and the tools are different licences in the same tree.
+
+---
+
 ## Appendix: re-running this review
 
 ```sh
@@ -586,4 +694,9 @@ git grep -l -e 'Copyright' -e 'Redistribution and use' -- '*.c' '*.h' '*.m' \
 # 5. attribution surface (expected: none, until §6 is done)
 grep -rn -i 'acknowledg\|third.party\|open source' MADDesigner/Source \
   MADDesigner/Resources --include='*.m' --include='*.plist'
+
+# 6. the Windows engine's runtime pins and texts
+cat Windows/Engine/toolchain.conf Windows/Engine/libraries.conf
+find ThirdParty/Licenses/Windows -maxdepth 1 -type f -print
+dumpbin /dependents Windows/Engine/build/mad.exe    # after a Windows build
 ```

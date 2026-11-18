@@ -212,6 +212,40 @@ exports in the same user work (the `.mdcache` rename issue is fixed — see
   are likewise deferred to Phase 3b and recorded in `build.ps1`, not skipped
   silently.
 
+## Third-party and licensing
+
+The Windows engine is a distribution surface of its own. It is registered in
+`docs/project/THIRD_PARTY_LICENSES.md` §10, and its notices and texts travel in
+`ThirdParty/Licenses/` (the C libraries shared with the Apple app) and
+`ThirdParty/Licenses/Windows/` (the GNUstep runtime):
+
+| Component | Licence | Notes |
+|---|---|---|
+| GNUstep Base, gnustep-corebase | LGPL-2.1-or-later | runtime DLLs; relink offer |
+| libiconv (library) | LGPL-2.1-or-later | the `iconv` tools are GPL and are not shipped |
+| libobjc2 (incl. libBlocksRuntime) | MIT | retain the notice |
+| libdispatch | Apache-2.0 with the Swift runtime exception | ship the licence text with the exception |
+| libffi | MIT | retain the notice |
+| SQLite, zlib, bzip2, libarchive | public domain / Zlib / bzip2 / BSD-2 | the existing §3.1 entries |
+| OpenSSL, FreeTDS, MariaDB Connector/C, libpq | Apache-2.0 / LGPL-3.0 election / LGPL-3.0 election / PostgreSQL | the existing §3.1–§3.4 entries; FreeTDS's `sybdb.h` is marked |
+
+`gnustep-make` is GPL-3.0-or-later **build tooling** and is not distributed; its
+`Testing.h` is compiled only into test binaries, which are not shipped. The
+GNUstep Base command-line tools (`gdomap`, `gdnc`, `defaults`, `plutil`,
+`gspath`) are GPL-3.0-or-later and are **not** part of `mad.exe`; do not package
+them unless the GPL text and corresponding-source offer are added. Clang,
+Visual Studio, the Windows SDK, CMake, Ninja, NASM and MSYS2 are build tools and
+are not distributed.
+
+The build records the actual DLL/static split with `dumpbin /dependents` (or
+`llvm-objdump -p`) on `mad.exe`; do not infer it. A Windows package must copy
+`ThirdParty/Licenses` and `NOTICE` beside `mad.exe` or into the WPF app package.
+The WPF **About** window (Phase 5 shell proof, completed in Phase 6) must render
+the Windows component list, the GNUstep and C-library texts, and the LGPL relink
+offer from the register and `ThirdParty/Licenses/Windows/`. The iOS and macOS
+About screens stay Apple-only; they must not claim the Apple app links GNUstep.
+The written offer is in `ThirdParty/Licenses/README.md`.
+
 ## Supported Windows versions
 
 `.NET 10`'s supported OS matrix (Windows 10 Enterprise 21H2/1809/1607,

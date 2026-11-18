@@ -9,6 +9,10 @@ not remove this directory during a cleanup without first reading
 family, the SIL OFL, the LGPL) require the text to travel with the distributed
 software, and the LGPL additionally requires the written offer below.
 
+The native Windows engine uses these C-library texts too, and adds the GNUstep
+runtime texts under `Windows/`; see the Windows relink offer below and
+`docs/project/THIRD_PARTY_LICENSES.md` §10.
+
 ## Where each text came from
 
 | File | Component | Source |
@@ -22,6 +26,10 @@ software, and the LGPL additionally requires the written offer below.
 | `zlib-LICENSE.txt` | zlib | `Compressor/build/zlib/source/src/LICENSE` (pinned 1.3.2). |
 | `sqlite3-LICENSE.md` | SQLite | `Compressor/build/sqlite3/source/src/LICENSE.md` (pinned 3.53.3). |
 | `postgres-LICENSE.txt` | PostgreSQL `libpq` | `Compressor/build/postgres/source/src/COPYRIGHT` (pinned 17.11). |
+| `Windows/LGPL-2.1.txt` | GNUstep Base, the libiconv library, gnustep-corebase | `COPYING.LIB` at the pinned GNUstep/libiconv revisions (`Windows/Engine/toolchain.conf`). The GNUstep test programs and the libiconv `iconv` tools are GPL; only the libraries are linked. |
+| `Windows/libobjc2-MIT.txt` | libobjc2 (including libBlocksRuntime) | `COPYING` at the pinned libobjc2 revision. |
+| `Windows/libdispatch-Apache-2.0-with-Swift-exception.txt` | libdispatch | `LICENSE` at the pinned swift-corelibs-libdispatch revision, including the Swift runtime exception. |
+| `Windows/libffi-MIT.txt` | libffi | `LICENSE` at libffi v3.8.0. |
 | `asn1c-BSD.txt` | asn1c runtime | The header comment in `MADDesigner/Source/ReceiptModuleAsn1c/asn_application.h`. |
 | `rwpng-BSD-2-Clause.txt` | pngquant `rwpng` | The header comment in `MADDesigner/Source/rwpng/rwpng.c`. |
 | `FontAwesome-OFL-1.1.txt` | FontAwesome.ttf (v4.3.0) | The canonical SIL OFL 1.1 text from openfontlicense.org. The 4.3.0 distribution carried no licence file, and the copyright line FA declared for that version was "Font Awesome by Dave Gandy - http://fontawesome.io". |
@@ -60,3 +68,28 @@ the last distribution of the image.
 
 gnustep-make (GPL-3.0-or-later) is build tooling and is **not** in the
 runtime image.
+
+## The relink offer (the native Windows engine)
+
+The native Windows engine (`Windows/`, `mad.exe` and the WPF app that will host
+it) distributes GNUstep Base, libiconv and gnustep-corebase (LGPL-2.1-or-later),
+and links FreeTDS and MariaDB Connector/C statically under the same **LGPL-3.0**
+election as the Apple app. The exact DLL/static split is measured from the built
+`mad.exe` with `dumpbin /dependents`; the build records it in
+`docs/project/MAD_WINDOWS.md`. The LGPL requires that a recipient be able to
+modify each library and relink the distributed work. To exercise that right,
+contact the copyright holder at **mthomason [at] gmail [dot] com** to receive the
+Windows engine's object files and the build materials needed to relink against a
+modified GNUstep Base, libiconv, gnustep-corebase, FreeTDS or MariaDB
+Connector/C. The pinned upstream sources are public in
+`Windows/Engine/toolchain.conf` and `Windows/Engine/libraries.conf`, and the
+engine rebuilds from them with `Windows/Engine/build.ps1`. This offer stands for
+at least three years from the last distribution of the Windows engine.
+
+gnustep-make (GPL-3.0-or-later) is build tooling and is **not** distributed with
+the Windows engine. The GNUstep `Testing.h` it supplies is compiled only into the
+test binaries, which are not shipped; the libiconv `iconv` tools and the
+gnustep-corebase test programs are likewise not distributed. The GNUstep Base
+command-line tools (`gdomap`, `gdnc`, `defaults`, `plutil`, `gspath`) are
+GPL-3.0-or-later and are not part of `mad.exe`; do not package them without the
+GPL text and a corresponding-source offer.

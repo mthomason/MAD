@@ -984,6 +984,16 @@ at https://github.com/mthomason/MAD/issues." The iOS About table has it as its
 own row above `Overview`; the Mac About overview has it as the last paragraph.
 The URL and the product names stay verbatim.
 
+**The Windows WPF About window (Phase 5 shell proof, completed in Phase 6) is a separate surface.** Its component
+list is the native Windows engine's, not the Apple app's: GNUstep Base,
+gnustep-corebase, libiconv, libobjc2, libdispatch/BlocksRuntime, libffi, and the
+C libraries, with the texts in `ThirdParty/Licenses/Windows/` and the shared root
+texts. Its chrome (title, section headings, and the three tabs, Overview,
+License & Notice, Acknowledgements) is localized like the Apple screens, but
+every component notice, licence body, copyright line, and the LGPL relink offer
+stays verbatim English. The register is `docs/project/THIRD_PARTY_LICENSES.md`
+§10; the Windows package must ship `ThirdParty/Licenses` and `NOTICE`.
+
 ## 9. Quality assurance
 
 * **Pseudo-localization:** Double-Length and Accented runs on every screen, on
