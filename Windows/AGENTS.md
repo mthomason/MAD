@@ -94,6 +94,19 @@ real CMake build can consume them once CMake's Windows ObjC support lands.
     `build.bat` path, without editing `PATH`.
 *   Do not change the compiler, STL, or Visual Studio/SDK without a new
     viability test — they are the environment, not a knob.
+*   The Windows engine's licence surface is not the Apple app's. GNUstep Base,
+    gnustep-corebase and the libiconv library are LGPL-2.1-or-later; libobjc2
+    and libffi are MIT; libdispatch is Apache-2.0 with the Swift runtime
+    exception. Their texts live in `ThirdParty/Licenses/Windows/`, the register
+    entry is `docs/project/THIRD_PARTY_LICENSES.md` §10, and the relink offer is
+    in `ThirdParty/Licenses/README.md`. Do not add GNUstep rows to the iOS/macOS
+    About screens; the WPF About window is opened by the Phase 5 shell proof and
+    completed in Phase 6, and must render the Windows components from the
+    register. A Windows package must ship
+    `ThirdParty/Licenses` and `NOTICE`. The GNUstep Base command-line tools
+    (`gdomap`, `gdnc`, `defaults`, `plutil`, `gspath`) are GPL-3.0-or-later and
+    are not part of `mad.exe`; do not package them without the GPL text and a
+    corresponding-source offer.
 
 ## Verification
 

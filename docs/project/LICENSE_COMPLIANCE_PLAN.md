@@ -273,6 +273,38 @@ Neither blocks anything else.
 
 ---
 
+## 7a. Workstream F — the native Windows engine (2026-11)
+
+The native Windows engine (`Windows/`, `mad.exe` and the future WPF app) is a
+third distribution surface. It does not introduce a new licence decision, but it
+does add a runtime and a packaging obligation:
+
+* **GNUstep runtime.** GNUstep Base, gnustep-corebase and the libiconv library
+  are LGPL-2.1-or-later; libobjc2 and libffi are MIT; libdispatch is Apache-2.0
+  with the Swift runtime exception. The exact DLL/static split is measured from
+  `mad.exe` with `dumpbin /dependents` and recorded in
+  `THIRD_PARTY_LICENSES.md` §10. gnustep-make is GPL-3.0-or-later build tooling
+  and is not distributed; its `Testing.h` is compiled only into test binaries,
+  which are not shipped. The libiconv `iconv` tools, gnustep-corebase's test
+  programs and the GNUstep Base command-line tools (`gdomap`, `gdnc`,
+  `defaults`, `plutil`, `gspath`) are likewise not distributed; the GNUstep Base
+  tools are GPL-3.0-or-later and must not be packaged without the GPL text and a
+  corresponding-source offer.
+* **Relink offer.** The written offer in `ThirdParty/Licenses/README.md` now
+  names the Windows engine and covers GNUstep Base, libiconv, gnustep-corebase,
+  FreeTDS and MariaDB Connector/C, with the pinned sources in
+  `Windows/Engine/toolchain.conf` and `libraries.conf` and the
+  `Windows/Engine/build.ps1` rebuild path.
+* **Notices and About.** The Windows texts are in
+  `ThirdParty/Licenses/Windows/`; `NOTICE` carries the Windows paragraph. The
+  Windows packages must ship `ThirdParty/Licenses` and `NOTICE`. The WPF About
+  window is opened by the Phase 5 shell proof and completed in Phase 6; it must
+  render this register. The iOS/macOS About screens stay Apple-only.
+* **Public docs.** Any `README.md` or public-site change is Phase 6 and must be
+  mirrored in all five translations under `LOCALIZATION.md`.
+
+---
+
 ## 8. Sequencing
 
 | Step | Work | Depends on |
@@ -290,6 +322,7 @@ Neither blocks anything else.
 | 11 | ~~Rewrite `NSOperation+Advanced` and `NSData+AES256` (D)~~ | done 2026-10-24 |
 | 12 | Fonts: OFL text, Larabie readme (E) | — |
 | 13 | Hygiene: `DEVELOPER.md` sentence, stale patch references | — |
+| 14 | Windows engine: register, texts, relink offer, NOTICE, About window (F) | Phase 3b/6 |
 
 Steps 2, 3, 11 and 12 are independent and can be done in any order, at any time.
 Steps 4–8 are the critical path. Step 9 is the point at which the app becomes
