@@ -1,0 +1,91 @@
+diff --git a/phases/11-libobjc2.bat b/phases/11-libobjc2.bat
+index 4b8784b..ac35555 100644
+--- a/phases/11-libobjc2.bat
++++ b/phases/11-libobjc2.bat
+@@ -3,7 +3,7 @@ setlocal
+ 
+ set PROJECT=libobjc2
+ set GITHUB_REPO=gnustep/libobjc2
+-set TAG=
++set TAG=a21ae931e4c186312701d7a4a8e85204955965a6
+ 
+ :: load environment and prepare project
+ call "%~dp0\..\scripts\common.bat" prepare_project || exit /b 1
+diff --git a/phases/13-libffi.sh b/phases/13-libffi.sh
+index 37a8afc..785669d 100755
+--- a/phases/13-libffi.sh
++++ b/phases/13-libffi.sh
+@@ -6,7 +6,7 @@ cd `dirname $0`
+ 
+ export PROJECT=libffi
+ export GITHUB_REPO=libffi/libffi
+-export TAG=`../scripts/get-latest-github-release-tag.sh $GITHUB_REPO`
++export TAG=v3.8.0
+ 
+ # load environment and prepare project
+ ../scripts/common.bat prepare_project
+diff --git a/phases/14-libiconv.bat b/phases/14-libiconv.bat
+index c1150d7..7d412b4 100644
+--- a/phases/14-libiconv.bat
++++ b/phases/14-libiconv.bat
+@@ -3,7 +3,7 @@ setlocal
+ 
+ set PROJECT=libiconv
+ set GITHUB_REPO=kiyolee/libiconv-win-build
+-set TAG=
++set TAG=a536e24a6793debf84779e0dbc8081a8af83bc1a
+ 
+ :: load environment and prepare project
+ call "%~dp0\..\scripts\common.bat" prepare_project || exit /b 1
+diff --git a/phases/18-libdispatch.bat b/phases/18-libdispatch.bat
+index 37f3ccf..297a9e2 100644
+--- a/phases/18-libdispatch.bat
++++ b/phases/18-libdispatch.bat
+@@ -3,7 +3,7 @@ setlocal
+ 
+ set PROJECT=libdispatch
+ set GITHUB_REPO=apple/swift-corelibs-libdispatch
+-set TAG=
++set TAG=22798930c98f60dcdbd8ede3edb560be6abf4a81
+ 
+ :: load environment and prepare project
+ call "%~dp0\..\scripts\common.bat" prepare_project || exit /b 1
+diff --git a/phases/20-gnustep-make.sh b/phases/20-gnustep-make.sh
+index e9d0258..054c24f 100755
+--- a/phases/20-gnustep-make.sh
++++ b/phases/20-gnustep-make.sh
+@@ -6,7 +6,7 @@ cd `dirname $0`
+ 
+ export PROJECT=gnustep-make
+ export GITHUB_REPO=gnustep/tools-make
+-export TAG=
++export TAG=e7c0730d54e272b2ff56d508fcb0bcfd9a890985
+ 
+ # load environment and prepare project
+ ../scripts/common.bat prepare_project
+diff --git a/phases/30-gnustep-base.sh b/phases/30-gnustep-base.sh
+index 5f45fca..60c573a 100755
+--- a/phases/30-gnustep-base.sh
++++ b/phases/30-gnustep-base.sh
+@@ -6,7 +6,7 @@ cd `dirname $0`
+ 
+ export PROJECT=gnustep-base
+ export GITHUB_REPO=gnustep/libs-base
+-export TAG=
++export TAG=24654296b7d3ae10495e31eca835b6d32c781bcf
+ 
+ # load environment and prepare project
+ ../scripts/common.bat prepare_project
+diff --git a/phases/40-gnustep-corebase.sh b/phases/40-gnustep-corebase.sh
+index 5945319..38f13a0 100755
+--- a/phases/40-gnustep-corebase.sh
++++ b/phases/40-gnustep-corebase.sh
+@@ -6,7 +6,7 @@ cd `dirname $0`
+ 
+ export PROJECT=gnustep-corebase
+ export GITHUB_REPO=gnustep/libs-corebase
+-export TAG=
++export TAG=67a6f90601e7b143f173d1403f9a381a6d968fc2
+ 
+ # load environment and prepare project
+ ../scripts/common.bat prepare_project

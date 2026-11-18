@@ -1,0 +1,27 @@
+diff --git a/scripts/sdkenv.bat b/scripts/sdkenv.bat
+index ec92720..ade2e8d 100644
+--- a/scripts/sdkenv.bat
++++ b/scripts/sdkenv.bat
+@@ -42,10 +42,10 @@ if "%ARCH%" == "x86" (
+ :: compiler flags: -m32/64 is required to ensure the right architecture is
+ :: built and linked. Unfortunately GNUstep Make ignores those, so we also set
+ :: them as part of the compiler.
+-if not defined CFLAGS set CFLAGS=%MFLAG%
+-if not defined CXXFLAGS set CXXFLAGS=%MFLAG%
+-if not defined OBJCFLAGS set OBJCFLAGS=%MFLAG%
+-if not defined OBJCXXFLAGS set OBJCXXFLAGS=%MFLAG%
++if not defined CFLAGS set CFLAGS=%MFLAG% -D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH
++if not defined CXXFLAGS set CXXFLAGS=%MFLAG% -D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH
++if not defined OBJCFLAGS set OBJCFLAGS=%MFLAG% -D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH
++if not defined OBJCXXFLAGS set OBJCXXFLAGS=%MFLAG% -D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH
+ if not defined ASMFLAGS set ASMFLAGS=%MFLAG%
+ if not defined CC set "CC=clang %MFLAG%"
+ if not defined CXX set "CXX=clang++ %MFLAG%"
+@@ -62,3 +62,7 @@ set CMAKE_OPTIONS=^
+   -G Ninja ^
+   -D CMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% ^
+   -D CMAKE_INSTALL_PREFIX="%INSTALL_PREFIX%" ^
++  -D CMAKE_C_FLAGS="-m64 -D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH" ^
++  -D CMAKE_CXX_FLAGS="-m64 -D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH" ^
++  -D CMAKE_OBJC_FLAGS="-m64 -D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH" ^
++  -D CMAKE_OBJCXX_FLAGS="-m64 -D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH" ^

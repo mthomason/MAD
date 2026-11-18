@@ -204,6 +204,10 @@ the headless side.
 * `Mac/README.md` -- the native macOS build, layout, and smoke-test guide (`./Mac/build.sh`).
 * `docs/project/MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
   Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
+* `docs/project/MAD_WINDOWS.md` -- the native Windows engine build: the pinned
+  toolchain recipe (Clang 20.1.8, the STL gate override, the seven GNUstep
+  revisions) and why, the framework port and its shims, and the `Windows/Engine/build.ps1`
+  entry point.
 * `docs/project/MAD_PDF_LINUX.md` -- the Linux PDF writer: status (deferred, blocked on the user's
   research), what exists and what is missing, the candidate stacks and licences, the
   open questions and the acceptance test.
