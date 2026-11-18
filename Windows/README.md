@@ -37,8 +37,11 @@ The proven, reproducible environment is recorded in
 `Engine/toolchain/bootstrap.ps1` as two patch files against the pinned
 `gnustep/tools-windows-msvc` driver:
 
-* **Clang 20.1.8, not 23.x.** Clang 23.1.5's Objective-C codegen crashes every
-  Foundation binary at startup (`0xC0000005`); Clang 20.1.8 works.
+* **Clang 20.1.8.** The Phase 1 startup crash (`0xC0000005` in every
+  Foundation binary) was a runtime regression in the floating-master GNUstep
+  components — the seven pins below fix it — not a Clang 23 codegen bug.
+  Clang 20.1.8 is the CI-tested compiler and part of the proven recipe;
+  Clang 22/23 with the pins were not tested.
 * **`-D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH`.** This machine's VS 2026
   (18.12.0) MSVC STL hard-requires "Clang 22 or newer" (`_MSVC_STL_UPDATE
   202609L`). The override is the STL's own escape hatch and is proven benign
