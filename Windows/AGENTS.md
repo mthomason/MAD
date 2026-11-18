@@ -51,11 +51,14 @@ real CMake build can consume them once CMake's Windows ObjC support lands.
 
 ## Conventions and hazards
 
-*   The two shared-source changes this increment required are both portable and
-    behaviour-neutral on Apple/Linux; they are enumerated in
-    `docs/project/MAD_WINDOWS.md` §5. Prefer a `Windows/Engine/Compat` shim
-    before editing a shared framework source; a gap that needs a source guard
-    is `#if __APPLE__` (never a `TARGET_OS_*` spelling GNUstep does not define).
+*   The one shared-source change this increment required (the `madlib.c`
+    `itoa`/`ltoa`/`ultoa` → `mad_*` rename) is portable and behaviour-neutral on
+    Apple/Linux; it is enumerated in `docs/project/MAD_WINDOWS.md` §5. The
+    `NSPropertyListSerialization+Stream.m` `NSData.h` import lives in the
+    `Windows/Engine/Compat` copy, not in shared source. Prefer a
+    `Windows/Engine/Compat` shim before editing a shared framework source; a gap
+    that needs a source guard is `#if __APPLE__` (never a `TARGET_OS_*` spelling
+    GNUstep does not define).
 *   `Engine/Compat/` mirrors `Linux/Compat/`. When a Linux shim changes, port
     the change to the Windows copy (or record why it does not apply).
 *   `.mm` files compile with `-std=gnu++20` and
@@ -75,4 +78,4 @@ real CMake build can consume them once CMake's Windows ObjC support lands.
 check: toolchain bootstrap (idempotent) + framework build + smoke test, exiting
 non-zero on any failure. The smoke test prints `SMOKE RESULT: 0 failure(s)` and
 exits 0. The Linux CI and the Apple suites are the regression gates for the
-shared-source changes this tree makes.
+shared-source change this tree makes.

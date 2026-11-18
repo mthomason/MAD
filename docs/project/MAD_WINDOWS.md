@@ -1,7 +1,7 @@
 # Compiling the MAD Engine on Windows — architecture and decision record
 
 Written 2026-11-18 against `master` for the `windows-engine` branch (Phase 2
-of `MAD-Windows-DevEnv/WINDOWS_POC_PLAN.md`). The Windows build is the sibling
+of the Windows PoC). The Windows build is the sibling
 of `Linux/`: the headless engine's Objective-C frameworks compiled natively on
 Windows with Clang against GNUstep Base, so the same engine that runs the macOS
 app and the Linux CLI can run on Windows. This document is the technical
@@ -14,10 +14,9 @@ made.
 ## 1. What this is, and what it is not
 
 The target is a native Windows MAD Designer (WPF on .NET 10 LTS) reusing the
-existing headless Objective-C engine compiled natively for Windows
-(`WINDOWS_POC_PLAN.md` §3). The engine build lands under `Windows/`, a sibling
-of `Mac/` and `Linux/`; the WPF app is a later phase (`Windows/App`, not yet
-created).
+existing headless Objective-C engine compiled natively for Windows. The engine
+build lands under `Windows/`, a sibling of `Mac/` and `Linux/`; the WPF app is
+a later phase (`Windows/App`, not yet created).
 
 This increment (the first) proves the toolchain and the framework port by
 building **MADDataStructures** and **MADFoundation** and running a smoke test.
@@ -28,14 +27,16 @@ or the app.
 
 ## 2. The toolchain recipe, and why each piece is pinned
 
-The full evidence trail is `C:\dev\mad-win-reports\viability-final.md`. The
-summary:
+The summary (this section stands alone):
 
-### 2.1 Compiler: Clang 20.1.8, not 23.x
+### 2.1 Compiler: Clang 20.1.8
 
-Clang 23.1.5's Objective-C codegen crashes every Foundation binary at startup
-(`0xC0000005`). Clang 20.1.8 produces a working toolchain. This is a pin, not
-a preference; do not upgrade LLVM without a new viability test.
+The Phase 1 startup crash (`0xC0000005` in every Foundation binary) was a
+runtime regression in the floating-master GNUstep components — the seven pins
+in §2.3 fix it — not a Clang 23 codegen bug. Clang 20.1.8 is the CI-tested
+compiler and part of the proven recipe; Clang 22/23 with the pins were not
+tested. This is a pin, not a preference; do not upgrade LLVM without a new
+viability test.
 
 ### 2.2 The STL gate override
 
@@ -179,8 +180,8 @@ block and is not a caller.
 * **The full ported Xcode suites** (GNUstep `Testing.h` + `MADTestSupport`) are
   not ported yet; the smoke test is the current gate.
 * **The remaining headless frameworks** (`MAD`, `MADSqlite3`, the drivers, …)
-  and **the CLI** are the next increments (`WINDOWS_POC_PLAN.md` §3, Phases 3–4).
-* **The WPF app** is Phase 5.
+  and **the CLI** are the next increments.
+* **The WPF app** is a later phase.
 
 ## 7. Supported Windows versions
 
@@ -190,10 +191,7 @@ block and is not a caller.
 
 ## Related documents
 
-* `C:\dev\mad-win-reports\viability-final.md` — the toolchain viability report
-  this record summarizes.
 * `docs/project/MAD_LINUX.md` and `Linux/README.md` — the Linux build this
   Windows build mirrors.
 * `docs/project/MAD_MACOS.md` and `Mac/README.md` — the native macOS application
   whose behaviour the WPF app will mirror.
-* `MAD-Windows-DevEnv/WINDOWS_POC_PLAN.md` — the overall PoC plan and phasing.
