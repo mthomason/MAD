@@ -187,9 +187,14 @@ int write_archive(char *outname, NSURL *filewrapper, int reproducible) {
 
 		// UTF8String, not -fileSystemRepresentation: GNUstep's NSString spelling
 		// returns GSNativeChar (UTF-16) on Windows, which strdup would truncate at
-		// the first NUL.  The member paths are ASCII, so UTF-8 is the same string.
+		// the first NUL.  Windows-only; the Apple/Linux spelling is unchanged.
+#if defined(_WIN32)
 		char *source_filepath_fsr = strdup(absolutePath.UTF8String);
 		char *source_path_relative_fsr = strdup(relativePath.UTF8String);
+#else
+		char *source_filepath_fsr = strdup(absolutePath.fileSystemRepresentation);
+		char *source_path_relative_fsr = strdup(relativePath.fileSystemRepresentation);
+#endif
 
 		if ((archive_status = mad_archive_write_file(archive, source_filepath_fsr,
 													 source_path_relative_fsr, reproducible)) < 0) {
@@ -389,7 +394,11 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 			dest = strdup(destinationURL.fileSystemRepresentation);
 			// UTF8String, not -fileSystemRepresentation (GNUstep NSString returns
 			// UTF-16 on Windows); see the note at write_archive.
+#if defined(_WIN32)
 			filename = strdup(destinationLastPathComponent.UTF8String);
+#else
+			filename = strdup(destinationLastPathComponent.fileSystemRepresentation);
+#endif
 			source = strdup(sourceArchive.fileSystemRepresentation);
 			success = mad_extract(source, dest, filename);
 			if (dest != 0) free(dest);
