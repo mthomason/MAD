@@ -6,9 +6,11 @@ The headless engine's native Windows build (see [`MAD_WINDOWS.md`](../docs/proje
 and this directory's [`README.md`](README.md)). It compiles the engine's
 Objective-C frameworks against GNUstep Base with Clang, the Windows sibling of
 the Linux build. Nothing here ships in the app yet; the WPF shell is a later
-phase. It builds MADDataStructures, MADFoundation, MADAPI and MADSqlite3,
-compiles the pinned SQLite amalgamation into a static library, and runs the
-ported Linux test suites for MADDataStructures, MADFoundation and MADSqlite3.
+phase. It builds all seven headless frameworks (MADDataStructures, MADFoundation,
+MADAPI, MADSqlite3, MADCocoaExtensions, MADFileManager, MAD), compiles the pinned
+SQLite/zlib/bzip2/libarchive libraries, builds `mad.exe` from `CLI/Source`, and
+runs the ported Linux test suites for MADDataStructures, MADFoundation and
+MADSqlite3.
 
 ## Layout
 

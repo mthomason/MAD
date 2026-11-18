@@ -223,6 +223,43 @@ behaviour-neutral on Apple/Linux (the same pointer bytes move through).
   `MADCocoaExtensions`, …) and **the CLI** are the next increments.
 * **The WPF app** is a later phase.
 
+## 6b. Phase 3a — the frameworks, the archive stack, and the CLI
+
+Phase 3a builds the remaining headless frameworks, the `.mad` container's C
+libraries, and `mad.exe`:
+
+* **Frameworks.** `MADCocoaExtensions` (7 files), `MADFileManager` (10) and `MAD`
+  (168) join the Phase 2/2b set, from the same Linux source lists and with the
+  same exclusion reasons (the UI tail, `MADocument`, the keychain operations, the
+  barcode element, `MADCloud`). `MADDirectoryMonitor` compiles against an inert
+  `sys/inotify.h` shim — the CLI is single-shot and needs no change events.
+* **C libraries.** `zlib` 1.3.2, `bzip2` 1.0.8 and `libarchive` 3.8.9 (the Linux
+  pins) build in `build.ps1`: zlib and bzip2 by direct clang + `llvm-lib`,
+  libarchive through CMake + clang-cl (zlib/bzip2 in; xml2/lzma/zstd/lz4/openssl
+  and the tools out), matching `Linux/lib/libraries.sh` / Compressor.
+* **CLI.** `CLI/Source` → `mad.exe`, whole-linked. `inspect`, `schema`, `query`
+  and `refresh` (76 rows) run on `London.portable.mad`; all six export digests
+  match the Mac/Linux pins byte-for-byte. `write --reproducible` is the one verb
+  still short (an open-SQLite-file read-back issue, tracked in
+  `C:\dev\mad-win-reports\phase3a-summary.md`).
+
+The additional Windows `Compat` shims are `unistd.h`, `dirent.h`, `libgen.h`,
+`sys/{unistd,fcntl,inotify}.h`, plus `MADCompat.h` gaining `strlcpy`, the
+`S_IS*`/`S_IR*` mode macros, `ssize_t`/`mode_t`, `M_PI`, `arc4random` and
+`gmtime_r`. The additional minimal shared-source changes (all `#if __APPLE__`-safe
+or byte-neutral on Linux; the Linux CI and Apple suites are the gates):
+
+* `MADReportSectionRepresentation.m` drops an empty `@finally` (clang 20.1.8's
+  GNUstep-2.2 + ARC codegen crashed on it).
+* `madtar.m` gains a `_WIN32` mtime branch (the UCRT `struct stat` has `st_mtime`,
+  no `st_mtim`).
+* `MADArchiveManager.m`, `MADStore.m` and `MADCLIInspect.m` use
+  `NSString -UTF8String` where they took `-fileSystemRepresentation` (GNUstep's
+  NSString spelling returns UTF-16 on Windows).
+* `MADDatabaseConnection+Constructor.m`'s `+Identifier:` returns the four
+  document-format constants directly, so a process linking only Sqlite3 can still
+  map a stored `driverID` to a type.
+
 ## 7. Supported Windows versions
 
 .NET 10's supported OS matrix (Windows 10 Enterprise 21H2/1809/1607, Windows
