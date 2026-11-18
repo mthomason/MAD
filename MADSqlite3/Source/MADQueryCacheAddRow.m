@@ -108,7 +108,7 @@ static NSString * const SqlDelimitorObject = @", %@";
 				// bounds the append and also gives the new length back.
 				buf_ptr = (int)strlcat(buf, ", ?", sizeof(buf));
 			}
-			buf_ptr = buf_ptr + ultoa((unsigned int)columnCounter + 1, (buf+buf_ptr));
+			buf_ptr = buf_ptr + mad_ultoa((unsigned int)columnCounter + 1, (buf+buf_ptr));
 		}
 		char *ptr = buf;
 		_sql = [[NSString alloc] initWithFormat:@"INSERT INTO main.%@ (%@) VALUES (%s)", [delegate queryTableName], _sqlColumnPart, ptr];

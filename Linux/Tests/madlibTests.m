@@ -13,7 +13,7 @@
 //    * The counters answer 0 for zero (the loop never runs), unlike madmath's
 //      digit_count_* which answer 1.  See madmathTests / MADCoreLogicTests.
 //    * The converters answer "0" for zero (do/while).
-//    * ltoa takes only non-negative input; a negative value emits garbage because
+//    * mad_ltoa takes only non-negative input; a negative value emits garbage because
 //      the remainder stays negative.  Callers pass array indices, so that is not
 //      exercised here -- it is recorded rather than pinned.
 //
@@ -54,14 +54,14 @@ static void testCountDigits(void) {
 static void testUltoa(void) {
 	char buffer[32];
 
-	MAD_PASS(ultoa(0, buffer) == 1, "ultoa reports one character for zero");
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"0", "ultoa of zero");
+	MAD_PASS(mad_ultoa(0, buffer) == 1, "mad_ultoa reports one character for zero");
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"0", "mad_ultoa of zero");
 
-	MAD_PASS(ultoa(12345, buffer) == 5, "ultoa reports five characters for 12345");
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"12345", "ultoa of 12345");
+	MAD_PASS(mad_ultoa(12345, buffer) == 5, "mad_ultoa reports five characters for 12345");
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"12345", "mad_ultoa of 12345");
 
-	MAD_PASS(ultoa(ULONG_MAX, buffer) == 20, "ultoa reports twenty characters for ULONG_MAX");
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"18446744073709551615", "ultoa of ULONG_MAX");
+	MAD_PASS(mad_ultoa(ULONG_MAX, buffer) == 20, "mad_ultoa reports twenty characters for ULONG_MAX");
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"18446744073709551615", "mad_ultoa of ULONG_MAX");
 }
 
 static void testUitoa(void) {
@@ -82,40 +82,40 @@ static void testUitoa(void) {
 static void testItoa(void) {
 	char buffer[32];
 
-	itoa(0, buffer);
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"0", "itoa of zero");
+	mad_itoa(0, buffer);
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"0", "mad_itoa of zero");
 
-	itoa(7, buffer);
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"7", "itoa of seven");
+	mad_itoa(7, buffer);
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"7", "mad_itoa of seven");
 
-	itoa(-7, buffer);
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"-7", "itoa of minus seven");
+	mad_itoa(-7, buffer);
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"-7", "mad_itoa of minus seven");
 
-	itoa(12345, buffer);
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"12345", "itoa of 12345");
+	mad_itoa(12345, buffer);
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"12345", "mad_itoa of 12345");
 
-	itoa(-12345, buffer);
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"-12345", "itoa of minus 12345");
+	mad_itoa(-12345, buffer);
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"-12345", "mad_itoa of minus 12345");
 
-	itoa(INT_MAX, buffer);
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"2147483647", "itoa of INT_MAX");
+	mad_itoa(INT_MAX, buffer);
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"2147483647", "mad_itoa of INT_MAX");
 }
 
 static void testLtoa(void) {
 	char buffer[32];
 
-	ltoa(0, buffer);
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"0", "ltoa of zero");
+	mad_ltoa(0, buffer);
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"0", "mad_ltoa of zero");
 
-	ltoa(9, buffer);
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"9", "ltoa of nine");
+	mad_ltoa(9, buffer);
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"9", "mad_ltoa of nine");
 
-	ltoa(10, buffer);
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"10", "ltoa of ten");
+	mad_ltoa(10, buffer);
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"10", "mad_ltoa of ten");
 
 	// The callers (query-table aliases) hand it a non-negative index.
-	ltoa(LONG_MAX, buffer);
-	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"9223372036854775807", "ltoa of LONG_MAX");
+	mad_ltoa(LONG_MAX, buffer);
+	MAD_PASS_EQUAL([NSString stringWithUTF8String:buffer], @"9223372036854775807", "mad_ltoa of LONG_MAX");
 }
 
 #pragma mark - Reverse

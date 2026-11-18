@@ -503,7 +503,7 @@ static os_log_t mlog;
 - (NSString *)tableName {
 	char buf[22];
 	buf[0] = 't';
-	ultoa(self.tag, (buf+1));
+	mad_ultoa(self.tag, (buf+1));
 	char *ptr = buf;
 	NSString *tableName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
 	// The buffer is ASCII "t<decimal>", so the fallback is unreachable; it keeps
@@ -514,7 +514,7 @@ static os_log_t mlog;
 - (NSString *)columnNameForIdentifier:(NSString *)identifier {
 	char buf[22];
 	buf[0] = 'c';
-	ultoa(identifier.hash, (buf+1));
+	mad_ultoa(identifier.hash, (buf+1));
 	char *ptr = buf;
 	return [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
 }
@@ -536,8 +536,8 @@ static os_log_t mlog;
 	char buf[22];
 	buf[0] = 'c';
 	NSAssert(column.identifier == column.fieldName, @"Column identifier and field name should be the same.");
-	ultoa(column.identifier.hash, (buf+1));
-	//ultoa(column.fieldName.hash, (buf+1));
+	mad_ultoa(column.identifier.hash, (buf+1));
+	//mad_ultoa(column.fieldName.hash, (buf+1));
 	char *ptr = buf;
 	NSString *columnName = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
 	[self.columnKeys addObject:columnName];
@@ -827,7 +827,7 @@ static os_log_t mlog;
 - (NSString *)cacheTableNameForGroupLevel:(NSUInteger)groupLevel {
 	char buf[22];
 	buf[0] = 's';
-	ultoa(groupLevel, (buf+1));
+	mad_ultoa(groupLevel, (buf+1));
 	char *ptr = buf;
 	return [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
 }
@@ -835,8 +835,8 @@ static os_log_t mlog;
 - (NSString *)indexNameForGroupLevel:(NSUInteger)groupLevel andIndex:(NSUInteger)index {
 	char buf[22];
 	buf[0] = 'i';
-	ultoa(groupLevel, (buf+1));
-	ultoa(index, (buf+1));
+	mad_ultoa(groupLevel, (buf+1));
+	mad_ultoa(index, (buf+1));
 	char *ptr = buf;
 	return [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
 }
