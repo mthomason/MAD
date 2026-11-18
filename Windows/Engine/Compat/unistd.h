@@ -22,7 +22,13 @@
 #include <process.h>
 #include <fcntl.h>
 
-#define open    _open
+// open is a function-like macro, not a bare rename: POSIX open has no
+// text/binary distinction, but the UCRT's _open defaults to text mode, where
+// _read stops at the first 0x1A (Ctrl-Z) byte.  A .mad store is a SQLite file,
+// which is full of such bytes, so a text-mode open read it as 116 bytes instead
+// of its real size (the "write --reproducible" 518-byte archive bug).  OR'ing
+// _O_BINARY into the flags restores the byte-for-byte POSIX behaviour.
+#define open(path, oflag, ...) _open((path), ((oflag) | _O_BINARY), ##__VA_ARGS__)
 #define close   _close
 #define read    _read
 #define write   _write

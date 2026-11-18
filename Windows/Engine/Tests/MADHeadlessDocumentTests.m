@@ -40,20 +40,25 @@
 #import <MADFoundation/MADURLFactory.h>
 
 // __FILE__ is absolute here (CMake hands the compiler an absolute path), so
-// Tests -> Linux -> the repository root.
+// Tests -> Linux -> the repository root.  The Windows copies live one level
+// deeper (Windows/Engine/Tests), so they go up one more level.
+static NSString *MADHeadlessRepositoryRoot(void) {
+	NSString *directory = [@(__FILE__) stringByDeletingLastPathComponent];
+	NSString *repositoryRoot = directory;
+#if defined(_WIN32)
+	repositoryRoot = [repositoryRoot stringByDeletingLastPathComponent]; // Engine
+#endif
+	repositoryRoot = [repositoryRoot stringByDeletingLastPathComponent]; // Linux / Windows
+	return [repositoryRoot stringByDeletingLastPathComponent];           // the root
+}
+
 static NSString *MADHeadlessFixturePath(void) {
-	NSString *testFile = [@(__FILE__) stringByDeletingLastPathComponent];
-	NSString *linuxDirectory = [testFile stringByDeletingLastPathComponent];
-	NSString *repositoryRoot = [linuxDirectory stringByDeletingLastPathComponent];
-	return [[repositoryRoot stringByAppendingPathComponent: @"CLI/Fixtures"]
+	return [[MADHeadlessRepositoryRoot() stringByAppendingPathComponent: @"CLI/Fixtures"]
 			stringByAppendingPathComponent: @"London.portable.mad"];
 }
 
 static NSString *MADHeadlessSampleDatabasePath(void) {
-	NSString *testFile = [@(__FILE__) stringByDeletingLastPathComponent];
-	NSString *linuxDirectory = [testFile stringByDeletingLastPathComponent];
-	NSString *repositoryRoot = [linuxDirectory stringByDeletingLastPathComponent];
-	return [[repositoryRoot stringByAppendingPathComponent:
+	return [[MADHeadlessRepositoryRoot() stringByAppendingPathComponent:
 			 @"MADDesigner/Resources/Assets/Samples.xcassets/Data/chinook.dataset"]
 			stringByAppendingPathComponent: @"chinook.sqlite3"];
 }

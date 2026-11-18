@@ -26,14 +26,21 @@
 					 options:(NSUInteger)opt
 					  format:(NSPropertyListFormat *)format
 					   error:(NSError **)error {
-	[stream open];
+	// The stream is already open: the only caller, MADDataTable's
+	// -loadFromCacheWithUrl:, opens it before this call and closes it after, the
+	// way Apple's +propertyListWithStream: reads an open stream.  The shim must
+	// not open it again.  GNUstep's win32 GSFileInputStream -open calls
+	// CreateFileW (FILE_SHARE_READ only) every time and overwrites _loopID, so a
+	// second open leaks the first handle; that handle then blocks the .mdcache's
+	// later atomic rewrite (MoveFileEx fails with "being used by another
+	// process"), which is the repeated-export failure.  Reading an already-open
+	// stream is the correct, leak-free behaviour on both platforms.
 	NSMutableData *data = [NSMutableData data];
 	uint8_t buffer[4096];
 	NSInteger read = 0;
 	while ((read = [stream read:buffer maxLength:sizeof(buffer)]) > 0) {
 		[data appendBytes:buffer length:(NSUInteger)read];
 	}
-	[stream close];
 	if (read < 0) {
 		if (error != NULL) {
 			*error = [NSError errorWithDomain:@"MADCompatPropertyList"

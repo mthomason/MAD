@@ -9,8 +9,8 @@ the Linux build. Nothing here ships in the app yet; the WPF shell is a later
 phase. It builds all seven headless frameworks (MADDataStructures, MADFoundation,
 MADAPI, MADSqlite3, MADCocoaExtensions, MADFileManager, MAD), compiles the pinned
 SQLite/zlib/bzip2/libarchive libraries, builds `mad.exe` from `CLI/Source`, and
-runs the ported Linux test suites for MADDataStructures, MADFoundation and
-MADSqlite3.
+runs the ported Linux test suites (107 suites + the smoke test, 966 tests, 6
+needs, 0 failures).
 
 ## Layout
 
@@ -35,14 +35,19 @@ MADSqlite3.
     inventory; `build.ps1` reads them back so the two cannot drift.
 *   **`Engine/Compat/`** — the Windows shims, a copy of `Linux/Compat` adapted
     for Windows: `syslog.h` (no-op), `pthread.h` (`CRITICAL_SECTION` mutex),
-    the `NSData+ReadingOptions` shim dropped, the `NSPropertyListSerialization+Stream.m`
-    import fixed, `MADCompat.h` (the force-included prelude) with the
-    `<endian.h>` block dropped and a `static inline strlcat` added, and
-    `NSURL+FileSystem.m` answering UTF-8 (not GNUstep's UTF-16).
+    the `NSData+ReadingOptions` shim dropped, `NSPropertyListSerialization+Stream.m`
+    (reads the already-open stream — never re-opens it), `unistd.h` (`open`
+    with `_O_BINARY`), `dirent.h`/`libgen.h`/`sys/{unistd,fcntl,inotify}.h`,
+    `MADCompat.h` (the force-included prelude) with the `<endian.h>` block
+    dropped and a `static inline strlcat` added, and `NSURL+FileSystem.m`
+    answering UTF-8 (not GNUstep's UTF-16).
 *   **`Engine/Tests/`** — the ported Linux test suites (one `.m` per
     executable) plus the smoke test, and `Support/MADTestSupport.h` (the
-    GNUstep `Testing.h` glue). BDHostTests is deliberately absent — `BDHost.m`
-    is excluded on Windows.
+    GNUstep `Testing.h` glue). `BDHostTests` is deliberately absent (`BDHost.m`
+    is excluded on Windows), as are the four MAD suites that need the Phase 3b
+    drivers (`MADDatabaseDriverDispatchTests`, `MADQueryFullTests`,
+    `MADSQLParserTests`, `MADQueryMaxFieldLengthTests`) — all recorded in
+    `build.ps1`, not skipped silently.
 *   **`Engine/build/`** — build output (gitignored): clang objects, `smoke.exe`,
     the `tests/` executables, the SQLite library, the toolchain clone, and the
     include-shim junctions.

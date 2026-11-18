@@ -120,6 +120,18 @@ static BOOL MADMonitorWaitForChange(MADRecordingDirectoryMonitorDelegate *delega
 	return delegate.changeCount > 0;
 }
 
+// The directory monitor is inert on Windows: sys/inotify.h's inotify_init1
+// answers no descriptor, so -startMonitoring builds no dispatch source and no
+// change is ever observed (the CLI is single-shot).  The three tests that need
+// a live source record a need and return there; the four that assert no source
+// (init, missing-directory, stop-without-start, stop-then-observe) still run.
+#if defined(_WIN32)
+#define MADMonitorRequireLiveSource() \
+	MAD_NEED(NO, @"the directory monitor is inert on Windows (sys/inotify.h shim)")
+#else
+#define MADMonitorRequireLiveSource() ((void)0)
+#endif
+
 #pragma mark - Description
 
 static void testInitStoresTheURLAndReportsNoDescriptor(void) {
@@ -156,6 +168,7 @@ static void testStartMonitoringAMissingDirectoryIsANoOp(void) {
 }
 
 static void testStartingTwiceKeepsOneSource(void) {
+	MADMonitorRequireLiveSource();
 	NSURL *directory = MADMonitorMakeTempDirectory();
 	MADDirectoryMonitor *monitor = [[MADDirectoryMonitor alloc] initWithURL:directory];
 
@@ -182,6 +195,7 @@ static void testStopMonitoringWithoutStartingIsSafe(void) {
 }
 
 static void testObservesAChangeInTheMonitoredDirectory(void) {
+	MADMonitorRequireLiveSource();
 	NSURL *directory = MADMonitorMakeTempDirectory();
 	MADDirectoryMonitor *monitor = [[MADDirectoryMonitor alloc] initWithURL:directory];
 	MADRecordingDirectoryMonitorDelegate *delegate = [[MADRecordingDirectoryMonitorDelegate alloc] init];
@@ -228,6 +242,7 @@ static void testStoppedMonitorStopsObserving(void) {
 }
 
 static void testReleasingAMonitorWithACancelPendingDoesNotCrash(void) {
+	MADMonitorRequireLiveSource();
 	// docs/project/BUGS.md: with the cancel pending, the handler used to dereference a nil owner.
 	// The source's queue is held down so the handler cannot have run before the
 	// monitor is released, then let go: the handler runs with nothing else retaining

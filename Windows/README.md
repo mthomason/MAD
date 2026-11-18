@@ -9,13 +9,11 @@ This increment builds all seven headless frameworks — **MADDataStructures**,
 **MADFoundation**, **MADAPI**, **MADSqlite3**, **MADCocoaExtensions**,
 **MADFileManager** and **MAD** — compiles the pinned SQLite, zlib, bzip2 and
 libarchive libraries, and builds **`mad.exe`** from `CLI/Source`. It runs the
-ported Linux test suites for MADDataStructures, MADFoundation and MADSqlite3
-(GNUstep `Testing.h` + `MADTestSupport.h`) plus a smoke test. `mad.exe` runs
-`inspect`, `schema`, `query`, `refresh` (76 rows on the London fixture) and
-`export` in every Foundation format with byte-identical digests; `write
---reproducible` is the one verb still short (see `Known gaps`). The remaining
-Linux test files (MAD, MADFileManager, MADCocoaExtensions, MADAPI) are copied
-into `Engine/Tests/` but not yet wired into the run.
+ported Linux test suites (GNUstep `Testing.h` + `MADTestSupport.h`) plus a
+smoke test: 107 suites, 966 tests, 6 needs, 0 failures. `mad.exe` runs
+`inspect`, `schema`, `query`, `refresh` (76 rows on the London fixture),
+`export` in every format, and `write --reproducible` — all with byte-identical
+digests to the Mac/Linux pins in `Linux/README.md`.
 
 ## Prerequisites
 
@@ -91,7 +89,14 @@ The ported suites are `Engine/Tests/*.m`, one executable each, driven by
 shape as `Linux/Tests`. The run prints a `MADTEST <suite> tests=… needs=…
 skips=… failed=…` line per suite; the build fails on any non-zero exit. The one
 deliberate skip is `MADDataTableFastBenchmarkTests`, which skips at its default
-scale zero (set `MAD_BENCH_ROWS=<n>` to run the benchmarks).
+scale zero (set `MAD_BENCH_ROWS=<n>` to run the benchmarks). The six recorded
+needs are the platform gaps the Linux image reports: `MADDirectoryMonitorTests`
+(3 — the Windows directory monitor is inert, `sys/inotify.h` shim),
+`MADStoreTests` (1 — Core Data + the compiled `MAD.momd`) and
+`RptqStoreContextTests` (2 — the converter/document path). Four MAD suites that
+need the Phase 3b drivers are not registered yet — `MADDatabaseDriverDispatchTests`,
+`MADQueryFullTests`, `MADSQLParserTests` and `MADQueryMaxFieldLengthTests` —
+recorded in `build.ps1`, not skipped silently.
 
 > The build wrapper uses the `vcvars64` environment, an absolute `build.bat`
 > path, and the `BASH` setting, without rewriting `PATH` (the vcvars64 `PATH`
@@ -122,6 +127,12 @@ into a COFF `sqlite3.lib`. The framework imports it as `<MADSqlite3/sqlite3.h>`
 through a header shim beside the framework self-import junction, the same way
 the Linux build exposes the header.
 
+The `.mad` container's archive stack is built the same way from the Linux pins
+in `Engine/libraries.conf`: **zlib 1.3.2** and **bzip2 1.0.8** (direct `clang` +
+`llvm-lib`) and **libarchive 3.8.9** (CMake + clang-cl; zlib/bzip2 in, the
+tools out). `MADArchiveManager.m`/`madtar.m` link them to read and write a
+document's bzip2/tar body.
+
 The per-framework source lists, with the exclusion reasons, are
 `Engine/cmake/<Name>Sources.cmake`, mirroring `Linux/cmake/`. The Windows shims
 live in `Engine/Compat/` (a copy of `Linux/Compat` adapted for Windows):
@@ -133,7 +144,17 @@ live in `Engine/Compat/` (a copy of `Linux/Compat` adapted for Windows):
 * the `NSData+ReadingOptions` shim is **dropped** — the pinned GNUstep master
   already carries `NSDataReadingOptions` and `-options:error:`.
 * `NSPropertyListSerialization+Stream.m` gains an explicit
-  `#import <Foundation/NSData.h>` (Windows header-include-order divergence).
+  `#import <Foundation/NSData.h>` (Windows header-include-order divergence), and
+  reads the already-open stream rather than opening it again — a second open
+  leaks a `FILE_SHARE_READ` handle that blocked the `.mdcache`'s atomic rewrite
+  (the repeated-export failure).
+* `unistd.h` maps POSIX `open`/`read`/`write`/`close`/`access`/`chdir`/`mkdir`
+  onto the UCRT `_`-spellings, and `open` ORs in `_O_BINARY` so a file's bytes
+  are read raw — the UCRT's text-mode default treated the SQLite store's `0x1A`
+  byte as EOF, which was the `write --reproducible` 518-byte-archive bug.
+* `dirent.h`, `libgen.h`, `sys/{unistd,fcntl,inotify}.h` — the container code's
+  POSIX imports; `sys/inotify.h` is an inert stub (`inotify_init1` answers `-1`,
+  so `MADDirectoryMonitor` is a no-op on Windows).
 * `MADCompat.h` drops the `<endian.h>` + `htonll`/`ntohll` block (not used by
   these two frameworks, and `<endian.h>` does not exist on Windows).
 * `MADCompat.h` gains a `static inline strlcat` — the Windows UCRT has no
@@ -173,22 +194,23 @@ mad write     CLI\Fixtures\London.portable.mad --out copy.mad --reproducible
 
 The export digests are byte-identical to the Mac/Linux pins in `Linux/README.md`
 (json `569c6ee2…`, csv `773f6215…`, text `7dcee96c…`, html `285541ed…`,
-html-flow `0565204a…`, json-report `9d01d0da…`). `export` refreshes the document
-itself; clear `%USERPROFILE%\GNUstep\Library\Caches\<hash>` between runs (a fresh
-run is clean).
+html-flow `0565204a…`, json-report `9d01d0da…`), and `write --reproducible`
+writes the same 16261-byte document the Mac and Linux write
+(`09815b24e91e03b6e526008f7c2700074fed10679771b9e1ee4609e54a1192f5`).
+`export` refreshes the document itself and rewrites the row cache; repeated
+exports in the same user work (the `.mdcache` rename issue is fixed — see
+`Engine/Compat/NSPropertyListSerialization+Stream.m`).
 
 ## Known gaps
 
 * `BDHost` (reverse DNS) and `MADKeyChain` (Security.framework) are excluded;
   `BDHostTests` is not registered on Windows for the same reason (its class
   cannot link without `BDHost.m`). `BDHost` needs a Winsock2 port.
-* `write --reproducible` is still short: the archive write reads the store back
-  through `_open`/`_read` while it is open and sees only the SQLite header, so the
-  copy is undersized (518 vs 16261 bytes). Tracked in
-  `C:\dev\mad-win-reports\phase3a-summary.md`.
 * The database drivers (MADMySQL, MADTds/MADTdsClient, MADPostgres) are Phase 3b.
-* The MAD/MADFileManager/MADCocoaExtensions/MADAPI test files are copied but not
-  yet wired into `build.ps1`.
+  Four MAD suites that need those drivers — `MADDatabaseDriverDispatchTests`,
+  `MADQueryFullTests`, `MADSQLParserTests` and `MADQueryMaxFieldLengthTests` —
+  are likewise deferred to Phase 3b and recorded in `build.ps1`, not skipped
+  silently.
 
 ## Supported Windows versions
 

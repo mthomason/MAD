@@ -522,7 +522,45 @@ $testNames = @(
 	# MADSqlite3
 	"MADDatabaseSqlite3BindingTests", "MADDatabaseSqlite3DatabaseTests",
 	"MADDatabaseSqlite3ResultValueTests", "MADDatabaseSqlite3Tests",
-	"MADDataTableFastBenchmarkTests", "MADDataTableFastSelectTests"
+	"MADDataTableFastBenchmarkTests", "MADDataTableFastSelectTests",
+	# MADFileManager
+	"MADAppStorageOptionTests", "MADDirectoryMonitorTests",
+	"MADFileInfoTests", "MADFileUtilitiesTests",
+	"MADLocalFileCoordinatorTests", "MADMetaDataTests", "MADStorageStateTests",
+	# MADCocoaExtensions
+	"MADBorderStyleTests", "MADDirectionTests", "MADGeometryExtrasTests",
+	"MADMarginTests", "MADMathAlgebraTests", "MADPaddingTests",
+	"MADTextStyleTests", "MTMathTests", "NSNumberFormatterExtensionsTests",
+	# MADAPI
+	"MADAPIEnumsAndConstantsTests", "MADDatabaseDriverRegistryTests",
+	"MADDatabaseConnectionTests", "MADDatabaseDataBindingTests",
+	"MADDatabaseFieldTests", "MADDatabaseTableTests", "MADDatabaseTests",
+	"MADErrorContainerTests", "MADNotificationDidReadRowsTests", "MADQueryTests",
+	# MAD.  Four of the Linux MAD suites are deferred to Phase 3b with the
+	# drivers: MADDatabaseDriverDispatchTests, MADQueryFullTests and
+	# MADSQLParserTests each import and instantiate MADMySQL/MADTdsClient/
+	# MADPostgres, whose frameworks (and the live fixtures) Phase 3a does not
+	# build, and MADQueryMaxFieldLengthTests dispatches MADDatabaseTypeMySQL
+	# through the constructor (no driver is registered).  The gap is recorded
+	# here rather than silently skipped, exactly as BDHostTests is above.
+	"MADArchiveManagerTests", "MADCoreLogicTests",
+	"MADHeadlessDocumentTests", "MADDataTableRegressionTests",
+	"MADDesignerQueryTests", "MADDesignerViewerTests",
+	"MADDocumentObjectDataReferenceTests", "MADDocumentObjectDataReferenceAggregateTests",
+	"MADDocumentObjectDataReferenceImageTests", "MADDocumentObjectDataReferenceLabelDynamicTests",
+	"MADDocumentObjectDataReferenceLabelStaticTests", "MADFontTests",
+	"MADLegacyStoreConversionTests", "MADModelQueryFieldTests", "MADModelQueryTableTests",
+	"MADNotificationAndOperationTests", "MADOperationHoldsProtocolsTests",
+	"MADPageOptionsTests", "MADQueryCacheAggregateFunctionTests", "MADQueryDefinitionTests",
+	"MADSQLQueryCompilerTests",
+	"MADQueryPredicateTests", "MADQuerySampleDataTests", "MADQuerySelectExpressionTests",
+	"MADQueryTestTests", "MADQueryFullTableEnumeratorTests",
+	"MADQuerySimpleTypesTests", "MADReportExporterTests", "MADReportSectionEnumeratorTests",
+	"MADReportSectionRepresentationTests", "MADReportSectionTests", "MADRptqDatabaseTests",
+	"MADRptqDocumentSectionTests", "MADRptqQueryTests", "MADRptqValueTypeTests",
+	"MADSchemaFieldSelectorModelTests", "MADStoreTests", "MADStoreMigrationTests",
+	"RptqDataHelperTests", "RptqDocumentElementFormulaTests", "RptqDocumentElementGroupKeyTests",
+	"RptqDocumentElementLabelLinkTests", "RptqDocumentSectionEnumeratorTests", "RptqStoreContextTests"
 )
 
 $testExes = New-Object System.Collections.Generic.List[string]
@@ -531,7 +569,7 @@ foreach ($name in $testNames) {
 	$obj = Join-Path $ObjDir ("test_" + $name + ".obj")
 	$exe = Join-Path $TestExeDir ($name + ".exe")
 	Write-Host "### test $name"
-	Compile-One $src $obj @("-fno-objc-arc", "-I$TestingInclude", "-I$TestsSupportDir")
+	Compile-One $src $obj @("-fno-objc-arc", "-I$TestingInclude", "-I$TestsSupportDir", "-I$Sqlite3Dir")
 	Write-Host "  linking $name.exe"
 	& clang "-fuse-ld=lld" "-fexceptions" "-fobjc-runtime=gnustep-2.2" "-fblocks" "-m64" `
 		"-L$GsLib" @allObjects $obj @archiveLibs @linkLibs `
