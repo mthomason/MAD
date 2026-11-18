@@ -24,9 +24,16 @@
 #import <MAD/MADStore.h>
 
 static NSString *MADArchiveFixturePath(void) {
-	NSString *testFile = [@(__FILE__) stringByDeletingLastPathComponent];
-	NSString *linuxDirectory = [testFile stringByDeletingLastPathComponent];
-	NSString *repositoryRoot = [linuxDirectory stringByDeletingLastPathComponent];
+	// __FILE__ is absolute; the fixture is CLI/Fixtures/London.portable.mad.  The
+	// Linux tests live at Linux/Tests (two levels under the root); the Windows
+	// copies live at Windows/Engine/Tests (three levels under it).
+	NSString *directory = [@(__FILE__) stringByDeletingLastPathComponent];
+	NSString *repositoryRoot = directory;
+#if defined(_WIN32)
+	repositoryRoot = [repositoryRoot stringByDeletingLastPathComponent]; // Engine
+#endif
+	repositoryRoot = [repositoryRoot stringByDeletingLastPathComponent]; // Linux / Windows
+	repositoryRoot = [repositoryRoot stringByDeletingLastPathComponent]; // the root
 	return [[repositoryRoot stringByAppendingPathComponent: @"CLI/Fixtures"]
 			stringByAppendingPathComponent: @"London.portable.mad"];
 }

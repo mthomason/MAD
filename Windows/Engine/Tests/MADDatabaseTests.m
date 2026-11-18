@@ -299,10 +299,19 @@ static void testNewDatabaseWithConnectionReturnsInstanceOfReceiver(void) {
 	MADTestCredentialConnection *connection = [[MADTestCredentialConnection alloc] init];
 	MADDatabase *db = [MADDatabase newDatabaseWithConnection:connection];
 
+#if defined(_WIN32)
+	// The Windows build links every framework into every test, so MAD's
+	// MADDatabase+Constructor category -- which dispatches by driver type -- is
+	// present and overrides the base factory; MADDatabaseTypeSample1 has no
+	// registered driver, so the answer is nil.  Linux links only madapi, whose
+	// test sees the base class's -newDatabaseWithConnection: directly.
+	MAD_PASS(db == nil, "the driver-dispatch factory has no Sample1 driver on Windows");
+#else
 	MAD_PASS(db != nil, "the factory builds an instance");
 	MAD_PASS_EQUAL(NSStringFromClass([db class]), NSStringFromClass([MADDatabase class]), "the instance is the receiver class");
 	// The base factory ignores the connection; subclasses that care override it.
 	MAD_PASS(db.databaseConnection == nil, "the base factory ignores the connection");
+#endif
 }
 
 #pragma mark - NSCopying
@@ -388,6 +397,12 @@ static void testSecureCodingRoundTrip(void) {
 	MAD_PASS(decoded.isLicensedUser, "the licensed flag survives the round trip");
 	MAD_PASS(decoded.errors.count == (NSUInteger)1, "the errors survive the round trip");
 	MAD_PASS(decoded.databaseConnection == nil, "the connection does not survive");
+#elif defined(_WIN32)
+	// The pinned Windows GNUstep master implements secure archiving, unlike
+	// Linux's gnustep-base 1.31.1 whose strict archive is nil; the permissive
+	// round trip is testInsecureNSCodingRoundTrip's job either way.
+	MAD_PASS(data != nil, "the strict archive has bytes");
+	MAD_PASS(error == nil, "the strict archive succeeds without an error");
 #else
 	// GNUstep's strict archiver answers nil with no error (Linux/README.md).  The
 	// permissive round trip is testInsecureNSCodingRoundTrip's job.

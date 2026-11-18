@@ -37,11 +37,16 @@
 #import <MAD/NSPredicate+Creators.h>
 
 // GNUstep's -[NSPredicate predicateFormat] renders equality as "=" and a nil
-// constant as "(null)"; Apple renders "==" and "nil".  The predicates the
-// creators build are the same on both platforms -- only the description
-// differs -- so the expected strings follow the platform.
+// constant as "(null)"; Apple renders "==" and "nil".  The pinned Windows
+// GNUstep master renders equality as "=" (like Linux) but a nil constant as
+// "nil" (like Apple) -- a master-vs-1.31.1 difference.  The predicates the
+// creators build are the same on all three -- only the description differs --
+// so the expected strings follow the platform.
 #if __APPLE__
 #define MADPredicateFormatEqual @"=="
+#define MADPredicateFormatNil	@"nil"
+#elif defined(_WIN32)
+#define MADPredicateFormatEqual @"="
 #define MADPredicateFormatNil	@"nil"
 #else
 #define MADPredicateFormatEqual @"="

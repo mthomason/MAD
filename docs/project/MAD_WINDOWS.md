@@ -239,9 +239,41 @@ libraries, and `mad.exe`:
   and the tools out), matching `Linux/lib/libraries.sh` / Compressor.
 * **CLI.** `CLI/Source` → `mad.exe`, whole-linked. `inspect`, `schema`, `query`
   and `refresh` (76 rows) run on `London.portable.mad`; all six export digests
-  match the Mac/Linux pins byte-for-byte. `write --reproducible` is the one verb
-  still short (an open-SQLite-file read-back issue, tracked in
-  `C:\dev\mad-win-reports\phase3a-summary.md`).
+  match the Mac/Linux pins byte-for-byte, and `write --reproducible` writes the
+  same 16261-byte document (`09815b24…`) the Mac and Linux write.
+
+### 6b.1 The two Windows-only runtime fixes (Phase 3a final)
+
+* **`write --reproducible` (the 116-byte store read).** The archive writer's
+  `open`/`read` went through `Windows/Engine/Compat/unistd.h`, whose `open`
+  mapped to the UCRT `_open` — which defaults to *text* mode.  A SQLite store
+  contains a `0x1A` (Ctrl-Z) byte at offset 116; text-mode `_read` stops there
+  as EOF, so the writer saw 116 of 663552 bytes and emitted a 518-byte archive.
+  The shim now ORs `_O_BINARY` into the flags, so `open`/`read` are the POSIX
+  byte-for-byte behaviour.  Guarded to the Windows shim; the Apple/Linux bytes
+  are unchanged.  Pinned by `MADArchiveManagerTests` (5 tests, 0 needs).
+* **Repeated `export` in one user (the `.mdcache` rename).** The row-cache
+  `.mdcache` is a plist read through `NSInputStream` then rewritten atomically.
+  `Compat/NSPropertyListSerialization+Stream.m` opened the already-open stream
+  a second time; GNUstep's win32 `GSFileInputStream -open` calls `CreateFileW`
+  (`FILE_SHARE_READ`) every time and overwrites `_loopID`, leaking the first
+  handle.  That handle blocked the later `MoveFileEx` over the `.mdcache`
+  (`"being used by another process"`), so the second export failed.  The shim
+  now reads the open stream without re-opening it (Apple's contract), and two
+  exports in one user both succeed.
+
+### 6b.2 The test inventory
+
+The copied MAD/MADFileManager/MADCocoaExtensions/MADAPI suites are wired into
+`build.ps1` (fixture paths adapted for `Windows/Engine/Tests`): **107 ported
+suites + the smoke test, 966 tests, 6 needs, 5 skips, 0 failures**. The six
+needs match the Linux image's platform gaps: `MADDirectoryMonitorTests` (3 — the
+Windows monitor is inert), `MADStoreTests` (1 — Core Data + `MAD.momd`) and
+`RptqStoreContextTests` (2 — the converter/document path). Four MAD suites that
+need the Phase 3b drivers are deferred and recorded in `build.ps1`:
+`MADDatabaseDriverDispatchTests`, `MADQueryFullTests`, `MADSQLParserTests` and
+`MADQueryMaxFieldLengthTests`. The five skips are the SQLite benchmark at its
+default scale.
 
 The additional Windows `Compat` shims are `unistd.h`, `dirent.h`, `libgen.h`,
 `sys/{unistd,fcntl,inotify}.h`, plus `MADCompat.h` gaining `strlcpy`, the

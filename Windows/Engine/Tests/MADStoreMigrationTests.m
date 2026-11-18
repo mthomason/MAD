@@ -380,7 +380,7 @@ static NSURL *makeTempDirectory(void) {
 // the question.
 static BOOL SQLiteExecute(NSURL *url, NSString *sql) {
 	sqlite3 *database = NULL;
-	if (sqlite3_open([url.path fileSystemRepresentation], &database) != SQLITE_OK) return NO;
+	if (sqlite3_open([url.path UTF8String], &database) != SQLITE_OK) return NO;
 	char *message = NULL;
 	int result = sqlite3_exec(database, [sql UTF8String], NULL, NULL, &message);
 	if (message) sqlite3_free(message);
@@ -390,7 +390,7 @@ static BOOL SQLiteExecute(NSURL *url, NSString *sql) {
 
 static NSInteger SQLiteUserVersion(NSURL *url) {
 	sqlite3 *database = NULL;
-	if (sqlite3_open([url.path fileSystemRepresentation], &database) != SQLITE_OK) return -1;
+	if (sqlite3_open([url.path UTF8String], &database) != SQLITE_OK) return -1;
 	sqlite3_stmt *statement = NULL;
 	NSInteger version = 0;
 	if (sqlite3_prepare_v2(database, "PRAGMA user_version;", -1, &statement, NULL) == SQLITE_OK) {
@@ -403,7 +403,7 @@ static NSInteger SQLiteUserVersion(NSURL *url) {
 
 static BOOL SQLiteTableHasColumn(NSURL *url, NSString *table, NSString *column) {
 	sqlite3 *database = NULL;
-	if (sqlite3_open([url.path fileSystemRepresentation], &database) != SQLITE_OK) return NO;
+	if (sqlite3_open([url.path UTF8String], &database) != SQLITE_OK) return NO;
 	NSString *sql = [[NSString alloc] initWithFormat:@"PRAGMA table_info(\"%@\");", table];
 	sqlite3_stmt *statement = NULL;
 	BOOL found = NO;
