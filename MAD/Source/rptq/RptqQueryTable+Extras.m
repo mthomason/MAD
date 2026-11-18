@@ -88,7 +88,7 @@
 + (NSString *)queryAliasForSchemaTableName:(NSString *)schemaTableName
 								 dropIndex:(int64_t)dropIndex {
 	char buf[22]; char *ptr;
-	ltoa(dropIndex, buf);
+	mad_ltoa(dropIndex, buf);
 	ptr = buf;
 	NSString *indexString = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
 	return [[schemaTableName stringByAppendingString:indexString] stringByReplacingOccurrencesOfString:@"." withString:@""];

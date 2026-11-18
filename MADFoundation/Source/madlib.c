@@ -10,7 +10,6 @@
 #import <stdlib.h>
 #import <stdio.h>
 #import <string.h>
-#import <strings.h>
 
 unsigned long count_digits_ul(unsigned long i) {
 	unsigned long digits = 0;
@@ -30,7 +29,7 @@ int count_digits(int i) {
 	return digits;
 }
 
-void ltoa(long n, char s[]) {
+void mad_ltoa(long n, char s[]) {
 	int i = 0;
 	do {                            /* generate digits in reverse order */
 		s[i++] = n % 10 + '0';      /* get next digit */
@@ -39,7 +38,7 @@ void ltoa(long n, char s[]) {
 	reverse(s);
 }
 
-int ultoa(unsigned long n, char s[]) {
+int mad_ultoa(unsigned long n, char s[]) {
 	int i = 0;
 	do {                            /* generate digits in reverse order */
 		s[i++] = n % 10 + '0';      /* get next digit */
@@ -58,7 +57,7 @@ void uitoa(unsigned int n, char s[]) {
 	reverse(s);
 }
 
-void itoa(int n, char s[]) {
+void mad_itoa(int n, char s[]) {
 	int i, sign;
 	
 	if ((sign = n) < 0)  /* record sign */

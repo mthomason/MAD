@@ -122,7 +122,7 @@
 
 - (NSString *)queryAlias {
 	char buf[22]; char *ptr;
-	ltoa(_dropIndex, buf);
+	mad_ltoa(_dropIndex, buf);
 	ptr = buf;
 	NSString *indexString = [[NSString alloc] initWithCString:ptr encoding:NSUTF8StringEncoding];
 	return [[self databaseSchemaTableName] stringByAppendingString:indexString];

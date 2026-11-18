@@ -12,7 +12,7 @@
 //    * The counters answer 0 for zero (the loop never runs), unlike madmath's
 //      digit_count_* which answer 1.  See madmathTests / MADCoreLogicTests.
 //    * The converters answer "0" for zero (do/while).
-//    * ltoa takes only non-negative input; a negative value emits garbage because
+//    * mad_ltoa takes only non-negative input; a negative value emits garbage because
 //      the remainder stays negative.  Callers pass array indices, so that is not
 //      exercised here -- it is recorded rather than pinned.
 //
@@ -56,13 +56,13 @@
 - (void)testUltoa {
 	char buffer[32];
 
-	XCTAssertEqual(ultoa(0, buffer), 1);
+	XCTAssertEqual(mad_ultoa(0, buffer), 1);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"0");
 
-	XCTAssertEqual(ultoa(12345, buffer), 5);
+	XCTAssertEqual(mad_ultoa(12345, buffer), 5);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"12345");
 
-	XCTAssertEqual(ultoa(ULONG_MAX, buffer), 20);
+	XCTAssertEqual(mad_ultoa(ULONG_MAX, buffer), 20);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"18446744073709551615");
 }
 
@@ -84,39 +84,39 @@
 - (void)testItoa {
 	char buffer[32];
 
-	itoa(0, buffer);
+	mad_itoa(0, buffer);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"0");
 
-	itoa(7, buffer);
+	mad_itoa(7, buffer);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"7");
 
-	itoa(-7, buffer);
+	mad_itoa(-7, buffer);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"-7");
 
-	itoa(12345, buffer);
+	mad_itoa(12345, buffer);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"12345");
 
-	itoa(-12345, buffer);
+	mad_itoa(-12345, buffer);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"-12345");
 
-	itoa(INT_MAX, buffer);
+	mad_itoa(INT_MAX, buffer);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"2147483647");
 }
 
 - (void)testLtoa {
 	char buffer[32];
 
-	ltoa(0, buffer);
+	mad_ltoa(0, buffer);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"0");
 
-	ltoa(9, buffer);
+	mad_ltoa(9, buffer);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"9");
 
-	ltoa(10, buffer);
+	mad_ltoa(10, buffer);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"10");
 
 	// The callers (query-table aliases) hand it a non-negative index.
-	ltoa(LONG_MAX, buffer);
+	mad_ltoa(LONG_MAX, buffer);
 	XCTAssertEqualObjects([NSString stringWithUTF8String:buffer], @"9223372036854775807");
 }
 
