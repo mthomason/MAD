@@ -234,7 +234,7 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
 	archive_function_result_handler(ar, "Archive correctly set standard lookup.");
 	
 	r = archive_read_open_filename(source_archive, source, 10240);
-	
+
 	if (r < 0) {
 		if (r == ARCHIVE_FATAL) {
 			os_log_debug(OS_LOG_DEFAULT, "archive_read_open_filename returned %d.  Probably opening an old file.  Not an error.", r);
@@ -266,7 +266,7 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
 		
 		const char *entry_pathname;
 		entry_pathname = archive_entry_pathname(source_archive_entry);
-		
+
 		char *location = (char *)malloc((strlen(entry_pathname) + strlen(filename) + 1 + 1) * sizeof(char));
 		location[0] = '\0';
 		strlcpy(location, filename, strlen(location) + strlen(filename) + 1);
@@ -286,7 +286,7 @@ int mad_extract(const char *source, const char *dest, const char *filename) {
 				mad_mkdir(path);
 			}
 		}
-		
+
 		archive_entry_set_pathname(source_archive_entry, location);
 		
 		if (!file_is_directory) {
@@ -349,6 +349,10 @@ void mad_archive_entry_set_attributes(struct archive_entry **e, struct stat *st,
 #if __APPLE__
 		archive_entry_set_mtime(*e, (*st).st_mtimespec.tv_sec, (*st).st_mtimespec.tv_nsec);
 		archive_entry_set_birthtime(*e, (*st).st_birthtimespec.tv_sec, (*st).st_birthtimespec.tv_nsec);
+#elif defined(_WIN32)
+		/* The UCRT's struct stat carries st_mtime in whole seconds and has no
+		   nanosecond field, so the sub-second part is 0. */
+		archive_entry_set_mtime(*e, (*st).st_mtime, 0);
 #else
 		/* Darwin spells the modified time st_mtimespec; POSIX st_mtim, and has no
 		   birth time to hand over. */
