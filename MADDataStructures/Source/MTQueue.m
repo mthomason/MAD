@@ -13,6 +13,7 @@
 #import "MTQueue.h"
 #import <Foundation/NSArray.h>
 #import "MTLinkedListNode.h"
+#include <string.h>
 
 @interface MTQueue ()
 
@@ -77,7 +78,8 @@
 								  objects:(id __unsafe_unretained [])stackbuf
 									count:(NSUInteger)len {
 	@synchronized(self) {
-		MTLinkedListNode *currentNode = nil;
+		// Borrowed: the queue owns the node chain, which outlives this call.
+		MTLinkedListNode * __unsafe_unretained currentNode = nil;
 		
 		// First call: Initialize mutationsPtr and start from head
 		if (state->state == 0) {
@@ -85,8 +87,11 @@
 			state->state = 1; // Signal that enumeration has started
 			currentNode = self.head;
 		} else {
-			// Subsequent calls: Resume from the last saved node
-			currentNode = (__bridge MTLinkedListNode *)(void *)state->extra[0];
+			// Subsequent calls: Resume from the last saved node.
+			// state->extra is unsigned long[5]; on Windows (LLP64) an unsigned
+			// long is 32 bits and cannot hold a pointer, so the node is copied
+			// with memcpy (correct on LP64 and LLP64 alike).
+			memcpy(&currentNode, state->extra, sizeof(currentNode));
 		}
 		
 		NSUInteger index = 0;
@@ -98,7 +103,7 @@
 		}
 		
 		// Save the current node for the next iteration (even if nil)
-		state->extra[0] = (unsigned long)(__bridge void *)currentNode;
+		memcpy(state->extra, &currentNode, sizeof(currentNode));
 		state->itemsPtr = stackbuf;
 		
 		return index; // Return the number of items added to the buffer
