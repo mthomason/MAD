@@ -1,0 +1,10 @@
+# Windows engine build output (clang objects, smoke.exe, the toolchain clone,
+# and the include-shim junctions), plus the future WPF app's build output.
+# The repo-wide `build/` pattern already covers Windows/Engine/build/, but these
+# are the Windows-tree specifics.
+build/
+bin/
+obj/
+.vs/
+*.user
+*.suo
