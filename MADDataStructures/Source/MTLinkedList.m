@@ -14,6 +14,7 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSString.h>
 #import "MTLinkedListNode.h"
+#include <string.h>
 
 @interface MTLinkedList ()
 
@@ -160,9 +161,14 @@
 	state->mutationsPtr = &_count;
 
 	NSUInteger batchCount = 0;
-	MTLinkedListNode *node = (state->state == 0) ?
-		_headNode :
-		(__bridge MTLinkedListNode *)(void *)state->extra[0];
+	// state->extra is unsigned long[5]; on Windows (LLP64) an unsigned long is
+	// 32 bits and cannot hold a pointer, so the node is copied with memcpy
+	// (correct on LP64 and LLP64 alike) rather than cast through unsigned long.
+	// Borrowed: the list owns the node chain, which outlives this call.
+	MTLinkedListNode * __unsafe_unretained node = _headNode;
+	if (state->state != 0) {
+		memcpy(&node, state->extra, sizeof(node));
+	}
 
 	while (node && batchCount < len) {
 		stackbuf[batchCount] = node.data;
@@ -172,7 +178,7 @@
 
 	state->state += batchCount;
 	state->itemsPtr = stackbuf;
-	state->extra[0] = (unsigned long)(__bridge void *)node;
+	memcpy(state->extra, &node, sizeof(node));
 
 	return batchCount;
 }

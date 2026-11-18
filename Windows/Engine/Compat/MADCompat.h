@@ -24,6 +24,24 @@
 #ifndef MADCompat_h
 #define MADCompat_h
 
+// strlcat/strlcpy are BSD/Apple spellings.  Modern glibc (2.38+) declares
+// them, which is why the Linux build needs no shim; the Windows UCRT does not,
+// and MADQueryCacheAddRow.m reaches for strlcat.  A static inline here keeps
+// the one call site working without a source edit or a link symbol.
+#include <string.h>
+static inline size_t strlcat(char *dst, const char *src, size_t dstsize) {
+	size_t dlen = 0;
+	while (dlen < dstsize && dst[dlen] != '\0') dlen++;
+	size_t slen = 0;
+	while (src[slen] != '\0') slen++;
+	if (dlen == dstsize) return dstsize + slen;
+	size_t n = dstsize - dlen - 1;
+	if (slen < n) n = slen;
+	memcpy(dst + dlen, src, n);
+	dst[dlen + n] = '\0';
+	return dlen + slen;
+}
+
 #import "NSOperation+Name.h"
 #import "NSFileManager+Ubiquity.h"
 #import "NSFileCoordinator+Presenter.h"

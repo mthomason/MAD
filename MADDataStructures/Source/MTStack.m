@@ -12,6 +12,7 @@
 
 #import "MTStack.h"
 #import <Foundation/NSException.h>
+#include <string.h>
 
 @interface MTStackNode : NSObject
 
@@ -85,7 +86,8 @@
 								 objects:(id __unsafe_unretained [])stackbuf
 								   count:(NSUInteger)len {
 	@synchronized(self) {
-		MTStackNode *currentNode = nil;
+		// Borrowed: the stack owns the node chain, which outlives this call.
+		MTStackNode * __unsafe_unretained currentNode = nil;
 		
 		// First call: Initialize mutationsPtr and start from top
 		if (state->state == 0) {
@@ -93,8 +95,11 @@
 			state->state = 1; // Signal enumeration has started
 			currentNode = self.top;
 		} else {
-			// Subsequent calls: Resume from the last saved node
-			currentNode = (__bridge MTStackNode *)(void *)state->extra[0];
+			// Subsequent calls: Resume from the last saved node.
+			// state->extra is unsigned long[5]; on Windows (LLP64) an unsigned
+			// long is 32 bits and cannot hold a pointer, so the node is copied
+			// with memcpy (correct on LP64 and LLP64 alike).
+			memcpy(&currentNode, state->extra, sizeof(currentNode));
 		}
 		
 		NSUInteger index = 0;
@@ -106,7 +111,7 @@
 		}
 		
 		// Save the current node for the next iteration (even if nil)
-		state->extra[0] = (unsigned long)(__bridge void *)currentNode;
+		memcpy(state->extra, &currentNode, sizeof(currentNode));
 		state->itemsPtr = stackbuf;
 		
 		return index; // Number of items added to the buffer

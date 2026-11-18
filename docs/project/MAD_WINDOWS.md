@@ -18,10 +18,14 @@ existing headless Objective-C engine compiled natively for Windows. The engine
 build lands under `Windows/`, a sibling of `Mac/` and `Linux/`; the WPF app is
 a later phase (`Windows/App`, not yet created).
 
-This increment (the first) proves the toolchain and the framework port by
-building **MADDataStructures** and **MADFoundation** and running a smoke test.
-It deliberately does not yet build the remaining headless frameworks, the CLI,
-or the app.
+This increment proves the toolchain and the framework port. Phase 2 (the first
+increment) built **MADDataStructures** and **MADFoundation** and ran a smoke
+test. Phase 2b (this revision) adds **MADAPI** (the transitive dependency
+MADSqlite3 pulls in) and **MADSqlite3**, compiles the pinned SQLite
+amalgamation into a static library, and ports the Linux test suites for
+MADDataStructures, MADFoundation and MADSqlite3 (GNUstep `Testing.h` +
+`MADTestSupport.h`). It still does not build the remaining headless frameworks,
+the CLI, or the app.
 
 ---
 
@@ -92,14 +96,27 @@ all three.
 
 `Windows/Engine/build.ps1` reproduces the recipe from the repo:
 
-1. **Prerequisite check** — Clang 20.1.8, lld, CMake, Ninja, MSYS2, git, VS
-   2026, the Windows SDK, NASM.
+1. **Prerequisite check** — Clang 20.1.8, lld, CMake, Ninja, MSYS2, git, curl,
+   tar, `llvm-lib`, VS 2026, the Windows SDK, NASM.
 2. **Idempotent toolchain bootstrap** — `Engine/toolchain/bootstrap.ps1`
    clones the pinned driver, applies the two patch files, and builds GNUstep
    from source into `C:\GNUstep` (configurable; ~20–30 min on first run).
-3. **Framework build** — compile MADDataStructures and MADFoundation (plus the
-   `Engine/Compat` shims) and link the smoke test.
-4. **Smoke test** — run `smoke.exe`; exit non-zero on any failure.
+3. **SQLite library build** — download the 3.53.3 amalgamation from
+   `Engine/libraries.conf`, verify its sha256, extract, compile `sqlite3.c`
+   with the `Compressor/sqlite3.xcconfig` option list, and archive it into a
+   COFF `sqlite3.lib` with `llvm-lib`.
+4. **Framework build** — compile MADDataStructures, MADFoundation, MADAPI and
+   MADSqlite3 (plus the `Engine/Compat` shims).
+5. **Test build** — compile and link one executable per ported test file (plus
+   the smoke test).
+6. **Test run** — run the smoke test and every suite; exit non-zero on any
+   failure.
+
+The framework compile flags match the Linux build's Debug profile: GNUstep's
+`gnustep-config --objc-flags` under `--enable-debug-by-default` (which the Linux
+toolchain uses) carries `-DDEBUG`, so `build.ps1` passes `-DDEBUG=1` to every
+translation unit — library and test alike — and does **not** define
+`NS_BLOCK_ASSERTIONS`, keeping `NSAssert` active exactly as on Linux.
 
 **Decision — `build.ps1` drives Clang directly, not through CMake.** CMake's
 Objective-C language support on Windows is broken for the combination this
@@ -123,6 +140,8 @@ CMake's Windows Objective-C support lands.
 |---|---|---|
 | MADFoundation | 26 of 27 (+ `madlib.c`) | `MADKeyChain` (Security.framework; already excluded on Linux) and `BDHost` (POSIX-socket reverse DNS — `sys/socket.h`/`netpacket/packet.h`/`ifaddrs.h`/`arpa/inet.h`; needs a Winsock2 port). The umbrella goes with `MADKeyChain`. |
 | MADDataStructures | all 17 | (`madmap.cpp` is not in the Xcode target either) |
+| MADAPI | 8 of 11 | the three connection view controllers (`MADConnectionViewController`, `MADConnectionSQLGenericViewController`) — UIKit, not headless. Not a Phase 2b deliverable of its own; MADSqlite3's transitive dependency. |
+| MADSqlite3 | all 26 | five orphan `.m` files not in the Xcode target either (named in `Engine/cmake/MADSqlite3Sources.cmake`) |
 
 `Windows/Engine/Compat/` is a copy of `Linux/Compat`, adapted for Windows:
 
@@ -142,13 +161,25 @@ CMake's Windows Objective-C support lands.
   `htonll`/`ntohll` block — neither MADFoundation nor MADDataStructures uses it
   (grep-verified), and `<endian.h>` does not exist on Windows. The driver layer
   (`MAD`) will need a Windows byte-order shim when it is ported.
+* **`MADCompat.h`** also gains a `static inline strlcat` — the Windows UCRT has
+  no `strlcat`/`strlcpy` (BSD/Apple spellings; glibc 2.38+ provides them, which
+  is why Linux needs no shim), and `MADQueryCacheAddRow.m` reaches for it.
+* **`NSURL+FileSystem.m`** answers `-fileSystemRepresentation` with
+  `self.path.UTF8String` rather than GNUstep's `GSNativeChar*` spelling (UTF-16
+  on Windows), which broke `sqlite3_open_v2`'s path when masqueraded as
+  `const char *`.
 
 The other Linux shims carry over unchanged, since the Windows and Linux
 GNUstep-base are the same 1.31.x line.
 
 ---
 
-## 5. The one unavoidable shared-source change
+## 5. The unavoidable shared-source changes
+
+Two shared-source changes were required, both minimal and portable (the Linux
+CI and the Apple suites are the gates):
+
+### 5.1 The `madlib.c` `itoa`/`ltoa`/`ultoa` rename
 
 `MADFoundation/Source/madlib.c` defines `itoa`/`ltoa`/`ultoa`, which collide
 with the Windows UCRT's three-argument non-standard names of the same spelling.
@@ -162,11 +193,23 @@ They are renamed `mad_itoa`/`mad_ltoa`/`mad_ultoa`, and every caller updated:
   (`ltoa`) and `MADSqlite3/Source/MADDataTableFast.m`,
   `MADSqlite3/Source/MADQueryCacheAddRow.m` (`ultoa`).
 
-This is a pure mechanical rename, behaviour-neutral on Apple and Linux; the
-Linux CI and the Apple suites are the gates. `uitoa`, `reverse`,
-`count_digits`, and `count_digits_ul` are untouched (they do not collide with
-the UCRT). The `itoa` reference in `MADExplorer` is inside a commented-out
-block and is not a caller.
+This is a pure mechanical rename, behaviour-neutral on Apple and Linux.
+`uitoa`, `reverse`, `count_digits`, and `count_digits_ul` are untouched (they
+do not collide with the UCRT). The `itoa` reference in `MADExplorer` is inside
+a commented-out block and is not a caller.
+
+### 5.2 The fast-enumeration cursor pointer
+
+`MTStack.m`, `MTQueue.m` and `MTLinkedList.m` store their `countByEnumerating…
+` cursor node pointer in `NSFastEnumerationState.extra[0]`, cast through
+`unsigned long`. That is 32 bits on Windows (LLP64) but 64 on Linux/Apple
+(LP64), so the pointer was truncated and multi-batch enumeration (any
+collection over one stack-buffer's worth of items) crashed or yielded garbage.
+The three files now copy the pointer into `extra` with `memcpy` (correct on
+both LP64 and LLP64) and hold it in an `__unsafe_unretained` local — the
+collection owns the node chain, which outlives the call, so the borrowed
+pointer is the honest ownership model on every platform. The change is
+behaviour-neutral on Apple/Linux (the same pointer bytes move through).
 
 ---
 
@@ -174,13 +217,10 @@ block and is not a caller.
 
 * **`BDHost`** (reverse DNS) and **`MADKeyChain`** (Security.framework) are
   excluded; `BDHost` needs a Winsock2 port, `MADKeyChain` has no Windows
-  keychain equivalent yet.
-* **`NSURL+FileSystem.m`** sees `-fileSystemRepresentation` return
-  `const uint16_t *` (UTF-16) on Windows GNUstep, not `const char *`.
-* **The full ported Xcode suites** (GNUstep `Testing.h` + `MADTestSupport`) are
-  not ported yet; the smoke test is the current gate.
-* **The remaining headless frameworks** (`MAD`, `MADSqlite3`, the drivers, …)
-  and **the CLI** are the next increments.
+  keychain equivalent yet. `BDHostTests` is not registered on Windows for the
+  same reason (it cannot link without `BDHost.m`) — recorded, not skipped.
+* **The remaining headless frameworks** (`MAD`, the drivers, `MADFileManager`,
+  `MADCocoaExtensions`, …) and **the CLI** are the next increments.
 * **The WPF app** is a later phase.
 
 ## 7. Supported Windows versions
