@@ -5,12 +5,17 @@ engine's Objective-C frameworks, compiled with Clang against GNUstep Base, so
 the same engine that runs the macOS app and the Linux CLI can run on Windows.
 Nothing here is the app — the WPF shell is a later phase (`docs/project/MAD_WINDOWS.md`).
 
-This increment builds **MADDataStructures**, **MADFoundation**, **MADAPI** (the
-transitive dependency MADSqlite3 pulls in) and **MADSqlite3**, compiles the
-pinned SQLite amalgamation into a static library, and runs the ported Linux
-test suites for the first two frameworks and MADSqlite3 (GNUstep `Testing.h` +
-`MADTestSupport.h`), plus a smoke test. It is still not the full engine — the
-remaining headless frameworks and the CLI come next.
+This increment builds all seven headless frameworks — **MADDataStructures**,
+**MADFoundation**, **MADAPI**, **MADSqlite3**, **MADCocoaExtensions**,
+**MADFileManager** and **MAD** — compiles the pinned SQLite, zlib, bzip2 and
+libarchive libraries, and builds **`mad.exe`** from `CLI/Source`. It runs the
+ported Linux test suites for MADDataStructures, MADFoundation and MADSqlite3
+(GNUstep `Testing.h` + `MADTestSupport.h`) plus a smoke test. `mad.exe` runs
+`inspect`, `schema`, `query`, `refresh` (76 rows on the London fixture) and
+`export` in every Foundation format with byte-identical digests; `write
+--reproducible` is the one verb still short (see `Known gaps`). The remaining
+Linux test files (MAD, MADFileManager, MADCocoaExtensions, MADAPI) are copied
+into `Engine/Tests/` but not yet wired into the run.
 
 ## Prerequisites
 
@@ -99,8 +104,11 @@ scale zero (set `MAD_BENCH_ROWS=<n>` to run the benchmarks).
 |---|---|---|
 | MADFoundation | 26 of 27 (+ `madlib.c`) | `MADKeyChain` (Security.framework, as on Linux) and `BDHost` (POSIX-socket reverse DNS — `sys/socket.h`/`netpacket/packet.h`/`ifaddrs.h`/`arpa/inet.h`; needs a Winsock2 port). The umbrella goes with `MADKeyChain`. |
 | MADDataStructures | all 17 | (`madmap.cpp` is not in the Xcode target either) |
-| MADAPI | 8 of 11 | the three connection view controllers (`MADConnectionViewController`, `MADConnectionSQLGenericViewController`); not a Phase 2b deliverable of its own — the transitive dependency MADSqlite3 pulls in. |
+| MADAPI | 8 of 11 | the three connection view controllers (`MADConnectionViewController`, `MADConnectionSQLGenericViewController`) — UIKit, not headless. |
 | MADSqlite3 | all 26 | five orphan `.m` files not in the Xcode target either (see `Engine/cmake/MADSqlite3Sources.cmake`) |
+| MADCocoaExtensions | 7 of 17 | the ten UIKit drawers/presenters (colors, labels, text fields, alerts, view helpers, the error presenter, MessageUI) — the same Linux split |
+| MADFileManager | 10 of 11 | `MADCloudFileCoordinator` (NSMetadataQuery/iCloud) — the same Linux exclusion; `MADDirectoryMonitor` uses an inert `inotify` shim |
+| MAD | 168 of 199 | the UI tail, `MADocument` + the build/close operations, the keychain operations, and the barcode element files — the same Linux exclusions (each named in `Engine/cmake/MADSources.cmake`) |
 
 ## The SQLite library
 
@@ -148,13 +156,39 @@ Linux CI and Apple suites are the gates):
   `__unsafe_unretained` local (the collection owns the node chain). See
   `docs/project/MAD_WINDOWS.md` §5.
 
+## The CLI (`mad.exe`)
+
+`build.ps1` builds `mad.exe` from `CLI/Source`, linked whole against every
+framework object, the SQLite library, and the archive stack (libarchive + zlib +
+bzip2). Run it from a prompt with `C:\GNUstep\x64\Release\bin` on `PATH`:
+
+```
+mad inspect   CLI\Fixtures\London.portable.mad
+mad schema    CLI\Fixtures\London.portable.mad
+mad query     CLI\Fixtures\London.portable.mad
+mad refresh   CLI\Fixtures\London.portable.mad        # 76 rows
+mad export    CLI\Fixtures\London.portable.mad --format json --out out.json --deterministic
+mad write     CLI\Fixtures\London.portable.mad --out copy.mad --reproducible
+```
+
+The export digests are byte-identical to the Mac/Linux pins in `Linux/README.md`
+(json `569c6ee2…`, csv `773f6215…`, text `7dcee96c…`, html `285541ed…`,
+html-flow `0565204a…`, json-report `9d01d0da…`). `export` refreshes the document
+itself; clear `%USERPROFILE%\GNUstep\Library\Caches\<hash>` between runs (a fresh
+run is clean).
+
 ## Known gaps
 
 * `BDHost` (reverse DNS) and `MADKeyChain` (Security.framework) are excluded;
   `BDHostTests` is not registered on Windows for the same reason (its class
   cannot link without `BDHost.m`). `BDHost` needs a Winsock2 port.
-* `MAD` (the report/query framework), the database drivers, and the CLI are the
-  next increments.
+* `write --reproducible` is still short: the archive write reads the store back
+  through `_open`/`_read` while it is open and sees only the SQLite header, so the
+  copy is undersized (518 vs 16261 bytes). Tracked in
+  `C:\dev\mad-win-reports\phase3a-summary.md`.
+* The database drivers (MADMySQL, MADTds/MADTdsClient, MADPostgres) are Phase 3b.
+* The MAD/MADFileManager/MADCocoaExtensions/MADAPI test files are copied but not
+  yet wired into `build.ps1`.
 
 ## Supported Windows versions
 
