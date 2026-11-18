@@ -18,7 +18,9 @@
 
 static BOOL MADCLICountRows(NSURL *storeURL, NSString *table, unsigned long long *count) {
 	sqlite3 *database = NULL;
-	if (sqlite3_open_v2(storeURL.path.fileSystemRepresentation, &database,
+	// UTF8String, not -fileSystemRepresentation (GNUstep NSString returns UTF-16
+	// on Windows); see MADArchiveManager.m.
+	if (sqlite3_open_v2(storeURL.path.UTF8String, &database,
 						SQLITE_OPEN_READONLY, NULL) != SQLITE_OK) {
 		if (database) sqlite3_close(database);
 		return NO;

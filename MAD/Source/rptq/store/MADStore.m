@@ -78,7 +78,9 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 	if (self.open) return YES;
 
 	sqlite3 *database = NULL;
-	int result = sqlite3_open_v2(self.url.path.fileSystemRepresentation, &database,
+	// UTF8String, not -fileSystemRepresentation (GNUstep NSString returns UTF-16
+	// on Windows); see MADArchiveManager.m.
+	int result = sqlite3_open_v2(self.url.path.UTF8String, &database,
 								 SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
 	if (result != SQLITE_OK) {
 		if (error) *error = MADStoreSQLiteError(database, @"Could not open the store");

@@ -53,7 +53,11 @@
 			NSLocalizedDescriptionKey: NSLocalizedString(@"Failed to add null value.", @"Error when a null value is added to a report section.")
 		}];
 		success = false;
-	} @finally { }
+	}
+	// (No @finally here: an empty @finally block after this @catch crashed
+	// clang 20.1.8's codegen on Windows — the GNUstep-2.2 + ARC + empty-@finally
+	// combination.  An empty @finally is a no-op, so dropping it is
+	// behaviour-neutral on Apple and Linux.  See docs/project/MAD_WINDOWS.md §5.)
 	return success;
 }
 
