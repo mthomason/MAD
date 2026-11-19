@@ -1,5 +1,6 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
+using System.IO;
 using System.Windows;
 using Mad.Designer.Windows.Engine;
 using Mad.Designer.Windows.Infrastructure;
@@ -38,12 +39,31 @@ public partial class MainWindow : Window
         window.Show();
     }
 
+    private static readonly IReadOnlyDictionary<string, (string Filter, string Extension)> ExportDialogs =
+        new Dictionary<string, (string Filter, string Extension)>
+        {
+            ["html"] = ("HTML page (*.html)|*.html", "html"),
+            ["html-flow"] = ("HTML flow (*.html)|*.html", "html"),
+            ["csv"] = ("CSV spreadsheet (*.csv)|*.csv", "csv"),
+            ["json"] = ("JSON data (*.json)|*.json", "json"),
+            ["json-report"] = ("JSON full report (*.json)|*.json", "json"),
+            ["text"] = ("Plain text (*.txt)|*.txt", "txt"),
+        };
+
     private string? ShowExportSaveDialog(string format)
     {
+        (string Filter, string Extension) entry =
+            ExportDialogs.TryGetValue(format, out var known) ? known : ("All files (*.*)|*.*", format);
+
+        string stem = Path.GetFileNameWithoutExtension(_viewModel.Document.FileName);
+        if (string.IsNullOrEmpty(stem)) stem = "report";
+
         var dialog = new Microsoft.Win32.SaveFileDialog
         {
-            Filter = format == "csv" ? "CSV spreadsheet (*.csv)|*.csv" : "JSON data (*.json)|*.json",
-            FileName = $"report.{format}",
+            Filter = entry.Filter,
+            DefaultExt = entry.Extension,
+            AddExtension = true,
+            FileName = $"{stem}.{entry.Extension}",
         };
         return dialog.ShowDialog() == true ? dialog.FileName : null;
     }
