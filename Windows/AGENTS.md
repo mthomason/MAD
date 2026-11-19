@@ -54,6 +54,10 @@ the smoke test, 1294 tests, 6 needs, 5 skips, 0 failures).
     the `tests/` executables, the SQLite library, the toolchain clone, and the
     include-shim junctions.
 *   **`global.json`** — pins .NET 10 LTS for the future WPF app.
+*   **`Client/`** — the Phase 4 stdio acceptance client (`.NET 10`): `Mad.Client`
+    (a console client for `mad serve`) and `Mad.Client.Tests` (xunit; success,
+    malformed, engine-failure and shutdown paths).  The protocol is documented in
+    `docs/project/MAD_WINDOWS.md` §6d.
 *   **`App/`** — the WPF shell (a later phase; not created yet).
 
 ## How the build works
@@ -118,4 +122,6 @@ build + test run, exiting non-zero on any failure. The smoke test prints
 `SMOKE RESULT: 0 failure(s)`; each suite prints `MADTEST <suite> tests=… needs=…
 skips=… failed=0` and exits 0. `MADDataTableFastBenchmarkTests` skips at its
 default scale zero (`MAD_BENCH_ROWS`). The Linux CI and the Apple suites are the
-regression gates for the shared-source changes this tree makes.
+regression gates for the shared-source changes this tree makes. The Phase 4
+client is checked separately: build `mad.exe`, then `dotnet test Mad.Client.Tests`
+from `Windows/Client` (see `Windows/README.md`).
