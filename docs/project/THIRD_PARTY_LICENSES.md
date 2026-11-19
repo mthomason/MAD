@@ -666,10 +666,15 @@ and macOS About screens stay Apple-only and must not claim the Apple app links
 GNUstep. The public `docs/windows.md` and the `README.md` wording are also Phase
 6, subject to the five-language contract in `LOCALIZATION.md`.
 
-The exact DLL/static split is not inferred: `Windows/Engine/build.ps1` records
-`dumpbin /dependents` (or `llvm-objdump -p`) for `mad.exe` and the GNUstep DLLs
-in the Phase 3b/6 build report, and this section is updated if that split
-changes. The GNUstep Base command-line tools are GPL-3.0-or-later; keep them
+The exact DLL/static split is measured, not inferred: `llvm-objdump -p
+Windows/Engine/build/mad.exe` (Phase 3b) shows the direct GNUstep imports are
+`gnustep-base-1_31.dll` (LGPL-2.1-or-later), `objc.dll` (libobjc2, MIT) and
+`dispatch.dll` (libdispatch, Apache-2.0 with the Swift runtime exception);
+`libffi-8.dll` (MIT), `libiconv.dll` (LGPL-2.1-or-later) and
+`gnustep-corebase-0.dll` (LGPL-2.1-or-later) are transitive dependencies and must
+ship beside them. SQLite, zlib, bzip2, libarchive, OpenSSL 3.5.9, FreeTDS 1.4.27,
+MariaDB Connector/C 3.4.11 and libpq 17.11 are **static** inside `mad.exe` (no
+DLL imports). The GNUstep Base command-line tools are GPL-3.0-or-later; keep them
 out of the Windows package unless the GPL text and corresponding-source offer
 are added. The library and the tools are different licences in the same tree.
 
