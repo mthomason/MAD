@@ -101,6 +101,59 @@ public sealed class EngineService : IAsyncDisposable
         return result.GetProperty("data").GetString() ?? "";
     }
 
+    public async Task<int> TestConnectionAsync(ConnectionSpec spec)
+    {
+        var result = await CallAsync("test-connection", ConnectionParams(spec)).ConfigureAwait(false);
+        return result.GetProperty("tableCount").GetInt32();
+    }
+
+    public async Task<OpenResult> CreateAsync(string path, ConnectionSpec spec)
+    {
+        var parameters = ConnectionParams(spec);
+        parameters["path"] = path;
+        var result = await CallAsync("create", parameters).ConfigureAwait(false);
+        return new OpenResult(
+            result.GetProperty("handle").GetInt32(),
+            result.GetProperty("filename").GetString() ?? "",
+            result.GetProperty("driver").GetString() ?? "");
+    }
+
+    public async Task<ConnectionSpec> ConnectionAsync(int handle)
+    {
+        var result = await CallAsync("connection", new Dictionary<string, object?> { ["handle"] = handle }).ConfigureAwait(false);
+        var driver = ConnectionSpec.DriverFromToken(result.GetProperty("driver").GetString() ?? "");
+
+        string? file = result.TryGetProperty("file", out var fileElement) ? fileElement.GetString() : null;
+        if (!string.IsNullOrEmpty(file))
+        {
+            file = Path.GetFullPath(file); // GNUstep returns forward slashes on Windows
+        }
+
+        string? host = result.TryGetProperty("host", out var hostElement) ? hostElement.GetString() : null;
+        int? port = result.TryGetProperty("port", out var portElement) ? portElement.GetInt32() : null;
+        string? database = result.TryGetProperty("database", out var dbElement) ? dbElement.GetString() : null;
+        string? server = result.TryGetProperty("server", out var serverElement) ? serverElement.GetString() : null;
+
+        return new ConnectionSpec(driver, file, host, port, database, server, null, null);
+    }
+
+    public async Task ApplyConnectionAsync(int handle, ConnectionSpec spec)
+    {
+        var parameters = ConnectionParams(spec);
+        parameters["handle"] = handle;
+        await CallAsync("apply-connection", parameters).ConfigureAwait(false);
+    }
+
+    public async Task<WriteResult> WriteAsync(int handle, string outPath, bool reproducible = false)
+    {
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["out"] = outPath };
+        if (reproducible) parameters["reproducible"] = true;
+        var result = await CallAsync("write", parameters).ConfigureAwait(false);
+        return new WriteResult(
+            result.GetProperty("path").GetString() ?? "",
+            result.GetProperty("bytes").GetInt64());
+    }
+
     public async Task ShutdownAsync()
     {
         if (_client == null) return;
@@ -124,6 +177,30 @@ public sealed class EngineService : IAsyncDisposable
         await ShutdownAsync().ConfigureAwait(false);
         _client?.Dispose();
         _gate.Dispose();
+    }
+
+    private static Dictionary<string, object?> ConnectionParams(ConnectionSpec spec)
+    {
+        var parameters = new Dictionary<string, object?> { ["driver"] = spec.Driver.Token() };
+        if (spec.Driver == ConnectionDriver.Sqlite3)
+        {
+            parameters["file"] = spec.File;
+        }
+        else
+        {
+            parameters["host"] = spec.Host;
+            parameters["port"] = spec.Port ?? spec.Driver.DefaultPort();
+            parameters["database"] = spec.Database;
+            if (spec.Driver == ConnectionDriver.SqlServer)
+            {
+                parameters["server"] = spec.ServerInstance;
+            }
+            if (!string.IsNullOrEmpty(spec.Username) || !string.IsNullOrEmpty(spec.Password))
+            {
+                parameters["credentials"] = $"{spec.Username}:{spec.Password}";
+            }
+        }
+        return parameters;
     }
 
     private async Task<JsonElement> CallAsync(string method, IReadOnlyDictionary<string, object?>? parameters = null)
