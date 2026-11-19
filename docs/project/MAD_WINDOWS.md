@@ -290,7 +290,36 @@ or byte-neutral on Linux; the Linux CI and Apple suites are the gates):
   NSString spelling returns UTF-16 on Windows).
 * `MADDatabaseConnection+Constructor.m`'s `+Identifier:` returns the four
   document-format constants directly, so a process linking only Sqlite3 can still
-  map a stored `driverID` to a type.
+  map a stored `driverID` to a type. (Phase 3b removed this guard — see §6c.)
+
+## 6c. Phase 3b — the drivers, BDHost and the live fixtures
+
+Phase 3b adds the four database drivers and the C libraries they link:
+
+* **C libraries** (`Windows/Engine/libraries.conf`, `build.ps1` §3c): OpenSSL
+  3.5.9 (Strawberry Perl + `VC-WIN64A` + `nmake`, static), FreeTDS 1.4.27 (CMake
+  `db-lib`, `ENABLE_MSDBLIB`, `sybdb.h` BOOL edit), MariaDB Connector/C 3.4.11
+  (CMake `mariadbclient`, auth plugins static), libpq 17.11 (**Meson + MSVC
+  `cl.exe`**, `libpq_st` + `libpgcommon_shlib` + `libpgport_shlib` merged into one
+  COFF `libpq.lib`). PostgreSQL 17 dropped the MSVC build, so Meson is its Windows
+  path; `cl.exe` (not `clang-cl`) is used because PostgreSQL's Meson checks
+  `cc.get_id() == 'msvc'` and `clang-cl` reports `clang-cl`, silently dropping
+  `win32gettimeofday.c`/`dirent.c` and the `win32_msvc` include dir. Meson and
+  Strawberry Perl are documented prerequisites.
+* **BDHost** — `MADFoundation/Source/BDHost.m` gains a `#elif defined(_WIN32)`
+  branch over `winsock2.h`/`ws2tcpip.h` (`WSAStartup` once,
+  `getaddrinfo`/`getnameinfo`, IPv4-only); `+ipAddresses`/`+ethernetAddresses` are
+  compiled out on Windows. `BDHostTests` passes 3/3.
+* **Drivers** — four `cmake/*Sources.cmake` lists (18/1/3/4 files) and header shims
+  for `<MADTds/sybdb.h>`, `<MADTdsClient/MADTdsClient.h>` and
+  `<MADPostgres/libpq-fe.h>` etc. `MADTdsDb.m` is linked normally (its global
+  `err_handler` collides with `MADDatabaseSQLServer.m`'s). The Phase 3a
+  `+Identifier:` guard is removed — the registry lookup works with all four drivers
+  linked, pinned by `MADDatabaseDriverDispatchTests` (9/9).
+* **Test inventory** — **125 suites + the smoke test, 1294 tests, 6 needs, 5 skips,
+  0 failures**. Live suites against the local `127.0.0.1` containers:
+  `MADMySQLLiveTests` 44/44, `MADTdsClientLiveTests` 29/29, `MADPostgresLiveTests`
+  14/14. CLI `mad refresh` returns 50 MySQL / 20 TDS / 25 PostgreSQL rows.
 
 ## 7. Supported Windows versions
 

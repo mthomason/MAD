@@ -5,15 +5,18 @@ engine's Objective-C frameworks, compiled with Clang against GNUstep Base, so
 the same engine that runs the macOS app and the Linux CLI can run on Windows.
 Nothing here is the app — the WPF shell is a later phase (`docs/project/MAD_WINDOWS.md`).
 
-This increment builds all seven headless frameworks — **MADDataStructures**,
+This increment builds all eleven headless frameworks — **MADDataStructures**,
 **MADFoundation**, **MADAPI**, **MADSqlite3**, **MADCocoaExtensions**,
-**MADFileManager** and **MAD** — compiles the pinned SQLite, zlib, bzip2 and
-libarchive libraries, and builds **`mad.exe`** from `CLI/Source`. It runs the
-ported Linux test suites (GNUstep `Testing.h` + `MADTestSupport.h`) plus a
-smoke test: 107 suites, 966 tests, 6 needs, 0 failures. `mad.exe` runs
-`inspect`, `schema`, `query`, `refresh` (76 rows on the London fixture),
-`export` in every format, and `write --reproducible` — all with byte-identical
-digests to the Mac/Linux pins in `Linux/README.md`.
+**MADFileManager**, **MAD**, and the four database drivers **MADMySQL**,
+**MADTds**, **MADTdsClient** and **MADPostgres** — compiles the pinned SQLite,
+zlib, bzip2, libarchive, OpenSSL, FreeTDS, MariaDB Connector/C and libpq
+libraries, and builds **`mad.exe`** from `CLI/Source`. It runs the ported Linux
+test suites (GNUstep `Testing.h` + `MADTestSupport.h`) plus a smoke test: 125
+suites, 1294 tests, 6 needs, 5 skips, 0 failures, including the live
+MySQL/SQL Server/PostgreSQL suites against the local `127.0.0.1` containers.
+`mad.exe` runs `inspect`, `schema`, `query`, `refresh` (76 rows on the London
+fixture), `export` in every format, and `write --reproducible` — all with
+byte-identical digests to the Mac/Linux pins in `Linux/README.md`.
 
 ## Prerequisites
 
@@ -241,14 +244,12 @@ $env:MAD_PG_TEST_DATABASE = "chinook"
 
 ## Known gaps
 
-* `BDHost` (reverse DNS) and `MADKeyChain` (Security.framework) are excluded;
-  `BDHostTests` is not registered on Windows for the same reason (its class
-  cannot link without `BDHost.m`). `BDHost` needs a Winsock2 port.
-* The database drivers (MADMySQL, MADTds/MADTdsClient, MADPostgres) are Phase 3b.
-  Four MAD suites that need those drivers — `MADDatabaseDriverDispatchTests`,
-  `MADQueryFullTests`, `MADSQLParserTests` and `MADQueryMaxFieldLengthTests` —
-  are likewise deferred to Phase 3b and recorded in `build.ps1`, not skipped
-  silently.
+* `MADKeyChain` (Security.framework) remains excluded; the CLI takes
+  `--credentials` and the refresh path never reads the keychain. `BDHost` is now
+  ported (Winsock2) and `BDHostTests` registered.
+* The four MAD suites that needed the drivers (`MADDatabaseDriverDispatchTests`,
+  `MADQueryFullTests`, `MADSQLParserTests`, `MADQueryMaxFieldLengthTests`) are
+  now wired with them and pass.
 
 ## Third-party and licensing
 

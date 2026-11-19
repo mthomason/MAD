@@ -6,11 +6,12 @@ The headless engine's native Windows build (see [`MAD_WINDOWS.md`](../docs/proje
 and this directory's [`README.md`](README.md)). It compiles the engine's
 Objective-C frameworks against GNUstep Base with Clang, the Windows sibling of
 the Linux build. Nothing here ships in the app yet; the WPF shell is a later
-phase. It builds all seven headless frameworks (MADDataStructures, MADFoundation,
-MADAPI, MADSqlite3, MADCocoaExtensions, MADFileManager, MAD), compiles the pinned
-SQLite/zlib/bzip2/libarchive libraries, builds `mad.exe` from `CLI/Source`, and
-runs the ported Linux test suites (107 suites + the smoke test, 966 tests, 6
-needs, 0 failures).
+phase. It builds all eleven headless frameworks (MADDataStructures, MADFoundation,
+MADAPI, MADSqlite3, MADCocoaExtensions, MADFileManager, MAD, plus the four drivers
+MADMySQL, MADTds, MADTdsClient, MADPostgres), compiles the pinned
+SQLite/zlib/bzip2/libarchive and OpenSSL/FreeTDS/MariaDB/libpq libraries, builds
+`mad.exe` from `CLI/Source`, and runs the ported Linux test suites (125 suites +
+the smoke test, 1294 tests, 6 needs, 5 skips, 0 failures).
 
 ## Layout
 
@@ -28,8 +29,9 @@ needs, 0 failures).
 *   **`Engine/build.ps1`** — the entry point: prerequisite check, idempotent
     toolchain bootstrap, the SQLite library build, the framework build, the
     test build, and the test run.
-*   **`Engine/libraries.conf`** — the C-library pins (currently just sqlite3
-    3.53.3), the same shape as `Linux/libraries.conf`; read by `build.ps1`.
+*   **`Engine/libraries.conf`** — the C-library pins (sqlite3, zlib, bzip2,
+    libarchive, and the four drivers openssl/freetds/mariadb/postgres), the same
+    shape as `Linux/libraries.conf`; read by `build.ps1`.
 *   **`Engine/cmake/<Name>Sources.cmake`** — the per-framework source lists and
     exclusion reasons, mirroring `Linux/cmake/`. These are the canonical file
     inventory; `build.ps1` reads them back so the two cannot drift.
@@ -43,11 +45,11 @@ needs, 0 failures).
     answering UTF-8 (not GNUstep's UTF-16).
 *   **`Engine/Tests/`** — the ported Linux test suites (one `.m` per
     executable) plus the smoke test, and `Support/MADTestSupport.h` (the
-    GNUstep `Testing.h` glue). `BDHostTests` is deliberately absent (`BDHost.m`
-    is excluded on Windows), as are the four MAD suites that need the Phase 3b
-    drivers (`MADDatabaseDriverDispatchTests`, `MADQueryFullTests`,
-    `MADSQLParserTests`, `MADQueryMaxFieldLengthTests`) — all recorded in
-    `build.ps1`, not skipped silently.
+    GNUstep `Testing.h` glue). `BDHostTests` is now registered (`BDHost.m`
+    carries a Winsock2 branch); the four Phase 3a-deferred MAD suites
+    (`MADDatabaseDriverDispatchTests`, `MADQueryFullTests`, `MADSQLParserTests`,
+    `MADQueryMaxFieldLengthTests`) and the MySQL/TDS/PostgreSQL suites are wired
+    in `build.ps1`.
 *   **`Engine/build/`** — build output (gitignored): clang objects, `smoke.exe`,
     the `tests/` executables, the SQLite library, the toolchain clone, and the
     include-shim junctions.
