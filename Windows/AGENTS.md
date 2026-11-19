@@ -58,7 +58,10 @@ the smoke test, 1294 tests, 6 needs, 5 skips, 0 failures).
     (a console client for `mad serve`) and `Mad.Client.Tests` (xunit; success,
     malformed, engine-failure and shutdown paths).  The protocol is documented in
     `docs/project/MAD_WINDOWS.md` §6d.
-*   **`App/`** — the WPF shell (a later phase; not created yet).
+*   **`App/`** — the WPF shell (`net10.0-windows`): `Mad.Designer.Windows` (the app,
+    MVVM over the Phase 4 client) and `Mad.Designer.Windows.Tests` (xunit; the headless
+    London acceptance and the licence-register checks). It reuses `Client/Mad.Client`
+    via a project reference; see `Windows/README.md`.
 
 ## How the build works
 

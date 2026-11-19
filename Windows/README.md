@@ -226,6 +226,38 @@ CSV to a temp file, and shuts the engine down cleanly. The tests discover the re
 `mad.exe` (override with `MAD_EXE` / `GNUSTEP_BIN`) and assert the child process exits
 with no orphan.
 
+## The WPF shell (`Windows/App`)
+
+Phase 5 adds the first WPF app on top of the engine: a `net10.0-windows` shell that
+proves the process boundary in a real UI. It reuses the Phase 4 `Mad.Client` unchanged,
+wrapping it in an async `EngineService` that serializes the line protocol through a
+semaphore and runs every blocking call on the thread pool so the UI never freezes.
+
+The shell has the three-workspace frame (MAD Query / Designer / Viewer): Query shows the
+stored schema and the generated SQL, Viewer shows the refreshed rows in a `DataGrid` and
+exports CSV/JSON, and Designer is a placeholder until Phase 6. On startup it auto-opens
+`CLI/Fixtures/London.portable.mad` (override with `MAD_DOCUMENT`); an Open… button opens
+any `.mad` via the file dialog. The About window (Overview / License & Notice /
+Acknowledgements) renders the Windows dependency register in
+`ThirdParty/Licenses/Windows/` and the relink offer — the Windows component set, never the
+Apple one.
+
+Build and run (the engine must be built first — see above):
+
+```powershell
+dotnet build .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj
+dotnet run --project .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj
+```
+
+The headless acceptance lives in `Windows/App/Mad.Designer.Windows.Tests` (xunit,
+`net10.0-windows`) and needs no human interaction — it drives the service and view-model
+layers through the London flow (open → describe 21/11 → refresh 76 → export json/csv →
+clean shutdown) and checks the licence register:
+
+```powershell
+dotnet test .\Windows\App\Mad.Designer.Windows.Tests
+```
+
 ## Test databases
 
 The three live driver suites talk to pinned Docker test servers — MySQL
