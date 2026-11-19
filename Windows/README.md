@@ -201,6 +201,44 @@ writes the same 16261-byte document the Mac and Linux write
 exports in the same user work (the `.mdcache` rename issue is fixed — see
 `Engine/Compat/NSPropertyListSerialization+Stream.m`).
 
+## Test databases
+
+The three live driver suites talk to pinned Docker test servers — MySQL
+(`employees`), SQL Server (`AdventureWorksLT2022`) and PostgreSQL (`chinook`).
+On Windows these run as local containers bound to `127.0.0.1`. The
+cross-platform wrapper is `TestDatabase/test-databases.ps1` (PowerShell) over
+`TestDatabase/test-databases.sh`; see `TestDatabase/README.md` and
+`docs/project/DEVELOPER.md` §"Test Databases (Docker)".
+
+```powershell
+.\TestDatabase\test-databases.ps1 -Action download   # fetch datasets, no Docker
+.\TestDatabase\test-databases.ps1 -Action up         # create/start all three
+.\TestDatabase\test-databases.ps1 -Action status     # -Service mysql|tds|postgres
+.\TestDatabase\test-databases.ps1 -Action verify
+.\TestDatabase\test-databases.ps1 -Action env        # print the env block
+```
+
+Apply the env block in the **same session** as `build.ps1` before running the
+Phase 3b live suites (the tests default to `127.0.0.1` and skip cleanly when a
+server is unreachable; there is no `MAD_TDS_TEST_PORT` — TDS is fixed on 1433):
+
+```powershell
+$env:MAD_MYSQL_TEST_HOST = "127.0.0.1"
+$env:MAD_MYSQL_TEST_PORT = "13306"
+$env:MAD_MYSQL_TEST_USER = "root"
+$env:MAD_MYSQL_TEST_PASSWORD = "root"
+$env:MAD_MYSQL_TEST_SCHEMA = "employees"
+$env:MAD_TDS_TEST_HOST = "127.0.0.1"
+$env:MAD_TDS_TEST_USER = "sa"
+$env:MAD_TDS_TEST_PASSWORD = "Root1@Root2"
+$env:MAD_TDS_TEST_DATABASE = "AdventureWorksLT2022"
+$env:MAD_PG_TEST_HOST = "127.0.0.1"
+$env:MAD_PG_TEST_PORT = "5432"
+$env:MAD_PG_TEST_USER = "mad"
+$env:MAD_PG_TEST_PASSWORD = "mad_test_pw"
+$env:MAD_PG_TEST_DATABASE = "chinook"
+```
+
 ## Known gaps
 
 * `BDHost` (reverse DNS) and `MADKeyChain` (Security.framework) are excluded;

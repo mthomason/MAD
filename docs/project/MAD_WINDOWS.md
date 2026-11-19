@@ -339,6 +339,41 @@ they list the C libraries the Apple app links and must not claim the Apple app
 links the GNUstep runtime. The public `docs/windows.md` and `README.md` wording
 is Phase 6 and must follow the five-language documentation contract.
 
+## Test databases
+
+The three live driver suites (Phase 3b) are exercised against the same pinned
+Docker test servers the Apple/Linux builds use, run as **local Windows
+containers bound to `127.0.0.1`** (the Mac keeps all-interface publishing so the
+Linux image and CLI fixtures reach its containers by name). The cross-platform
+entry points are `TestDatabase/test-databases.sh` (Git Bash) and
+`TestDatabase/test-databases.ps1` (PowerShell), which delegate to the three
+per-framework scripts; `TestDatabase/README.md` is the reference.
+
+```powershell
+.\TestDatabase\test-databases.ps1 -Action download   # fetch datasets, no Docker
+.\TestDatabase\test-databases.ps1 -Action up         # create/start all three
+.\TestDatabase\test-databases.ps1 -Action status     # -Service mysql|tds|postgres
+.\TestDatabase\test-databases.ps1 -Action verify
+.\TestDatabase\test-databases.ps1 -Action env        # print the env block
+```
+
+The `env` block is the contract the Phase 3b live suites read; apply it in the
+same session as `build.ps1`:
+
+```powershell
+$env:MAD_MYSQL_TEST_HOST = "127.0.0.1"; $env:MAD_MYSQL_TEST_PORT = "13306"
+$env:MAD_MYSQL_TEST_USER = "root"; $env:MAD_MYSQL_TEST_PASSWORD = "root"
+$env:MAD_MYSQL_TEST_SCHEMA = "employees"
+$env:MAD_TDS_TEST_HOST = "127.0.0.1"; $env:MAD_TDS_TEST_USER = "sa"
+$env:MAD_TDS_TEST_PASSWORD = "Root1@Root2"; $env:MAD_TDS_TEST_DATABASE = "AdventureWorksLT2022"
+$env:MAD_PG_TEST_HOST = "127.0.0.1"; $env:MAD_PG_TEST_PORT = "5432"
+$env:MAD_PG_TEST_USER = "mad"; $env:MAD_PG_TEST_PASSWORD = "mad_test_pw"
+$env:MAD_PG_TEST_DATABASE = "chinook"
+```
+
+There is no `MAD_TDS_TEST_PORT` — the TDS suite hardcodes 1433. Driver build
+results are documented in the Phase 3b report, not here.
+
 ## Related documents
 
 * `docs/project/MAD_LINUX.md` and `Linux/README.md` — the Linux build this

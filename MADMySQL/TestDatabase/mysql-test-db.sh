@@ -9,15 +9,17 @@
 #  (`mad-mysql`), created from a digest-pinned image, whose named volume holds a
 #  checksum-verified copy of the standard `employees` sample database.
 #
-#  The container publishes 13306 on every interface.  The iOS scheme points the
-#  tests at it with MAD_MYSQL_TEST_PORT=13306, and the Linux image and the CLI
-#  fixtures connect to the Mac's `mac:13306`.  One port, one server, one
-#  container -- do not start a second MySQL container.  (3306 is left alone
-#  because the Oracle MySQL installer's launchd service may own it; see
-#  docs/project/DEVELOPER.md.)
+#  The container publishes 13306.  On macOS/Linux it publishes on every
+#  interface (the iOS scheme points the tests at it with MAD_MYSQL_TEST_PORT=13306,
+#  and the Linux image and the CLI fixtures connect to the Mac's `mac:13306`); on
+#  Windows it binds loopback by default so the test server is not exposed on the
+#  LAN.  One port, one server, one container -- do not start a second MySQL
+#  container.  (3306 is left alone because the Oracle MySQL installer's launchd
+#  service may own it; see docs/project/DEVELOPER.md.)
 #
 #  Usage:
 #    mysql-test-db.sh up        create/start the server, load the data if needed (default)
+#    mysql-test-db.sh download  fetch + checksum-verify the dataset into the cache (no Docker)
 #    mysql-test-db.sh wait      block until the server answers
 #    mysql-test-db.sh verify    check every table against the upstream checksums
 #    mysql-test-db.sh status    container, port, and what dataset is loaded
@@ -35,7 +37,13 @@
 #    MAD_TESTDB_PORT     host port to publish (default 13306, what the tests use)
 #    MAD_TESTDB_NAME     container name      (default mad-mysql)
 #    MAD_TESTDB_VOLUME   volume name         (default mad-mysql-test-data)
-#    MAD_TESTDB_CACHE    download cache      (default ~/Library/Caches/MADTestDatabase)
+#    MAD_TESTDB_CACHE    download cache      (default is per-platform, see below)
+#    MAD_TESTDB_BIND     host IP to bind the published port to (default "" on
+#                        macOS/Linux = all interfaces; "127.0.0.1" on Windows)
+#
+#  The download cache defaults to $HOME/Library/Caches/MADTestDatabase on macOS,
+#  ${XDG_CACHE_HOME:-$HOME/.cache}/MADTestDatabase on Linux and
+#  ${LOCALAPPDATA}/MADTestDatabase on Windows.
 #
 #  The first `up` pulls the image (~600 MB) and imports the dataset (a few
 #  minutes, ~168 MB of SQL).  Later runs take seconds.  Bump the pins in
@@ -53,7 +61,57 @@ TESTDB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONTAINER="${MAD_TESTDB_NAME:-mad-mysql}"
 VOLUME="${MAD_TESTDB_VOLUME:-mad-mysql-test-data}"
 PORT="${MAD_TESTDB_PORT:-13306}"
-CACHE="${MAD_TESTDB_CACHE:-$HOME/Library/Caches/MADTestDatabase}"
+
+# ---------------------------------------------------------------- platform ---
+# One script, three platforms: macOS (system bash 3.2), Linux, and Git Bash on
+# Windows.  The cache lives in a per-platform location; the sha256 helper and
+# the host-port check degrade gracefully; and Docker host paths are converted
+# with cygpath on Windows, where MSYS_NO_PATHCONV also stops MSYS from rewriting
+# container-side paths such as /dataset.
+detect_platform() {
+	case "$(uname -s)" in
+		Darwin) echo "mac" ;;
+		MINGW*|MSYS*|CYGWIN*) echo "windows" ;;
+		*) echo "linux" ;;
+	esac
+}
+PLATFORM="$(detect_platform)"
+
+if [ "${PLATFORM}" = "windows" ]; then
+	if [ -n "${LOCALAPPDATA:-}" ]; then
+		CACHE_DEFAULT="$(cygpath -u "${LOCALAPPDATA}")/MADTestDatabase"
+	else
+		CACHE_DEFAULT="$HOME/AppData/Local/MADTestDatabase"
+	fi
+elif [ "${PLATFORM}" = "mac" ]; then
+	CACHE_DEFAULT="$HOME/Library/Caches/MADTestDatabase"
+else
+	CACHE_DEFAULT="${XDG_CACHE_HOME:-$HOME/.cache}/MADTestDatabase"
+fi
+CACHE="${MAD_TESTDB_CACHE:-${CACHE_DEFAULT}}"
+
+# macOS/Linux publish on every interface so the Linux image and the CLI fixtures
+# reach the Mac's containers by name; Windows binds loopback so the test servers
+# are not exposed on the LAN.  MAD_TESTDB_BIND overrides ("" = all interfaces).
+if [ -n "${MAD_TESTDB_BIND:-}" ]; then
+	BIND="${MAD_TESTDB_BIND}"
+elif [ "${PLATFORM}" = "windows" ]; then
+	BIND="127.0.0.1"
+else
+	BIND=""
+fi
+
+# Capture the real docker binary before the function below shadows the name, and
+# wrap it so Docker invocations on Windows never get their arguments rewritten
+# by MSYS path conversion (which would mangle /dataset and container:/path).
+DOCKER_BIN="$(command -v docker 2>/dev/null || true)"
+docker() {
+	if [ "${PLATFORM}" = "windows" ]; then
+		MSYS_NO_PATHCONV=1 "${DOCKER_BIN}" "$@"
+	else
+		"${DOCKER_BIN}" "$@"
+	fi
+}
 
 DATASET_TARBALL="${CACHE}/test_db.tar.gz"
 DATASET_DIR="${CACHE}/${DATASET_DIRNAME}"
@@ -74,6 +132,56 @@ usage() {
 	awk 'NR > 1 && /^#/ { sub(/^# ?/, ""); print; next } NR > 1 { exit }' "$0"
 }
 
+# A portable sha256: shasum first, then sha256sum, then PowerShell/certutil on
+# Windows.  Never assume shasum exists on Windows.
+sha256_of() { # <file> -> lowercase hex digest
+	if command -v shasum >/dev/null 2>&1; then
+		shasum -a 256 "$1" | awk '{print $1}'
+	elif command -v sha256sum >/dev/null 2>&1; then
+		sha256sum "$1" | awk '{print $1}'
+	elif [ "${PLATFORM}" = "windows" ]; then
+		local win
+		win="$(cygpath -w "$1" 2>/dev/null || echo "$1")"
+		if command -v powershell.exe >/dev/null 2>&1; then
+			powershell.exe -NoProfile -NonInteractive -Command \
+				"(Get-FileHash -Algorithm SHA256 -LiteralPath '${win}').Hash.ToLowerInvariant()" \
+				| tr -d '\r\n'
+		else
+			certutil -hashfile "${win}" SHA256 2>/dev/null \
+				| awk 'tolower($0) ~ /^[0-9a-f]{64}$/ { print; exit }'
+		fi
+	else
+		die "no sha256 tool found (shasum or sha256sum)"
+	fi
+}
+
+checksum_matches() { # <file> <sha256>
+	local actual
+	actual="$(sha256_of "$1")"
+	[ "${actual}" = "$2" ]
+}
+
+# The path Docker must see for a host path.  On Windows the Docker daemon is a
+# Windows process and needs a Windows path; Git Bash's own /c/... spelling is
+# meaningless to it.
+docker_host_path() { # <host-path>
+	if [ "${PLATFORM}" = "windows" ]; then
+		cygpath -w "$1" 2>/dev/null || echo "$1"
+	else
+		echo "$1"
+	fi
+}
+
+# The --publish argument for this container's port, honouring the bind address.
+publish_arg() { # <container-port>
+	local container_port="$1"
+	if [ -n "${BIND}" ]; then
+		echo "${BIND}:${PORT}:${container_port}"
+	else
+		echo "${PORT}:${container_port}"
+	fi
+}
+
 # Echo the SQL passed on stdin (or with --execute) into the container as root,
 # over the Unix socket -- root@localhost, which always exists.
 mysql_root() {
@@ -82,7 +190,7 @@ mysql_root() {
 }
 
 require_docker() {
-	command -v docker >/dev/null 2>&1 || die "docker is not installed -- see https://docs.docker.com/desktop/"
+	[ -n "${DOCKER_BIN}" ] || die "docker is not installed -- see https://docs.docker.com/desktop/"
 	docker info >/dev/null 2>&1 || die "the docker daemon is not running"
 }
 
@@ -115,12 +223,6 @@ fetch_dataset() {
 	[ -d "${DATASET_DIR}" ] || die "unexpected archive layout: ${DATASET_DIRNAME} is missing"
 }
 
-checksum_matches() {
-	local file="$1" expected="$2" actual
-	actual="$(shasum -a 256 "${file}" | awk '{print $1}')"
-	[ "${actual}" = "${expected}" ]
-}
-
 # -------------------------------------------------------------- container ---
 
 container_state() {
@@ -131,11 +233,25 @@ container_image() {
 	docker inspect --format '{{.Config.Image}}' "${CONTAINER}" 2>/dev/null || echo ""
 }
 
-# From the container's config, not `docker port`: a stopped container publishes
-# nothing, and `up` after `down` must restart it rather than recreate it.
-container_ports() {
-	docker inspect --format '{{range .HostConfig.PortBindings}}{{range .}}{{.HostPort}} {{end}}{{end}}' \
-		"${CONTAINER}" 2>/dev/null || echo ""
+# The normalised host bind address of the binding that publishes <port>, from
+# the container's config (a stopped container publishes nothing, and `up` after
+# `down` must restart rather than recreate).  Empty HostIp and "0.0.0.0" are
+# both "all interfaces" and are normalised to "" so an existing Mac container is
+# not recreated merely because Docker renders the value differently.  Returns
+# "_none_" when the container does not publish <port> at all.
+container_bind() { # <port>
+	local port="$1" line ip host_port
+	while IFS= read -r line; do
+		ip="${line%% *}"
+		host_port="${line##* }"
+		[ "${host_port}" = "${port}" ] || continue
+		case "${ip}" in
+			""|"0.0.0.0"|"::") echo "" ;;
+			*) echo "${ip}" ;;
+		esac
+		return 0
+	done < <(docker inspect --format '{{range .HostConfig.PortBindings}}{{range .}}{{.HostIp}} {{.HostPort}}{{println}}{{end}}{{end}}' "${CONTAINER}" 2>/dev/null || true)
+	echo "_none_"
 }
 
 remove_container() {
@@ -144,28 +260,43 @@ remove_container() {
 
 # A plain TCP connect, not lsof: a server running as another user (a stock
 # MySQL install runs as _mysql) is not visible to lsof here but certainly
-# holds the port.
-port_in_use() { # <port>
-	nc -z 127.0.0.1 "$1" >/dev/null 2>&1
+# holds the port.  Prefers nc; on Windows without nc it falls back to
+# PowerShell's Test-NetConnection; if neither can answer it reports "could not
+# pre-check" and lets Docker report a real conflict.
+port_in_use() { # <port> -> 0 when something is listening
+	local port="$1" result
+	if command -v nc >/dev/null 2>&1; then
+		nc -z 127.0.0.1 "${port}" >/dev/null 2>&1
+		return
+	fi
+	if command -v powershell.exe >/dev/null 2>&1; then
+		result="$(powershell.exe -NoProfile -NonInteractive -Command \
+			"(Test-NetConnection -ComputerName 127.0.0.1 -Port ${port} -WarningAction SilentlyContinue).TcpTestSucceeded" \
+			2>/dev/null | tr -d '\r\n ')"
+		if [ "${result}" = "True" ]; then return 0; fi
+		if [ "${result}" = "False" ]; then return 1; fi
+	fi
+	log "could not pre-check port ${port} (no nc or Test-NetConnection); Docker will report a real conflict"
+	return 1
 }
 
 port_conflict_message() { # <port>
 	local port="$1" local_mysqld=""
-	if pgrep -x mysqld >/dev/null 2>&1 || pgrep -x mysqld_safe >/dev/null 2>&1; then
-		local_mysqld="
-       This Mac is running its own mysqld (the Oracle installer's launchd
-       service is the usual holder), and the tests use this container, not it."
+	if command -v pgrep >/dev/null 2>&1; then
+		if pgrep -x mysqld >/dev/null 2>&1 || pgrep -x mysqld_safe >/dev/null 2>&1; then
+			local_mysqld="
+	       This Mac is running its own mysqld (the Oracle installer's launchd
+	       service is the usual holder), and the tests use this container, not it."
+		fi
 	fi
 	die "port ${port} is already in use on 127.0.0.1.${local_mysqld}
-       Publish the container on another port with MAD_TESTDB_PORT=<port> and
-       change the MADMySQL scheme's MAD_MYSQL_TEST_PORT to match."
+	       Publish the container on another port with MAD_TESTDB_PORT=<port> and
+	       change the MADMySQL scheme's MAD_MYSQL_TEST_PORT to match."
 }
 
 container_matches() {
-	local ports
-	ports=" $(container_ports) "
 	[ "$(container_image)" = "${MYSQL_IMAGE}" ] \
-		&& [[ "${ports}" == *" ${PORT} "* ]]
+		&& [ "$(container_bind "${PORT}")" = "${BIND}" ]
 }
 
 create_container() {
@@ -177,10 +308,15 @@ create_container() {
 		return 0
 	fi
 
-	# Check the port before touching anything: a conflict must not destroy a
-	# container that is running happily on some other port.
-	if port_in_use "${PORT}"; then
-		port_conflict_message "${PORT}"
+	# A port held by a *foreign* process is a hard conflict; a port held by our
+	# own (mismatched) container is not -- it is recreated below on the same
+	# volume.  Only pre-check the port when the container is not the one holding
+	# it, so a running all-interface container (Windows now wants loopback) is
+	# not mistaken for a conflict.
+	if [ "${state}" != "running" ] || [ "$(container_bind "${PORT}")" = "_none_" ]; then
+		if port_in_use "${PORT}"; then
+			port_conflict_message "${PORT}"
+		fi
 	fi
 
 	if [ "${state}" != "missing" ] && ! container_matches; then
@@ -195,15 +331,15 @@ create_container() {
 		return 0
 	fi
 
-	log "creating ${CONTAINER} from ${MYSQL_IMAGE_TAG} on :${PORT}"
+	log "creating ${CONTAINER} from ${MYSQL_IMAGE_TAG} on $(publish_arg 3306)"
 	docker volume create "${VOLUME}" >/dev/null
 	if ! docker run -d \
 		--name "${CONTAINER}" \
 		--env MYSQL_ROOT_PASSWORD="${ROOT_PASSWORD}" \
 		--env MYSQL_ROOT_HOST='%' \
-		--publish "${PORT}:3306" \
+		--publish "$(publish_arg 3306)" \
 		--volume "${VOLUME}:/var/lib/mysql" \
-		--volume "${DATASET_DIR}:/dataset:ro" \
+		--volume "$(docker_host_path "${DATASET_DIR}"):/dataset:ro" \
 		"${MYSQL_IMAGE}" >/dev/null; then
 		# A failed -d leaves a container behind in the created state.
 		remove_container
@@ -295,6 +431,15 @@ cmd_up() {
 	log "ready on :${PORT} (dataset ${DATASET_COMMIT:0:8})"
 }
 
+cmd_download() {
+	if [ -d "${DATASET_DIR}" ]; then
+		log "dataset already cached and verified in ${CACHE}"
+		return 0
+	fi
+	fetch_dataset
+	log "downloaded and verified the dataset into ${CACHE}"
+}
+
 cmd_wait() {
 	require_docker
 	wait_for_server
@@ -318,7 +463,7 @@ cmd_status() {
 	log "container: ${CONTAINER} (${state})"
 	log "image:     $(container_image)"
 	if [ "${state}" = "running" ]; then
-		log "port:      ${PORT} -> 3306"
+		log "port:      ${PORT} -> 3306 (bind: ${BIND:-all interfaces})"
 		log "loaded:    $(loaded_commit)"
 		log "employees: $(employee_count)"
 	else
@@ -351,6 +496,7 @@ cmd_reset() {
 
 case "${1:-up}" in
 	up) cmd_up ;;
+	download) cmd_download ;;
 	wait) cmd_wait ;;
 	verify) cmd_verify ;;
 	status) cmd_status ;;

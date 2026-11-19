@@ -9,12 +9,16 @@
 #  from a digest-pinned image, whose named volume holds the AdventureWorksLT2022
 #  sample database restored from a checksum-verified backup.
 #
-#  The same container serves the Linux image and the CLI fixtures, which reach
-#  the Mac's `mac:1433`; the port is published on every interface for that
-#  reason.  One server -- do not start a second SQL Server container.
+#  On macOS/Linux the same container serves the Linux image and the CLI fixtures,
+#  which reach the Mac's `mac:1433`; the port is published on every interface for
+#  that reason.  On Windows it binds loopback by default so the test server is
+#  not exposed on the LAN.  One server -- do not start a second SQL Server
+#  container.  (The live suite hardcodes 1433: there is no MAD_TDS_TEST_PORT in
+#  the current test, so the server stays on 1433.)
 #
 #  Usage:
 #    sqlserver-test-db.sh up       create/start the server, restore if needed (default)
+#    sqlserver-test-db.sh download fetch + checksum-verify the backup into the cache (no Docker)
 #    sqlserver-test-db.sh wait     block until the server answers
 #    sqlserver-test-db.sh verify   check the database and its pinned row count
 #    sqlserver-test-db.sh status   container, port, volume, and what is loaded
@@ -30,8 +34,14 @@
 #    MAD_TESTDB_PORT    host port to publish (default 1433, what the tests use)
 #    MAD_TESTDB_NAME    container name      (default mad-mssql)
 #    MAD_TESTDB_VOLUME  volume name         (default mad-mssql-data)
-#    MAD_TESTDB_CACHE   download cache      (default ~/Library/Caches/MADTestDatabase)
+#    MAD_TESTDB_CACHE   download cache      (default is per-platform, see below)
+#    MAD_TESTDB_BIND    host IP to bind the published port to (default "" on
+#                       macOS/Linux = all interfaces; "127.0.0.1" on Windows)
 #    MAD_TESTDB_BACKUP  use this local .bak instead of the cache/download
+#
+#  The download cache defaults to $HOME/Library/Caches/MADTestDatabase on macOS,
+#  ${XDG_CACHE_HOME:-$HOME/.cache}/MADTestDatabase on Linux and
+#  ${LOCALAPPDATA}/MADTestDatabase on Windows.
 #
 #  The first `up` pulls the image (~1.5 GB), starts SQL Server, and restores
 #  the 8 MB backup (a minute or two).  Later runs take seconds.  Bump the pins
@@ -49,7 +59,58 @@ TESTDB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONTAINER="${MAD_TESTDB_NAME:-mad-mssql}"
 VOLUME="${MAD_TESTDB_VOLUME:-mad-mssql-data}"
 PORT="${MAD_TESTDB_PORT:-1433}"
-CACHE="${MAD_TESTDB_CACHE:-$HOME/Library/Caches/MADTestDatabase}"
+
+# ---------------------------------------------------------------- platform ---
+# One script, three platforms: macOS (system bash 3.2), Linux, and Git Bash on
+# Windows.  The cache lives in a per-platform location; the sha256 helper and
+# the host-port check degrade gracefully; and Docker host paths are converted
+# with cygpath on Windows, where MSYS_NO_PATHCONV also stops MSYS from rewriting
+# container-side paths such as /var/opt/mssql and /opt/mssql-tools18.
+detect_platform() {
+	case "$(uname -s)" in
+		Darwin) echo "mac" ;;
+		MINGW*|MSYS*|CYGWIN*) echo "windows" ;;
+		*) echo "linux" ;;
+	esac
+}
+PLATFORM="$(detect_platform)"
+
+if [ "${PLATFORM}" = "windows" ]; then
+	if [ -n "${LOCALAPPDATA:-}" ]; then
+		CACHE_DEFAULT="$(cygpath -u "${LOCALAPPDATA}")/MADTestDatabase"
+	else
+		CACHE_DEFAULT="$HOME/AppData/Local/MADTestDatabase"
+	fi
+elif [ "${PLATFORM}" = "mac" ]; then
+	CACHE_DEFAULT="$HOME/Library/Caches/MADTestDatabase"
+else
+	CACHE_DEFAULT="${XDG_CACHE_HOME:-$HOME/.cache}/MADTestDatabase"
+fi
+CACHE="${MAD_TESTDB_CACHE:-${CACHE_DEFAULT}}"
+
+# macOS/Linux publish on every interface so the Linux image and the CLI fixtures
+# reach the Mac's containers by name; Windows binds loopback so the test servers
+# are not exposed on the LAN.  MAD_TESTDB_BIND overrides ("" = all interfaces).
+if [ -n "${MAD_TESTDB_BIND:-}" ]; then
+	BIND="${MAD_TESTDB_BIND}"
+elif [ "${PLATFORM}" = "windows" ]; then
+	BIND="127.0.0.1"
+else
+	BIND=""
+fi
+
+# Capture the real docker binary before the function below shadows the name, and
+# wrap it so Docker invocations on Windows never get their arguments rewritten
+# by MSYS path conversion (which would mangle /var/opt/mssql and container:/path).
+DOCKER_BIN="$(command -v docker 2>/dev/null || true)"
+docker() {
+	if [ "${PLATFORM}" = "windows" ]; then
+		MSYS_NO_PATHCONV=1 "${DOCKER_BIN}" "$@"
+	else
+		"${DOCKER_BIN}" "$@"
+	fi
+}
+
 BACKUP="${MAD_TESTDB_BACKUP:-${CACHE}/${DATASET_FILENAME}}"
 MSSQL_IMAGE="${MSSQL_IMAGE_TAG}@${MSSQL_IMAGE_DIGEST}"
 
@@ -66,8 +127,58 @@ usage() {
 	awk 'NR > 1 && /^#/ { sub(/^# ?/, ""); print; next } NR > 1 { exit }' "$0"
 }
 
+# A portable sha256: shasum first, then sha256sum, then PowerShell/certutil on
+# Windows.  Never assume shasum exists on Windows.
+sha256_of() { # <file> -> lowercase hex digest
+	if command -v shasum >/dev/null 2>&1; then
+		shasum -a 256 "$1" | awk '{print $1}'
+	elif command -v sha256sum >/dev/null 2>&1; then
+		sha256sum "$1" | awk '{print $1}'
+	elif [ "${PLATFORM}" = "windows" ]; then
+		local win
+		win="$(cygpath -w "$1" 2>/dev/null || echo "$1")"
+		if command -v powershell.exe >/dev/null 2>&1; then
+			powershell.exe -NoProfile -NonInteractive -Command \
+				"(Get-FileHash -Algorithm SHA256 -LiteralPath '${win}').Hash.ToLowerInvariant()" \
+				| tr -d '\r\n'
+		else
+			certutil -hashfile "${win}" SHA256 2>/dev/null \
+				| awk 'tolower($0) ~ /^[0-9a-f]{64}$/ { print; exit }'
+		fi
+	else
+		die "no sha256 tool found (shasum or sha256sum)"
+	fi
+}
+
+checksum_matches() { # <file> <sha256>
+	local actual
+	actual="$(sha256_of "$1")"
+	[ "${actual}" = "$2" ]
+}
+
+# The path Docker must see for a host path.  On Windows the Docker daemon is a
+# Windows process and needs a Windows path; Git Bash's own /c/... spelling is
+# meaningless to it.
+docker_host_path() { # <host-path>
+	if [ "${PLATFORM}" = "windows" ]; then
+		cygpath -w "$1" 2>/dev/null || echo "$1"
+	else
+		echo "$1"
+	fi
+}
+
+# The --publish argument for this container's port, honouring the bind address.
+publish_arg() { # <container-port>
+	local container_port="$1"
+	if [ -n "${BIND}" ]; then
+		echo "${BIND}:${PORT}:${container_port}"
+	else
+		echo "${PORT}:${container_port}"
+	fi
+}
+
 require_docker() {
-	command -v docker >/dev/null 2>&1 || die "docker is not installed -- see https://docs.docker.com/desktop/"
+	[ -n "${DOCKER_BIN}" ] || die "docker is not installed -- see https://docs.docker.com/desktop/"
 	docker info >/dev/null 2>&1 || die "the docker daemon is not running"
 }
 
@@ -99,12 +210,6 @@ fetch_backup() {
 		|| die "backup checksum mismatch: ${BACKUP}"
 }
 
-checksum_matches() { # <file> <sha256>
-	local actual
-	actual="$(shasum -a 256 "$1" | awk '{print $1}')"
-	[ "${actual}" = "$2" ]
-}
-
 # -------------------------------------------------------------- container ---
 
 container_state() {
@@ -115,11 +220,25 @@ container_image() {
 	docker inspect --format '{{.Config.Image}}' "${CONTAINER}" 2>/dev/null || echo ""
 }
 
-# From the container's config, not `docker port`: a stopped container publishes
-# nothing, and `up` after `down` must restart it rather than recreate it.
-container_ports() {
-	docker inspect --format '{{range .HostConfig.PortBindings}}{{range .}}{{.HostPort}} {{end}}{{end}}' \
-		"${CONTAINER}" 2>/dev/null || echo ""
+# The normalised host bind address of the binding that publishes <port>, from
+# the container's config (a stopped container publishes nothing, and `up` after
+# `down` must restart rather than recreate).  Empty HostIp and "0.0.0.0" are
+# both "all interfaces" and are normalised to "" so an existing Mac container is
+# not recreated merely because Docker renders the value differently.  Returns
+# "_none_" when the container does not publish <port> at all.
+container_bind() { # <port>
+	local port="$1" line ip host_port
+	while IFS= read -r line; do
+		ip="${line%% *}"
+		host_port="${line##* }"
+		[ "${host_port}" = "${port}" ] || continue
+		case "${ip}" in
+			""|"0.0.0.0"|"::") echo "" ;;
+			*) echo "${ip}" ;;
+		esac
+		return 0
+	done < <(docker inspect --format '{{range .HostConfig.PortBindings}}{{range .}}{{.HostIp}} {{.HostPort}}{{println}}{{end}}{{end}}' "${CONTAINER}" 2>/dev/null || true)
+	echo "_none_"
 }
 
 container_volume() {
@@ -132,16 +251,29 @@ remove_container() {
 }
 
 # A plain TCP connect, not lsof: another SQL Server may be running as a
-# different user and still hold the port.
-port_in_use() {
-	nc -z 127.0.0.1 "${PORT}" >/dev/null 2>&1
+# different user and still hold the port.  Prefers nc; on Windows without nc it
+# falls back to PowerShell's Test-NetConnection; if neither can answer it
+# reports "could not pre-check" and lets Docker report a real conflict.
+port_in_use() { # <port> -> 0 when something is listening
+	local port="$1" result
+	if command -v nc >/dev/null 2>&1; then
+		nc -z 127.0.0.1 "${port}" >/dev/null 2>&1
+		return
+	fi
+	if command -v powershell.exe >/dev/null 2>&1; then
+		result="$(powershell.exe -NoProfile -NonInteractive -Command \
+			"(Test-NetConnection -ComputerName 127.0.0.1 -Port ${port} -WarningAction SilentlyContinue).TcpTestSucceeded" \
+			2>/dev/null | tr -d '\r\n ')"
+		if [ "${result}" = "True" ]; then return 0; fi
+		if [ "${result}" = "False" ]; then return 1; fi
+	fi
+	log "could not pre-check port ${port} (no nc or Test-NetConnection); Docker will report a real conflict"
+	return 1
 }
 
 container_matches() {
-	local ports
-	ports=" $(container_ports) "
 	[ "$(container_image)" = "${MSSQL_IMAGE}" ] \
-		&& [[ "${ports}" == *" ${PORT} "* ]] \
+		&& [ "$(container_bind "${PORT}")" = "${BIND}" ] \
 		&& [ "$(container_volume)" = "${VOLUME}" ]
 }
 
@@ -154,13 +286,18 @@ create_container() {
 		return 0
 	fi
 
-	# Check the port before touching anything: a conflict must not destroy a
-	# container that is running happily on some other port.
-	if port_in_use; then
-		die "port ${PORT} is already in use on 127.0.0.1.
-       Stop the server holding it, or publish the container on another port
-       with MAD_TESTDB_PORT=<port> and point the tests at it with
-       MAD_TDS_TEST_PORT=<port>."
+	# A port held by a *foreign* process is a hard conflict; a port held by our
+	# own (mismatched) container is not -- it is recreated below on the same
+	# volume.  Only pre-check the port when the container is not the one holding
+	# it, so a running all-interface container (Windows now wants loopback) is
+	# not mistaken for a conflict.
+	if [ "${state}" != "running" ] || [ "$(container_bind "${PORT}")" = "_none_" ]; then
+		if port_in_use "${PORT}"; then
+			die "port ${PORT} is already in use on 127.0.0.1.
+	       Stop the server holding it.  The TDS live suite hardcodes 1433 (there
+	       is no MAD_TDS_TEST_PORT in the current test), so it cannot be moved to
+	       another port without a test change."
+		fi
 	fi
 
 	if [ "${state}" != "missing" ] && ! container_matches; then
@@ -175,14 +312,14 @@ create_container() {
 		return 0
 	fi
 
-	log "creating ${CONTAINER} from ${MSSQL_IMAGE_TAG} on :${PORT}"
+	log "creating ${CONTAINER} from ${MSSQL_IMAGE_TAG} on $(publish_arg 1433)"
 	docker volume create "${VOLUME}" >/dev/null
 	if ! docker run -d \
 		--name "${CONTAINER}" \
 		--env ACCEPT_EULA=Y \
 		--env MSSQL_SA_PASSWORD="${SA_PASSWORD}" \
 		--env MSSQL_PID=developer \
-		--publish "${PORT}:1433" \
+		--publish "$(publish_arg 1433)" \
 		--volume "${VOLUME}:/var/opt/mssql" \
 		"${MSSQL_IMAGE}" >/dev/null; then
 		# A failed -d leaves a container behind in the created state.
@@ -236,7 +373,7 @@ product_count() {
 restore_dataset() {
 	log "restoring ${DATABASE_NAME} from ${DATASET_FILENAME} -- a minute or two, once per volume"
 	docker exec -u root "${CONTAINER}" mkdir -p /var/opt/mssql/backup
-	docker cp "${BACKUP}" "${CONTAINER}:/var/opt/mssql/backup/${DATASET_FILENAME}" >/dev/null
+	docker cp "$(docker_host_path "${BACKUP}")" "${CONTAINER}:/var/opt/mssql/backup/${DATASET_FILENAME}" >/dev/null
 	docker exec -u root "${CONTAINER}" chown -R mssql:mssql /var/opt/mssql/backup
 
 	sqlcmd "RESTORE DATABASE [${DATABASE_NAME}]
@@ -275,6 +412,15 @@ cmd_up() {
 	log "ready on 127.0.0.1:${PORT} (dataset restored)"
 }
 
+cmd_download() {
+	if [ -f "${BACKUP}" ] && checksum_matches "${BACKUP}" "${DATASET_SHA256}"; then
+		log "backup already cached and verified in ${BACKUP}"
+		return 0
+	fi
+	fetch_backup
+	log "downloaded and verified the backup into ${BACKUP}"
+}
+
 cmd_wait() {
 	require_docker
 	wait_for_server
@@ -299,7 +445,7 @@ cmd_status() {
 	log "image:     $(container_image)"
 	log "volume:    $(container_volume)"
 	if [ "${state}" = "running" ]; then
-		log "port:      ${PORT} -> 1433"
+		log "port:      ${PORT} -> 1433 (bind: ${BIND:-all interfaces})"
 		if database_loaded; then
 			log "database:  ${DATABASE_NAME} (products: $(product_count))"
 		else
@@ -339,6 +485,7 @@ cmd_reset() {
 
 case "${1:-up}" in
 	up) cmd_up ;;
+	download) cmd_download ;;
 	wait) cmd_wait ;;
 	verify) cmd_verify ;;
 	status) cmd_status ;;
