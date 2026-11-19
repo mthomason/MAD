@@ -128,4 +128,40 @@ public sealed class DocumentViewModelTests
         Assert.NotNull(spec);
         Assert.Equal(ConnectionDriver.Sqlite3, spec.Driver);
     }
+
+    [Fact]
+    public void ResolveCredentials_RecallsFromStore_AndSkipsSqlite()
+    {
+        var store = new InMemoryCredentialStore();
+        store.Save("mysql:db.example.com:3306/employees", "root", "pw");
+
+        var server = new ConnectionSpec(ConnectionDriver.MySql, null, "db.example.com", 3306, "employees", null, null, null);
+        Assert.Equal("root:pw", DocumentViewModel.ResolveCredentials(server, store));
+
+        var sqlite = new ConnectionSpec(ConnectionDriver.Sqlite3, "/db/ch.sqlite3", null, null, null, null, null, null);
+        Assert.Null(DocumentViewModel.ResolveCredentials(sqlite, store));
+    }
+
+    private sealed class InMemoryCredentialStore : ICredentialStore
+    {
+        private readonly Dictionary<string, (string Username, string Password)> _values = new();
+
+        public void Save(string key, string username, string password)
+            => _values[key] = (username, password);
+
+        public bool TryRead(string key, out string username, out string password)
+        {
+            if (_values.TryGetValue(key, out var value))
+            {
+                username = value.Username;
+                password = value.Password;
+                return true;
+            }
+            username = "";
+            password = "";
+            return false;
+        }
+
+        public void Delete(string key) => _values.Remove(key);
+    }
 }

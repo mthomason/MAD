@@ -19,8 +19,10 @@ public sealed class DocumentViewModel : ObservableObject
     private readonly EngineService _engine;
     private readonly Func<string, string?>? _exportPath;
     private readonly Func<string?>? _saveAsPath;
+    private readonly ICredentialStore? _credentials;
     private int _handle = -1;
     private string? _filePath;
+    private ConnectionSpec? _connection;
 
     private bool _isBusy;
     private string _statusText = "";
@@ -33,11 +35,12 @@ public sealed class DocumentViewModel : ObservableObject
     private int _rowCount;
     private DataView? _dataView;
 
-    public DocumentViewModel(EngineService engine, Func<string, string?>? exportPath = null, Func<string?>? saveAsPath = null)
+    public DocumentViewModel(EngineService engine, Func<string, string?>? exportPath = null, Func<string?>? saveAsPath = null, ICredentialStore? credentials = null)
     {
         _engine = engine ?? throw new ArgumentNullException(nameof(engine));
         _exportPath = exportPath;
         _saveAsPath = saveAsPath;
+        _credentials = credentials;
         RefreshCommand = new AsyncRelayCommand(RefreshAsync, () => HasDocument);
         ExportCsvCommand = new AsyncRelayCommand(() => ExportAsync("csv"), () => HasDocument);
         ExportJsonCommand = new AsyncRelayCommand(() => ExportAsync("json"), () => HasDocument);
@@ -141,6 +144,7 @@ public sealed class DocumentViewModel : ObservableObject
         Tables = describe.Tables;
 
         Sql = await _engine.QueryAsync(_handle);
+        _connection = await _engine.ConnectionAsync(_handle);
 
         DataView = null;
         RowCount = 0;
@@ -155,7 +159,7 @@ public sealed class DocumentViewModel : ObservableObject
         ErrorText = null;
         try
         {
-            var refresh = await _engine.RefreshAsync(_handle);
+            var refresh = await _engine.RefreshAsync(_handle, credentials: ResolveCredentials(_connection, _credentials));
             RowCount = refresh.RowCount;
 
             string json = await _engine.ExportAsync(_handle, "json");
@@ -249,6 +253,7 @@ public sealed class DocumentViewModel : ObservableObject
         try
         {
             await _engine.ApplyConnectionAsync(_handle, spec);
+            _connection = spec;
             await RefreshAsync();
         }
         catch (Exception exception)
@@ -301,6 +306,26 @@ public sealed class DocumentViewModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    /// <summary>Resolves the <c>user:password</c> string to pass to <c>refresh</c>, from the
+    /// active connection's own username/password or from the Credential Manager store.
+    /// Answers null for SQLite (no credentials) or when nothing is known.</summary>
+    public static string? ResolveCredentials(ConnectionSpec? connection, ICredentialStore? store)
+    {
+        if (connection == null || connection.CredentialKey == null) return null;
+
+        string user = connection.Username ?? "";
+        string pass = connection.Password ?? "";
+        if ((string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass)) &&
+            store != null && store.TryRead(connection.CredentialKey, out string savedUser, out string savedPass))
+        {
+            user = savedUser;
+            pass = savedPass;
+        }
+
+        if (string.IsNullOrEmpty(user) && string.IsNullOrEmpty(pass)) return null;
+        return $"{user}:{pass}";
     }
 
     private void RaiseCanExecuteChanged()

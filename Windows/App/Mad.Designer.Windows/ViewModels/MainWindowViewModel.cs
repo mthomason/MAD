@@ -33,13 +33,14 @@ public sealed class MainWindowViewModel : ObservableObject
         Action? editConnection = null,
         Action<string>? openRecent = null,
         IReadOnlyList<string>? recentFiles = null,
-        Func<string?>? saveAsPath = null)
+        Func<string?>? saveAsPath = null,
+        ICredentialStore? credentials = null)
     {
         _openAbout = openAbout;
         _newDocument = newDocument;
         _editConnection = editConnection;
         _openRecent = openRecent;
-        Document = new DocumentViewModel(engine, exportPath, saveAsPath);
+        Document = new DocumentViewModel(engine, exportPath, saveAsPath, credentials);
         RecentFiles = recentFiles ?? Array.Empty<string>();
 
         OpenDocumentCommand = new RelayCommand(OpenDocument);

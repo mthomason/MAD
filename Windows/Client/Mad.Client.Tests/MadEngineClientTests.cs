@@ -293,6 +293,30 @@ public sealed class MadEngineClientTests
 	}
 
 	[Fact]
+	public void Create_MissingSqliteFile_IsDatabaseUnreachable_NoMadFile()
+	{
+		var client = StartClient();
+		client.Start();
+
+		string missing = Path.Combine(Path.GetTempPath(), $"mad-missing-{Guid.NewGuid():N}.sqlite3");
+		string mad = Path.Combine(Path.GetTempPath(), $"mad-created-{Guid.NewGuid():N}.mad");
+		try
+		{
+			var error = client.Call("create", Dict("path", mad, "driver", "sqlite3", "file", missing));
+			Assert.False(error.Ok);
+			Assert.Equal(3, error.Error!.Code);
+			Assert.False(File.Exists(mad));
+			Assert.False(File.Exists(missing));
+		}
+		finally
+		{
+			client.Dispose();
+			if (File.Exists(mad)) File.Delete(mad);
+			if (File.Exists(missing)) File.Delete(missing);
+		}
+	}
+
+	[Fact]
 	public void Connection_ReadsBackSqliteFile()
 	{
 		var client = StartClient();
