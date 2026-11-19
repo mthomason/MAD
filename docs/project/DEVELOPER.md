@@ -84,6 +84,7 @@ All three scripts take the same verbs:
 
 ```
 <the framework's script> up       # create/start; load the data if missing (default)
+<the framework's script> download # fetch + checksum-verify the dataset into the cache (no Docker)
 <the framework's script> wait     # block until the server answers
 <the framework's script> verify   # re-check the pinned dataset
 <the framework's script> status   # container, port, volume, what is loaded
@@ -106,6 +107,59 @@ container or volume is deleted, the next `up` rebuilds it from the pins in
 `db.conf`; nothing needs to be created by hand. The SQL Server image is
 `linux/amd64` only, so on Apple silicon Docker Desktop emulates it and prints a
 platform warning — expected, and why the first start is slower than MySQL's.
+
+### Windows and the cross-platform orchestrator
+
+The same three scripts run unchanged on Windows Git Bash; a cross-platform
+orchestrator and a PowerShell wrapper sit at the repository root
+(`TestDatabase/README.md` is the one place to look):
+
+```powershell
+.\TestDatabase\test-databases.ps1 -Action download   # fetch datasets, no Docker
+.\TestDatabase\test-databases.ps1 -Action up         # create/start all three
+.\TestDatabase\test-databases.ps1 -Action status     # or -Service mysql|tds|postgres
+.\TestDatabase\test-databases.ps1 -Action verify
+.\TestDatabase\test-databases.ps1 -Action env        # prints the env block below
+```
+
+or from Git Bash: `TestDatabase/test-databases.sh up|download|wait|verify|status|logs|down|reset|env [all|mysql|tds|postgres]`.
+
+The download cache is per-platform: `$HOME/Library/Caches/MADTestDatabase`
+(macOS), `${XDG_CACHE_HOME:-$HOME/.cache}/MADTestDatabase` (Linux), and
+`${LOCALAPPDATA}\MADTestDatabase` (Windows), overridable with `MAD_TESTDB_CACHE`.
+
+Windows uses **local containers** reached at `127.0.0.1` and, unlike the Mac,
+**binds the published ports to loopback by default** so the test servers are not
+exposed on the LAN (the Mac keeps all-interface publishing because the Linux
+image and the CLI fixtures reach its containers by name, `mac`). Override the
+bind with `MAD_TESTDB_BIND` only when you have a reason.
+
+The live suites read this environment (apply it in the same session as
+`Windows/Engine/build.ps1` before running the Phase 3b live suites):
+
+```
+MAD_MYSQL_TEST_HOST=127.0.0.1   MAD_MYSQL_TEST_PORT=13306
+MAD_MYSQL_TEST_USER=root        MAD_MYSQL_TEST_PASSWORD=root
+MAD_MYSQL_TEST_SCHEMA=employees
+MAD_TDS_TEST_HOST=127.0.0.1     MAD_TDS_TEST_USER=sa
+MAD_TDS_TEST_PASSWORD=Root1@Root2  MAD_TDS_TEST_DATABASE=AdventureWorksLT2022
+MAD_PG_TEST_HOST=127.0.0.1      MAD_PG_TEST_PORT=5432
+MAD_PG_TEST_USER=mad            MAD_PG_TEST_PASSWORD=mad_test_pw
+MAD_PG_TEST_DATABASE=chinook
+```
+
+There is deliberately **no `MAD_TDS_TEST_PORT`**: the TDS live suite hardcodes
+1433, so the SQL Server container stays on 1433.
+
+On Windows, the local CLI fixtures are refreshed with `--host 127.0.0.1` (the
+documents store `mac`; the flag overrides it for one run without rewriting the
+document):
+
+```powershell
+mad refresh CLI\Fixtures\MySQL.employees.mad --host 127.0.0.1 --port 13306 --credentials root:root --rows 50 --no-keychain
+mad refresh CLI\Fixtures\TDS.AdventureWorksLT2022.mad --host 127.0.0.1 --port 1433 --credentials 'sa:Root1@Root2' --rows 20 --no-keychain
+mad refresh CLI\Fixtures\Postgres.chinook.mad --host 127.0.0.1 --port 5432 --credentials mad:mad_test_pw --rows 25 --no-keychain
+```
 
 **MySQL is on 13306, not 3306.** The Oracle MySQL installer's launchd service
 (`com.oracle.oss.mysql.mysqld`) may own 3306 on this Mac, as it did on
