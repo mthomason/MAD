@@ -243,8 +243,11 @@ The shell has the three-workspace frame (MAD Query / Designer / Viewer): Query i
 full visual query designer — a left schema-table list, floating table cards on a canvas,
 drag-to-connect joins (Left Outer Join by default, with a join-type selector), WHERE and
 GROUP BY editors, and a mutually exclusive SQL editor with "Revert to Generated SQL" /
-"Validate SQL" / "Compile & Apply SQL" — Viewer shows the refreshed rows in a `DataGrid`
-and exports CSV/JSON, and Designer is the report-layout studio (a three-pane band-and-element
+"Validate SQL" / "Compile & Apply SQL" — Viewer is the rendered report: a WebView2 shows
+the engine's paginated HTML facsimile (the accepted interim for the Mac's PDF view) with
+page-size selection (US Letter / US Legal / A4), zoom, page navigation, print through the
+browser print path, and export in all six formats (HTML, HTML-flow, CSV, JSON, JSON-report,
+text) — and Designer is the report-layout studio (a three-pane band-and-element
 canvas with an element palette, a minimap / sections / query-fields sidebar, and a
 selected-element inspector) backed by the Phase 6c `layout-model` protocol. It launches to the empty
 main window with every document-dependent control disabled (no auto-open, no file dialog).
@@ -256,6 +259,11 @@ passed to the engine as `user:password`; recent files is a client-side list. The
 window (Overview / License & Notice / Acknowledgements) renders the Windows dependency
 register in `ThirdParty/Licenses/Windows/` and the relink offer — the Windows component
 set, never the Apple one.
+
+The Viewer's report preview uses the **WebView2** control (`Microsoft.Web.WebView2`, pinned
+in the app's `.csproj`), which needs the Evergreen WebView2 Runtime — shipped with Windows
+11 and installed alongside Microsoft Edge on Windows 10. PDF is an accepted gap: the
+Windows engine has no PDF exporter, so HTML + print is the interim.
 
 Build and run (the engine must be built first — see above):
 
@@ -269,7 +277,9 @@ The headless acceptance lives in `Windows/App/Mad.Designer.Windows.Tests` (xunit
 layers through the London flow (open → describe 21/11 → refresh 76 → export json/csv →
 clean shutdown), the Phase 6b query model (add/connect/filter/group/remove tables and
 validate/apply SQL against a fresh chinook document, plus the canvas and view-model
-layers), and checks the licence register:
+layers), the Phase 6c designer and the Phase 6d viewer (the rendered report's page count
+and status line, the page-size lock and its effect on the exported page box, every export
+format, and the workspace materialised on an STA thread), and checks the licence register:
 
 ```powershell
 dotnet test .\Windows\App\Mad.Designer.Windows.Tests

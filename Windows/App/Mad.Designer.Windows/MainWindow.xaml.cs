@@ -39,31 +39,23 @@ public partial class MainWindow : Window
         window.Show();
     }
 
-    private static readonly IReadOnlyDictionary<string, (string Filter, string Extension)> ExportDialogs =
-        new Dictionary<string, (string Filter, string Extension)>
-        {
-            ["html"] = ("HTML page (*.html)|*.html", "html"),
-            ["html-flow"] = ("HTML flow (*.html)|*.html", "html"),
-            ["csv"] = ("CSV spreadsheet (*.csv)|*.csv", "csv"),
-            ["json"] = ("JSON data (*.json)|*.json", "json"),
-            ["json-report"] = ("JSON full report (*.json)|*.json", "json"),
-            ["text"] = ("Plain text (*.txt)|*.txt", "txt"),
-        };
-
+    /// <summary>The save dialog for the Viewer's export format selector. The extension comes
+    /// from the same catalogue the view model exports with, so the dialog and the engine
+    /// cannot disagree about a format's file type.</summary>
     private string? ShowExportSaveDialog(string format)
     {
-        (string Filter, string Extension) entry =
-            ExportDialogs.TryGetValue(format, out var known) ? known : ("All files (*.*)|*.*", format);
+        var metadata = ViewerViewModel.ExportFormats.FirstOrDefault(f => f.Format == format);
+        string extension = metadata?.Extension ?? "txt";
 
         string stem = Path.GetFileNameWithoutExtension(_viewModel.Document.FileName);
         if (string.IsNullOrEmpty(stem)) stem = "report";
 
         var dialog = new Microsoft.Win32.SaveFileDialog
         {
-            Filter = entry.Filter,
-            DefaultExt = entry.Extension,
+            Filter = $"Report (*.{extension})|*.{extension}|All files (*.*)|*.*",
+            DefaultExt = extension,
             AddExtension = true,
-            FileName = $"{stem}.{entry.Extension}",
+            FileName = $"{stem}.{extension}",
         };
         return dialog.ShowDialog() == true ? dialog.FileName : null;
     }
