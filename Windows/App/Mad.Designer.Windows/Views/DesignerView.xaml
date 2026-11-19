@@ -8,10 +8,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Top workspace bar (palette arrives in Phase 6c-ii) -->
+        <!-- Top workspace bar: element palette -->
         <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="8,5">
-            <TextBlock Text="Insert:  Label  ·  Data Field  ·  Aggregate  ·  Barcode  ·  Image  ·  Line"
-                       Foreground="Gray" FontSize="12"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Insert:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <Button Content="Label" Command="{Binding AddLabelCommand}" Margin="0,0,4,0"/>
+                <Button Content="Data Field" Command="{Binding AddDataFieldCommand}" Margin="0,0,4,0"/>
+                <Button Content="Aggregate" Command="{Binding AddAggregateCommand}" Margin="0,0,4,0"/>
+                <Button Content="Barcode" IsEnabled="False" Margin="0,0,4,0"
+                        ToolTip="Barcode is not available in the Windows engine"/>
+                <Button Content="Image" Command="{Binding AddImageCommand}" Margin="0,0,4,0"/>
+                <Button Content="Line" Command="{Binding AddLineRuleCommand}" Margin="0,0,4,0"/>
+            </StackPanel>
         </Border>
 
         <Grid Grid.Row="1">

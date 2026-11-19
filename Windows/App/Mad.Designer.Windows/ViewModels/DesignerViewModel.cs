@@ -37,9 +37,20 @@ public sealed class DesignerViewModel : ObservableObject
     public DesignerViewModel(EngineService engine)
     {
         _engine = engine ?? throw new ArgumentNullException(nameof(engine));
+        AddLabelCommand = new AsyncRelayCommand(() => AddPaletteAsync("label", 124, 22), () => HasDocument);
+        AddDataFieldCommand = new AsyncRelayCommand(() => AddPaletteAsync("data-field", 140, 22), () => HasDocument);
+        AddAggregateCommand = new AsyncRelayCommand(() => AddPaletteAsync("aggregate", 144, 22), () => HasDocument);
+        AddImageCommand = new AsyncRelayCommand(() => AddPaletteAsync("image", 96, 64), () => HasDocument);
+        AddLineRuleCommand = new AsyncRelayCommand(() => AddPaletteAsync("line", 320, 8), () => HasDocument);
     }
 
     public bool HasDocument => _handle >= 0;
+
+    public AsyncRelayCommand AddLabelCommand { get; }
+    public AsyncRelayCommand AddDataFieldCommand { get; }
+    public AsyncRelayCommand AddAggregateCommand { get; }
+    public AsyncRelayCommand AddImageCommand { get; }
+    public AsyncRelayCommand AddLineRuleCommand { get; }
 
     public LayoutModel Model => _model;
     public IReadOnlyList<LayoutSection> Sections => _model.Sections;
@@ -65,6 +76,7 @@ public sealed class DesignerViewModel : ObservableObject
     {
         _handle = handle;
         OnPropertyChanged(nameof(HasDocument));
+        RaiseCanExecuteChanged();
         await ReloadAsync();
     }
 
@@ -198,6 +210,28 @@ public sealed class DesignerViewModel : ObservableObject
 
     public Task SetPaperSizeAsync(int paperSize)
         => MutateAsync(() => _engine.SetPaperSizeAsync(_handle, paperSize));
+
+    private async Task AddPaletteAsync(string kind, double w, double h)
+    {
+        if (!HasDocument) return;
+        long section = SelectedSectionId != 0 && _model.Sections.Any(s => s.Id == SelectedSectionId)
+            ? SelectedSectionId
+            : (_model.Sections.FirstOrDefault(s => s.Type == SectionType.Body)?.Id
+               ?? _model.Sections.FirstOrDefault()?.Id ?? 0);
+        if (section == 0) return;
+
+        var origin = NextAvailableOrigin(section, w, h);
+        await AddElementAsync(kind, section, origin.X, origin.Y);
+    }
+
+    private void RaiseCanExecuteChanged()
+    {
+        AddLabelCommand.RaiseCanExecuteChanged();
+        AddDataFieldCommand.RaiseCanExecuteChanged();
+        AddAggregateCommand.RaiseCanExecuteChanged();
+        AddImageCommand.RaiseCanExecuteChanged();
+        AddLineRuleCommand.RaiseCanExecuteChanged();
+    }
 
     private static bool Intersects(double x, double y, double w, double h, LayoutElement el)
         => x < el.X + el.W && x + w > el.X && y < el.Y + el.H && y + h > el.Y;

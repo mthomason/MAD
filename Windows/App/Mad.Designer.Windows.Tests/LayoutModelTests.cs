@@ -290,6 +290,36 @@ public sealed class LayoutProtocolTests
     }
 
     [Fact]
+    public async Task AddElement_LineAndImageKinds()
+    {
+        string sqlite = CopyChinookToTemp();
+        string mad = Path.Combine(Path.GetTempPath(), $"mad-layout-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var service = new EngineService();
+            var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
+            var model = await service.LayoutModelAsync(open.Handle);
+            long detailId = model.Sections.Single(s => s.Type == SectionType.Body).Id;
+
+            // A line rule is a static label with empty text and a 1.5pt bottom border.
+            model = await service.AddElementAsync(open.Handle, "line", detailId, 10, 20);
+            var line = model.Elements.Single(e => e.IsLineRule);
+            Assert.Equal(ElementType.LabelStatic, line.Type);
+            Assert.Equal(1.5, line.BorderBottom);
+
+            // An image is a placeholder element.
+            model = await service.AddElementAsync(open.Handle, "image", detailId, 30, 20);
+            var image = model.Elements.Single(e => e.IsImage);
+            Assert.Equal(ElementType.Image, image.Type);
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+            if (File.Exists(mad)) File.Delete(mad);
+        }
+    }
+
+    [Fact]
     public async Task LayoutMutations_StyleContentDuplicateAndPaper()
     {
         string sqlite = CopyChinookToTemp();
