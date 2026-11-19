@@ -11,8 +11,35 @@
     </Window.Resources>
 
     <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New Document…" Command="{Binding NewDocumentCommand}"/>
+                <MenuItem Header="_Open…" Command="{Binding OpenDocumentCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Save" Command="{Binding Document.SaveCommand}"/>
+                <MenuItem Header="Save _As…" Command="{Binding Document.SaveAsCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Database Connection…" Command="{Binding EditConnectionCommand}"
+                          IsEnabled="{Binding Document.HasDocument}"/>
+                <Separator/>
+                <MenuItem Header="_Recent Files" ItemsSource="{Binding RecentFiles}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding}"/>
+                            <Setter Property="Command" Value="{Binding DataContext.OpenRecentCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About MAD Designer" Command="{Binding OpenAboutCommand}"/>
+            </MenuItem>
+        </Menu>
+
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
+                <Button Content="New…" Command="{Binding NewDocumentCommand}"/>
                 <Button Content="Open…" Command="{Binding OpenDocumentCommand}"/>
                 <Button Content="About" Command="{Binding OpenAboutCommand}"/>
             </ToolBar>
@@ -32,7 +59,8 @@
             </StatusBarItem>
         </StatusBar>
 
-        <TabControl SelectedIndex="{Binding SelectedWorkspace, Mode=TwoWay, Converter={StaticResource EnumToInt}}">
+        <TabControl IsEnabled="{Binding Document.HasDocument}"
+                    SelectedIndex="{Binding SelectedWorkspace, Mode=TwoWay, Converter={StaticResource EnumToInt}}">
             <TabItem Header="MAD Query">
                 <views:QueryView/>
             </TabItem>
