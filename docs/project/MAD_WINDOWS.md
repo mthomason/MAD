@@ -354,6 +354,19 @@ unknown method, a missing parameter and an unexpected engine exception all answe
 | `connection` | `handle` | `driver` + `file`/`host`/`port`/`database`/`server` |
 | `apply-connection` | `handle`, `driver` + connection fields, optional `credentials` | `{}` |
 | `query` | `handle` | `sql` |
+| `query-model` | `handle` | `driver` token, `sql`, `sqlSourceText`, `tables`/`links`/`predicates`/`groups` (with store identifiers) |
+| `add-table` | `handle`, `table` (schema name) | the full `query-model` |
+| `remove-table` | `handle`, `table` (query-table id) | the full `query-model` |
+| `add-link` | `handle`, `leftField`, `rightField` (field ids) | the full `query-model` (Left Outer Join default) |
+| `set-link-type` | `handle`, `link`, `type` | the full `query-model` |
+| `swap-link` | `handle`, `link` | the full `query-model` |
+| `delete-link` | `handle`, `link` | the full `query-model` |
+| `add-predicate` | `handle`, `leftField`, `operator`, `value` | the full `query-model` |
+| `remove-predicate` | `handle`, `predicate` | the full `query-model` |
+| `add-group` | `handle`, `field`, `sort` | the full `query-model` |
+| `remove-group` | `handle`, `group` | the full `query-model` |
+| `validate-sql` | `handle`, `sql` | `tables`, `links`, `predicates`, `groups` (the plan's counts) |
+| `apply-sql` | `handle`, `sql` | `tables`, `links`, `predicates`, `groups` |
 | `refresh` | `handle`, optional `rows`/`credentials` | `rowCount`, `elapsed` |
 | `export` | `handle`, `format`, optional `path`/`deterministic` | `format` + `data` (the exporter's bytes) or `path` + `bytes` |
 | `write` | `handle`, `out`, optional `reproducible` | `path`, `bytes` — serializes the live document |
@@ -378,6 +391,21 @@ way the one-shot verbs do, so a checked-in document can run against a different 
 for the session. `write` now serializes the live session document rather than re-opening
 `sourceURL`, so a connection applied in-session is persisted. End-of-file on standard
 input is a clean shutdown, as is `shutdown`.
+
+The `query-model`/`add-table`/…/`apply-sql` methods are the Phase 6b Query workspace
+extension. The original `serve` contract exposed the query only as its generated `sql`,
+which the Mac derives by mutating the `RptqQuery` objects in-process; the WPF app has no
+such in-process handle, so these methods close that gap. `query-model` reads the full
+query model — tables/fields/links/predicates/groups with their store identifiers, the
+entered `sqlSourceText`, and the driver token — and every mutation method answers that
+same shape, so the client replaces its snapshot atomically. The mutations call the same
+factories and `MADSQLQueryDocument` helpers the Mac's `MADMacQueryViewController` uses
+(`newQueryTableForSchemaTable:`, `newQueryLinksWithLeftField:`, `addQueryGroupWithQueryField:`,
+`removeGroupWitObjectID:`, …), and `validate-sql`/`apply-sql` run the existing
+`MADSQLParser` → `MADSQLStatementResolver` → `MADSQLQueryCompiler` path unchanged.
+`query` now returns the all-fields SQL first and falls back to the active-field select,
+matching the Mac's `generatedSQLString:` — so a fresh document with no report elements
+still yields SQL.
 
 **Client and tests.** `Windows/Client/` holds the .NET 10 console acceptance client
 (`Mad.Client`) and the xunit suite (`Mad.Client.Tests`), both pinned by

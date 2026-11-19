@@ -110,3 +110,45 @@ public sealed class AsyncRelayCommand : ICommand
 
     public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 }
+
+/// <summary>An async <see cref="ICommand"/> that carries a parameter and disables itself
+/// while its task runs.</summary>
+public sealed class AsyncRelayCommand<T> : ICommand
+{
+    private readonly Func<T?, Task> _execute;
+    private readonly Func<bool>? _canExecute;
+    private bool _isRunning;
+
+    public AsyncRelayCommand(Func<T?, Task> execute, Func<bool>? canExecute = null)
+    {
+        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+        _canExecute = canExecute;
+    }
+
+    public event EventHandler? CanExecuteChanged;
+
+    public bool CanExecute(object? parameter) => !_isRunning && (_canExecute?.Invoke() ?? true);
+
+    public async void Execute(object? parameter) => await ExecuteAsync((T?)parameter);
+
+    public async Task ExecuteAsync(T? parameter)
+    {
+        if (_isRunning)
+        {
+            return;
+        }
+        _isRunning = true;
+        RaiseCanExecuteChanged();
+        try
+        {
+            await _execute(parameter);
+        }
+        finally
+        {
+            _isRunning = false;
+            RaiseCanExecuteChanged();
+        }
+    }
+
+    public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+}

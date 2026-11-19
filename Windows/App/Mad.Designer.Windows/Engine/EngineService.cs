@@ -83,6 +83,84 @@ public sealed class EngineService : IAsyncDisposable
         return result.GetProperty("sql").GetString() ?? "";
     }
 
+    public async Task<QueryModel> QueryModelAsync(int handle)
+    {
+        var result = await CallAsync("query-model", new Dictionary<string, object?> { ["handle"] = handle }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<QueryModel> AddTableAsync(int handle, string table)
+    {
+        var result = await CallAsync("add-table", new Dictionary<string, object?> { ["handle"] = handle, ["table"] = table }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<QueryModel> RemoveTableAsync(int handle, long table)
+    {
+        var result = await CallAsync("remove-table", new Dictionary<string, object?> { ["handle"] = handle, ["table"] = table }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<QueryModel> AddLinkAsync(int handle, long leftField, long rightField)
+    {
+        var result = await CallAsync("add-link", new Dictionary<string, object?> { ["handle"] = handle, ["leftField"] = leftField, ["rightField"] = rightField }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<QueryModel> SetLinkTypeAsync(int handle, long link, int type)
+    {
+        var result = await CallAsync("set-link-type", new Dictionary<string, object?> { ["handle"] = handle, ["link"] = link, ["type"] = type }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<QueryModel> SwapLinkAsync(int handle, long link)
+    {
+        var result = await CallAsync("swap-link", new Dictionary<string, object?> { ["handle"] = handle, ["link"] = link }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<QueryModel> DeleteLinkAsync(int handle, long link)
+    {
+        var result = await CallAsync("delete-link", new Dictionary<string, object?> { ["handle"] = handle, ["link"] = link }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<QueryModel> AddPredicateAsync(int handle, long leftField, int op, string value)
+    {
+        var result = await CallAsync("add-predicate", new Dictionary<string, object?> { ["handle"] = handle, ["leftField"] = leftField, ["operator"] = op, ["value"] = value }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<QueryModel> RemovePredicateAsync(int handle, long predicate)
+    {
+        var result = await CallAsync("remove-predicate", new Dictionary<string, object?> { ["handle"] = handle, ["predicate"] = predicate }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<QueryModel> AddGroupAsync(int handle, long field, int sort)
+    {
+        var result = await CallAsync("add-group", new Dictionary<string, object?> { ["handle"] = handle, ["field"] = field, ["sort"] = sort }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<QueryModel> RemoveGroupAsync(int handle, long group)
+    {
+        var result = await CallAsync("remove-group", new Dictionary<string, object?> { ["handle"] = handle, ["group"] = group }).ConfigureAwait(false);
+        return QueryModel.Parse(result);
+    }
+
+    public async Task<SqlCompileResult> ValidateSqlAsync(int handle, string sql)
+    {
+        var result = await CallAsync("validate-sql", new Dictionary<string, object?> { ["handle"] = handle, ["sql"] = sql }).ConfigureAwait(false);
+        return SqlCompileResult.Parse(result);
+    }
+
+    public async Task<SqlCompileResult> ApplySqlAsync(int handle, string sql)
+    {
+        var result = await CallAsync("apply-sql", new Dictionary<string, object?> { ["handle"] = handle, ["sql"] = sql }).ConfigureAwait(false);
+        return SqlCompileResult.Parse(result);
+    }
+
     public async Task<RefreshResult> RefreshAsync(int handle, int? rows = null, string? credentials = null)
     {
         var parameters = new Dictionary<string, object?> { ["handle"] = handle };

@@ -58,6 +58,21 @@
 #import <MADTdsClient/MADDatabaseConnectionSQLServer.h>
 #import <MADPostgres/MADDatabaseConnectionPostgres.h>
 
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDatabase+Extras.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQueryGroup.h>
+#import <MAD/RptqQueryTable+Extras.h>
+#import <MAD/RptqQueryField+Extras.h>
+#import <MAD/RptqQueryLinks+Extras.h>
+#import <MAD/RptqQueryPredicate+Extras.h>
+#import <MAD/MADQueryLinkType.h>
+#import <MAD/MADPredicateOperator.h>
+#import <MAD/MADSortOrder.h>
+#import <MAD/MADSQLParser.h>
+#import <MAD/MADSQLStatementResolver.h>
+#import <MAD/MADSQLQueryCompiler.h>
+
 #if defined(_WIN32)
 #include <io.h>
 #include <fcntl.h>
@@ -74,6 +89,19 @@ static NSString * const MADCLIServeMethodCreate			= @"create";
 static NSString * const MADCLIServeMethodTestConnection	= @"test-connection";
 static NSString * const MADCLIServeMethodConnection		= @"connection";
 static NSString * const MADCLIServeMethodApplyConnection	= @"apply-connection";
+static NSString * const MADCLIServeMethodQueryModel	= @"query-model";
+static NSString * const MADCLIServeMethodAddTable		= @"add-table";
+static NSString * const MADCLIServeMethodRemoveTable	= @"remove-table";
+static NSString * const MADCLIServeMethodAddLink		= @"add-link";
+static NSString * const MADCLIServeMethodSetLinkType	= @"set-link-type";
+static NSString * const MADCLIServeMethodSwapLink		= @"swap-link";
+static NSString * const MADCLIServeMethodDeleteLink	= @"delete-link";
+static NSString * const MADCLIServeMethodAddPredicate	= @"add-predicate";
+static NSString * const MADCLIServeMethodRemovePredicate = @"remove-predicate";
+static NSString * const MADCLIServeMethodAddGroup		= @"add-group";
+static NSString * const MADCLIServeMethodRemoveGroup	= @"remove-group";
+static NSString * const MADCLIServeMethodValidateSQL	= @"validate-sql";
+static NSString * const MADCLIServeMethodApplySQL		= @"apply-sql";
 
 #pragma mark - Session state
 
@@ -557,18 +585,26 @@ static void MADCLIServeDescribe(NSDictionary *params, NSMutableDictionary <NSNum
 	});
 }
 
+/// The generated SQL, the way the Mac's Query workspace shows it: all fields first
+/// (-SQLOnlyActiveFields:NO), falling back to the active-field select when the query has no
+/// report elements to reference -- so a fresh document still yields SQL.
+static NSString *MADCLIServeGeneratedSQL(id <MADDocumentDataProtocol> document) {
+	NSError *error = nil;
+	NSString *generated = [document.mainQuery SQLOnlyActiveFields: NO
+											managedObjectContext: document.storeContext
+														   error: &error];
+	if (generated.length == 0) {
+		generated = [document.mainQuery copySQLWithManagedObjectContext: document.storeContext error: &error];
+	}
+	return generated ?: @"";
+}
+
 static void MADCLIServeQuery(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
 	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
 	if (entry == nil) return;
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
-	NSError *error = nil;
-	NSString *sql = [document.mainQuery copySQLWithManagedObjectContext: document.storeContext error: &error];
-	if (sql == nil) {
-		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(error));
-		return;
-	}
-	MADCLIServeWriteResult(requestID, @{ @"sql": sql });
+	MADCLIServeWriteResult(requestID, @{ @"sql": MADCLIServeGeneratedSQL(document) });
 }
 
 static void MADCLIServeRefresh(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
@@ -731,6 +767,533 @@ static void MADCLIServeWriteCopy(NSDictionary *params, NSMutableDictionary <NSNu
 	MADCLIServeWriteResult(requestID, @{ @"path": outPath, @"bytes": attributes[NSFileSize] ?: @0 });
 }
 
+#pragma mark - Query model (Phase 6b)
+
+/// The document's main RptqQuery, read live from the store each call.  Reading through
+/// -newDocumentReadFromManagedObjectContext: (rather than the cached activeDocumentModel)
+/// means every mutation below is visible to the next read with no explicit invalidation --
+/// the same way -copySQLWithManagedObjectContext: already re-reads the query.
+static RptqQuery *MADCLIServeMainQuery(id <MADDocumentDataProtocol> document) {
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	return model.defaultDatabase.defaultQuery;
+}
+
+/// The document cast to the query-editing protocol (group/delete helpers) both the Mac and
+/// headless documents conform to; nil when the document cannot edit its query.
+static id <MADSQLQueryDocument> MADCLIServeQueryDocument(id <MADDocumentDataProtocol> document) {
+	if ([document conformsToProtocol: @protocol(MADSQLQueryDocument)]) {
+		return (id <MADSQLQueryDocument>)document;
+	}
+	return nil;
+}
+
+/// The full query model as JSON -- tables/fields/links/predicates/groups with their store
+/// identifiers, the generated SQL, the entered SQL, and the driver token.  This is what the
+/// WPF Query workspace round-trips: every mutation method below answers this same shape so
+/// the client replaces its snapshot atomically.
+static NSDictionary *MADCLIServeQueryModelDict(id <MADDocumentDataProtocol> document) {
+	RptqStoreContext *context = document.storeContext;
+	RptqQuery *query = MADCLIServeMainQuery(document);
+
+	NSString *driver = @"";
+	if (document.database.databaseConnection != nil) {
+		driver = MADCLIServeTokenForDatabaseType(document.database.databaseConnection.databaseType);
+	}
+
+	NSString *sql = MADCLIServeGeneratedSQL(document);
+
+	NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES
+															  selector: @selector(localizedCaseInsensitiveCompare:)];
+	NSSortDescriptor *byID = [NSSortDescriptor sortDescriptorWithKey: @"id" ascending: YES];
+
+	NSMutableArray <NSDictionary *> *tables = [NSMutableArray array];
+	for (RptqQueryTable *table in query.hasQueryTables) {
+		NSMutableArray <NSDictionary *> *fields = [NSMutableArray array];
+		for (RptqQueryField *field in table.hasQueryFields) {
+			[fields addObject: @{
+				@"id": @(field.identifier),
+				@"name": field.databaseSchemaField.name ?: @"",
+				@"type": MADCLIServeTypeName(field.databaseSchemaField.dataType),
+			}];
+		}
+		[fields sortUsingDescriptors: @[byName]];
+		[tables addObject: @{
+			@"id": @(table.identifier),
+			@"name": table.databaseSchemaTable.name ?: @"",
+			@"alias": table.alias ?: @"",
+			@"dropIndex": @(table.dropIndex),
+			@"fields": fields,
+		}];
+	}
+	[tables sortUsingDescriptors: @[[NSSortDescriptor sortDescriptorWithKey: @"dropIndex" ascending: YES], byName]];
+
+	NSMutableArray <NSDictionary *> *links = [NSMutableArray array];
+	for (RptqQueryLinks *link in query.hasQueryLinks) {
+		[links addObject: @{
+			@"id": @(link.identifier),
+			@"type": @(link.type),
+			@"leftField": @(link.hasLeftField ? link.hasLeftField.identifier : 0),
+			@"rightField": @(link.hasRightField ? link.hasRightField.identifier : 0),
+		}];
+	}
+	[links sortUsingDescriptors: @[byID]];
+
+	NSMutableArray <NSDictionary *> *predicates = [NSMutableArray array];
+	for (RptqQueryPredicate *predicate in query.hasQueryPredicate) {
+		[predicates addObject: @{
+			@"id": @(predicate.identifier),
+			@"operator": @(predicate.comparson),
+			@"leftField": @(predicate.hasLeftField ? predicate.hasLeftField.identifier : 0),
+			@"rightField": @(predicate.hasRightField ? predicate.hasRightField.identifier : 0),
+			@"leftValue": (predicate.leftFieldID != nil ? predicate.leftFieldID : [NSNull null]),
+			@"rightValue": (predicate.rightFieldID != nil ? predicate.rightFieldID : [NSNull null]),
+		}];
+	}
+	[predicates sortUsingDescriptors: @[byID]];
+
+	NSMutableArray <NSDictionary *> *groups = [NSMutableArray array];
+	for (RptqQueryGroup *group in query.hasQueryGroups) {
+		[groups addObject: @{
+			@"id": @(group.identifier),
+			@"field": @(group.hasField ? group.hasField.identifier : 0),
+			@"sort": @(group.sort),
+		}];
+	}
+	[groups sortUsingDescriptors: @[byID]];
+
+	return @{
+		@"driver": driver,
+		@"sql": sql,
+		@"sqlSourceText": query.sqlSourceText ?: @"",
+		@"tables": tables,
+		@"links": links,
+		@"predicates": predicates,
+		@"groups": groups,
+	};
+}
+
+static void MADCLIServeQueryModel(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(entry.document.document));
+}
+
+static void MADCLIServeAddTable(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	NSString *name = MADCLIServeOptionalString(params, @"table");
+	if (name == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"table must be a non-empty string.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqDatabase *database = [RptqDocument newDocumentReadFromManagedObjectContext: context].defaultDatabase;
+	RptqQuery *query = database.defaultQuery;
+
+	RptqDatabaseSchemaTable *schemaTable = nil;
+	for (RptqDatabaseSchemaTable *candidate in database.hasTables) {
+		if ([candidate.name isEqualToString: name]) {
+			schemaTable = candidate;
+			break;
+		}
+	}
+	if (schemaTable == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"no schema table named '%@'.", name]);
+		return;
+	}
+
+	// Mirrors MADMacQueryViewController -addSchemaTableToQuery: a query table plus one query
+	// field per schema field.
+	RptqQueryTable *queryTable = [RptqQueryTable newQueryTableForSchemaTable: schemaTable
+																	 database: database
+													  forManagedObjectContext: context];
+	NSMutableSet <RptqQueryField *> *queryFields = [NSMutableSet setWithCapacity: schemaTable.hasFields.count];
+	for (RptqDatabaseSchemaField *schemaField in schemaTable.hasFields) {
+		RptqQueryField *field = [RptqQueryField newQueryField: context];
+		field.inQueryTable = queryTable;
+		field.databaseSchemaField = schemaField;
+		[queryFields addObject: field];
+	}
+	queryTable.hasQueryFields = queryFields;
+	[query addHasQueryTablesObject: queryTable];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+}
+
+static void MADCLIServeRemoveTable(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	if (![params[@"table"] isKindOfClass: [NSNumber class]]) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"table must be a number.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	id <MADSQLQueryDocument> qdoc = MADCLIServeQueryDocument(document);
+	if (qdoc == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"the document cannot edit its query.");
+		return;
+	}
+	RptqStoreContext *context = document.storeContext;
+	RptqQuery *query = MADCLIServeMainQuery(document);
+
+	int64_t tableID = [params[@"table"] longLongValue];
+	RptqQueryTable *table = (RptqQueryTable *)[context objectForEntity: NSStringFromClass([RptqQueryTable class]) identifier: tableID];
+	if (table == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown query table %lld.", tableID]);
+		return;
+	}
+
+	// Mirrors MADMacQueryViewController -removeQueryTable: designer-element cleanup, then the
+	// groups/links/predicates/fields that touch the table, then the table itself.
+	[qdoc deleteDatafieldsRelatedToTable: tableID inContent: context];
+	[qdoc deleteAggregateFieldRelatedToTable: tableID inContent: context];
+	for (RptqQueryGroup *group in [query.hasQueryGroups allObjects]) {
+		if (group.hasField.inQueryTable.identifier == tableID) {
+			[qdoc removeGroupWitObjectID: group.identifier fromManagedObjectContext: context];
+		}
+	}
+	for (RptqQueryLinks *link in [query.hasQueryLinks allObjects]) {
+		if ([link isConnectedToTable: table]) {
+			[query removeHasQueryLinksObject: link];
+			[context deleteObject: link error: NULL];
+		}
+	}
+	for (RptqQueryPredicate *predicate in [query.hasQueryPredicate allObjects]) {
+		if (predicate.hasLeftField.inQueryTable.identifier == tableID ||
+			predicate.hasRightField.inQueryTable.identifier == tableID) {
+			[query removeHasQueryPredicateObject: predicate];
+			[context deleteObject: predicate error: NULL];
+		}
+	}
+	for (RptqQueryField *field in [table.hasQueryFields allObjects]) {
+		[context deleteObject: field error: NULL];
+	}
+	[query removeHasQueryTablesObject: table];
+	[context deleteObject: table error: NULL];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+}
+
+static void MADCLIServeAddLink(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	int64_t leftID = [params[@"leftField"] isKindOfClass: [NSNumber class]] ? [params[@"leftField"] longLongValue] : 0;
+	int64_t rightID = [params[@"rightField"] isKindOfClass: [NSNumber class]] ? [params[@"rightField"] longLongValue] : 0;
+	if (leftID == 0 || rightID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"leftField and rightField must be numbers.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqQuery *query = MADCLIServeMainQuery(document);
+
+	RptqQueryField *left = (RptqQueryField *)[context objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: leftID];
+	RptqQueryField *right = (RptqQueryField *)[context objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: rightID];
+	if (left == nil || right == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"unknown query field.");
+		return;
+	}
+	if (left.inQueryTable.identifier == right.inQueryTable.identifier) {
+		MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document)); // no-op, like the Mac
+		return;
+	}
+
+	for (RptqQueryLinks *existing in query.hasQueryLinks) {
+		if ((existing.hasLeftField.identifier == leftID && existing.hasRightField.identifier == rightID) ||
+			(existing.hasLeftField.identifier == rightID && existing.hasRightField.identifier == leftID)) {
+			MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document)); // already linked
+			return;
+		}
+	}
+
+	RptqQueryLinks *link = [RptqQueryLinks newQueryLinksWithLeftField: left
+														   rightField: right
+															 joinType: MADLinkTypeLeftOuterJoin
+												 managedObjectContext: context];
+	[query addHasQueryLinksObject: link];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+}
+
+static void MADCLIServeSetLinkType(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	int64_t linkID = [params[@"link"] isKindOfClass: [NSNumber class]] ? [params[@"link"] longLongValue] : 0;
+	if (linkID == 0 || ![params[@"type"] isKindOfClass: [NSNumber class]]) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"link and type must be numbers.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqQueryLinks *link = (RptqQueryLinks *)[document.storeContext objectForEntity: NSStringFromClass([RptqQueryLinks class]) identifier: linkID];
+	if (link == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown query link %lld.", linkID]);
+		return;
+	}
+	link.type = (int16_t)[params[@"type"] integerValue];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+}
+
+static void MADCLIServeSwapLink(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	int64_t linkID = [params[@"link"] isKindOfClass: [NSNumber class]] ? [params[@"link"] longLongValue] : 0;
+	if (linkID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"link must be a number.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqQueryLinks *link = (RptqQueryLinks *)[document.storeContext objectForEntity: NSStringFromClass([RptqQueryLinks class]) identifier: linkID];
+	if (link == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown query link %lld.", linkID]);
+		return;
+	}
+
+	RptqQueryField *oldLeft = link.hasLeftField;
+	RptqQueryField *oldRight = link.hasRightField;
+	if (oldLeft != nil && oldRight != nil) {
+		link.hasLeftField = oldRight;
+		link.hasRightField = oldLeft;
+		link.tableLeftID = oldRight.inQueryTable.alias.copy;
+		link.fieldLeftID = oldRight.databaseSchemaField.name.copy;
+		link.tableRightID = oldLeft.inQueryTable.alias.copy;
+		link.fieldRightID = oldLeft.databaseSchemaField.name.copy;
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+}
+
+static void MADCLIServeDeleteLink(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	int64_t linkID = [params[@"link"] isKindOfClass: [NSNumber class]] ? [params[@"link"] longLongValue] : 0;
+	if (linkID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"link must be a number.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqQuery *query = MADCLIServeMainQuery(document);
+	RptqQueryLinks *link = (RptqQueryLinks *)[context objectForEntity: NSStringFromClass([RptqQueryLinks class]) identifier: linkID];
+	if (link != nil) {
+		[query removeHasQueryLinksObject: link];
+		[context deleteObject: link error: NULL];
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+}
+
+static void MADCLIServeAddPredicate(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	int64_t leftID = [params[@"leftField"] isKindOfClass: [NSNumber class]] ? [params[@"leftField"] longLongValue] : 0;
+	NSString *value = [params[@"value"] isKindOfClass: [NSString class]] ? params[@"value"] : nil;
+	if (leftID == 0 || value.length == 0 || ![params[@"operator"] isKindOfClass: [NSNumber class]]) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"leftField, operator and a non-empty value are required.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *error = nil;
+	RptqQueryPredicate *predicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: leftID
+																			comparsonOperator: (MADPredicateOperator)[params[@"operator"] integerValue]
+																				andRightValue: value
+																  forManagedObjectContext: document.storeContext
+																						error: &error];
+	if (predicate == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+	[MADCLIServeMainQuery(document) addHasQueryPredicateObject: predicate];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+}
+
+static void MADCLIServeRemovePredicate(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	int64_t predicateID = [params[@"predicate"] isKindOfClass: [NSNumber class]] ? [params[@"predicate"] longLongValue] : 0;
+	if (predicateID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"predicate must be a number.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqQuery *query = MADCLIServeMainQuery(document);
+	RptqQueryPredicate *predicate = (RptqQueryPredicate *)[context objectForEntity: NSStringFromClass([RptqQueryPredicate class]) identifier: predicateID];
+	if (predicate != nil) {
+		[query removeHasQueryPredicateObject: predicate];
+		[context deleteObject: predicate error: NULL];
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+}
+
+static void MADCLIServeAddGroup(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	int64_t fieldID = [params[@"field"] isKindOfClass: [NSNumber class]] ? [params[@"field"] longLongValue] : 0;
+	if (fieldID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"field must be a number.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	id <MADSQLQueryDocument> qdoc = MADCLIServeQueryDocument(document);
+	if (qdoc == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"the document cannot edit its query.");
+		return;
+	}
+
+	MADSortOrder sort = ([params[@"sort"] isKindOfClass: [NSNumber class]] && [params[@"sort"] integerValue] == 1)
+		? MADSortOrderDecending : MADSortOrderAccending;
+	[qdoc addQueryGroupWithQueryField: fieldID andSortOrder: sort];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+}
+
+static void MADCLIServeRemoveGroup(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	int64_t groupID = [params[@"group"] isKindOfClass: [NSNumber class]] ? [params[@"group"] longLongValue] : 0;
+	if (groupID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"group must be a number.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	id <MADSQLQueryDocument> qdoc = MADCLIServeQueryDocument(document);
+	if (qdoc == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"the document cannot edit its query.");
+		return;
+	}
+	[qdoc removeGroupWitObjectID: groupID fromManagedObjectContext: document.storeContext];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeQueryModelDict(document));
+}
+
+#pragma mark - SQL entry (Phase 6b)
+
+/// Parses `sql` and resolves it against the document's schema (and, when `apply`, runs the
+/// compiler).  Returns the plan, or nil with `outError` -- the same MADSQLParser →
+/// MADSQLStatementResolver → MADSQLQueryCompiler path the Mac's SQL editor takes.
+static MADSQLQueryPlan *MADCLIServeCompileSQL(id <MADDocumentDataProtocol> document, NSString *sql, BOOL apply, NSError **outError) {
+	RptqStoreContext *context = document.storeContext;
+	RptqDatabase *database = [RptqDocument newDocumentReadFromManagedObjectContext: context].defaultDatabase;
+
+	NSMutableDictionary <NSString *, NSArray <NSString *> *> *schema = [NSMutableDictionary dictionary];
+	for (RptqDatabaseSchemaTable *table in database.hasTables) {
+		if (table.name.length == 0) continue;
+		NSMutableArray <NSString *> *columns = [NSMutableArray array];
+		for (RptqDatabaseSchemaField *field in table.hasFields) {
+			if (field.name.length > 0) [columns addObject: field.name];
+		}
+		schema[table.name] = columns;
+	}
+
+	NSError *error = nil;
+	MADSQLParser *parser = [[MADSQLParser alloc] initWithSQL: sql
+									identifierQuoteCharacters: [MADDatabase identifierQuoteCharacters]
+													   schema: schema];
+	MADSQLStatement *statement = [parser parseStatement: &error];
+	if (statement == nil) {
+		if (outError) *outError = error;
+		return nil;
+	}
+
+	MADSQLStatementResolver *resolver = [[MADSQLStatementResolver alloc] initWithStatement: statement database: database];
+	MADSQLQueryPlan *plan = [resolver resolveWithError: &error];
+	if (plan == nil) {
+		if (outError) *outError = error;
+		return nil;
+	}
+
+	if (apply) {
+		id <MADSQLQueryDocument> qdoc = MADCLIServeQueryDocument(document);
+		if (qdoc == nil) {
+			if (outError) *outError = MADCLIServeUsageError(@"the document cannot edit its query.");
+			return nil;
+		}
+		MADSQLQueryCompiler *compiler = [[MADSQLQueryCompiler alloc] initWithPlan: plan
+																		  document: qdoc
+																			 query: database.defaultQuery
+																		   context: context];
+		if (![compiler applyWithError: &error]) {
+			if (outError) *outError = error;
+			return nil;
+		}
+	}
+
+	return plan;
+}
+
+static NSDictionary *MADCLIServeCompileResult(MADSQLQueryPlan *plan) {
+	return @{
+		@"tables": @(plan.tables.count),
+		@"links": @(plan.links.count),
+		@"predicates": @(plan.predicates.count),
+		@"groups": @(plan.groups.count),
+	};
+}
+
+static void MADCLIServeValidateSQL(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	NSError *error = nil;
+	NSString *sql = MADCLIServeStringParam(params, @"sql", &error);
+	if (sql == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	NSError *compileError = nil;
+	MADSQLQueryPlan *plan = MADCLIServeCompileSQL(entry.document.document, sql, NO, &compileError);
+	if (plan == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(compileError));
+		return;
+	}
+	MADCLIServeWriteResult(requestID, MADCLIServeCompileResult(plan));
+}
+
+static void MADCLIServeApplySQL(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	NSError *error = nil;
+	NSString *sql = MADCLIServeStringParam(params, @"sql", &error);
+	if (sql == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	NSError *compileError = nil;
+	MADSQLQueryPlan *plan = MADCLIServeCompileSQL(entry.document.document, sql, YES, &compileError);
+	if (plan == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(compileError));
+		return;
+	}
+	MADCLIServeWriteResult(requestID, MADCLIServeCompileResult(plan));
+}
+
 #pragma mark - Dispatch
 
 /// Handles one parsed request.  Returns YES when the session should end (shutdown).
@@ -759,6 +1322,32 @@ static BOOL MADCLIServeDispatch(NSDictionary *request, NSMutableDictionary <NSNu
 			MADCLIServeDescribe(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodQuery]) {
 			MADCLIServeQuery(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodQueryModel]) {
+			MADCLIServeQueryModel(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodAddTable]) {
+			MADCLIServeAddTable(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodRemoveTable]) {
+			MADCLIServeRemoveTable(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodAddLink]) {
+			MADCLIServeAddLink(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodSetLinkType]) {
+			MADCLIServeSetLinkType(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodSwapLink]) {
+			MADCLIServeSwapLink(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodDeleteLink]) {
+			MADCLIServeDeleteLink(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodAddPredicate]) {
+			MADCLIServeAddPredicate(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodRemovePredicate]) {
+			MADCLIServeRemovePredicate(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodAddGroup]) {
+			MADCLIServeAddGroup(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodRemoveGroup]) {
+			MADCLIServeRemoveGroup(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodValidateSQL]) {
+			MADCLIServeValidateSQL(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodApplySQL]) {
+			MADCLIServeApplySQL(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodRefresh]) {
 			MADCLIServeRefresh(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodExport]) {
