@@ -1410,6 +1410,16 @@ static void MADCLIServeSetElementOrigin(RptqDocumentElement *element, double x, 
 	}
 }
 
+/// Grows the section's stored height when an element's bottom extends past it, mirroring the
+/// Mac's attachElement:/moveElement:toSection:atOrigin: auto-grow so a low-placed element is
+/// not clipped by the stored layout height.
+static void MADCLIServeGrowSectionForElement(RptqDocumentSection *section, RptqDocumentElement *element) {
+	CGRect rect = MADCLIServeElementRect(element);
+	if (rect.origin.y + rect.size.height + 6.0 > section.layoutHeight) {
+		[section setInterfaceHeight: ceil(rect.origin.y + rect.size.height + 8.0)];
+	}
+}
+
 static RptqDocumentSection *MADCLIServeSectionForElement(id <MADDocumentDataProtocol> document, RptqDocumentElement *element) {
 	if (element.inSectionRow && element.inSectionRow.inSection) return element.inSectionRow.inSection;
 	for (RptqDocumentSection *section in MADCLIServeOrderedSections(document)) {
@@ -1648,6 +1658,7 @@ static void MADCLIServeAddElement(NSDictionary *params, NSMutableDictionary <NSN
 	[section addDocumentObject: element withDropPoint: CGPointMake(x, y) managedObjectContext: context];
 	MADCLIServeSetElementOrigin(element, x, y);
 	element.inSectionRow = section.hasRows.firstObject;
+	MADCLIServeGrowSectionForElement(section, element);
 
 	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
 }
@@ -1712,6 +1723,7 @@ static void MADCLIServeMoveElements(NSDictionary *params, NSMutableDictionary <N
 		}
 		[targetRow addHasObjectsObject: element];
 		element.inSectionRow = targetRow;
+		MADCLIServeGrowSectionForElement(target, element);
 	}
 
 	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
@@ -1989,6 +2001,7 @@ static void MADCLIServeDuplicateElements(NSDictionary *params, NSMutableDictiona
 		[section addDocumentObject: dup withDropPoint: CGPointMake(nx, ny) managedObjectContext: context];
 		MADCLIServeSetElementOrigin(dup, nx, ny);
 		dup.inSectionRow = section.hasRows.firstObject;
+		MADCLIServeGrowSectionForElement(section, dup);
 	}
 
 	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));

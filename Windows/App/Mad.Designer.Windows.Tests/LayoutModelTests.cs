@@ -262,6 +262,34 @@ public sealed class LayoutProtocolTests
     }
 
     [Fact]
+    public async Task AddElement_BelowBand_GrowsSectionHeight()
+    {
+        string sqlite = CopyChinookToTemp();
+        string mad = Path.Combine(Path.GetTempPath(), $"mad-layout-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var service = new EngineService();
+            var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
+
+            var model = await service.LayoutModelAsync(open.Handle);
+            long detailId = model.Sections.Single(s => s.Type == SectionType.Body).Id;
+            double originalHeight = model.Sections.Single(s => s.Id == detailId).Height; // 88 (Detail default)
+
+            // A label placed low in the band (bottom 322) must grow the stored section height.
+            model = await service.AddElementAsync(open.Handle, "label", detailId, 0, 300);
+            double grownHeight = model.Sections.Single(s => s.Id == detailId).Height;
+
+            Assert.Equal(330.0, grownHeight);
+            Assert.True(grownHeight > originalHeight);
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+            if (File.Exists(mad)) File.Delete(mad);
+        }
+    }
+
+    [Fact]
     public async Task LayoutMutations_StyleContentDuplicateAndPaper()
     {
         string sqlite = CopyChinookToTemp();
