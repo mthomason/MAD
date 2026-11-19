@@ -211,8 +211,13 @@ newline-delimited JSON on standard input and writes one JSON response per line o
 standard output (diagnostics stay on standard error). The contract is documented in
 `docs/project/MAD_WINDOWS.md` §6d — methods `open`, `create`, `test-connection`,
 `describe`, `connection`, `apply-connection`, `query`, `refresh`, `export`, `write` and
-`shutdown`, with `export` reusing the existing `mad.report/1` and CSV bytes rather than
-a parallel schema.
+`shutdown`, plus the Phase 6b Query methods `query-model`, `add-table`, `remove-table`,
+`add-link`, `set-link-type`, `swap-link`, `delete-link`, `add-predicate`,
+`remove-predicate`, `add-group`, `remove-group`, `validate-sql` and `apply-sql`.
+`export` reuses the existing `mad.report/1` and CSV bytes rather than a parallel schema;
+the query methods read and mutate the `RptqQuery` model the Mac edits in-process, and the
+SQL methods run the existing `MADSQLParser` → `MADSQLStatementResolver` →
+`MADSQLQueryCompiler` path.
 
 `Windows/Client/` holds the .NET 10 acceptance client and its xunit suite, pinned by
 this directory's `global.json`. Build `mad.exe` first, then from `Windows/Client`:
@@ -234,9 +239,12 @@ proves the process boundary in a real UI. It reuses the Phase 4 `Mad.Client` unc
 wrapping it in an async `EngineService` that serializes the line protocol through a
 semaphore and runs every blocking call on the thread pool so the UI never freezes.
 
-The shell has the three-workspace frame (MAD Query / Designer / Viewer): Query shows the
-stored schema and the generated SQL, Viewer shows the refreshed rows in a `DataGrid` and
-exports CSV/JSON, and Designer is a placeholder until Phase 6c. It launches to the empty
+The shell has the three-workspace frame (MAD Query / Designer / Viewer): Query is now the
+full visual query designer — a left schema-table list, floating table cards on a canvas,
+drag-to-connect joins (Left Outer Join by default, with a join-type selector), WHERE and
+GROUP BY editors, and a mutually exclusive SQL editor with "Revert to Generated SQL" /
+"Validate SQL" / "Compile & Apply SQL" — Viewer shows the refreshed rows in a `DataGrid`
+and exports CSV/JSON, and Designer is a placeholder until Phase 6c. It launches to the empty
 main window with every document-dependent control disabled (no auto-open, no file dialog).
 File → New Document… opens the connection assistant (SQLite / MySQL / Microsoft SQL Server
 / PostgreSQL, with a Test Connection action), File → Open… opens an existing `.mad`, and a
@@ -257,7 +265,9 @@ dotnet run --project .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csp
 The headless acceptance lives in `Windows/App/Mad.Designer.Windows.Tests` (xunit,
 `net10.0-windows`) and needs no human interaction — it drives the service and view-model
 layers through the London flow (open → describe 21/11 → refresh 76 → export json/csv →
-clean shutdown) and checks the licence register:
+clean shutdown), the Phase 6b query model (add/connect/filter/group/remove tables and
+validate/apply SQL against a fresh chinook document, plus the canvas and view-model
+layers), and checks the licence register:
 
 ```powershell
 dotnet test .\Windows\App\Mad.Designer.Windows.Tests

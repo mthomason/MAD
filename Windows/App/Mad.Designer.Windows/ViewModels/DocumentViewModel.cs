@@ -46,7 +46,11 @@ public sealed class DocumentViewModel : ObservableObject
         ExportJsonCommand = new AsyncRelayCommand(() => ExportAsync("json"), () => HasDocument);
         SaveCommand = new AsyncRelayCommand(SaveAsync, () => HasDocument);
         SaveAsCommand = new AsyncRelayCommand(SaveAsAsync, () => HasDocument);
+        Query = new QueryViewModel(engine);
     }
+
+    /// <summary>The Query workspace's view model — the visual query designer and SQL editor.</summary>
+    public QueryViewModel Query { get; }
 
     /// <summary>Records a failure that happened before a document could be opened (for
     /// example, resolving the default fixture). Kept separate from <see cref="OpenAsync"/>
@@ -145,6 +149,7 @@ public sealed class DocumentViewModel : ObservableObject
 
         Sql = await _engine.QueryAsync(_handle);
         _connection = await _engine.ConnectionAsync(_handle);
+        await Query.LoadAsync(_handle, describe.Driver, describe.Tables);
 
         DataView = null;
         RowCount = 0;
@@ -254,6 +259,14 @@ public sealed class DocumentViewModel : ObservableObject
         {
             await _engine.ApplyConnectionAsync(_handle, spec);
             _connection = spec;
+
+            // Phase 6b: re-read the schema and query model so the Query workspace is not stale.
+            var describe = await _engine.DescribeAsync(_handle);
+            Driver = describe.Driver;
+            Columns = describe.Columns;
+            Tables = describe.Tables;
+            await Query.LoadAsync(_handle, describe.Driver, describe.Tables);
+
             await RefreshAsync();
         }
         catch (Exception exception)

@@ -1,38 +1,165 @@
 <UserControl x:Class="Mad.Designer.Windows.Views.QueryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Margin="8">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="3*"/>
-        </Grid.ColumnDefinitions>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:Mad.Designer.Windows.Views">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
 
-        <DockPanel Grid.Column="0">
-            <TextBlock DockPanel.Dock="Top" Text="Database schema" FontWeight="Bold" Margin="0,0,0,4"/>
-            <TreeView ItemsSource="{Binding Document.Tables}">
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Fields}">
-                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
-                        <HierarchicalDataTemplate.ItemTemplate>
+    <Grid DataContext="{Binding Document.Query}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top workspace bar: mode switch + contextual controls -->
+        <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="8,5">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                    <RadioButton Content="Query Designer" GroupName="QueryMode"
+                                 IsChecked="{Binding DesignerSelected, Mode=TwoWay}"
+                                 VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <RadioButton Content="SQL Query" GroupName="QueryMode"
+                                 IsChecked="{Binding SqlSelected, Mode=TwoWay}"
+                                 VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right"
+                            Visibility="{Binding IsDesigner, Converter={StaticResource BoolToVis}}">
+                    <Button x:Name="FiltersButton" Content="{Binding FiltersLabel}" Margin="0,0,6,0" Click="ToggleFilters"/>
+                    <Button x:Name="GroupsButton" Content="{Binding GroupsLabel}" Margin="0,0,6,0" Click="ToggleGroups"/>
+                    <Button Content="Arrange Tables" Command="{Binding ArrangeTablesCommand}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right"
+                            Visibility="{Binding IsSql, Converter={StaticResource BoolToVis}}">
+                    <Button Content="Revert to Generated SQL" Margin="0,0,6,0" Command="{Binding RevertSqlCommand}"/>
+                    <Button Content="Validate SQL" Margin="0,0,6,0" Command="{Binding ValidateSqlCommand}"/>
+                    <Button Content="Compile &amp; Apply SQL" Command="{Binding CompileAndApplySqlCommand}"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Visual Query Designer -->
+        <Grid Grid.Row="1" Visibility="{Binding IsDesigner, Converter={StaticResource BoolToVis}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" MinWidth="150" MaxWidth="420"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0">
+                <TextBlock DockPanel.Dock="Top" Text="Database Tables" FontWeight="Bold" Margin="8,6,8,4"/>
+                <ListBox x:Name="SchemaList" ItemsSource="{Binding SchemaTables}"
+                         MouseDoubleClick="SchemaList_OnDoubleClick">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} ({1})">
+                                        <Binding Path="Name"/>
+                                        <Binding Path="Fields.Count"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button DockPanel.Dock="Bottom" Content="+ Add Table to Query" Margin="6,4"
+                        Command="{Binding AddTableCommand}"
+                        CommandParameter="{Binding SelectedItem.Name, ElementName=SchemaList}"/>
+            </DockPanel>
+
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="LightGray"/>
+
+            <views:QueryCanvas x:Name="Canvas" Grid.Column="2" ClipToBounds="True"/>
+        </Grid>
+
+        <!-- SQL Query editor -->
+        <Grid Grid.Row="1" Margin="12" Visibility="{Binding IsSql, Converter={StaticResource BoolToVis}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="SQL Query Statement" FontWeight="Bold" Margin="0,0,0,8"/>
+
+            <TextBox Grid.Row="1" Text="{Binding SqlEditorText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     FontFamily="Consolas" FontSize="13" AcceptsReturn="True" AcceptsTab="True"
+                     TextWrapping="NoWrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                     BorderBrush="LightGray" BorderThickness="1" Padding="6"/>
+
+            <TextBlock Grid.Row="2" Text="{Binding StatusText}" Margin="0,8,0,0" Foreground="Gray"/>
+        </Grid>
+
+        <!-- Filters (WHERE) editor popover -->
+        <Popup x:Name="FiltersPopup" Placement="Bottom" StaysOpen="False"
+               PlacementTarget="{Binding ElementName=FiltersButton, Mode=OneWay}" AllowsTransparency="True">
+            <Border Background="White" BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="10" MinWidth="420">
+                <StackPanel>
+                    <TextBlock Text="Active WHERE Filters" FontWeight="Bold" Margin="0,0,0,6"/>
+                    <ItemsControl ItemsSource="{Binding PredicateRows}">
+                        <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Name}"/>
-                                    <TextBlock Text="{Binding Type}" Foreground="Gray" Margin="8,0,0,0"/>
-                                </StackPanel>
+                                <Grid Margin="0,1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Display}" VerticalAlignment="Center"/>
+                                    <Button Grid.Column="1" Content="-" Margin="6,0,0,0" Padding="4,0"
+                                            Command="{Binding DataContext.RemovePredicateCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding Id}"/>
+                                </Grid>
                             </DataTemplate>
-                        </HierarchicalDataTemplate.ItemTemplate>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
-        </DockPanel>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Separator Margin="0,6"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <ComboBox Width="150" ItemsSource="{Binding AllFields}" DisplayMemberPath="Display"
+                                  SelectedItem="{Binding SelectedFilterField}"/>
+                        <ComboBox Width="56" Margin="6,0,0,0" ItemsSource="{Binding FilterOperatorSymbols}"
+                                  SelectedIndex="{Binding SelectedFilterOperatorIndex, Mode=TwoWay}"/>
+                        <TextBox Width="110" Margin="6,0,0,0" Text="{Binding FilterValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Content="+ Add" Margin="6,0,0,0" Command="{Binding AddPredicateCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
 
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="LightGray"/>
-
-        <DockPanel Grid.Column="2">
-            <TextBlock DockPanel.Dock="Top" Text="Generated SQL" FontWeight="Bold" Margin="0,0,0,4"/>
-            <TextBox Text="{Binding Document.Sql}" IsReadOnly="True" FontFamily="Consolas"
-                     TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
-        </DockPanel>
+        <!-- Groupings (GROUP BY) editor popover -->
+        <Popup x:Name="GroupsPopup" Placement="Bottom" StaysOpen="False"
+               PlacementTarget="{Binding ElementName=GroupsButton, Mode=OneWay}" AllowsTransparency="True">
+            <Border Background="White" BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="10" MinWidth="400">
+                <StackPanel>
+                    <TextBlock Text="Report Grouping Levels (GROUP BY)" FontWeight="Bold" Margin="0,0,0,6"/>
+                    <ItemsControl ItemsSource="{Binding GroupRows}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Display}" VerticalAlignment="Center"/>
+                                    <Button Grid.Column="1" Content="-" Margin="6,0,0,0" Padding="4,0"
+                                            Command="{Binding DataContext.RemoveGroupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding Id}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Separator Margin="0,6"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <ComboBox Width="180" ItemsSource="{Binding AllFields}" DisplayMemberPath="Display"
+                                  SelectedItem="{Binding SelectedGroupField}"/>
+                        <ComboBox Width="110" Margin="6,0,0,0" ItemsSource="{Binding GroupSortLabels}"
+                                  SelectedIndex="{Binding SelectedGroupSortIndex, Mode=TwoWay}"/>
+                        <Button Content="+ Add Group" Margin="6,0,0,0" Command="{Binding AddGroupCommand}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
     </Grid>
 </UserControl>
