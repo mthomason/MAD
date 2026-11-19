@@ -1,6 +1,9 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
+using System.IO;
 using System.Text.Json;
+using Mad.Designer.Windows.Engine;
+using Mad.Designer.Windows.Infrastructure;
 using Mad.Designer.Windows.Models;
 
 namespace Mad.Designer.Windows.Tests;
@@ -135,5 +138,190 @@ public sealed class LayoutModelTests
         Assert.Equal(0.0, element.BorderTop);
         Assert.Equal(0.0, element.Padding);
         Assert.Equal(0.0, element.Margin);
+    }
+}
+
+/// <summary>Headless coverage of the Phase 6c report-layout read/mutation protocol paths,
+/// mirroring the Mac's <c>MADMacSmokeTest</c> step 5.</summary>
+[Collection("Engine")]
+public sealed class LayoutProtocolTests
+{
+    [Fact]
+    public async Task LayoutRoundTrip_AddMoveResizeSetSection_And_Remove()
+    {
+        string sqlite = CopyChinookToTemp();
+        string mad = Path.Combine(Path.GetTempPath(), $"mad-layout-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var service = new EngineService();
+            var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
+
+            var model = await service.LayoutModelAsync(open.Handle);
+
+            // Canonical order: Report Header, Page Header, Detail, Page Footer, Report Footer.
+            Assert.Equal(5, model.Sections.Count);
+            Assert.Equal(SectionType.ReportHeader, model.Sections[0].Type);
+            Assert.Equal(SectionType.PageHeader, model.Sections[1].Type);
+            Assert.Equal(SectionType.Body, model.Sections[2].Type);
+
+            long detailId = model.Sections.Single(s => s.Type == SectionType.Body).Id;
+            long pageHeaderId = model.Sections.Single(s => s.Type == SectionType.PageHeader).Id;
+
+            model = await service.AddElementAsync(open.Handle, "label", detailId, 10, 20);
+            var label = model.Elements.Single(e => e.IsLabel);
+            Assert.Equal(ElementType.LabelStatic, label.Type);
+            Assert.Equal(10.0, label.X);
+            Assert.Equal(20.0, label.Y);
+            Assert.Equal("Static Label", label.Text);
+
+            model = await service.AddElementAsync(open.Handle, "data-field", detailId, 0, 0);
+            model = await service.AddElementAsync(open.Handle, "aggregate", detailId, 0, 0);
+            Assert.Equal(3, model.Elements.Count);
+            var dataField = model.Elements.Single(e => e.IsDataField);
+            var aggregate = model.Elements.Single(e => e.IsAggregate);
+            Assert.True(label.Id != dataField.Id && dataField.Id != aggregate.Id && label.Id != aggregate.Id);
+
+            // Geometry edit round-trips.
+            model = await service.SetElementGeometryAsync(open.Handle, new[] { new ElementGeometry(label.Id, 111, 22, 200, 30) });
+            label = model.Elements.Single(e => e.Id == label.Id);
+            Assert.Equal(111.0, label.X);
+            Assert.Equal(22.0, label.Y);
+            Assert.Equal(200.0, label.W);
+            Assert.Equal(30.0, label.H);
+
+            // Cross-section move preserves origin.
+            model = await service.MoveElementsAsync(open.Handle, new[] { label.Id }, pageHeaderId);
+            label = model.Elements.Single(e => e.Id == label.Id);
+            Assert.Equal(pageHeaderId, label.Section);
+            Assert.Equal(111.0, label.X);
+            Assert.Equal(22.0, label.Y);
+
+            // Section height/visible/pageBreak round-trip.
+            model = await service.SetSectionAsync(open.Handle, pageHeaderId, 120, true, false);
+            var pageHeader = model.Sections.Single(s => s.Id == pageHeaderId);
+            Assert.Equal(120.0, pageHeader.Height);
+            Assert.True(pageHeader.Visible);
+            Assert.False(pageHeader.PageBreak);
+
+            // Removing the three elements leaves an empty layout.
+            model = await service.RemoveElementsAsync(open.Handle, new[] { label.Id, dataField.Id, aggregate.Id });
+            Assert.Empty(model.Elements);
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+            if (File.Exists(mad)) File.Delete(mad);
+        }
+    }
+
+    [Fact]
+    public async Task SetSectionHeight_RoundTripsWithoutDrift()
+    {
+        string sqlite = CopyChinookToTemp();
+        string mad = Path.Combine(Path.GetTempPath(), $"mad-layout-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var service = new EngineService();
+            var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
+
+            var model = await service.LayoutModelAsync(open.Handle);
+            long detailId = model.Sections.Single(s => s.Type == SectionType.Body).Id;
+
+            model = await service.SetSectionAsync(open.Handle, detailId, 137, null, null);
+            var detail = model.Sections.Single(s => s.Id == detailId);
+            Assert.Equal(137.0, detail.Height);
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+            if (File.Exists(mad)) File.Delete(mad);
+        }
+    }
+
+    [Fact]
+    public async Task AddElement_AutoCreatesFirstRow()
+    {
+        string sqlite = CopyChinookToTemp();
+        string mad = Path.Combine(Path.GetTempPath(), $"mad-layout-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var service = new EngineService();
+            var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
+
+            var model = await service.LayoutModelAsync(open.Handle);
+            long detailId = model.Sections.Single(s => s.Type == SectionType.Body).Id;
+
+            model = await service.AddElementAsync(open.Handle, "label", detailId, 5, 5);
+            Assert.Single(model.Elements);
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+            if (File.Exists(mad)) File.Delete(mad);
+        }
+    }
+
+    [Fact]
+    public async Task LayoutMutations_StyleContentDuplicateAndPaper()
+    {
+        string sqlite = CopyChinookToTemp();
+        string mad = Path.Combine(Path.GetTempPath(), $"mad-layout-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var service = new EngineService();
+            var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
+
+            var model = await service.LayoutModelAsync(open.Handle);
+            long detailId = model.Sections.Single(s => s.Type == SectionType.Body).Id;
+
+            model = await service.AddElementAsync(open.Handle, "label", detailId, 10, 20);
+            var label = model.Elements.Single(e => e.IsLabel);
+
+            // Content edit (label text).
+            model = await service.SetElementContentAsync(open.Handle, label.Id, new ElementContent(Text: "Hello"));
+            Assert.Equal("Hello", model.Elements.Single(e => e.Id == label.Id).Text);
+
+            // Typography edit.
+            model = await service.SetElementTypographyAsync(open.Handle, new[] { label.Id },
+                new ElementTypography(FontName: "Arial", FontSize: 18, Bold: true, Italic: true));
+            label = model.Elements.Single(e => e.Id == label.Id);
+            Assert.Equal("Arial", label.FontName);
+            Assert.Equal(18.0, label.FontSize);
+            Assert.True(label.Bold);
+            Assert.True(label.Italic);
+
+            // Box model edit.
+            model = await service.SetElementBoxModelAsync(open.Handle, new[] { label.Id },
+                new ElementBoxModel(BorderTop: 1.5, BorderBottom: 0.5, Padding: 4, Margin: 2));
+            label = model.Elements.Single(e => e.Id == label.Id);
+            Assert.Equal(1.5, label.BorderTop);
+            Assert.Equal(0.5, label.BorderBottom);
+            Assert.Equal(4.0, label.Padding);
+            Assert.Equal(2.0, label.Margin);
+
+            // Duplicate clones content, size and offsets +16/+12.
+            model = await service.DuplicateElementsAsync(open.Handle, new[] { label.Id });
+            Assert.Equal(2, model.Elements.Count);
+            Assert.Equal(2, model.Elements.Count(e => e.IsLabel));
+            Assert.True(model.Elements.All(e => e.Text == "Hello"));
+            Assert.Contains(model.Elements, e => e.Id != label.Id && e.X == label.X + 16.0 && e.Y == label.Y + 12.0);
+
+            // Paper size edit.
+            model = await service.SetPaperSizeAsync(open.Handle, (int)PaperSize.A4);
+            Assert.Equal(19, model.PaperSize);
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+            if (File.Exists(mad)) File.Delete(mad);
+        }
+    }
+
+    private static string CopyChinookToTemp()
+    {
+        string source = Path.Combine(MadPathResolver.RepoRoot(), "MADDesigner", "Resources", "Assets", "Samples.xcassets", "Data", "chinook.dataset", "chinook.sqlite3");
+        string temp = Path.Combine(Path.GetTempPath(), $"mad-chinook-{Guid.NewGuid():N}.sqlite3");
+        File.Copy(source, temp);
+        return temp;
     }
 }

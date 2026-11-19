@@ -73,6 +73,30 @@
 #import <MAD/MADSQLStatementResolver.h>
 #import <MAD/MADSQLQueryCompiler.h>
 
+#import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/RptqDocumentSectionRows.h>
+#import <MAD/RptqDocumentElement.h>
+#import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqDocumentElementLabel.h>
+#import <MAD/RptqDocumentElementLabelDataField.h>
+#import <MAD/RptqDocumentElementAggregate.h>
+#import <MAD/RptqDocumentElementImage.h>
+#import <MAD/RptqQueryGroup+Extras.h>
+#import <MAD/RptqQuery+Extras.h>
+#import <MAD/MADocumentSectionType.h>
+#import <MAD/MADDocumentObjectType.h>
+#import <MAD/MADAggregateFunctionType.h>
+#import <MAD/MADAggregateFunctionGroupByType.h>
+#import <MAD/MADAlignment.h>
+#import <MAD/MTPaper.h>
+#import <MAD/RptqRect.h>
+#import <MAD/RptqPoint.h>
+#import <MAD/RptqSize.h>
+#import <MAD/RptqBorder.h>
+#import <MAD/RptqDirectionalAsymmetry.h>
+#import <MAD/RptqTextStyle.h>
+#import <MAD/RptqAlignment.h>
+
 #if defined(_WIN32)
 #include <io.h>
 #include <fcntl.h>
@@ -102,6 +126,17 @@ static NSString * const MADCLIServeMethodAddGroup		= @"add-group";
 static NSString * const MADCLIServeMethodRemoveGroup	= @"remove-group";
 static NSString * const MADCLIServeMethodValidateSQL	= @"validate-sql";
 static NSString * const MADCLIServeMethodApplySQL		= @"apply-sql";
+static NSString * const MADCLIServeMethodLayoutModel	= @"layout-model";
+static NSString * const MADCLIServeMethodAddElement		= @"add-element";
+static NSString * const MADCLIServeMethodRemoveElements	= @"remove-elements";
+static NSString * const MADCLIServeMethodDuplicateElements = @"duplicate-elements";
+static NSString * const MADCLIServeMethodMoveElements	= @"move-elements";
+static NSString * const MADCLIServeMethodSetElementGeometry = @"set-element-geometry";
+static NSString * const MADCLIServeMethodSetElementContent = @"set-element-content";
+static NSString * const MADCLIServeMethodSetElementTypography = @"set-element-typography";
+static NSString * const MADCLIServeMethodSetElementBoxModel = @"set-element-box-model";
+static NSString * const MADCLIServeMethodSetSection		= @"set-section";
+static NSString * const MADCLIServeMethodSetPaperSize	= @"set-paper-size";
 
 #pragma mark - Session state
 
@@ -1294,6 +1329,671 @@ static void MADCLIServeApplySQL(NSDictionary *params, NSMutableDictionary <NSNum
 	MADCLIServeWriteResult(requestID, MADCLIServeCompileResult(plan));
 }
 
+#pragma mark - Report layout (Phase 6c)
+
+/// The report's sections in the order the designer draws them — the same order
+/// MADMacDocument -orderedSections yields: Report Header, Page Header, Group Headers,
+/// Detail, Group Footers, Page Footer, Report Footer.
+static NSArray <RptqDocumentSection *> *MADCLIServeOrderedSections(id <MADDocumentDataProtocol> document) {
+	RptqDocument *doc = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	NSMutableArray <RptqDocumentSection *> *sections = [NSMutableArray array];
+	if (doc.hasReportHeaderSection) [sections addObject: doc.hasReportHeaderSection];
+	if (doc.hasPageHeaderSection) [sections addObject: doc.hasPageHeaderSection];
+
+	RptqQuery *query = doc.defaultDatabase.defaultQuery;
+	NSArray <RptqQueryGroup *> *groups = [query sortedQueryGroups] ?: @[];
+	for (RptqQueryGroup *group in groups) {
+		RptqDocumentSection *header = [RptqDocumentSection headerSectionInSections: group.hasSection];
+		if (header) [sections addObject: header];
+	}
+	if (doc.hasDetailSection) [sections addObject: doc.hasDetailSection];
+	for (RptqQueryGroup *group in [groups reverseObjectEnumerator]) {
+		RptqDocumentSection *footer = [RptqDocumentSection footerSectionInSections: group.hasSection];
+		if (footer) [sections addObject: footer];
+	}
+	if (doc.hasPageFooterSection) [sections addObject: doc.hasPageFooterSection];
+	if (doc.hasReportFooterSection) [sections addObject: doc.hasReportFooterSection];
+	return sections;
+}
+
+/// The English band title, matching MADMacDocument -displayTitleForSection: (localization is 6e).
+static NSString *MADCLIServeSectionTitle(RptqDocumentSection *section) {
+	switch (section.type) {
+		case MADDocumentSectionTypeReportHeader: return @"Report Header";
+		case MADDocumentSectionTypePageHeader: return @"Page Header";
+		case MADDocumentSectionTypeBody: return @"Report Detail";
+		case MADDocumentSectionTypePageFooter: return @"Page Footer";
+		case MADDocumentSectionTypeReportFooter: return @"Report Footer";
+		case MADDocumentSectionTypeGroupHeader: {
+			NSString *field = [section.inGroup fieldNameNice];
+			return field.length > 0 ? [NSString stringWithFormat: @"Group Header (%@)", field] : @"Group Header";
+		}
+		case MADDocumentSectionTypeGroupFooter: {
+			NSString *field = [section.inGroup fieldNameNice];
+			return field.length > 0 ? [NSString stringWithFormat: @"Group Footer (%@)", field] : @"Group Footer";
+		}
+		default: return @"Section";
+	}
+}
+
+/// The designer's "interface height" — the value the inspector edits and that
+/// setInterfaceHeight: stores as layoutHeight (height is layoutHeight + 44).
+static double MADCLIServeSectionHeight(RptqDocumentSection *section) {
+	double h = section.layoutHeight;
+	if (h < 1.0) h = MAX(36.0, section.height - 44.0);
+	return h;
+}
+
+/// The authoritative section-local frame, as the Mac's elementRectInSectionContent: reads it.
+static CGRect MADCLIServeElementRect(RptqDocumentElement *element) {
+	CGFloat x = 0.0, y = 0.0, w = 120.0, h = 22.0;
+	if (element.rect && element.rect.origin) {
+		x = element.rect.origin.x;
+		y = element.rect.origin.y;
+	}
+	if (x == 0.0 && y == 0.0 && element.dropPoint && (element.dropPoint.x != 0.0 || element.dropPoint.y != 0.0)) {
+		x = element.dropPoint.x;
+		y = element.dropPoint.y;
+	}
+	if (element.rect && element.rect.size) {
+		if (element.rect.size.width > 0.0) w = element.rect.size.width;
+		if (element.rect.size.height > 0.0) h = element.rect.size.height;
+	}
+	return CGRectMake(x, y, w, h);
+}
+
+static void MADCLIServeSetElementOrigin(RptqDocumentElement *element, double x, double y) {
+	[element setOriginPoint: CGPointMake(x, y)];
+	if (element.dropPoint) {
+		element.dropPoint.x = (float)x;
+		element.dropPoint.y = (float)y;
+	}
+}
+
+static RptqDocumentSection *MADCLIServeSectionForElement(id <MADDocumentDataProtocol> document, RptqDocumentElement *element) {
+	if (element.inSectionRow && element.inSectionRow.inSection) return element.inSectionRow.inSection;
+	for (RptqDocumentSection *section in MADCLIServeOrderedSections(document)) {
+		for (RptqDocumentSectionRows *row in section.hasRows) {
+			if ([row.hasObjects containsObject: element]) return section;
+		}
+	}
+	return nil;
+}
+
+static RptqQueryField *MADCLIServeFirstQueryField(id <MADDocumentDataProtocol> document) {
+	RptqQuery *query = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext].defaultDatabase.defaultQuery;
+	for (RptqQueryTable *table in query.hasQueryTables) {
+		for (RptqQueryField *field in table.hasQueryFields) {
+			return field;
+		}
+	}
+	return nil;
+}
+
+static NSDictionary *MADCLIServeElementDict(RptqDocumentElement *element, int64_t sectionId) {
+	CGRect rect = MADCLIServeElementRect(element);
+
+	NSString *text = @"";
+	int64_t fieldID = 0;
+	NSString *tableID = @"";
+	NSString *columnID = @"";
+	int16_t functionType = 0;
+	int16_t groupType = 0;
+	int32_t groupNumber = 0;
+
+	if ([element isKindOfClass: [RptqDocumentElementLabel class]]) {
+		text = ((RptqDocumentElementLabel *)element).text ?: @"";
+	} else if ([element isKindOfClass: [RptqDocumentElementLabelDataField class]]) {
+		RptqDocumentElementLabelDataField *df = (RptqDocumentElementLabelDataField *)element;
+		text = df.text ?: @"";
+		tableID = df.tableID ?: @"";
+		columnID = df.fieldID ?: @"";
+		if (df.referencesQueryField) fieldID = df.referencesQueryField.identifier;
+	} else if ([element isKindOfClass: [RptqDocumentElementAggregate class]]) {
+		RptqDocumentElementAggregate *agg = (RptqDocumentElementAggregate *)element;
+		functionType = (int16_t)agg.functionType;
+		groupType = (int16_t)agg.groupType;
+		groupNumber = agg.groupNumber;
+		if (agg.aggregateField) fieldID = agg.aggregateField.identifier;
+	}
+
+	CGFloat borderTop = 0.0, borderBottom = 0.0, borderLeft = 0.0, borderRight = 0.0;
+	if (element.border && element.border.width) {
+		RptqDirectionalAsymmetry *bw = element.border.width;
+		borderTop = bw.top; borderBottom = bw.bottom; borderLeft = bw.left; borderRight = bw.right;
+	}
+	CGFloat padding = element.padding ? element.padding.left : 0.0;
+	CGFloat margin = element.margin ? element.margin.left : 0.0;
+
+	BOOL bold = NO, italic = NO, underline = NO, strikethrough = NO;
+	if (element.textStyle) {
+		bold = element.textStyle.bold;
+		italic = element.textStyle.italic;
+		underline = element.textStyle.underline;
+		strikethrough = element.textStyle.strikethrough;
+	}
+	int16_t hAlign = element.alignment ? element.alignment.horizontal : MADHorizontalAlignmentLeft;
+	int16_t vAlign = element.alignment ? element.alignment.vertical : MADVerticalAlignmentCenter;
+
+	return @{
+		@"id": @(element.identifier),
+		@"type": @(element.type),
+		@"section": @(sectionId),
+		@"x": @(rect.origin.x), @"y": @(rect.origin.y),
+		@"w": @(rect.size.width), @"h": @(rect.size.height),
+		@"text": text,
+		@"field": @(fieldID),
+		@"table": tableID,
+		@"column": columnID,
+		@"function": @(functionType),
+		@"scope": @(groupType),
+		@"group": @(groupNumber),
+		@"fontname": element.fontname ?: @"",
+		@"fontsize": @(element.fontsize),
+		@"bold": @(bold), @"italic": @(italic), @"underline": @(underline), @"strikethrough": @(strikethrough),
+		@"hAlign": @(hAlign), @"vAlign": @(vAlign),
+		@"borderTop": @(borderTop), @"borderBottom": @(borderBottom),
+		@"borderLeft": @(borderLeft), @"borderRight": @(borderRight),
+		@"padding": @(padding), @"margin": @(margin),
+	};
+}
+
+static NSDictionary *MADCLIServeLayoutModelDict(id <MADDocumentDataProtocol> document) {
+	RptqDocument *doc = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+
+	NSMutableArray <NSDictionary *> *sections = [NSMutableArray array];
+	NSMutableArray <NSDictionary *> *elements = [NSMutableArray array];
+	for (RptqDocumentSection *section in MADCLIServeOrderedSections(document)) {
+		NSString *groupField = nil;
+		if (section.type == MADDocumentSectionTypeGroupHeader || section.type == MADDocumentSectionTypeGroupFooter) {
+			groupField = [section.inGroup fieldNameNice];
+		}
+		[sections addObject: @{
+			@"id": @(section.identifier),
+			@"type": @(section.type),
+			@"title": MADCLIServeSectionTitle(section),
+			@"height": @(MADCLIServeSectionHeight(section)),
+			@"visible": @(section.visibility),
+			@"pageBreak": @([section producesFormFeed]),
+			@"groupField": groupField.length > 0 ? groupField : [NSNull null],
+		}];
+		for (RptqDocumentSectionRows *row in section.hasRows) {
+			for (RptqDocumentElement *element in row.hasObjects) {
+				[elements addObject: MADCLIServeElementDict(element, section.identifier)];
+			}
+		}
+	}
+
+	NSMutableArray <NSDictionary *> *fields = [NSMutableArray array];
+	RptqQuery *query = doc.defaultDatabase.defaultQuery;
+	NSMutableArray <RptqQueryTable *> *tables = [[query.hasQueryTables allObjects] mutableCopy];
+	[tables sortUsingDescriptors: @[[NSSortDescriptor sortDescriptorWithKey: @"dropIndex" ascending: YES]]];
+	NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey: @"databaseSchemaField.name"
+															 ascending: YES
+															  selector: @selector(localizedCaseInsensitiveCompare:)];
+	for (RptqQueryTable *table in tables) {
+		NSString *alias = table.alias.length > 0 ? table.alias : (table.databaseSchemaTable.name ?: @"");
+		NSArray <RptqQueryField *> *sorted = [[table.hasQueryFields allObjects] sortedArrayUsingDescriptors: @[byName]];
+		for (RptqQueryField *field in sorted) {
+			NSString *name = field.databaseSchemaField.name ?: @"";
+			[fields addObject: @{
+				@"id": @(field.identifier),
+				@"name": name,
+				@"table": alias,
+				@"display": [NSString stringWithFormat: @"%@.%@", alias, name],
+			}];
+		}
+	}
+
+	return @{
+		@"paperSize": @(doc.papersize),
+		@"sections": sections,
+		@"elements": elements,
+		@"fields": fields,
+	};
+}
+
+static void MADCLIServeLayoutModel(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(entry.document.document));
+}
+
+static void MADCLIServeEnsureFirstRow(RptqDocumentSection *section, RptqStoreContext *context) {
+	if (section.hasRows.count > 0) return;
+	RptqDocumentSectionRows *row = (RptqDocumentSectionRows *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentSectionRows class]) identifier: 0];
+	row.rowNumber = 0;
+	row.layoutHeight = MAX(40.0, section.layoutHeight);
+	row.inSection = section;
+	[section addHasRowsFixed: row];
+}
+
+static void MADCLIServeAddElement(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	NSString *kind = MADCLIServeOptionalString(params, @"kind");
+	int64_t sectionID = [params[@"section"] isKindOfClass: [NSNumber class]] ? [params[@"section"] longLongValue] : 0;
+	double x = [params[@"x"] isKindOfClass: [NSNumber class]] ? [params[@"x"] doubleValue] : 0.0;
+	double y = [params[@"y"] isKindOfClass: [NSNumber class]] ? [params[@"y"] doubleValue] : 0.0;
+	if (kind == nil || sectionID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"add-element needs a kind and a section.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqDocumentSection *section = (RptqDocumentSection *)[context objectForEntity: NSStringFromClass([RptqDocumentSection class]) identifier: sectionID];
+	if (section == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown section %lld.", sectionID]);
+		return;
+	}
+	MADCLIServeEnsureFirstRow(section, context);
+
+	RptqDocumentElement *element = nil;
+	double w = 120.0, h = 22.0;
+	if ([kind isEqualToString: @"label"]) {
+		RptqDocumentElementLabel *lbl = (RptqDocumentElementLabel *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementLabel class]) identifier: 0];
+		lbl.type = (int16_t)MADPrintPageElementTypeLabelStatic;
+		lbl.text = @"Static Label";
+		w = 124.0; h = 22.0;
+		element = lbl;
+	} else if ([kind isEqualToString: @"data-field"]) {
+		RptqDocumentElementLabelDataField *df = (RptqDocumentElementLabelDataField *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementLabelDataField class]) identifier: 0];
+		df.type = (int16_t)MADPrintPageElementTypeLabelDynamic;
+		RptqQueryField *bound = MADCLIServeFirstQueryField(document);
+		if (bound) {
+			df.referencesQueryField = bound;
+			df.fieldID = bound.databaseSchemaField.name;
+			df.tableID = bound.inQueryTable.alias ?: bound.inQueryTable.databaseSchemaTable.name;
+			df.text = [NSString stringWithFormat: @"[%@.%@]", df.tableID ?: @"", df.fieldID ?: @""];
+		} else {
+			df.text = @"[Data Field]";
+		}
+		w = 140.0; h = 22.0;
+		element = df;
+	} else if ([kind isEqualToString: @"aggregate"]) {
+		RptqDocumentElementAggregate *agg = (RptqDocumentElementAggregate *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementAggregate class]) identifier: 0];
+		agg.type = (int16_t)MADPrintPageElementTypeAggregate;
+		agg.functionType = MTAggregateFunctionTypeSum;
+		if (section.type == MADDocumentSectionTypeGroupHeader || section.type == MADDocumentSectionTypeGroupFooter) {
+			agg.groupType = MTAggregateGroupByTypeSection;
+			agg.groupNumber = 1;
+		} else if (section.type == MADDocumentSectionTypePageHeader || section.type == MADDocumentSectionTypePageFooter) {
+			agg.groupType = MTAggregateGroupByTypePage;
+		} else {
+			agg.groupType = MTAggregateGroupByTypeReport;
+		}
+		agg.aggregateField = MADCLIServeFirstQueryField(document);
+		w = 144.0; h = 22.0;
+		element = agg;
+	} else if ([kind isEqualToString: @"image"]) {
+		RptqDocumentElementImage *img = (RptqDocumentElementImage *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementImage class]) identifier: 0];
+		img.type = (int16_t)MADPrintPageElementTypeImage;
+		w = 96.0; h = 64.0;
+		element = img;
+	} else if ([kind isEqualToString: @"line"]) {
+		RptqDocumentElementLabel *line = (RptqDocumentElementLabel *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementLabel class]) identifier: 0];
+		line.type = (int16_t)MADPrintPageElementTypeLabelStatic;
+		line.text = @"";
+		if (line.border && line.border.width) line.border.width.bottom = 1.5f;
+		w = 320.0; h = 8.0;
+		element = line;
+	} else {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown element kind '%@'.", kind]);
+		return;
+	}
+
+	[element setSizeWidth: (float)w height: (float)h];
+	[section addDocumentObject: element withDropPoint: CGPointMake(x, y) managedObjectContext: context];
+	MADCLIServeSetElementOrigin(element, x, y);
+	element.inSectionRow = section.hasRows.firstObject;
+
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+}
+
+static void MADCLIServeRemoveElements(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	if (![params[@"elements"] isKindOfClass: [NSArray class]]) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"elements must be an array.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	for (NSNumber *idNumber in params[@"elements"]) {
+		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
+		if (element == nil) continue;
+		for (RptqDocumentSection *section in MADCLIServeOrderedSections(document)) {
+			for (RptqDocumentSectionRows *row in section.hasRows) {
+				if ([row.hasObjects containsObject: element]) {
+					[row removeHasObjectsObject: element];
+				}
+			}
+		}
+		element.inSectionRow = nil;
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+}
+
+static void MADCLIServeMoveElements(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	NSArray *ids = [params[@"elements"] isKindOfClass: [NSArray class]] ? params[@"elements"] : nil;
+	int64_t targetSectionID = [params[@"section"] isKindOfClass: [NSNumber class]] ? [params[@"section"] longLongValue] : 0;
+	if (ids == nil || targetSectionID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"move-elements needs an elements array and a section.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqDocumentSection *target = (RptqDocumentSection *)[context objectForEntity: NSStringFromClass([RptqDocumentSection class]) identifier: targetSectionID];
+	if (target == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown section %lld.", targetSectionID]);
+		return;
+	}
+	MADCLIServeEnsureFirstRow(target, context);
+	RptqDocumentSectionRows *targetRow = target.hasRows.firstObject;
+
+	for (NSNumber *idNumber in ids) {
+		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
+		if (element == nil) continue;
+		for (RptqDocumentSection *section in MADCLIServeOrderedSections(document)) {
+			for (RptqDocumentSectionRows *row in section.hasRows) {
+				if ([row.hasObjects containsObject: element]) {
+					[row removeHasObjectsObject: element];
+				}
+			}
+		}
+		[targetRow addHasObjectsObject: element];
+		element.inSectionRow = targetRow;
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+}
+
+static void MADCLIServeSetElementGeometry(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	NSArray *array = [params[@"elements"] isKindOfClass: [NSArray class]] ? params[@"elements"] : nil;
+	if (array == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"elements must be an array.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	for (NSDictionary *item in array) {
+		if (![item isKindOfClass: [NSDictionary class]]) continue;
+		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [item[@"id"] longLongValue]];
+		if (element == nil) continue;
+		double x = [item[@"x"] isKindOfClass: [NSNumber class]] ? [item[@"x"] doubleValue] : 0.0;
+		double y = [item[@"y"] isKindOfClass: [NSNumber class]] ? [item[@"y"] doubleValue] : 0.0;
+		double w = [item[@"w"] isKindOfClass: [NSNumber class]] ? [item[@"w"] doubleValue] : 0.0;
+		double h = [item[@"h"] isKindOfClass: [NSNumber class]] ? [item[@"h"] doubleValue] : 0.0;
+		MADCLIServeSetElementOrigin(element, x, y);
+		[element setSizeWidth: (float)w height: (float)h];
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+}
+
+static void MADCLIServeSetElementContent(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	int64_t elementID = [params[@"element"] isKindOfClass: [NSNumber class]] ? [params[@"element"] longLongValue] : 0;
+	NSDictionary *content = [params[@"content"] isKindOfClass: [NSDictionary class]] ? params[@"content"] : @{};
+	if (elementID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"element must be a number.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: elementID];
+	if (element == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown element %lld.", elementID]);
+		return;
+	}
+
+	if ([element isKindOfClass: [RptqDocumentElementLabel class]]) {
+		if ([content[@"text"] isKindOfClass: [NSString class]]) {
+			((RptqDocumentElementLabel *)element).text = content[@"text"];
+		}
+	} else if ([element isKindOfClass: [RptqDocumentElementLabelDataField class]]) {
+		RptqDocumentElementLabelDataField *df = (RptqDocumentElementLabelDataField *)element;
+		if ([content[@"field"] isKindOfClass: [NSNumber class]]) {
+			RptqQueryField *field = (RptqQueryField *)[context objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: [content[@"field"] longLongValue]];
+			if (field) {
+				df.referencesQueryField = field;
+				df.fieldID = field.databaseSchemaField.name;
+				df.tableID = field.inQueryTable.alias ?: field.inQueryTable.databaseSchemaTable.name;
+				df.text = [NSString stringWithFormat: @"[%@.%@]", df.tableID ?: @"", df.fieldID ?: @""];
+			}
+		} else if ([content[@"text"] isKindOfClass: [NSString class]]) {
+			df.text = content[@"text"];
+		}
+	} else if ([element isKindOfClass: [RptqDocumentElementAggregate class]]) {
+		RptqDocumentElementAggregate *agg = (RptqDocumentElementAggregate *)element;
+		if ([content[@"function"] isKindOfClass: [NSNumber class]]) agg.functionType = (MTAggregateFunctionType)[content[@"function"] integerValue];
+		if ([content[@"scope"] isKindOfClass: [NSNumber class]]) agg.groupType = (MTAggregateGroupByType)[content[@"scope"] integerValue];
+		if ([content[@"group"] isKindOfClass: [NSNumber class]]) agg.groupNumber = (int32_t)[content[@"group"] integerValue];
+		if ([content[@"field"] isKindOfClass: [NSNumber class]]) {
+			agg.aggregateField = (RptqQueryField *)[context objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: [content[@"field"] longLongValue]];
+		}
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+}
+
+static void MADCLIServeSetElementTypography(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	NSArray *ids = [params[@"elements"] isKindOfClass: [NSArray class]] ? params[@"elements"] : nil;
+	if (ids == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"elements must be an array.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	for (NSNumber *idNumber in ids) {
+		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
+		if (element == nil) continue;
+		if ([params[@"fontname"] isKindOfClass: [NSString class]]) element.fontname = params[@"fontname"];
+		if ([params[@"fontsize"] isKindOfClass: [NSNumber class]]) element.fontsize = [params[@"fontsize"] doubleValue];
+		if ([params[@"bold"] isKindOfClass: [NSNumber class]]) element.textStyle.bold = [params[@"bold"] boolValue];
+		if ([params[@"italic"] isKindOfClass: [NSNumber class]]) element.textStyle.italic = [params[@"italic"] boolValue];
+		if ([params[@"underline"] isKindOfClass: [NSNumber class]]) element.textStyle.underline = [params[@"underline"] boolValue];
+		if ([params[@"strikethrough"] isKindOfClass: [NSNumber class]]) element.textStyle.strikethrough = [params[@"strikethrough"] boolValue];
+		if ([params[@"hAlign"] isKindOfClass: [NSNumber class]]) element.alignment.horizontal = (int16_t)[params[@"hAlign"] integerValue];
+		if ([params[@"vAlign"] isKindOfClass: [NSNumber class]]) element.alignment.vertical = (int16_t)[params[@"vAlign"] integerValue];
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+}
+
+static void MADCLIServeSetElementBoxModel(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	NSArray *ids = [params[@"elements"] isKindOfClass: [NSArray class]] ? params[@"elements"] : nil;
+	if (ids == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"elements must be an array.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	for (NSNumber *idNumber in ids) {
+		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
+		if (element == nil) continue;
+		if ([params[@"borderTop"] isKindOfClass: [NSNumber class]]) element.border.width.top = (float)[params[@"borderTop"] doubleValue];
+		if ([params[@"borderBottom"] isKindOfClass: [NSNumber class]]) element.border.width.bottom = (float)[params[@"borderBottom"] doubleValue];
+		if ([params[@"borderLeft"] isKindOfClass: [NSNumber class]]) element.border.width.left = (float)[params[@"borderLeft"] doubleValue];
+		if ([params[@"borderRight"] isKindOfClass: [NSNumber class]]) element.border.width.right = (float)[params[@"borderRight"] doubleValue];
+		if ([params[@"padding"] isKindOfClass: [NSNumber class]]) {
+			float pad = (float)[params[@"padding"] doubleValue];
+			element.padding.top = pad; element.padding.bottom = pad; element.padding.left = pad; element.padding.right = pad;
+		}
+		if ([params[@"margin"] isKindOfClass: [NSNumber class]]) {
+			float mar = (float)[params[@"margin"] doubleValue];
+			element.margin.top = mar; element.margin.bottom = mar; element.margin.left = mar; element.margin.right = mar;
+		}
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+}
+
+static void MADCLIServeSetSection(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	int64_t sectionID = [params[@"section"] isKindOfClass: [NSNumber class]] ? [params[@"section"] longLongValue] : 0;
+	if (sectionID == 0) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"section must be a number.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	RptqDocumentSection *section = (RptqDocumentSection *)[context objectForEntity: NSStringFromClass([RptqDocumentSection class]) identifier: sectionID];
+	if (section == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown section %lld.", sectionID]);
+		return;
+	}
+	if ([params[@"height"] isKindOfClass: [NSNumber class]]) [section setInterfaceHeight: [params[@"height"] doubleValue]];
+	if ([params[@"visible"] isKindOfClass: [NSNumber class]]) section.visibility = [params[@"visible"] boolValue];
+	if ([params[@"pageBreak"] isKindOfClass: [NSNumber class]]) [section setProducesFormFeed: [params[@"pageBreak"] boolValue]];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+}
+
+static void MADCLIServeSetPaperSize(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	if (![params[@"paperSize"] isKindOfClass: [NSNumber class]]) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"paperSize must be a number.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqDocument *doc = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	doc.papersize = (int16_t)[params[@"paperSize"] integerValue];
+
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+}
+
+static RptqDocumentElement *MADCLIServeDuplicateElement(RptqDocumentElement *src, RptqStoreContext *context) {
+	RptqDocumentElement *dst = nil;
+	if ([src isKindOfClass: [RptqDocumentElementLabel class]]) {
+		RptqDocumentElementLabel *dup = (RptqDocumentElementLabel *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementLabel class]) identifier: 0];
+		dup.type = src.type;
+		dup.text = [((RptqDocumentElementLabel *)src).text copy];
+		dst = dup;
+	} else if ([src isKindOfClass: [RptqDocumentElementLabelDataField class]]) {
+		RptqDocumentElementLabelDataField *s = (RptqDocumentElementLabelDataField *)src;
+		RptqDocumentElementLabelDataField *dup = (RptqDocumentElementLabelDataField *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementLabelDataField class]) identifier: 0];
+		dup.type = src.type;
+		dup.referencesQueryField = s.referencesQueryField;
+		dup.fieldID = [s.fieldID copy];
+		dup.tableID = [s.tableID copy];
+		dup.text = [s.text copy];
+		dst = dup;
+	} else if ([src isKindOfClass: [RptqDocumentElementAggregate class]]) {
+		RptqDocumentElementAggregate *s = (RptqDocumentElementAggregate *)src;
+		RptqDocumentElementAggregate *dup = (RptqDocumentElementAggregate *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementAggregate class]) identifier: 0];
+		dup.type = src.type;
+		dup.functionType = s.functionType;
+		dup.groupType = s.groupType;
+		dup.groupNumber = s.groupNumber;
+		dup.aggregateField = s.aggregateField;
+		dst = dup;
+	} else if ([src isKindOfClass: [RptqDocumentElementImage class]]) {
+		RptqDocumentElementImage *dup = (RptqDocumentElementImage *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementImage class]) identifier: 0];
+		dup.type = src.type;
+		dst = dup;
+	}
+	return dst;
+}
+
+static void MADCLIServeCopyElementStyle(RptqDocumentElement *dst, RptqDocumentElement *src) {
+	dst.fontname = [src.fontname copy];
+	dst.fontsize = src.fontsize;
+	if (dst.textStyle && src.textStyle) {
+		dst.textStyle.bold = src.textStyle.bold;
+		dst.textStyle.italic = src.textStyle.italic;
+		dst.textStyle.underline = src.textStyle.underline;
+		dst.textStyle.strikethrough = src.textStyle.strikethrough;
+	}
+	if (dst.alignment && src.alignment) {
+		dst.alignment.horizontal = src.alignment.horizontal;
+		dst.alignment.vertical = src.alignment.vertical;
+	}
+	if (dst.border && dst.border.width && src.border && src.border.width) {
+		dst.border.width.top = src.border.width.top;
+		dst.border.width.bottom = src.border.width.bottom;
+		dst.border.width.left = src.border.width.left;
+		dst.border.width.right = src.border.width.right;
+	}
+	if (dst.padding && src.padding) {
+		dst.padding.top = src.padding.top;
+		dst.padding.bottom = src.padding.bottom;
+		dst.padding.left = src.padding.left;
+		dst.padding.right = src.padding.right;
+	}
+	if (dst.margin && src.margin) {
+		dst.margin.top = src.margin.top;
+		dst.margin.bottom = src.margin.bottom;
+		dst.margin.left = src.margin.left;
+		dst.margin.right = src.margin.right;
+	}
+}
+
+static void MADCLIServeDuplicateElements(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	NSArray *ids = [params[@"elements"] isKindOfClass: [NSArray class]] ? params[@"elements"] : nil;
+	if (ids == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"elements must be an array.");
+		return;
+	}
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	RptqStoreContext *context = document.storeContext;
+	for (NSNumber *idNumber in ids) {
+		RptqDocumentElement *src = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
+		if (src == nil) continue;
+		RptqDocumentSection *section = MADCLIServeSectionForElement(document, src);
+		if (section == nil) continue;
+		MADCLIServeEnsureFirstRow(section, context);
+
+		CGRect rect = MADCLIServeElementRect(src);
+		RptqDocumentElement *dup = MADCLIServeDuplicateElement(src, context);
+		if (dup == nil) continue;
+		MADCLIServeCopyElementStyle(dup, src);
+		[dup setSizeWidth: (float)rect.size.width height: (float)rect.size.height];
+
+		double nx = rect.origin.x + 16.0;
+		double ny = rect.origin.y + 12.0;
+		[section addDocumentObject: dup withDropPoint: CGPointMake(nx, ny) managedObjectContext: context];
+		MADCLIServeSetElementOrigin(dup, nx, ny);
+		dup.inSectionRow = section.hasRows.firstObject;
+	}
+
+	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
+}
+
 #pragma mark - Dispatch
 
 /// Handles one parsed request.  Returns YES when the session should end (shutdown).
@@ -1348,6 +2048,28 @@ static BOOL MADCLIServeDispatch(NSDictionary *request, NSMutableDictionary <NSNu
 			MADCLIServeValidateSQL(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodApplySQL]) {
 			MADCLIServeApplySQL(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodLayoutModel]) {
+			MADCLIServeLayoutModel(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodAddElement]) {
+			MADCLIServeAddElement(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodRemoveElements]) {
+			MADCLIServeRemoveElements(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodDuplicateElements]) {
+			MADCLIServeDuplicateElements(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodMoveElements]) {
+			MADCLIServeMoveElements(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodSetElementGeometry]) {
+			MADCLIServeSetElementGeometry(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodSetElementContent]) {
+			MADCLIServeSetElementContent(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodSetElementTypography]) {
+			MADCLIServeSetElementTypography(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodSetElementBoxModel]) {
+			MADCLIServeSetElementBoxModel(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodSetSection]) {
+			MADCLIServeSetSection(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodSetPaperSize]) {
+			MADCLIServeSetPaperSize(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodRefresh]) {
 			MADCLIServeRefresh(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodExport]) {
