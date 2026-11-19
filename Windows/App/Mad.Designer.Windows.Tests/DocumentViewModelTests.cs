@@ -83,4 +83,49 @@ public sealed class DocumentViewModelTests
             if (File.Exists(target)) File.Delete(target);
         }
     }
+
+    [Fact]
+    public async Task SaveAs_WritesCopy_AndUpdatesFilePath()
+    {
+        await using var engine = new EngineService();
+        var viewModel = new DocumentViewModel(engine);
+        string target = Path.Combine(Path.GetTempPath(), $"mad-saveas-{Guid.NewGuid():N}.mad");
+
+        try
+        {
+            await viewModel.OpenAsync(MadPathResolver.DefaultDocument());
+            await viewModel.SaveAsAsync(target);
+
+            Assert.True(File.Exists(target));
+            Assert.Equal(target, viewModel.FilePath);
+        }
+        finally
+        {
+            if (File.Exists(target)) File.Delete(target);
+        }
+    }
+
+    [Fact]
+    public async Task Save_WithNoDocument_SetsError()
+    {
+        await using var engine = new EngineService();
+        var viewModel = new DocumentViewModel(engine);
+
+        await viewModel.SaveAsync();
+
+        Assert.False(string.IsNullOrEmpty(viewModel.ErrorText));
+    }
+
+    [Fact]
+    public async Task GetConnection_ReturnsSqliteSpec()
+    {
+        await using var engine = new EngineService();
+        var viewModel = new DocumentViewModel(engine);
+
+        await viewModel.OpenAsync(MadPathResolver.DefaultDocument());
+        var spec = await viewModel.GetConnectionAsync();
+
+        Assert.NotNull(spec);
+        Assert.Equal(ConnectionDriver.Sqlite3, spec.Driver);
+    }
 }
