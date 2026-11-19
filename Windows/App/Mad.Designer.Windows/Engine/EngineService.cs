@@ -105,12 +105,12 @@ public sealed class EngineService : IAsyncDisposable
     {
         if (_client == null) return;
 
-        await _gate.WaitAsync();
+        await _gate.WaitAsync().ConfigureAwait(false);
         try
         {
             if (_client.IsRunning)
             {
-                await Task.Run(() => _client.Shutdown());
+                await Task.Run(() => _client.Shutdown()).ConfigureAwait(false);
             }
         }
         finally
@@ -121,7 +121,7 @@ public sealed class EngineService : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        await ShutdownAsync();
+        await ShutdownAsync().ConfigureAwait(false);
         _client?.Dispose();
         _gate.Dispose();
     }
