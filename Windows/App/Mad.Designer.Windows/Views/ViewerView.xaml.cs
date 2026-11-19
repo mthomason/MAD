@@ -27,8 +27,10 @@ public partial class ViewerView : UserControl
     public ViewerView()
     {
         InitializeComponent();
+        // The browser stays alive across TabControl unloads (switching workspaces) so the
+        // rendered report survives a visit to another workspace; the process exit tears down
+        // the WebView2 child processes with it.
         Loaded += OnLoaded;
-        Unloaded += OnUnloaded;
         DataContextChanged += OnDataContextChanged;
     }
 
@@ -64,13 +66,6 @@ public partial class ViewerView : UserControl
         }
     }
 
-    private void OnUnloaded(object sender, RoutedEventArgs e)
-    {
-        _browser?.Dispose();
-        _browser = null;
-        DeletePreviewFile();
-    }
-
     private async Task EnsureBrowserAsync()
     {
         if (_browser != null || _viewer == null) return;
@@ -92,11 +87,13 @@ public partial class ViewerView : UserControl
         browser.ZoomFactor = _viewer.Zoom;
         _browser = browser;
 
-        if (_pendingHtml != null)
+        // A render can land before the browser finishes starting; a later Load (after the
+        // workspace was unloaded) shows whatever the view model already holds.
+        string? html = _pendingHtml ?? _viewer.PreviewHtml;
+        _pendingHtml = null;
+        if (html != null)
         {
-            string? pending = _pendingHtml;
-            _pendingHtml = null;
-            ShowPreview(pending);
+            ShowPreview(html);
         }
     }
 
@@ -189,15 +186,6 @@ public partial class ViewerView : UserControl
         _ = _browser.CoreWebView2.ExecuteScriptAsync(
             $"var p=document.querySelector('.page[data-index=\"{index}\"]');" +
             "if(p){p.scrollIntoView({block:'start'});}");
-    }
-
-    private void DeletePreviewFile()
-    {
-        if (_previewFile != null)
-        {
-            TryDelete(_previewFile);
-            _previewFile = null;
-        }
     }
 
     private static void TryDelete(string path)

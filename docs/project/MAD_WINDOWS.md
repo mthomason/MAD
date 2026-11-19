@@ -475,6 +475,56 @@ Header, Group Headers, Detail, Group Footers, Page Footer, Report Footer), each 
 `borderLeft`/`borderRight`, `padding` and `margin`. `fields[]` lists the query fields (with
 store ids) for the sidebar browser and the binding popup.
 
+## 6g. Phase 6d — the Viewer workspace (render, page size, export, print)
+
+Phase 6d finishes the MAD Viewer on top of the 6a–6c shell. The Mac viewer renders a
+paginated PDF in `PDFView`; **PDF is an accepted gap on Windows** (no PDFKit, and the
+engine's `pdf` exporter is Apple-only), so the interim the plan names is HTML + print:
+
+* **Render approach — WebView2 over the engine's HTML exporter.** The preview shows the
+  exact `export --format html` bytes (one `<div class="page" data-index="N">` box per
+  page, the same formatter the PDF and every other exporter use), hosted in a WebView2.
+  The page count on the status line is the number of those page boxes, so the engine
+  remains the only paginator and no exporter is reimplemented in C#. The preview adds
+  only presentation chrome (grey desk, page gaps and shadows) through an injected style;
+  the exported bytes are untouched. The HTML is written to a temporary file and navigated
+  by URL because `NavigateToString` has a 2 MB ceiling a large report would hit. Zoom is
+  the WebView2 `ZoomFactor`; page navigation scrolls the requested page box into view.
+  **Print** uses `CoreWebView2.ShowPrintUI` — the interim HTML print path. The browser is
+  created on `Loaded`, not in XAML, so the workspace composes headlessly for its tests.
+* **`ViewerViewModel`** owns the page-size selection and its rendered lock (US Letter
+  default, US Legal, A4), the zoom steps (0.25–4.0, 1.25×, 100% reset), previous/next
+  navigation, the export-format catalogue, and the status line. The status line is the
+  Mac's: `Rendered N pages from M cached rows.` with its singular/plural grammar, green on
+  success and red on failure. Selecting a paper size does not change the rendered report
+  until the next refresh (the Mac's `selectedPaperType`/`renderedPaperType` split); the
+  selection survives refresh, and the export uses the rendered paper.
+* **Export** offers the six formats this build produces — HTML Page, HTML Flow, CSV,
+  JSON Data, JSON Full Report, and Plain Text — each with its own file extension
+  (`html`, `html`, `csv`, `json`, `json`, `txt`). The toolbar carries the format selector;
+  Export opens the save dialog filtered to the chosen format. PDF is not offered.
+  Exporting before a refresh refreshes first, as the Mac's Export does.
+* **Document integration.** `DocumentViewModel.RefreshAsync` runs the query and then calls
+  `Viewer.RenderAsync`, which applies the selected paper through the document (so the
+  Designer's snapshot follows) and loads the HTML preview. The Viewer's Refresh, Export
+  and Print buttons all run through that same document path.
+* **Engine correction.** `set-paper-size` mutated the stored `RptqDocument` but not the
+  render document, whose `MTPaper` is cached after the first layout, so the second paper
+  change never reached an export. It now also calls `setPaperType:` on the render document
+  (the call the Mac viewer makes before refreshing) and re-formats a report that is already
+  laid out, so the new size reaches an export that follows without another refresh.
+
+The Viewer replaces Phase 5's placeholder rows grid: the rendered report is the workspace,
+as on the Mac, and the rows remain available through the CSV/JSON exports.
+
+**Tests.** `ViewerViewModelTests` (status grammar, format catalogue, page counting, zoom,
+navigation, print request), `ViewerSurfaceTests` (the workspace materialised on an STA
+thread — the toolbar, the six formats, the page-size selector, the status colour and the
+page label), and `ViewerAcceptanceTests` against the engine (London → 5 pages / 76 cached
+rows, page-size lock and persistence through A4 with the exported page box at 595 × 842,
+every export format with its extension, and the paper-size switch A4 → Legal → Letter
+reaching each export).
+
 ## 7. Supported Windows versions
 
 .NET 10's supported OS matrix (Windows 10 Enterprise 21H2/1809/1607, Windows
