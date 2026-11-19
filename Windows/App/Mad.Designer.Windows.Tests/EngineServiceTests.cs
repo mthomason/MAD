@@ -8,6 +8,7 @@ using Mad.Designer.Windows.Infrastructure;
 
 namespace Mad.Designer.Windows.Tests;
 
+[Collection("Engine")]
 public sealed class EngineServiceTests
 {
     [Fact]
