@@ -1,0 +1,18 @@
+<UserControl x:Class="Mad.Designer.Windows.Views.ViewerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel Margin="8">
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
+            <Button Content="Refresh" Command="{Binding Document.RefreshCommand}" Padding="10,2"/>
+            <Button Content="Export CSV" Command="{Binding Document.ExportCsvCommand}" Padding="10,2" Margin="8,0,0,0"/>
+            <Button Content="Export JSON" Command="{Binding Document.ExportJsonCommand}" Padding="10,2" Margin="8,0,0,0"/>
+            <TextBlock Text="{Binding Document.StatusText}" Margin="16,0,0,0" VerticalAlignment="Center"/>
+        </StackPanel>
+        <DataGrid ItemsSource="{Binding Document.DataView}"
+                  AutoGenerateColumns="True"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="All"/>
+    </DockPanel>
+</UserControl>
