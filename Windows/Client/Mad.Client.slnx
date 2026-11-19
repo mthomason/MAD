@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Mad.Client.Tests/Mad.Client.Tests.csproj" />
+  <Project Path="Mad.Client/Mad.Client.csproj" />
+</Solution>
