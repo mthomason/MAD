@@ -36,6 +36,7 @@
 #import "MADCLIDocument.h"
 
 #import <MAD/MADDocumentDataProtocol.h>
+#import <MAD/MADDocumentRenderProtocol.h>
 #import <MAD/MADHeadlessDocument.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/MADReportExporting.h>
@@ -1901,6 +1902,18 @@ static void MADCLIServeSetPaperSize(NSDictionary *params, NSMutableDictionary <N
 	id <MADDocumentDataProtocol> document = entry.document.document;
 	RptqDocument *doc = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
 	doc.papersize = (int16_t)[params[@"paperSize"] integerValue];
+
+	// The layout model lives in the store, but a render document caches its MTPaper the
+	// first time it lays a page out.  Set the paper on the render document too -- the call
+	// the Mac viewer makes before it refreshes -- and re-format a report that is already
+	// laid out, so the new size reaches an export that follows without another refresh.
+	if ([document respondsToSelector: @selector(setPaperType:)]) {
+		id <MADDocumentRenderProtocol> renderDocument = (id <MADDocumentRenderProtocol>)document;
+		[renderDocument setPaperType: (MTPaperType)doc.papersize];
+		if (document.didRefresh && [renderDocument respondsToSelector: @selector(format)]) {
+			[renderDocument format];
+		}
+	}
 
 	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
 }

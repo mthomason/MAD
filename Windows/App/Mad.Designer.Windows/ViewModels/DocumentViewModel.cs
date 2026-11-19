@@ -48,6 +48,7 @@ public sealed class DocumentViewModel : ObservableObject
         SaveAsCommand = new AsyncRelayCommand(SaveAsAsync, () => HasDocument);
         Query = new QueryViewModel(engine);
         Designer = new DesignerViewModel(engine);
+        Viewer = new ViewerViewModel(engine, exportPath);
     }
 
     /// <summary>The Query workspace's view model — the visual query designer and SQL editor.</summary>
@@ -55,6 +56,10 @@ public sealed class DocumentViewModel : ObservableObject
 
     /// <summary>The Designer workspace's view model — the report-layout studio.</summary>
     public DesignerViewModel Designer { get; }
+
+    /// <summary>The Viewer workspace's view model — the rendered report, page size, navigation,
+    /// and export.</summary>
+    public ViewerViewModel Viewer { get; }
 
     /// <summary>Records a failure that happened before a document could be opened (for
     /// example, resolving the default fixture). Kept separate from <see cref="OpenAsync"/>
@@ -155,6 +160,7 @@ public sealed class DocumentViewModel : ObservableObject
         _connection = await _engine.ConnectionAsync(_handle);
         await Query.LoadAsync(_handle, describe.Driver, describe.Tables);
         await Designer.LoadAsync(_handle);
+        await Viewer.LoadAsync(_handle, RefreshAsync, ApplyPaperSizeAsync);
 
         DataView = null;
         RowCount = 0;
@@ -167,6 +173,7 @@ public sealed class DocumentViewModel : ObservableObject
 
         IsBusy = true;
         ErrorText = null;
+        Viewer.BeginRefresh();
         try
         {
             var refresh = await _engine.RefreshAsync(_handle, credentials: ResolveCredentials(_connection, _credentials));
@@ -175,17 +182,29 @@ public sealed class DocumentViewModel : ObservableObject
             string json = await _engine.ExportAsync(_handle, "json");
             DataView = MadReport.Parse(json).ToDataTable().DefaultView;
 
+            // Phase 6d: lay the report out for the Viewer's selected paper and load its
+            // HTML preview. Failures land on the Viewer's status line, not here.
+            await Viewer.RenderAsync(refresh.RowCount);
+
             StatusText = $"Rendered {refresh.RowCount} cached rows";
         }
         catch (Exception exception)
         {
             ErrorText = exception.Message;
             StatusText = "Refresh failed.";
+            Viewer.ReportRefreshFailed(exception.Message);
         }
         finally
         {
             IsBusy = false;
         }
+    }
+
+    /// <summary>Applies a paper size through the document so the Designer's snapshot follows.</summary>
+    private async Task ApplyPaperSizeAsync(int paperSize)
+    {
+        await _engine.SetPaperSizeAsync(_handle, paperSize);
+        await Designer.ReloadAsync();
     }
 
     public async Task SaveAsync()
