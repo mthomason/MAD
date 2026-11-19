@@ -49,8 +49,15 @@
 @end
 
 static void testAProcessWithNoDriverLinkedHasNone(void) {
+#if defined(_WIN32)
+	// The Windows build links every framework into every test, so every driver's
+	// +load runs here and there is no "process with no driver" state to check;
+	// the drivers' registration is pinned by MADDatabaseDriverDispatchTests.
+	// (Linux links only madapi, so the check below holds there.)
+#else
 	MAD_PASS([MADDatabaseDriverRegistry driverClassForType: MADDatabaseTypeMySQL] == Nil, "a process with no driver has no MySQL");
 	MAD_PASS([MADDatabaseDriverRegistry driverClassForType: MADDatabaseTypeTDS] == Nil, "a process with no driver has no TDS");
+#endif
 }
 
 static void testRegistrationIsVisibleThroughTheLookup(void) {

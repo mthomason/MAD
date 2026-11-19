@@ -17,15 +17,36 @@
 #import <CFNetwork/CFNetwork.h>
 #import <net/ethernet.h>
 #import <net/if_dl.h>
+#elif defined(_WIN32)
+#include <winsock2.h>
+#include <ws2tcpip.h>
 #else
 #import <netpacket/packet.h>	// sockaddr_ll: Linux's link-layer address
 #endif
 
+#if !defined(_WIN32)
 #import <sys/socket.h>
 #import <netinet/in.h>
 #import <netdb.h>
 #import <ifaddrs.h>
 #import <arpa/inet.h>
+#endif
+
+#if defined(_WIN32)
+// Winsock must be initialised before getaddrinfo/getnameinfo.  WSAStartup is
+// reference-counted, so one call per process is enough and the matching
+// WSACleanup is deliberately omitted: the process owns the socket runtime for
+// its whole life, exactly as the CLI and the live suites do.
+static void BDHostEnsureWinsock(void) {
+	static int winsockReady = 0;
+	if (!winsockReady) {
+		WSADATA data;
+		if (WSAStartup(MAKEWORD(2, 2), &data) == 0) {
+			winsockReady = 1;
+		}
+	}
+}
+#endif
 
 @implementation BDHost
 
@@ -74,6 +95,34 @@
 	}
 	CFRelease(hostRef);
 	return addresses;
+#elif defined(_WIN32)
+	// CFHost has no Windows equivalent; getaddrinfo/getnameinfo is the same
+	// resolution the CF path performs under it, and only IPv4 addresses are
+	// returned, as above.  Winsock is initialised once per process.
+	BDHostEnsureWinsock();
+	struct addrinfo hints;
+	struct addrinfo *result = NULL;
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family   = PF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+	if (getaddrinfo(hostname.UTF8String, NULL, &hints, &result) != 0) {
+		return nil;
+	}
+
+	char ipAddress[INET6_ADDRSTRLEN];
+	NSMutableArray *addresses = [NSMutableArray array];
+	for (struct addrinfo *current = result; current != NULL; current = current->ai_next) {
+		if (current->ai_family != AF_INET) {
+			continue;
+		}
+		if (getnameinfo(current->ai_addr, current->ai_addrlen, ipAddress, sizeof(ipAddress),
+						NULL, 0, NI_NUMERICHOST) != 0) {
+			continue;
+		}
+		[addresses addObject:[NSString stringWithUTF8String:ipAddress]];
+	}
+	freeaddrinfo(result);
+	return addresses;
 #else
 	// CFHost has no Linux equivalent; getaddrinfo is the same resolution the
 	// CF path performs under it.  Only IPv4 addresses, as above.
@@ -112,6 +161,9 @@
 }
 
 + (NSArray *)hostnamesForAddress:(NSString *)address {
+#if defined(_WIN32)
+	BDHostEnsureWinsock();
+#endif
 	// Get the host reference for the given address.
 	struct addrinfo hints;
 	struct addrinfo *result = NULL;
@@ -160,6 +212,7 @@
 #endif
 }
 
+#if !defined(_WIN32)
 + (NSArray *)ipAddresses {
 	NSMutableArray *addresses = [NSMutableArray array];
 	struct ifaddrs *interfaces = NULL;
@@ -231,5 +284,7 @@
 	freeifaddrs(interfaces);
 	return addresses;
 }
+
+#endif
 
 @end

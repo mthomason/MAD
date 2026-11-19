@@ -72,22 +72,7 @@ static Class <MADDatabaseDriver> MADDriverForType(MADDatabaseType databaseType) 
 }
 
 + (NSString *)Identifier:(MADDatabaseType)databaseType {
-#if defined(_WIN32)
-	// The identifiers are document-format constants (MADDatabaseDriver.h), not
-	// something a driver has to be linked to answer: RptqDatabaseCredentals reads
-	// a stored driverID back into a MADDatabaseType by comparing it to these, and
-	// that must work when a process links only some of the drivers (Windows Phase
-	// 3a links Sqlite3 alone).  The literals are the drivers' +Identifier values.
-	switch (databaseType) {
-		case MADDatabaseTypeMySQL:    return @"MySQL";
-		case MADDatabaseTypeTDS:      return @"TDS";
-		case MADDatabaseTypePostgres: return @"PostgreSQL";
-		case MADDatabaseTypeSqlite3:  return @"Sqlite 3";
-		default:                      return nil;
-	}
-#else
 	return [MADDriverForType(databaseType) Identifier];
-#endif
 }
 
 @end
