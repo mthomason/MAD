@@ -19,7 +19,15 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        _viewModel = new MainWindowViewModel(_engine, openAbout: OpenAboutWindow, exportPath: ShowExportSaveDialog);
+        _viewModel = new MainWindowViewModel(
+            _engine,
+            openAbout: OpenAboutWindow,
+            exportPath: ShowExportSaveDialog,
+            newDocument: () => OpenConnectionWindow(false),
+            editConnection: () => OpenConnectionWindow(true),
+            openRecent: OpenRecentPath,
+            recentFiles: _recentFiles.Get(),
+            saveAsPath: ShowSaveDocumentDialog);
         DataContext = _viewModel;
     }
 
@@ -37,6 +45,27 @@ public partial class MainWindow : Window
             FileName = $"report.{format}",
         };
         return dialog.ShowDialog() == true ? dialog.FileName : null;
+    }
+
+    private string? ShowSaveDocumentDialog()
+    {
+        var dialog = new Microsoft.Win32.SaveFileDialog
+        {
+            Filter = "MAD documents (*.mad)|*.mad",
+            FileName = "report.mad",
+        };
+        return dialog.ShowDialog() == true ? dialog.FileName : null;
+    }
+
+    private void OpenRecentPath(string path)
+    {
+        _ = OpenPathAsync(path);
+    }
+
+    private async Task OpenPathAsync(string path)
+    {
+        await _viewModel.Document.OpenAsync(path);
+        _recentFiles.Add(path);
     }
 
     /// <summary>Opens the connection assistant in create mode (New Document) or edit mode
@@ -73,7 +102,28 @@ public partial class MainWindow : Window
     protected override void OnContentRendered(EventArgs e)
     {
         base.OnContentRendered(e);
-        _ = _viewModel.InitializeAsync();
+
+        // Launch into the empty main window; open a document only when one was
+        // passed on the command line (double-click association). No auto-open, no
+        // file dialog.
+        string? document = FindCommandLineDocument();
+        if (document != null)
+        {
+            _ = OpenPathAsync(document);
+        }
+    }
+
+    private static string? FindCommandLineDocument()
+    {
+        string[] args = Environment.GetCommandLineArgs();
+        for (int i = 1; i < args.Length; i++)
+        {
+            if (args[i].EndsWith(".mad", StringComparison.OrdinalIgnoreCase))
+            {
+                return args[i];
+            }
+        }
+        return null;
     }
 
     protected override void OnClosed(EventArgs e)
