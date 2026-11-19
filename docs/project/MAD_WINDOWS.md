@@ -373,6 +373,32 @@ tests exercise the success path over `CLI/Fixtures/London.portable.mad` (open �
 malformed requests, an unknown method, a bad document, an unavailable format, and
 process shutdown.
 
+## 6e. Phase 5 — the WPF shell proof
+
+Phase 5 adds the first WPF app on top of the Phase 4 process boundary: a
+`net10.0-windows` shell under `Windows/App/` that proves the engine runs from a real UI.
+It reuses `Mad.Client` unchanged and adds an async `EngineService` (a `SemaphoreSlim`
+serializes the single-threaded line protocol; every blocking call runs on the thread
+pool), a hand-rolled MVVM layer (`ObservableObject`, `RelayCommand`, `AsyncRelayCommand`),
+and a `DocumentViewModel` that mirrors the Mac's `MADMacDocument` for the first slice:
+open → describe → query → refresh → export.
+
+The shell has the three-workspace frame (MAD Query / Designer / Viewer). Query shows the
+stored schema and generated SQL; Viewer shows the refreshed rows in a `DataGrid` (fed by
+parsing `mad.report/1` into a `DataTable`) and exports CSV/JSON; Designer is a Phase 6
+placeholder. On startup it auto-opens `CLI/Fixtures/London.portable.mad` (override with
+`MAD_DOCUMENT`), so it demos with zero clicks. The About window (Overview / License &
+Notice / Acknowledgements) renders the Windows dependency register from
+`ThirdParty/Licenses/Windows/` and the relink offer — the Windows component set, never the
+Apple one.
+
+Acceptance is verified headlessly by `Windows/App/Mad.Designer.Windows.Tests` (xunit):
+open London → describe (21 columns / 11 tables / driver "Sqlite 3") → refresh 76 rows →
+export json (76 rows) / csv (78 lines) → clean shutdown with no orphan, plus the
+`mad.report/1` parser and the licence-register checks. The app and tests build and run on
+`net10.0-windows` (pinned by `Windows/global.json`); the Linux CI is unaffected (it never
+builds .NET).
+
 ## 7. Supported Windows versions
 
 .NET 10's supported OS matrix (Windows 10 Enterprise 21H2/1809/1607, Windows
