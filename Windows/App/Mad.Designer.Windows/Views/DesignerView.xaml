@@ -73,11 +73,89 @@
             <Border Grid.Column="4" BorderBrush="LightGray" BorderThickness="1,0,0,0">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="10">
+                        <!-- Card 1: page & selected section -->
                         <TextBlock Text="1 · PAGE &amp; SELECTED SECTION" FontWeight="Bold" Foreground="Gray" FontSize="10"/>
-                        <TextBlock Text="Paper size, section height, visibility and page break."
-                                   Foreground="Gray" Margin="0,4,0,12" TextWrapping="Wrap"/>
-                        <TextBlock Text="2 · SELECTED ELEMENT INSPECTOR" FontWeight="Bold" Foreground="Gray" FontSize="10"/>
-                        <TextBlock Text="No element selected." Foreground="Gray" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                        <TextBlock Text="Paper" Foreground="Gray" FontSize="11" Margin="0,6,0,2"/>
+                        <ComboBox SelectedIndex="{Binding PaperSizeIndex}" Margin="0,0,0,8">
+                            <ComboBoxItem Content="US Letter (8.5 × 11 in)"/>
+                            <ComboBoxItem Content="US Legal (8.5 × 14 in)"/>
+                            <ComboBoxItem Content="A4 (210 × 297 mm)"/>
+                        </ComboBox>
+                        <TextBlock Text="Band" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{Binding SelectedSection.Title}" FontWeight="SemiBold"
+                                   Foreground="#0A84FF" Margin="0,0,0,8"/>
+                        <TextBlock Text="Height (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBox Text="{Binding SelectedSectionHeight, UpdateSourceTrigger=LostFocus}"
+                                 Width="80" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                        <CheckBox Content="Section Visible" IsChecked="{Binding SelectedSectionVisible}" Margin="0,0,0,4"/>
+                        <CheckBox Content="Page Break After" IsChecked="{Binding SelectedSectionPageBreak}" Margin="0,0,0,8"/>
+
+                        <Separator Margin="0,6"/>
+
+                        <!-- Card 2: selected element -->
+                        <TextBlock Text="2 · SELECTED ELEMENT INSPECTOR" FontWeight="Bold" Foreground="Black" FontSize="10"/>
+                        <TextBlock Text="{Binding ElementTypeName}" FontWeight="SemiBold"
+                                   Foreground="#0A84FF" Margin="0,4,0,8"/>
+
+                        <TextBlock Text="Band" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <ComboBox ItemsSource="{Binding Sections}" DisplayMemberPath="Title" SelectedValuePath="Id"
+                                  SelectedValue="{Binding ElementSectionId}" Margin="0,0,0,8"/>
+
+                        <TextBlock Text="Text" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBox Text="{Binding ElementText, UpdateSourceTrigger=LostFocus}" Margin="0,0,0,8"/>
+
+                        <TextBlock Text="X / Y (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBox Text="{Binding ElementX, UpdateSourceTrigger=LostFocus}" Width="64"/>
+                            <TextBlock Text="  Y:" Foreground="Gray" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding ElementY, UpdateSourceTrigger=LostFocus}" Width="64"/>
+                        </StackPanel>
+                        <TextBlock Text="W / H (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBox Text="{Binding ElementW, UpdateSourceTrigger=LostFocus}" Width="64"/>
+                            <TextBlock Text="  H:" Foreground="Gray" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding ElementH, UpdateSourceTrigger=LostFocus}" Width="64"/>
+                        </StackPanel>
+
+                        <TextBlock Text="TYPOGRAPHY" FontWeight="Bold" Foreground="Gray" FontSize="10" Margin="0,6,0,2"/>
+                        <TextBlock Text="Font" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBox Text="{Binding ElementFontName, UpdateSourceTrigger=LostFocus}" Margin="0,0,0,8"/>
+                        <TextBlock Text="Size (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBox Text="{Binding ElementFontSize, UpdateSourceTrigger=LostFocus}"
+                                 Width="80" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <CheckBox Content="B" IsChecked="{Binding ElementBold}" Margin="0,0,8,0"/>
+                            <CheckBox Content="I" IsChecked="{Binding ElementItalic}" Margin="0,0,8,0"/>
+                            <CheckBox Content="U" IsChecked="{Binding ElementUnderline}" Margin="0,0,8,0"/>
+                            <CheckBox Content="S" IsChecked="{Binding ElementStrikethrough}"/>
+                        </StackPanel>
+                        <TextBlock Text="H-Align" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <ComboBox SelectedIndex="{Binding ElementHAlignIndex}" Margin="0,0,0,8">
+                            <ComboBoxItem Content="Left"/><ComboBoxItem Content="Center"/><ComboBoxItem Content="Right"/>
+                        </ComboBox>
+                        <TextBlock Text="V-Align" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <ComboBox SelectedIndex="{Binding ElementVAlignIndex}" Margin="0,0,0,8">
+                            <ComboBoxItem Content="Top"/><ComboBoxItem Content="Middle"/><ComboBoxItem Content="Bottom"/>
+                        </ComboBox>
+
+                        <TextBlock Text="Border T / B / L / R (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBox Text="{Binding ElementBorderTop, UpdateSourceTrigger=LostFocus}" Width="42"/>
+                            <TextBox Text="{Binding ElementBorderBottom, UpdateSourceTrigger=LostFocus}" Width="42"/>
+                            <TextBox Text="{Binding ElementBorderLeft, UpdateSourceTrigger=LostFocus}" Width="42"/>
+                            <TextBox Text="{Binding ElementBorderRight, UpdateSourceTrigger=LostFocus}" Width="42"/>
+                        </StackPanel>
+                        <TextBlock Text="Pad / Margin (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBox Text="{Binding ElementPadding, UpdateSourceTrigger=LostFocus}" Width="64"/>
+                            <TextBlock Text="  M:" Foreground="Gray" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding ElementMargin, UpdateSourceTrigger=LostFocus}" Width="64"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <Button Content="Duplicate" Command="{Binding DuplicateElementCommand}" Margin="0,0,6,0"/>
+                            <Button Content="Delete" Command="{Binding DeleteElementCommand}"/>
+                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
             </Border>

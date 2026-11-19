@@ -33,6 +33,7 @@ public sealed class DesignerViewModel : ObservableObject
     private bool _showRulers = true;
     private bool _isBusy;
     private string? _errorText;
+    private bool _isUpdatingInspector;
 
     public DesignerViewModel(EngineService engine)
     {
@@ -42,6 +43,8 @@ public sealed class DesignerViewModel : ObservableObject
         AddAggregateCommand = new AsyncRelayCommand(() => AddPaletteAsync("aggregate", 144, 22), () => HasDocument);
         AddImageCommand = new AsyncRelayCommand(() => AddPaletteAsync("image", 96, 64), () => HasDocument);
         AddLineRuleCommand = new AsyncRelayCommand(() => AddPaletteAsync("line", 320, 8), () => HasDocument);
+        DeleteElementCommand = new AsyncRelayCommand(DeleteElementAsync, () => HasDocument && SelectedElementIds.Count > 0);
+        DuplicateElementCommand = new AsyncRelayCommand(DuplicateElementAsync, () => HasDocument && SelectedElementIds.Count > 0);
     }
 
     public bool HasDocument => _handle >= 0;
@@ -51,6 +54,8 @@ public sealed class DesignerViewModel : ObservableObject
     public AsyncRelayCommand AddAggregateCommand { get; }
     public AsyncRelayCommand AddImageCommand { get; }
     public AsyncRelayCommand AddLineRuleCommand { get; }
+    public AsyncRelayCommand DeleteElementCommand { get; }
+    public AsyncRelayCommand DuplicateElementCommand { get; }
 
     public LayoutModel Model => _model;
     public IReadOnlyList<LayoutSection> Sections => _model.Sections;
@@ -93,7 +98,11 @@ public sealed class DesignerViewModel : ObservableObject
         }
     }
 
-    public void SelectSection(long id) => SelectedSectionId = id;
+    public void SelectSection(long id)
+    {
+        SelectedSectionId = id;
+        RaiseInspectorChanged();
+    }
 
     public void SelectElement(long id, bool extend)
     {
@@ -113,6 +122,8 @@ public sealed class DesignerViewModel : ObservableObject
 
         OnPropertyChanged(nameof(SelectedElementIds));
         OnPropertyChanged(nameof(PrimaryElement));
+        RaiseInspectorChanged();
+        RaiseCanExecuteChanged();
     }
 
     public void ClearElementSelection()
@@ -120,6 +131,8 @@ public sealed class DesignerViewModel : ObservableObject
         _selectedElementIds.Clear();
         OnPropertyChanged(nameof(SelectedElementIds));
         OnPropertyChanged(nameof(PrimaryElement));
+        RaiseInspectorChanged();
+        RaiseCanExecuteChanged();
     }
 
     /// <summary>Computes a non-overlapping placement point in a section for a new element of the
@@ -211,6 +224,144 @@ public sealed class DesignerViewModel : ObservableObject
     public Task SetPaperSizeAsync(int paperSize)
         => MutateAsync(() => _engine.SetPaperSizeAsync(_handle, paperSize));
 
+    // ---- inspector edit-properties (commit on change; guard suppresses re-entrancy) ----
+
+    public LayoutSection? SelectedSection => _model.Sections.FirstOrDefault(s => s.Id == SelectedSectionId);
+
+    public int PaperSizeIndex
+    {
+        get => _model.PaperSize switch { 19 => 2, 7 => 1, _ => 0 };
+        set
+        {
+            if (_isUpdatingInspector || !HasDocument) return;
+            int paper = value switch { 2 => 19, 1 => 7, _ => 2 };
+            _ = SetPaperSizeAsync(paper);
+        }
+    }
+
+    public double SelectedSectionHeight
+    {
+        get => SelectedSection?.Height ?? 0;
+        set
+        {
+            if (_isUpdatingInspector || SelectedSectionId == 0) return;
+            _ = SetSectionAsync(SelectedSectionId, Math.Max(24, value), null, null);
+        }
+    }
+
+    public bool SelectedSectionVisible
+    {
+        get => SelectedSection?.Visible ?? false;
+        set
+        {
+            if (_isUpdatingInspector || SelectedSectionId == 0) return;
+            _ = SetSectionAsync(SelectedSectionId, null, value, null);
+        }
+    }
+
+    public bool SelectedSectionPageBreak
+    {
+        get => SelectedSection?.PageBreak ?? false;
+        set
+        {
+            if (_isUpdatingInspector || SelectedSectionId == 0) return;
+            _ = SetSectionAsync(SelectedSectionId, null, null, value);
+        }
+    }
+
+    public string ElementTypeName => PrimaryElement switch
+    {
+        { IsLabel: true } => "Static Label",
+        { IsDataField: true } => "Data Field",
+        { IsAggregate: true } => "Summary Aggregate",
+        { IsImage: true } => "Image",
+        { IsLineRule: true } => "Line Rule",
+        _ => "Element",
+    };
+
+    public long ElementSectionId
+    {
+        get => PrimaryElement?.Section ?? 0;
+        set
+        {
+            if (_isUpdatingInspector || PrimaryElement is not { } el) return;
+            _ = MoveElementsAsync(new[] { el.Id }, value);
+        }
+    }
+
+    public string ElementText
+    {
+        get => PrimaryElement?.Text ?? "";
+        set
+        {
+            if (_isUpdatingInspector || PrimaryElement is not { } el) return;
+            _ = SetElementContentAsync(el.Id, new ElementContent(Text: value));
+        }
+    }
+
+    public double ElementX { get => PrimaryElement?.X ?? 0; set => SetGeometry(value, null, null, null); }
+    public double ElementY { get => PrimaryElement?.Y ?? 0; set => SetGeometry(null, value, null, null); }
+    public double ElementW { get => PrimaryElement?.W ?? 0; set => SetGeometry(null, null, value, null); }
+    public double ElementH { get => PrimaryElement?.H ?? 0; set => SetGeometry(null, null, null, value); }
+
+    public string ElementFontName { get => PrimaryElement?.FontName ?? ""; set => SetTypography(fontName: value); }
+    public double ElementFontSize { get => PrimaryElement?.FontSize ?? 12; set => SetTypography(fontSize: value); }
+    public bool ElementBold { get => PrimaryElement?.Bold ?? false; set => SetTypography(bold: value); }
+    public bool ElementItalic { get => PrimaryElement?.Italic ?? false; set => SetTypography(italic: value); }
+    public bool ElementUnderline { get => PrimaryElement?.Underline ?? false; set => SetTypography(underline: value); }
+    public bool ElementStrikethrough { get => PrimaryElement?.Strikethrough ?? false; set => SetTypography(strikethrough: value); }
+
+    public int ElementHAlignIndex
+    {
+        get => PrimaryElement?.HAlign switch { ElementHAlign.Center => 1, ElementHAlign.Right => 2, _ => 0 };
+        set { if (_isUpdatingInspector || PrimaryElement is { }) SetTypography(hAlign: value); }
+    }
+
+    public int ElementVAlignIndex
+    {
+        get => PrimaryElement?.VAlign switch { ElementVAlign.Top => 0, ElementVAlign.Bottom => 2, _ => 1 };
+        set { if (_isUpdatingInspector || PrimaryElement is { }) SetTypography(vAlign: value); }
+    }
+
+    public double ElementBorderTop { get => PrimaryElement?.BorderTop ?? 0; set => SetBoxModel(borderTop: value); }
+    public double ElementBorderBottom { get => PrimaryElement?.BorderBottom ?? 0; set => SetBoxModel(borderBottom: value); }
+    public double ElementBorderLeft { get => PrimaryElement?.BorderLeft ?? 0; set => SetBoxModel(borderLeft: value); }
+    public double ElementBorderRight { get => PrimaryElement?.BorderRight ?? 0; set => SetBoxModel(borderRight: value); }
+    public double ElementPadding { get => PrimaryElement?.Padding ?? 0; set => SetBoxModel(padding: value); }
+    public double ElementMargin { get => PrimaryElement?.Margin ?? 0; set => SetBoxModel(margin: value); }
+
+    private void SetGeometry(double? x, double? y, double? w, double? h)
+    {
+        if (_isUpdatingInspector || PrimaryElement is not { } el) return;
+        _ = SetElementGeometryAsync(new[] { new ElementGeometry(el.Id, x ?? el.X, y ?? el.Y, w ?? el.W, h ?? el.H) });
+    }
+
+    private void SetTypography(string? fontName = null, double? fontSize = null, bool? bold = null, bool? italic = null, bool? underline = null, bool? strikethrough = null, int? hAlign = null, int? vAlign = null)
+    {
+        if (_isUpdatingInspector || PrimaryElement is not { } el) return;
+        _ = SetElementTypographyAsync(new[] { el.Id }, new ElementTypography(fontName, fontSize, bold, italic, underline, strikethrough, hAlign, vAlign));
+    }
+
+    private void SetBoxModel(double? borderTop = null, double? borderBottom = null, double? borderLeft = null, double? borderRight = null, double? padding = null, double? margin = null)
+    {
+        if (_isUpdatingInspector || PrimaryElement is not { } el) return;
+        _ = SetElementBoxModelAsync(new[] { el.Id }, new ElementBoxModel(borderTop, borderBottom, borderLeft, borderRight, padding, margin));
+    }
+
+    private async Task DeleteElementAsync()
+    {
+        if (SelectedElementIds.Count == 0) return;
+        var ids = SelectedElementIds.ToList();
+        await RemoveElementsAsync(ids);
+        ClearElementSelection();
+    }
+
+    private async Task DuplicateElementAsync()
+    {
+        if (SelectedElementIds.Count == 0) return;
+        await DuplicateElementsAsync(SelectedElementIds.ToList());
+    }
+
     private async Task AddPaletteAsync(string kind, double w, double h)
     {
         if (!HasDocument) return;
@@ -258,6 +409,8 @@ public sealed class DesignerViewModel : ObservableObject
         AddAggregateCommand.RaiseCanExecuteChanged();
         AddImageCommand.RaiseCanExecuteChanged();
         AddLineRuleCommand.RaiseCanExecuteChanged();
+        DeleteElementCommand.RaiseCanExecuteChanged();
+        DuplicateElementCommand.RaiseCanExecuteChanged();
     }
 
     private static bool Intersects(double x, double y, double w, double h, LayoutElement el)
@@ -284,6 +437,7 @@ public sealed class DesignerViewModel : ObservableObject
 
     private void ApplyModel(LayoutModel model)
     {
+        _isUpdatingInspector = true;
         _model = model;
         _selectedElementIds.RemoveAll(id => !model.Elements.Any(e => e.Id == id));
         if (_selectedSectionId != 0 && !model.Sections.Any(s => s.Id == _selectedSectionId))
@@ -297,5 +451,38 @@ public sealed class DesignerViewModel : ObservableObject
         OnPropertyChanged(nameof(Fields));
         OnPropertyChanged(nameof(SelectedElementIds));
         OnPropertyChanged(nameof(PrimaryElement));
+        RaiseInspectorChanged();
+        _isUpdatingInspector = false;
+        RaiseCanExecuteChanged();
+    }
+
+    private void RaiseInspectorChanged()
+    {
+        OnPropertyChanged(nameof(SelectedSection));
+        OnPropertyChanged(nameof(PaperSizeIndex));
+        OnPropertyChanged(nameof(SelectedSectionHeight));
+        OnPropertyChanged(nameof(SelectedSectionVisible));
+        OnPropertyChanged(nameof(SelectedSectionPageBreak));
+        OnPropertyChanged(nameof(ElementTypeName));
+        OnPropertyChanged(nameof(ElementSectionId));
+        OnPropertyChanged(nameof(ElementText));
+        OnPropertyChanged(nameof(ElementX));
+        OnPropertyChanged(nameof(ElementY));
+        OnPropertyChanged(nameof(ElementW));
+        OnPropertyChanged(nameof(ElementH));
+        OnPropertyChanged(nameof(ElementFontName));
+        OnPropertyChanged(nameof(ElementFontSize));
+        OnPropertyChanged(nameof(ElementBold));
+        OnPropertyChanged(nameof(ElementItalic));
+        OnPropertyChanged(nameof(ElementUnderline));
+        OnPropertyChanged(nameof(ElementStrikethrough));
+        OnPropertyChanged(nameof(ElementHAlignIndex));
+        OnPropertyChanged(nameof(ElementVAlignIndex));
+        OnPropertyChanged(nameof(ElementBorderTop));
+        OnPropertyChanged(nameof(ElementBorderBottom));
+        OnPropertyChanged(nameof(ElementBorderLeft));
+        OnPropertyChanged(nameof(ElementBorderRight));
+        OnPropertyChanged(nameof(ElementPadding));
+        OnPropertyChanged(nameof(ElementMargin));
     }
 }
