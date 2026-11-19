@@ -205,42 +205,37 @@ public sealed class DesignerViewModel : ObservableObject
     public Task AddElementAsync(string kind, long section, double x, double y)
     {
         long newId = 0;
-        return MutateAsync(
-            "Insert Element",
-            async () =>
-            {
-                var model = await _engine.AddElementAsync(_handle, kind, section, x, y);
-                newId = model.Elements.MaxBy(e => e.Id)!.Id;
-                return model;
-            },
-            () => _engine.RemoveElementsAsync(_handle, new[] { newId }),
-            () => _engine.AddElementAsync(_handle, kind, section, x, y));
+        Func<Task<LayoutModel>> doAdd = async () =>
+        {
+            var model = await _engine.AddElementAsync(_handle, kind, section, x, y);
+            newId = model.Elements.MaxBy(e => e.Id)!.Id;
+            return model;
+        };
+        return MutateAsync("Insert Element", doAdd, () => _engine.RemoveElementsAsync(_handle, new[] { newId }), doAdd);
     }
 
     public Task RemoveElementsAsync(IReadOnlyList<long> elements)
     {
         var removed = _model.Elements.Where(e => elements.Contains(e.Id)).ToList();
+        var restoredIds = new List<long>();
         return MutateAsync(
             "Delete Element",
             () => _engine.RemoveElementsAsync(_handle, elements),
-            removed.Count > 0 ? () => RestoreElementsAsync(removed) : null,
-            () => _engine.RemoveElementsAsync(_handle, elements));
+            removed.Count > 0 ? () => RestoreElementsAsync(removed, restoredIds) : null,
+            () => _engine.RemoveElementsAsync(_handle, restoredIds.Count > 0 ? restoredIds.ToArray() : elements.ToArray()));
     }
 
     public Task DuplicateElementsAsync(IReadOnlyList<long> elements)
     {
         var before = new HashSet<long>(_model.Elements.Select(e => e.Id));
         long[] dupIds = Array.Empty<long>();
-        return MutateAsync(
-            "Duplicate Element",
-            async () =>
-            {
-                var model = await _engine.DuplicateElementsAsync(_handle, elements);
-                dupIds = model.Elements.Where(e => !before.Contains(e.Id)).Select(e => e.Id).ToArray();
-                return model;
-            },
-            () => _engine.RemoveElementsAsync(_handle, dupIds),
-            () => _engine.DuplicateElementsAsync(_handle, elements));
+        Func<Task<LayoutModel>> doDup = async () =>
+        {
+            var model = await _engine.DuplicateElementsAsync(_handle, elements);
+            dupIds = model.Elements.Where(e => !before.Contains(e.Id)).Select(e => e.Id).ToArray();
+            return model;
+        };
+        return MutateAsync("Duplicate Element", doDup, () => _engine.RemoveElementsAsync(_handle, dupIds), doDup);
     }
 
     public Task MoveElementsAsync(IReadOnlyList<long> elements, long section)
@@ -269,6 +264,31 @@ public sealed class DesignerViewModel : ObservableObject
             () => _engine.MoveElementsAsync(_handle, elements, section),
             undoFn,
             () => _engine.MoveElementsAsync(_handle, elements, section));
+    }
+
+    /// <summary>Moves one element to another section and sets its origin relative to that section,
+    /// as a single undoable edit (the cross-band drag). One undo returns the section <em>and</em>
+    /// the origin.</summary>
+    public Task MoveElementToSectionAsync(long elementId, long newSection, double nx, double ny)
+    {
+        var el = _model.Elements.FirstOrDefault(e => e.Id == elementId);
+        if (el == null) return Task.CompletedTask;
+
+        long oldSection = el.Section;
+        double ox = el.X, oy = el.Y, w = el.W, h = el.H;
+
+        Func<Task<LayoutModel>> doMove = async () =>
+        {
+            var model = await _engine.MoveElementsAsync(_handle, new[] { elementId }, newSection);
+            return await _engine.SetElementGeometryAsync(_handle, new[] { new ElementGeometry(elementId, nx, ny, w, h) });
+        };
+        Func<Task<LayoutModel>> undoMove = async () =>
+        {
+            var model = await _engine.MoveElementsAsync(_handle, new[] { elementId }, oldSection);
+            return await _engine.SetElementGeometryAsync(_handle, new[] { new ElementGeometry(elementId, ox, oy, w, h) });
+        };
+
+        return MutateAsync("Move Element to Section", doMove, undoMove, doMove);
     }
 
     public Task SetElementGeometryAsync(IReadOnlyList<ElementGeometry> elements)
@@ -394,13 +414,15 @@ public sealed class DesignerViewModel : ObservableObject
         return model!;
     }
 
-    private async Task<LayoutModel> RestoreElementsAsync(IReadOnlyList<LayoutElement> elements)
+    private async Task<LayoutModel> RestoreElementsAsync(IReadOnlyList<LayoutElement> elements, List<long> newIds)
     {
         LayoutModel? model = null;
+        newIds.Clear();
         foreach (var el in elements)
         {
             model = await _engine.AddElementAsync(_handle, KindFor(el), el.Section, el.X, el.Y);
             var newEl = model.Elements.MaxBy(e => e.Id)!;
+            newIds.Add(newEl.Id);
             model = await _engine.SetElementContentAsync(_handle, newEl.Id, CaptureContent(el));
             model = await _engine.SetElementTypographyAsync(_handle, new[] { newEl.Id }, CaptureTypography(el));
             model = await _engine.SetElementBoxModelAsync(_handle, new[] { newEl.Id }, CaptureBoxModel(el));
@@ -566,20 +588,13 @@ public sealed class DesignerViewModel : ObservableObject
 
         var origin = NextAvailableOrigin(section, 140, 22);
         long newId = 0;
-        await MutateAsync(
-            "Insert Data Field",
-            async () =>
-            {
-                var afterAdd = await _engine.AddElementAsync(_handle, "data-field", section, origin.X, origin.Y);
-                newId = afterAdd.Elements.MaxBy(e => e.Id)!.Id;
-                return await _engine.SetElementContentAsync(_handle, newId, new ElementContent(Field: fieldId));
-            },
-            () => _engine.RemoveElementsAsync(_handle, new[] { newId }),
-            async () =>
-            {
-                var afterAdd = await _engine.AddElementAsync(_handle, "data-field", section, origin.X, origin.Y);
-                return await _engine.SetElementContentAsync(_handle, afterAdd.Elements.MaxBy(e => e.Id)!.Id, new ElementContent(Field: fieldId));
-            });
+        Func<Task<LayoutModel>> doInsert = async () =>
+        {
+            var afterAdd = await _engine.AddElementAsync(_handle, "data-field", section, origin.X, origin.Y);
+            newId = afterAdd.Elements.MaxBy(e => e.Id)!.Id;
+            return await _engine.SetElementContentAsync(_handle, newId, new ElementContent(Field: fieldId));
+        };
+        await MutateAsync("Insert Data Field", doInsert, () => _engine.RemoveElementsAsync(_handle, new[] { newId }), doInsert);
     }
 
     /// <summary>Flips a band's visibility (double-click in the sections outline).</summary>

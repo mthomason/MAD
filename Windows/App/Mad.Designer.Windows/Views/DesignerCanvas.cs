@@ -14,8 +14,8 @@ namespace Mad.Designer.Windows.Views;
 
 /// <summary>The MAD Designer canvas: a zoomable, scrollable WPF drawing of the report's paper
 /// bands and placed elements, with click-to-select, drag-to-move, 8-handle resize, rubber-band
-/// marquee, inline label editing, grid/rulers, and keyboard delete/duplicate/undo. This is the
-/// WPF counterpart of the Mac's <c>MADMacDesignerCanvasView</c>.</summary>
+/// marquee, inline label editing, grid/rulers, and keyboard delete/duplicate/undo. Mouse input
+/// is handled at the canvas level (like the Mac's view-level state machine).</summary>
 public sealed class DesignerCanvas : Canvas
 {
     private const double OuterMargin = 28.0;
@@ -26,7 +26,6 @@ public sealed class DesignerCanvas : Canvas
     private const double PaperWidth = 612.0;
     private const double LeftMargin = 18.0;
     private const double RightMargin = 18.0;
-    private const double ContentWidth = PaperWidth - LeftMargin - RightMargin;
 
     private static readonly Brush LabelTint = new SolidColorBrush(Color.FromRgb(0xF7, 0xF7, 0xF7));
     private static readonly Brush DataFieldTint = new SolidColorBrush(Color.FromRgb(0xEA, 0xF4, 0xFF));
@@ -45,13 +44,14 @@ public sealed class DesignerCanvas : Canvas
     private enum DragMode { None, Move, Resize, Marquee }
     private DragMode _dragMode;
     private long _dragElementId;
-    private int _dragHandle = -1; // 0..7 (top-left, top, top-right, right, bottom-right, bottom, bottom-left, left)
+    private int _dragHandle = -1;
     private Point _dragStartPt;
     private Rect _dragStartRect;
     private long _dragSourceSection;
     private long _dragHoverSection;
     private Rect _marqueeRect;
     private bool _dragMoved;
+    private Rectangle? _marqueeVisual;
 
     public DesignerCanvas()
     {
@@ -95,9 +95,8 @@ public sealed class DesignerCanvas : Canvas
         {
             double contentH = Math.Max(32.0, SectionContentHeight(section));
             double bandH = SectionHeaderHeight + contentH + SectionResizeBarHeight;
-            double bandX = OuterMargin;
-            _bandRects[section.Id] = new Rect(bandX, y, PaperWidth, bandH);
-            DrawBand(section, bandX, y, bandH, contentH);
+            _bandRects[section.Id] = new Rect(OuterMargin, y, PaperWidth, bandH);
+            DrawBand(section, y, bandH, contentH);
             y += bandH + SectionGap;
         }
 
@@ -106,7 +105,7 @@ public sealed class DesignerCanvas : Canvas
         Height = Math.Max(420.0, _contentHeight) * _zoom;
 
         if (_vm.ShowGrid) DrawGrid();
-        if (_vm.ShowRulers) DrawRulers();
+        if (_vm.ShowRulers) DrawRuler();
     }
 
     private double SectionContentHeight(LayoutSection section)
@@ -119,7 +118,7 @@ public sealed class DesignerCanvas : Canvas
         return total;
     }
 
-    private void DrawBand(LayoutSection section, double x, double y, double bandH, double contentH)
+    private void DrawBand(LayoutSection section, double y, double bandH, double contentH)
     {
         var band = new Border
         {
@@ -131,7 +130,7 @@ public sealed class DesignerCanvas : Canvas
             BorderThickness = new Thickness(_zoom),
             Tag = section,
         };
-        SetLeft(band, x * _zoom);
+        SetLeft(band, OuterMargin * _zoom);
         SetTop(band, y * _zoom);
         band.Child = new TextBlock
         {
@@ -144,7 +143,7 @@ public sealed class DesignerCanvas : Canvas
         };
         Children.Add(band);
 
-        double contentX = x + LeftMargin;
+        double contentX = OuterMargin + LeftMargin;
         double contentY = y + SectionHeaderHeight;
         foreach (var element in _vm.Elements.Where(e => e.Section == section.Id))
         {
@@ -171,27 +170,27 @@ public sealed class DesignerCanvas : Canvas
         SetLeft(border, ex * _zoom);
         SetTop(border, ey * _zoom);
 
-        var text = new TextBlock
-        {
-            Text = DisplayText(element),
-            FontSize = Math.Max(8.0, Math.Min(48.0, element.FontSize)) * _zoom,
-            Foreground = Brushes.Black,
-            TextTrimming = TextTrimming.CharacterEllipsis,
-            Margin = new Thickness(2 * _zoom, 1 * _zoom, 2 * _zoom, 1 * _zoom),
-            VerticalAlignment = VerticalAlignment.Center,
-        };
         if (element.IsLineRule)
         {
-            border.Child = new Border { Background = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66)), Height = Math.Max(1.0, element.BorderBottom * _zoom), VerticalAlignment = VerticalAlignment.Bottom };
+            border.Child = new Border
+            {
+                Background = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66)),
+                Height = Math.Max(1.0, element.BorderBottom * _zoom),
+                VerticalAlignment = VerticalAlignment.Bottom,
+            };
         }
         else
         {
-            border.Child = text;
+            border.Child = new TextBlock
+            {
+                Text = DisplayText(element),
+                FontSize = Math.Max(8.0, Math.Min(48.0, element.FontSize)) * _zoom,
+                Foreground = Brushes.Black,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                Margin = new Thickness(2 * _zoom, 1 * _zoom, 2 * _zoom, 1 * _zoom),
+                VerticalAlignment = VerticalAlignment.Center,
+            };
         }
-
-        border.MouseLeftButtonDown += (_, e) => OnElementMouseDown(element.Id, e);
-        border.MouseMove += (_, e) => OnElementMouseMove(element.Id, e);
-        border.MouseLeftButtonUp += (_, e) => OnElementMouseUp(e);
 
         _elementBorders[element.Id] = border;
         Children.Add(border);
@@ -222,12 +221,10 @@ public sealed class DesignerCanvas : Canvas
                 Stroke = Accent,
                 StrokeThickness = _zoom,
                 Tag = i,
+                IsHitTestVisible = false,
             };
             SetLeft(handle, (corners[i].x - hs / 2) * _zoom);
             SetTop(handle, (corners[i].y - hs / 2) * _zoom);
-            handle.MouseLeftButtonDown += (_, e) => OnHandleMouseDown(element.Id, i, e);
-            handle.MouseMove += (_, e) => OnElementMouseMove(element.Id, e);
-            handle.MouseLeftButtonUp += (_, e) => OnElementMouseUp(e);
             Children.Add(handle);
         }
     }
@@ -235,40 +232,32 @@ public sealed class DesignerCanvas : Canvas
     private void DrawGrid()
     {
         double spacing = DesignerViewModel.GridSpacing;
-        double y = OuterMargin + (_vm!.ShowRulers ? RulerHeight + 6.0 : 0.0);
         var brush = new SolidColorBrush(Color.FromArgb(0x0B, 0x00, 0x00, 0x00));
-        var pen = new Pen(brush, 0.5 * _zoom);
-        for (double gy = SectionHeaderHeight; gy < _contentHeight - OuterMargin; gy += spacing)
+        foreach (var section in _vm!.Sections)
         {
-            var line = new Line
+            var band = _bandRects[section.Id];
+            double contentH = SectionContentHeight(section);
+            double contentX = band.X + LeftMargin;
+            double contentY = band.Y + SectionHeaderHeight;
+            double contentW = PaperWidth - LeftMargin - RightMargin;
+            for (double gx = spacing; gx < contentW; gx += spacing)
             {
-                X1 = (OuterMargin + LeftMargin) * _zoom,
-                Y1 = (y + gy) * _zoom,
-                X2 = (OuterMargin + PaperWidth - RightMargin) * _zoom,
-                Y2 = (y + gy) * _zoom,
-                Stroke = brush,
-                StrokeThickness = 0.5 * _zoom,
-                IsHitTestVisible = false,
-            };
-            Children.Add(line);
-        }
-        for (double gx = LeftMargin + spacing; gx < ContentWidth; gx += spacing)
-        {
-            var line = new Line
+                Children.Add(Line(contentX + gx, contentY, contentX + gx, contentY + contentH, brush));
+            }
+            for (double gy = spacing; gy < contentH; gy += spacing)
             {
-                X1 = (OuterMargin + gx) * _zoom,
-                Y1 = (OuterMargin + (_vm.ShowRulers ? RulerHeight + 6.0 : 0.0)) * _zoom,
-                X2 = (OuterMargin + gx) * _zoom,
-                Y2 = (_contentHeight) * _zoom,
-                Stroke = brush,
-                StrokeThickness = 0.5 * _zoom,
-                IsHitTestVisible = false,
-            };
-            Children.Add(line);
+                Children.Add(Line(contentX, contentY + gy, contentX + contentW, contentY + gy, brush));
+            }
         }
     }
 
-    private void DrawRulers()
+    private Line Line(double x1, double y1, double x2, double y2, Brush brush) => new()
+    {
+        X1 = x1 * _zoom, Y1 = y1 * _zoom, X2 = x2 * _zoom, Y2 = y2 * _zoom,
+        Stroke = brush, StrokeThickness = 0.5 * _zoom, IsHitTestVisible = false,
+    };
+
+    private void DrawRuler()
     {
         var ruler = new Border
         {
@@ -284,57 +273,85 @@ public sealed class DesignerCanvas : Canvas
         Children.Add(ruler);
     }
 
-    // ---- mouse interaction ----
+    // ---- canvas-level mouse state machine ----
 
     private Point ToPt(Point p) => new(p.X / _zoom, p.Y / _zoom);
 
-    private void OnElementMouseDown(long elementId, MouseButtonEventArgs e)
+    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
     {
+        base.OnMouseLeftButtonDown(e);
         Focus();
-        var element = _vm!.Elements.FirstOrDefault(el => el.Id == elementId);
-        if (e.ClickCount == 2 && element is { IsLabel: true } or { IsDataField: true })
+        var pt = ToPt(e.GetPosition(this));
+
+        // 1. resize handle on the primary selected element
+        if (_vm!.PrimaryElement is { } primary && _vm.SelectedElementIds.Count == 1)
         {
-            _vm.SelectElement(elementId, extend: false);
-            BeginInlineEdit(elementId);
+            int handle = HitTestHandle(pt, primary);
+            if (handle >= 0)
+            {
+                _dragMode = DragMode.Resize;
+                _dragElementId = primary.Id;
+                _dragHandle = handle;
+                _dragStartPt = pt;
+                _dragStartRect = _elementRects[primary.Id];
+                _dragSourceSection = primary.Section;
+                _dragMoved = false;
+                CaptureMouse();
+                e.Handled = true;
+                return;
+            }
+        }
+
+        // 2. element hit
+        long elementId = ElementAt(pt);
+        if (elementId != 0)
+        {
+            var element = _vm.Elements.First(el => el.Id == elementId);
+            if (e.ClickCount == 2 && element is { IsLabel: true } or { IsDataField: true })
+            {
+                _vm.SelectElement(elementId, extend: false);
+                BeginInlineEdit(elementId);
+                e.Handled = true;
+                return;
+            }
+
+            _vm.SelectElement(elementId, Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
+            _dragMode = DragMode.Move;
+            _dragElementId = elementId;
+            _dragStartPt = pt;
+            _dragStartRect = _elementRects[elementId];
+            _dragSourceSection = element.Section;
+            _dragHoverSection = element.Section;
+            _dragMoved = false;
+            CaptureMouse();
             e.Handled = true;
             return;
         }
 
-        var pt = ToPt(e.GetPosition(this));
-        _vm.SelectElement(elementId, Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
-        _dragMode = DragMode.Move;
-        _dragElementId = elementId;
+        // 3. band header (or anywhere on a band) hit -> select the section
+        long sectionId = SectionAt(pt);
+        if (sectionId != 0)
+        {
+            _vm.SelectSection(sectionId);
+            _vm.ClearElementSelection();
+            e.Handled = true;
+            return;
+        }
+
+        // 4. empty canvas -> marquee
+        _vm.ClearElementSelection();
+        _dragMode = DragMode.Marquee;
         _dragStartPt = pt;
-        _dragStartRect = _elementRects[elementId];
-        _dragSourceSection = element?.Section ?? 0;
-        _dragHoverSection = _dragSourceSection;
+        _marqueeRect = Rect.Empty;
         _dragMoved = false;
         CaptureMouse();
         e.Handled = true;
     }
 
-    private void OnHandleMouseDown(long elementId, int handle, MouseButtonEventArgs e)
+    protected override void OnMouseMove(MouseEventArgs e)
     {
-        Focus();
-        var pt = ToPt(e.GetPosition(this));
-        _vm!.SelectElement(elementId, extend: false);
-        _dragMode = DragMode.Resize;
-        _dragElementId = elementId;
-        _dragHandle = handle;
-        _dragStartPt = pt;
-        _dragStartRect = _elementRects[elementId];
-        _dragSourceSection = _vm.PrimaryElement?.Section ?? 0;
-        _dragMoved = false;
-        CaptureMouse();
-        e.Handled = true;
-    }
-
-    private void OnElementMouseMove(long elementId, MouseEventArgs e)
-    {
-        if (_dragMode != DragMode.Move && _dragMode != DragMode.Resize) return;
-        if (elementId != _dragElementId) return;
-        if (e.LeftButton != MouseButtonState.Pressed) return;
-
+        base.OnMouseMove(e);
+        if (_dragMode == DragMode.None) return;
         var pt = ToPt(e.GetPosition(this));
         double dx = pt.X - _dragStartPt.X;
         double dy = pt.Y - _dragStartPt.Y;
@@ -346,33 +363,57 @@ public sealed class DesignerCanvas : Canvas
             double nx = _dragStartRect.X + dx;
             double ny = _dragStartRect.Y + dy;
             (nx, ny) = SnapToGuides(nx, ny);
-            var border = _elementBorders[elementId];
+            var border = _elementBorders[_dragElementId];
             SetLeft(border, nx * _zoom);
             SetTop(border, ny * _zoom);
-            _elementRects[elementId] = new Rect(nx, ny, _dragStartRect.Width, _dragStartRect.Height);
+            _elementRects[_dragElementId] = new Rect(nx, ny, _dragStartRect.Width, _dragStartRect.Height);
             _dragHoverSection = SectionAt(pt);
         }
         else if (_dragMode == DragMode.Resize)
         {
             var r = ResizeRect(_dragStartRect, _dragHandle, dx, dy);
-            var border = _elementBorders[elementId];
+            var border = _elementBorders[_dragElementId];
             border.Width = r.Width * _zoom;
             border.Height = r.Height * _zoom;
             SetLeft(border, r.X * _zoom);
             SetTop(border, r.Y * _zoom);
-            _elementRects[elementId] = r;
+            _elementRects[_dragElementId] = r;
+        }
+        else if (_dragMode == DragMode.Marquee)
+        {
+            _marqueeRect = new Rect(
+                Math.Min(_dragStartPt.X, pt.X), Math.Min(_dragStartPt.Y, pt.Y),
+                Math.Abs(pt.X - _dragStartPt.X), Math.Abs(pt.Y - _dragStartPt.Y));
+            UpdateMarqueeVisual();
         }
     }
 
-    private async void OnElementMouseUp(MouseButtonEventArgs e)
+    protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
     {
+        base.OnMouseLeftButtonUp(e);
         if (_dragMode == DragMode.None) return;
         var mode = _dragMode;
         _dragMode = DragMode.None;
         ReleaseMouseCapture();
+        RemoveMarqueeVisual();
+
+        if (mode == DragMode.Marquee)
+        {
+            if (_dragMoved)
+            {
+                foreach (var (id, rect) in _elementRects)
+                {
+                    if (_marqueeRect.IntersectsWith(rect))
+                    {
+                        _vm!.SelectElement(id, extend: true);
+                    }
+                }
+            }
+            return;
+        }
 
         if (!_dragMoved || _vm == null) return;
-        var rect = _elementRects[_dragElementId];
+        var movedRect = _elementRects[_dragElementId];
 
         if (mode == DragMode.Move && _dragHoverSection != 0 && _dragHoverSection != _dragSourceSection)
         {
@@ -380,77 +421,49 @@ public sealed class DesignerCanvas : Canvas
             if (target != null)
             {
                 var content = ContentOrigin(target);
-                double nx = Math.Max(0, rect.X - content.X);
-                double ny = Math.Max(0, rect.Y - content.Y);
-                await _vm.MoveElementsAsync(new[] { _dragElementId }, _dragHoverSection);
-                await _vm.SetElementGeometryAsync(new[] { new ElementGeometry(_dragElementId, nx, ny, rect.Width, rect.Height) });
+                double nx = Math.Max(0, movedRect.X - content.X);
+                double ny = Math.Max(0, movedRect.Y - content.Y);
+                _ = _vm.MoveElementToSectionAsync(_dragElementId, _dragHoverSection, nx, ny);
             }
         }
         else
         {
-            double nx = Math.Max(0, rect.X - ContentOriginX(_dragSourceSection));
-            double ny = Math.Max(0, rect.Y - ContentOriginY(_dragSourceSection));
-            _ = _vm.SetElementGeometryAsync(new[] { new ElementGeometry(_dragElementId, nx, ny, rect.Width, rect.Height) });
+            double mx = Math.Max(0, movedRect.X - (OuterMargin + LeftMargin));
+            double my = Math.Max(0, movedRect.Y - ContentOriginY(_dragSourceSection));
+            _ = _vm.SetElementGeometryAsync(new[] { new ElementGeometry(_dragElementId, mx, my, movedRect.Width, movedRect.Height) });
         }
     }
 
-    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+    private void UpdateMarqueeVisual()
     {
-        base.OnMouseLeftButtonDown(e);
-        var pt = ToPt(e.GetPosition(this));
-        var section = SectionAt(pt);
-        if (section != 0 && !_bandRects[section].Contains(pt))
+        if (_marqueeVisual == null)
         {
-            // clicked on a band header/gap: select the section
-            _vm!.SelectSection(section);
-            _vm.ClearElementSelection();
-            return;
-        }
-
-        if (ElementAt(pt) == 0)
-        {
-            _vm!.ClearElementSelection();
-            _dragMode = DragMode.Marquee;
-            _dragStartPt = pt;
-            _marqueeRect = Rect.Empty;
-            _dragMoved = false;
-            CaptureMouse();
-        }
-    }
-
-    protected override void OnMouseMove(MouseEventArgs e)
-    {
-        base.OnMouseMove(e);
-        if (_dragMode != DragMode.Marquee) return;
-        if (e.LeftButton != MouseButtonState.Pressed) return;
-        var pt = ToPt(e.GetPosition(this));
-        _dragMoved = true;
-        _marqueeRect = new Rect(
-            Math.Min(_dragStartPt.X, pt.X), Math.Min(_dragStartPt.Y, pt.Y),
-            Math.Abs(pt.X - _dragStartPt.X), Math.Abs(pt.Y - _dragStartPt.Y));
-    }
-
-    protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
-    {
-        base.OnMouseLeftButtonUp(e);
-        if (_dragMode != DragMode.Marquee) return;
-        _dragMode = DragMode.None;
-        ReleaseMouseCapture();
-        if (_dragMoved)
-        {
-            foreach (var (id, rect) in _elementRects)
+            _marqueeVisual = new Rectangle
             {
-                if (_marqueeRect.IntersectsWith(rect))
-                {
-                    _vm!.SelectElement(id, extend: true);
-                }
-            }
+                Fill = new SolidColorBrush(Color.FromArgb(0x1E, 0x0A, 0x84, 0xFF)),
+                Stroke = Accent,
+                StrokeThickness = 1,
+                IsHitTestVisible = false,
+            };
+            Children.Add(_marqueeVisual);
+        }
+        _marqueeVisual.Width = _marqueeRect.Width * _zoom;
+        _marqueeVisual.Height = _marqueeRect.Height * _zoom;
+        SetLeft(_marqueeVisual, _marqueeRect.X * _zoom);
+        SetTop(_marqueeVisual, _marqueeRect.Y * _zoom);
+    }
+
+    private void RemoveMarqueeVisual()
+    {
+        if (_marqueeVisual != null)
+        {
+            Children.Remove(_marqueeVisual);
+            _marqueeVisual = null;
         }
     }
 
     private long ElementAt(Point pt)
     {
-        // topmost = last drawn; iterate in reverse insertion order
         foreach (var (id, rect) in _elementRects.Reverse())
         {
             if (rect.Contains(pt)) return id;
@@ -462,7 +475,12 @@ public sealed class DesignerCanvas : Canvas
     {
         foreach (var (id, rect) in _bandRects)
         {
-            if (rect.Contains(pt) || (pt.X >= rect.X && pt.X <= rect.Right && Math.Abs(pt.Y - rect.Bottom) <= SectionGap + 12.0))
+            if (rect.Contains(pt)) return id;
+        }
+        // A point in the gap just below a band also targets that band (the Mac's nearest-section fallback).
+        foreach (var (id, rect) in _bandRects)
+        {
+            if (pt.X >= rect.X && pt.X <= rect.Right && pt.Y >= rect.Bottom && pt.Y <= rect.Bottom + SectionGap)
             {
                 return id;
             }
@@ -470,8 +488,24 @@ public sealed class DesignerCanvas : Canvas
         return 0;
     }
 
-    private double ContentOriginX(long sectionId)
-        => OuterMargin + LeftMargin;
+    private int HitTestHandle(Point pt, LayoutElement element)
+    {
+        var rect = _elementRects[element.Id];
+        double w = rect.Width, h = rect.Height;
+        double hs = 6.0;
+        var corners = new (double x, double y)[]
+        {
+            (rect.Left, rect.Top), (rect.Left + w / 2, rect.Top), (rect.Right, rect.Top),
+            (rect.Right, rect.Top + h / 2), (rect.Right, rect.Bottom),
+            (rect.Left + w / 2, rect.Bottom), (rect.Left, rect.Bottom), (rect.Left, rect.Top + h / 2),
+        };
+        for (int i = 0; i < corners.Length; i++)
+        {
+            var hr = new Rect(corners[i].x - hs, corners[i].y - hs, hs * 2, hs * 2);
+            if (hr.Contains(pt)) return i;
+        }
+        return -1;
+    }
 
     private double ContentOriginY(long sectionId)
     {
@@ -490,15 +524,17 @@ public sealed class DesignerCanvas : Canvas
         double w = _dragStartRect.Width, h = _dragStartRect.Height;
         const double threshold = 4.5;
 
+        // Snap content-relative so snapped elements sit on the per-section grid and align with
+        // the client-side NextAvailableOrigin placement.
         if (_vm!.SnapToGrid)
         {
+            double originX = OuterMargin + LeftMargin;
+            double originY = ContentOriginY(_dragSourceSection);
             double s = DesignerViewModel.GridSpacing;
-            x = Math.Round(x / s) * s;
-            y = Math.Round(y / s) * s;
+            x = originX + Math.Round((x - originX) / s) * s;
+            y = originY + Math.Round((y - originY) / s) * s;
         }
 
-        // Edge alignment guides: snap the dragged element's left/center/right and
-        // top/center/bottom to another element's matching edge within the threshold.
         double bestX = threshold, bestY = threshold;
         foreach (var (id, r) in _elementRects)
         {
@@ -527,10 +563,10 @@ public sealed class DesignerCanvas : Canvas
     {
         double left = r.Left, top = r.Top, right = r.Right, bottom = r.Bottom;
         const double minW = 20, minH = 12;
-        if (handle is 0 or 3 or 5 or 6 or 7) left = Math.Min(right - minW, left + dx); // left side
-        if (handle is 1 or 2 or 3 or 4) right = Math.Max(left + minW, right + dx); // right side
-        if (handle is 0 or 1 or 2 or 7) top = Math.Min(bottom - minH, top + dy); // top side
-        if (handle is 4 or 5 or 6) bottom = Math.Max(top + minH, bottom + dy); // bottom side
+        if (handle is 0 or 6 or 7) left = Math.Min(right - minW, left + dx);
+        if (handle is 2 or 3 or 4) right = Math.Max(left + minW, right + dx);
+        if (handle is 0 or 1 or 2) top = Math.Min(bottom - minH, top + dy);
+        if (handle is 4 or 5 or 6) bottom = Math.Max(top + minH, bottom + dy);
         return new Rect(left, top, Math.Max(minW, right - left), Math.Max(minH, bottom - top));
     }
 
@@ -578,8 +614,6 @@ public sealed class DesignerCanvas : Canvas
         }
     }
 
-    // ---- inline label editing ----
-
     private void BeginInlineEdit(long elementId)
     {
         var element = _vm!.Elements.FirstOrDefault(el => el.Id == elementId);
@@ -616,8 +650,6 @@ public sealed class DesignerCanvas : Canvas
         editor.Focus();
         editor.SelectAll();
     }
-
-    // ---- rendering helpers ----
 
     private static Brush TintFor(LayoutElement element)
         => element.IsDataField ? DataFieldTint
