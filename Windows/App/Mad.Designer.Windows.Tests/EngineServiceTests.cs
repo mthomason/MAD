@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading;
 using Mad.Designer.Windows.Engine;
 using Mad.Designer.Windows.Infrastructure;
+using Mad.Designer.Windows.Models;
 
 // The context-detector test below blocks deliberately, to reproduce the OnClosed
 // synchronous-dispose path; xUnit1031's deadlock warning is therefore expected there.
@@ -44,6 +45,49 @@ public sealed class EngineServiceTests
         string csv = await service.ExportAsync(open.Handle, "csv");
         var lines = csv.Split("\r\n", StringSplitOptions.None);
         Assert.Equal(78, lines.Length);
+    }
+
+    [Fact]
+    public async Task CreateFromSqlite_ThenDescribeRefresh_Completes()
+    {
+        string sqlite = CopyChinookToTemp();
+        string mad = Path.Combine(Path.GetTempPath(), $"mad-create-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var service = new EngineService();
+            var spec = new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null);
+
+            var open = await service.CreateAsync(mad, spec);
+            Assert.True(open.Handle >= 0);
+            Assert.Equal("Sqlite 3", open.Driver);
+
+            var describe = await service.DescribeAsync(open.Handle);
+            Assert.Equal(11, describe.Tables.Count);
+
+            var refresh = await service.RefreshAsync(open.Handle);
+            Assert.True(refresh.RowCount >= 0);
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+            if (File.Exists(mad)) File.Delete(mad);
+        }
+    }
+
+    [Fact]
+    public async Task TestConnection_Sqlite_ReportsTableCount()
+    {
+        string sqlite = CopyChinookToTemp();
+        try
+        {
+            await using var service = new EngineService();
+            var spec = new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null);
+            Assert.Equal(11, await service.TestConnectionAsync(spec));
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+        }
     }
 
     [Fact]
@@ -96,6 +140,14 @@ public sealed class EngineServiceTests
         {
             SynchronizationContext.SetSynchronizationContext(previous);
         }
+    }
+
+    private static string CopyChinookToTemp()
+    {
+        string source = Path.Combine(MadPathResolver.RepoRoot(), "MADDesigner", "Resources", "Assets", "Samples.xcassets", "Data", "chinook.dataset", "chinook.sqlite3");
+        string temp = Path.Combine(Path.GetTempPath(), $"mad-chinook-{Guid.NewGuid():N}.sqlite3");
+        File.Copy(source, temp);
+        return temp;
     }
 
     private sealed class PostThrowingSynchronizationContext : SynchronizationContext

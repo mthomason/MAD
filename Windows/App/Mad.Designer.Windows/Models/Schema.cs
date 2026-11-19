@@ -19,3 +19,6 @@ public sealed record DescribeResult(string Driver, IReadOnlyList<ReportColumn> C
 
 /// <summary>The `refresh` result: how many rows the query produced and how long it took.</summary>
 public sealed record RefreshResult(int RowCount, double Elapsed);
+
+/// <summary>The `write` result: the destination path and the number of bytes written.</summary>
+public sealed record WriteResult(string Path, long Bytes);
