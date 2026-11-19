@@ -1,5 +1,6 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using Mad.Designer.Windows.Engine;
@@ -166,6 +167,74 @@ public sealed class ViewerAcceptanceTests
         AssertPageSize(letter, 612.0, 792.0);
 
         await engine.ShutdownAsync();
+    }
+
+    [Fact]
+    public async Task CsvExport_IsByteIdenticalToTheOneShotCli()
+    {
+        await using var engine = new EngineService();
+        var document = new DocumentViewModel(engine);
+        await document.OpenAsync(MadPathResolver.DefaultDocument());
+        await document.RefreshAsync();
+
+        string viewerPath = Path.Combine(Path.GetTempPath(), $"mad-viewer-{Guid.NewGuid():N}.csv");
+        string cliPath = Path.Combine(Path.GetTempPath(), $"mad-cli-{Guid.NewGuid():N}.csv");
+        try
+        {
+            document.Viewer.SelectedFormatIndex = 2; // CSV Spreadsheet
+            await document.Viewer.ExportAsync(viewerPath);
+            await RunOneShotCliAsync("export", "--format", "csv", "--out", cliPath);
+
+            Assert.Equal(File.ReadAllBytes(cliPath), File.ReadAllBytes(viewerPath));
+            Assert.Equal(78, File.ReadAllText(viewerPath).Split("\r\n", StringSplitOptions.None).Length);
+        }
+        finally
+        {
+            if (File.Exists(viewerPath)) File.Delete(viewerPath);
+            if (File.Exists(cliPath)) File.Delete(cliPath);
+        }
+
+        await engine.ShutdownAsync();
+    }
+
+    /// <summary>Runs `mad.exe` the way the CLI verbs are invoked, with GNUstep on PATH. Both
+    /// streams are drained while the process runs: the engine logs enough to stderr to fill a
+    /// pipe buffer and deadlock an unread process.</summary>
+    private static async Task RunOneShotCliAsync(params string[] arguments)
+    {
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = MadPathResolver.MadExe(),
+            WorkingDirectory = MadPathResolver.RepoRoot(),
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+        };
+        foreach (string argument in arguments) startInfo.ArgumentList.Add(argument);
+        startInfo.ArgumentList.Add(MadPathResolver.DefaultDocument());
+
+        string inherited = Environment.GetEnvironmentVariable("PATH") ?? "";
+        startInfo.Environment["PATH"] = MadPathResolver.GnustepBin() + Path.PathSeparator + inherited;
+
+        using var process = Process.Start(startInfo);
+        Assert.NotNull(process);
+        Task<string> drainedOutput = process!.StandardOutput.ReadToEndAsync();
+        Task<string> drainedError = process.StandardError.ReadToEndAsync();
+
+        using var timeout = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+        try
+        {
+            await process.WaitForExitAsync(timeout.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            process.Kill(entireProcessTree: true);
+            throw new TimeoutException("mad export did not exit");
+        }
+
+        await drainedOutput;
+        await drainedError;
+        Assert.Equal(0, process.ExitCode);
     }
 
     private static void AssertPageSize(string html, double width, double height)
