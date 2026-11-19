@@ -15,7 +15,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        _viewModel = new MainWindowViewModel(_engine, openAbout: OpenAboutWindow);
+        _viewModel = new MainWindowViewModel(_engine, openAbout: OpenAboutWindow, exportPath: ShowExportSaveDialog);
         DataContext = _viewModel;
     }
 
@@ -23,6 +23,16 @@ public partial class MainWindow : Window
     {
         var window = new AboutWindow { DataContext = new AboutViewModel(), Owner = this };
         window.Show();
+    }
+
+    private string? ShowExportSaveDialog(string format)
+    {
+        var dialog = new Microsoft.Win32.SaveFileDialog
+        {
+            Filter = format == "csv" ? "CSV spreadsheet (*.csv)|*.csv" : "JSON data (*.json)|*.json",
+            FileName = $"report.{format}",
+        };
+        return dialog.ShowDialog() == true ? dialog.FileName : null;
     }
 
     protected override void OnContentRendered(EventArgs e)

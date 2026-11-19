@@ -36,7 +36,7 @@ public sealed class EngineService : IAsyncDisposable
         if (port is int portValue) parameters["port"] = portValue;
         if (database != null) parameters["database"] = database;
 
-        var result = await CallAsync("open", parameters);
+        var result = await CallAsync("open", parameters).ConfigureAwait(false);
         return new OpenResult(
             result.GetProperty("handle").GetInt32(),
             result.GetProperty("filename").GetString() ?? "",
@@ -45,7 +45,7 @@ public sealed class EngineService : IAsyncDisposable
 
     public async Task<DescribeResult> DescribeAsync(int handle)
     {
-        var result = await CallAsync("describe", new Dictionary<string, object?> { ["handle"] = handle });
+        var result = await CallAsync("describe", new Dictionary<string, object?> { ["handle"] = handle }).ConfigureAwait(false);
 
         var columns = new List<ReportColumn>();
         foreach (var column in result.GetProperty("columns").EnumerateArray())
@@ -79,7 +79,7 @@ public sealed class EngineService : IAsyncDisposable
 
     public async Task<string> QueryAsync(int handle)
     {
-        var result = await CallAsync("query", new Dictionary<string, object?> { ["handle"] = handle });
+        var result = await CallAsync("query", new Dictionary<string, object?> { ["handle"] = handle }).ConfigureAwait(false);
         return result.GetProperty("sql").GetString() ?? "";
     }
 
@@ -89,7 +89,7 @@ public sealed class EngineService : IAsyncDisposable
         if (rows is int rowCount) parameters["rows"] = rowCount;
         if (credentials != null) parameters["credentials"] = credentials;
 
-        var result = await CallAsync("refresh", parameters);
+        var result = await CallAsync("refresh", parameters).ConfigureAwait(false);
         return new RefreshResult(
             result.GetProperty("rowCount").GetInt32(),
             result.GetProperty("elapsed").GetDouble());
@@ -97,7 +97,7 @@ public sealed class EngineService : IAsyncDisposable
 
     public async Task<string> ExportAsync(int handle, string format)
     {
-        var result = await CallAsync("export", new Dictionary<string, object?> { ["handle"] = handle, ["format"] = format });
+        var result = await CallAsync("export", new Dictionary<string, object?> { ["handle"] = handle, ["format"] = format }).ConfigureAwait(false);
         return result.GetProperty("data").GetString() ?? "";
     }
 
@@ -128,12 +128,12 @@ public sealed class EngineService : IAsyncDisposable
 
     private async Task<JsonElement> CallAsync(string method, IReadOnlyDictionary<string, object?>? parameters = null)
     {
-        await _gate.WaitAsync();
+        await _gate.WaitAsync().ConfigureAwait(false);
         try
         {
             EnsureStarted();
             MadEngineClient client = _client!;
-            return await Task.Run(() => client.CallOk(method, parameters));
+            return await Task.Run(() => client.CallOk(method, parameters)).ConfigureAwait(false);
         }
         finally
         {

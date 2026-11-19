@@ -16,6 +16,7 @@ namespace Mad.Designer.Windows.ViewModels;
 public sealed class DocumentViewModel : ObservableObject
 {
     private readonly EngineService _engine;
+    private readonly Func<string, string?>? _exportPath;
     private int _handle = -1;
 
     private bool _isBusy;
@@ -29,12 +30,22 @@ public sealed class DocumentViewModel : ObservableObject
     private int _rowCount;
     private DataView? _dataView;
 
-    public DocumentViewModel(EngineService engine)
+    public DocumentViewModel(EngineService engine, Func<string, string?>? exportPath = null)
     {
         _engine = engine ?? throw new ArgumentNullException(nameof(engine));
+        _exportPath = exportPath;
         RefreshCommand = new AsyncRelayCommand(RefreshAsync, () => HasDocument);
         ExportCsvCommand = new AsyncRelayCommand(() => ExportAsync("csv"), () => HasDocument);
         ExportJsonCommand = new AsyncRelayCommand(() => ExportAsync("json"), () => HasDocument);
+    }
+
+    /// <summary>Records a failure that happened before a document could be opened (for
+    /// example, resolving the default fixture). Kept separate from <see cref="OpenAsync"/>
+    /// because that method only catches engine errors once a path is known.</summary>
+    public void ReportFailure(string message)
+    {
+        ErrorText = message;
+        StatusText = "Open failed.";
     }
 
     public bool IsBusy
@@ -125,12 +136,16 @@ public sealed class DocumentViewModel : ObservableObject
         }
     }
 
-    /// <summary>Exports the current report to a temp file (the command path; the view
-    /// substitutes a save dialog for a real destination).</summary>
-    public Task ExportAsync(string format)
+    /// <summary>Exports the current report to the destination chosen by the injected path
+    /// provider (a save dialog in the app), or a temp file when no provider is set.</summary>
+    public async Task ExportAsync(string format)
     {
-        string outPath = Path.Combine(Path.GetTempPath(), $"mad-export-{Guid.NewGuid():N}.{format}");
-        return ExportAsync(format, outPath);
+        string? outPath = _exportPath?.Invoke(format);
+        if (string.IsNullOrEmpty(outPath))
+        {
+            outPath = Path.Combine(Path.GetTempPath(), $"mad-export-{Guid.NewGuid():N}.{format}");
+        }
+        await ExportAsync(format, outPath);
     }
 
     public async Task ExportAsync(string format, string outPath)
@@ -143,7 +158,7 @@ public sealed class DocumentViewModel : ObservableObject
         {
             string data = await _engine.ExportAsync(_handle, format);
             await File.WriteAllTextAsync(outPath, data);
-            StatusText = $"Exported {format.ToUpperInvariant()}";
+            StatusText = $"Exported {format.ToUpperInvariant()} to {outPath}";
         }
         catch (Exception exception)
         {

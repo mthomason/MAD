@@ -3,8 +3,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
 using Mad.Designer.Windows.Engine;
 using Mad.Designer.Windows.Infrastructure;
+
+// The context-detector test below blocks deliberately, to reproduce the OnClosed
+// synchronous-dispose path; xUnit1031's deadlock warning is therefore expected there.
+#pragma warning disable xUnit1031
 
 namespace Mad.Designer.Windows.Tests;
 
@@ -65,5 +70,37 @@ public sealed class EngineServiceTests
             await Task.Delay(100);
         }
         Assert.Fail($"engine process {pid} is still running after disposal");
+    }
+
+    [Fact]
+    public void EngineService_DoesNotCaptureSynchronizationContext()
+    {
+        var previous = SynchronizationContext.Current;
+        SynchronizationContext.SetSynchronizationContext(new PostThrowingSynchronizationContext());
+        try
+        {
+            var service = new EngineService();
+            try
+            {
+                var open = service.OpenAsync(MadPathResolver.DefaultDocument()).GetAwaiter().GetResult();
+                Assert.True(open.Handle >= 0);
+                var describe = service.DescribeAsync(open.Handle).GetAwaiter().GetResult();
+                Assert.Equal(21, describe.Columns.Count);
+            }
+            finally
+            {
+                service.DisposeAsync().GetAwaiter().GetResult();
+            }
+        }
+        finally
+        {
+            SynchronizationContext.SetSynchronizationContext(previous);
+        }
+    }
+
+    private sealed class PostThrowingSynchronizationContext : SynchronizationContext
+    {
+        public override void Post(SendOrPostCallback d, object? state)
+            => throw new InvalidOperationException("an await posted to the captured synchronization context");
     }
 }
