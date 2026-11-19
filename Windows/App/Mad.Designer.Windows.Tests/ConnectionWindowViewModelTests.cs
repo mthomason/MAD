@@ -62,6 +62,22 @@ public sealed class ConnectionWindowViewModelTests
     }
 
     [Fact]
+    public async Task Submit_EditMode_RequestsClose()
+    {
+        bool closed = false;
+        var vm = new ConnectionWindowViewModel(new EngineService(), NoStore, isEdit: true, requestClose: () => closed = true);
+        vm.Driver = ConnectionDriver.MySql;
+        vm.Host = "db.example.com";
+        vm.Database = "employees";
+
+        await vm.SubmitCommand.ExecuteAsync();
+
+        Assert.True(closed);
+        Assert.True(vm.Submitted);
+        Assert.NotNull(vm.ResultSpec);
+    }
+
+    [Fact]
     public async Task TestConnection_Sqlite_ReportsTableCount()
     {
         string sqlite = CopyChinookToTemp();

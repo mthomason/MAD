@@ -18,7 +18,7 @@ public partial class ConnectionWindow : Window
     public ConnectionWindow(EngineService engine, ICredentialStore credentials, bool isEdit, ConnectionSpec? initial = null)
     {
         InitializeComponent();
-        ViewModel = new ConnectionWindowViewModel(engine, credentials, isEdit, initial, createPath: ShowCreateSaveDialog);
+        ViewModel = new ConnectionWindowViewModel(engine, credentials, isEdit, initial, createPath: ShowCreateSaveDialog, requestClose: () => DialogResult = true);
         DataContext = ViewModel;
 
         Title = isEdit ? "Database Connection Settings" : "Create a New Mobile Analytics Document (.mad)";

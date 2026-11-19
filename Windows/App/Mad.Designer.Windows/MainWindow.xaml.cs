@@ -27,7 +27,8 @@ public partial class MainWindow : Window
             editConnection: () => OpenConnectionWindow(true),
             openRecent: OpenRecentPath,
             recentFiles: _recentFiles.Get(),
-            saveAsPath: ShowSaveDocumentDialog);
+            saveAsPath: ShowSaveDocumentDialog,
+            credentials: _credentials);
         DataContext = _viewModel;
     }
 
@@ -72,30 +73,37 @@ public partial class MainWindow : Window
     /// (Database Connection…), and adopts the result back into the open document.</summary>
     private async void OpenConnectionWindow(bool isEdit)
     {
-        ConnectionSpec? initial = null;
-        if (isEdit)
+        try
         {
-            initial = await _viewModel.Document.GetConnectionAsync();
-            if (initial == null)
+            ConnectionSpec? initial = null;
+            if (isEdit)
             {
-                return; // no document is open
+                initial = await _viewModel.Document.GetConnectionAsync();
+                if (initial == null)
+                {
+                    return; // no document is open
+                }
+            }
+
+            var window = new ConnectionWindow(_engine, _credentials, isEdit, initial) { Owner = this };
+            window.ShowDialog();
+
+            if (isEdit)
+            {
+                if (window.ViewModel.Submitted && window.ViewModel.ResultSpec is ConnectionSpec spec)
+                {
+                    await _viewModel.Document.ApplyConnectionAsync(spec);
+                }
+            }
+            else if (window.ViewModel.Created is OpenResult created && window.ViewModel.CreatePath is string path)
+            {
+                await _viewModel.Document.AdoptAsync(created, path);
+                _recentFiles.Add(path);
             }
         }
-
-        var window = new ConnectionWindow(_engine, _credentials, isEdit, initial) { Owner = this };
-        window.ShowDialog();
-
-        if (isEdit)
+        catch (Exception exception)
         {
-            if (window.ViewModel.Submitted && window.ViewModel.ResultSpec is ConnectionSpec spec)
-            {
-                await _viewModel.Document.ApplyConnectionAsync(spec);
-            }
-        }
-        else if (window.ViewModel.Created is OpenResult created && window.ViewModel.CreatePath is string path)
-        {
-            await _viewModel.Document.AdoptAsync(created, path);
-            _recentFiles.Add(path);
+            _viewModel.Document.ReportFailure(exception.Message);
         }
     }
 

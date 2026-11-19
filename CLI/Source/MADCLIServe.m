@@ -438,6 +438,10 @@ static void MADCLIServeCreate(NSDictionary *params, NSMutableDictionary <NSNumbe
 															   credentials: credentials
 																	 error: &error];
 	if (document == nil) {
+		// The failed create opened the portable store before connecting, which leaves
+		// its guts directory in the temp dir. Remove it so a bad connection leaves no
+		// artifact behind.
+		[[NSFileManager defaultManager] removeItemAtURL: [MADDocumentStore storeForDocumentURL: url].gutsURL error: NULL];
 		MADCLIServeWriteError(requestID, MADCLIExitDatabaseUnreachable, MADCLIDescriptionForError(error));
 		return;
 	}

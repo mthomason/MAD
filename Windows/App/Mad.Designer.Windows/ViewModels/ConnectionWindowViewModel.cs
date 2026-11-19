@@ -15,6 +15,7 @@ public sealed class ConnectionWindowViewModel : ObservableObject
     private readonly EngineService _engine;
     private readonly ICredentialStore _credentials;
     private readonly Func<string?>? _createPath;
+    private readonly Action? _requestClose;
 
     private ConnectionDriver _driver;
     private string _file = "";
@@ -33,11 +34,13 @@ public sealed class ConnectionWindowViewModel : ObservableObject
         ICredentialStore credentials,
         bool isEdit,
         ConnectionSpec? initial = null,
-        Func<string?>? createPath = null)
+        Func<string?>? createPath = null,
+        Action? requestClose = null)
     {
         _engine = engine ?? throw new ArgumentNullException(nameof(engine));
         _credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
         _createPath = createPath;
+        _requestClose = requestClose;
         IsEdit = isEdit;
 
         Driver = initial?.Driver ?? ConnectionDriver.Sqlite3;
@@ -160,6 +163,7 @@ public sealed class ConnectionWindowViewModel : ObservableObject
         {
             ResultSpec = Spec;
             Submitted = true;
+            _requestClose?.Invoke();
             return;
         }
 
@@ -179,6 +183,7 @@ public sealed class ConnectionWindowViewModel : ObservableObject
             Created = await _engine.CreateAsync(path, Spec);
             CreatePath = path;
             SaveCredentialsIfRequested();
+            _requestClose?.Invoke();
         }
         catch (Exception exception)
         {
