@@ -204,6 +204,28 @@ writes the same 16261-byte document the Mac and Linux write
 exports in the same user work (the `.mdcache` rename issue is fixed — see
 `Engine/Compat/NSPropertyListSerialization+Stream.m`).
 
+## The stdio client (`mad serve`)
+
+`mad serve` is the long-lived process boundary the WPF shell will use: it reads
+newline-delimited JSON on standard input and writes one JSON response per line on
+standard output (diagnostics stay on standard error). The contract is documented in
+`docs/project/MAD_WINDOWS.md` §6d — methods `open`, `describe`, `query`, `refresh`,
+`export`, `write` and `shutdown`, with `export` reusing the existing `mad.report/1`
+and CSV bytes rather than a parallel schema.
+
+`Windows/Client/` holds the .NET 10 acceptance client and its xunit suite, pinned by
+this directory's `global.json`. Build `mad.exe` first, then from `Windows/Client`:
+
+```
+dotnet run --project Mad.Client   # the London fixture flow, end to end
+dotnet test Mad.Client.Tests      # success, malformed, engine-failure, shutdown
+```
+
+`dotnet run` opens `CLI/Fixtures/London.portable.mad`, lists schema and rows, writes
+CSV to a temp file, and shuts the engine down cleanly. The tests discover the repo's
+`mad.exe` (override with `MAD_EXE` / `GNUSTEP_BIN`) and assert the child process exits
+with no orphan.
+
 ## Test databases
 
 The three live driver suites talk to pinned Docker test servers — MySQL

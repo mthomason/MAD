@@ -321,6 +321,58 @@ Phase 3b adds the four database drivers and the C libraries they link:
   `MADMySQLLiveTests` 44/44, `MADTdsClientLiveTests` 29/29, `MADPostgresLiveTests`
   14/14. CLI `mad refresh` returns 50 MySQL / 20 TDS / 25 PostgreSQL rows.
 
+## 6d. Phase 4 — the stdio JSON process contract
+
+Phase 4 adds `mad serve`, the long-lived process boundary the WPF shell will use. It
+reads newline-delimited JSON on standard input and writes one newline-delimited JSON
+response per request on standard output; diagnostics stay on standard error, so the
+two never mix. The wire shape reuses the project's existing JSON contract rather than
+inventing a parallel one.
+
+**Request / response** — one JSON value per line, UTF-8, `\n`-terminated:
+
+```text
+request:   { "id": <int|string>, "method": "<name>", "params": { … } }
+ok:        { "id": <id>, "ok": true,  "result": { … } }
+error:     { "id": <id|null>, "ok": false, "error": { "code": <int>, "message": "…" } }
+```
+
+`id` is client-chosen and echoed back for correlation; a malformed request answers with
+`"id": null`. `error.code` is the CLI's exit code (MADCLI.h): 1 usage/protocol, 2 bad
+document, 3 database unreachable, 4 query failed, 5 export failed. A malformed line, an
+unknown method, a missing parameter and an unexpected engine exception all answer
+`ok: false` with a message — never a traceback — and the session keeps running.
+
+**Methods:**
+
+| method | params | result |
+|---|---|---|
+| `open` | `path`, optional `host`/`port`/`database` | `handle`, `filename`, `driver` |
+| `describe` | `handle` | `driver`, `columns` (key/name/table/type), `tables` (name + fields) |
+| `query` | `handle` | `sql` |
+| `refresh` | `handle`, optional `rows`/`credentials` | `rowCount`, `elapsed` |
+| `export` | `handle`, `format`, optional `path`/`deterministic` | `format` + `data` (the exporter's bytes) or `path` + `bytes` |
+| `write` | `handle`, `out`, optional `reproducible` | `path`, `bytes` |
+| `shutdown` | — | `{}`, then the process exits 0 |
+
+`export` is the export seam (`MADReportExporting` / `MADReportExporterRegistry`), not a
+new schema: `format: "json"` returns the exact `mad.report/1` bytes `mad export
+--format json` writes (`MADReportExporterJSON` — `columns` and `rows`), and `format:
+"csv"` the RFC 4180 bytes. A format this build cannot produce (for example `pdf` off
+Apple) answers `error.code` 5 with the exporter's reason. `describe`'s `columns` are
+those same `mad.report/1` columns (`MADReportExportSource`), and its `tables` is the
+stored database schema `mad schema` prints. `open` applies `host`/`port`/`database` the
+way the one-shot verbs do, so a checked-in document can run against a different server
+for the session. End-of-file on standard input is a clean shutdown, as is `shutdown`.
+
+**Client and tests.** `Windows/Client/` holds the .NET 10 console acceptance client
+(`Mad.Client`) and the xunit suite (`Mad.Client.Tests`), both pinned by
+`Windows/global.json`. The client spawns `mad serve` and covers the seven methods; the
+tests exercise the success path over `CLI/Fixtures/London.portable.mad` (open → describe
+→ query → refresh 76 rows → export json/csv → shutdown, exit 0, no orphan process),
+malformed requests, an unknown method, a bad document, an unavailable format, and
+process shutdown.
+
 ## 7. Supported Windows versions
 
 .NET 10's supported OS matrix (Windows 10 Enterprise 21H2/1809/1607, Windows
