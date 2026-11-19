@@ -348,12 +348,24 @@ unknown method, a missing parameter and an unexpected engine exception all answe
 | method | params | result |
 |---|---|---|
 | `open` | `path`, optional `host`/`port`/`database` | `handle`, `filename`, `driver` |
+| `create` | `path`, `driver` + connection fields, optional `credentials` | `handle`, `filename`, `driver` (the created document) |
+| `test-connection` | `driver` + connection fields, optional `credentials` | `tableCount` |
 | `describe` | `handle` | `driver`, `columns` (key/name/table/type), `tables` (name + fields) |
+| `connection` | `handle` | `driver` + `file`/`host`/`port`/`database`/`server` |
+| `apply-connection` | `handle`, `driver` + connection fields, optional `credentials` | `{}` |
 | `query` | `handle` | `sql` |
 | `refresh` | `handle`, optional `rows`/`credentials` | `rowCount`, `elapsed` |
 | `export` | `handle`, `format`, optional `path`/`deterministic` | `format` + `data` (the exporter's bytes) or `path` + `bytes` |
-| `write` | `handle`, `out`, optional `reproducible` | `path`, `bytes` |
+| `write` | `handle`, `out`, optional `reproducible` | `path`, `bytes` — serializes the live document |
 | `shutdown` | — | `{}`, then the process exits 0 |
+
+The connection methods (`create`, `test-connection`, `connection`, `apply-connection`)
+take a `driver` token — `sqlite3` | `mysql` | `sqlserver` | `postgres` — and
+driver-specific fields: SQLite takes `file`; the server drivers take
+`host`/`port`/`database` (SQL Server also takes an optional `server` instance), plus the
+existing `credentials` (`user:password`) string. They reuse the engine's
+`createDocumentAtURL:`, `MADDatabase` (connect/getTables/close) and
+`applyDatabaseConnection:` — the same calls the Mac's connection window makes.
 
 `export` is the export seam (`MADReportExporting` / `MADReportExporterRegistry`), not a
 new schema: `format: "json"` returns the exact `mad.report/1` bytes `mad export
@@ -363,7 +375,9 @@ Apple) answers `error.code` 5 with the exporter's reason. `describe`'s `columns`
 those same `mad.report/1` columns (`MADReportExportSource`), and its `tables` is the
 stored database schema `mad schema` prints. `open` applies `host`/`port`/`database` the
 way the one-shot verbs do, so a checked-in document can run against a different server
-for the session. End-of-file on standard input is a clean shutdown, as is `shutdown`.
+for the session. `write` now serializes the live session document rather than re-opening
+`sourceURL`, so a connection applied in-session is persisted. End-of-file on standard
+input is a clean shutdown, as is `shutdown`.
 
 **Client and tests.** `Windows/Client/` holds the .NET 10 console acceptance client
 (`Mad.Client`) and the xunit suite (`Mad.Client.Tests`), both pinned by

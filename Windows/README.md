@@ -206,12 +206,13 @@ exports in the same user work (the `.mdcache` rename issue is fixed — see
 
 ## The stdio client (`mad serve`)
 
-`mad serve` is the long-lived process boundary the WPF shell will use: it reads
+`mad serve` is the long-lived process boundary the WPF shell uses: it reads
 newline-delimited JSON on standard input and writes one JSON response per line on
 standard output (diagnostics stay on standard error). The contract is documented in
-`docs/project/MAD_WINDOWS.md` §6d — methods `open`, `describe`, `query`, `refresh`,
-`export`, `write` and `shutdown`, with `export` reusing the existing `mad.report/1`
-and CSV bytes rather than a parallel schema.
+`docs/project/MAD_WINDOWS.md` §6d — methods `open`, `create`, `test-connection`,
+`describe`, `connection`, `apply-connection`, `query`, `refresh`, `export`, `write` and
+`shutdown`, with `export` reusing the existing `mad.report/1` and CSV bytes rather than
+a parallel schema.
 
 `Windows/Client/` holds the .NET 10 acceptance client and its xunit suite, pinned by
 this directory's `global.json`. Build `mad.exe` first, then from `Windows/Client`:
@@ -235,12 +236,16 @@ semaphore and runs every blocking call on the thread pool so the UI never freeze
 
 The shell has the three-workspace frame (MAD Query / Designer / Viewer): Query shows the
 stored schema and the generated SQL, Viewer shows the refreshed rows in a `DataGrid` and
-exports CSV/JSON, and Designer is a placeholder until Phase 6. On startup it auto-opens
-`CLI/Fixtures/London.portable.mad` (override with `MAD_DOCUMENT`); an Open… button opens
-any `.mad` via the file dialog. The About window (Overview / License & Notice /
-Acknowledgements) renders the Windows dependency register in
-`ThirdParty/Licenses/Windows/` and the relink offer — the Windows component set, never the
-Apple one.
+exports CSV/JSON, and Designer is a placeholder until Phase 6c. It launches to the empty
+main window with every document-dependent control disabled (no auto-open, no file dialog).
+File → New Document… opens the connection assistant (SQLite / MySQL / Microsoft SQL Server
+/ PostgreSQL, with a Test Connection action), File → Open… opens an existing `.mad`, and a
+`.mad` passed on the command line (double-click association) opens on startup. Save / Save
+As reuse the engine's `write`; credentials are stored in Windows Credential Manager and
+passed to the engine as `user:password`; recent files is a client-side list. The About
+window (Overview / License & Notice / Acknowledgements) renders the Windows dependency
+register in `ThirdParty/Licenses/Windows/` and the relink offer — the Windows component
+set, never the Apple one.
 
 Build and run (the engine must be built first — see above):
 
