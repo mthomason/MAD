@@ -73,6 +73,15 @@ static inline size_t strlcat(char *dst, const char *src, size_t dstsize) {
 	return dlen + slen;
 }
 
+// strcasecmp/strncasecmp are BSD/POSIX (glibc has them, the UCRT spells them
+// _stricmp/_strnicmp).  MADDatabasePostgres.m:203 reaches strcasecmp.
+static inline int strcasecmp(const char *a, const char *b) {
+	return _stricmp(a, b);
+}
+static inline int strncasecmp(const char *a, const char *b, size_t n) {
+	return _strnicmp(a, b, n);
+}
+
 // arc4random / arc4random_uniform are BSD/Apple (glibc 2.36+ has them, so the
 // Linux build needs no shim; the UCRT does not).  They back random-geometry
 // helpers (CGGeometry+Extras, MTMath), not security, so a rand()-backed

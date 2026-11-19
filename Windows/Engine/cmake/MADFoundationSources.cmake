@@ -1,20 +1,20 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
 # The MADFoundation subset the Windows build compiles (docs/project/MAD_WINDOWS.md
-# §4): the Linux list (26 of the framework's 27 implementation files plus
-# madlib.c) minus one more file, for Windows.
+# §4): the Linux list (27 of the framework's 28 implementation files plus
+# madlib.c) minus one file, for Windows.
 #
-# Excluded, and why (the same two exclusions the Linux build makes, plus one):
+# Excluded, and why (the same exclusion the Linux build makes):
 #   MADKeyChain.m        Security.framework SecItem*; the refresh path never
 #                        reads the keychain, the credential comes from an
 #                        operation dependency, and the CLI takes --credentials
 #                        (excluded on Linux too)
-#   BDHost.m             POSIX-socket reverse DNS (sys/socket.h,
-#                        netpacket/packet.h, ifaddrs.h, arpa/inet.h).  On Linux
-#                        these exist and BDHost compiles behind __APPLE__; on
-#                        Windows they do not, so BDHost is excluded here until a
-#                        Winsock2 port lands.  BDHost.h is imported by nothing
-#                        else in this framework.
+#
+# BDHost.m is back in: its reverse-DNS lookups now carry a Winsock2 branch
+# behind #if defined(_WIN32) (getaddrinfo/getnameinfo, WSAStartup once), so it
+# compiles and links here.  It is imported by MADTdsClient
+# (MADDatabaseSQLServer.m calls +addressForHostname:), even though nothing in
+# MADFoundation itself calls it; BDHostTests is registered in build.ps1.
 #
 # The umbrella MADFoundation.h stays out with MADKeyChain: it imports
 # MADKeyChain.h.
@@ -33,6 +33,7 @@ set(MADFOUNDATION_SOURCES
 	"${SOURCE_DIR}/NSOperation+CompletionBlock.m"
 	"${SOURCE_DIR}/MADOperationConditionHasResultStringResult.m"
 	"${SOURCE_DIR}/MADOperationConditionTestConnectionSuccess.m"
+	"${SOURCE_DIR}/BDHost.m"
 	"${SOURCE_DIR}/MADApplication.m"
 	"${SOURCE_DIR}/MADURLFactory.m"
 	"${SOURCE_DIR}/madlib.c"

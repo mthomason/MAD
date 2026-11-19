@@ -42,7 +42,8 @@ param(
 	[string]$Prefix = "C:\GNUstep",
 	[switch]$SkipToolchain,
 	[switch]$NoTest,
-	[switch]$Clean
+	[switch]$Clean,
+	[switch]$LibrariesOnly
 )
 
 $ErrorActionPreference = "Stop"
@@ -86,6 +87,8 @@ Require "NASM" { Test-Path "C:\Program Files\NASM\nasm.exe" } "install NASM"
 Require "curl" { $null -ne (curl.exe --version 2>$null) } "curl ships with Windows 11"
 Require "tar" { $null -ne (tar --version 2>$null) } "tar ships with Windows 11"
 Require "llvm-lib" { $null -ne (llvm-lib /? 2>$null) } "llvm-lib ships with LLVM 20.1.8"
+Require "meson (PostgreSQL 17 libpq)" { Test-Path "C:\Program Files\Meson\meson.exe" } "install Meson (winget install Meson.Meson)"
+Require "Strawberry Perl 5.42 (OpenSSL Configure)" { Test-Path "C:\Strawberry\perl\bin\perl.exe" } "install Strawberry Perl (winget install StrawberryPerl.StrawberryPerl)"
 $vcvars = "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
 Require "Visual Studio 2026 (18.12.0)" { Test-Path $vcvars } "install Visual Studio 2026 Community (NativeDesktop)"
 Require "Windows SDK 10.0.26100" { Test-Path "C:\Program Files (x86)\Windows Kits\10\Lib\10.0.26100.0" } "install the Windows 10.0.26100 SDK"
@@ -325,6 +328,460 @@ if (-not (Test-Path $libarchiveLib)) {
 }
 
 # ---------------------------------------------------------------------------
+# 3c. The driver C libraries: openssl, freetds, mariadb and libpq.  Mirrors
+#     Linux/lib/libraries.sh's build_openssl/freetds/mariadb/postgres, but each
+#     built the Windows way:
+#       * openssl  -- perl Configure VC-WIN64A + nmake + clang-cl (static, no
+#                     tests).  The installed Perl/NASM are used; no-asm is only
+#                     a fallback if the asm path fails.
+#       * freetds  -- FreeTDS's own CMake path (not autotools), the static
+#                     db-lib (sybdb), ENABLE_MSDBLIB on, OpenSSL on.  The
+#                     odbc/apps/server/pool targets are simply not built.
+#       * mariadb  -- CMake, the static mariadbclient, OpenSSL + the existing
+#                     zlib, the MySQL 8 auth plugins static, the rest off.
+#       * postgres -- Meson (PostgreSQL 17 dropped the MSVC build), libpq +
+#                     pgcommon/pgport static, OpenSSL on, everything else off.
+# ---------------------------------------------------------------------------
+
+# Find a freshly built static .lib by name (the output location differs per
+# library and per CMake/Meson layout).
+function Find-Lib([string]$dir, [string]$name) {
+	$f = Get-ChildItem -Path $dir -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -eq "$name.lib" -or $_.Name -eq "$name.a" } | Select-Object -First 1
+	if ($f) { return $f.FullName }
+	throw "$name library not found under $dir"
+}
+
+$MesonExe = "C:\Program Files\Meson\meson.exe"
+$nmake = (Get-ChildItem "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\*\bin\Hostx64\x64\nmake.exe" -ErrorAction SilentlyContinue | Select-Object -First 1)
+if ($nmake) { $nmake = $nmake.FullName } else { $nmake = $null }
+
+# --- openssl 3.5.9 (static, no tests) ---------------------------------------
+$opensslDir = Get-LibrarySource "openssl" (Get-LibraryPin "openssl")
+$opensslInstall = Join-Path $opensslDir "install"
+$opensslInclude = Join-Path $opensslInstall "include"
+$opensslLibSsl = Join-Path $opensslInstall "lib\libssl.lib"
+$opensslLibCrypto = Join-Path $opensslInstall "lib\libcrypto.lib"
+if (-not (Test-Path $opensslLibCrypto)) {
+	Write-Host "  building openssl (perl Configure VC-WIN64A + nmake + clang-cl)"
+	if (-not $nmake) { throw "nmake.exe not found under the VS 2026 MSVC tools" }
+	$prefixFwd = $opensslInstall -replace '\\', '/'
+	$oldPath = $env:PATH
+	$oldInclude = $env:INCLUDE
+	$oldLib = $env:LIB
+	# nmake for the Configure-generated makefile, and the Windows SDK bin dir so
+	# the `rc` resource compiler is on PATH (OpenSSL compiles its .rc files).
+	# INCLUDE/LIB are set for rc (winver.h) and link; clang-cl finds MSVC on its
+	# own, so the rest of the build does not need this.
+	$sdkBin = "C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64"
+	$msvcTools = Split-Path (Split-Path (Split-Path (Split-Path $nmake)))
+	$sdkRoot = "C:\Program Files (x86)\Windows Kits\10"
+	$sdkVer = "10.0.26100.0"
+	$env:PATH = "$(Split-Path $nmake);$sdkBin;$oldPath"
+	$env:INCLUDE = "$msvcTools\include;$sdkRoot\Include\$sdkVer\ucrt;$sdkRoot\Include\$sdkVer\um;$sdkRoot\Include\$sdkVer\shared"
+	$env:LIB = "$msvcTools\lib\x64;$sdkRoot\Lib\$sdkVer\ucrt\x64;$sdkRoot\Lib\$sdkVer\um\x64"
+	# OpenSSL's Configure is a Perl script; it needs a complete native-Windows
+	# Perl (Strawberry), not the MSYS2 perl which lacks core modules and uses
+	# cygwin path semantics.
+	try {
+		Push-Location $opensslDir
+		try {
+			& "C:\Strawberry\perl\bin\perl.exe" Configure VC-WIN64A no-shared no-tests "--prefix=$prefixFwd" "--openssldir=$prefixFwd/ssl" CC=clang-cl 2>&1 | ForEach-Object { Write-Host $_ }
+			if ($LASTEXITCODE -ne 0) { throw "openssl Configure failed" }
+			& nmake 2>&1 | ForEach-Object { Write-Host $_ }
+			if ($LASTEXITCODE -ne 0) { throw "openssl nmake failed" }
+			& nmake install_sw 2>&1 | ForEach-Object { Write-Host $_ }
+			# install_sw copies the .lib files before it reaches the optional
+			# ossl_static.pdb copy, which this clang-cl build does not produce
+			# ("Can't Open ossl_static.pdb"); the archives are the real gate.
+			if (-not (Test-Path $opensslLibCrypto) -or -not (Test-Path $opensslLibSsl)) {
+				throw "openssl install failed (libcrypto/libssl missing)"
+			}
+		} finally {
+			Pop-Location
+		}
+	} finally {
+		$env:PATH = $oldPath
+		$env:INCLUDE = $oldInclude
+		$env:LIB = $oldLib
+	}
+	Write-Host "  ok   openssl.lib built (libssl + libcrypto)"
+} else {
+	Write-Host "  ok   openssl.lib (cached)"
+}
+
+# --- freetds 1.4.27 (CMake, static sybdb db-lib) ----------------------------
+$freetdsDir = Get-LibrarySource "freetds" (Get-LibraryPin "freetds")
+$freetdsBuild = Join-Path $BuildDir "freetds-cmake"
+$freetdsHeaderDir = Join-Path $BuildDir "freetds-headers"
+$freetdsGenInclude = Join-Path $freetdsBuild "include"
+$freetdsLib = Join-Path $freetdsBuild "src\dblib\db-lib.lib"
+if (-not (Test-Path $freetdsLib)) {
+	Write-Host "  configuring freetds (cmake + clang-cl; static db-lib)"
+	$ftSource = $freetdsDir -replace '\\', '/'
+	$ftBuild = $freetdsBuild -replace '\\', '/'
+	& cmake -S $ftSource -B $ftBuild -G Ninja `
+		"-DCMAKE_C_COMPILER=clang-cl" "-DCMAKE_CXX_COMPILER=clang-cl" "-DCMAKE_BUILD_TYPE=Release" `
+		"-DCMAKE_POLICY_VERSION_MINIMUM=3.5" `
+		"-DENABLE_MSDBLIB=ON" "-DWITH_OPENSSL=ON" `
+		"-DOPENSSL_ROOT_DIR=$($opensslInstall -replace '\\','/')" `
+		"-DBUILD_SHARED_LIBS=OFF" `
+		2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "freetds configure failed" }
+	Write-Host "  building freetds db-lib (static sybdb)"
+	& cmake --build $ftBuild --target db-lib 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "freetds build failed" }
+	Write-Host "  ok   freetds db-lib.lib built"
+} else {
+	Write-Host "  ok   freetds db-lib.lib (cached)"
+}
+# Assemble the "installed" public headers: the source include/ files plus the
+# CMake-generated ones (config.h, tds_sysdep_public.h, freetds/*), with the one
+# installed-header edit from Compressor/lib/recipes/freetds.sh (BOOL commented
+# out, with the LGPL change notice).  The library sources are unmodified.
+if (-not (Test-Path (Join-Path $freetdsHeaderDir "sybdb.h"))) {
+	New-Item -ItemType Directory -Force -Path $freetdsHeaderDir | Out-Null
+	Copy-Item (Join-Path $freetdsDir "include\*") $freetdsHeaderDir -Recurse -Force
+	Copy-Item (Join-Path $freetdsGenInclude "*") $freetdsHeaderDir -Recurse -Force
+	$sybdbPath = Join-Path $freetdsHeaderDir "sybdb.h"
+	$sybdbText = Get-Content $sybdbPath -Raw
+	$notice = '/* MODIFIED BY MAD Designer (2026-11-18): "typedef int BOOL;" is commented out below because Objective-C already defines BOOL and the redefinition fails the framework build. The FreeTDS library itself is built unmodified; only this installed header is edited. See Windows/Engine/build.ps1 and ThirdParty/Licenses/README.md. */'
+	$sybdbText = $sybdbText -replace '(?m)^typedef int BOOL;\s*$', "//typedef int BOOL;`n$notice"
+	Set-Content -Path $sybdbPath -Value $sybdbText -NoNewline
+}
+$freetdsInclude = $freetdsHeaderDir
+$freetdsTdsLib = Join-Path $freetdsBuild "src\tds\tds.lib"
+$freetdsReplacementsLib = Join-Path $freetdsBuild "src\replacements\replacements.lib"
+$freetdsTdsutilsLib = Join-Path $freetdsBuild "src\utils\tdsutils.lib"
+
+# --- mariadb 3.4.11 (CMake, static mariadbclient) ---------------------------
+$mariadbDir = Get-LibrarySource "mariadb" (Get-LibraryPin "mariadb")
+$mariadbBuild = Join-Path $BuildDir "mariadb-cmake"
+$mariadbInclude = Join-Path $BuildDir "mariadb-headers"
+$mariadbLib = Join-Path $mariadbBuild "libmariadb\mariadbclient.lib"
+if (-not (Test-Path $mariadbLib)) {
+	Write-Host "  configuring mariadb (cmake + clang-cl; static mariadbclient)"
+	$maSource = $mariadbDir -replace '\\', '/'
+	$maBuild = $mariadbBuild -replace '\\', '/'
+	$zlibLibFwd = $zlibLib -replace '\\', '/'
+	$zlibDirFwd = $zlibDir -replace '\\', '/'
+	& cmake -S $maSource -B $maBuild -G Ninja `
+		"-DCMAKE_C_COMPILER=clang-cl" "-DCMAKE_CXX_COMPILER=clang-cl" "-DCMAKE_BUILD_TYPE=Release" `
+		"-DWITH_SSL=OPENSSL" "-DOPENSSL_ROOT_DIR=$($opensslInstall -replace '\\','/')" "-DOPENSSL_USE_STATIC_LIBS=TRUE" `
+		"-DWITH_EXTERNAL_ZLIB=ON" "-DZLIB_LIBRARY=$zlibLibFwd" "-DZLIB_INCLUDE_DIR=$zlibDirFwd" `
+		"-DWITH_CURL=OFF" "-DWITH_UNIT_TESTS=OFF" `
+		"-DCLIENT_PLUGIN_CACHING_SHA2_PASSWORD=STATIC" "-DCLIENT_PLUGIN_SHA256_PASSWORD=STATIC" `
+		"-DCLIENT_PLUGIN_DIALOG=OFF" "-DCLIENT_PLUGIN_CLIENT_ED25519=OFF" "-DCLIENT_PLUGIN_PARSEC=OFF" `
+		"-DCLIENT_PLUGIN_AUTH_GSSAPI_CLIENT=OFF" "-DCLIENT_PLUGIN_MYSQL_CLEAR_PASSWORD=OFF" "-DCLIENT_PLUGIN_ZSTD=OFF" `
+		"-DINSTALL_LIBDIR=lib" "-DINSTALL_INCLUDEDIR=include" `
+		2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "mariadb configure failed" }
+	Write-Host "  building mariadb mariadbclient (static)"
+	& cmake --build $maBuild --target mariadbclient 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "mariadb build failed" }
+	Write-Host "  ok   mariadbclient.lib built"
+} else {
+	Write-Host "  ok   mariadbclient.lib (cached)"
+}
+# Flatten the headers so <mysql.h>/<mysqld_error.h> resolve from one include
+# root: the source include/*.h plus the CMake-generated ma_config.h/
+# mariadb_version.h (the same flatten the Compressor recipe makes after install).
+if (-not (Test-Path (Join-Path $mariadbInclude "mysql.h"))) {
+	New-Item -ItemType Directory -Force -Path $mariadbInclude | Out-Null
+	Copy-Item (Join-Path $mariadbDir "include\*.h") $mariadbInclude -Force
+	Copy-Item (Join-Path $mariadbBuild "include\*.h") $mariadbInclude -Force
+}
+
+# --- postgres 17.11 (Meson, libpq static) -----------------------------------
+$postgresDir = Get-LibrarySource "postgres" (Get-LibraryPin "postgres")
+$postgresBuild = Join-Path $BuildDir "postgres-meson"
+$postgresHeaders = Join-Path $BuildDir "postgres-headers"
+$postgresInclude = $postgresHeaders
+$postgresLib = Join-Path $postgresBuild "libpq.lib"
+$oldCC = $env:CC
+$oldCXX = $env:CXX
+$oldPath = $env:PATH
+$oldInclude = $env:INCLUDE
+$oldLib = $env:LIB
+if (-not (Test-Path $postgresLib)) {
+	Write-Host "  configuring postgres libpq (meson + clang-cl)"
+	$pgSource = $postgresDir -replace '\\', '/'
+	$pgBuild = $postgresBuild -replace '\\', '/'
+	# PKG_CONFIG_PATH lets meson's openssl dependency locate the from-source
+	# OpenSSL install, and the MSYS2 usr/bin is on PATH so meson finds the
+	# pkg-config binary it needs for that lookup.
+	$env:PKG_CONFIG_PATH = "$($opensslInstall -replace '\\','/')/lib/pkgconfig"
+	# Build libpq with MSVC's native cl.exe (PostgreSQL's supported Windows path),
+	# not clang-cl: several of PostgreSQL's meson checks compare cc.get_id() to
+	# 'msvc', and clang-cl reports 'clang-cl', which silently drops
+	# win32gettimeofday.c/dirent.c and the win32_msvc include dir.  cl.exe needs
+	# the vcvars INCLUDE/LIB/PATH, set here (the engine itself still uses clang,
+	# which finds MSVC on its own).
+	$msvcTools = Split-Path (Split-Path (Split-Path (Split-Path $nmake)))
+	$sdkRoot = "C:\Program Files (x86)\Windows Kits\10"
+	$sdkVer = "10.0.26100.0"
+	$sdkBin = Join-Path $sdkRoot "bin\$sdkVer\x64"
+	$env:PATH = "$msvcTools\bin\Hostx64\x64;C:\msys64\usr\bin;$sdkBin;$oldPath"
+	$env:INCLUDE = "$msvcTools\include;$sdkRoot\Include\$sdkVer\ucrt;$sdkRoot\Include\$sdkVer\um;$sdkRoot\Include\$sdkVer\shared"
+	$env:LIB = "$msvcTools\lib\x64;$sdkRoot\Lib\$sdkVer\ucrt\x64;$sdkRoot\Lib\$sdkVer\um\x64"
+	# PostgreSQL's Meson configure requires perl/flex/bison even for a libpq-only
+	# build, though none is actually run for libpq.  The Linux recipe fakes
+	# flex/bison the same way (FLEX=":" in libraries.sh); here they are no-op
+	# .bat files that answer --version, and perl is Strawberry (the only complete
+	# native-Windows Perl).
+	$dummyTools = Join-Path $BuildDir "pg-dummy-tools"
+	New-Item -ItemType Directory -Force -Path $dummyTools | Out-Null
+	@'
+@echo off
+if "%~1"=="--version" echo flex 2.6.4
+'@ | Set-Content -Path (Join-Path $dummyTools "flex.bat")
+	@'
+@echo off
+if "%~1"=="--version" echo bison (GNU Bison) 3.8.2
+'@ | Set-Content -Path (Join-Path $dummyTools "bison.bat")
+	$flexBat = (Join-Path $dummyTools "flex.bat") -replace '\\', '/'
+	$bisonBat = (Join-Path $dummyTools "bison.bat") -replace '\\', '/'
+	# Meson's find_library('ssl') looks for the MSVC name (no `lib` prefix); the
+	# OpenSSL build produces libssl.lib/libcrypto.lib, so expose the unprefixed
+	# names alongside them.
+	foreach ($pair in @(@("ssl", $opensslLibSsl), @("crypto", $opensslLibCrypto))) {
+		$dst = Join-Path (Split-Path $pair[1]) ($pair[0] + ".lib")
+		if (-not (Test-Path $dst)) { Copy-Item $pair[1] $dst -Force }
+	}
+	# The from-source OpenSSL install has no pkg-config .pc files, and Meson's
+	# dependency('openssl') needs them to learn the transitive Windows system
+	# libs (crypt32/ws2_32/…) that static libcrypto pulls in; write the three the
+	# package normally ships.
+	$pgPkgConfig = Join-Path (Split-Path $opensslLibSsl) "pkgconfig"
+	if (-not (Test-Path (Join-Path $pgPkgConfig "openssl.pc"))) {
+		New-Item -ItemType Directory -Force -Path $pgPkgConfig | Out-Null
+		$pcPrefix = $opensslInstall -replace '\\', '/'
+		@"
+prefix=$pcPrefix
+exec_prefix=`${prefix}
+libdir=`${exec_prefix}/lib
+includedir=`${prefix}/include
+
+Name: OpenSSL
+Description: Secure Sockets Layer and cryptography libraries and tools
+Version: 3.5.9
+Requires: libssl libcrypto
+"@ | Set-Content -Path (Join-Path $pgPkgConfig "openssl.pc")
+		@"
+prefix=$pcPrefix
+exec_prefix=`${prefix}
+libdir=`${exec_prefix}/lib
+includedir=`${prefix}/include
+
+Name: OpenSSL-libssl
+Description: Secure Sockets Layer and cryptography libraries
+Version: 3.5.9
+Requires.private: libcrypto
+Libs: -L`${libdir} -lssl
+Cflags: -I`${includedir}
+"@ | Set-Content -Path (Join-Path $pgPkgConfig "libssl.pc")
+		@"
+prefix=$pcPrefix
+exec_prefix=`${prefix}
+libdir=`${exec_prefix}/lib
+includedir=`${prefix}/include
+
+Name: OpenSSL-libcrypto
+Description: OpenSSL cryptography library
+Version: 3.5.9
+Libs: -L`${libdir} -lcrypto
+Libs.private: -lcrypt32 -lws2_32 -lgdi32 -luser32 -ladvapi32 -lbcrypt
+Cflags: -I`${includedir}
+"@ | Set-Content -Path (Join-Path $pgPkgConfig "libcrypto.pc")
+	}
+	# The MSYS2 pkgconf ignores PKG_CONFIG_PATH, so Meson cannot find the .pc
+	# files through it.  A small Windows-native Python shim is the pkg-config
+	# Meson invokes (via PKG_CONFIG): it reads PKG_CONFIG_PATH itself and answers
+	# the --modversion/--cflags/--libs/--print-requires questions.
+	$pgPkgConfigPy = Join-Path $dummyTools "pkg-config.py"
+	@'
+import os, re, sys
+
+def read_pc(name, dirs):
+    for d in dirs:
+        p = os.path.join(d, name + ".pc")
+        if os.path.isfile(p):
+            with open(p, "r") as f:
+                return f.read()
+    return None
+
+def parse(text):
+    vars = {"prefix": "/usr"}
+    fields = {}
+    for line in text.splitlines():
+        s = line.strip()
+        if not s or s.startswith("#"):
+            continue
+        m = re.match(r"^([A-Za-z_][A-Za-z0-9_]*)=(.*)$", s)
+        if m:
+            vars[m.group(1)] = m.group(2)
+        elif ":" in s and not s.startswith(" "):
+            k, v = s.split(":", 1)
+            fields.setdefault(k, []).append(v.strip())
+    return vars, fields
+
+def expand(s, vars):
+    prev = None
+    while prev != s:
+        prev = s
+        s = re.sub(r"\$\{([^}]+)\}", lambda m: vars.get(m.group(1), ""), s)
+    return s
+
+def collect(pkg, dirs, vars, fields, seen):
+    if pkg in seen:
+        return True
+    seen.add(pkg)
+    text = read_pc(pkg, dirs)
+    if text is None:
+        return False
+    v, f = parse(text)
+    vars.update(v)
+    for k, vals in f.items():
+        fields.setdefault(k, []).extend(vals)
+    for r in list(fields.get("Requires", [])) + list(fields.get("Requires.private", [])):
+        for dep in r.replace(",", " ").split():
+            if not collect(dep, dirs, vars, fields, seen):
+                return False
+    return True
+
+def main():
+    args = sys.argv[1:]
+    pkgs = [a for a in args if not a.startswith("-")]
+    dirs = [p for p in os.environ.get("PKG_CONFIG_PATH", "").split(os.pathsep) if p]
+    vars, fields, seen = {}, {}, set()
+    ok = True
+    for p in pkgs:
+        if not collect(p, dirs, vars, fields, seen):
+            ok = False
+    if "--version" in args and not pkgs:
+        print("0.29.2")
+        return 0
+    if "--modversion" in args:
+        if not ok:
+            print("Package %s was not found in the pkg-config search path." % ", ".join(pkgs), file=sys.stderr)
+            return 1
+        for line in fields.get("Version", ["0.0.0"]):
+            print(line)
+        return 0
+    if "--exists" in args:
+        return 0 if ok else 1
+    if any(a.startswith("--atleast-version") or a.startswith("--exact-version") for a in args):
+        return 0 if ok else 1
+    if not ok:
+        print("Package %s was not found in the pkg-config search path." % ", ".join(pkgs), file=sys.stderr)
+        return 1
+    want_cflags = "--cflags" in args or "--cflags-only-I" in args or "--cflags-only-other" in args
+    want_libs = "--libs" in args or "--libs-only-l" in args or "--libs-only-L" in args or "--libs-only-other" in args or "--static" in args
+    want_requires = "--print-requires" in args
+    out = []
+    if want_requires:
+        for line in fields.get("Requires", []):
+            out.append(line)
+    if want_cflags:
+        for line in fields.get("Cflags", []):
+            out.append(expand(line, vars))
+    if want_libs:
+        for line in fields.get("Libs", []) + fields.get("Libs.private", []):
+            out.append(expand(line, vars))
+    print(" ".join(out))
+    return 0
+
+sys.exit(main())
+'@ | Set-Content -Path $pgPkgConfigPy
+	$pgPkgConfigExe = Join-Path $dummyTools "pkg-config.exe"
+	if (-not (Test-Path $pgPkgConfigExe)) {
+		$pyPath = "C:/Users/Michael/AppData/Local/Programs/Python/Python313/python.exe"
+		$scriptFwd = $pgPkgConfigPy -replace '\\', '/'
+		@"
+#include <process.h>
+#include <stdlib.h>
+int main(int argc, char **argv) {
+    const char *python = "$pyPath";
+    const char *script = "$scriptFwd";
+    const char **v = (const char **)malloc(sizeof(char *) * (argc + 2));
+    v[0] = python; v[1] = script;
+    for (int i = 1; i < argc; i++) v[i + 1] = argv[i];
+    v[argc + 1] = 0;
+    return (int)_spawnv(_P_WAIT, python, v);
+}
+"@ | Set-Content -Path (Join-Path $dummyTools "pkg-config-launcher.c")
+		& clang (Join-Path $dummyTools "pkg-config-launcher.c") -o $pgPkgConfigExe 2>&1 | ForEach-Object { Write-Host $_ }
+		if ($LASTEXITCODE -ne 0) { throw "pkg-config launcher compile failed" }
+	}
+	$env:PKG_CONFIG = $pgPkgConfigExe
+	$env:CC = "cl"
+	$env:CXX = "cl"
+	& $MesonExe setup $pgBuild $pgSource `
+		"--backend=ninja" `
+		"-DPERL=C:/Strawberry/perl/bin/perl.exe" `
+		"-DFLEX=$flexBat" "-DBISON=$bisonBat" `
+		"-Dextra_include_dirs=$($opensslInclude -replace '\\','/')" `
+		"-Dextra_lib_dirs=$((Join-Path $opensslInstall 'lib') -replace '\\','/')" `
+		"-Dssl=openssl" `
+		"-Dzlib=disabled" "-Dreadline=disabled" "-Dicu=disabled" `
+		"-Dlz4=disabled" "-Dzstd=disabled" "-Dgssapi=disabled" `
+		"-Dldap=disabled" "-Dpam=disabled" "-Dbonjour=disabled" `
+		"-Dlibxml=disabled" "-Dnls=disabled" `
+		"-Dbuildtype=release" "-Ddefault_library=static" `
+		2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "postgres meson setup failed" }
+	Write-Host "  building postgres libpq + pgcommon_shlib + pgport_shlib (static)"
+	# The _shlib variants are the frontend ones that export the nominal
+	# pg_char_to_encoding()/pg_encoding_to_char() names (the plain libpgcommon.a
+	# is built with -DUSE_PRIVATE_ENCODING_FUNCS and only exports the "_private"
+	# spellings libpq does not call).  Same choice as Linux/lib/libraries.sh.
+	& ninja -C $pgBuild src/interfaces/libpq/libpq.a src/common/libpgcommon_shlib.a src/port/libpgport_shlib.a 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "postgres libpq build failed" }
+	# Meson produces GNU-ar .a archives, but lld-link resolves members only out of
+	# COFF .lib archives.  llvm-lib converts (and merges) the three into one COFF
+	# libpq.lib the frameworks link.
+	& llvm-lib /out:$postgresLib `
+		(Join-Path $pgBuild "src\interfaces\libpq\libpq.a") `
+		(Join-Path $pgBuild "src\common\libpgcommon_shlib.a") `
+		(Join-Path $pgBuild "src\port\libpgport_shlib.a") 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "postgres libpq.lib archive failed" }
+	Write-Host "  ok   libpq.lib built"
+} else {
+	Write-Host "  ok   libpq.lib (cached)"
+}
+$env:PKG_CONFIG_PATH = ""
+$env:PKG_CONFIG = $null
+$env:CC = $oldCC
+$env:CXX = $oldCXX
+$env:INCLUDE = $oldInclude
+$env:LIB = $oldLib
+$env:PATH = $oldPath
+
+# Assemble the libpq client headers (a few are generated by Meson, the rest are
+# source) into one flattened directory so <libpq-fe.h> and <MADPostgres/...>
+# both resolve from a single include root, the same way Linux/lib/libraries.sh
+# copies them into /usr/local/include.
+if (-not (Test-Path (Join-Path $postgresHeaders "libpq-fe.h"))) {
+	New-Item -ItemType Directory -Force -Path $postgresHeaders | Out-Null
+	Copy-Item (Join-Path $postgresDir "src\interfaces\libpq\libpq-fe.h") $postgresHeaders -Force
+	Copy-Item (Join-Path $postgresDir "src\interfaces\libpq\libpq-events.h") $postgresHeaders -Force
+	Copy-Item (Join-Path $postgresDir "src\include\postgres_ext.h") $postgresHeaders -Force
+	Copy-Item (Join-Path $postgresDir "src\include\pg_config_manual.h") $postgresHeaders -Force
+	foreach ($h in @("pg_config.h", "pg_config_ext.h", "pg_config_os.h")) {
+		$gen = Get-ChildItem -Path $postgresBuild -Recurse -Filter $h -File -ErrorAction SilentlyContinue | Select-Object -First 1
+		if (-not $gen) { throw "generated $h not found under $postgresBuild" }
+		Copy-Item $gen.FullName (Join-Path $postgresHeaders $h) -Force
+	}
+	$typd = Get-ChildItem -Path $postgresBuild -Recurse -Filter "pg_type_d.h" -File -ErrorAction SilentlyContinue | Select-Object -First 1
+	if (-not $typd) { throw "generated pg_type_d.h not found under $postgresBuild" }
+	Copy-Item $typd.FullName (Join-Path $postgresHeaders "pg_type_d.h") -Force
+}
+
+if ($LibrariesOnly) {
+	Write-Host "### Libraries built (-LibrariesOnly); stopping before the framework compile."
+	exit 0
+}
+
+# ---------------------------------------------------------------------------
 # 4. Framework compile
 # ---------------------------------------------------------------------------
 
@@ -418,6 +875,10 @@ $sqlite3Source = Join-Path $RepoRoot "MADSqlite3\Source"
 $cocoSource = Join-Path $RepoRoot "MADCocoaExtensions\Source"
 $fmSource = Join-Path $RepoRoot "MADFileManager\Source"
 $madSource = Join-Path $RepoRoot "MAD\Source"
+$mysqlSource = Join-Path $RepoRoot "MADMySQL\Source"
+$tdsSource = Join-Path $RepoRoot "MADTds\MADTds"
+$tdsClientSource = Join-Path $RepoRoot "MADTdsClient\Source"
+$pgSource = Join-Path $RepoRoot "MADPostgres\Source"
 
 $dsFlags = {
 	param($f)
@@ -438,6 +899,47 @@ $fdFlags = {
 }
 
 $arcFlags = { param($f) return @("-fobjc-arc") }
+
+# The driver frameworks expose C headers the Xcode targets keep Public:
+#   <MADTds/sybdb.h> and <MADTds/tds_sysdep_public.h>    (freetds)
+#   <MADTdsClient/MADTdsClient.h>                         (the umbrella above Source/)
+#   <MADPostgres/libpq-fe.h>, postgres_ext.h, pg_config_ext.h, pg_type_d.h (libpq)
+# These are copies beside the framework self-import junctions, the same shape as
+# Linux's sybdb-shim/umbrella-shim/libpq-shim directories.
+$SybdbShimDir = Join-Path $BuildDir "sybdb-shim"
+$UmbrellaShimDir = Join-Path $BuildDir "umbrella-shim"
+$LibpqShimDir = Join-Path $BuildDir "libpq-shim"
+foreach ($d in @((Join-Path $SybdbShimDir "MADTds"),
+				 (Join-Path $UmbrellaShimDir "MADTdsClient"),
+				 (Join-Path $LibpqShimDir "MADPostgres"))) {
+	New-Item -ItemType Directory -Force -Path $d | Out-Null
+}
+# <MADTds/sybdb.h> and <MADTds/tds_sysdep_public.h> are copies of the freetds
+# "installed" headers, whose sybdb.h already carries the BOOL edit + notice.
+Copy-Item (Join-Path $freetdsInclude "sybdb.h") (Join-Path $SybdbShimDir "MADTds\sybdb.h") -Force
+Copy-Item (Join-Path $freetdsInclude "tds_sysdep_public.h") (Join-Path $SybdbShimDir "MADTds\tds_sysdep_public.h") -Force
+Copy-Item (Join-Path $RepoRoot "MADTdsClient\MADTdsClient.h") (Join-Path $UmbrellaShimDir "MADTdsClient\MADTdsClient.h") -Force
+foreach ($h in @("libpq-fe.h", "postgres_ext.h", "pg_config_ext.h", "pg_type_d.h")) {
+	Copy-Item (Join-Path $postgresInclude $h) (Join-Path $LibpqShimDir "MADPostgres\$h") -Force
+}
+
+# The driver frameworks' C-header include dirs, per-framework (not global) so
+# they do not shadow the other frameworks' headers.
+$mysqlIncludeDirs = @($mariadbInclude)
+$tdsIncludeDirs = @($SybdbShimDir, $freetdsInclude)
+$tdsClientIncludeDirs = @($SybdbShimDir, $UmbrellaShimDir, $freetdsInclude)
+$pgIncludeDirs = @($LibpqShimDir, $postgresInclude)
+
+$mysqlFlags = { param($f) $flags = @("-fobjc-arc"); foreach ($d in $script:mysqlIncludeDirs) { $flags += "-I$d" }; return $flags }
+$tdsFlags = { param($f) $flags = @("-fobjc-arc"); foreach ($d in $script:tdsIncludeDirs) { $flags += "-I$d" }; return $flags }
+$tdsClientFlags = { param($f) $flags = @("-fobjc-arc"); foreach ($d in $script:tdsClientIncludeDirs) { $flags += "-I$d" }; return $flags }
+$pgFlags = { param($f) $flags = @("-fobjc-arc"); foreach ($d in $script:pgIncludeDirs) { $flags += "-I$d" }; return $flags }
+
+# The union of the driver include dirs, for the test and CLI compile lines (the
+# driver tests import <MADMySQL/...>, <MADTds/...>, <MADTdsClient/...>,
+# <MADPostgres/...>, whose headers reach the C library headers).
+$driverIncludeDirs = @($mariadbInclude, $SybdbShimDir, $UmbrellaShimDir, $LibpqShimDir,
+						$freetdsInclude, $postgresInclude)
 
 Compile-FrameworkSources "MADDataStructures" "ds_" $dsSource (Join-Path $EngineDir "cmake\MADDataStructuresSources.cmake") $dsFlags
 Compile-FrameworkSources "MADFoundation" "fd_" $fdSource (Join-Path $EngineDir "cmake\MADFoundationSources.cmake") $fdFlags
@@ -471,6 +973,25 @@ $madFlags = {
 }
 Compile-FrameworkSources "MAD" "mad_" $madSource (Join-Path $EngineDir "cmake\MADSources.cmake") $madFlags
 
+# The four driver frameworks.  MADMySQL, MADTdsClient and MADPostgres are linked
+# whole (their work is reached through categories), exactly as Linux
+# whole-archives them.  MADTds is the exception: MADTdsDb.m defines the global
+# err_handler symbol that MADTdsClient's MADDatabaseSQLServer.m also defines, so
+# its object is archived by itself and linked normally -- it resolves only if
+# something references it, which the headless engine does not (nothing names the
+# MADTdsDb class; Linux/CMakeLists.txt:416 records the same).
+New-Shim "MADTds" $tdsSource
+Compile-FrameworkSources "MADMySQL" "mysql_" $mysqlSource (Join-Path $EngineDir "cmake\MADMySQLSources.cmake") $mysqlFlags
+Compile-FrameworkSources "MADTdsClient" "tdsc_" $tdsClientSource (Join-Path $EngineDir "cmake\MADTdsClientSources.cmake") $tdsClientFlags
+Compile-FrameworkSources "MADPostgres" "pg_" $pgSource (Join-Path $EngineDir "cmake\MADPostgresSources.cmake") $pgFlags
+
+Write-Host "### MADTds"
+$tdsObj = Join-Path $ObjDir "tds_MADTdsDb.obj"
+Compile-One (Join-Path $tdsSource "MADTdsDb.m") $tdsObj (@(& $tdsFlags "MADTdsDb.m"))
+$madtdsLib = Join-Path $BuildDir "madtds.lib"
+& llvm-lib /out:$madtdsLib $tdsObj 2>&1 | ForEach-Object { Write-Host $_ }
+if ($LASTEXITCODE -ne 0) { throw "madtds archive failed" }
+
 # --- Compat shims -----------------------------------------------------------
 Write-Host "### Compat shims"
 foreach ($m in (Get-ChildItem -Path $CompatDir -Filter *.m -File)) {
@@ -494,18 +1015,23 @@ $linkLibs = @(
 	"-lgnustep-base", "-lobjc", "-ldispatch",
 	"-lws2_32", "-ladvapi32", "-lcomctl32", "-luser32", "-lcomdlg32", "-lmpr", "-lnetapi32",
 	"-lkernel32", "-lshell32", "-lmsvcrt", "-lvcruntime", "-lucrt", "-lpsapi",
-	"-lole32", "-lxmllite"
+	"-lole32", "-lxmllite", "-lcrypt32", "-lsecur32", "-lshlwapi", "-lgdi32", "-lbcrypt"
 )
 
 # The static C libraries, in link order: the framework objects come first, then
-# the archive stack.  libarchive references zlib and bzip2, so it precedes them.
-$archiveLibs = @($sqliteLib, $libarchiveLib, $zlibLib, $bzip2Lib)
+# the driver libraries, then the archive stack.  libarchive references zlib and
+# bzip2, so it precedes them; openssl is linked once, after the three drivers
+# that reference it (freetds, mariadb, libpq).  madtds.lib (MADTdsDb) is linked
+# normally, not whole: its member is dropped unless something references the
+# MADTdsDb class, which the headless engine does not.
+$archiveLibs = @($freetdsLib, $freetdsTdsLib, $freetdsReplacementsLib, $freetdsTdsutilsLib,
+				$mariadbLib, $postgresLib, $opensslLibSsl, $opensslLibCrypto,
+				$sqliteLib, $libarchiveLib, $zlibLib, $bzip2Lib, $madtdsLib)
 
 # The ported Linux test suites (Linux/Tests), one executable per file.  Tests
 # are manual-retain-release (GNUstep's Testing.h is MRC) while the frameworks
-# stay ARC, exactly as on Linux.  BDHostTests is not here: BDHost.m is excluded
-# on Windows (see cmake/MADFoundationSources.cmake), so its suite cannot link;
-# the gap is recorded rather than silently skipped.
+# stay ARC, exactly as on Linux.  BDHostTests is registered: BDHost.m carries a
+# Winsock2 branch (see MADFoundation/Source/BDHost.m) and links here.
 $testNames = @(
 	# MADDataStructures
 	"MADDataStructuresTests", "MADMapStringsTests", "MADVectorBoolTests",
@@ -516,7 +1042,7 @@ $testNames = @(
 	"MADBlockOperationTests", "MADGroupOperationTests", "MADOperationQueueTests",
 	"MADNotificationProgressTests", "MADExclusivityControllerTests", "MADOperationTests",
 	"MADOperationConditionTests", "MADOperationConditionResultTests", "MADDataColumnTests",
-	"MADCredentialTests", "MADApplicationTests", "MADBlockObserverTests",
+	"MADCredentialTests", "BDHostTests", "MADApplicationTests", "MADBlockObserverTests",
 	"MADDataTableBaseTests", "MADDataTableVirtualTests", "MADOperationBooleanAndTests",
 	"MADURLFactoryTests", "NSOperationAdvancedTests", "madlibTests",
 	# MADSqlite3
@@ -536,14 +1062,17 @@ $testNames = @(
 	"MADDatabaseConnectionTests", "MADDatabaseDataBindingTests",
 	"MADDatabaseFieldTests", "MADDatabaseTableTests", "MADDatabaseTests",
 	"MADErrorContainerTests", "MADNotificationDidReadRowsTests", "MADQueryTests",
-	# MAD.  Four of the Linux MAD suites are deferred to Phase 3b with the
-	# drivers: MADDatabaseDriverDispatchTests, MADQueryFullTests and
-	# MADSQLParserTests each import and instantiate MADMySQL/MADTdsClient/
-	# MADPostgres, whose frameworks (and the live fixtures) Phase 3a does not
-	# build, and MADQueryMaxFieldLengthTests dispatches MADDatabaseTypeMySQL
-	# through the constructor (no driver is registered).  The gap is recorded
-	# here rather than silently skipped, exactly as BDHostTests is above.
+	# MADMySQL
+	"MADMySQLLiveTests", "MADMySQLTests", "MADMySQLDeleteTests",
+	"MADMySQLExceptionTests", "MADMySQLFetchFieldTests", "MADMySQLInsertTests",
+	"MADMySQLSupportTypesTests", "MADMySQLTruncateTests", "MADMySQLUpdateTests",
+	# MADTdsClient (its suite is what exercises MADTds)
+	"MADTdsClientTests", "MADTdsClientLiveTests",
+	# MADPostgres
+	"MADPostgresLiveTests", "MADPostgresTests",
+	# MAD.  The four suites that need the drivers are wired with them.
 	"MADArchiveManagerTests", "MADCoreLogicTests",
+	"MADDatabaseDriverDispatchTests",
 	"MADHeadlessDocumentTests", "MADDataTableRegressionTests",
 	"MADDesignerQueryTests", "MADDesignerViewerTests",
 	"MADDocumentObjectDataReferenceTests", "MADDocumentObjectDataReferenceAggregateTests",
@@ -552,9 +1081,10 @@ $testNames = @(
 	"MADLegacyStoreConversionTests", "MADModelQueryFieldTests", "MADModelQueryTableTests",
 	"MADNotificationAndOperationTests", "MADOperationHoldsProtocolsTests",
 	"MADPageOptionsTests", "MADQueryCacheAggregateFunctionTests", "MADQueryDefinitionTests",
-	"MADSQLQueryCompilerTests",
+	"MADSQLParserTests", "MADSQLQueryCompilerTests",
 	"MADQueryPredicateTests", "MADQuerySampleDataTests", "MADQuerySelectExpressionTests",
-	"MADQueryTestTests", "MADQueryFullTableEnumeratorTests",
+	"MADQueryTestTests", "MADQueryFullTests", "MADQueryMaxFieldLengthTests",
+	"MADQueryFullTableEnumeratorTests",
 	"MADQuerySimpleTypesTests", "MADReportExporterTests", "MADReportSectionEnumeratorTests",
 	"MADReportSectionRepresentationTests", "MADReportSectionTests", "MADRptqDatabaseTests",
 	"MADRptqDocumentSectionTests", "MADRptqQueryTests", "MADRptqValueTypeTests",
@@ -564,12 +1094,14 @@ $testNames = @(
 )
 
 $testExes = New-Object System.Collections.Generic.List[string]
+$testCompileFlags = @("-fno-objc-arc", "-I$TestingInclude", "-I$TestsSupportDir", "-I$Sqlite3Dir")
+foreach ($d in $driverIncludeDirs) { $testCompileFlags += "-I$d" }
 foreach ($name in $testNames) {
 	$src = Join-Path $EngineDir ("Tests\" + $name + ".m")
 	$obj = Join-Path $ObjDir ("test_" + $name + ".obj")
 	$exe = Join-Path $TestExeDir ($name + ".exe")
 	Write-Host "### test $name"
-	Compile-One $src $obj @("-fno-objc-arc", "-I$TestingInclude", "-I$TestsSupportDir", "-I$Sqlite3Dir")
+	Compile-One $src $obj $testCompileFlags
 	Write-Host "  linking $name.exe"
 	& clang "-fuse-ld=lld" "-fexceptions" "-fobjc-runtime=gnustep-2.2" "-fblocks" "-m64" `
 		"-L$GsLib" @allObjects $obj @archiveLibs @linkLibs `
@@ -598,6 +1130,7 @@ if ($LASTEXITCODE -ne 0) { throw "link failed" }
 Write-Host "### CLI (mad.exe)"
 $cliSourceDir = Join-Path $RepoRoot "CLI\Source"
 $cliFlags = @("-fobjc-arc", "-I$cliSourceDir", "-I$Sqlite3Dir")
+foreach ($d in $driverIncludeDirs) { $cliFlags += "-I$d" }
 $cliObjects = New-Object System.Collections.Generic.List[string]
 foreach ($f in (Get-ChildItem -Path $cliSourceDir -Filter *.m -File | Sort-Object Name)) {
 	$obj = Join-Path $ObjDir ("cli_" + $f.BaseName + ".obj")
