@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Mad.Designer.Windows/Mad.Designer.Windows.csproj" />
+  <Project Path="Mad.Designer.Windows.Tests/Mad.Designer.Windows.Tests.csproj" />
+</Solution>
