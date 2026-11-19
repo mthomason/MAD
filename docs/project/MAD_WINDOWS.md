@@ -441,6 +441,40 @@ export json (76 rows) / csv (78 lines) → clean shutdown with no orphan, plus t
 `net10.0-windows` (pinned by `Windows/global.json`); the Linux CI is unaffected (it never
 builds .NET).
 
+## 6f. Phase 6c — the report-layout model (Designer)
+
+Phase 6c extends `serve` with the report-layout model the Designer workspace edits, using the
+same granular pattern as the 6b query-model methods. `layout-model` reads the full snapshot;
+every mutation method mutates the existing `RptqDocumentSection`/`RptqDocumentElement` objects
+and answers that same snapshot, so the client replaces its state atomically. Barcode is an
+accepted gap (the Windows engine excludes `MADBarcodes`); Image is a placeholder (the engine's
+`NSImage`/`UIImage` payload does not exist off Apple); colours are deferred (no portable colour
+type in the headless model). Undo/redo is client-side.
+
+| method | params | result |
+|---|---|---|
+| `layout-model` | `handle` | `paperSize`, `sections[]`, `elements[]`, `fields[]` |
+| `add-element` | `handle`, `kind` (`label`\|`data-field`\|`aggregate`\|`image`\|`line`), `section`, `x`, `y` | the full snapshot |
+| `remove-elements` | `handle`, `elements: [id…]` | the full snapshot |
+| `duplicate-elements` | `handle`, `elements: [id…]` | the full snapshot |
+| `move-elements` | `handle`, `elements: [id…]`, `section` | the full snapshot |
+| `set-element-geometry` | `handle`, `elements: [{id,x,y,w,h}…]` | the full snapshot |
+| `set-element-content` | `handle`, `element`, `content{text,field,function,scope,group}` | the full snapshot |
+| `set-element-typography` | `handle`, `elements: [id…]`, `style{fontname,fontsize,bold,italic,underline,strikethrough,hAlign,vAlign}` | the full snapshot |
+| `set-element-box-model` | `handle`, `elements: [id…]`, `box{borderTop,borderBottom,borderLeft,borderRight,padding,margin}` | the full snapshot |
+| `set-section` | `handle`, `section`, `{height,visible,pageBreak}` | the full snapshot |
+| `set-paper-size` | `handle`, `paperSize` (`MTPaperType` int16: Letter 2 / Legal 7 / A4 19) | the full snapshot |
+
+The snapshot carries the sections in the designer's canonical order (Report Header, Page
+Header, Group Headers, Detail, Group Footers, Page Footer, Report Footer), each with `id`,
+`type` (`MADocumentSectionType`), `title`, `height` (the interface height `layoutHeight`),
+`visible`, `pageBreak` and `groupField`. Each element carries `id`, `type`
+(`MADPrintPageElementType`), `section`, `x/y/w/h`, `text`, `field` (bound query-field id),
+`table`/`column`, `function`/`scope`/`group` (aggregate), `fontname`/`fontsize`,
+`bold`/`italic`/`underline`/`strikethrough`, `hAlign`/`vAlign`, `borderTop`/`borderBottom`/
+`borderLeft`/`borderRight`, `padding` and `margin`. `fields[]` lists the query fields (with
+store ids) for the sidebar browser and the binding popup.
+
 ## 7. Supported Windows versions
 
 .NET 10's supported OS matrix (Windows 10 Enterprise 21H2/1809/1607, Windows
