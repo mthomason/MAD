@@ -34,6 +34,7 @@ public sealed class DesignerViewModel : ObservableObject
     private bool _isBusy;
     private string? _errorText;
     private bool _isUpdatingInspector;
+    private readonly UndoRedoStack _undoRedo = new();
 
     public DesignerViewModel(EngineService engine)
     {
@@ -45,6 +46,8 @@ public sealed class DesignerViewModel : ObservableObject
         AddLineRuleCommand = new AsyncRelayCommand(() => AddPaletteAsync("line", 320, 8), () => HasDocument);
         DeleteElementCommand = new AsyncRelayCommand(DeleteElementAsync, () => HasDocument && SelectedElementIds.Count > 0);
         DuplicateElementCommand = new AsyncRelayCommand(DuplicateElementAsync, () => HasDocument && SelectedElementIds.Count > 0);
+        UndoCommand = new AsyncRelayCommand(UndoAsync, () => _undoRedo.CanUndo);
+        RedoCommand = new AsyncRelayCommand(RedoAsync, () => _undoRedo.CanRedo);
     }
 
     public bool HasDocument => _handle >= 0;
@@ -56,6 +59,11 @@ public sealed class DesignerViewModel : ObservableObject
     public AsyncRelayCommand AddLineRuleCommand { get; }
     public AsyncRelayCommand DeleteElementCommand { get; }
     public AsyncRelayCommand DuplicateElementCommand { get; }
+    public AsyncRelayCommand UndoCommand { get; }
+    public AsyncRelayCommand RedoCommand { get; }
+
+    public bool CanUndo => _undoRedo.CanUndo;
+    public bool CanRedo => _undoRedo.CanRedo;
 
     public LayoutModel Model => _model;
     public IReadOnlyList<LayoutSection> Sections => _model.Sections;
@@ -192,37 +200,214 @@ public sealed class DesignerViewModel : ObservableObject
     public Point NextAvailableOrigin(long sectionId, double w, double h)
         => NextAvailableOrigin(_model.Elements, sectionId, w, h, GridSpacing, SnapToGrid);
 
-    // ---- mutation wrappers (thin; each re-applies the snapshot) ----
+    // ---- mutation wrappers (each records its inverse for client-side undo) ----
 
     public Task AddElementAsync(string kind, long section, double x, double y)
-        => MutateAsync(() => _engine.AddElementAsync(_handle, kind, section, x, y));
+    {
+        long newId = 0;
+        return MutateAsync(
+            "Insert Element",
+            async () =>
+            {
+                var model = await _engine.AddElementAsync(_handle, kind, section, x, y);
+                newId = model.Elements.MaxBy(e => e.Id)!.Id;
+                return model;
+            },
+            () => _engine.RemoveElementsAsync(_handle, new[] { newId }),
+            () => _engine.AddElementAsync(_handle, kind, section, x, y));
+    }
 
     public Task RemoveElementsAsync(IReadOnlyList<long> elements)
-        => MutateAsync(() => _engine.RemoveElementsAsync(_handle, elements));
+    {
+        var removed = _model.Elements.Where(e => elements.Contains(e.Id)).ToList();
+        return MutateAsync(
+            "Delete Element",
+            () => _engine.RemoveElementsAsync(_handle, elements),
+            removed.Count > 0 ? () => RestoreElementsAsync(removed) : null,
+            () => _engine.RemoveElementsAsync(_handle, elements));
+    }
 
     public Task DuplicateElementsAsync(IReadOnlyList<long> elements)
-        => MutateAsync(() => _engine.DuplicateElementsAsync(_handle, elements));
+    {
+        var before = new HashSet<long>(_model.Elements.Select(e => e.Id));
+        long[] dupIds = Array.Empty<long>();
+        return MutateAsync(
+            "Duplicate Element",
+            async () =>
+            {
+                var model = await _engine.DuplicateElementsAsync(_handle, elements);
+                dupIds = model.Elements.Where(e => !before.Contains(e.Id)).Select(e => e.Id).ToArray();
+                return model;
+            },
+            () => _engine.RemoveElementsAsync(_handle, dupIds),
+            () => _engine.DuplicateElementsAsync(_handle, elements));
+    }
 
     public Task MoveElementsAsync(IReadOnlyList<long> elements, long section)
-        => MutateAsync(() => _engine.MoveElementsAsync(_handle, elements, section));
+    {
+        var oldSections = elements
+            .Where(id => _model.Elements.Any(e => e.Id == id))
+            .Select(id => (Id: id, Section: _model.Elements.First(e => e.Id == id).Section))
+            .ToList();
+
+        Func<Task<LayoutModel>>? undoFn = null;
+        if (oldSections.Count > 0)
+        {
+            undoFn = async () =>
+            {
+                LayoutModel? model = null;
+                foreach (var (id, oldSection) in oldSections)
+                {
+                    model = await _engine.MoveElementsAsync(_handle, new[] { id }, oldSection);
+                }
+                return model!;
+            };
+        }
+
+        return MutateAsync(
+            "Move Element to Section",
+            () => _engine.MoveElementsAsync(_handle, elements, section),
+            undoFn,
+            () => _engine.MoveElementsAsync(_handle, elements, section));
+    }
 
     public Task SetElementGeometryAsync(IReadOnlyList<ElementGeometry> elements)
-        => MutateAsync(() => _engine.SetElementGeometryAsync(_handle, elements));
+    {
+        var newGeom = elements.ToList();
+        var oldGeom = elements
+            .Select(g =>
+            {
+                var el = _model.Elements.FirstOrDefault(e => e.Id == g.Id);
+                return new ElementGeometry(g.Id, el?.X ?? 0, el?.Y ?? 0, el?.W ?? 0, el?.H ?? 0);
+            })
+            .ToList();
+
+        return MutateAsync(
+            "Move / Resize Element",
+            () => _engine.SetElementGeometryAsync(_handle, newGeom),
+            () => _engine.SetElementGeometryAsync(_handle, oldGeom),
+            () => _engine.SetElementGeometryAsync(_handle, newGeom));
+    }
 
     public Task SetElementContentAsync(long element, ElementContent content)
-        => MutateAsync(() => _engine.SetElementContentAsync(_handle, element, content));
+    {
+        var old = _model.Elements.FirstOrDefault(e => e.Id == element);
+        return MutateAsync(
+            "Edit Element Content",
+            () => _engine.SetElementContentAsync(_handle, element, content),
+            old != null ? () => _engine.SetElementContentAsync(_handle, element, CaptureContent(old)) : null,
+            () => _engine.SetElementContentAsync(_handle, element, content));
+    }
 
     public Task SetElementTypographyAsync(IReadOnlyList<long> elements, ElementTypography style)
-        => MutateAsync(() => _engine.SetElementTypographyAsync(_handle, elements, style));
+    {
+        var oldStyles = elements
+            .Where(id => _model.Elements.Any(e => e.Id == id))
+            .Select(id => _model.Elements.First(e => e.Id == id))
+            .Select(CaptureTypography)
+            .ToList();
+
+        return MutateAsync(
+            "Edit Typography",
+            () => _engine.SetElementTypographyAsync(_handle, elements, style),
+            oldStyles.Count > 0 ? () => RestoreTypographyAsync(elements.ToList(), oldStyles) : null,
+            () => _engine.SetElementTypographyAsync(_handle, elements, style));
+    }
 
     public Task SetElementBoxModelAsync(IReadOnlyList<long> elements, ElementBoxModel box)
-        => MutateAsync(() => _engine.SetElementBoxModelAsync(_handle, elements, box));
+    {
+        var oldBoxes = elements
+            .Where(id => _model.Elements.Any(e => e.Id == id))
+            .Select(id => _model.Elements.First(e => e.Id == id))
+            .Select(CaptureBoxModel)
+            .ToList();
+
+        return MutateAsync(
+            "Edit Box Model",
+            () => _engine.SetElementBoxModelAsync(_handle, elements, box),
+            oldBoxes.Count > 0 ? () => RestoreBoxModelAsync(elements.ToList(), oldBoxes) : null,
+            () => _engine.SetElementBoxModelAsync(_handle, elements, box));
+    }
 
     public Task SetSectionAsync(long section, double? height, bool? visible, bool? pageBreak)
-        => MutateAsync(() => _engine.SetSectionAsync(_handle, section, height, visible, pageBreak));
+    {
+        var old = _model.Sections.FirstOrDefault(s => s.Id == section);
+        return MutateAsync(
+            "Edit Section",
+            () => _engine.SetSectionAsync(_handle, section, height, visible, pageBreak),
+            old != null ? () => _engine.SetSectionAsync(_handle, section, old.Height, old.Visible, old.PageBreak) : null,
+            () => _engine.SetSectionAsync(_handle, section, height, visible, pageBreak));
+    }
 
     public Task SetPaperSizeAsync(int paperSize)
-        => MutateAsync(() => _engine.SetPaperSizeAsync(_handle, paperSize));
+    {
+        int old = _model.PaperSize;
+        return MutateAsync(
+            "Change Paper Size",
+            () => _engine.SetPaperSizeAsync(_handle, paperSize),
+            () => _engine.SetPaperSizeAsync(_handle, old),
+            () => _engine.SetPaperSizeAsync(_handle, paperSize));
+    }
+
+    private static ElementContent CaptureContent(LayoutElement el) => new(
+        Text: el.Text,
+        Field: el.Field != 0 ? el.Field : null,
+        Function: el.IsAggregate ? (int)el.Function : null,
+        Scope: el.IsAggregate ? (int)el.Scope : null,
+        Group: el.IsAggregate ? el.Group : null);
+
+    private static ElementTypography CaptureTypography(LayoutElement el) => new(
+        FontName: el.FontName, FontSize: el.FontSize, Bold: el.Bold, Italic: el.Italic,
+        Underline: el.Underline, Strikethrough: el.Strikethrough,
+        HAlign: (int)el.HAlign, VAlign: (int)el.VAlign);
+
+    private static ElementBoxModel CaptureBoxModel(LayoutElement el) => new(
+        BorderTop: el.BorderTop, BorderBottom: el.BorderBottom, BorderLeft: el.BorderLeft,
+        BorderRight: el.BorderRight, Padding: el.Padding, Margin: el.Margin);
+
+    private static string KindFor(LayoutElement el) => el switch
+    {
+        { IsDataField: true } => "data-field",
+        { IsAggregate: true } => "aggregate",
+        { IsImage: true } => "image",
+        { IsLineRule: true } => "line",
+        _ => "label",
+    };
+
+    private async Task<LayoutModel> RestoreTypographyAsync(IReadOnlyList<long> ids, IReadOnlyList<ElementTypography> styles)
+    {
+        LayoutModel? model = null;
+        for (int i = 0; i < ids.Count; i++)
+        {
+            model = await _engine.SetElementTypographyAsync(_handle, new[] { ids[i] }, styles[i]);
+        }
+        return model!;
+    }
+
+    private async Task<LayoutModel> RestoreBoxModelAsync(IReadOnlyList<long> ids, IReadOnlyList<ElementBoxModel> boxes)
+    {
+        LayoutModel? model = null;
+        for (int i = 0; i < ids.Count; i++)
+        {
+            model = await _engine.SetElementBoxModelAsync(_handle, new[] { ids[i] }, boxes[i]);
+        }
+        return model!;
+    }
+
+    private async Task<LayoutModel> RestoreElementsAsync(IReadOnlyList<LayoutElement> elements)
+    {
+        LayoutModel? model = null;
+        foreach (var el in elements)
+        {
+            model = await _engine.AddElementAsync(_handle, KindFor(el), el.Section, el.X, el.Y);
+            var newEl = model.Elements.MaxBy(e => e.Id)!;
+            model = await _engine.SetElementContentAsync(_handle, newEl.Id, CaptureContent(el));
+            model = await _engine.SetElementTypographyAsync(_handle, new[] { newEl.Id }, CaptureTypography(el));
+            model = await _engine.SetElementBoxModelAsync(_handle, new[] { newEl.Id }, CaptureBoxModel(el));
+            model = await _engine.SetElementGeometryAsync(_handle, new[] { new ElementGeometry(newEl.Id, el.X, el.Y, el.W, el.H) });
+        }
+        return model!;
+    }
 
     // ---- inspector edit-properties (commit on change; guard suppresses re-entrancy) ----
 
@@ -380,12 +565,21 @@ public sealed class DesignerViewModel : ObservableObject
         if (section == 0) return;
 
         var origin = NextAvailableOrigin(section, 140, 22);
-        await MutateAsync(async () =>
-        {
-            var afterAdd = await _engine.AddElementAsync(_handle, "data-field", section, origin.X, origin.Y);
-            var element = afterAdd.Elements.MaxBy(e => e.Id)!;
-            return await _engine.SetElementContentAsync(_handle, element.Id, new ElementContent(Field: fieldId));
-        });
+        long newId = 0;
+        await MutateAsync(
+            "Insert Data Field",
+            async () =>
+            {
+                var afterAdd = await _engine.AddElementAsync(_handle, "data-field", section, origin.X, origin.Y);
+                newId = afterAdd.Elements.MaxBy(e => e.Id)!.Id;
+                return await _engine.SetElementContentAsync(_handle, newId, new ElementContent(Field: fieldId));
+            },
+            () => _engine.RemoveElementsAsync(_handle, new[] { newId }),
+            async () =>
+            {
+                var afterAdd = await _engine.AddElementAsync(_handle, "data-field", section, origin.X, origin.Y);
+                return await _engine.SetElementContentAsync(_handle, afterAdd.Elements.MaxBy(e => e.Id)!.Id, new ElementContent(Field: fieldId));
+            });
     }
 
     /// <summary>Flips a band's visibility (double-click in the sections outline).</summary>
@@ -416,14 +610,19 @@ public sealed class DesignerViewModel : ObservableObject
     private static bool Intersects(double x, double y, double w, double h, LayoutElement el)
         => x < el.X + el.W && x + w > el.X && y < el.Y + el.H && y + h > el.Y;
 
-    private async Task MutateAsync(Func<Task<LayoutModel>> mutation)
+    private async Task MutateAsync(string name, Func<Task<LayoutModel>> doFn, Func<Task<LayoutModel>>? undoFn = null, Func<Task<LayoutModel>>? redoFn = null)
     {
         if (!HasDocument) return;
         IsBusy = true;
         ErrorText = null;
         try
         {
-            ApplyModel(await mutation());
+            ApplyModel(await doFn());
+            if (undoFn != null)
+            {
+                _undoRedo.Push(new UndoableEdit(name, undoFn, redoFn ?? doFn));
+                OnUndoChanged();
+            }
         }
         catch (Exception exception)
         {
@@ -433,6 +632,54 @@ public sealed class DesignerViewModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    public async Task UndoAsync()
+    {
+        if (!_undoRedo.CanUndo) return;
+        IsBusy = true;
+        ErrorText = null;
+        try
+        {
+            ApplyModel(await _undoRedo.UndoAsync());
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+            OnUndoChanged();
+        }
+    }
+
+    public async Task RedoAsync()
+    {
+        if (!_undoRedo.CanRedo) return;
+        IsBusy = true;
+        ErrorText = null;
+        try
+        {
+            ApplyModel(await _undoRedo.RedoAsync());
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+            OnUndoChanged();
+        }
+    }
+
+    private void OnUndoChanged()
+    {
+        OnPropertyChanged(nameof(CanUndo));
+        OnPropertyChanged(nameof(CanRedo));
+        UndoCommand.RaiseCanExecuteChanged();
+        RedoCommand.RaiseCanExecuteChanged();
     }
 
     private void ApplyModel(LayoutModel model)
