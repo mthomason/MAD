@@ -468,7 +468,8 @@ add_executable(mad-cli
 	"${CLI_SOURCE_DIR}/MADCLIRefresh.m"
 	"${CLI_SOURCE_DIR}/MADCLISchema.m"
 	"${CLI_SOURCE_DIR}/MADCLIExport.m"
-	"${CLI_SOURCE_DIR}/MADCLIWrite.m")
+	"${CLI_SOURCE_DIR}/MADCLIWrite.m"
+	"${CLI_SOURCE_DIR}/MADCLIServe.m")
 set_target_properties(mad-cli PROPERTIES OUTPUT_NAME mad)
 # The binary's stable path: the runtime stage copies /usr/local/bin/mad, so the
 # CLI is not a build-tree resident.  `cmake --install` writes it (Linux/Dockerfile).
