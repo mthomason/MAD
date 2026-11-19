@@ -49,6 +49,13 @@
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADDataType.h>
 
+#import <MAD/MADDatabase+Constructor.h>
+#import <MADAPI/MADDatabase.h>
+#import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
+#import <MADMySQL/MADDatabaseConnectionMySql.h>
+#import <MADTdsClient/MADDatabaseConnectionSQLServer.h>
+#import <MADPostgres/MADDatabaseConnectionPostgres.h>
+
 #if defined(_WIN32)
 #include <io.h>
 #include <fcntl.h>
@@ -61,6 +68,8 @@ static NSString * const MADCLIServeMethodRefresh	= @"refresh";
 static NSString * const MADCLIServeMethodExport		= @"export";
 static NSString * const MADCLIServeMethodWrite		= @"write";
 static NSString * const MADCLIServeMethodShutdown	= @"shutdown";
+static NSString * const MADCLIServeMethodCreate			= @"create";
+static NSString * const MADCLIServeMethodTestConnection	= @"test-connection";
 
 #pragma mark - Session state
 
@@ -189,6 +198,90 @@ static MADCredential *MADCLIServeCredential(NSString *credentials, NSError **err
 			andPassword: [credentials substringFromIndex: colon.location + 1]];
 }
 
+/// Maps the connection window's wire driver token to a MADDatabaseType.  "sqlserver"
+/// is the wire name for the TDS driver (Microsoft SQL Server).
+static MADDatabaseType MADCLIServeDatabaseTypeForToken(NSString *token) {
+	if ([token isEqualToString: @"sqlite3"]) return MADDatabaseTypeSqlite3;
+	if ([token isEqualToString: @"mysql"]) return MADDatabaseTypeMySQL;
+	if ([token isEqualToString: @"sqlserver"]) return MADDatabaseTypeTDS;
+	if ([token isEqualToString: @"postgres"]) return MADDatabaseTypePostgres;
+	return MADDatabaseTypeNotSet;
+}
+
+static NSString *MADCLIServeTokenForDatabaseType(MADDatabaseType type) {
+	switch (type) {
+		case MADDatabaseTypeSqlite3: return @"sqlite3";
+		case MADDatabaseTypeMySQL: return @"mysql";
+		case MADDatabaseTypeTDS: return @"sqlserver";
+		case MADDatabaseTypePostgres: return @"postgres";
+		default: return @"";
+	}
+}
+
+/// A trimmed, non-empty string parameter, or nil when absent/empty.
+static NSString *MADCLIServeOptionalString(NSDictionary *params, NSString *key) {
+	id value = params[key];
+	if (![value isKindOfClass: [NSString class]]) return nil;
+	NSString *string = [value stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	return string.length > 0 ? string : nil;
+}
+
+/// Builds a MADDatabaseConnection from the connection window's params, mirroring
+/// MADMacConnectionWindowController -buildConnectionWithCredentials:error:.  Answers
+/// nil and fills `error` (code 1) on invalid settings, and hands the parsed
+/// `user:password` credential back through `outCredentials`.
+static MADDatabaseConnection *MADCLIServeBuildConnection(NSDictionary *params, MADCredential **outCredentials, NSError **error) {
+	NSString *driverToken = MADCLIServeOptionalString(params, @"driver");
+	MADDatabaseType type = MADCLIServeDatabaseTypeForToken(driverToken);
+	if (type == MADDatabaseTypeNotSet) {
+		if (error) *error = MADCLIServeUsageError([NSString stringWithFormat: @"unknown driver '%@'.", driverToken ?: @""]);
+		return nil;
+	}
+
+	if (type == MADDatabaseTypeSqlite3) {
+		NSString *file = MADCLIServeOptionalString(params, @"file");
+		if (file.length == 0) {
+			if (error) *error = MADCLIServeUsageError(@"Please choose an existing SQLite database file.");
+			return nil;
+		}
+		if (outCredentials) *outCredentials = nil;
+		// The connect step (not this builder) reports a missing or 0-byte file as
+		// a database-unreachable error, the way MADDatabaseSqlite3 does natively.
+		return [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: [NSURL fileURLWithPath: file isDirectory: NO]];
+	}
+
+	NSString *host = MADCLIServeOptionalString(params, @"host");
+	NSString *database = MADCLIServeOptionalString(params, @"database");
+	if (host.length == 0 || database.length == 0) {
+		if (error) *error = MADCLIServeUsageError(@"Host and Database Name are required.");
+		return nil;
+	}
+
+	MADCredential *credentials = nil;
+	NSString *credentialsParam = MADCLIServeOptionalString(params, @"credentials");
+	if (credentialsParam.length > 0) {
+		credentials = MADCLIServeCredential(credentialsParam, error);
+		if (credentials == nil) return nil;
+	}
+	if (outCredentials) *outCredentials = credentials;
+
+	NSInteger port = [params[@"port"] isKindOfClass: [NSNumber class]] ? [params[@"port"] integerValue] : 0;
+
+	switch (type) {
+		case MADDatabaseTypeMySQL:
+			return [[MADDatabaseConnectionMySql alloc] initWithHost: host database: database andPort: (port > 0 ? port : 3306)];
+		case MADDatabaseTypeTDS: {
+			NSString *server = MADCLIServeOptionalString(params, @"server");
+			if (server.length == 0) server = host;
+			return [[MADDatabaseConnectionSQLServer alloc] initWithHost: host server: server database: database andPort: (port > 0 ? port : 1433)];
+		}
+		case MADDatabaseTypePostgres:
+			return [[MADDatabaseConnectionPostgres alloc] initWithHost: host database: database andPort: (port > 0 ? port : 5432)];
+		default:
+			return nil;
+	}
+}
+
 #pragma mark - Method handlers
 
 /// The column list for a document, in the exact shape the JSON export writes
@@ -278,6 +371,88 @@ static void MADCLIServeOpen(NSDictionary *params, NSMutableDictionary <NSNumber 
 		@"handle": @(handle),
 		@"filename": url.lastPathComponent ?: @"",
 		@"driver": MADCLIServeDriverName(cliDocument.document),
+	});
+}
+
+static void MADCLIServeTestConnection(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	(void)documents;
+
+	NSError *error = nil;
+	MADCredential *credentials = nil;
+	MADDatabaseConnection *connection = MADCLIServeBuildConnection(params, &credentials, &error);
+	if (connection == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	MADDatabase *database = [MADDatabase newDatabaseWithConnection: connection];
+	id dbHandle = [database connectWithConnection: connection credentals: credentials connectionError: &error];
+	if (dbHandle == nil || error != nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitDatabaseUnreachable, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	NSArray <MADDatabaseTable *> *tables = [database getTablesFromConnection: dbHandle error: &error];
+	[database closeConnection: dbHandle];
+	if (error != nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitDatabaseUnreachable, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	MADCLIServeWriteResult(requestID, @{ @"tableCount": @(tables.count) });
+}
+
+static void MADCLIServeCreate(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	NSError *error = nil;
+	NSString *path = MADCLIServeStringParam(params, @"path", &error);
+	if (path == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	MADCredential *credentials = nil;
+	MADDatabaseConnection *connection = MADCLIServeBuildConnection(params, &credentials, &error);
+	if (connection == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	NSURL *url = [NSURL fileURLWithPath: MADCLIResolveArgumentPath(path)];
+	NSError *directoryError = nil;
+	if (![[NSFileManager defaultManager] createDirectoryAtURL: [url URLByDeletingLastPathComponent]
+									  withIntermediateDirectories: YES
+														attributes: nil
+															 error: &directoryError]) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage,
+			[NSString stringWithFormat: @"create: cannot create %@: %@",
+				[url URLByDeletingLastPathComponent].path, directoryError.localizedDescription]);
+		return;
+	}
+
+	MADHeadlessDocument *document = [MADHeadlessDocument createDocumentAtURL: url
+													withDatabaseConnection: connection
+															   credentials: credentials
+																	 error: &error];
+	if (document == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitDatabaseUnreachable, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	NSInteger handle = 0;
+	for (NSNumber *candidate in documents.allKeys) {
+		if (candidate.integerValue >= handle) handle = candidate.integerValue + 1;
+	}
+
+	MADCLIDocument *cliDocument = [[MADCLIDocument alloc] initWithDocument: document];
+	MADCLIServeDocument *entry = [[MADCLIServeDocument alloc] init];
+	entry.document = cliDocument;
+	entry.sourceURL = url;
+	documents[@(handle)] = entry;
+
+	MADCLIServeWriteResult(requestID, @{
+		@"handle": @(handle),
+		@"filename": url.lastPathComponent ?: @"",
+		@"driver": MADCLIServeDriverName(document),
 	});
 }
 
@@ -490,6 +665,10 @@ static BOOL MADCLIServeDispatch(NSDictionary *request, NSMutableDictionary <NSNu
 	@try {
 		if ([method isEqualToString: MADCLIServeMethodOpen]) {
 			MADCLIServeOpen(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodCreate]) {
+			MADCLIServeCreate(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodTestConnection]) {
+			MADCLIServeTestConnection(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodDescribe]) {
 			MADCLIServeDescribe(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodQuery]) {

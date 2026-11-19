@@ -29,6 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// which opens asynchronously on the main queue; headless it is a plain read.
 + (instancetype)documentWithURL:(NSURL *)url error:(NSError * _Nullable __autoreleasing *)error;
 
+/// Wraps an already-created document (e.g. `createDocumentAtURL:`'s result) so the
+/// serve session can adopt it without re-reading the file it just wrote.
+- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document;
+
 @property (readonly, nonatomic, strong) id <MADDocumentDataProtocol> document;
 
 /// The application's refresh chain, without the credentials fetch and without the
