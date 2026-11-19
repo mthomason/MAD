@@ -64,6 +64,7 @@ MADCLIExitCode MADCLIRunQuery(MADCLIInvocation *invocation);
 MADCLIExitCode MADCLIRunRefresh(MADCLIInvocation *invocation);
 MADCLIExitCode MADCLIRunExport(MADCLIInvocation *invocation);
 MADCLIExitCode MADCLIRunWrite(MADCLIInvocation *invocation);
+MADCLIExitCode MADCLIRunServe(MADCLIInvocation *invocation);
 
 /// Logging that respects --quiet and --verbose.  Always to stderr, so stdout is
 /// the result and nothing else.

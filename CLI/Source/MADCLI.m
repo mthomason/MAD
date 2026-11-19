@@ -20,6 +20,7 @@ static NSString * const MADCLICommandQuery		= @"query";
 static NSString * const MADCLICommandRefresh	= @"refresh";
 static NSString * const MADCLICommandExport		= @"export";
 static NSString * const MADCLICommandWrite		= @"write";
+static NSString * const MADCLICommandServe		= @"serve";
 
 static NSError *MADCLIUsageError(NSString *message) {
 	return [NSError errorWithDomain: @"MADCLI"
@@ -144,6 +145,16 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 		return invocation;
 	}
 
+	// `serve` is the long-lived stdio mode (docs/project/MAD_WINDOWS.md §Phase 4): it takes
+	// no document on the command line -- the path arrives in the `open` request.
+	if ([invocation.command isEqualToString: MADCLICommandServe]) {
+		if (positional.count > 1) {
+			if (error) *error = MADCLIUsageError(@"mad serve takes no document.");
+			return nil;
+		}
+		return invocation;
+	}
+
 	if (positional.count < 2) {
 		if (error) *error = MADCLIUsageError([NSString stringWithFormat: @"mad %@ needs a document.", invocation.command]);
 		return nil;
@@ -233,6 +244,7 @@ NSString *MADCLIUsageString(void) {
 			"  refresh   run the query and fill the row cache\n"
 			"  export    render the report and write it out\n"
 			"  write     write the document out as a .mad (a copy; --out is required)\n"
+			"  serve     speak newline-delimited JSON over stdio (the Windows shell's boundary)\n"
 			"\n"
 			"Options:\n"
 			"  --format <name>          output format (export: %@)\n"
