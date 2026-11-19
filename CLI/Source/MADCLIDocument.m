@@ -102,6 +102,13 @@ static NSError *MADCLIDocumentError(NSString *message) {
 	return cli;
 }
 
+- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document {
+	if (self = [super init]) {
+		_document = document;
+	}
+	return self;
+}
+
 #pragma mark - Refresh
 
 - (BOOL)refreshWithCredentials:(MADCredential *)credentials error:(NSError **)error {

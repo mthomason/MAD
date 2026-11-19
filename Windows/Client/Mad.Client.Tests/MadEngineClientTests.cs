@@ -43,6 +43,15 @@ public sealed class MadEngineClientTests
 
 	private static MadEngineClient StartClient() => new(MadExe, GnustepBin);
 
+	private static string ChinookSqlite => Path.Combine(RepoRoot(), "MADDesigner", "Resources", "Assets", "Samples.xcassets", "Data", "chinook.dataset", "chinook.sqlite3");
+
+	private static string CopyChinookToTemp()
+	{
+		string temp = Path.Combine(Path.GetTempPath(), $"mad-chinook-{Guid.NewGuid():N}.sqlite3");
+		File.Copy(ChinookSqlite, temp);
+		return temp;
+	}
+
 	private static Dictionary<string, object?> Dict(params object[] keyValues)
 	{
 		var dictionary = new Dictionary<string, object?>();
@@ -179,6 +188,108 @@ public sealed class MadEngineClientTests
 		var error = client.Call("export", Dict("handle", handle, "format", "pdf"));
 		Assert.False(error.Ok);
 		Assert.Equal(5, error.Error!.Code); // pdf is not available off Apple
+	}
+
+	[Fact]
+	public void TestConnection_Sqlite_ReportsElevenTables()
+	{
+		using var client = StartClient();
+		client.Start();
+
+		string sqlite = CopyChinookToTemp();
+		try
+		{
+			var result = client.CallOk("test-connection", Dict("driver", "sqlite3", "file", sqlite));
+			Assert.Equal(11, result.GetProperty("tableCount").GetInt32());
+		}
+		finally
+		{
+			File.Delete(sqlite);
+		}
+	}
+
+	[Fact]
+	public void TestConnection_MissingSqliteFile_IsDatabaseUnreachable()
+	{
+		using var client = StartClient();
+		client.Start();
+
+		string missing = Path.Combine(Path.GetTempPath(), $"mad-missing-{Guid.NewGuid():N}.sqlite3");
+		var error = client.Call("test-connection", Dict("driver", "sqlite3", "file", missing));
+		Assert.False(error.Ok);
+		Assert.Equal(3, error.Error!.Code);
+		Assert.False(File.Exists(missing));
+	}
+
+	[Fact]
+	public void TestConnection_ServerMissingHost_IsUsageError()
+	{
+		using var client = StartClient();
+		client.Start();
+
+		var error = client.Call("test-connection", Dict("driver", "mysql", "database", "employees"));
+		Assert.False(error.Ok);
+		Assert.Equal(1, error.Error!.Code);
+	}
+
+	[Fact]
+	public void TestConnection_UnknownDriver_IsUsageError()
+	{
+		using var client = StartClient();
+		client.Start();
+
+		var error = client.Call("test-connection", Dict("driver", "oracle"));
+		Assert.False(error.Ok);
+		Assert.Equal(1, error.Error!.Code);
+	}
+
+	[Fact]
+	public void Create_FromSqlite_DescribesSchema()
+	{
+		var client = StartClient();
+		client.Start();
+
+		string sqlite = CopyChinookToTemp();
+		string mad = Path.Combine(Path.GetTempPath(), $"mad-created-{Guid.NewGuid():N}.mad");
+		try
+		{
+			var create = client.CallOk("create", Dict("path", mad, "driver", "sqlite3", "file", sqlite));
+			int handle = create.GetProperty("handle").GetInt32();
+			Assert.True(handle >= 0);
+			Assert.Equal("Sqlite 3", create.GetProperty("driver").GetString());
+
+			var describe = client.CallOk("describe", Dict("handle", handle));
+			Assert.Equal(11, describe.GetProperty("tables").GetArrayLength());
+		}
+		finally
+		{
+			client.Dispose(); // release the engine's handle on the source SQLite before cleanup
+			if (File.Exists(sqlite)) File.Delete(sqlite);
+			if (File.Exists(mad)) File.Delete(mad);
+		}
+	}
+
+	[Fact]
+	public void Create_IntoNewDirectory_Succeeds()
+	{
+		var client = StartClient();
+		client.Start();
+
+		string sqlite = CopyChinookToTemp();
+		string dir = Path.Combine(Path.GetTempPath(), $"mad-newdir-{Guid.NewGuid():N}");
+		string mad = Path.Combine(dir, "report.mad");
+		try
+		{
+			var create = client.CallOk("create", Dict("path", mad, "driver", "sqlite3", "file", sqlite));
+			Assert.True(create.GetProperty("handle").GetInt32() >= 0);
+			Assert.True(File.Exists(mad));
+		}
+		finally
+		{
+			client.Dispose();
+			if (File.Exists(sqlite)) File.Delete(sqlite);
+			if (Directory.Exists(dir)) Directory.Delete(dir, recursive: true);
+		}
 	}
 
 	[Fact]
