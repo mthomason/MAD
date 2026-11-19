@@ -133,11 +133,11 @@ public sealed record LayoutElement(
     double Padding,
     double Margin)
 {
-    /// <summary>True for a plain static label (not a line rule — see <see cref="IsLineRule"/>).</summary>
-    public bool IsLabel => Type == ElementType.LabelStatic && BorderBottom <= 0;
+    /// <summary>True for a horizontal line rule (a static label with empty text and a bottom border).</summary>
+    public bool IsLineRule => Type == ElementType.LabelStatic && string.IsNullOrEmpty(Text) && BorderBottom > 0;
 
-    /// <summary>True for a horizontal line rule (a static label with a bottom border).</summary>
-    public bool IsLineRule => Type == ElementType.LabelStatic && BorderBottom > 0;
+    /// <summary>True for a static label (any static-label element that is not a line rule).</summary>
+    public bool IsLabel => Type == ElementType.LabelStatic && !IsLineRule;
 
     public bool IsDataField => Type == ElementType.LabelDynamic;
     public bool IsAggregate => Type == ElementType.Aggregate;

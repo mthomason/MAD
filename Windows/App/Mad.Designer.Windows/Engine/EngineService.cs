@@ -161,6 +161,102 @@ public sealed class EngineService : IAsyncDisposable
         return SqlCompileResult.Parse(result);
     }
 
+    public async Task<LayoutModel> LayoutModelAsync(int handle)
+    {
+        var result = await CallAsync("layout-model", new Dictionary<string, object?> { ["handle"] = handle }).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> AddElementAsync(int handle, string kind, long section, double x, double y)
+    {
+        var result = await CallAsync("add-element", new Dictionary<string, object?> { ["handle"] = handle, ["kind"] = kind, ["section"] = section, ["x"] = x, ["y"] = y }).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> RemoveElementsAsync(int handle, IReadOnlyList<long> elements)
+    {
+        var result = await CallAsync("remove-elements", new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray() }).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> DuplicateElementsAsync(int handle, IReadOnlyList<long> elements)
+    {
+        var result = await CallAsync("duplicate-elements", new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray() }).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> MoveElementsAsync(int handle, IReadOnlyList<long> elements, long section)
+    {
+        var result = await CallAsync("move-elements", new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray(), ["section"] = section }).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> SetElementGeometryAsync(int handle, IReadOnlyList<ElementGeometry> elements)
+    {
+        var array = elements.Select(e => (object)new Dictionary<string, object?>
+        {
+            ["id"] = e.Id, ["x"] = e.X, ["y"] = e.Y, ["w"] = e.W, ["h"] = e.H,
+        }).ToArray();
+        var result = await CallAsync("set-element-geometry", new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = array }).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> SetElementContentAsync(int handle, long element, ElementContent content)
+    {
+        var contentParams = new Dictionary<string, object?>();
+        if (content.Text != null) contentParams["text"] = content.Text;
+        if (content.Field != null) contentParams["field"] = content.Field;
+        if (content.Function != null) contentParams["function"] = content.Function;
+        if (content.Scope != null) contentParams["scope"] = content.Scope;
+        if (content.Group != null) contentParams["group"] = content.Group;
+        var result = await CallAsync("set-element-content", new Dictionary<string, object?> { ["handle"] = handle, ["element"] = element, ["content"] = contentParams }).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> SetElementTypographyAsync(int handle, IReadOnlyList<long> elements, ElementTypography style)
+    {
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray() };
+        if (style.FontName != null) parameters["fontname"] = style.FontName;
+        if (style.FontSize != null) parameters["fontsize"] = style.FontSize;
+        if (style.Bold != null) parameters["bold"] = style.Bold;
+        if (style.Italic != null) parameters["italic"] = style.Italic;
+        if (style.Underline != null) parameters["underline"] = style.Underline;
+        if (style.Strikethrough != null) parameters["strikethrough"] = style.Strikethrough;
+        if (style.HAlign != null) parameters["hAlign"] = style.HAlign;
+        if (style.VAlign != null) parameters["vAlign"] = style.VAlign;
+        var result = await CallAsync("set-element-typography", parameters).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> SetElementBoxModelAsync(int handle, IReadOnlyList<long> elements, ElementBoxModel box)
+    {
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["elements"] = elements.ToArray() };
+        if (box.BorderTop != null) parameters["borderTop"] = box.BorderTop;
+        if (box.BorderBottom != null) parameters["borderBottom"] = box.BorderBottom;
+        if (box.BorderLeft != null) parameters["borderLeft"] = box.BorderLeft;
+        if (box.BorderRight != null) parameters["borderRight"] = box.BorderRight;
+        if (box.Padding != null) parameters["padding"] = box.Padding;
+        if (box.Margin != null) parameters["margin"] = box.Margin;
+        var result = await CallAsync("set-element-box-model", parameters).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> SetSectionAsync(int handle, long section, double? height, bool? visible, bool? pageBreak)
+    {
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["section"] = section };
+        if (height != null) parameters["height"] = height;
+        if (visible != null) parameters["visible"] = visible;
+        if (pageBreak != null) parameters["pageBreak"] = pageBreak;
+        var result = await CallAsync("set-section", parameters).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
+    public async Task<LayoutModel> SetPaperSizeAsync(int handle, int paperSize)
+    {
+        var result = await CallAsync("set-paper-size", new Dictionary<string, object?> { ["handle"] = handle, ["paperSize"] = paperSize }).ConfigureAwait(false);
+        return LayoutModel.Parse(result);
+    }
+
     public async Task<RefreshResult> RefreshAsync(int handle, int? rows = null, string? credentials = null)
     {
         var parameters = new Dictionary<string, object?> { ["handle"] = handle };
@@ -318,3 +414,29 @@ public sealed class EngineService : IAsyncDisposable
         }
     }
 }
+
+/// <summary>A geometry patch for one element: its store id and new origin/size.</summary>
+public sealed record ElementGeometry(long Id, double X, double Y, double W, double H);
+
+/// <summary>A type-specific content patch. Only non-null members are sent.</summary>
+public sealed record ElementContent(string? Text = null, long? Field = null, int? Function = null, int? Scope = null, int? Group = null);
+
+/// <summary>A bulk typography patch. Only non-null members are sent.</summary>
+public sealed record ElementTypography(
+    string? FontName = null,
+    double? FontSize = null,
+    bool? Bold = null,
+    bool? Italic = null,
+    bool? Underline = null,
+    bool? Strikethrough = null,
+    int? HAlign = null,
+    int? VAlign = null);
+
+/// <summary>A bulk box-model patch. Only non-null members are sent.</summary>
+public sealed record ElementBoxModel(
+    double? BorderTop = null,
+    double? BorderBottom = null,
+    double? BorderLeft = null,
+    double? BorderRight = null,
+    double? Padding = null,
+    double? Margin = null);
