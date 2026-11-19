@@ -51,6 +51,8 @@
 
 #import <MAD/MADDatabase+Constructor.h>
 #import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
+#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
 #import <MADTdsClient/MADDatabaseConnectionSQLServer.h>
@@ -70,6 +72,8 @@ static NSString * const MADCLIServeMethodWrite		= @"write";
 static NSString * const MADCLIServeMethodShutdown	= @"shutdown";
 static NSString * const MADCLIServeMethodCreate			= @"create";
 static NSString * const MADCLIServeMethodTestConnection	= @"test-connection";
+static NSString * const MADCLIServeMethodConnection		= @"connection";
+static NSString * const MADCLIServeMethodApplyConnection	= @"apply-connection";
 
 #pragma mark - Session state
 
@@ -456,6 +460,74 @@ static void MADCLIServeCreate(NSDictionary *params, NSMutableDictionary <NSNumbe
 	});
 }
 
+static MADCLIServeDocument *MADCLIServeLookup(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID);
+
+static void MADCLIServeConnection(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	MADDatabaseConnection *connection = document.database.databaseConnection;
+	if (connection == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"the document has no source database connection.");
+		return;
+	}
+
+	MADDatabaseType type = connection.databaseType;
+	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	result[@"driver"] = MADCLIServeTokenForDatabaseType(type);
+
+	if (type == MADDatabaseTypeSqlite3) {
+		NSString *file = @"";
+		if ([connection conformsToProtocol: @protocol(MADDatabaseConnectionsPropertiesURL)]) {
+			NSURL *databaseURL = ((id <MADDatabaseConnectionsPropertiesURL>)connection).databaseUrl;
+			file = databaseURL.path ?: @"";
+		}
+		result[@"file"] = file;
+	} else if ([connection conformsToProtocol: @protocol(MADConnectionsPropertiesProtocol)]) {
+		id <MADConnectionsPropertiesProtocol> serverConnection = (id <MADConnectionsPropertiesProtocol>)connection;
+		result[@"host"] = serverConnection.host ?: @"";
+		result[@"port"] = @(serverConnection.port);
+		result[@"database"] = serverConnection.database ?: @"";
+		if (type == MADDatabaseTypeTDS) {
+			result[@"server"] = serverConnection.server ?: @"";
+		}
+	}
+
+	MADCLIServeWriteResult(requestID, result);
+}
+
+static void MADCLIServeApplyConnection(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
+	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
+	if (entry == nil) return;
+
+	NSError *error = nil;
+	MADCredential *credentials = nil;
+	MADDatabaseConnection *connection = MADCLIServeBuildConnection(params, &credentials, &error);
+	if (connection == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
+	// Verify the new connection before applying it (the Mac's "Save & Refresh").
+	MADDatabase *database = [MADDatabase newDatabaseWithConnection: connection];
+	id dbHandle = [database connectWithConnection: connection credentals: credentials connectionError: &error];
+	if (dbHandle == nil || error != nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitDatabaseUnreachable, MADCLIDescriptionForError(error));
+		return;
+	}
+	[database closeConnection: dbHandle];
+
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	if ([document isKindOfClass: [MADHeadlessDocument class]]) {
+		[(MADHeadlessDocument *)document applyDatabaseConnection: connection];
+	} else {
+		[document updateDatabaseWithConnection: connection];
+	}
+
+	MADCLIServeWriteResult(requestID, @{});
+}
+
 static MADCLIServeDocument *MADCLIServeLookup(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
 	if (![params[@"handle"] isKindOfClass: [NSNumber class]]) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, @"handle must be a number.");
@@ -621,7 +693,13 @@ static void MADCLIServeWriteCopy(NSDictionary *params, NSMutableDictionary <NSNu
 		return;
 	}
 
-	MADHeadlessDocument *document = [MADHeadlessDocument documentWithContentsOfURL: entry.sourceURL error: &error];
+	// Write the live session document so an in-memory change (apply-connection) is
+	// persisted.  On Apple the session document is a UIDocument-backed MADocument, so
+	// fall back to re-opening the source URL the way `mad write` does.
+	id <MADDocumentDataProtocol> protocolDocument = entry.document.document;
+	MADHeadlessDocument *document = [protocolDocument isKindOfClass: [MADHeadlessDocument class]]
+		? (MADHeadlessDocument *)protocolDocument
+		: [MADHeadlessDocument documentWithContentsOfURL: entry.sourceURL error: &error];
 	if (document == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitBadDocument, MADCLIDescriptionForError(error));
 		return;
@@ -669,6 +747,10 @@ static BOOL MADCLIServeDispatch(NSDictionary *request, NSMutableDictionary <NSNu
 			MADCLIServeCreate(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodTestConnection]) {
 			MADCLIServeTestConnection(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodConnection]) {
+			MADCLIServeConnection(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodApplyConnection]) {
+			MADCLIServeApplyConnection(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodDescribe]) {
 			MADCLIServeDescribe(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodQuery]) {

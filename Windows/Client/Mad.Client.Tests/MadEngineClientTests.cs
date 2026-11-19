@@ -293,6 +293,103 @@ public sealed class MadEngineClientTests
 	}
 
 	[Fact]
+	public void Connection_ReadsBackSqliteFile()
+	{
+		var client = StartClient();
+		client.Start();
+
+		string sqlite = CopyChinookToTemp();
+		string mad = Path.Combine(Path.GetTempPath(), $"mad-created-{Guid.NewGuid():N}.mad");
+		try
+		{
+			var create = client.CallOk("create", Dict("path", mad, "driver", "sqlite3", "file", sqlite));
+			int handle = create.GetProperty("handle").GetInt32();
+
+			var conn = client.CallOk("connection", Dict("handle", handle));
+			Assert.Equal("sqlite3", conn.GetProperty("driver").GetString());
+			Assert.Equal(sqlite, conn.GetProperty("file").GetString());
+		}
+		finally
+		{
+			client.Dispose();
+			if (File.Exists(sqlite)) File.Delete(sqlite);
+			if (File.Exists(mad)) File.Delete(mad);
+		}
+	}
+
+	[Fact]
+	public void Connection_UnknownHandle_IsUsageError()
+	{
+		using var client = StartClient();
+		client.Start();
+
+		var error = client.Call("connection", Dict("handle", 99999));
+		Assert.False(error.Ok);
+		Assert.Equal(1, error.Error!.Code);
+	}
+
+	[Fact]
+	public void ApplyConnection_UnreachableServer_IsDatabaseUnreachable()
+	{
+		var client = StartClient();
+		client.Start();
+
+		string sqlite = CopyChinookToTemp();
+		string mad = Path.Combine(Path.GetTempPath(), $"mad-created-{Guid.NewGuid():N}.mad");
+		try
+		{
+			var create = client.CallOk("create", Dict("path", mad, "driver", "sqlite3", "file", sqlite));
+			int handle = create.GetProperty("handle").GetInt32();
+
+			var error = client.Call("apply-connection", Dict("handle", handle, "driver", "mysql",
+				"host", "127.0.0.1", "port", 1, "database", "test", "credentials", "root:root"));
+			Assert.False(error.Ok);
+			Assert.Equal(3, error.Error!.Code);
+		}
+		finally
+		{
+			client.Dispose();
+			if (File.Exists(sqlite)) File.Delete(sqlite);
+			if (File.Exists(mad)) File.Delete(mad);
+		}
+	}
+
+	[Fact]
+	public void ApplyConnection_ThenWrite_PersistsTheNewConnection()
+	{
+		var client = StartClient();
+		client.Start();
+
+		string sqliteA = CopyChinookToTemp();
+		string sqliteB = CopyChinookToTemp();
+		string mad = Path.Combine(Path.GetTempPath(), $"mad-created-{Guid.NewGuid():N}.mad");
+		string copy = Path.Combine(Path.GetTempPath(), $"mad-copy-{Guid.NewGuid():N}.mad");
+		try
+		{
+			var create = client.CallOk("create", Dict("path", mad, "driver", "sqlite3", "file", sqliteA));
+			int handle = create.GetProperty("handle").GetInt32();
+
+			// Reconnect the live document to a different (equally valid) SQLite file.
+			client.CallOk("apply-connection", Dict("handle", handle, "driver", "sqlite3", "file", sqliteB));
+
+			// `write` must serialize the live document, so the copy carries the new
+			// connection (file B), not the original source (file A).
+			client.CallOk("write", Dict("handle", handle, "out", copy, "reproducible", true));
+			int copyHandle = client.Open(copy);
+			var conn = client.CallOk("connection", Dict("handle", copyHandle));
+			Assert.Equal(Path.GetFullPath(sqliteB), Path.GetFullPath(conn.GetProperty("file").GetString() ?? ""));
+		}
+		finally
+		{
+			client.Dispose();
+			if (File.Exists(sqliteA)) File.Delete(sqliteA);
+			if (File.Exists(sqliteB)) File.Delete(sqliteB);
+			if (File.Exists(mad)) File.Delete(mad);
+			if (File.Exists(copy)) File.Delete(copy);
+		}
+	}
+
+	[Fact]
 	public void Shutdown_ExitsCleanly_WithNoOrphanProcess()
 	{
 		int pid;
