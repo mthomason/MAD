@@ -22,10 +22,10 @@ public sealed class MainWindowViewModel : ObservableObject
     private readonly Action? _openAbout;
     private Workspace _selectedWorkspace = Workspace.Viewer;
 
-    public MainWindowViewModel(EngineService engine, Action? openAbout = null)
+    public MainWindowViewModel(EngineService engine, Action? openAbout = null, Func<string, string?>? exportPath = null)
     {
         _openAbout = openAbout;
-        Document = new DocumentViewModel(engine);
+        Document = new DocumentViewModel(engine, exportPath);
         OpenDocumentCommand = new RelayCommand(OpenDocument);
         OpenAboutCommand = new RelayCommand(() => _openAbout?.Invoke());
     }
@@ -42,8 +42,19 @@ public sealed class MainWindowViewModel : ObservableObject
     public ICommand OpenAboutCommand { get; }
 
     /// <summary>Auto-opens the London fixture so the shell demos with zero clicks. Failures
-    /// land in <see cref="DocumentViewModel.ErrorText"/> rather than throwing.</summary>
-    public Task InitializeAsync() => Document.OpenAsync(MadPathResolver.DefaultDocument());
+    /// land in <see cref="DocumentViewModel.ErrorText"/> rather than throwing — including a
+    /// fixture/repo-root that cannot be resolved before the engine is involved.</summary>
+    public async Task InitializeAsync()
+    {
+        try
+        {
+            await Document.OpenAsync(MadPathResolver.DefaultDocument());
+        }
+        catch (Exception exception)
+        {
+            Document.ReportFailure(exception.Message);
+        }
+    }
 
     private void OpenDocument()
     {

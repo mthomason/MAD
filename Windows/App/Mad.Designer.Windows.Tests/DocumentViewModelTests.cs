@@ -60,4 +60,27 @@ public sealed class DocumentViewModelTests
         Assert.False(string.IsNullOrEmpty(viewModel.ErrorText));
         Assert.False(viewModel.IsBusy);
     }
+
+    [Fact]
+    public async Task ExportAsync_UsesProvidedPath()
+    {
+        await using var engine = new EngineService();
+        string target = Path.Combine(Path.GetTempPath(), $"mad-provided-{Guid.NewGuid():N}.csv");
+        var viewModel = new DocumentViewModel(engine, exportPath: _ => target);
+
+        try
+        {
+            await viewModel.OpenAsync(MadPathResolver.DefaultDocument());
+            await viewModel.RefreshAsync();
+            await viewModel.ExportAsync("csv");
+
+            Assert.True(File.Exists(target));
+            var lines = File.ReadAllText(target).Split("\r\n", StringSplitOptions.None);
+            Assert.Equal(78, lines.Length);
+        }
+        finally
+        {
+            if (File.Exists(target)) File.Delete(target);
+        }
+    }
 }
