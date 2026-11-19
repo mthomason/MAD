@@ -3,6 +3,7 @@
 using System.Windows;
 using Mad.Designer.Windows.Engine;
 using Mad.Designer.Windows.ViewModels;
+using Mad.Designer.Windows.Views;
 
 namespace Mad.Designer.Windows;
 
@@ -14,8 +15,14 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        _viewModel = new MainWindowViewModel(_engine);
+        _viewModel = new MainWindowViewModel(_engine, openAbout: OpenAboutWindow);
         DataContext = _viewModel;
+    }
+
+    private void OpenAboutWindow()
+    {
+        var window = new AboutWindow { DataContext = new AboutViewModel(), Owner = this };
+        window.Show();
     }
 
     protected override void OnContentRendered(EventArgs e)
