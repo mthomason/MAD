@@ -10,14 +10,17 @@ namespace Mad.Designer.Windows.ViewModels;
 
 /// <summary>The shared state of one opened .mad document — the WPF counterpart of the Mac
 /// app's <c>MADMacDocument</c>. Open populates the schema and generated SQL; Refresh runs the
-/// query and loads the rows for the viewer grid; Export writes CSV or JSON. Every engine call
-/// is async and marshals off the UI thread, and every failure lands in <see cref="ErrorText"/>
-/// rather than crashing.</summary>
+/// query and loads the rows for the viewer grid; Export writes CSV or JSON; Save/Save As
+/// write the document back through the engine's `write`; ApplyConnection reconnects it. Every
+/// engine call is async and marshals off the UI thread, and every failure lands in
+/// <see cref="ErrorText"/> rather than crashing.</summary>
 public sealed class DocumentViewModel : ObservableObject
 {
     private readonly EngineService _engine;
     private readonly Func<string, string?>? _exportPath;
+    private readonly Func<string?>? _saveAsPath;
     private int _handle = -1;
+    private string? _filePath;
 
     private bool _isBusy;
     private string _statusText = "";
@@ -30,13 +33,16 @@ public sealed class DocumentViewModel : ObservableObject
     private int _rowCount;
     private DataView? _dataView;
 
-    public DocumentViewModel(EngineService engine, Func<string, string?>? exportPath = null)
+    public DocumentViewModel(EngineService engine, Func<string, string?>? exportPath = null, Func<string?>? saveAsPath = null)
     {
         _engine = engine ?? throw new ArgumentNullException(nameof(engine));
         _exportPath = exportPath;
+        _saveAsPath = saveAsPath;
         RefreshCommand = new AsyncRelayCommand(RefreshAsync, () => HasDocument);
         ExportCsvCommand = new AsyncRelayCommand(() => ExportAsync("csv"), () => HasDocument);
         ExportJsonCommand = new AsyncRelayCommand(() => ExportAsync("json"), () => HasDocument);
+        SaveCommand = new AsyncRelayCommand(SaveAsync, () => HasDocument);
+        SaveAsCommand = new AsyncRelayCommand(SaveAsAsync, () => HasDocument);
     }
 
     /// <summary>Records a failure that happened before a document could be opened (for
@@ -70,11 +76,17 @@ public sealed class DocumentViewModel : ObservableObject
     public int RowCount { get => _rowCount; private set => Set(ref _rowCount, value); }
     public DataView? DataView { get => _dataView; private set => Set(ref _dataView, value); }
 
+    /// <summary>The document's on-disk path (the file it was opened from, created at, or
+    /// last saved to). Null until a document is open.</summary>
+    public string? FilePath { get => _filePath; private set => Set(ref _filePath, value); }
+
     public bool HasDocument => _handle >= 0;
 
     public AsyncRelayCommand RefreshCommand { get; }
     public AsyncRelayCommand ExportCsvCommand { get; }
     public AsyncRelayCommand ExportJsonCommand { get; }
+    public AsyncRelayCommand SaveCommand { get; }
+    public AsyncRelayCommand SaveAsCommand { get; }
 
     public async Task OpenAsync(string path)
     {
@@ -83,20 +95,7 @@ public sealed class DocumentViewModel : ObservableObject
         try
         {
             var open = await _engine.OpenAsync(path);
-            _handle = open.Handle;
-            FileName = open.Filename;
-            OnPropertyChanged(nameof(HasDocument));
-
-            var describe = await _engine.DescribeAsync(_handle);
-            Driver = describe.Driver;
-            Columns = describe.Columns;
-            Tables = describe.Tables;
-
-            Sql = await _engine.QueryAsync(_handle);
-
-            DataView = null;
-            RowCount = 0;
-            StatusText = $"Opened {FileName}";
+            await LoadAsync(open, path);
         }
         catch (Exception exception)
         {
@@ -107,6 +106,45 @@ public sealed class DocumentViewModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    /// <summary>Adopts an already-created document (from `create`) without re-opening it.</summary>
+    public async Task AdoptAsync(OpenResult open, string path)
+    {
+        IsBusy = true;
+        ErrorText = null;
+        try
+        {
+            await LoadAsync(open, path);
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+            StatusText = "Open failed.";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task LoadAsync(OpenResult open, string path)
+    {
+        _handle = open.Handle;
+        FileName = open.Filename;
+        FilePath = path;
+        OnPropertyChanged(nameof(HasDocument));
+
+        var describe = await _engine.DescribeAsync(_handle);
+        Driver = describe.Driver;
+        Columns = describe.Columns;
+        Tables = describe.Tables;
+
+        Sql = await _engine.QueryAsync(_handle);
+
+        DataView = null;
+        RowCount = 0;
+        StatusText = $"Opened {FileName}";
     }
 
     public async Task RefreshAsync()
@@ -134,6 +172,100 @@ public sealed class DocumentViewModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    public async Task SaveAsync()
+    {
+        if (!HasDocument)
+        {
+            ErrorText = "No document is open.";
+            StatusText = "Save failed.";
+            return;
+        }
+        if (string.IsNullOrEmpty(FilePath))
+        {
+            ErrorText = "This document has no file to save to.";
+            StatusText = "Save failed.";
+            return;
+        }
+
+        IsBusy = true;
+        ErrorText = null;
+        try
+        {
+            await _engine.WriteAsync(_handle, FilePath!);
+            StatusText = $"Saved {FilePath}";
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+            StatusText = "Save failed.";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    public async Task SaveAsAsync()
+    {
+        string? path = _saveAsPath?.Invoke();
+        if (string.IsNullOrEmpty(path))
+        {
+            return; // the user cancelled the dialog
+        }
+        await SaveAsAsync(path);
+    }
+
+    public async Task SaveAsAsync(string path)
+    {
+        if (!HasDocument) return;
+
+        IsBusy = true;
+        ErrorText = null;
+        try
+        {
+            await _engine.WriteAsync(_handle, path);
+            FilePath = path;
+            StatusText = $"Saved {path}";
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+            StatusText = "Save failed.";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    public async Task ApplyConnectionAsync(ConnectionSpec spec)
+    {
+        if (!HasDocument) return;
+
+        IsBusy = true;
+        ErrorText = null;
+        try
+        {
+            await _engine.ApplyConnectionAsync(_handle, spec);
+            await RefreshAsync();
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+            StatusText = "Reconnect failed.";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    public async Task<ConnectionSpec?> GetConnectionAsync()
+    {
+        if (!HasDocument) return null;
+        return await _engine.ConnectionAsync(_handle);
     }
 
     /// <summary>Exports the current report to the destination chosen by the injected path
@@ -176,5 +308,7 @@ public sealed class DocumentViewModel : ObservableObject
         RefreshCommand.RaiseCanExecuteChanged();
         ExportCsvCommand.RaiseCanExecuteChanged();
         ExportJsonCommand.RaiseCanExecuteChanged();
+        SaveCommand.RaiseCanExecuteChanged();
+        SaveAsCommand.RaiseCanExecuteChanged();
     }
 }
