@@ -214,15 +214,42 @@ public sealed class DesignerViewModel : ObservableObject
     private async Task AddPaletteAsync(string kind, double w, double h)
     {
         if (!HasDocument) return;
-        long section = SelectedSectionId != 0 && _model.Sections.Any(s => s.Id == SelectedSectionId)
-            ? SelectedSectionId
-            : (_model.Sections.FirstOrDefault(s => s.Type == SectionType.Body)?.Id
-               ?? _model.Sections.FirstOrDefault()?.Id ?? 0);
+        long section = ResolveTargetSection();
         if (section == 0) return;
 
         var origin = NextAvailableOrigin(section, w, h);
         await AddElementAsync(kind, section, origin.X, origin.Y);
     }
+
+    /// <summary>Inserts a data field bound to the given query field (double-click in the sidebar).</summary>
+    public async Task InsertDataFieldAsync(long fieldId)
+    {
+        if (!HasDocument) return;
+        long section = ResolveTargetSection();
+        if (section == 0) return;
+
+        var origin = NextAvailableOrigin(section, 140, 22);
+        await MutateAsync(async () =>
+        {
+            var afterAdd = await _engine.AddElementAsync(_handle, "data-field", section, origin.X, origin.Y);
+            var element = afterAdd.Elements.MaxBy(e => e.Id)!;
+            return await _engine.SetElementContentAsync(_handle, element.Id, new ElementContent(Field: fieldId));
+        });
+    }
+
+    /// <summary>Flips a band's visibility (double-click in the sections outline).</summary>
+    public async Task ToggleSectionVisibilityAsync(long sectionId)
+    {
+        var section = _model.Sections.FirstOrDefault(s => s.Id == sectionId);
+        if (section == null) return;
+        await SetSectionAsync(sectionId, null, !section.Visible, null);
+    }
+
+    private long ResolveTargetSection()
+        => SelectedSectionId != 0 && _model.Sections.Any(s => s.Id == SelectedSectionId)
+            ? SelectedSectionId
+            : (_model.Sections.FirstOrDefault(s => s.Type == SectionType.Body)?.Id
+               ?? _model.Sections.FirstOrDefault()?.Id ?? 0);
 
     private void RaiseCanExecuteChanged()
     {

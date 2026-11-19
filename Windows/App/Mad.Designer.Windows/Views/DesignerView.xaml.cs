@@ -2,6 +2,8 @@
 
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using Mad.Designer.Windows.Models;
 using Mad.Designer.Windows.ViewModels;
 
 namespace Mad.Designer.Windows.Views;
@@ -30,5 +32,22 @@ public partial class DesignerView : UserControl
         if (ReferenceEquals(_designer, designer)) return;
         _designer = designer;
         Canvas.Attach(designer);
+        Minimap.Attach(designer);
+    }
+
+    private async void SectionsList_OnDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (_designer != null && SectionsList.SelectedItem is LayoutSection section)
+        {
+            await _designer.ToggleSectionVisibilityAsync(section.Id);
+        }
+    }
+
+    private async void FieldsList_OnDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (_designer != null && FieldsList.SelectedItem is LayoutField field)
+        {
+            await _designer.InsertDataFieldAsync(field.Id);
+        }
     }
 }

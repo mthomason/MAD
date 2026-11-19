@@ -35,13 +35,12 @@
             <DockPanel Grid.Column="0">
                 <TextBlock DockPanel.Dock="Top" Text="PAGE &amp; SECTION MINIMAP" FontWeight="Bold"
                            Foreground="Gray" FontSize="10" Margin="10,8,10,3"/>
-                <Border DockPanel.Dock="Top" Height="124" Background="#F0F0F0" Margin="10,0,10,8"
-                        CornerRadius="5">
-                    <TextBlock Text="Minimap" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
+                <views:DesignerMinimap x:Name="Minimap" DockPanel.Dock="Top" Height="124"
+                                        Margin="10,0,10,8" Background="#F0F0F0"/>
                 <TextBlock DockPanel.Dock="Top" Text="REPORT BANDS" FontWeight="Bold" Foreground="Gray"
                            FontSize="10" Margin="10,0,10,3"/>
-                <ListBox DockPanel.Dock="Top" Height="168" Margin="10,0,10,8" ItemsSource="{Binding Sections}">
+                <ListBox x:Name="SectionsList" DockPanel.Dock="Top" Height="168" Margin="10,0,10,8"
+                         ItemsSource="{Binding Sections}" MouseDoubleClick="SectionsList_OnDoubleClick">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Title}"/>
@@ -50,7 +49,8 @@
                 </ListBox>
                 <TextBlock DockPanel.Dock="Top" Text="QUERY FIELDS (DRAG TO CANVAS)" FontWeight="Bold"
                            Foreground="Gray" FontSize="10" Margin="10,0,10,3"/>
-                <ListBox ItemsSource="{Binding Fields}">
+                <ListBox x:Name="FieldsList" ItemsSource="{Binding Fields}"
+                         MouseDoubleClick="FieldsList_OnDoubleClick">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Display}"/>
