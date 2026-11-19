@@ -8,18 +8,31 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Top workspace bar: element palette -->
+        <!-- Top workspace bar: element palette + view controls -->
         <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="8,5">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Insert:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                <Button Content="Label" Command="{Binding AddLabelCommand}" Margin="0,0,4,0"/>
-                <Button Content="Data Field" Command="{Binding AddDataFieldCommand}" Margin="0,0,4,0"/>
-                <Button Content="Aggregate" Command="{Binding AddAggregateCommand}" Margin="0,0,4,0"/>
-                <Button Content="Barcode" IsEnabled="False" Margin="0,0,4,0"
-                        ToolTip="Barcode is not available in the Windows engine"/>
-                <Button Content="Image" Command="{Binding AddImageCommand}" Margin="0,0,4,0"/>
-                <Button Content="Line" Command="{Binding AddLineRuleCommand}" Margin="0,0,4,0"/>
-            </StackPanel>
+            <DockPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                    <TextBlock Text="Insert:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <Button Content="Label" Command="{Binding AddLabelCommand}" Margin="0,0,4,0"/>
+                    <Button Content="Data Field" Command="{Binding AddDataFieldCommand}" Margin="0,0,4,0"/>
+                    <Button Content="Aggregate" Command="{Binding AddAggregateCommand}" Margin="0,0,4,0"/>
+                    <Button Content="Barcode" IsEnabled="False" Margin="0,0,4,0"
+                            ToolTip="Barcode is not available in the Windows engine"/>
+                    <Button Content="Image" Command="{Binding AddImageCommand}" Margin="0,0,4,0"/>
+                    <Button Content="Line" Command="{Binding AddLineRuleCommand}" Margin="0,0,4,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                    <Button Content="Undo" Command="{Binding UndoCommand}" Margin="0,0,4,0"/>
+                    <Button Content="Redo" Command="{Binding RedoCommand}" Margin="0,0,12,0"/>
+                    <CheckBox Content="Grid" IsChecked="{Binding ShowGrid}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <CheckBox Content="Snap" IsChecked="{Binding SnapToGrid}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <CheckBox Content="Rulers" IsChecked="{Binding ShowRulers}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock Text="Zoom" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <Slider Width="80" Minimum="0.5" Maximum="2.5" Value="{Binding Zoom}" VerticalAlignment="Center"
+                             TickFrequency="0.25" IsSnapToTickEnabled="True"/>
+                    <TextBlock Text="{Binding Zoom, StringFormat={}{0:0%}}" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                </StackPanel>
+            </DockPanel>
         </Border>
 
         <Grid Grid.Row="1">
