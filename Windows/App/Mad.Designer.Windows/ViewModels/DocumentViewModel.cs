@@ -47,10 +47,14 @@ public sealed class DocumentViewModel : ObservableObject
         SaveCommand = new AsyncRelayCommand(SaveAsync, () => HasDocument);
         SaveAsCommand = new AsyncRelayCommand(SaveAsAsync, () => HasDocument);
         Query = new QueryViewModel(engine);
+        Designer = new DesignerViewModel(engine);
     }
 
     /// <summary>The Query workspace's view model — the visual query designer and SQL editor.</summary>
     public QueryViewModel Query { get; }
+
+    /// <summary>The Designer workspace's view model — the report-layout studio.</summary>
+    public DesignerViewModel Designer { get; }
 
     /// <summary>Records a failure that happened before a document could be opened (for
     /// example, resolving the default fixture). Kept separate from <see cref="OpenAsync"/>
@@ -150,6 +154,7 @@ public sealed class DocumentViewModel : ObservableObject
         Sql = await _engine.QueryAsync(_handle);
         _connection = await _engine.ConnectionAsync(_handle);
         await Query.LoadAsync(_handle, describe.Driver, describe.Tables);
+        await Designer.LoadAsync(_handle);
 
         DataView = null;
         RowCount = 0;
@@ -266,6 +271,7 @@ public sealed class DocumentViewModel : ObservableObject
             Columns = describe.Columns;
             Tables = describe.Tables;
             await Query.LoadAsync(_handle, describe.Driver, describe.Tables);
+            await Designer.LoadAsync(_handle);
 
             await RefreshAsync();
         }

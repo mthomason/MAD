@@ -244,7 +244,9 @@ full visual query designer — a left schema-table list, floating table cards on
 drag-to-connect joins (Left Outer Join by default, with a join-type selector), WHERE and
 GROUP BY editors, and a mutually exclusive SQL editor with "Revert to Generated SQL" /
 "Validate SQL" / "Compile & Apply SQL" — Viewer shows the refreshed rows in a `DataGrid`
-and exports CSV/JSON, and Designer is a placeholder until Phase 6c. It launches to the empty
+and exports CSV/JSON, and Designer is the report-layout studio (a three-pane band-and-element
+canvas with an element palette, a minimap / sections / query-fields sidebar, and a
+selected-element inspector) backed by the Phase 6c `layout-model` protocol. It launches to the empty
 main window with every document-dependent control disabled (no auto-open, no file dialog).
 File → New Document… opens the connection assistant (SQLite / MySQL / Microsoft SQL Server
 / PostgreSQL, with a Test Connection action), File → Open… opens an existing `.mad`, and a
