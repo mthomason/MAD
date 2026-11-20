@@ -47,8 +47,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 	/// The element's encoded image -- a barcode's PNG -- or nil for an element that
 	/// has none.  The formats embed it (a data URI in HTML) and a PDF writer will
-	/// draw it.
-	@property (nullable, nonatomic, strong) NSData *imageData;
+	/// draw it.  It is rendered on first read, so a walk that only draws (the PDF)
+	/// never pays for a PNG it does not use.
+	- (nullable NSData *)imageData;
 
 @end
 
