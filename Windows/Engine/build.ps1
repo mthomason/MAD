@@ -900,6 +900,20 @@ function New-Shim([string]$framework, [string]$sourceDir) {
 					}
 				}
 			}
+		} elseif ($framework -eq "MADBarcodes") {
+			# The framework exposes the headers it builds on as
+			# <MADBarcodes/zint.h> and <MADBarcodes/png.h> (the Xcode target
+			# keeps them Public), so the shim is a directory of copies.
+			New-Item -ItemType Directory -Force -Path $link | Out-Null
+			Get-ChildItem -Path $sourceDir -Filter *.h -File | ForEach-Object {
+				Copy-Item $_.FullName (Join-Path $link $_.Name)
+			}
+			foreach ($h in @("zint.h")) {
+				Copy-Item (Join-Path $zintInclude $h) (Join-Path $link $h) -Force
+			}
+			foreach ($h in @("png.h", "pngconf.h", "pnglibconf.h")) {
+				Copy-Item (Join-Path $libpngInclude $h) (Join-Path $link $h) -Force
+			}
 		} else {
 			New-Item -ItemType Junction -Path $link -Target $sourceDir | Out-Null
 		}
@@ -953,6 +967,7 @@ $apiSource = Join-Path $RepoRoot "MADAPI\Source"
 $sqlite3Source = Join-Path $RepoRoot "MADSqlite3\Source"
 $cocoSource = Join-Path $RepoRoot "MADCocoaExtensions\Source"
 $fmSource = Join-Path $RepoRoot "MADFileManager\Source"
+$barcodeSource = Join-Path $RepoRoot "MADBarcodes\MADBarcodes\MADBarcodes"
 $madSource = Join-Path $RepoRoot "MAD\Source"
 $mysqlSource = Join-Path $RepoRoot "MADMySQL\Source"
 $tdsSource = Join-Path $RepoRoot "MADTds\MADTds"
@@ -1026,6 +1041,8 @@ Compile-FrameworkSources "MADAPI" "api_" $apiSource (Join-Path $EngineDir "cmake
 Compile-FrameworkSources "MADSqlite3" "sql_" $sqlite3Source (Join-Path $EngineDir "cmake\MADSqlite3Sources.cmake") $arcFlags
 Compile-FrameworkSources "MADCocoaExtensions" "coco_" $cocoSource (Join-Path $EngineDir "cmake\MADCocoaExtensionsSources.cmake") $arcFlags
 Compile-FrameworkSources "MADFileManager" "fm_" $fmSource (Join-Path $EngineDir "cmake\MADFileManagerSources.cmake") $arcFlags
+# MADBarcodes before MAD: MADPrintPageElementBarcode imports <MADBarcodes/...>.
+Compile-FrameworkSources "MADBarcodes" "bc_" $barcodeSource (Join-Path $EngineDir "cmake\MADBarcodesSources.cmake") $arcFlags
 
 # MAD compiles last: its quoted imports reach across its subdirectories (the way
 # the Xcode target's header search paths do), and madtar.m reaches the libarchive
@@ -1132,6 +1149,8 @@ $testNames = @(
 	"MADAppStorageOptionTests", "MADDirectoryMonitorTests",
 	"MADFileInfoTests", "MADFileUtilitiesTests",
 	"MADLocalFileCoordinatorTests", "MADMetaDataTests", "MADStorageStateTests",
+	# MADBarcodes
+	"MADBarcodesTests",
 	# MADCocoaExtensions
 	"MADBorderStyleTests", "MADDirectionTests", "MADGeometryExtrasTests",
 	"MADMarginTests", "MADMathAlgebraTests", "MADPaddingTests",

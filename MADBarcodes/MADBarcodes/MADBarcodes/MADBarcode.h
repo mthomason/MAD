@@ -11,6 +11,7 @@
 
 #import <TargetConditionals.h>
 #import <Foundation/NSObject.h>
+#import <Foundation/NSData.h>
 #import <CoreGraphics/CGGeometry.h>
 
 #import <MADBarcodes/MADBarcodeProtocol.h>
@@ -23,6 +24,9 @@ typedef UIImage MADBarcodeImage;
 #elif TARGET_OS_OSX
 @class NSImage;
 typedef NSImage MADBarcodeImage;
+#else
+// Headless: the render core answers PNG bytes instead of a platform image.
+typedef NSData MADBarcodeImage;
 #endif
 
 @interface MADBarcode : NSObject <MADBarcodeProtocol, NSSecureCoding>
@@ -56,6 +60,14 @@ typedef NSImage MADBarcodeImage;
 	// The encoded symbol as one image, in zint's natural orientation and at one
 	// point per bitmap pixel.  nil when zint refuses the inputs.
 	- (MADBarcodeImage *)renderedImage;
+
+	// The encoded symbol as PNG bytes (8-bit RGB, opaque), in zint's natural
+	// orientation and one pixel per bitmap pixel.  nil when zint refuses the
+	// inputs.  The UIKit-free render core, available on every platform.
+	- (NSData *)renderedPNGData;
+
+	// The same, reporting the message from the zint pass that failed.
+	- (NSData *)renderedPNGDataWithErrorMessage:(NSString * __autoreleasing *)errorMessage;
 
 	// Canonical key over every value that changes what -renderedImage or
 	// -drawInRect: produces, for MADBarcodeCache.

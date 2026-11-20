@@ -124,6 +124,10 @@ find_library(PGPORT_LIBRARY pgport REQUIRED)
 find_library(ARCHIVE_LIBRARY archive REQUIRED)
 find_library(ZLIB_LIBRARY z REQUIRED)
 find_library(BZIP2_LIBRARY bz2 REQUIRED)
+# The barcode stack (Linux/lib/libraries.sh): zint's backend and the libpng it
+# encodes through, both static into /usr/local.
+find_library(ZINT_LIBRARY zint REQUIRED)
+find_library(PNG_LIBRARY png REQUIRED)
 
 enable_testing()
 
@@ -335,6 +339,33 @@ target_include_directories(madpostgres PUBLIC "${CMAKE_BINARY_DIR}/libpq-shim")
 target_link_libraries(madpostgres PUBLIC madfoundation madapi
 	${PQ_LIBRARY} ${PGCOMMON_LIBRARY} ${PGPORT_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 
+set(SOURCE_DIR "${REPO_ROOT}/MADBarcodes/MADBarcodes/MADBarcodes")
+include(cmake/MADBarcodesSources.cmake)
+# The framework's headers import it as <MADBarcodes/Foo.h>, and it exposes the
+# two C libraries' headers it builds on as <MADBarcodes/zint.h> and
+# <MADBarcodes/png.h> (the Xcode target keeps all four Public).  The shim is a
+# directory of symlinks, like MAD's, rather than one symlink to the source.
+file(MAKE_DIRECTORY "${SHIM_DIR}/MADBarcodes")
+file(GLOB _barcode_headers "${SOURCE_DIR}/*.h")
+foreach (_barcode_header IN LISTS _barcode_headers)
+	get_filename_component(_barcode_header_name "${_barcode_header}" NAME)
+	if (NOT EXISTS "${SHIM_DIR}/MADBarcodes/${_barcode_header_name}")
+		file(CREATE_LINK "${_barcode_header}" "${SHIM_DIR}/MADBarcodes/${_barcode_header_name}" SYMBOLIC)
+	endif()
+endforeach()
+foreach (_barcode_library_header IN ITEMS "zint.h" "png.h" "pngconf.h" "pnglibconf.h")
+	if (NOT EXISTS "${SHIM_DIR}/MADBarcodes/${_barcode_library_header}")
+		file(CREATE_LINK "/usr/local/include/${_barcode_library_header}"
+			"${SHIM_DIR}/MADBarcodes/${_barcode_library_header}" SYMBOLIC)
+	endif()
+endforeach()
+mad_add_framework(madbarcodes MADBARCODES_SOURCES
+	MADBarcodesTests
+)
+# zint_* and png_* are reached from the framework's own code, and transitively
+# from MAD, so PUBLIC.
+target_link_libraries(madbarcodes PUBLIC ${ZINT_LIBRARY} ${PNG_LIBRARY} ${ZLIB_LIBRARY})
+
 set(SOURCE_DIR "${REPO_ROOT}/MAD/Source")
 include(cmake/MADSources.cmake)
 # MAD exposes its headers flattened as <MAD/Foo.h> -- the Xcode target copies
@@ -415,7 +446,7 @@ target_compile_options(mad PRIVATE -I/usr/include/libxml2)
 # MADTds is not in the list: it is freetds' wrapper with no categories, madtdsclient
 # already names it, and whole-archiving it collides with freetds' own err_handler.
 target_link_libraries(mad PUBLIC
-	madfoundation madapi madcocoaextensions maddatastructures madfilemanager
+	madfoundation madapi madcocoaextensions maddatastructures madfilemanager madbarcodes
 	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madsqlite3>"
 	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madmysql>"
 	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madtdsclient>"
