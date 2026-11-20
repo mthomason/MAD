@@ -57,6 +57,7 @@ jobs:
           df -h /
 
       - name: Restore the third-party static libraries
+        id: libs-cache
         uses: actions/cache/restore@v4
         with:
           path: Compressor/library
@@ -68,8 +69,9 @@ jobs:
         run: ./Compressor/build.sh --all --platforms ios,simulator,macosx
 
       # Save before the suites, so a failing run still leaves the expensive
-      # artifacts for the next attempt.
+      # artifacts for the next attempt.  A hit needs no second upload.
       - name: Save the third-party static libraries
+        if: steps.libs-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: Compressor/library
