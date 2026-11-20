@@ -116,6 +116,10 @@
 @property (nonatomic, strong) MADBarcodeElementTestBarcode *testBarcode;
 @property (nonatomic, assign) MADPrintPageElementType testType;
 @property (nonatomic, copy) NSString *nilValueSpelling;
+@property (nonatomic, assign) BOOL testUsesStaticInput1;
+@property (nonatomic, assign) BOOL testUsesStaticInput2;
+@property (nonatomic, copy) NSString *testStaticInput1;
+@property (nonatomic, copy) NSString *testStaticInput2;
 
 @property (nonatomic, strong) id firstValueSeen;
 @property (nonatomic, strong) id secondValueSeen;
@@ -129,6 +133,14 @@
 - (NSString *)fieldKey2 { return self.testFieldKey2; }
 - (MADPrintPageElementType)type { return self.testType; }
 - (id <MADBarcodeProtocol>)barcode { return (id <MADBarcodeProtocol>)self.testBarcode; }
+
+// The real reference answers these from its item: a field reference makes the input
+// live, and an unreferenced input is static.  The double has no item, so it states
+// the answer directly.
+- (BOOL)usesStaticInput1 { return self.testUsesStaticInput1; }
+- (BOOL)usesStaticInput2 { return self.testUsesStaticInput2; }
+- (NSString *)staticInput1 { return self.testStaticInput1 ?: @""; }
+- (NSString *)staticInput2 { return self.testStaticInput2 ?: @""; }
 
 - (NSString *)formattedStringForValue1:(id)value {
 	self.firstValueSeen = value;
@@ -264,6 +276,50 @@
 
 	XCTAssertNotNil(image);
 #endif
+}
+
+- (void)testBarcodeElementWithStaticInputsSkipsTheRowRead {
+	MADBarcodeElementTestDefinition *definition = [self definitionWithFields];
+	MADBarcodeElementTestSource *source = (MADBarcodeElementTestSource *)definition.testDatasource;
+	source.rowData = @{ @"Invoice0.Code" : @"FIELD", @"Invoice0.Note" : @"FIELD" };
+
+	definition.testUsesStaticInput1 = YES;
+	definition.testUsesStaticInput2 = YES;
+	definition.testStaticInput1 = @"123456";
+	definition.testStaticInput2 = @"note";
+	definition.testBarcode.barcodeType = 8;
+
+	MADPrintPageElementBarcode *element;
+	element = [[MADPrintPageElementBarcode alloc] initWithDefinition:definition];
+
+	// Both inputs answer from the element, so no row is read and no field is formatted.
+	XCTAssertEqual(source.lastRowID, (NSUInteger)0);
+	XCTAssertNil(definition.firstValueSeen);
+	XCTAssertNil(definition.secondValueSeen);
+	XCTAssertEqualObjects(element.text, @"123456note");
+
+	NSObject *drawing = [element valueForKey:@"_drawingObject"];
+	XCTAssertEqualObjects([drawing valueForKey:@"input"], @"123456");
+	XCTAssertEqualObjects([drawing valueForKey:@"primaryData"], @"note");
+}
+
+- (void)testBarcodeElementMixesAStaticFirstInputWithAFieldSecondInput {
+	MADBarcodeElementTestDefinition *definition = [self definitionWithFields];
+	MADBarcodeElementTestSource *source = (MADBarcodeElementTestSource *)definition.testDatasource;
+	source.rowData = @{ @"Invoice0.Code" : @"FIELD", @"Invoice0.Note" : @"note" };
+
+	definition.testUsesStaticInput1 = YES;
+	definition.testStaticInput1 = @"123456";
+	definition.testBarcode.barcodeType = 8;
+
+	MADPrintPageElementBarcode *element;
+	element = [[MADPrintPageElementBarcode alloc] initWithDefinition:definition];
+
+	// One live input is enough to need the row, but only the field-backed input is formatted.
+	XCTAssertEqual(source.lastRowID, (NSUInteger)7);
+	XCTAssertNil(definition.firstValueSeen);
+	XCTAssertEqualObjects(definition.secondValueSeen, @"note");
+	XCTAssertEqualObjects(element.text, @"123456note");
 }
 
 #pragma mark - Text

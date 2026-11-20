@@ -43,9 +43,11 @@ auswählen und als Ziel **My Mac** wählen.
   * `MADMacAppDelegate.{h,m}` — Anwendungslebenszyklus, Registrierung von
     Treibern/Konvertern und Hauptmenüleiste (`MAD Designer`, `File`, `Edit`,
     `View`, `Report`, `Window`, `Help`).
-  * `MADMacAboutWindowController.{h,m}` — natives Fenster **About MAD Designer**
-    (`Overview`, `License & Notice` und `Acknowledgements` mit Komponenten-Seitenleiste
-    und eingebetteten Lizenztexten von Drittanbietern).
+  * `MADMacAboutWindowController.{h,m}` — natives Fenster **About MAD Designer**, das
+    die Engine-Version (`MADMeta.plist`) und die Version der macOS-Anwendung
+    (`CFBundleShortVersionString`) als getrennte Werte zeigt; mit `Overview`,
+    `License & Notice` und `Acknowledgements` (Komponenten-Seitenleiste und
+    eingebettete Lizenztexte von Drittanbietern).
   * `MADMacDocumentController.{h,m}` — Unterklasse von `NSDocumentController`, die
     den Standard-Öffnen-Dialog mit `.mad`-`UTType`-Filtern
     (`com.everydayapps.productivity.mad` und `com.thomason.report.mad`) und einer

@@ -29,7 +29,7 @@ brew install --cask mthomason/tap/mad-designer
 
 * `Mac/Source/` —— `AppKit` 应用、`NSDocument` 架构，以及三个工作区：
   * `MADMacAppDelegate.{h,m}` —— 应用生命周期、驱动/转换器注册，以及主菜单栏（`MAD Designer`、`File`、`Edit`、`View`、`Report`、`Window`、`Help`）。
-  * `MADMacAboutWindowController.{h,m}` —— 原生的 **About MAD Designer** 窗口（`Overview`、`License & Notice`，以及带组件侧边栏和随附第三方许可证文本的 `Acknowledgements`）。
+  * `MADMacAboutWindowController.{h,m}` —— 原生的 **About MAD Designer** 窗口，将引擎版本（`MADMeta.plist`）和 macOS 应用程序版本（`CFBundleShortVersionString`）显示为两个独立的值，并提供 `Overview`、`License & Notice`，以及带组件侧边栏和随附第三方许可证文本的 `Acknowledgements`。
   * `MADMacDocumentController.{h,m}` —— `NSDocumentController` 子类，配置标准打开面板，带 `.mad` `UTType` 过滤器（`com.everydayapps.productivity.mad` 和 `com.thomason.report.mad`）以及主 **New Document** 按钮。
   * `MADMacDocument.{h,m}` —— 对 `MADHeadlessDocument`、`MADDesignerLayout`（`NSUndoManager`）、`MADSectionsLayout`、异步刷新（`MADOperationQueue`）和导出的 `NSDocument` 封装。
   * `MADMacWindowController.{h,m}` —— 主文档窗口，带有居中的 **Workspace** 分段控件（`MAD Query`、`MAD Designer`、`MAD Viewer`）。

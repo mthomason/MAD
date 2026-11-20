@@ -187,6 +187,49 @@
 	XCTAssertNil(reference.fieldKey2);
 }
 
+- (void)testEachFieldReferenceMakesItsInputLive {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+	RptqQueryField *field1 = [self queryFieldNamed:@"Name" tableName:@"Invoice" context:context document:document];
+	RptqQueryField *field2 = [self queryFieldNamed:@"Code" tableName:@"Customer" context:context document:document];
+	RptqDocumentElementBarcode *element = [self barcodeElementInContext:context field1:field1 field2:field2];
+
+	MADDocumentObjectDataReferenceBarcode *reference = [self referenceForElement:element datasource:nil];
+
+	XCTAssertFalse(reference.usesStaticInput1);
+	XCTAssertFalse(reference.usesStaticInput2);
+}
+
+- (void)testAnUnreferencedInputAnswersWithTheStaticText {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocumentElementBarcode *element = [self barcodeElementInContext:context field1:nil field2:nil];
+	element.inputStatic1 = @"123456";
+	element.inputStatic2 = @"note";
+
+	MADDocumentObjectDataReferenceBarcode *reference = [self referenceForElement:element datasource:nil];
+
+	XCTAssertTrue(reference.usesStaticInput1);
+	XCTAssertTrue(reference.usesStaticInput2);
+	XCTAssertEqualObjects(reference.staticInput1, @"123456");
+	XCTAssertEqualObjects(reference.staticInput2, @"note");
+}
+
+- (void)testTheStaticFlagWinsOverAFieldReference {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+	RptqQueryField *field1 = [self queryFieldNamed:@"Name" tableName:@"Invoice" context:context document:document];
+	RptqQueryField *field2 = [self queryFieldNamed:@"Code" tableName:@"Customer" context:context document:document];
+	RptqDocumentElementBarcode *element = [self barcodeElementInContext:context field1:field1 field2:field2];
+	element.useStaticInput1 = YES;
+	element.inputStatic1 = @"123456";
+
+	MADDocumentObjectDataReferenceBarcode *reference = [self referenceForElement:element datasource:nil];
+
+	XCTAssertTrue(reference.usesStaticInput1);
+	XCTAssertFalse(reference.usesStaticInput2);
+	XCTAssertEqualObjects(reference.staticInput1, @"123456");
+}
+
 - (void)testFormattedStringsUseEachFieldType {
 	RptqStoreContext *context = [self inMemoryContext];
 	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
