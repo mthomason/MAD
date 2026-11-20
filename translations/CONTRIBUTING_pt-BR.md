@@ -1,4 +1,4 @@
-[English](CONTRIBUTING.md) | [简体中文](CONTRIBUTING_zh.md) | [日本語](CONTRIBUTING_ja.md) | **Português (Brasil)** | [Deutsch](CONTRIBUTING_de.md) | [Español](CONTRIBUTING_es.md)
+[English](../CONTRIBUTING.md) | [简体中文](CONTRIBUTING_zh.md) | [日本語](CONTRIBUTING_ja.md) | **Português (Brasil)** | [Deutsch](CONTRIBUTING_de.md) | [Español](CONTRIBUTING_es.md)
 
 # Contribuindo para o MAD
 
@@ -6,7 +6,7 @@ Obrigado por estar aqui. O MAD (Mobile Analytics Document) é o projeto — os
 aplicativos MAD Designer e MAD Viewer, os frameworks e a engine headless —
 e os pontos de extensão (seams) para novos trabalhos são o foco principal: um novo driver de banco de dados, um novo
 elemento de documento, um novo formato de exportação. O tutorial de criação de drivers
-([`docs/tutorials/driver-authoring.md`](docs/pt-br/tutorials/driver-authoring.md))
+([`docs/tutorials/driver-authoring.md`](../docs/pt-br/tutorials/driver-authoring.md))
 guia você passo a passo pelo primeiro; essa é a primeira contribuição recomendada.
 
 ## Pré-requisitos
@@ -18,7 +18,7 @@ guia você passo a passo pelo primeiro; essa é a primeira contribuição recome
   C, compila os onze frameworks headless e executa suas suítes de teste.
 * Nenhum servidor de banco de dados é obrigatório para contribuir: as suítes de testes live de MySQL, SQL Server e
   PostgreSQL são puladas automaticamente quando nenhum servidor está acessível, e
-  [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) documenta os
+  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) documenta os
   contêineres Docker que fornecem esses bancos de teste.
 
 ## Primeiros passos
@@ -38,7 +38,7 @@ guia você passo a passo pelo primeiro; essa é a primeira contribuição recome
    ./Linux/build.sh
    ```
 
-   [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) traz a matriz completa
+   [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) traz a matriz completa
    de comandos, o caminho compartilhado de DerivedData esperado pelos
    frameworks e a configuração dos bancos de dados de teste.
 3. Escolha uma tarefa: um novo driver, um elemento de relatório ou uma issue marcada com
@@ -72,9 +72,9 @@ que não seja corrigida nem registrada é tratada como falha.
   própria declaração — um aviso de código não utilizado sem marcação significa código morto que deve ser removido.
 * Novos arquivos devem conter o cabeçalho de uma linha: `Copyright © 2012-2026 Michael
   Thomason. SPDX-License-Identifier: MIT` (`//` para código-fonte, `#` para scripts).
-* [`docs/project/BUGS.md`](docs/project/BUGS.md) registra defeitos em aberto junto com
+* [`docs/project/BUGS.md`](../docs/project/BUGS.md) registra defeitos em aberto junto com
   os testes que os reproduzem; quando você corrige um defeito, a entrada correspondente é movida para
-  [`docs/project/BUGS_FIXED.md`](docs/project/BUGS_FIXED.md) — uma correção não
+  [`docs/project/BUGS_FIXED.md`](../docs/project/BUGS_FIXED.md) — uma correção não
   registrada é considerada incompleta.
 
 ## Developer Certificate of Origin (DCO)
@@ -101,7 +101,7 @@ a alteração ou que tem o direito de submetê-la sob a licença do projeto
 ## Issues
 
 Os templates de relato de bug e de proposta de driver estão em
-[`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/). Questões de segurança devem seguir o
+[`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/). Questões de segurança devem seguir o
 canal privado descrito em [`SECURITY.md`](SECURITY_pt-BR.md), nunca uma issue pública.
 
 ## Ajuda

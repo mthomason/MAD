@@ -21,9 +21,9 @@ excludes from the published site.
 English is the source. A translation is complete when every document in the public set
 below exists in it, and the validation checklist in this file passes.
 
-The root-file suffix keeps its case: `README_pt-BR.md`, not `README_pt-br.md`. The
-website directory is lower-case where the tag is not (`pt-br`, `de`, `ja`, `zh`), because
-the directory is a URL path segment.
+The translation suffix keeps its case: `translations/README_pt-BR.md`, not
+`translations/README_pt-br.md`. The website directory is lower-case where the tag is not
+(`pt-br`, `de`, `ja`, `zh`), because the directory is a URL path segment.
 
 ## The canonical public set
 
@@ -58,15 +58,24 @@ serves `/es/01-document.html`.
 `docs/assets/london.html` is an exported sample report, not a documentation page, and is
 not translated.
 
-### Root and folder documents (11)
+### Root documents (5, under `translations/`)
+
+The translated copies of the five repository-root documents live in `translations/` at
+the repository root. The English originals stay at the root, so the root holds only
+English documents plus that one directory.
 
 | English source | Translation naming |
 | --- | --- |
-| `README.md` | `README_<suffix>.md` |
-| `CONTRIBUTING.md` | `CONTRIBUTING_<suffix>.md` |
-| `CODE_OF_CONDUCT.md` | `CODE_OF_CONDUCT_<suffix>.md` |
-| `SECURITY.md` | `SECURITY_<suffix>.md` |
-| `Note from Author on Agentic Programming and LLMs.md` | `Note from Author on Agentic Programming and LLMs_<suffix>.md` |
+| `README.md` | `translations/README_<suffix>.md` |
+| `CONTRIBUTING.md` | `translations/CONTRIBUTING_<suffix>.md` |
+| `CODE_OF_CONDUCT.md` | `translations/CODE_OF_CONDUCT_<suffix>.md` |
+| `SECURITY.md` | `translations/SECURITY_<suffix>.md` |
+| `Note from Author on Agentic Programming and LLMs.md` | `translations/Note from Author on Agentic Programming and LLMs_<suffix>.md` |
+
+### Folder documents (6)
+
+| English source | Translation naming |
+| --- | --- |
 | `CLI/Fixtures/README.md` | `CLI/Fixtures/README_<suffix>.md` |
 | `Linux/README.md` | `Linux/README_<suffix>.md` |
 | `Mac/README.md` | `Mac/README_<suffix>.md` |
@@ -74,14 +83,28 @@ not translated.
 | `MADTds/README.md` | `MADTds/README_<suffix>.md` |
 | `satellites/mad-action/README.md` | `satellites/mad-action/README_<suffix>.md` |
 
-These files sit outside the Jekyll source, so they are plain Markdown on GitHub. Each one
-opens with the same language banner, with the current language in bold and the other
-five in links, in the order `English`, `简体中文`, `日本語`, `Português (Brasil)`,
-`Deutsch`, `Español`:
+All eleven documents sit outside the Jekyll source, so they are plain Markdown on GitHub.
+Each one opens with the same language banner, with the current language in bold and the
+other five in links, in the order `English`, `简体中文`, `日本語`, `Português (Brasil)`,
+`Deutsch`, `Español`.
+
+In the four English root files, the banner links into `translations/`:
+
+```markdown
+**English** | [简体中文](translations/README_zh.md) | [日本語](translations/README_ja.md) | [Português (Brasil)](translations/README_pt-BR.md) | [Deutsch](translations/README_de.md) | [Español](translations/README_es.md)
+```
+
+In the English copies of the six folder documents, the banner links its siblings in
+place, exactly as before:
 
 ```markdown
 **English** | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md) | [Español](README_es.md)
 ```
+
+Inside a translated file the sibling links are plain names (`README_ja.md`,
+`SECURITY_de.md`) because the file already sits in the same directory as its siblings;
+only links out of that directory — the English originals and the rest of the repository —
+carry a `../` prefix (`../README.md`, `../docs/…`).
 
 A new language adds one more entry to that banner in every existing file — six files per
 document for the ten banner-bearing documents, 60 banner edits. (The author note is the
@@ -313,9 +336,10 @@ substitute its tag, directory, suffix, and label.
 4. **Add the switcher entry in every existing branch.** The layout has one `<nav>` block
    per language (English, Chinese, Japanese, Portuguese, German, Spanish); each must list
    the new label in the fixed order, and the new block must list the other languages.
-5. **Add the root files.** Eleven new files — `README_es.md`, `CONTRIBUTING_es.md`,
-   `CODE_OF_CONDUCT_es.md`, `SECURITY_es.md`, the author note, and the six folder
-   READMEs — and add the label to the banner of all 66 existing files (11 documents ×
+5. **Add the translated files.** Eleven new files: five under `translations/`
+   (`README_es.md`, `CONTRIBUTING_es.md`, `CODE_OF_CONDUCT_es.md`, `SECURITY_es.md`,
+   and the author note) and the six folder READMEs beside their English originals —
+   then add the label to the banner of all 66 existing files (11 documents ×
    6 languages; the author note has no banner). Translate the titles and descriptions of
    the website pages as well.
 6. **Update this manifest**: the languages table, the status column, the switcher order,

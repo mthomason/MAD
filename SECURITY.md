@@ -1,4 +1,4 @@
-**English** | [简体中文](SECURITY_zh.md) | [日本語](SECURITY_ja.md) | [Português (Brasil)](SECURITY_pt-BR.md) | [Deutsch](SECURITY_de.md) | [Español](SECURITY_es.md)
+**English** | [简体中文](translations/SECURITY_zh.md) | [日本語](translations/SECURITY_ja.md) | [Português (Brasil)](translations/SECURITY_pt-BR.md) | [Deutsch](translations/SECURITY_de.md) | [Español](translations/SECURITY_es.md)
 
 # Security Policy
 

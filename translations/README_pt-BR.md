@@ -1,8 +1,8 @@
-[English](README.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | **Português (Brasil)** | [Deutsch](README_de.md) | [Español](README_es.md)
+[English](../README.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | **Português (Brasil)** | [Deutsch](README_de.md) | [Español](README_es.md)
 
 > **Uma nota do autor sobre programação agêntica e LLMs** — [Leia aqui](Note%20from%20Author%20on%20Agentic%20Programming%20and%20LLMs_pt-BR.md)
 
-# <a href="StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="docs/assets/mad-designer-macos-icon-256.png" alt="Ícone do MAD Designer" width="44" height="44" align="absmiddle" /></a> MAD (Mobile Analytics Document)
+# <a href="../StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../docs/assets/mad-designer-macos-icon-256.png" alt="Ícone do MAD Designer" width="44" height="44" align="absmiddle" /></a> MAD (Mobile Analytics Document)
 
 **Um formato aberto e uma engine embarcável para relatórios relacionais — onde cada relatório é um grafo de consulta portável, uma tabela SQLite materializada e um layout paramétrico.**
 
@@ -10,7 +10,7 @@ O MAD é uma plataforma de relatórios relacionais construída do zero em Object
 
 Um arquivo `.mad` armazena toda a definição de um relatório — o snapshot do esquema do banco de dados, o grafo de consulta relacional (tabelas, joins, predicados, agrupamentos) e a árvore de layout em bandas — em um único arquivo com menos de 100 KB, claramente separado dos dados que ele exibe. Um relatório é um arquivo executável, não um servidor: qualquer runtime que entenda `.mad` pode inspecionar o esquema, compilar SQL determinístico para o banco de dados de destino, materializar o conjunto de resultados em uma tabela SQLite local e renderizá-lo em views nativas AppKit/UIKit, HTML paginado, PDF, CSV ou JSON.
 
-O repositório é um projeto único e autocontido: os aplicativos para iPad/iPhone, o aplicativo desktop nativo para macOS (`AppKit`) (`Mac/`), quatorze frameworks (doze multiplataforma para iOS, Simulador do iOS e macOS nativo; onze headless no Linux), o build e a suíte de testes headless para Linux (126 executáveis de teste, 1.303 testes), a ferramenta de linha de comando `mad` e o sistema de build (`Compressor`) que compila as bibliotecas C de terceiros a partir de códigos-fonte com versões fixadas. O código é publicado sob a licença MIT; o formato `.mad` é uma especificação aberta (consulte [`docs/`](docs/pt-br/)), embora os nomes do projeto e a arte visual dos aplicativos não façam parte da concessão da licença (consulte [`NOTICE`](NOTICE)).
+O repositório é um projeto único e autocontido: os aplicativos para iPad/iPhone, o aplicativo desktop nativo para macOS (`AppKit`) (`Mac/`), quatorze frameworks (doze multiplataforma para iOS, Simulador do iOS e macOS nativo; onze headless no Linux), o build e a suíte de testes headless para Linux (126 executáveis de teste, 1.303 testes), a ferramenta de linha de comando `mad` e o sistema de build (`Compressor`) que compila as bibliotecas C de terceiros a partir de códigos-fonte com versões fixadas. O código é publicado sob a licença MIT; o formato `.mad` é uma especificação aberta (consulte [`docs/`](../docs/pt-br/)), embora os nomes do projeto e a arte visual dos aplicativos não façam parte da concessão da licença (consulte [`NOTICE`](../NOTICE)).
 
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
@@ -33,19 +33,19 @@ A documentação técnica e a especificação do formato também estão disponí
 
 ## Veja em ação
 
-**[MAD Designer para macOS](docs/pt-br/macos.md)** — o aplicativo desktop nativo em `AppKit` (`Mac/`), mostrando o canvas visual de relacionamentos do **MAD Query** e o workspace de layout em bandas do **MAD Designer**:
+**[MAD Designer para macOS](../docs/pt-br/macos.md)** — o aplicativo desktop nativo em `AppKit` (`Mac/`), mostrando o canvas visual de relacionamentos do **MAD Query** e o workspace de layout em bandas do **MAD Designer**:
 
-![Workspace MAD Query no aplicativo nativo para macOS](docs/assets/macos-native-mad-query-pt-BR.png)
+![Workspace MAD Query no aplicativo nativo para macOS](../docs/assets/macos-native-mad-query-pt-BR.png)
 
-![Workspace MAD Designer no aplicativo nativo para macOS](docs/assets/macos-native-mad-designer-pt-BR.png)
+![Workspace MAD Designer no aplicativo nativo para macOS](../docs/assets/macos-native-mad-designer-pt-BR.png)
 
 **MAD Designer para iOS**, da escolha de uma fonte de dados até a leitura do relatório finalizado no MAD Viewer (28 segundos; [vídeo](https://docs.everydayapps.com/assets/app-preview.mp4)):
 
-[![Prévia do aplicativo MAD Designer](docs/assets/app-preview-poster.png)](https://docs.everydayapps.com/assets/app-preview.mp4)
+[![Prévia do aplicativo MAD Designer](../docs/assets/app-preview-poster.png)](https://docs.everydayapps.com/assets/app-preview.mp4)
 
 **A mesma engine rodando em modo headless no Linux**: `inspect`, `schema`, `query`, `refresh` e `export` através da CLI `mad`, sem servidor de relatórios:
 
-![A CLI mad inspecionando, consultando, atualizando e exportando um documento .mad](docs/assets/mad-cli-demo.gif)
+![A CLI mad inspecionando, consultando, atualizando e exportando um documento .mad](../docs/assets/mad-cli-demo.gif)
 
 O [relatório exportado](https://docs.everydayapps.com/assets/london.html) da gravação é HTML puro, podendo ser aberto em qualquer navegador.
 
@@ -73,11 +73,11 @@ A arquitetura divide um relatório entre **a definição portável** (dentro do 
 | **4. Tabela Materializada** *(complementar)* | `<hash>.maddb` + `<hash>.mdcache` | Banco SQLite de linhas (`t<tag>`) + plist de esquema de colunas (`MADDataColumn`) | **A saída do relatório como uma tabela de banco de dados.** Mantém as linhas buscadas, índices de chaves de grupo e metadados de tipos de coluna para que agregações em duas passagens (`SUM`, `COUNT`, `AVG`, `MIN`, `MAX`), ordenação e nova renderização nunca precisem consultar novamente o banco de dados remoto. |
 | **5. Cache de Páginas** *(complementar)* | `<hash>{ih,lh}{w,h}.madac` | Bancos SQLite de índice (`ih`) e layout (`lh`) indexados pela geometria da página | Quebras de página e quadros de elementos pré-calculados para um viewport alvo (por exemplo, `{612, 792}` US Letter), mantendo a rolagem e a exportação instantâneas. |
 
-A especificação completa — layout do contêiner, tabelas do store, esquemas dos arquivos complementares, peculiaridades conhecidas (incluindo por que o nome interno do arquivo de store é historicamente grafado como `analyitics` por compatibilidade retroativa) e verificação de digests multiplataforma — está documentada capítulo a capítulo em [`docs/`](docs/pt-br/).
+A especificação completa — layout do contêiner, tabelas do store, esquemas dos arquivos complementares, peculiaridades conhecidas (incluindo por que o nome interno do arquivo de store é historicamente grafado como `analyitics` por compatibilidade retroativa) e verificação de digests multiplataforma — está documentada capítulo a capítulo em [`docs/`](../docs/pt-br/).
 
 ## Para Onde o MAD Está Indo: Roadmap e Visão
 
-Como o MAD já separa o **grafo de consulta**, a **tabela de resultados SQLite materializada** e o **layout de apresentação**, a arquitetura viabiliza quatro grandes capacidades que estão sendo ativamente projetadas e enfileiradas (consulte [`docs/vision.md`](docs/pt-br/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](docs/project/MAD_DATA_OBJECT.md) e [`docs/project/TODO.md`](docs/project/TODO.md)):
+Como o MAD já separa o **grafo de consulta**, a **tabela de resultados SQLite materializada** e o **layout de apresentação**, a arquitetura viabiliza quatro grandes capacidades que estão sendo ativamente projetadas e enfileiradas (consulte [`docs/vision.md`](../docs/pt-br/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md) e [`docs/project/TODO.md`](../docs/project/TODO.md)):
 
 1. **Um relatório `.mad` como uma tabela de banco de dados ad hoc (Objetos de Dados Componíveis).**
    Em um banco de dados tradicional, você faz `SELECT` a partir de tabelas base como `employee` ou `sales_data`. Um relatório `.mad` faz join e filtra múltiplas tabelas, e sua saída (`.maddb` + `.mdcache`) já é uma tabela SQLite física com esquema tipado (`MADDataColumn`). Ao tornar a saída de um relatório endereçável como fonte de tabela dentro do designer de consultas, **um arquivo `.mad` torna-se uma tabela de banco de dados virtual/materializada**. Outros relatórios, consultas ou ferramentas podem fazer `SELECT` e `JOIN` contra um relatório `.mad` exatamente como fariam com qualquer tabela em um banco de dados.
@@ -112,7 +112,7 @@ As tags publicadas são `latest` e o SHA curto do commit, compiladas para `linux
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
-Os documentos de exemplo atualizam seus dados contra o banco de dados de exemplo Sqlite3 incluído dentro da imagem; as fixtures de MySQL, SQL Server e PostgreSQL esperam os servidores de teste descritos em [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).
+Os documentos de exemplo atualizam seus dados contra o banco de dados de exemplo Sqlite3 incluído dentro da imagem; as fixtures de MySQL, SQL Server e PostgreSQL esperam os servidores de teste descritos em [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md).
 
 ## Em CI
 
@@ -125,7 +125,7 @@ A GitHub Action [mad-action](https://github.com/mthomason/mad-action) executa um
     document: reports/sales.mad
 ```
 
-Ela executa a imagem publicada, portanto a Action e a CLI são exatamente a mesma engine. A Action é gerada a partir de [`satellites/mad-action/`](satellites/mad-action/) neste repositório; [`docs/project/SATELLITE_REPOS.md`](docs/project/SATELLITE_REPOS.md) documenta como o repositório satélite é mantido atualizado.
+Ela executa a imagem publicada, portanto a Action e a CLI são exatamente a mesma engine. A Action é gerada a partir de [`satellites/mad-action/`](../satellites/mad-action/) neste repositório; [`docs/project/SATELLITE_REPOS.md`](../docs/project/SATELLITE_REPOS.md) documenta como o repositório satélite é mantido atualizado.
 
 ## Drivers de banco de dados
 
@@ -136,7 +136,7 @@ O MAD comunica-se com bancos de dados por meio de subclasses de `MADDatabase`. Q
 * **PostgreSQL** — `MADPostgres`, sobre `libpq`;
 * **SQLite** — `MADSqlite3`, para documentos de exemplo, bancos de dados locais e tabelas internas de materialização.
 
-Um driver é um framework que cria uma subclasse de `MADDatabase` e se registra em `MADDatabaseDriverRegistry` — o designer de consultas e a engine nunca enxergam o protocolo de rede. Escrever um novo driver é a primeira contribuição recomendada (veja o tutorial de criação de drivers em [`docs/tutorials/driver-authoring.md`](docs/pt-br/tutorials/driver-authoring.md)). O ponto de extensão é real: os usuários podem construir uma consulta visualmente ou colar SQL (`MADSQLParser`), a engine gera a instrução específica do dialeto e o driver só precisa executá-la e transmitir as linhas para `id<MADDataTableWriting>`.
+Um driver é um framework que cria uma subclasse de `MADDatabase` e se registra em `MADDatabaseDriverRegistry` — o designer de consultas e a engine nunca enxergam o protocolo de rede. Escrever um novo driver é a primeira contribuição recomendada (veja o tutorial de criação de drivers em [`docs/tutorials/driver-authoring.md`](../docs/pt-br/tutorials/driver-authoring.md)). O ponto de extensão é real: os usuários podem construir uma consulta visualmente ou colar SQL (`MADSQLParser`), a engine gera a instrução específica do dialeto e o driver só precisa executá-la e transmitir as linhas para `id<MADDataTableWriting>`.
 
 ## Embarcando a engine
 
@@ -144,7 +144,7 @@ Onze dos quatorze frameworks não dependem de UIKit e compilam em modo headless.
 
 ## Aplicativo nativo para macOS
 
-O aplicativo desktop nativo para macOS ([`docs/macos.md`](docs/pt-br/macos.md), [`Mac/`](Mac/)) é construído diretamente com `AppKit` (SDK `macosx`, `MACOSX_DEPLOYMENT_TARGET = 12.0`) sobre os doze frameworks MAD multiplataforma e as dez bibliotecas C estáticas universais (`arm64` + `x86_64`) compiladas pelo `Compressor`:
+O aplicativo desktop nativo para macOS ([`docs/macos.md`](../docs/pt-br/macos.md), [`Mac/`](../Mac/)) é construído diretamente com `AppKit` (SDK `macosx`, `MACOSX_DEPLOYMENT_TARGET = 12.0`) sobre os doze frameworks MAD multiplataforma e as dez bibliotecas C estáticas universais (`arm64` + `x86_64`) compiladas pelo `Compressor`:
 
 * **Arquitetura `NSDocument` nativa (`MADMacDocument` / `MADMacDocumentController`):** Abre e salva arquivos `.mad` nativamente a partir do Finder ou do painel padrão de abertura (com um botão integrado **New Document**), migra automaticamente arquivos `.mad` legados do Core Data via `MADStoreConverter` e integra `MADDesignerLayout` diretamente com `NSDocument.undoManager` (`Cmd+Z` / `Cmd+Shift+Z`).
 * **Assistente de Conexão de Banco de Dados e Importação de Esquema (`MADMacConnectionWindowController`):** Conecta-se a **SQLite**, **MySQL / MariaDB**, **Microsoft SQL Server** ou **PostgreSQL**, verifica a conectividade, armazena credenciais nas Chaves do macOS (`MADKeyChain`) e importa esquemas de tabelas e colunas para um novo documento `.mad`.
@@ -153,7 +153,7 @@ O aplicativo desktop nativo para macOS ([`docs/macos.md`](docs/pt-br/macos.md), 
   2. **MAD Designer (`MADMacDesignerViewController`):** Visualização dividida em três painéis com **Page & Section Minimap** interativo, outline **Report Bands**, origem de arrasto pesquisável **Query Fields**, canvas de design com zoom e réguas (`MADMacDesignerCanvasView`) com arrastar e soltar entre seções e guias inteligentes de alinhamento, além de um **Page & Element Inspector** de cartão duplo.
   3. **MAD Viewer (`MADMacViewerViewController`):** Atualização de dados ao vivo (`Cmd+R`), repaginação instantânea por **Page Size** (`US Letter`, `Legal`, `Tabloid`, `A3`, `A4`, `A5`, `B4`, `B5`, `JIS B4`, `JIS B5`), pré-visualização emoldurada em `PDFView`, impressão nativa com `NSPrintOperation` (`Cmd+P`) e exportação (`Cmd+E`) para **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report** e **Plain Text**.
 
-Consulte [`docs/macos.md`](docs/pt-br/macos.md) para o guia completo e [`docs/project/MAD_MACOS.md`](docs/project/MAD_MACOS.md) para a auditoria de portabilidade multiplataforma.
+Consulte [`docs/macos.md`](../docs/pt-br/macos.md) para o guia completo e [`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md) para a auditoria de portabilidade multiplataforma.
 
 ## Compilação e testes
 
@@ -188,7 +188,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ```
 
-(`MADMySQL`, `MADTdsClient` e `MADPostgres` também possuem suítes de testes live que se comunicam com um servidor de banco de dados real e são puladas quando o servidor não está acessível — consulte [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).)
+(`MADMySQL`, `MADTdsClient` e `MADPostgres` também possuem suítes de testes live que se comunicam com um servidor de banco de dados real e são puladas quando o servidor não está acessível — consulte [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md).)
 
 ### Linux (Engine Headless e CLI)
 
@@ -198,7 +198,7 @@ A engine headless é verificada da mesma forma no Linux. A partir da raiz do rep
 ./Linux/build.sh       # build the toolchain image, compile the eleven frameworks, run the suites
 ```
 
-Isso executa 126 binários de teste e 1.303 testes dentro do contêiner, e `--verify` adiciona as verificações ponta a ponta da CLI contra as fixtures versionadas e seus digests fixados. Consulte [`Linux/README.md`](Linux/README_pt-BR.md) para detalhes sobre a imagem, as versões fixadas e as divergências do GNUstep encontradas durante o porte.
+Isso executa 126 binários de teste e 1.303 testes dentro do contêiner, e `--verify` adiciona as verificações ponta a ponta da CLI contra as fixtures versionadas e seus digests fixados. Consulte [`Linux/README.md`](../Linux/README_pt-BR.md) para detalhes sobre a imagem, as versões fixadas e as divergências do GNUstep encontradas durante o porte.
 
 ## Apoie o projeto
 
@@ -210,7 +210,7 @@ O MAD é software livre e continuará sendo livre. Um único mantenedor cuida do
 
 ## Licença
 
-MIT — consulte [`LICENSE`](LICENSE). A licença cobre o software; os nomes "MAD", "MAD Designer" e "MAD Viewer", os ícones dos aplicativos e demais artes visuais dos produtos, bem como a mídia de pré-visualização do aplicativo pertencem ao autor e estão excluídos da licença (consulte [`NOTICE`](NOTICE)). Cada componente de terceiros, sua respectiva licença e as obrigações associadas à sua distribuição estão registrados em [`docs/project/THIRD_PARTY_LICENSES.md`](docs/project/THIRD_PARTY_LICENSES.md).
+MIT — consulte [`LICENSE`](../LICENSE). A licença cobre o software; os nomes "MAD", "MAD Designer" e "MAD Viewer", os ícones dos aplicativos e demais artes visuais dos produtos, bem como a mídia de pré-visualização do aplicativo pertencem ao autor e estão excluídos da licença (consulte [`NOTICE`](../NOTICE)). Cada componente de terceiros, sua respectiva licença e as obrigações associadas à sua distribuição estão registrados em [`docs/project/THIRD_PARTY_LICENSES.md`](../docs/project/THIRD_PARTY_LICENSES.md).
 
 ## Conformidade de exportação
 
