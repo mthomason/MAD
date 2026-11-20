@@ -94,7 +94,6 @@
   <sys:String x:Key="Designer.DataField">Campo de Dados</sys:String>
   <sys:String x:Key="Designer.Aggregate">Agregado</sys:String>
   <sys:String x:Key="Designer.Barcode">Código de Barras</sys:String>
-  <sys:String x:Key="Designer.BarcodeUnavailable">O código de barras não está disponível no mecanismo do Windows</sys:String>
   <sys:String x:Key="Designer.Image">Imagem</sys:String>
   <sys:String x:Key="Designer.Line">Linha</sys:String>
   <sys:String x:Key="Designer.Undo">Desfazer</sys:String>
@@ -141,6 +140,16 @@
   <sys:String x:Key="Designer.Element.Image">Imagem</sys:String>
   <sys:String x:Key="Designer.Element.Line">Linha</sys:String>
   <sys:String x:Key="Designer.Element.Generic">Elemento</sys:String>
+  <sys:String x:Key="Designer.Element.Barcode">Código de Barras</sys:String>
+  <sys:String x:Key="Designer.Placeholder.Barcode">[Código de Barras]</sys:String>
+  <sys:String x:Key="Designer.Barcode.Symbology">Simbologia</sys:String>
+  <sys:String x:Key="Designer.Barcode.ShowText">Mostrar texto</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border">Borda</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.None">Sem borda</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.Bind">Unir barras</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.Box">Moldura</sys:String>
+  <sys:String x:Key="Designer.Barcode.Field">Entrada</sys:String>
+  <sys:String x:Key="Designer.Barcode.StaticInput">Entrada estática</sys:String>
   <sys:String x:Key="Designer.Placeholder.Label">Rótulo Estático</sys:String>
   <sys:String x:Key="Designer.Placeholder.DataField">[Campo de Dados]</sys:String>
   <sys:String x:Key="Designer.Placeholder.Image">[Imagem]</sys:String>

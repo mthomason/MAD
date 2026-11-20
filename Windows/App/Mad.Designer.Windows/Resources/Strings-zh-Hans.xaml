@@ -94,7 +94,6 @@
   <sys:String x:Key="Designer.DataField">数据字段</sys:String>
   <sys:String x:Key="Designer.Aggregate">聚合</sys:String>
   <sys:String x:Key="Designer.Barcode">条码</sys:String>
-  <sys:String x:Key="Designer.BarcodeUnavailable">Windows 引擎不支持条形码</sys:String>
   <sys:String x:Key="Designer.Image">图像</sys:String>
   <sys:String x:Key="Designer.Line">线条</sys:String>
   <sys:String x:Key="Designer.Undo">撤销</sys:String>
@@ -141,6 +140,16 @@
   <sys:String x:Key="Designer.Element.Image">图像</sys:String>
   <sys:String x:Key="Designer.Element.Line">线条</sys:String>
   <sys:String x:Key="Designer.Element.Generic">元素</sys:String>
+  <sys:String x:Key="Designer.Element.Barcode">条码</sys:String>
+  <sys:String x:Key="Designer.Placeholder.Barcode">[条码]</sys:String>
+  <sys:String x:Key="Designer.Barcode.Symbology">条码符号</sys:String>
+  <sys:String x:Key="Designer.Barcode.ShowText">显示文本</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border">边框</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.None">无边框</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.Bind">绑定条</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.Box">框线</sys:String>
+  <sys:String x:Key="Designer.Barcode.Field">输入</sys:String>
+  <sys:String x:Key="Designer.Barcode.StaticInput">静态输入</sys:String>
   <sys:String x:Key="Designer.Placeholder.Label">静态标签</sys:String>
   <sys:String x:Key="Designer.Placeholder.DataField">[数据字段]</sys:String>
   <sys:String x:Key="Designer.Placeholder.Image">[图像]</sys:String>

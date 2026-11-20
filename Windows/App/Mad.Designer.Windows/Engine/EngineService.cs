@@ -209,8 +209,24 @@ public sealed class EngineService : IAsyncDisposable
         if (content.Function != null) contentParams["function"] = content.Function;
         if (content.Scope != null) contentParams["scope"] = content.Scope;
         if (content.Group != null) contentParams["group"] = content.Group;
+        if (content.BarcodeType != null) contentParams["barcodeType"] = content.BarcodeType;
+        if (content.HumanReadable != null) contentParams["humanReadable"] = content.HumanReadable;
+        if (content.BorderStyle != null) contentParams["borderStyle"] = content.BorderStyle;
         var result = await CallAsync("set-element-content", new Dictionary<string, object?> { ["handle"] = handle, ["element"] = element, ["content"] = contentParams }).ConfigureAwait(false);
         return LayoutModel.Parse(result);
+    }
+
+    /// <summary>The barcode symbologies the engine can build, ordered by name — MADBarcode's
+    /// own name table, served as <c>barcode-types</c>.</summary>
+    public async Task<IReadOnlyList<BarcodeSymbology>> BarcodeTypesAsync()
+    {
+        var result = await CallAsync("barcode-types", new Dictionary<string, object?>()).ConfigureAwait(false);
+        var types = new List<BarcodeSymbology>();
+        if (result.TryGetProperty("types", out var array) && array.ValueKind == JsonValueKind.Array)
+        {
+            foreach (var entry in array.EnumerateArray()) types.Add(BarcodeSymbology.Parse(entry));
+        }
+        return types;
     }
 
     public async Task<LayoutModel> SetElementTypographyAsync(int handle, IReadOnlyList<long> elements, ElementTypography style)
@@ -419,7 +435,17 @@ public sealed class EngineService : IAsyncDisposable
 public sealed record ElementGeometry(long Id, double X, double Y, double W, double H);
 
 /// <summary>A type-specific content patch. Only non-null members are sent.</summary>
-public sealed record ElementContent(string? Text = null, long? Field = null, int? Function = null, int? Scope = null, int? Group = null);
+public sealed record ElementContent(string? Text = null, long? Field = null, int? Function = null, int? Scope = null, int? Group = null)
+{
+    /// <summary>A barcode's symbology id (MADBarcodeType's raw zint value).</summary>
+    public int? BarcodeType { get; init; }
+
+    /// <summary>Whether the symbol prints its value below the bars.</summary>
+    public bool? HumanReadable { get; init; }
+
+    /// <summary>The barcode's border style, as the inspector's 0/1/2 index.</summary>
+    public int? BorderStyle { get; init; }
+}
 
 /// <summary>A bulk typography patch. Only non-null members are sent.</summary>
 public sealed record ElementTypography(

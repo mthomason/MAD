@@ -35,6 +35,8 @@ public sealed class DesignerViewModel : ObservableObject
     private string? _errorText;
     private bool _isUpdatingInspector;
     private readonly UndoRedoStack _undoRedo = new();
+    private IReadOnlyList<BarcodeSymbology> _barcodeTypes = Array.Empty<BarcodeSymbology>();
+    private IReadOnlyList<BarcodeInputOption> _barcodeInputOptions = new[] { new BarcodeInputOption(0, "") };
 
     public DesignerViewModel(EngineService engine)
     {
@@ -44,6 +46,7 @@ public sealed class DesignerViewModel : ObservableObject
         AddAggregateCommand = new AsyncRelayCommand(() => AddPaletteAsync("aggregate", 144, 22), () => HasDocument);
         AddImageCommand = new AsyncRelayCommand(() => AddPaletteAsync("image", 96, 64), () => HasDocument);
         AddLineRuleCommand = new AsyncRelayCommand(() => AddPaletteAsync("line", 320, 8), () => HasDocument);
+        AddBarcodeCommand = new AsyncRelayCommand(() => AddPaletteAsync("barcode", 160, 48), () => HasDocument);
         DeleteElementCommand = new AsyncRelayCommand(DeleteElementAsync, () => HasDocument && SelectedElementIds.Count > 0);
         DuplicateElementCommand = new AsyncRelayCommand(DuplicateElementAsync, () => HasDocument && SelectedElementIds.Count > 0);
         UndoCommand = new AsyncRelayCommand(UndoAsync, () => _undoRedo.CanUndo);
@@ -57,6 +60,7 @@ public sealed class DesignerViewModel : ObservableObject
     public AsyncRelayCommand AddAggregateCommand { get; }
     public AsyncRelayCommand AddImageCommand { get; }
     public AsyncRelayCommand AddLineRuleCommand { get; }
+    public AsyncRelayCommand AddBarcodeCommand { get; }
     public AsyncRelayCommand DeleteElementCommand { get; }
     public AsyncRelayCommand DuplicateElementCommand { get; }
     public AsyncRelayCommand UndoCommand { get; }
@@ -69,6 +73,12 @@ public sealed class DesignerViewModel : ObservableObject
     public IReadOnlyList<LayoutSection> Sections => _model.Sections;
     public IReadOnlyList<LayoutElement> Elements => _model.Elements;
     public IReadOnlyList<LayoutField> Fields => _model.Fields;
+
+    /// <summary>The symbologies the engine's <c>barcode-types</c> catalogue offers.</summary>
+    public IReadOnlyList<BarcodeSymbology> BarcodeTypes => _barcodeTypes;
+
+    /// <summary>The barcode input picker's rows: the static input first, then every query field.</summary>
+    public IReadOnlyList<BarcodeInputOption> BarcodeInputOptions => _barcodeInputOptions;
 
     public long SelectedSectionId { get => _selectedSectionId; private set => Set(ref _selectedSectionId, value); }
 
@@ -90,6 +100,16 @@ public sealed class DesignerViewModel : ObservableObject
         _handle = handle;
         OnPropertyChanged(nameof(HasDocument));
         RaiseCanExecuteChanged();
+        try
+        {
+            _barcodeTypes = await _engine.BarcodeTypesAsync();
+        }
+        catch (Exception exception)
+        {
+            _barcodeTypes = Array.Empty<BarcodeSymbology>();
+            ErrorText = exception.Message;
+        }
+        OnPropertyChanged(nameof(BarcodeTypes));
         await ReloadAsync();
     }
 
@@ -371,10 +391,15 @@ public sealed class DesignerViewModel : ObservableObject
 
     private static ElementContent CaptureContent(LayoutElement el) => new(
         Text: el.Text,
-        Field: el.Field != 0 ? el.Field : null,
+        Field: el.IsBarcode ? (el.Barcode?.Field ?? 0) : (el.Field != 0 ? el.Field : null),
         Function: el.IsAggregate ? (int)el.Function : null,
         Scope: el.IsAggregate ? (int)el.Scope : null,
-        Group: el.IsAggregate ? el.Group : null);
+        Group: el.IsAggregate ? el.Group : null)
+    {
+        BarcodeType = el.Barcode?.Symbology,
+        HumanReadable = el.Barcode?.HumanReadable,
+        BorderStyle = el.Barcode?.BorderStyle,
+    };
 
     private static ElementTypography CaptureTypography(LayoutElement el) => new(
         FontName: el.FontName, FontSize: el.FontSize, Bold: el.Bold, Italic: el.Italic,
@@ -390,6 +415,7 @@ public sealed class DesignerViewModel : ObservableObject
         { IsDataField: true } => "data-field",
         { IsAggregate: true } => "aggregate",
         { IsImage: true } => "image",
+        { IsBarcode: true } => "barcode",
         { IsLineRule: true } => "line",
         _ => "label",
     };
@@ -482,6 +508,7 @@ public sealed class DesignerViewModel : ObservableObject
         { IsDataField: true } => Localizer.Get("Designer.Element.DataField"),
         { IsAggregate: true } => Localizer.Get("Designer.Element.Aggregate"),
         { IsImage: true } => Localizer.Get("Designer.Element.Image"),
+        { IsBarcode: true } => Localizer.Get("Designer.Element.Barcode"),
         { IsLineRule: true } => Localizer.Get("Designer.Element.Line"),
         _ => Localizer.Get("Designer.Element.Generic"),
     };
@@ -503,6 +530,59 @@ public sealed class DesignerViewModel : ObservableObject
         {
             if (_isUpdatingInspector || PrimaryElement is not { } el) return;
             _ = SetElementContentAsync(el.Id, new ElementContent(Text: value));
+        }
+    }
+
+    /// <summary>The selected barcode's symbology, as an index into <see cref="BarcodeTypes"/>.</summary>
+    public int ElementBarcodeSymbologyIndex
+    {
+        get
+        {
+            if (PrimaryElement?.Barcode is not { } barcode) return -1;
+            for (int index = 0; index < _barcodeTypes.Count; index++)
+            {
+                if (_barcodeTypes[index].Id == barcode.Symbology) return index;
+            }
+            return -1;
+        }
+        set
+        {
+            if (_isUpdatingInspector || PrimaryElement is not { } el) return;
+            if (value < 0 || value >= _barcodeTypes.Count) return;
+            _ = SetElementContentAsync(el.Id, new ElementContent { BarcodeType = _barcodeTypes[value].Id });
+        }
+    }
+
+    public bool ElementBarcodeHumanReadable
+    {
+        get => PrimaryElement?.Barcode?.HumanReadable ?? false;
+        set
+        {
+            if (_isUpdatingInspector || PrimaryElement is not { } el) return;
+            _ = SetElementContentAsync(el.Id, new ElementContent { HumanReadable = value });
+        }
+    }
+
+    /// <summary>0 = no border, 1 = bind the bars, 2 = a full frame (the Mac inspector's order).</summary>
+    public int ElementBarcodeBorderIndex
+    {
+        get => Math.Clamp(PrimaryElement?.Barcode?.BorderStyle ?? 0, 0, 2);
+        set
+        {
+            if (_isUpdatingInspector || PrimaryElement is not { } el) return;
+            _ = SetElementContentAsync(el.Id, new ElementContent { BorderStyle = Math.Clamp(value, 0, 2) });
+        }
+    }
+
+    /// <summary>The barcode's input: 0 is the static string (edited as the element's text),
+    /// any other value is a query field's id.</summary>
+    public long ElementBarcodeInputId
+    {
+        get => PrimaryElement?.Barcode is { UseStaticInput: false } barcode ? barcode.Field : 0;
+        set
+        {
+            if (_isUpdatingInspector || PrimaryElement is not { } el) return;
+            _ = SetElementContentAsync(el.Id, new ElementContent { Field = value });
         }
     }
 
@@ -618,6 +698,7 @@ public sealed class DesignerViewModel : ObservableObject
         AddAggregateCommand.RaiseCanExecuteChanged();
         AddImageCommand.RaiseCanExecuteChanged();
         AddLineRuleCommand.RaiseCanExecuteChanged();
+        AddBarcodeCommand.RaiseCanExecuteChanged();
         DeleteElementCommand.RaiseCanExecuteChanged();
         DuplicateElementCommand.RaiseCanExecuteChanged();
     }
@@ -707,10 +788,18 @@ public sealed class DesignerViewModel : ObservableObject
             SelectedSectionId = 0;
         }
 
+        var inputOptions = new List<BarcodeInputOption>
+        {
+            new(0, Localizer.Get("Designer.Barcode.StaticInput")),
+        };
+        foreach (var field in model.Fields) inputOptions.Add(new BarcodeInputOption(field.Id, field.Display));
+        _barcodeInputOptions = inputOptions;
+
         OnPropertyChanged(nameof(Model));
         OnPropertyChanged(nameof(Sections));
         OnPropertyChanged(nameof(Elements));
         OnPropertyChanged(nameof(Fields));
+        OnPropertyChanged(nameof(BarcodeInputOptions));
         OnPropertyChanged(nameof(SelectedElementIds));
         OnPropertyChanged(nameof(PrimaryElement));
         RaiseInspectorChanged();
@@ -746,5 +835,12 @@ public sealed class DesignerViewModel : ObservableObject
         OnPropertyChanged(nameof(ElementBorderRight));
         OnPropertyChanged(nameof(ElementPadding));
         OnPropertyChanged(nameof(ElementMargin));
+        OnPropertyChanged(nameof(ElementBarcodeSymbologyIndex));
+        OnPropertyChanged(nameof(ElementBarcodeHumanReadable));
+        OnPropertyChanged(nameof(ElementBarcodeBorderIndex));
+        OnPropertyChanged(nameof(ElementBarcodeInputId));
     }
 }
+
+/// <summary>One row in the barcode input picker: the static input (id 0) or a query field.</summary>
+public sealed record BarcodeInputOption(long Id, string Display);

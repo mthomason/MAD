@@ -1,10 +1,12 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Mad.Designer.Windows.Engine;
 using Mad.Designer.Windows.Infrastructure;
@@ -219,7 +221,22 @@ public sealed class DesignerCanvas : Canvas
         // one) must paint above every band, including the bands that follow its own section.
         Panel.SetZIndex(border, selected ? SelectedZIndex : 0);
 
-        if (element.IsLineRule)
+        if (element.IsBarcode)
+        {
+            // The engine renders the sample symbol, so the canvas shows the symbology
+            // and options as they will print; the text is the fallback when zint
+            // refuses the sample input.
+            border.Child = BarcodePreview(element) ?? (UIElement)new TextBlock
+            {
+                Text = DisplayText(element),
+                FontSize = 10 * _zoom,
+                Foreground = DesignPalette.PaperInk,
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                Margin = new Thickness(2 * _zoom, 1 * _zoom, 2 * _zoom, 1 * _zoom),
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+        }
+        else if (element.IsLineRule)
         {
             border.Child = new Border
             {
@@ -793,14 +810,58 @@ public sealed class DesignerCanvas : Canvas
             : element.IsImage ? ImageTint
             : LabelTint;
 
-    private static string DisplayText(LayoutElement element)
+    /// <summary>The engine-rendered sample symbol, decoded from the snapshot's base64 PNG;
+    /// null when zint refused the sample input and the text fallback should show.</summary>
+    private Image? BarcodePreview(LayoutElement element)
+    {
+        string base64 = element.Barcode?.PreviewBase64 ?? "";
+        if (string.IsNullOrEmpty(base64)) return null;
+        try
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.StreamSource = new MemoryStream(Convert.FromBase64String(base64));
+            bitmap.EndInit();
+            bitmap.Freeze();
+            return new Image
+            {
+                Source = bitmap,
+                Stretch = Stretch.Uniform,
+                Margin = new Thickness(2 * _zoom),
+            };
+        }
+        catch (Exception exception) when (exception is FormatException or NotSupportedException)
+        {
+            return null;
+        }
+    }
+
+    private string DisplayText(LayoutElement element)
     {
         if (element.IsLineRule) return "";
+        if (element.IsBarcode) return BarcodeDisplay(element);
         if (element.IsLabel) return string.IsNullOrEmpty(element.Text) ? Localizer.Get("Designer.Placeholder.Label") : element.Text;
         if (element.IsDataField) return string.IsNullOrEmpty(element.Text) ? Localizer.Get("Designer.Placeholder.DataField") : element.Text;
         if (element.IsAggregate) return AggregateDisplay(element);
         if (element.IsImage) return Localizer.Get("Designer.Placeholder.Image");
         return Localizer.Get("Designer.Element.Generic");
+    }
+
+    private string BarcodeDisplay(LayoutElement element)
+    {
+        if (element.Barcode is { } barcode)
+        {
+            if (barcode.UseStaticInput)
+            {
+                return string.IsNullOrEmpty(barcode.StaticInput)
+                    ? Localizer.Get("Designer.Placeholder.Barcode")
+                    : "Barcode: " + barcode.StaticInput;
+            }
+            var field = _vm?.Fields.FirstOrDefault(f => f.Id == barcode.Field);
+            if (field != null) return "Barcode: " + field.Display;
+        }
+        return Localizer.Get("Designer.Placeholder.Barcode");
     }
 
     private static string AggregateDisplay(LayoutElement element)

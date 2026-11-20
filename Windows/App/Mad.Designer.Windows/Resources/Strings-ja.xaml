@@ -94,7 +94,6 @@
   <sys:String x:Key="Designer.DataField">データフィールド</sys:String>
   <sys:String x:Key="Designer.Aggregate">集計</sys:String>
   <sys:String x:Key="Designer.Barcode">バーコード</sys:String>
-  <sys:String x:Key="Designer.BarcodeUnavailable">バーコードは Windows エンジンでは使用できません</sys:String>
   <sys:String x:Key="Designer.Image">画像</sys:String>
   <sys:String x:Key="Designer.Line">線</sys:String>
   <sys:String x:Key="Designer.Undo">取り消す</sys:String>
@@ -141,6 +140,16 @@
   <sys:String x:Key="Designer.Element.Image">画像</sys:String>
   <sys:String x:Key="Designer.Element.Line">罫線</sys:String>
   <sys:String x:Key="Designer.Element.Generic">要素</sys:String>
+  <sys:String x:Key="Designer.Element.Barcode">バーコード</sys:String>
+  <sys:String x:Key="Designer.Placeholder.Barcode">[バーコード]</sys:String>
+  <sys:String x:Key="Designer.Barcode.Symbology">シンボロジー</sys:String>
+  <sys:String x:Key="Designer.Barcode.ShowText">テキストを表示</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border">境界線</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.None">境界線なし</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.Bind">バーを囲む</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.Box">ボックス枠</sys:String>
+  <sys:String x:Key="Designer.Barcode.Field">入力</sys:String>
+  <sys:String x:Key="Designer.Barcode.StaticInput">固定入力</sys:String>
   <sys:String x:Key="Designer.Placeholder.Label">静的ラベル</sys:String>
   <sys:String x:Key="Designer.Placeholder.DataField">[データフィールド]</sys:String>
   <sys:String x:Key="Designer.Placeholder.Image">[画像]</sys:String>

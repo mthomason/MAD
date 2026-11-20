@@ -161,6 +161,11 @@ public sealed record LayoutElement(
     public bool IsDataField => Type == ElementType.LabelDynamic;
     public bool IsAggregate => Type == ElementType.Aggregate;
     public bool IsImage => Type == ElementType.Image;
+    public bool IsBarcode => Type == ElementType.Barcode;
+
+    /// <summary>The barcode settings and sample symbol the engine bakes into the snapshot, or
+    /// null for every other element.</summary>
+    public BarcodeContent? Barcode { get; init; }
 
     internal static LayoutElement Parse(JsonElement e) => new(
         LayoutJson.Long(e, "id"),
@@ -190,7 +195,45 @@ public sealed record LayoutElement(
         LayoutJson.Double(e, "borderLeft"),
         LayoutJson.Double(e, "borderRight"),
         LayoutJson.Double(e, "padding"),
-        LayoutJson.Double(e, "margin"));
+        LayoutJson.Double(e, "margin"))
+    {
+        // A barcode element carries one nested member; the other elements' shape is
+        // unchanged (LayoutModel.Parse reads it only when it is present).
+        Barcode = e.TryGetProperty("barcode", out var barcode) && barcode.ValueKind == JsonValueKind.Object
+            ? BarcodeContent.Parse(barcode)
+            : null,
+    };
+}
+
+/// <summary>One barcode element's settings, plus the base64 PNG the engine rendered for the
+/// designer's canvas (empty when zint refused the sample input).</summary>
+public sealed record BarcodeContent(
+    int Symbology,
+    string SymbologyName,
+    bool HumanReadable,
+    int BorderStyle,
+    bool UseStaticInput,
+    string StaticInput,
+    long Field,
+    string PreviewBase64)
+{
+    internal static BarcodeContent Parse(JsonElement e) => new(
+        LayoutJson.Int(e, "type"),
+        LayoutJson.Str(e, "name"),
+        LayoutJson.Bool(e, "humanReadable"),
+        LayoutJson.Int(e, "borderStyle"),
+        LayoutJson.Bool(e, "useStaticInput"),
+        LayoutJson.Str(e, "staticInput"),
+        LayoutJson.Long(e, "field"),
+        LayoutJson.Str(e, "preview"));
+}
+
+/// <summary>One entry in the engine's symbology catalogue (<c>barcode-types</c>).</summary>
+public sealed record BarcodeSymbology(int Id, string Name)
+{
+    internal static BarcodeSymbology Parse(JsonElement e) => new(
+        LayoutJson.Int(e, "id"),
+        LayoutJson.Str(e, "name"));
 }
 
 /// <summary>One query field the designer can bind a data field or aggregate to.</summary>
