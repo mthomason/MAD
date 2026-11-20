@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Mad.Designer.Windows.Engine;
+using Mad.Designer.Windows.Infrastructure;
 using Mad.Designer.Windows.Models;
 using Mad.Designer.Windows.ViewModels;
 
@@ -134,7 +135,7 @@ public sealed class DesignerCanvas : Canvas
         SetTop(band, y * _zoom);
         band.Child = new TextBlock
         {
-            Text = $"{section.Title}  ·  {_vm!.Elements.Count(e => e.Section == section.Id)} items",
+            Text = $"{section.DisplayTitle}  ·  {Localizer.Format("Designer.ItemCount", _vm!.Elements.Count(e => e.Section == section.Id))}",
             FontSize = 11 * _zoom,
             Foreground = SystemColors.GrayTextBrush,
             Margin = new Thickness(10 * _zoom, 4 * _zoom, 0, 0),
@@ -660,11 +661,11 @@ public sealed class DesignerCanvas : Canvas
     private static string DisplayText(LayoutElement element)
     {
         if (element.IsLineRule) return "";
-        if (element.IsLabel) return string.IsNullOrEmpty(element.Text) ? "Static Label" : element.Text;
-        if (element.IsDataField) return string.IsNullOrEmpty(element.Text) ? "[Data Field]" : element.Text;
+        if (element.IsLabel) return string.IsNullOrEmpty(element.Text) ? Localizer.Get("Designer.Placeholder.Label") : element.Text;
+        if (element.IsDataField) return string.IsNullOrEmpty(element.Text) ? Localizer.Get("Designer.Placeholder.DataField") : element.Text;
         if (element.IsAggregate) return AggregateDisplay(element);
-        if (element.IsImage) return "[Image]";
-        return "Element";
+        if (element.IsImage) return Localizer.Get("Designer.Placeholder.Image");
+        return Localizer.Get("Designer.Element.Generic");
     }
 
     private static string AggregateDisplay(LayoutElement element)

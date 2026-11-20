@@ -1,7 +1,8 @@
 <Window x:Class="Mad.Designer.Windows.Views.AboutWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="About MAD Designer" Height="620" Width="760"
+        xmlns:infra="clr-namespace:Mad.Designer.Windows.Infrastructure"
+        Title="{infra:Loc About.Title}" Height="620" Width="760"
         MinHeight="480" MinWidth="640" WindowStartupLocation="CenterOwner">
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="16,14,16,8">
@@ -11,15 +12,15 @@
         </StackPanel>
 
         <TabControl Margin="12,0,12,12">
-            <TabItem Header="Overview">
+            <TabItem Header="{infra:Loc About.Tab.Overview}">
                 <TextBox Text="{Binding Overview}" IsReadOnly="True" TextWrapping="Wrap"
                          VerticalScrollBarVisibility="Auto" FontSize="12" Margin="4"/>
             </TabItem>
-            <TabItem Header="License &amp; Notice">
+            <TabItem Header="{infra:Loc About.Tab.License}">
                 <TextBox Text="{Binding LicenseNotice}" IsReadOnly="True" TextWrapping="Wrap"
                          VerticalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="11" Margin="4"/>
             </TabItem>
-            <TabItem Header="Acknowledgements">
+            <TabItem Header="{infra:Loc About.Tab.Acknowledgements}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="220"/>

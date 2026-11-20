@@ -48,11 +48,11 @@ public partial class MainWindow : Window
         string extension = metadata?.Extension ?? "txt";
 
         string stem = Path.GetFileNameWithoutExtension(_viewModel.Document.FileName);
-        if (string.IsNullOrEmpty(stem)) stem = "report";
+        if (string.IsNullOrEmpty(stem)) stem = Localizer.Get("Dialog.DefaultReport");
 
         var dialog = new Microsoft.Win32.SaveFileDialog
         {
-            Filter = $"Report (*.{extension})|*.{extension}|All files (*.*)|*.*",
+            Filter = Localizer.Format("Dialog.ReportFilter", extension),
             DefaultExt = extension,
             AddExtension = true,
             FileName = $"{stem}.{extension}",
@@ -64,8 +64,8 @@ public partial class MainWindow : Window
     {
         var dialog = new Microsoft.Win32.SaveFileDialog
         {
-            Filter = "MAD documents (*.mad)|*.mad",
-            FileName = "report.mad",
+            Filter = Localizer.Get("Dialog.SaveMadFilter"),
+            FileName = Localizer.Get("Dialog.DefaultReportFile"),
         };
         return dialog.ShowDialog() == true ? dialog.FileName : null;
     }

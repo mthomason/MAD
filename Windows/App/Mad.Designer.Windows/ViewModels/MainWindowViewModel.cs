@@ -74,7 +74,7 @@ public sealed class MainWindowViewModel : ObservableObject
     {
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            Filter = "MAD documents (*.mad)|*.mad|All files (*.*)|*.*",
+            Filter = Localizer.Get("Dialog.OpenMadFilter"),
         };
         if (dialog.ShowDialog() == true)
         {

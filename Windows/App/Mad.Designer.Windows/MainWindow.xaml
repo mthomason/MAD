@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:Mad.Designer.Windows.Views"
         xmlns:infra="clr-namespace:Mad.Designer.Windows.Infrastructure"
-        Title="MAD Designer" Height="780" Width="1240"
+        Title="{infra:Loc App.Title}" Height="780" Width="1240"
         MinHeight="620" MinWidth="960">
     <Window.Resources>
         <infra:EnumToIntConverter x:Key="EnumToInt"/>
@@ -12,17 +12,17 @@
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New Document…" Command="{Binding NewDocumentCommand}"/>
-                <MenuItem Header="_Open…" Command="{Binding OpenDocumentCommand}"/>
+            <MenuItem Header="{infra:Loc Menu.File}">
+                <MenuItem Header="{infra:Loc Menu.File.New}" Command="{Binding NewDocumentCommand}"/>
+                <MenuItem Header="{infra:Loc Menu.File.Open}" Command="{Binding OpenDocumentCommand}"/>
                 <Separator/>
-                <MenuItem Header="_Save" Command="{Binding Document.SaveCommand}"/>
-                <MenuItem Header="Save _As…" Command="{Binding Document.SaveAsCommand}"/>
+                <MenuItem Header="{infra:Loc Menu.File.Save}" Command="{Binding Document.SaveCommand}"/>
+                <MenuItem Header="{infra:Loc Menu.File.SaveAs}" Command="{Binding Document.SaveAsCommand}"/>
                 <Separator/>
-                <MenuItem Header="_Database Connection…" Command="{Binding EditConnectionCommand}"
+                <MenuItem Header="{infra:Loc Menu.File.DatabaseConnection}" Command="{Binding EditConnectionCommand}"
                           IsEnabled="{Binding Document.HasDocument}"/>
                 <Separator/>
-                <MenuItem Header="_Recent Files" ItemsSource="{Binding RecentFiles}">
+                <MenuItem Header="{infra:Loc Menu.File.RecentFiles}" ItemsSource="{Binding RecentFiles}">
                     <MenuItem.ItemContainerStyle>
                         <Style TargetType="MenuItem">
                             <Setter Property="Header" Value="{Binding}"/>
@@ -32,16 +32,16 @@
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="_Help">
-                <MenuItem Header="_About MAD Designer" Command="{Binding OpenAboutCommand}"/>
+            <MenuItem Header="{infra:Loc Menu.Help}">
+                <MenuItem Header="{infra:Loc Menu.Help.About}" Command="{Binding OpenAboutCommand}"/>
             </MenuItem>
         </Menu>
 
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Content="New…" Command="{Binding NewDocumentCommand}"/>
-                <Button Content="Open…" Command="{Binding OpenDocumentCommand}"/>
-                <Button Content="About" Command="{Binding OpenAboutCommand}"/>
+                <Button Content="{infra:Loc Toolbar.New}" Command="{Binding NewDocumentCommand}"/>
+                <Button Content="{infra:Loc Toolbar.Open}" Command="{Binding OpenDocumentCommand}"/>
+                <Button Content="{infra:Loc Toolbar.About}" Command="{Binding OpenAboutCommand}"/>
             </ToolBar>
         </ToolBarTray>
 
@@ -61,13 +61,13 @@
 
         <TabControl IsEnabled="{Binding Document.HasDocument}"
                     SelectedIndex="{Binding SelectedWorkspace, Mode=TwoWay, Converter={StaticResource EnumToInt}}">
-            <TabItem Header="MAD Query">
+            <TabItem Header="{infra:Loc Workspace.Query}">
                 <views:QueryView/>
             </TabItem>
-            <TabItem Header="MAD Designer">
+            <TabItem Header="{infra:Loc Workspace.Designer}">
                 <views:DesignerView/>
             </TabItem>
-            <TabItem Header="MAD Viewer">
+            <TabItem Header="{infra:Loc Workspace.Viewer}">
                 <views:ViewerView/>
             </TabItem>
         </TabControl>

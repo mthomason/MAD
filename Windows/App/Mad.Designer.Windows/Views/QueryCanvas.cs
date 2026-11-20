@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Mad.Designer.Windows.Infrastructure;
 using Mad.Designer.Windows.Models;
 using Mad.Designer.Windows.ViewModels;
 
@@ -79,7 +80,7 @@ public sealed class QueryCanvas : Canvas
         {
             var hint = new TextBlock
             {
-                Text = "Double-click a table on the left to add it to the visual query designer.\nDrag from a field in one table to a field in another table to create a Left Outer Join.",
+                Text = Localizer.Get("Query.Placeholder"),
                 Foreground = SystemColors.GrayTextBrush,
                 FontSize = 13.5,
                 TextAlignment = TextAlignment.Center,
@@ -183,7 +184,7 @@ public sealed class QueryCanvas : Canvas
             FontWeight = FontWeights.Bold,
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Top,
-            ToolTip = "Remove table from query",
+            ToolTip = Localizer.Get("Query.RemoveTable.Tooltip"),
             Tag = tableId,
         };
         remove.Click += async (_, _) => await _vm!.RemoveTableAsync(tableId);
@@ -399,10 +400,10 @@ public sealed class QueryCanvas : Canvas
             menu.Items.Add(item);
         }
         menu.Items.Add(new Separator());
-        var swap = new MenuItem { Header = "Swap Left / Right Direction" };
+        var swap = new MenuItem { Header = Localizer.Get("Query.SwapJoin") };
         swap.Click += async (_, _) => await _vm.SwapLinkAsync(link.Id);
         menu.Items.Add(swap);
-        var del = new MenuItem { Header = "Delete Join Link" };
+        var del = new MenuItem { Header = Localizer.Get("Query.DeleteJoin") };
         del.Click += async (_, _) => await _vm.DeleteLinkAsync(link.Id);
         menu.Items.Add(del);
         return menu;

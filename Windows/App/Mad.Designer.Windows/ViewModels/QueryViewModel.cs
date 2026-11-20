@@ -137,10 +137,18 @@ public sealed class QueryViewModel : ObservableObject
     public int SelectedGroupSortIndex { get => _selectedGroupSortIndex; set => Set(ref _selectedGroupSortIndex, value); }
 
     public IReadOnlyList<string> FilterOperatorSymbols { get; } = new[] { "=", "!=", "<", "<=", ">", ">=" };
-    public IReadOnlyList<string> GroupSortLabels { get; } = new[] { "Ascending", "Descending" };
+    public IReadOnlyList<string> GroupSortLabels => new[]
+    {
+        Localizer.Get("Query.Sort.Ascending"),
+        Localizer.Get("Query.Sort.Descending"),
+    };
 
-    public string FiltersLabel => _model.Predicates.Count > 0 ? $"Filters ({_model.Predicates.Count})" : "Filters (WHERE)";
-    public string GroupsLabel => _model.Groups.Count > 0 ? $"Groupings ({_model.Groups.Count})" : "Groupings (GROUP BY)";
+    public string FiltersLabel => _model.Predicates.Count > 0
+        ? Localizer.Format("Query.Filters.Count", _model.Predicates.Count)
+        : Localizer.Get("Query.Filters.None");
+    public string GroupsLabel => _model.Groups.Count > 0
+        ? Localizer.Format("Query.Groups.Count", _model.Groups.Count)
+        : Localizer.Get("Query.Groups.None");
 
     public IReadOnlyList<PredicateRow> PredicateRows { get; private set; } = Array.Empty<PredicateRow>();
     public IReadOnlyList<GroupRow> GroupRows { get; private set; } = Array.Empty<GroupRow>();
@@ -263,7 +271,8 @@ public sealed class QueryViewModel : ObservableObject
         try
         {
             var result = await _engine.ValidateSqlAsync(_handle, SqlEditorText);
-            StatusText = $"Valid SQL: {result.Tables} tables, {result.Links} joins, {result.Predicates} filters, {result.Groups} groups.";
+            StatusText = Localizer.Format("Query.ValidSql",
+                result.Tables, result.Links, result.Predicates, result.Groups);
         }
         catch (Exception exception)
         {
@@ -283,7 +292,8 @@ public sealed class QueryViewModel : ObservableObject
         try
         {
             var result = await _engine.ApplySqlAsync(_handle, SqlEditorText);
-            StatusText = $"Applied: {result.Tables} tables, {result.Links} joins, {result.Predicates} predicates, {result.Groups} groups.";
+            StatusText = Localizer.Format("Query.AppliedSql",
+                result.Tables, result.Links, result.Predicates, result.Groups);
             await ReloadAsync();
         }
         catch (Exception exception)
@@ -329,7 +339,9 @@ public sealed class QueryViewModel : ObservableObject
     public string GroupDisplay(QueryGroup g, int index)
     {
         string field = FieldDisplay(g.Field);
-        string sort = g.Sort == GroupSort.Descending ? "Descending" : "Ascending";
+        string sort = g.Sort == GroupSort.Descending
+            ? Localizer.Get("Query.Sort.Descending")
+            : Localizer.Get("Query.Sort.Ascending");
         return $"{index + 1}. {field} ({sort})";
     }
 

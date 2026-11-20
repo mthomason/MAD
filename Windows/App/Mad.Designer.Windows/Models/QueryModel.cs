@@ -1,6 +1,7 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
 using System.Text.Json;
+using Mad.Designer.Windows.Infrastructure;
 
 namespace Mad.Designer.Windows.Models;
 
@@ -52,13 +53,13 @@ public static class LinkTypeExtensions
     /// <summary>The user-facing name ("Left Outer Join", "Inner Join", …).</summary>
     public static string DisplayName(this LinkType type) => type switch
     {
-        LinkType.InnerJoin => "Inner Join",
-        LinkType.EquiJoin => "Equi Join",
-        LinkType.NaturalJoin => "Natural Join",
-        LinkType.CrossJoin => "Cross Join",
-        LinkType.RightOuterJoin => "Right Outer Join",
-        LinkType.FullOuterJoin => "Full Outer Join",
-        _ => "Left Outer Join",
+        LinkType.InnerJoin => Localizer.Get("Join.Inner"),
+        LinkType.EquiJoin => Localizer.Get("Join.Equi"),
+        LinkType.NaturalJoin => Localizer.Get("Join.Natural"),
+        LinkType.CrossJoin => Localizer.Get("Join.Cross"),
+        LinkType.RightOuterJoin => Localizer.Get("Join.RightOuter"),
+        LinkType.FullOuterJoin => Localizer.Get("Join.FullOuter"),
+        _ => Localizer.Get("Join.LeftOuter"),
     };
 
     /// <summary>The join types the current driver supports, in the Mac's order (Left Outer first).</summary>

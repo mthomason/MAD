@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Mad.Designer.Windows.Infrastructure;
 using Mad.Designer.Windows.ViewModels;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
@@ -61,7 +62,7 @@ public partial class ViewerView : UserControl
         {
             // The report can still be exported and printed only through the browser, so say
             // why the preview is empty rather than failing silently.
-            Placeholder.Text = $"The report preview could not start: {exception.Message}";
+            Placeholder.Text = Localizer.Format("Viewer.PreviewError", exception.Message);
             Placeholder.Visibility = Visibility.Visible;
         }
     }

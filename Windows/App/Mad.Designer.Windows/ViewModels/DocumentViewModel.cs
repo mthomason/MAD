@@ -67,7 +67,7 @@ public sealed class DocumentViewModel : ObservableObject
     public void ReportFailure(string message)
     {
         ErrorText = message;
-        StatusText = "Open failed.";
+        StatusText = Localizer.Get("Document.OpenFailed");
     }
 
     public bool IsBusy
@@ -116,7 +116,7 @@ public sealed class DocumentViewModel : ObservableObject
         catch (Exception exception)
         {
             ErrorText = exception.Message;
-            StatusText = "Open failed.";
+            StatusText = Localizer.Get("Document.OpenFailed");
         }
         finally
         {
@@ -136,7 +136,7 @@ public sealed class DocumentViewModel : ObservableObject
         catch (Exception exception)
         {
             ErrorText = exception.Message;
-            StatusText = "Open failed.";
+            StatusText = Localizer.Get("Document.OpenFailed");
         }
         finally
         {
@@ -164,7 +164,7 @@ public sealed class DocumentViewModel : ObservableObject
 
         DataView = null;
         RowCount = 0;
-        StatusText = $"Opened {FileName}";
+        StatusText = Localizer.Format("Document.Opened", FileName);
     }
 
     /// <summary>Runs the query, refreshes the rows and renders the Viewer's preview. Answers
@@ -189,13 +189,13 @@ public sealed class DocumentViewModel : ObservableObject
             // HTML preview. Failures land on the Viewer's status line, not here.
             await Viewer.RenderAsync(refresh.RowCount);
 
-            StatusText = $"Rendered {refresh.RowCount} cached rows";
+            StatusText = Localizer.Format("Document.RenderedRows", refresh.RowCount);
             return true;
         }
         catch (Exception exception)
         {
             ErrorText = exception.Message;
-            StatusText = "Refresh failed.";
+            StatusText = Localizer.Get("Document.RefreshFailed");
             Viewer.ReportRefreshFailed(exception.Message);
             return false;
         }
@@ -216,14 +216,14 @@ public sealed class DocumentViewModel : ObservableObject
     {
         if (!HasDocument)
         {
-            ErrorText = "No document is open.";
-            StatusText = "Save failed.";
+            ErrorText = Localizer.Get("Document.NoDocument");
+            StatusText = Localizer.Get("Document.SaveFailed");
             return;
         }
         if (string.IsNullOrEmpty(FilePath))
         {
-            ErrorText = "This document has no file to save to.";
-            StatusText = "Save failed.";
+            ErrorText = Localizer.Get("Document.NoFile");
+            StatusText = Localizer.Get("Document.SaveFailed");
             return;
         }
 
@@ -232,12 +232,12 @@ public sealed class DocumentViewModel : ObservableObject
         try
         {
             await _engine.WriteAsync(_handle, FilePath!);
-            StatusText = $"Saved {FilePath}";
+            StatusText = Localizer.Format("Document.Saved", FilePath);
         }
         catch (Exception exception)
         {
             ErrorText = exception.Message;
-            StatusText = "Save failed.";
+            StatusText = Localizer.Get("Document.SaveFailed");
         }
         finally
         {
@@ -265,12 +265,12 @@ public sealed class DocumentViewModel : ObservableObject
         {
             await _engine.WriteAsync(_handle, path);
             FilePath = path;
-            StatusText = $"Saved {path}";
+            StatusText = Localizer.Format("Document.Saved", path);
         }
         catch (Exception exception)
         {
             ErrorText = exception.Message;
-            StatusText = "Save failed.";
+            StatusText = Localizer.Get("Document.SaveFailed");
         }
         finally
         {
@@ -302,7 +302,7 @@ public sealed class DocumentViewModel : ObservableObject
         catch (Exception exception)
         {
             ErrorText = exception.Message;
-            StatusText = "Reconnect failed.";
+            StatusText = Localizer.Get("Document.ReconnectFailed");
         }
         finally
         {
@@ -338,12 +338,12 @@ public sealed class DocumentViewModel : ObservableObject
         {
             string data = await _engine.ExportAsync(_handle, format);
             await File.WriteAllTextAsync(outPath, data);
-            StatusText = $"Exported {format.ToUpperInvariant()} to {outPath}";
+            StatusText = Localizer.Format("Document.Exported", format.ToUpperInvariant(), outPath);
         }
         catch (Exception exception)
         {
             ErrorText = exception.Message;
-            StatusText = "Export failed.";
+            StatusText = Localizer.Get("Document.ExportFailed");
         }
         finally
         {

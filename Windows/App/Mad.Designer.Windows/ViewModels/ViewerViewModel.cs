@@ -35,30 +35,33 @@ public sealed class ViewerViewModel : ObservableObject
     /// <summary>The Mac's status line, with its singular/plural grammar.</summary>
     public static string StatusMessage(int pageCount, int rowCount)
     {
-        string pages = pageCount == 1 ? "1 page" : $"{pageCount} pages";
-        string rows = rowCount == 1 ? "1 cached row" : $"{rowCount} cached rows";
-        return $"Rendered {pages} from {rows}.";
+        string pages = pageCount == 1
+            ? Localizer.Get("Viewer.Pages.One")
+            : Localizer.Format("Viewer.Pages.Many", pageCount);
+        string rows = rowCount == 1
+            ? Localizer.Get("Viewer.Rows.One")
+            : Localizer.Format("Viewer.Rows.Many", rowCount);
+        return Localizer.Format("Viewer.Status", pages, rows);
     }
 
-    public const string NotYetRefreshedText =
-        "Not yet refreshed. Click “Refresh” to query the database and render the report.";
+    public static string NotYetRefreshedText => Localizer.Get("Viewer.NotYetRefreshed");
 
-    public static IReadOnlyList<PaperOption> PaperOptions { get; } = new[]
+    public static IReadOnlyList<PaperOption> PaperOptions => new[]
     {
-        new PaperOption((int)PaperSize.Letter, "US Letter (8.5 × 11 in)", "US Letter"),
-        new PaperOption((int)PaperSize.Legal, "US Legal (8.5 × 14 in)", "US Legal"),
-        new PaperOption((int)PaperSize.A4, "A4 (210 × 297 mm)", "A4"),
+        new PaperOption((int)PaperSize.Letter, Localizer.Get("Paper.Letter.Display"), Localizer.Get("Paper.Letter")),
+        new PaperOption((int)PaperSize.Legal, Localizer.Get("Paper.Legal.Display"), Localizer.Get("Paper.Legal")),
+        new PaperOption((int)PaperSize.A4, Localizer.Get("Paper.A4.Display"), Localizer.Get("Paper.A4")),
     };
 
     /// <summary>The Windows engine's exporters, minus PDF (an accepted gap).</summary>
-    public static IReadOnlyList<ViewerExportFormat> ExportFormats { get; } = new[]
+    public static IReadOnlyList<ViewerExportFormat> ExportFormats => new[]
     {
-        new ViewerExportFormat("html", "HTML Page (.html)", "html"),
-        new ViewerExportFormat("html-flow", "HTML Flow (.html)", "html"),
-        new ViewerExportFormat("csv", "CSV Spreadsheet (.csv)", "csv"),
-        new ViewerExportFormat("json", "JSON Data (.json)", "json"),
-        new ViewerExportFormat("json-report", "JSON Full Report (.json)", "json"),
-        new ViewerExportFormat("text", "Plain Text (.txt)", "txt"),
+        new ViewerExportFormat("html", Localizer.Get("Format.Html"), "html"),
+        new ViewerExportFormat("html-flow", Localizer.Get("Format.HtmlFlow"), "html"),
+        new ViewerExportFormat("csv", Localizer.Get("Format.Csv"), "csv"),
+        new ViewerExportFormat("json", Localizer.Get("Format.Json"), "json"),
+        new ViewerExportFormat("json-report", Localizer.Get("Format.JsonReport"), "json"),
+        new ViewerExportFormat("text", Localizer.Get("Format.Text"), "txt"),
     };
 
     // The HTML exporter writes one `<div class="page" data-index="N">` per rendered page.
@@ -142,7 +145,7 @@ public sealed class ViewerViewModel : ObservableObject
         }
     }
 
-    public string PaperStatusText => $"Rendered Page Size: {OptionForType(_renderedPaperType).ShortName}";
+    public string PaperStatusText => Localizer.Format("Viewer.PaperStatus", OptionForType(_renderedPaperType).ShortName);
 
     private static PaperOption OptionForType(int type)
         => PaperOptions.FirstOrDefault(option => option.Type == type) ?? PaperOptions[0];
@@ -197,7 +200,9 @@ public sealed class ViewerViewModel : ObservableObject
         }
     }
 
-    public string PageLabel => _pageCount == 0 ? "Page 0 of 0" : $"Page {_currentPage} of {_pageCount}";
+    public string PageLabel => _pageCount == 0
+        ? Localizer.Get("Viewer.PageZero")
+        : Localizer.Format("Viewer.PageLabel", _currentPage, _pageCount);
 
     public bool CanGoPrevious => _pageCount > 0 && _currentPage > 1;
     public bool CanGoNext => _pageCount > 0 && _currentPage < _pageCount;
@@ -283,7 +288,7 @@ public sealed class ViewerViewModel : ObservableObject
     /// <summary>Shows the in-flight status line while a refresh runs.</summary>
     public void BeginRefresh()
     {
-        SetStatus("Executing SQL query and formatting report pages…", ViewerStatusKind.Neutral);
+        SetStatus(Localizer.Get("Viewer.BeginRefresh"), ViewerStatusKind.Neutral);
     }
 
     /// <summary>Reports a refresh failure on the status line.</summary>
@@ -312,7 +317,8 @@ public sealed class ViewerViewModel : ObservableObject
 
             string data = await _engine.ExportAsync(_handle, SelectedFormat.Format);
             await File.WriteAllTextAsync(outPath, data);
-            SetStatus($"Exported {SelectedFormat.Format.ToUpperInvariant()} to {Path.GetFileName(outPath)}",
+            SetStatus(Localizer.Format("Viewer.ExportStatus",
+                    SelectedFormat.Format.ToUpperInvariant(), Path.GetFileName(outPath)),
                 ViewerStatusKind.Success);
         }
         catch (Exception exception)

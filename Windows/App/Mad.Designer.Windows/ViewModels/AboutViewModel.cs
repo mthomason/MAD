@@ -16,7 +16,7 @@ public sealed class AboutViewModel : ObservableObject
     public AboutViewModel()
     {
         Components = WindowsLicenseRegistry.Components;
-        Overview = WindowsLicenseRegistry.OverviewText;
+        Overview = BuildOverview();
         LicenseNotice = BuildLicenseNotice();
         SelectedComponent = Components.FirstOrDefault();
     }
@@ -41,12 +41,22 @@ public sealed class AboutViewModel : ObservableObject
     }
 
     public string SelectedAcknowledgement => SelectedComponent == null
-        ? "Select a component to view its licence and attribution."
+        ? Localizer.Get("About.SelectComponent")
         : BuildAcknowledgement(SelectedComponent);
+
+    /// <summary>The Overview prose in the active language, with the machine-assisted
+    /// translation notice (MAD_APP_LOCALIZATION.md D14) as the last paragraph.</summary>
+    private static string BuildOverview() => string.Join("\n\n",
+        Localizer.Get("About.Overview.P1"),
+        Localizer.Get("About.Overview.P2"),
+        Localizer.Get("About.Overview.P3"),
+        Localizer.Get("About.Overview.P4"),
+        Localizer.Get("About.MachineAssisted"));
 
     private static string BuildAcknowledgement(WindowsComponent component)
     {
-        string license = WindowsLicenseRegistry.ReadLicenseText(component) ?? "(license text not found)";
+        string license = WindowsLicenseRegistry.ReadLicenseText(component)
+            ?? Localizer.Get("About.LicenseNotFound");
         return $"{component.Name}\n{component.License}\n\n{component.Details}\n\n{component.LicenseTitle}\n\n{license}";
     }
 
@@ -57,7 +67,10 @@ public sealed class AboutViewModel : ObservableObject
         string lgpl21 = ReadFileOrEmpty(Path.Combine(MadPathResolver.LicensesRoot(), "Windows", "LGPL-2.1.txt"));
         string lgpl30 = ReadFileOrEmpty(Path.Combine(MadPathResolver.LicensesRoot(), "LGPL-3.0.txt"));
 
-        return $"{WindowsLicenseRegistry.BrandNotice}\n\n" +
+        // The chrome around the legal texts is localized; the texts themselves (and the
+        // licence names) stay verbatim English by policy.
+        return $"{Localizer.Get("About.LicenseIntro")}\n\n" +
+               $"{WindowsLicenseRegistry.BrandNotice}\n\n" +
                $"NOTICE\n\n{notice}\n\n" +
                $"{WindowsLicenseRegistry.RelinkOffer}\n\n" +
                $"MIT License\n\n{mit}\n\n" +
@@ -66,5 +79,5 @@ public sealed class AboutViewModel : ObservableObject
     }
 
     private static string ReadFileOrEmpty(string path)
-        => File.Exists(path) ? File.ReadAllText(path) : "(text not found)";
+        => File.Exists(path) ? File.ReadAllText(path) : Localizer.Get("About.TextNotFound");
 }
