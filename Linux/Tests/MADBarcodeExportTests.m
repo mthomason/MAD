@@ -24,6 +24,7 @@
 #import <MAD/MADReportExporting.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDocumentElement+Extras.h>
 #import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSection+Extras.h>
