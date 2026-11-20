@@ -752,6 +752,42 @@ falls back to the `[Image]` placeholder when the element has none. `ImageElement
 the protocol, the picker's re-encode and the canvas; the created-document smoke test adds one
 to the exported document.
 
+## 6l. The PDF closure (2026-11-20)
+
+`mad export --format pdf` and `mad serve`'s `export` now write a PDF on Windows, and the
+Windows half is the third headless library stack the build carries.
+
+**Libraries.** `Windows/Engine/libraries.conf` pins the Linux pins exactly: pixman
+0.46.4 and cairo 1.18.6 (git tags, commits pinned) and FreeType 2.15.0 (tarball), plus
+the Liberation 2.1.5 font tarball. `build.ps1` builds FreeType with its own CMake
+(clang-cl, static, core only), then pixman and cairo with Meson under the MSVC
+environment (`cl`), statically and with the PDF surface only. The Meson builds find
+their local dependencies through generated `.pc` files and the same Windows-native
+pkg-config shim the libpq build introduced (`Ensure-PkgConfigShim`, now a function so
+both builds share it). Three archives join the link: `cairo.lib`, `freetype.lib`,
+`pixman-1.lib`; `msimg32` joins the system list for cairo's win32 surface.
+
+**Fonts.** The Liberation faces are copied to `Engine/build/fonts`;
+`MADReportExporterPDFCairo` searches `<exe>/fonts` first (so `mad.exe` finds
+`build/fonts` and a test in `build/tests` finds `build/fonts` through `<exe>/../fonts`),
+then the installed layouts and `MAD_FONTS_DIR`.
+
+**Writer.** `MADReportExporterPDFCairo` in `MAD/Source` is the non-Apple body of
+`MADReportExporterPDF`; the Apple body is untouched and does not link Cairo. The
+structural target, the font mapping and the determinism are
+`docs/project/MAD_PDF_LINUX.md`'s. `MADPDFExportTests` is the acceptance test on both
+engines; it reads the PDF back and compares page count, MediaBox, every frame and every
+line's text with the `json-report` oracle, checks the barcode and picture as image
+XObjects, and checks deterministic byte equality.
+
+**Licences.** cairo (MPL-1.1), pixman (MIT), FreeType (FTL) and the Liberation fonts
+(SIL OFL 1.1) are registered in `THIRD_PARTY_LICENSES.md` §3.5 and §10, their texts are
+in `ThirdParty/Licenses/`, and `WindowsLicenseRegistry` lists all four for the About
+window. None adds a relink obligation.
+
+**Not done.** The WPF Viewer's format picker does not list PDF (the engine and `serve`
+do); adding it is a UI change with its own strings.
+
 ## 7. Supported Windows versions
 
 .NET 10's supported OS matrix (Windows 10 Enterprise 21H2/1809/1607, Windows

@@ -10,15 +10,18 @@ This increment builds all twelve headless frameworks — **MADDataStructures**,
 **MADFoundation**, **MADAPI**, **MADSqlite3**, **MADCocoaExtensions**,
 **MADFileManager**, **MAD**, **MADBarcodes**, and the four database drivers
 **MADMySQL**, **MADTds**, **MADTdsClient** and **MADPostgres** — compiles the
-pinned SQLite, zlib, bzip2, libarchive, libpng, zint, OpenSSL, FreeTDS, MariaDB
-Connector/C and libpq libraries, and builds **`mad.exe`** from `CLI/Source`. It
+pinned SQLite, zlib, bzip2, libarchive, libpng, zint, pixman, FreeType, cairo,
+OpenSSL, FreeTDS, MariaDB Connector/C and libpq libraries, and builds **`mad.exe`** from `CLI/Source`. It
 runs the ported Linux test suites (GNUstep `Testing.h` + `MADTestSupport.h`) plus
-a smoke test: 129 suites, 1308 tests, 6 needs, 5 skips (48 without the live
+a smoke test: 130 suites, 1,313 tests, 6 needs, 5 skips (48 without the live
 containers), 0 failures, including the live MySQL/SQL Server/PostgreSQL suites
 against the local `127.0.0.1` containers.
 `mad.exe` runs `inspect`, `schema`, `query`, `refresh` (76 rows on the London
-fixture), `export` in every format, and `write --reproducible` — all with
-byte-identical digests to the Mac/Linux pins in `Linux/README.md`.
+fixture), `export` in every format — including `pdf`, drawn by the Cairo writer
+(the text and data formats are byte-identical to the Mac/Linux pins in
+`Linux/README.md`; the PDF is structurally identical) — and `write --reproducible`.
+The Liberation fonts the PDF writer shapes with are copied to `Engine/build/fonts`;
+ship them beside `mad.exe` (the writer looks in `<exe>/fonts` first).
 
 ## Prerequisites
 

@@ -578,9 +578,10 @@ runs on both platforms. Two HTML formats landed with it, on the user's choice:
 walked frame) and `html-flow` the reflowable reading view (sections as tables). `pdf`
 is on the seam too — `MADReportExporterPDF`, Apple's body, registering everywhere and
 saying why off Apple — and the CLI has no local arms; its output is byte-identical
-(43,177 bytes / 5 pages, `sha256 3eb2f1c4…`, before and after). What remains is the
-Linux PDF writer itself (`MAD_LINUX.md` §10.2 has the shape) and the currency-format
-divergence GNUstep's formatter carries (`BUGS.md`). The columns the formats carry are
+(43,177 bytes / 5 pages, `sha256 3eb2f1c4…`, before and after). The headless PDF
+writer landed 2026-11-20 (`MADReportExporterPDFCairo`: Cairo + FreeType + bundled
+Liberation faces; `MAD_PDF_LINUX.md`), and the currency-format divergence GNUstep's
+formatter carried is closed (`BUGS.md`). The columns the formats carry are
 the query's own, in the alias order the SELECT list now defines (`BUGS.md`).
 
 `mad export` used to have one arm: PDF, behind a string comparison in `MADCLIExport.m`.

@@ -8,8 +8,8 @@ subset); Phase C is the §4 shim list, and this directory is where it lands.
 The build now compiles **all twelve headless frameworks** — every framework in
 docs/project/MAD_LINUX.md §3's table plus `MADPostgres`, except the UI-only ones (`MADExplorer`,
 `MADFeedback`, `Scrimpter`, the app) — and runs their suites inside the
-container: 130 test executables, 1,308 tests (plus the 19-check toolchain
-probe), 7 recorded needs. The test
+container: 130 suites, 1,313 tests (plus the 19-check toolchain probe; 131 ctest
+entries), 7 recorded needs. The test
 coverage master merged on 2026-10-10 (~100 Xcode test files) is ported in
 full, suite for suite. Nothing here ships in the app; the CLI — Phase D's
 checkpoint — builds and runs here too (see "The CLI runs here" below), and
@@ -83,6 +83,12 @@ the Compressor matrix next door; nothing here ships.
 	postgres     17.11    the libpq static client library + libpgcommon/libpgport,
 	                       with openssl, without readline/icu/gssapi/ldap/pam/xml/
 	                       xslt/lz4/zstd/zlib (mirrors Compressor/lib/recipes/postgres.sh)
+	pixman       0.46.4   cairo's raster core (meson, static)
+	freetype     2.15.0   the PDF writer's glyph engine (autoconf, core only)
+	cairo        1.18.6   the PDF surface (meson, static, FreeType + zlib only)
+	liberation   2.1.5    installed as data (not a library): the twelve Liberation
+	                       faces in /usr/local/share/mad/fonts; the PDF writer's
+	                       substitutes for Helvetica Neue/Verdana/Courier/etc.
 
 Two external build dependencies remain from the retired mysqlclient build
 (`libncurses-dev` and `libtirpc-dev`, which mysql's cmake needed); the mariadb
@@ -359,15 +365,19 @@ whole-archive, and runs in the image:
 	/build/mad query   <document.mad>
 	/build/mad refresh --credentials user:pass <document.mad>
 
-`export` is the one verb that is not here: PDF is a Core Graphics context drawn by
-a `UIPrintPageRenderer`, so it stays on Apple and says so (`docs/project/MAD_LINUX.md` §5.2;
-the renderer decision is Phase E's).
-
 **`export` grew its Foundation formats here (Phase E, 2026-10-16).** The export seam
 (`MADReportExporting` + `MADReportExporterRegistry`, `docs/project/MAD_CLI.md` §5.3) is in `mad`, so
 `text`, `csv` and `json` run in the image and write the same bytes as the Mac's tool
 (the render-side formats — `html`, `html-flow`, `json-report` — run here too; see the
-section below, and `pdf` says why it cannot).
+section below).
+
+**`pdf` runs here too (2026-11-20).** `MADReportExporterPDF`'s non-Apple body is
+`MADReportExporterPDFCairo`: the same walked pages, drawn into a Cairo PDF surface with
+FreeType glyphs from the bundled Liberation faces. The output is structurally the
+Mac's — same pages, same frames, same text — not byte-identical (Core Graphics cannot
+be reproduced); `docs/project/MAD_PDF_LINUX.md` has the font policy and the residual.
+The writer's libraries (pixman, FreeType, cairo) and the fonts are in the image;
+`MADPDFExportTests` checks the PDF against the `json-report` oracle.
 The comparison, run for the record on the London fixture (`CLI/Fixtures/London.portable.mad`,
 refreshed first, `sha256sum` on each side):
 
@@ -538,7 +548,10 @@ The image carries:
 * the shared objects the binary links — GNUstep Base, libobjc2, libdispatch
   and libBlocksRuntime — plus GNUstep's runtime directories and config. The
   other C libraries (sqlite3, freetds, openssl, zlib, bzip2, libarchive,
-  mariadb, postgres) are static and are already inside the binary;
+  mariadb, postgres, libpng, zint, pixman, FreeType, cairo) are static and are
+  already inside the binary;
+* `/usr/local/share/mad/fonts`, the twelve Liberation faces (Sans, Serif,
+  Mono) the PDF writer shapes with, and their OFL text;
 * none of mysqlclient's share data: Connector/C embeds its client error
   messages and installs no `share/` files;
 * `chinook.sqlite3` at `/root/GNUstep/Library/ApplicationSupport/`, where a
@@ -602,13 +615,9 @@ hand-run build should do the same.
 
 ## What this does not do yet
 
-The Linux PDF writer — **deferred 2026-10-17, blocked on the user's research; do not
-start it without their decision.**  `docs/project/MAD_PDF_LINUX.md` is the handoff file (what
-exists, what is missing, the candidate stacks with licences, the open questions, the
-acceptance test); `docs/project/MAD_LINUX.md` §10.2 records the reasoning.  Until it lands, a PDF
-on Linux is a browser printing `--format html`.
-
-Phase F's other parts, as of 2026-10-17: the **runtime image** and its **repeatable
+The Linux PDF writer **landed 2026-11-20**: `mad export --format pdf` writes a
+structurally identical PDF here (Cairo + FreeType + Liberation; `MAD_PDF_LINUX.md`).
+What remains is Phase F's other parts, as of 2026-10-17: the **runtime image** and its **repeatable
 verification** are done (the section above), and the **CI row was dropped on the
 user's decision** — no GitHub Actions, because the Linux port is a proof of concept
 for testing, not a product release. That changed 2026-10-26 with the GHCR
