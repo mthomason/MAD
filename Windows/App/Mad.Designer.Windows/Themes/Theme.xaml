@@ -172,13 +172,38 @@
         <Setter Property="HorizontalContentAlignment" Value="Left" />
     </Style>
 
-    <!-- A small square icon-only command (zoom in/out). -->
-    <Style x:Key="MAD.IconButton" TargetType="Button" BasedOn="{StaticResource MAD.CommandButton}">
+    <!-- A small square icon-only command (zoom in/out). Its own flat template keeps a
+         disabled page-navigation button from showing Fluent's filled disabled chrome. -->
+    <Style x:Key="MAD.IconButton" TargetType="Button">
         <Setter Property="Width" Value="32" />
         <Setter Property="MinWidth" Value="32" />
         <Setter Property="Height" Value="28" />
         <Setter Property="MinHeight" Value="28" />
         <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Chrome" Background="Transparent"
+                            CornerRadius="{StaticResource MAD.CornerRadius.Control}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource SubtleFillColorTertiaryBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.35" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="MAD.PrimaryButton" TargetType="Button">

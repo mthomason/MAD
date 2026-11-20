@@ -94,10 +94,11 @@ public sealed class MainWindowViewModel : ObservableObject
         }
     }
 
-    /// <summary>The navigation rail's selection (0 Query, 1 Designer, 2 Viewer).</summary>
+    /// <summary>The navigation rail's selection (0 Query, 1 Designer, 2 Viewer), or -1 while
+    /// Welcome is shown so no workspace looks active without a document.</summary>
     public int SelectedWorkspaceIndex
     {
-        get => (int)_selectedWorkspace;
+        get => HasDocument ? (int)_selectedWorkspace : -1;
         set
         {
             if (!HasDocument) return;
@@ -214,6 +215,7 @@ public sealed class MainWindowViewModel : ObservableObject
             OnPropertyChanged(nameof(ShowWelcome));
             OnPropertyChanged(nameof(ShowWorkspace));
             OnPropertyChanged(nameof(WindowTitle));
+            OnPropertyChanged(nameof(SelectedWorkspaceIndex));
             OnPropertyChanged(nameof(QueryVisible));
             OnPropertyChanged(nameof(DesignerVisible));
             OnPropertyChanged(nameof(ViewerVisible));

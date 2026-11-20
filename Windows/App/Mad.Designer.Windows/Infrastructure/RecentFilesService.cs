@@ -37,6 +37,10 @@ public sealed class RecentFilesService
         {
             return Array.Empty<string>();
         }
+        catch (UnauthorizedAccessException)
+        {
+            return Array.Empty<string>();
+        }
     }
 
     public void Add(string path)
@@ -60,10 +64,37 @@ public sealed class RecentFilesService
 
     private void Write(List<string> list)
     {
-        string directory = Path.GetDirectoryName(_path)!;
-        Directory.CreateDirectory(directory);
-        string temp = _path + "." + Guid.NewGuid().ToString("N") + ".tmp";
-        File.WriteAllText(temp, JsonSerializer.Serialize(list));
-        File.Move(temp, _path, overwrite: true);
+        string? temp = null;
+        try
+        {
+            string directory = Path.GetDirectoryName(_path)!;
+            Directory.CreateDirectory(directory);
+            temp = _path + "." + Guid.NewGuid().ToString("N") + ".tmp";
+            File.WriteAllText(temp, JsonSerializer.Serialize(list));
+            File.Move(temp, _path, overwrite: true);
+            temp = null;
+        }
+        catch (Exception exception) when (exception is IOException
+            or UnauthorizedAccessException
+            or ArgumentException
+            or NotSupportedException
+            or System.Security.SecurityException)
+        {
+            // The recent list is a convenience. A read-only profile, a locked file or an
+            // unavailable directory must not terminate the app while it opens a report.
+        }
+        finally
+        {
+            if (temp != null)
+            {
+                try
+                {
+                    if (File.Exists(temp)) File.Delete(temp);
+                }
+                catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+                {
+                }
+            }
+        }
     }
 }

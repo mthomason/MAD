@@ -91,4 +91,24 @@ public sealed class RecentFilesServiceTests
         string path = Path.Combine(Path.GetTempPath(), $"mad-missing-{Guid.NewGuid():N}.json");
         Assert.Empty(new RecentFilesService(path).Get());
     }
+
+    [Fact]
+    public void Add_WhenTheStoreCannotBeWritten_DoesNotThrow()
+    {
+        // A regular file where the store's directory should be makes Directory.CreateDirectory
+        // fail. Persisting the recent list is best-effort: opening a report must not terminate
+        // the app because %APPDATA% is unavailable.
+        string blocker = Path.Combine(Path.GetTempPath(), $"mad-blocker-{Guid.NewGuid():N}");
+        File.WriteAllText(blocker, "not a directory");
+        try
+        {
+            var service = new RecentFilesService(Path.Combine(blocker, "recent.json"));
+            service.Add("C:\\a.mad");
+            service.Remove("C:\\a.mad");
+        }
+        finally
+        {
+            if (File.Exists(blocker)) File.Delete(blocker);
+        }
+    }
 }

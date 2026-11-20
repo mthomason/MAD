@@ -666,7 +666,7 @@ the icon-only zoom and page buttons), keyboard shortcuts, and Fluent focus and
 disabled states. Every new or renamed string is in all six dictionaries
 (`LocalizerTests` checks completeness and placeholders; English remains the
 authoritative source); licence bodies, notices, copyright and brand names stay
-verbatim English. The suite is 108 tests, including the Welcome/navigation/
+verbatim English. The suite is 110 tests, including the Welcome/navigation/
 first-workspace tests, the About window show test, the theme dictionary test and
 the query zoom/fit tests.
 

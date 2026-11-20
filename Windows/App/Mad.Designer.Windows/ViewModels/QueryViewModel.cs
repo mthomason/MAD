@@ -84,17 +84,27 @@ public sealed class QueryViewModel : ObservableObject
     public bool IsDesigner => Mode == QueryMode.Designer;
     public bool IsSql => Mode == QueryMode.Sql;
 
-    /// <summary>Two-way bindings for the mode radio buttons.</summary>
+    /// <summary>Two-way bindings for the segmented mode switch. Clicking the active segment
+    /// unchecks its ToggleButton; re-reading the source makes it check itself again instead of
+    /// leaving both segments unselected.</summary>
     public bool DesignerSelected
     {
         get => _mode == QueryMode.Designer;
-        set { if (value) SwitchToMode(QueryMode.Designer); }
+        set
+        {
+            if (value) SwitchToMode(QueryMode.Designer);
+            else OnPropertyChanged(nameof(DesignerSelected));
+        }
     }
 
     public bool SqlSelected
     {
         get => _mode == QueryMode.Sql;
-        set { if (value) SwitchToMode(QueryMode.Sql); }
+        set
+        {
+            if (value) SwitchToMode(QueryMode.Sql);
+            else OnPropertyChanged(nameof(SqlSelected));
+        }
     }
 
     public string StatusText { get => _statusText; private set => Set(ref _statusText, value); }
