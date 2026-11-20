@@ -630,9 +630,9 @@ would create this obligation; it is closed there.
 The native Windows engine (`Windows/`, built by `Windows/Engine/build.ps1`) is a
 third distribution surface. It links the headless frameworks against a
 source-built GNUstep runtime and the same C libraries as the Apple app and Linux
-image. It is registered here because `mad.exe` and the future WPF app will ship
-the GNUstep DLLs and the C-library notices; the Apple app's About screen does
-not apply to them.
+image. It is registered here because `mad.exe` and the WPF app (`Windows/App/`)
+ship the GNUstep DLLs and the C-library notices; the Apple app's About screen
+does not apply to them.
 
 | Component | Pin / version | Licence | How it reaches the Windows build | What it requires |
 |---|---|---|---|---|
@@ -646,6 +646,7 @@ not apply to them.
 | gnustep-make | `e7c0730d…` | GPL-3.0-or-later | **build tooling only — not distributed** | nothing; its `Testing.h` is compiled only into test binaries, which are not shipped |
 | SQLite, zlib, bzip2, libarchive | §3.1 pins | as registered | static `.lib` linked into `mad.exe` | the same permissive terms as the app |
 | OpenSSL 3.5.9, FreeTDS 1.4.27, MariaDB Connector/C 3.4.11, libpq 17.11 | §3.1, §3.3–§3.4 pins | Apache-2.0; LGPL-3.0 election; LGPL-3.0 election; PostgreSQL License | static `.lib` linked into `mad.exe` | the same texts and relink mechanism as the app/image; FreeTDS's modified `sybdb.h` is marked |
+| Microsoft Edge WebView2 (SDK and Evergreen Runtime) | `Microsoft.Web.WebView2` 1.0.4314.35 (the app csproj); the runtime is installed with Windows 11 and alongside Microsoft Edge | Microsoft Software License Terms (a Microsoft redistributable, not open source) | the WPF app's report-preview control (`Windows/App/`); the runtime is not bundled, modified or redistributed by this project | a notice/attribution per Microsoft's terms, `ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`; no open-source licence text applies |
 | Clang/LLVM 20.1.8, lld, Visual Studio 2026, Windows SDK, CMake, Ninja, NASM, MSYS2, Perl | `Windows/Engine/toolchain.conf` | build tooling | not distributed | nothing |
 | the Windows/UCRT runtime | Microsoft | OS component | resolved by the OS | none |
 
@@ -654,17 +655,21 @@ The Windows packages must copy `ThirdParty/Licenses/` (including
 package; a build without them is not releasable. The Windows-specific texts are
 `ThirdParty/Licenses/Windows/LGPL-2.1.txt`,
 `libobjc2-MIT.txt`, `libdispatch-Apache-2.0-with-Swift-exception.txt` and
-`libffi-MIT.txt`. The C-library texts are the root `ThirdParty/Licenses/` files
+`libffi-MIT.txt`; `WebView2-Runtime-NOTICE.txt` is the WebView2 attribution,
+not a licence text. The C-library texts are the root `ThirdParty/Licenses/` files
 already used by the Apple app. The written relink offer in
 `ThirdParty/Licenses/README.md` names the Windows engine and covers GNUstep Base,
 libiconv, gnustep-corebase, FreeTDS and MariaDB Connector/C.
 
-The WPF **About** window is a Phase 5/6 deliverable: the shell proof opens it and
-it must render the Windows component list and the texts above, including the
-LGPL relink offer, from this register and `ThirdParty/Licenses/Windows/`. The iOS
-and macOS About screens stay Apple-only and must not claim the Apple app links
-GNUstep. The public `docs/windows.md` and the `README.md` wording are also Phase
-6, subject to the five-language contract in `LOCALIZATION.md`.
+The WPF **About** window (completed in Phase 6e) renders the Windows component
+list and the texts above, including WebView2's attribution and the LGPL relink
+offer, from this register and `ThirdParty/Licenses/Windows/`; its chrome is
+localized in the app's six languages, while the licence bodies, component
+notices and copyright lines stay verbatim English (see
+`MAD_APP_LOCALIZATION.md` §8). The iOS and macOS About screens stay Apple-only
+and must not claim the Apple app links GNUstep. The public `docs/windows.md` and
+the `README.md` wording remain deferred, subject to the five-language contract
+in `LOCALIZATION.md`.
 
 The exact DLL/static split is measured, not inferred: `llvm-objdump -p
 Windows/Engine/build/mad.exe` (Phase 3b) shows the direct GNUstep imports are

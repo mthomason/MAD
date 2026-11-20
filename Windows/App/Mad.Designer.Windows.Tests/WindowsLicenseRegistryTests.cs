@@ -10,9 +10,10 @@ public sealed class WindowsLicenseRegistryTests
     public void Components_AreTheWindowsSet_NotApple()
     {
         var components = WindowsLicenseRegistry.Components;
-        Assert.Equal(14, components.Count);
+        Assert.Equal(15, components.Count);
         Assert.Contains(components, c => c.Name == "GNUstep Base" && c.License == "LGPL-2.1-or-later");
         Assert.Contains(components, c => c.Name == "MariaDB Connector/C");
+        Assert.Contains(components, c => c.Name == "Microsoft Edge WebView2" && c.License == "Microsoft Software License Terms");
         Assert.DoesNotContain(components, c => c.Name is "zint" or "libpng" or "Font Awesome");
     }
 

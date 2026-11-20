@@ -1,0 +1,19 @@
+Microsoft Edge WebView2 — notice
+
+MAD Designer (Windows) hosts its report preview in the Microsoft Edge WebView2
+control. The control is supplied by the Microsoft.Web.WebView2 NuGet package
+(pinned in Windows/App/Mad.Designer.Windows/Mad.Designer.Windows.csproj).
+
+The control requires the Microsoft Edge WebView2 Runtime. The Evergreen runtime
+is a Microsoft redistributable that ships with Windows 11 and is installed
+alongside Microsoft Edge on Windows 10; this application neither modifies nor
+redistributes the runtime. It is not open-source software, and no open-source
+licence text applies to it.
+
+Use of the WebView2 control and the WebView2 Runtime is governed by Microsoft's
+software licence terms. See:
+
+	https://developer.microsoft.com/microsoft-edge/webview2/
+	https://learn.microsoft.com/microsoft-edge/webview2/
+
+Microsoft and Microsoft Edge are trademarks of Microsoft Corporation.
