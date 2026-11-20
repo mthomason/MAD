@@ -837,7 +837,9 @@ static NSCache<NSString *, id> *MADBarcodePNGCache(void) {
 	NSString *inputString = primaryInput.length > 0 ? primaryInput : @"";
 
 	if (barcode->symbology == MADBarcodeTypeTelepenNum) {
-		NSCharacterSet *numeric = [NSCharacterSet decimalDigitCharacterSet].invertedSet;
+		// GNUstep declares +decimalDigitCharacterSet as returning id, so the dot
+		// syntax for -invertedSet does not type-check there; the message does.
+		NSCharacterSet *numeric = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
 		inputString = [[inputString componentsSeparatedByCharactersInSet:numeric] componentsJoinedByString:@""];
 	}
 
