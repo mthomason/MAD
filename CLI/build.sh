@@ -42,6 +42,7 @@ readonly FRAMEWORKS=(
 	MADFileManager
 	MADSqlite3
 	MADAPI
+	MADBarcodes
 	MAD
 	MADMySQL
 	MADTdsClient
