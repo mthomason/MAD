@@ -29,6 +29,7 @@
 
 #import <Foundation/NSArray.h>
 #import <Foundation/NSBundle.h>
+#import <Foundation/NSData.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
@@ -162,7 +163,17 @@ static NSString *MADReportExporterFontName(NSString *);
 	[html appendString: @"\">"];
 
 	NSString *text = [line text];
-	if (text != nil) {
+	NSData *imageData = line.imageData;
+	if (imageData != nil) {
+		// A barcode's symbol: the PNG inline, so the file stays one self-contained
+		// document.  The inline width/height is deliberate -- the shared <style> block
+		// is what the format's byte-for-byte comparisons pin.
+		[html appendString: @"<img src=\"data:image/png;base64,"];
+		[html appendString: [imageData base64EncodedStringWithOptions: 0]];
+		[html appendString: @"\" alt=\""];
+		[html appendString: [MADReportExporterHTML escapedString: text ?: @""]];
+		[html appendString: @"\" style=\"width:100%;height:100%;object-fit:contain\">"];
+	} else if (text != nil) {
 		[html appendString: [MADReportExporterHTML escapedString: text]];
 	}
 	[html appendString: @"</div>\n"];

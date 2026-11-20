@@ -10,6 +10,7 @@
 #define MAD_MADReportLineRepresentation_h
 
 #import <Foundation/NSObject.h>
+#import <Foundation/NSData.h>
 #import <CoreGraphics/CGGeometry.h>
 #import <MAD/MADDocumentObjectType.h>
 #import <MAD/MADDocumentTextRepresentationProtocol.h>
@@ -43,6 +44,11 @@ NS_ASSUME_NONNULL_BEGIN
 	/// instead, which is what the representation's own text is made of; this is the
 	/// content the json-report member serializes.
 	- (nullable NSString *)text;
+
+	/// The element's encoded image -- a barcode's PNG -- or nil for an element that
+	/// has none.  The formats embed it (a data URI in HTML) and a PDF writer will
+	/// draw it.
+	@property (nullable, nonatomic, strong) NSData *imageData;
 
 @end
 

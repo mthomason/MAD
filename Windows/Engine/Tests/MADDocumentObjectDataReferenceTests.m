@@ -94,10 +94,7 @@ static void testFactorySelectsConcreteClassForElementType(void) {
 	MAD_PASS_EQUAL(NSStringFromClass([labelDynamic class]), @"MADDocumentObjectDataReferenceLabelDynamic", "the dynamic label maps to its own reference");
 	MAD_PASS_EQUAL(NSStringFromClass([aggregate class]), @"MADDocumentObjectDataReferenceAggregate", "the aggregate maps to its own reference");
 	MAD_PASS_EQUAL(NSStringFromClass([image class]), @"MADDocumentObjectDataReferenceImage", "the image maps to its own reference");
-	// On Apple a barcode maps to MADDocumentObjectDataReferenceBarcode; that class (and
-	// MADBarcodes) is excluded from the Linux build, so the factory's #else arm logs and
-	// falls through to the base class with the whitespace/chart default below.
-	MAD_PASS_EQUAL(NSStringFromClass([barcode class]), @"MADDocumentObjectDataReference", "the barcode falls through to the base reference off Apple");
+	MAD_PASS_EQUAL(NSStringFromClass([barcode class]), @"MADDocumentObjectDataReferenceBarcode", "the barcode maps to its own reference");
 	// Whitespace (and anything the switch does not name) falls through to the base class.
 	MAD_PASS_EQUAL(NSStringFromClass([whitespace class]), @"MADDocumentObjectDataReference", "the whitespace falls through to the base reference");
 	MAD_PASS_EQUAL(NSStringFromClass([chart class]), @"MADDocumentObjectDataReference", "the chart falls through to the base reference");

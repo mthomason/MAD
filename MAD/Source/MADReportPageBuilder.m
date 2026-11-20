@@ -81,6 +81,12 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	return CGRectMake(pageRect.origin.x, originY, pageRect.size.width, HeightWithVisibility(sectionHeight, visility));
 }
 
+// The image-carrying drawing object's one property (MADPrintPageElementBarcode),
+// declared rather than imported so the walk stays element-agnostic.
+@protocol MADReportLineImageElement <NSObject>
+- (NSData *)renderedImageData;
+@end
+
 // The walk's own data-reference delegate: every element it builds asks it for drawing
 // attributes, and it answers with the styler's or with none.  Adopted here rather than
 // in the header, which is public and MADDocumentObjectDataReference.h is not.
@@ -263,6 +269,11 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 				// is open, so a format that is not Core Graphics can spell the line the
 				// way MADElementStylizedText would have drawn it.
 				line.style = [MADReportLineStyle styleForElement: item];
+				// A barcode's symbol travels with the line so a format can embed it;
+				// the other elements have no image.
+				if ([drawingObject respondsToSelector: @selector(renderedImageData)]) {
+					line.imageData = [(id <MADReportLineImageElement>)drawingObject renderedImageData];
+				}
 				line.elementOffset = offsetElement;
 				offsetElement++;
 

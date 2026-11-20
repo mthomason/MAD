@@ -37,6 +37,22 @@
 	return self.item;
 }
 
+- (BOOL)usesStaticInput1 {
+	return self.item.useStaticInput1 || self.item.referencesField1 == nil;
+}
+
+- (BOOL)usesStaticInput2 {
+	return self.item.useStaticInput2 || self.item.referencesField2 == nil;
+}
+
+- (NSString *)staticInput1 {
+	return self.item.inputStatic1 ?: @"";
+}
+
+- (NSString *)staticInput2 {
+	return self.item.inputStatic2 ?: @"";
+}
+
 - (NSString *)fieldKey1 {
 	NSString *queryAlias = [self.item.referencesField1.inQueryTable queryAlias];
 	NSString *fieldName = self.item.referencesField1.databaseSchemaField.name;

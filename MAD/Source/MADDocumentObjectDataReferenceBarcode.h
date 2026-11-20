@@ -18,6 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly) NSString *fieldKey1;
 @property (nonatomic, copy, readonly) NSString *fieldKey2;
 @property (nonatomic, strong, readonly) id <MADBarcodeProtocol> barcode;
+
+// An input is either a static string the element carries or a field's value:
+// a barcode with no field reference answers YES here and hands back the static
+// input, so the drawing object never looks up a nil row key.
+@property (nonatomic, assign, readonly) BOOL usesStaticInput1;
+@property (nonatomic, assign, readonly) BOOL usesStaticInput2;
+@property (nonatomic, copy, readonly) NSString *staticInput1;
+@property (nonatomic, copy, readonly) NSString *staticInput2;
 - (NSString *)formattedStringForValue1:(id)value;
 - (NSString *)formattedStringForValue2:(id)value;
 
