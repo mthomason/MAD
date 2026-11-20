@@ -141,12 +141,22 @@
 	XCTAssertNotNil([context insertObjectForEntity:@"RptqDocument" identifier:1]);
 	XCTAssertTrue([context save:NULL]);
 	NSError *error = nil;
-	XCTAssertTrue([writer writeContents:nil
-						  andAttributes:nil
-							safelyToURL:documentURL
-					   forSaveOperation:UIDocumentSaveForCreating
-								  error:&error],
-				  @"the fixture document did not save: %@", error);
+	BOOL wrote = [writer writeContents:nil
+						 andAttributes:nil
+						   safelyToURL:documentURL
+					  forSaveOperation:UIDocumentSaveForCreating
+								 error:&error];
+	// A missing fixture must stop the test: opening it drives UIDocument's
+	// archiver into its unbounded error loop and hangs the whole test process
+	// rather than failing this one case (MADOperationCreateDocumentCreateDocumentTests
+	// records the same hazard).
+	BOOL present = [[NSFileManager defaultManager] fileExistsAtPath:documentURL.path];
+	XCTAssertTrue(wrote && present,
+				  @"the fixture document did not reach disk (wrote=%d present=%d): %@",
+				  (int)wrote, (int)present, error);
+	if (!wrote || !present) {
+		return;
+	}
 
 	// Open it the way the app does.
 	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
@@ -158,6 +168,15 @@
 	[self waitForExpectations:@[ opened ] timeout:20];
 	XCTAssertEqual(document.documentState, UIDocumentStateNormal);
 	XCTAssertNotNil(document.storeContext);
+
+	// The close saves through the same archive path.  If the fixture disappeared
+	// while the document was open (a tmp-directory purge under disk pressure is
+	// one way), report that plainly rather than letting the close save drive the
+	// archiver into its error loop.
+	if (![[NSFileManager defaultManager] fileExistsAtPath:documentURL.path]) {
+		XCTFail(@"the fixture document disappeared after opening");
+		return;
+	}
 
 	MADCloseDocumentTestDependency *dependency = [[MADCloseDocumentTestDependency alloc] init];
 	dependency.document = document;
