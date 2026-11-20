@@ -463,12 +463,13 @@ target_link_libraries(mad PUBLIC
 	${ARCHIVE_LIBRARY} ${ZLIB_LIBRARY} ${BZIP2_LIBRARY})
 # These suites install chinook.sqlite3 into the same per-user Application
 # Support directory and refresh the same London fixture into the same cache
-# directory, and MADArchiveManagerTests opens the same fixture headlessly into
-# the same guts directory (its -testTheHeadlessDocumentWritesACopy).  ctest runs
-# test binaries in parallel, and the trio raced there (intermittent
-# MADHeadlessDocumentTests / MADArchiveManagerTests failures), so they take
-# turns.  The rest of the suite stays parallel.
-set_tests_properties(MADHeadlessDocumentTests MADReportExporterTests MADArchiveManagerTests
+# directory, MADArchiveManagerTests opens the same fixture headlessly into the
+# same guts directory (its -testTheHeadlessDocumentWritesACopy), and
+# MADBarcodeExportTests does the first two.  ctest runs test binaries in
+# parallel, and the suites raced there (intermittent MADHeadlessDocumentTests /
+# MADArchiveManagerTests failures), so they take turns.  The rest of the suite
+# stays parallel.
+set_tests_properties(MADHeadlessDocumentTests MADReportExporterTests MADArchiveManagerTests MADBarcodeExportTests
 	PROPERTIES RESOURCE_LOCK mad-london-fixture)
 target_include_directories(madtdsclient PUBLIC "${CMAKE_BINARY_DIR}/umbrella-shim")
 target_link_libraries(madtdsclient PUBLIC madtds madapi madcocoaextensions madfoundation)

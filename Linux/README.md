@@ -8,7 +8,8 @@ subset); Phase C is the §4 shim list, and this directory is where it lands.
 The build now compiles **all twelve headless frameworks** — every framework in
 docs/project/MAD_LINUX.md §3's table plus `MADPostgres`, except the UI-only ones (`MADExplorer`,
 `MADFeedback`, `Scrimpter`, the app) — and runs their suites inside the
-container: 128 test executables, 1,310 tests, 7 recorded needs. The test
+container: 128 test executables, 1,301 tests (plus the 19-check toolchain
+probe), 7 recorded needs. The test
 coverage master merged on 2026-10-10 (~100 Xcode test files) is ported in
 full, suite for suite. Nothing here ships in the app; the CLI — Phase D's
 checkpoint — builds and runs here too (see "The CLI runs here" below), and
