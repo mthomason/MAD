@@ -29,6 +29,12 @@ public sealed class SmokeTests
         ("text", 40441, "7dcee96c45951fac0e0057094a6a142c90a88d6d88a1c03278b273f5140c6e49"),
     };
 
+    /// <summary>A real 1x1 transparent PNG, base64 — the bytes the image element carries.</summary>
+    private const string OnePixelPngBase64 =
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+
+    private static readonly byte[] OnePixelPng = Convert.FromBase64String(OnePixelPngBase64);
+
     private readonly ITestOutputHelper _output;
 
     public SmokeTests(ITestOutputHelper output) => _output = output;
@@ -119,8 +125,16 @@ public sealed class SmokeTests
             Assert.True(barcodeElement.IsBarcode, "the barcode element is in the layout");
             Assert.False(string.IsNullOrEmpty(barcodeElement.Barcode?.PreviewBase64),
                 "the engine rendered no barcode preview");
-            Assert.Equal(4, document.Designer.Elements.Count);
-            _output.WriteLine("PASS: Added a static label, a data field, an aggregate and a barcode");
+
+            // An image element carries the chosen PNG through the store and the formats.
+            long image = await AddElementAsync(document.Designer, "image", detail, 660, 6);
+            await document.Designer.SetImageDataAsync(image, OnePixelPng);
+            var imageElement = document.Designer.Elements.Single(e => e.Id == image);
+            Assert.True(imageElement.IsImage, "the image element is in the layout");
+            Assert.Equal(OnePixelPngBase64, imageElement.Image?.DataBase64);
+
+            Assert.Equal(5, document.Designer.Elements.Count);
+            _output.WriteLine("PASS: Added a static label, a data field, an aggregate, a barcode and an image");
 
             Assert.True(await document.RefreshAsync(), document.ErrorText);
             Assert.True(document.RowCount > 0, "the created document refreshed 0 rows");
@@ -149,11 +163,13 @@ public sealed class SmokeTests
                         Assert.True(ViewerViewModel.CountPages(content) > 0, "the HTML export has no pages");
                         Assert.Contains("data:image/png;base64,", content);
                         Assert.Contains("alt=\"MAD-2026\"", content);
+                        Assert.Contains("data:image/png;base64," + OnePixelPngBase64, content);
                     }
                     else if (format.Format == "json-report")
                     {
                         Assert.Contains("\"kind\": \"Barcode\"", content);
                         Assert.Contains("\"text\": \"MAD-2026\"", content);
+                        Assert.Contains("\"kind\": \"Image\"", content);
                     }
 
                     _output.WriteLine($"PASS: Exported the created document as {format.Format} ({content.Length} chars)");

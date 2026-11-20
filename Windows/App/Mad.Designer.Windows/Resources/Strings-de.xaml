@@ -150,6 +150,8 @@
   <sys:String x:Key="Designer.Barcode.Border.Box">Rahmenkasten</sys:String>
   <sys:String x:Key="Designer.Barcode.Field">Eingabe</sys:String>
   <sys:String x:Key="Designer.Barcode.StaticInput">Statische Eingabe</sys:String>
+  <sys:String x:Key="Designer.Image.Choose">Bild auswählen…</sys:String>
+  <sys:String x:Key="Designer.Image.Filter">Bilddateien (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg</sys:String>
   <sys:String x:Key="Designer.Placeholder.Label">Statische Beschriftung</sys:String>
   <sys:String x:Key="Designer.Placeholder.DataField">[Datenfeld]</sys:String>
   <sys:String x:Key="Designer.Placeholder.Image">[Bild]</sys:String>

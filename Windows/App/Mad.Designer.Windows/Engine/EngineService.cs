@@ -212,6 +212,7 @@ public sealed class EngineService : IAsyncDisposable
         if (content.BarcodeType != null) contentParams["barcodeType"] = content.BarcodeType;
         if (content.HumanReadable != null) contentParams["humanReadable"] = content.HumanReadable;
         if (content.BorderStyle != null) contentParams["borderStyle"] = content.BorderStyle;
+        if (content.Data != null) contentParams["data"] = content.Data;
         var result = await CallAsync("set-element-content", new Dictionary<string, object?> { ["handle"] = handle, ["element"] = element, ["content"] = contentParams }).ConfigureAwait(false);
         return LayoutModel.Parse(result);
     }
@@ -445,6 +446,9 @@ public sealed record ElementContent(string? Text = null, long? Field = null, int
 
     /// <summary>The barcode's border style, as the inspector's 0/1/2 index.</summary>
     public int? BorderStyle { get; init; }
+
+    /// <summary>An image element's picture as base64 PNG (empty clears it).</summary>
+    public string? Data { get; init; }
 }
 
 /// <summary>A bulk typography patch. Only non-null members are sent.</summary>

@@ -167,6 +167,10 @@ public sealed record LayoutElement(
     /// null for every other element.</summary>
     public BarcodeContent? Barcode { get; init; }
 
+    /// <summary>An image element's stored picture (base64 PNG), or null for every other
+    /// element.</summary>
+    public ImageContent? Image { get; init; }
+
     internal static LayoutElement Parse(JsonElement e) => new(
         LayoutJson.Long(e, "id"),
         (ElementType)LayoutJson.Int(e, "type"),
@@ -197,12 +201,22 @@ public sealed record LayoutElement(
         LayoutJson.Double(e, "padding"),
         LayoutJson.Double(e, "margin"))
     {
-        // A barcode element carries one nested member; the other elements' shape is
-        // unchanged (LayoutModel.Parse reads it only when it is present).
+        // A barcode or image element carries one nested member each; the other
+        // elements' shape is unchanged (the members are read only when present).
         Barcode = e.TryGetProperty("barcode", out var barcode) && barcode.ValueKind == JsonValueKind.Object
             ? BarcodeContent.Parse(barcode)
             : null,
+        Image = e.TryGetProperty("image", out var image) && image.ValueKind == JsonValueKind.Object
+            ? ImageContent.Parse(image)
+            : null,
     };
+}
+
+/// <summary>An image element's picture: the PNG bytes the engine stores, base64 encoded
+/// (empty when the element has none).</summary>
+public sealed record ImageContent(string DataBase64)
+{
+    internal static ImageContent Parse(JsonElement e) => new(LayoutJson.Str(e, "data"));
 }
 
 /// <summary>One barcode element's settings, plus the base64 PNG the engine rendered for the

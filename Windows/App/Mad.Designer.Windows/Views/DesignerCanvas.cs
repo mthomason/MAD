@@ -226,15 +226,13 @@ public sealed class DesignerCanvas : Canvas
             // The engine renders the sample symbol, so the canvas shows the symbology
             // and options as they will print; the text is the fallback when zint
             // refuses the sample input.
-            border.Child = BarcodePreview(element) ?? (UIElement)new TextBlock
-            {
-                Text = DisplayText(element),
-                FontSize = 10 * _zoom,
-                Foreground = DesignPalette.PaperInk,
-                TextTrimming = TextTrimming.CharacterEllipsis,
-                Margin = new Thickness(2 * _zoom, 1 * _zoom, 2 * _zoom, 1 * _zoom),
-                VerticalAlignment = VerticalAlignment.Center,
-            };
+            border.Child = BarcodePreview(element) ?? (UIElement)PlaceholderText(element, 10);
+        }
+        else if (element.IsImage)
+        {
+            // The picture the file picker stored (the engine's snapshot carries the
+            // PNG); an element without one keeps the localized placeholder.
+            border.Child = ImagePreview(element) ?? (UIElement)PlaceholderText(element, 10);
         }
         else if (element.IsLineRule)
         {
@@ -247,15 +245,7 @@ public sealed class DesignerCanvas : Canvas
         }
         else
         {
-            border.Child = new TextBlock
-            {
-                Text = DisplayText(element),
-                FontSize = Math.Max(8.0, Math.Min(48.0, element.FontSize)) * _zoom,
-                Foreground = DesignPalette.PaperInk,
-                TextTrimming = TextTrimming.CharacterEllipsis,
-                Margin = new Thickness(2 * _zoom, 1 * _zoom, 2 * _zoom, 1 * _zoom),
-                VerticalAlignment = VerticalAlignment.Center,
-            };
+            border.Child = PlaceholderText(element, Math.Max(8.0, Math.Min(48.0, element.FontSize)));
         }
 
         _elementBorders[element.Id] = border;
@@ -813,8 +803,15 @@ public sealed class DesignerCanvas : Canvas
     /// <summary>The engine-rendered sample symbol, decoded from the snapshot's base64 PNG;
     /// null when zint refused the sample input and the text fallback should show.</summary>
     private Image? BarcodePreview(LayoutElement element)
+        => DecodePng(element.Barcode?.PreviewBase64);
+
+    /// <summary>The image element's stored picture, decoded from the snapshot's base64 PNG;
+    /// null when the element has none and the placeholder should show.</summary>
+    private Image? ImagePreview(LayoutElement element)
+        => DecodePng(element.Image?.DataBase64);
+
+    private Image? DecodePng(string? base64)
     {
-        string base64 = element.Barcode?.PreviewBase64 ?? "";
         if (string.IsNullOrEmpty(base64)) return null;
         try
         {
@@ -836,6 +833,16 @@ public sealed class DesignerCanvas : Canvas
             return null;
         }
     }
+
+    private TextBlock PlaceholderText(LayoutElement element, double fontSize) => new()
+    {
+        Text = DisplayText(element),
+        FontSize = fontSize * _zoom,
+        Foreground = DesignPalette.PaperInk,
+        TextTrimming = TextTrimming.CharacterEllipsis,
+        Margin = new Thickness(2 * _zoom, 1 * _zoom, 2 * _zoom, 1 * _zoom),
+        VerticalAlignment = VerticalAlignment.Center,
+    };
 
     private string DisplayText(LayoutElement element)
     {
