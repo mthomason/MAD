@@ -16,8 +16,8 @@
 @property (nonatomic, readonly, copy) NSString *text;
 @end
 
-// The image-carrying drawing object (MADPrintPageElementBarcode), declared rather
-// than imported for the same reason.
+// The image-carrying drawing objects (MADPrintPageElementBarcode and
+// MADPrintPageElementImage), declared rather than imported for the same reason.
 @protocol MADReportLineImageElement <NSObject>
 - (NSData *)renderedImageData;
 @end
