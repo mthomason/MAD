@@ -82,6 +82,10 @@
 #import <MAD/RptqDocumentElementLabelDataField.h>
 #import <MAD/RptqDocumentElementAggregate.h>
 #import <MAD/RptqDocumentElementImage.h>
+#import <MAD/RptqDocumentElementBarcode.h>
+#import <MAD/RptqDocumentElementBarcode+Extras.h>
+
+#import <MADBarcodes/MADBarcode.h>
 #import <MAD/RptqQueryGroup+Extras.h>
 #import <MAD/RptqQuery+Extras.h>
 #import <MAD/MADocumentSectionType.h>
@@ -138,6 +142,7 @@ static NSString * const MADCLIServeMethodSetElementTypography = @"set-element-ty
 static NSString * const MADCLIServeMethodSetElementBoxModel = @"set-element-box-model";
 static NSString * const MADCLIServeMethodSetSection		= @"set-section";
 static NSString * const MADCLIServeMethodSetPaperSize	= @"set-paper-size";
+static NSString * const MADCLIServeMethodBarcodeTypes	= @"barcode-types";
 
 #pragma mark - Session state
 
@@ -1451,6 +1456,7 @@ static NSDictionary *MADCLIServeElementDict(RptqDocumentElement *element, int64_
 	int16_t functionType = 0;
 	int16_t groupType = 0;
 	int32_t groupNumber = 0;
+	NSDictionary *barcodeInfo = nil;
 
 	if ([element isKindOfClass: [RptqDocumentElementLabel class]]) {
 		text = ((RptqDocumentElementLabel *)element).text ?: @"";
@@ -1460,6 +1466,28 @@ static NSDictionary *MADCLIServeElementDict(RptqDocumentElement *element, int64_
 		tableID = df.tableID ?: @"";
 		columnID = df.fieldID ?: @"";
 		if (df.referencesQueryField) fieldID = df.referencesQueryField.identifier;
+	} else if ([element isKindOfClass: [RptqDocumentElementBarcode class]]) {
+		RptqDocumentElementBarcode *bc = (RptqDocumentElementBarcode *)element;
+		if (bc.useStaticInput1) text = bc.inputStatic1 ?: @"";
+		if (bc.referencesField1) fieldID = bc.referencesField1.identifier;
+
+		// A sample symbol for the designer's canvas, so the Windows composer shows
+		// the barcode the options actually produce rather than a placeholder.
+		NSString *sample = (bc.useStaticInput1 && bc.inputStatic1.length > 0)
+			? bc.inputStatic1
+			: (bc.referencesField1.databaseSchemaField.name ?: @"1234567890");
+		MADBarcode *drawing = [MADBarcode newBarcode:bc input1:sample input2:@""];
+		NSData *preview = [drawing renderedPNGData];
+		barcodeInfo = @{
+			@"type": @(bc.barcodeType),
+			@"name": [MADBarcode newBarcodeNameForType: barcodeTypeForInt(bc.barcodeType)] ?: @"",
+			@"humanReadable": @(bc.humanReadable),
+			@"borderStyle": @(bc.barcodeBorderStyle),
+			@"useStaticInput": @(bc.useStaticInput1),
+			@"staticInput": bc.inputStatic1 ?: @"",
+			@"field": @(bc.referencesField1 ? bc.referencesField1.identifier : 0),
+			@"preview": [preview base64EncodedStringWithOptions: 0] ?: @"",
+		};
 	} else if ([element isKindOfClass: [RptqDocumentElementAggregate class]]) {
 		RptqDocumentElementAggregate *agg = (RptqDocumentElementAggregate *)element;
 		functionType = (int16_t)agg.functionType;
@@ -1486,7 +1514,7 @@ static NSDictionary *MADCLIServeElementDict(RptqDocumentElement *element, int64_
 	int16_t hAlign = element.alignment ? element.alignment.horizontal : MADHorizontalAlignmentLeft;
 	int16_t vAlign = element.alignment ? element.alignment.vertical : MADVerticalAlignmentCenter;
 
-	return @{
+	NSMutableDictionary *dictionary = [@{
 		@"id": @(element.identifier),
 		@"type": @(element.type),
 		@"section": @(sectionId),
@@ -1506,7 +1534,11 @@ static NSDictionary *MADCLIServeElementDict(RptqDocumentElement *element, int64_
 		@"borderTop": @(borderTop), @"borderBottom": @(borderBottom),
 		@"borderLeft": @(borderLeft), @"borderRight": @(borderRight),
 		@"padding": @(padding), @"margin": @(margin),
-	};
+	} mutableCopy];
+	// Only a barcode element carries the barcode member; every other element's
+	// shape is exactly what it was.
+	if (barcodeInfo != nil) dictionary[@"barcode"] = barcodeInfo;
+	return dictionary;
 }
 
 static NSDictionary *MADCLIServeLayoutModelDict(id <MADDocumentDataProtocol> document) {
@@ -1568,6 +1600,21 @@ static void MADCLIServeLayoutModel(NSDictionary *params, NSMutableDictionary <NS
 	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
 	if (entry == nil) return;
 	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(entry.document.document));
+}
+
+// The symbologies the designer's picker offers: MADBarcode's own name table, so
+// the Windows composer cannot drift from the Apple one.
+static void MADCLIServeBarcodeTypes(id requestID) {
+	NSDictionary <NSNumber *, NSString *> *names = [MADBarcode newDictionaryNames] ?: @{};
+	NSArray <NSNumber *> *keys = [names.allKeys sortedArrayUsingComparator: ^NSComparisonResult(NSNumber *a, NSNumber *b) {
+		return [names[a] localizedCaseInsensitiveCompare: names[b]];
+	}];
+
+	NSMutableArray <NSDictionary *> *types = [NSMutableArray arrayWithCapacity: keys.count];
+	for (NSNumber *key in keys) {
+		[types addObject: @{ @"id": key, @"name": names[key] }];
+	}
+	MADCLIServeWriteResult(requestID, @{ @"types": types });
 }
 
 static void MADCLIServeEnsureFirstRow(RptqDocumentSection *section, RptqStoreContext *context) {
@@ -1650,6 +1697,17 @@ static void MADCLIServeAddElement(NSDictionary *params, NSMutableDictionary <NSN
 		if (line.border && line.border.width) line.border.width.bottom = 1.5f;
 		w = 320.0; h = 8.0;
 		element = line;
+	} else if ([kind isEqualToString: @"barcode"]) {
+		RptqDocumentElementBarcode *bc = (RptqDocumentElementBarcode *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementBarcode class]) identifier: 0];
+		bc.type = (int16_t)MADPrintPageElementTypeBarcode;
+		bc.barcodeType = (int16_t)MADBarcodeTypeCODE128;
+		bc.humanReadable = YES;
+		bc.useStaticInput1 = YES;
+		bc.inputStatic1 = @"MAD-2026";
+		bc.scale = 1.0f;
+		bc.barcodeHeight = 40;
+		w = 160.0; h = 48.0;
+		element = bc;
 	} else {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown element kind '%@'.", kind]);
 		return;
@@ -1801,6 +1859,38 @@ static void MADCLIServeSetElementContent(NSDictionary *params, NSMutableDictiona
 		if ([content[@"field"] isKindOfClass: [NSNumber class]]) {
 			agg.aggregateField = (RptqQueryField *)[context objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: [content[@"field"] longLongValue]];
 		}
+	} else if ([element isKindOfClass: [RptqDocumentElementBarcode class]]) {
+		RptqDocumentElementBarcode *bc = (RptqDocumentElementBarcode *)element;
+		if ([content[@"barcodeType"] isKindOfClass: [NSNumber class]]) {
+			bc.barcodeType = (int16_t)[content[@"barcodeType"] integerValue];
+		}
+		if ([content[@"humanReadable"] isKindOfClass: [NSNumber class]]) {
+			bc.humanReadable = [content[@"humanReadable"] boolValue];
+		}
+		if ([content[@"borderStyle"] isKindOfClass: [NSNumber class]]) {
+			bc.barcodeBorderStyle = (int16_t)[content[@"borderStyle"] integerValue];
+		}
+		// A field binds the input to the query; field 0 (or none) switches back to
+		// the static string, which the text member edits.
+		if ([content[@"field"] isKindOfClass: [NSNumber class]]) {
+			int64_t fieldID = [content[@"field"] longLongValue];
+			RptqQueryField *field = fieldID != 0
+				? (RptqQueryField *)[context objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: fieldID]
+				: nil;
+			if (field != nil) {
+				bc.useStaticInput1 = NO;
+				bc.referencesField1 = field;
+				bc.inputField1 = field.databaseSchemaField.name;
+			} else {
+				bc.useStaticInput1 = YES;
+				bc.referencesField1 = nil;
+			}
+		}
+		if ([content[@"text"] isKindOfClass: [NSString class]]) {
+			bc.useStaticInput1 = YES;
+			bc.referencesField1 = nil;
+			bc.inputStatic1 = content[@"text"];
+		}
 	}
 
 	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(document));
@@ -1947,6 +2037,33 @@ static RptqDocumentElement *MADCLIServeDuplicateElement(RptqDocumentElement *src
 		RptqDocumentElementImage *dup = (RptqDocumentElementImage *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementImage class]) identifier: 0];
 		dup.type = src.type;
 		dst = dup;
+	} else if ([src isKindOfClass: [RptqDocumentElementBarcode class]]) {
+		RptqDocumentElementBarcode *s = (RptqDocumentElementBarcode *)src;
+		RptqDocumentElementBarcode *dup = (RptqDocumentElementBarcode *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementBarcode class]) identifier: 0];
+		dup.type = src.type;
+		dup.barcodeType = s.barcodeType;
+		dup.humanReadable = s.humanReadable;
+		dup.showErrorMessage = s.showErrorMessage;
+		dup.barcodeBorderStyle = s.barcodeBorderStyle;
+		dup.barcodeBorderType = s.barcodeBorderType;
+		dup.barcodeBorderWidth = s.barcodeBorderWidth;
+		dup.barcodeHeight = s.barcodeHeight;
+		dup.whitespaceWidth = s.whitespaceWidth;
+		dup.scale = s.scale;
+		dup.add2dComponent = s.add2dComponent;
+		dup.inputMode = s.inputMode;
+		dup.option1 = s.option1;
+		dup.option2 = s.option2;
+		dup.option3 = s.option3;
+		dup.useStaticInput1 = s.useStaticInput1;
+		dup.useStaticInput2 = s.useStaticInput2;
+		dup.inputStatic1 = [s.inputStatic1 copy];
+		dup.inputStatic2 = [s.inputStatic2 copy];
+		dup.inputField1 = [s.inputField1 copy];
+		dup.inputField2 = [s.inputField2 copy];
+		dup.referencesField1 = s.referencesField1;
+		dup.referencesField2 = s.referencesField2;
+		dst = dup;
 	}
 	return dst;
 }
@@ -2074,6 +2191,8 @@ static BOOL MADCLIServeDispatch(NSDictionary *request, NSMutableDictionary <NSNu
 			MADCLIServeValidateSQL(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodApplySQL]) {
 			MADCLIServeApplySQL(params, documents, requestID);
+		} else if ([method isEqualToString: MADCLIServeMethodBarcodeTypes]) {
+			MADCLIServeBarcodeTypes(requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodLayoutModel]) {
 			MADCLIServeLayoutModel(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodAddElement]) {
