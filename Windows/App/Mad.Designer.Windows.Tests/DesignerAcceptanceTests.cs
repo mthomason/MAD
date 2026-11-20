@@ -74,6 +74,93 @@ public sealed class DesignerAcceptanceTests
         }
     }
 
+    /// <summary>The barcode composer: the palette inserts a real symbol (the engine's
+    /// preview), and the inspector's symbology, options and input binding round-trip
+    /// through the engine.</summary>
+    [Fact]
+    public async Task Barcode_InsertEditBindAndUnbind()
+    {
+        string sqlite = CopyChinookToTemp();
+        string mad = Path.Combine(Path.GetTempPath(), $"mad-barcode-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var service = new EngineService();
+            var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
+            // A query, so the designer's field list is not empty when the test binds
+            // the barcode's input.
+            await service.ApplySqlAsync(open.Handle,
+                "SELECT Customer.FirstName, Customer.LastName, Customer.City FROM Customer WHERE Customer.Country = 'United Kingdom';");
+
+            var vm = new DesignerViewModel(service);
+            await vm.LoadAsync(open.Handle);
+            long detailId = vm.Sections.Single(s => s.Type == SectionType.Body).Id;
+            vm.SelectSection(detailId);
+
+            Assert.NotEmpty(vm.BarcodeTypes);
+
+            await vm.AddBarcodeCommand.ExecuteAsync();
+            var barcode = vm.Elements.Single(e => e.IsBarcode);
+            Assert.NotNull(barcode.Barcode);
+            Assert.False(string.IsNullOrEmpty(barcode.Barcode!.PreviewBase64));
+            Assert.StartsWith("iVBOR", barcode.Barcode.PreviewBase64); // the PNG signature, base64
+            Assert.False(string.IsNullOrEmpty(barcode.Barcode.SymbologyName));
+
+            vm.SelectElement(barcode.Id, extend: false);
+
+            int qrIndex = IndexOfSymbology(vm, "QR Code (ISO 18004)");
+            Assert.True(qrIndex >= 0, "the catalogue carries QR Code");
+            vm.ElementBarcodeSymbologyIndex = qrIndex;
+            await SettleAsync(vm);
+            Assert.Equal("QR Code (ISO 18004)", vm.PrimaryElement!.Barcode!.SymbologyName);
+
+            vm.ElementBarcodeHumanReadable = false;
+            await SettleAsync(vm);
+            Assert.False(vm.PrimaryElement!.Barcode!.HumanReadable);
+
+            var field = vm.Fields.First();
+            vm.ElementBarcodeInputId = field.Id;
+            await SettleAsync(vm);
+            Assert.False(vm.PrimaryElement!.Barcode!.UseStaticInput);
+            Assert.Equal(field.Id, vm.PrimaryElement!.Barcode!.Field);
+
+            // The text box edits the static input, which switches the binding back.
+            vm.ElementText = "QR-TEST";
+            await SettleAsync(vm);
+            Assert.True(vm.PrimaryElement!.Barcode!.UseStaticInput);
+            Assert.Equal("QR-TEST", vm.PrimaryElement!.Barcode!.StaticInput);
+
+            // The picker's first row is the static input (id 0).
+            vm.ElementBarcodeInputId = 0;
+            await SettleAsync(vm);
+            Assert.True(vm.PrimaryElement!.Barcode!.UseStaticInput);
+
+            await vm.RemoveElementsAsync(new[] { barcode.Id });
+            Assert.DoesNotContain(vm.Elements, e => e.IsBarcode);
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+            if (File.Exists(mad)) File.Delete(mad);
+        }
+    }
+
+    private static int IndexOfSymbology(DesignerViewModel vm, string name)
+    {
+        for (int i = 0; i < vm.BarcodeTypes.Count; i++)
+        {
+            if (vm.BarcodeTypes[i].Name == name) return i;
+        }
+        return -1;
+    }
+
+    /// <summary>The inspector's setters dispatch their mutation and return; wait for it.</summary>
+    private static async Task SettleAsync(DesignerViewModel vm)
+    {
+        for (int i = 0; i < 300 && vm.IsBusy; i++) await Task.Delay(10);
+        Assert.False(vm.IsBusy, "the designer did not settle");
+        await vm.ReloadAsync();
+    }
+
     private static string CopyChinookToTemp()
     {
         string source = Path.Combine(MadPathResolver.RepoRoot(), "MADDesigner", "Resources", "Assets", "Samples.xcassets", "Data", "chinook.dataset", "chinook.sqlite3");

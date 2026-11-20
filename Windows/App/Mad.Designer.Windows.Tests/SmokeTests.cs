@@ -111,8 +111,16 @@ public sealed class SmokeTests
                 Field: lastName.Id,
                 Function: (int)AggregateFunction.Count,
                 Scope: (int)AggregateScope.Report));
-            Assert.Equal(3, document.Designer.Elements.Count);
-            _output.WriteLine("PASS: Added a static label, a data field and an aggregate");
+
+            // The barcode element is part of the created document too: the engine
+            // renders its symbol and the formats carry it.
+            long barcode = await AddElementAsync(document.Designer, "barcode", detail, 460, 6);
+            var barcodeElement = document.Designer.Elements.Single(e => e.Id == barcode);
+            Assert.True(barcodeElement.IsBarcode, "the barcode element is in the layout");
+            Assert.False(string.IsNullOrEmpty(barcodeElement.Barcode?.PreviewBase64),
+                "the engine rendered no barcode preview");
+            Assert.Equal(4, document.Designer.Elements.Count);
+            _output.WriteLine("PASS: Added a static label, a data field, an aggregate and a barcode");
 
             Assert.True(await document.RefreshAsync(), document.ErrorText);
             Assert.True(document.RowCount > 0, "the created document refreshed 0 rows");
@@ -139,6 +147,13 @@ public sealed class SmokeTests
                     else if (format.Format == "html")
                     {
                         Assert.True(ViewerViewModel.CountPages(content) > 0, "the HTML export has no pages");
+                        Assert.Contains("data:image/png;base64,", content);
+                        Assert.Contains("alt=\"MAD-2026\"", content);
+                    }
+                    else if (format.Format == "json-report")
+                    {
+                        Assert.Contains("\"kind\": \"Barcode\"", content);
+                        Assert.Contains("\"text\": \"MAD-2026\"", content);
                     }
 
                     _output.WriteLine($"PASS: Exported the created document as {format.Format} ({content.Length} chars)");
