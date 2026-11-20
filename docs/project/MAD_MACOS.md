@@ -198,7 +198,7 @@ Built under `Mac/` (`Mac/Source/`, `Mac/Resources/`, `Mac/Tests/`, `Mac/build.sh
 
 1. **Application Lifecycle, About Window & Document Controller (`MADMacAppDelegate`, `MADMacAboutWindowController` & `MADMacDocumentController`):**
    - Registers all four database drivers and `MADStoreLegacyConverter`, builds the native macOS main menu (`MAD Designer`, `File`, `Edit` with `Undo`/`Redo`, `View` workspace switching `Cmd+1`/`Cmd+2`/`Cmd+3`, `Report` refresh `Cmd+R`, `Window`, `Help`), and presents the standard `NSOpenPanel` on launch when no document is open.
-   - `MADMacAboutWindowController` presents the native **About MAD Designer** window (`MAD Designer → About MAD Designer` and `Help` menu items) with version/build metadata (`MADMeta.plist`), copyright and reserved brand/artwork notice, **Source Code on GitHub** action, and three tabbed sections: **Overview** (what MAD is, the 4-step reporting workflow, and supported drivers/bands/exporters), **License & Notice** (MIT License, `NOTICE`, and the written LGPL-3.0 relink offer for FreeTDS and MariaDB Connector/C), and **Acknowledgements** (interactive sidebar of all 16 third-party open-source components paired with their attributions and the 12 full license texts bundled under `Contents/Resources/Licenses/`).
+   - `MADMacAboutWindowController` presents the native **About MAD Designer** window (`MAD Designer → About MAD Designer` and `Help` menu items) with the engine version/build (`MADMeta.plist`) and the macOS application version (`CFBundleShortVersionString`) shown as distinct values, copyright and reserved brand/artwork notice, **Source Code on GitHub** action, and three tabbed sections: **Overview** (what MAD is, the 4-step reporting workflow, and supported drivers/bands/exporters), **License & Notice** (MIT License, `NOTICE`, and the written LGPL-3.0 relink offer for FreeTDS and MariaDB Connector/C), and **Acknowledgements** (interactive sidebar of all 16 third-party open-source components paired with their attributions and the 12 full license texts bundled under `Contents/Resources/Licenses/`).
    - `MADMacDocumentController` configures `NSOpenPanel` with all `.mad` `UTType` identifiers (`com.everydayapps.productivity.mad` and `com.thomason.report.mad`) so existing `.mad` files are never dimmed out, and places a primary **New Document** button directly in the bottom-left bar of the Open Panel.
 2. **Database Connection & Schema Import Assistant (`MADMacConnectionWindowController`):**
    - Supports **SQLite** (custom `.sqlite3`/`.db` file via `NSOpenPanel`), **MySQL**, **Microsoft SQL Server**, and **PostgreSQL**, with **Test Connection**, `MADKeyChain` password storage, and **Create Document…** (`NSSavePanel`).
@@ -281,3 +281,14 @@ Produces:
 - `Mac/build/MAD-Designer-macOS.dmg`
 
 Public user and developer documentation for the native macOS application is published in [`docs/macos.md`](../macos.md) (with screenshots at `docs/assets/macos-native-mad-query.png` and `docs/assets/macos-native-mad-designer.png`) and [`Mac/README.md`](../../Mac/README.md).
+
+### Continuous integration (Completed)
+
+`.github/workflows/macos.yml` runs on every pull request and push to `master`.
+It builds (and caches) the Compressor static libraries, then runs the
+`MADBarcodes` and `MAD` suites on an iPhone simulator discovered from the
+runner, builds the iOS `MAD Designer` scheme, and runs
+`./Mac/build.sh --smoke-test`. The About window reports the engine version
+(`MADMeta.plist`, `v9.0 (r4433)`) and the macOS application version
+(`CFBundleShortVersionString`, `v0.7`) as distinct values, matching the
+Windows About window's post-Phase-6f presentation.

@@ -861,12 +861,15 @@ int main(int argc, const char * argv[]) {
 		if (![aboutWC.titleLabel.stringValue isEqualToString:@"MAD Designer"] ||
 			![aboutWC.versionLabel.stringValue containsString:@"v9.0"] ||
 			![aboutWC.versionLabel.stringValue containsString:@"r4433"] ||
+			![aboutWC.applicationVersionLabel.stringValue containsString:@"v0.7"] ||
+			[aboutWC.versionLabel.stringValue isEqualToString:aboutWC.applicationVersionLabel.stringValue] ||
 			![aboutWC.copyrightLabel.stringValue containsString:@"Copyright © 2012–2026 Michael Thomason"] ||
 			![aboutWC.licenseSummaryLabel.stringValue containsString:@"Licensed under the MIT License"] ||
 			![aboutWC.licenseSummaryLabel.stringValue containsString:@"not licensed under the MIT License"]) {
-			fprintf(stderr, "FAIL: About window header labels missing required metadata: title='%s' version='%s' copyright='%s'\n",
+			fprintf(stderr, "FAIL: About window header labels missing required metadata: title='%s' engine='%s' application='%s' copyright='%s'\n",
 					aboutWC.titleLabel.stringValue.UTF8String,
 					aboutWC.versionLabel.stringValue.UTF8String,
+					aboutWC.applicationVersionLabel.stringValue.UTF8String,
 					aboutWC.copyrightLabel.stringValue.UTF8String);
 			return 70;
 		}

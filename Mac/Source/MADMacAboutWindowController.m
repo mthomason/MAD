@@ -18,6 +18,7 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 @property (nonatomic, strong, readwrite) NSTextField *titleLabel;
 @property (nonatomic, strong, readwrite) NSTextField *subtitleLabel;
 @property (nonatomic, strong, readwrite) NSTextField *versionLabel;
+@property (nonatomic, strong, readwrite) NSTextField *applicationVersionLabel;
 @property (nonatomic, strong, readwrite) NSTextField *copyrightLabel;
 @property (nonatomic, strong, readwrite) NSTextField *licenseSummaryLabel;
 @property (nonatomic, strong) NSButton *gitHubButton;
@@ -112,22 +113,24 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 	return displayName.length > 0 ? displayName : @"MAD Designer";
 }
 
+// The engine's version lives in the bundled MADMeta.plist and is independent of the
+// application's own version (CFBundleShortVersionString), which is the macOS app's.
 + (NSString *)versionTextForBundle:(nullable NSBundle *)bundle {
 	NSDictionary *meta = [self metaDictionaryForBundle:bundle];
-	NSBundle *resolved = [self resolvedBundle:bundle];
-	NSString *shortVersion = meta[@"CFBundleShortVersionString"]
-		?: resolved.infoDictionary[@"CFBundleShortVersionString"]
-		?: @"9.0";
+	NSString *shortVersion = meta[@"CFBundleShortVersionString"] ?: @"9.0";
 	return [NSString stringWithFormat:@"v%@", shortVersion];
 }
 
 + (NSString *)buildTextForBundle:(nullable NSBundle *)bundle {
 	NSDictionary *meta = [self metaDictionaryForBundle:bundle];
-	NSBundle *resolved = [self resolvedBundle:bundle];
-	NSString *commitCount = [meta[@"MADGitCommitCount"] description]
-		?: [resolved.infoDictionary[@"CFBundleVersion"] description]
-		?: @"4433";
+	NSString *commitCount = [meta[@"MADGitCommitCount"] description] ?: @"4433";
 	return [NSString stringWithFormat:@"r%@", commitCount];
+}
+
++ (NSString *)applicationVersionTextForBundle:(nullable NSBundle *)bundle {
+	NSBundle *resolved = [self resolvedBundle:bundle];
+	NSString *shortVersion = resolved.infoDictionary[@"CFBundleShortVersionString"] ?: @"0.7";
+	return [NSString stringWithFormat:@"v%@", shortVersion];
 }
 
 + (NSString *)humanReadableCopyrightForBundle:(nullable NSBundle *)bundle {
@@ -577,11 +580,23 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 
 	NSString *versionStr = [MADMacAboutWindowController versionTextForBundle:_resourceBundle];
 	NSString *buildStr = [MADMacAboutWindowController buildTextForBundle:_resourceBundle];
-	_versionLabel = [NSTextField labelWithString:[NSString stringWithFormat:@"%@ (%@)", versionStr, buildStr]];
-	_versionLabel.frame = NSMakeRect(112, headerHeight - 60, 380, 18);
+	NSString *engineVersionStr = [[NSString alloc] initWithFormat:@"%@ (%@)", versionStr, buildStr];
+	_versionLabel = [NSTextField labelWithString:[[NSString alloc] initWithFormat:
+		NSLocalizedString(@"Engine %@", @"About window: the reporting engine's version. Engine is a technical term."),
+		engineVersionStr]];
+	_versionLabel.frame = NSMakeRect(112, headerHeight - 60, 200, 18);
 	_versionLabel.font = [NSFont monospacedDigitSystemFontOfSize:12.5 weight:NSFontWeightMedium];
 	_versionLabel.textColor = [NSColor labelColor];
 	[headerView addSubview:_versionLabel];
+
+	NSString *applicationVersionStr = [MADMacAboutWindowController applicationVersionTextForBundle:_resourceBundle];
+	_applicationVersionLabel = [NSTextField labelWithString:[[NSString alloc] initWithFormat:
+		NSLocalizedString(@"Application %@", @"About window: the macOS application's version."),
+		applicationVersionStr]];
+	_applicationVersionLabel.frame = NSMakeRect(320, headerHeight - 60, 220, 18);
+	_applicationVersionLabel.font = [NSFont monospacedDigitSystemFontOfSize:12.5 weight:NSFontWeightMedium];
+	_applicationVersionLabel.textColor = [NSColor labelColor];
+	[headerView addSubview:_applicationVersionLabel];
 
 	_subtitleLabel = [NSTextField labelWithString:NSLocalizedString(@"MAD Designer is open-source business intelligence software by Michael Thomason.", @"About window subtitle. MAD Designer is a brand.")];
 	_subtitleLabel.frame = NSMakeRect(112, headerHeight - 80, NSWidth(bounds) - 136, 18);

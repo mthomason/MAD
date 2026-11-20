@@ -29,7 +29,7 @@ También puede compilar, ejecutar y depurar la aplicación directamente en Xcode
 
 * `Mac/Source/` — aplicación `AppKit`, arquitectura `NSDocument` y los tres espacios de trabajo:
   * `MADMacAppDelegate.{h,m}` — ciclo de vida de la aplicación, registro de drivers y convertidores, y barra de menús principal (`MAD Designer`, `File`, `Edit`, `View`, `Report`, `Window`, `Help`).
-  * `MADMacAboutWindowController.{h,m}` — ventana nativa **About MAD Designer** (`Overview`, `License & Notice` y `Acknowledgements`, con barra lateral de componentes y textos de licencias de terceros incluidos).
+  * `MADMacAboutWindowController.{h,m}` — ventana nativa **About MAD Designer** que muestra la versión del motor (`MADMeta.plist`) y la versión de la aplicación macOS (`CFBundleShortVersionString`) como valores distintos, con `Overview`, `License & Notice` y `Acknowledgements` (barra lateral de componentes y textos de licencias de terceros incluidos).
   * `MADMacDocumentController.{h,m}` — subclase de `NSDocumentController` que configura el panel de apertura estándar con filtros `UTType` de `.mad` (`com.everydayapps.productivity.mad` y `com.thomason.report.mad`) y un botón principal **New Document**.
   * `MADMacDocument.{h,m}` — envoltorio `NSDocument` sobre `MADHeadlessDocument`, `MADDesignerLayout` (`NSUndoManager`), `MADSectionsLayout`, actualización asíncrona (`MADOperationQueue`) y exportación.
   * `MADMacWindowController.{h,m}` — ventana principal del documento con el control segmentado **Workspace** centrado (`MAD Query`, `MAD Designer`, `MAD Viewer`).

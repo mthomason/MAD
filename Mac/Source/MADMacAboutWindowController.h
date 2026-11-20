@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, MADMacAboutTab) {
 @property (nonatomic, strong, readonly) NSTextField *titleLabel;
 @property (nonatomic, strong, readonly) NSTextField *subtitleLabel;
 @property (nonatomic, strong, readonly) NSTextField *versionLabel;
+@property (nonatomic, strong, readonly) NSTextField *applicationVersionLabel;
 @property (nonatomic, strong, readonly) NSTextField *copyrightLabel;
 @property (nonatomic, strong, readonly) NSTextField *licenseSummaryLabel;
 @property (nonatomic, strong, readonly) NSSegmentedControl *sectionSegmentedControl;
@@ -42,6 +43,7 @@ typedef NS_ENUM(NSInteger, MADMacAboutTab) {
 + (NSString *)bundleDisplayNameForBundle:(nullable NSBundle *)bundle;
 + (NSString *)versionTextForBundle:(nullable NSBundle *)bundle;
 + (NSString *)buildTextForBundle:(nullable NSBundle *)bundle;
++ (NSString *)applicationVersionTextForBundle:(nullable NSBundle *)bundle;
 + (NSString *)humanReadableCopyrightForBundle:(nullable NSBundle *)bundle;
 + (NSString *)mitLicenseAndBrandNoticeText;
 

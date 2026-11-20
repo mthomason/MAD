@@ -1,0 +1,104 @@
+# macOS verification — the Apple suites' gate.
+#
+# The barcode, image and PDF closures all touched source that compiles on
+# Apple, but only the Linux gate ran while they landed.  This workflow runs
+# the same four checks as docs/archive/MAD_BARCODES.md section 3 on every PR:
+# the MADBarcodes suite, the MAD suite, the iOS app build, and the macOS app's
+# end-to-end smoke suite.
+#
+# The frameworks link Compressor's xcframeworks, which are never committed, so
+# the first run downloads and builds the pinned third-party sources for all
+# three platforms (~15-40 minutes).  The artifacts are cached; later runs
+# restore them and the ensure step is a no-op.  The recipe scratch trees under
+# Compressor/build are deleted after the build because the runner's disk is
+# the constraint, not the source download.
+#
+# The simulator is chosen from the devices actually installed on the runner:
+# the checked-out CLAUDE.md pins a device id locally, and a name/OS pair is not
+# stable across Xcode images (`OS:latest` can resolve to a runtime that lacks
+# the named device).  Any available iPhone runs these suites.
+#
+# This check is not yet in the "Protect master" ruleset; the required checks
+# remain "Linux verification" and "DCO".
+
+name: macOS verification
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  macos:
+    name: macOS verification
+    runs-on: macos-latest
+    timeout-minutes: 180
+
+    env:
+      # Shared DerivedData is required: the frameworks reference each other
+      # through BUILT_PRODUCTS_DIR.
+      MAD_DERIVED_DATA: ${{ runner.temp }}/DerivedData
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show the toolchain
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          xcrun simctl list runtimes
+
+      - name: Cache the third-party static libraries
+        uses: actions/cache@v4
+        with:
+          path: Compressor/library
+          key: compressor-${{ runner.os }}-${{ hashFiles('Compressor/matrix.conf', 'Compressor/lib/**') }}
+          restore-keys: |
+            compressor-${{ runner.os }}-
+
+      - name: Build the third-party static libraries
+        run: ./Compressor/build.sh --all --platforms ios,simulator,macosx
+
+      - name: Drop the recipe scratch trees
+        run: rm -rf Compressor/build
+
+      - name: Choose an available iPhone simulator
+        run: |
+          set -euo pipefail
+          udid="$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/ { print $2; exit }')"
+          test -n "${udid}"
+          echo "Using simulator ${udid}"
+          echo "MAD_SIMULATOR_UDID=${udid}" >> "${GITHUB_ENV}"
+
+      - name: Run the MADBarcodes suite
+        run: |
+          set -euo pipefail
+          xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
+            -destination "platform=iOS Simulator,id=${MAD_SIMULATOR_UDID}" \
+            -derivedDataPath "${MAD_DERIVED_DATA}"
+
+      - name: Run the MAD suite
+        run: |
+          set -euo pipefail
+          xcodebuild test -workspace Reports.xcworkspace -scheme MAD \
+            -destination "platform=iOS Simulator,id=${MAD_SIMULATOR_UDID}" \
+            -derivedDataPath "${MAD_DERIVED_DATA}"
+
+      - name: Build the iOS app
+        run: |
+          set -euo pipefail
+          xcodebuild build -workspace Reports.xcworkspace -scheme 'MAD Designer' \
+            -destination "platform=iOS Simulator,id=${MAD_SIMULATOR_UDID}" \
+            -derivedDataPath "${MAD_DERIVED_DATA}"
+
+      - name: Build and smoke-test the macOS app
+        run: ./Mac/build.sh --smoke-test

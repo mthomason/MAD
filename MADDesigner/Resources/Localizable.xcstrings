@@ -4174,6 +4174,42 @@
         }
       }
     },
+    "Application %@": {
+      "comment": "Defined in Mac/Source/MADMacAboutWindowController.m.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anwendung %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplicación %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アプリケーション %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplicativo %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "应用程序 %@"
+          }
+        }
+      }
+    },
     "Applied: %1$lu tables, %2$lu joins, %3$lu predicates, %4$lu groups.": {
       "comment": "Status after applying SQL to the query. Four counts: tables, joins, predicates, groups.",
       "extractionState": "manual",
@@ -10597,6 +10633,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "启用文档列表编辑模式。"
+          }
+        }
+      }
+    },
+    "Engine %@": {
+      "comment": "Defined in Mac/Source/MADMacAboutWindowController.m.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engine %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motor %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "エンジン %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motor %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "引擎 %@"
           }
         }
       }

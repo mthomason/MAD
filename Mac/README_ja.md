@@ -29,7 +29,7 @@ brew install --cask mthomason/tap/mad-designer
 
 * `Mac/Source/` — `AppKit`アプリケーション、`NSDocument`アーキテクチャ、および3つのワークスペース：
   * `MADMacAppDelegate.{h,m}` — アプリケーションライフサイクル、ドライバ／コンバータ登録、およびメインメニューバー（`MAD Designer`、`File`、`Edit`、`View`、`Report`、`Window`、`Help`）。
-  * `MADMacAboutWindowController.{h,m}` — ネイティブの**About MAD Designer**ウィンドウ（`Overview`、`License & Notice`、およびコンポーネントサイドバーとバンドル済みサードパーティライセンス本文を備えた`Acknowledgements`）。
+  * `MADMacAboutWindowController.{h,m}` — ネイティブの**About MAD Designer**ウィンドウ。エンジンバージョン（`MADMeta.plist`）と macOS アプリケーションバージョン（`CFBundleShortVersionString`）を別々の値として表示し、`Overview`、`License & Notice`、およびコンポーネントサイドバーとバンドル済みサードパーティライセンス本文を備えた`Acknowledgements` を提供します。
   * `MADMacDocumentController.{h,m}` — 標準のオープンパネルに`.mad` `UTType`フィルタ（`com.everydayapps.productivity.mad`および`com.thomason.report.mad`）とプライマリの**New Document**ボタンを構成する`NSDocumentController`サブクラス。
   * `MADMacDocument.{h,m}` — `MADHeadlessDocument`、`MADDesignerLayout`（`NSUndoManager`）、`MADSectionsLayout`、非同期更新（`MADOperationQueue`）、およびエクスポートをラップする`NSDocument`サブクラス。
   * `MADMacWindowController.{h,m}` — 中央に**Workspace**セグメントコントロール（`MAD Query`、`MAD Designer`、`MAD Viewer`）を備えたメインドキュメントウィンドウ。
