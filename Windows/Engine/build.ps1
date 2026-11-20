@@ -237,7 +237,9 @@ function Get-LibrarySource([string]$name, [hashtable]$pin) {
 	$dir = Join-Path $LibBuildDir $name
 	if (-not (Test-Path (Join-Path $dir ".extracted"))) {
 		New-Item -ItemType Directory -Force -Path $dir | Out-Null
-		& $TarExe -xzf $archive -C $dir --strip-components=1
+		# bsdtar picks the decompressor from the archive itself; -z would force
+		# gzip and FreeType's pin is .tar.xz.
+		& $TarExe -xf $archive -C $dir --strip-components=1
 		if ($LASTEXITCODE -ne 0) { throw "$name extract failed" }
 		New-Item -ItemType File -Force -Path (Join-Path $dir ".extracted") | Out-Null
 	}
@@ -433,6 +435,137 @@ function Find-Lib([string]$dir, [string]$name) {
 $MesonExe = "C:\Program Files\Meson\meson.exe"
 $nmake = (Get-ChildItem "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\*\bin\Hostx64\x64\nmake.exe" -ErrorAction SilentlyContinue | Select-Object -First 1)
 if ($nmake) { $nmake = $nmake.FullName } else { $nmake = $null }
+
+# The pkg-config Meson invokes on this machine.  MSYS2's pkgconf ignores
+# PKG_CONFIG_PATH here, so Meson finds nothing through it; a small Windows-native
+# Python shim reads PKG_CONFIG_PATH itself and answers the questions Meson asks
+# (--modversion/--cflags/--libs/--print-requires).  Returns the executable path.
+function Ensure-PkgConfigShim {
+	$dummyTools = Join-Path $BuildDir "pg-dummy-tools"
+	New-Item -ItemType Directory -Force -Path $dummyTools | Out-Null
+	$pgPkgConfigExe = Join-Path $dummyTools "pkg-config.exe"
+	if (Test-Path $pgPkgConfigExe) { return $pgPkgConfigExe }
+	# The MSYS2 pkgconf ignores PKG_CONFIG_PATH, so Meson cannot find the .pc
+	# files through it.  A small Windows-native Python shim is the pkg-config
+	# Meson invokes (via PKG_CONFIG): it reads PKG_CONFIG_PATH itself and answers
+	# the --modversion/--cflags/--libs/--print-requires questions.
+	$pgPkgConfigPy = Join-Path $dummyTools "pkg-config.py"
+	@'
+import os, re, sys
+
+def read_pc(name, dirs):
+    for d in dirs:
+        p = os.path.join(d, name + ".pc")
+        if os.path.isfile(p):
+            with open(p, "r") as f:
+                return f.read()
+    return None
+
+def parse(text):
+    vars = {"prefix": "/usr"}
+    fields = {}
+    for line in text.splitlines():
+        s = line.strip()
+        if not s or s.startswith("#"):
+            continue
+        m = re.match(r"^([A-Za-z_][A-Za-z0-9_]*)=(.*)$", s)
+        if m:
+            vars[m.group(1)] = m.group(2)
+        elif ":" in s and not s.startswith(" "):
+            k, v = s.split(":", 1)
+            fields.setdefault(k, []).append(v.strip())
+    return vars, fields
+
+def expand(s, vars):
+    prev = None
+    while prev != s:
+        prev = s
+        s = re.sub(r"\$\{([^}]+)\}", lambda m: vars.get(m.group(1), ""), s)
+    return s
+
+def collect(pkg, dirs, vars, fields, seen):
+    if pkg in seen:
+        return True
+    seen.add(pkg)
+    text = read_pc(pkg, dirs)
+    if text is None:
+        return False
+    v, f = parse(text)
+    vars.update(v)
+    for k, vals in f.items():
+        fields.setdefault(k, []).extend(vals)
+    for r in list(fields.get("Requires", [])) + list(fields.get("Requires.private", [])):
+        for dep in r.replace(",", " ").split():
+            if not collect(dep, dirs, vars, fields, seen):
+                return False
+    return True
+
+def main():
+    args = sys.argv[1:]
+    pkgs = [a for a in args if not a.startswith("-")]
+    dirs = [p for p in os.environ.get("PKG_CONFIG_PATH", "").split(os.pathsep) if p]
+    vars, fields, seen = {}, {}, set()
+    ok = True
+    for p in pkgs:
+        if not collect(p, dirs, vars, fields, seen):
+            ok = False
+    if "--version" in args and not pkgs:
+        print("0.29.2")
+        return 0
+    if "--modversion" in args:
+        if not ok:
+            print("Package %s was not found in the pkg-config search path." % ", ".join(pkgs), file=sys.stderr)
+            return 1
+        for line in fields.get("Version", ["0.0.0"]):
+            print(line)
+        return 0
+    if "--exists" in args:
+        return 0 if ok else 1
+    if any(a.startswith("--atleast-version") or a.startswith("--exact-version") for a in args):
+        return 0 if ok else 1
+    if not ok:
+        print("Package %s was not found in the pkg-config search path." % ", ".join(pkgs), file=sys.stderr)
+        return 1
+    want_cflags = "--cflags" in args or "--cflags-only-I" in args or "--cflags-only-other" in args
+    want_libs = "--libs" in args or "--libs-only-l" in args or "--libs-only-L" in args or "--libs-only-other" in args or "--static" in args
+    want_requires = "--print-requires" in args
+    out = []
+    if want_requires:
+        for line in fields.get("Requires", []):
+            out.append(line)
+    if want_cflags:
+        for line in fields.get("Cflags", []):
+            out.append(expand(line, vars))
+    if want_libs:
+        for line in fields.get("Libs", []) + fields.get("Libs.private", []):
+            out.append(expand(line, vars))
+    print(" ".join(out))
+    return 0
+
+sys.exit(main())
+'@ | Set-Content -Path $pgPkgConfigPy
+	$pgPkgConfigExe = Join-Path $dummyTools "pkg-config.exe"
+	if (-not (Test-Path $pgPkgConfigExe)) {
+		$pyPath = "C:/Users/Michael/AppData/Local/Programs/Python/Python313/python.exe"
+		$scriptFwd = $pgPkgConfigPy -replace '\\', '/'
+		@"
+#include <process.h>
+#include <stdlib.h>
+int main(int argc, char **argv) {
+    const char *python = "$pyPath";
+    const char *script = "$scriptFwd";
+    const char **v = (const char **)malloc(sizeof(char *) * (argc + 2));
+    v[0] = python; v[1] = script;
+    for (int i = 1; i < argc; i++) v[i + 1] = argv[i];
+    v[argc + 1] = 0;
+    return (int)_spawnv(_P_WAIT, python, v);
+}
+"@ | Set-Content -Path (Join-Path $dummyTools "pkg-config-launcher.c")
+		& clang (Join-Path $dummyTools "pkg-config-launcher.c") -o $pgPkgConfigExe 2>&1 | ForEach-Object { Write-Host $_ }
+		if ($LASTEXITCODE -ne 0) { throw "pkg-config launcher compile failed" }
+	}
+	return $pgPkgConfigExe
+}
 
 # --- openssl 3.5.9 (static, no tests) ---------------------------------------
 $opensslDir = Get-LibrarySource "openssl" (Get-LibraryPin "openssl")
@@ -672,125 +805,7 @@ Libs.private: -lcrypt32 -lws2_32 -lgdi32 -luser32 -ladvapi32 -lbcrypt
 Cflags: -I`${includedir}
 "@ | Set-Content -Path (Join-Path $pgPkgConfig "libcrypto.pc")
 	}
-	# The MSYS2 pkgconf ignores PKG_CONFIG_PATH, so Meson cannot find the .pc
-	# files through it.  A small Windows-native Python shim is the pkg-config
-	# Meson invokes (via PKG_CONFIG): it reads PKG_CONFIG_PATH itself and answers
-	# the --modversion/--cflags/--libs/--print-requires questions.
-	$pgPkgConfigPy = Join-Path $dummyTools "pkg-config.py"
-	@'
-import os, re, sys
-
-def read_pc(name, dirs):
-    for d in dirs:
-        p = os.path.join(d, name + ".pc")
-        if os.path.isfile(p):
-            with open(p, "r") as f:
-                return f.read()
-    return None
-
-def parse(text):
-    vars = {"prefix": "/usr"}
-    fields = {}
-    for line in text.splitlines():
-        s = line.strip()
-        if not s or s.startswith("#"):
-            continue
-        m = re.match(r"^([A-Za-z_][A-Za-z0-9_]*)=(.*)$", s)
-        if m:
-            vars[m.group(1)] = m.group(2)
-        elif ":" in s and not s.startswith(" "):
-            k, v = s.split(":", 1)
-            fields.setdefault(k, []).append(v.strip())
-    return vars, fields
-
-def expand(s, vars):
-    prev = None
-    while prev != s:
-        prev = s
-        s = re.sub(r"\$\{([^}]+)\}", lambda m: vars.get(m.group(1), ""), s)
-    return s
-
-def collect(pkg, dirs, vars, fields, seen):
-    if pkg in seen:
-        return True
-    seen.add(pkg)
-    text = read_pc(pkg, dirs)
-    if text is None:
-        return False
-    v, f = parse(text)
-    vars.update(v)
-    for k, vals in f.items():
-        fields.setdefault(k, []).extend(vals)
-    for r in list(fields.get("Requires", [])) + list(fields.get("Requires.private", [])):
-        for dep in r.replace(",", " ").split():
-            if not collect(dep, dirs, vars, fields, seen):
-                return False
-    return True
-
-def main():
-    args = sys.argv[1:]
-    pkgs = [a for a in args if not a.startswith("-")]
-    dirs = [p for p in os.environ.get("PKG_CONFIG_PATH", "").split(os.pathsep) if p]
-    vars, fields, seen = {}, {}, set()
-    ok = True
-    for p in pkgs:
-        if not collect(p, dirs, vars, fields, seen):
-            ok = False
-    if "--version" in args and not pkgs:
-        print("0.29.2")
-        return 0
-    if "--modversion" in args:
-        if not ok:
-            print("Package %s was not found in the pkg-config search path." % ", ".join(pkgs), file=sys.stderr)
-            return 1
-        for line in fields.get("Version", ["0.0.0"]):
-            print(line)
-        return 0
-    if "--exists" in args:
-        return 0 if ok else 1
-    if any(a.startswith("--atleast-version") or a.startswith("--exact-version") for a in args):
-        return 0 if ok else 1
-    if not ok:
-        print("Package %s was not found in the pkg-config search path." % ", ".join(pkgs), file=sys.stderr)
-        return 1
-    want_cflags = "--cflags" in args or "--cflags-only-I" in args or "--cflags-only-other" in args
-    want_libs = "--libs" in args or "--libs-only-l" in args or "--libs-only-L" in args or "--libs-only-other" in args or "--static" in args
-    want_requires = "--print-requires" in args
-    out = []
-    if want_requires:
-        for line in fields.get("Requires", []):
-            out.append(line)
-    if want_cflags:
-        for line in fields.get("Cflags", []):
-            out.append(expand(line, vars))
-    if want_libs:
-        for line in fields.get("Libs", []) + fields.get("Libs.private", []):
-            out.append(expand(line, vars))
-    print(" ".join(out))
-    return 0
-
-sys.exit(main())
-'@ | Set-Content -Path $pgPkgConfigPy
-	$pgPkgConfigExe = Join-Path $dummyTools "pkg-config.exe"
-	if (-not (Test-Path $pgPkgConfigExe)) {
-		$pyPath = "C:/Users/Michael/AppData/Local/Programs/Python/Python313/python.exe"
-		$scriptFwd = $pgPkgConfigPy -replace '\\', '/'
-		@"
-#include <process.h>
-#include <stdlib.h>
-int main(int argc, char **argv) {
-    const char *python = "$pyPath";
-    const char *script = "$scriptFwd";
-    const char **v = (const char **)malloc(sizeof(char *) * (argc + 2));
-    v[0] = python; v[1] = script;
-    for (int i = 1; i < argc; i++) v[i + 1] = argv[i];
-    v[argc + 1] = 0;
-    return (int)_spawnv(_P_WAIT, python, v);
-}
-"@ | Set-Content -Path (Join-Path $dummyTools "pkg-config-launcher.c")
-		& clang (Join-Path $dummyTools "pkg-config-launcher.c") -o $pgPkgConfigExe 2>&1 | ForEach-Object { Write-Host $_ }
-		if ($LASTEXITCODE -ne 0) { throw "pkg-config launcher compile failed" }
-	}
+	$pgPkgConfigExe = Ensure-PkgConfigShim
 	$env:PKG_CONFIG = $pgPkgConfigExe
 	$env:CC = "cl"
 	$env:CXX = "cl"
@@ -834,6 +849,204 @@ $env:CXX = $oldCXX
 $env:INCLUDE = $oldInclude
 $env:LIB = $oldLib
 $env:PATH = $oldPath
+
+# ---------------------------------------------------------------------------
+# 3d. The PDF stack: pixman, FreeType, cairo and the Liberation fonts.  The
+#     Windows sibling of Linux/lib/libraries.sh's build_pixman / build_freetype /
+#     build_cairo / build_liberation.  FreeType is built through its own CMake;
+#     pixman and cairo through Meson (their supported Windows path), each static.
+#     The three archives link into mad.exe, and the fonts are copied beside it so
+#     MADReportExporterPDFCairo finds them (its search starts at <exe>/fonts).
+# ---------------------------------------------------------------------------
+$pdfPkgConfig = Join-Path $BuildDir "pdf-pkgconfig"
+New-Item -ItemType Directory -Force -Path $pdfPkgConfig | Out-Null
+$fontsDir = Join-Path $BuildDir "fonts"
+New-Item -ItemType Directory -Force -Path $fontsDir | Out-Null
+
+# A .pc file for the Meson builds to find a dependency through the shim above.
+# Absolute library paths are written as such, so nothing depends on Meson's
+# -l/name translation for MSVC archives.
+function Write-PcFile([string]$file, [string]$name, [string]$version, [string]$description, [string]$libs, [string]$cflags, [string]$requires) {
+	$body = @("Name: $name", "Description: $description", "Version: $version", "Libs: $libs", "Cflags: $cflags")
+	if ($requires) { $body += "Requires.private: $requires" }
+	$body | Set-Content -Path (Join-Path $pdfPkgConfig $file)
+}
+
+# A pinned git source, the Windows half of Linux/lib/common.sh's clone_pinned:
+# the clone is kept between runs, checked out at the pin every time, and the
+# resulting HEAD is verified.
+function Get-GitLibrarySource([string]$name, [hashtable]$pin) {
+	$dir = Join-Path $LibBuildDir "$name-git"
+	if (-not (Test-Path $dir)) {
+		Write-Host "  cloning $name $($pin.ref)"
+		$clone = $false
+		foreach ($attempt in 1, 2, 3) {
+			& git clone --quiet --branch $pin.ref $pin.url $dir 2>&1 | ForEach-Object { Write-Host "    $_" }
+			if ($LASTEXITCODE -eq 0) { $clone = $true; break }
+			Remove-Item -Recurse -Force $dir -ErrorAction SilentlyContinue
+		}
+		if (-not $clone) { throw "$name clone failed" }
+	}
+	& git -C $dir checkout --quiet $pin.commit 2>&1 | ForEach-Object { Write-Host "    $_" }
+	if ($LASTEXITCODE -ne 0) { throw "$name commit $($pin.commit) is not in $($pin.ref)" }
+	$head = (& git -C $dir rev-parse HEAD).Trim()
+	if ($head -ne $pin.commit) { throw "$name HEAD $head does not match pinned $($pin.commit)" }
+	Write-Host "  ok   $name $($pin.version) ($($pin.commit.Substring(0,8))...)"
+	return $dir
+}
+
+function Fwd([string]$p) { return $p -replace '\\', '/' }
+
+Write-PcFile "zlib.pc" "zlib" "1.3.2" "zlib compression library" (Fwd $zlibLib) "-I$(Fwd $zlibDir)"
+Write-PcFile "libpng.pc" "libpng" "1.6.59" "PNG Reference Library" (Fwd $libpngLib) "-I$(Fwd $libpngInclude)" "zlib"
+
+# --- freetype 2.15.0 (CMake + clang-cl; core only, static) -------------------
+$freetypeDir = Get-LibrarySource "freetype" (Get-LibraryPin "freetype")
+$freetypeBuild = Join-Path $BuildDir "freetype-cmake"
+$freetypeInstall = Join-Path $BuildDir "freetype-install"
+$freetypeLib = Join-Path $freetypeInstall "lib\freetype.lib"
+if (-not (Test-Path $freetypeLib)) {
+	Write-Host "  configuring freetype (cmake + clang-cl; static, core only)"
+	& cmake -S (Fwd $freetypeDir) -B (Fwd $freetypeBuild) -G Ninja `
+		"-DCMAKE_C_COMPILER=clang-cl" "-DCMAKE_BUILD_TYPE=Release" `
+		"-DBUILD_SHARED_LIBS=OFF" `
+		"-DFT_DISABLE_HARFBUZZ=TRUE" "-DFT_DISABLE_BZIP2=TRUE" "-DFT_DISABLE_PNG=TRUE" `
+		"-DFT_DISABLE_ZLIB=TRUE" "-DFT_DISABLE_BROTLI=TRUE" `
+		"-DCMAKE_INSTALL_PREFIX=$(Fwd $freetypeInstall)" `
+		2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "freetype configure failed" }
+	& cmake --build (Fwd $freetypeBuild) --target freetype 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "freetype build failed" }
+	& cmake --install (Fwd $freetypeBuild) 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "freetype install failed" }
+	$freetypeLib = Find-Lib $freetypeInstall "freetype"
+	Write-Host "  ok   freetype.lib built"
+} else {
+	Write-Host "  ok   freetype.lib (cached)"
+}
+if (-not (Test-Path $freetypeLib)) { $freetypeLib = Find-Lib $freetypeInstall "freetype" }
+$freetypeInclude = Join-Path $freetypeInstall "include"
+$freetypeIncludeFwd = Fwd (Join-Path $freetypeInclude "freetype2")
+# FreeType's pkg-config version is its libtool version (version_info 26:7:20 in
+# builds/unix/configure.raw for 2.15.0), not 2.15.0; cairo requires >= 23.0.17 and
+# checks this exact string, so the release number would fail the check and send
+# cairo to its fallback wrap (a different FreeType pin).
+Write-PcFile "freetype2.pc" "freetype2" "26.7.20" "The FreeType 2 font engine" (Fwd $freetypeLib) "-I$freetypeIncludeFwd"
+
+# --- pixman 0.46.4 (Meson + cl; static) -------------------------------------
+$pixmanDir = Get-GitLibrarySource "pixman" (Get-LibraryPin "pixman")
+$pixmanBuild = Join-Path $BuildDir "pixman-meson"
+$pixmanLib = Join-Path $pixmanBuild "pixman\pixman-1.lib"
+if (-not (Test-Path $pixmanLib) -and (Test-Path $pixmanBuild)) {
+	try { $pixmanLib = Find-Lib $pixmanBuild "pixman-1" } catch { }
+}
+$oldCC = $env:CC
+$oldCXX = $env:CXX
+$oldPath = $env:PATH
+$oldInclude = $env:INCLUDE
+$oldLib = $env:LIB
+$oldPkgConfig = $env:PKG_CONFIG
+$oldPkgConfigPath = $env:PKG_CONFIG_PATH
+	$msvcTools = Split-Path (Split-Path (Split-Path (Split-Path $nmake)))
+	$sdkRoot = "C:\Program Files (x86)\Windows Kits\10"
+	$sdkVer = "10.0.26100.0"
+	$sdkBin = Join-Path $sdkRoot "bin\$sdkVer\x64"
+	$env:PATH = "$msvcTools\bin\Hostx64\x64;C:\msys64\usr\bin;$sdkBin;C:\Program Files\Meson;$oldPath"
+	$env:INCLUDE = "$msvcTools\include;$sdkRoot\Include\$sdkVer\ucrt;$sdkRoot\Include\$sdkVer\um;$sdkRoot\Include\$sdkVer\shared"
+	$env:LIB = "$msvcTools\lib\x64;$sdkRoot\Lib\$sdkVer\ucrt\x64;$sdkRoot\Lib\$sdkVer\um\x64"
+	$env:CC = "cl"
+	$env:CXX = "cl"
+	$env:PKG_CONFIG = Ensure-PkgConfigShim
+	$env:PKG_CONFIG_PATH = $pdfPkgConfig
+if (-not (Test-Path $pixmanLib)) {
+	Write-Host "  configuring pixman (meson + cl; static)"
+	$pixmanSetup = @((Fwd $pixmanBuild), (Fwd $pixmanDir), "--backend=ninja", "--buildtype=release",
+		"--default-library=static", "-Dtests=disabled", "-Ddemos=disabled", "-Dgtk=disabled", "-Dopenmp=disabled")
+	# A build dir left by an earlier run is reconfigured, not re-created: meson
+	# refuses a second `setup` on a configured directory.
+	if (Test-Path (Join-Path $pixmanBuild "build.ninja")) {
+		& $MesonExe setup --reconfigure @pixmanSetup 2>&1 | ForEach-Object { Write-Host $_ }
+	} else {
+		& $MesonExe setup @pixmanSetup 2>&1 | ForEach-Object { Write-Host $_ }
+	}
+	if ($LASTEXITCODE -ne 0) { throw "pixman meson setup failed" }
+	& ninja -C (Fwd $pixmanBuild) 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "pixman build failed" }
+	# Meson on this machine emits GNU-ar archives (MSYS2's ar is on the PATH it
+	# sees), and lld-link resolves members only out of COFF .lib archives, so the
+	# core and the SIMD back-ends are merged with llvm-lib, as the libpq build
+	# merges its three.
+	$pixmanArchives = @(Get-ChildItem -Path (Join-Path $pixmanBuild "pixman") -Filter "*.a" -File |
+		Where-Object { $_.Name -match '^libpixman-(1|mmx|sse2|ssse3)\.a$' } | ForEach-Object { $_.FullName })
+	if ($pixmanArchives.Count -eq 0) { throw "pixman produced no archive" }
+	& llvm-lib /out:$pixmanLib @pixmanArchives 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "pixman archive conversion failed" }
+	Write-Host "  ok   pixman-1.lib built"
+} else {
+	Write-Host "  ok   pixman-1.lib (cached)"
+}
+Write-PcFile "pixman-1.pc" "pixman-1" "0.46.4" "The pixel manipulation library" (Fwd $pixmanLib) "-I$(Fwd (Join-Path $pixmanDir 'pixman')) -I$(Fwd (Join-Path $pixmanBuild 'pixman'))"
+
+# --- cairo 1.18.6 (Meson + cl; the PDF surface, FreeType glyphs) ------------
+$cairoDir = Get-GitLibrarySource "cairo" (Get-LibraryPin "cairo")
+$cairoBuild = Join-Path $BuildDir "cairo-meson"
+$cairoLib = Join-Path $cairoBuild "src\cairo.lib"
+if (-not (Test-Path $cairoLib) -and (Test-Path $cairoBuild)) {
+	try { $cairoLib = Find-Lib $cairoBuild "cairo" } catch { }
+}
+if (-not (Test-Path $cairoLib)) {
+	Write-Host "  configuring cairo (meson + cl; static, PDF surface only)"
+	# cairo's win32 sources are compiled with _WIN32_WINNT=_WIN32_WINNT_VISTA (its
+	# own flags), but cairo-win32-system.c uses CO_MTA_USAGE_COOKIE, which the SDK
+	# headers declare only for a Windows 8+ target.  Raising the target in a native
+	# file is the supported way to add a compiler argument (a -Dc_args list is not
+	# split reliably by this Meson).
+	$cairoNativeFile = Join-Path $pdfPkgConfig "cairo-native.ini"
+	@"
+[built-in options]
+c_args = ['-D_WIN32_WINNT=0x0A00', '-DNTDDI_VERSION=0x0A000010', '-DWINVER=0x0A00']
+"@ | Set-Content -Path $cairoNativeFile
+	$cairoSetup = @((Fwd $cairoBuild), (Fwd $cairoDir), "--wrap-mode=nodownload", "--backend=ninja", "--buildtype=release",
+		"--default-library=static", "-Dfreetype=enabled", "-Dzlib=enabled", "-Dpng=enabled",
+		"-Dfontconfig=disabled", "-Ddwrite=enabled", "-Dxcb=disabled", "-Dxlib=disabled",
+		"-Dquartz=disabled", "-Dtee=disabled", "-Dglib=disabled", "-Dspectre=disabled",
+		"-Dsymbol-lookup=disabled", "-Dlzo=disabled", "-Dtests=disabled", "-Dgtk_doc=false",
+		"--native-file=$cairoNativeFile")
+	if (Test-Path (Join-Path $cairoBuild "build.ninja")) {
+		& $MesonExe setup --reconfigure @cairoSetup 2>&1 | ForEach-Object { Write-Host $_ }
+	} else {
+		& $MesonExe setup @cairoSetup 2>&1 | ForEach-Object { Write-Host $_ }
+	}
+	if ($LASTEXITCODE -ne 0) { throw "cairo meson setup failed" }
+	& ninja -C (Fwd $cairoBuild) 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "cairo build failed" }
+	$cairoArchive = Get-ChildItem -Path $cairoBuild -Recurse -Filter "libcairo.a" -File | Select-Object -First 1
+	if ($null -eq $cairoArchive) { throw "cairo produced no archive" }
+	& llvm-lib /out:$cairoLib $cairoArchive.FullName 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "cairo archive conversion failed" }
+	Write-Host "  ok   cairo.lib built"
+} else {
+	Write-Host "  ok   cairo.lib (cached)"
+}
+$env:PKG_CONFIG_PATH = $oldPkgConfigPath
+$env:PKG_CONFIG = $oldPkgConfig
+$env:CC = $oldCC
+$env:CXX = $oldCXX
+$env:INCLUDE = $oldInclude
+$env:LIB = $oldLib
+$env:PATH = $oldPath
+
+$cairoIncludeDirs = @((Join-Path $cairoDir "src"), (Join-Path $cairoBuild "src"))
+$freetypeIncludeDirs = @($freetypeInclude, (Join-Path $freetypeInclude "freetype2"))
+$pixmanIncludeDirs = @((Join-Path $pixmanDir "pixman"), (Join-Path $pixmanBuild "pixman"))
+
+# --- the Liberation fonts ---------------------------------------------------
+$liberationDir = Get-LibrarySource "liberation" (Get-LibraryPin "liberation")
+Get-ChildItem -Path $liberationDir -Filter *.ttf -File | ForEach-Object {
+	Copy-Item $_.FullName (Join-Path $fontsDir $_.Name) -Force
+}
+Copy-Item (Join-Path $liberationDir "LICENSE") (Join-Path $fontsDir "LICENSE-liberation-2.1.5.txt") -Force
+Write-Host "  ok   Liberation 2.1.5 fonts beside mad.exe"
 
 # Assemble the libpq client headers (a few are generated by Meson, the rest are
 # source) into one flattened directory so <libpq-fe.h> and <MADPostgres/...>
@@ -1057,14 +1270,15 @@ Compile-FrameworkSources "MADBarcodes" "bc_" $barcodeSource (Join-Path $EngineDi
 $madIncludeDirs = @("$madSource", "$madSource\model", "$madSource\rptq",
 					"$madSource\rptq\autogen", "$madSource\rptq\store",
 					"$madSource\sql", "$madSource\paper", $LibArchiveInclude,
-					(Join-Path $GsInclude "libxml2"), $Sqlite3Dir)
+					(Join-Path $GsInclude "libxml2"), $Sqlite3Dir) +
+					$cairoIncludeDirs + $freetypeIncludeDirs + $pixmanIncludeDirs
 $madFlags = {
 	param($f)
 	if ($f -eq "madmath.c") {
 		# Pure C (no #import); no ARC flag, but it still gets the prelude's C parts.
 		return @()
 	}
-	$flags = @("-fobjc-arc", "-DLIBARCHIVE_STATIC")
+	$flags = @("-fobjc-arc", "-DLIBARCHIVE_STATIC", "-DCAIRO_WIN32_STATIC_BUILD")
 	foreach ($d in $script:madIncludeDirs) { $flags += "-I$d" }
 	return $flags
 }
@@ -1112,7 +1326,12 @@ $linkLibs = @(
 	"-lgnustep-base", "-lobjc", "-ldispatch",
 	"-lws2_32", "-ladvapi32", "-lcomctl32", "-luser32", "-lcomdlg32", "-lmpr", "-lnetapi32",
 	"-lkernel32", "-lshell32", "-lmsvcrt", "-lvcruntime", "-lucrt", "-lpsapi",
-	"-lole32", "-lxmllite", "-lcrypt32", "-lsecur32", "-lshlwapi", "-lgdi32", "-lbcrypt"
+	"-lole32", "-lxmllite", "-lcrypt32", "-lsecur32", "-lshlwapi", "-lgdi32", "-lbcrypt",
+	# cairo's win32 surface (built unconditionally on Windows) reaches
+	# AlphaBlend/GradientFill through msimg32, and its dwrite font backend (built
+	# because cairo-win32-system.c calls cairo_win32_dwrite_finalize unconditionally)
+	# through DirectWrite/Direct2D/WIC.
+	"-lmsimg32", "-ldwrite", "-ld2d1", "-lwindowscodecs"
 )
 
 # The static C libraries, in link order: the framework objects come first, then
@@ -1123,7 +1342,8 @@ $linkLibs = @(
 # MADTdsDb class, which the headless engine does not.
 $archiveLibs = @($freetdsLib, $freetdsTdsLib, $freetdsReplacementsLib, $freetdsTdsutilsLib,
 				$mariadbLib, $postgresLib, $opensslLibSsl, $opensslLibCrypto,
-				$sqliteLib, $libarchiveLib, $zintLib, $libpngLib, $zlibLib, $bzip2Lib, $madtdsLib)
+				$sqliteLib, $libarchiveLib, $zintLib,
+				$cairoLib, $freetypeLib, $pixmanLib, $libpngLib, $zlibLib, $bzip2Lib, $madtdsLib)
 
 # The ported Linux test suites (Linux/Tests), one executable per file.  Tests
 # are manual-retain-release (GNUstep's Testing.h is MRC) while the frameworks
@@ -1184,7 +1404,7 @@ $testNames = @(
 	"MADQueryPredicateTests", "MADQuerySampleDataTests", "MADQuerySelectExpressionTests",
 	"MADQueryTestTests", "MADQueryFullTests", "MADQueryMaxFieldLengthTests",
 	"MADQueryFullTableEnumeratorTests",
-	"MADQuerySimpleTypesTests", "MADReportExporterTests", "MADBarcodeExportTests", "MADImageElementTests", "MADImageExportTests",
+	"MADQuerySimpleTypesTests", "MADReportExporterTests", "MADBarcodeExportTests", "MADImageElementTests", "MADImageExportTests", "MADPDFExportTests",
 	"MADReportSectionEnumeratorTests",
 	"MADReportSectionRepresentationTests", "MADReportSectionTests", "MADRptqDatabaseTests",
 	"MADRptqDocumentSectionTests", "MADRptqQueryTests", "MADRptqValueTypeTests",
@@ -1194,7 +1414,7 @@ $testNames = @(
 )
 
 $testExes = New-Object System.Collections.Generic.List[string]
-$testCompileFlags = @("-fno-objc-arc", "-I$TestingInclude", "-I$TestsSupportDir", "-I$Sqlite3Dir")
+$testCompileFlags = @("-fno-objc-arc", "-I$TestingInclude", "-I$TestsSupportDir", "-I$Sqlite3Dir", "-I$zlibDir")
 foreach ($d in $driverIncludeDirs) { $testCompileFlags += "-I$d" }
 foreach ($name in $testNames) {
 	$src = Join-Path $EngineDir ("Tests\" + $name + ".m")
