@@ -26,7 +26,8 @@ FROM ubuntu:24.04 AS toolchain-base
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
-		clang lld cmake make git pkg-config curl ca-certificates \
+		clang lld cmake make git pkg-config curl ca-certificates xz-utils \
+		meson ninja-build \
 		libbsd-dev \
 		libffi-dev libxml2-dev libxslt1-dev libgnutls28-dev zlib1g-dev \
 		libavahi-client-dev libicu-dev tzdata libcurl4-openssl-dev \
@@ -90,7 +91,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # The runtime half of toolchain-base's package list: what GNUstep Base links,
 # without clang, cmake, git or the -dev packages.  The C libraries the
 # frameworks link (sqlite3, freetds, openssl, zlib, bzip2, libarchive,
-# mariadb) are static and are already inside the binary.
+# mariadb, libpng, zint, pixman, FreeType, cairo) are static and are already
+# inside the binary; the Liberation fonts are data files (the toolchain stage).
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		ca-certificates libavahi-client3 libcurl4 libffi8 libgmp10 \
@@ -107,6 +109,9 @@ COPY --from=toolchain /usr/local/lib/libBlocksRuntime.so /usr/local/lib/
 COPY --from=toolchain /usr/local/lib/GNUstep /usr/local/lib/GNUstep
 COPY --from=toolchain /usr/local/etc/GNUstep /usr/local/etc/GNUstep
 COPY --from=toolchain /usr/local/share/GNUstep /usr/local/share/GNUstep
+# The bundled substitute fonts (Liberation Sans/Serif/Mono) the PDF writer
+# shapes with; MADReportExporterPDFCairo looks here by default.
+COPY --from=toolchain /usr/local/share/mad /usr/local/share/mad
 
 COPY --from=build /usr/local/bin/mad /usr/local/bin/mad
 

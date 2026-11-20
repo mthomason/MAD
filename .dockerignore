@@ -16,3 +16,8 @@ Compressor/src
 Compressor/library
 Compressor/media
 Linux/build
+Windows/Engine/build
+Windows/Client/*/bin
+Windows/Client/*/obj
+Windows/App/*/bin
+Windows/App/*/obj
