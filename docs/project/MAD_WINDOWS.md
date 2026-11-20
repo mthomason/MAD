@@ -15,17 +15,16 @@ made.
 
 The target is a native Windows MAD Designer (WPF on .NET 10 LTS) reusing the
 existing headless Objective-C engine compiled natively for Windows. The engine
-build lands under `Windows/`, a sibling of `Mac/` and `Linux/`; the WPF app is
-a later phase (`Windows/App`, not yet created).
+build lands under `Windows/`, a sibling of `Mac/` and `Linux/`; the WPF app
+followed in Phases 5–6e (`Windows/App`; §6e–§6h).
 
-This increment proves the toolchain and the framework port. Phase 2 (the first
-increment) built **MADDataStructures** and **MADFoundation** and ran a smoke
-test. Phase 2b (this revision) adds **MADAPI** (the transitive dependency
-MADSqlite3 pulls in) and **MADSqlite3**, compiles the pinned SQLite
-amalgamation into a static library, and ports the Linux test suites for
-MADDataStructures, MADFoundation and MADSqlite3 (GNUstep `Testing.h` +
-`MADTestSupport.h`). It still does not build the remaining headless frameworks,
-the CLI, or the app.
+The Phase 2b increment proved the toolchain and the framework port. Phase 2 (the
+first increment) built **MADDataStructures** and **MADFoundation** and ran a
+smoke test. Phase 2b added **MADAPI** (the transitive dependency MADSqlite3
+pulls in) and **MADSqlite3**, compiled the pinned SQLite amalgamation into a
+static library, and ported the Linux test suites for MADDataStructures,
+MADFoundation and MADSqlite3 (GNUstep `Testing.h` + `MADTestSupport.h`). It did
+not yet build the remaining headless frameworks, the CLI, or the app.
 
 ---
 
