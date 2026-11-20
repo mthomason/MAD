@@ -245,6 +245,24 @@
                                                   SelectedValuePath="Id" SelectedValue="{Binding ElementBarcodeInputId}" />
                                     </StackPanel>
 
+                                    <!-- The image element's picture. The engine stores PNG
+                                         bytes; the picker decodes any chosen PNG/JPEG through
+                                         WIC and re-encodes it as PNG before sending it. -->
+                                    <StackPanel Margin="0,0,0,8">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PrimaryElement.IsImage}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <Button Content="{infra:Loc Designer.Image.Choose}" Click="ChooseImage_OnClick"
+                                                Style="{StaticResource MAD.CommandButton}" HorizontalAlignment="Left" />
+                                    </StackPanel>
+
                                     <TextBlock Text="{infra:Loc Designer.XY}" Style="{StaticResource MAD.FieldLabel}" />
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                         <TextBox Text="{Binding ElementX, UpdateSourceTrigger=LostFocus}" Width="70" />

@@ -150,6 +150,8 @@
   <sys:String x:Key="Designer.Barcode.Border.Box">Marco de caja</sys:String>
   <sys:String x:Key="Designer.Barcode.Field">Entrada</sys:String>
   <sys:String x:Key="Designer.Barcode.StaticInput">Entrada estática</sys:String>
+  <sys:String x:Key="Designer.Image.Choose">Elegir imagen…</sys:String>
+  <sys:String x:Key="Designer.Image.Filter">Archivos de imagen (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg</sys:String>
   <sys:String x:Key="Designer.Placeholder.Label">Etiqueta estática</sys:String>
   <sys:String x:Key="Designer.Placeholder.DataField">[Campo de datos]</sys:String>
   <sys:String x:Key="Designer.Placeholder.Image">[Imagen]</sys:String>

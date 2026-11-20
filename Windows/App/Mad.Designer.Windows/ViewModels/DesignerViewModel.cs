@@ -399,6 +399,9 @@ public sealed class DesignerViewModel : ObservableObject
         BarcodeType = el.Barcode?.Symbology,
         HumanReadable = el.Barcode?.HumanReadable,
         BorderStyle = el.Barcode?.BorderStyle,
+        // An empty string clears an image element's picture, so the undo/redo
+        // round-trip can take a picture away as well as put one back.
+        Data = el.IsImage ? el.Image?.DataBase64 ?? "" : null,
     };
 
     private static ElementTypography CaptureTypography(LayoutElement el) => new(
@@ -658,6 +661,15 @@ public sealed class DesignerViewModel : ObservableObject
         var origin = NextAvailableOrigin(section, w, h);
         await AddElementAsync(kind, section, origin.X, origin.Y);
     }
+
+    /// <summary>Sets an image element's picture from PNG bytes -- what the file picker
+    /// hands over after re-encoding the chosen PNG/JPEG.</summary>
+    public Task SetImageDataAsync(long elementId, byte[] pngData)
+        => SetElementContentAsync(elementId, new ElementContent { Data = Convert.ToBase64String(pngData) });
+
+    /// <summary>Surfaces a failure that happened outside a mutation (the file picker's
+    /// decode) in the same banner every mutation failure uses.</summary>
+    public void ReportError(string message) => ErrorText = message;
 
     /// <summary>Inserts a data field bound to the given query field (double-click in the sidebar).</summary>
     public async Task InsertDataFieldAsync(long fieldId)

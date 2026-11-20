@@ -150,6 +150,8 @@
   <sys:String x:Key="Designer.Barcode.Border.Box">ボックス枠</sys:String>
   <sys:String x:Key="Designer.Barcode.Field">入力</sys:String>
   <sys:String x:Key="Designer.Barcode.StaticInput">固定入力</sys:String>
+  <sys:String x:Key="Designer.Image.Choose">画像を選択…</sys:String>
+  <sys:String x:Key="Designer.Image.Filter">画像ファイル (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg</sys:String>
   <sys:String x:Key="Designer.Placeholder.Label">静的ラベル</sys:String>
   <sys:String x:Key="Designer.Placeholder.DataField">[データフィールド]</sys:String>
   <sys:String x:Key="Designer.Placeholder.Image">[画像]</sys:String>

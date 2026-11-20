@@ -150,6 +150,8 @@
   <sys:String x:Key="Designer.Barcode.Border.Box">Moldura</sys:String>
   <sys:String x:Key="Designer.Barcode.Field">Entrada</sys:String>
   <sys:String x:Key="Designer.Barcode.StaticInput">Entrada estática</sys:String>
+  <sys:String x:Key="Designer.Image.Choose">Escolher imagem…</sys:String>
+  <sys:String x:Key="Designer.Image.Filter">Arquivos de imagem (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg</sys:String>
   <sys:String x:Key="Designer.Placeholder.Label">Rótulo Estático</sys:String>
   <sys:String x:Key="Designer.Placeholder.DataField">[Campo de Dados]</sys:String>
   <sys:String x:Key="Designer.Placeholder.Image">[Imagem]</sys:String>

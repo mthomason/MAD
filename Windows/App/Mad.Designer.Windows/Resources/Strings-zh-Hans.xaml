@@ -150,6 +150,8 @@
   <sys:String x:Key="Designer.Barcode.Border.Box">框线</sys:String>
   <sys:String x:Key="Designer.Barcode.Field">输入</sys:String>
   <sys:String x:Key="Designer.Barcode.StaticInput">静态输入</sys:String>
+  <sys:String x:Key="Designer.Image.Choose">选择图像…</sys:String>
+  <sys:String x:Key="Designer.Image.Filter">图像文件 (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg</sys:String>
   <sys:String x:Key="Designer.Placeholder.Label">静态标签</sys:String>
   <sys:String x:Key="Designer.Placeholder.DataField">[数据字段]</sys:String>
   <sys:String x:Key="Designer.Placeholder.Image">[图像]</sys:String>

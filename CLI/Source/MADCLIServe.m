@@ -82,6 +82,7 @@
 #import <MAD/RptqDocumentElementLabelDataField.h>
 #import <MAD/RptqDocumentElementAggregate.h>
 #import <MAD/RptqDocumentElementImage.h>
+#import <MAD/RptqDocumentElementImage+Extras.h>
 #import <MAD/RptqDocumentElementBarcode.h>
 #import <MAD/RptqDocumentElementBarcode+Extras.h>
 
@@ -1457,6 +1458,7 @@ static NSDictionary *MADCLIServeElementDict(RptqDocumentElement *element, int64_
 	int16_t groupType = 0;
 	int32_t groupNumber = 0;
 	NSDictionary *barcodeInfo = nil;
+	NSDictionary *imageInfo = nil;
 
 	if ([element isKindOfClass: [RptqDocumentElementLabel class]]) {
 		text = ((RptqDocumentElementLabel *)element).text ?: @"";
@@ -1488,6 +1490,11 @@ static NSDictionary *MADCLIServeElementDict(RptqDocumentElement *element, int64_
 			@"field": @(bc.referencesField1 ? bc.referencesField1.identifier : 0),
 			@"preview": [preview base64EncodedStringWithOptions: 0] ?: @"",
 		};
+	} else if ([element isKindOfClass: [RptqDocumentElementImage class]]) {
+		// The picture itself, in the store's PNG wire format, so the designer's
+		// canvas can show what will print.
+		NSData *png = ((RptqDocumentElementImage *)element).pngData;
+		imageInfo = @{ @"data": [png base64EncodedStringWithOptions: 0] ?: @"" };
 	} else if ([element isKindOfClass: [RptqDocumentElementAggregate class]]) {
 		RptqDocumentElementAggregate *agg = (RptqDocumentElementAggregate *)element;
 		functionType = (int16_t)agg.functionType;
@@ -1535,9 +1542,10 @@ static NSDictionary *MADCLIServeElementDict(RptqDocumentElement *element, int64_
 		@"borderLeft": @(borderLeft), @"borderRight": @(borderRight),
 		@"padding": @(padding), @"margin": @(margin),
 	} mutableCopy];
-	// Only a barcode element carries the barcode member; every other element's
-	// shape is exactly what it was.
+	// Only a barcode or image element carries its nested member; every other
+	// element's shape is exactly what it was.
 	if (barcodeInfo != nil) dictionary[@"barcode"] = barcodeInfo;
+	if (imageInfo != nil) dictionary[@"image"] = imageInfo;
 	return dictionary;
 }
 
@@ -1686,8 +1694,20 @@ static void MADCLIServeAddElement(NSDictionary *params, NSMutableDictionary <NSN
 		w = 144.0; h = 22.0;
 		element = agg;
 	} else if ([kind isEqualToString: @"image"]) {
+		// The PNG arrives as base64, the same encoding the snapshot uses; decode
+		// before inserting so a malformed request leaves no half-made element.
+		NSData *png = nil;
+		NSString *dataString = MADCLIServeOptionalString(params, @"data");
+		if (dataString.length > 0) {
+			png = [[NSData alloc] initWithBase64EncodedString: dataString options: 0];
+			if (png == nil) {
+				MADCLIServeWriteError(requestID, MADCLIExitUsage, @"data is not valid base64.");
+				return;
+			}
+		}
 		RptqDocumentElementImage *img = (RptqDocumentElementImage *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementImage class]) identifier: 0];
 		img.type = (int16_t)MADPrintPageElementTypeImage;
+		if (png != nil) [img setPngData: png];
 		w = 96.0; h = 64.0;
 		element = img;
 	} else if ([kind isEqualToString: @"line"]) {
@@ -1858,6 +1878,20 @@ static void MADCLIServeSetElementContent(NSDictionary *params, NSMutableDictiona
 		if ([content[@"group"] isKindOfClass: [NSNumber class]]) agg.groupNumber = (int32_t)[content[@"group"] integerValue];
 		if ([content[@"field"] isKindOfClass: [NSNumber class]]) {
 			agg.aggregateField = (RptqQueryField *)[context objectForEntity: NSStringFromClass([RptqQueryField class]) identifier: [content[@"field"] longLongValue]];
+		}
+	} else if ([element isKindOfClass: [RptqDocumentElementImage class]]) {
+		// The picture, base64 PNG; an empty string clears it.
+		if ([content[@"data"] isKindOfClass: [NSString class]]) {
+			NSString *dataString = content[@"data"];
+			NSData *png = nil;
+			if (dataString.length > 0) {
+				png = [[NSData alloc] initWithBase64EncodedString: dataString options: 0];
+				if (png == nil) {
+					MADCLIServeWriteError(requestID, MADCLIExitUsage, @"data is not valid base64.");
+					return;
+				}
+			}
+			[(RptqDocumentElementImage *)element setPngData: png];
 		}
 	} else if ([element isKindOfClass: [RptqDocumentElementBarcode class]]) {
 		RptqDocumentElementBarcode *bc = (RptqDocumentElementBarcode *)element;
@@ -2034,8 +2068,10 @@ static RptqDocumentElement *MADCLIServeDuplicateElement(RptqDocumentElement *src
 		dup.aggregateField = s.aggregateField;
 		dst = dup;
 	} else if ([src isKindOfClass: [RptqDocumentElementImage class]]) {
+		RptqDocumentElementImage *s = (RptqDocumentElementImage *)src;
 		RptqDocumentElementImage *dup = (RptqDocumentElementImage *)[context insertObjectForEntity: NSStringFromClass([RptqDocumentElementImage class]) identifier: 0];
 		dup.type = src.type;
+		[dup setPngData: [[s pngData] copy]];
 		dst = dup;
 	} else if ([src isKindOfClass: [RptqDocumentElementBarcode class]]) {
 		RptqDocumentElementBarcode *s = (RptqDocumentElementBarcode *)src;
