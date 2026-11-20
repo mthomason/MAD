@@ -87,6 +87,14 @@ epoch). Cairo writes no trailer `/ID`, and its object numbering, font subset
 tags, compression and page trees are deterministic, so two exports of an
 unchanged report are the same bytes. The test proves it.
 
+One writer-side hazard had to be removed to keep that true: cairo caches its
+font faces and scaled fonts by the `FT_Face` pointer, so a writer that opened
+and freed a set of faces per export could be handed a stale cache entry when
+the allocator reused an address, and the content stream would sometimes switch
+from `Tj` to per-glyph `TJ` offsets. The faces are now load-once process-wide
+statics, and exports are serialized under a recursive lock while they are
+shared.
+
 Across platforms the two writers are not asked to agree byte for byte, but the
 London fixture's Cairo output is the same size on Linux and Windows and differs in 44
 bytes only -- the font-subset prefixes cairo generates (it hashes the glyphs as
@@ -102,12 +110,15 @@ uses (`[1, 1, 610, 790]`); the trim is structural in the frames, not a PDF box.
 
 ## The drawing
 
-For each page, in PDF user space (origin bottom-left, y up):
+For each page, in cairo's PDF user space (origin top-left, y down; cairo
+writes the `1 0 0 -1 0 H cm` flip itself, so the walk's frames pass through
+unchanged):
 
 * the white trim box, as the Apple renderer's `drawWhiteCanvas:pageRect:` does;
 * each text line: the face and size from `MADReportLineStyle`, the resolved text
-  from the line, the glyphs placed with FreeType's unscaled advances and its
-  `kern` table, at the frame's left (or centred/right) edge and its baseline;
+  from the line, the glyphs placed with FreeType's advances and kerning at
+  the line's size (`FT_KERNING_UNFITTED`, so shaping depends only on face and
+  size), at the frame's left (or centred/right) edge and its baseline;
 * each picture: an image element's stored PNG or a barcode's symbol
   (`MADReportLineRepresentation -imageData`, rendered lazily), aspect-fitted into
   the frame the way the HTML facsimile fits it (`object-fit: contain`), decoded
@@ -156,7 +167,9 @@ Apple suite still asserts the 43,177-byte / `3eb2f1c4…` export, and the
   files), links the three static `.lib`s into `mad.exe`, and copies the
   Liberation faces to `Build\fonts`. The writer looks for
   `<exe>/fonts`, `<exe>/../fonts`, `<exe>/../share/mad/fonts`,
-  `/usr/local/share/mad/fonts`, `/usr/share/mad/fonts` and a
+  `/usr/local/share/mad/fonts`, `/usr/share/mad/fonts`,
+  `/usr/local/share/fonts/liberation`, `/usr/share/fonts/truetype/liberation`
+  and a
   `MAD_FONTS_DIR` override.
 
 The fonts are data files, not code: a Windows package must ship

@@ -217,11 +217,11 @@ static NSUInteger MADReportPDFScalars(NSString *text, uint32_t *scalars, NSUInte
 			}
 		}
 		if (scalar < 0x20 || scalar == 0x7F) {
-			if (scalar == 0x09) {	// a tab is a space's advance, as the renderer draws it
-				scalar = 0x20;
-			} else {
-				continue;
-			}
+			// A line break, tab or other control has no glyph; the walk's frame is
+			// one line, so it draws as a space's advance (the renderer's own break
+			// has nowhere to go in a fixed frame).
+			if (scalar == 0x7F) continue;
+			scalar = 0x20;
 		}
 		scalars[count++] = scalar;
 	}
@@ -348,10 +348,14 @@ typedef struct {
 static cairo_status_t MADReportPDFReadPNG(void *closure, unsigned char *buffer, unsigned int length) {
 	MADReportPDFPNGReader *reader = (MADReportPDFPNGReader *)closure;
 	NSUInteger remaining = reader->length - reader->offset;
-	NSUInteger take = (NSUInteger)length < remaining ? (NSUInteger)length : remaining;
-	if (take > 0) {
-		memcpy(buffer, reader->bytes + reader->offset, take);
-		reader->offset += take;
+	// A short read is EOF, and cairo's own reader reports it as an error: a
+	// "successful" short buffer would hand libpng uninitialised bytes.
+	if ((NSUInteger)length > remaining) {
+		return CAIRO_STATUS_READ_ERROR;
+	}
+	if (length > 0) {
+		memcpy(buffer, reader->bytes + reader->offset, length);
+		reader->offset += length;
 	}
 	return CAIRO_STATUS_SUCCESS;
 }
@@ -379,13 +383,21 @@ static cairo_status_t MADReportPDFWrite(void *closure, const unsigned char *data
 
 #pragma mark - The writer
 
+// The faces are process-wide.  cairo caches its font faces and scaled fonts by the
+// FT_Face pointer, so a writer that opened and freed a set per export could be
+// handed a stale cache entry when the allocator reused an address -- observed as
+// intermittent Tj/TJ differences between two deterministic exports.  One set of
+// faces for the process removes the churn (and the load cost); exports are
+// serialized because the FT face is shared.
+static NSRecursiveLock *MADReportPDFSharedLock = nil;
+static FT_Library MADReportPDFSharedLibrary = NULL;
+static FT_Face MADReportPDFSharedFaces[3][2][2];	// family, bold, italic
+static NSMutableArray <NSData *> *MADReportPDFSharedData = nil;
+static BOOL MADReportPDFSharedLoaded = NO;
+
 @implementation MADReportExporterPDFCairo {
-	FT_Library _library;
-	FT_Face _faces[3][2][2];	// family, bold, italic
 	NSMutableDictionary <NSString *, NSValue *> *_scaledFonts;
 	NSMutableArray <NSValue *> *_fontFaces;
-	NSMutableArray <NSData *> *_fontData;
-	NSString *_fontsDirectory;
 }
 
 + (NSString *)fontsDirectory {
@@ -450,91 +462,96 @@ static cairo_status_t MADReportPDFWrite(void *closure, const unsigned char *data
 	if (self = [super init]) {
 		_scaledFonts = [[NSMutableDictionary alloc] init];
 		_fontFaces = [[NSMutableArray alloc] init];
-		_fontData = [[NSMutableArray alloc] init];
 	}
 	return self;
 }
 
 - (void)dealloc {
+	// The FT faces outlive the writer; only the per-export cairo objects go.
 	for (NSValue *value in _scaledFonts.allValues) {
 		cairo_scaled_font_destroy((cairo_scaled_font_t *)value.pointerValue);
 	}
 	for (NSValue *value in _fontFaces) {
 		cairo_font_face_destroy((cairo_font_face_t *)value.pointerValue);
 	}
-	for (NSUInteger family = 0; family < 3; family++) {
-		for (NSUInteger bold = 0; bold < 2; bold++) {
-			for (NSUInteger italic = 0; italic < 2; italic++) {
-				if (_faces[family][bold][italic] != NULL) {
-					FT_Done_Face(_faces[family][bold][italic]);
-					_faces[family][bold][italic] = NULL;
-				}
-			}
+}
+
++ (NSRecursiveLock *)sharedLock {
+	@synchronized (self) {
+		if (MADReportPDFSharedLock == nil) {
+			MADReportPDFSharedLock = [[NSRecursiveLock alloc] init];
 		}
-	}
-	if (_library != NULL) {
-		FT_Done_FreeType(_library);
-		_library = NULL;
+		return MADReportPDFSharedLock;
 	}
 }
 
 #pragma mark - Fonts
 
-- (BOOL)loadFontsWithError:(NSError * _Nullable __autoreleasing *)error {
-	_fontsDirectory = [MADReportExporterPDFCairo fontsDirectory];
-	if (_fontsDirectory.length == 0) {
-		if (error) {
-			*error = [MADReportExporterPDFCairo errorWithCode: 6 description:
-					  NSLocalizedString(@"The PDF export needs the bundled Liberation fonts, and they were not found. "
-										@"Set MAD_FONTS_DIR to the directory holding LiberationSans-Regular.ttf "
-										@"(the Linux image installs them in /usr/local/share/mad/fonts).",
-										@"Error when the PDF writer cannot find its bundled fonts.")];
-		}
-		return NO;
-	}
++ (BOOL)loadSharedFontsWithError:(NSError * _Nullable __autoreleasing *)error {
+	@synchronized (self) {
+		if (MADReportPDFSharedLoaded) return YES;
 
-	if (FT_Init_FreeType(&_library) != 0) {
-		if (error) {
-			*error = [MADReportExporterPDFCairo errorWithCode: 7 description:
-					  NSLocalizedString(@"The PDF export could not start FreeType.",
-										@"Error when the PDF writer cannot initialize FreeType.")];
+		NSString *directory = [MADReportExporterPDFCairo fontsDirectory];
+		if (directory.length == 0) {
+			if (error) {
+				*error = [MADReportExporterPDFCairo errorWithCode: 6 description:
+						  NSLocalizedString(@"The PDF export needs the bundled Liberation fonts, and they were not found. "
+											@"Set MAD_FONTS_DIR to the directory holding LiberationSans-Regular.ttf "
+											@"(the Linux image installs them in /usr/local/share/mad/fonts).",
+											@"Error when the PDF writer cannot find its bundled fonts.")];
+			}
+			return NO;
 		}
-		return NO;
-	}
 
-	for (NSUInteger family = 0; family < 3; family++) {
-		for (NSUInteger bold = 0; bold < 2; bold++) {
-			for (NSUInteger italic = 0; italic < 2; italic++) {
-				NSString *file = MADReportPDFFaceFile((MADReportPDFFamily)family, bold == 1, italic == 1);
-				NSString *path = [[_fontsDirectory stringByAppendingPathComponent: file]
-								  stringByAppendingPathExtension: @"ttf"];
-				// Loaded from memory rather than by path: GNUstep's Windows
-				// -fileSystemRepresentation is UTF-16, and FreeType's path API takes
-				// char.  The bytes stay alive with the face for the export's lifetime.
-				NSData *data = [NSData dataWithContentsOfFile: path];
-				FT_Face face = NULL;
-				if (data.length == 0 ||
-					FT_New_Memory_Face(_library, data.bytes, (FT_Long)data.length, 0, &face) != 0) {
-					if (error) {
-						*error = [MADReportExporterPDFCairo errorWithCode: 8 description:
-								  [NSString stringWithFormat:
-								   NSLocalizedString(@"The PDF export could not open the bundled font %@.",
-													 @"Error when one bundled PDF font is unreadable; %@ is the file name."),
-								   path]];
+		if (FT_Init_FreeType(&MADReportPDFSharedLibrary) != 0) {
+			if (error) {
+				*error = [MADReportExporterPDFCairo errorWithCode: 7 description:
+						  NSLocalizedString(@"The PDF export could not start FreeType.",
+											@"Error when the PDF writer cannot initialize FreeType.")];
+			}
+			return NO;
+		}
+
+		NSMutableArray <NSData *> *fontData = [NSMutableArray array];
+		for (NSUInteger family = 0; family < 3; family++) {
+			for (NSUInteger bold = 0; bold < 2; bold++) {
+				for (NSUInteger italic = 0; italic < 2; italic++) {
+					NSString *file = MADReportPDFFaceFile((MADReportPDFFamily)family, bold == 1, italic == 1);
+					NSString *path = [[directory stringByAppendingPathComponent: file]
+									  stringByAppendingPathExtension: @"ttf"];
+					// Loaded from memory rather than by path: GNUstep's Windows
+					// -fileSystemRepresentation is UTF-16, and FreeType's path API takes
+					// char.  The bytes stay alive with the face for the process.
+					NSData *data = [NSData dataWithContentsOfFile: path];
+					FT_Face face = NULL;
+					if (data.length == 0 ||
+						FT_New_Memory_Face(MADReportPDFSharedLibrary, data.bytes,
+										   (FT_Long)data.length, 0, &face) != 0) {
+						if (error) {
+							*error = [MADReportExporterPDFCairo errorWithCode: 8 description:
+									  [NSString stringWithFormat:
+									   NSLocalizedString(@"The PDF export could not open the bundled font %@.",
+														 @"Error when one bundled PDF font is unreadable; %@ is the file name."),
+									   path]];
+						}
+						return NO;
 					}
-					return NO;
+					[fontData addObject: data];
+					// A face has no size until one is set, and FT_Load_Glyph refuses a
+					// sizeless face.  Each line sets its own size before shaping.
+					FT_Set_Char_Size(face, 0, 12 * 64, 72, 72);
+					MADReportPDFSharedFaces[family][bold][italic] = face;
 				}
-				[_fontData addObject: data];
-				// A face has no size until one is set, and FT_Load_Glyph refuses a
-				// sizeless face even with FT_LOAD_NO_SCALE.  The metrics are read
-				// unscaled from the font's units; the size is only the placeholder
-				// cairo replaces when it scales the face for the surface.
-				FT_Set_Char_Size(face, 0, 12 * 64, 72, 72);
-				_faces[family][bold][italic] = face;
 			}
 		}
+		MADReportPDFSharedData = fontData;
+		MADReportPDFSharedLoaded = YES;
+		return YES;
 	}
-	return YES;
+}
+
+- (BOOL)loadFontsWithError:(NSError * _Nullable __autoreleasing *)error {
+	return [MADReportExporterPDFCairo loadSharedFontsWithError: error];
 }
 
 // The style's face: the family its font name maps to, with the element's bold and
@@ -546,7 +563,7 @@ static cairo_status_t MADReportPDFWrite(void *closure, const unsigned char *data
 	MADReportPDFFamily family = MADReportPDFFamilyForName(name, &bold, &italic);
 	bold = bold || style.bold;
 	italic = italic || style.italic;
-	return _faces[family][bold ? 1 : 0][italic ? 1 : 0];
+	return MADReportPDFSharedFaces[family][bold ? 1 : 0][italic ? 1 : 0];
 }
 
 // The scaled font for one face at one size: cairo's glyph positions and the PDF
@@ -770,7 +787,7 @@ static void MADReportPDFFillRect(cairo_t *cr, CGRect rect) {
 		}
 		return NO;
 	}
-	if (url == nil) {
+	if (url == nil || !url.isFileURL || url.path.length == 0) {
 		if (error) {
 			*error = [self errorWithCode: 4 description:
 					  NSLocalizedString(@"PDF needs a file to write to.", @"Error when the PDF export has no output file.")];
@@ -782,10 +799,26 @@ static void MADReportPDFFillRect(cairo_t *cr, CGRect rect) {
 	return [writer writeDocument: document toURL: url options: options error: error];
 }
 
+// NSFileHandle raises rather than returning an error, and a close failure must not
+// escape the exporter as an exception.
+static void MADReportPDFCloseFile(NSFileHandle *handle) {
+	@try {
+		[handle closeFile];
+	} @catch (NSException *exception) {
+		(void)exception;
+	}
+}
+
 - (BOOL)writeDocument:(id <MADDocumentDataProtocol>)document
 				toURL:(NSURL *)url
 			  options:(MADReportExportOptions)options
 				error:(NSError * _Nullable __autoreleasing *)error {
+
+	// The faces are shared process-wide (see the statics above), so exports run
+	// one at a time; the drawing below does not reenter.
+	NSRecursiveLock *lock = [MADReportExporterPDFCairo sharedLock];
+	[lock lock];
+	@try {
 
 	id <MADDocumentRenderProtocol> renderDocument = (id <MADDocumentRenderProtocol>)document;
 
@@ -801,6 +834,18 @@ static void MADReportPDFFillRect(cairo_t *cr, CGRect rect) {
 
 	NSString *path = url.path;
 	NSFileManager *fileManager = [NSFileManager defaultManager];
+	BOOL isDirectory = NO;
+	if ([fileManager fileExistsAtPath: path isDirectory: &isDirectory] && isDirectory) {
+		if (error) {
+			*error = [MADReportExporterPDFCairo errorWithCode: 9 description:
+					  [NSString stringWithFormat:
+					   NSLocalizedString(@"The PDF cannot be written to %@: it is a directory.",
+										 @"Error when the PDF output path names a directory; %@ is the path."),
+					   path]];
+		}
+		return NO;
+	}
+	// Only a regular file is replaced; the directory case above returned already.
 	[fileManager removeItemAtPath: path error: NULL];
 	if (![fileManager createFileAtPath: path contents: nil attributes: nil]) {
 		if (error) {
@@ -813,6 +858,7 @@ static void MADReportPDFFillRect(cairo_t *cr, CGRect rect) {
 	}
 	NSFileHandle *handle = [NSFileHandle fileHandleForWritingAtPath: path];
 	if (handle == nil) {
+		[fileManager removeItemAtPath: path error: NULL];
 		if (error) {
 			*error = [MADReportExporterPDFCairo errorWithCode: 9 description:
 					  [NSString stringWithFormat:
@@ -835,7 +881,7 @@ static void MADReportPDFFillRect(cairo_t *cr, CGRect rect) {
 	cairo_status_t surfaceStatus = cairo_surface_status(surface);
 	if (surfaceStatus != CAIRO_STATUS_SUCCESS) {
 		cairo_surface_destroy(surface);
-		[handle closeFile];
+		MADReportPDFCloseFile(handle);
 		[fileManager removeItemAtPath: path error: NULL];
 		if (error) {
 			*error = [MADReportExporterPDFCairo errorWithCode: 10 description:
@@ -881,7 +927,7 @@ static void MADReportPDFFillRect(cairo_t *cr, CGRect rect) {
 	cairo_surface_finish(surface);
 	cairo_status_t finishedStatus = cairo_surface_status(surface);
 	cairo_surface_destroy(surface);
-	[handle closeFile];
+	MADReportPDFCloseFile(handle);
 
 	if (contextStatus != CAIRO_STATUS_SUCCESS || finishedStatus != CAIRO_STATUS_SUCCESS || target.failed) {
 		[fileManager removeItemAtPath: path error: NULL];
@@ -904,6 +950,10 @@ static void MADReportPDFFillRect(cairo_t *cr, CGRect rect) {
 	}
 
 	return YES;
+
+	} @finally {
+		[lock unlock];
+	}
 }
 
 @end
