@@ -10,9 +10,10 @@ against GNUstep Base with Clang, the Windows sibling of the Linux build, and
 6a–6e). It builds all twelve headless frameworks (MADDataStructures, MADFoundation,
 MADAPI, MADSqlite3, MADCocoaExtensions, MADFileManager, MAD, MADBarcodes, plus the
 four drivers MADMySQL, MADTds, MADTdsClient, MADPostgres), compiles the pinned
-SQLite/zlib/bzip2/libarchive/libpng/zint and OpenSSL/FreeTDS/MariaDB/libpq
-libraries, builds `mad.exe` from `CLI/Source`, and runs the ported Linux test
-suites (127 suites + the smoke test, 1301 tests, 6 needs, 5 skips, 0 failures).
+SQLite/zlib/bzip2/libarchive/libpng/zint/pixman/FreeType/cairo and
+OpenSSL/FreeTDS/MariaDB/libpq libraries, builds `mad.exe` from `CLI/Source`, and runs the ported Linux test
+suites (130 suites + the smoke test, 1,313 tests, 6 needs, 5 skips in the
+container-backed run, 0 failures).
 
 ## Layout
 

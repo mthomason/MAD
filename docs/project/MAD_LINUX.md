@@ -582,12 +582,14 @@ Both are one UTF-8 file with an embedded `<style>` and no script; the facsimile'
 is the 20 lines above plus a positioning rule, and the flow file's styles are a
 generated class table (nine classes for the London fixture).
 
-**`pdf` is on the seam**: `MADReportExporterPDF` registers everywhere, its body is
-Apple's (Core Graphics + `MADPrintPageRenderer`), and off Apple it answers
-`+isAvailable NO` with the reason.  The CLI has no local arms left.  The move is
-byte-neutral: the deterministic export of the London sample is the same 43,177-byte,
-5-page PDF before and after (`sha256 3eb2f1c4…` on both), measured by building the
-previous commit's CLI and comparing.
+**`pdf` is on the seam**: `MADReportExporterPDF` registers everywhere.  On Apple its
+body is Core Graphics + `MADPrintPageRenderer`, unchanged; off Apple it hands the same
+walked pages to `MADReportExporterPDFCairo`, which draws them into a Cairo PDF surface
+with FreeType glyphs from bundled Liberation faces (docs/project/MAD_PDF_LINUX.md).  The
+CLI has no local arms left.  The Apple move was byte-neutral: the deterministic export
+of the London sample is the same 43,177-byte, 5-page PDF before and after
+(`sha256 3eb2f1c4…` on both), measured by building the previous commit's CLI and
+comparing.  The headless writer targets structural parity, not byte parity.
 
 **What the cross-platform comparison says.** The text of every line, every frame,
 every font, the page count and the file structure are identical on Apple and Linux for
@@ -660,11 +662,14 @@ the C libraries natively.
    Core Graphics' writer cannot be reproduced — so the target is the same pages, boxes,
    text and fonts, with metric-compatible substitutes for Apple's fonts
    (`MADFont`'s default family is Helvetica Neue, which Linux does not have).
-   **Status 2026-10-17: deferred, blocked on the user's research — do not start it
-   without their decision.** `MAD_PDF_LINUX.md` is the handoff file: what exists, what
-   is missing, the candidate stacks with licences, the open questions and the
-   acceptance test.  Nothing needs it yet: the HTML facsimile prints from a browser,
-   and the app's PDF is untouched.
+   **Done 2026-11-20 (the PDF closure).** The stack is Cairo (PDF surface) +
+   FreeType, with no Pango: the walk hands every line its frame, text, font, size,
+   traits and alignment, so there is no layout to do -- only glyph advances and the
+   face's own `kern` table, which FreeType supplies.  Cairo 1.18.6 (MPL-1.1) and
+   pixman 0.46.4 (MIT) are built statically; the Liberation faces (SIL OFL 1.1) are
+   the substitutes for the Apple fonts.  `MAD_PDF_LINUX.md` records what landed, the
+   font-mapping policy and the measured residual.  The target remains structural:
+   Core Graphics' bytes are not reproducible.
 3. **mysqlclient → MariaDB Connector/C timing** — the GPL blocker gates any shipped
    binary; the replacement is already named in `LICENSE_COMPLIANCE_PLAN.md`.
 4. **Toolchain policy** — source-built clang/libobjc2/GNUstep (needed for ARC) is a

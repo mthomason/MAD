@@ -75,7 +75,7 @@ The code base also includes a custom scripting language in a file called `Scrimp
 
 The codebase also includes static library build scrips in a file called `Compressor`.  This is used to build the static libraries used by the project.  This is a very important part of the project.
 
-The codebase also includes `Linux`, the headless engine's build (`docs/project/MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all twelve headless frameworks against them, and runs their ported suites — 128 executables, 1,301 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
+The codebase also includes `Linux`, the headless engine's build (`docs/project/MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all twelve headless frameworks against them, and runs their ported suites — 130 suites, 1,313 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
 
 ## Code Style Guidance
 
@@ -208,9 +208,9 @@ the headless side.
   toolchain recipe (Clang 20.1.8, the STL gate override, the seven GNUstep
   revisions) and why, the framework port and its shims, and the `Windows/Engine/build.ps1`
   entry point.
-* `docs/project/MAD_PDF_LINUX.md` -- the Linux PDF writer: status (deferred, blocked on the user's
-  research), what exists and what is missing, the candidate stacks and licences, the
-  open questions and the acceptance test.
+* `docs/project/MAD_PDF_LINUX.md` -- the headless PDF writer: the Cairo + FreeType
+  stack and its licences, the font-mapping policy and its residual, the deterministic
+  mode, and the acceptance test against the json-report oracle.
 * `docs/project/MAD_SQL_ENTRY.md` -- the design for pasting a SQL statement into the query designer: the
   supported subset, the parser/resolver/compiler in `MAD`, the validation probe, the apply
   semantics, the persisted source text (`RptqQuery.sqlSourceText` + the store's first

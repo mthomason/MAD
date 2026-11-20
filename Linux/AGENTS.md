@@ -28,7 +28,8 @@ locally, `./Linux/build.sh --verify` is the repeatable check.
     The single place a component's version, source and hash lives.
 *   **`libraries.conf`** + **`lib/libraries.sh`** -- the same for the C
     libraries the frameworks link (sqlite3, openssl, freetds, zlib, bzip2,
-    libarchive, mariadb, postgres, libpng, zint), built natively into
+    libarchive, mariadb, postgres, libpng, zint, pixman, freetype, cairo) and
+    the Liberation fonts, built/installed natively into
     `/usr/local`.
 *   **`build.sh`** -- the entry point. Host modes (`--test`, `--runtime`,
     `--verify`, `--probe`, ...), plus the internal
