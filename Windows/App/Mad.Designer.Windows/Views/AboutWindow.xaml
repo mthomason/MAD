@@ -13,11 +13,11 @@
 
         <TabControl Margin="12,0,12,12">
             <TabItem Header="{infra:Loc About.Tab.Overview}">
-                <TextBox Text="{Binding Overview}" IsReadOnly="True" TextWrapping="Wrap"
+                <TextBox Text="{Binding Overview, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"
                          VerticalScrollBarVisibility="Auto" FontSize="12" Margin="4"/>
             </TabItem>
             <TabItem Header="{infra:Loc About.Tab.License}">
-                <TextBox Text="{Binding LicenseNotice}" IsReadOnly="True" TextWrapping="Wrap"
+                <TextBox Text="{Binding LicenseNotice, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"
                          VerticalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="11" Margin="4"/>
             </TabItem>
             <TabItem Header="{infra:Loc About.Tab.Acknowledgements}">
@@ -29,7 +29,7 @@
                     <ListBox Grid.Column="0" ItemsSource="{Binding Components}"
                              SelectedItem="{Binding SelectedComponent}"
                              DisplayMemberPath="Name"/>
-                    <TextBox Grid.Column="1" Text="{Binding SelectedAcknowledgement}" IsReadOnly="True"
+                    <TextBox Grid.Column="1" Text="{Binding SelectedAcknowledgement, Mode=OneWay}" IsReadOnly="True"
                              TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                              FontFamily="Consolas" FontSize="11" Margin="8,0,0,0"/>
                 </Grid>

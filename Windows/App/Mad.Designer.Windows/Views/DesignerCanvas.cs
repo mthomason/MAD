@@ -27,12 +27,25 @@ public sealed class DesignerCanvas : Canvas
     private const double PaperWidth = 612.0;
     private const double LeftMargin = 18.0;
     private const double RightMargin = 18.0;
+    private const int SelectedZIndex = 100;
+    private const int DraggingZIndex = 1000;
 
     private static readonly Brush LabelTint = new SolidColorBrush(Color.FromRgb(0xF7, 0xF7, 0xF7));
     private static readonly Brush DataFieldTint = new SolidColorBrush(Color.FromRgb(0xEA, 0xF4, 0xFF));
     private static readonly Brush AggregateTint = new SolidColorBrush(Color.FromRgb(0xEF, 0xF9, 0xEC));
     private static readonly Brush ImageTint = new SolidColorBrush(Color.FromRgb(0xFA, 0xF4, 0xE7));
     private static readonly Brush Accent = new SolidColorBrush(Color.FromRgb(0x0A, 0x84, 0xFF));
+
+    static DesignerCanvas()
+    {
+        // Frozen so the shared tints may be used from any UI thread (the tests materialise
+        // canvases on more than one STA thread).
+        LabelTint.Freeze();
+        DataFieldTint.Freeze();
+        AggregateTint.Freeze();
+        ImageTint.Freeze();
+        Accent.Freeze();
+    }
 
     private DesignerViewModel? _vm;
     private double _zoom = 1.0;
@@ -41,6 +54,8 @@ public sealed class DesignerCanvas : Canvas
     private readonly Dictionary<long, Border> _elementBorders = new();
     private readonly Dictionary<long, Rect> _elementRects = new();
     private readonly Dictionary<long, Rect> _bandRects = new();
+    private readonly List<Rectangle> _handles = new();
+    private bool _pendingRebuild;
 
     private enum DragMode { None, Move, Resize, Marquee }
     private DragMode _dragMode;
@@ -61,6 +76,16 @@ public sealed class DesignerCanvas : Canvas
         Background = new SolidColorBrush(Color.FromRgb(0xE8, 0xE8, 0xE8));
     }
 
+    private ScrollViewer? ScrollAncestor()
+    {
+        DependencyObject? parent = VisualTreeHelper.GetParent(this);
+        while (parent != null && parent is not ScrollViewer)
+        {
+            parent = VisualTreeHelper.GetParent(parent);
+        }
+        return parent as ScrollViewer;
+    }
+
     public void Attach(DesignerViewModel vm)
     {
         if (ReferenceEquals(_vm, vm)) return;
@@ -74,19 +99,39 @@ public sealed class DesignerCanvas : Canvas
         if (e.PropertyName is nameof(DesignerViewModel.Model)
             or nameof(DesignerViewModel.Zoom)
             or nameof(DesignerViewModel.ShowGrid)
-            or nameof(DesignerViewModel.ShowRulers)
-            or nameof(DesignerViewModel.SelectedElementIds))
+            or nameof(DesignerViewModel.ShowRulers))
         {
             Rebuild();
+        }
+        else if (e.PropertyName == nameof(DesignerViewModel.SelectedElementIds))
+        {
+            // A selection change does not alter the layout. Rebuilding it would destroy and
+            // recreate every visual under the pointer, which made a drag start jump and forced
+            // the ScrollViewer to re-measure its content. Update the selection chrome in place.
+            UpdateSelection();
         }
     }
 
     private void Rebuild()
     {
+        if (_dragMode != DragMode.None)
+        {
+            _pendingRebuild = true;
+            return;
+        }
+
+        // The canvas height follows the report's content, so a model edit can shrink it. A
+        // ScrollViewer clamps its offset to the new extent; remember the viewport and restore
+        // it once the new layout has run, so an edit never scrolls the user's view.
+        ScrollViewer? scroll = ScrollAncestor();
+        double horizontal = scroll?.HorizontalOffset ?? 0.0;
+        double vertical = scroll?.VerticalOffset ?? 0.0;
+
         Children.Clear();
         _elementBorders.Clear();
         _elementRects.Clear();
         _bandRects.Clear();
+        _handles.Clear();
 
         if (_vm is not { HasDocument: true }) return;
         _zoom = _vm.Zoom;
@@ -107,6 +152,15 @@ public sealed class DesignerCanvas : Canvas
 
         if (_vm.ShowGrid) DrawGrid();
         if (_vm.ShowRulers) DrawRuler();
+
+        if (scroll != null && (horizontal > 0.0 || vertical > 0.0))
+        {
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, () =>
+            {
+                scroll.ScrollToHorizontalOffset(horizontal);
+                scroll.ScrollToVerticalOffset(vertical);
+            });
+        }
     }
 
     private double SectionContentHeight(LayoutSection section)
@@ -170,6 +224,9 @@ public sealed class DesignerCanvas : Canvas
         };
         SetLeft(border, ex * _zoom);
         SetTop(border, ey * _zoom);
+        // Bands are opaque and are added section by section. A selected element (and a dragged
+        // one) must paint above every band, including the bands that follow its own section.
+        Panel.SetZIndex(border, selected ? SelectedZIndex : 0);
 
         if (element.IsLineRule)
         {
@@ -226,7 +283,41 @@ public sealed class DesignerCanvas : Canvas
             };
             SetLeft(handle, (corners[i].x - hs / 2) * _zoom);
             SetTop(handle, (corners[i].y - hs / 2) * _zoom);
+            Panel.SetZIndex(handle, SelectedZIndex + 1);
+            _handles.Add(handle);
             Children.Add(handle);
+        }
+    }
+
+    private void ClearHandles()
+    {
+        foreach (Rectangle handle in _handles)
+        {
+            Children.Remove(handle);
+        }
+        _handles.Clear();
+    }
+
+    /// <summary>Refreshes selection borders and resize handles without rebuilding the canvas.</summary>
+    private void UpdateSelection()
+    {
+        if (_vm == null || _dragMode != DragMode.None) return;
+
+        var inactive = new SolidColorBrush(Color.FromArgb(0x66, 0x80, 0x80, 0x80));
+        foreach ((long id, Border border) in _elementBorders)
+        {
+            bool selected = _vm.SelectedElementIds.Contains(id);
+            border.BorderBrush = selected ? Accent : inactive;
+            border.BorderThickness = new Thickness((selected ? 1.5 : 0.75) * _zoom);
+            Panel.SetZIndex(border, selected ? SelectedZIndex : 0);
+        }
+
+        ClearHandles();
+        if (_vm.PrimaryElement is { } primary &&
+            _vm.SelectedElementIds.Count == 1 &&
+            _elementRects.TryGetValue(primary.Id, out Rect rect))
+        {
+            DrawResizeHandles(primary, rect.X, rect.Y);
         }
     }
 
@@ -290,14 +381,7 @@ public sealed class DesignerCanvas : Canvas
             int handle = HitTestHandle(pt, primary);
             if (handle >= 0)
             {
-                _dragMode = DragMode.Resize;
-                _dragElementId = primary.Id;
-                _dragHandle = handle;
-                _dragStartPt = pt;
-                _dragStartRect = _elementRects[primary.Id];
-                _dragSourceSection = primary.Section;
-                _dragMoved = false;
-                CaptureMouse();
+                StartDrag(DragMode.Resize, primary.Id, handle, pt, _elementRects[primary.Id], primary.Section);
                 e.Handled = true;
                 return;
             }
@@ -317,14 +401,8 @@ public sealed class DesignerCanvas : Canvas
             }
 
             _vm.SelectElement(elementId, Keyboard.Modifiers.HasFlag(ModifierKeys.Shift));
-            _dragMode = DragMode.Move;
-            _dragElementId = elementId;
-            _dragStartPt = pt;
-            _dragStartRect = _elementRects[elementId];
-            _dragSourceSection = element.Section;
+            StartDrag(DragMode.Move, elementId, -1, pt, _elementRects[elementId], element.Section);
             _dragHoverSection = element.Section;
-            _dragMoved = false;
-            CaptureMouse();
             e.Handled = true;
             return;
         }
@@ -341,19 +419,42 @@ public sealed class DesignerCanvas : Canvas
 
         // 4. empty canvas -> marquee
         _vm.ClearElementSelection();
-        _dragMode = DragMode.Marquee;
-        _dragStartPt = pt;
-        _marqueeRect = Rect.Empty;
-        _dragMoved = false;
-        CaptureMouse();
+        StartDrag(DragMode.Marquee, 0, -1, pt, Rect.Empty, 0);
         e.Handled = true;
+    }
+
+    /// <summary>Enters a drag. The visual is raised above every band (they are opaque and
+    /// overlap when an element crosses a section boundary) and the resize handles are hidden
+    /// until the drop recreates the layout.</summary>
+    private void StartDrag(DragMode mode, long elementId, int handle, Point pt, Rect startRect, long sectionId)
+    {
+        _dragMode = mode;
+        _dragElementId = elementId;
+        _dragHandle = handle;
+        _dragStartPt = pt;
+        _dragStartRect = startRect;
+        _dragSourceSection = sectionId;
+        _dragMoved = false;
+        _marqueeRect = Rect.Empty;
+        ClearHandles();
+
+        if (mode != DragMode.Marquee && _elementBorders.TryGetValue(elementId, out Border? border))
+        {
+            Panel.SetZIndex(border, DraggingZIndex);
+        }
+        CaptureMouse();
     }
 
     protected override void OnMouseMove(MouseEventArgs e)
     {
         base.OnMouseMove(e);
         if (_dragMode == DragMode.None) return;
-        var pt = ToPt(e.GetPosition(this));
+        UpdateDrag(ToPt(e.GetPosition(this)));
+    }
+
+    /// <summary>Applies a pointer position (canvas coordinates, before zoom) to the active drag.</summary>
+    private void UpdateDrag(Point pt)
+    {
         double dx = pt.X - _dragStartPt.X;
         double dy = pt.Y - _dragStartPt.Y;
         if (!_dragMoved && Math.Abs(dx) + Math.Abs(dy) < 1.5) return;
@@ -393,6 +494,14 @@ public sealed class DesignerCanvas : Canvas
     {
         base.OnMouseLeftButtonUp(e);
         if (_dragMode == DragMode.None) return;
+        _ = CompleteDragAsync();
+    }
+
+    /// <summary>Finishes the active drag: commits the move or resize to the view model, then
+    /// restores the selection chrome (the drop's model change rebuilds the canvas itself).</summary>
+    private async Task CompleteDragAsync()
+    {
+        if (_dragMode == DragMode.None) return;
         var mode = _dragMode;
         _dragMode = DragMode.None;
         ReleaseMouseCapture();
@@ -413,9 +522,14 @@ public sealed class DesignerCanvas : Canvas
             return;
         }
 
-        if (!_dragMoved || _vm == null) return;
-        var movedRect = _elementRects[_dragElementId];
+        if (!_dragMoved || _vm == null)
+        {
+            UpdateSelection();
+            RebuildIfPending();
+            return;
+        }
 
+        var movedRect = _elementRects[_dragElementId];
         if (mode == DragMode.Move && _dragHoverSection != 0 && _dragHoverSection != _dragSourceSection)
         {
             var target = _vm.Sections.FirstOrDefault(s => s.Id == _dragHoverSection);
@@ -424,16 +538,46 @@ public sealed class DesignerCanvas : Canvas
                 var content = ContentOrigin(target);
                 double nx = Math.Max(0, movedRect.X - content.X);
                 double ny = Math.Max(0, movedRect.Y - content.Y);
-                _ = _vm.MoveElementToSectionAsync(_dragElementId, _dragHoverSection, nx, ny);
+                await _vm.MoveElementToSectionAsync(_dragElementId, _dragHoverSection, nx, ny);
             }
         }
         else
         {
             double mx = Math.Max(0, movedRect.X - (OuterMargin + LeftMargin));
             double my = Math.Max(0, movedRect.Y - ContentOriginY(_dragSourceSection));
-            _ = _vm.SetElementGeometryAsync(new[] { new ElementGeometry(_dragElementId, mx, my, movedRect.Width, movedRect.Height) });
+            await _vm.SetElementGeometryAsync(new[] { new ElementGeometry(_dragElementId, mx, my, movedRect.Width, movedRect.Height) });
         }
+
+        UpdateSelection();
+        RebuildIfPending();
     }
+
+    private void RebuildIfPending()
+    {
+        if (!_pendingRebuild) return;
+        _pendingRebuild = false;
+        Rebuild();
+    }
+
+    // ---- test hooks: drive the same state machine the mouse events use ----
+
+    internal void BeginMoveForTest(long elementId, Point logicalPoint)
+    {
+        LayoutElement element = _vm!.Elements.First(el => el.Id == elementId);
+        _vm.SelectElement(elementId, extend: false);
+        StartDrag(DragMode.Move, elementId, -1, logicalPoint, _elementRects[elementId], element.Section);
+        _dragHoverSection = element.Section;
+    }
+
+    internal void DragForTest(Point logicalPoint) => UpdateDrag(logicalPoint);
+
+    internal Task CompleteDragForTestAsync() => CompleteDragAsync();
+
+    internal Rect ElementRectForTest(long elementId) => _elementRects[elementId];
+
+    internal Border ElementBorderForTest(long elementId) => _elementBorders[elementId];
+
+    internal int HandleCountForTest => _handles.Count;
 
     private void UpdateMarqueeVisual()
     {

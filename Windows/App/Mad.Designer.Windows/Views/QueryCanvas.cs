@@ -29,6 +29,13 @@ public sealed class QueryCanvas : Canvas
     private static readonly Brush CardBackground = SystemColors.WindowBrush;
     private static readonly Brush RootHeader = new SolidColorBrush(Color.FromRgb(0x0A, 0x84, 0xFF));
 
+    static QueryCanvas()
+    {
+        ConnectorRed.Freeze();
+        AccentBlue.Freeze();
+        RootHeader.Freeze();
+    }
+
     private QueryViewModel? _vm;
     private readonly Dictionary<long, Border> _cards = new();
     private readonly Dictionary<long, List<Border>> _fieldRows = new();

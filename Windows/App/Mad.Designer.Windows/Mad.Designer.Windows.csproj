@@ -18,6 +18,10 @@
     <ProjectReference Include="..\..\Client\Mad.Client\Mad.Client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Mad.Designer.Windows.Tests" />
+  </ItemGroup>
+
   <!-- The language dictionaries are embedded XAML resources, not compiled Page items: the app
        loads them with XamlReader so the strings resolve without a WPF Application (the headless
        tests construct the views directly). -->
