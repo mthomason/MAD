@@ -6,15 +6,15 @@ the same engine that runs the macOS app and the Linux CLI can run on Windows.
 `Windows/App/` is the WPF application on top of it (Phases 5 and 6a–6f); the
 architecture record is `docs/project/MAD_WINDOWS.md`.
 
-This increment builds all eleven headless frameworks — **MADDataStructures**,
+This increment builds all twelve headless frameworks — **MADDataStructures**,
 **MADFoundation**, **MADAPI**, **MADSqlite3**, **MADCocoaExtensions**,
-**MADFileManager**, **MAD**, and the four database drivers **MADMySQL**,
-**MADTds**, **MADTdsClient** and **MADPostgres** — compiles the pinned SQLite,
-zlib, bzip2, libarchive, OpenSSL, FreeTDS, MariaDB Connector/C and libpq
-libraries, and builds **`mad.exe`** from `CLI/Source`. It runs the ported Linux
-test suites (GNUstep `Testing.h` + `MADTestSupport.h`) plus a smoke test: 125
-suites, 1294 tests, 6 needs, 5 skips, 0 failures, including the live
-MySQL/SQL Server/PostgreSQL suites against the local `127.0.0.1` containers.
+**MADFileManager**, **MAD**, **MADBarcodes**, and the four database drivers
+**MADMySQL**, **MADTds**, **MADTdsClient** and **MADPostgres** — compiles the
+pinned SQLite, zlib, bzip2, libarchive, libpng, zint, OpenSSL, FreeTDS, MariaDB
+Connector/C and libpq libraries, and builds **`mad.exe`** from `CLI/Source`. It
+runs the ported Linux test suites (GNUstep `Testing.h` + `MADTestSupport.h`) plus
+a smoke test: 127 suites, 1301 tests, 6 needs, 5 skips, 0 failures, including the
+live MySQL/SQL Server/PostgreSQL suites against the local `127.0.0.1` containers.
 `mad.exe` runs `inspect`, `schema`, `query`, `refresh` (76 rows on the London
 fixture), `export` in every format, and `write --reproducible` — all with
 byte-identical digests to the Mac/Linux pins in `Linux/README.md`.

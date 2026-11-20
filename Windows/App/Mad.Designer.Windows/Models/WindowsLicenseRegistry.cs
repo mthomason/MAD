@@ -15,7 +15,8 @@ public sealed record WindowsComponent(
 
 /// <summary>The Windows engine's dependency register, mirrored from
 /// <c>docs/project/THIRD_PARTY_LICENSES.md</c> §10 and <c>ThirdParty/Licenses/Windows/</c>. It lists
-/// the Windows component set only — never the Apple app's (no zint, libpng, Font Awesome, …).</summary>
+/// the Windows component set only — the components this engine links, which since the barcode
+/// work include zint and libpng; it never lists the Apple app's own additions (Font Awesome …).</summary>
 public static class WindowsLicenseRegistry
 {
     public static IReadOnlyList<WindowsComponent> Components { get; } = new List<WindowsComponent>
@@ -60,6 +61,14 @@ public static class WindowsLicenseRegistry
             "Archive library used to read and write the .mad container.",
             "BSD 2-Clause License (libarchive)",
             "libarchive-BSD-2-Clause.txt"),
+        new("zint", "BSD-3-Clause",
+            "The barcode encoder behind the report's barcode elements.",
+            "BSD 3-Clause License (zint)",
+            "zint-BSD-3-Clause.txt"),
+        new("libpng", "PNG Reference Library v2",
+            "The PNG encoder for the barcode images the engine renders.",
+            "PNG Reference Library v2 (libpng)",
+            "libpng-LICENSE.txt"),
         new("OpenSSL", "Apache-2.0",
             "TLS library used by the database drivers.",
             "Apache License 2.0 (OpenSSL)",

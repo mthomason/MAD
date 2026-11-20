@@ -2,7 +2,9 @@
 
 ## Framework Description
 
-The `MADBarcodes` framework provides functionality for generating a wide variety of barcodes. It is a wrapper around the `zint` barcode generation library (2.16.0, built by the `Compressor` recipe). The framework includes classes for different barcode symbologies, a view for displaying barcodes, and protocols for interacting with barcode data. It is maintained and backs the designer's barcode element on Apple; it is deliberately excluded from the Linux build, where the element type is model-only.
+The `MADBarcodes` framework provides functionality for generating a wide variety of barcodes. It is a wrapper around the `zint` barcode generation library (2.16.0, built by the `Compressor` recipe on Apple and by `Linux/libraries.conf` / `Windows/Engine/libraries.conf` headlessly). The framework includes classes for different barcode symbologies, a view for displaying barcodes, and protocols for interacting with barcode data. It is maintained and backs the designer's barcode element on every platform.
+
+The encode half is portable: `MADBarcode`'s zint pass feeds `-renderedPNGData` (zint's RGB bitmap through libpng) with no Core Graphics or UIKit, and `MADBarcodeView` / `MADBarcodeCache` / `-drawInRect:` stay behind `#if __APPLE__`. The headless builds compile every symbology subclass except those two UI files (`Linux/cmake/MADBarcodesSources.cmake`).
 
 ## Key Features
 
@@ -28,4 +30,5 @@ The framework is the app's barcode generator: the designer's element picker crea
 *   **Tests**: `MADBarcodes/MADBarcodesTests`, exposed by the shared `MADBarcodes`
     scheme. Run with
     `xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes -destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci`.
+    The headless half is `Linux/Tests/MADBarcodesTests.m` (the factory, the name table and `-renderedPNGData`), run by both `./Linux/build.sh` and `Windows/Engine/build.ps1`.
 *   **Tracking**: [`BUGS.md`](../docs/project/BUGS.md) -- the defect register; [`TASKS.md`](../docs/project/TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.

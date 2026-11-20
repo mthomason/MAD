@@ -10,12 +10,15 @@ public sealed class WindowsLicenseRegistryTests
     public void Components_AreTheWindowsSet_NotApple()
     {
         var components = WindowsLicenseRegistry.Components;
-        Assert.Equal(15, components.Count);
+        Assert.Equal(17, components.Count);
         Assert.Contains(components, c => c.Name == "GNUstep Base" && c.License == "LGPL-2.1-or-later");
         Assert.Contains(components, c => c.Name == "MariaDB Connector/C");
         Assert.Contains(components, c => c.Name == "Microsoft Edge WebView2"
             && c.License == "BSD-3-Clause (SDK) / Microsoft Software License Terms (Runtime)");
-        Assert.DoesNotContain(components, c => c.Name is "zint" or "libpng" or "Font Awesome");
+        // The barcode renderer links both; the Apple app's Font Awesome does not ship here.
+        Assert.Contains(components, c => c.Name == "zint" && c.License == "BSD-3-Clause");
+        Assert.Contains(components, c => c.Name == "libpng");
+        Assert.DoesNotContain(components, c => c.Name == "Font Awesome");
     }
 
     [Fact]

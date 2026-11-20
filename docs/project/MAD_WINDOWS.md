@@ -233,13 +233,15 @@ libraries, and `mad.exe`:
 
 * **Frameworks.** `MADCocoaExtensions` (7 files), `MADFileManager` (10) and `MAD`
   (168) join the Phase 2/2b set, from the same Linux source lists and with the
-  same exclusion reasons (the UI tail, `MADocument`, the keychain operations, the
-  barcode element, `MADCloud`). `MADDirectoryMonitor` compiles against an inert
-  `sys/inotify.h` shim — the CLI is single-shot and needs no change events.
+  same exclusion reasons (the UI tail, `MADocument`, the keychain operations,
+  `MADCloud`). `MADDirectoryMonitor` compiles against an inert `sys/inotify.h`
+  shim — the CLI is single-shot and needs no change events.
 * **C libraries.** `zlib` 1.3.2, `bzip2` 1.0.8 and `libarchive` 3.8.9 (the Linux
   pins) build in `build.ps1`: zlib and bzip2 by direct clang + `llvm-lib`,
   libarchive through CMake + clang-cl (zlib/bzip2 in; xml2/lzma/zstd/lz4/openssl
-  and the tools out), matching `Linux/lib/libraries.sh` / Compressor.
+  and the tools out), matching `Linux/lib/libraries.sh` / Compressor. The barcode
+  stack — `libpng` 1.6.59 and `zint` 2.16.0 — builds the same way (both through
+  CMake + clang-cl), so `MADBarcodes` compiles and renders here too.
 * **CLI.** `CLI/Source` → `mad.exe`, whole-linked. `inspect`, `schema`, `query`
   and `refresh` (76 rows) run on `London.portable.mad`; all six export digests
   match the Mac/Linux pins byte-for-byte, and `write --reproducible` writes the
@@ -319,8 +321,9 @@ Phase 3b adds the four database drivers and the C libraries they link:
   `err_handler` collides with `MADDatabaseSQLServer.m`'s). The Phase 3a
   `+Identifier:` guard is removed — the registry lookup works with all four drivers
   linked, pinned by `MADDatabaseDriverDispatchTests` (9/9).
-* **Test inventory** — **125 suites + the smoke test, 1294 tests, 6 needs, 5 skips,
-  0 failures**. Live suites against the local `127.0.0.1` containers:
+* **Test inventory** — **127 suites + the smoke test, 1301 tests, 6 needs, 5 skips,
+  0 failures** (the barcode increment added `MADBarcodesTests` and
+  `MADBarcodeExportTests`). Live suites against the local `127.0.0.1` containers:
   `MADMySQLLiveTests` 44/44, `MADTdsClientLiveTests` 29/29, `MADPostgresLiveTests`
   14/14. CLI `mad refresh` returns 50 MySQL / 20 TDS / 25 PostgreSQL rows.
 
@@ -449,10 +452,11 @@ builds .NET).
 Phase 6c extends `serve` with the report-layout model the Designer workspace edits, using the
 same granular pattern as the 6b query-model methods. `layout-model` reads the full snapshot;
 every mutation method mutates the existing `RptqDocumentSection`/`RptqDocumentElement` objects
-and answers that same snapshot, so the client replaces its state atomically. Barcode is an
-accepted gap (the Windows engine excludes `MADBarcodes`); Image is a placeholder (the engine's
-`NSImage`/`UIImage` payload does not exist off Apple); colours are deferred (no portable colour
-type in the headless model). Undo/redo is client-side.
+and answers that same snapshot, so the client replaces its state atomically. Barcode is part of
+the model (the barcode-closure increment added the element kind, its content edits, the
+symbology catalogue, an engine-rendered preview and the WPF composer — §6j). Image is a placeholder
+(the engine's `NSImage`/`UIImage` payload does not exist off Apple); colours are deferred (no
+portable colour type in the headless model). Undo/redo is client-side.
 
 | method | params | result |
 |---|---|---|
@@ -686,6 +690,37 @@ follows Microsoft's Windows 11 design guidance, the native Fluent theme and the
 existing MAD artwork, with the palette and spacing centralised for easy
 retuning. Public `docs/windows.md` and its translations remain deferred.
 
+## 6j. The barcode closure (2026-11-20)
+
+The barcode element is no longer a gap on either side of the boundary.
+
+**Engine.** `MADBarcodes` compiles here (every symbology subclass; `MADBarcodeView` and
+`MADBarcodeCache` stay Apple-only), linking libpng 1.6.59 and zint 2.16.0 from
+`libraries.conf`. `MADBarcode`'s encode pass is shared, and `-renderedPNGData` writes zint's
+RGB bitmap through libpng with no Core Graphics, so the headless engine produces the same
+symbol. `MADPrintPageElementBarcode`, `RptqDocumentElementBarcode+Extras` and
+`MADDocumentObjectDataReferenceBarcode` are in the headless build; the page walk puts the PNG
+on `MADReportLineRepresentation.imageData`, the HTML facsimile embeds it as a data URI (the
+input is the `alt` text), and the JSON report names it with `"image": true`. A barcode with
+`useStaticInput1`/`inputStatic1` renders that string; a bound one reads its query field.
+
+**serve.** `add-element` accepts `"kind": "barcode"` (Code 128, human-readable, static
+`MAD-2026`, 160×48, the Mac's defaults); `layout-model` carries a nested `"barcode"` object
+(symbology id and name, options, input binding, and a base64 PNG `preview` from the same
+render core); `set-element-content` edits the symbology, human-readable flag, border style and
+the static-or-field binding; `duplicate-elements` copies the barcode columns;
+`barcode-types` returns MADBarcode's name table as `{id, name}` sorted by name.
+
+**WPF.** The palette's Barcode button inserts one; the canvas draws the engine's preview
+(text fallback when zint refuses); the inspector shows the symbology picker, Show text, the
+border picker and the input picker (static, which the Text box edits, or a query field).
+`DesignerAcceptanceTests.Barcode_InsertEditBindAndUnbind` and the created-document smoke test
+pin it (the HTML/JSON exports carry the symbol and its text), and the London byte pins are
+unchanged because a barcode-free document's bytes did not move.
+
+**Licence.** zint (BSD-3-Clause) and libpng (PNG Reference Library v2) are in §10, the About
+window's component list and `ThirdParty/Licenses/` (both texts already existed).
+
 ## 7. Supported Windows versions
 
 .NET 10's supported OS matrix (Windows 10 Enterprise 21H2/1809/1607, Windows
@@ -708,8 +743,8 @@ compliance surface:
 * **FreeTDS and MariaDB Connector/C** are statically linked under the existing
   LGPL-3.0 election; the FreeTDS `sybdb.h` edit is marked, and the existing
   relink offer now names the Windows engine.
-* **The C libraries** (SQLite, zlib, bzip2, libarchive, OpenSSL, libpq) use the
-  existing entries and texts in `ThirdParty/Licenses/`.
+* **The C libraries** (SQLite, zlib, bzip2, libarchive, libpng, zint, OpenSSL,
+  libpq) use the existing entries and texts in `ThirdParty/Licenses/`.
 * **Microsoft Edge WebView2** (the WPF Viewer's preview control, NuGet
   `Microsoft.Web.WebView2` 1.0.4314.35) is a Microsoft product, not open-source
   software: the Evergreen WebView2 Runtime is installed with Windows 11 and Edge

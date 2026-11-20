@@ -64,7 +64,7 @@ Once this is complete, the user can go to the MAD Viewer screen and use the refr
 	* `MADPostgres`: Implements `MADDatabasePostgres`, the PostgreSQL subclass of `MADDatabase` over `libpq`.
 	* `MADSqlite3`: A wrapper around Sqlite3.
 	* `MADTds`: A base wrapper around the freetds project.
-	* `MADBarcodes`: This is used for the barcode element.  The framework is maintained, links zint 2.16.0 via the Compressor recipe, and backs the barcode element on Apple; it is deliberately excluded from the Linux build.
+	* `MADBarcodes`: This is used for the barcode element.  The framework is maintained, links zint 2.16.0 via the Compressor recipe, and backs the barcode element on every platform: the Apple drawing path is UIKit/AppKit, and `MADBarcode`'s encode + PNG core is UIKit-free, so the headless engine renders the same symbols.
 	* `MADFeedback`: This is a framework to allow user feedback.  `MADFeedback` is currently unused and unmaintained.
 
 The core iOS app is in `MADDesigner`.  Its source is in `MADDesigner/Source`, and its targets -- the iOS app itself, the native macOS app (`MAD Designer Mac`), the stand-alone viewer, and the unit and UI test bundles -- are in `MADDesigner/Targets`.
@@ -75,7 +75,7 @@ The code base also includes a custom scripting language in a file called `Scrimp
 
 The codebase also includes static library build scrips in a file called `Compressor`.  This is used to build the static libraries used by the project.  This is a very important part of the project.
 
-The codebase also includes `Linux`, the headless engine's build (`docs/project/MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all eleven headless frameworks against them, and runs their ported suites — 126 executables, 1,303 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
+The codebase also includes `Linux`, the headless engine's build (`docs/project/MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all twelve headless frameworks against them, and runs their ported suites — 128 executables, 1,310 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
 
 ## Code Style Guidance
 
@@ -216,7 +216,7 @@ the headless side.
   semantics, the persisted source text (`RptqQuery.sqlSourceText` + the store's first
   versioning step), the phases, and the tests that pin it. Phases A-D implemented and
   merged 2026-10-22 (`c48a39fb7`); Phase E deferred.
-* `Linux/README.md` -- the Linux build: the image, the eleven frameworks and their
+* `Linux/README.md` -- the Linux build: the image, the twelve frameworks and their
   suites, the GNUstep divergences the tests found, and the licences.
 * `docs/project/SATELLITE_REPOS.md` -- the satellite repositories (the
   `mthomason/mad-action` GitHub Action) and the rule that keeps them current: MAD is
