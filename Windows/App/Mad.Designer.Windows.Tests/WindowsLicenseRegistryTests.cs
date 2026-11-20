@@ -10,7 +10,7 @@ public sealed class WindowsLicenseRegistryTests
     public void Components_AreTheWindowsSet_NotApple()
     {
         var components = WindowsLicenseRegistry.Components;
-        Assert.Equal(17, components.Count);
+        Assert.Equal(21, components.Count);
         Assert.Contains(components, c => c.Name == "GNUstep Base" && c.License == "LGPL-2.1-or-later");
         Assert.Contains(components, c => c.Name == "MariaDB Connector/C");
         Assert.Contains(components, c => c.Name == "Microsoft Edge WebView2"
@@ -18,6 +18,11 @@ public sealed class WindowsLicenseRegistryTests
         // The barcode renderer links both; the Apple app's Font Awesome does not ship here.
         Assert.Contains(components, c => c.Name == "zint" && c.License == "BSD-3-Clause");
         Assert.Contains(components, c => c.Name == "libpng");
+        // The PDF stack: cairo, its raster core, the glyph engine and the fonts.
+        Assert.Contains(components, c => c.Name == "cairo" && c.License == "MPL-1.1");
+        Assert.Contains(components, c => c.Name == "pixman");
+        Assert.Contains(components, c => c.Name == "FreeType");
+        Assert.Contains(components, c => c.Name == "Liberation fonts");
         Assert.DoesNotContain(components, c => c.Name == "Font Awesome");
     }
 

@@ -268,6 +268,27 @@ source position is the pinned upstream release; nothing is modified.
 record). The `MADMySQL` layer above the C API was rewritten as first-party
 code in the same pass (§4.1).
 
+### 3.5 The PDF stack (the headless engines only)
+
+The PDF writer (`MADReportExporterPDFCairo`, docs/project/MAD_PDF_LINUX.md) links
+four components the Apple app does not: they are built by `Linux/lib/libraries.sh`
+and `Windows/Engine/build.ps1` from the pins in `Linux/libraries.conf` /
+`Windows/Engine/libraries.conf`, and linked statically into the Linux image's
+`mad` and the Windows `mad.exe`. None is in the Apple app, and Cairo/FreeType/
+pixman are not in `Compressor/matrix.conf`.
+
+| Component | Version | License | Where it is | What it requires |
+|---|---|---|---|---|
+| cairo | 1.18.6 | **MPL-1.1** (the MPL option; upstream is also offered under LGPL-2.1 — this project uses MPL-1.1) | static inside `mad` / `mad.exe` (the PDF surface) | the MPL-1.1 text (`ThirdParty/Licenses/cairo-MPL-1.1.txt`); modifications to MPL files must be published — none are made |
+| pixman | 0.46.4 | MIT | static inside `mad` / `mad.exe` (cairo's raster core) | retain the copyright and permission notice (`ThirdParty/Licenses/pixman-MIT.txt`) |
+| FreeType | 2.15.0 | **FTL** (FreeType License, BSD-style) or GPLv2 — this project uses the FTL | static inside `mad` / `mad.exe` (the glyph engine) | retain the notice; the FTL text (`ThirdParty/Licenses/freetype-FTL.txt`); credit "The FreeType Project" |
+| Liberation fonts 2.1.5 (Sans, Serif, Mono — 12 faces) | 2.1.5 | **SIL OFL 1.1** | data files beside `mad` / `mad.exe` (`/usr/local/share/mad/fonts`, `<exe>/fonts`) | the OFL text must accompany the fonts (`ThirdParty/Licenses/liberation-OFL-1.1.txt`); the fonts are unmodified, and the Reserved Font Names (Liberation, Arimo, Tinos, Cousine) are not used by a modified version |
+
+cairo is built with the PDF surface only (FreeType and zlib in, fontconfig,
+Pango/glib, Xlib/XCB and Quartz out), so no other library is pulled in.
+pixman and cairo are MIT/MPL respectively — neither adds a relink obligation, so
+the offer in `ThirdParty/Licenses/README.md` does not change.
+
 ## 4. Committed third-party source inside the app targets
 
 `DEVELOPER.md` says "nothing third-party is in revision control." That is not
@@ -613,6 +634,10 @@ ship, so they are registered here rather than in §1's app table.
 | gnustep-make | 2.9.3 | GPL-3.0-or-later | **build tooling — not in the runtime image** | nothing; it is not distributed |
 | zint 2.16.0 (backend) | 2.16.0 | BSD-3-Clause | static inside `mad` (the barcode renderer) | the copyright notice, conditions and disclaimer must be reproduced in the materials (`ThirdParty/Licenses/zint-BSD-3-Clause.txt`) |
 | libpng | 1.6.59 | PNG Reference Library v2 | static inside `mad` (the barcode PNG encoder) | the copyright notice may not be removed or altered (`ThirdParty/Licenses/libpng-LICENSE.txt`) |
+| cairo | 1.18.6 (`Linux/libraries.conf`) | MPL-1.1 | static inside `mad` (the PDF surface) | the MPL-1.1 text (§3.5) |
+| pixman | 0.46.4 (`Linux/libraries.conf`) | MIT | static inside `mad` (cairo's raster core) | retain the notice (§3.5) |
+| FreeType | 2.15.0 (`Linux/libraries.conf`) | FTL | static inside `mad` (the PDF glyph engine) | the FTL text and credit (§3.5) |
+| Liberation fonts | 2.1.5 (`Linux/libraries.conf`) | SIL OFL 1.1 | data files in `/usr/local/share/mad/fonts` | the OFL text travels with the fonts (§3.5) |
 | the C libraries (§3.1) | as pinned | as registered | static inside `mad` | the same permissive terms as the app; the image conveys them a second time |
 | the apt runtime packages | Ubuntu 24.04 | distro packages | shared objects in the image | the distro's own licence texts under `/usr/share/doc` |
 
@@ -649,6 +674,10 @@ does not apply to them.
 | SQLite, zlib, bzip2, libarchive | §3.1 pins | as registered | static `.lib` linked into `mad.exe` | the same permissive terms as the app |
 | zint 2.16.0 (backend) | 2.16.0 (`Windows/Engine/libraries.conf`) | BSD-3-Clause | static `.lib` linked into `mad.exe`; the barcode element's encoder | the copyright notice, conditions and disclaimer must be reproduced in the materials (`ThirdParty/Licenses/zint-BSD-3-Clause.txt`) |
 | libpng | 1.6.59 (`Windows/Engine/libraries.conf`) | PNG Reference Library v2 | static `.lib` linked into `mad.exe`; the barcode PNG encoder | the copyright notice may not be removed or altered (`ThirdParty/Licenses/libpng-LICENSE.txt`) |
+| cairo | 1.18.6 (`Windows/Engine/libraries.conf`) | MPL-1.1 | static `.lib` linked into `mad.exe`; the PDF surface | the MPL-1.1 text (§3.5) |
+| pixman | 0.46.4 (`Windows/Engine/libraries.conf`) | MIT | static `.lib` linked into `mad.exe`; cairo's raster core | retain the notice (§3.5) |
+| FreeType | 2.15.0 (`Windows/Engine/libraries.conf`) | FTL | static `.lib` linked into `mad.exe`; the PDF glyph engine | the FTL text and credit (§3.5) |
+| Liberation fonts | 2.1.5 (`Windows/Engine/libraries.conf`) | SIL OFL 1.1 | data files in `Windows/Engine/build/fonts`, shipped beside `mad.exe` | the OFL text travels with the fonts (§3.5) |
 | OpenSSL 3.5.9, FreeTDS 1.4.27, MariaDB Connector/C 3.4.11, libpq 17.11 | §3.1, §3.3–§3.4 pins | Apache-2.0; LGPL-3.0 election; LGPL-3.0 election; PostgreSQL License | static `.lib` linked into `mad.exe` | the same texts and relink mechanism as the app/image; FreeTDS's modified `sybdb.h` is marked |
 | Microsoft Edge WebView2 (SDK and Evergreen Runtime) | `Microsoft.Web.WebView2` 1.0.4314.35 (the app csproj); the runtime is installed with Windows 11 and alongside Microsoft Edge | BSD-3-Clause (SDK) and Microsoft Software License Terms (a Microsoft redistributable, not open source) | the WPF app's report-preview control (`Windows/App/`); the SDK assemblies ship with the app, while the runtime is not bundled, modified or redistributed by this project | the SDK's BSD text, Microsoft's third-party notices, and the runtime attribution in `ThirdParty/Licenses/Windows/WebView2-LICENSE.txt`; no open-source licence text applies to the runtime |
 | Clang/LLVM 20.1.8, lld, Visual Studio 2026, Windows SDK, CMake, Ninja, NASM, MSYS2, Perl | `Windows/Engine/toolchain.conf` | build tooling | not distributed | nothing |

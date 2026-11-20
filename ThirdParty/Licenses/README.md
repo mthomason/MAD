@@ -22,6 +22,10 @@ runtime texts under `Windows/`; see the Windows relink offer below and
 | `libarchive-BSD-2-Clause.txt` | libarchive | `Compressor/build/libarchive/source/src/COPYING` (pinned 3.8.9). |
 | `zint-BSD-3-Clause.txt` | zint backend | `Compressor/build/zint/source/src/LICENSE` (pinned 2.16.0). |
 | `libpng-LICENSE.txt` | libpng | `Compressor/build/libpng/source/src/LICENSE` (pinned 1.6.59). |
+| `cairo-MPL-1.1.txt` | cairo | `COPYING-MPL-1.1` at the pinned 1.18.6 commit (`Linux/libraries.conf`). The project uses the MPL option, not the LGPL one. |
+| `pixman-MIT.txt` | pixman | `COPYING` at the pinned 0.46.4 commit (`Linux/libraries.conf`). |
+| `freetype-FTL.txt` | FreeType | `docs/FTL.TXT` in the pinned 2.15.0 tarball (`Linux/libraries.conf`). The FTL option is used, not GPLv2. |
+| `liberation-OFL-1.1.txt` | Liberation Sans/Serif/Mono | `LICENSE` in the pinned `liberation-fonts-ttf-2.1.5.tar.gz` (`Linux/libraries.conf`); the fonts are unmodified, so the Reserved Font Names are unaffected. |
 | `bzip2-LICENSE.txt` | bzip2 | `Compressor/build/bzip2/source/src/LICENSE` (pinned 1.0.8). |
 | `zlib-LICENSE.txt` | zlib | `Compressor/build/zlib/source/src/LICENSE` (pinned 1.3.2). |
 | `sqlite3-LICENSE.md` | SQLite | `Compressor/build/sqlite3/source/src/LICENSE.md` (pinned 3.53.3). |
