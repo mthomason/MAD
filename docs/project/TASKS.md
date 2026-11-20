@@ -684,6 +684,10 @@ frameworks.
   *Updated 2026-11-20:* the barcode-closure increment moved the three
   MADBarcodes-backed element files into this build and added libpng and zint
   to the libraries layer; the paragraph above is the Phase C record.
+  *Also 2026-11-20:* the image closure made the picture headless — off Apple
+  `MADElementImage`/`MADReferenceImage` are the store's PNG `NSData`, and
+  `MADPrintPageElementImage` answers `-renderedImageData`, so the HTML and
+  JSON-report formats carry the picture with no new source file or library.
 * **The libraries layer.** `Linux/libraries.conf` + `lib/libraries.sh` build
   sqlite3 3.53.3 (the released amalgamation, compiled with the option list in
   `Compressor/sqlite3.xcconfig`), openssl 3.5.9, freetds 1.4.27, zlib 1.3.2,

@@ -554,9 +554,11 @@ same", so:
   window now formats and walks.  `MADOperationRefreshInitialize`'s render branch keys
   on the protocol instead of on `[doc isKindOfClass: [MADocument class]]`.
 * The element family compiles headless: `MADPrintPageElement`'s initialisers are
-  Foundation (the text is resolved there), and only the `-drawInRect:` bodies and the
-  image's `UIImage` are `#if __APPLE__`.  `MADElementStylizedText` stays Apple's — it
-  is drawing, not layout.
+  Foundation (the text is resolved there), and only the `-drawInRect:` bodies are
+  `#if __APPLE__`.  Off Apple the image element's picture is the store's PNG bytes
+  (`MADElementImage` is `NSData`), and `-renderedImageData` hands them to the line
+  representation the exporters read.  `MADElementStylizedText` stays Apple's — it is
+  drawing, not layout.
 
 **Pagination needs no text engine**, measured rather than assumed: a section's display
 height comes from `MADSectionLayout` (stored rect + margin + padding + border), which

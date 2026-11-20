@@ -321,10 +321,11 @@ Phase 3b adds the four database drivers and the C libraries they link:
   `err_handler` collides with `MADDatabaseSQLServer.m`'s). The Phase 3a
   `+Identifier:` guard is removed — the registry lookup works with all four drivers
   linked, pinned by `MADDatabaseDriverDispatchTests` (9/9).
-* **Test inventory** — **127 suites + the smoke test, 1301 tests, 6 needs, 5 skips,
-  0 failures** (the barcode increment added `MADBarcodesTests` and
-  `MADBarcodeExportTests`). Live suites against the local `127.0.0.1` containers:
-  `MADMySQLLiveTests` 44/44, `MADTdsClientLiveTests` 29/29, `MADPostgresLiveTests`
+* **Test inventory** — **129 suites + the smoke test, 1308 tests, 6 needs, 5 skips
+  (48 when the live containers are not running), 0 failures** (the barcode increment
+  added `MADBarcodesTests` and `MADBarcodeExportTests`; the image closure added
+  `MADImageElementTests` and `MADImageExportTests`). Live suites against the local
+  `127.0.0.1` containers: `MADMySQLLiveTests` 44/44, `MADTdsClientLiveTests` 29/29, `MADPostgresLiveTests`
   14/14. CLI `mad refresh` returns 50 MySQL / 20 TDS / 25 PostgreSQL rows.
 
 ## 6d. Phase 4 — the stdio JSON process contract
@@ -454,19 +455,19 @@ same granular pattern as the 6b query-model methods. `layout-model` reads the fu
 every mutation method mutates the existing `RptqDocumentSection`/`RptqDocumentElement` objects
 and answers that same snapshot, so the client replaces its state atomically. Barcode is part of
 the model (the barcode-closure increment added the element kind, its content edits, the
-symbology catalogue, an engine-rendered preview and the WPF composer — §6j). Image is a placeholder
-(the engine's `NSImage`/`UIImage` payload does not exist off Apple); colours are deferred (no
+symbology catalogue, an engine-rendered preview and the WPF composer — §6j; the image
+closure followed with PNG content and the WPF file picker — §6k). Colours are deferred (no
 portable colour type in the headless model). Undo/redo is client-side.
 
 | method | params | result |
 |---|---|---|
 | `layout-model` | `handle` | `paperSize`, `sections[]`, `elements[]`, `fields[]` |
-| `add-element` | `handle`, `kind` (`label`\|`data-field`\|`aggregate`\|`image`\|`line`), `section`, `x`, `y` | the full snapshot |
+| `add-element` | `handle`, `kind` (`label`\|`data-field`\|`aggregate`\|`image`\|`line`\|`barcode`), `section`, `x`, `y`; `data` for an image (base64 PNG) | the full snapshot |
 | `remove-elements` | `handle`, `elements: [id…]` | the full snapshot |
 | `duplicate-elements` | `handle`, `elements: [id…]` | the full snapshot |
 | `move-elements` | `handle`, `elements: [id…]`, `section` | the full snapshot |
 | `set-element-geometry` | `handle`, `elements: [{id,x,y,w,h}…]` | the full snapshot |
-| `set-element-content` | `handle`, `element`, `content{text,field,function,scope,group}` | the full snapshot |
+| `set-element-content` | `handle`, `element`, `content{text,field,function,scope,group,barcodeType,humanReadable,borderStyle,data}` (`data` is an image's base64 PNG; empty clears it) | the full snapshot |
 | `set-element-typography` | `handle`, `elements: [id…]`, `style{fontname,fontsize,bold,italic,underline,strikethrough,hAlign,vAlign}` | the full snapshot |
 | `set-element-box-model` | `handle`, `elements: [id…]`, `box{borderTop,borderBottom,borderLeft,borderRight,padding,margin}` | the full snapshot |
 | `set-section` | `handle`, `section`, `{height,visible,pageBreak}` | the full snapshot |
@@ -479,8 +480,10 @@ Header, Group Headers, Detail, Group Footers, Page Footer, Report Footer), each 
 (`MADPrintPageElementType`), `section`, `x/y/w/h`, `text`, `field` (bound query-field id),
 `table`/`column`, `function`/`scope`/`group` (aggregate), `fontname`/`fontsize`,
 `bold`/`italic`/`underline`/`strikethrough`, `hAlign`/`vAlign`, `borderTop`/`borderBottom`/
-`borderLeft`/`borderRight`, `padding` and `margin`. `fields[]` lists the query fields (with
-store ids) for the sidebar browser and the binding popup.
+`borderLeft`/`borderRight`, `padding` and `margin`. A barcode element additionally carries the
+nested `barcode` object (§6j); an image element carries `image{data}`, the stored picture as
+base64 PNG (empty when it has none — §6k). `fields[]` lists the query fields (with store ids)
+for the sidebar browser and the binding popup.
 
 ## 6g. Phase 6d — the Viewer workspace (render, page size, export, print)
 
@@ -720,6 +723,34 @@ unchanged because a barcode-free document's bytes did not move.
 
 **Licence.** zint (BSD-3-Clause) and libpng (PNG Reference Library v2) are in §10, the About
 window's component list and `ThirdParty/Licenses/` (both texts already existed).
+
+## 6k. The image closure (2026-11-20)
+
+The image element stops being a placeholder. No library was added: the store's image column
+already holds PNG bytes.
+
+**Engine.** Off Apple `MADReferenceImage` and `MADElementImage` are `NSData` — the store's
+wire format itself — so the model is headless-ready and `RptqDocumentElementImage (Extras)`
+gained the portable `-pngData` / `-setPngData:`, which store the bytes verbatim everywhere
+(Apple's `-image` accessors still code/decode the picture where UIKit/AppKit exists).
+`MADPrintPageElementImage -renderedImageData` answers the stored PNG, so
+`MADReportLineRepresentation.imageData` — the barcode closure's seam — carries a picture too:
+the HTML facsimile embeds it as a `data:image/png;base64,…` URI and the JSON report names it
+`"image": true` with no text. On Apple the PDF path still draws the element and
+`-renderedImageData` answers nil, which is the pre-existing Mac export behaviour.
+
+**serve.** `add-element` accepts `"kind": "image"` with an optional base64 `"data"` (decoded
+before the element is inserted, so a malformed request leaves nothing behind); `layout-model`
+carries a nested `"image"` object `{data}`; `set-element-content` accepts `"data"` (base64 PNG;
+empty clears it); `duplicate-elements` copies the picture.
+
+**WPF.** The palette's Image button inserts an element; the inspector shows a localized
+"Choose Image…" button for a selected image (the Mac inspector's row). The picker decodes any
+PNG/JPEG through WIC and re-encodes it as PNG (`ImageFileEncoder`) before sending it — the
+column is always PNG, so the HTML data URI is honest. The canvas draws the stored picture and
+falls back to the `[Image]` placeholder when the element has none. `ImageElementTests`,
+`DesignerCanvasTests` and the created-document smoke test pin the protocol, the picker's
+re-encode and the canvas.
 
 ## 7. Supported Windows versions
 

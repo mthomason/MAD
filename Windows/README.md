@@ -13,8 +13,9 @@ This increment builds all twelve headless frameworks — **MADDataStructures**,
 pinned SQLite, zlib, bzip2, libarchive, libpng, zint, OpenSSL, FreeTDS, MariaDB
 Connector/C and libpq libraries, and builds **`mad.exe`** from `CLI/Source`. It
 runs the ported Linux test suites (GNUstep `Testing.h` + `MADTestSupport.h`) plus
-a smoke test: 127 suites, 1301 tests, 6 needs, 5 skips, 0 failures, including the
-live MySQL/SQL Server/PostgreSQL suites against the local `127.0.0.1` containers.
+a smoke test: 129 suites, 1308 tests, 6 needs, 5 skips (48 without the live
+containers), 0 failures, including the live MySQL/SQL Server/PostgreSQL suites
+against the local `127.0.0.1` containers.
 `mad.exe` runs `inspect`, `schema`, `query`, `refresh` (76 rows on the London
 fixture), `export` in every format, and `write --reproducible` — all with
 byte-identical digests to the Mac/Linux pins in `Linux/README.md`.
