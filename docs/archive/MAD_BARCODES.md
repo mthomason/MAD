@@ -728,12 +728,14 @@ Do not push.
 
 ## 5. Follow-ups (documented here, deliberately not built)
 
-- **Headless barcode rendering.** `MADBarcodes` is UIKit-bound (`UIGraphics`,
-  `UIColor`, `NSStringDrawing`, `UIView`) and zint is not in `Linux/libraries.conf`.
-  A headless path would need a UIKit-free render core (zint's own PNG output is one
-  candidate) plus a zint pin in the image — the `Linux/CLAUDE.md` "Adding the next
-  framework" recipe applies. Until then the Linux build keeps excluding the three
-  barcode files and the element type stays model-only there, exactly as today.
+- **Headless barcode rendering — landed 2026-11-20 (`barcode-closure`).**
+  `MADBarcode` gained a UIKit-free PNG core (`-renderedPNGData`: zint's RGB bitmap
+  through libpng), zint 2.16.0 and libpng 1.6.59 are pinned in `Linux/libraries.conf`
+  and `Windows/Engine/libraries.conf`, and the Linux/Windows builds compile the
+  framework and the three barcode-backed MAD files. The page walk hands the symbol
+  to `MADReportLineRepresentation`, and the HTML and JSON-report exporters embed it.
+  The Windows WPF designer has the composer (symbology, human-readable, border,
+  static-or-field input). This entry is kept as the record of the gap it closed.
 - **GS1 / Data input mode.** The input mode is hardwired to Unicode in the encoder;
   the private `MADBarcodeDataInputType` enum exists but the GS1/Data modes are not
   wired to the option fields.

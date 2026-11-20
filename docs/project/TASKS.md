@@ -681,6 +681,9 @@ frameworks.
   the keychain operations (§4), and the MADBarcodes-backed element files
   (§3: unused; the element *type* stays in the model and the two creation
   paths log-and-skip it off Apple).
+  *Updated 2026-11-20:* the barcode-closure increment moved the three
+  MADBarcodes-backed element files into this build and added libpng and zint
+  to the libraries layer; the paragraph above is the Phase C record.
 * **The libraries layer.** `Linux/libraries.conf` + `lib/libraries.sh` build
   sqlite3 3.53.3 (the released amalgamation, compiled with the option list in
   `Compressor/sqlite3.xcconfig`), openssl 3.5.9, freetds 1.4.27, zlib 1.3.2,

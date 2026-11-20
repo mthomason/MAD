@@ -7,12 +7,12 @@ The native Windows engine and its WPF application (see
 [`README.md`](README.md)). It compiles the engine's Objective-C frameworks
 against GNUstep Base with Clang, the Windows sibling of the Linux build, and
 `App/` is the WPF app on top of the `mad serve` process boundary (Phases 5 and
-6a–6e). It builds all eleven headless frameworks (MADDataStructures, MADFoundation,
-MADAPI, MADSqlite3, MADCocoaExtensions, MADFileManager, MAD, plus the four drivers
-MADMySQL, MADTds, MADTdsClient, MADPostgres), compiles the pinned
-SQLite/zlib/bzip2/libarchive and OpenSSL/FreeTDS/MariaDB/libpq libraries, builds
-`mad.exe` from `CLI/Source`, and runs the ported Linux test suites (125 suites +
-the smoke test, 1294 tests, 6 needs, 5 skips, 0 failures).
+6a–6e). It builds all twelve headless frameworks (MADDataStructures, MADFoundation,
+MADAPI, MADSqlite3, MADCocoaExtensions, MADFileManager, MAD, MADBarcodes, plus the
+four drivers MADMySQL, MADTds, MADTdsClient, MADPostgres), compiles the pinned
+SQLite/zlib/bzip2/libarchive/libpng/zint and OpenSSL/FreeTDS/MariaDB/libpq
+libraries, builds `mad.exe` from `CLI/Source`, and runs the ported Linux test
+suites (127 suites + the smoke test, 1301 tests, 6 needs, 5 skips, 0 failures).
 
 ## Layout
 
@@ -31,8 +31,9 @@ the smoke test, 1294 tests, 6 needs, 5 skips, 0 failures).
     toolchain bootstrap, the SQLite library build, the framework build, the
     test build, and the test run.
 *   **`Engine/libraries.conf`** — the C-library pins (sqlite3, zlib, bzip2,
-    libarchive, and the four drivers openssl/freetds/mariadb/postgres), the same
-    shape as `Linux/libraries.conf`; read by `build.ps1`.
+    libarchive, libpng and zint, and the four drivers
+    openssl/freetds/mariadb/postgres), the same shape as
+    `Linux/libraries.conf`; read by `build.ps1`.
 *   **`Engine/cmake/<Name>Sources.cmake`** — the per-framework source lists and
     exclusion reasons, mirroring `Linux/cmake/`. These are the canonical file
     inventory; `build.ps1` reads them back so the two cannot drift.

@@ -5,10 +5,10 @@
 `docs/project/MAD_LINUX.md` §9: Phase B proved the toolchain (a Dockerfile that
 source-builds clang + libobjc2 + GNUstep Base and compiled a MADFoundation
 subset); Phase C is the §4 shim list, and this directory is where it lands.
-The build now compiles **all eleven headless frameworks** — every framework in
-docs/project/MAD_LINUX.md §3's table plus `MADPostgres`, except the UI-only ones (`MADExplorer`, `MADBarcodes`,
+The build now compiles **all twelve headless frameworks** — every framework in
+docs/project/MAD_LINUX.md §3's table plus `MADPostgres`, except the UI-only ones (`MADExplorer`,
 `MADFeedback`, `Scrimpter`, the app) — and runs their suites inside the
-container: 126 test executables, 1,303 tests, 7 recorded needs. The test
+container: 128 test executables, 1,310 tests, 7 recorded needs. The test
 coverage master merged on 2026-10-10 (~100 Xcode test files) is ported in
 full, suite for suite. Nothing here ships in the app; the CLI — Phase D's
 checkpoint — builds and runs here too (see "The CLI runs here" below), and
@@ -73,6 +73,9 @@ the Compressor matrix next door; nothing here ships.
 	zlib         1.3.2
 	bzip2        1.0.8    CC=clang: its Makefile hardcodes gcc
 	libarchive   3.8.9    the .mad container's tar/bzip2 path
+	libpng       1.6.59   static, against zlib; the barcode renderer's PNG encoder
+	zint         2.16.0   the barcode backend (ZINT_STATIC, frontend off, PNG on),
+	                       mirroring Compressor/lib/recipes/zint.sh
 	mariadb      3.4.11   the mariadbclient static target, openssl + external
 	                       zlib, auth plugins static, others off (mirrors
 	                       Compressor/lib/recipes/mariadb.sh)
@@ -347,7 +350,7 @@ is build tooling and is not in the runtime image.
 ## The CLI runs here — Phase D
 
 `mad` is built by this CMakeLists from `CLI/Source` (the same sources
-`CLI/build.sh` builds for the iOS Simulator), links the eleven frameworks
+`CLI/build.sh` builds for the iOS Simulator), links the twelve frameworks
 whole-archive, and runs in the image:
 
 	/build/mad inspect <document.mad>

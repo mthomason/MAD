@@ -95,7 +95,7 @@ contract: whichever side writes the store, the other reads it.
 | `MADMySQL` | yes | 0 Apple imports |
 | `MADTds` / `MADTdsClient` | yes | 0 Apple imports |
 | `MADExplorer` | no | file-explorer UI (19 of 32 files import UIKit) |
-| `MADBarcodes` | no | Apple-only: UIKit render path plus zint, which the image does not carry; the element type stays model-only headless |
+| `MADBarcodes` | yes | the encode + PNG core is portable (zint + libpng); only `MADBarcodeView` and `MADBarcodeCache` stay Apple-side |
 | `MADFeedback` | no | unused and unmaintained |
 | `Scrimpter` | no | 0 Apple imports, but unused |
 | `MADDesigner` (app) | no | 302 UIKit files; the UI stays on Apple platforms |
@@ -278,7 +278,7 @@ Every vendored library is portable C with an upstream autoconf/cmake build:
 | libarchive | 3.8.9 | BSD-2 | native |
 | freetds | 1.4.27 | LGPL-2.0+ | native (recipe has a BSD `sed -i ''` nit to fix) |
 | mysqlclient | 8.4.10 | **GPL-2.0 + FOSS exception** | native — **but GPL is a shipping blocker for a proprietary binary**; MariaDB Connector/C (LGPL-2.1) is the already-named replacement in `LICENSE_COMPLIANCE_PLAN.md` |
-| zint | 2.16.0 | BSD-3 | native (unused barcode backend) |
+| zint | 2.16.0 | BSD-3 | native; the barcode backend MADBarcodes' PNG core links (with libpng above) |
 
 Plus the in-tree C (`miniz`, `madmath`, `madpng`, `madtar`, `madlib` — all portable,
 all permissively licensed). Only Compressor's *packaging* layer is Apple-specific
@@ -419,8 +419,8 @@ defects, both fixed and in `BUGS.md`: the framework targets had dropped
 framework Debug build), and MAD's document fixtures shared one store across
 runs. A libraries
 layer (`Linux/libraries.conf`, `Linux/lib/libraries.sh`) builds sqlite3,
-openssl, freetds, zlib, bzip2, libarchive and mysqlclient natively into the
-image (§7's C libraries; nothing ships). The long-tail items went the way §4
+openssl, freetds, zlib, bzip2, libarchive, libpng, zint and mysqlclient natively
+into the image (§7's C libraries; nothing ships). The long-tail items went the way §4
 predicted — the `asl.h`/`vm_param.h` imports were vestigial, `copyfile(3)`
 became POSIX, `CFHost` became `getaddrinfo`, the CF sites became a
 `CFNumberGetValue` shim — and the UIKit/CoreGraphics tail is excluded
