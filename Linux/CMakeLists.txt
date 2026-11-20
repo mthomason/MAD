@@ -128,6 +128,16 @@ find_library(BZIP2_LIBRARY bz2 REQUIRED)
 # encodes through, both static into /usr/local.
 find_library(ZINT_LIBRARY zint REQUIRED)
 find_library(PNG_LIBRARY png REQUIRED)
+# The PDF stack (Linux/lib/libraries.sh): cairo's PDF surface, the pixman raster
+# core it is built on, and FreeType, which cairo shapes the bundled Liberation
+# glyphs through (MADReportExporterPDFCairo).
+find_library(CAIRO_LIBRARY cairo REQUIRED)
+find_library(FREETYPE_LIBRARY freetype REQUIRED)
+find_library(PIXMAN_LIBRARY pixman-1 REQUIRED)
+# cairo installs its public headers under include/cairo and FreeType under
+# include/freetype2; neither is on the compiler's default search path.
+find_path(CAIRO_INCLUDE_DIR cairo-pdf.h HINTS /usr/local/include/cairo /usr/include/cairo REQUIRED)
+find_path(FREETYPE_INCLUDE_DIR ft2build.h HINTS /usr/local/include/freetype2 /usr/include/freetype2 REQUIRED)
 
 enable_testing()
 
@@ -421,6 +431,7 @@ mad_add_framework(mad MAD_SOURCES
 	MADBarcodeExportTests
 	MADImageElementTests
 	MADImageExportTests
+	MADPDFExportTests
 	MADReportSectionEnumeratorTests
 	MADReportSectionRepresentationTests
 	MADReportSectionTests
@@ -442,7 +453,8 @@ mad_add_framework(mad MAD_SOURCES
 # the Xcode target's header search paths do.
 target_include_directories(mad PRIVATE
 	"${SOURCE_DIR}" "${SOURCE_DIR}/model" "${SOURCE_DIR}/rptq"
-	"${SOURCE_DIR}/rptq/autogen" "${SOURCE_DIR}/rptq/store" "${SOURCE_DIR}/sql" "${SOURCE_DIR}/paper")
+	"${SOURCE_DIR}/rptq/autogen" "${SOURCE_DIR}/rptq/store" "${SOURCE_DIR}/sql" "${SOURCE_DIR}/paper"
+	"${CAIRO_INCLUDE_DIR}" "${FREETYPE_INCLUDE_DIR}")
 target_include_directories(mad PUBLIC
 	"${CMAKE_BINARY_DIR}/sqlite3-shim" "${CMAKE_BINARY_DIR}/sybdb-shim"
 	"${CMAKE_BINARY_DIR}/umbrella-shim" "${CMAKE_BINARY_DIR}/libpq-shim")
@@ -462,7 +474,12 @@ target_link_libraries(mad PUBLIC
 	"$<LINK_LIBRARY:WHOLE_ARCHIVE,madpostgres>"
 	${SQLITE3_LIBRARY} ${FREETDS_LIBRARY} ${MYSQL_LIBRARY} ${PQ_LIBRARY} ${PGCOMMON_LIBRARY} ${PGPORT_LIBRARY}
 	${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY}
-	${ARCHIVE_LIBRARY} ${ZLIB_LIBRARY} ${BZIP2_LIBRARY})
+	${ARCHIVE_LIBRARY} ${ZLIB_LIBRARY} ${BZIP2_LIBRARY}
+	# cairo's own references are to pixman, FreeType, zlib and libpng; the archives
+	# are static, so the two it also pulls in (zlib and libpng) are named again
+	# after it -- GNU ld resolves a static archive's symbols only from the entries
+	# to its right.
+	${CAIRO_LIBRARY} ${FREETYPE_LIBRARY} ${PIXMAN_LIBRARY} ${PNG_LIBRARY} ${ZLIB_LIBRARY} ${CMAKE_DL_LIBS} m)
 # These suites install chinook.sqlite3 into the same per-user Application
 # Support directory and refresh the same London fixture into the same cache
 # directory, MADArchiveManagerTests opens the same fixture headlessly into the
@@ -472,7 +489,7 @@ target_link_libraries(mad PUBLIC
 # MADArchiveManagerTests failures), so they take turns.  The rest of the suite
 # stays parallel.
 set_tests_properties(MADHeadlessDocumentTests MADReportExporterTests MADArchiveManagerTests MADBarcodeExportTests
-	MADImageExportTests
+	MADImageExportTests MADPDFExportTests
 	PROPERTIES RESOURCE_LOCK mad-london-fixture)
 target_include_directories(madtdsclient PUBLIC "${CMAKE_BINARY_DIR}/umbrella-shim")
 target_link_libraries(madtdsclient PUBLIC madtds madapi madcocoaextensions madfoundation)

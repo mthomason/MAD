@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MAD subset the Linux build compiles (docs/project/MAD_LINUX.md §9): 171 of the 199
+# The MAD subset the Linux build compiles (docs/project/MAD_LINUX.md §9): 172 of the 200
 # implementation files under MAD/Source -- the data, model, store, query and
 # archive side, and since Phase E the render half (the formatter, the page walk,
 # the element family and the shared render reads).  The 28 that stay on Apple
@@ -123,6 +123,7 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/MADReportExporterJSON.m"
 	"${SOURCE_DIR}/MADReportExporterJSONReport.m"
 	"${SOURCE_DIR}/MADReportExporterPDF.m"
+	"${SOURCE_DIR}/MADReportExporterPDFCairo.m"
 	"${SOURCE_DIR}/MADReportExporterRegistry.m"
 	"${SOURCE_DIR}/MADReportExporterText.m"
 	"${SOURCE_DIR}/MADReportExportSource.m"

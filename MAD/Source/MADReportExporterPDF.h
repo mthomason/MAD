@@ -5,18 +5,20 @@
 //  MAD
 //
 //  `--format pdf`: the rendered report, drawn.  Pages come from the same walk
-//  json-report reads and the HTML facsimile prints from (MADReportPageBuilder), and
-//  the drawing is MADPrintPageRenderer's -- UIKit's UIPrintPageRenderer over Core
-//  Graphics, which is Apple's alone, so this format registers everywhere and answers
-//  +isAvailable NO where the renderer is not compiled.  It is the CLI's own arm moved
-//  onto the seam (docs/project/MAD_CLI.md §5.3), and the render-half protocol's second customer.
+//  json-report reads and the HTML facsimile prints from (MADReportPageBuilder).
+//  The drawing is MADPrintPageRenderer's on Apple -- UIKit's UIPrintPageRenderer
+//  over Core Graphics -- and MADReportExporterPDFCairo's everywhere else: a Cairo
+//  PDF surface with FreeType glyphs from the bundled Liberation faces.  The format
+//  is available on every platform; the two writers target structural parity (same
+//  pages, frames and text), not the same bytes (docs/project/MAD_PDF_LINUX.md).
 //
-//  `--out` is required: Core Graphics writes a file, not a stream.
+//  `--out` is required: a PDF is a file, not a stream.
 //
-//  With MADReportExportOptionsDeterministic the export pins what Core Graphics takes
-//  from the clock -- the creation and modification dates and the trailer identifier --
-//  so two runs over an unchanged report are the same bytes and a difference means a
-//  real one.  Every replacement is the same length as what it replaces, so the
+//  With MADReportExportOptionsDeterministic the export pins what the writer would
+//  otherwise take from the clock -- Core Graphics' creation and modification dates
+//  and trailer identifier, Cairo's creation and modification dates -- so two runs
+//  over an unchanged report are the same bytes and a difference means a real one.
+//  On Apple every replacement is the same length as what it replaces, so the
 //  cross-reference offsets stay correct and the file is still a valid PDF.
 //
 

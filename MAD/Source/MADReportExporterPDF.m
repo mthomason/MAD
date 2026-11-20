@@ -6,7 +6,8 @@
 //
 //  See MADReportExporterPDF.h.  The drawing sequence is MADCLIDocument's, moved here
 //  unchanged so the bytes stay the bytes; the metadata pinning is MADCLIPinPDFMetadata's,
-//  moved with it.
+//  moved with it.  That is the Apple arm; the non-Apple arm is MADReportExporterPDFCairo's
+//  -- the same walked pages, drawn into a Cairo PDF surface.
 //
 
 #if ! __has_feature(objc_arc)
@@ -18,6 +19,12 @@
 #import "MADReportExporterRegistry.h"
 #import "MADReportFormatter.h"
 #import "MADReportPageBuilder.h"
+
+#if ! __APPLE__
+// The headless sibling: the same walked pages, drawn into a Cairo PDF surface
+// instead of a Core Graphics context (MADReportExporterPDFCairo.h).
+#import "MADReportExporterPDFCairo.h"
+#endif
 
 #import <MAD/MADDocumentRenderProtocol.h>
 
@@ -145,21 +152,13 @@ static void MADReportExporterPinPDFMetadata(NSURL *url) {
 }
 
 + (BOOL)isAvailable {
-#if __APPLE__
+	// Apple draws it with Core Graphics; Linux and Windows draw the same walked
+	// pages with Cairo and FreeType (MADReportExporterPDFCairo).
 	return YES;
-#else
-	return NO;
-#endif
 }
 
 + (NSString *)unavailableReason {
-#if __APPLE__
 	return nil;
-#else
-	return @"PDF is a Core Graphics context drawn by a UIPrintPageRenderer, neither of which exists "
-			"off Apple.  The report's pages are the same everywhere -- --format html prints them from "
-			"a browser, and a Linux PDF writer is the next step (docs/project/MAD_LINUX.md §10.2).";
-#endif
 }
 
 - (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
@@ -168,12 +167,12 @@ static void MADReportExporterPinPDFMetadata(NSURL *url) {
 				 error:(NSError * _Nullable __autoreleasing *)error {
 
 #if !__APPLE__
-	if (error) {
-		*error = [NSError errorWithDomain: @"MADReportExport"
-									 code: 3
-								 userInfo: @{ NSLocalizedDescriptionKey: [MADReportExporterPDF unavailableReason] }];
-	}
-	return NO;
+	// The headless body: the walk is the same, the surface is Cairo's PDF surface
+	// and the glyphs are FreeType's from the bundled Liberation faces.
+	return [MADReportExporterPDFCairo writeDocument: document
+											  toURL: url
+											options: options
+											  error: error];
 #else
 
 	if (![document conformsToProtocol: @protocol(MADDocumentRenderProtocol)]) {
