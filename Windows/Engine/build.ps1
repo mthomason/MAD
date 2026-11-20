@@ -267,6 +267,85 @@ if (-not (Test-Path $zlibLib)) {
 	Write-Host "  ok   zlib.lib (cached)"
 }
 
+# libpng 1.6.59 and zint 2.16.0 -- the barcode stack MADBarcodes links.  libpng
+# is built through CMake with clang-cl (its pnglibconf.h is generated from the
+# feature checks, the same reason libarchive is); zint is the pinned 2.16.0
+# recipe's option set, with the libpng just built.  Static only: both are linked
+# into mad.exe, nothing is installed.
+$libpngDir = Get-LibrarySource "libpng" (Get-LibraryPin "libpng")
+$libpngBuild = Join-Path $BuildDir "libpng-cmake"
+$libpngInstall = Join-Path $BuildDir "libpng-install"
+$libpngInclude = Join-Path $libpngInstall "include"
+$libpngLib = Join-Path $libpngInstall "lib\libpng16_static.lib"
+if (-not (Test-Path $libpngLib)) {
+	Write-Host "  configuring libpng (cmake + clang-cl; static)"
+	$lpSource = $libpngDir -replace '\\', '/'
+	$lpBuild = $libpngBuild -replace '\\', '/'
+	$lpInstall = $libpngInstall -replace '\\', '/'
+	$zlibLibFwd = $zlibLib -replace '\\', '/'
+	$zlibDirFwd = $zlibDir -replace '\\', '/'
+	& cmake -S $lpSource -B $lpBuild -G Ninja `
+		"-DCMAKE_POLICY_VERSION_MINIMUM=3.5" `
+		"-DCMAKE_C_COMPILER=clang-cl" "-DCMAKE_BUILD_TYPE=Release" `
+		"-DPNG_SHARED=OFF" "-DPNG_STATIC=ON" "-DPNG_TESTS=OFF" "-DPNG_TOOLS=OFF" `
+		"-DZLIB_LIBRARY=$zlibLibFwd" "-DZLIB_INCLUDE_DIR=$zlibDirFwd" `
+		"-DCMAKE_INSTALL_PREFIX=$lpInstall" `
+		2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "libpng configure failed" }
+	& cmake --build $lpBuild --target png_static 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "libpng build failed" }
+	& cmake --install $lpBuild 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "libpng install failed" }
+	if (-not (Test-Path $libpngLib)) { throw "libpng16_static.lib not installed at $libpngLib" }
+	Write-Host "  ok   libpng.lib built"
+} else {
+	Write-Host "  ok   libpng.lib (cached)"
+}
+
+$zintDir = Get-LibrarySource "zint" (Get-LibraryPin "zint")
+$zintBuild = Join-Path $BuildDir "zint-cmake"
+$zintInstall = Join-Path $BuildDir "zint-install"
+$zintInclude = Join-Path $zintInstall "include"
+$zintLib = Join-Path $zintInstall "lib\zint-static.lib"
+if (-not (Test-Path $zintLib)) {
+	Write-Host "  configuring zint (cmake + clang-cl; static, PNG output)"
+	$znSource = $zintDir -replace '\\', '/'
+	$znBuild = $zintBuild -replace '\\', '/'
+	$znInstall = $zintInstall -replace '\\', '/'
+	$libpngLibFwd = $libpngLib -replace '\\', '/'
+	$libpngIncludeFwd = $libpngInclude -replace '\\', '/'
+	$zlibLibFwd = $zlibLib -replace '\\', '/'
+	$zlibDirFwd = $zlibDir -replace '\\', '/'
+	& cmake -S $znSource -B $znBuild -G Ninja `
+		"-DCMAKE_POLICY_VERSION_MINIMUM=3.5" `
+		"-DCMAKE_C_COMPILER=clang-cl" "-DCMAKE_CXX_COMPILER=clang-cl" "-DCMAKE_BUILD_TYPE=Release" `
+		"-DZINT_SHARED=OFF" "-DZINT_STATIC=ON" "-DZINT_FRONTEND=OFF" "-DZINT_USE_PNG=ON" `
+		"-DPNG_INCLUDE_DIR=$libpngIncludeFwd" "-DPNG_LIBRARY=$libpngLibFwd" `
+		"-DZLIB_INCLUDE_DIR=$zlibDirFwd" "-DZLIB_LIBRARY=$zlibLibFwd" `
+		"-DCMAKE_INSTALL_PREFIX=$znInstall" `
+		2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "zint configure failed" }
+	& cmake --build $znBuild --target zint-static 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "zint build failed" }
+	& cmake --install $znBuild 2>&1 | ForEach-Object { Write-Host $_ }
+	if ($LASTEXITCODE -ne 0) { throw "zint install failed" }
+	if (-not (Test-Path $zintLib)) {
+		# A CMake that does not install the static archive still builds it; the
+		# build dir holds zint-static.lib.
+		$found = Get-ChildItem -Path $zintBuild -Recurse -Filter "zint-static.lib" -File | Select-Object -First 1
+		if ($null -eq $found) { throw "zint-static.lib not found" }
+		New-Item -ItemType Directory -Force -Path (Split-Path $zintLib) | Out-Null
+		Copy-Item $found.FullName $zintLib -Force
+	}
+	if (-not (Test-Path (Join-Path $zintInclude "zint.h"))) {
+		New-Item -ItemType Directory -Force -Path $zintInclude | Out-Null
+		Copy-Item (Join-Path $zintDir "backend\zint.h") (Join-Path $zintInclude "zint.h") -Force
+	}
+	Write-Host "  ok   zint.lib built"
+} else {
+	Write-Host "  ok   zint.lib (cached)"
+}
+
 # bzip2 1.0.8 -- the .mad container's compression filter.  Library files only
 # (the bzip2/bzip2recover tools are not built).
 $bzip2Dir = Get-LibrarySource "bzip2" (Get-LibraryPin "bzip2")
@@ -1026,7 +1105,7 @@ $linkLibs = @(
 # MADTdsDb class, which the headless engine does not.
 $archiveLibs = @($freetdsLib, $freetdsTdsLib, $freetdsReplacementsLib, $freetdsTdsutilsLib,
 				$mariadbLib, $postgresLib, $opensslLibSsl, $opensslLibCrypto,
-				$sqliteLib, $libarchiveLib, $zlibLib, $bzip2Lib, $madtdsLib)
+				$sqliteLib, $libarchiveLib, $zintLib, $libpngLib, $zlibLib, $bzip2Lib, $madtdsLib)
 
 # The ported Linux test suites (Linux/Tests), one executable per file.  Tests
 # are manual-retain-release (GNUstep's Testing.h is MRC) while the frameworks
