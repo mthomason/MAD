@@ -59,14 +59,7 @@ public sealed class ConnectionWindowViewModel : ObservableObject
             if (string.IsNullOrEmpty(Password)) Password = savedPass;
         }
 
-        if (!isEdit)
-        {
-            StatusText = "Select a database source to import its schema into a new .mad document.";
-        }
-        else
-        {
-            StatusText = "Verify or update the connection settings, then click Save & Refresh.";
-        }
+        StatusText = Localizer.Get(isEdit ? "Connection.StatusEdit" : "Connection.StatusCreate");
 
         TestConnectionCommand = new AsyncRelayCommand(TestConnectionAsync, () => !IsBusy);
         SubmitCommand = new AsyncRelayCommand(SubmitAsync, () => !IsBusy);
@@ -145,7 +138,7 @@ public sealed class ConnectionWindowViewModel : ObservableObject
         try
         {
             int count = await _engine.TestConnectionAsync(Spec);
-            StatusText = $"Connected! Found {count} schema tables.";
+            StatusText = Localizer.Format("Connection.Connected", count);
         }
         catch (Exception exception)
         {

@@ -1,6 +1,7 @@
 <UserControl x:Class="Mad.Designer.Windows.Views.DesignerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:infra="clr-namespace:Mad.Designer.Windows.Infrastructure"
              xmlns:views="clr-namespace:Mad.Designer.Windows.Views">
     <Grid DataContext="{Binding Document.Designer}">
         <Grid.RowDefinitions>
@@ -12,22 +13,22 @@
         <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="8,5">
             <DockPanel>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                    <TextBlock Text="Insert:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                    <Button Content="Label" Command="{Binding AddLabelCommand}" Margin="0,0,4,0"/>
-                    <Button Content="Data Field" Command="{Binding AddDataFieldCommand}" Margin="0,0,4,0"/>
-                    <Button Content="Aggregate" Command="{Binding AddAggregateCommand}" Margin="0,0,4,0"/>
-                    <Button Content="Barcode" IsEnabled="False" Margin="0,0,4,0"
-                            ToolTip="Barcode is not available in the Windows engine"/>
-                    <Button Content="Image" Command="{Binding AddImageCommand}" Margin="0,0,4,0"/>
-                    <Button Content="Line" Command="{Binding AddLineRuleCommand}" Margin="0,0,4,0"/>
+                    <TextBlock Text="{infra:Loc Designer.Insert}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <Button Content="{infra:Loc Designer.Label}" Command="{Binding AddLabelCommand}" Margin="0,0,4,0"/>
+                    <Button Content="{infra:Loc Designer.DataField}" Command="{Binding AddDataFieldCommand}" Margin="0,0,4,0"/>
+                    <Button Content="{infra:Loc Designer.Aggregate}" Command="{Binding AddAggregateCommand}" Margin="0,0,4,0"/>
+                    <Button Content="{infra:Loc Designer.Barcode}" IsEnabled="False" Margin="0,0,4,0"
+                            ToolTip="{infra:Loc Designer.BarcodeUnavailable}"/>
+                    <Button Content="{infra:Loc Designer.Image}" Command="{Binding AddImageCommand}" Margin="0,0,4,0"/>
+                    <Button Content="{infra:Loc Designer.Line}" Command="{Binding AddLineRuleCommand}" Margin="0,0,4,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                    <Button Content="Undo" Command="{Binding UndoCommand}" Margin="0,0,4,0"/>
-                    <Button Content="Redo" Command="{Binding RedoCommand}" Margin="0,0,12,0"/>
-                    <CheckBox Content="Grid" IsChecked="{Binding ShowGrid}" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                    <CheckBox Content="Snap" IsChecked="{Binding SnapToGrid}" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                    <CheckBox Content="Rulers" IsChecked="{Binding ShowRulers}" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                    <TextBlock Text="Zoom" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <Button Content="{infra:Loc Designer.Undo}" Command="{Binding UndoCommand}" Margin="0,0,4,0"/>
+                    <Button Content="{infra:Loc Designer.Redo}" Command="{Binding RedoCommand}" Margin="0,0,12,0"/>
+                    <CheckBox Content="{infra:Loc Designer.Grid}" IsChecked="{Binding ShowGrid}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <CheckBox Content="{infra:Loc Designer.Snap}" IsChecked="{Binding SnapToGrid}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <CheckBox Content="{infra:Loc Designer.Rulers}" IsChecked="{Binding ShowRulers}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock Text="{infra:Loc Designer.Zoom}" VerticalAlignment="Center" Margin="0,0,4,0"/>
                     <Slider Width="80" Minimum="0.5" Maximum="2.5" Value="{Binding Zoom}" VerticalAlignment="Center"
                              TickFrequency="0.25" IsSnapToTickEnabled="True"/>
                     <TextBlock Text="{Binding Zoom, StringFormat={}{0:0%}}" VerticalAlignment="Center" Margin="6,0,0,0"/>
@@ -46,21 +47,21 @@
 
             <!-- Left sidebar -->
             <DockPanel Grid.Column="0">
-                <TextBlock DockPanel.Dock="Top" Text="PAGE &amp; SECTION MINIMAP" FontWeight="Bold"
+                <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Designer.Minimap}" FontWeight="Bold"
                            Foreground="Gray" FontSize="10" Margin="10,8,10,3"/>
                 <views:DesignerMinimap x:Name="Minimap" DockPanel.Dock="Top" Height="124"
                                         Margin="10,0,10,8" Background="#F0F0F0"/>
-                <TextBlock DockPanel.Dock="Top" Text="REPORT BANDS" FontWeight="Bold" Foreground="Gray"
+                <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Designer.Bands}" FontWeight="Bold" Foreground="Gray"
                            FontSize="10" Margin="10,0,10,3"/>
                 <ListBox x:Name="SectionsList" DockPanel.Dock="Top" Height="168" Margin="10,0,10,8"
                          ItemsSource="{Binding Sections}" MouseDoubleClick="SectionsList_OnDoubleClick">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Title}"/>
+                            <TextBlock Text="{Binding DisplayTitle}"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <TextBlock DockPanel.Dock="Top" Text="QUERY FIELDS (DRAG TO CANVAS)" FontWeight="Bold"
+                <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Designer.QueryFields}" FontWeight="Bold"
                            Foreground="Gray" FontSize="10" Margin="10,0,10,3"/>
                 <ListBox x:Name="FieldsList" ItemsSource="{Binding Fields}"
                          MouseDoubleClick="FieldsList_OnDoubleClick">
@@ -87,53 +88,53 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="10">
                         <!-- Card 1: page & selected section -->
-                        <TextBlock Text="1 · PAGE &amp; SELECTED SECTION" FontWeight="Bold" Foreground="Gray" FontSize="10"/>
-                        <TextBlock Text="Paper" Foreground="Gray" FontSize="11" Margin="0,6,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.CardPage}" FontWeight="Bold" Foreground="Gray" FontSize="10"/>
+                        <TextBlock Text="{infra:Loc Designer.Paper}" Foreground="Gray" FontSize="11" Margin="0,6,0,2"/>
                         <ComboBox SelectedIndex="{Binding PaperSizeIndex}" Margin="0,0,0,8">
-                            <ComboBoxItem Content="US Letter (8.5 × 11 in)"/>
-                            <ComboBoxItem Content="US Legal (8.5 × 14 in)"/>
-                            <ComboBoxItem Content="A4 (210 × 297 mm)"/>
+                            <ComboBoxItem Content="{infra:Loc Paper.Letter.Display}"/>
+                            <ComboBoxItem Content="{infra:Loc Paper.Legal.Display}"/>
+                            <ComboBoxItem Content="{infra:Loc Paper.A4.Display}"/>
                         </ComboBox>
-                        <TextBlock Text="Band" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
-                        <TextBlock Text="{Binding SelectedSection.Title}" FontWeight="SemiBold"
+                        <TextBlock Text="{infra:Loc Designer.Band}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{Binding SelectedSection.DisplayTitle}" FontWeight="SemiBold"
                                    Foreground="#0A84FF" Margin="0,0,0,8"/>
-                        <TextBlock Text="Height (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.Height}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
                         <TextBox Text="{Binding SelectedSectionHeight, UpdateSourceTrigger=LostFocus}"
                                  Width="80" HorizontalAlignment="Left" Margin="0,0,0,8"/>
-                        <CheckBox Content="Section Visible" IsChecked="{Binding SelectedSectionVisible}" Margin="0,0,0,4"/>
-                        <CheckBox Content="Page Break After" IsChecked="{Binding SelectedSectionPageBreak}" Margin="0,0,0,8"/>
+                        <CheckBox Content="{infra:Loc Designer.SectionVisible}" IsChecked="{Binding SelectedSectionVisible}" Margin="0,0,0,4"/>
+                        <CheckBox Content="{infra:Loc Designer.PageBreakAfter}" IsChecked="{Binding SelectedSectionPageBreak}" Margin="0,0,0,8"/>
 
                         <Separator Margin="0,6"/>
 
                         <!-- Card 2: selected element -->
-                        <TextBlock Text="2 · SELECTED ELEMENT INSPECTOR" FontWeight="Bold" Foreground="Black" FontSize="10"/>
+                        <TextBlock Text="{infra:Loc Designer.CardElement}" FontWeight="Bold" Foreground="Black" FontSize="10"/>
                         <TextBlock Text="{Binding ElementTypeName}" FontWeight="SemiBold"
                                    Foreground="#0A84FF" Margin="0,4,0,8"/>
 
-                        <TextBlock Text="Band" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
-                        <ComboBox ItemsSource="{Binding Sections}" DisplayMemberPath="Title" SelectedValuePath="Id"
+                        <TextBlock Text="{infra:Loc Designer.Band}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <ComboBox ItemsSource="{Binding Sections}" DisplayMemberPath="DisplayTitle" SelectedValuePath="Id"
                                   SelectedValue="{Binding ElementSectionId}" Margin="0,0,0,8"/>
 
-                        <TextBlock Text="Text" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.Text}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
                         <TextBox Text="{Binding ElementText, UpdateSourceTrigger=LostFocus}" Margin="0,0,0,8"/>
 
-                        <TextBlock Text="X / Y (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.XY}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                             <TextBox Text="{Binding ElementX, UpdateSourceTrigger=LostFocus}" Width="64"/>
-                            <TextBlock Text="  Y:" Foreground="Gray" VerticalAlignment="Center"/>
+                            <TextBlock Text="{infra:Loc Designer.YLabel}" Foreground="Gray" VerticalAlignment="Center" Margin="8,0,4,0"/>
                             <TextBox Text="{Binding ElementY, UpdateSourceTrigger=LostFocus}" Width="64"/>
                         </StackPanel>
-                        <TextBlock Text="W / H (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.WH}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                             <TextBox Text="{Binding ElementW, UpdateSourceTrigger=LostFocus}" Width="64"/>
-                            <TextBlock Text="  H:" Foreground="Gray" VerticalAlignment="Center"/>
+                            <TextBlock Text="{infra:Loc Designer.HLabel}" Foreground="Gray" VerticalAlignment="Center" Margin="8,0,4,0"/>
                             <TextBox Text="{Binding ElementH, UpdateSourceTrigger=LostFocus}" Width="64"/>
                         </StackPanel>
 
-                        <TextBlock Text="TYPOGRAPHY" FontWeight="Bold" Foreground="Gray" FontSize="10" Margin="0,6,0,2"/>
-                        <TextBlock Text="Font" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.Typography}" FontWeight="Bold" Foreground="Gray" FontSize="10" Margin="0,6,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.Font}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
                         <TextBox Text="{Binding ElementFontName, UpdateSourceTrigger=LostFocus}" Margin="0,0,0,8"/>
-                        <TextBlock Text="Size (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.Size}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
                         <TextBox Text="{Binding ElementFontSize, UpdateSourceTrigger=LostFocus}"
                                  Width="80" HorizontalAlignment="Left" Margin="0,0,0,8"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
@@ -142,32 +143,32 @@
                             <CheckBox Content="U" IsChecked="{Binding ElementUnderline}" Margin="0,0,8,0"/>
                             <CheckBox Content="S" IsChecked="{Binding ElementStrikethrough}"/>
                         </StackPanel>
-                        <TextBlock Text="H-Align" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.HAlign}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
                         <ComboBox SelectedIndex="{Binding ElementHAlignIndex}" Margin="0,0,0,8">
-                            <ComboBoxItem Content="Left"/><ComboBoxItem Content="Center"/><ComboBoxItem Content="Right"/>
+                            <ComboBoxItem Content="{infra:Loc Designer.Align.Left}"/><ComboBoxItem Content="{infra:Loc Designer.Align.Center}"/><ComboBoxItem Content="{infra:Loc Designer.Align.Right}"/>
                         </ComboBox>
-                        <TextBlock Text="V-Align" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.VAlign}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
                         <ComboBox SelectedIndex="{Binding ElementVAlignIndex}" Margin="0,0,0,8">
-                            <ComboBoxItem Content="Top"/><ComboBoxItem Content="Middle"/><ComboBoxItem Content="Bottom"/>
+                            <ComboBoxItem Content="{infra:Loc Designer.Align.Top}"/><ComboBoxItem Content="{infra:Loc Designer.Align.Middle}"/><ComboBoxItem Content="{infra:Loc Designer.Align.Bottom}"/>
                         </ComboBox>
 
-                        <TextBlock Text="Border T / B / L / R (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.Border}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                             <TextBox Text="{Binding ElementBorderTop, UpdateSourceTrigger=LostFocus}" Width="42"/>
                             <TextBox Text="{Binding ElementBorderBottom, UpdateSourceTrigger=LostFocus}" Width="42"/>
                             <TextBox Text="{Binding ElementBorderLeft, UpdateSourceTrigger=LostFocus}" Width="42"/>
                             <TextBox Text="{Binding ElementBorderRight, UpdateSourceTrigger=LostFocus}" Width="42"/>
                         </StackPanel>
-                        <TextBlock Text="Pad / Margin (pt)" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
+                        <TextBlock Text="{infra:Loc Designer.PadMargin}" Foreground="Gray" FontSize="11" Margin="0,0,0,2"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                             <TextBox Text="{Binding ElementPadding, UpdateSourceTrigger=LostFocus}" Width="64"/>
-                            <TextBlock Text="  M:" Foreground="Gray" VerticalAlignment="Center"/>
+                            <TextBlock Text="{infra:Loc Designer.MLabel}" Foreground="Gray" VerticalAlignment="Center" Margin="8,0,4,0"/>
                             <TextBox Text="{Binding ElementMargin, UpdateSourceTrigger=LostFocus}" Width="64"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                            <Button Content="Duplicate" Command="{Binding DuplicateElementCommand}" Margin="0,0,6,0"/>
-                            <Button Content="Delete" Command="{Binding DeleteElementCommand}"/>
+                            <Button Content="{infra:Loc Designer.Duplicate}" Command="{Binding DuplicateElementCommand}" Margin="0,0,6,0"/>
+                            <Button Content="{infra:Loc Designer.Delete}" Command="{Binding DeleteElementCommand}"/>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>

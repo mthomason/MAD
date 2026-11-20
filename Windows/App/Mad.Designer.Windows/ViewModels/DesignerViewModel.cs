@@ -211,7 +211,7 @@ public sealed class DesignerViewModel : ObservableObject
             newId = model.Elements.MaxBy(e => e.Id)!.Id;
             return model;
         };
-        return MutateAsync("Insert Element", doAdd, () => _engine.RemoveElementsAsync(_handle, new[] { newId }), doAdd);
+        return MutateAsync(Localizer.Get("Undo.InsertElement"), doAdd, () => _engine.RemoveElementsAsync(_handle, new[] { newId }), doAdd);
     }
 
     public Task RemoveElementsAsync(IReadOnlyList<long> elements)
@@ -219,7 +219,7 @@ public sealed class DesignerViewModel : ObservableObject
         var removed = _model.Elements.Where(e => elements.Contains(e.Id)).ToList();
         var restoredIds = new List<long>();
         return MutateAsync(
-            "Delete Element",
+            Localizer.Get("Undo.DeleteElement"),
             () => _engine.RemoveElementsAsync(_handle, elements),
             removed.Count > 0 ? () => RestoreElementsAsync(removed, restoredIds) : null,
             () => _engine.RemoveElementsAsync(_handle, restoredIds.Count > 0 ? restoredIds.ToArray() : elements.ToArray()));
@@ -235,7 +235,7 @@ public sealed class DesignerViewModel : ObservableObject
             dupIds = model.Elements.Where(e => !before.Contains(e.Id)).Select(e => e.Id).ToArray();
             return model;
         };
-        return MutateAsync("Duplicate Element", doDup, () => _engine.RemoveElementsAsync(_handle, dupIds), doDup);
+        return MutateAsync(Localizer.Get("Undo.DuplicateElement"), doDup, () => _engine.RemoveElementsAsync(_handle, dupIds), doDup);
     }
 
     public Task MoveElementsAsync(IReadOnlyList<long> elements, long section)
@@ -260,7 +260,7 @@ public sealed class DesignerViewModel : ObservableObject
         }
 
         return MutateAsync(
-            "Move Element to Section",
+            Localizer.Get("Undo.MoveElement"),
             () => _engine.MoveElementsAsync(_handle, elements, section),
             undoFn,
             () => _engine.MoveElementsAsync(_handle, elements, section));
@@ -288,7 +288,7 @@ public sealed class DesignerViewModel : ObservableObject
             return await _engine.SetElementGeometryAsync(_handle, new[] { new ElementGeometry(elementId, ox, oy, w, h) });
         };
 
-        return MutateAsync("Move Element to Section", doMove, undoMove, doMove);
+        return MutateAsync(Localizer.Get("Undo.MoveElement"), doMove, undoMove, doMove);
     }
 
     public Task SetElementGeometryAsync(IReadOnlyList<ElementGeometry> elements)
@@ -303,7 +303,7 @@ public sealed class DesignerViewModel : ObservableObject
             .ToList();
 
         return MutateAsync(
-            "Move / Resize Element",
+            Localizer.Get("Undo.MoveResize"),
             () => _engine.SetElementGeometryAsync(_handle, newGeom),
             () => _engine.SetElementGeometryAsync(_handle, oldGeom),
             () => _engine.SetElementGeometryAsync(_handle, newGeom));
@@ -313,7 +313,7 @@ public sealed class DesignerViewModel : ObservableObject
     {
         var old = _model.Elements.FirstOrDefault(e => e.Id == element);
         return MutateAsync(
-            "Edit Element Content",
+            Localizer.Get("Undo.EditContent"),
             () => _engine.SetElementContentAsync(_handle, element, content),
             old != null ? () => _engine.SetElementContentAsync(_handle, element, CaptureContent(old)) : null,
             () => _engine.SetElementContentAsync(_handle, element, content));
@@ -328,7 +328,7 @@ public sealed class DesignerViewModel : ObservableObject
             .ToList();
 
         return MutateAsync(
-            "Edit Typography",
+            Localizer.Get("Undo.EditTypography"),
             () => _engine.SetElementTypographyAsync(_handle, elements, style),
             oldStyles.Count > 0 ? () => RestoreTypographyAsync(elements.ToList(), oldStyles) : null,
             () => _engine.SetElementTypographyAsync(_handle, elements, style));
@@ -343,7 +343,7 @@ public sealed class DesignerViewModel : ObservableObject
             .ToList();
 
         return MutateAsync(
-            "Edit Box Model",
+            Localizer.Get("Undo.EditBoxModel"),
             () => _engine.SetElementBoxModelAsync(_handle, elements, box),
             oldBoxes.Count > 0 ? () => RestoreBoxModelAsync(elements.ToList(), oldBoxes) : null,
             () => _engine.SetElementBoxModelAsync(_handle, elements, box));
@@ -353,7 +353,7 @@ public sealed class DesignerViewModel : ObservableObject
     {
         var old = _model.Sections.FirstOrDefault(s => s.Id == section);
         return MutateAsync(
-            "Edit Section",
+            Localizer.Get("Undo.EditSection"),
             () => _engine.SetSectionAsync(_handle, section, height, visible, pageBreak),
             old != null ? () => _engine.SetSectionAsync(_handle, section, old.Height, old.Visible, old.PageBreak) : null,
             () => _engine.SetSectionAsync(_handle, section, height, visible, pageBreak));
@@ -363,7 +363,7 @@ public sealed class DesignerViewModel : ObservableObject
     {
         int old = _model.PaperSize;
         return MutateAsync(
-            "Change Paper Size",
+            Localizer.Get("Undo.PaperSize"),
             () => _engine.SetPaperSizeAsync(_handle, paperSize),
             () => _engine.SetPaperSizeAsync(_handle, old),
             () => _engine.SetPaperSizeAsync(_handle, paperSize));
@@ -478,12 +478,12 @@ public sealed class DesignerViewModel : ObservableObject
 
     public string ElementTypeName => PrimaryElement switch
     {
-        { IsLabel: true } => "Static Label",
-        { IsDataField: true } => "Data Field",
-        { IsAggregate: true } => "Summary Aggregate",
-        { IsImage: true } => "Image",
-        { IsLineRule: true } => "Line Rule",
-        _ => "Element",
+        { IsLabel: true } => Localizer.Get("Designer.Element.Label"),
+        { IsDataField: true } => Localizer.Get("Designer.Element.DataField"),
+        { IsAggregate: true } => Localizer.Get("Designer.Element.Aggregate"),
+        { IsImage: true } => Localizer.Get("Designer.Element.Image"),
+        { IsLineRule: true } => Localizer.Get("Designer.Element.Line"),
+        _ => Localizer.Get("Designer.Element.Generic"),
     };
 
     public long ElementSectionId
@@ -594,7 +594,7 @@ public sealed class DesignerViewModel : ObservableObject
             newId = afterAdd.Elements.MaxBy(e => e.Id)!.Id;
             return await _engine.SetElementContentAsync(_handle, newId, new ElementContent(Field: fieldId));
         };
-        await MutateAsync("Insert Data Field", doInsert, () => _engine.RemoveElementsAsync(_handle, new[] { newId }), doInsert);
+        await MutateAsync(Localizer.Get("Undo.InsertDataField"), doInsert, () => _engine.RemoveElementsAsync(_handle, new[] { newId }), doInsert);
     }
 
     /// <summary>Flips a band's visibility (double-click in the sections outline).</summary>

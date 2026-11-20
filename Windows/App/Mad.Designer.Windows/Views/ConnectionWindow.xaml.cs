@@ -21,16 +21,16 @@ public partial class ConnectionWindow : Window
         ViewModel = new ConnectionWindowViewModel(engine, credentials, isEdit, initial, createPath: ShowCreateSaveDialog, requestClose: () => DialogResult = true);
         DataContext = ViewModel;
 
-        Title = isEdit ? "Database Connection Settings" : "Create a New Mobile Analytics Document (.mad)";
-        SubmitButton.Content = isEdit ? "Save & Refresh" : "Create Document…";
+        Title = Localizer.Get(isEdit ? "Connection.Title.Edit" : "Connection.Title.Create");
+        SubmitButton.Content = Localizer.Get(isEdit ? "Connection.SaveRefresh" : "Connection.Create");
     }
 
     private string? ShowCreateSaveDialog()
     {
         var dialog = new Microsoft.Win32.SaveFileDialog
         {
-            Filter = "MAD documents (*.mad)|*.mad",
-            FileName = "Untitled Report.mad",
+            Filter = Localizer.Get("Dialog.SaveMadFilter"),
+            FileName = Localizer.Get("Dialog.DefaultNewDocument"),
         };
         return dialog.ShowDialog() == true ? dialog.FileName : null;
     }
@@ -39,7 +39,7 @@ public partial class ConnectionWindow : Window
     {
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            Filter = "SQLite databases (*.sqlite3;*.db;*.sqlite)|*.sqlite3;*.db;*.sqlite|All files (*.*)|*.*",
+            Filter = Localizer.Get("Dialog.SQLiteFilter"),
         };
         if (dialog.ShowDialog() == true)
         {

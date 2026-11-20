@@ -1,6 +1,7 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
 using System.Text.Json;
+using Mad.Designer.Windows.Infrastructure;
 
 namespace Mad.Designer.Windows.Models;
 
@@ -91,6 +92,24 @@ public sealed record LayoutSection(
     bool PageBreak,
     string? GroupField)
 {
+    /// <summary>The band's localized name. The engine's <see cref="Title"/> is English, so the
+    /// app maps the type (and the group's field) through the language dictionaries.</summary>
+    public string DisplayTitle => Type switch
+    {
+        SectionType.ReportHeader => Localizer.Get("Section.ReportHeader"),
+        SectionType.PageHeader => Localizer.Get("Section.PageHeader"),
+        SectionType.Body => Localizer.Get("Section.Body"),
+        SectionType.PageFooter => Localizer.Get("Section.PageFooter"),
+        SectionType.ReportFooter => Localizer.Get("Section.ReportFooter"),
+        SectionType.GroupHeader => string.IsNullOrEmpty(GroupField)
+            ? Localizer.Get("Section.GroupHeader")
+            : Localizer.Format("Section.GroupHeaderField", GroupField),
+        SectionType.GroupFooter => string.IsNullOrEmpty(GroupField)
+            ? Localizer.Get("Section.GroupFooter")
+            : Localizer.Format("Section.GroupFooterField", GroupField),
+        _ => Localizer.Get("Section.Unknown"),
+    };
+
     internal static LayoutSection Parse(JsonElement e) => new(
         LayoutJson.Long(e, "id"),
         (SectionType)LayoutJson.Int(e, "type"),

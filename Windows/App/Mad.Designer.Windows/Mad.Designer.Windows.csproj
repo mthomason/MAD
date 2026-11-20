@@ -18,4 +18,16 @@
     <ProjectReference Include="..\..\Client\Mad.Client\Mad.Client.csproj" />
   </ItemGroup>
 
+  <!-- The language dictionaries are embedded XAML resources, not compiled Page items: the app
+       loads them with XamlReader so the strings resolve without a WPF Application (the headless
+       tests construct the views directly). -->
+  <ItemGroup>
+    <Page Remove="Resources\Strings-*.xaml" />
+    <EmbeddedResource Include="Resources\Strings-*.xaml">
+      <!-- A dotted "Strings.en" would be read as a culture suffix and compiled into a
+           satellite assembly; the hyphen keeps every dictionary in the main assembly. -->
+      <LogicalName>Mad.Designer.Windows.Resources.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
