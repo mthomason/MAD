@@ -1,14 +1,14 @@
-[English](CONTRIBUTING.md) | [简体中文](CONTRIBUTING_zh.md) | **日本語** | [Português (Brasil)](CONTRIBUTING_pt-BR.md) | [Deutsch](CONTRIBUTING_de.md) | [Español](CONTRIBUTING_es.md)
+[English](../CONTRIBUTING.md) | [简体中文](CONTRIBUTING_zh.md) | **日本語** | [Português (Brasil)](CONTRIBUTING_pt-BR.md) | [Deutsch](CONTRIBUTING_de.md) | [Español](CONTRIBUTING_es.md)
 
 # MADへのコントリビューション
 
-ご覧いただきありがとうございます。MAD（Mobile Analytics Document）は、MAD DesignerおよびMAD Viewerアプリ、フレームワーク群、そしてヘッドレスエンジンから成るプロジェクトであり、新しいデータベースドライバ、新しいドキュメント要素、新しいエクスポートフォーマットといった拡張ポイント（seam）こそが本プロジェクトの要です。ドライバ作成チュートリアル（[`docs/tutorials/driver-authoring.md`](docs/ja/tutorials/driver-authoring.md)）では最初のドライバ実装手順を解説しており、最初のコントリビューションとして推奨しています。
+ご覧いただきありがとうございます。MAD（Mobile Analytics Document）は、MAD DesignerおよびMAD Viewerアプリ、フレームワーク群、そしてヘッドレスエンジンから成るプロジェクトであり、新しいデータベースドライバ、新しいドキュメント要素、新しいエクスポートフォーマットといった拡張ポイント（seam）こそが本プロジェクトの要です。ドライバ作成チュートリアル（[`docs/tutorials/driver-authoring.md`](../docs/ja/tutorials/driver-authoring.md)）では最初のドライバ実装手順を解説しており、最初のコントリビューションとして推奨しています。
 
 ## 前提条件
 
 * **XcodeがインストールされたmacOS** — iOS側は14個のフレームワークとアプリから成るワークスペースで、iOS 15以降を対象にビルドされます。フレームワークはObjective-Cで記述されています。
 * **Docker** — ヘッドレスエンジンのLinuxビルド用です。単一のイメージ内でObjective-Cツールチェーン（libobjc2、libdispatch、GNUstep）とCライブラリ群をソースからビルドし、11個のヘッドレスフレームワークをコンパイルしてテストスイートを実行します。
-* コントリビューションにあたってデータベースサーバーは必須ではありません。MySQL、SQL Server、およびPostgreSQLのライブテストスイートはサーバーに到達できない場合は自動的にスキップされます。また、それらを提供するDockerコンテナの起動手順は[`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md)に記載されています。
+* コントリビューションにあたってデータベースサーバーは必須ではありません。MySQL、SQL Server、およびPostgreSQLのライブテストスイートはサーバーに到達できない場合は自動的にスキップされます。また、それらを提供するDockerコンテナの起動手順は[`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md)に記載されています。
 
 ## はじめに
 
@@ -27,7 +27,7 @@
    ./Linux/build.sh
    ```
 
-   [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md)に、完全なコマンドマトリクス、フレームワークが前提とする共有DerivedDataパス、およびテストデータベースのセットアップ手順が記載されています。
+   [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md)に、完全なコマンドマトリクス、フレームワークが前提とする共有DerivedDataパス、およびテストデータベースのセットアップ手順が記載されています。
 3. 取り組む対象を選びます。新しいドライバ、要素、または`"good first issue"`ラベルが付いたIssueなどが適しています。レビューでは正確さが重視されるため、小さな変更から始めることを推奨します。
 
 ## テストファーストの原則
@@ -48,7 +48,7 @@ Linuxテストスイートでは、既知のプラットフォーム差異を黙
 * インデントにはスペースではなくタブを使用します。コメントは本当に必要な箇所にのみ記述します。
 * 意図的に未使用としているコードには、宣言箇所でclangの`unused`属性を付与します。属性の付いていない未使用警告はデッドコードを意味するため削除対象となります。
 * 新規ファイルには1行ヘッダー`Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT`（ソースコードは`//`、スクリプトは`#`）を記載します。
-* [`docs/project/BUGS.md`](docs/project/BUGS.md)には未解決の不具合とそれを固定するテストが記録されています。不具合を修正した場合は、そのエントリを[`docs/project/BUGS_FIXED.md`](docs/project/BUGS_FIXED.md)へ移動します——記録されていない修正は完了とはみなされません。
+* [`docs/project/BUGS.md`](../docs/project/BUGS.md)には未解決の不具合とそれを固定するテストが記録されています。不具合を修正した場合は、そのエントリを[`docs/project/BUGS_FIXED.md`](../docs/project/BUGS_FIXED.md)へ移動します——記録されていない修正は完了とはみなされません。
 
 ## Developer Certificate of Origin (DCO)
 
@@ -66,7 +66,7 @@ Linuxテストスイートでは、既知のプラットフォーム差異を黙
 
 ## Issue
 
-バグ報告およびドライバ提案用のテンプレートは[`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/)にあります。セキュリティに関する問題は決して公開Issueには投稿せず、[`SECURITY.md`](SECURITY_ja.md)に記載された非公開の連絡経路を使用してください。
+バグ報告およびドライバ提案用のテンプレートは[`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/)にあります。セキュリティに関する問題は決して公開Issueには投稿せず、[`SECURITY.md`](SECURITY_ja.md)に記載された非公開の連絡経路を使用してください。
 
 ## 質問・サポート
 

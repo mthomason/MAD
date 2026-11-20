@@ -1,4 +1,4 @@
-[English](CONTRIBUTING.md) | [简体中文](CONTRIBUTING_zh.md) | [日本語](CONTRIBUTING_ja.md) | [Português (Brasil)](CONTRIBUTING_pt-BR.md) | **Deutsch** | [Español](CONTRIBUTING_es.md)
+[English](../CONTRIBUTING.md) | [简体中文](CONTRIBUTING_zh.md) | [日本語](CONTRIBUTING_ja.md) | [Português (Brasil)](CONTRIBUTING_pt-BR.md) | **Deutsch** | [Español](CONTRIBUTING_es.md)
 
 # Zu MAD beitragen
 
@@ -7,7 +7,7 @@ Apps MAD Designer und MAD Viewer, die Frameworks und die headless Engine —, un
 die Nahtstellen für neue Arbeit sind der Punkt: ein neuer Datenbanktreiber, ein
 neues Dokumentelement, ein neues Exportformat. Das Tutorial zum Schreiben von
 Treibern
-([`docs/tutorials/driver-authoring.md`](docs/de/tutorials/driver-authoring.md))
+([`docs/tutorials/driver-authoring.md`](../docs/de/tutorials/driver-authoring.md))
 führt durch das erste; es ist der vorgesehene erste Beitrag.
 
 ## Voraussetzungen
@@ -20,7 +20,7 @@ führt durch das erste; es ist der vorgesehene erste Beitrag.
   ausführt.
 * Zum Mitwirken ist kein Datenbankserver nötig: Die Live-Suites für MySQL, SQL
   Server und PostgreSQL werden übersprungen, wenn kein Server erreichbar ist, und
-  [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) dokumentiert die
+  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) dokumentiert die
   Docker-Container, die sie bereitstellen.
 
 ## Erste Schritte
@@ -41,7 +41,7 @@ führt durch das erste; es ist der vorgesehene erste Beitrag.
    ./Linux/build.sh
    ```
 
-   [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) enthält die
+   [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) enthält die
    vollständige Befehlsmatrix, den gemeinsamen DerivedData-Pfad, den die
    Frameworks erwarten, und die Einrichtung der Testdatenbanken.
 3. Suchen Sie sich etwas aus. Einen neuen Treiber, ein Element oder ein Issue mit
@@ -81,9 +81,9 @@ fehlschlagende Änderung.
   Code tot ist.
 * Neue Dateien tragen den einzeiligen Header `Copyright © 2012-2026 Michael
   Thomason. SPDX-License-Identifier: MIT` (`//` für Quellcode, `#` für Skripte).
-* [`docs/project/BUGS.md`](docs/project/BUGS.md) hält offene Defekte mit den
+* [`docs/project/BUGS.md`](../docs/project/BUGS.md) hält offene Defekte mit den
   Tests fest, die sie fixieren; wenn Sie einen beheben, wandert der Eintrag nach
-  [`docs/project/BUGS_FIXED.md`](docs/project/BUGS_FIXED.md) — ein Fix, der
+  [`docs/project/BUGS_FIXED.md`](../docs/project/BUGS_FIXED.md) — ein Fix, der
   nicht festgehalten wird, ist nicht geschehen.
 
 ## Developer Certificate of Origin
@@ -111,7 +111,7 @@ Requests, sobald das Repository auf GitHub veröffentlicht ist.
 ## Issues
 
 Die Vorlagen für Fehlerberichte und Treibervorschläge liegen unter
-[`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/). Sicherheitsprobleme gehen
+[`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/). Sicherheitsprobleme gehen
 an den privaten Weg in [`SECURITY.md`](SECURITY_de.md), niemals an ein
 öffentliches Issue.
 

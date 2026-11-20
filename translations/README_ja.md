@@ -1,8 +1,8 @@
-[English](README.md) | [简体中文](README_zh.md) | **日本語** | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md) | [Español](README_es.md)
+[English](../README.md) | [简体中文](README_zh.md) | **日本語** | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md) | [Español](README_es.md)
 
 > **エージェント型プログラミングと LLM に関する著者からの注記** — [こちらからお読みください](Note%20from%20Author%20on%20Agentic%20Programming%20and%20LLMs_ja.md)
 
-# <a href="StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="docs/assets/mad-designer-macos-icon-256.png" alt="MAD Designer アイコン" width="44" height="44" align="absmiddle" /></a> MAD (Mobile Analytics Document)
+# <a href="../StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../docs/assets/mad-designer-macos-icon-256.png" alt="MAD Designer アイコン" width="44" height="44" align="absmiddle" /></a> MAD (Mobile Analytics Document)
 
 **リレーショナルレポーティングのためのオープンフォーマットおよび組み込み可能なエンジン——すべてのレポートは、ポータブルなクエリグラフ、マテリアライズドSQLiteテーブル、そしてパラメトリックレイアウトとして表現されます。**
 
@@ -10,7 +10,7 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 
 `.mad`ファイルは、データベースのスキーマスナップショット、リレーショナルクエリグラフ（テーブル、結合、述語、グループ化）、およびバンド型レイアウトツリーというレポート定義全体を、表示対象のデータから明確に分離したまま100 KB未満の単一ファイルに保持します。レポートはサーバーではなく実行可能なファイルです。`.mad`を解釈できるランタイムであれば、スキーマを検査し、対象データベース向けの決定論的SQLをコンパイルし、結果セットをローカルのSQLiteテーブルにマテリアライズ（実体化）したうえで、ネイティブのAppKit/UIKitビュー、ページ分割HTML、PDF、CSV、またはJSONとして描画・出力できます。
 
-本リポジトリは自己完結した単一プロジェクトです。iPad/iPhoneアプリ、ネイティブmacOS（`AppKit`）デスクトップアプリ（`Mac/`）、14個のフレームワーク（うち12個はiOS、iOSシミュレータ、ネイティブmacOS対応のマルチプラットフォーム、11個はLinux上でヘッドレス動作）、ヘッドレスLinuxビルドおよびテストスイート（テスト実行ファイル126個、テスト1,303件）、`mad`コマンドラインツール、およびピン留めされたソースからサードパーティ製Cライブラリをコンパイルするビルドシステム（`Compressor`）を含んでいます。コードはMITライセンスの下で公開されており、`.mad`フォーマットはオープン仕様です（[`docs/`](docs/ja/)を参照）。ただし、プロジェクト名およびアプリのアートワークはライセンス供与の対象外です（[`NOTICE`](NOTICE)を参照）。
+本リポジトリは自己完結した単一プロジェクトです。iPad/iPhoneアプリ、ネイティブmacOS（`AppKit`）デスクトップアプリ（`Mac/`）、14個のフレームワーク（うち12個はiOS、iOSシミュレータ、ネイティブmacOS対応のマルチプラットフォーム、11個はLinux上でヘッドレス動作）、ヘッドレスLinuxビルドおよびテストスイート（テスト実行ファイル126個、テスト1,303件）、`mad`コマンドラインツール、およびピン留めされたソースからサードパーティ製Cライブラリをコンパイルするビルドシステム（`Compressor`）を含んでいます。コードはMITライセンスの下で公開されており、`.mad`フォーマットはオープン仕様です（[`docs/`](../docs/ja/)を参照）。ただし、プロジェクト名およびアプリのアートワークはライセンス供与の対象外です（[`NOTICE`](../NOTICE)を参照）。
 
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
@@ -33,19 +33,19 @@ MADはレポーティングの課題を**フォーマットとエンジンのレ
 
 ## 実際の動作を見る
 
-**[MAD Designer for macOS](docs/ja/macos.md)**——**MAD Query**のビジュアルリレーションシップキャンバスと**MAD Designer**のバンド型レイアウトワークスペースを備えたネイティブ`AppKit`デスクトップアプリケーション（`Mac/`）：
+**[MAD Designer for macOS](../docs/ja/macos.md)**——**MAD Query**のビジュアルリレーションシップキャンバスと**MAD Designer**のバンド型レイアウトワークスペースを備えたネイティブ`AppKit`デスクトップアプリケーション（`Mac/`）：
 
-![ネイティブmacOSアプリケーションのMAD Queryワークスペース](docs/assets/macos-native-mad-query-ja.png)
+![ネイティブmacOSアプリケーションのMAD Queryワークスペース](../docs/assets/macos-native-mad-query-ja.png)
 
-![ネイティブmacOSアプリケーションのMAD Designerワークスペース](docs/assets/macos-native-mad-designer-ja.png)
+![ネイティブmacOSアプリケーションのMAD Designerワークスペース](../docs/assets/macos-native-mad-designer-ja.png)
 
 **MAD Designer for iOS**——データソースの選択からMAD Viewerで完成したレポートを閲覧するまで（28秒、[動画](https://docs.everydayapps.com/assets/app-preview.mp4)）：
 
-[![MAD Designerアプリプレビュー](docs/assets/app-preview-poster.png)](https://docs.everydayapps.com/assets/app-preview.mp4)
+[![MAD Designerアプリプレビュー](../docs/assets/app-preview-poster.png)](https://docs.everydayapps.com/assets/app-preview.mp4)
 
 **Linux上でヘッドレス動作する同一エンジン**：レポーティングサーバーなしで、`mad` CLIから`inspect`、`schema`、`query`、`refresh`、`export`を実行：
 
-![.madドキュメントの検査、クエリ確認、更新、エクスポートを行うmad CLI](docs/assets/mad-cli-demo.gif)
+![.madドキュメントの検査、クエリ確認、更新、エクスポートを行うmad CLI](../docs/assets/mad-cli-demo.gif)
 
 録画内で生成された[エクスポート済みレポート](https://docs.everydayapps.com/assets/london.html)はプレーンなHTMLであり、任意のブラウザで開くことができます。
 
@@ -73,11 +73,11 @@ macOS では、アプリが**書類**、**デスクトップ**、**ダウンロ�
 | **4. マテリアライズドテーブル** *(コンパニオン)* | `<hash>.maddb` + `<hash>.mdcache` | SQLite行データベース（`t<tag>`）+ カラムスキーマplist（`MADDataColumn`） | **データベーステーブルとしてのレポート出力。** 取得した行、グループキーインデックス、およびカラム型メタデータを保持し、2パス集計（`SUM`、`COUNT`、`AVG`、`MIN`、`MAX`）、ソート、再描画時にリモートデータベースへの再クエリを一切発生させません。 |
 | **5. ページキャッシュ** *(コンパニオン)* | `<hash>{ih,lh}{w,h}.madac` | ページジオメトリをキーとするSQLiteインデックス（`ih`）およびレイアウト（`lh`）データベース | 対象ビューポート（例：US Letterの`{612, 792}`）向けに事前計算された改ページ位置と要素フレームを保持し、瞬時のスクロールとエクスポートを実現します。 |
 
-コンテナレイアウト、ストアテーブル、コンパニオンスキーマ、既知の癖（後方互換性のために内部ストアファイル名が歴史的に`analyitics`と綴られている理由など）、およびクロスプラットフォームのダイジェスト検証を含む完全な仕様は、[`docs/`](docs/ja/)にて章ごとに文書化されています。
+コンテナレイアウト、ストアテーブル、コンパニオンスキーマ、既知の癖（後方互換性のために内部ストアファイル名が歴史的に`analyitics`と綴られている理由など）、およびクロスプラットフォームのダイジェスト検証を含む完全な仕様は、[`docs/`](../docs/ja/)にて章ごとに文書化されています。
 
 ## MADの今後の方向性：ロードマップとビジョン
 
-MADはすでに**クエリグラフ**、**マテリアライズドSQLite結果テーブル**、および**プレゼンテーションレイアウト**を分離しているため、このアーキテクチャによって次の4つの主要機能が実現可能となり、現在設計と実装キューが進められています（[`docs/vision.md`](docs/ja/vision.md)、[`docs/project/MAD_DATA_OBJECT.md`](docs/project/MAD_DATA_OBJECT.md)、および[`docs/project/TODO.md`](docs/project/TODO.md)を参照）：
+MADはすでに**クエリグラフ**、**マテリアライズドSQLite結果テーブル**、および**プレゼンテーションレイアウト**を分離しているため、このアーキテクチャによって次の4つの主要機能が実現可能となり、現在設計と実装キューが進められています（[`docs/vision.md`](../docs/ja/vision.md)、[`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md)、および[`docs/project/TODO.md`](../docs/project/TODO.md)を参照）：
 
 1. **アドホックなデータベーステーブルとしての`.mad`レポート（コンポーザブルなデータオブジェクト）。**
    従来のデータベースでは、`employee`や`sales_data`のようなベーステーブルから`SELECT`します。`.mad`レポートは複数のテーブルを結合・フィルタリングし、その出力（`.maddb` + `.mdcache`）はすでに型付きスキーマ（`MADDataColumn`）を持つ物理的なSQLiteテーブルになっています。クエリデザイナー内でレポートの出力をテーブルソースとして指定可能にすることで、**`.mad`ファイル自体が仮想／マテリアライズドデータベーステーブルになります**。他のレポート、クエリ、またはツールから、データベース内の通常のテーブルとまったく同じように`.mad`レポートに対して`SELECT`や`JOIN`を行えるようになります。
@@ -112,7 +112,7 @@ docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out ghcr.io/mthom
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
-サンプルドキュメントはイメージ内に同梱されているSqlite3サンプルデータベースに対して更新（リフレッシュ）されます。MySQL、SQL Server、およびPostgreSQLのフィクスチャは[`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md)に記載されているテストサーバーを前提としています。
+サンプルドキュメントはイメージ内に同梱されているSqlite3サンプルデータベースに対して更新（リフレッシュ）されます。MySQL、SQL Server、およびPostgreSQLのフィクスチャは[`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md)に記載されているテストサーバーを前提としています。
 
 ## CIでの利用
 
@@ -125,7 +125,7 @@ docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out ghcr.io/mthom
     document: reports/sales.mad
 ```
 
-このActionは公開イメージを実行するため、ActionとCLIは同一のエンジンです。Actionは本リポジトリの[`satellites/mad-action/`](satellites/mad-action/)から生成されており、[`docs/project/SATELLITE_REPOS.md`](docs/project/SATELLITE_REPOS.md)にサテライトリポジトリを最新に保つ仕組みが記録されています。
+このActionは公開イメージを実行するため、ActionとCLIは同一のエンジンです。Actionは本リポジトリの[`satellites/mad-action/`](../satellites/mad-action/)から生成されており、[`docs/project/SATELLITE_REPOS.md`](../docs/project/SATELLITE_REPOS.md)にサテライトリポジトリを最新に保つ仕組みが記録されています。
 
 ## データベースドライバ
 
@@ -136,7 +136,7 @@ MADは`MADDatabase`のサブクラスを介してデータベースと通信し�
 * **PostgreSQL** — `MADPostgres`（`libpq`ベース）
 * **SQLite** — `MADSqlite3`（サンプルドキュメント、ローカルデータベース、および内部マテリアライズテーブル用）
 
-ドライバは`MADDatabase`をサブクラス化し、`MADDatabaseDriverRegistry`に自身を登録するフレームワークです。クエリデザイナーやエンジンがワイヤプロトコルを直接意識することはありません。新しいドライバの作成は最初のコントリビューションとして推奨されています（[`docs/tutorials/driver-authoring.md`](docs/ja/tutorials/driver-authoring.md)のドライバ作成チュートリアルを参照）。この拡張ポイント（seam）は明確に分離されており、ユーザーが視覚的にクエリを構築するかSQLを貼り付ける（`MADSQLParser`）と、エンジンがダイアレクト固有のSQL文を生成し、ドライバはそれを実行して`id<MADDataTableWriting>`へ行をストリーム書き込みするだけで完結します。
+ドライバは`MADDatabase`をサブクラス化し、`MADDatabaseDriverRegistry`に自身を登録するフレームワークです。クエリデザイナーやエンジンがワイヤプロトコルを直接意識することはありません。新しいドライバの作成は最初のコントリビューションとして推奨されています（[`docs/tutorials/driver-authoring.md`](../docs/ja/tutorials/driver-authoring.md)のドライバ作成チュートリアルを参照）。この拡張ポイント（seam）は明確に分離されており、ユーザーが視覚的にクエリを構築するかSQLを貼り付ける（`MADSQLParser`）と、エンジンがダイアレクト固有のSQL文を生成し、ドライバはそれを実行して`id<MADDataTableWriting>`へ行をストリーム書き込みするだけで完結します。
 
 ## エンジンの組み込み
 
@@ -144,7 +144,7 @@ MADは`MADDatabase`のサブクラスを介してデータベースと通信し�
 
 ## ネイティブmacOSアプリケーション
 
-ネイティブmacOSデスクトップアプリ（[`docs/macos.md`](docs/ja/macos.md)、[`Mac/`](Mac/)）は、12個のマルチプラットフォームMADフレームワークと`Compressor`でコンパイルされた10個のユニバーサル（`arm64` + `x86_64`）静的Cライブラリの上に、`AppKit`（`macosx` SDK、`MACOSX_DEPLOYMENT_TARGET = 12.0`）で直接構築されています：
+ネイティブmacOSデスクトップアプリ（[`docs/macos.md`](../docs/ja/macos.md)、[`Mac/`](../Mac/)）は、12個のマルチプラットフォームMADフレームワークと`Compressor`でコンパイルされた10個のユニバーサル（`arm64` + `x86_64`）静的Cライブラリの上に、`AppKit`（`macosx` SDK、`MACOSX_DEPLOYMENT_TARGET = 12.0`）で直接構築されています：
 
 * **ネイティブ`NSDocument`アーキテクチャ（`MADMacDocument` / `MADMacDocumentController`）：** Finderまたは標準のオープンパネル（統合された**New Document**ボタン付き）から`.mad`アーカイブをネイティブに開いて保存し、`MADStoreConverter`を介してレガシーなCore Data形式の`.mad`ファイルを自動移行し、`MADDesignerLayout`を`NSDocument.undoManager`（`Cmd+Z` / `Cmd+Shift+Z`）と直接統合します。
 * **データベース接続＆スキーマインポートアシスタント（`MADMacConnectionWindowController`）：** **SQLite**、**MySQL / MariaDB**、**Microsoft SQL Server**、または**PostgreSQL**に接続して疎通を確認し、認証情報をmacOSキーチェーン（`MADKeyChain`）に保存し、テーブルおよびカラムスキーマを新しい`.mad`ドキュメントにインポートします。
@@ -153,7 +153,7 @@ MADは`MADDatabase`のサブクラスを介してデータベースと通信し�
   2. **MAD Designer（`MADMacDesignerViewController`）：** インタラクティブな**Page & Section Minimap**、**Report Bands**アウトライン、検索可能な**Query Fields**ドラッグソース、セクション間ドラッグ＆ドロップとスマート整列ガイドを備えたズーム・ルーラー付きデザインキャンバス（`MADMacDesignerCanvasView`）、および2カード構成の**Page & Element Inspector**を備えた3ペイン分割ビューです。
   3. **MAD Viewer（`MADMacViewerViewController`）：** ライブデータの更新（`Cmd+R`）、即座の**Page Size**再ページ分割（`US Letter`、`Legal`、`Tabloid`、`A3`、`A4`、`A5`、`B4`、`B5`、`JIS B4`、`JIS B5`）、フレーム付き`PDFView`プレビュー、ネイティブ`NSPrintOperation`印刷（`Cmd+P`）、および**PDF**、**HTML**、**HTML Flow**、**CSV**、**JSON**、**JSON Full Report**、**Plain Text**へのエクスポート（`Cmd+E`）を提供します。
 
-完全なガイドは[`docs/macos.md`](docs/ja/macos.md)を、マルチプラットフォーム移植の監査記録は[`docs/project/MAD_MACOS.md`](docs/project/MAD_MACOS.md)を参照してください。
+完全なガイドは[`docs/macos.md`](../docs/ja/macos.md)を、マルチプラットフォーム移植の監査記録は[`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md)を参照してください。
 
 ## ビルドとテスト
 
@@ -188,7 +188,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ```
 
-（`MADMySQL`、`MADTdsClient`、および`MADPostgres`には実際のデータベースサーバーと通信するライブテストスイートも含まれており、サーバーに到達できない場合は自動的にスキップされます——[`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md)を参照してください。）
+（`MADMySQL`、`MADTdsClient`、および`MADPostgres`には実際のデータベースサーバーと通信するライブテストスイートも含まれており、サーバーに到達できない場合は自動的にスキップされます——[`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md)を参照してください。）
 
 ### Linux（ヘッドレスエンジン＆CLI）
 
@@ -198,7 +198,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 ./Linux/build.sh       # build the toolchain image, compile the eleven frameworks, run the suites
 ```
 
-これによりコンテナ内で126個のテスト実行ファイルと1,303件のテストが実行され、`--verify`を付けるとコミット済みフィクスチャとその固定ダイジェストに対するCLIのエンドツーエンド検証が追加実行されます。イメージ、ピン留めされたバージョン、および移植時に判明したGNUstepとの差異については[`Linux/README.md`](Linux/README_ja.md)を参照してください。
+これによりコンテナ内で126個のテスト実行ファイルと1,303件のテストが実行され、`--verify`を付けるとコミット済みフィクスチャとその固定ダイジェストに対するCLIのエンドツーエンド検証が追加実行されます。イメージ、ピン留めされたバージョン、および移植時に判明したGNUstepとの差異については[`Linux/README.md`](../Linux/README_ja.md)を参照してください。
 
 ## サポート
 
@@ -210,7 +210,7 @@ MADはフリーソフトウェアであり、今後もフリーであり続け�
 
 ## ライセンス
 
-MIT — [`LICENSE`](LICENSE)を参照してください。ライセンスはソフトウェアのコードをカバーしますが、「MAD」「MAD Designer」「MAD Viewer」という名称、アプリアイコンおよびその他の製品アートワーク、ならびにアプリプレビューメディアは著作者に帰属し、ライセンスの対象外です（[`NOTICE`](NOTICE)を参照）。すべてのサードパーティ製コンポーネント、そのライセンス、および同梱・配布に伴う義務については[`docs/project/THIRD_PARTY_LICENSES.md`](docs/project/THIRD_PARTY_LICENSES.md)に記録されています。
+MIT — [`LICENSE`](../LICENSE)を参照してください。ライセンスはソフトウェアのコードをカバーしますが、「MAD」「MAD Designer」「MAD Viewer」という名称、アプリアイコンおよびその他の製品アートワーク、ならびにアプリプレビューメディアは著作者に帰属し、ライセンスの対象外です（[`NOTICE`](../NOTICE)を参照）。すべてのサードパーティ製コンポーネント、そのライセンス、および同梱・配布に伴う義務については[`docs/project/THIRD_PARTY_LICENSES.md`](../docs/project/THIRD_PARTY_LICENSES.md)に記録されています。
 
 ## 輸出コンプライアンス
 

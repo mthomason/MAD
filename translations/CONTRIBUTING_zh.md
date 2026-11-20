@@ -1,9 +1,9 @@
-[English](CONTRIBUTING.md) | **简体中文** | [日本語](CONTRIBUTING_ja.md) | [Português (Brasil)](CONTRIBUTING_pt-BR.md) | [Deutsch](CONTRIBUTING_de.md) | [Español](CONTRIBUTING_es.md)
+[English](../CONTRIBUTING.md) | **简体中文** | [日本語](CONTRIBUTING_ja.md) | [Português (Brasil)](CONTRIBUTING_pt-BR.md) | [Deutsch](CONTRIBUTING_de.md) | [Español](CONTRIBUTING_es.md)
 
 # 为 MAD 做贡献
 
 感谢你的到来。MAD（Mobile Analytics Document，移动分析文档）是一个项目——包括 MAD Designer 和 MAD Viewer 应用、各个框架以及无头引擎——而新工作的接缝正是重点：一个新的数据库驱动、一个新的文档元素、一种新的导出格式。驱动编写教程
-（[`docs/tutorials/driver-authoring.md`](docs/zh/tutorials/driver-authoring.md)）
+（[`docs/tutorials/driver-authoring.md`](../docs/zh/tutorials/driver-authoring.md)）
 会带你完成第一个；它是我们预期的首个贡献。
 
 ## 前置条件
@@ -14,7 +14,7 @@
   库，编译十一个无头框架，并运行它们的测试套件。
 * 贡献不需要数据库服务器：当没有服务器可达时，MySQL、SQL Server 和
   PostgreSQL 的实时测试套件会跳过，而
-  [`docs/project/DEVELOPER.md`](docs/zh/project/DEVELOPER.md) 记录了提供这些服务器的
+  [`docs/project/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md) 记录了提供这些服务器的
   Docker 容器。
 
 ## 开始
@@ -34,7 +34,7 @@
    ./Linux/build.sh
    ```
 
-   [`docs/project/DEVELOPER.md`](docs/zh/project/DEVELOPER.md) 有完整的
+   [`docs/project/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md) 有完整的
    命令矩阵、框架所依赖的共享 DerivedData 路径，以及测试数据库的设置。
 3. 挑点事情做。一个新的驱动、一个元素，或者一个标着
    “good first issue”的 issue。小一点是好事：这里的评审文化是精确。
@@ -60,8 +60,8 @@ Linux 套件把已知的平台差异记录为 `NEED` 行，而不是静默跳过
 * 有意不用的代码在声明处用 clang 的 `unused` 属性标记——未标记的未使用警告意味着该代码是死代码。
 * 新文件带有单行头注释：`Copyright © 2012-2026 Michael
   Thomason. SPDX-License-Identifier: MIT`（源码用 `//`，脚本用 `#`）。
-* [`docs/project/BUGS.md`](docs/zh/project/BUGS.md) 记录未解决的缺陷以及固定它们的测试；当你修复一个缺陷时，该条目会移到
-  [`docs/project/BUGS_FIXED.md`](docs/zh/project/BUGS_FIXED.md)——没有被记录的修复等于没有发生。
+* [`docs/project/BUGS.md`](../docs/zh/project/BUGS.md) 记录未解决的缺陷以及固定它们的测试；当你修复一个缺陷时，该条目会移到
+  [`docs/project/BUGS_FIXED.md`](../docs/zh/project/BUGS_FIXED.md)——没有被记录的修复等于没有发生。
 
 ## 开发者原创证书（DCO）
 
@@ -81,7 +81,7 @@ Linux 套件把已知的平台差异记录为 `NEED` 行，而不是静默跳过
 ## Issue
 
 Bug 报告和驱动提案模板位于
-[`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/)。安全问题请走
+[`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/)。安全问题请走
 [`SECURITY.md`](SECURITY_zh.md) 中的私密路径，绝不要发到公开 issue。
 
 ## 帮助

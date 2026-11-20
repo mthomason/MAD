@@ -1,8 +1,8 @@
-[English](README.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md) | **Español**
+[English](../README.md) | [简体中文](README_zh.md) | [日本語](README_ja.md) | [Português (Brasil)](README_pt-BR.md) | [Deutsch](README_de.md) | **Español**
 
 > **Una nota del autor sobre la programación con agentes y los LLM** — [Léala aquí](Note%20from%20Author%20on%20Agentic%20Programming%20and%20LLMs_es.md)
 
-# <a href="StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="docs/assets/mad-designer-macos-icon-256.png" alt="Icono de MAD Designer" width="44" height="44" align="absmiddle" /></a> MAD (Mobile Analytics Document)
+# <a href="../StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../docs/assets/mad-designer-macos-icon-256.png" alt="Icono de MAD Designer" width="44" height="44" align="absmiddle" /></a> MAD (Mobile Analytics Document)
 
 **Un formato abierto y un motor embebible para la generación de informes relacionales: cada informe es un grafo de consultas portátil, una tabla SQLite materializada y un diseño paramétrico.**
 
@@ -10,7 +10,7 @@ MAD es una plataforma de generación de informes relacionales construida desde c
 
 Un archivo `.mad` contiene la definición completa de un informe —la instantánea del esquema de la base de datos, el grafo de consultas relacional (tablas, joins, predicados, agrupaciones) y el árbol de diseño por bandas— en un único archivo de menos de 100 KB, separado limpiamente de los datos que muestra. Un informe es un archivo ejecutable, no un servidor: cualquier entorno de ejecución que hable `.mad` puede inspeccionar el esquema, compilar SQL determinista para la base de datos de destino, materializar el conjunto de resultados en una tabla SQLite local y renderizarlo a vistas nativas de AppKit/UIKit, HTML paginado, PDF, CSV o JSON.
 
-El repositorio es un único proyecto autocontenido: las aplicaciones para iPad/iPhone, la aplicación de escritorio nativa para macOS (`AppKit`) (`Mac/`), catorce frameworks (doce multiplataforma entre iOS, el Simulador de iOS y macOS nativo; once sin interfaz gráfica en Linux), la compilación y la suite de pruebas de Linux sin interfaz gráfica (126 ejecutables de prueba, 1 303 pruebas), la herramienta de línea de comandos `mad` y el sistema de compilación (`Compressor`) que compila las bibliotecas C de terceros desde fuentes fijadas. El código se publica bajo la licencia MIT; el formato `.mad` es una especificación abierta (consulte [`docs/`](docs/es/)), aunque los nombres y el arte de las aplicaciones del proyecto no están cubiertos por la concesión de la licencia (consulte [`NOTICE`](https://github.com/mthomason/MAD/blob/master/NOTICE)).
+El repositorio es un único proyecto autocontenido: las aplicaciones para iPad/iPhone, la aplicación de escritorio nativa para macOS (`AppKit`) (`Mac/`), catorce frameworks (doce multiplataforma entre iOS, el Simulador de iOS y macOS nativo; once sin interfaz gráfica en Linux), la compilación y la suite de pruebas de Linux sin interfaz gráfica (126 ejecutables de prueba, 1 303 pruebas), la herramienta de línea de comandos `mad` y el sistema de compilación (`Compressor`) que compila las bibliotecas C de terceros desde fuentes fijadas. El código se publica bajo la licencia MIT; el formato `.mad` es una especificación abierta (consulte [`docs/`](../docs/es/)), aunque los nombres y el arte de las aplicaciones del proyecto no están cubiertos por la concesión de la licencia (consulte [`NOTICE`](https://github.com/mthomason/MAD/blob/master/NOTICE)).
 
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
@@ -33,19 +33,19 @@ La documentación técnica y la especificación del formato también se publican
 
 ## Véalo
 
-**[MAD Designer para macOS](docs/es/macos.md)** — la aplicación de escritorio nativa de `AppKit` (`Mac/`), que muestra el lienzo visual de relaciones de **MAD Query** y el espacio de trabajo de diseño por bandas de **MAD Designer**:
+**[MAD Designer para macOS](../docs/es/macos.md)** — la aplicación de escritorio nativa de `AppKit` (`Mac/`), que muestra el lienzo visual de relaciones de **MAD Query** y el espacio de trabajo de diseño por bandas de **MAD Designer**:
 
-![Espacio de trabajo MAD Query en la aplicación nativa de macOS](docs/assets/macos-native-mad-query-es.png)
+![Espacio de trabajo MAD Query en la aplicación nativa de macOS](../docs/assets/macos-native-mad-query-es.png)
 
-![Espacio de trabajo MAD Designer en la aplicación nativa de macOS](docs/assets/macos-native-mad-designer-es.png)
+![Espacio de trabajo MAD Designer en la aplicación nativa de macOS](../docs/assets/macos-native-mad-designer-es.png)
 
 **MAD Designer para iOS**, desde la elección de una fuente de datos hasta la lectura del informe terminado en MAD Viewer (28 segundos; [vídeo](https://docs.everydayapps.com/assets/app-preview.mp4)):
 
-[![Vista previa de la aplicación MAD Designer](docs/assets/app-preview-poster.png)](https://docs.everydayapps.com/assets/app-preview.mp4)
+[![Vista previa de la aplicación MAD Designer](../docs/assets/app-preview-poster.png)](https://docs.everydayapps.com/assets/app-preview.mp4)
 
 **El mismo motor ejecutándose sin interfaz gráfica en Linux**: `inspect`, `schema`, `query`, `refresh` y `export` a través de la CLI `mad`, sin servidor de informes:
 
-![La CLI mad inspeccionando, consultando, actualizando y exportando un documento .mad](docs/assets/mad-cli-demo.gif)
+![La CLI mad inspeccionando, consultando, actualizando y exportando un documento .mad](../docs/assets/mad-cli-demo.gif)
 
 El [informe exportado](https://docs.everydayapps.com/assets/london.html) de la grabación es HTML simple, y se abre en cualquier navegador.
 
@@ -73,11 +73,11 @@ La arquitectura divide un informe en **la definición portátil** (dentro del ar
 | **4. Tabla materializada** *(complementaria)* | `<hash>.maddb` + `<hash>.mdcache` | Base de datos de filas SQLite (`t<tag>`) + lista de propiedades del esquema de columnas (`MADDataColumn`) | **La salida del informe como tabla de base de datos.** Contiene las filas obtenidas, los índices de claves de grupo y los metadatos de tipos de columna, de modo que los agregados en dos pasadas (`SUM`, `COUNT`, `AVG`, `MIN`, `MAX`), la ordenación y el renderizado posterior nunca vuelvan a consultar la base de datos remota. |
 | **5. Caché de páginas** *(complementaria)* | `<hash>{ih,lh}{w,h}.madac` | Bases de datos SQLite de índice (`ih`) y de diseño (`lh`) indexadas por geometría de página | Saltos de página y marcos de elementos precalculados para una ventana de visualización de destino (p. ej., `{612, 792}` US Letter), lo que mantiene instantáneos el desplazamiento y la exportación. |
 
-La especificación completa —disposición del contenedor, tablas del almacén, esquemas de los archivos complementarios, rarezas conocidas (incluida la razón por la que el nombre del archivo del almacén interno se escribe históricamente `analyitics` por compatibilidad hacia atrás) y verificación de resúmenes entre plataformas— está documentada capítulo a capítulo en [`docs/`](docs/es/).
+La especificación completa —disposición del contenedor, tablas del almacén, esquemas de los archivos complementarios, rarezas conocidas (incluida la razón por la que el nombre del archivo del almacén interno se escribe históricamente `analyitics` por compatibilidad hacia atrás) y verificación de resúmenes entre plataformas— está documentada capítulo a capítulo en [`docs/`](../docs/es/).
 
 ## Hacia dónde va MAD: hoja de ruta y visión
 
-Como MAD ya separa el **grafo de consultas**, la **tabla de resultados SQLite materializada** y el **diseño de presentación**, la arquitectura habilita cuatro capacidades principales que se están diseñando y encolando activamente (véanse [`docs/vision.md`](docs/es/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](docs/project/MAD_DATA_OBJECT.md) y [`docs/project/TODO.md`](docs/project/TODO.md)):
+Como MAD ya separa el **grafo de consultas**, la **tabla de resultados SQLite materializada** y el **diseño de presentación**, la arquitectura habilita cuatro capacidades principales que se están diseñando y encolando activamente (véanse [`docs/vision.md`](../docs/es/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md) y [`docs/project/TODO.md`](../docs/project/TODO.md)):
 
 1. **Un informe `.mad` como tabla ad hoc de base de datos (objetos de datos componibles).**
    En una base de datos tradicional, se hace `SELECT` sobre tablas base como `employee` o `sales_data`. Un informe `.mad` enlaza y filtra varias tablas, y su salida (`.maddb` + `.mdcache`) ya es una tabla SQLite física con un esquema tipado (`MADDataColumn`). Al hacer que la salida de un informe sea direccionable como fuente de tabla dentro del diseñador de consultas, **un archivo `.mad` se convierte en una tabla de base de datos virtual/materializada**. Otros informes, consultas o herramientas pueden hacer `SELECT` y `JOIN` contra un informe `.mad` igual que contra cualquier tabla de una base de datos.
@@ -112,7 +112,7 @@ Las etiquetas publicadas son `latest` y el SHA corto del commit, compiladas para
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
-Los documentos de muestra se actualizan contra la base de datos de muestra de Sqlite3 incluida en la imagen; las fixtures de MySQL, SQL Server y PostgreSQL esperan los servidores de prueba de [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).
+Los documentos de muestra se actualizan contra la base de datos de muestra de Sqlite3 incluida en la imagen; las fixtures de MySQL, SQL Server y PostgreSQL esperan los servidores de prueba de [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md).
 
 ## En CI
 
@@ -125,7 +125,7 @@ La GitHub Action [mad-action](https://github.com/mthomason/mad-action) ejecuta u
     document: reports/sales.mad
 ```
 
-Ejecuta la imagen publicada, así que la acción y la CLI son el mismo motor. La acción se genera desde [`satellites/mad-action/`](satellites/mad-action/) aquí; [`docs/project/SATELLITE_REPOS.md`](docs/project/SATELLITE_REPOS.md) registra cómo se mantiene actualizado el repositorio satélite.
+Ejecuta la imagen publicada, así que la acción y la CLI son el mismo motor. La acción se genera desde [`satellites/mad-action/`](../satellites/mad-action/) aquí; [`docs/project/SATELLITE_REPOS.md`](../docs/project/SATELLITE_REPOS.md) registra cómo se mantiene actualizado el repositorio satélite.
 
 ## Drivers de base de datos
 
@@ -136,7 +136,7 @@ MAD se comunica con las bases de datos a través de subclases de `MADDatabase`. 
 * **PostgreSQL** — `MADPostgres`, sobre `libpq`;
 * **SQLite** — `MADSqlite3`, para documentos de muestra, bases de datos locales y tablas de materialización internas.
 
-Un driver es un framework que crea una subclase de `MADDatabase` y se registra con `MADDatabaseDriverRegistry`: el diseñador de consultas y el motor nunca ven el protocolo de transporte. Escribir uno es la primera contribución prevista (consulte el tutorial para escribir drivers en [`docs/tutorials/driver-authoring.md`](docs/es/tutorials/driver-authoring.md)). La costura es real: los usuarios pueden construir una consulta visualmente o pegar SQL (`MADSQLParser`), el motor genera la sentencia específica del dialecto y el driver solo tiene que ejecutarla y transmitir las filas a `id<MADDataTableWriting>`.
+Un driver es un framework que crea una subclase de `MADDatabase` y se registra con `MADDatabaseDriverRegistry`: el diseñador de consultas y el motor nunca ven el protocolo de transporte. Escribir uno es la primera contribución prevista (consulte el tutorial para escribir drivers en [`docs/tutorials/driver-authoring.md`](../docs/es/tutorials/driver-authoring.md)). La costura es real: los usuarios pueden construir una consulta visualmente o pegar SQL (`MADSQLParser`), el motor genera la sentencia específica del dialecto y el driver solo tiene que ejecutarla y transmitir las filas a `id<MADDataTableWriting>`.
 
 ## Incrustar el motor
 
@@ -144,7 +144,7 @@ Once de los catorce frameworks no dependen de UIKit y se compilan sin interfaz g
 
 ## Aplicación nativa de macOS
 
-La aplicación de escritorio nativa de macOS ([`docs/macos.md`](docs/es/macos.md), [`Mac/`](Mac/)) se compila directamente con `AppKit` (SDK `macosx`, `MACOSX_DEPLOYMENT_TARGET = 12.0`) sobre los doce frameworks multiplataforma de MAD y las diez bibliotecas C estáticas universales (`arm64` + `x86_64`) compiladas por `Compressor`:
+La aplicación de escritorio nativa de macOS ([`docs/macos.md`](../docs/es/macos.md), [`Mac/`](../Mac/)) se compila directamente con `AppKit` (SDK `macosx`, `MACOSX_DEPLOYMENT_TARGET = 12.0`) sobre los doce frameworks multiplataforma de MAD y las diez bibliotecas C estáticas universales (`arm64` + `x86_64`) compiladas por `Compressor`:
 
 * **Arquitectura nativa de `NSDocument` (`MADMacDocument` / `MADMacDocumentController`):** Abre y guarda archivos `.mad` de forma nativa desde el Finder o el panel de apertura estándar (con un botón integrado **New Document**), migra automáticamente los archivos `.mad` heredados de Core Data mediante `MADStoreConverter` e integra `MADDesignerLayout` directamente con `NSDocument.undoManager` (`Cmd+Z` / `Cmd+Shift+Z`).
 * **Asistente de conexión a base de datos e importación de esquema (`MADMacConnectionWindowController`):** Se conecta a **SQLite**, **MySQL / MariaDB**, **Microsoft SQL Server** o **PostgreSQL**, verifica la conectividad, guarda las credenciales en el Llavero de macOS (`MADKeyChain`) e importa los esquemas de tablas y columnas a un nuevo documento `.mad`.
@@ -153,7 +153,7 @@ La aplicación de escritorio nativa de macOS ([`docs/macos.md`](docs/es/macos.md
   2. **MAD Designer (`MADMacDesignerViewController`):** Vista dividida en tres paneles con un **Page & Section Minimap** interactivo, un esquema **Report Bands**, una fuente de arrastre **Query Fields** con búsqueda, un lienzo de diseño ampliable y con reglas (`MADMacDesignerCanvasView`) con arrastrar y soltar entre secciones y guías de alineación inteligentes, y un **Page & Element Inspector** de dos tarjetas.
   3. **MAD Viewer (`MADMacViewerViewController`):** Actualización de datos en vivo (`Cmd+R`), repaginación instantánea por **Page Size** (`US Letter`, `Legal`, `Tabloid`, `A3`, `A4`, `A5`, `B4`, `B5`, `JIS B4`, `JIS B5`), vista previa enmarcada en `PDFView`, impresión nativa con `NSPrintOperation` (`Cmd+P`) y exportación (`Cmd+E`) a **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report** y **Plain Text**.
 
-Consulte [`docs/macos.md`](docs/es/macos.md) para la guía completa y [`docs/project/MAD_MACOS.md`](docs/project/MAD_MACOS.md) para la auditoría de portabilidad multiplataforma.
+Consulte [`docs/macos.md`](../docs/es/macos.md) para la guía completa y [`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md) para la auditoría de portabilidad multiplataforma.
 
 ## Compilación y pruebas
 
@@ -188,7 +188,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ```
 
-(`MADMySQL`, `MADTdsClient` y `MADPostgres` también incluyen suites en vivo que se comunican con un servidor de base de datos real y se omiten cuando no hay ninguno disponible; consulte [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md)).)
+(`MADMySQL`, `MADTdsClient` y `MADPostgres` también incluyen suites en vivo que se comunican con un servidor de base de datos real y se omiten cuando no hay ninguno disponible; consulte [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md)).)
 
 ### Linux (motor y CLI sin interfaz gráfica)
 
@@ -198,7 +198,7 @@ El motor sin interfaz gráfica se verifica del mismo modo en Linux. Desde la ra�
 ./Linux/build.sh       # build the toolchain image, compile the eleven frameworks, run the suites
 ```
 
-Esto ejecuta 126 ejecutables de prueba y 1 303 pruebas dentro del contenedor, y `--verify` añade las comprobaciones integrales de la CLI contra las fixtures incluidas y sus resúmenes fijados. Consulte [`Linux/README.md`](Linux/README_es.md) para la imagen, las versiones fijadas y las divergencias de GNUstep que encontró el port.
+Esto ejecuta 126 ejecutables de prueba y 1 303 pruebas dentro del contenedor, y `--verify` añade las comprobaciones integrales de la CLI contra las fixtures incluidas y sus resúmenes fijados. Consulte [`Linux/README.md`](../Linux/README_es.md) para la imagen, las versiones fijadas y las divergencias de GNUstep que encontró el port.
 
 ## Soporte
 

@@ -1,4 +1,4 @@
-[English](SECURITY.md) | [简体中文](SECURITY_zh.md) | [日本語](SECURITY_ja.md) | **Português (Brasil)** | [Deutsch](SECURITY_de.md) | [Español](SECURITY_es.md)
+[English](../SECURITY.md) | [简体中文](SECURITY_zh.md) | [日本語](SECURITY_ja.md) | **Português (Brasil)** | [Deutsch](SECURITY_de.md) | [Español](SECURITY_es.md)
 
 # Política de Segurança
 
@@ -59,5 +59,5 @@ especificação e no registro de bugs, e alterá-los é uma decisão de produto:
   (`docs/05-companion-files.md` §5.3), de modo que editar um documento mantendo o mesmo
   nome pode exibir páginas antigas até que os arquivos de cache sejam removidos.
 * As credenciais de banco de dados das suítes de teste em
-  [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) são credenciais descartáveis para
+  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) são credenciais descartáveis para
   contêineres Docker locais, não segredos de produção.

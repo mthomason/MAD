@@ -1,4 +1,4 @@
-[English](SECURITY.md) | [简体中文](SECURITY_zh.md) | [日本語](SECURITY_ja.md) | [Português (Brasil)](SECURITY_pt-BR.md) | **Deutsch** | [Español](SECURITY_es.md)
+[English](../SECURITY.md) | [简体中文](SECURITY_zh.md) | [日本語](SECURITY_ja.md) | [Português (Brasil)](SECURITY_pt-BR.md) | **Deutsch** | [Español](SECURITY_es.md)
 
 # Sicherheitsrichtlinie
 
@@ -64,6 +64,6 @@ Produktentscheidung:
   Dokuments unter demselben Namen veraltete Seiten ausliefern kann, bis die
   Cache-Dateien entfernt werden.
 * Die Datenbank-Zugangsdaten der Testsuiten in
-  [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) sind
+  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) sind
   Wegwerf-Zugangsdaten für lokale Docker-Container, keine
   Produktionsgeheimnisse.

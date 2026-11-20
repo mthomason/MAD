@@ -1,4 +1,4 @@
-[English](CONTRIBUTING.md) | [简体中文](CONTRIBUTING_zh.md) | [日本語](CONTRIBUTING_ja.md) | [Português (Brasil)](CONTRIBUTING_pt-BR.md) | [Deutsch](CONTRIBUTING_de.md) | **Español**
+[English](../CONTRIBUTING.md) | [简体中文](CONTRIBUTING_zh.md) | [日本語](CONTRIBUTING_ja.md) | [Português (Brasil)](CONTRIBUTING_pt-BR.md) | [Deutsch](CONTRIBUTING_de.md) | **Español**
 
 # Contribuir a MAD
 
@@ -7,7 +7,7 @@ aplicaciones MAD Designer y MAD Viewer, los frameworks y el motor sin interfaz
 gráfica—, y las costuras para trabajo nuevo son el punto: un nuevo driver de base
 de datos, un nuevo elemento de documento, un nuevo formato de exportación. El tutorial
 para escribir drivers
-([`docs/tutorials/driver-authoring.md`](docs/es/tutorials/driver-authoring.md))
+([`docs/tutorials/driver-authoring.md`](../docs/es/tutorials/driver-authoring.md))
 recorre el primero; es la primera contribución prevista.
 
 ## Requisitos previos
@@ -19,7 +19,7 @@ recorre el primero; es la primera contribución prevista.
   C, compila los once frameworks sin interfaz gráfica y ejecuta sus suites.
 * No se necesita ningún servidor de base de datos para contribuir: las suites en vivo de MySQL, SQL Server y
   PostgreSQL se omiten cuando no hay ningún servidor disponible, y
-  [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) documenta los
+  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) documenta los
   contenedores Docker que los proporcionan.
 
 ## Primeros pasos
@@ -39,7 +39,7 @@ recorre el primero; es la primera contribución prevista.
    ./Linux/build.sh
    ```
 
-   [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) contiene la matriz completa de
+   [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) contiene la matriz completa de
    comandos, la ruta compartida de DerivedData que esperan los
    frameworks y la configuración de las bases de datos de prueba.
 3. Elija algo. Un nuevo driver, un elemento o un issue etiquetado
@@ -73,9 +73,9 @@ que no se corrige ni se registra es un cambio que falla.
   declaración: una advertencia de código sin usar no marcada significa que el código está muerto.
 * Los archivos nuevos llevan la cabecera de una línea `Copyright © 2012-2026 Michael
   Thomason. SPDX-License-Identifier: MIT` (`//` para código fuente, `#` para scripts).
-* [`docs/project/BUGS.md`](docs/project/BUGS.md) registra los defectos abiertos con
+* [`docs/project/BUGS.md`](../docs/project/BUGS.md) registra los defectos abiertos con
   las pruebas que los fijan; cuando corrija uno, la entrada pasa a
-  [`docs/project/BUGS_FIXED.md`](docs/project/BUGS_FIXED.md): una corrección que
+  [`docs/project/BUGS_FIXED.md`](../docs/project/BUGS_FIXED.md): una corrección que
   no se registra no ocurrió.
 
 ## Developer Certificate of Origin
@@ -103,7 +103,7 @@ requests una vez que el repositorio se publica en GitHub.
 ## Issues
 
 Las plantillas de informe de errores y de propuesta de driver están en
-[`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/). Los problemas de seguridad van por
+[`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/). Los problemas de seguridad van por
 la vía privada de [`SECURITY.md`](SECURITY_es.md), nunca a un issue público.
 
 ## Ayuda

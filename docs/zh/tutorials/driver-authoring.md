@@ -140,7 +140,7 @@ lang: zh-CN
 
 ## 第 7 步——合入
 
-通过驱动提案 issue 模板提出驱动，遵循 [CONTRIBUTING.md](https://github.com/mthomason/MAD/blob/master/CONTRIBUTING_zh.md) 中的测试先行规则（先写
+通过驱动提案 issue 模板提出驱动，遵循 [CONTRIBUTING.md](https://github.com/mthomason/MAD/blob/master/translations/CONTRIBUTING_zh.md) 中的测试先行规则（先写
 失败的测试，再让代码走向绿色；对夹具做快照，而不是用新代码生成它们），如果驱动链接了新的第三方
 库，请同时扩展
 [docs/project/THIRD_PARTY_LICENSES.md](https://github.com/mthomason/MAD/blob/master/docs/zh/project/THIRD_PARTY_LICENSES.md)
