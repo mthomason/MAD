@@ -2,11 +2,12 @@
 
 ## What this is
 
-The headless engine's native Windows build (see [`MAD_WINDOWS.md`](../docs/project/MAD_WINDOWS.md)
-and this directory's [`README.md`](README.md)). It compiles the engine's
-Objective-C frameworks against GNUstep Base with Clang, the Windows sibling of
-the Linux build. Nothing here ships in the app yet; the WPF shell is a later
-phase. It builds all eleven headless frameworks (MADDataStructures, MADFoundation,
+The native Windows engine and its WPF application (see
+[`MAD_WINDOWS.md`](../docs/project/MAD_WINDOWS.md) and this directory's
+[`README.md`](README.md)). It compiles the engine's Objective-C frameworks
+against GNUstep Base with Clang, the Windows sibling of the Linux build, and
+`App/` is the WPF app on top of the `mad serve` process boundary (Phases 5 and
+6a–6e). It builds all eleven headless frameworks (MADDataStructures, MADFoundation,
 MADAPI, MADSqlite3, MADCocoaExtensions, MADFileManager, MAD, plus the four drivers
 MADMySQL, MADTds, MADTdsClient, MADPostgres), compiles the pinned
 SQLite/zlib/bzip2/libarchive and OpenSSL/FreeTDS/MariaDB/libpq libraries, builds
@@ -53,15 +54,18 @@ the smoke test, 1294 tests, 6 needs, 5 skips, 0 failures).
 *   **`Engine/build/`** — build output (gitignored): clang objects, `smoke.exe`,
     the `tests/` executables, the SQLite library, the toolchain clone, and the
     include-shim junctions.
-*   **`global.json`** — pins .NET 10 LTS for the future WPF app.
+*   **`global.json`** — pins .NET 10 LTS for the WPF app and its tests.
 *   **`Client/`** — the Phase 4 stdio acceptance client (`.NET 10`): `Mad.Client`
     (a console client for `mad serve`) and `Mad.Client.Tests` (xunit; success,
     malformed, engine-failure and shutdown paths).  The protocol is documented in
     `docs/project/MAD_WINDOWS.md` §6d.
-*   **`App/`** — the WPF shell (`net10.0-windows`): `Mad.Designer.Windows` (the app,
-    MVVM over the Phase 4 client) and `Mad.Designer.Windows.Tests` (xunit; the headless
-    London acceptance and the licence-register checks). It reuses `Client/Mad.Client`
-    via a project reference; see `Windows/README.md`.
+*   **`App/`** — the WPF application (`net10.0-windows`): `Mad.Designer.Windows`
+    (the app — connection, Query, Designer and Viewer workspaces, MVVM over the
+    Phase 4 client) and `Mad.Designer.Windows.Tests` (xunit; the acceptance tests,
+    the localization dictionaries, the licence register, and the WPF smoke test
+    `SmokeTests.cs`, which pins the London export bytes). `App/.../Resources/`
+    holds the six `Strings-<language>.xaml` dictionaries. It reuses
+    `Client/Mad.Client` via a project reference; see `Windows/README.md`.
 
 ## How the build works
 
@@ -108,11 +112,13 @@ real CMake build can consume them once CMake's Windows ObjC support lands.
     and libffi are MIT; libdispatch is Apache-2.0 with the Swift runtime
     exception. Their texts live in `ThirdParty/Licenses/Windows/`, the register
     entry is `docs/project/THIRD_PARTY_LICENSES.md` §10, and the relink offer is
-    in `ThirdParty/Licenses/README.md`. Do not add GNUstep rows to the iOS/macOS
-    About screens; the WPF About window is opened by the Phase 5 shell proof and
-    completed in Phase 6, and must render the Windows components from the
-    register. A Windows package must ship
-    `ThirdParty/Licenses` and `NOTICE`. The GNUstep Base command-line tools
+    in `ThirdParty/Licenses/README.md`. The WPF About window (completed in
+    Phase 6e) renders the Windows components from the register, plus Microsoft
+    Edge WebView2, which is a Microsoft redistributable with an attribution
+    notice (`ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`), not an
+    open-source licence text. Do not add GNUstep rows to the iOS/macOS About
+    screens. A Windows package must ship `ThirdParty/Licenses` and `NOTICE`. The
+    GNUstep Base command-line tools
     (`gdomap`, `gdnc`, `defaults`, `plutil`, `gspath`) are GPL-3.0-or-later and
     are not part of `mad.exe`; do not package them without the GPL text and a
     corresponding-source offer.
@@ -126,5 +132,8 @@ build + test run, exiting non-zero on any failure. The smoke test prints
 skips=… failed=0` and exits 0. `MADDataTableFastBenchmarkTests` skips at its
 default scale zero (`MAD_BENCH_ROWS`). The Linux CI and the Apple suites are the
 regression gates for the shared-source changes this tree makes. The Phase 4
-client is checked separately: build `mad.exe`, then `dotnet test Mad.Client.Tests`
-from `Windows/Client` (see `Windows/README.md`).
+client and the WPF app are checked separately: build `mad.exe`, then
+`dotnet test Windows/Client/Mad.Client.Tests` and
+`dotnet test Windows/App/Mad.Designer.Windows.Tests`. The app suite includes the
+WPF smoke test, whose London exports must match the pins in `Linux/README.md`
+(see `Windows/README.md`).

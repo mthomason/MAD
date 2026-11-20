@@ -984,15 +984,30 @@ at https://github.com/mthomason/MAD/issues." The iOS About table has it as its
 own row above `Overview`; the Mac About overview has it as the last paragraph.
 The URL and the product names stay verbatim.
 
-**The Windows WPF About window (Phase 5 shell proof, completed in Phase 6) is a separate surface.** Its component
-list is the native Windows engine's, not the Apple app's: GNUstep Base,
-gnustep-corebase, libiconv, libobjc2, libdispatch/BlocksRuntime, libffi, and the
-C libraries, with the texts in `ThirdParty/Licenses/Windows/` and the shared root
-texts. Its chrome (title, section headings, and the three tabs, Overview,
+**The Windows WPF About window (Phase 5 shell proof, completed in Phase 6e) is a
+separate surface.** Its component list is the native Windows engine's, not the
+Apple app's: GNUstep Base, gnustep-corebase, libiconv, libobjc2,
+libdispatch/BlocksRuntime, libffi, the C libraries, and Microsoft Edge WebView2
+(a Microsoft redistributable with an attribution notice, not an open-source
+licence text), with the texts in `ThirdParty/Licenses/Windows/` and the shared
+root texts. Its chrome (title, section headings, and the three tabs, Overview,
 License & Notice, Acknowledgements) is localized like the Apple screens, but
 every component notice, licence body, copyright line, and the LGPL relink offer
 stays verbatim English. The register is `docs/project/THIRD_PARTY_LICENSES.md`
 §10; the Windows package must ship `ThirdParty/Licenses` and `NOTICE`.
+
+**Windows status (Phase 6e, 2026-11-19).** The WPF app implements this contract
+with WPF resource dictionaries (`Windows/App/Mad.Designer.Windows/Resources/`:
+`Strings-en.xaml` plus `de`, `es`, `ja`, `pt-BR`, `zh-Hans`), loaded by
+`Infrastructure/Localizer.cs`, with XAML's `{infra:Loc Key}` and
+`Localizer.Get`/`Format` in code. The language follows the OS UI culture, with
+`MAD_LANGUAGE` as an override; the About Overview carries the D14
+machine-assisted notice in every language. The same exclusions apply: licence
+bodies, notices, copyright and brand names stay English, and SQL keywords,
+data-type names, and field/table identifiers are not translated. The tests
+(`LocalizerTests`) check that every dictionary carries every key, that format
+placeholders survive translation, and that the XAML renders the selected
+language; the WPF smoke test (`SmokeTests`) pins the exported bytes.
 
 ## 9. Quality assurance
 
