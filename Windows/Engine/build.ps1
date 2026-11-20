@@ -972,15 +972,19 @@ if (-not (Test-Path $pixmanLib)) {
 	if ($LASTEXITCODE -ne 0) { throw "pixman meson setup failed" }
 	& ninja -C (Fwd $pixmanBuild) 2>&1 | ForEach-Object { Write-Host $_ }
 	if ($LASTEXITCODE -ne 0) { throw "pixman build failed" }
-	# Meson on this machine emits GNU-ar archives (MSYS2's ar is on the PATH it
-	# sees), and lld-link resolves members only out of COFF .lib archives, so the
-	# core and the SIMD back-ends are merged with llvm-lib, as the libpq build
-	# merges its three.
+	# This Meson (with the MSVC toolchain) names its static outputs .a even though
+	# they are COFF archives built by lib.exe; merge the core and the SIMD
+	# back-ends into the one .lib the link names, as the libpq build merges its
+	# three.  If a Meson ever emits the .lib itself, Find-Lib takes it instead.
 	$pixmanArchives = @(Get-ChildItem -Path (Join-Path $pixmanBuild "pixman") -Filter "*.a" -File |
 		Where-Object { $_.Name -match '^libpixman-(1|mmx|sse2|ssse3)\.a$' } | ForEach-Object { $_.FullName })
-	if ($pixmanArchives.Count -eq 0) { throw "pixman produced no archive" }
-	& llvm-lib /out:$pixmanLib @pixmanArchives 2>&1 | ForEach-Object { Write-Host $_ }
-	if ($LASTEXITCODE -ne 0) { throw "pixman archive conversion failed" }
+	if ($pixmanArchives.Count -eq 0) {
+		$found = Find-Lib $pixmanBuild "pixman-1"
+		Copy-Item $found $pixmanLib -Force
+	} else {
+		& llvm-lib /out:$pixmanLib @pixmanArchives 2>&1 | ForEach-Object { Write-Host $_ }
+		if ($LASTEXITCODE -ne 0) { throw "pixman archive conversion failed" }
+	}
 	Write-Host "  ok   pixman-1.lib built"
 } else {
 	Write-Host "  ok   pixman-1.lib (cached)"

@@ -1059,18 +1059,38 @@ static void testThePDFCarriesTheBarcodeAndThePictureAsImages(void) {
 	if (pdf == nil) return;
 
 	NSString *text = [[NSString alloc] initWithData: pdf encoding: NSISOLatin1StringEncoding];
-	NSUInteger images = 0;
+
+	// Each image XObject's own pixel size, from the dictionary around its
+	// /Subtype /Image: the barcode's symbol is drawn from a 224x96 bitmap and
+	// the picture is the fixture's 1x1 PNG, so their presence proves both
+	// walked pictures reached the page, not merely that some image did.
+	NSMutableArray<NSString *> *sizes = [NSMutableArray array];
 	NSRange search = NSMakeRange(0, text.length);
 	while (search.length > 0) {
 		NSRange found = [text rangeOfString: @"/Subtype /Image" options: 0 range: search];
 		if (found.location == NSNotFound) break;
-		images++;
-		NSUInteger next = found.location + found.length;
-		search = NSMakeRange(next, text.length - next);
+		NSRange open = [text rangeOfString: @"<<" options: NSBackwardsSearch
+									   range: NSMakeRange(0, found.location)];
+		NSRange close = [text rangeOfString: @">>" options: 0
+									  range: NSMakeRange(found.location, text.length - found.location)];
+		if (open.location != NSNotFound && close.location != NSNotFound) {
+			NSString *dict = [text substringWithRange: NSMakeRange(open.location, NSMaxRange(close) - open.location)];
+			NSRange width = [dict rangeOfString: @"/Width "];
+			NSRange height = [dict rangeOfString: @"/Height "];
+			if (width.location != NSNotFound && height.location != NSNotFound) {
+				[sizes addObject: [NSString stringWithFormat: @"%ldx%ld",
+								   (long)[[dict substringFromIndex: NSMaxRange(width)] integerValue],
+								   (long)[[dict substringFromIndex: NSMaxRange(height)] integerValue]]];
+			}
+		}
+		search = NSMakeRange(NSMaxRange(found), text.length - NSMaxRange(found));
 	}
 	[text release];
-	MAD_PASS(images >= 2, "the barcode's symbol and the element's picture are image XObjects (found %lu)",
-			 (unsigned long)images);
+	NSString *inventory = [sizes componentsJoinedByString: @", "];
+	MAD_PASS([sizes containsObject: @"224x96"],
+			 "the barcode's 224x96 symbol is an image XObject (%s)", inventory.UTF8String);
+	MAD_PASS([sizes containsObject: @"1x1"],
+			 "the picture's 1x1 PNG is an image XObject at its own resolution (%s)", inventory.UTF8String);
 }
 
 static void testTheDeterministicExportIsTheSameBytes(void) {
