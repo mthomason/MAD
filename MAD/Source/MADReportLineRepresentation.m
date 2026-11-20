@@ -16,6 +16,12 @@
 @property (nonatomic, readonly, copy) NSString *text;
 @end
 
+// The image-carrying drawing object (MADPrintPageElementBarcode), declared rather
+// than imported for the same reason.
+@protocol MADReportLineImageElement <NSObject>
+- (NSData *)renderedImageData;
+@end
+
 @interface MADReportLineRepresentation ()
 
 	@property (nonatomic, strong) NSObject *object;
@@ -24,6 +30,8 @@
 
 @implementation MADReportLineRepresentation {
 	MADPrintPageElementType _type;
+	NSData *_imageData;
+	BOOL _imageDataResolved;
 }
 
 @synthesize elementOffset = _elementOffset, characterOffset = _characterOffset;
@@ -64,6 +72,17 @@
 		return [(id <MADReportLineTextElement>)object text];
 	}
 	return nil;
+}
+
+- (NSData *)imageData {
+	if (!_imageDataResolved) {
+		_imageDataResolved = YES;
+		id object = self.object;
+		if ([object respondsToSelector: @selector(renderedImageData)]) {
+			_imageData = [(id <MADReportLineImageElement>)object renderedImageData];
+		}
+	}
+	return _imageData;
 }
 
 #pragma mark - MADTextRepresentationProtocol
