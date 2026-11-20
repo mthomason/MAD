@@ -30,6 +30,7 @@ runtime texts under `Windows/`; see the Windows relink offer below and
 | `Windows/libobjc2-MIT.txt` | libobjc2 (including libBlocksRuntime) | `COPYING` at the pinned libobjc2 revision. |
 | `Windows/libdispatch-Apache-2.0-with-Swift-exception.txt` | libdispatch | `LICENSE` at the pinned swift-corelibs-libdispatch revision, including the Swift runtime exception. |
 | `Windows/libffi-MIT.txt` | libffi | `LICENSE` at libffi v3.8.0. |
+| `Windows/WebView2-Runtime-NOTICE.txt` | Microsoft Edge WebView2 | An attribution notice written for this project, not a licence text: the WebView2 Runtime is a Microsoft redistributable and is not open-source software. The control comes from the pinned `Microsoft.Web.WebView2` NuGet package. |
 | `asn1c-BSD.txt` | asn1c runtime | The header comment in `MADDesigner/Source/ReceiptModuleAsn1c/asn_application.h`. |
 | `rwpng-BSD-2-Clause.txt` | pngquant `rwpng` | The header comment in `MADDesigner/Source/rwpng/rwpng.c`. |
 | `FontAwesome-OFL-1.1.txt` | FontAwesome.ttf (v4.3.0) | The canonical SIL OFL 1.1 text from openfontlicense.org. The 4.3.0 distribution carried no licence file, and the copyright line FA declared for that version was "Font Awesome by Dave Gandy - http://fontawesome.io". |
@@ -71,7 +72,7 @@ runtime image.
 
 ## The relink offer (the native Windows engine)
 
-The native Windows engine (`Windows/`, `mad.exe` and the WPF app that will host
+The native Windows engine (`Windows/`, `mad.exe` and the WPF app that hosts
 it) distributes GNUstep Base, libiconv and gnustep-corebase (LGPL-2.1-or-later),
 and links FreeTDS and MariaDB Connector/C statically under the same **LGPL-3.0**
 election as the Apple app. The exact DLL/static split is measured from the built

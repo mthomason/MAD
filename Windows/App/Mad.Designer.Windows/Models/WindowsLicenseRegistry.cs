@@ -76,18 +76,16 @@ public static class WindowsLicenseRegistry
             "The PostgreSQL client library.",
             "PostgreSQL License (libpq)",
             "postgres-LICENSE.txt"),
+        new("Microsoft Edge WebView2", "Microsoft Software License Terms",
+            "The embedded browser control that renders the report preview. The Evergreen WebView2 Runtime is a Microsoft redistributable installed with Windows 11 and alongside Microsoft Edge; this application neither modifies nor redistributes the runtime. Use is governed by Microsoft's terms.",
+            "Microsoft Edge WebView2 — Notice",
+            "Windows/WebView2-Runtime-NOTICE.txt"),
     };
 
     public static string RelinkOffer { get; } = ReadRelinkOffer();
 
     public static string BrandNotice { get; } =
         "Licensed under the MIT License. The names \"MAD\", \"MAD Designer\", and \"MAD Viewer\" and the application icons and artwork are not licensed under the MIT License; all rights in them are reserved by Michael Thomason.";
-
-    public static string OverviewText { get; } =
-        "MAD Designer is open-source business intelligence software by Michael Thomason.\n\n" +
-        "MAD is an open-source mobile business intelligence and report-design system. A .mad file stores a report's schema snapshot, query definition, and visual layout in one compact, portable document.\n\n" +
-        "MAD Designer connects natively to MySQL / MariaDB, Microsoft SQL Server, and PostgreSQL databases, and uses SQLite for portable sample documents and local row caching.\n\n" +
-        "On Windows, MAD Designer is a WPF application that drives the native Windows engine (mad.exe) over a JSON process boundary. PDF export is deferred on Windows and Linux; HTML, CSV, JSON, and plain-text export are available.";
 
     public static string? ReadLicenseText(WindowsComponent component)
     {
