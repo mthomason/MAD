@@ -156,10 +156,12 @@ check_file "export html"	"${WORK}/out.html"		62007	285541ed59333e0e55b8c7fe5619e
 check_file "export html-flow"	"${WORK}/out.flow.html"		54766	0565204a55d02f925602b5c0bf298bb0e41c9cbe56bea6df770e828a35782382
 check_file "export json-report"	"${WORK}/out.report.json"	118109	9d01d0daabbb5e38921c0bfbed083b288031c9340e9a4af81679d03b691ce94c
 
-output mad export "${LONDON}" --format pdf --out "${WORK}/out.pdf" > "${WORK}/pdf.txt"
-PDF_STATUS=$?
-check "pdf refuses with exit 5"		[ "${PDF_STATUS}" -eq 5 ]
-check "pdf names its reason"		grep -q 'not available in this build' "${WORK}/pdf.txt"
+# The PDF is structurally compared, not byte-pinned: Core Graphics cannot be
+# reproduced, so the target is the walk's pages (docs/project/MAD_PDF_LINUX.md).
+export_format pdf		"${WORK}/out.pdf"
+check "export pdf: a PDF 1.4"		[ "$(head -c 8 "${WORK}/out.pdf")" = "%PDF-1.4" ]
+check "export pdf: five pages"		[ "$(grep -a -c '/Type /Page ' "${WORK}/out.pdf")" -eq 5 ]
+check "export pdf: US Letter"		grep -a -q '/MediaBox \[ 0 0 612 792 \]' "${WORK}/out.pdf"
 
 # --- write ----------------------------------------------------------------
 
