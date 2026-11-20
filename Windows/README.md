@@ -1,9 +1,10 @@
-# Windows — the headless engine's native build
+# Windows — the native engine and the WPF app
 
 The Windows counterpart to `Linux/`: a native Windows build of the headless
 engine's Objective-C frameworks, compiled with Clang against GNUstep Base, so
 the same engine that runs the macOS app and the Linux CLI can run on Windows.
-Nothing here is the app — the WPF shell is a later phase (`docs/project/MAD_WINDOWS.md`).
+`Windows/App/` is the WPF application on top of it (Phases 5 and 6a–6e); the
+architecture record is `docs/project/MAD_WINDOWS.md`.
 
 This increment builds all eleven headless frameworks — **MADDataStructures**,
 **MADFoundation**, **MADAPI**, **MADSqlite3**, **MADCocoaExtensions**,
@@ -272,6 +273,34 @@ dotnet build .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj
 dotnet run --project .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj
 ```
 
+The About window (Overview / License & Notice / Acknowledgements) renders the Windows
+dependency register in `ThirdParty/Licenses/Windows/` and the relink offer — the Windows
+component set, never the Apple one. It also lists **Microsoft Edge WebView2**, the
+Viewer's preview control: the Evergreen runtime is a Microsoft redistributable, so the
+entry is the Microsoft Software License Terms and the attribution notice
+`ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`, not an open-source licence
+text.
+
+### Localization
+
+The app's user-facing strings are WPF resource dictionaries in
+`Windows/App/Mad.Designer.Windows/Resources/`: `Strings-en.xaml` is the source and
+`Strings-de.xaml`, `Strings-es.xaml`, `Strings-ja.xaml`, `Strings-pt-BR.xaml` and
+`Strings-zh-Hans.xaml` are the Mac app's five translations. They are embedded in the
+assembly and loaded by `Infrastructure/Localizer.cs`; XAML uses `{infra:Loc Key}` and
+code uses `Localizer.Get`/`Format`. The language follows the OS UI culture at launch, or
+`MAD_LANGUAGE` for inspection:
+
+```powershell
+$env:MAD_LANGUAGE = "de"
+dotnet run --project .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj
+```
+
+The translations are machine-assisted and unreviewed, as on the Mac
+(`docs/project/MAD_APP_LOCALIZATION.md` D14); the About Overview ends with that notice
+in each language. Licence bodies, component notices, the relink offer, copyright and
+brand names stay verbatim English.
+
 The headless acceptance lives in `Windows/App/Mad.Designer.Windows.Tests` (xunit,
 `net10.0-windows`) and needs no human interaction — it drives the service and view-model
 layers through the London flow (open → describe 21/11 → refresh 76 → export json/csv →
@@ -279,7 +308,17 @@ clean shutdown), the Phase 6b query model (add/connect/filter/group/remove table
 validate/apply SQL against a fresh chinook document, plus the canvas and view-model
 layers), the Phase 6c designer and the Phase 6d viewer (the rendered report's page count
 and status line, the page-size lock and its effect on the exported page box, every export
-format, and the workspace materialised on an STA thread), and checks the licence register:
+format, and the workspace materialised on an STA thread), the localization dictionaries,
+and checks the licence register. It also carries the **WPF smoke test**
+(`SmokeTests.cs`), the counterpart of `Mac/Tests/MADMacSmokeTest.m`:
+
+* **London** — open, refresh 76 rows / 5 pages, export HTML Page, HTML Flow, CSV, JSON
+  Data, JSON Full Report and Plain Text, and assert each file's byte count and SHA-256
+  against the Mac/Linux pins in `Linux/README.md`.
+* **A created document** — new `.mad` from `chinook.sqlite3`, apply the Mac's SQL
+  statement, add a label, data field and aggregate, refresh, and export every format.
+
+PDF and barcode are excluded (accepted gaps).
 
 ```powershell
 dotnet test .\Windows\App\Mad.Designer.Windows.Tests
@@ -331,6 +370,11 @@ $env:MAD_PG_TEST_DATABASE = "chinook"
 * The four MAD suites that needed the drivers (`MADDatabaseDriverDispatchTests`,
   `MADQueryFullTests`, `MADSQLParserTests`, `MADQueryMaxFieldLengthTests`) are
   now wired with them and pass.
+* **PDF export and barcode elements are accepted gaps** on Windows: the engine
+  has no Windows PDF exporter, and `MADBarcodes` is excluded as on Linux. HTML +
+  print is the interim for PDF. The public `docs/windows.md` and its five
+  translations are deferred; `Windows/README.md` and
+  `docs/project/MAD_WINDOWS.md` are the Windows documentation for now.
 
 ## Third-party and licensing
 
@@ -348,6 +392,7 @@ The Windows engine is a distribution surface of its own. It is registered in
 | libffi | MIT | retain the notice |
 | SQLite, zlib, bzip2, libarchive | public domain / Zlib / bzip2 / BSD-2 | the existing §3.1 entries |
 | OpenSSL, FreeTDS, MariaDB Connector/C, libpq | Apache-2.0 / LGPL-3.0 election / LGPL-3.0 election / PostgreSQL | the existing §3.1–§3.4 entries; FreeTDS's `sybdb.h` is marked |
+| Microsoft Edge WebView2 (Runtime and SDK) | Microsoft Software License Terms | a Microsoft redistributable, not open-source software; the attribution is `ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`, and the runtime is not bundled or modified |
 
 `gnustep-make` is GPL-3.0-or-later **build tooling** and is not distributed; its
 `Testing.h` is compiled only into test binaries, which are not shipped. The

@@ -215,6 +215,10 @@ behaviour-neutral on Apple/Linux (the same pointer bytes move through).
 
 ## 6. Known gaps and next increments
 
+> This section records the Phase 1/2 gaps as they stood then. Phases 3a–6e
+> closed all of them except the accepted ones; see §6b–§6h, and
+> `Windows/README.md` for the current state.
+
 * **`BDHost`** (reverse DNS) and **`MADKeyChain`** (Security.framework) are
   excluded; `BDHost` needs a Winsock2 port, `MADKeyChain` has no Windows
   keychain equivalent yet. `BDHostTests` is not registered on Windows for the
@@ -525,6 +529,77 @@ rows, page-size lock and persistence through A4 with the exported page box at 59
 every export format with its extension, and the paper-size switch A4 → Legal → Letter
 reaching each export).
 
+## 6h. Phase 6e — About, localization, and the WPF smoke test
+
+Phase 6e closes the merge gate without changing the engine: it finishes the About
+window's dependency register, localizes the WPF app into the Mac app's language
+set, adds the WPF counterpart of `MADMacSmokeTest.m`, and brings this record and
+`Windows/README.md` up to date. Public `docs/windows.md` and its translations are
+deferred by design.
+
+**About and the WebView2 notice.** The Viewer preview runs in the
+**Microsoft Edge WebView2** control (NuGet `Microsoft.Web.WebView2` 1.0.4314.35).
+The Evergreen WebView2 Runtime is a Microsoft redistributable, not open-source
+software: the About window therefore lists `Microsoft Edge WebView2` with the
+Microsoft Software License Terms and an attribution notice,
+`ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`, rather than a licence
+text. The register is `docs/project/THIRD_PARTY_LICENSES.md` §10. The rest of the
+component list is unchanged (GNUstep Base, gnustep-corebase, libiconv, libobjc2,
+libdispatch/BlocksRuntime, libffi, and the C libraries), and the LGPL relink
+offer still names the Windows engine; the WPF app never shows the Apple set.
+
+**Localization.** Every user-facing string lives in a WPF `ResourceDictionary`
+under `Windows/App/Mad.Designer.Windows/Resources/`: `Strings-en.xaml` is the
+authoritative source and `Strings-de.xaml`, `Strings-es.xaml`,
+`Strings-ja.xaml`, `Strings-pt-BR.xaml` and `Strings-zh-Hans.xaml` mirror the
+Mac app's language set (`MAD_APP_LOCALIZATION.md` D1/D9). The dictionaries are
+embedded in the main assembly (not compiled `Page` items and not satellite
+assemblies — the hyphen in `Strings-de.xaml` keeps MSBuild from reading the
+language code as a culture suffix), and `Infrastructure/Localizer.cs` loads them
+with `XamlReader` and serves `Get`/`Format`. XAML consumes them through the
+`{infra:Loc Key}` markup extension, which resolves at load time; code-behind and
+view models call `Localizer`. The language follows the OS UI culture at launch
+(`de`, `es`, `ja`, `pt-BR`, `zh-Hans`; anything else is English), and
+`MAD_LANGUAGE` overrides it for inspection:
+
+```powershell
+$env:MAD_LANGUAGE = "de"
+dotnet run --project .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj
+```
+
+Translations reuse the Mac's `Localizable.xcstrings` where the English source
+matches, then follow the machine-assisted policy (MAD_APP_LOCALIZATION.md D14):
+the About Overview ends with the notice that the translations are
+machine-assisted and may contain errors, in each language. The About chrome,
+connection assistant, query/designer/viewer toolbars and status lines, dialogs,
+and the band names are translated; licence bodies, component notices, the LGPL
+relink offer, copyright and brand names stay verbatim English (D6/§8), with a
+localized sentence saying the licence texts are reproduced in their original
+English. SQL keywords, data-type names, and field/table identifiers are not
+translated, and error text the engine itself returns (driver failures, SQL
+parser messages) stays English, as the Mac's driver messages do.
+
+**The smoke test.** `Windows/App/Mad.Designer.Windows.Tests/SmokeTests.cs` is
+the view-model/service-level counterpart of `MADMacSmokeTest.m`, not a pixel
+test:
+
+1. **London.** Open `CLI/Fixtures/London.portable.mad`, refresh 76 rows (5
+   pages), then export HTML Page, HTML Flow, CSV, JSON Data, JSON Full Report and
+   Plain Text through the Viewer's own path. Each file's byte count and SHA-256
+   are asserted against the Mac/Linux pins in `Linux/README.md` (`html`
+   `285541ed…`, `html-flow` `0565204a…`, `csv` `773f6215…`, `json` `569c6ee2…`,
+   `json-report` `9d01d0da…`, `text` `7dcee96c…`).
+2. **A new document.** Create a `.mad` from `chinook.sqlite3`, apply the Mac's
+   SQL statement (`SELECT Customer.FirstName, Customer.LastName, Customer.City
+   FROM Customer WHERE Customer.Country = 'United Kingdom';`), add a static
+   label, a data field bound to `LastName`, and a report-scope COUNT aggregate,
+   refresh, then export every available format and check the JSON row count and
+   the HTML page count.
+
+PDF and barcode are excluded as accepted gaps (barcode is not a Windows element
+kind; PDF has no Windows exporter). The suite runs headlessly with the rest of
+the app tests; see `Windows/README.md`.
+
 ## 7. Supported Windows versions
 
 .NET 10's supported OS matrix (Windows 10 Enterprise 21H2/1809/1607, Windows
@@ -549,6 +624,13 @@ compliance surface:
   relink offer now names the Windows engine.
 * **The C libraries** (SQLite, zlib, bzip2, libarchive, OpenSSL, libpq) use the
   existing entries and texts in `ThirdParty/Licenses/`.
+* **Microsoft Edge WebView2** (the WPF Viewer's preview control, NuGet
+  `Microsoft.Web.WebView2` 1.0.4314.35) is a Microsoft product, not open-source
+  software: the Evergreen WebView2 Runtime is installed with Windows 11 and Edge
+  and is neither modified nor redistributed by this project. It is registered
+  with the Microsoft Software License Terms and the attribution notice
+  `ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`; no open-source
+  licence text applies to it.
 * **gnustep-make** is GPL-3.0-or-later build tooling and is not distributed; its
   `Testing.h` is compiled only into test binaries, which are not shipped. The
   libiconv `iconv` tools and the gnustep-corebase test programs are likewise not
@@ -562,15 +644,20 @@ The exact DLL/static split is measured from the built `mad.exe` with
 report; it is not inferred from the toolchain layout. The build and any package
 must copy `ThirdParty/Licenses/` and `NOTICE`.
 
-The WPF **About** window (Phase 5 shell proof, completed in Phase 6) must mirror
+The WPF **About** window (Phase 5 shell proof, completed in Phase 6e) mirrors
 the Mac's three tabs — Overview, License & Notice, and Acknowledgements — and
-list every component above, with the texts from `ThirdParty/Licenses/Windows/`
-and the shared root texts and the LGPL written offer. The Acknowledgements list is the Windows component list, not
-the Apple app's; the License & Notice tab carries the MIT/brand notice and the
-Windows relink offer. The existing iOS and macOS About screens stay Apple-only:
-they list the C libraries the Apple app links and must not claim the Apple app
-links the GNUstep runtime. The public `docs/windows.md` and `README.md` wording
-is Phase 6 and must follow the five-language documentation contract.
+lists every component above, including WebView2, with the texts from
+`ThirdParty/Licenses/Windows/` and the shared root texts and the LGPL written
+offer. The Acknowledgements list is the Windows component list, not the Apple
+app's; the License & Notice tab carries the MIT/brand notice and the Windows
+relink offer; the Overview carries the machine-assisted translation notice. Its
+chrome is localized, while every licence body, component notice, licence name
+and copyright line stays verbatim English (D6/§8 of
+`MAD_APP_LOCALIZATION.md`). The existing iOS and macOS About screens stay
+Apple-only: they list the C libraries the Apple app links and must not claim the
+Apple app links the GNUstep runtime. The public `docs/windows.md` and
+`README.md` wording remain deferred and must follow the five-language
+documentation contract.
 
 ## Test databases
 
