@@ -93,6 +93,39 @@ public sealed class ViewerAcceptanceTests
     }
 
     [Fact]
+    public async Task Export_UsesTheRenderedPaper_NotAPaperChangedElsewhere()
+    {
+        await using var engine = new EngineService();
+        var document = new DocumentViewModel(engine);
+        await document.OpenAsync(MadPathResolver.DefaultDocument());
+        await document.RefreshAsync(); // rendered at US Letter
+
+        // The Designer's own paper selector changes the engine's layout behind the
+        // Viewer's back (the Mac's Mac-only path). The preview still shows Letter, so the
+        // export must re-assert the rendered paper, as the Mac's export panel does.
+        await document.Designer.SetPaperSizeAsync((int)PaperSize.A4);
+        Assert.Equal((int)PaperSize.A4, document.Designer.Model.PaperSize);
+        Assert.Equal((int)PaperSize.Letter, document.Viewer.RenderedPaperType);
+
+        string path = Path.Combine(Path.GetTempPath(), $"mad-viewer-paper-export-{Guid.NewGuid():N}.html");
+        try
+        {
+            document.Viewer.SelectedFormatIndex = 0; // HTML
+            await document.Viewer.ExportAsync(path);
+
+            AssertPageSize(File.ReadAllText(path), 612.0, 792.0);
+            // The re-assertion also pulls the Designer's snapshot back to the Viewer's paper.
+            Assert.Equal((int)PaperSize.Letter, document.Designer.Model.PaperSize);
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+
+        await engine.ShutdownAsync();
+    }
+
+    [Fact]
     public async Task Export_WritesEveryFormat_WithItsExtension()
     {
         await using var engine = new EngineService();

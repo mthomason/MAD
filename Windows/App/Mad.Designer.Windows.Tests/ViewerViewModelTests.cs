@@ -1,5 +1,6 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
+using System.IO;
 using Mad.Designer.Windows.Engine;
 using Mad.Designer.Windows.Models;
 using Mad.Designer.Windows.ViewModels;
@@ -144,10 +145,35 @@ public sealed class ViewerViewModelTests
     }
 
     [Fact]
+    public async Task Export_AfterAFailedRefresh_LeavesTheErrorAndWritesNothing()
+    {
+        var vm = new ViewerViewModel(new EngineService());
+        string path = Path.Combine(Path.GetTempPath(), $"mad-viewer-failed-{Guid.NewGuid():N}.html");
+        await vm.LoadAsync(0, () =>
+        {
+            vm.ReportRefreshFailed("the database is unreachable");
+            return Task.FromResult(false);
+        });
+
+        try
+        {
+            await vm.ExportAsync(path);
+
+            Assert.False(File.Exists(path), "a failed refresh must not export a file");
+            Assert.Equal(ViewerStatusKind.Error, vm.StatusKind);
+            Assert.Equal("the database is unreachable", vm.StatusText);
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    [Fact]
     public async Task Print_WithARenderedPreview_RaisesAPrintRequest()
     {
         var vm = new ViewerViewModel(new EngineService());
-        await vm.LoadAsync(0, () => Task.CompletedTask);
+        await vm.LoadAsync(0, () => Task.FromResult(true));
         vm.SetRenderedHtml(BuildHtml(2), rowCount: 10);
 
         int requests = 0;
@@ -166,7 +192,7 @@ public sealed class ViewerViewModelTests
         {
             refreshes++;
             vm.SetRenderedHtml(BuildHtml(1), rowCount: 1);
-            return Task.CompletedTask;
+            return Task.FromResult(true);
         });
 
         int requests = 0;
