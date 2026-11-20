@@ -11,6 +11,7 @@
 
 #import <TargetConditionals.h>
 #import <Foundation/NSObject.h>
+#import <Foundation/NSData.h>
 #import <Foundation/NSString.h>
 
 @class MADBarcode;
@@ -20,6 +21,11 @@ typedef UIImage MADBarcodeImage;
 #elif TARGET_OS_OSX
 @class NSImage;
 typedef NSImage MADBarcodeImage;
+#else
+// The cache is an Apple implementation detail (MADBarcodeCache.m is not in the
+// headless build); the typedef only has to agree with MADBarcode.h so the
+// umbrella header compiles.
+typedef NSData MADBarcodeImage;
 #endif
 
 // Rendered barcode images, keyed by MADBarcode's -renderCacheKey.  A report

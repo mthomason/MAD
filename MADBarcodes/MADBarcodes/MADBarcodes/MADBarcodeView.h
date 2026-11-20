@@ -18,6 +18,7 @@ typedef UIView MADBarcodeSuperView;
 typedef NSView MADBarcodeSuperView;
 #endif
 
+#if TARGET_OS_IPHONE || TARGET_OS_OSX
 @class MADBarcode;
 
 @interface MADBarcodeView : MADBarcodeSuperView
@@ -25,5 +26,6 @@ typedef NSView MADBarcodeSuperView;
 	@property (nonatomic, retain) MADBarcode *barcode;
 
 @end
+#endif
 
 #endif

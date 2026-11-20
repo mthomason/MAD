@@ -342,6 +342,29 @@
 	XCTAssertNil([barcode renderedImage]);
 }
 
+- (void)testRenderedPNGDataIsTheSameSymbolAsAPNG {
+	MADBarcode *barcode = [MADBarcode newBarcodeWithType:MADBarcodeTypeCODE39];
+	barcode.input = @"TEST";
+
+	NSData *png = [barcode renderedPNGData];
+	XCTAssertNotNil(png);
+	XCTAssertGreaterThan(png.length, 33u);
+
+	const uint8_t *bytes = png.bytes;
+	XCTAssertEqual(bytes[0], 0x89);
+	XCTAssertEqual(bytes[1], 'P');
+	XCTAssertEqual(bytes[2], 'N');
+	XCTAssertEqual(bytes[3], 'G');
+
+	// The IHDR chunk's width and height are big-endian at offsets 16 and 20.
+	uint32_t width = ((uint32_t)bytes[16] << 24) | ((uint32_t)bytes[17] << 16) |
+					 ((uint32_t)bytes[18] << 8) | (uint32_t)bytes[19];
+	uint32_t height = ((uint32_t)bytes[20] << 24) | ((uint32_t)bytes[21] << 16) |
+					  ((uint32_t)bytes[22] << 8) | (uint32_t)bytes[23];
+	XCTAssertEqualWithAccuracy((CGFloat)width, [barcode renderedImage].size.width, 0.5);
+	XCTAssertEqualWithAccuracy((CGFloat)height, [barcode renderedImage].size.height, 0.5);
+}
+
 #pragma mark - Cache
 
 - (void)testCacheSharesOneImageBetweenEquivalentBarcodes {

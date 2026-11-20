@@ -11,7 +11,12 @@
 #endif
 
 #import "MADBarcode.h"
+#if __APPLE__
 #import "MADBarcodeCache.h"
+#endif
+#import <Foundation/NSBundle.h>
+#import <Foundation/NSCache.h>
+#import <Foundation/NSCharacterSet.h>
 #import "MADBarcodeAusPostStandardCustomer.h"
 #import "MADBarcodeAusreDirect.h"
 #import "MADBarcodeAusreply.h"
@@ -82,9 +87,15 @@
 #elif TARGET_OS_OSX
 #import <AppKit/AppKit.h>
 #endif
+#if __APPLE__
 #import <CoreGraphics/CGColorSpace.h>
 #import <CoreGraphics/CGDataProvider.h>
 #import <CoreGraphics/CGImage.h>
+#endif
+#import <MADBarcodes/png.h>
+#import <dispatch/dispatch.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef NS_ENUM(unsigned char, MADBarcodeDataInputType) {
 	MADBarcodeDataTypeUnicode = UNICODE_MODE,
@@ -115,9 +126,11 @@ static NSString * const MADBarcodeCodingKeyWidth				= @"width";
 static NSString * const MADBarcodeCodingKeyRotate				= @"rotate";
 
 // zint's raster buffer is 8-bit RGB, three bytes per pixel, row-major and
-// opaque.  A CGImage consumes that layout directly; this class never sets
-// fgcolour/bgcolour, so the bytes already are the black and white the paint
-// loop used to clamp to.
+// opaque.  This class never sets fgcolour/bgcolour, so the bytes already are
+// the black and white the paint loop used to clamp to.
+
+#if __APPLE__
+// A CGImage consumes that layout directly.
 static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *symbol) {
 	if (symbol->bitmap == NULL || symbol->bitmap_width <= 0 || symbol->bitmap_height <= 0) {
 		return nil;
@@ -148,7 +161,50 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 	CGImageRelease(cgImage);
 	return image;
 }
+#endif
 
+// The portable half of the render core: the same RGB bitmap, encoded to PNG
+// with libpng's simplified write API.  No Core Graphics, no UIKit, so the
+// headless engine and the Windows build reach the same bytes.
+static NSData *MADBarcodePNGDataFromZintBitmap(const struct zint_symbol *symbol) {
+	if (symbol->bitmap == NULL || symbol->bitmap_width <= 0 || symbol->bitmap_height <= 0) {
+		return nil;
+	}
+
+	png_image image;
+	memset(&image, 0, sizeof(image));
+	image.version = PNG_IMAGE_VERSION;
+	image.format = PNG_FORMAT_RGB;
+	image.width = (png_uint_32)symbol->bitmap_width;
+	image.height = (png_uint_32)symbol->bitmap_height;
+
+	png_alloc_size_t size = 0;
+	if (!png_image_write_to_memory(&image, NULL, &size, 0, symbol->bitmap, 0, NULL) || size == 0) {
+		return nil;
+	}
+	void *buffer = malloc((size_t)size);
+	if (buffer == NULL) {
+		return nil;
+	}
+	if (!png_image_write_to_memory(&image, buffer, &size, 0, symbol->bitmap, 0, NULL)) {
+		free(buffer);
+		return nil;
+	}
+	return [NSData dataWithBytesNoCopy:buffer length:(NSUInteger)size freeWhenDone:YES];
+}
+
+// A report draws one barcode per detail row and values repeat, so the PNG is
+// cached by -renderCacheKey exactly as the Apple image cache caches its images.
+// A failed pass stores its message under the same key.
+static NSCache<NSString *, id> *MADBarcodePNGCache(void) {
+	static NSCache<NSString *, id> *cache;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		cache = [[NSCache alloc] init];
+		cache.totalCostLimit = 64 * 1024 * 1024;
+	});
+	return cache;
+}
 
 @interface MADBarcode ()
 
@@ -165,6 +221,11 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 // see the message from the same zint pass that failed.  MADBarcodeCache
 // declares it too, to keep it off the public header.
 - (MADBarcodeImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessage;
+
+// One zint pass.  On success the caller owns *outSymbol and must call
+// ZBarcode_Delete; on failure it fills errorMessage and leaves *outSymbol NULL.
+- (BOOL)encodeSymbol:(struct zint_symbol **)outSymbol
+		errorMessage:(NSString * __autoreleasing *)errorMessage;
 
 @end
 
@@ -524,6 +585,7 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 }
 
 - (void)drawInRect:(CGRect)rect {
+#if __APPLE__
 	MADBarcodeCache *cache = [MADBarcodeCache sharedCache];
 	MADBarcodeImage *image = [cache imageForBarcode:self];
 
@@ -593,6 +655,11 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 	}
 
 	[image drawInRect:CGRectMake(x, y, bitmapWidth * skewValue, bitmapHeight * skewValue)];
+#else
+	// Nothing draws off Apple: the formats read the line the page walk hands
+	// them, and -renderedPNGData is where the symbol reaches them.
+	(void)rect;
+#endif
 }
 
 - (NSString *)renderCacheKey {
@@ -626,13 +693,64 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 }
 
 - (MADBarcodeImage *)renderedImageWithErrorMessage:(NSString * __autoreleasing *)errorMessageOut {
+#if __APPLE__
+	struct zint_symbol *symbol = NULL;
+	if (![self encodeSymbol:&symbol errorMessage:errorMessageOut]) {
+		return nil;
+	}
+	MADBarcodeImage *image = MADBarcodeImageFromZintBitmap(symbol);
+	ZBarcode_Delete(symbol);
+	return image;
+#else
+	// Off Apple MADBarcodeImage IS NSData: the PNG is the image.
+	return [self renderedPNGDataWithErrorMessage:errorMessageOut];
+#endif
+}
+
+- (NSData *)renderedPNGData {
+	return [self renderedPNGDataWithErrorMessage:NULL];
+}
+
+- (NSData *)renderedPNGDataWithErrorMessage:(NSString * __autoreleasing *)errorMessageOut {
+	NSString *key = self.renderCacheKey;
+	NSCache<NSString *, id> *cache = MADBarcodePNGCache();
+	id cached = [cache objectForKey:key];
+	if ([cached isKindOfClass:[NSData class]]) {
+		if (errorMessageOut != NULL) *errorMessageOut = nil;
+		return cached;
+	}
+	if ([cached isKindOfClass:[NSString class]]) {
+		if (errorMessageOut != NULL) *errorMessageOut = cached;
+		return nil;
+	}
+
+	struct zint_symbol *symbol = NULL;
+	NSString *errorMessage = nil;
+	if (![self encodeSymbol:&symbol errorMessage:&errorMessage]) {
+		if (errorMessage != nil) [cache setObject:errorMessage forKey:key];
+		if (errorMessageOut != NULL) *errorMessageOut = errorMessage;
+		return nil;
+	}
+
+	NSData *data = MADBarcodePNGDataFromZintBitmap(symbol);
+	ZBarcode_Delete(symbol);
+	if (data != nil) {
+		[cache setObject:data forKey:key cost:data.length];
+	}
+	if (errorMessageOut != NULL) *errorMessageOut = nil;
+	return data;
+}
+
+- (BOOL)encodeSymbol:(struct zint_symbol **)outSymbol
+		errorMessage:(NSString * __autoreleasing *)errorMessageOut {
+
 	struct zint_symbol *barcode = ZBarcode_Create();
 
 	if (barcode == NULL) {
 		if (errorMessageOut != NULL) {
 			*errorMessageOut = NSLocalizedString(@"No barcode data.", @"No barcode data.");
 		}
-		return nil;
+		return NO;
 	}
 
 	if (self.has2dComponentEnabled == NO) {
@@ -758,18 +876,19 @@ static MADBarcodeImage *MADBarcodeImageFromZintBitmap(const struct zint_symbol *
 		}
 	}
 
-	MADBarcodeImage *image = nil;
-	if (success == 0 && errorMessage == nil) {
-		image = MADBarcodeImageFromZintBitmap(barcode);
+	if (success != 0 || errorMessage != nil) {
+		ZBarcode_Delete(barcode);
+		if (errorMessageOut != NULL) {
+			*errorMessageOut = errorMessage;
+		}
+		return NO;
 	}
-
-	ZBarcode_Delete(barcode);
-	barcode = NULL;
 
 	if (errorMessageOut != NULL) {
-		*errorMessageOut = errorMessage;
+		*errorMessageOut = nil;
 	}
-	return image;
+	*outSymbol = barcode;
+	return YES;
 }
 
 + (NSDictionary *)newDictionaryNames {
