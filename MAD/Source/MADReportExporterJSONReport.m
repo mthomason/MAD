@@ -194,8 +194,8 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 	if (text != nil) {
 		[json appendFormat: @", \"text\": %@", [MADReportExporterJSON quotedString: text]];
 	}
-	// A barcode line also carries a symbol; the member is a token, not the bytes,
-	// so the document stays text and the image is re-rendered on demand.
+	// A barcode or image line also carries a picture; the member is a token, not the
+	// bytes, so the document stays text and the image is re-rendered on demand.
 	if (line.imageData != nil) {
 		[json appendString: @", \"image\": true"];
 	}

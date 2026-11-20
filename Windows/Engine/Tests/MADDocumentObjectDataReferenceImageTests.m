@@ -8,18 +8,12 @@
 //  MADDocumentObjectDataReferenceImage, the handle over an image element -- it
 //  simply hands back the element's `image`.
 //
-//  The file also pins the image's journey through the portable store.  The
-//  element declares `UIImage *image` (RptqDocumentElementImage.h) and the
-//  store's Blob column holds image bytes (MADStore.m's binder and reader; the
-//  legacy converter writes PNG).  The UIImage half of the transform is Apple
-//  only -- RptqDocumentElementImage (Extras) codes and decodes it there,
-//  because UIImage is UIKit's -- so what this port pins is the wire format:
-//  image bytes stored under the attribute survive a save and reopen.
-//
-//  UIImage does not exist off Apple (no UIGraphics either), so the fixture's
-//  one-pixel UIImage is a plain-object stand-in and the persistence test
-//  carries the bytes themselves; the assertions are the Xcode ones where the
-//  two platforms agree.
+//  The file also pins the image's journey through the portable store.  Off
+//  Apple the element declares `NSData *image` (RptqDocumentElementImage.h's
+//  MADElementImage), the store's Blob column holds image bytes (MADStore.m's
+//  binder and reader; the legacy converter writes PNG), and there is no
+//  UIImage half of the transform to code or decode -- so what this port pins
+//  is the wire format: the stored bytes and nothing else.
 //
 
 #import "MADTestSupport.h"
@@ -29,13 +23,6 @@
 #import <MAD/RptqStoreContext.h>
 #import <MAD/RptqDocumentElementImage.h>
 #import <MAD/RptqDocumentElement+Extras.h>
-
-// Stands in for the Xcode fixture's one-pixel UIImage (see the header comment).
-@interface MADTestImageStandIn : NSObject
-@end
-
-@implementation MADTestImageStandIn
-@end
 
 #pragma mark - Fixture
 
@@ -101,10 +88,10 @@ static void testImageIsTheElementImageWhileInMemory(void) {
 	NSURL *directory = makeTempDirectory();
 	RptqStoreContext *context = openContextAtPath(directory, @"memory.sqlite");
 	MAD_PASS([context loadAllWithError:NULL], "the context loads");
-	MADTestImageStandIn *image = [[MADTestImageStandIn alloc] init];
+	NSData *image = [@"PNG-ish bytes" dataUsingEncoding:NSUTF8StringEncoding];
 	RptqDocumentElementImage *element = (RptqDocumentElementImage *)[context insertObjectForEntity:@"RptqDocumentElementImage" identifier:0];
 	element.type = MADPrintPageElementTypeImage;
-	element.image = (UIImage *)image;
+	element.image = image;
 
 	MADDocumentObjectDataReferenceImage *reference = referenceForElement(element);
 
@@ -122,7 +109,7 @@ static void testImageDataSurvivesSaveAndReopen(void) {
 	NSData *data = [@"PNG-ish bytes" dataUsingEncoding:NSUTF8StringEncoding];
 	RptqDocumentElementImage *element = (RptqDocumentElementImage *)[context insertObjectForEntity:@"RptqDocumentElementImage" identifier:0];
 	element.type = MADPrintPageElementTypeImage;
-	element.image = (UIImage *)data;
+	element.image = data;
 	int64_t elementIdentifier = element.identifier;
 
 	NSError *error = nil;

@@ -74,6 +74,34 @@
 
 #endif
 
+// The store's wire format, portable: the column always carries PNG bytes.  Off
+// Apple those bytes are the picture (no decoding exists); where UIKit or AppKit
+// exists, a picture set through -image is encoded on the way into the column and
+// this accessor codes it back out for the formats and the designer's snapshot.
+- (NSData *)pngData {
+	id value = [self valueForUndefinedKey:@"image"];
+	if ([value isKindOfClass:[NSData class]]) return value;
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+	UIImage *image = [self image];
+	return image != nil ? UIImagePNGRepresentation(image) : nil;
+#elif defined(__APPLE__) && TARGET_OS_OSX
+	NSImage *image = [self image];
+	if (image == nil) return nil;
+	CGImageRef cgImage = [image CGImageForProposedRect:NULL context:nil hints:nil];
+	if (cgImage == NULL) return nil;
+	NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+	return [rep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+#else
+	return nil;
+#endif
+}
+
+// Stores the bytes verbatim rather than decoding and re-encoding them, so a PNG
+// set by the designer round-trips through the engine unchanged on every platform.
+- (void)setPngData:(NSData *)pngData {
+	[self setValue:pngData forUndefinedKey:@"image"];
+}
+
 - (NSString *)designerRepresentationText {
 	return @"image";
 }

@@ -419,6 +419,8 @@ mad_add_framework(mad MAD_SOURCES
 	MADQuerySimpleTypesTests
 	MADReportExporterTests
 	MADBarcodeExportTests
+	MADImageElementTests
+	MADImageExportTests
 	MADReportSectionEnumeratorTests
 	MADReportSectionRepresentationTests
 	MADReportSectionTests
@@ -465,11 +467,12 @@ target_link_libraries(mad PUBLIC
 # Support directory and refresh the same London fixture into the same cache
 # directory, MADArchiveManagerTests opens the same fixture headlessly into the
 # same guts directory (its -testTheHeadlessDocumentWritesACopy), and
-# MADBarcodeExportTests does the first two.  ctest runs test binaries in
+# MADBarcodeExportTests / MADImageExportTests do the first two.  ctest runs test binaries in
 # parallel, and the suites raced there (intermittent MADHeadlessDocumentTests /
 # MADArchiveManagerTests failures), so they take turns.  The rest of the suite
 # stays parallel.
 set_tests_properties(MADHeadlessDocumentTests MADReportExporterTests MADArchiveManagerTests MADBarcodeExportTests
+	MADImageExportTests
 	PROPERTIES RESOURCE_LOCK mad-london-fixture)
 target_include_directories(madtdsclient PUBLIC "${CMAKE_BINARY_DIR}/umbrella-shim")
 target_link_libraries(madtdsclient PUBLIC madtds madapi madcocoaextensions madfoundation)
