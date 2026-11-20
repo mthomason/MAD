@@ -41,7 +41,7 @@ public sealed class DocumentViewModel : ObservableObject
         _exportPath = exportPath;
         _saveAsPath = saveAsPath;
         _credentials = credentials;
-        RefreshCommand = new AsyncRelayCommand(RefreshAsync, () => HasDocument);
+        RefreshCommand = new AsyncRelayCommand(async () => { await RefreshAsync(); }, () => HasDocument);
         ExportCsvCommand = new AsyncRelayCommand(() => ExportAsync("csv"), () => HasDocument);
         ExportJsonCommand = new AsyncRelayCommand(() => ExportAsync("json"), () => HasDocument);
         SaveCommand = new AsyncRelayCommand(SaveAsync, () => HasDocument);
@@ -167,9 +167,12 @@ public sealed class DocumentViewModel : ObservableObject
         StatusText = $"Opened {FileName}";
     }
 
-    public async Task RefreshAsync()
+    /// <summary>Runs the query, refreshes the rows and renders the Viewer's preview. Answers
+    /// whether the refresh succeeded, so Export/Print can stop instead of exporting stale data
+    /// over a red status line.</summary>
+    public async Task<bool> RefreshAsync()
     {
-        if (!HasDocument) return;
+        if (!HasDocument) return false;
 
         IsBusy = true;
         ErrorText = null;
@@ -187,12 +190,14 @@ public sealed class DocumentViewModel : ObservableObject
             await Viewer.RenderAsync(refresh.RowCount);
 
             StatusText = $"Rendered {refresh.RowCount} cached rows";
+            return true;
         }
         catch (Exception exception)
         {
             ErrorText = exception.Message;
             StatusText = "Refresh failed.";
             Viewer.ReportRefreshFailed(exception.Message);
+            return false;
         }
         finally
         {

@@ -67,7 +67,7 @@ public sealed class ViewerViewModel : ObservableObject
     private readonly EngineService _engine;
     private readonly Func<string, string?>? _exportPath;
     private int _handle = -1;
-    private Func<Task>? _refresh;
+    private Func<Task<bool>>? _refresh;
     private Func<int, Task>? _setPaperSize;
     private int _selectedPaperIndex;
     private int _selectedFormatIndex;
@@ -90,7 +90,7 @@ public sealed class ViewerViewModel : ObservableObject
         ResetZoomCommand = new RelayCommand(() => SetZoom(1.0));
         PreviousPageCommand = new RelayCommand(GoToPreviousPage, () => CanGoPrevious);
         NextPageCommand = new RelayCommand(GoToNextPage, () => CanGoNext);
-        RefreshCommand = new AsyncRelayCommand(() => _refresh?.Invoke() ?? Task.CompletedTask, () => HasDocument && _refresh != null);
+        RefreshCommand = new AsyncRelayCommand(RefreshCoreAsync, () => HasDocument && _refresh != null);
         ExportCommand = new AsyncRelayCommand(ExportToChosenPathAsync, () => HasDocument);
         PrintCommand = new RelayCommand(() => _ = PrintAsync(), () => HasDocument);
     }
@@ -214,10 +214,10 @@ public sealed class ViewerViewModel : ObservableObject
     public static int CountPages(string html) => PageDiv.Matches(html).Count;
 
     /// <summary>Binds the view model to an open document. <paramref name="refresh"/> runs the
-    /// document's live-data refresh (which calls back into <see cref="RenderAsync"/>);
-    /// <paramref name="setPaperSize"/> lets the document apply the paper through its own path
-    /// (so the Designer's snapshot stays in step).</summary>
-    public Task LoadAsync(int handle, Func<Task> refresh, Func<int, Task>? setPaperSize = null)
+    /// document's live-data refresh (which calls back into <see cref="RenderAsync"/>) and
+    /// answers whether it succeeded; <paramref name="setPaperSize"/> lets the document apply
+    /// the paper through its own path (so the Designer's snapshot stays in step).</summary>
+    public Task LoadAsync(int handle, Func<Task<bool>> refresh, Func<int, Task>? setPaperSize = null)
     {
         _handle = handle;
         _refresh = refresh;
@@ -300,10 +300,15 @@ public sealed class ViewerViewModel : ObservableObject
 
         try
         {
-            if (_pageCount == 0 && _refresh != null)
+            if (_pageCount == 0 && _refresh != null && !await _refresh())
             {
-                await _refresh();
+                return; // the failed refresh already put its error on the status line
             }
+
+            // The report may have been rendered before something else (the Designer's own
+            // paper selector) changed the engine's layout. The Mac re-applies the rendered
+            // paper before every export; so does this, so the file matches the preview.
+            await ApplyRenderedPaperAsync();
 
             string data = await _engine.ExportAsync(_handle, SelectedFormat.Format);
             await File.WriteAllTextAsync(outPath, data);
@@ -327,12 +332,29 @@ public sealed class ViewerViewModel : ObservableObject
         await ExportAsync(path);
     }
 
+    private Task RefreshCoreAsync() => _refresh?.Invoke() ?? Task.FromResult(false);
+
+    /// <summary>Re-applies the paper the preview was rendered with. The engine's layout is
+    /// shared with the Designer, whose paper selector writes it directly, so an export has to
+    /// restore the Viewer's paper first (as the Mac's export panel does).</summary>
+    private async Task ApplyRenderedPaperAsync()
+    {
+        if (_setPaperSize != null)
+        {
+            await _setPaperSize(RenderedPaperType);
+        }
+        else
+        {
+            await _engine.SetPaperSizeAsync(_handle, RenderedPaperType);
+        }
+    }
+
     private async Task PrintAsync()
     {
         if (!HasDocument) return;
-        if (_pageCount == 0 && _refresh != null)
+        if (_pageCount == 0 && _refresh != null && !await _refresh())
         {
-            await _refresh();
+            return; // the failed refresh already put its error on the status line
         }
         if (_pageCount > 0)
         {
