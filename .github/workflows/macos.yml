@@ -43,11 +43,6 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 180
 
-    env:
-      # Shared DerivedData is required: the frameworks reference each other
-      # through BUILT_PRODUCTS_DIR.
-      MAD_DERIVED_DATA: ${{ runner.temp }}/DerivedData
-
     steps:
       - uses: actions/checkout@v4
 
@@ -78,6 +73,10 @@ jobs:
           test -n "${udid}"
           echo "Using simulator ${udid}"
           echo "MAD_SIMULATOR_UDID=${udid}" >> "${GITHUB_ENV}"
+          # Shared DerivedData is required: the frameworks reference each other
+          # through BUILT_PRODUCTS_DIR.  Set here, not in a job-level env, where
+          # the runner context is not available to GitHub's workflow parser.
+          echo "MAD_DERIVED_DATA=${RUNNER_TEMP}/DerivedData" >> "${GITHUB_ENV}"
 
       - name: Run the MADBarcodes suite
         run: |
