@@ -538,12 +538,13 @@ deferred by design.
 
 **About and the WebView2 notice.** The Viewer preview runs in the
 **Microsoft Edge WebView2** control (NuGet `Microsoft.Web.WebView2` 1.0.4314.35).
-The Evergreen WebView2 Runtime is a Microsoft redistributable, not open-source
-software: the About window therefore lists `Microsoft Edge WebView2` with the
-Microsoft Software License Terms and an attribution notice,
-`ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`, rather than a licence
-text. The register is `docs/project/THIRD_PARTY_LICENSES.md` §10. The rest of the
-component list is unchanged (GNUstep Base, gnustep-corebase, libiconv, libobjc2,
+The SDK that ships with the app is BSD-3-Clause and carries Microsoft's
+third-party notices; the Evergreen WebView2 Runtime is a Microsoft
+redistributable, not open-source software. The About window therefore lists
+`Microsoft Edge WebView2` with both terms and the runtime attribution, all in
+`ThirdParty/Licenses/Windows/WebView2-LICENSE.txt`. The register is
+`docs/project/THIRD_PARTY_LICENSES.md` §10. The rest of the component list is
+unchanged (GNUstep Base, gnustep-corebase, libiconv, libobjc2,
 libdispatch/BlocksRuntime, libffi, and the C libraries), and the LGPL relink
 offer still names the Windows engine; the WPF app never shows the Apple set.
 
@@ -627,9 +628,9 @@ compliance surface:
   `Microsoft.Web.WebView2` 1.0.4314.35) is a Microsoft product, not open-source
   software: the Evergreen WebView2 Runtime is installed with Windows 11 and Edge
   and is neither modified nor redistributed by this project. It is registered
-  with the Microsoft Software License Terms and the attribution notice
-  `ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`; no open-source
-  licence text applies to it.
+  with the SDK's BSD-3-Clause licence and Microsoft's third-party notices, the
+  runtime's Microsoft Software License Terms, and this project's attribution —
+  all in `ThirdParty/Licenses/Windows/WebView2-LICENSE.txt`.
 * **gnustep-make** is GPL-3.0-or-later build tooling and is not distributed; its
   `Testing.h` is compiled only into test binaries, which are not shipped. The
   libiconv `iconv` tools and the gnustep-corebase test programs are likewise not

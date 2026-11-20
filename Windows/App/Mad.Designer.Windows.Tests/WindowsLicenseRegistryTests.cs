@@ -13,7 +13,8 @@ public sealed class WindowsLicenseRegistryTests
         Assert.Equal(15, components.Count);
         Assert.Contains(components, c => c.Name == "GNUstep Base" && c.License == "LGPL-2.1-or-later");
         Assert.Contains(components, c => c.Name == "MariaDB Connector/C");
-        Assert.Contains(components, c => c.Name == "Microsoft Edge WebView2" && c.License == "Microsoft Software License Terms");
+        Assert.Contains(components, c => c.Name == "Microsoft Edge WebView2"
+            && c.License == "BSD-3-Clause (SDK) / Microsoft Software License Terms (Runtime)");
         Assert.DoesNotContain(components, c => c.Name is "zint" or "libpng" or "Font Awesome");
     }
 

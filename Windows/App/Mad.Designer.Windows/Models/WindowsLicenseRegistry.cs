@@ -76,10 +76,10 @@ public static class WindowsLicenseRegistry
             "The PostgreSQL client library.",
             "PostgreSQL License (libpq)",
             "postgres-LICENSE.txt"),
-        new("Microsoft Edge WebView2", "Microsoft Software License Terms",
-            "The embedded browser control that renders the report preview. The Evergreen WebView2 Runtime is a Microsoft redistributable installed with Windows 11 and alongside Microsoft Edge; this application neither modifies nor redistributes the runtime. Use is governed by Microsoft's terms.",
-            "Microsoft Edge WebView2 — Notice",
-            "Windows/WebView2-Runtime-NOTICE.txt"),
+        new("Microsoft Edge WebView2", "BSD-3-Clause (SDK) / Microsoft Software License Terms (Runtime)",
+            "The embedded browser control that renders the report preview. The Windows SDK is BSD-3-Clause; the Evergreen WebView2 Runtime is a Microsoft redistributable installed with Windows 11 and alongside Microsoft Edge, and this application neither modifies nor redistributes the runtime.",
+            "Microsoft Edge WebView2 — SDK Licence, Third-Party Notices, and Runtime Attribution",
+            "Windows/WebView2-LICENSE.txt"),
     };
 
     public static string RelinkOffer { get; } = ReadRelinkOffer();
