@@ -114,9 +114,10 @@ real CMake build can consume them once CMake's Windows ObjC support lands.
     entry is `docs/project/THIRD_PARTY_LICENSES.md` §10, and the relink offer is
     in `ThirdParty/Licenses/README.md`. The WPF About window (completed in
     Phase 6e) renders the Windows components from the register, plus Microsoft
-    Edge WebView2, which is a Microsoft redistributable with an attribution
-    notice (`ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`), not an
-    open-source licence text. Do not add GNUstep rows to the iOS/macOS About
+    Edge WebView2, whose SDK is BSD-3-Clause while its Evergreen Runtime is a
+    Microsoft redistributable; the SDK text, Microsoft's third-party notices,
+    and the runtime attribution are in
+    `ThirdParty/Licenses/Windows/WebView2-LICENSE.txt`. Do not add GNUstep rows to the iOS/macOS About
     screens. A Windows package must ship `ThirdParty/Licenses` and `NOTICE`. The
     GNUstep Base command-line tools
     (`gdomap`, `gdnc`, `defaults`, `plutil`, `gspath`) are GPL-3.0-or-later and

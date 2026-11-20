@@ -276,10 +276,10 @@ dotnet run --project .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csp
 The About window (Overview / License & Notice / Acknowledgements) renders the Windows
 dependency register in `ThirdParty/Licenses/Windows/` and the relink offer — the Windows
 component set, never the Apple one. It also lists **Microsoft Edge WebView2**, the
-Viewer's preview control: the Evergreen runtime is a Microsoft redistributable, so the
-entry is the Microsoft Software License Terms and the attribution notice
-`ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`, not an open-source licence
-text.
+Viewer's preview control: the SDK is BSD-3-Clause, while the Evergreen runtime is a
+Microsoft redistributable. Its entry carries the SDK text, Microsoft's third-party
+notices and the runtime attribution, all in
+`ThirdParty/Licenses/Windows/WebView2-LICENSE.txt`.
 
 ### Localization
 
@@ -392,7 +392,7 @@ The Windows engine is a distribution surface of its own. It is registered in
 | libffi | MIT | retain the notice |
 | SQLite, zlib, bzip2, libarchive | public domain / Zlib / bzip2 / BSD-2 | the existing §3.1 entries |
 | OpenSSL, FreeTDS, MariaDB Connector/C, libpq | Apache-2.0 / LGPL-3.0 election / LGPL-3.0 election / PostgreSQL | the existing §3.1–§3.4 entries; FreeTDS's `sybdb.h` is marked |
-| Microsoft Edge WebView2 (Runtime and SDK) | Microsoft Software License Terms | a Microsoft redistributable, not open-source software; the attribution is `ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`, and the runtime is not bundled or modified |
+| Microsoft Edge WebView2 (Runtime and SDK) | BSD-3-Clause (SDK) / Microsoft Software License Terms (Runtime) | the SDK's text and Microsoft's third-party notices are in `ThirdParty/Licenses/Windows/WebView2-LICENSE.txt`; the runtime is a Microsoft redistributable and is not bundled or modified |
 
 `gnustep-make` is GPL-3.0-or-later **build tooling** and is not distributed; its
 `Testing.h` is compiled only into test binaries, which are not shipped. The

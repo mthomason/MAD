@@ -646,7 +646,7 @@ does not apply to them.
 | gnustep-make | `e7c0730d…` | GPL-3.0-or-later | **build tooling only — not distributed** | nothing; its `Testing.h` is compiled only into test binaries, which are not shipped |
 | SQLite, zlib, bzip2, libarchive | §3.1 pins | as registered | static `.lib` linked into `mad.exe` | the same permissive terms as the app |
 | OpenSSL 3.5.9, FreeTDS 1.4.27, MariaDB Connector/C 3.4.11, libpq 17.11 | §3.1, §3.3–§3.4 pins | Apache-2.0; LGPL-3.0 election; LGPL-3.0 election; PostgreSQL License | static `.lib` linked into `mad.exe` | the same texts and relink mechanism as the app/image; FreeTDS's modified `sybdb.h` is marked |
-| Microsoft Edge WebView2 (SDK and Evergreen Runtime) | `Microsoft.Web.WebView2` 1.0.4314.35 (the app csproj); the runtime is installed with Windows 11 and alongside Microsoft Edge | Microsoft Software License Terms (a Microsoft redistributable, not open source) | the WPF app's report-preview control (`Windows/App/`); the runtime is not bundled, modified or redistributed by this project | a notice/attribution per Microsoft's terms, `ThirdParty/Licenses/Windows/WebView2-Runtime-NOTICE.txt`; no open-source licence text applies |
+| Microsoft Edge WebView2 (SDK and Evergreen Runtime) | `Microsoft.Web.WebView2` 1.0.4314.35 (the app csproj); the runtime is installed with Windows 11 and alongside Microsoft Edge | BSD-3-Clause (SDK) and Microsoft Software License Terms (a Microsoft redistributable, not open source) | the WPF app's report-preview control (`Windows/App/`); the SDK assemblies ship with the app, while the runtime is not bundled, modified or redistributed by this project | the SDK's BSD text, Microsoft's third-party notices, and the runtime attribution in `ThirdParty/Licenses/Windows/WebView2-LICENSE.txt`; no open-source licence text applies to the runtime |
 | Clang/LLVM 20.1.8, lld, Visual Studio 2026, Windows SDK, CMake, Ninja, NASM, MSYS2, Perl | `Windows/Engine/toolchain.conf` | build tooling | not distributed | nothing |
 | the Windows/UCRT runtime | Microsoft | OS component | resolved by the OS | none |
 
@@ -655,8 +655,8 @@ The Windows packages must copy `ThirdParty/Licenses/` (including
 package; a build without them is not releasable. The Windows-specific texts are
 `ThirdParty/Licenses/Windows/LGPL-2.1.txt`,
 `libobjc2-MIT.txt`, `libdispatch-Apache-2.0-with-Swift-exception.txt` and
-`libffi-MIT.txt`; `WebView2-Runtime-NOTICE.txt` is the WebView2 attribution,
-not a licence text. The C-library texts are the root `ThirdParty/Licenses/` files
+`libffi-MIT.txt`; `WebView2-LICENSE.txt` carries the WebView2 SDK's BSD text,
+Microsoft's third-party notices, and the runtime attribution. The C-library texts are the root `ThirdParty/Licenses/` files
 already used by the Apple app. The written relink offer in
 `ThirdParty/Licenses/README.md` names the Windows engine and covers GNUstep Base,
 libiconv, gnustep-corebase, FreeTDS and MariaDB Connector/C.

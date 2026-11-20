@@ -16,7 +16,7 @@ provenance is also recorded in `ThirdParty/Licenses/README.md`; the register is
 | `libobjc2-MIT.txt` | libobjc2 (including libBlocksRuntime) | `COPYING` in `gnustep/libobjc2` at the pinned revision. |
 | `libdispatch-Apache-2.0-with-Swift-exception.txt` | libdispatch | `LICENSE` in `apple/swift-corelibs-libdispatch` at the pinned revision, including the Swift runtime exception. |
 | `libffi-MIT.txt` | libffi | `LICENSE` at libffi v3.8.0. |
-| `WebView2-Runtime-NOTICE.txt` | Microsoft Edge WebView2 (WPF app) | An attribution notice written for this project. The Evergreen WebView2 Runtime is a Microsoft redistributable, not open-source software; no licence text is reproduced. See the notice for the Microsoft terms links. |
+| `WebView2-LICENSE.txt` | Microsoft Edge WebView2 (WPF app) | The `LICENSE.txt` and `NOTICE.txt` of the pinned `Microsoft.Web.WebView2` package (BSD-3-Clause and its third-party notices), followed by this project's attribution for the Evergreen WebView2 Runtime. The runtime is a Microsoft redistributable, not open-source software; no licence text applies to it. |
 
 SHA-256 of the committed texts:
 
