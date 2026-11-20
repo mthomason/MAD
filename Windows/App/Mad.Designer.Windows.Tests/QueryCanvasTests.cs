@@ -54,6 +54,10 @@ public sealed class QueryCanvasTests
                     canvas.Arrange(new Rect(0, 0, 900, 700));
                     canvas.UpdateLayout();
 
+                    vm.Zoom = 1.5;
+                    var scale = (ScaleTransform)canvas.LayoutTransform;
+                    if (Math.Abs(scale.ScaleX - 1.5) > 0.0001) throw new InvalidOperationException("the canvas did not follow the zoom");
+
                     cardCount = canvas.Children.OfType<Border>().Count(b => b.Tag is long);
                     linkCount = canvas.Children.OfType<ShapePath>().Count(p => p.Tag is QueryLink);
                 }

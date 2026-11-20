@@ -83,7 +83,17 @@ public sealed class DocumentViewModel : ObservableObject
     }
 
     public string StatusText { get => _statusText; private set => Set(ref _statusText, value); }
-    public string? ErrorText { get => _errorText; private set => Set(ref _errorText, value); }
+
+    public string? ErrorText
+    {
+        get => _errorText;
+        private set
+        {
+            if (Set(ref _errorText, value)) OnPropertyChanged(nameof(HasError));
+        }
+    }
+
+    public bool HasError => !string.IsNullOrEmpty(_errorText);
     public string Driver { get => _driver; private set => Set(ref _driver, value); }
     public string FileName { get => _fileName; private set => Set(ref _fileName, value); }
     public string Sql { get => _sql; private set => Set(ref _sql, value); }

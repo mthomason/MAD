@@ -65,7 +65,7 @@ public sealed class ViewerSurfaceTests
                 view.UpdateLayout();
 
                 Assert.Equal("Rendered 3 pages from 42 cached rows.", status.Text);
-                Assert.Equal(Colors.Green, ((SolidColorBrush)status.Foreground).Color);
+                Assert.Equal(Color.FromRgb(0x10, 0x7C, 0x10), ((SolidColorBrush)status.Foreground).Color);
                 Assert.Equal("Page 1 of 3", pageLabel.Text);
                 Assert.Equal(Visibility.Collapsed, placeholder.Visibility);
 
@@ -82,7 +82,7 @@ public sealed class ViewerSurfaceTests
                 main.Document.Viewer.ReportRefreshFailed("the database is unreachable");
                 view.UpdateLayout();
                 Assert.Equal("the database is unreachable", status.Text);
-                Assert.Equal(Colors.Red, ((SolidColorBrush)status.Foreground).Color);
+                Assert.Equal(Color.FromRgb(0xC4, 0x2B, 0x1C), ((SolidColorBrush)status.Foreground).Color);
             }
             catch (Exception exception)
             {

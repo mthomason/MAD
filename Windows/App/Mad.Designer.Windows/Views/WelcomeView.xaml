@@ -1,0 +1,104 @@
+<UserControl x:Class="Mad.Designer.Windows.Views.WelcomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:infra="clr-namespace:Mad.Designer.Windows.Infrastructure"
+             FontFamily="{DynamicResource MAD.FontFamily}"
+             FontSize="{DynamicResource MAD.FontSize.Body}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Mad.Designer.Windows;component/Themes/Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <infra:PathFileNameConverter x:Key="FileName" />
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <ScrollViewer Background="{DynamicResource ApplicationBackgroundBrush}"
+                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel MaxWidth="780" Margin="56,44,56,56" HorizontalAlignment="Center">
+            <Image Source="/Mad.Designer.Windows;component/Assets/AppIcon.png"
+                   Width="72" Height="72" HorizontalAlignment="Left"
+                   AutomationProperties.Name="{infra:Loc App.Title}" />
+            <TextBlock Text="{infra:Loc Welcome.Title}" Style="{StaticResource MAD.DisplayText}" Margin="0,18,0,2" />
+            <TextBlock Text="{Binding ApplicationVersionText}" Style="{StaticResource MAD.SecondaryText}" />
+            <TextBlock Text="{infra:Loc Welcome.Intro}" Style="{StaticResource MAD.BodyText}"
+                       Margin="0,18,0,0" MaxWidth="660" HorizontalAlignment="Left" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,24,0,0">
+                <Button x:Name="NewReportButton" Style="{StaticResource MAD.PrimaryButton}" Command="{Binding NewDocumentCommand}"
+                        AutomationProperties.Name="{infra:Loc Welcome.New}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE710;" Style="{StaticResource MAD.CommandIcon}"
+                                   Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                        <TextBlock Text="{infra:Loc Welcome.New}" Style="{StaticResource MAD.CommandLabel}"
+                                   Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="OpenReportButton" Style="{StaticResource MAD.SecondaryButton}" Command="{Binding OpenDocumentCommand}"
+                        Margin="10,0,0,0" AutomationProperties.Name="{infra:Loc Welcome.Open}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE8E5;" Style="{StaticResource MAD.CommandIcon}"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                        <TextBlock Text="{infra:Loc Welcome.Open}" Style="{StaticResource MAD.CommandLabel}"
+                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <Border Style="{StaticResource MAD.Card}" Margin="0,32,0,0" Padding="20,16">
+                <StackPanel>
+                    <TextBlock Text="{infra:Loc Welcome.Recent}" Style="{StaticResource MAD.SectionHeader}"
+                               FontSize="{StaticResource MAD.FontSize.Secondary}" />
+                    <TextBlock Text="{infra:Loc Welcome.NoRecent}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.SecondaryText}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasItems, ElementName=RecentList}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <ItemsControl x:Name="RecentList" ItemsSource="{Binding RecentFiles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource MAD.CommandButton}"
+                                        HorizontalContentAlignment="Stretch"
+                                        Padding="8,7"
+                                        ToolTip="{Binding}"
+                                        Command="{Binding DataContext.OpenRecentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        AutomationProperties.Name="{Binding Converter={StaticResource FileName}}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="&#xE8A5;" Style="{StaticResource MAD.CommandIcon}"
+                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                   Margin="2,0,10,0" />
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding Converter={StaticResource FileName}}"
+                                                       FontSize="{DynamicResource MAD.FontSize.Body}"
+                                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding}"
+                                                       FontSize="{StaticResource MAD.FontSize.Caption}"
+                                                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="{infra:Loc Welcome.Hint}" Style="{StaticResource MAD.SecondaryText}"
+                       Margin="0,20,0,0" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

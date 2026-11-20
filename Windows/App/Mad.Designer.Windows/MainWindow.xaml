@@ -3,73 +3,179 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:Mad.Designer.Windows.Views"
         xmlns:infra="clr-namespace:Mad.Designer.Windows.Infrastructure"
-        Title="{infra:Loc App.Title}" Height="780" Width="1240"
-        MinHeight="620" MinWidth="960">
+        Title="{Binding WindowTitle}" Height="800" Width="1320"
+        MinHeight="620" MinWidth="1000" WindowStartupLocation="CenterScreen"
+        Icon="/Mad.Designer.Windows;component/Assets/AppIcon.png"
+        Background="{DynamicResource ApplicationBackgroundBrush}"
+        FontFamily="{DynamicResource MAD.FontFamily}"
+        FontSize="{DynamicResource MAD.FontSize.Body}"
+        UseLayoutRounding="True">
     <Window.Resources>
-        <infra:EnumToIntConverter x:Key="EnumToInt"/>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Mad.Designer.Windows;component/Themes/Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        </ResourceDictionary>
     </Window.Resources>
 
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="{Binding NewDocumentCommand}" />
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenDocumentCommand}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding Document.SaveCommand}" />
+        <KeyBinding Key="S" Modifiers="Control+Shift" Command="{Binding Document.SaveAsCommand}" />
+        <KeyBinding Key="D1" Modifiers="Control" Command="{Binding SelectQueryCommand}" />
+        <KeyBinding Key="D2" Modifiers="Control" Command="{Binding SelectDesignerCommand}" />
+        <KeyBinding Key="D3" Modifiers="Control" Command="{Binding SelectViewerCommand}" />
+    </Window.InputBindings>
+
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
+        <Menu DockPanel.Dock="Top" Background="{DynamicResource ApplicationBackgroundBrush}">
             <MenuItem Header="{infra:Loc Menu.File}">
-                <MenuItem Header="{infra:Loc Menu.File.New}" Command="{Binding NewDocumentCommand}"/>
-                <MenuItem Header="{infra:Loc Menu.File.Open}" Command="{Binding OpenDocumentCommand}"/>
-                <Separator/>
-                <MenuItem Header="{infra:Loc Menu.File.Save}" Command="{Binding Document.SaveCommand}"/>
-                <MenuItem Header="{infra:Loc Menu.File.SaveAs}" Command="{Binding Document.SaveAsCommand}"/>
-                <Separator/>
+                <MenuItem Header="{infra:Loc Menu.File.New}" Command="{Binding NewDocumentCommand}" InputGestureText="Ctrl+N" />
+                <MenuItem Header="{infra:Loc Menu.File.Open}" Command="{Binding OpenDocumentCommand}" InputGestureText="Ctrl+O" />
+                <Separator />
+                <MenuItem Header="{infra:Loc Menu.File.Save}" Command="{Binding Document.SaveCommand}" InputGestureText="Ctrl+S" />
+                <MenuItem Header="{infra:Loc Menu.File.SaveAs}" Command="{Binding Document.SaveAsCommand}" InputGestureText="Ctrl+Shift+S" />
+                <Separator />
                 <MenuItem Header="{infra:Loc Menu.File.DatabaseConnection}" Command="{Binding EditConnectionCommand}"
-                          IsEnabled="{Binding Document.HasDocument}"/>
-                <Separator/>
+                          IsEnabled="{Binding Document.HasDocument}" />
+                <Separator />
                 <MenuItem Header="{infra:Loc Menu.File.RecentFiles}" ItemsSource="{Binding RecentFiles}">
                     <MenuItem.ItemContainerStyle>
                         <Style TargetType="MenuItem">
-                            <Setter Property="Header" Value="{Binding}"/>
-                            <Setter Property="Command" Value="{Binding DataContext.OpenRecentCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                            <Setter Property="Header" Value="{Binding}" />
+                            <Setter Property="Command" Value="{Binding DataContext.OpenRecentCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                            <Setter Property="CommandParameter" Value="{Binding}" />
                         </Style>
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
+                <Separator />
+                <MenuItem Header="{infra:Loc Menu.File.Exit}" Click="Exit_Click" />
             </MenuItem>
             <MenuItem Header="{infra:Loc Menu.Help}">
-                <MenuItem Header="{infra:Loc Menu.Help.About}" Command="{Binding OpenAboutCommand}"/>
+                <MenuItem Header="{infra:Loc Menu.Help.About}" Command="{Binding OpenAboutCommand}" />
             </MenuItem>
         </Menu>
 
-        <ToolBarTray DockPanel.Dock="Top">
-            <ToolBar>
-                <Button Content="{infra:Loc Toolbar.New}" Command="{Binding NewDocumentCommand}"/>
-                <Button Content="{infra:Loc Toolbar.Open}" Command="{Binding OpenDocumentCommand}"/>
-                <Button Content="{infra:Loc Toolbar.About}" Command="{Binding OpenAboutCommand}"/>
-            </ToolBar>
-        </ToolBarTray>
-
-        <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem>
+        <!-- Application-level quick commands. About stays in the Help menu. -->
+        <Border DockPanel.Dock="Top" Style="{StaticResource MAD.CommandBar}">
+            <DockPanel>
                 <StackPanel Orientation="Horizontal">
-                    <ProgressBar Width="90" Height="14"
-                                 IsIndeterminate="{Binding Document.IsBusy}"
-                                 Visibility="{Binding Document.IsBusy, Converter={StaticResource BoolToVis}}"/>
-                    <TextBlock Text="{Binding Document.StatusText}" Margin="8,0,0,0"/>
+                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding NewDocumentCommand}"
+                            AutomationProperties.Name="{infra:Loc Toolbar.New.Tooltip}"
+                            ToolTip="{infra:Loc Toolbar.New.Tooltip}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE710;" Style="{StaticResource MAD.CommandIcon}" />
+                            <TextBlock Text="{infra:Loc Toolbar.New}" Style="{StaticResource MAD.CommandLabel}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding OpenDocumentCommand}" Margin="2,0,0,0"
+                            AutomationProperties.Name="{infra:Loc Toolbar.Open.Tooltip}"
+                            ToolTip="{infra:Loc Toolbar.Open.Tooltip}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8E5;" Style="{StaticResource MAD.CommandIcon}" />
+                            <TextBlock Text="{infra:Loc Toolbar.Open}" Style="{StaticResource MAD.CommandLabel}" />
+                        </StackPanel>
+                    </Button>
+                    <Border Style="{StaticResource MAD.Divider}" />
+                    <TextBlock Text="{Binding Document.FileName}" Style="{StaticResource MAD.SecondaryText}"
+                               VerticalAlignment="Center" MaxWidth="420" TextTrimming="CharacterEllipsis"
+                               Visibility="{Binding Document.HasDocument, Converter={StaticResource BoolToVis}}" />
                 </StackPanel>
-            </StatusBarItem>
-            <StatusBarItem>
-                <TextBlock Text="{Binding Document.ErrorText}" Foreground="Red"/>
-            </StatusBarItem>
-        </StatusBar>
 
-        <TabControl IsEnabled="{Binding Document.HasDocument}"
-                    SelectedIndex="{Binding SelectedWorkspace, Mode=TwoWay, Converter={StaticResource EnumToInt}}">
-            <TabItem Header="{infra:Loc Workspace.Query}">
-                <views:QueryView/>
-            </TabItem>
-            <TabItem Header="{infra:Loc Workspace.Designer}">
-                <views:DesignerView/>
-            </TabItem>
-            <TabItem Header="{infra:Loc Workspace.Viewer}">
-                <views:ViewerView/>
-            </TabItem>
-        </TabControl>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <ProgressBar Width="70" Height="12" IsIndeterminate="{Binding Document.IsBusy}"
+                                 Visibility="{Binding Document.IsBusy, Converter={StaticResource BoolToVis}}"
+                                 Margin="0,0,8,0" />
+                    <TextBlock Text="{Binding Document.StatusText}" MaxWidth="300"
+                               TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.StatusText}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Document.HasError}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Text="{Binding Document.ErrorText}" MaxWidth="320"
+                               TextTrimming="CharacterEllipsis" VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.ErrorText}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Document.HasError}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding EditConnectionCommand}"
+                            IsEnabled="{Binding Document.HasDocument}" Margin="8,0,0,0"
+                            ToolTip="{infra:Loc Viewer.Connection.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Viewer.Connection}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE713;" Style="{StaticResource MAD.CommandIcon}" />
+                            <TextBlock Text="{infra:Loc Viewer.Connection}" Style="{StaticResource MAD.CommandLabel}" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="88" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Primary navigation: three peer-level workspaces, never document tabs. -->
+            <Border Style="{StaticResource MAD.NavRail}">
+                <DockPanel>
+                    <Image DockPanel.Dock="Top" Source="/Mad.Designer.Windows;component/Assets/AppIcon.png"
+                           Width="40" Height="40" Margin="0,14,0,10"
+                           AutomationProperties.Name="{infra:Loc App.Title}" />
+                    <TextBlock DockPanel.Dock="Bottom" Text="{x:Static infra:AppInfo.Version}"
+                               Style="{StaticResource MAD.CaptionText}" FontWeight="Normal"
+                               HorizontalAlignment="Center" Margin="0,0,0,10" />
+                    <ListBox x:Name="WorkspaceList"
+                             SelectedIndex="{Binding SelectedWorkspaceIndex, Mode=TwoWay}"
+                             IsEnabled="{Binding HasDocument}"
+                             Background="Transparent" BorderThickness="0"
+                             ItemContainerStyle="{StaticResource MAD.NavItem}"
+                             VerticalAlignment="Top"
+                             AutomationProperties.Name="{infra:Loc Nav.Workspaces}">
+                        <ListBoxItem AutomationProperties.Name="{infra:Loc Workspace.Query}">
+                            <StackPanel>
+                                <TextBlock Text="&#xE721;" Style="{StaticResource MAD.NavIcon}" />
+                                <TextBlock Text="{infra:Loc Workspace.Query}" Style="{StaticResource MAD.NavLabel}" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem AutomationProperties.Name="{infra:Loc Workspace.Designer}">
+                            <StackPanel>
+                                <TextBlock Text="&#xE70F;" Style="{StaticResource MAD.NavIcon}" />
+                                <TextBlock Text="{infra:Loc Workspace.Designer}" Style="{StaticResource MAD.NavLabel}" />
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem AutomationProperties.Name="{infra:Loc Workspace.Viewer}">
+                            <StackPanel>
+                                <TextBlock Text="&#xE7B3;" Style="{StaticResource MAD.NavIcon}" />
+                                <TextBlock Text="{infra:Loc Workspace.Viewer}" Style="{StaticResource MAD.NavLabel}" />
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <Grid Grid.Column="1">
+                <views:QueryView Visibility="{Binding QueryVisible, Converter={StaticResource BoolToVis}}" />
+                <views:DesignerView Visibility="{Binding DesignerVisible, Converter={StaticResource BoolToVis}}" />
+                <views:ViewerView Visibility="{Binding ViewerVisible, Converter={StaticResource BoolToVis}}" />
+                <views:WelcomeView Visibility="{Binding ShowWelcome, Converter={StaticResource BoolToVis}}" />
+            </Grid>
+        </Grid>
     </DockPanel>
 </Window>

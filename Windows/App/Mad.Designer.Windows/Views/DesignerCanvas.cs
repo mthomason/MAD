@@ -30,22 +30,11 @@ public sealed class DesignerCanvas : Canvas
     private const int SelectedZIndex = 100;
     private const int DraggingZIndex = 1000;
 
-    private static readonly Brush LabelTint = new SolidColorBrush(Color.FromRgb(0xF7, 0xF7, 0xF7));
-    private static readonly Brush DataFieldTint = new SolidColorBrush(Color.FromRgb(0xEA, 0xF4, 0xFF));
-    private static readonly Brush AggregateTint = new SolidColorBrush(Color.FromRgb(0xEF, 0xF9, 0xEC));
-    private static readonly Brush ImageTint = new SolidColorBrush(Color.FromRgb(0xFA, 0xF4, 0xE7));
-    private static readonly Brush Accent = new SolidColorBrush(Color.FromRgb(0x0A, 0x84, 0xFF));
-
-    static DesignerCanvas()
-    {
-        // Frozen so the shared tints may be used from any UI thread (the tests materialise
-        // canvases on more than one STA thread).
-        LabelTint.Freeze();
-        DataFieldTint.Freeze();
-        AggregateTint.Freeze();
-        ImageTint.Freeze();
-        Accent.Freeze();
-    }
+    private static readonly Brush LabelTint = DesignPalette.LabelTint;
+    private static readonly Brush DataFieldTint = DesignPalette.DataFieldTint;
+    private static readonly Brush AggregateTint = DesignPalette.AggregateTint;
+    private static readonly Brush ImageTint = DesignPalette.ImageTint;
+    private static readonly Brush Accent = DesignPalette.Accent;
 
     private DesignerViewModel? _vm;
     private double _zoom = 1.0;
@@ -73,7 +62,9 @@ public sealed class DesignerCanvas : Canvas
     {
         Focusable = true;
         ClipToBounds = true;
-        Background = new SolidColorBrush(Color.FromRgb(0xE8, 0xE8, 0xE8));
+        // Transparent so the ScrollViewer's theme surface (the desk) shows through in both
+        // light and dark; the paper bands themselves stay white, like a printed page.
+        Background = Brushes.Transparent;
     }
 
     private ScrollViewer? ScrollAncestor()
@@ -180,7 +171,7 @@ public sealed class DesignerCanvas : Canvas
             Width = PaperWidth * _zoom,
             Height = bandH * _zoom,
             CornerRadius = new CornerRadius(4 * _zoom),
-            Background = Brushes.White,
+            Background = DesignPalette.Paper,
             BorderBrush = SystemColors.ActiveBorderBrush,
             BorderThickness = new Thickness(_zoom),
             Tag = section,
@@ -218,7 +209,7 @@ public sealed class DesignerCanvas : Canvas
             Width = Math.Max(4, element.W) * _zoom,
             Height = Math.Max(4, element.H) * _zoom,
             Background = TintFor(element),
-            BorderBrush = selected ? Accent : new SolidColorBrush(Color.FromArgb(0x66, 0x80, 0x80, 0x80)),
+            BorderBrush = selected ? Accent : DesignPalette.ElementOutline,
             BorderThickness = new Thickness((selected ? 1.5 : 0.75) * _zoom),
             Tag = element,
         };
@@ -232,7 +223,7 @@ public sealed class DesignerCanvas : Canvas
         {
             border.Child = new Border
             {
-                Background = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66)),
+                Background = DesignPalette.LineRule,
                 Height = Math.Max(1.0, element.BorderBottom * _zoom),
                 VerticalAlignment = VerticalAlignment.Bottom,
             };
@@ -243,7 +234,7 @@ public sealed class DesignerCanvas : Canvas
             {
                 Text = DisplayText(element),
                 FontSize = Math.Max(8.0, Math.Min(48.0, element.FontSize)) * _zoom,
-                Foreground = Brushes.Black,
+                Foreground = DesignPalette.PaperInk,
                 TextTrimming = TextTrimming.CharacterEllipsis,
                 Margin = new Thickness(2 * _zoom, 1 * _zoom, 2 * _zoom, 1 * _zoom),
                 VerticalAlignment = VerticalAlignment.Center,
@@ -275,7 +266,7 @@ public sealed class DesignerCanvas : Canvas
             {
                 Width = hs * _zoom,
                 Height = hs * _zoom,
-                Fill = Brushes.White,
+                Fill = DesignPalette.Paper,
                 Stroke = Accent,
                 StrokeThickness = _zoom,
                 Tag = i,
@@ -303,7 +294,7 @@ public sealed class DesignerCanvas : Canvas
     {
         if (_vm == null || _dragMode != DragMode.None) return;
 
-        var inactive = new SolidColorBrush(Color.FromArgb(0x66, 0x80, 0x80, 0x80));
+        Brush inactive = DesignPalette.ElementOutline;
         foreach ((long id, Border border) in _elementBorders)
         {
             bool selected = _vm.SelectedElementIds.Contains(id);
@@ -324,7 +315,7 @@ public sealed class DesignerCanvas : Canvas
     private void DrawGrid()
     {
         double spacing = DesignerViewModel.GridSpacing;
-        var brush = new SolidColorBrush(Color.FromArgb(0x0B, 0x00, 0x00, 0x00));
+        var brush = DesignPalette.CanvasGrid;
         foreach (var section in _vm!.Sections)
         {
             var band = _bandRects[section.Id];
@@ -355,7 +346,7 @@ public sealed class DesignerCanvas : Canvas
         {
             Width = PaperWidth * _zoom,
             Height = RulerHeight * _zoom,
-            Background = Brushes.White,
+            Background = DesignPalette.Paper,
             BorderBrush = SystemColors.ActiveBorderBrush,
             BorderThickness = new Thickness(0.6 * _zoom),
             IsHitTestVisible = false,
@@ -585,7 +576,7 @@ public sealed class DesignerCanvas : Canvas
         {
             _marqueeVisual = new Rectangle
             {
-                Fill = new SolidColorBrush(Color.FromArgb(0x1E, 0x0A, 0x84, 0xFF)),
+                Fill = DesignPalette.MarqueeFill,
                 Stroke = Accent,
                 StrokeThickness = 1,
                 IsHitTestVisible = false,
@@ -769,7 +760,7 @@ public sealed class DesignerCanvas : Canvas
         {
             Text = element.Text,
             FontSize = Math.Max(11.0, element.FontSize * _zoom),
-            Background = Brushes.White,
+            Background = DesignPalette.Paper,
             BorderBrush = Accent,
             BorderThickness = new Thickness(1),
             Width = Math.Max(60, rect.Width * _zoom),

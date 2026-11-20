@@ -26,6 +26,15 @@ public sealed class AboutViewModelTests
     }
 
     [Fact]
+    public void About_ReportsTheEngineAndApplicationVersionsSeparately()
+    {
+        var about = new AboutViewModel();
+        Assert.Equal("v9.0 (r4433)", about.EngineVersion);
+        Assert.Equal("v0.7", about.ApplicationVersion);
+        Assert.NotEqual(about.EngineVersion, about.ApplicationVersion);
+    }
+
+    [Fact]
     public void About_English_ShowsTheNoticeAndTheEnglishLegalTexts()
     {
         var about = new AboutViewModel();

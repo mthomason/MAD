@@ -21,7 +21,13 @@ public sealed class AboutViewModel : ObservableObject
         SelectedComponent = Components.FirstOrDefault();
     }
 
-    public string Version { get; } = "v9.0 (r4433)";
+    /// <summary>The reporting engine's own version. It is distinct from the Windows
+    /// application's version: the engine is mature while the Windows app is pre-1.0.</summary>
+    public string EngineVersion { get; } = "v9.0 (r4433)";
+
+    /// <summary>The Windows application version (Phase 6f settled decision).</summary>
+    public string ApplicationVersion { get; } = AppInfo.Version;
+
     public string Copyright { get; } = "Copyright © 2012–2026 Michael Thomason";
 
     public string Overview { get; }
