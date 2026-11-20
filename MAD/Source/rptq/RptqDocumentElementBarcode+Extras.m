@@ -56,7 +56,7 @@
 	RptqQueryField *field1 = (RptqQueryField *)[storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field1ID];
 	RptqQueryField *field2 = (RptqQueryField *)[storeContext objectForEntity:NSStringFromClass([RptqQueryField class]) identifier:field2ID];
 	
-	self.add2dComponent =       @(barcode.has2dComponent);
+	self.add2dComponent =       barcode.has2dComponent;
 	self.barcodeBorderStyle =   barcode.barcodeBorderStyle;
 	self.barcodeBorderWidth =   barcode.barcodeBorderWidth;
 	self.barcodeType =          barcode.barcodeType;
@@ -92,8 +92,12 @@
 		reportObject.add2dComponent = barcode.has2dComponentEnabled;
 		reportObject.barcodeBorderStyle = barcode.barcodeBorderStyle;
 		reportObject.barcodeBorderWidth = barcode.barcodeBorderWidth;
+#if __APPLE__
+		// The store's colour columns hold platform colours, and off Apple the
+		// typedef is only a forward declaration.
 		reportObject.backgroundColor = [MADElementColor whiteColor];
 		reportObject.foregroundColor = [MADElementColor blackColor];
+#endif
 		reportObject.barcodeHeight = barcode.barcodeHeight;
 		reportObject.humanReadable = barcode.humanReadable;
 		reportObject.option1 = barcode.option1;

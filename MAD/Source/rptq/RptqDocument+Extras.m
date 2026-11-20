@@ -29,14 +29,12 @@
 #import "RptqDocumentElementLabelDataField.h"
 #import "RptqDocumentElementLabelLink.h"
 #import "RptqDocumentElementAggregate+Extras.h"
-#if __APPLE__
-#include <TargetConditionals.h>
 #import "RptqDocumentElementBarcode+Extras.h"
-#if TARGET_OS_IPHONE
+#include <TargetConditionals.h>
+#if defined(__APPLE__) && TARGET_OS_IPHONE
 #import <UIKit/UIImage.h>
-#elif TARGET_OS_OSX
+#elif defined(__APPLE__) && TARGET_OS_OSX
 #import <AppKit/NSImage.h>
-#endif
 #endif
 #import "RptqDocumentElementFormula+Extras.h"
 #import "RptqDataHelper.h"
@@ -612,9 +610,8 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 			reportObject.type = MADPrintPageElementTypeWhtiespace;
 			break;
 		}
-#if __APPLE__
 		case MADPrintPageElementTypeBarcode: {
-			
+
 			MADBarcode *barcode = defination[MTDocumentObjectDefinationObject];
 			int64_t field1ObjectId = [defination[MTDocumentObjectDefinationField1] longLongValue];
 			int64_t field2ObjectId = [defination[MTDocumentObjectDefinationField2] longLongValue];
@@ -624,17 +621,9 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 															  queryFieldOne: field1
 															  queryFieldTwo: field2];
 			reportObject.type = MADPrintPageElementTypeBarcode;
-			
+
 			break;
 		}
-#else
-		case MADPrintPageElementTypeBarcode:
-			// MADBarcodes is not in the Linux build (its base class is a
-			// CoreGraphics renderer), so a barcode element cannot be built
-			// here; it is dropped rather than silently mistyped.
-			os_log_error(OS_LOG_DEFAULT, "A barcode element was skipped: MADBarcodes is not built on this platform.");
-			break;
-#endif
 		default:
 			break;
 	}

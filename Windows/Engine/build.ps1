@@ -888,35 +888,36 @@ $commonFlags = @(
 # subdirectories, so its shim is a directory of copies rather than one junction.
 function New-Shim([string]$framework, [string]$sourceDir) {
 	$link = Join-Path $ShimDir $framework
-	if (-not (Test-Path $link)) {
-		if ($framework -eq "MAD") {
-			New-Item -ItemType Directory -Force -Path $link | Out-Null
-			foreach ($d in @("$sourceDir", "$sourceDir\model", "$sourceDir\rptq",
-							 "$sourceDir\rptq\autogen", "$sourceDir\rptq\store",
-							 "$sourceDir\sql", "$sourceDir\paper")) {
-				if (Test-Path $d) {
-					Get-ChildItem -Path $d -Filter *.h -File | ForEach-Object {
-						Copy-Item $_.FullName (Join-Path $link $_.Name)
-					}
+	if ($framework -eq "MAD") {
+		# Refreshed every run: these are copies, not junctions, so an edited
+		# header has to reach them (a stale copy compiles last build's interface).
+		New-Item -ItemType Directory -Force -Path $link | Out-Null
+		foreach ($d in @("$sourceDir", "$sourceDir\model", "$sourceDir\rptq",
+						 "$sourceDir\rptq\autogen", "$sourceDir\rptq\store",
+						 "$sourceDir\sql", "$sourceDir\paper")) {
+			if (Test-Path $d) {
+				Get-ChildItem -Path $d -Filter *.h -File | ForEach-Object {
+					Copy-Item $_.FullName (Join-Path $link $_.Name) -Force
 				}
 			}
-		} elseif ($framework -eq "MADBarcodes") {
-			# The framework exposes the headers it builds on as
-			# <MADBarcodes/zint.h> and <MADBarcodes/png.h> (the Xcode target
-			# keeps them Public), so the shim is a directory of copies.
-			New-Item -ItemType Directory -Force -Path $link | Out-Null
-			Get-ChildItem -Path $sourceDir -Filter *.h -File | ForEach-Object {
-				Copy-Item $_.FullName (Join-Path $link $_.Name)
-			}
-			foreach ($h in @("zint.h")) {
-				Copy-Item (Join-Path $zintInclude $h) (Join-Path $link $h) -Force
-			}
-			foreach ($h in @("png.h", "pngconf.h", "pnglibconf.h")) {
-				Copy-Item (Join-Path $libpngInclude $h) (Join-Path $link $h) -Force
-			}
-		} else {
-			New-Item -ItemType Junction -Path $link -Target $sourceDir | Out-Null
 		}
+	} elseif ($framework -eq "MADBarcodes") {
+		# The framework exposes the headers it builds on as
+		# <MADBarcodes/zint.h> and <MADBarcodes/png.h> (the Xcode target
+		# keeps them Public), so the shim is a directory of copies.
+		New-Item -ItemType Directory -Force -Path $link | Out-Null
+		Get-ChildItem -Path $sourceDir -Filter *.h -File | ForEach-Object {
+			Copy-Item $_.FullName (Join-Path $link $_.Name) -Force
+		}
+		Copy-Item (Join-Path $zintInclude "zint.h") (Join-Path $link "zint.h") -Force
+		foreach ($h in @("png.h", "pngconf.h", "pnglibconf.h")) {
+			Copy-Item (Join-Path $libpngInclude $h) (Join-Path $link $h) -Force
+		}
+		# The umbrella lives one level above the source directory.
+		$umbrella = Join-Path (Split-Path $sourceDir) "MADBarcodes.h"
+		if (Test-Path $umbrella) { Copy-Item $umbrella (Join-Path $link "MADBarcodes.h") -Force }
+	} elseif (-not (Test-Path $link)) {
+		New-Item -ItemType Junction -Path $link -Target $sourceDir | Out-Null
 	}
 }
 
@@ -1183,7 +1184,8 @@ $testNames = @(
 	"MADQueryPredicateTests", "MADQuerySampleDataTests", "MADQuerySelectExpressionTests",
 	"MADQueryTestTests", "MADQueryFullTests", "MADQueryMaxFieldLengthTests",
 	"MADQueryFullTableEnumeratorTests",
-	"MADQuerySimpleTypesTests", "MADReportExporterTests", "MADReportSectionEnumeratorTests",
+	"MADQuerySimpleTypesTests", "MADReportExporterTests", "MADBarcodeExportTests",
+	"MADReportSectionEnumeratorTests",
 	"MADReportSectionRepresentationTests", "MADReportSectionTests", "MADRptqDatabaseTests",
 	"MADRptqDocumentSectionTests", "MADRptqQueryTests", "MADRptqValueTypeTests",
 	"MADSchemaFieldSelectorModelTests", "MADStoreTests", "MADStoreMigrationTests",

@@ -25,19 +25,27 @@
 	if (self = [super init]) {
 		NSObject <MADPrintPageRendererDataSourceProtocol> *datasource;
 		datasource = definition.datasource;
-		
-		NSError *error = nil;
-		NSDictionary *rowData = [datasource dataForRow:definition.detailRowId error:&error];
-		if (error != nil) {
-			os_log_error(GetMadLog(), "Error getting data for row: %@", error);
-		}
-		
-		NSString *tableFieldKey1 = definition.fieldKey1;
-		NSString *tableFieldKey2 = definition.fieldKey2;
 
-		id value1 = rowData[tableFieldKey1], value2 = rowData[tableFieldKey2];
-		NSString *input1 = [definition formattedStringForValue1: value1];
-		NSString *input2 = [definition formattedStringForValue2: value2];
+		// A row read is needed only for a field-backed input; a static input (or an
+		// unbound one) answers from the element, with no row key to look up.
+		BOOL needsRow = !definition.usesStaticInput1 || !definition.usesStaticInput2;
+		NSDictionary *rowData = nil;
+		if (needsRow) {
+			NSError *error = nil;
+			rowData = [datasource dataForRow:definition.detailRowId error:&error];
+			if (error != nil) {
+				os_log_error(GetMadLog(), "Error getting data for row: %@", error);
+			}
+		}
+
+		NSString *fieldKey1 = definition.usesStaticInput1 ? nil : definition.fieldKey1;
+		NSString *fieldKey2 = definition.usesStaticInput2 ? nil : definition.fieldKey2;
+		NSString *input1 = definition.usesStaticInput1
+			? definition.staticInput1
+			: (fieldKey1 != nil ? [definition formattedStringForValue1: rowData[fieldKey1]] : @"");
+		NSString *input2 = definition.usesStaticInput2
+			? definition.staticInput2
+			: (fieldKey2 != nil ? [definition formattedStringForValue2: rowData[fieldKey2]] : @"");
 
 		MADBarcode *barcode = [MADBarcode newBarcode:definition.barcode
 											input1:input1
@@ -55,6 +63,10 @@
 
 - (void)drawInRect:(CGRect)rect {
 	[_drawingObject drawInRect:rect];
+}
+
+- (NSData *)renderedImageData {
+	return [_drawingObject renderedPNGData];
 }
 
 @end

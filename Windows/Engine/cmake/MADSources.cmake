@@ -20,7 +20,6 @@
 #     MADImageThumbnail.m               UIImage rewriting
 #     MADOperationBackgroundTaskBegin.m  UIApplication background tasks
 #     MADOperationBackgroundTaskEnd.m    (no suspension concept headless)
-#     MADPrintPageElementBarcode.m      barcode printing (MADBarcodes)
 #     MADPrintPageRenderer.m            UIPrintPageRenderer: the PDF seam
 #     MADSectionLayoutAttributes.m      UICollectionViewLayoutAttributes
 #     MADSectionLayoutManager.m         the above's client
@@ -42,11 +41,9 @@
 #   the refresh path takes credentials from an operation dependency, never
 #   the keychain, and MADFoundation's MADKeyChain is out for the same reason
 #
-#   MADBarcodes (§3: unused and unmaintained; its base class is a
-#   CoreGraphics renderer).  The element *type* stays in the model -- the
-#   two creation paths above log and skip it off Apple.
-#     rptq/RptqDocumentElementBarcode+Extras.m  the MTBarcodeProtocol conformance
-#     MADDocumentObjectDataReferenceBarcode.m   its data reference
+#   (MADBarcodes is not excluded any more: its render core is portable, and the
+#   barcode element, its data reference and its print object are in the list
+#   below.  The framework itself is built by cmake/MADBarcodesSources.cmake.)
 
 set(MAD_SOURCES
 	"${SOURCE_DIR}/MADAlignment.m"
@@ -65,6 +62,7 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/MADDesignerQuery.m"
 	"${SOURCE_DIR}/MADDesignerViewer.m"
 	"${SOURCE_DIR}/MADDocumentObjectDataReference.m"
+	"${SOURCE_DIR}/MADDocumentObjectDataReferenceBarcode.m"
 	"${SOURCE_DIR}/MADDocumentObjectTypeDescriptor.m"
 	"${SOURCE_DIR}/MADFont.m"
 	"${SOURCE_DIR}/model/MADModel.m"
@@ -116,6 +114,7 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/MADQuerySelectExpressionAllFields.m"
 	"${SOURCE_DIR}/MADPrintPageElement.m"
 	"${SOURCE_DIR}/MADPrintPageElement+Constructor.m"
+	"${SOURCE_DIR}/MADPrintPageElementBarcode.m"
 	"${SOURCE_DIR}/MADQueryTest.m"
 	"${SOURCE_DIR}/MADDocumentRenderDataSource.m"
 	"${SOURCE_DIR}/MADReportExporterCSV.m"
@@ -169,6 +168,7 @@ set(MAD_SOURCES
 	"${SOURCE_DIR}/rptq/RptqDocumentElement+Extras.m"
 	"${SOURCE_DIR}/rptq/RptqDocumentSection+Extras.m"
 	"${SOURCE_DIR}/rptq/RptqDocumentElementAggregate+Extras.m"
+	"${SOURCE_DIR}/rptq/RptqDocumentElementBarcode+Extras.m"
 	"${SOURCE_DIR}/rptq/RptqDocumentElementFormula+Extras.m"
 	"${SOURCE_DIR}/rptq/RptqDocumentElementGroupKey+Extras.m"
 	"${SOURCE_DIR}/rptq/RptqDocumentElementImage+Extras.m"

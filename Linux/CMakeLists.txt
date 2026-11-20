@@ -359,6 +359,12 @@ foreach (_barcode_library_header IN ITEMS "zint.h" "png.h" "pngconf.h" "pnglibco
 			"${SHIM_DIR}/MADBarcodes/${_barcode_library_header}" SYMBOLIC)
 	endif()
 endforeach()
+# The umbrella lives one level above the source directory (the Xcode target
+# keeps it Public at the framework's root).
+if (NOT EXISTS "${SHIM_DIR}/MADBarcodes/MADBarcodes.h")
+	file(CREATE_LINK "${REPO_ROOT}/MADBarcodes/MADBarcodes/MADBarcodes.h"
+		"${SHIM_DIR}/MADBarcodes/MADBarcodes.h" SYMBOLIC)
+endif()
 mad_add_framework(madbarcodes MADBARCODES_SOURCES
 	MADBarcodesTests
 )
@@ -412,6 +418,7 @@ mad_add_framework(mad MAD_SOURCES
 	MADQueryMaxFieldLengthTests
 	MADQuerySimpleTypesTests
 	MADReportExporterTests
+	MADBarcodeExportTests
 	MADReportSectionEnumeratorTests
 	MADReportSectionRepresentationTests
 	MADReportSectionTests
