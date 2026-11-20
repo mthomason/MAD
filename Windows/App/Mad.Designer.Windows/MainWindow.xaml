@@ -135,9 +135,6 @@
             <!-- Primary navigation: three peer-level workspaces, never document tabs. -->
             <Border Style="{StaticResource MAD.NavRail}">
                 <DockPanel>
-                    <Image DockPanel.Dock="Top" Source="/Mad.Designer.Windows;component/Assets/AppIcon.png"
-                           Width="40" Height="40" Margin="0,14,0,10"
-                           AutomationProperties.Name="{infra:Loc App.Title}" />
                     <TextBlock DockPanel.Dock="Bottom" Text="{x:Static infra:AppInfo.Version}"
                                Style="{StaticResource MAD.CaptionText}" FontWeight="Normal"
                                HorizontalAlignment="Center" Margin="0,0,0,10" />
@@ -146,7 +143,7 @@
                              IsEnabled="{Binding HasDocument}"
                              Background="Transparent" BorderThickness="0"
                              ItemContainerStyle="{StaticResource MAD.NavItem}"
-                             VerticalAlignment="Top"
+                             VerticalAlignment="Top" Margin="0,14,0,0"
                              AutomationProperties.Name="{infra:Loc Nav.Workspaces}">
                         <ListBoxItem AutomationProperties.Name="{infra:Loc Workspace.Query}">
                             <StackPanel>

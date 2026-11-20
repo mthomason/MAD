@@ -17,10 +17,7 @@
     <ScrollViewer Background="{DynamicResource ApplicationBackgroundBrush}"
                   VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel MaxWidth="780" Margin="56,44,56,56" HorizontalAlignment="Center">
-            <Image Source="/Mad.Designer.Windows;component/Assets/AppIcon.png"
-                   Width="72" Height="72" HorizontalAlignment="Left"
-                   AutomationProperties.Name="{infra:Loc App.Title}" />
-            <TextBlock Text="{infra:Loc Welcome.Title}" Style="{StaticResource MAD.DisplayText}" Margin="0,18,0,2" />
+            <TextBlock Text="{infra:Loc Welcome.Title}" Style="{StaticResource MAD.DisplayText}" Margin="0,0,0,2" />
             <TextBlock Text="{Binding ApplicationVersionText}" Style="{StaticResource MAD.SecondaryText}" />
             <TextBlock Text="{infra:Loc Welcome.Intro}" Style="{StaticResource MAD.BodyText}"
                        Margin="0,18,0,0" MaxWidth="660" HorizontalAlignment="Left" />
