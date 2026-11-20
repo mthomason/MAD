@@ -110,10 +110,7 @@ public partial class ViewerView : UserControl
         // workspace was unloaded) shows whatever the view model already holds.
         string? html = _pendingHtml ?? _viewer.PreviewHtml;
         _pendingHtml = null;
-        if (html != null)
-        {
-            ShowPreview(html);
-        }
+        ShowPreview(html);
     }
 
     private void OnViewerPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -170,8 +167,8 @@ public partial class ViewerView : UserControl
             string ink = ThemeInfo.IsDark ? "#E6E6E6" : "#555555";
             string hint = System.Net.WebUtility.HtmlEncode(Localizer.Get("Viewer.Placeholder"));
             _browser.CoreWebView2.NavigateToString(
-                $"<html><body style=\"background:{ThemeInfo.DeskColor};margin:0;height:100vh;" +
-                "display:flex;align-items:center;justify-content:center;" +
+                $"<html><body style=\"background:{ThemeInfo.DeskColor};margin:0;padding:0;height:100vh;" +
+                "box-sizing:border-box;overflow:hidden;display:flex;align-items:center;justify-content:center;" +
                 $"color:{ink};font-family:'Segoe UI Variable Text','Segoe UI';font-size:14px\">{hint}</body></html>");
             return;
         }
