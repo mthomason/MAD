@@ -748,9 +748,9 @@ empty clears it); `duplicate-elements` copies the picture.
 "Choose Image…" button for a selected image (the Mac inspector's row). The picker decodes any
 PNG/JPEG through WIC and re-encodes it as PNG (`ImageFileEncoder`) before sending it — the
 column is always PNG, so the HTML data URI is honest. The canvas draws the stored picture and
-falls back to the `[Image]` placeholder when the element has none. `ImageElementTests`,
-`DesignerCanvasTests` and the created-document smoke test pin the protocol, the picker's
-re-encode and the canvas.
+falls back to the `[Image]` placeholder when the element has none. `ImageElementTests` pins
+the protocol, the picker's re-encode and the canvas; the created-document smoke test adds one
+to the exported document.
 
 ## 7. Supported Windows versions
 
