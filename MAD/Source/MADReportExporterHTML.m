@@ -165,9 +165,10 @@ static NSString *MADReportExporterFontName(NSString *);
 	NSString *text = [line text];
 	NSData *imageData = line.imageData;
 	if (imageData != nil) {
-		// A barcode's symbol: the PNG inline, so the file stays one self-contained
-		// document.  The inline width/height is deliberate -- the shared <style> block
-		// is what the format's byte-for-byte comparisons pin.
+		// A barcode's symbol or an image element's picture: the PNG inline, so the
+		// file stays one self-contained document.  The inline width/height is
+		// deliberate -- the shared <style> block is what the format's byte-for-byte
+		// comparisons pin.
 		[html appendString: @"<img src=\"data:image/png;base64,"];
 		[html appendString: [imageData base64EncodedStringWithOptions: 0]];
 		[html appendString: @"\" alt=\""];

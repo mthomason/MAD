@@ -25,9 +25,15 @@ NS_ASSUME_NONNULL_BEGIN
 #if defined(__APPLE__) && TARGET_OS_OSX
 @class NSImage;
 typedef NSImage MADReferenceImage;
-#else
+#elif defined(__APPLE__)
 @class UIImage;
 typedef UIImage MADReferenceImage;
+#else
+// No AppKit or UIKit: the element's picture is the store's wire format itself.
+// The render layer hands these bytes to a line representation, whose -imageData
+// is what the exporters embed (the barcode closure's seam).
+@class NSData;
+typedef NSData MADReferenceImage;
 #endif
 
 @protocol MADDocumentObjectDataReferenceProtocol <NSObject>

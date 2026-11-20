@@ -1184,7 +1184,7 @@ $testNames = @(
 	"MADQueryPredicateTests", "MADQuerySampleDataTests", "MADQuerySelectExpressionTests",
 	"MADQueryTestTests", "MADQueryFullTests", "MADQueryMaxFieldLengthTests",
 	"MADQueryFullTableEnumeratorTests",
-	"MADQuerySimpleTypesTests", "MADReportExporterTests", "MADBarcodeExportTests",
+	"MADQuerySimpleTypesTests", "MADReportExporterTests", "MADBarcodeExportTests", "MADImageElementTests", "MADImageExportTests",
 	"MADReportSectionEnumeratorTests",
 	"MADReportSectionRepresentationTests", "MADReportSectionTests", "MADRptqDatabaseTests",
 	"MADRptqDocumentSectionTests", "MADRptqQueryTests", "MADRptqValueTypeTests",

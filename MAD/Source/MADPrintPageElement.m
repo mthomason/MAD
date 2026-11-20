@@ -137,6 +137,18 @@
 #endif
 }
 
+- (NSData *)renderedImageData {
+#if __APPLE__
+	// Apple draws the picture straight onto the page (the PDF path) and the
+	// designer edits the element itself; the stored bytes reach the exporters
+	// through the headless path below.
+	return nil;
+#else
+	// Off Apple the picture *is* the PNG the store holds.
+	return self.image;
+#endif
+}
+
 @end
 
 @implementation MADPrintPageElementAggregate

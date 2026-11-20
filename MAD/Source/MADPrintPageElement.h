@@ -12,7 +12,7 @@
 #import <Foundation/NSObject.h>
 #import <CoreGraphics/CGGeometry.h>
 
-@class MADDocumentObjectDataReference, MADDocumentObjectDataReferenceLabelStatic, MADDocumentObjectDataReferenceLabelDynamic, MADDocumentObjectDataReferenceAggregate, MADDocumentObjectDataReferenceImage;
+@class MADDocumentObjectDataReference, MADDocumentObjectDataReferenceLabelStatic, MADDocumentObjectDataReferenceLabelDynamic, MADDocumentObjectDataReferenceAggregate, MADDocumentObjectDataReferenceImage, NSData;
 
 @interface MADPrintPageElement : NSObject
 - (instancetype)initWithDefinition:(__kindof MADDocumentObjectDataReference *)definition;
@@ -34,6 +34,10 @@
 
 @interface MADPrintPageElementImage : MADPrintPageElement
 - (instancetype)initWithDefinition:(MADDocumentObjectDataReferenceImage *)definition;
+/// The element's stored PNG bytes, so a line representation can carry them to the
+/// formats (the barcode closure's -imageData seam).  Off Apple the picture is
+/// those bytes; on Apple the PDF path draws it and this answers nil.
+- (nullable NSData *)renderedImageData;
 @end
 
 @interface MADPrintPageElementAggregate : MADPrintPageElementText
