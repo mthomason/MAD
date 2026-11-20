@@ -77,7 +77,10 @@ public partial class ViewerView : UserControl
 
         CoreWebView2Environment environment = await CoreWebView2Environment.CreateAsync(userDataFolder: dataFolder);
 
-        var browser = new WebView2();
+        var browser = new WebView2
+        {
+            DefaultBackgroundColor = System.Drawing.Color.FromArgb(0xE8, 0xE8, 0xE8),
+        };
         PreviewHost.Children.Add(browser);
         await browser.EnsureCoreWebView2Async(environment);
 
