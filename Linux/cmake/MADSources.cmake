@@ -1,9 +1,9 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MAD subset the Linux build compiles (docs/project/MAD_LINUX.md §9): 168 of the 199
+# The MAD subset the Linux build compiles (docs/project/MAD_LINUX.md §9): 171 of the 199
 # implementation files under MAD/Source -- the data, model, store, query and
 # archive side, and since Phase E the render half (the formatter, the page walk,
-# the element family and the shared render reads).  The 31 that stay on Apple
+# the element family and the shared render reads).  The 28 that stay on Apple
 # fall in four groups, each named below.  Keep this list in step with
 # docs/project/MAD_LINUX.md §4 and §5.2.
 #
