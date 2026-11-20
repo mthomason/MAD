@@ -39,7 +39,9 @@ source_dir() { # name -> echoes a fresh work tree for the component
 	mkdir -p "${dest}"
 	if [[ "${ref}" == "-" ]]; then
 		archive="$(fetch_archive "$(conf_get "${name}" url)" "$(conf_get "${name}" sha256)")"
-		tar -xzf "${archive}" -C "${dest}" --strip-components=1 || die "${name}: extract failed"
+		# -a lets GNU tar pick the decompressor from the archive's name: some
+		# pins are .tar.gz and FreeType's is .tar.xz.
+		tar -xaf "${archive}" -C "${dest}" --strip-components=1 || die "${name}: extract failed"
 	else
 		cp -R "$(clone_pinned "${name}" "${ref}" "$(conf_get "${name}" commit)" "$(conf_get "${name}" url)")/." "${dest}"
 	fi
@@ -166,6 +168,66 @@ build_zint() { # src
 		install -m 0644 "$1/backend/zint.h" "${PREFIX}/include/zint.h"
 	)
 	ldconfig
+}
+
+build_pixman() { # src
+	local bld="$1/build-linux"
+	mkdir -p "${bld}"
+	# Meson (pixman has no autotools build any more).  Static, no tests, no
+	# demos: cairo uses the raster core only, and the image is not a desktop.
+	PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" \
+	meson setup "${bld}" "$1" \
+		--prefix="${PREFIX}" --libdir=lib --buildtype=release --default-library=static \
+		-Dtests=disabled -Ddemos=disabled -Dgtk=disabled -Dopenmp=disabled
+	ninja -C "${bld}"
+	meson install -C "${bld}"
+	ldconfig
+}
+
+build_freetype() { # src
+	(
+		cd "$1"
+		# The glyph engine cairo draws text through (MADReportExporterPDFCairo).
+		# Only the core is needed; the PNG/bzip2/brotli/zlib wrappers and
+		# HarfBuzz are off, so the archive carries nothing the writer does not use.
+		PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" \
+		./configure --prefix="${PREFIX}" --disable-shared --enable-static \
+			--without-harfbuzz --without-bzip2 --without-png --without-zlib \
+			--without-brotli --disable-freetype-config
+		make -j"${JOBS}"
+		make install
+	)
+	ldconfig
+}
+
+build_cairo() { # src
+	local bld="$1/build-linux"
+	mkdir -p "${bld}"
+	# Meson, static, and deliberately narrow: FreeType for glyphs (not the
+	# fontconfig/dwrite family backends, which need a font database), zlib for
+	# the PDF surface's content streams, and no windowing backends at all --
+	# the image has no display.  cairo's own tests and docs are off.
+	PKG_CONFIG_PATH="${PREFIX}/lib/pkgconfig" \
+	meson setup "${bld}" "$1" \
+		--prefix="${PREFIX}" --libdir=lib --buildtype=release --default-library=static \
+		-Dfreetype=enabled -Dzlib=enabled -Dpng=enabled -Dfontconfig=disabled \
+		-Ddwrite=disabled -Dxcb=disabled -Dxlib=disabled -Dquartz=disabled \
+		-Dtee=disabled -Dglib=disabled -Dspectre=disabled -Dsymbol-lookup=disabled \
+		-Dlzo=disabled -Dtests=disabled -Dgtk_doc=false
+	ninja -C "${bld}"
+	meson install -C "${bld}"
+	ldconfig
+}
+
+build_liberation() { # src
+	local src="$1" fonts="${PREFIX}/share/mad/fonts"
+	# The bundled substitutes for the fonts the documents name (Helvetica Neue,
+	# Verdana, Courier, Times New Roman, Arial, Georgia): Liberation Sans, Serif
+	# and Mono.  Each family's four faces install together, with the OFL text the
+	# licence requires to travel with the fonts.
+	install -d "${fonts}"
+	install -m 0644 "${src}"/*.ttf "${fonts}/"
+	install -m 0644 "${src}/LICENSE" "${fonts}/LICENSE-liberation-2.1.5.txt"
 }
 
 build_bzip2() { # src
