@@ -19,9 +19,9 @@
 //  cannot differ is where the line is, what it says, and how it is styled: those are
 //  the walk's, and this file only draws them.
 //
-//  Kerning is FreeType's: the face's own `kern` table, scaled from font units by the
-//  face's units-per-EM.  No advance is invented here; the only arithmetic is the
-//  conversion from the font's units to points.
+//  Kerning is FreeType's: the face's own `kern` table, read at the line's size
+//  (UNFITTED, so unhinted like the advances).  No advance is invented here; the
+//  only arithmetic is the conversion from the face's 26.6 metrics to points.
 //
 
 #if ! __has_feature(objc_arc)
