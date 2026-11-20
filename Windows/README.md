@@ -3,7 +3,7 @@
 The Windows counterpart to `Linux/`: a native Windows build of the headless
 engine's Objective-C frameworks, compiled with Clang against GNUstep Base, so
 the same engine that runs the macOS app and the Linux CLI can run on Windows.
-`Windows/App/` is the WPF application on top of it (Phases 5 and 6a–6e); the
+`Windows/App/` is the WPF application on top of it (Phases 5 and 6a–6f); the
 architecture record is `docs/project/MAD_WINDOWS.md`.
 
 This increment builds all eleven headless frameworks — **MADDataStructures**,
@@ -240,26 +240,30 @@ proves the process boundary in a real UI. It reuses the Phase 4 `Mad.Client` unc
 wrapping it in an async `EngineService` that serializes the line protocol through a
 semaphore and runs every blocking call on the thread pool so the UI never freezes.
 
-The shell has the three-workspace frame (MAD Query / Designer / Viewer): Query is now the
-full visual query designer — a left schema-table list, floating table cards on a canvas,
+The shell has the three-workspace model — **Query / Designer / Viewer** — as three
+peer-level destinations on a NavigationView-style left rail, never document tabs. Query is
+the full visual query designer: a left schema-table list, floating table cards on a canvas,
 drag-to-connect joins (Left Outer Join by default, with a join-type selector), WHERE and
-GROUP BY editors, and a mutually exclusive SQL editor with "Revert to Generated SQL" /
-"Validate SQL" / "Compile & Apply SQL" — Viewer is the rendered report: a WebView2 shows
-the engine's paginated HTML facsimile (the accepted interim for the Mac's PDF view) with
-page-size selection (US Letter / US Legal / A4), zoom, page navigation, print through the
-browser print path, and export in all six formats (HTML, HTML-flow, CSV, JSON, JSON-report,
-text) — and Designer is the report-layout studio (a three-pane band-and-element
-canvas with an element palette, a minimap / sections / query-fields sidebar, and a
-selected-element inspector) backed by the Phase 6c `layout-model` protocol. It launches to the empty
-main window with every document-dependent control disabled (no auto-open, no file dialog).
-File → New Document… opens the connection assistant (SQLite / MySQL / Microsoft SQL Server
-/ PostgreSQL, with a Test Connection action), File → Open… opens an existing `.mad`, and a
-`.mad` passed on the command line (double-click association) opens on startup. Save / Save
-As reuse the engine's `write`; credentials are stored in Windows Credential Manager and
-passed to the engine as `user:password`; recent files is a client-side list. The About
-window (Overview / License & Notice / Acknowledgements) renders the Windows dependency
-register in `ThirdParty/Licenses/Windows/` and the relink offer — the Windows component
-set, never the Apple one.
+GROUP BY editors, a segmented Designer/SQL mode switch, and a bottom zoom bar with in/out,
+percentage and Fit. Viewer is the rendered report: a WebView2 shows the engine's paginated
+HTML facsimile (the accepted interim for the Mac's PDF view) with page-size selection
+(US Letter / US Legal / A4), zoom, page navigation, print through the browser print path,
+and export in all six formats (HTML, HTML-flow, CSV, JSON, JSON-report, text). Designer is
+the report-layout studio (a band-and-element canvas with an insert palette, sections and
+query-field lists, a collapsible minimap, and a selected-element inspector) backed by the
+Phase 6c `layout-model` protocol. Launching with no report shows a Welcome/Home screen —
+New report, Open report, recent reports and a short introduction — not an empty Viewer; the
+rail is disabled until a report is open. A created report opens in the Designer; an existing
+report opens in the Viewer. File → New Document… opens the connection assistant (SQLite /
+MySQL / Microsoft SQL Server / PostgreSQL, with a Test Connection action) in a fixed-size,
+grouped window; File → Open… opens an existing `.mad`; and a `.mad` passed on the command
+line (double-click association) opens on startup. Save / Save As reuse the engine's `write`;
+credentials are stored in Windows Credential Manager and passed to the engine as
+`user:password`; recent files is a client-side list. The About window (Overview / License &
+Notice / Acknowledgements) renders the Windows dependency register in
+`ThirdParty/Licenses/Windows/` and the relink offer — the Windows component set, never the
+Apple one — and reports the engine version (`v9.0 (r4433)`) and the Windows application
+version (`v0.7`) separately.
 
 The Viewer's report preview uses the **WebView2** control (`Microsoft.Web.WebView2`, pinned
 in the app's `.csproj`), which needs the Evergreen WebView2 Runtime — shipped with Windows
@@ -272,6 +276,28 @@ Build and run (the engine must be built first — see above):
 dotnet build .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj
 dotnet run --project .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj
 ```
+
+### Theme, shell and accessibility
+
+The app opts into the native WPF Fluent theme with `Application.ThemeMode="System"`, so
+standard controls, focus visuals, high contrast and the user's accent follow Windows.
+`Themes/Theme.xaml` is the one application-wide design system: typography (Segoe UI
+Variable Text/Display), spacing, corner radii, surfaces, command and navigation styles,
+primary/secondary buttons, segmented toggles, form/card styles, and semantic status
+colours. Chrome brushes are Fluent dynamic-resource keys (light/dark aware); the report
+document keeps its own fixed palette in `Infrastructure/DesignPalette.cs` (paper, element
+tints, selection accent, joins, minimap). `MAD_THEME=Light|Dark` overrides the theme for
+inspection, like `MAD_LANGUAGE`; the Viewer's WebView2 desk follows it (or the Windows
+AppsUseLightTheme setting) when the browser is created.
+
+The application icon is generated from the existing MAD artwork (`Assets/AppIcon.png` and
+the multi-size `AppIcon.ico`) and is used for the window, taskbar and About identity. The
+left rail gives each workspace an icon and a text label, a clear selected state, tooltips
+and a UI Automation name; Ctrl+1 / Ctrl+2 / Ctrl+3 switch workspaces, Ctrl+N / Ctrl+O open
+New/Open, Ctrl+S saves, and Ctrl+Shift+S saves as. Icon-only controls (zoom, page
+navigation) have both tooltips and automation names. The window is DPI-independent and
+sized to fit the screen; the connection assistant is 640 × 660 and keeps that size when
+the driver changes, scrolling its grouped form instead.
 
 The About window (Overview / License & Notice / Acknowledgements) renders the Windows
 dependency register in `ThirdParty/Licenses/Windows/` and the relink offer — the Windows
@@ -296,20 +322,25 @@ $env:MAD_LANGUAGE = "de"
 dotnet run --project .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj
 ```
 
-The translations are machine-assisted and unreviewed, as on the Mac
-(`docs/project/MAD_APP_LOCALIZATION.md` D14); the About Overview ends with that notice
-in each language. Licence bodies, component notices, the relink offer, copyright and
-brand names stay verbatim English.
+The dictionaries carry 237 keys each, including the Phase 6f Welcome/Home surface, the
+short workspace labels (Query / Designer / Viewer), the connection cards, the query zoom
+controls and the two About version labels. The translations are machine-assisted and
+unreviewed, as on the Mac (`docs/project/MAD_APP_LOCALIZATION.md` D14); the About Overview
+ends with that notice in each language. Licence bodies, component notices, the relink
+offer, copyright and brand names stay verbatim English.
 
 The headless acceptance lives in `Windows/App/Mad.Designer.Windows.Tests` (xunit,
-`net10.0-windows`) and needs no human interaction — it drives the service and view-model
-layers through the London flow (open → describe 21/11 → refresh 76 → export json/csv →
-clean shutdown), the Phase 6b query model (add/connect/filter/group/remove tables and
-validate/apply SQL against a fresh chinook document, plus the canvas and view-model
-layers), the Phase 6c designer and the Phase 6d viewer (the rendered report's page count
-and status line, the page-size lock and its effect on the exported page box, every export
-format, and the workspace materialised on an STA thread), the localization dictionaries,
-and checks the licence register. It also carries the **WPF smoke test**
+`net10.0-windows`, **108 tests**) and needs no human interaction — it drives the service
+and view-model layers through the London flow (open → describe 21/11 → refresh 76 → export
+json/csv → clean shutdown), the Phase 6b query model (add/connect/filter/group/remove
+tables and validate/apply SQL against a fresh chinook document, plus the canvas and
+view-model layers), the Phase 6c designer (including the drag at zoom 2 with the view
+scrolled) and the Phase 6d viewer (the rendered report's page count and status line, the
+page-size lock and its effect on the exported page box, every export format, and the
+workspace materialised on an STA thread), the Phase 6f theme dictionary and shell
+(Welcome content and recent-list normalisation, disabled navigation with no report, the
+created→Designer and existing→Viewer rule, and the About window actually opening), the
+localization dictionaries, and the licence register. It also carries the **WPF smoke test**
 (`SmokeTests.cs`), the counterpart of `Mac/Tests/MADMacSmokeTest.m`:
 
 * **London** — open, refresh 76 rows / 5 pages, export HTML Page, HTML Flow, CSV, JSON

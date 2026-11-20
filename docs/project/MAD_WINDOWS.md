@@ -16,7 +16,7 @@ made.
 The target is a native Windows MAD Designer (WPF on .NET 10 LTS) reusing the
 existing headless Objective-C engine compiled natively for Windows. The engine
 build lands under `Windows/`, a sibling of `Mac/` and `Linux/`; the WPF app
-followed in Phases 5–6e (`Windows/App`; §6e–§6h).
+followed in Phases 5–6f (`Windows/App`; §6e–§6i).
 
 The Phase 2b increment proved the toolchain and the framework port. Phase 2 (the
 first increment) built **MADDataStructures** and **MADFoundation** and ran a
@@ -600,6 +600,92 @@ PDF and barcode are excluded as accepted gaps (barcode is not a Windows element
 kind; PDF has no Windows exporter). The suite runs headlessly with the rest of
 the app tests; see `Windows/README.md`.
 
+## 6i. Phase 6f — the theme, the shell, and the usability pass
+
+Phase 6f is presentation-only: no engine, protocol, document or workflow change.
+It fixes the two functional defects the design review reported and applies one
+Fluent-inspired design system and shell across the existing three-workspace
+architecture. (The theme pass was not part of the merge gate; it follows it.)
+
+**Defects fixed.** Help ▸ About terminated the process: the About window's
+read-only `Overview`, `LicenseNotice` and `SelectedAcknowledgement` were bound
+to `TextBox.Text`, whose default binding mode is TwoWay, and the binding threw
+`InvalidOperationException` during the window's first layout. The bindings are
+now OneWay, and `AboutWindowTests` shows the window to pin it. The Designer's
+drag defect was Z-order: each band's opaque background was added with its
+elements, so an element dragged into a later band painted underneath that band
+and vanished until the drop rebuilt the canvas; its resize handles also stayed
+at the old position. The dragged element now paints above every band, the
+handles are hidden while dragging, selection chrome updates in place instead of
+rebuilding, the ScrollViewer offset is preserved across a rebuild, and the drag
+math is pinned at zoom 2 with the view scrolled.
+
+**The design system.** `Themes/Theme.xaml` is the single resource set:
+typography (Segoe UI Variable Text/Display, Fluent sizes), spacing, corner radii,
+surfaces, command and navigation styles, primary/secondary buttons, segmented
+toggles, form and card styles, and semantic status colours. Chrome brushes are
+Fluent dynamic-resource keys, so light/dark, the user's accent and high contrast
+follow the system; `App.xaml` opts into the native Fluent theme with
+`ThemeMode="System"` (the experimental API's `WPF0001` is suppressed). Report
+documents keep their own fixed palette: `Infrastructure/DesignPalette.cs` is the
+single frozen source for paper, element tints, the selection accent, joins and
+the minimap. `MAD_THEME=Light|Dark` is an inspection override like
+`MAD_LANGUAGE`, and the Viewer's WebView2 desk follows it (or the Windows
+AppsUseLightTheme setting).
+
+**The shell.** The application icon is generated from the existing MAD artwork
+(`Assets/AppIcon.png` and the multi-size `AppIcon.ico`) and is the window,
+taskbar and About identity. Launching with no report shows a Welcome/Home screen
+(New report, Open report, recent reports, a short introduction) rather than an
+empty Viewer. The three workspaces are a NavigationView-style left rail with
+icon + label, a clear selected state, and Ctrl+1/Ctrl+2/Ctrl+3; they are disabled
+while Welcome is shown. A newly created report opens in the Designer; an existing
+report opens in the Viewer. There is no Home destination: the three workspaces
+stay the first-class peer set. The File menu keeps New/Open/Save/Save As/Recent/
+Connection/Exit; the command bar keeps New and Open (About stays in Help).
+
+**Workspace organisation.** The connection assistant is a fixed 640 × 660
+window (resizable, with a scrolling body) whose grouped cards keep the driver-
+specific form inside the same frame; switching SQLite → MySQL/SQL Server/
+PostgreSQL does not resize it. Query has a segmented Designer/SQL switch, grouped
+commands, a normal-sized Add table command in the table panel's header, and a
+bottom zoom bar with in/out, percentage and Fit. The Designer groups insert and
+edit commands, moves the minimap from the upper-left corner to a collapsed
+Expander at the top of the inspector, and puts zoom/grid/snap/rulers on the
+bottom view bar. The Viewer puts document/page/output commands at the top and
+zoom, page navigation and the status/paper line at the bottom, giving the report
+the maximum area.
+
+**About.** The window now reports two distinct identities: the engine
+(`v9.0 (r4433)`) and the Windows application (`v0.7`). The settled decision is
+that the Windows application is pre-1.0 while the engine is mature.
+
+**Accessibility and localization.** The navigation and command surfaces have
+tooltips, text labels where an icon is ambiguous, UI Automation names (including
+the icon-only zoom and page buttons), keyboard shortcuts, and Fluent focus and
+disabled states. Every new or renamed string is in all six dictionaries
+(`LocalizerTests` checks completeness and placeholders; English remains the
+authoritative source); licence bodies, notices, copyright and brand names stay
+verbatim English. The suite is 108 tests, including the Welcome/navigation/
+first-workspace tests, the About window show test, the theme dictionary test and
+the query zoom/fit tests.
+
+**Ribbon evaluation.** No ribbon was introduced. The Designer's command surface
+is two groups (insert palette, edit) plus a view bar; a ribbon would add chrome
+and take canvas space for no discoverability gain at this command count. A
+Designer-only ribbon is worth revisiting only if the element/command set grows
+substantially (for example, full typography, alignment and table-layout groups).
+The three workspaces have materially different commands, so an application-wide
+ribbon would be more complex, not simpler.
+
+**Not done (recorded, not defects).** No fourth Home destination; no in-app
+close-to-Welcome. The Viewer's WebView2 desk colour is read when the browser is
+created, so a mid-session theme switch needs a relaunch. The reference WPF
+application named in the brief was not present on the workstation; the direction
+follows Microsoft's Windows 11 design guidance, the native Fluent theme and the
+existing MAD artwork, with the palette and spacing centralised for easy
+retuning. Public `docs/windows.md` and its translations remain deferred.
+
 ## 7. Supported Windows versions
 
 .NET 10's supported OS matrix (Windows 10 Enterprise 21H2/1809/1607, Windows
@@ -644,7 +730,8 @@ The exact DLL/static split is measured from the built `mad.exe` with
 report; it is not inferred from the toolchain layout. The build and any package
 must copy `ThirdParty/Licenses/` and `NOTICE`.
 
-The WPF **About** window (Phase 5 shell proof, completed in Phase 6e) mirrors
+The WPF **About** window (Phase 5 shell proof, completed in Phase 6e; the
+engine/application version split arrived in Phase 6f) mirrors
 the Mac's three tabs — Overview, License & Notice, and Acknowledgements — and
 lists every component above, including WebView2, with the texts from
 `ThirdParty/Licenses/Windows/` and the shared root texts and the LGPL written
