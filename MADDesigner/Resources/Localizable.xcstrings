@@ -25086,6 +25086,258 @@
         }
       }
     },
+    "The PDF cannot be written to %@: it is a directory.": {
+      "comment": "Error when the PDF output path names a directory; %@ is the path.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das PDF kann nicht nach %@ geschrieben werden: Es handelt sich um ein Verzeichnis."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se puede escribir el PDF en %@: es un directorio."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF を %@ に書き込めません: ディレクトリです。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não é possível gravar o PDF em %@: é um diretório."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法将 PDF 写入 %@：它是一个目录。"
+          }
+        }
+      }
+    },
+    "The PDF could not be written to %@.": {
+      "comment": "Error when the PDF output file cannot be created; %@ is the path.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das PDF konnte nicht nach %@ geschrieben werden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo escribir el PDF en %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF を %@ に書き込めませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível gravar o PDF em %@."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法将 PDF 写入 %@。"
+          }
+        }
+      }
+    },
+    "The PDF could not be written: %s.": {
+      "comment": "Error when Cairo fails while writing the PDF; %s is Cairo's status.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das PDF konnte nicht geschrieben werden: %s."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo escribir el PDF: %s."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF を書き込めませんでした: %s。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível gravar o PDF: %s."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法写入 PDF：%s。"
+          }
+        }
+      }
+    },
+    "The PDF export could not open the bundled font %@.": {
+      "comment": "Error when one bundled PDF font is unreadable; %@ is the file name.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die PDF-Ausgabe konnte die mitgelieferte Schriftart %@ nicht öffnen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La exportación a PDF no pudo abrir la fuente incluida %@."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF 書き出しで同梱のフォント %@ を開けませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A exportação de PDF não pôde abrir a fonte incluída %@."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF 导出无法打开随附的字体 %@。"
+          }
+        }
+      }
+    },
+    "The PDF export could not start FreeType.": {
+      "comment": "Error when the PDF writer cannot initialize FreeType.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die PDF-Ausgabe konnte FreeType nicht starten."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La exportación a PDF no pudo iniciar FreeType."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF 書き出しで FreeType を開始できませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A exportação de PDF não pôde iniciar o FreeType."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF 导出无法启动 FreeType。"
+          }
+        }
+      }
+    },
+    "The PDF export needs the bundled Liberation fonts, and they were not found. Set MAD_FONTS_DIR to the directory holding LiberationSans-Regular.ttf (the Linux image installs them in /usr/local/share/mad/fonts).": {
+      "comment": "Error when the PDF writer cannot find its bundled fonts.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die PDF-Ausgabe benötigt die mitgelieferten Liberation-Schriftarten, und sie wurden nicht gefunden. Legen Sie MAD_FONTS_DIR auf das Verzeichnis mit LiberationSans-Regular.ttf fest (das Linux-Image installiert sie in /usr/local/share/mad/fonts)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La exportación a PDF necesita las fuentes Liberation incluidas, y no se encontraron. Establezca MAD_FONTS_DIR en el directorio que contiene LiberationSans-Regular.ttf (la imagen de Linux las instala en /usr/local/share/mad/fonts)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF 書き出しには同梱の Liberation フォントが必要ですが、見つかりませんでした。MAD_FONTS_DIR を LiberationSans-Regular.ttf を含むディレクトリに設定してください（Linux イメージでは /usr/local/share/mad/fonts にインストールされます）。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A exportação de PDF precisa das fontes Liberation incluídas, e elas não foram encontradas. Defina MAD_FONTS_DIR como o diretório que contém LiberationSans-Regular.ttf (a imagem Linux as instala em /usr/local/share/mad/fonts)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF 导出需要随附的 Liberation 字体，但未找到。请将 MAD_FONTS_DIR 设置为包含 LiberationSans-Regular.ttf 的目录（Linux 镜像会将其安装在 /usr/local/share/mad/fonts）。"
+          }
+        }
+      }
+    },
+    "The PDF surface could not be created: %s.": {
+      "comment": "Error when the Cairo PDF surface cannot start; %s is Cairo's status.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die PDF-Oberfläche konnte nicht erstellt werden: %s."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo crear la superficie de PDF: %s."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF サーフェスを作成できませんでした: %s。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível criar a superfície de PDF: %s."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法创建 PDF 表面：%s。"
+          }
+        }
+      }
+    },
     "The attached document can be opened with MAD Viewer.": {
       "comment": "Localized UI string.",
       "extractionState": "manual",
