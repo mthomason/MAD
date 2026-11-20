@@ -123,6 +123,51 @@ build_zlib() { # src
 	ldconfig
 }
 
+build_libpng() { # src
+	(
+		cd "$1"
+		# Static only, against the zlib built above (the same pairing the
+		# Compressor recipe makes for Apple).  The library is what zint's PNG
+		# output is built on and what MADBarcode's PNG core writes through.
+		CPPFLAGS="-I${PREFIX}/include" LDFLAGS="-L${PREFIX}/lib" \
+		./configure --prefix="${PREFIX}" --disable-shared --enable-static
+		make -j"${JOBS}"
+		make install
+		# libpng 1.6 installs libpng16.a; the frameworks and zint look for the
+		# unversioned name (CMake's find_library(PNG_LIBRARY png)).
+		if [[ ! -e "${PREFIX}/lib/libpng.a" ]]; then
+			ln -s libpng16.a "${PREFIX}/lib/libpng.a"
+		fi
+	)
+	ldconfig
+}
+
+build_zint() { # src
+	local bld="$1/build-linux"
+	mkdir -p "${bld}"
+	# The same CMake option set as Compressor/lib/recipes/zint.sh, with the
+	# libpng and zlib just installed.  ZINT_FRONTEND=OFF keeps the GPL-3.0 Qt
+	# frontends out; only the BSD-3-Clause backend is built.
+	(
+		cd "${bld}"
+		cmake "$1" \
+			-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+			-DCMAKE_BUILD_TYPE=Release \
+			-DZINT_SHARED=OFF \
+			-DZINT_STATIC=ON \
+			-DZINT_FRONTEND=OFF \
+			-DZINT_USE_PNG=ON \
+			-DPNG_INCLUDE_DIR="${PREFIX}/include" \
+			-DPNG_LIBRARY="${PREFIX}/lib/libpng.a" \
+			-DZLIB_INCLUDE_DIR="${PREFIX}/include" \
+			-DZLIB_LIBRARY="${PREFIX}/lib/libz.a"
+		make -j"${JOBS}" zint-static
+		install -m 0644 "$(find . -name libzint.a | head -1)" "${PREFIX}/lib/libzint.a"
+		install -m 0644 "$1/backend/zint.h" "${PREFIX}/include/zint.h"
+	)
+	ldconfig
+}
+
 build_bzip2() { # src
 	(
 		cd "$1"
