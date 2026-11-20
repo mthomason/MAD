@@ -65,6 +65,29 @@ public sealed class QueryViewModelTests
     }
 
     [Fact]
+    public void ClickingTheActiveSegment_DoesNotLeaveTheSwitchUnselected()
+    {
+        var vm = new QueryViewModel(new EngineService());
+        bool designerRefreshed = false;
+        bool sqlRefreshed = false;
+        vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(QueryViewModel.DesignerSelected)) designerRefreshed = true;
+            if (e.PropertyName == nameof(QueryViewModel.SqlSelected)) sqlRefreshed = true;
+        };
+
+        vm.DesignerSelected = false; // the ToggleButton unchecking itself
+        Assert.True(vm.DesignerSelected);
+        Assert.Equal(QueryMode.Designer, vm.Mode);
+        Assert.True(designerRefreshed);
+
+        vm.SqlSelected = false;
+        Assert.False(vm.SqlSelected);
+        Assert.Equal(QueryMode.Designer, vm.Mode);
+        Assert.True(sqlRefreshed);
+    }
+
+    [Fact]
     public void Zoom_ClampsStepsAndFitsTheCanvas()
     {
         var vm = new QueryViewModel(new EngineService());

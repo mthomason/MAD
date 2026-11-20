@@ -120,6 +120,8 @@ public sealed class ShellSurfaceTests
 
                 var navigation = (ListBox)window.FindName("WorkspaceList")!;
                 Assert.False(navigation.IsEnabled);
+                Assert.Equal(-1, viewModel.SelectedWorkspaceIndex);
+                Assert.Equal(-1, navigation.SelectedIndex);
 
                 window.Close();
             }
@@ -144,6 +146,7 @@ public sealed class ShellSurfaceTests
         {
             await using var engine = new EngineService();
             var viewModel = new MainWindowViewModel(engine);
+            Assert.Equal(-1, viewModel.SelectedWorkspaceIndex);
             OpenResult open = await engine.CreateAsync(created, new ConnectionSpec(
                 ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
 

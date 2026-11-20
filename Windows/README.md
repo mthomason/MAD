@@ -330,7 +330,7 @@ ends with that notice in each language. Licence bodies, component notices, the r
 offer, copyright and brand names stay verbatim English.
 
 The headless acceptance lives in `Windows/App/Mad.Designer.Windows.Tests` (xunit,
-`net10.0-windows`, **108 tests**) and needs no human interaction — it drives the service
+`net10.0-windows`, **110 tests**) and needs no human interaction — it drives the service
 and view-model layers through the London flow (open → describe 21/11 → refresh 76 → export
 json/csv → clean shutdown), the Phase 6b query model (add/connect/filter/group/remove
 tables and validate/apply SQL against a fresh chinook document, plus the canvas and
