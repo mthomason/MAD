@@ -42,7 +42,7 @@ This framework, along with `MADTdsClient`, serves as a good example of how to ad
     See [`DEVELOPER.md`](../docs/project/DEVELOPER.md) for the commands, the volumes and why
     3306 is left to the Oracle installer's launchd service.
     On Windows (Phase 3b) drive the same server through the cross-platform
-    wrapper [`TestDatabase/test-databases.ps1`](../../TestDatabase/README.md) (or
+    wrapper [`TestDatabase/test-databases.ps1`](../TestDatabase/README.md) (or
     `TestDatabase/test-databases.sh`) and set `MAD_MYSQL_TEST_PORT=13306` from its
     `env` output; the MySQL suite also needs `MAD_MYSQL_TEST_HOST/USER/PASSWORD/SCHEMA`.
     The Xcode scheme's pre/post actions (up/down) are macOS-only.

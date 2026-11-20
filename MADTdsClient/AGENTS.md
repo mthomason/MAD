@@ -40,6 +40,6 @@ This framework serves as a good example of how to add support for a new database
     the tests and stops it after. Do not start a second SQL Server container.
     The suite hardcodes 1433 (there is no `MAD_TDS_TEST_PORT`), so the container
     stays on 1433. On Windows (Phase 3b) drive it through
-    [`TestDatabase/test-databases.ps1`](../../TestDatabase/README.md) (or
+    [`TestDatabase/test-databases.ps1`](../TestDatabase/README.md) (or
     `TestDatabase/test-databases.sh`) and set `MAD_TDS_TEST_HOST/USER/PASSWORD/DATABASE`
     from its `env` output; the Xcode scheme's pre/post actions are macOS-only.

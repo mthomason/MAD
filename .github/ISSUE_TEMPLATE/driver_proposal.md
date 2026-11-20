@@ -24,7 +24,7 @@ dialect quirks, type mappings, pagination, auth.
 This project is test-first. Say where the live suite would run: a Docker
 container (like `MADMySQL/TestDatabase/`) or a skip-when-unreachable suite
 against a public server. The driver-authoring tutorial
-([`docs/tutorials/driver-authoring.md`](docs/tutorials/driver-authoring.md))
+([`docs/tutorials/driver-authoring.md`](../../docs/tutorials/driver-authoring.md))
 walks through the whole seam.
 
 **Are you building it?**
