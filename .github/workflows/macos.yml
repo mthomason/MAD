@@ -8,10 +8,13 @@
 #
 # The frameworks link Compressor's xcframeworks, which are never committed, so
 # the first run downloads and builds the pinned third-party sources for all
-# three platforms (~15-40 minutes).  The artifacts are cached; later runs
-# restore them and the ensure step is a no-op.  The recipe scratch trees under
-# Compressor/build are deleted after the build because the runner's disk is
-# the constraint, not the source download.
+# three platforms (~15-40 minutes).  The artifacts are cached before the suites
+# run, so a failing test run still leaves them for the next attempt; later runs
+# restore them and the ensure step is a no-op.  The recipe scratch trees and
+# downloaded sources are deleted after the build because the runner's disk is
+# the constraint, not the source download.  The disk line and the test-result
+# artifact exist because a purge of the simulator's tmp directory is one way a
+# test can fail without failing cleanly.
 #
 # The simulator is chosen from the devices actually installed on the runner:
 # the checked-out CLAUDE.md pins a device id locally, and a name/OS pair is not
@@ -51,9 +54,10 @@ jobs:
           set -euo pipefail
           xcodebuild -version
           xcrun simctl list runtimes
+          df -h /
 
-      - name: Cache the third-party static libraries
-        uses: actions/cache@v4
+      - name: Restore the third-party static libraries
+        uses: actions/cache/restore@v4
         with:
           path: Compressor/library
           key: compressor-${{ runner.os }}-${{ hashFiles('Compressor/matrix.conf', 'Compressor/lib/**') }}
@@ -63,8 +67,16 @@ jobs:
       - name: Build the third-party static libraries
         run: ./Compressor/build.sh --all --platforms ios,simulator,macosx
 
-      - name: Drop the recipe scratch trees
-        run: rm -rf Compressor/build
+      # Save before the suites, so a failing run still leaves the expensive
+      # artifacts for the next attempt.
+      - name: Save the third-party static libraries
+        uses: actions/cache/save@v4
+        with:
+          path: Compressor/library
+          key: compressor-${{ runner.os }}-${{ hashFiles('Compressor/matrix.conf', 'Compressor/lib/**') }}
+
+      - name: Drop the recipe scratch trees and sources
+        run: rm -rf Compressor/build Compressor/media
 
       - name: Choose an available iPhone simulator
         run: |
@@ -101,3 +113,11 @@ jobs:
 
       - name: Build and smoke-test the macOS app
         run: ./Mac/build.sh --smoke-test
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-test-results
+          path: ${{ env.MAD_DERIVED_DATA }}/Logs/Test
+          if-no-files-found: ignore
