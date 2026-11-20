@@ -193,15 +193,16 @@ static void testTheRenderSideFormatsRegisterHere(void) {
 	MAD_PASS([MADReportExporterHTMLFlow isAvailable], "and the reflowable one runs");
 }
 
-// PDF is the one format that is not: it is Core Graphics drawn by the Apple-only page
-// renderer.  It registers anyway -- the format list names it on both platforms -- and
-// says why (docs/project/MAD_LINUX.md §10.2: the Linux writer is the next step).
-static void testThePDFFormatSaysWhyItCannotRun(void) {
+// PDF runs here too now: the walk is MADReportPageBuilder's on every platform, and
+// the headless body draws it into a Cairo PDF surface (MADReportExporterPDFCairo,
+// docs/project/MAD_PDF_LINUX.md).  The bytes are not the Mac's -- the target is
+// structural parity -- so this checks the file and the walk's page count, and
+// MADPDFExportTests checks each line against the json-report.
+static void testThePDFFormatRunsHere(void) {
 	Class <MADReportExporting> exporterClass = [MADReportExporterRegistry exporterClassForFormat: @"pdf"];
-	MAD_PASS(exporterClass != Nil, "pdf is registered here, not hidden from the format list");
-	MAD_PASS(![exporterClass isAvailable], "this build cannot produce it");
-	MAD_PASS([exporterClass unavailableReason].length > 0, "it says why");
-	MAD_NEED([exporterClass unavailableReason] != nil, @"the reason string is missing");
+	MAD_PASS(exporterClass != Nil, "pdf is registered");
+	MAD_PASS([exporterClass isAvailable], "this build produces it");
+	MAD_PASS([exporterClass unavailableReason] == nil, "and gives no reason why it could not");
 	MAD_PASS([exporterClass requiresOutputPath], "pdf needs --out, on every platform");
 	MAD_PASS_EQUAL([exporterClass fileExtension], @"pdf", "and it is a .pdf");
 
@@ -209,13 +210,22 @@ static void testThePDFFormatSaysWhyItCannotRun(void) {
 	MADHeadlessDocument *document = MADExporterDocument();
 	MAD_NEED(document != nil, @"could not open the London fixture");
 
-	NSURL *url = MADExporterOutputURL(@"london.pdf");
-	id <MADReportExporting> exporter = [[(Class)exporterClass alloc] init];
-	NSError *error = nil;
-	MAD_PASS(![exporter exportDocument: document toURL: url options: MADReportExportOptionsNone error: &error],
-			 "an export that cannot run fails rather than writing something");
-	MAD_PASS(error != nil, "and it says why");
-	MAD_PASS(![[NSFileManager defaultManager] fileExistsAtPath: url.path], "nothing was written");
+	NSData *data = MADExporterOutput(exporterClass, @"london.pdf");
+	if (data == nil) return;
+	NSString *text = [[NSString alloc] initWithData: data encoding: NSISOLatin1StringEncoding];
+	MAD_PASS([text hasPrefix: @"%PDF-1.4"], "the London fixture's PDF is a PDF");
+
+	NSUInteger pages = 0;
+	NSRange search = NSMakeRange(0, text.length);
+	while (search.length > 0) {
+		NSRange found = [text rangeOfString: @"/Type /Page " options: 0 range: search];
+		if (found.location == NSNotFound) break;
+		pages++;
+		NSUInteger next = found.location + found.length;
+		search = NSMakeRange(next, text.length - next);
+	}
+	MAD_PASS(pages == 5, "five pages, the walk's page count for the fixture (found %lu)", (unsigned long)pages);
+	[text release];
 }
 
 #pragma mark - The formats
@@ -411,7 +421,7 @@ static void testDatesAreISO8601InUTC(void) {
 MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testTheFormatsAreRegistered),
 	MAD_TEST(testTheRenderSideFormatsRegisterHere),
-	MAD_TEST(testThePDFFormatSaysWhyItCannotRun),
+	MAD_TEST(testThePDFFormatRunsHere),
 	MAD_TEST(testNumbersAreSpelledInOneRoundTripForm),
 	MAD_TEST(testDatesAreISO8601InUTC),
 	MAD_TEST(testTheFormatterComparesStringGroupKeysByTheDefinedOrder),
