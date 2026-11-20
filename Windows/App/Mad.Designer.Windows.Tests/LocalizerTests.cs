@@ -22,7 +22,7 @@ public sealed class LocalizerTests
     public void EveryShippedDictionary_HasEveryEnglishKey()
     {
         IReadOnlyDictionary<string, string> english = Localizer.StringsFor("en");
-        Assert.Equal(216, english.Count);
+        Assert.Equal(237, english.Count);
 
         foreach (string language in Localizer.SupportedLanguages)
         {

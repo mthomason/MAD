@@ -24,10 +24,10 @@ public sealed class QueryCanvas : Canvas
     private const double GridX = 48;
     private const double GridY = 44;
 
-    private static readonly Brush ConnectorRed = new SolidColorBrush(Color.FromRgb(0xC0, 0x3B, 0x3B));
-    private static readonly Brush AccentBlue = new SolidColorBrush(Color.FromRgb(0x0A, 0x84, 0xFF));
+    private static readonly Brush ConnectorRed = DesignPalette.ConnectorRed;
+    private static readonly Brush AccentBlue = DesignPalette.Accent;
     private static readonly Brush CardBackground = SystemColors.WindowBrush;
-    private static readonly Brush RootHeader = new SolidColorBrush(Color.FromRgb(0x0A, 0x84, 0xFF));
+    private static readonly Brush RootHeader = DesignPalette.CardRootHeader;
 
     static QueryCanvas()
     {
@@ -41,8 +41,18 @@ public sealed class QueryCanvas : Canvas
     private readonly Dictionary<long, List<Border>> _fieldRows = new();
     private readonly Dictionary<long, QueryTable> _tablesById = new();
     private readonly Dictionary<long, Point> _positions = new();
+    private readonly ScaleTransform _scale = new(1.0, 1.0);
     private Path? _rubberBand;
     private DragSource? _drag;
+
+    public QueryCanvas()
+    {
+        LayoutTransform = _scale;
+    }
+
+    /// <summary>The unscaled extent of the card layout (the layout transform applies zoom).</summary>
+    public double ContentWidth { get; private set; } = 720.0;
+    public double ContentHeight { get; private set; } = 480.0;
 
     public void Attach(QueryViewModel vm)
     {
@@ -58,6 +68,35 @@ public sealed class QueryCanvas : Canvas
         {
             Rebuild();
         }
+        else if (e.PropertyName == nameof(QueryViewModel.Zoom))
+        {
+            ApplyZoom();
+        }
+    }
+
+    private void ApplyZoom()
+    {
+        double zoom = _vm?.Zoom ?? 1.0;
+        _scale.ScaleX = zoom;
+        _scale.ScaleY = zoom;
+    }
+
+    /// <summary>Grows the canvas to the cards' bounds so the ScrollViewer can pan and the Fit
+    /// command can measure the whole layout.</summary>
+    private void UpdateExtent()
+    {
+        double right = 0.0;
+        double bottom = 0.0;
+        foreach (Point position in _positions.Values)
+        {
+            right = Math.Max(right, position.X + CardWidth);
+            bottom = Math.Max(bottom, position.Y + CardHeight);
+        }
+
+        ContentWidth = Math.Max(720.0, right + GridX);
+        ContentHeight = Math.Max(480.0, bottom + GridY);
+        Width = ContentWidth;
+        Height = ContentHeight;
     }
 
     private void Rebuild()
@@ -98,6 +137,9 @@ public sealed class QueryCanvas : Canvas
             SetTop(hint, ActualHeight * 0.42);
             Children.Add(hint);
         }
+
+        UpdateExtent();
+        ApplyZoom();
     }
 
     private void BuildCard(QueryTable table)
@@ -160,7 +202,7 @@ public sealed class QueryCanvas : Canvas
     {
         var header = new Border
         {
-            Background = isRoot ? RootHeader : new SolidColorBrush(Color.FromRgb(0xD6, 0xE4, 0xF7)),
+            Background = isRoot ? RootHeader : DesignPalette.CardSubHeader,
             CornerRadius = new CornerRadius(10, 10, 0, 0),
         };
 
@@ -168,7 +210,7 @@ public sealed class QueryCanvas : Canvas
         var title = new TextBlock
         {
             Text = alias,
-            Foreground = isRoot ? Brushes.White : new SolidColorBrush(Color.FromRgb(0x0A, 0x5A, 0xB8)),
+            Foreground = isRoot ? DesignPalette.Paper : DesignPalette.CardSubHeaderText,
             FontWeight = isRoot ? FontWeights.SemiBold : FontWeights.Medium,
             FontSize = isRoot ? 12 : 11.5,
             TextAlignment = TextAlignment.Center,
@@ -186,7 +228,7 @@ public sealed class QueryCanvas : Canvas
             Padding = new Thickness(0),
             BorderThickness = new Thickness(0),
             Background = Brushes.Transparent,
-            Foreground = isRoot ? Brushes.White : new SolidColorBrush(Color.FromRgb(0x0A, 0x84, 0xFF)),
+            Foreground = isRoot ? DesignPalette.Paper : DesignPalette.Accent,
             FontSize = 14,
             FontWeight = FontWeights.Bold,
             HorizontalAlignment = HorizontalAlignment.Right,
@@ -213,6 +255,7 @@ public sealed class QueryCanvas : Canvas
             SetLeft(_cards[tableId], Math.Max(12, drag.StartLeft + (p.X - drag.Start.X)));
             SetTop(_cards[tableId], Math.Max(12, drag.StartTop + (p.Y - drag.Start.Y)));
             _positions[tableId] = new Point(GetLeft(_cards[tableId]), GetTop(_cards[tableId]));
+            UpdateExtent();
             DrawLinks();
         };
         header.MouseLeftButtonUp += (_, _) =>
@@ -371,7 +414,7 @@ public sealed class QueryCanvas : Canvas
             var badge = new Border
             {
                 Background = selected ? AccentBlue : CardBackground,
-                BorderBrush = selected ? Brushes.White : brush,
+                BorderBrush = selected ? DesignPalette.Paper : brush,
                 BorderThickness = new Thickness(selected ? 1.8 : 1.25),
                 CornerRadius = new CornerRadius(8),
                 Padding = new Thickness(6, 1, 6, 1),
@@ -381,7 +424,7 @@ public sealed class QueryCanvas : Canvas
                     Text = link.Type.ShortBadge(),
                     FontSize = 9.5,
                     FontWeight = FontWeights.Bold,
-                    Foreground = selected ? Brushes.White : brush,
+                    Foreground = selected ? DesignPalette.Paper : brush,
                 },
             };
             badge.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
@@ -500,6 +543,7 @@ public sealed class QueryCanvas : Canvas
                 SetTop(card, position.Y);
             }
         }
+        UpdateExtent();
         DrawLinks();
     }
 

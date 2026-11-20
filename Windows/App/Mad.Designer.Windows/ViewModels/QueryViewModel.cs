@@ -41,6 +41,7 @@ public sealed class QueryViewModel : ObservableObject
     private string _statusText = "";
     private string? _errorText;
     private bool _isBusy;
+    private double _zoom = 1.0;
 
     private QueryFieldRef? _selectedFilterField;
     private int _selectedFilterOperatorIndex;
@@ -67,6 +68,9 @@ public sealed class QueryViewModel : ObservableObject
         RevertSqlCommand = new RelayCommand(RevertSql);
         ValidateSqlCommand = new AsyncRelayCommand(ValidateSqlAsync);
         CompileAndApplySqlCommand = new AsyncRelayCommand(CompileAndApplySqlAsync);
+        ZoomInCommand = new RelayCommand(() => Zoom = _zoom * 1.2);
+        ZoomOutCommand = new RelayCommand(() => Zoom = _zoom / 1.2);
+        FitCommand = new RelayCommand(() => FitRequested?.Invoke());
     }
 
     public bool HasDocument => _handle >= 0;
@@ -95,6 +99,22 @@ public sealed class QueryViewModel : ObservableObject
 
     public string StatusText { get => _statusText; private set => Set(ref _statusText, value); }
     public string? ErrorText { get => _errorText; private set => Set(ref _errorText, value); }
+
+    /// <summary>The visual canvas zoom. The query canvas scales itself with a layout transform,
+    /// so the model coordinates and the pointer hit-testing stay in unscaled units.</summary>
+    public double Zoom
+    {
+        get => _zoom;
+        set
+        {
+            if (Set(ref _zoom, Math.Clamp(value, 0.4, 2.0)))
+            {
+                OnPropertyChanged(nameof(ZoomText));
+            }
+        }
+    }
+
+    public string ZoomText => $"{Math.Round(_zoom * 100.0)}%";
 
     public bool IsBusy
     {
@@ -168,9 +188,24 @@ public sealed class QueryViewModel : ObservableObject
     public RelayCommand RevertSqlCommand { get; }
     public AsyncRelayCommand ValidateSqlCommand { get; }
     public AsyncRelayCommand CompileAndApplySqlCommand { get; }
+    public RelayCommand ZoomInCommand { get; }
+    public RelayCommand ZoomOutCommand { get; }
+    public RelayCommand FitCommand { get; }
 
     /// <summary>Raised when "Arrange Tables" is clicked; the view re-lays the cards out.</summary>
     public event Action? ArrangeRequested;
+
+    /// <summary>Raised when "Fit" is clicked; the view measures its viewport and sets
+    /// <see cref="Zoom"/> through <see cref="FitToViewport"/>.</summary>
+    public event Action? FitRequested;
+
+    /// <summary>Chooses the zoom that shows the whole query canvas in the viewport.</summary>
+    public void FitToViewport(double viewportWidth, double viewportHeight, double contentWidth, double contentHeight)
+    {
+        if (viewportWidth <= 0 || viewportHeight <= 0 || contentWidth <= 0 || contentHeight <= 0) return;
+        const double margin = 32.0;
+        Zoom = Math.Min((viewportWidth - margin) / contentWidth, (viewportHeight - margin) / contentHeight);
+    }
 
     /// <summary>Populates the workspace after a document opens (or its connection changes).</summary>
     public async Task LoadAsync(int handle, string driver, IReadOnlyList<SchemaTable> schemaTables)

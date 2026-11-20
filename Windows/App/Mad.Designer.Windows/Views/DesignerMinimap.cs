@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Mad.Designer.Windows.Infrastructure;
 using Mad.Designer.Windows.Models;
 using Mad.Designer.Windows.ViewModels;
 
@@ -74,7 +75,7 @@ public sealed class DesignerMinimap : Canvas
         {
             Width = PaperWidth * _scale,
             Height = Math.Max(3.0, bandH * _scale),
-            Background = section.Visible ? Brushes.White : new SolidColorBrush(Color.FromRgb(0xDD, 0xDD, 0xDD)),
+            Background = section.Visible ? DesignPalette.MinimapBand : DesignPalette.MinimapHiddenBand,
             BorderBrush = SystemColors.ActiveBorderBrush,
             BorderThickness = new Thickness(0.6),
             Tag = section,
@@ -91,7 +92,7 @@ public sealed class DesignerMinimap : Canvas
             {
                 Width = Math.Max(2.0, element.W * _scale),
                 Height = Math.Max(1.5, element.H * _scale),
-                Background = Brushes.SteelBlue,
+                Background = DesignPalette.MinimapElement,
                 Tag = element,
             };
             SetLeft(el, _offsetX + (contentX + element.X) * _scale);

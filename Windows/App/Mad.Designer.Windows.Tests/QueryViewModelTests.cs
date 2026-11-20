@@ -64,6 +64,26 @@ public sealed class QueryViewModelTests
         }
     }
 
+    [Fact]
+    public void Zoom_ClampsStepsAndFitsTheCanvas()
+    {
+        var vm = new QueryViewModel(new EngineService());
+        Assert.Equal(1.0, vm.Zoom);
+        Assert.Equal("100%", vm.ZoomText);
+
+        vm.ZoomInCommand.Execute(null);
+        Assert.Equal(1.2, vm.Zoom, 6);
+        Assert.Equal("120%", vm.ZoomText);
+
+        for (int i = 0; i < 20; i++) vm.ZoomInCommand.Execute(null);
+        Assert.Equal(2.0, vm.Zoom, 6);
+        for (int i = 0; i < 40; i++) vm.ZoomOutCommand.Execute(null);
+        Assert.Equal(0.4, vm.Zoom, 6);
+
+        vm.FitToViewport(1000, 600, 2000, 800);
+        Assert.Equal(Math.Min(968.0 / 2000.0, 568.0 / 800.0), vm.Zoom, 6);
+    }
+
     private static string CopyChinookToTemp()
     {
         string source = Path.Combine(MadPathResolver.RepoRoot(), "MADDesigner", "Resources", "Assets", "Samples.xcassets", "Data", "chinook.dataset", "chinook.sqlite3");

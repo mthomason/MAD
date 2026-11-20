@@ -26,10 +26,10 @@ public partial class MainWindow : Window
             exportPath: ShowExportSaveDialog,
             newDocument: () => OpenConnectionWindow(false),
             editConnection: () => OpenConnectionWindow(true),
-            openRecent: OpenRecentPath,
             recentFiles: _recentFiles.Get(),
             saveAsPath: ShowSaveDocumentDialog,
-            credentials: _credentials);
+            credentials: _credentials,
+            persistRecent: _recentFiles.Add);
         DataContext = _viewModel;
     }
 
@@ -70,15 +70,9 @@ public partial class MainWindow : Window
         return dialog.ShowDialog() == true ? dialog.FileName : null;
     }
 
-    private void OpenRecentPath(string path)
-    {
-        _ = OpenPathAsync(path);
-    }
-
     private async Task OpenPathAsync(string path)
     {
-        await _viewModel.Document.OpenAsync(path);
-        _recentFiles.Add(path);
+        await _viewModel.OpenPathAsync(path);
     }
 
     /// <summary>Opens the connection assistant in create mode (New Document) or edit mode
@@ -109,8 +103,7 @@ public partial class MainWindow : Window
             }
             else if (window.ViewModel.Created is OpenResult created && window.ViewModel.CreatePath is string path)
             {
-                await _viewModel.Document.AdoptAsync(created, path);
-                _recentFiles.Add(path);
+                await _viewModel.AdoptCreatedAsync(created, path);
             }
         }
         catch (Exception exception)
@@ -145,6 +138,8 @@ public partial class MainWindow : Window
         }
         return null;
     }
+
+    private void Exit_Click(object sender, RoutedEventArgs e) => Close();
 
     protected override void OnClosed(EventArgs e)
     {

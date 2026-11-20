@@ -28,10 +28,13 @@ public partial class ViewerView : UserControl
     public ViewerView()
     {
         InitializeComponent();
-        // The browser stays alive across TabControl unloads (switching workspaces) so the
-        // rendered report survives a visit to another workspace; the process exit tears down
-        // the WebView2 child processes with it.
+        // The browser stays alive across workspace switches so the rendered report survives a
+        // visit to another workspace; the process exit tears down the WebView2 child processes
+        // with it. It is created only once the Viewer is actually visible with a document open:
+        // WebView2 is a native surface that paints above every WPF sibling, so creating it for
+        // the Welcome screen would cover that screen.
         Loaded += OnLoaded;
+        IsVisibleChanged += OnIsVisibleChanged;
         DataContextChanged += OnDataContextChanged;
     }
 
@@ -54,6 +57,16 @@ public partial class ViewerView : UserControl
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
+        if (IsVisible) await EnsureBrowserSafelyAsync();
+    }
+
+    private async void OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (IsVisible) await EnsureBrowserSafelyAsync();
+    }
+
+    private async Task EnsureBrowserSafelyAsync()
+    {
         try
         {
             await EnsureBrowserAsync();
@@ -69,7 +82,7 @@ public partial class ViewerView : UserControl
 
     private async Task EnsureBrowserAsync()
     {
-        if (_browser != null || _viewer == null) return;
+        if (_browser != null || _viewer is not { HasDocument: true }) return;
 
         string dataFolder = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -80,7 +93,9 @@ public partial class ViewerView : UserControl
 
         var browser = new WebView2
         {
-            DefaultBackgroundColor = System.Drawing.Color.FromArgb(0xE8, 0xE8, 0xE8),
+            DefaultBackgroundColor = ThemeInfo.IsDark
+                ? System.Drawing.Color.FromArgb(0x1F, 0x1F, 0x1F)
+                : System.Drawing.Color.FromArgb(0x8C, 0x8C, 0x8C),
         };
         PreviewHost.Children.Add(browser);
         await browser.EnsureCoreWebView2Async(environment);
@@ -112,6 +127,9 @@ public partial class ViewerView : UserControl
 
         switch (e.PropertyName)
         {
+            case nameof(ViewerViewModel.HasDocument) when _viewer.HasDocument && IsVisible:
+                _ = EnsureBrowserSafelyAsync();
+                break;
             case nameof(ViewerViewModel.PreviewHtml):
                 ShowPreview(_viewer.PreviewHtml);
                 break;
@@ -146,7 +164,10 @@ public partial class ViewerView : UserControl
 
         if (html == null)
         {
-            _browser.CoreWebView2.Navigate("about:blank");
+            // An empty preview still needs the desk colour: about:blank is white in both
+            // themes and would glare in the dark theme.
+            _browser.CoreWebView2.NavigateToString(
+                $"<html><body style=\"background:{ThemeInfo.DeskColor};margin:0\"></body></html>");
             return;
         }
 
@@ -170,12 +191,15 @@ public partial class ViewerView : UserControl
 
         // Preview-only chrome: the exported pages are white sheets on the app's grey desk,
         // with a gap and a shadow between them. The exported bytes are never altered.
+        string desk = ThemeInfo.DeskColor;
+        string outline = ThemeInfo.IsDark ? "#3A3A3A" : "#777777";
+        string shadow = ThemeInfo.IsDark ? "rgba(0,0,0,.65)" : "rgba(0,0,0,.45)";
         await _browser.CoreWebView2.ExecuteScriptAsync(
             "(function(){var s=document.createElement('style');" +
-            "s.textContent='html,body{background:#8C8C8C;margin:0}" +
+            $"s.textContent='html,body{{background:{desk};margin:0}}" +
             "body{padding:24px 0}" +
             ".page{margin:0 auto 24px auto;background:#fff;" +
-            "box-shadow:0 2px 12px rgba(0,0,0,.45);outline:1px solid #777}';" +
+            $"box-shadow:0 2px 12px {shadow};outline:1px solid {outline}}}';" +
             "document.head.appendChild(s);})()");
 
         ScrollToCurrentPage();

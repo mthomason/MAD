@@ -30,8 +30,20 @@ public partial class QueryView : UserControl
     private void AttachQuery(QueryViewModel query)
     {
         if (ReferenceEquals(_query, query)) return;
+        if (_query != null) _query.FitRequested -= OnFitRequested;
         _query = query;
+        _query.FitRequested += OnFitRequested;
         Canvas.Attach(query);
+    }
+
+    private void OnFitRequested()
+    {
+        CanvasScroll.UpdateLayout();
+        _query?.FitToViewport(
+            CanvasScroll.ViewportWidth,
+            CanvasScroll.ViewportHeight,
+            Canvas.ContentWidth,
+            Canvas.ContentHeight);
     }
 
     private async void SchemaList_OnDoubleClick(object sender, MouseButtonEventArgs e)
