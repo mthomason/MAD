@@ -56,9 +56,9 @@
                             <TextBlock Text="{infra:Loc Designer.Line}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource MAD.InsertButton}" IsEnabled="False" Margin="2,0,0,0"
-                            ToolTip="{infra:Loc Designer.BarcodeUnavailable}"
-                            AutomationProperties.Name="{infra:Loc Designer.BarcodeUnavailable}">
+                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddBarcodeCommand}" Margin="2,0,0,0"
+                            ToolTip="{infra:Loc Designer.Barcode}"
+                            AutomationProperties.Name="{infra:Loc Designer.Barcode}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8C8;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Designer.Barcode}" Style="{StaticResource MAD.CommandLabel}" />
@@ -215,6 +215,35 @@
 
                                     <TextBlock Text="{infra:Loc Designer.Text}" Style="{StaticResource MAD.FieldLabel}" />
                                     <TextBox Text="{Binding ElementText, UpdateSourceTrigger=LostFocus}" Margin="0,0,0,8" />
+
+                                    <!-- The barcode's content: a static string (the Text box above) or a
+                                         query field, plus the symbology and its two options. -->
+                                    <StackPanel Margin="0,0,0,8">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PrimaryElement.IsBarcode}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <TextBlock Text="{infra:Loc Designer.Barcode.Symbology}" Style="{StaticResource MAD.FieldLabel}" />
+                                        <ComboBox ItemsSource="{Binding BarcodeTypes}" DisplayMemberPath="Name"
+                                                  SelectedIndex="{Binding ElementBarcodeSymbologyIndex}" Margin="0,0,0,8" />
+                                        <CheckBox Content="{infra:Loc Designer.Barcode.ShowText}"
+                                                  IsChecked="{Binding ElementBarcodeHumanReadable}" Margin="0,0,0,8" />
+                                        <TextBlock Text="{infra:Loc Designer.Barcode.Border}" Style="{StaticResource MAD.FieldLabel}" />
+                                        <ComboBox SelectedIndex="{Binding ElementBarcodeBorderIndex}" Margin="0,0,0,8">
+                                            <ComboBoxItem Content="{infra:Loc Designer.Barcode.Border.None}" />
+                                            <ComboBoxItem Content="{infra:Loc Designer.Barcode.Border.Bind}" />
+                                            <ComboBoxItem Content="{infra:Loc Designer.Barcode.Border.Box}" />
+                                        </ComboBox>
+                                        <TextBlock Text="{infra:Loc Designer.Barcode.Field}" Style="{StaticResource MAD.FieldLabel}" />
+                                        <ComboBox ItemsSource="{Binding BarcodeInputOptions}" DisplayMemberPath="Display"
+                                                  SelectedValuePath="Id" SelectedValue="{Binding ElementBarcodeInputId}" />
+                                    </StackPanel>
 
                                     <TextBlock Text="{infra:Loc Designer.XY}" Style="{StaticResource MAD.FieldLabel}" />
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">

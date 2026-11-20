@@ -94,7 +94,6 @@
   <sys:String x:Key="Designer.DataField">Data Field</sys:String>
   <sys:String x:Key="Designer.Aggregate">Aggregate</sys:String>
   <sys:String x:Key="Designer.Barcode">Barcode</sys:String>
-  <sys:String x:Key="Designer.BarcodeUnavailable">Barcode is not available in the Windows engine</sys:String>
   <sys:String x:Key="Designer.Image">Image</sys:String>
   <sys:String x:Key="Designer.Line">Line</sys:String>
   <sys:String x:Key="Designer.Undo">Undo</sys:String>
@@ -141,6 +140,16 @@
   <sys:String x:Key="Designer.Element.Image">Image</sys:String>
   <sys:String x:Key="Designer.Element.Line">Line Rule</sys:String>
   <sys:String x:Key="Designer.Element.Generic">Element</sys:String>
+  <sys:String x:Key="Designer.Element.Barcode">Barcode</sys:String>
+  <sys:String x:Key="Designer.Placeholder.Barcode">[Barcode]</sys:String>
+  <sys:String x:Key="Designer.Barcode.Symbology">Symbology</sys:String>
+  <sys:String x:Key="Designer.Barcode.ShowText">Show text</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border">Border</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.None">No border</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.Bind">Bind bars</sys:String>
+  <sys:String x:Key="Designer.Barcode.Border.Box">Box frame</sys:String>
+  <sys:String x:Key="Designer.Barcode.Field">Input</sys:String>
+  <sys:String x:Key="Designer.Barcode.StaticInput">Static input</sys:String>
   <sys:String x:Key="Designer.Placeholder.Label">Static Label</sys:String>
   <sys:String x:Key="Designer.Placeholder.DataField">[Data Field]</sys:String>
   <sys:String x:Key="Designer.Placeholder.Image">[Image]</sys:String>
