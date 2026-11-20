@@ -164,10 +164,15 @@ public partial class ViewerView : UserControl
 
         if (html == null)
         {
-            // An empty preview still needs the desk colour: about:blank is white in both
-            // themes and would glare in the dark theme.
+            // An empty preview still needs the desk colour and its instruction: about:blank is
+            // white in both themes, would glare in the dark theme, and would cover the WPF
+            // placeholder (the WebView2 is a native surface that paints above its WPF siblings).
+            string ink = ThemeInfo.IsDark ? "#E6E6E6" : "#555555";
+            string hint = System.Net.WebUtility.HtmlEncode(Localizer.Get("Viewer.Placeholder"));
             _browser.CoreWebView2.NavigateToString(
-                $"<html><body style=\"background:{ThemeInfo.DeskColor};margin:0\"></body></html>");
+                $"<html><body style=\"background:{ThemeInfo.DeskColor};margin:0;height:100vh;" +
+                "display:flex;align-items:center;justify-content:center;" +
+                $"color:{ink};font-family:'Segoe UI Variable Text','Segoe UI';font-size:14px\">{hint}</body></html>");
             return;
         }
 

@@ -322,7 +322,7 @@ $env:MAD_LANGUAGE = "de"
 dotnet run --project .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj
 ```
 
-The dictionaries carry 237 keys each, including the Phase 6f Welcome/Home surface, the
+The dictionaries carry 239 keys each, including the Phase 6f Welcome/Home surface, the
 short workspace labels (Query / Designer / Viewer), the connection cards, the query zoom
 controls and the two About version labels. The translations are machine-assisted and
 unreviewed, as on the Mac (`docs/project/MAD_APP_LOCALIZATION.md` D14); the About Overview

@@ -87,8 +87,9 @@ public sealed class QueryCanvas : Canvas
     {
         double right = 0.0;
         double bottom = 0.0;
-        foreach (Point position in _positions.Values)
+        foreach (long id in _tablesById.Keys)
         {
+            if (!_positions.TryGetValue(id, out Point position)) continue;
             right = Math.Max(right, position.X + CardWidth);
             bottom = Math.Max(bottom, position.Y + CardHeight);
         }
@@ -282,8 +283,8 @@ public sealed class QueryCanvas : Canvas
             bool grouped = _vm.IsFieldGrouped(field.Id);
             bool filtered = _vm.IsFieldFiltered(field.Id);
             string display = $"{(linked ? "●" : "○")}  {field.Name}";
-            if (grouped) display += "  [GRP]";
-            if (filtered) display += "  [WHERE]";
+            if (grouped) display += $"  [{Localizer.Get("Query.Badge.Grouped")}]";
+            if (filtered) display += $"  [{Localizer.Get("Query.Badge.Filtered")}]";
             text.Text = display;
             text.Foreground = linked ? ConnectorRed : SystemColors.ControlTextBrush;
             text.FontWeight = linked || grouped || filtered ? FontWeights.SemiBold : FontWeights.Normal;

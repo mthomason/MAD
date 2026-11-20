@@ -242,4 +242,6 @@
   <sys:String x:Key="Designer.NoSelection">No element selected</sys:String>
   <sys:String x:Key="Connection.Section.Connection">Connection details</sys:String>
   <sys:String x:Key="Connection.Section.Credentials">Credentials</sys:String>
+  <sys:String x:Key="Query.Badge.Grouped">GRP</sys:String>
+  <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
 </ResourceDictionary>

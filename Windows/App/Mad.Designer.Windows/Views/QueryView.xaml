@@ -206,7 +206,7 @@
                                     <TextBlock Text="{Binding Display}" VerticalAlignment="Center" />
                                     <Button Grid.Column="1" Content="−" Margin="6,0,0,0" Padding="4,0"
                                             Style="{StaticResource MAD.IconButton}" Width="26" Height="24"
-                                            Command="{Binding DataContext.RemovePredicateCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            Command="{Binding DataContext.RemovePredicateCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding Id}" />
                                 </Grid>
                             </DataTemplate>
@@ -242,7 +242,7 @@
                                     <TextBlock Text="{Binding Display}" VerticalAlignment="Center" />
                                     <Button Grid.Column="1" Content="−" Margin="6,0,0,0" Padding="4,0"
                                             Style="{StaticResource MAD.IconButton}" Width="26" Height="24"
-                                            Command="{Binding DataContext.RemoveGroupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            Command="{Binding DataContext.RemoveGroupCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding Id}" />
                                 </Grid>
                             </DataTemplate>

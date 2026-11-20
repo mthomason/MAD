@@ -31,6 +31,7 @@ public partial class MainWindow : Window
             credentials: _credentials,
             persistRecent: _recentFiles.Add);
         DataContext = _viewModel;
+        WindowSizing.FitToWorkArea(this);
     }
 
     private void OpenAboutWindow()
