@@ -20,6 +20,7 @@ public partial class ConnectionWindow : Window
         InitializeComponent();
         ViewModel = new ConnectionWindowViewModel(engine, credentials, isEdit, initial, createPath: ShowCreateSaveDialog, requestClose: () => DialogResult = true);
         DataContext = ViewModel;
+        WindowSizing.FitToWorkArea(this);
 
         Title = Localizer.Get(isEdit ? "Connection.Title.Edit" : "Connection.Title.Create");
         SubmitButton.Content = Localizer.Get(isEdit ? "Connection.SaveRefresh" : "Connection.Create");
