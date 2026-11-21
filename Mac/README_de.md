@@ -21,7 +21,7 @@ Portabilität und das Architekturprotokoll siehe
 brew install --cask mthomason/tap/mad-designer
 ```
 
-Oder laden Sie [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) aus dem [Release `v9.1.0-macos`](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos) herunter.
+Oder laden Sie [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) aus dem [Release `v0.7.0`](https://github.com/mthomason/MAD/releases/tag/v0.7.0) herunter. Diese Version: **App 0.7 / Engine 9.0 (r4433)**.
 
 ## Aus dem Quellcode bauen und ausführen
 

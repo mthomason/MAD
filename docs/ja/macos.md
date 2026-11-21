@@ -19,8 +19,9 @@ macOS上で作成または編集されたすべての`.mad`ファイルは、iPa
   ```sh
   brew install --cask mthomason/tap/mad-designer
   ```
-* **直接ダウンロード：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip)
+* **直接ダウンロード：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip)
   *（ブラウザから直接ダウンロードして`/Applications`へ配置した場合は、初回起動前にターミナルで一度`xattr -cr "/Applications/MAD Designer.app"`を実行してmacOS Gatekeeperの検疫属性を解除してください。）*
+* **バージョン：** アプリ 0.7 / エンジン 9.0 (r4433)。
 
 ---
 
