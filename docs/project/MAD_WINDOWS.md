@@ -844,9 +844,14 @@ chrome is localized, while every licence body, component notice, licence name
 and copyright line stays verbatim English (D6/§8 of
 `MAD_APP_LOCALIZATION.md`). The existing iOS and macOS About screens stay
 Apple-only: they list the C libraries the Apple app links and must not claim the
-Apple app links the GNUstep runtime. The public `docs/windows.md` and
-`README.md` wording remain deferred and must follow the five-language
-documentation contract.
+Apple app links the GNUstep runtime. The public `docs/windows.md` and the
+`README.md` Windows entry landed with the 0.7 unsigned release (2026-11-21);
+the page is English-only for now, the one recorded exception to the
+five-language documentation contract (`docs/project/LOCALIZATION.md`), and its
+five translations are queued. The Windows verification workflow
+(`.github/workflows/windows.yml`) tests the .NET suites against the
+`mad-windows-x64.zip` engine asset attached to `v0.7.0`;
+`Windows/package.ps1` assembles both that asset and the app's release zip.
 
 ## Test databases
 

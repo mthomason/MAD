@@ -4,7 +4,7 @@
 
 # <a href="StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="docs/assets/mad-designer-macos-icon-256.png" alt="MAD Designer icon" width="44" height="44" align="absmiddle" /></a> MAD (Mobile Analytics Document)
 
-[![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
+[![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml) [![Windows verification](https://github.com/mthomason/MAD/actions/workflows/windows.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/windows.yml) [![macOS verification](https://github.com/mthomason/MAD/actions/workflows/macos.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/macos.yml)
 
 **An open format and embeddable engine for relational reporting — where every report is a portable query graph, a materialized SQLite table, and a parametric layout.**
 
@@ -18,6 +18,10 @@ The repository is one self-contained project: the iPad/iPhone apps, the native m
 > * **Homebrew:** `brew install --cask mthomason/tap/mad-designer`
 > * **Direct Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *(for direct downloads, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications`)*
 > * **Version:** app 0.7 / engine 9.0 (r4433)
+
+> **Try MAD Designer on Windows (Windows 10 1903+, Windows 11, 64-bit):**
+> * **Direct Download:** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip) *(unsigned: Windows SmartScreen will ask — choose More info → Run anyway; see [the Windows guide](docs/windows.md))*
+> * **Version:** app 0.7 / engine 9.0 (r4433) · **No .NET install needed** (self-contained)
 
 ## Why MAD
 
@@ -200,6 +204,18 @@ The headless engine is verified the same way on Linux. From the repository root,
 ```
 
 This runs 126 test executables and 1,303 tests inside the container, and `--verify` adds the CLI's end-to-end checks against the checked-in fixtures and their pinned digests. See [`Linux/README.md`](Linux/README.md) for the image, the pins, and the GNUstep divergences the port found.
+
+### Windows (WPF App & Engine)
+
+The native engine builds on an elevated Windows workstation — Clang 20.1.8, Visual Studio's MSVC, NASM, Strawberry Perl, Meson, Python, and GNUstep built from source into `C:\GNUstep` — and the WPF app with the .NET SDK pinned in `Windows/global.json`:
+
+```powershell
+pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain   # rebuild after the toolchain exists
+dotnet test Windows\App\Mad.Designer.Windows.slnx      # both .NET suites, against the built engine
+pwsh -File .\Windows\package.ps1                      # the unsigned release zip and the CI engine asset
+```
+
+CI does not rebuild the engine (it needs that workstation toolchain): [`windows.yml`](.github/workflows/windows.yml) downloads a pre-built engine asset and runs both suites. See [`docs/windows.md`](docs/windows.md) for the install guide and [`docs/project/MAD_WINDOWS.md`](docs/project/MAD_WINDOWS.md) for the build record.
 
 ## Support
 
