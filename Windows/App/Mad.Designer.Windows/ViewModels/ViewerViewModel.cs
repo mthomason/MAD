@@ -324,9 +324,15 @@ public sealed class ViewerViewModel : ObservableObject
     {
         if (!HasDocument) return;
 
+        // Capture the selection before the first await: the selector stays usable while the
+        // export runs, and re-reading it would let the file's extension, its bytes and the
+        // success line disagree.
+        ViewerExportFormat format = SelectedFormat;
+        string? stagedPath = null;
+        bool targetExisted = File.Exists(outPath);
         bool succeeded = false;
         IsExporting = true;
-        SetStatus(Localizer.Format("Viewer.Exporting", SelectedFormat.Format.ToUpperInvariant()), ViewerStatusKind.Neutral);
+        SetStatus(Localizer.Format("Viewer.Exporting", format.Format.ToUpperInvariant()), ViewerStatusKind.Neutral);
         try
         {
             if (_pageCount == 0 && _refresh != null && !await _refresh())
@@ -339,47 +345,61 @@ public sealed class ViewerViewModel : ObservableObject
             // paper before every export; so does this, so the file matches the preview.
             await ApplyRenderedPaperAsync();
 
-            if (SelectedFormat.Format == "pdf")
+            if (format.Format == "pdf")
             {
-                long bytes = await _engine.ExportToPathAsync(_handle, SelectedFormat.Format, outPath);
+                // The engine writes the bytes itself. Stage beside the target and move on
+                // success, so a failure can never delete a file the user already had.
+                stagedPath = $"{outPath}.{Guid.NewGuid():N}.part";
+                long bytes = await _engine.ExportToPathAsync(_handle, format.Format, stagedPath);
+                File.Move(stagedPath, outPath, overwrite: true);
+                stagedPath = null;
                 succeeded = true;
                 SetStatus(Localizer.Format("Viewer.ExportStatusBytes",
-                        SelectedFormat.Format.ToUpperInvariant(), Path.GetFileName(outPath),
+                        format.Format.ToUpperInvariant(), Path.GetFileName(outPath),
                         bytes.ToString("N0")),
                     ViewerStatusKind.Success);
             }
             else
             {
-                string data = await _engine.ExportAsync(_handle, SelectedFormat.Format);
+                string data = await _engine.ExportAsync(_handle, format.Format);
                 await File.WriteAllTextAsync(outPath, data);
                 succeeded = true;
                 SetStatus(Localizer.Format("Viewer.ExportStatus",
-                        SelectedFormat.Format.ToUpperInvariant(), Path.GetFileName(outPath)),
+                        format.Format.ToUpperInvariant(), Path.GetFileName(outPath)),
                     ViewerStatusKind.Success);
             }
         }
         catch (Exception exception)
         {
-            // The engine may have created a partial file before failing; never leave one
-            // behind with a successful-looking name.
-            if (!succeeded && File.Exists(outPath))
+            // The engine may have left a partial file. Delete the staged PDF, or a text
+            // file this export created; never a file that was already there before it.
+            if (stagedPath != null)
             {
-                try
-                {
-                    File.Delete(outPath);
-                }
-                catch (IOException)
-                {
-                }
-                catch (UnauthorizedAccessException)
-                {
-                }
+                TryDelete(stagedPath);
+            }
+            else if (!succeeded && !targetExisted)
+            {
+                TryDelete(outPath);
             }
             SetStatus(exception.Message, ViewerStatusKind.Error);
         }
         finally
         {
             IsExporting = false;
+        }
+    }
+
+    private static void TryDelete(string path)
+    {
+        try
+        {
+            File.Delete(path);
+        }
+        catch (IOException)
+        {
+        }
+        catch (UnauthorizedAccessException)
+        {
         }
     }
 

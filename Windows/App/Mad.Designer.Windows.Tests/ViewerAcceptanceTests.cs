@@ -223,6 +223,35 @@ public sealed class ViewerAcceptanceTests
     }
 
     [Fact]
+    public async Task PdfExport_UsesTheFormatChosenWhenItStarted()
+    {
+        await using var engine = new EngineService();
+        var document = new DocumentViewModel(engine);
+        await document.OpenAsync(MadPathResolver.DefaultDocument());
+        await document.RefreshAsync();
+
+        document.Viewer.SelectedFormatIndex = 0; // PDF Document
+        string path = Path.Combine(Path.GetTempPath(), $"mad-viewer-{Guid.NewGuid():N}.pdf");
+        try
+        {
+            Task export = document.Viewer.ExportAsync(path);
+            document.Viewer.SelectedFormatIndex = 1; // HTML Page, changed mid-export
+            await export;
+
+            Assert.Equal(ViewerStatusKind.Success, document.Viewer.StatusKind);
+            Assert.StartsWith("Exported PDF to ", document.Viewer.StatusText);
+            byte[] bytes = File.ReadAllBytes(path);
+            Assert.Equal("%PDF-", Encoding.ASCII.GetString(bytes, 0, 5));
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+
+        await engine.ShutdownAsync();
+    }
+
+    [Fact]
     public async Task PdfExport_WritesToAPathWithASpaceAndANonAsciiCharacter()
     {
         await using var engine = new EngineService();
