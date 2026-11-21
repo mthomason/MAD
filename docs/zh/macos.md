@@ -19,8 +19,9 @@ lang: zh-CN
   ```sh
   brew install --cask mthomason/tap/mad-designer
   ```
-* **直接下载：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip)
+* **直接下载：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip)
   *（通过浏览器下载并拖入 `/Applications` 后，首次打开前可在终端执行一次 `xattr -cr "/Applications/MAD Designer.app"` 以清除 macOS Gatekeeper 隔离标记。）*
+* **版本：** 应用 0.7 / 引擎 9.0 (r4433)。
 
 ---
 

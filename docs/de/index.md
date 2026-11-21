@@ -17,7 +17,7 @@ die Namen und das App-Artwork sind von dieser Lizenz nicht abgedeckt (siehe
 
 > **MAD Designer auf macOS ausprobieren (macOS 12.0+, Apple Silicon):**
 > * **Homebrew:** `brew install --cask mthomason/tap/mad-designer`
-> * **Direkter Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) *(bei direkten Downloads nach dem Kopieren nach `/Applications` einmal `xattr -cr "/Applications/MAD Designer.app"` ausführen)*
+> * **Direkter Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *(bei direkten Downloads nach dem Kopieren nach `/Applications` einmal `xattr -cr "/Applications/MAD Designer.app"` ausführen)*
 
 ## In Aktion
 

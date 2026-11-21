@@ -292,3 +292,14 @@ runner, builds the iOS `MAD Designer` scheme, and runs
 (`MADMeta.plist`, `v9.0 (r4433)`) and the macOS application version
 (`CFBundleShortVersionString`, `v0.7`) as distinct values, matching the
 Windows About window's post-Phase-6f presentation.
+
+`macos-latest` is an arm64 runner, and `Mac/build.sh` builds the frameworks for
+`platform=macOS,arch=arm64`. The first run downloads and compiles every pinned
+third-party source for three platforms (roughly 15–40 minutes); later runs
+restore `Compressor/library` from the Actions cache and the ensure step no-ops.
+The freetds recipe fetches `config.guess`/`config.sub` from Savannah once with
+no retry, so the workflow seeds `Compressor/media` first (see the workflow's
+comments). A residual, not a build failure: libarchive's configure step found
+the SDK's `libbz2.tbd` rather than the Compressor bzip2 install, because
+`BZIP2_LIBRARY` is not the hint modern CMake's `FindBZIP2` reads; the SDK
+library is present and the app processes the bzip2 xcframework.

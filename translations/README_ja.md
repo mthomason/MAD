@@ -16,7 +16,7 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 
 > **macOSでMAD Designerを試す（macOS 12.0以降、Apple Silicon）：**
 > * **Homebrew：** `brew install --cask mthomason/tap/mad-designer`
-> * **直接ダウンロード：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) *（直接ダウンロードして`/Applications`へ配置した場合は、初回起動前に一度`xattr -cr "/Applications/MAD Designer.app"`を実行してください）*
+> * **直接ダウンロード：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *（直接ダウンロードして`/Applications`へ配置した場合は、初回起動前に一度`xattr -cr "/Applications/MAD Designer.app"`を実行してください）*
 
 ## なぜMADなのか
 

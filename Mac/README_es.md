@@ -12,7 +12,7 @@ Para la descripción general de los espacios de trabajo orientada al usuario y l
 brew install --cask mthomason/tap/mad-designer
 ```
 
-O descargue [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v9.1.0-macos/MAD-Designer-macOS.zip) de la [versión `v9.1.0-macos`](https://github.com/mthomason/MAD/releases/tag/v9.1.0-macos).
+O descargue [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) / [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) de la [versión `v0.7.0`](https://github.com/mthomason/MAD/releases/tag/v0.7.0). Esta versión: **app 0.7 / motor 9.0 (r4433)**.
 
 ## Compilar y ejecutar desde el código fuente
 
