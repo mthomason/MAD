@@ -1,0 +1,91 @@
+# Windows verification — the .NET app's gate.
+#
+# The native engine (Windows/Engine/build.ps1) is not reproducible on a hosted
+# runner: it needs an elevated workstation with Visual Studio 2026's MSVC,
+# MSYS2 at C:\msys64, NASM, Strawberry Perl, Meson, Python, Clang 20.1.8 and a
+# GNUstep built from source.  The engine is therefore built on the workstation
+# and packed as mad-windows-x64.zip — mad.exe, its GNUstep/ObjC/VC runtime
+# DLLs, and the Liberation fonts the PDF writer loads — and attached to the
+# v0.7.0 release.  This workflow downloads that asset and runs both .NET
+# suites against it.
+#
+# The tag is pinned on purpose: a run is reproducible against one engine build.
+# Refresh the asset (and this pin, when a release carries a new engine) when
+# the engine changes.
+#
+# The bundle is extracted to Windows/Engine/build, the path MadPathResolver and
+# MadPathResolverTests expect, and the DLLs sit beside mad.exe, so no GNUstep
+# install is needed and GNUSTEP_BIN must stay unset: MadPathResolverTests pins
+# its C:\GNUstep default.  WPF tests need a Windows runner and their own STA
+# threads (handled in the test code), so this job must stay on windows-latest.
+#
+# This check is not yet in the "Protect master" ruleset; the required checks
+# remain "Linux verification" and "DCO".
+
+name: Windows verification
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    # The check name is the job name, and the badge label follows the workflow
+    # name; keep both in step with the "Protect master" ruleset when it adds
+    # this check.
+    name: Windows verification
+    runs-on: windows-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the .NET SDK pinned by global.json
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: Windows/global.json
+
+      - name: Download the pre-built engine
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $destination = Join-Path $env:GITHUB_WORKSPACE 'Windows/Engine/build'
+          New-Item -ItemType Directory -Force -Path $destination | Out-Null
+          gh release download v0.7.0 --repo $env:GITHUB_REPOSITORY `
+            --pattern mad-windows-x64.zip --output engine.zip --clobber
+          Expand-Archive -Path engine.zip -DestinationPath $destination -Force
+          Remove-Item engine.zip
+
+      - name: Verify the engine runs
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & 'Windows/Engine/build/mad.exe' inspect 'CLI/Fixtures/London.portable.mad'
+          if ($LASTEXITCODE -ne 0) { throw "mad.exe inspect exited $LASTEXITCODE" }
+
+      - name: Run the .NET suites
+        env:
+          MAD_EXE: ${{ github.workspace }}\Windows\Engine\build\mad.exe
+        run: |
+          dotnet test Windows/App/Mad.Designer.Windows.slnx --nologo -v minimal `
+            --logger trx --results-directory TestResults
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-test-results
+          path: TestResults
+          if-no-files-found: ignore
