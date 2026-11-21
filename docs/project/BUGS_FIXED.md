@@ -145,6 +145,31 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### `MADArchiveManager` kept writing archive members after the archive failed to open
+- **Status:** Fixed 2026-11-21 (commit `75f3411ac`).
+- **Where:** `MAD/Source/MADArchiveManager.m` (`write_archive`: the format, filter and
+  open setup and the member walk), `MAD/Source/madtar.m` (`mad_archive_write_file`).
+- **Behavior:** `write_archive` logged a failed `archive_write_open_filename` and then
+  walked the file wrapper anyway. The archive was still in its new state, so every
+  member's `archive_write_header` returned `ARCHIVE_FATAL` (-30), and the function wrote
+  that member's data after the failed header regardless, logging an error per buffer.
+  `mad_archive_write_file` also let a successful `close(fd)` overwrite a failed header
+  status, and logged a data-write failure without returning it, so the caller could not
+  see it. A document save whose target directory had gone -- a test fixture removed
+  while a save was still pending, seen on CI -- produced the full error storm, and the
+  test process took a SIGSEGV at the same moment.
+- **Why it matters:** A save into a removed or unwritable directory should fail once,
+  cleanly, and leave the previous document in place; instead it wrote every member into
+  an archive that could never accept one.
+- **Now:** `write_archive` returns at a failed format, filter or open, and stops the
+  member walk at the first member that cannot be written. `mad_archive_write_file`
+  returns at a failed header without writing data, reports a data-write failure, and no
+  longer lets `close` mask it. The archive format and a successful write's bytes are
+  unchanged; `-archive:` now reports the failure and restores the backup.
+- **Test:** `MAD/MADTests/MADDocumentTests.m
+  testArchiveAgainstARemovedDirectoryFailsCleanly` removes the destination directory
+  before the save and asserts the clean failure.
+
 ### `+[MADDatabaseConnection newDatabaseConnection:documentURL:]` recursed until the stack ended for every non-SQLite driver
 - **Status:** Fixed 2026-11-04.
 - **Where:** `MAD/Source/MADDatabaseConnection+Constructor.m:53-72`; the optional
