@@ -54,6 +54,7 @@ $EngineDir = Join-Path $PSScriptRoot "Engine\build"
 $PublishDir = Join-Path $PSScriptRoot "build\publish\win-x64"
 $AppProject = Join-Path $PSScriptRoot "App\Mad.Designer.Windows\Mad.Designer.Windows.csproj"
 $Sample = Join-Path $RepoRoot "CLI\Fixtures\London.portable.mad"
+$SampleDatabase = Join-Path $RepoRoot "MADDesigner\Resources\Assets\Samples.xcassets\Data\chinook.dataset\chinook.sqlite3"
 $Licenses = Join-Path $RepoRoot "ThirdParty\Licenses"
 
 # mad.exe links these runtime DLLs directly or through gnustep-base, measured
@@ -128,6 +129,7 @@ foreach ($file in $RuntimeFiles) {
 }
 Require (Join-Path $EngineDir "fonts\LiberationSans-Regular.ttf") "the engine build copies the Liberation fonts beside mad.exe"
 Require $Sample "the sample document is the repository-root marker"
+Require $SampleDatabase "the sample report refreshes against this SQLite database"
 Require $Licenses "the archive must carry every licence and notice"
 Require (Join-Path $RepoRoot "LICENSE") "the archive carries the MIT text"
 Require (Join-Path $RepoRoot "NOTICE") "the archive carries the brand notice"
@@ -165,6 +167,7 @@ Copy-Item (Join-Path $PublishDir "*") $StageRoot -Recurse
 
 New-Item -ItemType Directory -Force -Path (Join-Path $StageRoot "CLI\Fixtures") | Out-Null
 Copy-Item $Sample (Join-Path $StageRoot "CLI\Fixtures")
+Copy-Item $SampleDatabase (Join-Path $StageRoot "CLI\Fixtures")
 
 Copy-Engine (Join-Path $StageRoot "Windows\Engine\build")
 
