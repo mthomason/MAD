@@ -65,6 +65,28 @@ jobs:
           restore-keys: |
             compressor-${{ runner.os }}-
 
+      # The freetds recipe fetches config.guess/config.sub from Savannah once
+      # and dies on the first error; Savannah answered 502 on two CI runs.
+      # Seed the recipe's media cache first, with retries and the GCC mirror as
+      # a fallback, so a transient outage does not fail the whole gate.
+      - name: Seed the autoconf config files
+        if: steps.libs-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p Compressor/media
+          for file in config.guess config.sub; do
+            [[ -s "Compressor/media/${file}" ]] && continue
+            for url in \
+              "https://git.savannah.gnu.org/cgit/config.git/plain/${file}" \
+              "https://raw.githubusercontent.com/gcc-mirror/gcc/master/${file}"; do
+              if curl -fsSL --retry 3 --retry-delay 5 --max-time 60 \
+                -o "Compressor/media/${file}" "${url}"; then
+                break
+              fi
+            done
+            test -s "Compressor/media/${file}"
+          done
+
       - name: Build the third-party static libraries
         run: ./Compressor/build.sh --all --platforms ios,simulator,macosx
 
