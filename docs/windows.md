@@ -28,7 +28,8 @@ image: /assets/mad-designer-icon-512.png
 MAD-Designer-Windows-0.7/
   Mad.Designer.Windows.exe   the WPF application (self-contained)
   ...                        the application's own files
-  CLI/Fixtures/London.portable.mad   a sample report
+  CLI/Fixtures/              London.portable.mad (a sample report) and
+                             chinook.sqlite3 (the sample data it refreshes from)
   Windows/Engine/build/mad.exe       the headless engine
   Windows/Engine/build/*.dll         the engine's GNUstep/ObjC/VC runtime
   Windows/Engine/build/fonts/        the Liberation fonts used by PDF export

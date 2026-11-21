@@ -75,6 +75,16 @@ jobs:
           & 'Windows/Engine/build/mad.exe' inspect 'CLI/Fixtures/London.portable.mad'
           if ($LASTEXITCODE -ne 0) { throw "mad.exe inspect exited $LASTEXITCODE" }
 
+      # The London and Music fixtures name a bare `chinook.sqlite3`.  The engine
+      # resolves it beside the document first, then in Application Support -- a
+      # workstation has the latter, a clean runner does not.  Put the checked-in
+      # sample beside the fixtures so the refresh tests have a database.
+      - name: Supply the fixtures' sample database
+        shell: pwsh
+        run: |
+          Copy-Item 'MADDesigner/Resources/Assets/Samples.xcassets/Data/chinook.dataset/chinook.sqlite3' `
+            'CLI/Fixtures/chinook.sqlite3'
+
       - name: Run the .NET suites
         env:
           MAD_EXE: ${{ github.workspace }}\Windows\Engine\build\mad.exe
