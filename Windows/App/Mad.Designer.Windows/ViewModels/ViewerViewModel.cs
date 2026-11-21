@@ -53,9 +53,10 @@ public sealed class ViewerViewModel : ObservableObject
         new PaperOption((int)PaperSize.A4, Localizer.Get("Paper.A4.Display"), Localizer.Get("Paper.A4")),
     };
 
-    /// <summary>The Windows engine's exporters, minus PDF (an accepted gap).</summary>
+    /// <summary>The engine's exporters in the Mac viewer's order, PDF first.</summary>
     public static IReadOnlyList<ViewerExportFormat> ExportFormats => new[]
     {
+        new ViewerExportFormat("pdf", Localizer.Get("Format.Pdf"), "pdf"),
         new ViewerExportFormat("html", Localizer.Get("Format.Html"), "html"),
         new ViewerExportFormat("html-flow", Localizer.Get("Format.HtmlFlow"), "html"),
         new ViewerExportFormat("csv", Localizer.Get("Format.Csv"), "csv"),
@@ -82,6 +83,7 @@ public sealed class ViewerViewModel : ObservableObject
     private string? _previewHtml;
     private string _statusText = NotYetRefreshedText;
     private ViewerStatusKind _statusKind = ViewerStatusKind.Neutral;
+    private bool _isExporting;
 
     public ViewerViewModel(EngineService engine, Func<string, string?>? exportPath = null)
     {
@@ -93,9 +95,9 @@ public sealed class ViewerViewModel : ObservableObject
         ResetZoomCommand = new RelayCommand(() => SetZoom(1.0));
         PreviousPageCommand = new RelayCommand(GoToPreviousPage, () => CanGoPrevious);
         NextPageCommand = new RelayCommand(GoToNextPage, () => CanGoNext);
-        RefreshCommand = new AsyncRelayCommand(RefreshCoreAsync, () => HasDocument && _refresh != null);
-        ExportCommand = new AsyncRelayCommand(ExportToChosenPathAsync, () => HasDocument);
-        PrintCommand = new RelayCommand(() => _ = PrintAsync(), () => HasDocument);
+        RefreshCommand = new AsyncRelayCommand(RefreshCoreAsync, () => HasDocument && _refresh != null && !_isExporting);
+        ExportCommand = new AsyncRelayCommand(ExportToChosenPathAsync, () => HasDocument && !_isExporting);
+        PrintCommand = new RelayCommand(() => _ = PrintAsync(), () => HasDocument && !_isExporting);
     }
 
     /// <summary>Raised when the user asks to print; the view prints the preview through the
@@ -215,6 +217,21 @@ public sealed class ViewerViewModel : ObservableObject
     public string StatusText { get => _statusText; private set => Set(ref _statusText, value); }
     public ViewerStatusKind StatusKind { get => _statusKind; private set => Set(ref _statusKind, value); }
 
+    /// <summary>True while an export runs. The status bar shows its indeterminate progress
+    /// bar from this, and the other engine commands stay disabled because `serve` serialises
+    /// every request behind the same gate.</summary>
+    public bool IsExporting
+    {
+        get => _isExporting;
+        private set
+        {
+            if (Set(ref _isExporting, value))
+            {
+                RaiseCommandsChanged();
+            }
+        }
+    }
+
     /// <summary>Counts the engine's page boxes in an HTML facsimile.</summary>
     public static int CountPages(string html) => PageDiv.Matches(html).Count;
 
@@ -298,11 +315,18 @@ public sealed class ViewerViewModel : ObservableObject
     }
 
     /// <summary>Exports the rendered report in the selected format to <paramref name="outPath"/>.
-    /// If nothing is rendered yet the report is refreshed first, as the Mac's Export does.</summary>
+    /// If nothing is rendered yet the report is refreshed first, as the Mac's Export does.
+    /// PDF goes through the engine's path export so the binary bytes are never round-tripped
+    /// through the serve protocol's UTF-8 <c>data</c> field; the text formats keep the read-back
+    /// path. Progress is indeterminate on purpose: `serve` streams no export progress and the
+    /// whole operation is one request.</summary>
     public async Task ExportAsync(string outPath)
     {
         if (!HasDocument) return;
 
+        bool succeeded = false;
+        IsExporting = true;
+        SetStatus(Localizer.Format("Viewer.Exporting", SelectedFormat.Format.ToUpperInvariant()), ViewerStatusKind.Neutral);
         try
         {
             if (_pageCount == 0 && _refresh != null && !await _refresh())
@@ -315,15 +339,47 @@ public sealed class ViewerViewModel : ObservableObject
             // paper before every export; so does this, so the file matches the preview.
             await ApplyRenderedPaperAsync();
 
-            string data = await _engine.ExportAsync(_handle, SelectedFormat.Format);
-            await File.WriteAllTextAsync(outPath, data);
-            SetStatus(Localizer.Format("Viewer.ExportStatus",
-                    SelectedFormat.Format.ToUpperInvariant(), Path.GetFileName(outPath)),
-                ViewerStatusKind.Success);
+            if (SelectedFormat.Format == "pdf")
+            {
+                long bytes = await _engine.ExportToPathAsync(_handle, SelectedFormat.Format, outPath);
+                succeeded = true;
+                SetStatus(Localizer.Format("Viewer.ExportStatusBytes",
+                        SelectedFormat.Format.ToUpperInvariant(), Path.GetFileName(outPath),
+                        bytes.ToString("N0")),
+                    ViewerStatusKind.Success);
+            }
+            else
+            {
+                string data = await _engine.ExportAsync(_handle, SelectedFormat.Format);
+                await File.WriteAllTextAsync(outPath, data);
+                succeeded = true;
+                SetStatus(Localizer.Format("Viewer.ExportStatus",
+                        SelectedFormat.Format.ToUpperInvariant(), Path.GetFileName(outPath)),
+                    ViewerStatusKind.Success);
+            }
         }
         catch (Exception exception)
         {
+            // The engine may have created a partial file before failing; never leave one
+            // behind with a successful-looking name.
+            if (!succeeded && File.Exists(outPath))
+            {
+                try
+                {
+                    File.Delete(outPath);
+                }
+                catch (IOException)
+                {
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+            }
             SetStatus(exception.Message, ViewerStatusKind.Error);
+        }
+        finally
+        {
+            IsExporting = false;
         }
     }
 

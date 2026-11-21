@@ -42,6 +42,8 @@
   <sys:String x:Key="Viewer.Rows.Many">已缓存 {0} 行</sys:String>
   <sys:String x:Key="Viewer.BeginRefresh">正在执行 SQL 查询并格式化报表页面…</sys:String>
   <sys:String x:Key="Viewer.ExportStatus">已将 {0} 导出到 {1}</sys:String>
+  <sys:String x:Key="Viewer.ExportStatusBytes">已将 {0} 导出到 {1}（{2} 字节）</sys:String>
+  <sys:String x:Key="Viewer.Exporting">正在导出 {0}…</sys:String>
   <sys:String x:Key="Viewer.PaperStatus">渲染的页面大小：{0}</sys:String>
   <sys:String x:Key="Viewer.PageLabel">第 {0} 页，共 {1} 页</sys:String>
   <sys:String x:Key="Viewer.PageZero">第 0 页，共 0 页</sys:String>
@@ -51,6 +53,7 @@
   <sys:String x:Key="Paper.Letter">US Letter</sys:String>
   <sys:String x:Key="Paper.Legal">US Legal</sys:String>
   <sys:String x:Key="Paper.A4">A4</sys:String>
+  <sys:String x:Key="Format.Pdf">PDF 文档（.pdf）</sys:String>
   <sys:String x:Key="Format.Html">HTML 页面（.html）</sys:String>
   <sys:String x:Key="Format.HtmlFlow">HTML 流（.html）</sys:String>
   <sys:String x:Key="Format.Csv">CSV 电子表格（.csv）</sys:String>

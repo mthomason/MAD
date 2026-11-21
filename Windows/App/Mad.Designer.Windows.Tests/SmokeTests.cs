@@ -12,10 +12,10 @@ namespace Mad.Designer.Windows.Tests;
 
 /// <summary>The WPF smoke test — the counterpart of <c>Mac/Tests/MADMacSmokeTest.m</c>, driven at
 /// the view-model/service level rather than the pixels. Step 1 opens the London fixture,
-/// refreshes 76 rows and exports every format this build produces, asserting the bytes match
-/// the Mac/Linux pins in <c>Linux/README.md</c>. Step 2 creates a new document from the chinook
-/// SQLite fixture, applies a SQL statement, adds report elements, refreshes, and exports.
-/// PDF and barcode are the accepted gaps; HTML + print is the interim for PDF.</summary>
+/// refreshes 76 rows and exports the six pinned text formats, asserting the bytes match the
+/// Mac/Linux pins in <c>Linux/README.md</c>. Step 2 creates a new document from the chinook
+/// SQLite fixture, applies a SQL statement, adds report elements, refreshes, and exports
+/// every Viewer format, including the binary PDF (checked by signature, not text).</summary>
 [Collection("Engine")]
 public sealed class SmokeTests
 {
@@ -150,9 +150,21 @@ public sealed class SmokeTests
                     await document.Viewer.ExportAsync(path);
 
                     Assert.True(File.Exists(path), $"the {format.Format} export wrote no file");
+                    Assert.Equal(ViewerStatusKind.Success, document.Viewer.StatusKind);
+
+                    if (format.Format == "pdf")
+                    {
+                        // PDF is binary, so it has no text to parse: check the signature and
+                        // that the engine wrote a non-empty file through the path export.
+                        byte[] bytes = File.ReadAllBytes(path);
+                        Assert.True(bytes.Length > 0, "the pdf export wrote nothing");
+                        Assert.Equal("%PDF-", System.Text.Encoding.ASCII.GetString(bytes, 0, 5));
+                        _output.WriteLine($"PASS: Exported the created document as pdf ({bytes.Length} bytes)");
+                        continue;
+                    }
+
                     string content = File.ReadAllText(path);
                     Assert.False(string.IsNullOrWhiteSpace(content), $"the {format.Format} export wrote nothing");
-                    Assert.Equal(ViewerStatusKind.Success, document.Viewer.StatusKind);
 
                     if (format.Format == "json")
                     {

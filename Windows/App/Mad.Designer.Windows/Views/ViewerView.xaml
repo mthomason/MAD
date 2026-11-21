@@ -95,7 +95,7 @@
 
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                     <ProgressBar Width="90" Height="12" IsIndeterminate="True"
-                                 Visibility="{Binding Document.IsBusy, Converter={StaticResource BoolToVis}}"
+                                 Visibility="{Binding Document.IsBusyOrExporting, Converter={StaticResource BoolToVis}}"
                                  Margin="0,0,8,0" />
                     <TextBlock x:Name="StatusText" Text="{Binding Document.Viewer.StatusText}"
                                VerticalAlignment="Center" TextTrimming="CharacterEllipsis">

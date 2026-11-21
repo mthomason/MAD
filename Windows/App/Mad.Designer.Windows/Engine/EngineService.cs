@@ -292,6 +292,21 @@ public sealed class EngineService : IAsyncDisposable
         return result.GetProperty("data").GetString() ?? "";
     }
 
+    /// <summary>Exports through the engine's own file writer and returns the byte count.
+    /// The response's <c>data</c> member is text (the serve handler decodes the exporter's
+    /// bytes as UTF-8), so it cannot carry a binary PDF; passing <c>path</c> makes the engine
+    /// write the exporter's bytes to that file instead.</summary>
+    public async Task<long> ExportToPathAsync(int handle, string format, string path)
+    {
+        var result = await CallAsync("export", new Dictionary<string, object?>
+        {
+            ["handle"] = handle,
+            ["format"] = format,
+            ["path"] = path,
+        }).ConfigureAwait(false);
+        return result.GetProperty("bytes").GetInt64();
+    }
+
     public async Task<int> TestConnectionAsync(ConnectionSpec spec)
     {
         var result = await CallAsync("test-connection", ConnectionParams(spec)).ConfigureAwait(false);

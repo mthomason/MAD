@@ -22,14 +22,14 @@ public sealed class ViewerViewModelTests
     }
 
     [Fact]
-    public void ExportFormats_AreTheSixAvailableOnWindows()
+    public void ExportFormats_AreTheSevenAvailableOnWindows_PdfFirst()
     {
         Assert.Equal(
-            new[] { "html", "html-flow", "csv", "json", "json-report", "text" },
+            new[] { "pdf", "html", "html-flow", "csv", "json", "json-report", "text" },
             ViewerViewModel.ExportFormats.Select(f => f.Format).ToArray());
-        Assert.DoesNotContain(ViewerViewModel.ExportFormats, f => f.Format == "pdf");
 
         var byFormat = ViewerViewModel.ExportFormats.ToDictionary(f => f.Format, f => f.Extension);
+        Assert.Equal("pdf", byFormat["pdf"]);
         Assert.Equal("html", byFormat["html"]);
         Assert.Equal("html", byFormat["html-flow"]);
         Assert.Equal("csv", byFormat["csv"]);
@@ -37,7 +37,9 @@ public sealed class ViewerViewModelTests
         Assert.Equal("json", byFormat["json-report"]);
         Assert.Equal("txt", byFormat["text"]);
 
-        Assert.Equal("HTML Page (.html)", ViewerViewModel.ExportFormats[0].Title);
+        // The Mac's order puts PDF first.
+        Assert.Equal("PDF Document (.pdf)", ViewerViewModel.ExportFormats[0].Title);
+        Assert.Equal("HTML Page (.html)", ViewerViewModel.ExportFormats[1].Title);
         Assert.Equal("Plain Text (.txt)", ViewerViewModel.ExportFormats[^1].Title);
     }
 
@@ -162,6 +164,32 @@ public sealed class ViewerViewModelTests
             Assert.False(File.Exists(path), "a failed refresh must not export a file");
             Assert.Equal(ViewerStatusKind.Error, vm.StatusKind);
             Assert.Equal("the database is unreachable", vm.StatusText);
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public async Task Export_OnFailure_ClearsTheExportingStateAndDeletesTheTargetFile()
+    {
+        // An engine path that does not exist fails the export without needing the engine:
+        // the PDF branch (the catalogue's first format) fails inside ApplyRenderedPaperAsync.
+        string missing = Path.Combine(Path.GetTempPath(), $"mad-missing-{Guid.NewGuid():N}.exe");
+        var vm = new ViewerViewModel(new EngineService(madExe: missing));
+        await vm.LoadAsync(0, () => Task.FromResult(true));
+        vm.SetRenderedHtml(BuildHtml(1), rowCount: 1);
+
+        string path = Path.Combine(Path.GetTempPath(), $"mad-viewer-failed-{Guid.NewGuid():N}.pdf");
+        await File.WriteAllTextAsync(path, "partial");
+        try
+        {
+            await vm.ExportAsync(path);
+
+            Assert.False(vm.IsExporting, "the exporting state must clear on failure");
+            Assert.Equal(ViewerStatusKind.Error, vm.StatusKind);
+            Assert.False(File.Exists(path), "a failed export must not leave a partial file");
         }
         finally
         {

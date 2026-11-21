@@ -42,6 +42,8 @@
   <sys:String x:Key="Viewer.Rows.Many">{0} cached rows</sys:String>
   <sys:String x:Key="Viewer.BeginRefresh">Executing SQL query and formatting report pages…</sys:String>
   <sys:String x:Key="Viewer.ExportStatus">Exported {0} to {1}</sys:String>
+  <sys:String x:Key="Viewer.ExportStatusBytes">Exported {0} to {1} ({2} bytes)</sys:String>
+  <sys:String x:Key="Viewer.Exporting">Exporting {0}…</sys:String>
   <sys:String x:Key="Viewer.PaperStatus">Rendered Page Size: {0}</sys:String>
   <sys:String x:Key="Viewer.PageLabel">Page {0} of {1}</sys:String>
   <sys:String x:Key="Viewer.PageZero">Page 0 of 0</sys:String>
@@ -51,6 +53,7 @@
   <sys:String x:Key="Paper.Letter">US Letter</sys:String>
   <sys:String x:Key="Paper.Legal">US Legal</sys:String>
   <sys:String x:Key="Paper.A4">A4</sys:String>
+  <sys:String x:Key="Format.Pdf">PDF Document (.pdf)</sys:String>
   <sys:String x:Key="Format.Html">HTML Page (.html)</sys:String>
   <sys:String x:Key="Format.HtmlFlow">HTML Flow (.html)</sys:String>
   <sys:String x:Key="Format.Csv">CSV Spreadsheet (.csv)</sys:String>
