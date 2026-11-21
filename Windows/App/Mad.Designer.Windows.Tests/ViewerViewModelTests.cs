@@ -172,7 +172,7 @@ public sealed class ViewerViewModelTests
     }
 
     [Fact]
-    public async Task Export_OnFailure_ClearsTheExportingStateAndDeletesTheTargetFile()
+    public async Task Export_OnFailure_ClearsTheExportingStateAndLeavesTheTargetAlone()
     {
         // An engine path that does not exist fails the export without needing the engine:
         // the PDF branch (the catalogue's first format) fails inside ApplyRenderedPaperAsync.
@@ -181,19 +181,27 @@ public sealed class ViewerViewModelTests
         await vm.LoadAsync(0, () => Task.FromResult(true));
         vm.SetRenderedHtml(BuildHtml(1), rowCount: 1);
 
-        string path = Path.Combine(Path.GetTempPath(), $"mad-viewer-failed-{Guid.NewGuid():N}.pdf");
-        await File.WriteAllTextAsync(path, "partial");
+        string existing = Path.Combine(Path.GetTempPath(), $"mad-viewer-existing-{Guid.NewGuid():N}.pdf");
+        string fresh = Path.Combine(Path.GetTempPath(), $"mad-viewer-fresh-{Guid.NewGuid():N}.pdf");
+        await File.WriteAllTextAsync(existing, "existing report");
         try
         {
-            await vm.ExportAsync(path);
+            await vm.ExportAsync(existing);
 
             Assert.False(vm.IsExporting, "the exporting state must clear on failure");
             Assert.Equal(ViewerStatusKind.Error, vm.StatusKind);
-            Assert.False(File.Exists(path), "a failed export must not leave a partial file");
+            Assert.True(File.Exists(existing), "a failed export must not delete the user's existing file");
+            Assert.Equal("existing report", await File.ReadAllTextAsync(existing));
+
+            await vm.ExportAsync(fresh);
+
+            Assert.False(vm.IsExporting);
+            Assert.False(File.Exists(fresh), "a failed export must not leave a partial file");
         }
         finally
         {
-            if (File.Exists(path)) File.Delete(path);
+            if (File.Exists(existing)) File.Delete(existing);
+            if (File.Exists(fresh)) File.Delete(fresh);
         }
     }
 
