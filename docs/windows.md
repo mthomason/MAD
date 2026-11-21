@@ -76,12 +76,7 @@ The application has the same three reporting stages as the macOS app:
 * **MAD Designer** — the banded layout workspace: the page and section minimap, the Report Bands outline, searchable query fields, the zoomable/ruled design canvas with alignment guides and undo/redo, and the element inspector for content, typography, and geometry.
 * **MAD Viewer** — refresh the query into the local materialized table, choose the page size (US Letter, US Legal, A4), step through the rendered pages, and export.
 
-The Viewer exports **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report**, and **Plain Text**. PDF export exists in the engine and the `mad` CLI on Windows but is not yet offered in this build's Viewer format picker; for a PDF, call the engine directly:
-
-```powershell
-.\Windows\Engine\build\mad.exe export .\CLI\Fixtures\London.portable.mad `
-    --format pdf --out .\london.pdf
-```
+The Viewer exports **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report**, and **Plain Text**, in the macOS viewer's order. The PDF is written by the engine itself (the same exporter `mad export --format pdf` uses), so a large report exports without blocking the window: the status bar shows an indeterminate progress bar and an "Exporting…" line until the file is written, then reports its size.
 
 ## Building from Source
 

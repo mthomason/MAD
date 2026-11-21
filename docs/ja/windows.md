@@ -77,12 +77,7 @@ Set-AuthenticodeSignature -FilePath .\Mad.Designer.Windows.exe -Certificate $cer
 * **MAD Designer** — バンドベースのレイアウトワークスペース。ページとセクションのミニマップ、レポートバンドのアウトライン、検索可能なクエリフィールド、ズームとルーラー付きのデザインキャンバス（整列ガイド、元に戻す/やり直し）、コンテンツ・タイポグラフィ・ジオメトリの要素インスペクターを備えます。
 * **MAD Viewer** — クエリをローカルのマテリアライズ済みテーブルに更新し、ページサイズ（US Letter、US Legal、A4）を選択し、レンダリングされたページを移動して、エクスポートします。
 
-ビューアは **HTML**、**HTML Flow**、**CSV**、**JSON**、**JSON Full Report**、**プレーンテキスト**をエクスポートします。PDF エクスポートはエンジンと Windows の `mad` CLI に存在しますが、このビルドのビューアの形式選択にはまだ表示されません。PDF が必要な場合はエンジンを直接呼び出してください。
-
-```powershell
-.\Windows\Engine\build\mad.exe export .\CLI\Fixtures\London.portable.mad `
-    --format pdf --out .\london.pdf
-```
+ビューアは **PDF**、**HTML**、**HTML Flow**、**CSV**、**JSON**、**JSON Full Report**、**プレーンテキスト**を、macOS のビューアと同じ順序でエクスポートします。PDF はエンジン自身が書き出し（`mad export --format pdf` と同じエクスポーター）、大きなレポートでもウィンドウがブロックされません。ステータスバーには不確定の進行状況バーと「書き出し中…」の行が表示され、書き出しが終わるとサイズが示されます。
 
 ## ソースからのビルド
 

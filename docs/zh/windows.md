@@ -77,12 +77,7 @@ Set-AuthenticodeSignature -FilePath .\Mad.Designer.Windows.exe -Certificate $cer
 * **MAD Designer** —— 分带布局工作区：页面与节迷你地图、报表带大纲、可搜索的查询字段、带对齐参考线和撤销/重做的可缩放标尺设计画布，以及用于内容、排版和几何的元素检查器。
 * **MAD Viewer** —— 将查询刷新到本地物化表，选择页面大小（US Letter、US Legal、A4），在渲染的页面之间翻页，并导出。
 
-查看器可导出 **HTML**、**HTML Flow**、**CSV**、**JSON**、**JSON 完整报表**和**纯文本**。PDF 导出已在引擎和 Windows 的 `mad` CLI 中提供，但尚未出现在此版本查看器的格式选择器中；如需 PDF，请直接调用引擎：
-
-```powershell
-.\Windows\Engine\build\mad.exe export .\CLI\Fixtures\London.portable.mad `
-    --format pdf --out .\london.pdf
-```
+查看器可导出 **PDF**、**HTML**、**HTML Flow**、**CSV**、**JSON**、**JSON 完整报表**和**纯文本**，顺序与 macOS 查看器相同。PDF 由引擎自身写入（与 `mad export --format pdf` 使用相同的导出器），因此大型报表导出时不会阻塞窗口：状态栏会显示不确定进度条和“正在导出…”提示，完成后显示文件大小。
 
 ## 从源代码构建
 

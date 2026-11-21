@@ -252,7 +252,8 @@ GROUP BY editors, a segmented Designer/SQL mode switch, and a bottom zoom bar wi
 percentage and Fit. Viewer is the rendered report: a WebView2 shows the engine's paginated
 HTML facsimile (the accepted interim for the Mac's PDF view) with page-size selection
 (US Letter / US Legal / A4), zoom, page navigation, print through the browser print path,
-and export in all six formats (HTML, HTML-flow, CSV, JSON, JSON-report, text). Designer is
+and export in all seven formats, PDF first (PDF, HTML, HTML-flow, CSV, JSON, JSON-report,
+text), with the PDF written by the engine's own exporter. Designer is
 the report-layout studio (a band-and-element canvas with an insert palette, sections and
 query-field lists, a collapsible minimap, and a selected-element inspector) backed by the
 Phase 6c `layout-model` protocol. Launching with no report shows a Welcome/Home screen —
@@ -271,8 +272,9 @@ version (`v0.7`) separately.
 
 The Viewer's report preview uses the **WebView2** control (`Microsoft.Web.WebView2`, pinned
 in the app's `.csproj`), which needs the Evergreen WebView2 Runtime — shipped with Windows
-11 and installed alongside Microsoft Edge on Windows 10. PDF is an accepted gap: the
-Windows engine has no PDF exporter, so HTML + print is the interim.
+11 and installed alongside Microsoft Edge on Windows 10. PDF export goes through the
+engine's own exporter (`serve`'s `export` with a `path`), so the Viewer writes the same
+bytes `mad export --format pdf` does; HTML + print remains the preview's print path.
 
 Build and run (the engine must be built first — see above):
 
@@ -352,8 +354,7 @@ localization dictionaries, and the licence register. It also carries the **WPF s
   against the Mac/Linux pins in `Linux/README.md`.
 * **A created document** — new `.mad` from `chinook.sqlite3`, apply the Mac's SQL
   statement, add a label, data field and aggregate, refresh, and export every format.
-
-PDF and barcode are excluded (accepted gaps).
+  The binary PDF is checked by its `%PDF-` signature rather than read as text.
 
 ```powershell
 dotnet test .\Windows\App\Mad.Designer.Windows.Tests
@@ -405,11 +406,9 @@ $env:MAD_PG_TEST_DATABASE = "chinook"
 * The four MAD suites that needed the drivers (`MADDatabaseDriverDispatchTests`,
   `MADQueryFullTests`, `MADSQLParserTests`, `MADQueryMaxFieldLengthTests`) are
   now wired with them and pass.
-* **PDF export and barcode elements are accepted gaps** on Windows: the engine
-  has no Windows PDF exporter, and `MADBarcodes` is excluded as on Linux. HTML +
-  print is the interim for PDF. The public `docs/windows.md` and its five
-  translations are deferred; `Windows/README.md` and
-  `docs/project/MAD_WINDOWS.md` are the Windows documentation for now.
+* The public `docs/windows.md` and its five translations are the shipped user
+  guide; `Windows/README.md` and `docs/project/MAD_WINDOWS.md` are the developer
+  record.
 
 ## Third-party and licensing
 

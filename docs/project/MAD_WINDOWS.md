@@ -488,8 +488,9 @@ for the sidebar browser and the binding popup.
 ## 6g. Phase 6d — the Viewer workspace (render, page size, export, print)
 
 Phase 6d finishes the MAD Viewer on top of the 6a–6c shell. The Mac viewer renders a
-paginated PDF in `PDFView`; **PDF is an accepted gap on Windows** (no PDFKit, and the
-engine's `pdf` exporter is Apple-only), so the interim the plan names is HTML + print:
+paginated PDF in `PDFView`; Windows has no PDFKit, so the preview renders the engine's
+HTML facsimile instead, and the PDF itself is written by the engine's own exporter at
+export time (§6l):
 
 * **Render approach — WebView2 over the engine's HTML exporter.** The preview shows the
   exact `export --format html` bytes (one `<div class="page" data-index="N">` box per
@@ -509,11 +510,17 @@ engine's `pdf` exporter is Apple-only), so the interim the plan names is HTML + 
   success and red on failure. Selecting a paper size does not change the rendered report
   until the next refresh (the Mac's `selectedPaperType`/`renderedPaperType` split); the
   selection survives refresh, and the export uses the rendered paper.
-* **Export** offers the six formats this build produces — HTML Page, HTML Flow, CSV,
-  JSON Data, JSON Full Report, and Plain Text — each with its own file extension
-  (`html`, `html`, `csv`, `json`, `json`, `txt`). The toolbar carries the format selector;
-  Export opens the save dialog filtered to the chosen format. PDF is not offered.
-  Exporting before a refresh refreshes first, as the Mac's Export does.
+* **Export** offers the seven formats this build produces, in the Mac viewer's order —
+  PDF Document, HTML Page, HTML Flow, CSV, JSON Data, JSON Full Report, and Plain Text —
+  each with its own file extension (`pdf`, `html`, `html`, `csv`, `json`, `json`, `txt`).
+  The toolbar carries the format selector; Export opens the save dialog filtered to the
+  chosen format. PDF goes through `serve`'s path form (`export` with a `path`), so the
+  engine writes the exporter's bytes to the chosen file and the response carries only the
+  byte count; the `data` read-back the text formats use is UTF-8 and would corrupt a
+  binary PDF. Exporting before a refresh refreshes first, as the Mac's Export does, and
+  while an export runs the status bar shows its indeterminate progress bar with an
+  "Exporting…" line (the command is disabled; `serve` streams no progress and the export
+  is a single request).
 * **Document integration.** `DocumentViewModel.RefreshAsync` runs the query and then calls
   `Viewer.RenderAsync`, which applies the selected paper through the document (so the
   Designer's snapshot follows) and loads the HTML preview. The Viewer's Refresh, Export
@@ -529,11 +536,13 @@ as on the Mac, and the rows remain available through the CSV/JSON exports.
 
 **Tests.** `ViewerViewModelTests` (status grammar, format catalogue, page counting, zoom,
 navigation, print request), `ViewerSurfaceTests` (the workspace materialised on an STA
-thread — the toolbar, the six formats, the page-size selector, the status colour and the
+thread — the toolbar, the seven formats, the page-size selector, the status colour and the
 page label), and `ViewerAcceptanceTests` against the engine (London → 5 pages / 76 cached
 rows, page-size lock and persistence through A4 with the exported page box at 595 × 842,
-every export format with its extension, and the paper-size switch A4 → Legal → Letter
-reaching each export).
+every export format with its extension and the PDF checked by its `%PDF-` signature, an
+export to a path with a space and a non-ASCII character, the exporting state set while the
+PDF is written and cleared after, and the paper-size switch A4 → Legal → Letter reaching
+each export).
 
 ## 6h. Phase 6e — About, localization, and the WPF smoke test
 
@@ -603,9 +612,9 @@ test:
    refresh, then export every available format and check the JSON row count and
    the HTML page count.
 
-PDF and barcode are excluded as accepted gaps (barcode is not a Windows element
-kind; PDF has no Windows exporter). The suite runs headlessly with the rest of
-the app tests; see `Windows/README.md`.
+The Viewer exports PDF in both tests through the engine's path export; the
+smoke test checks its `%PDF-` signature rather than reading it as text. The
+suite runs headlessly with the rest of the app tests; see `Windows/README.md`.
 
 ## 6i. Phase 6f — the theme, the shell, and the usability pass
 
@@ -785,8 +794,12 @@ XObjects, and checks deterministic byte equality.
 in `ThirdParty/Licenses/`, and `WindowsLicenseRegistry` lists all four for the About
 window. None adds a relink obligation.
 
-**Not done.** The WPF Viewer's format picker does not list PDF (the engine and `serve`
-do); adding it is a UI change with its own strings.
+**Viewer.** The WPF Viewer's format picker lists PDF first, as the Mac's does, and
+exports it through `serve`'s path form (`export` with a `path`), so the engine writes the
+exporter's bytes and the response carries the byte count. The text formats keep the `data`
+read-back, whose UTF-8 decoding is lossless for them. An indeterminate progress bar and an
+"Exporting…" status line cover the call; the `Format.Pdf` and `Viewer.Exporting` strings
+ship in all six dictionaries.
 
 ## 7. Supported Windows versions
 
