@@ -179,15 +179,40 @@ public sealed class MadEngineClientTests
 	}
 
 	[Fact]
-	public void ExportUnavailableFormat_IsAnExportError()
+	public void ExportUnknownFormat_IsAnExportError()
 	{
 		using var client = StartClient();
 		client.Start();
 
 		int handle = client.Open(London);
-		var error = client.Call("export", Dict("handle", handle, "format", "pdf"));
+		var error = client.Call("export", Dict("handle", handle, "format", "docx"));
 		Assert.False(error.Ok);
-		Assert.Equal(5, error.Error!.Code); // pdf is not available off Apple
+		Assert.Equal(1, error.Error!.Code); // usage: --format is not a format this build has
+	}
+
+	[Fact]
+	public void ExportPdf_WritesAPdfFile()
+	{
+		using var client = StartClient();
+		client.Start();
+
+		int handle = client.Open(London);
+		string outPath = Path.Combine(Path.GetTempPath(), $"mad-serve-pdf-{Guid.NewGuid():N}.pdf");
+		try
+		{
+			var result = client.CallOk("export", Dict("handle", handle, "format", "pdf", "path", outPath));
+			Assert.Equal("pdf", result.GetProperty("format").GetString());
+			Assert.True(result.GetProperty("bytes").GetInt64() > 0);
+			Assert.True(File.Exists(outPath));
+
+			byte[] header = new byte[5];
+			using (var stream = File.OpenRead(outPath)) stream.ReadExactly(header);
+			Assert.Equal("%PDF-", System.Text.Encoding.ASCII.GetString(header));
+		}
+		finally
+		{
+			if (File.Exists(outPath)) File.Delete(outPath);
+		}
 	}
 
 	[Fact]
