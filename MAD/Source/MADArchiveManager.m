@@ -149,17 +149,30 @@ static int mad_path_is_hidden(NSString *relativePath) {
 int write_archive(char *outname, NSURL *filewrapper, int reproducible) {
 	int r = 0;
 	struct archive *archive = archive_write_new();
-	
-	if (archive_write_set_format_pax_restricted(archive) != ARCHIVE_OK) {
-		os_log_error(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
+
+	if ((r = archive_write_set_format_pax_restricted(archive)) != ARCHIVE_OK) {
+		os_log_error(OS_LOG_DEFAULT, "Error: archive_write_set_format_pax_restricted() returned %d: %s.",
+					 r, archive_error_string(archive) ?: "no error string");
+		archive_write_free(archive);
+		return r;
 	}
 
-	if (archive_write_add_filter_bzip2(archive) != ARCHIVE_OK) {
-		os_log_error(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
+	if ((r = archive_write_add_filter_bzip2(archive)) != ARCHIVE_OK) {
+		os_log_error(OS_LOG_DEFAULT, "Error: archive_write_add_filter_bzip2() returned %d: %s.",
+					 r, archive_error_string(archive) ?: "no error string");
+		archive_write_free(archive);
+		return r;
 	}
-	
+
+	// A failed open leaves the archive in its new state.  Carrying on writes every
+	// member into that state and fails every time; on Apple that error storm has
+	// taken the caller down (a document save whose directory was removed while the
+	// save was still pending).  Stop here and report the failure instead.
 	if ((r = archive_write_open_filename(archive, outname)) != ARCHIVE_OK) {
-		os_log_error(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
+		os_log_error(OS_LOG_DEFAULT, "Error: archive_write_open_filename() returned %d: %s.",
+					 r, archive_error_string(archive) ?: "no error string");
+		archive_write_free(archive);
+		return r;
 	}
 
 	// The members are the files below the directory, named by their paths relative to
@@ -199,6 +212,9 @@ int write_archive(char *outname, NSURL *filewrapper, int reproducible) {
 		if ((archive_status = mad_archive_write_file(archive, source_filepath_fsr,
 													 source_path_relative_fsr, reproducible)) < 0) {
 			os_log_error(OS_LOG_DEFAULT, "Error %d in archive.", archive_status);
+			r = archive_status;
+			free(source_path_relative_fsr); free(source_filepath_fsr);
+			break;
 		}
 		free(source_path_relative_fsr); free(source_filepath_fsr);
 	}
