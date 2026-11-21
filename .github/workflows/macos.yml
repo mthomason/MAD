@@ -47,7 +47,7 @@ jobs:
     timeout-minutes: 180
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Show the toolchain
         run: |
@@ -58,7 +58,7 @@ jobs:
 
       - name: Restore the third-party static libraries
         id: libs-cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: Compressor/library
           key: compressor-${{ runner.os }}-${{ hashFiles('Compressor/matrix.conf', 'Compressor/lib/**') }}
@@ -94,7 +94,7 @@ jobs:
       # artifacts for the next attempt.  A hit needs no second upload.
       - name: Save the third-party static libraries
         if: steps.libs-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: Compressor/library
           key: compressor-${{ runner.os }}-${{ hashFiles('Compressor/matrix.conf', 'Compressor/lib/**') }}
@@ -140,7 +140,7 @@ jobs:
 
       - name: Upload test results
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: macos-test-results
           path: ${{ env.MAD_DERIVED_DATA }}/Logs/Test
