@@ -413,6 +413,7 @@ Status key:
 
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
+- `MADArchiveManager` kept writing archive members after the archive failed to open
 - `RptqDocument -storeDatabaseConnectionDefination:forManagedObjectContext:` dropped `credentals.key`, `databaseDriverTypeEnum`, and TDS `host`, and `MADMacDocument` refresh neither supplied server credentials nor surfaced refresh errors
 - `MADDesignerLayout` multi-selection undo clobbers per-element previous values with a single scalar
 - `MADSQLParser` rejects schema-qualified table names (`schema.table`) in `FROM`, `JOIN`, and three-part column references
