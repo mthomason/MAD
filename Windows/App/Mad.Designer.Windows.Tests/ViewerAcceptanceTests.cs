@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using Mad.Designer.Windows.Engine;
 using Mad.Designer.Windows.Infrastructure;
@@ -80,7 +81,7 @@ public sealed class ViewerAcceptanceTests
         string exported = Path.Combine(Path.GetTempPath(), $"mad-viewer-paper-{Guid.NewGuid():N}.html");
         try
         {
-            document.Viewer.SelectedFormatIndex = 0; // HTML
+            document.Viewer.SelectedFormatIndex = 1; // HTML Page
             await document.Viewer.ExportAsync(exported);
             AssertPageSize(File.ReadAllText(exported), 595.0, 841.0);
         }
@@ -110,7 +111,7 @@ public sealed class ViewerAcceptanceTests
         string path = Path.Combine(Path.GetTempPath(), $"mad-viewer-paper-export-{Guid.NewGuid():N}.html");
         try
         {
-            document.Viewer.SelectedFormatIndex = 0; // HTML
+            document.Viewer.SelectedFormatIndex = 1; // HTML Page
             await document.Viewer.ExportAsync(path);
 
             AssertPageSize(File.ReadAllText(path), 612.0, 792.0);
@@ -146,10 +147,22 @@ public sealed class ViewerAcceptanceTests
                 await document.Viewer.ExportAsync(path);
 
                 Assert.True(File.Exists(path), $"{format.Format} did not write {path}");
-                string content = File.ReadAllText(path);
-                Assert.False(string.IsNullOrWhiteSpace(content), $"{format.Format} wrote nothing");
                 Assert.StartsWith($"Exported {format.Format.ToUpperInvariant()} to ", document.Viewer.StatusText);
                 Assert.Equal(ViewerStatusKind.Success, document.Viewer.StatusKind);
+
+                if (format.Format == "pdf")
+                {
+                    // PDF is binary: the engine wrote the bytes itself through the path
+                    // export, so the file opens with the PDF signature and is not empty.
+                    byte[] bytes = File.ReadAllBytes(path);
+                    Assert.True(bytes.Length > 0, "pdf wrote nothing");
+                    Assert.Equal("%PDF-", Encoding.ASCII.GetString(bytes, 0, 5));
+                    Assert.Contains("bytes", document.Viewer.StatusText);
+                    continue;
+                }
+
+                string content = File.ReadAllText(path);
+                Assert.False(string.IsNullOrWhiteSpace(content), $"{format.Format} wrote nothing");
 
                 switch (format.Format)
                 {
@@ -171,6 +184,67 @@ public sealed class ViewerAcceptanceTests
             {
                 if (File.Exists(path)) File.Delete(path);
             }
+        }
+
+        await engine.ShutdownAsync();
+    }
+
+    [Fact]
+    public async Task PdfExport_SetsTheExportingState_AndWritesAValidPdf()
+    {
+        await using var engine = new EngineService();
+        var document = new DocumentViewModel(engine);
+        await document.OpenAsync(MadPathResolver.DefaultDocument());
+        await document.RefreshAsync();
+
+        document.Viewer.SelectedFormatIndex = 0; // PDF Document
+        string path = Path.Combine(Path.GetTempPath(), $"mad-viewer-{Guid.NewGuid():N}.pdf");
+        try
+        {
+            Task export = document.Viewer.ExportAsync(path);
+
+            Assert.True(document.Viewer.IsExporting, "IsExporting must be set while the export runs");
+            Assert.Equal("Exporting PDF…", document.Viewer.StatusText);
+
+            await export;
+
+            Assert.False(document.Viewer.IsExporting, "IsExporting must clear when the export finishes");
+            Assert.Equal(ViewerStatusKind.Success, document.Viewer.StatusKind);
+
+            byte[] bytes = File.ReadAllBytes(path);
+            Assert.Equal("%PDF-", Encoding.ASCII.GetString(bytes, 0, 5));
+        }
+        finally
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+
+        await engine.ShutdownAsync();
+    }
+
+    [Fact]
+    public async Task PdfExport_WritesToAPathWithASpaceAndANonAsciiCharacter()
+    {
+        await using var engine = new EngineService();
+        var document = new DocumentViewModel(engine);
+        await document.OpenAsync(MadPathResolver.DefaultDocument());
+        await document.RefreshAsync();
+
+        string directory = Path.Combine(Path.GetTempPath(), $"mad café {Guid.NewGuid():N}");
+        Directory.CreateDirectory(directory);
+        string path = Path.Combine(directory, "café.pdf");
+        try
+        {
+            document.Viewer.SelectedFormatIndex = 0; // PDF Document
+            await document.Viewer.ExportAsync(path);
+
+            Assert.Equal(ViewerStatusKind.Success, document.Viewer.StatusKind);
+            byte[] bytes = File.ReadAllBytes(path);
+            Assert.Equal("%PDF-", Encoding.ASCII.GetString(bytes, 0, 5));
+        }
+        finally
+        {
+            if (Directory.Exists(directory)) Directory.Delete(directory, recursive: true);
         }
 
         await engine.ShutdownAsync();
@@ -214,7 +288,7 @@ public sealed class ViewerAcceptanceTests
         string cliPath = Path.Combine(Path.GetTempPath(), $"mad-cli-{Guid.NewGuid():N}.csv");
         try
         {
-            document.Viewer.SelectedFormatIndex = 2; // CSV Spreadsheet
+            document.Viewer.SelectedFormatIndex = 3; // CSV Spreadsheet
             await document.Viewer.ExportAsync(viewerPath);
             await RunOneShotCliAsync("export", "--format", "csv", "--out", cliPath);
 

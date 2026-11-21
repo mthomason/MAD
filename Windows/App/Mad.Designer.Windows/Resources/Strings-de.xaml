@@ -42,6 +42,8 @@
   <sys:String x:Key="Viewer.Rows.Many">{0} zwischengespeicherte Zeilen</sys:String>
   <sys:String x:Key="Viewer.BeginRefresh">SQL-Abfrage wird ausgeführt und Berichtsseiten werden formatiert…</sys:String>
   <sys:String x:Key="Viewer.ExportStatus">{0} nach {1} exportiert</sys:String>
+  <sys:String x:Key="Viewer.ExportStatusBytes">{0} nach {1} exportiert ({2} Bytes)</sys:String>
+  <sys:String x:Key="Viewer.Exporting">Exportiere {0}…</sys:String>
   <sys:String x:Key="Viewer.PaperStatus">Gerenderte Seitengröße: {0}</sys:String>
   <sys:String x:Key="Viewer.PageLabel">Seite {0} von {1}</sys:String>
   <sys:String x:Key="Viewer.PageZero">Seite 0 von 0</sys:String>
@@ -51,6 +53,7 @@
   <sys:String x:Key="Paper.Letter">US Letter</sys:String>
   <sys:String x:Key="Paper.Legal">US Legal</sys:String>
   <sys:String x:Key="Paper.A4">A4</sys:String>
+  <sys:String x:Key="Format.Pdf">PDF-Dokument (.pdf)</sys:String>
   <sys:String x:Key="Format.Html">HTML-Seite (.html)</sys:String>
   <sys:String x:Key="Format.HtmlFlow">HTML-Fließtext (.html)</sys:String>
   <sys:String x:Key="Format.Csv">CSV-Tabelle (.csv)</sys:String>

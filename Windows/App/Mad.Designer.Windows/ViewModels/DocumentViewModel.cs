@@ -49,6 +49,13 @@ public sealed class DocumentViewModel : ObservableObject
         Query = new QueryViewModel(engine);
         Designer = new DesignerViewModel(engine);
         Viewer = new ViewerViewModel(engine, exportPath);
+        Viewer.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(ViewerViewModel.IsExporting))
+            {
+                OnPropertyChanged(nameof(IsBusyOrExporting));
+            }
+        };
     }
 
     /// <summary>The Query workspace's view model — the visual query designer and SQL editor.</summary>
@@ -77,10 +84,16 @@ public sealed class DocumentViewModel : ObservableObject
         {
             if (Set(ref _isBusy, value))
             {
+                OnPropertyChanged(nameof(IsBusyOrExporting));
                 RaiseCanExecuteChanged();
             }
         }
     }
+
+    /// <summary>The Viewer's status-bar progress: a document operation (open, refresh, save)
+    /// or a Viewer export is in flight. They share one indeterminate bar; the export's own
+    /// state lives on <see cref="ViewerViewModel.IsExporting"/>.</summary>
+    public bool IsBusyOrExporting => _isBusy || Viewer.IsExporting;
 
     public string StatusText { get => _statusText; private set => Set(ref _statusText, value); }
 

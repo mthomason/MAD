@@ -42,7 +42,7 @@ public sealed class ViewerSurfaceTests
 
                 Assert.Equal(3, pageSize.Items.Count);
                 Assert.Equal(0, pageSize.SelectedIndex);
-                Assert.Equal(6, formats.Items.Count);
+                Assert.Equal(7, formats.Items.Count);
                 Assert.Equal(0, formats.SelectedIndex);
                 Assert.Equal(ViewerViewModel.NotYetRefreshedText, status.Text);
                 Assert.Equal("Page 0 of 0", pageLabel.Text);
@@ -55,8 +55,8 @@ public sealed class ViewerSurfaceTests
                 Assert.False(export.IsEnabled);
 
                 // Selecting a format drives the view model (the export dialog's extension).
-                formats.SelectedIndex = 3; // JSON Data
-                Assert.Equal(3, main.Document.Viewer.SelectedFormatIndex);
+                formats.SelectedIndex = 4; // JSON Data (PDF is first)
+                Assert.Equal(4, main.Document.Viewer.SelectedFormatIndex);
 
                 // A render turns the status line green and fills the page label.
                 main.Document.Viewer.SetRenderedHtml(
