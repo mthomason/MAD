@@ -800,18 +800,31 @@ int main(int argc, const char * argv[]) {
 			fprintf(stderr, "FAIL: Export save panel missing format selection accessory view\n");
 			return 63;
 		}
-		if (![exportPanel.nameFieldStringValue hasSuffix:@".pdf"]) {
-			fprintf(stderr, "FAIL: Export save panel did not default to .pdf filename (got %s)\n",
-					exportPanel.nameFieldStringValue.UTF8String);
+		// NSSavePanel normalizes the name it reports (extension hiding is a saved user
+		// preference, and a name with two extensions is trimmed differently per
+		// account), so the stable contract is the selected format and its content
+		// type; the panel adds the extension from the type on save.
+		NSString *initialName = exportPanel.nameFieldStringValue;
+		NSString *initialType = exportPanel.allowedContentTypes.firstObject.identifier;
+		if (initialName.length == 0 ||
+			![vVC.exportFormatPopup.selectedItem.representedObject isEqualToString:@"pdf"] ||
+			![initialType isEqualToString:[UTType typeWithFilenameExtension:@"pdf"].identifier]) {
+			fprintf(stderr, "FAIL: Export save panel did not default to PDF (name='%s', format='%s', type='%s')\n",
+					initialName.UTF8String,
+					[vVC.exportFormatPopup.selectedItem.representedObject description].UTF8String,
+					initialType.UTF8String);
 			return 64;
 		}
-		// Select CSV in the export format popup and verify extension updates to .csv
+		// Select CSV in the export format popup and verify the format and content type update.
 		NSInteger csvIdx = [vVC.exportFormatPopup indexOfItemWithRepresentedObject:@"csv"];
 		[vVC.exportFormatPopup selectItemAtIndex:csvIdx];
 		[vVC performSelector:@selector(exportSavePanelFormatChanged:) withObject:vVC.exportFormatPopup];
-		if (![exportPanel.nameFieldStringValue hasSuffix:@".csv"]) {
-			fprintf(stderr, "FAIL: Changing export format popup to CSV did not update save panel extension to .csv (got %s)\n",
-					exportPanel.nameFieldStringValue.UTF8String);
+		NSString *csvType = exportPanel.allowedContentTypes.firstObject.identifier;
+		if (![vVC.exportFormatPopup.selectedItem.representedObject isEqualToString:@"csv"] ||
+			![csvType isEqualToString:[UTType typeWithFilenameExtension:@"csv"].identifier]) {
+			fprintf(stderr, "FAIL: Changing export format popup to CSV did not update the save panel (format='%s', type='%s')\n",
+					[vVC.exportFormatPopup.selectedItem.representedObject description].UTF8String,
+					csvType.UTF8String);
 			return 65;
 		}
 		printf("PASS: Verified Report Viewer: toolbar icons, bottom status bar with singular/plural grammar, framed fixed-size page with zoom, page size persistence across refresh, and export dialog format selector\n");
