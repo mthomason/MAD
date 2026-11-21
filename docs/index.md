@@ -19,6 +19,10 @@ the names and app artwork are not covered by that licence (see
 > * **Direct Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *(for direct downloads, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications`)*
 > * **Version:** app 0.7 / engine 9.0 (r4433)
 
+> **Try MAD Designer on Windows (Windows 10 1903+, Windows 11, 64-bit):**
+> * **Direct Download:** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip) *(unsigned: Windows SmartScreen will ask — choose More info → Run anyway; see [the Windows guide](windows.html))*
+> * **Version:** app 0.7 / engine 9.0 (r4433) · **No .NET install needed** (self-contained)
+
 ## See it
 
 **[MAD Designer for macOS](macos.html)** — native `AppKit` desktop application (`NSDocument`, visual table/join query canvas, interactive section minimap and banded report designer, and paginated PDF/HTML/CSV/JSON report viewer):

@@ -27,12 +27,18 @@ The translation suffix keeps its case: `translations/README_pt-BR.md`, not
 
 ## The canonical public set
 
-Six languages × 25 documents. A new public page must be added to every language at the
-same time. A page that is missing from a language is not an error the switcher reports:
-the per-page counterpart lookup falls back to that language's landing page, so the reader
-silently lands somewhere else. Add the page rather than accept the fallback.
+Six languages × 26 documents, with one recorded exception (below). A new public page
+must be added to every language at the same time. A page that is missing from a language
+is not an error the switcher reports: the per-page counterpart lookup falls back to that
+language's landing page, so the reader silently lands somewhere else. Add the page rather
+than accept the fallback.
 
-### Website pages (14, under `docs/`)
+`docs/windows.md` is the one deliberate exception: it landed with the Windows 0.7 release
+as English-only (the unsigned Windows artifact was the time-sensitive part), and its five
+translations are queued. Until they land, a reader who switches language on that page
+falls back to the language's landing page, as described above.
+
+### Website pages (15, under `docs/`)
 
 | English source | Served URL |
 | --- | --- |
@@ -48,6 +54,7 @@ silently lands somewhere else. Add the page rather than accept the fallback.
 | `docs/08-open-questions.md` | `/08-open-questions.html` |
 | `docs/09-verification.md` | `/09-verification.html` |
 | `docs/macos.md` | `/macos.html` |
+| `docs/windows.md` | `/windows.html` |
 | `docs/vision.md` | `/vision.html` |
 | `docs/tutorials/driver-authoring.md` | `/tutorials/driver-authoring.html` |
 
