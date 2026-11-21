@@ -39,7 +39,7 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Export the fixture through the action
         uses: ./satellites/mad-action
@@ -62,7 +62,7 @@ jobs:
       MAD_ACTION_DEPLOY_KEY: ${{ secrets.MAD_ACTION_DEPLOY_KEY }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Publish to mthomason/mad-action
         run: |

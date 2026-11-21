@@ -23,7 +23,7 @@ jobs:
       # pull_request events is refs/pull/N/merge, GitHub's synthetic merge
       # commit, which carries no Signed-off-by and fails the loop below on
       # every PR.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
