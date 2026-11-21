@@ -572,6 +572,13 @@
 
 	[undoManager redo];
 	XCTAssertTrue(element.textStyle.bold, @"redo must restore the bold");
+
+	// Clear the change count and release the store while the fixture's directory
+	// still exists.  A pending UIDocument autosave otherwise fires after tearDown
+	// has removed the directory; the archive write then runs its unbounded error
+	// loop and can take the whole test process down (measured on CI, surfacing
+	// against whichever test was running at the time).
+	[document closeWithCompletionHandler:nil];
 }
 
 // A document that was never opened through UIDocument -- the shape the test harness
