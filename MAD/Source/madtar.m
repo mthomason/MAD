@@ -404,9 +404,14 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
 		archive_entry_set_pathname(entry, relativePath);
 		mad_archive_entry_set_attributes(&entry, &st, reproducible);
 		if ((status = archive_write_header(archive, entry)) != ARCHIVE_OK) {
-			os_log_error(OS_LOG_DEFAULT, "Error: archive_write_header() returned %d.", status);
+			os_log_error(OS_LOG_DEFAULT, "Error: archive_write_header() returned %d: %s.",
+						 status, archive_error_string(archive) ?: "no error string");
+			// The member never entered the archive; writing its data now fails for
+			// every buffer and fills the log for nothing.
+			archive_entry_free(entry);
+			return status;
 		}
-		
+
 		if ((fd = open(filename, O_RDONLY)) == -1) {
 			os_log_error(OS_LOG_DEFAULT, "Failed to open file %s.\n", filename);
 		} else {
@@ -419,11 +424,14 @@ int mad_archive_write_file(struct archive *archive, const char *filename, const 
 					// diagnosis.
 					os_log_error(OS_LOG_DEFAULT, "Error: archive_write_data() returned %ld: %s.",
 								 w_size, archive_error_string(archive) ?: "no error string");
+					status = (int)w_size;
+					break;
 				}
 			}
-			
-			if ((status = close(fd)) == -1) {
+
+			if (close(fd) == -1) {
 				os_log_error(OS_LOG_DEFAULT, "Error (%d): %s.", errno, strerror(errno));
+				if (status == ARCHIVE_OK) status = -1;
 			}
 		}
 	}

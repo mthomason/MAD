@@ -230,6 +230,29 @@
 	[fileManager removeItemAtURL: archive error: NULL];
 }
 
+// A save whose destination directory has gone must fail cleanly.  CI reached this
+// path when a document's fixture directory was removed while a save was still
+// pending: the archive writer kept writing members after its open failed, filling
+// the log with ARCHIVE_FATAL for every member, and the test process died.  The
+// writer now returns at the failed open.
+- (void)testArchiveAgainstARemovedDirectoryFailsCleanly {
+
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSURL *temp = [NSURL fileURLWithPath: NSTemporaryDirectory() isDirectory: YES];
+	NSURL *container = [temp URLByAppendingPathComponent: [NSUUID UUID].UUIDString isDirectory: YES];
+	NSURL *source = [container URLByAppendingPathComponent: @"guts" isDirectory: YES];
+	NSURL *archive = [container URLByAppendingPathComponent: @"removed.mad"];
+	[fileManager createDirectoryAtURL: source withIntermediateDirectories: YES attributes: nil error: NULL];
+	[@"member" writeToURL: [source URLByAppendingPathComponent: @"member.txt"]
+			   atomically: YES encoding: NSUTF8StringEncoding error: NULL];
+
+	MADArchiveManager *writer = [[MADArchiveManager alloc] initWithFileWrapperURL: source archiveURL: archive];
+	[fileManager removeItemAtURL: container error: NULL];
+
+	XCTAssertFalse([writer archive: YES], @"a save whose directory is gone reports failure");
+	XCTAssertFalse([fileManager fileExistsAtPath: archive.path], @"no document is left behind");
+}
+
 // The header's flag bit 0 records whether the store was checkpointed before archiving,
 // so a reader knows whether to expect a WAL.  The writer sets it from its
 // `checkpointed` property.
