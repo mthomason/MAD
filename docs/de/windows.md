@@ -77,12 +77,7 @@ Die Anwendung hat dieselben drei Berichtsphasen wie die macOS-App:
 * **MAD Designer** — der bandbasierte Layout-Arbeitsbereich: die Minimap für Seite und Abschnitte, die Gliederung der Berichtsbänder, durchsuchbare Abfragefelder, die zoombare/lineale Gestaltungsleinwand mit Ausrichtungslinien und Rückgängig/Wiederholen sowie der Element-Inspektor für Inhalt, Typografie und Geometrie.
 * **MAD Viewer** — aktualisiert die Abfrage in die lokale materialisierte Tabelle, wählt die Seitengröße (US Letter, US Legal, A4), blättert durch die gerenderten Seiten und exportiert.
 
-Der Betrachter exportiert **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON-Vollbericht** und **Reinen Text**. Der PDF-Export ist in der Engine und der `mad`-CLI unter Windows vorhanden, wird aber in der Formatauswahl dieses Builds noch nicht angeboten; für ein PDF rufen Sie die Engine direkt auf:
-
-```powershell
-.\Windows\Engine\build\mad.exe export .\CLI\Fixtures\London.portable.mad `
-    --format pdf --out .\london.pdf
-```
+Der Betrachter exportiert **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON-Vollbericht** und **Reinen Text**, in der Reihenfolge des macOS-Betrachters. Das PDF schreibt die Engine selbst (derselbe Exporter, den `mad export --format pdf` verwendet); daher blockiert auch ein großer Bericht das Fenster nicht: Die Statusleiste zeigt einen unbestimmten Fortschrittsbalken und eine Zeile „Exportiere…“, bis die Datei geschrieben ist, und nennt danach ihre Größe.
 
 ## Bauen aus dem Quellcode
 

@@ -77,12 +77,7 @@ La aplicación tiene las mismas tres etapas de informes que la app de macOS:
 * **MAD Designer**: el espacio de trabajo de maquetación por bandas: el minimapa de página y secciones, el esquema de bandas del informe, los campos de consulta con búsqueda, el lienzo de diseño con zoom y reglas, con guías de alineación y deshacer/rehacer, y el inspector de elementos para contenido, tipografía y geometría.
 * **MAD Viewer**: actualiza la consulta en la tabla materializada local, elige el tamaño de página (US Letter, US Legal, A4), recorre las páginas renderizadas y exporta.
 
-El visor exporta **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report** y **Texto sin formato**. La exportación a PDF existe en el motor y en la CLI `mad` de Windows, pero todavía no se ofrece en el selector de formato del visor de esta compilación; para obtener un PDF, llame directamente al motor:
-
-```powershell
-.\Windows\Engine\build\mad.exe export .\CLI\Fixtures\London.portable.mad `
-    --format pdf --out .\london.pdf
-```
+El visor exporta **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report** y **Texto sin formato**, en el orden del visor de macOS. El motor escribe el PDF (el mismo exportador que usa `mad export --format pdf`), de modo que un informe grande no bloquea la ventana: la barra de estado muestra una barra de progreso indeterminada y una línea «Exportando…» hasta que se escribe el archivo, y después indica su tamaño.
 
 ## Compilar desde el código fuente
 
