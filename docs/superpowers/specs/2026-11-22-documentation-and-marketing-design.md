@@ -467,9 +467,10 @@ Details:
 Every change runs the relevant subset, and the final delivery runs all of it:
 
 1. **Docs build.** `jekyll build` exits 0.
-2. **Internal links.** The existing link checker reports `broken: 0`, and a
+2. **Internal links.** The existing link checker reports `broken: 0`, a
    repository-wide Markdown relative-link checker reports no missing targets
-   after the moves.
+   after the moves, and the moved-path check reports no reference to a record's
+   old path in any Markdown, source, script, or configuration file.
 3. **Published tree — no leaks.** No `project`, `archive`, or `superpowers`
    directory in the built docs site in any language; no `DEVELOPER`,
    `TEST-DB-INFO`, `BUGS`, `TASKS`, `ROADMAP`, or agent-prompt file. The local

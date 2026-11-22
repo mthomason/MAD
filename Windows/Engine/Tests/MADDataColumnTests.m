@@ -10,7 +10,7 @@
 //
 //  The original's coding test used unarchiveTopLevelObjectWithData:error:,
 //  which GNUstep does not implement; the classic entry point is used instead
-//  (same coder machinery, see the Phase B report in docs/project/MAD_LINUX.md).
+//  (same coder machinery, see the Phase B report in docs/developers/build/linux.md).
 //
 
 #import "MADTestSupport.h"

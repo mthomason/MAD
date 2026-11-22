@@ -365,7 +365,7 @@
 
 #pragma mark - Golden SQL, per dialect
 
-// The exact strings the importer must round-trip (docs/project/MAD_SQL_ENTRY.md §10.1): the
+// The exact strings the importer must round-trip (docs/developers/sql-entry.md §10.1): the
 // full statement, not fragments, one per dialect.  These pin the generator the
 // parser is built against.
 

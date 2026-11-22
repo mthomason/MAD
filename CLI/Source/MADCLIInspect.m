@@ -196,7 +196,7 @@ MADCLIExitCode MADCLIRunInspect(MADCLIInvocation *invocation) {
 
 	// Counts come straight out of the store's own tables, whose names say which store
 	// it is: a legacy Core Data document writes them Z-prefixed, the portable store
-	// (docs/project/MAD_STORE_MIGRATION.md) uses the entity names as they are.
+	// (docs/project/design/MAD_STORE_MIGRATION.md) uses the entity names as they are.
 	BOOL portable = container.storeKind == MADCLIContainerStoreKindPortable;
 	unsigned long long sections = 0, elements = 0;
 	BOOL gotSections = MADCLICountRows(container.storeURL, portable ? @"RptqDocumentSection" : @"ZRPTQDOCUMENTSECTION", &sections);

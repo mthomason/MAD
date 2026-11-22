@@ -980,7 +980,7 @@ The design's phases, each with its acceptance criteria and its tests:
   `MADOperationValidateSQL` and its five construction tests are in the app
   target (app scheme 79/79; one pre-existing `MADStatusLabelRefreshTests`
   method never executes). **§10.6's UI assertions are not run:** the XCUITest
-  environment sees an empty accessibility tree (docs/project/BUGS.md, "Test infrastructure"),
+  environment sees an empty accessibility tree (docs/project/registers/BUGS.md, "Test infrastructure"),
   so the tables-list/canvas/designer assertions cannot be made, and the UI-test
   refresh assertion is recorded here rather than faked. The §9 close-and-reopen
   persistence the UI test would show is covered at the store level by the
@@ -1211,7 +1211,7 @@ prompts are in `~/Desktop/MADOpenSource-PostSteps/`.
     (`postgres:17.4-bookworm`, checksum-verified Chinook PostgreSQL dataset on
     `127.0.0.1:5432`, user `mad`, password `mad_test_pw`, database `chinook`),
     `MADPostgresLiveTests.m` (14 live tests on Apple and Linux; skips cleanly
-    when unreachable), and credentials documented in `docs/project/DEVELOPER.md`.
+    when unreachable), and credentials documented in `docs/project/build/DEVELOPER.md`.
   * **Phase E (app integration + CLI):** `MADDriverSelectorController` (row 2:
     `PostgreSQL Native Driver`, `UIImageExportTypePostgres`),
     `MADQueryAddLinkJoinTypeController` (all join types enabled for
@@ -1223,7 +1223,7 @@ prompts are in `~/Desktop/MADOpenSource-PostSteps/`.
     via `MADFixtureMaker`, `Linux/verify-cli.sh --live` extended with the 25-row
     PostgreSQL refresh check, and `Linux/README.md`, `CLI/Fixtures/README.md`,
     `docs/tutorials/driver-authoring.md`, `docs/developers/build/libraries.md`,
-    `docs/project/THIRD_PARTY_LICENSES.md`, `docs/project/BUGS.md`, and `AGENTS.md`
+    `docs/project/THIRD_PARTY_LICENSES.md`, `docs/project/registers/BUGS.md`, and `AGENTS.md`
     updated.
 
 ## 19. Application localization — Phase 0 and Phase 1 foundation

@@ -14,7 +14,7 @@ namespace Mad.Designer.Windows.Infrastructure;
 /// source is authoritative; a missing key falls back to English and then to the key itself.
 /// The language follows the OS UI language at launch, or the <c>MAD_LANGUAGE</c> environment
 /// variable for inspection and testing. Licence bodies, component notices and copyright lines
-/// stay in English by policy (docs/project/MAD_APP_LOCALIZATION.md §8).</summary>
+/// stay in English by policy (docs/project/localization/MAD_APP_LOCALIZATION.md §8).</summary>
 public static class Localizer
 {
     public const string DefaultLanguage = "en";

@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADPostgres subset the Windows build compiles (docs/project/MAD_WINDOWS.md §4): the 4
+# The MADPostgres subset the Windows build compiles (docs/developers/build/windows.md §4): the 4
 # implementation files of the Xcode target's 5, the same list as
 # Linux/cmake/MADPostgresSources.cmake.
 #

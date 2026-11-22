@@ -495,7 +495,7 @@ orden de columnas de la lista SELECT, que era orden de conjunto y por lo tanto d
 (mismos campos, mismas filas; anotado en `Linux/README.md`). **Resuelto el 2026-10-16**, con
 la decisión de la forma de exportación JSON (§10.1 abajo): el orden se define como el alias de columna
 en ambos constructores de SQL, así que el SQL generado, la caché de filas y cada exportación
-concuerdan en ambas plataformas (docs/project/BUGS.md, la entrada de la lista SELECT; las pruebas de orden en
+concuerdan en ambas plataformas (docs/project/registers/BUGS.md, la entrada de la lista SELECT; las pruebas de orden en
 `Linux/Tests/MADQuerySelectExpressionTests.m`).
 
 **Estado de la Fase E (2026-10-16, primera mitad).** La costura de exportación es real y los
@@ -594,7 +594,7 @@ tabla de clases generada (nueve clases para el fixture London).
 **`pdf` está en la costura**: `MADReportExporterPDF` se registra en todas partes.  En Apple su
 cuerpo es Core Graphics + `MADPrintPageRenderer`, sin cambios; fuera de Apple entrega las mismas
 páginas recorridas a `MADReportExporterPDFCairo`, que las dibuja en una superficie PDF Cairo
-con glifos FreeType de caras Liberation incluidas (docs/project/MAD_PDF_LINUX.md).  La
+con glifos FreeType de caras Liberation incluidas (docs/developers/build/pdf.md).  La
 CLI no tiene brazos locales restantes.  El movimiento de Apple fue neutral en bytes: la exportación determinista
 de la muestra London es el mismo PDF de 43,177 bytes y 5 páginas antes y después
 (`sha256 3eb2f1c4…` en ambos), medido compilando la CLI del commit anterior y
@@ -646,7 +646,7 @@ las bibliotecas C de forma nativa.
    valores con tipo JSON — y `--format json-report` es ese documento más un miembro `report`
    (las secciones renderizadas). Con él, el orden de la lista SELECT se define como el
    alias de columna, ordenado, para que el SQL generado, la caché de filas y cada exportación concuerden en
-   ambas plataformas (docs/project/BUGS.md, la entrada de la lista SELECT — antes, orden de conjunto). La mitad de datos
+   ambas plataformas (docs/project/registers/BUGS.md, la entrada de la lista SELECT — antes, orden de conjunto). La mitad de datos
    está construida (`MADReportExporterJSON`, ambas plataformas); el miembro de informe espera
    a la mitad de renderizado.
 2. **Puesta en escena del renderizador** — ¿HTML/SVG primero, PDF al final, o workers de PDF del lado de macOS?

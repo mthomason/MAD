@@ -6,7 +6,7 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  The kinds a MADModel can be.  Declared early; nothing in the tree reads it
-//  (docs/project/MADModel_Layer.md §6).
+//  (docs/developers/architecture/model-layer.md §6).
 //
 
 #ifndef MADModelType_h

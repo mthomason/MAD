@@ -9,7 +9,7 @@
 //  cannot be redirected -- so every test claims a private path extension
 //  (a UUID-suffixed one) and creates/removes only files carrying it.
 //
-//  The suite pins two live defects, both called out in docs/project/BUGS.md:
+//  The suite pins two live defects, both called out in docs/project/registers/BUGS.md:
 //    - -removeFileAtURL: reports the removed URL in the *updatedURLs* box and
 //      leaves removedURLs empty (the local arrays are handed over swapped).
 //    - -documentsDirectory is @dynamic with only a getter, so the protocol's
@@ -163,7 +163,7 @@
 }
 
 - (void)testDocumentsDirectoryHasNoSetter {
-	// docs/project/BUGS.md: the protocol declares documentsDirectory readwrite, but the
+	// docs/project/registers/BUGS.md: the protocol declares documentsDirectory readwrite, but the
 	// class declares it @dynamic and only -documentsDirectory is implemented.
 	MADLocalFileCoordinator *coordinator = [self coordinator];
 
@@ -285,7 +285,7 @@
 #pragma mark - remove / duplicate / rename
 
 - (void)testRemoveReportsTheURLAsUpdatedNotRemoved {
-	// docs/project/BUGS.md: the success branch hands the arrays over swapped.  The file is
+	// docs/project/registers/BUGS.md: the success branch hands the arrays over swapped.  The file is
 	// deleted, but the delegate is told the URL was updated.
 	MADLocalFileCoordinator *coordinator = [self coordinator];
 	coordinator.delegate = self.delegate;

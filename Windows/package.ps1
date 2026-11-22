@@ -58,7 +58,7 @@ $SampleDatabase = Join-Path $RepoRoot "MADDesigner\Resources\Assets\Samples.xcas
 $Licenses = Join-Path $RepoRoot "ThirdParty\Licenses"
 
 # mad.exe links these runtime DLLs directly or through gnustep-base, measured
-# with llvm-objdump -p (docs/project/MAD_WINDOWS.md section 8).  The engine
+# with llvm-objdump -p (docs/developers/build/windows.md section 8).  The engine
 # build leaves them in the GNUstep prefix; the bundle puts them beside mad.exe
 # so the archive needs no GNUstep install.
 $RuntimeFiles = @(

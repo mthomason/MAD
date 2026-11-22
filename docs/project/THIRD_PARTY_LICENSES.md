@@ -647,7 +647,7 @@ written offer in `ThirdParty/Licenses/README.md`, which now names the image:
 the pinned sources are public in `Linux/toolchain.conf` and
 `Linux/libraries.conf`, the image rebuilds from them with
 `./Linux/build.sh --runtime`, and the offer stands for at least three years
-from the last distribution. `docs/project/TASKS.md` §10 carried the flag that publication
+from the last distribution. `docs/project/registers/TASKS.md` §10 carried the flag that publication
 would create this obligation; it is closed there.
 
 ---

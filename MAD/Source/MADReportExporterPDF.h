@@ -10,7 +10,7 @@
 //  over Core Graphics -- and MADReportExporterPDFCairo's everywhere else: a Cairo
 //  PDF surface with FreeType glyphs from the bundled Liberation faces.  The format
 //  is available on every platform; the two writers target structural parity (same
-//  pages, frames and text), not the same bytes (docs/project/MAD_PDF_LINUX.md).
+//  pages, frames and text), not the same bytes (docs/developers/build/pdf.md).
 //
 //  `--out` is required: a PDF is a file, not a stream.
 //

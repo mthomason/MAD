@@ -365,7 +365,7 @@ Die Worte des Benutzers folgen; die Implikationen sind die des Autors.
 - **Keine Föderations-Engine.** Nichts Neues spricht in einer Anweisung mit MySQL und einer API. Jedes Objekt führt gegen seine eigene Quelle aus; der Join ist lokal.
 - **Keine zweite Abfrageimplementierung.** Der Graph, der Compiler, die Treiber, die Ergebnistabelle und SQLites Join-Engine existieren bereits.
 - **Keine Änderung am Pull-everything-Cache.** Der zweistufige Cache ist tragend (`docs/05-companion-files.md` §5.1).
-- **Nicht eingeplant.** Dies ist die Designaufzeichnung für künftige Arbeit. `docs/project/TODO.md` ist die eigene Wunschliste des Benutzers (der Wunsch nach Vorschau-Paging gehört dorthin), `TASKS.md` ist die Engineering-Warteschlange, und `ROADMAP.md` sagt, was als Nächstes aufgegriffen wird. Nichts hier wird auf Initiative eines Agenten begonnen.
+- **Nicht eingeplant.** Dies ist die Designaufzeichnung für künftige Arbeit. `docs/project/registers/TODO.md` ist die eigene Wunschliste des Benutzers (der Wunsch nach Vorschau-Paging gehört dorthin), `TASKS.md` ist die Engineering-Warteschlange, und `ROADMAP.md` sagt, was als Nächstes aufgegriffen wird. Nichts hier wird auf Initiative eines Agenten begonnen.
 
 Zwei künftige Funktionen werden hier benannt, gehören aber in die Tracking-Dateien des Benutzers, nicht in dieses Design: die Behebung des **Vorschau-Pagings** (§9.2.1) und das **Plug-and-Play-Treibersystem** (§5.1). Dieses Dokument ist, wo ihre Form festgehalten wird; es plant sie nicht ein.
 

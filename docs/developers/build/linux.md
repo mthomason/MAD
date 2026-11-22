@@ -496,7 +496,7 @@ SELECT-list column order, which was set order and therefore differed from Apple'
 (same fields, same rows; noted in `Linux/README.md`). **Settled 2026-10-16**, with
 the JSON export shape decision (§10.1 below): the order is defined as the column
 alias in both SQL builders, so the generated SQL, the row cache and every export
-agree on both platforms (docs/project/BUGS.md, the SELECT-list entry; the order tests in
+agree on both platforms (docs/project/registers/BUGS.md, the SELECT-list entry; the order tests in
 `Linux/Tests/MADQuerySelectExpressionTests.m`).
 
 **Phase E status (2026-10-16, first half).** The export seam is real and the
@@ -595,7 +595,7 @@ generated class table (nine classes for the London fixture).
 **`pdf` is on the seam**: `MADReportExporterPDF` registers everywhere.  On Apple its
 body is Core Graphics + `MADPrintPageRenderer`, unchanged; off Apple it hands the same
 walked pages to `MADReportExporterPDFCairo`, which draws them into a Cairo PDF surface
-with FreeType glyphs from bundled Liberation faces (docs/project/MAD_PDF_LINUX.md).  The
+with FreeType glyphs from bundled Liberation faces (docs/developers/build/pdf.md).  The
 CLI has no local arms left.  The Apple move was byte-neutral: the deterministic export
 of the London sample is the same 43,177-byte, 5-page PDF before and after
 (`sha256 3eb2f1c4…` on both), measured by building the previous commit's CLI and
@@ -647,7 +647,7 @@ the C libraries natively.
    JSON-typed values — and `--format json-report` is that document plus a `report`
    member (the rendered sections). With it, the SELECT list's order is defined as the
    column alias, sorted, so the generated SQL, the row cache and every export agree on
-   both platforms (docs/project/BUGS.md, the SELECT-list entry — previously set order). The data
+   both platforms (docs/project/registers/BUGS.md, the SELECT-list entry — previously set order). The data
    half is built (`MADReportExporterJSON`, both platforms); the report member waits
    for the render half.
 2. **Renderer staging** — HTML/SVG first, PDF last, or macOS-side PDF workers?

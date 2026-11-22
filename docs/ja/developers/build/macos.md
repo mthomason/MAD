@@ -101,7 +101,7 @@ lang: ja-JP
 
 ### Phase 1: 不具合修正とマルチプラットフォームフレームワークの有効化（完了）
 
-1. **macOS監査と移植で表面化した6つの不具合を修正**し、単体テストとともに`docs/project/BUGS.md`から`docs/project/BUGS_FIXED.md`へアーカイブしました。
+1. **macOS監査と移植で表面化した6つの不具合を修正**し、単体テストとともに`docs/project/registers/BUGS.md`から`docs/project/registers/BUGS_FIXED.md`へアーカイブしました。
    - `MADKeyChain`（`MADFoundation/Source/MADKeyChain.m`）: `+credentialsExist:`、`+saveToken:forKey:withDescription:`、`+deleteKey:`、`+deleteSavedPasswordForKey:error:`で`kSecReturnData : @YES`を要求すること（および返された`CFDataRef`をリークすること）を止めた。
    - `MADURLFactory`（`MADFoundation/Source/MADURLFactory.m`）: `[NSBundle mainBundle].bundleIdentifier`が`nil`のとき`+newURLForLocalApplicationSupportDirectory`をガードし（`[MADApplication groupIdentifier]`にフォールバック）、`containerURLForSecurityApplicationGroupIdentifier:`を`#if defined(__APPLE__) && TARGET_OS_IPHONE`でガードしたため、エンタイトルメントのないmacOSプロセスは`~/Library/Group Containers/`でTCCプロンプトをトリガーする代わりに標準のユーザーごとディレクトリを使う。
    - `MADDataTable`（`MADFoundation/Source/MADDataTable.m`）: `NSDataWritingFileProtectionCompleteUnlessOpen`を`#if defined(__APPLE__) && TARGET_OS_IPHONE`でガードし、エンタイトルメントのないmacOSキャッシュ書き込みが成功するようにした。

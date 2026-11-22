@@ -27,7 +27,7 @@ typedef struct {
 } MADCLISQLiteHeader;
 
 /// Which store the document's definition is in.  A document written before the
-/// portable store (docs/project/MAD_STORE_MIGRATION.md) holds a Core Data SQLite file named
+/// portable store (docs/project/design/MAD_STORE_MIGRATION.md) holds a Core Data SQLite file named
 /// `analyitics`; one written since holds the portable store, `store.sqlite`.
 typedef NS_ENUM(NSInteger, MADCLIContainerStoreKind) {
 	MADCLIContainerStoreKindNone = 0,

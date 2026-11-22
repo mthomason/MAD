@@ -2,7 +2,7 @@
 <#
   Windows/Engine/build.ps1 — the Windows engine build entry point.
 
-  Reproduces the proven recipe (docs/project/MAD_WINDOWS.md) from the repo, not
+  Reproduces the proven recipe (docs/developers/build/windows.md) from the repo, not
   the scratch workspace:
 
     1. prerequisite check (Clang 20.1.8, lld, CMake, Ninja, MSYS2, git,

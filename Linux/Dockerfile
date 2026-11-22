@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 #
-#  Linux/Dockerfile -- the Phase B toolchain spike (docs/project/MAD_LINUX.md §9).
+#  Linux/Dockerfile -- the Phase B toolchain spike (docs/developers/build/linux.md §9).
 #
 #  Three stages:
 #    toolchain-base  Ubuntu 24.04 plus the distro clang and GNUstep's
@@ -133,6 +133,6 @@ RUN ln -s libgnustep-base.so.1.31.1 /usr/local/lib/libgnustep-base.so.1.31 \
 
 WORKDIR /work
 
-# No ENTRYPOINT, so the command reads the way docs/project/MAD_CLI.md writes it:
+# No ENTRYPOINT, so the command reads the way docs/developers/cli.md writes it:
 #   docker run --rm -v "$PWD/docs":/docs mad-cli:latest mad inspect /docs/x.mad
 CMD ["mad"]

@@ -145,7 +145,7 @@ MADCLIInvocation *MADCLIParseInvocation(NSArray <NSString *> *arguments, NSError
 		return invocation;
 	}
 
-	// `serve` is the long-lived stdio mode (docs/project/MAD_WINDOWS.md §Phase 4): it takes
+	// `serve` is the long-lived stdio mode (docs/developers/build/windows.md §Phase 4): it takes
 	// no document on the command line -- the path arrives in the `open` request.
 	if ([invocation.command isEqualToString: MADCLICommandServe]) {
 		if (positional.count > 1) {

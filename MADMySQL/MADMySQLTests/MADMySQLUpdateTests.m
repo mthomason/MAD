@@ -60,7 +60,7 @@
 }
 
 - (void)testExecuteWithoutRowDataRaisesTheUpdatesOwnError {
-	// docs/project/BUGS.md: with no rows to set, the column list was still empty when -execute
+	// docs/project/registers/BUGS.md: with no rows to set, the column list was still empty when -execute
 	// deleted its leading ", ", so NSMakeRange(0, 2) raised
 	// NSInvalidArgumentException instead of the class's own diagnostic.
 	MADMySQLUpdate *update = [MADMySQLUpdate updateWithConnection:[self connectionWithoutAServer]];
@@ -88,7 +88,7 @@
 }
 
 - (void)testExecuteWithoutAQualifierRaisesTheUpdatesOwnError {
-	// docs/project/BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and the
+	// docs/project/registers/BUGS.md: a nil qualifier left the WHERE-clause buffer empty, and the
 	// four-character delete raised NSInvalidArgumentException rather than the
 	// "forgot the WHERE clause" diagnostic the caller needs.
 	MADMySQLUpdate *update = [MADMySQLUpdate updateWithConnection:[self connectionWithoutAServer]];

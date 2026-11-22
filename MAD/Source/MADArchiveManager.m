@@ -100,7 +100,7 @@ int backup_file(char *path_origin, char *path_destination) {
 	// caller's path is used again after this returns, and a path truncated at its last
 	// slash made the composed document write over its own directory -- measured on
 	// Linux as "Open (/tmp/out) failed - Is a directory", and it cost a write that
-	// Apple's implementations, which leave the buffer alone, never noticed (docs/project/BUGS.md,
+	// Apple's implementations, which leave the buffer alone, never noticed (docs/project/registers/BUGS.md,
 	// the .mad byte-identity entry).
 	char *directory_copy = strdup(path_origin);
 	char *name_copy = strdup(path_origin);
@@ -179,7 +179,7 @@ int write_archive(char *outname, NSURL *filewrapper, int reproducible) {
 	// it, and they are read with -subpathsAtPath: rather than a URL enumerator:
 	// GNUstep's -enumeratorAtURL: yields URLs with the containing directory stripped,
 	// which is what used to send the old walk-up loop to "/" and never let it return
-	// (docs/project/BUGS.md, the byte-identity entry; Linux/README.md).
+	// (docs/project/registers/BUGS.md, the byte-identity entry; Linux/README.md).
 	NSString *basePath = filewrapper.path;
 	NSMutableArray <NSString *> *relativePaths = [NSMutableArray array];
 	for (NSString *relativePath in [[NSFileManager defaultManager] subpathsAtPath: basePath]) {

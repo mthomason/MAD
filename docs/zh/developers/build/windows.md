@@ -15,7 +15,7 @@ lang: zh-CN
 Windows 构建是 `Linux/` 的兄弟：无头引擎的 Objective-C 框架在
 Windows 上以 Clang 针对 GNUstep Base 原生编译，使运行 macOS
 应用和 Linux CLI 的同一引擎能在 Windows 上运行。本文档是
-`Linux/README.md` / `docs/project/MAD_LINUX.md` 的技术伴侣；它记录
+`Linux/README.md` / `docs/developers/build/linux.md` 的技术伴侣；它记录
 工具链配方、每部分为何锁定，以及本增量所做的决策。
 
 ---
@@ -321,7 +321,7 @@ Phase 3b 增加四个数据库驱动及其链接的 C 库：
   `err_handler` 与 `MADDatabaseSQLServer.m` 的冲突）。Phase 3a 的
   `+Identifier:` 守卫被移除——注册表查找在四个驱动全部链接时工作，
   由 `MADDatabaseDriverDispatchTests` 锁定（9/9）。
-* **测试清单**——**129 个套件 + 冒烟测试，1308 个测试，6 个需求，5 个跳过
+* **测试清单**——**130 个套件，1,313 个测试（含冒烟测试），6 个需求，5 个跳过
   （实时容器未运行时 48 个），0 个失败**（条形码增量
   增加 `MADBarcodesTests` 和 `MADBarcodeExportTests`；镜像收尾增加
   `MADImageElementTests` 和 `MADImageExportTests`）。针对本地
@@ -771,7 +771,7 @@ pkg-config shim（`Ensure-PkgConfigShim`，现在是函数，使
 **写出器。** `MAD/Source` 中的 `MADReportExporterPDFCairo` 是
 `MADReportExporterPDF` 的非 Apple 主体；Apple 主体未动且不链接 Cairo。
 结构目标、字体映射和确定性是
-`docs/project/MAD_PDF_LINUX.md` 的。`MADPDFExportTests` 是两个引擎上的验收测试；
+`docs/developers/build/pdf.md` 的。`MADPDFExportTests` 是两个引擎上的验收测试；
 它读回 PDF 并把页数、MediaBox、每个框架和每
 行文本与 `json-report` 基准比较，把条形码和图片作为图像
 XObject 检查，并检查确定性字节相等。
@@ -843,7 +843,7 @@ WPF **关于**窗口（Phase 5 shell 证明，Phase 6e 完成；引擎/应用版
 仅 Apple：它们列出 Apple 应用链接的 C 库，且不得宣称
 Apple 应用链接 GNUstep 运行时。公开的 `docs/windows.md` 和
 `README.md` 的 Windows 条目随 0.7 未签名发布（2026-11-21）落地；
-该页面在文档契约（`docs/project/LOCALIZATION.md`）下以全部六种语言存在。Windows 验证工作流
+该页面在文档契约（`docs/project/localization/LOCALIZATION.md`）下以全部六种语言存在。Windows 验证工作流
 （`.github/workflows/windows.yml`）针对附加到
 `v0.7.0` 的 `mad-windows-x64.zip` 引擎资产测试 .NET 套件；
 `Windows/package.ps1` 组装该资产和应用发布 zip。
@@ -885,9 +885,9 @@ $env:MAD_PG_TEST_DATABASE = "chinook"
 
 ## 相关文档
 
-* `docs/project/MAD_LINUX.md` 和 `Linux/README.md`——本
+* `docs/developers/build/linux.md` 和 `Linux/README.md`——本
   Windows 构建所镜像的 Linux 构建。
-* `docs/project/MAD_MACOS.md` 和 `Mac/README.md`——WPF 应用将镜像其行为的
+* `docs/developers/build/macos.md` 和 `Mac/README.md`——WPF 应用将镜像其行为的
   原生 macOS 应用。
 * `docs/project/THIRD_PARTY_LICENSES.md` §10——Windows 引擎的许可证
   登记表；`ThirdParty/Licenses/` 和 `ThirdParty/Licenses/Windows/`——

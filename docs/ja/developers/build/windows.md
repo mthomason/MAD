@@ -11,7 +11,7 @@ lang: ja-JP
 
 *元の日付に書かれ、現状の事実は2026-11-22に整合。*
 
-2026-11-18、Windows PoCのPhase 2である`windows-engine`ブランチのために`master`に対して書かれました。Windowsビルドは`Linux/`の兄弟です。ヘッドレスエンジンのObjective-Cフレームワークを、ClangでGNUstep Baseに対してWindows上でネイティブにコンパイルし、macOSアプリとLinux CLIを動かす同じエンジンがWindowsでも動くようにします。このドキュメントは`Linux/README.md` / `docs/project/MAD_LINUX.md`の技術的コンパニオンであり、ツールチェーンレシピ、各ピースを固定する理由、この増分が下した決定を記録します。
+2026-11-18、Windows PoCのPhase 2である`windows-engine`ブランチのために`master`に対して書かれました。Windowsビルドは`Linux/`の兄弟です。ヘッドレスエンジンのObjective-Cフレームワークを、ClangでGNUstep Baseに対してWindows上でネイティブにコンパイルし、macOSアプリとLinux CLIを動かす同じエンジンがWindowsでも動くようにします。このドキュメントは`Linux/README.md` / `docs/developers/build/linux.md`の技術的コンパニオンであり、ツールチェーンレシピ、各ピースを固定する理由、この増分が下した決定を記録します。
 
 ---
 
@@ -164,7 +164,7 @@ Phase 3bは4つのデータベースドライバと、それらがリンクす�
 * **Cライブラリ**（`Windows/Engine/libraries.conf`、`build.ps1` §3c）: OpenSSL 3.5.9（Strawberry Perl + `VC-WIN64A` + `nmake`、静的）、FreeTDS 1.4.27（CMake `db-lib`、`ENABLE_MSDBLIB`、`sybdb.h` BOOL編集）、MariaDB Connector/C 3.4.11（CMake `mariadbclient`、認証プラグイン静的）、libpq 17.11（**Meson + MSVC `cl.exe`**、`libpq_st` + `libpgcommon_shlib` + `libpgport_shlib`を1つのCOFF `libpq.lib`にマージ）。PostgreSQL 17はMSVCビルドを落としたため、MesonがそのWindowsパスです。`cl.exe`（`clang-cl`ではなく）を使うのは、PostgreSQLのMesonが`cc.get_id() == 'msvc'`をチェックし、`clang-cl`が`clang-cl`と報告するためで、`win32gettimeofday.c`/`dirent.c`と`win32_msvc`インクルードディレクトリが静かに落ちます。MesonとStrawberry Perlがドキュメント化された前提条件です。
 * **BDHost** — `MADFoundation/Source/BDHost.m`が`winsock2.h`/`ws2tcpip.h`上の`#elif defined(_WIN32)`分岐を得ます（`WSAStartup`を一度、`getaddrinfo`/`getnameinfo`、IPv4のみ）。`+ipAddresses`/`+ethernetAddresses`はWindowsでコンパイルアウトされます。`BDHostTests`は3/3で通ります。
 * **ドライバ** — 4つの`cmake/*Sources.cmake`リスト（18/1/3/4ファイル）と`<MADTds/sybdb.h>`、`<MADTdsClient/MADTdsClient.h>`、`<MADPostgres/libpq-fe.h>`などのヘッダーシム。`MADTdsDb.m`は通常どおりリンクされます（そのグローバル`err_handler`は`MADDatabaseSQLServer.m`のものと衝突します）。Phase 3aの`+Identifier:`ガードは除去され、4つのドライバすべてをリンクした状態でレジストリルックアップが機能し、`MADDatabaseDriverDispatchTests`（9/9）で固定されます。
-* **テストインベントリ** — **129スイート + スモークテスト、1308テスト、6ニーズ、5スキップ（ライブコンテナが動いていないときは48）、0失敗**（バーコード増分が`MADBarcodesTests`と`MADBarcodeExportTests`を追加し、イメージクロージャが`MADImageElementTests`と`MADImageExportTests`を追加）。ローカル`127.0.0.1`コンテナに対するライブスイート: `MADMySQLLiveTests` 44/44、`MADTdsClientLiveTests` 29/29、`MADPostgresLiveTests` 14/14。CLIの`mad refresh`はMySQL 50行 / TDS 20行 / PostgreSQL 25行を返します。
+* **テストインベントリ** — **130スイート、1,313テスト（スモークテストを含む）、6ニーズ、5スキップ（ライブコンテナが動いていないときは48）、0失敗**（バーコード増分が`MADBarcodesTests`と`MADBarcodeExportTests`を追加し、イメージクロージャが`MADImageElementTests`と`MADImageExportTests`を追加）。ローカル`127.0.0.1`コンテナに対するライブスイート: `MADMySQLLiveTests` 44/44、`MADTdsClientLiveTests` 29/29、`MADPostgresLiveTests` 14/14。CLIの`mad refresh`はMySQL 50行 / TDS 20行 / PostgreSQL 25行を返します。
 
 ## 6d. Phase 4 — stdio JSONプロセス契約
 
@@ -333,7 +333,7 @@ Phase 6fはプレゼンテーションのみです。エンジン、プロトコ
 
 **フォント。** Liberationフェイスは`Engine/build/fonts`にコピーされ、`MADReportExporterPDFCairo`は`<exe>/fonts`を最初に検索し（`mad.exe`が`build/fonts`を見つけ、`build/tests`のテストが`<exe>/../fonts`を通じて`build/fonts`を見つける）、次にインストール済みレイアウトと`MAD_FONTS_DIR`を検索します。
 
-**ライター。** `MAD/Source`の`MADReportExporterPDFCairo`は`MADReportExporterPDF`の非Apple本体です。Apple本体は変更なしでCairoをリンクしません。構造目標、フォントマッピング、決定論は`docs/project/MAD_PDF_LINUX.md`のものです。`MADPDFExportTests`は両エンジンでの受け入れテストで、PDFを読み戻し、ページ数、MediaBox、すべてのフレーム、すべてのラインのテキストを`json-report`オラクルと比較し、バーコードとピクチャを画像XObjectとしてチェックし、決定論的バイト同等性をチェックします。
+**ライター。** `MAD/Source`の`MADReportExporterPDFCairo`は`MADReportExporterPDF`の非Apple本体です。Apple本体は変更なしでCairoをリンクしません。構造目標、フォントマッピング、決定論は`docs/developers/build/pdf.md`のものです。`MADPDFExportTests`は両エンジンでの受け入れテストで、PDFを読み戻し、ページ数、MediaBox、すべてのフレーム、すべてのラインのテキストを`json-report`オラクルと比較し、バーコードとピクチャを画像XObjectとしてチェックし、決定論的バイト同等性をチェックします。
 
 **ライセンス。** cairo（MPL-1.1）、pixman（MIT）、FreeType（FTL）、Liberationフォント（SIL OFL 1.1）は`THIRD_PARTY_LICENSES.md` §3.5と§10に登録され、テキストは`ThirdParty/Licenses/`にあり、`WindowsLicenseRegistry`がAboutウィンドウのために4つすべてを一覧します。どれも再リンク義務を追加しません。
 
@@ -357,7 +357,7 @@ Windowsエンジンは第3の配布面であり、`docs/project/THIRD_PARTY_LICE
 
 正確なDLL／静的の分割は、ビルドされた`mad.exe`から`dumpbin /dependents`（または`llvm-objdump -p`）で測定され、Phase 3bレポートに記録されます。ツールチェーンレイアウトから推測されません。ビルドと任意のパッケージは`ThirdParty/Licenses/`と`NOTICE`をコピーしなければなりません。
 
-WPFの**About**ウィンドウ（Phase 5シェル証明、Phase 6eで完成。エンジン／アプリケーションバージョンの分割はPhase 6fで到来）はMacの3つのタブ——Overview、License & Notice、Acknowledgements——をミラーし、上記のすべてのコンポーネントをWebView2を含めて一覧し、`ThirdParty/Licenses/Windows/`のテキスト、共有ルートテキスト、LGPL書面による申し出を表示します。AcknowledgementsリストはWindowsのコンポーネントリストであり、Appleアプリのものではありません。License & NoticeタブはMIT／ブランド通知とWindows再リンクの申し出を運び、Overviewは機械支援翻訳の通知を運びます。そのクロームはローカライズされますが、すべてのライセンス本体、コンポーネント通知、ライセンス名、著作権行は逐語的な英語のままです（`MAD_APP_LOCALIZATION.md`のD6/§8）。既存のiOSとmacOSのAbout画面はApple専用のままです。それらはAppleアプリがリンクするCライブラリを一覧し、AppleアプリがGNUstepランタイムをリンクすると主張してはなりません。公開`docs/windows.md`と`README.md`のWindowsエントリは0.7の未署名リリース（2026-11-21）とともに着地しました。ページはドキュメント契約（`docs/project/LOCALIZATION.md`）の下で6言語すべてに存在します。Windows検証ワークフロー（`.github/workflows/windows.yml`）は`v0.7.0`に添付された`mad-windows-x64.zip`エンジンアセットに対して.NETスイートをテストし、`Windows/package.ps1`はそのアセットとアプリのリリースzipの両方を組み立てます。
+WPFの**About**ウィンドウ（Phase 5シェル証明、Phase 6eで完成。エンジン／アプリケーションバージョンの分割はPhase 6fで到来）はMacの3つのタブ——Overview、License & Notice、Acknowledgements——をミラーし、上記のすべてのコンポーネントをWebView2を含めて一覧し、`ThirdParty/Licenses/Windows/`のテキスト、共有ルートテキスト、LGPL書面による申し出を表示します。AcknowledgementsリストはWindowsのコンポーネントリストであり、Appleアプリのものではありません。License & NoticeタブはMIT／ブランド通知とWindows再リンクの申し出を運び、Overviewは機械支援翻訳の通知を運びます。そのクロームはローカライズされますが、すべてのライセンス本体、コンポーネント通知、ライセンス名、著作権行は逐語的な英語のままです（`MAD_APP_LOCALIZATION.md`のD6/§8）。既存のiOSとmacOSのAbout画面はApple専用のままです。それらはAppleアプリがリンクするCライブラリを一覧し、AppleアプリがGNUstepランタイムをリンクすると主張してはなりません。公開`docs/windows.md`と`README.md`のWindowsエントリは0.7の未署名リリース（2026-11-21）とともに着地しました。ページはドキュメント契約（`docs/project/localization/LOCALIZATION.md`）の下で6言語すべてに存在します。Windows検証ワークフロー（`.github/workflows/windows.yml`）は`v0.7.0`に添付された`mad-windows-x64.zip`エンジンアセットに対して.NETスイートをテストし、`Windows/package.ps1`はそのアセットとアプリのリリースzipの両方を組み立てます。
 
 ## テストデータベース
 
@@ -390,6 +390,6 @@ $env:MAD_PG_TEST_DATABASE = "chinook"
 
 ## 関連ドキュメント
 
-* `docs/project/MAD_LINUX.md`と`Linux/README.md` — このWindowsビルドがミラーするLinuxビルド。
-* `docs/project/MAD_MACOS.md`と`Mac/README.md` — WPFアプリが振る舞いをミラーするネイティブmacOSアプリケーション。
+* `docs/developers/build/linux.md`と`Linux/README.md` — このWindowsビルドがミラーするLinuxビルド。
+* `docs/developers/build/macos.md`と`Mac/README.md` — WPFアプリが振る舞いをミラーするネイティブmacOSアプリケーション。
 * `docs/project/THIRD_PARTY_LICENSES.md` §10 — Windowsエンジンのライセンスレジストリ。`ThirdParty/Licenses/`と`ThirdParty/Licenses/Windows/` — テキストと書面による再リンクの申し出。

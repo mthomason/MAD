@@ -15,7 +15,7 @@ of the Windows PoC). The Windows build is the sibling
 of `Linux/`: the headless engine's Objective-C frameworks compiled natively on
 Windows with Clang against GNUstep Base, so the same engine that runs the macOS
 app and the Linux CLI can run on Windows. This document is the technical
-companion to `Linux/README.md` / `docs/project/MAD_LINUX.md`; it records the
+companion to `Linux/README.md` / `docs/developers/build/linux.md`; it records the
 toolchain recipe, why each piece is pinned, and the decisions this increment
 made.
 
@@ -331,7 +331,7 @@ Phase 3b adds the four database drivers and the C libraries they link:
   `err_handler` collides with `MADDatabaseSQLServer.m`'s). The Phase 3a
   `+Identifier:` guard is removed — the registry lookup works with all four drivers
   linked, pinned by `MADDatabaseDriverDispatchTests` (9/9).
-* **Test inventory** — **129 suites + the smoke test, 1308 tests, 6 needs, 5 skips
+* **Test inventory** — **130 suites, 1,313 tests (including the smoke test), 6 needs, 5 skips
   (48 when the live containers are not running), 0 failures** (the barcode increment
   added `MADBarcodesTests` and `MADBarcodeExportTests`; the image closure added
   `MADImageElementTests` and `MADImageExportTests`). Live suites against the local
@@ -794,7 +794,7 @@ then the installed layouts and `MAD_FONTS_DIR`.
 **Writer.** `MADReportExporterPDFCairo` in `MAD/Source` is the non-Apple body of
 `MADReportExporterPDF`; the Apple body is untouched and does not link Cairo. The
 structural target, the font mapping and the determinism are
-`docs/project/MAD_PDF_LINUX.md`'s. `MADPDFExportTests` is the acceptance test on both
+`docs/developers/build/pdf.md`'s. `MADPDFExportTests` is the acceptance test on both
 engines; it reads the PDF back and compares page count, MediaBox, every frame and every
 line's text with the `json-report` oracle, checks the barcode and picture as image
 XObjects, and checks deterministic byte equality.
@@ -870,7 +870,7 @@ Apple-only: they list the C libraries the Apple app links and must not claim the
 Apple app links the GNUstep runtime. The public `docs/windows.md` and the
 `README.md` Windows entry landed with the 0.7 unsigned release (2026-11-21);
 the page is present in all six languages under the documentation contract
-(`docs/project/LOCALIZATION.md`). The Windows verification workflow
+(`docs/project/localization/LOCALIZATION.md`). The Windows verification workflow
 (`.github/workflows/windows.yml`) tests the .NET suites against the
 `mad-windows-x64.zip` engine asset attached to `v0.7.0`;
 `Windows/package.ps1` assembles both that asset and the app's release zip.
@@ -912,9 +912,9 @@ results are documented in the Phase 3b report, not here.
 
 ## Related documents
 
-* `docs/project/MAD_LINUX.md` and `Linux/README.md` — the Linux build this
+* `docs/developers/build/linux.md` and `Linux/README.md` — the Linux build this
   Windows build mirrors.
-* `docs/project/MAD_MACOS.md` and `Mac/README.md` — the native macOS application
+* `docs/developers/build/macos.md` and `Mac/README.md` — the native macOS application
   whose behaviour the WPF app will mirror.
 * `docs/project/THIRD_PARTY_LICENSES.md` §10 — the Windows engine's licensing
   register; `ThirdParty/Licenses/` and `ThirdParty/Licenses/Windows/` — the

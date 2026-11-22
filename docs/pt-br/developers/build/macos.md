@@ -137,7 +137,7 @@ mais Linux para os doze frameworks headless):
 ### Fase 1: correções de bugs e habilitação multiplataforma dos frameworks (Concluída)
 
 1. **Corrigidos 6 defeitos surgidos durante a auditoria e a portabilidade para macOS** e arquivados de
-   `docs/project/BUGS.md` para `docs/project/BUGS_FIXED.md` com testes unitários:
+   `docs/project/registers/BUGS.md` para `docs/project/registers/BUGS_FIXED.md` com testes unitários:
    - `MADKeyChain` (`MADFoundation/Source/MADKeyChain.m`): parou de solicitar
      `kSecReturnData : @YES` (e de vazar o `CFDataRef` retornado) em
      `+credentialsExist:`, `+saveToken:forKey:withDescription:`, `+deleteKey:` e

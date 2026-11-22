@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADTdsClient subset the Windows build compiles (docs/project/MAD_WINDOWS.md §4): the 3
+# The MADTdsClient subset the Windows build compiles (docs/developers/build/windows.md §4): the 3
 # implementation files of the Xcode target's 4, the same list as
 # Linux/cmake/MADTdsClientSources.cmake.
 #

@@ -1223,4 +1223,4 @@ xcodebuild analyze -workspace Reports.xcworkspace -scheme MADAPI \
 | Mac Info.plist | `Mac/Resources/Info.plist` |
 | Mac smoke test | `Mac/Tests/MADMacSmokeTest.m` |
 | Licence files | `ThirdParty/Licenses/` |
-| Documentation localization contract | `docs/project/LOCALIZATION.md` |
+| Documentation localization contract | `docs/project/localization/LOCALIZATION.md` |

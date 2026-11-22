@@ -9,7 +9,7 @@
 //  pages, MADReportLineRepresentation's lines -- into a Cairo PDF surface, with
 //  FreeType shaping the glyphs from the bundled Liberation faces.  Core Graphics
 //  cannot be reproduced, so the target is structural parity, not byte parity
-//  (docs/project/MAD_PDF_LINUX.md).
+//  (docs/developers/build/pdf.md).
 //
 //  Compiled only where Core Graphics is not (the Linux and Windows source lists);
 //  the Apple body keeps its own path untouched.

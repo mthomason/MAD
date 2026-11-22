@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADPostgres subset the Linux build compiles (docs/project/MAD_LINUX.md §9): the 4
+# The MADPostgres subset the Linux build compiles (docs/developers/build/linux.md §9): the 4
 # implementation files of the Xcode target's 5.
 #
 # Excluded, with reason:

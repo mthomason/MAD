@@ -179,7 +179,7 @@ Before finishing, you **must** run and pass all of the following verification ga
    ```sh
    ./Linux/build.sh
    ```
-4. **Update `docs/project/BUGS.md` / `docs/project/BUGS_FIXED.md`:**
+4. **Update `docs/project/registers/BUGS.md` / `docs/project/registers/BUGS_FIXED.md`:**
    Record the fixed defects (`MADDatabaseSqlite3` `SQLITE_OPEN_CREATE` on missing source DB, `MADMacDocument` missing `MADOperationHoldsCredentialsProtocol` dependency) per `AGENTS.md`.
 5. **Follow the `AGENTS.md` PR & Approval Gate Flow:**
    * Commit all work with `git commit -s` (DCO sign-off).

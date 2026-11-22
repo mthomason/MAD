@@ -5,7 +5,7 @@
 //  MAD Designer
 //
 //  `mad serve` -- the long-lived process boundary the Windows shell speaks (the
-//  WPF app's engine; docs/project/MAD_WINDOWS.md §Phase 4).  It reads newline-delimited
+//  WPF app's engine; docs/developers/build/windows.md §Phase 4).  It reads newline-delimited
 //  JSON requests on standard input and writes one newline-delimited JSON response
 //  per request on standard output.  Standard output carries only the protocol;
 //  every diagnostic already goes to standard error (madlog, MADCLIError), so the

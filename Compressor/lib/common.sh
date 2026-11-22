@@ -136,7 +136,7 @@ fetch_source() {
 				done
 			done
 			[[ -f "${MEDIA_DIR}/unpinned-${basename}" ]] \
-				|| die "download failed for ${basename} from: ${urls} (first build needs network access; see docs/project/DEVELOPER.md)"
+				|| die "download failed for ${basename} from: ${urls} (first build needs network access; see docs/project/build/DEVELOPER.md)"
 		fi
 		RECORDED_SHA="$(shasum -a 256 "${MEDIA_DIR}/unpinned-${basename}" | awk '{print $1}')"
 		log "WARNING: no sha256 pinned for ${basename}; computed ${RECORDED_SHA}"

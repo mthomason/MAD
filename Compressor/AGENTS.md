@@ -37,7 +37,7 @@ include dirs, all gitignored.
 
 First run on a fresh checkout (network required): `build.sh --all --platforms
 ios,simulator`. Xcode builds then no-op through their "Ensure Libraries"
-phases; see `docs/project/LIBRARIES.md` and `docs/project/DEVELOPER.md` for the day-to-day commands and
+phases; see `docs/developers/build/libraries.md` and `docs/project/build/DEVELOPER.md` for the day-to-day commands and
 the version-bump procedure.
 
 To add a new third-party library: add its row to `matrix.conf`, write
@@ -49,7 +49,7 @@ Xcode target.
 target name, install layout, auth-plugin types, the LibreSSL probe answer), the
 freetds recipe (installed-header patch), the postgres recipe (client-only
 subtrees and merged `libpostgres.a` archive) and the zint recipe (cmake flags) all
-encode assumptions about the pinned version -- `docs/project/LIBRARIES.md` section 1 lists
+encode assumptions about the pinned version -- `docs/developers/build/libraries.md` section 1 lists
 them. When a version bumps, re-check those.
 
 ## Testing and Reports
@@ -57,7 +57,7 @@ them. When a version bumps, re-check those.
 *   **Note**: the project ships no test suite of its own. `build.sh --verify
     --all` is its verification, and the consuming frameworks' suites are the
     functional proof.
-*   **Tracking**: [`BUGS.md`](../docs/project/BUGS.md) -- the defect register;
-    [`TASKS.md`](../docs/project/TASKS.md) -- the engineering queue. Maintain them, but do
+*   **Tracking**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- the defect register;
+    [`TASKS.md`](../docs/project/registers/TASKS.md) -- the engineering queue. Maintain them, but do
     not start work from them.
-*   **Design document**: [`LIBRARIES.md`](../docs/project/LIBRARIES.md).
+*   **Design document**: [`LIBRARIES.md`](../docs/developers/build/libraries.md).

@@ -8,7 +8,7 @@
 //  MADPostgres.  Nothing in this file contacts a running server -- the
 //  connection-failure path proves the failure is reported cleanly against a
 //  dead port.  The tests that require the local PostgreSQL instance described
-//  in docs/project/DEVELOPER.md are in MADPostgresLiveTests.m.
+//  in docs/project/build/DEVELOPER.md are in MADPostgresLiveTests.m.
 //
 
 #import "MADTestSupport.h"

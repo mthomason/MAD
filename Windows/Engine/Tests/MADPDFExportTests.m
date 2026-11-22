@@ -4,7 +4,7 @@
 //  MADPDFExportTests.m
 //  Linux/Tests
 //
-//  The headless PDF writer end to end (docs/project/MAD_PDF_LINUX.md): a document
+//  The headless PDF writer end to end (docs/developers/build/pdf.md): a document
 //  is opened (its own process -- opening the London fixture twice in one process
 //  conflicts, see MADReportExporterTests), refreshed, given a barcode and a
 //  picture, and exported.  The PDF is read back with the small reader below and

@@ -136,7 +136,7 @@ plus Linux for the twelve headless frameworks):
 ### Phase 1: Bug Fixes & Multiplatform Framework Enablement (Completed)
 
 1. **Fixed 6 defects surfaced during the macOS audit & port** and archived them from
-   `docs/project/BUGS.md` to `docs/project/BUGS_FIXED.md` with unit tests:
+   `docs/project/registers/BUGS.md` to `docs/project/registers/BUGS_FIXED.md` with unit tests:
    - `MADKeyChain` (`MADFoundation/Source/MADKeyChain.m`): stopped requesting
      `kSecReturnData : @YES` (and leaking the returned `CFDataRef`) in
      `+credentialsExist:`, `+saveToken:forKey:withDescription:`, `+deleteKey:`, and

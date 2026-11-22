@@ -11,13 +11,7 @@ This page describes the `mad` command-line tool: the engine's embedding surface,
 This document defines a command-line tool that opens, inspects, refreshes and exports
 `.mad` documents without a user interface.
 
-It exists because the application cannot reach the two places it needs to go. It
-cannot run on a Mac as a Mac application, and it cannot run on Windows at all,
-because its entire presentation layer is UIKit. A CLI needs none of that: the data
-path -- open the document, run the query, fill the cache, render the report -- is
-almost entirely free of UIKit already (see §4). Building the CLI first is therefore
-not a detour around the platform work; it **is** the platform work, done in the order
-that produces something usable at each step.
+This record was written when the Apple application's presentation layer was entirely UIKit, so it could not run as a native macOS or Windows application. The native macOS (AppKit) and Windows (WPF) applications now exist; the `mad` CLI remains the headless path that runs the same engine without a UI. The data path -- open the document, run the query, fill the cache, render the report -- is almost entirely free of UIKit (see §4), which is what makes the CLI portable.
 
 ---
 

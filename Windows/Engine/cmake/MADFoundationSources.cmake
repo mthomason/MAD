@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADFoundation subset the Windows build compiles (docs/project/MAD_WINDOWS.md
+# The MADFoundation subset the Windows build compiles (docs/developers/build/windows.md
 # §4): the Linux list (27 of the framework's 28 implementation files plus
 # madlib.c) minus one file, for Windows.
 #
