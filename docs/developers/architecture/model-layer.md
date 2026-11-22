@@ -1,4 +1,14 @@
+---
+layout: default
+title: "The MADModel layer"
+description: "The document read-model over the Rptq entities, and how it is kept current."
+---
+
 # MADModel — the document read-model layer
+
+This page describes `MADModel`, the read-model over the `Rptq` entities: what each class is, how it is populated and kept current, and who reads it.
+
+*Written on the original date; current-state facts reconciled 2026-11-22.*
 
 **Scope:** `MAD/Source/model/MADModel*.{h,m}`, `MAD/Source/model/MADTableFieldIdentifier.{h,m}`, and every
 consumer of the layer in `MAD` and `MAD Designer`.

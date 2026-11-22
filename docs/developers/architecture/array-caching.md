@@ -1,4 +1,14 @@
+---
+layout: default
+title: "MADArrayCaching"
+description: "The disk-backed, append-only array behind the report render cache."
+---
+
 # `MADArrayCaching`
+
+This page describes `MADArrayCaching`, the disk-backed append-only array used as the report render cache.
+
+*Written on the original date; current-state facts reconciled 2026-11-22.*
 
 A disk-backed, append-only ordered array, used as the report's **render cache**. Written
 2026-10-01 against `master` at `7ebe82f89`.

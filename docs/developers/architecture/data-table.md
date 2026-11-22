@@ -1,4 +1,14 @@
+---
+layout: default
+title: "The MADDataTable architecture"
+description: "The data-table class cluster across the frameworks and its decoupling plan."
+---
+
 # MADDataTable — Architecture & Decoupling Report
+
+This page is the architecture report for `MADDataTable` and every implementation across `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`. It records the class cluster and the decoupling work.
+
+*Written on the original date; current-state facts reconciled 2026-11-22.*
 
 **Scope:** `MADDataTable` and every implementation, subclass, protocol, and call site across
 `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
