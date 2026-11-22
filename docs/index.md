@@ -100,6 +100,11 @@ Read the [introduction to the specification](README.html) first, or jump to a ch
   intended first contribution: subclass `MADDatabase`, register the
   driver, return rows.
 
+## Developers
+
+Embed the engine, drive it from the `mad` CLI, and read the data-object and
+architecture records: [developer documentation](developers/).
+
 ## The direction
 
 [Vision](vision.html) — reports as composable database tables, multi-source
