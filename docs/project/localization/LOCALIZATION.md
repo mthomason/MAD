@@ -27,12 +27,12 @@ The translation suffix keeps its case: `translations/README_pt-BR.md`, not
 
 ## The canonical public set
 
-Six languages × 26 documents. A new public page must be added to every language at the
+Six languages × 40 documents. A new public page must be added to every language at the
 same time. A page that is missing from a language is not an error the switcher reports:
 the per-page counterpart lookup falls back to that language's landing page, so the reader
 silently lands somewhere else. Add the page rather than accept the fallback.
 
-### Website pages (15, under `docs/`)
+### Website pages (29, under `docs/`)
 
 | English source | Served URL |
 | --- | --- |
@@ -51,6 +51,20 @@ silently lands somewhere else. Add the page rather than accept the fallback.
 | `docs/windows.md` | `/windows.html` |
 | `docs/vision.md` | `/vision.html` |
 | `docs/tutorials/driver-authoring.md` | `/tutorials/driver-authoring.html` |
+| `docs/developers/index.md` | `/developers/` |
+| `docs/developers/cli.md` | `/developers/cli.html` |
+| `docs/developers/data-object.md` | `/developers/data-object.html` |
+| `docs/developers/multi-source.md` | `/developers/multi-source.html` |
+| `docs/developers/sql-entry.md` | `/developers/sql-entry.html` |
+| `docs/developers/satellites.md` | `/developers/satellites.html` |
+| `docs/developers/build/linux.md` | `/developers/build/linux.html` |
+| `docs/developers/build/windows.md` | `/developers/build/windows.html` |
+| `docs/developers/build/macos.md` | `/developers/build/macos.html` |
+| `docs/developers/build/libraries.md` | `/developers/build/libraries.html` |
+| `docs/developers/build/pdf.md` | `/developers/build/pdf.html` |
+| `docs/developers/architecture/data-table.md` | `/developers/architecture/data-table.html` |
+| `docs/developers/architecture/model-layer.md` | `/developers/architecture/model-layer.html` |
+| `docs/developers/architecture/array-caching.md` | `/developers/architecture/array-caching.html` |
 
 Each translated page mirrors its source's path under the language directory:
 `docs/de/01-document.md` serves `/de/01-document.html`, and `docs/es/01-document.md`
@@ -250,7 +264,7 @@ Run from the repository root unless a step says otherwise.
 3. **Check the excluded trees are not published.**
 
    ```sh
-   find /tmp/madsite -type d \( -name project -o -name archive \) | wc -l   # 0
+   find /tmp/madsite -type d \( -name project -o -name archive -o -name superpowers \) | wc -l   # 0
    ```
 
 4. **Check every public page exists in every language.** Compare the English page set
@@ -259,15 +273,16 @@ Run from the repository root unless a step says otherwise.
    ```sh
    for d in zh ja pt-br de es; do
      echo "== $d"
-     diff <(cd /tmp/madsite && find . -name '*.html' -not -path './assets/*' -not -path "./$d/*" \
-             -not -path './zh/*' -not -path './ja/*' -not -path './pt-br/*' -not -path './de/*' \
-             -not -path './es/*' | sort) \
+     diff <(cd /tmp/madsite && find . -name '*.html' -not -path './assets/*' -not -path './404.html' \
+             -not -path "./$d/*" -not -path './zh/*' -not -path './ja/*' -not -path './pt-br/*' \
+             -not -path './de/*' -not -path './es/*' | sort) \
           <(cd /tmp/madsite/$d && find . -name '*.html' | sort)
    done
    ```
 
-   Expected: no output for any language. Each language serves its 14 pages (the English
-   set includes `/assets/london.html`, the sample report, which is excluded here).
+   Expected: no output for any language. Each language serves its 29 pages (the English
+   set includes `/assets/london.html`, the sample report, and `/404.html`, which are
+   excluded here).
 
 5. **Check code blocks are byte-identical.** The code in a translation must not drift.
    Extract fenced blocks from the English file and its counterpart, then compare:
@@ -302,6 +317,17 @@ Run from the repository root unless a step says otherwise.
    fallback for an untranslated page lands on that language's landing page rather than
    a 404.
 
+8. **Run the automated gates.**
+
+   ```sh
+   python3 -I scripts/docs/check_links.py
+   python3 -I scripts/docs/check_translations.py --require-complete
+   python3 -I scripts/docs/check_site_facts.py --docs docs --repo .
+   ```
+
+   Expected: `broken: 0`; no missing pages, code-block drift, or structure drift;
+   no version mismatch, banned stale literal, or leak.
+
 For the bug registers specifically, parity is a count check:
 
 ```sh
@@ -316,9 +342,9 @@ Spanish (`es-419`, directory `docs/es/`, suffix `_es`, label `Español`) was the
 added, on 2026-11-03, and followed these steps. The same steps apply to any language;
 substitute its tag, directory, suffix, and label.
 
-1. **Create `docs/<lang>/`** and translate the 14 website pages, mirroring the English
-   relative paths. Each page gets its BCP-47 tag as `lang:` in its front matter — for
-   Spanish, `lang: es-419` on every page.
+1. **Create `docs/<lang>/`** and translate the 29 website pages, mirroring the English
+   relative paths, including the `developers/` tree. Each page gets its BCP-47 tag as
+   `lang:` in its front matter — for Spanish, `lang: es-419` on every page.
 2. **Add a `_config.yml` default** so pages without an explicit `lang` still resolve:
 
    ```yaml
@@ -329,11 +355,13 @@ substitute its tag, directory, suffix, and label.
          locale: es_419
    ```
 
-   The `*/project` and `*/archive` exclusions already cover the new directory.
+   The `*/project`, `*/archive`, and `*/superpowers` exclusions already cover the new
+   directory.
 3. **Add the layout branch** in `docs/_layouts/default.html`: an `is_es` flag, a
    `base_url` strip for `/es`, an `es` candidate and match with a `/es/` fallback, the
    `hreflang="es-419"` link (plus the neutral `hreflang="es"` alternate pointing at the
-   same URL, when the variant is regional), the translation notice, and the footer string.
+   same URL, when the variant is regional), the translation notice, the footer string,
+   and the four section-navigation labels (`Format`, `Apps`, `Developers`, `Vision`).
 4. **Add the switcher entry in every existing branch.** The layout has one `<nav>` block
    per language (English, Chinese, Japanese, Portuguese, German, Spanish); each must list
    the new label in the fixed order, and the new block must list the other languages.
@@ -346,5 +374,6 @@ substitute its tag, directory, suffix, and label.
 6. **Update this manifest**: the languages table, the status column, the switcher order,
    the `hreflang` set, and this section.
 7. **Validate**: build, links, page counts, code-block identity, heading/table/fence
-   parity, and the switcher in all directions. A new language is not done until every
-   check in the validation checklist passes for all seven.
+   parity, the switcher in all directions, and the three automated gates. A new
+   language is not done until every check in the validation checklist passes for all
+   seven languages.
