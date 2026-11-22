@@ -18,7 +18,7 @@ guia você passo a passo pelo primeiro; essa é a primeira contribuição recome
   C, compila os onze frameworks headless e executa suas suítes de teste.
 * Nenhum servidor de banco de dados é obrigatório para contribuir: as suítes de testes live de MySQL, SQL Server e
   PostgreSQL são puladas automaticamente quando nenhum servidor está acessível, e
-  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) documenta os
+  [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md) documenta os
   contêineres Docker que fornecem esses bancos de teste.
 
 ## Primeiros passos
@@ -38,7 +38,7 @@ guia você passo a passo pelo primeiro; essa é a primeira contribuição recome
    ./Linux/build.sh
    ```
 
-   [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) traz a matriz completa
+   [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md) traz a matriz completa
    de comandos, o caminho compartilhado de DerivedData esperado pelos
    frameworks e a configuração dos bancos de dados de teste.
 3. Escolha uma tarefa: um novo driver, um elemento de relatório ou uma issue marcada com
@@ -72,9 +72,9 @@ que não seja corrigida nem registrada é tratada como falha.
   própria declaração — um aviso de código não utilizado sem marcação significa código morto que deve ser removido.
 * Novos arquivos devem conter o cabeçalho de uma linha: `Copyright © 2012-2026 Michael
   Thomason. SPDX-License-Identifier: MIT` (`//` para código-fonte, `#` para scripts).
-* [`docs/project/BUGS.md`](../docs/project/BUGS.md) registra defeitos em aberto junto com
+* [`docs/project/registers/BUGS.md`](../docs/project/registers/BUGS.md) registra defeitos em aberto junto com
   os testes que os reproduzem; quando você corrige um defeito, a entrada correspondente é movida para
-  [`docs/project/BUGS_FIXED.md`](../docs/project/BUGS_FIXED.md) — uma correção não
+  [`docs/project/registers/BUGS_FIXED.md`](../docs/project/registers/BUGS_FIXED.md) — uma correção não
   registrada é considerada incompleta.
 
 ## Developer Certificate of Origin (DCO)

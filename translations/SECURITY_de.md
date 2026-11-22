@@ -64,6 +64,6 @@ Produktentscheidung:
   Dokuments unter demselben Namen veraltete Seiten ausliefern kann, bis die
   Cache-Dateien entfernt werden.
 * Die Datenbank-Zugangsdaten der Testsuiten in
-  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) sind
+  [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md) sind
   Wegwerf-Zugangsdaten für lokale Docker-Container, keine
   Produktionsgeheimnisse.

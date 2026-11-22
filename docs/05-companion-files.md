@@ -118,4 +118,4 @@ second platform would have to guess at:
    `bulkInsertLoop`. `defaultValue` is the sentinel `~MTNull~`
    (`MADDataColumnNullSentinel`, `MADDataColumn.m:23`). Note the two persistent quirks:
    `dataPercision` is misspelled in the format, and the `~MTNull~` sentinel is a third null
-   marker distinct from the `"<null>"` / `"(null)"` family of `docs/project/BUGS.md` Track 1.5.
+   marker distinct from the `"<null>"` / `"(null)"` family of `docs/project/registers/BUGS.md` Track 1.5.

@@ -119,4 +119,4 @@ segunda plataforma teria de adivinhar:
    `bulkInsertLoop` da tabela rápida. `defaultValue` usa a sentinela `~MTNull~`
    (`MADDataColumnNullSentinel`, `MADDataColumn.m:23`). Observe duas peculiaridades persistentes:
    `dataPercision` está grafado incorretamente no formato, e a sentinela `~MTNull~` é um terceiro marcador de nulo,
-   distinto da família `"<null>"` / `"(null)"` documentada em `docs/project/BUGS.md` Track 1.5.
+   distinto da família `"<null>"` / `"(null)"` documentada em `docs/project/registers/BUGS.md` Track 1.5.

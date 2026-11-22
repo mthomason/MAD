@@ -119,4 +119,4 @@ segunda plataforma tendría que adivinar:
    `bulkInsertLoop` de la tabla rápida. `defaultValue` es el centinela `~MTNull~`
    (`MADDataColumnNullSentinel`, `MADDataColumn.m:23`). Observe las dos rarezas persistentes:
    `dataPercision` está mal escrito en el formato, y el centinela `~MTNull~` es un tercer marcador de nulo
-   distinto de la familia `"<null>"` / `"(null)"` del Track 1.5 de `docs/project/BUGS.md`.
+   distinto de la familia `"<null>"` / `"(null)"` del Track 1.5 de `docs/project/registers/BUGS.md`.

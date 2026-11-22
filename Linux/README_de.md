@@ -144,7 +144,7 @@ Workspace `MAD Designer` baut.
 ## Die Treiber werden registriert, nicht importiert
 
 Der Konstruktor importierte früher die Treiber, was der Zyklus `MAD` ↔ Treiber
-ist (`docs/project/ROADMAP.md` §5.1). `MADDatabaseDriverRegistry` (`MADAPI`) ist
+ist (`docs/project/registers/ROADMAP.md` §5.1). `MADDatabaseDriverRegistry` (`MADAPI`) ist
 jetzt die Nahtstelle: Die Verbindungsklasse jedes Treibers erfüllt
 `MADDatabaseDriver` und registriert sich in `+load`, und
 `MADDatabase+Constructor` / `MADDatabaseConnection+Constructor` schlagen einen
@@ -304,7 +304,7 @@ und das Währungssymbol wird explizit geschrieben, mit normalisiertem Yen-Zeiche
 (GNUstep schreibt es als Vollbreite U+FFE5). Ein Vergleich über 60 Fälle — sechs
 Locales mal zehn Werte, negative Werte und 1e12 eingeschlossen — ist inzwischen
 byte-identisch zwischen den beiden Plattformen; der einzige gefundene Unterschied
-war jener Yen-Codepoint. `docs/project/BUGS.md` enthält den Eintrag (archiviert:
+war jener Yen-Codepoint. `docs/project/registers/BUGS.md` enthält den Eintrag (archiviert:
 behoben), und die renderseitigen Exporte unten sind auf die Bytes des Macs
 fixiert.
 
@@ -336,7 +336,7 @@ separat gezählt und sind keine Needs.
 `MADMySQLLiveTests`, `MADTdsClientLiveTests` und `MADPostgresLiveTests` sprechen
 echte Server an und werden übersprungen (scheitern nie), wenn keiner
 erreichbar ist — derselbe Kontrakt wie die Xcode-Schemes. Die Server sind die drei
-Container, die `docs/project/DEVELOPER.md` dokumentiert; starten Sie sie zuerst:
+Container, die `docs/project/build/DEVELOPER.md` dokumentiert; starten Sie sie zuerst:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on :13306
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on :1433
@@ -368,7 +368,7 @@ LGPL-2.1-or-later; gnustep-make ist GPL-3.0-or-later, und sein `Testing.h`
 nur innerhalb dieses Build-Images. Die C-Bibliotheken tragen ihre eigenen
 Lizenzen (docs/project/THIRD_PARTY_LICENSES.md); das GPL-Problem von mysqlclient
 ist geklärt — D1 wechselte zu MariaDB Connector/C (LGPL-2.0-or-later, gewählt als
-LGPL-3.0), und dieses Image baut es (`docs/project/TASKS.md` §10). Das
+LGPL-3.0), und dieses Image baut es (`docs/project/registers/TASKS.md` §10). Das
 Runtime-Image wird als `ghcr.io/mthomason/mad` veröffentlicht, daher brauchen die
 LGPL-Komponenten, die es vertreibt, Relink-Angebote: Das schriftliche Angebot in
 `ThirdParty/Licenses/README.md` nennt jetzt das Image, und der Registereintrag ist
@@ -467,7 +467,7 @@ sind hash-abgeleitet, sodass sie sich ebenfalls pro Plattform unterschieden.
 `docs/project/MAD_LINUX.md` §10.1):** Die Reihenfolge ist jetzt als Spaltenalias
 definiert, sortiert mit `-compare:`, in beiden SQL-Buildern, sodass das erzeugte
 SQL, der Zeilen-Cache und jeder Export auf beiden Plattformen übereinstimmen
-(docs/project/BUGS.md, der SELECT-List-Eintrag; die Reihenfolgetests in
+(docs/project/registers/BUGS.md, der SELECT-List-Eintrag; die Reihenfolgetests in
 `Linux/Tests/MADQuerySelectExpressionTests.m`). Ein Cache, der vor der Änderung
 aktualisiert wurde, ordnet seine Spalten anders als einer, der danach aktualisiert
 wurde — dieselben Daten, eine neue Reihenfolge —, also einmal aktualisieren, bevor
@@ -499,7 +499,7 @@ Metadaten der Mitglieder, unterscheidet sich also konstruktionsbedingt zwischen
 Läufen und Plattformen.
 
 Zwei Dinge mussten behoben werden, damit der Writer hier läuft, beide in
-`docs/project/BUGS.md` festgehalten (der Eintrag zur Byte-Identität von `.mad`):
+`docs/project/registers/BUGS.md` festgehalten (der Eintrag zur Byte-Identität von `.mad`):
 
 * `-write_archive:` lief jede aufgezählte URL *bis* zum archivierten Verzeichnis
   ab, und GNUsteps `-enumeratorAtURL:` entfernt das enthaltende Verzeichnis,
@@ -550,7 +550,7 @@ Graphics). Gegen den Mac am London-Fixture gemessen:
 Die renderseitigen Formate sind plattformübergreifend byte-identisch, wie die
 Datenseitigen: jeder Rahmen, jede Schrift, Schriftgröße, Schriftschnitt,
 Ausrichtung, jeder Textlauf und jeder Seitenkasten, und das Geld (der Befund, der
-sie unterschied, und seine Behebung stehen oben und in `docs/project/BUGS.md`).
+sie unterschied, und seine Behebung stehen oben und in `docs/project/registers/BUGS.md`).
 `Linux/Tests/MADReportExporterTests.m` fixiert die drei Prüfsummen.
 
 ## Das Runtime-Image — das CLI-Artefakt (Phase F)
@@ -628,7 +628,7 @@ jedem Fehler endet es mit einem Wert ungleich null.
 	MADVERIFY 41 passed, 0 failed
 
 `--live` ergänzt die Refreshes für MySQL, TDS und PostgreSQL (50, 20 und 25
-Zeilen); starten Sie zuerst die drei Testcontainer (`docs/project/DEVELOPER.md`
+Zeilen); starten Sie zuerst die drei Testcontainer (`docs/project/build/DEVELOPER.md`
 hat ihre Skripte und Logins):
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up

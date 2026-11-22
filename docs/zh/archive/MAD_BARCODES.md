@@ -5,7 +5,7 @@ lang: zh-CN
 
 # MAD_BARCODES.md——条码元素：现代化与重新整合计划
 
-**状态：** 已于 2026-10-22 归档——该设计及其全部任务（0-7）均已实现（docs/project/TASKS.md §15，于 2026-10-21 完成）。本文档仅供查阅参考，不再是工作队列。
+**状态：** 已于 2026-10-22 归档——该设计及其全部任务（0-7）均已实现（docs/project/registers/TASKS.md §15，于 2026-10-21 完成）。本文档仅供查阅参考，不再是工作队列。
 
 **产品决策（用户，2026-10-20）：** 条码元素在设计器中**始终可用**。IAP 门禁（`com.everydayapps.mad.designer.product.element.barcode`）已从选择器中移除；StoreKit 标志机制保持原样，未作改动。
 
@@ -21,7 +21,7 @@ lang: zh-CN
 - **设计器层**（应用）：元素选择器**仅在内购权益验证通过时**才追加 Barcode（`MADDesignerElementPickerViewController.m:117-120`）。门禁背后的一切都存在并可编译：编辑器（`MADDesigner/Source/barcodes/`，约 20 个文件，`MTViewControllerBarcode` 家族）、storyboard（`MADDesigner/Resources/Storyboard/MADBarcodeDesigner.storyboard`）、画布视图（`MADDesignerElementBarcodeView`，在 `MADDesignerElementView+Constructor.m:36-37` 中接入），以及 `MADDesignerViewController.m` 中的保存/编辑管线。
 - **无头（Linux）：** `MADBarcodes` 被刻意不构建。`MAD` 中三个由条码支撑的文件被排除（`Linux/cmake/MADSources.cmake:21,43-48`），创建路径受 `#if __APPLE__` 保护（`RptqDocument+Extras.m:600`、`MADPrintPageElement+Constructor.m:31`、`MADDocumentObjectDataReference.m` 的条码分支）。这些保护必须保持完整；`./Linux/build.sh` 必须保持通过。
 
-### 已知缺陷（全部固定记录在 docs/project/BUGS.md 中——修复前请先阅读条目）
+### 已知缺陷（全部固定记录在 docs/project/registers/BUGS.md 中——修复前请先阅读条目）
 
 1. `MTBarcode.m:693/:719`——类型名词典有重复的键（`@(MTBarcodeTypeEan14)` 别名 `@BARCODE_EAN14`）。
 2. `MTBarcodeQrCodeIso18004.m`——init 与 `+type` 都返回 `MTBarcodeTypeOneCode`，因此 QR 请求**会绘制一个 OneCode 符号**。由 `MTBarcodeSymbologyTests testQrCodeClassClaimsTheOneCodeType` 锁定。
@@ -30,11 +30,11 @@ lang: zh-CN
 5. `MTBarcode.m:492`——未检查的 `strcpy(barcode->primary, primaryData)` 写入 zint 的 `char primary[128]`；超过 127 字节的输入会破坏该结构体。
 6. `MTBarcode.m:376-408`——NSCoding 已损坏（编码器写入空键，解码器丢弃归档）。潜伏状态：今天没有任何东西归档条码。由测试锁定。
 7. `MADBarcodes/MADBarcodes/MADBarcodes/MADBarcodeDataInputType.h`——一个死桩（枚举被注释掉；实际生效的私有枚举在 `MTBarcode.m:80-84`；该头文件在 pbxproj 中是一个文件引用，但不属于任何构建阶段）。
-8. `docs/project/BUGS.md` 中的“存储的颜色列没有读取者……”——存储有 `backgroundColorR/G/B/A` + `foregroundColorR/G/B/A` 列（`MADStoreSchema.m:496-503`），但模型的 `backgroundColor`/`foregroundColor` 属性（`RptqDocumentElement.h:30-31`）在 `RptqObject.m:63-92` 中没有属性映射，因此读写颜色会抛出 `NSUnknownKeyException`。**唯一的写入者是条码创建路径**（`RptqDocumentElementBarcode+Extras.m:89-90`）——而它在 Apple 上今天未经测试，所以这可能意味着条码创建目前会**崩溃**。必须在解除门禁任务之前修复。
+8. `docs/project/registers/BUGS.md` 中的“存储的颜色列没有读取者……”——存储有 `backgroundColorR/G/B/A` + `foregroundColorR/G/B/A` 列（`MADStoreSchema.m:496-503`），但模型的 `backgroundColor`/`foregroundColor` 属性（`RptqDocumentElement.h:30-31`）在 `RptqObject.m:63-92` 中没有属性映射，因此读写颜色会抛出 `NSUnknownKeyException`。**唯一的写入者是条码创建路径**（`RptqDocumentElementBarcode+Extras.m:89-90`）——而它在 Apple 上今天未经测试，所以这可能意味着条码创建目前会**崩溃**。必须在解除门禁任务之前修复。
 9. 元素模型缺陷：`RptqDocumentElementBarcode+Extras.m:56` 与 `:97` 把**码制 id 写入基础元素的 `type` 列**，覆盖掉 `MADPrintPageElementTypeBarcode`（9）。插入路径随后会重新设置它（`RptqDocument+Extras.m:613`），从而在那里掩盖了这个缺陷；**编辑**路径则不会，因此被编辑过的条码元素类型会变错，编辑器分发随之失效。
 10. `MADCellElement.m:138`——条码单元格的编辑操作被禁用（FIXME）；它本应调用的编辑分发已经存在（`MADDesignerViewController.m:1534-1537`）。
 11. `MADPrintPageElementBarcode` 没有 `-text`，所以 `MADReportLineRepresentation -text` 对条码行返回 nil——`json-report`、`html`、`html-flow` 和无障碍功能会为该元素序列化一个空字符串。
-12. `docs/project/TASKS.md` §13——`MADBarcodes` 仍带有自有代码的编译器警告/分析器发现（五个框架已清理；应用、MAD 和 MADBarcodes 仍有遗留）。
+12. `docs/project/registers/TASKS.md` §13——`MADBarcodes` 仍带有自有代码的编译器警告/分析器发现（五个框架已清理；应用、MAD 和 MADBarcodes 仍有遗留）。
 
 ### 性能问题（设计的驱动因素）
 
@@ -42,10 +42,10 @@ lang: zh-CN
 
 ## 2. 设计决策
 
-- **D1——重命名框架，而非应用 UI。** 所有框架符号 `MTBarcode*` → `MADBarcode*`：类（67 个子类、基类、视图）、`MTBarcodeProtocol`、`MTBarcodeType`（以及全部约 85 个 `MTBarcodeType*` 枚举值）、`MTBarcodeSizingMode`、私有的 `MTBarcodeDataInputType`，以及 126 个源文件名。应用自己的 `MT*` 条码视图控制器保留原名——`MT` 在应用其他地方是一个活跃的前缀，而且这些类绑定在 storyboard 上（`MADBarcodeDesigner.storyboard` 在 `customClass` 属性中命名它们），所以重命名它们只是无益的折腾。有一处 storyboard 字符串确实会变：`customClass="MTBarcodeView"` → `"MADBarcodeView"`（storyboard:581）。重命名涉及：框架（126 个文件 + umbrella + pbxproj）、`MAD`（7 个文件，全部受 Apple 保护）、应用（12 个文件）、框架测试（3 个文件），以及未关闭的 `docs/project/BUGS.md` 条目中的 `MTBarcode*.m` 路径引用。
+- **D1——重命名框架，而非应用 UI。** 所有框架符号 `MTBarcode*` → `MADBarcode*`：类（67 个子类、基类、视图）、`MTBarcodeProtocol`、`MTBarcodeType`（以及全部约 85 个 `MTBarcodeType*` 枚举值）、`MTBarcodeSizingMode`、私有的 `MTBarcodeDataInputType`，以及 126 个源文件名。应用自己的 `MT*` 条码视图控制器保留原名——`MT` 在应用其他地方是一个活跃的前缀，而且这些类绑定在 storyboard 上（`MADBarcodeDesigner.storyboard` 在 `customClass` 属性中命名它们），所以重命名它们只是无益的折腾。有一处 storyboard 字符串确实会变：`customClass="MTBarcodeView"` → `"MADBarcodeView"`（storyboard:581）。重命名涉及：框架（126 个文件 + umbrella + pbxproj）、`MAD`（7 个文件，全部受 Apple 保护）、应用（12 个文件）、框架测试（3 个文件），以及未关闭的 `docs/project/registers/BUGS.md` 条目中的 `MTBarcode*.m` 路径引用。
 - **D2——保留每个码制一个类的层级。** 67 个与 zint 码制一一对应的微小子类是一种可维护的设计（每个只是一个 init + `+type`）。把它折叠成表驱动的注册表将是一次没有产品收益的重写。工厂仍是构造路径。
 - **D3——一次 CGImage 绘制 + 一个缓存（性能修复）。** 渲染管线变为：zint 编码 → RGB 缓冲区 → 一个 `UIImage`/`CGImage` → **一次**缩放绘制进元素矩形（经由 `UIImage -drawInRect:`，这也绕开了 CG 的 y 轴翻转陷阱）。框架缓存（`MADBarcodeCache`，一个 `NSCache`）按规范化渲染键（类型 + 两个输入 + 每个影响绘制的选项）保存渲染后的图像。重复的值每次文档渲染只编码一次；此后每次绘制都是一次图像绘制。人类可读文本保留其现有的 `NSStringDrawing` 路径，在条码之后绘制。这就是“必须在移动 BI 上够快”的要求的具体落实。
-- **D4——修复测试所锁定的缺陷，并妥善归档。** 上述第 1–8 项在任务 2/任务 5 中修复。NSCoding 获得一份**正确的实现**（在真实的键下编码/解码所有协议属性）——廉价，且让这个类名副其实；锁定测试更新为断言修正后的行为。`docs/project/BUGS.md` 条目逐字移至 `docs/project/BUGS_FIXED.md`，并留下一条单行索引条目（本项目的内部约定）。
+- **D4——修复测试所锁定的缺陷，并妥善归档。** 上述第 1–8 项在任务 2/任务 5 中修复。NSCoding 获得一份**正确的实现**（在真实的键下编码/解码所有协议属性）——廉价，且让这个类名副其实；锁定测试更新为断言修正后的行为。`docs/project/registers/BUGS.md` 条目逐字移至 `docs/project/registers/BUGS_FIXED.md`，并留下一条单行索引条目（本项目的内部约定）。
 - **D5——删除死掉的东西。** 删除 `MADBarcodeDataInputType.h` 桩及其 pbxproj 文件引用、空的 `MADBarcodesTests.m` 模板，以及 `MTBarcode.m` 中被注释掉的颜色代码块（:462-467、:763-782）。输入模式仍硬编码为 Unicode（保留私有枚举）；GS1/Data 模式的接线是记录在案的后续事项，不在本轮。
 - **D6——码制 id 永不写入基础 `type`。** 元素的码制存在于 `barcodeType`；基础 `type` 在所有地方都保持 `MADPrintPageElementTypeBarcode`（9）。
 - **D7——条码行携带文本。** `MADPrintPageElementBarcode` 增加一个 `-text`（解析后的输入字符串），使每个导出器和无障碍功能都能通过现有的 `MADReportLineRepresentation` 路径拾取条码的内容，而无需改动导出器。
@@ -59,7 +59,7 @@ lang: zh-CN
 - 刻意不用的代码在声明处获得 clang 属性（文件静态函数用 `__attribute__((unused))`，局部变量/参数用 `__unused`，不应存在的初始化器用 `NS_UNAVAILABLE`）。永远不要在代码之外消除警告；未标记的警告意味着删除。
 - zsh 的 `rm`/`cp` 是交互式的——使用 `/bin/rm -f`、`/bin/cp -f` 或 `git mv`。
 - 头文件 import 必须与文件大小写完全一致（Linux 文件系统区分大小写）。
-- `docs/project/BUGS.md` 是一份记录：当某个条目被修复时，把它**逐字**移至 `docs/project/BUGS_FIXED.md`，并在 `docs/project/BUGS.md` 中留下一条单行索引条目。欢迎更新 `docs/project/TASKS.md` 的状态；永远不要仅仅因为跟踪文件列了某项就开始工作。
+- `docs/project/registers/BUGS.md` 是一份记录：当某个条目被修复时，把它**逐字**移至 `docs/project/registers/BUGS_FIXED.md`，并在 `docs/project/registers/BUGS.md` 中留下一条单行索引条目。欢迎更新 `docs/project/registers/TASKS.md` 的状态；永远不要仅仅因为跟踪文件列了某项就开始工作。
 - 在 `master` 上工作；每个任务通过其门禁后提交；除非被要求，**不要推送**。
 - 门禁（每次提交前运行）：框架测试套件、`MAD` 套件、应用构建，以及——只要有任何 `MAD/Source` 文件变化——在仓库根目录运行 `./Linux/build.sh`。
 
@@ -179,7 +179,7 @@ Steps:
        MADDesigner/Source/MADElementCanvas.h/.m
      The app-side CLASS names (MTViewControllerBarcode, MTTableViewControllerBarcodeExtra*
      etc.) do NOT change — only the MTBarcode* framework symbols they reference.
-6. Update the open docs/project/BUGS.md entries that cite MTBarcode*.m paths (the ## MADBarcodes
+6. Update the open docs/project/registers/BUGS.md entries that cite MTBarcode*.m paths (the ## MADBarcodes
    section and the colour entry at ~line 89): change the file paths to the new names.
    Do not change any other wording.
 7. Grep to confirm nothing is left: `grep -rn 'MTBarcode' MADBarcodes MAD MADDesigner/Source
@@ -212,18 +212,18 @@ fix it or stop and ask.
 
 ```
 Goal: fix the five framework defects below and delete the dead code, each pinned by
-docs/project/BUGS.md entries. Work on master in /Users/michael/Desktop/Reports. House rules: tabs;
+docs/project/registers/BUGS.md entries. Work on master in /Users/michael/Desktop/Reports. House rules: tabs;
 no stringWithFormat:; unused code gets a clang attribute at the declaration, never a
-silenced warning. Read each docs/project/BUGS.md entry in full before touching its code — the entry
+silenced warning. Read each docs/project/registers/BUGS.md entry in full before touching its code — the entry
 names the exact symbols.
 
-1. Duplicate dictionary key (docs/project/BUGS.md ## MADBarcodes, "MTBarcode's type-name dictionary
+1. Duplicate dictionary key (docs/project/registers/BUGS.md ## MADBarcodes, "MTBarcode's type-name dictionary
    has a duplicate key"): in MADBarcodes/MADBarcodes/MADBarcodes/MADBarcode.m the
    dictionary literal built around lines 693/719 uses both @(MADBarcodeTypeEan14) and
    @BARCODE_EAN14 (the enum value aliases the zint constant, so they collide). Delete
    the redundant line (keep the @BARCODE_EAN14 entry). Update the dictionary-shape test
    if it asserts the entry count.
-2. Wrong symbology types (docs/project/BUGS.md, the QR and EAN128 entry): in
+2. Wrong symbology types (docs/project/registers/BUGS.md, the QR and EAN128 entry): in
    MADBarcodeQrCodeIso18004.m make init and +type both return the QR type (they return
    MADBarcodeTypeOneCode today, and -drawInRect: passes the instance's type to zint, so
    the object draws the wrong symbol). In MADBarcodeCode128Iso15417.m lines ~145-161,
@@ -232,11 +232,11 @@ names the exact symbols.
    MADBarcodes/MADBarcodesTests/MADBarcodeSymbologyTests.m
    (testQrCodeClassClaimsTheOneCodeType and the EAN128 one) to assert the corrected
    behavior, renaming them to match.
-3. ISBN recursion (docs/project/BUGS.md): MADBarcodeInternationalStandardBookNumberIsbn's +type
+3. ISBN recursion (docs/project/registers/BUGS.md): MADBarcodeInternationalStandardBookNumberIsbn's +type
    calls itself. Make it return the enum value its class is named for (check
    MADBarcodeType.h and the factory case in MADBarcode.m +newBarcodeWithType: for the
    right spelling). Add a test if the suite does not already pin it.
-4. strcpy overflow (docs/project/BUGS.md): MADBarcode.m around line 492 does an unchecked
+4. strcpy overflow (docs/project/registers/BUGS.md): MADBarcode.m around line 492 does an unchecked
    strcpy(barcode->primary, primaryData) into zint's char primary[128]
    (Compressor/library/zint/include/zint.h:121). Guard it: if the input's UTF-8 length
    would not fit (>= sizeof(barcode->primary)), skip the encode and follow the
@@ -244,10 +244,10 @@ names the exact symbols.
    logging the reason; honor showErrorMessage the way the existing error path does.
    Add a test: a >127-byte input must not crash and must produce the defined error
    result (no symbol, or an error image per showErrorMessage).
-5. NSCoding (docs/project/BUGS.md): MADBarcode.m's encodeWithCoder:/initWithCoder: pair is broken
+5. NSCoding (docs/project/registers/BUGS.md): MADBarcode.m's encodeWithCoder:/initWithCoder: pair is broken
    (empty-key encoding; decoder discards the archive). First grep the workspace for
    NSKeyedArchiver/NSKeyedUnarchiver use with barcode objects to confirm nothing
-   depends on the broken format (docs/project/BUGS.md says nothing does). Then implement it
+   depends on the broken format (docs/project/registers/BUGS.md says nothing does). Then implement it
    properly: encode every MTBarcodeProtocol property plus the inputs and subclass
    state under real string keys, decode them back, and update the pinning test in
    MADBarcodesTests to assert a round-trip preserves the values.
@@ -258,10 +258,10 @@ names the exact symbols.
    - The empty Xcode template MADBarcodesTests/MADBarcodesTests.m and its pbxproj
      entries in the test target.
    - The commented-out colour blocks in MADBarcode.m (~lines 462-467 and 763-782).
-7. docs/project/BUGS.md bookkeeping: for each of the five fixed entries, move the entry VERBATIM
-   (full text, including its test names) to docs/project/BUGS_FIXED.md under the same framework
-   heading, and leave a one-line index entry in docs/project/BUGS.md under ## MADBarcodes so
-   "docs/project/BUGS.md, the X entry" still lands. The colour-columns entry stays open (Task 5).
+7. docs/project/registers/BUGS.md bookkeeping: for each of the five fixed entries, move the entry VERBATIM
+   (full text, including its test names) to docs/project/registers/BUGS_FIXED.md under the same framework
+   heading, and leave a one-line index entry in docs/project/registers/BUGS.md under ## MADBarcodes so
+   "docs/project/registers/BUGS.md, the X entry" still lands. The colour-columns entry stays open (Task 5).
 
 Verify:
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
@@ -360,7 +360,7 @@ Verify:
 Commit on master ("Render barcodes as one cached image draw"). Do not push.
 ```
 
-### 任务 4——`MADBarcodes` 警告清扫（docs/project/TASKS.md §13）
+### 任务 4——`MADBarcodes` 警告清扫（docs/project/registers/TASKS.md §13）
 
 **依赖：** 任务 3。
 
@@ -368,7 +368,7 @@ Commit on master ("Render barcodes as one cached image draw"). Do not push.
 
 ```
 Goal: clear MADBarcodes' remaining first-party compiler warnings and analyzer findings
-(docs/project/TASKS.md §13: five frameworks were cleared 2026-10-17; the app, MAD and MADBarcodes
+(docs/project/registers/TASKS.md §13: five frameworks were cleared 2026-10-17; the app, MAD and MADBarcodes
 remain). Work on master in /Users/michael/Desktop/Reports.
 
 1. Build the framework and run Analyze on it in isolation:
@@ -384,10 +384,10 @@ remain). Work on master in /Users/michael/Desktop/Reports.
    code is dead and should be deleted. Do not "fix" warnings inside vendored zint/png
    headers — those are not ours.
 3. If a diagnostic reveals a real defect you are unsure how to fix without behavior
-   change, leave the code alone and record it as a new docs/project/BUGS.md entry under
+   change, leave the code alone and record it as a new docs/project/registers/BUGS.md entry under
    ## MADBarcodes (Status: Open, with the file:line and what you saw) rather than
    papering over it.
-4. Update docs/project/TASKS.md §13's status line to note MADBarcodes is cleared (or what remains).
+4. Update docs/project/registers/TASKS.md §13's status line to note MADBarcodes is cleared (or what remains).
 
 Verify:
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes \
@@ -427,7 +427,7 @@ compiles some of these files and excludes others (Linux/cmake/MADSources.cmake).
    MADDocumentObjectDataReferenceBarcodeTests.m): create a barcode element through the
    factory, assert documentObjectType == MADPrintPageElementTypeBarcode and barcodeType
    == the symbology; then call updateWithBarcode: and assert the same invariant.
-2. Fix the store's colour columns (docs/project/BUGS.md "The store's colour columns have no reader,
+2. Fix the store's colour columns (docs/project/registers/BUGS.md "The store's colour columns have no reader,
    and the model's colour properties have no column" — read the whole entry first).
    The store has backgroundColorR/G/B/A + foregroundColorR/G/B/A columns
    (MAD/Source/rptq/store/MADStoreSchema.m:496-503); the model exposes
@@ -441,7 +441,7 @@ compiles some of these files and excludes others (Linux/cmake/MADSources.cmake).
    to read/write backgroundColor and foregroundColor through the four RGBA columns.
    Do not change the schema columns. Then add a MAD test that creates a barcode element
    via the factory (exercising the :89-90 write) and reads its colours back without an
-   exception. Once green, move the docs/project/BUGS.md entry VERBATIM to docs/project/BUGS_FIXED.md and leave
+   exception. Once green, move the docs/project/registers/BUGS.md entry VERBATIM to docs/project/registers/BUGS_FIXED.md and leave
    the one-line index entry behind. (This fixes the whole element colour story, not
    just barcodes — the entry's "Why it matters" names the HTML/PDF consequences.)
 3. Give barcode lines text.
@@ -565,12 +565,12 @@ documentation in line with reality. Work on master in /Users/michael/Desktop/Rep
      ~283-284 already flags the staleness — check that note and update it to say the
      docs/project/LIBRARIES.md text is now corrected. Do not touch the notices gap itself (it is on
      the licence-register track).
-   - docs/project/BUGS.md: the colour-columns entry's "untested on Apple" note was resolved by
-     Task 5 (the entry moved to docs/project/BUGS_FIXED.md). The "barcode creation path, which is
+   - docs/project/registers/BUGS.md: the colour-columns entry's "untested on Apple" note was resolved by
+     Task 5 (the entry moved to docs/project/registers/BUGS_FIXED.md). The "barcode creation path, which is
      off the headless build" wording in any remaining open entry: adjust only the
      stale "untested on Apple" phrasing where the facts have changed; leave everything
      else verbatim.
-   - docs/project/TASKS.md: update §15 (this queue entry) with what landed, commit hashes included,
+   - docs/project/registers/TASKS.md: update §15 (this queue entry) with what landed, commit hashes included,
      and mark it Done; keep the follow-ups listed there under a short "Remains" line
      (see MAD_BARCODES.md §5).
 3. End-to-end verification:

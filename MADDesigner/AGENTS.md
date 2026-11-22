@@ -47,6 +47,6 @@ The project defines four targets:
     *   `MADOperationValidateSQLTests.m` -- SQL validation probe generation.
     *   `MADStatusLabelRefreshTests.m` -- status label formatting progress and coalescing.
 *   **UI tests**: `MADDesigner/Targets/MADDesignerUITests`.
-*   **Known issues**: [`BUGS.md`](../docs/project/BUGS.md) -- see the `## MAD Designer (app)` section. The
+*   **Known issues**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- see the `## MAD Designer (app)` section. The
     faults found in this test target itself are under `## Test infrastructure`.
-*   **Task queue**: [`TASKS.md`](../docs/project/TASKS.md) -- maintain it, but do not start work from it.
+*   **Task queue**: [`TASKS.md`](../docs/project/registers/TASKS.md) -- maintain it, but do not start work from it.

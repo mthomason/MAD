@@ -291,7 +291,7 @@ _MAD Designer_ 当时采用 `LICENSE.md`：“Copyright © Michael Thomason 2025
 | 各 C 库（§3.1） | 按固定版本 | 按登记 | 静态链接进 `mad` | 与 App 相同的宽松条款；镜像第二次传递它们 |
 | apt 运行时包 | Ubuntu 24.04 | 发行版软件包 | 镜像中的共享对象 | 发行版自带的许可证文本，位于 `/usr/share/doc` |
 
-两个静态 LGPL 库（MariaDB Connector/C 和 FreeTDS）的重新链接义务，以及覆盖 GNUstep Base 的要约，由 `ThirdParty/Licenses/README.md` 中的书面要约履行，该要约现在还点名了镜像：固定的源码公开在 `Linux/toolchain.conf` 和 `Linux/libraries.conf` 中，镜像用 `./Linux/build.sh --runtime` 从它们重新构建，且该要约自最后一次分发起至少三年内有效。`docs/project/TASKS.md` §10 曾带有“镜像发布会产生此义务”的标记；它在那里已关闭。
+两个静态 LGPL 库（MariaDB Connector/C 和 FreeTDS）的重新链接义务，以及覆盖 GNUstep Base 的要约，由 `ThirdParty/Licenses/README.md` 中的书面要约履行，该要约现在还点名了镜像：固定的源码公开在 `Linux/toolchain.conf` 和 `Linux/libraries.conf` 中，镜像用 `./Linux/build.sh --runtime` 从它们重新构建，且该要约自最后一次分发起至少三年内有效。`docs/project/registers/TASKS.md` §10 曾带有“镜像发布会产生此义务”的标记；它在那里已关闭。
 
 ---
 

@@ -37,4 +37,4 @@
 
 * `.mad` 容器目前没有魔数（`docs/zh/06-hazards.md`，风险 H1）；发布格式中通过扩展名检测，规范性 `v1` 中有魔数。
 * 渲染缓存以文件名和页面大小而不是内容为键（`docs/zh/05-companion-files.md` §5.3），因此以相同名称编辑文档可能会提供过期页面，直到缓存文件被删除。
-* 测试套件的数据库凭据在 [`docs/project/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md) 中是本地 Docker 的一次性凭据，不是生产秘密。
+* 测试套件的数据库凭据在 [`docs/project/build/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md) 中是本地 Docker 的一次性凭据，不是生产秘密。

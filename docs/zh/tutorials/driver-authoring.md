@@ -17,7 +17,7 @@ lang: zh-CN
    `+load` 中注册自身。
 
 其余的一切——查询设计器的图、SQL 生成、行缓存、渲染管线、七种导出格式、CLI、Docker 镜像——都是驱动接入的共享机制。驱动满足的契约是*“以表的形式返回架构和数据行”*
-（`docs/project/MAD_STRATEGY.md` §3.7），这就是为什么驱动可以面向任何能做得像表的东西：SQL 数据库、Web 服务、文件。
+（`docs/project/product/MAD_STRATEGY.md` §3.7），这就是为什么驱动可以面向任何能做得像表的东西：SQL 数据库、Web 服务、文件。
 
 可以借鉴的三个服务器示例是 `MADPostgres`（6 个文件，
 `MADPostgres/Source/`，基于 `libpq` 的 `MADDatabasePostgres` 子类）、
@@ -127,7 +127,7 @@ lang: zh-CN
 
 ## 第 6 步——诚实的注意事项：非 SQL 驱动今天能做什么、不能做什么
 
-这是整套设想中唯一尚未完成的部分，而且是有意记录下来的（`docs/project/MAD_STRATEGY.md` §4.7）：**执行**层是驱动形状的——`executeSQL:…intoResultTable:…` 和
+这是整套设想中唯一尚未完成的部分，而且是有意记录下来的（`docs/project/product/MAD_STRATEGY.md` §4.7）：**执行**层是驱动形状的——`executeSQL:…intoResultTable:…` 和
 `MADDataTableWriting` 目标诚实地面对“任何返回表的东西”——但**编译**层是共享的：`MADQueryFull` 把查询图编译为每个驱动一份 SQL 文本。你的驱动收到的是 **SQL 文本**，而不是图（表、字段、谓词、分组）。
 
 因此，今天的 REST/Web 服务驱动：

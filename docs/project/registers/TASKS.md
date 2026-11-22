@@ -1231,7 +1231,7 @@ prompts are in `~/Desktop/MADOpenSource-PostSteps/`.
 **Status:** In progress on `feature/app-localization-foundation` (started 2026-11-04).
 
 The plan, inventory, decisions, and phases are in
-[`MAD_APP_LOCALIZATION.md`](MAD_APP_LOCALIZATION.md). The user has confirmed the
+[`MAD_APP_LOCALIZATION.md`](../localization/MAD_APP_LOCALIZATION.md). The user has confirmed the
 language set (`de`, `es`, `ja`, `pt-BR`, `zh-Hans`), `es` as the Spanish bundle
 code, AI-drafted translations reviewed by the user, iOS first with macOS
 infrastructure in parallel, keeping the per-driver storyboards, and consolidating

@@ -23,7 +23,7 @@ Alles andere – der Graph des Abfrage-Designers, die SQL-Erzeugung, der
 Zeilen-Cache, die Render-Pipeline, die sieben Exportformate, die CLI, das
 Docker-Image – ist gemeinsame Maschinerie, in die sich der Treiber einhängt. Der
 Kontrakt, den ein Treiber erfüllt, lautet *„ein Schema und Zeilen in Tabellenform
-zurückgeben“* (`docs/project/MAD_STRATEGY.md` §3.7); deshalb kann ein Treiber vor
+zurückgeben“* (`docs/project/product/MAD_STRATEGY.md` §3.7); deshalb kann ein Treiber vor
 allem stehen, was sich wie eine Tabelle darstellen lässt: eine SQL-Datenbank, ein
 Webdienst, eine Datei.
 
@@ -166,7 +166,7 @@ Zwei Suites im Testtarget des Frameworks:
 ## Schritt 6 – die ehrliche Einschränkung: Was ein Nicht-SQL-Treiber heute kann und nicht kann
 
 Dies ist der einzige Teil der Argumentation, der nicht fertig ist, und er ist
-bewusst festgehalten (`docs/project/MAD_STRATEGY.md` §4.7): Die
+bewusst festgehalten (`docs/project/product/MAD_STRATEGY.md` §4.7): Die
 **Ausführungsschicht** ist treiberförmig – `executeSQL:…intoResultTable:…` und
 das Ziel `MADDataTableWriting` halten ehrlich, was „alles, was eine Tabelle
 zurückgibt“ verspricht –, aber die **Kompilierungsschicht** ist gemeinsam:

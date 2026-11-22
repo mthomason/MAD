@@ -11,9 +11,9 @@ Migrationsmechanismen ist bereits gebaut; das Design, auf dem das
 Datenobjektmodell basiert, steht in
 [`docs/project/MAD_DATA_OBJECT.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_DATA_OBJECT.md),
 das Arbeitsprotokoll in
-[`docs/project/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_FUTURE.md)
+[`docs/project/product/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/product/MAD_FUTURE.md)
 und die Produktwunschliste in
-[`docs/project/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/TODO.md).
+[`docs/project/registers/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/registers/TODO.md).
 
 ## Wo MAD heute steht
 

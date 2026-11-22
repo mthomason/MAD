@@ -35,7 +35,7 @@ Zwei Eigenschaften dieses Speichers sind entscheidend für die Portabilität:
 
 ### 3.1 Der portable Speicher (seit der Speichermigration)
 
-Seit der Speichermigration (`docs/project/MAD_STORE_MIGRATION.md`) lebt die
+Seit der Speichermigration (`docs/project/design/MAD_STORE_MIGRATION.md`) lebt die
 Definition eines Dokuments in einem portablen SQLite-Speicher eigener Bauart.
 Sein Schema wird durch die handgepflegten `MADStoreSchema`-Deskriptoren
 (`MAD/Source/rptq/store/`) beschrieben, von `-createSchemaSQL` erzeugt und von

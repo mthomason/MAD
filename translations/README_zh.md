@@ -77,7 +77,7 @@ MAD 尊重您的隐私。应用程序不包含分析、遥测或跟踪代码，�
 
 ## MAD 的前进方向：路线图与愿景
 
-由于 MAD 已经把**查询图**、**物化的 SQLite 结果表**和**呈现布局**分离，该架构解锁了四项正在设计和排队中的主要能力（参见 [`docs/vision.md`](../docs/zh/vision.md)、[`docs/project/MAD_DATA_OBJECT.md`](../docs/zh/project/MAD_DATA_OBJECT.md) 和 [`docs/project/TODO.md`](../docs/zh/project/TODO.md)）：
+由于 MAD 已经把**查询图**、**物化的 SQLite 结果表**和**呈现布局**分离，该架构解锁了四项正在设计和排队中的主要能力（参见 [`docs/vision.md`](../docs/zh/vision.md)、[`docs/project/MAD_DATA_OBJECT.md`](../docs/zh/project/MAD_DATA_OBJECT.md) 和 [`docs/project/registers/TODO.md`](../docs/zh/project/TODO.md)）：
 
 1. **把 `.mad` 报表当作即席数据库表（可组合数据对象）。**
    在传统数据库中，你从 `employee` 或 `sales_data` 这样的基表中选择数据。`.mad` 报表连接并筛选多张表，其输出（`.maddb` + `.mdcache`）已经是一张带类型架构（`MADDataColumn`）的物理 SQLite 表。让报表输出在查询设计器中可作为表源寻址，**`.mad` 文件就成为一张虚拟/物化数据库表**。其他报表、查询或工具可以像数据库中的任何表一样，从 `.mad` 报表中选择并与之连接。
@@ -112,7 +112,7 @@ docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out ghcr.io/mthom
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
-示例文档针对镜像内附带的 Sqlite3 示例数据库刷新；MySQL、SQL Server 和 PostgreSQL 夹具需要 [`docs/project/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md) 中描述的测试服务器。
+示例文档针对镜像内附带的 Sqlite3 示例数据库刷新；MySQL、SQL Server 和 PostgreSQL 夹具需要 [`docs/project/build/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md) 中描述的测试服务器。
 
 ## 在 CI 中
 
@@ -188,7 +188,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ```
 
-（`MADMySQL`、`MADTdsClient` 和 `MADPostgres` 还带有实时测试套件，它们与真实数据库服务器通信，不可达时会跳过——参见 [`docs/project/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md)。）
+（`MADMySQL`、`MADTdsClient` 和 `MADPostgres` 还带有实时测试套件，它们与真实数据库服务器通信，不可达时会跳过——参见 [`docs/project/build/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md)。）
 
 ### Linux（无头引擎与 CLI）
 

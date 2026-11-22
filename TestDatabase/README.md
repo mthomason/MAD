@@ -150,7 +150,7 @@ The `MADMySQL`, `MADTdsClient` and `MADPostgres` Xcode schemes own the server
 lifecycle: their Test action's pre-action runs `up` and the post-action runs
 `down`, and the scheme supplies the environment (`MAD_MYSQL_TEST_PORT=13306`,
 etc.). Run the schemes from Xcode, or with the `xcodebuild` command in
-`docs/project/DEVELOPER.md`. The pre/post actions are macOS-only.
+`docs/project/build/DEVELOPER.md`. The pre/post actions are macOS-only.
 
 ### Windows (after Phase 3b)
 

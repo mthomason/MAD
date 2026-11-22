@@ -127,7 +127,7 @@ e MAD continuam todos verdes, e o workspace `MAD Designer` compila integralmente
 ## Os drivers são registrados, não importados diretamente
 
 Antigamente o construtor importava diretamente os drivers, o que criava uma dependência circular entre `MAD` ↔ drivers
-(`docs/project/ROADMAP.md` §5.1). Agora o ponto de desacoplamento é `MADDatabaseDriverRegistry` (`MADAPI`): a classe
+(`docs/project/registers/ROADMAP.md` §5.1). Agora o ponto de desacoplamento é `MADDatabaseDriverRegistry` (`MADAPI`): a classe
 de conexão de cada driver adota `MADDatabaseDriver` e registra a si mesma em
 `+load`, enquanto `MADDatabase+Constructor` / `MADDatabaseConnection+Constructor` buscam o
 driver por `MADDatabaseType` em vez de referenciar classes concretas. Assim, quais drivers um processo possui
@@ -202,7 +202,7 @@ As suítes de bancos de dados live pulam (`SKIP`, nunca falham) quando nenhum se
 
 ## Executando as suítes de bancos de dados live aqui
 
-`MADMySQLLiveTests`, `MADTdsClientLiveTests` e `MADPostgresLiveTests` conversam com servidores reais e são puladas quando nenhum servidor está acessível. Os servidores são os três contêineres documentados em `docs/project/DEVELOPER.md`; inicie-os primeiro:
+`MADMySQLLiveTests`, `MADTdsClientLiveTests` e `MADPostgresLiveTests` conversam com servidores reais e são puladas quando nenhum servidor está acessível. Os servidores são os três contêineres documentados em `docs/project/build/DEVELOPER.md`; inicie-os primeiro:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on :13306
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on :1433

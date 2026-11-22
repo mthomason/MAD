@@ -77,7 +77,7 @@ La especificación completa —disposición del contenedor, tablas del almacén,
 
 ## Hacia dónde va MAD: hoja de ruta y visión
 
-Como MAD ya separa el **grafo de consultas**, la **tabla de resultados SQLite materializada** y el **diseño de presentación**, la arquitectura habilita cuatro capacidades principales que se están diseñando y encolando activamente (véanse [`docs/vision.md`](../docs/es/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md) y [`docs/project/TODO.md`](../docs/project/TODO.md)):
+Como MAD ya separa el **grafo de consultas**, la **tabla de resultados SQLite materializada** y el **diseño de presentación**, la arquitectura habilita cuatro capacidades principales que se están diseñando y encolando activamente (véanse [`docs/vision.md`](../docs/es/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md) y [`docs/project/registers/TODO.md`](../docs/project/registers/TODO.md)):
 
 1. **Un informe `.mad` como tabla ad hoc de base de datos (objetos de datos componibles).**
    En una base de datos tradicional, se hace `SELECT` sobre tablas base como `employee` o `sales_data`. Un informe `.mad` enlaza y filtra varias tablas, y su salida (`.maddb` + `.mdcache`) ya es una tabla SQLite física con un esquema tipado (`MADDataColumn`). Al hacer que la salida de un informe sea direccionable como fuente de tabla dentro del diseñador de consultas, **un archivo `.mad` se convierte en una tabla de base de datos virtual/materializada**. Otros informes, consultas o herramientas pueden hacer `SELECT` y `JOIN` contra un informe `.mad` igual que contra cualquier tabla de una base de datos.
@@ -112,7 +112,7 @@ Las etiquetas publicadas son `latest` y el SHA corto del commit, compiladas para
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
-Los documentos de muestra se actualizan contra la base de datos de muestra de Sqlite3 incluida en la imagen; las fixtures de MySQL, SQL Server y PostgreSQL esperan los servidores de prueba de [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md).
+Los documentos de muestra se actualizan contra la base de datos de muestra de Sqlite3 incluida en la imagen; las fixtures de MySQL, SQL Server y PostgreSQL esperan los servidores de prueba de [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md).
 
 ## En CI
 
@@ -188,7 +188,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ```
 
-(`MADMySQL`, `MADTdsClient` y `MADPostgres` también incluyen suites en vivo que se comunican con un servidor de base de datos real y se omiten cuando no hay ninguno disponible; consulte [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md)).)
+(`MADMySQL`, `MADTdsClient` y `MADPostgres` también incluyen suites en vivo que se comunican con un servidor de base de datos real y se omiten cuando no hay ninguno disponible; consulte [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md)).)
 
 ### Linux (motor y CLI sin interfaz gráfica)
 

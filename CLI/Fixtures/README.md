@@ -76,7 +76,7 @@ can be refreshed from the Mac and from the Linux image. `host.docker.internal`
 would work only inside a container; `127.0.0.1` only on the Mac.
 
 All three live fixtures were created against the canonical test containers, which
-`docs/project/DEVELOPER.md` documents and whose scripts create them from pinned images and
+`docs/project/build/DEVELOPER.md` documents and whose scripts create them from pinned images and
 checksum-verified datasets:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on 13306

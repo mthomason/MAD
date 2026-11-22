@@ -59,5 +59,5 @@ la especificación y en el registro de errores, y cambiarlas es una decisión de
   (`docs/05-companion-files.md` §5.3), así que editar un documento con el mismo
   nombre puede servir páginas obsoletas hasta que se eliminen los archivos de caché.
 * Las credenciales de base de datos de las suites de prueba en
-  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) son credenciales desechables
+  [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md) son credenciales desechables
   de Docker local, no secretos de producción.

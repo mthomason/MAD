@@ -9,9 +9,9 @@ into. None of the composition or migration machinery described here is built
 yet; the design that grounds the data-object model is
 [`docs/project/MAD_DATA_OBJECT.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_DATA_OBJECT.md),
 the working record is
-[`docs/project/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_FUTURE.md),
+[`docs/project/product/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/product/MAD_FUTURE.md),
 and the product wishlist is
-[`docs/project/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/TODO.md).
+[`docs/project/registers/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/registers/TODO.md).
 
 ## Where MAD is today
 

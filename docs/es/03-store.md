@@ -32,7 +32,7 @@ Dos propiedades de este almacén son fundamentales para la portabilidad:
 
 ### 3.1 El almacén portátil (desde la migración del almacén)
 
-Desde la migración del almacén (`docs/project/MAD_STORE_MIGRATION.md`), la definición de un documento vive en
+Desde la migración del almacén (`docs/project/design/MAD_STORE_MIGRATION.md`), la definición de un documento vive en
 un almacén SQLite portátil de nuestro propio diseño. Su esquema se describe mediante los
 descriptores `MADStoreSchema` mantenidos a mano (`MAD/Source/rptq/store/`), generados por
 `-createSchemaSQL` y contrastados con el modelo compilado por `MADStoreTests`.

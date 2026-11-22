@@ -9,7 +9,7 @@
 
 ## Project Overview
 
-_MAD Designer_ defines a `.mad` file type.  A document's definition lives in a portable SQLite store of our own (`docs/project/MAD_STORE_MIGRATION.md`, `docs/project/MAD_FORMAT.md`); the MAD framework does not link Core Data — Core Data survives only to convert legacy documents, in the application target (`MADDesigner/Source/MADStoreLegacy/`).
+_MAD Designer_ defines a `.mad` file type.  A document's definition lives in a portable SQLite store of our own (`docs/project/design/MAD_STORE_MIGRATION.md`, `docs/project/MAD_FORMAT.md`); the MAD framework does not link Core Data — Core Data survives only to convert legacy documents, in the application target (`MADDesigner/Source/MADStoreLegacy/`).
 
 It is BI software, and currently supports access to MySQL, SQL Server, and PostgreSQL databases.  It also uses Sqlite3 for example reports and internal data tables.
 
@@ -156,7 +156,7 @@ required -- the frameworks reference each other via `BUILT_PRODUCTS_DIR`.
 `MADMySQL`, `MADTdsClient`, and `MADPostgres` each carry a second file -- `MADMySQLLiveTests.m`,
 `MADTdsClientLiveTests.m`, and `MADPostgresLiveTests.m` -- that talks to a real database server and **skips** when one is
 not reachable, so the suite still passes on a machine without a server. The credentials
-they expect are in `docs/project/DEVELOPER.md`, and each can be overridden with a `MAD_MYSQL_TEST_*`,
+they expect are in `docs/project/build/DEVELOPER.md`, and each can be overridden with a `MAD_MYSQL_TEST_*`,
 `MAD_TDS_TEST_*`, or `MAD_PG_TEST_*` environment variable.
 
 `MADFeedback`, `MADTds`, `Scrimpter`, and `Compressor` expose no shared test
@@ -169,12 +169,12 @@ the headless side.
 
 ## Related Documents
 
-* `docs/project/BUGS.md` -- the open defects and recorded quirks, grouped by framework, with
+* `docs/project/registers/BUGS.md` -- the open defects and recorded quirks, grouped by framework, with
   `file:line` references and the tests that pin each one; fixed entries are archived in
-  `docs/project/BUGS_FIXED.md`.
-* `docs/project/TASKS.md` -- the engineering task queue: what is being worked, in order, with the
+  `docs/project/registers/BUGS_FIXED.md`.
+* `docs/project/registers/TASKS.md` -- the engineering task queue: what is being worked, in order, with the
   context needed to start cold.
-* `docs/project/ROADMAP.md` -- the plan: which register, queue and design document gets picked up next,
+* `docs/project/registers/ROADMAP.md` -- the plan: which register, queue and design document gets picked up next,
   and in what order.
 * `docs/project/MADDataTable_Architecture_Report.md` -- the `MADDataTable` class cluster across
   `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
@@ -182,7 +182,7 @@ the headless side.
   class is, how it is populated and kept current, who reads it, and the refactoring
   candidates.
 * `docs/project/MAD_FORMAT.md` -- what a `.mad` document is, and what it should be.
-* `docs/project/MAD_FUTURE.md` -- the vision: the `.mad` as a data object, the hidden file types as
+* `docs/project/product/MAD_FUTURE.md` -- the vision: the `.mad` as a data object, the hidden file types as
   products, the web clone, AI, and the money.
 * `docs/project/MAD_DATA_OBJECT.md` -- the design of the data object itself: a report's definition,
   schema and result set as one contract, how each piece is represented in the code today,
@@ -193,12 +193,12 @@ the headless side.
   deliberately not built (the design behind it is `MAD_DATA_OBJECT.md`).
 * `docs/index.md` -- the developer site's landing page; GitHub Pages serves `docs/` via Jekyll
   (`_config.yml`, `docs/CNAME`, `docs/robots.txt`), live once the repository is public.
-* `docs/project/MAD_SCRIPTING.md` -- the Scrimpter revival analysis: the state and correctness audit of
+* `docs/project/design/MAD_SCRIPTING.md` -- the Scrimpter revival analysis: the state and correctness audit of
   the language, the formula-element integration map, the engine alternatives, and the
   licensing surface. The engine decision is deferred by the user; when the formula-element
   work starts, the implementing agent must ask the user to choose the engine (§8).
 * `docs/archive/MAD_BARCODES.md` -- the barcode element's modernization and re-integration
-  design: complete and archived 2026-10-22 (docs/project/TASKS.md §15); kept for reference.
+  design: complete and archived 2026-10-22 (docs/project/registers/TASKS.md §15); kept for reference.
 * `docs/macos.md` -- the user and developer guide for the native macOS (`AppKit`) application, served on the documentation site (`macos.html`).
 * `docs/project/MAD_MACOS.md` -- the multiplatform framework portability audit (`iphoneos`, `iphonesimulator`, `macosx`) and native macOS architecture record.
 * `Mac/README.md` -- the native macOS build, layout, and smoke-test guide (`./Mac/build.sh`).
@@ -229,20 +229,20 @@ the headless side.
   before adding or removing a library.
 * `docs/project/LICENSE_COMPLIANCE_PLAN.md` -- the remediation plan for those findings, including the
   MySQL-to-MariaDB replacement and the LGPL relink obligation.
-* `docs/project/MAD_STORE_MIGRATION.md` -- the plan to move the `.mad` store off Core Data to a portable
+* `docs/project/design/MAD_STORE_MIGRATION.md` -- the plan to move the `.mad` store off Core Data to a portable
   SQLite schema of our own.
-* `docs/project/DEVELOPER.md` -- test database credentials and common build commands.
-* `docs/project/LOCALIZATION.md` -- the documentation localization contract: the five
+* `docs/project/build/DEVELOPER.md` -- test database credentials and common build commands.
+* `docs/project/localization/LOCALIZATION.md` -- the documentation localization contract: the five
   languages, the 25 public documents that must exist in each, the naming and front-matter
   rules, the language switcher, the excluded internal record trees, and the validation
   checklist for adding the next language.
-* `docs/project/MAD_APP_LOCALIZATION.md` -- the plan to localize the iOS and macOS
+* `docs/project/localization/MAD_APP_LOCALIZATION.md` -- the plan to localize the iOS and macOS
   applications: the measured string inventory, the String Catalog strategy, the
   storyboard and framework-bundle findings, the licence-text policy, the phases, and the
   open decisions.
-* `docs/project/TODO.md` -- the product wishlist: features and ideas.
+* `docs/project/registers/TODO.md` -- the product wishlist: features and ideas.
 * `README.md` -- build notes and the export-compliance statement.
-* `docs/project/APPSTORE.md` -- the App Store promotional text and description currently in use.
+* `docs/project/product/APPSTORE.md` -- the App Store promotional text and description currently in use.
 
 Documents live under `docs/`: the `.mad` format spec (`docs/README.md` and the
 numbered chapters), the tutorials (`docs/tutorials/`), the working records and
@@ -253,21 +253,21 @@ Only the files GitHub and the agent tooling need stay at the repository root
 
 ## Tracking Files Are Maintained, Not Acted On
 
-`docs/project/BUGS.md` and `docs/project/TASKS.md` are **records, not instructions**. An agent may -- and should --
+`docs/project/registers/BUGS.md` and `docs/project/registers/TASKS.md` are **records, not instructions**. An agent may -- and should --
 keep them accurate: add an entry when new evidence appears, record a fix, and re-status a
 task. What an agent must **not** do is start work because a file lists it. Entries there
 are picked up when the user asks for that task by name or number, never on the agent's own
 initiative.
 
-`docs/project/BUGS.md` is the **open** record: what is still wrong, still suspicious, or deliberately
+`docs/project/registers/BUGS.md` is the **open** record: what is still wrong, still suspicious, or deliberately
 left as it is. When a defect is fixed, the entry moves -- full text, its `Now:` line, its
-test and any commit hash, verbatim -- to `docs/project/BUGS_FIXED.md`, and a one-line index entry
-stays under the same framework heading in `docs/project/BUGS.md`, so a reference to "docs/project/BUGS.md, the X
+test and any commit hash, verbatim -- to `docs/project/registers/BUGS_FIXED.md`, and a one-line index entry
+stays under the same framework heading in `docs/project/registers/BUGS.md`, so a reference to "docs/project/registers/BUGS.md, the X
 entry" still lands. The older entries under *Already fixed (for reference)* live there
-too. Archiving is a move, never a rewrite. A partly fixed entry stays in `docs/project/BUGS.md`
+too. Archiving is a move, never a rewrite. A partly fixed entry stays in `docs/project/registers/BUGS.md`
 until the rest of it is closed.
 
-`docs/project/TODO.md` is the user's own wishlist and is not for agents to edit.
+`docs/project/registers/TODO.md` is the user's own wishlist and is not for agents to edit.
 
 Every directory with an `AGENTS.md` also has a `CLAUDE.md` symlink to it, so the two names
 always name the same file.

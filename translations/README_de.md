@@ -77,7 +77,7 @@ Die vollständige Spezifikation — Container-Layout, Speichertabellen, Schemata
 
 ## Wohin MAD führt: Roadmap & Vision
 
-Weil MAD den **Abfragegraphen**, die **materialisierte SQLite-Ergebnistabelle** und das **Präsentationslayout** bereits trennt, eröffnet die Architektur vier große Fähigkeiten, die aktiv entworfen und eingeplant werden (siehe [`docs/vision.md`](../docs/de/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md) und [`docs/project/TODO.md`](../docs/project/TODO.md)):
+Weil MAD den **Abfragegraphen**, die **materialisierte SQLite-Ergebnistabelle** und das **Präsentationslayout** bereits trennt, eröffnet die Architektur vier große Fähigkeiten, die aktiv entworfen und eingeplant werden (siehe [`docs/vision.md`](../docs/de/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md) und [`docs/project/registers/TODO.md`](../docs/project/registers/TODO.md)):
 
 1. **Ein `.mad`-Bericht als Ad-hoc-Datenbanktabelle (kombinierbare Datenobjekte).**
    In einer traditionellen Datenbank wählt man mit `SELECT` aus Basistabellen wie `employee` oder `sales_data` aus. Ein `.mad`-Bericht verknüpft und filtert mehrere Tabellen, und seine Ausgabe (`.maddb` + `.mdcache`) ist bereits eine physische SQLite-Tabelle mit typisiertem Schema (`MADDataColumn`). Indem man die Ausgabe eines Berichts als Tabellenquelle im Abfrage-Designer adressierbar macht, **wird eine `.mad`-Datei zu einer virtuellen/materialisierten Datenbanktabelle**. Andere Berichte, Abfragen oder Werkzeuge können aus einem `.mad`-Bericht mit `SELECT` auswählen und dagegen `JOIN`en wie gegen jede Tabelle einer Datenbank.
@@ -112,7 +112,7 @@ Die veröffentlichten Tags sind `latest` und der kurze SHA des Commits, gebaut f
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
-Die Beispieldokumente aktualisieren sich gegen die Sqlite3-Beispieldatenbank, die im Image enthalten ist; die Fixtures für MySQL, SQL Server und PostgreSQL erwarten die Testserver aus [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md).
+Die Beispieldokumente aktualisieren sich gegen die Sqlite3-Beispieldatenbank, die im Image enthalten ist; die Fixtures für MySQL, SQL Server und PostgreSQL erwarten die Testserver aus [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md).
 
 ## In CI
 
@@ -188,7 +188,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ```
 
-(`MADMySQL`, `MADTdsClient` und `MADPostgres` führen außerdem Live-Suites aus, die mit einem echten Datenbankserver sprechen und übersprungen werden, wenn keiner erreichbar ist — siehe [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md).)
+(`MADMySQL`, `MADTdsClient` und `MADPostgres` führen außerdem Live-Suites aus, die mit einem echten Datenbankserver sprechen und übersprungen werden, wenn keiner erreichbar ist — siehe [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md).)
 
 ### Linux (headless Engine & CLI)
 

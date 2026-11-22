@@ -22,7 +22,7 @@ StoreContent/analyitics: SQLite 3.x database, last written using SQLite version 
 
 ### 3.1 ポータブルストア（ストア移行後）
 
-ストア移行（`docs/project/MAD_STORE_MIGRATION.md`）以降、ドキュメントの定義は独自設計のポータブルSQLiteストアに格納されています。そのスキーマは手動管理される`MADStoreSchema`ディスクリプタ（`MAD/Source/rptq/store/`）によって記述され、`-createSchemaSQL`によって生成され、`MADStoreTests`によってコンパイル済みモデルと照合検証されます。ストアは`PRAGMA user_version`にスキーマバージョンを記録します。バージョン1は初期出荷時のスキーマ（未設定または0）、バージョン2ではユーザーが貼り付けたSQLをそのまま保持する`RptqQuery.sqlSourceText`（`docs/project/MAD_SQL_ENTRY.md` §8）が追加されており、`MADStore`はオープン時に未適用のマイグレーションステップを適用します。`RptqQuery`テーブルのフィールドは以下の通りです：
+ストア移行（`docs/project/design/MAD_STORE_MIGRATION.md`）以降、ドキュメントの定義は独自設計のポータブルSQLiteストアに格納されています。そのスキーマは手動管理される`MADStoreSchema`ディスクリプタ（`MAD/Source/rptq/store/`）によって記述され、`-createSchemaSQL`によって生成され、`MADStoreTests`によってコンパイル済みモデルと照合検証されます。ストアは`PRAGMA user_version`にスキーマバージョンを記録します。バージョン1は初期出荷時のスキーマ（未設定または0）、バージョン2ではユーザーが貼り付けたSQLをそのまま保持する`RptqQuery.sqlSourceText`（`docs/project/MAD_SQL_ENTRY.md` §8）が追加されており、`MADStore`はオープン時に未適用のマイグレーションステップを適用します。`RptqQuery`テーブルのフィールドは以下の通りです：
 
 | カラム | 型 | 備考 |
 |---|---|---|

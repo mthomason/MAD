@@ -18,7 +18,7 @@ walks through the first one; it is the intended first contribution.
   libraries, compiles the eleven headless frameworks, and runs their suites.
 * No database server is needed to contribute: the live MySQL, SQL Server, and
   PostgreSQL suites skip when no server is reachable, and
-  [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) documents the
+  [`docs/project/build/DEVELOPER.md`](docs/project/build/DEVELOPER.md) documents the
   Docker containers that supply them.
 
 ## Getting started
@@ -38,7 +38,7 @@ walks through the first one; it is the intended first contribution.
    ./Linux/build.sh
    ```
 
-   [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md) has the full
+   [`docs/project/build/DEVELOPER.md`](docs/project/build/DEVELOPER.md) has the full
    command matrix, the shared DerivedData path the
    frameworks expect, and the test-database setup.
 3. Pick something. A new driver, an element, or an issue labelled
@@ -72,9 +72,9 @@ that isn't either fixed or recorded is a failing change.
   declaration — an unmarked unused warning means the code is dead.
 * New files carry the one-line header, `Copyright © 2012-2026 Michael
   Thomason. SPDX-License-Identifier: MIT` (`//` for source, `#` for scripts).
-* [`docs/project/BUGS.md`](docs/project/BUGS.md) records open defects with
+* [`docs/project/registers/BUGS.md`](docs/project/registers/BUGS.md) records open defects with
   the tests that pin them; when you fix one, the entry moves to
-  [`docs/project/BUGS_FIXED.md`](docs/project/BUGS_FIXED.md) — a fix that
+  [`docs/project/registers/BUGS_FIXED.md`](docs/project/registers/BUGS_FIXED.md) — a fix that
   isn't recorded didn't happen.
 
 ## Developer Certificate of Origin

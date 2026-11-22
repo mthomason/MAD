@@ -5,7 +5,7 @@ lang: ja-JP
 
 # 今後の方向性：レポートはテーブルである
 
-最終更新：2026-10-29。本ページは、MADが今後成長していく設計上の方向性を示すものです。ここに記述されているコンポジション（合成）機能やマイグレーション機構はまだ実装されていません。データオブジェクトモデルの基礎となる設計は[`docs/project/MAD_DATA_OBJECT.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_DATA_OBJECT.md)、作業記録は[`docs/project/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_FUTURE.md)、プロダクトのウィッシュリストは[`docs/project/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/TODO.md)にあります。
+最終更新：2026-10-29。本ページは、MADが今後成長していく設計上の方向性を示すものです。ここに記述されているコンポジション（合成）機能やマイグレーション機構はまだ実装されていません。データオブジェクトモデルの基礎となる設計は[`docs/project/MAD_DATA_OBJECT.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_DATA_OBJECT.md)、作業記録は[`docs/project/product/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/product/MAD_FUTURE.md)、プロダクトのウィッシュリストは[`docs/project/registers/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/registers/TODO.md)にあります。
 
 ## 現在のMAD
 

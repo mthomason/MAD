@@ -20,7 +20,7 @@ führt durch das erste; es ist der vorgesehene erste Beitrag.
   ausführt.
 * Zum Mitwirken ist kein Datenbankserver nötig: Die Live-Suites für MySQL, SQL
   Server und PostgreSQL werden übersprungen, wenn kein Server erreichbar ist, und
-  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) dokumentiert die
+  [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md) dokumentiert die
   Docker-Container, die sie bereitstellen.
 
 ## Erste Schritte
@@ -41,7 +41,7 @@ führt durch das erste; es ist der vorgesehene erste Beitrag.
    ./Linux/build.sh
    ```
 
-   [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) enthält die
+   [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md) enthält die
    vollständige Befehlsmatrix, den gemeinsamen DerivedData-Pfad, den die
    Frameworks erwarten, und die Einrichtung der Testdatenbanken.
 3. Suchen Sie sich etwas aus. Einen neuen Treiber, ein Element oder ein Issue mit
@@ -81,9 +81,9 @@ fehlschlagende Änderung.
   Code tot ist.
 * Neue Dateien tragen den einzeiligen Header `Copyright © 2012-2026 Michael
   Thomason. SPDX-License-Identifier: MIT` (`//` für Quellcode, `#` für Skripte).
-* [`docs/project/BUGS.md`](../docs/project/BUGS.md) hält offene Defekte mit den
+* [`docs/project/registers/BUGS.md`](../docs/project/registers/BUGS.md) hält offene Defekte mit den
   Tests fest, die sie fixieren; wenn Sie einen beheben, wandert der Eintrag nach
-  [`docs/project/BUGS_FIXED.md`](../docs/project/BUGS_FIXED.md) — ein Fix, der
+  [`docs/project/registers/BUGS_FIXED.md`](../docs/project/registers/BUGS_FIXED.md) — ein Fix, der
   nicht festgehalten wird, ist nicht geschehen.
 
 ## Developer Certificate of Origin
