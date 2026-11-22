@@ -105,6 +105,10 @@ Lesen Sie zuerst die [Einführung in die Spezifikation](README.html) oder spring
   vorgesehene erste Beitrag: `MADDatabase` ableiten, den Treiber registrieren,
   Zeilen zurückgeben.
 
+## Entwickler
+
+Binden Sie die Engine ein, steuern Sie sie über das `mad`-Kommandozeilenwerkzeug und lesen Sie den Datenobjekt-Vertrag und die Architekturunterlagen: [Entwicklerdokumentation](developers/).
+
 ## Die Richtung
 
 [Vision](vision.html) — Berichte als kombinierbare Datenbanktabellen, Abfragen mit
