@@ -6,10 +6,10 @@
 Dockerfile, das clang + libobjc2 + GNUstep Base aus Quellen baut und eine
 MADFoundation-Teilmenge kompiliert hat); Phase C ist die Shim-Liste aus §4, und
 in diesem Verzeichnis wird sie umgesetzt. Der Build kompiliert inzwischen **alle
-elf headless Frameworks** — jedes Framework aus der Tabelle in
+zwölf headless Frameworks** — jedes Framework aus der Tabelle in
 docs/developers/build/linux.md §3 plus `MADPostgres`, außer den reinen UI-Frameworks
 (`MADExplorer`, `MADBarcodes`, `MADFeedback`, `Scrimpter`, die App) — und führt
-ihre Suites im Container aus: 126 Testprogramme, 1.303 Tests, 7 festgehaltene
+ihre Suites im Container aus: 130 Suiten, 1.313 Tests, 7 festgehaltene
 Needs. Die Testabdeckung, die am 2026-10-10 in master zusammengeführt wurde
 (~100 Xcode-Testdateien), ist vollständig portiert, Suite für Suite. Nichts davon
 wird in der App ausgeliefert; auch die CLI — der Checkpoint von Phase D — wird
@@ -378,7 +378,7 @@ Runtime-Image.
 ## Die CLI läuft hier — Phase D
 
 `mad` wird von diesem CMakeLists aus `CLI/Source` gebaut (denselben Quellen, die
-`CLI/build.sh` für den iOS-Simulator baut), linkt die elf Frameworks
+`CLI/build.sh` für den iOS-Simulator baut), linkt die zwölf Frameworks
 whole-archive und läuft im Image:
 
 	/build/mad inspect <document.mad>
@@ -595,7 +595,7 @@ Das Image enthält:
   eingecheckten Fixtures London und Music ohne zusätzliche Einrichtung
   aktualisierbar macht.
 
-Es lässt den Compiler, cmake, git, die Quellen, die 126 Testbinaries sowie die
+Es lässt den Compiler, cmake, git, die Quellen, die 130 Testbinaries sowie die
 statischen Archive und Header zurück: Die letzte Stufe ist `ubuntu:24.04` plus die
 Runtime-Bibliotheken aus apt, nicht das Toolchain-Image. Es ist **283 MB auf der
 Festplatte (66,5 MB komprimiert)**; das Build-Image ist 6,65 GB.

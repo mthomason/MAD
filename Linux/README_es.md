@@ -5,7 +5,7 @@
 `docs/developers/build/linux.md` §9: la Fase B demostró la cadena de herramientas (un Dockerfile que
 compila desde fuentes clang + libobjc2 + GNUstep Base y compiló un subconjunto de
 MADFoundation); la Fase C es la lista de shims de la §4, y este directorio es donde aterriza.
-La compilación ahora compila **los once frameworks sin interfaz gráfica**: todos los de la tabla de
+La compilación ahora compila **los doce frameworks sin interfaz gráfica**: todos los de la tabla de
 la §3 de docs/developers/build/linux.md más `MADPostgres`, excepto los que son solo de interfaz (`MADExplorer`, `MADBarcodes`,
 `MADFeedback`, `Scrimpter`, la aplicación), y ejecuta sus suites dentro del
 contenedor: 126 ejecutables de prueba, 1 303 pruebas, 7 necesidades registradas. La cobertura de pruebas que
@@ -343,7 +343,7 @@ es herramienta de compilación y no está en la imagen de ejecución.
 ## La CLI se ejecuta aquí: Fase D
 
 `mad` lo compila este CMakeLists desde `CLI/Source` (las mismas fuentes que
-`CLI/build.sh` compila para el Simulador de iOS), enlaza los once frameworks
+`CLI/build.sh` compila para el Simulador de iOS), enlaza los doce frameworks
 con whole-archive y se ejecuta en la imagen:
 
 	/build/mad inspect <document.mad>
@@ -537,7 +537,7 @@ La imagen contiene:
   no una ruta, así que este único archivo es lo que permite que las fixtures London y Music
   incluidas en el repositorio se actualicen sin configuración adicional.
 
-Deja atrás el compilador, cmake, git, las fuentes, los 126 binarios de prueba,
+Deja atrás el compilador, cmake, git, las fuentes, los 130 binarios de prueba,
 y los archivos estáticos y las cabeceras: la etapa final es `ubuntu:24.04` más
 las bibliotecas de ejecución de apt, no la imagen de la cadena de herramientas. Ocupa **283 MB en
 disco (66.5 MB comprimida)**; la imagen de compilación ocupa 6.65 GB.

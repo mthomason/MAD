@@ -60,6 +60,10 @@ class CheckSiteFactsTest(unittest.TestCase):
 		self.write("docs/a.md", "engine 9.1")
 		self.assertIn("9.1", check_site_facts.banned_literals(str(self.docs)))
 
+	def test_localized_1303_forms_are_flagged(self):
+		self.write("docs/a.md", "1.303 pruebas\n1 303 pruebas")
+		self.assertIn("1,303", check_site_facts.banned_literals(str(self.docs)))
+
 	def test_built_site_internal_directory_fails(self):
 		(self.built / "project").mkdir(parents=True)
 		self.assertIn("project", check_site_facts.built_leaks(str(self.built)))

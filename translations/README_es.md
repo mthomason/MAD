@@ -10,7 +10,7 @@ MAD es una plataforma de generación de informes relacionales construida desde c
 
 Un archivo `.mad` contiene la definición completa de un informe —la instantánea del esquema de la base de datos, el grafo de consultas relacional (tablas, joins, predicados, agrupaciones) y el árbol de diseño por bandas— en un único archivo de menos de 100 KB, separado limpiamente de los datos que muestra. Un informe es un archivo ejecutable, no un servidor: cualquier entorno de ejecución que hable `.mad` puede inspeccionar el esquema, compilar SQL determinista para la base de datos de destino, materializar el conjunto de resultados en una tabla SQLite local y renderizarlo a vistas nativas de AppKit/UIKit, HTML paginado, PDF, CSV o JSON.
 
-El repositorio es un único proyecto autocontenido: las aplicaciones para iPad/iPhone, la aplicación de escritorio nativa para macOS (`AppKit`) (`Mac/`), catorce frameworks (doce multiplataforma entre iOS, el Simulador de iOS y macOS nativo; once sin interfaz gráfica en Linux), la compilación y la suite de pruebas de Linux sin interfaz gráfica (126 ejecutables de prueba, 1 303 pruebas), la herramienta de línea de comandos `mad` y el sistema de compilación (`Compressor`) que compila las bibliotecas C de terceros desde fuentes fijadas. El código se publica bajo la licencia MIT; el formato `.mad` es una especificación abierta (consulte [`docs/`](../docs/es/)), aunque los nombres y el arte de las aplicaciones del proyecto no están cubiertos por la concesión de la licencia (consulte [`NOTICE`](https://github.com/mthomason/MAD/blob/master/NOTICE)).
+El repositorio es un único proyecto autocontenido: las aplicaciones para iPad/iPhone, la aplicación de escritorio nativa para macOS (`AppKit`) (`Mac/`), catorce frameworks (doce multiplataforma entre iOS, el Simulador de iOS y macOS nativo; doce sin interfaz gráfica en Linux), la compilación y la suite de pruebas de Linux sin interfaz gráfica (126 ejecutables de prueba, 1 303 pruebas), la herramienta de línea de comandos `mad` y el sistema de compilación (`Compressor`) que compila las bibliotecas C de terceros desde fuentes fijadas. El código se publica bajo la licencia MIT; el formato `.mad` es una especificación abierta (consulte [`docs/`](../docs/es/)), aunque los nombres y el arte de las aplicaciones del proyecto no están cubiertos por la concesión de la licencia (consulte [`NOTICE`](https://github.com/mthomason/MAD/blob/master/NOTICE)).
 
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
@@ -195,7 +195,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 El motor sin interfaz gráfica se verifica del mismo modo en Linux. Desde la raíz del repositorio, con Docker instalado:
 
 ```sh
-./Linux/build.sh       # build the toolchain image, compile the eleven frameworks, run the suites
+./Linux/build.sh       # build the toolchain image, compile the twelve frameworks, run the suites
 ```
 
 Esto ejecuta 126 ejecutables de prueba y 1 303 pruebas dentro del contenedor, y `--verify` añade las comprobaciones integrales de la CLI contra las fixtures incluidas y sus resúmenes fijados. Consulte [`Linux/README.md`](../Linux/README_es.md) para la imagen, las versiones fijadas y las divergencias de GNUstep que encontró el port.

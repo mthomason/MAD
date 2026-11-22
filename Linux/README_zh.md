@@ -2,7 +2,7 @@
 
 # Linux —— 无头引擎的构建
 
-`docs/developers/build/linux.md` §9：阶段 B 验证了工具链（一个从源码构建 clang + libobjc2 + GNUstep Base 并编译了 MADFoundation 子集的 Dockerfile）；阶段 C 是 §4 的垫片清单，而本目录就是它的落地之处。现在的构建会编译**全部十一个无头框架**——docs/developers/build/linux.md §3 表格中的每个框架加上 `MADPostgres`，除去仅限 UI 的那些（`MADExplorer`、`MADBarcodes`、`MADFeedback`、`Scrimpter`、应用本身）——并在容器内运行它们的测试套件：126 个测试可执行文件、1,303 个测试、7 个已记录的 need。2026-10-10 合入 master 的测试覆盖（约 100 个 Xcode 测试文件）已逐套件完整移植。这里的内容不会随应用发布；CLI——阶段 D 的检查点——也在这里构建和运行（见下文“CLI 在此运行”），阶段 F 的运行时镜像则把它作为交付物来运行（见下文“运行时镜像”）。
+`docs/developers/build/linux.md` §9：阶段 B 验证了工具链（一个从源码构建 clang + libobjc2 + GNUstep Base 并编译了 MADFoundation 子集的 Dockerfile）；阶段 C 是 §4 的垫片清单，而本目录就是它的落地之处。现在的构建会编译**全部十二个无头框架**——docs/developers/build/linux.md §3 表格中的每个框架加上 `MADPostgres`，除去仅限 UI 的那些（`MADExplorer`、`MADBarcodes`、`MADFeedback`、`Scrimpter`、应用本身）——并在容器内运行它们的测试套件：130 个测试套件、1,313 个测试、7 个已记录的 need。2026-10-10 合入 master 的测试覆盖（约 100 个 Xcode 测试文件）已逐套件完整移植。这里的内容不会随应用发布；CLI——阶段 D 的检查点——也在这里构建和运行（见下文“CLI 在此运行”），阶段 F 的运行时镜像则把它作为交付物来运行（见下文“运行时镜像”）。
 
 ## 运行
 

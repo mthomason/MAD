@@ -35,7 +35,7 @@ recorre el primero; es la primera contribución prevista.
    ```
 
    ```sh
-   # Linux: the whole headless engine — 126 test executables, 1,303 tests
+   # Linux: the whole headless engine — 130 suites, 1,313 tests
    ./Linux/build.sh
    ```
 

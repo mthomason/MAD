@@ -68,8 +68,8 @@ any browser.
   into a SQLite row cache (`MADDataTableFast`) and computes two-pass groupings
   and aggregates from there, so paginated rendering stays fast within a
   phone's memory.
-* **Embeddable and portable.** Eleven of the fourteen frameworks are
-  UIKit-free and build headlessly, passing 1,303 tests on Linux in Docker.
+* **Embeddable and portable.** Twelve of the fourteen frameworks are
+  UIKit-free and build headlessly, passing 1,313 tests on Linux in Docker.
   The `.mad` container is a bzip2 tar archive holding a portable SQLite store;
   no Apple framework is required to open it.
 

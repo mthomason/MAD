@@ -51,7 +51,7 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 * **通过契约实现互操作。** 与其在整个组织内散落一次性的 SQL 脚本和定制的仪表板胶水代码，`.mad` 文件把架构契约、查询 AST 和呈现布局打包成一个可检查、可 diff 的产物，在 Apple 与 Linux 上生成逐字节一致的 SQL 和导出结果。
 * **自研，而非拼装。** SQL 生成器、SQL 解析器、数据表引擎、存储、布局模型和渲染器都是十四个框架中自研的 Objective-C 代码。第三方代码严格限于通信链路——MariaDB Connector/C、FreeTDS、`libpq`、SQLite——以及用于条形码的 `libarchive`/`bzip2` 和 `zint`。没有转售任何专有报表 SDK。
 * **移动优先，按内存预算设计。** 一次刷新会把结果集一次性读入 SQLite 行缓存（`MADDataTableFast`），并在其中计算两趟分组和聚合，因此分页渲染在手机的内存预算内依然很快。
-* **可嵌入、可移植。** 十四个框架中有十一个不依赖 UIKit，可以无头构建，并在 Docker 中的 Linux 上通过 1,303 个测试。`.mad` 容器是一个 bzip2 tar 归档，内含可移植的 SQLite 存储；打开它不需要任何 Apple 框架。
+* **可嵌入、可移植。** 十四个框架中有十二个不依赖 UIKit，可以无头构建，并在 Docker 中的 Linux 上通过 1,313 个测试。`.mad` 容器是一个 bzip2 tar 归档，内含可移植的 SQLite 存储；打开它不需要任何 Apple 框架。
 
 ## `.mad` 格式
 
