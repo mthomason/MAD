@@ -315,3 +315,7 @@ _site/
 # Python bytecode
 __pycache__/
 *.pyc
+
+# The documentation's developer build guides are source, not build output.
+!docs/developers/build/
+!docs/*/developers/build/
