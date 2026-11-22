@@ -102,6 +102,10 @@ Leia primeiro a [introdução à especificação](README.html), ou vá diretamen
   primeira contribuição recomendada: crie uma subclasse de `MADDatabase`, registre o
   driver e retorne linhas.
 
+## Desenvolvedores
+
+Incorpore o motor, use a ferramenta de linha de comando `mad` e leia o contrato do objeto de dados e os registros de arquitetura: [documentação para desenvolvedores](developers/).
+
 ## A direção
 
 [Visão](vision.html) — relatórios como tabelas de banco de dados componíveis, consultas

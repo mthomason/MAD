@@ -78,6 +78,10 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 * [驱动编写教程](tutorials/driver-authoring.html)——理想的第一个贡献：
   继承 `MADDatabase`、注册驱动、返回数据行。
 
+## 开发者
+
+嵌入引擎、通过 `mad` 命令行工具驱动它，并阅读数据对象与架构记录：[开发者文档](developers/)。
+
 ## 方向
 
 [愿景](vision.html)——报表即组合式数据库表、单份报表中的多数据源查询、超越纸面范式的原生 UIKit 数据视图，以及把旧版 Crystal Reports（`.rpt`）转换为开放的 `.mad` 文件。

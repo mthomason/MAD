@@ -73,6 +73,10 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 * [mad-action](https://github.com/mthomason/mad-action)——リポジトリにコミットされた`.mad`をGitHub Actionsで実行し、エクスポート結果をアップロード（`mthomason/mad-action@v1`）。
 * [ドライバ作成チュートリアル](tutorials/driver-authoring.html)——最初のコントリビューションとして推奨されるガイド：`MADDatabase`をサブクラス化し、ドライバを登録して行データを返す方法。
 
+## 開発者
+
+エンジンを組み込み、`mad` コマンドラインから実行し、データオブジェクトとアーキテクチャの記録を読む：[開発者向けドキュメント](developers/)。
+
 ## 今後の方向性
 
 [ビジョン](vision.html)——コンポーザブルなデータベーステーブルとしてのレポート、単一レポート内でのマルチデータソースクエリ、紙のパラダイムを超えたネイティブUIKitデータビュー、およびレガシーなCrystal Reports（`.rpt`）からオープンな`.mad`ファイルへの変換。
