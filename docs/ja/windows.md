@@ -27,14 +27,14 @@ lang: ja-JP
 
 ```
 MAD-Designer-Windows-0.7/
-  Mad.Designer.Windows.exe    WPF アプリケーション（自己完結型）
-  ...                         アプリケーション自身のファイル
-  CLI/Fixtures/               London.portable.mad（サンプルレポート）と
-                              chinook.sqlite3（更新に使うサンプルデータ）
-  Windows/Engine/build/mad.exe       headless エンジン
-  Windows/Engine/build/*.dll         エンジンの GNUstep/ObjC/VC ランタイム
-  Windows/Engine/build/fonts/        PDF エクスポートで使う Liberation フォント
-  ThirdParty/Licenses/       すべてのサードパーティライセンスと通知
+  Mad.Designer.Windows.exe   the WPF application (self-contained)
+  ...                        the application's own files
+  CLI/Fixtures/              London.portable.mad (a sample report) and
+                             chinook.sqlite3 (the sample data it refreshes from)
+  Windows/Engine/build/mad.exe       the headless engine
+  Windows/Engine/build/*.dll         the engine's GNUstep/ObjC/VC runtime
+  Windows/Engine/build/fonts/        the Liberation fonts used by PDF export
+  ThirdParty/Licenses/       every third-party licence and notice
   LICENSE, NOTICE, README-Windows.txt
 ```
 
@@ -91,8 +91,8 @@ dotnet publish Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj `
 エンジンのほうが難しい半分です。`Windows\Engine\build.ps1` はネイティブビルドを再現します（Clang 20.1.8、固定された Visual Studio の MSVC ツールチェーン、NASM、Strawberry Perl、Meson、Python、そして 7 つの固定リビジョンから `C:\GNUstep` にビルドする GNUstep）。管理者権限の PowerShell プロンプトから実行する必要があります。
 
 ```powershell
-pwsh -File .\Windows\Engine\build.ps1                 # ツールチェーンの完全なブートストラップとビルド
-pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # ツールチェーンが既にある場合の再ビルド
+pwsh -File .\Windows\Engine\build.ps1                 # full toolchain bootstrap and build
+pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # rebuild after the toolchain exists
 ```
 
 2 つの .NET スイートはビルド済みのエンジンに対して実行します。

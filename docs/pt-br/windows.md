@@ -27,14 +27,14 @@ lang: pt-BR
 
 ```
 MAD-Designer-Windows-0.7/
-  Mad.Designer.Windows.exe   o aplicativo WPF (autocontido)
-  ...                        os arquivos do próprio aplicativo
-  CLI/Fixtures/              London.portable.mad (um relatório de exemplo) e
-                             chinook.sqlite3 (os dados de exemplo que ele atualiza)
-  Windows/Engine/build/mad.exe       o motor headless
-  Windows/Engine/build/*.dll         o runtime GNUstep/ObjC/VC do motor
-  Windows/Engine/build/fonts/        as fontes Liberation usadas pela exportação em PDF
-  ThirdParty/Licenses/       todas as licenças e avisos de terceiros
+  Mad.Designer.Windows.exe   the WPF application (self-contained)
+  ...                        the application's own files
+  CLI/Fixtures/              London.portable.mad (a sample report) and
+                             chinook.sqlite3 (the sample data it refreshes from)
+  Windows/Engine/build/mad.exe       the headless engine
+  Windows/Engine/build/*.dll         the engine's GNUstep/ObjC/VC runtime
+  Windows/Engine/build/fonts/        the Liberation fonts used by PDF export
+  ThirdParty/Licenses/       every third-party licence and notice
   LICENSE, NOTICE, README-Windows.txt
 ```
 
@@ -91,8 +91,8 @@ dotnet publish Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj `
 O motor é a metade mais difícil. `Windows\Engine\build.ps1` reproduz a compilação nativa (Clang 20.1.8, a toolchain MSVC fixada do Visual Studio, NASM, Strawberry Perl, Meson, Python e GNUstep compilado a partir de sete revisões fixadas em `C:\GNUstep`). Ele deve ser executado em um prompt do PowerShell elevado:
 
 ```powershell
-pwsh -File .\Windows\Engine\build.ps1                 # bootstrap completo da toolchain e compilação
-pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # recompilar quando a toolchain já existe
+pwsh -File .\Windows\Engine\build.ps1                 # full toolchain bootstrap and build
+pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # rebuild after the toolchain exists
 ```
 
 As duas suítes .NET são executadas contra o motor compilado:

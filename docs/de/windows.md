@@ -27,14 +27,14 @@ lang: de-DE
 
 ```
 MAD-Designer-Windows-0.7/
-  Mad.Designer.Windows.exe   die WPF-Anwendung (self-contained)
-  ...                        die eigenen Dateien der Anwendung
-  CLI/Fixtures/              London.portable.mad (ein Beispielbericht) und
-                             chinook.sqlite3 (die Beispieldaten dafür)
-  Windows/Engine/build/mad.exe       die headless Engine
-  Windows/Engine/build/*.dll         die GNUstep-/ObjC-/VC-Laufzeit der Engine
-  Windows/Engine/build/fonts/        die Liberation-Schriften für den PDF-Export
-  ThirdParty/Licenses/       jede Lizenz und jeder Hinweis Dritter
+  Mad.Designer.Windows.exe   the WPF application (self-contained)
+  ...                        the application's own files
+  CLI/Fixtures/              London.portable.mad (a sample report) and
+                             chinook.sqlite3 (the sample data it refreshes from)
+  Windows/Engine/build/mad.exe       the headless engine
+  Windows/Engine/build/*.dll         the engine's GNUstep/ObjC/VC runtime
+  Windows/Engine/build/fonts/        the Liberation fonts used by PDF export
+  ThirdParty/Licenses/       every third-party licence and notice
   LICENSE, NOTICE, README-Windows.txt
 ```
 
@@ -91,8 +91,8 @@ dotnet publish Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj `
 Die Engine ist die schwierigere Hälfte. `Windows\Engine\build.ps1` reproduziert den nativen Build (Clang 20.1.8, die festgelegte Visual-Studio-MSCV-Toolchain, NASM, Strawberry Perl, Meson, Python und ein aus sieben festgelegten Revisionen gebautes GNUstep in `C:\GNUstep`). Das Skript muss in einer erhöhten PowerShell-Eingabeaufforderung laufen:
 
 ```powershell
-pwsh -File .\Windows\Engine\build.ps1                 # vollständiger Toolchain-Bootstrap und Build
-pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # Neubau, wenn die Toolchain bereits existiert
+pwsh -File .\Windows\Engine\build.ps1                 # full toolchain bootstrap and build
+pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # rebuild after the toolchain exists
 ```
 
 Die beiden .NET-Testsuiten laufen gegen die gebaute Engine:
