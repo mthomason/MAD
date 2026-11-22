@@ -895,12 +895,12 @@ mesma sessão que `build.ps1`:
 
 ```powershell
 $env:MAD_MYSQL_TEST_HOST = "127.0.0.1"; $env:MAD_MYSQL_TEST_PORT = "13306"
-$env:MAD_MYSQL_TEST_USER = "root"; $env:MAD_MYSQL_TEST_PASSWORD = "root"
+$env:MAD_MYSQL_TEST_USER = "root"; $env:MAD_MYSQL_TEST_PASSWORD = "<password>"
 $env:MAD_MYSQL_TEST_SCHEMA = "employees"
 $env:MAD_TDS_TEST_HOST = "127.0.0.1"; $env:MAD_TDS_TEST_USER = "sa"
-$env:MAD_TDS_TEST_PASSWORD = "Root1@Root2"; $env:MAD_TDS_TEST_DATABASE = "AdventureWorksLT2022"
+$env:MAD_TDS_TEST_PASSWORD = "<password>"; $env:MAD_TDS_TEST_DATABASE = "AdventureWorksLT2022"
 $env:MAD_PG_TEST_HOST = "127.0.0.1"; $env:MAD_PG_TEST_PORT = "5432"
-$env:MAD_PG_TEST_USER = "mad"; $env:MAD_PG_TEST_PASSWORD = "mad_test_pw"
+$env:MAD_PG_TEST_USER = "mad"; $env:MAD_PG_TEST_PASSWORD = "<password>"
 $env:MAD_PG_TEST_DATABASE = "chinook"
 ```
 
