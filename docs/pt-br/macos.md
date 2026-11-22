@@ -23,6 +23,8 @@ Cada arquivo `.mad` criado ou editado no macOS é compatível byte a byte com os
   *(Se você baixar o `.dmg` ou `.zip` pelo navegador, execute `xattr -cr "/Applications/MAD Designer.app"` uma vez no Terminal após copiar para `/Applications` para limpar o atributo de quarentena do macOS Gatekeeper.)*
 * **Versão:** app {{ site.data.versions.macos_app_version }} / motor {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
 
+**Idiomas.** A interface do aplicativo está disponível em inglês, chinês simplificado, japonês, português do Brasil, alemão e espanhol latino-americano. As traduções são assistidas por máquina e podem conter erros; reporte-os em <https://github.com/mthomason/MAD/issues>.
+
 ---
 
 ## Workspaces

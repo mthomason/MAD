@@ -17,6 +17,8 @@ lang: ja-JP
 
 * **直接ダウンロード:** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip)
 * **バージョン:** アプリ {{ site.data.versions.windows_app_version }} / エンジン {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }})。
+
+**言語：** アプリの UI は英語、簡体字中国語、日本語、ブラジルポルトガル語、ドイツ語、ラテンアメリカスペイン語で利用できます。翻訳は機械支援によるもので、誤りを含む場合があります。問題は <https://github.com/mthomason/MAD/issues> で報告してください。
 * **要件:** Windows 10（1903 以降）または Windows 11、64 ビット。アーカイブは自己完結型のため、**.NET ランタイムのインストールは不要です**。ビューアは Microsoft Edge WebView2 Evergreen ランタイムを使用します。これは Windows 11 と最新の Edge に同梱されています。古い Windows 10 イメージでは [Evergreen ランタイム](https://developer.microsoft.com/microsoft-edge/webview2/)をインストールしてください。
 
 1. `.zip` をダウンロードし、任意のフォルダーに展開します。アプリケーション、エンジン、ライセンスは一体なので、フォルダー構造はそのまま保持してください。
