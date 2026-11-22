@@ -253,6 +253,14 @@ def test_built_site_internal_directory_fails(self):
 	(self.built / "project").mkdir(parents=True)
 	self.assertIn("project", check_site_facts.built_leaks(str(self.built)))
 
+def test_moved_path_reference_is_reported(self):
+	self.write("Code/a.m", "see docs/project/BUGS.md")
+	self.assertIn("docs/project/BUGS.md", check_site_facts.moved_path_references(str(self.root)))
+
+def test_frozen_tree_moved_path_is_ignored(self):
+	self.write("docs/zh/project/a.md", "see docs/project/BUGS.md")
+	self.assertEqual(check_site_facts.moved_path_references(str(self.root)), [])
+
 def test_built_marketing_source_markdown_fails(self):
 	self.write("built/AGENTS.md", "# internal")
 	self.assertIn("AGENTS.md", check_site_facts.built_leaks(str(self.built)))
@@ -265,7 +273,7 @@ Expected: FAIL with missing functions.
 
 - [ ] **Step 3: Implement `check_site_facts.py`**
 
-Read the flat `key: "value"` pairs from `docs/_data/versions.yml` and the optional marketing `_data/versions.yml` with a small regex parser (no PyYAML). Compare every key present in both; report differences. Scan text files (`.md`, `.html`, `.yml`) in the public docs tree (excluding `project`, `archive`, `superpowers`, `assets`), the repository root documents when `--repo` is given (`README.md`, `translations/*.md`, `Mac/README*.md`, `Linux/README*.md`, `CLI/Fixtures/README*.md`, `MADFileManager/README*.md`, `MADTds/README*.md`, `satellites/mad-action/README*.md`), and the marketing tree when `--marketing` is given (excluding `.git`, `_site`, `img`, `css`, `js`). Banned literals: `v9.1.0-macos`, `9.1` as a whole word, `1,303`, `126 test executables`, `Eleven of the fourteen`, `not yet localized`, `instrumented but not localized`. `banned_literals` returns the literal strings found, so the tests can assert on them. When `--built` is given, assert the built tree contains no directory named `project`, `archive`, or `superpowers`; no file whose basename starts with `BUGS`, `TASKS`, `ROADMAP`, `DEVELOPER`, `TEST-DB-INFO`, or `MAD_DATASOURCE_AND_CONNECTION_UX`; and, when the built tree is the marketing site, no `.md` file. The local Docker test credentials are intentionally public, so they are not scanned. `built_leaks` returns one token per leak: `project` or the offending basename.
+Read the flat `key: "value"` pairs from `docs/_data/versions.yml` and the optional marketing `_data/versions.yml` with a small regex parser (no PyYAML). Compare every key present in both; report differences. Scan text files (`.md`, `.html`, `.yml`) in the public docs tree (excluding `project`, `archive`, `superpowers`, `assets`), the repository root documents when `--repo` is given (`README.md`, `translations/*.md`, `Mac/README*.md`, `Linux/README*.md`, `CLI/Fixtures/README*.md`, `MADFileManager/README*.md`, `MADTds/README*.md`, `satellites/mad-action/README*.md`), and the marketing tree when `--marketing` is given (excluding `.git`, `_site`, `img`, `css`, `js`). Banned literals: `v9.1.0-macos`, `9.1` as a whole word, `1,303`, `126 test executables`, `Eleven of the fourteen`, `not yet localized`, `instrumented but not localized`. `banned_literals` returns the literal strings found, so the tests can assert on them. When `--built` is given, assert the built tree contains no directory named `project`, `archive`, or `superpowers`; no file whose basename starts with `BUGS`, `TASKS`, `ROADMAP`, `DEVELOPER`, `TEST-DB-INFO`, or `MAD_DATASOURCE_AND_CONNECTION_UX`; and, when the built tree is the marketing site, no `.md` file. The local Docker test credentials are intentionally public, so they are not scanned. `built_leaks` returns one token per leak: `project` or the offending basename. `moved_path_references` scans every Markdown, source, script, and configuration file (excluding the frozen legacy tree, the internal plans, and the checker's own source) for a moved record's old path, reported as `moved-paths`.
 
 - [ ] **Step 4: Run the tests to verify they pass**
 

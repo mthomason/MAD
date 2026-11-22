@@ -73,6 +73,18 @@ class CheckLinksTest(unittest.TestCase):
 		self.write("docs/superpowers/x.md", "[x](missing.md)")
 		self.assertEqual(check_links.check_links(str(self.root)), [])
 
+	def test_checks_compressor_tree(self):
+		self.write("Compressor/a.md", "[x](missing.md)")
+		self.assertEqual(check_links.check_links(str(self.root)), [("Compressor/a.md", 1, "missing.md")])
+
+	def test_skips_compressor_build_output(self):
+		self.write("Compressor/build/vendor.md", "[x](missing.md)")
+		self.assertEqual(check_links.check_links(str(self.root)), [])
+
+	def test_skips_compressor_vendored_sources(self):
+		self.write("Compressor/src/vendor.md", "[x](missing.md)")
+		self.assertEqual(check_links.check_links(str(self.root)), [])
+
 
 if __name__ == "__main__":
 	unittest.main()

@@ -669,7 +669,7 @@ The user's own words follow; the implications are the author's.
   table, and SQLite's join engine already exist.
 - **Not a change to the pull-everything cache.** The two-pass cache is load-bearing
   (`docs/05-companion-files.md` §5.1).
-- **Not scheduled.** This is the design record for future work. `docs/project/TODO.md` is
+- **Not scheduled.** This is the design record for future work. `docs/project/registers/TODO.md` is
   the user's own wishlist (the preview-paging wish belongs there), `TASKS.md` is the
   engineering queue, and `ROADMAP.md` says what is picked up next. Nothing here is started on
   an agent's initiative.

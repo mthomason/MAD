@@ -1,7 +1,7 @@
 # Publish the `mad` runtime image to GHCR -- the distribution vehicle.
 #
 # Builds the runtime stage of Linux/Dockerfile (the CLI deliverable,
-# docs/project/MAD_CLI.md §5.5) and pushes it to ghcr.io/mthomason/mad as
+# docs/developers/cli.md §5.5) and pushes it to ghcr.io/mthomason/mad as
 # :latest and :<short-sha>.  Runs on pushes to master and by hand from the
 # Actions tab; deliberately not on pull requests -- a PR must not publish.
 # ubuntu-latest is native amd64, the platform the published tag targets (the

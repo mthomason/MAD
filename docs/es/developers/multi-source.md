@@ -670,7 +670,7 @@ Siguen las palabras del propio usuario; las implicaciones son del autor.
   de resultados y el motor de unión de SQLite ya existen.
 - **No es un cambio a la caché que lo extrae todo.** La caché de dos pasadas es fundamental
   (`docs/05-companion-files.md` §5.1).
-- **No está programado.** Este es el registro de diseño para trabajo futuro. `docs/project/TODO.md` es
+- **No está programado.** Este es el registro de diseño para trabajo futuro. `docs/project/registers/TODO.md` es
   la lista de deseos del propio usuario (el deseo de paginación de vista previa pertenece allí), `TASKS.md` es la
   cola de ingeniería, y `ROADMAP.md` dice qué se toma a continuación. Nada aquí se inicia por
   iniciativa de un agente.

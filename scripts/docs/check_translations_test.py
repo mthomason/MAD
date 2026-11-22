@@ -33,7 +33,7 @@ class CheckTranslationsTest(unittest.TestCase):
 
 	def test_public_pages_excludes_internal(self):
 		self.write("docs/index.md", "# Home")
-		self.write("docs/project/BUGS.md", "# B")
+		self.write("docs/project/registers/BUGS.md", "# B")
 		self.write("docs/superpowers/x.md", "# X")
 		self.write("docs/404.md", "# 404")
 		self.write("docs/de/index.md", "# Start")

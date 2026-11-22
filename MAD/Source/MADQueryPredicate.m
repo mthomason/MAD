@@ -81,7 +81,7 @@
                 // and escaped the way the database in use reads, which is what
                 // -newSafeLiteral: is for.  It used to be @"\"%@\"" -- a double quote, which
                 // SQL reads as a *name*: the filter read as a reference to a column called
-                // London.  See docs/project/BUGS.md.
+                // London.  See docs/project/registers/BUGS.md.
                 NSString *rightFieldID = queryPredicate.rightFieldID;
                 rightValue = [MADDatabaseField isNumeric:dataType] ? rightFieldID :
                 [database newSafeLiteral: rightFieldID];

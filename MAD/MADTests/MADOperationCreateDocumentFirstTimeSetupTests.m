@@ -144,7 +144,7 @@
 	[operation execute];
 
 	XCTAssertTrue(operation.isFinished);
-	// Quirk (docs/project/BUGS.md): the private `success` flag is initialised NO and never
+	// Quirk (docs/project/registers/BUGS.md): the private `success` flag is initialised NO and never
 	// assigned -- the local that records the outcome is only used for logging.
 	XCTAssertFalse(operation.success);
 	XCTAssertEqual(operation.errors.count, (NSUInteger)0);

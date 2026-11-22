@@ -17,7 +17,7 @@
 # The view-controller headers those exclusions drop are not imported by any of
 # the 8 files below (grep-verified), so MADAPI compiles here without the
 # MADCocoaExtensions headers those view controllers reach for.  Keep this list
-# in step with Linux/cmake/MADAPISources.cmake and docs/project/MAD_WINDOWS.md.
+# in step with Linux/cmake/MADAPISources.cmake and docs/developers/build/windows.md.
 
 set(MADAPI_SOURCES
 	"${SOURCE_DIR}/MADDatabase.m"

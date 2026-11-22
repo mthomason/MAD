@@ -6,13 +6,13 @@
 #  Runs INSIDE the runtime image, with the repository mounted read-only at
 #  /repo (Linux/build.sh --verify does that).  It exercises the verbs the way a
 #  caller does -- inspect, schema, query, refresh, export in every format this
-#  build offers, and write -- and asserts the pinned digests (docs/project/MAD_CLI.md §3,
+#  build offers, and write -- and asserts the pinned digests (docs/developers/cli.md §3,
 #  Linux/README.md).  It also checks that the image really is the runtime layer:
 #  no compiler, no build tree, and the sample database in place.
 #
 #  --live additionally refreshes the MySQL, TDS and PostgreSQL fixtures, which
 #  needs the three containers documented in CLI/Fixtures/README.md and
-#  docs/project/DEVELOPER.md.
+#  docs/project/build/DEVELOPER.md.
 #
 #  Exit code: 0 when every check passes, 1 otherwise.
 #
@@ -157,7 +157,7 @@ check_file "export html-flow"	"${WORK}/out.flow.html"		54766	0565204a55d02f92560
 check_file "export json-report"	"${WORK}/out.report.json"	118109	9d01d0daabbb5e38921c0bfbed083b288031c9340e9a4af81679d03b691ce94c
 
 # The PDF is structurally compared, not byte-pinned: Core Graphics cannot be
-# reproduced, so the target is the walk's pages (docs/project/MAD_PDF_LINUX.md).
+# reproduced, so the target is the walk's pages (docs/developers/build/pdf.md).
 export_format pdf		"${WORK}/out.pdf"
 check "export pdf: a PDF 1.4"		[ "$(head -c 8 "${WORK}/out.pdf")" = "%PDF-1.4" ]
 check "export pdf: five pages"		[ "$(grep -a -c '/Type /Page ' "${WORK}/out.pdf")" -eq 5 ]
@@ -168,7 +168,7 @@ check "export pdf: US Letter"		grep -a -q '/MediaBox \[ 0 0 612 792 \]' "${WORK}
 output mad write "${LONDON}" --out "${WORK}/copy.mad" --reproducible --quiet >/dev/null
 check_file "write --reproducible" "${WORK}/copy.mad" 16261	09815b24e91e03b6e526008f7c2700074fed10679771b9e1ee4609e54a1192f5
 
-# --- exit codes (docs/project/MAD_CLI.md §3) -------------------------------------------
+# --- exit codes (docs/developers/cli.md §3) -------------------------------------------
 
 mad inspect /nonexistent.mad >/dev/null 2>&1
 check "bad document exits 2"		[ "$?" -eq 2 ]

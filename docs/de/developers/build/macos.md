@@ -100,7 +100,7 @@ Zwölf Frameworks bilden den Multiplattform-Stack (`iphoneos`, `iphonesimulator`
 
 ### Phase 1: Fehlerbehebungen und Freischaltung der Multiplattform-Frameworks (abgeschlossen)
 
-1. **6 während des macOS-Audits und -Ports aufgedeckte Defekte behoben** und mit Unit-Tests von `docs/project/BUGS.md` nach `docs/project/BUGS_FIXED.md` archiviert:
+1. **6 während des macOS-Audits und -Ports aufgedeckte Defekte behoben** und mit Unit-Tests von `docs/project/registers/BUGS.md` nach `docs/project/registers/BUGS_FIXED.md` archiviert:
    - `MADKeyChain` (`MADFoundation/Source/MADKeyChain.m`): das Anfordern von `kSecReturnData : @YES` (und das Lecken des zurückgegebenen `CFDataRef`) in `+credentialsExist:`, `+saveToken:forKey:withDescription:`, `+deleteKey:` und `+deleteSavedPasswordForKey:error:` beendet.
    - `MADURLFactory` (`MADFoundation/Source/MADURLFactory.m`): `+newURLForLocalApplicationSupportDirectory` geschützt, wenn `[NSBundle mainBundle].bundleIdentifier` nil ist (mit Rückfall auf `[MADApplication groupIdentifier]`), und `containerURLForSecurityApplicationGroupIdentifier:` mit `#if defined(__APPLE__) && TARGET_OS_IPHONE` geschützt, sodass nicht-berechtigte macOS-Prozesse die üblichen benutzerspezifischen Verzeichnisse verwenden, statt TCC-Abfragen auf `~/Library/Group Containers/` auszulösen.
    - `MADDataTable` (`MADFoundation/Source/MADDataTable.m`): `NSDataWritingFileProtectionCompleteUnlessOpen` mit `#if defined(__APPLE__) && TARGET_OS_IPHONE` geschützt, sodass Cache-Schreibvorgänge unter nicht-berechtigtem macOS gelingen.

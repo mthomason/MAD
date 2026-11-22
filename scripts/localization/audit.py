@@ -4,7 +4,7 @@
 
 This is deliberately pure Python: it needs no Xcode, so the Linux workflow can
 run it.  It finds the four classes of problem described in
-docs/project/MAD_APP_LOCALIZATION.md §5.3:
+docs/project/localization/MAD_APP_LOCALIZATION.md §5.3:
 
 	nonliteral-key       NSLocalizedString receives something other than @"..."
 	literal-key          NSLocalizedString receives a literal (good; reported)

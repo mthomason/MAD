@@ -6,7 +6,7 @@
 //
 //  Ported from MADPostgresTests/MADPostgresLiveTests.m: integration tests for
 //  MADPostgres that talk to a real PostgreSQL server -- the local instance
-//  documented in docs/project/DEVELOPER.md (127.0.0.1:5432, mad, mad_test_pw,
+//  documented in docs/project/build/DEVELOPER.md (127.0.0.1:5432, mad, mad_test_pw,
 //  chinook).  Every credential can be overridden with MAD_PG_TEST_*, and the
 //  suite SKIPS when the server cannot be reached.
 //
@@ -116,7 +116,7 @@ static BOOL serverIsAvailable(void) {
 
 #define REQUIRE_SERVER() \
 	MAD_SKIP(!serverIsAvailable(), \
-			 @"No PostgreSQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.")
+			 @"No PostgreSQL server reachable; see docs/project/build/DEVELOPER.md for the expected test instance.")
 
 static MADPostgresConnection *openSessionWithDatabase(MADDatabasePostgres **outDatabase) {
 	MADDatabasePostgres *db = [[MADDatabasePostgres alloc] init];

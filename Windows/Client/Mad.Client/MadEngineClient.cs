@@ -2,7 +2,7 @@
 
 //
 //  MadEngineClient.cs
-//  The .NET side of the Phase 4 process contract (docs/project/MAD_WINDOWS.md §Phase 4):
+//  The .NET side of the Phase 4 process contract (docs/developers/build/windows.md §Phase 4):
 //  it spawns `mad serve`, speaks the newline-delimited JSON protocol, and exposes the
 //  seven methods (open, describe, query, refresh, export, write, shutdown) as typed calls.
 //

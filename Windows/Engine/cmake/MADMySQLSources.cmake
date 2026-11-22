@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADMySQL subset the Windows build compiles (docs/project/MAD_WINDOWS.md §4): the 18
+# The MADMySQL subset the Windows build compiles (docs/developers/build/windows.md §4): the 18
 # implementation files of the Xcode target's 19, the same list as
 # Linux/cmake/MADMySQLSources.cmake.
 #
@@ -12,7 +12,7 @@
 # Windows/Engine/libraries.conf, with openssl beneath it.  The licence position is
 # unchanged by this: the GPL/FOSS-exception blocker and the MariaDB replacement
 # are docs/project/LICENSE_COMPLIANCE_PLAN.md's to settle, and nothing here ships
-# (docs/project/MAD_WINDOWS.md §7).
+# (docs/developers/build/windows.md §7).
 #
 # Keep this list in step with Linux/cmake/MADMySQLSources.cmake.
 

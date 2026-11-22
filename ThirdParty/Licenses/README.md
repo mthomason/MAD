@@ -81,7 +81,7 @@ it) distributes GNUstep Base, libiconv and gnustep-corebase (LGPL-2.1-or-later),
 and links FreeTDS and MariaDB Connector/C statically under the same **LGPL-3.0**
 election as the Apple app. The exact DLL/static split is measured from the built
 `mad.exe` with `dumpbin /dependents`; the build records it in
-`docs/project/MAD_WINDOWS.md`. The LGPL requires that a recipient be able to
+`docs/developers/build/windows.md`. The LGPL requires that a recipient be able to
 modify each library and relink the distributed work. To exercise that right,
 contact the copyright holder at **mthomason [at] gmail [dot] com** to receive the
 Windows engine's object files and the build materials needed to relink against a

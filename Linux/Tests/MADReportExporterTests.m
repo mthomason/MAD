@@ -4,7 +4,7 @@
 //  MADReportExporterTests.m
 //  Linux/Tests
 //
-//  The export seam end to end (docs/project/MAD_CLI.md §5.3, docs/project/MAD_LINUX.md §9 Phase E): the
+//  The export seam end to end (docs/developers/cli.md §5.3, docs/developers/build/linux.md §9 Phase E): the
 //  formats register themselves, and each Foundation exporter writes the London
 //  fixture's rows -- the same bytes the Mac's `mad export` writes for the same
 //  document, pinned here by a checksum of the whole output (Linux/README.md carries
@@ -173,7 +173,7 @@ static void testTheFormatsAreRegistered(void) {
 			 "an unregistered format answers Nil");
 }
 
-// The render half is in this build now (docs/project/MAD_LINUX.md §9 Phase E): the formats that
+// The render half is in this build now (docs/developers/build/linux.md §9 Phase E): the formats that
 // need it -- json-report, html, html-flow -- run here, on the same page walk the
 // PDF draws from on Apple.
 static void testTheRenderSideFormatsRegisterHere(void) {
@@ -188,7 +188,7 @@ static void testTheRenderSideFormatsRegisterHere(void) {
 
 // PDF runs here too now: the walk is MADReportPageBuilder's on every platform, and
 // the headless body draws it into a Cairo PDF surface (MADReportExporterPDFCairo,
-// docs/project/MAD_PDF_LINUX.md).  The bytes are not the Mac's -- the target is
+// docs/developers/build/pdf.md).  The bytes are not the Mac's -- the target is
 // structural parity -- so this checks the file and the walk's page count, and
 // MADPDFExportTests checks each line against the json-report.
 static void testThePDFFormatRunsHere(void) {
@@ -304,7 +304,7 @@ static void testTheJSONReportAddsTheRenderedReport(void) {
 			 "the first line sits at the page's trim corner, where the PDF draws it");
 	// The render side's bytes are the Mac's, like text/csv/json: the money in the
 	// report is formatted from the document's own locale and precision, not the
-	// machine's, so the same document writes the same report here (docs/project/BUGS.md).
+	// machine's, so the same document writes the same report here (docs/project/registers/BUGS.md).
 	MAD_PASS_EQUAL(@(MADExporterChecksum(data)), @(0x499761E44D3BDD39ULL),
 				   "the report member's bytes are the ones the Mac writes");
 }
@@ -376,7 +376,7 @@ static void testTheFormatterComparesStringGroupKeysByTheDefinedOrder(void) {
 	//  (+compareValue:withValue:forDataType:), and the cache's ORDER BY sorts
 	//  the same keys with the LSASC collation; both must agree with
 	//  -[NSString mad_orderedCompare:] on every pair, or the sections the walk
-	//  finds will not be the sections the ORDER BY produced (docs/project/MAD_CLI.md's
+	//  finds will not be the sections the ORDER BY produced (docs/developers/cli.md's
 	//  `mad export` section).
 	NSArray *keys = @[@"", @"a", @"A", @"B", @"b", @"Core", @"[1997] Black Light Syndrome",
 					  @"Ä", @"ä", @"Zebra", @"ac/dc", @"AC/DC", @"Straße", @"strabe"];

@@ -12,13 +12,7 @@ Esta página describe la herramienta de línea de comandos `mad`: la superficie 
 Este documento define una herramienta de línea de comandos que abre, inspecciona, actualiza y exporta
 documentos `.mad` sin una interfaz de usuario.
 
-Existe porque la aplicación no puede llegar a los dos lugares a los que necesita ir. No
-puede ejecutarse en un Mac como aplicación de Mac, y no puede ejecutarse en Windows en absoluto,
-porque toda su capa de presentación es UIKit. Una CLI no necesita nada de eso: la ruta de
-datos -- abrir el documento, ejecutar la consulta, llenar la caché, renderizar el informe -- está
-casi por completo libre de UIKit ya (véase §4). Construir primero la CLI por lo tanto
-no es un desvío alrededor del trabajo de plataforma; **es** el trabajo de plataforma, hecho en el orden
-que produce algo utilizable en cada paso.
+Este registro se escribió cuando la capa de presentación de la aplicación de Apple era completamente UIKit, por lo que no podía ejecutarse como una aplicación nativa de macOS o Windows. Ahora existen las aplicaciones nativas de macOS (AppKit) y Windows (WPF); la CLI `mad` sigue siendo la ruta sin interfaz que ejecuta el mismo motor sin una UI. La ruta de datos -- abrir el documento, ejecutar la consulta, llenar la caché, renderizar el informe -- está casi por completo libre de UIKit (véase §4), y eso es lo que hace que la CLI sea portátil.
 
 ---
 

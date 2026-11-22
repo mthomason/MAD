@@ -1,6 +1,6 @@
 # Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
-# The MADSqlite3 subset the Windows build compiles (docs/project/MAD_WINDOWS.md
+# The MADSqlite3 subset the Windows build compiles (docs/developers/build/windows.md
 # §4): the 26 implementation files of the Xcode target's Sources phase -- the
 # framework the CLI's .maddb row cache and .madac render cache are built on.
 # The list is identical to Linux/cmake/MADSqlite3Sources.cmake.
@@ -16,7 +16,7 @@
 # Windows/Engine/libraries.conf; the framework imports it as
 # <MADSqlite3/sqlite3.h> (the Xcode target keeps the header Public), which the
 # sqlite3 include shim beside build.ps1 satisfies.  Keep this list in step with
-# Linux/cmake/MADSqlite3Sources.cmake and docs/project/MAD_WINDOWS.md §4.
+# Linux/cmake/MADSqlite3Sources.cmake and docs/developers/build/windows.md §4.
 
 set(MADSQLITE3_SOURCES
 	"${SOURCE_DIR}/MADArrayCaching.m"

@@ -7,10 +7,10 @@
 //  The `.mad` container on Linux (docs/project/MAD_FORMAT.md §2, §7): the reader the CLI's verbs
 //  run on, and the writer, which works here since 2026-10-16 -- -write_archive: walks
 //  the directory with -subpathsAtPath: rather than the URL enumerator GNUstep strips
-//  the containing directory from (docs/project/BUGS.md -- "the same .mad on both platforms").
+//  the containing directory from (docs/project/registers/BUGS.md -- "the same .mad on both platforms").
 //
 //  The writer is pinned three ways: the round trip (unpack, repack, unpack again, and
-//  every member's bytes are unchanged -- docs/project/MAD_CLI.md §6.1), the ordinary mode's
+//  every member's bytes are unchanged -- docs/developers/cli.md §6.1), the ordinary mode's
 //  characterisation (two writes of a changed directory differ, because the metadata
 //  is the filesystem's), and the reproducible mode (two writes are equal, and equal
 //  to the Mac's bytes for the same document -- the user's byte-identity requirement).
@@ -124,7 +124,7 @@ static void testUnarchiveReadsAContainer(void) {
 
 #pragma mark - Writing
 
-/// docs/project/MAD_CLI.md §6.1's container fidelity: unpack, repack, unpack again, and the member
+/// docs/developers/cli.md §6.1's container fidelity: unpack, repack, unpack again, and the member
 /// list and every member's bytes are unchanged.
 static void testArchiveRoundTripIsByteIdentical(void) {
 	MAD_NEED([[NSFileManager defaultManager] fileExistsAtPath: MADArchiveFixturePath()],
@@ -212,7 +212,7 @@ static void testTheReproducibleWriterIsByteIdentical(void) {
 	if (guts == nil) return;
 
 	// The Mac's `mad write` opens the document before it archives, and opening
-	// migrates the store to the current version (docs/project/MAD_SQL_ENTRY.md §8.2) -- so the
+	// migrates the store to the current version (docs/developers/sql-entry.md §8.2) -- so the
 	// bytes the pin names are the opened store's.  Open and close here for the
 	// same reason; the fixture itself is a version-1 store and stays one.
 	MADStore *store = [MADStore storeWithURL: [guts URLByAppendingPathComponent: @"StoreContent/store.sqlite"]];

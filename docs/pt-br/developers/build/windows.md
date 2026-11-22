@@ -16,7 +16,7 @@ da prova de conceito do Windows). A compilação para Windows é irmã
 de `Linux/`: os frameworks Objective-C da engine headless compilados nativamente no
 Windows com Clang contra GNUstep Base, para que a mesma engine que executa o aplicativo
 macOS e a CLI Linux possa executar no Windows. Este documento é o companheiro técnico
-de `Linux/README.md` / `docs/project/MAD_LINUX.md`; ele registra a
+de `Linux/README.md` / `docs/developers/build/linux.md`; ele registra a
 receita da cadeia de ferramentas, por que cada peça está fixada e as decisões que este incremento
 tomou.
 
@@ -330,7 +330,7 @@ A Fase 3b adiciona os quatro drivers de banco de dados e as bibliotecas C que el
   `err_handler` global colide com o de `MADDatabaseSQLServer.m`). A proteção `+Identifier:` da Fase 3a
   é removida — a busca no registro funciona com os quatro drivers vinculados,
   fixada por `MADDatabaseDriverDispatchTests` (9/9).
-* **Inventário de testes** — **129 suítes + o teste rápido, 1308 testes, 6 necessidades, 5 ignorados
+* **Inventário de testes** — **130 suítes, 1,313 testes (incluindo o teste rápido), 6 necessidades, 5 ignorados
   (48 quando os contêineres ativos não estão em execução), 0 falhas** (o incremento de código de barras
   adicionou `MADBarcodesTests` e `MADBarcodeExportTests`; o fechamento de imagem adicionou
   `MADImageElementTests` e `MADImageExportTests`). Suítes ativas contra os contêineres locais
@@ -792,7 +792,7 @@ depois os layouts instalados e `MAD_FONTS_DIR`.
 **Escritor.** `MADReportExporterPDFCairo` em `MAD/Source` é o corpo não Apple de
 `MADReportExporterPDF`; o corpo Apple está intocado e não vincula Cairo. O alvo
 estrutural, o mapeamento de fontes e o determinismo são os de
-`docs/project/MAD_PDF_LINUX.md`. `MADPDFExportTests` é o teste de aceitação em ambas as
+`docs/developers/build/pdf.md`. `MADPDFExportTests` é o teste de aceitação em ambas as
 engines; ele lê o PDF de volta e compara contagem de páginas, MediaBox, cada quadro e o texto
 de cada linha com o oráculo `json-report`, verifica o código de barras e a imagem como
 XObjects de imagem e verifica a igualdade determinística de bytes.
@@ -868,7 +868,7 @@ exclusivas da Apple: elas listam as bibliotecas C que o aplicativo Apple vincula
 aplicativo Apple vincula o runtime GNUstep. O `docs/windows.md` público e a
 entrada do Windows no `README.md` chegaram com a versão 0.7 não assinada (2026-11-21);
 a página está presente nos seis idiomas sob o contrato de documentação
-(`docs/project/LOCALIZATION.md`). O workflow de verificação do Windows
+(`docs/project/localization/LOCALIZATION.md`). O workflow de verificação do Windows
 (`.github/workflows/windows.yml`) testa as suítes .NET contra o
 ativo de engine `mad-windows-x64.zip` anexado ao `v0.7.0`;
 `Windows/package.ps1` monta tanto esse ativo quanto o zip de versão do aplicativo.
@@ -909,9 +909,9 @@ estão documentados no relatório da Fase 3b, não aqui.
 
 ## Documentos relacionados
 
-* `docs/project/MAD_LINUX.md` e `Linux/README.md` — a compilação Linux que esta
+* `docs/developers/build/linux.md` e `Linux/README.md` — a compilação Linux que esta
   compilação Windows espelha.
-* `docs/project/MAD_MACOS.md` e `Mac/README.md` — o aplicativo nativo para macOS
+* `docs/developers/build/macos.md` e `Mac/README.md` — o aplicativo nativo para macOS
   cujo comportamento o aplicativo WPF espelhará.
 * `docs/project/THIRD_PARTY_LICENSES.md` §10 — o registro de licenciamento
   da engine Windows; `ThirdParty/Licenses/` e `ThirdParty/Licenses/Windows/` — os

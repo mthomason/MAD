@@ -174,7 +174,7 @@ The switcher, the `hreflang` set, the translation notice, and the footer all liv
   design documents, and registers — not part of the published site and not part of the
   translation contract. `docs/_config.yml` excludes them for every language tree
   (see below); do not translate them for a new language.
-* **`docs/project/MAD_DATASOURCE_AND_CONNECTION_UX.md` is not translatable.** It is an
+* **`docs/project/agents/MAD_DATASOURCE_AND_CONNECTION_UX.md` is not translatable.** It is an
   agent prompt containing private instructions, not a record for a reader.
 * **`LICENSE` and `NOTICE` are not translated**, and their terms are not altered. The
   site pages that reference them link to the English files on GitHub.
@@ -331,7 +331,7 @@ Run from the repository root unless a step says otherwise.
 For the bug registers specifically, parity is a count check:
 
 ```sh
-for f in docs/project/BUGS.md docs/zh/project/BUGS.md docs/project/BUGS_FIXED.md docs/zh/project/BUGS_FIXED.md; do
+for f in docs/project/registers/BUGS.md docs/zh/project/BUGS.md docs/project/registers/BUGS_FIXED.md docs/zh/project/BUGS_FIXED.md; do
   printf '%s headings=%s bullets=%s\n' "$f" "$(grep -c '^### ' "$f")" "$(grep -c '^- ' "$f")"
 done
 ```

@@ -471,7 +471,7 @@ SELECT 列表列顺序，它曾是集合顺序因而与 Apple 不同
 （同字段、同行；记录于 `Linux/README.md`）。**已于 2026-10-16 解决**，随
 JSON 导出形态决策（下文 §10.1）：顺序在两个 SQL 构建器中都定义为列
 别名，因此生成的 SQL、行缓存和每个导出
-在两个平台上一致（docs/project/BUGS.md，SELECT 列表条目；
+在两个平台上一致（docs/project/registers/BUGS.md，SELECT 列表条目；
 `Linux/Tests/MADQuerySelectExpressionTests.m` 中的顺序测试）。
 
 **Phase E 状态（2026-10-16，前半）。** 导出接缝是真实的，Foundation 格式在此运行。
@@ -567,7 +567,7 @@ Linux 构建中且自 Phase C 起就在，因此分页在各处相同。
 **`pdf` 在接缝上**：`MADReportExporterPDF` 在每个平台注册。在 Apple 上其
 主体是 Core Graphics + `MADPrintPageRenderer`，不变；非 Apple 上它把同样的
 已遍历页面交给 `MADReportExporterPDFCairo`，后者把它们绘制进一个 Cairo PDF surface，
-字形用 FreeType、来自随附的 Liberation 字面（docs/project/MAD_PDF_LINUX.md）。CLI
+字形用 FreeType、来自随附的 Liberation 字面（docs/developers/build/pdf.md）。CLI
 已无本地分支。Apple 的移动是字节中立的：London 样本的确定性导出
 前后是同一个 43,177 字节、5 页 PDF
 （两者 `sha256 3eb2f1c4…`），通过构建前一提交的 CLI 并
@@ -614,7 +614,7 @@ Phase F 唯一未完成的部分，且 CLI 不需要它：镜像
    JSON 类型——而 `--format json-report` 是该文档加一个 `report`
    成员（渲染后的带区）。有了它，SELECT 列表的顺序定义为列
    别名、排序后，因此生成的 SQL、行缓存和每个导出在两个平台上一致
-   （docs/project/BUGS.md，SELECT 列表条目——此前是集合顺序）。数据
+   （docs/project/registers/BUGS.md，SELECT 列表条目——此前是集合顺序）。数据
    那一半已构建（`MADReportExporterJSON`，两个平台）；报表成员等待
    渲染那一半。
 2. **渲染器分阶段**——HTML/SVG 先，PDF 最后，还是 macOS 侧 PDF 工作进程？

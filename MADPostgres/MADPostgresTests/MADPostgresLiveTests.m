@@ -11,7 +11,7 @@
 //  -getTablesFromConnection:error:, -fieldsForTable:connection:error:, and
 //  -executeSQL:fieldKeys:onConnection:intoResultTable:withError:.
 //
-//  The server is the local Docker instance documented in docs/project/DEVELOPER.md:
+//  The server is the local Docker instance documented in docs/project/build/DEVELOPER.md:
 //
 //      PostgreSQL 17, 127.0.0.1:5432, mad, mad_test_pw, chinook
 //
@@ -135,7 +135,7 @@
 
 - (void)requireServer {
 	XCTSkipIf(![[self class] serverIsAvailable],
-			  @"No PostgreSQL server reachable; see docs/project/DEVELOPER.md for the expected test instance.");
+			  @"No PostgreSQL server reachable; see docs/project/build/DEVELOPER.md for the expected test instance.");
 }
 
 - (MADPostgresConnection *)openSessionWithDatabase:(MADDatabasePostgres **)outDatabase {

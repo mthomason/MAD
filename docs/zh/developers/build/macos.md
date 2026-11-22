@@ -133,7 +133,7 @@ Silicon Mac 以及运行 Monterey 或更新版本的 Intel Mac）。**否决 Mac
 ### 阶段 1：缺陷修复与多平台框架启用（已完成）
 
 1. **修复了 macOS 审计与移植期间浮现的 6 个缺陷**，并连同单元测试把它们从
-   `docs/project/BUGS.md` 归档到 `docs/project/BUGS_FIXED.md`：
+   `docs/project/registers/BUGS.md` 归档到 `docs/project/registers/BUGS_FIXED.md`：
    - `MADKeyChain`（`MADFoundation/Source/MADKeyChain.m`）：在
      `+credentialsExist:`、`+saveToken:forKey:withDescription:`、`+deleteKey:` 和
      `+deleteSavedPasswordForKey:error:` 中停止请求 `kSecReturnData : @YES`（并停止泄漏返回的 `CFDataRef`）。

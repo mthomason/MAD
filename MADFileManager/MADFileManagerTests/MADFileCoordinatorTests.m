@@ -57,7 +57,7 @@
 @interface MADFileCoordinatorTests : XCTestCase
 
 // Cloud coordinators are held until their documents-directory block has run;
-// releasing one first segfaults (see docs/project/BUGS.md).
+// releasing one first segfaults (see docs/project/registers/BUGS.md).
 @property (nonatomic, strong) NSMutableArray *cloudCoordinators;
 
 @end

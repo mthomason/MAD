@@ -64,6 +64,18 @@ class CheckSiteFactsTest(unittest.TestCase):
 		self.write("docs/a.md", "1.303 pruebas\n1 303 pruebas")
 		self.assertIn("1,303", check_site_facts.banned_literals(str(self.docs)))
 
+	def test_stale_1308_is_flagged(self):
+		self.write("docs/a.md", "1308 tests")
+		self.assertIn("1308", check_site_facts.banned_literals(str(self.docs)))
+
+	def test_moved_path_reference_is_reported(self):
+		self.write("Code/a.m", "see docs/project/BUGS.md")
+		self.assertIn("docs/project/BUGS.md", check_site_facts.moved_path_references(str(self.root)))
+
+	def test_frozen_tree_moved_path_is_ignored(self):
+		self.write("docs/zh/project/a.md", "see docs/project/BUGS.md")
+		self.assertEqual(check_site_facts.moved_path_references(str(self.root)), [])
+
 	def test_built_site_internal_directory_fails(self):
 		(self.built / "project").mkdir(parents=True)
 		self.assertIn("project", check_site_facts.built_leaks(str(self.built)))

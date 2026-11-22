@@ -15,7 +15,7 @@
 #  Windows it binds loopback by default so the test server is not exposed on the
 #  LAN.  One port, one server, one container -- do not start a second MySQL
 #  container.  (3306 is left alone because the Oracle MySQL installer's launchd
-#  service may own it; see docs/project/DEVELOPER.md.)
+#  service may own it; see docs/project/build/DEVELOPER.md.)
 #
 #  Usage:
 #    mysql-test-db.sh up        create/start the server, load the data if needed (default)

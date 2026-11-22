@@ -497,7 +497,7 @@ ordem das colunas da lista SELECT, que era ordem de conjunto e portanto diferia 
 (mesmos campos, mesmas linhas; anotado em `Linux/README.md`). **Resolvido em 2026-10-16**, com
 a decisão da forma da exportação JSON (§10.1 abaixo): a ordem é definida como o alias da coluna
 em ambos os construtores de SQL, então o SQL gerado, o cache de linhas e toda exportação
-concordam em ambas as plataformas (docs/project/BUGS.md, a entrada da lista SELECT; os testes de ordem em
+concordam em ambas as plataformas (docs/project/registers/BUGS.md, a entrada da lista SELECT; os testes de ordem em
 `Linux/Tests/MADQuerySelectExpressionTests.m`).
 
 **Status da Fase E (2026-10-16, primeira metade).** A costura de exportação é real e os
@@ -596,7 +596,7 @@ tabela de classes gerada (nove classes para o fixture London).
 **`pdf` está na costura**: `MADReportExporterPDF` se registra em todos os lugares.  Na Apple seu
 corpo é Core Graphics + `MADPrintPageRenderer`, sem mudança; fora da Apple ele entrega as mesmas
 páginas percorridas ao `MADReportExporterPDFCairo`, que as desenha em uma superfície PDF Cairo
-com glifos FreeType de faces Liberation fornecidas (docs/project/MAD_PDF_LINUX.md).  A
+com glifos FreeType de faces Liberation fornecidas (docs/developers/build/pdf.md).  A
 CLI não tem mais braços locais.  A mudança Apple foi neutra em bytes: a exportação determinística
 da amostra London é o mesmo PDF de 43.177 bytes e 5 páginas antes e depois
 (`sha256 3eb2f1c4…` em ambos), medido compilando a CLI do commit anterior e
@@ -648,7 +648,7 @@ as bibliotecas C nativamente.
    valores tipados em JSON — e `--format json-report` é esse documento mais um membro `report`
    (as seções renderizadas). Com isso, a ordem da lista SELECT é definida como o
    alias da coluna, ordenado, para que o SQL gerado, o cache de linhas e toda exportação concordem em
-   ambas as plataformas (docs/project/BUGS.md, a entrada da lista SELECT — antes ordem de conjunto). A metade de dados
+   ambas as plataformas (docs/project/registers/BUGS.md, a entrada da lista SELECT — antes ordem de conjunto). A metade de dados
    está construída (`MADReportExporterJSON`, ambas as plataformas); o membro do relatório aguarda
    a metade de renderização.
 2. **Escalonamento do renderizador** — HTML/SVG primeiro, PDF por último, ou workers de PDF do lado

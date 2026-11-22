@@ -11,7 +11,7 @@ Diese Seite beschreibt das Kommandozeilenwerkzeug `mad`: die Einbettungsoberflä
 
 Dieses Dokument definiert ein Kommandozeilenwerkzeug, das `.mad`-Dokumente ohne Benutzeroberfläche öffnet, inspiziert, aktualisiert und exportiert.
 
-Es existiert, weil die Anwendung die beiden Orte nicht erreichen kann, an die sie muss. Sie kann auf einem Mac nicht als Mac-Anwendung laufen und unter Windows überhaupt nicht, weil ihre gesamte Präsentationsschicht UIKit ist. Eine CLI braucht nichts davon: der Datenpfad -- das Dokument öffnen, die Abfrage ausführen, den Cache füllen, den Bericht rendern -- ist bereits fast vollständig frei von UIKit (siehe §4). Die CLI zuerst zu bauen ist daher kein Umweg um die Plattformarbeit herum; sie **ist** die Plattformarbeit, in der Reihenfolge ausgeführt, die bei jedem Schritt etwas Brauchbares erzeugt.
+Dieser Bericht entstand, als die Präsentationsschicht der Apple-Anwendung vollständig aus UIKit bestand; deshalb konnte sie nicht als native macOS- oder Windows-Anwendung laufen. Die nativen macOS- (AppKit) und Windows-Anwendungen (WPF) existieren inzwischen; das `mad`-CLI bleibt der Headless-Pfad, der dieselbe Engine ohne UI ausführt. Der Datenpfad -- das Dokument öffnen, die Abfrage ausführen, den Cache füllen, den Bericht rendern -- ist bereits fast vollständig frei von UIKit (siehe §4); das macht die CLI portabel.
 
 ---
 

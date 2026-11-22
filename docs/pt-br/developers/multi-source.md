@@ -670,7 +670,7 @@ As próprias palavras do usuário seguem; as implicações são do autor.
   e a engine de junção do SQLite já existem.
 - **Não é uma mudança no cache que puxa tudo.** O cache de duas passagens é estrutural
   (`docs/05-companion-files.md` §5.1).
-- **Não está agendado.** Este é o registro de design para trabalho futuro. `docs/project/TODO.md` é
+- **Não está agendado.** Este é o registro de design para trabalho futuro. `docs/project/registers/TODO.md` é
   a lista de desejos do próprio usuário (o desejo de paginação de pré-visualização pertence lá), `TASKS.md` é a
   fila de engenharia, e `ROADMAP.md` diz o que é pego a seguir. Nada aqui é iniciado por
   iniciativa de um agente.
