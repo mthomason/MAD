@@ -4,7 +4,7 @@
 
 `Mac/`には、12個のマルチプラットフォームMADフレームワーク（`MADFoundation`、`MADDataStructures`、`MADCocoaExtensions`、`MADFileManager`、`MADAPI`、`MADSqlite3`、`MADTds`、`MADTdsClient`、`MADMySQL`、`MADPostgres`、`MADBarcodes`、および`MAD`）と`Compressor`がビルドする10個のユニバーサル（`arm64` + `x86_64`）静的Cライブラリの上に構築された、**MAD Designer**のネイティブmacOS（`AppKit`、`macosx` SDK、`MACOSX_DEPLOYMENT_TARGET = 12.0`）フロントエンドが格納されています。
 
-ユーザー向けのワークスペース概要およびスクリーンショットについては[`docs/macos.md`](../docs/ja/macos.md)を参照してください。フレームワークごとのマルチプラットフォーム移植監査およびアーキテクチャ記録については[`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md)を参照してください。
+ユーザー向けのワークスペース概要およびスクリーンショットについては[`docs/macos.md`](../docs/ja/macos.md)を参照してください。フレームワークごとのマルチプラットフォーム移植監査およびアーキテクチャ記録については[`docs/developers/build/macos.md`](../docs/developers/build/macos.md)を参照してください。
 
 ## ビルド済みリリースのインストール
 

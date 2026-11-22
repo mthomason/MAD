@@ -48,7 +48,7 @@ A página da versão publica um checksum SHA-256 do arquivo. Compare-o após o d
 Get-FileHash .\MAD-Designer-Windows-0.7.zip -Algorithm SHA256
 ```
 
-Também é possível revisar a extração arquivo por arquivo: o arquivo compactado contém apenas o aplicativo publicado, o motor compilado por `Windows/Engine/build.ps1`, o documento de exemplo e os textos das licenças. `mad.exe` é o mesmo motor de linha de comando documentado no [guia do Linux](https://github.com/mthomason/MAD/blob/master/Linux/README.md) e no [registro de compilação do Windows](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_WINDOWS.md).
+Também é possível revisar a extração arquivo por arquivo: o arquivo compactado contém apenas o aplicativo publicado, o motor compilado por `Windows/Engine/build.ps1`, o documento de exemplo e os textos das licenças. `mad.exe` é o mesmo motor de linha de comando documentado no [guia do Linux](https://github.com/mthomason/MAD/blob/master/Linux/README.md) e no [registro de compilação do Windows](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md).
 
 ### Revisando e assinando esta compilação
 
@@ -101,7 +101,7 @@ As duas suítes .NET são executadas contra o motor compilado:
 dotnet test Windows\App\Mad.Designer.Windows.slnx
 ```
 
-`Windows/Engine/build.ps1` também executa as suítes nativas portadas, e `Windows/package.ps1` monta o arquivo de versão não assinado e o ativo do motor para CI depois que o motor e o aplicativo são compilados. A receita completa, as correções de runtime específicas do Windows, as obrigações de licença e a matriz de sistemas operacionais suportados estão em [`docs/project/MAD_WINDOWS.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_WINDOWS.md).
+`Windows/Engine/build.ps1` também executa as suítes nativas portadas, e `Windows/package.ps1` monta o arquivo de versão não assinado e o ativo do motor para CI depois que o motor e o aplicativo são compilados. A receita completa, as correções de runtime específicas do Windows, as obrigações de licença e a matriz de sistemas operacionais suportados estão em [`docs/developers/build/windows.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md).
 
 ## Licença
 

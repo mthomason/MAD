@@ -3,7 +3,7 @@
 ## What this is
 
 The native Windows engine and its WPF application (see
-[`MAD_WINDOWS.md`](../docs/project/MAD_WINDOWS.md) and this directory's
+[`MAD_WINDOWS.md`](../docs/developers/build/windows.md) and this directory's
 [`README.md`](README.md)). It compiles the engine's Objective-C frameworks
 against GNUstep Base with Clang, the Windows sibling of the Linux build, and
 `App/` is the WPF app on top of the `mad serve` process boundary (Phases 5 and
@@ -60,7 +60,7 @@ container-backed run, 0 failures).
 *   **`Client/`** — the Phase 4 stdio acceptance client (`.NET 10`): `Mad.Client`
     (a console client for `mad serve`) and `Mad.Client.Tests` (xunit; success,
     malformed, engine-failure and shutdown paths).  The protocol is documented in
-    `docs/project/MAD_WINDOWS.md` §6d.
+    `docs/developers/build/windows.md` §6d.
 *   **`App/`** — the WPF application (`net10.0-windows`): `Mad.Designer.Windows`
     (the app — connection, Query, Designer and Viewer workspaces, MVVM over the
     Phase 4 client) and `Mad.Designer.Windows.Tests` (xunit; the acceptance tests,
@@ -86,7 +86,7 @@ real CMake build can consume them once CMake's Windows ObjC support lands.
     `itoa`/`ltoa`/`ultoa` → `mad_*` rename, and the `MTStack`/`MTQueue`/
     `MTLinkedList` fast-enumeration `memcpy` cursor) are portable and
     behaviour-neutral on Apple/Linux; both are enumerated in
-    `docs/project/MAD_WINDOWS.md` §5. The `NSPropertyListSerialization+Stream.m`
+    `docs/developers/build/windows.md` §5. The `NSPropertyListSerialization+Stream.m`
     `NSData.h` import and the `strlcat`/UTF-8 `fileSystemRepresentation` shims
     live in `Windows/Engine/Compat`, not in shared source. Prefer a
     `Windows/Engine/Compat` shim before editing a shared framework source; a gap

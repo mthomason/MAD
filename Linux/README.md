@@ -2,11 +2,11 @@
 
 # Linux — the headless engine's build
 
-`docs/project/MAD_LINUX.md` §9: Phase B proved the toolchain (a Dockerfile that
+`docs/developers/build/linux.md` §9: Phase B proved the toolchain (a Dockerfile that
 source-builds clang + libobjc2 + GNUstep Base and compiled a MADFoundation
 subset); Phase C is the §4 shim list, and this directory is where it lands.
 The build now compiles **all twelve headless frameworks** — every framework in
-docs/project/MAD_LINUX.md §3's table plus `MADPostgres`, except the UI-only ones (`MADExplorer`,
+docs/developers/build/linux.md §3's table plus `MADPostgres`, except the UI-only ones (`MADExplorer`,
 `MADFeedback`, `Scrimpter`, the app) — and runs their suites inside the
 container: 130 suites, 1,313 tests (plus the 19-check toolchain probe; 131 ctest
 entries), 7 recorded needs. The test
@@ -63,7 +63,7 @@ compiles with `-fobjc-runtime=gnustep-2.2` and ARC.
 ## The libraries layer
 
 `libraries.conf` + `lib/libraries.sh` build the C libraries the frameworks
-link, natively, into `/usr/local` (docs/project/MAD_LINUX.md §7). Same shape and intent as
+link, natively, into `/usr/local` (docs/developers/build/linux.md §7). Same shape and intent as
 the Compressor matrix next door; nothing here ships.
 
 	sqlite3      3.53.3   the released amalgamation; the option list still comes
@@ -113,7 +113,7 @@ build does not use them, but they stay in the image.
 Each framework's source list is a `cmake/<Name>Sources.cmake` beside the
 build, with the exclusions named and their reasons — the same shape as
 `MADFoundationSources.cmake`. `MADExplorer`, `MADBarcodes`, `MADFeedback` and
-`Scrimpter` are not in the Linux build at all (docs/project/MAD_LINUX.md §3).
+`Scrimpter` are not in the Linux build at all (docs/developers/build/linux.md §3).
 
 The Linux build supplies what GNUstep lacks without touching the framework
 sources:
@@ -375,7 +375,7 @@ section below).
 `MADReportExporterPDFCairo`: the same walked pages, drawn into a Cairo PDF surface with
 FreeType glyphs from the bundled Liberation faces. The output is structurally the
 Mac's — same pages, same frames, same text — not byte-identical (Core Graphics cannot
-be reproduced); `docs/project/MAD_PDF_LINUX.md` has the font policy and the residual.
+be reproduced); `docs/developers/build/pdf.md` has the font policy and the residual.
 The writer's libraries (pixman, FreeType, cairo) and the fonts are in the image;
 `MADPDFExportTests` checks the PDF against the `json-report` oracle.
 The comparison, run for the record on the London fixture (`CLI/Fixtures/London.portable.mad`,
@@ -436,7 +436,7 @@ was *set* order (`MADQueryActiveQueryFields` accumulates into an `NSSet`), so th
 same document produced a different order on Apple and on GNUstep — the same fields,
 different order; the cache's *data* is identical once compared by field name, and the
 cache's `c<hash>` column names are hash-derived, so they differed per platform too.
-**Settled 2026-10-16 (the JSON export shape decision, `docs/project/MAD_LINUX.md` §10.1):** the
+**Settled 2026-10-16 (the JSON export shape decision, `docs/developers/build/linux.md` §10.1):** the
 order is now defined as the column alias, sorted with `-compare:`, in both SQL
 builders, so the generated SQL, the row cache and every export agree on both
 platforms (docs/project/registers/BUGS.md, the SELECT-list entry; the order tests in
@@ -446,7 +446,7 @@ order — so refresh once before comparing caches across that date.
 
 ## The writer runs here, and the two platforms agree
 
-Phase E's other half (`docs/project/MAD_LINUX.md` §9; the user's requirement, 2026-10-16): the `.mad`
+Phase E's other half (`docs/developers/build/linux.md` §9; the user's requirement, 2026-10-16): the `.mad`
 writer works on Linux and produces the **same bytes** as the Mac's for the same
 document.  `mad write <doc.mad> --out <copy.mad> [--reproducible]` is the surface, and
 the document is opened headlessly on both platforms, so both sides run the same writer.

@@ -115,7 +115,7 @@ iOSのUIをMac Catalystでラップするのではなく、MADは14個のフレ�
 | **コア＆ドライバフレームワーク** | `MADFoundation`, `MADDataStructures`, `MADCocoaExtensions`, `MADFileManager`, `MADAPI`, `MADSqlite3`, `MADTds`, `MADTdsClient`, `MADMySQL`, `MADPostgres`, `MADBarcodes`, `MAD` | 共有Objective-Cモデル、ポータブルSQLiteストア（`Rptq*`）、SQLパーサー／コンパイラ、ワイヤデータベースドライバ、zintバーコードレンダラー、`MADDesignerLayout` Undo/Redoエンジン、および`MADPrintPageRenderer` / `MADReportExporterPDF`。 |
 | **ネイティブ`AppKit`フロントエンド（`Mac/`）** | `MADMacAppDelegate`, `MADMacAboutWindowController`, `MADMacDocumentController`, `MADMacDocument`, `MADMacWindowController`, `MADMacConnectionWindowController`, `MADMacQueryViewController`, `MADMacDesignerViewController`, `MADMacDesignerCanvasView`, `MADMacViewerViewController` | ネイティブ`NSDocument`ライフサイクル、About / Overview / Acknowledgementsウィンドウ、ツールバー＆メニューバー、ビジュアルクエリキャンバス、ミニマップ＆インスペクタ付き3ペインレポートデザイナー、および`PDFView`レポートビューア。 |
 
-マルチプラットフォーム移植におけるアーキテクチャ監査および不具合修正ログの詳細は、[`docs/project/MAD_MACOS.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_MACOS.md)に記録されています。
+マルチプラットフォーム移植におけるアーキテクチャ監査および不具合修正ログの詳細は、[`docs/developers/build/macos.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/build/macos.md)に記録されています。
 
 ---
 

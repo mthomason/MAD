@@ -153,7 +153,7 @@ La aplicación de escritorio nativa de macOS ([`docs/macos.md`](../docs/es/macos
   2. **MAD Designer (`MADMacDesignerViewController`):** Vista dividida en tres paneles con un **Page & Section Minimap** interactivo, un esquema **Report Bands**, una fuente de arrastre **Query Fields** con búsqueda, un lienzo de diseño ampliable y con reglas (`MADMacDesignerCanvasView`) con arrastrar y soltar entre secciones y guías de alineación inteligentes, y un **Page & Element Inspector** de dos tarjetas.
   3. **MAD Viewer (`MADMacViewerViewController`):** Actualización de datos en vivo (`Cmd+R`), repaginación instantánea por **Page Size** (`US Letter`, `Legal`, `Tabloid`, `A3`, `A4`, `A5`, `B4`, `B5`, `JIS B4`, `JIS B5`), vista previa enmarcada en `PDFView`, impresión nativa con `NSPrintOperation` (`Cmd+P`) y exportación (`Cmd+E`) a **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report** y **Plain Text**.
 
-Consulte [`docs/macos.md`](../docs/es/macos.md) para la guía completa y [`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md) para la auditoría de portabilidad multiplataforma.
+Consulte [`docs/macos.md`](../docs/es/macos.md) para la guía completa y [`docs/developers/build/macos.md`](../docs/developers/build/macos.md) para la auditoría de portabilidad multiplataforma.
 
 ## Compilación y pruebas
 

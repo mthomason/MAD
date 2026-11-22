@@ -72,6 +72,10 @@ copy:
 
 [MAD_CLI](../developers/cli.md), [MAD_DATA_OBJECT](../developers/data-object.md),
 [MAD_MULTI_SOURCE](../developers/multi-source.md), [MAD_SQL_ENTRY](../developers/sql-entry.md),
-[SATELLITE_REPOS](../developers/satellites.md), `LIBRARIES`, `MAD_LINUX`, `MAD_WINDOWS`, `MAD_MACOS`,
-`MAD_PDF_LINUX`, `MADDataTable_Architecture_Report`, `MADModel_Layer`,
-`MAD_ARRAY_CACHING`.
+[SATELLITE_REPOS](../developers/satellites.md),
+[LIBRARIES](../developers/build/libraries.md),
+[MAD_LINUX](../developers/build/linux.md),
+[MAD_WINDOWS](../developers/build/windows.md),
+[MAD_MACOS](../developers/build/macos.md),
+[MAD_PDF_LINUX](../developers/build/pdf.md),
+`MADDataTable_Architecture_Report`, `MADModel_Layer`, `MAD_ARRAY_CACHING`.

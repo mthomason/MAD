@@ -1,4 +1,14 @@
+---
+layout: default
+title: "Building the engine on Linux"
+description: "The Docker build, the twelve headless frameworks, and their suites."
+---
+
 # Compiling the MAD Engine on Linux — a technical assessment
+
+This page records the Linux build: the Docker image, the pinned toolchain, the twelve headless frameworks, and the suites they run. `Linux/README.md` has the day-to-day commands.
+
+*Written on the original date; current-state facts reconciled 2026-11-22.*
 
 Written 2026-10-04 against `master` at `c807eeb4d`. The dependency audit (§4) and the
 ecosystem research (§5-6) this document rests on were both produced the same day:
@@ -293,7 +303,7 @@ replace it with the MariaDB move, don't ship it.
 
 ## 8. The build and test plan
 
-- **Build system**: CMake for the ten headless frameworks plus the CLI — one flag
+- **Build system**: CMake for the twelve headless frameworks plus the CLI — one flag
   set (`clang`, `-fobjc-arc`, `-fblocks`, GNUstep's `gnustep-config --objc-flags`).
   The `.momd`-copying dance in `CLI/build.sh` disappears with Phase D, and
   `REFRESH_SOURCES`' reach across the target boundary disappears with the
@@ -319,7 +329,7 @@ How does this actually get built and shipped?
 - **Docker is the build environment.** One Dockerfile, two stages: a toolchain stage
   that source-builds clang + libobjc2 2.3 + GNUstep Base (required for ARC — §6), and
   a build stage that runs the Compressor Linux driver for the C libraries (§7), then
-  CMake for the ten frameworks and the CLI. The same image doubles as the CI
+  CMake for the twelve frameworks and the CLI. The same image doubles as the CI
   environment and the deployment artifact.
 - **Which Linux to support: one baseline, in a container.** Pick a single baseline —
   Debian stable or an Ubuntu LTS — and build there, because the real compatibility
@@ -405,7 +415,7 @@ every header and source in the Linux build imports what it uses, and
 `name` property.
 
 **Phase C status (2026-10-06).** The §4 shim list is cleared and the build is no
-longer a spike: all ten headless frameworks of §3's table compile and link
+longer a spike: all twelve headless frameworks of §3's table compile and link
 inside the image — MADFoundation 26 of 27 files, MADDataStructures 17,
 MADFileManager 10 of 11, MADCocoaExtensions 7 of 17, MADAPI 8 of 11,
 MADSqlite3 26, MADTds 1, MADTdsClient 4 of 5, MADMySQL 18 of 19, MAD 150 of
@@ -449,7 +459,7 @@ verbs — is the next step and the go/no-go.
 
 **Phase D status (2026-10-16).** The checkpoint is met: `mad` builds inside the
 image from `CLI/Source` (the same sources the iOS-Simulator tool is built from),
-links the ten frameworks, and runs the data path there. `inspect` reports both a
+links the twelve frameworks, and runs the data path there. `inspect` reports both a
 legacy v0 sample and a portable v1 fixture; `schema` and `query` produce the same
 answers as the Mac's tool (byte-identical for `schema`); `refresh` fills the row
 cache on the Sqlite3 sample and is byte-identical to the Mac's cache when compared

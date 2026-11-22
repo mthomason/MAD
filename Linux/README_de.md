@@ -2,12 +2,12 @@
 
 # Linux — der Build der headless Engine
 
-`docs/project/MAD_LINUX.md` §9: Phase B hat die Toolchain bewiesen (ein
+`docs/developers/build/linux.md` §9: Phase B hat die Toolchain bewiesen (ein
 Dockerfile, das clang + libobjc2 + GNUstep Base aus Quellen baut und eine
 MADFoundation-Teilmenge kompiliert hat); Phase C ist die Shim-Liste aus §4, und
 in diesem Verzeichnis wird sie umgesetzt. Der Build kompiliert inzwischen **alle
 elf headless Frameworks** — jedes Framework aus der Tabelle in
-docs/project/MAD_LINUX.md §3 plus `MADPostgres`, außer den reinen UI-Frameworks
+docs/developers/build/linux.md §3 plus `MADPostgres`, außer den reinen UI-Frameworks
 (`MADExplorer`, `MADBarcodes`, `MADFeedback`, `Scrimpter`, die App) — und führt
 ihre Suites im Container aus: 126 Testprogramme, 1.303 Tests, 7 festgehaltene
 Needs. Die Testabdeckung, die am 2026-10-10 in master zusammengeführt wurde
@@ -67,7 +67,7 @@ alles mit `-fobjc-runtime=gnustep-2.2` und ARC kompiliert wird.
 ## Die Bibliotheksschicht
 
 `libraries.conf` + `lib/libraries.sh` bauen die C-Bibliotheken, die die
-Frameworks linken, nativ nach `/usr/local` (docs/project/MAD_LINUX.md §7). Gleiche
+Frameworks linken, nativ nach `/usr/local` (docs/developers/build/linux.md §7). Gleiche
 Form und Absicht wie die Compressor-Matrix daneben; nichts davon wird
 ausgeliefert.
 
@@ -109,7 +109,7 @@ brauchte); der mariadb-Build verwendet sie nicht, aber sie bleiben im Image.
 Die Quelldateiliste jedes Frameworks ist ein `cmake/<Name>Sources.cmake` neben
 dem Build, mit den genannten Ausschlüssen und ihren Gründen — dieselbe Form wie
 `MADFoundationSources.cmake`. `MADExplorer`, `MADBarcodes`, `MADFeedback` und
-`Scrimpter` sind überhaupt nicht im Linux-Build (docs/project/MAD_LINUX.md §3).
+`Scrimpter` sind überhaupt nicht im Linux-Build (docs/developers/build/linux.md §3).
 
 Der Linux-Build liefert, was GNUstep fehlt, ohne die Framework-Quellen zu
 berühren:
@@ -388,7 +388,7 @@ whole-archive und läuft im Image:
 
 `export` ist das eine Verb, das hier nicht vorkommt: PDF ist ein
 Core-Graphics-Kontext, gezeichnet von einem `UIPrintPageRenderer`, also bleibt es
-auf Apple und sagt das auch (`docs/project/MAD_LINUX.md` §5.2; die Entscheidung
+auf Apple und sagt das auch (`docs/developers/build/linux.md` §5.2; die Entscheidung
 über den Renderer gehört zu Phase E).
 
 **`export` bekam hier seine Foundation-Formate (Phase E, 2026-10-16).** Die
@@ -464,7 +464,7 @@ dieselben Felder, andere Reihenfolge; die *Daten* des Caches sind identisch,
 sobald man nach Feldnamen vergleicht, und die Spaltennamen `c<hash>` des Caches
 sind hash-abgeleitet, sodass sie sich ebenfalls pro Plattform unterschieden.
 **Geklärt am 2026-10-16 (die Entscheidung zur Form des JSON-Exports,
-`docs/project/MAD_LINUX.md` §10.1):** Die Reihenfolge ist jetzt als Spaltenalias
+`docs/developers/build/linux.md` §10.1):** Die Reihenfolge ist jetzt als Spaltenalias
 definiert, sortiert mit `-compare:`, in beiden SQL-Buildern, sodass das erzeugte
 SQL, der Zeilen-Cache und jeder Export auf beiden Plattformen übereinstimmen
 (docs/project/registers/BUGS.md, der SELECT-List-Eintrag; die Reihenfolgetests in
@@ -475,7 +475,7 @@ man Caches über dieses Datum hinweg vergleicht.
 
 ## Der Writer läuft hier, und die beiden Plattformen stimmen überein
 
-Die andere Hälfte von Phase E (`docs/project/MAD_LINUX.md` §9; die Anforderung
+Die andere Hälfte von Phase E (`docs/developers/build/linux.md` §9; die Anforderung
 des Benutzers, 2026-10-16): Der `.mad`-Writer funktioniert unter Linux und erzeugt
 für dasselbe Dokument **dieselben Bytes** wie der des Macs. `mad write <doc.mad>
 --out <copy.mad> [--reproducible]` ist die Oberfläche, und das Dokument wird auf
@@ -654,9 +654,9 @@ von Hand ausgeführter Build sollte dasselbe tun.
 
 Der Linux-PDF-Writer — **zurückgestellt am 2026-10-17, blockiert durch die
 Recherche des Benutzers; ohne dessen Entscheidung nicht beginnen.**
-`docs/project/MAD_PDF_LINUX.md` ist die Übergabedatei (was existiert, was fehlt,
+`docs/developers/build/pdf.md` ist die Übergabedatei (was existiert, was fehlt,
 die Kandidaten-Stacks mit Lizenzen, die offenen Fragen, der Abnahmetest);
-`docs/project/MAD_LINUX.md` §10.2 hält die Begründung fest. Bis er landet, ist
+`docs/developers/build/linux.md` §10.2 hält die Begründung fest. Bis er landet, ist
 ein PDF unter Linux ein Browser, der `--format html` druckt.
 
 Die übrigen Teile von Phase F, Stand 2026-10-17: Das **Runtime-Image** und seine

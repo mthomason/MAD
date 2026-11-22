@@ -4,7 +4,7 @@ The Windows counterpart to `Linux/`: a native Windows build of the headless
 engine's Objective-C frameworks, compiled with Clang against GNUstep Base, so
 the same engine that runs the macOS app and the Linux CLI can run on Windows.
 `Windows/App/` is the WPF application on top of it (Phases 5 and 6a–6f); the
-architecture record is `docs/project/MAD_WINDOWS.md`.
+architecture record is `docs/developers/build/windows.md`.
 
 This increment builds all twelve headless frameworks — **MADDataStructures**,
 **MADFoundation**, **MADAPI**, **MADSqlite3**, **MADCocoaExtensions**,
@@ -59,7 +59,7 @@ The proven, reproducible environment is recorded in
 * **`-D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH`.** This machine's VS 2026
   (18.12.0) MSVC STL hard-requires "Clang 22 or newer" (`_MSVC_STL_UPDATE
   202609L`). The override is the STL's own escape hatch and is proven benign
-  for the code involved (`docs/project/MAD_WINDOWS.md` §2).
+  for the code involved (`docs/developers/build/windows.md` §2).
 * **Seven pinned GNUstep component revisions.** `tools-windows-msvc` clones
   floating master, and its CI builds but never runs a binary, so a runtime
   regression (11-14 → 11-17) shipped unnoticed. The known-good 11-14 revisions
@@ -177,13 +177,13 @@ Linux CI and Apple suites are the gates):
 
 * `madlib.c` defines `itoa`/`ltoa`/`ultoa`, which collide with the Windows UCRT.
   They are renamed `mad_itoa`/`mad_ltoa`/`mad_ultoa` (and their callers
-  updated), behaviour-neutral on Apple and Linux. See `docs/project/MAD_WINDOWS.md` §5.
+  updated), behaviour-neutral on Apple and Linux. See `docs/developers/build/windows.md` §5.
 * `MTStack.m`/`MTQueue.m`/`MTLinkedList.m` store their fast-enumeration cursor
   node pointer in `NSFastEnumerationState.extra[0]`, which is `unsigned long` —
   32 bits on Windows (LLP64), where a pointer does not fit. They now copy the
   pointer with `memcpy` (correct on LP64 and LLP64 alike) and hold it in an
   `__unsafe_unretained` local (the collection owns the node chain). See
-  `docs/project/MAD_WINDOWS.md` §5.
+  `docs/developers/build/windows.md` §5.
 
 ## The CLI (`mad.exe`)
 
@@ -214,7 +214,7 @@ exports in the same user work (the `.mdcache` rename issue is fixed — see
 `mad serve` is the long-lived process boundary the WPF shell uses: it reads
 newline-delimited JSON on standard input and writes one JSON response per line on
 standard output (diagnostics stay on standard error). The contract is documented in
-`docs/project/MAD_WINDOWS.md` §6d — methods `open`, `create`, `test-connection`,
+`docs/developers/build/windows.md` §6d — methods `open`, `create`, `test-connection`,
 `describe`, `connection`, `apply-connection`, `query`, `refresh`, `export`, `write` and
 `shutdown`, plus the Phase 6b Query methods `query-model`, `add-table`, `remove-table`,
 `add-link`, `set-link-type`, `swap-link`, `delete-link`, `add-predicate`,
@@ -407,7 +407,7 @@ $env:MAD_PG_TEST_DATABASE = "chinook"
   `MADQueryFullTests`, `MADSQLParserTests`, `MADQueryMaxFieldLengthTests`) are
   now wired with them and pass.
 * The public `docs/windows.md` and its five translations are the shipped user
-  guide; `Windows/README.md` and `docs/project/MAD_WINDOWS.md` are the developer
+  guide; `Windows/README.md` and `docs/developers/build/windows.md` are the developer
   record.
 
 ## Third-party and licensing

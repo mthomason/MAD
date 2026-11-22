@@ -2,11 +2,11 @@
 
 # Linux: la compilación del motor sin interfaz gráfica
 
-`docs/project/MAD_LINUX.md` §9: la Fase B demostró la cadena de herramientas (un Dockerfile que
+`docs/developers/build/linux.md` §9: la Fase B demostró la cadena de herramientas (un Dockerfile que
 compila desde fuentes clang + libobjc2 + GNUstep Base y compiló un subconjunto de
 MADFoundation); la Fase C es la lista de shims de la §4, y este directorio es donde aterriza.
 La compilación ahora compila **los once frameworks sin interfaz gráfica**: todos los de la tabla de
-la §3 de docs/project/MAD_LINUX.md más `MADPostgres`, excepto los que son solo de interfaz (`MADExplorer`, `MADBarcodes`,
+la §3 de docs/developers/build/linux.md más `MADPostgres`, excepto los que son solo de interfaz (`MADExplorer`, `MADBarcodes`,
 `MADFeedback`, `Scrimpter`, la aplicación), y ejecuta sus suites dentro del
 contenedor: 126 ejecutables de prueba, 1 303 pruebas, 7 necesidades registradas. La cobertura de pruebas que
 master integró el 2026-10-10 (~100 archivos de prueba de Xcode) está portada en
@@ -61,7 +61,7 @@ se compila con `-fobjc-runtime=gnustep-2.2` y ARC.
 ## La capa de bibliotecas
 
 `libraries.conf` + `lib/libraries.sh` compilan las bibliotecas C que enlazan los frameworks,
-de forma nativa, en `/usr/local` (docs/project/MAD_LINUX.md §7). La misma forma e intención que
+de forma nativa, en `/usr/local` (docs/developers/build/linux.md §7). La misma forma e intención que
 la matriz de Compressor de al lado; nada de esto se distribuye.
 
 	sqlite3      3.53.3   the released amalgamation; the option list still comes
@@ -102,7 +102,7 @@ mariadb no las usa, pero siguen en la imagen.
 La lista de fuentes de cada framework es un `cmake/<Name>Sources.cmake` junto a la
 compilación, con las exclusiones nombradas y sus motivos: la misma forma que
 `MADFoundationSources.cmake`. `MADExplorer`, `MADBarcodes`, `MADFeedback` y
-`Scrimpter` no están en la compilación de Linux en absoluto (docs/project/MAD_LINUX.md §3).
+`Scrimpter` no están en la compilación de Linux en absoluto (docs/developers/build/linux.md §3).
 
 La compilación de Linux suple lo que le falta a GNUstep sin tocar las fuentes de los frameworks:
 
@@ -352,7 +352,7 @@ con whole-archive y se ejecuta en la imagen:
 	/build/mad refresh --credentials user:pass <document.mad>
 
 `export` es el único verbo que no está aquí: el PDF es un contexto de Core Graphics dibujado por
-un `UIPrintPageRenderer`, así que se queda en Apple y lo dice (`docs/project/MAD_LINUX.md` §5.2;
+un `UIPrintPageRenderer`, así que se queda en Apple y lo dice (`docs/developers/build/linux.md` §5.2;
 la decisión del renderizador es de la Fase E).
 
 **`export` hizo crecer aquí sus formatos de Foundation (Fase E, 2026-10-16).** La costura de exportación
@@ -418,7 +418,7 @@ era el orden de *conjunto* (`MADQueryActiveQueryFields` acumula en un `NSSet`), 
 mismo documento producía un orden distinto en Apple y en GNUstep: los mismos campos,
 distinto orden; los *datos* de la caché son idénticos una vez comparados por nombre de campo, y
 los nombres de columna `c<hash>` de la caché derivan de hashes, así que también diferían por plataforma.
-**Resuelto el 2026-10-16 (la decisión de la forma de la exportación JSON, `docs/project/MAD_LINUX.md` §10.1):** el
+**Resuelto el 2026-10-16 (la decisión de la forma de la exportación JSON, `docs/developers/build/linux.md` §10.1):** el
 orden ahora se define como el alias de columna, ordenado con `-compare:`, en ambos constructores de SQL,
 así que el SQL generado, la caché de filas y cada exportación coinciden en ambas
 plataformas (docs/project/registers/BUGS.md, la entrada de la lista SELECT; las pruebas de orden en
@@ -428,7 +428,7 @@ orden, así que actualice una vez antes de comparar cachés a través de esa fec
 
 ## El escritor se ejecuta aquí, y las dos plataformas coinciden
 
-La otra mitad de la Fase E (`docs/project/MAD_LINUX.md` §9; el requisito del usuario, 2026-10-16): el escritor
+La otra mitad de la Fase E (`docs/developers/build/linux.md` §9; el requisito del usuario, 2026-10-16): el escritor
 `.mad` funciona en Linux y produce los **mismos bytes** que el del Mac para el mismo
 documento. `mad write <doc.mad> --out <copy.mad> [--reproducible]` es la superficie, y
 el documento se abre sin interfaz gráfica en ambas plataformas, así que ambos lados ejecutan el mismo escritor.
@@ -594,9 +594,9 @@ compilación manual debería hacer lo mismo.
 ## Lo que esto aún no hace
 
 El escritor de PDF de Linux: **aplazado el 2026-10-17, bloqueado por la investigación del usuario; no lo
-empiece sin su decisión.** `docs/project/MAD_PDF_LINUX.md` es el archivo de traspaso (lo que
+empiece sin su decisión.** `docs/developers/build/pdf.md` es el archivo de traspaso (lo que
 existe, lo que falta, las pilas candidatas con licencias, las preguntas abiertas, la
-prueba de aceptación); `docs/project/MAD_LINUX.md` §10.2 registra el razonamiento. Hasta que llegue, un PDF
+prueba de aceptación); `docs/developers/build/linux.md` §10.2 registra el razonamiento. Hasta que llegue, un PDF
 en Linux es un navegador imprimiendo `--format html`.
 
 Las demás partes de la Fase F, a fecha de 2026-10-17: la **imagen de ejecución** y su **verificación

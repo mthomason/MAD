@@ -158,7 +158,7 @@ The native macOS desktop app ([`docs/macos.md`](docs/macos.md), [`Mac/`](Mac/)) 
   2. **MAD Designer (`MADMacDesignerViewController`):** Three-pane split view with an interactive **Page & Section Minimap**, **Report Bands** outline, searchable **Query Fields** drag source, zoomable/ruled design canvas (`MADMacDesignerCanvasView`) with cross-section drag-and-drop and smart alignment guides, and a dual-card **Page & Element Inspector**.
   3. **MAD Viewer (`MADMacViewerViewController`):** Live data refresh (`Cmd+R`), instant **Page Size** re-pagination (`US Letter`, `Legal`, `Tabloid`, `A3`, `A4`, `A5`, `B4`, `B5`, `JIS B4`, `JIS B5`), framed `PDFView` preview, native `NSPrintOperation` printing (`Cmd+P`), and export (`Cmd+E`) to **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report**, and **Plain Text**.
 
-See [`docs/macos.md`](docs/macos.md) for the full guide and [`docs/project/MAD_MACOS.md`](docs/project/MAD_MACOS.md) for the multiplatform portability audit.
+See [`docs/macos.md`](docs/macos.md) for the full guide and [`docs/developers/build/macos.md`](docs/developers/build/macos.md) for the multiplatform portability audit.
 
 ## Build and test
 
@@ -215,7 +215,7 @@ dotnet test Windows\App\Mad.Designer.Windows.slnx      # both .NET suites, again
 pwsh -File .\Windows\package.ps1                      # the unsigned release zip and the CI engine asset
 ```
 
-CI does not rebuild the engine (it needs that workstation toolchain): [`windows.yml`](.github/workflows/windows.yml) downloads a pre-built engine asset and runs both suites. See [`docs/windows.md`](docs/windows.md) for the install guide and [`docs/project/MAD_WINDOWS.md`](docs/project/MAD_WINDOWS.md) for the build record.
+CI does not rebuild the engine (it needs that workstation toolchain): [`windows.yml`](.github/workflows/windows.yml) downloads a pre-built engine asset and runs both suites. See [`docs/windows.md`](docs/windows.md) for the install guide and [`docs/developers/build/windows.md`](docs/developers/build/windows.md) for the build record.
 
 ## Support
 

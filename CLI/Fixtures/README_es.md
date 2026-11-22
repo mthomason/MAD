@@ -17,7 +17,7 @@ Documentos contra los que se ejecutan los verbos de la CLI, junto a las muestras
 
 Ambas muestras distribuidas son documentos **heredados**: su definición es un almacén de Core Data
 (`StoreContent/analyitics`), y convertir uno necesita Core Data, que el
-framework MAD no enlaza y Linux no tiene (`docs/project/MAD_LINUX.md` §5.1, §9).
+framework MAD no enlaza y Linux no tiene (`docs/developers/build/linux.md` §5.1, §9).
 `London.portable.mad` y `Music.portable.mad` son los mismos documentos escritos en
 el almacén portátil, para que una plataforma sin Core Data pueda leerlos y actualizarlos,
 que es lo que hacen la CLI de Linux y `Linux/Tests/MADHeadlessDocumentTests.m`.

@@ -577,7 +577,7 @@ particular is a business decision, not an engineering task.
 
 ---
 
-## 11. The Linux toolchain (docs/project/MAD_LINUX.md Phase B)
+## 11. The Linux toolchain (docs/developers/build/linux.md Phase B)
 
 **Status:** Done 2026-10-06 on `linux-port` (renamed from `linux-phase-b`; merged to `master` 2026-10-16, `524e0d86e`) — the spike is green, and
 Phase C is the next step. Two of Phase C's inputs come from this work: the GNUstep
@@ -1222,7 +1222,7 @@ prompts are in `~/Desktop/MADOpenSource-PostSteps/`.
   * **Phase F (docs and fixtures):** `CLI/Fixtures/Postgres.chinook.mad` generated
     via `MADFixtureMaker`, `Linux/verify-cli.sh --live` extended with the 25-row
     PostgreSQL refresh check, and `Linux/README.md`, `CLI/Fixtures/README.md`,
-    `docs/tutorials/driver-authoring.md`, `docs/project/LIBRARIES.md`,
+    `docs/tutorials/driver-authoring.md`, `docs/developers/build/libraries.md`,
     `docs/project/THIRD_PARTY_LICENSES.md`, `docs/project/BUGS.md`, and `AGENTS.md`
     updated.
 

@@ -13,7 +13,7 @@ lang: zh-CN
 
 “条码生成器已被移除”这一前提在 Apple 侧是错误的。该元素**从未与应用程序断开连接**——它只是被隐藏了。以下各项今天都能编译并链接：
 
-- **`MADBarcodes` 框架**是工作区成员，由应用 target 链接并嵌入，也由 `MAD` 链接。它封装 **zint 2.16.0**（纯 C，仅使用 BSD-3-Clause 后端），由 Compressor 配方构建进 `Compressor/library/zint.xcframework`，并与 `libpng.xcframework` 和 `zlib.xcframework` 一并链接（`docs/project/LIBRARIES.md:152`）。
+- **`MADBarcodes` 框架**是工作区成员，由应用 target 链接并嵌入，也由 `MAD` 链接。它封装 **zint 2.16.0**（纯 C，仅使用 BSD-3-Clause 后端），由 Compressor 配方构建进 `Compressor/library/zint.xcframework`，并与 `libpng.xcframework` 和 `zlib.xcframework` 一并链接（`docs/developers/build/libraries.md:152`）。
 - **框架形态：** `MTBarcode` 基类 + `MTBarcodeProtocol` + `MTBarcodeView`（UIView）+ 61 个头文件中的 **67 个码制子类**（有两个文件声明了不止一个类：`MTBarcodeCode128Iso15417.h` 中有 6 个，`MTBarcodeCode39Iso16388.h` 中有 2 个）。类型枚举 `MTBarcodeType`（`MADBarcodeType.h`）按原始值作为 zint 的 `BARCODE_*` 常量的别名。构造经由 `+[MTBarcode newBarcodeWithType:]`（一个 65 分支的 switch）。
 - **框架测试存在且通过：** 共享的 scheme `MADBarcodes`，`MADBarcodes/MADBarcodesTests/`（`MTBarcodeTests`、`MTBarcodeSymbologyTests`、`MTBarcodeViewTests`，共 21 个测试）——包括一次真正的端到端绘制，把 Code 39 符号画进离屏上下文。不需要测试夹具。
 - **模型层**（`MAD`）：`RptqDocumentElementBarcode`（自动生成）+ 遵循 `MTBarcodeProtocol` 的 Extras 类别；元素类型 `MADPrintPageElementTypeBarcode = 9`（`MAD/Source/MADDocumentObjectType.h:14-26`）；存储架构列已经存在（`MAD/Source/rptq/store/MADStoreSchema.m:522-542`）——**不需要存储迁移**。
@@ -557,13 +557,13 @@ documentation in line with reality. Work on master in /Users/michael/Desktop/Rep
      Also add MAD_BARCODES.md to the Related Documents list.
    - MADBarcodes/AGENTS.md (and its CLAUDE.md symlink): remove the "unused and
      unmaintained" claim; state the framework's role and its test scheme.
-   - docs/project/LIBRARIES.md lines ~100-102 are stale: they still describe zint 2.4.2 with
+   - docs/developers/build/libraries.md lines ~100-102 are stale: they still describe zint 2.4.2 with
      patches/zint-2.4.2-mad.patch. Correct them to the actual arrangement: zint
      2.16.0 built by the Compressor recipe (Compressor/matrix.conf + lib/recipes/zint.sh)
      into Compressor/library/zint.xcframework; the old 2.4.2 patch is retired
      (ZBarcode_Encode_and_Buffer is upstream API in 2.16). docs/project/THIRD_PARTY_LICENSES.md
      ~283-284 already flags the staleness — check that note and update it to say the
-     docs/project/LIBRARIES.md text is now corrected. Do not touch the notices gap itself (it is on
+     docs/developers/build/libraries.md text is now corrected. Do not touch the notices gap itself (it is on
      the licence-register track).
    - docs/project/registers/BUGS.md: the colour-columns entry's "untested on Apple" note was resolved by
      Task 5 (the entry moved to docs/project/registers/BUGS_FIXED.md). The "barcode creation path, which is

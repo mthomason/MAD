@@ -47,7 +47,7 @@ The release page publishes a SHA-256 checksum for the archive. Compare it after 
 Get-FileHash .\MAD-Designer-Windows-0.7.zip -Algorithm SHA256
 ```
 
-The extraction can also be reviewed file by file: the archive contains only the published application, the engine built by `Windows/Engine/build.ps1`, the sample document, and the licence texts. `mad.exe` is the same command-line engine documented in the [Linux guide](https://github.com/mthomason/MAD/blob/master/Linux/README.md) and the [Windows build record](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_WINDOWS.md).
+The extraction can also be reviewed file by file: the archive contains only the published application, the engine built by `Windows/Engine/build.ps1`, the sample document, and the licence texts. `mad.exe` is the same command-line engine documented in the [Linux guide](https://github.com/mthomason/MAD/blob/master/Linux/README.md) and the [Windows build record](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md).
 
 ### Reviewing and self-signing this build
 
@@ -100,7 +100,7 @@ The two .NET suites run against the built engine:
 dotnet test Windows\App\Mad.Designer.Windows.slnx
 ```
 
-`Windows/Engine/build.ps1` also runs the ported native suites, and `Windows/package.ps1` assembles the unsigned release archive and the engine-only CI asset once the engine and app are built. The full recipe, the Windows-only runtime fixes, the licence obligations, and the supported OS matrix are recorded in [`docs/project/MAD_WINDOWS.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_WINDOWS.md).
+`Windows/Engine/build.ps1` also runs the ported native suites, and `Windows/package.ps1` assembles the unsigned release archive and the engine-only CI asset once the engine and app are built. The full recipe, the Windows-only runtime fixes, the licence obligations, and the supported OS matrix are recorded in [`docs/developers/build/windows.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md).
 
 ## Licence
 

@@ -17,7 +17,7 @@ Documentos contra os quais os comandos da CLI são executados, ao lado dos exemp
 
 Ambos os exemplos distribuídos são documentos **legados**: sua definição é um store
 do Core Data (`StoreContent/analyitics`), e converter um exige o Core Data, que o
-framework MAD não vincula e que o Linux não possui (`docs/project/MAD_LINUX.md` §5.1, §9).
+framework MAD não vincula e que o Linux não possui (`docs/developers/build/linux.md` §5.1, §9).
 `London.portable.mad` e `Music.portable.mad` são esses mesmos documentos gravados no
 store portável, permitindo que uma plataforma sem Core Data possa lê-los e atualizá-los —
 que é exatamente o que a CLI no Linux e `Linux/Tests/MADHeadlessDocumentTests.m` fazem.

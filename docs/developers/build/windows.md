@@ -1,4 +1,14 @@
+---
+layout: default
+title: "Building the engine on Windows"
+description: "The pinned Clang and GNUstep toolchain and the native Windows engine build."
+---
+
 # Compiling the MAD Engine on Windows — architecture and decision record
+
+This page records the Windows engine build: the pinned toolchain, the framework port and its shims, and the `Windows/Engine/build.ps1` entry point. The application guide is at `/windows.html`.
+
+*Written on the original date; current-state facts reconciled 2026-11-22.*
 
 Written 2026-11-18 against `master` for the `windows-engine` branch (Phase 2
 of the Windows PoC). The Windows build is the sibling

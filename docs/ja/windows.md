@@ -48,7 +48,7 @@ MAD-Designer-Windows-0.7/
 Get-FileHash .\MAD-Designer-Windows-0.7.zip -Algorithm SHA256
 ```
 
-展開した内容はファイル単位でも確認できます。アーカイブには、公開されたアプリケーション、`Windows/Engine/build.ps1` でビルドされたエンジン、サンプルドキュメント、ライセンス文書だけが含まれています。`mad.exe` は、[Linux ガイド](https://github.com/mthomason/MAD/blob/master/Linux/README.md)と [Windows ビルド記録](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_WINDOWS.md)に記載されているコマンドラインエンジンと同じものです。
+展開した内容はファイル単位でも確認できます。アーカイブには、公開されたアプリケーション、`Windows/Engine/build.ps1` でビルドされたエンジン、サンプルドキュメント、ライセンス文書だけが含まれています。`mad.exe` は、[Linux ガイド](https://github.com/mthomason/MAD/blob/master/Linux/README.md)と [Windows ビルド記録](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md)に記載されているコマンドラインエンジンと同じものです。
 
 ### このビルドの確認と自己署名
 
@@ -101,7 +101,7 @@ pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # rebuild after the toolch
 dotnet test Windows\App\Mad.Designer.Windows.slnx
 ```
 
-`Windows/Engine/build.ps1` は移植されたネイティブスイートも実行し、`Windows/package.ps1` はエンジンとアプリをビルドした後に、署名なしのリリースアーカイブと CI 用のエンジンアセットを組み立てます。完全なレシピ、Windows 固有のランタイム修正、ライセンス義務、対応 OS のマトリックスは [`docs/project/MAD_WINDOWS.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_WINDOWS.md) に記録されています。
+`Windows/Engine/build.ps1` は移植されたネイティブスイートも実行し、`Windows/package.ps1` はエンジンとアプリをビルドした後に、署名なしのリリースアーカイブと CI 用のエンジンアセットを組み立てます。完全なレシピ、Windows 固有のランタイム修正、ライセンス義務、対応 OS のマトリックスは [`docs/developers/build/windows.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md) に記録されています。
 
 ## ライセンス
 

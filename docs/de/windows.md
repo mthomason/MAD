@@ -48,7 +48,7 @@ Die Release-Seite veröffentlicht eine SHA-256-Prüfsumme für das Archiv. Vergl
 Get-FileHash .\MAD-Designer-Windows-0.7.zip -Algorithm SHA256
 ```
 
-Das entpackte Archiv lässt sich auch Datei für Datei prüfen: Es enthält nur die veröffentlichte Anwendung, die mit `Windows/Engine/build.ps1` gebaute Engine, das Beispieldokument und die Lizenztexte. `mad.exe` ist dieselbe Kommandozeilen-Engine, die im [Linux-Leitfaden](https://github.com/mthomason/MAD/blob/master/Linux/README.md) und in der [Windows-Builddokumentation](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_WINDOWS.md) beschrieben ist.
+Das entpackte Archiv lässt sich auch Datei für Datei prüfen: Es enthält nur die veröffentlichte Anwendung, die mit `Windows/Engine/build.ps1` gebaute Engine, das Beispieldokument und die Lizenztexte. `mad.exe` ist dieselbe Kommandozeilen-Engine, die im [Linux-Leitfaden](https://github.com/mthomason/MAD/blob/master/Linux/README.md) und in der [Windows-Builddokumentation](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md) beschrieben ist.
 
 ### Diesen Build prüfen und selbst signieren
 
@@ -101,7 +101,7 @@ Die beiden .NET-Testsuiten laufen gegen die gebaute Engine:
 dotnet test Windows\App\Mad.Designer.Windows.slnx
 ```
 
-`Windows/Engine/build.ps1` führt außerdem die portierten nativen Suiten aus, und `Windows/package.ps1` stellt nach dem Bau von Engine und App das unsignierte Release-Archiv und das Engine-Asset für CI zusammen. Das vollständige Rezept, die Windows-spezifischen Laufzeitkorrekturen, die Lizenzpflichten und die unterstützte Betriebssystemmatrix sind in [`docs/project/MAD_WINDOWS.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_WINDOWS.md) dokumentiert.
+`Windows/Engine/build.ps1` führt außerdem die portierten nativen Suiten aus, und `Windows/package.ps1` stellt nach dem Bau von Engine und App das unsignierte Release-Archiv und das Engine-Asset für CI zusammen. Das vollständige Rezept, die Windows-spezifischen Laufzeitkorrekturen, die Lizenzpflichten und die unterstützte Betriebssystemmatrix sind in [`docs/developers/build/windows.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md) dokumentiert.
 
 ## Lizenz
 

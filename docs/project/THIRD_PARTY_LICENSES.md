@@ -270,7 +270,7 @@ code in the same pass (§4.1).
 
 ### 3.5 The PDF stack (the headless engines only)
 
-The PDF writer (`MADReportExporterPDFCairo`, docs/project/MAD_PDF_LINUX.md) links
+The PDF writer (`MADReportExporterPDFCairo`, docs/developers/build/pdf.md) links
 four components the Apple app does not: they are built by `Linux/lib/libraries.sh`
 and `Windows/Engine/build.ps1` from the pins in `Linux/libraries.conf` /
 `Windows/Engine/libraries.conf`, and linked statically into the Linux image's

@@ -17,7 +17,7 @@ links today:
 - **`MADBarcodes` framework** is a workspace member, linked and embedded by the app target
   and linked by `MAD`. It wraps **zint 2.16.0** (pure C, BSD-3-Clause backend only),
   built by the Compressor recipe into `Compressor/library/zint.xcframework`, linked
-  alongside `libpng.xcframework` and `zlib.xcframework` (`docs/project/LIBRARIES.md:152`).
+  alongside `libpng.xcframework` and `zlib.xcframework` (`docs/developers/build/libraries.md:152`).
 - **Framework shape:** `MTBarcode` base class + `MTBarcodeProtocol` + `MTBarcodeView`
   (UIView) + **67 symbology subclasses** in 61 headers (two files declare more than one
   class: `MTBarcodeCode128Iso15417.h` holds 6, `MTBarcodeCode39Iso16388.h` holds 2).
@@ -659,13 +659,13 @@ documentation in line with reality. Work on master in /Users/michael/Desktop/Rep
      Also add MAD_BARCODES.md to the Related Documents list.
    - MADBarcodes/AGENTS.md (and its CLAUDE.md symlink): remove the "unused and
      unmaintained" claim; state the framework's role and its test scheme.
-   - docs/project/LIBRARIES.md lines ~100-102 are stale: they still describe zint 2.4.2 with
+   - docs/developers/build/libraries.md lines ~100-102 are stale: they still describe zint 2.4.2 with
      patches/zint-2.4.2-mad.patch. Correct them to the actual arrangement: zint
      2.16.0 built by the Compressor recipe (Compressor/matrix.conf + lib/recipes/zint.sh)
      into Compressor/library/zint.xcframework; the old 2.4.2 patch is retired
      (ZBarcode_Encode_and_Buffer is upstream API in 2.16). docs/project/THIRD_PARTY_LICENSES.md
      ~283-284 already flags the staleness — check that note and update it to say the
-     docs/project/LIBRARIES.md text is now corrected. Do not touch the notices gap itself (it is on
+     docs/developers/build/libraries.md text is now corrected. Do not touch the notices gap itself (it is on
      the licence-register track).
    - docs/project/registers/BUGS.md: the colour-columns entry's "untested on Apple" note was resolved by
      Task 5 (the entry moved to docs/project/registers/BUGS_FIXED.md). The "barcode creation path, which is

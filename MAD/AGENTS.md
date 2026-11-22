@@ -4,7 +4,7 @@
 
 The `MAD` framework is the central component of the _MAD Designer_ application. It contains the portable document store, document handling logic, and the core functionality for creating and managing reports. This framework brings together all the other components of the application to deliver the main features of _MAD Designer_. It has dependencies on `MADFoundation`, `MADCocoaExtensions`, and `MADAPI`.
 
-The framework does not link Core Data: a document's definition lives in the portable SQLite store (`MADStore`, `MADStoreSchema`, `RptqStoreContext`), and the Core Data model survives only for converting old documents, in the application target (`MADDesigner/Source/MADStoreLegacy/`). See `docs/project/design/MAD_STORE_MIGRATION.md` and `docs/project/MAD_LINUX.md`.
+The framework does not link Core Data: a document's definition lives in the portable SQLite store (`MADStore`, `MADStoreSchema`, `RptqStoreContext`), and the Core Data model survives only for converting old documents, in the application target (`MADDesigner/Source/MADStoreLegacy/`). See `docs/project/design/MAD_STORE_MIGRATION.md` and `docs/developers/build/linux.md`.
 
 ## Key Features
 

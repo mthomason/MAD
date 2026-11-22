@@ -153,7 +153,7 @@ O aplicativo desktop nativo para macOS ([`docs/macos.md`](../docs/pt-br/macos.md
   2. **MAD Designer (`MADMacDesignerViewController`):** Visualização dividida em três painéis com **Page & Section Minimap** interativo, outline **Report Bands**, origem de arrasto pesquisável **Query Fields**, canvas de design com zoom e réguas (`MADMacDesignerCanvasView`) com arrastar e soltar entre seções e guias inteligentes de alinhamento, além de um **Page & Element Inspector** de cartão duplo.
   3. **MAD Viewer (`MADMacViewerViewController`):** Atualização de dados ao vivo (`Cmd+R`), repaginação instantânea por **Page Size** (`US Letter`, `Legal`, `Tabloid`, `A3`, `A4`, `A5`, `B4`, `B5`, `JIS B4`, `JIS B5`), pré-visualização emoldurada em `PDFView`, impressão nativa com `NSPrintOperation` (`Cmd+P`) e exportação (`Cmd+E`) para **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report** e **Plain Text**.
 
-Consulte [`docs/macos.md`](../docs/pt-br/macos.md) para o guia completo e [`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md) para a auditoria de portabilidade multiplataforma.
+Consulte [`docs/macos.md`](../docs/pt-br/macos.md) para o guia completo e [`docs/developers/build/macos.md`](../docs/developers/build/macos.md) para a auditoria de portabilidade multiplataforma.
 
 ## Compilação e testes
 
