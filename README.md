@@ -82,7 +82,7 @@ The full specification — container layout, store tables, companion schemas, kn
 
 ## Where MAD Is Going: The Roadmap & Vision
 
-Because MAD already separates the **query graph**, the **materialized SQLite result table**, and the **presentation layout**, the architecture unlocks four major capabilities that are actively being designed and queued (see [`docs/vision.md`](docs/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](docs/project/MAD_DATA_OBJECT.md), and [`docs/project/registers/TODO.md`](docs/project/registers/TODO.md)):
+Because MAD already separates the **query graph**, the **materialized SQLite result table**, and the **presentation layout**, the architecture unlocks four major capabilities that are actively being designed and queued (see [`docs/vision.md`](docs/vision.md), [`docs/developers/data-object.md`](docs/developers/data-object.md), and [`docs/project/registers/TODO.md`](docs/project/registers/TODO.md)):
 
 1. **A `.mad` report as an ad hoc database table (Composable Data Objects).**
    In a traditional database, you `SELECT` from base tables like `employee` or `sales_data`. A `.mad` report joins and filters multiple tables, and its output (`.maddb` + `.mdcache`) is already a physical SQLite table with a typed schema (`MADDataColumn`). By making a report's output addressable as a table source inside the query designer, **a `.mad` file becomes a virtual/materialized database table**. Other reports, queries, or tools can `SELECT` from and `JOIN` against a `.mad` report just like any table in a database.
@@ -130,7 +130,7 @@ The [mad-action](https://github.com/mthomason/mad-action) GitHub Action runs a c
     document: reports/sales.mad
 ```
 
-It runs the published image, so the action and the CLI are the same engine. The action is generated from [`satellites/mad-action/`](satellites/mad-action/) here; [`docs/project/SATELLITE_REPOS.md`](docs/project/SATELLITE_REPOS.md) records how the satellite is kept current.
+It runs the published image, so the action and the CLI are the same engine. The action is generated from [`satellites/mad-action/`](satellites/mad-action/) here; [`docs/developers/satellites.md`](docs/developers/satellites.md) records how the satellite is kept current.
 
 ## Database drivers
 

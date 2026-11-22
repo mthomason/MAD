@@ -178,7 +178,7 @@ suas categorias estarão silenciosamente ausentes em tempo de execução.
   registrada por `MADDatabaseSqlite3` (`compare_string_utf8_localized_asc_collation`),
   os seletores de ordenação em memória e o comparador de strings do formatador de relatórios agora
   passam todos por uma única ordem definida pelo próprio projeto (`NSString+Comparison.h`:
-  case-fold seguido de ordem de code points UTF-8), eliminando qualquer divergência entre plataformas. Consulte a seção `mad export` em `docs/project/MAD_CLI.md`.
+  case-fold seguido de ordem de code points UTF-8), eliminando qualquer divergência entre plataformas. Consulte a seção `mad export` em `docs/developers/cli.md`.
 * **Codificação de tipo em runtime de `BOOL` e herança em `class_getProperty` — encontradas pelas
   suítes rptq do `MAD`, corrigidas em `RptqObject`.** No GNUstep, `BOOL` é
   `unsigned char` (`'C'`), enquanto na Apple é `signed char` (`'c'`); por isso, os accessors booleanos dinâmicos de `RptqObject` agora registram a
@@ -231,7 +231,7 @@ O binário `mad` é compilado por este `CMakeLists.txt` a partir de `CLI/Source`
 	/build/mad query   <document.mad>
 	/build/mad refresh --credentials user:pass <document.mad>
 
-**`export` recebeu seus formatos baseados em Foundation e renderização na Fase E (2026-10-16).** A interface de exportação (`MADReportExporting` + `MADReportExporterRegistry`, `docs/project/MAD_CLI.md` §5.3) está integrada ao `mad`, de modo que `text`, `csv`, `json`, `html`, `html-flow` e `json-report` rodam na imagem Linux e geram exatamente os mesmos bytes que a ferramenta no Mac (enquanto `pdf` informa explicitamente por que não está disponível no Linux).
+**`export` recebeu seus formatos baseados em Foundation e renderização na Fase E (2026-10-16).** A interface de exportação (`MADReportExporting` + `MADReportExporterRegistry`, `docs/developers/cli.md` §5.3) está integrada ao `mad`, de modo que `text`, `csv`, `json`, `html`, `html-flow` e `json-report` rodam na imagem Linux e geram exatamente os mesmos bytes que a ferramenta no Mac (enquanto `pdf` informa explicitamente por que não está disponível no Linux).
 
 Comparação dos formatos de dados na fixture London (`CLI/Fixtures/London.portable.mad`, atualizada antes do teste, com `sha256sum` em ambas as plataformas):
 

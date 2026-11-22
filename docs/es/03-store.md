@@ -38,7 +38,7 @@ descriptores `MADStoreSchema` mantenidos a mano (`MAD/Source/rptq/store/`), gene
 `-createSchemaSQL` y contrastados con el modelo compilado por `MADStoreTests`.
 El almacén registra la versión de su esquema en `PRAGMA user_version`: la versión 1 es el esquema
 tal como se distribuyó (ausente o 0), la versión 2 añade `RptqQuery.sqlSourceText` —el SQL
-pegado por el usuario, conservado textualmente (`docs/project/MAD_SQL_ENTRY.md` §8)— y `MADStore` aplica los pasos
+pegado por el usuario, conservado textualmente (`docs/developers/sql-entry.md` §8)— y `MADStore` aplica los pasos
 que faltan al abrir. Los campos de la tabla `RptqQuery`:
 
 | Columna | Tipo | Notas |

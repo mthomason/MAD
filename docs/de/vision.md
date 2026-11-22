@@ -9,7 +9,7 @@ Aktualisiert am 2026-10-29. Diese Seite beschreibt die Richtung, in die MAD
 wachsen soll. Keiner der hier beschriebenen Kompositions- oder
 Migrationsmechanismen ist bereits gebaut; das Design, auf dem das
 Datenobjektmodell basiert, steht in
-[`docs/project/MAD_DATA_OBJECT.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_DATA_OBJECT.md),
+[`docs/developers/data-object.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/data-object.md),
 das Arbeitsprotokoll in
 [`docs/project/product/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/product/MAD_FUTURE.md)
 und die Produktwunschliste in

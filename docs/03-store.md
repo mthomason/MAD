@@ -37,7 +37,7 @@ hand-maintained `MADStoreSchema` descriptors (`MAD/Source/rptq/store/`), generat
 `-createSchemaSQL`, and cross-checked against the compiled model by `MADStoreTests`.
 The store records its schema version in `PRAGMA user_version`: version 1 is the schema
 as it shipped (absent or 0), version 2 adds `RptqQuery.sqlSourceText` -- the user's
-pasted SQL, kept verbatim (`docs/project/MAD_SQL_ENTRY.md` §8) -- and `MADStore` applies the missing
+pasted SQL, kept verbatim (`docs/developers/sql-entry.md` §8) -- and `MADStore` applies the missing
 steps on open.  The `RptqQuery` table's fields:
 
 | Column | Type | Notes |

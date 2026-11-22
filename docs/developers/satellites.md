@@ -1,4 +1,12 @@
+---
+layout: default
+title: "Satellite repositories"
+description: "How `mad-action` and the container image are published from this repository."
+---
+
 # Satellite repositories
+
+This page explains how the `mad-action` GitHub Action and the container image are published from this repository, and the rule that keeps a satellite current.
 
 A satellite is a repository outside `mthomason/MAD` that publishes something
 built from MAD: today the `mad-action` GitHub Action, alongside the container

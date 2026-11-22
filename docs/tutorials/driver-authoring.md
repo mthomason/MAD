@@ -175,7 +175,7 @@ So a REST/Web-service driver today:
 * **cannot** receive the query graph natively: to know *what* the engine
   is asking it must parse the SQL text back out of the string it was
   handed. The practical route: the engine's own SQL parser (built for the
-  SQL-entry feature, `docs/project/MAD_SQL_ENTRY.md`) already parses the
+  SQL-entry feature, `docs/developers/sql-entry.md`) already parses the
   supported subset — the generated SQL is that subset by construction — so
   a driver can reuse it to recover the graph;
 * the **proper fix** is a per-driver compilation hook — the same shape the

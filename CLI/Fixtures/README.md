@@ -3,7 +3,7 @@
 # CLI fixtures
 
 Documents the CLI's verbs are run against, beside the samples they come from
-(`docs/project/MAD_CLI.md` §6).
+(`docs/developers/cli.md` §6).
 
 | Fixture | Source | What it pins |
 |---|---|---|
@@ -90,6 +90,6 @@ not 3306, because the Oracle MySQL installer's launchd service may own 3306.
 next `up` rebuilds it.
 
 The CLI's `--host`, `--port` and `--database` override the stored connection
-for one run (`docs/project/MAD_CLI.md` §3), which is how a CI job points one of
+for one run (`docs/developers/cli.md` §3), which is how a CI job points one of
 these documents at a service container whose host and port differ from the
 Mac's. The document itself is not rewritten.

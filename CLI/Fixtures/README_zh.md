@@ -2,7 +2,7 @@
 
 # CLI 测试夹具
 
-记录 CLI 各动词所针对运行的文档，与它们来源的示例放在一起（`docs/project/MAD_CLI.md` §6）。
+记录 CLI 各动词所针对运行的文档，与它们来源的示例放在一起（`docs/developers/cli.md` §6）。
 
 | 测试夹具 | 来源 | 固定验证的内容 |
 |---|---|---|
@@ -59,4 +59,4 @@
 
 三者都在所有接口上发布，因此文档中的 `mac` 主机名从 Mac 和 Linux 镜像内部都能解析。MySQL 容器使用 13306 而不是 3306，因为 Oracle MySQL 安装程序的 launchd 服务可能占用 3306。`down` 停止服务器（数据卷保留数据）；`reset` 将其移除，下一次 `up` 会重新构建它。
 
-CLI 的 `--host`、`--port` 和 `--database` 在单次运行中覆盖存储的连接（`docs/project/MAD_CLI.md` §3），CI 任务正是以此将其中一个文档指向主机和端口与 Mac 不同的服务容器。文档本身不会被改写。
+CLI 的 `--host`、`--port` 和 `--database` 在单次运行中覆盖存储的连接（`docs/developers/cli.md` §3），CI 任务正是以此将其中一个文档指向主机和端口与 Mac 不同的服务容器。文档本身不会被改写。

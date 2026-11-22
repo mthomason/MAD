@@ -3,7 +3,7 @@
 # CLI-Fixtures
 
 Dokumente, gegen die die Verben der CLI ausgeführt werden, neben den Beispielen,
-aus denen sie stammen (`docs/project/MAD_CLI.md` §6).
+aus denen sie stammen (`docs/developers/cli.md` §6).
 
 | Fixture | Quelle | Was es fixiert |
 |---|---|---|
@@ -98,6 +98,6 @@ Oracle-MySQL-Installers 3306 belegen kann. `down` stoppt einen Server (die Volum
 behalten die Daten); `reset` entfernt ihn, und das nächste `up` baut ihn neu.
 
 Die Optionen `--host`, `--port` und `--database` der CLI überschreiben die
-gespeicherte Verbindung für einen Lauf (`docs/project/MAD_CLI.md` §3); so richtet
+gespeicherte Verbindung für einen Lauf (`docs/developers/cli.md` §3); so richtet
 ein CI-Job eines dieser Dokumente auf einen Service-Container, dessen Host und Port
 vom Mac abweichen. Das Dokument selbst wird nicht neu geschrieben.

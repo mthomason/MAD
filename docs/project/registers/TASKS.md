@@ -1183,7 +1183,7 @@ prompts are in `~/Desktop/MADOpenSource-PostSteps/`.
 * **03 — the `mad-action` GitHub Action (PR #7).** The action's source lives
   in `satellites/mad-action/`; `.github/workflows/publish-mad-action.yml`
   publishes it to `mthomason/mad-action` and moves `v1`. The policy and the
-  release checklist are `docs/project/SATELLITE_REPOS.md`. The `mad` CLI
+  release checklist are `docs/developers/satellites.md`. The `mad` CLI
   gained `--host`, `--port` and `--database` so a checked-in document can
   point at a CI database without being rewritten (`MAD_CLI.md` §3).
 * **04 — the PostgreSQL driver (`MADPostgres`) — done 2026-10-28 on `postgres-driver`.**

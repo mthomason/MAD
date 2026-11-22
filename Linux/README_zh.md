@@ -97,7 +97,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 
 * **NSOperationQueue 与 KVO——在此发现，已在 MADOperation 中修复。** GNUstep 的 `NSOperationQueue` 在收到的每个通知上都会移除其 `"isReady"` 观察，并且在注册该观察之后还会再检查一次 `isReady`。MADOperation 过去从 `-isReady` 内部推进其状态机（通过 `state` 的 KVO 依赖键），因此第一次就绪检查触发了队列正在等待的通知，第二次调用随后移除了一个已经不存在的观察——`NSInvalidArgumentException`，操作从未运行。MADOperation 现在显式驱动推进（`-willEnqueue` 启动条件求值），并且仅在 `isReady`、`isExecuting` 和 `isFinished` 各自的值真正变化时才为它们发送 `will`/`didChangeValueForKey:`，因此队列每次入队只看到一个 `isReady` 通知，与 Apple 的行为相同。Linux 测试在两个平台上直接断言这一点；没有任何东西被静默，阶段 D 的刷新路径也不再被它阻塞。
 * **缺少安全编码（secure-coding）归档。** `archivedDataWithRootObject: requiringSecureCoding:YES` 返回 nil 且无错误，因此必须在 Apple 之外工作的代码路径——MADArrayCaching 的 `.madac` 渲染缓存、MADDataTableFast 的分组键集合、MADFileUtilities 的归档——在 `#if __APPLE__` 下回退到 `requiringSecureCoding:NO`，即同一个编码器但不带加固。解档一侧不需要回退：`unarchivedObjectOfClass:fromData:error:` 及其复数形式在 GNUstep 上确实可用（2026-10-06 实测——探针早前的报告称它和 `+unarchiveTopLevelObjectWithData:error:` 都不存在，那来自一个 nil 严格归档从未到达的分支，因此只有后者是真的）。后者确实不存在，并在 `Compat/` 中通过 `+unarchiveObjectWithData:` 打垫片。
-* **`-localizedCaseInsensitiveCompare:` 在 GNUstep 上区分大小写**——不再起关键作用（2026-10-25 修复）。MADDatabaseSqlite3 注册的 SQLite 排序规则（`compare_string_utf8_localized_asc_collation`）、内存排序选择器以及报表格式器的字符串比较器都统一经过一个第一方定义的顺序（`NSString+Comparison.h`：先进行大小写折叠，再按 UTF-8 码点顺序），因此本地化比较造成的差异已经消除，而不是被掩盖；测试在两个平台上断言相同的定义顺序。参见 `docs/project/MAD_CLI.md` 的 `mad export` 一节。
+* **`-localizedCaseInsensitiveCompare:` 在 GNUstep 上区分大小写**——不再起关键作用（2026-10-25 修复）。MADDatabaseSqlite3 注册的 SQLite 排序规则（`compare_string_utf8_localized_asc_collation`）、内存排序选择器以及报表格式器的字符串比较器都统一经过一个第一方定义的顺序（`NSString+Comparison.h`：先进行大小写折叠，再按 UTF-8 码点顺序），因此本地化比较造成的差异已经消除，而不是被掩盖；测试在两个平台上断言相同的定义顺序。参见 `docs/developers/cli.md` 的 `mad export` 一节。
 * **BOOL 的运行时编码，以及 `class_getProperty` 的继承——由 MAD 的 rptq 套件发现，已在 RptqObject 中修复。** 运行时会比较已安装访问器的类型编码与编译调用点的类型编码，而 BOOL 在 GNUstep 上是 `unsigned char`（`'C'`），Apple 则使用 `signed char`（`'c'`），因此 `RptqObject` 动态安装的 bool 访问器现在注册按平台区分的编码（`MAD_RPTQ_BOOL_TYPE`）。另外，GNUstep 的 `class_getProperty()` 只查看类本身，而 Apple 的会沿超类链查找——因此一个继承的属性（标签的 `alignment`）落入了通用对象分支；`RptqPropertyNamed` 在两个平台上都执行这一查找。失败模式是静默的错误值而非崩溃，因此两者都由移植的套件固定。
 * **GNUstep 的文件 API 拒绝无 scheme 的 URL——由 MADFileManager 移植的测试发现，已在 MADURLFactory 中修复。** `-contentsOfDirectoryAtURL:` 和 `-writeToURL:` 对不带 `file://` scheme 的 URL 会静默地什么都不做（2026-10-11 实测），而 `+newURLForLocalDocumentsDirectory` 曾用 `-initWithString:` 从路径构建 URL——Apple 容忍这种做法。它现在使用 `+fileURLWithPath:`，这是两个平台上都诚实的答案；这一修复加上下面的协调器垫片，将五个搁置的 need 变成了五个通过的测试（`MADLocalFileCoordinatorTests`，12 个测试，0 个 need）。
 * **dispatch 对象是纯 C 指针**（`os/object.h` 在 Darwin 之外不支持 ObjC，并直接拒绝 `OS_OBJECT_USE_OBJC=1`——libdispatch 构建的注释如此说明），因此 ARC 无法持有它们：在 Apple 之外，每个 `strong`/`copy` 的 dispatch 属性都是 `assign`，并在原处添加了注释。队列创建一次，存活于整个进程；没有任何东西释放它们。
@@ -149,7 +149,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 
 `export` 是唯一不在此处的动词：PDF 是由 `UIPrintPageRenderer` 绘制的 Core Graphics 上下文，因此它留在 Apple 上，并会说明这一点（`docs/project/MAD_LINUX.md` §5.2；渲染器决策属于阶段 E）。
 
-**`export` 在这里增加了它的 Foundation 格式（阶段 E，2026-10-16）。** 导出接缝（`MADReportExporting` + `MADReportExporterRegistry`，`docs/project/MAD_CLI.md` §5.3）位于 `mad` 中，因此 `text`、`csv` 和 `json` 在镜像中运行，并写出与 Mac 工具相同的字节（渲染侧格式——`html`、`html-flow`、`json-report`——也在这里运行；见下面一节，`pdf` 则说明它为什么不能运行）。为留档而在 London 测试夹具（`CLI/Fixtures/London.portable.mad`，先刷新，两侧均做 `sha256sum`）上运行的比较：
+**`export` 在这里增加了它的 Foundation 格式（阶段 E，2026-10-16）。** 导出接缝（`MADReportExporting` + `MADReportExporterRegistry`，`docs/developers/cli.md` §5.3）位于 `mad` 中，因此 `text`、`csv` 和 `json` 在镜像中运行，并写出与 Mac 工具相同的字节（渲染侧格式——`html`、`html-flow`、`json-report`——也在这里运行；见下面一节，`pdf` 则说明它为什么不能运行）。为留档而在 London 测试夹具（`CLI/Fixtures/London.portable.mad`，先刷新，两侧均做 `sha256sum`）上运行的比较：
 
 | 格式 | 字节 | sha256（两个平台一致） |
 |---|---|---|
@@ -157,7 +157,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 | `csv` | 12538 | `773f6215a5447f72d499282d337a5916b11f0f3b06cb4c5aec134db6f493cb21` |
 | `text` | 40441 | `7dcee96c45951fac0e0057094a6a142c90a88d6d88a1c03278b273f5140c6e49` |
 
-`Linux/Tests/MADReportExporterTests.m` 是同一检查的测试形式：它刷新测试夹具，并针对 Mac 的字节断言每个导出的 FNV-1a 校验和（外加形状和少量值），因此在 GNUstep 与 Apple 之间漂移的拼写会在这里失败——而且现在 Mac 一侧也固定了相同的 FNV-1a 校验和（`MAD/MADTests/MADReportExporterTests.m`），所以漂移在两个平台上都无法静默。`json-report` 是相同的架构，以渲染后的报表作为一个额外成员；它需要渲染那一半（`MADReportFormatter` 和页面渲染器），自阶段 E 起可在此编译——下面一节载有它的摘要，只有 `pdf` 会注册并说明它为什么不能运行（`docs/project/MAD_CLI.md` §3）；`Linux/Tests/MADReportExporterTests.m` 断言它会失败，而不是静默地只写出数据那一半。
+`Linux/Tests/MADReportExporterTests.m` 是同一检查的测试形式：它刷新测试夹具，并针对 Mac 的字节断言每个导出的 FNV-1a 校验和（外加形状和少量值），因此在 GNUstep 与 Apple 之间漂移的拼写会在这里失败——而且现在 Mac 一侧也固定了相同的 FNV-1a 校验和（`MAD/MADTests/MADReportExporterTests.m`），所以漂移在两个平台上都无法静默。`json-report` 是相同的架构，以渲染后的报表作为一个额外成员；它需要渲染那一半（`MADReportFormatter` 和页面渲染器），自阶段 E 起可在此编译——下面一节载有它的摘要，只有 `pdf` 会注册并说明它为什么不能运行（`docs/developers/cli.md` §3）；`Linux/Tests/MADReportExporterTests.m` 断言它会失败，而不是静默地只写出数据那一半。
 
 **文档类是如何确定的。** `MADocument` 是一个 `UIDocument`，因此无法一同移植，而 `MADCLIDocument` 过去构建在它之上。文档的数据那一半现在是一个协议——`MADDocumentDataProtocol`——`MADocument` 遵循它（行为不变；每个成员本来就已是它的某个访问器），`MADHeadlessDocument` 实现它：它用 `MADDocumentStore` 打开容器和可移植存储（与 MADocument 使用的存储布局相同，因此两者不可能不一致）、编译查询、通过注册表构建由驱动支持的数据库，并持有行表。刷新链接受该协议，因此 Apple 和 Linux 运行*相同*的 `MADOperationRefresh`——只有它的一个渲染侧分支（报表格式器和节区布局管理器）是 `#if __APPLE__`。用户在 2026-10-16 选择了这种形态，而非 Compat 中的 `UIDocument` 垫片，也非拆分 `MADocument` 本身。
 
@@ -197,7 +197,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 * `-write_archive:` 遍历每个枚举到的 URL *直到*归档目录为止，而 GNUstep 的 `-enumeratorAtURL:` 会剥离包含目录，因此循环从未到达。现在改用 `-subpathsAtPath:` 读取成员，CLI 的成员列表本来就是这样做的。
 * `backup_file` 将其路径交给 `dirname(3)`/`basename(3)`，glibc 被允许修改该缓冲区而且确实修改了：调用者的归档路径在最后一个斜杠处被截断，因此合成后的文档被写到了它自己的目录上（`Open (…) failed - Is a directory`）。Apple 的实现不改动该缓冲区，这就是为什么只有 Linux 遇到了这个问题。
 
-`Linux/Tests/MADArchiveManagerTests.m` 是相应的覆盖（5 个测试，0 个 need）：往返（`docs/project/MAD_CLI.md` §6.1）、普通模式的特性刻画、可复现模式——包括对整个文档相对 Mac 字节的 FNV-1a 校验和——以及文档路径，它写出一份副本并保持源文件不变。
+`Linux/Tests/MADArchiveManagerTests.m` 是相应的覆盖（5 个测试，0 个 need）：往返（`docs/developers/cli.md` §6.1）、普通模式的特性刻画、可复现模式——包括对整个文档相对 Mac 字节的 FNV-1a 校验和——以及文档路径，它写出一份副本并保持源文件不变。
 
 ## 渲染那一半和 HTML 格式在此运行
 

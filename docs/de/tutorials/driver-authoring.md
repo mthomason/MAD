@@ -184,7 +184,7 @@ Ein REST-/Webdienst-Treiber heute:
 * **kann nicht** den Abfragegraphen nativ empfangen: Um zu wissen, *was* die
   Engine von ihm verlangt, muss er den SQL-Text aus der Zeichenkette
   herausparsen, die er erhalten hat. Der praktische Weg: Der SQL-Parser der
-  Engine selbst (gebaut für die SQL-Eingabe, `docs/project/MAD_SQL_ENTRY.md`)
+  Engine selbst (gebaut für die SQL-Eingabe, `docs/developers/sql-entry.md`)
   parst bereits die unterstützte Teilmenge – das erzeugte SQL gehört konstruktiv
   zu dieser Teilmenge –, sodass ein Treiber ihn wiederverwenden kann, um den
   Graphen zurückzugewinnen;

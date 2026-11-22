@@ -42,7 +42,7 @@ Sein Schema wird durch die handgepflegten `MADStoreSchema`-Deskriptoren
 `MADStoreTests` gegen das kompilierte Modell abgeglichen. Der Speicher führt
 seine Schemaversion in `PRAGMA user_version`: Version 1 ist das ausgelieferte
 Schema (fehlend oder 0), Version 2 ergänzt `RptqQuery.sqlSourceText` – das vom
-Benutzer eingefügte SQL, unverändert aufbewahrt (`docs/project/MAD_SQL_ENTRY.md`
+Benutzer eingefügte SQL, unverändert aufbewahrt (`docs/developers/sql-entry.md`
 §8) –, und `MADStore` wendet beim Öffnen die fehlenden Schritte an. Die Felder der
 Tabelle `RptqQuery`:
 

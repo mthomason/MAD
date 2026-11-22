@@ -21,7 +21,7 @@ ls -la ~/Library/Developer/CoreSimulator/Devices/<UDID>/data/Library/Caches/<dat
 ```
 
 Qualquer alteração no formato deve estender as fixtures de round-trip descritas em
-`docs/project/MAD_CLI.md` §6, para que a definição neste arquivo seja garantida por um teste automatizado e não
+`docs/developers/cli.md` §6, para que a definição neste arquivo seja garantida por um teste automatizado e não
 apenas por este texto. A fixture do contêiner existe desde 2026-10-16
 (`../Linux/Tests/MADArchiveManagerTests.m`: descompactar, recompactar, descompactar novamente, verificando que a lista de membros e
 os bytes permanecem inalterados), e o bit de checkpoint da §7.2 é testado pelo próprio gravador que o define (`mad

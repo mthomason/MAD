@@ -1,4 +1,12 @@
+---
+layout: default
+title: "The data object"
+description: "A report's definition, schema, and result set as one contract."
+---
+
 # The Data Object — a report's definition, its schema, and its result set
+
+This page defines the data object: a report's definition, its schema, and its result set as one contract. It is the design the multi-source work builds on; the format specification describes the document as it ships today.
 
 **Scope:** the concept raised 2026-10-16 — what a data object is, how it is represented in
 this codebase, and what formalizing it takes. The multi-source / subreport rig-up described
@@ -6,7 +14,7 @@ in the same conversation is written down here as a consequence of the contract, 
 not built.
 **Date:** 2026-10-16, read at `445794e11`.
 **Status:** design document. It proposes; it implements nothing, and nothing here is
-scheduled. `MAD_FUTURE.md` §1 — "a report is a function from data sources to a table" — is
+scheduled. [the project vision](../vision.html) §1 — "a report is a function from data sources to a table" — is
 the vision this file makes concrete and names the code for.
 
 ---
@@ -40,7 +48,7 @@ Three consequences, each pursued below:
    each already carries its own driver and connection — materialized, then joined by their
    outputs. The user's sketch: *"you would query MySQL in a subreport, and you would query
    SQL Server in a subreport… and then you could link those reports together as tables in the
-   query designer by their output."* `MAD_FUTURE.md` §1 says the same thing: no federation
+   query designer by their output."* [the project vision](../vision.html) §1 says the same thing: no federation
    engine needed; the snapshots *are* the federation.
 
 What it is explicitly **not**:

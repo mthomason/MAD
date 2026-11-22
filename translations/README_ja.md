@@ -77,7 +77,7 @@ macOS では、アプリが**書類**、**デスクトップ**、**ダウンロ�
 
 ## MADの今後の方向性：ロードマップとビジョン
 
-MADはすでに**クエリグラフ**、**マテリアライズドSQLite結果テーブル**、および**プレゼンテーションレイアウト**を分離しているため、このアーキテクチャによって次の4つの主要機能が実現可能となり、現在設計と実装キューが進められています（[`docs/vision.md`](../docs/ja/vision.md)、[`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md)、および[`docs/project/registers/TODO.md`](../docs/project/registers/TODO.md)を参照）：
+MADはすでに**クエリグラフ**、**マテリアライズドSQLite結果テーブル**、および**プレゼンテーションレイアウト**を分離しているため、このアーキテクチャによって次の4つの主要機能が実現可能となり、現在設計と実装キューが進められています（[`docs/vision.md`](../docs/ja/vision.md)、[`docs/developers/data-object.md`](../docs/developers/data-object.md)、および[`docs/project/registers/TODO.md`](../docs/project/registers/TODO.md)を参照）：
 
 1. **アドホックなデータベーステーブルとしての`.mad`レポート（コンポーザブルなデータオブジェクト）。**
    従来のデータベースでは、`employee`や`sales_data`のようなベーステーブルから`SELECT`します。`.mad`レポートは複数のテーブルを結合・フィルタリングし、その出力（`.maddb` + `.mdcache`）はすでに型付きスキーマ（`MADDataColumn`）を持つ物理的なSQLiteテーブルになっています。クエリデザイナー内でレポートの出力をテーブルソースとして指定可能にすることで、**`.mad`ファイル自体が仮想／マテリアライズドデータベーステーブルになります**。他のレポート、クエリ、またはツールから、データベース内の通常のテーブルとまったく同じように`.mad`レポートに対して`SELECT`や`JOIN`を行えるようになります。
@@ -125,7 +125,7 @@ docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out ghcr.io/mthom
     document: reports/sales.mad
 ```
 
-このActionは公開イメージを実行するため、ActionとCLIは同一のエンジンです。Actionは本リポジトリの[`satellites/mad-action/`](../satellites/mad-action/)から生成されており、[`docs/project/SATELLITE_REPOS.md`](../docs/project/SATELLITE_REPOS.md)にサテライトリポジトリを最新に保つ仕組みが記録されています。
+このActionは公開イメージを実行するため、ActionとCLIは同一のエンジンです。Actionは本リポジトリの[`satellites/mad-action/`](../satellites/mad-action/)から生成されており、[`docs/developers/satellites.md`](../docs/developers/satellites.md)にサテライトリポジトリを最新に保つ仕組みが記録されています。
 
 ## データベースドライバ
 
