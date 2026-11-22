@@ -27,14 +27,14 @@ lang: es-419
 
 ```
 MAD-Designer-Windows-0.7/
-  Mad.Designer.Windows.exe   la aplicación WPF (autocontenida)
-  ...                        los archivos propios de la aplicación
-  CLI/Fixtures/              London.portable.mad (un informe de ejemplo) y
-                             chinook.sqlite3 (los datos de ejemplo que actualiza)
-  Windows/Engine/build/mad.exe       el motor headless
-  Windows/Engine/build/*.dll         el runtime GNUstep/ObjC/VC del motor
-  Windows/Engine/build/fonts/        las fuentes Liberation que usa la exportación a PDF
-  ThirdParty/Licenses/       todas las licencias y avisos de terceros
+  Mad.Designer.Windows.exe   the WPF application (self-contained)
+  ...                        the application's own files
+  CLI/Fixtures/              London.portable.mad (a sample report) and
+                             chinook.sqlite3 (the sample data it refreshes from)
+  Windows/Engine/build/mad.exe       the headless engine
+  Windows/Engine/build/*.dll         the engine's GNUstep/ObjC/VC runtime
+  Windows/Engine/build/fonts/        the Liberation fonts used by PDF export
+  ThirdParty/Licenses/       every third-party licence and notice
   LICENSE, NOTICE, README-Windows.txt
 ```
 
@@ -91,8 +91,8 @@ dotnet publish Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj `
 El motor es la mitad más difícil. `Windows\Engine\build.ps1` reproduce la compilación nativa (Clang 20.1.8, la cadena de herramientas MSVC de Visual Studio fijada, NASM, Strawberry Perl, Meson, Python y GNUstep compilado desde siete revisiones fijadas en `C:\GNUstep`). Debe ejecutarse desde un símbolo del sistema de PowerShell elevado:
 
 ```powershell
-pwsh -File .\Windows\Engine\build.ps1                 # arranque completo de la cadena de herramientas y compilación
-pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # recompilar cuando la cadena ya existe
+pwsh -File .\Windows\Engine\build.ps1                 # full toolchain bootstrap and build
+pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # rebuild after the toolchain exists
 ```
 
 Las dos suites .NET se ejecutan contra el motor compilado:

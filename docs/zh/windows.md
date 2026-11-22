@@ -27,14 +27,14 @@ lang: zh-CN
 
 ```
 MAD-Designer-Windows-0.7/
-  Mad.Designer.Windows.exe   WPF 应用（自包含）
-  ...                        应用自身的文件
-  CLI/Fixtures/              London.portable.mad（示例报表）和
-                             chinook.sqlite3（用于刷新的示例数据）
-  Windows/Engine/build/mad.exe       headless 引擎
-  Windows/Engine/build/*.dll         引擎的 GNUstep/ObjC/VC 运行时
-  Windows/Engine/build/fonts/        PDF 导出使用的 Liberation 字体
-  ThirdParty/Licenses/       所有第三方许可证和声明
+  Mad.Designer.Windows.exe   the WPF application (self-contained)
+  ...                        the application's own files
+  CLI/Fixtures/              London.portable.mad (a sample report) and
+                             chinook.sqlite3 (the sample data it refreshes from)
+  Windows/Engine/build/mad.exe       the headless engine
+  Windows/Engine/build/*.dll         the engine's GNUstep/ObjC/VC runtime
+  Windows/Engine/build/fonts/        the Liberation fonts used by PDF export
+  ThirdParty/Licenses/       every third-party licence and notice
   LICENSE, NOTICE, README-Windows.txt
 ```
 
@@ -91,8 +91,8 @@ dotnet publish Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csproj `
 引擎是更难的一半。`Windows\Engine\build.ps1` 重现原生构建（Clang 20.1.8、固定的 Visual Studio MSVC 工具链、NASM、Strawberry Perl、Meson、Python，以及从七个固定修订版构建到 `C:\GNUstep` 的 GNUstep）。它必须在提升权限的 PowerShell 提示符中运行：
 
 ```powershell
-pwsh -File .\Windows\Engine\build.ps1                 # 完整引导工具链并构建
-pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # 工具链已存在时重新构建
+pwsh -File .\Windows\Engine\build.ps1                 # full toolchain bootstrap and build
+pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # rebuild after the toolchain exists
 ```
 
 两个 .NET 测试套件针对已构建的引擎运行：
