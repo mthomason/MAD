@@ -8,7 +8,8 @@ Run with: python3 -I scripts/docs/check_site_facts.py [--docs docs]
 --docs scans the public documentation tree for stale facts.
 --marketing compares the marketing copy of versions.yml and scans it.
 --repo scans the root and folder READMEs.
---built asserts the built tree contains no internal records or credentials.
+--built asserts the built tree contains no internal records or source Markdown.
+The local Docker test credentials are intentionally public and are not scanned.
 """
 
 import argparse
@@ -41,7 +42,6 @@ EXCLUDED_DIRS = {
 }
 
 TEXT_EXTENSIONS = {".md", ".html", ".yml", ".yaml", ".txt", ".js", ".css", ".xml", ".json"}
-CREDENTIALS = ("Root1@Root2", "mad_test_pw")
 LEAK_DIRS = {"project": "project", "archive": "archive", "superpowers": "superpowers"}
 LEAK_PREFIXES = (
 	"BUGS",
@@ -142,13 +142,6 @@ def built_leaks(built_root):
 				leaks.add(name)
 			if name.endswith(".md"):
 				leaks.add(name)
-			extension = os.path.splitext(name)[1].lower()
-			if extension not in TEXT_EXTENSIONS:
-				continue
-			path = os.path.join(dirpath, name)
-			with open(path, encoding="utf-8", errors="replace") as handle:
-				if any(credential in handle.read() for credential in CREDENTIALS):
-					leaks.add("credential")
 	return sorted(leaks)
 
 

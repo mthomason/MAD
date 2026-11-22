@@ -100,9 +100,13 @@ Success, concretely:
   must carry a visible notice that the English original prevails, and
   `AGENTS.md` must be updated to permit the translation.
 - **Internal material must not be published.** `DEVELOPER.md` and
-  `TEST-DB-INFO.md` contain test credentials; `MAD_DATASOURCE_AND_CONNECTION_UX.md`
-  is a private agent prompt. They stay excluded. The `docs/superpowers/` tree
-  (specs and plans) is internal and must be excluded; today it is not.
+  `TEST-DB-INFO.md` are working notes; `MAD_DATASOURCE_AND_CONNECTION_UX.md` is
+  a private agent prompt. They stay excluded. The **local Docker test
+  credentials** (`root`/`root`, `sa`/`Root1@Root2`, `mad`/`mad_test_pw`) are
+  intentionally public: they are deterministic values for throwaway local
+  containers, and publishing them makes the test path reproducible for agents
+  and other developers. They are not treated as a leak. The `docs/superpowers/`
+  tree (specs and plans) is internal and must be excluded; today it is not.
 - **Legacy trees are preserved.** `docs/zh/project/` and `docs/zh/archive/`
   are a frozen legacy snapshot. Their relative links may be repaired
   mechanically, but their content is not reworked and the tree is not deleted.
@@ -468,8 +472,9 @@ Every change runs the relevant subset, and the final delivery runs all of it:
    after the moves.
 3. **Published tree — no leaks.** No `project`, `archive`, or `superpowers`
    directory in the built docs site in any language; no `DEVELOPER`,
-   `TEST-DB-INFO`, `BUGS`, `TASKS`, `ROADMAP`, or agent-prompt file; no
-   credential strings. The marketing output contains no `README.md`,
+   `TEST-DB-INFO`, `BUGS`, `TASKS`, `ROADMAP`, or agent-prompt file. The local
+   Docker test credentials are intentionally present in the public Windows
+   build guide and are not a leak. The marketing output contains no `README.md`,
    `AGENTS.md`, `privacy.md`, `mad-file-type.md`, or any other source
    Markdown.
 4. **Page-set parity.** Every English public page has a counterpart in each of
@@ -563,6 +568,7 @@ policy (§6.2, §6.5), and the cross-repository check (§6.4).
 | Old URLs | All in-repo links repaired; moved internal blob URLs may 404; marketing source `.md` URLs intentionally 404 |
 | Cross-repository check | `scripts/docs/check_site_facts.py` plus a marketing workflow |
 | Internal agent records | `docs/superpowers/` stays in the repository, excluded from the site |
+| Test credentials | Local Docker values (`root`/`root`, `sa`/`Root1@Root2`, `mad`/`mad_test_pw`) are intentionally public and may appear in the developer docs |
 | Translation scope | Public set translated; licensing and internal records English-only |
 | Privacy policy | Translated with an "English original prevails" notice; `AGENTS.md` updated |
 | App localization | Recorded as complete for all translatable strings; 62 entries intentionally untranslated (SQL identifiers, data-type/font names, brands, licence text, format samples), with the machine-assisted caveat |

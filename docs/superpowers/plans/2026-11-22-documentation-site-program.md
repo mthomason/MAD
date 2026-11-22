@@ -18,19 +18,19 @@
 - **Measured facts:** 12 headless frameworks, 130 suites, 1,313 tests — confirmed from `ls Linux/cmake/*Sources.cmake` (12), `Linux/README.md` lines 8-11, and the latest green Linux run.
 - **Version truth:** app `0.7` for macOS and Windows; engine `9.0` revision `r4433`; release tag `v0.7.0`; iOS between releases and returning early 2027.
 - **Licensing stays English and verbatim.** `LICENSE`, `NOTICE`, `THIRD_PARTY_LICENSES.md`, and `LICENSE_COMPLIANCE_PLAN.md` are not translated. `MAD_FORMAT.md`, `THIRD_PARTY_LICENSES.md`, and `LICENSE_COMPLIANCE_PLAN.md` stay at the `docs/project/` root.
-- **Internal records stay internal.** `docs/project/`, `docs/archive/`, `docs/superpowers/`, credentials (`DEVELOPER.md`, `TEST-DB-INFO.md`), and the agent prompt are never published or translated. `BUGS.md` and `BUGS_FIXED.md` are never translated.
+- **Internal records stay internal.** `docs/project/`, `docs/archive/`, `docs/superpowers/`, the working notes (`DEVELOPER.md`, `TEST-DB-INFO.md`), and the agent prompt are never published or translated. The local Docker test credentials themselves are intentionally public and may appear in the developer docs. `BUGS.md` and `BUGS_FIXED.md` are never translated.
 - **Code is byte-identical in translation.** Paths, identifiers, SQL, brand names, and fenced blocks are copied exactly.
 - **Move, do not copy.** A promoted record has one source file, in `docs/developers/`.
 - **Tabs for indentation** in scripts and configuration. YAML is the exception: it forbids tab indentation, so data files use two spaces.
 - **PR flow:** branch off `master`, commit with `git commit -s`, push, open a PR, watch DCO and Linux verification, rebase-merge.
-- **No leaks:** the built site contains no `project`, `archive`, or `superpowers` tree, no credentials, no agent prompt, and no internal register.
+- **No leaks:** the built site contains no `project`, `archive`, or `superpowers` tree, no agent prompt, and no internal register. The local Docker test credentials (`root`/`root`, `sa`/`Root1@Root2`, `mad`/`mad_test_pw`) are intentionally public.
 
 ## Review Focus
 
 These are the failure modes most likely to reach a reader. Each is pinned by a check in the task that owns it.
 
 1. **A moved record leaves a broken relative link** in the root translations, a framework README, the legacy Chinese tree, or the archive. Expected: every relative link resolves. Pinned by `check_links.py` in Tasks 8-11 and 21.
-2. **Internal content is published** — a `project`/`archive`/`superpowers` page, a credential, or raw source Markdown. Expected: zero. Pinned by `check_site_facts.py --built` in Tasks 4 and 21.
+2. **Internal content is published** — a `project`/`archive`/`superpowers` page or raw source Markdown. Expected: zero. Pinned by `check_site_facts.py --built` in Tasks 4 and 21.
 3. **A translation drifts a code block or changes a heading/table/fence count.** Expected: byte-identical code and equal structure. Pinned by `check_translations.py` in Tasks 13-17 and 21.
 4. **A stale fact survives in one language** — `1,303`, `126 test executables`, "eleven of the fourteen", `9.1`, "not yet localized". Expected: zero occurrences in public text. Pinned by the version-literal grep in Task 6 and by `check_site_facts.py` in Tasks 19 and 21.
 5. **A new page is missing in one language**, so the switcher silently falls back to that language's home. Expected: every English public page has a counterpart in all five languages. Pinned by `check_translations.py --require-complete` in Task 21.
@@ -253,10 +253,6 @@ def test_built_site_internal_directory_fails(self):
 	(self.built / "project").mkdir(parents=True)
 	self.assertIn("project", check_site_facts.built_leaks(str(self.built)))
 
-def test_built_site_credential_fails(self):
-	self.write("built/a.html", "Root1@Root2")
-	self.assertIn("credential", check_site_facts.built_leaks(str(self.built)))
-
 def test_built_marketing_source_markdown_fails(self):
 	self.write("built/AGENTS.md", "# internal")
 	self.assertIn("AGENTS.md", check_site_facts.built_leaks(str(self.built)))
@@ -269,7 +265,7 @@ Expected: FAIL with missing functions.
 
 - [ ] **Step 3: Implement `check_site_facts.py`**
 
-Read the flat `key: "value"` pairs from `docs/_data/versions.yml` and the optional marketing `_data/versions.yml` with a small regex parser (no PyYAML). Compare every key present in both; report differences. Scan text files (`.md`, `.html`, `.yml`) in the public docs tree (excluding `project`, `archive`, `superpowers`, `assets`), the repository root documents when `--repo` is given (`README.md`, `translations/*.md`, `Mac/README*.md`, `Linux/README*.md`, `CLI/Fixtures/README*.md`, `MADFileManager/README*.md`, `MADTds/README*.md`, `satellites/mad-action/README*.md`), and the marketing tree when `--marketing` is given (excluding `.git`, `_site`, `img`, `css`, `js`). Banned literals: `v9.1.0-macos`, `9.1` as a whole word, `1,303`, `126 test executables`, `Eleven of the fourteen`, `not yet localized`, `instrumented but not localized`. `banned_literals` returns the literal strings found, so the tests can assert on them. When `--built` is given, assert the built tree contains no directory named `project`, `archive`, or `superpowers`; no file whose basename starts with `BUGS`, `TASKS`, `ROADMAP`, `DEVELOPER`, `TEST-DB-INFO`, or `MAD_DATASOURCE_AND_CONNECTION_UX`; no credential string `Root1@Root2` or `mad_test_pw`; and, when the built tree is the marketing site, no `.md` file. `built_leaks` returns one token per leak: `project`, `credential`, or the offending basename.
+Read the flat `key: "value"` pairs from `docs/_data/versions.yml` and the optional marketing `_data/versions.yml` with a small regex parser (no PyYAML). Compare every key present in both; report differences. Scan text files (`.md`, `.html`, `.yml`) in the public docs tree (excluding `project`, `archive`, `superpowers`, `assets`), the repository root documents when `--repo` is given (`README.md`, `translations/*.md`, `Mac/README*.md`, `Linux/README*.md`, `CLI/Fixtures/README*.md`, `MADFileManager/README*.md`, `MADTds/README*.md`, `satellites/mad-action/README*.md`), and the marketing tree when `--marketing` is given (excluding `.git`, `_site`, `img`, `css`, `js`). Banned literals: `v9.1.0-macos`, `9.1` as a whole word, `1,303`, `126 test executables`, `Eleven of the fourteen`, `not yet localized`, `instrumented but not localized`. `banned_literals` returns the literal strings found, so the tests can assert on them. When `--built` is given, assert the built tree contains no directory named `project`, `archive`, or `superpowers`; no file whose basename starts with `BUGS`, `TASKS`, `ROADMAP`, `DEVELOPER`, `TEST-DB-INFO`, or `MAD_DATASOURCE_AND_CONNECTION_UX`; and, when the built tree is the marketing site, no `.md` file. The local Docker test credentials are intentionally public, so they are not scanned. `built_leaks` returns one token per leak: `project` or the offending basename.
 
 - [ ] **Step 4: Run the tests to verify they pass**
 

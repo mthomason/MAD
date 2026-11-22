@@ -68,10 +68,6 @@ class CheckSiteFactsTest(unittest.TestCase):
 		(self.built / "project").mkdir(parents=True)
 		self.assertIn("project", check_site_facts.built_leaks(str(self.built)))
 
-	def test_built_site_credential_fails(self):
-		self.write("built/a.html", "Root1@Root2")
-		self.assertIn("credential", check_site_facts.built_leaks(str(self.built)))
-
 	def test_built_marketing_source_markdown_fails(self):
 		self.write("built/AGENTS.md", "# internal")
 		self.assertIn("AGENTS.md", check_site_facts.built_leaks(str(self.built)))
