@@ -3,13 +3,13 @@ MADDesigner/run.log
 
 # Warnings-cleanup working documents -- a scratch tracker and its data dump,
 # maintained while the warning/analyzer sweep is in flight.  Not source, and
-# durable findings are recorded in docs/project/BUGS.md as normal.
-docs/project/WARNINGS_PLAN.md
-docs/project/WARNINGS_INVENTORY.md
+# durable findings are recorded in docs/project/registers/BUGS.md as normal.
+docs/project/registers/WARNINGS_PLAN.md
+docs/project/registers/WARNINGS_INVENTORY.md
 
 # Local test-database credentials for the live MySQL / SQL Server suites.
 # A working note for this machine, not source, and it carries passwords.
-docs/project/TEST-DB-INFO.md
+docs/project/build/TEST-DB-INFO.md
 
 # Scripts
 .DS_Store
