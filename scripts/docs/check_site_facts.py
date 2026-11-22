@@ -81,7 +81,7 @@ def _found(text):
 	found = []
 	for literal in BANNED:
 		if literal == "9.1":
-			if re.search(r"\b9\.1\b", text):
+			if re.search(r"(?:v9\.1|\bengine\s+9\.1\b|\bapp\s+9\.1\b|9\.1\s+\(r)", text, re.I):
 				found.append(literal)
 		elif literal in text:
 			found.append(literal)
