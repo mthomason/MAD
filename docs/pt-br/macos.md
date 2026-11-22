@@ -19,9 +19,9 @@ Cada arquivo `.mad` criado ou editado no macOS é compatível byte a byte com os
   ```sh
   brew install --cask mthomason/tap/mad-designer
   ```
-* **Download Direto:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip)
+* **Download Direto:** [**MAD-Designer-macOS.dmg**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.zip)
   *(Se você baixar o `.dmg` ou `.zip` pelo navegador, execute `xattr -cr "/Applications/MAD Designer.app"` uma vez no Terminal após copiar para `/Applications` para limpar o atributo de quarentena do macOS Gatekeeper.)*
-* **Versão:** app 0.7 / motor 9.0 (r4433).
+* **Versão:** app {{ site.data.versions.macos_app_version }} / motor {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
 
 ---
 

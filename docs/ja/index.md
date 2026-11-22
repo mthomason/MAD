@@ -15,7 +15,12 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 
 > **macOSでMAD Designerを試す（macOS 12.0以降、Apple Silicon）：**
 > * **Homebrew：** `brew install --cask mthomason/tap/mad-designer`
-> * **直接ダウンロード：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *（直接ダウンロードして`/Applications`へ配置した場合は、初回起動前に一度`xattr -cr "/Applications/MAD Designer.app"`を実行してください）*
+> * **直接ダウンロード：** [**MAD-Designer-macOS.dmg**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.zip) *（直接ダウンロードして`/Applications`へ配置した場合は、初回起動前に一度`xattr -cr "/Applications/MAD Designer.app"`を実行してください）*
+> * **バージョン：** アプリ {{ site.data.versions.macos_app_version}} / エンジン {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}})
+
+> **Windows で MAD Designer を試す（Windows 10 1903 以降、Windows 11、64 ビット）：**
+> * **直接ダウンロード：** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url}}/MAD-Designer-Windows-0.7.zip) *（未署名：Windows SmartScreen が警告します。「詳細情報」→「実行」を選択してください。詳しくは [Windows ガイド](windows.html) を参照）*
+> * **バージョン：** アプリ {{ site.data.versions.windows_app_version}} / エンジン {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}}) · **.NET のインストール不要**（自己完結型）
 
 ## 実際の動作を見る
 

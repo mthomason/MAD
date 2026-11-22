@@ -14,8 +14,8 @@ image: /assets/mad-designer-icon-512.png
 
 ## Download & Install
 
-* **Direct Download:** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip)
-* **Version:** app 0.7 / engine 9.0 (r4433).
+* **Direct Download:** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip)
+* **Version:** app {{ site.data.versions.windows_app_version }} / engine {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
 * **Requirements:** Windows 10 (1903 or later) or Windows 11, 64-bit. The archive is self-contained, so **no .NET runtime install is needed**. The Viewer uses the Microsoft Edge WebView2 Evergreen Runtime, which ships with Windows 11 and current Edge; on older Windows 10 images, install the [Evergreen Runtime](https://developer.microsoft.com/microsoft-edge/webview2/).
 
 1. Download the `.zip` and extract it to a folder of your choosing. Keep the folder structure intact: the application, the engine, and the licences belong together.

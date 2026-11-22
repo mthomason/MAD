@@ -15,8 +15,8 @@ lang: es-419
 
 ## Descarga e instalación
 
-* **Descarga directa:** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip)
-* **Versión:** app 0.7 / motor 9.0 (r4433).
+* **Descarga directa:** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip)
+* **Versión:** app {{ site.data.versions.windows_app_version }} / motor {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
 * **Requisitos:** Windows 10 (1903 o posterior) o Windows 11, 64 bits. El archivo es autocontenido, así que **no hace falta instalar el runtime de .NET**. El visor usa el runtime Evergreen de Microsoft Edge WebView2, que viene con Windows 11 y con Edge actualizado; en imágenes antiguas de Windows 10, instale el [runtime Evergreen](https://developer.microsoft.com/microsoft-edge/webview2/).
 
 1. Descargue el `.zip` y extráigalo en la carpeta que prefiera. Mantenga intacta la estructura de carpetas: la aplicación, el motor y las licencias van juntos.
