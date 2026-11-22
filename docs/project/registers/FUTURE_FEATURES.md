@@ -8,7 +8,7 @@ and is not edited by agents, this file is where each vision item gets a durable 
 has (or is awaiting) a design.
 
 **Date:** 2026-11-22. Created to hold the multi-source and non-SQL driver work designed in
-[`MAD_MULTI_SOURCE.md`](../MAD_MULTI_SOURCE.md).
+[`MAD_MULTI_SOURCE.md`](../../developers/multi-source.md).
 
 ## How this relates to the other files
 
@@ -34,8 +34,8 @@ and its status. Work is still picked up from `TASKS.md`/`ROADMAP.md`, never star
 - **What.** One `.mad` holds several report/query definitions (sub-reports); each runs to a
   SQLite table; a composing report joins those tables together (`ATTACH DATABASE`) and is
   executed bottom-up on refresh. Same-document first; cross-document deferred.
-- **Design.** [`MAD_MULTI_SOURCE.md`](../MAD_MULTI_SOURCE.md) (whole);
-  [`MAD_DATA_OBJECT.md`](../MAD_DATA_OBJECT.md) §4–5; [`docs/vision.md`](../../vision.md) §1–2.
+- **Design.** [`MAD_MULTI_SOURCE.md`](../../developers/multi-source.md) (whole);
+  [`MAD_DATA_OBJECT.md`](../../developers/data-object.md) §4–5; [`docs/vision.md`](../../vision.md) §1–2.
 - **Phases.** `MAD_MULTI_SOURCE.md` §8: 0 driver seam, 1 data-object contract, 2 query
   owns itself, 3 same-document composition, 4 cross-document (deferred).
 - **Status.** `Designed`, `Not started`.
@@ -45,14 +45,14 @@ and its status. Work is still picked up from `TASKS.md`/`ROADMAP.md`, never star
 - **What.** A driver receives a structured `MADQueryPlan` (tables, fields, links, predicates,
   limit/offset) instead of SQL text, and reports its abilities through a capabilities object,
   so the engine and UI stop hardcoding driver IDs and join rules.
-- **Design.** [`MAD_MULTI_SOURCE.md`](../MAD_MULTI_SOURCE.md) §4.
+- **Design.** [`MAD_MULTI_SOURCE.md`](../../developers/multi-source.md) §4.
 - **Status.** `Designed`, `Not started` (Phase 0 — the independent first step).
 
 ## 3. Generic manifest-driven API driver
 
 - **What.** One HTTP/JSON driver whose schema comes from a bundled source manifest (resources
   as tables, fields as columns, pagination rules); eBay Seller is the worked example.
-- **Design.** [`MAD_MULTI_SOURCE.md`](../MAD_MULTI_SOURCE.md) §5.
+- **Design.** [`MAD_MULTI_SOURCE.md`](../../developers/multi-source.md) §5.
 - **Status.** `Designed`, `Not started` (Phase 5).
 
 ## 4. Extensible driver credentials
@@ -60,14 +60,14 @@ and its status. Work is still picked up from `TASKS.md`/`ROADMAP.md`, never star
 - **What.** A single JSON `options` column on the credential holds driver-specific parameters
   (OAuth client secret reference, refresh-token key, marketplace ID, sandbox flag); secrets
   stay in the Keychain. Avoids a new store column per driver.
-- **Design.** [`MAD_MULTI_SOURCE.md`](../MAD_MULTI_SOURCE.md) §5, §6, §9.2.6.
+- **Design.** [`MAD_MULTI_SOURCE.md`](../../developers/multi-source.md) §5, §6, §9.2.6.
 - **Status.** `Designed`, `Not started`.
 
 ## 5. Plug-and-play driver system
 
 - **What.** Install, register, and remove drivers at runtime, and add/remove them through the
   UI. A macOS/Linux/Windows/server feature; iOS keeps build-time-linked drivers.
-- **Design.** [`MAD_MULTI_SOURCE.md`](../MAD_MULTI_SOURCE.md) §5.1 (shape recorded, not a full
+- **Design.** [`MAD_MULTI_SOURCE.md`](../../developers/multi-source.md) §5.1 (shape recorded, not a full
   design).
 - **Status.** `Described`, `Not started`.
 
@@ -75,7 +75,7 @@ and its status. Work is still picked up from `TASKS.md`/`ROADMAP.md`, never star
 
 - **What.** The sample-table preview pages through the full result instead of capping at
   ~512 rows.
-- **Design.** [`MAD_MULTI_SOURCE.md`](../MAD_MULTI_SOURCE.md) §9.2.1; wishlisted in
+- **Design.** [`MAD_MULTI_SOURCE.md`](../../developers/multi-source.md) §9.2.1; wishlisted in
   [`TODO.md`](TODO.md) §3.
 - **Status.** `Noted`, `Not started`.
 

@@ -176,7 +176,7 @@ Así que hoy un driver REST/servicio web:
 * **no puede** recibir el grafo de consultas de forma nativa: para saber *qué* le está pidiendo el motor
   debe analizar el texto SQL de la cadena que se le
   entregó. La ruta práctica: el analizador de SQL del propio motor (construido para la
-  función de entrada de SQL, `docs/project/MAD_SQL_ENTRY.md`) ya analiza el
+  función de entrada de SQL, `docs/developers/sql-entry.md`) ya analiza el
   subconjunto admitido —el SQL generado es ese subconjunto por construcción—, así que
   un driver puede reutilizarlo para recuperar el grafo;
 * la **solución correcta** es un hook de compilación por driver: la misma forma que el

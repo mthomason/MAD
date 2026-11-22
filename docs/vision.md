@@ -7,7 +7,7 @@ layout: default
 Updated 2026-10-29. This page states the direction MAD is designed to grow
 into. None of the composition or migration machinery described here is built
 yet; the design that grounds the data-object model is
-[`docs/project/MAD_DATA_OBJECT.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_DATA_OBJECT.md),
+[`docs/developers/data-object.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/data-object.md),
 the working record is
 [`docs/project/product/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/product/MAD_FUTURE.md),
 and the product wishlist is

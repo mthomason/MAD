@@ -1,4 +1,12 @@
+---
+layout: default
+title: "Multi-source reports"
+description: "Reports as tables, and drivers for anything that returns a table."
+---
+
 # Multi-Source Reports — reports as tables, and drivers for anything
+
+This page describes composable reports: a report's result becomes a table another report can query, and a driver can front anything that returns rows. It is a design record; §8 names the phases, and not all of them are built.
 
 **Scope:** the architecture the user described on 2026-11-22: a user designs a report
 against a data source (MySQL, SQL Server, PostgreSQL, SQLite, or a Web API such as eBay's
@@ -12,7 +20,7 @@ rows in table form.
 **Date:** 2026-11-22, read at `eba4225a1`; decisions folded in 2026-11-22 (§9.2).
 **Status:** design report. It states the idea and the design; it does not implement
 anything and it does not add work to `TASKS.md`. The code audit that grounds the
-data-object half is [`MAD_DATA_OBJECT.md`](MAD_DATA_OBJECT.md); the direction is
+data-object half is [`MAD_DATA_OBJECT.md`](data-object.md); the direction is
 [`docs/vision.md`](../vision.md). This document adds the multi-source composition model
 (intra-document sub-reports first), the driver API that makes non-SQL sources first-class,
 and a combined phase order.

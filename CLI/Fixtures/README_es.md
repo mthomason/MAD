@@ -3,7 +3,7 @@
 # Fixtures de la CLI
 
 Documentos contra los que se ejecutan los verbos de la CLI, junto a las muestras de las que proceden
-(`docs/project/MAD_CLI.md` §6).
+(`docs/developers/cli.md` §6).
 
 | Fixture | Origen | Qué fija |
 |---|---|---|
@@ -90,6 +90,6 @@ no en 3306, porque el servicio launchd del instalador de Oracle MySQL puede ocup
 siguiente `up` lo reconstruye.
 
 Los parámetros `--host`, `--port` y `--database` de la CLI sobrescriben la conexión almacenada
-para una ejecución (`docs/project/MAD_CLI.md` §3), que es como un trabajo de CI apunta uno de
+para una ejecución (`docs/developers/cli.md` §3), que es como un trabajo de CI apunta uno de
 estos documentos a un contenedor de servicio cuyo host y puerto difieren de los
 del Mac. El documento en sí no se reescribe.

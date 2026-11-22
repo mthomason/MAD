@@ -203,7 +203,7 @@ y sus categorías faltan silenciosamente en tiempo de ejecución.
   pasan todos por un orden definido propio (`NSString+Comparison.h`:
   plegado de mayúsculas y minúsculas, y después orden de puntos de código UTF-8), así que la divergencia que causaba
   la comparación localizada ha desaparecido, no se ha disimulado; las pruebas comprueban el orden definido
-  de forma idéntica en ambas plataformas. Véase la sección `mad export` de `docs/project/MAD_CLI.md`.
+  de forma idéntica en ambas plataformas. Véase la sección `mad export` de `docs/developers/cli.md`.
 * **La codificación en tiempo de ejecución de BOOL y la herencia de `class_getProperty`:
   encontradas por las suites rptq de MAD, corregidas en RptqObject.** El tiempo de ejecución compara la codificación de tipo
   de un accesor instalado con la del sitio de llamada compilado, y BOOL es
@@ -356,7 +356,7 @@ un `UIPrintPageRenderer`, así que se queda en Apple y lo dice (`docs/project/MA
 la decisión del renderizador es de la Fase E).
 
 **`export` hizo crecer aquí sus formatos de Foundation (Fase E, 2026-10-16).** La costura de exportación
-(`MADReportExporting` + `MADReportExporterRegistry`, `docs/project/MAD_CLI.md` §5.3) está en `mad`, así que
+(`MADReportExporting` + `MADReportExporterRegistry`, `docs/developers/cli.md` §5.3) está en `mad`, así que
 `text`, `csv` y `json` se ejecutan en la imagen y escriben los mismos bytes que la herramienta del Mac
 (los formatos del lado del renderizado —`html`, `html-flow`, `json-report`— también se ejecutan aquí; véase la
 sección de abajo, y `pdf` explica por qué no puede).
@@ -377,7 +377,7 @@ aquí; y los mismos checksums FNV-1a están fijados ahora en el lado del Mac
 plataformas. `json-report` es el mismo esquema con el informe renderizado como miembro adicional;
 necesita la mitad del renderizado (`MADReportFormatter` y el renderizador de páginas), que
 compila aquí desde la Fase E: la sección de abajo lleva su resumen, y solo `pdf`
-se registra y explica por qué no puede ejecutarse (`docs/project/MAD_CLI.md` §3); `Linux/Tests/MADReportExporterTests.m`
+se registra y explica por qué no puede ejecutarse (`docs/developers/cli.md` §3); `Linux/Tests/MADReportExporterTests.m`
 comprueba que falla
 en lugar de escribir silenciosamente la mitad de los datos.
 
@@ -461,7 +461,7 @@ Hubo que corregir dos cosas para que el escritor se ejecutara aquí, ambas regis
   lo veía.
 
 `Linux/Tests/MADArchiveManagerTests.m` es la cobertura (5 pruebas, 0 necesidades): la ida y
-vuelta (`docs/project/MAD_CLI.md` §6.1), la caracterización del modo ordinario, el modo reproducible,
+vuelta (`docs/developers/cli.md` §6.1), la caracterización del modo ordinario, el modo reproducible,
 incluido un checksum FNV-1a del documento completo contra los bytes del Mac, y la
 ruta del documento, que escribe una copia y deja intacta la fuente.
 

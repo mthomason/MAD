@@ -184,7 +184,7 @@ the headless side.
 * `docs/project/MAD_FORMAT.md` -- what a `.mad` document is, and what it should be.
 * `docs/project/product/MAD_FUTURE.md` -- the vision: the `.mad` as a data object, the hidden file types as
   products, the web clone, AI, and the money.
-* `docs/project/MAD_DATA_OBJECT.md` -- the design of the data object itself: a report's definition,
+* `docs/developers/data-object.md` -- the design of the data object itself: a report's definition,
   schema and result set as one contract, how each piece is represented in the code today,
   what formalizing it takes in phases, and the multi-source/subreport composition
   documented but deliberately not built.
@@ -211,18 +211,18 @@ the headless side.
 * `docs/project/MAD_PDF_LINUX.md` -- the headless PDF writer: the Cairo + FreeType
   stack and its licences, the font-mapping policy and its residual, the deterministic
   mode, and the acceptance test against the json-report oracle.
-* `docs/project/MAD_SQL_ENTRY.md` -- the design for pasting a SQL statement into the query designer: the
+* `docs/developers/sql-entry.md` -- the design for pasting a SQL statement into the query designer: the
   supported subset, the parser/resolver/compiler in `MAD`, the validation probe, the apply
   semantics, the persisted source text (`RptqQuery.sqlSourceText` + the store's first
   versioning step), the phases, and the tests that pin it. Phases A-D implemented and
   merged 2026-10-22 (`c48a39fb7`); Phase E deferred.
 * `Linux/README.md` -- the Linux build: the image, the twelve frameworks and their
   suites, the GNUstep divergences the tests found, and the licences.
-* `docs/project/SATELLITE_REPOS.md` -- the satellite repositories (the
+* `docs/developers/satellites.md` -- the satellite repositories (the
   `mthomason/mad-action` GitHub Action) and the rule that keeps them current: MAD is
   the source of truth under `satellites/<name>/`, and a publish workflow carries the
   source to the target on master while the image carries every engine change.
-* `docs/project/MAD_CLI.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
+* `docs/developers/cli.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
 * `docs/project/LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
 * `docs/project/THIRD_PARTY_LICENSES.md` -- every third-party component in the app and the published
   container image, how it is linked, its licence, and what shipping it obliges us to do. Read

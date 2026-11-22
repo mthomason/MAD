@@ -77,7 +77,7 @@ MAD 尊重您的隐私。应用程序不包含分析、遥测或跟踪代码，�
 
 ## MAD 的前进方向：路线图与愿景
 
-由于 MAD 已经把**查询图**、**物化的 SQLite 结果表**和**呈现布局**分离，该架构解锁了四项正在设计和排队中的主要能力（参见 [`docs/vision.md`](../docs/zh/vision.md)、[`docs/project/MAD_DATA_OBJECT.md`](../docs/zh/project/MAD_DATA_OBJECT.md) 和 [`docs/project/registers/TODO.md`](../docs/zh/project/TODO.md)）：
+由于 MAD 已经把**查询图**、**物化的 SQLite 结果表**和**呈现布局**分离，该架构解锁了四项正在设计和排队中的主要能力（参见 [`docs/vision.md`](../docs/zh/vision.md)、[`docs/developers/data-object.md`](../docs/zh/project/MAD_DATA_OBJECT.md) 和 [`docs/project/registers/TODO.md`](../docs/zh/project/TODO.md)）：
 
 1. **把 `.mad` 报表当作即席数据库表（可组合数据对象）。**
    在传统数据库中，你从 `employee` 或 `sales_data` 这样的基表中选择数据。`.mad` 报表连接并筛选多张表，其输出（`.maddb` + `.mdcache`）已经是一张带类型架构（`MADDataColumn`）的物理 SQLite 表。让报表输出在查询设计器中可作为表源寻址，**`.mad` 文件就成为一张虚拟/物化数据库表**。其他报表、查询或工具可以像数据库中的任何表一样，从 `.mad` 报表中选择并与之连接。
@@ -125,7 +125,7 @@ docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out ghcr.io/mthom
     document: reports/sales.mad
 ```
 
-它运行已发布的镜像，因此该 action 和 CLI 是同一个引擎。该 action 由这里的 [`satellites/mad-action/`](../satellites/mad-action/) 生成；[`docs/project/SATELLITE_REPOS.md`](../docs/zh/project/SATELLITE_REPOS.md) 记录了卫星仓库如何保持最新。
+它运行已发布的镜像，因此该 action 和 CLI 是同一个引擎。该 action 由这里的 [`satellites/mad-action/`](../satellites/mad-action/) 生成；[`docs/developers/satellites.md`](../docs/zh/project/SATELLITE_REPOS.md) 记录了卫星仓库如何保持最新。
 
 ## 数据库驱动
 

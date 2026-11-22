@@ -23,7 +23,7 @@ ls -la ~/Library/Developer/CoreSimulator/Devices/<UDID>/data/Library/Caches/<dat
 ```
 
 Jede Änderung am Format muss die Round-Trip-Fixtures erweitern, die in
-`docs/project/MAD_CLI.md` §6 beschrieben sind, damit die Definition in dieser
+`docs/developers/cli.md` §6 beschrieben sind, damit die Definition in dieser
 Datei durch einen Test und nicht durch diese Prosa fixiert wird. Das Fixture des
 Containers existiert seit dem 2026-10-16
 (`../../Linux/Tests/MADArchiveManagerTests.m`: entpacken, neu packen, erneut

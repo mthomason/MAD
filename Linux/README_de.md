@@ -225,7 +225,7 @@ seine Kategorien zur Laufzeit stillschweigend nicht vorhanden.
   UTF-8-Codepoint-Reihenfolge), sodass die Abweichung, die der lokalisierte
   Vergleich verursachte, beseitigt und nicht übertüncht ist; die Tests prüfen
   die definierte Reihenfolge auf beiden Plattformen identisch. Siehe den
-  Abschnitt `mad export` in `docs/project/MAD_CLI.md`.
+  Abschnitt `mad export` in `docs/developers/cli.md`.
 * **Die Runtime-Codierung von BOOL und die Vererbung von `class_getProperty` —
   gefunden von den rptq-Suites von MAD, behoben in RptqObject.** Die Runtime
   vergleicht die Typcodierung eines installierten Accessors mit der der
@@ -393,7 +393,7 @@ auf Apple und sagt das auch (`docs/project/MAD_LINUX.md` §5.2; die Entscheidung
 
 **`export` bekam hier seine Foundation-Formate (Phase E, 2026-10-16).** Die
 Export-Nahtstelle (`MADReportExporting` + `MADReportExporterRegistry`,
-`docs/project/MAD_CLI.md` §5.3) liegt in `mad`, daher laufen `text`, `csv` und
+`docs/developers/cli.md` §5.3) liegt in `mad`, daher laufen `text`, `csv` und
 `json` im Image und schreiben dieselben Bytes wie das Werkzeug des Macs (die
 renderseitigen Formate — `html`, `html-flow`, `json-report` — laufen hier
 ebenfalls; siehe den Abschnitt unten, und `pdf` sagt, warum es nicht kann). Der
@@ -417,7 +417,7 @@ Plattform still bleiben kann. `json-report` ist dasselbe Schema mit dem
 gerenderten Bericht als zusätzlichem Mitglied; es braucht die Render-Hälfte
 (`MADReportFormatter` und den Seitenrenderer), die seit Phase E hier kompiliert —
 der Abschnitt unten enthält den Digest, und nur `pdf` registriert sich und sagt,
-warum es nicht laufen kann (`docs/project/MAD_CLI.md` §3);
+warum es nicht laufen kann (`docs/developers/cli.md` §3);
 `Linux/Tests/MADReportExporterTests.m` prüft, dass es fehlschlägt, statt
 stillschweigend die Datenhälfte zu schreiben.
 
@@ -512,7 +512,7 @@ Zwei Dinge mussten behoben werden, damit der Writer hier läuft, beide in
   Implementierungen lassen den Puffer unangetastet, weshalb nur Linux es sah.
 
 `Linux/Tests/MADArchiveManagerTests.m` ist die Abdeckung (5 Tests, 0 Needs): der
-Roundtrip (`docs/project/MAD_CLI.md` §6.1), die Charakterisierung des gewöhnlichen
+Roundtrip (`docs/developers/cli.md` §6.1), die Charakterisierung des gewöhnlichen
 Modus, der reproduzierbare Modus — einschließlich einer FNV-1a-Prüfsumme des
 gesamten Dokuments gegen die Bytes des Macs — und der Dokumentpfad, der eine Kopie
 schreibt und die Quelle unangetastet lässt.

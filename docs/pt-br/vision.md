@@ -8,7 +8,7 @@ lang: pt-BR
 Atualizado em 2026-10-29. Esta página descreve a direção para a qual o MAD foi projetado para
 evoluir. Nenhum dos mecanismos de composição ou migração descritos aqui foi construído
 ainda; o documento de arquitetura que fundamenta o modelo de objetos de dados é
-[`docs/project/MAD_DATA_OBJECT.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_DATA_OBJECT.md),
+[`docs/developers/data-object.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/data-object.md),
 o registro de trabalho é
 [`docs/project/product/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/product/MAD_FUTURE.md),
 e a lista de desejos do produto é

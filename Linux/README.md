@@ -215,7 +215,7 @@ and its categories are silently absent at runtime.
   route through one first-party defined order (`NSString+Comparison.h`:
   case-fold, then UTF-8 code-point order), so the divergence the localized
   comparison caused is gone, not papered over; the tests assert the defined
-  order identically on both platforms. See `docs/project/MAD_CLI.md`'s `mad export` section.
+  order identically on both platforms. See `docs/developers/cli.md`'s `mad export` section.
 * **BOOL's runtime encoding, and `class_getProperty` inheritance — found by
   MAD's rptq suites, fixed in RptqObject.** The runtime compares an installed
   accessor's type encoding against the compiled call site's, and BOOL is
@@ -366,7 +366,7 @@ whole-archive, and runs in the image:
 	/build/mad refresh --credentials user:pass <document.mad>
 
 **`export` grew its Foundation formats here (Phase E, 2026-10-16).** The export seam
-(`MADReportExporting` + `MADReportExporterRegistry`, `docs/project/MAD_CLI.md` §5.3) is in `mad`, so
+(`MADReportExporting` + `MADReportExporterRegistry`, `docs/developers/cli.md` §5.3) is in `mad`, so
 `text`, `csv` and `json` run in the image and write the same bytes as the Mac's tool
 (the render-side formats — `html`, `html-flow`, `json-report` — run here too; see the
 section below).
@@ -395,7 +395,7 @@ here — and the same FNV-1a checksums are pinned on the Mac side now
 platform. `json-report` is the same schema with the rendered report as an extra
 member; it needs the render half (`MADReportFormatter` and the page renderer), which
 compiles here since Phase E — the section below carries its digest, and only `pdf`
-registers and says why it cannot run (`docs/project/MAD_CLI.md` §3); `Linux/Tests/MADReportExporterTests.m`
+registers and says why it cannot run (`docs/developers/cli.md` §3); `Linux/Tests/MADReportExporterTests.m`
 asserts that it fails
 rather than silently writing the data half.
 
@@ -480,7 +480,7 @@ Two things had to be fixed for the writer to run here, both recorded in `docs/pr
   saw it.
 
 `Linux/Tests/MADArchiveManagerTests.m` is the coverage (5 tests, 0 needs): the round
-trip (`docs/project/MAD_CLI.md` §6.1), the ordinary mode's characterisation, the reproducible mode --
+trip (`docs/developers/cli.md` §6.1), the ordinary mode's characterisation, the reproducible mode --
 including an FNV-1a checksum of the whole document against the Mac's bytes -- and the
 document path, which writes a copy and leaves the source untouched.
 

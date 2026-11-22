@@ -175,7 +175,7 @@ Portanto, um driver REST/Web-service hoje:
   utilizar todo o fluxo de atualização/renderização/exportação — sendo um driver totalmente funcional;
 * **não pode** receber o grafo de consulta nativamente: para saber *o que* a engine
   está pedindo, ele precisa fazer o parse do texto SQL recebido. O caminho prático: o próprio parser SQL da engine (construído para o
-  recurso de entrada direta de SQL, `docs/project/MAD_SQL_ENTRY.md`) já faz o parse do
+  recurso de entrada direta de SQL, `docs/developers/sql-entry.md`) já faz o parse do
   subconjunto suportado — e o SQL gerado pertence a esse subconjunto por construção —, de modo que
   um driver pode reutilizá-lo para recuperar o grafo;
 * a **solução definitiva** é um hook de compilação por driver — o mesmo desenho que o

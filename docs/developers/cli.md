@@ -1,4 +1,12 @@
+---
+layout: default
+title: "The `mad` command-line tool"
+description: "Open, inspect, query, refresh, and export `.mad` documents without a UI."
+---
+
 # `mad` -- the MAD Designer Command-Line Interface
+
+This page describes the `mad` command-line tool: the engine's embedding surface, and the fastest way to exercise a `.mad` document without the app. Read the format specification first if the container and store are new to you.
 
 This document defines a command-line tool that opens, inspects, refreshes and exports
 `.mad` documents without a user interface.
@@ -305,7 +313,7 @@ with `macosx`, the per-SDK library search paths from `LIBRARIES.md` §6, and the
 file-level exclusions above.
 
 **Done on Linux, 2026-10-16** (`MAD_LINUX.md` §9 Phase D), and done this way: the
-headless target is the ten frameworks compiled by `Linux/CMakeLists.txt` against
+headless target is the twelve frameworks compiled by `Linux/CMakeLists.txt` against
 GNUstep, and the CLI is a target beside them. The piece §4.1 assigned to the `MAD`
 framework — the refresh chain — moved there, and the piece it did not anticipate —
 `MADocument`, a `UIDocument`, on which `MADCLIDocument` was built — is answered by

@@ -77,7 +77,7 @@ A especificação completa — layout do contêiner, tabelas do store, esquemas 
 
 ## Para Onde o MAD Está Indo: Roadmap e Visão
 
-Como o MAD já separa o **grafo de consulta**, a **tabela de resultados SQLite materializada** e o **layout de apresentação**, a arquitetura viabiliza quatro grandes capacidades que estão sendo ativamente projetadas e enfileiradas (consulte [`docs/vision.md`](../docs/pt-br/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md) e [`docs/project/registers/TODO.md`](../docs/project/registers/TODO.md)):
+Como o MAD já separa o **grafo de consulta**, a **tabela de resultados SQLite materializada** e o **layout de apresentação**, a arquitetura viabiliza quatro grandes capacidades que estão sendo ativamente projetadas e enfileiradas (consulte [`docs/vision.md`](../docs/pt-br/vision.md), [`docs/developers/data-object.md`](../docs/developers/data-object.md) e [`docs/project/registers/TODO.md`](../docs/project/registers/TODO.md)):
 
 1. **Um relatório `.mad` como uma tabela de banco de dados ad hoc (Objetos de Dados Componíveis).**
    Em um banco de dados tradicional, você faz `SELECT` a partir de tabelas base como `employee` ou `sales_data`. Um relatório `.mad` faz join e filtra múltiplas tabelas, e sua saída (`.maddb` + `.mdcache`) já é uma tabela SQLite física com esquema tipado (`MADDataColumn`). Ao tornar a saída de um relatório endereçável como fonte de tabela dentro do designer de consultas, **um arquivo `.mad` torna-se uma tabela de banco de dados virtual/materializada**. Outros relatórios, consultas ou ferramentas podem fazer `SELECT` e `JOIN` contra um relatório `.mad` exatamente como fariam com qualquer tabela em um banco de dados.
@@ -125,7 +125,7 @@ A GitHub Action [mad-action](https://github.com/mthomason/mad-action) executa um
     document: reports/sales.mad
 ```
 
-Ela executa a imagem publicada, portanto a Action e a CLI são exatamente a mesma engine. A Action é gerada a partir de [`satellites/mad-action/`](../satellites/mad-action/) neste repositório; [`docs/project/SATELLITE_REPOS.md`](../docs/project/SATELLITE_REPOS.md) documenta como o repositório satélite é mantido atualizado.
+Ela executa a imagem publicada, portanto a Action e a CLI são exatamente a mesma engine. A Action é gerada a partir de [`satellites/mad-action/`](../satellites/mad-action/) neste repositório; [`docs/developers/satellites.md`](../docs/developers/satellites.md) documenta como o repositório satélite é mantido atualizado.
 
 ## Drivers de banco de dados
 
