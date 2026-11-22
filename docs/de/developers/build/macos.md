@@ -175,7 +175,7 @@ Erzeugt:
 - `Mac/build/MAD-Designer-macOS.zip`
 - `Mac/build/MAD-Designer-macOS.dmg`
 
-Die öffentliche Benutzer- und Entwicklerdokumentation für die native macOS-Anwendung wird in [`docs/macos.md`](../../macos.md) veröffentlicht (mit Screenshots unter `docs/assets/macos-native-mad-query.png` und `docs/assets/macos-native-mad-designer.png`) und in [`Mac/README.md`](../../../Mac/README.md).
+Die öffentliche Benutzer- und Entwicklerdokumentation für die native macOS-Anwendung wird in [`docs/macos.md`](../../macos.md) veröffentlicht (mit Screenshots unter `docs/assets/macos-native-mad-query.png` und `docs/assets/macos-native-mad-designer.png`) und in [`Mac/README.md`](../../../../Mac/README.md).
 
 ### Kontinuierliche Integration (abgeschlossen)
 
