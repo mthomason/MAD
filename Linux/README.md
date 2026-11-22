@@ -559,7 +559,7 @@ The image carries:
   not a path, so this one file is what lets the checked-in London and Music
   fixtures refresh without extra setup.
 
-It leaves behind the compiler, cmake, git, the sources, the 126 test binaries,
+It leaves behind the compiler, cmake, git, the sources, the 130 test binaries,
 and the static archives and headers: the final stage is `ubuntu:24.04` plus
 the runtime libraries from apt, not the toolchain image. It is **283 MB on
 disk (66.5 MB compressed)**; the build image is 6.65 GB.

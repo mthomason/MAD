@@ -70,8 +70,8 @@ und lässt sich in jedem Browser öffnen.
   einmal in einen SQLite-Zeilen-Cache (`MADDataTableFast`) und berechnet von dort
   zweistufige Gruppierungen und Aggregate, sodass das seitenweise Rendern im
   Speicher eines Telefons schnell bleibt.
-* **Einbettbar und portabel.** Elf der vierzehn Frameworks sind frei von UIKit
-  und lassen sich headless bauen; sie bestehen 1.303 Tests unter Linux in Docker.
+* **Einbettbar und portabel.** Zwölf der vierzehn Frameworks sind frei von UIKit
+  und lassen sich headless bauen; sie bestehen 1.313 Tests unter Linux in Docker.
   Der `.mad`-Container ist ein bzip2-tar-Archiv mit einem portablen
   SQLite-Speicher; zum Öffnen ist kein Apple-Framework erforderlich.
 

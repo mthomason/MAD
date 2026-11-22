@@ -70,8 +70,8 @@ qualquer navegador.
   para um cache de linhas em SQLite (`MADDataTableFast`) e calcula agrupamentos e agregações em duas passagens
   a partir dali, mantendo a renderização paginada rápida mesmo dentro da memória de um
   celular.
-* **Embarcável e portável.** Onze dos quatorze frameworks não dependem de
-  UIKit e compilam em modo headless, passando em 1.303 testes no Linux em Docker.
+* **Embarcável e portável.** Doze dos quatorze frameworks não dependem de
+  UIKit e compilam em modo headless, passando em 1.313 testes no Linux em Docker.
   O contêiner `.mad` é um arquivo tar comprimido com bzip2 contendo um store SQLite portável;
   nenhum framework da Apple é necessário para abri-lo.
 

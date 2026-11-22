@@ -12,7 +12,7 @@ MAD is a relational reporting platform built from scratch in Objective-C for ad 
 
 A `.mad` file holds a report's entire definition — the database schema snapshot, the relational query graph (tables, joins, predicates, groupings), and the banded layout tree — in a single file under 100 KB, cleanly separated from the data it displays. A report is an executable file, not a server: any runtime that speaks `.mad` can inspect the schema, compile deterministic SQL for the target database, materialize the result set into a local SQLite table, and render it to native AppKit/UIKit views, paginated HTML, PDF, CSV, or JSON.
 
-The repository is one self-contained project: the iPad/iPhone apps, the native macOS (`AppKit`) desktop app (`Mac/`), fourteen frameworks (twelve multiplatform across iOS, iOS Simulator, and native macOS; eleven headless on Linux), the headless Linux build and test suite (126 test executables, 1,303 tests), the `mad` command-line tool, and the build system (`Compressor`) that compiles the third-party C libraries from pinned sources. The code is published under the MIT licence; the `.mad` format is an open specification (see [`docs/`](docs/)), though the project's names and app artwork are not covered by the licence grant (see [`NOTICE`](NOTICE)).
+The repository is one self-contained project: the iPad/iPhone apps, the native macOS (`AppKit`) desktop app (`Mac/`), fourteen frameworks (twelve multiplatform across iOS, iOS Simulator, and native macOS; twelve headless on Linux), the headless Linux build and test suite (130 suites, 1,313 tests), the `mad` command-line tool, and the build system (`Compressor`) that compiles the third-party C libraries from pinned sources. The code is published under the MIT licence; the `.mad` format is an open specification (see [`docs/`](docs/)), though the project's names and app artwork are not covered by the licence grant (see [`NOTICE`](NOTICE)).
 
 > **Try MAD Designer on macOS (macOS 12.0+, Apple Silicon):**
 > * **Homebrew:** `brew install --cask mthomason/tap/mad-designer`
@@ -145,7 +145,7 @@ A driver is a framework that subclasses `MADDatabase` and registers itself with 
 
 ## Embedding the engine
 
-Eleven of the fourteen frameworks are UIKit-free and build headlessly. The `mad` CLI above is that engine wearing a command line: the verb set — `inspect`, `schema`, `query`, `refresh`, `export`, `write` — is the embedding surface, and an application that links `MAD`, a driver framework, and `MADSqlite3` has relational reporting with no server in the loop. Drivers and export formats (`<MADReportExporting>` / `MADReportExporterRegistry`) self-register, so adding a data source or an output format is a subclass, not a fork.
+Twelve of the fourteen frameworks are UIKit-free and build headlessly. The `mad` CLI above is that engine wearing a command line: the verb set — `inspect`, `schema`, `query`, `refresh`, `export`, `write` — is the embedding surface, and an application that links `MAD`, a driver framework, and `MADSqlite3` has relational reporting with no server in the loop. Drivers and export formats (`<MADReportExporting>` / `MADReportExporterRegistry`) self-register, so adding a data source or an output format is a subclass, not a fork.
 
 ## Native macOS application
 
@@ -200,10 +200,10 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 The headless engine is verified the same way on Linux. From the repository root, with Docker installed:
 
 ```sh
-./Linux/build.sh       # build the toolchain image, compile the eleven frameworks, run the suites
+./Linux/build.sh       # build the toolchain image, compile the twelve frameworks, run the suites
 ```
 
-This runs 126 test executables and 1,303 tests inside the container, and `--verify` adds the CLI's end-to-end checks against the checked-in fixtures and their pinned digests. See [`Linux/README.md`](Linux/README.md) for the image, the pins, and the GNUstep divergences the port found.
+This runs 130 suites and 1,313 tests inside the container, and `--verify` adds the CLI's end-to-end checks against the checked-in fixtures and their pinned digests. See [`Linux/README.md`](Linux/README.md) for the image, the pins, and the GNUstep divergences the port found.
 
 ### Windows (WPF App & Engine)
 

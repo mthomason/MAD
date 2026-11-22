@@ -10,7 +10,7 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 
 一个 `.mad` 文件在不到 100 KB 的单个文件中保存报表的完整定义——数据库架构快照、关系查询图（表、连接、谓词、分组）以及带区分层布局树——并与它所展示的数据清晰分离。报表是可执行文件，不是服务器：任何支持 `.mad` 的运行时都可以检查架构、为目标数据库编译确定性 SQL、把结果集物化到本地 SQLite 表，并将其渲染为原生 AppKit/UIKit 视图、分页 HTML、PDF、CSV 或 JSON。
 
-本仓库是一个自包含项目：iPad/iPhone 应用、原生 macOS（`AppKit`）桌面应用（`Mac/`）、十四个框架（其中十二个跨 iOS、iOS 模拟器和原生 macOS 多平台；十一个在 Linux 上无头运行）、无头 Linux 构建与测试套件（126 个测试可执行文件，1,303 个测试）、`mad` 命令行工具，以及从固定源码编译第三方 C 库的构建系统（`Compressor`）。代码以 MIT 许可证发布；`.mad` 格式是开放规范（参见 [`docs/`](../docs/zh/)），但项目名称和应用美术资源不在许可证授权范围内（参见 [`NOTICE`](../NOTICE)）。
+本仓库是一个自包含项目：iPad/iPhone 应用、原生 macOS（`AppKit`）桌面应用（`Mac/`）、十四个框架（其中十二个跨 iOS、iOS 模拟器和原生 macOS 多平台；十二个在 Linux 上无头运行）、无头 Linux 构建与测试套件（126 个测试可执行文件，1,313 个测试）、`mad` 命令行工具，以及从固定源码编译第三方 C 库的构建系统（`Compressor`）。代码以 MIT 许可证发布；`.mad` 格式是开放规范（参见 [`docs/`](../docs/zh/)），但项目名称和应用美术资源不在许可证授权范围内（参见 [`NOTICE`](../NOTICE)）。
 
 [![Linux 验证](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
@@ -140,7 +140,7 @@ MAD 通过 `MADDatabase` 子类与数据库通信。目前随版本发布四个�
 
 ## 嵌入引擎
 
-十四个框架中有十一个不依赖 UIKit，可以无头构建。上面的 `mad` CLI 就是穿上命令行的该引擎：动词集合——`inspect`、`schema`、`query`、`refresh`、`export`、`write`——就是嵌入界面，一个链接了 `MAD`、某个驱动框架和 `MADSqlite3` 的应用，无需服务器参与即可获得关系型报表能力。驱动和导出格式（`<MADReportExporting>` / `MADReportExporterRegistry`）会自注册，因此添加数据源或输出格式是写一个子类，而不是分叉。
+十四个框架中有十二个不依赖 UIKit，可以无头构建。上面的 `mad` CLI 就是穿上命令行的该引擎：动词集合——`inspect`、`schema`、`query`、`refresh`、`export`、`write`——就是嵌入界面，一个链接了 `MAD`、某个驱动框架和 `MADSqlite3` 的应用，无需服务器参与即可获得关系型报表能力。驱动和导出格式（`<MADReportExporting>` / `MADReportExporterRegistry`）会自注册，因此添加数据源或输出格式是写一个子类，而不是分叉。
 
 ## 原生 macOS 应用
 
@@ -195,10 +195,10 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 无头引擎在 Linux 上以同样的方式验证。从仓库根目录运行，需要安装 Docker：
 
 ```sh
-./Linux/build.sh       # build the toolchain image, compile the eleven frameworks, run the suites
+./Linux/build.sh       # build the toolchain image, compile the twelve frameworks, run the suites
 ```
 
-这会在容器内运行 126 个测试可执行文件和 1,303 个测试，`--verify` 还会针对签入的夹具及其固定摘要添加 CLI 的端到端检查。关于镜像、固定版本以及移植中发现的 GNUstep 差异，参见 [`Linux/README.md`](../Linux/README_zh.md)。
+这会在容器内运行 126 个测试可执行文件和 1,313 个测试，`--verify` 还会针对签入的夹具及其固定摘要添加 CLI 的端到端检查。关于镜像、固定版本以及移植中发现的 GNUstep 差异，参见 [`Linux/README.md`](../Linux/README_zh.md)。
 
 ## 支持
 

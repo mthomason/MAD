@@ -10,7 +10,7 @@ O MAD é uma plataforma de relatórios relacionais construída do zero em Object
 
 Um arquivo `.mad` armazena toda a definição de um relatório — o snapshot do esquema do banco de dados, o grafo de consulta relacional (tabelas, joins, predicados, agrupamentos) e a árvore de layout em bandas — em um único arquivo com menos de 100 KB, claramente separado dos dados que ele exibe. Um relatório é um arquivo executável, não um servidor: qualquer runtime que entenda `.mad` pode inspecionar o esquema, compilar SQL determinístico para o banco de dados de destino, materializar o conjunto de resultados em uma tabela SQLite local e renderizá-lo em views nativas AppKit/UIKit, HTML paginado, PDF, CSV ou JSON.
 
-O repositório é um projeto único e autocontido: os aplicativos para iPad/iPhone, o aplicativo desktop nativo para macOS (`AppKit`) (`Mac/`), quatorze frameworks (doze multiplataforma para iOS, Simulador do iOS e macOS nativo; onze headless no Linux), o build e a suíte de testes headless para Linux (126 executáveis de teste, 1.303 testes), a ferramenta de linha de comando `mad` e o sistema de build (`Compressor`) que compila as bibliotecas C de terceiros a partir de códigos-fonte com versões fixadas. O código é publicado sob a licença MIT; o formato `.mad` é uma especificação aberta (consulte [`docs/`](../docs/pt-br/)), embora os nomes do projeto e a arte visual dos aplicativos não façam parte da concessão da licença (consulte [`NOTICE`](../NOTICE)).
+O repositório é um projeto único e autocontido: os aplicativos para iPad/iPhone, o aplicativo desktop nativo para macOS (`AppKit`) (`Mac/`), quatorze frameworks (doze multiplataforma para iOS, Simulador do iOS e macOS nativo; doze headless no Linux), o build e a suíte de testes headless para Linux (130 suítes, 1.313 testes), a ferramenta de linha de comando `mad` e o sistema de build (`Compressor`) que compila as bibliotecas C de terceiros a partir de códigos-fonte com versões fixadas. O código é publicado sob a licença MIT; o formato `.mad` é uma especificação aberta (consulte [`docs/`](../docs/pt-br/)), embora os nomes do projeto e a arte visual dos aplicativos não façam parte da concessão da licença (consulte [`NOTICE`](../NOTICE)).
 
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
@@ -195,10 +195,10 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 A engine headless é verificada da mesma forma no Linux. A partir da raiz do repositório, com o Docker instalado:
 
 ```sh
-./Linux/build.sh       # build the toolchain image, compile the eleven frameworks, run the suites
+./Linux/build.sh       # build the toolchain image, compile the twelve frameworks, run the suites
 ```
 
-Isso executa 126 binários de teste e 1.303 testes dentro do contêiner, e `--verify` adiciona as verificações ponta a ponta da CLI contra as fixtures versionadas e seus digests fixados. Consulte [`Linux/README.md`](../Linux/README_pt-BR.md) para detalhes sobre a imagem, as versões fixadas e as divergências do GNUstep encontradas durante o porte.
+Isso executa 130 suítes e 1.313 testes dentro do contêiner, e `--verify` adiciona as verificações ponta a ponta da CLI contra as fixtures versionadas e seus digests fixados. Consulte [`Linux/README.md`](../Linux/README_pt-BR.md) para detalhes sobre a imagem, as versões fixadas e as divergências do GNUstep encontradas durante o porte.
 
 ## Apoie o projeto
 

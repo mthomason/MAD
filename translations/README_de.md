@@ -10,7 +10,7 @@ MAD ist eine von Grund auf in Objective-C entwickelte Plattform für relationale
 
 Eine `.mad`-Datei enthält die gesamte Definition eines Berichts — den Schema-Snapshot der Datenbank, den relationalen Abfragegraphen (Tabellen, Joins, Prädikate, Gruppierungen) und den bandbasierten Layoutbaum — in einer einzigen Datei unter 100 KB, sauber getrennt von den Daten, die sie anzeigt. Ein Bericht ist eine ausführbare Datei, kein Server: Jede Laufzeitumgebung, die `.mad` versteht, kann das Schema inspizieren, deterministisches SQL für die Zieldatenbank kompilieren, die Ergebnismenge in eine lokale SQLite-Tabelle materialisieren und sie als native AppKit-/UIKit-Ansichten, seitenweise aufgeteiltes HTML, PDF, CSV oder JSON rendern.
 
-Das Repository ist ein einziges, in sich geschlossenes Projekt: die iPad-/iPhone-Apps, die native macOS-Desktopanwendung (`AppKit`, `Mac/`), vierzehn Frameworks (zwölf multiplattformfähig für iOS, iOS-Simulator und natives macOS; elf headless unter Linux), der headless Linux-Build und seine Testsuite (126 Testprogramme, 1.303 Tests), das Kommandozeilenwerkzeug `mad` und das Buildsystem (`Compressor`), das die C-Bibliotheken von Drittanbietern aus fixierten Quellen kompiliert. Der Code wird unter der MIT-Lizenz veröffentlicht; das `.mad`-Format ist eine offene Spezifikation (siehe [`docs/`](../docs/de/)), die Namen und das App-Artwork des Projekts sind jedoch nicht von der Lizenzgewährung abgedeckt (siehe [`NOTICE`](../NOTICE)).
+Das Repository ist ein einziges, in sich geschlossenes Projekt: die iPad-/iPhone-Apps, die native macOS-Desktopanwendung (`AppKit`, `Mac/`), vierzehn Frameworks (zwölf multiplattformfähig für iOS, iOS-Simulator und natives macOS; zwölf headless unter Linux), der headless Linux-Build und seine Testsuite (130 Suiten, 1.313 Tests), das Kommandozeilenwerkzeug `mad` und das Buildsystem (`Compressor`), das die C-Bibliotheken von Drittanbietern aus fixierten Quellen kompiliert. Der Code wird unter der MIT-Lizenz veröffentlicht; das `.mad`-Format ist eine offene Spezifikation (siehe [`docs/`](../docs/de/)), die Namen und das App-Artwork des Projekts sind jedoch nicht von der Lizenzgewährung abgedeckt (siehe [`NOTICE`](../NOTICE)).
 
 [![Linux verification](https://github.com/mthomason/MAD/actions/workflows/linux.yml/badge.svg)](https://github.com/mthomason/MAD/actions/workflows/linux.yml)
 
@@ -195,10 +195,10 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 Die headless Engine wird unter Linux auf dieselbe Weise verifiziert. Vom Wurzelverzeichnis des Repository aus, mit installiertem Docker:
 
 ```sh
-./Linux/build.sh       # build the toolchain image, compile the eleven frameworks, run the suites
+./Linux/build.sh       # build the toolchain image, compile the twelve frameworks, run the suites
 ```
 
-Dies führt 126 Testprogramme und 1.303 Tests im Container aus, und `--verify` ergänzt die End-to-End-Prüfungen der CLI gegen die eingecheckten Fixtures und ihre fixierten Digests. Siehe [`Linux/README.md`](../Linux/README_de.md) für das Image, die fixierten Versionen und die GNUstep-Abweichungen, die der Port gefunden hat.
+Dies führt 130 Suiten und 1.313 Tests im Container aus, und `--verify` ergänzt die End-to-End-Prüfungen der CLI gegen die eingecheckten Fixtures und ihre fixierten Digests. Siehe [`Linux/README.md`](../Linux/README_de.md) für das Image, die fixierten Versionen und die GNUstep-Abweichungen, die der Port gefunden hat.
 
 ## Unterstützung
 

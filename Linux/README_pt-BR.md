@@ -5,10 +5,10 @@
 `docs/developers/build/linux.md` §9: a Fase B validou o toolchain (um Dockerfile que
 compila a partir do código-fonte clang + libobjc2 + GNUstep Base e compilou um subconjunto
 do MADFoundation); a Fase C corresponde à lista de shims da §4, e este diretório é onde ela vive.
-O build agora compila **todos os onze frameworks headless** — cada framework da tabela
+O build agora compila **todos os doze frameworks headless** — cada framework da tabela
 da §3 de `docs/developers/build/linux.md` mais `MADPostgres`, exceto os exclusivos de interface gráfica (`MADExplorer`, `MADBarcodes`,
 `MADFeedback`, `Scrimpter` e o aplicativo) — e executa suas suítes de teste dentro do
-contêiner: 126 executáveis de teste, 1.303 testes e 7 `NEED`s registrados. A cobertura
+contêiner: 130 suítes, 1.313 testes e 7 `NEED`s registrados. A cobertura
 de testes mesclada na `master` em 2026-10-10 (~100 arquivos de teste do Xcode) foi portada na
 íntegra, suíte por suíte. Nada daqui é embarcado no aplicativo iOS/macOS; a CLI — marco da
 Fase D — também compila e roda aqui (veja "A CLI roda aqui — Fase D" abaixo), e
@@ -224,7 +224,7 @@ Tudo na imagem de build é ferramenta de compilação e teste; nada dali é vinc
 
 ## A CLI roda aqui — Fase D
 
-O binário `mad` é compilado por este `CMakeLists.txt` a partir de `CLI/Source` (os mesmos arquivos-fonte que `CLI/build.sh` compila no macOS), vincula os onze frameworks com whole-archive e roda dentro da imagem:
+O binário `mad` é compilado por este `CMakeLists.txt` a partir de `CLI/Source` (os mesmos arquivos-fonte que `CLI/build.sh` compila no macOS), vincula os doze frameworks com whole-archive e roda dentro da imagem:
 
 	/build/mad inspect <document.mad>
 	/build/mad schema  <document.mad>
