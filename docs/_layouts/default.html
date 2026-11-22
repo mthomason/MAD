@@ -117,6 +117,22 @@
         {% endif %}
       </nav>
 
+      {%- if is_zh -%}{%- assign section_root = "/zh" -%}{%- assign nav_format = "格式" -%}{%- assign nav_apps = "应用" -%}{%- assign nav_developers = "开发者" -%}{%- assign nav_vision = "愿景" -%}
+      {%- elsif is_ja -%}{%- assign section_root = "/ja" -%}{%- assign nav_format = "フォーマット" -%}{%- assign nav_apps = "アプリ" -%}{%- assign nav_developers = "開発者" -%}{%- assign nav_vision = "ビジョン" -%}
+      {%- elsif is_pt -%}{%- assign section_root = "/pt-br" -%}{%- assign nav_format = "Formato" -%}{%- assign nav_apps = "Aplicativos" -%}{%- assign nav_developers = "Desenvolvedores" -%}{%- assign nav_vision = "Visão" -%}
+      {%- elsif is_de -%}{%- assign section_root = "/de" -%}{%- assign nav_format = "Format" -%}{%- assign nav_apps = "Anwendungen" -%}{%- assign nav_developers = "Entwickler" -%}{%- assign nav_vision = "Vision" -%}
+      {%- elsif is_es -%}{%- assign section_root = "/es" -%}{%- assign nav_format = "Formato" -%}{%- assign nav_apps = "Aplicaciones" -%}{%- assign nav_developers = "Desarrolladores" -%}{%- assign nav_vision = "Visión" -%}
+      {%- else -%}{%- assign section_root = "" -%}{%- assign nav_format = "Format" -%}{%- assign nav_apps = "Apps" -%}{%- assign nav_developers = "Developers" -%}{%- assign nav_vision = "Vision" -%}{%- endif -%}
+      <nav class="section-nav" aria-label="Documentation sections" style="display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.875rem; margin-bottom: 1rem;">
+        <a href="{{ section_root | append: "/README.html" | relative_url }}">{{ nav_format }}</a>
+        <span aria-hidden="true">·</span>
+        <a href="{{ section_root | append: "/macos.html" | relative_url }}">{{ nav_apps }}</a>
+        <span aria-hidden="true">·</span>
+        <a href="{{ section_root | append: "/developers/" | relative_url }}">{{ nav_developers }}</a>
+        <span aria-hidden="true">·</span>
+        <a href="{{ section_root | append: "/vision.html" | relative_url }}">{{ nav_vision }}</a>
+      </nav>
+
       {% if site.title and site.title != page.title %}
       <h1><a href="{% if is_zh %}{{ "/zh/" | relative_url }}{% elsif is_ja %}{{ "/ja/" | relative_url }}{% elsif is_pt %}{{ "/pt-br/" | relative_url }}{% elsif is_de %}{{ "/de/" | relative_url }}{% elsif is_es %}{{ "/es/" | relative_url }}{% else %}{{ "/" | absolute_url }}{% endif %}"><img src="{{ "/assets/mad-designer-macos-icon-128.png" | relative_url }}" alt="MAD Designer icon" width="36" height="36" style="vertical-align: middle; margin-right: 8px;" />{{ site.title }}</a></h1>
       {% endif %}

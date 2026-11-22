@@ -44,3 +44,6 @@ questions and how the claims are verified:
 7. [The format as it should be defined](07-normative.md)
 8. [Open questions](08-open-questions.md)
 9. [Verification](09-verification.md)
+
+For the engine's embedding surface, the `mad` CLI, the data-object contract, and
+the architecture records, see the [developer documentation](developers/).
