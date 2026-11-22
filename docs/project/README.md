@@ -66,9 +66,8 @@ gitignored local-only scratch; they are not in version control.
 
 ## Promoted to the public site
 
-The following records have moved, or are moving, to `docs/developers/` and are
-translated into the five languages. Once moved, the public page is the only
-copy:
+The following records have moved to `docs/developers/` and are translated into
+the five languages. The public page is the only copy:
 
 [MAD_CLI](../developers/cli.md), [MAD_DATA_OBJECT](../developers/data-object.md),
 [MAD_MULTI_SOURCE](../developers/multi-source.md), [MAD_SQL_ENTRY](../developers/sql-entry.md),
@@ -78,4 +77,6 @@ copy:
 [MAD_WINDOWS](../developers/build/windows.md),
 [MAD_MACOS](../developers/build/macos.md),
 [MAD_PDF_LINUX](../developers/build/pdf.md),
-`MADDataTable_Architecture_Report`, `MADModel_Layer`, `MAD_ARRAY_CACHING`.
+[MADDataTable_Architecture_Report](../developers/architecture/data-table.md),
+[MADModel_Layer](../developers/architecture/model-layer.md),
+[MAD_ARRAY_CACHING](../developers/architecture/array-caching.md).

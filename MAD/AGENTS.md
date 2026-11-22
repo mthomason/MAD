@@ -49,4 +49,4 @@ When performing asynchronous tasks related to documents or data, look for an exi
     `xcodebuild test -workspace Reports.xcworkspace -scheme MAD -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
 *   **Known issues**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- see the `## MAD (framework)` section.
 *   **Task queue**: [`TASKS.md`](../docs/project/registers/TASKS.md) -- maintain it, but do not start work from it.
-*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../docs/project/MADDataTable_Architecture_Report.md).
+*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../docs/developers/architecture/data-table.md).

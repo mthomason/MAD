@@ -176,9 +176,9 @@ the headless side.
   context needed to start cold.
 * `docs/project/registers/ROADMAP.md` -- the plan: which register, queue and design document gets picked up next,
   and in what order.
-* `docs/project/MADDataTable_Architecture_Report.md` -- the `MADDataTable` class cluster across
+* `docs/developers/architecture/data-table.md` -- the `MADDataTable` class cluster across
   `MADFoundation`, `MAD`, `MADSqlite3`, `MADMySQL`, and `MADTdsClient`.
-* `docs/project/MADModel_Layer.md` -- the `MADModel*` read-model over the `Rptq` entities: what each
+* `docs/developers/architecture/model-layer.md` -- the `MADModel*` read-model over the `Rptq` entities: what each
   class is, how it is populated and kept current, who reads it, and the refactoring
   candidates.
 * `docs/project/MAD_FORMAT.md` -- what a `.mad` document is, and what it should be.
