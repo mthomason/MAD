@@ -52,6 +52,14 @@ class CheckSiteFactsTest(unittest.TestCase):
 		self.write("docs/project/x.md", "1,303 tests")
 		self.assertEqual(check_site_facts.banned_literals(str(self.docs)), [])
 
+	def test_section_number_is_not_a_version_literal(self):
+		self.write("docs/a.md", "decision 9.1")
+		self.assertEqual(check_site_facts.banned_literals(str(self.docs)), [])
+
+	def test_version_9_1_is_flagged(self):
+		self.write("docs/a.md", "engine 9.1")
+		self.assertIn("9.1", check_site_facts.banned_literals(str(self.docs)))
+
 	def test_built_site_internal_directory_fails(self):
 		(self.built / "project").mkdir(parents=True)
 		self.assertIn("project", check_site_facts.built_leaks(str(self.built)))
