@@ -82,7 +82,7 @@ The full specification — container layout, store tables, companion schemas, kn
 
 ## Where MAD Is Going: The Roadmap & Vision
 
-Because MAD already separates the **query graph**, the **materialized SQLite result table**, and the **presentation layout**, the architecture unlocks four major capabilities that are actively being designed and queued (see [`docs/vision.md`](docs/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](docs/project/MAD_DATA_OBJECT.md), and [`docs/project/TODO.md`](docs/project/TODO.md)):
+Because MAD already separates the **query graph**, the **materialized SQLite result table**, and the **presentation layout**, the architecture unlocks four major capabilities that are actively being designed and queued (see [`docs/vision.md`](docs/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](docs/project/MAD_DATA_OBJECT.md), and [`docs/project/registers/TODO.md`](docs/project/registers/TODO.md)):
 
 1. **A `.mad` report as an ad hoc database table (Composable Data Objects).**
    In a traditional database, you `SELECT` from base tables like `employee` or `sales_data`. A `.mad` report joins and filters multiple tables, and its output (`.maddb` + `.mdcache`) is already a physical SQLite table with a typed schema (`MADDataColumn`). By making a report's output addressable as a table source inside the query designer, **a `.mad` file becomes a virtual/materialized database table**. Other reports, queries, or tools can `SELECT` from and `JOIN` against a `.mad` report just like any table in a database.
@@ -117,7 +117,7 @@ The published tags are `latest` and the commit's short SHA, built for `linux/amd
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
-The sample documents refresh against the Sqlite3 sample database that ships inside the image; the MySQL, SQL Server, and PostgreSQL fixtures expect the test servers from [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).
+The sample documents refresh against the Sqlite3 sample database that ships inside the image; the MySQL, SQL Server, and PostgreSQL fixtures expect the test servers from [`docs/project/build/DEVELOPER.md`](docs/project/build/DEVELOPER.md).
 
 ## In CI
 
@@ -193,7 +193,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ```
 
-(`MADMySQL`, `MADTdsClient`, and `MADPostgres` also carry live suites that talk to a real database server and skip when one is not reachable — see [`docs/project/DEVELOPER.md`](docs/project/DEVELOPER.md).)
+(`MADMySQL`, `MADTdsClient`, and `MADPostgres` also carry live suites that talk to a real database server and skip when one is not reachable — see [`docs/project/build/DEVELOPER.md`](docs/project/build/DEVELOPER.md).)
 
 ### Linux (Headless Engine & CLI)
 

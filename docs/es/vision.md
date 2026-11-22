@@ -10,9 +10,9 @@ crecer. Nada de la maquinaria de composición o migración descrita aquí está 
 todavía; el diseño que fundamenta el modelo de objeto de datos es
 [`docs/project/MAD_DATA_OBJECT.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_DATA_OBJECT.md),
 el registro de trabajo es
-[`docs/project/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_FUTURE.md),
+[`docs/project/product/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/product/MAD_FUTURE.md),
 y la lista de deseos del producto es
-[`docs/project/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/TODO.md).
+[`docs/project/registers/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/registers/TODO.md).
 
 ## Dónde está MAD hoy
 

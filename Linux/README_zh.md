@@ -81,7 +81,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 
 ## 驱动是注册的，而非导入的
 
-构造函数过去会导入驱动，这就是 `MAD` ↔ 驱动的循环依赖（`docs/project/ROADMAP.md` §5.1）。`MADDatabaseDriverRegistry`（`MADAPI`）现在是接缝：每个驱动的连接类都遵循 `MADDatabaseDriver` 并在 `+load` 中注册自身，而 `MADDatabase+Constructor` / `MADDatabaseConnection+Constructor` 按 `MADDatabaseType` 查找驱动，而不是指名某一个。因此，一个进程拥有哪些驱动，取决于它*链接*了什么。
+构造函数过去会导入驱动，这就是 `MAD` ↔ 驱动的循环依赖（`docs/project/registers/ROADMAP.md` §5.1）。`MADDatabaseDriverRegistry`（`MADAPI`）现在是接缝：每个驱动的连接类都遵循 `MADDatabaseDriver` 并在 `+load` 中注册自身，而 `MADDatabase+Constructor` / `MADDatabaseConnection+Constructor` 按 `MADDatabaseType` 查找驱动，而不是指名某一个。因此，一个进程拥有哪些驱动，取决于它*链接*了什么。
 
 在 Apple 上，宿主链接驱动框架——应用和 CLI 指名 MADMySQL、MADTdsClient 和 MADPostgres，而 `MAD.framework` 不再指名它们，因此它的测试捆绑包也指名它们。在 Linux 上，驱动归档从 `mad` 目标进行**整档链接**（`$<LINK_LIBRARY:WHOLE_ARCHIVE,…>`，它会传播到每个使用方）：静态归档是被搜索的，不是被加载的，因此没有任何引用的成员——驱动的 `+load` 或某个 category——否则会被丢弃。这不是可有可无的细节；正是它在修复之前让通过 MySQL 的 `mad refresh` 中止（见下面关于 category 的一节）。`MADDatabaseDriverDispatchTests` 固定了注册表，`Linux/Tests/MADHeadlessDocumentTests.m` 驱动整条链。
 
@@ -104,7 +104,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 * **较小的缺失，已打垫片或已加防护：** `NSOperation.name`、`NSOperation.cancelled` 和 `NSOperation.asynchronous`（GNUstep 只保留旧的 `-isConcurrent` 拼写，作为一个总是回答 NO 的桩——它自己的簿记会查询它，而如果没有 Compat category 回答 `[self isAsynchronous]`，一个正在结束的异步操作会从 `-dealloc` 中抛出）、NSFileManager 的 ubiquity 方法（Apple 之外没有 iCloud；每个答案都是空答案）、NSFileCoordinator 上的 `-initWithFilePresenter:`、`-coordinateAccessWithIntents:queue:byAccessor:`（GNUstep 的实现在运行访问器时会故障——SIGSEGV，已实测；Compat category 在给定队列上调用访问器，因为在 Apple 之外没有什么可协调的）、NSURL 的安全作用域访问和 `-fileSystemRepresentation`、NSData 的 `-options:error:` 读取方法及其常量、NSCoder 上的 `-decodeTopLevelObjectOfClasses:forKey:error:`、NSUndoManager 上的 `-registerUndoWithTarget:handler:`、`+propertyListWithStream:options:format:error:`（一个返回 nil 的桩，流从未被读取——Compat category 读取该流并转交给 `+propertyListWithData:`；有了它，MADDataTable 的 `-loadFromCacheWithUrl:` 可在 Linux 上运行，并在两个平台上都有断言）、NSValue 的 `CG*Value` 拼写、`CF_ENUM`/`CFAvailability` 宏、CFNumber 提取调用（一个 compat 的 `CoreFoundation/CFNumber.h`）、POSIX 中的 `copyfile(3)`、`htonll`、MacTypes 标量（`Float64`、`SInt32`…`UInt64`、`Boolean`）、`NS_RETURNS_INNER_POINTER`、`__nullable` 拼写、`NSOperation.qualityOfService`、`NSDataWritingFileProtection*`、`containerURLForSecurityApplicationGroupIdentifier:`（缺失——这就是 MADURLFactory 的组路径回退到每用户目录的原因）、来自 `<sys/qos.h>` 的 `QOS_CLASS_DEFAULT`（缺失）。
 * **已验证良好：** ARC 与弱引用清零、block、异常、`@synchronized`、KVO（手动和依赖键）、`NSOperation` 状态机 KVO、`NSPredicate predicateWithFormat:@"error != nil"`（MAD 的确切谓词）、dispatch（once/队列/组/信号量）、普通可执行文件下的主队列排空、JSON、UUID、日期、plist、排序描述符、流、NSDecimalNumber、NSCalendar，以及宽松路径上的键控归档。完整报告就是 `--probe` 打印的内容；其中 19 项核心检查决定退出码，12 个报告项不决定（CLI 的运行增加了 `directory-enumeration` 和 `directory-enumeration-url-form`）。
 
-**货币格式化（2026-10-16 发现，2026-10-17 修复）。**  GNUstep 的两种行为使渲染出的金额与 Apple 不同：`NSNumberFormatterCurrencyStyle` 对任何区域设置都不渲染小数位（`en_US` 得到 `$1`，Apple 得到 `$0.99`），而镜像的当前区域设置是 `en_US_POSIX`，其货币符号后有一个空格且没有分组。两者都在不替换格式化器的前提下得到解决：报表从文档的数字格式中获取其区域设置和小数位数（回退是 `en_US`，而不是机器的区域设置），货币符号则显式写出，并对日元符号进行规范化（GNUstep 将其拼写为全角 U+FFE5）。一个 60 用例的比较——六个区域设置乘以十个值，包括负数和 1e12——现在在两个平台之间逐字节一致；它找到的唯一差异就是那个日元码点。`docs/project/BUGS.md` 有该条目（已归档：已修复），下面渲染侧的导出均固定为 Mac 的字节。
+**货币格式化（2026-10-16 发现，2026-10-17 修复）。**  GNUstep 的两种行为使渲染出的金额与 Apple 不同：`NSNumberFormatterCurrencyStyle` 对任何区域设置都不渲染小数位（`en_US` 得到 `$1`，Apple 得到 `$0.99`），而镜像的当前区域设置是 `en_US_POSIX`，其货币符号后有一个空格且没有分组。两者都在不替换格式化器的前提下得到解决：报表从文档的数字格式中获取其区域设置和小数位数（回退是 `en_US`，而不是机器的区域设置），货币符号则显式写出，并对日元符号进行规范化（GNUstep 将其拼写为全角 U+FFE5）。一个 60 用例的比较——六个区域设置乘以十个值，包括负数和 1e12——现在在两个平台之间逐字节一致；它找到的唯一差异就是那个日元码点。`docs/project/registers/BUGS.md` 有该条目（已归档：已修复），下面渲染侧的导出均固定为 Mac 的字节。
 
 ## need 的数量，以及为什么是 6
 
@@ -118,7 +118,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 
 ## 实时数据库套件在此运行
 
-`MADMySQLLiveTests`、`MADTdsClientLiveTests` 和 `MADPostgresLiveTests` 与真实服务器通信，在没有可到达的服务器时会跳过（从不失败）——与 Xcode 方案相同的约定。这些服务器就是 `docs/project/DEVELOPER.md` 记录的三个容器；请先启动它们：
+`MADMySQLLiveTests`、`MADTdsClientLiveTests` 和 `MADPostgresLiveTests` 与真实服务器通信，在没有可到达的服务器时会跳过（从不失败）——与 Xcode 方案相同的约定。这些服务器就是 `docs/project/build/DEVELOPER.md` 记录的三个容器；请先启动它们：
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on :13306
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on :1433
@@ -136,7 +136,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 
 ## 许可证
 
-镜像中的所有内容都是构建工具；没有任何内容链接进应用。libobjc2 是 MIT；libdispatch 是 Apache-2.0 并带有 Swift 运行时例外；GNUstep Base 是 LGPL-2.1-or-later；gnustep-make 是 GPL-3.0-or-later，其 `Testing.h`（GPL-3.0-or-later）被编译进 Linux 测试二进制——这些二进制只存在于本构建镜像内。C 库带有各自的许可证（docs/project/THIRD_PARTY_LICENSES.md）；mysqlclient 的 GPL 问题已经解决——D1 改为 MariaDB Connector/C（LGPL-2.0-or-later，选用 LGPL-3.0），本镜像构建它（`docs/project/TASKS.md` §10）。运行时镜像以 `ghcr.io/mthomason/mad` 发布，因此它分发的 LGPL 组件需要重链接要约：`ThirdParty/Licenses/README.md` 中的书面要约现在写明了该镜像，登记条目是 `THIRD_PARTY_LICENSES.md` §9。gnustep-make 是构建工具，不在运行时镜像中。
+镜像中的所有内容都是构建工具；没有任何内容链接进应用。libobjc2 是 MIT；libdispatch 是 Apache-2.0 并带有 Swift 运行时例外；GNUstep Base 是 LGPL-2.1-or-later；gnustep-make 是 GPL-3.0-or-later，其 `Testing.h`（GPL-3.0-or-later）被编译进 Linux 测试二进制——这些二进制只存在于本构建镜像内。C 库带有各自的许可证（docs/project/THIRD_PARTY_LICENSES.md）；mysqlclient 的 GPL 问题已经解决——D1 改为 MariaDB Connector/C（LGPL-2.0-or-later，选用 LGPL-3.0），本镜像构建它（`docs/project/registers/TASKS.md` §10）。运行时镜像以 `ghcr.io/mthomason/mad` 发布，因此它分发的 LGPL 组件需要重链接要约：`ThirdParty/Licenses/README.md` 中的书面要约现在写明了该镜像，登记条目是 `THIRD_PARTY_LICENSES.md` §9。gnustep-make 是构建工具，不在运行时镜像中。
 
 ## CLI 在此运行——阶段 D
 
@@ -176,7 +176,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 
 实时套件的结果一致：来自同一镜像的 `MADMySQLLiveTests` 44/44、`MADTdsClientLiveTests` 29/29 和 `MADPostgresLiveTests` 14/14。`Linux/Tests/MADHeadlessDocumentTests.m` 是同一检查点的测试形式——打开、架构、查询、驱动解析、刷新、76 行——因此它会在 CI 中失败，而不是在手工运行中失败。
 
-**两个值得了解的差异，都在这里发现。** SELECT 列表的列顺序曾是*集合*顺序（`MADQueryActiveQueryFields` 累积到一个 `NSSet` 中），因此同一文档在 Apple 和 GNUstep 上产生不同的顺序——相同的字段，不同的顺序；一旦按字段名比较，缓存的*数据*是相同的，而缓存的 `c<hash>` 列名由哈希派生，因此每个平台也不同。**2026-10-16 已解决（JSON 导出形状决策，`docs/project/MAD_LINUX.md` §10.1）：** 现在两个 SQL 构建器都将顺序定义为按 `-compare:` 排序的列别名，因此生成的 SQL、行缓存和每个导出在两个平台上都一致（docs/project/BUGS.md 的 SELECT 列表条目；顺序测试在 `Linux/Tests/MADQuerySelectExpressionTests.m`）。在该变更之前刷新的缓存，其列顺序与之后刷新的缓存不同——相同的数据，新的顺序——因此在跨该日期比较缓存之前先刷新一次。
+**两个值得了解的差异，都在这里发现。** SELECT 列表的列顺序曾是*集合*顺序（`MADQueryActiveQueryFields` 累积到一个 `NSSet` 中），因此同一文档在 Apple 和 GNUstep 上产生不同的顺序——相同的字段，不同的顺序；一旦按字段名比较，缓存的*数据*是相同的，而缓存的 `c<hash>` 列名由哈希派生，因此每个平台也不同。**2026-10-16 已解决（JSON 导出形状决策，`docs/project/MAD_LINUX.md` §10.1）：** 现在两个 SQL 构建器都将顺序定义为按 `-compare:` 排序的列别名，因此生成的 SQL、行缓存和每个导出在两个平台上都一致（docs/project/registers/BUGS.md 的 SELECT 列表条目；顺序测试在 `Linux/Tests/MADQuerySelectExpressionTests.m`）。在该变更之前刷新的缓存，其列顺序与之后刷新的缓存不同——相同的数据，新的顺序——因此在跨该日期比较缓存之前先刷新一次。
 
 ## 写入器在此运行，两个平台结果一致
 
@@ -192,7 +192,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 
 `--reproducible` 固定 uid/gid 0、固定时间 2001-01-12T00:00:00Z 以及排序的成员遍历；普通写入保留成员的真实元数据，因此按设计会在不同次运行和不同平台之间不同。
 
-为了让写入器在此运行，必须修复两件事，均记录在 `docs/project/BUGS.md`（`.mad` 字节一致性条目）中：
+为了让写入器在此运行，必须修复两件事，均记录在 `docs/project/registers/BUGS.md`（`.mad` 字节一致性条目）中：
 
 * `-write_archive:` 遍历每个枚举到的 URL *直到*归档目录为止，而 GNUstep 的 `-enumeratorAtURL:` 会剥离包含目录，因此循环从未到达。现在改用 `-subpathsAtPath:` 读取成员，CLI 的成员列表本来就是这样做的。
 * `backup_file` 将其路径交给 `dirname(3)`/`basename(3)`，glibc 被允许修改该缓冲区而且确实修改了：调用者的归档路径在最后一个斜杠处被截断，因此合成后的文档被写到了它自己的目录上（`Open (…) failed - Is a directory`）。Apple 的实现不改动该缓冲区，这就是为什么只有 Linux 遇到了这个问题。
@@ -216,7 +216,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 | `html-flow` | 54,766 | `0565204a55d02f925602b5c0bf298bb0e41c9cbe56bea6df770e828a35782382` |
 | `pdf` | — | 在此未生成；`+isAvailable` 为 NO 并给出原因 |
 
-渲染侧格式在各平台之间逐字节一致，与数据格式一样：每个 frame、字体、字号、特性、对齐、文本段和页面框，以及金额（使它们产生差异的发现及其修复见上文和 `docs/project/BUGS.md`）。`Linux/Tests/MADReportExporterTests.m` 固定了这三个校验和。
+渲染侧格式在各平台之间逐字节一致，与数据格式一样：每个 frame、字体、字号、特性、对齐、文本段和页面框，以及金额（使它们产生差异的发现及其修复见上文和 `docs/project/registers/BUGS.md`）。`Linux/Tests/MADReportExporterTests.m` 固定了这三个校验和。
 
 ## 运行时镜像——CLI 交付物（阶段 F）
 
@@ -257,7 +257,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 	...
 	MADVERIFY 41 passed, 0 failed
 
-`--live` 会增加 MySQL、TDS 和 PostgreSQL 的刷新（分别为 50、20 和 25 行）；请先启动三个测试容器（`docs/project/DEVELOPER.md` 中有它们的脚本和登录信息）：
+`--live` 会增加 MySQL、TDS 和 PostgreSQL 的刷新（分别为 50、20 和 25 行）；请先启动三个测试容器（`docs/project/build/DEVELOPER.md` 中有它们的脚本和登录信息）：
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up

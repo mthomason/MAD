@@ -75,7 +75,7 @@ tanto no Mac quanto na imagem Linux. `host.docker.internal`
 funcionaria apenas dentro de um contêiner; `127.0.0.1`, apenas no Mac.
 
 Todas as três fixtures live foram criadas contra os contêineres canônicos de teste documentados em
-`docs/project/DEVELOPER.md`, cujos scripts os criam a partir de imagens fixadas e
+`docs/project/build/DEVELOPER.md`, cujos scripts os criam a partir de imagens fixadas e
 conjuntos de dados verificados por checksum:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on 13306

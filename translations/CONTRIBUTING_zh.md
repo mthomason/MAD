@@ -14,7 +14,7 @@
   库，编译十一个无头框架，并运行它们的测试套件。
 * 贡献不需要数据库服务器：当没有服务器可达时，MySQL、SQL Server 和
   PostgreSQL 的实时测试套件会跳过，而
-  [`docs/project/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md) 记录了提供这些服务器的
+  [`docs/project/build/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md) 记录了提供这些服务器的
   Docker 容器。
 
 ## 开始
@@ -34,7 +34,7 @@
    ./Linux/build.sh
    ```
 
-   [`docs/project/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md) 有完整的
+   [`docs/project/build/DEVELOPER.md`](../docs/zh/project/DEVELOPER.md) 有完整的
    命令矩阵、框架所依赖的共享 DerivedData 路径，以及测试数据库的设置。
 3. 挑点事情做。一个新的驱动、一个元素，或者一个标着
    “good first issue”的 issue。小一点是好事：这里的评审文化是精确。
@@ -60,8 +60,8 @@ Linux 套件把已知的平台差异记录为 `NEED` 行，而不是静默跳过
 * 有意不用的代码在声明处用 clang 的 `unused` 属性标记——未标记的未使用警告意味着该代码是死代码。
 * 新文件带有单行头注释：`Copyright © 2012-2026 Michael
   Thomason. SPDX-License-Identifier: MIT`（源码用 `//`，脚本用 `#`）。
-* [`docs/project/BUGS.md`](../docs/zh/project/BUGS.md) 记录未解决的缺陷以及固定它们的测试；当你修复一个缺陷时，该条目会移到
-  [`docs/project/BUGS_FIXED.md`](../docs/zh/project/BUGS_FIXED.md)——没有被记录的修复等于没有发生。
+* [`docs/project/registers/BUGS.md`](../docs/zh/project/BUGS.md) 记录未解决的缺陷以及固定它们的测试；当你修复一个缺陷时，该条目会移到
+  [`docs/project/registers/BUGS_FIXED.md`](../docs/zh/project/BUGS_FIXED.md)——没有被记录的修复等于没有发生。
 
 ## 开发者原创证书（DCO）
 

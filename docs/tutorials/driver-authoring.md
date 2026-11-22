@@ -22,7 +22,7 @@ Everything else — the query designer's graph, SQL generation, the row
 cache, the render pipeline, the seven export formats, the CLI, the Docker
 image — is shared machinery the driver plugs into. The contract a driver
 satisfies is *"return a schema and rows in table form"*
-(`docs/project/MAD_STRATEGY.md` §3.7), which is why a driver can front
+(`docs/project/product/MAD_STRATEGY.md` §3.7), which is why a driver can front
 anything that can be made to look like a table: a SQL database, a Web
 service, a file.
 
@@ -159,7 +159,7 @@ Two suites, in the framework's test target:
 ## Step 6 — the honest caveat: what a non-SQL driver can and cannot do today
 
 This is the one part of the pitch that is not finished, and it is written
-down deliberately (`docs/project/MAD_STRATEGY.md` §4.7): the **execution**
+down deliberately (`docs/project/product/MAD_STRATEGY.md` §4.7): the **execution**
 layer is driver-shaped — `executeSQL:…intoResultTable:…` and the
 `MADDataTableWriting` destination are honest about "anything that returns a
 table" — but the **compilation** layer is shared: `MADQueryFull` compiles

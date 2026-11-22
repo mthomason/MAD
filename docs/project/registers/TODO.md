@@ -1,12 +1,12 @@
 # TODO — Product Roadmap & Wishlist
 
-The author's product wishlist and strategic roadmap. Active engineering tasks are tracked in [`TASKS.md`](TASKS.md), open defects are pinned in [`BUGS.md`](BUGS.md), and the architectural designs live in [`MAD_DATA_OBJECT.md`](MAD_DATA_OBJECT.md) and [`MAD_FUTURE.md`](MAD_FUTURE.md). Entries here are picked up when asked for.
+The author's product wishlist and strategic roadmap. Active engineering tasks are tracked in [`TASKS.md`](TASKS.md), open defects are pinned in [`BUGS.md`](BUGS.md), and the architectural designs live in [`MAD_DATA_OBJECT.md`](../MAD_DATA_OBJECT.md) and [`MAD_FUTURE.md`](../product/MAD_FUTURE.md). Entries here are picked up when asked for.
 
 ## 1. The Data Object & Composable Tables (`.mad` as a Table)
 
 A database exposes base tables (`employee`, `sales_data`); a `.mad` report joins, filters, and shapes multiple tables into a materialized SQLite result table (`.maddb` + `.mdcache`). The next architectural leap is making that output a first-class, addressable table:
 
-* **Reports as virtual / materialized database tables** — Give every query definition a stable identity and schema contract (`MADDataObjectSchema` / `MADDataObjectExecuting`, see [`MAD_DATA_OBJECT.md`](MAD_DATA_OBJECT.md)) so a `.mad` report's output can be queried (`SELECT` / `JOIN`) just like a base table in a database.
+* **Reports as virtual / materialized database tables** — Give every query definition a stable identity and schema contract (`MADDataObjectSchema` / `MADDataObjectExecuting`, see [`MAD_DATA_OBJECT.md`](../MAD_DATA_OBJECT.md)) so a `.mad` report's output can be queried (`SELECT` / `JOIN`) just like a base table in a database.
 * **Multiple data sources in a single report** — Allow one `.mad` document to define queries against multiple databases (e.g., PostgreSQL + SQL Server + MySQL), materialize each into local SQLite tables (`MADDataTableFast`), and join them together in the query designer with no external federation server.
 * **Composable subreports & semantic DAGs** — Link `.mad` reports inside other `.mad` reports as upstream table sources, forming a portable, dependency-ordered DAG of derived tables (`mad run`).
 * **Named, shareable data snapshots** — Package `.maddb` + `.mdcache` as an addressable, versioned snapshot artifact that can travel offline without database credentials and answer point-in-time audit questions.
@@ -25,7 +25,7 @@ Printing on paper (paginated bands) should be just one paradigm for viewing a `.
 * **Interactive raw-data & sample-table explorer** — Complete the sample-table / raw-data display with paged/virtualized queries over `.maddb` to browse, sort, and inspect unlimited rows interactively.
 * **Chart element** — First-class chart document element bound to query groups and aggregates.
 * **Dashboard & KPI document types** — The data model already carries a report type; add a multi-tile Dashboard view and reusable KPI query cards alongside paginated reports.
-* **Formula elements (`Scrimpter` / expression engine)** — Bring computed formula elements into the designer and renderer (engine choice tracked in [`MAD_SCRIPTING.md`](MAD_SCRIPTING.md) §8).
+* **Formula elements (`Scrimpter` / expression engine)** — Bring computed formula elements into the designer and renderer (engine choice tracked in [`MAD_SCRIPTING.md`](../design/MAD_SCRIPTING.md) §8).
 
 ## 4. AI-Assisted Authoring (Graph-First, Deterministic)
 
@@ -35,7 +35,7 @@ Printing on paper (paginated bands) should be just one paradigm for viewing a `.
 ## 5. Drivers, Export Formats & Headless Engine
 
 * **New database drivers** — Subclass `MADDatabase` for cloud warehouses and APIs (Snowflake, BigQuery, DuckDB, REST/JSON, Salesforce SOQL).
-* **Linux headless PDF writer** — Complete the non-UIKit PDF rendering path on Linux (tracked in [`MAD_PDF_LINUX.md`](MAD_PDF_LINUX.md); `html`, `html-flow`, `json`, `json-report`, `csv`, and `text` already ship on both platforms).
+* **Linux headless PDF writer** — Complete the non-UIKit PDF rendering path on Linux (tracked in [`MAD_PDF_LINUX.md`](../MAD_PDF_LINUX.md); `html`, `html-flow`, `json`, `json-report`, `csv`, and `text` already ship on both platforms).
 * **Rich office export formats** — Native Excel (`.xlsx`), Word (`.docx`), and Rich Text exporters on the `<MADReportExporting>` seam.
 * **`ORDER BY` in the visual query builder** — Expose explicit sort ordering in the query designer UI beyond group-driven sort descriptors.
 * **Edit database connection information** — Allow re-pointing an existing `.mad` document at a new host/database in the UI (already supported via `--host`/`--port`/`--database` in the `mad` CLI).

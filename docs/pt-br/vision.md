@@ -10,9 +10,9 @@ evoluir. Nenhum dos mecanismos de composição ou migração descritos aqui foi 
 ainda; o documento de arquitetura que fundamenta o modelo de objetos de dados é
 [`docs/project/MAD_DATA_OBJECT.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_DATA_OBJECT.md),
 o registro de trabalho é
-[`docs/project/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_FUTURE.md),
+[`docs/project/product/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/product/MAD_FUTURE.md),
 e a lista de desejos do produto é
-[`docs/project/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/TODO.md).
+[`docs/project/registers/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/registers/TODO.md).
 
 ## Onde o MAD está hoje
 

@@ -331,7 +331,7 @@ dotnet run --project .\Windows\App\Mad.Designer.Windows\Mad.Designer.Windows.csp
 The dictionaries carry 239 keys each, including the Phase 6f Welcome/Home surface, the
 short workspace labels (Query / Designer / Viewer), the connection cards, the query zoom
 controls and the two About version labels. The translations are machine-assisted and
-unreviewed, as on the Mac (`docs/project/MAD_APP_LOCALIZATION.md` D14); the About Overview
+unreviewed, as on the Mac (`docs/project/localization/MAD_APP_LOCALIZATION.md` D14); the About Overview
 ends with that notice in each language. Licence bodies, component notices, the relink
 offer, copyright and brand names stay verbatim English.
 
@@ -367,7 +367,7 @@ The three live driver suites talk to pinned Docker test servers — MySQL
 On Windows these run as local containers bound to `127.0.0.1`. The
 cross-platform wrapper is `TestDatabase/test-databases.ps1` (PowerShell) over
 `TestDatabase/test-databases.sh`; see `TestDatabase/README.md` and
-`docs/project/DEVELOPER.md` §"Test Databases (Docker)".
+`docs/project/build/DEVELOPER.md` §"Test Databases (Docker)".
 
 ```powershell
 .\TestDatabase\test-databases.ps1 -Action download   # fetch datasets, no Docker

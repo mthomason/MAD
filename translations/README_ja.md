@@ -77,7 +77,7 @@ macOS では、アプリが**書類**、**デスクトップ**、**ダウンロ�
 
 ## MADの今後の方向性：ロードマップとビジョン
 
-MADはすでに**クエリグラフ**、**マテリアライズドSQLite結果テーブル**、および**プレゼンテーションレイアウト**を分離しているため、このアーキテクチャによって次の4つの主要機能が実現可能となり、現在設計と実装キューが進められています（[`docs/vision.md`](../docs/ja/vision.md)、[`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md)、および[`docs/project/TODO.md`](../docs/project/TODO.md)を参照）：
+MADはすでに**クエリグラフ**、**マテリアライズドSQLite結果テーブル**、および**プレゼンテーションレイアウト**を分離しているため、このアーキテクチャによって次の4つの主要機能が実現可能となり、現在設計と実装キューが進められています（[`docs/vision.md`](../docs/ja/vision.md)、[`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md)、および[`docs/project/registers/TODO.md`](../docs/project/registers/TODO.md)を参照）：
 
 1. **アドホックなデータベーステーブルとしての`.mad`レポート（コンポーザブルなデータオブジェクト）。**
    従来のデータベースでは、`employee`や`sales_data`のようなベーステーブルから`SELECT`します。`.mad`レポートは複数のテーブルを結合・フィルタリングし、その出力（`.maddb` + `.mdcache`）はすでに型付きスキーマ（`MADDataColumn`）を持つ物理的なSQLiteテーブルになっています。クエリデザイナー内でレポートの出力をテーブルソースとして指定可能にすることで、**`.mad`ファイル自体が仮想／マテリアライズドデータベーステーブルになります**。他のレポート、クエリ、またはツールから、データベース内の通常のテーブルとまったく同じように`.mad`レポートに対して`SELECT`や`JOIN`を行えるようになります。
@@ -112,7 +112,7 @@ docker run --rm -v "$PWD/CLI/Fixtures":/docs:ro -v "$PWD/out":/out ghcr.io/mthom
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
-サンプルドキュメントはイメージ内に同梱されているSqlite3サンプルデータベースに対して更新（リフレッシュ）されます。MySQL、SQL Server、およびPostgreSQLのフィクスチャは[`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md)に記載されているテストサーバーを前提としています。
+サンプルドキュメントはイメージ内に同梱されているSqlite3サンプルデータベースに対して更新（リフレッシュ）されます。MySQL、SQL Server、およびPostgreSQLのフィクスチャは[`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md)に記載されているテストサーバーを前提としています。
 
 ## CIでの利用
 
@@ -188,7 +188,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ```
 
-（`MADMySQL`、`MADTdsClient`、および`MADPostgres`には実際のデータベースサーバーと通信するライブテストスイートも含まれており、サーバーに到達できない場合は自動的にスキップされます——[`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md)を参照してください。）
+（`MADMySQL`、`MADTdsClient`、および`MADPostgres`には実際のデータベースサーバーと通信するライブテストスイートも含まれており、サーバーに到達できない場合は自動的にスキップされます——[`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md)を参照してください。）
 
 ### Linux（ヘッドレスエンジン＆CLI）
 

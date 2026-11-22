@@ -15,18 +15,18 @@ An audit of `MADSqlite3`, `MAD`, `Mac/`, and `MADDesigner/` uncovered five concr
 
 ### Bug 1 (CRITICAL): macOS Refresh Chain Never Supplies Credentials to `MADOperationRefresh`
 * **Where:**
-  * [`Mac/Source/MADMacDocument.m:203-257`](../../Mac/Source/MADMacDocument.m#L203-L257) (`-refreshDataWithPassword:completion:`)
-  * [`MAD/Source/MADOperationRefresh.m:79-102`](../../MAD/Source/MADOperationRefresh.m#L79-L102) (`-execute`)
+  * [`Mac/Source/MADMacDocument.m:203-257`](../../../Mac/Source/MADMacDocument.m#L203-L257) (`-refreshDataWithPassword:completion:`)
+  * [`MAD/Source/MADOperationRefresh.m:79-102`](../../../MAD/Source/MADOperationRefresh.m#L79-L102) (`-execute`)
 * **What happens:**
   In `MADMacDocument -refreshDataWithPassword:completion:`, `refreshOp` (`MADOperationRefresh`) is added to `_refreshQueue` with only two dependencies: `initTable` (`MADOperationRefreshInitializeMainDataTable`) and `initOp` (`MADOperationRefreshInitialize`). Neither conforms to `MADOperationHoldsCredentialsProtocol`.
   Whenever `[document.database.databaseConnection requiresCredentials]` is `YES` (which is true for **MySQL, SQL Server, and PostgreSQL**), `MADOperationRefresh -execute` (`MADOperationRefresh.m:81-100`) scans `self.dependencies` for an operation conforming to `MADOperationHoldsCredentialsProtocol`. Finding none, it **unconditionally aborts with `errMissingCredentials` (code 3, `"Credentials required"`)**.
 * **Consequence:** Refreshing **any** MySQL, SQL Server, or PostgreSQL report in `MAD Viewer` on macOS currently fails 100% of the time, even when the server is online and credentials are in the Keychain.
 * **Reference implementations of `MADOperationHoldsCredentialsProtocol`:**
-  * [`CLI/Source/MADCLIDocument.m:46-55,127-132`](../../CLI/Source/MADCLIDocument.m#L46-L55) (`MADCLICredentialsOperation`)
-  * [`MADDesigner/Source/MADOperationRefreshReload.m:75-90`](../../MADDesigner/Source/MADOperationRefreshReload.m#L75-L90) (`MADOperationGetCredentials`)
+  * [`CLI/Source/MADCLIDocument.m:46-55,127-132`](../../../CLI/Source/MADCLIDocument.m#L46-L55) (`MADCLICredentialsOperation`)
+  * [`MADDesigner/Source/MADOperationRefreshReload.m:75-90`](../../../MADDesigner/Source/MADOperationRefreshReload.m#L75-L90) (`MADOperationGetCredentials`)
 
 ### Bug 2 (CRITICAL): macOS `MADMacDocument` Discards the Real Driver Error on Refresh Failure
-* **Where:** [`Mac/Source/MADMacDocument.m:239-245`](../../Mac/Source/MADMacDocument.m#L239-L245)
+* **Where:** [`Mac/Source/MADMacDocument.m:239-245`](../../../Mac/Source/MADMacDocument.m#L239-L245)
 * **What happens:**
   When `refreshOp` finishes with `doc.refreshed == NO`, `MADMacDocument` ignores `refreshOp.errors.firstObject` and substitutes a hardcoded generic error:
   `"Could not refresh report data. Check the query and database connection settings."`
@@ -34,10 +34,10 @@ An audit of `MADSqlite3`, `MAD`, `Mac/`, and `MADDesigner/` uncovered five concr
 
 ### Bug 3 (CRITICAL): Keychain Key Mismatch Between Document Creation, Storage, and Refresh
 * **Where:**
-  * [`Mac/Source/MADMacConnectionWindowController.m:368-370`](../../Mac/Source/MADMacConnectionWindowController.m#L368-L370)
-  * [`Mac/Source/MADMacDocument.m:218-221`](../../Mac/Source/MADMacDocument.m#L218-L221)
-  * [`MAD/Source/rptq/RptqDocument+Extras.m:366-437`](../../MAD/Source/rptq/RptqDocument+Extras.m#L366-L437) (`-storeDatabaseConnectionDefination:forManagedObjectContext:`)
-  * [`MADDesigner/Source/MADOperationGetCredentials.m:86-88`](../../MADDesigner/Source/MADOperationGetCredentials.m#L86-L88)
+  * [`Mac/Source/MADMacConnectionWindowController.m:368-370`](../../../Mac/Source/MADMacConnectionWindowController.m#L368-L370)
+  * [`Mac/Source/MADMacDocument.m:218-221`](../../../Mac/Source/MADMacDocument.m#L218-L221)
+  * [`MAD/Source/rptq/RptqDocument+Extras.m:366-437`](../../../MAD/Source/rptq/RptqDocument+Extras.m#L366-L437) (`-storeDatabaseConnectionDefination:forManagedObjectContext:`)
+  * [`MADDesigner/Source/MADOperationGetCredentials.m:86-88`](../../../MADDesigner/Source/MADOperationGetCredentials.m#L86-L88)
 * **What happens:**
   * `MADMacConnectionWindowController.m:369` saves credentials under `conn.identifier` (which is the static driver string `@"MySQL"`, `@"TDS"`, or `@"PostgreSQL"`, colliding across all servers of the same type).
   * `MADMacDocument.m:219` tries to save `passwordOverride` under `credRow.key`, which is `nil` because `-storeDatabaseConnectionDefination:forManagedObjectContext:` never sets `credentals.key`.
@@ -45,8 +45,8 @@ An audit of `MADSqlite3`, `MAD`, `Mac/`, and `MADDesigner/` uncovered five concr
 
 ### Bug 4 (CRITICAL): `MADDatabaseSqlite3` Opens Missing Source Databases with `SQLITE_OPEN_CREATE`
 * **Where:**
-  * [`MADSqlite3/Source/MADDatabaseSqlite3.m:234-274,292-300`](../../MADSqlite3/Source/MADDatabaseSqlite3.m#L234-L300)
-  * [`MADSqlite3/Source/MADDatabaseConnectionSqlite3.m:63-91`](../../MADSqlite3/Source/MADDatabaseConnectionSqlite3.m#L63-L91)
+  * [`MADSqlite3/Source/MADDatabaseSqlite3.m:234-274,292-300`](../../../MADSqlite3/Source/MADDatabaseSqlite3.m#L234-L300)
+  * [`MADSqlite3/Source/MADDatabaseConnectionSqlite3.m:63-91`](../../../MADSqlite3/Source/MADDatabaseConnectionSqlite3.m#L63-L91)
 * **What happens:**
   1. When a SQLite `.mad` document is opened and its `.sqlite3` file is missing or moved, `MADDatabaseConnectionSqlite3 +newDatabaseConnection:` falls back to returning `dbUrl` pointing to a non-existent path in `Application Support`.
   2. When the user clicks **Refresh**, `MADDatabaseSqlite3 -connectWithConnection:credentals:connectionError:` (`:292-300`) calls `[self openDatabase]`, which calls `sqlite3_open_v2` with `SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE` (`:235`).
@@ -57,7 +57,7 @@ An audit of `MADSqlite3`, `MAD`, `Mac/`, and `MADDesigner/` uncovered five concr
   7. Furthermore, if the parent directory does not exist, `NSAssert(databaseOpen, ...)` at `MADDatabaseSqlite3.m:249` crashes in Debug builds instead of populating `connectionError` and returning `nil`.
 
 ### Bug 5: "New Report from Database Connection" UI (`MADMacConnectionWindowController`) & Lack of Reconnect UI
-* **Where:** [`Mac/Source/MADMacConnectionWindowController.m`](../../Mac/Source/MADMacConnectionWindowController.m)
+* **Where:** [`Mac/Source/MADMacConnectionWindowController.m`](../../../Mac/Source/MADMacConnectionWindowController.m)
 * **Problems:**
   1. **Layout & Visual Design:** Uses manual `NSMakeRect` coordinates in a static `540×420` window where **all controls for every database type are stacked on screen at the same time** (SQLite file path + Browse button, Host, Port, SQL Server Instance, Database Name, Username, Password), merely toggling `.enabled = YES/NO`. When SQLite is selected, 6 server text fields sit disabled below it; when PostgreSQL or MySQL is selected, the SQLite file row and SQL Server instance row sit disabled on screen.
   2. **Create-only:** It can only create a *new* document (`File -> New Document…`). There is no way to open Connection Settings for an *existing* `.mad` document to point it at a relocated `.sqlite3` file or update a database server's host, port, instance, database name, or credentials.
@@ -69,12 +69,12 @@ An audit of `MADSqlite3`, `MAD`, `Mac/`, and `MADDesigner/` uncovered five concr
 
 ### Part A: Safe SQLite Source Opening & Smart Path Resolution (`MADSqlite3` + `MAD`)
 1. **Never create a 0-byte file when connecting to a source SQLite database:**
-   * In [`MADSqlite3/Source/MADDatabaseSqlite3.m`](../../MADSqlite3/Source/MADDatabaseSqlite3.m#L234-L300), `-connectWithConnection:credentals:connectionError:` must verify that the target SQLite file at `self.databaseConnection.databaseUrl.path` exists and is non-empty (file size `> 0`) before opening, and open without creating a blank file if missing.
+   * In [`MADSqlite3/Source/MADDatabaseSqlite3.m`](../../../MADSqlite3/Source/MADDatabaseSqlite3.m#L234-L300), `-connectWithConnection:credentals:connectionError:` must verify that the target SQLite file at `self.databaseConnection.databaseUrl.path` exists and is non-empty (file size `> 0`) before opening, and open without creating a blank file if missing.
    * If a 0-byte file exists at that path (left over from the old `SQLITE_OPEN_CREATE` bug), remove the 0-byte file and treat it as missing.
    * When the file is missing or cannot be opened, do **not** trip `NSAssert` in `-connectWithConnection:credentals:connectionError:`; populate `*error` with a clear, structured `NSError` (e.g., domain `MADDatabaseSqlite3ErrorDomain` / `NSStringFromClass([self class])`, distinct code for missing file, with a clear `NSLocalizedDescriptionKey` naming the missing file and `NSLocalizedFailureReasonErrorKey` naming the path) and return `nil`.
    * *(Note: Make sure internal cache databases in `MADDataTableFast` / `MADArrayCaching` that legitimately create new cache files still work as before.)*
 2. **Smart SQLite Path Resolution:**
-   * In [`MADSqlite3/Source/MADDatabaseConnectionSqlite3.m`](../../MADSqlite3/Source/MADDatabaseConnectionSqlite3.m#L63-L91) (and in `MADOperationRefreshInitialize` / `MADHeadlessDocument` / `MADocument` where `document.fileURL` is known):
+   * In [`MADSqlite3/Source/MADDatabaseConnectionSqlite3.m`](../../../MADSqlite3/Source/MADDatabaseConnectionSqlite3.m#L63-L91) (and in `MADOperationRefreshInitialize` / `MADHeadlessDocument` / `MADocument` where `document.fileURL` is known):
    * Resolve a SQLite connection's file URL by checking these locations in order for an **existing, non-empty (`size > 0`)** file:
      1. Exact path in `credentals.host` or `credentals.database` (if absolute and non-empty).
      2. **Sibling file in the same directory as the `.mad` document** (`[document.fileURL.URLByDeletingLastPathComponent URLByAppendingPathComponent:credentals.database.lastPathComponent]`).
@@ -84,7 +84,7 @@ An audit of `MADSqlite3`, `MAD`, `Mac/`, and `MADDesigner/` uncovered five concr
 
 ### Part B: Fix Server Credentials & Error Propagation on Refresh (`MADMacDocument`)
 1. **Supply Credentials to `MADOperationRefresh`:**
-   * In [`Mac/Source/MADMacDocument.m:203-257`](../../Mac/Source/MADMacDocument.m#L203-L257) (`-refreshDataWithPassword:completion:`), ensure `doc.database` is initialized from `RptqDatabaseCredentals` if `nil`, and if `[doc.database.databaseConnection requiresCredentials]` is `YES`:
+   * In [`Mac/Source/MADMacDocument.m:203-257`](../../../Mac/Source/MADMacDocument.m#L203-L257) (`-refreshDataWithPassword:completion:`), ensure `doc.database` is initialized from `RptqDatabaseCredentals` if `nil`, and if `[doc.database.databaseConnection requiresCredentials]` is `YES`:
      * Look up saved username/password from `MADKeyChain` using a consistent key derived from `doc.database.databaseConnection.connectionString` (with fallback to `credRow.key` or `conn.identifier` so previously saved credentials still resolve).
      * If `passwordOverride` (or a credential override) is provided, use it and optionally save it to `MADKeyChain`.
      * Attach a `MADOperation <MADOperationHoldsCredentialsProtocol>` dependency (like `MADCLICredentialsOperation` in `CLI/Source/MADCLIDocument.m:46-55`) to `refreshOp` when credentials are available.
@@ -92,7 +92,7 @@ An audit of `MADSqlite3`, `MAD`, `Mac/`, and `MADDesigner/` uncovered five concr
    * In `refreshOp.completionBlock` (`MADMacDocument.m:235-252`), extract `refreshOp.errors.firstObject` and pass that real `NSError *` to `completion(ok, err)` instead of overwriting it with the generic string.
 
 ### Part C: Interactive Control Flow When Data Source Is Missing, Unreachable, or Needs Credentials (`MADMacViewerViewController` & `MADDesigner` iOS)
-When a user clicks **Refresh** (or **Export** / **Print** when unrefreshed) in [`Mac/Source/MADMacViewerViewController.m`](../../Mac/Source/MADMacViewerViewController.m#L411-L435) and refresh fails, provide a clear, native recovery workflow instead of leaving them at a dead end:
+When a user clicks **Refresh** (or **Export** / **Print** when unrefreshed) in [`Mac/Source/MADMacViewerViewController.m`](../../../Mac/Source/MADMacViewerViewController.m#L411-L435) and refresh fails, provide a clear, native recovery workflow instead of leaving them at a dead end:
 1. **Case 1 — SQLite Database File Not Found (`MADDatabaseTypeSqlite3`):**
    * Present a document-modal sheet (`NSAlert` or `NSOpenPanel`):
      * **Title:** `Database File “<filename>” Could Not Be Found`
@@ -108,13 +108,13 @@ When a user clicks **Refresh** (or **Export** / **Print** when unrefreshed) in [
      * **`Retry`** — retries the refresh.
      * **`Cancel`** — dismisses the alert and keeps the error summary visible in the bottom status bar.
 4. **Menu Bar & Toolbar Access at Any Time:**
-   * Add a **`Database Connection…`** menu item under the `File` menu in [`Mac/Source/MADMacAppDelegate.m`](../../Mac/Source/MADMacAppDelegate.m#L80-L95) (and/or a button in the `MAD Query` workspace toolbar) that opens the Connection Settings sheet for the active `MADMacDocument` at any time.
+   * Add a **`Database Connection…`** menu item under the `File` menu in [`Mac/Source/MADMacAppDelegate.m`](../../../Mac/Source/MADMacAppDelegate.m#L80-L95) (and/or a button in the `MAD Query` workspace toolbar) that opens the Connection Settings sheet for the active `MADMacDocument` at any time.
 5. **iOS Audit (`MADDesigner`):**
-   * Check [`MADDesigner/Source/MADViewerController.m:747-776`](../../MADDesigner/Source/MADViewerController.m#L747-L776):
+   * Check [`MADDesigner/Source/MADViewerController.m:747-776`](../../../MADDesigner/Source/MADViewerController.m#L747-L776):
      * Ensure the error alert displays both `error.localizedDescription` and `error.localizedFailureReason` (when non-empty and distinct) so SQLite missing-file errors and SQL Server / MySQL / PostgreSQL connection errors show the specific reason rather than just `"Connect Failed"` or `"Error"`.
 
 ### Part D: Overhaul `MADMacConnectionWindowController` ("New Report from Database Connection" & "Edit Connection Settings")
-Redesign [`Mac/Source/MADMacConnectionWindowController.m`](../../Mac/Source/MADMacConnectionWindowController.m) so it looks and feels like a polished, modern native macOS dialog and supports both creating a new document and editing an existing document's connection:
+Redesign [`Mac/Source/MADMacConnectionWindowController.m`](../../../Mac/Source/MADMacConnectionWindowController.m) so it looks and feels like a polished, modern native macOS dialog and supports both creating a new document and editing an existing document's connection:
 1. **Dynamic, Driver-Specific Form Layout (Hide Irrelevant Controls!):**
    * Do **not** show SQLite controls when a server driver is selected, do **not** show server controls when SQLite is selected, and do **not** show "Server Instance" unless Microsoft SQL Server is selected.
    * Dynamically swap or collapse the form rows (and smoothly resize the window/sheet height to fit) based on the selected driver:
@@ -143,17 +143,17 @@ Redesign [`Mac/Source/MADMacConnectionWindowController.m`](../../Mac/Source/MADM
 
 | Component | File Path | Notes |
 |---|---|---|
-| SQLite URL Resolution | [`MADSqlite3/Source/MADDatabaseConnectionSqlite3.m`](../../MADSqlite3/Source/MADDatabaseConnectionSqlite3.m#L63-L91) | `+newDatabaseConnection:` path resolution order. |
-| SQLite Open & Error Handling | [`MADSqlite3/Source/MADDatabaseSqlite3.m`](../../MADSqlite3/Source/MADDatabaseSqlite3.m#L234-L300) | Fix `SQLITE_OPEN_CREATE` on missing source DB (`:235`), remove `NSAssert` on open failure (`:249`), and populate `connectionError` in `-connectWithConnection:credentals:connectionError:` (`:292-300`). |
-| Shared Refresh Operation | [`MAD/Source/MADOperationRefresh.m`](../../MAD/Source/MADOperationRefresh.m#L60-L173) | Reads `MADOperationHoldsCredentialsProtocol` from `self.dependencies` (`:79-102`) and calls `connectWithConnection:credentals:connectionError:` (`:106-114`). |
-| Shared Refresh Initializer | [`MAD/Source/MADOperationRefreshInitialize.m`](../../MAD/Source/MADOperationRefreshInitialize.m#L72-L129) | Lazy `document.database` initialization from `RptqDatabaseCredentals` (`:100-104`). |
-| Stored Connection Model | [`MAD/Source/rptq/RptqDocument+Extras.m`](../../MAD/Source/rptq/RptqDocument+Extras.m#L366-L437) | `-storeDatabaseConnectionDefination:forManagedObjectContext:`. |
-| macOS Document & Refresh | [`Mac/Source/MADMacDocument.h`](../../Mac/Source/MADMacDocument.h), [`Mac/Source/MADMacDocument.m`](../../Mac/Source/MADMacDocument.m#L203-L257) | Add credential operation dependency, unify Keychain lookup, propagate `refreshOp.errors.firstObject`, and add method to update connection settings. |
-| macOS Viewer UI | [`Mac/Source/MADMacViewerViewController.m`](../../Mac/Source/MADMacViewerViewController.m#L411-L474) | Add interactive error recovery flow in `-refreshReportAction:` (Locate SQLite file / Enter Credentials / Edit Connection Settings). |
-| macOS Connection Controller | [`Mac/Source/MADMacConnectionWindowController.h`](../../Mac/Source/MADMacConnectionWindowController.h), [`Mac/Source/MADMacConnectionWindowController.m`](../../Mac/Source/MADMacConnectionWindowController.m) | Overhaul UI to dynamically show only driver-relevant fields, fix Keychain key, stop copying SQLite files to App Support, and add Edit/Reconnect mode. |
-| macOS App Delegate | [`Mac/Source/MADMacAppDelegate.m`](../../Mac/Source/MADMacAppDelegate.m#L80-L95) | Add `Database Connection…` menu item under `File`. |
-| macOS Smoke Test | [`Mac/Tests/MADMacSmokeTest.m`](../../Mac/Tests/MADMacSmokeTest.m#L68-L142) | Add tests for: (1) missing SQLite file returns error and does NOT create 0-byte file; (2) sibling `.sqlite3` resolution next to `.mad` file; (3) server credential dependency in `MADMacDocument`; (4) connection controller dynamic field visibility and edit mode. |
-| iOS Viewer Alert | [`MADDesigner/Source/MADViewerController.m`](../../MADDesigner/Source/MADViewerController.m#L747-L776) | Include `error.localizedFailureReason` in the error alert message when present. |
+| SQLite URL Resolution | [`MADSqlite3/Source/MADDatabaseConnectionSqlite3.m`](../../../MADSqlite3/Source/MADDatabaseConnectionSqlite3.m#L63-L91) | `+newDatabaseConnection:` path resolution order. |
+| SQLite Open & Error Handling | [`MADSqlite3/Source/MADDatabaseSqlite3.m`](../../../MADSqlite3/Source/MADDatabaseSqlite3.m#L234-L300) | Fix `SQLITE_OPEN_CREATE` on missing source DB (`:235`), remove `NSAssert` on open failure (`:249`), and populate `connectionError` in `-connectWithConnection:credentals:connectionError:` (`:292-300`). |
+| Shared Refresh Operation | [`MAD/Source/MADOperationRefresh.m`](../../../MAD/Source/MADOperationRefresh.m#L60-L173) | Reads `MADOperationHoldsCredentialsProtocol` from `self.dependencies` (`:79-102`) and calls `connectWithConnection:credentals:connectionError:` (`:106-114`). |
+| Shared Refresh Initializer | [`MAD/Source/MADOperationRefreshInitialize.m`](../../../MAD/Source/MADOperationRefreshInitialize.m#L72-L129) | Lazy `document.database` initialization from `RptqDatabaseCredentals` (`:100-104`). |
+| Stored Connection Model | [`MAD/Source/rptq/RptqDocument+Extras.m`](../../../MAD/Source/rptq/RptqDocument+Extras.m#L366-L437) | `-storeDatabaseConnectionDefination:forManagedObjectContext:`. |
+| macOS Document & Refresh | [`Mac/Source/MADMacDocument.h`](../../../Mac/Source/MADMacDocument.h), [`Mac/Source/MADMacDocument.m`](../../../Mac/Source/MADMacDocument.m#L203-L257) | Add credential operation dependency, unify Keychain lookup, propagate `refreshOp.errors.firstObject`, and add method to update connection settings. |
+| macOS Viewer UI | [`Mac/Source/MADMacViewerViewController.m`](../../../Mac/Source/MADMacViewerViewController.m#L411-L474) | Add interactive error recovery flow in `-refreshReportAction:` (Locate SQLite file / Enter Credentials / Edit Connection Settings). |
+| macOS Connection Controller | [`Mac/Source/MADMacConnectionWindowController.h`](../../../Mac/Source/MADMacConnectionWindowController.h), [`Mac/Source/MADMacConnectionWindowController.m`](../../../Mac/Source/MADMacConnectionWindowController.m) | Overhaul UI to dynamically show only driver-relevant fields, fix Keychain key, stop copying SQLite files to App Support, and add Edit/Reconnect mode. |
+| macOS App Delegate | [`Mac/Source/MADMacAppDelegate.m`](../../../Mac/Source/MADMacAppDelegate.m#L80-L95) | Add `Database Connection…` menu item under `File`. |
+| macOS Smoke Test | [`Mac/Tests/MADMacSmokeTest.m`](../../../Mac/Tests/MADMacSmokeTest.m#L68-L142) | Add tests for: (1) missing SQLite file returns error and does NOT create 0-byte file; (2) sibling `.sqlite3` resolution next to `.mad` file; (3) server credential dependency in `MADMacDocument`; (4) connection controller dynamic field visibility and edit mode. |
+| iOS Viewer Alert | [`MADDesigner/Source/MADViewerController.m`](../../../MADDesigner/Source/MADViewerController.m#L747-L776) | Include `error.localizedFailureReason` in the error alert message when present. |
 
 ---
 

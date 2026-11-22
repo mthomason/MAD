@@ -145,7 +145,7 @@ and MAD are all green on the simulator, and the `MAD Designer` workspace builds.
 ## The drivers are registered, not imported
 
 The constructor used to import the drivers, which is the `MAD` ↔ drivers cycle
-(`docs/project/ROADMAP.md` §5.1). `MADDatabaseDriverRegistry` (`MADAPI`) is the seam now: each
+(`docs/project/registers/ROADMAP.md` §5.1). `MADDatabaseDriverRegistry` (`MADAPI`) is the seam now: each
 driver's connection class conforms to `MADDatabaseDriver` and registers itself in
 `+load`, and `MADDatabase+Constructor` / `MADDatabaseConnection+Constructor` look a
 driver up by `MADDatabaseType` instead of naming one. Which drivers a process has
@@ -287,7 +287,7 @@ locale and its fraction digits from the document's numeric format (the fallback 
 the yen sign normalized (GNUstep spells it fullwidth U+FFE5).  A 60-case comparison --
 six locales times ten values, negatives and 1e12 included -- is now byte-identical
 between the two platforms; the only difference it found was that yen codepoint.
-`docs/project/BUGS.md` has the entry (archived: it is fixed), and the render-side exports below are
+`docs/project/registers/BUGS.md` has the entry (archived: it is fixed), and the render-side exports below are
 pinned to the Mac's bytes.
 
 ## The need count, and why it is 6
@@ -316,7 +316,7 @@ default scale; skips are counted separately and are not needs.
 
 `MADMySQLLiveTests`, `MADTdsClientLiveTests` and `MADPostgresLiveTests` talk to
 real servers and skip (never fail) when none is reachable — the same contract the
-Xcode schemes have. The servers are the three containers `docs/project/DEVELOPER.md`
+Xcode schemes have. The servers are the three containers `docs/project/build/DEVELOPER.md`
 documents; start them first:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on :13306
@@ -348,7 +348,7 @@ GNUstep Base is LGPL-2.1-or-later; gnustep-make is GPL-3.0-or-later, and its
 exist only inside this build image. The C libraries carry their own licences
 (docs/project/THIRD_PARTY_LICENSES.md); the mysqlclient GPL problem is settled — D1 went
 to MariaDB Connector/C (LGPL-2.0-or-later, elected LGPL-3.0) and this image
-builds it (`docs/project/TASKS.md` §10). The runtime image is published as
+builds it (`docs/project/registers/TASKS.md` §10). The runtime image is published as
 `ghcr.io/mthomason/mad`, so the LGPL components it distributes need relink
 offers: the written offer in `ThirdParty/Licenses/README.md` now names the
 image, and the register entry is `THIRD_PARTY_LICENSES.md` §9. gnustep-make
@@ -439,7 +439,7 @@ cache's `c<hash>` column names are hash-derived, so they differed per platform t
 **Settled 2026-10-16 (the JSON export shape decision, `docs/project/MAD_LINUX.md` §10.1):** the
 order is now defined as the column alias, sorted with `-compare:`, in both SQL
 builders, so the generated SQL, the row cache and every export agree on both
-platforms (docs/project/BUGS.md, the SELECT-list entry; the order tests in
+platforms (docs/project/registers/BUGS.md, the SELECT-list entry; the order tests in
 `Linux/Tests/MADQuerySelectExpressionTests.m`). A cache refreshed before the change
 orders its columns differently from one refreshed after it — the same data, a new
 order — so refresh once before comparing caches across that date.
@@ -466,7 +466,7 @@ document's.
 walk; an ordinary write keeps the members' real metadata, so it differs between runs
 and platforms by design.
 
-Two things had to be fixed for the writer to run here, both recorded in `docs/project/BUGS.md`
+Two things had to be fixed for the writer to run here, both recorded in `docs/project/registers/BUGS.md`
 (the `.mad` byte-identity entry):
 
 * `-write_archive:` walked each enumerated URL *up to* the archived directory, and
@@ -512,7 +512,7 @@ the London fixture:
 
 The render-side formats are byte-identical across the platforms, like the data ones:
 every frame, font, font size, trait, alignment, text run and page box, and the money
-(the finding that made them differ, and its fix, are above and in `docs/project/BUGS.md`).
+(the finding that made them differ, and its fix, are above and in `docs/project/registers/BUGS.md`).
 `Linux/Tests/MADReportExporterTests.m` pins the three checksums.
 
 ## The runtime image — the CLI deliverable (Phase F)
@@ -591,7 +591,7 @@ clang, cmake, git or build tree). 41 checks; it exits non-zero on any failure.
 	MADVERIFY 41 passed, 0 failed
 
 `--live` adds the MySQL, TDS and PostgreSQL refreshes (50, 20 and 25 rows); start
-the three test containers first (`docs/project/DEVELOPER.md` has their scripts
+the three test containers first (`docs/project/build/DEVELOPER.md` has their scripts
 and logins):
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up

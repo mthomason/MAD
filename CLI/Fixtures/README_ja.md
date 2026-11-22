@@ -50,7 +50,7 @@
 
 3つのライブフィクスチャはいずれもサーバー名を`mac`としています。これは作成元Macのホスト名であり、ローカル環境およびDockerコンテナ内の双方からLANアドレスへ名前解決されます。これにより、Mac上のMySQL（下記のフィクスチャコンテナによってループバック*および*LANに公開）と、SQL ServerおよびPostgreSQLコンテナ（全インターフェースに公開）に対して単一のホスト名でアクセスでき、同じドキュメントをMacからもLinuxイメージからも更新できます。`host.docker.internal`はコンテナ内でしか機能せず、`127.0.0.1`はMac上でしか機能しないためです。
 
-3つのライブフィクスチャはすべて、`docs/project/DEVELOPER.md`に文書化されている標準テストコンテナに対して作成されました。これらのスクリプトは固定イメージとチェックサム検証済みデータセットからコンテナを構築します：
+3つのライブフィクスチャはすべて、`docs/project/build/DEVELOPER.md`に文書化されている標準テストコンテナに対して作成されました。これらのスクリプトは固定イメージとチェックサム検証済みデータセットからコンテナを構築します：
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on 13306
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on 1433

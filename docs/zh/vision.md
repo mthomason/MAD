@@ -8,9 +8,9 @@ lang: zh-CN
 更新于 2026-10-29。本页说明 MAD 设计上要发展的方向。这里描述的组合同构或迁移机制尚未构建；奠定数据对象模型基础的设计是
 [`docs/project/MAD_DATA_OBJECT.md`](https://github.com/mthomason/MAD/blob/master/docs/zh/project/MAD_DATA_OBJECT.md)，
 工作记录是
-[`docs/project/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/zh/project/MAD_FUTURE.md)，
+[`docs/project/product/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/zh/project/MAD_FUTURE.md)，
 产品愿望清单是
-[`docs/project/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/zh/project/TODO.md)。
+[`docs/project/registers/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/zh/project/TODO.md)。
 
 ## MAD 的现状
 

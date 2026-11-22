@@ -59,5 +59,5 @@ especificação e no registro de bugs, e alterá-los é uma decisão de produto:
   (`docs/05-companion-files.md` §5.3), de modo que editar um documento mantendo o mesmo
   nome pode exibir páginas antigas até que os arquivos de cache sejam removidos.
 * As credenciais de banco de dados das suítes de teste em
-  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) são credenciais descartáveis para
+  [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md) são credenciais descartáveis para
   contêineres Docker locais, não segredos de produção.

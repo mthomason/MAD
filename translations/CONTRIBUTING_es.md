@@ -19,7 +19,7 @@ recorre el primero; es la primera contribución prevista.
   C, compila los once frameworks sin interfaz gráfica y ejecuta sus suites.
 * No se necesita ningún servidor de base de datos para contribuir: las suites en vivo de MySQL, SQL Server y
   PostgreSQL se omiten cuando no hay ningún servidor disponible, y
-  [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) documenta los
+  [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md) documenta los
   contenedores Docker que los proporcionan.
 
 ## Primeros pasos
@@ -39,7 +39,7 @@ recorre el primero; es la primera contribución prevista.
    ./Linux/build.sh
    ```
 
-   [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md) contiene la matriz completa de
+   [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md) contiene la matriz completa de
    comandos, la ruta compartida de DerivedData que esperan los
    frameworks y la configuración de las bases de datos de prueba.
 3. Elija algo. Un nuevo driver, un elemento o un issue etiquetado
@@ -73,9 +73,9 @@ que no se corrige ni se registra es un cambio que falla.
   declaración: una advertencia de código sin usar no marcada significa que el código está muerto.
 * Los archivos nuevos llevan la cabecera de una línea `Copyright © 2012-2026 Michael
   Thomason. SPDX-License-Identifier: MIT` (`//` para código fuente, `#` para scripts).
-* [`docs/project/BUGS.md`](../docs/project/BUGS.md) registra los defectos abiertos con
+* [`docs/project/registers/BUGS.md`](../docs/project/registers/BUGS.md) registra los defectos abiertos con
   las pruebas que los fijan; cuando corrija uno, la entrada pasa a
-  [`docs/project/BUGS_FIXED.md`](../docs/project/BUGS_FIXED.md): una corrección que
+  [`docs/project/registers/BUGS_FIXED.md`](../docs/project/registers/BUGS_FIXED.md): una corrección que
   no se registra no ocurrió.
 
 ## Developer Certificate of Origin

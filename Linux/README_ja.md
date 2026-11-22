@@ -82,7 +82,7 @@ Linuxビルドは、フレームワークのソースコードを汚すことな
 
 ## ドライバはインポートではなくレジストリ登録される
 
-以前はコンストラクタが各ドライバを直接インポートしており、これが`MAD` ↔ ドライバ間の循環依存（`docs/project/ROADMAP.md` §5.1）を生んでいました。現在は`MADDatabaseDriverRegistry`（`MADAPI`）がその接点（seam）となっています。各ドライバのコネクションクラスは`MADDatabaseDriver`に準拠して`+load`内で自身を登録し、`MADDatabase+Constructor` / `MADDatabaseConnection+Constructor`は具象クラス名ではなく`MADDatabaseType`でドライバを検索します。したがって、プロセスがどのドライバを利用できるかは、何を*リンクしたか*によって決まります。
+以前はコンストラクタが各ドライバを直接インポートしており、これが`MAD` ↔ ドライバ間の循環依存（`docs/project/registers/ROADMAP.md` §5.1）を生んでいました。現在は`MADDatabaseDriverRegistry`（`MADAPI`）がその接点（seam）となっています。各ドライバのコネクションクラスは`MADDatabaseDriver`に準拠して`+load`内で自身を登録し、`MADDatabase+Constructor` / `MADDatabaseConnection+Constructor`は具象クラス名ではなく`MADDatabaseType`でドライバを検索します。したがって、プロセスがどのドライバを利用できるかは、何を*リンクしたか*によって決まります。
 
 Appleプラットフォームでは、ホスト（アプリやCLI）がMADMySQL、MADTdsClient、MADPostgresの各ドライバフレームワークをリンクし、`MAD.framework`自体はそれらをリンクしません（そのため`MAD`のテストバンドルもそれらを個別にリンクします）。Linuxでは、ドライバの静的アーカイブは`mad`ターゲットから**whole-archive**指定（すべての利用側に伝播する`$<LINK_LIBRARY:WHOLE_ARCHIVE,…>`）でリンクされます。静的アーカイブはロードではなくシンボル検索されるため、どこからも直接シンボル参照されないメンバ（ドライバの`+load`やカテゴリ）は、こうしない限り脱落してしまいます。これは実際、`mad refresh`でMySQL接続を実行した際に修正前にabortを引き起こした原因そのものでした（次節参照）。レジストリの動作は`MADDatabaseDriverDispatchTests`で固定されており、`Linux/Tests/MADHeadlessDocumentTests.m`がチェーン全体を駆動します。
 
@@ -119,7 +119,7 @@ Appleプラットフォームでは、ホスト（アプリやCLI）がMADMySQL�
 
 ## ライブデータベーステストスイートの実行
 
-`MADMySQLLiveTests`、`MADTdsClientLiveTests`、および`MADPostgresLiveTests`は実際のサーバーと通信し、到達できない場合はスキップされます。サーバーは`docs/project/DEVELOPER.md`に記載されている3つのコンテナです。先にそれらを起動してください：
+`MADMySQLLiveTests`、`MADTdsClientLiveTests`、および`MADPostgresLiveTests`は実際のサーバーと通信し、到達できない場合はスキップされます。サーバーは`docs/project/build/DEVELOPER.md`に記載されている3つのコンテナです。先にそれらを起動してください：
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on :13306
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on :1433
@@ -137,7 +137,7 @@ Appleプラットフォームでは、ホスト（アプリやCLI）がMADMySQL�
 
 ## ライセンス
 
-ビルドイメージ内のツール群はすべてビルドツールであり、iOS/macOSアプリには一切リンクされません。libobjc2はMIT、libdispatchはSwiftランタイム例外付きApache-2.0、GNUstep BaseはLGPL-2.1-or-later、gnustep-makeはGPL-3.0-or-laterであり、その`Testing.h`（GPL-3.0-or-later）はLinuxテストバイナリにコンパイルされますが、それらはビルドイメージ内にのみ存在します。各Cライブラリにはそれぞれのライセンスが適用されます（`docs/project/THIRD_PARTY_LICENSES.md`）。mysqlclientのGPL問題はMariaDB Connector/C（LGPL-2.0-or-later、LGPL-3.0を選択）への置き換えによって解決済みです（`docs/project/TASKS.md` §10）。ランタイムイメージは`ghcr.io/mthomason/mad`として公開されているため、そこに含まれるLGPLコンポーネントには再リンク提供の義務が生じます。`ThirdParty/Licenses/README.md`の書面による提供申し出（written offer）にはこのイメージが明記されており、台帳エントリは`THIRD_PARTY_LICENSES.md` §9に記載されています。なお、gnustep-makeはビルドツールでありランタイムイメージには含まれません。
+ビルドイメージ内のツール群はすべてビルドツールであり、iOS/macOSアプリには一切リンクされません。libobjc2はMIT、libdispatchはSwiftランタイム例外付きApache-2.0、GNUstep BaseはLGPL-2.1-or-later、gnustep-makeはGPL-3.0-or-laterであり、その`Testing.h`（GPL-3.0-or-later）はLinuxテストバイナリにコンパイルされますが、それらはビルドイメージ内にのみ存在します。各Cライブラリにはそれぞれのライセンスが適用されます（`docs/project/THIRD_PARTY_LICENSES.md`）。mysqlclientのGPL問題はMariaDB Connector/C（LGPL-2.0-or-later、LGPL-3.0を選択）への置き換えによって解決済みです（`docs/project/registers/TASKS.md` §10）。ランタイムイメージは`ghcr.io/mthomason/mad`として公開されているため、そこに含まれるLGPLコンポーネントには再リンク提供の義務が生じます。`ThirdParty/Licenses/README.md`の書面による提供申し出（written offer）にはこのイメージが明記されており、台帳エントリは`THIRD_PARTY_LICENSES.md` §9に記載されています。なお、gnustep-makeはビルドツールでありランタイムイメージには含まれません。
 
 ## CLIの実行 — フェーズD
 
@@ -189,7 +189,7 @@ Londonフィクスチャ（`CLI/Fixtures/London.portable.mad`）での実測結�
 
 `--reproducible`はuid/gid 0、固定時刻`2001-01-12T00:00:00Z`、およびソート済みメンバ走査を適用します。通常の書き込みではメンバの実際のファイルシステムメタデータが保持されるため、設計上、実行ごと・プラットフォームごとにバイト列は異なります。
 
-Linux上でライターを動作させるにあたり修正した2つの不具合（いずれも`docs/project/BUGS.md`の`.mad`バイト同一性エントリに記録済み）：
+Linux上でライターを動作させるにあたり修正した2つの不具合（いずれも`docs/project/registers/BUGS.md`の`.mad`バイト同一性エントリに記録済み）：
 
 * `-write_archive:`が列挙された各URLからアーカイブ対象ディレクトリまでを辿る際、GNUstepの`-enumeratorAtURL:`が親ディレクトリ部分を除去していたためループが到達しなかった問題。現在はCLIのメンバ一覧と同様に`-subpathsAtPath:`を使用しています。
 * `backup_file`がパスバッファをそのまま`dirname(3)`/`basename(3)`に渡しており、glibc実装がバッファを書き換えるため、呼び出し元のアーカイブパスが最後のスラッシュ位置で切り詰められ、生成されたドキュメントが自身のディレクトリ上に上書きされようとして失敗（`Open (…) failed - Is a directory`）していた問題。Apple実装は入力バッファを変更しないためLinuxでのみ顕在化しました。
@@ -249,7 +249,7 @@ LondonフィクスチャにおけるMacとの比較実測値：
 	...
 	MADVERIFY 41 passed, 0 failed
 
-`--live`を付けるとMySQL、TDS、PostgreSQLの更新チェック（50行、20行、25行）が追加されます（先に`docs/project/DEVELOPER.md`の3つのテストコンテナを起動してください）：
+`--live`を付けるとMySQL、TDS、PostgreSQLの更新チェック（50行、20行、25行）が追加されます（先に`docs/project/build/DEVELOPER.md`の3つのテストコンテナを起動してください）：
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up

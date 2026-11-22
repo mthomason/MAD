@@ -9,7 +9,7 @@ lang: pt-BR
    grafo de objetos modesto. Um esquema SQLite próprio dentro do mesmo arquivo elimina
    o risco H3, remove a última dependência da Apple do formato e é um pré-requisito para
    Windows independentemente do que a CLI faça. Esta foi uma decisão de projeto abordada na
-   migração do Core Data (`docs/project/MAD_STORE_MIGRATION.md`).
+   migração do Core Data (`docs/project/design/MAD_STORE_MIGRATION.md`).
 2. **A miniatura (thumbnail) deve ficar dentro do documento?** Ela é regenerável, assim como o cache
    de linhas, e é a única razão para a existência de `AdditionalContent/`. Removê-la tornaria
    todos os membros de um `.mad` estritamente essenciais (authoritative).

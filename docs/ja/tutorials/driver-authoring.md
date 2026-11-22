@@ -14,7 +14,7 @@ lang: ja-JP
 1. データソースのスキーマを参照し、それに対してクエリを実行する方法を知っている`MADDatabase`のサブクラス（`MADAPI/Source/MADDatabase.h`——ヘッダーには明快に`"This class is built for subclassing"`と記されています）。
 2. コネクションクラス——`MADDatabaseDriver`プロトコル（`MADAPI/Source/MADDatabaseDriverRegistry.h`）に準拠し、`+load`内で自身を登録する`MADDatabaseConnection`のサブクラス。
 
-それ以外のすべて——クエリデザイナーのグラフ、SQL生成、行キャッシュ、レンダーパイプライン、7種類のエクスポートフォーマット、CLI、Dockerイメージ——は、ドライバがプラグインとして接続する共通機構です。ドライバが満たすべき契約は*「スキーマと行をテーブル形式で返すこと」*（`docs/project/MAD_STRATEGY.md` §3.7）であり、だからこそSQLデータベース、Webサービス、ファイルなど、テーブルとして表現できるあらゆるもののフロントエンドとしてドライバを実装できます。
+それ以外のすべて——クエリデザイナーのグラフ、SQL生成、行キャッシュ、レンダーパイプライン、7種類のエクスポートフォーマット、CLI、Dockerイメージ——は、ドライバがプラグインとして接続する共通機構です。ドライバが満たすべき契約は*「スキーマと行をテーブル形式で返すこと」*（`docs/project/product/MAD_STRATEGY.md` §3.7）であり、だからこそSQLデータベース、Webサービス、ファイルなど、テーブルとして表現できるあらゆるもののフロントエンドとしてドライバを実装できます。
 
 参考にできるサーバー型ドライバの実装例は、`MADPostgres`（6ファイル、`MADPostgres/Source/`、`libpq`上のサブクラス`MADDatabasePostgres`）、`MADMySQL`（18ファイル、`MADMySQL/Source/`、サブクラス`MADDatabaseMySQL`）、および`MADTdsClient`（FreeTDS上のSQL Server）の3つです。4つ目の同梱ドライバはSqlite3（`MADSqlite3`）であり、ファイルベースのケース（`+newDatabaseConnectionWithURL:`）はそのコネクションクラスが参考になります。
 
@@ -107,7 +107,7 @@ lang: ja-JP
 
 ## ステップ6 — 正直な注意点：非SQLドライバが現時点でできること・できないこと
 
-ここは現時点で未完成の部分であり、意図的に文書化されています（`docs/project/MAD_STRATEGY.md` §4.7）。**実行（execution）**レイヤーはドライバ主導の形になっており、`executeSQL:…intoResultTable:…`と出力先の`MADDataTableWriting`は「テーブルを返すあらゆるもの」という約束を忠実に守っています。しかし、**コンパイル（compilation）**レイヤーは共通化されており、`MADQueryFull`がクエリグラフをドライバごとの1つのSQLテキストにコンパイルします。つまり、ドライバが受け取るのはクエリグラフ（テーブル、フィールド、述語、グループ）ではなく**SQLテキスト**です。
+ここは現時点で未完成の部分であり、意図的に文書化されています（`docs/project/product/MAD_STRATEGY.md` §4.7）。**実行（execution）**レイヤーはドライバ主導の形になっており、`executeSQL:…intoResultTable:…`と出力先の`MADDataTableWriting`は「テーブルを返すあらゆるもの」という約束を忠実に守っています。しかし、**コンパイル（compilation）**レイヤーは共通化されており、`MADQueryFull`がクエリグラフをドライバごとの1つのSQLテキストにコンパイルします。つまり、ドライバが受け取るのはクエリグラフ（テーブル、フィールド、述語、グループ）ではなく**SQLテキスト**です。
 
 したがって、現時点でREST／Webサービス用ドライバを実装する場合：
 

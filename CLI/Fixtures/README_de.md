@@ -84,7 +84,7 @@ aus aktualisiert werden kann. `host.docker.internal` würde nur innerhalb eines
 Containers funktionieren; `127.0.0.1` nur auf dem Mac.
 
 Alle drei Live-Fixtures wurden gegen die kanonischen Testcontainer erstellt, die
-`docs/project/DEVELOPER.md` dokumentiert und deren Skripte sie aus fixierten Images
+`docs/project/build/DEVELOPER.md` dokumentiert und deren Skripte sie aus fixierten Images
 und prüfsummenverifizierten Datensätzen erzeugen:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on 13306

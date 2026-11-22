@@ -31,4 +31,4 @@ The framework is the app's barcode generator: the designer's element picker crea
     scheme. Run with
     `xcodebuild test -workspace Reports.xcworkspace -scheme MADBarcodes -destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci`.
     The headless half is `Linux/Tests/MADBarcodesTests.m` (the factory, the name table and `-renderedPNGData`), run by both `./Linux/build.sh` and `Windows/Engine/build.ps1`.
-*   **Tracking**: [`BUGS.md`](../docs/project/BUGS.md) -- the defect register; [`TASKS.md`](../docs/project/TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.
+*   **Tracking**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- the defect register; [`TASKS.md`](../docs/project/registers/TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.

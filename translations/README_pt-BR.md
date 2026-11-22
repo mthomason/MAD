@@ -77,7 +77,7 @@ A especificação completa — layout do contêiner, tabelas do store, esquemas 
 
 ## Para Onde o MAD Está Indo: Roadmap e Visão
 
-Como o MAD já separa o **grafo de consulta**, a **tabela de resultados SQLite materializada** e o **layout de apresentação**, a arquitetura viabiliza quatro grandes capacidades que estão sendo ativamente projetadas e enfileiradas (consulte [`docs/vision.md`](../docs/pt-br/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md) e [`docs/project/TODO.md`](../docs/project/TODO.md)):
+Como o MAD já separa o **grafo de consulta**, a **tabela de resultados SQLite materializada** e o **layout de apresentação**, a arquitetura viabiliza quatro grandes capacidades que estão sendo ativamente projetadas e enfileiradas (consulte [`docs/vision.md`](../docs/pt-br/vision.md), [`docs/project/MAD_DATA_OBJECT.md`](../docs/project/MAD_DATA_OBJECT.md) e [`docs/project/registers/TODO.md`](../docs/project/registers/TODO.md)):
 
 1. **Um relatório `.mad` como uma tabela de banco de dados ad hoc (Objetos de Dados Componíveis).**
    Em um banco de dados tradicional, você faz `SELECT` a partir de tabelas base como `employee` ou `sales_data`. Um relatório `.mad` faz join e filtra múltiplas tabelas, e sua saída (`.maddb` + `.mdcache`) já é uma tabela SQLite física com esquema tipado (`MADDataColumn`). Ao tornar a saída de um relatório endereçável como fonte de tabela dentro do designer de consultas, **um arquivo `.mad` torna-se uma tabela de banco de dados virtual/materializada**. Outros relatórios, consultas ou ferramentas podem fazer `SELECT` e `JOIN` contra um relatório `.mad` exatamente como fariam com qualquer tabela em um banco de dados.
@@ -112,7 +112,7 @@ As tags publicadas são `latest` e o SHA curto do commit, compiladas para `linux
 ./Linux/build.sh --verify                 # build the toolchain and run the checks (~20 min first time)
 ```
 
-Os documentos de exemplo atualizam seus dados contra o banco de dados de exemplo Sqlite3 incluído dentro da imagem; as fixtures de MySQL, SQL Server e PostgreSQL esperam os servidores de teste descritos em [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md).
+Os documentos de exemplo atualizam seus dados contra o banco de dados de exemplo Sqlite3 incluído dentro da imagem; as fixtures de MySQL, SQL Server e PostgreSQL esperam os servidores de teste descritos em [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md).
 
 ## Em CI
 
@@ -188,7 +188,7 @@ xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
 	-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
 ```
 
-(`MADMySQL`, `MADTdsClient` e `MADPostgres` também possuem suítes de testes live que se comunicam com um servidor de banco de dados real e são puladas quando o servidor não está acessível — consulte [`docs/project/DEVELOPER.md`](../docs/project/DEVELOPER.md).)
+(`MADMySQL`, `MADTdsClient` e `MADPostgres` também possuem suítes de testes live que se comunicam com um servidor de banco de dados real e são puladas quando o servidor não está acessível — consulte [`docs/project/build/DEVELOPER.md`](../docs/project/build/DEVELOPER.md).)
 
 ### Linux (Engine Headless e CLI)
 

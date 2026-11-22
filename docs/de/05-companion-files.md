@@ -135,4 +135,4 @@ bei denen eine zweite Plattform raten müsste:
    (`MADDataColumnNullSentinel`, `MADDataColumn.m:23`). Zu beachten sind die
    beiden dauerhaften Eigenheiten: `dataPercision` ist im Format falsch geschrieben,
    und der Sentinel `~MTNull~` ist ein dritter Null-Marker, verschieden von der
-   Familie `"<null>"` / `"(null)"` aus `docs/project/BUGS.md`, Track 1.5.
+   Familie `"<null>"` / `"(null)"` aus `docs/project/registers/BUGS.md`, Track 1.5.

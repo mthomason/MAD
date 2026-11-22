@@ -476,7 +476,7 @@ SELECT 列表的列顺序，它原先是集合顺序因而与 Apple 不同
 （同样的字段、同样的行；记在 `Linux/README.md`）。**2026-10-16 敲定**，随
 JSON 导出形态决策（下面的 §10.1）一起：顺序在两个 SQL 构建器中
 都定义为列别名，所以生成的 SQL、行缓存和每次导出在两个平台上
-一致（docs/project/BUGS.md，SELECT 列表条目；`Linux/Tests/MADQuerySelectExpressionTests.m` 中的
+一致（docs/project/registers/BUGS.md，SELECT 列表条目；`Linux/Tests/MADQuerySelectExpressionTests.m` 中的
 顺序测试）。
 
 **Phase E 状态（2026-10-16，前半）。** 导出接缝是真的，Foundation
@@ -620,7 +620,7 @@ Compressor Linux 驱动是 Phase F 唯一没做完的部分，而 CLI 并不需�
    值为 JSON 类型——而 `--format json-report` 是那份文档加上一个 `report`
    成员（渲染后的 section）。随之，SELECT 列表的顺序定义为
    列别名，已排序，所以生成的 SQL、行缓存和每次导出在两个平台上
-   一致（docs/project/BUGS.md，SELECT 列表条目——此前是集合顺序）。数据
+   一致（docs/project/registers/BUGS.md，SELECT 列表条目——此前是集合顺序）。数据
    那一半已建成（`MADReportExporterJSON`，两个平台）；report 成员等待
    渲染那一半。
 2. **渲染器分阶段**——先 HTML/SVG、最后 PDF，还是 macOS 侧 PDF 工作进程？

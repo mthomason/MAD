@@ -133,7 +133,7 @@ y MAD están todas en verde en el simulador, y el espacio de trabajo `MAD Design
 ## Los drivers se registran, no se importan
 
 El constructor solía importar los drivers, que es el ciclo `MAD` ↔ drivers
-(`docs/project/ROADMAP.md` §5.1). `MADDatabaseDriverRegistry` (`MADAPI`) es ahora la costura: la clase de conexión de cada
+(`docs/project/registers/ROADMAP.md` §5.1). `MADDatabaseDriverRegistry` (`MADAPI`) es ahora la costura: la clase de conexión de cada
 driver implementa `MADDatabaseDriver` y se registra en
 `+load`, y `MADDatabase+Constructor` / `MADDatabaseConnection+Constructor` buscan un
 driver por `MADDatabaseType` en lugar de nombrar uno. Por lo tanto, qué drivers tiene un proceso
@@ -274,7 +274,7 @@ configuración regional y sus dígitos fraccionarios del formato numérico del d
 el signo del yen normalizado (GNUstep lo escribe U+FFE5 de ancho completo). Una comparación de 60 casos,
 seis configuraciones regionales por diez valores, incluidos negativos y 1e12, es ahora idéntica byte a byte
 entre las dos plataformas; la única diferencia que encontró fue ese punto de código del yen.
-`docs/project/BUGS.md` tiene la entrada (archivada: está corregida), y las exportaciones del lado del renderizado de abajo están
+`docs/project/registers/BUGS.md` tiene la entrada (archivada: está corregida), y las exportaciones del lado del renderizado de abajo están
 fijadas a los bytes del Mac.
 
 ## El recuento de necesidades, y por qué son 6
@@ -304,7 +304,7 @@ escala predeterminada; las omisiones se cuentan por separado y no son necesidade
 `MADMySQLLiveTests`, `MADTdsClientLiveTests` y `MADPostgresLiveTests` se comunican con
 servidores reales y se omiten (nunca fallan) cuando no hay ninguno disponible: el mismo contrato que
 tienen los schemes de Xcode. Los servidores son los tres contenedores que
-`docs/project/DEVELOPER.md` documenta; inícielos primero:
+`docs/project/build/DEVELOPER.md` documenta; inícielos primero:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on :13306
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on :1433
@@ -334,7 +334,7 @@ GNUstep Base es LGPL-2.1-or-later; gnustep-make es GPL-3.0-or-later, y su
 existen solo dentro de esta imagen de compilación. Las bibliotecas C llevan sus propias licencias
 (docs/project/THIRD_PARTY_LICENSES.md); el problema GPL de mysqlclient está resuelto: la D1 fue
 a MariaDB Connector/C (LGPL-2.0-or-later, elegida LGPL-3.0) y esta imagen
-lo compila (`docs/project/TASKS.md` §10). La imagen de ejecución se publica como
+lo compila (`docs/project/registers/TASKS.md` §10). La imagen de ejecución se publica como
 `ghcr.io/mthomason/mad`, así que los componentes LGPL que distribuye necesitan ofertas de
 revinculación: la oferta escrita en `ThirdParty/Licenses/README.md` ahora nombra la
 imagen, y la entrada del registro es `THIRD_PARTY_LICENSES.md` §9. gnustep-make
@@ -421,7 +421,7 @@ los nombres de columna `c<hash>` de la caché derivan de hashes, así que tambi�
 **Resuelto el 2026-10-16 (la decisión de la forma de la exportación JSON, `docs/project/MAD_LINUX.md` §10.1):** el
 orden ahora se define como el alias de columna, ordenado con `-compare:`, en ambos constructores de SQL,
 así que el SQL generado, la caché de filas y cada exportación coinciden en ambas
-plataformas (docs/project/BUGS.md, la entrada de la lista SELECT; las pruebas de orden en
+plataformas (docs/project/registers/BUGS.md, la entrada de la lista SELECT; las pruebas de orden en
 `Linux/Tests/MADQuerySelectExpressionTests.m`). Una caché actualizada antes del cambio
 ordena sus columnas de forma distinta a una actualizada después: los mismos datos, un nuevo
 orden, así que actualice una vez antes de comparar cachés a través de esa fecha.
@@ -447,7 +447,7 @@ y `user_version` 2) en ambas plataformas; los bytes de arriba son los del docume
 ordenado; una escritura ordinaria conserva los metadatos reales de los miembros, así que difiere entre ejecuciones
 y plataformas por diseño.
 
-Hubo que corregir dos cosas para que el escritor se ejecutara aquí, ambas registradas en `docs/project/BUGS.md`
+Hubo que corregir dos cosas para que el escritor se ejecutara aquí, ambas registradas en `docs/project/registers/BUGS.md`
 (la entrada de identidad de bytes de `.mad`):
 
 * `-write_archive:` recorría cada URL enumerada *hasta* el directorio archivado, y
@@ -493,7 +493,7 @@ la fixture London:
 
 Los formatos del lado del renderizado son idénticos byte a byte entre las plataformas, como los de datos:
 cada marco, fuente, tamaño de fuente, atributo, alineación, tramo de texto y caja de página, y el dinero
-(el hallazgo que los hacía diferir, y su corrección, están arriba y en `docs/project/BUGS.md`).
+(el hallazgo que los hacía diferir, y su corrección, están arriba y en `docs/project/registers/BUGS.md`).
 `Linux/Tests/MADReportExporterTests.m` fija los tres checksums.
 
 ## La imagen de ejecución: el entregable de la CLI (Fase F)
@@ -569,7 +569,7 @@ clang, cmake, git ni árbol de compilación). 41 comprobaciones; termina con un 
 	MADVERIFY 41 passed, 0 failed
 
 `--live` añade las actualizaciones de MySQL, TDS y PostgreSQL (50, 20 y 25 filas); inicie
-primero los tres contenedores de prueba (`docs/project/DEVELOPER.md` tiene sus scripts
+primero los tres contenedores de prueba (`docs/project/build/DEVELOPER.md` tiene sus scripts
 y credenciales):
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up

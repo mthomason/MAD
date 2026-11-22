@@ -76,7 +76,7 @@ se pueda actualizar desde el Mac y desde la imagen de Linux. `host.docker.intern
 solo funcionaría dentro de un contenedor; `127.0.0.1` solo en el Mac.
 
 Las tres fixtures en vivo se crearon contra los contenedores de prueba canónicos, que
-`docs/project/DEVELOPER.md` documenta y cuyos scripts los crean a partir de imágenes fijadas y
+`docs/project/build/DEVELOPER.md` documenta y cuyos scripts los crean a partir de imágenes fijadas y
 conjuntos de datos verificados con checksum:
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on 13306

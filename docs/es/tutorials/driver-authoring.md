@@ -23,7 +23,7 @@ Todo lo demás —el grafo del diseñador de consultas, la generación de SQL, l
 filas, la canalización de renderizado, los siete formatos de exportación, la CLI y la imagen de
 Docker— es maquinaria compartida a la que el driver se conecta. El contrato que cumple un driver es
 *«devolver un esquema y filas en forma de tabla»*
-(`docs/project/MAD_STRATEGY.md` §3.7), y por eso un driver puede estar frente a
+(`docs/project/product/MAD_STRATEGY.md` §3.7), y por eso un driver puede estar frente a
 cualquier cosa que se pueda hacer parecer una tabla: una base de datos SQL, un servicio
 web, un archivo.
 
@@ -160,7 +160,7 @@ Dos suites, en el objetivo de pruebas del framework:
 ## Paso 6: la advertencia honesta: qué puede y qué no puede hacer hoy un driver que no sea SQL
 
 Esta es la única parte del discurso que no está terminada, y está escrita
-a propósito (`docs/project/MAD_STRATEGY.md` §4.7): la capa de **ejecución**
+a propósito (`docs/project/product/MAD_STRATEGY.md` §4.7): la capa de **ejecución**
 tiene forma de driver —`executeSQL:…intoResultTable:…` y el
 destino `MADDataTableWriting` son honestos sobre «cualquier cosa que devuelva
 una tabla»—, pero la capa de **compilación** es compartida: `MADQueryFull` compila

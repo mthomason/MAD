@@ -51,7 +51,7 @@
 
 三者都将服务器命名为 `mac`——这台 Mac 的主机名，在这里以及在 Docker 容器内都会解析为其局域网地址。因此，一个名称同时用于 Mac 的 MySQL（由下面的测试夹具容器发布在回环地址*和*局域网上）以及 SQL Server 和 PostgreSQL 容器（发布在所有接口上），这样同一文档既可以从 Mac 刷新，也可以从 Linux 镜像刷新。`host.docker.internal` 只能在容器内使用；`127.0.0.1` 只能在 Mac 上使用。
 
-三个实时测试夹具都是针对规范的测试容器创建的；`docs/project/DEVELOPER.md` 记录了这些容器，其脚本从固定版本的镜像和经校验和验证的数据集创建它们：
+三个实时测试夹具都是针对规范的测试容器创建的；`docs/project/build/DEVELOPER.md` 记录了这些容器，其脚本从固定版本的镜像和经校验和验证的数据集创建它们：
 
 	MADMySQL/TestDatabase/mysql-test-db.sh up          # mad-mysql on 13306
 	MADTdsClient/TestDatabase/sqlserver-test-db.sh up  # mad-mssql on 1433

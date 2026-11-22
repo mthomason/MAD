@@ -32,7 +32,7 @@ Duas propriedades desse store são estruturais para a portabilidade:
 
 ### 3.1 O store portável (desde a migração do store)
 
-Desde a migração do store (`docs/project/MAD_STORE_MIGRATION.md`), a definição de um documento vive em
+Desde a migração do store (`docs/project/design/MAD_STORE_MIGRATION.md`), a definição de um documento vive em
 um store SQLite portável projetado por nós. Seu esquema é descrito pelos
 descritores `MADStoreSchema` mantidos manualmente (`MAD/Source/rptq/store/`), gerado por
 `-createSchemaSQL` e verificado de forma cruzada contra o modelo compilado por `MADStoreTests`.
