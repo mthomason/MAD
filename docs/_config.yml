@@ -37,8 +37,10 @@ lang: en-US
 exclude:
   - project
   - archive
+  - superpowers
   - "*/project"
   - "*/archive"
+  - "*/superpowers"
 
 plugins:
   - jekyll-seo-tag
