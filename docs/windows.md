@@ -16,6 +16,8 @@ image: /assets/mad-designer-icon-512.png
 
 * **Direct Download:** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip)
 * **Version:** app {{ site.data.versions.windows_app_version }} / engine {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
+
+**Languages.** The application UI is available in English, Simplified Chinese, Japanese, Brazilian Portuguese, German, and Latin American Spanish. Translations are machine-assisted and may contain errors; report them at <https://github.com/mthomason/MAD/issues>.
 * **Requirements:** Windows 10 (1903 or later) or Windows 11, 64-bit. The archive is self-contained, so **no .NET runtime install is needed**. The Viewer uses the Microsoft Edge WebView2 Evergreen Runtime, which ships with Windows 11 and current Edge; on older Windows 10 images, install the [Evergreen Runtime](https://developer.microsoft.com/microsoft-edge/webview2/).
 
 1. Download the `.zip` and extract it to a folder of your choosing. Keep the folder structure intact: the application, the engine, and the licences belong together.

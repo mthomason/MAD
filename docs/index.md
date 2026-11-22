@@ -23,6 +23,8 @@ the names and app artwork are not covered by that licence (see
 > * **Direct Download:** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip) *(unsigned: Windows SmartScreen will ask — choose More info → Run anyway; see [the Windows guide](windows.html))*
 > * **Version:** app {{ site.data.versions.windows_app_version }} / engine {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}) · **No .NET install needed** (self-contained)
 
+**Languages.** The application UI is available in English, Simplified Chinese, Japanese, Brazilian Portuguese, German, and Latin American Spanish. Translations are machine-assisted and may contain errors; report them at <https://github.com/mthomason/MAD/issues>.
+
 ## See it
 
 **[MAD Designer for macOS](macos.html)** — native `AppKit` desktop application (`NSDocument`, visual table/join query canvas, interactive section minimap and banded report designer, and paginated PDF/HTML/CSV/JSON report viewer):

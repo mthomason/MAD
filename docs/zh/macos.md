@@ -23,6 +23,8 @@ lang: zh-CN
   *（通过浏览器下载并拖入 `/Applications` 后，首次打开前可在终端执行一次 `xattr -cr "/Applications/MAD Designer.app"` 以清除 macOS Gatekeeper 隔离标记。）*
 * **版本：** 应用 {{ site.data.versions.macos_app_version }} / 引擎 {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }})。
 
+**语言：** 应用界面提供英语、简体中文、日语、巴西葡萄牙语、德语和拉丁美洲西班牙语。翻译由机器辅助完成，可能包含错误；请在 <https://github.com/mthomason/MAD/issues> 报告。
+
 ---
 
 ## 工作区

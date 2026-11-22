@@ -22,6 +22,8 @@ Every `.mad` file created or edited on macOS is byte-compatible with the iPad/iP
   *(If you download the `.dmg` or `.zip` in a browser, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications` to clear the macOS Gatekeeper quarantine flag.)*
 * **Version:** app {{ site.data.versions.macos_app_version }} / engine {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
 
+**Languages.** The application UI is available in English, Simplified Chinese, Japanese, Brazilian Portuguese, German, and Latin American Spanish. Translations are machine-assisted and may contain errors; report them at <https://github.com/mthomason/MAD/issues>.
+
 ---
 
 ## Workspaces

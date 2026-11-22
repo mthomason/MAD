@@ -1,8 +1,8 @@
 # Application Localization — Plan and Report
 
-**Status:** Decisions recorded 2026-11-04; Phase 0/1 foundation in progress on
-`feature/app-localization-foundation`. Not queued in `TASKS.md` beyond its short
-entry.
+**Status:** Complete 2026-11-22. Every translatable UI string is in the iOS and
+macOS string catalog and the Windows resource dictionaries. The phase records
+below are kept as history.
 **Scope:** the iOS app (`MAD Designer` and `MAD Viewer`), the native macOS app
 (`Mac/`), and the user-facing strings in the frameworks those two apps embed.
 **Out of scope:** documentation (already localized under
@@ -12,7 +12,17 @@ localization of *report content* (a separate product feature; see
 
 ## 1. The short answer
 
-The application is **instrumented but not localized**. There are 559 active
+**Completed 2026-11-22.** Every translatable UI string is now translated into
+Simplified Chinese, Japanese, Brazilian Portuguese, German, and Latin American
+Spanish on iOS, macOS, and Windows. The 62 catalog entries marked
+do-not-translate are SQL identifiers, data-type and font names, brand names,
+licence text, and format samples. Translations are machine-assisted; the About
+screens carry the notice required by D14, and the issue tracker is the
+correction path.
+
+The audit below records the pre-localization state and is kept as history.
+
+The application **was instrumented but not localized**. There are 559 active
 `NSLocalizedString` calls across 106 files (573 textual occurrences, of which 14
 are commented out), but there is no `Localizable.strings`, no string catalog, no
 app `.lproj` resource (only the stock `Settings.bundle` template), and no

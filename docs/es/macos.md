@@ -29,6 +29,8 @@ iPad/iPhone, la CLI `mad` en Linux y la GitHub Action
   *(Si descarga el `.dmg` o el `.zip` en un navegador, ejecute `xattr -cr "/Applications/MAD Designer.app"` una vez después de copiar la aplicación a `/Applications` para eliminar la marca de cuarentena de Gatekeeper de macOS.)*
 * **Versión:** app {{ site.data.versions.macos_app_version }} / motor {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
 
+**Idiomas.** La interfaz de la aplicación está disponible en inglés, chino simplificado, japonés, portugués de Brasil, alemán y español latinoamericano. Las traducciones son asistidas por máquina y pueden contener errores; repórtelos en <https://github.com/mthomason/MAD/issues>.
+
 ---
 
 ## Espacios de trabajo

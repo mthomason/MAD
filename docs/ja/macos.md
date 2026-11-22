@@ -23,6 +23,8 @@ macOS上で作成または編集されたすべての`.mad`ファイルは、iPa
   *（ブラウザから直接ダウンロードして`/Applications`へ配置した場合は、初回起動前にターミナルで一度`xattr -cr "/Applications/MAD Designer.app"`を実行してmacOS Gatekeeperの検疫属性を解除してください。）*
 * **バージョン：** アプリ {{ site.data.versions.macos_app_version }} / エンジン {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }})。
 
+**言語：** アプリの UI は英語、簡体字中国語、日本語、ブラジルポルトガル語、ドイツ語、ラテンアメリカスペイン語で利用できます。翻訳は機械支援によるもので、誤りを含む場合があります。問題は <https://github.com/mthomason/MAD/issues> で報告してください。
+
 ---
 
 ## ワークスペース

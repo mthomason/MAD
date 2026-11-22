@@ -22,6 +22,8 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 > * **直接ダウンロード：** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url}}/MAD-Designer-Windows-0.7.zip) *（未署名：Windows SmartScreen が警告します。「詳細情報」→「実行」を選択してください。詳しくは [Windows ガイド](windows.html) を参照）*
 > * **バージョン：** アプリ {{ site.data.versions.windows_app_version}} / エンジン {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}}) · **.NET のインストール不要**（自己完結型）
 
+**言語：** アプリの UI は英語、簡体字中国語、日本語、ブラジルポルトガル語、ドイツ語、ラテンアメリカスペイン語で利用できます。翻訳は機械支援によるもので、誤りを含む場合があります。問題は <https://github.com/mthomason/MAD/issues> で報告してください。
+
 ## 実際の動作を見る
 
 **[MAD Designer for macOS](macos.html)**——ネイティブ`AppKit`デスクトップアプリケーション（`NSDocument`、視覚的なテーブル／結合クエリキャンバス、インタラクティブなセクションミニマップおよびバンド型レポートデザイナー、ページ分割されたPDF/HTML/CSV/JSONレポートビューアを搭載）：
