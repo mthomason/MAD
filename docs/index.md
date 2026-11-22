@@ -16,12 +16,12 @@ the names and app artwork are not covered by that licence (see
 
 > **Try MAD Designer on macOS (macOS 12.0+, Apple Silicon):**
 > * **Homebrew:** `brew install --cask mthomason/tap/mad-designer`
-> * **Direct Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *(for direct downloads, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications`)*
-> * **Version:** app 0.7 / engine 9.0 (r4433)
+> * **Direct Download:** [**MAD-Designer-macOS.dmg**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.zip) *(for direct downloads, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications`)*
+> * **Version:** app {{ site.data.versions.macos_app_version }} / engine {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }})
 
 > **Try MAD Designer on Windows (Windows 10 1903+, Windows 11, 64-bit):**
-> * **Direct Download:** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip) *(unsigned: Windows SmartScreen will ask — choose More info → Run anyway; see [the Windows guide](windows.html))*
-> * **Version:** app 0.7 / engine 9.0 (r4433) · **No .NET install needed** (self-contained)
+> * **Direct Download:** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip) *(unsigned: Windows SmartScreen will ask — choose More info → Run anyway; see [the Windows guide](windows.html))*
+> * **Version:** app {{ site.data.versions.windows_app_version }} / engine {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}) · **No .NET install needed** (self-contained)
 
 ## See it
 

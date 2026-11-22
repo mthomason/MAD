@@ -15,8 +15,8 @@ lang: zh-CN
 
 ## 下载与安装
 
-* **直接下载：** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip)
-* **版本：** 应用 0.7 / 引擎 9.0 (r4433)。
+* **直接下载：** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip)
+* **版本：** 应用 {{ site.data.versions.windows_app_version }} / 引擎 {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }})。
 * **系统要求：** Windows 10（1903 或更高版本）或 Windows 11，64 位。压缩包是自包含的，因此**无需安装 .NET 运行时**。查看器使用 Microsoft Edge WebView2 Evergreen 运行时，Windows 11 和当前版本的 Edge 已自带该运行时；在较旧的 Windows 10 镜像上，请安装 [Evergreen 运行时](https://developer.microsoft.com/microsoft-edge/webview2/)。
 
 1. 下载 `.zip` 并将其解压到您选择的文件夹。请保持文件夹结构完整：应用、引擎和许可证彼此关联。

@@ -18,9 +18,9 @@ Every `.mad` file created or edited on macOS is byte-compatible with the iPad/iP
   ```sh
   brew install --cask mthomason/tap/mad-designer
   ```
-* **Direct Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip)
+* **Direct Download:** [**MAD-Designer-macOS.dmg**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.zip)
   *(If you download the `.dmg` or `.zip` in a browser, run `xattr -cr "/Applications/MAD Designer.app"` once after copying to `/Applications` to clear the macOS Gatekeeper quarantine flag.)*
-* **Version:** app 0.7 / engine 9.0 (r4433).
+* **Version:** app {{ site.data.versions.macos_app_version }} / engine {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
 
 ---
 

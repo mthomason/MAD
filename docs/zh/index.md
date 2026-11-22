@@ -15,7 +15,12 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 
 > **在 macOS 上试用 MAD Designer（macOS 12.0+，Apple Silicon）：**
 > * **Homebrew 安装：** `brew install --cask mthomason/tap/mad-designer`
-> * **直接下载：** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip) *（浏览器直接下载拖入 `/Applications` 后，首次打开前可在终端执行一次 `xattr -cr "/Applications/MAD Designer.app"`）*
+> * **直接下载：** [**MAD-Designer-macOS.dmg**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.zip) *（浏览器直接下载拖入 `/Applications` 后，首次打开前可在终端执行一次 `xattr -cr "/Applications/MAD Designer.app"`）*
+> * **版本：** 应用 {{ site.data.versions.macos_app_version}} / 引擎 {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}})
+
+> **在 Windows 上试用 MAD Designer（Windows 10 1903+、Windows 11，64 位）：**
+> * **直接下载：** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url}}/MAD-Designer-Windows-0.7.zip) *（未签名：Windows SmartScreen 会提示——选择“更多信息”→“仍要运行”；参见 [Windows 指南](windows.html)）*
+> * **版本：** 应用 {{ site.data.versions.windows_app_version}} / 引擎 {{ site.data.versions.engine_version}} ({{ site.data.versions.engine_revision}}) · **无需安装 .NET**（自包含）
 
 ## 看看效果
 

@@ -15,8 +15,8 @@ lang: pt-BR
 
 ## Download e Instalação
 
-* **Download direto:** [**MAD-Designer-Windows-0.7.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-Windows-0.7.zip)
-* **Versão:** app 0.7 / motor 9.0 (r4433).
+* **Download direto:** [**MAD-Designer-Windows-0.7.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-Windows-0.7.zip)
+* **Versão:** app {{ site.data.versions.windows_app_version }} / motor {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
 * **Requisitos:** Windows 10 (1903 ou posterior) ou Windows 11, 64 bits. O arquivo é autocontido, então **não é necessário instalar o runtime do .NET**. O visualizador usa o runtime Evergreen do Microsoft Edge WebView2, que acompanha o Windows 11 e o Edge atualizado; em imagens antigas do Windows 10, instale o [runtime Evergreen](https://developer.microsoft.com/microsoft-edge/webview2/).
 
 1. Baixe o `.zip` e extraia-o para uma pasta de sua escolha. Mantenha a estrutura de pastas: o aplicativo, o motor e as licenças ficam juntos.

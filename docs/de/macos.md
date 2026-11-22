@@ -26,9 +26,9 @@ den iPad-/iPhone-Apps, der `mad`-CLI unter Linux und der GitHub Action
   ```sh
   brew install --cask mthomason/tap/mad-designer
   ```
-* **Direkter Download:** [**MAD-Designer-macOS.dmg**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**](https://github.com/mthomason/MAD/releases/download/v0.7.0/MAD-Designer-macOS.zip)
+* **Direkter Download:** [**MAD-Designer-macOS.dmg**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.dmg) | [**MAD-Designer-macOS.zip**]({{ site.data.versions.release_base_url }}/MAD-Designer-macOS.zip)
   *(Wenn Sie die `.dmg` oder `.zip` in einem Browser herunterladen, führen Sie nach dem Kopieren nach `/Applications` einmal `xattr -cr "/Applications/MAD Designer.app"` aus, um das Quarantäne-Flag von macOS Gatekeeper zu entfernen.)*
-* **Version:** App 0.7 / Engine 9.0 (r4433).
+* **Version:** App {{ site.data.versions.macos_app_version }} / Engine {{ site.data.versions.engine_version }} ({{ site.data.versions.engine_revision }}).
 
 ---
 
