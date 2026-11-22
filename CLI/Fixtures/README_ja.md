@@ -14,7 +14,7 @@
 
 ## サンプルを変換する必要があった理由
 
-出荷されている2つのサンプルはいずれも**レガシー**なドキュメントです。その定義はCore Dataストア（`StoreContent/analyitics`）であり、変換にはCore Dataが必要ですが、MADフレームワーク自体はCore Dataをリンクしておらず、LinuxにもCore Dataは存在しません（`docs/project/MAD_LINUX.md` §5.1, §9）。`London.portable.mad`と`Music.portable.mad`は同じドキュメントをポータブルストア形式で書き出したものであり、Core Dataを持たないプラットフォームでも読み込みと更新が可能です——Linux CLIおよび`Linux/Tests/MADHeadlessDocumentTests.m`はこれを使用しています。
+出荷されている2つのサンプルはいずれも**レガシー**なドキュメントです。その定義はCore Dataストア（`StoreContent/analyitics`）であり、変換にはCore Dataが必要ですが、MADフレームワーク自体はCore Dataをリンクしておらず、LinuxにもCore Dataは存在しません（`docs/developers/build/linux.md` §5.1, §9）。`London.portable.mad`と`Music.portable.mad`は同じドキュメントをポータブルストア形式で書き出したものであり、Core Dataを持たないプラットフォームでも読み込みと更新が可能です——Linux CLIおよび`Linux/Tests/MADHeadlessDocumentTests.m`はこれを使用しています。
 
 また、これらはv0サンプルに対する読み取り側の対照群でもあります。`mad inspect`はフィクスチャを`StoreContent/store.sqlite`を持つv1として報告し、サンプルをレガシーストアを持つv0として報告しますが、どちらも同じコンテナリーダーから出力されます。
 

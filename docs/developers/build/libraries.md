@@ -1,4 +1,14 @@
+---
+layout: default
+title: "The Compressor static-library build"
+description: "The third-party C libraries, how they are built, and how Xcode reaches them."
+---
+
 # Static Libraries: the Compressor Build System
+
+This page describes the third-party C libraries the application links and the `Compressor` build system that produces them.
+
+*Written on the original date; current-state facts reconciled 2026-11-22.*
 
 This document describes the third-party static libraries the application links, and
 the build system that produces them — as built, not as planned. The pre-rework

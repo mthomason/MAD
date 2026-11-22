@@ -1,4 +1,14 @@
+---
+layout: default
+title: "The headless PDF writer"
+description: "The Cairo and FreeType stack, font mapping, and deterministic PDF export."
+---
+
 # The headless PDF writer — the Cairo + FreeType body
+
+This page records the headless PDF writer: the Cairo and FreeType stack, the font-mapping policy, the deterministic mode, and the acceptance test against the json-report oracle.
+
+*Written on the original date; current-state facts reconciled 2026-11-22.*
 
 **Status (2026-11-20): implemented, on Linux and Windows, and green.** `mad export
 --format pdf` and `mad serve`'s `export` write a PDF on both headless engines;

@@ -69,13 +69,13 @@ Once this is complete, the user can go to the MAD Viewer screen and use the refr
 
 The core iOS app is in `MADDesigner`.  Its source is in `MADDesigner/Source`, and its targets -- the iOS app itself, the native macOS app (`MAD Designer Mac`), the stand-alone viewer, and the unit and UI test bundles -- are in `MADDesigner/Targets`.
 
-The native macOS (`AppKit`) application lives in `Mac` (`Mac/Source`, `Mac/Resources`, `Mac/Tests`, `Mac/build.sh`).  It links twelve of the fourteen frameworks compiled natively for `macosx` (`MACOSX_DEPLOYMENT_TARGET = 12.0`), provides a native `NSDocument` workflow across the `MAD Query`, `MAD Designer`, and `MAD Viewer` workspaces, and packages `MAD Designer.app`, `.zip`, and `.dmg` artifacts via `./Mac/build.sh --smoke-test --package`.  See `docs/macos.md`, `Mac/README.md`, and `docs/project/MAD_MACOS.md`.
+The native macOS (`AppKit`) application lives in `Mac` (`Mac/Source`, `Mac/Resources`, `Mac/Tests`, `Mac/build.sh`).  It links twelve of the fourteen frameworks compiled natively for `macosx` (`MACOSX_DEPLOYMENT_TARGET = 12.0`), provides a native `NSDocument` workflow across the `MAD Query`, `MAD Designer`, and `MAD Viewer` workspaces, and packages `MAD Designer.app`, `.zip`, and `.dmg` artifacts via `./Mac/build.sh --smoke-test --package`.  See `docs/macos.md`, `Mac/README.md`, and `docs/developers/build/macos.md`.
 
 The code base also includes a custom scripting language in a file called `Scrimpter`, which was going to be used for adding formula elements to the project, but it is currently not used.
 
 The codebase also includes static library build scrips in a file called `Compressor`.  This is used to build the static libraries used by the project.  This is a very important part of the project.
 
-The codebase also includes `Linux`, the headless engine's build (`docs/project/MAD_LINUX.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all twelve headless frameworks against them, and runs their ported suites — 130 suites, 1,313 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
+The codebase also includes `Linux`, the headless engine's build (`docs/developers/build/linux.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all twelve headless frameworks against them, and runs their ported suites — 130 suites, 1,313 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
 
 ## Code Style Guidance
 
@@ -200,15 +200,15 @@ the headless side.
 * `docs/archive/MAD_BARCODES.md` -- the barcode element's modernization and re-integration
   design: complete and archived 2026-10-22 (docs/project/registers/TASKS.md §15); kept for reference.
 * `docs/macos.md` -- the user and developer guide for the native macOS (`AppKit`) application, served on the documentation site (`macos.html`).
-* `docs/project/MAD_MACOS.md` -- the multiplatform framework portability audit (`iphoneos`, `iphonesimulator`, `macosx`) and native macOS architecture record.
+* `docs/developers/build/macos.md` -- the multiplatform framework portability audit (`iphoneos`, `iphonesimulator`, `macosx`) and native macOS architecture record.
 * `Mac/README.md` -- the native macOS build, layout, and smoke-test guide (`./Mac/build.sh`).
-* `docs/project/MAD_LINUX.md` -- the technical assessment of compiling the headless engine on
+* `docs/developers/build/linux.md` -- the technical assessment of compiling the headless engine on
   Linux: the dependency audit, GNUstep coverage, and the compile-and-call plan.
-* `docs/project/MAD_WINDOWS.md` -- the native Windows engine build: the pinned
+* `docs/developers/build/windows.md` -- the native Windows engine build: the pinned
   toolchain recipe (Clang 20.1.8, the STL gate override, the seven GNUstep
   revisions) and why, the framework port and its shims, and the `Windows/Engine/build.ps1`
   entry point.
-* `docs/project/MAD_PDF_LINUX.md` -- the headless PDF writer: the Cairo + FreeType
+* `docs/developers/build/pdf.md` -- the headless PDF writer: the Cairo + FreeType
   stack and its licences, the font-mapping policy and its residual, the deterministic
   mode, and the acceptance test against the json-report oracle.
 * `docs/developers/sql-entry.md` -- the design for pasting a SQL statement into the query designer: the
@@ -223,7 +223,7 @@ the headless side.
   the source of truth under `satellites/<name>/`, and a publish workflow carries the
   source to the target on master while the image carries every engine change.
 * `docs/developers/cli.md` -- the `mad` command-line tool: what it does, and the phasing to build it.
-* `docs/project/LIBRARIES.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
+* `docs/developers/build/libraries.md` -- the vendored libraries on disk, how Xcode reaches them, and the build plan.
 * `docs/project/THIRD_PARTY_LICENSES.md` -- every third-party component in the app and the published
   container image, how it is linked, its licence, and what shipping it obliges us to do. Read
   before adding or removing a library.

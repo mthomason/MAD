@@ -230,7 +230,7 @@ dafür gebaute `AppKit`-Dokumentarchitektur (`Mac/Source/`) darüber:
 
 Der vollständige Architektur-Audit und das Fehlerprotokoll aus dem
 Multiplattform-Port sind in
-[`docs/project/MAD_MACOS.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_MACOS.md)
+[`docs/developers/build/macos.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/build/macos.md)
 festgehalten.
 
 ---

@@ -2,11 +2,11 @@
 
 # Linux — o build da engine headless
 
-`docs/project/MAD_LINUX.md` §9: a Fase B validou o toolchain (um Dockerfile que
+`docs/developers/build/linux.md` §9: a Fase B validou o toolchain (um Dockerfile que
 compila a partir do código-fonte clang + libobjc2 + GNUstep Base e compilou um subconjunto
 do MADFoundation); a Fase C corresponde à lista de shims da §4, e este diretório é onde ela vive.
 O build agora compila **todos os onze frameworks headless** — cada framework da tabela
-da §3 de `docs/project/MAD_LINUX.md` mais `MADPostgres`, exceto os exclusivos de interface gráfica (`MADExplorer`, `MADBarcodes`,
+da §3 de `docs/developers/build/linux.md` mais `MADPostgres`, exceto os exclusivos de interface gráfica (`MADExplorer`, `MADBarcodes`,
 `MADFeedback`, `Scrimpter` e o aplicativo) — e executa suas suítes de teste dentro do
 contêiner: 126 executáveis de teste, 1.303 testes e 7 `NEED`s registrados. A cobertura
 de testes mesclada na `master` em 2026-10-10 (~100 arquivos de teste do Xcode) foi portada na
@@ -59,7 +59,7 @@ A combinação de bibliotecas (library-combo) é `ng-gnu-gnu` com ABI de runtime
 ## A camada de bibliotecas C
 
 `libraries.conf` + `lib/libraries.sh` compilam nativamente as bibliotecas C que os frameworks
-vinculam, instalando-as em `/usr/local` (`docs/project/MAD_LINUX.md` §7), seguindo a mesma estrutura e propósito da
+vinculam, instalando-as em `/usr/local` (`docs/developers/build/linux.md` §7), seguindo a mesma estrutura e propósito da
 matriz do `Compressor`.
 
 	sqlite3      3.53.3   the released amalgamation; the option list still comes
@@ -100,7 +100,7 @@ não as utiliza, mas elas permanecem na imagem.
 A lista de fontes de cada framework fica em um arquivo `cmake/<Name>Sources.cmake` ao lado do
 build, com as exclusões nomeadas e justificadas — no mesmo formato de
 `MADFoundationSources.cmake`. `MADExplorer`, `MADBarcodes`, `MADFeedback` e
-`Scrimpter` não entram no build Linux (`docs/project/MAD_LINUX.md` §3).
+`Scrimpter` não entram no build Linux (`docs/developers/build/linux.md` §3).
 
 O build Linux fornece o que falta no GNUstep sem poluir o código-fonte dos
 frameworks:
@@ -258,11 +258,11 @@ Comparação dos formatos de dados na fixture London (`CLI/Fixtures/London.porta
 | `mad refresh --rows 20 --credentials sa:Root1@Root2` em `TDS.AdventureWorksLT2022.mad` | 20 linhas do SQL Server 2022 ativo (freetds, `AdventureWorksLT2022`) |
 | `mad refresh --rows 25 --credentials mad:mad_test_pw` em `Postgres.chinook.mad` | 25 linhas do PostgreSQL 17 ativo (libpq, `chinook`) |
 
-**Ordem determinística de colunas no SELECT (resolvido em 2026-10-16, `docs/project/MAD_LINUX.md` §10.1):** a ordem das colunas agora é definida pelo alias da coluna ordenado com `-compare:` em ambos os geradores de SQL, garantindo que o SQL gerado, o cache de linhas e todas as exportações coincidam em ambas as plataformas (`Linux/Tests/MADQuerySelectExpressionTests.m`).
+**Ordem determinística de colunas no SELECT (resolvido em 2026-10-16, `docs/developers/build/linux.md` §10.1):** a ordem das colunas agora é definida pelo alias da coluna ordenado com `-compare:` em ambos os geradores de SQL, garantindo que o SQL gerado, o cache de linhas e todas as exportações coincidam em ambas as plataformas (`Linux/Tests/MADQuerySelectExpressionTests.m`).
 
 ## O gravador (writer) roda aqui, e as duas plataformas produzem os mesmos bytes
 
-Na Fase E (`docs/project/MAD_LINUX.md` §9), o gravador de arquivos `.mad` também roda no Linux e produz os **mesmos bytes** que o Mac para o mesmo documento por meio de `mad write <doc.mad> --out <copy.mad> [--reproducible]`:
+Na Fase E (`docs/developers/build/linux.md` §9), o gravador de arquivos `.mad` também roda no Linux e produz os **mesmos bytes** que o Mac para o mesmo documento por meio de `mad write <doc.mad> --out <copy.mad> [--reproducible]`:
 
 	$ mad write London.portable.mad --out copy.mad --reproducible
 	16261 bytes, sha256 09815b24e91e03b6e526008f7c2700074fed10679771b9e1ee4609e54a1192f5
@@ -303,4 +303,4 @@ A imagem de runtime inclui `/usr/local/bin/mad`, as bibliotecas compartilhadas n
 
 ## O que ainda não é feito aqui
 
-O gerador de PDF no Linux — **adiado em 2026-10-17, aguardando pesquisa e decisão do mantenedor; não inicie sem aprovação.** O arquivo de contexto é `docs/project/MAD_PDF_LINUX.md` e a justificativa está em `docs/project/MAD_LINUX.md` §10.2. Até lá, para gerar PDF no Linux, exporte com `--format html` e imprima a partir de um navegador headless/desktop.
+O gerador de PDF no Linux — **adiado em 2026-10-17, aguardando pesquisa e decisão do mantenedor; não inicie sem aprovação.** O arquivo de contexto é `docs/developers/build/pdf.md` e a justificativa está em `docs/developers/build/linux.md` §10.2. Até lá, para gerar PDF no Linux, exporte com `--format html` e imprima a partir de um navegador headless/desktop.

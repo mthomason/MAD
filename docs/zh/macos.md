@@ -115,7 +115,7 @@ MAD 没有用 Mac Catalyst 包装 iOS UI，而是将十四个框架中的十二�
 | **核心与驱动框架** | `MADFoundation`、`MADDataStructures`、`MADCocoaExtensions`、`MADFileManager`、`MADAPI`、`MADSqlite3`、`MADTds`、`MADTdsClient`、`MADMySQL`、`MADPostgres`、`MADBarcodes`、`MAD` | 共享的 Objective-C 模型、可移植 SQLite 存储（`Rptq*`）、SQL 解析器/编译器、数据库线路驱动、zint 条形码渲染器、`MADDesignerLayout` 撤销/重做引擎，以及 `MADPrintPageRenderer` / `MADReportExporterPDF`。 |
 | **原生 `AppKit` 前端（`Mac/`）** | `MADMacAppDelegate`、`MADMacAboutWindowController`、`MADMacDocumentController`、`MADMacDocument`、`MADMacWindowController`、`MADMacConnectionWindowController`、`MADMacQueryViewController`、`MADMacDesignerViewController`、`MADMacDesignerCanvasView`、`MADMacViewerViewController` | 原生 `NSDocument` 生命周期、关于 / 概览 / 致谢窗口、工具栏与菜单栏、可视化查询画布、带缩略图和检查器的三栏报表设计器，以及 `PDFView` 报表查看器。 |
 
-多平台移植的完整架构审计和缺陷日志记录在 [`docs/project/MAD_MACOS.md`](https://github.com/mthomason/MAD/blob/master/docs/zh/project/MAD_MACOS.md)。
+多平台移植的完整架构审计和缺陷日志记录在 [`docs/developers/build/macos.md`](https://github.com/mthomason/MAD/blob/master/docs/zh/project/MAD_MACOS.md)。
 
 ---
 

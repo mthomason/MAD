@@ -1,4 +1,14 @@
+---
+layout: default
+title: "Portability and the native macOS application"
+description: "The framework portability audit and the AppKit application architecture."
+---
+
 # `MAD_MACOS.md` -- Multiplatform Frameworks and the Native macOS Application
+
+This page records the multiplatform framework audit and the native macOS application architecture. The user-facing guide is at `/macos.html`.
+
+*Written on the original date; current-state facts reconciled 2026-11-22.*
 
 This document records the architecture decision, the framework-by-framework portability
 audit, and the phased migration and implementation plan for making the MAD frameworks
@@ -53,7 +63,7 @@ Verification command:
 ## 3. Framework-by-Framework Multiplatform Audit
 
 Twelve frameworks form the multiplatform stack (`iphoneos`, `iphonesimulator`, `macosx`,
-plus Linux for the eleven headless frameworks):
+plus Linux for the twelve headless frameworks):
 
 1. **`MADFoundation`** (28 `.m` files):
    - `MADApplication.h`: guard `<UIKit/UIApplication.h>` with `#if TARGET_OS_IPHONE`
@@ -280,7 +290,7 @@ Produces:
 - `Mac/build/MAD-Designer-macOS.zip`
 - `Mac/build/MAD-Designer-macOS.dmg`
 
-Public user and developer documentation for the native macOS application is published in [`docs/macos.md`](../macos.md) (with screenshots at `docs/assets/macos-native-mad-query.png` and `docs/assets/macos-native-mad-designer.png`) and [`Mac/README.md`](../../Mac/README.md).
+Public user and developer documentation for the native macOS application is published in [`docs/macos.md`](../../macos.md) (with screenshots at `docs/assets/macos-native-mad-query.png` and `docs/assets/macos-native-mad-designer.png`) and [`Mac/README.md`](../../../Mac/README.md).
 
 ### Continuous integration (Completed)
 

@@ -2,8 +2,8 @@
 
 # Linux — ヘッドレスエンジンのビルド
 
-`docs/project/MAD_LINUX.md` §9：フェーズBではツールチェーン（clang + libobjc2 + GNUstep Baseをソースからビルドし、MADFoundationのサブセットをコンパイルするDockerfile）を実証しました。フェーズCは§4のシム（shim）一覧であり、このディレクトリがその実装場所です。
-現在、このビルドは**11個すべてのヘッドレスフレームワーク**——`docs/project/MAD_LINUX.md` §3の表にあるすべてのフレームワークに`MADPostgres`を加え、UI専用のもの（`MADExplorer`、`MADBarcodes`、`MADFeedback`、`Scrimpter`、およびアプリ本体）を除いたもの——をコンパイルし、コンテナ内でそれらのテストスイートを実行します（テスト実行ファイル126個、テスト1,303件、記録された`NEED` 7件）。2026-10-10にmasterへマージされたテストカバレッジ（約100個のXcodeテストファイル）がスイート単位ですべて移植されています。ここにあるものはアプリ本体には同梱されません。フェーズDのチェックポイントであるCLIもここでビルド・実行され（後述の「CLIの実行 — フェーズD」を参照）、フェーズFのランタイムイメージが成果物としてそれを実行します（後述の「ランタイムイメージ — CLI成果物（フェーズF）」を参照）。
+`docs/developers/build/linux.md` §9：フェーズBではツールチェーン（clang + libobjc2 + GNUstep Baseをソースからビルドし、MADFoundationのサブセットをコンパイルするDockerfile）を実証しました。フェーズCは§4のシム（shim）一覧であり、このディレクトリがその実装場所です。
+現在、このビルドは**11個すべてのヘッドレスフレームワーク**——`docs/developers/build/linux.md` §3の表にあるすべてのフレームワークに`MADPostgres`を加え、UI専用のもの（`MADExplorer`、`MADBarcodes`、`MADFeedback`、`Scrimpter`、およびアプリ本体）を除いたもの——をコンパイルし、コンテナ内でそれらのテストスイートを実行します（テスト実行ファイル126個、テスト1,303件、記録された`NEED` 7件）。2026-10-10にmasterへマージされたテストカバレッジ（約100個のXcodeテストファイル）がスイート単位ですべて移植されています。ここにあるものはアプリ本体には同梱されません。フェーズDのチェックポイントであるCLIもここでビルド・実行され（後述の「CLIの実行 — フェーズD」を参照）、フェーズFのランタイムイメージが成果物としてそれを実行します（後述の「ランタイムイメージ — CLI成果物（フェーズF）」を参照）。
 
 ## 実行方法
 
@@ -33,7 +33,7 @@ Docker DesktopのCLIはデフォルトでは`PATH`に含まれない場合があ
 
 ## ライブラリレイヤー
 
-`libraries.conf` + `lib/libraries.sh`は、フレームワークがリンクするCライブラリ群をネイティブにビルドして`/usr/local`へインストールします（`docs/project/MAD_LINUX.md` §7）。隣接するCompressorのマトリクスと同じ構造・目的であり、ここの成果物がiOS/macOSアプリに同梱されることはありません。
+`libraries.conf` + `lib/libraries.sh`は、フレームワークがリンクするCライブラリ群をネイティブにビルドして`/usr/local`へインストールします（`docs/developers/build/linux.md` §7）。隣接するCompressorのマトリクスと同じ構造・目的であり、ここの成果物がiOS/macOSアプリに同梱されることはありません。
 
 	sqlite3      3.53.3   the released amalgamation; the option list still comes
 	                      from Compressor/sqlite3.xcconfig, the one place it lives
@@ -68,7 +68,7 @@ Docker DesktopのCLIはデフォルトでは`PATH`に含まれない場合があ
 | MADPostgres | 5 / 6 | 接続ビューコントローラ |
 | MAD | 150 / 181 | UI関連ファイル群（§5.2）、`MADocument`およびそれを生成・クローズするオペレーション群、キーチェーンオペレーション、`MADBarcodes`依存の要素ファイル群。すべて`cmake/MADSources.cmake`に明記 |
 
-各フレームワークのソースリストは`MADFoundationSources.cmake`と同じ形式で`cmake/<Name>Sources.cmake`に記述され、除外ファイル名とその理由が明記されています。`MADExplorer`、`MADBarcodes`、`MADFeedback`、および`Scrimpter`はLinuxビルドには一切含まれません（`docs/project/MAD_LINUX.md` §3）。
+各フレームワークのソースリストは`MADFoundationSources.cmake`と同じ形式で`cmake/<Name>Sources.cmake`に記述され、除外ファイル名とその理由が明記されています。`MADExplorer`、`MADBarcodes`、`MADFeedback`、および`Scrimpter`はLinuxビルドには一切含まれません（`docs/developers/build/linux.md` §3）。
 
 Linuxビルドは、フレームワークのソースコードを汚すことなくGNUstepに不足している機能を補います：
 
@@ -148,7 +148,7 @@ Appleプラットフォームでは、ホスト（アプリやCLI）がMADMySQL�
 	/build/mad query   <document.mad>
 	/build/mad refresh --credentials user:pass <document.mad>
 
-当初はPDFが`UIPrintPageRenderer`によるCore Graphicsコンテキスト描画であったため`export`のみが含まれていませんでしたが（`docs/project/MAD_LINUX.md` §5.2）、**フェーズE（2026-10-16）でFoundationおよびレンダー系の全エクスポートフォーマットが実装されました。** エクスポートインターフェース（`MADReportExporting` + `MADReportExporterRegistry`、`docs/developers/cli.md` §5.3）が`mad`に組み込まれ、`text`、`csv`、`json`、およびレンダー系の`html`、`html-flow`、`json-report`がイメージ内で動作し、Mac版ツールとバイト単位で同一の出力を生成します（`pdf`のみ、Linux上で実行できない理由を返して明示的に拒否します）。
+当初はPDFが`UIPrintPageRenderer`によるCore Graphicsコンテキスト描画であったため`export`のみが含まれていませんでしたが（`docs/developers/build/linux.md` §5.2）、**フェーズE（2026-10-16）でFoundationおよびレンダー系の全エクスポートフォーマットが実装されました。** エクスポートインターフェース（`MADReportExporting` + `MADReportExporterRegistry`、`docs/developers/cli.md` §5.3）が`mad`に組み込まれ、`text`、`csv`、`json`、およびレンダー系の`html`、`html-flow`、`json-report`がイメージ内で動作し、Mac版ツールとバイト単位で同一の出力を生成します（`pdf`のみ、Linux上で実行できない理由を返して明示的に拒否します）。
 
 Londonフィクスチャ（`CLI/Fixtures/London.portable.mad`、事前に更新を実行し両環境で`sha256sum`を計測）での比較結果：
 
@@ -175,11 +175,11 @@ Londonフィクスチャ（`CLI/Fixtures/London.portable.mad`、事前に更新�
 | `TDS.AdventureWorksLT2022.mad`に対する`mad refresh --rows 20 --credentials sa:Root1@Root2` | ライブSQL Server 2022から20行取得（freetds、`AdventureWorksLT2022`） |
 | `Postgres.chinook.mad`に対する`mad refresh --rows 25 --credentials mad:mad_test_pw` | ライブPostgreSQL 17から25行取得（libpq、`chinook`） |
 
-**ここで発見され解決されたSELECTリスト順序の差異。** 以前、SELECTリストのカラム順序は`NSSet`の列挙順序（`MADQueryActiveQueryFields`が`NSSet`に蓄積していたため）になっており、同じドキュメントでもAppleとGNUstepでカラム順およびハッシュ由来の`c<hash>`カラム名が異なっていました。**2026-10-16に解決（`docs/project/MAD_LINUX.md` §10.1）：** 両方のSQLビルダにおいて、カラムエイリアスを`-compare:`でソートした順序として明確に定義したため、生成されるSQL、行キャッシュ、およびすべてのエクスポートが両プラットフォームで完全に一致するようになりました（`Linux/Tests/MADQuerySelectExpressionTests.m`でテスト固定済み）。
+**ここで発見され解決されたSELECTリスト順序の差異。** 以前、SELECTリストのカラム順序は`NSSet`の列挙順序（`MADQueryActiveQueryFields`が`NSSet`に蓄積していたため）になっており、同じドキュメントでもAppleとGNUstepでカラム順およびハッシュ由来の`c<hash>`カラム名が異なっていました。**2026-10-16に解決（`docs/developers/build/linux.md` §10.1）：** 両方のSQLビルダにおいて、カラムエイリアスを`-compare:`でソートした順序として明確に定義したため、生成されるSQL、行キャッシュ、およびすべてのエクスポートが両プラットフォームで完全に一致するようになりました（`Linux/Tests/MADQuerySelectExpressionTests.m`でテスト固定済み）。
 
 ## ライターの動作とプラットフォーム間のバイト一致
 
-フェーズEのもう一方の柱（`docs/project/MAD_LINUX.md` §9；2026-10-16の要件）として、`.mad`ライターがLinux上で動作し、同一ドキュメントに対してMac版と**同一のバイト列**を生成します。コマンドは`mad write <doc.mad> --out <copy.mad> [--reproducible]`であり、両プラットフォームともドキュメントをヘッドレスで開いて同一のライターを実行します。
+フェーズEのもう一方の柱（`docs/developers/build/linux.md` §9；2026-10-16の要件）として、`.mad`ライターがLinux上で動作し、同一ドキュメントに対してMac版と**同一のバイト列**を生成します。コマンドは`mad write <doc.mad> --out <copy.mad> [--reproducible]`であり、両プラットフォームともドキュメントをヘッドレスで開いて同一のライターを実行します。
 
 Londonフィクスチャ（`CLI/Fixtures/London.portable.mad`）での実測結果：
 
@@ -261,4 +261,4 @@ LondonフィクスチャにおけるMacとの比較実測値：
 
 ## 現時点で未実装のもの
 
-Linux版PDFライター — **2026-10-17より保留中（ユーザーのリサーチおよび判断待ちのため、指示なしに着手しないでください）。** 引き継ぎ事項（既存資産、不足要素、候補スタックとライセンス、未解決の論点、受け入れテスト）は`docs/project/MAD_PDF_LINUX.md`に、判断の経緯は`docs/project/MAD_LINUX.md` §10.2に記録されています。これが実装されるまでは、Linux上でのPDF生成には`--format html`の出力をブラウザで印刷する方法を用います。
+Linux版PDFライター — **2026-10-17より保留中（ユーザーのリサーチおよび判断待ちのため、指示なしに着手しないでください）。** 引き継ぎ事項（既存資産、不足要素、候補スタックとライセンス、未解決の論点、受け入れテスト）は`docs/developers/build/pdf.md`に、判断の経緯は`docs/developers/build/linux.md` §10.2に記録されています。これが実装されるまでは、Linux上でのPDF生成には`--format html`の出力をブラウザで印刷する方法を用います。

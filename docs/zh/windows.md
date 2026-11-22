@@ -48,7 +48,7 @@ MAD-Designer-Windows-0.7/
 Get-FileHash .\MAD-Designer-Windows-0.7.zip -Algorithm SHA256
 ```
 
-也可以逐个文件审查解压内容：压缩包只包含已发布的应用、由 `Windows/Engine/build.ps1` 构建的引擎、示例文档和许可证文本。`mad.exe` 就是 [Linux 指南](https://github.com/mthomason/MAD/blob/master/Linux/README.md)和 [Windows 构建记录](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_WINDOWS.md)中记录的命令行引擎。
+也可以逐个文件审查解压内容：压缩包只包含已发布的应用、由 `Windows/Engine/build.ps1` 构建的引擎、示例文档和许可证文本。`mad.exe` 就是 [Linux 指南](https://github.com/mthomason/MAD/blob/master/Linux/README.md)和 [Windows 构建记录](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md)中记录的命令行引擎。
 
 ### 审查并为此版本自行签名
 
@@ -101,7 +101,7 @@ pwsh -File .\Windows\Engine\build.ps1 -SkipToolchain  # rebuild after the toolch
 dotnet test Windows\App\Mad.Designer.Windows.slnx
 ```
 
-`Windows/Engine/build.ps1` 还会运行移植的原生套件；在引擎和应用构建完成后，`Windows/package.ps1` 会组装未签名的发布压缩包和 CI 使用的引擎资源。完整配方、Windows 专用的运行时修复、许可证义务和支持的操作系统矩阵记录在 [`docs/project/MAD_WINDOWS.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_WINDOWS.md) 中。
+`Windows/Engine/build.ps1` 还会运行移植的原生套件；在引擎和应用构建完成后，`Windows/package.ps1` 会组装未签名的发布压缩包和 CI 使用的引擎资源。完整配方、Windows 专用的运行时修复、许可证义务和支持的操作系统矩阵记录在 [`docs/developers/build/windows.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/build/windows.md) 中。
 
 ## 许可证
 

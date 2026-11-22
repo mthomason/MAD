@@ -153,7 +153,7 @@ Die native macOS-Desktopanwendung ([`docs/macos.md`](../docs/de/macos.md), [`Mac
   2. **MAD Designer (`MADMacDesignerViewController`):** Dreigeteilte Ansicht mit interaktiver **Page & Section Minimap**, Gliederung **Report Bands**, durchsuchbarer Drag-Quelle **Query Fields**, zoombarer/mit Linealen versehener Design-Leinwand (`MADMacDesignerCanvasView`) mit Drag-and-Drop zwischen Bereichen und intelligenten Ausrichtungshilfen sowie einem zweikartigen **Page & Element Inspector**.
   3. **MAD Viewer (`MADMacViewerViewController`):** Live-Datenaktualisierung (`Cmd+R`), sofortige Neupaginierung per **Page Size** (`US Letter`, `Legal`, `Tabloid`, `A3`, `A4`, `A5`, `B4`, `B5`, `JIS B4`, `JIS B5`), gerahmte `PDFView`-Vorschau, natives Drucken über `NSPrintOperation` (`Cmd+P`) und Export (`Cmd+E`) nach **PDF**, **HTML**, **HTML Flow**, **CSV**, **JSON**, **JSON Full Report** und **Plain Text**.
 
-Siehe [`docs/macos.md`](../docs/de/macos.md) für die vollständige Anleitung und [`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md) für den Multiplattform-Portabilitäts-Audit.
+Siehe [`docs/macos.md`](../docs/de/macos.md) für die vollständige Anleitung und [`docs/developers/build/macos.md`](../docs/developers/build/macos.md) für den Multiplattform-Portabilitäts-Audit.
 
 ## Bauen und testen
 

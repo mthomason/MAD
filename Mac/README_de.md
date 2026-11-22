@@ -13,7 +13,7 @@ baut.
 Für die benutzerseitige Übersicht der Arbeitsbereiche und Screenshots siehe
 [`docs/macos.md`](../docs/de/macos.md). Für den Framework-für-Framework-Audit der
 Portabilität und das Architekturprotokoll siehe
-[`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md).
+[`docs/developers/build/macos.md`](../docs/developers/build/macos.md).
 
 ## Eine vorgebaute Version installieren
 

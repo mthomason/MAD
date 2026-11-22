@@ -14,7 +14,7 @@
 
 ## 示例为什么需要转换
 
-两个随附示例都是**旧式**（legacy）文档：它们的定义是一个 Core Data 存储（`StoreContent/analyitics`），而转换其中一个需要 Core Data，MAD 框架不链接 Core Data，Linux 也没有 Core Data（`docs/project/MAD_LINUX.md` §5.1、§9）。
+两个随附示例都是**旧式**（legacy）文档：它们的定义是一个 Core Data 存储（`StoreContent/analyitics`），而转换其中一个需要 Core Data，MAD 框架不链接 Core Data，Linux 也没有 Core Data（`docs/developers/build/linux.md` §5.1、§9）。
 `London.portable.mad` 和 `Music.portable.mad` 是同样这两个文档以可移植存储写成的版本，因此没有 Core Data 的平台也能读取和刷新它们——Linux CLI 和 `Linux/Tests/MADHeadlessDocumentTests.m` 正是这样做的。
 
 它们也是 v0 示例在读取侧的对应物：`mad inspect` 将测试夹具报告为 v1，带有 `StoreContent/store.sqlite`，而将示例报告为 v0，使用旧式存储；这两个结论都来自同一个容器读取器。

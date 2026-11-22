@@ -4,7 +4,7 @@
 
 `Mac/` 包含 **MAD Designer** 的原生 macOS 前端（`AppKit`、`macosx` SDK、`MACOSX_DEPLOYMENT_TARGET = 12.0`），它构建在十二个多平台 MAD 框架（`MADFoundation`、`MADDataStructures`、`MADCocoaExtensions`、`MADFileManager`、`MADAPI`、`MADSqlite3`、`MADTds`、`MADTdsClient`、`MADMySQL`、`MADPostgres`、`MADBarcodes` 和 `MAD`）以及由 `Compressor` 构建的十个通用（`arm64` + `x86_64`）静态 C 库之上。
 
-面向用户的工作区概览和截图参见 [`docs/macos.md`](../docs/zh/macos.md)。逐框架的可移植性审计和架构记录参见 [`docs/project/MAD_MACOS.md`](../docs/zh/project/MAD_MACOS.md)。
+面向用户的工作区概览和截图参见 [`docs/macos.md`](../docs/zh/macos.md)。逐框架的可移植性审计和架构记录参见 [`docs/developers/build/macos.md`](../docs/zh/project/MAD_MACOS.md)。
 
 ## 安装预构建发布版
 

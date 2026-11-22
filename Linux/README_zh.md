@@ -2,7 +2,7 @@
 
 # Linux —— 无头引擎的构建
 
-`docs/project/MAD_LINUX.md` §9：阶段 B 验证了工具链（一个从源码构建 clang + libobjc2 + GNUstep Base 并编译了 MADFoundation 子集的 Dockerfile）；阶段 C 是 §4 的垫片清单，而本目录就是它的落地之处。现在的构建会编译**全部十一个无头框架**——docs/project/MAD_LINUX.md §3 表格中的每个框架加上 `MADPostgres`，除去仅限 UI 的那些（`MADExplorer`、`MADBarcodes`、`MADFeedback`、`Scrimpter`、应用本身）——并在容器内运行它们的测试套件：126 个测试可执行文件、1,303 个测试、7 个已记录的 need。2026-10-10 合入 master 的测试覆盖（约 100 个 Xcode 测试文件）已逐套件完整移植。这里的内容不会随应用发布；CLI——阶段 D 的检查点——也在这里构建和运行（见下文“CLI 在此运行”），阶段 F 的运行时镜像则把它作为交付物来运行（见下文“运行时镜像”）。
+`docs/developers/build/linux.md` §9：阶段 B 验证了工具链（一个从源码构建 clang + libobjc2 + GNUstep Base 并编译了 MADFoundation 子集的 Dockerfile）；阶段 C 是 §4 的垫片清单，而本目录就是它的落地之处。现在的构建会编译**全部十一个无头框架**——docs/developers/build/linux.md §3 表格中的每个框架加上 `MADPostgres`，除去仅限 UI 的那些（`MADExplorer`、`MADBarcodes`、`MADFeedback`、`Scrimpter`、应用本身）——并在容器内运行它们的测试套件：126 个测试可执行文件、1,303 个测试、7 个已记录的 need。2026-10-10 合入 master 的测试覆盖（约 100 个 Xcode 测试文件）已逐套件完整移植。这里的内容不会随应用发布；CLI——阶段 D 的检查点——也在这里构建和运行（见下文“CLI 在此运行”），阶段 F 的运行时镜像则把它作为交付物来运行（见下文“运行时镜像”）。
 
 ## 运行
 
@@ -32,7 +32,7 @@ Docker Desktop 的 CLI 默认不在 `PATH` 上；`build.sh` 会在 `/Application
 
 ## 库层
 
-`libraries.conf` + `lib/libraries.sh` 以原生方式将框架所链接的 C 库构建到 `/usr/local`（docs/project/MAD_LINUX.md §7）。形式与意图和隔壁的 Compressor 矩阵相同；这里的内容不会随应用发布。
+`libraries.conf` + `lib/libraries.sh` 以原生方式将框架所链接的 C 库构建到 `/usr/local`（docs/developers/build/linux.md §7）。形式与意图和隔壁的 Compressor 矩阵相同；这里的内容不会随应用发布。
 
 	sqlite3      3.53.3   the released amalgamation; the option list still comes
 	                      from Compressor/sqlite3.xcconfig, the one place it lives
@@ -67,7 +67,7 @@ Docker Desktop 的 CLI 默认不在 `PATH` 上；`build.sh` 会在 `/Application
 | MADPostgres | 6 个中的 5 个 | 其连接视图控制器 |
 | MAD | 181 个中的 150 个 | UI 尾部（§5.2）、`MADocument` 及其构建/关闭一个文档的操作（属于阶段 D）、钥匙串操作、由 MADBarcodes 支持的元素文件。每一项都在 `cmake/MADSources.cmake` 中列出名称 |
 
-每个框架的源文件列表是构建旁边的一个 `cmake/<Name>Sources.cmake`，其中列出被排除的文件及其原因——形式与 `MADFoundationSources.cmake` 相同。`MADExplorer`、`MADBarcodes`、`MADFeedback` 和 `Scrimpter` 完全不在 Linux 构建中（docs/project/MAD_LINUX.md §3）。
+每个框架的源文件列表是构建旁边的一个 `cmake/<Name>Sources.cmake`，其中列出被排除的文件及其原因——形式与 `MADFoundationSources.cmake` 相同。`MADExplorer`、`MADBarcodes`、`MADFeedback` 和 `Scrimpter` 完全不在 Linux 构建中（docs/developers/build/linux.md §3）。
 
 Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能：
 
@@ -147,7 +147,7 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 	/build/mad query   <document.mad>
 	/build/mad refresh --credentials user:pass <document.mad>
 
-`export` 是唯一不在此处的动词：PDF 是由 `UIPrintPageRenderer` 绘制的 Core Graphics 上下文，因此它留在 Apple 上，并会说明这一点（`docs/project/MAD_LINUX.md` §5.2；渲染器决策属于阶段 E）。
+`export` 是唯一不在此处的动词：PDF 是由 `UIPrintPageRenderer` 绘制的 Core Graphics 上下文，因此它留在 Apple 上，并会说明这一点（`docs/developers/build/linux.md` §5.2；渲染器决策属于阶段 E）。
 
 **`export` 在这里增加了它的 Foundation 格式（阶段 E，2026-10-16）。** 导出接缝（`MADReportExporting` + `MADReportExporterRegistry`，`docs/developers/cli.md` §5.3）位于 `mad` 中，因此 `text`、`csv` 和 `json` 在镜像中运行，并写出与 Mac 工具相同的字节（渲染侧格式——`html`、`html-flow`、`json-report`——也在这里运行；见下面一节，`pdf` 则说明它为什么不能运行）。为留档而在 London 测试夹具（`CLI/Fixtures/London.portable.mad`，先刷新，两侧均做 `sha256sum`）上运行的比较：
 
@@ -176,11 +176,11 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 
 实时套件的结果一致：来自同一镜像的 `MADMySQLLiveTests` 44/44、`MADTdsClientLiveTests` 29/29 和 `MADPostgresLiveTests` 14/14。`Linux/Tests/MADHeadlessDocumentTests.m` 是同一检查点的测试形式——打开、架构、查询、驱动解析、刷新、76 行——因此它会在 CI 中失败，而不是在手工运行中失败。
 
-**两个值得了解的差异，都在这里发现。** SELECT 列表的列顺序曾是*集合*顺序（`MADQueryActiveQueryFields` 累积到一个 `NSSet` 中），因此同一文档在 Apple 和 GNUstep 上产生不同的顺序——相同的字段，不同的顺序；一旦按字段名比较，缓存的*数据*是相同的，而缓存的 `c<hash>` 列名由哈希派生，因此每个平台也不同。**2026-10-16 已解决（JSON 导出形状决策，`docs/project/MAD_LINUX.md` §10.1）：** 现在两个 SQL 构建器都将顺序定义为按 `-compare:` 排序的列别名，因此生成的 SQL、行缓存和每个导出在两个平台上都一致（docs/project/registers/BUGS.md 的 SELECT 列表条目；顺序测试在 `Linux/Tests/MADQuerySelectExpressionTests.m`）。在该变更之前刷新的缓存，其列顺序与之后刷新的缓存不同——相同的数据，新的顺序——因此在跨该日期比较缓存之前先刷新一次。
+**两个值得了解的差异，都在这里发现。** SELECT 列表的列顺序曾是*集合*顺序（`MADQueryActiveQueryFields` 累积到一个 `NSSet` 中），因此同一文档在 Apple 和 GNUstep 上产生不同的顺序——相同的字段，不同的顺序；一旦按字段名比较，缓存的*数据*是相同的，而缓存的 `c<hash>` 列名由哈希派生，因此每个平台也不同。**2026-10-16 已解决（JSON 导出形状决策，`docs/developers/build/linux.md` §10.1）：** 现在两个 SQL 构建器都将顺序定义为按 `-compare:` 排序的列别名，因此生成的 SQL、行缓存和每个导出在两个平台上都一致（docs/project/registers/BUGS.md 的 SELECT 列表条目；顺序测试在 `Linux/Tests/MADQuerySelectExpressionTests.m`）。在该变更之前刷新的缓存，其列顺序与之后刷新的缓存不同——相同的数据，新的顺序——因此在跨该日期比较缓存之前先刷新一次。
 
 ## 写入器在此运行，两个平台结果一致
 
-阶段 E 的另一半（`docs/project/MAD_LINUX.md` §9；用户的要求，2026-10-16）：`.mad` 写入器在 Linux 上工作，并对同一文档产出与 Mac 的**相同字节**。  `mad write <doc.mad> --out <copy.mad> [--reproducible]` 是其命令行接口，文档在两个平台上都以无头方式打开，因此两侧运行同一个写入器。
+阶段 E 的另一半（`docs/developers/build/linux.md` §9；用户的要求，2026-10-16）：`.mad` 写入器在 Linux 上工作，并对同一文档产出与 Mac 的**相同字节**。  `mad write <doc.mad> --out <copy.mad> [--reproducible]` 是其命令行接口，文档在两个平台上都以无头方式打开，因此两侧运行同一个写入器。
 
 在 London 测试夹具（`CLI/Fixtures/London.portable.mad`）上测得：
 
@@ -271,6 +271,6 @@ Linux 构建在不改动框架源码的前提下提供 GNUstep 所缺的功能�
 
 ## 尚未完成的事项
 
-Linux PDF 写入器——**2026-10-17 推迟，取决于用户的研究；未经其决定不要启动。**  `docs/project/MAD_PDF_LINUX.md` 是交接文件（已有什么、缺少什么、带许可证的候选技术栈、未决问题、验收测试）；`docs/project/MAD_LINUX.md` §10.2 记录了理由。  在它落地之前，Linux 上的 PDF 就是用浏览器打印 `--format html`。
+Linux PDF 写入器——**2026-10-17 推迟，取决于用户的研究；未经其决定不要启动。**  `docs/developers/build/pdf.md` 是交接文件（已有什么、缺少什么、带许可证的候选技术栈、未决问题、验收测试）；`docs/developers/build/linux.md` §10.2 记录了理由。  在它落地之前，Linux 上的 PDF 就是用浏览器打印 `--format html`。
 
 截至 2026-10-17，阶段 F 的其他部分：**运行时镜像**及其**可重复验证**已完成（见上面一节），而 **CI 这一行因用户的决定被删除**——不使用 GitHub Actions，因为 Linux 移植是用于测试的概念验证，而不是产品发布。2026-10-26 的 GHCR 发布改变了这一点：镜像已发布，`publish-image.yml` 构建并推送它（见上面一节）。**Compressor Linux 驱动**尚未完成，CLI 也不需要它：镜像已经以原生方式构建 C 库（`libraries.conf` + `lib/libraries.sh`）。  启动之前请先询问。

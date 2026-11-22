@@ -153,7 +153,7 @@ MADは`MADDatabase`のサブクラスを介してデータベースと通信し�
   2. **MAD Designer（`MADMacDesignerViewController`）：** インタラクティブな**Page & Section Minimap**、**Report Bands**アウトライン、検索可能な**Query Fields**ドラッグソース、セクション間ドラッグ＆ドロップとスマート整列ガイドを備えたズーム・ルーラー付きデザインキャンバス（`MADMacDesignerCanvasView`）、および2カード構成の**Page & Element Inspector**を備えた3ペイン分割ビューです。
   3. **MAD Viewer（`MADMacViewerViewController`）：** ライブデータの更新（`Cmd+R`）、即座の**Page Size**再ページ分割（`US Letter`、`Legal`、`Tabloid`、`A3`、`A4`、`A5`、`B4`、`B5`、`JIS B4`、`JIS B5`）、フレーム付き`PDFView`プレビュー、ネイティブ`NSPrintOperation`印刷（`Cmd+P`）、および**PDF**、**HTML**、**HTML Flow**、**CSV**、**JSON**、**JSON Full Report**、**Plain Text**へのエクスポート（`Cmd+E`）を提供します。
 
-完全なガイドは[`docs/macos.md`](../docs/ja/macos.md)を、マルチプラットフォーム移植の監査記録は[`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md)を参照してください。
+完全なガイドは[`docs/macos.md`](../docs/ja/macos.md)を、マルチプラットフォーム移植の監査記録は[`docs/developers/build/macos.md`](../docs/developers/build/macos.md)を参照してください。
 
 ## ビルドとテスト
 

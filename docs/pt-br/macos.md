@@ -115,7 +115,7 @@ Em vez de encapsular a interface do iOS com Mac Catalyst, o MAD compila doze de 
 | **Frameworks Core e de Drivers** | `MADFoundation`, `MADDataStructures`, `MADCocoaExtensions`, `MADFileManager`, `MADAPI`, `MADSqlite3`, `MADTds`, `MADTdsClient`, `MADMySQL`, `MADPostgres`, `MADBarcodes`, `MAD` | Modelo compartilhado em Objective-C, store SQLite portável (`Rptq*`), parser/compilador SQL, drivers de protocolo de banco de dados, renderizador de código de barras zint, engine de undo/redo `MADDesignerLayout` e `MADPrintPageRenderer` / `MADReportExporterPDF`. |
 | **Frontend Nativo em `AppKit` (`Mac/`)** | `MADMacAppDelegate`, `MADMacAboutWindowController`, `MADMacDocumentController`, `MADMacDocument`, `MADMacWindowController`, `MADMacConnectionWindowController`, `MADMacQueryViewController`, `MADMacDesignerViewController`, `MADMacDesignerCanvasView`, `MADMacViewerViewController` | Ciclo de vida nativo de `NSDocument`, janela About / Overview / Acknowledgements, barra de ferramentas e barra de menus, canvas visual de consultas, designer de relatórios de 3 painéis com minimapa e inspetor, e visualizador de relatórios em `PDFView`. |
 
-A auditoria arquitetural completa e o registro de correções do porte multiplataforma estão documentados em [`docs/project/MAD_MACOS.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_MACOS.md).
+A auditoria arquitetural completa e o registro de correções do porte multiplataforma estão documentados em [`docs/developers/build/macos.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/build/macos.md).
 
 ---
 

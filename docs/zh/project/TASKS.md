@@ -263,7 +263,7 @@ MADOperationConditionResult: created 'failed' (not satisfied) for condition name
 
 ---
 
-## 11. Linux 工具链（docs/project/MAD_LINUX.md 阶段 B）
+## 11. Linux 工具链（docs/developers/build/linux.md 阶段 B）
 
 **状态：** 于 2026-10-06 在 `linux-port` 上完成（由 `linux-phase-b` 改名；2026-10-16 合并到 `master`，`524e0d86e`）—— 验证原型（spike）已通过，阶段 C 是下一步。阶段 C 的两个输入来自这项工作：记录在 `Linux/README.md` 中的 GNUstep 分歧，以及因此短得多的垫片清单。
 
@@ -432,4 +432,4 @@ MIT 发布是一个由 `~/Desktop/MADOpenSource/` 驱动的六提示词操作（
   * **阶段 C（Linux 移植 + `MAD` Rptq 分派）：** `Linux/cmake/MADPostgresSources.cmake`、`<MADPostgres/libpq-fe.h>` 垫片、`Linux/CMakeLists.txt` 中 `mad` 的 whole-archive 链接条目、`MAD` 中的 `RptqDatabaseCredentals+Postgres`，以及移植的 MRC 套件 `Linux/Tests/MADPostgresTests.m`（17 个测试）。
   * **阶段 D（实时测试 + Chinook 测试容器）：** `MADPostgres/TestDatabase/postgres-test-db.sh`（`postgres:17.4-bookworm`，校验和验证的 Chinook PostgreSQL 数据集，位于 `127.0.0.1:5432`，用户 `mad`，密码 `mad_test_pw`，数据库 `chinook`）、`MADPostgresLiveTests.m`（Apple 和 Linux 上 14 个实时测试；不可达时干净跳过），以及记录在 `docs/project/build/DEVELOPER.md` 中的凭据。
   * **阶段 E（应用集成 + CLI）：** `MADDriverSelectorController`（第 2 行：`PostgreSQL Native Driver`，`UIImageExportTypePostgres`）、`MADQueryAddLinkJoinTypeController`（为 `MADDatabaseTypePostgres` 启用所有连接类型）、`MADOperationValidateSQL` 对 `MADDatabaseTypePostgres` 的分号剥离、Apple 和 Linux 上 `MADQueryFullTests` + `MADSQLParserTests` 的双引号覆盖，以及把 `MADPostgres` 链接进 `MAD Designer` 和 `CLI/build.sh`。
-  * **阶段 F（文档与测试夹具）：** 通过 `MADFixtureMaker` 生成的 `CLI/Fixtures/Postgres.chinook.mad`、`Linux/verify-cli.sh --live` 扩展了 25 行的 PostgreSQL 刷新检查，以及 `Linux/README.md`、`CLI/Fixtures/README.md`、`docs/tutorials/driver-authoring.md`、`docs/project/LIBRARIES.md`、`docs/project/THIRD_PARTY_LICENSES.md`、`docs/project/registers/BUGS.md` 和 `AGENTS.md` 的更新。
+  * **阶段 F（文档与测试夹具）：** 通过 `MADFixtureMaker` 生成的 `CLI/Fixtures/Postgres.chinook.mad`、`Linux/verify-cli.sh --live` 扩展了 25 行的 PostgreSQL 刷新检查，以及 `Linux/README.md`、`CLI/Fixtures/README.md`、`docs/tutorials/driver-authoring.md`、`docs/developers/build/libraries.md`、`docs/project/THIRD_PARTY_LICENSES.md`、`docs/project/registers/BUGS.md` 和 `AGENTS.md` 的更新。

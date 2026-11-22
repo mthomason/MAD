@@ -4,7 +4,7 @@
 
 `Mac/` contém o frontend nativo para macOS (`AppKit`, SDK `macosx`, `MACOSX_DEPLOYMENT_TARGET = 12.0`) do **MAD Designer**, construído sobre os doze frameworks MAD multiplataforma (`MADFoundation`, `MADDataStructures`, `MADCocoaExtensions`, `MADFileManager`, `MADAPI`, `MADSqlite3`, `MADTds`, `MADTdsClient`, `MADMySQL`, `MADPostgres`, `MADBarcodes` e `MAD`) e as dez bibliotecas C estáticas universais (`arm64` + `x86_64`) compiladas pelo `Compressor`.
 
-Para a visão geral dos workspaces voltada ao usuário e capturas de tela, consulte [`docs/macos.md`](../docs/pt-br/macos.md). Para a auditoria de portabilidade framework por framework e o registro arquitetural, consulte [`docs/project/MAD_MACOS.md`](../docs/project/MAD_MACOS.md).
+Para a visão geral dos workspaces voltada ao usuário e capturas de tela, consulte [`docs/macos.md`](../docs/pt-br/macos.md). Para a auditoria de portabilidade framework por framework e o registro arquitetural, consulte [`docs/developers/build/macos.md`](../docs/developers/build/macos.md).
 
 ## Instalando uma Versão Pré-Compilada
 

@@ -2,7 +2,7 @@
 
 ## What this is
 
-The headless engine's Linux build (see [`MAD_LINUX.md`](../docs/project/MAD_LINUX.md) §9 and
+The headless engine's Linux build (see [`MAD_LINUX.md`](../docs/developers/build/linux.md) §9 and
 this directory's [`README.md`](README.md)). One Docker image builds libobjc2,
 libdispatch, GNUstep and the C libraries the frameworks link from pinned
 sources on Ubuntu 24.04, compiles all eleven headless frameworks against them,
@@ -68,7 +68,7 @@ The recipe MADFoundation was built with, in the order it was done:
     implementation files the framework needs on Linux, grouped, with every
     excluded file named and a one-line reason (the shape of
     `MADFoundationSources.cmake`; MAD's is the inverse — 150 included, the 31
-    exclusions named by group). Keep it in step with `docs/project/MAD_LINUX.md` §4.
+    exclusions named by group). Keep it in step with `docs/developers/build/linux.md` §4.
 2.  **Include shim and library.** `mad_make_include_shim(<Name> <source-dir>)`,
     then `mad_add_framework(<library> <SOURCES_VAR> <test> ...)`. The function
     adds the compat prelude, builds the library ARC, and links the tests

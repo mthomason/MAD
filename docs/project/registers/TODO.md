@@ -35,7 +35,7 @@ Printing on paper (paginated bands) should be just one paradigm for viewing a `.
 ## 5. Drivers, Export Formats & Headless Engine
 
 * **New database drivers** — Subclass `MADDatabase` for cloud warehouses and APIs (Snowflake, BigQuery, DuckDB, REST/JSON, Salesforce SOQL).
-* **Linux headless PDF writer** — Complete the non-UIKit PDF rendering path on Linux (tracked in [`MAD_PDF_LINUX.md`](../MAD_PDF_LINUX.md); `html`, `html-flow`, `json`, `json-report`, `csv`, and `text` already ship on both platforms).
+* **Linux headless PDF writer** — Complete the non-UIKit PDF rendering path on Linux (tracked in [`MAD_PDF_LINUX.md`](../../developers/build/pdf.md); `html`, `html-flow`, `json`, `json-report`, `csv`, and `text` already ship on both platforms).
 * **Rich office export formats** — Native Excel (`.xlsx`), Word (`.docx`), and Rich Text exporters on the `<MADReportExporting>` seam.
 * **`ORDER BY` in the visual query builder** — Expose explicit sort ordering in the query designer UI beyond group-driven sort descriptors.
 * **Edit database connection information** — Allow re-pointing an existing `.mad` document at a new host/database in the UI (already supported via `--host`/`--port`/`--database` in the `mad` CLI).

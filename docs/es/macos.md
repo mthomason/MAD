@@ -127,7 +127,7 @@ En lugar de envolver la interfaz de iOS en Mac Catalyst, MAD compila doce de sus
 | **Frontend nativo `AppKit` (`Mac/`)** | `MADMacAppDelegate`, `MADMacAboutWindowController`, `MADMacDocumentController`, `MADMacDocument`, `MADMacWindowController`, `MADMacConnectionWindowController`, `MADMacQueryViewController`, `MADMacDesignerViewController`, `MADMacDesignerCanvasView`, `MADMacViewerViewController` | Ciclo de vida nativo de `NSDocument`, ventana About / Overview / Acknowledgements, barra de herramientas y barra de menús, lienzo visual de consultas, diseñador de informes en tres paneles con minimapa e inspector, y visor de informes `PDFView`. |
 
 La auditoría arquitectónica completa y el registro de defectos del port multiplataforma están en
-[`docs/project/MAD_MACOS.md`](https://github.com/mthomason/MAD/blob/master/docs/project/MAD_MACOS.md).
+[`docs/developers/build/macos.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/build/macos.md).
 
 ---
 

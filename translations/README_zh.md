@@ -153,7 +153,7 @@ MAD 通过 `MADDatabase` 子类与数据库通信。目前随版本发布四个�
   2. **MAD Designer（`MADMacDesignerViewController`）：** 三栏分割视图，包含交互式 **Page & Section Minimap**、**Report Bands** 大纲、可搜索的 **Query Fields** 拖放源、带标尺且可缩放的跨节区设计画布（`MADMacDesignerCanvasView`，支持跨节区拖放和智能对齐参考线），以及双卡片 **Page & Element Inspector**。
   3. **MAD Viewer（`MADMacViewerViewController`）：** 实时数据刷新（`Cmd+R`）、即时 **Page Size** 重新分页（`US Letter`、`Legal`、`Tabloid`、`A3`、`A4`、`A5`、`B4`、`B5`、`JIS B4`、`JIS B5`）、带框 `PDFView` 预览、原生 `NSPrintOperation` 打印（`Cmd+P`），以及导出（`Cmd+E`）为 **PDF**、**HTML**、**HTML Flow**、**CSV**、**JSON**、**JSON Full Report** 和 **Plain Text**。
 
-完整指南参见 [`docs/macos.md`](../docs/zh/macos.md)，多平台可移植性审计参见 [`docs/project/MAD_MACOS.md`](../docs/zh/project/MAD_MACOS.md)。
+完整指南参见 [`docs/macos.md`](../docs/zh/macos.md)，多平台可移植性审计参见 [`docs/developers/build/macos.md`](../docs/zh/project/MAD_MACOS.md)。
 
 ## 构建与测试
 

@@ -18,7 +18,7 @@ aus denen sie stammen (`docs/developers/cli.md` §6).
 Beide ausgelieferten Beispiele sind **Legacy**-Dokumente: Ihre Definition ist ein
 Core-Data-Speicher (`StoreContent/analyitics`), und eines zu konvertieren erfordert
 Core Data, das das MAD-Framework nicht linkt und das Linux nicht hat
-(`docs/project/MAD_LINUX.md` §5.1, §9). `London.portable.mad` und
+(`docs/developers/build/linux.md` §5.1, §9). `London.portable.mad` und
 `Music.portable.mad` sind dieselben Dokumente, geschrieben im portablen Speicher,
 sodass eine Plattform ohne Core Data sie lesen und aktualisieren kann — was die
 Linux-CLI und `Linux/Tests/MADHeadlessDocumentTests.m` tun.
