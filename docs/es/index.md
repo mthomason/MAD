@@ -109,10 +109,9 @@ Incorpore el motor, úselo desde la herramienta de línea de comandos `mad` y le
 
 ## La dirección
 
-[Visión](vision.html) — los informes como tablas de base de datos componibles, consultas
-de varias fuentes en un solo informe, vistas de datos nativas de UIKit más allá del
-paradigma del papel, y la conversión de informes heredados de Crystal Reports (`.rpt`)
-en archivos `.mad` abiertos.
+[Visión](vision.html) — de los informes a los objetos de datos componibles, consultas de
+varias fuentes materializadas localmente, un motor embebible y sin interfaz gráfica,
+presentación más allá del paradigma del papel, y documentos editables creados por IA.
 
 ---
 
