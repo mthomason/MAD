@@ -1,14 +1,14 @@
 ---
 title: MAD — Mobile Analytics Document
 description: >-
-  Un formato abierto y un motor embebible para la generación de informes relacionales — MAD Designer y MAD Viewer para macOS nativo (AppKit) e iOS, la CLI mad sin interfaz gráfica (headless) para Linux y macOS, y la especificación abierta de .mad.
+  Un formato abierto y un motor embebible para la generación de informes relacionales — MAD Designer y MAD Viewer para macOS nativo (AppKit) e iOS, la CLI mad sin interfaz gráfica (headless) para Linux y Windows, y la especificación abierta de .mad.
 image: /assets/mad-icons-banner.png
 lang: es-419
 ---
 
 <p><a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../assets/mad-designer-macos-icon-256.png" alt="Icono de MAD Designer" width="64" height="64" align="left" style="margin-right: 16px; margin-bottom: 8px;" /></a><strong>Un formato abierto y un motor embebible para la generación de informes relacionales: cada informe es un grafo de consultas portátil, una tabla SQLite materializada y un diseño paramétrico.</strong></p>
 
-MAD es una plataforma embebida de generación de informes relacionales para consultas ad hoc, informes y diseño: las aplicaciones **MAD Designer** y **MAD Viewer** para iOS y macOS nativo (`AppKit`), el motor sin interfaz gráfica (headless) que las ejecuta en Linux y macOS, y el formato de documento abierto `.mad`. Un archivo `.mad` contiene la definición completa de un informe —la instantánea del esquema de la base de datos, el grafo de consultas (tablas, joins, predicados, agrupaciones) y el diseño por bandas de sus elementos— en menos de 100 KB, separado limpiamente de la tabla SQLite materializada (`.maddb` + `.mdcache`) que produce al actualizarse.
+MAD es una plataforma embebida de generación de informes relacionales para consultas ad hoc, informes y diseño: las aplicaciones **MAD Designer** y **MAD Viewer** para iOS y macOS nativo (`AppKit`), el motor sin interfaz gráfica (headless) que las ejecuta en Linux y Windows, y el formato de documento abierto `.mad`. Un archivo `.mad` contiene la definición completa de un informe —la instantánea del esquema de la base de datos, el grafo de consultas (tablas, joins, predicados, agrupaciones) y el diseño por bandas de sus elementos— en menos de 100 KB, separado limpiamente de la tabla SQLite materializada (`.maddb` + `.mdcache`) que produce al actualizarse.
 
 El código está en
 [github.com/mthomason/MAD](https://github.com/mthomason/MAD), con licencia MIT;

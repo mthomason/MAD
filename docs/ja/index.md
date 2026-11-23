@@ -9,7 +9,7 @@ lang: ja-JP
 
 <p><a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../assets/mad-designer-macos-icon-256.png" alt="MAD Designer アイコン" width="64" height="64" align="left" style="margin-right: 16px; margin-bottom: 8px;" /></a><strong>リレーショナルレポーティングのためのオープンフォーマットおよび組み込み可能なエンジン——すべてのレポートは、ポータブルなクエリグラフ、マテリアライズドSQLiteテーブル、そしてパラメトリックレイアウトとして表現されます。</strong></p>
 
-MADは、アドホッククエリ、レポーティング、およびレポート設計のための組み込み型リレーショナルレポーティングプラットフォームです。iOSおよびネイティブmacOS（`AppKit`）向けの**MAD Designer**および**MAD Viewer**アプリケーション、LinuxおよびmacOS上でそれらをヘッドレス実行するエンジン、そしてオープンな`.mad`ドキュメントフォーマットで構成されています。`.mad`ファイルは、データベースのスキーマスナップショット、クエリグラフ（テーブル、結合、述語、グループ化）、および各要素のバンド型レイアウトというレポート定義全体を100 KB未満で保持し、更新（リフレッシュ）時に生成されるマテリアライズドSQLiteテーブル（`.maddb` + `.mdcache`）から明確に分離されています。
+MADは、アドホッククエリ、レポーティング、およびレポート設計のための組み込み型リレーショナルレポーティングプラットフォームです。iOSおよびネイティブmacOS（`AppKit`）向けの**MAD Designer**および**MAD Viewer**アプリケーション、LinuxおよびWindows上でそれらをヘッドレス実行するエンジン、そしてオープンな`.mad`ドキュメントフォーマットで構成されています。`.mad`ファイルは、データベースのスキーマスナップショット、クエリグラフ（テーブル、結合、述語、グループ化）、および各要素のバンド型レイアウトというレポート定義全体を100 KB未満で保持し、更新（リフレッシュ）時に生成されるマテリアライズドSQLiteテーブル（`.maddb` + `.mdcache`）から明確に分離されています。
 
 ソースコードは[github.com/mthomason/MAD](https://github.com/mthomason/MAD)にてMITライセンスで公開されています。なお、名称およびアプリケーションのアートワークは同ライセンスの対象外です（[NOTICE](https://github.com/mthomason/MAD/blob/master/NOTICE)を参照）。
 

@@ -109,7 +109,7 @@ Regelschleife mit harten Echtzeitanforderungen passt.
 
 ### Darstellung jenseits von Papier
 
-Die bandbasierte Paginierung — Report Header, Page Header, Gruppierungen,
+Die bandbasierte Paginierung — Berichtskopf, Seitenkopf, Gruppierungen,
 Detail, Fußzeilen — wurde für den Druck auf Papier erfunden. Ein
 `.mad`-Layout sind parametrische Daten, und der Zeilen-Cache ist lokales
 SQLite, sodass Papierseiten nur eine Darstellung der Daten sind und nicht
@@ -195,7 +195,7 @@ lokaler Verarbeitung.
 Ein System, in dem Menschen die benötigten Informationen beschreiben und
 ein Modell validierte MAD-Datenobjekte und -Dokumente konstruiert, mit
 strukturierter Generierung, maschineller Validierung und editierbaren
-Artefakten, die unabhängig von der KI nützlich bleiben.
+Artefakten, die unabhängig von der KI nützlich bleiben. Dies ist ein Vorschlag, keine bereits ausgelieferte Funktion.
 
 ## Warum das wichtig ist
 

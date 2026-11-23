@@ -175,7 +175,7 @@ processing as the emphasis.
 A system where people describe the information they need and a model
 constructs validated MAD data objects and documents, with structured
 generation, machine validation, and editable artifacts that remain useful
-independently of the AI.
+independently of the AI. This is a proposal; no AI authoring ships today.
 
 ## Why this matters
 

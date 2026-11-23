@@ -175,7 +175,7 @@ reutilizables y el procesamiento local.
 Un sistema en el que las personas describen la información que necesitan y un modelo
 construye objetos de datos y documentos MAD validados, con generación estructurada,
 validación por máquina y artefactos editables que siguen siendo útiles independientemente
-de la IA.
+de la IA. Esto es una propuesta, no una función ya disponible.
 
 ## Por qué esto importa
 

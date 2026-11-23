@@ -1,14 +1,14 @@
 ---
 title: MAD — Mobile Analytics Document
 description: >-
-  Ein offenes Format und eine einbettbare Engine für relationales Reporting — MAD Designer und MAD Viewer für natives macOS (AppKit) und iOS, die headless mad-CLI für Linux und macOS und die offene .mad-Spezifikation.
+  Ein offenes Format und eine einbettbare Engine für relationales Reporting — MAD Designer und MAD Viewer für natives macOS (AppKit) und iOS, die headless mad-CLI für Linux und Windows und die offene .mad-Spezifikation.
 image: /assets/mad-icons-banner.png
 lang: de-DE
 ---
 
 <p><a href="https://raw.githubusercontent.com/mthomason/MAD/master/StaticResources/Images/icons/document/Designer%20Icon@3x.png"><img src="../assets/mad-designer-macos-icon-256.png" alt="MAD Designer-Symbol" width="64" height="64" align="left" style="margin-right: 16px; margin-bottom: 8px;" /></a><strong>Ein offenes Format und eine einbettbare Engine für relationales Reporting — hier ist jeder Bericht ein portabler Abfragegraph, eine materialisierte SQLite-Tabelle und ein parametrisches Layout.</strong></p>
 
-MAD ist eine eingebettete Plattform für relationales Reporting für Ad-hoc-Abfragen, Berichte und Design: die Apps **MAD Designer** und **MAD Viewer** für iOS und natives macOS (`AppKit`), die headless Engine, die sie unter Linux und macOS ausführt, und das offene `.mad`-Dokumentformat. Eine `.mad`-Datei enthält die gesamte Definition eines Berichts — den Schema-Snapshot der Datenbank, den Abfragegraphen (Tabellen, Joins, Prädikate, Gruppierungen) und das bandbasierte Layout seiner Elemente — in weniger als 100 KB, sauber getrennt von der materialisierten SQLite-Tabelle (`.maddb` + `.mdcache`), die sie beim Aktualisieren erzeugt.
+MAD ist eine eingebettete Plattform für relationales Reporting für Ad-hoc-Abfragen, Berichte und Design: die Apps **MAD Designer** und **MAD Viewer** für iOS und natives macOS (`AppKit`), die headless Engine, die sie unter Linux und Windows ausführt, und das offene `.mad`-Dokumentformat. Eine `.mad`-Datei enthält die gesamte Definition eines Berichts — den Schema-Snapshot der Datenbank, den Abfragegraphen (Tabellen, Joins, Prädikate, Gruppierungen) und das bandbasierte Layout seiner Elemente — in weniger als 100 KB, sauber getrennt von der materialisierten SQLite-Tabelle (`.maddb` + `.mdcache`), die sie beim Aktualisieren erzeugt.
 
 Der Code liegt auf
 [github.com/mthomason/MAD](https://github.com/mthomason/MAD), unter MIT-Lizenz;
