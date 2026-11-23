@@ -101,7 +101,7 @@ rígido.
 
 ### Apresentação além do papel
 
-A paginação em bandas — Report Header, Page Header, Groupings, Detail, Footers —
+A paginação em bandas — Cabeçalho do Relatório, Cabeçalho da Página, Agrupamentos, Detalhe, Rodapés —
 foi inventada para impressão em papel. O layout de um `.mad` é composto por
 dados paramétricos, e o cache de linhas é um SQLite local, de modo que as
 páginas em papel são uma apresentação dos dados, e não sua definição.
@@ -180,7 +180,7 @@ definições reutilizáveis e processamento local.
 Um sistema em que as pessoas descrevem as informações de que precisam e um
 modelo constrói objetos de dados e documentos MAD validados, com geração
 estruturada, validação por máquina e artefatos editáveis que permanecem úteis
-independentemente da IA.
+independentemente da IA. Esta é uma proposta; a criação por IA ainda não está disponível.
 
 ## Por que isso importa
 
