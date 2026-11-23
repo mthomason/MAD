@@ -46,7 +46,8 @@ When performing asynchronous tasks related to documents or data, look for an exi
 ## Testing and Reports
 
 *   **Tests**: `MAD/MADTests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MAD -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MAD -destination 'platform=iOS Simulator,id=<device-udid>' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared`.
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Known issues**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- see the `## MAD (framework)` section.
 *   **Task queue**: [`TASKS.md`](../docs/project/registers/TASKS.md) -- maintain it, but do not start work from it.
-*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../docs/developers/architecture/data-table.md).
+*   **Architecture**: [`data-table.md`](../docs/developers/architecture/data-table.md).

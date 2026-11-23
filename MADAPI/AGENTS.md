@@ -41,6 +41,7 @@ When you need to interact with a database, you should use the classes and protoc
 ## Testing and Reports
 
 *   **Tests**: `MADAPI/MADAPITests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MADAPI -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADAPI -destination 'platform=iOS Simulator,id=<device-udid>' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared`.
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Known issues**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- see the `## MADAPI` section.
 *   **Task queue**: [`TASKS.md`](../docs/project/registers/TASKS.md) -- maintain it, but do not start work from it.

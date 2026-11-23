@@ -41,6 +41,7 @@ If you need to support a new file storage location (e.g., a different cloud serv
 ## Testing and Reports
 
 *   **Tests**: `MADFileManager/MADFileManagerTests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MADFileManager -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADFileManager -destination 'platform=iOS Simulator,id=<device-udid>' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared`.
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Known issues**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- see the `## MADFileManager` section.
 *   **Task queue**: [`TASKS.md`](../docs/project/registers/TASKS.md) -- maintain it, but do not start work from it.

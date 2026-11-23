@@ -24,10 +24,11 @@ This framework, along with `MADTdsClient`, serves as a good example of how to ad
 ## Testing and Reports
 
 *   **Tests**: `MADMySQL/MADMySQLTests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MADMySQL -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADMySQL -destination 'platform=iOS Simulator,id=<device-udid>' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared`.
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Known issues**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- see the `## MADMySQL` section.
 *   **Task queue**: [`TASKS.md`](../docs/project/registers/TASKS.md) -- maintain it, but do not start work from it.
-*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../docs/developers/architecture/data-table.md).
+*   **Architecture**: [`data-table.md`](../docs/developers/architecture/data-table.md).
 *   **Live tests**: `MADMySQLTests/MADMySQLLiveTests.m` talks to a real MySQL server
     and skips when none is reachable. The credentials it expects are in
     [`DEVELOPER.md`](../docs/project/build/DEVELOPER.md); override them with the `MAD_MYSQL_TEST_*`
