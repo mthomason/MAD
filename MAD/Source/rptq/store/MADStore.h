@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, MADStoreErrorCode) {
 	MADStoreErrorUnknownEntity,
 	MADStoreErrorUnknownAttribute,
 	MADStoreErrorUnwritableAttribute,
+	MADStoreErrorUnsupportedVersion,
 };
 
 @interface MADStore : NSObject

@@ -94,6 +94,27 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 	}
 	self.database = database;
 
+	// A store written by a newer build must be refused before the journal mode,
+	// schema creation, or migration writes anything.  Version 0 is an unversioned
+	// store and means version 1 (see -migrateIfNeededWithError:).
+	NSInteger storedVersion = [self readUserVersionWithError:error];
+	if (storedVersion < 0) {
+		[self close];
+		return NO;
+	}
+	if (storedVersion == 0) storedVersion = 1;
+	if (storedVersion > MADStoreCurrentVersion) {
+		if (error) {
+			*error = MADStoreError(MADStoreErrorUnsupportedVersion,
+				[[NSString alloc] initWithFormat:
+					@"This document was written by a newer version of MAD Designer "
+					@"(store revision %ld). Upgrade MAD Designer to open it.",
+					(long)storedVersion]);
+		}
+		[self close];
+		return NO;
+	}
+
 	// A document is a single file that gets archived, so the rollback journal is the
 	// right mode: unlike WAL it leaves nothing in a side file for a reader to miss.
 	if (![self execute:@"PRAGMA journal_mode = DELETE;" error:error]) {

@@ -549,4 +549,27 @@ static BOOL SQLiteTableHasColumn(NSURL *url, NSString *table, NSString *column) 
 	[store close];
 }
 
+/// A store written by a newer build is refused before journal-mode, schema
+/// creation or migration writes anything.  The version-1 fixture is deliberately
+/// missing `sqlSourceText`, so the column's absence after the failed open proves
+/// no migration ran.
+- (void)testAStoreFromANewerBuildIsRefusedBeforeAnyWrite {
+	NSURL *url = [self makeVersionOneStoreURL];
+	XCTAssertTrue((SQLiteExecute(url, [[NSString alloc] initWithFormat:
+		@"PRAGMA user_version = %ld;", (long)(MADStoreCurrentVersion + 1)])),
+		@"could not stamp the newer version");
+
+	MADStore *store = [MADStore storeWithURL:url];
+	NSError *error = nil;
+	XCTAssertFalse([store openWithError:&error], @"a newer store must not open");
+	XCTAssertEqualObjects(error.domain, MADStoreErrorDomain);
+	XCTAssertEqual(error.code, MADStoreErrorUnsupportedVersion);
+
+	XCTAssertEqual(SQLiteUserVersion(url), MADStoreCurrentVersion + 1,
+				   @"the refused open leaves user_version alone");
+	XCTAssertFalse(SQLiteTableHasColumn(url, @"RptqQuery", @"sqlSourceText"),
+				   @"the refused open runs no migration");
+	[store close];
+}
+
 @end
