@@ -37,6 +37,7 @@ If you need to add a new file storage location to the application, you will need
 ## Testing and Reports
 
 *   **Tests**: `MADExplorer/MADExplorerTests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MADExplorer -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADExplorer -destination 'platform=iOS Simulator,id=<device-udid>' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared`.
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Known issues**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- see the `## MADExplorer` section.
 *   **Task queue**: [`TASKS.md`](../docs/project/registers/TASKS.md) -- maintain it, but do not start work from it.

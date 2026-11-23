@@ -5,7 +5,7 @@
 The headless engine's Linux build (see [`MAD_LINUX.md`](../docs/developers/build/linux.md) §9 and
 this directory's [`README.md`](README.md)). One Docker image builds libobjc2,
 libdispatch, GNUstep and the C libraries the frameworks link from pinned
-sources on Ubuntu 24.04, compiles all eleven headless frameworks against them,
+sources on Ubuntu 24.04, compiles all twelve headless frameworks against them,
 and runs their suites. Nothing here ships in the app; the CLI is Phase D's
 checkpoint, and Phase F's runtime image (`mad-cli:latest` locally, published
 as `ghcr.io/mthomason/mad`) is how it is run.

@@ -13,7 +13,7 @@ four drivers MADMySQL, MADTds, MADTdsClient, MADPostgres), compiles the pinned
 SQLite/zlib/bzip2/libarchive/libpng/zint/pixman/FreeType/cairo and
 OpenSSL/FreeTDS/MariaDB/libpq libraries, builds `mad.exe` from `CLI/Source`, and runs the ported Linux test
 suites (130 suites + the smoke test, 1,313 tests, 6 needs, 5 skips in the
-container-backed run, 0 failures).
+container-backed run, 0 failures; measured 2026-11-20).
 
 ## Layout
 

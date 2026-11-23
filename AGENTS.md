@@ -75,7 +75,7 @@ The code base also includes a custom scripting language in a file called `Scrimp
 
 The codebase also includes static library build scrips in a file called `Compressor`.  This is used to build the static libraries used by the project.  This is a very important part of the project.
 
-The codebase also includes `Linux`, the headless engine's build (`docs/developers/build/linux.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all twelve headless frameworks against them, and runs their ported suites — 130 suites, 1,313 tests (`./Linux/build.sh`), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
+The codebase also includes `Linux`, the headless engine's build (`docs/developers/build/linux.md` §9): a Docker image that builds libobjc2, GNUstep and the C libraries from pinned sources, compiles all twelve headless frameworks against them, and runs their ported suites — 130 suites, 1,313 tests (`./Linux/build.sh`, measured 2026-11-20), plus the CLI.  It proves the environment for the headless engine; nothing there ships in the app.  See `Linux/README.md`.
 
 ## Code Style Guidance
 
@@ -141,17 +141,22 @@ exact end-to-end sequence without needing the user to spell out each step:
 
 ## Testing
 
-Each framework has one test target, exposed by a shared scheme of the same name. Run a
-suite against an iOS Simulator:
+Each framework has one test target, exposed by a shared scheme of the same name. Pick an
+available simulator, then run the suite against it:
 
+	xcrun simctl list devices available
+
+	# Use a UDID from the list above.
 	xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation \
-		-destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
-		-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
+		-destination 'platform=iOS Simulator,id=<device-udid>' \
+		-derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared
 
-The destination is pinned by device id, not name: `OS:latest` resolves to the newest
-installed runtime (iOS 27.0), which has no iPhone 17 Pro device (26.0/26.1/26.5 do), so
-the `name=iPhone 17 Pro` form fails with exit code 70.  The shared DerivedData path is
-required -- the frameworks reference each other via `BUILT_PRODUCTS_DIR`.
+Choose the destination by device id from `simctl`, not by a device name: a name is only
+valid on the runtimes that contain that device, so the `name=...` form fails with exit
+code 70 when the newest installed runtime does not offer it.  Every framework suite must
+use the same `-derivedDataPath` -- the frameworks reference each other via
+`BUILT_PRODUCTS_DIR`, so a per-suite or per-invocation path breaks the build.
+`Reports-shared` is the shared path the project documents (`CONTRIBUTING.md`).
 
 `MADMySQL`, `MADTdsClient`, and `MADPostgres` each carry a second file -- `MADMySQLLiveTests.m`,
 `MADTdsClientLiveTests.m`, and `MADPostgresLiveTests.m` -- that talks to a real database server and **skips** when one is
@@ -190,7 +195,7 @@ the headless side.
   documented but deliberately not built.
 * `docs/vision.md` -- the public statement of the direction: a report is a table; reports as
   composable data sources, one document spanning several databases, documented but
-  deliberately not built (the design behind it is `MAD_DATA_OBJECT.md`).
+  deliberately not built (the design behind it is `docs/developers/data-object.md`).
 * `docs/index.md` -- the developer site's landing page; GitHub Pages serves `docs/` via Jekyll
   (`_config.yml`, `docs/CNAME`, `docs/robots.txt`), live once the repository is public.
 * `docs/project/design/MAD_SCRIPTING.md` -- the Scrimpter revival analysis: the state and correctness audit of

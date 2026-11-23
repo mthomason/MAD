@@ -39,7 +39,8 @@ When performing multiple database operations that need to be treated as a single
 ## Testing and Reports
 
 *   **Tests**: `MADSqlite3/MADSqlite3Tests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MADSqlite3 -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADSqlite3 -destination 'platform=iOS Simulator,id=<device-udid>' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared`.
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Known issues**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- see the `## MADSqlite3` section.
 *   **Task queue**: [`TASKS.md`](../docs/project/registers/TASKS.md) -- maintain it, but do not start work from it.
-*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../docs/developers/architecture/data-table.md).
+*   **Architecture**: [`data-table.md`](../docs/developers/architecture/data-table.md).

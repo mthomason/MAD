@@ -20,5 +20,6 @@ The `MADPostgres` framework provides the PostgreSQL implementation of `MADDataba
 ## Testing and Reports
 
 *   **Tests**: `MADPostgres/MADPostgresTests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MADPostgres -destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci`.
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADPostgres -destination 'platform=iOS Simulator,id=<device-udid>' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared`.
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Live tests**: `MADPostgresTests/MADPostgresLiveTests.m` talks to a real PostgreSQL server and skips when none is reachable. Override credentials with `MAD_PG_TEST_*` environment variables (`MAD_PG_TEST_HOST`, `MAD_PG_TEST_PORT`, `MAD_PG_TEST_USER`, `MAD_PG_TEST_PASSWORD`, `MAD_PG_TEST_DATABASE`). `TestDatabase/postgres-test-db.sh` manages the `mad-postgres` Docker container. On Windows (Phase 3b) drive the same server through [`TestDatabase/test-databases.ps1`](../TestDatabase/README.md) (or `TestDatabase/test-databases.sh`) and set `MAD_PG_TEST_HOST/PORT/USER/PASSWORD/DATABASE` from its `env` output; the Xcode scheme's pre/post actions (up/down) are macOS-only.

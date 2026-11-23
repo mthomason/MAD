@@ -43,5 +43,6 @@ When you need to work with complex data relationships or implement algorithms, c
 ## Testing and Reports
 
 *   **Tests**: `MADDataStructures/MADDataStructuresTests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MADDataStructures -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADDataStructures -destination 'platform=iOS Simulator,id=<device-udid>' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared`.
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Tracking**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- the defect register; [`TASKS.md`](../docs/project/registers/TASKS.md) -- the engineering queue. Maintain them, but do not start work from them.

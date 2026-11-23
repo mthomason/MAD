@@ -46,7 +46,8 @@ When working with any other framework in this project, it is highly likely that 
 ## Testing and Reports
 
 *   **Tests**: `MADFoundation/MADFoundationTests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADFoundation -destination 'platform=iOS Simulator,id=<device-udid>' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared`.
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Known issues**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- see the `## MADFoundation` section.
 *   **Task queue**: [`TASKS.md`](../docs/project/registers/TASKS.md) -- maintain it, but do not start work from it.
-*   **Architecture**: [`MADDataTable_Architecture_Report.md`](../docs/developers/architecture/data-table.md).
+*   **Architecture**: [`data-table.md`](../docs/developers/architecture/data-table.md).

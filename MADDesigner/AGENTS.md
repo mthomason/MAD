@@ -33,9 +33,10 @@ The project defines four targets:
     ```sh
     xcodebuild test -workspace Reports.xcworkspace -scheme "MAD Designer" \
         -only-testing:MADDesignerUnitTests \
-        -destination 'platform=iOS Simulator,id=94952340-7629-4EBB-BBD3-6FEE068793B8' \
-        -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-cozeiyczmvgrbeapplwfuygymqci
+        -destination 'platform=iOS Simulator,id=<device-udid>' \
+        -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared
     ```
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Unit test files**:
     *   `MADDesignerUnitTests.m` -- the app-source helper categories (Base64, RFC 3339 date
         formatting), framework consumption, designer/viewer controller regressions, and

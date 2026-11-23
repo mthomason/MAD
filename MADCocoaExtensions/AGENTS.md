@@ -44,6 +44,7 @@ When you need to create or modify UI elements, consult this framework first. It 
 ## Testing and Reports
 
 *   **Tests**: `MADCocoaExtensions/MADCocoaExtensionsTests`. Run with
-    `xcodebuild test -workspace Reports.xcworkspace -scheme MADCocoaExtensions -destination 'platform=iOS Simulator,name=iPhone 17 Pro'`.
+    `xcodebuild test -workspace Reports.xcworkspace -scheme MADCocoaExtensions -destination 'platform=iOS Simulator,id=<device-udid>' -derivedDataPath ~/Library/Developer/Xcode/DerivedData/Reports-shared`.
+    Pick `<device-udid>` from `xcrun simctl list devices available`; see the root [`AGENTS.md`](../AGENTS.md) § Testing.
 *   **Known issues**: [`BUGS.md`](../docs/project/registers/BUGS.md) -- see the `## MADCocoaExtensions` section.
 *   **Task queue**: [`TASKS.md`](../docs/project/registers/TASKS.md) -- maintain it, but do not start work from it.
