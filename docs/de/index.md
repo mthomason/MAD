@@ -113,10 +113,10 @@ Binden Sie die Engine ein, steuern Sie sie über das `mad`-Kommandozeilenwerkzeu
 
 ## Die Richtung
 
-[Vision](vision.html) — Berichte als kombinierbare Datenbanktabellen, Abfragen mit
-mehreren Quellen in einem einzigen Bericht, native UIKit-Datenansichten jenseits
-des Papierparadigmas und die Konvertierung von Legacy-Crystal-Reports-Dateien
-(`.rpt`) in offene `.mad`-Dateien.
+[Vision](vision.html) — von Berichten zu kombinierbaren Datenobjekten, lokal
+materialisierten Abfragen mit mehreren Quellen, einer eingebetteten und headless
+Engine, Darstellung jenseits des Papierparadigmas und KI-verfassten, editierbaren
+Dokumenten.
 
 ---
 
