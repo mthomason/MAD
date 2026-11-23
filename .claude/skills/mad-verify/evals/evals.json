@@ -1,0 +1,17 @@
+{
+	"skill_name": "mad-verify",
+	"evals": [
+		{
+			"id": 1,
+			"prompt": "I changed MAD/Source/MADQueryFull.m and Mac/Source/MADMacDocument.m. What should I run locally before opening a PR? I do not want to spend an hour on the Linux build unless it is actually required.",
+			"expected_output": "Routes the MAD framework file to its iOS suite and the Linux gate, the Mac file to the Mac build/smoke test, distinguishes re-running artifacts from compiling the edit, and keeps the full Linux build as a PR-time gate rather than an edit-time step.",
+			"files": []
+		},
+		{
+			"id": 2,
+			"prompt": "I only edited docs/vision.md and one string in MADDesigner/Resources/Localizable.xcstrings. Verify the change without building the app.",
+			"expected_output": "Runs the pure-Python docs and localization checks only, does not invoke Apple or Linux suites, and notes the CI forms of the checks.",
+			"files": []
+		}
+	]
+}
