@@ -109,9 +109,9 @@ architecture records: [developer documentation](developers/).
 
 ## The direction
 
-[Vision](vision.html) — reports as composable database tables, multi-source
-queries in a single report, native UIKit data views beyond the paper paradigm,
-and converting legacy Crystal Reports (`.rpt`) into open `.mad` files.
+[Vision](vision.html) — from reports to composable data objects, multi-source
+queries materialized locally, an embedded and headless engine, presentation
+beyond the paper paradigm, and AI-authored, editable documents.
 
 ---
 
