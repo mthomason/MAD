@@ -110,9 +110,9 @@ Incorpore o motor, use a ferramenta de linha de comando `mad` e leia o contrato 
 
 ## A direção
 
-[Visão](vision.html) — relatórios como tabelas de banco de dados componíveis, consultas
-multifonte em um único relatório, views nativas em UIKit além do paradigma do papel
-e conversão de arquivos legados do Crystal Reports (`.rpt`) para arquivos `.mad` abertos.
+[Visão](vision.html) — de relatórios a objetos de dados componíveis, consultas
+multifonte materializadas localmente, uma engine embarcada e headless,
+apresentação além do paradigma do papel e documentos escritos por IA e editáveis.
 
 ---
 
