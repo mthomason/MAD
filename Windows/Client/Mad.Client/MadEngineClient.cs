@@ -17,6 +17,17 @@ using System.Text.Json;
 
 namespace Mad.Client;
 
+/// <summary>The engine's answer to `engine-info`.  Every identity field is nullable:
+/// an engine built without the generated identity file reports nulls, never a guess.</summary>
+public sealed record EngineInfo(
+	int ProtocolVersion,
+	string? EngineVersion,
+	string? EngineRevision,
+	string? SourceCommit,
+	string? SourceCommitShort,
+	bool? SourceDirty,
+	IReadOnlyList<string> Capabilities);
+
 /// <summary>The `error` member of a failed response.</summary>
 public sealed class MadEngineError
 {
@@ -203,6 +214,45 @@ public sealed class MadEngineClient : IDisposable
 			throw new MadEngineException(-1, "the engine closed its standard output before answering");
 		}
 		return MadEngineResponse.Parse(reply);
+	}
+
+	/// <summary>`engine-info` -- the running engine's identity.  An engine older than
+	/// this client answers "unknown method", which raises <see cref="MadEngineException"/>;
+	/// callers treat that as an unknown identity, never as a failed open.</summary>
+	public EngineInfo EngineInfo()
+	{
+		var result = CallOk("engine-info");
+		int protocolVersion = result.TryGetProperty("protocolVersion", out var protocol)
+			&& protocol.ValueKind == JsonValueKind.Number ? protocol.GetInt32() : 0;
+
+		string? String(string name) =>
+			result.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String
+				? value.GetString() : null;
+
+		bool? dirty = null;
+		if (result.TryGetProperty("sourceDirty", out var dirtyValue))
+		{
+			if (dirtyValue.ValueKind == JsonValueKind.True) dirty = true;
+			else if (dirtyValue.ValueKind == JsonValueKind.False) dirty = false;
+		}
+
+		var capabilities = new List<string>();
+		if (result.TryGetProperty("capabilities", out var collection)
+			&& collection.ValueKind == JsonValueKind.Array)
+		{
+			foreach (var capability in collection.EnumerateArray())
+			{
+				if (capability.ValueKind == JsonValueKind.String
+					&& capability.GetString() is { } name)
+				{
+					capabilities.Add(name);
+				}
+			}
+		}
+
+		return new EngineInfo(protocolVersion, String("engineVersion"),
+			String("engineRevision"), String("sourceCommit"),
+			String("sourceCommitShort"), dirty, capabilities);
 	}
 
 	/// <summary>`open` -- opens a document and returns its handle.</summary>

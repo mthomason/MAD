@@ -144,6 +144,7 @@ static NSString * const MADCLIServeMethodSetElementBoxModel = @"set-element-box-
 static NSString * const MADCLIServeMethodSetSection		= @"set-section";
 static NSString * const MADCLIServeMethodSetPaperSize	= @"set-paper-size";
 static NSString * const MADCLIServeMethodBarcodeTypes	= @"barcode-types";
+static NSString * const MADCLIServeMethodEngineInfo	= @"engine-info";
 
 #pragma mark - Session state
 
@@ -2187,7 +2188,9 @@ static BOOL MADCLIServeDispatch(NSDictionary *request, NSMutableDictionary <NSNu
 	}
 
 	@try {
-		if ([method isEqualToString: MADCLIServeMethodOpen]) {
+		if ([method isEqualToString: MADCLIServeMethodEngineInfo]) {
+			MADCLIServeWriteResult(requestID, MADCLIEngineInfoDictionary());
+		} else if ([method isEqualToString: MADCLIServeMethodOpen]) {
 			MADCLIServeOpen(params, documents, requestID);
 		} else if ([method isEqualToString: MADCLIServeMethodCreate]) {
 			MADCLIServeCreate(params, documents, requestID);

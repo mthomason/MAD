@@ -80,6 +80,18 @@ public sealed class MadEngineClientTests
 	}
 
 	[Fact]
+	public void EngineInfo_ReportsAProtocolVersionAndCapabilities()
+	{
+		using var client = StartClient();
+		client.Start();
+
+		var info = client.EngineInfo();
+		Assert.Equal(1, info.ProtocolVersion);
+		Assert.False(string.IsNullOrEmpty(info.EngineVersion));
+		Assert.Contains("engine-info", info.Capabilities);
+	}
+
+	[Fact]
 	public void LondonFixture_OpenDescribeRefreshExport_Completes()
 	{
 		using var client = StartClient();

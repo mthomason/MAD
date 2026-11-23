@@ -120,6 +120,13 @@ compile_tool() {
 	rm -rf "${BUILD_DIR}/MAD.momd"
 	cp -R "${PRODUCTS}/MAD Designer.app/MAD.momd" "${BUILD_DIR}/MAD.momd"
 
+	# The engine reports its own identity from this generated file, which sits
+	# beside the binary.  It is a build product, never a tracked plist.
+	"${REPO_ROOT}/scripts/dev/build-info.sh" --format plist \
+		--output "${BUILD_DIR}/MADBuildInfo.plist" \
+		--app-version "$(python3 -I "${REPO_ROOT}/scripts/dev/versions.py" read macos_app_version)" \
+		--app-build "$(python3 -I "${REPO_ROOT}/scripts/dev/versions.py" read macos_build)"
+
 	sign_tool
 }
 
