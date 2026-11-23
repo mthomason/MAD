@@ -453,4 +453,43 @@ public sealed class MadEngineClientTests
 
 		AssertProcessGone(pid);
 	}
+
+	[Fact]
+	public void Shutdown_WhenTheEngineDoesNotAnswer_ReturnsAndKillsTheProcess()
+	{
+		if (!OperatingSystem.IsWindows())
+		{
+			return; // the stub is a Windows PowerShell process
+		}
+
+		var startInfo = new ProcessStartInfo
+		{
+			FileName = "powershell.exe",
+			Arguments = "-NoProfile -Command \"Start-Sleep -Seconds 60\"",
+			RedirectStandardInput = true,
+			RedirectStandardOutput = true,
+			RedirectStandardError = true,
+			UseShellExecute = false,
+			CreateNoWindow = true,
+		};
+
+		var client = new MadEngineClient(startInfo);
+		try
+		{
+			client.Start();
+			int pid = client.Pid;
+			Assert.True(pid > 0);
+
+			var watch = Stopwatch.StartNew();
+			client.Shutdown(TimeSpan.FromMilliseconds(250));
+			watch.Stop();
+
+			Assert.True(watch.Elapsed < TimeSpan.FromSeconds(5), $"shutdown took {watch.Elapsed}");
+			AssertProcessGone(pid);
+		}
+		finally
+		{
+			client.Dispose();
+		}
+	}
 }
