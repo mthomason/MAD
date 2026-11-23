@@ -34,9 +34,16 @@ public partial class MainWindow : Window
         WindowSizing.FitToWorkArea(this);
     }
 
-    private void OpenAboutWindow()
+    private async void OpenAboutWindow()
     {
-        var window = new AboutWindow { DataContext = new AboutViewModel(), Owner = this };
+        // Ask the engine this app launched for its identity.  A null answer -- an older
+        // engine, an engine that failed to start -- makes the About line read "unknown".
+        var engine = await _engine.EngineInfoAsync();
+        var window = new AboutWindow
+        {
+            DataContext = new AboutViewModel(BuildInfo.Load(), engine),
+            Owner = this,
+        };
         window.Show();
     }
 

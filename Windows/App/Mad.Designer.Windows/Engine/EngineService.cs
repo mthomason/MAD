@@ -29,6 +29,28 @@ public sealed class EngineService : IAsyncDisposable
 
     public int Pid => _client?.Pid ?? -1;
 
+    /// <summary>`engine-info` -- the identity of the engine this service launched.  A
+    /// failure (an engine too old to answer, a missing executable) answers null, and
+    /// the About window reports the engine as unknown rather than inventing an identity.</summary>
+    public async Task<EngineInfo?> EngineInfoAsync()
+    {
+        await _gate.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            EnsureStarted();
+            MadEngineClient client = _client!;
+            return await Task.Run(() => client.EngineInfo()).ConfigureAwait(false);
+        }
+        catch
+        {
+            return null;
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
     public async Task<OpenResult> OpenAsync(string path, string? host = null, int? port = null, string? database = null)
     {
         var parameters = new Dictionary<string, object?> { ["path"] = path };

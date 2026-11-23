@@ -1,6 +1,7 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 
 using System.IO;
+using Mad.Client;
 using Mad.Designer.Windows.Infrastructure;
 using Mad.Designer.Windows.Models;
 
@@ -13,20 +14,30 @@ public sealed class AboutViewModel : ObservableObject
 {
     private WindowsComponent? _selectedComponent;
 
-    public AboutViewModel()
+    public AboutViewModel() : this(BuildInfo.Load(), null)
     {
+    }
+
+    /// <summary>Builds the About content with the application's generated identity and the
+    /// engine's answer to <c>engine-info</c>.  A null engine means the engine did not
+    /// answer, and the engine line reads "unknown" rather than a stale literal.</summary>
+    public AboutViewModel(BuildInfo build, EngineInfo? engine)
+    {
+        EngineVersion = FormatEngine(engine);
+        ApplicationVersion = FormatApplication(build);
         Components = WindowsLicenseRegistry.Components;
         Overview = BuildOverview();
         LicenseNotice = BuildLicenseNotice();
         SelectedComponent = Components.FirstOrDefault();
     }
 
-    /// <summary>The reporting engine's own version. It is distinct from the Windows
-    /// application's version: the engine is mature while the Windows app is pre-1.0.</summary>
-    public string EngineVersion { get; } = "v9.0 (r4433)";
+    /// <summary>The reporting engine's own version, asked of the engine this app launched.
+    /// It is distinct from the Windows application's version: the engine is mature while
+    /// the Windows app is pre-1.0.</summary>
+    public string EngineVersion { get; }
 
-    /// <summary>The Windows application version (Phase 6f settled decision).</summary>
-    public string ApplicationVersion { get; } = AppInfo.Version;
+    /// <summary>The Windows application version and build, from the generated identity.</summary>
+    public string ApplicationVersion { get; }
 
     public string Copyright { get; } = "Copyright © 2012–2026 Michael Thomason";
 
@@ -52,6 +63,34 @@ public sealed class AboutViewModel : ObservableObject
 
     /// <summary>The Overview prose in the active language, with the machine-assisted
     /// translation notice (MAD_APP_LOCALIZATION.md D14) as the last paragraph.</summary>
+    private static string FormatEngine(EngineInfo? engine)
+    {
+        if (engine == null || string.IsNullOrEmpty(engine.EngineVersion)) return "unknown";
+
+        string text = $"v{engine.EngineVersion}";
+        if (!string.IsNullOrEmpty(engine.EngineRevision)) text += $" ({engine.EngineRevision})";
+
+        string? commit = engine.SourceCommitShort;
+        if (string.IsNullOrEmpty(commit) && !string.IsNullOrEmpty(engine.SourceCommit))
+        {
+            commit = engine.SourceCommit[..Math.Min(8, engine.SourceCommit.Length)];
+        }
+        if (!string.IsNullOrEmpty(commit)) text += $" · {commit}";
+        if (engine.SourceDirty == true) text += "*";
+        return text;
+    }
+
+    private static string FormatApplication(BuildInfo build)
+    {
+        if (string.IsNullOrEmpty(build.AppVersion)) return "unknown";
+
+        string text = $"v{build.AppVersion}";
+        if (!string.IsNullOrEmpty(build.AppBuild)) text += $" ({build.AppBuild})";
+        if (!string.IsNullOrEmpty(build.SourceCommitShort)) text += $" · {build.SourceCommitShort}";
+        if (build.SourceDirty) text += "*";
+        return text;
+    }
+
     private static string BuildOverview() => string.Join("\n\n",
         Localizer.Get("About.Overview.P1"),
         Localizer.Get("About.Overview.P2"),
