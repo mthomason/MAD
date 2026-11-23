@@ -145,6 +145,32 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### A newer store revision was opened and rewritten, and the container header was stripped without a version check
+- **Status:** Fixed 2026-11-23 (commits `da80ef09e`, `ea080c423`).
+- **Where:** `MAD/Source/rptq/store/MADStore.m:77` (`-openWithError:`),
+  `MAD/Source/MADArchiveManager.m:332` (`-unarchive`), `MAD/Source/MADConstants.m:15`,
+  `CLI/Source/MADCLIContainer.m:95`.
+- **Behavior:** `-openWithError:` set the journal mode, ran `-createSchemaSQL` and the
+  migration before reading `PRAGMA user_version`; `-migrateIfNeededWithError:` treated
+  any version `>= MADStoreCurrentVersion` as current, so a store written by a newer build
+  was opened, written to and left at the newer version with no warning. The archive
+  reader stripped any `MADFILE` header after checking only the 8 magic bytes, so the
+  header's two version words were never read; the CLI read the major word and ignored the
+  minor word.
+- **Why it matters:** A reader that cannot interpret a document must refuse it before it
+  edits or saves it. Without the gate, a newer document opened by an older binary is
+  flattened or corrupted silently -- the failure mode composition would make routine.
+- **Now:** `-openWithError:` reads `user_version` before any write and returns
+  `MADStoreErrorUnsupportedVersion` for a revision newer than this build. A shared
+  `MADFileFormatHeaderIsSupported` validates the 16-byte header in both the app reader
+  (`-unarchiveWithError:`) and `MADCLIContainer`, with a clear "Upgrade MAD Designer"
+  message. The container stays 1.0 and the store revision stays 2 in this pass.
+- **Test:** `MADStoreMigrationTests testAStoreFromANewerBuildIsRefusedBeforeAnyWrite`;
+  `MADDocumentTests testContainerHeaderAcceptsVersionOneZero`,
+  `testContainerHeaderRefusesANewerMajor`, `testContainerHeaderRefusesANewerMinor`,
+  `testContainerHeaderTreatsNoMagicAsLegacy`; `mad inspect` of a header rewritten to
+  2.0 exits 2 with the upgrade message, while `London.portable.mad` still inspects.
+
 ### `MADArchiveManager` kept writing archive members after the archive failed to open
 - **Status:** Fixed 2026-11-21 (commit `75f3411ac`).
 - **Where:** `MAD/Source/MADArchiveManager.m` (`write_archive`: the format, filter and

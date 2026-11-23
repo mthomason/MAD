@@ -35,6 +35,7 @@ Status key:
 *Archived (fixed; full text, test and any commit hash in [`BUGS_FIXED.md`](BUGS_FIXED.md)):*
 
 - `+[MADDatabaseConnection newDatabaseConnection:documentURL:]` recursed until the stack ended for every non-SQLite driver
+- `MADStore` opened and migrated a newer store revision, and the container reader ignored the header's version words
 
 ### The document thumbnail uses the deprecated QuickLook file-attribute keys
 - **Status:** Open -- kept deliberately, behind a scoped pragma.
