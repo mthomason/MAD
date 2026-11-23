@@ -12,6 +12,7 @@
 // would be two things to keep in step.  MADArchiveManager is a public MAD header,
 // so this resolves on both platforms without an extra include path.
 #import <MAD/MADArchiveManager.h>
+#import <MAD/MADConstants.h>
 
 static NSString * const MADCLIMetaPlistName		= @"meta.plist";
 static NSString * const MADCLIStoreDirectory	= @"StoreContent";
@@ -93,6 +94,12 @@ NSString *MADCLISQLiteVersionString(uint32_t versionNumber) {
 
 	const uint8_t *bytes = header.bytes;
 	if (memcmp(bytes, MADCLIMagic, sizeof(MADCLIMagic)) == 0) {
+		NSError *formatError = nil;
+		if (!MADFileFormatHeaderIsSupported(bytes, header.length, &formatError)) {
+			if (error) *error = MADCLIContainerError(MADCLIExitBadDocument,
+													 formatError.localizedDescription);
+			return nil;
+		}
 		container.formatVersion = (MADCLIFormatVersion)MADCLIReadUInt16LE(bytes + 8);
 		container.formatFlags = MADCLIReadUInt32LE(bytes + 12);
 	} else {

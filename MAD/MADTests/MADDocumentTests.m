@@ -17,6 +17,7 @@
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 #import <MAD/MADocument.h>
+#import <MAD/MADConstants.h>
 #endif
 #import <MAD/MADStore.h>
 #import <MAD/MADStoreGraph.h>
@@ -755,5 +756,34 @@
 	[[NSFileManager defaultManager] removeItemAtURL:thumbnailURL error:NULL];
 }
 #endif
+
+#pragma mark - Container header versions
+
+- (void)testContainerHeaderAcceptsVersionOneZero {
+	NSError *error = nil;
+	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 1,0, 0,0, 0,0,0,0 };
+	XCTAssertTrue(MADFileFormatHeaderIsSupported(header, sizeof(header), &error));
+	XCTAssertNil(error);
+}
+
+- (void)testContainerHeaderRefusesANewerMajor {
+	NSError *error = nil;
+	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 2,0, 0,0, 0,0,0,0 };
+	XCTAssertFalse(MADFileFormatHeaderIsSupported(header, sizeof(header), &error));
+	XCTAssertEqualObjects(error.domain, MADFileFormatErrorDomain);
+	XCTAssertTrue([error.localizedDescription containsString:@"Upgrade"]);
+}
+
+- (void)testContainerHeaderRefusesANewerMinor {
+	NSError *error = nil;
+	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 1,0, 1,0, 0,0,0,0 };
+	XCTAssertFalse(MADFileFormatHeaderIsSupported(header, sizeof(header), &error));
+	XCTAssertEqualObjects(error.domain, MADFileFormatErrorDomain);
+}
+
+- (void)testContainerHeaderTreatsNoMagicAsLegacy {
+	uint8_t bytes[16] = { 0 };
+	XCTAssertTrue(MADFileFormatHeaderIsSupported(bytes, sizeof(bytes), NULL));
+}
 
 @end

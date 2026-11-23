@@ -19,6 +19,10 @@
 - (BOOL)archive:(BOOL)overwrite;
 - (BOOL)unarchive;
 
+/// Like -unarchive, but an unsupported container version fills `error` with the
+/// upgrade message instead of looking like an unreadable archive.
+- (BOOL)unarchiveWithError:(NSError * __autoreleasing *)error;
+
 /// Whether the store was checkpointed before archiving, recorded as bit 0 of the v1
 /// header's flags.  The caller decides this and sets it before -archive:.
 @property (nonatomic, assign) BOOL checkpointed;

@@ -292,12 +292,13 @@ static BOOL MADStoreLooksLikeADocument(NSURL *url) {
 	// working directory back before anything else can notice.
 	NSString *workingDirectory = [NSFileManager defaultManager].currentDirectoryPath;
 	MADArchiveManager *archive = [[MADArchiveManager alloc] initWithFileWrapperURL:directory archiveURL:documentURL];
-	BOOL unarchived = [archive unarchive];
+	NSError *archiveError = nil;
+	BOOL unarchived = [archive unarchiveWithError:&archiveError];
 	if (workingDirectory) [[NSFileManager defaultManager] changeCurrentDirectoryPath:workingDirectory];
 
 	if (!unarchived) {
 		if (error) {
-			*error = MADStoreConverterError(MADStoreConverterErrorUnarchive,
+			*error = archiveError ?: MADStoreConverterError(MADStoreConverterErrorUnarchive,
 											[[NSString alloc] initWithFormat:@"could not unarchive %@", documentURL.lastPathComponent]);
 		}
 		return nil;

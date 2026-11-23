@@ -330,6 +330,19 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 }
 
 - (BOOL)unarchive {
+	return [self unarchiveWithError: NULL];
+}
+
+- (BOOL)unarchiveWithError:(NSError * __autoreleasing *)error {
+	// Refuse a newer container before any extraction.  A v0 document has no
+	// header and is accepted; a 1.x newer than this build is not.
+	NSData *header = [NSData dataWithContentsOfURL: self.archive
+										   options: NSDataReadingMappedIfSafe
+											 error: NULL];
+	if (header != nil && !MADFileFormatHeaderIsSupported(header.bytes, header.length, error)) {
+		return NO;
+	}
+
 	// A v1 document carries the 16-byte header ahead of the bzip2 stream; libarchive
 	// does not know about it, so hand the extractors a headerless copy when one is
 	// present.  A v0 document has no header and is extracted as-is.

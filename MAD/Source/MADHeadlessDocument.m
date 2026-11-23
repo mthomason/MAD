@@ -208,13 +208,14 @@
 
 	MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.documentStore.gutsURL
 																			   archiveURL: url];
-	if (![archiveManager unarchive]) {
+	NSError *archiveError = nil;
+	if (![archiveManager unarchiveWithError:&archiveError]) {
 		os_log_error(GetMadLog(), "%s: Document unarchive failed.", __PRETTY_FUNCTION__);
 		if (error != NULL) {
-			*error = [NSError errorWithDomain: @"MADHeadlessDocument"
-										 code: 2
-									 userInfo: @{ NSLocalizedDescriptionKey:
-						 [NSString stringWithFormat: @"Could not unpack %@.", url.lastPathComponent] }];
+			*error = archiveError ?: [NSError errorWithDomain: @"MADHeadlessDocument"
+														 code: 2
+													 userInfo: @{ NSLocalizedDescriptionKey:
+								 [NSString stringWithFormat: @"Could not unpack %@.", url.lastPathComponent] }];
 		}
 		return NO;
 	}

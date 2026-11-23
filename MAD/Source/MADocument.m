@@ -460,9 +460,13 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	if ([url.pathExtension isEqualToString:MADFileExtentionMobleApplicationDocument]) {
 		MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL: self.urlGuts
 																				   archiveURL: url];
-		success = [archiveManager unarchive];
+		NSError *archiveError = nil;
+		success = [archiveManager unarchiveWithError:&archiveError];
 		if (!success) {
 			os_log_error(GetMadLog(), "%s: Document unarchive failed.", __PRETTY_FUNCTION__);
+			if (archiveError != nil && outError != NULL) {
+				*outError = archiveError;
+			}
 		}
 	}
 
