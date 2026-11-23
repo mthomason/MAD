@@ -78,6 +78,12 @@ const char * MADQueueAppDelegate = "com.everydayapps.mad.designer.appdelegate";
 	return ((NSDictionary *)[[NSBundle mainBundle] infoDictionary][@"NSUbiquitousContainers"]).allKeys.firstObject;
 }
 
++ (nullable NSDictionary *)buildInfoForBundle:(nullable NSBundle *)bundle {
+	NSBundle *resolved = bundle ?: [NSBundle mainBundle];
+	NSString *path = [resolved pathForResource: @"MADBuildInfo" ofType: @"plist"];
+	return path.length > 0 ? [NSDictionary dictionaryWithContentsOfFile: path] : nil;
+}
+
 + (NSString *)bundleGitCommitCount {
 	NSString *path = [[NSBundle mainBundle] pathForResource:@"MADMeta" ofType:@"plist"];
 	NSDictionary *metaDictionary = [NSDictionary dictionaryWithContentsOfFile:path];

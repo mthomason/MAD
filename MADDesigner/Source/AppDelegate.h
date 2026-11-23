@@ -17,6 +17,10 @@
 
 @property (nullable, nonatomic, strong) UIWindow *window;
 
+/// The generated per-build identity (MADBuildInfo.plist), or nil when this build
+/// did not produce one.  Never reads or writes a tracked plist.
++ (nullable NSDictionary *)buildInfoForBundle:(nullable NSBundle *)bundle;
+
 @end
 
 #endif

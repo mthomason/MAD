@@ -113,24 +113,55 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 	return displayName.length > 0 ? displayName : @"MAD Designer";
 }
 
-// The engine's version lives in the bundled MADMeta.plist and is independent of the
-// application's own version (CFBundleShortVersionString), which is the macOS app's.
+/// The generated per-build identity, or nil when this build did not produce one.
++ (nullable NSDictionary *)buildInfoForBundle:(nullable NSBundle *)bundle {
+	NSBundle *resolved = [self resolvedBundle:bundle];
+	NSString *path = [resolved pathForResource:@"MADBuildInfo" ofType:@"plist"];
+	return path.length > 0 ? [NSDictionary dictionaryWithContentsOfFile:path] : nil;
+}
+
+// The engine's version lives in the generated MADBuildInfo.plist (falling back to the
+// bundled MADMeta.plist) and is independent of the application's own version.
 + (NSString *)versionTextForBundle:(nullable NSBundle *)bundle {
-	NSDictionary *meta = [self metaDictionaryForBundle:bundle];
-	NSString *shortVersion = meta[@"CFBundleShortVersionString"] ?: @"9.0";
-	return [NSString stringWithFormat:@"v%@", shortVersion];
+	NSString *version = [self buildInfoForBundle:bundle][@"MADEngineVersion"];
+	if (![version isKindOfClass:[NSString class]] || version.length == 0) {
+		version = [self metaDictionaryForBundle:bundle][@"CFBundleShortVersionString"];
+	}
+	return [NSString stringWithFormat:@"v%@", version.length > 0 ? version : @"unknown"];
 }
 
 + (NSString *)buildTextForBundle:(nullable NSBundle *)bundle {
-	NSDictionary *meta = [self metaDictionaryForBundle:bundle];
-	NSString *commitCount = [meta[@"MADGitCommitCount"] description] ?: @"4433";
-	return [NSString stringWithFormat:@"r%@", commitCount];
+	NSString *revision = [self buildInfoForBundle:bundle][@"MADEngineRevision"];
+	if ([revision isKindOfClass:[NSString class]] && revision.length > 0) {
+		return revision;
+	}
+	NSString *commitCount = [[self metaDictionaryForBundle:bundle][@"MADGitCommitCount"] description];
+	return [NSString stringWithFormat:@"r%@", commitCount.length > 0 ? commitCount : @"unknown"];
+}
+
+/// The short source commit, starred when the tree was dirty at build time.
++ (NSString *)commitTextForBundle:(nullable NSBundle *)bundle {
+	NSDictionary *info = [self buildInfoForBundle:bundle];
+	NSString *commit = info[@"MADSourceCommitShort"];
+	if (![commit isKindOfClass:[NSString class]] || commit.length == 0) {
+		return @"unknown";
+	}
+	return [info[@"MADSourceDirty"] boolValue] ? [commit stringByAppendingString:@"*"] : commit;
 }
 
 + (NSString *)applicationVersionTextForBundle:(nullable NSBundle *)bundle {
+	NSDictionary *info = [self buildInfoForBundle:bundle];
+	NSString *version = info[@"MADAppVersion"];
+	NSString *build = info[@"MADAppBuild"];
+	if ([version isKindOfClass:[NSString class]] && version.length > 0) {
+		if ([build isKindOfClass:[NSString class]] && build.length > 0) {
+			return [NSString stringWithFormat:@"v%@ (%@)", version, build];
+		}
+		return [NSString stringWithFormat:@"v%@", version];
+	}
 	NSBundle *resolved = [self resolvedBundle:bundle];
-	NSString *shortVersion = resolved.infoDictionary[@"CFBundleShortVersionString"] ?: @"0.7";
-	return [NSString stringWithFormat:@"v%@", shortVersion];
+	NSString *shortVersion = resolved.infoDictionary[@"CFBundleShortVersionString"];
+	return [NSString stringWithFormat:@"v%@", shortVersion.length > 0 ? shortVersion : @"unknown"];
 }
 
 + (NSString *)humanReadableCopyrightForBundle:(nullable NSBundle *)bundle {
@@ -580,7 +611,8 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 
 	NSString *versionStr = [MADMacAboutWindowController versionTextForBundle:_resourceBundle];
 	NSString *buildStr = [MADMacAboutWindowController buildTextForBundle:_resourceBundle];
-	NSString *engineVersionStr = [[NSString alloc] initWithFormat:@"%@ (%@)", versionStr, buildStr];
+	NSString *commitStr = [MADMacAboutWindowController commitTextForBundle:_resourceBundle];
+	NSString *engineVersionStr = [[NSString alloc] initWithFormat:@"%@ (%@) · %@", versionStr, buildStr, commitStr];
 	_versionLabel = [NSTextField labelWithString:[[NSString alloc] initWithFormat:
 		NSLocalizedString(@"Engine %@", @"About window: the reporting engine's version. Engine is a technical term."),
 		engineVersionStr]];
