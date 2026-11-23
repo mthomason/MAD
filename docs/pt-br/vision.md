@@ -1,88 +1,215 @@
 ---
 layout: default
+title: "A direção"
+description: "A direção do MAD: de relatórios a objetos de dados componíveis, uma engine embarcável e documentos escritos por IA."
 lang: pt-BR
 ---
 
-# A Direção: Um Relatório É uma Tabela
+# A Direção: De Relatórios a Dados Componíveis
 
-Atualizado em 2026-10-29. Esta página descreve a direção para a qual o MAD foi projetado para
-evoluir. Nenhum dos mecanismos de composição ou migração descritos aqui foi construído
-ainda; o documento de arquitetura que fundamenta o modelo de objetos de dados é
-[`docs/developers/data-object.md`](https://github.com/mthomason/MAD/blob/master/docs/developers/data-object.md),
-o registro de trabalho é
-[`docs/project/product/MAD_FUTURE.md`](https://github.com/mthomason/MAD/blob/master/docs/project/product/MAD_FUTURE.md),
-e a lista de desejos do produto é
-[`docs/project/registers/TODO.md`](https://github.com/mthomason/MAD/blob/master/docs/project/registers/TODO.md).
+Atualizado em 2026-11-22. Esta página declara a direção para a qual o MAD foi
+projetado para crescer. Ela separa o que já é entregue hoje do que é proposto, e
+aponta para os registros públicos de design em vez das notas internas de
+trabalho: o [design do objeto de dados](developers/data-object.html), os
+[relatórios multifonte](developers/multi-source.html) e a
+[especificação do formato](README.html).
 
-## Onde o MAD está hoje
+## O que existe hoje
 
-Um documento `.mad` é a *definição* de um relatório: o snapshot do esquema, o grafo
-de consulta (tabelas, joins, agrupamentos, filtros) e a árvore de layout em bandas. Ao
-atualizar (`refresh`), a engine compila o grafo em SQL, lê as linhas uma única vez e
-as materializa em um cache SQLite complementar (`.maddb` + `.mdcache`). Os dados de
-linhas permanecem deliberadamente fora do documento; a definição se mantém abaixo de 100 KB.
+Um documento `.mad` é a **definição** de um relatório: o snapshot do esquema, o
+grafo de consulta (tabelas, joins, predicados, agrupamentos) e a árvore de
+layout em bandas. Ao atualizar, a engine compila o grafo em SQL, lê as linhas
+uma única vez e as materializa em um cache SQLite complementar (`.maddb` +
+`.mdcache`). Os dados de linhas permanecem fora do documento de propósito; a
+definição se mantém abaixo de 100 KB.
 
-Uma consequência disso passa facilmente despercebida: **um relatório é uma função que mapeia fontes de dados
-para uma tabela.** Cada driver retorna um esquema e linhas em formato tabular, e a
-saída de um relatório *é* um esquema (`MADDataColumn`) e linhas em formato tabular
-(`MADDataTableFast`). A engine já trata ambos de maneira idêntica.
+A engine já tem as peças de que uma direção mais ampla precisa:
 
-## Para onde ele está indo
+* Um formato de documento aberto e portável: um arquivo tar comprimido com
+  bzip2 contendo um store SQLite portável, sem exigir nenhum framework da
+  Apple para abri-lo.
+* Um construtor de consultas que compila definições estruturadas em SQL, além
+  de um parser de SQL para instruções digitadas diretamente.
+* Quatro drivers SQL — MySQL, SQL Server, PostgreSQL e SQLite — cada um
+  retornando um esquema e linhas como uma tabela.
+* Materialização local em SQLite (`MADDataTableFast`) que torna agrupamentos,
+  agregações e renderização repetida viáveis em um celular.
+* Aplicativos nativos para iOS e macOS, um aplicativo nativo para Windows e a
+  mesma engine rodando de forma headless no Linux e no Windows por meio do
+  `mad serve` e da CLI `mad`.
 
-Fechar o ciclo entre a definição de um relatório e sua saída materializada
-destrava quatro capacidades principais:
+Uma consequência é fácil de passar despercebida: **um relatório é uma função de
+fontes de dados para uma tabela.** Todo driver retorna um esquema e linhas em
+formato tabular, e a saída de um relatório *é* um esquema e linhas em formato
+tabular. A engine já trata os dois de forma idêntica.
 
-### 1. Um arquivo `.mad` como uma tabela de banco de dados ad hoc
+## Para onde está indo
 
-Em um banco de dados tradicional, você faz `SELECT` a partir de tabelas base como `employee` ou `sales_data`. Um
-relatório conecta múltiplas tabelas, e sua saída é uma tabela SQLite ad hoc
-materializada. Hoje nada consegue apontar uma consulta para a saída de outro relatório —
-o cache de resultados existe, mas é indexado por um hash de nome de arquivo em vez
-de uma identidade endereçável. Tornar essa saída endereçável significa que:
+As direções abaixo são propostas. Elas se baseiam na arquitetura acima, mas
+nenhuma delas é entregue hoje, a menos que esta página diga que sim.
 
-> **O resultado de um relatório passa a ser uma tabela de banco de dados que outros relatórios e
-> consultas podem consultar com `SELECT` e combinar com `JOIN`.**
+### Objetos de dados componíveis
 
-Um relatório construído sobre outro relatório forma um DAG (grafo acíclico direcionado) de tabelas derivadas — uma camada semântica
-portável na qual projetar um relatório também significa projetar uma fonte de dados reutilizável.
+Em um banco de dados, você seleciona de tabelas base como `employee` ou
+`sales_data`. Um relatório conecta várias tabelas entre si, e sua saída é uma
+tabela SQLite ad hoc e materializada. Hoje nada consegue apontar uma consulta
+para a saída de outro relatório: o cache de resultados existe, mas é indexado
+por um hash de nome de arquivo em vez de uma identidade endereçável.
 
-### 2. Múltiplas fontes de dados em um único relatório
+Dar a essa saída uma identidade estável tornaria o resultado de um relatório
+uma tabela da qual outros relatórios podem selecionar e com a qual podem fazer
+join. Um relatório construído sobre um relatório torna-se um grafo acíclico
+direcionado de tabelas derivadas — uma camada semântica portável na qual
+projetar um relatório também é projetar uma fonte de dados reutilizável. O
+[design do objeto de dados](developers/data-object.html) descreve o modelo e o
+que é preciso para formalizá-lo.
 
-Cada driver (`MADMySQL`, `MADPostgres`, `MADTdsClient`, `MADSqlite3`)
-materializa seu conjunto de resultados na mesma representação local de tabela SQLite.
-Quando um documento puder conter múltiplas definições de consulta e endereçar cada saída como
-uma tabela, um único relatório poderá fazer join de uma tabela do PostgreSQL com uma tabela do SQL Server e com uma
-tabela do MySQL — federadas localmente no SQLite, sem um servidor pesado de federação no
-meio do caminho. Os próprios snapshots *são* a federação.
+### Materialização local multifonte
 
-### 3. O papel como apenas um paradigma — views nativas em UIKit sobre dados brutos
+Cada driver materializa seu conjunto de resultados na mesma representação local
+de tabela SQLite. Quando um documento puder conter várias definições de
+consulta e endereçar cada saída como uma tabela, um único relatório poderá
+fazer join de uma tabela do PostgreSQL com uma tabela do SQL Server e com uma
+tabela do MySQL — combinadas localmente no SQLite sem um servidor de federação
+no meio do caminho. Cada fonte entende seus próprios dados; o MAD entende as
+tabelas resultantes. O [design multifonte](developers/multi-source.html) registra
+a arquitetura e as fases, nem todas construídas.
 
-A paginação em bandas (Report Header, Page Header, Groupings, Detail, Footers) foi
-inventada para impressão em papel. Como o layout de um `.mad` é composto por dados paramétricos e
-o cache de linhas `.maddb` é um banco SQLite local no dispositivo, as páginas em papel são apenas uma
-das formas possíveis de apresentar um relatório. Quando o usuário não está imprimindo, a mesma definição
-e o mesmo cache local podem ser renderizados como views nativas interativas em UIKit e exploradores
-de dados brutos — diagrame uma vez, visualize como papel ou como interface nativa.
+### Uso embarcado e headless
 
-### 4. Convertendo arquivos legados do Crystal Reports (`.rpt`) para arquivos `.mad` abertos
+O MAD não precisa se limitar a aplicativos chamados MAD. A mesma engine poderia
+ser embarcada nos produtos de outros desenvolvedores: um sistema de inventário,
+um aplicativo financeiro, uma ferramenta de manufatura ou um sistema de gestão
+específico de um setor que precise de consultas, relatórios, exportações e
+resumos operacionais sem construir um subsistema de relatórios do zero.
 
-O Crystal Reports (`.rpt`) e arquivos de relatórios legados semelhantes continuam enraizados
-em milhares de empresas porque nenhuma engine aberta e portável compartilha seu
-modelo de seções em bandas + grafo de consulta relacional. Como o MAD é construído exatamente sobre esse
-paradigma estrutural — mas armazenando suas definições em um formato SQLite-in-tar aberto e
-documentado —, converter documentos `.rpt` legados em
-arquivos `.mad` oferece às organizações um caminho direto de migração para sair de pilhas
-proprietárias de relatórios legados.
+O aplicativo hospedeiro fornece acesso aos dados, integração e sua própria
+experiência de usuário. O MAD fornece capacidades reutilizáveis de consulta,
+materialização, relatório e exportação. A costura do driver é deliberadamente
+ampla — uma fonte precisa fornecer um esquema e linhas, não necessariamente um
+banco de dados SQL convencional —, de modo que o mesmo contrato possa acomodar
+bancos de dados relacionais, dados locais de aplicativos, arquivos estruturados
+e dispositivos. Algumas dessas fontes já têm drivers hoje; outras precisariam
+de um.
 
-## O que já existe
+Essa direção também vai além do software de desktop: um appliance ou sistema
+industrial com recursos suficientes poderia usar a engine localmente para
+transformar medições e registros de manutenção em relatórios de diagnóstico,
+sem conectividade contínua. Não é uma afirmação de que a engine completa caiba
+em um microcontrolador minúsculo ou em um laço de controle de tempo real
+rígido.
 
-As partes mais complexas e custosas já estão prontas: definições portáveis, geração e
-parsing determinísticos de SQL, um formato portável de materialização (SQLite), quatro
-drivers de banco de dados e uma única engine que roda nativamente no iOS/macOS e em modo
-headless no Linux.
+### Apresentação além do papel
+
+A paginação em bandas — Report Header, Page Header, Groupings, Detail, Footers —
+foi inventada para impressão em papel. O layout de um `.mad` é composto por
+dados paramétricos, e o cache de linhas é um SQLite local, de modo que as
+páginas em papel são uma apresentação dos dados, e não sua definição.
+
+Manter a definição e sua tabela materializada separadas tornam possíveis outras
+apresentações sobre o mesmo objeto de dados: tabelas interativas e exploradores
+de dados, views nativas de aplicativo, gráficos e dashboards, views embarcadas
+em aplicativos e visualizadores baseados em navegador. Relatórios paginados
+tradicionais continuam importantes; o objetivo é torná-los uma apresentação útil
+entre várias, não abandoná-los.
+
+### Documentos escritos por IA
+
+A estrutura declarativa do MAD o torna adequado a um modelo diferente de
+relatório assistido por IA. Em vez de gerar uma imagem de um gráfico, um modelo
+poderia propor um documento MAD real: descobrir as fontes e os metadados de
+esquema disponíveis, escolher as tabelas e os campos relevantes, construir os
+grafos de consulta e relacionamentos, propor um layout e submeter o resultado à
+engine para validação e execução.
+
+A divisão de responsabilidades importa. O modelo interpreta a intenção e propõe
+uma definição estruturada; o MAD a valida e executa. O modelo deve produzir
+grafos de consulta e definições de layout, e não SQL arbitrário não verificado,
+e a engine deve permanecer responsável pela geração de SQL, pelo acesso aos
+dados e pela materialização.
+
+O resultado seria um documento `.mad` normal e editável, e não uma resposta
+pontual. O grafo de consulta poderia ser inspecionado, os joins e filtros
+editados, a apresentação personalizada, os resultados atualizados sem o modelo
+e o documento reutilizado em outros lugares. Isso mantém o usuário no controle
+do artefato e evita que a operação dependa da IA que o escreveu. Autorização,
+validação e controles de proteção de dados fariam parte de tornar isso real; a
+validação estrutural por si só não prova que uma análise está semanticamente
+correta.
+
+### Servidor opcional e implantação web
+
+Aplicativos nativos, componentes embarcados e execução headless devem permanecer
+de primeira classe. Um serviço futuro poderia acrescentar agendamento, catálogos
+de documentos, controles de acesso, gerenciamento de snapshots, relatórios
+compartilhados e APIs, e um designer baseado em navegador poderia operar no
+mesmo modelo de documento que os clientes nativos.
+
+A engine e o formato do documento continuam sendo a fundação comum. Um cliente
+que precise de execução local, infraestrutura privada ou operação offline não
+deveria ter de adotar uma implantação em nuvem para se beneficiar da engine, e
+uma futura implementação web não deveria bifurcar a semântica de consulta.
+
+### Conversão de relatórios legados
+
+Um futuro importador poderia trazer definições de formatos de relatório legados
+para arquivos `.mad` abertos. Esse é um caminho de compatibilidade para
+organizações com bibliotecas de relatórios de longa vida, não o centro da
+direção e nem um substituto para as direções acima.
+
+## Três maneiras de usar o MAD
+
+Estas não são produtos separados nem bases de código separadas. São usos
+diferentes da mesma arquitetura, conectados pelo modelo de objeto de dados.
+
+### O MAD como aplicativo
+
+Uma experiência completa de consulta, design e relatórios para pessoas que
+trabalham diretamente com seus dados, com aplicativos nativos, portabilidade de
+documentos e relatórios práticos.
+
+### O MAD como engine embarcada
+
+Um componente reutilizável de acesso a dados, consulta, materialização e
+relatórios para desenvolvedores que incorporam o MAD em seu próprio software ou
+dispositivos, com ênfase na arquitetura de drivers, execução headless,
+definições reutilizáveis e processamento local.
+
+### O MAD como plataforma de dados escrita por IA
+
+Um sistema em que as pessoas descrevem as informações de que precisam e um
+modelo constrói objetos de dados e documentos MAD validados, com geração
+estruturada, validação por máquina e artefatos editáveis que permanecem úteis
+independentemente da IA.
+
+## Por que isso importa
+
+O problema é prático. Muitas organizações operam sistemas substanciais e de
+longa vida construídos em torno de bancos de dados relacionais e aplicativos de
+negócios especializados. Elas querem acesso confiável aos seus próprios dados,
+relatórios que possam manter sem desenvolvimento personalizado repetido,
+ferramentas nativas com boas experiências de usuário, controle sobre credenciais
+e onde os dados são processados, uso continuado da infraestrutura de banco de
+dados existente e portabilidade entre plataformas e ambientes.
+
+A parte difícil costuma ser colocar os dados em uma forma confiável e
+utilizável. Apresentá-los é o passo final. O MAD investe na aquisição de dados,
+modelagem relacional, materialização e execução, e a interface fica por cima
+desse trabalho em vez de escondê-lo.
+
+O valor é positivo: portabilidade, controle local, componibilidade,
+processamento confiável, extensibilidade e uma experiência acessível. Uma
+empresa deveria conseguir obter respostas úteis de seus dados sem aceitar
+dependências de plataforma desnecessárias.
 
 ## O que isto não é
 
-Uma promessa de prazo. Esta página registra a direção arquitetural; o projeto detalhado e a fila de tarefas
-vivem em `docs/project/`, e nada do que está descrito aqui é lançado até que seja
-projetado, testado e documentado com o mesmo rigor de todo o restante do repositório.
+Uma promessa, um roadmap com datas ou uma afirmação de que as propostas acima
+são entregues. Esta página registra uma direção. Cada capacidade ainda precisa
+ser projetada, testada e documentada como todo o restante do repositório, e
+algumas dessas direções podem mudar à medida que forem construídas.
+
+## O princípio norteador
+
+> **O documento define o trabalho. A engine o executa. A apresentação torna o
+> resultado útil.**
