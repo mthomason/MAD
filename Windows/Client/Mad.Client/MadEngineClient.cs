@@ -75,8 +75,11 @@ public sealed class MadEngineException : Exception
 /// <summary>A `mad serve` child process and the request/response line protocol.</summary>
 public sealed class MadEngineClient : IDisposable
 {
+	private static readonly TimeSpan DefaultShutdownTimeout = TimeSpan.FromSeconds(5);
+
 	private readonly string _madExePath;
 	private readonly string? _gnustepBinPath;
+	private readonly ProcessStartInfo? _testStartInfo;
 	private Process? _process;
 	private StreamWriter? _stdin;
 	private StreamReader? _stdout;
@@ -88,6 +91,13 @@ public sealed class MadEngineClient : IDisposable
 	{
 		_madExePath = madExePath;
 		_gnustepBinPath = gnustepBinPath;
+	}
+
+	/// <summary>Starts a supplied command instead of `mad serve`; tests only.</summary>
+	internal MadEngineClient(ProcessStartInfo startInfo)
+	{
+		_madExePath = startInfo.FileName;
+		_testStartInfo = startInfo;
 	}
 
 	public bool IsRunning => _process is { HasExited: false };
@@ -109,7 +119,7 @@ public sealed class MadEngineClient : IDisposable
 			throw new InvalidOperationException("the engine process is already started");
 		}
 
-		var startInfo = new ProcessStartInfo
+		var startInfo = _testStartInfo ?? new ProcessStartInfo
 		{
 			FileName = _madExePath,
 			Arguments = "serve",
@@ -120,7 +130,7 @@ public sealed class MadEngineClient : IDisposable
 			CreateNoWindow = true,
 		};
 
-		if (!string.IsNullOrEmpty(_gnustepBinPath))
+		if (_testStartInfo == null && !string.IsNullOrEmpty(_gnustepBinPath))
 		{
 			var separator = Path.PathSeparator;
 			var inherited = Environment.GetEnvironmentVariable("PATH") ?? "";
@@ -206,14 +216,28 @@ public sealed class MadEngineClient : IDisposable
 	}
 
 	/// <summary>`shutdown` -- asks the engine to stop, then waits for the process to exit.</summary>
-	public void Shutdown()
+	public void Shutdown() => Shutdown(DefaultShutdownTimeout);
+
+	internal void Shutdown(TimeSpan timeout)
 	{
 		if (_process == null || _process.HasExited)
 		{
 			return;
 		}
 
-		CallOk("shutdown");
+		try
+		{
+			Task response = Task.Run(() => CallOk("shutdown"));
+			if (!BoundedWait.Wait(response, timeout))
+			{
+				try { _process.Kill(entireProcessTree: true); } catch { /* best effort */ }
+			}
+		}
+		catch
+		{
+			/* best effort */
+		}
+
 		if (!_process.WaitForExit(5000))
 		{
 			try { _process.Kill(entireProcessTree: true); } catch { /* best effort */ }
