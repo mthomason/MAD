@@ -292,6 +292,9 @@
 			MADQueryFull *mainQuery = [[MADQueryFull alloc] initWithQuery: query
 															andQueryLimit: self.limitResultsDesignMode ? 50 : NSUIntegerMax];
 			mainQuery.dataDelegate = self;
+			// The query compiles with the dialect of the database it runs against,
+			// not whatever database the delegate happens to hand back.
+			mainQuery.database = self.database;
 			// The table's group indexes are built from the query's sort order, so it
 			// is applied once here, as MADocument applies it.
 			[self.dataTable sortUsingDescriptors: [self readCurrentSortDescriptors]];

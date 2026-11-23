@@ -76,7 +76,6 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 
 @interface MADQueryFull ()
 
-@property (nonatomic, strong) id queryObject;
 @property (nonatomic, copy) NSNumber *objectID;
 
 @end
@@ -130,6 +129,25 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	return result;
 }
 
+/// Resolve the query the caller selected, by the durable identifier captured in
+/// -initWithQuery:andQueryLimit:.  The store's row order is not a selection rule;
+/// taking `hasQueries.anyObject` here is what made a two-query document compile
+/// an arbitrary one of them.
+- (nullable RptqQuery *)selectedQueryWithContext:(RptqStoreContext *)managedObjectContext
+										   error:(NSError * __autoreleasing *)error {
+	RptqQuery *query = (RptqQuery *)[managedObjectContext objectForEntity: NSStringFromClass([RptqQuery class])
+															   identifier: self.objectID.longLongValue];
+	if (query == nil && error != NULL) {
+		NSString *message = NSLocalizedString(@"The query no longer exists in the document.",
+											  @"The selected query was not found in the store.");
+		*error = [NSError errorWithDomain: @"MADQuery"
+									 code: 5775
+								 userInfo: [[NSDictionary alloc] initWithObjectsAndKeys:
+											message, NSLocalizedDescriptionKey, nil]];
+	}
+	return query;
+}
+
 - (NSString *)copySQLWithManagedObjectContext:(RptqStoreContext *)managedObjectContext
 										error:(NSError * __autoreleasing *)error {
 	//[super getSql:error];
@@ -144,16 +162,14 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 			 managedObjectContext: (RptqStoreContext *)managedObjectContext
 							error: (NSError * __autoreleasing *)error {
 	
-	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:managedObjectContext];
-	RptqDatabase *databaseSchema = document.hasDatabaseSchemas.anyObject;
-	RptqQuery *queryObject = databaseSchema.hasQueries.anyObject;
-	
-	
+	RptqQuery *queryObject = [self selectedQueryWithContext: managedObjectContext error: error];
+	if (queryObject == nil) return @"";
+
 	if (queryObject.hasQueryTables.count <= 0) return @"";
-	
+
 	NSMutableString *result = [[NSMutableString alloc] initWithString: @""];
-	
-	MADDatabase *database = [self.dataDelegate database];
+
+	MADDatabase *database = self.database ?: [self.dataDelegate database];
 	NSString *selectPart = [database selectPartWithLimitedResults:self.limitResults];
 	
 	
@@ -171,7 +187,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	NSSet *hasTables = queryObject.hasQueryTables;
 	
 	//Add a vertex to the graph for each table.
-	for (RptqDatabaseSchemaTable *table in hasTables) {
+	for (RptqQueryTable *table in hasTables) {
 		//@autoreleasepool {
 		[graph addVertexWithObject: @(table.identifier)];
 		//}
@@ -195,33 +211,45 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	
 	
 	// MARK: Sort the vectors topologically.
-	BOOL  isDirectedAcyclicGraph;
+	BOOL  isDirectedAcyclicGraph = NO;
 	NSAssert(graph != nil, @"Where's the graph?");
 	
 	NSError * __autoreleasing sortError = NULL;
 	MTLinkedList *topologicalSort = [graph topologicalSortWithError:&sortError
 											 isDirectedAcyclicGraph:&isDirectedAcyclicGraph];
 	
-	// MARK: Error on circuts or other bad query.
-	if (*error != NULL) {
-		NSAssert(YES, @"Error: Bad conditions.");
+	// MARK: Error on cycles or other bad query.
+	// A cycle is a bad query.  The legacy sorter reports it through
+	// isDirectedAcyclicGraph and now also fills sortError in; either is a failure.
+	// Propagate the sorter's own error when it has one, and synthesize one when
+	// only the flag says so, so the caller never compiles a cyclic graph.
+	if (sortError != nil || !isDirectedAcyclicGraph) {
+		if (sortError == nil) {
+			NSString *message = NSLocalizedString(@"The query contains a cycle.",
+												  @"A query link graph with a cycle.");
+			sortError = [NSError errorWithDomain: @"MADQuery"
+											code: 5776
+										userInfo: [[NSDictionary alloc] initWithObjectsAndKeys:
+												   message, NSLocalizedDescriptionKey, nil]];
+		}
+		if (error != NULL) *error = sortError;
 		[result setString:@""];
 	} else {
-		
+
 		NSArray *topologicalSortArray = [topologicalSort toArray];
-		
-		
+
+
 		MADQuerySelectExpression *select;
 		if (onlyActiveFields) {
 			select = [[MADQuerySelectExpressionActiveFields alloc] initWithDatabase: database
-															forManagedObjectContext: managedObjectContext];
+																			 query: queryObject
+														   forManagedObjectContext: managedObjectContext];
 			self.fieldKeys = ((MADQuerySelectExpressionActiveFields *)select).fieldKeys.copy;
 			self.fields = ((MADQuerySelectExpressionActiveFields *)select).fields.copy;
 		} else {
 			// MAKR: List each field in the query.
-			NSArray *sort = [topologicalSort toArray];
 			select = [[MADQuerySelectExpressionAllFields alloc] initWithDatabase: database
-																		  tables: sort
+																		  tables: topologicalSortArray
 														 forManagedObjectContext: managedObjectContext];
 		}
 		
@@ -257,9 +285,11 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 												  @"query fields.");
 			NSDictionary *errorInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
 									   message, NSLocalizedDescriptionKey, nil];
-			*error = [NSError errorWithDomain: @"MADQuery"
-										 code: 5774
-									 userInfo: errorInfo];
+			if (error != NULL) {
+				*error = [NSError errorWithDomain: @"MADQuery"
+											 code: 5774
+										 userInfo: errorInfo];
+			}
 			[result setString:@""];
 		}
 		
@@ -279,7 +309,7 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 	NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
 	
 	NSInteger tableCounter = 0;
-	MADDatabase *database = [self.dataDelegate database];
+	MADDatabase *database = self.database ?: [self.dataDelegate database];
 	
 	for (MTVertex *vertexTable in tables) {
 		if (vertexTable) {

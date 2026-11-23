@@ -5,9 +5,9 @@
 //  Copyright © 2012-2026 Michael Thomason. SPDX-License-Identifier: MIT
 //
 //  Tier 3 coverage for MADQueryFull, the SELECT/JOIN/WHERE/ORDER BY generator behind
-//  the report's data load.  The SQL is assembled against the *first* document in the
-//  store context (newDocumentReadFromManagedObjectContext:), and the database dialect
-//  comes from -dataDelegate.
+//  the report's data load.  The SQL is assembled for the query the generator was
+//  given (resolved by the identifier it captured), and the database dialect comes
+//  from the database set for that query.
 //
 //  Pinned here: the empty-query early return, the single-table FROM with its alias, the
 //  limit clause, the predicate splice, the all-fields vs active-fields select list, and
@@ -138,6 +138,35 @@
 	// the fixture has to keep it alive for the whole test.
 	self.dataDelegate.database = database;
 	query.dataDelegate = self.dataDelegate;
+	return query;
+}
+
+// The query is the selection: the generator resolves it by the identifier it
+// captured, so a fixture with more than one query can ask for each one.
+- (MADQueryFull *)queryFullForQuery:(RptqQuery *)rptqQuery
+							  limit:(NSUInteger)limit
+						   database:(MADDatabase *)database {
+	MADQueryFull *query = [[MADQueryFull alloc] initWithQuery:rptqQuery andQueryLimit:limit];
+	query.database = database;
+	query.dataDelegate = self.dataDelegate;
+	return query;
+}
+
+- (RptqDatabase *)addDatabaseWithIdentifier:(int64_t)identifier
+								 toDocument:(RptqDocument *)document
+									context:(RptqStoreContext *)context {
+	RptqDatabase *database = (RptqDatabase *)[context insertObjectForEntity:@"RptqDatabase"
+																 identifier:identifier];
+	[document addHasDatabaseSchemasObject:database];
+	return database;
+}
+
+- (RptqQuery *)addQueryWithIdentifier:(int64_t)identifier
+						   toDatabase:(RptqDatabase *)database
+							  context:(RptqStoreContext *)context {
+	RptqQuery *query = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery"
+													   identifier:identifier];
+	[database addHasQueriesObject:query];
 	return query;
 }
 
@@ -644,6 +673,207 @@
 	XCTAssertEqualObjects(sql,
 		@"SELECT\n\tInvoice0.Amount,\n\tInvoice0.Name\nFROM\n\tInvoice AS Invoice0");
 	XCTAssertEqualObjects(query.fieldKeys, (@[ @"Invoice0.Amount", @"Invoice0.Name" ]));
+}
+
+#pragma mark - Selected query, two queries
+
+- (void)testTwoQueriesCompileTheirOwnTablesAndDialects {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [self documentWithDatabaseAndQueryInContext:context];
+	RptqDatabase *ordersDatabase = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqQuery *ordersQuery = (RptqQuery *)[context objectForEntity:@"RptqQuery" identifier:20];
+	RptqDatabase *paymentsDatabase = [self addDatabaseWithIdentifier:30 toDocument:document context:context];
+	RptqQuery *paymentsQuery = [self addQueryWithIdentifier:40 toDatabase:paymentsDatabase context:context];
+
+	RptqDatabaseSchemaTable *orders = [self schemaTableNamed:@"Orders" database:ordersDatabase context:context];
+	[self queryFieldNamed:@"Id" type:MADDataTypeInteger onSchemaTable:orders database:ordersDatabase context:context];
+	RptqDatabaseSchemaTable *payments = [self schemaTableNamed:@"Payments" database:paymentsDatabase context:context];
+	[self queryFieldNamed:@"Id" type:MADDataTypeInteger onSchemaTable:payments database:paymentsDatabase context:context];
+
+	// A third dialect on the delegate proves the per-query database wins.
+	self.dataDelegate.database = [[MADDatabasePostgres alloc] init];
+
+	MADQueryFull *ordersFull = [self queryFullForQuery:ordersQuery limit:0
+											database:[[MADDatabaseMySQL alloc] init]];
+	MADQueryFull *paymentsFull = [self queryFullForQuery:paymentsQuery limit:0
+											  database:[[MADDatabaseSQLServer alloc] init]];
+
+	NSError *error = nil;
+	NSString *ordersSQL = [ordersFull SQLOnlyActiveFields:NO managedObjectContext:context error:&error];
+	XCTAssertNil(error);
+	XCTAssertTrue([ordersSQL containsString:@"`Orders` AS `Orders0`"], @"%@", ordersSQL);
+	XCTAssertFalse([ordersSQL containsString:@"Payments"], @"%@", ordersSQL);
+
+	error = nil;
+	NSString *paymentsSQL = [paymentsFull SQLOnlyActiveFields:NO managedObjectContext:context error:&error];
+	XCTAssertNil(error);
+	XCTAssertTrue([paymentsSQL containsString:@"[Payments] AS [Payments0]"], @"%@", paymentsSQL);
+	XCTAssertFalse([paymentsSQL containsString:@"Orders"], @"%@", paymentsSQL);
+}
+
+- (void)testActiveFieldsAreScopedToTheSelectedQuery {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [self documentWithDatabaseAndQueryInContext:context];
+	RptqDatabase *ordersDatabase = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqQuery *ordersQuery = (RptqQuery *)[context objectForEntity:@"RptqQuery" identifier:20];
+	RptqDatabase *paymentsDatabase = [self addDatabaseWithIdentifier:30 toDocument:document context:context];
+	RptqQuery *paymentsQuery = [self addQueryWithIdentifier:40 toDatabase:paymentsDatabase context:context];
+
+	RptqDatabaseSchemaTable *orders = [self schemaTableNamed:@"Orders" database:ordersDatabase context:context];
+	RptqQueryField *ordersName = [self queryFieldNamed:@"Name" type:MADDataTypeString onSchemaTable:orders database:ordersDatabase context:context];
+	RptqDatabaseSchemaTable *payments = [self schemaTableNamed:@"Payments" database:paymentsDatabase context:context];
+	RptqQueryField *paymentsName = [self queryFieldNamed:@"Name" type:MADDataTypeString onSchemaTable:payments database:paymentsDatabase context:context];
+
+	RptqQueryGroup *ordersGroup = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	ordersGroup.hasField = ordersName;
+	RptqQueryGroup *paymentsGroup = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	paymentsGroup.hasField = paymentsName;
+
+	MADQueryFull *ordersFull = [self queryFullForQuery:ordersQuery limit:0
+											database:[[MADDatabaseMySQL alloc] init]];
+	NSError *error = nil;
+	NSString *ordersSQL = [ordersFull SQLOnlyActiveFields:YES managedObjectContext:context error:&error];
+	XCTAssertNil(error);
+	XCTAssertTrue([ordersSQL containsString:@"`Orders0`.`Name`"], @"%@", ordersSQL);
+	XCTAssertFalse([ordersSQL containsString:@"Payments"], @"%@", ordersSQL);
+	XCTAssertEqualObjects(ordersFull.fieldKeys, (@[ @"`Orders0`.`Name`" ]));
+
+	MADQueryFull *paymentsFull = [self queryFullForQuery:paymentsQuery limit:0
+											  database:[[MADDatabaseSQLServer alloc] init]];
+	error = nil;
+	NSString *paymentsSQL = [paymentsFull SQLOnlyActiveFields:YES managedObjectContext:context error:&error];
+	XCTAssertNil(error);
+	XCTAssertTrue([paymentsSQL containsString:@"[Payments0].[Name]"], @"%@", paymentsSQL);
+	XCTAssertFalse([paymentsSQL containsString:@"Orders"], @"%@", paymentsSQL);
+	XCTAssertEqualObjects(paymentsFull.fieldKeys, (@[ @"[Payments0].[Name]" ]));
+}
+
+- (void)testAllFieldsIncludesAnUnusedFieldAndActiveFieldsOmitsIt {
+	RptqStoreContext *context = [self inMemoryContext];
+	[self documentWithDatabaseAndQueryInContext:context];
+	RptqDatabase *database = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqQuery *queryObject = (RptqQuery *)[context objectForEntity:@"RptqQuery" identifier:20];
+	RptqDatabaseSchemaTable *orders = [self schemaTableNamed:@"Orders" database:database context:context];
+	RptqQueryField *name = [self queryFieldNamed:@"Name" type:MADDataTypeString onSchemaTable:orders database:database context:context];
+	[self queryFieldNamed:@"Reference" type:MADDataTypeString onSchemaTable:orders database:database context:context];
+
+	RptqQueryGroup *group = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	group.hasField = name;
+
+	MADQueryFull *allFull = [self queryFullForQuery:queryObject limit:0
+										   database:[[MADDatabaseMySQL alloc] init]];
+	NSError *error = nil;
+	NSString *allSQL = [allFull SQLOnlyActiveFields:NO managedObjectContext:context error:&error];
+	XCTAssertNil(error);
+	XCTAssertTrue([allSQL containsString:@"`Orders0`.`Reference`"], @"%@", allSQL);
+
+	MADQueryFull *activeFull = [self queryFullForQuery:queryObject limit:0
+											  database:[[MADDatabaseMySQL alloc] init]];
+	error = nil;
+	NSString *activeSQL = [activeFull SQLOnlyActiveFields:YES managedObjectContext:context error:&error];
+	XCTAssertNil(error);
+	XCTAssertTrue([activeSQL containsString:@"`Orders0`.`Name`"], @"%@", activeSQL);
+	XCTAssertFalse([activeSQL containsString:@"Reference"], @"%@", activeSQL);
+}
+
+- (void)testFieldKeysMatchTheSelectListOrder {
+	RptqStoreContext *context = [self inMemoryContext];
+	[self documentWithDatabaseAndQueryInContext:context];
+	RptqDatabase *database = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqQuery *queryObject = (RptqQuery *)[context objectForEntity:@"RptqQuery" identifier:20];
+	RptqDatabaseSchemaTable *orders = [self schemaTableNamed:@"Orders" database:database context:context];
+	RptqQueryField *amount = [self queryFieldNamed:@"Amount" type:MADDataTypeDecimal onSchemaTable:orders database:database context:context];
+	RptqQueryField *name = [self queryFieldNamed:@"Name" type:MADDataTypeString onSchemaTable:orders database:database context:context];
+
+	RptqQueryGroup *amountGroup = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	amountGroup.hasField = amount;
+	RptqQueryGroup *nameGroup = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	nameGroup.hasField = name;
+
+	MADQueryFull *full = [self queryFullForQuery:queryObject limit:0
+										database:[[MADDatabaseMySQL alloc] init]];
+	NSError *error = nil;
+	NSString *sql = [full SQLOnlyActiveFields:YES managedObjectContext:context error:&error];
+	XCTAssertNil(error);
+
+	NSString *selectPart = [[sql componentsSeparatedByString:@"\nFROM"] firstObject];
+	NSArray *lines = [selectPart componentsSeparatedByString:@",\n"];
+	NSMutableArray *keys = [NSMutableArray array];
+	for (NSString *line in lines) {
+		NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+		NSString *trimmed = [line stringByTrimmingCharactersInSet:whitespace];
+		if ([trimmed hasPrefix:@"SELECT"]) {
+			trimmed = [trimmed substringFromIndex:@"SELECT".length];
+			trimmed = [trimmed stringByTrimmingCharactersInSet:whitespace];
+		}
+		if (trimmed.length > 0) [keys addObject:trimmed];
+	}
+	XCTAssertEqualObjects(keys, full.fieldKeys, @"%@", sql);
+	XCTAssertEqualObjects(full.fieldKeys, (@[ @"`Orders0`.`Amount`", @"`Orders0`.`Name`" ]));
+}
+
+- (void)testNilErrorOutParameterIsSafe {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [self documentWithDatabaseAndQueryInContext:context];
+	RptqQueryField *name = [self queryFieldNamed:@"Name" type:MADDataTypeString database:document.defaultDatabase context:context];
+	RptqQueryGroup *group = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	group.hasField = name;
+	MADQueryFull *full = [self queryFullForDocument:document limit:0];
+	XCTAssertTrue([full SQLOnlyActiveFields:YES managedObjectContext:context error:NULL].length > 0);
+
+	// A query with tables but no active fields reports through a NULL error.
+	RptqStoreContext *emptyContext = [self inMemoryContext];
+	RptqDocument *emptyDocument = [self documentWithDatabaseAndQueryInContext:emptyContext];
+	[self queryFieldNamed:@"Name" type:MADDataTypeString database:emptyDocument.defaultDatabase context:emptyContext];
+	MADQueryFull *emptyFull = [self queryFullForDocument:emptyDocument limit:0];
+	XCTAssertEqualObjects([emptyFull SQLOnlyActiveFields:YES managedObjectContext:emptyContext error:NULL], @"");
+}
+
+- (void)testCycleIsReportedThroughTheSortError {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [self documentWithDatabaseAndQueryInContext:context];
+	RptqDatabase *database = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqDatabaseSchemaTable *orders = [self schemaTableNamed:@"Orders" database:database context:context];
+	RptqDatabaseSchemaTable *customers = [self schemaTableNamed:@"Customers" database:database context:context];
+	RptqQueryField *orderKey = [self queryFieldNamed:@"Key" type:MADDataTypeInteger onSchemaTable:orders database:database context:context];
+	RptqQueryField *customerKey = [self queryFieldNamed:@"Key" type:MADDataTypeInteger onSchemaTable:customers database:database context:context];
+	[self addLinkOfType:MADLinkTypeInnerJoin left:orderKey right:customerKey context:context];
+	[self addLinkOfType:MADLinkTypeInnerJoin left:customerKey right:orderKey context:context];
+
+	MADQueryFull *full = [self queryFullForDocument:document limit:0];
+	NSError *error = nil;
+	NSString *sql = [full SQLOnlyActiveFields:NO managedObjectContext:context error:&error];
+	XCTAssertEqualObjects(sql, @"");
+	XCTAssertNotNil(error);
+	XCTAssertEqualObjects(error.domain, @"MTGraphErrorDomain");
+	XCTAssertEqual(error.code, 100);
+	XCTAssertEqualObjects([full SQLOnlyActiveFields:NO managedObjectContext:context error:NULL], @"");
+}
+
+- (void)testDropIndexIsCountedWithinTheSelectedQuery {
+	RptqStoreContext *context = [self inMemoryContext];
+	[self documentWithDatabaseAndQueryInContext:context];
+	RptqDatabase *database = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqQuery *first = (RptqQuery *)[context objectForEntity:@"RptqQuery" identifier:20];
+	RptqQuery *second = [self addQueryWithIdentifier:40 toDatabase:database context:context];
+	RptqDatabaseSchemaTable *orders = [self schemaTableNamed:@"Orders" database:database context:context];
+
+	RptqQueryTable *firstTable = [RptqQueryTable newQueryTableForSchemaTable:orders
+																	   query:first
+													 forManagedObjectContext:context];
+	RptqQueryTable *secondTable = [RptqQueryTable newQueryTableForSchemaTable:orders
+																		query:second
+													  forManagedObjectContext:context];
+	RptqQueryTable *firstCopy = [RptqQueryTable newQueryTableForSchemaTable:orders
+																	  query:first
+													forManagedObjectContext:context];
+
+	XCTAssertEqual(firstTable.dropIndex, (int64_t)0);
+	XCTAssertEqual(secondTable.dropIndex, (int64_t)0);
+	XCTAssertEqual(firstCopy.dropIndex, (int64_t)1);
+	XCTAssertEqualObjects(firstTable.queryAlias, @"Orders0");
+	XCTAssertEqualObjects(secondTable.queryAlias, @"Orders0");
+	XCTAssertEqualObjects(firstCopy.queryAlias, @"Orders1");
 }
 
 @end

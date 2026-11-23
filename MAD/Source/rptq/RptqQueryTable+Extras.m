@@ -55,10 +55,16 @@
 + (RptqQueryTable *)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
 									   database:(RptqDatabase *)database
 						forManagedObjectContext:(RptqStoreContext *)managedObjectContext {
+	return [self newQueryTableForSchemaTable: databaseSchemaTable
+									   query: database.defaultQuery
+					 forManagedObjectContext: managedObjectContext];
+}
 
++ (RptqQueryTable *)newQueryTableForSchemaTable:(RptqDatabaseSchemaTable *)databaseSchemaTable
+										 query:(RptqQuery *)query
+					   forManagedObjectContext:(RptqStoreContext *)managedObjectContext {
 
-	RptqQuery *query = database.defaultQuery;
-	NSSet <RptqQueryTable *> *queryTables = database.defaultQuery.hasQueryTables;
+	NSSet <RptqQueryTable *> *queryTables = query.hasQueryTables;
 	int64_t dupeCtr = 0;
 	for (RptqQueryTable *table in queryTables) {
 		if (table.databaseSchemaTable.identifier == databaseSchemaTable.identifier) {

@@ -1222,7 +1222,10 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 											 andQueryLimit: self.limitResultsDesignMode ?
 																	50 : NSUIntegerMax];
 			mainQuery.dataDelegate = self;
-			
+			// The query compiles with the dialect of the database it runs against,
+			// not whatever database the delegate happens to hand back.
+			mainQuery.database = self.database;
+
 			NSArray *sortDescriptors = [self readCurrentSortDescriptors];
 			[self.dataTable sortUsingDescriptors:sortDescriptors];
 			

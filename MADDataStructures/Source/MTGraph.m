@@ -284,15 +284,17 @@ NSString * const TextCycleEncountered = @"Cycle encountered.";
 	for (MTPair *pair in resultEdges) {
 		if ((MTEdgeType)((NSNumber *)pair.latter).shortValue == MTEdgeTypeBackEdge) {
 			*isDirectedAcyclicGraph = NO;
-			
-			/*if (anError != NULL) {
-				NSString *t = NSLocalizedString(TextCycleEncountered, TextCycleEncountered);
-				NSDictionary *userInfo;
-				userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:t, NSLocalizedDescriptionKey, nil];
-				*anError = [NSError errorWithDomain: @"MTDataStructures"
-											   code: 1
-										   userInfo: userInfo];
-			}*/
+			// Report the cycle through the caller's error, the same error
+			// -standardTopologicalSortWithError: produces.  Leaving it nil forced
+			// every caller to inspect the DAG flag to notice a cycle.
+			if (anError != NULL) {
+				NSString *description = NSLocalizedString(TextCycleEncountered, TextCycleEncountered);
+				NSDictionary *userInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
+										  description, NSLocalizedDescriptionKey, nil];
+				*anError = [NSError errorWithDomain:@"MTGraphErrorDomain"
+											   code:100
+										   userInfo:userInfo];
+			}
 			break;
 		}
 	}

@@ -12,12 +12,18 @@
 #import "MADQuerySelectExpression.h"
 #import <MAD/RptqStoreContext.h>
 
-@class RptqDatabaseSchemaField, NSString,
+@class RptqDatabaseSchemaField, RptqQuery, NSString,
        NSMutableDictionary, NSMutableArray<ObjectType>;
 
 @interface MADQuerySelectExpressionActiveFields : MADQuerySelectExpression
 
     - (instancetype)initWithDatabase:(MADDatabase *)database
+             forManagedObjectContext:(RptqStoreContext *)context;
+
+/// @param query The query whose active fields to project, or nil for every field
+///              the context references (the legacy, unscoped form).
+    - (instancetype)initWithDatabase:(MADDatabase *)database
+                               query:(nullable RptqQuery *)query
              forManagedObjectContext:(RptqStoreContext *)context;
 
     @property (nonatomic, readonly, strong) NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields;

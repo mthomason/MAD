@@ -56,12 +56,18 @@ static NSArray <RptqQueryField *> *MADActiveFieldsInOrder(MADDatabase *database,
 
 - (instancetype)initWithDatabase:(MADDatabase *)database
          forManagedObjectContext:(RptqStoreContext *)context {
+	return [self initWithDatabase:database query:nil forManagedObjectContext:context];
+}
+
+- (instancetype)initWithDatabase:(MADDatabase *)database
+                           query:(RptqQuery *)query
+         forManagedObjectContext:(RptqStoreContext *)context {
 
     if (self = [super init]) {
-        
+
         NSMutableString *result = [[NSMutableString alloc] init];
         MADQueryActiveQueryFields *activeQueryFields;
-        activeQueryFields = [[MADQueryActiveQueryFields alloc] initWithContext:context];
+        activeQueryFields = [[MADQueryActiveQueryFields alloc] initWithContext:context query:query];
 
         NSArray <RptqQueryField *> *rptqQueryFields = MADActiveFieldsInOrder(database, activeQueryFields.queryFields);
         NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields;

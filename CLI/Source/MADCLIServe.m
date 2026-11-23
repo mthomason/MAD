@@ -951,8 +951,8 @@ static void MADCLIServeAddTable(NSDictionary *params, NSMutableDictionary <NSNum
 	// Mirrors MADMacQueryViewController -addSchemaTableToQuery: a query table plus one query
 	// field per schema field.
 	RptqQueryTable *queryTable = [RptqQueryTable newQueryTableForSchemaTable: schemaTable
-																	 database: database
-													  forManagedObjectContext: context];
+																	   query: query
+													 forManagedObjectContext: context];
 	NSMutableSet <RptqQueryField *> *queryFields = [NSMutableSet setWithCapacity: schemaTable.hasFields.count];
 	for (RptqDatabaseSchemaField *schemaField in schemaTable.hasFields) {
 		RptqQueryField *field = [RptqQueryField newQueryField: context];

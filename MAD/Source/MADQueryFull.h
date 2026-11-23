@@ -18,6 +18,12 @@
 
 - (instancetype)initWithQuery:(RptqQuery *)query andQueryLimit:(NSUInteger)queryLimit;
 
+/// The source database that supplies the dialect for the selected query.  The
+/// document sets it to the database built for that query's `inDatabase`; when it
+/// is nil the generator falls back to the data delegate's database, which is the
+/// single-source behaviour this class had before query selection was explicit.
+@property (nonatomic, strong) MADDatabase *database;
+
 - (NSString *)copySQLWithManagedObjectContext:(RptqStoreContext *)managedObjectContext
 										error:(NSError * __autoreleasing *)error;
 

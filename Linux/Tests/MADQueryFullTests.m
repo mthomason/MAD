@@ -6,9 +6,9 @@
 //
 //  Ported from MAD/MADTests/MADQueryFullTests.m: MADQueryFull, the
 //  SELECT/JOIN/WHERE/ORDER BY generator behind the report's data load.  The SQL
-//  is assembled against the *first* document in the store context
-//  (newDocumentReadFromManagedObjectContext:), and the database dialect comes
-//  from -dataDelegate.  The store is a real SQLite file under a per-test temp
+//  is assembled for the query the generator was given (resolved by the
+//  identifier it captured), and the database dialect comes from the database
+//  set for that query.  The store is a real SQLite file under a per-test temp
 //  directory, as in the Xcode suite; the mock database is the portable half of
 //  MADMock (Tests/Support/MADMock.h).
 //
@@ -128,6 +128,29 @@ static MADQueryFull *queryFullForDocumentWithDatabase(RptqDocument *document, NS
 
 static MADQueryFull *queryFullForDocument(RptqDocument *document, NSUInteger limit) {
 	return queryFullForDocumentWithDatabase(document, limit, [MADMock mockDatabase]);
+}
+
+// The query is the selection: the generator resolves it by the identifier it
+// captured, so a fixture with more than one query can ask for each one.
+static MADQueryFull *queryFullForQueryWithDatabase(RptqQuery *rptqQuery, NSUInteger limit, MADDatabase *database) {
+	MADQueryFull *full = [[MADQueryFull alloc] initWithQuery:rptqQuery andQueryLimit:limit];
+	full.database = database;
+	MADTestDataDelegate *dataDelegate = [[MADTestDataDelegate alloc] init];
+	dataDelegate.database = database;
+	full.dataDelegate = dataDelegate;
+	return full;
+}
+
+static RptqDatabase *addDatabaseWithIdentifier(RptqDocument *document, int64_t identifier, RptqStoreContext *context) {
+	RptqDatabase *database = (RptqDatabase *)[context insertObjectForEntity:@"RptqDatabase" identifier:identifier];
+	[document addHasDatabaseSchemasObject:database];
+	return database;
+}
+
+static RptqQuery *addQueryWithIdentifier(RptqDatabase *database, int64_t identifier, RptqStoreContext *context) {
+	RptqQuery *query = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:identifier];
+	[database addHasQueriesObject:query];
+	return query;
 }
 
 // The single-table helper above creates a fresh schema table per field; the
@@ -626,6 +649,205 @@ static void testActiveFieldOrderingIsByAlias(void) {
 	MAD_PASS_EQUAL(query.fieldKeys, (@[ @"Invoice0.Amount", @"Invoice0.Name" ]), "the field keys follow the same order");
 }
 
+#pragma mark - Selected query, two queries
+
+static void testTwoQueriesCompileTheirOwnTablesAndDialects(void) {
+	RptqStoreContext *context = inMemoryContext();
+	RptqDocument *document = documentWithDatabaseAndQueryInContext(context);
+	RptqDatabase *ordersDatabase = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqQuery *ordersQuery = (RptqQuery *)[context objectForEntity:@"RptqQuery" identifier:20];
+	RptqDatabase *paymentsDatabase = addDatabaseWithIdentifier(document, 30, context);
+	RptqQuery *paymentsQuery = addQueryWithIdentifier(paymentsDatabase, 40, context);
+
+	RptqDatabaseSchemaTable *orders = schemaTableNamed(@"Orders", ordersDatabase, context);
+	queryFieldNamedOnTable(@"Id", MADDataTypeInteger, orders, ordersDatabase, context);
+	RptqDatabaseSchemaTable *payments = schemaTableNamed(@"Payments", paymentsDatabase, context);
+	queryFieldNamedOnTable(@"Id", MADDataTypeInteger, payments, paymentsDatabase, context);
+
+	MADQueryFull *ordersFull = queryFullForQueryWithDatabase(ordersQuery, 0, [[MADDatabaseMySQL alloc] init]);
+	MADQueryFull *paymentsFull = queryFullForQueryWithDatabase(paymentsQuery, 0, [[MADDatabaseSQLServer alloc] init]);
+	// A third dialect on the delegate proves the per-query database wins; the
+	// local +1 keeps the weakly-held delegate alive for the test.
+	MADTestDataDelegate *delegate = [[MADTestDataDelegate alloc] init];
+	delegate.database = [[MADDatabasePostgres alloc] init];
+	ordersFull.dataDelegate = delegate;
+	paymentsFull.dataDelegate = delegate;
+
+	NSError *error = nil;
+	NSString *ordersSQL = [ordersFull SQLOnlyActiveFields:NO managedObjectContext:context error:&error];
+	MAD_PASS(error == nil, "the orders query compiles");
+	MAD_PASS([ordersSQL containsString:@"`Orders` AS `Orders0`"], "the orders query uses its own table: %s", [ordersSQL UTF8String]);
+	MAD_PASS(![ordersSQL containsString:@"Payments"], "the orders query does not carry the payments table");
+
+	error = nil;
+	NSString *paymentsSQL = [paymentsFull SQLOnlyActiveFields:NO managedObjectContext:context error:&error];
+	MAD_PASS(error == nil, "the payments query compiles");
+	MAD_PASS([paymentsSQL containsString:@"[Payments] AS [Payments0]"], "the payments query uses its own table: %s", [paymentsSQL UTF8String]);
+	MAD_PASS(![paymentsSQL containsString:@"Orders"], "the payments query does not carry the orders table");
+}
+
+static void testActiveFieldsAreScopedToTheSelectedQuery(void) {
+	RptqStoreContext *context = inMemoryContext();
+	RptqDocument *document = documentWithDatabaseAndQueryInContext(context);
+	RptqDatabase *ordersDatabase = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqQuery *ordersQuery = (RptqQuery *)[context objectForEntity:@"RptqQuery" identifier:20];
+	RptqDatabase *paymentsDatabase = addDatabaseWithIdentifier(document, 30, context);
+	RptqQuery *paymentsQuery = addQueryWithIdentifier(paymentsDatabase, 40, context);
+
+	RptqDatabaseSchemaTable *orders = schemaTableNamed(@"Orders", ordersDatabase, context);
+	RptqQueryField *ordersName = queryFieldNamedOnTable(@"Name", MADDataTypeString, orders, ordersDatabase, context);
+	RptqDatabaseSchemaTable *payments = schemaTableNamed(@"Payments", paymentsDatabase, context);
+	RptqQueryField *paymentsName = queryFieldNamedOnTable(@"Name", MADDataTypeString, payments, paymentsDatabase, context);
+
+	RptqQueryGroup *ordersGroup = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	ordersGroup.hasField = ordersName;
+	RptqQueryGroup *paymentsGroup = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	paymentsGroup.hasField = paymentsName;
+
+	MADQueryFull *ordersFull = queryFullForQueryWithDatabase(ordersQuery, 0, [[MADDatabaseMySQL alloc] init]);
+	NSError *error = nil;
+	NSString *ordersSQL = [ordersFull SQLOnlyActiveFields:YES managedObjectContext:context error:&error];
+	MAD_PASS(error == nil, "the orders active query compiles");
+	MAD_PASS([ordersSQL containsString:@"`Orders0`.`Name`"], "the orders active list holds its own field");
+	MAD_PASS(![ordersSQL containsString:@"Payments"], "the payments field does not leak into orders");
+	MAD_PASS_EQUAL(ordersFull.fieldKeys, (@[ @"`Orders0`.`Name`" ]), "the field keys are the orders field only");
+
+	MADQueryFull *paymentsFull = queryFullForQueryWithDatabase(paymentsQuery, 0, [[MADDatabaseSQLServer alloc] init]);
+	error = nil;
+	NSString *paymentsSQL = [paymentsFull SQLOnlyActiveFields:YES managedObjectContext:context error:&error];
+	MAD_PASS(error == nil, "the payments active query compiles");
+	MAD_PASS([paymentsSQL containsString:@"[Payments0].[Name]"], "the payments active list holds its own field");
+	MAD_PASS(![paymentsSQL containsString:@"Orders"], "the orders field does not leak into payments");
+	MAD_PASS_EQUAL(paymentsFull.fieldKeys, (@[ @"[Payments0].[Name]" ]), "the field keys are the payments field only");
+}
+
+static void testAllFieldsIncludesAnUnusedFieldAndActiveFieldsOmitsIt(void) {
+	RptqStoreContext *context = inMemoryContext();
+	documentWithDatabaseAndQueryInContext(context);
+	RptqDatabase *database = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqQuery *queryObject = (RptqQuery *)[context objectForEntity:@"RptqQuery" identifier:20];
+	RptqDatabaseSchemaTable *orders = schemaTableNamed(@"Orders", database, context);
+	RptqQueryField *name = queryFieldNamedOnTable(@"Name", MADDataTypeString, orders, database, context);
+	queryFieldNamedOnTable(@"Reference", MADDataTypeString, orders, database, context);
+
+	RptqQueryGroup *group = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	group.hasField = name;
+
+	MADQueryFull *allFull = queryFullForQueryWithDatabase(queryObject, 0, [[MADDatabaseMySQL alloc] init]);
+	NSError *error = nil;
+	NSString *allSQL = [allFull SQLOnlyActiveFields:NO managedObjectContext:context error:&error];
+	MAD_PASS(error == nil, "the all-fields query compiles");
+	MAD_PASS([allSQL containsString:@"`Orders0`.`Reference`"], "the unused field is in the all-fields list");
+
+	MADQueryFull *activeFull = queryFullForQueryWithDatabase(queryObject, 0, [[MADDatabaseMySQL alloc] init]);
+	error = nil;
+	NSString *activeSQL = [activeFull SQLOnlyActiveFields:YES managedObjectContext:context error:&error];
+	MAD_PASS(error == nil, "the active query compiles");
+	MAD_PASS([activeSQL containsString:@"`Orders0`.`Name`"], "the referenced field is in the active list");
+	MAD_PASS(![activeSQL containsString:@"Reference"], "the unused field is omitted from the active list");
+}
+
+static void testFieldKeysMatchTheSelectListOrder(void) {
+	RptqStoreContext *context = inMemoryContext();
+	documentWithDatabaseAndQueryInContext(context);
+	RptqDatabase *database = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqQuery *queryObject = (RptqQuery *)[context objectForEntity:@"RptqQuery" identifier:20];
+	RptqDatabaseSchemaTable *orders = schemaTableNamed(@"Orders", database, context);
+	RptqQueryField *amount = queryFieldNamedOnTable(@"Amount", MADDataTypeDecimal, orders, database, context);
+	RptqQueryField *name = queryFieldNamedOnTable(@"Name", MADDataTypeString, orders, database, context);
+
+	RptqQueryGroup *amountGroup = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	amountGroup.hasField = amount;
+	RptqQueryGroup *nameGroup = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	nameGroup.hasField = name;
+
+	MADQueryFull *full = queryFullForQueryWithDatabase(queryObject, 0, [[MADDatabaseMySQL alloc] init]);
+	NSError *error = nil;
+	NSString *sql = [full SQLOnlyActiveFields:YES managedObjectContext:context error:&error];
+	MAD_PASS(error == nil, "the active query compiles");
+
+	NSString *selectPart = [[sql componentsSeparatedByString:@"\nFROM"] firstObject];
+	NSArray *lines = [selectPart componentsSeparatedByString:@",\n"];
+	NSMutableArray *keys = [NSMutableArray array];
+	for (NSString *line in lines) {
+		NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+		NSString *trimmed = [line stringByTrimmingCharactersInSet:whitespace];
+		if ([trimmed hasPrefix:@"SELECT"]) {
+			trimmed = [trimmed substringFromIndex:@"SELECT".length];
+			trimmed = [trimmed stringByTrimmingCharactersInSet:whitespace];
+		}
+		if (trimmed.length > 0) [keys addObject:trimmed];
+	}
+	MAD_PASS_EQUAL(keys, full.fieldKeys, "the field keys follow the SELECT list order: %s", [sql UTF8String]);
+	MAD_PASS_EQUAL(full.fieldKeys, (@[ @"`Orders0`.`Amount`", @"`Orders0`.`Name`" ]), "the keys are the aliases");
+}
+
+static void testNilErrorOutParameterIsSafe(void) {
+	RptqStoreContext *context = inMemoryContext();
+	RptqDocument *document = documentWithDatabaseAndQueryInContext(context);
+	RptqQueryField *name = queryFieldNamed(@"Name", MADDataTypeString, document.defaultDatabase, context);
+	RptqQueryGroup *group = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+	group.hasField = name;
+	MADQueryFull *full = queryFullForDocument(document, 0);
+	MAD_PASS([full SQLOnlyActiveFields:YES managedObjectContext:context error:NULL].length > 0,
+			 "a NULL error pointer is safe when the query compiles");
+
+	RptqStoreContext *emptyContext = inMemoryContext();
+	RptqDocument *emptyDocument = documentWithDatabaseAndQueryInContext(emptyContext);
+	queryFieldNamed(@"Name", MADDataTypeString, emptyDocument.defaultDatabase, emptyContext);
+	MADQueryFull *emptyFull = queryFullForDocument(emptyDocument, 0);
+	MAD_PASS_EQUAL([emptyFull SQLOnlyActiveFields:YES managedObjectContext:emptyContext error:NULL], @"",
+				   "a NULL error pointer is safe when there are no active fields");
+}
+
+static void testCycleIsReportedThroughTheSortError(void) {
+	RptqStoreContext *context = inMemoryContext();
+	RptqDocument *document = documentWithDatabaseAndQueryInContext(context);
+	RptqDatabase *database = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqDatabaseSchemaTable *orders = schemaTableNamed(@"Orders", database, context);
+	RptqDatabaseSchemaTable *customers = schemaTableNamed(@"Customers", database, context);
+	RptqQueryField *orderKey = queryFieldNamedOnTable(@"Key", MADDataTypeInteger, orders, database, context);
+	RptqQueryField *customerKey = queryFieldNamedOnTable(@"Key", MADDataTypeInteger, customers, database, context);
+	addLinkOfType(MADLinkTypeInnerJoin, orderKey, customerKey, context);
+	addLinkOfType(MADLinkTypeInnerJoin, customerKey, orderKey, context);
+
+	MADQueryFull *full = queryFullForDocument(document, 0);
+	NSError *error = nil;
+	NSString *sql = [full SQLOnlyActiveFields:NO managedObjectContext:context error:&error];
+	MAD_PASS_EQUAL(sql, @"", "a cyclic query compiles to no SQL");
+	MAD_PASS(error != nil, "a cyclic query reports an error");
+	MAD_PASS_EQUAL(error.domain, @"MTGraphErrorDomain", "the sorter's own error is propagated");
+	MAD_PASS_EQUAL(@(error.code), @(100), "the sorter's cycle code is propagated");
+	MAD_PASS_EQUAL([full SQLOnlyActiveFields:NO managedObjectContext:context error:NULL], @"",
+				   "a NULL error pointer is safe on a cycle");
+}
+
+static void testDropIndexIsCountedWithinTheSelectedQuery(void) {
+	RptqStoreContext *context = inMemoryContext();
+	documentWithDatabaseAndQueryInContext(context);
+	RptqDatabase *database = (RptqDatabase *)[context objectForEntity:@"RptqDatabase" identifier:10];
+	RptqQuery *first = (RptqQuery *)[context objectForEntity:@"RptqQuery" identifier:20];
+	RptqQuery *second = addQueryWithIdentifier(database, 40, context);
+	RptqDatabaseSchemaTable *orders = schemaTableNamed(@"Orders", database, context);
+
+	RptqQueryTable *firstTable = [RptqQueryTable newQueryTableForSchemaTable:orders
+																	   query:first
+													 forManagedObjectContext:context];
+	RptqQueryTable *secondTable = [RptqQueryTable newQueryTableForSchemaTable:orders
+																		query:second
+													  forManagedObjectContext:context];
+	RptqQueryTable *firstCopy = [RptqQueryTable newQueryTableForSchemaTable:orders
+																	  query:first
+													forManagedObjectContext:context];
+
+	MAD_PASS_EQUAL(@(firstTable.dropIndex), @(0), "the first query's first copy is index 0");
+	MAD_PASS_EQUAL(@(secondTable.dropIndex), @(0), "the second query's first copy is index 0");
+	MAD_PASS_EQUAL(@(firstCopy.dropIndex), @(1), "the first query's second copy is index 1");
+	MAD_PASS_EQUAL(firstTable.queryAlias, @"Orders0", "the first query's alias is Orders0");
+	MAD_PASS_EQUAL(secondTable.queryAlias, @"Orders0", "the second query reuses Orders0");
+	MAD_PASS_EQUAL(firstCopy.queryAlias, @"Orders1", "the first query's copy is Orders1");
+}
+
 MAD_TEST_MAIN("MADQueryFullTests",
 	MAD_TEST(testQueryWithNoTablesIsEmpty),
 	MAD_TEST(testSingleTableAllFieldsSql),
@@ -645,4 +867,11 @@ MAD_TEST_MAIN("MADQueryFullTests",
 	MAD_TEST(testNumericPredicateLiteralIsBare),
 	MAD_TEST(testColumnToColumnPredicate),
 	MAD_TEST(testPredicateConjunctionUsesAndSeparator),
-	MAD_TEST(testActiveFieldOrderingIsByAlias));
+	MAD_TEST(testActiveFieldOrderingIsByAlias),
+	MAD_TEST(testTwoQueriesCompileTheirOwnTablesAndDialects),
+	MAD_TEST(testActiveFieldsAreScopedToTheSelectedQuery),
+	MAD_TEST(testAllFieldsIncludesAnUnusedFieldAndActiveFieldsOmitsIt),
+	MAD_TEST(testFieldKeysMatchTheSelectListOrder),
+	MAD_TEST(testNilErrorOutParameterIsSafe),
+	MAD_TEST(testCycleIsReportedThroughTheSortError),
+	MAD_TEST(testDropIndexIsCountedWithinTheSelectedQuery));
