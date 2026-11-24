@@ -234,3 +234,75 @@ Pushed `d9fff7566` to `origin/feat/query-composition`.
 **Results.** Apple `MAD` green, Linux `RptqStoreContextTests` 25/0, full `./Linux/build.sh` 131/0, and `./Mac/build.sh --smoke-test` passes (London 76 rows, every format exported, plus a created/designed/refreshed/exported 3-row report). `versions.py` + `check_source_lists.py` green.
 
 Checkpoint D is complete. Next: Checkpoint E (fresh-process `mad refresh` and export of the invoice/payment rows).
+
+## Checkpoint E — fresh-process CLI refresh and export landed (2026-11-24)
+
+A saved composed report now refreshes and exports end to end through the shared engine
+path. The CLI stays a thin adapter; the work lives in the engine so native clients can
+reuse it.
+
+- **Composer projection order.** `MADComposer` gained `MADComposerProjection` (an input
+  plus its `sourceKey`/`outputKey`) and `+composeLeft:right:joinType:projections:orderByKeys:cacheDirectory:intoTable:error:`,
+  which composes an explicit ordered projection into a caller-owned result table. The
+  existing `+composeLeft:right:joinType:orderByKeys:rootIdentifier:cacheDirectory:error:`
+  is now a convenience that folds the two inputs' fields into one projection and writes
+  the column map itself. A caller honors a persisted output order by passing the
+  projections in that order.
+- **The composed refresh coordinator.** `MADOperationRefreshComposed` (in
+  `MADOperationRefresh.m`) is the composition branch of the refresh chain. On the store's
+  owning queue it resolves the explicit root, validates the graph, reads the ordered
+  outputs and the join, derives each source's required fields (every output field plus
+  each join key — so a downstream-only join key is projected), and compiles each source's
+  SQL with that source's own connection and dialect. Off that queue it refreshes each
+  source once serially into a fresh generation, builds the composer inputs and ordered
+  projections, composes into the document's staged result, and publishes through the
+  ordinary `beginRefreshResult`/`publishPendingResult` boundary. A failed source reports
+  the source by name, and a failed refresh leaves the previous published root untouched.
+- **Export reads the committed root.** `MADReportExportSource` detects a composed document
+  and builds its columns, schema fields and rows from `currentResult` plus the persisted
+  output projection, instead of compiling `document.mainQuery`.
+- **Join keys are not outputs.** `RptqDocument -orderedCompositionOutputsWithError:` now
+  returns only the fields that name an `outputKey`; a field with none is a join key, not a
+  projection the store forgot to order. The "no output order" error still fires when the
+  root has fields but none of them is an output.
+- **CLI adapter.** `MADCLIDocument -refreshWithCredentials:` selects
+  `MADOperationRefreshComposed` when `activeDocumentModel.rootQuery` is non-nil, with the
+  same credentials-holder dependency the ordinary path uses. `MADFixtureMaker compose`
+  builds the invoices/payments fixture (and `compose … reorder` the reordered projection)
+  through the production store and archive writers.
+- **Test.** `testComposedRefreshProducesRoot` builds a composed document through the
+  store + archive writers, reopens it headless, refreshes through
+  `MADOperationRefreshComposed`, and pins the column order and row count.
+
+**Fixture and commands (all run from a different working directory so an accidental
+source-path resolution against the shell's cwd would fail).**
+
+```sh
+CLI/build.sh --make-fixture compose /tmp/mad-e2e/composed.mad
+env SIMCTL_CHILD_MAD_HOST_CWD="$PWD" xcrun simctl spawn booted CLI/build/mad refresh /tmp/mad-e2e/composed.mad
+env SIMCTL_CHILD_MAD_HOST_CWD="$PWD" xcrun simctl spawn booted CLI/build/mad export --format json /tmp/mad-e2e/composed.mad
+```
+
+**Observed results (actual).**
+
+- Default projection: `refreshed 4 rows`; `json` columns `invoice_id, invoice_amount,
+  payment_amount`; rows `(1,100,40) (1,100,60) (2,200,null) (3,300,null)`.
+- Empty payments (`DELETE FROM payments;`, same saved report): `refreshed 3 rows`; rows
+  `(1,100,null) (2,200,null) (3,300,null)` — the zero-row payments source keeps its
+  `invoice_id` join key, and all three invoices stay.
+- Reordered projection (`compose … reorder`): columns `invoice_id, payment_amount,
+  invoice_amount`; rows `(1,40,100) (1,60,100) (2,null,200) (3,null,300)` — the exported
+  values follow their output keys.
+- Failure and recovery: with `payments.sqlite` moved aside, `mad refresh` exits 4 with
+  `The source 'payments' could not connect: …`; the stable `.mdcache` still names the same
+  generation and its row file still holds the four rows; restoring the source and
+  refreshing again succeeds.
+
+**Results.** Apple `MAD` 752/0 (including `testComposedRefreshProducesRoot`), full
+`./Linux/build.sh` 131 suites / 0 failures, `./Mac/build.sh --smoke-test` passes (London
+76 rows, every format exported, plus the created/designed/refreshed/exported 3-row report),
+and `scripts/dev/check_source_lists.py` green.
+
+**Pending.** The same-commit Windows engine/package/WPF run and the PR CI have not been
+run; they remain identified as pending. PR creation and merge await the user's direction.
+
