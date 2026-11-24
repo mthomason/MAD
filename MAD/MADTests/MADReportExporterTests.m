@@ -33,18 +33,23 @@
 
 #import <MAD/MADPredicateOperator.h>
 #import <MAD/MADQueryFull.h>
+#import <MAD/MADQueryLinkType.h>
+#import <MAD/MADArchiveManager.h>
+#import <MAD/MADDocumentStore.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MADFoundation/MADDataColumn.h>
 #import <MAD/RptqDatabase+Extras.h>
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryLinks.h>
 #import <MAD/RptqQueryPredicate.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDocumentElementLabelDataField.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqQueryTable+Extras.h>
+#import <MAD/RptqObject.h>
 #import <MAD/RptqStoreContext.h>
 
 #import <MADSqlite3/MADDataTableFast.h>
@@ -806,6 +811,179 @@ static MADComposerInput *MADCompositionInput(NSString *alias,
 	input.fields = composerFields;
 	input.joinKey = MADCompositionLogicalKey(result, joinKeyField);
 	return input;
+}
+
+/// Builds a composed invoices/payments document through the production store and
+/// archive writers, with a downstream-only join key on the payments side, and
+/// reopens it as a headless document ready to refresh.
+static MADHeadlessDocument *MADCompositionComposedDocument(NSString *directory, NSString **outError) {
+	NSURL *invoicesURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"invoices.sqlite"]];
+	NSURL *paymentsURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"payments.sqlite"]];
+	NSURL *madURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"composed.mad"]];
+
+	if (!MADCompositionCreateSource(invoicesURL, @[
+		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL);",
+		@"INSERT INTO invoices VALUES (1, 100.0);",
+		@"INSERT INTO invoices VALUES (2, 200.0);",
+		@"INSERT INTO invoices VALUES (3, 300.0);"])) {
+		if (outError) *outError = @"invoices source";
+		return nil;
+	}
+	if (!MADCompositionCreateSource(paymentsURL, @[
+		@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
+		@"INSERT INTO payments VALUES (101, 1, 40.0);",
+		@"INSERT INTO payments VALUES (102, 1, 60.0);"])) {
+		if (outError) *outError = @"payments source";
+		return nil;
+	}
+
+	MADDocumentStore *store = [MADDocumentStore storeForDocumentURL: madURL];
+	NSError *error = nil;
+	if (![store openWithError: &error]) {
+		if (outError) *outError = error.description;
+		return nil;
+	}
+	RptqStoreContext *context = store.context;
+	[context loadAllWithError: NULL];
+
+	RptqObject *(^insert)(NSString *, int64_t) = ^(NSString *entity, int64_t identifier) {
+		return [context insertObjectForEntity: entity identifier: identifier];
+	};
+
+	RptqObject *document = insert(@"RptqDocument", 1);
+
+	// A source: database, credential, schema table + fields, named query, query
+	// table and the query fields it projects (a label makes a field active).
+	RptqObject *(^source)(NSURL *, NSString *, int64_t, int64_t, int64_t, NSArray<NSString *> *) =
+		^(NSURL *url, NSString *queryName, int64_t dbId, int64_t queryId, int64_t tableId, NSArray<NSString *> *labelled) {
+		RptqObject *database = insert(@"RptqDatabase", dbId);
+		[database setValue: @"Sqlite 3" forKey: @"databaseDriverType"];
+		RptqObject *credential = insert(@"RptqDatabaseCredentals", 0);
+		[credential setValue: url.lastPathComponent forKey: @"dbname"];
+		[credential setValue: url.path forKey: @"host"];
+		[database setValue: credential forKey: @"ownedByUser"];
+
+		RptqObject *table = insert(@"RptqDatabaseSchemaTable", tableId + 1);
+		[table setValue: queryName forKey: @"name"];
+		RptqObject *idField = insert(@"RptqDatabaseSchemaField", tableId + 2);
+		[idField setValue: @"invoice_id" forKey: @"name"];
+		RptqObject *amountField = insert(@"RptqDatabaseSchemaField", tableId + 3);
+		[amountField setValue: @"amount" forKey: @"name"];
+		[database setValue: @[ table ] forKey: @"hasTables"];
+		[table setValue: @[ idField, amountField ] forKey: @"hasFields"];
+
+		RptqObject *query = insert(@"RptqQuery", queryId);
+		[query setValue: queryName forKey: @"name"];
+		[database setValue: @[ query ] forKey: @"hasQueries"];
+		RptqObject *queryTable = insert(@"RptqQueryTable", tableId);
+		[queryTable setValue: table forKey: @"databaseSchemaTable"];
+		[queryTable setValue: query forKey: @"inQuery"];
+
+		NSMutableArray *fields = [NSMutableArray array];
+		for (RptqObject *schemaField in @[ idField, amountField ]) {
+			RptqObject *field = insert(@"RptqQueryField", 0);
+			[field setValue: schemaField forKey: @"databaseSchemaField"];
+			[field setValue: queryTable forKey: @"inQueryTable"];
+			[fields addObject: field];
+			if ([labelled containsObject: [schemaField valueForKey: @"name"]]) {
+				RptqObject *label = insert(@"RptqDocumentElementLabelDataField", 0);
+				[label setValue: field forKey: @"referencesQueryField"];
+			}
+		}
+		[queryTable setValue: fields forKey: @"hasQueryFields"];
+		return query;
+	};
+
+	RptqObject *invoices = source(invoicesURL, @"invoices", 10, 101, 200, @[ @"invoice_id", @"amount" ]);
+	RptqObject *payments = source(paymentsURL, @"payments", 20, 102, 300, @[ @"amount" ]);
+	RptqObject *invoicesDB = [invoices valueForKey: @"inDatabase"];
+	RptqObject *paymentsDB = [payments valueForKey: @"inDatabase"];
+	[document setValue: @[ invoicesDB, paymentsDB ] forKey: @"hasDatabaseSchemas"];
+
+	RptqObject *root = insert(@"RptqQuery", 100);
+	[root setValue: @"root" forKey: @"name"];
+	[root setValue: invoicesDB forKey: @"inDatabase"];
+	RptqObject *rootInvoices = insert(@"RptqQueryTable", 400);
+	[rootInvoices setValue: root forKey: @"inQuery"];
+	[rootInvoices setValue: invoices forKey: @"upstreamQuery"];
+	RptqObject *rootPayments = insert(@"RptqQueryTable", 401);
+	[rootPayments setValue: root forKey: @"inQuery"];
+	[rootPayments setValue: payments forKey: @"upstreamQuery"];
+
+	RptqObject *invoiceIdField = [context objectForEntity: @"RptqDatabaseSchemaField" identifier: 202];
+	RptqObject *invoiceAmountField = [context objectForEntity: @"RptqDatabaseSchemaField" identifier: 203];
+	RptqObject *paymentIdField = [context objectForEntity: @"RptqDatabaseSchemaField" identifier: 302];
+	RptqObject *paymentAmountField = [context objectForEntity: @"RptqDatabaseSchemaField" identifier: 303];
+
+	RptqObject *leftKey = insert(@"RptqQueryField", 500);
+	[leftKey setValue: invoiceIdField forKey: @"databaseSchemaField"];
+	[leftKey setValue: rootInvoices forKey: @"inQueryTable"];
+	RptqObject *rightKey = insert(@"RptqQueryField", 501);
+	[rightKey setValue: paymentIdField forKey: @"databaseSchemaField"];
+	[rightKey setValue: rootPayments forKey: @"inQueryTable"];
+	RptqObject *join = insert(@"RptqQueryLinks", 450);
+	[join setValue: @(MADLinkTypeLeftOuterJoin) forKey: @"type"];
+	[join setValue: leftKey forKey: @"hasLeftField"];
+	[join setValue: rightKey forKey: @"hasRightField"];
+	[join setValue: root forKey: @"inQuery"];
+
+	RptqObject *out0 = insert(@"RptqQueryField", 600);
+	[out0 setValue: invoiceIdField forKey: @"databaseSchemaField"];
+	[out0 setValue: rootInvoices forKey: @"inQueryTable"];
+	[out0 setValue: @"invoice_id" forKey: @"outputKey"];
+	[out0 setValue: @0 forKey: @"outputIndex"];
+	RptqObject *out1 = insert(@"RptqQueryField", 601);
+	[out1 setValue: invoiceAmountField forKey: @"databaseSchemaField"];
+	[out1 setValue: rootInvoices forKey: @"inQueryTable"];
+	[out1 setValue: @"invoice_amount" forKey: @"outputKey"];
+	[out1 setValue: @1 forKey: @"outputIndex"];
+	RptqObject *out2 = insert(@"RptqQueryField", 602);
+	[out2 setValue: paymentAmountField forKey: @"databaseSchemaField"];
+	[out2 setValue: rootPayments forKey: @"inQueryTable"];
+	[out2 setValue: @"payment_amount" forKey: @"outputKey"];
+	[out2 setValue: @2 forKey: @"outputIndex"];
+
+	[document setValue: root forKey: @"rootQuery"];
+
+	if (![context saveComposed: &error]) {
+		if (outError) *outError = error.description;
+		return nil;
+	}
+	[store close];
+	MADArchiveManager *writer = [[MADArchiveManager alloc] initWithFileWrapperURL: store.gutsURL archiveURL: madURL];
+	writer.composed = YES;
+	if (![writer archive: YES]) {
+		if (outError) *outError = @"archive";
+		return nil;
+	}
+
+	MADHeadlessDocument *result = [MADHeadlessDocument documentWithContentsOfURL: madURL error: &error];
+	if (result == nil && outError) *outError = error.description;
+	return result;
+}
+
+- (void)testComposedRefreshProducesRoot {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionComposedDocument(directory, &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	NSError *error = nil;
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: refresh];
+	while (queue.operationCount > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode
+								 beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+	}
+	XCTAssertEqual(refresh.errors.count, (NSUInteger)0, @"%@", refresh.errors.firstObject);
+	XCTAssertNotNil(document.currentResult);
+
+	XCTAssertEqualObjects(document.currentResult.columnKeys, (@[ @"invoice_id", @"invoice_amount", @"payment_amount" ]));
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)4);
 }
 
 - (void)testCompositionJoinPopulated {
