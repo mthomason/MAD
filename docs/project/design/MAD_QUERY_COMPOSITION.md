@@ -221,3 +221,16 @@ Pushed `3d491eedf` to `origin/feat/query-composition`.
 **Results.** Apple `MAD` green, Linux `RptqStoreContextTests` 22/0, full `./Linux/build.sh` 131/0, versions.py + check_source_lists.py green.
 
 **Still to do.** The explicit reorder case (payment_amount between the two invoice outputs), Save As identity, the forced failed-archive-save case, and the macOS ordinary-report smoke test. Then Checkpoint E.
+
+## Checkpoint D — reorder, Save As, and failed-save landed (2026-11-24)
+
+Pushed `d9fff7566` to `origin/feat/query-composition`.
+
+- **Reorder.** `testComposedProjectionReorder` round-trips the reordered projection (`invoice_id`, `payment_amount`, `invoice_amount`) and asserts the exact sequence and the source field behind each output.
+- **Save As.** `testComposedSaveAs` saves two same-named documents in different directories — the original with the default order, the copy with the reordered projection — and verifies each reopens with its own order and both keep their two connection references.
+- **Failed save.** `testComposedFailedArchivePreservesDestination` forces the archive to fail (moved guts) and verifies the previous destination still opens with its projection. This exposed and fixed two defects: the native `MADocument` save path did not detect a composed document (it saved at revision 2 / container 1.0), and `MADArchiveManager -archive:` swallowed a failed requirements-record write.
+- **Native path.** `MADocument -writeStoreAndArchiveWithError:` and `MADHeadlessDocument -writeToURL:` now detect composition by reading the document row directly (safe before the create flow inserts it), save at revision 3, and archive as container 1.1.
+
+**Results.** Apple `MAD` green, Linux `RptqStoreContextTests` 25/0, full `./Linux/build.sh` 131/0, and `./Mac/build.sh --smoke-test` passes (London 76 rows, every format exported, plus a created/designed/refreshed/exported 3-row report). `versions.py` + `check_source_lists.py` green.
+
+Checkpoint D is complete. Next: Checkpoint E (fresh-process `mad refresh` and export of the invoice/payment rows).
