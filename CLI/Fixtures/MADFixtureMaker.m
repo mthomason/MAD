@@ -59,6 +59,8 @@
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqDocumentElementLabelDataField.h>
 #import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqQueryPredicate+Extras.h>
+#import <MAD/MADPredicateOperator.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSection+Extras.h>
 #import <MAD/RptqStoreContext.h>
@@ -428,7 +430,9 @@ static RptqObject *MADFixtureComposeSource(RptqStoreContext *context,
 /// production store and archive writers (container 1.1, store revision 3).  When
 /// `reordered`, the root projects `invoice_id, payment_amount, invoice_amount`
 /// instead of the default `invoice_id, invoice_amount, payment_amount`.
-static int MADFixtureCompose(NSURL *documentURL, BOOL reordered) {
+/// When `rootfilter`, the root carries `payment_amount > 50`, a WHERE predicate the
+/// composed coordinator evaluates on the joined rows.
+static int MADFixtureCompose(NSURL *documentURL, BOOL reordered, BOOL rootfilter) {
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSURL *directory = documentURL.URLByDeletingLastPathComponent;
 	NSURL *invoicesURL = [directory URLByAppendingPathComponent: @"invoices.sqlite"];
@@ -524,6 +528,21 @@ static int MADFixtureCompose(NSURL *documentURL, BOOL reordered) {
 
 	[document setValue: root forKey: @"rootQuery"];
 
+	if (rootfilter) {
+		// A root predicate: payment_amount > 50, evaluated on the joined rows, so the
+		// CLI can demonstrate a root-filtered refresh and export.
+		RptqQueryPredicate *predicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: 602
+																				 comparsonOperator: MADPredicateOperatorGreaterThan
+																					 andRightValue: @"50"
+																			 forManagedObjectContext: context
+																						   error: &error];
+		if (predicate == nil) {
+			fprintf(stderr, "could not build the root predicate: %s\n", error.localizedDescription.UTF8String);
+			return 1;
+		}
+		[(RptqQuery *)root addHasQueryPredicateObject: predicate];
+	}
+
 	// A detail band whose three data labels are bound to the root's output fields.
 	// The labels reference the root output fields themselves -- whose persisted
 	// outputKey is what the renderer reads -- so invoice and payment amounts bind to
@@ -616,11 +635,12 @@ int main(int argc, const char *argv[]) {
 
 		if (argc >= 2 && strcmp(argv[1], "compose") == 0) {
 			if (argc != 3 && argc != 4) {
-				fprintf(stderr, "usage: MADFixtureMaker compose <document.mad> [reorder]\n");
+				fprintf(stderr, "usage: MADFixtureMaker compose <document.mad> [reorder|rootfilter]\n");
 				return 1;
 			}
 			BOOL reordered = (argc == 4 && strcmp(argv[3], "reorder") == 0);
-			return MADFixtureCompose([NSURL fileURLWithPath: [NSString stringWithUTF8String: argv[2]]], reordered);
+			BOOL rootfilter = (argc == 4 && strcmp(argv[3], "rootfilter") == 0);
+			return MADFixtureCompose([NSURL fileURLWithPath: [NSString stringWithUTF8String: argv[2]]], reordered, rootfilter);
 		}
 
 		fprintf(stderr, "usage: MADFixtureMaker portable <document.mad> <fixture.mad>\n"
