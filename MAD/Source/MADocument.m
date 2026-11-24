@@ -137,6 +137,8 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 @property (nonatomic, readwrite, strong) UIImage *thumbnail;
 
 @property (nonatomic, readwrite, strong) MADDataTableFast *dataTable;
+@property (nonatomic, readwrite, strong, nullable) MADDataResult *currentResult;
+@property (nonatomic, readwrite, strong, nullable) MADDataResult *pendingResult;
 @property (nonatomic, readwrite, strong) MADDatabase *database;
 @property (nonatomic, readwrite, strong) MADQueryFull *mainQuery;
 
@@ -219,12 +221,107 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	MADDataTableFast *datatable = [[MADDataTableFast alloc] initWithId:self.filename.hash];
 	datatable.cacheDelegate = self;
 	NSError *error = nil;
-	[datatable loadFromCacheWithUrl:self.urlDataTableCache error:&error];
+	BOOL loaded = [datatable loadFromCacheWithUrl:self.urlDataTableCache error:&error];
 	if (error != nil && error.code != -215) {
 		os_log_error(GetMadLog(), "Error: %@", error);
 	}
 	self.dataTable = datatable;
+	self.currentResult = loaded ? [MADDataResult resultWithDataTable: datatable
+														columnMapURL: self.urlDataTableCache] : nil;
+}
 
+#pragma mark - Publication
+
+- (MADDataResult *)beginRefreshResultWithError:(NSError * __autoreleasing *)error {
+	// Establish the last published result from the cache before staging the next
+	// one, so a failed refresh has something to leave usable.
+	if (self.currentResult == nil) {
+		[self resetCache];
+	}
+
+	NSString *generation = NSUUID.UUID.UUIDString;
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId: self.filename.hash];
+	table.cacheFileIdentifier = generation;
+	table.cacheDelegate = self;
+	NSURL *columnMapURL = [self.cachedFilesDirectory URLByAppendingPathComponent:
+		[generation stringByAppendingPathExtension:@"mdcache"]];
+
+	self.pendingResult = [[MADDataResult alloc] initWithIdentifier: generation
+														 dataTable: table
+													rowDatabaseURL: table.rowDatabaseURL
+													  columnMapURL: columnMapURL];
+	return self.pendingResult;
+}
+
+- (BOOL)publishPendingResultWithError:(NSError * __autoreleasing *)error {
+	MADDataResult *pending = self.pendingResult;
+	if (pending == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: NSStringFromClass([self class])
+										  code: 1
+									  userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"There is no pending refresh result.", @"No result to publish.") }];
+		}
+		return NO;
+	}
+
+	NSError *writeError = nil;
+	if (![pending.dataTable cacheWithUrl: pending.columnMapURL error: &writeError]) {
+		if (error != NULL) *error = writeError ?: [NSError errorWithDomain: NSStringFromClass([self class]) code: 2 userInfo: nil];
+		return NO;
+	}
+
+	NSData *columnMap = [NSData dataWithContentsOfURL: pending.columnMapURL options: 0 error: &writeError];
+	if (columnMap == nil) {
+		if (error != NULL) *error = writeError ?: [NSError errorWithDomain: NSStringFromClass([self class]) code: 3 userInfo: nil];
+		return NO;
+	}
+
+	NSURL *rowDatabaseURL = pending.rowDatabaseURL;
+	if (rowDatabaseURL == nil || ![[NSFileManager defaultManager] fileExistsAtPath: rowDatabaseURL.path]) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: NSStringFromClass([self class])
+										  code: 4
+									  userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"The refreshed row table was not written.", @"The staged row file is missing.") }];
+		}
+		return NO;
+	}
+
+	// The commit point: the stable column map now points at the staged row file.
+	if (![self writePublishedColumnMapData: columnMap
+									toURL: self.urlDataTableCache
+									error: &writeError]) {
+		if (error != NULL) *error = writeError ?: [NSError errorWithDomain: NSStringFromClass([self class]) code: 5 userInfo: nil];
+		return NO;
+	}
+
+	self.dataTable = pending.dataTable;
+	self.currentResult = [[MADDataResult alloc] initWithIdentifier: pending.identifier
+														 dataTable: pending.dataTable
+													rowDatabaseURL: pending.rowDatabaseURL
+													  columnMapURL: self.urlDataTableCache];
+	self.pendingResult = nil;
+	[[NSFileManager defaultManager] removeItemAtURL: pending.columnMapURL error: NULL];
+	return YES;
+}
+
+- (void)discardPendingResult {
+	MADDataResult *pending = self.pendingResult;
+	self.pendingResult = nil;
+	if (pending == nil) return;
+	NSURL *rowDatabaseURL = pending.rowDatabaseURL;
+	NSURL *columnMapURL = pending.columnMapURL;
+	pending = nil;	// close the staged table's connections before removing its files
+	[[NSFileManager defaultManager] removeItemAtURL: rowDatabaseURL error: NULL];
+	[[NSFileManager defaultManager] removeItemAtURL: columnMapURL error: NULL];
+}
+
+- (BOOL)writePublishedColumnMapData:(NSData *)data toURL:(NSURL *)url error:(NSError * __autoreleasing *)error {
+#if defined(__APPLE__) && TARGET_OS_IPHONE
+	NSDataWritingOptions options = (NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen);
+#else
+	NSUInteger options = NSDataWritingAtomic;
+#endif
+	return [data writeToURL: url options: options error: error];
 }
 
 - (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection {
@@ -280,11 +377,13 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 		self.urlDataTableCache = cacheUrl;
 		
 		NSError *error = nil;
-		[datatable loadFromCacheWithUrl:cacheUrl error:&error];
+		BOOL loaded = [datatable loadFromCacheWithUrl:cacheUrl error:&error];
 		if (error != nil) {
 			os_log_error(GetMadLog(), "Error: %@", error);
 		}
 		self.dataTable = datatable;
+		self.currentResult = loaded ? [MADDataResult resultWithDataTable: datatable
+															columnMapURL: cacheUrl] : nil;
 		
 		MADocumentState *documentState = [[MADocumentState alloc] init];
 		self.documentStatus = documentState;
@@ -963,7 +1062,8 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 #pragma mark Helpers
 
 - (void)dataTableSetDataDelegate:(id <MADDataProtocol>)delegage {
-	self.dataTable.dataDelegate = delegage;
+	MADDataTableFast *table = self.pendingResult.dataTable ?: self.dataTable;
+	table.dataDelegate = delegage;
 }
 
 - (BOOL)dataTableMakeCache {
@@ -981,7 +1081,8 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 
 - (void)dataTableSort:(RptqQuery *)query {
 	NSArray *sortDescriptors = [query sortDescriptorsForDatabase:self.database];
-	[self.dataTable sortUsingDescriptors:sortDescriptors];
+	MADDataTableFast *table = self.pendingResult.dataTable ?: self.dataTable;
+	[table sortUsingDescriptors:sortDescriptors];
 }
 
 - (BOOL)hasCachedData {

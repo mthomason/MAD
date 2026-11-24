@@ -59,6 +59,7 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 + (NSString *)driverNameForDocument:(id <MADDocumentDataProtocol>)document;
 
 @property (nonatomic, readwrite, strong) id <MADDocumentDataProtocol> document;
+@property (nonatomic, readwrite, strong, nullable) MADDataResult *result;
 @property (nonatomic, readwrite, copy) NSString *driverName;
 @property (nonatomic, readwrite, copy) NSString *sql;
 @property (nonatomic, readwrite, copy) NSArray <NSString *> *columnKeys;
@@ -94,6 +95,9 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 
 	MADReportExportSource *source = [[MADReportExportSource alloc] init];
 	source.document = document;
+	// Pin the published generation now: a refresh that publishes while an exporter
+	// is running must not change the rows or the column map under it.
+	source.result = document.currentResult;
 	source.sql = sql;
 	source.driverName = [MADReportExportSource driverNameForDocument: document];
 
@@ -107,7 +111,7 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 	// builds them from the first row -- so the query's own field keys stand in, and
 	// the export still describes the shape of something empty rather than nothing
 	// (docs/developers/data-object.md section 3.6).
-	MADDataTableFast *table = document.dataTable;
+	MADDataTableFast *table = source.result.dataTable ?: document.dataTable;
 	NSMutableArray <NSString *> *columnKeys = [NSMutableArray arrayWithCapacity: table.columnKeys.count];
 	for (NSString *tableColumnKey in table.columnKeys) {
 		MADDataColumn *column = table.columns[tableColumnKey];
@@ -165,7 +169,7 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 	}
 	// The stored column, when the document does not name the schema field: the table
 	// keys its columns by the c<hash> name, so the field key is looked up first.
-	MADDataTableFast *table = self.document.dataTable;
+	MADDataTableFast *table = self.result.dataTable ?: self.document.dataTable;
 	NSString *tableColumnKey = [table columnKeyForColumnName: columnKey];
 	MADDataColumn *column = tableColumnKey != nil ? table.columns[tableColumnKey] : nil;
 	return column != nil ? MADReportExportTypeName(column.type) : nil;
@@ -174,11 +178,13 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 #pragma mark - Rows
 
 - (NSUInteger)numberOfRows {
+	if (self.result != nil) return self.result.numberOfRows;
 	return self.document.numberOfResults;
 }
 
 - (NSEnumerator <NSDictionary <NSString *, id> *> *)rowEnumerator {
-	return [self.document.dataTable objectEnumerator];
+	MADDataTableFast *table = self.result.dataTable ?: self.document.dataTable;
+	return [table objectEnumerator];
 }
 
 #pragma mark - Values

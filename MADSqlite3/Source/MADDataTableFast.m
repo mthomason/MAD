@@ -400,9 +400,23 @@ static os_log_t mlog;
 	return rows;
 }
 
+- (void)setCacheFileIdentifier:(NSString *)cacheFileIdentifier {
+	if (![_cacheFileIdentifier isEqualToString:cacheFileIdentifier]) {
+		_cacheFileIdentifier = [cacheFileIdentifier copy];
+		_urlFastCache = nil;
+	}
+}
+
+- (NSURL *)rowDatabaseURL {
+	return self.urlFastCache;
+}
+
 - (NSString *)filenameCacheMadDB {
-	NSString *tag = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)self.tag];
-	return [tag stringByAppendingPathExtension:@"maddb"];
+	NSString *identifier = self.cacheFileIdentifier;
+	if (identifier.length == 0) {
+		identifier = [[NSString alloc] initWithFormat:@"%lu", (unsigned long)self.tag];
+	}
+	return [identifier stringByAppendingPathExtension:@"maddb"];
 }
 
 // Resolved once and then held: the app delegate is not cheap to ask on every read,

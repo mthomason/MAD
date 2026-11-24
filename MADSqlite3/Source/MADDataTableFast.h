@@ -26,6 +26,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) IBOutlet id <MADCacheProtocol> cacheDelegate;
 @property (nonatomic, weak) IBOutlet id <MADDataProtocol> dataDelegate;
 
+/// The generation token used for the row file's name (`<identifier>.maddb`).  The
+/// table keeps its `tag`, and so its `t<tag>` name, which lets a staged generation
+/// be written beside the live one and published by swapping the column map.  Set
+/// it before the table first opens a connection.
+@property (nonatomic, copy, nullable) NSString *cacheFileIdentifier;
+
+/// The row database file this table reads and writes.
+@property (nonatomic, strong, readonly, nullable) NSURL *rowDatabaseURL;
+
 /// The cache file lives in this directory.  Pass one when no cache delegate is
 /// available -- in a test, say -- and the table resolves its cache URL from it
 /// instead of reaching for the application delegate.  `nil` keeps the existing

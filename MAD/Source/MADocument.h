@@ -123,6 +123,13 @@ extern NSString * const MADDocumentInfoKeyThumbnail;
 - (void)dataTableSetDataDelegate:(id <MADDataProtocol>)delegage;
 - (void)dataTableSort:(RptqQuery *)query;
 
+/// The publication's commit point: writes the staged column map over the
+/// document's stable one.  Overridable so a test can fail a publication after the
+/// rows are staged.
+- (BOOL)writePublishedColumnMapData:(NSData *)data
+							  toURL:(NSURL *)url
+							  error:(NSError * __autoreleasing *)error;
+
 - (void)saveContext;
 - (void)prepareForQuery;
 - (void)updateDatabaseWithConnection:(MADDatabaseConnection *)databaseConnection;

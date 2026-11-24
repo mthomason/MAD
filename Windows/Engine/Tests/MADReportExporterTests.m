@@ -33,6 +33,17 @@
 #import <MAD/MADReportExporterRegistry.h>
 #import <MAD/MADReportExporterText.h>
 #import <MAD/MADReportExportSource.h>
+#import <MAD/MADQueryFull.h>
+#import <MAD/MADPredicateOperator.h>
+#import <MADFoundation/MADDataColumn.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDatabase+Extras.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryPredicate.h>
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqStoreContext.h>
 
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADDataType.h>
@@ -41,27 +52,21 @@
 #import <MADFoundation/NSString+Comparison.h>
 
 #import <MADSqlite3/MADDatabaseSqlite3.h>
+#import <MADSqlite3/MADDataTableFast.h>
 
 // __FILE__ is absolute here (CMake hands the compiler an absolute path), so
-// Tests -> Linux -> the repository root.  The Windows copies live one level
-// deeper (Windows/Engine/Tests), so they go up one more level.
-static NSString *MADExporterRepositoryRoot(void) {
-	NSString *directory = [@(__FILE__) stringByDeletingLastPathComponent];
-	NSString *repositoryRoot = directory;
-#if defined(_WIN32)
-	repositoryRoot = [repositoryRoot stringByDeletingLastPathComponent]; // Engine
-#endif
-	repositoryRoot = [repositoryRoot stringByDeletingLastPathComponent]; // Linux / Windows
-	return [repositoryRoot stringByDeletingLastPathComponent];           // the root
-}
-
+// Tests -> Linux -> the repository root.
 static NSString *MADExporterFixturePath(void) {
-	return [[MADExporterRepositoryRoot() stringByAppendingPathComponent: @"CLI/Fixtures"]
+	NSString *testFile = [@(__FILE__) stringByDeletingLastPathComponent];
+	NSString *repositoryRoot = [[testFile stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+	return [[repositoryRoot stringByAppendingPathComponent: @"CLI/Fixtures"]
 			stringByAppendingPathComponent: @"London.portable.mad"];
 }
 
 static NSString *MADExporterSampleDatabasePath(void) {
-	return [[MADExporterRepositoryRoot() stringByAppendingPathComponent:
+	NSString *testFile = [@(__FILE__) stringByDeletingLastPathComponent];
+	NSString *repositoryRoot = [[testFile stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+	return [[repositoryRoot stringByAppendingPathComponent:
 			 @"MADDesigner/Resources/Assets/Samples.xcassets/Data/chinook.dataset"]
 			stringByAppendingPathComponent: @"chinook.sqlite3"];
 }
@@ -119,6 +124,109 @@ static MADHeadlessDocument *MADExporterDocument(void) {
 	}
 	refreshed = queue.operationCount == 0 && refresh.errors.count == 0;
 	return document;
+}
+
+#pragma mark - Publication fixtures
+
+// A document whose publication commit can be failed after the rows are staged.
+@interface MADFailingPublicationDocument : MADHeadlessDocument
+@property (nonatomic, assign) BOOL failPublication;
+@end
+
+@implementation MADFailingPublicationDocument
+- (BOOL)writePublishedColumnMapData:(NSData *)data toURL:(NSURL *)url error:(NSError * __autoreleasing *)error {
+	if (self.failPublication) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: @"MADFailingPublication"
+										  code: 1
+									  userInfo: @{ NSLocalizedDescriptionKey: @"forced publication failure" }];
+		}
+		return NO;
+	}
+	return [super writePublishedColumnMapData: data toURL: url error: error];
+}
+@end
+
+/// A fresh copy of the London fixture under a unique name, so opening it does not
+/// unarchive over the shared export fixture's guts.
+static MADFailingPublicationDocument *MADExporterNewPublicationDocument(void) {
+	MADExporterInstallSampleDatabase();
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory
+							  withIntermediateDirectories: YES
+											   attributes: NULL
+													error: NULL];
+	NSString *name = [NSString stringWithFormat: @"publication-%@.mad", [[NSUUID UUID] UUIDString]];
+	NSURL *copy = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: name]];
+	NSError *error = nil;
+	if (![[NSFileManager defaultManager] copyItemAtURL: [NSURL fileURLWithPath: MADExporterFixturePath()]
+												 toURL: copy
+												 error: &error]) {
+		return nil;
+	}
+	return (MADFailingPublicationDocument *)[MADFailingPublicationDocument documentWithContentsOfURL: copy
+																							  error: &error];
+}
+
+static BOOL MADExporterRefreshDocument(MADHeadlessDocument *document, NSError **outError) {
+	MADOperationRefreshInitializeMainDataTable *initializeTable =
+		[[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument: document];
+	MADOperationRefreshInitialize *initialize = [[MADOperationRefreshInitialize alloc] initWithDocument: document];
+	[initialize addDependency: initializeTable];
+	MADOperationRefresh *refresh = [[MADOperationRefresh alloc] initWithDocument: document];
+	[refresh addDependency: initializeTable];
+	[refresh addDependency: initialize];
+
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: initializeTable];
+	[queue addOperation: initialize];
+	[queue addOperation: refresh];
+
+	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow: 60];
+	while (queue.operationCount > 0 && deadline.timeIntervalSinceNow > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode
+								 beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.02]];
+	}
+	if (outError != NULL && refresh.errors.count > 0) {
+		*outError = refresh.errors.firstObject;
+	}
+	return queue.operationCount == 0 && refresh.errors.count == 0;
+}
+
+// An equality predicate on an integer field with a value the fixture cannot hold.
+// The projection is unchanged; the result is zero rows.
+static RptqQueryPredicate *MADExporterAddImpossiblePredicate(MADHeadlessDocument *document) {
+	RptqStoreContext *context = document.storeContext;
+	RptqQuery *query = document.activeDocumentModel.defaultDatabase.defaultQuery;
+	RptqQueryField *field = nil;
+	for (RptqQueryTable *table in query.hasQueryTables) {
+		for (RptqQueryField *candidate in table.hasQueryFields) {
+			int16_t type = candidate.databaseSchemaField.dataType;
+			if (type == MADDataTypeInteger || type == MADDataTypeLong ||
+				type == MADDataTypeLongLong || type == MADDataTypeShort) {
+				field = candidate;
+				break;
+			}
+		}
+		if (field != nil) break;
+	}
+	if (field == nil) return nil;
+
+	RptqQueryPredicate *predicate =
+		(RptqQueryPredicate *)[context insertObjectForEntity: @"RptqQueryPredicate" identifier: 0];
+	predicate.comparson = (int16_t)MADPredicateOperatorEqual;
+	predicate.hasLeftField = field;
+	predicate.rigthFieldID = @"-1";
+	[query addHasQueryPredicateObject: predicate];
+	return predicate;
+}
+
+static void MADExporterRemovePredicate(MADHeadlessDocument *document, RptqQueryPredicate *predicate) {
+	if (predicate == nil) return;
+	RptqQuery *query = document.activeDocumentModel.defaultDatabase.defaultQuery;
+	[query removeHasQueryPredicateObject: predicate];
+	[document.storeContext deleteObject: predicate error: NULL];
 }
 
 // The three conditions every export test needs, in the shape MAD_NEED wants (it
@@ -418,6 +526,129 @@ static void testDatesAreISO8601InUTC(void) {
 	MAD_PASS_EQUAL([MADReportExportSource stringForDate: date], @"2001-01-12T00:00:00Z", "the ISO 8601 UTC spelling");
 }
 
+#pragma mark - Publication
+
+static void testSuccessfulRefreshPublishesOneCompleteResult(void) {
+	MADHeadlessDocument *document = MADExporterNewPublicationDocument();
+	MAD_PASS(document != nil, "the London fixture could not be copied and opened");
+	if (document == nil) return;
+
+	NSError *error = nil;
+	MAD_PASS(MADExporterRefreshDocument(document, &error), "the refresh publishes: %s", [[error description] UTF8String]);
+	MADDataResult *result = document.currentResult;
+	MAD_PASS(result != nil, "the refresh published a result");
+	MAD_PASS(result.identifier.length > 0, "the result has a generation identifier");
+	MAD_PASS(result.rowDatabaseURL != nil, "the result names its row database");
+	MAD_PASS([[NSFileManager defaultManager] fileExistsAtPath: result.rowDatabaseURL.path], "the row database exists");
+	MAD_PASS_EQUAL(result.columnMapURL.path, document.urlDataTableCache.path, "the column map is the stable one");
+	MAD_PASS(result.numberOfRows == document.numberOfResults, "the result's row count is the document's");
+	MAD_PASS(result.numberOfRows == (NSUInteger)76, "the London fixture published 76 rows");
+	MAD_PASS_EQUAL(result.columnKeys, document.mainQuery.fieldKeys, "the columns are the active-field projection");
+	for (NSString *key in result.columnKeys) {
+		MAD_PASS(result.columns[key] != nil, "the column map has %s", [key UTF8String]);
+		MAD_PASS_EQUAL(result.columns[key].identifier, key, "the column key is the field key");
+	}
+
+	MADDataTableFast *reopened = [[MADDataTableFast alloc] initWithId: document.filename.hash];
+	reopened.cacheDelegate = document;
+	MAD_PASS([reopened loadFromCacheWithUrl: document.urlDataTableCache error: &error],
+			 "the stable cache reopens: %s", [[error description] UTF8String]);
+	MAD_PASS(reopened.numberOfRows == result.numberOfRows, "the reopened table has the published rows");
+	MAD_PASS(reopened.columnKeys.count == result.columnKeys.count, "the reopened table has the published columns");
+}
+
+static void testZeroRowRefreshPublishesTheProjectedColumns(void) {
+	MADHeadlessDocument *document = MADExporterNewPublicationDocument();
+	MAD_PASS(document != nil, "the London fixture could not be copied and opened");
+	if (document == nil) return;
+
+	RptqQueryPredicate *predicate = MADExporterAddImpossiblePredicate(document);
+	MAD_PASS(predicate != nil, "the fixture has an integer query field to constrain");
+	NSError *error = nil;
+	MAD_PASS(MADExporterRefreshDocument(document, &error), "the zero-row refresh publishes: %s", [[error description] UTF8String]);
+	MADDataResult *result = document.currentResult;
+	MAD_PASS(result != nil, "the zero-row refresh published a result");
+	MAD_PASS(result.numberOfRows == (NSUInteger)0, "the published result has no rows");
+	MAD_PASS(result.columnKeys.count > 0, "the published result still has columns");
+	MAD_PASS_EQUAL(result.columnKeys, document.mainQuery.fieldKeys, "the columns are the projection");
+	MAD_PASS([[NSFileManager defaultManager] fileExistsAtPath: result.rowDatabaseURL.path], "the row table exists");
+}
+
+static void testFailedPublicationLeavesTheLastResultUsable(void) {
+	MADFailingPublicationDocument *document = MADExporterNewPublicationDocument();
+	MAD_PASS(document != nil, "the London fixture could not be copied and opened");
+	if (document == nil) return;
+
+	NSError *error = nil;
+	MAD_PASS(MADExporterRefreshDocument(document, &error), "A publishes: %s", [[error description] UTF8String]);
+	MADDataResult *a = document.currentResult;
+	MAD_PASS(a != nil, "A is published");
+	NSUInteger aRows = a.numberOfRows;
+	NSArray *aKeys = a.columnKeys;
+	NSString *aIdentifier = a.identifier;
+	NSString *aRowPath = a.rowDatabaseURL.path;
+	MAD_PASS(aRows == (NSUInteger)76, "A has the fixture's rows");
+
+	MADReportExportSource *pinned = [MADReportExportSource sourceWithDocument: document error: &error];
+	MAD_PASS(pinned != nil, "the export source pins A");
+	MAD_PASS(pinned.numberOfRows == aRows, "the pinned source sees A's rows");
+	MAD_PASS_EQUAL(pinned.columnKeys, aKeys, "the pinned source sees A's columns");
+
+	// B is a different result: same projection, zero rows.  Its rows are written,
+	// then the publication commit is forced to fail.
+	RptqQueryPredicate *predicate = MADExporterAddImpossiblePredicate(document);
+	MAD_PASS(predicate != nil, "B constrains an integer field");
+	document.failPublication = YES;
+	error = nil;
+	MAD_PASS(!MADExporterRefreshDocument(document, &error), "the forced publication fails the refresh");
+	MAD_PASS(error != nil, "the failed refresh reports an error");
+	document.failPublication = NO;
+	MADExporterRemovePredicate(document, predicate);
+
+	MADDataResult *current = document.currentResult;
+	MAD_PASS(current != nil, "A is still current");
+	MAD_PASS_EQUAL(current.identifier, aIdentifier, "A's generation is still current");
+	MAD_PASS_EQUAL(current.columnKeys, aKeys, "A's column map is still current");
+	MAD_PASS(current.numberOfRows == aRows, "A's rows are still current");
+	MAD_PASS_EQUAL(current.rowDatabaseURL.path, aRowPath, "A's row database is still current");
+	MAD_PASS([[NSFileManager defaultManager] fileExistsAtPath: aRowPath], "A's row database is still there");
+
+	MADReportExportSource *fresh = [MADReportExportSource sourceWithDocument: document error: &error];
+	MAD_PASS(fresh != nil, "a fresh export source pins A");
+	MADReportExportSource *sources[] = { pinned, fresh };
+	for (int index = 0; index < 2; index++) {
+		MADReportExportSource *source = sources[index];
+		MAD_PASS(source.numberOfRows == aRows, "the source sees A's rows");
+		MAD_PASS_EQUAL(source.columnKeys, aKeys, "the source sees A's columns");
+		NSDictionary *firstRow = source.rowEnumerator.nextObject;
+		MAD_PASS(firstRow != nil, "the source reads A's first row");
+		for (NSString *key in aKeys) {
+			MAD_PASS(firstRow[key] != nil, "the row still has %s", [key UTF8String]);
+		}
+	}
+}
+
+static void testFailedFirstRefreshThenRetryPublishes(void) {
+	MADFailingPublicationDocument *document = MADExporterNewPublicationDocument();
+	MAD_PASS(document != nil, "the London fixture could not be copied and opened");
+	if (document == nil) return;
+
+	document.failPublication = YES;
+	NSError *error = nil;
+	MAD_PASS(!MADExporterRefreshDocument(document, &error), "the first refresh fails at publication");
+	MAD_PASS(error != nil, "the failed first refresh reports an error");
+	MAD_PASS(document.currentResult == nil, "there is no result before the first success");
+	MAD_PASS(document.numberOfResults == (NSUInteger)0, "the row table is empty");
+
+	document.failPublication = NO;
+	error = nil;
+	MAD_PASS(MADExporterRefreshDocument(document, &error), "the retry publishes: %s", [[error description] UTF8String]);
+	MAD_PASS(document.currentResult != nil, "the retry published a result");
+	MAD_PASS(document.currentResult.numberOfRows == (NSUInteger)76, "the retry has the fixture's rows");
+	MAD_PASS([[NSFileManager defaultManager] fileExistsAtPath: document.currentResult.rowDatabaseURL.path],
+			 "the retry wrote the row table");
+}
+
 MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testTheFormatsAreRegistered),
 	MAD_TEST(testTheRenderSideFormatsRegisterHere),
@@ -430,4 +661,8 @@ MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testTheJSONExportIsTheSchemaAndTheRows),
 	MAD_TEST(testTheJSONReportAddsTheRenderedReport),
 	MAD_TEST(testTheHTMExportIsAFacsimileOfThePages),
-	MAD_TEST(testTheHTMLFlowExportIsTheSectionsAndRows));
+	MAD_TEST(testTheHTMLFlowExportIsTheSectionsAndRows),
+	MAD_TEST(testSuccessfulRefreshPublishesOneCompleteResult),
+	MAD_TEST(testZeroRowRefreshPublishesTheProjectedColumns),
+	MAD_TEST(testFailedPublicationLeavesTheLastResultUsable),
+	MAD_TEST(testFailedFirstRefreshThenRetryPublishes));

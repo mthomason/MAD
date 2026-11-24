@@ -92,6 +92,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// the active `database` instance to reflect `databaseConnection`.
 - (void)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
 
+/// The publication's commit point: writes the staged column map over the
+/// document's stable one.  Overridable so a test can fail a publication after the
+/// rows are staged.
+- (BOOL)writePublishedColumnMapData:(NSData *)data
+							  toURL:(NSURL *)url
+							  error:(NSError * _Nullable __autoreleasing *)error;
+
 @end
 
 NS_ASSUME_NONNULL_END

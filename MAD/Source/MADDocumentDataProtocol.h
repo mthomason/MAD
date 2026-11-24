@@ -24,10 +24,42 @@
 
 #import <Foundation/Foundation.h>
 
-@class MADDataTableFast, MADDatabase, MADDatabaseConnection, MADQueryFull;
+NS_ASSUME_NONNULL_BEGIN
+
+@class MADDataTableFast, MADDataColumn, MADDatabase, MADDatabaseConnection, MADQueryFull;
 @class RptqDocument, RptqQuery, RptqStoreContext;
 
 @protocol MADDataProtocol;
+
+/// One complete refresh result: the generation token, the row table (its rows and
+/// its column map), the row database file, and the column map file.  A consumer
+/// that holds one keeps reading the same generation even after a later refresh
+/// publishes another.
+@interface MADDataResult : NSObject
+
+@property (readonly, nonatomic, copy) NSString *identifier;
+@property (readonly, nonatomic, strong) MADDataTableFast *dataTable;
+/// The `.maddb` file: the rows and the physical columns.
+@property (readonly, nonatomic, copy) NSURL *rowDatabaseURL;
+/// The `.mdcache` file: the column map that points at the row database.
+@property (readonly, nonatomic, copy) NSURL *columnMapURL;
+/// The logical field keys, in projection order.
+@property (readonly, nonatomic, copy) NSArray<NSString *> *columnKeys;
+/// The columns keyed by their logical field key.
+@property (readonly, nonatomic, copy) NSDictionary<NSString *, MADDataColumn *> *columns;
+@property (readonly, nonatomic) NSUInteger numberOfRows;
+
+- (instancetype)initWithIdentifier:(NSString *)identifier
+                         dataTable:(MADDataTableFast *)dataTable
+                    rowDatabaseURL:(NSURL *)rowDatabaseURL
+                      columnMapURL:(NSURL *)columnMapURL;
+
+/// A result for a table loaded from an existing cache.  The identifier is the row
+/// file's generation token, which is the file's name.
++ (nullable instancetype)resultWithDataTable:(MADDataTableFast *)dataTable
+                                columnMapURL:(NSURL *)columnMapURL;
+
+@end
 
 @protocol MADDocumentDataProtocol <NSObject>
 @required
@@ -50,6 +82,22 @@
 
 /// The cache file the row table is written to; derived, and outside the document.
 @property (readonly, nonatomic, copy) NSURL *urlDataTableCache;
+
+/// The last successfully published result.  nil until a refresh, or the existing
+/// cache at open, produces one.  This is the generation a consumer should read.
+@property (readonly, nonatomic, strong, nullable) MADDataResult *currentResult;
+
+/// The result a refresh is building, if one is in flight.  nil otherwise.
+@property (readonly, nonatomic, strong, nullable) MADDataResult *pendingResult;
+
+/// Stage a new generation without touching the current result.
+- (nullable MADDataResult *)beginRefreshResultWithError:(NSError * _Nullable __autoreleasing *)error;
+
+/// Publish the staged result.  The current result changes only when this succeeds.
+- (BOOL)publishPendingResultWithError:(NSError * _Nullable __autoreleasing *)error;
+
+/// Drop the staged result after a failed refresh; the current result is untouched.
+- (void)discardPendingResult;
 
 /// How many rows the table holds.
 @property (readonly, nonatomic) NSUInteger numberOfResults;
@@ -80,5 +128,7 @@
 - (BOOL)dataTableMakeCache;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #endif

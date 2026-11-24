@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol MADDocumentDataProtocol;
 
-@class RptqDatabase;
+@class MADDataResult, RptqDatabase;
 
 @interface MADReportExportSource : NSObject
 
@@ -35,6 +35,13 @@ NS_ASSUME_NONNULL_BEGIN
 									  error:(NSError * _Nullable __autoreleasing *)error;
 
 @property (readonly, nonatomic, strong) id <MADDocumentDataProtocol> document;
+
+/// The published generation this source pinned when it was created.  The rows,
+/// row count and column map are read from it, so a refresh that completes while an
+/// export is running cannot change the export's result mid-stream.  nil when the
+/// document has no published result yet; the source then reads the document's
+/// current table, as it did before publication existed.
+@property (readonly, nonatomic, strong, nullable) MADDataResult *result;
 
 /// The stored driver identifier -- "Sqlite 3", "MySQL", "TDS" -- which is a
 /// document-format constant (MADDatabaseDriverRegistry.h).
