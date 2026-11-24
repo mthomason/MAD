@@ -555,8 +555,10 @@ static BOOL SQLiteTableHasColumn(NSURL *url, NSString *table, NSString *column) 
 /// no migration ran.
 - (void)testAStoreFromANewerBuildIsRefusedBeforeAnyWrite {
 	NSURL *url = [self makeVersionOneStoreURL];
+	// One past the highest readable revision -- a composed document is revision 3,
+	// which this build reads, so only 4 and beyond is "newer".
 	XCTAssertTrue((SQLiteExecute(url, [[NSString alloc] initWithFormat:
-		@"PRAGMA user_version = %ld;", (long)(MADStoreCurrentVersion + 1)])),
+		@"PRAGMA user_version = %ld;", (long)(MADStoreMaximumReadableVersion + 1)])),
 		@"could not stamp the newer version");
 
 	MADStore *store = [MADStore storeWithURL:url];
@@ -565,7 +567,7 @@ static BOOL SQLiteTableHasColumn(NSURL *url, NSString *table, NSString *column) 
 	XCTAssertEqualObjects(error.domain, MADStoreErrorDomain);
 	XCTAssertEqual(error.code, MADStoreErrorUnsupportedVersion);
 
-	XCTAssertEqual(SQLiteUserVersion(url), MADStoreCurrentVersion + 1,
+	XCTAssertEqual(SQLiteUserVersion(url), MADStoreMaximumReadableVersion + 1,
 				   @"the refused open leaves user_version alone");
 	XCTAssertFalse(SQLiteTableHasColumn(url, @"RptqQuery", @"sqlSourceText"),
 				   @"the refused open runs no migration");

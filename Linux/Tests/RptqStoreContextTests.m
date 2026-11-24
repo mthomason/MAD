@@ -577,6 +577,193 @@ static void testDeleteIsPendingUntilSave(void) {
 	removeTempDirectory(directory);
 }
 
+#pragma mark - Composition graph (store revision 3)
+
+/// Builds a minimal invoices/payments composition graph -- an explicit root, two
+/// named source queries over their own connections, the root's tables referencing
+/// those upstream queries, and a left join -- saves it composed, releases the
+/// context, reopens from disk, and recovers every fact from the reopened objects
+/// alone (no fixture setup leaks into the assertions).
+static void testCompositionGraphRoundTripsAndIsRevision3(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *context = openContextAtPath(directory, @"composed.sqlite");
+	MAD_PASS([context loadAllWithError:NULL], "the context loads");
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *invoicesTable = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[invoicesTable setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsTable = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:12];
+	[paymentsTable setValue:@"payments" forKey:@"name"];
+	RptqObject *invoiceIdField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ invoicesTable, paymentsTable ] forKey:@"hasTables"];
+	[invoicesTable setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+	[paymentsTable setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+
+	RptqObject *rootQuery = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[rootQuery setValue:@"root" forKey:@"name"];
+	RptqObject *invoicesQuery = [context insertObjectForEntity:@"RptqQuery" identifier:101];
+	[invoicesQuery setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsQuery = [context insertObjectForEntity:@"RptqQuery" identifier:102];
+	[paymentsQuery setValue:@"payments" forKey:@"name"];
+	[database setValue:@[ rootQuery, invoicesQuery, paymentsQuery ] forKey:@"hasQueries"];
+
+	RptqObject *invoicesSourceTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[invoicesSourceTable setValue:invoicesTable forKey:@"databaseSchemaTable"];
+	[invoicesSourceTable setValue:invoicesQuery forKey:@"inQuery"];
+	RptqObject *paymentsSourceTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:201];
+	[paymentsSourceTable setValue:paymentsTable forKey:@"databaseSchemaTable"];
+	[paymentsSourceTable setValue:paymentsQuery forKey:@"inQuery"];
+
+	RptqObject *rootInvoicesTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:202];
+	[rootInvoicesTable setValue:rootQuery forKey:@"inQuery"];
+	[rootInvoicesTable setValue:invoicesQuery forKey:@"upstreamQuery"];
+	RptqObject *rootPaymentsTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:203];
+	[rootPaymentsTable setValue:rootQuery forKey:@"inQuery"];
+	[rootPaymentsTable setValue:paymentsQuery forKey:@"upstreamQuery"];
+
+	// The root's projected fields (logical identity = the schema field name).
+	RptqObject *leftKey = [context insertObjectForEntity:@"RptqQueryField" identifier:300];
+	[leftKey setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[leftKey setValue:rootInvoicesTable forKey:@"inQueryTable"];
+	RptqObject *rightKey = [context insertObjectForEntity:@"RptqQueryField" identifier:301];
+	[rightKey setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[rightKey setValue:rootPaymentsTable forKey:@"inQueryTable"];
+
+	// The left outer join and its keys.
+	RptqObject *join = [context insertObjectForEntity:@"RptqQueryLinks" identifier:400];
+	[join setValue:@1 forKey:@"type"];	// MADLinkTypeLeftOuterJoin
+	[join setValue:leftKey forKey:@"hasLeftField"];
+	[join setValue:rightKey forKey:@"hasRightField"];
+	[join setValue:rootQuery forKey:@"inQuery"];
+
+	[document setValue:rootQuery forKey:@"rootQuery"];
+
+	NSError *error = nil;
+	MAD_PASS([context saveComposed:&error], "composed save: %s", [[error description] UTF8String]);
+	MAD_PASS(context.store.storeVersion == MADStoreMaximumReadableVersion, "the composed store is revision 3");
+
+	// A fresh context over the same file is a real read from disk.
+	RptqStoreContext *reread = openContextAtPath(directory, @"composed.sqlite");
+	MAD_PASS([reread loadAllWithError:&error], "load failed: %s", [[error description] UTF8String]);
+	MAD_PASS(reread.store.storeVersion == MADStoreMaximumReadableVersion, "the reopened store is revision 3");
+
+	RptqObject *readDocument = [reread objectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *readRoot = [readDocument valueForKey:@"rootQuery"];
+	MAD_PASS(readRoot != nil, "the explicit root is recovered");
+	MAD_PASS_EQUAL([readRoot valueForKey:@"name"], @"root", "the root is the named root query");
+
+	RptqObject *readDatabase = [[readDocument valueForKey:@"hasDatabaseSchemas"] anyObject];
+	NSSet *queries = [readDatabase valueForKey:@"hasQueries"];
+	MAD_PASS(queries.count == (NSUInteger)3, "three queries survive the round trip");
+
+	RptqObject *readInvoices = nil, *readPayments = nil;
+	for (RptqObject *query in queries) {
+		RptqObject *owning = [query valueForKey:@"inDatabase"];
+		MAD_PASS(owning != nil, "each query keeps its connection reference");
+		MAD_PASS_EQUAL([owning valueForKey:@"databaseDriverType"], @"Sqlite 3", "the connection reference is the driver type");
+		if ([[query valueForKey:@"name"] isEqualToString:@"invoices"]) readInvoices = query;
+		if ([[query valueForKey:@"name"] isEqualToString:@"payments"]) readPayments = query;
+	}
+	MAD_PASS(readInvoices != nil, "the invoices source is recovered by name");
+	MAD_PASS(readPayments != nil, "the payments source is recovered by name");
+
+	// The root's tables reference the upstream queries; the join keeps its type
+	// and keys.
+	NSSet *rootTables = [readRoot valueForKey:@"hasQueryTables"];
+	MAD_PASS(rootTables.count == (NSUInteger)2, "the root has two upstream tables");
+	NSSet *rootUpstreams = [NSSet setWithArray:[[rootTables allObjects] valueForKey:@"upstreamQuery"]];
+	MAD_PASS(rootUpstreams.count == (NSUInteger)2, "both upstream queries are referenced");
+	NSSet *joinSet = [readRoot valueForKey:@"hasQueryLinks"];
+	MAD_PASS(joinSet.count == (NSUInteger)1, "one join survives");
+	RptqObject *readJoin = joinSet.anyObject;
+	MAD_PASS_EQUAL([readJoin valueForKey:@"type"], @1, "the join is a left outer join");
+	RptqObject *readLeftKey = [readJoin valueForKey:@"hasLeftField"];
+	RptqObject *readRightKey = [readJoin valueForKey:@"hasRightField"];
+	MAD_PASS_EQUAL([[readLeftKey valueForKey:@"databaseSchemaField"] valueForKey:@"name"], @"invoice_id",
+				   "the left join key is invoice_id");
+	MAD_PASS_EQUAL([[readRightKey valueForKey:@"databaseSchemaField"] valueForKey:@"name"], @"invoice_id",
+				   "the right join key is invoice_id");
+
+	removeTempDirectory(directory);
+}
+
+/// An ordinary report (no composition graph) is written and reopened at the
+/// ordinary revision, with the revision-2 schema -- the composition columns are
+/// not added.
+static void testOrdinaryReportStaysRevision2(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *context = openContextAtPath(directory, @"ordinary.sqlite");
+	MAD_PASS([context loadAllWithError:NULL], "the context loads");
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[table setValue:@"invoices" forKey:@"name"];
+	[database setValue:@[ table ] forKey:@"hasTables"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+	RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[query setValue:database forKey:@"inDatabase"];
+
+	NSError *error = nil;
+	MAD_PASS([context save:&error], "ordinary save: %s", [[error description] UTF8String]);
+	MAD_PASS(context.store.storeVersion == MADStoreCurrentVersion, "the ordinary store is revision 2");
+
+	RptqStoreContext *reread = openContextAtPath(directory, @"ordinary.sqlite");
+	MAD_PASS([reread loadAllWithError:&error], "load failed: %s", [[error description] UTF8String]);
+	MAD_PASS(reread.store.storeVersion == MADStoreCurrentVersion, "the reopened ordinary store is revision 2");
+	MAD_PASS([[reread objectForEntity:@"RptqDocument" identifier:1] valueForKey:@"rootQuery"] == nil,
+			 "an ordinary report has no root query");
+
+	removeTempDirectory(directory);
+}
+
+/// A composed save that fails after the migration has begun rolls the schema,
+/// the version, and the rows back, leaving the previous revision-2 store intact.
+static void testFailedCompositionSaveRollsBackToRevision2(void) {
+	NSURL *directory = makeTempDirectory();
+	NSURL *url = [directory URLByAppendingPathComponent:@"failed.sqlite"];
+	MADStore *store = [MADStore storeWithURL:url];
+	MAD_PASS([store openWithError:NULL], "the store opens");
+
+	// A composed graph (a document with an explicit root) plus a row that cannot be
+	// written -- it carries an identifier value, which -writeRowForObject: refuses --
+	// so the write fails after the migration columns have been added in the same
+	// transaction.
+	MADStoreObject *document = [MADStoreObject objectWithEntity:@"RptqDocument" identifier:1];
+	[document setReference:@100 forName:@"rootQuery"];
+	MADStoreObject *query = [MADStoreObject objectWithEntity:@"RptqQuery" identifier:100];
+	[query setAttributeValue:@"root" forName:@"name"];
+	MADStoreObject *bad = [MADStoreObject objectWithEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[bad setAttributeValue:@1 forName:@"identifier"];
+
+	MADStoreGraph *graph = [MADStoreGraph new];
+	[graph addObject:document];
+	[graph addObject:query];
+	[graph addObject:bad];
+
+	NSError *error = nil;
+	MAD_PASS(![store writeGraph:graph replacingAll:NO composed:YES error:&error], "the composed write fails");
+	MAD_PASS(store.storeVersion == MADStoreCurrentVersion, "the failed write leaves the store at revision 2");
+	[store close];
+
+	// A fresh open sees the original revision, and the schema still has no
+	// composition columns.
+	MADStore *reread = [MADStore storeWithURL:url];
+	MAD_PASS([reread openWithError:NULL], "the store reopens");
+	MAD_PASS(reread.storeVersion == MADStoreCurrentVersion, "the on-disk revision is still 2 after the failure");
+	[reread close];
+
+	removeTempDirectory(directory);
+}
+
 MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testSchemaRoundTripsThroughTheContext),
 	MAD_TEST(testFaultingReturnsStableIdentities),
@@ -594,4 +781,7 @@ MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testACleanSaveLeavesTheStoreFileUntouched),
 	MAD_TEST(testOnePropertyChangeWritesOnlyThatRow),
 	MAD_TEST(testAnOrderedToManyReorderIsWrittenIncrementally),
-	MAD_TEST(testDeleteIsPendingUntilSave));
+	MAD_TEST(testDeleteIsPendingUntilSave),
+	MAD_TEST(testCompositionGraphRoundTripsAndIsRevision3),
+	MAD_TEST(testOrdinaryReportStaysRevision2),
+	MAD_TEST(testFailedCompositionSaveRollsBackToRevision2));

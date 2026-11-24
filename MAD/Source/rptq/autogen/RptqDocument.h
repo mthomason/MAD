@@ -11,7 +11,7 @@
 
 #import <MAD/RptqObject.h>
 
-@class RptqDatabase, RptqDocumentSection;
+@class RptqDatabase, RptqDocumentSection, RptqQuery;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) RptqDocumentSection *hasPageHeaderSection;
 @property (nullable, nonatomic, retain) RptqDocumentSection *hasReportFooterSection;
 @property (nullable, nonatomic, retain) RptqDocumentSection *hasReportHeaderSection;
+@property (nullable, nonatomic, retain) RptqQuery *rootQuery;
 
 @end
 

@@ -68,6 +68,11 @@ FOUNDATION_EXPORT NSString * const RptqStoreContextDeletedObjectsKey;
 - (void)markObjectChanged:(RptqObject *)object;
 
 - (BOOL)save:(NSError * __autoreleasing *)error;
+
+/// Saves a document that carries a composition graph: the store applies the
+/// revision-3 schema and version in the same transaction as the rows.
+- (BOOL)saveComposed:(NSError * __autoreleasing *)error;
+
 - (BOOL)deleteObject:(RptqObject *)object error:(NSError * __autoreleasing *)error;
 
 #pragma mark Relationships

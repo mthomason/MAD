@@ -240,11 +240,21 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 }
 
 - (BOOL)save:(NSError * __autoreleasing *)error {
-	if (!self.hasChanges) return YES; // A clean save must not touch the file.
+	return [self saveComposed:NO error:error];
+}
+
+/// Saves a document that carries a composition graph: the store applies the
+/// revision-3 schema and version in the same transaction as the rows.
+- (BOOL)saveComposed:(NSError * __autoreleasing *)error {
+	return [self saveComposed:YES error:error];
+}
+
+- (BOOL)saveComposed:(BOOL)composed error:(NSError * __autoreleasing *)error {
+	if (!self.hasChanges && !composed) return YES; // A clean ordinary save must not touch the file.
 
 	NSArray<MADStoreObject *> *dirty = [self dirtyBackingObjects];
 	NSArray<MADStoreObject *> *deleted = self.deletedObjects.copy;
-	if (![self.store writeObjects:dirty deletingObjects:deleted error:error]) {
+	if (![self.store writeObjects:dirty deletingObjects:deleted composed:composed error:error]) {
 		return NO;
 	}
 

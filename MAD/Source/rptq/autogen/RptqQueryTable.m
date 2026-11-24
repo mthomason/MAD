@@ -23,5 +23,6 @@
 @dynamic databaseSchemaTable;
 @dynamic hasQueryFields;
 @dynamic inQuery;
+@dynamic upstreamQuery;
 
 @end

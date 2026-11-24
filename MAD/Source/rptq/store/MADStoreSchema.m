@@ -11,6 +11,7 @@ NSString * const MADStorePositionColumn = @"position";
 NSString * const MADStoreIdentifierColumnSuffix = @"_identifier";
 
 NSInteger const MADStoreCurrentVersion = 2;
+NSInteger const MADStoreMaximumReadableVersion = 3;
 
 #pragma mark - Attribute
 
@@ -24,6 +25,7 @@ NSInteger const MADStoreCurrentVersion = 2;
 	attribute.type = type;
 	attribute.optional = optional;
 	attribute.subentityAttribute = optional;
+	attribute.introducedInVersion = 1;
 	return attribute;
 }
 
@@ -48,6 +50,7 @@ NSInteger const MADStoreCurrentVersion = 2;
 	relationship.toMany = NO;
 	relationship.ordered = NO;
 	relationship.ownsForeignKey = ownsForeignKey;
+	relationship.introducedInVersion = 1;
 	return relationship;
 }
 
@@ -62,6 +65,7 @@ NSInteger const MADStoreCurrentVersion = 2;
 	relationship.toMany = YES;
 	relationship.ordered = ordered;
 	relationship.ownsForeignKey = NO;
+	relationship.introducedInVersion = 1;
 	return relationship;
 }
 
@@ -79,6 +83,7 @@ NSInteger const MADStoreCurrentVersion = 2;
 	relationship.ownsForeignKey = NO;
 	relationship.joinTable = joinTable;
 	relationship.joinColumn = joinColumn;
+	relationship.introducedInVersion = 1;
 	return relationship;
 }
 
@@ -319,6 +324,37 @@ static NSArray<MADStoreMigration *> *MADStoreMigrations(void) {
 	return migrations;
 }
 
+/// The 2→3 step, applied only when a document first saves a composition graph,
+/// never on open: the query's display name and the two graph references (an
+/// explicit root on the document, an upstream query on a table node).  The
+/// foreign-key columns are added without the REFERENCES clause the base schema
+/// uses -- foreign keys are not enforced anyway, and an ALTER TABLE ADD COLUMN
+/// cannot carry one.
+static NSArray<MADStoreMigration *> *MADStoreCompositionMigrations(void) {
+	static NSArray<MADStoreMigration *> *migrations = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		migrations = @[
+			[MADStoreMigration migrationFromVersion:2
+										  toVersion:3
+									  addingColumn:@"name"
+											 toTable:@"RptqQuery"
+												type:MADStoreValueTypeText],
+			[MADStoreMigration migrationFromVersion:2
+										  toVersion:3
+									  addingColumn:@"rootQuery_identifier"
+											 toTable:@"RptqDocument"
+												type:MADStoreValueTypeInteger],
+			[MADStoreMigration migrationFromVersion:2
+										  toVersion:3
+									  addingColumn:@"upstreamQuery_identifier"
+											 toTable:@"RptqQueryTable"
+												type:MADStoreValueTypeInteger],
+		];
+	});
+	return migrations;
+}
+
 /// The one many-to-many: a query selects schema fields, and a field knows the
 /// queries that select it.  Both sides name the same join table and their own
 /// column in it.
@@ -355,6 +391,19 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		NSMutableArray *entities = [NSMutableArray arrayWithCapacity:33];
+
+		// The composition fields, introduced in store revision 3.  The base schema
+		// omits them (see -createSchemaSQL), and the 2→3 migration adds them.
+		MADStoreAttribute *queryName = TextOpt(@"name");
+		queryName.introducedInVersion = 3;
+		MADStoreRelationship *queryRootOfDocument = ToOne(@"rootOfDocument", @"RptqDocument", @"rootQuery", NO);
+		queryRootOfDocument.introducedInVersion = 3;
+		MADStoreRelationship *queryUpstreamOfTable = ToMany(@"upstreamOfTable", @"RptqQueryTable", @"upstreamQuery");
+		queryUpstreamOfTable.introducedInVersion = 3;
+		MADStoreRelationship *documentRootQuery = ToOne(@"rootQuery", @"RptqQuery", @"rootOfDocument", YES);
+		documentRootQuery.introducedInVersion = 3;
+		MADStoreRelationship *tableUpstreamQuery = ToOne(@"upstreamQuery", @"RptqQuery", @"upstreamOfTable", YES);
+		tableUpstreamQuery.introducedInVersion = 3;
 
 		#pragma mark Schema part
 
@@ -416,6 +465,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 		[entities addObject:Table(@"RptqQuery", @[
 			TextOpt(@"cachedText"),
 			Int(@"identifier"),
+			queryName,
 			Int(@"override"),
 			TextOpt(@"overrideText"),
 			TextOpt(@"sqlSourceText"),
@@ -427,6 +477,8 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 			ToOne(@"hasQuerySort", @"RptqQuerySort", @"inQuery", NO),
 			ToMany(@"hasQueryTables", @"RptqQueryTable", @"inQuery"),
 			ToOne(@"inDatabase", @"RptqDatabase", @"hasQueries", YES),
+			queryRootOfDocument,
+			queryUpstreamOfTable,
 		])];
 
 		[entities addObject:Table(@"RptqQueryTable", @[
@@ -437,6 +489,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 			ToOne(@"databaseSchemaTable", @"RptqDatabaseSchemaTable", @"inQueryTable", YES),
 			ToMany(@"hasQueryFields", @"RptqQueryField", @"inQueryTable"),
 			ToOne(@"inQuery", @"RptqQuery", @"hasQueryTables", YES),
+			tableUpstreamQuery,
 		])];
 
 		[entities addObject:Table(@"RptqQueryField", @[
@@ -510,6 +563,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 			ToOne(@"hasPageHeaderSection", @"RptqDocumentSection", @"inReportPageHeader", NO),
 			ToOne(@"hasReportFooterSection", @"RptqDocumentSection", @"inReportReportFooter", NO),
 			ToOne(@"hasReportHeaderSection", @"RptqDocumentSection", @"inReportReportHeader", NO),
+			documentRootQuery,
 		])];
 
 		[entities addObject:Table(@"RptqDocumentSection", @[
@@ -715,6 +769,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 @property (nonatomic, copy) NSArray<MADStoreEntity *> *entities;
 @property (nonatomic, copy) NSArray<MADStoreEntity *> *tables;
 @property (nonatomic, copy) NSArray<MADStoreMigration *> *migrations;
+@property (nonatomic, copy) NSArray<MADStoreMigration *> *compositionMigrations;
 @property (nonatomic, copy) NSDictionary<NSString *, MADStoreEntity *> *byName;
 @property (nonatomic, copy) NSDictionary<NSString *, MADStoreEntity *> *byTable;
 @end
@@ -816,6 +871,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 	self.entities = all;
 	self.tables = tables;
 	self.migrations = MADStoreMigrations();
+	self.compositionMigrations = MADStoreCompositionMigrations();
 	self.byName = byName;
 
 	NSMutableDictionary<NSString *, MADStoreEntity *> *byTable = [NSMutableDictionary dictionaryWithCapacity:tables.count];
@@ -905,6 +961,9 @@ static NSString *MADStoreColumnDefinition(MADStoreAttribute *attribute, BOOL for
 		for (MADStoreAttribute *attribute in table.allAttributes) {
 			// The model's `identifier` attribute is the row key above, not a column.
 			if ([attribute.name isEqualToString:@"identifier"]) continue;
+			// A field introduced after the base revision is added by its own
+			// migration, not by the base schema.
+			if (attribute.introducedInVersion > MADStoreCurrentVersion) continue;
 			[emitted addObject:attribute.name];
 			[columns addObject:MADStoreColumnDefinition(attribute, NO)];
 		}
@@ -916,6 +975,7 @@ static NSString *MADStoreColumnDefinition(MADStoreAttribute *attribute, BOOL for
 		for (MADStoreEntity *subentity in table.subentities) {
 			for (MADStoreAttribute *attribute in subentity.attributes) {
 				if ([emitted containsObject:attribute.name]) continue;
+				if (attribute.introducedInVersion > MADStoreCurrentVersion) continue;
 				[emitted addObject:attribute.name];
 				[columns addObject:MADStoreColumnDefinition(attribute, YES)];
 			}
@@ -931,6 +991,7 @@ static NSString *MADStoreColumnDefinition(MADStoreAttribute *attribute, BOOL for
 			// Many-to-many relationships store their edges in a join table, emitted
 			// after every table; a derived to-one stores its foreign key on the far side.
 			if (!relationship.ownsForeignKey) continue;
+			if (relationship.introducedInVersion > MADStoreCurrentVersion) continue;
 			NSString *emittedColumn = relationship.column;
 			if (emittedColumn == nil || [emittedColumns containsObject:emittedColumn]) continue;
 			[emittedColumns addObject:emittedColumn];
@@ -952,6 +1013,7 @@ static NSString *MADStoreColumnDefinition(MADStoreAttribute *attribute, BOOL for
 		for (MADStoreRelationship *relationship in relationships) {
 			NSString *indexedColumn = relationship.column;
 			if (!relationship.ownsForeignKey || indexedColumn == nil || [indexed containsObject:indexedColumn]) continue;
+			if (relationship.introducedInVersion > MADStoreCurrentVersion) continue;
 			[indexed addObject:indexedColumn];
 			[sql appendFormat:@"CREATE INDEX IF NOT EXISTS \"idx_%@_%@\" ON \"%@\" (\"%@\");\n",
 				table.name, relationship.column, table.name, relationship.column];

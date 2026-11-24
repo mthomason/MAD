@@ -156,6 +156,9 @@ static void MADStoreWriteRelationships(NSManagedObject *object,
 									   MADStoreEntity *entity,
 									   NSDictionary<NSManagedObjectID *, NSNumber *> *identifiers) {
 	for (MADStoreRelationship *relationship in entity.allRelationships) {
+		// Store-only fields the composition step (revision 3) introduces have no
+		// counterpart in a legacy Core Data document; there is nothing to read.
+		if (relationship.introducedInVersion > MADStoreCurrentVersion) continue;
 		id value = [object valueForKey:relationship.name];
 
 		if (!relationship.isToMany) {

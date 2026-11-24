@@ -25,6 +25,7 @@
 
 @dynamic cachedText;
 @dynamic identifier;
+@dynamic name;
 @dynamic override;
 @dynamic overrideText;
 @dynamic sqlSourceText;
@@ -35,5 +36,7 @@
 @dynamic hasQuerySort;
 @dynamic hasQueryTables;
 @dynamic inDatabase;
+@dynamic rootOfDocument;
+@dynamic upstreamOfTable;
 
 @end

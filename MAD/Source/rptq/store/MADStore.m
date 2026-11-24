@@ -52,6 +52,11 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 @property (nonatomic, copy) NSURL *url;
 @property (nonatomic, assign, getter=isOpen) BOOL open;
 @property (nonatomic, assign) sqlite3 *database;
+/// The revision this store currently carries (its PRAGMA user_version), read on
+/// open and advanced by the migrations.  -columnsForTable: uses it to decide
+/// which columns a schema carries, so a revision-2 store never reads a column
+/// that only the composition migration adds.
+@property (nonatomic, assign) NSInteger storeVersion;
 @end
 
 @implementation MADStore
@@ -103,7 +108,8 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 		return NO;
 	}
 	if (storedVersion == 0) storedVersion = 1;
-	if (storedVersion > MADStoreCurrentVersion) {
+	self.storeVersion = storedVersion;
+	if (storedVersion > MADStoreMaximumReadableVersion) {
 		if (error) {
 			*error = MADStoreError(MADStoreErrorUnsupportedVersion,
 				[[NSString alloc] initWithFormat:
@@ -235,7 +241,29 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 		[self rollbackTransaction];
 		return NO;
 	}
-	return [self commitTransactionWithError:error];
+	if (![self commitTransactionWithError:error]) return NO;
+	self.storeVersion = MADStoreCurrentVersion;
+	return YES;
+}
+
+/// Applies the composition step (2→3): the schema columns a composed document
+/// needs, then PRAGMA user_version = 3, in one transaction so a failed step
+/// leaves the store at revision 2.  Called only when a graph is first saved, and
+/// Applies the composition step's columns and advances user_version to the
+/// maximum readable revision, inside a transaction the caller already opened.
+/// A composed save folds this into the same transaction as the graph write, so
+/// a failed write cannot leave a revision-3 schema behind.  It does not update
+/// -storeVersion: the caller does that only after the commit succeeds, so a
+/// rollback leaves the in-memory revision matching the on-disk one.
+- (BOOL)applyCompositionMigrationWithError:(NSError * __autoreleasing *)error {
+	if (self.storeVersion >= MADStoreMaximumReadableVersion) return YES;
+	for (MADStoreMigration *migration in self.schema.compositionMigrations) {
+		if (![self applyMigration:migration error:error]) return NO;
+	}
+	if (![self execute:[[NSString alloc] initWithFormat:@"PRAGMA user_version = %ld;", (long)MADStoreMaximumReadableVersion] error:error]) {
+		return NO;
+	}
+	return YES;
 }
 
 #pragma mark - Columns
@@ -269,6 +297,8 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 		// column for it, and no second place to keep it.
 		if ([attribute.name isEqualToString:@"identifier"]) continue;
 		if ([seen containsObject:attribute.name]) continue;
+		// A column introduced after this store's revision does not exist yet.
+		if (attribute.introducedInVersion > self.storeVersion) continue;
 		[seen addObject:attribute.name];
 		MADStoreColumn *column = [MADStoreColumn new];
 		column.name = attribute.name;
@@ -284,6 +314,7 @@ typedef NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, NSNumber
 	[seen removeAllObjects];
 	for (MADStoreRelationship *relationship in relationships) {
 		if (!relationship.ownsForeignKey) continue;
+		if (relationship.introducedInVersion > self.storeVersion) continue;
 		NSString *seenColumn = relationship.column;
 		if (seenColumn == nil || [seen containsObject:seenColumn]) continue;
 		[seen addObject:seenColumn];
@@ -826,6 +857,13 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 }
 
 - (BOOL)writeGraph:(MADStoreGraph *)graph replacingAll:(BOOL)replacingAll error:(NSError * __autoreleasing *)error {
+	return [self writeGraph:graph replacingAll:replacingAll composed:NO error:error];
+}
+
+- (BOOL)writeGraph:(MADStoreGraph *)graph
+	  replacingAll:(BOOL)replacingAll
+		  composed:(BOOL)composed
+			 error:(NSError * __autoreleasing *)error {
 	if (!self.open) {
 		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");
 		return NO;
@@ -839,6 +877,10 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	MADStoreGraph *resolved = [self graphByAssigningSurrogates:complete error:error];
 
 	if (![self beginTransactionWithError:error]) return NO;
+	if (composed && ![self applyCompositionMigrationWithError:error]) {
+		[self rollbackTransaction];
+		return NO;
+	}
 	if (replacingAll && ![self deleteAllInTransactionWithError:error]) {
 		[self rollbackTransaction];
 		return NO;
@@ -855,6 +897,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 		[self rollbackTransaction];
 		return NO;
 	}
+	if (composed) self.storeVersion = MADStoreMaximumReadableVersion;
 	return YES;
 }
 
@@ -967,11 +1010,18 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 - (BOOL)writeObjects:(NSArray<MADStoreObject *> *)objects
 	 deletingObjects:(NSArray<MADStoreObject *> *)deletedObjects
 			   error:(NSError * __autoreleasing *)error {
+	return [self writeObjects:objects deletingObjects:deletedObjects composed:NO error:error];
+}
+
+- (BOOL)writeObjects:(NSArray<MADStoreObject *> *)objects
+	 deletingObjects:(NSArray<MADStoreObject *> *)deletedObjects
+			composed:(BOOL)composed
+			   error:(NSError * __autoreleasing *)error {
 	if (!self.open) {
 		if (error) *error = MADStoreError(MADStoreErrorNotOpen, @"The store is not open");
 		return NO;
 	}
-	if (objects.count == 0 && deletedObjects.count == 0) return YES;
+	if (objects.count == 0 && deletedObjects.count == 0 && !composed) return YES;
 
 	// Resolve the identifiers the model does not supply before anything is written,
 	// so the rows land under the keys the reader will look them up by.
@@ -981,6 +1031,10 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 	if (!resolved) return NO;
 
 	if (![self beginTransactionWithError:error]) return NO;
+	if (composed && ![self applyCompositionMigrationWithError:error]) {
+		[self rollbackTransaction];
+		return NO;
+	}
 	for (MADStoreObject *deleted in deletedObjects) {
 		if (![self deleteObjectForEntity:deleted.entity identifier:deleted.identifier error:error] ||
 			![self deleteJoinRowsForObject:deleted error:error]) {
@@ -1000,6 +1054,7 @@ static BOOL MADStoreBindColumn(sqlite3_stmt *statement, int index, MADStoreColum
 		[self rollbackTransaction];
 		return NO;
 	}
+	if (composed) self.storeVersion = MADStoreMaximumReadableVersion;
 	return YES;
 }
 

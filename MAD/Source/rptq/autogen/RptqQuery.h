@@ -11,7 +11,7 @@
 
 #import <MAD/RptqObject.h>
 
-@class RptqDatabase, RptqDatabaseSchemaField, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate,
+@class RptqDatabase, RptqDatabaseSchemaField, RptqDocument, RptqQueryGroup, RptqQueryLinks, RptqQueryPredicate,
        RptqQuerySort, RptqQueryTable;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSString *cachedText;
 @property (nonatomic) int64_t identifier;
+@property (nullable, nonatomic, copy) NSString *name;
 @property (nonatomic) BOOL override;
 @property (nullable, nonatomic, copy) NSString *overrideText;
 @property (nullable, nonatomic, copy) NSString *sqlSourceText;
@@ -34,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, retain) RptqQuerySort *hasQuerySort;
 @property (nullable, nonatomic, retain) NSSet<RptqQueryTable *> *hasQueryTables;
 @property (nullable, nonatomic, retain) RptqDatabase *inDatabase;
+@property (nullable, nonatomic, retain) RptqDocument *rootOfDocument;
+@property (nullable, nonatomic, retain) NSSet<RptqQueryTable *> *upstreamOfTable;
 
 @end
 

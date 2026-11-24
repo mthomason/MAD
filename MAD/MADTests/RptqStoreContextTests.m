@@ -590,4 +590,154 @@
 				 @"the deleted row left the context's graph");
 }
 
+#pragma mark - Composition graph (store revision 3)
+
+- (void)testCompositionGraphRoundTripsAndIsRevision3 {
+	RptqStoreContext *context = [self openContextAtPath:@"composed.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *invoicesTable = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[invoicesTable setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsTable = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:12];
+	[paymentsTable setValue:@"payments" forKey:@"name"];
+	RptqObject *invoiceIdField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ invoicesTable, paymentsTable ] forKey:@"hasTables"];
+	[invoicesTable setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+	[paymentsTable setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+
+	RptqObject *rootQuery = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[rootQuery setValue:@"root" forKey:@"name"];
+	RptqObject *invoicesQuery = [context insertObjectForEntity:@"RptqQuery" identifier:101];
+	[invoicesQuery setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsQuery = [context insertObjectForEntity:@"RptqQuery" identifier:102];
+	[paymentsQuery setValue:@"payments" forKey:@"name"];
+	[database setValue:@[ rootQuery, invoicesQuery, paymentsQuery ] forKey:@"hasQueries"];
+
+	RptqObject *invoicesSourceTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[invoicesSourceTable setValue:invoicesTable forKey:@"databaseSchemaTable"];
+	[invoicesSourceTable setValue:invoicesQuery forKey:@"inQuery"];
+	RptqObject *paymentsSourceTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:201];
+	[paymentsSourceTable setValue:paymentsTable forKey:@"databaseSchemaTable"];
+	[paymentsSourceTable setValue:paymentsQuery forKey:@"inQuery"];
+
+	RptqObject *rootInvoicesTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:202];
+	[rootInvoicesTable setValue:rootQuery forKey:@"inQuery"];
+	[rootInvoicesTable setValue:invoicesQuery forKey:@"upstreamQuery"];
+	RptqObject *rootPaymentsTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:203];
+	[rootPaymentsTable setValue:rootQuery forKey:@"inQuery"];
+	[rootPaymentsTable setValue:paymentsQuery forKey:@"upstreamQuery"];
+
+	RptqObject *leftKey = [context insertObjectForEntity:@"RptqQueryField" identifier:300];
+	[leftKey setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[leftKey setValue:rootInvoicesTable forKey:@"inQueryTable"];
+	RptqObject *rightKey = [context insertObjectForEntity:@"RptqQueryField" identifier:301];
+	[rightKey setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[rightKey setValue:rootPaymentsTable forKey:@"inQueryTable"];
+
+	RptqObject *join = [context insertObjectForEntity:@"RptqQueryLinks" identifier:400];
+	[join setValue:@1 forKey:@"type"];
+	[join setValue:leftKey forKey:@"hasLeftField"];
+	[join setValue:rightKey forKey:@"hasRightField"];
+	[join setValue:rootQuery forKey:@"inQuery"];
+
+	[document setValue:rootQuery forKey:@"rootQuery"];
+
+	NSError *error = nil;
+	XCTAssertTrue([context saveComposed:&error], @"%@", error);
+	XCTAssertEqual(context.store.storeVersion, MADStoreMaximumReadableVersion);
+
+	RptqStoreContext *reread = [self openContextAtPath:@"composed.sqlite"];
+	XCTAssertTrue([reread loadAllWithError:&error], @"%@", error);
+	XCTAssertEqual(reread.store.storeVersion, MADStoreMaximumReadableVersion);
+
+	RptqObject *readDocument = [reread objectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *readRoot = [readDocument valueForKey:@"rootQuery"];
+	XCTAssertNotNil(readRoot);
+	XCTAssertEqualObjects([readRoot valueForKey:@"name"], @"root");
+
+	RptqObject *readDatabase = [[readDocument valueForKey:@"hasDatabaseSchemas"] anyObject];
+	NSSet *queries = [readDatabase valueForKey:@"hasQueries"];
+	XCTAssertEqual(queries.count, (NSUInteger)3);
+	RptqObject *readInvoices = nil, *readPayments = nil;
+	for (RptqObject *query in queries) {
+		XCTAssertEqualObjects([[query valueForKey:@"inDatabase"] valueForKey:@"databaseDriverType"], @"Sqlite 3");
+		if ([[query valueForKey:@"name"] isEqualToString:@"invoices"]) readInvoices = query;
+		if ([[query valueForKey:@"name"] isEqualToString:@"payments"]) readPayments = query;
+	}
+	XCTAssertNotNil(readInvoices);
+	XCTAssertNotNil(readPayments);
+
+	NSSet *rootTables = [readRoot valueForKey:@"hasQueryTables"];
+	XCTAssertEqual(rootTables.count, (NSUInteger)2);
+	NSSet *rootUpstreams = [NSSet setWithArray:[[rootTables allObjects] valueForKey:@"upstreamQuery"]];
+	XCTAssertEqual(rootUpstreams.count, (NSUInteger)2);
+
+	NSSet *joinSet = [readRoot valueForKey:@"hasQueryLinks"];
+	XCTAssertEqual(joinSet.count, (NSUInteger)1);
+	RptqObject *readJoin = joinSet.anyObject;
+	XCTAssertEqualObjects([readJoin valueForKey:@"type"], @1);
+	XCTAssertEqualObjects([[[readJoin valueForKey:@"hasLeftField"] valueForKey:@"databaseSchemaField"] valueForKey:@"name"], @"invoice_id");
+	XCTAssertEqualObjects([[[readJoin valueForKey:@"hasRightField"] valueForKey:@"databaseSchemaField"] valueForKey:@"name"], @"invoice_id");
+}
+
+- (void)testOrdinaryReportStaysRevision2 {
+	RptqStoreContext *context = [self openContextAtPath:@"ordinary.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[table setValue:@"invoices" forKey:@"name"];
+	[database setValue:@[ table ] forKey:@"hasTables"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+	RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[query setValue:database forKey:@"inDatabase"];
+
+	NSError *error = nil;
+	XCTAssertTrue([context save:&error], @"%@", error);
+	XCTAssertEqual(context.store.storeVersion, MADStoreCurrentVersion);
+
+	RptqStoreContext *reread = [self openContextAtPath:@"ordinary.sqlite"];
+	XCTAssertTrue([reread loadAllWithError:&error], @"%@", error);
+	XCTAssertEqual(reread.store.storeVersion, MADStoreCurrentVersion);
+	XCTAssertNil([[reread objectForEntity:@"RptqDocument" identifier:1] valueForKey:@"rootQuery"]);
+}
+
+- (void)testFailedCompositionSaveRollsBackToRevision2 {
+	NSURL *url = [self.directory URLByAppendingPathComponent:@"failed.sqlite"];
+	MADStore *store = [MADStore storeWithURL:url];
+	XCTAssertTrue([store openWithError:NULL]);
+
+	MADStoreObject *document = [MADStoreObject objectWithEntity:@"RptqDocument" identifier:1];
+	[document setReference:@100 forName:@"rootQuery"];
+	MADStoreObject *query = [MADStoreObject objectWithEntity:@"RptqQuery" identifier:100];
+	[query setAttributeValue:@"root" forName:@"name"];
+	MADStoreObject *bad = [MADStoreObject objectWithEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[bad setAttributeValue:@1 forName:@"identifier"];
+
+	MADStoreGraph *graph = [MADStoreGraph new];
+	[graph addObject:document];
+	[graph addObject:query];
+	[graph addObject:bad];
+
+	NSError *error = nil;
+	XCTAssertFalse([store writeGraph:graph replacingAll:NO composed:YES error:&error]);
+	XCTAssertEqual(store.storeVersion, MADStoreCurrentVersion);
+	[store close];
+
+	MADStore *reread = [MADStore storeWithURL:url];
+	XCTAssertTrue([reread openWithError:NULL]);
+	XCTAssertEqual(reread.storeVersion, MADStoreCurrentVersion);
+	[reread close];
+}
+
 @end

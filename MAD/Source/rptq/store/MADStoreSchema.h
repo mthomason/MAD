@@ -61,6 +61,13 @@ FOUNDATION_EXPORT NSString * const MADStoreIdentifierColumnSuffix;
 /// version 1 are the same thing to the migration list.
 FOUNDATION_EXPORT NSInteger const MADStoreCurrentVersion;
 
+/// The highest store revision this build can read.  A store carrying a higher
+/// user_version is refused before any write.  It is distinct from
+/// MADStoreCurrentVersion: ordinary reports are written at the current version,
+/// while a composed document is written at this higher revision by an explicit,
+/// transactional step -- opening a document never stamps it up to this.
+FOUNDATION_EXPORT NSInteger const MADStoreMaximumReadableVersion;
+
 #pragma mark -
 
 @interface MADStoreAttribute : NSObject
@@ -71,6 +78,10 @@ FOUNDATION_EXPORT NSInteger const MADStoreCurrentVersion;
 /// YES when the attribute is contributed by a subentity of a shared table, and so
 /// must be nullable no matter what the attribute itself says.
 @property (nonatomic, assign, getter=isSubentityAttribute) BOOL subentityAttribute;
+/// The lowest store revision whose schema carries this attribute.  The base
+/// schema (revision MADStoreCurrentVersion) omits anything introduced later;
+/// a later attribute appears only after its introducing migration has run.
+@property (nonatomic, assign) NSInteger introducedInVersion;
 
 + (instancetype)attributeWithName:(NSString *)name
 							 type:(MADStoreValueType)type
@@ -98,6 +109,9 @@ FOUNDATION_EXPORT NSInteger const MADStoreCurrentVersion;
 @property (nonatomic, copy, nullable) NSString *joinTable;
 /// This side's column in the join table, when many-to-many.
 @property (nonatomic, copy, nullable) NSString *joinColumn;
+/// The lowest store revision whose schema carries this relationship, the same
+/// contract as MADStoreAttribute.introducedInVersion.
+@property (nonatomic, assign) NSInteger introducedInVersion;
 
 + (instancetype)toOneNamed:(NSString *)name
 			   destination:(NSString *)destination
@@ -201,6 +215,11 @@ FOUNDATION_EXPORT NSInteger const MADStoreCurrentVersion;
 /// The migration steps, oldest first and contiguous: applying one brings a
 /// store from its -fromVersion to its -toVersion.
 @property (nonatomic, copy, readonly) NSArray<MADStoreMigration *> *migrations;
+
+/// The composition step (2→3): the columns a composed document needs.  These
+/// are applied only when a document first saves a composition graph, not by the
+/// open-time migration ladder.
+@property (nonatomic, copy, readonly) NSArray<MADStoreMigration *> *compositionMigrations;
 
 - (nullable MADStoreEntity *)entityNamed:(nullable NSString *)name;
 - (nullable MADStoreEntity *)entityForTable:(NSString *)table;

@@ -51,6 +51,10 @@ typedef NS_ENUM(NSInteger, MADStoreErrorCode) {
 @property (nonatomic, copy, readonly) NSURL *url;
 @property (nonatomic, assign, readonly, getter=isOpen) BOOL open;
 @property (nonatomic, strong, readonly) MADStoreSchema *schema;
+/// The revision this store currently carries (its PRAGMA user_version).  It is
+/// MADStoreCurrentVersion for an ordinary report and MADStoreMaximumReadableVersion
+/// for a composed one.
+@property (nonatomic, assign, readonly) NSInteger storeVersion;
 
 /// Opens the file, creating the schema when it is not there yet and applying
 /// the migration steps the store is behind on (MADStoreSchema.migrations).
@@ -76,12 +80,25 @@ typedef NS_ENUM(NSInteger, MADStoreErrorCode) {
 - (BOOL)writeGraph:(MADStoreGraph *)graph replacingAll:(BOOL)replacingAll error:(NSError * __autoreleasing *)error;
 - (BOOL)writeObject:(MADStoreObject *)object error:(NSError * __autoreleasing *)error;
 
+/// The composed variants apply the composition migration (schema columns plus
+/// user_version 3) in the same transaction as the write, so a failed write cannot
+/// leave a revision-3 schema or version behind.  `composed` is YES only when the
+/// document actually carries a composition graph.
+- (BOOL)writeGraph:(MADStoreGraph *)graph
+	  replacingAll:(BOOL)replacingAll
+		  composed:(BOOL)composed
+			 error:(NSError * __autoreleasing *)error;
+
 /// The incremental save path: writes exactly the named rows -- plus the position
 /// and join-table rows their to-many edges produce -- and deletes the named rows,
 /// all in one transaction.  Rows not named are untouched, and a nil `objects`
 /// with an empty `deletedObjects` is a successful no-op.
 - (BOOL)writeObjects:(NSArray<MADStoreObject *> *)objects
 	 deletingObjects:(NSArray<MADStoreObject *> *)deletedObjects
+			   error:(NSError * __autoreleasing *)error;
+- (BOOL)writeObjects:(NSArray<MADStoreObject *> *)objects
+	 deletingObjects:(NSArray<MADStoreObject *> *)deletedObjects
+			composed:(BOOL)composed
 			   error:(NSError * __autoreleasing *)error;
 
 - (BOOL)deleteObjectForEntity:(NSString *)entity identifier:(int64_t)identifier error:(NSError * __autoreleasing *)error;

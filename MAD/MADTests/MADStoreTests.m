@@ -615,6 +615,24 @@ static NSDictionary *MADStoreTransformedAttributes(void) {
 	return @{ @"image": @(MADStoreValueTypeBlob), @"locale": @(MADStoreValueTypeText) };
 }
 
+/// Store-only fields the composition step (store revision 3) introduces, keyed
+/// by entity.  They have no counterpart in the frozen legacy Core Data model, so
+/// the fidelity check below does not require or forbid them.  (Several of these
+/// names -- `name` foremost -- are also real model attributes on *other*
+/// entities, so the set is scoped to the entity that carries the store-only one.)
+static NSSet *MADStoreCompositionOnlyFields(NSString *entityName) {
+	static NSDictionary<NSString *, NSSet<NSString *> *> *byEntity = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		byEntity = @{
+			@"RptqQuery": [NSSet setWithArray:@[ @"name", @"rootOfDocument", @"upstreamOfTable" ]],
+			@"RptqDocument": [NSSet setWithArray:@[ @"rootQuery" ]],
+			@"RptqQueryTable": [NSSet setWithArray:@[ @"upstreamQuery" ]],
+		};
+	});
+	return byEntity[entityName] ?: [NSSet set];
+}
+
 static MADStoreValueType MADStoreExpectedType(NSAttributeType type) {
 	switch (type) {
 		case NSInteger16AttributeType:
@@ -680,6 +698,7 @@ static MADStoreValueType MADStoreExpectedType(NSAttributeType type) {
 
 		NSMutableSet<NSString *> *actualAttributes = [NSMutableSet set];
 		for (MADStoreAttribute *attribute in descriptor.allAttributes) {
+			if ([MADStoreCompositionOnlyFields(entity.name) containsObject:attribute.name]) continue;
 			[actualAttributes addObject:attribute.name];
 			NSNumber *expected = expectedTypes[attribute.name];
 			if (!expected) { XCTFail(@"%@ has a surplus attribute %@", entity.name, attribute.name); continue; }
@@ -709,6 +728,7 @@ static MADStoreValueType MADStoreExpectedType(NSAttributeType type) {
 								  @"%@.%@ inverse", entity.name, relationship.name);
 		}
 		for (MADStoreRelationship *relationship in descriptor.allRelationships) {
+			if ([MADStoreCompositionOnlyFields(entity.name) containsObject:relationship.name]) continue;
 			XCTAssertTrue([expectedRelationships containsObject:relationship.name],
 						  @"%@ has a surplus relationship %@", entity.name, relationship.name);
 		}
