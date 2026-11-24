@@ -369,6 +369,16 @@ static NSString *MADComposedLogicalKeyForField(RptqQueryField *rootField, MADDat
 		RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
 		if (![model validateCompositionGraphWithError: &resolveError]) return;
 
+		// A predicate on the root query has no evaluation point: the root is the
+		// composition of the sources, not a SQL statement the coordinator compiles.
+		// Refusing it here is what keeps a saved filter from being silently ignored;
+		// a filter must sit on the source query it constrains.
+		if (model.rootQuery.hasQueryPredicate.count > 0) {
+			resolveError = [NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
+				NSLocalizedDescriptionKey: NSLocalizedString(@"The composed document's root query has a filter, which the composition coordinator does not evaluate. Put the filter on the source query it constrains.", @"Root filter rejection.") }];
+			return;
+		}
+
 		NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError: &resolveError];
 		if (outputs == nil) return;
 
