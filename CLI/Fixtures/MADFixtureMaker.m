@@ -35,6 +35,8 @@
 #import <Foundation/Foundation.h>
 
 #import <MAD/MADocument.h>
+#import <MAD/MADArchiveManager.h>
+#import <MAD/MADDocumentStore.h>
 #import <MAD/MADOperationCreateDocumentAddConnection.h>
 #import <MAD/MADOperationCreateDocumentCreateDocument.h>
 #import <MAD/MADOperationCreateDocumentFirstTimeSetup.h>
@@ -44,16 +46,21 @@
 #import <MAD/MADOperationUniqueUrlForFilename.h>
 #import <MAD/RptqDatabase+Extras.h>
 #import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseCredentals.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDocument.h>
+#import <MAD/RptqQuery.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqQueryField.h>
+#import <MAD/RptqQueryLinks.h>
 #import <MAD/RptqQueryTable+Extras.h>
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqDocumentElementLabelDataField.h>
 #import <MAD/RptqStoreContext.h>
+#import <MAD/RptqObject.h>
+#import <MAD/MADQueryLinkType.h>
 
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseConnection.h>
@@ -61,6 +68,9 @@
 
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADOperationQueue.h>
+
+#import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
+#import <MADSqlite3/MADDatabaseSqlite3.h>
 
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
 #import <MADTdsClient/MADDatabaseConnectionSQLServer.h>
@@ -327,6 +337,205 @@ static int MADFixtureSelectFields(NSURL *documentURL, NSString *tableName, NSArr
 	return 0;
 }
 
+#pragma mark - Compose fixture
+
+/// Writes the two sqlite sources a composed fixture reads: an invoices table and a
+/// payments table, the exact rows the composition tests pin.
+static BOOL MADFixtureWriteSource(NSURL *url, NSArray <NSString *> *statements) {
+	[[NSFileManager defaultManager] removeItemAtURL: url error: NULL];
+	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: url];
+	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
+	database.databaseConnection = connection;
+	[database openDatabase];
+	NSError *error = nil;
+	for (NSString *statement in statements) {
+		if (![database executeSQL: statement
+						fieldKeys: @[]
+					 onConnection: nil
+				  intoResultTable: nil
+				   transactionSet: NO
+				   returnsResults: NO
+				   binaryBindings: nil
+						withError: &error]) {
+			[database closeDatabaseConnectionIfOpen];
+			return NO;
+		}
+	}
+	[database closeDatabaseConnectionIfOpen];
+	return YES;
+}
+
+/// Builds one source: a database with a distinct connection reference (the source
+/// file's path), a schema table with two fields, a named query over that table, and
+/// the query fields the query projects.  `labelledFields` name the fields that carry
+/// a report label (the active ones); the others are projected only when a downstream
+/// consumer requires them (the composition root's join key).
+static RptqObject *MADFixtureComposeSource(RptqStoreContext *context,
+										   NSURL *sourceURL,
+										   NSString *tableName,
+										   NSString *queryName,
+										   int64_t databaseId,
+										   int64_t queryId,
+										   int64_t tableId,
+										   NSArray <NSString *> *labelledFields) {
+	RptqObject *database = [context insertObjectForEntity: @"RptqDatabase" identifier: databaseId];
+	[database setValue: @"Sqlite 3" forKey: @"databaseDriverType"];
+	RptqObject *credential = [context insertObjectForEntity: @"RptqDatabaseCredentals" identifier: 0];
+	[credential setValue: sourceURL.lastPathComponent forKey: @"dbname"];
+	[credential setValue: sourceURL.path forKey: @"host"];
+	[database setValue: credential forKey: @"ownedByUser"];
+
+	RptqObject *schemaTable = [context insertObjectForEntity: @"RptqDatabaseSchemaTable" identifier: tableId + 1];
+	[schemaTable setValue: tableName forKey: @"name"];
+	RptqObject *idField = [context insertObjectForEntity: @"RptqDatabaseSchemaField" identifier: tableId + 2];
+	[idField setValue: @"invoice_id" forKey: @"name"];
+	RptqObject *amountField = [context insertObjectForEntity: @"RptqDatabaseSchemaField" identifier: tableId + 3];
+	[amountField setValue: @"amount" forKey: @"name"];
+	[database setValue: @[ schemaTable ] forKey: @"hasTables"];
+	[schemaTable setValue: @[ idField, amountField ] forKey: @"hasFields"];
+
+	RptqObject *query = [context insertObjectForEntity: @"RptqQuery" identifier: queryId];
+	[query setValue: queryName forKey: @"name"];
+	[database setValue: @[ query ] forKey: @"hasQueries"];
+	RptqObject *queryTable = [context insertObjectForEntity: @"RptqQueryTable" identifier: tableId];
+	[queryTable setValue: schemaTable forKey: @"databaseSchemaTable"];
+	[queryTable setValue: query forKey: @"inQuery"];
+
+	NSMutableArray *queryFields = [NSMutableArray arrayWithCapacity: 2];
+	for (RptqObject *schemaField in @[ idField, amountField ]) {
+		NSString *fieldName = [schemaField valueForKey: @"name"];
+		RptqObject *queryField = [context insertObjectForEntity: @"RptqQueryField" identifier: 0];
+		[queryField setValue: schemaField forKey: @"databaseSchemaField"];
+		[queryField setValue: queryTable forKey: @"inQueryTable"];
+		[queryFields addObject: queryField];
+
+		// A label is what makes a field active (projected with a report element); the
+		// payments source's invoice_id has none and is projected as a required field.
+		if ([labelledFields containsObject: fieldName]) {
+			RptqObject *label = [context insertObjectForEntity: @"RptqDocumentElementLabelDataField" identifier: 0];
+			[label setValue: queryField forKey: @"referencesQueryField"];
+		}
+	}
+	[queryTable setValue: queryFields forKey: @"hasQueryFields"];
+	return query;
+}
+
+/// Writes a composed invoices/payments `.mad` and its two sqlite sources, using the
+/// production store and archive writers (container 1.1, store revision 3).  When
+/// `reordered`, the root projects `invoice_id, payment_amount, invoice_amount`
+/// instead of the default `invoice_id, invoice_amount, payment_amount`.
+static int MADFixtureCompose(NSURL *documentURL, BOOL reordered) {
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSURL *directory = documentURL.URLByDeletingLastPathComponent;
+	NSURL *invoicesURL = [directory URLByAppendingPathComponent: @"invoices.sqlite"];
+	NSURL *paymentsURL = [directory URLByAppendingPathComponent: @"payments.sqlite"];
+
+	if (!MADFixtureWriteSource(invoicesURL, @[
+		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
+		@"INSERT INTO invoices VALUES (1, 100.0, 'first');",
+		@"INSERT INTO invoices VALUES (2, 200.0, 'second');",
+		@"INSERT INTO invoices VALUES (3, 300.0, 'third');"])) {
+		fprintf(stderr, "could not write %s\n", invoicesURL.path.UTF8String);
+		return 1;
+	}
+	if (!MADFixtureWriteSource(paymentsURL, @[
+		@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
+		@"INSERT INTO payments VALUES (101, 1, 40.0);",
+		@"INSERT INTO payments VALUES (102, 1, 60.0);"])) {
+		fprintf(stderr, "could not write %s\n", paymentsURL.path.UTF8String);
+		return 1;
+	}
+
+	MADDocumentStore *store = [MADDocumentStore storeForDocumentURL: documentURL];
+	[fileManager removeItemAtURL: store.gutsURL error: NULL];
+	NSError *error = nil;
+	if (![store openWithError: &error]) {
+		fprintf(stderr, "could not open the document store: %s\n", error.localizedDescription.UTF8String);
+		return 1;
+	}
+	RptqStoreContext *context = store.context;
+	[context loadAllWithError: NULL];
+
+	RptqObject *document = [context insertObjectForEntity: @"RptqDocument" identifier: 1];
+	RptqObject *invoices = MADFixtureComposeSource(context, invoicesURL, @"invoices", @"invoices", 10, 101, 200, @[ @"invoice_id", @"amount" ]);
+	RptqObject *payments = MADFixtureComposeSource(context, paymentsURL, @"payments", @"payments", 20, 102, 300, @[ @"amount" ]);
+	RptqObject *invoicesDatabase = [invoices valueForKey: @"inDatabase"];
+	RptqObject *paymentsDatabase = [payments valueForKey: @"inDatabase"];
+	[document setValue: @[ invoicesDatabase, paymentsDatabase ] forKey: @"hasDatabaseSchemas"];
+
+	RptqObject *root = [context insertObjectForEntity: @"RptqQuery" identifier: 100];
+	[root setValue: @"root" forKey: @"name"];
+	[root setValue: invoicesDatabase forKey: @"inDatabase"];
+	RptqObject *rootInvoicesTable = [context insertObjectForEntity: @"RptqQueryTable" identifier: 400];
+	[rootInvoicesTable setValue: root forKey: @"inQuery"];
+	[rootInvoicesTable setValue: invoices forKey: @"upstreamQuery"];
+	RptqObject *rootPaymentsTable = [context insertObjectForEntity: @"RptqQueryTable" identifier: 401];
+	[rootPaymentsTable setValue: root forKey: @"inQuery"];
+	[rootPaymentsTable setValue: payments forKey: @"upstreamQuery"];
+
+	// The schema fields the root projects and joins on.  The invoices side carries
+	// both invoice outputs; the payments side carries only its amount output, while
+	// its invoice_id is the downstream-only join key.
+	RptqObject *invoiceIdField = [context objectForEntity: @"RptqDatabaseSchemaField" identifier: 202];
+	RptqObject *invoiceAmountField = [context objectForEntity: @"RptqDatabaseSchemaField" identifier: 203];
+	RptqObject *paymentIdField = [context objectForEntity: @"RptqDatabaseSchemaField" identifier: 302];
+	RptqObject *paymentAmountField = [context objectForEntity: @"RptqDatabaseSchemaField" identifier: 303];
+
+	RptqObject *leftJoinField = [context insertObjectForEntity: @"RptqQueryField" identifier: 500];
+	[leftJoinField setValue: invoiceIdField forKey: @"databaseSchemaField"];
+	[leftJoinField setValue: rootInvoicesTable forKey: @"inQueryTable"];
+	RptqObject *rightJoinField = [context insertObjectForEntity: @"RptqQueryField" identifier: 501];
+	[rightJoinField setValue: paymentIdField forKey: @"databaseSchemaField"];
+	[rightJoinField setValue: rootPaymentsTable forKey: @"inQueryTable"];
+	RptqObject *join = [context insertObjectForEntity: @"RptqQueryLinks" identifier: 450];
+	[join setValue: @(MADLinkTypeLeftOuterJoin) forKey: @"type"];
+	[join setValue: leftJoinField forKey: @"hasLeftField"];
+	[join setValue: rightJoinField forKey: @"hasRightField"];
+	[join setValue: root forKey: @"inQuery"];
+
+	RptqObject *out0 = [context insertObjectForEntity: @"RptqQueryField" identifier: 600];
+	[out0 setValue: invoiceIdField forKey: @"databaseSchemaField"];
+	[out0 setValue: rootInvoicesTable forKey: @"inQueryTable"];
+	[out0 setValue: @"invoice_id" forKey: @"outputKey"];
+	[out0 setValue: @0 forKey: @"outputIndex"];
+	RptqObject *out1 = [context insertObjectForEntity: @"RptqQueryField" identifier: 601];
+	[out1 setValue: @1 forKey: @"outputIndex"];
+	RptqObject *out2 = [context insertObjectForEntity: @"RptqQueryField" identifier: 602];
+	[out2 setValue: @2 forKey: @"outputIndex"];
+	if (reordered) {
+		[out1 setValue: rootPaymentsTable forKey: @"inQueryTable"];
+		[out1 setValue: paymentAmountField forKey: @"databaseSchemaField"];
+		[out1 setValue: @"payment_amount" forKey: @"outputKey"];
+		[out2 setValue: rootInvoicesTable forKey: @"inQueryTable"];
+		[out2 setValue: invoiceAmountField forKey: @"databaseSchemaField"];
+		[out2 setValue: @"invoice_amount" forKey: @"outputKey"];
+	} else {
+		[out1 setValue: rootInvoicesTable forKey: @"inQueryTable"];
+		[out1 setValue: invoiceAmountField forKey: @"databaseSchemaField"];
+		[out1 setValue: @"invoice_amount" forKey: @"outputKey"];
+		[out2 setValue: rootPaymentsTable forKey: @"inQueryTable"];
+		[out2 setValue: paymentAmountField forKey: @"databaseSchemaField"];
+		[out2 setValue: @"payment_amount" forKey: @"outputKey"];
+	}
+
+	[document setValue: root forKey: @"rootQuery"];
+
+	if (![context saveComposed: &error]) {
+		fprintf(stderr, "composed save failed: %s\n", error.localizedDescription.UTF8String);
+		return 1;
+	}
+	[store close];
+
+	MADArchiveManager *writer = [[MADArchiveManager alloc] initWithFileWrapperURL: store.gutsURL archiveURL: documentURL];
+	writer.composed = YES;
+	if (![writer archive: YES]) {
+		fprintf(stderr, "composed archive failed\n");
+		return 1;
+	}
+	printf("wrote %s (invoices and payments beside it)\n", documentURL.path.UTF8String);
+	return 0;
+}
+
 #pragma mark - main
 
 int main(int argc, const char *argv[]) {
@@ -383,9 +592,19 @@ int main(int argc, const char *argv[]) {
 										  tableName, fieldNames);
 		}
 
+		if (argc >= 2 && strcmp(argv[1], "compose") == 0) {
+			if (argc != 3 && argc != 4) {
+				fprintf(stderr, "usage: MADFixtureMaker compose <document.mad> [reorder]\n");
+				return 1;
+			}
+			BOOL reordered = (argc == 4 && strcmp(argv[3], "reorder") == 0);
+			return MADFixtureCompose([NSURL fileURLWithPath: [NSString stringWithUTF8String: argv[2]]], reordered);
+		}
+
 		fprintf(stderr, "usage: MADFixtureMaker portable <document.mad> <fixture.mad>\n"
 						"       MADFixtureMaker create <mysql|tds|postgres> <host> <port> <user> <password> <database> <out.mad>\n"
-						"       MADFixtureMaker select <document.mad> <table> <field>[,<field>...]\n");
+						"       MADFixtureMaker select <document.mad> <table> <field>[,<field>...]\n"
+						"       MADFixtureMaker compose <document.mad> [reorder]\n");
 		return 1;
 	}
 }

@@ -18,6 +18,7 @@
 #import <MAD/MADConstants.h>
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
+#import <MAD/RptqDocument.h>
 
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationQueue.h>
@@ -116,6 +117,33 @@ static NSError *MADCLIDocumentError(NSString *message) {
 	id <MADDocumentDataProtocol> document = self.document;
 	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
 	queue.maxConcurrentOperationCount = 1;
+
+	// A composed document runs its own refresh: each source, then the join.  The
+	// operation below is the same MADOperation the app's refresh would build for an
+	// ordinary document, and the composed one is the engine's, so the CLI stays a
+	// thin adapter over the shared engine work.
+	if (document.activeDocumentModel.rootQuery != nil) {
+		MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+		if (credentials != nil) {
+			MADCLICredentialsOperation *holder = [[MADCLICredentialsOperation alloc] init];
+			holder.credentials = credentials;
+			[refresh addDependency: holder];
+			[queue addOperation: holder];
+		}
+		[queue addOperation: refresh];
+
+		while (queue.operationCount > 0) {
+			@autoreleasepool {
+				[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode
+										 beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+			}
+		}
+		if (refresh.errors.count > 0) {
+			if (error) *error = refresh.errors.firstObject;
+			return NO;
+		}
+		return YES;
+	}
 
 	MADOperationRefreshInitializeMainDataTable *initializeTable =
 		[[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument: document];
