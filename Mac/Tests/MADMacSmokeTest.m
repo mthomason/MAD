@@ -97,7 +97,7 @@ static BOOL RunRefreshSynchronous(MADHeadlessDocument *doc) {
 static NSMutableArray *sRetainedPanels = nil;
 
 static BOOL MADSmokeRunSQLite(NSURL *url, NSArray<NSString *> *statements);
-static NSString *MADSmokeBuildComposedDocument(NSURL *invoicesURL, NSURL *paymentsURL, NSURL *madURL, NSString **outError);
+static NSString *MADSmokeBuildComposedDocument(NSURL *invoicesURL, NSURL *paymentsURL, NSURL *madURL, BOOL grouped, NSString **outError);
 
 // Builds a composed invoices/payments fixture -- the .mad plus its two sqlite sources
 // -- the same way the CLI's MADFixtureMaker compose does, through the production store
@@ -121,7 +121,7 @@ static NSString *MADSmokeCreateComposedFixture(NSString *directory, NSString **o
 		if (outError) *outError = @"could not write payments source";
 		return nil;
 	}
-	return MADSmokeBuildComposedDocument(invoicesURL, paymentsURL, madURL, outError);
+	return MADSmokeBuildComposedDocument(invoicesURL, paymentsURL, madURL, NO, outError);
 }
 
 // Writes one sqlite source file from the given schema + row statements.
@@ -145,7 +145,7 @@ static BOOL MADSmokeRunSQLite(NSURL *url, NSArray<NSString *> *statements) {
 
 // Builds a composed invoices/payments .mad from two already-written sources, through the
 // production store and archive writers (the same path the CLI's MADFixtureMaker uses).
-static NSString *MADSmokeBuildComposedDocument(NSURL *invoicesURL, NSURL *paymentsURL, NSURL *madURL, NSString **outError) {
+static NSString *MADSmokeBuildComposedDocument(NSURL *invoicesURL, NSURL *paymentsURL, NSURL *madURL, BOOL grouped, NSString **outError) {
 	NSFileManager *fm = [NSFileManager defaultManager];
 	MADDocumentStore *store = [MADDocumentStore storeForDocumentURL:madURL];
 	[fm removeItemAtURL:store.gutsURL error:NULL];
@@ -267,6 +267,25 @@ static NSString *MADSmokeBuildComposedDocument(NSURL *invoicesURL, NSURL *paymen
 		labelX += 100.0f;
 	}
 
+	if (grouped) {
+		// Two nested groups on the root, the way the app's add-group path does:
+		// invoice_id ascending, then payment_amount descending.  The fields are the
+		// root output fields, whose persisted outputKey is the grouping key.
+		RptqObject *(^addGroup)(RptqObject *, MADSortOrder, int16_t) = ^(RptqObject *field, MADSortOrder order, int16_t weight) {
+			RptqQueryGroup *group = [RptqQueryGroup newQueryGroupQueryWithSortOrder:order andManagedObjectContext:context];
+			group.hasField = (RptqQueryField *)field;
+			group.weight = weight;
+			RptqDocumentSection *header = [RptqDocumentSection newDocumentSectionOfType:MADDocumentSectionTypeGroupHeader forManagedObjectContext:context];
+			[group addHasSectionObject:header];
+			RptqDocumentSection *footer = [RptqDocumentSection newDocumentSectionOfType:MADDocumentSectionTypeGroupFooter forManagedObjectContext:context];
+			[group addHasSectionObject:footer];
+			[(RptqQuery *)root addHasQueryGroupsObject:group];
+			return group;
+		};
+		addGroup(out0, MADSortOrderAccending, 0);
+		addGroup(out2, MADSortOrderDecending, 1);
+	}
+
 	if (![context saveComposed:&error]) {
 		if (outError) *outError = error.localizedDescription;
 		return nil;
@@ -313,7 +332,41 @@ static NSString *MADSmokeCreateComposedFixtureWithInvoiceCount(NSUInteger invoic
 		if (outError) *outError = @"could not write payments source";
 		return nil;
 	}
-	return MADSmokeBuildComposedDocument(invoicesURL, paymentsURL, madURL, outError);
+	return MADSmokeBuildComposedDocument(invoicesURL, paymentsURL, madURL, NO, outError);
+}
+
+// A grouped composed fixture big enough that one group crosses a page boundary: invoice 1
+// carries 40 payments, invoice 2 five, and invoice 3 none, with the rows deliberately
+// shuffled so both the ascending and descending groups have to reorder them.
+static NSString *MADSmokeCreateGroupedComposedFixture(NSString *directory, NSString **outError) {
+	NSURL *invoicesURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"invoices.sqlite"]];
+	NSURL *paymentsURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"payments.sqlite"]];
+	NSURL *madURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"composed.mad"]];
+
+	NSMutableArray<NSString *> *invoiceStatements = [NSMutableArray arrayWithObject:@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);"];
+	[invoiceStatements addObject:@"INSERT INTO invoices VALUES (3, 300.0, 'third');"];
+	[invoiceStatements addObject:@"INSERT INTO invoices VALUES (1, 100.0, 'first');"];
+	[invoiceStatements addObject:@"INSERT INTO invoices VALUES (2, 200.0, 'second');"];
+
+	NSMutableArray<NSString *> *paymentStatements = [NSMutableArray arrayWithObject:@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);"];
+	for (NSUInteger p = 1; p <= 40; p++) {
+		// Insert invoice 1's payments in ascending amount order so the descending group
+		// has to reorder them.
+		[paymentStatements addObject:[NSString stringWithFormat:@"INSERT INTO payments VALUES (%lu, 1, %lu.0);", (unsigned long)(1000 + p), (unsigned long)(100 + p)]];
+	}
+	for (NSUInteger p = 1; p <= 5; p++) {
+		[paymentStatements addObject:[NSString stringWithFormat:@"INSERT INTO payments VALUES (%lu, 2, %lu.0);", (unsigned long)(2000 + p), (unsigned long)(200 + p)]];
+	}
+
+	if (!MADSmokeRunSQLite(invoicesURL, invoiceStatements)) {
+		if (outError) *outError = @"could not write grouped invoices source";
+		return nil;
+	}
+	if (!MADSmokeRunSQLite(paymentsURL, paymentStatements)) {
+		if (outError) *outError = @"could not write grouped payments source";
+		return nil;
+	}
+	return MADSmokeBuildComposedDocument(invoicesURL, paymentsURL, madURL, YES, outError);
 }
 
 // The composed detail rows the multi-page fixture produces, in sorted order.  Each entry
@@ -1770,6 +1823,80 @@ int main(int argc, const char * argv[]) {
 		printf("PASS: Multi-page composed report (%lu invoices -> %lu rows, %lu pages; refresh %.2fs, render %.2fs; pruned to %lu rows / %lu pages)\n",
 			   (unsigned long)kComposedInvoiceCount, (unsigned long)expectedRows.count, (unsigned long)multiPageCount,
 			   multiRefreshElapsed, multiRenderElapsed, (unsigned long)expectedPrunedRows, (unsigned long)prunedPageCount);
+
+		// 11. Grouped composed report: the root's groups sort the joined rows and the
+		// renderer emits group breaks, with one group spanning a page boundary.
+		NSString *groupedDir = [NSTemporaryDirectory() stringByAppendingPathComponent:
+								[NSString stringWithFormat:@"mad-composed-grouped-%@", NSUUID.UUID.UUIDString]];
+		[fm createDirectoryAtPath:groupedDir withIntermediateDirectories:YES attributes:nil error:NULL];
+
+		NSString *groupedError = nil;
+		NSString *groupedMadPath = MADSmokeCreateGroupedComposedFixture(groupedDir, &groupedError);
+		if (groupedMadPath.length == 0) {
+			fprintf(stderr, "FAIL: Could not build grouped composed fixture: %s\n", groupedError.UTF8String ?: "(none)");
+			return 140;
+		}
+		MADMacDocument *groupedDoc = [[MADMacDocument alloc] initWithContentsOfURL:[NSURL fileURLWithPath:groupedMadPath] ofType:@"com.thomason.mad" error:&err];
+		if (groupedDoc == nil) {
+			fprintf(stderr, "FAIL: Could not open grouped composed .mad: %s\n", err.localizedDescription.UTF8String);
+			return 141;
+		}
+		MADMacViewerViewController *groupedViewer = [[MADMacViewerViewController alloc] initWithDocument:groupedDoc];
+		(void)groupedViewer.view;
+		[groupedViewer refreshReportAction:nil];
+		NSDate *groupedDeadline = [NSDate dateWithTimeIntervalSinceNow:60.0];
+		while (groupedViewer.pdfView.document.pageCount == 0 && groupedViewer.lastRefreshError == nil &&
+			   groupedDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
+		}
+		if (groupedViewer.lastRefreshError != nil || groupedViewer.pdfView.document.pageCount == 0) {
+			fprintf(stderr, "FAIL: Grouped composed refresh/render failed: %s\n", groupedViewer.lastRefreshError.description.UTF8String);
+			return 142;
+		}
+
+		MADReportFormatter *groupedFormatter = groupedDoc.headlessDocument.reportFormatter;
+		if (groupedFormatter.numberOfGroups != 2) {
+			fprintf(stderr, "FAIL: Grouped composed report has %lu groups, expected 2\n", (unsigned long)groupedFormatter.numberOfGroups);
+			return 143;
+		}
+		NSUInteger groupedPages = groupedFormatter.reportLayout.count;
+		if (groupedPages < 2) {
+			fprintf(stderr, "FAIL: Grouped composed report rendered only %lu pages\n", (unsigned long)groupedPages);
+			return 144;
+		}
+
+		// A group (invoice 1, forty rows) must cross a page boundary: both the first and
+		// second pages carry invoice 1's detail rows.
+		NSUInteger groupHeaders = 0;
+		BOOL firstPageHasInvoice1 = NO;
+		BOOL secondPageHasInvoice1 = NO;
+		MADDataTableFast *groupedTable = groupedDoc.headlessDocument.dataTable;
+		for (NSUInteger page = 0; page < groupedPages; page++) {
+			for (MADSectionRepresentation *section in groupedFormatter.reportLayout[page]) {
+				if (section.sectionType == MADDocumentSectionTypeGroupHeader) groupHeaders++;
+				if (section.sectionType == MADDocumentSectionTypeBody && page < 2) {
+					NSDictionary *row = [groupedTable dataForRow:section.detailRowId error:NULL];
+					id inv = row[@"invoice_id"];
+					if (inv && [inv doubleValue] == 1.0) {
+						if (page == 0) firstPageHasInvoice1 = YES;
+						else secondPageHasInvoice1 = YES;
+					}
+				}
+			}
+		}
+		if (groupHeaders == 0) {
+			fprintf(stderr, "FAIL: Grouped composed report rendered no group breaks\n");
+			return 145;
+		}
+		if (!firstPageHasInvoice1 || !secondPageHasInvoice1) {
+			fprintf(stderr, "FAIL: Invoice 1's group did not cross a page boundary (first=%d second=%d)\n",
+					firstPageHasInvoice1, secondPageHasInvoice1);
+			return 146;
+		}
+
+		[fm removeItemAtPath:groupedDir error:NULL];
+		printf("PASS: Grouped composed report (%lu rows, %lu pages, 2 groups) rendered group breaks and crossed a page boundary\n",
+			   (unsigned long)[groupedTable numberOfRows], (unsigned long)groupedPages);
 	}
 	return 0;
 }
