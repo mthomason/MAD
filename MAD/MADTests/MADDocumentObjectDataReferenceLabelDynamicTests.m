@@ -174,6 +174,20 @@
 	XCTAssertNil(reference.fieldKey);
 }
 
+- (void)testFieldKeyUsesTheComposedOutputKey {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+	RptqQueryField *field = [self queryFieldNamed:@"Amount" tableName:@"Invoice" context:context document:document];
+	// A composed document's root output field persists an explicit output key; the
+	// composed result table is keyed by that, so the reference reads it directly and
+	// needs no datasource (nor a source-table alias).
+	field.outputKey = @"invoice_amount";
+
+	MADDocumentObjectDataReferenceLabelDynamic *reference = [self referenceForField:field context:context datasource:nil];
+
+	XCTAssertEqualObjects(reference.fieldKey, @"invoice_amount");
+}
+
 - (void)testFormattedStringUsesTheSchemaFieldType {
 	RptqStoreContext *context = [self inMemoryContext];
 	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];

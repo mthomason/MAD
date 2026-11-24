@@ -170,6 +170,20 @@ static void testFieldKeyIsNilWithoutADatasource(void) {
 	MAD_PASS(reference.fieldKey == nil, "without a datasource there is no field key");
 }
 
+static void testFieldKeyUsesTheComposedOutputKey(void) {
+	RptqStoreContext *context = inMemoryContext();
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+	RptqQueryField *field = queryFieldNamed(@"Amount", @"Invoice", context, document);
+	// A composed document's root output field persists an explicit output key; the
+	// composed result table is keyed by that, so the reference reads it directly and
+	// needs no datasource (nor a source-table alias).
+	field.outputKey = @"invoice_amount";
+
+	MADDocumentObjectDataReferenceLabelDynamic *reference = referenceForField(field, context, nil);
+
+	MAD_PASS_EQUAL(reference.fieldKey, @"invoice_amount", "a composed output field reads its output key directly");
+}
+
 static void testFormattedStringUsesTheSchemaFieldType(void) {
 	RptqStoreContext *context = inMemoryContext();
 	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
@@ -186,4 +200,5 @@ MAD_TEST_MAIN("MADDocumentObjectDataReferenceLabelDynamicTests",
 	MAD_TEST(testFactoryReturnsLabelDynamicReference),
 	MAD_TEST(testFieldKeyQualifiesTheFieldWithTheTableAlias),
 	MAD_TEST(testFieldKeyIsNilWithoutADatasource),
+	MAD_TEST(testFieldKeyUsesTheComposedOutputKey),
 	MAD_TEST(testFormattedStringUsesTheSchemaFieldType));
