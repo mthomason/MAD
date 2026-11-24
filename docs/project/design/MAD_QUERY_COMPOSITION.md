@@ -210,3 +210,14 @@ Pushed `9546bae85` to `origin/feat/query-composition`.
 **Tests.** Container 1.1 vs 1.0 headers + the requirements record; missing/unknown/supported capability checks; graph cycle and missing-upstream validation; the header now accepts 1.1 and refuses 1.2. Apple `MAD` green, Linux `MADArchiveManagerTests` 7/0 and `RptqStoreContextTests` 21/0, full `./Linux/build.sh` 131/0, versions.py + check_source_lists.py green.
 
 **Still to do.** The archive round trip through the production writer/reader with *distinct* per-source connection references, the ordered root projection (invoice_id/invoice_amount from invoices, payment_amount from payments) — the store does not yet preserve field *order*, a model gap to close — Save As identity, the forced failed-archive-save case, and the macOS ordinary-report smoke test. Then Checkpoint E.
+
+## Checkpoint D — ordered output projection + archive round trip landed (2026-11-24)
+
+Pushed `3d491eedf` to `origin/feat/query-composition`.
+
+- **Ordered projection.** `RptqQueryField` gains `outputIndex` and `outputKey` (both revision 3, so ordinary revision-2 documents keep their schema). `RptqDocument -orderedCompositionOutputsWithError:` returns the root's projected fields ordered by `outputIndex`, and errors — rather than inventing an order — when a composed document records none (an earlier store or an unset projection).
+- **Archive round trip.** `testComposedArchiveRoundTrip` builds invoices and payments with *distinct* connection references (`invoices.sqlite` / `payments.sqlite`), saves through the production store + archive writers (container 1.1), copies only the `.mad` into a clean directory, reopens it through the production reader, and recovers — from the document alone — both connection references, the root, and the ordered outputs (`invoice_id` ← invoices, `invoice_amount` ← invoices, `payment_amount` ← payments).
+
+**Results.** Apple `MAD` green, Linux `RptqStoreContextTests` 22/0, full `./Linux/build.sh` 131/0, versions.py + check_source_lists.py green.
+
+**Still to do.** The explicit reorder case (payment_amount between the two invoice outputs), Save As identity, the forced failed-archive-save case, and the macOS ordinary-report smoke test. Then Checkpoint E.
