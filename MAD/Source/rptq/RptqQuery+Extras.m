@@ -158,6 +158,36 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 	return sortedSortDescriptorsGroup;
 }
 
+- (NSArray<RptqQueryField *> *)orderedOutputFieldsWithError:(NSError * __autoreleasing *)error {
+	NSMutableArray<RptqQueryField *> *outputs = [NSMutableArray array];
+	for (RptqQueryTable *table in self.hasQueryTables) {
+		for (RptqQueryField *field in table.hasQueryFields) {
+			[outputs addObject: field];
+		}
+	}
+	[outputs sortUsingComparator:^NSComparisonResult(RptqQueryField *a, RptqQueryField *b) {
+		return [@(a.outputIndex) compare: @(b.outputIndex)];
+	}];
+
+	// A field with no output key is a join or filter field, projected for the query
+	// but not for the node; only the fields that name an output are the projection.
+	NSMutableArray<RptqQueryField *> *projected = [NSMutableArray arrayWithCapacity: outputs.count];
+	for (RptqQueryField *field in outputs) {
+		if (field.outputKey != nil) {
+			[projected addObject: field];
+		}
+	}
+	if (projected.count == 0 && outputs.count > 0) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: @"MADCompositionValidationErrorDomain" code: 3 userInfo: @{
+				NSLocalizedDescriptionKey: NSLocalizedString(
+					@"This composed document records no output order for its projection.", @"Missing projection order error.") }];
+		}
+		return nil;
+	}
+	return projected;
+}
+
 - (id)debugQuickLookObject {
 	NSMutableString *description = [[NSMutableString alloc] init];
 	[description appendFormat:@"*********\n"];

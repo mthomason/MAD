@@ -682,6 +682,24 @@ static NSError *MADCompositionError(NSInteger code, NSString *message) {
 	if ([visited containsObject: key]) return YES;
 	[path addObject: key];
 
+	// A composing node attaches each child read-only; SQLITE_MAX_ATTACHED caps a
+	// node's direct children at ten in this milestone (MAD_COMPOSITION_SPEC.md §6).
+	NSMutableSet<NSNumber *> *directChildren = [NSMutableSet set];
+	for (RptqQueryTable *table in query.hasQueryTables) {
+		NSNumber *upstreamIdentifier = [table.backingObject referenceForName: @"upstreamQuery"];
+		if (upstreamIdentifier != nil) {
+			[directChildren addObject: upstreamIdentifier];
+		}
+	}
+	if (directChildren.count > 10) {
+		if (error != NULL) {
+			NSString *name = query.name ?: NSLocalizedString(@"<unnamed>", @"Unnamed query in a composition error.");
+			*error = MADCompositionError(4, [[NSString alloc] initWithFormat:
+				NSLocalizedString(@"The query '%@' has more than ten direct sources, which this build cannot attach.", @"Too many composition children."), name]);
+		}
+		return NO;
+	}
+
 	for (RptqQueryTable *table in query.hasQueryTables) {
 		NSNumber *upstreamIdentifier = [table.backingObject referenceForName: @"upstreamQuery"];
 		if (upstreamIdentifier == nil) continue;
@@ -705,35 +723,7 @@ static NSError *MADCompositionError(NSInteger code, NSString *message) {
 - (NSArray<RptqQueryField *> *)orderedCompositionOutputsWithError:(NSError * __autoreleasing *)error {
 	RptqQuery *root = self.rootQuery;
 	if (root == nil) return @[];
-
-	NSMutableArray<RptqQueryField *> *outputs = [NSMutableArray array];
-	for (RptqQueryTable *table in root.hasQueryTables) {
-		for (RptqQueryField *field in table.hasQueryFields) {
-			[outputs addObject: field];
-		}
-	}
-	[outputs sortUsingComparator:^NSComparisonResult(RptqQueryField *a, RptqQueryField *b) {
-		return [@(a.outputIndex) compare:@(b.outputIndex)];
-	}];
-
-	// A field with no output key is a join key, projected for the join but not for
-	// the root; only the fields that name an output are the projection.  A root whose
-	// fields carry no output key at all is a projection whose order was never recorded
-	// (an earlier store, or an unset projection); do not invent an order for it.
-	NSMutableArray<RptqQueryField *> *projected = [NSMutableArray arrayWithCapacity: outputs.count];
-	for (RptqQueryField *field in outputs) {
-		if (field.outputKey != nil) {
-			[projected addObject: field];
-		}
-	}
-	if (projected.count == 0 && outputs.count > 0) {
-		if (error != NULL) {
-			*error = MADCompositionError(3, NSLocalizedString(
-				@"This composed document records no output order for its projection.", @"Missing projection order error."));
-		}
-		return nil;
-	}
-	return projected;
+	return [root orderedOutputFieldsWithError: error];
 }
 
 @end

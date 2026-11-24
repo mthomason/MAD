@@ -26,14 +26,20 @@
 @end
 
 /// The refresh a composed document runs: resolves the explicit root, validates its
-/// dependencies, refreshes each reachable source once serially with that source's
-/// connection and dialect, composes the published inputs through MADComposer, and
-/// publishes the completed root for normal consumers.  The ordinary document path is
-/// MADOperationRefresh; a caller selects this one when the document has an explicit
-/// root query.
+/// dependencies, walks the whole graph topologically (children before parents, root
+/// last, each node once), compiles every composing node as a general query against
+/// its attached children, and publishes the completed root for normal consumers.
+/// The ordinary document path is MADOperationRefresh; a caller selects this one when
+/// the document has an explicit root query.
 @interface MADOperationRefreshComposed : MADOperation
 
 	- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document;
+
+	/// The names of the nodes in the order they executed — children before parents,
+	/// root last, each once.  Populated after a refresh succeeds or fails partway; a
+	/// diagnostic of the walk, and what the tests assert the order and once-only
+	/// invariants against.
+	@property (nonatomic, readonly, copy) NSArray<NSString *> *executedNodeNames;
 
 @end
 

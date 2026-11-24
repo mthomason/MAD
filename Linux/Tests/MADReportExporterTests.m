@@ -17,7 +17,6 @@
 
 #import "MADTestSupport.h"
 
-#import <MAD/MADComposer.h>
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADHeadlessDocument.h>
 #import <MAD/MADReportFormatter.h>
@@ -50,6 +49,10 @@
 #import <MAD/RptqQueryPredicate.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqStoreContext.h>
+#import <MAD/RptqObject.h>
+#import <MAD/MADArchiveManager.h>
+#import <MAD/MADDocumentStore.h>
+#import <MAD/MADQueryLinkType.h>
 
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADDataType.h>
@@ -757,36 +760,6 @@ static BOOL MADCompositionAddQuery(MADHeadlessDocument *document,
 	return [context save: &error];
 }
 
-/// Adds a query field with no report label -- a field only a downstream consumer
-/// (the composition root) requires, so it must be projected without a dummy label.
-static RptqQueryField *MADCompositionAddRequiredField(MADHeadlessDocument *document,
-													   NSString *tableName,
-													   NSString *fieldName) {
-	RptqStoreContext *context = document.storeContext;
-	RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: context];
-	RptqDatabase *database = rptqDocument.hasDatabaseSchemas.anyObject;
-	RptqQuery *query = database.hasQueries.anyObject;
-	RptqQueryTable *queryTable = nil;
-	for (RptqQueryTable *candidate in query.hasQueryTables) {
-		if ([candidate.databaseSchemaTable.name isEqualToString: tableName]) { queryTable = candidate; break; }
-	}
-	if (queryTable == nil) return nil;
-	RptqDatabaseSchemaField *schemaField = nil;
-	for (RptqDatabaseSchemaField *candidate in queryTable.databaseSchemaTable.hasFields) {
-		if ([candidate.name isEqualToString: fieldName]) { schemaField = candidate; break; }
-	}
-	if (schemaField == nil) return nil;
-	RptqQueryField *queryField = [RptqQueryField newQueryField: context];
-	queryField.inQueryTable = queryTable;
-	queryField.databaseSchemaField = schemaField;
-	NSMutableSet *fields = [queryTable.hasQueryFields mutableCopy];
-	[fields addObject: queryField];
-	queryTable.hasQueryFields = fields;
-	NSError *error = nil;
-	[context save: &error];
-	return queryField;
-}
-
 /// Build a refreshed document whose query projects `activeFields` of `tableName`.
 static MADHeadlessDocument *MADCompositionDocument(NSString *name,
 												   NSURL *sourceURL,
@@ -828,151 +801,13 @@ static MADDatabaseSqlite3 *MADCompositionConnection(NSURL *composerURL) {
 	return database;
 }
 
-static MADComposerInput *MADCompositionInput(NSString *alias,
-											 MADDataResult *result,
-											 NSArray<NSArray<NSString *> *> *fields,
-											 NSString *joinKeyField) {
-	MADComposerInput *input = [[MADComposerInput alloc] init];
-	input.alias = alias;
-	input.result = result;
-	NSMutableArray<MADComposerField *> *composerFields = [NSMutableArray arrayWithCapacity: fields.count];
-	for (NSArray<NSString *> *pair in fields) {
-		[composerFields addObject: [MADComposerField fieldWithSourceKey: MADCompositionLogicalKey(result, pair[0])
-															 outputKey: pair[1]]];
-	}
-	input.fields = composerFields;
-	input.joinKey = MADCompositionLogicalKey(result, joinKeyField);
-	return input;
-}
 
 // Two documents: three invoices (one with an unused `note` column) and two
 // payments for invoice 1.  Both projects join the key and its amount; the other
 // columns stay out of the projection.
-static void testCompositionJoinPopulated(void) {
-	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
-	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
-	NSURL *invoicesURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"invoices.sqlite"]];
-	NSURL *paymentsURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"payments.sqlite"]];
-
-	MAD_PASS(MADCompositionCreateSource(invoicesURL, @[
-		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
-		@"INSERT INTO invoices VALUES (1, 100.0, 'first');",
-		@"INSERT INTO invoices VALUES (2, 200.0, 'second');",
-		@"INSERT INTO invoices VALUES (3, 300.0, 'third');"]), "the invoices source is written");
-	MAD_PASS(MADCompositionCreateSource(paymentsURL, @[
-		@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
-		@"INSERT INTO payments VALUES (101, 1, 40.0);",
-		@"INSERT INTO payments VALUES (102, 1, 60.0);"]), "the payments source is written");
-
-	NSString *errorDescription = nil;
-	MADHeadlessDocument *invoices = MADCompositionDocument(@"invoices.mad", invoicesURL, @"invoices",
-														   @[@"invoice_id", @"amount"], &errorDescription);
-	MADHeadlessDocument *payments = MADCompositionDocument(@"payments.mad", paymentsURL, @"payments",
-														   @[@"invoice_id", @"amount"], &errorDescription);
-	MAD_NEED(invoices != nil && payments != nil, @"the documents opened and refreshed");
-	if (invoices == nil || payments == nil) return;
-
-	MADDataResult *invoicesResult = invoices.currentResult;
-	MADDataResult *paymentsResult = payments.currentResult;
-	MAD_PASS(invoicesResult.numberOfRows == (NSUInteger)3, "the invoices result has three rows");
-	MAD_PASS(paymentsResult.numberOfRows == (NSUInteger)2, "the payments result has two rows");
-
-	// The unused source columns stay out of the upstream projection.
-	MAD_PASS([invoicesResult.columnKeys filteredArrayUsingPredicate:
-			  [NSPredicate predicateWithBlock:^BOOL(id key, NSDictionary *b) {
-		return [(NSString *)key rangeOfString:@"note"].location != NSNotFound;
-	}]].count == 0, "the unused note column is not projected");
-	MAD_PASS([paymentsResult.columnKeys filteredArrayUsingPredicate:
-			  [NSPredicate predicateWithBlock:^BOOL(id key, NSDictionary *b) {
-		return [(NSString *)key rangeOfString:@"payment_id"].location != NSNotFound;
-	}]].count == 0, "the unused payment_id column is not projected");
-
-	MADComposerInput *left = MADCompositionInput(@"invoices", invoicesResult,
-		@[@[@"invoice_id", @"invoice_id"], @[@"amount", @"invoice_amount"]], @"invoice_id");
-	MADComposerInput *right = MADCompositionInput(@"payments", paymentsResult,
-		@[@[@"amount", @"payment_amount"]], @"invoice_id");
-
-	NSError *error = nil;
-	MADDataResult *root = [MADComposer composeLeft: left
-											right: right
-										  joinType: MADLinkTypeLeftOuterJoin
-									   orderByKeys: @[left.joinKey, right.fields.lastObject.sourceKey]
-									rootIdentifier: [[NSUUID UUID] UUIDString]
-									cacheDirectory: [NSURL fileURLWithPath: directory]
-											  error: &error];
-	MAD_PASS(root != nil, "the root join materialized: %s", [[error description] UTF8String]);
-	if (root == nil) return;
-
-	MAD_PASS_EQUAL(root.columnKeys, (@[@"invoice_id", @"invoice_amount", @"payment_amount"]), "the root projection is the three keys");
-	MAD_PASS(root.numberOfRows == (NSUInteger)4, "the populated join has four rows");
-
-	NSArray *rows = [root.dataTable objectEnumerator].allObjects;
-	MAD_PASS_EQUAL(rows[0][@"invoice_id"], @1, "row 0 is invoice 1");
-	MAD_PASS_EQUAL(rows[0][@"invoice_amount"], @100, "invoice 1 keeps its amount");
-	MAD_PASS_EQUAL(rows[0][@"payment_amount"], @40, "invoice 1's first payment");
-	MAD_PASS_EQUAL(rows[1][@"invoice_id"], @1, "row 1 is invoice 1 again");
-	MAD_PASS_EQUAL(rows[1][@"payment_amount"], @60, "invoice 1's second payment");
-	MAD_PASS_EQUAL(rows[2][@"invoice_id"], @2, "row 2 is invoice 2");
-	MAD_PASS(rows[2][@"payment_amount"] == [NSNull null], "invoice 2 has no payment");
-	MAD_PASS_EQUAL(rows[3][@"invoice_id"], @3, "row 3 is invoice 3");
-	MAD_PASS(rows[3][@"payment_amount"] == [NSNull null], "invoice 3 has no payment");
-}
 
 // Refresh payments to zero rows; the LEFT JOIN keeps all three invoices with
 // NULL payment fields.
-static void testCompositionJoinEmptyPayments(void) {
-	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
-	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
-	NSURL *invoicesURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"invoices.sqlite"]];
-	NSURL *paymentsURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"payments.sqlite"]];
-
-	MADCompositionCreateSource(invoicesURL, @[
-		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
-		@"INSERT INTO invoices VALUES (1, 100.0, 'first');",
-		@"INSERT INTO invoices VALUES (2, 200.0, 'second');",
-		@"INSERT INTO invoices VALUES (3, 300.0, 'third');"]);
-	MADCompositionCreateSource(paymentsURL, @[
-		@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
-		@"INSERT INTO payments VALUES (101, 1, 40.0);"]);
-
-	NSString *errorDescription = nil;
-	MADHeadlessDocument *invoices = MADCompositionDocument(@"invoices.mad", invoicesURL, @"invoices",
-														   @[@"invoice_id", @"amount"], &errorDescription);
-	MADHeadlessDocument *payments = MADCompositionDocument(@"payments.mad", paymentsURL, @"payments",
-														   @[@"invoice_id", @"amount"], &errorDescription);
-	MAD_NEED(invoices != nil && payments != nil, @"the documents opened");
-	if (invoices == nil || payments == nil) return;
-
-	// Zero the payments: an impossible predicate on the integer key.
-	RptqQueryPredicate *predicate = MADExporterAddImpossiblePredicate(payments);
-	MAD_PASS(predicate != nil, "the payments query has an integer key to constrain");
-	NSError *error = nil;
-	MAD_PASS(MADExporterRefreshDocument(payments, &error), "the payments refresh to zero rows: %s", [[error description] UTF8String]);
-	MAD_PASS(payments.currentResult.numberOfRows == (NSUInteger)0, "the payments result is empty");
-
-	MADComposerInput *left = MADCompositionInput(@"invoices", invoices.currentResult,
-		@[@[@"invoice_id", @"invoice_id"], @[@"amount", @"invoice_amount"]], @"invoice_id");
-	MADComposerInput *right = MADCompositionInput(@"payments", payments.currentResult,
-		@[@[@"amount", @"payment_amount"]], @"invoice_id");
-
-	error = nil;
-	MADDataResult *root = [MADComposer composeLeft: left
-											right: right
-										  joinType: MADLinkTypeLeftOuterJoin
-									   orderByKeys: @[left.joinKey]
-									rootIdentifier: [[NSUUID UUID] UUIDString]
-									cacheDirectory: [NSURL fileURLWithPath: directory]
-											  error: &error];
-	MAD_PASS(root != nil, "the empty-input join materialized: %s", [[error description] UTF8String]);
-	if (root == nil) return;
-	MAD_PASS(root.numberOfRows == (NSUInteger)3, "the LEFT JOIN keeps all three invoices");
-	NSArray *rows = [root.dataTable objectEnumerator].allObjects;
-	MAD_PASS_EQUAL(rows[0][@"invoice_id"], @1, "invoice 1 remains");
-	MAD_PASS(rows[0][@"payment_amount"] == [NSNull null], "invoice 1 has no payment");
-	MAD_PASS_EQUAL(rows[1][@"invoice_id"], @2, "invoice 2 remains");
-	MAD_PASS_EQUAL(rows[2][@"invoice_id"], @3, "invoice 3 remains");
-	MAD_PASS(rows[2][@"payment_amount"] == [NSNull null], "invoice 3 has no payment");
-}
 
 // The attachment surface: read-only enforcement, a missing file, and the limit.
 static void testCompositionAttachGuards(void) {
@@ -1028,48 +863,6 @@ static void testCompositionAttachGuards(void) {
 
 // The root ORDER BY over a text key must use the LSASC collation the MAD
 // connection registers -- a raw sqlite3 handle would reject it.
-static void testCompositionJoinOrdersTextByLSASC(void) {
-	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
-	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
-	NSURL *db = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"items.sqlite"]];
-	// Inserted out of LSASC order, so the ORDER BY -- not the insertion order -- is
-	// what the assertion reads back.
-	MADCompositionCreateSource(db, @[
-		@"CREATE TABLE items (id INTEGER, name TEXT);",
-		@"INSERT INTO items VALUES (1, 'zebra');",
-		@"INSERT INTO items VALUES (2, 'Apple');",
-		@"INSERT INTO items VALUES (3, 'apricot');",
-		@"INSERT INTO items VALUES (4, 'äpfel');",
-		@"INSERT INTO items VALUES (5, 'Banana');"]);
-
-	NSString *errorDescription = nil;
-	MADHeadlessDocument *items = MADCompositionDocument(@"items.mad", db, @"items", @[@"id", @"name"], &errorDescription);
-	MAD_NEED(items != nil, @"the items document opened");
-	if (items == nil) return;
-
-	MADComposerInput *left = MADCompositionInput(@"items", items.currentResult,
-		@[@[@"name", @"name"]], @"id");
-	MADComposerInput *right = MADCompositionInput(@"items", items.currentResult, @[], @"id");
-
-	NSError *error = nil;
-	MADDataResult *root = [MADComposer composeLeft: left
-											right: right
-										  joinType: MADLinkTypeInnerJoin
-									   orderByKeys: @[left.fields.firstObject.sourceKey]
-									rootIdentifier: [[NSUUID UUID] UUIDString]
-									cacheDirectory: [NSURL fileURLWithPath: directory]
-											  error: &error];
-	MAD_PASS(root != nil, "the text-key join materialized: %s", [[error description] UTF8String]);
-	if (root == nil) return;
-
-	NSArray *names = @[@"zebra", @"Apple", @"apricot", @"äpfel", @"Banana"];
-	NSArray *expected = [names sortedArrayUsingSelector: @selector(mad_orderedCompare:)];
-	NSMutableArray *actual = [NSMutableArray array];
-	for (NSDictionary *row in [root.dataTable objectEnumerator]) {
-		[actual addObject: row[@"name"]];
-	}
-	MAD_PASS_EQUAL(actual, expected, "the root orders the text key with LSASC");
-}
 
 // The attach helper must percent-encode a URI-reserved or Unicode path and quote
 // an alias that needs it, so read-only cannot silently become writable.
@@ -1133,64 +926,6 @@ static void testCompositionAttachmentLimitAndSQLiteVersion(void) {
 
 // The root's join key lives only on the payments side and is not otherwise
 // projected; the composer must still project it as a required field.
-static void testCompositionRequiredJoinKeyWithoutLabel(void) {
-	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
-	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
-	NSURL *invoicesURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"invoices.sqlite"]];
-	NSURL *paymentsURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"payments.sqlite"]];
-	MAD_PASS(MADCompositionCreateSource(invoicesURL, @[
-		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL);",
-		@"INSERT INTO invoices VALUES (1, 100.0);",
-		@"INSERT INTO invoices VALUES (2, 200.0);",
-		@"INSERT INTO invoices VALUES (3, 300.0);"]), "the invoices source is written");
-	MAD_PASS(MADCompositionCreateSource(paymentsURL, @[
-		@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
-		@"INSERT INTO payments VALUES (101, 1, 40.0);"]), "the payments source is written");
-
-	NSString *errorDescription = nil;
-	MADHeadlessDocument *invoices = MADCompositionDocument(@"invoices.mad", invoicesURL, @"invoices",
-														   @[@"invoice_id", @"amount"], &errorDescription);
-	// Payments projects only "amount" through a report label; "invoice_id" is the
-	// root's join key and must be supplied as a required field, with no label.
-	MADHeadlessDocument *payments = MADCompositionDocument(@"payments.mad", paymentsURL, @"payments",
-														   @[@"amount"], &errorDescription);
-	MAD_NEED(invoices != nil && payments != nil, @"the documents opened and refreshed");
-	if (invoices == nil || payments == nil) return;
-
-	RptqQueryField *requiredInvoiceId = MADCompositionAddRequiredField(payments, @"payments", @"invoice_id");
-	MAD_PASS(requiredInvoiceId != nil, "the required join key is added");
-	payments.mainQuery.requiredQueryFields = @[requiredInvoiceId];
-	NSError *error = nil;
-	MAD_PASS(MADExporterRefreshDocument(payments, &error), "the payments refresh with the required join key: %s", [[error description] UTF8String]);
-
-	MADDataResult *paymentsResult = payments.currentResult;
-	MAD_PASS(MADCompositionLogicalKey(paymentsResult, @"invoice_id") != nil, "the required join key is projected");
-	MAD_PASS(MADCompositionLogicalKey(paymentsResult, @"payment_id") == nil, "the unused payment column stays out");
-
-	MADComposerInput *left = MADCompositionInput(@"invoices", invoices.currentResult,
-		@[@[@"invoice_id", @"invoice_id"], @[@"amount", @"invoice_amount"]], @"invoice_id");
-	MADComposerInput *right = MADCompositionInput(@"payments", paymentsResult,
-		@[@[@"amount", @"payment_amount"]], @"invoice_id");
-
-	error = nil;
-	MADDataResult *root = [MADComposer composeLeft: left
-											right: right
-										  joinType: MADLinkTypeLeftOuterJoin
-									   orderByKeys: @[left.joinKey]
-									rootIdentifier: [[NSUUID UUID] UUIDString]
-									cacheDirectory: [NSURL fileURLWithPath: directory]
-											  error: &error];
-	MAD_PASS(root != nil, "the required-key join materialized: %s", [[error description] UTF8String]);
-	if (root == nil) return;
-	MAD_PASS(root.numberOfRows == (NSUInteger)3, "the join keeps all three invoices");
-	NSArray *rows = [root.dataTable objectEnumerator].allObjects;
-	MAD_PASS_EQUAL(rows[0][@"invoice_id"], @1, "row 0 is invoice 1");
-	MAD_PASS_EQUAL(rows[0][@"payment_amount"], @40, "invoice 1's payment");
-	MAD_PASS_EQUAL(rows[1][@"invoice_id"], @2, "row 1 is invoice 2");
-	MAD_PASS(rows[1][@"payment_amount"] == [NSNull null], "invoice 2 has no payment");
-	MAD_PASS_EQUAL(rows[2][@"invoice_id"], @3, "row 2 is invoice 3");
-	MAD_PASS(rows[2][@"payment_amount"] == [NSNull null], "invoice 3 has no payment");
-}
 
 // A zero-row refresh over a typed column must still expose the column's declared
 // type, not the String fallback for an untyped empty expression.
@@ -1227,6 +962,315 @@ static void testCompositionEmptyExpressionKeepsKnownType(void) {
 	MAD_PASS(amountType == MADDataTypeDouble, "the empty real column keeps its declared type");
 }
 
+static RptqObject *MADCompositionGraphInsert(RptqStoreContext *context, NSString *entity, int64_t identifier) {
+	return [context insertObjectForEntity: entity identifier: identifier];
+}
+
+static MADOperationRefreshComposed *MADCompositionRunRefresh(MADHeadlessDocument *document) {
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: refresh];
+	while (queue.operationCount > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+	}
+	return refresh;
+}
+
+static double MADCompositionCell(MADDataTableFast *table, NSUInteger row, NSString *key) {
+	NSDictionary *dict = [table dataForRow: row column: key error: NULL];
+	id value = dict[key];
+	if (value == nil || value == [NSNull null]) return NAN;
+	return [value doubleValue];
+}
+
+/// Builds an N-node composed document from leaf and composer descriptions, through
+/// the production store and archive writers, reopened as a headless document.
+/// A leaf is @{@"name", @"file", @"rows"}; a composer is @{@"name", @"children",
+/// @"links", @"outputs"} with the same shapes as the Apple suite's helper.
+static MADHeadlessDocument *MADCompositionGraphDocument(NSString *directory,
+														NSArray *leaves,
+														NSArray *composers,
+														NSString *rootName,
+														NSString **outError) {
+	for (NSDictionary *leaf in leaves) {
+		NSString *name = leaf[@"name"];
+		NSURL *url = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: leaf[@"file"]]];
+		NSMutableArray *statements = [NSMutableArray arrayWithObject:
+			[NSString stringWithFormat: @"CREATE TABLE %@ (id INTEGER, value REAL);", name]];
+		for (NSArray *row in leaf[@"rows"]) {
+			[statements addObject: [NSString stringWithFormat: @"INSERT INTO %@ VALUES (%@, %@);",
+				name, [row[0] description], [row[1] description]]];
+		}
+		if (!MADCompositionCreateSource(url, statements)) {
+			if (outError) *outError = [NSString stringWithFormat: @"source %@", name];
+			return nil;
+		}
+	}
+
+	NSURL *madURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"composed.mad"]];
+	MADDocumentStore *store = [MADDocumentStore storeForDocumentURL: madURL];
+	NSError *error = nil;
+	if (![store openWithError: &error]) { if (outError) *outError = error.description; return nil; }
+	RptqStoreContext *context = store.context;
+	[context loadAllWithError: NULL];
+
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext: context];
+	int64_t counter = 1000;
+
+	NSMutableDictionary *queryByName = [NSMutableDictionary dictionary];
+	NSMutableDictionary *columnsByName = [NSMutableDictionary dictionary];
+	NSMutableDictionary *schemaFieldsByName = [NSMutableDictionary dictionary];
+	NSMutableArray *databases = [NSMutableArray array];
+
+	for (NSDictionary *leaf in leaves) {
+		NSString *name = leaf[@"name"];
+		NSURL *url = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: leaf[@"file"]]];
+
+		RptqObject *database = MADCompositionGraphInsert(context, @"RptqDatabase", counter++);
+		[database setValue: @"Sqlite 3" forKey: @"databaseDriverType"];
+		RptqObject *credential = MADCompositionGraphInsert(context, @"RptqDatabaseCredentals", counter++);
+		[credential setValue: url.lastPathComponent forKey: @"dbname"];
+		[credential setValue: url.path forKey: @"host"];
+		[database setValue: credential forKey: @"ownedByUser"];
+
+		RptqObject *table = MADCompositionGraphInsert(context, @"RptqDatabaseSchemaTable", counter++);
+		[table setValue: name forKey: @"name"];
+		RptqObject *idField = MADCompositionGraphInsert(context, @"RptqDatabaseSchemaField", counter++);
+		[idField setValue: @"id" forKey: @"name"];
+		RptqObject *valueField = MADCompositionGraphInsert(context, @"RptqDatabaseSchemaField", counter++);
+		[valueField setValue: @"value" forKey: @"name"];
+		[database setValue: @[ table ] forKey: @"hasTables"];
+		[table setValue: @[ idField, valueField ] forKey: @"hasFields"];
+
+		RptqObject *query = MADCompositionGraphInsert(context, @"RptqQuery", counter++);
+		[query setValue: name forKey: @"name"];
+		[database setValue: @[ query ] forKey: @"hasQueries"];
+		RptqObject *queryTable = MADCompositionGraphInsert(context, @"RptqQueryTable", counter++);
+		[queryTable setValue: table forKey: @"databaseSchemaTable"];
+		[queryTable setValue: query forKey: @"inQuery"];
+
+		NSMutableArray *fields = [NSMutableArray array];
+		NSArray *schemaFields = @[ idField, valueField ];
+		for (RptqObject *schemaField in schemaFields) {
+			RptqObject *field = MADCompositionGraphInsert(context, @"RptqQueryField", counter++);
+			[field setValue: schemaField forKey: @"databaseSchemaField"];
+			[field setValue: queryTable forKey: @"inQueryTable"];
+			[fields addObject: field];
+			RptqObject *label = MADCompositionGraphInsert(context, @"RptqDocumentElementLabelDataField", counter++);
+			[label setValue: field forKey: @"referencesQueryField"];
+		}
+		[queryTable setValue: fields forKey: @"hasQueryFields"];
+
+		queryByName[name] = query;
+		columnsByName[name] = @[ @"id", @"value" ];
+		schemaFieldsByName[name] = @{ @"id": idField, @"value": valueField };
+		[databases addObject: database];
+	}
+
+	[document setValue: databases forKey: @"hasDatabaseSchemas"];
+
+	for (NSDictionary *composer in composers) {
+		NSString *name = composer[@"name"];
+		NSArray *children = composer[@"children"];
+		RptqObject *rootQuery = MADCompositionGraphInsert(context, @"RptqQuery", counter++);
+		[rootQuery setValue: name forKey: @"name"];
+		[rootQuery setValue: databases.firstObject forKey: @"inDatabase"];
+
+		NSMutableDictionary *fieldsByChild = [NSMutableDictionary dictionary];
+		NSMutableArray *rootTables = [NSMutableArray array];
+		for (NSString *childName in children) {
+			RptqObject *childQuery = queryByName[childName];
+			RptqObject *rootTable = MADCompositionGraphInsert(context, @"RptqQueryTable", counter++);
+			[rootTable setValue: rootQuery forKey: @"inQuery"];
+			[rootTable setValue: childQuery forKey: @"upstreamQuery"];
+
+			NSDictionary *childSchema = schemaFieldsByName[childName];
+			NSMutableDictionary *fieldsByCol = [NSMutableDictionary dictionary];
+			NSMutableArray *fields = [NSMutableArray array];
+			for (NSString *col in columnsByName[childName]) {
+				RptqObject *field = MADCompositionGraphInsert(context, @"RptqQueryField", counter++);
+				[field setValue: childSchema[col] forKey: @"databaseSchemaField"];
+				[field setValue: rootTable forKey: @"inQueryTable"];
+				[fields addObject: field];
+				fieldsByCol[col] = field;
+			}
+			[rootTable setValue: fields forKey: @"hasQueryFields"];
+			[rootTables addObject: rootTable];
+			fieldsByChild[childName] = fieldsByCol;
+		}
+		[rootQuery setValue: rootTables forKey: @"hasQueryTables"];
+
+		NSMutableArray *links = [NSMutableArray array];
+		for (NSArray *link in composer[@"links"]) {
+			RptqObject *leftField = fieldsByChild[link[0]][link[1]];
+			RptqObject *rightField = fieldsByChild[link[2]][link[3]];
+			RptqObject *ql = MADCompositionGraphInsert(context, @"RptqQueryLinks", counter++);
+			[ql setValue: @(MADLinkTypeLeftOuterJoin) forKey: @"type"];
+			[ql setValue: leftField forKey: @"hasLeftField"];
+			[ql setValue: rightField forKey: @"hasRightField"];
+			[ql setValue: rootQuery forKey: @"inQuery"];
+			[links addObject: ql];
+		}
+		[rootQuery setValue: links forKey: @"hasQueryLinks"];
+
+		NSMutableArray *outputColumns = [NSMutableArray array];
+		NSMutableDictionary *outputSchema = [NSMutableDictionary dictionary];
+		NSArray *outputs = composer[@"outputs"];
+		for (NSUInteger idx = 0; idx < outputs.count; idx++) {
+			NSArray *output = outputs[idx];
+			NSString *child = output[0], *col = output[1], *outputKey = output[2];
+			RptqObject *field = fieldsByChild[child][col];
+			[field setValue: outputKey forKey: @"outputKey"];
+			[field setValue: @(idx) forKey: @"outputIndex"];
+			[outputColumns addObject: outputKey];
+			outputSchema[outputKey] = schemaFieldsByName[child][col];
+		}
+
+		queryByName[name] = rootQuery;
+		columnsByName[name] = outputColumns;
+		schemaFieldsByName[name] = outputSchema;
+	}
+
+	[document setValue: queryByName[rootName] forKey: @"rootQuery"];
+
+	if (![context saveComposed: &error]) { if (outError) *outError = error.description; return nil; }
+	[store close];
+	MADArchiveManager *writer = [[MADArchiveManager alloc] initWithFileWrapperURL: store.gutsURL archiveURL: madURL];
+	writer.composed = YES;
+	if (![writer archive: YES]) { if (outError) *outError = @"archive"; return nil; }
+
+	MADHeadlessDocument *result = [MADHeadlessDocument documentWithContentsOfURL: madURL error: &error];
+	if (result == nil && outError) *outError = error.description;
+	return result;
+}
+
+static void testComposedThreeLeafRootJoinsAllThree(void) {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[
+		@{ @"name": @"a", @"file": @"a.sqlite", @"rows": @[ @[@1, @10], @[@2, @20] ] },
+		@{ @"name": @"b", @"file": @"b.sqlite", @"rows": @[ @[@1, @100], @[@2, @200] ] },
+		@{ @"name": @"c", @"file": @"c.sqlite", @"rows": @[ @[@1, @1000] ] },
+	];
+	NSArray *composers = @[
+		@{ @"name": @"root", @"children": @[ @"a", @"b", @"c" ],
+		   @"links": @[ @[ @"a", @"id", @"b", @"id" ], @[ @"b", @"id", @"c", @"id" ] ],
+		   @"outputs": @[ @[ @"a", @"id", @"a_id" ], @[ @"a", @"value", @"a_value" ],
+						  @[ @"b", @"value", @"b_value" ], @[ @"c", @"value", @"c_value" ] ] },
+	];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	MAD_NEED(document != nil, "the composed document opened");
+	if (document == nil) return;
+
+	MADOperationRefreshComposed *refresh = MADCompositionRunRefresh(document);
+	MAD_PASS(refresh.errors.count == 0, "the three-leaf refresh succeeds");
+	MAD_PASS([document.currentResult.columnKeys isEqualToArray: (@[ @"a_id", @"a_value", @"b_value", @"c_value" ])], "the root projects in output order");
+	MAD_PASS(document.currentResult.numberOfRows == 2, "the chain join keeps both left rows");
+
+	MADDataTableFast *table = document.dataTable;
+	MAD_PASS(MADCompositionCell(table, 1, @"a_id") == 1.0, "row 1 joins a/b/c");
+	MAD_PASS(MADCompositionCell(table, 1, @"c_value") == 1000.0, "row 1 c value");
+	MAD_PASS(MADCompositionCell(table, 2, @"a_id") == 2.0, "row 2 a id");
+	MAD_PASS(MADCompositionCell(table, 2, @"b_value") == 200.0, "row 2 b value");
+	MAD_PASS(isnan(MADCompositionCell(table, 2, @"c_value")), "row 2 has no c match");
+}
+
+static void testComposedNestedComposerRunsChildrenBeforeParents(void) {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[
+		@{ @"name": @"A", @"file": @"a.sqlite", @"rows": @[ @[@1, @10] ] },
+		@{ @"name": @"B", @"file": @"b.sqlite", @"rows": @[ @[@1, @20] ] },
+		@{ @"name": @"R1", @"file": @"r1.sqlite", @"rows": @[ @[@1, @30] ] },
+		@{ @"name": @"D", @"file": @"d.sqlite", @"rows": @[ @[@1, @40] ] },
+		@{ @"name": @"R2", @"file": @"r2.sqlite", @"rows": @[ @[@1, @50] ] },
+	];
+	NSArray *composers = @[
+		@{ @"name": @"C1", @"children": @[ @"A", @"B", @"R1" ],
+		   @"links": @[], @"outputs": @[ @[ @"A", @"id", @"a_id" ] ] },
+		@{ @"name": @"C2", @"children": @[ @"C1", @"D", @"R2" ],
+		   @"links": @[], @"outputs": @[ @[ @"C1", @"a_id", @"c1_id" ], @[ @"D", @"value", @"d_value" ] ] },
+	];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"C2", &errorDescription);
+	MAD_NEED(document != nil, "the nested document opened");
+	if (document == nil) return;
+
+	MADOperationRefreshComposed *refresh = MADCompositionRunRefresh(document);
+	MAD_PASS(refresh.errors.count == 0, "the nested refresh succeeds");
+
+	NSArray *order = refresh.executedNodeNames;
+	MAD_PASS(order.count == 7, "all seven nodes execute");
+	MAD_PASS([order.lastObject isEqualToString: @"C2"], "the root runs last");
+	NSUInteger c1 = [order indexOfObject: @"C1"];
+	MAD_PASS([order indexOfObject: @"A"] < c1, "A before C1");
+	MAD_PASS([order indexOfObject: @"B"] < c1, "B before C1");
+	MAD_PASS([order indexOfObject: @"R1"] < c1, "R1 before C1");
+	MAD_PASS(c1 < [order indexOfObject: @"C2"], "C1 before C2");
+	MAD_PASS([order indexOfObject: @"D"] < [order indexOfObject: @"C2"], "D before C2");
+	MAD_PASS([order indexOfObject: @"R2"] < [order indexOfObject: @"C2"], "R2 before C2");
+}
+
+static void testComposedSharedChildRunsOnce(void) {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[
+		@{ @"name": @"A", @"file": @"a.sqlite", @"rows": @[ @[@1, @10] ] },
+		@{ @"name": @"B", @"file": @"b.sqlite", @"rows": @[ @[@1, @20] ] },
+	];
+	NSArray *composers = @[
+		@{ @"name": @"C1", @"children": @[ @"A", @"B" ],
+		   @"links": @[], @"outputs": @[ @[ @"A", @"id", @"a_id" ] ] },
+		@{ @"name": @"C2", @"children": @[ @"C1", @"A" ],
+		   @"links": @[], @"outputs": @[ @[ @"C1", @"a_id", @"c1_id" ], @[ @"A", @"value", @"a_value" ] ] },
+	];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"C2", &errorDescription);
+	MAD_NEED(document != nil, "the diamond document opened");
+	if (document == nil) return;
+
+	MADOperationRefreshComposed *refresh = MADCompositionRunRefresh(document);
+	MAD_PASS(refresh.errors.count == 0, "the diamond refresh succeeds");
+
+	NSUInteger aCount = 0;
+	for (NSString *name in refresh.executedNodeNames) {
+		if ([name isEqualToString: @"A"]) aCount++;
+	}
+	MAD_PASS(aCount == 1, "the shared child runs once");
+	MAD_PASS([refresh.executedNodeNames.lastObject isEqualToString: @"C2"], "the root runs last");
+}
+
+static void testComposedRootWithMoreThanTenChildrenIsRejected(void) {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+
+	NSMutableArray *leaves = [NSMutableArray array];
+	NSMutableArray *children = [NSMutableArray array];
+	NSMutableArray *outputs = [NSMutableArray array];
+	for (NSUInteger i = 0; i < 11; i++) {
+		NSString *name = [NSString stringWithFormat: @"leaf%lu", (unsigned long)i];
+		[leaves addObject: @{ @"name": name, @"file": [name stringByAppendingString: @".sqlite"], @"rows": @[ @[@1, @10] ] }];
+		[children addObject: name];
+		[outputs addObject: @[ name, @"id", [name stringByAppendingString: @"_id"] ]];
+	}
+	NSArray *composers = @[ @{ @"name": @"root", @"children": children, @"links": @[], @"outputs": outputs } ];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	MAD_NEED(document != nil, "the over-wide document opened");
+	if (document == nil) return;
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	NSError *error = nil;
+	MAD_PASS(![model validateCompositionGraphWithError: &error], "more than ten direct children is a design-time error");
+	MAD_PASS(error != nil && [error.localizedDescription rangeOfString: @"root"].location != NSNotFound, "the error names the node");
+}
+
 MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testTheFormatsAreRegistered),
 	MAD_TEST(testTheRenderSideFormatsRegisterHere),
@@ -1245,11 +1289,11 @@ MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testFailedPublicationLeavesTheLastResultUsable),
 	MAD_TEST(testFailedFirstRefreshThenRetryPublishes),
 	MAD_TEST(testRenderOperationPinsOneGeneration),
-	MAD_TEST(testCompositionJoinPopulated),
-	MAD_TEST(testCompositionJoinEmptyPayments),
 	MAD_TEST(testCompositionAttachGuards),
-	MAD_TEST(testCompositionJoinOrdersTextByLSASC),
 	MAD_TEST(testCompositionAttachUnicodeReservedPathAndAlias),
 	MAD_TEST(testCompositionAttachmentLimitAndSQLiteVersion),
-	MAD_TEST(testCompositionRequiredJoinKeyWithoutLabel),
+	MAD_TEST(testComposedThreeLeafRootJoinsAllThree),
+	MAD_TEST(testComposedNestedComposerRunsChildrenBeforeParents),
+	MAD_TEST(testComposedSharedChildRunsOnce),
+	MAD_TEST(testComposedRootWithMoreThanTenChildrenIsRejected),
 	MAD_TEST(testCompositionEmptyExpressionKeepsKnownType));

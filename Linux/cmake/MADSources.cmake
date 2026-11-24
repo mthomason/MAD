@@ -48,7 +48,6 @@
 set(MAD_SOURCES
 	"${SOURCE_DIR}/MADAlignment.m"
 	"${SOURCE_DIR}/MADArchiveManager.m"
-	"${SOURCE_DIR}/MADComposer.m"
 	"${SOURCE_DIR}/MADConstants.m"
 	"${SOURCE_DIR}/madmath.c"
 	"${SOURCE_DIR}/MADCurrencyFormatter.m"
