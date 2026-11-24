@@ -38,6 +38,10 @@ typedef NS_ENUM(NSInteger, MADMacQueryWorkspaceMode) {
 /// Adds a database schema table (and all of its schema fields) to the query and places it on the visual canvas.
 - (nullable RptqQueryTable *)addSchemaTableToQuery:(RptqDatabaseSchemaTable *)schemaTable;
 
+/// Adds a source query as a table of the composed root (creating a root query field per
+/// source field), when the root is the selected query.
+- (nullable RptqQueryTable *)addUpstreamQueryToRoot:(RptqQuery *)sourceQuery;
+
 /// Removes a query table (and any connected links, groups, predicates, and bound elements) from the query.
 - (void)removeQueryTable:(RptqQueryTable *)queryTable;
 

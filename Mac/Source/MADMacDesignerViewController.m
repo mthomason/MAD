@@ -1128,6 +1128,11 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 
 - (NSArray<RptqQueryField *> *)allQueryFields {
 	MADMacDocument *doc = self.madDocument;
+	// A composed document binds its elements to the root's output fields, in output
+	// order.  The root's join-key fields (no output key) are not bindable.
+	if (doc.isComposed) {
+		return [doc.rptqDocument orderedCompositionOutputsWithError:NULL] ?: @[];
+	}
 	RptqQuery *q = doc.rptqQuery;
 	if (!q) return @[];
 	NSMutableArray<RptqQueryField *> *fields = [NSMutableArray array];
@@ -1141,9 +1146,12 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 
 - (NSString *)displayLabelForQueryField:(RptqQueryField *)qf {
 	if (!qf) return @"(Unbound)";
+	if (qf.outputKey.length > 0) {
+		return qf.outputKey;
+	}
 	NSString *tbl = qf.inQueryTable.alias.length > 0
 		? qf.inQueryTable.alias
-		: (qf.inQueryTable.databaseSchemaTable.name ?: @"Table");
+		: (qf.inQueryTable.databaseSchemaTable.name ?: (qf.inQueryTable.upstreamQuery.name ?: @"Table"));
 	NSString *col = qf.databaseSchemaField.name ?: @"Field";
 	return [NSString stringWithFormat:@"%@.%@", tbl, col];
 }
@@ -1628,9 +1636,15 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	RptqQueryField *bound = queryField ?: [self allQueryFields].firstObject;
 	if (bound) {
 		dl.referencesQueryField = bound;
-		dl.fieldID = bound.databaseSchemaField.name;
-		dl.tableID = bound.inQueryTable.alias ?: bound.inQueryTable.databaseSchemaTable.name;
-		dl.text = [NSString stringWithFormat:@"[%@.%@]", dl.tableID ?: @"", dl.fieldID ?: @""];
+		if (bound.outputKey.length > 0) {
+			dl.fieldID = bound.outputKey;
+			dl.tableID = bound.inQueryTable.upstreamQuery.name;
+			dl.text = [NSString stringWithFormat:@"[%@]", bound.outputKey];
+		} else {
+			dl.fieldID = bound.databaseSchemaField.name;
+			dl.tableID = bound.inQueryTable.alias ?: bound.inQueryTable.databaseSchemaTable.name;
+			dl.text = [NSString stringWithFormat:@"[%@.%@]", dl.tableID ?: @"", dl.fieldID ?: @""];
+		}
 	} else {
 		dl.text = NSLocalizedString(@"[Data Field]", @"Canvas placeholder text for a newly inserted data field.");
 	}
@@ -2140,9 +2154,15 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 		RptqDocumentElementLabelDataField *df = (RptqDocumentElementLabelDataField *)el;
 		df.referencesQueryField = chosen;
 		if (chosen) {
-			df.fieldID = chosen.databaseSchemaField.name;
-			df.tableID = chosen.inQueryTable.alias ?: chosen.inQueryTable.databaseSchemaTable.name;
-			df.text = [NSString stringWithFormat:@"[%@.%@]", df.tableID ?: @"", df.fieldID ?: @""];
+			if (chosen.outputKey.length > 0) {
+				df.fieldID = chosen.outputKey;
+				df.tableID = chosen.inQueryTable.upstreamQuery.name;
+				df.text = [NSString stringWithFormat:@"[%@]", chosen.outputKey];
+			} else {
+				df.fieldID = chosen.databaseSchemaField.name;
+				df.tableID = chosen.inQueryTable.alias ?: chosen.inQueryTable.databaseSchemaTable.name;
+				df.text = [NSString stringWithFormat:@"[%@.%@]", df.tableID ?: @"", df.fieldID ?: @""];
+			}
 		}
 	} else if ([el isKindOfClass:[RptqDocumentElementAggregate class]]) {
 		RptqDocumentElementAggregate *agg = (RptqDocumentElementAggregate *)el;
