@@ -107,6 +107,10 @@
 	return [key stringByAppendingString:NSStringFromSelector(@selector(dataType))];
 }
 
++ (NSString *)keyOutputKey {
+	return NSStringFromSelector(@selector(outputKey));
+}
+
 + (NSString *)keyInQueryTableAlias {
 	NSString *key = [MADStringUtilities stringByAppendingPeriod: [self keyInQueryTable]];
 	return [key stringByAppendingString:NSStringFromSelector(@selector(alias))];

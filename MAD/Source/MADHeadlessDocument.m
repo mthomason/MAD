@@ -419,7 +419,11 @@
 
 - (NSArray *)readCurrentSortDescriptors {
 	RptqDocument *document = self.activeDocumentModel;
-	return [document.defaultDatabase.defaultQuery sortDescriptorsForDatabase: self.database];
+	// A composed document's grouping lives on its explicit root, whose fields
+	// persist output keys; an ordinary document's lives on its single default
+	// query.  Both feed the same sort-descriptor builder.
+	RptqQuery *query = document.rootQuery ?: document.defaultDatabase.defaultQuery;
+	return [query sortDescriptorsForDatabase: self.database];
 }
 
 #pragma mark - The rows

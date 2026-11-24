@@ -45,6 +45,7 @@
 	+ (NSString *)keyPathInGroup;
 	+ (NSString *)keyPathInGroupHasFieldDatabaseSchemaFieldDataType;
 	+ (NSString *)keyPathInGroupHasFieldInQueryTableDropIndex;
+	+ (NSString *)keyPathInGroupHasFieldOutputKey;
 
 	+ (MADDocumentSectionType)getSectionTypeforRow:(NSUInteger)row
 								withNumberOfGroups:(NSUInteger)numberOfGroups;

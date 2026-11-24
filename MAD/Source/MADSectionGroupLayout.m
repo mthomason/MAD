@@ -27,6 +27,7 @@
 	int64_t _dropIndex;
 	NSString *_tableAlias;
 	NSString *_fieldName;
+	NSString *_outputKey;
 	BOOL _groupingFieldResolved;
 }
 
@@ -41,7 +42,8 @@
 					 *keyPathInGroupHasFieldDatabaseSchemaFieldDataType = [RptqDocumentSection keyPathInGroupHasFieldDatabaseSchemaFieldDataType],
 					 *keyPathInGroupHasFieldInQueryTableAlias = [RptqDocumentSection keyPathInGroupHasFieldInQueryTableAlias],
 					 *keyPathInGroupHasFieldDatabaseSchemaFieldName = [RptqDocumentSection keyPathInGroupHasFieldDatabaseSchemaFieldName],
-					 *keyPathInGroupHasFieldInQueryTableDropIndex = [RptqDocumentSection keyPathInGroupHasFieldInQueryTableDropIndex];
+					 *keyPathInGroupHasFieldInQueryTableDropIndex = [RptqDocumentSection keyPathInGroupHasFieldInQueryTableDropIndex],
+					 *keyPathInGroupHasFieldOutputKey = [RptqDocumentSection keyPathInGroupHasFieldOutputKey];
 		
 			// A query group is a GROUP BY: it must name a field of a table the
 			// query selects.  The four numbers are optional here because this
@@ -65,15 +67,20 @@
 			NSString *fieldName = object[keyPathInGroupHasFieldDatabaseSchemaFieldName];
 			_fieldName = [fieldName copy];
 
+			NSString *outputKey = object[keyPathInGroupHasFieldOutputKey];
+			_outputKey = [outputKey copy];
+
 			NSNumber *dropIndexNumber = object[keyPathInGroupHasFieldInQueryTableDropIndex];
 			if (dropIndexNumber != nil) CFNumberGetValue((__bridge CFNumberRef)(NSNumber *)dropIndexNumber, kCFNumberSInt64Type, &_dropIndex);
 
-			// The key cannot be built without both halves.  Defining that here,
-			// rather than letting each consumer guess, is what keeps the
-			// designer able to show a broken group while the query and render
-			// paths refuse it.
-			_groupingFieldResolved = (tableAlias != nil && fieldName != nil &&
-									  dataTypeNumber != nil && dropIndexNumber != nil);
+			// The key cannot be built without the field's name and table alias --
+			// except for a composed root's output field, whose persisted output key
+			// alone addresses the composed result table.  Defining that here, rather
+			// than letting each consumer guess, is what keeps the designer able to
+			// show a broken group while the query and render paths refuse it.
+			_groupingFieldResolved = (_outputKey.length > 0) ||
+				(tableAlias != nil && fieldName != nil &&
+				 dataTypeNumber != nil && dropIndexNumber != nil);
 			if (!_groupingFieldResolved) {
 				os_log_error(GetMadLog(), "MADSectionGroupLayout: group section %lld has no grouping field backed by a selected query table; the document is invalid. The designer shows a placeholder; query and report execution will refuse it.", self.identifier);
 			}
@@ -95,6 +102,12 @@
 		// the user can see and repair the invalid group; the key itself is never
 		// used there.  -sortDescriptor refuses to sort it.
 		return NSLocalizedString(@"missing grouping field", @"Designer label for a query group with no resolvable grouping field");
+	}
+	// A composed root's output field addresses the composed result table by its
+	// persisted output key; an ordinary field addresses it by its qualified
+	// "<alias>.<field>" spelling.
+	if (_outputKey.length > 0) {
+		return _outputKey;
 	}
 	NSString *queryTableAlias = [RptqQueryTable queryAliasForSchemaTableName:_tableAlias dropIndex:_dropIndex];
 	NSString *safeTableAlias = self.safeIdentifier(queryTableAlias);

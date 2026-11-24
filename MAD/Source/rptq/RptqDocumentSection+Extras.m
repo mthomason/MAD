@@ -249,6 +249,17 @@ static inline MADDocumentSectionType MADSectionTypeForRow(NSUInteger row, NSUInt
 	return result;
 }
 
++ (NSString *)keyPathInGroupHasFieldOutputKey {
+	NSString *keyPathHasField = [RptqQueryGroup keyPathHasField];
+	NSString *keyOutputKey = [RptqQueryField keyOutputKey];
+	NSString *result = [self keyPathInGroup];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
+	result = [result stringByAppendingString:keyPathHasField];
+	result = [MADStringUtilities stringByAppendingPeriod:result];
+	result = [result stringByAppendingString:keyOutputKey];
+	return result;
+}
+
 
 
 

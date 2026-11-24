@@ -72,6 +72,7 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
                     dictionary[[RptqDocumentSection keyPathInGroupHasFieldInQueryTableAlias]] = field.inQueryTable.alias;
                     dictionary[[RptqDocumentSection keyPathInGroupHasFieldInQueryTableDropIndex]] = @(field.inQueryTable.dropIndex);
                     dictionary[[RptqDocumentSection keyPathInGroupHasFieldDatabaseSchemaFieldDataType]] = @(field.databaseSchemaField.dataType);
+                    dictionary[[RptqDocumentSection keyPathInGroupHasFieldOutputKey]] = field.outputKey;
                 }
             }
             [documentSections addObject:dictionary];
