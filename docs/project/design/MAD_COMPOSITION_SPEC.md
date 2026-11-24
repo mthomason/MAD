@@ -126,4 +126,5 @@ the executor (`MADComposer`, `MADOperationRefreshComposed`) and the authoring UI
 
 The remaining work is to replace the two-input special case with the general walk of §3 and
 make the composing root a compiled query over N attached children.
-`MAD_QUERY_COMPOSITION.md` tracks that plan and its progress.
+[`MAD_COMPOSITION_ENGINE.md`](MAD_COMPOSITION_ENGINE.md) scopes that engine change;
+`MAD_QUERY_COMPOSITION.md` tracks the plan and its progress.
