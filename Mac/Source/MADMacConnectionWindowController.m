@@ -154,9 +154,11 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	}
 	[content addSubview:_headerIconView];
 
-	NSString *headerTitle = isEditMode
-		? NSLocalizedString(@"Database Connection Settings", @"Connection window title when editing an existing report's connection.")
-		: NSLocalizedString(@"Create a New Mobile Analytics Document (.mad)", @"Connection window title when creating a report. Mobile Analytics Document is the file type name.");
+	NSString *headerTitle = _sourcePickerMode
+		? NSLocalizedString(@"Add a Source Query", @"Connection window title when adding a composed source query.")
+		: (isEditMode
+			? NSLocalizedString(@"Database Connection Settings", @"Connection window title when editing an existing report's connection.")
+			: NSLocalizedString(@"Create a New Mobile Analytics Document (.mad)", @"Connection window title when creating a report. Mobile Analytics Document is the file type name."));
 	_headerTitleLabel = [self makeLabel:headerTitle
 								  frame:NSMakeRect(66, 14, 450, 20)
 								   bold:YES
@@ -342,9 +344,11 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	_testButton.frame = NSMakeRect(276, 250, 124, 28);
 	[content addSubview:_testButton];
 
-	NSString *primaryTitle = isEditMode
-		? NSLocalizedString(@"Save & Refresh", @"Connection window primary button when editing a connection.")
-		: NSLocalizedString(@"Create Document…", @"Connection window primary button when creating a report.");
+	NSString *primaryTitle = _sourcePickerMode
+		? NSLocalizedString(@"Choose Source", @"Connection window primary button when adding a source query.")
+		: (isEditMode
+			? NSLocalizedString(@"Save & Refresh", @"Connection window primary button when editing a connection.")
+			: NSLocalizedString(@"Create Document…", @"Connection window primary button when creating a report."));
 	_createButton = [NSButton buttonWithTitle:primaryTitle
 									   target:self
 									   action:@selector(createDocumentAction:)];
@@ -354,8 +358,14 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 }
 
 - (void)populateFromDocument:(MADMacDocument *)document {
-	MADDatabaseConnection *conn = document.headlessDocument.database.databaseConnection;
-	RptqDatabaseCredentals *credRow = document.rptqDatabase.ownedByUser;
+	RptqDatabase *targetDB = (self.targetQuery != nil) ? self.targetQuery.inDatabase : document.rptqDatabase;
+	MADDatabaseConnection *conn = nil;
+	if (self.targetQuery != nil && targetDB.ownedByUser != nil) {
+		conn = [MADDatabaseConnection newDatabaseConnection:targetDB.ownedByUser documentURL:document.fileURL];
+	} else {
+		conn = document.headlessDocument.database.databaseConnection;
+	}
+	RptqDatabaseCredentals *credRow = targetDB.ownedByUser;
 	MADDatabaseType dbType = (conn != nil) ? conn.databaseType : credRow.databaseType;
 
 	switch (dbType) {
@@ -728,9 +738,16 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	[db closeConnection:handle];
 
 	BOOL saveKeychain = (_saveKeychainCheckbox.state == NSControlStateValueOn);
-	[_editingDocument updateDatabaseConnection:conn
-								   credentials:creds
-								saveToKeychain:saveKeychain];
+	if (self.targetQuery != nil) {
+		[_editingDocument updateDatabaseConnection:conn
+										  forQuery:self.targetQuery
+									   credentials:creds
+									 saveToKeychain:saveKeychain];
+	} else {
+		[_editingDocument updateDatabaseConnection:conn
+									   credentials:creds
+									saveToKeychain:saveKeychain];
+	}
 	return YES;
 }
 
@@ -743,6 +760,35 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 }
 
 - (void)createDocumentAction:(id) __unused sender {
+	if (_sourcePickerMode) {
+		NSError *buildError = nil;
+		MADCredential *creds = nil;
+		MADDatabaseConnection *conn = [self buildConnectionWithCredentials:&creds error:&buildError];
+		if (conn == nil) {
+			_statusLabel.textColor = [NSColor systemRedColor];
+			_statusLabel.stringValue = [self formattedMessageForError:buildError fallback:NSLocalizedString(@"Invalid connection settings.", @"Connection status line: the settings are incomplete or invalid.")];
+			if (self.onSourceConnectionBuilt) self.onSourceConnectionBuilt(nil, nil, buildError);
+			return;
+		}
+		[_spinner startAnimation:nil];
+		_statusLabel.textColor = [NSColor secondaryLabelColor];
+		_statusLabel.stringValue = NSLocalizedString(@"Verifying database connection…", @"Connection status line while verifying a source connection.");
+		MADDatabase *db = [MADDatabase newDatabaseWithConnection:conn];
+		NSError *connError = nil;
+		id handle = [db connectWithConnection:conn credentals:creds connectionError:&connError];
+		[_spinner stopAnimation:nil];
+		if (handle == nil || connError != nil) {
+			_statusLabel.textColor = [NSColor systemRedColor];
+			_statusLabel.stringValue = [self formattedMessageForError:connError fallback:NSLocalizedString(@"Connection failed.", @"Connection status line: the connection failed with no more specific reason.")];
+			if (self.onSourceConnectionBuilt) self.onSourceConnectionBuilt(nil, nil, connError);
+			return;
+		}
+		[db closeConnection:handle];
+		[self dismissWindowOrSheetWithCode:NSModalResponseOK];
+		if (self.onSourceConnectionBuilt) self.onSourceConnectionBuilt(conn, creds, nil);
+		return;
+	}
+
 	if (_editingDocument != nil) {
 		NSError *applyErr = nil;
 		if (![self applyToEditingDocumentAndError:&applyErr]) {

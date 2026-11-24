@@ -14,6 +14,10 @@
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADDatabaseTable.h>
+#import <MADAPI/MADDatabaseField.h>
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
+#import <MADAPI/MADDatabaseConnectionsPropertiesURLProtocol.h>
 #import <MADSqlite3/MADDataTableFast.h>
 
 NSNotificationName const MADMacDocumentDidMutateNotification = @"MADMacDocumentDidMutateNotification";
@@ -92,11 +96,197 @@ NSNotificationName const MADMacDocumentDidRefreshNotification = @"MADMacDocument
 }
 
 - (RptqDatabase *)rptqDatabase {
-	return self.rptqDocument.hasDatabaseSchemas.anyObject;
+	return [self databaseForQuery:self.reportQuery];
 }
 
 - (RptqQuery *)rptqQuery {
-	return self.rptqDatabase.hasQueries.anyObject;
+	return self.reportQuery;
+}
+
+- (BOOL)isComposed {
+	return self.rptqDocument.rootQuery != nil;
+}
+
+- (RptqQuery *)rootQuery {
+	return self.rptqDocument.rootQuery;
+}
+
+- (RptqQuery *)reportQuery {
+	RptqQuery *root = self.rptqDocument.rootQuery;
+	if (root != nil) return root;
+	return self.rptqDocument.defaultDatabase.hasQueries.anyObject;
+}
+
+- (NSArray<RptqQuery *> *)allQueries {
+	RptqDocument *doc = self.rptqDocument;
+	if (doc == nil) return @[];
+	NSMutableArray<RptqQuery *> *queries = [[NSMutableArray alloc] init];
+	RptqQuery *root = doc.rootQuery;
+	if (root != nil) {
+		[queries addObject:root];
+	}
+	// Sources in a stable order: their databases in hasDatabaseSchemas order, each
+	// database's single query.  The root's placeholder database is skipped (it carries
+	// no source query).
+	for (RptqDatabase *database in doc.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			if (query == root) continue;
+			if (![queries containsObject:query]) {
+				[queries addObject:query];
+			}
+		}
+	}
+	// A legacy/ordinary document with no named queries still has one query.
+	if (queries.count == 0) {
+		RptqQuery *single = doc.defaultDatabase.hasQueries.anyObject;
+		if (single != nil) [queries addObject:single];
+	}
+	return queries;
+}
+
+- (RptqQuery *)selectedQuery {
+	if (_selectedQuery != nil) return _selectedQuery;
+	return self.reportQuery;
+}
+
+- (nullable RptqDatabase *)databaseForQuery:(nullable RptqQuery *)query {
+	if (query == nil) return nil;
+	return query.inDatabase;
+}
+
+- (BOOL)requiresComposedStore {
+	RptqDocument *doc = self.rptqDocument;
+	if (doc == nil) return NO;
+	if (doc.rootQuery != nil) return YES;
+	if (doc.hasDatabaseSchemas.count > 1) return YES;
+	for (RptqDatabase *database in doc.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			if (query.name.length > 0) return YES;
+		}
+	}
+	return NO;
+}
+
+#pragma mark - Composition Authoring
+
+- (nullable RptqQuery *)addSourceQueryNamed:(NSString *)name
+							 withConnection:(MADDatabaseConnection *)connection
+								credentials:(nullable MADCredential *)credentials
+									  error:(NSError * _Nullable __autoreleasing *)error {
+	if (name.length == 0 || connection == nil || _headlessDocument == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:@"MADMacDocument"
+										  code:7
+									  userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"A query name and a database connection are required to add a source query.", @"Error: a source query was added without its name or connection.") }];
+		}
+		return nil;
+	}
+
+	RptqStoreContext *context = self.managedObjectContext;
+	RptqDocument *doc = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	if (context == nil || doc == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:@"MADMacDocument"
+										  code:8
+									  userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"No open report store to add a source query to.", @"Error: a source query was added with no open store.") }];
+		}
+		return nil;
+	}
+
+	MADDatabase *database = [MADDatabase newDatabaseWithConnection:connection];
+	NSError *connectError = nil;
+	id handle = [database connectWithConnection:connection credentals:credentials connectionError:&connectError];
+	if (handle == nil || connectError != nil) {
+		if (error != NULL) *error = connectError;
+		return nil;
+	}
+
+	NSError *tablesError = nil;
+	NSArray<MADDatabaseTable *> *tables = [database getTablesFromConnection:handle error:&tablesError];
+	if (tables == nil || tablesError != nil) {
+		[database closeConnection:handle];
+		if (error != NULL) *error = tablesError;
+		return nil;
+	}
+
+	NSMutableDictionary<NSString *, NSArray<MADDatabaseField *> *> *fieldsByTable = [[NSMutableDictionary alloc] init];
+	for (MADDatabaseTable *table in tables) {
+		if (table.name.length == 0) continue;
+		NSArray<MADDatabaseField *> *fields = [database fieldsForTable:table.name connection:handle error:NULL];
+		if (fields != nil) fieldsByTable[table.name] = fields;
+	}
+	[database closeConnection:handle];
+
+	NSSet<RptqDatabase *> *before = [doc.hasDatabaseSchemas copy];
+	[doc storeDatabaseConnectionDefination:database forManagedObjectContext:context];
+
+	RptqDatabase *newDatabase = nil;
+	for (RptqDatabase *candidate in doc.hasDatabaseSchemas) {
+		if (![before containsObject:candidate]) {
+			newDatabase = candidate;
+			break;
+		}
+	}
+	if (newDatabase == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:@"MADMacDocument"
+										  code:9
+									  userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"Could not register the new source database.", @"Error: a source query's database was not added to the document.") }];
+		}
+		return nil;
+	}
+
+	RptqQuery *newQuery = newDatabase.hasQueries.anyObject;
+	newQuery.name = name;
+
+	for (MADDatabaseTable *table in tables) {
+		NSArray<MADDatabaseField *> *fields = fieldsByTable[table.name];
+		if (fields.count == 0) continue;
+		RptqDatabaseSchemaTable *schemaTable =
+			[RptqDatabaseSchemaTable newDatabaseSchemaTableFactoryForManagedObjectContext:context andTable:table];
+		[newDatabase addHasTablesObject:schemaTable];
+		NSMutableArray<RptqDatabaseSchemaField *> *schemaFields = [[NSMutableArray alloc] initWithCapacity:fields.count];
+		for (MADDatabaseField *field in fields) {
+			RptqDatabaseSchemaField *schemaField =
+				[RptqDatabaseSchemaField newDatabaseSchemaFieldFactoryForManagedObjectContext:context andField:field];
+			[schemaFields addObject:schemaField];
+		}
+		schemaTable.hasFields = [NSOrderedSet orderedSetWithArray:schemaFields];
+	}
+
+	[self notifyDocumentMutated];
+	return newQuery;
+}
+
+- (nullable RptqQuery *)addRootQueryNamed:(NSString *)name
+									error:(NSError * _Nullable __autoreleasing *)error {
+	RptqStoreContext *context = self.managedObjectContext;
+	RptqDocument *doc = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	if (context == nil || doc == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:@"MADMacDocument"
+										  code:10
+									  userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"No open report store to add a root query to.", @"Error: a root query was added with no open store.") }];
+		}
+		return nil;
+	}
+
+	RptqQuery *root = (RptqQuery *)[context insertObjectForEntity:NSStringFromClass([RptqQuery class]) identifier:0];
+	root.name = (name.length > 0 ? name : @"root");
+	// The root's database is a placeholder (the refresh coordinator resolves each source
+	// from its own inDatabase); point it at the first source so ordinary accessors that
+	// walk query.inDatabase still resolve.
+	root.inDatabase = doc.hasDatabaseSchemas.anyObject;
+	doc.rootQuery = root;
+
+	[self notifyDocumentMutated];
+	return root;
+}
+
+- (void)renameQuery:(RptqQuery *)query to:(NSString *)name {
+	if (query == nil) return;
+	query.name = name;
+	[self notifyDocumentMutated];
 }
 
 #pragma mark - NSDocument Lifecycle
@@ -156,7 +346,11 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	[_headlessDocument invalidateQueryAndModelCaches];
 	[self rebuildSectionsLayout];
 	NSError *saveError = nil;
-	[self.managedObjectContext save:&saveError];
+	if ([self requiresComposedStore]) {
+		[self.managedObjectContext saveComposed:&saveError];
+	} else {
+		[self.managedObjectContext save:&saveError];
+	}
 	[[NSNotificationCenter defaultCenter] postNotificationName:MADMacDocumentDidMutateNotification
 														object:self];
 }
@@ -243,6 +437,62 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	[_headlessDocument applyDatabaseConnection:connection];
 	self.sessionCredentials = credentials;
 
+	if ([connection requiresCredentials] && credentials != nil) {
+		NSString *key = connection.connectionString;
+		if (saveToKeychain && key.length > 0) {
+			if (credentials.username.length > 0 && credentials.password.length > 0) {
+				[MADKeyChain saveUsername:credentials.username andPassword:credentials.password forKey:key];
+			} else if (credentials.username.length > 0) {
+				[MADKeyChain saveUsername:credentials.username forKey:key];
+			}
+		}
+	}
+	[self notifyDocumentMutated];
+}
+
+- (void)updateDatabaseConnection:(MADDatabaseConnection *)connection
+						forQuery:(nullable RptqQuery *)query
+					  credentials:(nullable MADCredential *)credentials
+					saveToKeychain:(BOOL)saveToKeychain {
+	RptqDatabase *rptqDB = [self databaseForQuery:query];
+	if (connection == nil || rptqDB == nil) {
+		return;
+	}
+
+	RptqStoreContext *context = self.managedObjectContext;
+	RptqDatabaseCredentals *credRow = rptqDB.ownedByUser;
+	if (credRow == nil) {
+		credRow = [RptqDatabaseCredentals newDatabaseCredental:context];
+		rptqDB.ownedByUser = credRow;
+	}
+	rptqDB.databaseDriverTypeEnum = connection.databaseType;
+	credRow.driverID = [connection.identifier copy];
+	credRow.key = [connection.connectionString copy];
+	switch (connection.databaseType) {
+		case MADDatabaseTypeSqlite3: {
+			NSURL *sqliteURL = ((id<MADDatabaseConnectionsPropertiesURL>)connection).databaseUrl;
+			credRow.dbname = [sqliteURL.path.lastPathComponent copy];
+			credRow.host = [sqliteURL.path copy];
+			credRow.server = nil;
+			credRow.port = 0;
+			break;
+		}
+		case MADDatabaseTypeMySQL:
+		case MADDatabaseTypePostgres:
+		case MADDatabaseTypeTDS: {
+			MADDatabaseConnection<MADConnectionsPropertiesProtocol> *conn =
+				(MADDatabaseConnection<MADConnectionsPropertiesProtocol> *)connection;
+			credRow.port = conn.port;
+			credRow.host = conn.host.length > 0 ? [conn.host copy] : [conn.server copy];
+			credRow.server = [conn.server copy];
+			credRow.dbname = [conn.database copy];
+			break;
+		}
+		default:
+			break;
+	}
+
+	self.sessionCredentials = credentials;
 	if ([connection requiresCredentials] && credentials != nil) {
 		NSString *key = connection.connectionString;
 		if (saveToKeychain && key.length > 0) {
