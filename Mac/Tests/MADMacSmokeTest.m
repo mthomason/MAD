@@ -69,6 +69,18 @@
 
 @end
 
+// Refreshes a composed document through the Viewer's own action and waits for the
+// expected row count (or a refresh error).
+static BOOL MADSmokeRefreshComposed(MADMacDocument *doc, MADMacViewerViewController *viewer, NSUInteger expectedRows) {
+	[viewer refreshReportAction:nil];
+	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:30.0];
+	while ([doc.headlessDocument.dataTable numberOfRows] != expectedRows &&
+		   viewer.lastRefreshError == nil && deadline.timeIntervalSinceNow > 0) {
+		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+	}
+	return [doc.headlessDocument.dataTable numberOfRows] == expectedRows && viewer.lastRefreshError == nil;
+}
+
 static BOOL RunRefreshSynchronous(MADHeadlessDocument *doc) {
 	MADOperationRefreshInitializeMainDataTable *initTable =
 		[[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:doc];
@@ -1897,6 +1909,214 @@ int main(int argc, const char * argv[]) {
 		[fm removeItemAtPath:groupedDir error:NULL];
 		printf("PASS: Grouped composed report (%lu rows, %lu pages, 2 groups) rendered group breaks and crossed a page boundary\n",
 			   (unsigned long)[groupedTable numberOfRows], (unsigned long)groupedPages);
+
+		// 12. Composed authoring: build the invoices/payments report from scratch through
+		// the document and query-workspace actions (no prebuilt .mad), save, reopen,
+		// refresh, and verify the source-vs-root filter behaviour.
+		NSString *authorDir = [NSTemporaryDirectory() stringByAppendingPathComponent:
+								[NSString stringWithFormat:@"mad-composed-author-%@", NSUUID.UUID.UUIDString]];
+		[fm createDirectoryAtPath:authorDir withIntermediateDirectories:YES attributes:nil error:NULL];
+		NSURL *authorInvoicesURL = [NSURL fileURLWithPath:[authorDir stringByAppendingPathComponent:@"invoices.sqlite"]];
+		NSURL *authorPaymentsURL = [NSURL fileURLWithPath:[authorDir stringByAppendingPathComponent:@"payments.sqlite"]];
+		NSURL *authorMadURL = [NSURL fileURLWithPath:[authorDir stringByAppendingPathComponent:@"composed.mad"]];
+
+		if (!MADSmokeRunSQLite(authorInvoicesURL, @[@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
+													 @"INSERT INTO invoices VALUES (1, 100.0, 'first');",
+													 @"INSERT INTO invoices VALUES (2, 200.0, 'second');",
+													 @"INSERT INTO invoices VALUES (3, 300.0, 'third');"]) ||
+			!MADSmokeRunSQLite(authorPaymentsURL, @[@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
+													 @"INSERT INTO payments VALUES (101, 1, 40.0);",
+													 @"INSERT INTO payments VALUES (102, 1, 60.0);"])) {
+			fprintf(stderr, "FAIL: Could not write authoring source databases\n");
+			return 200;
+		}
+
+		MADHeadlessDocument *authorHeadless = [MADHeadlessDocument createDocumentAtURL:authorMadURL
+															   withDatabaseConnection:[[MADDatabaseConnectionSqlite3 alloc] initWithUrl:authorInvoicesURL]
+																		  credentials:nil
+																				error:&err];
+		if (authorHeadless == nil) {
+			fprintf(stderr, "FAIL: Could not create authoring document: %s\n", err.localizedDescription.UTF8String);
+			return 201;
+		}
+		MADMacDocument *authorDoc = [[MADMacDocument alloc] init];
+		authorDoc.fileURL = authorMadURL;
+		[authorDoc adoptHeadlessDocument:authorHeadless];
+
+		RptqQuery *invoicesQuery = authorDoc.allQueries.firstObject;
+		[authorDoc renameQuery:invoicesQuery to:@"invoices"];
+
+		[authorDoc makeWindowControllers];
+		MADMacWindowController *authorWC = authorDoc.windowControllers.firstObject;
+		[authorWC switchToWorkspaceTab:MADMacWorkspaceTabQuery];
+		[authorWC.window layoutIfNeeded];
+		MADMacQueryViewController *authorQVC = authorWC.queryViewController;
+
+		// Add the invoices schema table to the invoices source query (the ordinary
+		// "double-click a table" action).
+		authorDoc.selectedQuery = invoicesQuery;
+		[authorQVC reloadFromDocument];
+		RptqDatabaseSchemaTable *invoicesSchemaTable = invoicesQuery.inDatabase.hasTables.anyObject;
+		if ([authorQVC addSchemaTableToQuery:invoicesSchemaTable] == nil) {
+			fprintf(stderr, "FAIL: Could not add invoices schema table to its source query\n");
+			return 202;
+		}
+
+		// Add the payments source query (the "+ Source…" action, then name it).
+		RptqQuery *paymentsQuery = [authorDoc addSourceQueryNamed:@"payments"
+												   withConnection:[[MADDatabaseConnectionSqlite3 alloc] initWithUrl:authorPaymentsURL]
+													  credentials:nil
+															error:&err];
+		if (paymentsQuery == nil) {
+			fprintf(stderr, "FAIL: Could not add payments source query: %s\n", err.localizedDescription.UTF8String);
+			return 203;
+		}
+		authorDoc.selectedQuery = paymentsQuery;
+		[authorQVC reloadFromDocument];
+		RptqDatabaseSchemaTable *paymentsSchemaTable = paymentsQuery.inDatabase.hasTables.anyObject;
+		if ([authorQVC addSchemaTableToQuery:paymentsSchemaTable] == nil) {
+			fprintf(stderr, "FAIL: Could not add payments schema table to its source query\n");
+			return 204;
+		}
+
+		// Add the root and its two upstream tables (the "+ Root" action, then the
+		// source-queries sidebar).
+		RptqQuery *rootQuery = [authorDoc addRootQueryNamed:@"root" error:&err];
+		if (rootQuery == nil) {
+			fprintf(stderr, "FAIL: Could not add root query: %s\n", err.localizedDescription.UTF8String);
+			return 205;
+		}
+		authorDoc.selectedQuery = rootQuery;
+		[authorQVC reloadFromDocument];
+		RptqQueryTable *rootInvoicesTable = [authorQVC addUpstreamQueryToRoot:invoicesQuery];
+		RptqQueryTable *rootPaymentsTable = [authorQVC addUpstreamQueryToRoot:paymentsQuery];
+		if (rootInvoicesTable == nil || rootPaymentsTable == nil) {
+			fprintf(stderr, "FAIL: Could not add upstream sources to the root\n");
+			return 206;
+		}
+
+		// Join invoices.invoice_id -> payments.invoice_id (the drag-to-join action).
+		RptqQueryField *(^fieldNamed)(RptqQueryTable *, NSString *) = ^(RptqQueryTable *table, NSString *name) {
+			for (RptqQueryField *f in table.hasQueryFields) {
+				if ([f.databaseSchemaField.name isEqualToString:name]) return f;
+			}
+			return (RptqQueryField *)nil;
+		};
+		RptqQueryField *leftJoinField = fieldNamed(rootInvoicesTable, @"invoice_id");
+		RptqQueryField *rightJoinField = fieldNamed(rootPaymentsTable, @"invoice_id");
+		if ([authorQVC connectQueryField:leftJoinField toQueryField:rightJoinField] == nil ||
+			rootQuery.hasQueryLinks.count != 1) {
+			fprintf(stderr, "FAIL: Could not create the root left join on invoice_id\n");
+			return 207;
+		}
+
+		// Choose and name the three root outputs (the Outputs panel's effect).
+		fieldNamed(rootInvoicesTable, @"invoice_id").outputKey = @"invoice_id";
+		fieldNamed(rootInvoicesTable, @"invoice_id").outputIndex = 0;
+		fieldNamed(rootInvoicesTable, @"amount").outputKey = @"invoice_amount";
+		fieldNamed(rootInvoicesTable, @"amount").outputIndex = 1;
+		fieldNamed(rootPaymentsTable, @"amount").outputKey = @"payment_amount";
+		fieldNamed(rootPaymentsTable, @"amount").outputIndex = 2;
+		[authorDoc notifyDocumentMutated];
+
+		// Lay out three detail labels bound to the root outputs (the Report Designer's
+		// "drag a query field onto a band" action).
+		[authorWC switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+		[authorWC.window layoutIfNeeded];
+		MADMacDesignerViewController *authorDVC = authorWC.designerViewController;
+		RptqDocumentSection *authorDetail = authorDoc.rptqDocument.hasDetailSection;
+		NSArray<RptqQueryField *> *outputs = [authorDoc.rptqDocument orderedCompositionOutputsWithError:&err];
+		CGFloat authorLabelX = 12.0;
+		for (RptqQueryField *output in outputs) {
+			[authorDVC addDataField:output inSection:authorDetail atPoint:NSMakePoint(authorLabelX, 6.0)];
+			authorLabelX += 100.0;
+		}
+		[authorDoc notifyDocumentMutated];
+
+		// Save and reopen (the File > Save / reopen path: the document's writeToURL
+		// forwards to the headless write, which promotes a composed graph to revision 3).
+		if (![authorDoc.headlessDocument writeToURL:authorMadURL reproducible:NO error:&err]) {
+			fprintf(stderr, "FAIL: Could not save the authored composed document: %s\n", err.localizedDescription.UTF8String);
+			return 208;
+		}
+		MADMacDocument *reopenedDoc = [[MADMacDocument alloc] initWithContentsOfURL:authorMadURL ofType:@"com.thomason.mad" error:&err];
+		if (reopenedDoc == nil || !reopenedDoc.isComposed || reopenedDoc.allQueries.count != 3) {
+			fprintf(stderr, "FAIL: Reopened composed document is missing its root/sources: %s\n", err.localizedDescription.UTF8String);
+			return 209;
+		}
+		MADMacViewerViewController *authorViewer = [[MADMacViewerViewController alloc] initWithDocument:reopenedDoc];
+		(void)authorViewer.view;
+
+		// Unfiltered: four detail rows, including both unpaid invoices.
+		if (!MADSmokeRefreshComposed(reopenedDoc, authorViewer, 4)) {
+			fprintf(stderr, "FAIL: Authored composed refresh did not produce 4 rows: %s\n",
+					authorViewer.lastRefreshError.description.UTF8String);
+			return 210;
+		}
+		MADDataTableFast *authorTable = reopenedDoc.headlessDocument.dataTable;
+		if (fabs(MADSmokeComposedDouble(authorTable, 1, @"invoice_amount") - 100.0) > 0.001 ||
+			fabs(MADSmokeComposedDouble(authorTable, 1, @"payment_amount") - 40.0) > 0.001 ||
+			fabs(MADSmokeComposedDouble(authorTable, 4, @"invoice_amount") - 300.0) > 0.001 ||
+			!isnan(MADSmokeComposedDouble(authorTable, 4, @"payment_amount"))) {
+			fprintf(stderr, "FAIL: Authored composed detail values are wrong or swapped\n");
+			return 211;
+		}
+
+		// Re-fetch the reopened document's queries and root fields (the author-time
+		// objects belong to a different store context).
+		RptqQuery *(^queryNamed)(NSString *) = ^(NSString *name) {
+			for (RptqQuery *q in reopenedDoc.allQueries) {
+				if ([q.name isEqualToString:name]) return q;
+			}
+			return (RptqQuery *)nil;
+		};
+		RptqQuery *reopenedPaymentsQuery = queryNamed(@"payments");
+		RptqQuery *reopenedRootQuery = queryNamed(@"root");
+		RptqQueryTable *reopenedRootPaymentsTable = nil;
+		for (RptqQueryTable *t in reopenedRootQuery.hasQueryTables) {
+			if (t.upstreamQuery == reopenedPaymentsQuery) { reopenedRootPaymentsTable = t; break; }
+		}
+		RptqQueryField *reopenedPaymentsAmount = fieldNamed(reopenedPaymentsQuery.hasQueryTables.anyObject, @"amount");
+		RptqQueryField *reopenedPaymentAmountOutput = fieldNamed(reopenedRootPaymentsTable, @"amount");
+
+		// Source filter: payments.amount > 50 leaves payment 60; the left join keeps
+		// three rows (invoices 2 and 3 have no matching payment).
+		RptqQueryPredicate *sourcePred = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID:reopenedPaymentsAmount.identifier
+																				 comparsonOperator:MADPredicateOperatorGreaterThan
+																					 andRightValue:@"50"
+																				   forManagedObjectContext:reopenedDoc.managedObjectContext error:&err];
+		[reopenedPaymentsQuery addHasQueryPredicateObject:sourcePred];
+		[reopenedDoc notifyDocumentMutated];
+		if (!MADSmokeRefreshComposed(reopenedDoc, authorViewer, 3)) {
+			fprintf(stderr, "FAIL: Source-filtered composed refresh did not produce 3 rows: %s\n",
+					authorViewer.lastRefreshError.description.UTF8String);
+			return 212;
+		}
+
+		// Move the predicate to the root: payment_amount > 50 keeps only (1,100,60).
+		[reopenedPaymentsQuery removeHasQueryPredicateObject:sourcePred];
+		[RptqQueryPredicate deletePredicate:sourcePred];
+		RptqQueryPredicate *rootPred = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID:reopenedPaymentAmountOutput.identifier
+																				 comparsonOperator:MADPredicateOperatorGreaterThan
+																					 andRightValue:@"50"
+																				   forManagedObjectContext:reopenedDoc.managedObjectContext error:&err];
+		[reopenedRootQuery addHasQueryPredicateObject:rootPred];
+		[reopenedDoc notifyDocumentMutated];
+		if (!MADSmokeRefreshComposed(reopenedDoc, authorViewer, 1)) {
+			fprintf(stderr, "FAIL: Root-filtered composed refresh did not produce 1 row: %s\n",
+					authorViewer.lastRefreshError.description.UTF8String);
+			return 213;
+		}
+		MADDataTableFast *filteredTable = reopenedDoc.headlessDocument.dataTable;
+		if (fabs(MADSmokeComposedDouble(filteredTable, 1, @"invoice_id") - 1.0) > 0.001 ||
+			fabs(MADSmokeComposedDouble(filteredTable, 1, @"invoice_amount") - 100.0) > 0.001 ||
+			fabs(MADSmokeComposedDouble(filteredTable, 1, @"payment_amount") - 60.0) > 0.001) {
+			fprintf(stderr, "FAIL: Root filter did not keep only (1,100,60)\n");
+			return 214;
+		}
+
+		[fm removeItemAtPath:authorDir error:NULL];
+		printf("PASS: Authored composed report from scratch (create sources, name, switch, join, outputs, layout, save, reopen, refresh: 4 rows; source filter -> 3 rows; root filter -> (1,100,60))\n");
 	}
 	return 0;
 }

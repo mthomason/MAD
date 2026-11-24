@@ -577,6 +577,32 @@ static int MADFixtureCompose(NSURL *documentURL, BOOL reordered, BOOL rootfilter
 	return 0;
 }
 
+/// Writes the two sqlite sources a composed fixture reads, without the .mad.  The
+/// author builds the report from these through the app (the native authoring workflow).
+static int MADFixtureWriteComposeSources(NSURL *directoryURL) {
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	[fileManager createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSURL *invoicesURL = [directoryURL URLByAppendingPathComponent:@"invoices.sqlite"];
+	NSURL *paymentsURL = [directoryURL URLByAppendingPathComponent:@"payments.sqlite"];
+	if (!MADFixtureWriteSource(invoicesURL, @[
+		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
+		@"INSERT INTO invoices VALUES (1, 100.0, 'first');",
+		@"INSERT INTO invoices VALUES (2, 200.0, 'second');",
+		@"INSERT INTO invoices VALUES (3, 300.0, 'third');"])) {
+		fprintf(stderr, "could not write %s\n", invoicesURL.path.UTF8String);
+		return 1;
+	}
+	if (!MADFixtureWriteSource(paymentsURL, @[
+		@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
+		@"INSERT INTO payments VALUES (101, 1, 40.0);",
+		@"INSERT INTO payments VALUES (102, 1, 60.0);"])) {
+		fprintf(stderr, "could not write %s\n", paymentsURL.path.UTF8String);
+		return 1;
+	}
+	printf("wrote %s and %s\n", invoicesURL.path.UTF8String, paymentsURL.path.UTF8String);
+	return 0;
+}
+
 #pragma mark - main
 
 int main(int argc, const char *argv[]) {
@@ -631,6 +657,14 @@ int main(int argc, const char *argv[]) {
 			if ([fieldNames isEqualToArray: @[ @"" ]]) fieldNames = @[];
 			return MADFixtureSelectFields([NSURL fileURLWithPath: [NSString stringWithUTF8String: argv[2]]],
 										  tableName, fieldNames);
+		}
+
+		if (argc >= 2 && strcmp(argv[1], "sources") == 0) {
+			if (argc != 3) {
+				fprintf(stderr, "usage: MADFixtureMaker sources <directory>\n");
+				return 1;
+			}
+			return MADFixtureWriteComposeSources([NSURL fileURLWithPath: [NSString stringWithUTF8String: argv[2]]]);
 		}
 
 		if (argc >= 2 && strcmp(argv[1], "compose") == 0) {
