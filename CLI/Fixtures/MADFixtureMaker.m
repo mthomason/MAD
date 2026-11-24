@@ -58,8 +58,12 @@
 #import <MAD/RptqQueryTable+Extras.h>
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqDocumentElementLabelDataField.h>
+#import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
 #import <MAD/RptqStoreContext.h>
 #import <MAD/RptqObject.h>
+#import <MAD/MADDocumentObjectType.h>
 #import <MAD/MADQueryLinkType.h>
 
 #import <MADAPI/MADDatabase.h>
@@ -456,7 +460,7 @@ static int MADFixtureCompose(NSURL *documentURL, BOOL reordered) {
 	RptqStoreContext *context = store.context;
 	[context loadAllWithError: NULL];
 
-	RptqObject *document = [context insertObjectForEntity: @"RptqDocument" identifier: 1];
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext: context];
 	RptqObject *invoices = MADFixtureComposeSource(context, invoicesURL, @"invoices", @"invoices", 10, 101, 200, @[ @"invoice_id", @"amount" ]);
 	RptqObject *payments = MADFixtureComposeSource(context, paymentsURL, @"payments", @"payments", 20, 102, 300, @[ @"amount" ]);
 	RptqObject *invoicesDatabase = [invoices valueForKey: @"inDatabase"];
@@ -519,6 +523,24 @@ static int MADFixtureCompose(NSURL *documentURL, BOOL reordered) {
 	}
 
 	[document setValue: root forKey: @"rootQuery"];
+
+	// A detail band whose three data labels are bound to the root's output fields.
+	// The labels reference the root output fields themselves -- whose persisted
+	// outputKey is what the renderer reads -- so invoice and payment amounts bind to
+	// their own root keys rather than to a source field name the two sources share.
+	RptqDocumentSection *detail = document.hasDetailSection;
+	NSArray<RptqObject *> *outputs = @[ out0, out1, out2 ];
+	CGFloat labelX = 12.0;
+	for (RptqObject *output in outputs) {
+		RptqDocumentElementLabelDataField *label =
+			(RptqDocumentElementLabelDataField *)[context insertObjectForEntity: @"RptqDocumentElementLabelDataField" identifier: 0];
+		label.type = MADPrintPageElementTypeLabelDynamic;
+		label.referencesQueryField = (RptqQueryField *)output;
+		label.text = [output valueForKey: @"outputKey"];
+		[label setSizeWidth: 90.0f height: 20.0f];
+		[detail addDocumentObject: label withDropPoint: CGPointMake(labelX, 6.0f) managedObjectContext: context];
+		labelX += 100.0f;
+	}
 
 	if (![context saveComposed: &error]) {
 		fprintf(stderr, "composed save failed: %s\n", error.localizedDescription.UTF8String);
