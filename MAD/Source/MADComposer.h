@@ -93,9 +93,17 @@ NS_ASSUME_NONNULL_BEGIN
             joinType:(MADLinkType)joinType
         projections:(NSArray<MADComposerProjection *> *)projections
          orderByKeys:(nullable NSArray<NSString *> *)orderByKeys
+          whereClause:(nullable NSString *)whereClause
       cacheDirectory:(NSURL *)cacheDirectory
           intoTable:(MADDataTableFast *)table
               error:(NSError * _Nullable __autoreleasing *)error;
+
+/// Resolve a full logical field key to the physical column name in `input`'s result.
+/// Returns nil with `error` set when the key is absent, so a caller can report an
+/// actionable error rather than a silent drop.
++ (nullable NSString *)physicalColumnForKey:(NSString *)key
+                                    inInput:(MADComposerInput *)input
+                                      error:(NSError * _Nullable __autoreleasing *)error;
 
 @end
 

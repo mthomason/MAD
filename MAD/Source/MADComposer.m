@@ -101,7 +101,7 @@ static NSString * const MADComposerJoinKeyword(MADLinkType type) {
 	table.cacheFileIdentifier = rootIdentifier;
 
 	if (![self composeLeft: left right: right joinType: joinType projections: projections
-			   orderByKeys: orderByKeys cacheDirectory: cacheDirectory intoTable: table error: error]) {
+			   orderByKeys: orderByKeys whereClause: nil cacheDirectory: cacheDirectory intoTable: table error: error]) {
 		return nil;
 	}
 
@@ -123,6 +123,7 @@ static NSString * const MADComposerJoinKeyword(MADLinkType type) {
             joinType:(MADLinkType)joinType
         projections:(NSArray<MADComposerProjection *> *)projections
          orderByKeys:(nullable NSArray<NSString *> *)orderByKeys
+          whereClause:(nullable NSString *)whereClause
       cacheDirectory:(NSURL *)cacheDirectory
           intoTable:(MADDataTableFast *)table
               error:(NSError * _Nullable __autoreleasing *)error {
@@ -161,6 +162,12 @@ static NSString * const MADComposerJoinKeyword(MADLinkType type) {
 							joinSQL,
 							right.result.dataTable.tableName,
 							leftKey, rightKey];
+
+	// A root predicate filters the joined rows, after the join's ON; it must not alter
+	// the join itself.
+	if (whereClause.length > 0) {
+		[sql appendString: whereClause];
+	}
 
 	// ORDER BY over full logical keys; a text key orders with the LSASC collation the
 	// MAD connection registers, which a raw sqlite3 handle would reject.

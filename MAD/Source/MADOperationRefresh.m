@@ -27,6 +27,7 @@
 #import <MAD/MADQueryFull.h>
 
 #import "MADComposer.h"
+#import "MADQueryPredicate.h"
 #import "MADDatabase+Constructor.h"
 #import "MADDatabaseConnection+Constructor.h"
 #import "RptqDocument+Extras.h"
@@ -36,6 +37,7 @@
 #import "RptqQueryTable.h"
 #import "RptqQueryLinks.h"
 #import "RptqQueryField.h"
+#import "RptqQueryPredicate.h"
 #import "RptqDatabase.h"
 #import "RptqDatabaseSchemaField.h"
 #import "RptqDatabaseSchemaTable.h"
@@ -363,21 +365,13 @@ static NSString *MADComposedLogicalKeyForField(RptqQueryField *rootField, MADDat
 	__block MADComposedSourcePlan *leftPlan = nil;
 	__block MADComposedSourcePlan *rightPlan = nil;
 	__block NSArray<MADComposedOutputPlan *> *outputPlans = nil;
+	__block NSArray<RptqQueryPredicate *> *rootPredicates = nil;
+	__block NSDictionary<NSNumber *, NSArray *> *rootPredicateFieldResolution = nil;
 	__block MADLinkType joinType = MADLinkTypeLeftOuterJoin;
 	__block NSError *resolveError = nil;
 	MADOperationRefreshRunOnMain(^{
 		RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
 		if (![model validateCompositionGraphWithError: &resolveError]) return;
-
-		// A predicate on the root query has no evaluation point: the root is the
-		// composition of the sources, not a SQL statement the coordinator compiles.
-		// Refusing it here is what keeps a saved filter from being silently ignored;
-		// a filter must sit on the source query it constrains.
-		if (model.rootQuery.hasQueryPredicate.count > 0) {
-			resolveError = [NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
-				NSLocalizedDescriptionKey: NSLocalizedString(@"The composed document's root query has a filter, which the composition coordinator does not evaluate. Put the filter on the source query it constrains.", @"Root filter rejection.") }];
-			return;
-		}
 
 		NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError: &resolveError];
 		if (outputs == nil) return;
@@ -413,6 +407,13 @@ static NSString *MADComposedLogicalKeyForField(RptqQueryField *rootField, MADDat
 		for (RptqQueryField *output in outputs) requireField(output);
 		requireField(join.hasLeftField);
 		requireField(join.hasRightField);
+
+		// A root predicate's fields must be materialized by their upstream source so
+		// the join's WHERE can reference them, without becoming visible root outputs.
+		for (RptqQueryPredicate *predicate in model.rootQuery.hasQueryPredicate) {
+			if (predicate.hasLeftField != nil) requireField(predicate.hasLeftField);
+			if (predicate.hasRightField != nil) requireField(predicate.hasRightField);
+		}
 
 		NSArray<RptqQueryField *> *(^requiredForSource)(RptqQuery *) = ^(RptqQuery *source) {
 			NSMutableArray<RptqQueryField *> *required = [NSMutableArray array];
@@ -467,6 +468,24 @@ static NSString *MADComposedLogicalKeyForField(RptqQueryField *rootField, MADDat
 			[plans addObject: plan];
 		}
 		outputPlans = plans;
+
+		// Capture the root's predicates and, for each field operand, the source it
+		// came from and its full logical key, so the join's WHERE can be compiled
+		// against the attached inputs without touching the store off this queue.
+		rootPredicates = model.rootQuery.hasQueryPredicate.allObjects;
+		NSMutableDictionary<NSNumber *, NSArray *> *resolution = [NSMutableDictionary dictionary];
+		void (^resolvePredicateField)(RptqQueryField *) = ^(RptqQueryField *field) {
+			if (field == nil) return;
+			NSInteger sourceIndex = (field.inQueryTable.upstreamQuery.identifier == leftQuery.identifier) ? 0 : 1;
+			MADComposedSourcePlan *owner = sourceIndex == 0 ? leftPlan : rightPlan;
+			NSString *logicalKey = MADComposedLogicalKeyForField(field, owner.database);
+			resolution[@(field.identifier)] = @[ @(sourceIndex), logicalKey ?: @"" ];
+		};
+		for (RptqQueryPredicate *predicate in rootPredicates) {
+			resolvePredicateField(predicate.hasLeftField);
+			resolvePredicateField(predicate.hasRightField);
+		}
+		rootPredicateFieldResolution = resolution;
 	});
 	if (resolveError != nil) {
 		[self finishWithError: resolveError];
@@ -564,6 +583,44 @@ static NSString *MADComposedLogicalKeyForField(RptqQueryField *rootField, MADDat
 																outputKey: output.outputKey]];
 	}
 
+	// Compile the root's predicates into the join's WHERE.  Each field resolves to the
+	// physical column of the input it came from; an unresolved field fails the refresh
+	// and leaves any prior published root intact.
+	NSString *whereClause = nil;
+	if (rootPredicates.count > 0) {
+		NSMutableDictionary<NSNumber *, NSString *> *fieldExpressions = [NSMutableDictionary dictionary];
+		for (NSNumber *fieldIdentifier in rootPredicateFieldResolution) {
+			NSArray *resolution = rootPredicateFieldResolution[fieldIdentifier];
+			NSInteger sourceIndex = [resolution[0] integerValue];
+			NSString *logicalKey = resolution[1];
+			MADComposerInput *input = sourceIndex == 0 ? leftInput : rightInput;
+			NSString *sqlAlias = sourceIndex == 0 ? @"src0" : @"src1";
+			NSError *fieldError = nil;
+			NSString *physical = [MADComposer physicalColumnForKey: logicalKey inInput: input error: &fieldError];
+			if (physical == nil) {
+				[self discardSourceResult: leftPlan];
+				[self discardSourceResult: rightPlan];
+				[self finishWithError: fieldError ?: [NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
+					NSLocalizedDescriptionKey: [NSString stringWithFormat:
+						NSLocalizedString(@"The root filter references the field '%@', which is not present in either input.", @"Unresolved root filter field."), logicalKey] }]];
+				return;
+			}
+			fieldExpressions[fieldIdentifier] = [NSString stringWithFormat: @"%@.%@", sqlAlias, physical];
+		}
+
+		// The compiler reads the saved predicates on the store's owning queue; its field
+		// resolver only consults the pre-resolved expressions above.
+		__block NSString *compiledWhere = nil;
+		MADOperationRefreshRunOnMain(^{
+			MADQueryPredicate *compiler = [[MADQueryPredicate alloc] initWithQueryPredicates: [NSSet setWithArray: rootPredicates]
+																				fieldResolver: ^NSString *(RptqQueryField *field) {
+				return fieldExpressions[@(field.identifier)];
+			} andDatabase: leftPlan.database];
+			compiledWhere = compiler.sql;
+		});
+		whereClause = compiledWhere;
+	}
+
 	// Stage the root the ordinary way, compose into it, then publish.
 	MADDataResult *pending = [document beginRefreshResultWithError: nil];
 	if (pending == nil) {
@@ -580,6 +637,7 @@ static NSString *MADComposedLogicalKeyForField(RptqQueryField *rootField, MADDat
 								   joinType: joinType
 							   projections: projections
 								orderByKeys: nil
+							  whereClause: whereClause
 							 cacheDirectory: cacheDirectory
 								 intoTable: pending.dataTable
 									 error: &composeError];

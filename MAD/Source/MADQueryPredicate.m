@@ -35,47 +35,60 @@
 
 - (instancetype)initWithQueryPredicates:(NSSet <RptqQueryPredicate *> *)queryPredicates
                             andDatabase:(MADDatabase *)database {
+    return [self initWithQueryPredicates: queryPredicates fieldResolver: nil andDatabase: database];
+}
+
+- (instancetype)initWithQueryPredicates:(NSSet <RptqQueryPredicate *> *)queryPredicates
+                          fieldResolver:(NSString * _Nullable (^)(RptqQueryField *field))fieldResolver
+                            andDatabase:(MADDatabase *)database {
     if (self = [super init]) {
-        
+
         NSMutableString *result = [[NSMutableString alloc] initWithString:@""];
         NSUInteger loopCounter = 0;
-        
+
         for (RptqQueryPredicate *queryPredicate in queryPredicates) {
-            
+
             if (loopCounter == 0) {
                 [result appendString:@"\nWHERE\n"];
             } else {
                 [result appendString:@" AND \n"];
             }
-            
+
             NSString *leftValue = nil;
-            
+
             if (queryPredicate.hasLeftField != nil) {
-                
+
                 RptqQueryField *leftField = queryPredicate.hasLeftField;
-                NSString *leftTableName = [leftField.inQueryTable queryAlias];
-                
-                leftValue = [database queryKey: leftField.databaseSchemaField.name table: leftTableName];
-                
+                if (fieldResolver != nil) {
+                    leftValue = fieldResolver(leftField);
+                } else {
+                    NSString *leftTableName = [leftField.inQueryTable queryAlias];
+                    leftValue = [database queryKey: leftField.databaseSchemaField.name table: leftTableName];
+                }
+
             } else if (queryPredicate.leftFieldID != nil) {
-                
+
                 leftValue = queryPredicate.leftFieldID;
-                
+
             }
-            
+
             NSString *rightValue = nil;
-            
+
             if (queryPredicate.hasRightField != nil) {
-                
+
                 RptqQueryField *rightField = queryPredicate.hasRightField;
-                NSString *rightTableName = [rightField.inQueryTable queryAlias];
-                rightValue = [database queryKey: rightField.databaseSchemaField.name table: rightTableName];
-                
+                if (fieldResolver != nil) {
+                    rightValue = fieldResolver(rightField);
+                } else {
+                    NSString *rightTableName = [rightField.inQueryTable queryAlias];
+                    rightValue = [database queryKey: rightField.databaseSchemaField.name table: rightTableName];
+                }
+
             } else if (queryPredicate.rightFieldID != nil) {
-                
+
                 RptqQueryField *leftField = queryPredicate.hasLeftField;
                 MADDataType dataType = leftField.databaseSchemaField.dataType;
-                
+
                 // Despite the name, -rightFieldID holds the user's typed value, not an id.
                 // A number is already a valid SQL literal; anything else has to be quoted
                 // and escaped the way the database in use reads, which is what
@@ -88,11 +101,11 @@
             }
             NSString *symbolForComparson = [queryPredicate symbolForComparson];
             [result appendFormat:@"\t(%@ %@ %@)", leftValue, symbolForComparson, rightValue];
-            
+
             loopCounter++;
         }
         self.sql = result;
-        
+
     }
     return self;
 }
