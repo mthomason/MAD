@@ -702,6 +702,9 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	if (_database != database) {
 		_database = database;
 		_database.delegate = self;
+		// The cached query compiles with the source's dialect; keep it in step
+		// when the document reconnects through -updateDatabaseWithConnection:.
+		_mainQuery.database = database;
 	}
 }
 
