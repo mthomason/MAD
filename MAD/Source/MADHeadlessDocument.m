@@ -239,9 +239,11 @@
 	}
 
 	// The store as it stands.  A document that was only read has nothing dirty, so
-	// this writes nothing -- the same call the app's save makes.
+	// this writes nothing -- the same call the app's save makes.  A composed
+	// document (one with an explicit root) saves at store revision 3.
+	BOOL composed = (self.activeDocumentModel.rootQuery != nil);
 	NSError *storeError = nil;
-	if (![context save: &storeError]) {
+	if (!(composed ? [context saveComposed: &storeError] : [context save: &storeError])) {
 		if (outError != NULL) {
 			*outError = storeError;
 		}
@@ -262,6 +264,7 @@
 																		   archiveURL: url];
 	archiveManager.checkpointed = checkpointed;
 	archiveManager.reproducible = reproducible;
+	archiveManager.composed = composed;
 	if (![archiveManager archive: YES]) {
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain: @"MADHeadlessDocument"

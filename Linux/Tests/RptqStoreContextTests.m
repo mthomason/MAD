@@ -21,6 +21,7 @@
 #import <MAD/RptqObject.h>
 #import <MAD/RptqStoreContext.h>
 #import <MAD/MADStore.h>
+#import <MAD/RptqDocument+Extras.h>
 
 // The original imported "MADStoreConverter.h" for the converted-sample tests; that
 // header is app-side and Core Data-backed and does not exist off Apple.
@@ -764,6 +765,63 @@ static void testFailedCompositionSaveRollsBackToRevision2(void) {
 	removeTempDirectory(directory);
 }
 
+/// The composition graph validator rejects a cycle and a missing upstream
+/// reference, naming the affected query in each error.
+static void testCompositionGraphValidation(void) {
+	// A cycle: root -> invoices -> root.
+	{
+		NSURL *directory = makeTempDirectory();
+		RptqStoreContext *context = openContextAtPath(directory, @"cycle.sqlite");
+		[context loadAllWithError:NULL];
+		RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+		RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+		[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+		RptqObject *root = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+		[root setValue:@"root" forKey:@"name"];
+		RptqObject *invoices = [context insertObjectForEntity:@"RptqQuery" identifier:101];
+		[invoices setValue:@"invoices" forKey:@"name"];
+		[database setValue:@[ root, invoices ] forKey:@"hasQueries"];
+		RptqObject *rootTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+		[rootTable setValue:root forKey:@"inQuery"];
+		[rootTable setValue:invoices forKey:@"upstreamQuery"];
+		RptqObject *invoicesTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:201];
+		[invoicesTable setValue:invoices forKey:@"inQuery"];
+		[invoicesTable setValue:root forKey:@"upstreamQuery"];
+		[document setValue:root forKey:@"rootQuery"];
+
+		RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+		NSError *error = nil;
+		MAD_PASS(![model validateCompositionGraphWithError:&error], "a cycle is rejected");
+		MAD_PASS(error != nil && [error.localizedDescription rangeOfString:@"root"].location != NSNotFound,
+				 "the cycle error names the affected query");
+		removeTempDirectory(directory);
+	}
+
+	// A missing upstream: the root's table references a query that does not exist.
+	{
+		NSURL *directory = makeTempDirectory();
+		RptqStoreContext *context = openContextAtPath(directory, @"missing.sqlite");
+		[context loadAllWithError:NULL];
+		RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+		RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+		[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+		RptqObject *root = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+		[root setValue:@"root" forKey:@"name"];
+		[database setValue:@[ root ] forKey:@"hasQueries"];
+		RptqObject *rootTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+		[rootTable setValue:root forKey:@"inQuery"];
+		[rootTable.backingObject setReference:@999 forName:@"upstreamQuery"];
+		[document setValue:root forKey:@"rootQuery"];
+
+		RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+		NSError *error = nil;
+		MAD_PASS(![model validateCompositionGraphWithError:&error], "a missing upstream is rejected");
+		MAD_PASS(error != nil && [error.localizedDescription rangeOfString:@"root"].location != NSNotFound,
+				 "the missing-upstream error names the affected query");
+		removeTempDirectory(directory);
+	}
+}
+
 MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testSchemaRoundTripsThroughTheContext),
 	MAD_TEST(testFaultingReturnsStableIdentities),
@@ -784,4 +842,5 @@ MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testDeleteIsPendingUntilSave),
 	MAD_TEST(testCompositionGraphRoundTripsAndIsRevision3),
 	MAD_TEST(testOrdinaryReportStaysRevision2),
-	MAD_TEST(testFailedCompositionSaveRollsBackToRevision2));
+	MAD_TEST(testFailedCompositionSaveRollsBackToRevision2),
+	MAD_TEST(testCompositionGraphValidation));

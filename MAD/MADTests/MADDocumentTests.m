@@ -811,6 +811,13 @@
 	XCTAssertNil(error);
 }
 
+- (void)testContainerHeaderAcceptsVersionOneOne {
+	NSError *error = nil;
+	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 1,0, 1,0, 0,0,0,0 };
+	XCTAssertTrue(MADFileFormatHeaderIsSupported(header, sizeof(header), &error));
+	XCTAssertNil(error);
+}
+
 - (void)testContainerHeaderRefusesANewerMajor {
 	NSError *error = nil;
 	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 2,0, 0,0, 0,0,0,0 };
@@ -821,7 +828,7 @@
 
 - (void)testContainerHeaderRefusesANewerMinor {
 	NSError *error = nil;
-	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 1,0, 1,0, 0,0,0,0 };
+	uint8_t header[16] = { 'M','A','D','F','I','L','E',0, 1,0, 2,0, 0,0,0,0 };
 	XCTAssertFalse(MADFileFormatHeaderIsSupported(header, sizeof(header), &error));
 	XCTAssertEqualObjects(error.domain, MADFileFormatErrorDomain);
 }

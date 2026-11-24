@@ -50,6 +50,11 @@
 
 	- (MTPaperType)paperType;
 
+	/// Validates a composition graph: every upstream reference resolves, and the
+	/// dependency graph has no cycle.  An error names the affected query.  A
+	/// document with no root is not composed and trivially validates.
+	- (BOOL)validateCompositionGraphWithError:(NSError * __autoreleasing *)error;
+
 @end
 
 #endif

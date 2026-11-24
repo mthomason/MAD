@@ -53,29 +53,40 @@ static int mad_path_is_relative(const char *path) { return mad_path_is_absolute(
 // The v1 document header, per docs/project/MAD_FORMAT.md section 7.1: 8 magic bytes, two
 // little-endian version words, then four flags bytes (bit 0 records whether the store
 // was checkpointed).  It sits ahead of the bzip2 stream so a document is identified by
-// content, not by its extension.
-static NSData *MADFileFormatHeader(BOOL checkpointed) {
+// content, not by its extension.  The minor word is 0 for an ordinary report and 1 for
+// a composed one.
+static NSData *MADFileFormatHeader(BOOL checkpointed, uint16_t minorVersion) {
 	uint8_t bytes[MADFileFormatHeaderLength] = { 0 };
 	memcpy(bytes, MADFileFormatMagic, 8);
 	bytes[8]  = (uint8_t)(MADFileFormatMajorVersion & 0xFF);
 	bytes[9]  = (uint8_t)((MADFileFormatMajorVersion >> 8) & 0xFF);
-	bytes[10] = (uint8_t)(MADFileFormatMinorVersion & 0xFF);
-	bytes[11] = (uint8_t)((MADFileFormatMinorVersion >> 8) & 0xFF);
+	bytes[10] = (uint8_t)(minorVersion & 0xFF);
+	bytes[11] = (uint8_t)((minorVersion >> 8) & 0xFF);
 	bytes[12] = (uint8_t)(checkpointed ? 1 : 0);
 	return [NSData dataWithBytes: bytes length: sizeof(bytes)];
 }
 
 // Write the header, then the archive body, into `archivePath`.
-static BOOL MADComposeV1Archive(const char *archivePath, const char *bodyPath, BOOL checkpointed) {
+static BOOL MADComposeV1Archive(const char *archivePath, const char *bodyPath, BOOL checkpointed, uint16_t minorVersion) {
 	NSString *bodyFile = [NSString stringWithUTF8String: bodyPath];
 	NSData *body = bodyFile ? [NSData dataWithContentsOfFile: bodyFile] : nil;
 	if (body == nil) return NO;
 
-	NSMutableData *composed = [NSMutableData dataWithData: MADFileFormatHeader(checkpointed)];
+	NSMutableData *composed = [NSMutableData dataWithData: MADFileFormatHeader(checkpointed, minorVersion)];
 	[composed appendData: body];
 
 	NSString *archiveFile = [NSString stringWithUTF8String: archivePath];
 	return archiveFile ? [composed writeToFile: archiveFile atomically: NO] : NO;
+}
+
+// The versioned requirements record a composed document carries beside meta.plist,
+// and the capabilities this build declares it supports.
+static NSString * const MADRequirementsRecordName = @"requirements.plist";
+
+/// Whether this build supports a required capability, keyed to the requirements
+/// record names and consistent with `engine-info`.
+static BOOL MADEngineSupportsCapability(NSString *capability) {
+	return [capability isEqualToString: MADDocumentCapabilityQueryComposition];
 }
 
 size_t m_malloc(char **str, size_t len) {
@@ -264,6 +275,54 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	return self;
 }
 
+#pragma mark - Required capabilities
+
+/// Writes the versioned requirements record into the guts directory, so the
+/// archive walk carries it like any other member.
+- (BOOL)writeRequirementsRecordWithError:(NSError * __autoreleasing *)error {
+	NSDictionary *record = @{ @"format": @1,
+							  @"requiredCapabilities": @[ MADDocumentCapabilityQueryComposition ] };
+	NSURL *url = [self.filewrapper URLByAppendingPathComponent: MADRequirementsRecordName isDirectory: NO];
+	return [record writeToURL: url atomically: YES];
+}
+
+/// Reads the requirements record a 1.1 container carries and checks every
+/// required capability against this build.  A missing or malformed record, or an
+/// unknown required capability, fills `error` with an actionable message.
+- (BOOL)checkRequirementsWithError:(NSError * __autoreleasing *)error {
+	NSURL *url = [self.filewrapper URLByAppendingPathComponent: MADRequirementsRecordName isDirectory: NO];
+	NSDictionary *record = [NSDictionary dictionaryWithContentsOfURL: url];
+	if (record == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: MADFileFormatErrorDomain code: 2 userInfo: @{
+				NSLocalizedDescriptionKey:
+					@"This document requires capabilities this build cannot read (its requirements record is missing). Upgrade MAD Designer to open it." }];
+		}
+		return NO;
+	}
+	NSArray *required = record[@"requiredCapabilities"];
+	if (![required isKindOfClass:[NSArray class]]) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: MADFileFormatErrorDomain code: 3 userInfo: @{
+				NSLocalizedDescriptionKey:
+					@"This document's requirements record is malformed. Upgrade MAD Designer to open it." }];
+		}
+		return NO;
+	}
+	for (id capability in required) {
+		if (![capability isKindOfClass:[NSString class]] ||
+			!MADEngineSupportsCapability(capability)) {
+			if (error != NULL) {
+				*error = [NSError errorWithDomain: MADFileFormatErrorDomain code: 4 userInfo: @{
+					NSLocalizedDescriptionKey: [[NSString alloc] initWithFormat:
+						@"This document requires the %@ capability, which this version of MAD Designer does not support. Upgrade MAD Designer to open it.", capability] }];
+			}
+			return NO;
+		}
+	}
+	return YES;
+}
+
 ///
 /// 1. Remove Backup
 /// 2. Copy archive to backup location
@@ -291,6 +350,14 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 		os_log_error(OS_LOG_DEFAULT, "Failed to backup file with %d.", r);
 	}
 
+	// A composed document carries a requirements record and a 1.1 header; an
+	// ordinary one is 1.0 with no record.  The record is a regular member of the
+	// guts directory, so write it before the archive walk.
+	if (self.composed && ![self writeRequirementsRecordWithError: NULL]) {
+		r = -1;
+		os_log_error(OS_LOG_DEFAULT, "Failed to write the requirements record.");
+	}
+
 	// 2. Write the archive body to a sibling temp file, then compose the v1 header
 	// and the body into the document URL.  libarchive opens its own output, so the
 	// header cannot simply be written first and have libarchive append to it.
@@ -299,9 +366,10 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	strlcpy(body_path, archive_path, body_size);
 	strlcat(body_path, ".tmp", body_size);
 
+	uint16_t minorVersion = self.composed ? MADFileFormatCompositionMinorVersion : MADFileFormatMinorVersion;
 	if ((r = write_archive(body_path, self.filewrapper, self.reproducible)) < 0) {
 		os_log_error(OS_LOG_DEFAULT, "Failed to archive file with %d.", r);
-	} else if (!MADComposeV1Archive(archive_path, body_path, self.checkpointed)) {
+	} else if (!MADComposeV1Archive(archive_path, body_path, self.checkpointed, minorVersion)) {
 		r = -1;
 		os_log_error(OS_LOG_DEFAULT, "Failed to write the document header.");
 	}
@@ -363,7 +431,25 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	if (stripped) {
 		[[NSFileManager defaultManager] removeItemAtURL: stripped error: NULL];
 	}
-	return success == 0;
+	if (success != 0) return NO;
+
+	// A 1.1 container is composed and must declare its required capabilities; check
+	// them before the store is opened, so an unsupported document is refused with the
+	// file untouched.
+	if ([self containerMinorVersion] == MADFileFormatCompositionMinorVersion) {
+		return [self checkRequirementsWithError: error];
+	}
+	return YES;
+}
+
+/// The header's minor version word, or 0 for a v0 / headerless document.
+- (uint16_t)containerMinorVersion {
+	NSData *data = [NSData dataWithContentsOfURL: self.archive
+										 options: NSDataReadingMappedIfSafe
+										   error: NULL];
+	if (data.length < MADFileFormatHeaderLength) return 0;
+	if (memcmp(data.bytes, MADFileFormatMagic, 8) != 0) return 0;
+	return (uint16_t)(((const uint8_t *)data.bytes)[10] | (((const uint8_t *)data.bytes)[11] << 8));
 }
 
 // Returns nil for a v0 document (no header), or a temporary headerless copy for a

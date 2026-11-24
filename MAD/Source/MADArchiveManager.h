@@ -35,6 +35,17 @@
 /// what the user's .mad byte-identity requirement needs (docs/project/registers/BUGS.md, that entry).
 @property (nonatomic, assign) BOOL reproducible;
 
+/// YES when the document is composed: the archive is written as container 1.1 and
+/// carries a versioned requirements record declaring `query-composition`.  Set
+/// before -archive:, the way -checkpointed is.
+@property (nonatomic, assign) BOOL composed;
+
+/// Reads the requirements record in the (already-extracted) file wrapper and
+/// checks every required capability against this build.  A missing or malformed
+/// record, or an unknown required capability, fills `error`.  Called by
+/// -unarchiveWithError: for a 1.1 container.
+- (BOOL)checkRequirementsWithError:(NSError * __autoreleasing *)error;
+
 @end
 
 #endif

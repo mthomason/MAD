@@ -15,6 +15,7 @@
 #import "RptqQueryGroup+Extras.h"
 #import "RptqDocumentSectionRows.h"
 #import "RptqQuery+Extras.h"
+#import "RptqQueryTable.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqDatabaseCredentals+Extras.h"
@@ -650,6 +651,55 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 	[document appendFormat:@"Report footer:     %@\n", self.hasReportFooterSection];
 	[document appendFormat:@"*********"];
 	return document;
+}
+
+#pragma mark - Composition validation
+
+static NSError *MADCompositionError(NSInteger code, NSString *message) {
+	return [NSError errorWithDomain: @"MADCompositionValidationErrorDomain" code: code
+						   userInfo: @{ NSLocalizedDescriptionKey: message }];
+}
+
+- (BOOL)validateCompositionGraphWithError:(NSError * __autoreleasing *)error {
+	RptqQuery *root = self.rootQuery;
+	if (root == nil) return YES;	// an ordinary report has nothing to validate
+	return [self validateCompositionQuery: root visited: [NSMutableSet set] path: [NSMutableSet set] error: error];
+}
+
+- (BOOL)validateCompositionQuery:(RptqQuery *)query
+						  visited:(NSMutableSet<NSNumber *> *)visited
+							 path:(NSMutableSet<NSNumber *> *)path
+							error:(NSError * __autoreleasing *)error {
+	NSNumber *key = @(query.identifier);
+	if ([path containsObject: key]) {
+		if (error != NULL) {
+			NSString *name = query.name ?: NSLocalizedString(@"<unnamed>", @"Unnamed query in a composition error.");
+			*error = MADCompositionError(1, [[NSString alloc] initWithFormat:
+				NSLocalizedString(@"The composition graph has a cycle involving the query '%@'.", @"Cycle validation error."), name]);
+		}
+		return NO;
+	}
+	if ([visited containsObject: key]) return YES;
+	[path addObject: key];
+
+	for (RptqQueryTable *table in query.hasQueryTables) {
+		NSNumber *upstreamIdentifier = [table.backingObject referenceForName: @"upstreamQuery"];
+		if (upstreamIdentifier == nil) continue;
+		RptqQuery *upstream = table.upstreamQuery;
+		if (upstream == nil) {
+			if (error != NULL) {
+				NSString *name = query.name ?: NSLocalizedString(@"<unnamed>", @"Unnamed query in a composition error.");
+				*error = MADCompositionError(2, [[NSString alloc] initWithFormat:
+					NSLocalizedString(@"The query '%@' references a missing upstream query (%@).", @"Missing-upstream validation error."), name, upstreamIdentifier]);
+			}
+			return NO;
+		}
+		if (![self validateCompositionQuery: upstream visited: visited path: path error: error]) return NO;
+	}
+
+	[path removeObject: key];
+	[visited addObject: key];
+	return YES;
 }
 
 @end

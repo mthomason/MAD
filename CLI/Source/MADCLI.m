@@ -12,6 +12,7 @@
 #import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDocument.h>
+#import <MAD/MADConstants.h>
 #import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 static NSString * const MADCLICommandInspect	= @"inspect";
@@ -79,7 +80,7 @@ NSDictionary * MADCLIEngineInfoDictionary(void) {
 		@"sourceDirty": dirty,
 		@"capabilities": @[ @"open", @"describe", @"query", @"refresh", @"export",
 							@"write", @"query-model", @"layout-model", @"sql-entry",
-							@"engine-info" ],
+							@"engine-info", MADDocumentCapabilityQueryComposition ],
 	};
 }
 

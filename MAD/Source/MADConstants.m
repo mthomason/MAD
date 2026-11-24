@@ -15,9 +15,14 @@ NSString * const MADFileExtentionMobleApplicationDocument           = @"mad";
 NSString * const MADFileExtentionMobleApplicationDocumentArchive    = @"mada";
 NSString * const MADTrademark                                       = @"MAD";
 
+// Required-capability names, declared by a composed document's requirements
+// record and checked against what this build supports.
+NSString * const MADDocumentCapabilityQueryComposition = @"query-composition";
+
 const uint8_t MADFileFormatMagic[8] = { 'M', 'A', 'D', 'F', 'I', 'L', 'E', '\0' };
 const uint16_t MADFileFormatMajorVersion = 1;
 const uint16_t MADFileFormatMinorVersion = 0;
+const uint16_t MADFileFormatCompositionMinorVersion = 1;
 
 NSString * const MADFileFormatErrorDomain = @"MADFileFormatErrorDomain";
 
@@ -30,8 +35,9 @@ BOOL MADFileFormatHeaderIsSupported(const uint8_t *bytes, NSUInteger length,
 
 	uint16_t major = (uint16_t)(bytes[8] | (bytes[9] << 8));
 	uint16_t minor = (uint16_t)(bytes[10] | (bytes[11] << 8));
+	// 1.x up to the composition minor (1.1) is readable; anything newer is not.
 	if (major < MADFileFormatMajorVersion ||
-		(major == MADFileFormatMajorVersion && minor <= MADFileFormatMinorVersion)) {
+		(major == MADFileFormatMajorVersion && minor <= MADFileFormatCompositionMinorVersion)) {
 		return YES;
 	}
 	if (error) {
