@@ -778,12 +778,13 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 
 /// Resolve one result column's MAD type.  A non-NULL value keeps the runtime
 /// affinity the old code used, so existing results and exports do not change.
-/// The projection's known type (the previous materialization's column) and then
-/// SQLite's declared type fill the gaps: a typed column whose first value is NULL
-/// keeps its declared type, and an empty result keeps a real type instead of the
-/// first-row answer that does not exist.  With neither, the runtime affinity is
-/// SQLITE_NULL, which has always mapped to String; that is the defined fallback
-/// for an untyped expression with an empty result.
+/// SQLite's declared type for the *current* statement then fills the gap: a typed
+/// column whose first value is NULL keeps its declared type, and an empty result
+/// keeps a real type instead of the first-row answer that does not exist.  The
+/// previous materialization's cached type is the last resort -- a projection that
+/// reuses an output key for a different declared type must not keep the old type.
+/// With neither, the runtime affinity is SQLITE_NULL, which has always mapped to
+/// String; that is the defined fallback for an untyped empty expression.
 - (MADDataType)dataTypeForStatement:(sqlite3_stmt *)statement
 					   columnNumber:(int)columnNumber
 						  fieldName:(NSString *)fieldName
@@ -793,9 +794,6 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 		return [MADDatabaseSqlite3 dataTypeForAffentyType:runtimeAffinity];
 	}
 
-	NSNumber *known = knownTypes[fieldName];
-	if (known != nil) return (MADDataType)known.integerValue;
-
 	const char *declared = sqlite3_column_decltype(statement, columnNumber);
 	if (declared != NULL) {
 		NSString *nativeType = [[NSString alloc] initWithCString:declared encoding:NSUTF8StringEncoding];
@@ -803,6 +801,9 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 			return [MADDatabaseSqlite3 dataTypeForNativeType:nativeType];
 		}
 	}
+
+	NSNumber *known = knownTypes[fieldName];
+	if (known != nil) return (MADDataType)known.integerValue;
 
 	return [MADDatabaseSqlite3 dataTypeForAffentyType:runtimeAffinity];
 }

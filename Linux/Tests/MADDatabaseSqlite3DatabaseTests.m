@@ -815,6 +815,49 @@ static void testRepeatRefreshFromNonemptyToEmptyReplacesTheRowsAndColumns(void) 
 	removeTempDirectory(tempDirectory);
 }
 
+static void testCurrentProjectionDeclaredTypeBeatsTheCachedType(void) {
+	NSURL *tempDirectory = makeTempDirectory();
+	NSURL *databaseURL = [tempDirectory URLByAppendingPathComponent:@"test.sqlite"];
+	sqlite3 *db = NULL;
+	sqlite3_open(databaseURL.path.UTF8String, &db);
+	sqlite3_exec(db, "CREATE TABLE old (x INTEGER); INSERT INTO old (x) VALUES (1);", NULL, NULL, NULL);
+	sqlite3_exec(db, "CREATE TABLE new (x TEXT);", NULL, NULL, NULL);
+	sqlite3_close(db);
+
+	MADDatabaseSqlite3 *database = makeOpenDatabase(databaseURL);
+	MADArrayCachingDirectoryDouble *cacheDouble = [[MADArrayCachingDirectoryDouble alloc] init];
+	cacheDouble.directory = tempDirectory;
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:77 fromCache:YES];
+	table.cacheDelegate = cacheDouble;
+
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT x FROM old"
+							  fieldKeys:@[@"x"]
+						   onConnection:nil
+						intoResultTable:table
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	MAD_PASS(success, "%s", [[error description] UTF8String]);
+	MAD_PASS(table.columns[table.columnKeys[0]].type == MADDataTypeInteger, "the first result is INTEGER");
+
+	error = nil;
+	success = [database executeSQL:@"SELECT x FROM new WHERE 0"
+						 fieldKeys:@[@"x"]
+					  onConnection:nil
+				   intoResultTable:table
+					transactionSet:NO
+					returnsResults:YES
+					binaryBindings:nil
+						 withError:&error];
+	MAD_PASS(success, "%s", [[error description] UTF8String]);
+	MAD_PASS([table count] == (NSUInteger)0, "the second result has no rows");
+	MAD_PASS(table.columns[table.columnKeys[0]].type == MADDataTypeString,
+			 "the current projection's TEXT must beat the cached INTEGER");
+	removeTempDirectory(tempDirectory);
+}
+
 static void testPrepareAndStepErrorsAreDistinguishedFromSQLiteDone(void) {
 	NSURL *tempDirectory = makeTempDirectory();
 	NSURL *databaseURL = [tempDirectory URLByAppendingPathComponent:@"test.sqlite"];
@@ -950,6 +993,7 @@ MAD_TEST_MAIN("MADDatabaseSqlite3DatabaseTests",
 	MAD_TEST(testUntypedExpressionUsesTheRuntimeTypeAndTheEmptyFallback),
 	MAD_TEST(testProjectionMismatchLeavesTheDestinationUntouched),
 	MAD_TEST(testRepeatRefreshFromNonemptyToEmptyReplacesTheRowsAndColumns),
+	MAD_TEST(testCurrentProjectionDeclaredTypeBeatsTheCachedType),
 	MAD_TEST(testPrepareAndStepErrorsAreDistinguishedFromSQLiteDone),
 	MAD_TEST(testCheckpointStoreAtURLFoldsTheWal),
 	MAD_TEST(testConnectWithConnectionToMissingFileDoesNotCreateZeroByteFile),

@@ -768,6 +768,48 @@
 	XCTAssertEqualObjects(reloaded.columns[reloaded.columnKeys[0]].fieldName, @"name");
 }
 
+- (void)testCurrentProjectionDeclaredTypeBeatsTheCachedType {
+	sqlite3 *db = NULL;
+	XCTAssertEqual(sqlite3_open(self.databaseURL.path.UTF8String, &db), SQLITE_OK);
+	XCTAssertEqual(sqlite3_exec(db, "CREATE TABLE old (x INTEGER); INSERT INTO old (x) VALUES (1);",
+								NULL, NULL, NULL), SQLITE_OK);
+	XCTAssertEqual(sqlite3_exec(db, "CREATE TABLE new (x TEXT);", NULL, NULL, NULL), SQLITE_OK);
+	sqlite3_close(db);
+
+	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
+	MADArrayCachingDirectoryDouble *cacheDouble = [[MADArrayCachingDirectoryDouble alloc] init];
+	cacheDouble.directory = self.tempDirectory;
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:77 fromCache:YES];
+	table.cacheDelegate = cacheDouble;
+
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT x FROM old"
+							  fieldKeys:@[@"x"]
+						   onConnection:nil
+						intoResultTable:table
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	XCTAssertTrue(success, @"%@", error);
+	XCTAssertEqual(table.columns[table.columnKeys[0]].type, MADDataTypeInteger);
+
+	// The projection reuses the output key for a different declared type and
+	// returns no rows; the old cached INTEGER must not win.
+	success = [database executeSQL:@"SELECT x FROM new WHERE 0"
+						 fieldKeys:@[@"x"]
+					  onConnection:nil
+				   intoResultTable:table
+					transactionSet:NO
+					returnsResults:YES
+					binaryBindings:nil
+						 withError:&error];
+	XCTAssertTrue(success, @"%@", error);
+	XCTAssertEqual([table count], (NSUInteger)0);
+	XCTAssertEqual(table.columns[table.columnKeys[0]].type, MADDataTypeString,
+				   @"the current projection's TEXT must beat the cached INTEGER");
+}
+
 - (void)testPrepareAndStepErrorsAreDistinguishedFromSQLiteDone {
 	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
 
