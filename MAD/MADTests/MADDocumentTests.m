@@ -17,7 +17,10 @@
 #import <UIKit/UIGraphics.h>
 #import <UIKit/UIImage.h>
 #import <MAD/MADocument.h>
+#import <MAD/MADQueryFull.h>
 #import <MAD/MADConstants.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
+#import <MADAPI/MADDatabaseConnection.h>
 #endif
 #import <MAD/MADStore.h>
 #import <MAD/MADStoreGraph.h>
@@ -419,6 +422,48 @@
 	MADModelQuery *firstQuery = ((MADModelDatabase *)databases.firstObject).queries.firstObject;
 	XCTAssertNotEqual(firstQuery.identifier, (int64_t)0,
 					  @"the model layer found London's query");
+
+	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
+}
+
+// A document reconnects through -updateDatabaseWithConnection: (the connection
+// editor and the refresh's apply path both use it).  The cached mainQuery must
+// pick up the new dialect; otherwise a compile after the change still speaks the
+// old database's quoting.
+- (void)testMainQueryUsesTheUpdatedDatabaseDialect {
+	NSURL *directory = [self newTestDirectory];
+	NSURL *sampleURL = [[NSBundle bundleForClass:[self class]] URLForResource:@"London" withExtension:@"mad"];
+	XCTAssertNotNil(sampleURL, @"London.mad was not copied into the test bundle.");
+	NSURL *documentURL = [directory URLByAppendingPathComponent:@"London.mad"];
+
+	NSError *error = nil;
+	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
+	XCTAssertTrue([document readFromURL:sampleURL error:&error],
+				  @"opening the legacy document failed: %@", error);
+
+	MADQueryFull *mainQuery = (MADQueryFull *)document.mainQuery;
+	XCTAssertNotNil(mainQuery);
+
+	NSString *sqliteSQL = [mainQuery SQLOnlyActiveFields:NO
+								  managedObjectContext:document.storeContext
+												 error:&error];
+	XCTAssertNil(error);
+	XCTAssertFalse([sqliteSQL containsString:@"["],
+				   @"the SQLite query is not bracket-quoted: %@", sqliteSQL);
+
+	MADDatabaseConnection *tds = [MADDatabaseConnection newDatabaseConnectionWithType:MADDatabaseTypeTDS
+																				  host:@"localhost"
+																			  database:@"London"
+																				  port:1433];
+	[document updateDatabaseWithConnection:tds];
+
+	error = nil;
+	NSString *tdsSQL = [mainQuery SQLOnlyActiveFields:NO
+							   managedObjectContext:document.storeContext
+											  error:&error];
+	XCTAssertNil(error);
+	XCTAssertTrue([tdsSQL containsString:@"["],
+				  @"the cached main query kept the old dialect: %@", tdsSQL);
 
 	[[NSFileManager defaultManager] removeItemAtURL:directory error:NULL];
 }

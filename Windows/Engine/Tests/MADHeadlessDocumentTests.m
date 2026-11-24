@@ -24,6 +24,7 @@
 #import <MAD/MADOperationRefresh.h>
 #import <MAD/MADOperationRefreshInitialize.h>
 #import <MAD/MADOperationRefreshInitalizeMainDataTable.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabase+Extras.h>
@@ -35,30 +36,26 @@
 #import <MAD/RptqStoreContext.h>
 
 #import <MADAPI/MADDatabase.h>
+#import <MADAPI/MADDatabaseConnection.h>
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADOperationQueue.h>
 #import <MADFoundation/MADURLFactory.h>
 
 // __FILE__ is absolute here (CMake hands the compiler an absolute path), so
-// Tests -> Linux -> the repository root.  The Windows copies live one level
-// deeper (Windows/Engine/Tests), so they go up one more level.
-static NSString *MADHeadlessRepositoryRoot(void) {
-	NSString *directory = [@(__FILE__) stringByDeletingLastPathComponent];
-	NSString *repositoryRoot = directory;
-#if defined(_WIN32)
-	repositoryRoot = [repositoryRoot stringByDeletingLastPathComponent]; // Engine
-#endif
-	repositoryRoot = [repositoryRoot stringByDeletingLastPathComponent]; // Linux / Windows
-	return [repositoryRoot stringByDeletingLastPathComponent];           // the root
-}
-
+// Tests -> Linux -> the repository root.
 static NSString *MADHeadlessFixturePath(void) {
-	return [[MADHeadlessRepositoryRoot() stringByAppendingPathComponent: @"CLI/Fixtures"]
+	NSString *testFile = [@(__FILE__) stringByDeletingLastPathComponent];
+	NSString *linuxDirectory = [testFile stringByDeletingLastPathComponent];
+	NSString *repositoryRoot = [linuxDirectory stringByDeletingLastPathComponent];
+	return [[repositoryRoot stringByAppendingPathComponent: @"CLI/Fixtures"]
 			stringByAppendingPathComponent: @"London.portable.mad"];
 }
 
 static NSString *MADHeadlessSampleDatabasePath(void) {
-	return [[MADHeadlessRepositoryRoot() stringByAppendingPathComponent:
+	NSString *testFile = [@(__FILE__) stringByDeletingLastPathComponent];
+	NSString *linuxDirectory = [testFile stringByDeletingLastPathComponent];
+	NSString *repositoryRoot = [linuxDirectory stringByDeletingLastPathComponent];
+	return [[repositoryRoot stringByAppendingPathComponent:
 			 @"MADDesigner/Resources/Assets/Samples.xcassets/Data/chinook.dataset"]
 			stringByAppendingPathComponent: @"chinook.sqlite3"];
 }
@@ -140,6 +137,46 @@ static void testTheDataSourceResolvesWithoutCredentials(void) {
 	MAD_PASS(document.database != nil, "the driver was constructed");
 	MAD_PASS([NSStringFromClass([document.database class]) rangeOfString: @"Sqlite3"].location != NSNotFound,
 			 "the Sqlite3 driver answers a Sqlite3 document");
+}
+
+// A document reconnects through -updateDatabaseWithConnection: (the connection
+// editor and the refresh's apply path both use it).  The cached mainQuery must
+// pick up the new dialect; otherwise a compile after the change still speaks the
+// old database's quoting.
+static void testMainQueryUsesTheUpdatedDatabaseDialect(void) {
+	MAD_NEED(MADHeadlessFixtureIsThere(), @"CLI/Fixtures/London.portable.mad is missing (it is checked in)");
+	MADHeadlessDocument *document = MADHeadlessDocumentForTests();
+	MAD_NEED(document != nil, @"could not open CLI/Fixtures/London.portable.mad");
+	if (document == nil) return;
+
+	// MRC: the document releases the old database when the update replaces it.
+	MADDatabase *original = [document.database retain];
+	MADQueryFull *mainQuery = document.mainQuery;
+	NSError *error = nil;
+	NSString *sqliteSQL = [mainQuery SQLOnlyActiveFields:NO
+								   managedObjectContext:document.storeContext
+												  error:&error];
+	MAD_PASS(sqliteSQL != nil, "the SQLite query compiles");
+	MAD_PASS([sqliteSQL rangeOfString:@"["].location == NSNotFound,
+			 "the SQLite query is not bracket-quoted");
+
+	MADDatabaseConnection *tds = [MADDatabaseConnection newDatabaseConnectionWithType:MADDatabaseTypeTDS
+																				  host:@"localhost"
+																			  database:@"London"
+																				  port:1433];
+	[document updateDatabaseWithConnection:tds];
+
+	error = nil;
+	NSString *tdsSQL = [mainQuery SQLOnlyActiveFields:NO
+							   managedObjectContext:document.storeContext
+											  error:&error];
+	MAD_PASS(tdsSQL != nil, "the TDS query compiles");
+	MAD_PASS([tdsSQL rangeOfString:@"["].location != NSNotFound,
+			 "the cached main query uses the updated dialect");
+
+	// Restore the singleton's source for the rest of the suite.
+	[document updateDatabaseWithConnection:original.databaseConnection];
+	[original release];
 }
 
 #pragma mark - Rendered values
@@ -225,5 +262,6 @@ MAD_TEST_MAIN("MADHeadlessDocumentTests",
 	MAD_TEST(testOpeningReadsTheDefinition),
 	MAD_TEST(testTheQueryCompilesToSQL),
 	MAD_TEST(testTheDataSourceResolvesWithoutCredentials),
+	MAD_TEST(testMainQueryUsesTheUpdatedDatabaseDialect),
 	MAD_TEST(testTheRefreshChainFillsTheRowCache),
 	MAD_TEST(testMoneyIsFormattedFromTheDocumentNotTheMachine));
