@@ -36,6 +36,7 @@
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
+#import <MADSqlite3/MADArrayCaching.h>
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADBarcodes/MADBarcodes.h>
@@ -95,47 +96,57 @@ static BOOL RunRefreshSynchronous(MADHeadlessDocument *doc) {
 
 static NSMutableArray *sRetainedPanels = nil;
 
+static BOOL MADSmokeRunSQLite(NSURL *url, NSArray<NSString *> *statements);
+static NSString *MADSmokeBuildComposedDocument(NSURL *invoicesURL, NSURL *paymentsURL, NSURL *madURL, NSString **outError);
+
 // Builds a composed invoices/payments fixture -- the .mad plus its two sqlite sources
 // -- the same way the CLI's MADFixtureMaker compose does, through the production store
 // and archive writers, so the native document path below opens exactly what a user's
 // composed document looks like.
 static NSString *MADSmokeCreateComposedFixture(NSString *directory, NSString **outError) {
-	NSFileManager *fm = [NSFileManager defaultManager];
 	NSURL *invoicesURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"invoices.sqlite"]];
 	NSURL *paymentsURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"payments.sqlite"]];
 	NSURL *madURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"composed.mad"]];
 
-	BOOL (^runSQL)(NSURL *, NSArray<NSString *> *) = ^BOOL(NSURL *url, NSArray<NSString *> *statements) {
-		[fm removeItemAtURL:url error:NULL];
-		MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
-		MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
-		database.databaseConnection = connection;
-		[database openDatabase];
-		NSError *error = nil;
-		for (NSString *statement in statements) {
-			if (![database executeSQL:statement fieldKeys:@[] onConnection:nil intoResultTable:nil transactionSet:NO returnsResults:NO binaryBindings:nil withError:&error]) {
-				[database closeDatabaseConnectionIfOpen];
-				return NO;
-			}
-		}
-		[database closeDatabaseConnectionIfOpen];
-		return YES;
-	};
-
-	if (!runSQL(invoicesURL, @[@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
-							   @"INSERT INTO invoices VALUES (1, 100.0, 'first');",
-							   @"INSERT INTO invoices VALUES (2, 200.0, 'second');",
-							   @"INSERT INTO invoices VALUES (3, 300.0, 'third');"])) {
+	if (!MADSmokeRunSQLite(invoicesURL, @[@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
+										 @"INSERT INTO invoices VALUES (1, 100.0, 'first');",
+										 @"INSERT INTO invoices VALUES (2, 200.0, 'second');",
+										 @"INSERT INTO invoices VALUES (3, 300.0, 'third');"])) {
 		if (outError) *outError = @"could not write invoices source";
 		return nil;
 	}
-	if (!runSQL(paymentsURL, @[@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
-							   @"INSERT INTO payments VALUES (101, 1, 40.0);",
-							   @"INSERT INTO payments VALUES (102, 1, 60.0);"])) {
+	if (!MADSmokeRunSQLite(paymentsURL, @[@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
+										 @"INSERT INTO payments VALUES (101, 1, 40.0);",
+										 @"INSERT INTO payments VALUES (102, 1, 60.0);"])) {
 		if (outError) *outError = @"could not write payments source";
 		return nil;
 	}
+	return MADSmokeBuildComposedDocument(invoicesURL, paymentsURL, madURL, outError);
+}
 
+// Writes one sqlite source file from the given schema + row statements.
+static BOOL MADSmokeRunSQLite(NSURL *url, NSArray<NSString *> *statements) {
+	NSFileManager *fm = [NSFileManager defaultManager];
+	[fm removeItemAtURL:url error:NULL];
+	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
+	database.databaseConnection = connection;
+	[database openDatabase];
+	NSError *error = nil;
+	for (NSString *statement in statements) {
+		if (![database executeSQL:statement fieldKeys:@[] onConnection:nil intoResultTable:nil transactionSet:NO returnsResults:NO binaryBindings:nil withError:&error]) {
+			[database closeDatabaseConnectionIfOpen];
+			return NO;
+		}
+	}
+	[database closeDatabaseConnectionIfOpen];
+	return YES;
+}
+
+// Builds a composed invoices/payments .mad from two already-written sources, through the
+// production store and archive writers (the same path the CLI's MADFixtureMaker uses).
+static NSString *MADSmokeBuildComposedDocument(NSURL *invoicesURL, NSURL *paymentsURL, NSURL *madURL, NSString **outError) {
+	NSFileManager *fm = [NSFileManager defaultManager];
 	MADDocumentStore *store = [MADDocumentStore storeForDocumentURL:madURL];
 	[fm removeItemAtURL:store.gutsURL error:NULL];
 	NSError *error = nil;
@@ -269,6 +280,71 @@ static NSString *MADSmokeCreateComposedFixture(NSString *directory, NSString **o
 		return nil;
 	}
 	return madURL.path;
+}
+
+// A multi-page composed fixture: `invoiceCount` invoices in a deterministic pattern --
+// invoice i has amount 1000+i; invoices i%3==0 carry two payments (2000+i and 3000+i),
+// i%3==1 carry one (2000+i), and i%3==2 carry none.  Invoices and payments are inserted
+// in sorted order, so the composed LEFT JOIN materializes the detail rows in that order.
+static NSString *MADSmokeCreateComposedFixtureWithInvoiceCount(NSUInteger invoiceCount,
+																NSString *directory,
+																NSString **outError) {
+	NSURL *invoicesURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"invoices.sqlite"]];
+	NSURL *paymentsURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"payments.sqlite"]];
+	NSURL *madURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"composed.mad"]];
+
+	NSMutableArray<NSString *> *invoiceStatements = [NSMutableArray arrayWithObject:@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);"];
+	NSMutableArray<NSString *> *paymentStatements = [NSMutableArray arrayWithObject:@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);"];
+	for (NSUInteger i = 1; i <= invoiceCount; i++) {
+		[invoiceStatements addObject:[NSString stringWithFormat:@"INSERT INTO invoices VALUES (%lu, %lu.0, 'inv%lu');", (unsigned long)i, (unsigned long)(1000 + i), (unsigned long)i]];
+		if (i % 3 == 0) {
+			[paymentStatements addObject:[NSString stringWithFormat:@"INSERT INTO payments VALUES (%lu, %lu, %lu.0);", (unsigned long)(i * 100 + 1), (unsigned long)i, (unsigned long)(2000 + i)]];
+			[paymentStatements addObject:[NSString stringWithFormat:@"INSERT INTO payments VALUES (%lu, %lu, %lu.0);", (unsigned long)(i * 100 + 2), (unsigned long)i, (unsigned long)(3000 + i)]];
+		} else if (i % 3 == 1) {
+			[paymentStatements addObject:[NSString stringWithFormat:@"INSERT INTO payments VALUES (%lu, %lu, %lu.0);", (unsigned long)(i * 100 + 1), (unsigned long)i, (unsigned long)(2000 + i)]];
+		}
+	}
+
+	if (!MADSmokeRunSQLite(invoicesURL, invoiceStatements)) {
+		if (outError) *outError = @"could not write invoices source";
+		return nil;
+	}
+	if (!MADSmokeRunSQLite(paymentsURL, paymentStatements)) {
+		if (outError) *outError = @"could not write payments source";
+		return nil;
+	}
+	return MADSmokeBuildComposedDocument(invoicesURL, paymentsURL, madURL, outError);
+}
+
+// The composed detail rows the multi-page fixture produces, in sorted order.  Each entry
+// is (invoice_id, invoice_amount, payment_amount); payment_amount is NAN when unpaid.
+static NSArray<NSArray<NSNumber *> *> *MADSmokeComposedExpectedRows(NSUInteger invoiceCount) {
+	NSMutableArray<NSArray<NSNumber *> *> *rows = [NSMutableArray array];
+	for (NSUInteger i = 1; i <= invoiceCount; i++) {
+		double amount = 1000.0 + (double)i;
+		if (i % 3 == 0) {
+			[rows addObject:@[@(i), @(amount), @(2000.0 + (double)i)]];
+			[rows addObject:@[@(i), @(amount), @(3000.0 + (double)i)]];
+		} else if (i % 3 == 1) {
+			[rows addObject:@[@(i), @(amount), @(2000.0 + (double)i)]];
+		} else {
+			[rows addObject:@[@(i), @(amount), @(NAN)]];
+		}
+	}
+	return rows;
+}
+
+// The detail-band row ids across every page, in page order.
+static NSArray<NSNumber *> *MADSmokeDetailRowIDsInPageOrder(MADReportFormatter *formatter) {
+	NSMutableArray<NSNumber *> *rows = [NSMutableArray array];
+	for (NSUInteger page = 0; page < formatter.reportLayout.count; page++) {
+		for (MADSectionRepresentation *section in formatter.reportLayout[page]) {
+			if (section.sectionType == MADDocumentSectionTypeBody) {
+				[rows addObject:@(section.detailRowId)];
+			}
+		}
+	}
+	return rows;
 }
 
 // Reads one composed result cell as a double; NaN means the column is blank (NULL).
@@ -1512,6 +1588,188 @@ int main(int argc, const char * argv[]) {
 		}
 		[fm removeItemAtPath:composedDir error:NULL];
 		printf("PASS: Composed document exported to PDF and the visible generation agrees with the export\n");
+
+		// 10. Multi-page composed report: page-order correctness, page breaks, PDF
+		// agreement, and a refresh with fewer rows that shrinks the page count.
+		const NSUInteger kComposedInvoiceCount = 60;
+		NSString *multiDir = [NSTemporaryDirectory() stringByAppendingPathComponent:
+							  [NSString stringWithFormat:@"mad-composed-multi-%@", NSUUID.UUID.UUIDString]];
+		[fm createDirectoryAtPath:multiDir withIntermediateDirectories:YES attributes:nil error:NULL];
+
+		NSString *multiError = nil;
+		NSString *multiMadPath = MADSmokeCreateComposedFixtureWithInvoiceCount(kComposedInvoiceCount, multiDir, &multiError);
+		if (multiMadPath.length == 0) {
+			fprintf(stderr, "FAIL: Could not build multi-page composed fixture: %s\n", multiError.UTF8String ?: "(none)");
+			return 120;
+		}
+		NSURL *multiMadURL = [NSURL fileURLWithPath:multiMadPath];
+		NSURL *multiInvoicesURL = [NSURL fileURLWithPath:[multiDir stringByAppendingPathComponent:@"invoices.sqlite"]];
+		NSURL *multiPaymentsURL = [NSURL fileURLWithPath:[multiDir stringByAppendingPathComponent:@"payments.sqlite"]];
+
+		MADMacDocument *multiDoc = [[MADMacDocument alloc] initWithContentsOfURL:multiMadURL ofType:@"com.thomason.mad" error:&err];
+		if (multiDoc == nil) {
+			fprintf(stderr, "FAIL: Could not open multi-page composed .mad: %s\n", err.localizedDescription.UTF8String);
+			return 121;
+		}
+		MADMacViewerViewController *multiViewer = [[MADMacViewerViewController alloc] initWithDocument:multiDoc];
+		(void)multiViewer.view;
+
+		NSArray<NSArray<NSNumber *> *> *expectedRows = MADSmokeComposedExpectedRows(kComposedInvoiceCount);
+
+		NSDate *multiRefreshStart = [NSDate date];
+		[multiViewer refreshReportAction:nil];
+		NSDate *multiDeadline = [NSDate dateWithTimeIntervalSinceNow:60.0];
+		while ([multiDoc.headlessDocument.dataTable numberOfRows] != expectedRows.count &&
+			   multiViewer.lastRefreshError == nil && multiDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
+		}
+		double multiRefreshElapsed = -[multiRefreshStart timeIntervalSinceNow];
+		if ([multiDoc.headlessDocument.dataTable numberOfRows] != expectedRows.count) {
+			fprintf(stderr, "FAIL: Multi-page composed refresh produced %lu rows, expected %lu: %s\n",
+					(unsigned long)[multiDoc.headlessDocument.dataTable numberOfRows],
+					(unsigned long)expectedRows.count,
+					multiViewer.lastRefreshError.description.UTF8String);
+			return 122;
+		}
+
+		// Wait for the Viewer to render the multi-page PDF.
+		while (multiViewer.pdfView.document.pageCount == 0 && multiDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
+		}
+		double multiRenderElapsed = -[multiRefreshStart timeIntervalSinceNow] - multiRefreshElapsed;
+		MADReportFormatter *multiFormatter = multiDoc.headlessDocument.reportFormatter;
+		NSUInteger multiPageCount = multiFormatter.reportLayout.count;
+		if (multiPageCount < 3) {
+			fprintf(stderr, "FAIL: Multi-page composed report rendered only %lu pages, expected several\n", (unsigned long)multiPageCount);
+			return 123;
+		}
+
+		// 10a. Every detail row, in sorted order, matches the fixture.
+		MADDataTableFast *multiTable = multiDoc.headlessDocument.dataTable;
+		for (NSUInteger r = 0; r < expectedRows.count; r++) {
+			double inv = MADSmokeComposedDouble(multiTable, r + 1, @"invoice_id");
+			double amt = MADSmokeComposedDouble(multiTable, r + 1, @"invoice_amount");
+			double pay = MADSmokeComposedDouble(multiTable, r + 1, @"payment_amount");
+			NSArray<NSNumber *> *e = expectedRows[r];
+			double eInv = e[0].doubleValue;
+			double eAmt = e[1].doubleValue;
+			double ePay = e[2].doubleValue;
+			if ((NSUInteger)llround(inv) != (NSUInteger)llround(eInv) ||
+				fabs(amt - eAmt) > 0.001 ||
+				(isnan(ePay) ? !isnan(pay) : fabs(pay - ePay) > 0.001)) {
+				fprintf(stderr, "FAIL: Multi-page composed row %lu wrong: got (%.0f, %.0f, %.0f) expected (%.0f, %.0f, %s)\n",
+						(unsigned long)r, inv, amt, pay, eInv, eAmt, isnan(ePay) ? "null" : [e[2] stringValue].UTF8String);
+				return 124;
+			}
+		}
+
+		// 10b. Page-ordered detail rows are exactly 1..N (no missing/duplicated at breaks).
+		NSArray<NSNumber *> *pageOrder = MADSmokeDetailRowIDsInPageOrder(multiFormatter);
+		if (pageOrder.count != expectedRows.count) {
+			fprintf(stderr, "FAIL: Page-ordered detail rows count %lu != expected %lu\n",
+					(unsigned long)pageOrder.count, (unsigned long)expectedRows.count);
+			return 125;
+		}
+		for (NSUInteger r = 0; r < pageOrder.count; r++) {
+			if (pageOrder[r].unsignedIntegerValue != r + 1) {
+				fprintf(stderr, "FAIL: Page-ordered detail row at index %lu is %lu (expected %lu) -- missing or duplicated at a page break\n",
+						(unsigned long)r, (unsigned long)pageOrder[r].unsignedIntegerValue, (unsigned long)(r + 1));
+				return 126;
+			}
+		}
+
+		// 10c. Spot-check recognizable values on the first, middle, and last PDF pages.
+		PDFDocument *multiPdfDoc = multiViewer.pdfView.document;
+		if (multiPdfDoc.pageCount != multiPageCount) {
+			fprintf(stderr, "FAIL: Viewer PDF page count %lu != formatter page count %lu\n",
+					(unsigned long)multiPdfDoc.pageCount, (unsigned long)multiPageCount);
+			return 127;
+		}
+		NSString *firstPageText = [[multiPdfDoc pageAtIndex:0] string] ?: @"";
+		NSString *middlePageText = [[multiPdfDoc pageAtIndex:multiPdfDoc.pageCount / 2] string] ?: @"";
+		NSString *lastPageText = [[multiPdfDoc pageAtIndex:multiPdfDoc.pageCount - 1] string] ?: @"";
+		NSString *firstAmount = [NSString stringWithFormat:@"%.0f", (double)(1000 + 1)];
+		NSString *lastAmount = [NSString stringWithFormat:@"%.0f", (double)(1000 + kComposedInvoiceCount)];
+		if (firstPageText.length == 0 || ![firstPageText containsString:firstAmount]) {
+			fprintf(stderr, "FAIL: First PDF page does not contain invoice 1 amount '%s'\n", firstAmount.UTF8String);
+			return 128;
+		}
+		if (lastPageText.length == 0 || ![lastPageText containsString:lastAmount]) {
+			fprintf(stderr, "FAIL: Last PDF page does not contain last invoice amount '%s'\n", lastAmount.UTF8String);
+			return 129;
+		}
+		if (middlePageText.length == 0) {
+			fprintf(stderr, "FAIL: Middle PDF page has no text\n");
+			return 130;
+		}
+
+		// 10d. Export the multi-page report and confirm the page count agrees.
+		Class<MADReportExporting> multiPdfCls = [MADReportExporterRegistry exporterClassForFormat:@"pdf"];
+		NSURL *multiPdfURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:
+													 [NSString stringWithFormat:@"smoke-composed-multi-%@.pdf", NSUUID.UUID.UUIDString]]];
+		id<MADReportExporting> multiPdfExporter = [[(Class)multiPdfCls alloc] init];
+		if (![multiPdfExporter exportDocument:multiDoc.headlessDocument toURL:multiPdfURL options:MADReportExportOptionsNone error:&err]) {
+			fprintf(stderr, "FAIL: Multi-page composed PDF export failed: %s\n", err.localizedDescription.UTF8String);
+			return 131;
+		}
+		PDFDocument *exportedPdf = [[PDFDocument alloc] initWithURL:multiPdfURL];
+		[fm removeItemAtURL:multiPdfURL error:NULL];
+		if (exportedPdf.pageCount != multiPageCount) {
+			fprintf(stderr, "FAIL: Exported PDF page count %lu != rendered page count %lu\n",
+					(unsigned long)exportedPdf.pageCount, (unsigned long)multiPageCount);
+			return 132;
+		}
+
+		// 10e. Refresh the same open report with fewer rows; the page count must shrink.
+		{
+			MADDatabaseConnectionSqlite3 *invConn = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:multiInvoicesURL];
+			MADDatabaseSqlite3 *invDB = [[MADDatabaseSqlite3 alloc] init];
+			invDB.databaseConnection = invConn;
+			[invDB openDatabase];
+			NSError *pruneErr = nil;
+			[invDB executeSQL:@"DELETE FROM invoices WHERE invoice_id > 5;" fieldKeys:@[] onConnection:nil intoResultTable:nil transactionSet:NO returnsResults:NO binaryBindings:nil withError:&pruneErr];
+			[invDB closeDatabaseConnectionIfOpen];
+
+			MADDatabaseConnectionSqlite3 *payConn = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:multiPaymentsURL];
+			MADDatabaseSqlite3 *payDB = [[MADDatabaseSqlite3 alloc] init];
+			payDB.databaseConnection = payConn;
+			[payDB openDatabase];
+			[payDB executeSQL:@"DELETE FROM payments WHERE invoice_id > 5;" fieldKeys:@[] onConnection:nil intoResultTable:nil transactionSet:NO returnsResults:NO binaryBindings:nil withError:&pruneErr];
+			[payDB closeDatabaseConnectionIfOpen];
+		}
+		NSUInteger expectedPrunedRows = [MADSmokeComposedExpectedRows(5) count];
+		[multiViewer refreshReportAction:nil];
+		multiDeadline = [NSDate dateWithTimeIntervalSinceNow:30.0];
+		while ([multiDoc.headlessDocument.dataTable numberOfRows] != expectedPrunedRows &&
+			   multiDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
+		}
+		if ([multiDoc.headlessDocument.dataTable numberOfRows] != expectedPrunedRows) {
+			fprintf(stderr, "FAIL: Pruned refresh produced %lu rows, expected %lu\n",
+					(unsigned long)[multiDoc.headlessDocument.dataTable numberOfRows], (unsigned long)expectedPrunedRows);
+			return 133;
+		}
+		// Wait for the Viewer to re-render to fewer pages.
+		multiDeadline = [NSDate dateWithTimeIntervalSinceNow:30.0];
+		while (multiViewer.pdfView.document.pageCount >= multiPageCount && multiDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.01]];
+		}
+		NSUInteger prunedPageCount = multiDoc.headlessDocument.reportFormatter.reportLayout.count;
+		if (prunedPageCount >= multiPageCount) {
+			fprintf(stderr, "FAIL: Pruned refresh did not shrink the page count (%lu -> %lu)\n",
+					(unsigned long)multiPageCount, (unsigned long)prunedPageCount);
+			return 134;
+		}
+		if (multiViewer.pdfView.document.pageCount != prunedPageCount) {
+			fprintf(stderr, "FAIL: Viewer page count %lu != formatter page count %lu after prune\n",
+					(unsigned long)multiViewer.pdfView.document.pageCount, (unsigned long)prunedPageCount);
+			return 135;
+		}
+
+		[fm removeItemAtPath:multiDir error:NULL];
+		printf("PASS: Multi-page composed report (%lu invoices -> %lu rows, %lu pages; refresh %.2fs, render %.2fs; pruned to %lu rows / %lu pages)\n",
+			   (unsigned long)kComposedInvoiceCount, (unsigned long)expectedRows.count, (unsigned long)multiPageCount,
+			   multiRefreshElapsed, multiRenderElapsed, (unsigned long)expectedPrunedRows, (unsigned long)prunedPageCount);
 	}
 	return 0;
 }
