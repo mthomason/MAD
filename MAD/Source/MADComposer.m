@@ -27,6 +27,7 @@
 
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSURL.h>
+#import <Foundation/NSUUID.h>
 
 static NSString * const MADComposerErrorDomain = @"com.everydayapps.composer";
 
@@ -54,6 +55,20 @@ static NSString * const MADComposerJoinKeyword(MADLinkType type) {
 
 @end
 
+@implementation MADComposerProjection
+
++ (instancetype)projectionWithInput:(MADComposerInput *)input
+						  sourceKey:(NSString *)sourceKey
+						  outputKey:(NSString *)outputKey {
+	MADComposerProjection *projection = [[self alloc] init];
+	projection.input = input;
+	projection.sourceKey = sourceKey;
+	projection.outputKey = outputKey;
+	return projection;
+}
+
+@end
+
 @implementation MADComposerInput
 @end
 
@@ -67,6 +82,51 @@ static NSString * const MADComposerJoinKeyword(MADLinkType type) {
                           cacheDirectory:(NSURL *)cacheDirectory
                                     error:(NSError * _Nullable __autoreleasing *)error {
 
+	// The two-input convenience keeps its left-then-right convention by folding
+	// each input's fields into one ordered projection.
+	NSMutableArray<MADComposerProjection *> *projections =
+		[NSMutableArray arrayWithCapacity: left.fields.count + right.fields.count];
+	for (MADComposerField *field in left.fields) {
+		[projections addObject: [MADComposerProjection projectionWithInput: left
+																sourceKey: field.sourceKey
+																outputKey: field.outputKey]];
+	}
+	for (MADComposerField *field in right.fields) {
+		[projections addObject: [MADComposerProjection projectionWithInput: right
+																sourceKey: field.sourceKey
+																outputKey: field.outputKey]];
+	}
+
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId: rootIdentifier.hash cacheDirectory: cacheDirectory];
+	table.cacheFileIdentifier = rootIdentifier;
+
+	if (![self composeLeft: left right: right joinType: joinType projections: projections
+			   orderByKeys: orderByKeys cacheDirectory: cacheDirectory intoTable: table error: error]) {
+		return nil;
+	}
+
+	NSURL *columnMap = [cacheDirectory URLByAppendingPathComponent: [rootIdentifier stringByAppendingPathExtension: @"mdcache"]];
+	[table cacheWithUrl: columnMap error: NULL];
+	// A table built with a cache directory always resolves its row file; the
+	// fallback keeps the result's non-null contract honest without masking a real
+	// miss.
+	NSURL *rowDatabaseURL = table.rowDatabaseURL ?: [cacheDirectory URLByAppendingPathComponent:
+		[rootIdentifier stringByAppendingPathExtension: @"maddb"]];
+	return [[MADDataResult alloc] initWithIdentifier: rootIdentifier
+											dataTable: table
+									   rowDatabaseURL: rowDatabaseURL
+										 columnMapURL: columnMap];
+}
+
++ (BOOL)composeLeft:(MADComposerInput *)left
+              right:(MADComposerInput *)right
+            joinType:(MADLinkType)joinType
+        projections:(NSArray<MADComposerProjection *> *)projections
+         orderByKeys:(nullable NSArray<NSString *> *)orderByKeys
+      cacheDirectory:(NSURL *)cacheDirectory
+          intoTable:(MADDataTableFast *)table
+              error:(NSError * _Nullable __autoreleasing *)error {
+
 	if (left.result == nil || right.result == nil) {
 		if (error != NULL) {
 			*error = [NSError errorWithDomain: MADComposerErrorDomain
@@ -74,25 +134,24 @@ static NSString * const MADComposerJoinKeyword(MADLinkType type) {
 									  userInfo: @{ NSLocalizedDescriptionKey:
 							NSLocalizedString(@"A composition input has no published result.", @"Missing composition input result.") }];
 		}
-		return nil;
+		return NO;
 	}
 
 	// Resolve every logical key before opening a connection, so a missing field or
 	// join key fails before any attach and leaves the inputs untouched.
 	NSString *leftKey = [MADComposer physicalColumnForKey: left.joinKey inInput: left error: error];
 	NSString *rightKey = [MADComposer physicalColumnForKey: right.joinKey inInput: right error: error];
-	if (leftKey == nil || rightKey == nil) return nil;
+	if (leftKey == nil || rightKey == nil) return NO;
 
-	NSMutableArray<NSString *> *fieldKeys = [NSMutableArray arrayWithCapacity: left.fields.count + right.fields.count];
-	NSMutableArray<NSString *> *selectTerms = [NSMutableArray arrayWithCapacity: left.fields.count + right.fields.count];
-	for (MADComposerInput *input in @[left, right]) {
+	NSMutableArray<NSString *> *fieldKeys = [NSMutableArray arrayWithCapacity: projections.count];
+	NSMutableArray<NSString *> *selectTerms = [NSMutableArray arrayWithCapacity: projections.count];
+	for (MADComposerProjection *projection in projections) {
+		MADComposerInput *input = projection.input;
 		NSString *sqlAlias = input == left ? @"src0" : @"src1";
-		for (MADComposerField *field in input.fields) {
-			NSString *physical = [MADComposer physicalColumnForKey: field.sourceKey inInput: input error: error];
-			if (physical == nil) return nil;
-			[selectTerms addObject: [NSString stringWithFormat: @"%@.%@", sqlAlias, physical]];
-			[fieldKeys addObject: field.outputKey];
-		}
+		NSString *physical = [MADComposer physicalColumnForKey: projection.sourceKey inInput: input error: error];
+		if (physical == nil) return NO;
+		[selectTerms addObject: [NSString stringWithFormat: @"%@.%@", sqlAlias, physical]];
+		[fieldKeys addObject: projection.outputKey];
 	}
 
 	NSString *joinSQL = MADComposerJoinKeyword(joinType);
@@ -115,10 +174,10 @@ static NSString * const MADComposerJoinKeyword(MADLinkType type) {
 						NSLocalizedDescriptionKey: [NSString stringWithFormat:
 							NSLocalizedString(@"The order-by field %@ is not present in either input.", @"Missing composition order-by field."), key] }];
 				}
-				return nil;
+				return NO;
 			}
 			NSString *physical = [MADComposer physicalColumnForKey: key inInput: owner error: error];
-			if (physical == nil) return nil;
+			if (physical == nil) return NO;
 			NSString *sqlAlias = owner == left ? @"src0" : @"src1";
 			MADDataType type = [MADComposer dataTypeForKey: key inInput: owner];
 			NSString *collation = [MADDatabaseSqlite3 sortDescriptionForColumnType: type ascending: YES];
@@ -129,8 +188,10 @@ static NSString * const MADComposerJoinKeyword(MADLinkType type) {
 
 	// Open the composing connection over one scratch file, with SQLITE_OPEN_URI so
 	// the read-only attach URI is honoured (P5).  openDatabaseWithFlags: also
-	// registers LSASC.
-	NSURL *scratchURL = [cacheDirectory URLByAppendingPathComponent: [rootIdentifier stringByAppendingString: @"-composer.maddb"]];
+	// registers LSASC.  The scratch name is fresh each call, so two composes never
+	// collide on it.
+	NSString *scratchIdentifier = NSUUID.UUID.UUIDString;
+	NSURL *scratchURL = [cacheDirectory URLByAppendingPathComponent: [scratchIdentifier stringByAppendingString: @"-composer.maddb"]];
 	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: scratchURL];
 	MADDatabaseSqlite3 *composer = [[MADDatabaseSqlite3 alloc] init];
 	composer.databaseConnection = connection;
@@ -140,11 +201,8 @@ static NSString * const MADComposerJoinKeyword(MADLinkType type) {
 		![composer attachReadOnlyDatabaseAtURL: right.result.rowDatabaseURL asName: @"att1" error: error]) {
 		[composer closeDatabaseConnectionIfOpen];
 		[[NSFileManager defaultManager] removeItemAtURL: scratchURL error: NULL];
-		return nil;
+		return NO;
 	}
-
-	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId: rootIdentifier.hash cacheDirectory: cacheDirectory];
-	table.cacheFileIdentifier = rootIdentifier;
 
 	NSError *executeError = nil;
 	BOOL success = [composer executeSQL: sql
@@ -164,20 +222,9 @@ static NSString * const MADComposerJoinKeyword(MADLinkType type) {
 			*error = executeError ?: [NSError errorWithDomain: MADComposerErrorDomain code: 3 userInfo: @{
 				NSLocalizedDescriptionKey: NSLocalizedString(@"The composition join failed.", @"Composition join failure.") }];
 		}
-		return nil;
+		return NO;
 	}
-
-	NSURL *columnMap = [cacheDirectory URLByAppendingPathComponent: [rootIdentifier stringByAppendingPathExtension: @"mdcache"]];
-	[table cacheWithUrl: columnMap error: NULL];
-	// A table built with a cache directory always resolves its row file; the
-	// fallback keeps the result's non-null contract honest without masking a real
-	// miss.
-	NSURL *rowDatabaseURL = table.rowDatabaseURL ?: [cacheDirectory URLByAppendingPathComponent:
-		[rootIdentifier stringByAppendingPathExtension: @"maddb"]];
-	return [[MADDataResult alloc] initWithIdentifier: rootIdentifier
-											dataTable: table
-									   rowDatabaseURL: rowDatabaseURL
-										 columnMapURL: columnMap];
+	return YES;
 }
 
 + (MADComposerInput *)inputContainingKey:(NSString *)key inLeft:(MADComposerInput *)left right:(MADComposerInput *)right {

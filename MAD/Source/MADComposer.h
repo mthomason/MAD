@@ -26,7 +26,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class MADDataResult;
+@class MADDataResult, MADDataTableFast;
 
 /// One projected column in the root: the field in the input (`sourceKey`, a full
 /// logical key as it appears in the input's `MADDataResult.columnKeys`) and the
@@ -46,6 +46,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) MADDataResult *result;
 @property (nonatomic, copy) NSArray<MADComposerField *> *fields;
 @property (nonatomic, copy) NSString *joinKey;
+@end
+
+/// One projected column in the root, in root order, naming the input it comes
+/// from.  `sourceKey` is a full logical key in that input's result, `outputKey`
+/// the column key it is written as in the root.  The ordered array of these is
+/// the projection: unlike `composeLeft:right:`'s left-then-right convention, the
+/// caller controls the root's column order so a persisted output order survives.
+@interface MADComposerProjection : NSObject
+@property (nonatomic, strong) MADComposerInput *input;
+@property (nonatomic, copy) NSString *sourceKey;
+@property (nonatomic, copy) NSString *outputKey;
++ (instancetype)projectionWithInput:(MADComposerInput *)input
+						  sourceKey:(NSString *)sourceKey
+						  outputKey:(NSString *)outputKey;
 @end
 
 /// The serial, in-memory composer.
@@ -68,6 +82,20 @@ NS_ASSUME_NONNULL_BEGIN
                           rootIdentifier:(NSString *)rootIdentifier
                           cacheDirectory:(NSURL *)cacheDirectory
                                     error:(NSError * _Nullable __autoreleasing *)error;
+
+/// Compose the root into a caller-owned result table, in the caller's projection
+/// order.  The rows land in `table`; the caller writes the column map and
+/// publishes, so a failed compose leaves the caller's staged result and any prior
+/// published root untouched.  `cacheDirectory` hosts the transient attach scratch
+/// file, which is removed before this returns.
++ (BOOL)composeLeft:(MADComposerInput *)left
+              right:(MADComposerInput *)right
+            joinType:(MADLinkType)joinType
+        projections:(NSArray<MADComposerProjection *> *)projections
+         orderByKeys:(nullable NSArray<NSString *> *)orderByKeys
+      cacheDirectory:(NSURL *)cacheDirectory
+          intoTable:(MADDataTableFast *)table
+              error:(NSError * _Nullable __autoreleasing *)error;
 
 @end
 
