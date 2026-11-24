@@ -64,6 +64,12 @@
 @property (readonly, nonatomic) CGSize paperSize;
 - (void)setPaperType:(MTPaperType)paperType;
 
+/// Pin the render data source to the document's `currentResult` for the coming
+/// format/page pass, so an in-flight operation reads one generation even if a
+/// refresh publishes another while it runs.  The formatter calls it before it
+/// iterates the rows.
+- (void)pinRenderResultToCurrentResult;
+
 @end
 
 #endif

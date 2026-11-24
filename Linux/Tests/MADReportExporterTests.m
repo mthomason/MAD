@@ -33,6 +33,7 @@
 #import <MAD/MADReportExporterRegistry.h>
 #import <MAD/MADReportExporterText.h>
 #import <MAD/MADReportExportSource.h>
+#import <MAD/MADReportPageBuilder.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/MADPredicateOperator.h>
 #import <MADFoundation/MADDataColumn.h>
@@ -628,6 +629,41 @@ static void testFailedPublicationLeavesTheLastResultUsable(void) {
 	}
 }
 
+static void testRenderOperationPinsOneGeneration(void) {
+	MADHeadlessDocument *document = MADExporterNewPublicationDocument();
+	MAD_NEED(document != nil, "the London fixture could not be copied and opened");
+	if (document == nil) return;
+
+	NSError *error = nil;
+	MAD_PASS(MADExporterRefreshDocument(document, &error), "A publishes: %s", [[error description] UTF8String]);
+	MAD_PASS(document.currentResult.numberOfRows == (NSUInteger)76, "A has the fixture's rows");
+
+	// Render A: the formatter pins the render data source to A.
+	[MADReportPageBuilder prepareDocumentForRender: document];
+	MAD_PASS(document.reportFormatter.numberOfPages > 0, "A produced pages");
+	NSDictionary *firstA = [document dataForRowReportFirst];
+	MAD_PASS(firstA != nil, "A's first detail row is readable");
+
+	// Publish a visibly different B: zero rows, same projection.
+	RptqQueryPredicate *predicate = MADExporterAddImpossiblePredicate(document);
+	MAD_PASS(predicate != nil, "B constrains an integer field");
+	MAD_PASS(MADExporterRefreshDocument(document, &error), "B publishes: %s", [[error description] UTF8String]);
+	MAD_PASS(document.numberOfResults == (NSUInteger)0, "the data half sees B's zero rows");
+	MAD_PASS(document.currentResult.numberOfRows == (NSUInteger)0, "B's generation is published");
+
+	// The in-flight render operation is still pinned to A.
+	NSDictionary *stillFirstA = [document dataForRowReportFirst];
+	MAD_PASS(stillFirstA != nil, "the pinned render still reads A's first row");
+	MAD_PASS_EQUAL(stillFirstA, firstA, "the pinned render reads the same A row");
+
+	// A new render pins B and re-paginates.
+	[MADReportPageBuilder prepareDocumentForRender: document];
+	MAD_PASS(document.currentResult.numberOfRows == (NSUInteger)0, "B is still the current generation");
+	MAD_PASS([document dataForRowReportFirst] == nil, "B has no detail row to read");
+
+	MADExporterRemovePredicate(document, predicate);
+}
+
 static void testFailedFirstRefreshThenRetryPublishes(void) {
 	MADFailingPublicationDocument *document = MADExporterNewPublicationDocument();
 	MAD_PASS(document != nil, "the London fixture could not be copied and opened");
@@ -665,4 +701,5 @@ MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testSuccessfulRefreshPublishesOneCompleteResult),
 	MAD_TEST(testZeroRowRefreshPublishesTheProjectedColumns),
 	MAD_TEST(testFailedPublicationLeavesTheLastResultUsable),
-	MAD_TEST(testFailedFirstRefreshThenRetryPublishes));
+	MAD_TEST(testFailedFirstRefreshThenRetryPublishes),
+	MAD_TEST(testRenderOperationPinsOneGeneration));

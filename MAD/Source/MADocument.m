@@ -1000,6 +1000,14 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	return _renderDataSource;
 }
 
+- (void)pinRenderResultToCurrentResult {
+	self.renderDataSource.result = self.currentResult;
+}
+
+- (void)beginReadTransaction { [self.renderDataSource beginReadTransaction]; }
+
+- (void)commitReadTransaction { [self.renderDataSource commitReadTransaction]; }
+
 #pragma mark MADReportFormatterDataSource Protocol
 
 - (NSEnumerator *)enumeratorForReportData { return [self.renderDataSource enumeratorForReportData]; }

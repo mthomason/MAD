@@ -28,6 +28,7 @@
 #import <MAD/MADReportExporterRegistry.h>
 #import <MAD/MADReportExporterText.h>
 #import <MAD/MADReportExportSource.h>
+#import <MAD/MADReportPageBuilder.h>
 
 #import <MAD/MADPredicateOperator.h>
 #import <MAD/MADQueryFull.h>
@@ -579,6 +580,41 @@ static NSString *MADReportExporterSHA256(NSData *data) {
 			XCTAssertNotNil(firstRow[key], @"the row still has %@", key);
 		}
 	}
+}
+
+- (void)testRenderOperationPinsOneGeneration {
+	MADHeadlessDocument *document = MADReportExporterNewPublicationDocument();
+	XCTAssertNotNil(document, @"the London fixture could not be copied and opened");
+	if (document == nil) return;
+
+	NSError *error = nil;
+	XCTAssertTrue(MADReportExporterRefreshDocument(document, &error), @"%@", error);
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)76);
+
+	// Render A: the formatter pins the render data source to A.
+	[MADReportPageBuilder prepareDocumentForRender: document];
+	XCTAssertGreaterThan(document.reportFormatter.numberOfPages, (NSUInteger)0);
+	NSDictionary *firstA = [document dataForRowReportFirst];
+	XCTAssertNotNil(firstA, @"A's first detail row is readable");
+
+	// Publish a visibly different B: zero rows, same projection.
+	RptqQueryPredicate *predicate = MADReportExporterAddImpossiblePredicate(document);
+	XCTAssertNotNil(predicate);
+	XCTAssertTrue(MADReportExporterRefreshDocument(document, &error), @"%@", error);
+	XCTAssertEqual(document.numberOfResults, (NSUInteger)0);
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)0);
+
+	// The in-flight render operation is still pinned to A.
+	NSDictionary *stillFirstA = [document dataForRowReportFirst];
+	XCTAssertNotNil(stillFirstA, @"the pinned render still reads A's first row");
+	XCTAssertEqualObjects(stillFirstA, firstA, @"the pinned render reads the same A row");
+
+	// A new render pins B and re-paginates.
+	[MADReportPageBuilder prepareDocumentForRender: document];
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)0);
+	XCTAssertNil([document dataForRowReportFirst], @"B has no detail row to read");
+
+	MADReportExporterRemovePredicate(document, predicate);
 }
 
 - (void)testFailedFirstRefreshThenRetryPublishes {

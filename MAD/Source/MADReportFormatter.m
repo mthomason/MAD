@@ -196,12 +196,22 @@ typedef NSComparisonResult (*MADGroupLevelComparator)(id value, id value2, MADDa
 	return pageLayout.objectEnumerator;
 }
 
+// The generation the page index and layout cache names are keyed by.  The index
+// stores row IDs into the row table, so a new generation's row IDs must never be
+// paired with an old generation's table: the key carries the published result's
+// identifier, which changes every refresh (and is the stable row-file name for a
+// result reloaded from cache).
+- (NSString *)generationIdentifier {
+	NSString *identifier = self.layout.currentResult.identifier;
+	return identifier.length > 0 ? identifier : @"none";
+}
+
 - (NSString *)newStringNameCurrentReportIndexes:(CGSize)size andHash:(unsigned long)hash {
-	return [[NSString alloc] initWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "ih", NSStringFromCGSize(_page.layoutSize)];
+	return [[NSString alloc] initWithFormat:@"%lu%s%@_%@", (unsigned long)[self layoutIdentifier], "ih", NSStringFromCGSize(_page.layoutSize), [self generationIdentifier]];
 }
 
 - (NSString *)newStringNameCurrentReportLayout:(CGSize)size andHash:(unsigned long)hash {
-	return [[NSString alloc] initWithFormat:@"%lu%s%@", (unsigned long)[self layoutIdentifier], "lh", NSStringFromCGSize(_page.layoutSize)];
+	return [[NSString alloc] initWithFormat:@"%lu%s%@_%@", (unsigned long)[self layoutIdentifier], "lh", NSStringFromCGSize(_page.layoutSize), [self generationIdentifier]];
 }
 
 - (NSUInteger)layoutIdentifier {
@@ -625,6 +635,13 @@ static MADGroupLevelComparator MADComparisonFunctionForDataType(MADDataType data
 	id <MADDocumentRenderProtocol> layout = _layout;
 	self.sections = nil;
 	self.groupDataTypes = nil;
+
+	// Pin this pass to one published generation: the page index key (above) and
+	// every row read during and after this format use the same result, so a refresh
+	// that publishes mid-operation cannot change what the operation reads.
+	if ([layout respondsToSelector: @selector(pinRenderResultToCurrentResult)]) {
+		[layout pinRenderResultToCurrentResult];
+	}
 
 	[layout resetSectionLayoutManagers];
 	
