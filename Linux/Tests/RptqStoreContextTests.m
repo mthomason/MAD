@@ -965,6 +965,184 @@ static void testComposedArchiveRoundTrip(void) {
 	removeTempDirectory(cleanDirectory);
 }
 
+#pragma mark - Reorder, Save As, and failed save
+
+/// Builds a composed invoices/payments graph on `context`, with the root output
+/// order either `invoice_id, invoice_amount, payment_amount` or the reorder
+/// `invoice_id, payment_amount, invoice_amount`.
+static RptqStoreContext *MADBuildComposedGraph(RptqStoreContext *context, BOOL reordered) {
+	[context loadAllWithError:NULL];
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *invoices = MADComposedSource(context, @"invoices.sqlite", @"invoices", @"invoices", 10, 101, 200);
+	RptqObject *payments = MADComposedSource(context, @"payments.sqlite", @"payments", @"payments", 20, 102, 300);
+	[document setValue:@[ [invoices valueForKey:@"inDatabase"], [payments valueForKey:@"inDatabase"] ] forKey:@"hasDatabaseSchemas"];
+	RptqObject *root = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[root setValue:@"root" forKey:@"name"];
+	[root setValue:[invoices valueForKey:@"inDatabase"] forKey:@"inDatabase"];
+	RptqObject *rootInvoicesTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:400];
+	[rootInvoicesTable setValue:root forKey:@"inQuery"];
+	[rootInvoicesTable setValue:invoices forKey:@"upstreamQuery"];
+	RptqObject *rootPaymentsTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:401];
+	[rootPaymentsTable setValue:root forKey:@"inQuery"];
+	[rootPaymentsTable setValue:payments forKey:@"upstreamQuery"];
+
+	RptqObject *invoiceIdField = [context objectForEntity:@"RptqDatabaseSchemaField" identifier:202];
+	RptqObject *invoiceAmountField = [context objectForEntity:@"RptqDatabaseSchemaField" identifier:203];
+	RptqObject *paymentAmountField = [context objectForEntity:@"RptqDatabaseSchemaField" identifier:303];
+
+	RptqObject *out0 = [context insertObjectForEntity:@"RptqQueryField" identifier:500];
+	[out0 setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[out0 setValue:rootInvoicesTable forKey:@"inQueryTable"];
+	[out0 setValue:@"invoice_id" forKey:@"outputKey"];
+	[out0 setValue:@0 forKey:@"outputIndex"];
+
+	RptqObject *mid = [context insertObjectForEntity:@"RptqQueryField" identifier:501];
+	RptqObject *last = [context insertObjectForEntity:@"RptqQueryField" identifier:502];
+	if (reordered) {
+		[mid setValue:paymentAmountField forKey:@"databaseSchemaField"];
+		[mid setValue:rootPaymentsTable forKey:@"inQueryTable"];
+		[mid setValue:@"payment_amount" forKey:@"outputKey"];
+		[mid setValue:@1 forKey:@"outputIndex"];
+		[last setValue:invoiceAmountField forKey:@"databaseSchemaField"];
+		[last setValue:rootInvoicesTable forKey:@"inQueryTable"];
+		[last setValue:@"invoice_amount" forKey:@"outputKey"];
+		[last setValue:@2 forKey:@"outputIndex"];
+	} else {
+		[mid setValue:invoiceAmountField forKey:@"databaseSchemaField"];
+		[mid setValue:rootInvoicesTable forKey:@"inQueryTable"];
+		[mid setValue:@"invoice_amount" forKey:@"outputKey"];
+		[mid setValue:@1 forKey:@"outputIndex"];
+		[last setValue:paymentAmountField forKey:@"databaseSchemaField"];
+		[last setValue:rootPaymentsTable forKey:@"inQueryTable"];
+		[last setValue:@"payment_amount" forKey:@"outputKey"];
+		[last setValue:@2 forKey:@"outputIndex"];
+	}
+	[document setValue:root forKey:@"rootQuery"];
+	return context;
+}
+
+/// The reordered projection — payment_amount between the two invoice outputs —
+/// survives a store round trip with the exact sequence and source fields.
+static void testComposedProjectionReorder(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *context = openContextAtPath(directory, @"reorder.sqlite");
+	MADBuildComposedGraph(context, YES);
+	NSError *error = nil;
+	MAD_PASS([context saveComposed:&error], "composed save: %s", [[error description] UTF8String]);
+
+	RptqStoreContext *reread = openContextAtPath(directory, @"reorder.sqlite");
+	MAD_PASS([reread loadAllWithError:&error], "load: %s", [[error description] UTF8String]);
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: reread];
+	NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError:&error];
+	MAD_PASS(outputs.count == (NSUInteger)3, "three outputs");
+	if (outputs.count == 3) {
+		MAD_PASS_EQUAL(outputs[0].outputKey, @"invoice_id", "output 0 is invoice_id");
+		MAD_PASS_EQUAL([outputs[0] valueForKeyPath:@"inQueryTable.upstreamQuery.name"], @"invoices", "output 0 from invoices");
+		MAD_PASS_EQUAL(outputs[1].outputKey, @"payment_amount", "output 1 is payment_amount (between the invoices)");
+		MAD_PASS_EQUAL([outputs[1] valueForKeyPath:@"inQueryTable.upstreamQuery.name"], @"payments", "output 1 from payments");
+		MAD_PASS_EQUAL(outputs[2].outputKey, @"invoice_amount", "output 2 is invoice_amount");
+		MAD_PASS_EQUAL([outputs[2] valueForKeyPath:@"inQueryTable.upstreamQuery.name"], @"invoices", "output 2 from invoices");
+	}
+	removeTempDirectory(directory);
+}
+
+/// Save As: the original keeps its order and the copy keeps its reordered
+/// projection, in different directories under the same basename.
+static void testComposedSaveAs(void) {
+	NSURL *dirA = makeTempDirectory();
+	NSURL *dirB = makeTempDirectory();
+	NSURL *urlA = [dirA URLByAppendingPathComponent:@"Shared.mad"];
+	NSURL *urlB = [dirB URLByAppendingPathComponent:@"Shared.mad"];
+	NSError *error = nil;
+
+	MADDocumentStore *storeA = [MADDocumentStore storeForDocumentURL: urlA];
+	MAD_PASS([storeA openWithError:&error], "A opens");
+	MADBuildComposedGraph(storeA.context, NO);
+	MAD_PASS([storeA.context saveComposed:&error], "A saves: %s", [[error description] UTF8String]);
+	[storeA close];
+	MADArchiveManager *wa = [[MADArchiveManager alloc] initWithFileWrapperURL: storeA.gutsURL archiveURL: urlA];
+	wa.composed = YES;
+	MAD_PASS([wa archive:YES], "A archives");
+
+	MADDocumentStore *storeB = [MADDocumentStore storeForDocumentURL: urlB];
+	MAD_PASS([storeB openWithError:&error], "B opens");
+	MADBuildComposedGraph(storeB.context, YES);
+	MAD_PASS([storeB.context saveComposed:&error], "B saves: %s", [[error description] UTF8String]);
+	[storeB close];
+	MADArchiveManager *wb = [[MADArchiveManager alloc] initWithFileWrapperURL: storeB.gutsURL archiveURL: urlB];
+	wb.composed = YES;
+	MAD_PASS([wb archive:YES], "B archives");
+
+	// Reopen A: original order.
+	MADDocumentStore *reopenA = [MADDocumentStore storeForDocumentURL: urlA];
+	MAD_PASS([[[MADArchiveManager alloc] initWithFileWrapperURL: reopenA.gutsURL archiveURL: urlA] unarchiveWithError:&error], "A reopens");
+	MAD_PASS([reopenA openWithError:&error], "A store opens");
+	RptqDocument *modelA = [RptqDocument newDocumentReadFromManagedObjectContext: reopenA.context];
+	NSArray<RptqQueryField *> *a = [modelA orderedCompositionOutputsWithError:&error];
+	MAD_PASS(a.count == 3 && [a[1].outputKey isEqualToString:@"invoice_amount"], "A keeps its original order");
+	MAD_PASS([[modelA valueForKey:@"hasDatabaseSchemas"] count] == (NSUInteger)2, "A keeps its two connections");
+
+	// Reopen B: reordered.
+	MADDocumentStore *reopenB = [MADDocumentStore storeForDocumentURL: urlB];
+	MAD_PASS([[[MADArchiveManager alloc] initWithFileWrapperURL: reopenB.gutsURL archiveURL: urlB] unarchiveWithError:&error], "B reopens");
+	MAD_PASS([reopenB openWithError:&error], "B store opens");
+	RptqDocument *modelB = [RptqDocument newDocumentReadFromManagedObjectContext: reopenB.context];
+	NSArray<RptqQueryField *> *b = [modelB orderedCompositionOutputsWithError:&error];
+	MAD_PASS(b.count == 3 && [b[1].outputKey isEqualToString:@"payment_amount"], "B keeps its reordered projection");
+
+	removeTempDirectory(dirA);
+	removeTempDirectory(dirB);
+}
+
+/// A failed archive save leaves the previous destination intact.
+static void testComposedFailedArchivePreservesDestination(void) {
+	NSURL *directory = makeTempDirectory();
+	NSURL *madURL = [directory URLByAppendingPathComponent:@"report.mad"];
+	NSError *error = nil;
+
+	// Save A (default order).
+	MADDocumentStore *store = [MADDocumentStore storeForDocumentURL: madURL];
+	MAD_PASS([store openWithError:&error], "the store opens");
+	MADBuildComposedGraph(store.context, NO);
+	MAD_PASS([store.context saveComposed:&error], "A saves");
+	[store close];
+	MADArchiveManager *wa = [[MADArchiveManager alloc] initWithFileWrapperURL: store.gutsURL archiveURL: madURL];
+	wa.composed = YES;
+	MAD_PASS([wa archive:YES], "A archives");
+
+	// Prepare a visibly different B: reorder the projection in the guts.
+	[store openWithError:&error];
+	RptqStoreContext *context = store.context;
+	[context loadAllWithError:NULL];
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+	NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError:NULL];
+	// Swap output 1 and 2's indices so payment_amount moves between the invoices.
+	[outputs[1] setValue:@2 forKey:@"outputIndex"];
+	[outputs[2] setValue:@1 forKey:@"outputIndex"];
+	[context markObjectChanged:outputs[1]];
+	[context markObjectChanged:outputs[2]];
+	MAD_PASS([context saveComposed:&error], "B saves in the store");
+	[store close];
+
+	// Force the archive to fail: move the guts aside so the requirements record
+	// cannot be written, aborting the save before it touches the destination.
+	NSString *movedGuts = [store.gutsURL.path stringByAppendingString:@".moved"];
+	[[NSFileManager defaultManager] moveItemAtPath:store.gutsURL.path toPath:movedGuts error:NULL];
+	MADArchiveManager *failing = [[MADArchiveManager alloc] initWithFileWrapperURL: store.gutsURL archiveURL: madURL];
+	failing.composed = YES;
+	MAD_PASS(![failing archive:YES], "the archive fails");
+
+	// A still opens with its original order.
+	MADDocumentStore *reopen = [MADDocumentStore storeForDocumentURL: madURL];
+	MAD_PASS([[[MADArchiveManager alloc] initWithFileWrapperURL: reopen.gutsURL archiveURL: madURL] unarchiveWithError:&error], "the destination still unpacks");
+	MAD_PASS([reopen openWithError:&error], "the destination still opens");
+	RptqDocument *reopenedModel = [RptqDocument newDocumentReadFromManagedObjectContext: reopen.context];
+	NSArray<RptqQueryField *> *a = [reopenedModel orderedCompositionOutputsWithError:&error];
+	MAD_PASS(a.count == 3 && [a[1].outputKey isEqualToString:@"invoice_amount"], "the destination keeps its previous projection");
+
+	removeTempDirectory(directory);
+}
+
 MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testSchemaRoundTripsThroughTheContext),
 	MAD_TEST(testFaultingReturnsStableIdentities),
@@ -987,4 +1165,7 @@ MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testOrdinaryReportStaysRevision2),
 	MAD_TEST(testFailedCompositionSaveRollsBackToRevision2),
 	MAD_TEST(testCompositionGraphValidation),
-	MAD_TEST(testComposedArchiveRoundTrip));
+	MAD_TEST(testComposedArchiveRoundTrip),
+	MAD_TEST(testComposedProjectionReorder),
+	MAD_TEST(testComposedSaveAs),
+	MAD_TEST(testComposedFailedArchivePreservesDestination));

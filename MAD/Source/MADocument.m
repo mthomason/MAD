@@ -716,10 +716,18 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 }
 
 /// The document's one write: save the store context, write the metadata plist, and
-/// archive the guts directory over the document file.
+/// archive the guts directory over the document file.  A composed document (one
+/// with an explicit root) saves at store revision 3 and archives as container 1.1,
+/// the same as the headless writer.
 - (BOOL)writeStoreAndArchiveWithError:(NSError * __autoreleasing *)outError {
+	// A composed document has an explicit root query.  Check the document row
+	// directly rather than through -activeDocumentModel, which asserts when the
+	// document has not been inserted yet (the create flow saves before it does).
+	NSArray *documents = [self.storeContext objectsForEntity:@"RptqDocument"];
+	BOOL composed = (documents.count > 0 && [documents.lastObject valueForKey:@"rootQuery"] != nil);
 	NSError *error = nil;
-	if (![self.storeContext save:&error]) {
+	BOOL saved = composed ? [self.storeContext saveComposed:&error] : [self.storeContext save:&error];
+	if (!saved) {
 		if (outError != nil) {
 			*outError = error.copy;
 		}
@@ -731,6 +739,7 @@ completionHandler:(void (^ __nullable)(BOOL))completionHandler {
 	MADArchiveManager *archiveManager = [[MADArchiveManager alloc] initWithFileWrapperURL:self.urlGuts
 																		   archiveURL:self.fileURL];
 	archiveManager.checkpointed = YES;
+	archiveManager.composed = composed;
 	return [archiveManager archive:YES];
 }
 

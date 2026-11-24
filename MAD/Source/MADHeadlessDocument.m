@@ -240,8 +240,11 @@
 
 	// The store as it stands.  A document that was only read has nothing dirty, so
 	// this writes nothing -- the same call the app's save makes.  A composed
-	// document (one with an explicit root) saves at store revision 3.
-	BOOL composed = (self.activeDocumentModel.rootQuery != nil);
+	// document (one with an explicit root) saves at store revision 3.  Check the
+	// document row directly rather than through -activeDocumentModel, which
+	// asserts when the document has not been inserted yet.
+	NSArray *documents = [context objectsForEntity:@"RptqDocument"];
+	BOOL composed = (documents.count > 0 && [documents.lastObject valueForKey:@"rootQuery"] != nil);
 	NSError *storeError = nil;
 	if (!(composed ? [context saveComposed: &storeError] : [context save: &storeError])) {
 		if (outError != NULL) {

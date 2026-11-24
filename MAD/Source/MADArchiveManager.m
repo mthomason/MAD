@@ -352,28 +352,32 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 
 	// A composed document carries a requirements record and a 1.1 header; an
 	// ordinary one is 1.0 with no record.  The record is a regular member of the
-	// guts directory, so write it before the archive walk.
-	if (self.composed && ![self writeRequirementsRecordWithError: NULL]) {
+	// guts directory, so write it before the archive walk.  A failure here must
+	// abort the save -- not fall through to the archive walk, which would overwrite
+	// `r` and hide it.
+	BOOL requirementsWritten = !self.composed || [self writeRequirementsRecordWithError: NULL];
+	if (!requirementsWritten) {
 		r = -1;
 		os_log_error(OS_LOG_DEFAULT, "Failed to write the requirements record.");
-	}
+	} else {
+		// 2. Write the archive body to a sibling temp file, then compose the v1 header
+		// and the body into the document URL.  libarchive opens its own output, so the
+		// header cannot simply be written first and have libarchive append to it.
+		char *body_path;
+		size_t body_size = m_malloc(&body_path, strlen(archive_path) + 5);
+		strlcpy(body_path, archive_path, body_size);
+		strlcat(body_path, ".tmp", body_size);
 
-	// 2. Write the archive body to a sibling temp file, then compose the v1 header
-	// and the body into the document URL.  libarchive opens its own output, so the
-	// header cannot simply be written first and have libarchive append to it.
-	char *body_path;
-	size_t body_size = m_malloc(&body_path, strlen(archive_path) + 5);
-	strlcpy(body_path, archive_path, body_size);
-	strlcat(body_path, ".tmp", body_size);
-
-	uint16_t minorVersion = self.composed ? MADFileFormatCompositionMinorVersion : MADFileFormatMinorVersion;
-	if ((r = write_archive(body_path, self.filewrapper, self.reproducible)) < 0) {
-		os_log_error(OS_LOG_DEFAULT, "Failed to archive file with %d.", r);
-	} else if (!MADComposeV1Archive(archive_path, body_path, self.checkpointed, minorVersion)) {
-		r = -1;
-		os_log_error(OS_LOG_DEFAULT, "Failed to write the document header.");
+		uint16_t minorVersion = self.composed ? MADFileFormatCompositionMinorVersion : MADFileFormatMinorVersion;
+		if ((r = write_archive(body_path, self.filewrapper, self.reproducible)) < 0) {
+			os_log_error(OS_LOG_DEFAULT, "Failed to archive file with %d.", r);
+		} else if (!MADComposeV1Archive(archive_path, body_path, self.checkpointed, minorVersion)) {
+			r = -1;
+			os_log_error(OS_LOG_DEFAULT, "Failed to write the document header.");
+		}
+		mad_file_remove_if_exist(body_path);
+		free(body_path);
 	}
-	mad_file_remove_if_exist(body_path);
 
 	success = r == ARCHIVE_OK;
 
@@ -390,7 +394,6 @@ int restore_backup(char *origional_path, char *backup_path, char *backup_name) {
 	free(archive_path);
 	free(origin_path);
 	free(backup_path);
-	free(body_path);
 
 	if (!success) os_log_error(OS_LOG_DEFAULT, "Failed to write archive.");
 
