@@ -345,6 +345,21 @@ the Viewer's detail band binds the joined rows to their root output keys.
   report with only the first five invoices shrinks the page count. The fixture relies on
   sorted insertion order — the composed coordinator has no explicit `ORDER BY` yet, a gap
   the test's ordered comparison would expose.
+- **Grouping parity.** The composed root now groups the way an ordinary report does. Two
+  defects were found and fixed: `readCurrentSortDescriptors` read the *default* query (an
+  arbitrary source query with no groups) instead of the explicit `rootQuery`, and the
+  group sort key was built as `"<alias>.<field>"` — a spelling a composed output field
+  (which references an upstream query table) has none of, and one that cannot name a
+  column of the composed result table, which is keyed by its output keys. Both
+  `RptqQuery -sortDescriptorsForDatabase:` and `MADSectionGroupLayout -safeSortKey` now use
+  a root field's persisted `outputKey` when one is set, so the data table sort and the
+  renderer's group-break comparison key off the same output keys. `MADSectionGroupLayout`
+  and `MADSectionsLayout` carry the output key through the section dictionary. The ordinary
+  alias path is unchanged. `testComposedGroupingSortsByOutputKeysAndBreaksGroups` builds a
+  composed document with two nested groups (invoice_id ascending, payment_amount
+  descending) over deliberately shuffled invoices and duplicate detail records, then checks
+  the sort descriptors, the sorted row order, and the rendered group breaks; the macOS smoke
+  suite adds a 40-payment group that crosses a page boundary.
 
 **Fixture and commands.** `CLI/build.sh --make-fixture compose /tmp/mad-e2e/composed.mad`,
 then `mad refresh` / `mad export --format json` on that file (run from a different working
@@ -359,11 +374,13 @@ bind to their own root keys, not swapped (the renderer's key mapping is pinned b
 amounts. The unavailable-payments refresh reports `The source 'payments' …` and keeps the
 four-row result readable.
 
-**Results.** Apple `MAD` 753/0 (added `testFieldKeyUsesTheComposedOutputKey`); headless
+**Results.** Apple `MAD` 754/0 (added `testFieldKeyUsesTheComposedOutputKey` and
+`testComposedGroupingSortsByOutputKeysAndBreaksGroups`); headless
 `MADDocumentObjectDataReferenceLabelDynamicTests` (5/0) and `MADReportExporterTests` (25/0)
 pass in the Linux image; the headless `mad` framework compiles; and
-`./Mac/build.sh --smoke-test` passes (20 PASS) with the composed open→refresh→view→export
-case, the multi-page composed case, and the ordinary London/created reports.
+`./Mac/build.sh --smoke-test` passes (21 PASS) with the composed open→refresh→view→export
+case, the multi-page composed case, the grouped composed case (46 rows / 2 pages / 2
+groups, one group crossing a page boundary), and the ordinary London/created reports.
 
 **Pending.** The full `./Linux/build.sh` image build, the Windows engine/package/WPF run,
 and the PR CI have not been run; PR creation and merge await the user's direction.
