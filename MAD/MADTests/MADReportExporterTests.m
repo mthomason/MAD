@@ -40,6 +40,7 @@
 #import <MADFoundation/MADDataColumn.h>
 #import <MAD/RptqDatabase+Extras.h>
 #import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQueryLinks.h>
@@ -51,12 +52,23 @@
 #import <MAD/RptqQueryTable+Extras.h>
 #import <MAD/RptqObject.h>
 #import <MAD/RptqStoreContext.h>
+#import <MAD/RptqQueryGroup.h>
+#import <MAD/RptqQueryGroup+Extras.h>
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/MADocumentSectionType.h>
+#import <MAD/MADSortOrder.h>
+#import <MAD/MADSectionRepresentation.h>
+#import <MAD/MADSectionsLayout.h>
 
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
+#import <MADSqlite3/MADArrayCaching.h>
 
 #import "sqlite3.h"
+
+#import <math.h>
 
 #import <MADFoundation/MADApplication.h>
 #import <MADFoundation/MADDataType.h>
@@ -823,9 +835,10 @@ static MADHeadlessDocument *MADCompositionComposedDocument(NSString *directory, 
 
 	if (!MADCompositionCreateSource(invoicesURL, @[
 		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL);",
+		// Deliberately shuffled so an ascending invoice_id group has to reorder them.
+		@"INSERT INTO invoices VALUES (3, 300.0);",
 		@"INSERT INTO invoices VALUES (1, 100.0);",
-		@"INSERT INTO invoices VALUES (2, 200.0);",
-		@"INSERT INTO invoices VALUES (3, 300.0);"])) {
+		@"INSERT INTO invoices VALUES (2, 200.0);"])) {
 		if (outError) *outError = @"invoices source";
 		return nil;
 	}
@@ -850,7 +863,7 @@ static MADHeadlessDocument *MADCompositionComposedDocument(NSString *directory, 
 		return [context insertObjectForEntity: entity identifier: identifier];
 	};
 
-	RptqObject *document = insert(@"RptqDocument", 1);
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext: context];
 
 	// A source: database, credential, schema table + fields, named query, query
 	// table and the query fields it projects (a label makes a field active).
@@ -984,6 +997,114 @@ static MADHeadlessDocument *MADCompositionComposedDocument(NSString *directory, 
 
 	XCTAssertEqualObjects(document.currentResult.columnKeys, (@[ @"invoice_id", @"invoice_amount", @"payment_amount" ]));
 	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)4);
+}
+
+- (void)testComposedGroupingSortsByOutputKeysAndBreaksGroups {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionComposedDocument(directory, &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	// Add two nested groups to the root: invoice_id ascending, then payment_amount
+	// descending -- the same way the app's add-group path does, and the fields both
+	// upstream sources could name "amount" distinguish by their root output keys.
+	RptqStoreContext *context = document.storeContext;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+	RptqQuery *root = model.rootQuery;
+	XCTAssertNotNil(root);
+	if (root == nil) return;
+
+	NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError: NULL];
+	RptqQueryField *invoiceIdField = nil;
+	RptqQueryField *paymentAmountField = nil;
+	for (RptqQueryField *field in outputs) {
+		if ([field.outputKey isEqualToString: @"invoice_id"]) invoiceIdField = field;
+		if ([field.outputKey isEqualToString: @"payment_amount"]) paymentAmountField = field;
+	}
+	XCTAssertNotNil(invoiceIdField);
+	XCTAssertNotNil(paymentAmountField);
+	if (invoiceIdField == nil || paymentAmountField == nil) return;
+
+	void (^addGroup)(RptqQueryField *, MADSortOrder, int16_t) = ^(RptqQueryField *field, MADSortOrder order, int16_t weight) {
+		RptqQueryGroup *group = [RptqQueryGroup newQueryGroupQueryWithSortOrder: order andManagedObjectContext: context];
+		group.hasField = field;
+		group.weight = weight;
+		RptqDocumentSection *header = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupHeader forManagedObjectContext: context];
+		[group addHasSectionObject: header];
+		RptqDocumentSection *footer = [RptqDocumentSection newDocumentSectionOfType: MADDocumentSectionTypeGroupFooter forManagedObjectContext: context];
+		[group addHasSectionObject: footer];
+		[root addHasQueryGroupsObject: group];
+	};
+	addGroup(invoiceIdField, MADSortOrderAccending, 0);
+	addGroup(paymentAmountField, MADSortOrderDecending, 1);
+
+	NSError *saveError = nil;
+	XCTAssertTrue([context save: &saveError], @"%@", saveError);
+
+	// The root's group fields resolve to output keys, not "<alias>.<field>" (which a
+	// composed output field has none of), with their declared direction.
+	NSArray<NSSortDescriptor *> *descriptors = [root sortDescriptorsForDatabase: document.database];
+	XCTAssertEqual(descriptors.count, (NSUInteger)2);
+	if (descriptors.count == 2) {
+		XCTAssertEqualObjects(descriptors[0].key, @"invoice_id");
+		XCTAssertTrue(descriptors[0].ascending);
+		XCTAssertEqualObjects(descriptors[1].key, @"payment_amount");
+		XCTAssertFalse(descriptors[1].ascending);
+	}
+
+	// Refresh, then sort through the document's own path (readCurrentSortDescriptors
+	// must read the root, not the arbitrary default query, which has no groups).
+	NSError *refreshError = nil;
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: refresh];
+	while (queue.operationCount > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+	}
+	XCTAssertEqual(refresh.errors.count, (NSUInteger)0, @"%@", refresh.errors.firstObject);
+	[document prepareForQuery];
+
+	// The sorted enumerator (the renderer's own read path) must yield invoice_id
+	// ascending and payment_amount descending within invoice 1, so the document's
+	// readCurrentSortDescriptors read the root and resolved the output keys.
+	MADDataTableFast *table = document.dataTable;
+	XCTAssertEqual(table.numberOfRows, (NSUInteger)4);
+	NSMutableArray<NSNumber *> *invoiceIds = [NSMutableArray array];
+	NSMutableArray<NSNumber *> *payments = [NSMutableArray array];
+	for (NSDictionary *row in [table enumeratorForKeyObjectsSorted]) {
+		id inv = row[@"invoice_id"];
+		id pay = row[@"payment_amount"];
+		[invoiceIds addObject: inv ? @([inv doubleValue]) : @(NAN)];
+		[payments addObject: (pay && pay != [NSNull null]) ? @([pay doubleValue]) : @(NAN)];
+	}
+	XCTAssertEqual(invoiceIds.count, (NSUInteger)4);
+	XCTAssertEqual(invoiceIds[0].doubleValue, 1.0);
+	XCTAssertEqual(invoiceIds[1].doubleValue, 1.0);
+	XCTAssertEqual(invoiceIds[2].doubleValue, 2.0);
+	XCTAssertEqual(invoiceIds[3].doubleValue, 3.0);
+	XCTAssertEqual(payments.count, (NSUInteger)4);
+	XCTAssertEqual(payments[0].doubleValue, 60.0);
+	XCTAssertEqual(payments[1].doubleValue, 40.0);
+	XCTAssertTrue(isnan(payments[2].doubleValue));
+	XCTAssertTrue(isnan(payments[3].doubleValue));
+
+	// The renderer sees two groups and emits group breaks and all four detail rows.
+	[document format];
+	MADReportFormatter *formatter = document.reportFormatter;
+	XCTAssertEqual(formatter.numberOfGroups, (NSUInteger)2);
+	NSMutableSet<NSNumber *> *bodyRows = [NSMutableSet set];
+	NSUInteger groupHeaders = 0;
+	for (NSUInteger page = 0; page < formatter.reportLayout.count; page++) {
+		for (MADSectionRepresentation *section in formatter.reportLayout[page]) {
+			if (section.sectionType == MADDocumentSectionTypeGroupHeader) groupHeaders++;
+			if (section.sectionType == MADDocumentSectionTypeBody) [bodyRows addObject: @(section.detailRowId)];
+		}
+	}
+	XCTAssertGreaterThan(groupHeaders, (NSUInteger)0);
+	XCTAssertEqual(bodyRows.count, (NSUInteger)4);
 }
 
 - (void)testCompositionJoinPopulated {
