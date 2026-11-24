@@ -95,6 +95,191 @@ static BOOL RunRefreshSynchronous(MADHeadlessDocument *doc) {
 
 static NSMutableArray *sRetainedPanels = nil;
 
+// Builds a composed invoices/payments fixture -- the .mad plus its two sqlite sources
+// -- the same way the CLI's MADFixtureMaker compose does, through the production store
+// and archive writers, so the native document path below opens exactly what a user's
+// composed document looks like.
+static NSString *MADSmokeCreateComposedFixture(NSString *directory, NSString **outError) {
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSURL *invoicesURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"invoices.sqlite"]];
+	NSURL *paymentsURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"payments.sqlite"]];
+	NSURL *madURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"composed.mad"]];
+
+	BOOL (^runSQL)(NSURL *, NSArray<NSString *> *) = ^BOOL(NSURL *url, NSArray<NSString *> *statements) {
+		[fm removeItemAtURL:url error:NULL];
+		MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:url];
+		MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
+		database.databaseConnection = connection;
+		[database openDatabase];
+		NSError *error = nil;
+		for (NSString *statement in statements) {
+			if (![database executeSQL:statement fieldKeys:@[] onConnection:nil intoResultTable:nil transactionSet:NO returnsResults:NO binaryBindings:nil withError:&error]) {
+				[database closeDatabaseConnectionIfOpen];
+				return NO;
+			}
+		}
+		[database closeDatabaseConnectionIfOpen];
+		return YES;
+	};
+
+	if (!runSQL(invoicesURL, @[@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
+							   @"INSERT INTO invoices VALUES (1, 100.0, 'first');",
+							   @"INSERT INTO invoices VALUES (2, 200.0, 'second');",
+							   @"INSERT INTO invoices VALUES (3, 300.0, 'third');"])) {
+		if (outError) *outError = @"could not write invoices source";
+		return nil;
+	}
+	if (!runSQL(paymentsURL, @[@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
+							   @"INSERT INTO payments VALUES (101, 1, 40.0);",
+							   @"INSERT INTO payments VALUES (102, 1, 60.0);"])) {
+		if (outError) *outError = @"could not write payments source";
+		return nil;
+	}
+
+	MADDocumentStore *store = [MADDocumentStore storeForDocumentURL:madURL];
+	[fm removeItemAtURL:store.gutsURL error:NULL];
+	NSError *error = nil;
+	if (![store openWithError:&error]) {
+		if (outError) *outError = error.localizedDescription;
+		return nil;
+	}
+	RptqStoreContext *context = store.context;
+	[context loadAllWithError:NULL];
+
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+
+	RptqObject *(^source)(NSURL *, NSString *, int64_t, int64_t, int64_t, NSArray<NSString *> *) =
+		^(NSURL *url, NSString *queryName, int64_t dbId, int64_t queryId, int64_t tableId, NSArray<NSString *> *labelled) {
+		RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:dbId];
+		[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+		RptqObject *credential = [context insertObjectForEntity:@"RptqDatabaseCredentals" identifier:0];
+		[credential setValue:url.lastPathComponent forKey:@"dbname"];
+		[credential setValue:url.path forKey:@"host"];
+		[database setValue:credential forKey:@"ownedByUser"];
+
+		RptqObject *schemaTable = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:tableId + 1];
+		[schemaTable setValue:queryName forKey:@"name"];
+		RptqObject *idField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:tableId + 2];
+		[idField setValue:@"invoice_id" forKey:@"name"];
+		RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:tableId + 3];
+		[amountField setValue:@"amount" forKey:@"name"];
+		[database setValue:@[schemaTable] forKey:@"hasTables"];
+		[schemaTable setValue:@[idField, amountField] forKey:@"hasFields"];
+
+		RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:queryId];
+		[query setValue:queryName forKey:@"name"];
+		[database setValue:@[query] forKey:@"hasQueries"];
+		RptqObject *queryTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:tableId];
+		[queryTable setValue:schemaTable forKey:@"databaseSchemaTable"];
+		[queryTable setValue:query forKey:@"inQuery"];
+
+		NSMutableArray *fields = [NSMutableArray arrayWithCapacity:2];
+		for (RptqObject *schemaField in @[idField, amountField]) {
+			NSString *fieldName = [schemaField valueForKey:@"name"];
+			RptqObject *field = [context insertObjectForEntity:@"RptqQueryField" identifier:0];
+			[field setValue:schemaField forKey:@"databaseSchemaField"];
+			[field setValue:queryTable forKey:@"inQueryTable"];
+			[fields addObject:field];
+			if ([labelled containsObject:fieldName]) {
+				RptqObject *label = [context insertObjectForEntity:@"RptqDocumentElementLabelDataField" identifier:0];
+				[label setValue:field forKey:@"referencesQueryField"];
+			}
+		}
+		[queryTable setValue:fields forKey:@"hasQueryFields"];
+		return query;
+	};
+
+	RptqObject *invoices = source(invoicesURL, @"invoices", 10, 101, 200, @[@"invoice_id", @"amount"]);
+	RptqObject *payments = source(paymentsURL, @"payments", 20, 102, 300, @[@"amount"]);
+	RptqObject *invoicesDatabase = [invoices valueForKey:@"inDatabase"];
+	RptqObject *paymentsDatabase = [payments valueForKey:@"inDatabase"];
+	[document setValue:@[invoicesDatabase, paymentsDatabase] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *root = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[root setValue:@"root" forKey:@"name"];
+	[root setValue:invoicesDatabase forKey:@"inDatabase"];
+	RptqObject *rootInvoicesTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:400];
+	[rootInvoicesTable setValue:root forKey:@"inQuery"];
+	[rootInvoicesTable setValue:invoices forKey:@"upstreamQuery"];
+	RptqObject *rootPaymentsTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:401];
+	[rootPaymentsTable setValue:root forKey:@"inQuery"];
+	[rootPaymentsTable setValue:payments forKey:@"upstreamQuery"];
+
+	RptqObject *invoiceIdField = [context objectForEntity:@"RptqDatabaseSchemaField" identifier:202];
+	RptqObject *invoiceAmountField = [context objectForEntity:@"RptqDatabaseSchemaField" identifier:203];
+	RptqObject *paymentIdField = [context objectForEntity:@"RptqDatabaseSchemaField" identifier:302];
+	RptqObject *paymentAmountField = [context objectForEntity:@"RptqDatabaseSchemaField" identifier:303];
+
+	RptqObject *leftJoinField = [context insertObjectForEntity:@"RptqQueryField" identifier:500];
+	[leftJoinField setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[leftJoinField setValue:rootInvoicesTable forKey:@"inQueryTable"];
+	RptqObject *rightJoinField = [context insertObjectForEntity:@"RptqQueryField" identifier:501];
+	[rightJoinField setValue:paymentIdField forKey:@"databaseSchemaField"];
+	[rightJoinField setValue:rootPaymentsTable forKey:@"inQueryTable"];
+	RptqObject *join = [context insertObjectForEntity:@"RptqQueryLinks" identifier:450];
+	[join setValue:@(MADLinkTypeLeftOuterJoin) forKey:@"type"];
+	[join setValue:leftJoinField forKey:@"hasLeftField"];
+	[join setValue:rightJoinField forKey:@"hasRightField"];
+	[join setValue:root forKey:@"inQuery"];
+
+	RptqObject *out0 = [context insertObjectForEntity:@"RptqQueryField" identifier:600];
+	[out0 setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[out0 setValue:rootInvoicesTable forKey:@"inQueryTable"];
+	[out0 setValue:@"invoice_id" forKey:@"outputKey"];
+	[out0 setValue:@0 forKey:@"outputIndex"];
+	RptqObject *out1 = [context insertObjectForEntity:@"RptqQueryField" identifier:601];
+	[out1 setValue:invoiceAmountField forKey:@"databaseSchemaField"];
+	[out1 setValue:rootInvoicesTable forKey:@"inQueryTable"];
+	[out1 setValue:@"invoice_amount" forKey:@"outputKey"];
+	[out1 setValue:@1 forKey:@"outputIndex"];
+	RptqObject *out2 = [context insertObjectForEntity:@"RptqQueryField" identifier:602];
+	[out2 setValue:paymentAmountField forKey:@"databaseSchemaField"];
+	[out2 setValue:rootPaymentsTable forKey:@"inQueryTable"];
+	[out2 setValue:@"payment_amount" forKey:@"outputKey"];
+	[out2 setValue:@2 forKey:@"outputIndex"];
+
+	[document setValue:root forKey:@"rootQuery"];
+
+	// A detail band whose labels are bound to the root outputs, so the Viewer renders
+	// the joined rows and the amounts bind to their own root keys.
+	RptqDocumentSection *detail = document.hasDetailSection;
+	NSArray<RptqObject *> *outputs = @[out0, out1, out2];
+	CGFloat labelX = 12.0;
+	for (RptqObject *output in outputs) {
+		RptqDocumentElementLabelDataField *label =
+			(RptqDocumentElementLabelDataField *)[context insertObjectForEntity:@"RptqDocumentElementLabelDataField" identifier:0];
+		label.type = MADPrintPageElementTypeLabelDynamic;
+		label.referencesQueryField = (RptqQueryField *)output;
+		label.text = [output valueForKey:@"outputKey"];
+		[label setSizeWidth:90.0f height:20.0f];
+		[detail addDocumentObject:label withDropPoint:CGPointMake(labelX, 6.0f) managedObjectContext:context];
+		labelX += 100.0f;
+	}
+
+	if (![context saveComposed:&error]) {
+		if (outError) *outError = error.localizedDescription;
+		return nil;
+	}
+	[store close];
+
+	MADArchiveManager *writer = [[MADArchiveManager alloc] initWithFileWrapperURL:store.gutsURL archiveURL:madURL];
+	writer.composed = YES;
+	if (![writer archive:YES]) {
+		if (outError) *outError = @"composed archive failed";
+		return nil;
+	}
+	return madURL.path;
+}
+
+// Reads one composed result cell as a double; NaN means the column is blank (NULL).
+static double MADSmokeComposedDouble(MADDataTableFast *table, NSUInteger row, NSString *key) {
+	NSError *error = nil;
+	NSDictionary *dict = [table dataForRow:row column:key error:&error];
+	id value = dict[key];
+	if (value == nil || value == [NSNull null]) return NAN;
+	return [value doubleValue];
+}
+
 int main(int argc, const char * argv[]) {
 	sRetainedPanels = [[NSMutableArray alloc] init];
 	@autoreleasepool {
@@ -1195,6 +1380,138 @@ int main(int argc, const char * argv[]) {
 
 		[fm removeItemAtPath:dsTestDir error:NULL];
 		printf("PASS: Verified Data Source & Connection UX: no 0-byte SQLite file creation, sibling resolution, Locate File recovery, server credential propagation, and dynamic driver-specific connection dialog\n");
+
+		// 9. Composed report: the native open -> refresh -> view -> export flow.
+		// The document is built through the production store + archive writers, opened
+		// through MADMacDocument (the normal document path), refreshed through the
+		// Viewer's refresh action, and rendered by the same PDF exporter the Viewer uses.
+		NSString *composedDir = [NSTemporaryDirectory() stringByAppendingPathComponent:
+								 [NSString stringWithFormat:@"mad-composed-smoke-%@", NSUUID.UUID.UUIDString]];
+		[fm createDirectoryAtPath:composedDir withIntermediateDirectories:YES attributes:nil error:NULL];
+
+		NSString *composedError = nil;
+		NSString *composedMadPath = MADSmokeCreateComposedFixture(composedDir, &composedError);
+		if (composedMadPath.length == 0) {
+			fprintf(stderr, "FAIL: Could not build composed fixture: %s\n", composedError.UTF8String ?: "(none)");
+			return 100;
+		}
+		NSURL *composedMadURL = [NSURL fileURLWithPath:composedMadPath];
+		NSString *composedPaymentsPath = [composedDir stringByAppendingPathComponent:@"payments.sqlite"];
+
+		MADMacDocument *composedDoc = [[MADMacDocument alloc] initWithContentsOfURL:composedMadURL ofType:@"com.thomason.mad" error:&err];
+		if (composedDoc == nil) {
+			fprintf(stderr, "FAIL: Could not open composed .mad through MADMacDocument: %s\n", err.localizedDescription.UTF8String);
+			return 101;
+		}
+		MADMacViewerViewController *composedViewer = [[MADMacViewerViewController alloc] initWithDocument:composedDoc];
+		(void)composedViewer.view;
+
+		// 9a. Refresh through the Viewer action and read back the joined values.
+		[composedViewer refreshReportAction:nil];
+		NSDate *composedDeadline = [NSDate dateWithTimeIntervalSinceNow:20.0];
+		while (composedViewer.pdfView.document.pageCount == 0 && composedViewer.lastRefreshError == nil &&
+			   composedDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+		}
+		if (composedViewer.lastRefreshError != nil || composedViewer.pdfView.document.pageCount == 0) {
+			fprintf(stderr, "FAIL: Composed refresh/render failed: %s\n", composedViewer.lastRefreshError.description.UTF8String);
+			return 102;
+		}
+		MADDataTableFast *composedTable = composedDoc.headlessDocument.dataTable;
+		if ([composedTable numberOfRows] != 4) {
+			fprintf(stderr, "FAIL: Composed refresh produced %lu rows, expected 4\n", (unsigned long)[composedTable numberOfRows]);
+			return 103;
+		}
+		// The joined rows, in composer order: (1,100,40) (1,100,60) (2,200,null) (3,300,null).
+		// Row ids are 1-based (the sqlite rowid -dataForRow:column: binds).
+		double inv1 = MADSmokeComposedDouble(composedTable, 1, @"invoice_amount");
+		double pay1 = MADSmokeComposedDouble(composedTable, 1, @"payment_amount");
+		double inv2 = MADSmokeComposedDouble(composedTable, 2, @"invoice_amount");
+		double pay2 = MADSmokeComposedDouble(composedTable, 2, @"payment_amount");
+		double inv3 = MADSmokeComposedDouble(composedTable, 3, @"invoice_amount");
+		double pay3 = MADSmokeComposedDouble(composedTable, 3, @"payment_amount");
+		double inv4 = MADSmokeComposedDouble(composedTable, 4, @"invoice_amount");
+		double pay4 = MADSmokeComposedDouble(composedTable, 4, @"payment_amount");
+		if (fabs(inv1 - 100.0) > 0.001 || fabs(pay1 - 40.0) > 0.001 ||
+			fabs(inv2 - 100.0) > 0.001 || fabs(pay2 - 60.0) > 0.001 ||
+			fabs(inv3 - 200.0) > 0.001 || !isnan(pay3) ||
+			fabs(inv4 - 300.0) > 0.001 || !isnan(pay4)) {
+			fprintf(stderr, "FAIL: Composed detail values are wrong or swapped: inv=(%.1f,%.1f,%.1f,%.1f) pay=(%.1f,%.1f,%.1f,%.1f)\n",
+					inv1, inv2, inv3, inv4, pay1, pay2, pay3, pay4);
+			return 104;
+		}
+		printf("PASS: Composed document refreshed (%lu rows) and rendered, with invoice/payment amounts bound to their own root keys\n",
+			   (unsigned long)[composedTable numberOfRows]);
+
+		// 9b. Make payments unavailable, refresh, and keep the previous report readable.
+		NSString *composedPaymentsAway = [composedDir stringByAppendingPathComponent:@"payments-away.sqlite"];
+		[fm moveItemAtPath:composedPaymentsPath toPath:composedPaymentsAway error:NULL];
+		[composedViewer refreshReportAction:nil];
+		composedDeadline = [NSDate dateWithTimeIntervalSinceNow:20.0];
+		while (composedViewer.lastRefreshError == nil && composedDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+		}
+		if (composedViewer.lastRefreshError == nil ||
+			![composedViewer.lastRefreshError.localizedDescription containsString:@"payments"]) {
+			fprintf(stderr, "FAIL: Unavailable payments source did not report a failure naming 'payments': %s\n",
+					composedViewer.lastRefreshError.description.UTF8String);
+			return 105;
+		}
+		if ([composedDoc.headlessDocument.dataTable numberOfRows] != 4) {
+			fprintf(stderr, "FAIL: Failed composed refresh discarded the previous readable report (%lu rows, expected 4)\n",
+					(unsigned long)[composedDoc.headlessDocument.dataTable numberOfRows]);
+			return 106;
+		}
+		printf("PASS: Unavailable payments source reported by name and left the previous report readable\n");
+
+		// 9c. Restore an empty payments source; the same open document refreshes to 3 invoices with blank payments.
+		[fm moveItemAtPath:composedPaymentsAway toPath:composedPaymentsPath error:NULL];
+		{
+			MADDatabaseConnectionSqlite3 *emptyConn = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl:[NSURL fileURLWithPath:composedPaymentsPath]];
+			MADDatabaseSqlite3 *emptyDB = [[MADDatabaseSqlite3 alloc] init];
+			emptyDB.databaseConnection = emptyConn;
+			[emptyDB openDatabase];
+			NSError *emptyErr = nil;
+			[emptyDB executeSQL:@"DELETE FROM payments;" fieldKeys:@[] onConnection:nil intoResultTable:nil transactionSet:NO returnsResults:NO binaryBindings:nil withError:&emptyErr];
+			[emptyDB closeDatabaseConnectionIfOpen];
+		}
+		[composedViewer refreshReportAction:nil];
+		composedDeadline = [NSDate dateWithTimeIntervalSinceNow:20.0];
+		while ([composedDoc.headlessDocument.dataTable numberOfRows] != 3 &&
+			   composedDeadline.timeIntervalSinceNow > 0) {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+		}
+		if (composedViewer.lastRefreshError != nil || [composedDoc.headlessDocument.dataTable numberOfRows] != 3) {
+			fprintf(stderr, "FAIL: Empty-payments refresh did not yield 3 invoices: %s\n",
+					composedViewer.lastRefreshError.description.UTF8String);
+			return 107;
+		}
+		MADDataTableFast *emptyTable = composedDoc.headlessDocument.dataTable;
+		double e1Pay = MADSmokeComposedDouble(emptyTable, 1, @"payment_amount");
+		double e2Pay = MADSmokeComposedDouble(emptyTable, 2, @"payment_amount");
+		double e3Pay = MADSmokeComposedDouble(emptyTable, 3, @"payment_amount");
+		if (!isnan(e1Pay) || !isnan(e2Pay) || !isnan(e3Pay)) {
+			fprintf(stderr, "FAIL: Empty-payments refresh left non-blank payment amounts\n");
+			return 108;
+		}
+
+		// 9d. Export the visible generation and confirm the exported values agree.
+		Class<MADReportExporting> composedPdfCls = [MADReportExporterRegistry exporterClassForFormat:@"pdf"];
+		NSURL *composedPdfURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:
+														[NSString stringWithFormat:@"smoke-composed-%@.pdf", NSUUID.UUID.UUIDString]]];
+		id<MADReportExporting> composedPdfExporter = [[(Class)composedPdfCls alloc] init];
+		if (![composedPdfExporter exportDocument:composedDoc.headlessDocument toURL:composedPdfURL options:MADReportExportOptionsNone error:&err]) {
+			fprintf(stderr, "FAIL: Composed PDF export failed: %s\n", err.localizedDescription.UTF8String);
+			return 109;
+		}
+		NSData *composedPdfBytes = [NSData dataWithContentsOfURL:composedPdfURL];
+		[fm removeItemAtURL:composedPdfURL error:NULL];
+		if (composedPdfBytes.length == 0) {
+			fprintf(stderr, "FAIL: Composed PDF export wrote 0 bytes\n");
+			return 110;
+		}
+		[fm removeItemAtPath:composedDir error:NULL];
+		printf("PASS: Composed document exported to PDF and the visible generation agrees with the export\n");
 	}
 	return 0;
 }
