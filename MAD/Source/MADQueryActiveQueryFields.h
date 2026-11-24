@@ -26,6 +26,13 @@
 /// @param query The query whose fields to collect, or nil for the whole context.
 - (instancetype)initWithContext:(RptqStoreContext *)context query:(nullable RptqQuery *)query;
 
+/// As above, but also projects `requiredFields` -- fields a downstream consumer
+/// (the composition root) needs even though no report element, link or group
+/// references them.  A required field is still scoped to `query`.
+- (instancetype)initWithContext:(RptqStoreContext *)context
+						  query:(nullable RptqQuery *)query
+				 requiredFields:(nullable NSSet <RptqQueryField *> *)requiredFields;
+
 @property (nonatomic, strong) NSSet <RptqQueryField *> *queryFields;
 
 @end

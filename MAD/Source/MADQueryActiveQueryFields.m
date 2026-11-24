@@ -30,6 +30,12 @@
 }
 
 - (instancetype)initWithContext:(RptqStoreContext *)context query:(RptqQuery *)query {
+	return [self initWithContext:context query:query requiredFields:nil];
+}
+
+- (instancetype)initWithContext:(RptqStoreContext *)context
+						  query:(RptqQuery *)query
+				 requiredFields:(NSSet<RptqQueryField *> *)requiredFields {
 
 	if (self = [super init]) {
 		NSArray *objects;
@@ -82,6 +88,19 @@
 		for (RptqQueryGroup *queryGroup in objects) {
 			addField(queryGroup.hasField);
 		}
+
+		// Fields a downstream consumer requires: projected even without a report
+		// element, link or group referencing them.  They are scoped to the query the
+		// same way the element-driven fields are.
+		for (RptqQueryField *requiredField in requiredFields) {
+			if (requiredField == nil) continue;
+			if (query != nil) {
+				RptqQuery *owner = requiredField.inQueryTable.inQuery;
+				if (owner == nil || owner.identifier != query.identifier) continue;
+			}
+			[queryFields addObject: requiredField];
+		}
+
 		self.queryFields = queryFields;
 
 	}

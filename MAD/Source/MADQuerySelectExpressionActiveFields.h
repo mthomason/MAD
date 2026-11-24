@@ -12,7 +12,7 @@
 #import "MADQuerySelectExpression.h"
 #import <MAD/RptqStoreContext.h>
 
-@class RptqDatabaseSchemaField, RptqQuery, NSString,
+@class RptqDatabaseSchemaField, RptqQuery, RptqQueryField, NSString, NSSet,
        NSMutableDictionary, NSMutableArray<ObjectType>;
 
 @interface MADQuerySelectExpressionActiveFields : MADQuerySelectExpression
@@ -25,6 +25,13 @@
     - (instancetype)initWithDatabase:(MADDatabase *)database
                                query:(nullable RptqQuery *)query
              forManagedObjectContext:(RptqStoreContext *)context;
+
+/// As above, but also projects `requiredFields` -- fields a downstream consumer
+/// needs without a report element referencing them.
+    - (instancetype)initWithDatabase:(MADDatabase *)database
+                               query:(nullable RptqQuery *)query
+             forManagedObjectContext:(RptqStoreContext *)context
+                      requiredFields:(nullable NSSet <RptqQueryField *> *)requiredFields;
 
     @property (nonatomic, readonly, strong) NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields;
     @property (nonatomic, readonly, strong) NSMutableArray <NSString *> *fieldKeys;

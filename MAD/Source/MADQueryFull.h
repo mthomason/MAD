@@ -12,7 +12,7 @@
 #import <MADAPI/MADQuery.h>
 #import <MAD/RptqStoreContext.h>
 
-@class RptqQuery;
+@class RptqQuery, RptqQueryField;
 
 @interface MADQueryFull : MADQuery <MADQueryFieldKeysProtocol, MADQueryDataDelegateProtocol>
 
@@ -32,6 +32,12 @@
 							error:(NSError * __autoreleasing *)error;
 
 @property (nonatomic, assign) NSUInteger limitResults;
+
+/// Fields a downstream consumer requires, projected even when no report element,
+/// link or group references them.  The composition coordinator sets this on an
+/// upstream query before it compiles, so the join key enters the result without a
+/// dummy report label.  nil is the ordinary-report behaviour.
+@property (nonatomic, strong, nullable) NSArray <RptqQueryField *> *requiredQueryFields;
 
 @end
 

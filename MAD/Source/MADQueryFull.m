@@ -241,9 +241,12 @@ static inline BOOL isKindOfRptqQuery(id obj) {
 
 		MADQuerySelectExpression *select;
 		if (onlyActiveFields) {
+			NSSet <RptqQueryField *> *required = self.requiredQueryFields.count > 0
+				? [NSSet setWithArray: self.requiredQueryFields] : nil;
 			select = [[MADQuerySelectExpressionActiveFields alloc] initWithDatabase: database
-																			 query: queryObject
-														   forManagedObjectContext: managedObjectContext];
+																		 query: queryObject
+													   forManagedObjectContext: managedObjectContext
+																			requiredFields: required];
 			self.fieldKeys = ((MADQuerySelectExpressionActiveFields *)select).fieldKeys.copy;
 			self.fields = ((MADQuerySelectExpressionActiveFields *)select).fields.copy;
 		} else {

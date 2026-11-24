@@ -886,10 +886,18 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 
 	// mode=ro makes the attached file read-only at the file level; the connection
 	// must carry SQLITE_OPEN_URI for the URI to be parsed rather than taken as a
-	// literal file name.  Quote the URI and double any embedded single quote.
-	NSString *uri = [NSString stringWithFormat:@"file:%@?mode=ro", path];
+	// literal file name.  Percent-encode the path so URI-reserved characters (? # %
+	// and anything non-ASCII) cannot misparse the URI, double any embedded single
+	// quote for the SQL literal, and quote the alias so a name like "main" or a
+	// name with a space cannot break the statement.
+	NSMutableCharacterSet *allowed = [NSMutableCharacterSet alphanumericCharacterSet];
+	[allowed addCharactersInString: @"-._~/"];
+	NSString *encodedPath = [path stringByAddingPercentEncodingWithAllowedCharacters: allowed];
+	if (encodedPath.length == 0) encodedPath = path;
+	NSString *uri = [NSString stringWithFormat:@"file:%@?mode=ro", encodedPath];
 	NSString *escaped = [uri stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
-	NSString *sql = [NSString stringWithFormat:@"ATTACH DATABASE '%@' AS %@", escaped, name];
+	NSString *quotedName = [NSString stringWithFormat:@"\"%@\"", [name stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""]];
+	NSString *sql = [NSString stringWithFormat:@"ATTACH DATABASE '%@' AS %@", escaped, quotedName];
 	return [self executeSQL: sql
 				  fieldKeys: @[]
 			   onConnection: nil

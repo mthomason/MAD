@@ -14,6 +14,7 @@
 #import <XCTest/XCTest.h>
 
 #import <MAD/MADHeadlessDocument.h>
+#import <MAD/MADComposer.h>
 #import <MAD/MADOperationRefresh.h>
 #import <MAD/MADOperationRefreshInitialize.h>
 #import <MAD/MADOperationRefreshInitalizeMainDataTable.h>
@@ -722,6 +723,36 @@ static BOOL MADCompositionAddQuery(MADHeadlessDocument *document,
 	return [context save: &error];
 }
 
+/// Adds a query field with no report label -- a field only a downstream consumer
+/// (the composition root) requires, so it must be projected without a dummy label.
+static RptqQueryField *MADCompositionAddRequiredField(MADHeadlessDocument *document,
+													   NSString *tableName,
+													   NSString *fieldName) {
+	RptqStoreContext *context = document.storeContext;
+	RptqDocument *rptqDocument = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+	RptqDatabase *database = rptqDocument.hasDatabaseSchemas.anyObject;
+	RptqQuery *query = database.hasQueries.anyObject;
+	RptqQueryTable *queryTable = nil;
+	for (RptqQueryTable *candidate in query.hasQueryTables) {
+		if ([candidate.databaseSchemaTable.name isEqualToString: tableName]) { queryTable = candidate; break; }
+	}
+	if (queryTable == nil) return nil;
+	RptqDatabaseSchemaField *schemaField = nil;
+	for (RptqDatabaseSchemaField *candidate in queryTable.databaseSchemaTable.hasFields) {
+		if ([candidate.name isEqualToString: fieldName]) { schemaField = candidate; break; }
+	}
+	if (schemaField == nil) return nil;
+	RptqQueryField *queryField = [RptqQueryField newQueryField: context];
+	queryField.inQueryTable = queryTable;
+	queryField.databaseSchemaField = schemaField;
+	NSMutableSet *fields = [queryTable.hasQueryFields mutableCopy];
+	[fields addObject: queryField];
+	queryTable.hasQueryFields = fields;
+	NSError *error = nil;
+	[context save: &error];
+	return queryField;
+}
+
 static MADHeadlessDocument *MADCompositionDocument(NSString *name,
 												   NSURL *sourceURL,
 												   NSString *tableName,
@@ -743,10 +774,10 @@ static MADHeadlessDocument *MADCompositionDocument(NSString *name,
 	return document;
 }
 
-static NSString *MADCompositionPhysicalColumn(MADDataResult *result, NSString *fieldName) {
+static NSString *MADCompositionLogicalKey(MADDataResult *result, NSString *fieldName) {
 	for (NSString *key in result.columnKeys) {
 		if ([key rangeOfString: fieldName].location != NSNotFound) {
-			return [result.dataTable columnKeyForColumnName: key];
+			return key;
 		}
 	}
 	return nil;
@@ -760,32 +791,21 @@ static MADDatabaseSqlite3 *MADCompositionConnection(NSURL *composerURL) {
 	return database;
 }
 
-static MADDataResult *MADCompositionExecute(MADDatabaseSqlite3 *composer,
-											NSString *sql,
-											NSArray<NSString *> *fieldKeys,
-											NSString *identifier,
-											NSURL *cacheDirectory,
-											NSError **outError) {
-	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId: [[NSUUID UUID] UUIDString].hash cacheDirectory: cacheDirectory];
-	table.cacheFileIdentifier = identifier;
-	NSError *error = nil;
-	if (![composer executeSQL: sql
-					fieldKeys: fieldKeys
-				 onConnection: nil
-			  intoResultTable: table
-			   transactionSet: NO
-			   returnsResults: YES
-			   binaryBindings: nil
-					withError: &error]) {
-		if (outError) *outError = error;
-		return nil;
+static MADComposerInput *MADCompositionInput(NSString *alias,
+											 MADDataResult *result,
+											 NSArray<NSArray<NSString *> *> *fields,
+											 NSString *joinKeyField) {
+	MADComposerInput *input = [[MADComposerInput alloc] init];
+	input.alias = alias;
+	input.result = result;
+	NSMutableArray<MADComposerField *> *composerFields = [NSMutableArray arrayWithCapacity: fields.count];
+	for (NSArray<NSString *> *pair in fields) {
+		[composerFields addObject: [MADComposerField fieldWithSourceKey: MADCompositionLogicalKey(result, pair[0])
+															 outputKey: pair[1]]];
 	}
-	NSURL *columnMap = [cacheDirectory URLByAppendingPathComponent: [identifier stringByAppendingPathExtension: @"mdcache"]];
-	[table cacheWithUrl: columnMap error: NULL];
-	return [[MADDataResult alloc] initWithIdentifier: identifier
-										   dataTable: table
-									  rowDatabaseURL: table.rowDatabaseURL
-										columnMapURL: columnMap];
+	input.fields = composerFields;
+	input.joinKey = MADCompositionLogicalKey(result, joinKeyField);
+	return input;
 }
 
 - (void)testCompositionJoinPopulated {
@@ -827,34 +847,19 @@ static MADDataResult *MADCompositionExecute(MADDatabaseSqlite3 *composer,
 		return [(NSString *)key rangeOfString:@"payment_id"].location != NSNotFound;
 	}]].count, (NSUInteger)0);
 
-	NSString *invoicesTable = invoicesResult.dataTable.tableName;
-	NSString *paymentsTable = paymentsResult.dataTable.tableName;
-	NSString *invoiceId = MADCompositionPhysicalColumn(invoicesResult, @"invoice_id");
-	NSString *invoiceAmount = MADCompositionPhysicalColumn(invoicesResult, @"amount");
-	NSString *paymentInvoiceId = MADCompositionPhysicalColumn(paymentsResult, @"invoice_id");
-	NSString *paymentAmount = MADCompositionPhysicalColumn(paymentsResult, @"amount");
-	XCTAssertNotNil(invoiceId);
-	XCTAssertNotNil(invoiceAmount);
-	XCTAssertNotNil(paymentInvoiceId);
-	XCTAssertNotNil(paymentAmount);
+	MADComposerInput *left = MADCompositionInput(@"invoices", invoicesResult,
+		@[@[@"invoice_id", @"invoice_id"], @[@"amount", @"invoice_amount"]], @"invoice_id");
+	MADComposerInput *right = MADCompositionInput(@"payments", paymentsResult,
+		@[@[@"amount", @"payment_amount"]], @"invoice_id");
 
-	NSString *sql = [NSString stringWithFormat:
-		@"SELECT a.%@, a.%@, b.%@ FROM %@ a LEFT JOIN %@ b ON a.%@ = b.%@ ORDER BY a.%@, b.%@",
-		invoiceId, invoiceAmount, paymentAmount,
-		[NSString stringWithFormat:@"inv.%@", invoicesTable], [NSString stringWithFormat:@"pay.%@", paymentsTable],
-		invoiceId, paymentInvoiceId, invoiceId, paymentAmount];
-
-	NSURL *composerURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"composer.sqlite"]];
-	MADDatabaseSqlite3 *composer = MADCompositionConnection(composerURL);
 	NSError *error = nil;
-	XCTAssertTrue([composer attachReadOnlyDatabaseAtURL: invoicesResult.rowDatabaseURL asName: @"inv" error: &error], @"%@", error);
-	error = nil;
-	XCTAssertTrue([composer attachReadOnlyDatabaseAtURL: paymentsResult.rowDatabaseURL asName: @"pay" error: &error], @"%@", error);
-
-	NSString *rootIdentifier = [[NSUUID UUID] UUIDString];
-	error = nil;
-	MADDataResult *root = MADCompositionExecute(composer, sql, @[@"invoice_id", @"invoice_amount", @"payment_amount"],
-											   rootIdentifier, [NSURL fileURLWithPath: directory], &error);
+	MADDataResult *root = [MADComposer composeLeft: left
+											right: right
+										  joinType: MADLinkTypeLeftOuterJoin
+									   orderByKeys: @[left.joinKey, right.fields.lastObject.sourceKey]
+									rootIdentifier: [[NSUUID UUID] UUIDString]
+									cacheDirectory: [NSURL fileURLWithPath: directory]
+											  error: &error];
 	XCTAssertNotNil(root, @"%@", error);
 	if (root == nil) return;
 
@@ -902,25 +907,19 @@ static MADDataResult *MADCompositionExecute(MADDatabaseSqlite3 *composer,
 	XCTAssertTrue(MADReportExporterRefreshDocument(payments, &error), @"%@", error);
 	XCTAssertEqual(payments.currentResult.numberOfRows, (NSUInteger)0);
 
-	NSString *sql = [NSString stringWithFormat:
-		@"SELECT a.%@, a.%@, b.%@ FROM inv.%@ a LEFT JOIN pay.%@ b ON a.%@ = b.%@ ORDER BY a.%@",
-		MADCompositionPhysicalColumn(invoices.currentResult, @"invoice_id"),
-		MADCompositionPhysicalColumn(invoices.currentResult, @"amount"),
-		MADCompositionPhysicalColumn(payments.currentResult, @"amount"),
-		invoices.currentResult.dataTable.tableName,
-		payments.currentResult.dataTable.tableName,
-		MADCompositionPhysicalColumn(invoices.currentResult, @"invoice_id"),
-		MADCompositionPhysicalColumn(payments.currentResult, @"invoice_id"),
-		MADCompositionPhysicalColumn(invoices.currentResult, @"invoice_id")];
-
-	NSURL *composerURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"composer.sqlite"]];
-	MADDatabaseSqlite3 *composer = MADCompositionConnection(composerURL);
-	[composer attachReadOnlyDatabaseAtURL: invoices.currentResult.rowDatabaseURL asName: @"inv" error: NULL];
-	[composer attachReadOnlyDatabaseAtURL: payments.currentResult.rowDatabaseURL asName: @"pay" error: NULL];
+	MADComposerInput *left = MADCompositionInput(@"invoices", invoices.currentResult,
+		@[@[@"invoice_id", @"invoice_id"], @[@"amount", @"invoice_amount"]], @"invoice_id");
+	MADComposerInput *right = MADCompositionInput(@"payments", payments.currentResult,
+		@[@[@"amount", @"payment_amount"]], @"invoice_id");
 
 	error = nil;
-	MADDataResult *root = MADCompositionExecute(composer, sql, @[@"invoice_id", @"invoice_amount", @"payment_amount"],
-											   [[NSUUID UUID] UUIDString], [NSURL fileURLWithPath: directory], &error);
+	MADDataResult *root = [MADComposer composeLeft: left
+											right: right
+										  joinType: MADLinkTypeLeftOuterJoin
+									   orderByKeys: @[left.joinKey]
+									rootIdentifier: [[NSUUID UUID] UUIDString]
+									cacheDirectory: [NSURL fileURLWithPath: directory]
+											  error: &error];
 	XCTAssertNotNil(root, @"%@", error);
 	if (root == nil) return;
 	XCTAssertEqual(root.numberOfRows, (NSUInteger)3);
@@ -975,6 +974,199 @@ static MADDataResult *MADCompositionExecute(MADDatabaseSqlite3 *composer,
 			XCTAssertNotNil(error);
 		}
 	}
+}
+
+- (void)testCompositionJoinOrdersTextByLSASC {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSURL *db = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"items.sqlite"]];
+	// Inserted out of LSASC order, so the ORDER BY -- not the insertion order -- is
+	// what the assertion reads back.
+	MADCompositionCreateSource(db, @[
+		@"CREATE TABLE items (id INTEGER, name TEXT);",
+		@"INSERT INTO items VALUES (1, 'zebra');",
+		@"INSERT INTO items VALUES (2, 'Apple');",
+		@"INSERT INTO items VALUES (3, 'apricot');",
+		@"INSERT INTO items VALUES (4, 'äpfel');",
+		@"INSERT INTO items VALUES (5, 'Banana');"]);
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *items = MADCompositionDocument(@"items.mad", db, @"items", @[@"id", @"name"], &errorDescription);
+	XCTAssertNotNil(items, @"%@", errorDescription);
+	if (items == nil) return;
+
+	MADComposerInput *left = MADCompositionInput(@"items", items.currentResult,
+		@[@[@"name", @"name"]], @"id");
+	MADComposerInput *right = MADCompositionInput(@"items", items.currentResult, @[], @"id");
+
+	NSError *error = nil;
+	MADDataResult *root = [MADComposer composeLeft: left
+											right: right
+										  joinType: MADLinkTypeInnerJoin
+									   orderByKeys: @[left.fields.firstObject.sourceKey]
+									rootIdentifier: [[NSUUID UUID] UUIDString]
+									cacheDirectory: [NSURL fileURLWithPath: directory]
+											  error: &error];
+	XCTAssertNotNil(root, @"%@", error);
+	if (root == nil) return;
+
+	NSArray *names = @[@"zebra", @"Apple", @"apricot", @"äpfel", @"Banana"];
+	NSArray *expected = [names sortedArrayUsingSelector: @selector(mad_orderedCompare:)];
+	NSMutableArray *actual = [NSMutableArray array];
+	for (NSDictionary *row in [root.dataTable objectEnumerator]) {
+		[actual addObject: row[@"name"]];
+	}
+	XCTAssertEqualObjects(actual, expected, @"the root orders the text key with LSASC");
+}
+
+- (void)testCompositionAttachUnicodeReservedPathAndAlias {
+	// A unique root so the run never collides with a previous run's files; the tail
+	// still carries Unicode and URI-reserved characters in the path.
+	NSString *root = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	NSString *directory = [root stringByAppendingPathComponent: @"Café ?#% ü"];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSURL *db = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"data ?#%.sqlite"]];
+	XCTAssertTrue(MADCompositionCreateSource(db, @[
+		@"CREATE TABLE t (id INTEGER, v TEXT);",
+		@"INSERT INTO t VALUES (1, 'one');"]));
+
+	NSURL *composerURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"composer.sqlite"]];
+	MADDatabaseSqlite3 *composer = MADCompositionConnection(composerURL);
+	NSError *error = nil;
+	// A space-containing alias, and a path with Unicode and URI-reserved characters.
+	XCTAssertTrue([composer attachReadOnlyDatabaseAtURL: db asName: @"my attached db" error: &error], @"%@", error);
+	BOOL wrote = [composer executeSQL: @"INSERT INTO \"my attached db\".t DEFAULT VALUES"
+							fieldKeys: @[] onConnection: nil intoResultTable: nil
+					   transactionSet: NO returnsResults: NO binaryBindings: nil withError: &error];
+	XCTAssertFalse(wrote, @"the attached file is read-only through its encoded path and quoted alias");
+}
+
+- (void)testCompositionAttachmentLimitAndSQLiteVersion {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSURL *db = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"invoices.sqlite"]];
+	XCTAssertTrue(MADCompositionCreateSource(db, @[
+		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL);",
+		@"INSERT INTO invoices VALUES (1, 100.0);"]));
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *invoices = MADCompositionDocument(@"invoices.mad", db, @"invoices", @[@"invoice_id"], &errorDescription);
+	XCTAssertNotNil(invoices, @"%@", errorDescription);
+	if (invoices == nil) return;
+
+	NSURL *composerURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"composer.sqlite"]];
+	MADDatabaseSqlite3 *composer = MADCompositionConnection(composerURL);
+	sqlite3 *handle = (sqlite3 *)composer.databaseHandle;
+	int effectiveLimit = sqlite3_limit(handle, SQLITE_LIMIT_ATTACHED, -1);
+	const char *version = sqlite3_libversion();
+	printf("composition connection: SQLite %s, effective SQLITE_MAX_ATTACHED %d\n", version, effectiveLimit);
+	XCTAssertGreaterThan(effectiveLimit, 0, @"the connection reports its attach limit");
+
+	NSError *error = nil;
+	for (int i = 0; i < effectiveLimit; i++) {
+		NSString *name = [NSString stringWithFormat: @"db%d", i];
+		XCTAssertTrue([composer attachReadOnlyDatabaseAtURL: invoices.currentResult.rowDatabaseURL asName: name error: &error],
+					  @"attachment %d within the limit: %@", i, error);
+	}
+	error = nil;
+	XCTAssertFalse([composer attachReadOnlyDatabaseAtURL: invoices.currentResult.rowDatabaseURL asName: @"overflow" error: &error],
+				   @"one past the limit is refused");
+	XCTAssertNotNil(error);
+}
+
+- (void)testCompositionRequiredJoinKeyWithoutLabel {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSURL *invoicesURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"invoices.sqlite"]];
+	NSURL *paymentsURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"payments.sqlite"]];
+	XCTAssertTrue(MADCompositionCreateSource(invoicesURL, @[
+		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL);",
+		@"INSERT INTO invoices VALUES (1, 100.0);",
+		@"INSERT INTO invoices VALUES (2, 200.0);",
+		@"INSERT INTO invoices VALUES (3, 300.0);"]));
+	XCTAssertTrue(MADCompositionCreateSource(paymentsURL, @[
+		@"CREATE TABLE payments (payment_id INTEGER, invoice_id INTEGER, amount REAL);",
+		@"INSERT INTO payments VALUES (101, 1, 40.0);"]));
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *invoices = MADCompositionDocument(@"invoices.mad", invoicesURL, @"invoices",
+														   @[@"invoice_id", @"amount"], &errorDescription);
+	// Payments projects only "amount" through a report label; "invoice_id" is the
+	// root's join key and must be supplied as a required field, with no label.
+	MADHeadlessDocument *payments = MADCompositionDocument(@"payments.mad", paymentsURL, @"payments",
+														   @[@"amount"], &errorDescription);
+	XCTAssertNotNil(invoices, @"%@", errorDescription);
+	XCTAssertNotNil(payments, @"%@", errorDescription);
+	if (invoices == nil || payments == nil) return;
+
+	RptqQueryField *requiredInvoiceId = MADCompositionAddRequiredField(payments, @"payments", @"invoice_id");
+	XCTAssertNotNil(requiredInvoiceId);
+	payments.mainQuery.requiredQueryFields = @[requiredInvoiceId];
+	NSError *error = nil;
+	XCTAssertTrue(MADReportExporterRefreshDocument(payments, &error), @"%@", error);
+
+	MADDataResult *paymentsResult = payments.currentResult;
+	XCTAssertNotNil(MADCompositionLogicalKey(paymentsResult, @"invoice_id"), @"the required join key is projected");
+	XCTAssertNil(MADCompositionLogicalKey(paymentsResult, @"payment_id"), @"the unused payment column stays out");
+
+	MADComposerInput *left = MADCompositionInput(@"invoices", invoices.currentResult,
+		@[@[@"invoice_id", @"invoice_id"], @[@"amount", @"invoice_amount"]], @"invoice_id");
+	MADComposerInput *right = MADCompositionInput(@"payments", paymentsResult,
+		@[@[@"amount", @"payment_amount"]], @"invoice_id");
+
+	error = nil;
+	MADDataResult *root = [MADComposer composeLeft: left
+											right: right
+										  joinType: MADLinkTypeLeftOuterJoin
+									   orderByKeys: @[left.joinKey]
+									rootIdentifier: [[NSUUID UUID] UUIDString]
+									cacheDirectory: [NSURL fileURLWithPath: directory]
+											  error: &error];
+	XCTAssertNotNil(root, @"%@", error);
+	if (root == nil) return;
+	XCTAssertEqual(root.numberOfRows, (NSUInteger)3);
+	NSArray *rows = [root.dataTable objectEnumerator].allObjects;
+	XCTAssertEqualObjects(rows[0][@"invoice_id"], @1);
+	XCTAssertEqualObjects(rows[0][@"payment_amount"], @40);
+	XCTAssertEqualObjects(rows[1][@"invoice_id"], @2);
+	XCTAssertEqual(rows[1][@"payment_amount"], [NSNull null]);
+	XCTAssertEqualObjects(rows[2][@"invoice_id"], @3);
+	XCTAssertEqual(rows[2][@"payment_amount"], [NSNull null]);
+}
+
+- (void)testCompositionEmptyExpressionKeepsKnownType {
+	// A zero-row refresh over a typed column must still expose the column's declared
+	// type, not the String fallback for an untyped empty expression.
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSURL *db = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"invoices.sqlite"]];
+	XCTAssertTrue(MADCompositionCreateSource(db, @[
+		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL);",
+		@"INSERT INTO invoices VALUES (1, 100.0);"]));
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionDocument(@"invoices.mad", db, @"invoices",
+														   @[@"invoice_id", @"amount"], &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)1);
+
+	// Force a zero-row refresh.
+	RptqQueryPredicate *predicate = MADReportExporterAddImpossiblePredicate(document);
+	XCTAssertNotNil(predicate);
+	NSError *error = nil;
+	XCTAssertTrue(MADReportExporterRefreshDocument(document, &error), @"%@", error);
+
+	MADDataResult *empty = document.currentResult;
+	XCTAssertEqual(empty.numberOfRows, (NSUInteger)0);
+	NSString *invoiceKey = MADCompositionLogicalKey(empty, @"invoice_id");
+	NSString *amountKey = MADCompositionLogicalKey(empty, @"amount");
+	XCTAssertNotNil(invoiceKey);
+	XCTAssertNotNil(amountKey);
+	MADDataType invoiceType = empty.columns[invoiceKey].type;
+	MADDataType amountType = empty.columns[amountKey].type;
+	XCTAssertEqual(invoiceType, MADDataTypeInteger, @"the empty integer column keeps its declared type");
+	XCTAssertEqual(amountType, MADDataTypeDouble, @"the empty real column keeps its declared type");
 }
 
 #pragma mark - Cache ownership (P1)
