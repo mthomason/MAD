@@ -8,6 +8,11 @@ description: "Reports as tables, and drivers for anything that returns a table."
 
 This page describes composable reports: a report's result becomes a table another report can query, and a driver can front anything that returns rows. It is a design record; §8 names the phases, and not all of them are built.
 
+> **Normative model:** the execution contract this page motivates is now stated, normatively
+> and in one place, in
+> [`MAD_COMPOSITION_SPEC.md`](../project/design/MAD_COMPOSITION_SPEC.html). Where this page
+> (or `data-object.md`) differs from it, the spec wins.
+
 **Scope:** the architecture the user described on 2026-11-22: a user designs a report
 against a data source (MySQL, SQL Server, PostgreSQL, SQLite, or a Web API such as eBay's
 Seller API); that report's result is a materialized SQLite table; and another report can

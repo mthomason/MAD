@@ -1,5 +1,8 @@
 # MAD same-document composition implementation plan
 
+> **The normative execution model is [MAD_COMPOSITION_SPEC.md](MAD_COMPOSITION_SPEC.md).**
+> Read it first. This file is the implementation plan and progress record against it.
+
 Baseline: [mthomason/MAD master at 2d87f220](https://github.com/mthomason/MAD/tree/2d87f220b972397a325a9d225df8b4ee9acb6d6d). Audited 2026-11-23 against `feat/query-composition` at `5dba230eb`, which already carries the versioning and build-identity work; the revisions below are what that audit and the SQLite spike changed.
 
 ## Target behavior

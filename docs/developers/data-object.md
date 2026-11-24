@@ -17,6 +17,10 @@ not built.
 scheduled. [the project vision](../vision.html) §1 — "a report is a function from data sources to a table" — is
 the vision this file makes concrete and names the code for.
 
+> §5's composition sketch (including its Layout B recommendation, §5.1/§9.2) is superseded by
+> the normative [`MAD_COMPOSITION_SPEC.md`](../project/design/MAD_COMPOSITION_SPEC.html),
+> which adopts Layout A (`ATTACH`, one `.maddb` per node).
+
 ---
 
 ## 1. The idea, and what it is not
