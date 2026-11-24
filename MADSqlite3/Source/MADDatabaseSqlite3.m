@@ -869,6 +869,37 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 	}
 }
 
+- (BOOL)attachReadOnlyDatabaseAtURL:(NSURL *)url
+							asName:(NSString *)name
+							 error:(NSError * __autoreleasing *)error {
+	NSString *path = url.path;
+	if (path.length == 0 || name.length == 0) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: MADDatabaseSqlite3ErrorDomain
+										  code: MADDatabaseSqlite3ErrorFileNotFound
+									  userInfo: @{
+				NSLocalizedDescriptionKey: NSLocalizedString(@"The database file could not be attached.", @"Error attaching a read-only database."),
+			}];
+		}
+		return NO;
+	}
+
+	// mode=ro makes the attached file read-only at the file level; the connection
+	// must carry SQLITE_OPEN_URI for the URI to be parsed rather than taken as a
+	// literal file name.  Quote the URI and double any embedded single quote.
+	NSString *uri = [NSString stringWithFormat:@"file:%@?mode=ro", path];
+	NSString *escaped = [uri stringByReplacingOccurrencesOfString:@"'" withString:@"''"];
+	NSString *sql = [NSString stringWithFormat:@"ATTACH DATABASE '%@' AS %@", escaped, name];
+	return [self executeSQL: sql
+				  fieldKeys: @[]
+			   onConnection: nil
+			intoResultTable: nil
+			 transactionSet: NO
+			 returnsResults: NO
+			 binaryBindings: nil
+				  withError: error];
+}
+
 - (BOOL)executeQuery:(MADQuery <MADQueryDataBindingProtocol> *)query
 	   withDataTable:(id <MADDataTableWriting>)dataTable
 			andError:(NSError * __autoreleasing *)error {

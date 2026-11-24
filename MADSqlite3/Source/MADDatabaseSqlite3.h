@@ -63,6 +63,15 @@ int compare_string_utf8_localized_asc_collation(void* data, int len1, const void
 	binaryBindings: (NSArray *)binaryBindings
 		 withError: (NSError * __autoreleasing *)resultError;
 
+/// Attach another SQLite database file read-only, under `name`, for a composition
+/// query.  The connection must be open with SQLITE_OPEN_URI so the read-only URI
+/// is honoured; it registers LSASC, so a join that orders or compares a text key
+/// works.  Returns NO with `error` when the file is missing or the attachment
+/// limit (SQLITE_MAX_ATTACHED) is exceeded.
+- (BOOL)attachReadOnlyDatabaseAtURL:(NSURL *)url
+							 asName:(NSString *)name
+							  error:(NSError * __autoreleasing *)error;
+
 void mad_sqlite3Err(int rc, const char **errName, const char **errMsg);
 
 + (MADResult *)databaseResultValue:(void *)statement columnNumber:(int)columnNumber;
