@@ -54,6 +54,9 @@
 #import <MAD/RptqStoreContext.h>
 #import <MAD/RptqQueryGroup.h>
 #import <MAD/RptqQueryGroup+Extras.h>
+#import <MAD/RptqQueryPredicate.h>
+#import <MAD/RptqQueryPredicate+Extras.h>
+#import <MAD/MADPredicateOperator.h>
 #import <MAD/RptqDocumentSection.h>
 #import <MAD/RptqDocumentSection+Extras.h>
 #import <MAD/MADocumentSectionType.h>
@@ -909,6 +912,25 @@ static MADHeadlessDocument *MADCompositionComposedDocument(NSString *directory, 
 
 	RptqObject *invoices = source(invoicesURL, @"invoices", 10, 101, 200, @[ @"invoice_id", @"amount" ]);
 	RptqObject *payments = source(paymentsURL, @"payments", 20, 102, 300, @[ @"amount" ]);
+
+	// A predicate-only field on the payments source: payment_id is in the source table
+	// but is neither an output nor a join key, so a filter on it is evaluated without the
+	// value joining the source's projection (narrow projection).
+	RptqObject *paymentsSchemaTable = [context objectForEntity: @"RptqDatabaseSchemaTable" identifier: 301];
+	RptqObject *paymentIdSchemaField = [context insertObjectForEntity: @"RptqDatabaseSchemaField" identifier: 304];
+	[paymentIdSchemaField setValue: @"payment_id" forKey: @"name"];
+	NSMutableArray *paymentsFields = [[paymentsSchemaTable valueForKey: @"hasFields"] mutableCopy];
+	[paymentsFields addObject: paymentIdSchemaField];
+	[paymentsSchemaTable setValue: paymentsFields forKey: @"hasFields"];
+
+	RptqObject *paymentsQueryTable = [context objectForEntity: @"RptqQueryTable" identifier: 300];
+	RptqObject *paymentIdQueryField = [context insertObjectForEntity: @"RptqQueryField" identifier: 0];
+	[paymentIdQueryField setValue: paymentIdSchemaField forKey: @"databaseSchemaField"];
+	[paymentIdQueryField setValue: paymentsQueryTable forKey: @"inQueryTable"];
+	NSMutableArray *paymentsQueryFields = [[paymentsQueryTable valueForKey: @"hasQueryFields"] mutableCopy];
+	[paymentsQueryFields addObject: paymentIdQueryField];
+	[paymentsQueryTable setValue: paymentsQueryFields forKey: @"hasQueryFields"];
+
 	RptqObject *invoicesDB = [invoices valueForKey: @"inDatabase"];
 	RptqObject *paymentsDB = [payments valueForKey: @"inDatabase"];
 	[document setValue: @[ invoicesDB, paymentsDB ] forKey: @"hasDatabaseSchemas"];
@@ -1105,6 +1127,185 @@ static MADHeadlessDocument *MADCompositionComposedDocument(NSString *directory, 
 	}
 	XCTAssertGreaterThan(groupHeaders, (NSUInteger)0);
 	XCTAssertEqual(bodyRows.count, (NSUInteger)4);
+}
+
+static RptqQuery *MADCompositionQueryNamed(RptqDocument *model, NSString *name) {
+	for (RptqDatabase *db in model.hasDatabaseSchemas) {
+		for (RptqQuery *q in db.hasQueries) {
+			if ([q.name isEqualToString:name]) return q;
+		}
+	}
+	return nil;
+}
+
+static RptqQueryField *MADCompositionFieldNamed(RptqQuery *query, NSString *name) {
+	for (RptqQueryTable *qt in query.hasQueryTables) {
+		for (RptqQueryField *f in qt.hasQueryFields) {
+			if ([f.databaseSchemaField.name isEqualToString:name]) return f;
+		}
+	}
+	return nil;
+}
+
+static double MADCompositionValue(MADDataTableFast *table, NSUInteger row, NSString *key) {
+	NSDictionary *dict = [table dataForRow:row column:key error:NULL];
+	id value = dict[key];
+	if (value == nil || value == [NSNull null]) return NAN;
+	return [value doubleValue];
+}
+
+- (void)testComposedSourcePredicateFiltersTheSource {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionComposedDocument(directory, &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	RptqStoreContext *context = document.storeContext;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+	RptqQuery *payments = MADCompositionQueryNamed(model, @"payments");
+	RptqQueryField *amountField = MADCompositionFieldNamed(payments, @"amount");
+	XCTAssertNotNil(payments);
+	XCTAssertNotNil(amountField);
+
+	NSError *error = nil;
+	RptqQueryPredicate *predicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: amountField.identifier
+																				comparsonOperator: MADPredicateOperatorGreaterThan
+																					andRightValue: @"50"
+																			forManagedObjectContext: context
+																						  error: &error];
+	XCTAssertNotNil(predicate, @"%@", error);
+	[payments addHasQueryPredicateObject: predicate];
+	XCTAssertTrue([context save: &error], @"%@", error);
+
+	// Re-archive and reopen so the predicate round-trips the production save path.
+	XCTAssertTrue([document writeToURL: document.fileURL reproducible: NO error: &error], @"%@", error);
+	MADHeadlessDocument *reopened = [MADHeadlessDocument documentWithContentsOfURL: document.fileURL error: &error];
+	XCTAssertNotNil(reopened, @"%@", error);
+	if (reopened == nil) return;
+
+	RptqDocument *reopenedModel = [RptqDocument newDocumentReadFromManagedObjectContext: reopened.storeContext];
+	XCTAssertEqual(MADCompositionQueryNamed(reopenedModel, @"payments").hasQueryPredicate.count, (NSUInteger)1);
+	XCTAssertEqual(MADCompositionQueryNamed(reopenedModel, @"invoices").hasQueryPredicate.count, (NSUInteger)0);
+
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: reopened];
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: refresh];
+	while (queue.operationCount > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+	}
+	XCTAssertEqual(refresh.errors.count, (NSUInteger)0, @"%@", refresh.errors.firstObject);
+
+	// amount > 50 on payments leaves only payment 60; the left join keeps invoices 2 and 3.
+	// The composed result has no ORDER BY, so compare by invoice_id rather than by row.
+	XCTAssertEqual(reopened.currentResult.numberOfRows, (NSUInteger)3);
+	MADDataTableFast *table = reopened.dataTable;
+	NSMutableDictionary<NSNumber *, id> *rowsByInvoice = [NSMutableDictionary dictionary];
+	for (NSUInteger r = 1; r <= table.numberOfRows; r++) {
+		NSInteger invoice = (NSInteger)MADCompositionValue(table, r, @"invoice_id");
+		double payment = MADCompositionValue(table, r, @"payment_amount");
+		rowsByInvoice[@(invoice)] = isnan(payment) ? [NSNull null] : @(payment);
+	}
+	XCTAssertEqual(rowsByInvoice.count, (NSUInteger)3);
+	XCTAssertEqual([rowsByInvoice[@1] doubleValue], 60.0);
+	XCTAssertEqualObjects(rowsByInvoice[@2], [NSNull null]);
+	XCTAssertEqualObjects(rowsByInvoice[@3], [NSNull null]);
+}
+
+- (void)testComposedSourcePredicateOnNonReturnedFieldPreservesProjection {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionComposedDocument(directory, &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	RptqStoreContext *context = document.storeContext;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+	RptqQuery *payments = MADCompositionQueryNamed(model, @"payments");
+	RptqQueryField *paymentIdField = MADCompositionFieldNamed(payments, @"payment_id");
+	XCTAssertNotNil(paymentIdField);
+
+	// Filter on payment_id, which is neither an output nor a join key, so the value is
+	// used to evaluate the filter but never becomes a visible root output.
+	NSError *error = nil;
+	RptqQueryPredicate *predicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: paymentIdField.identifier
+																				comparsonOperator: MADPredicateOperatorEqual
+																					andRightValue: @"101"
+																			forManagedObjectContext: context
+																						  error: &error];
+	XCTAssertNotNil(predicate, @"%@", error);
+	[payments addHasQueryPredicateObject: predicate];
+	XCTAssertTrue([context save: &error], @"%@", error);
+
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: refresh];
+	while (queue.operationCount > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+	}
+	XCTAssertEqual(refresh.errors.count, (NSUInteger)0, @"%@", refresh.errors.firstObject);
+
+	// payment_id stays out of the root projection.
+	XCTAssertEqualObjects(document.currentResult.columnKeys, (@[ @"invoice_id", @"invoice_amount", @"payment_amount" ]));
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)3);
+
+	// Only payment 101 (amount 40) survives; invoices 2 and 3 stay, with blank payments.
+	MADDataTableFast *table = document.dataTable;
+	NSMutableDictionary<NSNumber *, id> *rowsByInvoice = [NSMutableDictionary dictionary];
+	for (NSUInteger r = 1; r <= table.numberOfRows; r++) {
+		NSInteger invoice = (NSInteger)MADCompositionValue(table, r, @"invoice_id");
+		double payment = MADCompositionValue(table, r, @"payment_amount");
+		rowsByInvoice[@(invoice)] = isnan(payment) ? [NSNull null] : @(payment);
+	}
+	XCTAssertEqual(rowsByInvoice.count, (NSUInteger)3);
+	XCTAssertEqual([rowsByInvoice[@1] doubleValue], 40.0);
+	XCTAssertEqualObjects(rowsByInvoice[@2], [NSNull null]);
+	XCTAssertEqualObjects(rowsByInvoice[@3], [NSNull null]);
+}
+
+- (void)testComposedRootPredicateIsRejected {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionComposedDocument(directory, &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	RptqStoreContext *context = document.storeContext;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+	RptqQuery *root = model.rootQuery;
+	RptqQueryField *paymentAmount = nil;
+	for (RptqQueryField *output in [model orderedCompositionOutputsWithError: NULL]) {
+		if ([output.outputKey isEqualToString: @"payment_amount"]) paymentAmount = output;
+	}
+	XCTAssertNotNil(root);
+	XCTAssertNotNil(paymentAmount);
+
+	NSError *error = nil;
+	RptqQueryPredicate *predicate = [RptqQueryPredicate newQueryPredicateFactoryWithLeftFieldID: paymentAmount.identifier
+																				comparsonOperator: MADPredicateOperatorGreaterThan
+																					andRightValue: @"50"
+																			forManagedObjectContext: context
+																						  error: &error];
+	XCTAssertNotNil(predicate, @"%@", error);
+	[root addHasQueryPredicateObject: predicate];
+	XCTAssertTrue([context save: &error], @"%@", error);
+
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: refresh];
+	while (queue.operationCount > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+	}
+	// A predicate on the root has no evaluation point, so the coordinator must refuse
+	// it rather than silently ignore a saved filter.
+	XCTAssertGreaterThan(refresh.errors.count, (NSUInteger)0, @"a root predicate must not be silently ignored");
+	XCTAssertTrue([refresh.errors.firstObject.localizedDescription containsString:@"root query"], @"%@", refresh.errors.firstObject);
 }
 
 - (void)testCompositionJoinPopulated {
