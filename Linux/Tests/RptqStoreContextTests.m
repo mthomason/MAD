@@ -22,6 +22,9 @@
 #import <MAD/RptqStoreContext.h>
 #import <MAD/MADStore.h>
 #import <MAD/RptqDocument+Extras.h>
+#import <MAD/MADDocumentStore.h>
+#import <MAD/MADArchiveManager.h>
+#import <MAD/RptqQueryField.h>
 
 // The original imported "MADStoreConverter.h" for the converted-sample tests; that
 // header is app-side and Core Data-backed and does not exist off Apple.
@@ -822,6 +825,146 @@ static void testCompositionGraphValidation(void) {
 	}
 }
 
+#pragma mark - Archive round trip
+
+/// Builds one source: a database with a distinct connection reference (dbname),
+/// a schema table with two fields, and a named query over that table.  Returns
+/// the query.
+static RptqObject *MADComposedSource(RptqStoreContext *context, NSString *dbname,
+									  NSString *tableName, NSString *queryName,
+									  int64_t databaseId, int64_t queryId, int64_t tableId) {
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:databaseId];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	RptqObject *credential = [context insertObjectForEntity:@"RptqDatabaseCredentals" identifier:0];
+	[credential setValue:dbname forKey:@"dbname"];
+	[database setValue:credential forKey:@"ownedByUser"];
+
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:tableId + 1];
+	[table setValue:tableName forKey:@"name"];
+	RptqObject *idField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:tableId + 2];
+	[idField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:tableId + 3];
+	[amountField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ table ] forKey:@"hasTables"];
+	[table setValue:@[ idField, amountField ] forKey:@"hasFields"];
+
+	RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:queryId];
+	[query setValue:queryName forKey:@"name"];
+	[database setValue:@[ query ] forKey:@"hasQueries"];
+	RptqObject *queryTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:tableId];
+	[queryTable setValue:table forKey:@"databaseSchemaTable"];
+	[queryTable setValue:query forKey:@"inQuery"];
+	return query;
+}
+
+/// A composed document saved through the production writer is copied as one .mad
+/// file to a clean directory and reopened through the production reader, which
+/// recovers both connection references, the root, the join and its field
+/// ownership, and the ordered output projection.
+static void testComposedArchiveRoundTrip(void) {
+	NSURL *directory = makeTempDirectory();
+	NSURL *madURL = [directory URLByAppendingPathComponent:@"composed.mad"];
+
+	// Build and save the composed document through the store + archive writers.
+	MADDocumentStore *documentStore = [MADDocumentStore storeForDocumentURL: madURL];
+	NSError *error = nil;
+	MAD_PASS([documentStore openWithError:&error], "the document store opens: %s", [[error description] UTF8String]);
+	RptqStoreContext *context = documentStore.context;
+	MAD_PASS([context loadAllWithError:&error], "the context loads: %s", [[error description] UTF8String]);
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *invoices = MADComposedSource(context, @"invoices.sqlite", @"invoices", @"invoices", 10, 101, 200);
+	RptqObject *payments = MADComposedSource(context, @"payments.sqlite", @"payments", @"payments", 20, 102, 300);
+	[document setValue:@[ [invoices valueForKey:@"inDatabase"], [payments valueForKey:@"inDatabase"] ] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *root = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[root setValue:@"root" forKey:@"name"];
+	[root setValue:[invoices valueForKey:@"inDatabase"] forKey:@"inDatabase"];
+
+	RptqObject *rootInvoicesTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:400];
+	[rootInvoicesTable setValue:root forKey:@"inQuery"];
+	[rootInvoicesTable setValue:invoices forKey:@"upstreamQuery"];
+	RptqObject *rootPaymentsTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:401];
+	[rootPaymentsTable setValue:root forKey:@"inQuery"];
+	[rootPaymentsTable setValue:payments forKey:@"upstreamQuery"];
+
+	// The root's ordered outputs, with an explicit non-incidental order.
+	// invoice_id and amount are 202/203 on invoices; amount is 303 on payments.
+	RptqObject *invoiceIdField = [context objectForEntity:@"RptqDatabaseSchemaField" identifier:202];
+	RptqObject *invoiceAmountField = [context objectForEntity:@"RptqDatabaseSchemaField" identifier:203];
+	RptqObject *paymentAmountField = [context objectForEntity:@"RptqDatabaseSchemaField" identifier:303];
+
+	RptqObject *out0 = [context insertObjectForEntity:@"RptqQueryField" identifier:500];
+	[out0 setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[out0 setValue:rootInvoicesTable forKey:@"inQueryTable"];
+	[out0 setValue:@"invoice_id" forKey:@"outputKey"];
+	[out0 setValue:@0 forKey:@"outputIndex"];
+	RptqObject *out1 = [context insertObjectForEntity:@"RptqQueryField" identifier:501];
+	[out1 setValue:invoiceAmountField forKey:@"databaseSchemaField"];
+	[out1 setValue:rootInvoicesTable forKey:@"inQueryTable"];
+	[out1 setValue:@"invoice_amount" forKey:@"outputKey"];
+	[out1 setValue:@1 forKey:@"outputIndex"];
+	RptqObject *out2 = [context insertObjectForEntity:@"RptqQueryField" identifier:502];
+	[out2 setValue:paymentAmountField forKey:@"databaseSchemaField"];
+	[out2 setValue:rootPaymentsTable forKey:@"inQueryTable"];
+	[out2 setValue:@"payment_amount" forKey:@"outputKey"];
+	[out2 setValue:@2 forKey:@"outputIndex"];
+
+	[document setValue:root forKey:@"rootQuery"];
+
+	MAD_PASS([context saveComposed:&error], "composed save: %s", [[error description] UTF8String]);
+	[documentStore close];
+
+	MADArchiveManager *writer = [[MADArchiveManager alloc] initWithFileWrapperURL: documentStore.gutsURL archiveURL: madURL];
+	writer.composed = YES;
+	MAD_PASS([writer archive:YES], "the composed archive writes");
+
+	// Copy only the .mad into a clean directory and reopen it there.
+	NSURL *cleanDirectory = makeTempDirectory();
+	NSURL *copyURL = [cleanDirectory URLByAppendingPathComponent:@"copy.mad"];
+	MAD_PASS([[NSFileManager defaultManager] copyItemAtURL: madURL toURL: copyURL error: &error],
+			 "the .mad copies alone: %s", [[error description] UTF8String]);
+
+	MADDocumentStore *reopenedStore = [MADDocumentStore storeForDocumentURL: copyURL];
+	MADArchiveManager *reader = [[MADArchiveManager alloc] initWithFileWrapperURL: reopenedStore.gutsURL archiveURL: copyURL];
+	MAD_PASS([reader unarchiveWithError: &error], "the copy unarchives: %s", [[error description] UTF8String]);
+	MAD_PASS([reopenedStore openWithError: &error], "the copy opens: %s", [[error description] UTF8String]);
+	RptqStoreContext *reread = reopenedStore.context;
+	MAD_PASS([reread loadAllWithError: &error], "the copy loads: %s", [[error description] UTF8String]);
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: reread];
+	RptqQuery *readRoot = model.rootQuery;
+	MAD_PASS(readRoot != nil, "the root is recovered");
+	MAD_PASS_EQUAL([readRoot valueForKey:@"name"], @"root", "the root is the named root");
+
+	// Both distinct connection references survive.
+	NSSet *databases = [model valueForKey:@"hasDatabaseSchemas"];
+	MAD_PASS(databases.count == (NSUInteger)2, "two distinct connections survive");
+	NSMutableSet *dbnames = [NSMutableSet set];
+	for (RptqObject *db in databases) {
+		[dbnames addObject:[[db valueForKey:@"ownedByUser"] valueForKey:@"dbname"]];
+	}
+	MAD_PASS([dbnames containsObject:@"invoices.sqlite"], "the invoices connection reference survives");
+	MAD_PASS([dbnames containsObject:@"payments.sqlite"], "the payments connection reference survives");
+
+	// The ordered output projection, recovered from the document alone.
+	NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError:&error];
+	MAD_PASS(outputs != nil, "the output order is recovered: %s", [[error description] UTF8String]);
+	MAD_PASS(outputs.count == (NSUInteger)3, "three outputs are recovered");
+	if (outputs.count == 3) {
+		RptqQueryField *o0 = outputs[0], *o1 = outputs[1], *o2 = outputs[2];
+		MAD_PASS_EQUAL(o0.outputKey, @"invoice_id", "output 0 is invoice_id");
+		MAD_PASS_EQUAL([o0 valueForKeyPath:@"inQueryTable.upstreamQuery.name"], @"invoices", "output 0 comes from invoices");
+		MAD_PASS_EQUAL(o1.outputKey, @"invoice_amount", "output 1 is invoice_amount");
+		MAD_PASS_EQUAL([o1 valueForKeyPath:@"inQueryTable.upstreamQuery.name"], @"invoices", "output 1 comes from invoices");
+		MAD_PASS_EQUAL(o2.outputKey, @"payment_amount", "output 2 is payment_amount");
+		MAD_PASS_EQUAL([o2 valueForKeyPath:@"inQueryTable.upstreamQuery.name"], @"payments", "output 2 comes from payments");
+	}
+
+	removeTempDirectory(directory);
+	removeTempDirectory(cleanDirectory);
+}
+
 MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testSchemaRoundTripsThroughTheContext),
 	MAD_TEST(testFaultingReturnsStableIdentities),
@@ -843,4 +986,5 @@ MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testCompositionGraphRoundTripsAndIsRevision3),
 	MAD_TEST(testOrdinaryReportStaysRevision2),
 	MAD_TEST(testFailedCompositionSaveRollsBackToRevision2),
-	MAD_TEST(testCompositionGraphValidation));
+	MAD_TEST(testCompositionGraphValidation),
+	MAD_TEST(testComposedArchiveRoundTrip));

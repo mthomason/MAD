@@ -350,6 +350,16 @@ static NSArray<MADStoreMigration *> *MADStoreCompositionMigrations(void) {
 									  addingColumn:@"upstreamQuery_identifier"
 											 toTable:@"RptqQueryTable"
 												type:MADStoreValueTypeInteger],
+			[MADStoreMigration migrationFromVersion:2
+										  toVersion:3
+									  addingColumn:@"outputIndex"
+											 toTable:@"RptqQueryField"
+												type:MADStoreValueTypeInteger],
+			[MADStoreMigration migrationFromVersion:2
+										  toVersion:3
+									  addingColumn:@"outputKey"
+											 toTable:@"RptqQueryField"
+												type:MADStoreValueTypeText],
 		];
 	});
 	return migrations;
@@ -404,6 +414,10 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 		documentRootQuery.introducedInVersion = 3;
 		MADStoreRelationship *tableUpstreamQuery = ToOne(@"upstreamQuery", @"RptqQuery", @"upstreamOfTable", YES);
 		tableUpstreamQuery.introducedInVersion = 3;
+		MADStoreAttribute *queryFieldOutputIndex = IntOpt(@"outputIndex");
+		queryFieldOutputIndex.introducedInVersion = 3;
+		MADStoreAttribute *queryFieldOutputKey = TextOpt(@"outputKey");
+		queryFieldOutputKey.introducedInVersion = 3;
 
 		#pragma mark Schema part
 
@@ -494,6 +508,8 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 
 		[entities addObject:Table(@"RptqQueryField", @[
 			Int(@"identifier"),
+			queryFieldOutputIndex,
+			queryFieldOutputKey,
 		], @[
 			ToOne(@"databaseSchemaField", @"RptqDatabaseSchemaField", @"inQueryField", YES),
 			ToMany(@"inAggregateObject", @"RptqDocumentElementAggregate", @"aggregateField"),

@@ -628,6 +628,7 @@ static NSSet *MADStoreCompositionOnlyFields(NSString *entityName) {
 			@"RptqQuery": [NSSet setWithArray:@[ @"name", @"rootOfDocument", @"upstreamOfTable" ]],
 			@"RptqDocument": [NSSet setWithArray:@[ @"rootQuery" ]],
 			@"RptqQueryTable": [NSSet setWithArray:@[ @"upstreamQuery" ]],
+			@"RptqQueryField": [NSSet setWithArray:@[ @"outputIndex", @"outputKey" ]],
 		};
 	});
 	return byEntity[entityName] ?: [NSSet set];

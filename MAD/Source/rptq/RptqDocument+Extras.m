@@ -702,4 +702,32 @@ static NSError *MADCompositionError(NSInteger code, NSString *message) {
 	return YES;
 }
 
+- (NSArray<RptqQueryField *> *)orderedCompositionOutputsWithError:(NSError * __autoreleasing *)error {
+	RptqQuery *root = self.rootQuery;
+	if (root == nil) return @[];
+
+	NSMutableArray<RptqQueryField *> *outputs = [NSMutableArray array];
+	for (RptqQueryTable *table in root.hasQueryTables) {
+		for (RptqQueryField *field in table.hasQueryFields) {
+			[outputs addObject: field];
+		}
+	}
+	[outputs sortUsingComparator:^NSComparisonResult(RptqQueryField *a, RptqQueryField *b) {
+		return [@(a.outputIndex) compare:@(b.outputIndex)];
+	}];
+
+	// A field with no output key is a projection whose order was never recorded
+	// (an earlier store, or an unset projection); do not invent an order.
+	for (RptqQueryField *field in outputs) {
+		if (field.outputKey == nil) {
+			if (error != NULL) {
+				*error = MADCompositionError(3, NSLocalizedString(
+					@"This composed document records no output order for its projection.", @"Missing projection order error."));
+			}
+			return nil;
+		}
+	}
+	return outputs;
+}
+
 @end

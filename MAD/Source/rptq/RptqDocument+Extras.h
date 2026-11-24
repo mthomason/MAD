@@ -15,7 +15,7 @@
 #import <MAD/MTPaper.h>
 
 @class MADDatabase, MADErrorContainer, RptqDocumentElement, RptqQuery,
-	   RptqQueryPredicate, RptqQueryLinks;
+	   RptqQueryPredicate, RptqQueryLinks, RptqQueryField, RptqQueryTable;
 
 @interface RptqDocument (Extras)
 
@@ -54,6 +54,12 @@
 	/// dependency graph has no cycle.  An error names the affected query.  A
 	/// document with no root is not composed and trivially validates.
 	- (BOOL)validateCompositionGraphWithError:(NSError * __autoreleasing *)error;
+
+	/// The root's projected query fields, ordered by their output index.  Each
+	/// field carries its root output key and its source query and schema field.
+	/// Nil with `error` when a composed document records no output order (an
+	/// earlier store or an unset projection) -- never an invented order.
+	- (nullable NSArray<RptqQueryField *> *)orderedCompositionOutputsWithError:(NSError * __autoreleasing *)error;
 
 @end
 

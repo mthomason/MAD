@@ -25,6 +25,8 @@
 
 @dynamic identifier;
 @dynamic databaseSchemaField;
+@dynamic outputIndex;
+@dynamic outputKey;
 @dynamic inAggregateObject;
 @dynamic inBarcodeField1;
 @dynamic inBarcodeField2;
