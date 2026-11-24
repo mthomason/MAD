@@ -401,3 +401,62 @@ groups, one group crossing a page boundary), and the ordinary London/created rep
 
 **Pending.** The full `./Linux/build.sh` image build, the Windows engine/package/WPF run,
 and the PR CI have not been run; PR creation and merge await the user's direction.
+
+## Checkpoint G — native macOS authoring landed (2026-11-24)
+
+The first native macOS workflow for **authoring** a composed report is landed: a user can
+build the invoices/payments report from a new document and two SQLite sources, through the
+app's own actions, without a prebuilt `.mad`. The engine (Checkpoints A–F) is unchanged;
+this checkpoint is the AppKit authoring surface on top of it.
+
+- **Document model.** `MADMacDocument` gains `isComposed`, `rootQuery`, `allQueries`,
+  `reportQuery` (root for a composed document, else the single query), `selectedQuery`,
+  `databaseForQuery:`, `requiresComposedStore`, and the graph mutations
+  `addSourceQueryNamed:withConnection:credentials:error:`,
+  `addRootQueryNamed:error:`, and `renameQuery:to:`. A composed document (a root, more
+  than one query, or any named query) now persists at store revision 3 on every mutation
+  (`notifyDocumentMutated` → `saveComposed:`), not only at the final save, so an
+  interrupted session does not lose the revision-3 columns.
+- **Adding a source.** `addSourceQueryNamed:…` connects to a live source, imports its
+  schema as a new `RptqDatabase` plus a named `RptqQuery` (each source keeps its own
+  `inDatabase` connection reference), and adds it to the document. The connection sheet
+  gained a source-picker mode (builds/tests and hands back a connection) and a
+  `targetQuery`, so an existing source reconnects in place instead of overwriting the
+  document's default database.
+- **Query workspace.** A query selector (root + sources) with add-source, add-root, and
+  rename actions. Switching queries scopes the schema sidebar, the visual canvas, the
+  Filters/Groupings editors, and the SQL editor to the selected query, so editing one
+  source preserves the others' connections, fields, and filters.
+- **The root.** When the root is selected, the sidebar lists the source queries;
+  double-clicking one adds it as an upstream table (one root query field per projected
+  source field). The existing drag/context-menu field connection creates the left outer
+  join (the root is scoped to one left outer join). The new **Outputs** popover chooses,
+  names, and reorders the root's output columns via `outputKey`/`outputIndex`; a field may
+  be both a join key and an output (the composer derives the join key from
+  `databaseSchemaField` and the output from `outputKey`, so they do not collide). Filter
+  and group field labels show each field's source and output key, keeping
+  `invoices.amount` distinct from `payments.amount`.
+- **Report Designer.** The field browser lists a composed document's root outputs in
+  order and binds a placed data field to its `outputKey`, so the detail band renders the
+  joined values against the right source; the ordinary alias path is unchanged.
+
+**Verification.** `./Mac/build.sh --smoke-test` is green (22 PASS), including a new
+authoring case that builds the report from scratch through the document and query-workspace
+actions, saves, reopens, refreshes, and pins: four unfiltered detail rows
+`(1,100,40) (1,100,60) (2,200,null) (3,300,null)`, a source filter `payments.amount > 50`
+→ three rows, and the same predicate on the root → one row `(1,100,60)`. The ordinary
+single-source workflow (London refresh/export, created+SQL+designer report, viewer) stays
+green. `MADFixtureMaker sources <dir>` writes the two sample databases. The smoke test
+drives the controller actions where they are reachable (`addSchemaTableToQuery:`,
+`addUpstreamQueryToRoot:`, `connectQueryField:`, the designer's `addDataField:inSection:`)
+and sets `outputKey`/`outputIndex` directly rather than through the Outputs popover, and
+drives the connection sheet's effect via `addSourceQueryNamed:` rather than the sheet's
+buttons — those two UI steps are the ones the test bypasses.
+
+**Not covered / pending.** The full `./Linux/build.sh` image build, the Windows
+engine/package/WPF run, and the PR CI have not been run (this checkpoint touches only the
+AppKit app and the fixture maker, not the headless or Windows surfaces). Source-query
+*preview* and the SQL editor still compile the default query rather than the selected
+source, and the SQL editor is disabled for the root. A graphical capability matrix, the
+Windows/iOS authoring surfaces, and the remaining open review items (P4, P7, P8) are out
+of scope for this milestone. PR creation and merge await the user's direction.
