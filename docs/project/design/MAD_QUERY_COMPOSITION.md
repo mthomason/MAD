@@ -336,6 +336,15 @@ the Viewer's detail band binds the joined rows to their root output keys.
   joined detail values, take the payments source away and refresh (the failure names
   `payments` and the previous report stays readable), restore an empty payments source and
   refresh (three invoices, blank payments), and export the visible generation to PDF.
+- **Multi-page verification.** The smoke suite also builds a 60-invoice fixture (invoices
+  `i%3==0` carry two payments, `i%3==1` one, `i%3==2` none, so unpaid invoices render blank
+  payment fields) and verifies: the detail rows, in page order, are exactly `1…N` (no row
+  dropped or duplicated at a page break) and each row's invoice/payment amounts match the
+  fixture; the first and last PDF pages contain the first and last invoice amounts; the
+  exported PDF page count equals the rendered page count; and refreshing the same open
+  report with only the first five invoices shrinks the page count. The fixture relies on
+  sorted insertion order — the composed coordinator has no explicit `ORDER BY` yet, a gap
+  the test's ordered comparison would expose.
 
 **Fixture and commands.** `CLI/build.sh --make-fixture compose /tmp/mad-e2e/composed.mad`,
 then `mad refresh` / `mad export --format json` on that file (run from a different working
@@ -353,8 +362,8 @@ four-row result readable.
 **Results.** Apple `MAD` 753/0 (added `testFieldKeyUsesTheComposedOutputKey`); headless
 `MADDocumentObjectDataReferenceLabelDynamicTests` (5/0) and `MADReportExporterTests` (25/0)
 pass in the Linux image; the headless `mad` framework compiles; and
-`./Mac/build.sh --smoke-test` passes (19 PASS) with the composed open→refresh→view→export
-case plus the ordinary London/created reports.
+`./Mac/build.sh --smoke-test` passes (20 PASS) with the composed open→refresh→view→export
+case, the multi-page composed case, and the ordinary London/created reports.
 
 **Pending.** The full `./Linux/build.sh` image build, the Windows engine/package/WPF run,
 and the PR CI have not been run; PR creation and merge await the user's direction.
