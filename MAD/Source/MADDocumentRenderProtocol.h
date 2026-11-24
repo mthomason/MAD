@@ -70,6 +70,24 @@
 /// iterates the rows.
 - (void)pinRenderResultToCurrentResult;
 
+/// The generation the render data source is pinned to: the result the last
+/// -pinRenderResultToCurrentResult captured, or nil when nothing has pinned yet.
+/// The formatter reads its page-index and layout cache key and its group types from
+/// this, so they describe the same generation the rows come from.
+- (nullable MADDataResult *)pinnedRenderResult;
+
+/// Pin the render data source to a specific result.  An export pins the result it
+/// captured so the page walk and its rows describe one generation; a format that
+/// follows must not re-pin over it.
+- (void)pinRenderResult:(nullable MADDataResult *)result;
+
+/// Clear the render data source's pin, so the next format pins to the live result.
+- (void)unpinRenderResult;
+
+/// Whether the current pin was set explicitly (an export), and so must survive a
+/// following format rather than being re-pinned to the live current result.
+- (BOOL)isRenderResultExplicitlyPinned;
+
 @end
 
 #endif

@@ -1104,6 +1104,20 @@ static os_log_t mlog;
 	}
 }
 
+- (void)closeConnections {
+	// Prepared statements belong to the connections being closed; finalize them
+	// first so they are not finalized against a closed database.
+	[self invalidateSelectStatementCache];
+	if (_statementInsert != NULL) {
+		sqlite3_finalize(_statementInsert);
+		_statementInsert = NULL;
+	}
+	[self.databaseForInserts closeDatabaseConnectionIfOpen];
+	[self.databaseForSelects closeDatabaseConnectionIfOpen];
+	self.databaseForInserts = nil;
+	self.databaseForSelects = nil;
+}
+
 - (void)beginReadTransaction {
 	// A table with no cache directory or delegate has no selects connection at all;
 	// there is nothing to begin, so the pair is a no-op rather than a crash.

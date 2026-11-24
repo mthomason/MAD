@@ -45,6 +45,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// cache.  Named for the document, via MADURLFactory, as the app has always named it.
 @property (readonly, nonatomic, copy) NSURL *cacheDirectory;
 
+/// The document's derived-file namespace, as the `NSUInteger` the row table and
+/// cache files are keyed by.  Derived from the full file URL, not the basename, so
+/// two same-named documents in different folders keep separate caches.
+@property (readonly, nonatomic) NSUInteger cacheNamespaceHash;
+
 /// The opened store, nil until -openWithError: has answered YES.  Settable so a
 /// caller that already has one -- the tests, which inject a context instead of
 /// unarchiving a document -- can hand it over; the app always lets -openWithError:

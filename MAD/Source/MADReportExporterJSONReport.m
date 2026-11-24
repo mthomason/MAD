@@ -95,11 +95,30 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 }
 
 - (void)appendEntriesToJSON:(NSMutableString *)json source:(MADReportExportSource *)source {
+	// One snapshot for the rows and the pages: the export source already pinned the
+	// result it was created with, and the page walk below must read the same one, so
+	// a refresh that publishes mid-export cannot pair one generation's rows with
+	// another's pages.  Pin the render data source explicitly (the format's own pin
+	// then leaves it alone) and clear it when the export is done.
+	id <MADDocumentRenderProtocol> renderDocument = nil;
+	if ([source.document conformsToProtocol: @protocol(MADDocumentRenderProtocol)]) {
+		renderDocument = (id <MADDocumentRenderProtocol>)source.document;
+	}
+	BOOL pinned = NO;
+	if ([renderDocument respondsToSelector: @selector(pinRenderResult:)]) {
+		[renderDocument pinRenderResult: source.result];
+		pinned = YES;
+	}
+
 	[super appendEntriesToJSON: json source: source];
 
 	[json appendString: @",\n  \"report\": {\n"];
 	[self appendPagesToJSON: json document: source.document];
 	[json appendString: @"  }"];
+
+	if (pinned) {
+		[renderDocument unpinRenderResult];
+	}
 }
 
 // The pages, in order: the same walk the PDF draws from and the HTML formats read

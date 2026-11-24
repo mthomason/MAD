@@ -108,6 +108,30 @@
 }
 @end
 
+// Forward declarations for the two helpers defined inside the test implementation
+// below; the publishing document's -format override uses them.
+static BOOL MADReportExporterRefreshDocument(MADHeadlessDocument *document, NSError **outError);
+static RptqQueryPredicate *MADReportExporterAddImpossiblePredicate(MADHeadlessDocument *document);
+
+// A document that publishes a zero-row result the first time it is asked to format,
+// so a test can place a publish between an export source's capture and the page walk
+// that renders the report.
+@interface MADPublishingExportDocument : MADHeadlessDocument
+@property (nonatomic) BOOL publishOnNextFormat;
+@end
+
+@implementation MADPublishingExportDocument
+- (void)format {
+	if (self.publishOnNextFormat) {
+		self.publishOnNextFormat = NO;
+		RptqQueryPredicate *predicate = MADReportExporterAddImpossiblePredicate(self);
+		NSError *error = nil;
+		MADReportExporterRefreshDocument(self, &error);
+	}
+	[super format];
+}
+@end
+
 @interface MADReportExporterTests : XCTestCase
 @end
 
@@ -951,6 +975,192 @@ static MADDataResult *MADCompositionExecute(MADDatabaseSqlite3 *composer,
 			XCTAssertNotNil(error);
 		}
 	}
+}
+
+#pragma mark - Cache ownership (P1)
+
+static NSArray<NSString *> *MADCompositionMaddbFiles(MADHeadlessDocument *document) {
+	NSURL *directory = document.cachedFilesDirectory;
+	NSArray<NSString *> *names = [[NSFileManager defaultManager] contentsOfDirectoryAtPath: directory.path error: NULL];
+	NSMutableArray<NSString *> *maddb = [NSMutableArray array];
+	for (NSString *name in names) {
+		if ([name.pathExtension isEqualToString: @"maddb"]) {
+			[maddb addObject: [directory URLByAppendingPathComponent: name].path];
+		}
+	}
+	return maddb;
+}
+
+- (void)testTwoSameNamedDocumentsInDifferentFoldersKeepSeparateCaches {
+	NSString *root = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSUUID UUID].UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath: root withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSURL *dbA = [NSURL fileURLWithPath: [root stringByAppendingPathComponent: @"a.sqlite"]];
+	NSURL *dbB = [NSURL fileURLWithPath: [root stringByAppendingPathComponent: @"b.sqlite"]];
+
+	XCTAssertTrue(MADCompositionCreateSource(dbA, @[
+		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
+		@"INSERT INTO invoices VALUES (1, 100.0, 'first');",
+		@"INSERT INTO invoices VALUES (2, 200.0, 'second');",
+		@"INSERT INTO invoices VALUES (3, 300.0, 'third');"]));
+	XCTAssertTrue(MADCompositionCreateSource(dbB, @[
+		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
+		@"INSERT INTO invoices VALUES (1, 100.0, 'first');",
+		@"INSERT INTO invoices VALUES (2, 200.0, 'second');",
+		@"INSERT INTO invoices VALUES (3, 300.0, 'third');",
+		@"INSERT INTO invoices VALUES (4, 400.0, 'fourth');",
+		@"INSERT INTO invoices VALUES (5, 500.0, 'fifth');"]));
+
+	// Two documents that share one basename; their caches used to collide on it.
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *a = MADCompositionDocument(@"SharedName.mad", dbA, @"invoices", @[@"invoice_id", @"amount"], &errorDescription);
+	XCTAssertNotNil(a, @"%@", errorDescription);
+	XCTAssertEqual(a.currentResult.numberOfRows, (NSUInteger)3);
+	NSURL *aURL = a.fileURL;
+	NSString *aRowPath = a.currentResult.rowDatabaseURL.path;
+	a = nil;
+
+	MADHeadlessDocument *b = MADCompositionDocument(@"SharedName.mad", dbB, @"invoices", @[@"invoice_id", @"amount"], &errorDescription);
+	XCTAssertNotNil(b, @"%@", errorDescription);
+	XCTAssertEqual(b.currentResult.numberOfRows, (NSUInteger)5);
+	NSURL *bURL = b.fileURL;
+	NSString *bRowPath = b.currentResult.rowDatabaseURL.path;
+	b = nil;
+
+	XCTAssertNotEqualObjects(aRowPath, bRowPath, @"same-named documents in different folders keep separate row files");
+
+	// Reopen each through the normal cache-loading path, without refreshing.
+	MADHeadlessDocument *reopenedA = [MADHeadlessDocument documentWithContentsOfURL: aURL error: &errorDescription];
+	XCTAssertNotNil(reopenedA, @"%@", errorDescription);
+	[reopenedA resetCache];
+	XCTAssertEqual(reopenedA.currentResult.numberOfRows, (NSUInteger)3, @"A reads its own rows, not B's");
+
+	MADHeadlessDocument *reopenedB = [MADHeadlessDocument documentWithContentsOfURL: bURL error: &errorDescription];
+	XCTAssertNotNil(reopenedB, @"%@", errorDescription);
+	[reopenedB resetCache];
+	XCTAssertEqual(reopenedB.currentResult.numberOfRows, (NSUInteger)5, @"B reads its own rows, not A's");
+}
+
+- (void)testSaveAsCopyRefreshDoesNotChangeTheOriginal {
+	NSString *root = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSUUID UUID].UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath: root withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSURL *db = [NSURL fileURLWithPath: [root stringByAppendingPathComponent: @"a.sqlite"]];
+	XCTAssertTrue(MADCompositionCreateSource(db, @[
+		@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL, note TEXT);",
+		@"INSERT INTO invoices VALUES (1, 100.0, 'first');",
+		@"INSERT INTO invoices VALUES (2, 200.0, 'second');",
+		@"INSERT INTO invoices VALUES (3, 300.0, 'third');"]));
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *a = MADCompositionDocument(@"SharedName.mad", db, @"invoices", @[@"invoice_id", @"amount"], &errorDescription);
+	XCTAssertNotNil(a, @"%@", errorDescription);
+	XCTAssertEqual(a.currentResult.numberOfRows, (NSUInteger)3);
+	NSURL *aURL = a.fileURL;
+
+	// Save As into a second folder under the same name.
+	NSURL *saveAsDirectory = [NSURL fileURLWithPath: [NSTemporaryDirectory() stringByAppendingPathComponent: [NSUUID UUID].UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtURL: saveAsDirectory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSURL *docB = [saveAsDirectory URLByAppendingPathComponent: @"SharedName.mad"];
+	NSError *error = nil;
+	XCTAssertTrue([a writeToURL: docB reproducible: NO error: &error], @"%@", error);
+	a = nil;
+
+	// Open the copy and refresh it to a different, zero-row result.
+	MADHeadlessDocument *b = [MADHeadlessDocument documentWithContentsOfURL: docB error: &errorDescription];
+	XCTAssertNotNil(b, @"%@", errorDescription);
+	RptqQueryPredicate *predicate = MADReportExporterAddImpossiblePredicate(b);
+	XCTAssertNotNil(predicate);
+	XCTAssertTrue(MADReportExporterRefreshDocument(b, &error), @"%@", error);
+	XCTAssertEqual(b.currentResult.numberOfRows, (NSUInteger)0);
+	b = nil;
+
+	// The original still reopens to its own rows.
+	MADHeadlessDocument *reopenedA = [MADHeadlessDocument documentWithContentsOfURL: aURL error: &errorDescription];
+	XCTAssertNotNil(reopenedA, @"%@", errorDescription);
+	[reopenedA resetCache];
+	XCTAssertEqual(reopenedA.currentResult.numberOfRows, (NSUInteger)3, @"refreshing the copy cannot change what the original reopens");
+}
+
+#pragma mark - One render snapshot (P2)
+
+static MADPublishingExportDocument *MADPublishingExportNewDocument(void) {
+	MADReportExporterInstallSampleDatabase();
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSUUID UUID].UUIDString];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSString *name = [NSString stringWithFormat: @"publishing-%@.mad", [NSUUID UUID].UUIDString];
+	NSURL *copy = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: name]];
+	NSError *error = nil;
+	if (![[NSFileManager defaultManager] copyItemAtURL: [NSURL fileURLWithPath: MADReportExporterFixturePath()] toURL: copy error: &error]) return nil;
+	return (MADPublishingExportDocument *)[MADPublishingExportDocument documentWithContentsOfURL: copy error: &error];
+}
+
+- (void)testJSONReportExportUsesOneGenerationAcrossAPublish {
+	MADPublishingExportDocument *document = MADPublishingExportNewDocument();
+	XCTAssertNotNil(document, @"the London fixture could not be copied and opened");
+	if (document == nil) return;
+
+	NSError *error = nil;
+	XCTAssertTrue(MADReportExporterRefreshDocument(document, &error), @"%@", error);
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)76);
+
+	id <MADReportExporting> cleanExporter = [[MADReportExporterJSONReport alloc] init];
+	NSURL *cleanURL = MADReportExporterOutputURL(@"clean.json");
+	XCTAssertTrue([cleanExporter exportDocument: document toURL: cleanURL options: 0 error: &error], @"%@", error);
+	NSData *cleanData = [NSData dataWithContentsOfURL: cleanURL];
+	XCTAssertNotNil(cleanData);
+
+	// Publish a zero-row B after the export source captured A and wrote A's rows but
+	// before the page walk formats.  The rows and the pages must both stay A.
+	document.publishOnNextFormat = YES;
+	id <MADReportExporting> crossingExporter = [[MADReportExporterJSONReport alloc] init];
+	NSURL *crossingURL = MADReportExporterOutputURL(@"crossing.json");
+	XCTAssertTrue([crossingExporter exportDocument: document toURL: crossingURL options: 0 error: &error], @"%@", error);
+	NSData *crossingData = [NSData dataWithContentsOfURL: crossingURL];
+	XCTAssertNotNil(crossingData);
+
+	XCTAssertEqualObjects(crossingData, cleanData, @"the export's rows and pages describe one generation (A)");
+}
+
+#pragma mark - Staged-file cleanup (P3)
+
+- (void)testFailedRefreshLeavesNoStagedFilesAndRetrySucceeds {
+	MADFailingPublicationDocument *document = MADReportExporterNewPublicationDocument();
+	XCTAssertNotNil(document);
+	if (document == nil) return;
+
+	NSError *error = nil;
+	XCTAssertTrue(MADReportExporterRefreshDocument(document, &error), @"%@", error);
+	MADDataResult *a = document.currentResult;
+	XCTAssertNotNil(a);
+	NSString *aIdentifier = a.identifier;
+	NSString *aRowPath = a.rowDatabaseURL.path;
+
+	// The baseline set of row files: the live table's (empty) file plus A's.  A
+	// failed refresh must add nothing to it.
+	NSArray<NSString *> *maddbBefore = MADCompositionMaddbFiles(document);
+
+	// Force a failed publish: the staged generation must be discarded, leaving A.
+	RptqQueryPredicate *predicate = MADReportExporterAddImpossiblePredicate(document);
+	XCTAssertNotNil(predicate);
+	document.failPublication = YES;
+	error = nil;
+	XCTAssertFalse(MADReportExporterRefreshDocument(document, &error), @"the forced publication must fail");
+	XCTAssertNotNil(error);
+	document.failPublication = NO;
+
+	XCTAssertEqualObjects(document.currentResult.identifier, aIdentifier, @"A stays published");
+	XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath: aRowPath], @"A's row file is intact");
+
+	// No staged row file leaked: the discard removed B with its handles closed.
+	NSArray<NSString *> *maddbAfter = MADCompositionMaddbFiles(document);
+	XCTAssertEqualObjects([maddbAfter sortedArrayUsingSelector: @selector(compare:)],
+						  [maddbBefore sortedArrayUsingSelector: @selector(compare:)],
+						  @"the staged row file was removed");
+
+	// A retry succeeds.
+	MADReportExporterRemovePredicate(document, predicate);
+	error = nil;
+	XCTAssertTrue(MADReportExporterRefreshDocument(document, &error), @"%@", error);
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)76);
 }
 
 @end

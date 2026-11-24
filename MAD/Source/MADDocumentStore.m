@@ -49,9 +49,24 @@ static NSString * const MADDocumentStoreFileName			= @"store.sqlite";
 			URLByAppendingPathComponent: MADDocumentStoreFileName];
 }
 
+// The stable identity a document's derived files are named by.  The app used the
+// document's basename, so two same-named documents (different folders, or a Save As
+// under the same name) collided on one `<hash>.mdcache` and one `t<hash>` row table;
+// the last publisher won and reopening the other read its rows.  The full, normalized
+// file path names the file itself, so a reopen finds the same cache while two
+// same-named documents stay apart.  A cache written under the old basename key is
+// simply not found and is disposable -- a refresh regenerates it.
+- (NSString *)cacheNamespace {
+	NSString *path = self.documentURL.standardizedURL.path;
+	return path.length > 0 ? path : (self.documentURL.absoluteString ?: @"");
+}
+
+- (NSUInteger)cacheNamespaceHash {
+	return self.cacheNamespace.hash;
+}
+
 - (NSURL *)cacheDirectory {
-	NSString *filename = self.documentURL.lastPathComponent.stringByDeletingPathExtension;
-	return [MADURLFactory newURLCacheFilesDirectoryForFilename: filename];
+	return [MADURLFactory newURLCacheFilesDirectoryForFilename: self.cacheNamespace];
 }
 
 #pragma mark - Opening

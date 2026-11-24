@@ -66,6 +66,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)beginReadTransaction;
 - (void)commitReadTransaction;
 
+/// Finalize prepared statements and close both SQLite connections (the inserts
+/// writer and the selects reader), so the row file and column map can be removed
+/// immediately.  Windows cannot delete a file while a handle to it is open, and
+/// the reader otherwise stays open for the table's whole lifetime.  Idempotent.
+- (void)closeConnections;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -33,6 +33,14 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 	return NSMakeRange(0, (NSUInteger)groupNumber + 1);
 }
 
+@interface MADDocumentRenderDataSource ()
+// YES when an export pinned a specific result with -pinResult:explicitly:YES.  The
+// formatter's own -pinRenderResultToCurrentResult pins with explicitly:NO, so a
+// format that follows an export leaves the export's generation in place rather than
+// re-pinning to whatever the live current result is by then.
+@property (nonatomic, readwrite) BOOL resultPinnedExplicitly;
+@end
+
 @implementation MADDocumentRenderDataSource
 
 - (instancetype)initWithDocument:(id <MADDocumentRenderProtocol>)document {
@@ -40,6 +48,11 @@ static inline NSRange MADRangeToGroup(int64_t groupNumber) {
 		_document = document;
 	}
 	return self;
+}
+
+- (void)pinResult:(MADDataResult *)result explicitly:(BOOL)explicitly {
+	self.result = result;
+	self.resultPinnedExplicitly = explicitly;
 }
 
 #pragma mark - MADPrintPageRendererDataSourceProtocol

@@ -196,13 +196,26 @@ typedef NSComparisonResult (*MADGroupLevelComparator)(id value, id value2, MADDa
 	return pageLayout.objectEnumerator;
 }
 
+// The result this pass reads: the render data source's pin when it has one, else
+// the document's live current result.  Every read that describes a page -- the
+// cache key, the group types, the rows -- must use the same one, so a refresh that
+// publishes mid-pass cannot pair one generation's cache key with another's rows.
+- (MADDataResult *)renderResult {
+	id <MADDocumentRenderProtocol> layout = self.layout;
+	if ([layout respondsToSelector: @selector(pinnedRenderResult)]) {
+		MADDataResult *pinned = layout.pinnedRenderResult;
+		if (pinned != nil) return pinned;
+	}
+	return layout.currentResult;
+}
+
 // The generation the page index and layout cache names are keyed by.  The index
 // stores row IDs into the row table, so a new generation's row IDs must never be
 // paired with an old generation's table: the key carries the published result's
 // identifier, which changes every refresh (and is the stable row-file name for a
 // result reloaded from cache).
 - (NSString *)generationIdentifier {
-	NSString *identifier = self.layout.currentResult.identifier;
+	NSString *identifier = self.renderResult.identifier;
 	return identifier.length > 0 ? identifier : @"none";
 }
 
@@ -376,7 +389,10 @@ static MADGroupLevelComparator MADComparisonFunctionForDataType(MADDataType data
 	if (_groupDataTypes == nil) {
 		NSArray <NSSortDescriptor *> *sortDescriptors = self.sections.groupSortDescriptors;
 		NSMutableArray <NSNumber *> *dataTypes = [[NSMutableArray alloc] initWithCapacity:sortDescriptors.count];
-		NSDictionary <NSString *, MADDataColumn *> *columns = self.layout.dataTable.columns;
+		// The pinned generation's columns, so a group's comparison type matches the
+		// rows this pass reads rather than a newer result's live table.
+		MADDataTableFast *dataTable = self.renderResult.dataTable ?: self.layout.dataTable;
+		NSDictionary <NSString *, MADDataColumn *> *columns = dataTable.columns;
 		NSUInteger groupLevel = 0;
 		for (NSSortDescriptor *sortDescriptor in sortDescriptors) {
 			MADDataType dataType = MADDataTypeUnknown;
@@ -595,6 +611,18 @@ static MADGroupLevelComparator MADComparisonFunctionForDataType(MADDataType data
 
 	if (contextChanged == NO || self.needsFormat) {
 		@synchronized(self) {
+			// Pin this pass to one published generation before the page-index and
+			// layout cache key, the group types or any row is read.  It is pinned
+			// exactly once here; -formatDocument must not re-pin, or a refresh that
+			// publishes between the two could pair one generation's cache key with
+			// another's rows.  An export that already pinned a result (so its rows and
+			// pages describe one generation) keeps that pin rather than re-pinning.
+			id <MADDocumentRenderProtocol> layout = self.layout;
+			BOOL explicitlyPinned = [layout respondsToSelector: @selector(isRenderResultExplicitlyPinned)] &&
+									layout.isRenderResultExplicitlyPinned;
+			if ([layout respondsToSelector: @selector(pinRenderResultToCurrentResult)] && !explicitlyPinned) {
+				[layout pinRenderResultToCurrentResult];
+			}
 			[self setLayoutSize:printableSize];
 			[self loadLayoutAndIndexesFromCache];
 			BOOL needsFormatNow = self.needsFormat;
@@ -636,12 +664,9 @@ static MADGroupLevelComparator MADComparisonFunctionForDataType(MADDataType data
 	self.sections = nil;
 	self.groupDataTypes = nil;
 
-	// Pin this pass to one published generation: the page index key (above) and
-	// every row read during and after this format use the same result, so a refresh
-	// that publishes mid-operation cannot change what the operation reads.
-	if ([layout respondsToSelector: @selector(pinRenderResultToCurrentResult)]) {
-		[layout pinRenderResultToCurrentResult];
-	}
+	// The generation is pinned once in -format:contentChanged: before the cache key
+	// or group types are read; re-pinning here would let a refresh that publishes in
+	// between change the rows under an already-written cache key.
 
 	[layout resetSectionLayoutManagers];
 	

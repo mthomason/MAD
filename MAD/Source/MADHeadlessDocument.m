@@ -183,7 +183,7 @@
 		_fileURL = [url copy];
 		_documentStore = [MADDocumentStore storeForDocumentURL: url];
 
-		MADDataTableFast *dataTable = [[MADDataTableFast alloc] initWithId: self.filename.hash];
+		MADDataTableFast *dataTable = [[MADDataTableFast alloc] initWithId: self.documentStore.cacheNamespaceHash];
 		dataTable.cacheDelegate = self;
 		_dataTable = dataTable;
 	}
@@ -423,7 +423,7 @@
 }
 
 - (void)resetCache {
-	MADDataTableFast *dataTable = [[MADDataTableFast alloc] initWithId: self.filename.hash];
+	MADDataTableFast *dataTable = [[MADDataTableFast alloc] initWithId: self.documentStore.cacheNamespaceHash];
 	dataTable.cacheDelegate = self;
 	NSError *error = nil;
 	BOOL loaded = [dataTable loadFromCacheWithUrl: self.urlDataTableCache error: &error];
@@ -455,7 +455,7 @@
 	}
 
 	NSString *generation = NSUUID.UUID.UUIDString;
-	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId: self.filename.hash];
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId: self.documentStore.cacheNamespaceHash];
 	table.cacheFileIdentifier = generation;
 	table.cacheDelegate = self;
 	NSURL *columnMapURL = [self.cachedFilesDirectory URLByAppendingPathComponent:
@@ -525,9 +525,25 @@
 	if (pending == nil) return;
 	NSURL *rowDatabaseURL = pending.rowDatabaseURL;
 	NSURL *columnMapURL = pending.columnMapURL;
-	pending = nil;	// close the staged table's connections before removing its files
-	[[NSFileManager defaultManager] removeItemAtURL: rowDatabaseURL error: NULL];
-	[[NSFileManager defaultManager] removeItemAtURL: columnMapURL error: NULL];
+	MADDataTableFast *table = pending.dataTable;
+	// Close the staged table's handles before removing its files: Windows cannot
+	// delete a file whose handle is still open, and the reader otherwise stays open
+	// for the table's whole lifetime (holding the space on Apple).
+	[table closeConnections];
+	pending = nil;
+
+	// A removal failure is observable but must not clobber the refresh's own error;
+	// the discard is a cleanup, so its result is logged, not returned.
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSError *removeError = nil;
+	if (![fileManager removeItemAtURL: rowDatabaseURL error: &removeError]) {
+		os_log_error(GetMadLog(), "Failed to remove the staged row file %@: %@",
+					 rowDatabaseURL.lastPathComponent, removeError.localizedDescription);
+	}
+	if (![fileManager removeItemAtURL: columnMapURL error: &removeError]) {
+		os_log_error(GetMadLog(), "Failed to remove the staged column map %@: %@",
+					 columnMapURL.lastPathComponent, removeError.localizedDescription);
+	}
 }
 
 - (BOOL)writePublishedColumnMapData:(NSData *)data toURL:(NSURL *)url error:(NSError * __autoreleasing *)error {
@@ -624,7 +640,23 @@
 }
 
 - (void)pinRenderResultToCurrentResult {
-	self.renderDataSource.result = self.currentResult;
+	[self.renderDataSource pinResult:self.currentResult explicitly:NO];
+}
+
+- (void)pinRenderResult:(MADDataResult *)result {
+	[self.renderDataSource pinResult:result explicitly:YES];
+}
+
+- (void)unpinRenderResult {
+	[self.renderDataSource pinResult:nil explicitly:NO];
+}
+
+- (MADDataResult *)pinnedRenderResult {
+	return self.renderDataSource.result;
+}
+
+- (BOOL)isRenderResultExplicitlyPinned {
+	return self.renderDataSource.resultPinnedExplicitly;
 }
 
 - (void)beginReadTransaction { [self.renderDataSource beginReadTransaction]; }
