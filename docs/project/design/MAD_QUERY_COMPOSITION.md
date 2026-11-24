@@ -360,8 +360,23 @@ the Viewer's detail band binds the joined rows to their root output keys.
   descending) over deliberately shuffled invoices and duplicate detail records, then checks
   the sort descriptors, the sorted row order, and the rendered group breaks; the macOS smoke
   suite adds a 40-payment group that crosses a page boundary.
-
-**Fixture and commands.** `CLI/build.sh --make-fixture compose /tmp/mad-e2e/composed.mad`,
+- **Filter behavior.** A filter is a `RptqQueryPredicate` owned by a query
+  (`RptqQuery.hasQueryPredicate`), compiled by `MADQueryPredicate` into the query's SQL
+  `WHERE`. There is no separate Viewer or report-level filter. On a composed document a
+  source predicate runs in that source's own SQL, before the join: `amount > 50` on the
+  payments source leaves payment 60 and the left join still returns `(1,100,60) (2,200,null)
+  (3,300,null)`. A predicate on the composed *root* has no evaluation point — the root is the
+  composition of the sources, not a statement the coordinator compiles — so the coordinator
+  now refuses it with a clear error instead of silently ignoring a saved filter; a filter
+  must sit on the source it constrains. Narrow projection is preserved: a source can filter
+  on a field it does not return (e.g. `payment_id = 101`), and that field never becomes a
+  visible root output. The three cases are pinned by `testComposedSourcePredicateFiltersTheSource`,
+  `testComposedRootPredicateIsRejected`, and
+  `testComposedSourcePredicateOnNonReturnedFieldPreservesProjection`. Root predicates are the
+  open gap: filtering the joined result (e.g. `payment_amount > 50` to exclude unpaid
+  invoices) needs a post-join evaluation the existing semantics do not express, and would
+  require a new filter decision before the macOS authoring milestone; the query editor's
+  filter UI today operates on a source query, not the root. `CLI/build.sh --make-fixture compose /tmp/mad-e2e/composed.mad`,
 then `mad refresh` / `mad export --format json` on that file (run from a different working
 directory, as in Checkpoint E).
 
@@ -374,8 +389,8 @@ bind to their own root keys, not swapped (the renderer's key mapping is pinned b
 amounts. The unavailable-payments refresh reports `The source 'payments' …` and keeps the
 four-row result readable.
 
-**Results.** Apple `MAD` 754/0 (added `testFieldKeyUsesTheComposedOutputKey` and
-`testComposedGroupingSortsByOutputKeysAndBreaksGroups`); headless
+**Results.** Apple `MAD` 757/0 (added `testFieldKeyUsesTheComposedOutputKey`,
+`testComposedGroupingSortsByOutputKeysAndBreaksGroups`, and the three filter tests); headless
 `MADDocumentObjectDataReferenceLabelDynamicTests` (5/0) and `MADReportExporterTests` (25/0)
 pass in the Linux image; the headless `mad` framework compiles; and
 `./Mac/build.sh --smoke-test` passes (21 PASS) with the composed open→refresh→view→export
