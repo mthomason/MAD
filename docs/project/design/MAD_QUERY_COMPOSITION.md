@@ -306,3 +306,55 @@ and `scripts/dev/check_source_lists.py` green.
 **Pending.** The same-commit Windows engine/package/WPF run and the PR CI have not been
 run; they remain identified as pending. PR creation and merge await the user's direction.
 
+
+## Checkpoint F — native macOS composition landed (2026-11-24)
+
+The composed report now opens, refreshes, renders, and exports through the native AppKit
+application's own path: the ordinary Refresh action selects the composed coordinator, and
+the Viewer's detail band binds the joined rows to their root output keys.
+
+- **Shared refresh selection.** `MADOperationRefresh` gained
+  `+documentUsesComposedRefresh:`, the one place that decides a document refreshes through
+  `MADOperationRefreshComposed` (an explicit `rootQuery`) rather than the ordinary
+  single-query chain. Both the CLI (`MADCLIDocument`) and the native document
+  (`MADMacDocument`) now call it. `MADMacDocument -refreshDataWithPassword:completion:`
+  branches to a `MADOperationRefreshComposed` run for a composed root and leaves the
+  ordinary `MADOperationRefreshInitialize…` → `MADOperationRefresh` chain unchanged for an
+  ordinary report.
+- **Field binding.** `MADDocumentObjectDataReferenceLabelDynamic -fieldKey` returns a root
+  field's persisted `outputKey` when one is set. The composed result table is keyed by the
+  output keys the composer wrote, not by a source-table alias, so a composed detail band
+  would otherwise render blank — or, with two sources naming a field `amount`, bind both to
+  the wrong source. The ordinary alias path is unchanged.
+- **Fixture layout.** `MADFixtureMaker compose` now writes a detail band whose three data
+  labels are bound to the root outputs `invoice_id`, `invoice_amount`, `payment_amount`.
+  The document now uses `newDocumentForManagedObjectContext:` for its five sections, so the
+  composed fixture is a real report layout rather than a sectionless root.
+- **Native verification.** `Mac/Tests/MADMacSmokeTest.m` adds the composed case: build the
+  fixture through the production store and archive writers, open it through
+  `MADMacDocument`, refresh through the Viewer's `refreshReportAction:`, read back the
+  joined detail values, take the payments source away and refresh (the failure names
+  `payments` and the previous report stays readable), restore an empty payments source and
+  refresh (three invoices, blank payments), and export the visible generation to PDF.
+
+**Fixture and commands.** `CLI/build.sh --make-fixture compose /tmp/mad-e2e/composed.mad`,
+then `mad refresh` / `mad export --format json` on that file (run from a different working
+directory, as in Checkpoint E).
+
+**Observed rendered values.** Default projection refreshes 4 rows and exports columns
+`invoice_id, invoice_amount, payment_amount` with rows `(1,100,40) (1,100,60) (2,200,null)
+(3,300,null)`. The native Viewer reads the same four rows through `dataForRow:column:` and
+confirms invoice 1's two payments (40 and 60) sit beside invoice amount 100 — the amounts
+bind to their own root keys, not swapped (the renderer's key mapping is pinned by
+`testFieldKeyUsesTheComposedOutputKey`). Empty payments refresh 3 rows with blank payment
+amounts. The unavailable-payments refresh reports `The source 'payments' …` and keeps the
+four-row result readable.
+
+**Results.** Apple `MAD` 753/0 (added `testFieldKeyUsesTheComposedOutputKey`); headless
+`MADDocumentObjectDataReferenceLabelDynamicTests` (5/0) and `MADReportExporterTests` (25/0)
+pass in the Linux image; the headless `mad` framework compiles; and
+`./Mac/build.sh --smoke-test` passes (19 PASS) with the composed open→refresh→view→export
+case plus the ordinary London/created reports.
+
+**Pending.** The full `./Linux/build.sh` image build, the Windows engine/package/WPF run,
+and the PR CI have not been run; PR creation and merge await the user's direction.
