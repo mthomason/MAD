@@ -50,6 +50,11 @@ NSNotificationName const MADMacDocumentDidRefreshNotification = @"MADMacDocument
 @property (nonatomic, strong, readwrite, nullable) MADSectionsLayout *sectionsLayout;
 @property (nonatomic, strong) MADOperationQueue *refreshQueue;
 
+- (void)refreshComposedDataWithDocument:(MADHeadlessDocument *)document
+					  resolvedCredential:(nullable MADCredential *)resolvedCred
+							connection:(MADDatabaseConnection *)connection
+							completion:(void (^)(BOOL success, NSError * _Nullable error))completion;
+
 @end
 
 @implementation MADMacDocument
@@ -334,6 +339,17 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 		}
 	}
 
+	// A composed document (one with an explicit root) refreshes through the engine's
+	// multi-source coordinator; the ordinary single-query chain below is only for the
+	// ordinary report.
+	if ([MADOperationRefresh documentUsesComposedRefresh: doc]) {
+		[self refreshComposedDataWithDocument:doc
+							resolvedCredential:resolvedCred
+								  connection:conn
+								  completion:completion];
+		return;
+	}
+
 	MADOperationRefreshInitializeMainDataTable *initTable =
 		[[MADOperationRefreshInitializeMainDataTable alloc] initWithDocument:doc];
 	MADOperationRefreshInitialize *initOp =
@@ -384,6 +400,50 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 
 	[_refreshQueue addOperation:initTable];
 	[_refreshQueue addOperation:initOp];
+	if (credOp != nil) {
+		[_refreshQueue addOperation:credOp];
+	}
+	[_refreshQueue addOperation:refreshOp];
+}
+
+- (void)refreshComposedDataWithDocument:(MADHeadlessDocument *)doc
+					  resolvedCredential:(nullable MADCredential *)resolvedCred
+							connection:(MADDatabaseConnection *)conn
+							completion:(void (^)(BOOL success, NSError * _Nullable error))completion {
+	MADOperationRefreshComposed *refreshOp =
+		[[MADOperationRefreshComposed alloc] initWithDocument:doc];
+
+	MADMacCredentialsOperation *credOp = nil;
+	if ([conn requiresCredentials] && resolvedCred != nil &&
+		(resolvedCred.username.length > 0 || resolvedCred.password.length > 0)) {
+		credOp = [[MADMacCredentialsOperation alloc] initWithCredentials:resolvedCred];
+		[refreshOp addDependency:credOp];
+	}
+
+	__weak typeof(self) weakSelf = self;
+	__weak MADOperationRefreshComposed *weakRefreshOp = refreshOp;
+	refreshOp.completionBlock = ^{
+		MADOperationRefreshComposed *strongRefreshOp = weakRefreshOp;
+		NSArray<NSError *> *refreshErrors = [strongRefreshOp.errors copy];
+		NSError *firstErr = refreshErrors.firstObject;
+		dispatch_async(dispatch_get_main_queue(), ^{
+			typeof(self) strongSelf = weakSelf;
+			if (strongSelf == nil) return;
+			BOOL ok = doc.refreshed && refreshErrors.count == 0 && firstErr == nil;
+			NSError *err = firstErr;
+			if (!ok && err == nil) {
+				err = [NSError errorWithDomain:@"MADMacDocument"
+										  code:3
+									  userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"Could not refresh report data. Check the query and database connection settings.", @"Error: the report refresh failed with no more specific reason.") }];
+			}
+			[[NSNotificationCenter defaultCenter] postNotificationName:MADMacDocumentDidRefreshNotification
+																object:strongSelf];
+			if (completion) {
+				completion(ok, err);
+			}
+		});
+	};
+
 	if (credOp != nil) {
 		[_refreshQueue addOperation:credOp];
 	}

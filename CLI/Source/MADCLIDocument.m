@@ -122,7 +122,7 @@ static NSError *MADCLIDocumentError(NSString *message) {
 	// operation below is the same MADOperation the app's refresh would build for an
 	// ordinary document, and the composed one is the engine's, so the CLI stays a
 	// thin adapter over the shared engine work.
-	if (document.activeDocumentModel.rootQuery != nil) {
+	if ([MADOperationRefresh documentUsesComposedRefresh: document]) {
 		MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
 		if (credentials != nil) {
 			MADCLICredentialsOperation *holder = [[MADCLICredentialsOperation alloc] init];

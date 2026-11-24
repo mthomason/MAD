@@ -17,6 +17,12 @@
 
 	- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document;
 
+	/// YES when the document carries an explicit composition root and must refresh
+	/// through MADOperationRefreshComposed rather than the ordinary single-query
+	/// chain.  The CLI and the native application both use this to pick the
+	/// coordinator, so the decision lives in one place.
+	+ (BOOL)documentUsesComposedRefresh:(id <MADDocumentDataProtocol>)document;
+
 @end
 
 /// The refresh a composed document runs: resolves the explicit root, validates its

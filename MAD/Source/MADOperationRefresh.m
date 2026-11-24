@@ -129,6 +129,10 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 
 @implementation MADOperationRefresh
 
++ (BOOL)documentUsesComposedRefresh:(id <MADDocumentDataProtocol>)document {
+	return document.activeDocumentModel.rootQuery != nil;
+}
+
 - (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document {
 	if (self = [super init]) {
 		_document = document;
