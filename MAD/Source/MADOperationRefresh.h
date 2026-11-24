@@ -19,4 +19,16 @@
 
 @end
 
+/// The refresh a composed document runs: resolves the explicit root, validates its
+/// dependencies, refreshes each reachable source once serially with that source's
+/// connection and dialect, composes the published inputs through MADComposer, and
+/// publishes the completed root for normal consumers.  The ordinary document path is
+/// MADOperationRefresh; a caller selects this one when the document has an explicit
+/// root query.
+@interface MADOperationRefreshComposed : MADOperation
+
+	- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document;
+
+@end
+
 #endif

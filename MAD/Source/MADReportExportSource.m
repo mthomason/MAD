@@ -20,9 +20,11 @@
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqQueryField.h>
 
 #import <MADSqlite3/MADDataTableFast.h>
 
@@ -80,6 +82,12 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 		return nil;
 	}
 
+	// A composed document has no single compilable query; its committed root result
+	// and its persisted output projection are the schema, fields and rows.
+	if (document.activeDocumentModel.rootQuery != nil) {
+		return [self composedSourceWithDocument: document error: error];
+	}
+
 	// The SQL build is what populates the query's fieldKeys and fields, so the column
 	// descriptions below are read after it, not before.
 	NSError *sqlError = nil;
@@ -131,6 +139,50 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 		if ([field isKindOfClass: [RptqDatabaseSchemaField class]]) {
 			fields[columnKey] = field;
 		}
+	}
+	source.schemaFields = fields;
+
+	return source;
+}
+
+/// The export source for a composed document: the committed root's columns and
+/// rows, and the persisted output projection's schema fields.  The root result's
+/// columns are keyed by the output keys the composer wrote, which is the order the
+/// document persists.
++ (instancetype)composedSourceWithDocument:(id <MADDocumentDataProtocol>)document
+									 error:(NSError * _Nullable __autoreleasing *)error {
+
+	RptqDocument *model = document.activeDocumentModel;
+	NSArray <RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError: error];
+	if (outputs == nil) return nil;
+
+	MADReportExportSource *source = [[MADReportExportSource alloc] init];
+	source.document = document;
+	source.result = document.currentResult;
+	source.driverName = @"composed";
+	// The root has no single SQL statement the way an ordinary query does; a reader
+	// dispatches on the document's composition, not on this description.
+	source.sql = @"<composed root>";
+
+	MADDataTableFast *table = source.result.dataTable ?: document.dataTable;
+	NSMutableArray <NSString *> *columnKeys = [NSMutableArray arrayWithCapacity: table.columnKeys.count];
+	for (NSString *tableColumnKey in table.columnKeys) {
+		MADDataColumn *column = table.columns[tableColumnKey];
+		[columnKeys addObject: column.identifier ?: tableColumnKey];
+	}
+	// A root with no published result still describes its projection from the
+	// persisted outputs, so an empty composed export is shaped, not absent.
+	if (columnKeys.count == 0) {
+		for (RptqQueryField *output in outputs) {
+			[columnKeys addObject: output.outputKey];
+		}
+	}
+	source.columnKeys = columnKeys;
+
+	NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields =
+		[NSMutableDictionary dictionaryWithCapacity: outputs.count];
+	for (RptqQueryField *output in outputs) {
+		fields[output.outputKey] = output.databaseSchemaField;
 	}
 	source.schemaFields = fields;
 

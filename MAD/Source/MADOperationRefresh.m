@@ -13,6 +13,7 @@
 #import <MADAPI/MADDatabaseConnection.h>
 #import <MADAPI/MADDatabase.h>
 #import <MADAPI/MADQuery.h>
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
 
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADDataColumn.h>
@@ -24,6 +25,24 @@
 #import <MAD/MADConstants.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
 #import <MAD/MADQueryFull.h>
+
+#import "MADComposer.h"
+#import "MADDatabase+Constructor.h"
+#import "MADDatabaseConnection+Constructor.h"
+#import "RptqDocument+Extras.h"
+#import "RptqDocument.h"
+#import "RptqQuery.h"
+#import "RptqQueryTable+Extras.h"
+#import "RptqQueryTable.h"
+#import "RptqQueryLinks.h"
+#import "RptqQueryField.h"
+#import "RptqDatabase.h"
+#import "RptqDatabaseSchemaField.h"
+#import "RptqDatabaseSchemaTable.h"
+#import "RptqDatabaseCredentals+Extras.h"
+
+#import <Foundation/NSFileManager.h>
+#import <Foundation/NSUUID.h>
 
 
 // The operation's own domain.  It used to borrow @"MADCache" for a missing
@@ -252,6 +271,341 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 	document.refreshed = YES;
 
 	[self finish];
+}
+
+@end
+
+#pragma mark - Composed refresh
+
+// MADocument and MADHeadlessDocument both expose -fileURL; the data protocol does
+// not, so the coordinator reaches it through this declaration (the same selector
+// MADOperationRefreshInitialize uses to resolve a source's connection).
+@interface NSObject (MADComposedRefreshDocumentURL)
+- (NSURL *)fileURL;
+@end
+
+/// The plain-data snapshot of one source, captured on the store's owning queue so
+/// the database I/O that follows runs without touching the store.
+@interface MADComposedSourcePlan : NSObject
+@property (nonatomic, copy) NSString *name;               // the source query's name (alias)
+@property (nonatomic, strong) MADDatabase *database;      // the source's own connection and dialect
+@property (nonatomic, copy) NSString *sql;                // the compiled SELECT
+@property (nonatomic, copy) NSArray<NSString *> *fieldKeys; // the projection's logical keys, in order
+@property (nonatomic, copy) NSString *joinKey;            // the full logical key this source joins on
+@property (nonatomic, strong) MADDataResult *result;      // the published source result, after refresh
+@end
+
+/// One projected root column, in the caller's order, naming which source it reads.
+@interface MADComposedOutputPlan : NSObject
+@property (nonatomic, assign) NSInteger sourceIndex;      // 0 = left, 1 = right
+@property (nonatomic, copy) NSString *sourceKey;
+@property (nonatomic, copy) NSString *outputKey;
+@end
+
+@implementation MADComposedSourcePlan
+@end
+
+@implementation MADComposedOutputPlan
+@end
+
+/// The full logical key a root field reads from its source: the source query table's
+/// alias plus the schema field name, the same spelling the source's SELECT writes
+/// ("Invoices0.InvoiceId").  A root field owns its source through its query table's
+/// upstream reference.
+static NSString *MADComposedLogicalKeyForField(RptqQueryField *rootField, MADDatabase *database) {
+	RptqQuery *sourceQuery = rootField.inQueryTable.upstreamQuery;
+	RptqDatabaseSchemaField *schemaField = rootField.databaseSchemaField;
+	if (sourceQuery == nil || schemaField == nil) return nil;
+	int64_t tableIdentifier = schemaField.inTable.identifier;
+	for (RptqQueryTable *table in sourceQuery.hasQueryTables) {
+		if (table.databaseSchemaTable.identifier == tableIdentifier) {
+			return [database queryKey: schemaField.name table: table.queryAlias];
+		}
+	}
+	return nil;
+}
+
+@implementation MADOperationRefreshComposed {
+	id <MADDocumentDataProtocol> _document;
+}
+
+- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document {
+	if (self = [super init]) {
+		_document = document;
+	}
+	return self;
+}
+
+- (BOOL)isAsynchronous { return YES; }
+
+- (void)execute {
+	id <MADDocumentDataProtocol> document = _document;
+	if (self.cancelled) {
+		[document discardPendingResult];
+		return [self finish];
+	}
+	if (document == nil) {
+		[self finishWithError:[NSError errorWithDomain: MADOperationRefreshErrorDomain
+												 code: errNoDocument
+											 userInfo: nil]];
+		return;
+	}
+
+	NSURL *documentURL = [document respondsToSelector:@selector(fileURL)] ? [(id)document fileURL] : nil;
+	NSURL *cacheDirectory = document.urlDataTableCache.URLByDeletingLastPathComponent;
+
+	// Resolve the graph on the store's owning queue, and capture everything the
+	// database I/O below needs as plain data.
+	__block MADComposedSourcePlan *leftPlan = nil;
+	__block MADComposedSourcePlan *rightPlan = nil;
+	__block NSArray<MADComposedOutputPlan *> *outputPlans = nil;
+	__block MADLinkType joinType = MADLinkTypeLeftOuterJoin;
+	__block NSError *resolveError = nil;
+	MADOperationRefreshRunOnMain(^{
+		RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+		if (![model validateCompositionGraphWithError: &resolveError]) return;
+
+		NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError: &resolveError];
+		if (outputs == nil) return;
+
+		RptqQueryLinks *join = model.rootQuery.hasQueryLinks.anyObject;
+		if (join == nil || join.hasLeftField == nil || join.hasRightField == nil) {
+			resolveError = [NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
+				NSLocalizedDescriptionKey: NSLocalizedString(@"The composed document has no join between its sources.",
+															  @"Missing composition join.") }];
+			return;
+		}
+		joinType = (MADLinkType)join.type;
+
+		RptqQuery *leftQuery = join.hasLeftField.inQueryTable.upstreamQuery;
+		RptqQuery *rightQuery = join.hasRightField.inQueryTable.upstreamQuery;
+		if (leftQuery == nil || rightQuery == nil) {
+			resolveError = [NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
+				NSLocalizedDescriptionKey: NSLocalizedString(@"A join side references a missing source.",
+															  @"Missing composition source.") }];
+			return;
+		}
+
+		// Every output field and every join key must be present in its source's
+		// projection.  Collect them by source, then resolve each to the source's
+		// own query fields so the downstream-only join key is projected too.
+		NSMutableDictionary<NSNumber *, NSMutableSet<NSNumber *> *> *requiredSchemaIds = [NSMutableDictionary dictionary];
+		void (^requireField)(RptqQueryField *) = ^(RptqQueryField *field) {
+			NSNumber *sourceId = @(field.inQueryTable.upstreamQuery.identifier);
+			NSMutableSet<NSNumber *> *ids = requiredSchemaIds[sourceId];
+			if (ids == nil) { ids = [NSMutableSet set]; requiredSchemaIds[sourceId] = ids; }
+			[ids addObject: @(field.databaseSchemaField.identifier)];
+		};
+		for (RptqQueryField *output in outputs) requireField(output);
+		requireField(join.hasLeftField);
+		requireField(join.hasRightField);
+
+		NSArray<RptqQueryField *> *(^requiredForSource)(RptqQuery *) = ^(RptqQuery *source) {
+			NSMutableArray<RptqQueryField *> *required = [NSMutableArray array];
+			NSSet<NSNumber *> *ids = requiredSchemaIds[@(source.identifier)];
+			for (RptqQueryTable *table in source.hasQueryTables) {
+				for (RptqQueryField *field in table.hasQueryFields) {
+					if ([ids containsObject: @(field.databaseSchemaField.identifier)]) {
+						[required addObject: field];
+					}
+				}
+			}
+			return required;
+		};
+
+		MADComposedSourcePlan *(^planForSource)(RptqQuery *, RptqQueryField *) = ^(RptqQuery *source, RptqQueryField *joinField) {
+			RptqDatabase *rptqDatabase = source.inDatabase;
+			NSObject <MADConnectionsPropertiesProtocol> *user =
+				(NSObject <MADConnectionsPropertiesProtocol> *)rptqDatabase.ownedByUser;
+			MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: user documentURL: documentURL];
+			MADDatabase *database = [MADDatabase newDatabaseWithConnection: connection];
+
+			MADQueryFull *query = [[MADQueryFull alloc] initWithQuery: source andQueryLimit: NSUIntegerMax];
+			query.database = database;
+			query.requiredQueryFields = requiredForSource(source);
+
+			NSError *sqlError = nil;
+			NSString *sql = [query copySQLWithManagedObjectContext: document.storeContext error: &sqlError];
+			if (sql.length == 0) { resolveError = sqlError; return (MADComposedSourcePlan *)nil; }
+
+			MADComposedSourcePlan *plan = [[MADComposedSourcePlan alloc] init];
+			plan.name = source.name;
+			plan.database = database;
+			plan.sql = sql;
+			plan.fieldKeys = query.fieldKeys;
+			plan.joinKey = MADComposedLogicalKeyForField(joinField, database);
+			return plan;
+		};
+
+		leftPlan = planForSource(leftQuery, join.hasLeftField);
+		if (leftPlan == nil) return;
+		rightPlan = planForSource(rightQuery, join.hasRightField);
+		if (rightPlan == nil) return;
+
+		NSMutableArray<MADComposedOutputPlan *> *plans = [NSMutableArray arrayWithCapacity: outputs.count];
+		for (RptqQueryField *output in outputs) {
+			NSInteger sourceIndex = (output.inQueryTable.upstreamQuery.identifier == leftQuery.identifier) ? 0 : 1;
+			MADComposedSourcePlan *owner = sourceIndex == 0 ? leftPlan : rightPlan;
+			MADComposedOutputPlan *plan = [[MADComposedOutputPlan alloc] init];
+			plan.sourceIndex = sourceIndex;
+			plan.sourceKey = MADComposedLogicalKeyForField(output, owner.database);
+			plan.outputKey = output.outputKey;
+			[plans addObject: plan];
+		}
+		outputPlans = plans;
+	});
+	if (resolveError != nil) {
+		[self finishWithError: resolveError];
+		return;
+	}
+	if (leftPlan == nil || rightPlan == nil || outputPlans == nil) {
+		[self finishWithError:[NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
+			NSLocalizedDescriptionKey: NSLocalizedString(@"The composed document could not be resolved.",
+														  @"Composition resolution failure.") }]];
+		return;
+	}
+
+	// Credentials come from a dependency, the way the ordinary refresh takes them.
+	MADCredential *credentials = nil;
+	for (NSOperation *dependency in self.dependencies) {
+		if ([dependency conformsToProtocol:@protocol(MADOperationHoldsCredentialsProtocol)] &&
+			((id <MADOperationHoldsCredentialsProtocol>)dependency).gotCredentials) {
+			credentials = ((id <MADOperationHoldsCredentialsProtocol>)dependency).credentials;
+		}
+	}
+
+	// Refresh each source once, serially, staging its rows in a fresh table.
+	MADDataResult *(^refreshSource)(MADComposedSourcePlan *) = ^(MADComposedSourcePlan *plan) {
+		MADDatabase *database = plan.database;
+		if ([database.databaseConnection requiresCredentials] && credentials == nil) {
+			NSError *missing = [NSError errorWithDomain: MADOperationRefreshErrorDomain code: errMissingCredentials userInfo: @{
+				NSLocalizedDescriptionKey: [NSString stringWithFormat:
+					NSLocalizedString(@"The source '%@' requires credentials and none were supplied.", @"Missing credentials for a source."), plan.name] }];
+			[self finishWithError: missing];
+			return (MADDataResult *)nil;
+		}
+
+		NSError *connectError = nil;
+		id dbconn = [database connectWithConnection: database.databaseConnection
+										  credentals: credentials
+									 connectionError: &connectError];
+		if (connectError != nil) {
+			NSError *wrapped = [NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
+				NSLocalizedDescriptionKey: [NSString stringWithFormat:
+					NSLocalizedString(@"The source '%@' could not connect: %@", @"Source connection failure."),
+					plan.name, connectError.localizedDescription] }];
+			[self finishWithError: wrapped];
+			return (MADDataResult *)nil;
+		}
+
+		NSString *identifier = NSUUID.UUID.UUIDString;
+		MADDataTableFast *table = [[MADDataTableFast alloc] initWithId: identifier.hash cacheDirectory: cacheDirectory];
+		table.cacheFileIdentifier = identifier;
+
+		NSError *executeError = nil;
+		BOOL success = [database executeSQL: plan.sql
+								  fieldKeys: plan.fieldKeys
+							   onConnection: dbconn
+							intoResultTable: (MADDataTable *)table
+								  withError: &executeError];
+		[database closeConnection: dbconn];
+		if (!success || executeError != nil) {
+			[table closeConnections];
+			NSError *wrapped = [NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
+				NSLocalizedDescriptionKey: [NSString stringWithFormat:
+					NSLocalizedString(@"The source '%@' failed: %@", @"Source query failure."),
+					plan.name, (executeError.localizedDescription ?: NSLocalizedString(@"the query reported no error", @"No driver error."))] }];
+			[self finishWithError: wrapped];
+			return (MADDataResult *)nil;
+		}
+
+		NSURL *columnMap = [cacheDirectory URLByAppendingPathComponent: [identifier stringByAppendingPathExtension: @"mdcache"]];
+		[table cacheWithUrl: columnMap error: NULL];
+		return [[MADDataResult alloc] initWithIdentifier: identifier
+											   dataTable: table
+										  rowDatabaseURL: table.rowDatabaseURL
+											columnMapURL: columnMap];
+	};
+
+	leftPlan.result = refreshSource(leftPlan);
+	if (leftPlan.result == nil) return;
+	rightPlan.result = refreshSource(rightPlan);
+	if (rightPlan.result == nil) { [self discardSourceResult: leftPlan]; return; }
+
+	// The inputs and the ordered projection, handed to the composer.
+	MADComposerInput *leftInput = [[MADComposerInput alloc] init];
+	leftInput.alias = leftPlan.name;
+	leftInput.result = leftPlan.result;
+	leftInput.joinKey = leftPlan.joinKey;
+	MADComposerInput *rightInput = [[MADComposerInput alloc] init];
+	rightInput.alias = rightPlan.name;
+	rightInput.result = rightPlan.result;
+	rightInput.joinKey = rightPlan.joinKey;
+
+	NSMutableArray<MADComposerProjection *> *projections = [NSMutableArray arrayWithCapacity: outputPlans.count];
+	for (MADComposedOutputPlan *output in outputPlans) {
+		MADComposerInput *input = output.sourceIndex == 0 ? leftInput : rightInput;
+		[projections addObject: [MADComposerProjection projectionWithInput: input
+																sourceKey: output.sourceKey
+																outputKey: output.outputKey]];
+	}
+
+	// Stage the root the ordinary way, compose into it, then publish.
+	MADDataResult *pending = [document beginRefreshResultWithError: nil];
+	if (pending == nil) {
+		[self discardSourceResult: leftPlan];
+		[self discardSourceResult: rightPlan];
+		[self finishWithError:[NSError errorWithDomain: MADOperationRefreshErrorDomain code: errNoPendingResult userInfo: @{
+			NSLocalizedDescriptionKey: NSLocalizedString(@"The refresh result was not staged.", @"No staged result to fill.") }]];
+		return;
+	}
+
+	NSError *composeError = nil;
+	BOOL composed = [MADComposer composeLeft: leftInput
+									  right: rightInput
+								   joinType: joinType
+							   projections: projections
+								orderByKeys: nil
+							 cacheDirectory: cacheDirectory
+								 intoTable: pending.dataTable
+									 error: &composeError];
+
+	[self discardSourceResult: leftPlan];
+	[self discardSourceResult: rightPlan];
+
+	if (!composed) {
+		[document discardPendingResult];
+		[self finishWithError: composeError ?: [NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
+			NSLocalizedDescriptionKey: NSLocalizedString(@"The composition join failed.", @"Composition join failure.") }]];
+		return;
+	}
+
+	NSError *publishError = nil;
+	if (![document publishPendingResultWithError: &publishError]) {
+		[document discardPendingResult];
+		[self finishWithError: publishError ?: [NSError errorWithDomain:@"MADCache" code:errCache userInfo:nil]];
+		return;
+	}
+	document.refreshed = YES;
+	[self finish];
+}
+
+- (void)discardSourceResult:(MADComposedSourcePlan *)plan {
+	MADDataTableFast *table = plan.result.dataTable;
+	NSURL *rowURL = plan.result.rowDatabaseURL;
+	NSURL *columnMapURL = plan.result.columnMapURL;
+	NSUInteger tag = table.tag;
+	plan.result = nil;
+	[table closeConnections];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	[fileManager removeItemAtURL: rowURL error: NULL];
+	[fileManager removeItemAtURL: columnMapURL error: NULL];
+	// The table opened its writer on a tag-named file before the generation
+	// identifier was set; that empty file is removed too, so a source stage leaves
+	// nothing behind once its handles close.
+	NSURL *tagURL = [[rowURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:
+		[[NSString stringWithFormat: @"%lu", (unsigned long)tag] stringByAppendingPathExtension: @"maddb"]];
+	[fileManager removeItemAtURL: tagURL error: NULL];
 }
 
 @end

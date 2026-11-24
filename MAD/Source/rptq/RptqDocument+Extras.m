@@ -716,18 +716,24 @@ static NSError *MADCompositionError(NSInteger code, NSString *message) {
 		return [@(a.outputIndex) compare:@(b.outputIndex)];
 	}];
 
-	// A field with no output key is a projection whose order was never recorded
-	// (an earlier store, or an unset projection); do not invent an order.
+	// A field with no output key is a join key, projected for the join but not for
+	// the root; only the fields that name an output are the projection.  A root whose
+	// fields carry no output key at all is a projection whose order was never recorded
+	// (an earlier store, or an unset projection); do not invent an order for it.
+	NSMutableArray<RptqQueryField *> *projected = [NSMutableArray arrayWithCapacity: outputs.count];
 	for (RptqQueryField *field in outputs) {
-		if (field.outputKey == nil) {
-			if (error != NULL) {
-				*error = MADCompositionError(3, NSLocalizedString(
-					@"This composed document records no output order for its projection.", @"Missing projection order error."));
-			}
-			return nil;
+		if (field.outputKey != nil) {
+			[projected addObject: field];
 		}
 	}
-	return outputs;
+	if (projected.count == 0 && outputs.count > 0) {
+		if (error != NULL) {
+			*error = MADCompositionError(3, NSLocalizedString(
+				@"This composed document records no output order for its projection.", @"Missing projection order error."));
+		}
+		return nil;
+	}
+	return projected;
 }
 
 @end
