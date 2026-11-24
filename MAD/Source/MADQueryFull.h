@@ -22,6 +22,9 @@
 @property (nonatomic) int64_t queryIdentifier;
 @property (nonatomic, copy) NSString *attachAlias;
 @property (nonatomic, strong, nullable) RptqQuery *query;
+/// The child's dialect database.  Set only for a leaf child: a composing child has no
+/// remote dialect, and its columns resolve through its output keys, not through
+/// `database`.  `logicalKeyForField:inChild:` dereferences it only on the leaf branch.
 @property (nonatomic, strong, nullable) MADDatabase *database;
 @property (nonatomic, strong, nullable) MADDataResult *result;
 @end

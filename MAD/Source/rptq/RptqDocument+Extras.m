@@ -682,6 +682,25 @@ static NSError *MADCompositionError(NSInteger code, NSString *message) {
 	if ([visited containsObject: key]) return YES;
 	[path addObject: key];
 
+	// A node's tables are either all children (a composing node) or all remote schema
+	// tables (a leaf).  Mixing the two is invalid: a remote table cannot be attached,
+	// and the walk classifies a node by whether any table carries an upstream reference
+	// (MAD_COMPOSITION_SPEC.md §6).  Reject it here so the failure names the node.
+	BOOL hasUpstreamTable = NO;
+	BOOL hasRemoteTable = NO;
+	for (RptqQueryTable *table in query.hasQueryTables) {
+		if ([table.backingObject referenceForName: @"upstreamQuery"] != nil) hasUpstreamTable = YES;
+		else hasRemoteTable = YES;
+	}
+	if (hasUpstreamTable && hasRemoteTable) {
+		if (error != NULL) {
+			NSString *name = query.name ?: NSLocalizedString(@"<unnamed>", @"Unnamed query in a composition error.");
+			*error = MADCompositionError(3, [[NSString alloc] initWithFormat:
+				NSLocalizedString(@"The query '%@' mixes remote tables with other reports.  A composing query references only other reports, never a remote table.", @"Mixed composition node."), name]);
+		}
+		return NO;
+	}
+
 	// A composing node attaches each child read-only; SQLITE_MAX_ATTACHED caps a
 	// node's direct children at ten in this milestone (MAD_COMPOSITION_SPEC.md §6).
 	NSMutableSet<NSNumber *> *directChildren = [NSMutableSet set];

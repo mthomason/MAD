@@ -1021,6 +1021,7 @@ static MADHeadlessDocument *MADCompositionGraphDocument(NSString *directory,
 	NSMutableDictionary *queryByName = [NSMutableDictionary dictionary];
 	NSMutableDictionary *columnsByName = [NSMutableDictionary dictionary];
 	NSMutableDictionary *schemaFieldsByName = [NSMutableDictionary dictionary];
+	NSMutableDictionary *schemaTablesByName = [NSMutableDictionary dictionary];
 	NSMutableArray *databases = [NSMutableArray array];
 
 	for (NSDictionary *leaf in leaves) {
@@ -1065,6 +1066,7 @@ static MADHeadlessDocument *MADCompositionGraphDocument(NSString *directory,
 		queryByName[name] = query;
 		columnsByName[name] = @[ @"id", @"value" ];
 		schemaFieldsByName[name] = @{ @"id": idField, @"value": valueField };
+		schemaTablesByName[name] = table;
 		[databases addObject: database];
 	}
 
@@ -1098,6 +1100,19 @@ static MADHeadlessDocument *MADCompositionGraphDocument(NSString *directory,
 			[rootTable setValue: fields forKey: @"hasQueryFields"];
 			[rootTables addObject: rootTable];
 			fieldsByChild[childName] = fieldsByCol;
+		}
+		// A composer may also list `remoteTables`: leaf schema tables added as remote
+		// (non-upstream) tables, to build a node that mixes both kinds for the
+		// mixed-node validation test.
+		for (NSString *remoteName in composer[@"remoteTables"]) {
+			RptqObject *remoteTable = insert(@"RptqQueryTable", counter++);
+			[remoteTable setValue: rootQuery forKey: @"inQuery"];
+			[remoteTable setValue: schemaTablesByName[remoteName] forKey: @"databaseSchemaTable"];
+			RptqObject *remoteField = insert(@"RptqQueryField", counter++);
+			[remoteField setValue: schemaFieldsByName[remoteName][@"id"] forKey: @"databaseSchemaField"];
+			[remoteField setValue: remoteTable forKey: @"inQueryTable"];
+			[remoteTable setValue: @[ remoteField ] forKey: @"hasQueryFields"];
+			[rootTables addObject: remoteTable];
 		}
 		[rootQuery setValue: rootTables forKey: @"hasQueryTables"];
 
@@ -1271,6 +1286,23 @@ static void testComposedRootWithMoreThanTenChildrenIsRejected(void) {
 	MAD_PASS(error != nil && [error.localizedDescription rangeOfString: @"root"].location != NSNotFound, "the error names the node");
 }
 
+static void testComposedMixedNodeIsRejected(void) {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[ @{ @"name": @"a", @"file": @"a.sqlite", @"rows": @[ @[@1, @10] ] } ];
+	NSArray *composers = @[ @{ @"name": @"root", @"children": @[ @"a" ], @"links": @[], @"outputs": @[ @[ @"a", @"id", @"a_id" ] ], @"remoteTables": @[ @"a" ] } ];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	MAD_NEED(document != nil, "the mixed document opened");
+	if (document == nil) return;
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	NSError *error = nil;
+	MAD_PASS(![model validateCompositionGraphWithError: &error], "a node that mixes remote and upstream tables is a design-time error");
+	MAD_PASS(error != nil && [error.localizedDescription rangeOfString: @"root"].location != NSNotFound, "the error names the offending node");
+}
+
 MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testTheFormatsAreRegistered),
 	MAD_TEST(testTheRenderSideFormatsRegisterHere),
@@ -1296,4 +1328,5 @@ MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testComposedNestedComposerRunsChildrenBeforeParents),
 	MAD_TEST(testComposedSharedChildRunsOnce),
 	MAD_TEST(testComposedRootWithMoreThanTenChildrenIsRejected),
+	MAD_TEST(testComposedMixedNodeIsRejected),
 	MAD_TEST(testCompositionEmptyExpressionKeepsKnownType));

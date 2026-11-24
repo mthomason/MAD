@@ -84,6 +84,10 @@ the local SQLite connection that has the two children attached.
   The physical cache column (`c<hash>`) is an implementation detail the compiler maps to.
 - Inside a composing query, a child's column is referenced `<child-alias>.<outputKey>` and is
   always qualified by its child. An unqualified column is an error (ambiguous).
+- **A node's public schema is its output columns.** A leaf's schema is the fields its parents
+  need, projected on demand — a join key a parent references is projected even with no label.
+  A composing node's schema is exactly its declared `outputKey` fields: a parent may reference
+  any field of a leaf child, but only a field a composing child declares as an output.
 
 ## 5. Grouping, sorting, and aggregates
 
