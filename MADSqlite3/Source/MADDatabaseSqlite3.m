@@ -636,11 +636,14 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 		return NO;
 	}
 	BOOL success = NO;
+	BOOL preparedThisCall = NO;
 	sqlite3_stmt *statement = partOfTransactionSet ? _bulkStatement : NULL;
 	char *errorMessage = NULL;
+	NSError *validationError = nil;
 	char *csql = sqlite3_mprintf("%s", sql.UTF8String);
-	
+
 	if (statement == NULL) {
+		preparedThisCall = YES;
 		if (sqlite3_prepare_v2(_database, csql, -1, &statement, NULL) != SQLITE_OK) {
 			success = NO;
 		} else {
@@ -654,72 +657,70 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 	}
 	
 	if (returnsResults && success) {
-		[dataTable removeAllObjects];
-
 		int numberOfColumns = sqlite3_column_count(statement);
 		numberOfColumns = numberOfColumns >= 0 ? numberOfColumns : 0;
 
-		NSUInteger rowCounter = 0;
-		while (sqlite3_step(statement) == SQLITE_ROW) {
-			if (rowCounter == 0) {
-				for (int columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
-					NSString *fieldName = fieldKeys[(NSUInteger)columnCounter];
-					MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
-					
-					int affentyType = sqlite3_column_type(statement, (int)columnCounter);
-					const char *columnName = sqlite3_column_name(statement, (int)columnCounter);
-					NSAssert(columnName != NULL, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
-					
-					const char *tableName = sqlite3_column_table_name(statement, (int)columnCounter);
-					const char *databaseName = sqlite3_column_database_name(statement, (int)columnCounter);
-					
-					char const *pzDataType = NULL;
-					char const *pzCollSeq = NULL;
-					int pNotNull = 0;
-					int pPrimaryKey = 0;
-					int pAutoinc = 0;
-					
-					if (tableName != NULL) {
-						int sqlite3_metadata = sqlite3_table_column_metadata(_database, databaseName, tableName, columnName, &pzDataType, &pzCollSeq, &pNotNull, &pPrimaryKey, &pAutoinc);
-						if (sqlite3_metadata != SQLITE_OK) {
-							const char *errName = NULL;
-							const char *errMsg = NULL;
-							mad_sqlite3Err(sqlite3_metadata, &errName, &errMsg);
-							os_log_error(GetSqlite3Log(), "Error: %s at %s", errMsg, __PRETTY_FUNCTION__);
+		// The projection and the statement must agree before the destination is
+		// touched: a mismatch used to read past fieldKeys and clear the previous
+		// result on the way out.
+		if ((NSUInteger)numberOfColumns != fieldKeys.count) {
+			validationError = [NSError errorWithDomain: NSStringFromClass([self class])
+												  code: 4785
+											  userInfo: @{
+				NSLocalizedDescriptionKey: NSLocalizedString(@"The query's projection does not match its result.",
+															  @"Projection/statement column mismatch."),
+				NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:
+					@"The projection has %lu field keys but the statement returns %d columns.",
+					(unsigned long)fieldKeys.count, numberOfColumns],
+			}];
+			success = NO;
+		} else {
+			// One step distinguishes a zero-row success (SQLITE_DONE) from a row
+			// source and from a step error.  The first row is also the only source
+			// of a runtime type for an untyped expression.
+			int stepResult = sqlite3_step(statement);
+			if (stepResult != SQLITE_ROW && stepResult != SQLITE_DONE) {
+				success = NO;
+			} else {
+				[self prepareResultTable: dataTable
+							   statement: statement
+							  fieldKeys: fieldKeys
+						 numberOfColumns: numberOfColumns
+								  hasRow: (stepResult == SQLITE_ROW)];
+
+				if (numberOfColumns > 0) {
+					[dataTable beginBulkInsert];
+				}
+
+				NSUInteger rowCounter = 0;
+				while (stepResult == SQLITE_ROW) {
+					[self readRow:rowCounter];
+
+					NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:(NSUInteger)numberOfColumns];
+
+					for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
+						NSString *fieldKey = fieldKeys[(NSUInteger)colCtr];
+						if (fieldKey != nil) {
+							resultsForRow[fieldKey] = [MADDatabaseSqlite3 databaseResultValue:statement
+																					columnNumber:colCtr];
+						} else {
+							os_log_error(GetSqlite3Log(), "Error: %s at %s", "Field Key is nil.", __PRETTY_FUNCTION__);
 						}
 					}
-					
-					MADDataType columnType = [MADDatabaseSqlite3 dataTypeForAffentyType:affentyType];
-					dataColumn.fieldName = fieldName;
-					dataColumn.nativeType = (int16_t)affentyType;
-					dataColumn.type = columnType;
-					dataColumn.primaryKey = pPrimaryKey ? NO : pPrimaryKey;
-					dataColumn.autoIncrement = pAutoinc ? NO : pAutoinc;
-					dataColumn.notNull = pNotNull ? NO : pNotNull;
-					[dataTable addColumn:dataColumn];
+
+					[dataTable addRowWithDataForFieldKeys:resultsForRow];
+					rowCounter++;
+					stepResult = sqlite3_step(statement);
 				}
-				[dataTable beginBulkInsert];
-			}
-			[self readRow:rowCounter];
-			
-			NSMutableDictionary *resultsForRow = [[NSMutableDictionary alloc] initWithCapacity:(NSUInteger)numberOfColumns];
-			
-			for (int colCtr = 0; colCtr < numberOfColumns; colCtr++) {
-				NSString *fieldKey = fieldKeys[(NSUInteger)colCtr];
-				if (fieldKey != nil) {
-					resultsForRow[fieldKey] = [MADDatabaseSqlite3 databaseResultValue:statement
-																			columnNumber:colCtr];
-				} else {
-					os_log_error(GetSqlite3Log(), "Error: %s at %s", "Field Key is nil.", __PRETTY_FUNCTION__);
+
+				if (numberOfColumns > 0) {
+					[dataTable endBulkInsert];
+				}
+
+				if (stepResult != SQLITE_DONE) {
+					success = NO;
 				}
 			}
-			
-			[dataTable addRowWithDataForFieldKeys:resultsForRow];
-			rowCounter++;
-		}
-		
-		if (rowCounter > 0) {
-			[dataTable endBulkInsert];
 		}
 	}
 	
@@ -734,28 +735,137 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 	if (!partOfTransactionSet) {
 		if (statement != NULL) {
 			sqlite3_clear_bindings(statement);
-			success = sqlite3_finalize(statement) == SQLITE_OK;
-			NSAssert(success, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
+			int finalizeResult = sqlite3_finalize(statement);
+			if (finalizeResult != SQLITE_OK) {
+				os_log_error(GetSqlite3Log(), "%s: finalize failed: %s",
+							 __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+				success = NO;
+			}
 		}
 	} else {
-		success = sqlite3_reset(statement) == SQLITE_OK;
-		NSAssert(success, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
+		BOOL resetOK = NO;
+		if (statement != NULL) {
+			int resetResult = sqlite3_reset(statement);
+			resetOK = (resetResult == SQLITE_OK);
+			if (!resetOK) {
+				os_log_error(GetSqlite3Log(), "%s: reset failed: %s",
+							 __PRETTY_FUNCTION__, sqlite3_errmsg(_database));
+			}
+		}
 		_bulkStatement = statement;
+		// A reused statement has no prepare this call to set success; the reset
+		// carries the step result either way.  A prepared statement keeps its
+		// prepare result, and any failure recorded above is not erased.
+		success = (preparedThisCall ? success : YES) && resetOK;
 	}
-	
+
 	if (!success) {
 		errorMessage = (char *)sqlite3_errmsg(_database);
 		os_log_error(GetSqlite3Log(), "%s: %s", __PRETTY_FUNCTION__, errorMessage);
 	}
-	
-	if (!success && resultError != NULL) *resultError = [NSError errorWithDomain:NSStringFromClass([self class])
-																			code:4784 userInfo:@{
-		NSLocalizedDescriptionKey: NSLocalizedString(@"Error", @"Error"),
-		NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding] ?: @"",
-	}];
+
+	if (!success && resultError != NULL) {
+		*resultError = validationError ?: [NSError errorWithDomain:NSStringFromClass([self class])
+															  code:4784 userInfo:@{
+			NSLocalizedDescriptionKey: NSLocalizedString(@"Error", @"Error"),
+			NSLocalizedFailureReasonErrorKey: [NSString stringWithCString:sqlite3_errmsg(_database) encoding:NSUTF8StringEncoding] ?: @"",
+		}];
+	}
 
 	sqlite3_free(csql);
 	return success;
+}
+
+/// Resolve one result column's MAD type.  A non-NULL value keeps the runtime
+/// affinity the old code used, so existing results and exports do not change.
+/// The projection's known type (the previous materialization's column) and then
+/// SQLite's declared type fill the gaps: a typed column whose first value is NULL
+/// keeps its declared type, and an empty result keeps a real type instead of the
+/// first-row answer that does not exist.  With neither, the runtime affinity is
+/// SQLITE_NULL, which has always mapped to String; that is the defined fallback
+/// for an untyped expression with an empty result.
+- (MADDataType)dataTypeForStatement:(sqlite3_stmt *)statement
+					   columnNumber:(int)columnNumber
+						  fieldName:(NSString *)fieldName
+						 knownTypes:(NSDictionary<NSString *, NSNumber *> *)knownTypes {
+	int runtimeAffinity = sqlite3_column_type(statement, columnNumber);
+	if (runtimeAffinity != SQLITE_NULL) {
+		return [MADDatabaseSqlite3 dataTypeForAffentyType:runtimeAffinity];
+	}
+
+	NSNumber *known = knownTypes[fieldName];
+	if (known != nil) return (MADDataType)known.integerValue;
+
+	const char *declared = sqlite3_column_decltype(statement, columnNumber);
+	if (declared != NULL) {
+		NSString *nativeType = [[NSString alloc] initWithCString:declared encoding:NSUTF8StringEncoding];
+		if (nativeType.length > 0) {
+			return [MADDatabaseSqlite3 dataTypeForNativeType:nativeType];
+		}
+	}
+
+	return [MADDatabaseSqlite3 dataTypeForAffentyType:runtimeAffinity];
+}
+
+/// Create the result columns before any row is written, so a zero-row success
+/// still leaves a real table behind, and clear the previous result only after the
+/// projection has been validated.
+- (void)prepareResultTable:(id <MADDataTableWriting>)dataTable
+				 statement:(sqlite3_stmt *)statement
+				fieldKeys:(NSArray *)fieldKeys
+		   numberOfColumns:(int)numberOfColumns
+					hasRow:(BOOL)hasRow {
+	// The previous materialization's column types are the projection's known MAD
+	// types; capture them before removeAllObjects drops the columns.
+	NSMutableDictionary<NSString *, NSNumber *> *knownTypes =
+		[NSMutableDictionary dictionaryWithCapacity:dataTable.columns.count];
+	for (MADDataColumn *column in dataTable.columns.allValues) {
+		NSString *identifier = column.identifier ?: column.fieldName;
+		if (identifier != nil) {
+			knownTypes[identifier] = @(column.type);
+		}
+	}
+
+	[dataTable removeAllObjects];
+
+	for (int columnCounter = 0; columnCounter < numberOfColumns; columnCounter++) {
+		NSString *fieldName = fieldKeys[(NSUInteger)columnCounter];
+		MADDataColumn *dataColumn = [[MADDataColumn alloc] initWithIdentifier:fieldName];
+
+		const char *columnName = sqlite3_column_name(statement, columnCounter);
+		NSAssert(columnName != NULL, @"%s at %s", sqlite3_errmsg(_database), __PRETTY_FUNCTION__);
+
+		const char *tableName = sqlite3_column_table_name(statement, columnCounter);
+		const char *databaseName = sqlite3_column_database_name(statement, columnCounter);
+
+		int pNotNull = 0;
+		int pPrimaryKey = 0;
+		int pAutoinc = 0;
+
+		if (tableName != NULL && columnName != NULL) {
+			int sqlite3_metadata = sqlite3_table_column_metadata(_database, databaseName, tableName, columnName,
+																 NULL, NULL, &pNotNull, &pPrimaryKey, &pAutoinc);
+			if (sqlite3_metadata != SQLITE_OK) {
+				const char *errName = NULL;
+				const char *errMsg = NULL;
+				mad_sqlite3Err(sqlite3_metadata, &errName, &errMsg);
+				os_log_error(GetSqlite3Log(), "Error: %s at %s", errMsg, __PRETTY_FUNCTION__);
+			}
+		}
+
+		dataColumn.fieldName = fieldName;
+		dataColumn.nativeType = hasRow ? (int16_t)sqlite3_column_type(statement, columnCounter) : 0;
+		dataColumn.type = [self dataTypeForStatement:statement
+										columnNumber:columnCounter
+										   fieldName:fieldName
+										  knownTypes:knownTypes];
+		// Keep the metadata the driver has always written; the zero-row work is
+		// about the type, not the flags.
+		dataColumn.primaryKey = pPrimaryKey ? NO : pPrimaryKey;
+		dataColumn.autoIncrement = pAutoinc ? NO : pAutoinc;
+		dataColumn.notNull = pNotNull ? NO : pNotNull;
+		[dataTable addColumn:dataColumn];
+	}
 }
 
 - (BOOL)executeQuery:(MADQuery <MADQueryDataBindingProtocol> *)query

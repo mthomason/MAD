@@ -599,7 +599,7 @@ static void testDriverFillsAWritePortWithNoDataTableBehindIt(void) {
 	removeTempDirectory(tempDirectory);
 }
 
-static void testDriverZeroRowSelectDoesNotCallUnpairedEndBulkInsert(void) {
+static void testDriverZeroRowSelectCreatesTheResultTable(void) {
 	NSURL *tempDirectory = makeTempDirectory();
 	NSURL *databaseURL = [tempDirectory URLByAppendingPathComponent:@"test.sqlite"];
 	createPeopleTable(databaseURL);
@@ -616,14 +616,20 @@ static void testDriverZeroRowSelectDoesNotCallUnpairedEndBulkInsert(void) {
 						 binaryBindings:nil
 							  withError:&error];
 	MAD_PASS(success, "zero-row select failed: %s", [[error description] UTF8String]);
-	MAD_PASS(recorder.beginBulkInsertCount == (NSUInteger)0, "zero-row select must not begin bulk insert");
-	MAD_PASS(recorder.endBulkInsertCount == (NSUInteger)0, "zero-row select must not end bulk insert");
-	MAD_PASS_EQUAL(recorder.callLog, (@[@"removeAllObjects"]), "zero-row select clears the destination table");
+	MAD_PASS(recorder.beginBulkInsertCount == (NSUInteger)1, "zero-row select begins a paired bulk insert");
+	MAD_PASS(recorder.endBulkInsertCount == (NSUInteger)1, "zero-row select ends the bulk insert");
+	MAD_PASS_EQUAL(recorder.callLog, (@[@"removeAllObjects",
+										@"addColumn:", @"addColumn:",
+										@"beginBulkInsert", @"endBulkInsert"]),
+				   "the zero-row port sequence creates the columns and the table");
+	MAD_PASS_EQUAL(recorder.columnKeys, (@[@"name", @"age"]), "the columns follow the projection");
+	MAD_PASS(recorder.rows.count == (NSUInteger)0, "no rows are handed over");
 
 	MADArrayCachingDirectoryDouble *cacheDouble = [[MADArrayCachingDirectoryDouble alloc] init];
 	cacheDouble.directory = tempDirectory;
 	MADDataTableFast *fastTable = [[MADDataTableFast alloc] initWithId:99 fromCache:YES];
 	fastTable.cacheDelegate = cacheDouble;
+	error = nil;
 	success = [database executeSQL:@"SELECT name, age FROM people WHERE age < 0"
 						 fieldKeys:@[@"name", @"age"]
 					  onConnection:nil
@@ -634,6 +640,214 @@ static void testDriverZeroRowSelectDoesNotCallUnpairedEndBulkInsert(void) {
 						 withError:&error];
 	MAD_PASS(success, "zero-row select into MADDataTableFast failed: %s", [[error description] UTF8String]);
 	MAD_PASS([fastTable count] == (NSUInteger)0, "fast table remains empty");
+	MAD_PASS(fastTable.columnKeys.count == (NSUInteger)2, "the fast table has both columns");
+	MAD_PASS_EQUAL(fastTable.columns[fastTable.columnKeys[0]].fieldName, @"name", "the first column is name");
+	MAD_PASS_EQUAL(fastTable.columns[fastTable.columnKeys[1]].fieldName, @"age", "the second column is age");
+	MAD_PASS(fastTable.columns[fastTable.columnKeys[0]].type == MADDataTypeString, "name keeps its declared TEXT");
+	MAD_PASS(fastTable.columns[fastTable.columnKeys[1]].type == MADDataTypeInteger, "age keeps its declared INTEGER");
+
+	NSURL *rowFile = [tempDirectory URLByAppendingPathComponent:@"99.maddb"];
+	MAD_PASS([[NSFileManager defaultManager] fileExistsAtPath: rowFile.path],
+			 "the zero-row select left a .maddb table");
+
+	NSURL *plistURL = [tempDirectory URLByAppendingPathComponent:[fastTable newFilenameMDCache]];
+	MAD_PASS([fastTable cacheWithUrl: plistURL error: &error], "cache write failed: %s", [[error description] UTF8String]);
+	MADDataTableFast *reloaded = [[MADDataTableFast alloc] initWithId:99 fromCache:YES];
+	reloaded.cacheDelegate = cacheDouble;
+	MAD_PASS([reloaded loadFromCacheWithUrl: plistURL error: &error], "cache read failed: %s", [[error description] UTF8String]);
+	MAD_PASS([reloaded count] == (NSUInteger)0, "the reopened table is empty");
+	MAD_PASS(reloaded.columnKeys.count == (NSUInteger)2, "the reopened table has both columns");
+	MAD_PASS_EQUAL(reloaded.columns[reloaded.columnKeys[0]].fieldName, @"name", "the reopened first column is name");
+	MAD_PASS_EQUAL(reloaded.columns[reloaded.columnKeys[1]].fieldName, @"age", "the reopened second column is age");
+	removeTempDirectory(tempDirectory);
+}
+
+static void testTypedColumnWithNullFirstValueKeepsItsDeclaredType(void) {
+	NSURL *tempDirectory = makeTempDirectory();
+	NSURL *databaseURL = [tempDirectory URLByAppendingPathComponent:@"test.sqlite"];
+	sqlite3 *db = NULL;
+	sqlite3_open(databaseURL.path.UTF8String, &db);
+	sqlite3_exec(db, "CREATE TABLE typed (t INTEGER); INSERT INTO typed (t) VALUES (NULL);", NULL, NULL, NULL);
+	sqlite3_close(db);
+
+	MADDatabaseSqlite3 *database = makeOpenDatabase(databaseURL);
+	MADWritePortRecorder *recorder = [[MADWritePortRecorder alloc] init];
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT t FROM typed"
+							  fieldKeys:@[@"t"]
+						   onConnection:nil
+						intoResultTable:recorder
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	MAD_PASS(success, "%s", [[error description] UTF8String]);
+	MAD_PASS(recorder.rows.count == (NSUInteger)1, "the NULL row is handed over");
+	MAD_PASS(recorder.columns[@"t"].type == MADDataTypeInteger,
+			 "a NULL first value must not erase the declared INTEGER");
+	removeTempDirectory(tempDirectory);
+}
+
+static void testUntypedExpressionUsesTheRuntimeTypeAndTheEmptyFallback(void) {
+	NSURL *tempDirectory = makeTempDirectory();
+	NSURL *databaseURL = [tempDirectory URLByAppendingPathComponent:@"test.sqlite"];
+	MADDatabaseSqlite3 *database = makeOpenDatabase(databaseURL);
+
+	MADWritePortRecorder *withRow = [[MADWritePortRecorder alloc] init];
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT 1 + 1 AS total"
+							  fieldKeys:@[@"total"]
+						   onConnection:nil
+						intoResultTable:withRow
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	MAD_PASS(success, "%s", [[error description] UTF8String]);
+	MAD_PASS(withRow.rows.count == (NSUInteger)1, "the expression row is handed over");
+	MAD_PASS(withRow.columns[@"total"].type == MADDataTypeInteger,
+			 "an expression with a row keeps its runtime affinity");
+
+	MADWritePortRecorder *empty = [[MADWritePortRecorder alloc] init];
+	error = nil;
+	success = [database executeSQL:@"SELECT 1 + 1 AS total WHERE 0"
+						 fieldKeys:@[@"total"]
+					  onConnection:nil
+				   intoResultTable:empty
+					transactionSet:NO
+					returnsResults:YES
+					binaryBindings:nil
+						 withError:&error];
+	MAD_PASS(success, "%s", [[error description] UTF8String]);
+	MAD_PASS(empty.rows.count == (NSUInteger)0, "the empty expression has no rows");
+	MAD_PASS(empty.beginBulkInsertCount == (NSUInteger)1, "the empty expression begins a bulk insert");
+	MAD_PASS(empty.endBulkInsertCount == (NSUInteger)1, "the empty expression ends the bulk insert");
+	MAD_PASS(empty.columns[@"total"].type == MADDataTypeString,
+			 "an empty untyped expression falls back to String");
+	removeTempDirectory(tempDirectory);
+}
+
+static void testProjectionMismatchLeavesTheDestinationUntouched(void) {
+	NSURL *tempDirectory = makeTempDirectory();
+	NSURL *databaseURL = [tempDirectory URLByAppendingPathComponent:@"test.sqlite"];
+	createPeopleTable(databaseURL);
+	MADDatabaseSqlite3 *database = makeOpenDatabase(databaseURL);
+
+	MADWritePortRecorder *recorder = [[MADWritePortRecorder alloc] init];
+	MADDataColumn *kept = [[MADDataColumn alloc] initWithIdentifier:@"kept"];
+	kept.fieldName = @"kept";
+	kept.type = MADDataTypeInteger;
+	recorder.columnKeys = [@[@"kept"] mutableCopy];
+	recorder.columns = [@{@"kept": kept} mutableCopy];
+	recorder.rows = [@[@{@"kept": @1}] mutableCopy];
+
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT name, age FROM people"
+							  fieldKeys:@[@"name"]
+						   onConnection:nil
+						intoResultTable:recorder
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	MAD_PASS(!success, "a mismatched projection must be refused");
+	MAD_PASS(error != nil, "the mismatch reports an error");
+	MAD_PASS_EQUAL(@(error.code), @(4785), "the mismatch carries its own code");
+	MAD_PASS_EQUAL(recorder.callLog, (@[]), "the destination was touched before validation");
+	MAD_PASS_EQUAL(recorder.columnKeys, (@[@"kept"]), "the previous column survives");
+	MAD_PASS(recorder.rows.count == (NSUInteger)1, "the previous row survives");
+	MAD_PASS_EQUAL(recorder.rows[0][@"kept"], @1, "the previous value survives");
+	removeTempDirectory(tempDirectory);
+}
+
+static void testRepeatRefreshFromNonemptyToEmptyReplacesTheRowsAndColumns(void) {
+	NSURL *tempDirectory = makeTempDirectory();
+	NSURL *databaseURL = [tempDirectory URLByAppendingPathComponent:@"test.sqlite"];
+	createPeopleTable(databaseURL);
+	MADDatabaseSqlite3 *database = makeOpenDatabase(databaseURL);
+	MADArrayCachingDirectoryDouble *cacheDouble = [[MADArrayCachingDirectoryDouble alloc] init];
+	cacheDouble.directory = tempDirectory;
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:42 fromCache:YES];
+	table.cacheDelegate = cacheDouble;
+
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT name, age FROM people ORDER BY rowid"
+							  fieldKeys:@[@"name", @"age"]
+						   onConnection:nil
+						intoResultTable:table
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	MAD_PASS(success, "%s", [[error description] UTF8String]);
+	MAD_PASS([table count] == (NSUInteger)2, "the nonempty refresh has two rows");
+	MAD_PASS(table.columnKeys.count == (NSUInteger)2, "the nonempty refresh has two columns");
+	NSURL *plistURL = [tempDirectory URLByAppendingPathComponent:[table newFilenameMDCache]];
+	MAD_PASS([table cacheWithUrl: plistURL error: &error], "%s", [[error description] UTF8String]);
+
+	sqlite3 *db = NULL;
+	sqlite3_open(databaseURL.path.UTF8String, &db);
+	sqlite3_exec(db, "DELETE FROM people;", NULL, NULL, NULL);
+	sqlite3_close(db);
+
+	error = nil;
+	success = [database executeSQL:@"SELECT name FROM people"
+						 fieldKeys:@[@"name"]
+					  onConnection:nil
+				   intoResultTable:table
+					transactionSet:NO
+					returnsResults:YES
+					binaryBindings:nil
+						 withError:&error];
+	MAD_PASS(success, "%s", [[error description] UTF8String]);
+	MAD_PASS([table count] == (NSUInteger)0, "the empty refresh has no rows");
+	MAD_PASS(table.columnKeys.count == (NSUInteger)1, "the old age column did not survive");
+	MAD_PASS_EQUAL(table.columns[table.columnKeys[0]].fieldName, @"name", "the new projection is name only");
+	MAD_PASS(table.columns[table.columnKeys[0]].type == MADDataTypeString, "name keeps its known type");
+
+	MAD_PASS([table cacheWithUrl: plistURL error: &error], "%s", [[error description] UTF8String]);
+	MADDataTableFast *reloaded = [[MADDataTableFast alloc] initWithId:42 fromCache:YES];
+	reloaded.cacheDelegate = cacheDouble;
+	MAD_PASS([reloaded loadFromCacheWithUrl: plistURL error: &error], "%s", [[error description] UTF8String]);
+	MAD_PASS([reloaded count] == (NSUInteger)0, "the reopened table is empty");
+	MAD_PASS(reloaded.columnKeys.count == (NSUInteger)1, "the reopened table has one column");
+	MAD_PASS_EQUAL(reloaded.columns[reloaded.columnKeys[0]].fieldName, @"name", "the reopened column is name");
+	removeTempDirectory(tempDirectory);
+}
+
+static void testPrepareAndStepErrorsAreDistinguishedFromSQLiteDone(void) {
+	NSURL *tempDirectory = makeTempDirectory();
+	NSURL *databaseURL = [tempDirectory URLByAppendingPathComponent:@"test.sqlite"];
+	MADDatabaseSqlite3 *database = makeOpenDatabase(databaseURL);
+
+	MADWritePortRecorder *prepareFailure = [[MADWritePortRecorder alloc] init];
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT * FROM no_such_table"
+							  fieldKeys:@[@"x"]
+						   onConnection:nil
+						intoResultTable:prepareFailure
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	MAD_PASS(!success, "a prepare failure is not a success");
+	MAD_PASS(error != nil, "the prepare failure reports an error");
+	MAD_PASS_EQUAL(prepareFailure.callLog, (@[]), "a prepare failure leaves the destination untouched");
+
+	MADWritePortRecorder *stepFailure = [[MADWritePortRecorder alloc] init];
+	error = nil;
+	success = [database executeSQL:@"SELECT abs(-9223372036854775808) AS x"
+						 fieldKeys:@[@"x"]
+					  onConnection:nil
+				   intoResultTable:stepFailure
+					transactionSet:NO
+					returnsResults:YES
+					binaryBindings:nil
+						 withError:&error];
+	MAD_PASS(!success, "a step error must not look like SQLITE_DONE");
+	MAD_PASS(error != nil, "the step error reports an error");
+	MAD_PASS_EQUAL(stepFailure.callLog, (@[]),
+				   "a step error before the first row leaves the destination untouched");
 	removeTempDirectory(tempDirectory);
 }
 
@@ -731,7 +945,12 @@ MAD_TEST_MAIN("MADDatabaseSqlite3DatabaseTests",
 	MAD_TEST(testCopyPlistStoresTheCacheFileNameNotAnAbsoluteUrl),
 	MAD_TEST(testLoadWithPlistResolvesAStoredFileNameInTheDirectoryInUseNow),
 	MAD_TEST(testDriverFillsAWritePortWithNoDataTableBehindIt),
-	MAD_TEST(testDriverZeroRowSelectDoesNotCallUnpairedEndBulkInsert),
+	MAD_TEST(testDriverZeroRowSelectCreatesTheResultTable),
+	MAD_TEST(testTypedColumnWithNullFirstValueKeepsItsDeclaredType),
+	MAD_TEST(testUntypedExpressionUsesTheRuntimeTypeAndTheEmptyFallback),
+	MAD_TEST(testProjectionMismatchLeavesTheDestinationUntouched),
+	MAD_TEST(testRepeatRefreshFromNonemptyToEmptyReplacesTheRowsAndColumns),
+	MAD_TEST(testPrepareAndStepErrorsAreDistinguishedFromSQLiteDone),
 	MAD_TEST(testCheckpointStoreAtURLFoldsTheWal),
 	MAD_TEST(testConnectWithConnectionToMissingFileDoesNotCreateZeroByteFile),
 	MAD_TEST(testConnectWithConnectionRemovesPreExistingZeroByteArtifact));

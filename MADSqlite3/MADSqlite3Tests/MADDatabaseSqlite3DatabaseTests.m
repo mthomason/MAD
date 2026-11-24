@@ -562,7 +562,7 @@
 	}
 }
 
-- (void)testDriverZeroRowSelectDoesNotCallUnpairedEndBulkInsert {
+- (void)testDriverZeroRowSelectCreatesTheResultTable {
 	[self createPeopleTable];
 	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
 
@@ -577,15 +577,20 @@
 						 binaryBindings:nil
 							  withError:&error];
 	XCTAssertTrue(success, @"zero-row select failed: %@", error);
-	XCTAssertEqual(recorder.beginBulkInsertCount, (NSUInteger)0);
-	XCTAssertEqual(recorder.endBulkInsertCount, (NSUInteger)0);
-	XCTAssertEqualObjects(recorder.callLog, (@[@"removeAllObjects"]));
+	XCTAssertEqual(recorder.beginBulkInsertCount, (NSUInteger)1);
+	XCTAssertEqual(recorder.endBulkInsertCount, (NSUInteger)1);
+	XCTAssertEqualObjects(recorder.callLog, (@[@"removeAllObjects",
+											   @"addColumn:", @"addColumn:",
+											   @"beginBulkInsert", @"endBulkInsert"]));
+	XCTAssertEqualObjects(recorder.columnKeys, (@[@"name", @"age"]));
+	XCTAssertEqual(recorder.rows.count, (NSUInteger)0);
 
 	MADArrayCachingDirectoryDouble *cacheDouble = [[MADArrayCachingDirectoryDouble alloc] init];
 	cacheDouble.directory = self.tempDirectory;
 	MADDataTableFast *fastTable = [[MADDataTableFast alloc] initWithId:99 fromCache:YES];
 	fastTable.cacheDelegate = cacheDouble;
 	NSArray<NSString *> *keys = @[@"name", @"age"];
+	error = nil;
 	XCTAssertNoThrow((success = [database executeSQL:@"SELECT name, age FROM people WHERE age < 0"
 										   fieldKeys:keys
 										onConnection:nil
@@ -596,6 +601,204 @@
 										   withError:&error]));
 	XCTAssertTrue(success, @"zero-row select into MADDataTableFast failed: %@", error);
 	XCTAssertEqual([fastTable count], (NSUInteger)0);
+	XCTAssertEqual(fastTable.columnKeys.count, (NSUInteger)2);
+	MADDataColumn *nameColumn = fastTable.columns[fastTable.columnKeys[0]];
+	MADDataColumn *ageColumn = fastTable.columns[fastTable.columnKeys[1]];
+	XCTAssertEqualObjects(nameColumn.fieldName, @"name");
+	XCTAssertEqualObjects(ageColumn.fieldName, @"age");
+	XCTAssertEqual(nameColumn.type, MADDataTypeString);
+	XCTAssertEqual(ageColumn.type, MADDataTypeInteger);
+
+	NSURL *rowFile = [self.tempDirectory URLByAppendingPathComponent:@"99.maddb"];
+	XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:rowFile.path],
+				  @"the zero-row select left no .maddb table");
+
+	NSURL *plistURL = [self.tempDirectory URLByAppendingPathComponent:[fastTable newFilenameMDCache]];
+	XCTAssertTrue([fastTable cacheWithUrl:plistURL error:&error], @"cache write failed: %@", error);
+	MADDataTableFast *reloaded = [[MADDataTableFast alloc] initWithId:99 fromCache:YES];
+	reloaded.cacheDelegate = cacheDouble;
+	XCTAssertTrue([reloaded loadFromCacheWithUrl:plistURL error:&error], @"cache read failed: %@", error);
+	XCTAssertEqual([reloaded count], (NSUInteger)0);
+	XCTAssertEqual(reloaded.columnKeys.count, (NSUInteger)2);
+	XCTAssertEqualObjects(reloaded.columns[reloaded.columnKeys[0]].fieldName, @"name");
+	XCTAssertEqualObjects(reloaded.columns[reloaded.columnKeys[1]].fieldName, @"age");
+}
+
+- (void)testTypedColumnWithNullFirstValueKeepsItsDeclaredType {
+	sqlite3 *db = NULL;
+	XCTAssertEqual(sqlite3_open(self.databaseURL.path.UTF8String, &db), SQLITE_OK);
+	XCTAssertEqual(sqlite3_exec(db, "CREATE TABLE typed (t INTEGER); INSERT INTO typed (t) VALUES (NULL);",
+								NULL, NULL, NULL), SQLITE_OK);
+	sqlite3_close(db);
+
+	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
+	MADWritePortRecorder *recorder = [[MADWritePortRecorder alloc] init];
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT t FROM typed"
+							  fieldKeys:@[@"t"]
+						   onConnection:nil
+						intoResultTable:recorder
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	XCTAssertTrue(success, @"%@", error);
+	XCTAssertEqual(recorder.rows.count, (NSUInteger)1);
+	XCTAssertEqual(recorder.columns[@"t"].type, MADDataTypeInteger,
+				   @"a NULL first value must not erase the declared INTEGER");
+}
+
+- (void)testUntypedExpressionUsesTheRuntimeTypeAndTheEmptyFallback {
+	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
+
+	MADWritePortRecorder *withRow = [[MADWritePortRecorder alloc] init];
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT 1 + 1 AS total"
+							  fieldKeys:@[@"total"]
+						   onConnection:nil
+						intoResultTable:withRow
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	XCTAssertTrue(success, @"%@", error);
+	XCTAssertEqual(withRow.rows.count, (NSUInteger)1);
+	XCTAssertEqual(withRow.columns[@"total"].type, MADDataTypeInteger,
+				   @"an expression with a row keeps its runtime affinity");
+
+	MADWritePortRecorder *empty = [[MADWritePortRecorder alloc] init];
+	error = nil;
+	success = [database executeSQL:@"SELECT 1 + 1 AS total WHERE 0"
+						 fieldKeys:@[@"total"]
+					  onConnection:nil
+				   intoResultTable:empty
+					transactionSet:NO
+					returnsResults:YES
+					binaryBindings:nil
+						 withError:&error];
+	XCTAssertTrue(success, @"%@", error);
+	XCTAssertEqual(empty.rows.count, (NSUInteger)0);
+	XCTAssertEqual(empty.beginBulkInsertCount, (NSUInteger)1);
+	XCTAssertEqual(empty.endBulkInsertCount, (NSUInteger)1);
+	XCTAssertEqual(empty.columns[@"total"].type, MADDataTypeString,
+				   @"an empty untyped expression falls back to String");
+}
+
+- (void)testProjectionMismatchLeavesTheDestinationUntouched {
+	[self createPeopleTable];
+	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
+
+	MADWritePortRecorder *recorder = [[MADWritePortRecorder alloc] init];
+	MADDataColumn *kept = [[MADDataColumn alloc] initWithIdentifier:@"kept"];
+	kept.fieldName = @"kept";
+	kept.type = MADDataTypeInteger;
+	recorder.columnKeys = [@[@"kept"] mutableCopy];
+	recorder.columns = [@{@"kept": kept} mutableCopy];
+	recorder.rows = [@[@{@"kept": @1}] mutableCopy];
+
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT name, age FROM people"
+							  fieldKeys:@[@"name"]
+						   onConnection:nil
+						intoResultTable:recorder
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	XCTAssertFalse(success, @"a mismatched projection must be refused");
+	XCTAssertNotNil(error);
+	XCTAssertEqual(error.code, 4785);
+	XCTAssertEqualObjects(recorder.callLog, @[], @"the destination was touched before validation");
+	XCTAssertEqualObjects(recorder.columnKeys, (@[@"kept"]));
+	XCTAssertEqual(recorder.rows.count, (NSUInteger)1);
+	XCTAssertEqualObjects(recorder.rows[0][@"kept"], @1);
+}
+
+- (void)testRepeatRefreshFromNonemptyToEmptyReplacesTheRowsAndColumns {
+	[self createPeopleTable];
+	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
+	MADArrayCachingDirectoryDouble *cacheDouble = [[MADArrayCachingDirectoryDouble alloc] init];
+	cacheDouble.directory = self.tempDirectory;
+	MADDataTableFast *table = [[MADDataTableFast alloc] initWithId:42 fromCache:YES];
+	table.cacheDelegate = cacheDouble;
+
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT name, age FROM people ORDER BY rowid"
+							  fieldKeys:@[@"name", @"age"]
+						   onConnection:nil
+						intoResultTable:table
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	XCTAssertTrue(success, @"%@", error);
+	XCTAssertEqual([table count], (NSUInteger)2);
+	XCTAssertEqual(table.columnKeys.count, (NSUInteger)2);
+	NSURL *plistURL = [self.tempDirectory URLByAppendingPathComponent:[table newFilenameMDCache]];
+	XCTAssertTrue([table cacheWithUrl:plistURL error:&error], @"%@", error);
+
+	// Delete the source rows and narrow the projection; neither the old rows nor
+	// the old age column may survive.
+	sqlite3 *db = NULL;
+	XCTAssertEqual(sqlite3_open(self.databaseURL.path.UTF8String, &db), SQLITE_OK);
+	XCTAssertEqual(sqlite3_exec(db, "DELETE FROM people;", NULL, NULL, NULL), SQLITE_OK);
+	sqlite3_close(db);
+
+	error = nil;
+	success = [database executeSQL:@"SELECT name FROM people"
+						 fieldKeys:@[@"name"]
+					  onConnection:nil
+				   intoResultTable:table
+					transactionSet:NO
+					returnsResults:YES
+					binaryBindings:nil
+						 withError:&error];
+	XCTAssertTrue(success, @"%@", error);
+	XCTAssertEqual([table count], (NSUInteger)0);
+	XCTAssertEqual(table.columnKeys.count, (NSUInteger)1);
+	XCTAssertEqualObjects(table.columns[table.columnKeys[0]].fieldName, @"name");
+	XCTAssertEqual(table.columns[table.columnKeys[0]].type, MADDataTypeString);
+
+	XCTAssertTrue([table cacheWithUrl:plistURL error:&error], @"%@", error);
+	MADDataTableFast *reloaded = [[MADDataTableFast alloc] initWithId:42 fromCache:YES];
+	reloaded.cacheDelegate = cacheDouble;
+	XCTAssertTrue([reloaded loadFromCacheWithUrl:plistURL error:&error], @"%@", error);
+	XCTAssertEqual([reloaded count], (NSUInteger)0);
+	XCTAssertEqual(reloaded.columnKeys.count, (NSUInteger)1);
+	XCTAssertEqualObjects(reloaded.columns[reloaded.columnKeys[0]].fieldName, @"name");
+}
+
+- (void)testPrepareAndStepErrorsAreDistinguishedFromSQLiteDone {
+	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
+
+	MADWritePortRecorder *prepareFailure = [[MADWritePortRecorder alloc] init];
+	NSError *error = nil;
+	BOOL success = [database executeSQL:@"SELECT * FROM no_such_table"
+							  fieldKeys:@[@"x"]
+						   onConnection:nil
+						intoResultTable:prepareFailure
+						 transactionSet:NO
+						 returnsResults:YES
+						 binaryBindings:nil
+							  withError:&error];
+	XCTAssertFalse(success);
+	XCTAssertNotNil(error);
+	XCTAssertEqualObjects(prepareFailure.callLog, @[]);
+
+	MADWritePortRecorder *stepFailure = [[MADWritePortRecorder alloc] init];
+	error = nil;
+	success = [database executeSQL:@"SELECT abs(-9223372036854775808) AS x"
+						 fieldKeys:@[@"x"]
+					  onConnection:nil
+				   intoResultTable:stepFailure
+					transactionSet:NO
+					returnsResults:YES
+					binaryBindings:nil
+						 withError:&error];
+	XCTAssertFalse(success, @"a step error must not look like SQLITE_DONE");
+	XCTAssertNotNil(error);
+	XCTAssertEqualObjects(stepFailure.callLog, @[],
+						  @"a step error before the first row leaves the destination untouched");
 }
 
 #pragma mark - Checkpoint
