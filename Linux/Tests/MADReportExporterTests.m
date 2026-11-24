@@ -1105,10 +1105,10 @@ static MADHeadlessDocument *MADCompositionGraphDocument(NSString *directory,
 		// (non-upstream) tables, to build a node that mixes both kinds for the
 		// mixed-node validation test.
 		for (NSString *remoteName in composer[@"remoteTables"]) {
-			RptqObject *remoteTable = insert(@"RptqQueryTable", counter++);
+			RptqObject *remoteTable = MADCompositionGraphInsert(context, @"RptqQueryTable", counter++);
 			[remoteTable setValue: rootQuery forKey: @"inQuery"];
 			[remoteTable setValue: schemaTablesByName[remoteName] forKey: @"databaseSchemaTable"];
-			RptqObject *remoteField = insert(@"RptqQueryField", counter++);
+			RptqObject *remoteField = MADCompositionGraphInsert(context, @"RptqQueryField", counter++);
 			[remoteField setValue: schemaFieldsByName[remoteName][@"id"] forKey: @"databaseSchemaField"];
 			[remoteField setValue: remoteTable forKey: @"inQueryTable"];
 			[remoteTable setValue: @[ remoteField ] forKey: @"hasQueryFields"];
