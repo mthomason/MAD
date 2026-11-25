@@ -7,6 +7,7 @@
 
 #import "MADMacQueryViewController.h"
 #import "MADMacDocument.h"
+#import "MADMacDocumentController.h"
 #import "MADMacWindowController.h"
 #import "MADMacConnectionWindowController.h"
 
@@ -1075,6 +1076,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 @property (nonatomic, strong) NSSegmentedControl *modeSegmentedControl;
 @property (nonatomic, strong) NSPopUpButton *querySelectorPopup;
 @property (nonatomic, strong) NSButton *addSourceButton;
+@property (nonatomic, strong) NSButton *importChildButton;
 @property (nonatomic, strong) NSButton *addRootButton;
 @property (nonatomic, strong) NSButton *renameQueryButton;
 @property (nonatomic, strong) NSButton *outputsButton;
@@ -1249,6 +1251,11 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 										  action:@selector(addSourceQueryAction:)];
 	_addSourceButton.toolTip = NSLocalizedString(@"Add a source query from another database connection", @"Tooltip for the add-source button.");
 
+	_importChildButton = [NSButton buttonWithTitle:NSLocalizedString(@"+ Import…", @"Query toolbar button that imports an existing report as a child.")
+											target:self
+											action:@selector(importChildQueryAction:)];
+	_importChildButton.toolTip = NSLocalizedString(@"Import an existing report as a child of the composition", @"Tooltip for the import-child button.");
+
 	_addRootButton = [NSButton buttonWithTitle:NSLocalizedString(@"+ Root", @"Query toolbar button that creates the composed root query.")
 										target:self
 										action:@selector(addRootQueryAction:)];
@@ -1273,7 +1280,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		connectionBtn.imagePosition = NSImageLeft;
 	}
 
-	_designerHeaderControls = [NSStackView stackViewWithViews:@[_querySelectorPopup, _addSourceButton, _addRootButton, _renameQueryButton, _outputsButton, _filtersButton, _groupsButton, _arrangeButton, connectionBtn]];
+	_designerHeaderControls = [NSStackView stackViewWithViews:@[_querySelectorPopup, _addSourceButton, _importChildButton, _addRootButton, _renameQueryButton, _outputsButton, _filtersButton, _groupsButton, _arrangeButton, connectionBtn]];
 	_designerHeaderControls.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	_designerHeaderControls.spacing = 8.0;
 	_designerHeaderControls.translatesAutoresizingMaskIntoConstraints = NO;
@@ -1792,6 +1799,44 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	}
 }
 
+- (void)importChildQueryAction:(id) __unused sender {
+	// The child is added to the composed root; ensure one exists first.
+	if (_document.rootQuery == nil) {
+		NSError *rootError = nil;
+		if ([_document addRootQueryNamed:NSLocalizedString(@"root", @"Default name of the composed root query.") error:&rootError] == nil) {
+			NSAlert *errAlert = [[NSAlert alloc] init];
+			errAlert.messageText = NSLocalizedString(@"Could not create the root query", @"Alert title when the root query cannot be created.");
+			errAlert.informativeText = rootError.localizedDescription ?: @"";
+			[errAlert runModal];
+			return;
+		}
+	}
+
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	panel.title = NSLocalizedString(@"Choose a Report to Import", @"Import-child picker title.");
+	panel.prompt = NSLocalizedString(@"Import", @"Import-child picker confirm button.");
+	panel.allowsMultipleSelection = NO;
+	panel.canChooseDirectories = NO;
+	panel.canChooseFiles = YES;
+	panel.allowedContentTypes = [MADMacDocumentController allowedMadContentTypes];
+	if ([panel runModal] != NSModalResponseOK) return;
+	NSURL *sourceURL = panel.URL;
+	if (sourceURL == nil) return;
+
+	NSError *error = nil;
+	NSString *name = sourceURL.lastPathComponent.stringByDeletingPathExtension;
+	RptqQuery *child = [_document importChildFromURL:sourceURL name:name error:&error];
+	if (child == nil || [_document addChildQuery:child error:&error] == nil) {
+		NSAlert *errAlert = [[NSAlert alloc] init];
+		errAlert.messageText = NSLocalizedString(@"Could not import the report", @"Alert title when a child import fails.");
+		errAlert.informativeText = error.localizedDescription ?: @"";
+		[errAlert runModal];
+		return;
+	}
+	_document.selectedQuery = _document.rootQuery;
+	[self reloadFromDocument];
+}
+
 - (void)promptForSourceQueryNameWithConnection:(MADDatabaseConnection *)connection
 								   credentials:(nullable MADCredential *)credentials {
 	NSAlert *alert = [[NSAlert alloc] init];
@@ -2035,16 +2080,6 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	RptqStoreContext *ctx = _document.managedObjectContext;
 	if (query == nil || ctx == nil) return nil;
 
-	// The composed root supports exactly one join (two inputs).  Replacing an existing
-	// join keeps the graph within the engine's supported shape.
-	if (_editingRoot && query.hasQueryLinks.count > 0) {
-		for (RptqQueryLinks *link in [query.hasQueryLinks copy]) {
-			[query removeHasQueryLinksObject:link];
-			[ctx deleteObject:link error:NULL];
-		}
-		_canvasView.selectedLinkID = 0;
-	}
-
 	// If a link between these exact two fields already exists, return it
 	for (RptqQueryLinks *existing in query.hasQueryLinks) {
 		if ((existing.hasLeftField.identifier == leftField.identifier && existing.hasRightField.identifier == rightField.identifier) ||
@@ -2104,9 +2139,17 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (NSArray<NSNumber *> *)supportedJoinTypesForCurrentDatabase {
-	// The composed root's two-input join is scoped to a Left Outer Join.
+	// The composed root joins its children in local SQLite, so it supports the same
+	// join types as a SQLite source.
 	if (_editingRoot) {
-		return @[ @(MADLinkTypeLeftOuterJoin) ];
+		return @[
+			@(MADLinkTypeLeftOuterJoin),
+			@(MADLinkTypeInnerJoin),
+			@(MADLinkTypeRightOuterJoin),
+			@(MADLinkTypeFullOuterJoin),
+			@(MADLinkTypeEquiJoin),
+			@(MADLinkTypeNaturalJoin),
+		];
 	}
 	// Matches MADQueryAddLinkJoinTypeController.m driver rules, with Left Outer Join first
 	RptqDatabase *db = [self selectedDatabase];
