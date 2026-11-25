@@ -320,6 +320,8 @@
   <sys:String x:Key="Document.ExportFailed">書き出しに失敗しました。</sys:String>
   <sys:String x:Key="Document.TypeStandard">Standard Report</sys:String>
   <sys:String x:Key="Document.TypeComposition">Composition Report</sys:String>
+  <sys:String x:Key="Document.TypeStandard.Tooltip">このレポートは1つのデータベースにクエリを実行します。</sys:String>
+  <sys:String x:Key="Document.TypeComposition.Tooltip">このレポートはソースとしてインポートしたレポートを結合します。</sys:String>
   <sys:String x:Key="Document.Converted">Converted to a Composition Report.</sys:String>
   <sys:String x:Key="Document.ConvertFailed">Conversion failed.</sys:String>
   <sys:String x:Key="Document.Imported">Imported the report.</sys:String>

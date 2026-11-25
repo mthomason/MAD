@@ -156,9 +156,11 @@ public sealed class CompositionAcceptanceTests
             var document = new DocumentViewModel(engine);
             await document.AdoptAsync(created, mad);
             Assert.False(document.IsComposed);
+            Assert.Equal(Localizer.Get("Document.TypeStandard.Tooltip"), document.DocumentTypeTooltip);
 
             await document.ConvertToCompositionAsync("invoices");
             Assert.True(document.IsComposed);
+            Assert.Equal(Localizer.Get("Document.TypeComposition.Tooltip"), document.DocumentTypeTooltip);
             Assert.Contains(document.Queries, q => q.IsRoot);
             Assert.Contains(document.Queries, q => !q.IsRoot && q.Name == "invoices");
 

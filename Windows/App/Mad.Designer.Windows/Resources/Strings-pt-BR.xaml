@@ -320,6 +320,8 @@
   <sys:String x:Key="Document.ExportFailed">Falha ao exportar.</sys:String>
   <sys:String x:Key="Document.TypeStandard">Standard Report</sys:String>
   <sys:String x:Key="Document.TypeComposition">Composition Report</sys:String>
+  <sys:String x:Key="Document.TypeStandard.Tooltip">Este relatório consulta um banco de dados.</sys:String>
+  <sys:String x:Key="Document.TypeComposition.Tooltip">Este relatório combina relatórios importados como fontes.</sys:String>
   <sys:String x:Key="Document.Converted">Converted to a Composition Report.</sys:String>
   <sys:String x:Key="Document.ConvertFailed">Conversion failed.</sys:String>
   <sys:String x:Key="Document.Imported">Imported the report.</sys:String>

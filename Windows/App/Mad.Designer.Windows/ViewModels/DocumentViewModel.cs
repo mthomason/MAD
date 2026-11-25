@@ -153,6 +153,11 @@ public sealed class DocumentViewModel : ObservableObject
     public string DocumentTypeText
         => IsComposed ? Localizer.Get("Document.TypeComposition") : Localizer.Get("Document.TypeStandard");
 
+    /// <summary>The localized tooltip for the document-type badge: a description of the type
+    /// currently shown, never an instruction.</summary>
+    public string DocumentTypeTooltip
+        => IsComposed ? Localizer.Get("Document.TypeComposition.Tooltip") : Localizer.Get("Document.TypeStandard.Tooltip");
+
     public AsyncRelayCommand RefreshCommand { get; }
     public AsyncRelayCommand ExportCsvCommand { get; }
     public AsyncRelayCommand ExportJsonCommand { get; }
@@ -218,6 +223,7 @@ public sealed class DocumentViewModel : ObservableObject
         Queries = info.Queries;
         Query.SetQueries(info.Queries);
         OnPropertyChanged(nameof(DocumentTypeText));
+        OnPropertyChanged(nameof(DocumentTypeTooltip));
         long selected = info.Composed ? info.RootQuery : (info.Queries.FirstOrDefault()?.Id ?? 0);
         await Query.LoadAsync(_handle, describe.Driver, describe.Tables, selected);
         SelectedQueryId = selected;
@@ -282,6 +288,7 @@ public sealed class DocumentViewModel : ObservableObject
         Queries = info.Queries;
         Query.SetQueries(info.Queries);
         OnPropertyChanged(nameof(DocumentTypeText));
+        OnPropertyChanged(nameof(DocumentTypeTooltip));
         return info;
     }
 

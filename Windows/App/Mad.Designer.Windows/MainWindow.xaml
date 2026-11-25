@@ -85,9 +85,21 @@
                     <TextBlock Text="{Binding Document.FileName}" Style="{StaticResource MAD.SecondaryText}"
                                VerticalAlignment="Center" MaxWidth="420" TextTrimming="CharacterEllipsis"
                                Visibility="{Binding Document.HasDocument, Converter={StaticResource BoolToVis}}" />
-                    <TextBlock Text="{Binding Document.DocumentTypeText}" Style="{StaticResource MAD.SecondaryText}"
-                               FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0"
-                               Visibility="{Binding Document.HasDocument, Converter={StaticResource BoolToVis}}" />
+                    <Border x:Name="DocumentTypeBadge" Margin="8,0,0,0" VerticalAlignment="Center"
+                            ToolTip="{Binding Document.DocumentTypeTooltip}"
+                            Visibility="{Binding Document.HasDocument, Converter={StaticResource BoolToVis}}">
+                        <Border.Style>
+                            <Style TargetType="Border" BasedOn="{StaticResource MAD.DocumentTypeBadge}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Document.IsComposed}" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                        <Setter Property="TextElement.Foreground" Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="{Binding Document.DocumentTypeText}" />
+                    </Border>
                 </StackPanel>
 
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">

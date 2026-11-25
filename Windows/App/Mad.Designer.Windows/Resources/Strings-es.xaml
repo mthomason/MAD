@@ -320,6 +320,8 @@
   <sys:String x:Key="Document.ExportFailed">Error al exportar.</sys:String>
   <sys:String x:Key="Document.TypeStandard">Standard Report</sys:String>
   <sys:String x:Key="Document.TypeComposition">Composition Report</sys:String>
+  <sys:String x:Key="Document.TypeStandard.Tooltip">Este informe consulta una base de datos.</sys:String>
+  <sys:String x:Key="Document.TypeComposition.Tooltip">Este informe combina informes importados como orígenes.</sys:String>
   <sys:String x:Key="Document.Converted">Converted to a Composition Report.</sys:String>
   <sys:String x:Key="Document.ConvertFailed">Conversion failed.</sys:String>
   <sys:String x:Key="Document.Imported">Imported the report.</sys:String>

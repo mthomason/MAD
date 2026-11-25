@@ -58,9 +58,11 @@ explain the drag-to-join gesture.
 
 **P0 — Make the document type and its next action explicit.** (The composition case is
 redesigned in detail in [`MAD_COMPOSITION_UX.md`](MAD_COMPOSITION_UX.md).)
-Promote the document-type label to a visible pill/badge next to the filename (Standard =
-neutral, Composition = accent), and add a one-line hint on open: e.g. "Composition: use
-Import… to add reports, then join them in the Query workspace." (Detailed in Report 2.)
+**Badge complete (2026-11-25).** The small type text is now a pill next to the filename
+(Standard = neutral, Composition = accent) with a per-type tooltip, and
+`DocumentTypeBadgeTests` pins the bindings, the accent trigger, and the placement beside
+a trimmed filename. The one-line next-action hint on open (e.g. "Composition: use
+Import… to add reports, then join them in the Query workspace") still waits for Report 2.
 
 **P1 — Group the command bars.** Introduce visual groups (Insert / Edit / View) with a small
 divider, and move less-used commands (Arrange Tables, Fit, grid/rulers) out of the primary

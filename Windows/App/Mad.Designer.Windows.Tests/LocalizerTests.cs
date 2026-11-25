@@ -22,7 +22,7 @@ public sealed class LocalizerTests
     public void EveryShippedDictionary_HasEveryEnglishKey()
     {
         IReadOnlyDictionary<string, string> english = Localizer.StringsFor("en");
-        Assert.Equal(353, english.Count);
+        Assert.Equal(355, english.Count);
 
         foreach (string language in Localizer.SupportedLanguages)
         {
@@ -74,6 +74,8 @@ public sealed class LocalizerTests
     {
         Assert.Equal("en", Localizer.DefaultLanguage);
         Assert.Equal("Page Size:", Localizer.Get("Viewer.PageSize"));
+        Assert.Equal("This report queries one database.", Localizer.Get("Document.TypeStandard.Tooltip"));
+        Assert.Equal("This report combines reports imported as sources.", Localizer.Get("Document.TypeComposition.Tooltip"));
         Assert.Equal("Rendered 5 pages from 76 cached rows.", ViewerViewModel.StatusMessage(5, 76));
     }
 
