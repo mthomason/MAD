@@ -421,6 +421,63 @@ static double MADSmokeComposedDouble(MADDataTableFast *table, NSUInteger row, NS
 	return [value doubleValue];
 }
 
+// Builds an ordinary single-query `.mad` (a standard report) over `sourceURL`: one
+// database, its credential, one schema table with `fieldNames`, and one query with a
+// query table and field per schema field. No root, no output keys -- a plain report.
+static NSString *MADSmokeBuildStandardReport(NSURL *sourceURL, NSURL *madURL, NSString *tableName,
+											 NSArray<NSString *> *fieldNames, NSString **outError) {
+	NSFileManager *fm = [NSFileManager defaultManager];
+	MADDocumentStore *store = [MADDocumentStore storeForDocumentURL:madURL];
+	[fm removeItemAtURL:store.gutsURL error:NULL];
+	NSError *error = nil;
+	if (![store openWithError:&error]) { if (outError) *outError = error.localizedDescription; return nil; }
+	RptqStoreContext *context = store.context;
+	[context loadAllWithError:NULL];
+
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	RptqObject *credential = [context insertObjectForEntity:@"RptqDatabaseCredentals" identifier:0];
+	[credential setValue:sourceURL.lastPathComponent forKey:@"dbname"];
+	[credential setValue:sourceURL.path forKey:@"host"];
+	[database setValue:credential forKey:@"ownedByUser"];
+
+	RptqObject *schemaTable = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[schemaTable setValue:tableName forKey:@"name"];
+	NSMutableArray *schemaFields = [NSMutableArray array];
+	int64_t fieldId = 20;
+	for (NSString *fieldName in fieldNames) {
+		RptqObject *schemaField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:fieldId++];
+		[schemaField setValue:fieldName forKey:@"name"];
+		[schemaFields addObject:schemaField];
+	}
+	[database setValue:@[schemaTable] forKey:@"hasTables"];
+	[schemaTable setValue:schemaFields forKey:@"hasFields"];
+
+	RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[database setValue:@[query] forKey:@"hasQueries"];
+	RptqObject *queryTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[queryTable setValue:schemaTable forKey:@"databaseSchemaTable"];
+	[queryTable setValue:query forKey:@"inQuery"];
+	NSMutableArray *queryFields = [NSMutableArray array];
+	for (RptqObject *schemaField in schemaFields) {
+		RptqObject *field = [context insertObjectForEntity:@"RptqQueryField" identifier:0];
+		[field setValue:schemaField forKey:@"databaseSchemaField"];
+		[field setValue:queryTable forKey:@"inQueryTable"];
+		[queryFields addObject:field];
+	}
+	[queryTable setValue:queryFields forKey:@"hasQueryFields"];
+	[document setValue:@[database] forKey:@"hasDatabaseSchemas"];
+
+	if (![context save:&error]) { if (outError) *outError = error.localizedDescription; [store close]; return nil; }
+	[store close];
+	MADArchiveManager *writer = [[MADArchiveManager alloc] initWithFileWrapperURL:store.gutsURL archiveURL:madURL];
+	writer.composed = NO;
+	if (![writer archive:YES]) { if (outError) *outError = @"archive failed"; return nil; }
+	return madURL.path;
+}
+
 int main(int argc, const char * argv[]) {
 	sRetainedPanels = [[NSMutableArray alloc] init];
 	@autoreleasepool {
@@ -2127,6 +2184,139 @@ int main(int argc, const char * argv[]) {
 
 		[fm removeItemAtPath:authorDir error:NULL];
 		printf("PASS: Authored composed report from scratch (create sources, name, switch, join, outputs, layout, save, reopen, refresh: 4 rows; source filter -> 3 rows; root filter -> (1,100,60))\n");
+	}
+
+	@autoreleasepool {
+		NSFileManager *fm = [NSFileManager defaultManager];
+		NSError *err = nil;
+
+		// 13. Convert a standard report into a one-child composition, then refresh.
+		{
+		NSString *convertDir = [NSTemporaryDirectory() stringByAppendingPathComponent:
+								[NSString stringWithFormat:@"mad-convert-%@", NSUUID.UUID.UUIDString]];
+		[fm createDirectoryAtPath:convertDir withIntermediateDirectories:YES attributes:nil error:NULL];
+		NSURL *convertSourceURL = [NSURL fileURLWithPath:[convertDir stringByAppendingPathComponent:@"invoices.sqlite"]];
+		NSURL *convertMadURL = [NSURL fileURLWithPath:[convertDir stringByAppendingPathComponent:@"invoices.mad"]];
+		if (!MADSmokeRunSQLite(convertSourceURL, @[@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL);",
+												   @"INSERT INTO invoices VALUES (1, 100.0);",
+												   @"INSERT INTO invoices VALUES (2, 200.0);"])) {
+			fprintf(stderr, "FAIL: Could not write convert source database\n");
+			return 220;
+		}
+		NSString *convertError = nil;
+		if (MADSmokeBuildStandardReport(convertSourceURL, convertMadURL, @"invoices", @[@"invoice_id", @"amount"], &convertError) == nil) {
+			fprintf(stderr, "FAIL: Could not build convert source report: %s\n", convertError.UTF8String ?: "(none)");
+			return 221;
+		}
+		MADMacDocument *convertDoc = [[MADMacDocument alloc] initWithContentsOfURL:convertMadURL ofType:@"com.thomason.mad" error:&err];
+		if (convertDoc == nil || convertDoc.isComposed) {
+			fprintf(stderr, "FAIL: Convert source did not open as a standard report\n");
+			return 222;
+		}
+		RptqQuery *convertRoot = [convertDoc convertToCompositionWithChildName:nil error:&err];
+		if (convertRoot == nil || !convertDoc.isComposed) {
+			fprintf(stderr, "FAIL: Convert failed: %s\n", err.localizedDescription.UTF8String);
+			return 223;
+		}
+		NSArray<RptqQueryField *> *convertOutputs = [convertDoc.rptqDocument orderedCompositionOutputsWithError:&err];
+		if (convertOutputs.count != 2 ||
+			![convertOutputs[0].outputKey isEqualToString:@"invoice_id"] ||
+			![convertOutputs[1].outputKey isEqualToString:@"amount"]) {
+			fprintf(stderr, "FAIL: Convert output keys are wrong\n");
+			return 224;
+		}
+		MADMacViewerViewController *convertViewer = [[MADMacViewerViewController alloc] initWithDocument:convertDoc];
+		(void)convertViewer.view;
+		if (!MADSmokeRefreshComposed(convertDoc, convertViewer, 2)) {
+			fprintf(stderr, "FAIL: Converted refresh failed: %s\n", convertViewer.lastRefreshError.description.UTF8String);
+			return 225;
+		}
+		MADDataTableFast *convertTable = convertDoc.headlessDocument.dataTable;
+		if ([convertTable numberOfRows] != 2 ||
+			fabs(MADSmokeComposedDouble(convertTable, 1, @"invoice_id") - 1.0) > 0.001 ||
+			fabs(MADSmokeComposedDouble(convertTable, 1, @"amount") - 100.0) > 0.001) {
+			fprintf(stderr, "FAIL: Converted refresh produced wrong rows\n");
+			return 226;
+		}
+		NSURL *convertSavedURL = [NSURL fileURLWithPath:[convertDir stringByAppendingPathComponent:@"converted.mad"]];
+		if (![convertDoc.headlessDocument writeToURL:convertSavedURL reproducible:NO error:&err]) {
+			fprintf(stderr, "FAIL: Converted save failed: %s\n", err.localizedDescription.UTF8String);
+			return 227;
+		}
+		MADMacDocument *convertReopened = [[MADMacDocument alloc] initWithContentsOfURL:convertSavedURL ofType:@"com.thomason.mad" error:&err];
+		if (convertReopened == nil || !convertReopened.isComposed) {
+			fprintf(stderr, "FAIL: Converted document did not reopen as composed\n");
+			return 228;
+		}
+		[fm removeItemAtPath:convertDir error:NULL];
+		printf("PASS: Converted a standard report into a one-child composition (outputs, refresh, save, reopen)\n");
+	}
+
+	// 14. Create a composition by importing two standard reports, then reopen it
+	// without the source `.mad` files present.
+	{
+		NSString *importDir = [NSTemporaryDirectory() stringByAppendingPathComponent:
+							   [NSString stringWithFormat:@"mad-import-%@", NSUUID.UUID.UUIDString]];
+		[fm createDirectoryAtPath:importDir withIntermediateDirectories:YES attributes:nil error:NULL];
+		NSURL *importInvoicesURL = [NSURL fileURLWithPath:[importDir stringByAppendingPathComponent:@"invoices.sqlite"]];
+		NSURL *importPaymentsURL = [NSURL fileURLWithPath:[importDir stringByAppendingPathComponent:@"payments.sqlite"]];
+		NSURL *importInvoicesMad = [NSURL fileURLWithPath:[importDir stringByAppendingPathComponent:@"invoices.mad"]];
+		NSURL *importPaymentsMad = [NSURL fileURLWithPath:[importDir stringByAppendingPathComponent:@"payments.mad"]];
+		if (!MADSmokeRunSQLite(importInvoicesURL, @[@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL);", @"INSERT INTO invoices VALUES (1, 100.0);"]) ||
+			!MADSmokeRunSQLite(importPaymentsURL, @[@"CREATE TABLE payments (invoice_id INTEGER, amount REAL);", @"INSERT INTO payments VALUES (1, 40.0);", @"INSERT INTO payments VALUES (1, 60.0);"])) {
+			fprintf(stderr, "FAIL: Could not write import source databases\n");
+			return 230;
+		}
+		NSString *importError = nil;
+		if (MADSmokeBuildStandardReport(importInvoicesURL, importInvoicesMad, @"invoices", @[@"invoice_id", @"amount"], &importError) == nil ||
+			MADSmokeBuildStandardReport(importPaymentsURL, importPaymentsMad, @"payments", @[@"invoice_id", @"amount"], &importError) == nil) {
+			fprintf(stderr, "FAIL: Could not build import source reports: %s\n", importError.UTF8String ?: "(none)");
+			return 231;
+		}
+		NSURL *importDestURL = [NSURL fileURLWithPath:[importDir stringByAppendingPathComponent:@"composition.mad"]];
+		MADHeadlessDocument *empty = [MADHeadlessDocument createEmptyDocumentAtURL:importDestURL error:&err];
+		if (empty == nil) {
+			fprintf(stderr, "FAIL: Could not create empty composition: %s\n", err.localizedDescription.UTF8String);
+			return 232;
+		}
+		MADMacDocument *importDoc = [[MADMacDocument alloc] init];
+		importDoc.fileURL = importDestURL;
+		[importDoc adoptHeadlessDocument:empty];
+		if ([importDoc addRootQueryNamed:@"root" error:&err] == nil) {
+			fprintf(stderr, "FAIL: Could not add the root: %s\n", err.localizedDescription.UTF8String);
+			return 233;
+		}
+		RptqQuery *invoicesChild = [importDoc importChildFromURL:importInvoicesMad name:@"invoices" error:&err];
+		RptqQuery *paymentsChild = [importDoc importChildFromURL:importPaymentsMad name:@"payments" error:&err];
+		if (invoicesChild == nil || paymentsChild == nil ||
+			[importDoc addChildQuery:invoicesChild error:&err] == nil ||
+			[importDoc addChildQuery:paymentsChild error:&err] == nil) {
+			fprintf(stderr, "FAIL: Could not import children: %s\n", err.localizedDescription.UTF8String);
+			return 234;
+		}
+		NSArray<RptqQueryField *> *importOutputs = [importDoc.rptqDocument orderedCompositionOutputsWithError:&err];
+		if (importDoc.allQueries.count != 3 || importOutputs.count != 4 ||
+			![importOutputs[0].outputKey isEqualToString:@"invoice_id"] ||
+			![importOutputs[1].outputKey isEqualToString:@"amount"] ||
+			![importOutputs[2].outputKey isEqualToString:@"payments.invoice_id"] ||
+			![importOutputs[3].outputKey isEqualToString:@"payments.amount"]) {
+			fprintf(stderr, "FAIL: Import composition structure or outputs are wrong\n");
+			return 235;
+		}
+		if (![importDoc.headlessDocument writeToURL:importDestURL reproducible:NO error:&err]) {
+			fprintf(stderr, "FAIL: Imported composition save failed: %s\n", err.localizedDescription.UTF8String);
+			return 236;
+		}
+		[fm removeItemAtPath:importInvoicesMad.path error:NULL];
+		[fm removeItemAtPath:importPaymentsMad.path error:NULL];
+		MADMacDocument *importReopened = [[MADMacDocument alloc] initWithContentsOfURL:importDestURL ofType:@"com.thomason.mad" error:&err];
+		if (importReopened == nil || !importReopened.isComposed || importReopened.allQueries.count != 3) {
+			fprintf(stderr, "FAIL: Imported composition did not reopen standalone\n");
+			return 237;
+		}
+		[fm removeItemAtPath:importDir error:NULL];
+			printf("PASS: Created a composition by importing two standard reports (structure, outputs, save, reopen without sources)\n");
+		}
 	}
 	return 0;
 }

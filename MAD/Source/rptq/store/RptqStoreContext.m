@@ -558,6 +558,15 @@ static void MADStoreResolveRelativeSQLitePaths(NSDictionary<NSNumber *, RptqObje
 	// the destination's location.
 	MADStoreResolveRelativeSQLitePaths(remap[@"RptqDatabase"], relativePathBaseURL);
 
+	// The imported databases join the destination document's schema list, so the
+	// document owns them and every walk (allQueries, the sidebar, refresh) sees them.
+	RptqDocument *destinationDocument = [RptqDocument newDocumentReadFromManagedObjectContext:self];
+	if (destinationDocument != nil) {
+		for (RptqObject *database in remap[@"RptqDatabase"].allValues) {
+			[self addObject:database toRelationshipNamed:@"hasDatabaseSchemas" onObject:destinationDocument];
+		}
+	}
+
 	// The imported root is the source's explicit root, else its single query.
 	RptqDocument *sourceDocument = [RptqDocument newDocumentReadFromManagedObjectContext:sourceContext];
 	RptqQuery *sourceRoot = sourceDocument.rootQuery ?: sourceDocument.mainQuery;

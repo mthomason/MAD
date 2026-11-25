@@ -1201,6 +1201,8 @@ static void testImportQueryGraphRemapsIdentifiersAndResolvesRelativePath(void) {
 
 	MAD_PASS([destination objectsForEntity:@"RptqQuery"].count == (NSUInteger)2, "two queries coexist");
 	MAD_PASS([destination objectsForEntity:@"RptqDatabase"].count == (NSUInteger)2, "two databases coexist");
+	RptqObject *destinationDocumentRow = [destination objectForEntity:@"RptqDocument" identifier:1];
+	MAD_PASS([[destinationDocumentRow valueForKey:@"hasDatabaseSchemas"] count] == (NSUInteger)2, "the imported database joins the document");
 	MAD_PASS([destination objectsForEntity:@"RptqDatabaseSchemaTable"].count == (NSUInteger)2, "two schema tables coexist");
 	MAD_PASS([destination objectsForEntity:@"RptqDatabaseSchemaField"].count == (NSUInteger)2, "two schema fields coexist");
 	MAD_PASS([destination objectsForEntity:@"RptqQueryTable"].count == (NSUInteger)2, "two query tables coexist");

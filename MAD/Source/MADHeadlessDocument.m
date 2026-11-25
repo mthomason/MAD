@@ -375,6 +375,9 @@
 - (MADDatabase *)database {
 	if (_database == nil) {
 		RptqDatabase *database = self.activeDocumentModel.hasDatabaseSchemas.anyObject;
+		// An empty document -- a composition before any child is imported -- has
+		// no database, so there is no source to build a connection for.
+		if (database == nil) return nil;
 		// The credential row conforms through its category
 		// (RptqDatabaseCredentals+MADDatabaseConnection.h), which the compiler
 		// cannot see from the class alone -- the same cast the app makes.

@@ -756,6 +756,9 @@
 	// imported copies.
 	XCTAssertEqual([destination objectsForEntity:@"RptqQuery"].count, (NSUInteger)2);
 	XCTAssertEqual([destination objectsForEntity:@"RptqDatabase"].count, (NSUInteger)2);
+	// The imported database joins the destination document's schema list.
+	RptqObject *destinationDocumentRow = [destination objectForEntity:@"RptqDocument" identifier:1];
+	XCTAssertEqual([[destinationDocumentRow valueForKey:@"hasDatabaseSchemas"] count], (NSUInteger)2);
 	XCTAssertEqual([destination objectsForEntity:@"RptqDatabaseSchemaTable"].count, (NSUInteger)2);
 	XCTAssertEqual([destination objectsForEntity:@"RptqDatabaseSchemaField"].count, (NSUInteger)2);
 	XCTAssertEqual([destination objectsForEntity:@"RptqQueryTable"].count, (NSUInteger)2);
