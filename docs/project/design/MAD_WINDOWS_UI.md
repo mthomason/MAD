@@ -46,9 +46,15 @@ this is an audit with prioritized recommendations.
 ## Prioritized recommendations
 
 **P0 — Tooltip & automation-name convention (low effort, high payoff).**
-Add a `ToolTip` + `AutomationProperties.Name` to every command, and a shared helper (a
-`ToolTipService`-based attached property, or just discipline in XAML) so it stays consistent.
-Prioritize the Query and Designer command buttons above.
+**Complete (2026-11-25).** The Query and Designer workspaces now give every `Button`,
+`ToggleButton`, `CheckBox`, `ComboBox`, `ListBox`, and `Slider` a localized `ToolTip`
+(the task explanation) and a separate localized `AutomationProperties.Name` (the short
+spoken label). `TooltipConventionTests` reads both XAML sources and fails with a
+file/line list when either is missing or not localized. The five insert commands, the
+mode toggles, the query selector, both sidebars, the popup editors, the barcode and
+typography controls, and the canvas-view controls are covered. The join-type tooltip
+moved from the non-hit-testable curve to its midpoint badge, and query fields now
+explain the drag-to-join gesture.
 
 **P0 — Make the document type and its next action explicit.** (The composition case is
 redesigned in detail in [`MAD_COMPOSITION_UX.md`](MAD_COMPOSITION_UX.md).)
@@ -93,3 +99,13 @@ visual verification does not.
 
 Recommendation: add nothing mandatory — open the project in Visual Studio and share a few
 screenshots; that unblocks visual iteration for both of us.
+
+## Follow-ups found while completing P0 (2026-11-25)
+
+- The element inspector's `Border T / B / L / R` boxes are four unlabeled numeric
+  fields. They need accessible names and clearer individual labels.
+- The Bands list's double-click toggles section visibility. That is a surprising
+  gesture for a list; a visible checkbox or context menu would be more discoverable.
+- The remaining P1/P2 items in this audit — command-bar grouping, in-place empty
+  states, unified feedback, and general canvas hover tooltips — are still open.
+- Composition-facing presentation stays with Report 2 (`MAD_COMPOSITION_UX.md`).
