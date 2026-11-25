@@ -516,3 +516,47 @@ composed root now supports N-way joins (the engine's general-query compiler alre
 join-type editor offers the full SQLite set. The query toolbar gains `+ Import…`, which imports an
 existing `.mad` as a child of the composed root. Full `./Linux/build.sh` is green (131 suites /
 0 failures, `RptqStoreContextTests` 31/0), and the Linux CLI verify is 42/0.
+
+## Checkpoint I — native Windows composition landed (2026-11-25)
+
+The Windows workstation now authors, saves, reopens, refreshes, views and exports a
+composition through the native WPF shell, on the shared engine. The engine and macOS
+surface (Checkpoints A–H) are unchanged except for the baseline fixes below; the work here
+is the `mad serve` transport and the WPF surface on top of the existing engine primitives.
+
+- **Baseline.** Three Windows-only failures were fixed before the surface work:
+  `RptqDocument -mainQuery` could return the composed root instead of the source query
+  (the root shares the first source's database, so `hasDatabaseSchemas.anyObject.hasQueries.anyObject`
+  is ambiguous once a root exists); `MADDatabaseSqlite3 -executeSQL:…` failed an empty query
+  (a freshly created document with no tables) as `SQLITE_MISUSE`/“not an error” instead of an
+  empty result; and the byte-identical Linux/Windows `MADReportExporterTests` mirror assumed
+  Linux's two-level test path and used `?` (a DOS wildcard) in a fixture path.
+- **Serve protocol.** Every query-model mutation takes an optional `query` identifier and edits
+  that query; an unknown or stale identifier answers an actionable error and leaves the document
+  unchanged. New methods, backed by the existing `MAD` primitives: `document-info`, `create-empty`,
+  `add-root`, `add-source`, `add-upstream`, `import-child`, `convert`, and `set-root-outputs`.
+  `layout-model` resolves the composed root (its ordered outputs become the designer field list).
+  Ordinary single-query callers that omit `query` keep today's behaviour.
+- **WPF surface.** `DocumentViewModel` exposes `IsComposed`, the query list, and the selected
+  query (shown separately from the document type, which is labelled in the window toolbar);
+  `QueryViewModel` edits the selected query; the File menu gains New Composition, Convert to
+  Composition and Import; the Query workspace gains a query selector. New `document-info`/query
+  models and `EngineService` methods carry the protocol.
+- **Acceptance tests.** `CompositionAcceptanceTests` drives the full flow through the engine
+  service and view models: create + author + save + reopen + refresh + view + export (pinning
+  the joined rows `(1,100,40) (1,100,60) (2,200,null) (3,300,null)`), convert a standard report,
+  and import a child report. The invoices/payments SQLite fixtures are checked in under the test
+  project.
+
+**Results (actual, 2026-11-25).** Windows engine build `131 suites / 0 failures`; WPF suite
+`122/122` (including the three composition acceptance tests); `check_source_lists.py` green. The
+packaged app (`Windows/package.ps1`) verifies its bundled engine is the tested checkout and writes
+`MAD-Designer-Windows-0.7.1.zip` (75.3 MB) and `mad-windows-x64.zip` (11.8 MB); the bundled engine
+reports `9.0 (r4433) commit 25de4050`. The packaged WPF app launches
+`Windows\Engine\build\mad.exe` beside itself (`MadPathResolver.MadExe()`), built from the tested
+checkout.
+
+**Not covered / deferred.** Per-query SQL entry (validate/apply-sql still targets the default
+query); a graphical capability matrix; the remaining open review items (P4, P7, P8). The Linux CI
+and Apple suites for the shared-source baseline fixes have not been run here. PR creation and merge
+await the user's direction.
