@@ -59,6 +59,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// The same, without the open: the accessors read the store lazily.
 - (instancetype)initWithFileURL:(NSURL *)url;
 
+/// Creates an empty `.mad` document at `url` -- the document row and its default
+/// report sections, but no database connection or schema. The composition flows
+/// import child reports into it. Returns nil with `error` when it cannot.
++ (nullable instancetype)createEmptyDocumentAtURL:(NSURL *)url
+											error:(NSError * _Nullable __autoreleasing *)outError;
+
 @property (readonly, nonatomic, copy) NSURL *fileURL;
 @property (readonly, nonatomic, copy) NSString *filename;
 

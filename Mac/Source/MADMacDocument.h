@@ -69,6 +69,23 @@ extern NSNotificationName const MADMacDocumentDidRefreshNotification;
 /// Renames a query.
 - (void)renameQuery:(RptqQuery *)query to:(NSString *)name;
 
+/// Imports the query graph of the `.mad` at `sourceURL` into this document as a new
+/// child, remapping identifiers, and returns the imported root query (named `name`).
+/// The source file is untouched.
+- (nullable RptqQuery *)importChildFromURL:(NSURL *)sourceURL
+									  name:(nullable NSString *)name
+									  error:(NSError * _Nullable __autoreleasing *)error;
+
+/// Converts this standard report into a one-child composition (engine
+/// `convertToCompositionWithChildName:error:`), and marks the document mutated.
+- (nullable RptqQuery *)convertToCompositionWithChildName:(nullable NSString *)childName
+													 error:(NSError * _Nullable __autoreleasing *)error;
+
+/// Adds `child` as a new input of this document's composed root (engine
+/// `addChildQuery:error:`), and marks the document mutated.
+- (nullable RptqQueryTable *)addChildQuery:(RptqQuery *)child
+									  error:(NSError * _Nullable __autoreleasing *)error;
+
 /// In-memory session credentials for the active document (used before or in addition to Keychain lookup).
 @property (nonatomic, strong, nullable) MADCredential *sessionCredentials;
 

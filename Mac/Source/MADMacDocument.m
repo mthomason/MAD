@@ -289,6 +289,48 @@ NSNotificationName const MADMacDocumentDidRefreshNotification = @"MADMacDocument
 	[self notifyDocumentMutated];
 }
 
+- (nullable RptqQuery *)importChildFromURL:(NSURL *)sourceURL
+									  name:(nullable NSString *)name
+									  error:(NSError * _Nullable __autoreleasing *)error {
+	if (sourceURL == nil || _headlessDocument == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:@"MADMacDocument"
+										  code:11
+									  userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"A source report is required to import a child.", @"Import error: no source report.") }];
+		}
+		return nil;
+	}
+	MADHeadlessDocument *source = [MADHeadlessDocument documentWithContentsOfURL:sourceURL error:error];
+	if (source == nil) return nil;
+	RptqStoreContext *sourceContext = source.storeContext;
+	if (sourceContext == nil || ![sourceContext loadAllWithError:error]) return nil;
+	RptqQuery *imported = [self.managedObjectContext importQueryGraphFromContext:sourceContext
+														   relativePathBaseURL:sourceURL
+																		  error:error];
+	if (imported == nil) return nil;
+	if (name.length > 0) imported.name = name;
+	[self notifyDocumentMutated];
+	return imported;
+}
+
+- (nullable RptqQuery *)convertToCompositionWithChildName:(nullable NSString *)childName
+													 error:(NSError * _Nullable __autoreleasing *)error {
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:self.managedObjectContext];
+	if (document == nil) return nil;
+	RptqQuery *root = [document convertToCompositionWithChildName:childName error:error];
+	if (root != nil) [self notifyDocumentMutated];
+	return root;
+}
+
+- (nullable RptqQueryTable *)addChildQuery:(RptqQuery *)child
+									  error:(NSError * _Nullable __autoreleasing *)error {
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:self.managedObjectContext];
+	if (document == nil) return nil;
+	RptqQueryTable *table = [document addChildQuery:child error:error];
+	if (table != nil) [self notifyDocumentMutated];
+	return table;
+}
+
 #pragma mark - NSDocument Lifecycle
 
 - (void)makeWindowControllers {

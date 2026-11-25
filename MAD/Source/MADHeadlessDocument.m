@@ -178,6 +178,39 @@
 	return document;
 }
 
++ (nullable instancetype)createEmptyDocumentAtURL:(NSURL *)url
+											error:(NSError * _Nullable __autoreleasing *)outError {
+	if (url == nil) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADHeadlessDocument"
+											 code:13
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"A file URL is required to create a document.", @"Error when an empty document is created without a URL.") }];
+		}
+		return nil;
+	}
+
+	MADHeadlessDocument *document = [[self alloc] initWithFileURL:url];
+	[[NSFileManager defaultManager] removeItemAtURL:document.documentStore.gutsURL error:NULL];
+	if (![document.documentStore openWithError:outError]) {
+		return nil;
+	}
+
+	RptqDocument *rptqDocument = [RptqDocument newDocumentForManagedObjectContext:document.storeContext];
+	if (rptqDocument == nil) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADHeadlessDocument"
+											 code:14
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"Could not initialize the document model in the portable store.", @"Error when the portable store cannot be initialized.") }];
+		}
+		return nil;
+	}
+
+	if (![document writeToURL:url reproducible:NO error:outError]) {
+		return nil;
+	}
+	return document;
+}
+
 - (instancetype)initWithFileURL:(NSURL *)url {
 	if (self = [super init]) {
 		_fileURL = [url copy];

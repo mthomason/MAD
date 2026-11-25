@@ -89,12 +89,19 @@
 	NSMenuItem *fileMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:fileMenuItem];
 	NSMenu *fileMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"File", @"File menu title.")];
-	[fileMenu addItemWithTitle:NSLocalizedString(@"New Document…", @"File menu item that starts a new report.")
-						action:@selector(newDocument:)
+	[fileMenu addItemWithTitle:NSLocalizedString(@"New…", @"File menu item that starts a new report; offers the report type.")
+						action:@selector(newDocumentWithChooser:)
 				 keyEquivalent:@"n"];
+	[fileMenu addItemWithTitle:NSLocalizedString(@"New Composition…", @"File menu item that starts a new composition from existing reports.")
+						action:@selector(newCompositionDocument:)
+				 keyEquivalent:@""];
 	[fileMenu addItemWithTitle:NSLocalizedString(@"Open…", @"File menu item that opens an existing report.")
 						action:@selector(openDocument:)
 				 keyEquivalent:@"o"];
+	[fileMenu addItem:[NSMenuItem separatorItem]];
+	[fileMenu addItemWithTitle:NSLocalizedString(@"Convert to Composition…", @"File menu item that converts the current standard report into a one-child composition.")
+						action:@selector(convertCurrentDocumentToComposition:)
+				 keyEquivalent:@""];
 	[fileMenu addItem:[NSMenuItem separatorItem]];
 	[fileMenu addItemWithTitle:NSLocalizedString(@"Close", @"File menu item that closes the window.")
 						action:@selector(performClose:)
@@ -257,6 +264,98 @@
 		weakSelf.connectionWindowController = nil;
 	};
 	[_connectionWindowController showWindow:self];
+}
+
+- (void)newDocumentWithChooser:(nullable id)sender {
+	NSAlert *alert = [[NSAlert alloc] init];
+	alert.messageText = NSLocalizedString(@"New Report", @"New report chooser title.");
+	alert.informativeText = NSLocalizedString(@"Choose the type of report to create.", @"New report chooser prompt.");
+	[alert addButtonWithTitle:NSLocalizedString(@"Standard Report", @"New report chooser: the standard report option.")];
+	[alert addButtonWithTitle:NSLocalizedString(@"Composition Report", @"New report chooser: the composition option.")];
+	[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel button.")];
+	NSModalResponse response = [alert runModal];
+	if (response == NSAlertFirstButtonReturn) {
+		[self newDocumentFromDatabase:sender];
+	} else if (response == NSAlertSecondButtonReturn) {
+		[self newCompositionDocument:sender];
+	}
+}
+
+- (void)newCompositionDocument:(nullable id) __unused sender {
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	panel.title = NSLocalizedString(@"Choose Reports to Compose", @"Composition child picker title.");
+	panel.prompt = NSLocalizedString(@"Choose", @"Composition child picker confirm button.");
+	panel.allowsMultipleSelection = YES;
+	panel.canChooseDirectories = NO;
+	panel.canChooseFiles = YES;
+	panel.allowedContentTypes = [MADMacDocumentController allowedMadContentTypes];
+	if ([panel runModal] != NSModalResponseOK) return;
+	NSArray<NSURL *> *childURLs = panel.URLs;
+	if (childURLs.count == 0) return;
+
+	NSSavePanel *savePanel = [NSSavePanel savePanel];
+	savePanel.title = NSLocalizedString(@"Save Composition", @"Composition destination title.");
+	savePanel.prompt = NSLocalizedString(@"Create", @"Composition destination confirm button.");
+	savePanel.allowedContentTypes = [MADMacDocumentController allowedMadContentTypes];
+	savePanel.nameFieldStringValue = NSLocalizedString(@"Composition.mad", @"Default composition file name.");
+	if ([savePanel runModal] != NSModalResponseOK) return;
+
+	[self createCompositionDocumentAtURL:savePanel.URL withChildURLs:childURLs];
+}
+
+- (void)createCompositionDocumentAtURL:(NSURL *)destinationURL
+						  withChildURLs:(NSArray<NSURL *> *)childURLs {
+	NSError *error = nil;
+	MADHeadlessDocument *empty = [MADHeadlessDocument createEmptyDocumentAtURL:destinationURL error:&error];
+	if (empty == nil) {
+		[NSApp presentError:error];
+		return;
+	}
+	MADMacDocument *document = [[MADMacDocument alloc] init];
+	document.fileURL = destinationURL;
+	[document adoptHeadlessDocument:empty];
+
+	if ([document addRootQueryNamed:NSLocalizedString(@"root", @"Default composed root name.") error:&error] == nil) {
+		[NSApp presentError:error];
+		return;
+	}
+	for (NSURL *childURL in childURLs) {
+		NSString *name = childURL.lastPathComponent.stringByDeletingPathExtension;
+		RptqQuery *child = [document importChildFromURL:childURL name:name error:&error];
+		if (child == nil || [document addChildQuery:child error:&error] == nil) {
+			[NSApp presentError:error];
+			return;
+		}
+	}
+
+	[[NSDocumentController sharedDocumentController] addDocument:document];
+	[document makeWindowControllers];
+	[document showWindows];
+	MADMacWindowController *windowController = (MADMacWindowController *)document.windowControllers.firstObject;
+	[windowController switchToWorkspaceTab:MADMacWorkspaceTabQuery];
+}
+
+- (void)convertCurrentDocumentToComposition:(nullable id) __unused sender {
+	MADMacDocument *document = [self activeMacDocument];
+	if (document == nil || document.isComposed) return;
+	NSError *error = nil;
+	if ([document convertToCompositionWithChildName:nil error:&error] == nil) {
+		[NSApp presentError:error];
+		return;
+	}
+	[[self activeWindowController] switchToWorkspaceTab:MADMacWorkspaceTabQuery];
+}
+
+- (nullable MADMacDocument *)activeMacDocument {
+	return [self activeWindowController].madDocument;
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	if (menuItem.action == @selector(convertCurrentDocumentToComposition:)) {
+		MADMacDocument *document = [self activeMacDocument];
+		return document != nil && !document.isComposed;
+	}
+	return YES;
 }
 
 - (nullable MADMacWindowController *)activeWindowController {
