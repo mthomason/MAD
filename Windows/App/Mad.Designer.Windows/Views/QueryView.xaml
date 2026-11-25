@@ -29,11 +29,13 @@
                         <ToggleButton Style="{StaticResource MAD.SegmentToggle}"
                                       Content="{infra:Loc Query.Mode.Designer}"
                                       IsChecked="{Binding DesignerSelected, Mode=TwoWay}"
+                                      ToolTip="{infra:Loc Query.Mode.Designer.Tooltip}"
                                       AutomationProperties.Name="{infra:Loc Query.Mode.Designer}" />
                         <ToggleButton Style="{StaticResource MAD.SegmentToggle}" Margin="2,0,0,0"
                                       Content="{infra:Loc Query.Mode.Sql}"
                                       IsChecked="{Binding SqlSelected, Mode=TwoWay}"
                                       IsEnabled="{Binding CanEditSql}"
+                                      ToolTip="{infra:Loc Query.Mode.Sql.Tooltip}"
                                       AutomationProperties.Name="{infra:Loc Query.Mode.Sql}" />
                     </StackPanel>
                 </Border>
@@ -43,30 +45,39 @@
                           ItemsSource="{Binding Queries}"
                           SelectedValuePath="Id" SelectedValue="{Binding QueryId, Mode=TwoWay}"
                           DisplayMemberPath="Name"
-                          AutomationProperties.Name="{infra:Loc Query.SelectQuery}" />
+                          ToolTip="{infra:Loc Query.SelectQuery.Tooltip}"
+                          AutomationProperties.Name="{infra:Loc Query.SelectQuery.Name}" />
 
                 <StackPanel Orientation="Horizontal" Visibility="{Binding IsDesigner, Converter={StaticResource BoolToVis}}">
-                    <Button x:Name="FiltersButton" Style="{StaticResource MAD.CommandButton}" Click="ToggleFilters">
+                    <Button x:Name="FiltersButton" Style="{StaticResource MAD.CommandButton}" Click="ToggleFilters"
+                            ToolTip="{infra:Loc Query.Filters.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Query.Filters.Name}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE71C;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{Binding FiltersLabel}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
-                    <Button x:Name="GroupsButton" Style="{StaticResource MAD.CommandButton}" Margin="2,0,0,0" Click="ToggleGroups">
+                    <Button x:Name="GroupsButton" Style="{StaticResource MAD.CommandButton}" Margin="2,0,0,0" Click="ToggleGroups"
+                            ToolTip="{infra:Loc Query.Groups.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Query.Groups.Name}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8EF;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{Binding GroupsLabel}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
                     <Button x:Name="OutputsButton" Style="{StaticResource MAD.CommandButton}" Margin="2,0,0,0" Click="ToggleOutputs"
-                            Visibility="{Binding IsRoot, Converter={StaticResource BoolToVis}}">
+                            Visibility="{Binding IsRoot, Converter={StaticResource BoolToVis}}"
+                            ToolTip="{infra:Loc Query.Outputs.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Query.Outputs.Name}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8FD;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{Binding OutputsLabel}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
                     <Border Style="{StaticResource MAD.Divider}" />
-                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding ArrangeTablesCommand}">
+                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding ArrangeTablesCommand}"
+                            ToolTip="{infra:Loc Query.ArrangeTables.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Query.ArrangeTables}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE80A;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Query.ArrangeTables}" Style="{StaticResource MAD.CommandLabel}" />
@@ -75,19 +86,25 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Visibility="{Binding IsSql, Converter={StaticResource BoolToVis}}">
-                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding RevertSqlCommand}">
+                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding RevertSqlCommand}"
+                            ToolTip="{infra:Loc Query.RevertSql.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Query.RevertSql}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE7A7;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Query.RevertSql}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding ValidateSqlCommand}" Margin="2,0,0,0">
+                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding ValidateSqlCommand}" Margin="2,0,0,0"
+                            ToolTip="{infra:Loc Query.ValidateSql.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Query.ValidateSql}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE73E;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Query.ValidateSql}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding CompileAndApplySqlCommand}" Margin="2,0,0,0">
+                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding CompileAndApplySqlCommand}" Margin="2,0,0,0"
+                            ToolTip="{infra:Loc Query.ApplySql.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Query.ApplySql}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8FB;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Query.ApplySql}" Style="{StaticResource MAD.CommandLabel}" />
@@ -118,7 +135,7 @@
                     <Button Grid.Column="1" Style="{StaticResource MAD.CommandButton}"
                             Command="{Binding AddTableCommand}"
                             CommandParameter="{Binding SelectedItem.Name, ElementName=SchemaList}"
-                            ToolTip="{infra:Loc Query.AddTable}"
+                            ToolTip="{infra:Loc Query.AddTable.Tooltip}"
                             AutomationProperties.Name="{infra:Loc Query.AddTable}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE710;" Style="{StaticResource MAD.CommandIcon}" FontSize="14" />
@@ -130,7 +147,9 @@
                          MouseDoubleClick="SchemaList_OnDoubleClick"
                          Background="{DynamicResource ControlFillColorDefaultBrush}"
                          BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
-                         Visibility="{Binding IsNotRoot, Converter={StaticResource BoolToVis}}">
+                         Visibility="{Binding IsNotRoot, Converter={StaticResource BoolToVis}}"
+                         ToolTip="{infra:Loc Query.SchemaList.Tooltip}"
+                         AutomationProperties.Name="{infra:Loc Query.DatabaseTables}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>
@@ -152,7 +171,9 @@
                          MouseDoubleClick="SourcesList_OnDoubleClick"
                          Background="{DynamicResource ControlFillColorDefaultBrush}"
                          BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
-                         Visibility="{Binding IsRoot, Converter={StaticResource BoolToVis}}">
+                         Visibility="{Binding IsRoot, Converter={StaticResource BoolToVis}}"
+                         ToolTip="{infra:Loc Query.SourcesList.Tooltip}"
+                         AutomationProperties.Name="{infra:Loc Query.Sources}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" />
@@ -238,7 +259,9 @@
                                     <Button Grid.Column="1" Content="−" Margin="6,0,0,0" Padding="4,0"
                                             Style="{StaticResource MAD.IconButton}" Width="26" Height="24"
                                             Command="{Binding DataContext.RemovePredicateCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding Id}" />
+                                            CommandParameter="{Binding Id}"
+                                            ToolTip="{infra:Loc Query.RemoveFilter.Tooltip}"
+                                            AutomationProperties.Name="{infra:Loc Query.RemoveFilter}" />
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -246,11 +269,17 @@
                     <Separator Margin="0,8" />
                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                         <ComboBox Width="160" ItemsSource="{Binding AllFields}" DisplayMemberPath="Display"
-                                  SelectedItem="{Binding SelectedFilterField}" />
+                                  SelectedItem="{Binding SelectedFilterField}"
+                                  ToolTip="{infra:Loc Query.FilterField.Tooltip}"
+                                  AutomationProperties.Name="{infra:Loc Query.FilterField}" />
                         <ComboBox Width="60" Margin="6,0,0,0" ItemsSource="{Binding FilterOperatorSymbols}"
-                                  SelectedIndex="{Binding SelectedFilterOperatorIndex, Mode=TwoWay}" />
+                                  SelectedIndex="{Binding SelectedFilterOperatorIndex, Mode=TwoWay}"
+                                  ToolTip="{infra:Loc Query.FilterOperator.Tooltip}"
+                                  AutomationProperties.Name="{infra:Loc Query.FilterOperator}" />
                         <TextBox Width="120" Margin="6,0,0,0" Text="{Binding FilterValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <Button Content="{infra:Loc Query.Add}" Margin="6,0,0,0" Command="{Binding AddPredicateCommand}" />
+                        <Button Content="{infra:Loc Query.Add}" Margin="6,0,0,0" Command="{Binding AddPredicateCommand}"
+                                ToolTip="{infra:Loc Query.AddFilter.Tooltip}"
+                                AutomationProperties.Name="{infra:Loc Query.AddFilter}" />
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -274,7 +303,9 @@
                                     <Button Grid.Column="1" Content="−" Margin="6,0,0,0" Padding="4,0"
                                             Style="{StaticResource MAD.IconButton}" Width="26" Height="24"
                                             Command="{Binding DataContext.RemoveGroupCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding Id}" />
+                                            CommandParameter="{Binding Id}"
+                                            ToolTip="{infra:Loc Query.RemoveGroup.Tooltip}"
+                                            AutomationProperties.Name="{infra:Loc Query.RemoveGroup}" />
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -282,10 +313,16 @@
                     <Separator Margin="0,8" />
                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                         <ComboBox Width="190" ItemsSource="{Binding AllFields}" DisplayMemberPath="Display"
-                                  SelectedItem="{Binding SelectedGroupField}" />
+                                  SelectedItem="{Binding SelectedGroupField}"
+                                  ToolTip="{infra:Loc Query.GroupField.Tooltip}"
+                                  AutomationProperties.Name="{infra:Loc Query.GroupField}" />
                         <ComboBox Width="120" Margin="6,0,0,0" ItemsSource="{Binding GroupSortLabels}"
-                                  SelectedIndex="{Binding SelectedGroupSortIndex, Mode=TwoWay}" />
-                        <Button Content="{infra:Loc Query.AddGroup}" Margin="6,0,0,0" Command="{Binding AddGroupCommand}" />
+                                  SelectedIndex="{Binding SelectedGroupSortIndex, Mode=TwoWay}"
+                                  ToolTip="{infra:Loc Query.GroupSort.Tooltip}"
+                                  AutomationProperties.Name="{infra:Loc Query.GroupSort}" />
+                        <Button Content="{infra:Loc Query.AddGroup}" Margin="6,0,0,0" Command="{Binding AddGroupCommand}"
+                                ToolTip="{infra:Loc Query.AddGroup.Tooltip}"
+                                AutomationProperties.Name="{infra:Loc Query.AddGroup.Name}" />
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -311,15 +348,21 @@
                                     <Button Grid.Column="1" Content="↑" Margin="4,0,0,0" Padding="4,0"
                                             Style="{StaticResource MAD.IconButton}" Width="26" Height="24"
                                             Command="{Binding DataContext.MoveOutputUpCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding Id}" />
+                                            CommandParameter="{Binding Id}"
+                                            ToolTip="{infra:Loc Query.MoveOutputUp.Tooltip}"
+                                            AutomationProperties.Name="{infra:Loc Query.MoveOutputUp}" />
                                     <Button Grid.Column="2" Content="↓" Margin="2,0,0,0" Padding="4,0"
                                             Style="{StaticResource MAD.IconButton}" Width="26" Height="24"
                                             Command="{Binding DataContext.MoveOutputDownCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding Id}" />
+                                            CommandParameter="{Binding Id}"
+                                            ToolTip="{infra:Loc Query.MoveOutputDown.Tooltip}"
+                                            AutomationProperties.Name="{infra:Loc Query.MoveOutputDown}" />
                                     <Button Grid.Column="3" Content="−" Margin="2,0,0,0" Padding="4,0"
                                             Style="{StaticResource MAD.IconButton}" Width="26" Height="24"
                                             Command="{Binding DataContext.RemoveOutputCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding Id}" />
+                                            CommandParameter="{Binding Id}"
+                                            ToolTip="{infra:Loc Query.RemoveOutput.Tooltip}"
+                                            AutomationProperties.Name="{infra:Loc Query.RemoveOutput}" />
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -327,9 +370,13 @@
                     <Separator Margin="0,8" />
                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                         <ComboBox Width="180" ItemsSource="{Binding NonOutputFields}" DisplayMemberPath="Name"
-                                  SelectedItem="{Binding NewOutputField}" />
+                                  SelectedItem="{Binding NewOutputField}"
+                                  ToolTip="{infra:Loc Query.OutputField.Tooltip}"
+                                  AutomationProperties.Name="{infra:Loc Query.OutputField}" />
                         <TextBox Width="150" Margin="6,0,0,0" Text="{Binding NewOutputKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <Button Content="{infra:Loc Query.Add}" Margin="6,0,0,0" Command="{Binding AddOutputCommand}" />
+                        <Button Content="{infra:Loc Query.Add}" Margin="6,0,0,0" Command="{Binding AddOutputCommand}"
+                                ToolTip="{infra:Loc Query.AddOutput.Tooltip}"
+                                AutomationProperties.Name="{infra:Loc Query.AddOutput}" />
                     </StackPanel>
                 </StackPanel>
             </Border>
