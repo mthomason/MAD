@@ -861,4 +861,63 @@ static NSError *MADCompositionError(NSInteger code, NSString *message) {
 	return root;
 }
 
+- (nullable RptqQueryTable *)addChildQuery:(RptqQuery *)child
+									  error:(NSError * __autoreleasing *)error {
+	RptqQuery *root = self.rootQuery;
+	if (root == nil) {
+		if (error != NULL) *error = MADCompositionError(8, NSLocalizedString(@"This report has no root to add a child to.", @"Add-child error: no root."));
+		return nil;
+	}
+	if (child == nil) {
+		if (error != NULL) *error = MADCompositionError(9, NSLocalizedString(@"No child report to add.", @"Add-child error: no child."));
+		return nil;
+	}
+	RptqStoreContext *context = self.storeContext;
+	if (context == nil) {
+		if (error != NULL) *error = MADCompositionError(10, NSLocalizedString(@"No report store to add a child to.", @"Add-child error: no store."));
+		return nil;
+	}
+
+	for (RptqQueryTable *existing in root.hasQueryTables) {
+		if (existing.upstreamQuery == child) return existing;
+	}
+
+	// Existing root outputs reserve their keys and their place in the order.
+	NSMutableSet<NSString *> *existingKeys = [NSMutableSet set];
+	int64_t maxIndex = -1;
+	for (RptqQueryTable *table in root.hasQueryTables) {
+		for (RptqQueryField *field in table.hasQueryFields) {
+			if (field.outputKey.length > 0) {
+				[existingKeys addObject:field.outputKey];
+				if (field.outputIndex > maxIndex) maxIndex = field.outputIndex;
+			}
+		}
+	}
+
+	RptqQueryTable *rootTable = (RptqQueryTable *)[context insertObjectForEntity:@"RptqQueryTable" identifier:0];
+	rootTable.inQuery = root;
+	rootTable.upstreamQuery = child;
+
+	NSArray<RptqQueryTable *> *childTables = [[child.hasQueryTables allObjects] sortedArrayUsingComparator:
+		^NSComparisonResult(RptqQueryTable *a, RptqQueryTable *b) { return [@(a.identifier) compare:@(b.identifier)]; }];
+	NSMutableArray<RptqQueryField *> *rootFields = [NSMutableArray array];
+	for (RptqQueryTable *childTable in childTables) {
+		NSArray<RptqQueryField *> *childFields = [[childTable.hasQueryFields allObjects] sortedArrayUsingComparator:
+			^NSComparisonResult(RptqQueryField *a, RptqQueryField *b) { return [@(a.identifier) compare:@(b.identifier)]; }];
+		for (RptqQueryField *childField in childFields) {
+			RptqQueryField *rootField = (RptqQueryField *)[context insertObjectForEntity:@"RptqQueryField" identifier:0];
+			rootField.inQueryTable = rootTable;
+			rootField.databaseSchemaField = childField.databaseSchemaField;
+			[rootFields addObject:rootField];
+		}
+	}
+
+	NSArray<NSString *> *keys = [RptqQuery composeOutputKeysForFields:rootFields existingKeys:existingKeys];
+	for (NSUInteger i = 0; i < rootFields.count; i++) {
+		rootFields[i].outputKey = keys[i];
+		rootFields[i].outputIndex = maxIndex + 1 + (int64_t)i;
+	}
+	return rootTable;
+}
+
 @end

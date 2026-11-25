@@ -71,6 +71,13 @@
 	- (nullable RptqQuery *)convertToCompositionWithChildName:(nullable NSString *)childName
 														 error:(NSError * __autoreleasing *)error;
 
+	/// Adds a child query as a new input of the composed root: one upstream table
+	/// with a root query field per child field, then derives output keys for those
+	/// fields (preserving the root's existing outputs) and appends them to the root's
+	/// output order. Returns the new root table, or nil with `error`. The caller saves.
+	- (nullable RptqQueryTable *)addChildQuery:(RptqQuery *)child
+										  error:(NSError * __autoreleasing *)error;
+
 @end
 
 #endif

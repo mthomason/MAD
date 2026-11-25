@@ -988,6 +988,59 @@
 	XCTAssertEqualObjects([rebound valueForKey:@"outputKey"], @"amount");
 }
 
+- (void)testAddChildQueryProjectsFieldsAndDisambiguatesCollisions {
+	RptqStoreContext *context = [self openContextAtPath:@"addchild.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+	RptqObject *root = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[root setValue:@"root" forKey:@"name"];
+	[root setValue:database forKey:@"inDatabase"];
+	[document setValue:root forKey:@"rootQuery"];
+
+	RptqObject *invoiceIdField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+
+	// Child "invoices": invoice_id + amount.
+	RptqObject *invoices = [context insertObjectForEntity:@"RptqQuery" identifier:101];
+	[invoices setValue:@"invoices" forKey:@"name"];
+	[invoices setValue:database forKey:@"inDatabase"];
+	RptqObject *invoicesTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:201];
+	[invoicesTable setValue:invoices forKey:@"inQuery"];
+	RptqObject *iId = [context insertObjectForEntity:@"RptqQueryField" identifier:301];
+	[iId setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[iId setValue:invoicesTable forKey:@"inQueryTable"];
+	RptqObject *iAmount = [context insertObjectForEntity:@"RptqQueryField" identifier:302];
+	[iAmount setValue:amountField forKey:@"databaseSchemaField"];
+	[iAmount setValue:invoicesTable forKey:@"inQueryTable"];
+
+	// Child "payments": amount only.
+	RptqObject *payments = [context insertObjectForEntity:@"RptqQuery" identifier:102];
+	[payments setValue:@"payments" forKey:@"name"];
+	[payments setValue:database forKey:@"inDatabase"];
+	RptqObject *paymentsTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:202];
+	[paymentsTable setValue:payments forKey:@"inQuery"];
+	RptqObject *pAmount = [context insertObjectForEntity:@"RptqQueryField" identifier:303];
+	[pAmount setValue:amountField forKey:@"databaseSchemaField"];
+	[pAmount setValue:paymentsTable forKey:@"inQueryTable"];
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	NSError *error = nil;
+	XCTAssertNotNil([model addChildQuery:(RptqQuery *)invoices error:&error]);
+	XCTAssertNotNil([model addChildQuery:(RptqQuery *)payments error:&error]);
+
+	NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError:&error];
+	XCTAssertEqual(outputs.count, (NSUInteger)3);
+	XCTAssertEqualObjects(outputs[0].outputKey, @"invoice_id");
+	XCTAssertEqualObjects(outputs[1].outputKey, @"amount");
+	XCTAssertEqualObjects(outputs[2].outputKey, @"payments.amount");
+}
+
 - (void)testOrdinaryReportStaysRevision2 {
 	RptqStoreContext *context = [self openContextAtPath:@"ordinary.sqlite"];
 	XCTAssertTrue([context loadAllWithError:NULL]);

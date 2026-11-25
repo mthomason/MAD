@@ -1427,6 +1427,60 @@ static void testConvertToCompositionMovesGroupsAndRebindsLabels(void) {
 	removeTempDirectory(directory);
 }
 
+static void testAddChildQueryProjectsFieldsAndDisambiguatesCollisions(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *context = openContextAtPath(directory, @"addchild.sqlite");
+	MAD_PASS([context loadAllWithError:NULL], "the context loads");
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+	RptqObject *root = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[root setValue:@"root" forKey:@"name"];
+	[root setValue:database forKey:@"inDatabase"];
+	[document setValue:root forKey:@"rootQuery"];
+
+	RptqObject *invoiceIdField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+
+	RptqObject *invoices = [context insertObjectForEntity:@"RptqQuery" identifier:101];
+	[invoices setValue:@"invoices" forKey:@"name"];
+	[invoices setValue:database forKey:@"inDatabase"];
+	RptqObject *invoicesTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:201];
+	[invoicesTable setValue:invoices forKey:@"inQuery"];
+	RptqObject *iId = [context insertObjectForEntity:@"RptqQueryField" identifier:301];
+	[iId setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[iId setValue:invoicesTable forKey:@"inQueryTable"];
+	RptqObject *iAmount = [context insertObjectForEntity:@"RptqQueryField" identifier:302];
+	[iAmount setValue:amountField forKey:@"databaseSchemaField"];
+	[iAmount setValue:invoicesTable forKey:@"inQueryTable"];
+
+	RptqObject *payments = [context insertObjectForEntity:@"RptqQuery" identifier:102];
+	[payments setValue:@"payments" forKey:@"name"];
+	[payments setValue:database forKey:@"inDatabase"];
+	RptqObject *paymentsTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:202];
+	[paymentsTable setValue:payments forKey:@"inQuery"];
+	RptqObject *pAmount = [context insertObjectForEntity:@"RptqQueryField" identifier:303];
+	[pAmount setValue:amountField forKey:@"databaseSchemaField"];
+	[pAmount setValue:paymentsTable forKey:@"inQueryTable"];
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	NSError *error = nil;
+	MAD_PASS([model addChildQuery:(RptqQuery *)invoices error:&error] != nil, "the first child is added");
+	MAD_PASS([model addChildQuery:(RptqQuery *)payments error:&error] != nil, "the second child is added");
+
+	NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError:&error];
+	MAD_PASS(outputs.count == (NSUInteger)3, "the root projects three fields");
+	MAD_PASS_EQUAL(outputs[0].outputKey, @"invoice_id", "the first output is invoice_id");
+	MAD_PASS_EQUAL(outputs[1].outputKey, @"amount", "the first amount stays bare");
+	MAD_PASS_EQUAL(outputs[2].outputKey, @"payments.amount", "the colliding amount is qualified");
+
+	removeTempDirectory(directory);
+}
+
 MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testSchemaRoundTripsThroughTheContext),
 	MAD_TEST(testFaultingReturnsStableIdentities),
@@ -1457,4 +1511,5 @@ MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testImportComposedGraphBringsRootAndLeaves),
 	MAD_TEST(testComposeOutputKeysBareNamesDisambiguate),
 	MAD_TEST(testComposeOutputKeysPreserveExistingAndAvoidTaken),
-	MAD_TEST(testConvertToCompositionMovesGroupsAndRebindsLabels));
+	MAD_TEST(testConvertToCompositionMovesGroupsAndRebindsLabels),
+	MAD_TEST(testAddChildQueryProjectsFieldsAndDisambiguatesCollisions));
