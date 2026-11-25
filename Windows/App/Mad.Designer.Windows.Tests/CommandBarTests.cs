@@ -175,4 +175,28 @@ public sealed class CommandBarTests
             .Single(b => ((string?)b.Attribute("Style"))?.Contains("MAD.StatusBar") == true);
         Assert.Contains(status.Descendants(P + "Button"), b => HasCommand(b, "ArrangeTablesCommand"));
     }
+
+    [Fact]
+    public void Query_ArrangeTablesIsVisibleOnlyInDesignerMode()
+    {
+        XDocument document = Load("QueryView.xaml");
+        XElement status = document.Descendants(P + "Border")
+            .Single(b => ((string?)b.Attribute("Style"))?.Contains("MAD.StatusBar") == true);
+        XElement arrange = status.Descendants(P + "Button")
+            .Single(b => HasCommand(b, "ArrangeTablesCommand"));
+
+        // The button, or a container inside the status bar, must carry the Designer gate;
+        // moving it to the status bar must not leak it into SQL mode.
+        bool gated = false;
+        for (XElement? element = arrange; element is not null && element != status; element = element.Parent)
+        {
+            string? visibility = (string?)element.Attribute("Visibility");
+            if (visibility is not null && visibility.Contains("IsDesigner"))
+            {
+                gated = true;
+                break;
+            }
+        }
+        Assert.True(gated, "Arrange Tables must appear only in Designer mode");
+    }
 }

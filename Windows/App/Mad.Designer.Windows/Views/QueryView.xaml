@@ -229,15 +229,18 @@
                             AutomationProperties.Name="{infra:Loc Query.ZoomFit.Tooltip}">
                         <TextBlock Text="{infra:Loc Query.ZoomFit}" Style="{StaticResource MAD.CommandLabel}" Margin="0" />
                     </Button>
-                    <Border Style="{StaticResource MAD.Divider}" />
-                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding ArrangeTablesCommand}"
-                            ToolTip="{infra:Loc Query.ArrangeTables.Tooltip}"
-                            AutomationProperties.Name="{infra:Loc Query.ArrangeTables}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE80A;" Style="{StaticResource MAD.CommandIcon}" />
-                            <TextBlock Text="{infra:Loc Query.ArrangeTables}" Style="{StaticResource MAD.CommandLabel}" />
-                        </StackPanel>
-                    </Button>
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding IsDesigner, Converter={StaticResource BoolToVis}}">
+                        <Border Style="{StaticResource MAD.Divider}" />
+                        <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding ArrangeTablesCommand}"
+                                ToolTip="{infra:Loc Query.ArrangeTables.Tooltip}"
+                                AutomationProperties.Name="{infra:Loc Query.ArrangeTables}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE80A;" Style="{StaticResource MAD.CommandIcon}" />
+                                <TextBlock Text="{infra:Loc Query.ArrangeTables}" Style="{StaticResource MAD.CommandLabel}" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Border>

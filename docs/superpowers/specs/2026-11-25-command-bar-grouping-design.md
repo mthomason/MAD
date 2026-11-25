@@ -24,9 +24,9 @@ command) sits beside the query-shaping commands.
   the status bar beside Fit, in a canvas-view cluster.
 - Fix the glyph collision: Barcode becomes `EC5A` (BarcodeScanner); Duplicate keeps
   `E8C8` (Copy).
-- Keyboard support for the menu: Enter/Space opens it, focus enters the first row, Up/Down
-  move between rows, Home/End jump, Enter activates the focused row, Esc closes it and
-  returns focus to Insert.
+- Keyboard support for the menu: Enter/Space/Down opens it, Up/Down move between rows,
+  Enter activates the focused row, and Esc closes it and returns focus to Insert. Home/End
+  do not jump; a live check showed they leave focus on the header, so they are not promised.
 - Tooltips and accessible names stay separate and localized; the Query/Designer tooltip
   gate extends to `MenuItem` (skipping disabled caption items), so the Insert menu and its
   rows are covered.
