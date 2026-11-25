@@ -9,6 +9,12 @@
 #import "RptqObject.h"
 #import "MADStoreSchema.h"
 #import "MADStoreGraph.h"
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseCredentals.h>
+#import <MADAPI/MADDatabaseType.h>
 
 // The change notification mirrors Core Data's contract -- the same userInfo keys,
 // object = this context -- under our own name (RptqStoreContext.h), so the
@@ -424,6 +430,138 @@ static NSArray<NSNumber *> *MADStoreIdentifiersOfValue(id value) {
 	} else {
 		[target setReference:nil forName:inverse.name];
 	}
+}
+
+#pragma mark - Importing a query graph
+
+static NSSet<NSString *> *MADStoreImportQueryGraphEntities(void) {
+	static NSSet<NSString *> *entities = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		entities = [NSSet setWithArray:@[
+			@"RptqQuery",
+			@"RptqDatabase",
+			@"RptqDatabaseCredentals",
+			@"RptqDatabaseSchemaTable",
+			@"RptqDatabaseSchemaField",
+			@"RptqQueryTable",
+			@"RptqQueryField",
+			@"RptqQueryLinks",
+			@"RptqQueryGroup",
+			@"RptqQueryPredicate",
+			@"RptqQuerySort",
+		]];
+	});
+	return entities;
+}
+
+static NSNumber *MADStoreImportIdentifierForSourceIdentifier(NSNumber *sourceIdentifier,
+															 NSString *entity,
+															 NSDictionary<NSString *, NSDictionary<NSNumber *, RptqObject *> *> *remap) {
+	if (sourceIdentifier == nil || sourceIdentifier.longLongValue == 0) return nil;
+	RptqObject *imported = remap[entity][sourceIdentifier];
+	return imported != nil ? @(imported.identifier) : nil;
+}
+
+static void MADStoreResolveRelativeSQLitePaths(NSDictionary<NSNumber *, RptqObject *> *importedDatabases,
+											   NSURL *baseURL) {
+	if (baseURL == nil || !baseURL.isFileURL) return;
+	for (RptqObject *object in importedDatabases.allValues) {
+		if (![object isKindOfClass:[RptqDatabase class]]) continue;
+		RptqDatabase *database = (RptqDatabase *)object;
+		if (database.databaseDriverTypeEnum != MADDatabaseTypeSqlite3) continue;
+		RptqDatabaseCredentals *credential = database.ownedByUser;
+		if (credential == nil) continue;
+		NSString *host = credential.host ?: @"";
+		if (host.length > 0 && [host hasPrefix:@"/"]) continue; // already absolute
+		NSString *filename = credential.dbname.length > 0 ? credential.dbname : host.lastPathComponent;
+		if (filename.length == 0) continue;
+		credential.host = [[baseURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:filename isDirectory:NO].path;
+		if (credential.dbname.length == 0) credential.dbname = filename;
+	}
+}
+
+- (nullable RptqQuery *)importQueryGraphFromContext:(RptqStoreContext *)sourceContext
+							   relativePathBaseURL:(nullable NSURL *)relativePathBaseURL
+											  error:(NSError * __autoreleasing *)error {
+	if (sourceContext == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:@"MADStore"
+										  code:1
+									  userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"No source document to import.", @"Import failed: no source document was supplied.") }];
+		}
+		return nil;
+	}
+
+	MADStoreSchema *schema = [MADStoreSchema sharedSchema];
+	NSSet<NSString *> *copySet = MADStoreImportQueryGraphEntities();
+	NSArray<NSString *> *orderedEntities = [copySet.allObjects sortedArrayUsingSelector:@selector(compare:)];
+
+	// Pass 1: insert a fresh object for every source object, remapping identifiers
+	// so two independently authored graphs coexist even with identical ids.
+	NSMutableDictionary<NSString *, NSMutableDictionary<NSNumber *, RptqObject *> *> *remap =
+		[NSMutableDictionary dictionaryWithCapacity:orderedEntities.count];
+	for (NSString *entity in orderedEntities) {
+		NSArray<RptqObject *> *sourceObjects = [sourceContext objectsForEntity:entity];
+		NSMutableDictionary<NSNumber *, RptqObject *> *bySourceId =
+			[NSMutableDictionary dictionaryWithCapacity:sourceObjects.count];
+		for (RptqObject *sourceObject in sourceObjects) {
+			bySourceId[@(sourceObject.identifier)] = [self insertObjectForEntity:entity identifier:0];
+		}
+		remap[entity] = bySourceId;
+	}
+
+	// Pass 2: copy attributes and edges, remapping every identifier and dropping an
+	// edge whose destination is outside the query graph (layout bands, elements, and
+	// the source document row).
+	for (NSString *entity in orderedEntities) {
+		MADStoreEntity *descriptor = [schema entityNamed:entity];
+		NSDictionary<NSNumber *, RptqObject *> *bySourceId = remap[entity];
+		if (bySourceId.count == 0) continue;
+		for (RptqObject *sourceObject in [sourceContext objectsForEntity:entity]) {
+			RptqObject *imported = bySourceId[@(sourceObject.identifier)];
+			if (imported == nil) continue;
+
+			for (MADStoreAttribute *attribute in descriptor.allAttributes) {
+				if ([attribute.name isEqualToString:@"identifier"]) continue;
+				id value = [sourceObject.backingObject attributeValue:attribute.name];
+				if (value != nil) {
+					[imported.backingObject setAttributeValue:value forName:attribute.name];
+				}
+			}
+
+			for (NSString *name in sourceObject.backingObject.references) {
+				MADStoreRelationship *relationship = [descriptor anyRelationshipNamed:name];
+				if (relationship == nil || ![copySet containsObject:relationship.destination]) continue;
+				[imported.backingObject setReference:
+					MADStoreImportIdentifierForSourceIdentifier([sourceObject.backingObject referenceForName:name],
+																 relationship.destination, remap)
+														  forName:name];
+			}
+
+			for (NSString *name in sourceObject.backingObject.collections) {
+				MADStoreRelationship *relationship = [descriptor anyRelationshipNamed:name];
+				if (relationship == nil || ![copySet containsObject:relationship.destination]) continue;
+				NSArray<NSNumber *> *sourceIds = [sourceObject.backingObject existingCollectionForName:name];
+				NSMutableArray<NSNumber *> *importedIds = [NSMutableArray arrayWithCapacity:sourceIds.count];
+				for (NSNumber *sourceId in sourceIds) {
+					NSNumber *importedId = MADStoreImportIdentifierForSourceIdentifier(sourceId,
+																					   relationship.destination, remap);
+					if (importedId != nil) [importedIds addObject:importedId];
+				}
+				[[imported.backingObject collectionForName:name] addObjectsFromArray:importedIds];
+			}
+		}
+	}
+
+	// Pass 3: resolve relative SQLite source paths so they name the same file from
+	// the destination's location.
+	MADStoreResolveRelativeSQLitePaths(remap[@"RptqDatabase"], relativePathBaseURL);
+
+	// The imported root is the source's explicit root, else its single query.
+	RptqDocument *sourceDocument = [RptqDocument newDocumentReadFromManagedObjectContext:sourceContext];
+	RptqQuery *sourceRoot = sourceDocument.rootQuery ?: sourceDocument.mainQuery;
+	return sourceRoot != nil ? (RptqQuery *)remap[@"RptqQuery"][@(sourceRoot.identifier)] : nil;
 }
 
 @end

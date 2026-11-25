@@ -25,6 +25,7 @@
 #import <MAD/MADDocumentStore.h>
 #import <MAD/MADArchiveManager.h>
 #import <MAD/RptqQueryField.h>
+#import <MAD/RptqQuery.h>
 
 // The original imported "MADStoreConverter.h" for the converted-sample tests; that
 // header is app-side and Core Data-backed and does not exist off Apple.
@@ -1143,6 +1144,166 @@ static void testComposedFailedArchivePreservesDestination(void) {
 	removeTempDirectory(directory);
 }
 
+#pragma mark - Importing a query graph
+
+/// Builds an ordinary single-query graph -- one database, its credential, one schema
+/// table and field, and one query with a query table and field -- using fixed
+/// identifiers so two independent documents collide exactly.
+static void buildStandardQueryGraphInContext(RptqStoreContext *context,
+											 NSString *tableName,
+											 NSString *fieldName,
+											 NSString *host) {
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[database setValue:@10 forKey:@"databaseDriverTypeEnum"];
+	RptqObject *credential = [context insertObjectForEntity:@"RptqDatabaseCredentals" identifier:0];
+	[credential setValue:host.lastPathComponent forKey:@"dbname"];
+	[credential setValue:host forKey:@"host"];
+	[database setValue:credential forKey:@"ownedByUser"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[table setValue:tableName forKey:@"name"];
+	RptqObject *field = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[field setValue:fieldName forKey:@"name"];
+	[database setValue:@[ table ] forKey:@"hasTables"];
+	[table setValue:@[ field ] forKey:@"hasFields"];
+	RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[query setValue:database forKey:@"inDatabase"];
+	RptqObject *queryTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[queryTable setValue:table forKey:@"databaseSchemaTable"];
+	[queryTable setValue:query forKey:@"inQuery"];
+	RptqObject *queryField = [context insertObjectForEntity:@"RptqQueryField" identifier:300];
+	[queryField setValue:field forKey:@"databaseSchemaField"];
+	[queryField setValue:queryTable forKey:@"inQueryTable"];
+	[queryTable setValue:@[ queryField ] forKey:@"hasQueryFields"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+	[database setValue:@[ query ] forKey:@"hasQueries"];
+}
+
+static void testImportQueryGraphRemapsIdentifiersAndResolvesRelativePath(void) {
+	NSURL *directory = makeTempDirectory();
+
+	RptqStoreContext *source = openContextAtPath(directory, @"source.sqlite");
+	MAD_PASS([source loadAllWithError:NULL], "the source loads");
+	buildStandardQueryGraphInContext(source, @"invoices", @"amount", @"invoices.sqlite");
+	MAD_PASS([source save:NULL], "the source saves");
+
+	RptqStoreContext *destination = openContextAtPath(directory, @"destination.sqlite");
+	MAD_PASS([destination loadAllWithError:NULL], "the destination loads");
+	buildStandardQueryGraphInContext(destination, @"orders", @"total", @"orders.sqlite");
+	MAD_PASS([destination save:NULL], "the destination saves");
+
+	NSURL *childURL = [directory URLByAppendingPathComponent:@"child.mad"];
+	RptqQuery *importedRoot = [destination importQueryGraphFromContext:source relativePathBaseURL:childURL error:NULL];
+	MAD_PASS(importedRoot != nil, "the import returns the imported root");
+	MAD_PASS(importedRoot.identifier != (int64_t)100, "the imported query is remapped");
+
+	MAD_PASS([destination objectsForEntity:@"RptqQuery"].count == (NSUInteger)2, "two queries coexist");
+	MAD_PASS([destination objectsForEntity:@"RptqDatabase"].count == (NSUInteger)2, "two databases coexist");
+	MAD_PASS([destination objectsForEntity:@"RptqDatabaseSchemaTable"].count == (NSUInteger)2, "two schema tables coexist");
+	MAD_PASS([destination objectsForEntity:@"RptqDatabaseSchemaField"].count == (NSUInteger)2, "two schema fields coexist");
+	MAD_PASS([destination objectsForEntity:@"RptqQueryTable"].count == (NSUInteger)2, "two query tables coexist");
+	MAD_PASS([destination objectsForEntity:@"RptqQueryField"].count == (NSUInteger)2, "two query fields coexist");
+
+	RptqObject *importedDatabase = [importedRoot valueForKey:@"inDatabase"];
+	MAD_PASS(importedDatabase.identifier != (int64_t)10, "the imported database is remapped");
+	RptqObject *importedTable = [[importedDatabase valueForKey:@"hasTables"] anyObject];
+	MAD_PASS_EQUAL([importedTable valueForKey:@"name"], @"invoices", "the imported schema table keeps its name");
+	RptqObject *importedField = [[importedTable valueForKey:@"hasFields"] firstObject];
+	MAD_PASS_EQUAL([importedField valueForKey:@"name"], @"amount", "the imported schema field keeps its name");
+
+	RptqObject *importedQueryTable = [[importedRoot valueForKey:@"hasQueryTables"] anyObject];
+	MAD_PASS(importedQueryTable != nil, "the imported query owns a query table");
+	RptqObject *importedQueryField = [[importedQueryTable valueForKey:@"hasQueryFields"] anyObject];
+	MAD_PASS(importedQueryField != nil, "the imported query table owns a query field");
+	MAD_PASS_EQUAL([[importedQueryField valueForKey:@"databaseSchemaField"] valueForKey:@"name"], @"amount", "the query field binds to the imported schema field");
+
+	RptqObject *importedCredential = [importedDatabase valueForKey:@"ownedByUser"];
+	MAD_PASS_EQUAL([importedCredential valueForKey:@"host"],
+				   [[childURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:@"invoices.sqlite"].path,
+				   "the relative SQLite path resolves against the child location");
+
+	RptqObject *sourceQuery = [source objectForEntity:@"RptqQuery" identifier:100];
+	MAD_PASS(sourceQuery != nil, "the source query is untouched");
+	RptqObject *sourceTable = [[[sourceQuery valueForKey:@"inDatabase"] valueForKey:@"hasTables"] anyObject];
+	MAD_PASS_EQUAL([sourceTable valueForKey:@"name"], @"invoices", "the source schema is intact");
+
+	removeTempDirectory(directory);
+}
+
+static void testImportComposedGraphBringsRootAndLeaves(void) {
+	NSURL *directory = makeTempDirectory();
+
+	RptqStoreContext *source = openContextAtPath(directory, @"composed-source.sqlite");
+	MAD_PASS([source loadAllWithError:NULL], "the source loads");
+
+	RptqObject *document = [source insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [source insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	RptqObject *invoicesTable = [source insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[invoicesTable setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsTable = [source insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:12];
+	[paymentsTable setValue:@"payments" forKey:@"name"];
+	RptqObject *invoiceIdField = [source insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	[database setValue:@[ invoicesTable, paymentsTable ] forKey:@"hasTables"];
+	[invoicesTable setValue:@[ invoiceIdField ] forKey:@"hasFields"];
+	[paymentsTable setValue:@[ invoiceIdField ] forKey:@"hasFields"];
+
+	RptqObject *rootQuery = [source insertObjectForEntity:@"RptqQuery" identifier:100];
+	[rootQuery setValue:@"root" forKey:@"name"];
+	RptqObject *invoicesQuery = [source insertObjectForEntity:@"RptqQuery" identifier:101];
+	[invoicesQuery setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsQuery = [source insertObjectForEntity:@"RptqQuery" identifier:102];
+	[paymentsQuery setValue:@"payments" forKey:@"name"];
+	[database setValue:@[ rootQuery, invoicesQuery, paymentsQuery ] forKey:@"hasQueries"];
+
+	RptqObject *invoicesSourceTable = [source insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[invoicesSourceTable setValue:invoicesTable forKey:@"databaseSchemaTable"];
+	[invoicesSourceTable setValue:invoicesQuery forKey:@"inQuery"];
+	RptqObject *paymentsSourceTable = [source insertObjectForEntity:@"RptqQueryTable" identifier:201];
+	[paymentsSourceTable setValue:paymentsTable forKey:@"databaseSchemaTable"];
+	[paymentsSourceTable setValue:paymentsQuery forKey:@"inQuery"];
+
+	RptqObject *rootInvoicesTable = [source insertObjectForEntity:@"RptqQueryTable" identifier:202];
+	[rootInvoicesTable setValue:rootQuery forKey:@"inQuery"];
+	[rootInvoicesTable setValue:invoicesQuery forKey:@"upstreamQuery"];
+	RptqObject *rootPaymentsTable = [source insertObjectForEntity:@"RptqQueryTable" identifier:203];
+	[rootPaymentsTable setValue:rootQuery forKey:@"inQuery"];
+	[rootPaymentsTable setValue:paymentsQuery forKey:@"upstreamQuery"];
+
+	[document setValue:rootQuery forKey:@"rootQuery"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+	MAD_PASS([source saveComposed:NULL], "the composed source saves");
+
+	RptqStoreContext *destination = openContextAtPath(directory, @"composed-destination.sqlite");
+	MAD_PASS([destination loadAllWithError:NULL], "the destination loads");
+	RptqObject *destinationDocument = [destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	RptqQuery *importedRoot = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:NULL];
+	MAD_PASS(importedRoot != nil, "the import returns the composed root");
+	MAD_PASS_EQUAL([importedRoot valueForKey:@"name"], @"root", "the imported root keeps its name");
+
+	MAD_PASS([destination objectsForEntity:@"RptqQuery"].count == (NSUInteger)3, "root plus two leaves come along");
+	MAD_PASS([destination objectsForEntity:@"RptqDatabaseSchemaTable"].count == (NSUInteger)2, "both schema tables come along");
+
+	NSSet *importedRootTables = [importedRoot valueForKey:@"hasQueryTables"];
+	MAD_PASS(importedRootTables.count == (NSUInteger)2, "the imported root keeps its two upstream tables");
+	NSMutableSet *upstreamNames = [NSMutableSet set];
+	for (RptqObject *table in importedRootTables) {
+		RptqObject *upstream = [table valueForKey:@"upstreamQuery"];
+		MAD_PASS(upstream != nil, "each upstream table names its source");
+		[upstreamNames addObject:[upstream valueForKey:@"name"]];
+	}
+	MAD_PASS([upstreamNames isEqualToSet:[NSSet setWithArray:@[ @"invoices", @"payments" ]]],
+			 "the imported root references both leaves");
+
+	MAD_PASS([destinationDocument valueForKey:@"rootQuery"] == nil,
+			 "the source document's root relationship is not copied");
+
+	removeTempDirectory(directory);
+}
+
 MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testSchemaRoundTripsThroughTheContext),
 	MAD_TEST(testFaultingReturnsStableIdentities),
@@ -1168,4 +1329,6 @@ MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testComposedArchiveRoundTrip),
 	MAD_TEST(testComposedProjectionReorder),
 	MAD_TEST(testComposedSaveAs),
-	MAD_TEST(testComposedFailedArchivePreservesDestination));
+	MAD_TEST(testComposedFailedArchivePreservesDestination),
+	MAD_TEST(testImportQueryGraphRemapsIdentifiersAndResolvesRelativePath),
+	MAD_TEST(testImportComposedGraphBringsRootAndLeaves));

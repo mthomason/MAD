@@ -17,7 +17,7 @@
 
 #import <MAD/MADStore.h>
 
-@class MADStoreGraph, RptqObject;
+@class MADStoreGraph, RptqObject, RptqQuery;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -74,6 +74,21 @@ FOUNDATION_EXPORT NSString * const RptqStoreContextDeletedObjectsKey;
 - (BOOL)saveComposed:(NSError * __autoreleasing *)error;
 
 - (BOOL)deleteObject:(RptqObject *)object error:(NSError * __autoreleasing *)error;
+
+#pragma mark Importing a query graph
+
+/// Copies the query graph (queries, databases, their schema, and every query
+/// table/field/link/group/predicate/sort) of `sourceContext` into the receiver,
+/// remapping every identifier so the imported objects coexist with whatever the
+/// destination already holds, even when the two were authored independently with
+/// identical names or identifiers. Layout bands, elements, and the source document
+/// row are not copied. A relative SQLite source path is resolved to an absolute
+/// path against `relativePathBaseURL` (the source document's own file URL) before
+/// it is embedded. Returns the imported root query -- the source's explicit root,
+/// or its single query -- or nil with `error`. Does not save; the caller saves.
+- (nullable RptqQuery *)importQueryGraphFromContext:(RptqStoreContext *)sourceContext
+							   relativePathBaseURL:(nullable NSURL *)relativePathBaseURL
+											  error:(NSError * __autoreleasing *)error;
 
 #pragma mark Relationships
 
