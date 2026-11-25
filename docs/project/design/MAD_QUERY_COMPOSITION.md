@@ -508,8 +508,11 @@ macOS smoke suite adds the convert (outputs, refresh, save, reopen) and create-b
 (structure, outputs, save, reopen without the source files) flows, on top of the existing
 authored-composed case.
 
-**Pending.** The full `./Linux/build.sh` image build, the Windows engine/package/WPF run, and the
-PR CI have not been run. The AppKit query canvas still caps the composed root at one left-outer
-join (two inputs) at `MADMacQueryViewController.m` — the N-way join UI is the next design task,
-and there is no "add an existing report as a child" control in the query workspace yet. PR
-creation and merge await the user's direction.
+**Pending.** The Windows engine/package/WPF run and the PR CI have not been run. PR creation and
+merge await the user's direction.
+
+**Follow-up (same day).** The two-input join cap at `MADMacQueryViewController.m` is lifted: the
+composed root now supports N-way joins (the engine's general-query compiler already did), and the
+join-type editor offers the full SQLite set. The query toolbar gains `+ Import…`, which imports an
+existing `.mad` as a child of the composed root. Full `./Linux/build.sh` is green (131 suites /
+0 failures, `RptqStoreContextTests` 31/0), and the Linux CLI verify is 42/0.
