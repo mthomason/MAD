@@ -19,6 +19,8 @@
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqQuery+Extras.h>
 #import <MAD/RptqQueryField.h>
+#import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
 #import <MAD/MADStore.h>
 #import "MADStoreConverter.h"
 
@@ -908,6 +910,82 @@
 	NSArray<NSString *> *keys2 = [RptqQuery composeOutputKeysForFields:@[ colliding ]
 														 existingKeys:[NSSet setWithArray:@[ @"amount" ]]];
 	XCTAssertEqualObjects(keys2, (@[ @"payments.amount" ]));
+}
+
+#pragma mark - Converting a standard report to a composition
+
+- (void)testConvertToCompositionMovesGroupsAndRebindsLabels {
+	RptqStoreContext *context = [self openContextAtPath:@"convert.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	// A standard report: one database, one table with two fields, one query.
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[table setValue:@"invoices" forKey:@"name"];
+	RptqObject *invoiceIdField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ table ] forKey:@"hasTables"];
+	[table setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[query setValue:database forKey:@"inDatabase"];
+	RptqObject *queryTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[queryTable setValue:table forKey:@"databaseSchemaTable"];
+	[queryTable setValue:query forKey:@"inQuery"];
+	RptqObject *invoiceIdQueryField = [context insertObjectForEntity:@"RptqQueryField" identifier:300];
+	[invoiceIdQueryField setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[invoiceIdQueryField setValue:queryTable forKey:@"inQueryTable"];
+	RptqObject *amountQueryField = [context insertObjectForEntity:@"RptqQueryField" identifier:301];
+	[amountQueryField setValue:amountField forKey:@"databaseSchemaField"];
+	[amountQueryField setValue:queryTable forKey:@"inQueryTable"];
+	[queryTable setValue:@[ invoiceIdQueryField, amountQueryField ] forKey:@"hasQueryFields"];
+
+	// A group on invoice_id, and a data label bound to amount.
+	RptqObject *group = [context insertObjectForEntity:@"RptqQueryGroup" identifier:400];
+	[group setValue:invoiceIdQueryField forKey:@"hasField"];
+	[group setValue:@1 forKey:@"sort"];
+	[group setValue:@0 forKey:@"weight"];
+	[group setValue:query forKey:@"inQuery"];
+	RptqObject *label = [context insertObjectForEntity:@"RptqDocumentElementLabelDataField" identifier:0];
+	[label setValue:amountQueryField forKey:@"referencesQueryField"];
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	NSError *error = nil;
+	RptqQuery *root = [model convertToCompositionWithChildName:@"invoices" error:&error];
+	XCTAssertNotNil(root, @"convert failed: %@", error);
+	XCTAssertEqualObjects([model valueForKey:@"rootQuery"], root);
+	XCTAssertEqualObjects([root valueForKey:@"name"], @"root");
+
+	// The child is named, and its groups are gone.
+	RptqObject *child = [model valueForKey:@"mainQuery"];
+	XCTAssertEqualObjects([child valueForKey:@"name"], @"invoices");
+	XCTAssertEqual([[child valueForKey:@"hasQueryGroups"] count], (NSUInteger)0);
+
+	// The root has one upstream table and two projected fields with output keys.
+	NSSet *rootTables = [root valueForKey:@"hasQueryTables"];
+	XCTAssertEqual(rootTables.count, (NSUInteger)1);
+	RptqObject *rootTable = rootTables.anyObject;
+	XCTAssertNotNil([rootTable valueForKey:@"upstreamQuery"]);
+	NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError:&error];
+	XCTAssertEqual(outputs.count, (NSUInteger)2);
+	XCTAssertEqualObjects(outputs[0].outputKey, @"invoice_id");
+	XCTAssertEqualObjects(outputs[1].outputKey, @"amount");
+
+	// The group moved to the root and binds to the root's invoice_id output.
+	NSSet *rootGroups = [root valueForKey:@"hasQueryGroups"];
+	XCTAssertEqual(rootGroups.count, (NSUInteger)1);
+	RptqObject *rootGroup = rootGroups.anyObject;
+	XCTAssertEqualObjects([[rootGroup valueForKey:@"hasField"] valueForKey:@"outputKey"], @"invoice_id");
+
+	// The label rebinds to the root's amount output, not the child field.
+	RptqObject *rebound = [label valueForKey:@"referencesQueryField"];
+	XCTAssertNotEqual(rebound.identifier, [amountQueryField valueForKey:@"identifier"]);
+	XCTAssertEqualObjects([rebound valueForKey:@"outputKey"], @"amount");
 }
 
 - (void)testOrdinaryReportStaysRevision2 {

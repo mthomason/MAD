@@ -61,6 +61,16 @@
 	/// earlier store or an unset projection) -- never an invented order.
 	- (nullable NSArray<RptqQueryField *> *)orderedCompositionOutputsWithError:(NSError * __autoreleasing *)error;
 
+	/// Converts an ordinary single-query report into a one-child composition: the
+	/// report's query and connection become the child, a new root projects the
+	/// child's fields with derived output keys, the child's groups and sort move to
+	/// the root, and the layout's data-field, aggregate, and barcode field references
+	/// rebind to the root's outputs so the existing bands and labels keep their
+	/// values. Returns the new root, or nil with `error` (the report is left
+	/// unchanged). The caller saves.
+	- (nullable RptqQuery *)convertToCompositionWithChildName:(nullable NSString *)childName
+														 error:(NSError * __autoreleasing *)error;
+
 @end
 
 #endif

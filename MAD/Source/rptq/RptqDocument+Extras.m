@@ -16,6 +16,7 @@
 #import "RptqDocumentSectionRows.h"
 #import "RptqQuery+Extras.h"
 #import "RptqQueryTable.h"
+#import "RptqQuerySort.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDatabase+Extras.h"
 #import "RptqDatabaseCredentals+Extras.h"
@@ -743,6 +744,121 @@ static NSError *MADCompositionError(NSInteger code, NSString *message) {
 	RptqQuery *root = self.rootQuery;
 	if (root == nil) return @[];
 	return [root orderedOutputFieldsWithError: error];
+}
+
+- (nullable RptqQuery *)convertToCompositionWithChildName:(nullable NSString *)childName
+													 error:(NSError * __autoreleasing *)error {
+	if (self.rootQuery != nil) {
+		if (error != NULL) *error = MADCompositionError(5, NSLocalizedString(@"This report is already a composition.", @"Conversion error: already composed."));
+		return nil;
+	}
+	RptqQuery *child = self.mainQuery;
+	if (child == nil) {
+		if (error != NULL) *error = MADCompositionError(6, NSLocalizedString(@"This report has no query to convert.", @"Conversion error: no query."));
+		return nil;
+	}
+	RptqStoreContext *context = self.storeContext;
+	if (context == nil) {
+		if (error != NULL) *error = MADCompositionError(7, NSLocalizedString(@"No report store to convert.", @"Conversion error: no store."));
+		return nil;
+	}
+
+	// A composed child is named; an ordinary report's query is not.  Derive a stable
+	// name from the child's first schema table when the caller names none.
+	if (childName.length > 0) {
+		child.name = childName;
+	} else if (child.name.length == 0) {
+		NSString *tableName = child.hasQueryTables.anyObject.databaseSchemaTable.name;
+		child.name = tableName.length > 0 ? tableName : NSLocalizedString(@"child", @"Default converted child name.");
+	}
+
+	// The new root and its single upstream table over the child.
+	RptqQuery *root = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:0];
+	root.name = @"root";
+	root.inDatabase = child.inDatabase;
+	RptqQueryTable *rootTable = (RptqQueryTable *)[context insertObjectForEntity:@"RptqQueryTable" identifier:0];
+	rootTable.inQuery = root;
+	rootTable.upstreamQuery = child;
+	self.rootQuery = root;
+
+	// One root field per child field, in a stable (identifier) order, and a map from
+	// each child field to its root counterpart for the group/sort/layout rebinding.
+	NSArray<RptqQueryTable *> *childTables = [[child.hasQueryTables allObjects] sortedArrayUsingComparator:
+		^NSComparisonResult(RptqQueryTable *a, RptqQueryTable *b) { return [@(a.identifier) compare:@(b.identifier)]; }];
+	NSMutableArray<RptqQueryField *> *rootFields = [NSMutableArray array];
+	NSMutableDictionary<NSNumber *, RptqQueryField *> *rootFieldForChildField = [NSMutableDictionary dictionary];
+	for (RptqQueryTable *childTable in childTables) {
+		NSArray<RptqQueryField *> *childFields = [[childTable.hasQueryFields allObjects] sortedArrayUsingComparator:
+			^NSComparisonResult(RptqQueryField *a, RptqQueryField *b) { return [@(a.identifier) compare:@(b.identifier)]; }];
+		for (RptqQueryField *childField in childFields) {
+			RptqQueryField *rootField = (RptqQueryField *)[context insertObjectForEntity:@"RptqQueryField" identifier:0];
+			rootField.inQueryTable = rootTable;
+			rootField.databaseSchemaField = childField.databaseSchemaField;
+			[rootFields addObject:rootField];
+			rootFieldForChildField[@(childField.identifier)] = rootField;
+		}
+	}
+
+	// Name and order the root outputs (bare names, alias-qualified on collision).
+	NSArray<NSString *> *keys = [RptqQuery composeOutputKeysForFields:rootFields existingKeys:[NSSet set]];
+	for (NSUInteger i = 0; i < rootFields.count; i++) {
+		rootFields[i].outputKey = keys[i];
+		rootFields[i].outputIndex = (int64_t)i;
+	}
+
+	// Move the child's groups to the root, rebinding each group's field and keeping
+	// its bands and sort direction.
+	for (RptqQueryGroup *group in [child.hasQueryGroups copy]) {
+		RptqQueryField *rootField = (group.hasField != nil) ? rootFieldForChildField[@(group.hasField.identifier)] : nil;
+		if (rootField != nil) {
+			RptqQueryGroup *rootGroup = (RptqQueryGroup *)[context insertObjectForEntity:@"RptqQueryGroup" identifier:0];
+			rootGroup.inQuery = root;
+			rootGroup.hasField = rootField;
+			rootGroup.sort = group.sort;
+			rootGroup.weight = group.weight;
+			if (group.hasSection.count > 0) {
+				rootGroup.hasSection = group.hasSection;
+			}
+		}
+		[child removeHasQueryGroupsObject:group];
+		[context deleteObject:group error:NULL];
+	}
+
+	// Move the child's sort to the root.
+	RptqQuerySort *childSort = child.hasQuerySort;
+	if (childSort != nil) {
+		RptqQueryField *rootField = (childSort.hasField != nil) ? rootFieldForChildField[@(childSort.hasField.identifier)] : nil;
+		if (rootField != nil) {
+			RptqQuerySort *rootSort = (RptqQuerySort *)[context insertObjectForEntity:@"RptqQuerySort" identifier:0];
+			rootSort.inQuery = root;
+			rootSort.hasField = rootField;
+			rootSort.ascending = childSort.ascending;
+		}
+		[context deleteObject:childSort error:NULL];
+	}
+
+	// Rebind the layout's field references from the child's fields to the root's, so
+	// the existing labels, aggregates, and barcodes keep resolving to the same values.
+	for (RptqQueryTable *childTable in childTables) {
+		for (RptqQueryField *childField in childTable.hasQueryFields) {
+			RptqQueryField *rootField = rootFieldForChildField[@(childField.identifier)];
+			if (rootField == nil) continue;
+			for (RptqDocumentElementLabelDataField *label in [childField.inDataObject copy]) {
+				label.referencesQueryField = rootField;
+			}
+			for (RptqDocumentElementAggregate *aggregate in [childField.inAggregateObject copy]) {
+				aggregate.aggregateField = rootField;
+			}
+			for (RptqDocumentElementBarcode *barcode in [childField.inBarcodeField1 copy]) {
+				barcode.referencesField1 = rootField;
+			}
+			for (RptqDocumentElementBarcode *barcode in [childField.inBarcodeField2 copy]) {
+				barcode.referencesField2 = rootField;
+			}
+		}
+	}
+
+	return root;
 }
 
 @end

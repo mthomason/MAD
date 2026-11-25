@@ -1355,6 +1355,78 @@ static void testComposeOutputKeysPreserveExistingAndAvoidTaken(void) {
 	removeTempDirectory(directory);
 }
 
+#pragma mark - Converting a standard report to a composition
+
+static void testConvertToCompositionMovesGroupsAndRebindsLabels(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *context = openContextAtPath(directory, @"convert.sqlite");
+	MAD_PASS([context loadAllWithError:NULL], "the context loads");
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[table setValue:@"invoices" forKey:@"name"];
+	RptqObject *invoiceIdField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ table ] forKey:@"hasTables"];
+	[table setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *query = [context insertObjectForEntity:@"RptqQuery" identifier:100];
+	[query setValue:database forKey:@"inDatabase"];
+	RptqObject *queryTable = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[queryTable setValue:table forKey:@"databaseSchemaTable"];
+	[queryTable setValue:query forKey:@"inQuery"];
+	RptqObject *invoiceIdQueryField = [context insertObjectForEntity:@"RptqQueryField" identifier:300];
+	[invoiceIdQueryField setValue:invoiceIdField forKey:@"databaseSchemaField"];
+	[invoiceIdQueryField setValue:queryTable forKey:@"inQueryTable"];
+	RptqObject *amountQueryField = [context insertObjectForEntity:@"RptqQueryField" identifier:301];
+	[amountQueryField setValue:amountField forKey:@"databaseSchemaField"];
+	[amountQueryField setValue:queryTable forKey:@"inQueryTable"];
+	[queryTable setValue:@[ invoiceIdQueryField, amountQueryField ] forKey:@"hasQueryFields"];
+
+	RptqObject *group = [context insertObjectForEntity:@"RptqQueryGroup" identifier:400];
+	[group setValue:invoiceIdQueryField forKey:@"hasField"];
+	[group setValue:@1 forKey:@"sort"];
+	[group setValue:@0 forKey:@"weight"];
+	[group setValue:query forKey:@"inQuery"];
+	RptqObject *label = [context insertObjectForEntity:@"RptqDocumentElementLabelDataField" identifier:0];
+	[label setValue:amountQueryField forKey:@"referencesQueryField"];
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext:context];
+	NSError *error = nil;
+	RptqQuery *root = [model convertToCompositionWithChildName:@"invoices" error:&error];
+	MAD_PASS(root != nil, "convert: %s", [[error description] UTF8String]);
+	MAD_PASS([model valueForKey:@"rootQuery"] == root, "the document's root is the new root");
+	MAD_PASS_EQUAL([root valueForKey:@"name"], @"root", "the root keeps its name");
+
+	RptqObject *child = [model valueForKey:@"mainQuery"];
+	MAD_PASS_EQUAL([child valueForKey:@"name"], @"invoices", "the child is named");
+	MAD_PASS([[child valueForKey:@"hasQueryGroups"] count] == (NSUInteger)0, "the child's groups are moved");
+
+	NSSet *rootTables = [root valueForKey:@"hasQueryTables"];
+	MAD_PASS(rootTables.count == (NSUInteger)1, "the root has one upstream table");
+	RptqObject *rootTable = rootTables.anyObject;
+	MAD_PASS([rootTable valueForKey:@"upstreamQuery"] != nil, "the upstream table names the child");
+	NSArray<RptqQueryField *> *outputs = [model orderedCompositionOutputsWithError:&error];
+	MAD_PASS(outputs.count == (NSUInteger)2, "the root projects two fields");
+	MAD_PASS_EQUAL(outputs[0].outputKey, @"invoice_id", "the first output keeps its bare name");
+	MAD_PASS_EQUAL(outputs[1].outputKey, @"amount", "the second output keeps its bare name");
+
+	NSSet *rootGroups = [root valueForKey:@"hasQueryGroups"];
+	MAD_PASS(rootGroups.count == (NSUInteger)1, "the root carries one group");
+	MAD_PASS_EQUAL([[rootGroups.anyObject valueForKey:@"hasField"] valueForKey:@"outputKey"], @"invoice_id", "the group binds to the root's invoice_id output");
+
+	RptqObject *rebound = [label valueForKey:@"referencesQueryField"];
+	MAD_PASS(rebound.identifier != [[amountQueryField valueForKey:@"identifier"] longLongValue], "the label no longer references the child field");
+	MAD_PASS_EQUAL([rebound valueForKey:@"outputKey"], @"amount", "the label rebinds to the root's amount output");
+
+	removeTempDirectory(directory);
+}
+
 MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testSchemaRoundTripsThroughTheContext),
 	MAD_TEST(testFaultingReturnsStableIdentities),
@@ -1384,4 +1456,5 @@ MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testImportQueryGraphRemapsIdentifiersAndResolvesRelativePath),
 	MAD_TEST(testImportComposedGraphBringsRootAndLeaves),
 	MAD_TEST(testComposeOutputKeysBareNamesDisambiguate),
-	MAD_TEST(testComposeOutputKeysPreserveExistingAndAvoidTaken));
+	MAD_TEST(testComposeOutputKeysPreserveExistingAndAvoidTaken),
+	MAD_TEST(testConvertToCompositionMovesGroupsAndRebindsLabels));
