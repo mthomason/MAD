@@ -143,7 +143,7 @@
   <sys:String x:Key="Query.OutputField">Spaltenfeld</sys:String>
   <sys:String x:Key="Query.AddOutput.Tooltip">Diese Spalte zum Bericht hinzufügen.</sys:String>
   <sys:String x:Key="Query.AddOutput">Spalte hinzufügen</sys:String>
-  <sys:String x:Key="Query.JoinBadge.Tooltip">{0}-Join zwischen {1} und {2}. Klicken Sie, um den Verknüpfungstyp zu ändern.</sys:String>
+  <sys:String x:Key="Query.JoinBadge.Tooltip">{0} zwischen {1} und {2}. Klicken Sie mit der rechten Maustaste, um den Verknüpfungstyp zu ändern.</sys:String>
   <sys:String x:Key="Query.FieldDrag.Tooltip">Ziehen Sie zu einem Feld einer anderen Tabelle, um eine Verknüpfung zu erstellen.</sys:String>
   <sys:String x:Key="Designer.Insert">Einfügen:</sys:String>
   <sys:String x:Key="Designer.Label">Beschriftung</sys:String>

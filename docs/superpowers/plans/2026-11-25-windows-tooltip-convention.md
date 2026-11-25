@@ -555,7 +555,7 @@ but the badge and the field row carry none).
 
 | Key | English text |
 |---|---|
-| `Query.JoinBadge.Tooltip` | `{0} join between {1} and {2}. Click to change the join type.` |
+| `Query.JoinBadge.Tooltip` | `{0} between {1} and {2}. Right-click to change the join type.` |
 | `Query.FieldDrag.Tooltip` | `Drag to another table's field to create a join.` |
 
 Translate both into the five dictionaries. Keep the `{0}`, `{1}`, `{2}` placeholders in

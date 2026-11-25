@@ -136,6 +136,7 @@ public sealed class QueryCanvasTests
 
             Assert.Null(failure);
             Assert.False(string.IsNullOrWhiteSpace(badgeTip));
+            Assert.Contains("Right-click", badgeTip!);
             Assert.False(string.IsNullOrWhiteSpace(fieldTip));
         }
         finally
