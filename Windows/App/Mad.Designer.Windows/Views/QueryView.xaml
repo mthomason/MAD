@@ -38,6 +38,12 @@
                 </Border>
                 <Border Style="{StaticResource MAD.Divider}" />
 
+                <ComboBox DockPanel.Dock="Right" Margin="8,0,0,0" MinWidth="150" VerticalAlignment="Center"
+                          ItemsSource="{Binding Queries}"
+                          SelectedValuePath="Id" SelectedValue="{Binding QueryId, Mode=TwoWay}"
+                          DisplayMemberPath="Name"
+                          AutomationProperties.Name="{infra:Loc Query.SelectQuery}" />
+
                 <StackPanel Orientation="Horizontal" Visibility="{Binding IsDesigner, Converter={StaticResource BoolToVis}}">
                     <Button x:Name="FiltersButton" Style="{StaticResource MAD.CommandButton}" Click="ToggleFilters">
                         <StackPanel Orientation="Horizontal">

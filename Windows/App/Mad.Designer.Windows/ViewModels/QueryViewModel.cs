@@ -76,6 +76,13 @@ public sealed class QueryViewModel : ObservableObject
 
     public bool HasDocument => _handle >= 0;
 
+    /// <summary>The queries the document offers, in authoring order.</summary>
+    public void SetQueries(IReadOnlyList<QueryInfo> queries)
+    {
+        Queries = queries ?? Array.Empty<QueryInfo>();
+        OnPropertyChanged(nameof(Queries));
+    }
+
     /// <summary>The query this workspace edits (its store identifier). Selecting a
     /// different query reloads the model so every mutation applies to that query.</summary>
     public long QueryId
@@ -94,6 +101,10 @@ public sealed class QueryViewModel : ObservableObject
     /// <summary>True when the selected query is the composed root (no schema tables to
     /// add; its inputs are the other queries).</summary>
     public bool IsRoot => _model.IsRoot;
+
+    /// <summary>Every query in the document, for the query selector. Set by the
+    /// document when it loads the document-info.</summary>
+    public IReadOnlyList<QueryInfo> Queries { get; private set; } = Array.Empty<QueryInfo>();
 
     public QueryMode Mode
     {

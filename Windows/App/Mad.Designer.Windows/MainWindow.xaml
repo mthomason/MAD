@@ -33,8 +33,11 @@
         <Menu DockPanel.Dock="Top" Background="{DynamicResource ApplicationBackgroundBrush}">
             <MenuItem Header="{infra:Loc Menu.File}">
                 <MenuItem Header="{infra:Loc Menu.File.New}" Command="{Binding NewDocumentCommand}" InputGestureText="Ctrl+N" />
+                <MenuItem Header="{infra:Loc Menu.File.NewComposition}" Command="{Binding NewCompositionCommand}" />
                 <MenuItem Header="{infra:Loc Menu.File.Open}" Command="{Binding OpenDocumentCommand}" InputGestureText="Ctrl+O" />
                 <Separator />
+                <MenuItem Header="{infra:Loc Menu.File.Convert}" Command="{Binding ConvertCommand}" IsEnabled="{Binding Document.HasDocument}" />
+                <MenuItem Header="{infra:Loc Menu.File.Import}" Command="{Binding ImportChildCommand}" />
                 <MenuItem Header="{infra:Loc Menu.File.Save}" Command="{Binding Document.SaveCommand}" InputGestureText="Ctrl+S" />
                 <MenuItem Header="{infra:Loc Menu.File.SaveAs}" Command="{Binding Document.SaveAsCommand}" InputGestureText="Ctrl+Shift+S" />
                 <Separator />
@@ -81,6 +84,9 @@
                     <Border Style="{StaticResource MAD.Divider}" />
                     <TextBlock Text="{Binding Document.FileName}" Style="{StaticResource MAD.SecondaryText}"
                                VerticalAlignment="Center" MaxWidth="420" TextTrimming="CharacterEllipsis"
+                               Visibility="{Binding Document.HasDocument, Converter={StaticResource BoolToVis}}" />
+                    <TextBlock Text="{Binding Document.DocumentTypeText}" Style="{StaticResource MAD.SecondaryText}"
+                               FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0"
                                Visibility="{Binding Document.HasDocument, Converter={StaticResource BoolToVis}}" />
                 </StackPanel>
 

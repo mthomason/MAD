@@ -9,6 +9,9 @@
   <sys:String x:Key="Menu.File">_File</sys:String>
   <sys:String x:Key="Menu.File.New">_New Document…</sys:String>
   <sys:String x:Key="Menu.File.Open">_Open…</sys:String>
+  <sys:String x:Key="Menu.File.NewComposition">New Composition…</sys:String>
+  <sys:String x:Key="Menu.File.Convert">Convert to Composition</sys:String>
+  <sys:String x:Key="Menu.File.Import">Import…</sys:String>
   <sys:String x:Key="Menu.File.Save">_Save</sys:String>
   <sys:String x:Key="Menu.File.SaveAs">Save _As…</sys:String>
   <sys:String x:Key="Menu.File.DatabaseConnection">_Database Connection…</sys:String>
@@ -63,6 +66,7 @@
   <sys:String x:Key="Query.Mode.Designer">Designer</sys:String>
   <sys:String x:Key="Query.Mode.Sql">SQL</sys:String>
   <sys:String x:Key="Query.ArrangeTables">Arrange Tables</sys:String>
+  <sys:String x:Key="Query.SelectQuery">Query</sys:String>
   <sys:String x:Key="Query.RevertSql">Revert to Generated SQL</sys:String>
   <sys:String x:Key="Query.ValidateSql">Validate SQL</sys:String>
   <sys:String x:Key="Query.ApplySql">Compile &amp; Apply SQL</sys:String>

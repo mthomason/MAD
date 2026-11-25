@@ -26,6 +26,8 @@ public sealed class MainWindowViewModel : ObservableObject
     private readonly Action? _openAbout;
     private readonly Action? _newDocument;
     private readonly Action? _editConnection;
+    private readonly Action? _newComposition;
+    private readonly Action? _importChild;
     private readonly Action<string>? _persistRecent;
     private Workspace _selectedWorkspace = Workspace.Viewer;
 
@@ -35,6 +37,8 @@ public sealed class MainWindowViewModel : ObservableObject
         Func<string, string?>? exportPath = null,
         Action? newDocument = null,
         Action? editConnection = null,
+        Action? newComposition = null,
+        Action? importChild = null,
         IReadOnlyList<string>? recentFiles = null,
         Func<string?>? saveAsPath = null,
         ICredentialStore? credentials = null,
@@ -43,6 +47,8 @@ public sealed class MainWindowViewModel : ObservableObject
         _openAbout = openAbout;
         _newDocument = newDocument;
         _editConnection = editConnection;
+        _newComposition = newComposition;
+        _importChild = importChild;
         _persistRecent = persistRecent;
         Document = new DocumentViewModel(engine, exportPath, saveAsPath, credentials);
         RecentFiles = new ObservableCollection<string>(NormalizeRecent(recentFiles));
@@ -51,7 +57,10 @@ public sealed class MainWindowViewModel : ObservableObject
         OpenDocumentCommand = new AsyncRelayCommand(OpenDocumentAsync);
         OpenAboutCommand = new RelayCommand(() => _openAbout?.Invoke());
         NewDocumentCommand = new RelayCommand(() => _newDocument?.Invoke());
+        NewCompositionCommand = new RelayCommand(() => _newComposition?.Invoke());
         EditConnectionCommand = new RelayCommand(() => _editConnection?.Invoke());
+        ConvertCommand = new AsyncRelayCommand(() => Document.ConvertToCompositionAsync(), () => HasDocument);
+        ImportChildCommand = new RelayCommand(() => _importChild?.Invoke(), () => HasDocument);
         OpenRecentCommand = new AsyncRelayCommand<string?>(path => OpenPathAsync(path!));
         SelectQueryCommand = new RelayCommand(() => SelectedWorkspace = Workspace.Query, () => HasDocument);
         SelectDesignerCommand = new RelayCommand(() => SelectedWorkspace = Workspace.Designer, () => HasDocument);
@@ -120,7 +129,10 @@ public sealed class MainWindowViewModel : ObservableObject
     public ICommand OpenDocumentCommand { get; }
     public ICommand OpenAboutCommand { get; }
     public ICommand NewDocumentCommand { get; }
+    public ICommand NewCompositionCommand { get; }
     public ICommand EditConnectionCommand { get; }
+    public AsyncRelayCommand ConvertCommand { get; }
+    public RelayCommand ImportChildCommand { get; }
     public AsyncRelayCommand<string?> OpenRecentCommand { get; }
     public RelayCommand SelectQueryCommand { get; }
     public RelayCommand SelectDesignerCommand { get; }

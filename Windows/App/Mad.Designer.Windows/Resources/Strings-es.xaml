@@ -8,6 +8,9 @@
   <sys:String x:Key="App.Title">MAD Designer</sys:String>
   <sys:String x:Key="Menu.File">_Archivo</sys:String>
   <sys:String x:Key="Menu.File.New">_Nuevo documento…</sys:String>
+  <sys:String x:Key="Menu.File.NewComposition">New Composition&#x2026;</sys:String>
+  <sys:String x:Key="Menu.File.Convert">Convert to Composition</sys:String>
+  <sys:String x:Key="Menu.File.Import">Import&#x2026;</sys:String>
   <sys:String x:Key="Menu.File.Open">_Abrir…</sys:String>
   <sys:String x:Key="Menu.File.Save">_Guardar</sys:String>
   <sys:String x:Key="Menu.File.SaveAs">_Guardar como…</sys:String>
@@ -62,6 +65,7 @@
   <sys:String x:Key="Format.Text">Texto sin formato (.txt)</sys:String>
   <sys:String x:Key="Query.Mode.Designer">Diseñador</sys:String>
   <sys:String x:Key="Query.Mode.Sql">SQL</sys:String>
+  <sys:String x:Key="Query.SelectQuery">Query</sys:String>
   <sys:String x:Key="Query.ArrangeTables">Organizar tablas</sys:String>
   <sys:String x:Key="Query.RevertSql">Volver al SQL generado</sys:String>
   <sys:String x:Key="Query.ValidateSql">Validar SQL</sys:String>

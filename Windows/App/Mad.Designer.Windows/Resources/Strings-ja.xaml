@@ -8,6 +8,9 @@
   <sys:String x:Key="App.Title">MAD Designer</sys:String>
   <sys:String x:Key="Menu.File">_ファイル</sys:String>
   <sys:String x:Key="Menu.File.New">_新規ドキュメント…</sys:String>
+  <sys:String x:Key="Menu.File.NewComposition">New Composition&#x2026;</sys:String>
+  <sys:String x:Key="Menu.File.Convert">Convert to Composition</sys:String>
+  <sys:String x:Key="Menu.File.Import">Import&#x2026;</sys:String>
   <sys:String x:Key="Menu.File.Open">_開く…</sys:String>
   <sys:String x:Key="Menu.File.Save">_保存</sys:String>
   <sys:String x:Key="Menu.File.SaveAs">_別名で保存…</sys:String>
@@ -62,6 +65,7 @@
   <sys:String x:Key="Format.Text">プレーンテキスト (.txt)</sys:String>
   <sys:String x:Key="Query.Mode.Designer">デザイナー</sys:String>
   <sys:String x:Key="Query.Mode.Sql">SQL</sys:String>
+  <sys:String x:Key="Query.SelectQuery">Query</sys:String>
   <sys:String x:Key="Query.ArrangeTables">テーブルを整列</sys:String>
   <sys:String x:Key="Query.RevertSql">生成された SQL に戻す</sys:String>
   <sys:String x:Key="Query.ValidateSql">SQL を検証</sys:String>

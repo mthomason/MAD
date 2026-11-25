@@ -216,6 +216,7 @@ public sealed class DocumentViewModel : ObservableObject
         var info = await _engine.DocumentInfoAsync(_handle);
         IsComposed = info.Composed;
         Queries = info.Queries;
+        Query.SetQueries(info.Queries);
         OnPropertyChanged(nameof(DocumentTypeText));
         long selected = info.Composed ? info.RootQuery : (info.Queries.FirstOrDefault()?.Id ?? 0);
         await Query.LoadAsync(_handle, describe.Driver, describe.Tables, selected);
@@ -279,6 +280,7 @@ public sealed class DocumentViewModel : ObservableObject
         var info = await _engine.DocumentInfoAsync(_handle);
         IsComposed = info.Composed;
         Queries = info.Queries;
+        Query.SetQueries(info.Queries);
         OnPropertyChanged(nameof(DocumentTypeText));
         return info;
     }

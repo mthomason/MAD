@@ -8,6 +8,9 @@
   <sys:String x:Key="App.Title">MAD Designer</sys:String>
   <sys:String x:Key="Menu.File">_文件</sys:String>
   <sys:String x:Key="Menu.File.New">_新建文档…</sys:String>
+  <sys:String x:Key="Menu.File.NewComposition">New Composition&#x2026;</sys:String>
+  <sys:String x:Key="Menu.File.Convert">Convert to Composition</sys:String>
+  <sys:String x:Key="Menu.File.Import">Import&#x2026;</sys:String>
   <sys:String x:Key="Menu.File.Open">_打开…</sys:String>
   <sys:String x:Key="Menu.File.Save">_存储</sys:String>
   <sys:String x:Key="Menu.File.SaveAs">_存储为…</sys:String>
@@ -62,6 +65,7 @@
   <sys:String x:Key="Format.Text">纯文本（.txt）</sys:String>
   <sys:String x:Key="Query.Mode.Designer">设计器</sys:String>
   <sys:String x:Key="Query.Mode.Sql">SQL</sys:String>
+  <sys:String x:Key="Query.SelectQuery">Query</sys:String>
   <sys:String x:Key="Query.ArrangeTables">排列表</sys:String>
   <sys:String x:Key="Query.RevertSql">恢复为生成的 SQL</sys:String>
   <sys:String x:Key="Query.ValidateSql">验证 SQL</sys:String>
