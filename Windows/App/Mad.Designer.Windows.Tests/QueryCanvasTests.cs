@@ -81,6 +81,81 @@ public sealed class QueryCanvasTests
         }
     }
 
+    [Fact]
+    public async Task JoinBadgeAndFieldRow_ExplainTheirInteractions()
+    {
+        string sqlite = CopyChinookToTemp();
+        string mad = Path.Combine(Path.GetTempPath(), $"mad-canvas-tip-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var service = new EngineService();
+            var open = await service.CreateAsync(mad, new ConnectionSpec(
+                ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
+            var describe = await service.DescribeAsync(open.Handle);
+
+            var vm = new QueryViewModel(service);
+            await vm.LoadAsync(open.Handle, describe.Driver, describe.Tables, 0);
+            await vm.AddTableAsync("Customer");
+            await vm.AddTableAsync("Invoice");
+            var customer = vm.Tables.Single(t => t.Name == "Customer");
+            var invoice = vm.Tables.Single(t => t.Name == "Invoice");
+            await vm.ConnectFieldsAsync(
+                customer.Fields.Single(f => f.Name == "CustomerId").Id,
+                invoice.Fields.Single(f => f.Name == "CustomerId").Id);
+
+            Exception? failure = null;
+            string? badgeTip = null;
+            string? fieldTip = null;
+
+            var thread = new Thread(() =>
+            {
+                try
+                {
+                    var canvas = new QueryCanvas { Width = 900, Height = 700 };
+                    canvas.Attach(vm);
+                    canvas.Measure(new Size(900, 700));
+                    canvas.Arrange(new Rect(0, 0, 900, 700));
+                    canvas.UpdateLayout();
+
+                    var badge = canvas.Children.OfType<Border>().FirstOrDefault(b => b.Tag is QueryLink);
+                    badgeTip = badge is null ? null : ToolTipService.GetToolTip(badge) as string;
+
+                    var card = canvas.Children.OfType<Border>().First(b => b.Tag is long);
+                    var row = Descendants(card).OfType<Border>()
+                        .First(b => b.Tag is long && Math.Abs(b.Height - 20.0) < 0.1);
+                    fieldTip = ToolTipService.GetToolTip(row) as string;
+                }
+                catch (Exception ex)
+                {
+                    failure = ex;
+                }
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+
+            Assert.Null(failure);
+            Assert.False(string.IsNullOrWhiteSpace(badgeTip));
+            Assert.False(string.IsNullOrWhiteSpace(fieldTip));
+        }
+        finally
+        {
+            if (File.Exists(sqlite)) File.Delete(sqlite);
+            if (File.Exists(mad)) File.Delete(mad);
+        }
+    }
+
+    private static IEnumerable<DependencyObject> Descendants(DependencyObject root)
+    {
+        int count = VisualTreeHelper.GetChildrenCount(root);
+        for (int i = 0; i < count; i++)
+        {
+            DependencyObject child = VisualTreeHelper.GetChild(root, i);
+            yield return child;
+            foreach (DependencyObject descendant in Descendants(child)) yield return descendant;
+        }
+    }
+
     private static string CopyChinookToTemp()
     {
         string source = Path.Combine(MadPathResolver.RepoRoot(), "MADDesigner", "Resources", "Assets", "Samples.xcassets", "Data", "chinook.dataset", "chinook.sqlite3");

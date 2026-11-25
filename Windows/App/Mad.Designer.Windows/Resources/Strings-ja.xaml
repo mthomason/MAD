@@ -143,6 +143,8 @@
   <sys:String x:Key="Query.OutputField">列フィールド</sys:String>
   <sys:String x:Key="Query.AddOutput.Tooltip">この列をレポートに追加します。</sys:String>
   <sys:String x:Key="Query.AddOutput">列を追加</sys:String>
+  <sys:String x:Key="Query.JoinBadge.Tooltip">{1} と {2} の間の{0}結合です。クリックして結合の種類を変更します。</sys:String>
+  <sys:String x:Key="Query.FieldDrag.Tooltip">別のテーブルのフィールドまでドラッグして結合を作成します。</sys:String>
   <sys:String x:Key="Designer.Insert">挿入:</sys:String>
   <sys:String x:Key="Designer.Label">ラベル</sys:String>
   <sys:String x:Key="Designer.DataField">データフィールド</sys:String>

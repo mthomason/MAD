@@ -297,6 +297,7 @@ public sealed class QueryCanvas : Canvas
             Child = text,
             Background = Brushes.Transparent,
             Tag = field.Id,
+            ToolTip = Localizer.Get("Query.FieldDrag.Tooltip"),
         };
 
         row.MouseLeftButtonDown += (_, e) =>
@@ -404,7 +405,6 @@ public sealed class QueryCanvas : Canvas
                 StrokeStartLineCap = PenLineCap.Round,
                 StrokeEndLineCap = PenLineCap.Round,
                 Tag = link,
-                ToolTip = $"{link.Type.DisplayName()}",
                 // The curve is visual only; the midpoint badge is the click target, so the
                 // stroke never intercepts a click meant for a card underneath it.
                 IsHitTestVisible = false,
@@ -420,6 +420,8 @@ public sealed class QueryCanvas : Canvas
                 CornerRadius = new CornerRadius(8),
                 Padding = new Thickness(6, 1, 6, 1),
                 Tag = link,
+                ToolTip = Localizer.Format(
+                    "Query.JoinBadge.Tooltip", link.Type.DisplayName(), AliasOf(leftTable), AliasOf(rightTable)),
                 Child = new TextBlock
                 {
                     Text = link.Type.ShortBadge(),
@@ -477,6 +479,11 @@ public sealed class QueryCanvas : Canvas
         }
         return 0;
     }
+
+    private string AliasOf(long tableId)
+        => _tablesById.TryGetValue(tableId, out QueryTable? table)
+            ? (string.IsNullOrEmpty(table.Alias) ? table.Name : table.Alias)
+            : "";
 
     private (long TableId, long FieldId)? HitTestField(Point p)
     {

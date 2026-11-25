@@ -143,6 +143,8 @@
   <sys:String x:Key="Query.OutputField">Campo de columna</sys:String>
   <sys:String x:Key="Query.AddOutput.Tooltip">Agregue esta columna al informe.</sys:String>
   <sys:String x:Key="Query.AddOutput">Agregar columna</sys:String>
+  <sys:String x:Key="Query.JoinBadge.Tooltip">Unión {0} entre {1} y {2}. Haga clic para cambiar el tipo de unión.</sys:String>
+  <sys:String x:Key="Query.FieldDrag.Tooltip">Arrastre hasta el campo de otra tabla para crear una unión.</sys:String>
   <sys:String x:Key="Designer.Insert">Insertar:</sys:String>
   <sys:String x:Key="Designer.Label">Etiqueta</sys:String>
   <sys:String x:Key="Designer.DataField">Campo de datos</sys:String>

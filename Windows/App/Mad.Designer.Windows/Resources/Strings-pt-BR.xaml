@@ -143,6 +143,8 @@
   <sys:String x:Key="Query.OutputField">Campo da coluna</sys:String>
   <sys:String x:Key="Query.AddOutput.Tooltip">Adicione esta coluna ao relatório.</sys:String>
   <sys:String x:Key="Query.AddOutput">Adicionar coluna</sys:String>
+  <sys:String x:Key="Query.JoinBadge.Tooltip">Junção {0} entre {1} e {2}. Clique para alterar o tipo de junção.</sys:String>
+  <sys:String x:Key="Query.FieldDrag.Tooltip">Arraste até o campo de outra tabela para criar uma junção.</sys:String>
   <sys:String x:Key="Designer.Insert">Inserir:</sys:String>
   <sys:String x:Key="Designer.Label">Rótulo</sys:String>
   <sys:String x:Key="Designer.DataField">Campo de Dados</sys:String>
