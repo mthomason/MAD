@@ -556,7 +556,31 @@ reports `9.0 (r4433) commit 25de4050`. The packaged WPF app launches
 `Windows\Engine\build\mad.exe` beside itself (`MadPathResolver.MadExe()`), built from the tested
 checkout.
 
-**Not covered / deferred.** Per-query SQL entry (validate/apply-sql still targets the default
-query); a graphical capability matrix; the remaining open review items (P4, P7, P8). The Linux CI
-and Apple suites for the shared-source baseline fixes have not been run here. PR creation and merge
-await the user's direction.
+**Not covered / deferred.** A graphical capability matrix; the remaining open review items
+(P4, P7, P8). The Linux CI and Apple suites for the shared-source baseline fixes have not been run
+here. PR creation and merge await the user's direction.
+
+## Checkpoint J — Windows authoring gaps closed (2026-11-25)
+
+The follow-up closes the Windows authoring gaps named in Checkpoint I, so a user can sit down at
+the packaged app with two standard `.mad` reports and author a composition themselves.
+
+- **Add-upstream.** When the composed root is selected, the Query sidebar lists the source
+  queries; double-clicking one adds it as an upstream input of the root (the Mac's
+  `addUpstreamQueryToRoot:`, served as `add-upstream`).
+- **Outputs editor.** An Outputs popover (visible only for the root) chooses, names, removes and
+  reorders the root's outputs, persisted through `set-root-outputs` (the field list in the query
+  model now carries each field's `outputKey`/`outputIndex`).
+- **Query-scoped SQL.** `validate-sql`/`apply-sql` take a `query` identifier and compile against
+  that query's own schema; a composing root answers an actionable "SQL editing is not supported
+  for the composed root" error, the SQL toggle is disabled for the root, and a stale selection
+  leaves the document unchanged.
+- **Tests.** `ImportTwoReports_AuthorJoinAndOutputs` drives two imported reports → join on
+  `invoice_id` → choose and then reorder the outputs, asserting the exported column order follows;
+  `SqlEntry_ActsOnTheSelectedQueryAndRejectsTheRoot` pins the query-scoped SQL behavior.
+
+**Results (actual, 2026-11-25).** Windows engine build `131 suites / 0 failures`; WPF suite
+`124/124` (five composition acceptance tests). The packaged app writes
+`MAD-Designer-Windows-0.7.1.zip` and `mad-windows-x64.zip`, and its bundled engine reports the
+checked-out commit.
+
