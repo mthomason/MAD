@@ -23,6 +23,10 @@ public sealed class TooltipConventionTests
     public void QueryView_GivesEveryActionControlATooltipAndAccessibleName()
         => AssertViewConforms("QueryView.xaml");
 
+    [Fact]
+    public void DesignerView_GivesEveryActionControlATooltipAndAccessibleName()
+        => AssertViewConforms("DesignerView.xaml");
+
     private static void AssertViewConforms(string fileName)
     {
         string path = Path.Combine(

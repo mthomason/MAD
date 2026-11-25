@@ -26,38 +26,48 @@
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
                     <TextBlock Text="{infra:Loc Designer.Insert}" Style="{StaticResource MAD.CaptionText}"
                                VerticalAlignment="Center" Margin="2,0,8,0" FontWeight="SemiBold" />
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddLabelCommand}">
+                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddLabelCommand}"
+                            ToolTip="{infra:Loc Designer.Label.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Designer.Label}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8D2;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Designer.Label}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddDataFieldCommand}" Margin="2,0,0,0">
+                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddDataFieldCommand}" Margin="2,0,0,0"
+                            ToolTip="{infra:Loc Designer.DataField.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Designer.DataField}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE7C3;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Designer.DataField}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddAggregateCommand}" Margin="2,0,0,0">
+                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddAggregateCommand}" Margin="2,0,0,0"
+                            ToolTip="{infra:Loc Designer.Aggregate.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Designer.Aggregate}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE9D9;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Designer.Aggregate}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddImageCommand}" Margin="2,0,0,0">
+                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddImageCommand}" Margin="2,0,0,0"
+                            ToolTip="{infra:Loc Designer.Image.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Designer.Image}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE91B;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Designer.Image}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddLineRuleCommand}" Margin="2,0,0,0">
+                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddLineRuleCommand}" Margin="2,0,0,0"
+                            ToolTip="{infra:Loc Designer.Line.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Designer.Line}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE738;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Designer.Line}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
                     <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddBarcodeCommand}" Margin="2,0,0,0"
-                            ToolTip="{infra:Loc Designer.Barcode}"
+                            ToolTip="{infra:Loc Designer.Barcode.Tooltip}"
                             AutomationProperties.Name="{infra:Loc Designer.Barcode}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8C8;" Style="{StaticResource MAD.CommandIcon}" />
@@ -69,28 +79,28 @@
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
                     <Border Style="{StaticResource MAD.Divider}" />
                     <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding UndoCommand}"
-                            ToolTip="{infra:Loc Designer.Undo}" AutomationProperties.Name="{infra:Loc Designer.Undo}">
+                            ToolTip="{infra:Loc Designer.Undo.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.Undo}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE7A7;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Designer.Undo}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
                     <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding RedoCommand}" Margin="2,0,0,0"
-                            ToolTip="{infra:Loc Designer.Redo}" AutomationProperties.Name="{infra:Loc Designer.Redo}">
+                            ToolTip="{infra:Loc Designer.Redo.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.Redo}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE7A6;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Designer.Redo}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
                     <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding DuplicateElementCommand}" Margin="2,0,0,0"
-                            ToolTip="{infra:Loc Designer.Duplicate}" AutomationProperties.Name="{infra:Loc Designer.Duplicate}">
+                            ToolTip="{infra:Loc Designer.Duplicate.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.Duplicate}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8C8;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Designer.Duplicate}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
                     <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding DeleteElementCommand}" Margin="2,0,0,0"
-                            ToolTip="{infra:Loc Designer.Delete}" AutomationProperties.Name="{infra:Loc Designer.Delete}">
+                            ToolTip="{infra:Loc Designer.Delete.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.Delete}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE74D;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{infra:Loc Designer.Delete}" Style="{StaticResource MAD.CommandLabel}" />
@@ -116,7 +126,9 @@
                 <ListBox x:Name="SectionsList" DockPanel.Dock="Top" Height="180" Margin="0,0,0,12"
                          ItemsSource="{Binding Sections}" MouseDoubleClick="SectionsList_OnDoubleClick"
                          Background="{DynamicResource ControlFillColorDefaultBrush}"
-                         BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}">
+                         BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                         ToolTip="{infra:Loc Designer.Bands.Tooltip}"
+                         AutomationProperties.Name="{infra:Loc Designer.Bands.Name}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding DisplayTitle}" />
@@ -128,7 +140,9 @@
                 <ListBox x:Name="FieldsList" ItemsSource="{Binding Fields}"
                          MouseDoubleClick="FieldsList_OnDoubleClick"
                          Background="{DynamicResource ControlFillColorDefaultBrush}"
-                         BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}">
+                         BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                         ToolTip="{infra:Loc Designer.QueryFields.Tooltip}"
+                         AutomationProperties.Name="{infra:Loc Designer.QueryFields.Name}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Display}" />
@@ -162,7 +176,9 @@
                             <StackPanel>
                                 <TextBlock Text="{infra:Loc Designer.CardPage}" Style="{StaticResource MAD.SectionHeader}" />
                                 <TextBlock Text="{infra:Loc Designer.Paper}" Style="{StaticResource MAD.FieldLabel}" />
-                                <ComboBox SelectedIndex="{Binding PaperSizeIndex}" Margin="0,0,0,8">
+                                <ComboBox SelectedIndex="{Binding PaperSizeIndex}" Margin="0,0,0,8"
+                                          ToolTip="{infra:Loc Designer.Paper.Tooltip}"
+                                          AutomationProperties.Name="{infra:Loc Designer.Paper}">
                                     <ComboBoxItem Content="{infra:Loc Paper.Letter.Display}" />
                                     <ComboBoxItem Content="{infra:Loc Paper.Legal.Display}" />
                                     <ComboBoxItem Content="{infra:Loc Paper.A4.Display}" />
@@ -173,8 +189,12 @@
                                 <TextBlock Text="{infra:Loc Designer.Height}" Style="{StaticResource MAD.FieldLabel}" />
                                 <TextBox Text="{Binding SelectedSectionHeight, UpdateSourceTrigger=LostFocus}"
                                          Width="90" HorizontalAlignment="Left" Margin="0,0,0,8" />
-                                <CheckBox Content="{infra:Loc Designer.SectionVisible}" IsChecked="{Binding SelectedSectionVisible}" Margin="0,0,0,4" />
-                                <CheckBox Content="{infra:Loc Designer.PageBreakAfter}" IsChecked="{Binding SelectedSectionPageBreak}" />
+                                <CheckBox Content="{infra:Loc Designer.SectionVisible}" IsChecked="{Binding SelectedSectionVisible}" Margin="0,0,0,4"
+                                          ToolTip="{infra:Loc Designer.SectionVisible.Tooltip}"
+                                          AutomationProperties.Name="{infra:Loc Designer.SectionVisible}" />
+                                <CheckBox Content="{infra:Loc Designer.PageBreakAfter}" IsChecked="{Binding SelectedSectionPageBreak}"
+                                          ToolTip="{infra:Loc Designer.PageBreakAfter.Tooltip}"
+                                          AutomationProperties.Name="{infra:Loc Designer.PageBreakAfter}" />
                             </StackPanel>
                         </Border>
 
@@ -211,7 +231,9 @@
 
                                     <TextBlock Text="{infra:Loc Designer.Band}" Style="{StaticResource MAD.FieldLabel}" />
                                     <ComboBox ItemsSource="{Binding Sections}" DisplayMemberPath="DisplayTitle" SelectedValuePath="Id"
-                                              SelectedValue="{Binding ElementSectionId}" Margin="0,0,0,8" />
+                                              SelectedValue="{Binding ElementSectionId}" Margin="0,0,0,8"
+                                              ToolTip="{infra:Loc Designer.ElementBand.Tooltip}"
+                                              AutomationProperties.Name="{infra:Loc Designer.Band}" />
 
                                     <TextBlock Text="{infra:Loc Designer.Text}" Style="{StaticResource MAD.FieldLabel}" />
                                     <TextBox Text="{Binding ElementText, UpdateSourceTrigger=LostFocus}" Margin="0,0,0,8" />
@@ -231,18 +253,26 @@
                                         </StackPanel.Style>
                                         <TextBlock Text="{infra:Loc Designer.Barcode.Symbology}" Style="{StaticResource MAD.FieldLabel}" />
                                         <ComboBox ItemsSource="{Binding BarcodeTypes}" DisplayMemberPath="Name"
-                                                  SelectedIndex="{Binding ElementBarcodeSymbologyIndex}" Margin="0,0,0,8" />
+                                                  SelectedIndex="{Binding ElementBarcodeSymbologyIndex}" Margin="0,0,0,8"
+                                                  ToolTip="{infra:Loc Designer.Barcode.Symbology.Tooltip}"
+                                                  AutomationProperties.Name="{infra:Loc Designer.Barcode.Symbology}" />
                                         <CheckBox Content="{infra:Loc Designer.Barcode.ShowText}"
-                                                  IsChecked="{Binding ElementBarcodeHumanReadable}" Margin="0,0,0,8" />
+                                                  IsChecked="{Binding ElementBarcodeHumanReadable}" Margin="0,0,0,8"
+                                                  ToolTip="{infra:Loc Designer.Barcode.ShowText.Tooltip}"
+                                                  AutomationProperties.Name="{infra:Loc Designer.Barcode.ShowText}" />
                                         <TextBlock Text="{infra:Loc Designer.Barcode.Border}" Style="{StaticResource MAD.FieldLabel}" />
-                                        <ComboBox SelectedIndex="{Binding ElementBarcodeBorderIndex}" Margin="0,0,0,8">
+                                        <ComboBox SelectedIndex="{Binding ElementBarcodeBorderIndex}" Margin="0,0,0,8"
+                                                  ToolTip="{infra:Loc Designer.Barcode.Border.Tooltip}"
+                                                  AutomationProperties.Name="{infra:Loc Designer.Barcode.Border}">
                                             <ComboBoxItem Content="{infra:Loc Designer.Barcode.Border.None}" />
                                             <ComboBoxItem Content="{infra:Loc Designer.Barcode.Border.Bind}" />
                                             <ComboBoxItem Content="{infra:Loc Designer.Barcode.Border.Box}" />
                                         </ComboBox>
                                         <TextBlock Text="{infra:Loc Designer.Barcode.Field}" Style="{StaticResource MAD.FieldLabel}" />
                                         <ComboBox ItemsSource="{Binding BarcodeInputOptions}" DisplayMemberPath="Display"
-                                                  SelectedValuePath="Id" SelectedValue="{Binding ElementBarcodeInputId}" />
+                                                  SelectedValuePath="Id" SelectedValue="{Binding ElementBarcodeInputId}"
+                                                  ToolTip="{infra:Loc Designer.Barcode.Field.Tooltip}"
+                                                  AutomationProperties.Name="{infra:Loc Designer.Barcode.Field}" />
                                     </StackPanel>
 
                                     <!-- The image element's picture. The engine stores PNG
@@ -260,7 +290,9 @@
                                             </Style>
                                         </StackPanel.Style>
                                         <Button Content="{infra:Loc Designer.Image.Choose}" Click="ChooseImage_OnClick"
-                                                Style="{StaticResource MAD.CommandButton}" HorizontalAlignment="Left" />
+                                                Style="{StaticResource MAD.CommandButton}" HorizontalAlignment="Left"
+                                                ToolTip="{infra:Loc Designer.Image.Choose.Tooltip}"
+                                                AutomationProperties.Name="{infra:Loc Designer.Image.Choose}" />
                                     </StackPanel>
 
                                     <TextBlock Text="{infra:Loc Designer.XY}" Style="{StaticResource MAD.FieldLabel}" />
@@ -283,19 +315,31 @@
                                     <TextBox Text="{Binding ElementFontSize, UpdateSourceTrigger=LostFocus}"
                                              Width="90" HorizontalAlignment="Left" Margin="0,0,0,8" />
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                        <CheckBox Content="B" IsChecked="{Binding ElementBold}" Margin="0,0,10,0" />
-                                        <CheckBox Content="I" IsChecked="{Binding ElementItalic}" Margin="0,0,10,0" />
-                                        <CheckBox Content="U" IsChecked="{Binding ElementUnderline}" Margin="0,0,10,0" />
-                                        <CheckBox Content="S" IsChecked="{Binding ElementStrikethrough}" />
+                                        <CheckBox Content="B" IsChecked="{Binding ElementBold}" Margin="0,0,10,0"
+                                                  ToolTip="{infra:Loc Designer.Bold.Tooltip}"
+                                                  AutomationProperties.Name="{infra:Loc Designer.Bold}" />
+                                        <CheckBox Content="I" IsChecked="{Binding ElementItalic}" Margin="0,0,10,0"
+                                                  ToolTip="{infra:Loc Designer.Italic.Tooltip}"
+                                                  AutomationProperties.Name="{infra:Loc Designer.Italic}" />
+                                        <CheckBox Content="U" IsChecked="{Binding ElementUnderline}" Margin="0,0,10,0"
+                                                  ToolTip="{infra:Loc Designer.Underline.Tooltip}"
+                                                  AutomationProperties.Name="{infra:Loc Designer.Underline}" />
+                                        <CheckBox Content="S" IsChecked="{Binding ElementStrikethrough}"
+                                                  ToolTip="{infra:Loc Designer.Strikethrough.Tooltip}"
+                                                  AutomationProperties.Name="{infra:Loc Designer.Strikethrough}" />
                                     </StackPanel>
                                     <TextBlock Text="{infra:Loc Designer.HAlign}" Style="{StaticResource MAD.FieldLabel}" />
-                                    <ComboBox SelectedIndex="{Binding ElementHAlignIndex}" Margin="0,0,0,8">
+                                    <ComboBox SelectedIndex="{Binding ElementHAlignIndex}" Margin="0,0,0,8"
+                                              ToolTip="{infra:Loc Designer.HAlign.Tooltip}"
+                                              AutomationProperties.Name="{infra:Loc Designer.HAlign.Name}">
                                         <ComboBoxItem Content="{infra:Loc Designer.Align.Left}" />
                                         <ComboBoxItem Content="{infra:Loc Designer.Align.Center}" />
                                         <ComboBoxItem Content="{infra:Loc Designer.Align.Right}" />
                                     </ComboBox>
                                     <TextBlock Text="{infra:Loc Designer.VAlign}" Style="{StaticResource MAD.FieldLabel}" />
-                                    <ComboBox SelectedIndex="{Binding ElementVAlignIndex}" Margin="0,0,0,8">
+                                    <ComboBox SelectedIndex="{Binding ElementVAlignIndex}" Margin="0,0,0,8"
+                                              ToolTip="{infra:Loc Designer.VAlign.Tooltip}"
+                                              AutomationProperties.Name="{infra:Loc Designer.VAlign.Name}">
                                         <ComboBoxItem Content="{infra:Loc Designer.Align.Top}" />
                                         <ComboBoxItem Content="{infra:Loc Designer.Align.Middle}" />
                                         <ComboBoxItem Content="{infra:Loc Designer.Align.Bottom}" />
@@ -316,8 +360,12 @@
                                     </StackPanel>
 
                                     <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                                        <Button Content="{infra:Loc Designer.Duplicate}" Command="{Binding DuplicateElementCommand}" Margin="0,0,6,0" />
-                                        <Button Content="{infra:Loc Designer.Delete}" Command="{Binding DeleteElementCommand}" />
+                                        <Button Content="{infra:Loc Designer.Duplicate}" Command="{Binding DuplicateElementCommand}" Margin="0,0,6,0"
+                                                ToolTip="{infra:Loc Designer.Duplicate.Tooltip}"
+                                                AutomationProperties.Name="{infra:Loc Designer.Duplicate}" />
+                                        <Button Content="{infra:Loc Designer.Delete}" Command="{Binding DeleteElementCommand}"
+                                                ToolTip="{infra:Loc Designer.Delete.Tooltip}"
+                                                AutomationProperties.Name="{infra:Loc Designer.Delete}" />
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -340,13 +388,20 @@
                     <TextBlock Text="{infra:Loc Designer.Zoom}" Style="{StaticResource MAD.StatusText}" Margin="0,0,6,0" />
                     <Slider Width="130" Minimum="0.5" Maximum="2.5" Value="{Binding Zoom}" VerticalAlignment="Center"
                             TickFrequency="0.25" IsSnapToTickEnabled="True"
+                            ToolTip="{infra:Loc Designer.Zoom.Tooltip}"
                             AutomationProperties.Name="{infra:Loc Designer.Zoom}" />
                     <TextBlock Text="{Binding Zoom, StringFormat={}{0:0%}}" Style="{StaticResource MAD.StatusText}"
                                MinWidth="44" TextAlignment="Center" Margin="6,0,0,0" />
                     <Border Style="{StaticResource MAD.Divider}" />
-                    <CheckBox Content="{infra:Loc Designer.Grid}" IsChecked="{Binding ShowGrid}" Margin="0,0,10,0" />
-                    <CheckBox Content="{infra:Loc Designer.Snap}" IsChecked="{Binding SnapToGrid}" Margin="0,0,10,0" />
-                    <CheckBox Content="{infra:Loc Designer.Rulers}" IsChecked="{Binding ShowRulers}" />
+                    <CheckBox Content="{infra:Loc Designer.Grid}" IsChecked="{Binding ShowGrid}" Margin="0,0,10,0"
+                              ToolTip="{infra:Loc Designer.Grid.Tooltip}"
+                              AutomationProperties.Name="{infra:Loc Designer.Grid}" />
+                    <CheckBox Content="{infra:Loc Designer.Snap}" IsChecked="{Binding SnapToGrid}" Margin="0,0,10,0"
+                              ToolTip="{infra:Loc Designer.Snap.Tooltip}"
+                              AutomationProperties.Name="{infra:Loc Designer.Snap}" />
+                    <CheckBox Content="{infra:Loc Designer.Rulers}" IsChecked="{Binding ShowRulers}"
+                              ToolTip="{infra:Loc Designer.Rulers.Tooltip}"
+                              AutomationProperties.Name="{infra:Loc Designer.Rulers}" />
                 </StackPanel>
             </Grid>
         </Border>
