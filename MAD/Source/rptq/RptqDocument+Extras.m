@@ -184,8 +184,18 @@ static inline NSUInteger queryGroupIndexForSelectedIndexOfTypeFooter(NSUInteger 
 }
 
 - (RptqQuery *)mainQuery {
-	RptqDatabase *defaultDatabase = self.hasDatabaseSchemas.anyObject;
-	return defaultDatabase.hasQueries.anyObject;
+	// A composed document's root shares the first source's database (a placeholder
+	// so ordinary accessors still resolve), so a bare anyObject over hasQueries can
+	// hand back the root instead of the report's own source query.  Exclude the root
+	// so `mainQuery` keeps meaning "the report's query" -- the same value an ordinary
+	// document's single query has -- instead of being ambiguous once a root exists.
+	RptqQuery *root = self.rootQuery;
+	for (RptqDatabase *database in self.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			if (query != root) return query;
+		}
+	}
+	return self.hasDatabaseSchemas.anyObject.hasQueries.anyObject;
 }
 
 - (RptqDatabase *)defaultDatabase {
