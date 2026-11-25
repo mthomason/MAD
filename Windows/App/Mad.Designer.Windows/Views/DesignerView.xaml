@@ -21,63 +21,92 @@
         </Grid.RowDefinitions>
 
         <!-- Workspace command bar: insert palette, then edit commands. -->
-        <Border Grid.Row="0" Style="{StaticResource MAD.CommandBar}">
+        <Border x:Name="CommandBar" Grid.Row="0" Style="{StaticResource MAD.CommandBar}">
             <DockPanel>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                    <TextBlock Text="{infra:Loc Designer.Insert}" Style="{StaticResource MAD.CaptionText}"
-                               VerticalAlignment="Center" Margin="2,0,8,0" FontWeight="SemiBold" />
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddLabelCommand}"
-                            ToolTip="{infra:Loc Designer.Label.Tooltip}"
-                            AutomationProperties.Name="{infra:Loc Designer.Label}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE8D2;" Style="{StaticResource MAD.CommandIcon}" />
-                            <TextBlock Text="{infra:Loc Designer.Label}" Style="{StaticResource MAD.CommandLabel}" />
-                        </StackPanel>
-                    </Button>
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddDataFieldCommand}" Margin="2,0,0,0"
-                            ToolTip="{infra:Loc Designer.DataField.Tooltip}"
-                            AutomationProperties.Name="{infra:Loc Designer.DataField}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE7C3;" Style="{StaticResource MAD.CommandIcon}" />
-                            <TextBlock Text="{infra:Loc Designer.DataField}" Style="{StaticResource MAD.CommandLabel}" />
-                        </StackPanel>
-                    </Button>
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddAggregateCommand}" Margin="2,0,0,0"
-                            ToolTip="{infra:Loc Designer.Aggregate.Tooltip}"
-                            AutomationProperties.Name="{infra:Loc Designer.Aggregate}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE9D9;" Style="{StaticResource MAD.CommandIcon}" />
-                            <TextBlock Text="{infra:Loc Designer.Aggregate}" Style="{StaticResource MAD.CommandLabel}" />
-                        </StackPanel>
-                    </Button>
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddImageCommand}" Margin="2,0,0,0"
-                            ToolTip="{infra:Loc Designer.Image.Tooltip}"
-                            AutomationProperties.Name="{infra:Loc Designer.Image}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE91B;" Style="{StaticResource MAD.CommandIcon}" />
-                            <TextBlock Text="{infra:Loc Designer.Image}" Style="{StaticResource MAD.CommandLabel}" />
-                        </StackPanel>
-                    </Button>
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddLineRuleCommand}" Margin="2,0,0,0"
-                            ToolTip="{infra:Loc Designer.Line.Tooltip}"
-                            AutomationProperties.Name="{infra:Loc Designer.Line}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE738;" Style="{StaticResource MAD.CommandIcon}" />
-                            <TextBlock Text="{infra:Loc Designer.Line}" Style="{StaticResource MAD.CommandLabel}" />
-                        </StackPanel>
-                    </Button>
-                    <Button Style="{StaticResource MAD.InsertButton}" Command="{Binding AddBarcodeCommand}" Margin="2,0,0,0"
-                            ToolTip="{infra:Loc Designer.Barcode.Tooltip}"
-                            AutomationProperties.Name="{infra:Loc Designer.Barcode}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE8C8;" Style="{StaticResource MAD.CommandIcon}" />
-                            <TextBlock Text="{infra:Loc Designer.Barcode}" Style="{StaticResource MAD.CommandLabel}" />
-                        </StackPanel>
-                    </Button>
+                    <Menu Background="Transparent" Padding="0" VerticalAlignment="Center">
+                        <MenuItem x:Name="InsertButton" Style="{StaticResource MAD.InsertMenu}"
+                                  ToolTip="{infra:Loc Designer.Insert.Tooltip}"
+                                  AutomationProperties.Name="{infra:Loc Designer.Insert}">
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE710;" Style="{StaticResource MAD.CommandIcon}" />
+                                    <TextBlock Text="{infra:Loc Designer.Insert}" Style="{StaticResource MAD.CommandLabel}" />
+                                    <TextBlock Text="&#xE70D;" Style="{StaticResource MAD.CommandIcon}" FontSize="10" Margin="5,1,0,0" />
+                                </StackPanel>
+                            </MenuItem.Header>
+                            <MenuItem Style="{StaticResource MAD.InsertMenuCaption}" IsEnabled="False">
+                                <MenuItem.Header>
+                                    <TextBlock Text="{infra:Loc Designer.Insert.Text}" Style="{StaticResource MAD.MenuGroupCaption}" />
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem Style="{StaticResource MAD.InsertMenuItem}" Command="{Binding AddLabelCommand}"
+                                      ToolTip="{infra:Loc Designer.Label.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.Label}">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE8D2;" Style="{StaticResource MAD.CommandIcon}" Width="20" TextAlignment="Center" />
+                                        <TextBlock Text="{infra:Loc Designer.Label}" Style="{StaticResource MAD.CommandLabel}" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem Style="{StaticResource MAD.InsertMenuItem}" Command="{Binding AddDataFieldCommand}"
+                                      ToolTip="{infra:Loc Designer.DataField.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.DataField}">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE7C3;" Style="{StaticResource MAD.CommandIcon}" Width="20" TextAlignment="Center" />
+                                        <TextBlock Text="{infra:Loc Designer.DataField}" Style="{StaticResource MAD.CommandLabel}" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem Style="{StaticResource MAD.InsertMenuItem}" Command="{Binding AddAggregateCommand}"
+                                      ToolTip="{infra:Loc Designer.Aggregate.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.Aggregate}">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE9D9;" Style="{StaticResource MAD.CommandIcon}" Width="20" TextAlignment="Center" />
+                                        <TextBlock Text="{infra:Loc Designer.Aggregate}" Style="{StaticResource MAD.CommandLabel}" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <Separator Style="{StaticResource MAD.MenuSeparator}" />
+                            <MenuItem Style="{StaticResource MAD.InsertMenuCaption}" IsEnabled="False">
+                                <MenuItem.Header>
+                                    <TextBlock Text="{infra:Loc Designer.Insert.Graphics}" Style="{StaticResource MAD.MenuGroupCaption}" />
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem Style="{StaticResource MAD.InsertMenuItem}" Command="{Binding AddImageCommand}"
+                                      ToolTip="{infra:Loc Designer.Image.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.Image}">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE91B;" Style="{StaticResource MAD.CommandIcon}" Width="20" TextAlignment="Center" />
+                                        <TextBlock Text="{infra:Loc Designer.Image}" Style="{StaticResource MAD.CommandLabel}" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem Style="{StaticResource MAD.InsertMenuItem}" Command="{Binding AddLineRuleCommand}"
+                                      ToolTip="{infra:Loc Designer.Line.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.Line}">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE738;" Style="{StaticResource MAD.CommandIcon}" Width="20" TextAlignment="Center" />
+                                        <TextBlock Text="{infra:Loc Designer.Line}" Style="{StaticResource MAD.CommandLabel}" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem Style="{StaticResource MAD.InsertMenuItem}" Command="{Binding AddBarcodeCommand}"
+                                      ToolTip="{infra:Loc Designer.Barcode.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.Barcode}">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xEC5A;" Style="{StaticResource MAD.CommandIcon}" Width="20" TextAlignment="Center" />
+                                        <TextBlock Text="{infra:Loc Designer.Barcode}" Style="{StaticResource MAD.CommandLabel}" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                        </MenuItem>
+                    </Menu>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                <StackPanel x:Name="EditGroup" Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
                     <Border Style="{StaticResource MAD.Divider}" />
+                    <TextBlock Text="{infra:Loc Designer.Edit}" Style="{StaticResource MAD.GroupCaption}" />
                     <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding UndoCommand}"
                             ToolTip="{infra:Loc Designer.Undo.Tooltip}" AutomationProperties.Name="{infra:Loc Designer.Undo}">
                         <StackPanel Orientation="Horizontal">

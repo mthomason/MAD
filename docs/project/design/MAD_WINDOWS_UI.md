@@ -64,9 +64,15 @@ redesigned in detail in [`MAD_COMPOSITION_UX.md`](MAD_COMPOSITION_UX.md).)
 a trimmed filename. The one-line next-action hint on open (e.g. "Composition: use
 Import… to add reports, then join them in the Query workspace") still waits for Report 2.
 
-**P1 — Group the command bars.** Introduce visual groups (Insert / Edit / View) with a small
-divider, and move less-used commands (Arrange Tables, Fit, grid/rulers) out of the primary
-bar into a menu or the status bar. Reduces crowding and teaches the layout.
+**P1 — Group the command bars.** **Complete (2026-11-25).** The Designer's six insert
+buttons are now one Insert menu with Text and Graphics groups; the Designer bar carries an
+Edit caption, and the Query bar a Refine caption. Arrange Tables moved to the Query status
+bar beside Fit — the other View controls (grid, snap, rulers, zoom) were already in the
+status bars. Barcode now uses the BarcodeScanner glyph (EC5A) instead of the Copy glyph it
+shared with Duplicate. `CommandBarTests` pins the structure and hosts the Designer at
+912 px, the content width of the 1000 px window minimum, to prove the edit group no longer
+clips. Follow-up (owner, 2026-11-25): the remaining button surfaces — the main-window
+toolbar and the inspector's Duplicate/Delete — may get the same treatment in time.
 
 **P1 — In-place empty/error states.** Per workspace, replace the generic status with a
 situational message (e.g. the Query sidebar says "This source has no tables yet — add one

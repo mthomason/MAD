@@ -322,6 +322,11 @@
   <sys:String x:Key="Document.TypeComposition">Composition Report</sys:String>
   <sys:String x:Key="Document.TypeStandard.Tooltip">このレポートは1つのデータベースにクエリを実行します。</sys:String>
   <sys:String x:Key="Document.TypeComposition.Tooltip">このレポートはソースとしてインポートしたレポートを結合します。</sys:String>
+  <sys:String x:Key="Designer.Insert.Tooltip">選択したバンドに要素を追加します。</sys:String>
+  <sys:String x:Key="Designer.Edit">編集</sys:String>
+  <sys:String x:Key="Query.Refine">絞り込み</sys:String>
+  <sys:String x:Key="Designer.Insert.Text">テキスト</sys:String>
+  <sys:String x:Key="Designer.Insert.Graphics">グラフィック</sys:String>
   <sys:String x:Key="Document.Converted">Converted to a Composition Report.</sys:String>
   <sys:String x:Key="Document.ConvertFailed">Conversion failed.</sys:String>
   <sys:String x:Key="Document.Imported">Imported the report.</sys:String>

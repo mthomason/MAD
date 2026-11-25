@@ -322,6 +322,11 @@
   <sys:String x:Key="Document.TypeComposition">Composition Report</sys:String>
   <sys:String x:Key="Document.TypeStandard.Tooltip">Este informe consulta una base de datos.</sys:String>
   <sys:String x:Key="Document.TypeComposition.Tooltip">Este informe combina informes importados como orígenes.</sys:String>
+  <sys:String x:Key="Designer.Insert.Tooltip">Agrega un elemento a la banda seleccionada.</sys:String>
+  <sys:String x:Key="Designer.Edit">Editar</sys:String>
+  <sys:String x:Key="Query.Refine">Refinar</sys:String>
+  <sys:String x:Key="Designer.Insert.Text">Texto</sys:String>
+  <sys:String x:Key="Designer.Insert.Graphics">Gráficos</sys:String>
   <sys:String x:Key="Document.Converted">Converted to a Composition Report.</sys:String>
   <sys:String x:Key="Document.ConvertFailed">Conversion failed.</sys:String>
   <sys:String x:Key="Document.Imported">Imported the report.</sys:String>

@@ -16,7 +16,7 @@ public sealed class TooltipConventionTests
 {
     private static readonly string[] ActionControls =
     {
-        "Button", "ToggleButton", "CheckBox", "ComboBox", "ListBox", "Slider",
+        "Button", "ToggleButton", "CheckBox", "ComboBox", "ListBox", "Slider", "MenuItem",
     };
 
     [Fact]
@@ -39,6 +39,8 @@ public sealed class TooltipConventionTests
         {
             if (element.Name.Namespace != presentation) continue;
             if (!ActionControls.Contains(element.Name.LocalName)) continue;
+            // A disabled menu item is a group caption, not an action.
+            if (element.Name.LocalName == "MenuItem" && (string?)element.Attribute("IsEnabled") == "False") continue;
 
             string location = $"{fileName}:{((IXmlLineInfo)element).LineNumber} ({element.Name.LocalName})";
             string? toolTip = (string?)element.Attribute("ToolTip");

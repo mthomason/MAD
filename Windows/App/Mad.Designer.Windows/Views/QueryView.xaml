@@ -49,6 +49,7 @@
                           AutomationProperties.Name="{infra:Loc Query.SelectQuery.Name}" />
 
                 <StackPanel Orientation="Horizontal" Visibility="{Binding IsDesigner, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="{infra:Loc Query.Refine}" Style="{StaticResource MAD.GroupCaption}" />
                     <Button x:Name="FiltersButton" Style="{StaticResource MAD.CommandButton}" Click="ToggleFilters"
                             ToolTip="{infra:Loc Query.Filters.Tooltip}"
                             AutomationProperties.Name="{infra:Loc Query.Filters.Name}">
@@ -72,15 +73,6 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8FD;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{Binding OutputsLabel}" Style="{StaticResource MAD.CommandLabel}" />
-                        </StackPanel>
-                    </Button>
-                    <Border Style="{StaticResource MAD.Divider}" />
-                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding ArrangeTablesCommand}"
-                            ToolTip="{infra:Loc Query.ArrangeTables.Tooltip}"
-                            AutomationProperties.Name="{infra:Loc Query.ArrangeTables}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="&#xE80A;" Style="{StaticResource MAD.CommandIcon}" />
-                            <TextBlock Text="{infra:Loc Query.ArrangeTables}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
@@ -236,6 +228,15 @@
                             ToolTip="{infra:Loc Query.ZoomFit.Tooltip}"
                             AutomationProperties.Name="{infra:Loc Query.ZoomFit.Tooltip}">
                         <TextBlock Text="{infra:Loc Query.ZoomFit}" Style="{StaticResource MAD.CommandLabel}" Margin="0" />
+                    </Button>
+                    <Border Style="{StaticResource MAD.Divider}" />
+                    <Button Style="{StaticResource MAD.CommandButton}" Command="{Binding ArrangeTablesCommand}"
+                            ToolTip="{infra:Loc Query.ArrangeTables.Tooltip}"
+                            AutomationProperties.Name="{infra:Loc Query.ArrangeTables}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE80A;" Style="{StaticResource MAD.CommandIcon}" />
+                            <TextBlock Text="{infra:Loc Query.ArrangeTables}" Style="{StaticResource MAD.CommandLabel}" />
+                        </StackPanel>
                     </Button>
                 </StackPanel>
             </Grid>
