@@ -212,4 +212,125 @@ public sealed class CompositionAcceptanceTests
             if (File.Exists(composed)) File.Delete(composed);
         }
     }
+
+    [Fact]
+    public async Task ImportTwoReports_AuthorJoinAndOutputs()
+    {
+        string invoices = CopyFixture("invoices.sqlite");
+        string payments = CopyFixture("payments.sqlite");
+        string invoicesMad = Path.Combine(Path.GetTempPath(), $"mad-two-invoices-{Guid.NewGuid():N}.mad");
+        string paymentsMad = Path.Combine(Path.GetTempPath(), $"mad-two-payments-{Guid.NewGuid():N}.mad");
+        string composed = Path.Combine(Path.GetTempPath(), $"mad-two-composed-{Guid.NewGuid():N}.mad");
+        try
+        {
+            // 1. Two standard reports (invoices, payments), each a single table query.
+            await using (var engine = new EngineService())
+            {
+                OpenResult inv = await engine.CreateAsync(invoicesMad, Sqlite(invoices));
+                await engine.AddTableAsync(inv.Handle, "invoices", (await engine.DocumentInfoAsync(inv.Handle)).Queries[0].Id);
+                await engine.WriteAsync(inv.Handle, invoicesMad);
+
+                OpenResult pay = await engine.CreateAsync(paymentsMad, Sqlite(payments));
+                await engine.AddTableAsync(pay.Handle, "payments", (await engine.DocumentInfoAsync(pay.Handle)).Queries[0].Id);
+                await engine.WriteAsync(pay.Handle, paymentsMad);
+            }
+
+            // 2. Import both as children, join on invoice_id, and choose the outputs.
+            await using var engine2 = new EngineService();
+            OpenResult created = await engine2.CreateEmptyAsync(composed);
+            await engine2.AddRootAsync(created.Handle, "root");
+            var afterInv = await engine2.ImportChildAsync(created.Handle, invoicesMad, "invoices");
+            var afterPay = await engine2.ImportChildAsync(created.Handle, paymentsMad, "payments");
+            long invQuery = afterInv.Queries.Single(q => q.Name == "invoices").Id;
+            long payQuery = afterPay.Queries.Single(q => q.Name == "payments").Id;
+            long rootQuery = afterPay.RootQuery;
+
+            QueryModel root = await engine2.QueryModelAsync(created.Handle, rootQuery);
+            long invInvoiceId = FieldOn(root, invQuery, "invoice_id").Id;
+            long invAmount = FieldOn(root, invQuery, "amount").Id;
+            long payInvoiceId = FieldOn(root, payQuery, "invoice_id").Id;
+            long payAmount = FieldOn(root, payQuery, "amount").Id;
+            await engine2.AddLinkAsync(created.Handle, invInvoiceId, payInvoiceId, rootQuery);
+            await engine2.SetRootOutputsAsync(created.Handle, new[]
+            {
+                new RootOutput(invInvoiceId, "invoice_id"),
+                new RootOutput(invAmount, "invoice_amount"),
+                new RootOutput(payAmount, "payment_amount"),
+            });
+
+            var document = new DocumentViewModel(engine2);
+            await document.AdoptAsync(created, composed);
+            Assert.True(document.IsComposed);
+            Assert.True(await document.RefreshAsync(), document.ErrorText);
+            Assert.Equal(4, document.RowCount);
+            _output.WriteLine("PASS: imported two reports, joined on invoice_id, refreshed 4 rows");
+
+            // 3. Reorder the outputs and confirm the exported column order follows.
+            await engine2.SetRootOutputsAsync(created.Handle, new[]
+            {
+                new RootOutput(payAmount, "payment_amount"),
+                new RootOutput(invInvoiceId, "invoice_id"),
+                new RootOutput(invAmount, "invoice_amount"),
+            });
+            Assert.True(await document.RefreshAsync(), document.ErrorText);
+
+            string export = Path.Combine(Path.GetTempPath(), $"mad-two-{Guid.NewGuid():N}.json");
+            try
+            {
+                document.Viewer.SelectedFormatIndex = ViewerViewModel.ExportFormats
+                    .Select((f, i) => (f, i)).Single(x => x.f.Format == "json").i;
+                await document.Viewer.ExportAsync(export);
+                MadReport report = MadReport.Parse(File.ReadAllText(export));
+                Assert.Equal(new[] { "payment_amount", "invoice_id", "invoice_amount" },
+                    report.Columns.Select(c => c.Key).ToArray());
+                Assert.Equal(4, report.Rows.Count);
+                _output.WriteLine("PASS: reordered the outputs and the exported columns followed");
+            }
+            finally
+            {
+                if (File.Exists(export)) File.Delete(export);
+            }
+        }
+        finally
+        {
+            if (File.Exists(invoices)) File.Delete(invoices);
+            if (File.Exists(payments)) File.Delete(payments);
+            if (File.Exists(invoicesMad)) File.Delete(invoicesMad);
+            if (File.Exists(paymentsMad)) File.Delete(paymentsMad);
+            if (File.Exists(composed)) File.Delete(composed);
+        }
+    }
+
+    [Fact]
+    public async Task SqlEntry_ActsOnTheSelectedQueryAndRejectsTheRoot()
+    {
+        string invoices = CopyFixture("invoices.sqlite");
+        string composed = Path.Combine(Path.GetTempPath(), $"mad-sql-{Guid.NewGuid():N}.mad");
+        try
+        {
+            await using var engine = new EngineService();
+            OpenResult created = await engine.CreateEmptyAsync(composed);
+            await engine.AddRootAsync(created.Handle, "root");
+            var afterInv = await engine.AddSourceAsync(created.Handle, "invoices", Sqlite(invoices));
+            long invQuery = afterInv.Queries.Single(q => q.Name == "invoices").Id;
+            long rootQuery = afterInv.RootQuery;
+            await engine.AddTableAsync(created.Handle, "invoices", invQuery);
+
+            // A source query accepts SQL entry against its own schema.
+            var validated = await engine.ValidateSqlAsync(created.Handle, "SELECT invoice_id, amount FROM invoices", invQuery);
+            Assert.True(validated.Tables > 0, "the selected source query validated SQL");
+            _output.WriteLine("PASS: validated SQL against the selected source query");
+
+            // The composed root has no single editable statement.
+            var exception = await Assert.ThrowsAsync<Mad.Client.MadEngineException>(
+                () => engine.ValidateSqlAsync(created.Handle, "SELECT invoice_id, amount FROM invoices", rootQuery));
+            Assert.Contains("SQL editing is not supported", exception.Message);
+            _output.WriteLine("PASS: the composed root rejects SQL editing");
+        }
+        finally
+        {
+            if (File.Exists(invoices)) File.Delete(invoices);
+            if (File.Exists(composed)) File.Delete(composed);
+        }
+    }
 }

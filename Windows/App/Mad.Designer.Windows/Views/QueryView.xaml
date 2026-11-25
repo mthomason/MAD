@@ -33,6 +33,7 @@
                         <ToggleButton Style="{StaticResource MAD.SegmentToggle}" Margin="2,0,0,0"
                                       Content="{infra:Loc Query.Mode.Sql}"
                                       IsChecked="{Binding SqlSelected, Mode=TwoWay}"
+                                      IsEnabled="{Binding CanEditSql}"
                                       AutomationProperties.Name="{infra:Loc Query.Mode.Sql}" />
                     </StackPanel>
                 </Border>
@@ -55,6 +56,13 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#xE8EF;" Style="{StaticResource MAD.CommandIcon}" />
                             <TextBlock Text="{Binding GroupsLabel}" Style="{StaticResource MAD.CommandLabel}" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="OutputsButton" Style="{StaticResource MAD.CommandButton}" Margin="2,0,0,0" Click="ToggleOutputs"
+                            Visibility="{Binding IsRoot, Converter={StaticResource BoolToVis}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8FD;" Style="{StaticResource MAD.CommandIcon}" />
+                            <TextBlock Text="{Binding OutputsLabel}" Style="{StaticResource MAD.CommandLabel}" />
                         </StackPanel>
                     </Button>
                     <Border Style="{StaticResource MAD.Divider}" />
@@ -98,7 +106,8 @@
             </Grid.ColumnDefinitions>
 
             <DockPanel Grid.Column="0" Margin="10,8,10,8">
-                <Grid DockPanel.Dock="Top" Margin="0,0,0,8">
+                <Grid DockPanel.Dock="Top" Margin="0,0,0,8"
+                      Visibility="{Binding IsNotRoot, Converter={StaticResource BoolToVis}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
@@ -120,7 +129,8 @@
                 <ListBox x:Name="SchemaList" ItemsSource="{Binding SchemaTables}"
                          MouseDoubleClick="SchemaList_OnDoubleClick"
                          Background="{DynamicResource ControlFillColorDefaultBrush}"
-                         BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}">
+                         BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                         Visibility="{Binding IsNotRoot, Converter={StaticResource BoolToVis}}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>
@@ -131,6 +141,21 @@
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Query.Sources}"
+                           Style="{StaticResource MAD.SectionHeader}" Margin="0,0,0,8"
+                           Visibility="{Binding IsRoot, Converter={StaticResource BoolToVis}}" />
+                <ListBox x:Name="SourcesList" ItemsSource="{Binding UpstreamSources}"
+                         MouseDoubleClick="SourcesList_OnDoubleClick"
+                         Background="{DynamicResource ControlFillColorDefaultBrush}"
+                         BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                         Visibility="{Binding IsRoot, Converter={StaticResource BoolToVis}}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -261,6 +286,50 @@
                         <ComboBox Width="120" Margin="6,0,0,0" ItemsSource="{Binding GroupSortLabels}"
                                   SelectedIndex="{Binding SelectedGroupSortIndex, Mode=TwoWay}" />
                         <Button Content="{infra:Loc Query.AddGroup}" Margin="6,0,0,0" Command="{Binding AddGroupCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
+
+        <!-- Root Outputs (choose/name/order) editor popover -->
+        <Popup x:Name="OutputsPopup" Placement="Bottom" StaysOpen="False"
+               PlacementTarget="{Binding ElementName=OutputsButton, Mode=OneWay}" AllowsTransparency="True">
+            <Border Style="{StaticResource MAD.PopupSurface}" MinWidth="480">
+                <StackPanel>
+                    <TextBlock Text="{infra:Loc Query.RootOutputs}" Style="{StaticResource MAD.SectionHeader}" />
+                    <ItemsControl ItemsSource="{Binding Outputs}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding OutputKey}" VerticalAlignment="Center" />
+                                    <Button Grid.Column="1" Content="↑" Margin="4,0,0,0" Padding="4,0"
+                                            Style="{StaticResource MAD.IconButton}" Width="26" Height="24"
+                                            Command="{Binding DataContext.MoveOutputUpCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding Id}" />
+                                    <Button Grid.Column="2" Content="↓" Margin="2,0,0,0" Padding="4,0"
+                                            Style="{StaticResource MAD.IconButton}" Width="26" Height="24"
+                                            Command="{Binding DataContext.MoveOutputDownCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding Id}" />
+                                    <Button Grid.Column="3" Content="−" Margin="2,0,0,0" Padding="4,0"
+                                            Style="{StaticResource MAD.IconButton}" Width="26" Height="24"
+                                            Command="{Binding DataContext.RemoveOutputCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding Id}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Separator Margin="0,8" />
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <ComboBox Width="180" ItemsSource="{Binding NonOutputFields}" DisplayMemberPath="Name"
+                                  SelectedItem="{Binding NewOutputField}" />
+                        <TextBox Width="150" Margin="6,0,0,0" Text="{Binding NewOutputKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Content="{infra:Loc Query.Add}" Margin="6,0,0,0" Command="{Binding AddOutputCommand}" />
                     </StackPanel>
                 </StackPanel>
             </Border>

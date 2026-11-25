@@ -67,6 +67,10 @@
   <sys:String x:Key="Query.Mode.Sql">SQL</sys:String>
   <sys:String x:Key="Query.ArrangeTables">Arrange Tables</sys:String>
   <sys:String x:Key="Query.SelectQuery">Query</sys:String>
+  <sys:String x:Key="Query.Sources">Sources</sys:String>
+  <sys:String x:Key="Query.RootOutputs">Root Outputs (in order)</sys:String>
+  <sys:String x:Key="Query.Outputs.Count">Outputs: {0}</sys:String>
+  <sys:String x:Key="Query.Outputs.None">Outputs</sys:String>
   <sys:String x:Key="Query.RevertSql">Revert to Generated SQL</sys:String>
   <sys:String x:Key="Query.ValidateSql">Validate SQL</sys:String>
   <sys:String x:Key="Query.ApplySql">Compile &amp; Apply SQL</sys:String>

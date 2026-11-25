@@ -65,6 +65,10 @@
   <sys:String x:Key="Format.Text">プレーンテキスト (.txt)</sys:String>
   <sys:String x:Key="Query.Mode.Designer">デザイナー</sys:String>
   <sys:String x:Key="Query.Mode.Sql">SQL</sys:String>
+  <sys:String x:Key="Query.Sources">Sources</sys:String>
+  <sys:String x:Key="Query.RootOutputs">Root Outputs (in order)</sys:String>
+  <sys:String x:Key="Query.Outputs.Count">Outputs: {0}</sys:String>
+  <sys:String x:Key="Query.Outputs.None">Outputs</sys:String>
   <sys:String x:Key="Query.SelectQuery">Query</sys:String>
   <sys:String x:Key="Query.ArrangeTables">テーブルを整列</sys:String>
   <sys:String x:Key="Query.RevertSql">生成された SQL に戻す</sys:String>
