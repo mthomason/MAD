@@ -67,18 +67,29 @@
 #import "sqlite3.h"
 
 // __FILE__ is absolute here (CMake hands the compiler an absolute path), so
-// Tests -> Linux -> the repository root.
+// The test file's directory, walked up until the repository root (the directory
+// holding Versions.yml) is found.  The Linux test lives at Linux/Tests and the
+// Windows mirror at Windows/Engine/Tests, so a fixed number of levels cannot
+// describe both.
+static NSString *MADExporterRepositoryRoot(void) {
+	NSString *directory = [@(__FILE__) stringByDeletingLastPathComponent];
+	while (directory.length > 0) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:
+				[directory stringByAppendingPathComponent: @"Versions.yml"]]) {
+			return directory;
+		}
+		directory = [directory stringByDeletingLastPathComponent];
+	}
+	return directory;
+}
+
 static NSString *MADExporterFixturePath(void) {
-	NSString *testFile = [@(__FILE__) stringByDeletingLastPathComponent];
-	NSString *repositoryRoot = [[testFile stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
-	return [[repositoryRoot stringByAppendingPathComponent: @"CLI/Fixtures"]
+	return [[MADExporterRepositoryRoot() stringByAppendingPathComponent: @"CLI/Fixtures"]
 			stringByAppendingPathComponent: @"London.portable.mad"];
 }
 
 static NSString *MADExporterSampleDatabasePath(void) {
-	NSString *testFile = [@(__FILE__) stringByDeletingLastPathComponent];
-	NSString *repositoryRoot = [[testFile stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
-	return [[repositoryRoot stringByAppendingPathComponent:
+	return [[MADExporterRepositoryRoot() stringByAppendingPathComponent:
 			 @"MADDesigner/Resources/Assets/Samples.xcassets/Data/chinook.dataset"]
 			stringByAppendingPathComponent: @"chinook.sqlite3"];
 }
@@ -870,9 +881,11 @@ static void testCompositionAttachUnicodeReservedPathAndAlias(void) {
 	// A unique root so the run never collides with a previous run's files; the tail
 	// still carries Unicode and URI-reserved characters in the path.
 	NSString *root = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
-	NSString *directory = [root stringByAppendingPathComponent: @"Café ?#% ü"];
+	// '?' is a DOS wildcard and cannot name a Windows file or directory; '#' and '%'
+	// are legal on every platform and still exercise the URI-reserved encoding.
+	NSString *directory = [root stringByAppendingPathComponent: @"Café #% ü"];
 	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
-	NSURL *db = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"data ?#%.sqlite"]];
+	NSURL *db = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"data #%.sqlite"]];
 	MAD_PASS(MADCompositionCreateSource(db, @[
 		@"CREATE TABLE t (id INTEGER, v TEXT);",
 		@"INSERT INTO t VALUES (1, 'one');"]), "the unicode-path source is written");
