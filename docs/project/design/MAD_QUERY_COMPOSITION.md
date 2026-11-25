@@ -463,3 +463,53 @@ AppKit app and the fixture maker, not the headless or Windows surfaces). Source-
 source, and the SQL editor is disabled for the root. A graphical capability matrix, the
 Windows/iOS authoring surfaces, and the remaining open review items (P4, P7, P8) are out
 of scope for this milestone. PR creation and merge await the user's direction.
+
+## Checkpoint H — create / import / convert landed (2026-11-25)
+
+The three authoring workflows are now engine primitives, with the AppKit surface on top.
+Everything is in the `MAD` framework (headless-safe, so Windows and iOS reuse it); the
+macOS smoke suite drives the new flows end to end.
+
+- **Import (graph copy + identifier remap).** `RptqStoreContext -importQueryGraphFromContext:relativePathBaseURL:error:`
+  copies another document's query graph — queries, databases, their schema, and every query
+  table/field/link/group/predicate/sort — into the destination, minting fresh identifiers so
+  two independently authored documents coexist even with identical ids. Layout bands,
+  elements, and the source document row are not copied; a relative SQLite source path is
+  resolved to an absolute path against the source document's own location; and each imported
+  database is wired into the destination document's `hasDatabaseSchemas`. Returns the imported
+  root (the source's explicit root, else its single query).
+- **Naming.** `RptqQuery +composeOutputKeysForFields:existingKeys:` derives one output key per
+  field, preserving established keys, naming a field by its bare schema-field name when unique,
+  and qualifying a collision with the source alias (`payments.amount`). `existingKeys` reserve
+  names taken by already-added children; a collision that survives qualification gets a numeric
+  suffix.
+- **Convert.** `RptqDocument -convertToCompositionWithChildName:error:` keeps the report's query
+  and connection as the child, adds a root that projects the child's fields with derived output
+  keys, moves the child's groups and sort to the root (rebound to the root's outputs, bands kept),
+  and rebinds the layout's data-field, aggregate, and barcode references to the root's outputs.
+  A failure leaves the report unchanged.
+- **Add child.** `RptqDocument -addChildQuery:error:` adds a child as a new input of the composed
+  root (upstream table + one root field per child field), derives output keys preserving existing
+  outputs, and appends to the output order.
+- **Empty document.** `MADHeadlessDocument +createEmptyDocumentAtURL:error:` makes a
+  connection-less document the composition flows import children into; `-database` now answers
+  nil for a document with no database instead of asserting.
+- **AppKit surface.** The document type label ("Standard Report" / "Composition Report") is
+  persistent in the window toolbar and VoiceOver-exposed. `File → New…` offers Standard vs
+  Composition; `File → New Composition…` picks existing `.mad` reports, imports each as a child,
+  adds the root, and opens the result; `File → Convert to Composition…` converts the current
+  standard report and is enabled only when it applies. `MADMacDocument` gains
+  `importChildFromURL:name:error:`, `convertToCompositionWithChildName:error:`, and
+  `addChildQuery:error:`.
+
+**Tests.** Apple `MAD` store suite is 26/0 (import remap + relative-path resolution + composed
+import, naming, convert, add-child). `RptqStoreContextTests` is mirrored to Linux/Windows. The
+macOS smoke suite adds the convert (outputs, refresh, save, reopen) and create-by-import
+(structure, outputs, save, reopen without the source files) flows, on top of the existing
+authored-composed case.
+
+**Pending.** The full `./Linux/build.sh` image build, the Windows engine/package/WPF run, and the
+PR CI have not been run. The AppKit query canvas still caps the composed root at one left-outer
+join (two inputs) at `MADMacQueryViewController.m` — the N-way join UI is the next design task,
+and there is no "add an existing report as a child" control in the query workspace yet. PR
+creation and merge await the user's direction.
