@@ -25,7 +25,9 @@ public partial class MainWindow : Window
             openAbout: OpenAboutWindow,
             exportPath: ShowExportSaveDialog,
             newDocument: () => OpenConnectionWindow(false),
+            newComposition: NewComposition,
             editConnection: () => OpenConnectionWindow(true),
+            importChild: ImportChild,
             recentFiles: _recentFiles.Get(),
             saveAsPath: ShowSaveDocumentDialog,
             credentials: _credentials,
@@ -81,6 +83,41 @@ public partial class MainWindow : Window
     private async Task OpenPathAsync(string path)
     {
         await _viewModel.OpenPathAsync(path);
+    }
+
+    /// <summary>File ▸ New Composition…: creates an empty composition (a root, no children),
+    /// then opens it in the Query workspace so the author can add sources and join them.</summary>
+    private async void NewComposition()
+    {
+        var dialog = new Microsoft.Win32.SaveFileDialog
+        {
+            Filter = Localizer.Get("Dialog.SaveMadFilter"),
+            FileName = Localizer.Get("Dialog.DefaultReportFile"),
+        };
+        if (dialog.ShowDialog() != true) return;
+
+        try
+        {
+            OpenResult created = await _engine.CreateEmptyAsync(dialog.FileName);
+            await _engine.AddRootAsync(created.Handle, "root");
+            await _viewModel.AdoptCreatedAsync(created, dialog.FileName);
+        }
+        catch (Exception exception)
+        {
+            _viewModel.Document.ReportFailure(exception.Message);
+        }
+    }
+
+    /// <summary>File ▸ Import…: imports an existing .mad as a child of the composed root.</summary>
+    private async void ImportChild()
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Filter = Localizer.Get("Dialog.OpenMadFilter"),
+        };
+        if (dialog.ShowDialog() != true) return;
+
+        await _viewModel.Document.ImportChildAsync(dialog.FileName);
     }
 
     /// <summary>Opens the connection assistant in create mode (New Document) or edit mode
