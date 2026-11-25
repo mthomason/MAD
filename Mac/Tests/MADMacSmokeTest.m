@@ -1950,6 +1950,11 @@ int main(int argc, const char * argv[]) {
 		MADMacWindowController *authorWC = authorDoc.windowControllers.firstObject;
 		[authorWC switchToWorkspaceTab:MADMacWorkspaceTabQuery];
 		[authorWC.window layoutIfNeeded];
+		if (authorWC.documentTypeLabel == nil ||
+			![authorWC.documentTypeLabel.stringValue isEqualToString:@"Standard Report"]) {
+			fprintf(stderr, "FAIL: Standard document type label is not 'Standard Report'\n");
+			return 207;
+		}
 		MADMacQueryViewController *authorQVC = authorWC.queryViewController;
 
 		// Add the invoices schema table to the invoices source query (the ordinary
@@ -1985,6 +1990,11 @@ int main(int argc, const char * argv[]) {
 		if (rootQuery == nil) {
 			fprintf(stderr, "FAIL: Could not add root query: %s\n", err.localizedDescription.UTF8String);
 			return 205;
+		}
+		if (authorWC.documentTypeLabel == nil ||
+			![authorWC.documentTypeLabel.stringValue isEqualToString:@"Composition Report"]) {
+			fprintf(stderr, "FAIL: Document type label did not update to 'Composition Report' after adding the root\n");
+			return 208;
 		}
 		authorDoc.selectedQuery = rootQuery;
 		[authorQVC reloadFromDocument];

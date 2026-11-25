@@ -13,6 +13,7 @@
 #import "MADMacConnectionWindowController.h"
 
 static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspace";
+static NSToolbarItemIdentifier const kToolbarItemDocumentType = @"MADToolbarDocumentType";
 
 @interface MADMacWindowController ()
 
@@ -24,6 +25,7 @@ static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspa
 
 @property (nonatomic, strong) NSSegmentedControl *workspaceSegmentedControl;
 @property (nonatomic, strong) NSTabView *workspaceTabView;
+@property (nonatomic, strong, readwrite) NSTextField *documentTypeLabel;
 
 @end
 
@@ -50,8 +52,17 @@ static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspa
 
 		[self setupToolbar];
 		[self setupWorkspaceTabs];
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(documentDidMutate:)
+													 name:MADMacDocumentDidMutateNotification
+												   object:document];
+		[self refreshDocumentTypeLabel];
 	}
 	return self;
+}
+
+- (void)documentDidMutate:(NSNotification *) __unused notification {
+	[self refreshDocumentTypeLabel];
 }
 
 - (void)setupToolbar {
@@ -68,6 +79,17 @@ static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspa
 #pragma clang diagnostic pop
 	}
 	self.window.toolbar = toolbar;
+	_documentTypeLabel = [self makeDocumentTypeLabel];
+}
+
+- (NSTextField *)makeDocumentTypeLabel {
+	NSTextField *label = [NSTextField labelWithString:[self documentTypeString]];
+	label.font = [NSFont systemFontOfSize:NSFont.smallSystemFontSize weight:NSFontWeightMedium];
+	label.textColor = [NSColor secondaryLabelColor];
+	label.lineBreakMode = NSLineBreakByTruncatingTail;
+	label.accessibilityLabel = [self documentTypeString];
+	label.toolTip = NSLocalizedString(@"The type of the open document: an ordinary report or one that combines child reports.", @"Tooltip for the document type label.");
+	return label;
 }
 
 - (void)setupWorkspaceTabs {
@@ -105,6 +127,21 @@ static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspa
 
 - (void)workspaceSegmentAction:(NSSegmentedControl *)sender {
 	[self switchToWorkspaceTab:(MADMacWorkspaceTab)sender.selectedSegment];
+}
+
+- (NSString *)documentTypeString {
+	return self.madDocument.isComposed
+		? NSLocalizedString(@"Composition Report", @"Document type label: a report that combines one or more child reports.")
+		: NSLocalizedString(@"Standard Report", @"Document type label: an ordinary single-source report.");
+}
+
+- (void)refreshDocumentTypeLabel {
+	if (_documentTypeLabel == nil) {
+		return;
+	}
+	NSString *type = [self documentTypeString];
+	_documentTypeLabel.stringValue = type;
+	_documentTypeLabel.accessibilityLabel = type;
 }
 
 - (void)refreshReportAction:(nullable id)sender {
@@ -158,6 +195,7 @@ static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspa
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarAllowedItemIdentifiers:(NSToolbar *) __unused toolbar {
 	return @[
+		kToolbarItemDocumentType,
 		NSToolbarFlexibleSpaceItemIdentifier,
 		kToolbarItemWorkspace,
 	];
@@ -165,6 +203,7 @@ static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspa
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarDefaultItemIdentifiers:(NSToolbar *) __unused toolbar {
 	return @[
+		kToolbarItemDocumentType,
 		NSToolbarFlexibleSpaceItemIdentifier,
 		kToolbarItemWorkspace,
 		NSToolbarFlexibleSpaceItemIdentifier,
@@ -174,6 +213,14 @@ static NSToolbarItemIdentifier const kToolbarItemWorkspace = @"MADToolbarWorkspa
 - (nullable NSToolbarItem *)toolbar:(NSToolbar *) __unused toolbar
 			  itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier
 		  willBeInsertedIntoToolbar:(BOOL) __unused flag {
+	if ([itemIdentifier isEqualToString:kToolbarItemDocumentType]) {
+		NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+		item.label = NSLocalizedString(@"Document Type", @"Toolbar item label for the document type.");
+		item.paletteLabel = item.label;
+		item.view = _documentTypeLabel;
+		return item;
+	}
+
 	if (![itemIdentifier isEqualToString:kToolbarItemWorkspace]) {
 		return nil;
 	}

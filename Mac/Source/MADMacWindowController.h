@@ -28,6 +28,13 @@ typedef NS_ENUM(NSInteger, MADMacWorkspaceTab) {
 @property (nonatomic, strong, readonly) MADMacViewerViewController *viewerViewController;
 @property (nonatomic, strong, readonly, nullable) MADMacConnectionWindowController *activeConnectionSheetController;
 
+/// The compact, persistent document-type label ("Standard Report" / "Composition
+/// Report") shown in the window toolbar across all three workspaces.
+@property (nonatomic, strong, readonly) NSTextField *documentTypeLabel;
+
+/// Refreshes the document-type label from the document model (`isComposed`).
+- (void)refreshDocumentTypeLabel;
+
 - (instancetype)initWithDocument:(MADMacDocument *)document;
 - (void)switchToWorkspaceTab:(MADMacWorkspaceTab)tab;
 - (void)refreshReportAction:(nullable id)sender;
