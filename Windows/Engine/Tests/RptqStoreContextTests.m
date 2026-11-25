@@ -1298,8 +1298,8 @@ static void testImportComposedGraphBringsRootAndLeaves(void) {
 		MAD_PASS(upstream != nil, "each upstream table names its source");
 		[upstreamNames addObject:[upstream valueForKey:@"name"]];
 	}
-	MAD_PASS([upstreamNames isEqualToSet:[NSSet setWithArray:@[ @"invoices", @"payments" ]]],
-			 "the imported root references both leaves");
+	NSSet *expectedUpstreams = [NSSet setWithArray:@[ @"invoices", @"payments" ]];
+	MAD_PASS([upstreamNames isEqualToSet:expectedUpstreams], "the imported root references both leaves");
 
 	MAD_PASS([destinationDocument valueForKey:@"rootQuery"] == nil,
 			 "the source document's root relationship is not copied");
