@@ -651,6 +651,16 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 			success = YES;
 		}
 	}
+
+	// sqlite3_prepare_v2 answers SQLITE_OK with a NULL statement for empty or
+	// comment-only SQL -- a freshly created document whose query has no tables yet.
+	// There is nothing to step; the result is an empty, valid table, not a
+	// SQLITE_MISUSE that would otherwise surface as "not an error".
+	if (statement == NULL && success) {
+		sqlite3_free(csql);
+		return YES;
+	}
+
 	if (binaryBindings.count > 0) {
 		for (MADDatabaseDataBinding *databinding in binaryBindings) {
 			[self bindStatement:(void **)&statement withBindings:databinding];
