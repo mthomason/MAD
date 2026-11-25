@@ -31,7 +31,7 @@ public sealed class QueryCanvasTests
             var describe = await service.DescribeAsync(open.Handle);
 
             var vm = new QueryViewModel(service);
-            await vm.LoadAsync(open.Handle, describe.Driver, describe.Tables);
+            await vm.LoadAsync(open.Handle, describe.Driver, describe.Tables, 0);
             await vm.AddTableAsync("Customer");
             await vm.AddTableAsync("Invoice");
             var customer = vm.Tables.Single(t => t.Name == "Customer");

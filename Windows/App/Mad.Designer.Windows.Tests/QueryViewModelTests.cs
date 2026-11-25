@@ -25,7 +25,7 @@ public sealed class QueryViewModelTests
             var describe = await service.DescribeAsync(open.Handle);
 
             var vm = new QueryViewModel(service);
-            await vm.LoadAsync(open.Handle, describe.Driver, describe.Tables);
+            await vm.LoadAsync(open.Handle, describe.Driver, describe.Tables, 0);
 
             // Starts in the visual designer mode.
             Assert.Equal(QueryMode.Designer, vm.Mode);

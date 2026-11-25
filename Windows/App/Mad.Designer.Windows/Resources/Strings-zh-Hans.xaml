@@ -226,6 +226,15 @@
   <sys:String x:Key="Document.ReconnectFailed">重新连接失败。</sys:String>
   <sys:String x:Key="Document.Exported">已将 {0} 导出到 {1}</sys:String>
   <sys:String x:Key="Document.ExportFailed">导出失败。</sys:String>
+  <sys:String x:Key="Document.TypeStandard">Standard Report</sys:String>
+  <sys:String x:Key="Document.TypeComposition">Composition Report</sys:String>
+  <sys:String x:Key="Document.Converted">Converted to a Composition Report.</sys:String>
+  <sys:String x:Key="Document.ConvertFailed">Conversion failed.</sys:String>
+  <sys:String x:Key="Document.Imported">Imported the report.</sys:String>
+  <sys:String x:Key="Document.ImportFailed">Import failed.</sys:String>
+  <sys:String x:Key="Document.SourceAdded">Added the source query.</sys:String>
+  <sys:String x:Key="Document.SourceAddFailed">Could not add the source.</sys:String>
+
   <sys:String x:Key="Dialog.OpenMadFilter">MAD 文档 (*.mad)|*.mad|所有文件 (*.*)|*.*</sys:String>
   <sys:String x:Key="Dialog.SaveMadFilter">MAD 文档 (*.mad)|*.mad</sys:String>
   <sys:String x:Key="Dialog.ReportFilter">报表 (*.{0})|*.{0}|所有文件 (*.*)|*.*</sys:String>

@@ -226,6 +226,15 @@
   <sys:String x:Key="Document.ReconnectFailed">Error al reconectar.</sys:String>
   <sys:String x:Key="Document.Exported">Se exportó {0} a {1}</sys:String>
   <sys:String x:Key="Document.ExportFailed">Error al exportar.</sys:String>
+  <sys:String x:Key="Document.TypeStandard">Standard Report</sys:String>
+  <sys:String x:Key="Document.TypeComposition">Composition Report</sys:String>
+  <sys:String x:Key="Document.Converted">Converted to a Composition Report.</sys:String>
+  <sys:String x:Key="Document.ConvertFailed">Conversion failed.</sys:String>
+  <sys:String x:Key="Document.Imported">Imported the report.</sys:String>
+  <sys:String x:Key="Document.ImportFailed">Import failed.</sys:String>
+  <sys:String x:Key="Document.SourceAdded">Added the source query.</sys:String>
+  <sys:String x:Key="Document.SourceAddFailed">Could not add the source.</sys:String>
+
   <sys:String x:Key="Dialog.OpenMadFilter">Documentos MAD (*.mad)|*.mad|Todos los archivos (*.*)|*.*</sys:String>
   <sys:String x:Key="Dialog.SaveMadFilter">Documentos MAD (*.mad)|*.mad</sys:String>
   <sys:String x:Key="Dialog.ReportFilter">Informe (*.{0})|*.{0}|Todos los archivos (*.*)|*.*</sys:String>

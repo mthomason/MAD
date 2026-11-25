@@ -23,6 +23,9 @@ public sealed class DocumentViewModel : ObservableObject
     private int _handle = -1;
     private string? _filePath;
     private ConnectionSpec? _connection;
+    private bool _isComposed;
+    private IReadOnlyList<QueryInfo> _queries = Array.Empty<QueryInfo>();
+    private long _selectedQueryId;
 
     private bool _isBusy;
     private string _statusText = "";
@@ -121,6 +124,35 @@ public sealed class DocumentViewModel : ObservableObject
 
     public bool HasDocument => _handle >= 0;
 
+    /// <summary>True when the document is a Composition Report (it has an explicit root),
+    /// false for a Standard Report.</summary>
+    public bool IsComposed { get => _isComposed; private set => Set(ref _isComposed, value); }
+
+    /// <summary>Every query in the document, the composed root first, then each source.</summary>
+    public IReadOnlyList<QueryInfo> Queries { get => _queries; private set => Set(ref _queries, value); }
+
+    /// <summary>The query the Query workspace edits. Distinct from <see cref="IsComposed"/>,
+    /// so a user editing a child query still sees the document's type clearly.</summary>
+    public long SelectedQueryId
+    {
+        get => _selectedQueryId;
+        set
+        {
+            if (Set(ref _selectedQueryId, value))
+            {
+                Query.QueryId = value;
+                OnPropertyChanged(nameof(SelectedQueryName));
+            }
+        }
+    }
+
+    public string? SelectedQueryName
+        => _queries.FirstOrDefault(q => q.Id == _selectedQueryId)?.Name;
+
+    /// <summary>The localized document type, shown across the workspaces.</summary>
+    public string DocumentTypeText
+        => IsComposed ? Localizer.Get("Document.TypeComposition") : Localizer.Get("Document.TypeStandard");
+
     public AsyncRelayCommand RefreshCommand { get; }
     public AsyncRelayCommand ExportCsvCommand { get; }
     public AsyncRelayCommand ExportJsonCommand { get; }
@@ -181,7 +213,13 @@ public sealed class DocumentViewModel : ObservableObject
 
         Sql = await _engine.QueryAsync(_handle);
         _connection = await _engine.ConnectionAsync(_handle);
-        await Query.LoadAsync(_handle, describe.Driver, describe.Tables);
+        var info = await _engine.DocumentInfoAsync(_handle);
+        IsComposed = info.Composed;
+        Queries = info.Queries;
+        OnPropertyChanged(nameof(DocumentTypeText));
+        long selected = info.Composed ? info.RootQuery : (info.Queries.FirstOrDefault()?.Id ?? 0);
+        await Query.LoadAsync(_handle, describe.Driver, describe.Tables, selected);
+        SelectedQueryId = selected;
         await Designer.LoadAsync(_handle);
         await Viewer.LoadAsync(_handle, RefreshAsync, ApplyPaperSizeAsync);
 
@@ -233,6 +271,89 @@ public sealed class DocumentViewModel : ObservableObject
     {
         await _engine.SetPaperSizeAsync(_handle, paperSize);
         await Designer.ReloadAsync();
+    }
+
+    /// <summary>Re-reads the document's type and query list after a composition mutation.</summary>
+    private async Task<DocumentInfo> ReloadDocumentInfoAsync()
+    {
+        var info = await _engine.DocumentInfoAsync(_handle);
+        IsComposed = info.Composed;
+        Queries = info.Queries;
+        OnPropertyChanged(nameof(DocumentTypeText));
+        return info;
+    }
+
+    public async Task SelectQueryAsync(long queryId)
+    {
+        if (!HasDocument) return;
+        SelectedQueryId = queryId;
+    }
+
+    /// <summary>Converts this standard report into a one-child composition.</summary>
+    public async Task ConvertToCompositionAsync(string? childName = null)
+    {
+        if (!HasDocument) return;
+        IsBusy = true;
+        ErrorText = null;
+        try
+        {
+            var info = await _engine.ConvertAsync(_handle, childName);
+            await ReloadDocumentInfoAsync();
+            await Query.ReloadAsync();
+            await Designer.ReloadAsync();
+            StatusText = Localizer.Get("Document.Converted");
+            _ = info;
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+            StatusText = Localizer.Get("Document.ConvertFailed");
+        }
+        finally { IsBusy = false; }
+    }
+
+    /// <summary>Imports the query graph of another .mad as a child of the composed root.</summary>
+    public async Task ImportChildAsync(string path, string? name = null)
+    {
+        if (!HasDocument) return;
+        IsBusy = true;
+        ErrorText = null;
+        try
+        {
+            var info = await _engine.ImportChildAsync(_handle, path, name);
+            await ReloadDocumentInfoAsync();
+            SelectedQueryId = info.RootQuery;
+            await Designer.ReloadAsync();
+            StatusText = Localizer.Get("Document.Imported");
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+            StatusText = Localizer.Get("Document.ImportFailed");
+        }
+        finally { IsBusy = false; }
+    }
+
+    /// <summary>Adds a source query from a live connection (the connection sheet's
+    /// source-picker mode).</summary>
+    public async Task AddSourceAsync(string name, ConnectionSpec spec)
+    {
+        if (!HasDocument) return;
+        IsBusy = true;
+        ErrorText = null;
+        try
+        {
+            await _engine.AddSourceAsync(_handle, name, spec);
+            await ReloadDocumentInfoAsync();
+            await Designer.ReloadAsync();
+            StatusText = Localizer.Get("Document.SourceAdded");
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+            StatusText = Localizer.Get("Document.SourceAddFailed");
+        }
+        finally { IsBusy = false; }
     }
 
     public async Task SaveAsync()
@@ -317,7 +438,7 @@ public sealed class DocumentViewModel : ObservableObject
             Driver = describe.Driver;
             Columns = describe.Columns;
             Tables = describe.Tables;
-            await Query.LoadAsync(_handle, describe.Driver, describe.Tables);
+            await Query.LoadAsync(_handle, describe.Driver, describe.Tables, SelectedQueryId);
             await Designer.LoadAsync(_handle);
 
             await RefreshAsync();

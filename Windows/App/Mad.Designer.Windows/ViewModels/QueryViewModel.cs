@@ -30,8 +30,9 @@ public sealed class QueryViewModel : ObservableObject
 {
     private readonly EngineService _engine;
     private int _handle = -1;
+    private long _queryId;
     private IReadOnlyList<SchemaTable> _schemaTables = Array.Empty<SchemaTable>();
-    private QueryModel _model = new("", "", "", Array.Empty<QueryTable>(), Array.Empty<QueryLink>(), Array.Empty<QueryPredicate>(), Array.Empty<QueryGroup>());
+    private QueryModel _model = new("", "", "", Array.Empty<QueryTable>(), Array.Empty<QueryLink>(), Array.Empty<QueryPredicate>(), Array.Empty<QueryGroup>(), 0, false);
     private IReadOnlyList<QueryTable> _orderedTables = Array.Empty<QueryTable>();
     private IReadOnlySet<long> _rootTableIds = new HashSet<long>();
 
@@ -74,6 +75,25 @@ public sealed class QueryViewModel : ObservableObject
     }
 
     public bool HasDocument => _handle >= 0;
+
+    /// <summary>The query this workspace edits (its store identifier). Selecting a
+    /// different query reloads the model so every mutation applies to that query.</summary>
+    public long QueryId
+    {
+        get => _queryId;
+        set
+        {
+            if (Set(ref _queryId, value))
+            {
+                OnPropertyChanged(nameof(IsRoot));
+                _ = ReloadAsync();
+            }
+        }
+    }
+
+    /// <summary>True when the selected query is the composed root (no schema tables to
+    /// add; its inputs are the other queries).</summary>
+    public bool IsRoot => _model.IsRoot;
 
     public QueryMode Mode
     {
@@ -218,10 +238,11 @@ public sealed class QueryViewModel : ObservableObject
     }
 
     /// <summary>Populates the workspace after a document opens (or its connection changes).</summary>
-    public async Task LoadAsync(int handle, string driver, IReadOnlyList<SchemaTable> schemaTables)
+    public async Task LoadAsync(int handle, string driver, IReadOnlyList<SchemaTable> schemaTables, long queryId)
     {
         _handle = handle;
         _schemaTables = schemaTables;
+        _queryId = queryId;
         OnPropertyChanged(nameof(SchemaTables));
         OnPropertyChanged(nameof(HasDocument));
         _ = driver; // the model's driver token is authoritative; kept for symmetry
@@ -235,7 +256,7 @@ public sealed class QueryViewModel : ObservableObject
         if (!HasDocument) return;
         try
         {
-            ApplyModel(await _engine.QueryModelAsync(_handle));
+            ApplyModel(await _engine.QueryModelAsync(_handle, _queryId));
             if (Mode == QueryMode.Designer)
             {
                 SqlEditorText = string.IsNullOrEmpty(_model.SqlSourceText) ? _model.Sql : _model.SqlSourceText;
@@ -266,43 +287,43 @@ public sealed class QueryViewModel : ObservableObject
     }
 
     public async Task AddTableAsync(string tableName)
-        => await MutateAsync(() => _engine.AddTableAsync(_handle, tableName));
+        => await MutateAsync(() => _engine.AddTableAsync(_handle, tableName, _queryId));
 
     public async Task RemoveTableAsync(long tableId)
-        => await MutateAsync(() => _engine.RemoveTableAsync(_handle, tableId));
+        => await MutateAsync(() => _engine.RemoveTableAsync(_handle, tableId, _queryId));
 
     public async Task ConnectFieldsAsync(long leftField, long rightField)
-        => await MutateAsync(() => _engine.AddLinkAsync(_handle, leftField, rightField));
+        => await MutateAsync(() => _engine.AddLinkAsync(_handle, leftField, rightField, _queryId));
 
     public async Task SetLinkTypeAsync(long linkId, LinkType type)
-        => await MutateAsync(() => _engine.SetLinkTypeAsync(_handle, linkId, (int)type));
+        => await MutateAsync(() => _engine.SetLinkTypeAsync(_handle, linkId, (int)type, _queryId));
 
     public async Task SwapLinkAsync(long linkId)
-        => await MutateAsync(() => _engine.SwapLinkAsync(_handle, linkId));
+        => await MutateAsync(() => _engine.SwapLinkAsync(_handle, linkId, _queryId));
 
     public async Task DeleteLinkAsync(long linkId)
-        => await MutateAsync(() => _engine.DeleteLinkAsync(_handle, linkId));
+        => await MutateAsync(() => _engine.DeleteLinkAsync(_handle, linkId, _queryId));
 
     public async Task AddPredicateAsync()
     {
         if (SelectedFilterField is not { } field || string.IsNullOrEmpty(FilterValue)) return;
         var op = (PredicateOperator)Math.Clamp(SelectedFilterOperatorIndex, 0, 5);
-        await MutateAsync(() => _engine.AddPredicateAsync(_handle, field.Id, (int)op, FilterValue));
+        await MutateAsync(() => _engine.AddPredicateAsync(_handle, field.Id, (int)op, FilterValue, _queryId));
         FilterValue = "";
     }
 
     public async Task RemovePredicateAsync(long predicateId)
-        => await MutateAsync(() => _engine.RemovePredicateAsync(_handle, predicateId));
+        => await MutateAsync(() => _engine.RemovePredicateAsync(_handle, predicateId, _queryId));
 
     public async Task AddGroupAsync()
     {
         if (SelectedGroupField is not { } field) return;
         var sort = SelectedGroupSortIndex == 1 ? GroupSort.Descending : GroupSort.Ascending;
-        await MutateAsync(() => _engine.AddGroupAsync(_handle, field.Id, (int)sort));
+        await MutateAsync(() => _engine.AddGroupAsync(_handle, field.Id, (int)sort, _queryId));
     }
 
     public async Task RemoveGroupAsync(long groupId)
-        => await MutateAsync(() => _engine.RemoveGroupAsync(_handle, groupId));
+        => await MutateAsync(() => _engine.RemoveGroupAsync(_handle, groupId, _queryId));
 
     public void ArrangeTables() => ArrangeRequested?.Invoke();
 

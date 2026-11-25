@@ -90,7 +90,12 @@ public static class PredicateOperatorExtensions
 public sealed record QueryField(long Id, string Name, string Type);
 
 /// <summary>One query table (a placed card) and its fields.</summary>
-public sealed record QueryTable(long Id, string Name, string Alias, long DropIndex, IReadOnlyList<QueryField> Fields);
+public sealed record QueryTable(long Id, string Name, string Alias, long DropIndex, IReadOnlyList<QueryField> Fields, long UpstreamQuery)
+{
+    /// <summary>True when this card is a composed root's upstream table (it names a
+    /// child query), rather than a leaf's schema table.</summary>
+    public bool IsUpstream => UpstreamQuery != 0;
+}
 
 /// <summary>One join between two query fields.</summary>
 public sealed record QueryLink(long Id, LinkType Type, long LeftField, long RightField);
@@ -109,7 +114,9 @@ public sealed record QueryModel(
     IReadOnlyList<QueryTable> Tables,
     IReadOnlyList<QueryLink> Links,
     IReadOnlyList<QueryPredicate> Predicates,
-    IReadOnlyList<QueryGroup> Groups)
+    IReadOnlyList<QueryGroup> Groups,
+    long QueryId,
+    bool IsRoot)
 {
     public static QueryModel Parse(JsonElement root)
     {
@@ -133,7 +140,8 @@ public sealed record QueryModel(
                 table.GetProperty("name").GetString() ?? "",
                 table.GetProperty("alias").GetString() ?? "",
                 table.GetProperty("dropIndex").GetInt64(),
-                fields));
+                fields,
+                table.TryGetProperty("upstreamQuery", out var upstream) && upstream.ValueKind == JsonValueKind.Number ? upstream.GetInt64() : 0));
         }
 
         var links = new List<QueryLink>();
@@ -167,7 +175,9 @@ public sealed record QueryModel(
                 (GroupSort)group.GetProperty("sort").GetInt32()));
         }
 
-        return new QueryModel(driver, sql, sqlSource, tables, links, predicates, groups);
+        long queryId = root.TryGetProperty("queryId", out var queryIdEl) && queryIdEl.ValueKind == JsonValueKind.Number ? queryIdEl.GetInt64() : 0;
+        bool isRoot = root.TryGetProperty("isRoot", out var isRootEl) && isRootEl.ValueKind == JsonValueKind.True;
+        return new QueryModel(driver, sql, sqlSource, tables, links, predicates, groups, queryId, isRoot);
     }
 }
 
