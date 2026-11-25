@@ -903,6 +903,8 @@ static NSDictionary *MADCLIServeQueryModelDict(id <MADDocumentDataProtocol> docu
 				@"id": @(field.identifier),
 				@"name": field.databaseSchemaField.name ?: @"",
 				@"type": MADCLIServeTypeName(field.databaseSchemaField.dataType),
+				@"outputKey": (field.outputKey.length > 0 ? field.outputKey : [NSNull null]),
+				@"outputIndex": @(field.outputIndex),
 			}];
 		}
 		[fields sortUsingDescriptors: @[byName]];
@@ -1682,9 +1684,17 @@ static void MADCLIServeSetRootOutputs(NSDictionary *params, NSMutableDictionary 
 /// Parses `sql` and resolves it against the document's schema (and, when `apply`, runs the
 /// compiler).  Returns the plan, or nil with `outError` -- the same MADSQLParser →
 /// MADSQLStatementResolver → MADSQLQueryCompiler path the Mac's SQL editor takes.
-static MADSQLQueryPlan *MADCLIServeCompileSQL(id <MADDocumentDataProtocol> document, NSString *sql, BOOL apply, NSError **outError) {
+static MADSQLQueryPlan *MADCLIServeCompileSQL(id <MADDocumentDataProtocol> document, RptqQuery *query, NSString *sql, BOOL apply, NSError **outError) {
+	if (query.rootOfDocument != nil) {
+		if (outError) *outError = MADCLIServeUsageError(@"SQL editing is not supported for the composed root.");
+		return nil;
+	}
 	RptqStoreContext *context = document.storeContext;
-	RptqDatabase *database = [RptqDocument newDocumentReadFromManagedObjectContext: context].defaultDatabase;
+	RptqDatabase *database = query.inDatabase;
+	if (database == nil) {
+		if (outError) *outError = MADCLIServeUsageError(@"this query has no source database to compile SQL against.");
+		return nil;
+	}
 
 	NSMutableDictionary <NSString *, NSArray <NSString *> *> *schema = [NSMutableDictionary dictionary];
 	for (RptqDatabaseSchemaTable *table in database.hasTables) {
@@ -1721,7 +1731,7 @@ static MADSQLQueryPlan *MADCLIServeCompileSQL(id <MADDocumentDataProtocol> docum
 		}
 		MADSQLQueryCompiler *compiler = [[MADSQLQueryCompiler alloc] initWithPlan: plan
 																		  document: qdoc
-																			 query: database.defaultQuery
+																			 query: query
 																		   context: context];
 		if (![compiler applyWithError: &error]) {
 			if (outError) *outError = error;
@@ -1752,8 +1762,16 @@ static void MADCLIServeValidateSQL(NSDictionary *params, NSMutableDictionary <NS
 		return;
 	}
 
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *resolveError = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &resolveError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(resolveError));
+		return;
+	}
+
 	NSError *compileError = nil;
-	MADSQLQueryPlan *plan = MADCLIServeCompileSQL(entry.document.document, sql, NO, &compileError);
+	MADSQLQueryPlan *plan = MADCLIServeCompileSQL(document, query, sql, NO, &compileError);
 	if (plan == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(compileError));
 		return;
@@ -1772,8 +1790,16 @@ static void MADCLIServeApplySQL(NSDictionary *params, NSMutableDictionary <NSNum
 		return;
 	}
 
+	id <MADDocumentDataProtocol> document = entry.document.document;
+	NSError *resolveError = nil;
+	RptqQuery *query = MADCLIServeResolveQuery(document, params, &resolveError);
+	if (query == nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(resolveError));
+		return;
+	}
+
 	NSError *compileError = nil;
-	MADSQLQueryPlan *plan = MADCLIServeCompileSQL(entry.document.document, sql, YES, &compileError);
+	MADSQLQueryPlan *plan = MADCLIServeCompileSQL(document, query, sql, YES, &compileError);
 	if (plan == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(compileError));
 		return;

@@ -86,8 +86,13 @@ public static class PredicateOperatorExtensions
     };
 }
 
-/// <summary>One query field: its store identifier, its schema field name, and its type token.</summary>
-public sealed record QueryField(long Id, string Name, string Type);
+/// <summary>One query field: its store identifier, its schema field name, and its type token.
+/// A composed root field also carries its persisted output key and order, when it is an output.</summary>
+public sealed record QueryField(long Id, string Name, string Type, string? OutputKey, long OutputIndex)
+{
+    /// <summary>True when this field is one of the composed root's outputs.</summary>
+    public bool IsOutput => !string.IsNullOrEmpty(OutputKey);
+}
 
 /// <summary>One query table (a placed card) and its fields.</summary>
 public sealed record QueryTable(long Id, string Name, string Alias, long DropIndex, IReadOnlyList<QueryField> Fields, long UpstreamQuery)
@@ -133,7 +138,9 @@ public sealed record QueryModel(
                 fields.Add(new QueryField(
                     field.GetProperty("id").GetInt64(),
                     field.GetProperty("name").GetString() ?? "",
-                    field.GetProperty("type").GetString() ?? ""));
+                    field.GetProperty("type").GetString() ?? "",
+                    field.TryGetProperty("outputKey", out var ok) && ok.ValueKind == JsonValueKind.String ? ok.GetString() : null,
+                    field.TryGetProperty("outputIndex", out var oi) && oi.ValueKind == JsonValueKind.Number ? oi.GetInt64() : 0));
             }
             tables.Add(new QueryTable(
                 table.GetProperty("id").GetInt64(),

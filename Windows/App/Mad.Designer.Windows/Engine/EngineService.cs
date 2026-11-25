@@ -193,15 +193,19 @@ public sealed class EngineService : IAsyncDisposable
         return QueryModel.Parse(result);
     }
 
-    public async Task<SqlCompileResult> ValidateSqlAsync(int handle, string sql)
+    public async Task<SqlCompileResult> ValidateSqlAsync(int handle, string sql, long? query = null)
     {
-        var result = await CallAsync("validate-sql", new Dictionary<string, object?> { ["handle"] = handle, ["sql"] = sql }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["sql"] = sql };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("validate-sql", parameters).ConfigureAwait(false);
         return SqlCompileResult.Parse(result);
     }
 
-    public async Task<SqlCompileResult> ApplySqlAsync(int handle, string sql)
+    public async Task<SqlCompileResult> ApplySqlAsync(int handle, string sql, long? query = null)
     {
-        var result = await CallAsync("apply-sql", new Dictionary<string, object?> { ["handle"] = handle, ["sql"] = sql }).ConfigureAwait(false);
+        var parameters = new Dictionary<string, object?> { ["handle"] = handle, ["sql"] = sql };
+        if (query is long queryId) parameters["query"] = queryId;
+        var result = await CallAsync("apply-sql", parameters).ConfigureAwait(false);
         return SqlCompileResult.Parse(result);
     }
 
