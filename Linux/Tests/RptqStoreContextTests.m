@@ -26,6 +26,7 @@
 #import <MAD/MADArchiveManager.h>
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
 
 // The original imported "MADStoreConverter.h" for the converted-sample tests; that
 // header is app-side and Core Data-backed and does not exist off Apple.
@@ -1304,6 +1305,56 @@ static void testImportComposedGraphBringsRootAndLeaves(void) {
 	removeTempDirectory(directory);
 }
 
+#pragma mark - Composed output-key naming
+
+static RptqQueryField *fieldWithSchemaName(RptqStoreContext *context, NSString *schemaName, NSString *sourceAlias) {
+	RptqObject *schemaField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:0];
+	[schemaField setValue:schemaName forKey:@"name"];
+	RptqObject *upstream = [context insertObjectForEntity:@"RptqQuery" identifier:0];
+	[upstream setValue:sourceAlias forKey:@"name"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqQueryTable" identifier:0];
+	[table setValue:upstream forKey:@"upstreamQuery"];
+	RptqQueryField *field = (RptqQueryField *)[context insertObjectForEntity:@"RptqQueryField" identifier:0];
+	[field setValue:schemaField forKey:@"databaseSchemaField"];
+	[field setValue:table forKey:@"inQueryTable"];
+	return field;
+}
+
+static void testComposeOutputKeysBareNamesDisambiguate(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *context = openContextAtPath(directory, @"naming.sqlite");
+	MAD_PASS([context loadAllWithError:NULL], "the context loads");
+
+	RptqQueryField *invoiceId = fieldWithSchemaName(context, @"invoice_id", @"invoices");
+	RptqQueryField *invoiceAmount = fieldWithSchemaName(context, @"amount", @"invoices");
+	RptqQueryField *paymentAmount = fieldWithSchemaName(context, @"amount", @"payments");
+
+	NSArray<NSString *> *keys = [RptqQuery composeOutputKeysForFields:@[ invoiceId, invoiceAmount, paymentAmount ]
+														 existingKeys:[NSSet set]];
+	MAD_PASS_EQUAL(keys, (@[ @"invoice_id", @"invoices.amount", @"payments.amount" ]), "colliding bare names qualify with their source alias");
+
+	removeTempDirectory(directory);
+}
+
+static void testComposeOutputKeysPreserveExistingAndAvoidTaken(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *context = openContextAtPath(directory, @"naming2.sqlite");
+	MAD_PASS([context loadAllWithError:NULL], "the context loads");
+
+	RptqQueryField *kept = fieldWithSchemaName(context, @"amount", @"invoices");
+	kept.outputKey = @"kept_amount";
+	RptqQueryField *newAmount = fieldWithSchemaName(context, @"amount", @"payments");
+
+	NSArray<NSString *> *keys = [RptqQuery composeOutputKeysForFields:@[ kept, newAmount ] existingKeys:[NSSet set]];
+	MAD_PASS_EQUAL(keys, (@[ @"kept_amount", @"amount" ]), "an established key is preserved and a unique bare name stays bare");
+
+	RptqQueryField *colliding = fieldWithSchemaName(context, @"amount", @"payments");
+	NSArray<NSString *> *keys2 = [RptqQuery composeOutputKeysForFields:@[ colliding ] existingKeys:[NSSet setWithArray:@[ @"amount" ]]];
+	MAD_PASS_EQUAL(keys2, (@[ @"payments.amount" ]), "a bare name already taken is qualified with its source alias");
+
+	removeTempDirectory(directory);
+}
+
 MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testSchemaRoundTripsThroughTheContext),
 	MAD_TEST(testFaultingReturnsStableIdentities),
@@ -1331,4 +1382,6 @@ MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testComposedSaveAs),
 	MAD_TEST(testComposedFailedArchivePreservesDestination),
 	MAD_TEST(testImportQueryGraphRemapsIdentifiersAndResolvesRelativePath),
-	MAD_TEST(testImportComposedGraphBringsRootAndLeaves));
+	MAD_TEST(testImportComposedGraphBringsRootAndLeaves),
+	MAD_TEST(testComposeOutputKeysBareNamesDisambiguate),
+	MAD_TEST(testComposeOutputKeysPreserveExistingAndAvoidTaken));

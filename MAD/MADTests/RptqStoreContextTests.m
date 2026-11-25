@@ -17,6 +17,8 @@
 #import <MAD/RptqObject.h>
 #import <MAD/RptqStoreContext.h>
 #import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
+#import <MAD/RptqQueryField.h>
 #import <MAD/MADStore.h>
 #import "MADStoreConverter.h"
 
@@ -855,6 +857,57 @@
 	// The imported root is not the destination document's root (that relationship is
 	// not copied across the import).
 	XCTAssertNil([destinationDocument valueForKey:@"rootQuery"]);
+}
+
+#pragma mark - Composed output-key naming
+
+- (RptqQueryField *)fieldWithSchemaName:(NSString *)schemaName
+						   sourceAlias:(NSString *)sourceAlias
+								context:(RptqStoreContext *)context {
+	RptqObject *schemaField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:0];
+	[schemaField setValue:schemaName forKey:@"name"];
+	RptqObject *upstream = [context insertObjectForEntity:@"RptqQuery" identifier:0];
+	[upstream setValue:sourceAlias forKey:@"name"];
+	RptqObject *table = [context insertObjectForEntity:@"RptqQueryTable" identifier:0];
+	[table setValue:upstream forKey:@"upstreamQuery"];
+	RptqQueryField *field = (RptqQueryField *)[context insertObjectForEntity:@"RptqQueryField" identifier:0];
+	[field setValue:schemaField forKey:@"databaseSchemaField"];
+	[field setValue:table forKey:@"inQueryTable"];
+	return field;
+}
+
+- (void)testComposeOutputKeysBareNamesDisambiguate {
+	RptqStoreContext *context = [self openContextAtPath:@"naming.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqQueryField *invoiceId = [self fieldWithSchemaName:@"invoice_id" sourceAlias:@"invoices" context:context];
+	RptqQueryField *invoiceAmount = [self fieldWithSchemaName:@"amount" sourceAlias:@"invoices" context:context];
+	RptqQueryField *paymentAmount = [self fieldWithSchemaName:@"amount" sourceAlias:@"payments" context:context];
+
+	NSArray<NSString *> *keys = [RptqQuery composeOutputKeysForFields:@[ invoiceId, invoiceAmount, paymentAmount ]
+														 existingKeys:[NSSet set]];
+	XCTAssertEqualObjects(keys, (@[ @"invoice_id", @"invoices.amount", @"payments.amount" ]));
+}
+
+- (void)testComposeOutputKeysPreserveExistingAndAvoidTaken {
+	RptqStoreContext *context = [self openContextAtPath:@"naming2.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqQueryField *kept = [self fieldWithSchemaName:@"amount" sourceAlias:@"invoices" context:context];
+	kept.outputKey = @"kept_amount";
+	RptqQueryField *newAmount = [self fieldWithSchemaName:@"amount" sourceAlias:@"payments" context:context];
+
+	// The preserved key survives; the new field's bare name is unique among the
+	// unnamed fields, so it stays bare.
+	NSArray<NSString *> *keys = [RptqQuery composeOutputKeysForFields:@[ kept, newAmount ]
+														 existingKeys:[NSSet set]];
+	XCTAssertEqualObjects(keys, (@[ @"kept_amount", @"amount" ]));
+
+	// A bare name already taken elsewhere is qualified with the source alias.
+	RptqQueryField *colliding = [self fieldWithSchemaName:@"amount" sourceAlias:@"payments" context:context];
+	NSArray<NSString *> *keys2 = [RptqQuery composeOutputKeysForFields:@[ colliding ]
+														 existingKeys:[NSSet setWithArray:@[ @"amount" ]]];
+	XCTAssertEqualObjects(keys2, (@[ @"payments.amount" ]));
 }
 
 - (void)testOrdinaryReportStaysRevision2 {

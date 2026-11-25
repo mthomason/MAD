@@ -29,6 +29,15 @@
 	/// earlier store or an unset projection) -- never an invented order.
 	- (nullable NSArray<RptqQueryField *> *)orderedOutputFieldsWithError:(NSError * _Nullable __autoreleasing *)error;
 
+	/// Derives one output key per field, in field order, preserving any field's
+	/// existing `outputKey` and naming the rest by their bare schema-field name when
+	/// that name is unique, otherwise qualifying a collision with the field's source
+	/// alias (`<alias>.<name>`, e.g. `payments.amount`).  `existingKeys` are output
+	/// keys already taken elsewhere (other children already added), which a new key
+	/// must not reuse.  Keys are deterministic and collision-free.
+	+ (NSArray<NSString *> *)composeOutputKeysForFields:(NSArray<RptqQueryField *> *)fields
+										  existingKeys:(NSSet<NSString *> *)existingKeys;
+
 @end
 
 #endif

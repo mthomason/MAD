@@ -188,6 +188,63 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 	return projected;
 }
 
+static NSString *MADCompositionSourceAliasForField(RptqQueryField *field) {
+	NSString *alias = field.inQueryTable.upstreamQuery.name;
+	if (alias.length == 0) alias = field.inQueryTable.alias;
+	if (alias.length == 0) alias = field.inQueryTable.databaseSchemaTable.name;
+	return alias ?: @"";
+}
+
++ (NSArray<NSString *> *)composeOutputKeysForFields:(NSArray<RptqQueryField *> *)fields
+									  existingKeys:(NSSet<NSString *> *)existingKeys {
+	NSMutableSet<NSString *> *taken = [NSMutableSet set];
+	for (NSString *key in existingKeys) {
+		if (key.length > 0) [taken addObject:key];
+	}
+	for (RptqQueryField *field in fields) {
+		if (field.outputKey.length > 0) [taken addObject:field.outputKey];
+	}
+
+	// A bare name is "unique" when it appears once among the fields that still need
+	// a key; a collision qualifies every field that shares it.
+	NSMutableDictionary<NSString *, NSNumber *> *bareCount = [NSMutableDictionary dictionary];
+	for (RptqQueryField *field in fields) {
+		if (field.outputKey.length > 0) continue;
+		NSString *bare = field.databaseSchemaField.name;
+		if (bare.length == 0) continue;
+		NSInteger count = bareCount[bare].integerValue;
+		bareCount[bare] = @(count + 1);
+	}
+
+	NSMutableArray<NSString *> *keys = [NSMutableArray arrayWithCapacity:fields.count];
+	for (RptqQueryField *field in fields) {
+		if (field.outputKey.length > 0) {
+			[keys addObject:field.outputKey];
+			continue;
+		}
+		NSString *bare = field.databaseSchemaField.name ?: @"";
+		NSString *alias = MADCompositionSourceAliasForField(field);
+		NSString *candidate = nil;
+		if (bare.length > 0 && bareCount[bare].integerValue <= 1 && ![taken containsObject:bare]) {
+			candidate = bare;
+		} else if (bare.length > 0 && alias.length > 0) {
+			candidate = [[NSString alloc] initWithFormat:@"%@.%@", alias, bare];
+		} else {
+			candidate = bare.length > 0 ? bare : NSLocalizedString(@"field", @"Fallback output name.");
+		}
+		// A collision that survives qualification (two children sharing an alias)
+		// is made unique with a numeric suffix rather than silently duplicated.
+		NSString *unique = candidate;
+		NSUInteger suffix = 2;
+		while ([taken containsObject:unique]) {
+			unique = [[NSString alloc] initWithFormat:@"%@_%lu", candidate, (unsigned long)suffix++];
+		}
+		[taken addObject:unique];
+		[keys addObject:unique];
+	}
+	return keys;
+}
+
 - (id)debugQuickLookObject {
 	NSMutableString *description = [[NSMutableString alloc] init];
 	[description appendFormat:@"*********\n"];
