@@ -200,7 +200,7 @@
   <sys:String x:Key="Designer.Duplicate.Tooltip">選択した要素を複製します。</sys:String>
   <sys:String x:Key="Designer.Delete.Tooltip">選択した要素を削除します。</sys:String>
   <sys:String x:Key="Designer.Bands.Name">レポートバンド</sys:String>
-  <sys:String x:Key="Designer.Bands.Tooltip">バンドをダブルクリックして表示または非表示にします。</sys:String>
+  <sys:String x:Key="Designer.Bands.Tooltip">バンドを右クリックして選択するか、表示または非表示にします。</sys:String>
   <sys:String x:Key="Designer.QueryFields.Name">クエリフィールド</sys:String>
   <sys:String x:Key="Designer.QueryFields.Tooltip">フィールドをダブルクリックして選択したバンドに追加します。</sys:String>
   <sys:String x:Key="Designer.Paper.Tooltip">レポートのページ サイズを選択します。</sys:String>
@@ -366,4 +366,27 @@
   <sys:String x:Key="Connection.Section.Credentials">資格情報</sys:String>
   <sys:String x:Key="Query.Badge.Grouped">GRP</sys:String>
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
+  <sys:String x:Key="Query.SchemaEmpty">このソースにはテーブルがありません。</sys:String>
+  <sys:String x:Key="Designer.FieldsEmpty">クエリを作成すると、ここにフィールドが表示されます。</sys:String>
+  <sys:String x:Key="Query.Table.Tooltip">ヘッダーをドラッグしてこのテーブルを移動します。</sys:String>
+  <sys:String x:Key="Designer.Band.Tooltip">クリックしてこのバンドを選択します。下端をドラッグしてサイズを変更します。</sys:String>
+  <sys:String x:Key="Designer.Element.Tooltip">ドラッグで移動、ハンドルのドラッグでサイズ変更、ダブルクリックで編集します。</sys:String>
+  <sys:String x:Key="Designer.Section.Select">セクションを選択</sys:String>
+  <sys:String x:Key="Designer.Section.Select.Tooltip">このバンドを選択中のバンドにします。</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility">セクションの表示/非表示</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility.Tooltip">レポートでこのバンドを表示または非表示にします。</sys:String>
+  <sys:String x:Key="Designer.Section.Show">セクションを表示</sys:String>
+  <sys:String x:Key="Designer.Section.Hide">セクションを非表示</sys:String>
+  <sys:String x:Key="Designer.Border.Top">上</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Tooltip">上罫線の幅 (ポイント)。</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Name">上罫線の幅</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom">下</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Tooltip">下罫線の幅 (ポイント)。</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Name">下罫線の幅</sys:String>
+  <sys:String x:Key="Designer.Border.Left">左</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Tooltip">左罫線の幅 (ポイント)。</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Name">左罫線の幅</sys:String>
+  <sys:String x:Key="Designer.Border.Right">右</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Tooltip">右罫線の幅 (ポイント)。</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Name">右罫線の幅</sys:String>
 </ResourceDictionary>

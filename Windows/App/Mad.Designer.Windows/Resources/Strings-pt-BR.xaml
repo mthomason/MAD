@@ -200,7 +200,7 @@
   <sys:String x:Key="Designer.Duplicate.Tooltip">Duplique o elemento selecionado.</sys:String>
   <sys:String x:Key="Designer.Delete.Tooltip">Exclua o elemento selecionado.</sys:String>
   <sys:String x:Key="Designer.Bands.Name">Bandas do relatório</sys:String>
-  <sys:String x:Key="Designer.Bands.Tooltip">Clique duas vezes em uma banda para mostrá-la ou ocultá-la.</sys:String>
+  <sys:String x:Key="Designer.Bands.Tooltip">Clique com o botão direito em uma faixa para selecioná-la ou para mostrá-la ou ocultá-la.</sys:String>
   <sys:String x:Key="Designer.QueryFields.Name">Campos de consulta</sys:String>
   <sys:String x:Key="Designer.QueryFields.Tooltip">Clique duas vezes em um campo para adicioná-lo à banda selecionada.</sys:String>
   <sys:String x:Key="Designer.Paper.Tooltip">Escolha o tamanho da página do relatório.</sys:String>
@@ -366,4 +366,27 @@
   <sys:String x:Key="Connection.Section.Credentials">Credenciais</sys:String>
   <sys:String x:Key="Query.Badge.Grouped">GRP</sys:String>
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
+  <sys:String x:Key="Query.SchemaEmpty">Esta origem não tem tabelas.</sys:String>
+  <sys:String x:Key="Designer.FieldsEmpty">Crie a consulta para ver campos aqui.</sys:String>
+  <sys:String x:Key="Query.Table.Tooltip">Arraste o cabeçalho para mover esta tabela.</sys:String>
+  <sys:String x:Key="Designer.Band.Tooltip">Clique para selecionar esta faixa; arraste a borda inferior para redimensionar.</sys:String>
+  <sys:String x:Key="Designer.Element.Tooltip">Arraste para mover, arraste uma alça para redimensionar ou clique duas vezes para editar.</sys:String>
+  <sys:String x:Key="Designer.Section.Select">Selecionar faixa</sys:String>
+  <sys:String x:Key="Designer.Section.Select.Tooltip">Tornar esta faixa a faixa selecionada.</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility">Mostrar ou ocultar faixa</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility.Tooltip">Mostrar ou ocultar esta faixa no relatório.</sys:String>
+  <sys:String x:Key="Designer.Section.Show">Mostrar faixa</sys:String>
+  <sys:String x:Key="Designer.Section.Hide">Ocultar faixa</sys:String>
+  <sys:String x:Key="Designer.Border.Top">Superior</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Tooltip">Largura da borda superior em pontos.</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Name">Largura da borda superior</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom">Inferior</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Tooltip">Largura da borda inferior em pontos.</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Name">Largura da borda inferior</sys:String>
+  <sys:String x:Key="Designer.Border.Left">Esquerda</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Tooltip">Largura da borda esquerda em pontos.</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Name">Largura da borda esquerda</sys:String>
+  <sys:String x:Key="Designer.Border.Right">Direita</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Tooltip">Largura da borda direita em pontos.</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Name">Largura da borda direita</sys:String>
 </ResourceDictionary>

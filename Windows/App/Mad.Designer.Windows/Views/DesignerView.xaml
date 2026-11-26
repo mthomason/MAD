@@ -156,16 +156,59 @@
                          ItemsSource="{Binding Sections}" MouseDoubleClick="SectionsList_OnDoubleClick"
                          Background="{DynamicResource ControlFillColorDefaultBrush}"
                          BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                         ContextMenuOpening="SectionsList_OnContextMenuOpening"
                          ToolTip="{infra:Loc Designer.Bands.Tooltip}"
                          AutomationProperties.Name="{infra:Loc Designer.Bands.Name}">
+                    <ListBox.ContextMenu>
+                        <!-- The discoverable visibility gesture: right-click a band. The toggle
+                             item's header is set at open time from the band's Visible state. -->
+                        <ContextMenu x:Name="SectionsMenu">
+                            <MenuItem Header="{infra:Loc Designer.Section.Select}"
+                                      Click="SelectSection_OnClick"
+                                      ToolTip="{infra:Loc Designer.Section.Select.Tooltip}"
+                                      AutomationProperties.Name="{infra:Loc Designer.Section.Select}" />
+                            <Separator />
+                            <MenuItem x:Name="ToggleSectionVisibilityItem"
+                                      Header="{infra:Loc Designer.Section.Hide}"
+                                      Click="ToggleSectionVisibility_OnClick"
+                                      ToolTip="{infra:Loc Designer.Section.Visibility.Tooltip}"
+                                      AutomationProperties.Name="{infra:Loc Designer.Section.Visibility}" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding DisplayTitle}" />
+                            <TextBlock Text="{Binding DisplayTitle}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" />
+                                        <Style.Triggers>
+                                            <!-- A hidden band stays in the list but reads as disabled,
+                                                 mirroring the iOS designer's disabled bands. -->
+                                            <DataTrigger Binding="{Binding Visible}" Value="False">
+                                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}" />
+                                                <Setter Property="FontStyle" Value="Italic" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
                 <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Designer.QueryFields}"
                            Style="{StaticResource MAD.SectionHeader}" Margin="0,0,0,4" />
+                <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Designer.FieldsEmpty}" Margin="2,0,0,6">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.SecondaryText}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Fields.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 <ListBox x:Name="FieldsList" ItemsSource="{Binding Fields}"
                          MouseDoubleClick="FieldsList_OnDoubleClick"
                          Background="{DynamicResource ControlFillColorDefaultBrush}"
@@ -375,11 +418,25 @@
                                     </ComboBox>
 
                                     <TextBlock Text="{infra:Loc Designer.Border}" Style="{StaticResource MAD.FieldLabel}" />
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                        <TextBlock Text="{infra:Loc Designer.Border.Top}" Style="{StaticResource MAD.FieldLabel}" Width="52" />
+                                        <TextBox Text="{Binding ElementBorderTop, UpdateSourceTrigger=LostFocus}" Width="46"
+                                                 ToolTip="{infra:Loc Designer.Border.Top.Tooltip}"
+                                                 AutomationProperties.Name="{infra:Loc Designer.Border.Top.Name}" />
+                                        <TextBlock Text="{infra:Loc Designer.Border.Bottom}" Style="{StaticResource MAD.FieldLabel}" Width="60" Margin="10,0,0,0" />
+                                        <TextBox Text="{Binding ElementBorderBottom, UpdateSourceTrigger=LostFocus}" Width="46"
+                                                 ToolTip="{infra:Loc Designer.Border.Bottom.Tooltip}"
+                                                 AutomationProperties.Name="{infra:Loc Designer.Border.Bottom.Name}" />
+                                    </StackPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                        <TextBox Text="{Binding ElementBorderTop, UpdateSourceTrigger=LostFocus}" Width="46" />
-                                        <TextBox Text="{Binding ElementBorderBottom, UpdateSourceTrigger=LostFocus}" Width="46" Margin="4,0,0,0" />
-                                        <TextBox Text="{Binding ElementBorderLeft, UpdateSourceTrigger=LostFocus}" Width="46" Margin="4,0,0,0" />
-                                        <TextBox Text="{Binding ElementBorderRight, UpdateSourceTrigger=LostFocus}" Width="46" Margin="4,0,0,0" />
+                                        <TextBlock Text="{infra:Loc Designer.Border.Left}" Style="{StaticResource MAD.FieldLabel}" Width="52" />
+                                        <TextBox Text="{Binding ElementBorderLeft, UpdateSourceTrigger=LostFocus}" Width="46"
+                                                 ToolTip="{infra:Loc Designer.Border.Left.Tooltip}"
+                                                 AutomationProperties.Name="{infra:Loc Designer.Border.Left.Name}" />
+                                        <TextBlock Text="{infra:Loc Designer.Border.Right}" Style="{StaticResource MAD.FieldLabel}" Width="60" Margin="10,0,0,0" />
+                                        <TextBox Text="{Binding ElementBorderRight, UpdateSourceTrigger=LostFocus}" Width="46"
+                                                 ToolTip="{infra:Loc Designer.Border.Right.Tooltip}"
+                                                 AutomationProperties.Name="{infra:Loc Designer.Border.Right.Name}" />
                                     </StackPanel>
                                     <TextBlock Text="{infra:Loc Designer.PadMargin}" Style="{StaticResource MAD.FieldLabel}" />
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
@@ -411,8 +468,21 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding SelectedSection.DisplayTitle}" Style="{StaticResource MAD.StatusText}"
-                           VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding SelectedSection.DisplayTitle}" Style="{StaticResource MAD.StatusText}" />
+                    <TextBlock Text="{Binding ErrorText}" Margin="12,0,0,0" MaxWidth="620" TextTrimming="CharacterEllipsis">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.ErrorText}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="{infra:Loc Designer.Zoom}" Style="{StaticResource MAD.StatusText}" Margin="0,0,6,0" />
                     <Slider Width="130" Minimum="0.5" Maximum="2.5" Value="{Binding Zoom}" VerticalAlignment="Center"

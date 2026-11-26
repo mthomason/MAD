@@ -200,7 +200,7 @@
   <sys:String x:Key="Designer.Duplicate.Tooltip">Duplique el elemento seleccionado.</sys:String>
   <sys:String x:Key="Designer.Delete.Tooltip">Elimine el elemento seleccionado.</sys:String>
   <sys:String x:Key="Designer.Bands.Name">Bandas del informe</sys:String>
-  <sys:String x:Key="Designer.Bands.Tooltip">Haga doble clic en una banda para mostrarla u ocultarla.</sys:String>
+  <sys:String x:Key="Designer.Bands.Tooltip">Haga clic con el botón derecho en una banda para seleccionarla o para mostrarla u ocultarla.</sys:String>
   <sys:String x:Key="Designer.QueryFields.Name">Campos de consulta</sys:String>
   <sys:String x:Key="Designer.QueryFields.Tooltip">Haga doble clic en un campo para agregarlo a la banda seleccionada.</sys:String>
   <sys:String x:Key="Designer.Paper.Tooltip">Elija el tamaño de página del informe.</sys:String>
@@ -366,4 +366,27 @@
   <sys:String x:Key="Connection.Section.Credentials">Credenciales</sys:String>
   <sys:String x:Key="Query.Badge.Grouped">GRP</sys:String>
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
+  <sys:String x:Key="Query.SchemaEmpty">Esta fuente no tiene tablas.</sys:String>
+  <sys:String x:Key="Designer.FieldsEmpty">Cree la consulta para ver campos aquí.</sys:String>
+  <sys:String x:Key="Query.Table.Tooltip">Arrastre el encabezado para mover esta tabla.</sys:String>
+  <sys:String x:Key="Designer.Band.Tooltip">Haga clic para seleccionar esta banda; arrastre su borde inferior para cambiar el tamaño.</sys:String>
+  <sys:String x:Key="Designer.Element.Tooltip">Arrastre para mover, arrastre un controlador para cambiar el tamaño o haga doble clic para editar.</sys:String>
+  <sys:String x:Key="Designer.Section.Select">Seleccionar banda</sys:String>
+  <sys:String x:Key="Designer.Section.Select.Tooltip">Convertir esta banda en la banda seleccionada.</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility">Mostrar u ocultar banda</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility.Tooltip">Mostrar u ocultar esta banda en el informe.</sys:String>
+  <sys:String x:Key="Designer.Section.Show">Mostrar banda</sys:String>
+  <sys:String x:Key="Designer.Section.Hide">Ocultar banda</sys:String>
+  <sys:String x:Key="Designer.Border.Top">Superior</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Tooltip">Ancho del borde superior en puntos.</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Name">Ancho del borde superior</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom">Inferior</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Tooltip">Ancho del borde inferior en puntos.</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Name">Ancho del borde inferior</sys:String>
+  <sys:String x:Key="Designer.Border.Left">Izquierdo</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Tooltip">Ancho del borde izquierdo en puntos.</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Name">Ancho del borde izquierdo</sys:String>
+  <sys:String x:Key="Designer.Border.Right">Derecho</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Tooltip">Ancho del borde derecho en puntos.</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Name">Ancho del borde derecho</sys:String>
 </ResourceDictionary>

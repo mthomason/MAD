@@ -200,7 +200,7 @@
   <sys:String x:Key="Designer.Duplicate.Tooltip">复制所选元素。</sys:String>
   <sys:String x:Key="Designer.Delete.Tooltip">删除所选元素。</sys:String>
   <sys:String x:Key="Designer.Bands.Name">报表带区</sys:String>
-  <sys:String x:Key="Designer.Bands.Tooltip">双击带区以显示或隐藏它。</sys:String>
+  <sys:String x:Key="Designer.Bands.Tooltip">右键单击条带以选择它，或显示/隐藏它。</sys:String>
   <sys:String x:Key="Designer.QueryFields.Name">查询字段</sys:String>
   <sys:String x:Key="Designer.QueryFields.Tooltip">双击字段将其添加到所选带区。</sys:String>
   <sys:String x:Key="Designer.Paper.Tooltip">选择报表的页面大小。</sys:String>
@@ -366,4 +366,27 @@
   <sys:String x:Key="Connection.Section.Credentials">凭据</sys:String>
   <sys:String x:Key="Query.Badge.Grouped">GRP</sys:String>
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
+  <sys:String x:Key="Query.SchemaEmpty">此源没有表。</sys:String>
+  <sys:String x:Key="Designer.FieldsEmpty">生成查询后，字段将显示在此处。</sys:String>
+  <sys:String x:Key="Query.Table.Tooltip">拖动标题栏可移动此表。</sys:String>
+  <sys:String x:Key="Designer.Band.Tooltip">单击可选择此条带；拖动其下边缘可调整大小。</sys:String>
+  <sys:String x:Key="Designer.Element.Tooltip">拖动可移动，拖动控制柄可调整大小，双击可编辑。</sys:String>
+  <sys:String x:Key="Designer.Section.Select">选择节</sys:String>
+  <sys:String x:Key="Designer.Section.Select.Tooltip">将此条带设为选定的条带。</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility">显示或隐藏节</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility.Tooltip">在报表中显示或隐藏此条带。</sys:String>
+  <sys:String x:Key="Designer.Section.Show">显示节</sys:String>
+  <sys:String x:Key="Designer.Section.Hide">隐藏节</sys:String>
+  <sys:String x:Key="Designer.Border.Top">上</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Tooltip">上边框宽度（磅）。</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Name">上边框宽度</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom">下</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Tooltip">下边框宽度（磅）。</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Name">下边框宽度</sys:String>
+  <sys:String x:Key="Designer.Border.Left">左</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Tooltip">左边框宽度（磅）。</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Name">左边框宽度</sys:String>
+  <sys:String x:Key="Designer.Border.Right">右</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Tooltip">右边框宽度（磅）。</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Name">右边框宽度</sys:String>
 </ResourceDictionary>

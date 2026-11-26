@@ -82,7 +82,7 @@ public sealed class QueryCanvasTests
     }
 
     [Fact]
-    public async Task JoinBadgeAndFieldRow_ExplainTheirInteractions()
+    public async Task JoinBadgeFieldRowAndHeader_ExplainTheirInteractions()
     {
         string sqlite = CopyChinookToTemp();
         string mad = Path.Combine(Path.GetTempPath(), $"mad-canvas-tip-{Guid.NewGuid():N}.mad");
@@ -106,6 +106,7 @@ public sealed class QueryCanvasTests
             Exception? failure = null;
             string? badgeTip = null;
             string? fieldTip = null;
+            string? headerTip = null;
 
             var thread = new Thread(() =>
             {
@@ -124,6 +125,10 @@ public sealed class QueryCanvasTests
                     var row = Descendants(card).OfType<Border>()
                         .First(b => b.Tag is long && Math.Abs(b.Height - 20.0) < 0.1);
                     fieldTip = ToolTipService.GetToolTip(row) as string;
+
+                    var header = Descendants(card).OfType<Border>().FirstOrDefault(
+                        b => ToolTipService.GetToolTip(b) is string tip && tip == Localizer.Get("Query.Table.Tooltip"));
+                    headerTip = header is null ? null : ToolTipService.GetToolTip(header) as string;
                 }
                 catch (Exception ex)
                 {
@@ -138,6 +143,7 @@ public sealed class QueryCanvasTests
             Assert.False(string.IsNullOrWhiteSpace(badgeTip));
             Assert.Contains("Right-click", badgeTip!);
             Assert.False(string.IsNullOrWhiteSpace(fieldTip));
+            Assert.Equal(Localizer.Get("Query.Table.Tooltip"), headerTip);
         }
         finally
         {

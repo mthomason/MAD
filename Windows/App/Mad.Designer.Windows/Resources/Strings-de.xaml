@@ -200,7 +200,7 @@
   <sys:String x:Key="Designer.Duplicate.Tooltip">Duplizieren Sie das ausgewählte Element.</sys:String>
   <sys:String x:Key="Designer.Delete.Tooltip">Löschen Sie das ausgewählte Element.</sys:String>
   <sys:String x:Key="Designer.Bands.Name">Berichtsbereiche</sys:String>
-  <sys:String x:Key="Designer.Bands.Tooltip">Doppelklicken Sie auf einen Bereich, um ihn ein- oder auszublenden.</sys:String>
+  <sys:String x:Key="Designer.Bands.Tooltip">Klicken Sie mit der rechten Maustaste auf einen Bereich, um ihn auszuwählen oder ein- bzw. auszublenden.</sys:String>
   <sys:String x:Key="Designer.QueryFields.Name">Abfragefelder</sys:String>
   <sys:String x:Key="Designer.QueryFields.Tooltip">Doppelklicken Sie auf ein Feld, um es dem ausgewählten Bereich hinzuzufügen.</sys:String>
   <sys:String x:Key="Designer.Paper.Tooltip">Wählen Sie die Seitengröße für den Bericht.</sys:String>
@@ -366,4 +366,27 @@
   <sys:String x:Key="Connection.Section.Credentials">Anmeldeinformationen</sys:String>
   <sys:String x:Key="Query.Badge.Grouped">GRP</sys:String>
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
+  <sys:String x:Key="Query.SchemaEmpty">Diese Quelle enthält keine Tabellen.</sys:String>
+  <sys:String x:Key="Designer.FieldsEmpty">Erstellen Sie die Abfrage, um hier Felder zu sehen.</sys:String>
+  <sys:String x:Key="Query.Table.Tooltip">Ziehen Sie die Kopfzeile, um diese Tabelle zu verschieben.</sys:String>
+  <sys:String x:Key="Designer.Band.Tooltip">Klicken Sie, um diesen Bereich auszuwählen; ziehen Sie den unteren Rand, um die Größe zu ändern.</sys:String>
+  <sys:String x:Key="Designer.Element.Tooltip">Ziehen Sie zum Verschieben, ziehen Sie einen Griff zum Ändern der Größe, oder doppelklicken Sie zum Bearbeiten.</sys:String>
+  <sys:String x:Key="Designer.Section.Select">Bereich auswählen</sys:String>
+  <sys:String x:Key="Designer.Section.Select.Tooltip">Diesen Bereich als ausgewählten Bereich festlegen.</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility">Bereich ein- oder ausblenden</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility.Tooltip">Diesen Bereich im Bericht ein- oder ausblenden.</sys:String>
+  <sys:String x:Key="Designer.Section.Show">Bereich einblenden</sys:String>
+  <sys:String x:Key="Designer.Section.Hide">Bereich ausblenden</sys:String>
+  <sys:String x:Key="Designer.Border.Top">Oben</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Tooltip">Breite des oberen Rahmens in Punkten.</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Name">Breite des oberen Rahmens</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom">Unten</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Tooltip">Breite des unteren Rahmens in Punkten.</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Name">Breite des unteren Rahmens</sys:String>
+  <sys:String x:Key="Designer.Border.Left">Links</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Tooltip">Breite des linken Rahmens in Punkten.</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Name">Breite des linken Rahmens</sys:String>
+  <sys:String x:Key="Designer.Border.Right">Rechts</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Tooltip">Breite des rechten Rahmens in Punkten.</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Name">Breite des rechten Rahmens</sys:String>
 </ResourceDictionary>

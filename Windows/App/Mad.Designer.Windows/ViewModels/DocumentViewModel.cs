@@ -30,6 +30,8 @@ public sealed class DocumentViewModel : ObservableObject
     private bool _isBusy;
     private string _statusText = "";
     private string? _errorText;
+    private string? _queryError;
+    private string? _designerError;
     private string _driver = "";
     private string _fileName = "";
     private string _sql = "";
@@ -59,6 +61,19 @@ public sealed class DocumentViewModel : ObservableObject
                 OnPropertyChanged(nameof(IsBusyOrExporting));
             }
         };
+
+        // Unify feedback: a failed Query or Designer mutation is surfaced on the document
+        // toolbar, the one place that stays visible in every workspace, so it is never missed
+        // behind a workspace status line. A workspace clears the toolbar error only when it was
+        // the one that set it, so a successful edit never hides an unrelated document failure.
+        Query.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(QueryViewModel.ErrorText)) ForwardWorkspaceError(Query.ErrorText, ref _queryError);
+        };
+        Designer.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(DesignerViewModel.ErrorText)) ForwardWorkspaceError(Designer.ErrorText, ref _designerError);
+        };
     }
 
     /// <summary>The Query workspace's view model — the visual query designer and SQL editor.</summary>
@@ -78,6 +93,23 @@ public sealed class DocumentViewModel : ObservableObject
     {
         ErrorText = message;
         StatusText = Localizer.Get("Document.OpenFailed");
+    }
+
+    /// <summary>Mirrors a workspace error to the document toolbar. A workspace that clears its
+    /// own error clears the toolbar only when it set that same text, so a successful edit never
+    /// erases an unrelated document failure.</summary>
+    private void ForwardWorkspaceError(string? text, ref string? remembered)
+    {
+        if (!string.IsNullOrEmpty(text))
+        {
+            remembered = text;
+            ErrorText = text;
+        }
+        else if (remembered != null && ErrorText == remembered)
+        {
+            remembered = null;
+            ErrorText = null;
+        }
     }
 
     public bool IsBusy

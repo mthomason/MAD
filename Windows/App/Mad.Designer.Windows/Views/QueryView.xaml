@@ -135,6 +135,25 @@
                         </StackPanel>
                     </Button>
                 </Grid>
+                <!-- A leaf source whose database had no tables: say so where the list would be,
+                     rather than presenting an unexplained empty box. -->
+                <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Query.SchemaEmpty}" Margin="2,0,0,6">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.SecondaryText}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsNotRoot}" Value="True" />
+                                        <Condition Binding="{Binding SchemaTables.Count}" Value="0" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
                 <ListBox x:Name="SchemaList" ItemsSource="{Binding SchemaTables}"
                          MouseDoubleClick="SchemaList_OnDoubleClick"
                          Background="{DynamicResource ControlFillColorDefaultBrush}"
@@ -208,8 +227,31 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding StatusText}" Style="{StaticResource MAD.StatusText}"
-                           VerticalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding StatusText}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.StatusText}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Text="{Binding ErrorText}" MaxWidth="620" TextTrimming="CharacterEllipsis">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.ErrorText}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button x:Name="ZoomOutButton" Style="{StaticResource MAD.IconButton}"
                             Command="{Binding ZoomOutCommand}"

@@ -184,7 +184,18 @@ public sealed class QueryViewModel : ObservableObject
     }
 
     public string StatusText { get => _statusText; private set => Set(ref _statusText, value); }
-    public string? ErrorText { get => _errorText; private set => Set(ref _errorText, value); }
+
+    public string? ErrorText
+    {
+        get => _errorText;
+        private set
+        {
+            if (Set(ref _errorText, value)) OnPropertyChanged(nameof(HasError));
+        }
+    }
+
+    /// <summary>True while a mutation failure is waiting to be shown in the status bar.</summary>
+    public bool HasError => !string.IsNullOrEmpty(_errorText);
 
     /// <summary>The visual canvas zoom. The query canvas scales itself with a layout transform,
     /// so the model coordinates and the pointer hit-testing stay in unscaled units.</summary>

@@ -93,7 +93,18 @@ public sealed class DesignerViewModel : ObservableObject
     public bool ShowRulers { get => _showRulers; set => Set(ref _showRulers, value); }
 
     public bool IsBusy { get => _isBusy; private set => Set(ref _isBusy, value); }
-    public string? ErrorText { get => _errorText; private set => Set(ref _errorText, value); }
+
+    public string? ErrorText
+    {
+        get => _errorText;
+        private set
+        {
+            if (Set(ref _errorText, value)) OnPropertyChanged(nameof(HasError));
+        }
+    }
+
+    /// <summary>True while a mutation or engine failure is waiting to be shown in the status bar.</summary>
+    public bool HasError => !string.IsNullOrEmpty(_errorText);
 
     public async Task LoadAsync(int handle)
     {

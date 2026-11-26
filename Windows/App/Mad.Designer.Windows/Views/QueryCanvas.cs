@@ -205,6 +205,7 @@ public sealed class QueryCanvas : Canvas
         {
             Background = isRoot ? RootHeader : DesignPalette.CardSubHeader,
             CornerRadius = new CornerRadius(10, 10, 0, 0),
+            ToolTip = Localizer.Get("Query.Table.Tooltip"),
         };
 
         var grid = new Grid();

@@ -77,14 +77,26 @@ toolbar and the inspector's Duplicate/Delete — may get the same treatment in t
 **P1 — In-place empty/error states.** Per workspace, replace the generic status with a
 situational message (e.g. the Query sidebar says "This source has no tables yet — add one
 below", the root canvas says "Import or add a source to begin composing").
+**Complete for standard reports (2026-11-26).** A leaf query whose database has no tables
+now says so above the empty schema list, and the Designer's field list says "Build the
+query to see fields here." when the query exposes none. The composition/root empty states
+stay with Report 2, per the scope note below.
 
 **P2 — Unify feedback.** Route all mutations' success/error to one visible place (the
 document status bar), with workspace-local detail where helpful, so a failed action is never
 missed.
+**Complete (2026-11-26).** `DocumentViewModel` forwards a Query or Designer failure to the
+always-visible document toolbar, and both workspace status bars now render their own
+`ErrorText` in red. A workspace clears the toolbar error only when it set that text, so a
+successful edit never hides an unrelated document failure.
 
 **P2 — Real tooltips for the canvases.** The Designer canvas and Query canvas draw their own
 elements (tables, fields, joins, bands); they get no native tooltips. Add cursor/hover
 tooltips for "drag field-to-field to join", "drag a band to resize", etc.
+**Complete (2026-11-26).** The Query table header explains dragging to move the table. The
+Designer canvas gives every element ("drag to move, drag a handle to resize, or
+double-click to edit") and every band ("click to select; drag its bottom edge to resize") a
+hover tooltip. Field rows and join badges were already covered in P0.
 
 ## What I need to run/debug the UI (and tools to add to the box)
 
@@ -110,10 +122,13 @@ screenshots; that unblocks visual iteration for both of us.
 
 ## Follow-ups found while completing P0 (2026-11-25)
 
-- The element inspector's `Border T / B / L / R` boxes are four unlabeled numeric
-  fields. They need accessible names and clearer individual labels.
-- The Bands list's double-click toggles section visibility. That is a surprising
-  gesture for a list; a visible checkbox or context menu would be more discoverable.
-- The remaining P1/P2 items in this audit — command-bar grouping, in-place empty
-  states, unified feedback, and general canvas hover tooltips — are still open.
-- Composition-facing presentation stays with Report 2 (`MAD_COMPOSITION_UX.md`).
+- **Complete (2026-11-26).** The element inspector's `Border T / B / L / R` boxes are now
+  individually labelled Top / Bottom / Left / Right in two rows, each with a localized
+  tooltip and accessible name.
+- **Complete (2026-11-26).** The Bands list's visibility gesture is now a right-click
+  context menu (Select Section / Show Section / Hide Section). A hidden band stays in the
+  list but renders dimmed and italic so it reads as disabled, mirroring the iOS designer.
+  Double-click remains a silent accelerator.
+- Composition-facing presentation stays with Report 2 (`MAD_COMPOSITION_UX.md`): the node
+  strip, the "Outputs → Columns" rename, the type-specific next-action hint, and the
+  root-canvas empty state.

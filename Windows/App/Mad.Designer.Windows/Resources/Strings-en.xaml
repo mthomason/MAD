@@ -200,7 +200,7 @@
   <sys:String x:Key="Designer.Duplicate.Tooltip">Duplicate the selected element.</sys:String>
   <sys:String x:Key="Designer.Delete.Tooltip">Delete the selected element.</sys:String>
   <sys:String x:Key="Designer.Bands.Name">Report bands</sys:String>
-  <sys:String x:Key="Designer.Bands.Tooltip">Double-click a band to show or hide it.</sys:String>
+  <sys:String x:Key="Designer.Bands.Tooltip">Right-click a band to select it or to show or hide it.</sys:String>
   <sys:String x:Key="Designer.QueryFields.Name">Query fields</sys:String>
   <sys:String x:Key="Designer.QueryFields.Tooltip">Double-click a field to add it to the selected band.</sys:String>
   <sys:String x:Key="Designer.Paper.Tooltip">Choose the page size for the report.</sys:String>
@@ -365,4 +365,27 @@
   <sys:String x:Key="Connection.Section.Credentials">Credentials</sys:String>
   <sys:String x:Key="Query.Badge.Grouped">GRP</sys:String>
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
+  <sys:String x:Key="Query.SchemaEmpty">This source has no tables.</sys:String>
+  <sys:String x:Key="Designer.FieldsEmpty">Build the query to see fields here.</sys:String>
+  <sys:String x:Key="Query.Table.Tooltip">Drag the header to move this table.</sys:String>
+  <sys:String x:Key="Designer.Band.Tooltip">Click to select this band; drag its bottom edge to resize.</sys:String>
+  <sys:String x:Key="Designer.Element.Tooltip">Drag to move, drag a handle to resize, or double-click to edit.</sys:String>
+  <sys:String x:Key="Designer.Section.Select">Select Section</sys:String>
+  <sys:String x:Key="Designer.Section.Select.Tooltip">Make this band the selected band.</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility">Show or hide section</sys:String>
+  <sys:String x:Key="Designer.Section.Visibility.Tooltip">Show or hide this band in the report.</sys:String>
+  <sys:String x:Key="Designer.Section.Show">Show Section</sys:String>
+  <sys:String x:Key="Designer.Section.Hide">Hide Section</sys:String>
+  <sys:String x:Key="Designer.Border.Top">Top</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Tooltip">Top border width in points.</sys:String>
+  <sys:String x:Key="Designer.Border.Top.Name">Top border width</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom">Bottom</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Tooltip">Bottom border width in points.</sys:String>
+  <sys:String x:Key="Designer.Border.Bottom.Name">Bottom border width</sys:String>
+  <sys:String x:Key="Designer.Border.Left">Left</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Tooltip">Left border width in points.</sys:String>
+  <sys:String x:Key="Designer.Border.Left.Name">Left border width</sys:String>
+  <sys:String x:Key="Designer.Border.Right">Right</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Tooltip">Right border width in points.</sys:String>
+  <sys:String x:Key="Designer.Border.Right.Name">Right border width</sys:String>
 </ResourceDictionary>
