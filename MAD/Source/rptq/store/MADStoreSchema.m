@@ -11,7 +11,7 @@ NSString * const MADStorePositionColumn = @"position";
 NSString * const MADStoreIdentifierColumnSuffix = @"_identifier";
 
 NSInteger const MADStoreCurrentVersion = 2;
-NSInteger const MADStoreMaximumReadableVersion = 3;
+NSInteger const MADStoreMaximumReadableVersion = 4;
 
 #pragma mark - Attribute
 
@@ -360,6 +360,11 @@ static NSArray<MADStoreMigration *> *MADStoreCompositionMigrations(void) {
 									  addingColumn:@"outputKey"
 											 toTable:@"RptqQueryField"
 												type:MADStoreValueTypeText],
+			[MADStoreMigration migrationFromVersion:3
+										  toVersion:4
+									  addingColumn:@"ownerQuery_identifier"
+											 toTable:@"RptqDocumentSection"
+												type:MADStoreValueTypeInteger],
 		];
 	});
 	return migrations;
@@ -418,6 +423,16 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 		queryFieldOutputIndex.introducedInVersion = 3;
 		MADStoreAttribute *queryFieldOutputKey = TextOpt(@"outputKey");
 		queryFieldOutputKey.introducedInVersion = 3;
+
+		// The per-node layout fields, introduced in store revision 4.  A section
+		// gains an owning query (the document's five structural sections stay on the
+		// document and are the root's layout, so their ownerQuery stays NULL); the
+		// query owns its sections through the inverse.  The 3→4 migration adds the
+		// foreign-key column only.
+		MADStoreRelationship *queryHasLayoutSections = ToMany(@"hasLayoutSections", @"RptqDocumentSection", @"ownerQuery");
+		queryHasLayoutSections.introducedInVersion = 4;
+		MADStoreRelationship *sectionOwnerQuery = ToOne(@"ownerQuery", @"RptqQuery", @"hasLayoutSections", YES);
+		sectionOwnerQuery.introducedInVersion = 4;
 
 		#pragma mark Schema part
 
@@ -493,6 +508,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 			ToOne(@"inDatabase", @"RptqDatabase", @"hasQueries", YES),
 			queryRootOfDocument,
 			queryUpstreamOfTable,
+			queryHasLayoutSections,
 		])];
 
 		[entities addObject:Table(@"RptqQueryTable", @[
@@ -598,6 +614,7 @@ static NSArray<MADStoreEntity *> *MADStoreEntityDescriptors(void) {
 			ToOne(@"inReportPageHeader", @"RptqDocument", @"hasPageHeaderSection", YES),
 			ToOne(@"inReportReportFooter", @"RptqDocument", @"hasReportFooterSection", YES),
 			ToOne(@"inReportReportHeader", @"RptqDocument", @"hasReportHeaderSection", YES),
+			sectionOwnerQuery,
 		])];
 
 		[entities addObject:Table(@"RptqDocumentSectionRows", @[

@@ -24,6 +24,12 @@
 	+ (instancetype)newDocumentSectionOfType:(MADDocumentSectionType)type
 					 forManagedObjectContext:(RptqStoreContext *)managedObjectContext;
 
+	/// Creates the five structural sections (report header/footer, page header/footer,
+	/// detail), each with one empty row, owned by `query` via `ownerQuery`.  Returns them
+	/// in the creation order: report header, report footer, page header, page footer, detail.
+	+ (NSArray<RptqDocumentSection *> *)createStructuralSectionsForQuery:(RptqQuery *)query
+												 managedObjectContext:(RptqStoreContext *)context;
+
 	+ (instancetype)documentSectionForObjectID:(int64_t)objid
 						inManagedObjectContext:(RptqStoreContext *)moc;
 

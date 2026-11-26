@@ -90,6 +90,16 @@ NS_ASSUME_NONNULL_BEGIN
 /// The result a refresh is building, if one is in flight.  nil otherwise.
 @property (readonly, nonatomic, strong, nullable) MADDataResult *pendingResult;
 
+/// The per-node results of the last composed refresh, keyed by query identifier.
+/// The root is not here (it is `currentResult`); these are the leaves and any
+/// intermediate composers.  Empty until a composed refresh publishes them.
+@property (readonly, nonatomic, copy) NSDictionary<NSNumber *, MADDataResult *> *nodeResults;
+
+/// Replace the per-node results atomically, on the same refresh-completion path that
+/// publishes `currentResult`.  Superseded results are not deleted here (they follow the
+/// root's P4 discipline); their tables close once no reader still pins them.
+- (void)setNodeResults:(NSDictionary<NSNumber *, MADDataResult *> *)results;
+
 /// Stage a new generation without touching the current result.
 - (nullable MADDataResult *)beginRefreshResultWithError:(NSError * _Nullable __autoreleasing *)error;
 

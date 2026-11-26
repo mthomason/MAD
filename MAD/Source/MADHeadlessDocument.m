@@ -79,6 +79,7 @@
 	MADDataTableFast *_dataTable;
 	MADDataResult *_currentResult;
 	MADDataResult *_pendingResult;
+	NSDictionary<NSNumber *, MADDataResult *> *_nodeResults;
 	BOOL _refreshed;
 	BOOL _limitResultsDesignMode;
 	MADReportFormatter *_reportFormatter;
@@ -481,6 +482,7 @@
 	_dataTable = dataTable;
 	_currentResult = loaded ? [MADDataResult resultWithDataTable: dataTable
 													columnMapURL: self.urlDataTableCache] : nil;
+	_nodeResults = nil;
 }
 
 #pragma mark - Publication
@@ -491,6 +493,14 @@
 
 - (MADDataResult *)pendingResult {
 	return _pendingResult;
+}
+
+- (NSDictionary<NSNumber *, MADDataResult *> *)nodeResults {
+	return _nodeResults;
+}
+
+- (void)setNodeResults:(NSDictionary<NSNumber *, MADDataResult *> *)results {
+	_nodeResults = [results copy];
 }
 
 - (MADDataResult *)beginRefreshResultWithError:(NSError * __autoreleasing *)error {

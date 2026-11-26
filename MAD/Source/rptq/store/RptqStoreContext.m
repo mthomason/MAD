@@ -14,6 +14,18 @@
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseCredentals.h>
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSectionRows.h>
+#import <MAD/RptqDocumentElement.h>
+#import <MAD/RptqAlignment.h>
+#import <MAD/RptqBorder.h>
+#import <MAD/RptqDirectionalAsymmetry.h>
+#import <MAD/RptqDirectionalProperty.h>
+#import <MAD/RptqNumericFormat.h>
+#import <MAD/RptqPoint.h>
+#import <MAD/RptqRect.h>
+#import <MAD/RptqSize.h>
+#import <MAD/RptqTextStyle.h>
 #import <MADAPI/MADDatabaseType.h>
 
 // The change notification mirrors Core Data's contract -- the same userInfo keys,
@@ -450,6 +462,18 @@ static NSSet<NSString *> *MADStoreImportQueryGraphEntities(void) {
 			@"RptqQueryGroup",
 			@"RptqQueryPredicate",
 			@"RptqQuerySort",
+			@"RptqDocumentSection",
+			// The element subentities share RptqDocumentElement's table but are named
+			// individually so the flat copy reads each kind's own attributes.
+			@"RptqDocumentElementAggregate",
+			@"RptqDocumentElementBarcode",
+			@"RptqDocumentElementChart",
+			@"RptqDocumentElementFormula",
+			@"RptqDocumentElementGroupKey",
+			@"RptqDocumentElementImage",
+			@"RptqDocumentElementLabel",
+			@"RptqDocumentElementLabelDataField",
+			@"RptqDocumentElementLabelLink",
 		]];
 	});
 	return entities;
@@ -478,6 +502,59 @@ static void MADStoreResolveRelativeSQLitePaths(NSDictionary<NSNumber *, RptqObje
 		if (filename.length == 0) continue;
 		credential.host = [[baseURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:filename isDirectory:NO].path;
 		if (credential.dbname.length == 0) credential.dbname = filename;
+	}
+}
+
+/// Copies an element's value-type satellites from the source onto the imported element.
+/// `awakeFromInsert` already created the imported element's satellites (and border/rect's
+/// own sub-satellites); this copies the scalar geometry/typography/format values only.
+static void MADStoreCopyElementValueTypes(RptqDocumentElement *source, RptqDocumentElement *imported) {
+	if (source.alignment != nil) {
+		imported.alignment.horizontal = source.alignment.horizontal;
+		imported.alignment.vertical = source.alignment.vertical;
+	}
+	if (source.border != nil) {
+		imported.border.width.top = source.border.width.top;
+		imported.border.width.bottom = source.border.width.bottom;
+		imported.border.width.left = source.border.width.left;
+		imported.border.width.right = source.border.width.right;
+		imported.border.style.top = source.border.style.top;
+		imported.border.style.bottom = source.border.style.bottom;
+		imported.border.style.left = source.border.style.left;
+		imported.border.style.right = source.border.style.right;
+	}
+	if (source.dropPoint != nil) {
+		imported.dropPoint.x = source.dropPoint.x;
+		imported.dropPoint.y = source.dropPoint.y;
+	}
+	if (source.margin != nil) {
+		imported.margin.top = source.margin.top;
+		imported.margin.bottom = source.margin.bottom;
+		imported.margin.left = source.margin.left;
+		imported.margin.right = source.margin.right;
+	}
+	if (source.numericFormat != nil) {
+		imported.numericFormat.locale = source.numericFormat.locale;
+		imported.numericFormat.enabled = source.numericFormat.enabled;
+		imported.numericFormat.decimalCount = source.numericFormat.decimalCount;
+	}
+	if (source.padding != nil) {
+		imported.padding.top = source.padding.top;
+		imported.padding.bottom = source.padding.bottom;
+		imported.padding.left = source.padding.left;
+		imported.padding.right = source.padding.right;
+	}
+	if (source.rect != nil) {
+		imported.rect.origin.x = source.rect.origin.x;
+		imported.rect.origin.y = source.rect.origin.y;
+		imported.rect.size.width = source.rect.size.width;
+		imported.rect.size.height = source.rect.size.height;
+	}
+	if (source.textStyle != nil) {
+		imported.textStyle.strikethrough = source.textStyle.strikethrough;
+		imported.textStyle.underline = source.textStyle.underline;
+		imported.textStyle.italic = source.textStyle.italic;
+		imported.textStyle.bold = source.textStyle.bold;
 	}
 }
 
@@ -558,6 +635,48 @@ static void MADStoreResolveRelativeSQLitePaths(NSDictionary<NSNumber *, RptqObje
 	// the destination's location.
 	MADStoreResolveRelativeSQLitePaths(remap[@"RptqDatabase"], relativePathBaseURL);
 
+	// Pass 4: copy the layout's surrogate-keyed rows and value-type satellites, which
+	// have no identifier and so are out of reach of the flat identifier remap above.
+	// The sections and elements themselves were already copied (their attributes,
+	// field references, and element-to-element edges), remapped by identifier.  A
+	// document-structural section belongs to the source's root, so it is assigned to
+	// the imported root here; a group section keeps its remapped `inGroup`; a leaf's
+	// section already carries its remapped `ownerQuery`.
+	RptqDocument *sourceDocument = [RptqDocument newDocumentReadFromManagedObjectContext:sourceContext];
+	RptqQuery *sourceRoot = sourceDocument.rootQuery ?: sourceDocument.mainQuery;
+	RptqQuery *importedRoot = sourceRoot != nil ? (RptqQuery *)remap[@"RptqQuery"][@(sourceRoot.identifier)] : nil;
+
+	NSString *sectionEntity = NSStringFromClass([RptqDocumentSection class]);
+	NSString *rowEntity = NSStringFromClass([RptqDocumentSectionRows class]);
+	for (RptqObject *sourceSectionObject in [sourceContext objectsForEntity:sectionEntity]) {
+		RptqDocumentSection *sourceSection = (RptqDocumentSection *)sourceSectionObject;
+		RptqDocumentSection *importedSection = (RptqDocumentSection *)remap[sectionEntity][@(sourceSection.identifier)];
+		if (importedSection == nil) continue;
+
+		BOOL isDocumentSection = sourceSection.inReport != nil ||
+			sourceSection.inReportPageFooter != nil ||
+			sourceSection.inReportPageHeader != nil ||
+			sourceSection.inReportReportFooter != nil ||
+			sourceSection.inReportReportHeader != nil;
+		if (isDocumentSection && importedRoot != nil) {
+			importedSection.ownerQuery = importedRoot;
+		}
+
+		for (RptqDocumentSectionRows *sourceRow in sourceSection.hasRows) {
+			RptqDocumentSectionRows *importedRow = (RptqDocumentSectionRows *)[self insertObjectForEntity:rowEntity identifier:0];
+			importedRow.layoutHeight = sourceRow.layoutHeight;
+			importedRow.rowNumber = sourceRow.rowNumber;
+			importedRow.inSection = importedSection;
+
+			for (RptqDocumentElement *sourceElement in sourceRow.hasObjects) {
+				RptqDocumentElement *importedElement = (RptqDocumentElement *)remap[sourceElement.entity][@(sourceElement.identifier)];
+				if (importedElement == nil) continue;
+				MADStoreCopyElementValueTypes(sourceElement, importedElement);
+				importedElement.inSectionRow = importedRow;
+			}
+		}
+	}
+
 	// The imported databases join the destination document's schema list, so the
 	// document owns them and every walk (allQueries, the sidebar, refresh) sees them.
 	RptqDocument *destinationDocument = [RptqDocument newDocumentReadFromManagedObjectContext:self];
@@ -567,9 +686,8 @@ static void MADStoreResolveRelativeSQLitePaths(NSDictionary<NSNumber *, RptqObje
 		}
 	}
 
-	// The imported root is the source's explicit root, else its single query.
-	RptqDocument *sourceDocument = [RptqDocument newDocumentReadFromManagedObjectContext:sourceContext];
-	RptqQuery *sourceRoot = sourceDocument.rootQuery ?: sourceDocument.mainQuery;
+	// The imported root is the source's explicit root, else its single query (resolved
+	// in pass 4 above).
 	return sourceRoot != nil ? (RptqQuery *)remap[@"RptqQuery"][@(sourceRoot.identifier)] : nil;
 }
 
