@@ -80,7 +80,11 @@ static NSString *MADReportExporterFontName(NSString *);
 	id <MADDocumentRenderProtocol> renderDocument = (id <MADDocumentRenderProtocol>)document;
 	int64_t saved = renderDocument.renderQueryIdentifier;
 	renderDocument.renderQueryIdentifier = query.identifier;
+	MADDataResult *nodeResult = document.nodeResults[@(query.identifier)];
+	BOOL pinned = nodeResult != nil && [renderDocument respondsToSelector: @selector(pinRenderResult:)];
+	if (pinned) [renderDocument pinRenderResult: nodeResult];
 	BOOL ok = [self exportDocument: document toURL: url options: options error: error];
+	if (pinned) [renderDocument unpinRenderResult];
 	renderDocument.renderQueryIdentifier = saved;
 	return ok;
 }
