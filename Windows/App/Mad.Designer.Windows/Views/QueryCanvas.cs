@@ -127,7 +127,7 @@ public sealed class QueryCanvas : Canvas
         {
             var hint = new TextBlock
             {
-                Text = Localizer.Get("Query.Placeholder"),
+                Text = Localizer.Get(_vm.IsRoot ? "Query.Placeholder.Root" : "Query.Placeholder"),
                 Foreground = SystemColors.GrayTextBrush,
                 FontSize = 13.5,
                 TextAlignment = TextAlignment.Center,

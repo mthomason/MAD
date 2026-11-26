@@ -25,6 +25,7 @@ public sealed class DocumentViewModel : ObservableObject
     private ConnectionSpec? _connection;
     private bool _isComposed;
     private IReadOnlyList<QueryInfo> _queries = Array.Empty<QueryInfo>();
+    private IReadOnlyList<QueryOption> _componentOptions = Array.Empty<QueryOption>();
     private long _selectedQueryId;
 
     private bool _isBusy;
@@ -54,6 +55,8 @@ public sealed class DocumentViewModel : ObservableObject
         Query = new QueryViewModel(engine);
         Designer = new DesignerViewModel(engine);
         Viewer = new ViewerViewModel(engine, exportPath);
+        Composition = new CompositionViewModel();
+        Composition.NodeSelected += queryId => _ = SelectQueryAsync(queryId);
         Viewer.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(ViewerViewModel.IsExporting))
@@ -69,6 +72,12 @@ public sealed class DocumentViewModel : ObservableObject
         Query.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName == nameof(QueryViewModel.ErrorText)) ForwardWorkspaceError(Query.ErrorText, ref _queryError);
+            // The selected query reloads after every edit; keep its graph edges current so an
+            // added upstream table appears in the Composition pane without reopening the file.
+            if (args.PropertyName == nameof(QueryViewModel.Model) && Query.HasDocument)
+            {
+                Composition.UpdateModel(Query.QueryId, Query.Model);
+            }
         };
         Designer.PropertyChanged += (_, args) =>
         {
@@ -85,6 +94,10 @@ public sealed class DocumentViewModel : ObservableObject
     /// <summary>The Viewer workspace's view model — the rendered report, page size, navigation,
     /// and export.</summary>
     public ViewerViewModel Viewer { get; }
+
+    /// <summary>The document-level composition graph and selection, shared by the Composition
+    /// pane, the Component picker, and the Query workspace. Empty for a Standard Report.</summary>
+    public CompositionViewModel Composition { get; }
 
     /// <summary>Records a failure that happened before a document could be opened (for
     /// example, resolving the default fixture). Kept separate from <see cref="OpenAsync"/>
@@ -173,13 +186,38 @@ public sealed class DocumentViewModel : ObservableObject
             if (Set(ref _selectedQueryId, value))
             {
                 Query.QueryId = value;
+                Composition.SetSelected(value);
                 OnPropertyChanged(nameof(SelectedQueryName));
+                OnPropertyChanged(nameof(IsRootSelected));
+                OnPropertyChanged(nameof(SelectedQueryHint));
             }
         }
     }
 
     public string? SelectedQueryName
         => _queries.FirstOrDefault(q => q.Id == _selectedQueryId)?.Name;
+
+    /// <summary>True when the selected query is the composition's root (always true for a
+    /// Standard Report's single query).</summary>
+    public bool IsRootSelected
+        => !IsComposed || (_queries.FirstOrDefault(q => q.Id == _selectedQueryId)?.IsRoot ?? false);
+
+    /// <summary>The Component picker's choices: the root is marked Result so its special role
+    /// stays visible when the graph is collapsed.</summary>
+    public IReadOnlyList<QueryOption> ComponentOptions
+    {
+        get => _componentOptions;
+        private set => Set(ref _componentOptions, value);
+    }
+
+    /// <summary>A one-line explanation of the selected report part, shown beside the Component
+    /// picker. Empty for a Standard Report.</summary>
+    public string SelectedQueryHint
+        => !IsComposed
+            ? ""
+            : IsRootSelected
+                ? Localizer.Get("Composition.Role.Result")
+                : Localizer.Get("Composition.Role.Source");
 
     /// <summary>The localized document type, shown across the workspaces.</summary>
     public string DocumentTypeText
@@ -241,6 +279,7 @@ public sealed class DocumentViewModel : ObservableObject
         _handle = open.Handle;
         FileName = open.Filename;
         FilePath = path;
+        Composition.Collapse();
         OnPropertyChanged(nameof(HasDocument));
 
         var describe = await _engine.DescribeAsync(_handle);
@@ -249,13 +288,21 @@ public sealed class DocumentViewModel : ObservableObject
         Tables = describe.Tables;
 
         Sql = await _engine.QueryAsync(_handle);
-        _connection = await _engine.ConnectionAsync(_handle);
-        var info = await _engine.DocumentInfoAsync(_handle);
-        IsComposed = info.Composed;
-        Queries = info.Queries;
-        Query.SetQueries(info.Queries);
-        OnPropertyChanged(nameof(DocumentTypeText));
-        OnPropertyChanged(nameof(DocumentTypeTooltip));
+        // A newly created composition has a root and no source database yet; the connection
+        // endpoint reports that as an error. It is the expected state for an empty
+        // composition, not a failure to open the document.
+        _connection = null;
+        try
+        {
+            _connection = await _engine.ConnectionAsync(_handle);
+        }
+        catch (Mad.Client.MadEngineException)
+        {
+            // No source database; sources are imported into the graph instead.
+        }
+        DocumentInfo info = await _engine.DocumentInfoAsync(_handle);
+        ApplyDocumentInfo(info);
+        await LoadCompositionAsync(info);
         long selected = info.Composed ? info.RootQuery : (info.Queries.FirstOrDefault()?.Id ?? 0);
         await Query.LoadAsync(_handle, describe.Driver, describe.Tables, selected);
         SelectedQueryId = selected;
@@ -315,13 +362,54 @@ public sealed class DocumentViewModel : ObservableObject
     /// <summary>Re-reads the document's type and query list after a composition mutation.</summary>
     private async Task<DocumentInfo> ReloadDocumentInfoAsync()
     {
-        var info = await _engine.DocumentInfoAsync(_handle);
+        DocumentInfo info = await _engine.DocumentInfoAsync(_handle);
+        ApplyDocumentInfo(info);
+        await LoadCompositionAsync(info);
+        return info;
+    }
+
+    /// <summary>Publishes one document-info snapshot to the views that depend on it.</summary>
+    private void ApplyDocumentInfo(DocumentInfo info)
+    {
         IsComposed = info.Composed;
         Queries = info.Queries;
         Query.SetQueries(info.Queries);
+        ComponentOptions = BuildComponentOptions(info.Queries);
+        Designer.IsComposition = info.Composed;
         OnPropertyChanged(nameof(DocumentTypeText));
         OnPropertyChanged(nameof(DocumentTypeTooltip));
-        return info;
+        OnPropertyChanged(nameof(IsRootSelected));
+        OnPropertyChanged(nameof(SelectedQueryHint));
+    }
+
+    private static IReadOnlyList<QueryOption> BuildComponentOptions(IReadOnlyList<QueryInfo> queries)
+        => queries
+            .Select(q => new QueryOption(q.Id, q.IsRoot
+                ? Localizer.Format("Composition.Component.Root", q.Name)
+                : q.Name))
+            .ToList();
+
+    /// <summary>Snapshots every query's own model so the Composition pane can draw the true
+    /// dependency graph (a child is known from its parent's upstream tables). A query whose
+    /// model cannot be read still appears as a node; it simply has no visible edge.</summary>
+    private async Task LoadCompositionAsync(DocumentInfo info)
+    {
+        var models = new Dictionary<long, QueryModel>();
+        if (info.Composed)
+        {
+            foreach (QueryInfo query in info.Queries)
+            {
+                try
+                {
+                    models[query.Id] = await _engine.QueryModelAsync(_handle, query.Id);
+                }
+                catch
+                {
+                    // The pane still lists the node; a failed model only loses its edges.
+                }
+            }
+        }
+        Composition.Load(info, models);
     }
 
     public async Task SelectQueryAsync(long queryId)
@@ -339,7 +427,8 @@ public sealed class DocumentViewModel : ObservableObject
         try
         {
             var info = await _engine.ConvertAsync(_handle, childName);
-            await ReloadDocumentInfoAsync();
+            DocumentInfo reloaded = await ReloadDocumentInfoAsync();
+            SelectedQueryId = reloaded.RootQuery;
             await Query.ReloadAsync();
             await Designer.ReloadAsync();
             StatusText = Localizer.Get("Document.Converted");
@@ -565,3 +654,7 @@ public sealed class DocumentViewModel : ObservableObject
         SaveAsCommand.RaiseCanExecuteChanged();
     }
 }
+
+/// <summary>One choice in the Component picker. The root's display carries its "Result" role;
+/// a source uses its name alone.</summary>
+public sealed record QueryOption(long Id, string Display);

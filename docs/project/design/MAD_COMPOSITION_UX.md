@@ -5,6 +5,14 @@ Status: **design draft** — the user-facing shape of a composition report. The 
 record is [`MAD_QUERY_COMPOSITION.md`](MAD_QUERY_COMPOSITION.md). This file is about how the
 feature is *presented*, not how it runs.
 
+> **Windows implementation (2026-11-26).** The persistent chrome shipped as a docked **left
+> Composition pane** (the direction in `Composable UI on Windows.md`) rather than the top node
+> strip recommended in §4: a `GridSplitter`, an Expand/Collapse mode, one toolbar Component
+> picker, a clickable graph whose Result is at depth 0, and the terminology/empty-state/
+> localization work below. Selecting a source moves to Query. Per-node Designer and Viewer
+> layouts are **not** available yet — they need the store and serve work recorded in
+> [`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md).
+
 ## 1. The problem
 
 A Standard Report is legible because it mirrors the iOS app: one query → one table → Designer →

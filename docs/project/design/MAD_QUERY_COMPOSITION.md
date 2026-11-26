@@ -584,3 +584,42 @@ the packaged app with two standard `.mad` reports and author a composition thems
 `MAD-Designer-Windows-0.7.1.zip` and `mad-windows-x64.zip`, and its bundled engine reports the
 checked-out commit.
 
+
+## Checkpoint K — Windows composition pane and node selection (2026-11-26)
+
+The Windows surface now makes the container legible as a graph rather than a flat query
+selector. The engine and serve protocol are unchanged by this checkpoint.
+
+- **Composition pane.** A docked column beside the workspace (absent for a Standard Report),
+  with a `GridSplitter`, an Expand/Collapse mode, an Import entry point, and an empty state.
+  Its graph is built from each query's own upstream tables, so nested composers and shared
+  children draw correctly; the Result is at depth 0 and connectors point at the consumer.
+- **One selection.** The graph and a new toolbar **Component** picker drive
+  `Document.SelectedQueryId`; the Query workspace loads that node. Selecting a source moves to
+  Query; the Designer/Viewer show an explicit notice that they still render the Result.
+- **Start workspace.** Opening a report starts in Query; a created standard report starts in
+  the Designer; a created composition starts in Query.
+- **Terminology and guidance.** Outputs → Columns ("Report columns"), Sources/Result/Source
+  wording, the root canvas placeholder, the Sources hint, the one-source hint, and the
+  Designer's "Report columns" caption. The Sources list now hides sources already joined to
+  the Result and says when all are added. All new strings are in the six dictionaries.
+- **Two client-side protocol/flow fixes found by rendering the real window.** `query-model`
+  writes `isRoot` as `1`/`0` while `document-info` writes a JSON boolean; the parser now
+  accepts both, so the Result's Query workspace shows Sources/Columns instead of the schema
+  list. A root-only composition's missing source database makes the `connection` endpoint
+  answer an error; the document now treats that as the expected empty-composition state, so
+  **File ▸ New Composition** reaches its guide instead of failing to open.
+- **Tests.** `CompositionGraphTests` pins edge/depth derivation, selection events, and the
+  rendered card/connector counts; `CompositionPaneTests` pins the XAML shell;
+  `CompositionSelectionTests` drives a real composition through select-source / select-Result,
+  the workspace notice, and the empty-composition open; `ProtocolParsingTests` pins the
+  boolean/1-0 root flag.
+
+**Results (actual, 2026-11-26).** WPF suite `165/165` and client suite `24/24` on the Windows
+engine build from 2026-11-25; the engine, serve protocol, and store are unchanged, so no engine
+suite was rerun.
+
+**Remaining.** Designer and Viewer still show the Result for any selection: a document has one
+layout and import drops a source's layout, so per-node layouts require store, import, and serve
+work. The design and backlog are in
+[`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md).

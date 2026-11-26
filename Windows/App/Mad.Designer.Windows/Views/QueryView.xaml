@@ -41,13 +41,6 @@
                 </Border>
                 <Border Style="{StaticResource MAD.Divider}" />
 
-                <ComboBox DockPanel.Dock="Right" Margin="8,0,0,0" MinWidth="150" VerticalAlignment="Center"
-                          ItemsSource="{Binding Queries}"
-                          SelectedValuePath="Id" SelectedValue="{Binding QueryId, Mode=TwoWay}"
-                          DisplayMemberPath="Name"
-                          ToolTip="{infra:Loc Query.SelectQuery.Tooltip}"
-                          AutomationProperties.Name="{infra:Loc Query.SelectQuery.Name}" />
-
                 <StackPanel Orientation="Horizontal" Visibility="{Binding IsDesigner, Converter={StaticResource BoolToVis}}">
                     <TextBlock Text="{infra:Loc Query.Refine}" Style="{StaticResource MAD.GroupCaption}" />
                     <Button x:Name="FiltersButton" Style="{StaticResource MAD.CommandButton}" Click="ToggleFilters"
@@ -176,8 +169,40 @@
                 </ListBox>
 
                 <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Query.Sources}"
-                           Style="{StaticResource MAD.SectionHeader}" Margin="0,0,0,8"
+                           Style="{StaticResource MAD.SectionHeader}" Margin="0,0,0,4"
                            Visibility="{Binding IsRoot, Converter={StaticResource BoolToVis}}" />
+                <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Query.Sources.Hint}" Margin="2,0,0,6"
+                           Visibility="{Binding ShowSourcesHint, Converter={StaticResource BoolToVis}}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.SecondaryText}">
+                            <Setter Property="FontSize" Value="{StaticResource MAD.FontSize.Caption}" />
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Query.Sources.Empty}" Margin="2,0,0,6">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.SecondaryText}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowSourcesEmpty}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Query.Sources.AllAdded}" Margin="2,0,0,6">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.SecondaryText}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShowAllSourcesAdded}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 <ListBox x:Name="SourcesList" ItemsSource="{Binding UpstreamSources}"
                          MouseDoubleClick="SourcesList_OnDoubleClick"
                          Background="{DynamicResource ControlFillColorDefaultBrush}"
@@ -196,11 +221,20 @@
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"
                           Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
 
-            <ScrollViewer x:Name="CanvasScroll" Grid.Column="2"
-                          HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                          Background="{DynamicResource SolidBackgroundFillColorBaseBrush}">
-                <views:QueryCanvas x:Name="Canvas" ClipToBounds="True" />
-            </ScrollViewer>
+            <DockPanel Grid.Column="2">
+                <Border DockPanel.Dock="Top" Padding="10,4"
+                        Background="{DynamicResource LayerFillColorDefaultBrush}"
+                        BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}"
+                        BorderThickness="0,0,0,1"
+                        Visibility="{Binding ShowOneSourceHint, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="{infra:Loc Composition.OneSource}" Style="{StaticResource MAD.SecondaryText}" />
+                </Border>
+                <ScrollViewer x:Name="CanvasScroll"
+                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                              Background="{DynamicResource SolidBackgroundFillColorBaseBrush}">
+                    <views:QueryCanvas x:Name="Canvas" ClipToBounds="True" />
+                </ScrollViewer>
+            </DockPanel>
         </Grid>
 
         <!-- SQL Query editor -->
@@ -380,6 +414,8 @@
             <Border Style="{StaticResource MAD.PopupSurface}" MinWidth="480">
                 <StackPanel>
                     <TextBlock Text="{infra:Loc Query.RootOutputs}" Style="{StaticResource MAD.SectionHeader}" />
+                    <TextBlock Text="{infra:Loc Query.Columns.Copy}" Style="{StaticResource MAD.SecondaryText}"
+                               Margin="0,0,0,8" />
                     <ItemsControl ItemsSource="{Binding Outputs}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

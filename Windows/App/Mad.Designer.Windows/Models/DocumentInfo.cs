@@ -10,7 +10,9 @@ public sealed record QueryInfo(long Id, string Name, bool IsRoot)
     internal static QueryInfo Parse(JsonElement e) => new(
         e.GetProperty("id").GetInt64(),
         e.GetProperty("name").GetString() ?? "",
-        e.TryGetProperty("isRoot", out var root) && root.ValueKind == JsonValueKind.True);
+        e.TryGetProperty("isRoot", out var root)
+            && (root.ValueKind == JsonValueKind.True
+                || (root.ValueKind == JsonValueKind.Number && root.GetInt32() != 0)));
 }
 
 /// <summary>The document's type and its queries, from the engine's <c>document-info</c>.

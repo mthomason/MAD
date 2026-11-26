@@ -129,6 +129,11 @@ screenshots; that unblocks visual iteration for both of us.
   context menu (Select Section / Show Section / Hide Section). A hidden band stays in the
   list but renders dimmed and italic so it reads as disabled, mirroring the iOS designer.
   Double-click remains a silent accelerator.
-- Composition-facing presentation stays with Report 2 (`MAD_COMPOSITION_UX.md`): the node
-  strip, the "Outputs → Columns" rename, the type-specific next-action hint, and the
-  root-canvas empty state.
+- **Complete (2026-11-26).** The composition-facing presentation from Report 2 landed as a
+  docked **Composition pane** (the direction in `Composable UI on Windows.md`), not the top
+  node strip: a clickable graph with the Result at depth 0, Expand/Collapse, one toolbar
+  Component picker, the "Outputs → Columns" rename with explanatory copy, the Sources and
+  result-canvas empty states, the one-source hint, and the type-specific start workspace
+  (Query on open). Every new string is in all six dictionaries. Selecting a source moves to
+  Query; per-node Designer/Viewer layouts remain, recorded in
+  [`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md).

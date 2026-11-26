@@ -114,8 +114,33 @@ public sealed class QueryViewModel : ObservableObject
     /// <summary>True when the selected query is a source query (a leaf), not the root.</summary>
     public bool IsNotRoot => !IsRoot;
 
-    /// <summary>The queries a composed root can take as inputs (every non-root query).</summary>
-    public IReadOnlyList<QueryInfo> UpstreamSources => Queries.Where(q => !q.IsRoot).ToList();
+    /// <summary>The queries a composed root can still add as inputs: every non-root query that
+    /// is not already one of the root's upstream tables.</summary>
+    public IReadOnlyList<QueryInfo> UpstreamSources
+    {
+        get
+        {
+            var used = _model.Tables.Where(t => t.IsUpstream).Select(t => t.UpstreamQuery).ToHashSet();
+            return Queries.Where(q => !q.IsRoot && !used.Contains(q.Id)).ToList();
+        }
+    }
+
+    public bool HasAvailableSources => UpstreamSources.Count > 0;
+
+    /// <summary>The number of sources already wired into the composed root.</summary>
+    public int UpstreamTableCount => _model.Tables.Count(t => t.IsUpstream);
+
+    /// <summary>True when the Result has no sources yet: the sidebar explains how to begin.</summary>
+    public bool ShowSourcesEmpty => IsRoot && UpstreamTableCount == 0;
+
+    /// <summary>True when every source in the document is already joined to the Result.</summary>
+    public bool ShowAllSourcesAdded => IsRoot && UpstreamTableCount > 0 && !HasAvailableSources;
+
+    /// <summary>True when the sidebar has a source the user can still add.</summary>
+    public bool ShowSourcesHint => IsRoot && HasAvailableSources;
+
+    /// <summary>True when the Result has exactly one source: joining needs at least two.</summary>
+    public bool ShowOneSourceHint => IsRoot && UpstreamTableCount == 1;
 
     /// <summary>The composed root's outputs, in their output order.</summary>
     public IReadOnlyList<QueryField> Outputs
@@ -580,6 +605,12 @@ public sealed class QueryViewModel : ObservableObject
         OnPropertyChanged(nameof(NonOutputFields));
         OnPropertyChanged(nameof(OutputsLabel));
         OnPropertyChanged(nameof(UpstreamSources));
+        OnPropertyChanged(nameof(HasAvailableSources));
+        OnPropertyChanged(nameof(UpstreamTableCount));
+        OnPropertyChanged(nameof(ShowSourcesEmpty));
+        OnPropertyChanged(nameof(ShowAllSourcesAdded));
+        OnPropertyChanged(nameof(ShowSourcesHint));
+        OnPropertyChanged(nameof(ShowOneSourceHint));
         OnPropertyChanged(nameof(IsRoot));
         OnPropertyChanged(nameof(CanEditSql));
         OnPropertyChanged(nameof(IsNotRoot));

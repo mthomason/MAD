@@ -55,6 +55,22 @@ public sealed class DesignerViewModel : ObservableObject
 
     public bool HasDocument => _handle >= 0;
 
+    private bool _isComposition;
+
+    /// <summary>True when the document is a Composition Report. The field list's caption then
+    /// reads "Report columns" — the columns the Result exposes — rather than "Query fields".</summary>
+    public bool IsComposition
+    {
+        get => _isComposition;
+        set
+        {
+            if (Set(ref _isComposition, value)) OnPropertyChanged(nameof(FieldsCaption));
+        }
+    }
+
+    public string FieldsCaption
+        => Localizer.Get(IsComposition ? "Designer.ReportColumns" : "Designer.QueryFields");
+
     public AsyncRelayCommand AddLabelCommand { get; }
     public AsyncRelayCommand AddDataFieldCommand { get; }
     public AsyncRelayCommand AddAggregateCommand { get; }

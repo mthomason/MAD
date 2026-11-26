@@ -138,7 +138,7 @@ public sealed class ShellSurfaceTests
     }
 
     [Fact]
-    public async Task CreatedReportOpensInTheDesigner_ExistingReportInTheViewer()
+    public async Task CreatedReportOpensInTheDesigner_ExistingReportInTheQueryWorkspace()
     {
         string sqlite = CopyChinookToTemp();
         string created = Path.Combine(Path.GetTempPath(), $"mad-shell-{Guid.NewGuid():N}.mad");
@@ -157,10 +157,10 @@ public sealed class ShellSurfaceTests
             Assert.Equal(1, viewModel.SelectedWorkspaceIndex);
 
             await viewModel.OpenPathAsync(MadPathResolver.DefaultDocument());
-            Assert.Equal(Workspace.Viewer, viewModel.SelectedWorkspace);
-            Assert.True(viewModel.ViewerVisible);
-            Assert.False(viewModel.DesignerVisible);
-            Assert.Equal(2, viewModel.SelectedWorkspaceIndex);
+            Assert.Equal(Workspace.Query, viewModel.SelectedWorkspace);
+            Assert.True(viewModel.QueryVisible);
+            Assert.False(viewModel.ViewerVisible);
+            Assert.Equal(0, viewModel.SelectedWorkspaceIndex);
         }
         finally
         {

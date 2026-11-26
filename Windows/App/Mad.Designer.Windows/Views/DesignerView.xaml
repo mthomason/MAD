@@ -195,7 +195,7 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Designer.QueryFields}"
+                <TextBlock DockPanel.Dock="Top" Text="{Binding FieldsCaption}"
                            Style="{StaticResource MAD.SectionHeader}" Margin="0,0,0,4" />
                 <TextBlock DockPanel.Dock="Top" Text="{infra:Loc Designer.FieldsEmpty}" Margin="2,0,0,6">
                     <TextBlock.Style>

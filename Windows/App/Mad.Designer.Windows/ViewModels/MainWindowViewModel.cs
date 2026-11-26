@@ -100,6 +100,7 @@ public sealed class MainWindowViewModel : ObservableObject
             OnPropertyChanged(nameof(QueryVisible));
             OnPropertyChanged(nameof(DesignerVisible));
             OnPropertyChanged(nameof(ViewerVisible));
+            OnPropertyChanged(nameof(ShowSourceWorkspaceNotice));
         }
     }
 
@@ -126,6 +127,12 @@ public sealed class MainWindowViewModel : ObservableObject
     public bool DesignerVisible => HasDocument && IsDesignerSelected;
     public bool ViewerVisible => HasDocument && IsViewerSelected;
 
+    /// <summary>True when a source is selected but the active workspace can only show the
+    /// Result: the shell then explains why the pane and the workspace disagree. Separate
+    /// per-source layouts are future work (MAD_COMPOSITION_NODE_VIEW.md).</summary>
+    public bool ShowSourceWorkspaceNotice
+        => HasDocument && Document.IsComposed && !Document.IsRootSelected && SelectedWorkspace != Workspace.Query;
+
     public ICommand OpenDocumentCommand { get; }
     public ICommand OpenAboutCommand { get; }
     public ICommand NewDocumentCommand { get; }
@@ -139,26 +146,28 @@ public sealed class MainWindowViewModel : ObservableObject
     public RelayCommand SelectViewerCommand { get; }
 
     /// <summary>Opens a document at a known path (a recent file or a command-line argument) in
-    /// the Viewer — the reading default for an existing report.</summary>
+    /// the Query workspace — the authoring default, and the one place that can show either the
+    /// Result or a source.</summary>
     public async Task<bool> OpenPathAsync(string path)
     {
         await Document.OpenAsync(path);
         if (!Document.HasDocument) return false;
 
         AddRecent(path);
-        SelectedWorkspace = Workspace.Viewer;
+        SelectedWorkspace = Workspace.Query;
         return true;
     }
 
-    /// <summary>Adopts a report the connection assistant just created and opens it in the
-    /// Designer — a new report starts with its layout.</summary>
+    /// <summary>Adopts a report just created. A standard report opens in the Designer (a new
+    /// report starts with its layout); a composition opens in Query, where sources are added
+    /// and joined.</summary>
     public async Task AdoptCreatedAsync(OpenResult created, string path)
     {
         await Document.AdoptAsync(created, path);
         if (!Document.HasDocument) return;
 
         AddRecent(path);
-        SelectedWorkspace = Workspace.Designer;
+        SelectedWorkspace = Document.IsComposed ? Workspace.Query : Workspace.Designer;
     }
 
     /// <summary>Adds a path to the most-recent-first list, removing an earlier occurrence.</summary>
@@ -231,9 +240,30 @@ public sealed class MainWindowViewModel : ObservableObject
             OnPropertyChanged(nameof(QueryVisible));
             OnPropertyChanged(nameof(DesignerVisible));
             OnPropertyChanged(nameof(ViewerVisible));
+            OnPropertyChanged(nameof(ShowSourceWorkspaceNotice));
             SelectQueryCommand.RaiseCanExecuteChanged();
             SelectDesignerCommand.RaiseCanExecuteChanged();
             SelectViewerCommand.RaiseCanExecuteChanged();
+            ConvertCommand.RaiseCanExecuteChanged();
+            ImportChildCommand.RaiseCanExecuteChanged();
+            return;
+        }
+
+        if (e.PropertyName is nameof(DocumentViewModel.SelectedQueryId)
+            or nameof(DocumentViewModel.IsRootSelected))
+        {
+            // Only Query can show a source's own definition today. Selecting one takes the user
+            // there; selecting the Result leaves the current workspace alone.
+            if (Document.IsComposed && !Document.IsRootSelected)
+            {
+                SelectedWorkspace = Workspace.Query;
+            }
+            OnPropertyChanged(nameof(ShowSourceWorkspaceNotice));
+        }
+
+        if (e.PropertyName == nameof(DocumentViewModel.IsComposed))
+        {
+            OnPropertyChanged(nameof(ShowSourceWorkspaceNotice));
         }
     }
 }

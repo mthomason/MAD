@@ -183,7 +183,11 @@ public sealed record QueryModel(
         }
 
         long queryId = root.TryGetProperty("queryId", out var queryIdEl) && queryIdEl.ValueKind == JsonValueKind.Number ? queryIdEl.GetInt64() : 0;
-        bool isRoot = root.TryGetProperty("isRoot", out var isRootEl) && isRootEl.ValueKind == JsonValueKind.True;
+        // The engine writes this flag as a JSON boolean in document-info but as 1/0 in
+        // query-model (an NSNumber built from a BOOL expression), so accept either form.
+        bool isRoot = root.TryGetProperty("isRoot", out var isRootEl)
+            && (isRootEl.ValueKind == JsonValueKind.True
+                || (isRootEl.ValueKind == JsonValueKind.Number && isRootEl.GetInt32() != 0));
         return new QueryModel(driver, sql, sqlSource, tables, links, predicates, groups, queryId, isRoot);
     }
 }
