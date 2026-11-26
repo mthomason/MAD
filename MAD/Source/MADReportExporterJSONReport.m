@@ -19,6 +19,7 @@
 #import "MADReportPageBuilder.h"
 
 #import <MAD/MADDocumentRenderProtocol.h>
+#import <MAD/RptqQuery.h>
 #import <MAD/MADReportLineRepresentation.h>
 #import <MAD/MADReportPageRepresentation.h>
 #import <MAD/MADReportSectionRepresentation.h>
@@ -76,6 +77,22 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 
 // The CLI checks +isAvailable before it asks, but a direct caller must not get the
 // data half's bytes under this format's name from a document that cannot render.
+- (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
+				 query:(RptqQuery *)query
+				 toURL:(NSURL *)url
+			   options:(MADReportExportOptions)options
+				 error:(NSError * _Nullable __autoreleasing *)error {
+	if (query == nil || query.rootOfDocument != nil || ![document conformsToProtocol: @protocol(MADDocumentRenderProtocol)]) {
+		return [self exportDocument: document toURL: url options: options error: error];
+	}
+	id <MADDocumentRenderProtocol> renderDocument = (id <MADDocumentRenderProtocol>)document;
+	int64_t saved = renderDocument.renderQueryIdentifier;
+	renderDocument.renderQueryIdentifier = query.identifier;
+	BOOL ok = [self exportDocument: document toURL: url options: options error: error];
+	renderDocument.renderQueryIdentifier = saved;
+	return ok;
+}
+
 - (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
 				 toURL:(NSURL *)url
 			   options:(MADReportExportOptions)options

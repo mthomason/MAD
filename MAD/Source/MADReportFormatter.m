@@ -202,6 +202,13 @@ typedef NSComparisonResult (*MADGroupLevelComparator)(id value, id value2, MADDa
 // publishes mid-pass cannot pair one generation's cache key with another's rows.
 - (MADDataResult *)renderResult {
 	id <MADDocumentRenderProtocol> layout = self.layout;
+	// A specific node's result (a leaf or intermediate composer), when the renderer
+	// is scoped to one, before the document's own pin/current result.
+	int64_t queryIdentifier = [layout respondsToSelector: @selector(renderQueryIdentifier)] ? layout.renderQueryIdentifier : 0;
+	if (queryIdentifier != 0) {
+		MADDataResult *nodeResult = layout.nodeResults[@(queryIdentifier)];
+		if (nodeResult != nil) return nodeResult;
+	}
 	if ([layout respondsToSelector: @selector(pinnedRenderResult)]) {
 		MADDataResult *pinned = layout.pinnedRenderResult;
 		if (pinned != nil) return pinned;
@@ -646,12 +653,12 @@ static MADGroupLevelComparator MADComparisonFunctionForDataType(MADDataType data
 		id <MADDocumentRenderProtocol> layout = _layout;
 		if (layout != nil) {
 			MADDatabase *database = layout.database;
-			MADSectionsLayout *sections;
+			int64_t queryIdentifier = [layout respondsToSelector: @selector(renderQueryIdentifier)] ? layout.renderQueryIdentifier : 0;
 			// The store context is the protocol's own (it used to be read through
 			// -managedObjectContext, which only MADocument spells that way).
-			sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: layout.storeContext
-																 databaseClass: [database class]];
-			_sections = sections;
+			_sections = [[MADSectionsLayout alloc] initWithManagedObjectContext: layout.storeContext
+																 databaseClass: [database class]
+															   queryIdentifier: queryIdentifier];
 		}
 	}
 	return _sections;

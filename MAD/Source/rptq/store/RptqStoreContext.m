@@ -15,6 +15,7 @@
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseCredentals.h>
 #import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
 #import <MAD/RptqDocumentSectionRows.h>
 #import <MAD/RptqDocumentElement.h>
 #import <MAD/RptqAlignment.h>
@@ -674,6 +675,16 @@ static void MADStoreCopyElementValueTypes(RptqDocumentElement *source, RptqDocum
 				MADStoreCopyElementValueTypes(sourceElement, importedElement);
 				importedElement.inSectionRow = importedRow;
 			}
+		}
+	}
+
+	// A layoutless source imports with five empty sections: a query that ended up with
+	// no structural sections of its own (a source that had no designed layout) gets an
+	// authorable layout here, eagerly rather than on its first scoped write.
+	for (RptqObject *importedQueryObject in remap[@"RptqQuery"].allValues) {
+		RptqQuery *importedQuery = (RptqQuery *)importedQueryObject;
+		if (importedQuery.hasLayoutSections.count == 0) {
+			[RptqDocumentSection createStructuralSectionsForQuery: importedQuery managedObjectContext: self];
 		}
 	}
 

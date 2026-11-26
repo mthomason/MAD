@@ -765,6 +765,23 @@
 	}
 }
 
+/// A layoutless source (a query with no sections of its own) imports with five empty
+/// sections, so the imported child is authorable immediately.
+- (void)testImportLayoutlessSourceYieldsEmptySections {
+	RptqStoreContext *source = [self openContextAtPath:@"layoutless-source.sqlite"];
+	XCTAssertTrue([source loadAllWithError:NULL]);
+	[self buildStandardQueryGraphInContext:source tableName:@"t" fieldName:@"f" host:@"/tmp/t.sqlite"];
+
+	RptqStoreContext *destination = [self openContextAtPath:@"layoutless-dest.sqlite"];
+	XCTAssertTrue([destination loadAllWithError:NULL]);
+	[destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	NSError *error = nil;
+	RptqQuery *imported = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:&error];
+	XCTAssertNotNil(imported);
+	XCTAssertEqual(imported.hasLayoutSections.count, (NSUInteger)5);
+}
+
 #pragma mark - Importing a query graph
 
 /// Builds an ordinary single-query graph -- one database, its credential, one schema

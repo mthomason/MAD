@@ -158,6 +158,7 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 }
 
 - (void)ensureStructuralSectionsInContext:(RptqStoreContext *)context {
+	if (self.rootOfDocument != nil) return; // the root's sections are the document's
 	for (RptqDocumentSection *section in self.hasLayoutSections) {
 		switch (section.type) {
 			case MADDocumentSectionTypeReportHeader:

@@ -537,6 +537,9 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 	NSError *publishError = nil;
 	if (![document publishPendingResultWithError: &publishError]) {
 		[document discardPendingResult];
+		// A failed publish keeps the previous node results; only the newly staged
+		// intermediates are discarded.
+		[self discardIntermediateResults: resultsByIdentifier];
 		[self finishWithError: publishError ?: [NSError errorWithDomain:@"MADCache" code:errCache userInfo:nil]];
 		return;
 	}

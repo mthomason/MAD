@@ -14,6 +14,7 @@
 #import "MADReportExporterHTML.h"
 
 #import <MAD/MADDocumentRenderProtocol.h>
+#import <MAD/RptqQuery.h>
 
 #import "MADReportExportSource.h"
 #import "MADReportExportWriter.h"
@@ -66,6 +67,22 @@ static NSString *MADReportExporterFontName(NSString *);
 
 + (NSString *)unavailableReason {
 	return nil;
+}
+
+- (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
+				 query:(RptqQuery *)query
+				 toURL:(NSURL *)url
+			   options:(MADReportExportOptions)options
+				 error:(NSError * _Nullable __autoreleasing *)error {
+	if (query == nil || query.rootOfDocument != nil || ![document conformsToProtocol: @protocol(MADDocumentRenderProtocol)]) {
+		return [self exportDocument: document toURL: url options: options error: error];
+	}
+	id <MADDocumentRenderProtocol> renderDocument = (id <MADDocumentRenderProtocol>)document;
+	int64_t saved = renderDocument.renderQueryIdentifier;
+	renderDocument.renderQueryIdentifier = query.identifier;
+	BOOL ok = [self exportDocument: document toURL: url options: options error: error];
+	renderDocument.renderQueryIdentifier = saved;
+	return ok;
 }
 
 - (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document

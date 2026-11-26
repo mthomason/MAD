@@ -60,6 +60,11 @@
 
 @optional
 
+/// The query whose layout and result the renderer draws (0 = the document's default
+/// node).  An export of a specific node sets this before it formats, so the formatter
+/// reads that node's sections and result; 0 restores the root.
+@property (nonatomic, readwrite) int64_t renderQueryIdentifier;
+
 @property (readonly, nonatomic, strong) MTPaper *paper;
 @property (readonly, nonatomic) CGSize paperSize;
 - (void)setPaperType:(MTPaperType)paperType;

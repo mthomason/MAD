@@ -125,7 +125,8 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	CGRect bounds = [self pageBoundsForDocument: document];
 	CGRect trimBox = [self pageTrimBoxForDocument: document];
 	MADReportFormatter *reportFormatter = document.reportFormatter;
-	reportFormatter.overrideIdentifier = @"madpreview";
+	int64_t renderQuery = [document respondsToSelector: @selector(renderQueryIdentifier)] ? document.renderQueryIdentifier : 0;
+	reportFormatter.overrideIdentifier = renderQuery != 0 ? [NSString stringWithFormat: @"madpreview-q%lld", renderQuery] : @"madpreview";
 	reportFormatter.didRefresh = YES;
 	reportFormatter.layoutSize = bounds.size;
 	[reportFormatter setMarginUsingPrintableRect: trimBox];

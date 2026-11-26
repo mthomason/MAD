@@ -80,6 +80,7 @@
 	MADDataResult *_currentResult;
 	MADDataResult *_pendingResult;
 	NSDictionary<NSNumber *, MADDataResult *> *_nodeResults;
+	int64_t _renderQueryIdentifier;
 	BOOL _refreshed;
 	BOOL _limitResultsDesignMode;
 	MADReportFormatter *_reportFormatter;
@@ -501,6 +502,14 @@
 
 - (void)setNodeResults:(NSDictionary<NSNumber *, MADDataResult *> *)results {
 	_nodeResults = [results copy];
+}
+
+- (int64_t)renderQueryIdentifier {
+	return _renderQueryIdentifier;
+}
+
+- (void)setRenderQueryIdentifier:(int64_t)renderQueryIdentifier {
+	_renderQueryIdentifier = renderQueryIdentifier;
 }
 
 - (MADDataResult *)beginRefreshResultWithError:(NSError * __autoreleasing *)error {
