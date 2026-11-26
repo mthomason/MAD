@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol MADDocumentDataProtocol;
 
-@class MADDataResult, RptqDatabase;
+@class MADDataResult, RptqDatabase, RptqQuery;
 
 @interface MADReportExportSource : NSObject
 
@@ -33,6 +33,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// no SQL -- there is nothing to export then.
 + (nullable instancetype)sourceWithDocument:(id <MADDocumentDataProtocol>)document
 									  error:(NSError * _Nullable __autoreleasing *)error;
+/// Reads one node's committed result and layout.  `query` nil, or the root, reads the
+/// document's current result (the existing `sourceWithDocument:` behavior).  A non-root
+/// node reads its retained result from the document's per-node map; it errors when the
+/// node has not been refreshed.
++ (nullable instancetype)sourceWithDocument:(id <MADDocumentDataProtocol>)document
+					  query:(nullable RptqQuery *)query
+					  error:(NSError * _Nullable __autoreleasing *)error;
 
 @property (readonly, nonatomic, strong) id <MADDocumentDataProtocol> document;
 

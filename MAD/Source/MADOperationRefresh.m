@@ -533,7 +533,6 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 		[self discardIntermediateResults: resultsByIdentifier];
 		return;
 	}
-	[self discardIntermediateResults: resultsByIdentifier];
 
 	NSError *publishError = nil;
 	if (![document publishPendingResultWithError: &publishError]) {
@@ -542,6 +541,10 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 		return;
 	}
 	document.refreshed = YES;
+	// Retain every non-root node's materialized table so a query-scoped read
+	// (node-result / export?query) can reach it after this refresh.  Superseded
+	// node results are released here; their files follow the root's P4 discipline.
+	[document setNodeResults: resultsByIdentifier];
 	[self finish];
 }
 

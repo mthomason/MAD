@@ -142,6 +142,35 @@ node's output columns and rows.
 - A failed node already fails the refresh and leaves the previous complete results untouched;
   the query-scoped read names the node that failed.
 
+### 3.4b Serve JSON contract (Windows client)
+
+The Windows client is the consumer of `mad serve`; this is the query-scoped contract. All
+existing members are unchanged; the optional `query` parameter (a `RptqQuery.identifier`) is
+added to the layout, describe, result, and export methods. Omitted `query` targets the root
+(today's behavior). An unknown or stale `query` answers
+`{ "ok": false, "error": { "code": 1, "message": "no query <id> in this document." } }` and
+leaves the document unchanged.
+
+- **`layout-model`** + the nine query-scoped mutations (`add-element`, `remove-elements`,
+  `duplicate-elements`, `move-elements`, `set-element-geometry`, `set-element-content`,
+  `set-element-typography`, `set-element-box-model`, `set-section`) gain optional `query`.
+  The response stays the full `LayoutModel` — `{ paperSize, sections[], elements[], fields[] }`
+  — for **that query's** layout. A composing node's `fields` are its `outputKey` columns; a
+  leaf's are its query fields (no `outputKey` required). `set-paper-size` stays document-level.
+- **`describe`** gains optional `query`: `columns` = the selected query's output columns
+  (composing → its `outputKey`s; leaf → its field keys/names); `tables` = the selected leaf's
+  own schema tables only (a composing node → `[]`). Omitted → today's all-databases `tables`.
+- **`query-model`** gains `isComposing` (beside `isRoot`) — true for the root or any query with
+  an upstream table; a composing node reports `driver: "sqlite3"` and `sql: ""`. Only
+  `validate-sql`/`apply-sql` reject a composing node ("SQL editing is not supported for a
+  composed node."). `query` (no param) still succeeds with `""` for a composed document.
+- **`node-result`** (new, + optional `query`) reads a node's materialized rows:
+  `{ "query": <id>, "name": "...", "rowCount": N, "columns": [{ "key", "name", "table", "type" }],
+  "rows": [[ … ]] }`. Omitted/root reads the root's published result; a non-root node reads its
+  retained result (error if the node has not been refreshed). `refresh` stays whole-document.
+- **`export`** gains optional `query`: the row formats (`json`, `csv`, `text`) read the selected
+  node's result; omitted → the root. `engine-info` advertises `node-result` in its `capabilities`.
+
 ### 3.5 Windows UI follow-up
 
 - Bind the Designer and Viewer to `Document.SelectedQueryId` instead of the document layout.

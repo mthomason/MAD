@@ -24,6 +24,9 @@
 #import <MAD/RptqDatabase.h>
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
+#import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQueryField.h>
 
 #import <MADSqlite3/MADDataTableFast.h>
@@ -142,6 +145,63 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 	}
 	source.schemaFields = fields;
 
+	return source;
+}
+
++ (nullable instancetype)sourceWithDocument:(id <MADDocumentDataProtocol>)document
+									  query:(nullable RptqQuery *)query
+									  error:(NSError * _Nullable __autoreleasing *)error {
+	// The root, or no explicit node, reads the document the way it always has.
+	if (query == nil || query.rootOfDocument != nil) {
+		return [self sourceWithDocument:document error:error];
+	}
+
+	MADDataResult *result = document.nodeResults[@(query.identifier)];
+	if (result == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:@"MADReportExport" code:3 userInfo:@{
+				NSLocalizedDescriptionKey: [NSString stringWithFormat:
+					NSLocalizedString(@"The node '%@' has not been refreshed; refresh the document first.", @"Export of an unrefreshed node."),
+					query.name.length > 0 ? query.name : @"?"] }];
+		}
+		return nil;
+	}
+
+	MADReportExportSource *source = [[MADReportExportSource alloc] init];
+	source.document = document;
+	source.result = result;
+	source.sql = @"<node>";
+
+	NSMutableArray <NSString *> *columnKeys = [result.columnKeys mutableCopy];
+	NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields = [NSMutableDictionary dictionary];
+
+	if ([query isComposing]) {
+		source.driverName = @"composed";
+		NSArray <RptqQueryField *> *outputs = [query orderedOutputFieldsWithError:NULL] ?: @[];
+		for (RptqQueryField *output in outputs) {
+			if (output.outputKey != nil) fields[output.outputKey] = output.databaseSchemaField;
+		}
+		if (columnKeys.count == 0) {
+			for (RptqQueryField *output in outputs) {
+				if (output.outputKey != nil) [columnKeys addObject:output.outputKey];
+			}
+		}
+	} else {
+		RptqDatabase *database = query.inDatabase;
+		source.driverName = database.databaseDriverType ?: @"";
+		for (RptqQueryTable *table in query.hasQueryTables) {
+			NSString *alias = table.alias.length > 0 ? table.alias : (table.databaseSchemaTable.name ?: @"");
+			for (RptqQueryField *field in table.hasQueryFields) {
+				NSString *name = field.databaseSchemaField.name ?: @"";
+				if (name.length == 0) continue;
+				NSString *key = alias.length > 0 ? [NSString stringWithFormat:@"%@.%@", alias, name] : name;
+				fields[key] = field.databaseSchemaField;
+			}
+		}
+	}
+
+	source.columnKeys = columnKeys;
+	source.schemaFields = fields;
 	return source;
 }
 

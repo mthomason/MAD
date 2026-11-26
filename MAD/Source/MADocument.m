@@ -139,6 +139,7 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 @property (nonatomic, readwrite, strong) MADDataTableFast *dataTable;
 @property (nonatomic, readwrite, strong, nullable) MADDataResult *currentResult;
 @property (nonatomic, readwrite, strong, nullable) MADDataResult *pendingResult;
+@property (nonatomic, readwrite, copy) NSDictionary<NSNumber *, MADDataResult *> *nodeResults;
 @property (nonatomic, readwrite, strong) MADDatabase *database;
 @property (nonatomic, readwrite, strong) MADQueryFull *mainQuery;
 
@@ -228,6 +229,7 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 	self.dataTable = datatable;
 	self.currentResult = loaded ? [MADDataResult resultWithDataTable: datatable
 														columnMapURL: self.urlDataTableCache] : nil;
+	self.nodeResults = nil;
 }
 
 #pragma mark - Publication

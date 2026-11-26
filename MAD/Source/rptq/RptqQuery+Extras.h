@@ -38,6 +38,20 @@
 	+ (NSArray<NSString *> *)composeOutputKeysForFields:(NSArray<RptqQueryField *> *)fields
 										  existingKeys:(NSSet<NSString *> *)existingKeys;
 
+	/// YES when the query joins other nodes (it has a query table whose `upstreamQuery`
+	/// is set) -- the root of a composition and any non-root composer.  A leaf is NO.
+	- (BOOL)isComposing;
+
+	/// The query's report sections in render order: report header, page header, group
+	/// headers, detail, group footers, page footer, report footer.  The root's structural
+	/// sections are the document's five; any other node's are its `hasLayoutSections`.
+	- (NSArray<RptqDocumentSection *> *)orderedLayoutSectionsForDocument:(RptqDocument *)document;
+
+	/// Lazily creates the five structural sections (owned via `ownerQuery`) when the query
+	/// has none -- the first scoped layout write to a migrated revision-3 leaf.  A query
+	/// that already has any structural section is left unchanged.
+	- (void)ensureStructuralSectionsInContext:(RptqStoreContext *)context;
+
 @end
 
 #endif

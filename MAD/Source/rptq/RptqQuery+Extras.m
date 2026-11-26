@@ -108,6 +108,71 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 	return sortedArray;
 }
 
+- (BOOL)isComposing {
+	for (RptqQueryTable *table in self.hasQueryTables) {
+		if (table.upstreamQuery != nil) return YES;
+	}
+	return NO;
+}
+
+- (NSArray<RptqDocumentSection *> *)orderedLayoutSectionsForDocument:(RptqDocument *)document {
+	NSMutableArray<RptqDocumentSection *> *sections = [NSMutableArray array];
+
+	RptqDocumentSection *reportHeader = nil, *reportFooter = nil, *pageHeader = nil, *pageFooter = nil, *detail = nil;
+	if (self.rootOfDocument != nil) {
+		reportHeader = document.hasReportHeaderSection;
+		reportFooter = document.hasReportFooterSection;
+		pageHeader = document.hasPageHeaderSection;
+		pageFooter = document.hasPageFooterSection;
+		detail = document.hasDetailSection;
+	} else {
+		for (RptqDocumentSection *section in self.hasLayoutSections) {
+			switch (section.type) {
+				case MADDocumentSectionTypeReportHeader: reportHeader = section; break;
+				case MADDocumentSectionTypeReportFooter: reportFooter = section; break;
+				case MADDocumentSectionTypePageHeader: pageHeader = section; break;
+				case MADDocumentSectionTypePageFooter: pageFooter = section; break;
+				case MADDocumentSectionTypeBody: detail = section; break;
+				default: break;
+			}
+		}
+	}
+
+	if (reportHeader) [sections addObject:reportHeader];
+	if (pageHeader) [sections addObject:pageHeader];
+
+	NSArray<RptqQueryGroup *> *groups = [self sortedQueryGroups] ?: @[];
+	for (RptqQueryGroup *group in groups) {
+		RptqDocumentSection *header = [RptqDocumentSection headerSectionInSections:group.hasSection];
+		if (header) [sections addObject:header];
+	}
+	if (detail) [sections addObject:detail];
+	for (RptqQueryGroup *group in [groups reverseObjectEnumerator]) {
+		RptqDocumentSection *footer = [RptqDocumentSection footerSectionInSections:group.hasSection];
+		if (footer) [sections addObject:footer];
+	}
+	if (pageFooter) [sections addObject:pageFooter];
+	if (reportFooter) [sections addObject:reportFooter];
+
+	return sections;
+}
+
+- (void)ensureStructuralSectionsInContext:(RptqStoreContext *)context {
+	for (RptqDocumentSection *section in self.hasLayoutSections) {
+		switch (section.type) {
+			case MADDocumentSectionTypeReportHeader:
+			case MADDocumentSectionTypeReportFooter:
+			case MADDocumentSectionTypePageHeader:
+			case MADDocumentSectionTypePageFooter:
+			case MADDocumentSectionTypeBody:
+				return;
+			default:
+				break;
+		}
+	}
+	[RptqDocumentSection createStructuralSectionsForQuery:self managedObjectContext:context];
+}
+
 - (NSArray *)sortDescriptorsForDatabase:(MADDatabase *)database {
 
 	NSMutableArray *sortedSortDescriptorsGroup = [[NSMutableArray alloc] init];

@@ -21,6 +21,9 @@
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/RptqDatabase.h>
 #import <MAD/MADStore.h>
 #import "MADStoreConverter.h"
 
@@ -691,6 +694,75 @@
 	XCTAssertEqualObjects([readJoin valueForKey:@"type"], @1);
 	XCTAssertEqualObjects([[[readJoin valueForKey:@"hasLeftField"] valueForKey:@"databaseSchemaField"] valueForKey:@"name"], @"invoice_id");
 	XCTAssertEqualObjects([[[readJoin valueForKey:@"hasRightField"] valueForKey:@"databaseSchemaField"] valueForKey:@"name"], @"invoice_id");
+}
+
+/// Each node owns its five structural sections via `ownerQuery`; a save/reopen keeps
+/// three independent layouts intact (store revision 4).
+- (void)testPerNodeLayoutRoundTripsWithThreeLayouts {
+	RptqStoreContext *context = [self openContextAtPath:@"per-node-layout.sqlite"];
+	XCTAssertTrue([context loadAllWithError:NULL]);
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqQuery *root = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:100];
+	root.name = @"root";
+	RptqQuery *leaf1 = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:101];
+	leaf1.name = @"leaf1";
+	RptqQuery *leaf2 = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:102];
+	leaf2.name = @"leaf2";
+	[database setValue:@[ root, leaf1, leaf2 ] forKey:@"hasQueries"];
+	[document setValue:root forKey:@"rootQuery"];
+
+	// The root's five sections stay on the document; each leaf owns its own five.
+	RptqDocumentSection *reportHeader = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:1];
+	reportHeader.type = MADDocumentSectionTypeReportHeader;
+	reportHeader.visibility = YES;
+	RptqDocumentSection *reportFooter = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:2];
+	reportFooter.type = MADDocumentSectionTypeReportFooter;
+	reportFooter.visibility = YES;
+	RptqDocumentSection *pageHeader = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:3];
+	pageHeader.type = MADDocumentSectionTypePageHeader;
+	pageHeader.visibility = YES;
+	RptqDocumentSection *pageFooter = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:4];
+	pageFooter.type = MADDocumentSectionTypePageFooter;
+	pageFooter.visibility = YES;
+	RptqDocumentSection *detail = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:5];
+	detail.type = MADDocumentSectionTypeBody;
+	detail.visibility = YES;
+	[document setValue:reportHeader forKey:@"hasReportHeaderSection"];
+	[document setValue:reportFooter forKey:@"hasReportFooterSection"];
+	[document setValue:pageHeader forKey:@"hasPageHeaderSection"];
+	[document setValue:pageFooter forKey:@"hasPageFooterSection"];
+	[document setValue:detail forKey:@"hasDetailSection"];
+
+	[RptqDocumentSection createStructuralSectionsForQuery:leaf1 managedObjectContext:context];
+	[RptqDocumentSection createStructuralSectionsForQuery:leaf2 managedObjectContext:context];
+
+	NSError *error = nil;
+	XCTAssertTrue([context saveComposed:&error], @"%@", error);
+	XCTAssertEqual(context.store.storeVersion, MADStoreMaximumReadableVersion);
+
+	RptqStoreContext *reread = [self openContextAtPath:@"per-node-layout.sqlite"];
+	XCTAssertTrue([reread loadAllWithError:&error], @"%@", error);
+	RptqDocument *readDocument = [RptqDocument newDocumentReadFromManagedObjectContext:reread];
+	RptqQuery *readRoot = readDocument.rootQuery;
+	XCTAssertEqualObjects(readRoot.name, @"root");
+
+	// The root's ordered layout is the document's five sections.
+	NSArray<RptqDocumentSection *> *rootSections = [readRoot orderedLayoutSectionsForDocument:readDocument];
+	XCTAssertEqual(rootSections.count, (NSUInteger)5);
+
+	// Each leaf owns its own five sections.
+	for (RptqQuery *query in readRoot.inDatabase.hasQueries) {
+		if (query == readRoot) continue;
+		XCTAssertEqual(query.hasLayoutSections.count, (NSUInteger)5);
+		for (RptqDocumentSection *section in query.hasLayoutSections) {
+			XCTAssertEqualObjects(section.ownerQuery.name, query.name);
+		}
+	}
 }
 
 #pragma mark - Importing a query graph

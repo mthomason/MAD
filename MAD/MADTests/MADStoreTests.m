@@ -625,10 +625,11 @@ static NSSet *MADStoreCompositionOnlyFields(NSString *entityName) {
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		byEntity = @{
-			@"RptqQuery": [NSSet setWithArray:@[ @"name", @"rootOfDocument", @"upstreamOfTable" ]],
+			@"RptqQuery": [NSSet setWithArray:@[ @"name", @"rootOfDocument", @"upstreamOfTable", @"hasLayoutSections" ]],
 			@"RptqDocument": [NSSet setWithArray:@[ @"rootQuery" ]],
 			@"RptqQueryTable": [NSSet setWithArray:@[ @"upstreamQuery" ]],
 			@"RptqQueryField": [NSSet setWithArray:@[ @"outputIndex", @"outputKey" ]],
+			@"RptqDocumentSection": [NSSet setWithArray:@[ @"ownerQuery" ]],
 		};
 	});
 	return byEntity[entityName] ?: [NSSet set];

@@ -14,6 +14,7 @@
 #import "MADReportExporterJSON.h"
 
 #import "MADReportExportSource.h"
+#import <MAD/RptqQuery.h>
 #import "MADReportExportWriter.h"
 #import "MADReportExporterRegistry.h"
 
@@ -65,8 +66,16 @@ static NSString * const MADReportExporterJSONFormat = @"mad.report/1";
 				 toURL:(NSURL *)url
 			   options:(MADReportExportOptions)options
 				 error:(NSError * _Nullable __autoreleasing *)error {
+	return [self exportDocument: document query: nil toURL: url options: options error: error];
+}
 
-	MADReportExportSource *source = [MADReportExportSource sourceWithDocument: document error: error];
+- (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document
+				 query:(nullable RptqQuery *)query
+				 toURL:(NSURL *)url
+			   options:(MADReportExportOptions)options
+				 error:(NSError * _Nullable __autoreleasing *)error {
+
+	MADReportExportSource *source = [MADReportExportSource sourceWithDocument: document query: query error: error];
 	if (source == nil) return NO;
 
 	NSMutableString *json = [[NSMutableString alloc] init];

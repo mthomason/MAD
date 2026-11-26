@@ -80,7 +80,7 @@ NSDictionary * MADCLIEngineInfoDictionary(void) {
 		@"sourceDirty": dirty,
 		@"capabilities": @[ @"open", @"describe", @"query", @"refresh", @"export",
 							@"write", @"query-model", @"layout-model", @"sql-entry",
-							@"engine-info", MADDocumentCapabilityQueryComposition ],
+							@"node-result", @"engine-info", MADDocumentCapabilityQueryComposition ],
 	};
 }
 
