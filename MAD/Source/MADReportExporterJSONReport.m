@@ -82,19 +82,16 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 				 toURL:(NSURL *)url
 			   options:(MADReportExportOptions)options
 				 error:(NSError * _Nullable __autoreleasing *)error {
-	if (query == nil || query.rootOfDocument != nil || ![document conformsToProtocol: @protocol(MADDocumentRenderProtocol)]) {
+	if (query == nil || query.rootOfDocument != nil) {
 		return [self exportDocument: document toURL: url options: options error: error];
 	}
-	id <MADDocumentRenderProtocol> renderDocument = (id <MADDocumentRenderProtocol>)document;
-	int64_t saved = renderDocument.renderQueryIdentifier;
-	renderDocument.renderQueryIdentifier = query.identifier;
-	MADDataResult *nodeResult = document.nodeResults[@(query.identifier)];
-	BOOL pinned = nodeResult != nil && [renderDocument respondsToSelector: @selector(pinRenderResult:)];
-	if (pinned) [renderDocument pinRenderResult: nodeResult];
-	BOOL ok = [self exportDocument: document toURL: url options: options error: error];
-	if (pinned) [renderDocument unpinRenderResult];
-	renderDocument.renderQueryIdentifier = saved;
-	return ok;
+	// json-report cannot render a specific node's pages and rows yet: it would write
+	// the root's rows for a non-root query.  Error rather than silently do that.
+	if (error != NULL) {
+		*error = [NSError errorWithDomain: @"MADReportExport" code: 3 userInfo: @{
+			NSLocalizedDescriptionKey: NSLocalizedString(@"json-report cannot export a specific node.", @"Error when json-report is asked for a non-root node.") }];
+	}
+	return NO;
 }
 
 - (BOOL)exportDocument:(id <MADDocumentDataProtocol>)document

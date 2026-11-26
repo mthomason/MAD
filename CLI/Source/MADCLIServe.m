@@ -2273,6 +2273,9 @@ static void MADCLIServeLayoutModel(NSDictionary *params, NSMutableDictionary <NS
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
 		return;
 	}
+	// A legacy revision-3 leaf has no sections; materialize its five empty sections so
+	// the client always has section ids to author against (persisted by the next save).
+	[query ensureStructuralSectionsInContext: entry.document.document.storeContext];
 	MADCLIServeWriteResult(requestID, MADCLIServeLayoutModelDict(entry.document.document, query));
 }
 
