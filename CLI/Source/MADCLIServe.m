@@ -1130,7 +1130,7 @@ static NSDictionary *MADCLIServeQueryModelDict(id <MADDocumentDataProtocol> docu
 
 	return @{
 		@"queryId": @(query.identifier),
-		@"isRoot": @(query.rootOfDocument != nil),
+		@"isRoot": @(query.rootOfDocument != nil ? YES : NO),
 		@"isComposing": @([query isComposing]),
 		@"driver": driver,
 		@"sql": sql,
