@@ -396,6 +396,40 @@ static NSArray <NSDictionary *> *MADCLIServeColumns(id <MADDocumentDataProtocol>
 	return source != nil ? MADCLIServeColumnsForSource(source) : @[];
 }
 
+/// A query's output columns, from its own fields rather than a materialized result:
+/// a composing node's ordered outputs (by outputKey), a leaf's per-table fields.
+/// This is what `describe` with a `query` returns, so it works before any refresh.
+static NSArray <NSDictionary *> *MADCLIServeColumnsForQuery(RptqQuery *query) {
+	NSMutableArray <NSDictionary *> *columns = [NSMutableArray array];
+	if ([query isComposing]) {
+		for (RptqQueryField *field in [query orderedOutputFieldsWithError:NULL] ?: @[]) {
+			NSString *key = field.outputKey ?: (field.databaseSchemaField.name ?: @"");
+			NSString *table = field.inQueryTable.upstreamQuery.name ?: @"";
+			[columns addObject: @{
+				@"key": key,
+				@"name": field.databaseSchemaField.name ?: @"",
+				@"table": table.length > 0 ? table : [NSNull null],
+				@"type": MADCLIServeTypeName(field.databaseSchemaField.dataType),
+			}];
+		}
+	} else {
+		for (RptqQueryTable *table in [query.hasQueryTables allObjects]) {
+			NSString *alias = table.alias.length > 0 ? table.alias : (table.databaseSchemaTable.name ?: @"");
+			for (RptqQueryField *field in table.hasQueryFields) {
+				NSString *name = field.databaseSchemaField.name ?: @"";
+				NSString *key = alias.length > 0 ? [NSString stringWithFormat:@"%@.%@", alias, name] : name;
+				[columns addObject: @{
+					@"key": key,
+					@"name": name,
+					@"table": alias.length > 0 ? alias : [NSNull null],
+					@"type": MADCLIServeTypeName(field.databaseSchemaField.dataType),
+				}];
+			}
+		}
+	}
+	return columns;
+}
+
 /// One database's schema, the same tables/fields `mad schema` prints, as JSON.
 static NSArray <NSDictionary *> *MADCLIServeTablesForDatabase(RptqDatabase *schema) {
 	NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey: @"name" ascending: YES];
@@ -661,10 +695,18 @@ static void MADCLIServeDescribe(NSDictionary *params, NSMutableDictionary <NSNum
 	}
 	BOOL explicitQuery = [params[@"query"] isKindOfClass: [NSNumber class]] && [params[@"query"] longLongValue] > 0;
 
-	MADReportExportSource *source = [MADReportExportSource sourceWithDocument: document query: query error: &error];
-	if (source == nil) {
-		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(error));
-		return;
+	// `columns` come from the query's own fields (its ordered outputs for a composing
+	// node, its per-table fields for a leaf), not a materialized result, so a scoped
+	// describe works before any refresh.
+	NSArray <NSDictionary *> *columns = nil;
+	NSString *driver = nil;
+	if (!explicitQuery) {
+		columns = MADCLIServeColumns(document);
+		driver = MADCLIServeDriverName(document);
+	} else {
+		columns = MADCLIServeColumnsForQuery(query);
+		driver = [query isComposing] ? @"sqlite3"
+			: (query.inDatabase != nil ? MADCLIServeTokenForDatabaseType((MADDatabaseType)query.inDatabase.databaseDriverTypeEnum) : @"");
 	}
 
 	NSArray <NSDictionary *> *tables = nil;
@@ -679,8 +721,8 @@ static void MADCLIServeDescribe(NSDictionary *params, NSMutableDictionary <NSNum
 	}
 
 	MADCLIServeWriteResult(requestID, @{
-		@"driver": source.driverName,
-		@"columns": MADCLIServeColumnsForSource(source),
+		@"driver": driver,
+		@"columns": columns,
 		@"tables": tables,
 	});
 }
@@ -869,9 +911,17 @@ static void MADCLIServeExport(NSDictionary *params, NSMutableDictionary <NSNumbe
 
 	id <MADReportExporting> exporter = [[(Class)exporterClass alloc] init];
 	MADReportExportOptions exportOptions = deterministic ? MADReportExportOptionsDeterministic : MADReportExportOptionsNone;
+	BOOL rootNode = query.rootOfDocument != nil || query == MADCLIServeReportQuery(document);
 	BOOL ok = NO;
 	if ([exporter respondsToSelector: @selector(exportDocument:query:toURL:options:error:)]) {
 		ok = [exporter exportDocument: document query: query toURL: outURL options: exportOptions error: &error];
+	} else if (!rootNode) {
+		// A format that has not learned to render a specific node must not silently
+		// render the root for a non-root query.
+		if (temporaryURL) [[NSFileManager defaultManager] removeItemAtURL: temporaryURL error: NULL];
+		MADCLIServeWriteError(requestID, MADCLIExitUsage,
+			[NSString stringWithFormat: @"--format %@ cannot export a specific node.", format]);
+		return;
 	} else {
 		ok = [exporter exportDocument: document toURL: outURL options: exportOptions error: &error];
 	}
@@ -2020,6 +2070,22 @@ static RptqDocumentSection *MADCLIServeSectionForElement(id <MADDocumentDataProt
 	return nil;
 }
 
+/// YES when the section is part of the query's own layout (its five structural sections
+/// or its group bands), so a cross-node section id cannot touch another node.
+static BOOL MADCLIServeSectionBelongsToQuery(id <MADDocumentDataProtocol> document, RptqQuery *query, RptqDocumentSection *section) {
+	if (section == nil || query == nil) return NO;
+	RptqDocument *doc = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	for (RptqDocumentSection *candidate in [query orderedLayoutSectionsForDocument: doc]) {
+		if (candidate == section) return YES;
+	}
+	return NO;
+}
+
+static BOOL MADCLIServeElementBelongsToQuery(id <MADDocumentDataProtocol> document, RptqQuery *query, RptqDocumentElement *element) {
+	if (element == nil || query == nil) return NO;
+	return MADCLIServeSectionBelongsToQuery(document, query, element.inSectionRow.inSection);
+}
+
 static RptqQueryField *MADCLIServeFirstQueryField(RptqQuery *query) {
 	for (RptqQueryTable *table in query.hasQueryTables) {
 		for (RptqQueryField *field in table.hasQueryFields) {
@@ -2254,10 +2320,15 @@ static void MADCLIServeAddElement(NSDictionary *params, NSMutableDictionary <NSN
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
 		return;
 	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	RptqDocumentSection *section = (RptqDocumentSection *)[context objectForEntity: NSStringFromClass([RptqDocumentSection class]) identifier: sectionID];
 	if (section == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown section %lld.", sectionID]);
+		return;
+	}
+	if (!MADCLIServeSectionBelongsToQuery(document, query, section)) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"section %lld is not part of query %lld's layout.", sectionID, query.identifier]);
 		return;
 	}
 	MADCLIServeEnsureFirstRow(section, context);
@@ -2364,10 +2435,12 @@ static void MADCLIServeRemoveElements(NSDictionary *params, NSMutableDictionary 
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
 		return;
 	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	for (NSNumber *idNumber in params[@"elements"]) {
 		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
 		if (element == nil) continue;
+		if (!MADCLIServeElementBelongsToQuery(document, query, element)) continue;
 		for (RptqDocumentSection *section in MADCLIServeOrderedSections(document, query)) {
 			for (RptqDocumentSectionRows *row in section.hasRows) {
 				if ([row.hasObjects containsObject: element]) {
@@ -2399,10 +2472,15 @@ static void MADCLIServeMoveElements(NSDictionary *params, NSMutableDictionary <N
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
 		return;
 	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	RptqDocumentSection *target = (RptqDocumentSection *)[context objectForEntity: NSStringFromClass([RptqDocumentSection class]) identifier: targetSectionID];
 	if (target == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown section %lld.", targetSectionID]);
+		return;
+	}
+	if (!MADCLIServeSectionBelongsToQuery(document, query, target)) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"section %lld is not part of query %lld's layout.", targetSectionID, query.identifier]);
 		return;
 	}
 	MADCLIServeEnsureFirstRow(target, context);
@@ -2411,6 +2489,7 @@ static void MADCLIServeMoveElements(NSDictionary *params, NSMutableDictionary <N
 	for (NSNumber *idNumber in ids) {
 		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
 		if (element == nil) continue;
+		if (!MADCLIServeElementBelongsToQuery(document, query, element)) continue;
 		for (RptqDocumentSection *section in MADCLIServeOrderedSections(document, query)) {
 			for (RptqDocumentSectionRows *row in section.hasRows) {
 				if ([row.hasObjects containsObject: element]) {
@@ -2443,11 +2522,13 @@ static void MADCLIServeSetElementGeometry(NSDictionary *params, NSMutableDiction
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
 		return;
 	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	for (NSDictionary *item in array) {
 		if (![item isKindOfClass: [NSDictionary class]]) continue;
 		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [item[@"id"] longLongValue]];
 		if (element == nil) continue;
+		if (!MADCLIServeElementBelongsToQuery(document, query, element)) continue;
 		double x = [item[@"x"] isKindOfClass: [NSNumber class]] ? [item[@"x"] doubleValue] : 0.0;
 		double y = [item[@"y"] isKindOfClass: [NSNumber class]] ? [item[@"y"] doubleValue] : 0.0;
 		double w = [item[@"w"] isKindOfClass: [NSNumber class]] ? [item[@"w"] doubleValue] : 0.0;
@@ -2477,10 +2558,15 @@ static void MADCLIServeSetElementContent(NSDictionary *params, NSMutableDictiona
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
 		return;
 	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: elementID];
 	if (element == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown element %lld.", elementID]);
+		return;
+	}
+	if (!MADCLIServeElementBelongsToQuery(document, query, element)) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"element %lld is not part of query %lld's layout.", elementID, query.identifier]);
 		return;
 	}
 
@@ -2577,10 +2663,12 @@ static void MADCLIServeSetElementTypography(NSDictionary *params, NSMutableDicti
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
 		return;
 	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	for (NSNumber *idNumber in ids) {
 		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
 		if (element == nil) continue;
+		if (!MADCLIServeElementBelongsToQuery(document, query, element)) continue;
 		if ([params[@"fontname"] isKindOfClass: [NSString class]]) element.fontname = params[@"fontname"];
 		if ([params[@"fontsize"] isKindOfClass: [NSNumber class]]) element.fontsize = [params[@"fontsize"] doubleValue];
 		if ([params[@"bold"] isKindOfClass: [NSNumber class]]) element.textStyle.bold = [params[@"bold"] boolValue];
@@ -2611,10 +2699,12 @@ static void MADCLIServeSetElementBoxModel(NSDictionary *params, NSMutableDiction
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
 		return;
 	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	for (NSNumber *idNumber in ids) {
 		RptqDocumentElement *element = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
 		if (element == nil) continue;
+		if (!MADCLIServeElementBelongsToQuery(document, query, element)) continue;
 		if ([params[@"borderTop"] isKindOfClass: [NSNumber class]]) element.border.width.top = (float)[params[@"borderTop"] doubleValue];
 		if ([params[@"borderBottom"] isKindOfClass: [NSNumber class]]) element.border.width.bottom = (float)[params[@"borderBottom"] doubleValue];
 		if ([params[@"borderLeft"] isKindOfClass: [NSNumber class]]) element.border.width.left = (float)[params[@"borderLeft"] doubleValue];
@@ -2649,10 +2739,15 @@ static void MADCLIServeSetSection(NSDictionary *params, NSMutableDictionary <NSN
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
 		return;
 	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	RptqDocumentSection *section = (RptqDocumentSection *)[context objectForEntity: NSStringFromClass([RptqDocumentSection class]) identifier: sectionID];
 	if (section == nil) {
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"unknown section %lld.", sectionID]);
+		return;
+	}
+	if (!MADCLIServeSectionBelongsToQuery(document, query, section)) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, [NSString stringWithFormat: @"section %lld is not part of query %lld's layout.", sectionID, query.identifier]);
 		return;
 	}
 	if ([params[@"height"] isKindOfClass: [NSNumber class]]) [section setInterfaceHeight: [params[@"height"] doubleValue]];
@@ -2802,10 +2897,12 @@ static void MADCLIServeDuplicateElements(NSDictionary *params, NSMutableDictiona
 		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(queryError));
 		return;
 	}
+	[query ensureStructuralSectionsInContext: document.storeContext];
 	RptqStoreContext *context = document.storeContext;
 	for (NSNumber *idNumber in ids) {
 		RptqDocumentElement *src = (RptqDocumentElement *)[context objectForEntity: NSStringFromClass([RptqDocumentElement class]) identifier: [idNumber longLongValue]];
 		if (src == nil) continue;
+		if (!MADCLIServeElementBelongsToQuery(document, query, src)) continue;
 		RptqDocumentSection *section = MADCLIServeSectionForElement(document, query, src);
 		if (section == nil) continue;
 		MADCLIServeEnsureFirstRow(section, context);

@@ -14,6 +14,10 @@
 #import <Foundation/NSPredicate.h>
 #import <Foundation/NSBundle.h>
 #import <MADAPI/MADDatabase.h>
+#import "RptqDocument.h"
+#import "RptqDocument+Extras.h"
+#import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqQueryGroup.h"
@@ -197,6 +201,123 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
 
     }
     return self;
+}
+
+- (instancetype)initWithManagedObjectContext:(RptqStoreContext *)managedObjectContext
+							   databaseClass:(Class)databaseClass
+							 queryIdentifier:(int64_t)queryIdentifier {
+	if (queryIdentifier <= 0) {
+		return [self initWithManagedObjectContext:managedObjectContext databaseClass:databaseClass];
+	}
+
+	if (self = [super init]) {
+		RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext:managedObjectContext];
+		RptqQuery *query = (RptqQuery *)[managedObjectContext objectForEntity:NSStringFromClass([RptqQuery class]) identifier:queryIdentifier];
+		NSArray<RptqDocumentSection *> *orderedSections = [query orderedLayoutSectionsForDocument:document];
+
+		NSMutableArray <NSDictionary *> *documentSections = [NSMutableArray arrayWithCapacity:orderedSections.count];
+		for (RptqDocumentSection *section in orderedSections) {
+			NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+			dictionary[NSStringFromSelector(@selector(identifier))] = @(section.identifier);
+			dictionary[[RptqDocumentSection keyPathNumberOfRows]] = @(section.numberOfRows);
+			dictionary[[RptqDocumentSection keyPathType]] = @(section.type);
+			dictionary[[RptqDocumentSection keyPathVisibility]] = @(section.visibility);
+			dictionary[[RptqDocumentSection keyPathWrappingStyle]] = @(section.wrappingStyle);
+			dictionary[[RptqDocumentSection keyPathHeight]] = @(section.height);
+			switch ((MADDocumentSectionType)section.type) {
+				case MADDocumentSectionTypeReportHeader: dictionary[[RptqDocumentSection keyPathInReportHeader]] = section; break;
+				case MADDocumentSectionTypeReportFooter: dictionary[[RptqDocumentSection keyPathInReportFooter]] = section; break;
+				case MADDocumentSectionTypePageHeader: dictionary[[RptqDocumentSection keyPathInPageHeader]] = section; break;
+				case MADDocumentSectionTypePageFooter: dictionary[[RptqDocumentSection keyPathInPageFooter]] = section; break;
+				case MADDocumentSectionTypeBody: dictionary[[RptqDocumentSection keyPathInReport]] = section; break;
+				default: break;
+			}
+			if (section.inGroup) {
+				dictionary[[RptqDocumentSection keyPathInGroup]] = section.inGroup;
+				RptqQueryGroup *group = section.inGroup;
+				RptqQueryField *field = group.hasField;
+				dictionary[[RptqDocumentSection keyPathInGroupSort]] = @(group.sort);
+				dictionary[[RptqDocumentSection keyPathInGroupWeight]] = @(group.weight);
+				if (field) {
+					dictionary[[RptqDocumentSection keyPathInGroupHasFieldDatabaseSchemaFieldName]] = field.databaseSchemaField.name;
+					dictionary[[RptqDocumentSection keyPathInGroupHasFieldInQueryTableAlias]] = field.inQueryTable.alias;
+					dictionary[[RptqDocumentSection keyPathInGroupHasFieldInQueryTableDropIndex]] = @(field.inQueryTable.dropIndex);
+					dictionary[[RptqDocumentSection keyPathInGroupHasFieldDatabaseSchemaFieldDataType]] = @(field.databaseSchemaField.dataType);
+					dictionary[[RptqDocumentSection keyPathInGroupHasFieldOutputKey]] = field.outputKey;
+				}
+			}
+			[documentSections addObject:dictionary];
+		}
+
+		NSString *keyPath = [RptqDocumentSection keyPathInReportHeader];
+		NSPredicate *predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
+		NSArray <NSDictionary *> *reportHeaderArray = [documentSections filteredArrayUsingPredicate:predicate];
+		if (reportHeaderArray.count > 0) _reportHeader = [[MADSectionLayout alloc] initWithObject:reportHeaderArray[0] managedObjectContext:managedObjectContext];
+
+		keyPath = [RptqDocumentSection keyPathInReportFooter];
+		predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
+		NSArray <NSDictionary *> *reportFooterArray = [documentSections filteredArrayUsingPredicate:predicate];
+		if (reportFooterArray.count > 0) _reportFooter = [[MADSectionLayout alloc] initWithObject:reportFooterArray[0] managedObjectContext:managedObjectContext];
+
+		keyPath = [RptqDocumentSection keyPathInPageHeader];
+		predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
+		NSArray <NSDictionary *> *pageHeaderArray = [documentSections filteredArrayUsingPredicate:predicate];
+		if (pageHeaderArray.count > 0) _pageHeader = [[MADSectionLayout alloc] initWithObject:pageHeaderArray[0] managedObjectContext:managedObjectContext];
+
+		keyPath = [RptqDocumentSection keyPathInPageFooter];
+		predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
+		NSArray <NSDictionary *> *pageFooterArray = [documentSections filteredArrayUsingPredicate:predicate];
+		if (pageFooterArray.count > 0) _pageFooter = [[MADSectionLayout alloc] initWithObject:pageFooterArray[0] managedObjectContext:managedObjectContext];
+
+		keyPath = [RptqDocumentSection keyPathInReport];
+		predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
+		NSArray <NSDictionary *> *detailArray = [documentSections filteredArrayUsingPredicate:predicate];
+		if (detailArray.count > 0) _detail = [[MADSectionLayout alloc] initWithObject:detailArray[0] managedObjectContext:managedObjectContext];
+
+		NSNumber *heightReportHeader = [[NSNumber alloc] initWithDouble:_reportHeader.displayHeight];
+		NSNumber *heightReportFooter = [[NSNumber alloc] initWithDouble:_reportFooter.displayHeight];
+		NSNumber *heightPageHeader = [[NSNumber alloc] initWithDouble:_pageHeader.displayHeight];
+		NSNumber *heightPageFooter = [[NSNumber alloc] initWithDouble:_pageFooter.displayHeight];
+		NSNumber *heightDetail = [[NSNumber alloc] initWithDouble:_detail.displayHeight];
+		NSMutableDictionary <NSNumber *, NSNumber *> *heightForSectionID;
+		heightForSectionID = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+							  heightReportHeader, _reportHeader.identifierObject,
+							  heightReportFooter, _reportFooter.identifierObject,
+							  heightPageHeader, _pageHeader.identifierObject,
+							  heightPageFooter, _pageFooter.identifierObject,
+							  heightDetail, _detail.identifierObject, nil];
+
+		NSArray *groupHeaders = [[NSArray alloc] init];
+		NSArray *groupFooters = [[NSArray alloc] init];
+		keyPath = [RptqDocumentSection keyPathInGroup];
+		predicate = [NSPredicate newPredicateProperyNotNull:keyPath];
+		NSArray <NSDictionary *> *groupArray = [documentSections filteredArrayUsingPredicate:predicate];
+		if (groupArray.count > 0) {
+			for (NSDictionary *objects in groupArray) {
+				MADSectionGroupLayout *groupLayout = [[MADSectionGroupLayout alloc] initWithObject:objects
+																			  managedObjectContext:managedObjectContext
+																				   safeIdentifier:^NSString *(NSString *identifier) {
+					if (databaseClass != NULL) { return [databaseClass newSafeIdentifier:identifier]; }
+					return identifier;
+				}];
+				NSNumber *heightObject = [[NSNumber alloc] initWithDouble:groupLayout.displayHeight];
+				[heightForSectionID setObject:heightObject forKey:groupLayout.identifierObject];
+				switch (groupLayout.type) {
+					case MADDocumentSectionTypeGroupHeader: groupHeaders = [groupHeaders arrayByAddingObject:groupLayout]; break;
+					case MADDocumentSectionTypeGroupFooter: groupFooters = [groupFooters arrayByAddingObject:groupLayout]; break;
+					default: break;
+				}
+			}
+		}
+
+		NSString *keyWeight = NSStringFromSelector(@selector(weight));
+		NSSortDescriptor *sortWeightAsc = [NSSortDescriptor sortDescriptorWithKey:keyWeight ascending:YES];
+		NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortWeightAsc, nil];
+		self.groupHeaders = [groupHeaders sortedArrayUsingDescriptors:sortDescriptors];
+		self.groupFooters = [groupFooters sortedArrayUsingDescriptors:sortDescriptors];
+		self.heightForSectionID = heightForSectionID;
+	}
+	return self;
 }
 
 - (NSArray <NSSortDescriptor *> *)groupSortDescriptors {

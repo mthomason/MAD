@@ -172,7 +172,15 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 	source.result = result;
 	source.sql = @"<node>";
 
-	NSMutableArray <NSString *> *columnKeys = [result.columnKeys mutableCopy];
+	// The node's committed columns, keyed by their logical identifier (the same
+	// physical → logical mapping the root source does): the c<hash> table keys are
+	// storage, the column.identifier is the field key the SELECT list wrote.
+	MADDataTableFast *table = result.dataTable;
+	NSMutableArray <NSString *> *columnKeys = [NSMutableArray arrayWithCapacity: table.columnKeys.count];
+	for (NSString *tableColumnKey in table.columnKeys) {
+		MADDataColumn *column = table.columns[tableColumnKey];
+		[columnKeys addObject: column.identifier ?: tableColumnKey];
+	}
 	NSMutableDictionary <NSString *, RptqDatabaseSchemaField *> *fields = [NSMutableDictionary dictionary];
 
 	if ([query isComposing]) {

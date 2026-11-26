@@ -162,6 +162,7 @@ void madwarn(char *__unused err,  const char *__unused err2) { }
 @end
 
 @implementation MADocument
+@synthesize renderQueryIdentifier = _renderQueryIdentifier;
 
 @dynamic filename;
 @dynamic refreshed;
