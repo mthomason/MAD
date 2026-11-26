@@ -21,12 +21,24 @@
 #import <MAD/RptqObject.h>
 #import <MAD/RptqStoreContext.h>
 #import <MAD/MADStore.h>
+#import <MAD/RptqDocument.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/MADDocumentStore.h>
 #import <MAD/MADArchiveManager.h>
 #import <MAD/RptqQueryField.h>
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqQuery+Extras.h>
+#import <MAD/RptqQueryTable.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseSchemaField.h>
+#import <MAD/RptqDatabaseSchemaTable.h>
+#import <MAD/RptqDocumentSection.h>
+#import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/RptqDocumentSectionRows.h>
+#import <MAD/RptqDocumentElement.h>
+#import <MAD/RptqDocumentElementLabelDataField.h>
+#import <MAD/RptqDocumentElementAggregate.h>
+#import <MAD/RptqDocumentElementBarcode.h>
 
 // The original imported "MADStoreConverter.h" for the converted-sample tests; that
 // header is app-side and Core Data-backed and does not exist off Apple.
@@ -1307,6 +1319,332 @@ static void testImportComposedGraphBringsRootAndLeaves(void) {
 	removeTempDirectory(directory);
 }
 
+/// Each node owns its five structural sections via `ownerQuery`; a save/reopen keeps
+/// three independent layouts -- and a data-field element on a leaf -- intact.
+static void testPerNodeLayoutRoundTripsWithThreeLayouts(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *context = openContextAtPath(directory, @"per-node-layout.sqlite");
+	MAD_PASS([context loadAllWithError:NULL], "the context loads");
+
+	RptqObject *document = [context insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [context insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqQuery *root = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:100];
+	root.name = @"root";
+	RptqQuery *leaf1 = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:101];
+	leaf1.name = @"leaf1";
+	RptqQuery *leaf2 = (RptqQuery *)[context insertObjectForEntity:@"RptqQuery" identifier:102];
+	leaf2.name = @"leaf2";
+	[database setValue:@[ root, leaf1, leaf2 ] forKey:@"hasQueries"];
+	[document setValue:root forKey:@"rootQuery"];
+
+	RptqDocumentSection *reportHeader = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:1];
+	reportHeader.type = MADDocumentSectionTypeReportHeader;
+	reportHeader.visibility = YES;
+	RptqDocumentSection *reportFooter = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:2];
+	reportFooter.type = MADDocumentSectionTypeReportFooter;
+	reportFooter.visibility = YES;
+	RptqDocumentSection *pageHeader = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:3];
+	pageHeader.type = MADDocumentSectionTypePageHeader;
+	pageHeader.visibility = YES;
+	RptqDocumentSection *pageFooter = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:4];
+	pageFooter.type = MADDocumentSectionTypePageFooter;
+	pageFooter.visibility = YES;
+	RptqDocumentSection *detail = (RptqDocumentSection *)[context insertObjectForEntity:@"RptqDocumentSection" identifier:5];
+	detail.type = MADDocumentSectionTypeBody;
+	detail.visibility = YES;
+	[document setValue:reportHeader forKey:@"hasReportHeaderSection"];
+	[document setValue:reportFooter forKey:@"hasReportFooterSection"];
+	[document setValue:pageHeader forKey:@"hasPageHeaderSection"];
+	[document setValue:pageFooter forKey:@"hasPageFooterSection"];
+	[document setValue:detail forKey:@"hasDetailSection"];
+
+	[RptqDocumentSection createStructuralSectionsForQuery:leaf1 managedObjectContext:context];
+	[RptqDocumentSection createStructuralSectionsForQuery:leaf2 managedObjectContext:context];
+
+	// A leaf1 query field and a data-field element bound to it.
+	RptqObject *schemaTable = [context insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[schemaTable setValue:@"invoices" forKey:@"name"];
+	RptqObject *schemaField = [context insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[schemaField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ schemaTable ] forKey:@"hasTables"];
+	[schemaTable setValue:@[ schemaField ] forKey:@"hasFields"];
+	RptqObject *leaf1Table = [context insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[leaf1Table setValue:leaf1 forKey:@"inQuery"];
+	[leaf1Table setValue:schemaTable forKey:@"databaseSchemaTable"];
+	RptqQueryField *leaf1Field = (RptqQueryField *)[context insertObjectForEntity:@"RptqQueryField" identifier:300];
+	[leaf1Field setValue:schemaField forKey:@"databaseSchemaField"];
+	[leaf1Field setValue:leaf1Table forKey:@"inQueryTable"];
+	[leaf1Table setValue:@[ leaf1Field ] forKey:@"hasQueryFields"];
+
+	RptqDocumentSection *leaf1Detail = nil;
+	for (RptqDocumentSection *section in leaf1.hasLayoutSections) {
+		if (section.type == MADDocumentSectionTypeBody) leaf1Detail = section;
+	}
+	MAD_PASS(leaf1Detail != nil, "leaf1 has a detail section");
+	RptqDocumentSectionRows *leaf1Row = leaf1Detail.hasRows.firstObject;
+	MAD_PASS(leaf1Row != nil, "leaf1's detail section has a row");
+	RptqDocumentElementLabelDataField *leaf1DataField =
+		(RptqDocumentElementLabelDataField *)[context insertObjectForEntity:@"RptqDocumentElementLabelDataField" identifier:0];
+	leaf1DataField.referencesQueryField = leaf1Field;
+	leaf1DataField.fieldID = @"amount";
+	leaf1DataField.inSectionRow = leaf1Row;
+
+	MAD_PASS([context saveComposed:NULL], "the composed store saves");
+	MAD_PASS(context.store.storeVersion == MADStoreMaximumReadableVersion, "the composed save is revision 4");
+
+	RptqStoreContext *reread = openContextAtPath(directory, @"per-node-layout.sqlite");
+	MAD_PASS([reread loadAllWithError:NULL], "the store reopens");
+	RptqDocument *readDocument = [RptqDocument newDocumentReadFromManagedObjectContext:reread];
+	RptqQuery *readRoot = readDocument.rootQuery;
+	MAD_PASS_EQUAL(readRoot.name, @"root", "the root reads back");
+
+	NSArray<RptqDocumentSection *> *rootSections = [readRoot orderedLayoutSectionsForDocument:readDocument];
+	MAD_PASS(rootSections.count == (NSUInteger)5, "the root's ordered layout is the document's five sections");
+
+	RptqQuery *readLeaf1 = nil;
+	for (RptqQuery *query in readRoot.inDatabase.hasQueries) {
+		if (query == readRoot) continue;
+		MAD_PASS(query.hasLayoutSections.count == (NSUInteger)5, "each leaf owns five sections");
+		for (RptqDocumentSection *section in query.hasLayoutSections) {
+			MAD_PASS_EQUAL(section.ownerQuery.name, query.name, "each section is owned by its query");
+		}
+		if ([query.name isEqualToString:@"leaf1"]) readLeaf1 = query;
+	}
+	MAD_PASS(readLeaf1 != nil, "leaf1 reads back");
+
+	RptqDocumentSection *readLeaf1Detail = nil;
+	for (RptqDocumentSection *section in readLeaf1.hasLayoutSections) {
+		if (section.type == MADDocumentSectionTypeBody) readLeaf1Detail = section;
+	}
+	MAD_PASS(readLeaf1Detail.hasRows.firstObject.hasObjects.count == (NSUInteger)1, "leaf1's data-field element survives");
+	RptqDocumentElementLabelDataField *readElement =
+		(RptqDocumentElementLabelDataField *)readLeaf1Detail.hasRows.firstObject.hasObjects.firstObject;
+	MAD_PASS_EQUAL(readElement.fieldID, @"amount", "the element keeps its field id");
+	MAD_PASS(readElement.referencesQueryField != nil, "the element keeps its field binding");
+	MAD_PASS_EQUAL(readElement.referencesQueryField.databaseSchemaField.name, @"amount", "the element binds to the leaf's own field");
+
+	removeTempDirectory(directory);
+}
+
+/// A layoutless source (a query with no sections of its own) imports with five empty
+/// sections, so the imported child is authorable immediately.
+static void testImportLayoutlessSourceYieldsEmptySections(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *source = openContextAtPath(directory, @"layoutless-source.sqlite");
+	MAD_PASS([source loadAllWithError:NULL], "the source loads");
+	buildStandardQueryGraphInContext(source, @"t", @"f", @"/tmp/t.sqlite");
+
+	RptqStoreContext *destination = openContextAtPath(directory, @"layoutless-dest.sqlite");
+	MAD_PASS([destination loadAllWithError:NULL], "the destination loads");
+	[destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	RptqQuery *imported = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:NULL];
+	MAD_PASS(imported != nil, "the import returns a root");
+	MAD_PASS(imported.hasLayoutSections.count == (NSUInteger)5, "the layoutless source imports five sections");
+
+	removeTempDirectory(directory);
+}
+
+/// A source with a designed layout imports its five sections onto the imported query.
+static void testImportCopiesSourceLayout(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *source = openContextAtPath(directory, @"layout-source.sqlite");
+	MAD_PASS([source loadAllWithError:NULL], "the source loads");
+	buildStandardQueryGraphInContext(source, @"t", @"f", @"/tmp/t.sqlite");
+
+	RptqObject *sourceDocument = [source objectForEntity:@"RptqDocument" identifier:1];
+	for (int i = 1; i <= 5; i++) {
+		RptqObject *section = [source insertObjectForEntity:@"RptqDocumentSection" identifier:i];
+		[section setValue:@(i) forKey:@"type"];
+		[section setValue:@YES forKey:@"visibility"];
+	}
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:1] forKey:@"hasReportHeaderSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:2] forKey:@"hasReportFooterSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:3] forKey:@"hasPageHeaderSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:4] forKey:@"hasPageFooterSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:5] forKey:@"hasDetailSection"];
+
+	RptqStoreContext *destination = openContextAtPath(directory, @"layout-dest.sqlite");
+	MAD_PASS([destination loadAllWithError:NULL], "the destination loads");
+	[destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	RptqQuery *imported = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:NULL];
+	MAD_PASS(imported != nil, "the import returns a root");
+	MAD_PASS(imported.hasLayoutSections.count == (NSUInteger)5, "the source's five sections import");
+	for (RptqDocumentSection *section in imported.hasLayoutSections) {
+		MAD_PASS_EQUAL(section.ownerQuery.name, imported.name, "each section is owned by the imported query");
+	}
+
+	removeTempDirectory(directory);
+}
+
+/// A designed layout imports its elements with every field reference remapped to the
+/// imported query's field (data-field, aggregate, and barcode each carry one).
+static void testImportLayoutWithElementsRemapsFieldRefs(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *source = openContextAtPath(directory, @"layout-elements-source.sqlite");
+	MAD_PASS([source loadAllWithError:NULL], "the source loads");
+	buildStandardQueryGraphInContext(source, @"invoices", @"amount", @"/tmp/invoices.sqlite");
+
+	RptqObject *sourceDocument = [source objectForEntity:@"RptqDocument" identifier:1];
+	RptqDocumentSection *detail = (RptqDocumentSection *)[source insertObjectForEntity:@"RptqDocumentSection" identifier:1];
+	detail.type = MADDocumentSectionTypeBody;
+	detail.visibility = YES;
+	RptqDocumentSectionRows *row = (RptqDocumentSectionRows *)[source insertObjectForEntity:@"RptqDocumentSectionRows" identifier:0];
+	row.inSection = detail;
+	detail.hasRows = [[NSOrderedSet alloc] initWithObject:row];
+	[sourceDocument setValue:detail forKey:@"hasDetailSection"];
+
+	RptqQueryField *sourceField = (RptqQueryField *)[source objectForEntity:@"RptqQueryField" identifier:300];
+
+	RptqDocumentElementLabelDataField *dataField =
+		(RptqDocumentElementLabelDataField *)[source insertObjectForEntity:@"RptqDocumentElementLabelDataField" identifier:0];
+	dataField.referencesQueryField = sourceField;
+	dataField.fieldID = @"amount";
+	dataField.inSectionRow = row;
+
+	RptqDocumentElementAggregate *aggregate =
+		(RptqDocumentElementAggregate *)[source insertObjectForEntity:@"RptqDocumentElementAggregate" identifier:0];
+	aggregate.aggregateField = sourceField;
+	aggregate.inSectionRow = row;
+
+	RptqDocumentElementBarcode *barcode =
+		(RptqDocumentElementBarcode *)[source insertObjectForEntity:@"RptqDocumentElementBarcode" identifier:0];
+	barcode.referencesField1 = sourceField;
+	barcode.inSectionRow = row;
+
+	MAD_PASS([source save:NULL], "the source saves");
+
+	RptqStoreContext *destination = openContextAtPath(directory, @"layout-elements-dest.sqlite");
+	MAD_PASS([destination loadAllWithError:NULL], "the destination loads");
+	[destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	RptqQuery *imported = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:NULL];
+	MAD_PASS(imported != nil, "the import returns a root");
+
+	RptqDocumentSection *importedDetail = nil;
+	for (RptqDocumentSection *section in imported.hasLayoutSections) {
+		if (section.type == MADDocumentSectionTypeBody) importedDetail = section;
+	}
+	MAD_PASS(importedDetail != nil, "the imported detail section is present");
+	MAD_PASS(importedDetail.hasRows.firstObject.hasObjects.count == (NSUInteger)3, "the three elements import");
+
+	RptqQueryField *importedField = nil;
+	for (RptqQueryTable *table in imported.hasQueryTables) {
+		importedField = table.hasQueryFields.anyObject;
+	}
+	MAD_PASS(importedField != nil, "the imported query owns its field");
+	MAD_PASS(importedField.identifier != sourceField.identifier, "the imported field is remapped");
+	MAD_PASS_EQUAL(importedField.databaseSchemaField.name, @"amount", "the imported field keeps its name");
+
+	NSUInteger seen = 0;
+	for (RptqDocumentElement *element in importedDetail.hasRows.firstObject.hasObjects) {
+		if ([element isKindOfClass:[RptqDocumentElementLabelDataField class]]) {
+			RptqDocumentElementLabelDataField *df = (RptqDocumentElementLabelDataField *)element;
+			MAD_PASS_EQUAL(df.referencesQueryField, importedField, "the data field rebinds to the imported field");
+			MAD_PASS_EQUAL(df.fieldID, @"amount", "the data field keeps its field id");
+			seen++;
+		} else if ([element isKindOfClass:[RptqDocumentElementAggregate class]]) {
+			MAD_PASS_EQUAL([(RptqDocumentElementAggregate *)element aggregateField], importedField, "the aggregate rebinds to the imported field");
+			seen++;
+		} else if ([element isKindOfClass:[RptqDocumentElementBarcode class]]) {
+			MAD_PASS_EQUAL([(RptqDocumentElementBarcode *)element referencesField1], importedField, "the barcode rebinds to the imported field");
+			seen++;
+		}
+	}
+	MAD_PASS(seen == (NSUInteger)3, "all three element kinds are present");
+
+	removeTempDirectory(directory);
+}
+
+/// A nested four-node graph (root → intermediate composer → two leaves) imports with
+/// every node's layout and its composing/leaf identity intact.
+static void testImportNestedFourNodeGraph(void) {
+	NSURL *directory = makeTempDirectory();
+	RptqStoreContext *source = openContextAtPath(directory, @"nested-source.sqlite");
+	MAD_PASS([source loadAllWithError:NULL], "the source loads");
+
+	RptqObject *document = [source insertObjectForEntity:@"RptqDocument" identifier:1];
+	RptqObject *database = [source insertObjectForEntity:@"RptqDatabase" identifier:10];
+	[database setValue:@"Sqlite 3" forKey:@"databaseDriverType"];
+	[document setValue:@[ database ] forKey:@"hasDatabaseSchemas"];
+
+	RptqObject *invoicesTable = [source insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:11];
+	[invoicesTable setValue:@"invoices" forKey:@"name"];
+	RptqObject *paymentsTable = [source insertObjectForEntity:@"RptqDatabaseSchemaTable" identifier:12];
+	[paymentsTable setValue:@"payments" forKey:@"name"];
+	RptqObject *invoiceIdField = [source insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:20];
+	[invoiceIdField setValue:@"invoice_id" forKey:@"name"];
+	RptqObject *amountField = [source insertObjectForEntity:@"RptqDatabaseSchemaField" identifier:21];
+	[amountField setValue:@"amount" forKey:@"name"];
+	[database setValue:@[ invoicesTable, paymentsTable ] forKey:@"hasTables"];
+	[invoicesTable setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+	[paymentsTable setValue:@[ invoiceIdField, amountField ] forKey:@"hasFields"];
+
+	RptqQuery *root = (RptqQuery *)[source insertObjectForEntity:@"RptqQuery" identifier:100];
+	[root setValue:@"root" forKey:@"name"];
+	RptqQuery *mid = (RptqQuery *)[source insertObjectForEntity:@"RptqQuery" identifier:101];
+	[mid setValue:@"mid" forKey:@"name"];
+	RptqQuery *invoices = (RptqQuery *)[source insertObjectForEntity:@"RptqQuery" identifier:102];
+	[invoices setValue:@"invoices" forKey:@"name"];
+	RptqQuery *payments = (RptqQuery *)[source insertObjectForEntity:@"RptqQuery" identifier:103];
+	[payments setValue:@"payments" forKey:@"name"];
+	[database setValue:@[ root, mid, invoices, payments ] forKey:@"hasQueries"];
+
+	RptqObject *invoicesSource = [source insertObjectForEntity:@"RptqQueryTable" identifier:200];
+	[invoicesSource setValue:invoicesTable forKey:@"databaseSchemaTable"];
+	[invoicesSource setValue:invoices forKey:@"inQuery"];
+	RptqObject *paymentsSource = [source insertObjectForEntity:@"RptqQueryTable" identifier:201];
+	[paymentsSource setValue:paymentsTable forKey:@"databaseSchemaTable"];
+	[paymentsSource setValue:payments forKey:@"inQuery"];
+
+	RptqObject *midInvoices = [source insertObjectForEntity:@"RptqQueryTable" identifier:202];
+	[midInvoices setValue:mid forKey:@"inQuery"];
+	[midInvoices setValue:invoices forKey:@"upstreamQuery"];
+	RptqObject *midPayments = [source insertObjectForEntity:@"RptqQueryTable" identifier:203];
+	[midPayments setValue:mid forKey:@"inQuery"];
+	[midPayments setValue:payments forKey:@"upstreamQuery"];
+
+	RptqObject *rootMid = [source insertObjectForEntity:@"RptqQueryTable" identifier:204];
+	[rootMid setValue:root forKey:@"inQuery"];
+	[rootMid setValue:mid forKey:@"upstreamQuery"];
+
+	[document setValue:root forKey:@"rootQuery"];
+	[RptqDocumentSection createStructuralSectionsForQuery:invoices managedObjectContext:source];
+	[RptqDocumentSection createStructuralSectionsForQuery:payments managedObjectContext:source];
+	[RptqDocumentSection createStructuralSectionsForQuery:mid managedObjectContext:source];
+	MAD_PASS([source saveComposed:NULL], "the source saves");
+
+	RptqStoreContext *destination = openContextAtPath(directory, @"nested-destination.sqlite");
+	MAD_PASS([destination loadAllWithError:NULL], "the destination loads");
+	[destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	RptqQuery *importedRoot = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:NULL];
+	MAD_PASS(importedRoot != nil, "the import returns a root");
+
+	MAD_PASS([destination objectsForEntity:@"RptqQuery"].count == (NSUInteger)4, "all four nodes import");
+	RptqQuery *importedMid = nil;
+	for (RptqObject *object in [destination objectsForEntity:@"RptqQuery"]) {
+		RptqQuery *query = (RptqQuery *)object;
+		if ([query.name isEqualToString:@"mid"]) importedMid = query;
+	}
+	MAD_PASS(importedMid != nil, "the intermediate composer imports");
+	MAD_PASS([importedMid isComposing], "the intermediate composer is still composing");
+	MAD_PASS(importedMid.hasQueryTables.count == (NSUInteger)2, "the intermediate composer keeps its two children");
+	for (RptqQueryTable *table in importedMid.hasQueryTables) {
+		MAD_PASS(table.upstreamQuery != nil, "each child of the intermediate composer is upstream");
+	}
+	MAD_PASS(importedMid.hasLayoutSections.count == (NSUInteger)5, "the intermediate composer's five sections import");
+	for (RptqDocumentSection *section in importedMid.hasLayoutSections) {
+		MAD_PASS_EQUAL(section.ownerQuery.name, @"mid", "each section is owned by the intermediate composer");
+	}
+
+	removeTempDirectory(directory);
+}
+
 #pragma mark - Composed output-key naming
 
 static RptqQueryField *fieldWithSchemaName(RptqStoreContext *context, NSString *schemaName, NSString *sourceAlias) {
@@ -1511,6 +1849,11 @@ MAD_TEST_MAIN("RptqStoreContextTests",
 	MAD_TEST(testComposedFailedArchivePreservesDestination),
 	MAD_TEST(testImportQueryGraphRemapsIdentifiersAndResolvesRelativePath),
 	MAD_TEST(testImportComposedGraphBringsRootAndLeaves),
+	MAD_TEST(testPerNodeLayoutRoundTripsWithThreeLayouts),
+	MAD_TEST(testImportLayoutlessSourceYieldsEmptySections),
+	MAD_TEST(testImportCopiesSourceLayout),
+	MAD_TEST(testImportLayoutWithElementsRemapsFieldRefs),
+	MAD_TEST(testImportNestedFourNodeGraph),
 	MAD_TEST(testComposeOutputKeysBareNamesDisambiguate),
 	MAD_TEST(testComposeOutputKeysPreserveExistingAndAvoidTaken),
 	MAD_TEST(testConvertToCompositionMovesGroupsAndRebindsLabels),
