@@ -62,6 +62,7 @@
 #import <MAD/MADSortOrder.h>
 #import <MAD/MADSectionRepresentation.h>
 #import <MAD/MADSectionsLayout.h>
+#import <MAD/MADSectionLayout.h>
 
 #import <MADSqlite3/MADDataTableFast.h>
 #import <MADSqlite3/MADDatabaseSqlite3.h>
@@ -2118,6 +2119,257 @@ static MADPublishingExportDocument *MADPublishingExportNewDocument(void) {
 	error = nil;
 	XCTAssertTrue(MADReportExporterRefreshDocument(document, &error), @"%@", error);
 	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)76);
+}
+
+#pragma mark - Per-node results and node-scoped export (node-as-report)
+
+/// A nested composition -- two leaves (A, B), an intermediate composer (C1) joining
+/// them, and a root (C2) over C1 -- reopened and refreshed, so every non-root node
+/// has a retained result in `nodeResults`.
+static MADHeadlessDocument *MADNestedCompositionRefreshedDocument(NSString **outError) {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[
+		@{ @"name": @"A", @"file": @"a.sqlite", @"rows": @[ @[@1, @10], @[@2, @20] ] },
+		@{ @"name": @"B", @"file": @"b.sqlite", @"rows": @[ @[@1, @100] ] },
+	];
+	NSArray *composers = @[
+		@{ @"name": @"C1", @"children": @[ @"A", @"B" ],
+		   @"links": @[ @[ @"A", @"id", @"B", @"id" ] ],
+		   @"outputs": @[ @[ @"A", @"id", @"a_id" ], @[ @"B", @"value", @"b_value" ] ] },
+		@{ @"name": @"C2", @"children": @[ @"C1" ],
+		   @"links": @[],
+		   @"outputs": @[ @[ @"C1", @"a_id", @"c1_id" ] ] },
+	];
+
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"C2", outError);
+	if (document == nil) return nil;
+	MADOperationRefreshComposed *refresh = MADCompositionRunRefresh(document);
+	if (refresh.errors.count > 0) {
+		if (outError) *outError = refresh.errors.firstObject.description;
+		return nil;
+	}
+	return document;
+}
+
+/// A successful composed refresh retains every non-root node's materialized table,
+/// keyed by query identifier, while the root stays the document's current result.
+- (void)testComposedRefreshRetainsNodeResults {
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADNestedCompositionRefreshedDocument(&errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	XCTAssertEqual(document.nodeResults.count, (NSUInteger)3);
+	for (NSString *name in @[ @"A", @"B", @"C1" ]) {
+		RptqQuery *query = MADCompositionQueryNamed(model, name);
+		XCTAssertNotNil(query);
+		MADDataResult *result = document.nodeResults[@(query.identifier)];
+		XCTAssertNotNil(result, @"node %@ retained its result", name);
+	}
+
+	// The root is not in the map; its result is the document's current result.
+	XCTAssertNil(document.nodeResults[@(model.rootQuery.identifier)]);
+	XCTAssertNotNil(document.currentResult);
+	XCTAssertEqualObjects(document.currentResult.columnKeys, (@[ @"c1_id" ]));
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)2);
+}
+
+/// A second refresh publishes a new generation: the node-result reads the new rows,
+/// not the ones the previous publish retained.
+- (void)testNodeResultReadsOneGenerationAcrossAPublish {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[ @{ @"name": @"A", @"file": @"a.sqlite", @"rows": @[ @[@1, @10], @[@2, @20] ] } ];
+	NSArray *composers = @[
+		@{ @"name": @"root", @"children": @[ @"A" ], @"links": @[],
+		   @"outputs": @[ @[ @"A", @"id", @"a_id" ], @[ @"A", @"value", @"a_value" ] ] },
+	];
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	XCTAssertEqual(MADCompositionRunRefresh(document).errors.count, (NSUInteger)0);
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *leafA = MADCompositionQueryNamed(model, @"A");
+	MADDataResult *first = document.nodeResults[@(leafA.identifier)];
+	XCTAssertNotNil(first);
+	XCTAssertEqual(first.numberOfRows, (NSUInteger)2);
+
+	// Grow the leaf's source and refresh again: the retained result advances.
+	NSURL *aURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"a.sqlite"]];
+	XCTAssertTrue(MADCompositionCreateSource(aURL, @[ @"INSERT INTO A VALUES (3, 30);" ]));
+	XCTAssertEqual(MADCompositionRunRefresh(document).errors.count, (NSUInteger)0);
+
+	MADDataResult *second = document.nodeResults[@(leafA.identifier)];
+	XCTAssertNotNil(second);
+	XCTAssertEqual(second.numberOfRows, (NSUInteger)3, @"the node-result reads the new generation");
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)3, @"the root's rows advance too");
+}
+
+/// A failed leaf refresh leaves the previous complete node results in place: the
+/// failed walk never publishes, so the map a prior refresh retained is untouched.
+- (void)testFailedLeafKeepsPreviousNodeResults {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[
+		@{ @"name": @"A", @"file": @"a.sqlite", @"rows": @[ @[@1, @10] ] },
+		@{ @"name": @"B", @"file": @"b.sqlite", @"rows": @[ @[@1, @100] ] },
+	];
+	NSArray *composers = @[
+		@{ @"name": @"root", @"children": @[ @"A", @"B" ], @"links": @[],
+		   @"outputs": @[ @[ @"A", @"id", @"a_id" ], @[ @"B", @"value", @"b_value" ] ] },
+	];
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	XCTAssertEqual(MADCompositionRunRefresh(document).errors.count, (NSUInteger)0);
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *leafA = MADCompositionQueryNamed(model, @"A");
+	MADDataResult *aResult = document.nodeResults[@(leafA.identifier)];
+	XCTAssertNotNil(aResult);
+
+	// Drop leaf B's source: the next refresh fails at B, before any publish.
+	NSURL *bURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"b.sqlite"]];
+	XCTAssertTrue([[NSFileManager defaultManager] removeItemAtURL: bURL error: NULL]);
+	MADOperationRefreshComposed *failed = MADCompositionRunRefresh(document);
+	XCTAssertGreaterThan(failed.errors.count, (NSUInteger)0, @"the dropped leaf fails the refresh");
+
+	// The previous complete results survive: A's retained rows are unchanged.
+	MADDataResult *aAfter = document.nodeResults[@(leafA.identifier)];
+	XCTAssertEqualObjects(aAfter, aResult, @"the prior node result is retained");
+	XCTAssertEqual(aAfter.numberOfRows, (NSUInteger)1);
+}
+
+/// `MADReportExportSource sourceWithDocument:query:` reads a leaf's and a composing
+/// child's retained result, not the root's.
+- (void)testNodeResultExportSourceReadsLeafAndComposingChild {
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADNestedCompositionRefreshedDocument(&errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *leafA = MADCompositionQueryNamed(model, @"A");
+	RptqQuery *composer = MADCompositionQueryNamed(model, @"C1");
+
+	NSError *error = nil;
+	MADReportExportSource *leafSource = [MADReportExportSource sourceWithDocument: document query: leafA error: &error];
+	XCTAssertNotNil(leafSource, @"%@", error);
+	XCTAssertEqual(leafSource.numberOfRows, (NSUInteger)2);
+	XCTAssertEqual(leafSource.columnKeys.count, (NSUInteger)2);
+
+	MADReportExportSource *composerSource = [MADReportExportSource sourceWithDocument: document query: composer error: &error];
+	XCTAssertNotNil(composerSource, @"%@", error);
+	XCTAssertEqual(composerSource.numberOfRows, (NSUInteger)2);
+	XCTAssertEqual(composerSource.columnKeys.count, (NSUInteger)2);
+	XCTAssertTrue([composerSource.columnKeys containsObject: @"a_id"], @"%@", composerSource.columnKeys);
+	XCTAssertTrue([composerSource.columnKeys containsObject: @"b_value"], @"%@", composerSource.columnKeys);
+}
+
+/// A node (leaf or composing child) exports as JSON through the query-scoped seam,
+/// and the bytes name the node's own columns rather than the root's.
+- (void)testLeafAndComposingChildJSONExport {
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADNestedCompositionRefreshedDocument(&errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *leafA = MADCompositionQueryNamed(model, @"A");
+	RptqQuery *composer = MADCompositionQueryNamed(model, @"C1");
+
+	MADReportExporterJSON *exporter = [[MADReportExporterJSON alloc] init];
+	NSError *error = nil;
+	NSURL *leafURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"leaf.json"]];
+	XCTAssertTrue([exporter exportDocument: document query: leafA toURL: leafURL options: MADReportExportOptionsNone error: &error], @"%@", error);
+	NSURL *composerURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"composer.json"]];
+	error = nil;
+	XCTAssertTrue([exporter exportDocument: document query: composer toURL: composerURL options: MADReportExportOptionsNone error: &error], @"%@", error);
+
+	NSData *leafData = [NSData dataWithContentsOfURL: leafURL];
+	NSData *composerData = [NSData dataWithContentsOfURL: composerURL];
+	XCTAssertGreaterThan(leafData.length, (NSUInteger)0);
+	XCTAssertGreaterThan(composerData.length, (NSUInteger)0);
+	NSString *composerJSON = [[NSString alloc] initWithData: composerData encoding: NSUTF8StringEncoding];
+	XCTAssertTrue([composerJSON containsString: @"a_id"], @"the composing child's JSON carries its own columns");
+	XCTAssertFalse([composerJSON containsString: @"c1_id"], @"the composing child's JSON does not carry the root's columns");
+}
+
+/// `json-report` is not node-scoped yet: a non-root query errors instead of writing
+/// the root's rows under the node's name.
+- (void)testJSONReportNonRootErrors {
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADNestedCompositionRefreshedDocument(&errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *composer = MADCompositionQueryNamed(model, @"C1");
+
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	MADReportExporterJSONReport *reporter = [[MADReportExporterJSONReport alloc] init];
+
+	NSError *error = nil;
+	NSURL *nodeURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"node.report.json"]];
+	XCTAssertFalse([reporter exportDocument: document query: composer toURL: nodeURL options: MADReportExportOptionsNone error: &error],
+				   @"a non-root json-report export must be refused");
+	XCTAssertNotNil(error);
+
+	// The root still exports.
+	error = nil;
+	NSURL *rootURL = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"root.report.json"]];
+	XCTAssertTrue([reporter exportDocument: document query: model.rootQuery toURL: rootURL options: MADReportExportOptionsNone error: &error], @"%@", error);
+	XCTAssertGreaterThan([[NSData dataWithContentsOfURL: rootURL] length], (NSUInteger)0);
+}
+
+/// The sections layout is per-node: the root's layout reads the document's sections,
+/// a leaf's reads its own, and the two never share identifiers.
+- (void)testSectionsLayoutIsDistinctPerQuery {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[
+		@{ @"name": @"A", @"file": @"a.sqlite", @"rows": @[ @[@1, @10] ] },
+		@{ @"name": @"B", @"file": @"b.sqlite", @"rows": @[ @[@1, @100] ] },
+	];
+	NSArray *composers = @[
+		@{ @"name": @"C1", @"children": @[ @"A", @"B" ], @"links": @[], @"outputs": @[ @[ @"A", @"id", @"a_id" ] ] },
+		@{ @"name": @"C2", @"children": @[ @"C1" ], @"links": @[], @"outputs": @[ @[ @"C1", @"a_id", @"c1_id" ] ] },
+	];
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"C2", &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *leafA = MADCompositionQueryNamed(model, @"A");
+	XCTAssertNotNil(leafA);
+
+	// The leaf owns its own five sections (authorable from a legacy revision-3 leaf).
+	[RptqDocumentSection createStructuralSectionsForQuery: leafA managedObjectContext: document.storeContext];
+	NSError *error = nil;
+	XCTAssertTrue([document.storeContext saveComposed: &error], @"%@", error);
+
+	MADSectionsLayout *rootLayout = [[MADSectionsLayout alloc] initWithManagedObjectContext: document.storeContext
+																			  databaseClass: [document.database class]
+																			queryIdentifier: 0];
+	MADSectionsLayout *leafLayout = [[MADSectionsLayout alloc] initWithManagedObjectContext: document.storeContext
+																			  databaseClass: [document.database class]
+																			queryIdentifier: leafA.identifier];
+
+	XCTAssertNotNil(rootLayout.detail, @"the root's layout reads the document's detail section");
+	XCTAssertNotNil(leafLayout.detail, @"the leaf's layout reads the leaf's detail section");
+	XCTAssertNotEqualObjects(rootLayout.detail.identifierObject, leafLayout.detail.identifierObject,
+							 @"root and leaf layouts are distinct");
 }
 
 @end

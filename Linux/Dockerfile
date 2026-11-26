@@ -93,11 +93,14 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # frameworks link (sqlite3, freetds, openssl, zlib, bzip2, libarchive,
 # mariadb, libpng, zint, pixman, FreeType, cairo) are static and are already
 # inside the binary; the Liberation fonts are data files (the toolchain stage).
+# python3 is here for verify-cli.sh's serve-protocol check (CLI/serve-protocol.py),
+# not for the tool itself; it stays out of the "no compiler" list because it is an
+# interpreter the end-to-end check drives, not a build tool.
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		ca-certificates libavahi-client3 libcurl4 libffi8 libgmp10 \
 		libgnutls30 libicu74 libsasl2-2 libssl3 libstdc++6 libxml2 \
-		libxslt1.1 tzdata zlib1g \
+		libxslt1.1 tzdata zlib1g python3 \
 	&& rm -rf /var/lib/apt/lists/*
 
 # The toolchain stage installs everything into /usr/local.  Only the shared

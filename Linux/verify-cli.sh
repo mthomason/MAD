@@ -179,6 +179,14 @@ check "unknown format exits 1"		[ "$?" -eq 1 ]
 mad write "${LONDON}" >/dev/null 2>&1
 check "write without --out exits 1"	[ "$?" -eq 1 ]
 
+# --- the serve protocol (query-scoped per-node report) ----------------------
+# CLI/serve-protocol.py spawns `mad serve` and drives the newline-delimited JSON
+# protocol: the scoped describe/layout-model/query-model/node-result/export, a
+# scoped mutation, and the error answers (unknown query, SQL editing on a composed
+# node, a non-root json-report).  It runs here, inside the runtime image, so it is
+# the same process shape the Windows client drives.
+check "serve protocol"	python3 /repo/CLI/serve-protocol.py
+
 # --- optionally, the live databases ---------------------------------------
 
 if [[ "${1:-}" == "--live" ]]; then
