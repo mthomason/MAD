@@ -168,8 +168,11 @@ leaves the document unchanged.
   `{ "query": <id>, "name": "...", "rowCount": N, "columns": [{ "key", "name", "table", "type" }],
   "rows": [[ … ]] }`. Omitted/root reads the root's published result; a non-root node reads its
   retained result (error if the node has not been refreshed). `refresh` stays whole-document.
-- **`export`** gains optional `query`: the row formats (`json`, `csv`, `text`) read the selected
-  node's result; omitted → the root. `engine-info` advertises `node-result` in its `capabilities`.
+- **`export`** gains optional `query`: the node-scoped formats are `json`, `csv`, `text`,
+  `html`, `html-flow`, and `pdf` — they read the selected node's result/layout. `json-report`
+  is **not** node-scoped yet: `export?query=<non-root>&format=json-report` errors rather than
+  writing the root's rows. Omitted `query` → the root. `engine-info` advertises `node-result`
+  in its `capabilities`.
 
 ### 3.5 Windows UI follow-up
 

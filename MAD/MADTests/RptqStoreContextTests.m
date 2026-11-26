@@ -782,6 +782,39 @@
 	XCTAssertEqual(imported.hasLayoutSections.count, (NSUInteger)5);
 }
 
+/// A source with a designed layout imports its five sections onto the imported query
+/// (the source document's sections map to the imported root via `ownerQuery`).
+- (void)testImportCopiesSourceLayout {
+	RptqStoreContext *source = [self openContextAtPath:@"layout-source.sqlite"];
+	XCTAssertTrue([source loadAllWithError:NULL]);
+	[self buildStandardQueryGraphInContext:source tableName:@"t" fieldName:@"f" host:@"/tmp/t.sqlite"];
+
+	// Five document sections on the source (its single query is the root).
+	RptqObject *sourceDocument = [source objectForEntity:@"RptqDocument" identifier:1];
+	for (int i = 1; i <= 5; i++) {
+		RptqObject *section = [source insertObjectForEntity:@"RptqDocumentSection" identifier:i];
+		[section setValue:@(i) forKey:@"type"];
+		[section setValue:@YES forKey:@"visibility"];
+	}
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:1] forKey:@"hasReportHeaderSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:2] forKey:@"hasReportFooterSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:3] forKey:@"hasPageHeaderSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:4] forKey:@"hasPageFooterSection"];
+	[sourceDocument setValue:[source objectForEntity:@"RptqDocumentSection" identifier:5] forKey:@"hasDetailSection"];
+
+	RptqStoreContext *destination = [self openContextAtPath:@"layout-dest.sqlite"];
+	XCTAssertTrue([destination loadAllWithError:NULL]);
+	[destination insertObjectForEntity:@"RptqDocument" identifier:1];
+
+	NSError *error = nil;
+	RptqQuery *imported = [destination importQueryGraphFromContext:source relativePathBaseURL:nil error:&error];
+	XCTAssertNotNil(imported);
+	XCTAssertEqual(imported.hasLayoutSections.count, (NSUInteger)5);
+	for (RptqDocumentSection *section in imported.hasLayoutSections) {
+		XCTAssertEqualObjects(section.ownerQuery.name, imported.name);
+	}
+}
+
 #pragma mark - Importing a query graph
 
 /// Builds an ordinary single-query graph -- one database, its credential, one schema
