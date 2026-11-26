@@ -28,6 +28,14 @@ e uma ordem de fases combinada.
 
 ---
 
+> **Modelo normativo:** o contrato de execução que esta página motiva está agora declarado de
+> forma normativa e em um só lugar em
+> [`MAD_COMPOSITION_SPEC.md`](../../project/design/MAD_COMPOSITION_SPEC.html). Onde esta página
+> (ou `data-object.md`) divergir dele, a especificação prevalece. A §0 da especificação é
+> **final**: cada nó de uma composição é um relatório completo com seu próprio layout e dados,
+> e a raiz é o relatório padrão do documento, não o único visível. A frase da §3.2 passo 5 que
+> menciona apenas a raiz fica substituída.
+
 ## 1. A ideia, em uma página
 
 Um relatório é uma função de fontes de dados para uma tabela. A distinção conta-vs-pedido que

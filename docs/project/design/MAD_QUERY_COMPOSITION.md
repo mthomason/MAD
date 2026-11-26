@@ -7,9 +7,24 @@ Baseline: [mthomason/MAD master at 2d87f220](https://github.com/mthomason/MAD/tr
 
 ## Target behavior
 
-One .mad document contains source queries and one explicit report root. For example, a SQL Server query returns invoices, a PostgreSQL query returns payments, and the root joins their materialized tables in local SQLite. The layout, Viewer, printing, and exports consume the root result. Upstream queries have an editable definition, an output schema, and a data preview. The .mad file contains the definitions and connection references. Rows and page caches stay in companion storage, and credential secrets stay in the platform credential store or runtime inputs.
+One .mad document contains source queries and one explicit report root. For example, a SQL Server query returns invoices, a PostgreSQL query returns payments, and the root joins their materialized tables in local SQLite. **Every node is a full report:** it has an editable definition, an output schema, its own layout, and its own Viewer/print/export. The root is the document's default report and default output; it is not the only node that can be designed or viewed. The .mad file contains the definitions, layouts, and connection references. Rows and page caches stay in companion storage, and credential secrets stay in the platform credential store or runtime inputs.
 
-Deliver two upstream queries and one composer end to end first. Represent dependencies as a DAG so the model can grow to additional dependencies and nested composers. Defer cross-document links, pinned snapshots, a generic API driver, and independently rendered subreports. The current driver execution contract is sufficient for this SQL-only milestone. The published design puts a structured driver plan in Phase 0. Treat that as a prerequisite only if the composition spike exposes a concrete dependency. [Vision](https://github.com/mthomason/MAD/blob/master/docs/vision.md) · [Multi-source design](https://github.com/mthomason/MAD/blob/master/docs/developers/multi-source.md#8-phases)
+Deliver two upstream queries and one composer end to end first. Represent dependencies as a DAG so the model can grow to additional dependencies and nested composers. Each child keeps its layout and data when it is combined; per-node Designer/Viewer is required, not deferred. Defer cross-document links, pinned snapshots, and a generic API driver. The current driver execution contract is sufficient for this SQL-only milestone. The published design puts a structured driver plan in Phase 0. Treat that as a prerequisite only if the composition spike exposes a concrete dependency. [Vision](https://github.com/mthomason/MAD/blob/master/docs/vision.md) · [Multi-source design](https://github.com/mthomason/MAD/blob/master/docs/developers/multi-source.md#8-phases)
+
+## Decision recorded 2026-11-26 — a node is a report (final)
+
+**Final, not open.** Every node in a composition owns its query definition, its materialized
+result table, and its own report layout. Combining reports carries each child's layout with it.
+The root is the document's default node; any node can be designed, viewed, printed, and
+exported. This supersedes the earlier target text that made the root result the only consumer
+and deferred independently rendered subreports.
+
+The normative statement is [`MAD_COMPOSITION_SPEC.md`](MAD_COMPOSITION_SPEC.md) §0. The
+implementation scope — store revision, import, query-scoped layout/describe/result reads, and
+the Windows/macOS/iOS surfaces — is
+[`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md). The current root-only behavior
+(one layout, import drops source layouts, root-scoped serve) is a known gap, not a design
+choice.
 
 ## 0. Before implementation
 
@@ -63,17 +78,23 @@ The newly compiled graph snapshot must own the projection, logical-to-physical m
 
 Publish a generation only after every required node, the root sort and grouping indexes, and cache metadata succeed. Use an atomic pointer or manifest swap for the matched .maddb and .mdcache, with a single writer per cache namespace. Existing readers retain the previous generation until done. On failure, cancellation, or restart, keep the most recent complete result visibly stale and clean staged files once their handles close. Associate success and progress with the current operation. Today MADOperationRefresh sets document.refreshed before checking cache persistence, and Mac completion partly infers success from that flag. Return the committed result or an error explicitly. [Compiler](https://github.com/mthomason/MAD/blob/master/MAD/Source/MADQueryFull.m#L143) · [Refresh operation](https://github.com/mthomason/MAD/blob/master/MAD/Source/MADOperationRefresh.m#L116) · [Headless table lifecycle](https://github.com/mthomason/MAD/blob/master/MAD/Source/MADHeadlessDocument.m#L410)
 
-## 3. Render and export from one committed root
+## 3. Render and export from the selected node's committed result
 
-Keep the existing banded renderer. Its page index cache stores row IDs, so using a page index and row table from different refreshes can display plausible but incorrect data. The renderer needs a pinned view of the root result for the lifetime of a format, page read, export, or print job.
+> **Updated for the node-as-report decision (2026-11-26, final).** The render/export path is
+> node-scoped, defaulting to the root. Where the bullets below say "root", read "the selected
+> node (the root by default)". A node's own layout revision and its materialized table — not
+> the document's single root — are the pinned inputs. The same renderer, formatter, and export
+> source serve every node.
 
-- **Backing data:** Update MADDocumentRenderDataSource, MADDocumentRenderProtocol, MADocument and MADHeadlessDocument so row enumeration, row-ID lookup, group boundaries, and MADDocumentObjectDataReference field and aggregate reads all resolve to the same root generation and compatible layout revision. Bind Designer fields only to the root output. Resolve formatting types from the root schema. Audit MADSectionsLayout's current use of the document database class for the local composer. Today a designer field key is `[database queryKey:fieldName table:queryAlias]` (`MADDocumentObjectDataReference.m:173-179`) and a group's identity is `hasField.databaseSchemaField.name` plus `inQueryTable.alias` (`MADSectionsLayout.m:64-75`) — both schema-based, so a composed root must make those resolve against the root's committed output, not the live schema.
+Keep the existing banded renderer. Its page index cache stores row IDs, so using a page index and row table from different refreshes can display plausible but incorrect data. The renderer needs a pinned view of the selected node's result (the root by default) for the lifetime of a format, page read, export, or print job.
+
+- **Backing data:** Update MADDocumentRenderDataSource, MADDocumentRenderProtocol, MADocument and MADHeadlessDocument so row enumeration, row-ID lookup, group boundaries, and MADDocumentObjectDataReference field and aggregate reads all resolve to the same node generation and compatible layout revision. Bind Designer fields to the selected node's output (the root's outputs by default). Resolve formatting types from that node's schema. Audit MADSectionsLayout's current use of the document database class for the local composer. Today a designer field key is `[database queryKey:fieldName table:queryAlias]` (`MADDocumentObjectDataReference.m:173-179`) and a group's identity is `hasField.databaseSchemaField.name` plus `inQueryTable.alias` (`MADSectionsLayout.m:64-75`) — both schema-based, so a composed node must make those resolve against its own committed output, not the live schema.
 - **Pagination and caching:** Update MADReportFormatter and its MADArrayCaching keys or cache namespace to include root generation, layout revision, and existing page geometry and formatter variants. The current page-index key is `<layoutIdentifier>ih<NSStringFromCGSize(size)>` and the layout key is the same with `lh`; the `andHash:` argument exists but is unused (`MADReportFormatter.m:199-209`). The index stores row ids into a table identified only by `filename.hash`, in `.madac` files in a cache directory keyed by the document basename (`MADArrayCaching.m:287-293`, `MADDocumentStore.m:52-55`). `needsFormat` reuses the persisted pages whenever `didRefresh` is false, the caches are non-empty, and the file exists (`MADReportFormatter.m:569-578`), so a surviving page index can be paired with a newer row table. Keep sort order and aggregate calculation in the current engine. Reuse pages for identical inputs. An edit to geometry or layout should rerender the pinned rows, and a successful data refresh should cause one reformat for the current Viewer. Failed refresh should leave the previous complete pages readable. Render an empty but valid root using the agreed zero-row layout behavior.
 - **Exports:** Inspect every path through MADReportExportSource, CLI refresh/export, native printing, and Viewer. MADReportExportSource currently compiles the live main query at export time for field keys and schema (`MADReportExportSource.m:85, 110-131`), picks the driver from the first `hasDatabaseSchemas` entry (`:136-143`), and reads rows from `document.dataTable` (`:180-182`); `mad export` also refreshes before it exports (`MADCLIExport.m:28-66`). For composed reports, use the committed root's schema, fields, SQL metadata and rows. Preserve single-source output contracts where possible. Ensure row exports and paginated exports derive from the same generation even if a refresh completes mid-export. [Render data source](https://github.com/mthomason/MAD/blob/master/MAD/Source/MADDocumentRenderDataSource.m#L246) · [Formatter cache and render loop](https://github.com/mthomason/MAD/blob/master/MAD/Source/MADReportFormatter.m#L518) · [Export source](https://github.com/mthomason/MAD/blob/master/MAD/Source/MADReportExportSource.m#L82)
 
 ## 4. Ship through the existing workspaces
 
-- **Headless and Windows RPC first.** Update MADCLIDocument.m, MADCLIRefresh.m, MADCLIQuery.m, MADCLISchema.m, and MADCLIServe.m. Preserve existing root defaults. Add query/source selection for inspection and preview, report result schema and dependencies, and accept per-source credential/connection resolution through the appropriate runtime channel. `mad serve` already dispatches by named method and advertises a fixed capability list, so a composition method and capability are additive. `mad refresh` applies `--rows` to `mainQuery` only (`MADCLIRefresh.m:49-51`), and the preview limit must keep meaning the root's limit. Return errors with a source or query ID. Existing single-source overrides and preview limits must keep their meaning. A limited root preview must leave full upstream inputs intact unless the query definition itself filters them.
+- **Headless and Windows RPC first.** Update MADCLIDocument.m, MADCLIRefresh.m, MADCLIQuery.m, MADCLISchema.m, and MADCLIServe.m. Preserve existing root defaults. Add query/source selection for inspection and preview, report result schema and dependencies, and accept per-source credential/connection resolution through the appropriate runtime channel. `mad serve` already dispatches by named method and advertises a fixed capability list, so a composition method and capability are additive. `mad refresh` applies `--rows` to `mainQuery` only (`MADCLIRefresh.m:49-51`), and the preview limit must keep meaning the selected node's limit, defaulting to the root. Return errors with a source or query ID. Existing single-source overrides and preview limits must keep their meaning. A limited node preview must leave full upstream inputs intact unless the query definition itself filters them.
 - **AppKit first authoring surface.** In MADMacQueryViewController and MADMacDocument, add a query selector that shows the root and upstream queries, source setup via the existing connection flow, and an upstream output picker when editing the root. Scope add-table, join, filter, preview and undo operations to the selected query. `MADMacDocument` currently treats `document.refreshed` as success (`MADMacDocument.m:370`), so make it consume an explicit committed-result/error before adding per-source progress. Use MADMacViewerViewController for phase progress, source-specific failures and the stale-result state. Center the first macOS smoke test on a complete author → save → reopen → refresh → preview → export sequence.
 - **WPF and UIKit.** Extend Windows/App/Mad.Designer.Windows/Engine/EngineService.cs and the MadEngineClient transport as needed, then DocumentViewModel, QueryViewModel and ViewerViewModel. Keep graph mutations and validation in the engine. On iOS, adapt MADQueryViewController, its BuilderDelegates and query data source, plus MADOperationRefreshReload and MADViewerController. Collect credentials per source, scope progress to the current document/run, and preserve the Query → Designer → Viewer workflow. Use a compact query picker on iPhone and the same graph semantics on iPad. Gate shipping authoring controls on end-to-end save/reopen support for each surface. [macOS document refresh](https://github.com/mthomason/MAD/blob/master/Mac/Source/MADMacDocument.m#L295) · [Windows engine service](https://github.com/mthomason/MAD/blob/master/Windows/App/Mad.Designer.Windows/Engine/EngineService.cs) · [iOS refresh adapter](https://github.com/mthomason/MAD/blob/master/MADDesigner/Source/MADOperationRefreshReload.m)
 
@@ -488,6 +509,11 @@ macOS smoke suite drives the new flows end to end.
   keys, moves the child's groups and sort to the root (rebound to the root's outputs, bands kept),
   and rebinds the layout's data-field, aggregate, and barcode references to the root's outputs.
   A failure leaves the report unchanged.
+
+> **Superseded by the node-as-report decision (2026-11-26, final).** Convert must keep the
+> child's layout with the child and give the new root its own layout. The "bands kept on the
+> root" behavior recorded above is a pre-decision shortcut, not the target. See spec §0 and
+> `MAD_COMPOSITION_NODE_VIEW.md` §3.
 - **Add child.** `RptqDocument -addChildQuery:error:` adds a child as a new input of the composed
   root (upstream table + one root field per child field), derives output keys preserving existing
   outputs, and appends to the output order.
@@ -535,8 +561,10 @@ is the `mad serve` transport and the WPF surface on top of the existing engine p
   that query; an unknown or stale identifier answers an actionable error and leaves the document
   unchanged. New methods, backed by the existing `MAD` primitives: `document-info`, `create-empty`,
   `add-root`, `add-source`, `add-upstream`, `import-child`, `convert`, and `set-root-outputs`.
-  `layout-model` resolves the composed root (its ordered outputs become the designer field list).
-  Ordinary single-query callers that omit `query` keep today's behaviour.
+  `layout-model` resolves the composed root (its ordered outputs become the designer field list);
+  this is pre-decision behavior — the per-node layout decision (spec §0) makes it query-scoped,
+  with the root as the default. Ordinary single-query callers that omit `query` keep today's
+  behaviour.
 - **WPF surface.** `DocumentViewModel` exposes `IsComposed`, the query list, and the selected
   query (shown separately from the document type, which is labelled in the window toolbar);
   `QueryViewModel` edits the selected query; the File menu gains New Composition, Convert to
@@ -619,7 +647,9 @@ selector. The engine and serve protocol are unchanged by this checkpoint.
 engine build from 2026-11-25; the engine, serve protocol, and store are unchanged, so no engine
 suite was rerun.
 
-**Remaining.** Designer and Viewer still show the Result for any selection: a document has one
-layout and import drops a source's layout, so per-node layouts require store, import, and serve
-work. The design and backlog are in
+**Remaining — decided final, implementation pending.** Designer and Viewer still show the
+Result for any selection: a document has one layout and import drops a source's layout. The
+target is not in question: every node keeps its layout and data, and all three workspaces
+follow the selection (spec §0). The implementation scope — store revision, import,
+query-scoped layout/describe/result reads, and the Windows/macOS/iOS surfaces — is in
 [`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md).

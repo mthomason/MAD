@@ -20,6 +20,14 @@ la visión que este archivo hace concreta y para la que nombra el código.
 
 ---
 
+> **Decisión final sobre la composición (2026-11-26):** el esbozo de composición de §5
+> (incluida su recomendación de Diseño B, §5.1/§9.2) queda sustituido por el documento
+> normativo [`MAD_COMPOSITION_SPEC.md`](../../project/design/MAD_COMPOSITION_SPEC.html), que
+> adopta el Diseño A (`ATTACH`, un `.maddb` por nodo). La §0 de la especificación es
+> **definitiva**: cada nodo de una composición es un informe completo con su propio diseño y
+> datos; la raíz es el informe predeterminado del documento, no el único. Combinar informes
+> conserva el diseño y el resultado de cada hijo.
+
 ## 1. La idea, y lo que no es
 
 Hoy el usuario diseña una consulta ad hoc contra una base de datos (MySQL, SQL Server o Sqlite3),

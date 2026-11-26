@@ -19,7 +19,10 @@ the vision this file makes concrete and names the code for.
 
 > §5's composition sketch (including its Layout B recommendation, §5.1/§9.2) is superseded by
 > the normative [`MAD_COMPOSITION_SPEC.md`](../project/design/MAD_COMPOSITION_SPEC.html),
-> which adopts Layout A (`ATTACH`, one `.maddb` per node).
+> which adopts Layout A (`ATTACH`, one `.maddb` per node). The spec's §0 is **final**: every
+> node in a composition is a full report with its own layout and data; the root is the
+> document's default report, not the only report. Combining reports carries each child's
+> layout and result with it.
 
 ---
 
@@ -307,9 +310,11 @@ The heavier alternative — a new `RptqDataObject` entity owning the definition,
 
 ## 5. Composition — the subreport rig, documented, not built
 
-**This section is deliberately not scheduled** (the user, 2026-10-16: *"I don't want to rig it
-up… but I want to document this idea"*). It exists so that when it is wanted, it is a plan
-rather than a discovery.
+**Status: scheduled (2026-11-26).** This section's mechanism is now the target. The earlier
+position — documented but deliberately unscheduled (the user, 2026-10-16: *"I don't want to rig
+it up… but I want to document this idea"*) — is history. The normative decision
+([`MAD_COMPOSITION_SPEC.md`](../project/design/MAD_COMPOSITION_SPEC.html) §0) makes every node
+in a composition a full report with its own layout and data.
 
 ### 5.1 The mechanism, precisely
 

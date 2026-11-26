@@ -8,13 +8,16 @@ description: "The scoped engine change that replaces the two-input composition s
 
 **Target:** [`MAD_COMPOSITION_SPEC.md`](MAD_COMPOSITION_SPEC.md) is the contract this work
 must satisfy — read it first; its §7 is the acceptance checklist. This brief scopes the
-engine change only. Authoring UI, iOS/WPF surfaces, and cross-document references are out of
-scope here.
+engine, store, and serve change. The authoring UI implementation and the cross-document
+reference model are out of scope here, but the engine must support the final **node-as-report**
+decision (spec §0) — see Change 4.
 
 ## What is already correct and must not change
 
 - Store revision 3 (`RptqQuery.name`, `RptqDocument.rootQuery`, `RptqQueryTable.upstreamQuery`,
-  `outputIndex`/`outputKey`) and the container 1.1 + capability record. **No format change.**
+  `outputIndex`/`outputKey`) and the container 1.1 + capability record. **No format change is
+  needed for the N-node execution change.** Change 4 (per-node layouts) does require a store
+  revision; it is additive to this baseline.
 - `outputKey` column identity and `<child-alias>.<outputKey>` → physical-column resolution.
 - `MADDatabaseSqlite3 -attachReadOnlyDatabaseAtURL:asName:error:` — read-only attach, URI
   encoding, alias quoting, `LSASC` registration. Reuse as-is.
@@ -65,6 +68,28 @@ Give the composing connection one read-only attach alias per child (bounded, gen
 aliases) and resolve each child reference to `<alias>.<physical>`. More than
 `SQLITE_MAX_ATTACHED` (10) direct children is a design-time error naming the node.
 
+## Change 4 — every node is a report (final decision, spec §0)
+
+The node-as-report decision is part of the engine target, not a later option. The execution
+walk above is unchanged; what changes is what a node owns and what the read paths address.
+
+1. **Store.** Give every `RptqQuery` its own layout: the five document sections move under a
+   node, or a section gains an owning query. Migrate the current document sections onto the
+   root, and create them when a source query is created or imported. This is a store revision
+   (see [`MAD_STORE_MIGRATION.md`](MAD_STORE_MIGRATION.md)); the container already carries the
+   capability record.
+2. **Import.** `importQueryGraphFromContext:` copies the source's layout entities as well as
+   its query graph, remapping field references. An imported report keeps its report.
+3. **Serve.** `layout-model` and every layout mutation take the same optional `query` as the
+   query-model methods; without it they resolve the root. A query-scoped result read (rows, or
+   an `export` variant) reads the selected node's published table. `describe` is scoped the
+   same way.
+4. **Read paths.** Viewer, export, and print take a node, defaulting to the root. A node with
+   no layout falls back to a row grid; its data still exists because every node materializes.
+
+Scope and acceptance criteria live in
+[`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md).
+
 ## Tests to add (Apple + Linux mirror; Windows where the source list includes them)
 
 - **3-leaf root** — three SQLite sources, root joins all three; assert exact rows and column
@@ -84,8 +109,12 @@ source-list check. `MADComposer.m` and `MADOperationRefresh.m` compile headless,
 to both `Linux/cmake/MADSources.cmake` and `Windows/Engine/cmake/MADSources.cmake` (the
 `check_source_lists.py` gate).
 
-## Out of scope (later)
+## Out of scope for this brief
 
-Authoring UI (the "combine" flow, an N-source picker, the Outputs popover generalization),
-iOS/WPF surfaces, cross-document references, and the still-open P4/P7/P8 follow-ups in
-`MAD_QUERY_COMPOSITION.md`.
+The authoring-UI implementation (the "combine" flow, an N-source picker, the Columns popover
+generalization), the iOS/WPF/macOS surface changes, cross-document references, and the
+still-open P4/P7/P8 follow-ups in `MAD_QUERY_COMPOSITION.md`.
+
+Per-node report rendering is **not** deferred: Change 4 is the engine half, and the UI half
+(selecting a node in every workspace, per-node Designer/Viewer, the row-grid fallback) is
+scoped in [`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md).

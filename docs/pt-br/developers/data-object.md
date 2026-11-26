@@ -20,6 +20,14 @@ a visão que este arquivo torna concreta e nomeia o código para ela.
 
 ---
 
+> **Decisão final sobre a composição (2026-11-26):** o esboço de composição da §5 (incluindo
+> sua recomendação de Layout B, §5.1/§9.2) foi substituído pelo documento normativo
+> [`MAD_COMPOSITION_SPEC.md`](../../project/design/MAD_COMPOSITION_SPEC.html), que adota o
+> Layout A (`ATTACH`, um `.maddb` por nó). A §0 da especificação é **final**: cada nó de uma
+> composição é um relatório completo com seu próprio layout e seus próprios dados; a raiz é o
+> relatório padrão do documento, não o único. Combinar relatórios leva o layout e o resultado
+> de cada filho junto.
+
 ## 1. A ideia, e o que ela não é
 
 Hoje o usuário projeta uma consulta ad hoc contra um banco de dados (MySQL, SQL Server ou Sqlite3),

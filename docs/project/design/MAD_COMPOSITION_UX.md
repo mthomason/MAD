@@ -1,17 +1,24 @@
-# Composition (container) report UX — design draft
+# Composition (container) report UX — decision and design
 
-Status: **design draft** — the user-facing shape of a composition report. The normative
-*execution* model is [`MAD_COMPOSITION_SPEC.md`](MAD_COMPOSITION_SPEC.md); the implementation
-record is [`MAD_QUERY_COMPOSITION.md`](MAD_QUERY_COMPOSITION.md). This file is about how the
-feature is *presented*, not how it runs.
+Status: **UX decision final.** The user-facing shape of a composition report. The normative
+execution and per-node-report model is [`MAD_COMPOSITION_SPEC.md`](MAD_COMPOSITION_SPEC.md)
+(especially §0); the implementation record is [`MAD_QUERY_COMPOSITION.md`](MAD_QUERY_COMPOSITION.md);
+the per-node layout/viewer scope is [`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md).
+This file is about how the feature is *presented*, not how it runs.
 
+> **Final decision (2026-11-26): a node is a report.** Every source keeps its layout and its
+> data; combining reports does not reduce a source to a table. Selecting a node selects its
+> query, its layout, and its rows in **every** workspace. The root is the document's default
+> report, not the only report. This is final; see spec §0.
+>
 > **Windows implementation (2026-11-26).** The persistent chrome shipped as a docked **left
 > Composition pane** (the direction in `Composable UI on Windows.md`) rather than the top node
 > strip recommended in §4: a `GridSplitter`, an Expand/Collapse mode, one toolbar Component
 > picker, a clickable graph whose Result is at depth 0, and the terminology/empty-state/
-> localization work below. Selecting a source moves to Query. Per-node Designer and Viewer
-> layouts are **not** available yet — they need the store and serve work recorded in
-> [`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md).
+> localization work below. The pane and the Query-workspace selection are live. The
+> Designer/Viewer per-node rendering and the notice that currently explains the gap are
+> **pending the engine/store work** in `MAD_COMPOSITION_NODE_VIEW.md`; the notice is temporary
+> and must be removed when that lands.
 
 ## 1. The problem
 
@@ -23,26 +30,36 @@ sources list, an Outputs popover — but never tells the story, and nothing on s
 
 ## 2. Naming
 
-- **Design/internal term:** *container report* — it literally contains other reports.
-- **User-facing term:** to be decided. Keep "Composition Report" for continuity (it is already
-  used in the UI and the capability record), or rename to *Combined Report* / *Multi-source
-  Report*. The important thing is one consistent word, used everywhere.
+Final, user-facing terms:
+
+| Concept | Term |
+| --- | --- |
+| Document type | **Composition Report** |
+| A child report brought into the composition | **Source** |
+| The document's default report, built from its sources | **Result** |
+| A field the Result exposes | **Column** |
+| The layout choice in the Query workspace | **Columns** (popover: **Report columns**) |
+
+Do not use "root", "upstream", "output key", "child query", or "subreport" in the UI. Those
+are engine/store terms. "Container report" remains the internal design term.
 
 ## 3. The mental model to teach
 
 > A **composition report combines other reports into one.** You bring in existing reports
-> ("sources"), each of which produces a single table. You join those tables to build one
-> **result** table, choose which result **columns** to show, then design and view that result
-> exactly like a Standard Report.
+> ("sources"). **Each source is itself a full report:** it keeps its layout and its data.
+> You join the sources' result tables to build a new **Result** report, choose which result
+> **columns** to show, then design and view that Result exactly like a Standard Report.
+> Selecting a source gives you that source's query, layout, and rows again.
 
-Three verbs: **add sources → join them → pick the columns.**
+Three verbs: **add sources → join them → pick the columns.** The fourth, equally important
+verb is **select**: the Composition pane makes any report in the document one click away in
+every workspace.
 
 ## 4. The one thing that makes it legible: a persistent "container chrome"
 
 The single biggest gap is that nothing on screen *persistently* indicates a container and shows
-its structure. A one-line toolbar label is not enough. Add an always-visible element — a
-**node strip** across the top of the content area (above the Query/Designer/Viewer workspaces)
-that:
+its structure. A one-line toolbar label is not enough. Add an always-visible **node graph** —
+shipped as a docked left pane — that:
 
 - carries **"container" chrome** (a distinct accent tint or header strip) so you always know
   you are inside one;
@@ -54,13 +71,16 @@ that:
 
 Placement options:
 
-- **Top node strip (recommended):** a horizontal graph strip, Sources left → Result right,
+- **Top node strip (considered):** a horizontal graph strip, Sources left → Result right,
   matching "combine". Always visible across all three workspaces, room to draw links.
-- **Left node rail:** a persistent vertical list under the workspace nav; more room for names,
-  less graph-like.
+- **Left node rail / pane (chosen):** a persistent vertical graph beside the workspace; more
+  room for names and a natural home for per-node status.
 
-Recommend the top strip; it is the natural home for the join visualization and stays put while
-you work in Query, Designer or Viewer.
+**Final placement (2026-11-26):** a docked **left Composition pane** with a `GridSplitter` and
+an Expand/Collapse mode, plus a one-line **Component** picker above the workspace. This is what
+shipped on Windows. The pane is always available across Query, Designer, and Viewer; the picker
+stays visible when the pane collapses. The earlier top-strip recommendation is retained below
+as design history.
 
 ## 5. The "data source" view must show multiple linked sources
 
@@ -85,22 +105,32 @@ together".
    change the join type at the link's badge.
 4. **Pick the columns** — open **Columns** (today's "Outputs" popover); choose/name/order the
    result columns.
-5. **Design** — the Designer field list shows exactly those columns.
-6. **View / refresh / export / save** — unchanged.
+5. **Design** — the Result's Designer field list shows exactly those columns.
+6. **Select any node** — the pane and the Component picker switch Query, Designer, and Viewer
+   to that report. A source shows its own layout and rows; it is not reduced to a table.
+7. **View / refresh / export / save** — unchanged. The selected node is what the Viewer,
+   print, and export show, defaulting to the Result.
 
 ## 7. Per-area UI
 
-- **Document chrome:** the node strip *is* the document-type indicator, so the toolbar badge
-  becomes secondary (keep both: a small badge + the strip).
-- **Node switching:** the node strip replaces the flat query-selector dropdown (or the two
-  coexist — the strip for the graph, the dropdown for keyboard/accessibility).
+- **Document chrome:** the Composition pane and the document-type badge together frame the
+  document. The badge says "Composition Report"; the pane shows its structure.
+- **Node switching:** the pane's graph and the toolbar **Component** picker share one selection.
+  The picker stays when the pane collapses. The graph is the visual navigation; the picker is
+  the compact/keyboard one.
 - **Result canvas:** Source cards show driver + name; join badges get tooltips
-  (`Left → Right, Join type`); an empty state when there are no sources.
-- **Columns editor:** rename "Outputs" → **Columns**; title "Report columns"; one line of copy.
-- **Source canvas:** unchanged from Standard (schema tables, SQL editor, filters/groups), only
-  labelled "you are editing a source".
-- **Designer/Viewer:** Designer field list already shows the result columns in order; caption
-  it "Report columns".
+  (`Left → Right, Join type`); an empty state when there are no sources; the Sources list
+  shows only sources not yet joined and says when all are added.
+- **Columns editor:** "Outputs" → **Columns**; title **Report columns**; one line of copy.
+- **Source canvas:** in Query, unchanged from a Standard Report (that source's schema tables,
+  SQL editor, filters/groups). Each source has **its own Designer and Viewer**; selecting it
+  shows that source's layout and rows.
+- **Designer/Viewer:** every node is a report. The Designer edits the selected node's layout;
+  the field list shows that node's columns, captioned "Report columns" for a Result and its
+  own output fields for a source. The Viewer renders the selected node; a layout-less source
+  shows a row grid.
+- **Root/Result:** the Result is visually distinct (accent) and is the default when the
+  document opens; it is never the only option.
 
 ## 8. WPF expressiveness opportunities
 
@@ -117,28 +147,27 @@ WPF can make this feel like a real graph rather than a list:
 
 | State | Presentation |
 |---|---|
-| Empty container (no sources) | hint + empty Result canvas; Import/Add-source highlighted |
+| Empty container (no sources) | hint + empty-state Import action; the Result canvas explains how to begin |
 | One source | Result = that source's columns; hint "add another source to combine" |
+| Source selected | Query shows that source's query; Designer shows its layout; Viewer shows its rows/pages. No notice, no forced workspace switch |
+| Source has no layout | the Viewer shows a row grid; the Designer offers to author a layout |
 | Missing/offline source | refresh error names the source (already); surface it on the source node |
 | Join cycle | design-time error names the query (already); show in the status bar |
 | Result selected + SQL mode | SQL editor disabled (already); tooltip explains why |
 
-## 10. Done vs proposed
+## 10. Shipped vs remaining
 
-Already functional (previous checkpoints): document-type text, query selector, sources list +
-double-click add, Outputs popover (add/name/remove/reorder), query-scoped filters/groups/SQL,
-Designer field binding to result columns, save/reopen/refresh/view/export.
+Shipped on Windows (2026-11-26): the docked Composition pane, clickable graph, Expand/Collapse,
+one Component picker, document-type badge/tooltip, Outputs → Columns with explanatory copy,
+composition empty states, the one-source hint, the Designer "Report columns" caption,
+consistent Result/Source wording in all six dictionaries, and Query-on-open.
 
-Proposed (UX layer — copy, tooltips, labels, and the node strip — no engine change):
-1. The persistent **node strip** (container chrome + nodes + links + switching).
-2. Document-type badge + tooltip + first-run hint.
-3. Rename **Outputs → Columns** with explanatory copy.
-4. Tooltips on sources list, join badges, Columns controls, segment toggles.
-5. Empty states for the Result canvas and source sidebar.
-6. Consistent "source / Result" wording across the six language dictionaries.
+Remaining (the node-as-report decision): per-node layouts and data reads in the store, import,
+serve, and all three workspaces. Scoped in
+[`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md). The interim "source layouts are
+not available yet" notice and the forced switch to Query are removed when that lands.
 
-## 11. Recommended order
+## 11. Order
 
-Ship terminology + tooltips + empty states first (pure XAML/localization, low risk), then the
-node strip (a small view-model + XAML change), which is the piece that makes the feature
-finally legible.
+The terminology, empty states, pane, and picker are complete. Next is the engine/store work in
+`MAD_COMPOSITION_NODE_VIEW.md` §3, then the Windows/macOS/iOS follow-up in §3.5–§3.6.

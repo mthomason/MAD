@@ -15,6 +15,14 @@ Diese Seite beschreibt kombinierbare Berichte: das Ergebnis eines Berichts wird 
 
 ---
 
+> **Normatives Modell:** Der Ausführungsvertrag, den diese Seite motiviert, ist jetzt normativ
+> an einer Stelle in [`MAD_COMPOSITION_SPEC.md`](../../project/design/MAD_COMPOSITION_SPEC.html)
+> festgehalten. Wo diese Seite (oder `data-object.md`) davon abweicht, gilt die Spezifikation.
+> §0 der Spezifikation ist **endgültig**: Jeder Knoten einer Komposition ist ein vollständiger
+> Bericht mit eigenem Layout und eigenen Daten, und die Wurzel ist der Standardbericht des
+> Dokuments, nicht der einzige sichtbare. Der Satz in §3.2 Schritt 5, der nur die Wurzel nennt,
+> ist damit überholt.
+
 ## 1. Die Idee, auf einer Seite
 
 Ein Bericht ist eine Funktion von Datenquellen auf eine Tabelle. Die Unterscheidung zwischen Definition und Ergebnis, die für dieses Design zählt, steht bereits im Code:

@@ -15,6 +15,14 @@ Diese Seite definiert das Datenobjekt: die Definition eines Berichts, sein Schem
 
 ---
 
+> **Endgültige Kompositionsentscheidung (2026-11-26):** §5s Kompositionsskizze (einschließlich
+> ihrer Layout-B-Empfehlung, §5.1/§9.2) wird durch die normative
+> [`MAD_COMPOSITION_SPEC.md`](../../project/design/MAD_COMPOSITION_SPEC.html) ersetzt, die
+> Layout A übernimmt (`ATTACH`, eine `.maddb` pro Knoten). §0 der Spezifikation ist
+> **endgültig**: Jeder Knoten einer Komposition ist ein vollständiger Bericht mit eigenem
+> Layout und eigenen Daten; die Wurzel ist der Standardbericht des Dokuments, nicht der einzige
+> Bericht. Das Kombinieren von Berichten führt Layout und Ergebnis jedes Kindes mit.
+
 ## 1. Die Idee und was sie nicht ist
 
 Heute entwirft der Benutzer eine Ad-hoc-Abfrage gegen eine Datenbank (MySQL, SQL Server oder Sqlite3), sie gibt eine Datentabelle zurück, und der Bericht wird von den Layoutwerkzeugen auf diesen Daten aufgebaut. Der Bericht ist Abfrage plus Layout. Die Verallgemeinerung besteht darin, die Abfragehälfte zu nehmen und sie zum Objekt zu machen:

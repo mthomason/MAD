@@ -134,6 +134,9 @@ screenshots; that unblocks visual iteration for both of us.
   node strip: a clickable graph with the Result at depth 0, Expand/Collapse, one toolbar
   Component picker, the "Outputs → Columns" rename with explanatory copy, the Sources and
   result-canvas empty states, the one-source hint, and the type-specific start workspace
-  (Query on open). Every new string is in all six dictionaries. Selecting a source moves to
-  Query; per-node Designer/Viewer layouts remain, recorded in
+  (Query on open). Every new string is in all six dictionaries. Selecting a source currently
+  moves to Query and Designer/Viewer show a notice — that is an **interim** state, not the
+  target. The final decision (spec §0) is that every node is a full report with its own layout
+  and data, and all three workspaces follow the selection. The store/import/serve and UI work
+  to remove the notice is scoped in
   [`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md).

@@ -28,6 +28,14 @@ y un orden de fases combinado.
 
 ---
 
+> **Modelo normativo:** el contrato de ejecución que motiva esta página se expresa ahora de
+> forma normativa y en un solo lugar en
+> [`MAD_COMPOSITION_SPEC.md`](../../project/design/MAD_COMPOSITION_SPEC.html). Donde esta página
+> (o `data-object.md`) difiera de él, prevalece la especificación. La §0 de la especificación es
+> **definitiva**: cada nodo de una composición es un informe completo con su propio diseño y
+> datos, y la raíz es el informe predeterminado del documento, no el único visible. La frase de
+> §3.2 paso 5 que solo menciona la raíz queda sustituida.
+
 ## 1. La idea, en una página
 
 Un informe es una función de orígenes de datos a una tabla. La distinción cuenta-vs-pedido que

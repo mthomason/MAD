@@ -11,7 +11,10 @@ This page describes composable reports: a report's result becomes a table anothe
 > **Normative model:** the execution contract this page motivates is now stated, normatively
 > and in one place, in
 > [`MAD_COMPOSITION_SPEC.md`](../project/design/MAD_COMPOSITION_SPEC.html). Where this page
-> (or `data-object.md`) differs from it, the spec wins.
+> (or `data-object.md`) differs from it, the spec wins. The spec's §0 is **final**: every node
+> in a composition is a full report with its own layout and data, and the root is the
+> document's default report, not the only viewable one. The root-only sentence in §3.2 step 5
+> below is superseded.
 
 **Scope:** the architecture the user described on 2026-11-22: a user designs a report
 against a data source (MySQL, SQL Server, PostgreSQL, SQLite, or a Web API such as eBay's
