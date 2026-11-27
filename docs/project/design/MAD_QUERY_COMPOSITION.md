@@ -653,3 +653,83 @@ target is not in question: every node keeps its layout and data, and all three w
 follow the selection (spec §0). The implementation scope — store revision, import,
 query-scoped layout/describe/result reads, and the Windows/macOS/iOS surfaces — is in
 [`MAD_COMPOSITION_NODE_VIEW.md`](MAD_COMPOSITION_NODE_VIEW.md).
+
+## Checkpoint L — macOS per-node reports (2026-11-27)
+
+The native AppKit app now treats every composition node as a report: one selection in the
+toolbar drives Query, Designer, and Viewer together; a source shows and edits its own
+layout and renders its own values; a layout-less source is a row grid; the Result and a
+Standard Report keep the document path. The engine, store, import, and serve code is
+unchanged (`253847b04` plus this slice).
+
+- **Selection model.** `MADMacDocument.selectedQuery` is the one selection. A custom setter
+  posts `MADMacDocumentDidSelectQueryNotification` (selection is not a mutation: no dirty
+  flag, no save, no workspace switch) and bumps `selectionVersion`. Selecting a non-root
+  query with no structural bands calls `ensureStructuralSectionsInContext:` once, persists
+  that real store mutation (without the mutate notification), and rebuilds the
+  `MADSectionsLayout` snapshot for the selected query. `orderedSections` is now
+  `[selectedQuery orderedLayoutSectionsForDocument:]`, so the canvas, band table, minimap,
+  inspector, and drag/drop follow the selection in one place; the report root still returns
+  the document's five sections, so the ordinary report is byte-for-byte the old path.
+- **Node picker.** A toolbar `NSPopUpButton` (Composition Reports only) lists the Result
+  first, marked "Result — <name>", then each source. It shares the selection with the Query
+  workspace's existing popup; selecting a node never changes the active workspace.
+- **Query workspace.** A nested composing source is read-only structure (its upstream
+  tables; no Add Table) with a note that the source is itself a composition. SQL editing is
+  disabled for any composing node with a localized explanation. The generated SQL preview
+  is now compiled from a `MADQueryFull` built for the **selected** leaf's own database and
+  dialect, closing the Checkpoint G gap where it compiled `headlessDocument.mainQuery`.
+- **Designer.** The field list is the selected node's: its ordered output fields for the
+  Result/any composer (caption "REPORT COLUMNS"), its own query fields for a leaf (caption
+  "QUERY FIELDS"). A leaf's data field binds with `queryAlias` so it resolves to the key the
+  node result carries. Stale cross-node section/element selections are cleared on reload;
+  an empty layout shows an "add elements" hint rather than an error. Paper stays
+  document-level.
+- **Viewer.** Renders the selected node with the PDF exporter's
+  `exportDocument:query:toURL:…` (never the no-query fallback for a non-root; a format
+  without node support refuses). Status uses the node's own row count. A node whose
+  ordered bands contain no elements shows an `NSTableView` row grid built from its
+  retained `nodeResults` (root: `currentResult`); the previous node's PDF/grid is cleared
+  before the new render. `json-report` is offered only for the report root and refused for
+  a source; every other format exports the selected node. Refresh stays whole-document, and
+  a failed node leaves the previous result readable. Print is disabled in grid mode.
+- **Localization.** `sync_catalog.py` added the 100 keys the composition work had left
+  uncatalogued (the Mac authoring strings plus this slice's), and all five translations
+  (de, es, ja, pt-BR, zh-Hans) were written for them. The catalog is complete and
+  `check_translations.py --require-complete` passes.
+- **Verification (actual).** `./Mac/build.sh --smoke-test` passes, 25 checks. The new
+  per-node check drives the real toolbar picker: selecting payments keeps the workspace,
+  creates its five bands, shows its leaf caption, then authors a label + `payments.amount`
+  data field, refreshes the composition, renders a node PDF, and exports HTML containing
+  the authored text and its own values (40/60); selecting the untouched invoices source
+  shows a three-row grid; selecting the Result restores the document bands, a non-empty PDF,
+  and the "Report columns" caption; `json-report` is present for the Result and absent/refused
+  for the source; save/reopen preserves the source layout (2 elements) and leaves the
+  Result's (3) untouched; a Standard Report keeps document-owned bands and json-report; an
+  empty composition (root, no sources) selects the Result and shows the not-yet-refreshed
+  guidance without a crash.
+
+  The per-node states were also captured from the app's own window with the smoke binary's
+  `--write-node-screenshots <dir>` mode (written for hosts where screen capture is
+  unavailable): the Result/Designer, Payments/Designer, Payments/Viewer (node PDF showing
+  40 and 60), Invoices/Viewer (three-row grid), and Result/Viewer (four joined rows). The
+  AppKit snapshot does not draw the toolbar's popup/segmented controls into the bitmap, so
+  the per-node evidence there is the field caption, bands, status line, and page content;
+  the PDF rendering of each state is written beside its PNG.
+
+**Finding — the Apple print walk is dead code.** The handoff expected the first compile of
+the node-aware section substitution in `MAD/Source/MADPrintPageRenderer.m` to be the gate.
+It compiles because the whole `accessibilityDrawingObjectsOnPageAtIndex:` region is inside
+a block comment (`/*` at `:379` through `*/` at `:469`), so the substitution has never been
+compiled or run. If it is uncommented it will not build: `:432` has a stray `]` with no
+opening `[`, and `:413` calls `newDatabaseConnectionForUserCredentals:`, a selector that
+does not exist (`+[MADDatabaseConnection newDatabaseConnection:]` is the real factory).
+The Mac Viewer prints the rendered PDF (`PDFView`), not this renderer, so the slice is not
+blocked. Recorded in `docs/project/registers/BUGS.md`; reviving the accessibility walk
+belongs to its own change.
+
+**Deferred / recorded.** Direct nested-composer authoring (adding upstream children to a
+non-root composer), per-node paper size, `json-report` node scoping, an optional sidebar
+node list, and node-scoped selection of a source's connection sheet. The audit's one
+pre-existing over-baseline occurrence (`MADDataStructures/Source/MTGraph.m`,
+`nonliteral-key: TextCycleEncountered`, now 2 vs baseline 1) is untouched.

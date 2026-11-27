@@ -28606,6 +28606,3606 @@
           }
         }
       }
+    },
+    "+ Add Source to Root": {
+      "comment": "Schema sidebar button that adds a source query to the composed root.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Quelle zum Ergebnis hinzufügen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Agregar origen al resultado"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "＋結果にソースを追加"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Adicionar fonte ao resultado"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "＋将源添加到结果"
+          }
+        }
+      }
+    },
+    "+ Import…": {
+      "comment": "Query toolbar button that imports an existing report as a child.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Importieren…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Importar…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "＋読み込む…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Importar…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "＋导入…"
+          }
+        }
+      }
+    },
+    "+ Root": {
+      "comment": "Query toolbar button that creates the composed root query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Ergebnis"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Resultado"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "＋結果"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Resultado"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "＋结果"
+          }
+        }
+      }
+    },
+    "+ Source…": {
+      "comment": "Query toolbar button that adds a source query from a database connection.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Quelle…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Origen…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "＋ソース…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Fonte…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "＋源…"
+          }
+        }
+      }
+    },
+    "<unnamed>": {
+      "comment": "Unnamed query in a composition error.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "<unnamed>"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "<unnamed>"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "<unnamed>"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "<unnamed>"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "<unnamed>"
+          }
+        }
+      }
+    },
+    "A composing field references an upstream query with no published result.": {
+      "comment": "Missing upstream result in a composing query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein zusammengesetztes Feld verweist auf eine übergeordnete Abfrage ohne veröffentlichtes Ergebnis."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un campo compuesto hace referencia a una consulta de origen sin resultado publicado."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "合成フィールドが、公開された結果を持たない上流クエリを参照しています。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um campo composto referencia uma consulta de origem sem resultado publicado."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "合成字段引用了没有已发布结果的上游查询。"
+          }
+        }
+      }
+    },
+    "A file URL is required to create a document.": {
+      "comment": "Error when an empty document is created without a URL.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zum Erstellen eines Dokuments ist eine Datei-URL erforderlich."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se requiere una URL de archivo para crear un documento."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドキュメントを作成するにはファイル URL が必要です。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "É necessária uma URL de arquivo para criar um documento."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "创建文档需要文件 URL。"
+          }
+        }
+      }
+    },
+    "A query name and a database connection are required to add a source query.": {
+      "comment": "Error: a source query was added without its name or connection.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zum Hinzufügen einer Quellabfrage sind ein Abfragename und eine Datenbankverbindung erforderlich."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se requieren un nombre de consulta y una conexión de base de datos para agregar una consulta de origen."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソースクエリを追加するには、クエリ名とデータベース接続が必要です。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um nome de consulta e uma conexão de banco de dados são necessários para adicionar uma consulta de origem."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加源查询需要查询名称和数据库连接。"
+          }
+        }
+      }
+    },
+    "A source report is required to import a child.": {
+      "comment": "Import error: no source report.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zum Importieren eines untergeordneten Berichts ist ein Quellbericht erforderlich."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se requiere un informe de origen para importar un informe secundario."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "子レポートを読み込むにはソースレポートが必要です。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "É necessário um relatório de origem para importar um relatório filho."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入子报表需要源报表。"
+          }
+        }
+      }
+    },
+    "Add Source": {
+      "comment": "Button that adds the named source query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelle hinzufügen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar origen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソースを追加"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar fonte"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加源"
+          }
+        }
+      }
+    },
+    "Add a Source Query": {
+      "comment": "Connection window title when adding a composed source query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quellabfrage hinzufügen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar una consulta de origen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソースクエリを追加"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar uma consulta de origem"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加源查询"
+          }
+        }
+      }
+    },
+    "Add a source query from another database connection": {
+      "comment": "Tooltip for the add-source button.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine Quellabfrage aus einer anderen Datenbankverbindung hinzufügen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregar una consulta de origen desde otra conexión de base de datos"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "別のデータベース接続からソースクエリを追加します"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicionar uma consulta de origem de outra conexão de banco de dados"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从另一个数据库连接添加源查询"
+          }
+        }
+      }
+    },
+    "Add elements to design this report.": {
+      "comment": "Designer hint when the selected node's report layout has no elements.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fügen Sie Elemente hinzu, um diesen Bericht zu gestalten."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agregue elementos para diseñar este informe."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要素を追加してこのレポートをデザインします。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adicione elementos para projetar este relatório."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加元素以设计此报表。"
+          }
+        }
+      }
+    },
+    "Choose": {
+      "comment": "Composition child picker confirm button.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auswählen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolher"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择"
+          }
+        }
+      }
+    },
+    "Choose Reports to Compose": {
+      "comment": "Composition child picker title.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu kombinierende Berichte auswählen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir informes para combinar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結合するレポートを選択"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolher relatórios para combinar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择要组合的报表"
+          }
+        }
+      }
+    },
+    "Choose Source": {
+      "comment": "Connection window primary button when adding a source query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelle auswählen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir origen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソースを選択"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolher fonte"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择源"
+          }
+        }
+      }
+    },
+    "Choose a Report to Import": {
+      "comment": "Import-child picker title.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu importierenden Bericht auswählen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir un informe para importar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "読み込むレポートを選択"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolher um relatório para importar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择要导入的报表"
+          }
+        }
+      }
+    },
+    "Choose the Result or one of the composition's sources. Every workspace follows the selection.": {
+      "comment": "Tooltip for the composition report picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wählen Sie das Ergebnis oder eine der Quellen der Komposition. Alle Arbeitsbereiche folgen der Auswahl."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elija el Resultado o uno de los orígenes de la composición. Todos los espacios de trabajo siguen la selección."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結果または構成のソースを選択します。すべてのワークスペースが選択に従います。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha o Resultado ou uma das fontes da composição. Todos os espaços de trabalho seguem a seleção."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择结果或组合中的某个源。所有工作区都会跟随所选内容。"
+          }
+        }
+      }
+    },
+    "Choose the type of report to create.": {
+      "comment": "New report chooser prompt.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wählen Sie den Typ des zu erstellenden Berichts."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elija el tipo de informe que desea crear."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "作成するレポートの種類を選択します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha o tipo de relatório a criar."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择要创建的报表类型。"
+          }
+        }
+      }
+    },
+    "Choose, name, and reorder the composed root's output columns": {
+      "comment": "Tooltip for the outputs button.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Ausgabespalten des zusammengesetzten Ergebnisses auswählen, benennen und neu anordnen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir, nombrar y reordenar las columnas de salida del resultado compuesto"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "合成結果の出力列を選択、名前変更、並べ替えます"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolher, nomear e reordenar as colunas de saída do resultado composto"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择、命名并重新排序合成结果的输出列"
+          }
+        }
+      }
+    },
+    "Column %lu": {
+      "comment": "Fallback row-grid column header when the result carries no column name. %lu is the column number.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spalte %lu"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Columna %lu"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "列 %lu"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coluna %lu"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "列 %lu"
+          }
+        }
+      }
+    },
+    "Composition Report": {
+      "comment": "Document type label: a report that combines one or more child reports.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition Report"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition Report"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition Report"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition Report"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition Report"
+          }
+        }
+      }
+    },
+    "Composition.mad": {
+      "comment": "Default composition file name.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition.mad"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition.mad"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition.mad"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition.mad"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Composition.mad"
+          }
+        }
+      }
+    },
+    "Convert to Composition…": {
+      "comment": "File menu item that converts the current standard report into a one-child composition.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In Komposition umwandeln…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convertir en composición…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "構成に変換…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Converter em composição…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "转换为组合…"
+          }
+        }
+      }
+    },
+    "Could not add the source query": {
+      "comment": "Alert title when a source query cannot be added.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quellabfrage konnte nicht hinzugefügt werden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo agregar la consulta de origen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソースクエリを追加できませんでした"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível adicionar a consulta de origem"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法添加源查询"
+          }
+        }
+      }
+    },
+    "Could not connect to the source": {
+      "comment": "Alert title when a source connection fails.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbindung zur Quelle nicht möglich"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo conectar con el origen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソースに接続できませんでした"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível conectar à fonte"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法连接到源"
+          }
+        }
+      }
+    },
+    "Could not create the root query": {
+      "comment": "Alert title when the root query cannot be created.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Ergebnisabfrage konnte nicht erstellt werden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo crear la consulta del resultado"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結果クエリを作成できませんでした"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível criar a consulta do resultado"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法创建结果查询"
+          }
+        }
+      }
+    },
+    "Could not import the report": {
+      "comment": "Alert title when a child import fails.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Bericht konnte nicht importiert werden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo importar el informe"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レポートを読み込めませんでした"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível importar o relatório"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法导入报表"
+          }
+        }
+      }
+    },
+    "Could not register the new source database.": {
+      "comment": "Error: a source query's database was not added to the document.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die neue Quelldatenbank konnte nicht registriert werden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo registrar la nueva base de datos de origen."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しいソースデータベースを登録できませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível registrar o novo banco de dados de origem."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法注册新的源数据库。"
+          }
+        }
+      }
+    },
+    "Could not render the report.": {
+      "comment": "Viewer status line when the PDF preview failed.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Bericht konnte nicht gerendert werden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo renderizar el informe."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レポートをレンダリングできませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível renderizar o relatório."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法渲染报表。"
+          }
+        }
+      }
+    },
+    "Create": {
+      "comment": "Composition destination confirm button.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erstellen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crear"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "作成"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Criar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "创建"
+          }
+        }
+      }
+    },
+    "Create the composed root query that joins the source queries": {
+      "comment": "Tooltip for the add-root button.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Ergebnisabfrage erstellen, die die Quellabfragen verknüpft"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crear la consulta del resultado que une las consultas de origen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソースクエリを結合する結果クエリを作成します"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Criar a consulta do resultado que une as consultas de origem"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "创建连接各源查询的结果查询"
+          }
+        }
+      }
+    },
+    "Document Type": {
+      "comment": "Toolbar item label for the document type.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dokumenttyp"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo de documento"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ドキュメントの種類"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo de documento"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文档类型"
+          }
+        }
+      }
+    },
+    "Double-click to use this source as a table in the root": {
+      "comment": "Tooltip on a source query row when editing the root.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doppelklicken Sie, um diese Quelle als Tabelle im Ergebnis zu verwenden"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haga doble clic para usar este origen como tabla en el resultado"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ダブルクリックしてこのソースを結果のテーブルとして使用します"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clique duas vezes para usar esta origem como tabela no resultado"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "双击以将此源用作结果中的表"
+          }
+        }
+      }
+    },
+    "Give this source a name you will recognise when building the root join.": {
+      "comment": "Alert body for naming a source query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geben Sie dieser Quelle einen Namen, den Sie beim Erstellen der Ergebnisverknüpfung wiedererkennen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asigne a este origen un nombre que reconozca al crear la unión del resultado."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結果の結合を作成するときに識別できる名前をこのソースに付けます。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dê a esta fonte um nome que você reconheça ao criar a junção do resultado."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "为此源指定一个在构建结果连接时能识别的名称。"
+          }
+        }
+      }
+    },
+    "Import": {
+      "comment": "Import-child picker confirm button.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "読み込む"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入"
+          }
+        }
+      }
+    },
+    "Import an existing report as a child of the composition": {
+      "comment": "Tooltip for the import-child button.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einen vorhandenen Bericht als untergeordneten Bericht der Komposition importieren"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar un informe existente como informe secundario de la composición"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "既存のレポートを構成の子として読み込みます"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar um relatório existente como filho da composição"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将现有报表作为组合的子报表导入"
+          }
+        }
+      }
+    },
+    "Name the source query": {
+      "comment": "Alert title for naming a source query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quellabfrage benennen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombrar la consulta de origen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソースクエリに名前を付ける"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nomear a consulta de origem"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "命名源查询"
+          }
+        }
+      }
+    },
+    "New Composition…": {
+      "comment": "File menu item that starts a new composition from existing reports.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neue Komposition…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nueva composición…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新規構成…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nova composição…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新建组合…"
+          }
+        }
+      }
+    },
+    "New…": {
+      "comment": "File menu item that starts a new report; offers the report type.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neu…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nuevo…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新規…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Novo…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新建…"
+          }
+        }
+      }
+    },
+    "No child report to add.": {
+      "comment": "Add-child error: no child.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein untergeordneter Bericht zum Hinzufügen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay ningún informe secundario para agregar."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "追加する子レポートがありません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum relatório filho para adicionar."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有要添加的子报表。"
+          }
+        }
+      }
+    },
+    "No open report store to add a root query to.": {
+      "comment": "Error: a root query was added with no open store.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein offener Berichtsspeicher, zu dem eine Ergebnisabfrage hinzugefügt werden kann."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay ningún almacén de informes abierto al que agregar una consulta del resultado."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結果クエリを追加できる開いているレポートストアがありません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum armazenamento de relatório aberto para adicionar uma consulta do resultado."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有可添加结果查询的已打开报表存储。"
+          }
+        }
+      }
+    },
+    "No open report store to add a source query to.": {
+      "comment": "Error: a source query was added with no open store.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein offener Berichtsspeicher, zu dem eine Quellabfrage hinzugefügt werden kann."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay ningún almacén de informes abierto al que agregar una consulta de origen."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソースクエリを追加できる開いているレポートストアがありません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum armazenamento de relatório aberto para adicionar uma consulta de origem."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有可添加源查询的已打开报表存储。"
+          }
+        }
+      }
+    },
+    "No report layout; showing %lu cached rows.": {
+      "comment": "Viewer status line when a node with no elements is shown as a row grid. %lu is the row count.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Berichtslayout; %lu zwischengespeicherte Zeilen werden angezeigt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin diseño de informe; se muestran %lu filas en caché."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レポートレイアウトがありません。キャッシュされた %lu 行を表示しています。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sem layout de relatório; mostrando %lu linhas em cache."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有报表布局；正在显示 %lu 行缓存行。"
+          }
+        }
+      }
+    },
+    "No report store to add a child to.": {
+      "comment": "Add-child error: no store.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Berichtsspeicher, zu dem ein untergeordneter Bericht hinzugefügt werden kann."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay ningún almacén de informes al que agregar un informe secundario."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "子を追加するレポートストアがありません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum armazenamento de relatório para adicionar um filho."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有可添加子报表的报表存储。"
+          }
+        }
+      }
+    },
+    "No report store to convert.": {
+      "comment": "Conversion error: no store.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Berichtsspeicher zum Umwandeln."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay ningún almacén de informes para convertir."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "変換するレポートストアがありません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum armazenamento de relatório para converter."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有要转换的报表存储。"
+          }
+        }
+      }
+    },
+    "No source document to import.": {
+      "comment": "Import failed: no source document was supplied.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Quelldokument zum Importieren."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay ningún documento de origen para importar."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "読み込むソースドキュメントがありません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum documento de origem para importar."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有要导入的源文档。"
+          }
+        }
+      }
+    },
+    "Output name": {
+      "comment": "Placeholder for the composed output column name.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgabenname"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre de salida"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出力名"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome da saída"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "输出名称"
+          }
+        }
+      }
+    },
+    "Outputs…": {
+      "comment": "Query toolbar button that edits the composed root's outputs.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgaben…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salidas…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "出力…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saídas…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "输出…"
+          }
+        }
+      }
+    },
+    "REPORT COLUMNS (DRAG TO CANVAS)": {
+      "comment": "Designer sidebar heading for a Result's or a composing node's report columns.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BERICHTSSPALTEN (ZUM ZEICHENBEREICH ZIEHEN)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "COLUMNAS DEL INFORME (ARRASTRE AL LIENZO)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レポート列（キャンバスにドラッグ）"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "COLUNAS DO RELATÓRIO (ARRASTE PARA A TELA)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "报表列（拖到画布）"
+          }
+        }
+      }
+    },
+    "Rename Query": {
+      "comment": "Alert title for renaming a query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abfrage umbenennen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renombrar consulta"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリ名を変更"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear consulta"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重命名查询"
+          }
+        }
+      }
+    },
+    "Rename the selected query": {
+      "comment": "Tooltip for the rename-query button.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die ausgewählte Abfrage umbenennen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renombrar la consulta seleccionada"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択したクエリの名前を変更します"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear a consulta selecionada"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重命名所选查询"
+          }
+        }
+      }
+    },
+    "Rename…": {
+      "comment": "Query toolbar button that renames the selected query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umbenennen…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renombrar…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名前を変更…"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renomear…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重命名…"
+          }
+        }
+      }
+    },
+    "Result — %@": {
+      "comment": "Node picker item for the composition's Result report. %@ is the Result's name.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ergebnis — %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resultado — %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結果 — %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resultado — %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "结果 — %@"
+          }
+        }
+      }
+    },
+    "Root Outputs (in order)": {
+      "comment": "Composed outputs editor title.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ergebnisausgaben (in Reihenfolge)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salidas del resultado (en orden)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "結果の出力（順序どおり）"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saídas do resultado (em ordem)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "结果输出（按顺序）"
+          }
+        }
+      }
+    },
+    "SQL editing is not available for a composed report. Design it from its sources.": {
+      "comment": "Tooltip on the disabled SQL segment for a composed node.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die SQL-Bearbeitung ist für einen zusammengesetzten Bericht nicht verfügbar. Gestalten Sie ihn aus seinen Quellen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La edición de SQL no está disponible para un informe compuesto. Diséñelo a partir de sus orígenes."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "合成レポートでは SQL 編集を使用できません。ソースからデザインしてください。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A edição de SQL não está disponível para um relatório composto. Projete-o a partir de suas fontes."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "组合报表不支持 SQL 编辑。请从其源进行设计。"
+          }
+        }
+      }
+    },
+    "Save Composition": {
+      "comment": "Composition destination title.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Komposition sichern"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar composición"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "構成を保存"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar composição"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "存储组合"
+          }
+        }
+      }
+    },
+    "Source Queries": {
+      "comment": "Schema sidebar heading when the composed root is being edited.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quellabfragen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultas de origen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソースクエリ"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consultas de origem"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "源查询"
+          }
+        }
+      }
+    },
+    "Standard Report": {
+      "comment": "Document type label: an ordinary single-source report.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard Report"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard Report"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard Report"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard Report"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard Report"
+          }
+        }
+      }
+    },
+    "Table": {
+      "comment": "Generic table name when none is recorded.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabelle"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabla"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テーブル"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabela"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "表"
+          }
+        }
+      }
+    },
+    "The composed document could not be resolved.": {
+      "comment": "Composition resolution failure.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das zusammengesetzte Dokument konnte nicht aufgelöst werden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo resolver el documento compuesto."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "合成ドキュメントを解決できませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível resolver o documento composto."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法解析组合文档。"
+          }
+        }
+      }
+    },
+    "The composed query could not be compiled.": {
+      "comment": "Composition compilation failure.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die zusammengesetzte Abfrage konnte nicht kompiliert werden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo compilar la consulta compuesta."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "合成クエリをコンパイルできませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível compilar a consulta composta."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法编译组合查询。"
+          }
+        }
+      }
+    },
+    "The composition graph could not be ordered.": {
+      "comment": "Composition ordering failure.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Kompositionsgraph konnte nicht sortiert werden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo ordenar el grafo de la composición."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "構成グラフを並べ替えられませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível ordenar o grafo da composição."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法对组合图进行排序。"
+          }
+        }
+      }
+    },
+    "The composition graph has a cycle involving the query '%@'.": {
+      "comment": "Cycle validation error.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Kompositionsgraph enthält einen Zyklus mit der Abfrage '%@'."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El grafo de la composición contiene un ciclo que incluye la consulta '%@'."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "構成グラフにクエリ '%@' を含む循環があります。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O grafo da composição contém um ciclo que envolve a consulta '%@'."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "组合图中存在涉及查询 '%@' 的循环。"
+          }
+        }
+      }
+    },
+    "The composition join failed.": {
+      "comment": "Composition join failure.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Kompositionsverknüpfung ist fehlgeschlagen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error en la unión de la composición."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "構成の結合に失敗しました。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha na junção da composição."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "组合连接失败。"
+          }
+        }
+      }
+    },
+    "The connection could not be imported.": {
+      "comment": "Alert body for a failed source import.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Verbindung konnte nicht importiert werden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo importar la conexión."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "接続を読み込めませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível importar a conexão."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法导入连接。"
+          }
+        }
+      }
+    },
+    "The database file could not be attached.": {
+      "comment": "Error attaching a read-only database.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Datenbankdatei konnte nicht eingebunden werden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo adjuntar el archivo de base de datos."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "データベースファイルをアタッチできませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível anexar o arquivo de banco de dados."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法附加数据库文件。"
+          }
+        }
+      }
+    },
+    "The field %@ is not present in the upstream query's result.": {
+      "comment": "Missing composing field.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Feld %@ ist im Ergebnis der übergeordneten Abfrage nicht vorhanden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El campo %@ no está presente en el resultado de la consulta de origen."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フィールド %@ は上流クエリの結果に存在しません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O campo %@ não está presente no resultado da consulta de origem."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "字段 %@ 不存在于上游查询的结果中。"
+          }
+        }
+      }
+    },
+    "The node '%@' has not been refreshed; refresh the document first.": {
+      "comment": "Export of an unrefreshed node.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Knoten '%@' wurde noch nicht aktualisiert; aktualisieren Sie zuerst das Dokument."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El nodo '%@' no se ha actualizado; actualice primero el documento."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ノード '%@' はまだ更新されていません。先にドキュメントを更新してください。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O nó '%@' não foi atualizado; atualize o documento primeiro."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "节点 '%@' 尚未刷新；请先刷新文档。"
+          }
+        }
+      }
+    },
+    "The query '%@' has more than ten direct sources, which this build cannot attach.": {
+      "comment": "Too many composition children.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Abfrage '%@' hat mehr als zehn direkte Quellen, die diese Version nicht einbinden kann."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La consulta '%@' tiene más de diez orígenes directos, que esta versión no puede adjuntar."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリ '%@' には 10 を超える直接のソースがあり、このビルドではアタッチできません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A consulta '%@' tem mais de dez fontes diretas, que esta versão não pode anexar."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查询 '%@' 的直接源超过十个，此构建无法附加。"
+          }
+        }
+      }
+    },
+    "The query '%@' mixes remote tables with other reports.  A composing query references only other reports, never a remote table.": {
+      "comment": "Mixed composition node.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Abfrage '%@' mischt Remote-Tabellen mit anderen Berichten.  Eine zusammengesetzte Abfrage verweist nur auf andere Berichte, niemals auf eine Remote-Tabelle."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La consulta '%@' mezcla tablas remotas con otros informes.  Una consulta compuesta solo hace referencia a otros informes, nunca a una tabla remota."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリ '%@' はリモートテーブルと他のレポートを混在させています。  合成クエリは他のレポートのみを参照し、リモートテーブルは参照しません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A consulta '%@' mistura tabelas remotas com outros relatórios.  Uma consulta composta referencia apenas outros relatórios, nunca uma tabela remota."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查询 '%@' 将远程表与其他报表混合。  合成查询只引用其他报表，从不引用远程表。"
+          }
+        }
+      }
+    },
+    "The query '%@' references a missing upstream query (%@).": {
+      "comment": "Missing-upstream validation error.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Abfrage '%@' verweist auf eine fehlende übergeordnete Abfrage (%@)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La consulta '%@' hace referencia a una consulta de origen ausente (%@)."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリ '%@' が存在しない上流クエリ (%@) を参照しています。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A consulta '%@' referencia uma consulta de origem ausente (%@)."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查询 '%@' 引用了不存在的上游查询（%@）。"
+          }
+        }
+      }
+    },
+    "The query being edited. The composed root joins the source queries below it.": {
+      "comment": "Tooltip for the query selector popup.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die bearbeitete Abfrage. Das zusammengesetzte Ergebnis verknüpft die darunter liegenden Quellabfragen."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La consulta que se está editando. El resultado compuesto une las consultas de origen que aparecen debajo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編集中のクエリ。合成結果はその下のソースクエリを結合します。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A consulta em edição. O resultado composto une as consultas de origem abaixo dele."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在编辑的查询。合成结果连接其下方的源查询。"
+          }
+        }
+      }
+    },
+    "The query contains a cycle.": {
+      "comment": "A query link graph with a cycle.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Abfrage enthält einen Zyklus."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La consulta contiene un ciclo."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリに循環があります。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A consulta contém um ciclo."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查询中存在循环。"
+          }
+        }
+      }
+    },
+    "The query no longer exists in the document.": {
+      "comment": "The selected query was not found in the store.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Abfrage ist im Dokument nicht mehr vorhanden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La consulta ya no existe en el documento."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリはドキュメントに存在しなくなりました。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A consulta não existe mais no documento."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "该查询已不在文档中。"
+          }
+        }
+      }
+    },
+    "The query's projection does not match its result.": {
+      "comment": "Projection/statement column mismatch.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Projektion der Abfrage stimmt nicht mit ihrem Ergebnis überein."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La proyección de la consulta no coincide con su resultado."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリの射影が結果と一致しません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A projeção da consulta não corresponde ao seu resultado."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查询的投影与其结果不匹配。"
+          }
+        }
+      }
+    },
+    "The refresh result could not be prepared.": {
+      "comment": "The staged refresh table could not be created.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Aktualisierungsergebnis konnte nicht vorbereitet werden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo preparar el resultado de la actualización."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更新結果を準備できませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível preparar o resultado da atualização."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法准备刷新结果。"
+          }
+        }
+      }
+    },
+    "The refresh result was not staged.": {
+      "comment": "No staged result to fill.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Aktualisierungsergebnis wurde nicht bereitgestellt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El resultado de la actualización no se preparó."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更新結果がステージングされませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O resultado da atualização não foi preparado."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刷新结果未暂存。"
+          }
+        }
+      }
+    },
+    "The refresh's initializer did not create a pending result.": {
+      "comment": "Localized UI string.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Initialisierer der Aktualisierung hat kein ausstehendes Ergebnis erstellt."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El inicializador de la actualización no creó un resultado pendiente."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更新の初期化処理が保留中の結果を作成しませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O inicializador da atualização não criou um resultado pendente."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刷新的初始化程序未创建待处理结果。"
+          }
+        }
+      }
+    },
+    "The refreshed row table was not written.": {
+      "comment": "The staged row file is missing.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die aktualisierte Zeilentabelle wurde nicht geschrieben."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se escribió la tabla de filas actualizada."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更新された行テーブルが書き込まれませんでした。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A tabela de linhas atualizada não foi gravada."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未写入刷新后的行表。"
+          }
+        }
+      }
+    },
+    "The source '%@' could not connect: %@": {
+      "comment": "Source connection failure.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Quelle '%@' konnte keine Verbindung herstellen: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El origen '%@' no pudo conectarse: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソース '%@' が接続できませんでした: %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A fonte '%@' não pôde conectar: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "源 '%@' 无法连接：%@"
+          }
+        }
+      }
+    },
+    "The source '%@' failed: %@": {
+      "comment": "Source query failure.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Quelle '%@' ist fehlgeschlagen: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El origen '%@' falló: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソース '%@' が失敗しました: %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A fonte '%@' falhou: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "源 '%@' 失败：%@"
+          }
+        }
+      }
+    },
+    "The source '%@' requires credentials and none were supplied.": {
+      "comment": "Missing credentials for a source.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Quelle '%@' erfordert Anmeldedaten, es wurden jedoch keine angegeben."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El origen '%@' requiere credenciales y no se proporcionó ninguna."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ソース '%@' には認証情報が必要ですが、指定されていません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A fonte '%@' requer credenciais e nenhuma foi fornecida."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "源 '%@' 需要凭据，但未提供。"
+          }
+        }
+      }
+    },
+    "The type of the open document: an ordinary report or one that combines child reports.": {
+      "comment": "Tooltip for the document type label.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Typ des geöffneten Dokuments: ein normaler Bericht oder einer, der untergeordnete Berichte kombiniert."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El tipo del documento abierto: un informe normal o uno que combina informes secundarios."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開いているドキュメントの種類: 通常のレポート、または子レポートを結合するレポート。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O tipo do documento aberto: um relatório comum ou um que combina relatórios filhos."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已打开文档的类型：普通报表或组合子报表的报表。"
+          }
+        }
+      }
+    },
+    "There is no pending refresh result.": {
+      "comment": "No result to publish.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es gibt kein ausstehendes Aktualisierungsergebnis."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay ningún resultado de actualización pendiente."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保留中の更新結果はありません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não há resultado de atualização pendente."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有待处理的刷新结果。"
+          }
+        }
+      }
+    },
+    "This composed document records no output order for its projection.": {
+      "comment": "Missing projection order error.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses zusammengesetzte Dokument zeichnet keine Ausgabereihenfolge für seine Projektion auf."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este documento compuesto no registra ningún orden de salida para su proyección."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この合成ドキュメントには射影の出力順序が記録されていません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este documento composto não registra nenhuma ordem de saída para sua projeção."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此组合文档未记录其投影的输出顺序。"
+          }
+        }
+      }
+    },
+    "This format cannot export a specific node.": {
+      "comment": "Error when a node-scoped export format does not support selecting the node.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Format kann keinen bestimmten Knoten exportieren."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este formato no puede exportar un nodo específico."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この形式では特定のノードを書き出せません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este formato não pode exportar um nó específico."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此格式无法导出特定节点。"
+          }
+        }
+      }
+    },
+    "This report has no query to convert.": {
+      "comment": "Conversion error: no query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Bericht hat keine Abfrage zum Umwandeln."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este informe no tiene ninguna consulta para convertir."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このレポートには変換するクエリがありません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este relatório não tem consulta para converter."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此报表没有可转换的查询。"
+          }
+        }
+      }
+    },
+    "This report has no root to add a child to.": {
+      "comment": "Add-child error: no root.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Bericht hat kein Ergebnis, zu dem ein untergeordneter Bericht hinzugefügt werden kann."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este informe no tiene un resultado al que agregar un informe secundario."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このレポートには子を追加する結果がありません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este relatório não tem resultado para adicionar um filho."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此报表没有可添加子报表的结果。"
+          }
+        }
+      }
+    },
+    "This report is already a composition.": {
+      "comment": "Conversion error: already composed.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Bericht ist bereits eine Komposition."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este informe ya es una composición."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このレポートは既に構成です。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este relatório já é uma composição."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此报表已是组合。"
+          }
+        }
+      }
+    },
+    "This source is itself a composition. Its tables are the sources it joins.": {
+      "comment": "Note in the query sidebar when a source that is itself a composition is selected.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Quelle ist selbst eine Komposition. Ihre Tabellen sind die Quellen, die sie verknüpft."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este origen es en sí mismo una composición. Sus tablas son los orígenes que une."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このソースはそれ自体が構成です。そのテーブルは、結合するソースです。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta fonte é ela própria uma composição. Suas tabelas são as fontes que ela une."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此源本身就是一个组合。它的表就是它所连接的各个源。"
+          }
+        }
+      }
+    },
+    "child": {
+      "comment": "Default converted child name.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "child"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "child"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "child"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "child"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "child"
+          }
+        }
+      }
+    },
+    "e.g. invoices": {
+      "comment": "Placeholder for the source query name.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. invoices"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "p. ej. invoices"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "例: invoices"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex.: invoices"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "例如 invoices"
+          }
+        }
+      }
+    },
+    "field": {
+      "comment": "Fallback output name.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "field"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "field"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "field"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "field"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "field"
+          }
+        }
+      }
+    },
+    "json-report cannot export a specific node.": {
+      "comment": "Error when json-report is asked for a non-root node.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "json-report kann keinen bestimmten Knoten exportieren."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "json-report no puede exportar un nodo específico."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "json-report は特定のノードを書き出せません。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "json-report não pode exportar um nó específico."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "json-report 无法导出特定节点。"
+          }
+        }
+      }
+    },
+    "root": {
+      "comment": "Default name of the composed root query.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "root"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "root"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "root"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "root"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "root"
+          }
+        }
+      }
+    },
+    "the query reported no error": {
+      "comment": "No driver error.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "die Abfrage hat keinen Fehler gemeldet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "la consulta no informó ningún error"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クエリはエラーを報告しませんでした"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a consulta não relatou erro"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查询未报告错误"
+          }
+        }
+      }
+    },
+    "“%@” has no data yet. Click “Refresh” to load the composition.": {
+      "comment": "Viewer status line before the first refresh while a source is selected. %@ is the source's name.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "„%@“ hat noch keine Daten. Klicken Sie auf „Aktualisieren“, um die Komposition zu laden."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” aún no tiene datos. Haga clic en “Actualizar” para cargar la composición."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」にはまだデータがありません。「更新」をクリックして構成を読み込んでください。"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” ainda não tem dados. Clique em “Atualizar” para carregar a composição."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@”尚无数据。点按“刷新”以载入组合。"
+          }
+        }
+      }
+    },
+    "↑": {
+      "comment": "Button that moves an output column earlier.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↑"
+          }
+        }
+      }
+    },
+    "↓": {
+      "comment": "Button that moves an output column later.",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↓"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↓"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↓"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↓"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↓"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

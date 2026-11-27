@@ -478,9 +478,169 @@ static NSString *MADSmokeBuildStandardReport(NSURL *sourceURL, NSURL *madURL, NS
 	return madURL.path;
 }
 
+// Builds a composed invoices/payments fixture whose payments source has an authored
+// layout, opens it, and returns the document (its window controller is already made).
+// Test-only; the smoke run below does the same authoring in its per-node section.
+static MADMacDocument *MADSmokeNodeFixtureDocument(NSString *directory) {
+	NSFileManager *fm = [NSFileManager defaultManager];
+	[fm createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSString *errorText = nil;
+	NSString *madPath = MADSmokeCreateComposedFixture(directory, &errorText);
+	if (madPath.length == 0) {
+		fprintf(stderr, "Could not build the node fixture: %s\n", errorText.UTF8String ?: "(none)");
+		return nil;
+	}
+	NSError *error = nil;
+	NSURL *madURL = [NSURL fileURLWithPath:madPath];
+	MADMacDocument *doc = [[MADMacDocument alloc] initWithContentsOfURL:madURL
+																 ofType:@"com.thomason.mad"
+																  error:&error];
+	if (doc == nil) {
+		fprintf(stderr, "Could not open the node fixture: %s\n", error.localizedDescription.UTF8String);
+		return nil;
+	}
+	[doc makeWindowControllers];
+	MADMacWindowController *wc = doc.windowControllers.firstObject;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+
+	RptqQuery *payments = nil;
+	for (RptqQuery *query in [doc allQueries]) {
+		if ([query.name isEqualToString:@"payments"]) { payments = query; break; }
+	}
+	if (payments == nil) return nil;
+	doc.selectedQuery = payments;
+	MADMacDesignerViewController *designer = wc.designerViewController;
+	[designer reloadFromDocument];
+
+	RptqDocumentSection *detail = nil;
+	for (RptqDocumentSection *section in [doc orderedSections]) {
+		if ((MADDocumentSectionType)section.type == MADDocumentSectionTypeBody) { detail = section; break; }
+	}
+	if (detail == nil) return nil;
+	RptqDocumentElementLabel *label = [designer addStaticLabelInSection:detail atPoint:NSMakePoint(12.0, 6.0)];
+	label.text = NSLocalizedString(@"Payments Source", @"Screenshot fixture: static label on the payments source's detail band.");
+	RptqQueryField *amount = nil;
+	for (RptqQueryTable *table in payments.hasQueryTables) {
+		for (RptqQueryField *field in table.hasQueryFields) {
+			if ([field.databaseSchemaField.name isEqualToString:@"amount"]) { amount = field; break; }
+		}
+	}
+	if (amount != nil) {
+		[designer addDataField:amount inSection:detail atPoint:NSMakePoint(12.0, 32.0)];
+	}
+	if (![doc.headlessDocument writeToURL:madURL reproducible:NO error:&error]) {
+		fprintf(stderr, "Could not save the node fixture: %s\n", error.localizedDescription.UTF8String);
+		return nil;
+	}
+	return doc;
+}
+
+static int MADSmokeWriteNodeFixture(NSString *directory) {
+	MADMacDocument *doc = MADSmokeNodeFixtureDocument(directory);
+	if (doc == nil) return 1;
+	printf("%s\n", doc.fileURL.path.UTF8String);
+	return 0;
+}
+
+// Renders a window's frame view (title bar, toolbar, and content) to a PNG.  AppKit's
+// own snapshot path; it needs no Screen Recording permission.  Also writes a PDF of the
+// view tree, which preserves vector/PDFView content a bitmap cache may miss.
+static BOOL MADSmokeWriteWindowSnapshots(NSWindow *window, NSString *directory, NSString *name) {
+	if (window == nil) return NO;
+	[window layoutIfNeeded];
+	NSView *target = window.contentView.superview ?: window.contentView;
+	[target layoutSubtreeIfNeeded];
+	[target displayIfNeeded];
+	NSRect bounds = target.bounds;
+
+	NSData *pdf = [target dataWithPDFInsideRect:bounds];
+	if (pdf.length > 0) {
+		NSString *pdfPath = [directory stringByAppendingPathComponent:
+							 [name stringByAppendingPathExtension:@"pdf"]];
+		[pdf writeToFile:pdfPath atomically:YES];
+	}
+
+	NSBitmapImageRep *rep = [target bitmapImageRepForCachingDisplayInRect:bounds];
+	if (rep == nil) return NO;
+	[target cacheDisplayInRect:bounds toBitmapImageRep:rep];
+	NSData *png = [rep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+	NSString *pngPath = [directory stringByAppendingPathComponent:
+						 [name stringByAppendingPathExtension:@"png"]];
+	return [png writeToFile:pngPath atomically:YES];
+}
+
+// Drives the app's own window through the per-node states and writes PNG/PDF snapshots,
+// for environments where screen capture is unavailable.  Test-only.
+static int MADSmokeWriteNodeScreenshots(NSString *directory) {
+	NSFileManager *fm = [NSFileManager defaultManager];
+	[fm createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	MADMacDocument *doc = MADSmokeNodeFixtureDocument(directory);
+	if (doc == nil) return 1;
+	MADMacWindowController *wc = doc.windowControllers.firstObject;
+	NSWindow *window = wc.window;
+	[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+	[NSApp activateIgnoringOtherApps:YES];
+	[window makeKeyAndOrderFront:nil];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
+
+	NSString *pngDir = [directory stringByAppendingPathComponent:@"png"];
+	[fm createDirectoryAtPath:pngDir withIntermediateDirectories:YES attributes:nil error:NULL];
+
+	RptqQuery *root = doc.rootQuery;
+	RptqQuery *payments = nil, *invoices = nil;
+	for (RptqQuery *query in [doc allQueries]) {
+		if ([query.name isEqualToString:@"payments"]) payments = query;
+		if ([query.name isEqualToString:@"invoices"]) invoices = query;
+	}
+	if (root == nil || payments == nil || invoices == nil) return 1;
+
+	doc.selectedQuery = root;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+	MADSmokeWriteWindowSnapshots(window, pngDir, @"01-result-designer");
+
+	doc.selectedQuery = payments;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+	MADSmokeWriteWindowSnapshots(window, pngDir, @"02-payments-designer");
+
+	MADMacViewerViewController *viewer = wc.viewerViewController;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[viewer refreshReportAction:nil];
+	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:30.0];
+	while ([doc.headlessDocument.dataTable numberOfRows] != 4 &&
+		   viewer.lastRefreshError == nil && deadline.timeIntervalSinceNow > 0) {
+		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+								 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+	}
+	[viewer reloadPreview];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+	MADSmokeWriteWindowSnapshots(window, pngDir, @"03-payments-viewer");
+
+	doc.selectedQuery = invoices;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+	MADSmokeWriteWindowSnapshots(window, pngDir, @"04-invoices-grid");
+
+	doc.selectedQuery = root;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+	MADSmokeWriteWindowSnapshots(window, pngDir, @"05-result-viewer");
+
+	printf("%s\n", pngDir.UTF8String);
+	[window orderOut:nil];
+	return 0;
+}
+
 int main(int argc, const char * argv[]) {
 	sRetainedPanels = [[NSMutableArray alloc] init];
 	@autoreleasepool {
+		if (argc >= 3 && strcmp(argv[1], "--write-node-fixture") == 0) {
+			return MADSmokeWriteNodeFixture([NSString stringWithUTF8String:argv[2]]);
+		}
+		if (argc >= 3 && strcmp(argv[1], "--write-node-screenshots") == 0) {
+			return MADSmokeWriteNodeScreenshots([NSString stringWithUTF8String:argv[2]]);
+		}
 		if (argc < 2) {
 			fprintf(stderr, "Usage: mad-mac-smoke-test <path-to-MAD Designer.app>\n");
 			return 1;
@@ -2316,6 +2476,394 @@ int main(int argc, const char * argv[]) {
 		}
 		[fm removeItemAtPath:importDir error:NULL];
 			printf("PASS: Created a composition by importing two standard reports (structure, outputs, save, reopen without sources)\n");
+		}
+
+		// 15. Every node in a composition is a report: the toolbar picker switches Query,
+		// Designer, and Viewer together; a source's layout renders its own values; a
+		// layout-less source shows a row grid; json-report stays root-only; the Result and
+		// a Standard Report keep today's document path.
+		{
+			NSString *nodeDir = [NSTemporaryDirectory() stringByAppendingPathComponent:
+								 [NSString stringWithFormat:@"mad-node-reports-%@", NSUUID.UUID.UUIDString]];
+			[fm createDirectoryAtPath:nodeDir withIntermediateDirectories:YES attributes:nil error:NULL];
+			NSString *nodeError = nil;
+			NSString *nodeMadPath = MADSmokeCreateComposedFixture(nodeDir, &nodeError);
+			if (nodeMadPath.length == 0) {
+				fprintf(stderr, "FAIL: Could not build the per-node fixture: %s\n", nodeError.UTF8String ?: "(none)");
+				return 240;
+			}
+			NSURL *nodeMadURL = [NSURL fileURLWithPath:nodeMadPath];
+			MADMacDocument *nodeDoc = [[MADMacDocument alloc] initWithContentsOfURL:nodeMadURL
+																			ofType:@"com.thomason.mad"
+																			 error:&err];
+			if (nodeDoc == nil || !nodeDoc.isComposed) {
+				fprintf(stderr, "FAIL: Could not open the per-node composition: %s\n", err.localizedDescription.UTF8String);
+				return 241;
+			}
+			[nodeDoc makeWindowControllers];
+			MADMacWindowController *nodeWC = nodeDoc.windowControllers.firstObject;
+			[nodeWC switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+			[nodeWC.window layoutIfNeeded];
+			MADMacDesignerViewController *nodeDVC = nodeWC.designerViewController;
+			MADMacViewerViewController *nodeViewer = nodeWC.viewerViewController;
+
+			NSTabView *nodeTabs = nil;
+			for (NSView *view in nodeWC.window.contentView.subviews) {
+				if ([view isKindOfClass:[NSTabView class]]) { nodeTabs = (NSTabView *)view; break; }
+			}
+			if (nodeTabs == nil || nodeWC.nodePickerPopup == nil) {
+				fprintf(stderr, "FAIL: The composition window has no workspace tab view or node picker\n");
+				return 242;
+			}
+			NSInteger startTab = [nodeTabs indexOfTabViewItem:nodeTabs.selectedTabViewItem];
+
+			RptqQuery *(^nodeQueryNamed)(NSString *) = ^RptqQuery *(NSString *name) {
+				for (RptqQuery *query in [nodeDoc allQueries]) {
+					if ([query.name isEqualToString:name]) return query;
+				}
+				return (RptqQuery *)nil;
+			};
+			RptqQuery *nodeRoot = nodeDoc.rootQuery;
+			RptqQuery *nodePayments = nodeQueryNamed(@"payments");
+			RptqQuery *nodeInvoices = nodeQueryNamed(@"invoices");
+			if (nodeRoot == nil || nodePayments == nil || nodeInvoices == nil) {
+				fprintf(stderr, "FAIL: The per-node fixture is missing the root or a source query\n");
+				return 243;
+			}
+			if (nodeWC.nodePickerPopup.numberOfItems != 3 ||
+				![nodeWC.nodePickerPopup.itemArray.firstObject.title containsString:@"Result"]) {
+				fprintf(stderr, "FAIL: The node picker does not list the Result first plus its two sources\n");
+				return 244;
+			}
+			NSArray<RptqDocumentSection *> *rootNodeSections = [nodeDoc orderedSections];
+			if (rootNodeSections.count == 0) {
+				fprintf(stderr, "FAIL: The Result has no report bands\n");
+				return 245;
+			}
+			NSInteger (^pickerIndexForQuery)(RptqQuery *) = ^NSInteger(RptqQuery *query) {
+				for (NSInteger i = 0; i < nodeWC.nodePickerPopup.numberOfItems; i++) {
+					if (nodeWC.nodePickerPopup.itemArray[i].representedObject == query) return i;
+				}
+				return -1;
+			};
+
+			// Select a source through the real toolbar picker: the workspace stays put,
+			// the source's bands appear (created lazily), and the leaf caption stays.
+			NSInteger paymentsIndex = pickerIndexForQuery(nodePayments);
+			if (paymentsIndex < 0) {
+				fprintf(stderr, "FAIL: The node picker does not contain the payments source\n");
+				return 246;
+			}
+			[nodeWC.nodePickerPopup selectItemAtIndex:paymentsIndex];
+			[nodeWC nodePickerChanged:nodeWC.nodePickerPopup];
+			if (nodeDoc.selectedQuery != nodePayments) {
+				fprintf(stderr, "FAIL: Selecting payments in the picker did not select its query\n");
+				return 247;
+			}
+			if ([nodeTabs indexOfTabViewItem:nodeTabs.selectedTabViewItem] != startTab) {
+				fprintf(stderr, "FAIL: Selecting a source changed the active workspace\n");
+				return 248;
+			}
+			NSArray<RptqDocumentSection *> *paymentsSections =
+				[nodePayments orderedLayoutSectionsForDocument:nodeDoc.rptqDocument];
+			if (paymentsSections.count != 5 ||
+				[nodeDoc orderedSections].firstObject != paymentsSections.firstObject ||
+				[nodeDoc orderedSections].firstObject == rootNodeSections.firstObject) {
+				fprintf(stderr, "FAIL: The selected source's bands are not its own five structural bands\n");
+				return 249;
+			}
+			if ([nodeDVC.canvasView orderedSections].firstObject != paymentsSections.firstObject) {
+				fprintf(stderr, "FAIL: The Designer canvas did not follow the selection\n");
+				return 250;
+			}
+			if (![nodeDVC.fieldsHeaderLabel.stringValue containsString:@"QUERY FIELDS"]) {
+				fprintf(stderr, "FAIL: A leaf source's field caption is not 'Query Fields'\n");
+				return 251;
+			}
+
+			// Author a layout on the payments source: a label and a data field bound to
+			// payments.amount (its own field, not the Result's).
+			RptqDocumentSection *paymentsDetail = nil;
+			for (RptqDocumentSection *section in paymentsSections) {
+				if ((MADDocumentSectionType)section.type == MADDocumentSectionTypeBody) {
+					paymentsDetail = section;
+					break;
+				}
+			}
+			if (paymentsDetail == nil) {
+				fprintf(stderr, "FAIL: The payments source has no detail band\n");
+				return 252;
+			}
+			NSString *paymentsLayoutText = NSLocalizedString(@"Payments Layout", @"Smoke fixture: static label text on the payments source's report.");
+			RptqDocumentElementLabel *nodeLabel = [nodeDVC addStaticLabelInSection:paymentsDetail
+																		  atPoint:NSMakePoint(12.0, 6.0)];
+			nodeLabel.text = paymentsLayoutText;
+			RptqQueryField *paymentsAmountField = nil;
+			for (RptqQueryTable *table in nodePayments.hasQueryTables) {
+				for (RptqQueryField *field in table.hasQueryFields) {
+					if ([field.databaseSchemaField.name isEqualToString:@"amount"]) {
+						paymentsAmountField = field;
+						break;
+					}
+				}
+			}
+			if (paymentsAmountField == nil ||
+				[nodeDVC addDataField:paymentsAmountField
+							 inSection:paymentsDetail
+							   atPoint:NSMakePoint(12.0, 32.0)] == nil) {
+				fprintf(stderr, "FAIL: Could not author a data field on the payments source\n");
+				return 253;
+			}
+			[nodeDoc notifyDocumentMutated];
+
+			// Refresh the whole composition, then render the selected source from its own
+			// retained result.
+			if (!MADSmokeRefreshComposed(nodeDoc, nodeViewer, 4)) {
+				fprintf(stderr, "FAIL: The per-node composed refresh failed: %s\n",
+						nodeViewer.lastRefreshError.description.UTF8String);
+				return 254;
+			}
+			MADDataResult *paymentsResult = nodeDoc.headlessDocument.nodeResults[@(nodePayments.identifier)];
+			if (paymentsResult == nil || paymentsResult.numberOfRows != 2) {
+				fprintf(stderr, "FAIL: The payments node result is missing or has the wrong row count\n");
+				return 255;
+			}
+			if (nodeDoc.selectedQuery != nodePayments) {
+				fprintf(stderr, "FAIL: The refresh changed the selected node\n");
+				return 256;
+			}
+			if ([nodeViewer isShowingRowGrid] || nodeViewer.pdfView.document.pageCount == 0) {
+				fprintf(stderr, "FAIL: The authored payments source did not render its own node PDF\n");
+				return 257;
+			}
+
+			// The authored node renders values from its own rows, not the Result's.
+			Class<MADReportExporting> nodeHTMLClass = [MADReportExporterRegistry exporterClassForFormat:@"html"];
+			id<MADReportExporting> nodeHTMLExporter = [[(Class)nodeHTMLClass alloc] init];
+			NSURL *nodeHTMLURL = [NSURL fileURLWithPath:[nodeDir stringByAppendingPathComponent:@"payments.html"]];
+			if (![nodeHTMLExporter exportDocument:nodeDoc.headlessDocument
+											query:nodePayments
+											toURL:nodeHTMLURL
+										  options:MADReportExportOptionsNone
+											error:&err]) {
+				fprintf(stderr, "FAIL: The payments node HTML export failed: %s\n", err.localizedDescription.UTF8String);
+				return 258;
+			}
+			NSString *nodeHTML = [NSString stringWithContentsOfURL:nodeHTMLURL
+														 encoding:NSUTF8StringEncoding
+															error:NULL];
+			if (![nodeHTML containsString:paymentsLayoutText] ||
+				![nodeHTML containsString:@"40"] ||
+				![nodeHTML containsString:@"60"]) {
+				fprintf(stderr, "FAIL: The payments node report is missing its authored text or its own values\n");
+				return 259;
+			}
+
+			// A source with no elements (invoices, untouched until now) is a row grid.
+			NSInteger invoicesIndex = pickerIndexForQuery(nodeInvoices);
+			if (invoicesIndex < 0) {
+				fprintf(stderr, "FAIL: The node picker does not contain the invoices source\n");
+				return 260;
+			}
+			[nodeWC.nodePickerPopup selectItemAtIndex:invoicesIndex];
+			[nodeWC nodePickerChanged:nodeWC.nodePickerPopup];
+			if (![nodeViewer isShowingRowGrid] || nodeViewer.rowGridView.numberOfRows != 3) {
+				fprintf(stderr, "FAIL: A layout-less source did not show a three-row grid\n");
+				return 261;
+			}
+			if (nodeViewer.pdfView.document != nil) {
+				fprintf(stderr, "FAIL: The previous node's PDF was not cleared when a source was selected\n");
+				return 262;
+			}
+			// The grid cells resolve against the node result's row ids, not blanks.
+			NSString *gridFirstValue = [nodeViewer gridValueAtRow:0 columnIndex:0];
+			if (gridFirstValue.length == 0) {
+				fprintf(stderr, "FAIL: The row grid's first cell is blank\n");
+				return 279;
+			}
+
+			// Selecting the Result returns every workspace to the Result's layout/report.
+			NSInteger rootIndex = pickerIndexForQuery(nodeRoot);
+			[nodeWC.nodePickerPopup selectItemAtIndex:rootIndex];
+			[nodeWC nodePickerChanged:nodeWC.nodePickerPopup];
+			if (nodeDoc.selectedQuery != nodeRoot ||
+				[nodeDoc orderedSections].firstObject != rootNodeSections.firstObject) {
+				fprintf(stderr, "FAIL: Selecting the Result did not return to the Result's layout\n");
+				return 263;
+			}
+			if ([nodeViewer isShowingRowGrid] || nodeViewer.pdfView.document.pageCount == 0) {
+				fprintf(stderr, "FAIL: The Result did not render its own report\n");
+				return 264;
+			}
+			if (![nodeDVC.fieldsHeaderLabel.stringValue containsString:@"REPORT COLUMNS"]) {
+				fprintf(stderr, "FAIL: The Result's field caption is not 'Report columns'\n");
+				return 265;
+			}
+
+			// json-report is offered for the Result and refused for a source.
+			NSSavePanel *rootExportPanel = [nodeViewer configureExportSavePanel:[NSSavePanel savePanel]];
+			[sRetainedPanels addObject:rootExportPanel];
+			BOOL rootOffersJSONReport = NO;
+			for (NSMenuItem *item in nodeViewer.exportFormatPopup.itemArray) {
+				if ([item.representedObject isEqualToString:@"json-report"]) {
+					rootOffersJSONReport = YES;
+					break;
+				}
+			}
+			if (!rootOffersJSONReport) {
+				fprintf(stderr, "FAIL: json-report is not offered for the Result\n");
+				return 266;
+			}
+			[nodeWC.nodePickerPopup selectItemAtIndex:paymentsIndex];
+			[nodeWC nodePickerChanged:nodeWC.nodePickerPopup];
+			NSSavePanel *sourceExportPanel = [nodeViewer configureExportSavePanel:[NSSavePanel savePanel]];
+			[sRetainedPanels addObject:sourceExportPanel];
+			BOOL sourceOffersJSONReport = NO;
+			for (NSMenuItem *item in nodeViewer.exportFormatPopup.itemArray) {
+				if ([item.representedObject isEqualToString:@"json-report"]) {
+					sourceOffersJSONReport = YES;
+					break;
+				}
+			}
+			if (sourceOffersJSONReport) {
+				fprintf(stderr, "FAIL: json-report is offered for a source\n");
+				return 267;
+			}
+			Class<MADReportExporting> nodeJSONReportClass = [MADReportExporterRegistry exporterClassForFormat:@"json-report"];
+			id<MADReportExporting> nodeJSONReportExporter = [[(Class)nodeJSONReportClass alloc] init];
+			NSError *nodeJSONError = nil;
+			NSURL *nodeJSONURL = [NSURL fileURLWithPath:[nodeDir stringByAppendingPathComponent:@"payments.json"]];
+			if ([nodeJSONReportExporter exportDocument:nodeDoc.headlessDocument
+												 query:nodePayments
+												 toURL:nodeJSONURL
+											   options:MADReportExportOptionsNone
+												 error:&nodeJSONError]) {
+				fprintf(stderr, "FAIL: json-report exported a source instead of refusing it\n");
+				return 268;
+			}
+
+			// The source layout persists across save/reopen; the Result's is untouched.
+			NSUInteger paymentsElementCount = 0;
+			for (RptqDocumentSection *section in paymentsSections) {
+				for (RptqDocumentSectionRows *row in section.hasRows) paymentsElementCount += row.hasObjects.count;
+			}
+			NSUInteger rootElementCount = 0;
+			for (RptqDocumentSection *section in rootNodeSections) {
+				for (RptqDocumentSectionRows *row in section.hasRows) rootElementCount += row.hasObjects.count;
+			}
+			if (paymentsElementCount != 2) {
+				fprintf(stderr, "FAIL: The authored payments layout has %lu elements, expected 2\n",
+						(unsigned long)paymentsElementCount);
+				return 269;
+			}
+			if (![nodeDoc.headlessDocument writeToURL:nodeMadURL reproducible:NO error:&err]) {
+				fprintf(stderr, "FAIL: Could not save the per-node composition: %s\n", err.localizedDescription.UTF8String);
+				return 270;
+			}
+			MADMacDocument *nodeReopened = [[MADMacDocument alloc] initWithContentsOfURL:nodeMadURL
+																				  ofType:@"com.thomason.mad"
+																				   error:&err];
+			if (nodeReopened == nil) {
+				fprintf(stderr, "FAIL: The per-node composition did not reopen: %s\n", err.localizedDescription.UTF8String);
+				return 271;
+			}
+			RptqQuery *reopenedPayments = nil;
+			for (RptqQuery *query in [nodeReopened allQueries]) {
+				if ([query.name isEqualToString:@"payments"]) { reopenedPayments = query; break; }
+			}
+			if (reopenedPayments == nil) {
+				fprintf(stderr, "FAIL: The reopened composition has no payments source\n");
+				return 271;
+			}
+			nodeReopened.selectedQuery = reopenedPayments;
+			NSUInteger reopenedPaymentsElements = 0;
+			for (RptqDocumentSection *section in [reopenedPayments orderedLayoutSectionsForDocument:nodeReopened.rptqDocument]) {
+				for (RptqDocumentSectionRows *row in section.hasRows) reopenedPaymentsElements += row.hasObjects.count;
+			}
+			NSUInteger reopenedRootElements = 0;
+			for (RptqDocumentSection *section in [nodeReopened.rootQuery orderedLayoutSectionsForDocument:nodeReopened.rptqDocument]) {
+				for (RptqDocumentSectionRows *row in section.hasRows) reopenedRootElements += row.hasObjects.count;
+			}
+			if (reopenedPaymentsElements != paymentsElementCount || reopenedRootElements != rootElementCount) {
+				fprintf(stderr, "FAIL: Reopened layouts differ (payments %lu/%lu, Result %lu/%lu)\n",
+						(unsigned long)reopenedPaymentsElements, (unsigned long)paymentsElementCount,
+						(unsigned long)reopenedRootElements, (unsigned long)rootElementCount);
+				return 272;
+			}
+
+			// A Standard Report keeps the document's own sections and its json-report.
+			NSURL *standardSourceURL = [NSURL fileURLWithPath:[nodeDir stringByAppendingPathComponent:@"standard.sqlite"]];
+			NSURL *standardMadURL = [NSURL fileURLWithPath:[nodeDir stringByAppendingPathComponent:@"standard.mad"]];
+			if (!MADSmokeRunSQLite(standardSourceURL, @[@"CREATE TABLE invoices (invoice_id INTEGER, amount REAL);",
+													   @"INSERT INTO invoices VALUES (1, 100.0);"])) {
+				fprintf(stderr, "FAIL: Could not write the Standard Report source\n");
+				return 272;
+			}
+			NSString *standardError = nil;
+			if (MADSmokeBuildStandardReport(standardSourceURL, standardMadURL, @"invoices",
+											@[@"invoice_id", @"amount"], &standardError) == nil) {
+				fprintf(stderr, "FAIL: Could not build the Standard Report: %s\n", standardError.UTF8String ?: "(none)");
+				return 272;
+			}
+			MADMacDocument *standardDoc = [[MADMacDocument alloc] initWithContentsOfURL:standardMadURL
+																				ofType:@"com.thomason.mad"
+																				 error:&err];
+			if (standardDoc == nil || standardDoc.isComposed ||
+				standardDoc.selectedQuery != standardDoc.reportQuery ||
+				![standardDoc queryIsReportRoot:standardDoc.selectedQuery]) {
+				fprintf(stderr, "FAIL: The Standard Report does not read as its own report root\n");
+				return 273;
+			}
+			for (RptqDocumentSection *section in [standardDoc orderedSections]) {
+				if (section.ownerQuery != nil) {
+					fprintf(stderr, "FAIL: The Standard Report's bands are not the document's own\n");
+					return 274;
+				}
+			}
+			MADMacViewerViewController *standardViewer = [[MADMacViewerViewController alloc] initWithDocument:standardDoc];
+			(void)standardViewer.view;
+			NSSavePanel *standardExportPanel = [standardViewer configureExportSavePanel:[NSSavePanel savePanel]];
+			[sRetainedPanels addObject:standardExportPanel];
+			BOOL standardOffersJSONReport = NO;
+			for (NSMenuItem *item in standardViewer.exportFormatPopup.itemArray) {
+				if ([item.representedObject isEqualToString:@"json-report"]) {
+					standardOffersJSONReport = YES;
+					break;
+				}
+			}
+			if (!standardOffersJSONReport) {
+				fprintf(stderr, "FAIL: A Standard Report no longer offers json-report\n");
+				return 275;
+			}
+
+			// An empty composition (a root with no sources) reads as the Result: no crash,
+			// the Result selected, its bands present, and the not-yet-refreshed guidance.
+			NSURL *emptyCompositionURL = [NSURL fileURLWithPath:[nodeDir stringByAppendingPathComponent:@"empty-composition.mad"]];
+			MADHeadlessDocument *emptyComposition = [MADHeadlessDocument createEmptyDocumentAtURL:emptyCompositionURL error:&err];
+			if (emptyComposition == nil) {
+				fprintf(stderr, "FAIL: Could not create an empty composition: %s\n", err.localizedDescription.UTF8String);
+				return 276;
+			}
+			MADMacDocument *emptyDoc = [[MADMacDocument alloc] init];
+			emptyDoc.fileURL = emptyCompositionURL;
+			[emptyDoc adoptHeadlessDocument:emptyComposition];
+			RptqQuery *emptyRoot = [emptyDoc addRootQueryNamed:@"root" error:&err];
+			if (emptyRoot == nil || !emptyDoc.isComposed || emptyDoc.selectedQuery != emptyRoot ||
+				[emptyDoc orderedSections].count == 0) {
+				fprintf(stderr, "FAIL: An empty composition did not read as its Result\n");
+				return 277;
+			}
+			MADMacViewerViewController *emptyViewer = [[MADMacViewerViewController alloc] initWithDocument:emptyDoc];
+			(void)emptyViewer.view;
+			[emptyViewer reloadPreview];
+			if ([emptyViewer isShowingRowGrid] || emptyViewer.pdfView.document != nil ||
+				emptyViewer.statusLabel.stringValue.length == 0) {
+				fprintf(stderr, "FAIL: An unrefreshed empty composition did not show its guidance state\n");
+				return 278;
+			}
+
+			[fm removeItemAtPath:nodeDir error:NULL];
+			printf("PASS: Per-node reports: the picker switches all three workspaces, a source layout renders its own values, a layout-less source grids, json-report stays root-only, and the Result/Standard Report paths are unchanged\n");
 		}
 	}
 	return 0;

@@ -39,6 +39,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) MADMacDesignerCanvasView *canvasView;
 @property (nonatomic, strong, readonly) MADMacDesignerMinimapView *minimapView;
 
+/// The field-list heading: "REPORT COLUMNS" for the Result or a composing node,
+/// "QUERY FIELDS" for a leaf.
+@property (nonatomic, strong, readonly) NSTextField *fieldsHeaderLabel;
+
 @property (nonatomic, assign, readonly) CGFloat leftSidebarWidth;
 @property (nonatomic, assign, readonly) CGFloat rightInspectorWidth;
 

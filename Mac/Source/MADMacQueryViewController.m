@@ -1090,8 +1090,10 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 @property (nonatomic, strong) NSSplitView *designerSplitView;
 @property (nonatomic, strong) NSView *schemaSidebarView;
 @property (nonatomic, strong) NSTableView *schemaTablesTable;
+@property (nonatomic, strong) NSScrollView *schemaTablesScrollView;
 @property (nonatomic, strong) NSTextField *schemaSidebarHeaderLabel;
 @property (nonatomic, strong) NSButton *addTableButton;
+@property (nonatomic, strong, nullable) NSTextField *composingNodeNoteLabel;
 @property (nonatomic, strong) NSView *canvasContainerView;
 @property (nonatomic, strong) NSScrollView *canvasScrollView;
 @property (nonatomic, strong) MADMacQueryCanvasView *canvasView;
@@ -1128,6 +1130,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 @property (nonatomic, copy) NSArray<RptqDatabaseSchemaTable *> *schemaTables;
 @property (nonatomic, copy) NSArray<RptqQuery *> *upstreamQueries;
 @property (nonatomic, assign) BOOL editingRoot;
+@property (nonatomic, assign) BOOL editingComposingNode;
 @property (nonatomic, copy) NSArray<RptqQueryTable *> *queryTables;
 @property (nonatomic, copy) NSArray<RptqQueryField *> *queryFields;
 @property (nonatomic, copy) NSArray<RptqQueryLinks *> *queryLinks;
@@ -1356,7 +1359,19 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	_schemaSidebarHeaderLabel.autoresizingMask = NSViewWidthSizable | NSViewMinYMargin;
 	[sidebar addSubview:_schemaSidebarHeaderLabel];
 
+	// Shown only when a source that is itself a composition is selected: its tables are
+	// its own sources, read-only here (nested authoring is a separate piece of work).
+	_composingNodeNoteLabel = [NSTextField wrappingLabelWithString:
+		NSLocalizedString(@"This source is itself a composition. Its tables are the sources it joins.", @"Note in the query sidebar when a source that is itself a composition is selected.")];
+	_composingNodeNoteLabel.font = [NSFont systemFontOfSize:10.5];
+	_composingNodeNoteLabel.textColor = [NSColor secondaryLabelColor];
+	_composingNodeNoteLabel.frame = NSMakeRect(10.0, b.size.height - headerH - 46.0, b.size.width - 20.0, 40.0);
+	_composingNodeNoteLabel.autoresizingMask = NSViewWidthSizable | NSViewMinYMargin;
+	_composingNodeNoteLabel.hidden = YES;
+	[sidebar addSubview:_composingNodeNoteLabel];
+
 	NSScrollView *scroll = [[NSScrollView alloc] initWithFrame:NSMakeRect(0.0, footerH, b.size.width, b.size.height - headerH - footerH)];
+	_schemaTablesScrollView = scroll;
 	scroll.hasVerticalScroller = YES;
 	scroll.hasHorizontalScroller = NO;
 	scroll.autohidesScrollers = YES;
@@ -1484,6 +1499,10 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 											 selector:@selector(handleDocumentNotification:)
 												 name:MADMacDocumentDidRefreshNotification
 											   object:_document];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(handleDocumentNotification:)
+												 name:MADMacDocumentDidSelectQueryNotification
+											   object:_document];
 	[self reloadFromDocument];
 }
 
@@ -1498,8 +1517,8 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (void)switchToMode:(MADMacQueryWorkspaceMode)mode {
-	if (mode == MADMacQueryWorkspaceModeSQL && _editingRoot) {
-		// The composed root is authored visually, not as a single SQL statement.
+	if (mode == MADMacQueryWorkspaceModeSQL && (_editingRoot || _editingComposingNode)) {
+		// A composing node is authored visually, not as a single SQL statement.
 		mode = MADMacQueryWorkspaceModeDesigner;
 	}
 	_workspaceMode = mode;
@@ -1674,28 +1693,56 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (void)updateSchemaSidebarHeader {
-	// The sidebar lists source queries when editing the root, schema tables otherwise.
-	_schemaSidebarHeaderLabel.stringValue = _editingRoot
+	// The sidebar lists source queries when editing a composer (the root, or a source
+	// that is itself a composition), schema tables otherwise.
+	BOOL listsUpstream = (_editingRoot || _editingComposingNode);
+	_schemaSidebarHeaderLabel.stringValue = listsUpstream
 		? NSLocalizedString(@"Source Queries", @"Schema sidebar heading when the composed root is being edited.")
 		: NSLocalizedString(@"Database Tables", @"Schema sidebar heading.");
 	_addTableButton.title = _editingRoot
 		? NSLocalizedString(@"+ Add Source to Root", @"Schema sidebar button that adds a source query to the composed root.")
 		: NSLocalizedString(@"+ Add Table to Query", @"Schema sidebar button that adds the selected table to the query.");
+	_addTableButton.hidden = _editingComposingNode;
+
+	// A nested composer's tables are read-only structure; leave room for its note.
+	_composingNodeNoteLabel.hidden = !_editingComposingNode;
+	NSView *sidebar = _schemaSidebarView;
+	if (_schemaTablesScrollView != nil && sidebar != nil) {
+		const CGFloat headerH = 26.0, footerH = 30.0, noteH = 44.0;
+		CGFloat width = NSWidth(sidebar.bounds);
+		CGFloat height = NSHeight(sidebar.bounds) - headerH - footerH - (_editingComposingNode ? noteH : 0.0);
+		_schemaTablesScrollView.frame = NSMakeRect(0.0, footerH, width, MAX(40.0, height));
+	}
 }
 
 - (void)reloadFromDocument {
-	[self refreshQuerySelector];
-
 	RptqQuery *query = self.selectedQuery;
 	_editingRoot = (query != nil && query == _document.rootQuery);
+	// A source that joins its own upstream tables is a composition too: SQL editing is
+	// refused and its tables are read-only structure, exactly as for the root.
+	_editingComposingNode = (query != nil && !_editingRoot && [query isComposing]);
 	_outputsButton.hidden = !_editingRoot;
+
+	BOOL sqlAvailable = !(_editingRoot || _editingComposingNode);
+	if (_modeSegmentedControl != nil) {
+		[_modeSegmentedControl setEnabled:sqlAvailable forSegment:MADMacQueryWorkspaceModeSQL];
+		[_modeSegmentedControl setToolTip:(sqlAvailable
+			? nil
+			: NSLocalizedString(@"SQL editing is not available for a composed report. Design it from its sources.", @"Tooltip on the disabled SQL segment for a composed node."))
+								 forSegment:MADMacQueryWorkspaceModeSQL];
+	}
+	if (!sqlAvailable && _workspaceMode == MADMacQueryWorkspaceModeSQL) {
+		[self switchToMode:MADMacQueryWorkspaceModeDesigner];
+	}
+
+	[self refreshQuerySelector];
 
 	NSSortDescriptor *byName = [NSSortDescriptor sortDescriptorWithKey:@"name"
 															 ascending:YES
 															  selector:@selector(localizedCaseInsensitiveCompare:)];
 
-	if (_editingRoot) {
-		// The root's "tables" are its upstream source queries (already added).
+	if (_editingRoot || _editingComposingNode) {
+		// A composer's "tables" are its upstream source queries (already added).
 		NSMutableArray<RptqQuery *> *upstream = [[NSMutableArray alloc] init];
 		for (RptqQueryTable *qt in query.hasQueryTables) {
 			if (qt.upstreamQuery != nil && ![upstream containsObject:qt.upstreamQuery]) {
@@ -1768,8 +1815,8 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 - (void)querySelectorChanged:(NSPopUpButton *)sender {
 	RptqQuery *query = sender.selectedItem.representedObject;
 	if ([query isKindOfClass:[RptqQuery class]]) {
+		// The selection notification reloads this workspace (and the Designer/Viewer).
 		_document.selectedQuery = query;
-		[self reloadFromDocument];
 	}
 }
 
@@ -1946,6 +1993,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		[self addUpstreamQueryToRoot:_upstreamQueries[(NSUInteger)row]];
 		return;
 	}
+	if (_editingComposingNode) return; // structure only; nested authoring is separate work
 	if (row < 0 || (NSUInteger)row >= _schemaTables.count) return;
 	[self addSchemaTableToQuery:_schemaTables[(NSUInteger)row]];
 }
@@ -1958,6 +2006,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		[self addUpstreamQueryToRoot:_upstreamQueries[(NSUInteger)row]];
 		return;
 	}
+	if (_editingComposingNode) return; // structure only; nested authoring is separate work
 	if (row < 0 && _schemaTables.count > 0) row = 0;
 	if (row < 0 || (NSUInteger)row >= _schemaTables.count) return;
 	[self addSchemaTableToQuery:_schemaTables[(NSUInteger)row]];
@@ -2000,7 +2049,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	if (schemaTable == nil) return nil;
 	RptqQuery *query = self.selectedQuery;
 	RptqStoreContext *ctx = _document.managedObjectContext;
-	if (query == nil || ctx == nil || _editingRoot) return nil;
+	if (query == nil || ctx == nil || _editingRoot || [query isComposing]) return nil;
 
 	// Create RptqQueryTable AND populate all RptqQueryField children (matches MADQueryViewController+BuilderDelegates.m:421-440)
 	RptqQueryTable *newQueryTable = [RptqQueryTable newQueryTableForSchemaTable:schemaTable
@@ -2785,21 +2834,44 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 #pragma mark - SQL Query Mode (Sync, Validate, Compile & Apply)
 
+- (nullable MADQueryFull *)queryFullForSelectedLeaf {
+	RptqQuery *query = self.selectedQuery;
+	RptqDatabase *databaseModel = query.inDatabase;
+	if (databaseModel == nil) return nil;
+	MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection:databaseModel.ownedByUser];
+	if (connection == nil) return nil;
+	MADDatabase *database = [MADDatabase newDatabaseWithConnection:connection];
+	if (database == nil) return nil;
+	NSUInteger limit = self.document.headlessDocument.limitResultsDesignMode ? 50 : NSUIntegerMax;
+	MADQueryFull *full = [[MADQueryFull alloc] initWithQuery:query andQueryLimit:limit];
+	full.database = database;
+	full.dataDelegate = self.document.headlessDocument;
+	return full;
+}
+
 - (NSString *)generatedSQLString {
-	if (_editingRoot) {
-		// The composed root is compiled from its sources by the refresh coordinator;
+	RptqQuery *query = self.selectedQuery;
+	if (query == nil || [query isComposing]) {
+		// A composing node is compiled from its sources by the refresh coordinator;
 		// there is no single source statement to show.
 		return @"";
 	}
 	[_document.headlessDocument invalidateQueryAndModelCaches];
+	RptqStoreContext *context = _document.managedObjectContext;
+
+	// A non-root leaf compiles against its own database and dialect, not the document's
+	// default query (which may be a different source entirely).
+	MADQueryFull *compiler = [_document queryIsReportRoot:query]
+		? _document.headlessDocument.mainQuery
+		: [self queryFullForSelectedLeaf];
+
 	NSError *allFieldsErr = nil;
-	NSString *generated = [_document.headlessDocument.mainQuery SQLOnlyActiveFields:NO
-															   managedObjectContext:_document.managedObjectContext
-																			  error:&allFieldsErr];
+	NSString *generated = [compiler SQLOnlyActiveFields:NO
+								   managedObjectContext:context
+												  error:&allFieldsErr];
 	if (generated.length == 0) {
 		NSError *activeErr = nil;
-		generated = [_document.headlessDocument.mainQuery copySQLWithManagedObjectContext:_document.managedObjectContext
-																					error:&activeErr];
+		generated = [compiler copySQLWithManagedObjectContext:context error:&activeErr];
 	}
 	return generated ?: @"";
 }
@@ -2838,6 +2910,12 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (void)validateSQLAction:(id) __unused sender {
+	RptqQuery *selected = self.selectedQuery;
+	if (selected != nil && [selected isComposing]) {
+		_sqlStatusLabel.textColor = [NSColor systemRedColor];
+		_sqlStatusLabel.stringValue = NSLocalizedString(@"SQL editing is not available for a composed report. Design it from its sources.", @"Tooltip on the disabled SQL segment for a composed node.");
+		return;
+	}
 	NSString *sql = [_sqlTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	if (sql.length == 0) {
 		_sqlStatusLabel.textColor = [NSColor systemRedColor];
@@ -2871,6 +2949,12 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 }
 
 - (void)compileAndApplySQL:(id) __unused sender {
+	RptqQuery *selectedQuery = self.selectedQuery;
+	if (selectedQuery != nil && [selectedQuery isComposing]) {
+		_sqlStatusLabel.textColor = [NSColor systemRedColor];
+		_sqlStatusLabel.stringValue = NSLocalizedString(@"SQL editing is not available for a composed report. Design it from its sources.", @"Tooltip on the disabled SQL segment for a composed node.");
+		return;
+	}
 	NSString *sql = [_sqlTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	if (sql.length == 0) return;
 
@@ -2922,7 +3006,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 #pragma mark - NSTableViewDataSource & Delegate (Schema Table List + Popover Tables)
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
-	if (tableView == _schemaTablesTable) return _editingRoot ? (NSInteger)_upstreamQueries.count : (NSInteger)_schemaTables.count;
+	if (tableView == _schemaTablesTable) return (_editingRoot || _editingComposingNode) ? (NSInteger)_upstreamQueries.count : (NSInteger)_schemaTables.count;
 	if (tableView == _predicatesTable) return (NSInteger)_queryPredicates.count;
 	if (tableView == _groupsTable) return (NSInteger)_queryGroups.count;
 	if (tableView == _outputsTable) return (NSInteger)[self rootOutputFields].count;
@@ -2933,7 +3017,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	NSString *text = @"";
 	BOOL isSchemaInQuery = NO;
 
-	if (tableView == _schemaTablesTable && _editingRoot && (NSUInteger)row < _upstreamQueries.count) {
+	if (tableView == _schemaTablesTable && (_editingRoot || _editingComposingNode) && (NSUInteger)row < _upstreamQueries.count) {
 		RptqQuery *source = _upstreamQueries[(NSUInteger)row];
 		BOOL added = NO;
 		for (RptqQueryTable *qt in _queryTables) {
@@ -2987,7 +3071,9 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 			: [NSFont systemFontOfSize:12.0 weight:NSFontWeightRegular];
 		cell.toolTip = _editingRoot
 			? NSLocalizedString(@"Double-click to use this source as a table in the root", @"Tooltip on a source query row when editing the root.")
-			: NSLocalizedString(@"Double-click to add table to query", @"Tooltip on a schema table row.");
+			: (_editingComposingNode
+				? NSLocalizedString(@"This source is itself a composition. Its tables are the sources it joins.", @"Note in the query sidebar when a source that is itself a composition is selected.")
+				: NSLocalizedString(@"Double-click to add table to query", @"Tooltip on a schema table row."));
 	} else {
 		cell.font = [NSFont systemFontOfSize:12.0];
 	}

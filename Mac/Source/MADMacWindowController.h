@@ -32,8 +32,15 @@ typedef NS_ENUM(NSInteger, MADMacWorkspaceTab) {
 /// Report") shown in the window toolbar across all three workspaces.
 @property (nonatomic, strong, readonly) NSTextField *documentTypeLabel;
 
+/// The composition node picker (the Result and each source), shown in the toolbar only
+/// for a Composition Report.  Nil for a Standard Report and before the toolbar is built.
+@property (nonatomic, strong, readonly, nullable) NSPopUpButton *nodePickerPopup;
+
 /// Refreshes the document-type label from the document model (`isComposed`).
 - (void)refreshDocumentTypeLabel;
+
+/// The node picker's action: sets the document's selection; every workspace follows.
+- (void)nodePickerChanged:(NSPopUpButton *)sender;
 
 - (instancetype)initWithDocument:(MADMacDocument *)document;
 - (void)switchToWorkspaceTab:(MADMacWorkspaceTab)tab;

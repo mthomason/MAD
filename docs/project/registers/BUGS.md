@@ -37,6 +37,25 @@ Status key:
 - `+[MADDatabaseConnection newDatabaseConnection:documentURL:]` recursed until the stack ended for every non-SQLite driver
 - `MADStore` opened and migrated a newer store revision, and the container reader ignored the header's version words
 
+### The Apple print page walk's node substitution is inside a block comment
+- **Status:** Open (latent -- the code is commented out, so it has never compiled or run)
+- **Where:** `MAD/Source/MADPrintPageRenderer.m:379` (`/*`) through `:469` (`*/`); the
+  substitution is `:398-432`.
+- **Behavior:** `-accessibilityDrawingObjectsOnPageAtIndex:inPageRect:` and the rest of the
+  accessibility walk are inside a block comment, so the per-node band resolution added in
+  `089f8c12a` is not in any binary. The `./Mac/build.sh --smoke-test` gate passes because
+  the region is inert, not because it works. Uncommented, it will not build: `:432` reads
+  `self.backgroundColorForDocumentSection:...];` with an opening `[` missing, and `:413`
+  sends `+[MADDatabaseConnection newDatabaseConnectionForUserCredentals:]`, which is
+  declared nowhere (the real factory is `+[... newDatabaseConnection:]`, and
+  `RptqDatabaseCredentals` adopts `MADConnectionsPropertiesProtocol`).
+- **Why it matters:** A reader can believe the Apple print/accessibility path follows the
+  selected node when it does not exist. The Mac Viewer prints the rendered PDF, not this
+  renderer, so the app is unaffected today. Reviving the walk is its own change: uncomment,
+  fix the syntax and the factory, and prove it against a node-scoped page walk.
+- **Test:** none possible until the region compiles; the macOS smoke suite covers the
+  PDF/Viewer print path, not `MADPrintPageRenderer`.
+
 ### The document thumbnail uses the deprecated QuickLook file-attribute keys
 - **Status:** Open -- kept deliberately, behind a scoped pragma.
 - **What:** `MAD/Source/MADocument.m -fileAttributesToWriteToURL:forSaveOperation:error:`

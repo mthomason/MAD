@@ -107,6 +107,8 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 // Left sidebar controls
 @property (nonatomic, strong, readwrite) MADMacDesignerMinimapView *minimapView;
 @property (nonatomic, strong) NSTableView *sectionsTableView;
+@property (nonatomic, strong, readwrite) NSTextField *fieldsHeaderLabel;
+@property (nonatomic, strong) NSTextField *emptyLayoutHintLabel;
 @property (nonatomic, strong) NSSearchField *queryFieldsSearchField;
 @property (nonatomic, strong) NSTableView *queryFieldsTableView;
 @property (nonatomic, strong) NSArray<RptqQueryField *> *filteredQueryFields;
@@ -443,10 +445,18 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	sectionsScroll.borderType = NSBezelBorder;
 	sectionsScroll.translatesAutoresizingMaskIntoConstraints = NO;
 
-	NSTextField *fieldsHeader = [NSTextField labelWithString:NSLocalizedString(@"QUERY FIELDS (DRAG TO CANVAS)", @"Designer sidebar heading for the query field list.")];
-	fieldsHeader.font = [NSFont systemFontOfSize:10.0 weight:NSFontWeightBold];
-	fieldsHeader.textColor = [NSColor secondaryLabelColor];
-	fieldsHeader.translatesAutoresizingMaskIntoConstraints = NO;
+	_fieldsHeaderLabel = [NSTextField labelWithString:NSLocalizedString(@"QUERY FIELDS (DRAG TO CANVAS)", @"Designer sidebar heading for the query field list.")];
+	_fieldsHeaderLabel.font = [NSFont systemFontOfSize:10.0 weight:NSFontWeightBold];
+	_fieldsHeaderLabel.textColor = [NSColor secondaryLabelColor];
+	_fieldsHeaderLabel.translatesAutoresizingMaskIntoConstraints = NO;
+
+	// Shown when the selected node's layout has no elements: an empty band is authorable,
+	// not an error.
+	_emptyLayoutHintLabel = [NSTextField wrappingLabelWithString:NSLocalizedString(@"Add elements to design this report.", @"Designer hint when the selected node's report layout has no elements.")];
+	_emptyLayoutHintLabel.font = [NSFont systemFontOfSize:9.5];
+	_emptyLayoutHintLabel.textColor = [NSColor tertiaryLabelColor];
+	_emptyLayoutHintLabel.translatesAutoresizingMaskIntoConstraints = NO;
+	_emptyLayoutHintLabel.hidden = YES;
 
 	_queryFieldsSearchField = [[NSSearchField alloc] initWithFrame:NSZeroRect];
 	_queryFieldsSearchField.placeholderString = NSLocalizedString(@"Filter query fields…", @"Search field placeholder that filters the query field list.");
@@ -488,7 +498,8 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	[container addSubview:_minimapView];
 	[container addSubview:sectionsHeader];
 	[container addSubview:sectionsScroll];
-	[container addSubview:fieldsHeader];
+	[container addSubview:_emptyLayoutHintLabel];
+	[container addSubview:_fieldsHeaderLabel];
 	[container addSubview:_queryFieldsSearchField];
 	[container addSubview:fieldsScroll];
 	[container addSubview:fieldsHint];
@@ -516,11 +527,15 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 		[sectionsScroll.trailingAnchor constraintEqualToAnchor:container.trailingAnchor constant:-10.0],
 		[sectionsScroll.heightAnchor constraintEqualToConstant:168.0],
 
-		[fieldsHeader.topAnchor constraintEqualToAnchor:sectionsScroll.bottomAnchor constant:12.0],
-		[fieldsHeader.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:10.0],
-		[fieldsHeader.trailingAnchor constraintEqualToAnchor:container.trailingAnchor constant:-10.0],
+		[_emptyLayoutHintLabel.topAnchor constraintEqualToAnchor:sectionsScroll.bottomAnchor constant:4.0],
+		[_emptyLayoutHintLabel.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:10.0],
+		[_emptyLayoutHintLabel.trailingAnchor constraintEqualToAnchor:container.trailingAnchor constant:-10.0],
 
-		[_queryFieldsSearchField.topAnchor constraintEqualToAnchor:fieldsHeader.bottomAnchor constant:4.0],
+		[_fieldsHeaderLabel.topAnchor constraintEqualToAnchor:_emptyLayoutHintLabel.bottomAnchor constant:8.0],
+		[_fieldsHeaderLabel.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:10.0],
+		[_fieldsHeaderLabel.trailingAnchor constraintEqualToAnchor:container.trailingAnchor constant:-10.0],
+
+		[_queryFieldsSearchField.topAnchor constraintEqualToAnchor:_fieldsHeaderLabel.bottomAnchor constant:4.0],
 		[_queryFieldsSearchField.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:10.0],
 		[_queryFieldsSearchField.trailingAnchor constraintEqualToAnchor:container.trailingAnchor constant:-10.0],
 
@@ -1128,13 +1143,14 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 
 - (NSArray<RptqQueryField *> *)allQueryFields {
 	MADMacDocument *doc = self.madDocument;
-	// A composed document binds its elements to the root's output fields, in output
-	// order.  The root's join-key fields (no output key) are not bindable.
-	if (doc.isComposed) {
-		return [doc.rptqDocument orderedCompositionOutputsWithError:NULL] ?: @[];
+	RptqQuery *q = doc.selectedQuery;
+	if (q == nil) return @[];
+	// The Result and every composing node bind to their own output fields, in output
+	// order; a field with no output key is a join/filter field, not a report column.
+	if ([doc queryShowsReportColumns:q]) {
+		return [q orderedOutputFieldsWithError:NULL] ?: @[];
 	}
-	RptqQuery *q = doc.rptqQuery;
-	if (!q) return @[];
+	// A leaf binds to its own query fields.
 	NSMutableArray<RptqQueryField *> *fields = [NSMutableArray array];
 	for (RptqQueryTable *qt in q.hasQueryTables) {
 		for (RptqQueryField *qf in qt.hasQueryFields) {
@@ -1142,6 +1158,22 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 		}
 	}
 	return fields;
+}
+
+/// The selected node's detail band (its own, not the document's).
+- (nullable RptqDocumentSection *)selectedNodeDetailSection {
+	for (RptqDocumentSection *sec in [_canvasView orderedSections]) {
+		if ((MADDocumentSectionType)sec.type == MADDocumentSectionTypeBody) return sec;
+	}
+	return nil;
+}
+
+- (NSUInteger)selectedNodeElementCount {
+	NSUInteger count = 0;
+	for (RptqDocumentSection *sec in [_canvasView orderedSections]) {
+		count += [_canvasView elementsInSection:sec].count;
+	}
+	return count;
 }
 
 - (NSString *)displayLabelForQueryField:(RptqQueryField *)qf {
@@ -1203,10 +1235,22 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	MADMacDocument *doc = self.madDocument;
 	_canvasView.document = doc;
 	NSArray<RptqDocumentSection *> *sections = [_canvasView orderedSections];
-	if (!_canvasView.selectedSection && sections.count > 0) {
-		RptqDocumentSection *detail = doc.rptqDocument.hasDetailSection;
-		_canvasView.selectedSection = detail ?: sections.firstObject;
+	// A section from another node is not a valid target here: clear the element
+	// selection so an edit can never be replayed against the wrong node's objects.
+	if (_canvasView.selectedSection != nil && ![sections containsObject:_canvasView.selectedSection]) {
+		[_canvasView setSelectedElementsSet:[NSOrderedSet orderedSet]];
+		_canvasView.selectedSection = nil;
 	}
+	if (_canvasView.selectedSection == nil && sections.count > 0) {
+		_canvasView.selectedSection = [self selectedNodeDetailSection] ?: sections.firstObject;
+	}
+
+	BOOL showsColumns = [doc queryShowsReportColumns:doc.selectedQuery];
+	_fieldsHeaderLabel.stringValue = showsColumns
+		? NSLocalizedString(@"REPORT COLUMNS (DRAG TO CANVAS)", @"Designer sidebar heading for a Result's or a composing node's report columns.")
+		: NSLocalizedString(@"QUERY FIELDS (DRAG TO CANVAS)", @"Designer sidebar heading for the query field list.");
+	_emptyLayoutHintLabel.hidden = ([self selectedNodeElementCount] > 0);
+
 	[self rebuildQueryFieldAndScopePopups];
 	[self rebuildFilteredQueryFields];
 	[self reloadSectionsTablePreservingSelection];
@@ -1557,7 +1601,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	MADMacDocument *doc = self.madDocument;
 	RptqDocumentSection *sec = _canvasView.selectedSection;
 	if (!sec) {
-		sec = doc.rptqDocument.hasDetailSection ?: [_canvasView orderedSections].firstObject;
+		sec = [self selectedNodeDetailSection] ?: [_canvasView orderedSections].firstObject;
 		_canvasView.selectedSection = sec;
 	}
 	if (sec && sec.hasRows.count == 0) {
@@ -1641,8 +1685,10 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 			dl.tableID = bound.inQueryTable.upstreamQuery.name;
 			dl.text = [NSString stringWithFormat:@"[%@]", bound.outputKey];
 		} else {
+			// A leaf's result table is keyed by the compiled "<alias>.<field>" identifier;
+			// use the same alias the renderer resolves (queryAlias, not the bare alias).
 			dl.fieldID = bound.databaseSchemaField.name;
-			dl.tableID = bound.inQueryTable.alias ?: bound.inQueryTable.databaseSchemaTable.name;
+			dl.tableID = [bound.inQueryTable queryAlias] ?: bound.inQueryTable.databaseSchemaTable.name;
 			dl.text = [NSString stringWithFormat:@"[%@.%@]", dl.tableID ?: @"", dl.fieldID ?: @""];
 		}
 	} else {
