@@ -483,8 +483,51 @@ static BOOL CheckCopiedAndReopened(NSURL *samplesDirectory, NSString *screenshot
 	BOOL compositionOK = SampleRefresh(compositionDoc, compositionWC.viewerViewController, 347,
 									   @"copied Chinook-Composition.mad");
 
+	NSURL *savedCompositionURL = [copyDirectory URLByAppendingPathComponent:@"Saved-Chinook-Composition.mad" isDirectory:NO];
+	NSError *compositionSaveError = nil;
+	BOOL savedComposition = [compositionDoc writeToURL:savedCompositionURL
+											   ofType:@"com.thomason.mad"
+									 forSaveOperation:NSSaveOperation
+								  originalContentsURL:composition
+												error:&compositionSaveError];
+	if (!savedComposition) {
+		SampleFail(@"save a copied composition: %@", compositionSaveError.localizedDescription);
+		compositionOK = NO;
+	}
+	MADMacDocument *reopenedComposition = savedComposition
+		? SampleOpenDocument(savedCompositionURL, @"reopened composition")
+		: nil;
+	BOOL reopenedCompositionOK = NO;
+	if (reopenedComposition != nil) {
+		MADMacWindowController *reopenedCompositionWC = reopenedComposition.windowControllers.firstObject;
+		[reopenedCompositionWC switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+		reopenedCompositionOK = SampleRefresh(reopenedComposition,
+											  reopenedCompositionWC.viewerViewController,
+											  347,
+											  @"reopened composition") &&
+			reopenedComposition.isComposed &&
+			[reopenedComposition allQueries].count == 3;
+		RptqQuery *reopenedAlbums = nil, *reopenedArtists = nil;
+		for (RptqQuery *query in [reopenedComposition allQueries]) {
+			if ([query.name isEqualToString:@"Albums"]) reopenedAlbums = query;
+			if ([query.name isEqualToString:@"Artists"]) reopenedArtists = query;
+		}
+		reopenedComposition.selectedQuery = reopenedAlbums;
+		[reopenedCompositionWC switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+		BOOL albumsLayoutSurvived = reopenedAlbums != nil && SampleElementCount(reopenedComposition) > 0;
+		reopenedComposition.selectedQuery = reopenedArtists;
+		[reopenedCompositionWC switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+		BOOL artistsLayoutlessSurvived = reopenedArtists != nil && SampleElementCount(reopenedComposition) == 0;
+		reopenedCompositionOK = reopenedCompositionOK && albumsLayoutSurvived && artistsLayoutlessSurvived;
+		if (reopenedCompositionOK) {
+			SamplePass(@"reopened composition kept the Result, the Albums layout and the layout-less Artists source");
+		} else {
+			SampleFail(@"reopened composition lost a node or a source layout");
+		}
+	}
+
 	[[NSFileManager defaultManager] removeItemAtURL:tempRootURL error:NULL];
-	return refreshed && reopenedOK && compositionOK;
+	return refreshed && reopenedOK && compositionOK && reopenedCompositionOK;
 }
 
 static BOOL CheckPostgres(NSURL *url, NSString *screenshots) {
