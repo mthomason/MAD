@@ -41,6 +41,11 @@ NS_ASSUME_NONNULL_BEGIN
 					  query:(nullable RptqQuery *)query
 					  error:(NSError * _Nullable __autoreleasing *)error;
 
+/// The error every node-scoped read/export returns when the node has no committed
+/// result (it has not been refreshed).  Shared so the data exporters and the render
+/// exporters refuse an unrefreshed node the same way.
++ (NSError *)errorForUnrefreshedNode:(RptqQuery *)query;
+
 @property (readonly, nonatomic, strong) id <MADDocumentDataProtocol> document;
 
 /// The published generation this source pinned when it was created.  The rows,

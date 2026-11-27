@@ -39,6 +39,15 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
 	return (groupCount - 1) - (sectionIndex - groupCount - 3);
 }
 
+/// Adds one section's height to the map, skipping an absent section -- a query node
+/// with no materialized layout sections yet.  Building the dictionary entry by entry
+/// keeps such a node's export an empty layout instead of a nil-object exception from
+/// -initWithObjectsAndKeys:.
+static void MADAddSectionHeight(NSMutableDictionary<NSNumber *, NSNumber *> *heights, MADSectionLayout *section) {
+	if (section == nil || section.identifierObject == nil) return;
+	heights[section.identifierObject] = @(section.displayHeight);
+}
+
 @interface MADSectionsLayout ()
 
 @property (nonatomic, readwrite, strong) NSArray <NSSortDescriptor *> *groupSortDescriptors;
@@ -138,18 +147,12 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
                                           managedObjectContext: managedObjectContext];
         }
         
-        NSNumber *heightReportHeader = [[NSNumber alloc] initWithDouble: _reportHeader.displayHeight];
-        NSNumber *heightReportFooter = [[NSNumber alloc] initWithDouble: _reportFooter.displayHeight];
-        NSNumber *heightPageHeader = [[NSNumber alloc] initWithDouble: _pageHeader.displayHeight];
-        NSNumber *heightPageFooter = [[NSNumber alloc] initWithDouble: _pageFooter.displayHeight];
-        NSNumber *heightDetail = [[NSNumber alloc] initWithDouble: _detail.displayHeight];
-        NSMutableDictionary <NSNumber *, NSNumber *> *heightForSectionID;
-        heightForSectionID = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                                   heightReportHeader, _reportHeader.identifierObject,
-                                                   heightReportFooter, _reportFooter.identifierObject,
-                                                   heightPageHeader, _pageHeader.identifierObject,
-                                                   heightPageFooter, _pageFooter.identifierObject,
-                                                   heightDetail, _detail.identifierObject, nil];
+        NSMutableDictionary <NSNumber *, NSNumber *> *heightForSectionID = [NSMutableDictionary dictionaryWithCapacity:5];
+        MADAddSectionHeight(heightForSectionID, _reportHeader);
+        MADAddSectionHeight(heightForSectionID, _reportFooter);
+        MADAddSectionHeight(heightForSectionID, _pageHeader);
+        MADAddSectionHeight(heightForSectionID, _pageFooter);
+        MADAddSectionHeight(heightForSectionID, _detail);
 
         
         // Groups
@@ -162,7 +165,6 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
         NSArray <NSDictionary *> *groupArray = [documentSections filteredArrayUsingPredicate:predicate];
         if (groupArray.count > 0) {
             MADSectionGroupLayout *groupLayout;
-            NSNumber *heightObject;
             for (NSDictionary *objects in groupArray) {
                 groupLayout = [[MADSectionGroupLayout alloc] initWithObject: objects
                                                        managedObjectContext: managedObjectContext
@@ -174,8 +176,7 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
                                        return identifier;
                                    }
                                }];
-                heightObject = [[NSNumber alloc] initWithDouble: groupLayout.displayHeight];
-                [heightForSectionID setObject:heightObject forKey: groupLayout.identifierObject];
+                MADAddSectionHeight(heightForSectionID, groupLayout);
                 switch (groupLayout.type) {
                     
                     case MADDocumentSectionTypeGroupHeader:
@@ -274,18 +275,12 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
 		NSArray <NSDictionary *> *detailArray = [documentSections filteredArrayUsingPredicate:predicate];
 		if (detailArray.count > 0) _detail = [[MADSectionLayout alloc] initWithObject:detailArray[0] managedObjectContext:managedObjectContext];
 
-		NSNumber *heightReportHeader = [[NSNumber alloc] initWithDouble:_reportHeader.displayHeight];
-		NSNumber *heightReportFooter = [[NSNumber alloc] initWithDouble:_reportFooter.displayHeight];
-		NSNumber *heightPageHeader = [[NSNumber alloc] initWithDouble:_pageHeader.displayHeight];
-		NSNumber *heightPageFooter = [[NSNumber alloc] initWithDouble:_pageFooter.displayHeight];
-		NSNumber *heightDetail = [[NSNumber alloc] initWithDouble:_detail.displayHeight];
-		NSMutableDictionary <NSNumber *, NSNumber *> *heightForSectionID;
-		heightForSectionID = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-							  heightReportHeader, _reportHeader.identifierObject,
-							  heightReportFooter, _reportFooter.identifierObject,
-							  heightPageHeader, _pageHeader.identifierObject,
-							  heightPageFooter, _pageFooter.identifierObject,
-							  heightDetail, _detail.identifierObject, nil];
+		NSMutableDictionary <NSNumber *, NSNumber *> *heightForSectionID = [NSMutableDictionary dictionaryWithCapacity:5];
+		MADAddSectionHeight(heightForSectionID, _reportHeader);
+		MADAddSectionHeight(heightForSectionID, _reportFooter);
+		MADAddSectionHeight(heightForSectionID, _pageHeader);
+		MADAddSectionHeight(heightForSectionID, _pageFooter);
+		MADAddSectionHeight(heightForSectionID, _detail);
 
 		NSArray *groupHeaders = [[NSArray alloc] init];
 		NSArray *groupFooters = [[NSArray alloc] init];
@@ -300,8 +295,7 @@ static inline NSUInteger groupFooterIndex(NSUInteger sectionIndex, NSUInteger gr
 					if (databaseClass != NULL) { return [databaseClass newSafeIdentifier:identifier]; }
 					return identifier;
 				}];
-				NSNumber *heightObject = [[NSNumber alloc] initWithDouble:groupLayout.displayHeight];
-				[heightForSectionID setObject:heightObject forKey:groupLayout.identifierObject];
+				MADAddSectionHeight(heightForSectionID, groupLayout);
 				switch (groupLayout.type) {
 					case MADDocumentSectionTypeGroupHeader: groupHeaders = [groupHeaders arrayByAddingObject:groupLayout]; break;
 					case MADDocumentSectionTypeGroupFooter: groupFooters = [groupFooters arrayByAddingObject:groupLayout]; break;

@@ -20,6 +20,7 @@
 
 #import <MAD/MADDocumentRenderProtocol.h>
 #import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
 #import <MAD/MADReportLineRepresentation.h>
 #import <MAD/MADReportPageRepresentation.h>
 #import <MAD/MADReportSectionRepresentation.h>
@@ -82,7 +83,7 @@ static NSString *MADReportExporterTypeToken(NSString *name, NSString *prefix) {
 				 toURL:(NSURL *)url
 			   options:(MADReportExportOptions)options
 				 error:(NSError * _Nullable __autoreleasing *)error {
-	if (query == nil || query.rootOfDocument != nil) {
+	if (query == nil || [query isLayoutRootInDocument: document.activeDocumentModel]) {
 		return [self exportDocument: document toURL: url options: options error: error];
 	}
 	// json-report cannot render a specific node's pages and rows yet: it would write

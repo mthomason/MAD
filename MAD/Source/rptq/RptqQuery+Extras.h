@@ -42,6 +42,13 @@
 	/// is set) -- the root of a composition and any non-root composer.  A leaf is NO.
 	- (BOOL)isComposing;
 
+	/// YES when this query is the document's report root for **layout and result**
+	/// purposes: the explicit composed root, or -- when the document has no composed
+	/// root -- the document's single/default query (an ordinary report).  This is not
+	/// the composition `isRoot` the serve protocol reports; an ordinary report keeps
+	/// `isRoot == NO`.
+	- (BOOL)isLayoutRootInDocument:(RptqDocument *)document;
+
 	/// The query's report sections in render order: report header, page header, group
 	/// headers, detail, group footers, page footer, report footer.  The root's structural
 	/// sections are the document's five; any other node's are its `hasLayoutSections`.
