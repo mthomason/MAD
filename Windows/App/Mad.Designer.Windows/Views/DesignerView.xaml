@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Mad.Designer.Windows;component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -227,10 +228,20 @@
                           Background="{DynamicResource DividerStrokeColorDefaultBrush}" />
 
             <!-- The design canvas owns the primary work area. -->
-            <ScrollViewer Grid.Column="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                          Background="{DynamicResource SolidBackgroundFillColorBaseBrush}">
-                <views:DesignerCanvas x:Name="Canvas" ClipToBounds="True" />
-            </ScrollViewer>
+            <Grid Grid.Column="2">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                              Background="{DynamicResource SolidBackgroundFillColorBaseBrush}">
+                    <views:DesignerCanvas x:Name="Canvas" ClipToBounds="True" />
+                </ScrollViewer>
+                <!-- A layout with no elements is authorable, not an error: say how to begin. -->
+                <TextBlock Text="{infra:Loc Designer.AddElementsHint}"
+                           HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,14,0,0"
+                           Visibility="{Binding ShowAddElementsHint, Converter={StaticResource BoolToVis}}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource MAD.SecondaryText}" />
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
 
             <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch"
                           Background="{DynamicResource DividerStrokeColorDefaultBrush}" />

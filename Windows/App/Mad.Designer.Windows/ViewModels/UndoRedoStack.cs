@@ -23,6 +23,14 @@ public sealed class UndoRedoStack
         _redo.Clear();
     }
 
+    /// <summary>Discards the whole history. Used when the designer switches to another node, so
+    /// an edit recorded against one node's layout is never replayed against another's.</summary>
+    public void Clear()
+    {
+        _undo.Clear();
+        _redo.Clear();
+    }
+
     public async Task<LayoutModel> UndoAsync()
     {
         var edit = _undo.Pop();

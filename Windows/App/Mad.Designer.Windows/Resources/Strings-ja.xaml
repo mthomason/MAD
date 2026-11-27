@@ -38,6 +38,10 @@
   <sys:String x:Key="Viewer.Placeholder">更新してレポートをレンダリングします。</sys:String>
   <sys:String x:Key="Viewer.PreviewError">レポートプレビューを開始できませんでした: {0}</sys:String>
   <sys:String x:Key="Viewer.NotYetRefreshed">まだ更新されていません。“更新” をクリックしてデータベースにクエリを実行し、レポートをレンダリングしてください。</sys:String>
+  <sys:String x:Key="Viewer.NodeRows">{0} 行を表示しています。</sys:String>
+  <sys:String x:Key="Viewer.NodeRows.Name">レポートの行</sys:String>
+  <sys:String x:Key="Viewer.NodeNotRefreshed">このレポートはまだ更新されていません。</sys:String>
+  <sys:String x:Key="Viewer.JsonReportUnavailable">JSON 完全レポートはソースには使用できません。</sys:String>
   <sys:String x:Key="Viewer.Status">{0} を {1} からレンダリングしました。</sys:String>
   <sys:String x:Key="Viewer.Pages.One">1 ページ</sys:String>
   <sys:String x:Key="Viewer.Pages.Many">{0} ページ</sys:String>
@@ -368,6 +372,7 @@
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
   <sys:String x:Key="Query.SchemaEmpty">このソースにはテーブルがありません。</sys:String>
   <sys:String x:Key="Designer.FieldsEmpty">クエリを作成すると、ここにフィールドが表示されます。</sys:String>
+  <sys:String x:Key="Designer.AddElementsHint">このレポートをデザインする要素を追加してください。</sys:String>
   <sys:String x:Key="Query.Table.Tooltip">ヘッダーをドラッグしてこのテーブルを移動します。</sys:String>
   <sys:String x:Key="Designer.Band.Tooltip">クリックしてこのバンドを選択します。下端をドラッグしてサイズを変更します。</sys:String>
   <sys:String x:Key="Designer.Element.Tooltip">ドラッグで移動、ハンドルのドラッグでサイズ変更、ダブルクリックで編集します。</sys:String>
@@ -393,6 +398,7 @@
   <sys:String x:Key="Query.Sources.Hint">ソースをダブルクリックして結果に追加します。</sys:String>
   <sys:String x:Key="Query.Sources.Empty">ソースはまだありません。レポートをインポートするか、ソースを追加してください。</sys:String>
   <sys:String x:Key="Query.Sources.AllAdded">すべてのソースが結果に追加されています。</sys:String>
+  <sys:String x:Key="Query.NestedAuthoring">このソースはそれ自体が合成レポートです。ここではネストした編集はできません。</sys:String>
   <sys:String x:Key="Query.Placeholder.Root">結果にソースを追加し、ここで結合します。</sys:String>
   <sys:String x:Key="Designer.ReportColumns">レポート列（キャンバスにドラッグ）</sys:String>
   <sys:String x:Key="Composition.Title">コンポジション</sys:String>
@@ -415,6 +421,5 @@
   <sys:String x:Key="Composition.Component.Root">{0}（結果）</sys:String>
   <sys:String x:Key="Composition.Role.Result">結果 — デザインして表示するレポート。</sys:String>
   <sys:String x:Key="Composition.Role.Source">ソース — このクエリは結果にデータを渡します。</sys:String>
-  <sys:String x:Key="Composition.WorkspaceNotice">デザイナーとビューアーには結果レポートが表示されます。ソースのレイアウトはまだ利用できません。</sys:String>
   <sys:String x:Key="Composition.OneSource">結合するソースをもう 1 つ追加してください。</sys:String>
 </ResourceDictionary>

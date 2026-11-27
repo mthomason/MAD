@@ -33,6 +33,27 @@ public sealed class ProtocolParsingTests
     [Theory]
     [InlineData("true", true)]
     [InlineData("1", true)]
+    [InlineData("false", false)]
+    [InlineData("0", false)]
+    public void QueryModel_ReadsTheComposingFlagFromEitherEncoding(string flag, bool expected)
+    {
+        string json = $$"""
+            {
+              "driver": "sqlite3",
+              "tables": [], "links": [], "predicates": [], "groups": [],
+              "queryId": 9,
+              "isRoot": false,
+              "isComposing": {{flag}}
+            }
+            """;
+
+        using JsonDocument document = JsonDocument.Parse(json);
+        Assert.Equal(expected, QueryModel.Parse(document.RootElement).IsComposing);
+    }
+
+    [Theory]
+    [InlineData("true", true)]
+    [InlineData("1", true)]
     [InlineData("0", false)]
     public void DocumentInfo_ReadsAQueryRootFlagFromEitherEncoding(string flag, bool expected)
     {

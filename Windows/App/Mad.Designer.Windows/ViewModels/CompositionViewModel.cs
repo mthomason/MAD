@@ -7,8 +7,10 @@ namespace Mad.Designer.Windows.ViewModels;
 
 /// <summary>One card in the composition graph: a query the document contains. The root is the
 /// report the user designs and views; every other node is a source that feeds it directly or
-/// through another composing node.</summary>
-public sealed record CompositionNode(long Id, string Name, bool IsRoot, int Depth);
+/// through another composing node. <see cref="IsComposing"/> is true for the root and for any
+/// node built from other nodes, so the Designer's field caption can be set synchronously from
+/// the selection without waiting on the async query-model reload.</summary>
+public sealed record CompositionNode(long Id, string Name, bool IsRoot, int Depth, bool IsComposing);
 
 /// <summary>One composition dependency. The arrow points at the consumer: <see cref="FromId"/>
 /// feeds <see cref="ToId"/>.</summary>
@@ -89,7 +91,9 @@ public static class CompositionGraph
             .OrderBy(x => depth[x.query.Id])
             .ThenBy(x => x.query.IsRoot ? 0 : 1)
             .ThenBy(x => x.index)
-            .Select(x => new CompositionNode(x.query.Id, x.query.Name, x.query.IsRoot, depth[x.query.Id]))
+            .Select(x => new CompositionNode(
+                x.query.Id, x.query.Name, x.query.IsRoot, depth[x.query.Id],
+                models.TryGetValue(x.query.Id, out QueryModel? model) && model.IsComposing))
             .ToList();
 
         return (order, edges);

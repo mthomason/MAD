@@ -28,7 +28,7 @@ public sealed class DesignerCanvasTests
             await using var service = new EngineService();
             var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
             var vm = new DesignerViewModel(service);
-            await vm.LoadAsync(open.Handle);
+            await vm.LoadAsync(open.Handle, 0);
             await vm.AddElementAsync("label", vm.Sections.Single(s => s.Type == SectionType.Body).Id, 10, 20);
 
             Exception? renderError = null;
@@ -78,7 +78,7 @@ public sealed class DesignerCanvasTests
             await using var service = new EngineService();
             var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
             var vm = new DesignerViewModel(service);
-            await vm.LoadAsync(open.Handle);
+            await vm.LoadAsync(open.Handle, 0);
             await vm.AddElementAsync("label", vm.Sections.Single(s => s.Type == SectionType.Body).Id, 10, 20);
 
             Exception? failure = null;
@@ -130,7 +130,7 @@ public sealed class DesignerCanvasTests
             await using var service = new EngineService();
             var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
             var vm = new DesignerViewModel(service);
-            await vm.LoadAsync(open.Handle);
+            await vm.LoadAsync(open.Handle, 0);
 
             LayoutSection reportHeader = vm.Sections.Single(s => s.Type == SectionType.ReportHeader);
             LayoutSection body = vm.Sections.Single(s => s.Type == SectionType.Body);

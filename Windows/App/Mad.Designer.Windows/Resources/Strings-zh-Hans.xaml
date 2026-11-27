@@ -38,6 +38,10 @@
   <sys:String x:Key="Viewer.Placeholder">刷新以渲染报表。</sys:String>
   <sys:String x:Key="Viewer.PreviewError">无法启动报表预览：{0}</sys:String>
   <sys:String x:Key="Viewer.NotYetRefreshed">尚未刷新。点按“刷新”以查询数据库并渲染报表。</sys:String>
+  <sys:String x:Key="Viewer.NodeRows">正在显示 {0} 行。</sys:String>
+  <sys:String x:Key="Viewer.NodeRows.Name">报表行</sys:String>
+  <sys:String x:Key="Viewer.NodeNotRefreshed">此报表尚未刷新。</sys:String>
+  <sys:String x:Key="Viewer.JsonReportUnavailable">源不支持完整 JSON 报表。</sys:String>
   <sys:String x:Key="Viewer.Status">已渲染 {0}，数据来自 {1}。</sys:String>
   <sys:String x:Key="Viewer.Pages.One">1 页</sys:String>
   <sys:String x:Key="Viewer.Pages.Many">{0} 页</sys:String>
@@ -368,6 +372,7 @@
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
   <sys:String x:Key="Query.SchemaEmpty">此源没有表。</sys:String>
   <sys:String x:Key="Designer.FieldsEmpty">生成查询后，字段将显示在此处。</sys:String>
+  <sys:String x:Key="Designer.AddElementsHint">添加元素来设计此报表。</sys:String>
   <sys:String x:Key="Query.Table.Tooltip">拖动标题栏可移动此表。</sys:String>
   <sys:String x:Key="Designer.Band.Tooltip">单击可选择此条带；拖动其下边缘可调整大小。</sys:String>
   <sys:String x:Key="Designer.Element.Tooltip">拖动可移动，拖动控制柄可调整大小，双击可编辑。</sys:String>
@@ -393,6 +398,7 @@
   <sys:String x:Key="Query.Sources.Hint">双击源，将其添加到结果。</sys:String>
   <sys:String x:Key="Query.Sources.Empty">尚无源。请导入报表或添加源。</sys:String>
   <sys:String x:Key="Query.Sources.AllAdded">所有源均已添加到结果。</sys:String>
+  <sys:String x:Key="Query.NestedAuthoring">此源本身就是一个组合报表；此处不支持嵌套编辑。</sys:String>
   <sys:String x:Key="Query.Placeholder.Root">将源添加到结果，然后在此连接它们。</sys:String>
   <sys:String x:Key="Designer.ReportColumns">报表列（拖动到画布）</sys:String>
   <sys:String x:Key="Composition.Title">组合</sys:String>
@@ -415,6 +421,5 @@
   <sys:String x:Key="Composition.Component.Root">{0}（结果）</sys:String>
   <sys:String x:Key="Composition.Role.Result">结果 — 您设计和查看的报表。</sys:String>
   <sys:String x:Key="Composition.Role.Source">源 — 此查询提供给结果。</sys:String>
-  <sys:String x:Key="Composition.WorkspaceNotice">设计器和查看器显示结果报表。源布局尚不可用。</sys:String>
   <sys:String x:Key="Composition.OneSource">再添加一个源以进行组合。</sys:String>
 </ResourceDictionary>

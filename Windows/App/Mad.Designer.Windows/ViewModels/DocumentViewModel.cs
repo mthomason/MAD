@@ -27,6 +27,9 @@ public sealed class DocumentViewModel : ObservableObject
     private IReadOnlyList<QueryInfo> _queries = Array.Empty<QueryInfo>();
     private IReadOnlyList<QueryOption> _componentOptions = Array.Empty<QueryOption>();
     private long _selectedQueryId;
+    private Task? _nodeReloadTask;
+    private bool _suppressSelectionReload;
+    private bool _hasRefreshed;
 
     private bool _isBusy;
     private string _statusText = "";
@@ -190,8 +193,77 @@ public sealed class DocumentViewModel : ObservableObject
                 OnPropertyChanged(nameof(SelectedQueryName));
                 OnPropertyChanged(nameof(IsRootSelected));
                 OnPropertyChanged(nameof(SelectedQueryHint));
+                UpdateSelectedNodeState();
+                if (!_suppressSelectionReload && HasDocument)
+                {
+                    _nodeReloadTask = ReloadNodeAsync(value);
+                }
             }
         }
+    }
+
+    /// <summary>True when the selected node's field list is its report columns: the Result (the
+    /// composed root) or any composing node. The engine's <c>isComposing</c> is upstream-table
+    /// based, so a Result with no joined sources reads as non-composing — the root identity
+    /// covers that case. A Standard Report has no graph node, so its single query stays a leaf.</summary>
+    private bool SelectedNodeShowsColumns()
+    {
+        CompositionNode? node = Composition.SelectedNode;
+        return node != null && (node.IsRoot || node.IsComposing);
+    }
+
+    /// <summary>Publishes the parts of the selection that must be correct synchronously: the
+    /// Designer's field caption (from the graph, not the not-yet-reloaded query model), the
+    /// Viewer's report-root identity, and the Viewer's target node (which clears the previous
+    /// node's render so it never flashes through).</summary>
+    private void UpdateSelectedNodeState()
+    {
+        Designer.SelectedNodeComposing = SelectedNodeShowsColumns();
+        Viewer.IsNodeReportRoot = !IsComposed || IsRootSelected;
+        Viewer.QueryId = _selectedQueryId;
+    }
+
+    /// <summary>Reloads every workspace for the selected node, serialized and versioned: after
+    /// each await it abandons the work if the selection has moved on, so a slow load can never
+    /// overwrite a newer selection.</summary>
+    private async Task ReloadNodeAsync(long queryId)
+    {
+        if (!HasDocument) return;
+        long version = queryId;
+
+        await Query.ReloadSchemaAsync();
+        if (SelectedQueryId != version) return;
+
+        await Designer.LoadAsync(_handle, queryId);
+        if (SelectedQueryId != version) return;
+
+        Designer.SelectedNodeComposing = SelectedNodeShowsColumns();
+        Viewer.QueryId = queryId;
+        Viewer.IsNodeReportRoot = !IsComposed || IsRootSelected;
+
+        // Re-render the newly selected node from its retained result, if the document has
+        // ever published one. The decision uses the selected node's own layout, the same
+        // expression RefreshAsync uses.
+        if (_hasRefreshed)
+        {
+            await Viewer.RenderAsync(Designer.Elements.Count > 0);
+        }
+    }
+
+    /// <summary>Selects a node programmatically after a graph mutation and awaits its reload
+    /// deterministically (the setter's reload is suppressed so there is exactly one).</summary>
+    private async Task SelectAndReloadAsync(long queryId)
+    {
+        _suppressSelectionReload = true;
+        try
+        {
+            SelectedQueryId = queryId;
+        }
+        finally
+        {
+            _suppressSelectionReload = false;
+        }
+        await ReloadNodeAsync(queryId);
     }
 
     public string? SelectedQueryName
@@ -305,12 +377,27 @@ public sealed class DocumentViewModel : ObservableObject
         await LoadCompositionAsync(info);
         long selected = info.Composed ? info.RootQuery : (info.Queries.FirstOrDefault()?.Id ?? 0);
         await Query.LoadAsync(_handle, describe.Driver, describe.Tables, selected);
-        SelectedQueryId = selected;
-        await Designer.LoadAsync(_handle);
-        await Viewer.LoadAsync(_handle, RefreshAsync, ApplyPaperSizeAsync);
+        // Set the initial selection without starting an async node reload: the workspaces are
+        // bound to it explicitly just below.
+        _suppressSelectionReload = true;
+        try
+        {
+            SelectedQueryId = selected;
+        }
+        finally
+        {
+            _suppressSelectionReload = false;
+        }
+        await Designer.LoadAsync(_handle, selected);
+        await Viewer.LoadAsync(_handle, selected, RefreshAsync, ApplyPaperSizeAsync);
+        // The initial selection is the report root (the Result, or a Standard Report's single
+        // query), so json-report stays available and the caption follows the node's kind.
+        Viewer.IsNodeReportRoot = !IsComposed || IsRootSelected;
+        Designer.SelectedNodeComposing = SelectedNodeShowsColumns();
 
         DataView = null;
         RowCount = 0;
+        _hasRefreshed = false;
         StatusText = Localizer.Format("Document.Opened", FileName);
     }
 
@@ -332,9 +419,17 @@ public sealed class DocumentViewModel : ObservableObject
             string json = await _engine.ExportAsync(_handle, "json");
             DataView = MadReport.Parse(json).ToDataTable().DefaultView;
 
-            // Phase 6d: lay the report out for the Viewer's selected paper and load its
-            // HTML preview. Failures land on the Viewer's status line, not here.
-            await Viewer.RenderAsync(refresh.RowCount);
+            // A pending selection must finish loading before the Viewer decides whether the
+            // selected node renders its HTML or a row grid.
+            if (_nodeReloadTask != null)
+            {
+                try { await _nodeReloadTask; } catch { /* surfaced on the workspace's own line */ }
+            }
+
+            // Render the selected node for the Viewer's paper: its HTML report, or a row grid
+            // when it has no elements. Failures land on the Viewer's status line, not here.
+            await Viewer.RenderAsync(Designer.Elements.Count > 0);
+            _hasRefreshed = true;
 
             StatusText = Localizer.Format("Document.RenderedRows", refresh.RowCount);
             return true;
@@ -375,7 +470,6 @@ public sealed class DocumentViewModel : ObservableObject
         Queries = info.Queries;
         Query.SetQueries(info.Queries);
         ComponentOptions = BuildComponentOptions(info.Queries);
-        Designer.IsComposition = info.Composed;
         OnPropertyChanged(nameof(DocumentTypeText));
         OnPropertyChanged(nameof(DocumentTypeTooltip));
         OnPropertyChanged(nameof(IsRootSelected));
@@ -412,10 +506,16 @@ public sealed class DocumentViewModel : ObservableObject
         Composition.Load(info, models);
     }
 
+    /// <summary>Selects a node and awaits its workspace reload. The pane and picker both use
+    /// this, and tests can await it to observe the loaded per-node state deterministically.</summary>
     public async Task SelectQueryAsync(long queryId)
     {
         if (!HasDocument) return;
         SelectedQueryId = queryId;
+        if (_nodeReloadTask != null)
+        {
+            try { await _nodeReloadTask; } catch { /* surfaced on the workspace's own line */ }
+        }
     }
 
     /// <summary>Converts this standard report into a one-child composition.</summary>
@@ -426,13 +526,10 @@ public sealed class DocumentViewModel : ObservableObject
         ErrorText = null;
         try
         {
-            var info = await _engine.ConvertAsync(_handle, childName);
+            await _engine.ConvertAsync(_handle, childName);
             DocumentInfo reloaded = await ReloadDocumentInfoAsync();
-            SelectedQueryId = reloaded.RootQuery;
-            await Query.ReloadAsync();
-            await Designer.ReloadAsync();
+            await SelectAndReloadAsync(reloaded.RootQuery);
             StatusText = Localizer.Get("Document.Converted");
-            _ = info;
         }
         catch (Exception exception)
         {
@@ -450,10 +547,9 @@ public sealed class DocumentViewModel : ObservableObject
         ErrorText = null;
         try
         {
-            var info = await _engine.ImportChildAsync(_handle, path, name);
+            DocumentInfo info = await _engine.ImportChildAsync(_handle, path, name);
             await ReloadDocumentInfoAsync();
-            SelectedQueryId = info.RootQuery;
-            await Designer.ReloadAsync();
+            await SelectAndReloadAsync(info.RootQuery);
             StatusText = Localizer.Get("Document.Imported");
         }
         catch (Exception exception)
@@ -569,7 +665,9 @@ public sealed class DocumentViewModel : ObservableObject
             Columns = describe.Columns;
             Tables = describe.Tables;
             await Query.LoadAsync(_handle, describe.Driver, describe.Tables, SelectedQueryId);
-            await Designer.LoadAsync(_handle);
+            // SelectedQueryId does not change on reconnect, so its setter will not reload the
+            // node: reload it explicitly before the refresh runs.
+            await SelectAndReloadAsync(SelectedQueryId);
 
             await RefreshAsync();
         }
