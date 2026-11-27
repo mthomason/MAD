@@ -23,7 +23,7 @@
 static const CGFloat kViewerTopToolbarHeight = 40.0;
 static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 
-@interface MADMacViewerViewController ()
+@interface MADMacViewerViewController () <NSTableViewDataSource, NSTableViewDelegate>
 
 @property (nonatomic, strong, readwrite) NSButton *refreshButton;
 @property (nonatomic, strong, readwrite) NSButton *connectionButton;
@@ -35,6 +35,10 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 @property (nonatomic, strong, readwrite) NSView *statusBarView;
 @property (nonatomic, strong, readwrite) NSTextField *statusLabel;
 @property (nonatomic, strong, readwrite, nullable) NSError *lastRefreshError;
+
+@property (nonatomic, strong, readwrite) NSTableView *rowGridView;
+@property (nonatomic, strong) NSScrollView *rowGridScrollView;
+@property (nonatomic, copy) NSArray<NSDictionary<NSString *, id> *> *gridRows;
 
 @property (nonatomic, strong) NSProgressIndicator *spinner;
 @property (nonatomic, strong) NSTextField *paperStatusLabel;
@@ -255,6 +259,23 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 												 name:PDFViewPageChangedNotification
 											   object:_pdfView];
 
+	// 2b. Row grid for a node whose layout has no elements (hidden while the PDF shows)
+	_rowGridView = [[NSTableView alloc] initWithFrame:pdfFrame];
+	_rowGridView.usesAlternatingRowBackgroundColors = YES;
+	_rowGridView.rowHeight = 22.0;
+	_rowGridView.allowsMultipleSelection = YES;
+	_rowGridView.dataSource = self;
+	_rowGridView.delegate = self;
+
+	_rowGridScrollView = [[NSScrollView alloc] initWithFrame:pdfFrame];
+	_rowGridScrollView.documentView = _rowGridView;
+	_rowGridScrollView.hasVerticalScroller = YES;
+	_rowGridScrollView.hasHorizontalScroller = YES;
+	_rowGridScrollView.autohidesScrollers = YES;
+	_rowGridScrollView.borderType = NSBezelBorder;
+	_rowGridScrollView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+	_rowGridScrollView.hidden = YES;
+
 	// 3. Bottom Status Bar
 	_statusBarView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 1180, kViewerBottomStatusBarHeight)];
 	_statusBarView.autoresizingMask = NSViewWidthSizable | NSViewMaxYMargin;
@@ -299,6 +320,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 
 	[root addSubview:topBar];
 	[root addSubview:_pdfView];
+	[root addSubview:_rowGridScrollView];
 	[root addSubview:_statusBarView];
 
 	self.view = root;
@@ -314,6 +336,10 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 											 selector:@selector(handleDocumentRefreshed:)
 												 name:MADMacDocumentDidRefreshNotification
 											   object:_document];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(handleDocumentSelectionChanged:)
+												 name:MADMacDocumentDidSelectQueryNotification
+											   object:_document];
 	[self reloadPreview];
 }
 
@@ -325,6 +351,11 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 }
 
 - (void)handleDocumentRefreshed:(NSNotification *) __unused note {
+	[self reloadPreview];
+}
+
+- (void)handleDocumentSelectionChanged:(NSNotification *) __unused note {
+	// reloadPreview clears the previous node's PDF/grid first, so it never flashes.
 	[self reloadPreview];
 }
 
@@ -638,11 +669,92 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	[self performRefreshWithSuccessHandler:nil];
 }
 
+- (BOOL)isShowingRowGrid {
+	return _rowGridScrollView != nil && !_rowGridScrollView.hidden;
+}
+
+- (NSString *)selectedNodeName {
+	RptqQuery *query = _document.selectedQuery;
+	return query.name.length > 0
+		? query.name
+		: NSLocalizedString(@"Query", @"Default query name in the selector.");
+}
+
+/// YES when the selected node's own ordered bands carry at least one element.
+- (BOOL)selectedNodeHasElements {
+	for (RptqDocumentSection *section in [_document orderedSections]) {
+		for (RptqDocumentSectionRows *row in section.hasRows) {
+			if (row.hasObjects.count > 0) return YES;
+		}
+	}
+	return NO;
+}
+
+/// Clears the PDF and the row grid so a previous node's content never flashes.
+- (void)clearPreviewContent {
+	if (_pdfView != nil) _pdfView.document = nil;
+	if (_rowGridScrollView != nil) _rowGridScrollView.hidden = YES;
+	_gridRows = @[];
+	[_rowGridView reloadData];
+	if (_printButton != nil) _printButton.enabled = YES;
+}
+
+- (void)showRowGridForResult:(MADDataResult *)result {
+	MADDataTableFast *table = result.dataTable;
+	NSArray<NSString *> *keys = result.columnKeys ?: @[];
+	NSMutableArray<NSDictionary<NSString *, id> *> *rows =
+		[[NSMutableArray alloc] initWithCapacity:result.numberOfRows];
+	for (NSUInteger i = 0; i < result.numberOfRows; i++) {
+		NSError *error = nil;
+		NSDictionary *row = [table dataForRow:i + 1 error:&error];
+		[rows addObject:row ?: @{}];
+	}
+
+	while (_rowGridView.numberOfColumns > 0) {
+		[_rowGridView removeTableColumn:_rowGridView.tableColumns.lastObject];
+	}
+	NSUInteger index = 0;
+	for (NSString *key in keys) {
+		// The logical field key is the readable column name (an output key for a composed
+		// node, "<alias>.<field>" for a leaf); the column's SQL expression is not.
+		NSString *title = key;
+		if (title.length == 0) {
+			title = [NSString localizedStringWithFormat:
+				NSLocalizedString(@"Column %lu", @"Fallback row-grid column header when the result carries no column name. %lu is the column number."),
+				(unsigned long)(index + 1)];
+		}
+		NSTableColumn *tableColumn = [[NSTableColumn alloc] initWithIdentifier:key];
+		tableColumn.title = title;
+		tableColumn.width = 120.0;
+		tableColumn.minWidth = 60.0;
+		[_rowGridView addTableColumn:tableColumn];
+		index++;
+	}
+	_gridRows = rows;
+	[_rowGridView reloadData];
+
+	_rowGridScrollView.hidden = NO;
+	_pdfView.hidden = YES;
+	_printButton.enabled = NO;
+}
+
 - (void)reloadPreview {
 	MADHeadlessDocument *doc = _document.headlessDocument;
-	if (doc == nil || !doc.refreshed) {
-		_pdfView.document = nil;
+	[self clearPreviewContent];
+	if (doc == nil) {
 		_statusLabel.stringValue = NSLocalizedString(@"Not yet refreshed. Click “Refresh” to query the database and render the report.", @"Viewer status line before the first refresh. The quoted word matches the Refresh button.");
+		_statusLabel.textColor = [NSColor secondaryLabelColor];
+		[self updateZoomAndPageControls];
+		return;
+	}
+
+	BOOL isReportRoot = [_document queryIsReportRoot:_document.selectedQuery];
+	if (!doc.refreshed) {
+		_statusLabel.stringValue = isReportRoot
+			? NSLocalizedString(@"Not yet refreshed. Click “Refresh” to query the database and render the report.", @"Viewer status line before the first refresh. The quoted word matches the Refresh button.")
+			: [NSString localizedStringWithFormat:
+				NSLocalizedString(@"“%@” has no data yet. Click “Refresh” to load the composition.", @"Viewer status line before the first refresh while a source is selected. %@ is the source's name."),
+				[self selectedNodeName]];
 		_statusLabel.textColor = [NSColor secondaryLabelColor];
 		[self updateZoomAndPageControls];
 		return;
@@ -651,23 +763,52 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	[doc setPaperType:_renderedPaperType];
 	_renderedPaperSize = doc.paperSize;
 
-	NSUInteger rowCount = [doc.dataTable numberOfRows];
+	MADDataResult *result = [_document resultForQuery:_document.selectedQuery];
+	if (result == nil) {
+		_statusLabel.stringValue = [NSString localizedStringWithFormat:
+			NSLocalizedString(@"“%@” has no data yet. Click “Refresh” to load the composition.", @"Viewer status line before the first refresh while a source is selected. %@ is the source's name."),
+			[self selectedNodeName]];
+		_statusLabel.textColor = [NSColor secondaryLabelColor];
+		[self updateZoomAndPageControls];
+		return;
+	}
 
-	// Render PDF preview into a temporary file using the locked renderedPaperType
+	NSUInteger rowCount = result.numberOfRows;
+
+	if (![self selectedNodeHasElements]) {
+		// A node with no layout is a report of rows, not an error.
+		[self showRowGridForResult:result];
+		_statusLabel.stringValue = [NSString localizedStringWithFormat:
+			NSLocalizedString(@"No report layout; showing %lu cached rows.", @"Viewer status line when a node with no elements is shown as a row grid. %lu is the row count."),
+			(unsigned long)rowCount];
+		_statusLabel.textColor = [NSColor systemGreenColor];
+		[self updateZoomAndPageControls];
+		return;
+	}
+
+	// Render the selected node's PDF into a temporary file using the locked paper type.
 	NSString *tmpPDF = [NSTemporaryDirectory() stringByAppendingPathComponent:
 						[NSString stringWithFormat:@"mad-preview-%@.pdf", NSUUID.UUID.UUIDString]];
 	NSURL *tmpPDFURL = [NSURL fileURLWithPath:tmpPDF];
-	Class<MADReportExporting> pdfCls = [MADReportExporterRegistry exporterClassForFormat:@"pdf"];
-	if (pdfCls != Nil && [pdfCls isAvailable]) {
-		id<MADReportExporting> pdfExporter = [[(Class)pdfCls alloc] init];
-		NSError *pdfErr = nil;
-		if ([pdfExporter exportDocument:doc toURL:tmpPDFURL options:MADReportExportOptionsNone error:&pdfErr]) {
-			PDFDocument *pdfDoc = [[PDFDocument alloc] initWithURL:tmpPDFURL];
-			_pdfView.autoScales = NO;
-			_pdfView.document = pdfDoc;
-			_pdfView.scaleFactor = _zoomScale;
-		}
-		[[NSFileManager defaultManager] removeItemAtURL:tmpPDFURL error:NULL];
+	NSError *pdfErr = nil;
+	BOOL exported = [self exportCurrentNodeInFormat:@"pdf" toURL:tmpPDFURL error:&pdfErr];
+	if (exported) {
+		PDFDocument *pdfDoc = [[PDFDocument alloc] initWithURL:tmpPDFURL];
+		_pdfView.autoScales = NO;
+		_pdfView.document = pdfDoc;
+		_pdfView.scaleFactor = _zoomScale;
+		_pdfView.hidden = NO;
+		_rowGridScrollView.hidden = YES;
+		_printButton.enabled = (pdfDoc != nil);
+	}
+	[[NSFileManager defaultManager] removeItemAtURL:tmpPDFURL error:NULL];
+
+	if (!exported) {
+		_statusLabel.stringValue = [self formattedMessageForError:pdfErr
+														fallback:NSLocalizedString(@"Could not render the report.", @"Viewer status line when the PDF preview failed.")];
+		_statusLabel.textColor = [NSColor systemRedColor];
+		[self updateZoomAndPageControls];
+		return;
 	}
 
 	NSUInteger pageCount = _pdfView.document ? _pdfView.document.pageCount : 0;
@@ -675,6 +816,81 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 																			rowCount:rowCount];
 	_statusLabel.textColor = [NSColor systemGreenColor];
 	[self updateZoomAndPageControls];
+}
+
+/// Exports the selected node.  The no-query form is the report root's only; a non-root
+/// node never falls back to it (that would silently write the root's rows).
+- (BOOL)exportCurrentNodeInFormat:(NSString *)formatName
+							toURL:(NSURL *)url
+							error:(NSError * _Nullable __autoreleasing *)error {
+	MADHeadlessDocument *doc = _document.headlessDocument;
+	if (doc == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:@"MADMacViewer" code:1 userInfo:@{
+				NSLocalizedDescriptionKey: NSLocalizedString(@"No active document to export.", @"Error: an export was requested with no open report.") }];
+		}
+		return NO;
+	}
+	Class<MADReportExporting> cls = [MADReportExporterRegistry exporterClassForFormat:formatName];
+	if (cls == Nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain:@"MADMacViewer" code:2 userInfo:@{
+				NSLocalizedDescriptionKey: [[NSString alloc] initWithFormat:
+					NSLocalizedString(@"Unknown export format '%@'.", @"Error: the export format identifier is not registered. %@ is the identifier."), formatName] }];
+		}
+		return NO;
+	}
+	RptqQuery *query = _document.selectedQuery;
+	BOOL isReportRoot = [_document queryIsReportRoot:query];
+	Class exporterClass = (Class)cls;
+	id<MADReportExporting> exporter = [[exporterClass alloc] init];
+	if ([exporter respondsToSelector:@selector(exportDocument:query:toURL:options:error:)]) {
+		return [exporter exportDocument:doc
+								  query:query
+								  toURL:url
+								options:MADReportExportOptionsNone
+								  error:error];
+	}
+	if (isReportRoot) {
+		return [exporter exportDocument:doc toURL:url options:MADReportExportOptionsNone error:error];
+	}
+	if (error != NULL) {
+		*error = [NSError errorWithDomain:@"MADMacViewer" code:3 userInfo:@{
+			NSLocalizedDescriptionKey: NSLocalizedString(@"This format cannot export a specific node.", @"Error when a node-scoped export format does not support selecting the node.") }];
+	}
+	return NO;
+}
+
+#pragma mark - Row Grid Data Source
+
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
+	if (tableView == _rowGridView) return (NSInteger)_gridRows.count;
+	return 0;
+}
+
+- (nullable NSString *)gridValueAtRow:(NSInteger)row columnIndex:(NSInteger)columnIndex {
+	if (row < 0 || (NSUInteger)row >= _gridRows.count) return nil;
+	if (columnIndex < 0 || (NSUInteger)columnIndex >= _rowGridView.numberOfColumns) return nil;
+	NSString *key = _rowGridView.tableColumns[(NSUInteger)columnIndex].identifier;
+	id value = _gridRows[(NSUInteger)row][key];
+	if (value == nil || value == [NSNull null]) return @"";
+	return [value isKindOfClass:[NSString class]] ? value : [value description];
+}
+
+- (nullable NSView *)tableView:(NSTableView *)tableView
+			viewForTableColumn:(nullable NSTableColumn *)tableColumn
+						   row:(NSInteger)row {
+	if (tableView != _rowGridView || tableColumn == nil) return nil;
+	NSInteger columnIndex = (NSInteger)[_rowGridView.tableColumns indexOfObject:tableColumn];
+	NSTextField *cell = [tableView makeViewWithIdentifier:@"MADRowGridCell" owner:self];
+	if (cell == nil) {
+		cell = [NSTextField labelWithString:@""];
+		cell.identifier = @"MADRowGridCell";
+		cell.font = [NSFont systemFontOfSize:11.0];
+		cell.lineBreakMode = NSLineBreakByTruncatingTail;
+	}
+	cell.stringValue = [self gridValueAtRow:row columnIndex:columnIndex] ?: @"";
+	return cell;
 }
 
 #pragma mark - Export Dialog with Format Selection
@@ -695,7 +911,10 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	_exportFormatPopup.action = @selector(exportSavePanelFormatChanged:);
 
 	NSArray<NSString *> *preferredOrder = @[@"pdf", @"html", @"html-flow", @"csv", @"json", @"json-report", @"text"];
+	BOOL isReportRoot = [_document queryIsReportRoot:_document.selectedQuery];
 	for (NSString *fmt in preferredOrder) {
+		// json-report is root-only in the engine; do not offer it for a source.
+		if ([fmt isEqualToString:@"json-report"] && !isReportRoot) continue;
 		Class<MADReportExporting> cls = [MADReportExporterRegistry exporterClassForFormat:fmt];
 		if (cls != Nil && [cls isAvailable]) {
 			NSString *ext = [cls fileExtension] ?: fmt;
@@ -769,12 +988,8 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 		if (cls == Nil) return;
 
 		[strongSelf.document.headlessDocument setPaperType:strongSelf.renderedPaperType];
-		id<MADReportExporting> exporter = [[(Class)cls alloc] init];
 		NSError *err = nil;
-		if (![exporter exportDocument:strongSelf.document.headlessDocument
-								toURL:panel.URL
-							  options:MADReportExportOptionsNone
-								error:&err]) {
+		if (![strongSelf exportCurrentNodeInFormat:formatName toURL:panel.URL error:&err]) {
 			if (err) [NSApp presentError:err];
 		} else {
 			strongSelf.statusLabel.stringValue = [[NSString alloc] initWithFormat:NSLocalizedString(@"Exported %1$@ to %2$@", @"Viewer status line after a successful export. %1$@ is the format, %2$@ the file name."),
@@ -794,6 +1009,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 #pragma mark - Print
 
 - (void)printReportAction:(id) __unused sender {
+	if ([self isShowingRowGrid]) return; // no report layout to print
 	if (_pdfView.document == nil) {
 		[self refreshReportAction:nil];
 		return;

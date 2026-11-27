@@ -22,6 +22,7 @@
 
 NSNotificationName const MADMacDocumentDidMutateNotification = @"MADMacDocumentDidMutateNotification";
 NSNotificationName const MADMacDocumentDidRefreshNotification = @"MADMacDocumentDidRefreshNotification";
+NSNotificationName const MADMacDocumentDidSelectQueryNotification = @"MADMacDocumentDidSelectQueryNotification";
 
 @interface MADMacCredentialsOperation : MADOperation <MADOperationHoldsCredentialsProtocol>
 @property (nonatomic, strong, nullable) MADCredential *credentials;
@@ -47,7 +48,10 @@ NSNotificationName const MADMacDocumentDidRefreshNotification = @"MADMacDocument
 
 @end
 
-@interface MADMacDocument ()
+@interface MADMacDocument () {
+	RptqQuery *_selectedQuery;
+	NSUInteger _selectionVersion;
+}
 
 @property (nonatomic, strong, readwrite, nullable) MADHeadlessDocument *headlessDocument;
 @property (nonatomic, strong, readwrite) MADDesignerLayout *designerLayout;
@@ -58,6 +62,9 @@ NSNotificationName const MADMacDocumentDidRefreshNotification = @"MADMacDocument
 					  resolvedCredential:(nullable MADCredential *)resolvedCred
 							connection:(MADDatabaseConnection *)connection
 							completion:(void (^)(BOOL success, NSError * _Nullable error))completion;
+
+- (void)prepareSelectedQueryLayout;
+- (void)persistAfterLayoutCreation;
 
 @end
 
@@ -147,6 +154,80 @@ NSNotificationName const MADMacDocumentDidRefreshNotification = @"MADMacDocument
 - (RptqQuery *)selectedQuery {
 	if (_selectedQuery != nil) return _selectedQuery;
 	return self.reportQuery;
+}
+
+- (void)setSelectedQuery:(RptqQuery *)query {
+	if (query != nil) {
+		// A query from another store context is not a selection this document can honour.
+		if (self.managedObjectContext == nil || ![self.allQueries containsObject:query]) return;
+	}
+	RptqQuery *oldEffective = _selectedQuery ?: self.reportQuery;
+	_selectedQuery = query;
+	RptqQuery *newEffective = query ?: self.reportQuery;
+	if (oldEffective == newEffective) {
+		return;
+	}
+
+	_selectionVersion++;
+
+	// A source query imported from an earlier store has no structural bands until its
+	// Designer is first opened.  Creating them is a real store mutation, so it persists;
+	// it is not a *selection* mutation, so it does not post the mutate notification.
+	[self prepareSelectedQueryLayout];
+	[self rebuildSectionsLayout];
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:MADMacDocumentDidSelectQueryNotification
+														object:self];
+}
+
+- (NSUInteger)selectionVersion {
+	return _selectionVersion;
+}
+
+- (BOOL)queryIsReportRoot:(nullable RptqQuery *)query {
+	RptqQuery *node = query ?: self.selectedQuery;
+	if (node == nil) return NO;
+	return [node isLayoutRootInDocument:self.rptqDocument];
+}
+
+- (BOOL)queryShowsReportColumns:(nullable RptqQuery *)query {
+	RptqQuery *node = query ?: self.selectedQuery;
+	if (node == nil) return NO;
+	// `isComposing` is upstream-table based, so an empty Result reads as a leaf; the root
+	// identity covers that case (the Windows SelectedNodeShowsColumns rule).
+	return [self queryIsReportRoot:node] || [node isComposing];
+}
+
+- (nullable MADDataResult *)resultForQuery:(nullable RptqQuery *)query {
+	RptqQuery *node = query ?: self.selectedQuery;
+	if (node == nil || _headlessDocument == nil) return nil;
+	if ([self queryIsReportRoot:node]) {
+		return _headlessDocument.currentResult;
+	}
+	return _headlessDocument.nodeResults[@(node.identifier)];
+}
+
+- (void)prepareSelectedQueryLayout {
+	RptqStoreContext *context = self.managedObjectContext;
+	RptqQuery *query = self.selectedQuery;
+	if (context == nil || query == nil) return;
+	if ([self queryIsReportRoot:query]) return;
+
+	NSUInteger before = query.hasLayoutSections.count;
+	[query ensureStructuralSectionsInContext:context];
+	if (query.hasLayoutSections.count == before) return;
+	[self persistAfterLayoutCreation];
+}
+
+- (void)persistAfterLayoutCreation {
+	[self updateChangeCount:NSChangeDone];
+	[_headlessDocument invalidateQueryAndModelCaches];
+	NSError *saveError = nil;
+	if ([self requiresComposedStore]) {
+		[self.managedObjectContext saveComposed:&saveError];
+	} else {
+		[self.managedObjectContext save:&saveError];
+	}
 }
 
 - (nullable RptqDatabase *)databaseForQuery:(nullable RptqQuery *)query {
@@ -340,6 +421,7 @@ NSNotificationName const MADMacDocumentDidRefreshNotification = @"MADMacDocument
 
 - (void)adoptHeadlessDocument:(MADHeadlessDocument *)headlessDocument {
 	_headlessDocument = headlessDocument;
+	_selectedQuery = nil;
 	if (headlessDocument.fileURL != nil) {
 		self.fileURL = headlessDocument.fileURL;
 	}
@@ -352,6 +434,7 @@ NSNotificationName const MADMacDocumentDidRefreshNotification = @"MADMacDocument
 		return NO;
 	}
 	_headlessDocument = doc;
+	_selectedQuery = nil;
 	[self rebuildSectionsLayout];
 	return YES;
 }
@@ -379,8 +462,10 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	RptqStoreContext *context = self.managedObjectContext;
 	if (context == nil) return;
 	Class dbClass = _headlessDocument.database ? [_headlessDocument.database class] : Nil;
+	int64_t queryIdentifier = self.selectedQuery != nil ? self.selectedQuery.identifier : 0;
 	_sectionsLayout = [[MADSectionsLayout alloc] initWithManagedObjectContext:context
-																databaseClass:dbClass];
+																databaseClass:dbClass
+															  queryIdentifier:queryIdentifier];
 }
 
 - (void)notifyDocumentMutated {
@@ -399,43 +484,12 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 
 - (NSArray<RptqDocumentSection *> *)orderedSections {
 	RptqDocument *doc = self.rptqDocument;
-	if (doc == nil) return @[];
-
-	NSMutableArray<RptqDocumentSection *> *sections = [[NSMutableArray alloc] init];
-	if (doc.hasReportHeaderSection != nil) {
-		[sections addObject:doc.hasReportHeaderSection];
-	}
-	if (doc.hasPageHeaderSection != nil) {
-		[sections addObject:doc.hasPageHeaderSection];
-	}
-
-	RptqQuery *query = self.rptqQuery;
-	NSArray<RptqQueryGroup *> *groups = [query sortedQueryGroups] ?: @[];
-	for (RptqQueryGroup *group in groups) {
-		RptqDocumentSection *header = [RptqDocumentSection headerSectionInSections:group.hasSection];
-		if (header != nil) {
-			[sections addObject:header];
-		}
-	}
-
-	if (doc.hasDetailSection != nil) {
-		[sections addObject:doc.hasDetailSection];
-	}
-
-	for (RptqQueryGroup *group in [groups reverseObjectEnumerator]) {
-		RptqDocumentSection *footer = [RptqDocumentSection footerSectionInSections:group.hasSection];
-		if (footer != nil) {
-			[sections addObject:footer];
-		}
-	}
-
-	if (doc.hasPageFooterSection != nil) {
-		[sections addObject:doc.hasPageFooterSection];
-	}
-	if (doc.hasReportFooterSection != nil) {
-		[sections addObject:doc.hasReportFooterSection];
-	}
-	return sections;
+	RptqQuery *query = self.selectedQuery;
+	if (doc == nil || query == nil) return @[];
+	// The selected node's bands.  For the report root (the explicit composed root, or a
+	// Standard Report's single query) this is the document's five sections plus its groups,
+	// so the ordinary report path is unchanged.
+	return [query orderedLayoutSectionsForDocument:doc] ?: @[];
 }
 
 - (NSString *)displayTitleForSection:(RptqDocumentSection *)section {

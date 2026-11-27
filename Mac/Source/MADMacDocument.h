@@ -17,6 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSNotificationName const MADMacDocumentDidMutateNotification;
 extern NSNotificationName const MADMacDocumentDidRefreshNotification;
 
+/// Posted when `selectedQuery` changes.  Selection is not a document mutation: it does
+/// not mark the document dirty, save it, or change the active workspace.
+extern NSNotificationName const MADMacDocumentDidSelectQueryNotification;
+
 @class MADCredential, MADDatabaseConnection;
 
 @interface MADMacDocument : NSDocument <MADocumentDesignerProtocol>
@@ -43,8 +47,25 @@ extern NSNotificationName const MADMacDocumentDidRefreshNotification;
 /// document, otherwise the single query.
 @property (nonatomic, strong, readonly, nullable) RptqQuery *reportQuery;
 
-/// The query the query workspace edits.  Defaults to reportQuery.
+/// The query the query workspace edits.  Defaults to reportQuery.  The same selection
+/// drives the Query, Designer, and Viewer workspaces of a composition.
 @property (nonatomic, strong, nullable) RptqQuery *selectedQuery;
+
+/// Incremented whenever the effective selection changes.  A deferred reload compares it
+/// before publishing, so an older selection can never overwrite a newer one.
+@property (nonatomic, assign, readonly) NSUInteger selectionVersion;
+
+/// YES when `query` is the report's layout/result root: the explicit composed root, or a
+/// Standard Report's single query.  Defaults to `selectedQuery` when nil.
+- (BOOL)queryIsReportRoot:(nullable RptqQuery *)query;
+
+/// YES when the node's Designer field list is its report columns: the report root or a
+/// composing node.  A leaf (including a Standard Report's single query) answers NO.
+- (BOOL)queryShowsReportColumns:(nullable RptqQuery *)query;
+
+/// The published result a node renders: `currentResult` for the report root, the retained
+/// `nodeResults` entry for a source.  Nil before the document has been refreshed.
+- (nullable MADDataResult *)resultForQuery:(nullable RptqQuery *)query;
 
 /// The database a query's own connection references (nil for the composed root's
 /// placeholder database, which the refresh coordinator never reads).
