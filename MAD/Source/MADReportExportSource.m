@@ -148,22 +148,27 @@ static NSString *MADReportExportTypeName(MADDataType type) {
 	return source;
 }
 
++ (NSError *)errorForUnrefreshedNode:(RptqQuery *)query {
+	return [NSError errorWithDomain:@"MADReportExport" code:3 userInfo:@{
+		NSLocalizedDescriptionKey: [NSString stringWithFormat:
+			NSLocalizedString(@"The node '%@' has not been refreshed; refresh the document first.", @"Export of an unrefreshed node."),
+			query.name.length > 0 ? query.name : @"?"] }];
+}
+
 + (nullable instancetype)sourceWithDocument:(id <MADDocumentDataProtocol>)document
 									  query:(nullable RptqQuery *)query
 									  error:(NSError * _Nullable __autoreleasing *)error {
-	// The root, or no explicit node, reads the document the way it always has.
-	if (query == nil || query.rootOfDocument != nil) {
+	// The report's layout/result root, or no explicit node, reads the document the way
+	// it always has.  An ordinary report has no composed root, so its single/default
+	// query is the root here too -- otherwise a no-`query` read would look for a node
+	// result that an ordinary refresh never publishes.
+	if (query == nil || [query isLayoutRootInDocument: document.activeDocumentModel]) {
 		return [self sourceWithDocument:document error:error];
 	}
 
 	MADDataResult *result = document.nodeResults[@(query.identifier)];
 	if (result == nil) {
-		if (error != NULL) {
-			*error = [NSError errorWithDomain:@"MADReportExport" code:3 userInfo:@{
-				NSLocalizedDescriptionKey: [NSString stringWithFormat:
-					NSLocalizedString(@"The node '%@' has not been refreshed; refresh the document first.", @"Export of an unrefreshed node."),
-					query.name.length > 0 ? query.name : @"?"] }];
-		}
+		if (error != NULL) *error = [self errorForUnrefreshedNode: query];
 		return nil;
 	}
 

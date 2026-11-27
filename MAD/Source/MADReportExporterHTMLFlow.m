@@ -15,6 +15,7 @@
 
 #import <MAD/MADDocumentRenderProtocol.h>
 #import <MAD/RptqQuery.h>
+#import <MAD/RptqQuery+Extras.h>
 
 #import "MADReportExportSource.h"
 #import "MADReportExportWriter.h"
@@ -87,18 +88,27 @@ static NSString *MADReportExporterFlowCSSAlignment(MADHorizontalAlignment);
 				 toURL:(NSURL *)url
 			   options:(MADReportExportOptions)options
 				 error:(NSError * _Nullable __autoreleasing *)error {
-	if (query == nil || query.rootOfDocument != nil || ![document conformsToProtocol: @protocol(MADDocumentRenderProtocol)]) {
+	if (query == nil || [query isLayoutRootInDocument: document.activeDocumentModel] ||
+		![document conformsToProtocol: @protocol(MADDocumentRenderProtocol)]) {
 		return [self exportDocument: document toURL: url options: options error: error];
+	}
+	MADDataResult *nodeResult = document.nodeResults[@(query.identifier)];
+	if (nodeResult == nil) {
+		if (error != NULL) *error = [MADReportExportSource errorForUnrefreshedNode: query];
+		return NO;
 	}
 	id <MADDocumentRenderProtocol> renderDocument = (id <MADDocumentRenderProtocol>)document;
 	int64_t saved = renderDocument.renderQueryIdentifier;
 	renderDocument.renderQueryIdentifier = query.identifier;
-	MADDataResult *nodeResult = document.nodeResults[@(query.identifier)];
-	BOOL pinned = nodeResult != nil && [renderDocument respondsToSelector: @selector(pinRenderResult:)];
+	BOOL pinned = [renderDocument respondsToSelector: @selector(pinRenderResult:)];
 	if (pinned) [renderDocument pinRenderResult: nodeResult];
-	BOOL ok = [self exportDocument: document toURL: url options: options error: error];
-	if (pinned) [renderDocument unpinRenderResult];
-	renderDocument.renderQueryIdentifier = saved;
+	BOOL ok = NO;
+	@try {
+		ok = [self exportDocument: document toURL: url options: options error: error];
+	} @finally {
+		if (pinned) [renderDocument unpinRenderResult];
+		renderDocument.renderQueryIdentifier = saved;
+	}
 	return ok;
 }
 

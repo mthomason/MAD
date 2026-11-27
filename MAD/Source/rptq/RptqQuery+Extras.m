@@ -115,11 +115,23 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 	return NO;
 }
 
+/// The report's layout/result root.  An explicit composed root is the root; a
+/// document without one (an ordinary report) treats its single/default query as the
+/// root, so its own sections and published result stay what the no-`query` serve
+/// methods read.  Deliberately distinct from the composition `isRoot` flag, which
+/// stays NO for an ordinary report.
+- (BOOL)isLayoutRootInDocument:(RptqDocument *)document {
+	if (document == nil) return self.rootOfDocument != nil;
+	RptqQuery *root = document.rootQuery;
+	if (root != nil) return self == root;
+	return self == document.defaultDatabase.defaultQuery;
+}
+
 - (NSArray<RptqDocumentSection *> *)orderedLayoutSectionsForDocument:(RptqDocument *)document {
 	NSMutableArray<RptqDocumentSection *> *sections = [NSMutableArray array];
 
 	RptqDocumentSection *reportHeader = nil, *reportFooter = nil, *pageHeader = nil, *pageFooter = nil, *detail = nil;
-	if (self.rootOfDocument != nil) {
+	if ([self isLayoutRootInDocument: document]) {
 		reportHeader = document.hasReportHeaderSection;
 		reportFooter = document.hasReportFooterSection;
 		pageHeader = document.hasPageHeaderSection;
@@ -158,7 +170,8 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 }
 
 - (void)ensureStructuralSectionsInContext:(RptqStoreContext *)context {
-	if (self.rootOfDocument != nil) return; // the root's sections are the document's
+	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: context];
+	if ([self isLayoutRootInDocument: document]) return; // the root's sections are the document's
 	for (RptqDocumentSection *section in self.hasLayoutSections) {
 		switch (section.type) {
 			case MADDocumentSectionTypeReportHeader:
