@@ -13,6 +13,9 @@
 #  The default output is Samples/Reports, and the source database is the
 #  chinook.sqlite3 in the app's asset catalog.  Set MAD_PG_SAMPLE_* and pass
 #  `postgres` as the last maker argument to also write the PostgreSQL sample.
+#  Set MAD_MYSQL_SAMPLE_*, MAD_PG_SAMPLE_* and MAD_TDS_SAMPLE_* and pass
+#  `crossdatabase` to build the three-source composition sample (a driver whose
+#  password is unset or unreachable is dropped; two sources are the minimum).
 #
 
 set -euo pipefail

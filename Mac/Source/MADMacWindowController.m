@@ -277,6 +277,21 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 	MADMacConnectionWindowController *connWC =
 		[[MADMacConnectionWindowController alloc] initWithDocument:_madDocument
 													  statusPrompt:prompt];
+	// A composed document's "Database Connection…" edits the connection of the
+	// selected source (or the first source when the Result is selected), not the
+	// document-wide connection the ordinary report uses.
+	RptqQuery *target = nil;
+	if (_madDocument.isComposed) {
+		RptqQuery *selected = _madDocument.selectedQuery;
+		if (selected != nil && selected != _madDocument.rootQuery) {
+			target = selected;
+		} else {
+			target = [_madDocument sourceQueriesRequiringCredentials].firstObject;
+		}
+	}
+	if (target != nil) {
+		[connWC prepareForTargetQuery:target prompt:prompt];
+	}
 	_activeConnectionSheetController = connWC;
 	__weak typeof(self) weakSelf = self;
 	connWC.onConnectionUpdated = ^(MADDatabaseConnection * __unused conn, MADCredential * __unused creds) {
@@ -299,6 +314,91 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 		}];
 	}
 	return connWC;
+}
+
+#pragma mark - Composition Source Credentials
+
+- (void)promptForSourceCredentialsStartingWithSourceName:(nullable NSString *)sourceName
+											  completion:(void (^)(BOOL provided))completion {
+	MADMacDocument *document = _madDocument;
+	if (document == nil || !document.isComposed) {
+		if (completion) completion(NO);
+		return;
+	}
+
+	NSMutableArray<RptqQuery *> *targets = [[document sourceQueriesMissingCredentials] mutableCopy];
+	// A source the server rejected still has a (stale) credential, so it is not in
+	// the missing list; the failed refresh names it, and it is prompted first.
+	if (sourceName.length > 0) {
+		RptqQuery *named = nil;
+		for (RptqQuery *source in [document sourceQueriesRequiringCredentials]) {
+			if ([source.name isEqualToString:sourceName]) {
+				named = source;
+				break;
+			}
+		}
+		if (named != nil && ![targets containsObject:named]) {
+			[targets insertObject:named atIndex:0];
+		}
+	}
+	[self promptForSourceQueries:targets completion:completion];
+}
+
+- (void)promptForSourceQueries:(NSArray<RptqQuery *> *)queries
+					completion:(void (^)(BOOL provided))completion {
+	if (queries.count == 0) {
+		if (completion) completion(YES);
+		return;
+	}
+	RptqQuery *query = queries.firstObject;
+	NSArray<RptqQuery *> *rest = [queries subarrayWithRange:NSMakeRange(1, queries.count - 1)];
+	NSString *name = query.name.length > 0 ? query.name : NSLocalizedString(@"source", @"Fallback name for a composition source.");
+	NSString *prompt = [[NSString alloc] initWithFormat:
+		NSLocalizedString(@"Enter the password for the '%@' source.", @"Composition prompt naming the source that needs a password."),
+		name];
+
+	MADMacConnectionWindowController *connWC =
+		[[MADMacConnectionWindowController alloc] initWithDocument:_madDocument statusPrompt:prompt];
+	[connWC prepareForTargetQuery:query prompt:prompt];
+	_activeConnectionSheetController = connWC;
+
+	__weak typeof(self) weakSelf = self;
+	__block BOOL saved = NO;
+	connWC.onConnectionUpdated = ^(MADDatabaseConnection * __unused conn, MADCredential * __unused creds) {
+		__strong typeof(weakSelf) strongSelf = weakSelf;
+		if (strongSelf == nil) return;
+		saved = YES;
+		strongSelf.activeConnectionSheetController = nil;
+		[strongSelf.queryViewController reloadFromDocument];
+		[strongSelf.designerViewController reloadFromDocument];
+		// Let the just-finished sheet's endSheet: completion run before attaching the
+		// next one to the same window.
+		dispatch_async(dispatch_get_main_queue(), ^{
+			__strong typeof(weakSelf) strongSelf2 = weakSelf;
+			if (strongSelf2 == nil) return;
+			[strongSelf2 promptForSourceQueries:rest completion:completion];
+		});
+	};
+
+	NSWindow *sheetWindow = connWC.window;
+	if (self.window != nil && self.window.isVisible && sheetWindow != nil) {
+		[self.window beginSheet:sheetWindow completionHandler:^(NSModalResponse returnCode) {
+			__strong typeof(weakSelf) strongSelf = weakSelf;
+			if (strongSelf == nil) return;
+			// A rejected/blank password leaves the sheet open (no returnCode), so a
+			// non-OK code is always the user cancelling.
+			if (returnCode != NSModalResponseOK && !saved) {
+				strongSelf.activeConnectionSheetController = nil;
+				if (completion) completion(NO);
+			}
+		}];
+	} else if (sheetWindow != nil) {
+		// No visible parent window (a headless or first-launch run): show it
+		// unattached so a caller can still fill and submit it.
+		[sheetWindow makeKeyAndOrderFront:nil];
+	} else if (completion) {
+		completion(NO);
+	}
 }
 
 #pragma mark - Menu Command Dispatch

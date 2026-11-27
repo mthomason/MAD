@@ -13,6 +13,17 @@
 
 #import <MAD/MADDocumentDataProtocol.h>
 
+@class MADCredential;
+
+/// The source whose leaf query needed (or rejected) credentials.  Present in the
+/// error a composed refresh finishes with, so a caller can prompt for that source
+/// instead of guessing which one failed.
+extern NSString * const MADOperationRefreshSourceNameKey;
+
+/// The failing source's `MADDatabaseConnection.connectionString`, the same key
+/// `MADOperationRefreshComposed.credentialsByConnectionString` is keyed by.
+extern NSString * const MADOperationRefreshSourceConnectionStringKey;
+
 @interface MADOperationRefresh : MADOperation
 
 	- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document;
@@ -40,6 +51,11 @@
 	/// diagnostic of the walk, and what the tests assert the order and once-only
 	/// invariants against.
 	@property (nonatomic, readonly, copy) NSArray<NSString *> *executedNodeNames;
+
+	/// Credentials for each leaf source, keyed by its connection string.  A source
+	/// not named here falls back to the credential a dependency supplied, so a
+	/// single-credential caller (the pre-composition path) keeps working.
+	@property (nonatomic, copy) NSDictionary<NSString *, MADCredential *> *credentialsByConnectionString;
 
 @end
 

@@ -58,6 +58,16 @@ typedef NS_ENUM(NSInteger, MADMacWorkspaceTab) {
 - (MADMacConnectionWindowController *)presentConnectionSettingsWithPrompt:(nullable NSString *)prompt
 																onUpdated:(nullable void (^)(void))onUpdated;
 
+/// Walks the composition's sources that still lack a credential, presenting the
+/// connection sheet for one source at a time (host, database and username
+/// prefilled; password empty) and validating each before moving on.  When
+/// `sourceName` is non-nil, that source is prompted first even though a stale
+/// credential exists — the case where the server rejected the saved password.
+/// `completion` runs with YES once every source is configured, or NO if the user
+/// cancels a sheet.
+- (void)promptForSourceCredentialsStartingWithSourceName:(nullable NSString *)sourceName
+											  completion:(void (^)(BOOL provided))completion;
+
 /// Presents the native rename sheet for the open report.
 - (void)presentRenameSheet:(nullable id)sender;
 

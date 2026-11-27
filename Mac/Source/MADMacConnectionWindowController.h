@@ -33,6 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// document's default database.  Used to reconnect a composed source query.
 @property (nonatomic, weak, nullable) RptqQuery *targetQuery;
 
+/// Repoints an already-built edit sheet at one composition source and prefills it
+/// from that source's connection, credential hint, and Keychain entry.  `prompt`
+/// replaces the status line (it usually names the source being asked about).
+- (void)prepareForTargetQuery:(RptqQuery *)query prompt:(nullable NSString *)prompt;
+
 /// Initializes the controller in "New Report from Database Connection" mode.
 - (instancetype)init;
 

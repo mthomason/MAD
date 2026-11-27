@@ -59,6 +59,9 @@
 // credentials the caller never supplied.
 static NSString * const MADOperationRefreshErrorDomain = @"com.everydayapps.operation.refresh";
 
+NSString * const MADOperationRefreshSourceNameKey = @"MADOperationRefreshSourceName";
+NSString * const MADOperationRefreshSourceConnectionStringKey = @"MADOperationRefreshSourceConnectionString";
+
 static const short errCache = 2;
 static const short errMissingCredentials = 3;
 static const short errExecute = 4;
@@ -590,20 +593,40 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 								credentials:(MADCredential *)credentials
 							 cacheDirectory:(NSURL *)cacheDirectory {
 	MADDatabase *database = plan.database;
-	if ([database.databaseConnection requiresCredentials] && credentials == nil) {
-		[self finishWithError:[NSError errorWithDomain: MADOperationRefreshErrorDomain code: errMissingCredentials userInfo: @{
-			NSLocalizedDescriptionKey: [NSString stringWithFormat:
-				NSLocalizedString(@"The source '%@' requires credentials and none were supplied.", @"Missing credentials for a source."), plan.name] }]];
+	MADDatabaseConnection *leafConnection = database.databaseConnection;
+	NSString *connectionString = leafConnection.connectionString;
+	// Each source resolves its own credential first; a caller that supplied only one
+	// credential (the pre-composition path) still refreshes every source with it.
+	MADCredential *leafCredentials = connectionString.length > 0
+		? self.credentialsByConnectionString[connectionString]
+		: nil;
+	if (leafCredentials == nil) leafCredentials = credentials;
+	BOOL hasCredentials = (leafCredentials.username.length > 0 || leafCredentials.password.length > 0);
+	if ([leafConnection requiresCredentials] && !hasCredentials) {
+		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+		userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:
+			NSLocalizedString(@"The source '%@' requires credentials and none were supplied.", @"Missing credentials for a source."), plan.name];
+		if (plan.name.length > 0) userInfo[MADOperationRefreshSourceNameKey] = plan.name;
+		if (connectionString.length > 0) userInfo[MADOperationRefreshSourceConnectionStringKey] = connectionString;
+		[self finishWithError:[NSError errorWithDomain: MADOperationRefreshErrorDomain
+												 code: errMissingCredentials
+											 userInfo: userInfo]];
 		return nil;
 	}
 
 	NSError *connectError = nil;
-	id dbconn = [database connectWithConnection: database.databaseConnection credentals: credentials connectionError: &connectError];
+	id dbconn = [database connectWithConnection: leafConnection credentals: leafCredentials connectionError: &connectError];
 	if (connectError != nil) {
-		[self finishWithError:[NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
-			NSLocalizedDescriptionKey: [NSString stringWithFormat:
-				NSLocalizedString(@"The source '%@' could not connect: %@", @"Source connection failure."),
-				plan.name, connectError.localizedDescription] }]];
+		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+		userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:
+			NSLocalizedString(@"The source '%@' could not connect: %@", @"Source connection failure."),
+			plan.name, connectError.localizedDescription];
+		if (plan.name.length > 0) userInfo[MADOperationRefreshSourceNameKey] = plan.name;
+		if (connectionString.length > 0) userInfo[MADOperationRefreshSourceConnectionStringKey] = connectionString;
+		NSError *sourceError = [NSError errorWithDomain: MADOperationRefreshErrorDomain
+												   code: errExecute
+											   userInfo: userInfo];
+		[self finishWithError: sourceError];
 		return nil;
 	}
 
@@ -617,13 +640,23 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 						   onConnection: dbconn
 						intoResultTable: (MADDataTable *)table
 							  withError: &executeError];
-	[database closeConnection: dbconn];
+	// SQL Server's -executeSQL: closes the process it was given (its -runSQL: owns
+	// the DBPROCESS); the other drivers leave the connection to the caller.  A
+	// second dbclose here frees the TDS process out from under tds_close_socket.
+	if (leafConnection.databaseType != MADDatabaseTypeTDS) {
+		[database closeConnection: dbconn];
+	}
 	if (!success || executeError != nil) {
 		[table closeConnections];
-		[self finishWithError:[NSError errorWithDomain: MADOperationRefreshErrorDomain code: errExecute userInfo: @{
-			NSLocalizedDescriptionKey: [NSString stringWithFormat:
-				NSLocalizedString(@"The source '%@' failed: %@", @"Source query failure."),
-				plan.name, (executeError.localizedDescription ?: NSLocalizedString(@"the query reported no error", @"No driver error."))] }]];
+		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+		userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:
+			NSLocalizedString(@"The source '%@' failed: %@", @"Source query failure."),
+			plan.name, (executeError.localizedDescription ?: NSLocalizedString(@"the query reported no error", @"No driver error."))];
+		if (plan.name.length > 0) userInfo[MADOperationRefreshSourceNameKey] = plan.name;
+		if (connectionString.length > 0) userInfo[MADOperationRefreshSourceConnectionStringKey] = connectionString;
+		[self finishWithError:[NSError errorWithDomain: MADOperationRefreshErrorDomain
+												 code: errExecute
+											 userInfo: userInfo]];
 		return nil;
 	}
 

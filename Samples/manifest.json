@@ -12,6 +12,18 @@
       "username": "mad",
       "password": null,
       "passwordNote": "Not stored. Use the test-database credential from docs/zh/project/TEST-DB-INFO.md at the connection prompt."
+    },
+    "crossDatabase": {
+      "table": "composition_demo(demo_id, label, amount)",
+      "rows": 5,
+      "setupSQL": "Samples/README.md, 'First run: the cross-database composition sample'",
+      "credentialsDocument": "docs/zh/project/TEST-DB-INFO.md",
+      "sources": [
+        { "driver": "MySQL", "host": "127.0.0.1", "port": 13306, "database": "employees", "usernameHint": "root", "password": null },
+        { "driver": "PostgreSQL", "host": "127.0.0.1", "port": 5432, "database": "chinook", "usernameHint": "mad", "password": null },
+        { "driver": "SQL Server", "host": "127.0.0.1", "port": 1433, "database": "AdventureWorksLT2022", "usernameHint": "sa", "password": null }
+      ],
+      "passwordNote": "No password is stored. Each source asks for its own password on first refresh; the username is a non-secret hint in the credential row."
     }
   },
   "samples": [
@@ -92,6 +104,42 @@
         "Screenshots/composition-artists-designer.png",
         "Screenshots/composition-artists-grid-view.png"
       ]
+    },
+    {
+      "file": "Reports/Composition-MySQL-PostgreSQL-SQLServer.mad",
+      "type": "composition",
+      "drivers": ["MySQL", "PostgreSQL", "SQL Server"],
+      "databases": ["employees", "chinook", "AdventureWorksLT2022"],
+      "join": "demo_id",
+      "nodes": [
+        { "name": "Result", "rows": 5, "pages": 1, "hasLayout": true },
+        { "name": "MySQL", "rows": 5, "pages": 1, "hasLayout": true },
+        { "name": "PostgreSQL", "rows": 5, "columns": 3, "hasLayout": false, "viewer": "row-grid" },
+        { "name": "SQL Server", "rows": 5, "columns": 3, "hasLayout": false, "viewer": "row-grid" }
+      ],
+      "checks": [
+        "opens with no stored credentials for any of the three sources",
+        "refresh asks for each source's password separately, with host/port/database/username prefilled",
+        "each source's sheet validates before the next is shown",
+        "Result joins 5 rows on demo_id across the three databases",
+        "node picker lists Result and all three sources",
+        "MySQL renders its own page layout",
+        "PostgreSQL and SQL Server show 3-column row grids",
+        "a saved copy reopens and refreshes through the same three prompts",
+        "the exported PDF writes"
+      ],
+      "screenshots": [
+        "Screenshots/composition-cross-result-report.png",
+        "Screenshots/composition-cross-result-designer.png",
+        "Screenshots/composition-cross-connection-sheet.png",
+        "Screenshots/composition-cross-mysql-designer.png",
+        "Screenshots/composition-cross-mysql-viewer.png",
+        "Screenshots/composition-cross-postgres-designer.png",
+        "Screenshots/composition-cross-postgres-grid.png",
+        "Screenshots/composition-cross-sqlserver-designer.png",
+        "Screenshots/composition-cross-sqlserver-grid.png"
+      ],
+      "fallback": "If a driver is unreachable when generated, the builder drops it and writes Composition-MySQL-PostgreSQL.mad or Composition-PostgreSQL-SQLServer.mad."
     },
     {
       "file": "Reports/PostgreSQL-Chinook.mad",

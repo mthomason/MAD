@@ -357,6 +357,22 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 	[content addSubview:_createButton];
 }
 
+- (void)prepareForTargetQuery:(RptqQuery *)query prompt:(nullable NSString *)prompt {
+	_targetQuery = query;
+	if (_editingDocument != nil) {
+		[self populateFromDocument:_editingDocument];
+	}
+	if (prompt.length > 0) {
+		_statusLabel.textColor = [NSColor labelColor];
+		_statusLabel.stringValue = prompt;
+	}
+	if (query.name.length > 0) {
+		_headerSubtitleLabel.stringValue = [[NSString alloc] initWithFormat:
+			NSLocalizedString(@"Enter the connection details for the '%@' source.", @"Connection window subtitle naming the composition source."),
+			query.name];
+	}
+}
+
 - (void)populateFromDocument:(MADMacDocument *)document {
 	RptqDatabase *targetDB = (self.targetQuery != nil) ? self.targetQuery.inDatabase : document.rptqDatabase;
 	MADDatabaseConnection *conn = nil;
@@ -412,14 +428,16 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 		_serverInstanceField.stringValue = server ?: @"";
 		_databaseField.stringValue = dbname ?: @"";
 
-		MADCredential *resolved = [document resolvedCredentialsForDatabaseConnection:conn];
+		MADCredential *resolved = (self.targetQuery != nil)
+			? [document resolvedCredentialsForQuery:self.targetQuery]
+			: [document resolvedCredentialsForDatabaseConnection:conn];
 		// A sample can carry a non-secret username hint.  The store has no username
-		// column; `domain` is the one credential attribute PostgreSQL and MySQL never
-		// read (it is a SQL Server login domain), so a document may write the account
-		// name there and a first-run sheet still shows who to connect as.  A real
-		// Keychain username always wins.
+		// column; `domain` is the one credential attribute no driver reads when the
+		// connection is rebuilt from the store (SQL Server's login domain is not wired
+		// through), so a document may write the account name there and a first-run
+		// sheet still shows who to connect as.  A real Keychain username always wins.
 		NSString *usernameHint = nil;
-		if (dbType == MADDatabaseTypePostgres || dbType == MADDatabaseTypeMySQL) {
+		if (dbType != MADDatabaseTypeSqlite3) {
 			usernameHint = credRow.domain;
 		}
 		_usernameField.stringValue = resolved.username.length > 0

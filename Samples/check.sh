@@ -13,6 +13,9 @@
 #    ./Samples/check.sh [--no-build]
 #
 #  The PostgreSQL sample is checked only when MAD_PG_SAMPLE_PASSWORD is set.
+#  The cross-database composition sample is checked only when
+#  MAD_MYSQL_SAMPLE_PASSWORD, MAD_PG_SAMPLE_PASSWORD and
+#  MAD_TDS_SAMPLE_PASSWORD are all set; it drives the real per-source prompts.
 #
 
 set -euo pipefail

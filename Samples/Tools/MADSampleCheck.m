@@ -30,6 +30,8 @@
 #import <MAD/MAD.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADFoundation/MADKeyChain.h>
+#import <MADAPI/MADDatabaseConnection.h>
+#import <MADAPI/MADConnectionsPropertiesProtocol.h>
 #import <MADSqlite3/MADDataTableFast.h>
 
 /// The viewer's row-grid decision and controls are implementation details; the
@@ -214,13 +216,21 @@ static BOOL SampleRefresh(MADMacDocument *document,
 
 static void SampleClearKeychainForConnection(NSString *connectionString) {
 	if (connectionString.length == 0) return;
-	// Only this sample's key: the app also probes a driver-identifier fallback, but
-	// deleting that would remove credentials the user saved for other servers.
+	// The app writes each half under MADKeyChain's account descriptions, so a delete
+	// that names only the service leaves the item behind.  Delete the exact
+	// class+service+account triple without reading the secret (a data read can prompt
+	// for authorization in a test process).  Only this connection's key is cleared, not
+	// the driver-identifier fallback the app also probes; deleting that would remove
+	// credentials the user saved for other servers.
 	for (NSString *prefix in @[@"u:", @"p:"]) {
 		NSString *service = [prefix stringByAppendingString:connectionString];
+		NSString *account = [prefix isEqualToString:@"u:"]
+			? MADKeyChainUsernameAccountDesc
+			: MADKeyChainPasswordAccountDesc;
 		NSDictionary *query = @{
 			(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
-			(__bridge id)kSecAttrService : service
+			(__bridge id)kSecAttrService : service,
+			(__bridge id)kSecAttrAccount : account
 		};
 		SecItemDelete((__bridge CFDictionaryRef)query);
 	}
@@ -627,6 +637,309 @@ static BOOL SampleDocumentStoresPassword(MADHeadlessDocument *document, NSString
 	return NO;
 }
 
+#pragma mark - Cross-database composition
+
+static NSString *SampleTokenForSourceName(NSString *name) {
+	if ([name isEqualToString:@"MySQL"]) return @"mysql";
+	if ([name isEqualToString:@"PostgreSQL"]) return @"postgres";
+	if ([name isEqualToString:@"SQL Server"]) return @"sqlserver";
+	return name.lowercaseString;
+}
+
+static NSString *SamplePasswordForSourceName(NSString *name) {
+	NSDictionary<NSString *, NSString *> *env = NSProcessInfo.processInfo.environment;
+	if ([name isEqualToString:@"MySQL"]) return env[@"MAD_MYSQL_SAMPLE_PASSWORD"];
+	if ([name isEqualToString:@"PostgreSQL"]) return env[@"MAD_PG_SAMPLE_PASSWORD"];
+	if ([name isEqualToString:@"SQL Server"]) return env[@"MAD_TDS_SAMPLE_PASSWORD"];
+	return nil;
+}
+
+static MADDatabaseConnection *SampleConnectionForSource(MADMacDocument *document, RptqQuery *source) {
+	RptqDatabase *database = source.inDatabase;
+	if (database == nil || database.ownedByUser == nil) return nil;
+	return [MADDatabaseConnection newDatabaseConnection:database.ownedByUser documentURL:document.fileURL];
+}
+
+/// Refreshes a composed document through the viewer's real first-run path: the
+/// refresh fails for want of credentials, the viewer asks the window controller to
+/// walk the sources, and each sheet is answered here exactly as a person would --
+/// after checking that the host, database and username are already filled in and the
+/// password is blank.  Returns NO (with a SampleFail) on any deviation.
+static BOOL SampleRefreshComposedWithPrompts(MADMacDocument *document,
+											 MADMacWindowController *wc,
+											 MADMacViewerViewController *viewer,
+											 NSUInteger expectedRows,
+											 NSString *label,
+											 NSString *screenshots) {
+	document.selectedQuery = document.rootQuery;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[viewer setValue:nil forKey:@"lastRefreshError"];
+	[viewer refreshReportAction:nil];
+
+	NSSet<NSString *> *expectedNames = [NSSet setWithArray:
+		[[document sourceQueriesRequiringCredentials] valueForKey:@"name"]];
+	NSMutableSet<NSValue *> *answeredSheets = [NSMutableSet set];
+	NSMutableSet<NSString *> *answeredNames = [NSMutableSet set];
+	NSMutableDictionary<NSString *, NSNumber *> *attempts = [NSMutableDictionary dictionary];
+	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:120.0];
+
+	while (deadline.timeIntervalSinceNow > 0) {
+		@autoreleasepool {
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+									 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.05]];
+		}
+		MADMacConnectionWindowController *sheet = wc.activeConnectionSheetController;
+		if (sheet != nil) {
+			NSValue *key = [NSValue valueWithPointer:(__bridge const void *)sheet];
+			if (![answeredSheets containsObject:key]) {
+				[answeredSheets addObject:key];
+				RptqQuery *target = sheet.targetQuery;
+				NSString *name = target.name ?: @"";
+				NSString *password = SamplePasswordForSourceName(name);
+				if (target == nil || password.length == 0) {
+					SampleFail(@"%@: a credential sheet asked for an unknown or unconfigured source '%@'",
+							   label, name);
+					return NO;
+				}
+				NSInteger attempt = attempts[name].integerValue;
+				if (attempt >= 2) {
+					SampleFail(@"%@: '%@' was asked for a password %ld times", label, name, (long)(attempt + 1));
+					return NO;
+				}
+				attempts[name] = @(attempt + 1);
+
+				// An attached sheet has populated controls; order it front so its fields
+				// are laid out before they are read.
+				[sheet.window makeKeyAndOrderFront:nil];
+				[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.25]];
+
+				MADDatabaseConnection *conn = SampleConnectionForSource(document, target);
+				id<MADConnectionsPropertiesProtocol> props = (id<MADConnectionsPropertiesProtocol>)conn;
+				NSString *expectedHost = props.host ?: @"";
+				NSString *expectedDatabase = props.database ?: @"";
+				NSString *expectedUser = target.inDatabase.ownedByUser.domain ?: @"";
+				NSString *shownPassword = sheet.passwordField.stringValue;
+				BOOL prefillOK = [sheet.hostField.stringValue isEqualToString:expectedHost] &&
+					[sheet.databaseField.stringValue isEqualToString:expectedDatabase] &&
+					[sheet.usernameField.stringValue isEqualToString:expectedUser];
+				// The first ask for a source must not carry a remembered password; a retry
+				// may offer the one just tried.
+				if (attempt == 0 && shownPassword.length != 0) prefillOK = NO;
+				if (!prefillOK) {
+					SampleFail(@"%@: '%@' prefilled host='%@' database='%@' user='%@' password='%lu chars'",
+							   label, name, sheet.hostField.stringValue, sheet.databaseField.stringValue,
+							   sheet.usernameField.stringValue, (unsigned long)shownPassword.length);
+					return NO;
+				}
+				SamplePass(@"%@: asked for '%@' with %@ / %@ / %@ prefilled",
+						   label, name, sheet.hostField.stringValue, sheet.databaseField.stringValue,
+						   sheet.usernameField.stringValue);
+
+				// One picture of the first-run prompt: host, database and username filled,
+				// password empty.
+				NSString *sheetPNG = [screenshots stringByAppendingPathComponent:
+									  @"composition-cross-connection-sheet.png"];
+				if (screenshots.length > 0 &&
+					![[NSFileManager defaultManager] fileExistsAtPath:sheetPNG]) {
+					SampleWriteSnapshots(sheet.window, screenshots, @"composition-cross-connection-sheet");
+				}
+
+				sheet.passwordField.stringValue = password;
+				sheet.saveKeychainCheckbox.state = NSControlStateValueOff;
+				[viewer setValue:nil forKey:@"lastRefreshError"];
+				[answeredNames addObject:name];
+				[sheet createDocumentAction:nil];
+			}
+		}
+
+		MADDataResult *result = [document resultForQuery:document.rootQuery];
+		if (document.headlessDocument.refreshed && result != nil) {
+			[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.4]];
+			if (viewer.lastRefreshError != nil) {
+				SampleFail(@"%@: refresh: %@", label, viewer.lastRefreshError.description);
+				return NO;
+			}
+			if (result.numberOfRows != expectedRows) {
+				SampleFail(@"%@: %lu rows, expected %lu", label,
+						   (unsigned long)result.numberOfRows, (unsigned long)expectedRows);
+				return NO;
+			}
+			if (![answeredNames isEqualToSet:expectedNames]) {
+				SampleFail(@"%@: prompted for %@, journaled %@", label,
+						   expectedNames, answeredNames);
+				return NO;
+			}
+			SamplePass(@"%@ refreshed through %lu source prompt(s): %lu rows",
+					   label, (unsigned long)answeredNames.count,
+					   (unsigned long)result.numberOfRows);
+			return YES;
+		}
+
+		if (viewer.lastRefreshError != nil && sheet == nil) {
+			SampleFail(@"%@: refresh: %@", label, viewer.lastRefreshError.description);
+			return NO;
+		}
+	}
+	SampleFail(@"%@: refresh did not settle", label);
+	return NO;
+}
+
+static BOOL CheckCrossDatabaseComposition(NSURL *url, NSString *screenshots) {
+	MADMacDocument *document = SampleOpenDocument(url, url.lastPathComponent);
+	if (document == nil) return NO;
+	MADMacWindowController *wc = document.windowControllers.firstObject;
+	MADMacViewerViewController *viewer = wc.viewerViewController;
+
+	if (!document.isComposed || [document allQueries].count < 3) {
+		SampleFail(@"%@: composed=%d queries=%lu", url.lastPathComponent,
+				   document.isComposed, (unsigned long)[document allQueries].count);
+		return NO;
+	}
+
+	NSMutableArray<RptqQuery *> *sources = [NSMutableArray array];
+	for (RptqQuery *query in [document allQueries]) {
+		if (query != document.rootQuery) [sources addObject:query];
+	}
+	for (RptqQuery *source in sources) {
+		if (SamplePasswordForSourceName(source.name).length == 0) {
+			printf("SKIP  %@: set MAD_MYSQL_SAMPLE_PASSWORD / MAD_PG_SAMPLE_PASSWORD / MAD_TDS_SAMPLE_PASSWORD\n",
+				   url.lastPathComponent.UTF8String);
+			return YES;
+		}
+	}
+
+	// A first run must not find a remembered credential for any of the three.
+	for (RptqQuery *source in sources) {
+		SampleClearKeychainForConnection(SampleConnectionForSource(document, source).connectionString);
+	}
+
+	if (!SampleRefreshComposedWithPrompts(document, wc, viewer, 5, url.lastPathComponent, screenshots)) {
+		return NO;
+	}
+	if (wc.nodePickerPopup == nil || wc.nodePickerPopup.numberOfItems != (NSInteger)[document allQueries].count) {
+		SampleFail(@"%@: node picker has %ld items", url.lastPathComponent,
+				   (long)wc.nodePickerPopup.numberOfItems);
+		return NO;
+	}
+
+	document.selectedQuery = document.rootQuery;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.25]];
+	SampleWriteSnapshots(wc.window, screenshots, @"composition-cross-result-designer");
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.25]];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.25]];
+	if (viewer.pdfView.document.pageCount < 1) {
+		SampleFail(@"%@: the Result rendered no pages", url.lastPathComponent);
+		return NO;
+	}
+	SamplePass(@"%@: the Result rendered %lu page(s)",
+			   url.lastPathComponent, (unsigned long)viewer.pdfView.document.pageCount);
+	SampleWriteSnapshots(wc.window, screenshots, @"composition-cross-result-viewer");
+	SampleExportReportPDF(document.headlessDocument, document.rootQuery, screenshots, @"composition-cross-result");
+
+	NSUInteger layoutSources = 0, gridSources = 0;
+	for (RptqQuery *source in sources) {
+		MADDataResult *result = [document resultForQuery:source];
+		if (result == nil || result.numberOfRows != 5) {
+			SampleFail(@"%@: source '%@' has %lu rows", url.lastPathComponent,
+					   source.name, (unsigned long)result.numberOfRows);
+			return NO;
+		}
+		document.selectedQuery = source;
+		[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+		[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.25]];
+		NSUInteger fields = wc.designerViewController.displayedQueryFields.count;
+		NSUInteger elements = SampleElementCount(document);
+		BOOL hasLayout = elements > 0;
+		if (fields != 3) {
+			SampleFail(@"%@: source '%@' Designer shows %lu fields", url.lastPathComponent,
+					   source.name, (unsigned long)fields);
+			return NO;
+		}
+		NSString *token = SampleTokenForSourceName(source.name);
+		SampleWriteSnapshots(wc.window, screenshots,
+							 [NSString stringWithFormat:@"composition-cross-%@-designer", token]);
+
+		[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+		[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+		BOOL grid = [viewer isShowingRowGrid];
+		if (hasLayout) {
+			layoutSources++;
+			if (grid || viewer.pdfView.document.pageCount < 1) {
+				SampleFail(@"%@: layout source '%@' showed %@", url.lastPathComponent,
+						   source.name, grid ? @"a row grid" : @"no pages");
+				return NO;
+			}
+			SampleWriteSnapshots(wc.window, screenshots,
+								 [NSString stringWithFormat:@"composition-cross-%@-viewer", token]);
+			SamplePass(@"%@: '%@' rendered its own %lu-page layout", url.lastPathComponent,
+					   source.name, (unsigned long)viewer.pdfView.document.pageCount);
+		} else {
+			gridSources++;
+			if (!grid || viewer.rowGridView.numberOfColumns < 3) {
+				SampleFail(@"%@: layout-less source '%@' grid=%d columns=%lu", url.lastPathComponent,
+						   source.name, grid, (unsigned long)viewer.rowGridView.numberOfColumns);
+				return NO;
+			}
+			SampleWriteSnapshots(wc.window, screenshots,
+								 [NSString stringWithFormat:@"composition-cross-%@-grid", token]);
+			SamplePass(@"%@: '%@' showed a %lu-column, %lu-row grid", url.lastPathComponent,
+					   source.name, (unsigned long)viewer.rowGridView.numberOfColumns,
+					   (unsigned long)result.numberOfRows);
+		}
+	}
+	if (layoutSources == 0 || gridSources == 0) {
+		SampleFail(@"%@: layout sources=%lu grid sources=%lu", url.lastPathComponent,
+				   (unsigned long)layoutSources, (unsigned long)gridSources);
+		return NO;
+	}
+
+	document.selectedQuery = document.rootQuery;
+
+	// Save and reopen: the graph, the layouts and the per-source prompt all survive.
+	NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:
+						  [NSString stringWithFormat:@"mad-cross-reopen-%@.mad", NSUUID.UUID.UUIDString]];
+	NSURL *savedURL = [NSURL fileURLWithPath:tempPath isDirectory:NO];
+	NSError *saveError = nil;
+	BOOL saved = [document writeToURL:savedURL
+							   ofType:@"com.thomason.mad"
+					 forSaveOperation:NSSaveOperation
+				  originalContentsURL:url
+								error:&saveError];
+	if (!saved) {
+		SampleFail(@"%@: save: %@", url.lastPathComponent, saveError.localizedDescription);
+		return NO;
+	}
+	MADMacDocument *reopened = SampleOpenDocument(savedURL, @"reopened cross composition");
+	if (reopened == nil) return NO;
+	MADMacWindowController *reopenedWC = reopened.windowControllers.firstObject;
+	MADMacViewerViewController *reopenedViewer = reopenedWC.viewerViewController;
+	BOOL structureOK = reopened.isComposed &&
+		[reopened allQueries].count == [document allQueries].count;
+	NSUInteger reopenedLayouts = 0, reopenedGrids = 0;
+	for (RptqQuery *reopenedSource in [reopened allQueries]) {
+		if (reopenedSource == reopened.rootQuery) continue;
+		SampleClearKeychainForConnection(SampleConnectionForSource(reopened, reopenedSource).connectionString);
+		reopened.selectedQuery = reopenedSource;
+		[reopenedWC switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+		[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];
+		if (SampleElementCount(reopened) > 0) reopenedLayouts++; else reopenedGrids++;
+	}
+	reopened.selectedQuery = reopened.rootQuery;
+	structureOK = structureOK && reopenedLayouts == layoutSources && reopenedGrids == gridSources;
+	structureOK = structureOK && SampleRefreshComposedWithPrompts(reopened, reopenedWC, reopenedViewer,
+																  5, @"reopened cross composition",
+																  screenshots);
+	[[NSFileManager defaultManager] removeItemAtURL:savedURL error:NULL];
+	if (!structureOK) {
+		SampleFail(@"%@: save/reopen lost the composition or its refresh", url.lastPathComponent);
+		return NO;
+	}
+	SamplePass(@"%@: saved, reopened and refreshed through every source", url.lastPathComponent);
+	return YES;
+}
+
 #pragma mark - main
 
 int main(int argc, const char *argv[]) {
@@ -658,6 +971,18 @@ int main(int argc, const char *argv[]) {
 		NSURL *postgres = [samples URLByAppendingPathComponent:@"PostgreSQL-Chinook.mad" isDirectory:NO];
 		if ([[NSFileManager defaultManager] fileExistsAtPath:postgres.path]) {
 			CheckPostgres(postgres, screenshots);
+		}
+
+		// A cross-database sample is any Composition-*.mad other than the Chinook
+		// (single-file SQLite) one.  Its per-source prompts need the three passwords.
+		NSArray<NSString *> *entries = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:samples.path
+																						  error:NULL];
+		for (NSString *name in [entries sortedArrayUsingSelector:@selector(compare:)]) {
+			if (![name hasPrefix:@"Composition-"] || ![name hasSuffix:@".mad"]) continue;
+			if ([name isEqualToString:@"Chinook-Composition.mad"]) continue;
+			CheckCrossDatabaseComposition([samples URLByAppendingPathComponent:name isDirectory:NO],
+										  screenshots);
+			break;
 		}
 
 		if (sFailures > 0) {

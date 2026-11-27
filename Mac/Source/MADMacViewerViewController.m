@@ -696,13 +696,23 @@ static NSImage *MADViewerSymbolImage(NSString *name, NSString * _Nullable descri
 	}
 
 	// Case 2: Server Database Needs Credentials or Authentication Failed
-	if (!isSQLite && [self isAuthenticationError:error]) {
+	if ([self isAuthenticationError:error] && (_document.isComposed || !isSQLite)) {
 		if (wc != nil && win != nil && win.isVisible) {
-			NSString *prompt = [self formattedMessageForError:error fallback:NSLocalizedString(@"Enter credentials to connect to the database server.", @"Prompt shown when the database server rejected the credentials.")];
 			__weak typeof(self) weakSelf = self;
-			[wc presentConnectionSettingsWithPrompt:prompt onUpdated:^{
-				[weakSelf performRefreshWithSuccessHandler:onRetrySuccess];
-			}];
+			if (_document.isComposed) {
+				// A composition asks for each source that still lacks a credential, one
+				// sheet at a time.  The error names the source the server rejected.
+				NSString *sourceName = error.userInfo[MADOperationRefreshSourceNameKey];
+				[wc promptForSourceCredentialsStartingWithSourceName:sourceName
+														  completion:^(BOOL provided) {
+					if (provided) [weakSelf performRefreshWithSuccessHandler:onRetrySuccess];
+				}];
+			} else {
+				NSString *prompt = [self formattedMessageForError:error fallback:NSLocalizedString(@"Enter credentials to connect to the database server.", @"Prompt shown when the database server rejected the credentials.")];
+				[wc presentConnectionSettingsWithPrompt:prompt onUpdated:^{
+					[weakSelf performRefreshWithSuccessHandler:onRetrySuccess];
+				}];
+			}
 		}
 		return;
 	}

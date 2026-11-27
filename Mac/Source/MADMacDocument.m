@@ -57,10 +57,12 @@ NSNotificationName const MADMacDocumentDidSelectQueryNotification = @"MADMacDocu
 @property (nonatomic, strong, readwrite) MADDesignerLayout *designerLayout;
 @property (nonatomic, strong, readwrite, nullable) MADSectionsLayout *sectionsLayout;
 @property (nonatomic, strong) MADOperationQueue *refreshQueue;
+/// In-memory credentials for individual composition sources, keyed by connection
+/// string.  Kept apart from `sessionCredentials` so one source's password is never
+/// offered to another source.
+@property (nonatomic, strong) NSMutableDictionary<NSString *, MADCredential *> *sourceSessionCredentials;
 
 - (void)refreshComposedDataWithDocument:(MADHeadlessDocument *)document
-					  resolvedCredential:(nullable MADCredential *)resolvedCred
-							connection:(MADDatabaseConnection *)connection
 							completion:(void (^)(BOOL success, NSError * _Nullable error))completion;
 
 - (void)prepareSelectedQueryLayout;
@@ -78,6 +80,7 @@ NSNotificationName const MADMacDocumentDidSelectQueryNotification = @"MADMacDocu
 		_designerLayout.delegate = self;
 		_refreshQueue = [[MADOperationQueue alloc] init];
 		_refreshQueue.maxConcurrentOperationCount = 1;
+		_sourceSessionCredentials = [NSMutableDictionary dictionary];
 	}
 	return self;
 }
@@ -717,7 +720,17 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 			break;
 	}
 
-	self.sessionCredentials = credentials;
+	// A source's credential is remembered against its own connection string, so the
+	// next source the user is asked for is never offered this source's password.  A
+	// non-composed document keeps the document-wide session credential as before.
+	NSString *sessionKey = connection.connectionString;
+	if (credentials != nil && sessionKey.length > 0) {
+		self.sourceSessionCredentials[sessionKey] = credentials;
+	}
+	RptqQuery *reportRoot = self.rootQuery;
+	if (!self.isComposed || query == nil || query == reportRoot) {
+		self.sessionCredentials = credentials;
+	}
 	if ([connection requiresCredentials] && credentials != nil) {
 		NSString *key = connection.connectionString;
 		if (saveToKeychain && key.length > 0) {
@@ -732,11 +745,43 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 }
 
 - (nullable MADCredential *)resolvedCredentialsForDatabaseConnection:(nullable MADDatabaseConnection *)connection {
-	MADDatabaseConnection *conn = connection ?: _headlessDocument.database.databaseConnection;
-	NSString *username = self.sessionCredentials.username;
-	NSString *password = self.sessionCredentials.password;
+	return [self resolvedCredentialsForDatabaseConnection:connection
+													query:nil
+									   allowGlobalSession:YES];
+}
 
-	RptqDatabaseCredentals *credRow = self.rptqDatabase.ownedByUser;
+- (nullable MADCredential *)resolvedCredentialsForQuery:(nullable RptqQuery *)query {
+	if (query == nil) {
+		return [self resolvedCredentialsForDatabaseConnection:nil];
+	}
+	RptqDatabase *database = query.inDatabase;
+	MADDatabaseConnection *connection = database.ownedByUser != nil
+		? [MADDatabaseConnection newDatabaseConnection:database.ownedByUser documentURL:self.fileURL]
+		: nil;
+	return [self resolvedCredentialsForDatabaseConnection:connection
+													query:query
+									   allowGlobalSession:NO];
+}
+
+- (nullable MADCredential *)resolvedCredentialsForDatabaseConnection:(nullable MADDatabaseConnection *)connection
+																query:(nullable RptqQuery *)query
+												   allowGlobalSession:(BOOL)allowGlobalSession {
+	MADDatabaseConnection *conn = connection ?: _headlessDocument.database.databaseConnection;
+	RptqDatabase *database = query.inDatabase ?: self.rptqDatabase;
+	RptqDatabaseCredentals *credRow = database.ownedByUser;
+
+	// A composed leaf resolves only its own session credential; the document-wide one
+	// belongs to whichever source the user last configured and must not leak across.
+	if (!allowGlobalSession && query != nil) {
+		MADCredential *session = [self sourceSessionCredentialForConnection:conn credentialRow:credRow];
+		if (session != nil && (session.username.length > 0 || session.password.length > 0)) {
+			return session;
+		}
+	}
+
+	NSString *username = allowGlobalSession ? self.sessionCredentials.username : nil;
+	NSString *password = allowGlobalSession ? self.sessionCredentials.password : nil;
+
 	NSMutableArray<NSString *> *candidateKeys = [[NSMutableArray alloc] init];
 	NSString *connectionString = conn.connectionString;
 	if (connectionString.length > 0) {
@@ -775,6 +820,92 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	return [[MADCredential alloc] initWithUsername:username ?: @"" andPassword:password ?: @""];
 }
 
+- (nullable MADCredential *)sourceSessionCredentialForConnection:(nullable MADDatabaseConnection *)connection
+												   credentialRow:(nullable RptqDatabaseCredentals *)credRow {
+	NSMutableArray<NSString *> *keys = [NSMutableArray array];
+	NSString *connectionString = connection.connectionString;
+	if (connectionString.length > 0) [keys addObject:connectionString];
+	if (credRow.key.length > 0 && ![keys containsObject:credRow.key]) [keys addObject:credRow.key];
+	if (connection.identifier.length > 0 && ![keys containsObject:connection.identifier]) {
+		[keys addObject:connection.identifier];
+	}
+	for (NSString *key in keys) {
+		MADCredential *credential = self.sourceSessionCredentials[key];
+		if (credential != nil) return credential;
+	}
+	return nil;
+}
+
+#pragma mark - Composition source credentials
+
+- (NSArray<RptqQuery *> *)leafSourceQueries {
+	RptqQuery *root = self.rootQuery;
+	if (root == nil) return @[];
+	NSMutableArray<RptqQuery *> *leaves = [NSMutableArray array];
+	NSMutableSet<NSNumber *> *seen = [NSMutableSet set];
+	NSMutableArray<RptqQuery *> *stack = [NSMutableArray array];
+	for (RptqQueryTable *table in root.hasQueryTables) {
+		if (table.upstreamQuery != nil) [stack addObject:table.upstreamQuery];
+	}
+	while (stack.count > 0) {
+		RptqQuery *node = stack.lastObject;
+		[stack removeLastObject];
+		NSNumber *key = @(node.identifier);
+		if ([seen containsObject:key]) continue;
+		[seen addObject:key];
+		if (node.isComposing) {
+			for (RptqQueryTable *table in node.hasQueryTables) {
+				if (table.upstreamQuery != nil) [stack addObject:table.upstreamQuery];
+			}
+		} else {
+			[leaves addObject:node];
+		}
+	}
+	return leaves;
+}
+
+- (NSArray<RptqQuery *> *)sourceQueriesRequiringCredentials {
+	NSMutableArray<RptqQuery *> *sources = [NSMutableArray array];
+	for (RptqQuery *leaf in [self leafSourceQueries]) {
+		RptqDatabase *database = leaf.inDatabase;
+		if (database == nil) continue;
+		MADDatabaseConnection *connection = database.ownedByUser != nil
+			? [MADDatabaseConnection newDatabaseConnection:database.ownedByUser documentURL:self.fileURL]
+			: nil;
+		if (connection != nil && [connection requiresCredentials]) {
+			[sources addObject:leaf];
+		}
+	}
+	return sources;
+}
+
+- (NSArray<RptqQuery *> *)sourceQueriesMissingCredentials {
+	NSMutableArray<RptqQuery *> *missing = [NSMutableArray array];
+	for (RptqQuery *source in [self sourceQueriesRequiringCredentials]) {
+		MADCredential *credential = [self resolvedCredentialsForQuery:source];
+		if (credential.username.length == 0 || credential.password.length == 0) {
+			[missing addObject:source];
+		}
+	}
+	return missing;
+}
+
+- (NSDictionary<NSString *, MADCredential *> *)resolvedCredentialsByConnectionStringForSources {
+	NSMutableDictionary<NSString *, MADCredential *> *byKey = [NSMutableDictionary dictionary];
+	for (RptqQuery *source in [self sourceQueriesRequiringCredentials]) {
+		RptqDatabase *database = source.inDatabase;
+		MADDatabaseConnection *connection = database.ownedByUser != nil
+			? [MADDatabaseConnection newDatabaseConnection:database.ownedByUser documentURL:self.fileURL]
+			: nil;
+		NSString *key = connection.connectionString;
+		MADCredential *credential = [self resolvedCredentialsForQuery:source];
+		if (key.length > 0 && credential != nil) {
+			byKey[key] = credential;
+		}
+	}
+	return byKey;
+}
+
 #pragma mark - Refresh & Export
 
 - (void)refreshDataWithPassword:(nullable NSString *)passwordOverride
@@ -792,6 +923,39 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 
 	[doc invalidateQueryAndModelCaches];
 	doc.refreshed = NO;
+
+	// A composed document (one with an explicit root) refreshes through the engine's
+	// multi-source coordinator, and only after every credential-taking source has a
+	// credential of its own.  Refusing here (rather than refreshing and failing on the
+	// first source that lacks one) lets the caller prompt for each source in turn.
+	if ([MADOperationRefresh documentUsesComposedRefresh: doc]) {
+		NSArray<RptqQuery *> *missing = [self sourceQueriesMissingCredentials];
+		if (missing.count > 0) {
+			RptqQuery *source = missing.firstObject;
+			RptqDatabase *database = source.inDatabase;
+			NSString *connectionString = database.ownedByUser != nil
+				? [MADDatabaseConnection newDatabaseConnection:database.ownedByUser documentURL:self.fileURL].connectionString
+				: nil;
+			NSString *name = source.name.length > 0 ? source.name : NSLocalizedString(@"source", @"Fallback name for a composition source.");
+			NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+			userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"Credentials required", @"Credentials required");
+			userInfo[NSLocalizedFailureReasonErrorKey] = [[NSString alloc] initWithFormat:
+				NSLocalizedString(@"Enter the password for the '%@' source.", @"Composition prompt reason naming the source that needs a password."), name];
+			userInfo[MADOperationRefreshSourceNameKey] = source.name ?: @"";
+			if (connectionString.length > 0) {
+				userInfo[MADOperationRefreshSourceConnectionStringKey] = connectionString;
+			}
+			NSError *error = [NSError errorWithDomain:@"com.everydayapps.operation.refresh"
+												 code:3
+											 userInfo:userInfo];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				if (completion) completion(NO, error);
+			});
+			return;
+		}
+		[self refreshComposedDataWithDocument:doc completion:completion];
+		return;
+	}
 
 	// Ensure doc.database is initialized before checking requiresCredentials.
 	MADDatabase *db = doc.database;
@@ -815,17 +979,6 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 				}
 			}
 		}
-	}
-
-	// A composed document (one with an explicit root) refreshes through the engine's
-	// multi-source coordinator; the ordinary single-query chain below is only for the
-	// ordinary report.
-	if ([MADOperationRefresh documentUsesComposedRefresh: doc]) {
-		[self refreshComposedDataWithDocument:doc
-							resolvedCredential:resolvedCred
-								  connection:conn
-								  completion:completion];
-		return;
 	}
 
 	MADOperationRefreshInitializeMainDataTable *initTable =
@@ -885,18 +1038,12 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 }
 
 - (void)refreshComposedDataWithDocument:(MADHeadlessDocument *)doc
-					  resolvedCredential:(nullable MADCredential *)resolvedCred
-							connection:(MADDatabaseConnection *)conn
 							completion:(void (^)(BOOL success, NSError * _Nullable error))completion {
 	MADOperationRefreshComposed *refreshOp =
 		[[MADOperationRefreshComposed alloc] initWithDocument:doc];
-
-	MADMacCredentialsOperation *credOp = nil;
-	if ([conn requiresCredentials] && resolvedCred != nil &&
-		(resolvedCred.username.length > 0 || resolvedCred.password.length > 0)) {
-		credOp = [[MADMacCredentialsOperation alloc] initWithCredentials:resolvedCred];
-		[refreshOp addDependency:credOp];
-	}
+	// Each source carries its own credential; no single credential is handed to every
+	// source, so two sources on different servers (or different logins) both connect.
+	refreshOp.credentialsByConnectionString = [self resolvedCredentialsByConnectionStringForSources];
 
 	__weak typeof(self) weakSelf = self;
 	__weak MADOperationRefreshComposed *weakRefreshOp = refreshOp;
@@ -922,9 +1069,6 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 		});
 	};
 
-	if (credOp != nil) {
-		[_refreshQueue addOperation:credOp];
-	}
 	[_refreshQueue addOperation:refreshOp];
 }
 

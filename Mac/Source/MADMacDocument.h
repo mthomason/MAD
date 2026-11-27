@@ -142,6 +142,22 @@ extern NSNotificationName const MADMacDocumentDidSelectQueryNotification;
 /// then MADKeyChain under connection.connectionString, credRow.key, and connection.identifier).
 - (nullable MADCredential *)resolvedCredentialsForDatabaseConnection:(nullable MADDatabaseConnection *)connection;
 
+/// Resolves credentials for one composition source, preferring the per-source session
+/// store (keyed by that source's connection string) and then MADKeyChain.  A composed
+/// leaf never borrows another source's session credential.
+- (nullable MADCredential *)resolvedCredentialsForQuery:(nullable RptqQuery *)query;
+
+/// The credentials each source leaf needs, keyed by `MADDatabaseConnection.connectionString`.
+/// SQLite and other credential-free sources are omitted.
+- (NSDictionary<NSString *, MADCredential *> *)resolvedCredentialsByConnectionStringForSources;
+
+/// The leaf source queries whose connections require credentials, in document order.
+- (NSArray<RptqQuery *> *)sourceQueriesRequiringCredentials;
+
+/// The subset of `sourceQueriesRequiringCredentials` with no usable credential: the
+/// list a first-run composition prompt walks.
+- (NSArray<RptqQuery *> *)sourceQueriesMissingCredentials;
+
 /// Rebuilds the MADSectionsLayout snapshot after query grouping or section edits.
 - (void)rebuildSectionsLayout;
 
