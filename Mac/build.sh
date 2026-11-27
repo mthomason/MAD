@@ -213,6 +213,7 @@ run_smoke_test() {
 		"${SCRIPT_DIR}/Source/MADMacDesignerViewController.m" \
 		"${SCRIPT_DIR}/Source/MADMacViewerViewController.m" \
 		"${SCRIPT_DIR}/Source/MADMacDesignerCanvasView.m" \
+		"${SCRIPT_DIR}/Source/MADMacTipBar.m" \
 		"${TRANSFORMERS[@]}" \
 		"${LEGACY_SOURCES[@]}" \
 		-o "${smoke_bin}"

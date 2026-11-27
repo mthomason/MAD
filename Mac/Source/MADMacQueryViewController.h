@@ -35,6 +35,29 @@ typedef NS_ENUM(NSInteger, MADMacQueryWorkspaceMode) {
 - (void)reloadFromDocument;
 - (void)switchToMode:(MADMacQueryWorkspaceMode)mode;
 
+/// The query the workspace edits (the document's selection, or its report query).
+- (nullable RptqQuery *)selectedQuery;
+
+/// State used by the menu bar to enable and title its commands.
+@property (nonatomic, assign, readonly) BOOL editingRootQuery;
+@property (nonatomic, assign, readonly) BOOL editingComposingNode;
+@property (nonatomic, assign, readonly) BOOL canAddSelectedTable;
+@property (nonatomic, assign, readonly) BOOL canCreateRoot;
+@property (nonatomic, assign, readonly) BOOL schemaSidebarVisible;
+
+/// Query authoring actions (also reachable from the menu bar and the top-bar menus).
+- (void)addSelectedSchemaTable:(nullable id)sender;
+- (void)addSourceQueryAction:(nullable id)sender;
+- (void)importChildQueryAction:(nullable id)sender;
+- (void)addRootQueryAction:(nullable id)sender;
+- (void)toggleOutputsPopover:(nullable id)sender;
+- (void)toggleFiltersPopover:(nullable id)sender;
+- (void)toggleGroupsPopover:(nullable id)sender;
+- (void)renameQueryAction:(nullable id)sender;
+- (void)autoArrangeTablesAction:(nullable id)sender;
+- (void)editDatabaseConnectionAction:(nullable id)sender;
+- (void)toggleSchemaSidebarAction:(nullable id)sender;
+
 /// Adds a database schema table (and all of its schema fields) to the query and places it on the visual canvas.
 - (nullable RptqQueryTable *)addSchemaTableToQuery:(RptqDatabaseSchemaTable *)schemaTable;
 

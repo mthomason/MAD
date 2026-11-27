@@ -65,6 +65,8 @@ NSNotificationName const MADMacDocumentDidSelectQueryNotification = @"MADMacDocu
 
 - (void)prepareSelectedQueryLayout;
 - (void)persistAfterLayoutCreation;
+- (void)noteRecentDocumentURL:(nullable NSURL *)url;
+- (void)updateWindowRepresentations;
 
 @end
 
@@ -425,8 +427,10 @@ NSNotificationName const MADMacDocumentDidSelectQueryNotification = @"MADMacDocu
 	_selectedQuery = nil;
 	if (headlessDocument.fileURL != nil) {
 		self.fileURL = headlessDocument.fileURL;
+		[self noteRecentDocumentURL:headlessDocument.fileURL];
 	}
 	[self rebuildSectionsLayout];
+	[self updateWindowRepresentations];
 }
 
 - (BOOL)readFromURL:(NSURL *)url ofType:(NSString *) __unused typeName error:(NSError * __autoreleasing *)outError {
@@ -437,6 +441,8 @@ NSNotificationName const MADMacDocumentDidSelectQueryNotification = @"MADMacDocu
 	_headlessDocument = doc;
 	_selectedQuery = nil;
 	[self rebuildSectionsLayout];
+	[self noteRecentDocumentURL:url];
+	[self updateWindowRepresentations];
 	return YES;
 }
 
@@ -454,7 +460,126 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 		return NO;
 	}
 	[_headlessDocument invalidateQueryAndModelCaches];
-	return [_headlessDocument writeToURL:url reproducible:NO error:outError];
+	BOOL wrote = [_headlessDocument writeToURL:url reproducible:NO error:outError];
+	if (wrote) {
+		[self noteRecentDocumentURL:url];
+	}
+	return wrote;
+}
+
+#pragma mark - Rename & Recent Documents
+
+- (void)noteRecentDocumentURL:(nullable NSURL *)url {
+	if (url == nil || !url.isFileURL) return;
+	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:url];
+}
+
+/// Keeps the window title bar and its proxy icon in step with the document's file URL.
+- (void)updateWindowRepresentations {
+	NSURL *url = self.fileURL;
+	NSString *title = self.displayName;
+	for (NSWindowController *controller in self.windowControllers) {
+		NSWindow *window = controller.window;
+		if (window == nil) continue;
+		if (url != nil) {
+			window.representedURL = url;
+		}
+		if (title.length > 0) {
+			window.title = title;
+		}
+	}
+}
+
+- (BOOL)renameToURL:(NSURL *)newURL error:(NSError * _Nullable __autoreleasing *)outError {
+	if (newURL == nil || !newURL.isFileURL) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADMacDocument"
+											code:12
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"The new name is not a valid file location.", @"Rename error: the destination is not a file URL.") }];
+		}
+		return NO;
+	}
+	NSURL *oldURL = self.fileURL;
+	if (oldURL == nil) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADMacDocument"
+											code:13
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"This report has not been saved yet, so it cannot be renamed.", @"Rename error: the document has no file on disk.") }];
+		}
+		return NO;
+	}
+	if ([newURL isEqual:oldURL]) {
+		return YES;
+	}
+	if ([[NSFileManager defaultManager] fileExistsAtPath:newURL.path]) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADMacDocument"
+											code:14
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"A file with that name already exists. Choose a different name.", @"Rename error: the destination file exists.") }];
+		}
+		return NO;
+	}
+	if (_headlessDocument == nil) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADMacDocument"
+											code:15
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"There is no open report to rename.", @"Rename error: the document has no open store.") }];
+		}
+		return NO;
+	}
+
+	// Write the current contents at the new location first; only then remove the old
+	// file, so a failed write leaves the document exactly where it was.
+	NSError *writeError = nil;
+	if (![self writeToURL:newURL ofType:self.fileType forSaveOperation:NSSaveOperation originalContentsURL:nil error:&writeError]) {
+		if (outError != NULL) *outError = writeError;
+		return NO;
+	}
+	[[NSFileManager defaultManager] removeItemAtURL:oldURL error:NULL];
+
+	self.fileURL = newURL;
+	self.displayName = newURL.lastPathComponent;
+	[self updateChangeCount:NSChangeCleared];
+	[self noteRecentDocumentURL:newURL];
+	[self updateWindowRepresentations];
+	return YES;
+}
+
+- (BOOL)renameToDisplayName:(nullable NSString *)displayName error:(NSError * _Nullable __autoreleasing *)outError {
+	NSString *trimmed = [displayName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	if (trimmed.length == 0) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADMacDocument"
+											code:16
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"Enter a name for the report.", @"Rename error: the new name is empty.") }];
+		}
+		return NO;
+	}
+	NSURL *current = self.fileURL;
+	if (current == nil) {
+		if (outError != NULL) {
+			*outError = [NSError errorWithDomain:@"MADMacDocument"
+											code:13
+										userInfo:@{ NSLocalizedDescriptionKey: NSLocalizedString(@"This report has not been saved yet, so it cannot be renamed.", @"Rename error: the document has no file on disk.") }];
+		}
+		return NO;
+	}
+	NSString *extension = current.pathExtension.length > 0 ? current.pathExtension : @"mad";
+	NSString *file = trimmed.lastPathComponent;
+	if (![[file.pathExtension lowercaseString] isEqualToString:[extension lowercaseString]]) {
+		file = [file stringByAppendingPathExtension:extension];
+	}
+	NSURL *destination = [[current URLByDeletingLastPathComponent] URLByAppendingPathComponent:file];
+	return [self renameToURL:destination error:outError];
+}
+
+- (IBAction)renameDocument:(nullable id)sender {
+	MADMacWindowController *controller = (MADMacWindowController *)self.windowControllers.firstObject;
+	if ([controller respondsToSelector:@selector(presentRenameSheet:)]) {
+		[controller presentRenameSheet:sender];
+		return;
+	}
+	[super renameDocument:sender];
 }
 
 #pragma mark - Sections & Mutation

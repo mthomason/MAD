@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat zoomScale;
 
 @property (nonatomic, strong, readonly) NSButton *refreshButton;
+/// The overflow (…) button.  Also exposed under its historical name `connectionButton`.
+@property (nonatomic, strong, readonly) NSButton *overflowButton;
 @property (nonatomic, strong, readonly) NSButton *connectionButton;
 @property (nonatomic, strong, readonly) NSButton *exportButton;
 @property (nonatomic, strong, readonly) NSButton *printButton;

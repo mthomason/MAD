@@ -27,6 +27,7 @@
 #import "MADMacDesignerViewController.h"
 #import "MADMacDesignerCanvasView.h"
 #import "MADMacViewerViewController.h"
+#import "MADMacTipBar.h"
 #import "MADocumentDesignerProtocol.h"
 #import "MADSQLQueryCompiler.h"
 #import "MADSQLStatementResolver.h"
@@ -576,6 +577,11 @@ static BOOL MADSmokeWriteWindowSnapshots(NSWindow *window, NSString *directory, 
 static int MADSmokeWriteNodeScreenshots(NSString *directory) {
 	NSFileManager *fm = [NSFileManager defaultManager];
 	[fm createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	// Install the menu bar so the inventory covers the whole command surface.
+	(void)[NSApplication sharedApplication];
+	MADMacAppDelegate *appDelegate = [[MADMacAppDelegate alloc] init];
+	[appDelegate applicationWillFinishLaunching:[NSNotification notificationWithName:@"ui-screenshot" object:NSApp]];
+
 	MADMacDocument *doc = MADSmokeNodeFixtureDocument(directory);
 	if (doc == nil) return 1;
 	MADMacWindowController *wc = doc.windowControllers.firstObject;
@@ -630,6 +636,123 @@ static int MADSmokeWriteNodeScreenshots(NSString *directory) {
 	MADSmokeWriteWindowSnapshots(window, pngDir, @"05-result-viewer");
 
 	printf("%s\n", pngDir.UTF8String);
+	[window orderOut:nil];
+	return 0;
+}
+
+// Captures the audited macOS UI states and writes a text inventory of the menus,
+// controls, and tooltips.  Test-only; used for the UI evidence.
+static int MADSmokeWriteUIScreenshots(NSString *directory) {
+	NSFileManager *fm = [NSFileManager defaultManager];
+	[fm createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+	NSString *pngDir = [directory stringByAppendingPathComponent:@"png"];
+	[fm createDirectoryAtPath:pngDir withIntermediateDirectories:YES attributes:nil error:NULL];
+
+	// Install the menu bar so the inventory covers the whole command surface.
+	(void)[NSApplication sharedApplication];
+	MADMacAppDelegate *appDelegate = [[MADMacAppDelegate alloc] init];
+	[appDelegate applicationWillFinishLaunching:[NSNotification notificationWithName:@"ui-screenshot" object:NSApp]];
+
+	MADMacDocument *doc = MADSmokeNodeFixtureDocument(directory);
+	if (doc == nil) return 1;
+	MADMacWindowController *wc = doc.windowControllers.firstObject;
+	NSWindow *window = wc.window;
+	[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+	[NSApp activateIgnoringOtherApps:YES];
+	[window makeKeyAndOrderFront:nil];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
+
+	doc.selectedQuery = doc.rootQuery;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabQuery];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.4]];
+	MADSmokeWriteWindowSnapshots(window, pngDir, @"after-query");
+
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.4]];
+	MADSmokeWriteWindowSnapshots(window, pngDir, @"after-designer");
+
+	MADMacViewerViewController *viewer = wc.viewerViewController;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[viewer refreshReportAction:nil];
+	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:30.0];
+	while ([doc.headlessDocument.dataTable numberOfRows] != 4 &&
+		   viewer.lastRefreshError == nil && deadline.timeIntervalSinceNow > 0) {
+		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+								 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+	}
+	[viewer reloadPreview];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.6]];
+	MADSmokeWriteWindowSnapshots(window, pngDir, @"after-viewer");
+
+	// The layout-less source shows the row grid and hides the page/zoom controls.
+	RptqQuery *invoices = nil;
+	for (RptqQuery *query in [doc allQueries]) {
+		if ([query.name isEqualToString:@"invoices"]) { invoices = query; break; }
+	}
+	if (invoices != nil) {
+		doc.selectedQuery = invoices;
+		[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+		[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+		MADSmokeWriteWindowSnapshots(window, pngDir, @"after-viewer-grid");
+		doc.selectedQuery = doc.rootQuery;
+	}
+
+	// The native rename sheet.
+	[wc presentRenameSheet:nil];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.6]];
+	NSWindow *sheet = window.attachedSheet;
+	if (sheet != nil) {
+		MADSmokeWriteWindowSnapshots(sheet, pngDir, @"after-rename-sheet");
+		[window endSheet:sheet returnCode:NSModalResponseCancel];
+	}
+
+	// A human-readable inventory of the command surface.
+	NSMutableString *inventory = [[NSMutableString alloc] init];
+	[inventory appendFormat:@"MAD Designer (macOS) UI inventory\n\n"];
+	[inventory appendFormat:@"Workspace switcher: %@ / %@ / %@\n\n",
+		[wc.workspaceSegmentedControl labelForSegment:0],
+		[wc.workspaceSegmentedControl labelForSegment:1],
+		[wc.workspaceSegmentedControl labelForSegment:2]];
+	for (NSMenuItem *top in [NSApp mainMenu].itemArray) {
+		NSMenu *menu = top.submenu;
+		if (menu == nil) continue;
+		[inventory appendFormat:@"%@\n", menu.title];
+		for (NSMenuItem *item in menu.itemArray) {
+			if (item.isSeparatorItem) continue;
+			NSString *key = item.keyEquivalent.length > 0 ? item.keyEquivalent : @"";
+			[inventory appendFormat:@"    %@%@", item.title, key.length > 0 ? [NSString stringWithFormat:@"  [%@]", key] : @""];
+			if (item.submenu != nil) {
+				NSMutableArray<NSString *> *children = [[NSMutableArray alloc] init];
+				for (NSMenuItem *child in item.submenu.itemArray) {
+					if (!child.isSeparatorItem) [children addObject:child.title];
+				}
+				[inventory appendFormat:@"  > %@", [children componentsJoinedByString:@", "]];
+			}
+			if (item.toolTip.length > 0) [inventory appendFormat:@"  — %@", item.toolTip];
+			[inventory appendString:@"\n"];
+		}
+		[inventory appendString:@"\n"];
+	}
+	MADMacDesignerViewController *designer = wc.designerViewController;
+	MADMacQueryViewController *queryVC = wc.queryViewController;
+	[inventory appendFormat:@"Insert menu: %@\n", designer.insertPopUpButton.toolTip];
+	for (NSMenuItem *item in designer.insertPopUpButton.menu.itemArray) {
+		if (item.isSeparatorItem || item.tag == 0) continue;
+		[inventory appendFormat:@"    %@ (tag %ld)\n", item.title, (long)item.tag];
+	}
+	[inventory appendFormat:@"\nQuery top bar: selector (%@), add menu (%@), actions menu (%@), connection (%@)\n",
+		queryVC.selectedQuery.name ?: @"",
+		[queryVC valueForKey:@"addMenuButton"] ? @"Add" : @"",
+		[queryVC valueForKey:@"queryMenuButton"] ? @"Query" : @"",
+		[queryVC valueForKey:@"connectionButton"] ? @"Database Connection" : @""];
+	[inventory appendFormat:@"Viewer top bar: Refresh, Print…, Export…, More (%@)\n", viewer.overflowButton.toolTip];
+	[inventory appendFormat:@"Viewer bottom bar: status line, zoom out/percentage/in, previous/page/next, paper size, rendered paper size\n"];
+	[inventory appendFormat:@"Viewer controls hide in row-grid mode: %@\n", viewer.isShowingRowGrid ? @"yes (grid is visible)" : @"n/a in this state"];
+	NSString *inventoryPath = [directory stringByAppendingPathComponent:@"ui-inventory.txt"];
+	[inventory writeToFile:inventoryPath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+
+	printf("%s\n", pngDir.UTF8String);
+	printf("%s\n", inventoryPath.UTF8String);
 	[window orderOut:nil];
 	return 0;
 }
@@ -1127,6 +1250,9 @@ int main(int argc, const char * argv[]) {
 		}
 		if (argc >= 3 && strcmp(argv[1], "--write-node-screenshots") == 0) {
 			return MADSmokeWriteNodeScreenshots([NSString stringWithUTF8String:argv[2]]);
+		}
+		if (argc >= 3 && strcmp(argv[1], "--write-ui-screenshots") == 0) {
+			return MADSmokeWriteUIScreenshots([NSString stringWithUTF8String:argv[2]]);
 		}
 		if (argc >= 2 && strcmp(argv[1], "--write-live-reports") == 0) {
 			NSString *liveDirectory = argc >= 3
@@ -3220,6 +3346,13 @@ int main(int argc, const char * argv[]) {
 				fprintf(stderr, "FAIL: The authored payments source did not render its own node PDF\n");
 				return 257;
 			}
+			NSStackView *nodePageControls = [nodeViewer valueForKey:@"pageControlsStack"];
+			if (nodePageControls == nil || nodePageControls.hidden ||
+				![nodePageControls isDescendantOf:nodeViewer.statusBarView] ||
+				!nodeViewer.printButton.enabled) {
+				fprintf(stderr, "FAIL: The PDF viewer's page/zoom controls are missing or hidden in the status bar\n");
+				return 257;
+			}
 
 			// The authored node renders values from its own rows, not the Result's.
 			Class<MADReportExporting> nodeHTMLClass = [MADReportExporterRegistry exporterClassForFormat:@"html"];
@@ -3256,6 +3389,11 @@ int main(int argc, const char * argv[]) {
 			[nodeWC nodePickerChanged:nodeWC.nodePickerPopup];
 			if (![nodeViewer isShowingRowGrid] || nodeViewer.rowGridView.numberOfRows != 3) {
 				fprintf(stderr, "FAIL: A layout-less source did not show a three-row grid\n");
+				return 261;
+			}
+			// The row grid has no pages or zoom; those controls hide rather than go dead.
+			if (!nodePageControls.hidden || nodeViewer.printButton.enabled) {
+				fprintf(stderr, "FAIL: Row-grid mode did not hide the page/zoom controls or disable print\n");
 				return 261;
 			}
 			if (nodeViewer.pdfView.document != nil) {
@@ -3531,5 +3669,308 @@ int main(int argc, const char * argv[]) {
 			printf("PASS: Per-node reports: the picker switches all three workspaces, a source layout renders its own values, a layout-less source grids, json-report stays root-only, and the Result/Standard Report paths are unchanged\n");
 		}
 	}
+		// 20. UI audit: workspace labels, Insert and context menus, tooltips, the Viewer
+		// bottom bar, first-run tips, the menu bar, rename, and Open Recent.
+		{
+			NSFileManager *fm = [NSFileManager defaultManager];
+			NSError *err = nil;
+			NSString *uiDir = [NSTemporaryDirectory() stringByAppendingPathComponent:
+							   [NSString stringWithFormat:@"mad-ui-smoke-%@", NSUUID.UUID.UUIDString]];
+			[fm createDirectoryAtPath:uiDir withIntermediateDirectories:YES attributes:nil error:NULL];
+			NSURL *uiSourceURL = [NSURL fileURLWithPath:[uiDir stringByAppendingPathComponent:@"ui.sqlite"]];
+			NSURL *uiMadURL = [NSURL fileURLWithPath:[uiDir stringByAppendingPathComponent:@"UI.mad"]];
+			if (!MADSmokeRunSQLite(uiSourceURL, @[@"CREATE TABLE t (a INTEGER, b TEXT);",
+												   @"INSERT INTO t VALUES (1, 'x');"])) {
+				fprintf(stderr, "FAIL: Could not write the UI smoke source\n");
+				return 300;
+			}
+			NSString *uiError = nil;
+			if (MADSmokeBuildStandardReport(uiSourceURL, uiMadURL, @"t", @[@"a", @"b"], &uiError) == nil) {
+				fprintf(stderr, "FAIL: Could not build the UI smoke report: %s\n", uiError.UTF8String ?: "(none)");
+				return 300;
+			}
+			MADMacDocument *uiDoc = [[MADMacDocument alloc] initWithContentsOfURL:uiMadURL
+																			ofType:@"com.thomason.mad"
+																			 error:&err];
+			if (uiDoc == nil) {
+				fprintf(stderr, "FAIL: Could not open the UI smoke report: %s\n", err.localizedDescription.UTF8String);
+				return 300;
+			}
+			[uiDoc makeWindowControllers];
+			MADMacWindowController *uiWC = uiDoc.windowControllers.firstObject;
+			[uiWC.window layoutIfNeeded];
+
+			// 20a. The workspace switcher names the workspaces, not the product.
+			NSSegmentedControl *switcher = uiWC.workspaceSegmentedControl;
+			if (switcher == nil || switcher.segmentCount != 3 ||
+				![[switcher labelForSegment:0] isEqualToString:@"Query"] ||
+				![[switcher labelForSegment:1] isEqualToString:@"Designer"] ||
+				![[switcher labelForSegment:2] isEqualToString:@"Viewer"] ||
+				switcher.toolTip.length == 0) {
+				fprintf(stderr, "FAIL: Workspace switcher is not labeled Query / Designer / Viewer\n");
+				return 301;
+			}
+			[uiWC switchToWorkspaceTab:MADMacWorkspaceTabQuery];
+			if (uiWC.activeWorkspaceTab != MADMacWorkspaceTabQuery) {
+				fprintf(stderr, "FAIL: The active workspace did not follow the switcher\n");
+				return 301;
+			}
+
+			// 20b. The Designer has one Insert menu that covers every element kind.
+			MADMacDesignerViewController *uiDesigner = uiWC.designerViewController;
+			(void)uiDesigner.view;
+			[uiDesigner reloadFromDocument];
+			NSPopUpButton *insertButton = uiDesigner.insertPopUpButton;
+			if (insertButton == nil || insertButton.toolTip.length == 0) {
+				fprintf(stderr, "FAIL: The Designer has no Insert menu or no tooltip on it\n");
+				return 302;
+			}
+			NSMutableSet<NSNumber *> *insertKinds = [[NSMutableSet alloc] init];
+			BOOL insertSymbols = YES;
+			for (NSMenuItem *item in insertButton.menu.itemArray) {
+				if (item.isSeparatorItem) continue;
+				// A pull-down button's first item is its title, not an insertion command.
+				if (item.tag < 1 || item.tag > 6) continue;
+				[insertKinds addObject:@(item.tag)];
+				if (item.image == nil) insertSymbols = NO;
+			}
+			if (insertKinds.count != 6 || !insertSymbols) {
+				fprintf(stderr, "FAIL: The Insert menu covers %lu kinds or is missing SF Symbols\n",
+						(unsigned long)insertKinds.count);
+				return 302;
+			}
+
+			// 20c. The context menu matches the Insert menu and carries the element commands.
+			RptqDocumentSection *uiDetail = nil;
+			for (RptqDocumentSection *section in [uiDoc orderedSections]) {
+				if ((MADDocumentSectionType)section.type == MADDocumentSectionTypeBody) { uiDetail = section; break; }
+			}
+			if (uiDetail == nil) {
+				fprintf(stderr, "FAIL: The UI smoke report has no detail band\n");
+				return 303;
+			}
+			NSMenu *sectionMenu = [uiDesigner buildContextMenuForElement:nil inSection:uiDetail];
+			NSMenuItem *insertParent = sectionMenu.itemArray.firstObject;
+			NSMutableSet<NSNumber *> *contextKinds = [[NSMutableSet alloc] init];
+			for (NSMenuItem *item in insertParent.submenu.itemArray) {
+				if (!item.isSeparatorItem) [contextKinds addObject:@(item.tag)];
+			}
+			if (contextKinds.count != 6) {
+				fprintf(stderr, "FAIL: The section context menu exposes %lu insertable kinds, expected 6\n",
+						(unsigned long)contextKinds.count);
+				return 303;
+			}
+			RptqDocumentElementLabel *uiLabel = [uiDesigner addStaticLabelInSection:uiDetail atPoint:NSMakePoint(8.0, 8.0)];
+			[uiDoc notifyDocumentMutated];
+			NSMenu *elementMenu = [uiDesigner buildContextMenuForElement:uiLabel inSection:uiDetail];
+			NSArray<NSString *> *elementTitles = [elementMenu.itemArray valueForKey:@"title"];
+			for (NSString *required in @[@"Cut", @"Copy", @"Duplicate", @"Delete",
+										 @"Size to Fit Content", @"Move to Band",
+										 @"Select All Elements", @"Fit Band Height to Elements"]) {
+				if (![elementTitles containsObject:required]) {
+					fprintf(stderr, "FAIL: The element context menu is missing '%s'\n", required.UTF8String);
+					return 304;
+				}
+			}
+
+			// 20d. Tooltips and first-run tips.
+			if (uiWC.documentTypeLabel.toolTip.length == 0 ||
+				insertButton.accessibilityLabel.length == 0) {
+				fprintf(stderr, "FAIL: A key Designer control is missing its tooltip or accessibility label\n");
+				return 305;
+			}
+			MADMacTipBar *designerTip = [uiDesigner valueForKey:@"tipBar"];
+			MADMacQueryViewController *uiQuery = uiWC.queryViewController;
+			(void)uiQuery.view;
+			MADMacTipBar *queryTip = [uiQuery valueForKey:@"tipBar"];
+			MADMacViewerViewController *uiViewer = uiWC.viewerViewController;
+			(void)uiViewer.view;
+			MADMacTipBar *viewerTip = [uiViewer valueForKey:@"tipBar"];
+			if (designerTip == nil || queryTip == nil || viewerTip == nil) {
+				fprintf(stderr, "FAIL: A workspace has no first-run tip\n");
+				return 305;
+			}
+			for (MADMacTipBar *tip in @[designerTip, queryTip, viewerTip]) {
+				if (tip.textLabel.stringValue.length == 0 ||
+					tip.dismissButton.toolTip.length == 0 || tip.dismissButton.accessibilityLabel.length == 0) {
+					fprintf(stderr, "FAIL: A first-run tip is missing its text or dismiss control\n");
+					return 305;
+				}
+			}
+			[designerTip dismissTip:nil];
+			NSString *tipKey = [NSString stringWithFormat:@"MADMacTip.%@", designerTip.tipIdentifier];
+			if (![[NSUserDefaults standardUserDefaults] boolForKey:tipKey]) {
+				fprintf(stderr, "FAIL: Dismissing a tip was not remembered\n");
+				return 306;
+			}
+			MADMacAppDelegate *uiAppDelegate = [[MADMacAppDelegate alloc] init];
+			[uiAppDelegate showTipsAgain:nil];
+			if ([[NSUserDefaults standardUserDefaults] boolForKey:tipKey]) {
+				fprintf(stderr, "FAIL: Show Tips Again did not clear the dismissed state\n");
+				return 306;
+			}
+
+			// 20e. The Viewer keeps status and page controls in its bottom bar, with
+			// tooltips, and the overflow button carries the secondary actions.
+			NSStackView *uiPageControls = [uiViewer valueForKey:@"pageControlsStack"];
+			if (uiPageControls == nil || ![uiPageControls isDescendantOf:uiViewer.statusBarView] ||
+				![uiViewer.statusLabel isDescendantOf:uiViewer.statusBarView]) {
+				fprintf(stderr, "FAIL: The Viewer bottom bar does not carry the status and page controls\n");
+				return 307;
+			}
+			if (uiViewer.refreshButton.toolTip.length == 0 ||
+				uiViewer.printButton.toolTip.length == 0 ||
+				uiViewer.exportButton.toolTip.length == 0 ||
+				uiViewer.overflowButton.toolTip.length == 0) {
+				fprintf(stderr, "FAIL: A Viewer action is missing its tooltip\n");
+				return 307;
+			}
+
+			// 20f. The menu bar is complete and agrees with the Insert menu.
+			NSMenu *mainMenu = [NSApp mainMenu];
+			NSMutableDictionary<NSString *, NSMenu *> *menusByTitle = [[NSMutableDictionary alloc] init];
+			for (NSMenuItem *item in mainMenu.itemArray) {
+				if (item.submenu.title.length > 0) menusByTitle[item.submenu.title] = item.submenu;
+			}
+			for (NSString *required in @[@"File", @"Edit", @"Insert", @"Format", @"Query",
+										 @"Report", @"View", @"Window", @"Help"]) {
+				if (menusByTitle[required] == nil) {
+					fprintf(stderr, "FAIL: The menu bar is missing the %s menu\n", required.UTF8String);
+					return 308;
+				}
+			}
+			NSArray<NSString *> *(^titlesOf)(NSMenu *) = ^NSArray<NSString *> *(NSMenu *menu) {
+				return [menu.itemArray valueForKey:@"title"];
+			};
+			NSArray<NSString *> *fileTitles = titlesOf(menusByTitle[@"File"]);
+			if (![fileTitles containsObject:@"Open Recent"] || ![fileTitles containsObject:@"Rename…"] ||
+				![fileTitles containsObject:@"Save"] || ![fileTitles containsObject:@"Save As…"] ||
+				![fileTitles containsObject:@"Export Report…"] || ![fileTitles containsObject:@"Print…"]) {
+				fprintf(stderr, "FAIL: The File menu is incomplete: %s\n", fileTitles.description.UTF8String);
+				return 308;
+			}
+			NSMenuItem *openRecentParent = nil;
+			for (NSMenuItem *item in menusByTitle[@"File"].itemArray) {
+				if ([item.title isEqualToString:@"Open Recent"]) { openRecentParent = item; break; }
+			}
+			if (openRecentParent.submenu == nil) {
+				fprintf(stderr, "FAIL: Open Recent has no submenu\n");
+				return 309;
+			}
+			NSArray<NSString *> *insertTitles = titlesOf(menusByTitle[@"Insert"]);
+			if (insertTitles.count < 6 || ![insertTitles containsObject:@"Static Label"] ||
+				![insertTitles containsObject:@"Data Field"] || ![insertTitles containsObject:@"Barcode"]) {
+				fprintf(stderr, "FAIL: The Insert menu is incomplete: %s\n", insertTitles.description.UTF8String);
+				return 310;
+			}
+			NSArray<NSString *> *formatTitles = titlesOf(menusByTitle[@"Format"]);
+			if (![formatTitles containsObject:@"Size to Fit"] || ![formatTitles containsObject:@"Align"] ||
+				![formatTitles containsObject:@"Bold"] || ![formatTitles containsObject:@"Italic"] ||
+				![formatTitles containsObject:@"Underline"]) {
+				fprintf(stderr, "FAIL: The Format menu is incomplete: %s\n", formatTitles.description.UTF8String);
+				return 311;
+			}
+			NSArray<NSString *> *queryTitles = titlesOf(menusByTitle[@"Query"]);
+			if (![queryTitles containsObject:@"Add Table to Query"] || ![queryTitles containsObject:@"Outputs…"] ||
+				![queryTitles containsObject:@"Filters…"] || ![queryTitles containsObject:@"Groupings…"] ||
+				![queryTitles containsObject:@"Rename Query…"] || ![queryTitles containsObject:@"Arrange Tables"] ||
+				![queryTitles containsObject:@"Database Connection…"]) {
+				fprintf(stderr, "FAIL: The Query menu is incomplete: %s\n", queryTitles.description.UTF8String);
+				return 312;
+			}
+			NSArray<NSString *> *reportTitles = titlesOf(menusByTitle[@"Report"]);
+			BOOL hasPageSize = NO;
+			for (NSMenuItem *item in menusByTitle[@"Report"].itemArray) {
+				if ([item.title isEqualToString:@"Page Size"] && item.submenu != nil) hasPageSize = YES;
+			}
+			if (![reportTitles containsObject:@"Refresh Report Data"] || !hasPageSize ||
+				![reportTitles containsObject:@"Export Report…"] || ![reportTitles containsObject:@"Print…"]) {
+				fprintf(stderr, "FAIL: The Report menu is incomplete: %s\n", reportTitles.description.UTF8String);
+				return 313;
+			}
+			NSArray<NSString *> *viewTitles = titlesOf(menusByTitle[@"View"]);
+			for (NSString *required in @[@"Query Workspace", @"Designer Workspace", @"Viewer Workspace",
+										 @"Zoom In", @"Zoom Out", @"Actual Size", @"Show Left Sidebar",
+										 @"Show Inspector", @"Show Minimap", @"Show Database Tables",
+										 @"Show Grid", @"Snap to Grid", @"Show Rulers", @"Enter Full Screen"]) {
+				if (![viewTitles containsObject:required]) {
+					fprintf(stderr, "FAIL: The View menu is missing '%s': %s\n",
+							required.UTF8String, viewTitles.description.UTF8String);
+					return 314;
+				}
+			}
+			if (![titlesOf(menusByTitle[@"Help"]) containsObject:@"Show Tips Again"]) {
+				fprintf(stderr, "FAIL: The Help menu is missing Show Tips Again\n");
+				return 315;
+			}
+			// Insert is enabled only in the Designer.
+			NSMenuItem *insertProbe = nil;
+			for (NSMenuItem *item in menusByTitle[@"Insert"].itemArray) {
+				if (item.tag == MADMacPaletteElementKindLabel) { insertProbe = item; break; }
+			}
+			[uiWC switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+			if (insertProbe == nil || ![uiWC validateMenuItem:insertProbe]) {
+				fprintf(stderr, "FAIL: Insert is disabled in the Designer\n");
+				return 316;
+			}
+			[uiWC switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+			if ([uiWC validateMenuItem:insertProbe]) {
+				fprintf(stderr, "FAIL: Insert is enabled outside the Designer\n");
+				return 316;
+			}
+
+			// 20g. Rename updates the file, the document, the window, and Open Recent.
+			[[NSUserDefaults standardUserDefaults] removeObjectForKey:tipKey];
+			NSError *renameError = nil;
+			if (![uiDoc renameToDisplayName:@"UI Renamed" error:&renameError]) {
+				fprintf(stderr, "FAIL: Rename failed: %s\n", renameError.localizedDescription.UTF8String);
+				return 317;
+			}
+			NSURL *renamedURL = uiDoc.fileURL;
+			if (![renamedURL.lastPathComponent isEqualToString:@"UI Renamed.mad"] ||
+				![uiDoc.displayName isEqualToString:@"UI Renamed.mad"] ||
+				![[NSFileManager defaultManager] fileExistsAtPath:renamedURL.path] ||
+				[[NSFileManager defaultManager] fileExistsAtPath:uiMadURL.path]) {
+				fprintf(stderr, "FAIL: Rename did not move the file or update the document (url=%s name=%s)\n",
+						renamedURL.path.UTF8String, uiDoc.displayName.UTF8String);
+				return 317;
+			}
+			if (![uiWC.window.title isEqualToString:uiDoc.displayName] ||
+				![uiWC.window.representedURL isEqual:renamedURL]) {
+				fprintf(stderr, "FAIL: Rename did not update the window title or proxy icon\n");
+				return 318;
+			}
+			// NSDocumentController standardizes file URLs (the temporary directory is a
+			// symlink), so compare the canonical forms.
+			NSArray<NSURL *> *(^recentURLs)(void) = ^NSArray<NSURL *> *(void) {
+				return [[NSDocumentController sharedDocumentController] recentDocumentURLs];
+			};
+			BOOL (^recentContains)(NSURL *) = ^BOOL(NSURL *url) {
+				NSURL *target = url.URLByResolvingSymlinksInPath;
+				for (NSURL *candidate in recentURLs()) {
+					if ([[candidate URLByResolvingSymlinksInPath] isEqual:target]) return YES;
+				}
+				return NO;
+			};
+			if (!recentContains(renamedURL)) {
+				fprintf(stderr, "FAIL: Rename did not add the report to Open Recent (%s)\n",
+						recentURLs().description.UTF8String);
+				return 319;
+			}
+			// The standard recent list persists through NSUserDefaults, which is what a
+			// relaunch reads; noting a URL must be visible immediately.
+			NSURL *recentProbe = [NSURL fileURLWithPath:[uiDir stringByAppendingPathComponent:@"Recent Probe.mad"]];
+			[[NSFileManager defaultManager] copyItemAtURL:renamedURL toURL:recentProbe error:NULL];
+			[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:recentProbe];
+			if (!recentContains(recentProbe)) {
+				fprintf(stderr, "FAIL: noteNewRecentDocumentURL did not update Open Recent\n");
+				return 319;
+			}
+
+			[fm removeItemAtPath:uiDir error:NULL];
+			printf("PASS: UI audit: Query/Designer/Viewer switcher, one complete Insert menu, a complete element context menu, tooltips and first-run tips, the Viewer bottom bar, the complete menu bar, rename, and Open Recent\n");
+		}
+
+
 	return 0;
 }

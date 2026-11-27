@@ -108,6 +108,16 @@ extern NSNotificationName const MADMacDocumentDidSelectQueryNotification;
 - (nullable RptqQueryTable *)addChildQuery:(RptqQuery *)child
 									  error:(NSError * _Nullable __autoreleasing *)error;
 
+/// Renames the document's file on disk.  Writes the current contents to `newURL`, removes
+/// the old file, then updates the file URL, the window titles, and the recent-documents
+/// list.  Fails if `newURL` already exists or the write fails.
+- (BOOL)renameToURL:(NSURL *)newURL error:(NSError * _Nullable __autoreleasing *)outError;
+
+/// Renames the document's file to `displayName` in its current directory, keeping the
+/// `.mad` extension.  A sheet-friendly wrapper around -renameToURL:error:.
+- (BOOL)renameToDisplayName:(nullable NSString *)displayName
+					   error:(NSError * _Nullable __autoreleasing *)outError;
+
 /// In-memory session credentials for the active document (used before or in addition to Keychain lookup).
 @property (nonatomic, strong, nullable) MADCredential *sessionCredentials;
 

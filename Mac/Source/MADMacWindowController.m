@@ -23,8 +23,9 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 @property (nonatomic, strong, readwrite) MADMacDesignerViewController *designerViewController;
 @property (nonatomic, strong, readwrite) MADMacViewerViewController *viewerViewController;
 @property (nonatomic, strong, readwrite, nullable) MADMacConnectionWindowController *activeConnectionSheetController;
+@property (nonatomic, assign, readwrite) MADMacWorkspaceTab activeWorkspaceTab;
 
-@property (nonatomic, strong) NSSegmentedControl *workspaceSegmentedControl;
+@property (nonatomic, strong, readwrite, nullable) NSSegmentedControl *workspaceSegmentedControl;
 @property (nonatomic, strong) NSTabView *workspaceTabView;
 @property (nonatomic, strong, readwrite) NSTextField *documentTypeLabel;
 @property (nonatomic, strong, readwrite, nullable) NSPopUpButton *nodePickerPopup;
@@ -68,6 +69,9 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 			[self ensureNodePicker];
 		}
 		[self refreshNodePicker];
+		if (document.fileURL != nil) {
+			window.representedURL = document.fileURL;
+		}
 	}
 	return self;
 }
@@ -137,6 +141,7 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 }
 
 - (void)switchToWorkspaceTab:(MADMacWorkspaceTab)tab {
+	_activeWorkspaceTab = tab;
 	_workspaceSegmentedControl.selectedSegment = tab;
 	[_workspaceTabView selectTabViewItemAtIndex:tab];
 	if (tab == MADMacWorkspaceTabQuery) {
@@ -295,6 +300,268 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 	return connWC;
 }
 
+#pragma mark - Menu Command Dispatch
+
+- (void)insertElementFromMenu:(NSMenuItem *)sender {
+	if (![self isDesignerActive]) return;
+	switch ((MADMacPaletteElementKind)sender.tag) {
+		case MADMacPaletteElementKindLabel: [self.designerViewController addStaticLabelAction:sender]; break;
+		case MADMacPaletteElementKindDataField: [self.designerViewController addDataFieldAction:sender]; break;
+		case MADMacPaletteElementKindAggregate: [self.designerViewController addAggregateAction:sender]; break;
+		case MADMacPaletteElementKindBarcode: [self.designerViewController addBarcodeAction:sender]; break;
+		case MADMacPaletteElementKindImage: [self.designerViewController addImageAction:sender]; break;
+		case MADMacPaletteElementKindLineRule: [self.designerViewController addLineRuleAction:sender]; break;
+		default: break;
+	}
+}
+
+- (void)alignSelectedElementsFromMenu:(NSMenuItem *)sender {
+	if (![self isDesignerActive]) return;
+	[self.designerViewController alignSelectedElementsWithMode:sender.tag];
+}
+
+- (void)formatSizeToFit:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController sizeSelectedElementsToFitAction:sender];
+}
+
+- (void)toggleBoldStyle:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController toggleBoldStyleAction:sender];
+}
+
+- (void)toggleItalicStyle:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController toggleItalicStyleAction:sender];
+}
+
+- (void)toggleUnderlineStyle:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController toggleUnderlineStyleAction:sender];
+}
+
+- (void)copySelection:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController copySelectedElementsAction:sender];
+}
+
+- (void)cutSelection:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController cutSelectedElementsAction:sender];
+}
+
+- (void)pasteSelection:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController pasteElementsAction:sender];
+}
+
+- (void)deleteSelection:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController deleteSelectedElementsAction:sender];
+}
+
+- (void)duplicateSelection:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController duplicateSelectedElementsAction:sender];
+}
+
+- (void)selectAllInCanvas:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController selectAllElementsAction:sender];
+}
+
+- (void)queryAddSelectedTable:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController addSelectedSchemaTable:sender];
+}
+
+- (void)queryAddSource:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController addSourceQueryAction:sender];
+}
+
+- (void)queryImportReport:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController importChildQueryAction:sender];
+}
+
+- (void)queryCreateRoot:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController addRootQueryAction:sender];
+}
+
+- (void)queryShowOutputs:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController toggleOutputsPopover:sender];
+}
+
+- (void)queryShowFilters:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController toggleFiltersPopover:sender];
+}
+
+- (void)queryShowGroupings:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController toggleGroupsPopover:sender];
+}
+
+- (void)queryRename:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController renameQueryAction:sender];
+}
+
+- (void)queryArrangeTables:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController autoArrangeTablesAction:sender];
+}
+
+- (void)queryEditConnection:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController editDatabaseConnectionAction:sender];
+	else [self editDatabaseConnectionAction:sender];
+}
+
+- (void)viewerZoomIn:(nullable id)sender {
+	if ([self isViewerActive]) [self.viewerViewController zoomInAction:sender];
+	else if ([self isDesignerActive]) [self.designerViewController zoomInAction:sender];
+}
+
+- (void)viewerZoomOut:(nullable id)sender {
+	if ([self isViewerActive]) [self.viewerViewController zoomOutAction:sender];
+	else if ([self isDesignerActive]) [self.designerViewController zoomOutAction:sender];
+}
+
+- (void)viewerZoomActualSize:(nullable id)sender {
+	if ([self isViewerActive]) [self.viewerViewController zoomActualSizeAction:sender];
+	else if ([self isDesignerActive]) [self.designerViewController zoomActualSizeAction:sender];
+}
+
+- (void)selectReportPaperTypeFromMenu:(NSMenuItem *)sender {
+	NSNumber *type = sender.representedObject;
+	if (![type isKindOfClass:[NSNumber class]]) return;
+	[self.viewerViewController selectPaperType:(MTPaperType)type.integerValue];
+}
+
+- (void)toggleDesignerLeftSidebar:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController toggleLeftSidebarAction:sender];
+}
+
+- (void)toggleDesignerInspector:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController toggleInspectorAction:sender];
+}
+
+- (void)toggleDesignerMinimap:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController toggleMinimapAction:sender];
+}
+
+- (void)toggleQuerySchemaSidebar:(nullable id)sender {
+	if ([self isQueryActive]) [self.queryViewController toggleSchemaSidebarAction:sender];
+}
+
+- (void)toggleDesignerGrid:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController toggleGridFromMenu:sender];
+}
+
+- (void)toggleDesignerSnap:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController toggleSnapFromMenu:sender];
+}
+
+- (void)toggleDesignerRulers:(nullable id)sender {
+	if ([self isDesignerActive]) [self.designerViewController toggleRulersFromMenu:sender];
+}
+
+#pragma mark - Menu Validation
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	SEL action = menuItem.action;
+	MADMacDocument *document = self.madDocument;
+	BOOL designer = [self isDesignerActive];
+	BOOL query = [self isQueryActive];
+	BOOL viewer = [self isViewerActive];
+
+	if (action == @selector(insertElementFromMenu:)) {
+		return designer && [self.designerViewController canInsertElement];
+	}
+	if (action == @selector(alignSelectedElementsFromMenu:)) {
+		return designer && [self.designerViewController selectedElementCount] >= 2;
+	}
+	if (action == @selector(formatSizeToFit:) ||
+		action == @selector(toggleBoldStyle:) ||
+		action == @selector(toggleItalicStyle:) ||
+		action == @selector(toggleUnderlineStyle:)) {
+		return designer && [self.designerViewController selectedElementCount] >= 1;
+	}
+	if (action == @selector(copySelection:) || action == @selector(cutSelection:)) {
+		return designer && [self.designerViewController selectedElementCount] >= 1;
+	}
+	if (action == @selector(pasteSelection:)) {
+		return designer && [self.designerViewController canPasteElements];
+	}
+	if (action == @selector(deleteSelection:) || action == @selector(duplicateSelection:)) {
+		return designer && [self.designerViewController selectedElementCount] >= 1;
+	}
+	if (action == @selector(selectAllInCanvas:)) {
+		return designer && [self.designerViewController selectedElementCount] >= 0;
+	}
+	if (action == @selector(queryAddSelectedTable:)) {
+		return query && [self.queryViewController canAddSelectedTable];
+	}
+	if (action == @selector(queryAddSource:)) {
+		return query && document != nil;
+	}
+	if (action == @selector(queryImportReport:)) {
+		return query && document != nil;
+	}
+	if (action == @selector(queryCreateRoot:)) {
+		return query && [self.queryViewController canCreateRoot];
+	}
+	if (action == @selector(queryShowOutputs:)) {
+		return query && [self.queryViewController editingRootQuery];
+	}
+	if (action == @selector(queryShowFilters:)) {
+		return query && [self.queryViewController selectedQuery] != nil;
+	}
+	if (action == @selector(queryShowGroupings:)) {
+		return query && [self.queryViewController selectedQuery] != nil;
+	}
+	if (action == @selector(queryRename:)) {
+		return query && [self.queryViewController selectedQuery] != nil;
+	}
+	if (action == @selector(queryArrangeTables:)) {
+		return query && [self.queryViewController selectedQuery] != nil;
+	}
+	if (action == @selector(queryEditConnection:)) {
+		return document != nil;
+	}
+	if (action == @selector(viewerZoomIn:) || action == @selector(viewerZoomOut:) ||
+		action == @selector(viewerZoomActualSize:)) {
+		if (viewer) return ![self.viewerViewController isShowingRowGrid];
+		if (designer) return YES;
+		return NO;
+	}
+	if (action == @selector(selectReportPaperTypeFromMenu:)) {
+		BOOL match = ([menuItem.representedObject isKindOfClass:[NSNumber class]] &&
+					  (MTPaperType)[menuItem.representedObject integerValue] == self.viewerViewController.selectedPaperType);
+		menuItem.state = match ? NSControlStateValueOn : NSControlStateValueOff;
+		return document != nil;
+	}
+	if (action == @selector(toggleDesignerLeftSidebar:)) {
+		menuItem.title = [self.designerViewController leftSidebarVisible]
+			? NSLocalizedString(@"Hide Left Sidebar", @"View menu item that hides the designer's left sidebar.")
+			: NSLocalizedString(@"Show Left Sidebar", @"View menu item that shows the designer's left sidebar.");
+		return designer;
+	}
+	if (action == @selector(toggleDesignerInspector:)) {
+		menuItem.title = [self.designerViewController inspectorVisible]
+			? NSLocalizedString(@"Hide Inspector", @"View menu item that hides the designer's inspector.")
+			: NSLocalizedString(@"Show Inspector", @"View menu item that shows the designer's inspector.");
+		return designer;
+	}
+	if (action == @selector(toggleDesignerMinimap:)) {
+		menuItem.state = [self.designerViewController minimapVisible] ? NSControlStateValueOn : NSControlStateValueOff;
+		return designer;
+	}
+	if (action == @selector(toggleQuerySchemaSidebar:)) {
+		menuItem.title = [self.queryViewController schemaSidebarVisible]
+			? NSLocalizedString(@"Hide Database Tables", @"View menu item that hides the query workspace's schema sidebar.")
+			: NSLocalizedString(@"Show Database Tables", @"View menu item that shows the query workspace's schema sidebar.");
+		return query;
+	}
+	if (action == @selector(toggleDesignerGrid:)) {
+		menuItem.state = [self.designerViewController gridVisible] ? NSControlStateValueOn : NSControlStateValueOff;
+		return designer;
+	}
+	if (action == @selector(toggleDesignerSnap:)) {
+		menuItem.state = [self.designerViewController snapEnabled] ? NSControlStateValueOn : NSControlStateValueOff;
+		return designer;
+	}
+	if (action == @selector(toggleDesignerRulers:)) {
+		menuItem.state = [self.designerViewController rulersVisible] ? NSControlStateValueOn : NSControlStateValueOff;
+		return designer;
+	}
+	return YES;
+}
+
 #pragma mark - NSToolbarDelegate
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarAllowedItemIdentifiers:(NSToolbar *) __unused toolbar {
@@ -339,14 +606,95 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 	}
 	NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
 	_workspaceSegmentedControl = [NSSegmentedControl segmentedControlWithLabels:@[
-		@"MAD Query",
-		@"MAD Designer",
-		@"MAD Viewer"
+		NSLocalizedString(@"Query", @"Workspace switcher segment: the query designer."),
+		NSLocalizedString(@"Designer", @"Workspace switcher segment: the report layout designer."),
+		NSLocalizedString(@"Viewer", @"Workspace switcher segment: the rendered report viewer.")
 	] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(workspaceSegmentAction:)];
-	_workspaceSegmentedControl.selectedSegment = MADMacWorkspaceTabDesigner;
+	_workspaceSegmentedControl.selectedSegment = _activeWorkspaceTab;
+	_workspaceSegmentedControl.toolTip = NSLocalizedString(@"Switch between the query, layout, and viewer workspaces.", @"Tooltip for the workspace switcher.");
+	_workspaceSegmentedControl.accessibilityLabel = NSLocalizedString(@"Workspace", @"Accessibility label for the workspace switcher.");
+	for (NSInteger segment = 0; segment < 3; segment++) {
+		[_workspaceSegmentedControl setToolTip:[self workspaceNameForTab:(MADMacWorkspaceTab)segment]
+									forSegment:segment];
+	}
 	item.label = NSLocalizedString(@"Workspace", @"Toolbar item label for the workspace switcher.");
 	item.view = _workspaceSegmentedControl;
 	return item;
+}
+
+- (NSString *)workspaceNameForTab:(MADMacWorkspaceTab)tab {
+	switch (tab) {
+		case MADMacWorkspaceTabQuery:
+			return NSLocalizedString(@"Query", @"Workspace name: the query designer.");
+		case MADMacWorkspaceTabDesigner:
+			return NSLocalizedString(@"Designer", @"Workspace name: the report layout designer.");
+		case MADMacWorkspaceTabViewer:
+			return NSLocalizedString(@"Viewer", @"Workspace name: the rendered report viewer.");
+	}
+	return @"";
+}
+
+- (BOOL)isDesignerActive {
+	return _activeWorkspaceTab == MADMacWorkspaceTabDesigner;
+}
+
+- (BOOL)isQueryActive {
+	return _activeWorkspaceTab == MADMacWorkspaceTabQuery;
+}
+
+- (BOOL)isViewerActive {
+	return _activeWorkspaceTab == MADMacWorkspaceTabViewer;
+}
+
+#pragma mark - Rename
+
+- (void)presentRenameSheet:(nullable id) __unused sender {
+	MADMacDocument *document = self.madDocument;
+	NSWindow *window = self.window;
+	if (document == nil || window == nil) return;
+	if (document.fileURL == nil) {
+		NSAlert *alert = [[NSAlert alloc] init];
+		alert.messageText = NSLocalizedString(@"Save the report before renaming it.", @"Rename alert title when the report has never been saved.");
+		[alert addButtonWithTitle:NSLocalizedString(@"OK", @"Dismiss button.")];
+		[alert beginSheetModalForWindow:window completionHandler:nil];
+		return;
+	}
+
+	NSString *currentName = document.displayName ?: document.fileURL.lastPathComponent;
+	NSAlert *alert = [[NSAlert alloc] init];
+	alert.messageText = NSLocalizedString(@"Rename Report", @"Title of the rename sheet.");
+	alert.informativeText = NSLocalizedString(@"Enter a new name for this report. It stays in the same folder.", @"Body of the rename sheet.");
+	[alert addButtonWithTitle:NSLocalizedString(@"Rename", @"Confirm button of the rename sheet.")];
+	[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Cancel button.")];
+
+	NSTextField *field = [[NSTextField alloc] initWithFrame:NSMakeRect(0.0, 0.0, 320.0, 24.0)];
+	field.stringValue = currentName;
+	field.placeholderString = NSLocalizedString(@"Report name", @"Placeholder in the rename sheet's name field.");
+	field.accessibilityLabel = NSLocalizedString(@"Report name", @"Accessibility label for the rename sheet's name field.");
+	field.toolTip = NSLocalizedString(@"The new file name, without the .mad extension.", @"Tooltip for the rename sheet's name field.");
+	alert.accessoryView = field;
+	alert.window.initialFirstResponder = field;
+
+	[alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse response) {
+		if (response != NSAlertFirstButtonReturn) return;
+		NSError *error = nil;
+		if (![document renameToDisplayName:field.stringValue error:&error]) {
+			[NSApp presentError:error];
+			return;
+		}
+		[self updateWindowRepresentation];
+	}];
+}
+
+- (void)updateWindowRepresentation {
+	MADMacDocument *document = self.madDocument;
+	NSWindow *window = self.window;
+	if (document.fileURL != nil) {
+		window.representedURL = document.fileURL;
+	}
+	if (document.displayName.length > 0) {
+		window.title = document.displayName;
+	}
 }
 
 @end

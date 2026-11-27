@@ -10,6 +10,7 @@
 #import "MADMacDocumentController.h"
 #import "MADMacWindowController.h"
 #import "MADMacConnectionWindowController.h"
+#import "MADMacTipBar.h"
 
 #import <MAD/MAD.h>
 #import "MADSQLQueryCompiler.h"
@@ -22,6 +23,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 static const CGFloat kTopBarHeight = 38.0;
+static const CGFloat kDesignerTipBarHeight = 30.0;
 static const CGFloat kDefaultSidebarWidth = 200.0;
 static const CGFloat kMinSidebarWidth = 150.0;
 static const CGFloat kMaxSidebarWidth = 420.0;
@@ -1070,21 +1072,24 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 @property (nonatomic, assign, readwrite) MADMacQueryWorkspaceMode workspaceMode;
 @property (nonatomic, assign, readwrite) CGFloat schemaSidebarWidth;
+@property (nonatomic, assign) BOOL schemaSidebarHidden;
 
 // Top bar controls
 @property (nonatomic, strong) NSView *topBarView;
 @property (nonatomic, strong) NSSegmentedControl *modeSegmentedControl;
 @property (nonatomic, strong) NSPopUpButton *querySelectorPopup;
-@property (nonatomic, strong) NSButton *addSourceButton;
-@property (nonatomic, strong) NSButton *importChildButton;
-@property (nonatomic, strong) NSButton *addRootButton;
-@property (nonatomic, strong) NSButton *renameQueryButton;
-@property (nonatomic, strong) NSButton *outputsButton;
+@property (nonatomic, strong) NSPopUpButton *addMenuButton;
+@property (nonatomic, strong) NSPopUpButton *queryMenuButton;
+@property (nonatomic, strong) NSButton *connectionButton;
+@property (nonatomic, strong, nullable) NSMenuItem *addTableMenuItem;
+@property (nonatomic, strong, nullable) NSMenuItem *createRootMenuItem;
+@property (nonatomic, strong, nullable) NSMenuItem *outputsMenuItem;
+@property (nonatomic, strong, nullable) NSMenuItem *filtersMenuItem;
+@property (nonatomic, strong, nullable) NSMenuItem *groupsMenuItem;
 @property (nonatomic, strong) NSStackView *designerHeaderControls;
-@property (nonatomic, strong) NSButton *filtersButton;
-@property (nonatomic, strong) NSButton *groupsButton;
-@property (nonatomic, strong) NSButton *arrangeButton;
 @property (nonatomic, strong) NSStackView *sqlHeaderControls;
+@property (nonatomic, strong) MADMacTipBar *tipBar;
+@property (nonatomic, strong) NSLayoutConstraint *tipBarHeightConstraint;
 
 // Mode 0: Visual Query Designer (NSSplitView: 200px Schema Sidebar + Visual Canvas)
 @property (nonatomic, strong) NSSplitView *designerSplitView;
@@ -1221,69 +1226,138 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	[root addSubview:_topBarView];
 	[root addSubview:topDivider];
 
+	_tipBar = [MADMacTipBar tipBarWithIdentifier:@"query"
+											text:NSLocalizedString(@"Start here: choose a table in the list on the left, then use Add to place it on the canvas. Drag between fields to create a join.", @"First-run tip in the query workspace.")];
+	_tipBar.translatesAutoresizingMaskIntoConstraints = NO;
+	[root addSubview:_tipBar];
+	[NSLayoutConstraint activateConstraints:@[
+		[_tipBar.leadingAnchor constraintEqualToAnchor:_canvasContainerView.leadingAnchor],
+		[_tipBar.trailingAnchor constraintEqualToAnchor:root.trailingAnchor],
+		[_tipBar.topAnchor constraintEqualToAnchor:_topBarView.bottomAnchor],
+		[_tipBar.heightAnchor constraintEqualToConstant:kDesignerTipBarHeight],
+	]];
+
 	self.view = root;
+}
+
+- (NSPopUpButton *)menuButtonWithTitle:(NSString *)title
+							symbolName:(NSString *)symbolName
+								 items:(NSArray<NSMenuItem *> *)items
+							   toolTip:(NSString *)toolTip {
+	NSPopUpButton *button = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:YES];
+	[button addItemWithTitle:title];
+	button.controlSize = NSControlSizeRegular;
+	button.font = [NSFont systemFontOfSize:12.0];
+	button.toolTip = toolTip;
+	button.accessibilityLabel = title;
+	button.translatesAutoresizingMaskIntoConstraints = NO;
+	if (@available(macOS 11.0, *)) {
+		NSImage *image = [NSImage imageWithSystemSymbolName:symbolName accessibilityDescription:title];
+		if (image != nil) {
+			button.image = image;
+			button.imagePosition = NSImageLeading;
+		}
+	}
+	for (NSMenuItem *item in items) {
+		if (item.isSeparatorItem) {
+			[button.menu addItem:[NSMenuItem separatorItem]];
+		} else {
+			item.target = self;
+			[button.menu addItem:item];
+		}
+	}
+	button.menu.autoenablesItems = YES;
+	return button;
+}
+
+- (NSMenuItem *)menuItemWithTitle:(NSString *)title action:(SEL)action symbol:(NSString *)symbol {
+	NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:title action:action keyEquivalent:@""];
+	item.target = self;
+	if (@available(macOS 11.0, *)) {
+		NSImage *image = [NSImage imageWithSystemSymbolName:symbol accessibilityDescription:title];
+		if (image != nil) item.image = image;
+	}
+	return item;
 }
 
 - (void)populateTopBar:(NSView *)bar {
 	_modeSegmentedControl = [NSSegmentedControl segmentedControlWithLabels:@[
-		NSLocalizedString(@"Query Designer", @"Query workspace segment that shows the visual table designer."),
-		NSLocalizedString(@"SQL Query", @"Query workspace segment that shows the SQL text editor.")
+		NSLocalizedString(@"Designer", @"Query workspace segment that shows the visual table designer."),
+		NSLocalizedString(@"SQL", @"Query workspace segment that shows the SQL text editor.")
 	]
 															  trackingMode:NSSegmentSwitchTrackingSelectOne
 																	target:self
 																	action:@selector(modeSegmentChanged:)];
 	_modeSegmentedControl.selectedSegment = MADMacQueryWorkspaceModeDesigner;
 	_modeSegmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
+	_modeSegmentedControl.toolTip = NSLocalizedString(@"Switch between the visual query designer and the SQL editor.", @"Tooltip for the query mode switcher.");
+	[_modeSegmentedControl setToolTip:NSLocalizedString(@"Design the query by adding tables and joins.", @"Tooltip on the visual query designer segment.")
+						   forSegment:MADMacQueryWorkspaceModeDesigner];
+	[_modeSegmentedControl setToolTip:NSLocalizedString(@"Write or paste a SQL statement.", @"Tooltip on the SQL editor segment.")
+						   forSegment:MADMacQueryWorkspaceModeSQL];
 
-	_filtersButton = [NSButton buttonWithTitle:NSLocalizedString(@"Filters (WHERE)", @"Query toolbar button that opens the filter editor. WHERE is SQL.")
-										target:self
-										action:@selector(toggleFiltersPopover:)];
-	_groupsButton = [NSButton buttonWithTitle:NSLocalizedString(@"Groupings (GROUP BY)", @"Query toolbar button that opens the grouping editor. GROUP BY is SQL.")
-									   target:self
-									   action:@selector(toggleGroupsPopover:)];
-	_arrangeButton = [NSButton buttonWithTitle:NSLocalizedString(@"Arrange Tables", @"Query toolbar button that lays the table cards out automatically.")
-										target:self
-										action:@selector(autoArrangeTablesAction:)];
+	// The query selector is the workspace's anchor: everything to its right acts on the
+	// query it names.
 	_querySelectorPopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
 	_querySelectorPopup.target = self;
 	_querySelectorPopup.action = @selector(querySelectorChanged:);
 	_querySelectorPopup.toolTip = NSLocalizedString(@"The query being edited. The composed root joins the source queries below it.", @"Tooltip for the query selector popup.");
+	_querySelectorPopup.accessibilityLabel = NSLocalizedString(@"Query", @"Accessibility label for the query selector popup.");
+	_querySelectorPopup.translatesAutoresizingMaskIntoConstraints = NO;
 
-	_addSourceButton = [NSButton buttonWithTitle:NSLocalizedString(@"+ Source…", @"Query toolbar button that adds a source query from a database connection.")
-										  target:self
-										  action:@selector(addSourceQueryAction:)];
-	_addSourceButton.toolTip = NSLocalizedString(@"Add a source query from another database connection", @"Tooltip for the add-source button.");
+	NSMenuItem *addTable = [self menuItemWithTitle:NSLocalizedString(@"Add Table to Query", @"Add menu item that adds the selected database table.")
+											action:@selector(addSelectedSchemaTable:)
+											symbol:@"tablecells.badge.ellipsis"];
+	_addTableMenuItem = addTable;
+	NSMenuItem *addSource = [self menuItemWithTitle:NSLocalizedString(@"Add Source Query…", @"Add menu item that adds a source query from a connection.")
+											 action:@selector(addSourceQueryAction:)
+											 symbol:@"plus.rectangle.on.folder"];
+	NSMenuItem *importReport = [self menuItemWithTitle:NSLocalizedString(@"Import Report…", @"Add menu item that imports an existing report as a child.")
+												action:@selector(importChildQueryAction:)
+												symbol:@"square.and.arrow.down.on.square"];
+	NSMenuItem *createRoot = [self menuItemWithTitle:NSLocalizedString(@"Create Root Query", @"Add menu item that creates the composed root query.")
+											  action:@selector(addRootQueryAction:)
+											  symbol:@"rectangle.stack.badge.plus"];
+	_createRootMenuItem = createRoot;
+	_addMenuButton = [self menuButtonWithTitle:NSLocalizedString(@"Add", @"Query add menu button title.")
+									symbolName:@"plus"
+										 items:@[addTable, [NSMenuItem separatorItem], addSource, importReport, createRoot]
+									   toolTip:NSLocalizedString(@"Add a table, a source query, an imported report, or the composed root.", @"Tooltip for the query add menu.")];
 
-	_importChildButton = [NSButton buttonWithTitle:NSLocalizedString(@"+ Import…", @"Query toolbar button that imports an existing report as a child.")
-											target:self
-											action:@selector(importChildQueryAction:)];
-	_importChildButton.toolTip = NSLocalizedString(@"Import an existing report as a child of the composition", @"Tooltip for the import-child button.");
+	NSMenuItem *outputs = [self menuItemWithTitle:NSLocalizedString(@"Outputs…", @"Query actions menu item that edits the composed root's outputs.")
+										   action:@selector(toggleOutputsPopover:)
+										   symbol:@"list.bullet.rectangle"];
+	_outputsMenuItem = outputs;
+	NSMenuItem *filters = [self menuItemWithTitle:NSLocalizedString(@"Filters…", @"Query actions menu item that edits the WHERE filters.")
+										   action:@selector(toggleFiltersPopover:)
+										   symbol:@"line.3.horizontal.decrease.circle"];
+	_filtersMenuItem = filters;
+	NSMenuItem *groups = [self menuItemWithTitle:NSLocalizedString(@"Groupings…", @"Query actions menu item that edits the GROUP BY groupings.")
+										  action:@selector(toggleGroupsPopover:)
+										  symbol:@"rectangle.3.group"];
+	_groupsMenuItem = groups;
+	NSMenuItem *rename = [self menuItemWithTitle:NSLocalizedString(@"Rename Query…", @"Query actions menu item that renames the selected query.")
+										  action:@selector(renameQueryAction:)
+										  symbol:@"pencil"];
+	NSMenuItem *arrange = [self menuItemWithTitle:NSLocalizedString(@"Arrange Tables", @"Query actions menu item that lays the table cards out automatically.")
+											action:@selector(autoArrangeTablesAction:)
+											symbol:@"square.grid.3x3"];
+	_queryMenuButton = [self menuButtonWithTitle:NSLocalizedString(@"Query", @"Query actions menu button title.")
+									  symbolName:@"ellipsis.circle"
+										   items:@[outputs, filters, groups, [NSMenuItem separatorItem], rename, arrange]
+										 toolTip:NSLocalizedString(@"Actions for the selected query: outputs, filters, groupings, name, and layout.", @"Tooltip for the query actions menu.")];
 
-	_addRootButton = [NSButton buttonWithTitle:NSLocalizedString(@"+ Root", @"Query toolbar button that creates the composed root query.")
-										target:self
-										action:@selector(addRootQueryAction:)];
-	_addRootButton.toolTip = NSLocalizedString(@"Create the composed root query that joins the source queries", @"Tooltip for the add-root button.");
-
-	_renameQueryButton = [NSButton buttonWithTitle:NSLocalizedString(@"Rename…", @"Query toolbar button that renames the selected query.")
+	_connectionButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
+															accessibilityDescription:NSLocalizedString(@"Database Connection", @"Accessibility description for the connection button icon.")]
 										   target:self
-										   action:@selector(renameQueryAction:)];
-	_renameQueryButton.toolTip = NSLocalizedString(@"Rename the selected query", @"Tooltip for the rename-query button.");
+										   action:@selector(editDatabaseConnectionAction:)];
+	_connectionButton.bezelStyle = NSBezelStyleTexturedRounded;
+	_connectionButton.imagePosition = NSImageOnly;
+	_connectionButton.toolTip = NSLocalizedString(@"Edit the database connection for the selected query", @"Tooltip for the query workspace's connection button.");
+	_connectionButton.accessibilityLabel = NSLocalizedString(@"Database Connection", @"Accessibility label for the connection button.");
+	_connectionButton.translatesAutoresizingMaskIntoConstraints = NO;
 
-	_outputsButton = [NSButton buttonWithTitle:NSLocalizedString(@"Outputs…", @"Query toolbar button that edits the composed root's outputs.")
-										target:self
-										action:@selector(toggleOutputsPopover:)];
-	_outputsButton.toolTip = NSLocalizedString(@"Choose, name, and reorder the composed root's output columns", @"Tooltip for the outputs button.");
-
-	NSButton *connectionBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Database Connection…", @"Query toolbar button that edits the database connection.")
-												 target:self
-												 action:@selector(editDatabaseConnectionAction:)];
-	if (@available(macOS 11.0, *)) {
-		connectionBtn.image = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
-										accessibilityDescription:NSLocalizedString(@"Database Connection", @"Accessibility description for the connection button icon.")];
-		connectionBtn.imagePosition = NSImageLeft;
-	}
-
-	_designerHeaderControls = [NSStackView stackViewWithViews:@[_querySelectorPopup, _addSourceButton, _importChildButton, _addRootButton, _renameQueryButton, _outputsButton, _filtersButton, _groupsButton, _arrangeButton, connectionBtn]];
+	_designerHeaderControls = [NSStackView stackViewWithViews:@[_addMenuButton, _queryMenuButton]];
 	_designerHeaderControls.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	_designerHeaderControls.spacing = 8.0;
 	_designerHeaderControls.translatesAutoresizingMaskIntoConstraints = NO;
@@ -1291,13 +1365,16 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	NSButton *revertSQLBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Revert to Generated SQL", @"SQL toolbar button that replaces the text with the SQL generated from the visual query.")
 												target:self
 												action:@selector(syncSQLFromVisualQuery:)];
+	revertSQLBtn.toolTip = NSLocalizedString(@"Replace the SQL text with the statement generated from the visual query.", @"Tooltip for the revert SQL button.");
 	NSButton *validateSQLBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Validate SQL", @"SQL toolbar button that checks the statement without applying it.")
 												  target:self
 												  action:@selector(validateSQLAction:)];
+	validateSQLBtn.toolTip = NSLocalizedString(@"Check the statement without applying it.", @"Tooltip for the validate SQL button.");
 	NSButton *applySQLBtn = [NSButton buttonWithTitle:NSLocalizedString(@"Compile & Apply SQL", @"SQL toolbar button that parses the statement and applies it to the query.")
 											   target:self
 											   action:@selector(compileAndApplySQL:)];
 	applySQLBtn.bezelColor = [NSColor controlAccentColor];
+	applySQLBtn.toolTip = NSLocalizedString(@"Parse the statement and apply it to the query.", @"Tooltip for the compile and apply SQL button.");
 
 	_sqlHeaderControls = [NSStackView stackViewWithViews:@[revertSQLBtn, validateSQLBtn, applySQLBtn]];
 	_sqlHeaderControls.orientation = NSUserInterfaceLayoutOrientationHorizontal;
@@ -1306,18 +1383,34 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	_sqlHeaderControls.hidden = YES;
 
 	[bar addSubview:_modeSegmentedControl];
+	[bar addSubview:_querySelectorPopup];
 	[bar addSubview:_designerHeaderControls];
 	[bar addSubview:_sqlHeaderControls];
+	[bar addSubview:_connectionButton];
 
+	NSLayoutConstraint *selectorWidth = [_querySelectorPopup.widthAnchor constraintEqualToConstant:190.0];
+	selectorWidth.priority = NSLayoutPriorityDefaultHigh;
 	[NSLayoutConstraint activateConstraints:@[
 		[_modeSegmentedControl.leadingAnchor constraintEqualToAnchor:bar.leadingAnchor constant:12.0],
 		[_modeSegmentedControl.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
 
-		[_designerHeaderControls.trailingAnchor constraintEqualToAnchor:bar.trailingAnchor constant:-12.0],
-		[_designerHeaderControls.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
+		[_querySelectorPopup.leadingAnchor constraintEqualToAnchor:_modeSegmentedControl.trailingAnchor constant:12.0],
+		[_querySelectorPopup.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
+		selectorWidth,
+		[_querySelectorPopup.widthAnchor constraintGreaterThanOrEqualToConstant:150.0],
+		[_querySelectorPopup.widthAnchor constraintLessThanOrEqualToConstant:240.0],
 
-		[_sqlHeaderControls.trailingAnchor constraintEqualToAnchor:bar.trailingAnchor constant:-12.0],
+		[_designerHeaderControls.leadingAnchor constraintEqualToAnchor:_querySelectorPopup.trailingAnchor constant:8.0],
+		[_designerHeaderControls.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
+		[_designerHeaderControls.trailingAnchor constraintLessThanOrEqualToAnchor:_connectionButton.leadingAnchor constant:-12.0],
+
+		[_sqlHeaderControls.trailingAnchor constraintEqualToAnchor:_connectionButton.leadingAnchor constant:-12.0],
 		[_sqlHeaderControls.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
+		[_sqlHeaderControls.leadingAnchor constraintGreaterThanOrEqualToAnchor:_querySelectorPopup.trailingAnchor constant:8.0],
+
+		[_connectionButton.trailingAnchor constraintEqualToAnchor:bar.trailingAnchor constant:-12.0],
+		[_connectionButton.centerYAnchor constraintEqualToAnchor:bar.centerYAnchor],
+		[_connectionButton.widthAnchor constraintEqualToConstant:30.0],
 	]];
 }
 
@@ -1530,6 +1623,11 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 	_sqlEditorContainerView.hidden = isDesigner;
 	_sqlHeaderControls.hidden = isDesigner;
+	if (isDesigner) {
+		[_tipBar showIfNeeded];
+	} else {
+		_tipBar.hidden = YES;
+	}
 
 	[self dismissActiveLinkPopover];
 	if (!isDesigner) {
@@ -1539,12 +1637,12 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 #pragma mark - NSSplitViewDelegate (Fixed 200px Left Sidebar on Window Resize, User-Resizable Divider)
 
-- (BOOL)splitView:(NSSplitView *) __unused splitView canCollapseSubview:(NSView *) __unused subview {
-	return NO;
+- (BOOL)splitView:(NSSplitView *) __unused splitView canCollapseSubview:(NSView *)subview {
+	return subview == _schemaSidebarView && _schemaSidebarHidden;
 }
 
 - (CGFloat)splitView:(NSSplitView *) __unused splitView constrainMinCoordinate:(CGFloat) __unused proposedMinimumPosition ofSubviewAt:(NSInteger) __unused dividerIndex {
-	return kMinSidebarWidth;
+	return _schemaSidebarHidden ? 0.0 : kMinSidebarWidth;
 }
 
 - (CGFloat)splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat) __unused proposedMaximumPosition ofSubviewAt:(NSInteger) __unused dividerIndex {
@@ -1562,7 +1660,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	NSRect b = splitView.bounds;
 	CGFloat divider = splitView.dividerThickness;
 	CGFloat maxLeft = MAX(kMinSidebarWidth, MIN(kMaxSidebarWidth, b.size.width - divider - 320.0));
-	CGFloat leftW = MIN(MAX(_schemaSidebarWidth, kMinSidebarWidth), maxLeft);
+	CGFloat leftW = _schemaSidebarHidden ? 0.0 : MIN(MAX(_schemaSidebarWidth, kMinSidebarWidth), maxLeft);
 	CGFloat rightW = MAX(0.0, b.size.width - leftW - divider);
 
 	_schemaSidebarView.frame = NSMakeRect(0.0, 0.0, leftW, b.size.height);
@@ -1572,7 +1670,8 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 - (void)splitViewDidResizeSubviews:(NSNotification *) __unused notification {
 	CGFloat currentLeftWidth = NSWidth(_schemaSidebarView.frame);
-	if (currentLeftWidth >= kMinSidebarWidth - 1.0 && currentLeftWidth <= kMaxSidebarWidth + 1.0) {
+	if (!_schemaSidebarHidden &&
+		currentLeftWidth >= kMinSidebarWidth - 1.0 && currentLeftWidth <= kMaxSidebarWidth + 1.0) {
 		_schemaSidebarWidth = currentLeftWidth;
 	}
 	[_canvasView ensureCanvasSizeFitsCards];
@@ -1687,8 +1786,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		}
 	}
 	BOOL hasRoot = (_document.rootQuery != nil);
-	_addRootButton.hidden = hasRoot;
-	_renameQueryButton.hidden = (queries.count == 0);
+	_createRootMenuItem.hidden = hasRoot;
 	[self updateSchemaSidebarHeader];
 }
 
@@ -1721,7 +1819,12 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	// A source that joins its own upstream tables is a composition too: SQL editing is
 	// refused and its tables are read-only structure, exactly as for the root.
 	_editingComposingNode = (query != nil && !_editingRoot && [query isComposing]);
-	_outputsButton.hidden = !_editingRoot;
+	_outputsMenuItem.hidden = !_editingRoot;
+	// The composed root has no connection of its own; its sources do.
+	_connectionButton.enabled = !_editingRoot;
+	_connectionButton.toolTip = _editingRoot
+		? NSLocalizedString(@"The Result has no connection of its own; connect each source instead.", @"Tooltip on the disabled connection button while the composed Result is selected.")
+		: NSLocalizedString(@"Edit the database connection for the selected query", @"Tooltip for the query workspace's connection button.");
 
 	BOOL sqlAvailable = !(_editingRoot || _editingComposingNode);
 	if (_modeSegmentedControl != nil) {
@@ -1798,13 +1901,13 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 	[_canvasView rebuildCanvasWithTables:topoTables links:_queryLinks rootTableID:rootTableIDs];
 
-	// Update top bar button badges
-	_filtersButton.title = _queryPredicates.count > 0
-		? [[NSString alloc] initWithFormat:NSLocalizedString(@"Filters (%lu)", @"Query toolbar button with the active filter count. %lu is the count."), (unsigned long)_queryPredicates.count]
-		: NSLocalizedString(@"Filters (WHERE)", @"Query toolbar button that opens the filter editor. WHERE is SQL.");
-	_groupsButton.title = _queryGroups.count > 0
-		? [[NSString alloc] initWithFormat:NSLocalizedString(@"Groupings (%lu)", @"Query toolbar button with the active grouping count. %lu is the count."), (unsigned long)_queryGroups.count]
-		: NSLocalizedString(@"Groupings (GROUP BY)", @"Query toolbar button that opens the grouping editor. GROUP BY is SQL.");
+	// Update the actions menu's counts.
+	_filtersMenuItem.title = _queryPredicates.count > 0
+		? [[NSString alloc] initWithFormat:NSLocalizedString(@"Filters (%lu)…", @"Query actions menu item with the active filter count. %lu is the count."), (unsigned long)_queryPredicates.count]
+		: NSLocalizedString(@"Filters…", @"Query actions menu item that edits the WHERE filters.");
+	_groupsMenuItem.title = _queryGroups.count > 0
+		? [[NSString alloc] initWithFormat:NSLocalizedString(@"Groupings (%lu)…", @"Query actions menu item with the active grouping count. %lu is the count."), (unsigned long)_queryGroups.count]
+		: NSLocalizedString(@"Groupings…", @"Query actions menu item that edits the GROUP BY groupings.");
 
 	[self refreshClausePopoverControls];
 	[self syncSQLFromVisualQuery:nil];
@@ -2513,7 +2616,54 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	[_groupsTable reloadData];
 }
 
-- (void)toggleFiltersPopover:(NSButton *)sender {
+/// The popovers anchor to the button that opened them, or to the actions menu when the
+/// command came from the menu bar (where the sender is an NSMenuItem, not a view).
+- (NSView *)popoverAnchorForSender:(id)sender {
+	if ([sender isKindOfClass:[NSView class]]) return sender;
+	return _queryMenuButton ?: _addMenuButton ?: _connectionButton ?: self.view;
+}
+
+#pragma mark - Menu State
+
+- (BOOL)editingRootQuery {
+	return _editingRoot;
+}
+
+- (BOOL)editingComposingNode {
+	return _editingComposingNode;
+}
+
+- (BOOL)canAddSelectedTable {
+	if (_editingComposingNode || _workspaceMode != MADMacQueryWorkspaceModeDesigner) return NO;
+	return (_editingRoot ? _upstreamQueries.count : _schemaTables.count) > 0;
+}
+
+- (BOOL)canCreateRoot {
+	return _document.rootQuery == nil && _workspaceMode == MADMacQueryWorkspaceModeDesigner;
+}
+
+- (BOOL)schemaSidebarVisible {
+	return !_schemaSidebarHidden;
+}
+
+- (void)toggleSchemaSidebarAction:(nullable id) __unused sender {
+	_schemaSidebarHidden = !_schemaSidebarHidden;
+	_schemaSidebarView.hidden = _schemaSidebarHidden;
+	CGFloat position = _schemaSidebarHidden ? 0.0 : MAX(kMinSidebarWidth, _schemaSidebarWidth);
+	[_designerSplitView setPosition:position ofDividerAtIndex:0];
+	[_designerSplitView adjustSubviews];
+	[_canvasView ensureCanvasSizeFitsCards];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
+	SEL action = menuItem.action;
+	if (action == @selector(addSelectedSchemaTable:)) return [self canAddSelectedTable];
+	if (action == @selector(addRootQueryAction:)) return [self canCreateRoot];
+	if (action == @selector(toggleOutputsPopover:)) return _editingRoot;
+	return YES;
+}
+
+- (void)toggleFiltersPopover:(id)sender {
 	if (_filtersPopover.isShown) {
 		[_filtersPopover close];
 		return;
@@ -2570,10 +2720,11 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		_filtersPopover.behavior = NSPopoverBehaviorTransient;
 	}
 	[self refreshClausePopoverControls];
-	[_filtersPopover showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSRectEdgeMaxY];
+	NSView *anchor = [self popoverAnchorForSender:sender];
+	[_filtersPopover showRelativeToRect:anchor.bounds ofView:anchor preferredEdge:NSRectEdgeMaxY];
 }
 
-- (void)toggleGroupsPopover:(NSButton *)sender {
+- (void)toggleGroupsPopover:(id)sender {
 	if (_groupsPopover.isShown) {
 		[_groupsPopover close];
 		return;
@@ -2627,7 +2778,8 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		_groupsPopover.behavior = NSPopoverBehaviorTransient;
 	}
 	[self refreshClausePopoverControls];
-	[_groupsPopover showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSRectEdgeMaxY];
+	NSView *anchor = [self popoverAnchorForSender:sender];
+	[_groupsPopover showRelativeToRect:anchor.bounds ofView:anchor preferredEdge:NSRectEdgeMaxY];
 }
 
 - (void)addPredicateAction:(id) __unused sender {
@@ -2702,7 +2854,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 	}
 }
 
-- (void)toggleOutputsPopover:(NSButton *)sender {
+- (void)toggleOutputsPopover:(id)sender {
 	if (_outputsPopover.isShown) {
 		[_outputsPopover close];
 		return;
@@ -2766,7 +2918,8 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 		_outputsPopover.behavior = NSPopoverBehaviorTransient;
 	}
 	[self refreshOutputPopoverControls];
-	[_outputsPopover showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSRectEdgeMaxY];
+	NSView *anchor = [self popoverAnchorForSender:sender];
+	[_outputsPopover showRelativeToRect:anchor.bounds ofView:anchor preferredEdge:NSRectEdgeMaxY];
 }
 
 - (void)refreshOutputPopoverControls {

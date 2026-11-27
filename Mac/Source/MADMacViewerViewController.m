@@ -9,6 +9,7 @@
 #import "MADMacDocument.h"
 #import "MADMacWindowController.h"
 #import "MADMacConnectionWindowController.h"
+#import "MADMacTipBar.h"
 
 #import <MAD/MAD.h>
 #import <MADAPI/MADDatabase.h>
@@ -20,8 +21,8 @@
 #import <Quartz/Quartz.h>
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
-static const CGFloat kViewerTopToolbarHeight = 40.0;
-static const CGFloat kViewerBottomStatusBarHeight = 28.0;
+static const CGFloat kViewerTopToolbarHeight = 44.0;
+static const CGFloat kViewerBottomStatusBarHeight = 34.0;
 
 @interface MADMacViewerViewController () <NSTableViewDataSource, NSTableViewDelegate>
 
@@ -48,6 +49,9 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 @property (nonatomic, strong) NSButton *prevPageButton;
 @property (nonatomic, strong) NSTextField *pageNumberLabel;
 @property (nonatomic, strong) NSButton *nextPageButton;
+@property (nonatomic, strong) NSButton *overflowButton;
+@property (nonatomic, strong) NSStackView *pageControlsStack;
+@property (nonatomic, strong) MADMacTipBar *tipBar;
 
 @property (nonatomic, assign, readwrite) MTPaperType renderedPaperType;
 @property (nonatomic, assign, readwrite) CGSize renderedPaperSize;
@@ -103,7 +107,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	NSView *root = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 1180, 740)];
 	root.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
 
-	// 1. Top Toolbar
+	// 1. Top Toolbar: the three primary actions, plus a quiet overflow for the rest.
 	NSView *topBar = [[NSView alloc] initWithFrame:NSMakeRect(0, 740 - kViewerTopToolbarHeight, 1180, kViewerTopToolbarHeight)];
 	topBar.autoresizingMask = NSViewWidthSizable | NSViewMinYMargin;
 	topBar.wantsLayer = YES;
@@ -114,21 +118,6 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	topSep.autoresizingMask = NSViewWidthSizable | NSViewMaxYMargin;
 	[topBar addSubview:topSep];
 
-	NSTextField *pageSizeLabel = [NSTextField labelWithString:NSLocalizedString(@"Page Size:", @"Viewer toolbar label for the paper-size popup.")];
-	pageSizeLabel.font = [NSFont systemFontOfSize:12 weight:NSFontWeightMedium];
-	pageSizeLabel.textColor = [NSColor secondaryLabelColor];
-
-	_pageSizePopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(0, 0, 210, 26) pullsDown:NO];
-	_pageSizePopup.target = self;
-	_pageSizePopup.action = @selector(pageSizePopupChanged:);
-	for (NSNumber *typeNum in [MTPaper standardPaperTypes]) {
-		MTPaperType type = (MTPaperType)typeNum.integerValue;
-		NSString *title = [MTPaper displayNameForPaperType:type];
-		[_pageSizePopup addItemWithTitle:title];
-		_pageSizePopup.lastItem.representedObject = typeNum;
-	}
-	[self syncPageSizePopupSelection];
-
 	_refreshButton = [NSButton buttonWithTitle:NSLocalizedString(@"Refresh", @"Viewer button that re-runs the query and re-renders the report.")
 										target:self
 										action:@selector(refreshReportAction:)];
@@ -136,59 +125,10 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 									 accessibilityDescription:NSLocalizedString(@"Refresh Report", @"Accessibility description for the refresh button icon.")];
 	_refreshButton.imagePosition = NSImageLeft;
 	_refreshButton.bezelStyle = NSBezelStyleRounded;
+	_refreshButton.bezelColor = [NSColor controlAccentColor];
+	_refreshButton.toolTip = NSLocalizedString(@"Run the query and render the report (⌘R).", @"Tooltip for the viewer refresh button.");
+	_refreshButton.accessibilityLabel = NSLocalizedString(@"Refresh Report", @"Accessibility label for the viewer refresh button.");
 
-	_connectionButton = [NSButton buttonWithTitle:NSLocalizedString(@"Connection…", @"Viewer button that opens the database connection settings.")
-										   target:self
-										   action:@selector(editDatabaseConnectionAction:)];
-	_connectionButton.image = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
-										accessibilityDescription:NSLocalizedString(@"Database Connection", @"Accessibility description for the connection button icon.")];
-	_connectionButton.imagePosition = NSImageLeft;
-	_connectionButton.bezelStyle = NSBezelStyleRounded;
-	_connectionButton.toolTip = NSLocalizedString(@"Configure Database Connection Settings…", @"Tooltip for the connection button.");
-
-	// Zoom controls
-	_zoomOutButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"minus.magnifyingglass"
-														 accessibilityDescription:NSLocalizedString(@"Zoom Out", @"Accessibility description for the zoom-out icon.")]
-										target:self
-										action:@selector(zoomOutAction:)];
-	_zoomOutButton.bezelStyle = NSBezelStyleRounded;
-	_zoomOutButton.toolTip = NSLocalizedString(@"Zoom Out", @"Tooltip for the zoom-out button.");
-
-	_zoomLabelButton = [NSButton buttonWithTitle:@"100%"
-										  target:self
-										  action:@selector(zoomActualSizeAction:)];
-	_zoomLabelButton.bezelStyle = NSBezelStyleRounded;
-	_zoomLabelButton.font = [NSFont monospacedDigitSystemFontOfSize:11 weight:NSFontWeightMedium];
-	_zoomLabelButton.toolTip = NSLocalizedString(@"Reset Zoom to 100% (Actual Page Size)", @"Tooltip for the zoom percentage button.");
-
-	_zoomInButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"plus.magnifyingglass"
-														accessibilityDescription:NSLocalizedString(@"Zoom In", @"Accessibility description for the zoom-in icon.")]
-									   target:self
-									   action:@selector(zoomInAction:)];
-	_zoomInButton.bezelStyle = NSBezelStyleRounded;
-	_zoomInButton.toolTip = NSLocalizedString(@"Zoom In", @"Tooltip for the zoom-in button.");
-
-	// Page navigation controls
-	_prevPageButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"chevron.left"
-														  accessibilityDescription:NSLocalizedString(@"Previous Page", @"Accessibility description for the previous-page icon.")]
-										 target:self
-										 action:@selector(previousPageAction:)];
-	_prevPageButton.bezelStyle = NSBezelStyleRounded;
-	_prevPageButton.toolTip = NSLocalizedString(@"Previous Page", @"Tooltip for the previous-page button.");
-
-	_pageNumberLabel = [NSTextField labelWithString:NSLocalizedString(@"Page 0 of 0", @"Viewer page-number placeholder before a report is rendered.")];
-	_pageNumberLabel.font = [NSFont monospacedDigitSystemFontOfSize:12 weight:NSFontWeightRegular];
-	_pageNumberLabel.textColor = [NSColor secondaryLabelColor];
-	_pageNumberLabel.alignment = NSTextAlignmentCenter;
-
-	_nextPageButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"chevron.right"
-														  accessibilityDescription:NSLocalizedString(@"Next Page", @"Accessibility description for the next-page icon.")]
-										 target:self
-										 action:@selector(nextPageAction:)];
-	_nextPageButton.bezelStyle = NSBezelStyleRounded;
-	_nextPageButton.toolTip = NSLocalizedString(@"Next Page", @"Tooltip for the next-page button.");
-
-	// Print & Export buttons with icons
 	_printButton = [NSButton buttonWithTitle:NSLocalizedString(@"Print…", @"Viewer button that prints the rendered report.")
 									  target:self
 									  action:@selector(printReportAction:)];
@@ -196,6 +136,8 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 								   accessibilityDescription:NSLocalizedString(@"Print Report", @"Accessibility description for the print button icon.")];
 	_printButton.imagePosition = NSImageLeft;
 	_printButton.bezelStyle = NSBezelStyleRounded;
+	_printButton.toolTip = NSLocalizedString(@"Print the rendered report (⌘P).", @"Tooltip for the viewer print button.");
+	_printButton.accessibilityLabel = NSLocalizedString(@"Print Report", @"Accessibility label for the viewer print button.");
 
 	_exportButton = [NSButton buttonWithTitle:NSLocalizedString(@"Export…", @"Viewer button that exports the rendered report.")
 									   target:self
@@ -204,37 +146,34 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 									accessibilityDescription:NSLocalizedString(@"Export Report", @"Accessibility description for the export button icon.")];
 	_exportButton.imagePosition = NSImageLeft;
 	_exportButton.bezelStyle = NSBezelStyleRounded;
+	_exportButton.toolTip = NSLocalizedString(@"Export the report as PDF, HTML, CSV, JSON, or text (⌘E).", @"Tooltip for the viewer export button.");
+	_exportButton.accessibilityLabel = NSLocalizedString(@"Export Report", @"Accessibility label for the viewer export button.");
 
-	NSView *spacerLeft = [[NSView alloc] initWithFrame:NSZeroRect];
-	[spacerLeft setContentHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationHorizontal];
-	NSView *spacerRight = [[NSView alloc] initWithFrame:NSZeroRect];
-	[spacerRight setContentHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationHorizontal];
+	_connectionButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"ellipsis.circle"
+														 accessibilityDescription:NSLocalizedString(@"More", @"Accessibility description for the viewer overflow button.")]
+										   target:self
+										   action:@selector(showOverflowMenu:)];
+	_connectionButton.bezelStyle = NSBezelStyleRounded;
+	_connectionButton.imagePosition = NSImageOnly;
+	_connectionButton.toolTip = NSLocalizedString(@"More report actions.", @"Tooltip for the viewer overflow button.");
+	_connectionButton.accessibilityLabel = NSLocalizedString(@"More Report Actions", @"Accessibility label for the viewer overflow button.");
+	_overflowButton = _connectionButton;
+
+	NSView *spacer = [[NSView alloc] initWithFrame:NSZeroRect];
+	[spacer setContentHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationHorizontal];
 
 	NSStackView *topStack = [NSStackView stackViewWithViews:@[
-		pageSizeLabel,
-		_pageSizePopup,
-		_refreshButton,
-		_connectionButton,
-		spacerLeft,
-		_zoomOutButton,
-		_zoomLabelButton,
-		_zoomInButton,
-		_prevPageButton,
-		_pageNumberLabel,
-		_nextPageButton,
-		spacerRight,
-		_printButton,
-		_exportButton
+		_refreshButton, spacer, _printButton, _exportButton, _connectionButton
 	]];
 	topStack.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	topStack.spacing = 8;
 	topStack.alignment = NSLayoutAttributeCenterY;
-	topStack.edgeInsets = NSEdgeInsetsMake(4, 12, 4, 12);
+	topStack.edgeInsets = NSEdgeInsetsMake(6, 14, 6, 14);
 	topStack.frame = topBar.bounds;
 	topStack.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
 	[topBar addSubview:topStack];
 
-	// 2. Center Framed Fixed-Size Paginated Report View
+	// 2. Center: a framed fixed-size paginated report, or the row grid for a node with no layout.
 	NSRect pdfFrame = NSMakeRect(0,
 								 kViewerBottomStatusBarHeight,
 								 1180,
@@ -259,7 +198,6 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 												 name:PDFViewPageChangedNotification
 											   object:_pdfView];
 
-	// 2b. Row grid for a node whose layout has no elements (hidden while the PDF shows)
 	_rowGridView = [[NSTableView alloc] initWithFrame:pdfFrame];
 	_rowGridView.usesAlternatingRowBackgroundColors = YES;
 	_rowGridView.rowHeight = 22.0;
@@ -276,7 +214,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	_rowGridScrollView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
 	_rowGridScrollView.hidden = YES;
 
-	// 3. Bottom Status Bar
+	// 3. Bottom Status Bar: status on the left, page/zoom/paper controls on the right.
 	_statusBarView = [[NSView alloc] initWithFrame:NSMakeRect(0, 0, 1180, kViewerBottomStatusBarHeight)];
 	_statusBarView.autoresizingMask = NSViewWidthSizable | NSViewMaxYMargin;
 	_statusBarView.wantsLayer = YES;
@@ -293,22 +231,107 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	_spinner.displayedWhenStopped = NO;
 
 	_statusLabel = [NSTextField labelWithString:NSLocalizedString(@"Not yet refreshed. Click “Refresh” to query the database and render the report.", @"Viewer status line before the first refresh. The quoted word matches the Refresh button.")];
-	_statusLabel.font = [NSFont systemFontOfSize:12];
+	_statusLabel.font = [NSFont systemFontOfSize:11.5];
 	_statusLabel.textColor = [NSColor secondaryLabelColor];
 	_statusLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+	_statusLabel.accessibilityLabel = NSLocalizedString(@"Report Status", @"Accessibility label for the viewer status line.");
+
+	_zoomOutButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"minus.magnifyingglass"
+														 accessibilityDescription:NSLocalizedString(@"Zoom Out", @"Accessibility description for the zoom-out icon.")]
+										target:self
+										action:@selector(zoomOutAction:)];
+	_zoomOutButton.bezelStyle = NSBezelStyleRounded;
+	_zoomOutButton.controlSize = NSControlSizeSmall;
+	_zoomOutButton.toolTip = NSLocalizedString(@"Zoom Out", @"Tooltip for the zoom-out button.");
+	_zoomOutButton.accessibilityLabel = NSLocalizedString(@"Zoom Out", @"Accessibility label for the zoom-out button.");
+
+	_zoomLabelButton = [NSButton buttonWithTitle:@"100%"
+										  target:self
+										  action:@selector(zoomActualSizeAction:)];
+	_zoomLabelButton.bezelStyle = NSBezelStyleRounded;
+	_zoomLabelButton.controlSize = NSControlSizeSmall;
+	_zoomLabelButton.font = [NSFont monospacedDigitSystemFontOfSize:10.5 weight:NSFontWeightMedium];
+	_zoomLabelButton.toolTip = NSLocalizedString(@"Reset Zoom to 100% (Actual Page Size)", @"Tooltip for the zoom percentage button.");
+	_zoomLabelButton.accessibilityLabel = NSLocalizedString(@"Reset Zoom", @"Accessibility label for the zoom percentage button.");
+
+	_zoomInButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"plus.magnifyingglass"
+														accessibilityDescription:NSLocalizedString(@"Zoom In", @"Accessibility description for the zoom-in icon.")]
+									   target:self
+									   action:@selector(zoomInAction:)];
+	_zoomInButton.bezelStyle = NSBezelStyleRounded;
+	_zoomInButton.controlSize = NSControlSizeSmall;
+	_zoomInButton.toolTip = NSLocalizedString(@"Zoom In", @"Tooltip for the zoom-in button.");
+	_zoomInButton.accessibilityLabel = NSLocalizedString(@"Zoom In", @"Accessibility label for the zoom-in button.");
+
+	_prevPageButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"chevron.left"
+														  accessibilityDescription:NSLocalizedString(@"Previous Page", @"Accessibility description for the previous-page icon.")]
+										 target:self
+										 action:@selector(previousPageAction:)];
+	_prevPageButton.bezelStyle = NSBezelStyleRounded;
+	_prevPageButton.controlSize = NSControlSizeSmall;
+	_prevPageButton.toolTip = NSLocalizedString(@"Previous Page", @"Tooltip for the previous-page button.");
+	_prevPageButton.accessibilityLabel = NSLocalizedString(@"Previous Page", @"Accessibility label for the previous-page button.");
+
+	_pageNumberLabel = [NSTextField labelWithString:NSLocalizedString(@"Page 0 of 0", @"Viewer page-number placeholder before a report is rendered.")];
+	_pageNumberLabel.font = [NSFont monospacedDigitSystemFontOfSize:10.5 weight:NSFontWeightRegular];
+	_pageNumberLabel.textColor = [NSColor secondaryLabelColor];
+	_pageNumberLabel.alignment = NSTextAlignmentCenter;
+	_pageNumberLabel.accessibilityLabel = NSLocalizedString(@"Page Number", @"Accessibility label for the viewer page-number label.");
+
+	_nextPageButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"chevron.right"
+														  accessibilityDescription:NSLocalizedString(@"Next Page", @"Accessibility description for the next-page icon.")]
+										 target:self
+										 action:@selector(nextPageAction:)];
+	_nextPageButton.bezelStyle = NSBezelStyleRounded;
+	_nextPageButton.controlSize = NSControlSizeSmall;
+	_nextPageButton.toolTip = NSLocalizedString(@"Next Page", @"Tooltip for the next-page button.");
+	_nextPageButton.accessibilityLabel = NSLocalizedString(@"Next Page", @"Accessibility label for the next-page button.");
+
+	_pageSizePopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
+	_pageSizePopup.target = self;
+	_pageSizePopup.action = @selector(pageSizePopupChanged:);
+	_pageSizePopup.controlSize = NSControlSizeSmall;
+	_pageSizePopup.font = [NSFont systemFontOfSize:10.5];
+	_pageSizePopup.toolTip = NSLocalizedString(@"Choose the paper size, then refresh to render at that size.", @"Tooltip for the viewer paper-size popup.");
+	_pageSizePopup.accessibilityLabel = NSLocalizedString(@"Page Size", @"Accessibility label for the viewer paper-size popup.");
+	for (NSNumber *typeNum in [MTPaper standardPaperTypes]) {
+		MTPaperType type = (MTPaperType)typeNum.integerValue;
+		NSString *title = [MTPaper displayNameForPaperType:type];
+		[_pageSizePopup addItemWithTitle:title];
+		_pageSizePopup.lastItem.representedObject = typeNum;
+	}
+	[self syncPageSizePopupSelection];
 
 	_paperStatusLabel = [NSTextField labelWithString:[[NSString alloc] initWithFormat:NSLocalizedString(@"Rendered Page Size: %@", @"Viewer status line. %@ is a paper name such as A4."), [MTPaper displayNameForPaperType:_renderedPaperType]]];
-	_paperStatusLabel.font = [NSFont systemFontOfSize:11 weight:NSFontWeightMedium];
-	_paperStatusLabel.textColor = [NSColor secondaryLabelColor];
+	_paperStatusLabel.font = [NSFont systemFontOfSize:10.5 weight:NSFontWeightMedium];
+	_paperStatusLabel.textColor = [NSColor tertiaryLabelColor];
+	_paperStatusLabel.accessibilityLabel = _paperStatusLabel.stringValue;
+	[_paperStatusLabel setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationHorizontal];
 
 	NSView *statusSpacer = [[NSView alloc] initWithFrame:NSZeroRect];
 	[statusSpacer setContentHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationHorizontal];
 
+	NSBox *zoomSep = [[NSBox alloc] init];
+	zoomSep.boxType = NSBoxSeparator;
+	[zoomSep.widthAnchor constraintEqualToConstant:1.0].active = YES;
+	[zoomSep.heightAnchor constraintEqualToConstant:14.0].active = YES;
+	NSBox *pageSep = [[NSBox alloc] init];
+	pageSep.boxType = NSBoxSeparator;
+	[pageSep.widthAnchor constraintEqualToConstant:1.0].active = YES;
+	[pageSep.heightAnchor constraintEqualToConstant:14.0].active = YES;
+
+	_pageControlsStack = [NSStackView stackViewWithViews:@[
+		_zoomOutButton, _zoomLabelButton, _zoomInButton, zoomSep,
+		_prevPageButton, _pageNumberLabel, _nextPageButton, pageSep,
+		_pageSizePopup, _paperStatusLabel
+	]];
+	_pageControlsStack.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+	_pageControlsStack.spacing = 5.0;
+	_pageControlsStack.alignment = NSLayoutAttributeCenterY;
+	_pageControlsStack.translatesAutoresizingMaskIntoConstraints = NO;
+
 	NSStackView *statusStack = [NSStackView stackViewWithViews:@[
-		_spinner,
-		_statusLabel,
-		statusSpacer,
-		_paperStatusLabel
+		_spinner, _statusLabel, statusSpacer, _pageControlsStack
 	]];
 	statusStack.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	statusStack.spacing = 8;
@@ -322,6 +345,12 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	[root addSubview:_pdfView];
 	[root addSubview:_rowGridScrollView];
 	[root addSubview:_statusBarView];
+
+	_tipBar = [MADMacTipBar tipBarWithIdentifier:@"viewer"
+											text:NSLocalizedString(@"Start here: press Refresh to run the query. Use the bottom bar to zoom, page through, or change the paper size.", @"First-run tip in the viewer workspace.")];
+	_tipBar.frame = NSMakeRect(0.0, 740.0 - kViewerTopToolbarHeight - 30.0, 1180.0, 30.0);
+	_tipBar.autoresizingMask = NSViewWidthSizable | NSViewMinYMargin;
+	[root addSubview:_tipBar];
 
 	self.view = root;
 }
@@ -436,6 +465,10 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 - (void)updateZoomAndPageControls {
 	NSInteger pct = (NSInteger)llround(_zoomScale * 100.0);
 	_zoomLabelButton.title = [NSString stringWithFormat:@"%ld%%", (long)pct];
+	BOOL grid = [self isShowingRowGrid];
+	_zoomOutButton.enabled = !grid;
+	_zoomLabelButton.enabled = !grid;
+	_zoomInButton.enabled = !grid;
 
 	PDFDocument *pdfDoc = _pdfView.document;
 	NSUInteger totalPages = pdfDoc != nil ? pdfDoc.pageCount : 0;
@@ -486,6 +519,36 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 			[combined containsString:@"login failed"] ||
 			[combined containsString:@"credentials"] ||
 			[combined containsString:@"fe_sendauth"]);
+}
+
+- (void)showOverflowMenu:(NSView *)sender {
+	NSMenu *menu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"More Report Actions", @"Title of the viewer's overflow menu. Never shown to the user.")];
+	menu.autoenablesItems = NO;
+
+	NSMenuItem *connection = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Database Connection…", @"Viewer menu item that edits the database connection.")
+													   action:@selector(editDatabaseConnectionAction:)
+												keyEquivalent:@""];
+	connection.target = self;
+	connection.toolTip = NSLocalizedString(@"Edit the database connection settings.", @"Tooltip for the viewer connection menu item.");
+	if (@available(macOS 11.0, *)) {
+		connection.image = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2" accessibilityDescription:nil];
+	}
+	[menu addItem:connection];
+	[menu addItem:[NSMenuItem separatorItem]];
+
+	BOOL grid = [self isShowingRowGrid];
+	NSArray<NSArray *> *rows = @[
+		@[NSLocalizedString(@"Zoom In", @"Viewer menu item that zooms in."), NSStringFromSelector(@selector(zoomInAction:))],
+		@[NSLocalizedString(@"Zoom Out", @"Viewer menu item that zooms out."), NSStringFromSelector(@selector(zoomOutAction:))],
+		@[NSLocalizedString(@"Actual Size", @"Viewer menu item that resets zoom to 100%."), NSStringFromSelector(@selector(zoomActualSizeAction:))],
+	];
+	for (NSArray *row in rows) {
+		NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:row[0] action:NSSelectorFromString(row[1]) keyEquivalent:@""];
+		item.target = self;
+		item.enabled = !grid;
+		[menu addItem:item];
+	}
+	[menu popUpMenuPositioningItem:nil atLocation:NSMakePoint(0.0, NSHeight(sender.bounds) + 2.0) inView:sender];
 }
 
 - (void)editDatabaseConnectionAction:(nullable id) __unused sender {
@@ -694,6 +757,8 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 - (void)clearPreviewContent {
 	if (_pdfView != nil) _pdfView.document = nil;
 	if (_rowGridScrollView != nil) _rowGridScrollView.hidden = YES;
+	// Until something renders, paging, zoom, and paper controls have nothing to act on.
+	if (_pageControlsStack != nil) _pageControlsStack.hidden = YES;
 	_gridRows = @[];
 	[_rowGridView reloadData];
 	if (_printButton != nil) _printButton.enabled = YES;
@@ -736,6 +801,8 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 	_rowGridScrollView.hidden = NO;
 	_pdfView.hidden = YES;
 	_printButton.enabled = NO;
+	// Rows have no pages, zoom, or paper: hide those controls rather than leaving them dead.
+	_pageControlsStack.hidden = YES;
 }
 
 - (void)reloadPreview {
@@ -799,6 +866,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 28.0;
 		_pdfView.scaleFactor = _zoomScale;
 		_pdfView.hidden = NO;
 		_rowGridScrollView.hidden = YES;
+		_pageControlsStack.hidden = NO;
 		_printButton.enabled = (pdfDoc != nil);
 	}
 	[[NSFileManager defaultManager] removeItemAtURL:tmpPDFURL error:NULL];
