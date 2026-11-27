@@ -94,6 +94,13 @@ extern NSString * const MTDocumentObjectDefinationField2;
 
 	- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value;
 
+	/// As above, but `decimals` is the source field's scale (its schema `decimals`).
+	/// The element's numeric format wins when it names a positive fraction count; a
+	/// zero count is the unconfigured default, so it falls back to `decimals` rather
+	/// than rounding every decimal to an integer.  Pass a negative value when there is
+	/// no source scale (a barcode's text, say) to keep the numeric format's count.
+	- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value decimals:(NSInteger)decimals;
+
 @end
 
 #endif

@@ -200,4 +200,19 @@
 	XCTAssertEqualObjects(formatted, @"abc");
 }
 
+- (void)testFormattedStringUsesTheSchemaFieldsScale {
+	RptqStoreContext *context = [self inMemoryContext];
+	RptqDocument *document = [RptqDocument newDocumentForManagedObjectContext:context];
+	RptqQueryField *field = [self queryFieldNamed:@"Amount" tableName:@"Invoice" context:context document:document];
+	field.databaseSchemaField.dataType = MADDataTypeDecimal;
+	field.databaseSchemaField.decimals = 2;
+	MADDataReferenceLabelDynamicDatasourceDouble *datasource = [[MADDataReferenceLabelDynamicDatasourceDouble alloc] init];
+	datasource.database = [MADMock mockDatabase];
+	MADDocumentObjectDataReferenceLabelDynamic *reference = [self referenceForField:field context:context datasource:datasource];
+
+	// The element's numeric format is the default (count 0), so the field's
+	// DECIMAL(10,2) scale supplies the fraction digits instead of rounding to "102".
+	XCTAssertEqualObjects([reference formattedStringForValue:@(101.5)], @"101.50");
+}
+
 @end

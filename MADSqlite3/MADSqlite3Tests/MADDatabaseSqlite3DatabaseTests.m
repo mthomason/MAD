@@ -25,6 +25,7 @@
 #import <MADFoundation/MADCacheProtocol.h>
 #import <MADFoundation/MADDataTable.h>
 #import <MADFoundation/MADDataColumn.h>
+#import <MADAPI/MADDatabaseField.h>
 #import <MADAPI/MADQuery.h>
 
 #import "sqlite3.h"
@@ -198,6 +199,36 @@
 	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
 	XCTAssertEqualObjects([database newSafeIdentifier:@"name"], @"\"name\"");
 	XCTAssertEqualObjects([database queryKey:@"field" table:@"tbl"], @"\"tbl\".\"field\"");
+}
+
+// SQLite does not enforce a declared type's arguments, but they are what the author
+// wrote, and the report formatter reads `decimals` as the default fraction count.  A
+// `NUMERIC(10,2)` amount used to import with scale 0 and print as an integer.
+- (void)testFieldsForTableKeepsDeclaredPrecisionAndScale {
+	sqlite3 *ddl = NULL;
+	sqlite3_open(self.databaseURL.path.UTF8String, &ddl);
+	sqlite3_exec(ddl,
+				 "CREATE TABLE amounts (id INTEGER, amount NUMERIC(10,2), label NVARCHAR(70));",
+				 NULL, NULL, NULL);
+	sqlite3_close(ddl);
+
+	MADDatabaseSqlite3 *database = [self makeOpenDatabase];
+	NSError *error = nil;
+	NSArray<MADDatabaseField *> *fields = [database fieldsForTable:@"amounts" connection:nil error:&error];
+	XCTAssertNil(error);
+	XCTAssertEqual(fields.count, 3);
+	for (MADDatabaseField *field in fields) {
+		if ([field.name isEqualToString:@"amount"]) {
+			XCTAssertEqual(field.width, 10);
+			XCTAssertEqual(field.decimals, 2);
+		} else if ([field.name isEqualToString:@"label"]) {
+			XCTAssertEqual(field.width, 70);
+			XCTAssertEqual(field.decimals, 0);
+		} else {
+			XCTAssertEqual(field.width, 0);
+			XCTAssertEqual(field.decimals, 0);
+		}
+	}
 }
 
 #pragma mark - MADArrayCaching lifecycle

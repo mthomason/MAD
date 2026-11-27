@@ -97,6 +97,35 @@ void sqliteLog(void *foo, const char* statement) {
 
 @end
 
+/// Reads the precision and scale SQLite keeps in a declared type such as
+/// `NUMERIC(10,2)` or `NVARCHAR(70)`.  SQLite does not enforce them, but they are
+/// what the author declared, and the report formatter uses the scale to decide how
+/// many fraction digits a decimal value prints with.  A type with no parenthesized
+/// arguments leaves both zero.
+static void MADDatabaseSqlite3ParseTypeWidthScale(NSString *typeText, int64_t *outWidth, int16_t *outDecimals) {
+	if (outWidth != NULL) *outWidth = 0;
+	if (outDecimals != NULL) *outDecimals = 0;
+	if (typeText.length == 0) return;
+	NSRange open = [typeText rangeOfString:@"("];
+	if (open.location == NSNotFound) return;
+	NSRange close = [typeText rangeOfString:@")"
+								   options:0
+									 range:NSMakeRange(open.location + 1, typeText.length - open.location - 1)];
+	if (close.location == NSNotFound) return;
+	NSString *inside = [typeText substringWithRange:NSMakeRange(open.location + 1,
+																close.location - open.location - 1)];
+	NSArray<NSString *> *parts = [inside componentsSeparatedByString:@","];
+	if (outWidth != NULL && parts.count > 0) {
+		*outWidth = MAX((int64_t)0, (int64_t)parts[0].integerValue);
+	}
+	if (outDecimals != NULL && parts.count > 1) {
+		NSInteger scale = parts[1].integerValue;
+		if (scale < 0) scale = 0;
+		if (scale > INT16_MAX) scale = INT16_MAX;
+		*outDecimals = (int16_t)scale;
+	}
+}
+
 @implementation MADDatabaseSqlite3 {
 	BOOL _isOpen;
 	sqlite3_stmt *_bulkStatement;
@@ -1246,6 +1275,14 @@ static void MADSqlite3LogBindViolation(MADDataType datatype, Class valueClass) {
 			NSString *nativeType = typeText != NULL ?
 				[[NSString alloc] initWithCString:typeText encoding:NSUTF8StringEncoding] : @"";
 			databaseField.fieldType = [MADDatabaseSqlite3 dataTypeForNativeType:nativeType];
+			// Keep the declared precision/scale (`NUMERIC(10,2)`, `NVARCHAR(70)`): the
+			// report formatter uses the scale as the default fraction count, so without
+			// it a DECIMAL column printed as an integer.
+			int64_t declaredWidth = 0;
+			int16_t declaredDecimals = 0;
+			MADDatabaseSqlite3ParseTypeWidthScale(nativeType, &declaredWidth, &declaredDecimals);
+			databaseField.width = declaredWidth;
+			databaseField.decimals = declaredDecimals;
 			databaseField.primaryKey = sqlite3_column_int(statement, 5) != 0;
 			[result addObject:databaseField];
 		}

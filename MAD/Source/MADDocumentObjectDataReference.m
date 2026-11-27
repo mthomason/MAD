@@ -188,8 +188,10 @@
 }
 
 - (NSString *)formattedStringForValue:(id)value {
-	return [self.item formattedString: self.item.referencesQueryField.databaseSchemaField.dataType
-							  forValue: value];
+	RptqDatabaseSchemaField *schemaField = self.item.referencesQueryField.databaseSchemaField;
+	return [self.item formattedString:schemaField.dataType
+							 forValue:value
+							 decimals:schemaField.decimals];
 }
 
 @end
@@ -277,8 +279,10 @@
 }
 
 - (NSString *)formattedStringForValue:(id)value {
-	return [self.item formattedString: self.item.aggregateField.databaseSchemaField.dataType
-							 forValue: value];
+	RptqDatabaseSchemaField *schemaField = self.item.aggregateField.databaseSchemaField;
+	return [self.item formattedString:schemaField.dataType
+							 forValue:value
+							 decimals:schemaField.decimals];
 }
 
 @end

@@ -823,6 +823,10 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 }
 
 - (NSString *)formattedString:(MADDataType)dataType forValue:(id)value {
+	return [self formattedString:dataType forValue:value decimals:-1];
+}
+
+- (NSString *)formattedString:(MADDataType)dataType forValue:(id)value decimals:(NSInteger)decimals {
 	// NSNull is how a NULL read from a source database arrives here -- it is not nil,
 	// so it used to fall through to the branches below, whose text paths all end in
 	// -initWithFormat:@"%@", which writes NSNull as "<null>".  That is what appeared
@@ -943,9 +947,16 @@ static inline CGRect MADDocObjFrameCalculated(CGFloat x, CGFloat sx, CGFloat y, 
 																			  numericFormat.decimalCount);
 					result = [formatter stringFromNumber:value];
 				} else {
+					// The numeric format's count is the author's choice; zero is the
+					// unconfigured default, so a decimal value keeps its source field's
+					// scale instead of being rounded to an integer.
+					NSInteger digits = self.numericFormat.decimalCount;
+					if (digits <= 0 && decimals > 0) digits = decimals;
+					if (digits < 0) digits = 0;
+					if (digits > 12) digits = 12;
 					NSMutableString *format;
 					format = [[NSMutableString alloc] initWithString:@"%."];
-					[format appendFormat:@"%lld", self.numericFormat.decimalCount];
+					[format appendFormat:@"%ld", (long)digits];
 					[format appendString:@"f"];
 					result = [[NSString alloc] initWithFormat:format, [value floatValue]];
 				}

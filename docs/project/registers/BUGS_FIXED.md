@@ -145,6 +145,40 @@ reference to "BUGS.md, the X entry" still lands.
 
 ## MAD (framework)
 
+### Decimal values rendered as integers because the formatter ignored the source field's scale
+- **Status:** Fixed 2026-11-27.
+- **Where:** `MAD/Source/rptq/RptqDocumentElement+Extras.m`
+  (`-formattedString:forValue:`), `MAD/Source/MADDocumentObjectDataReference.m`
+  (`-formattedStringForValue:` on the dynamic label and aggregate references),
+  `MADSqlite3/Source/MADDatabaseSqlite3.m` (`-fieldsForTable:connection:error:`).
+- **Behavior:** The non-currency numeric branch formatted every value with the
+  element's `numericFormat.decimalCount`, which is 0 in a document that never
+  touched the field. A DECIMAL value was therefore rounded to an integer: the
+  Chinook grouped sample's `Total` printed 3.98 as "4", and the cross-database
+  sample's amounts printed 101.50 as "102". The SQLite schema importer also
+  discarded the declared precision and scale, so `NUMERIC(10,2)` imported as
+  `MADDataTypeNumber` with `decimals` 0 and there was no source scale to fall back
+  to. The server drivers already read the scale, which is why the same value
+  rendered correctly from MySQL or PostgreSQL but not from SQLite.
+- **Why it matters:** A report is its numbers. Silently rounding every decimal
+  column changes the data the reader sees.
+- **Now:** `-formattedString:forValue:decimals:` takes the source field's scale.
+  A positive `numericFormat.decimalCount` still wins; a zero (unconfigured) count
+  uses the field's `decimals`, clamped to 0-12. The data-label and aggregate
+  references pass `referencesQueryField.databaseSchemaField.decimals` and
+  `aggregateField.databaseSchemaField.decimals`. `-fieldsForTable:` parses the
+  declared type (`NUMERIC(10,2)`, `NVARCHAR(70)`) and stores its width and scale.
+- **Test:** `MADTests MADDocumentTests
+  testFormattedStringUsesTheSourceScaleWhenTheFormatNamesNone`;
+  `MADDocumentObjectDataReferenceLabelDynamicTests
+  testFormattedStringUsesTheSchemaFieldsScale`;
+  `MADDocumentObjectDataReferenceAggregateTests
+  testFormattedStringUsesTheAggregateFieldsScale`;
+  `MADSqlite3Tests MADDatabaseSqlite3DatabaseTests
+  testFieldsForTableKeepsDeclaredPrecisionAndScale`. The regenerated Chinook
+  grouped sample now renders `Total` as 3.98 and the cross-database sample as
+  101.50.
+
 ### A newer store revision was opened and rewritten, and the container header was stripped without a version check
 - **Status:** Fixed 2026-11-23 (commits `da80ef09e`, `ea080c423`).
 - **Where:** `MAD/Source/rptq/store/MADStore.m:77` (`-openWithError:`),

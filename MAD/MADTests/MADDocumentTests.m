@@ -184,6 +184,36 @@
 	XCTAssertEqualObjects([element formattedString: MADDataTypeDouble forValue: @(1234.5)], @"¥1,234.50");
 }
 
+// A plain decimal data label has no currency format, and a document that never
+// touched the field leaves its decimalCount at zero.  Zero is the unconfigured
+// default, not "print no decimals": the source field's scale is the right count, so
+// a DECIMAL(10,2) amount prints "101.50" rather than being rounded to "102" (the
+// Chinook sample's Total and the cross-database amount columns did).
+- (void)testFormattedStringUsesTheSourceScaleWhenTheFormatNamesNone {
+
+	RptqStoreContext *context = [self newTestContext];
+	RptqDocumentElement *element =
+		[context insertObjectForEntity:@"RptqDocumentElement" identifier:0];
+	RptqNumericFormat *format =
+		[context insertObjectForEntity:@"RptqNumericFormat" identifier:0];
+	format.enabled = NO;
+	format.decimalCount = 0;
+	element.numericFormat = format;
+
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDecimal forValue: @(101.5) decimals: 2],
+						  @"101.50");
+	// With no source scale, the zero count still rounds (the barcode/text callers).
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDecimal forValue: @(101.5) decimals: -1],
+						  @"102");
+	// An integer field keeps zero fraction digits.
+	XCTAssertEqualObjects([element formattedString: MADDataTypeInteger forValue: @(101) decimals: 0],
+						  @"101");
+	// An explicit positive count still wins over the source scale.
+	format.decimalCount = 3;
+	XCTAssertEqualObjects([element formattedString: MADDataTypeDecimal forValue: @(101.5) decimals: 2],
+						  @"101.500");
+}
+
 #pragma mark - Document format
 
 // The v1 header (docs/project/MAD_FORMAT.md section 7.1) is written ahead of the bzip2 stream by
