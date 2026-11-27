@@ -99,7 +99,7 @@ public sealed class ImageElementTests
             await using var service = new EngineService();
             var open = await service.CreateAsync(mad, new ConnectionSpec(ConnectionDriver.Sqlite3, sqlite, null, null, null, null, null, null));
             var vm = new DesignerViewModel(service);
-            await vm.LoadAsync(open.Handle);
+            await vm.LoadAsync(open.Handle, 0);
 
             await vm.AddElementAsync("image", vm.Sections.Single(s => s.Type == SectionType.Body).Id, 10, 20);
             long id = vm.Elements.Single(e => e.IsImage).Id;

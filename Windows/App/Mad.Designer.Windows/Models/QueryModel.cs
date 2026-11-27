@@ -121,7 +121,8 @@ public sealed record QueryModel(
     IReadOnlyList<QueryPredicate> Predicates,
     IReadOnlyList<QueryGroup> Groups,
     long QueryId,
-    bool IsRoot)
+    bool IsRoot,
+    bool IsComposing = false)
 {
     public static QueryModel Parse(JsonElement root)
     {
@@ -183,13 +184,19 @@ public sealed record QueryModel(
         }
 
         long queryId = root.TryGetProperty("queryId", out var queryIdEl) && queryIdEl.ValueKind == JsonValueKind.Number ? queryIdEl.GetInt64() : 0;
-        // The engine writes this flag as a JSON boolean in document-info but as 1/0 in
+        // The engine writes these flags as a JSON boolean in document-info but as 1/0 in
         // query-model (an NSNumber built from a BOOL expression), so accept either form.
-        bool isRoot = root.TryGetProperty("isRoot", out var isRootEl)
-            && (isRootEl.ValueKind == JsonValueKind.True
-                || (isRootEl.ValueKind == JsonValueKind.Number && isRootEl.GetInt32() != 0));
-        return new QueryModel(driver, sql, sqlSource, tables, links, predicates, groups, queryId, isRoot);
+        // isComposing is true for the composed root and for any query with an upstream table.
+        bool isRoot = ReadFlag(root, "isRoot");
+        bool isComposing = ReadFlag(root, "isComposing");
+        return new QueryModel(driver, sql, sqlSource, tables, links, predicates, groups, queryId, isRoot, isComposing);
     }
+
+    /// <summary>Reads a boolean flag that the engine may write as a JSON boolean or as 1/0.</summary>
+    private static bool ReadFlag(JsonElement root, string name)
+        => root.TryGetProperty(name, out var element)
+            && (element.ValueKind == JsonValueKind.True
+                || (element.ValueKind == JsonValueKind.Number && element.GetInt32() != 0));
 }
 
 /// <summary>The result of <c>validate-sql</c> / <c>apply-sql</c>: the plan's counts.</summary>

@@ -38,6 +38,10 @@
   <sys:String x:Key="Viewer.Placeholder">Refresh to render the report.</sys:String>
   <sys:String x:Key="Viewer.PreviewError">The report preview could not start: {0}</sys:String>
   <sys:String x:Key="Viewer.NotYetRefreshed">Not yet refreshed. Click “Refresh” to query the database and render the report.</sys:String>
+  <sys:String x:Key="Viewer.NodeRows">Showing {0} rows.</sys:String>
+  <sys:String x:Key="Viewer.NodeRows.Name">Report rows</sys:String>
+  <sys:String x:Key="Viewer.NodeNotRefreshed">This report has not been refreshed yet.</sys:String>
+  <sys:String x:Key="Viewer.JsonReportUnavailable">The full JSON report is not available for a source.</sys:String>
   <sys:String x:Key="Viewer.Status">Rendered {0} from {1}.</sys:String>
   <sys:String x:Key="Viewer.Pages.One">1 page</sys:String>
   <sys:String x:Key="Viewer.Pages.Many">{0} pages</sys:String>
@@ -114,6 +118,7 @@
   <sys:String x:Key="Query.Sources.Hint">Double-click a source to add it to the Result.</sys:String>
   <sys:String x:Key="Query.Sources.Empty">No sources yet. Import a report or add a source.</sys:String>
   <sys:String x:Key="Query.Sources.AllAdded">All sources are added to the Result.</sys:String>
+  <sys:String x:Key="Query.NestedAuthoring">This source is itself a composition; nested authoring is not available here.</sys:String>
   <sys:String x:Key="Query.Placeholder.Root">Add sources to the Result, then join them here.</sys:String>
   <sys:String x:Key="Query.ArrangeTables.Tooltip">Lay the table cards out automatically.</sys:String>
   <sys:String x:Key="Query.RevertSql.Tooltip">Discard the SQL edits and return to the generated statement.</sys:String>
@@ -372,6 +377,7 @@
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
   <sys:String x:Key="Query.SchemaEmpty">This source has no tables.</sys:String>
   <sys:String x:Key="Designer.FieldsEmpty">Build the query to see fields here.</sys:String>
+  <sys:String x:Key="Designer.AddElementsHint">Add elements to design this report.</sys:String>
   <sys:String x:Key="Query.Table.Tooltip">Drag the header to move this table.</sys:String>
   <sys:String x:Key="Designer.Band.Tooltip">Click to select this band; drag its bottom edge to resize.</sys:String>
   <sys:String x:Key="Designer.Element.Tooltip">Drag to move, drag a handle to resize, or double-click to edit.</sys:String>
@@ -414,6 +420,5 @@
   <sys:String x:Key="Composition.Component.Root">{0} (Result)</sys:String>
   <sys:String x:Key="Composition.Role.Result">Result — the report you design and view.</sys:String>
   <sys:String x:Key="Composition.Role.Source">Source — this query feeds the Result.</sys:String>
-  <sys:String x:Key="Composition.WorkspaceNotice">The Designer and Viewer show the Result report. Source layouts are not available yet.</sys:String>
   <sys:String x:Key="Composition.OneSource">Add another source to combine.</sys:String>
 </ResourceDictionary>

@@ -38,6 +38,10 @@
   <sys:String x:Key="Viewer.Placeholder">Zum Rendern des Berichts aktualisieren.</sys:String>
   <sys:String x:Key="Viewer.PreviewError">Die Berichtsvorschau konnte nicht gestartet werden: {0}</sys:String>
   <sys:String x:Key="Viewer.NotYetRefreshed">Noch nicht aktualisiert. Klicken Sie auf „Aktualisieren“, um die Datenbank abzufragen und den Bericht zu rendern.</sys:String>
+  <sys:String x:Key="Viewer.NodeRows">{0} Zeilen werden angezeigt.</sys:String>
+  <sys:String x:Key="Viewer.NodeRows.Name">Berichtszeilen</sys:String>
+  <sys:String x:Key="Viewer.NodeNotRefreshed">Dieser Bericht wurde noch nicht aktualisiert.</sys:String>
+  <sys:String x:Key="Viewer.JsonReportUnavailable">Der vollständige JSON-Bericht ist für eine Quelle nicht verfügbar.</sys:String>
   <sys:String x:Key="Viewer.Status">{0} aus {1} gerendert.</sys:String>
   <sys:String x:Key="Viewer.Pages.One">1 Seite</sys:String>
   <sys:String x:Key="Viewer.Pages.Many">{0} Seiten</sys:String>
@@ -368,6 +372,7 @@
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
   <sys:String x:Key="Query.SchemaEmpty">Diese Quelle enthält keine Tabellen.</sys:String>
   <sys:String x:Key="Designer.FieldsEmpty">Erstellen Sie die Abfrage, um hier Felder zu sehen.</sys:String>
+  <sys:String x:Key="Designer.AddElementsHint">Fügen Sie Elemente hinzu, um diesen Bericht zu gestalten.</sys:String>
   <sys:String x:Key="Query.Table.Tooltip">Ziehen Sie die Kopfzeile, um diese Tabelle zu verschieben.</sys:String>
   <sys:String x:Key="Designer.Band.Tooltip">Klicken Sie, um diesen Bereich auszuwählen; ziehen Sie den unteren Rand, um die Größe zu ändern.</sys:String>
   <sys:String x:Key="Designer.Element.Tooltip">Ziehen Sie zum Verschieben, ziehen Sie einen Griff zum Ändern der Größe, oder doppelklicken Sie zum Bearbeiten.</sys:String>
@@ -393,6 +398,7 @@
   <sys:String x:Key="Query.Sources.Hint">Doppelklicken Sie auf eine Quelle, um sie dem Ergebnis hinzuzufügen.</sys:String>
   <sys:String x:Key="Query.Sources.Empty">Noch keine Quellen. Importieren Sie einen Bericht oder fügen Sie eine Quelle hinzu.</sys:String>
   <sys:String x:Key="Query.Sources.AllAdded">Alle Quellen sind dem Ergebnis hinzugefügt.</sys:String>
+  <sys:String x:Key="Query.NestedAuthoring">Diese Quelle ist selbst eine Zusammenstellung; verschachtelte Bearbeitung ist hier nicht verfügbar.</sys:String>
   <sys:String x:Key="Query.Placeholder.Root">Fügen Sie dem Ergebnis Quellen hinzu und verknüpfen Sie sie hier.</sys:String>
   <sys:String x:Key="Designer.ReportColumns">BERICHTSSPALTEN (ZUM ZEICHENBEREICH ZIEHEN)</sys:String>
   <sys:String x:Key="Composition.Title">Komposition</sys:String>
@@ -415,6 +421,5 @@
   <sys:String x:Key="Composition.Component.Root">{0} (Ergebnis)</sys:String>
   <sys:String x:Key="Composition.Role.Result">Ergebnis — der Bericht, den Sie gestalten und anzeigen.</sys:String>
   <sys:String x:Key="Composition.Role.Source">Quelle — diese Abfrage speist das Ergebnis.</sys:String>
-  <sys:String x:Key="Composition.WorkspaceNotice">Designer und Viewer zeigen den Ergebnisbericht. Quellenlayouts sind noch nicht verfügbar.</sys:String>
   <sys:String x:Key="Composition.OneSource">Fügen Sie eine weitere Quelle zum Kombinieren hinzu.</sys:String>
 </ResourceDictionary>

@@ -103,16 +103,32 @@ public sealed class QueryViewModel : ObservableObject
         }
     }
 
-    /// <summary>True when the selected query is the composed root (no schema tables to
-    /// add; its inputs are the other queries).</summary>
+    /// <summary>True when the selected query is the composed root (the document's default
+    /// report, whose Result identity drives the Columns/Sources areas).</summary>
     public bool IsRoot => _model.IsRoot;
 
-    /// <summary>False for the composed root, whose SQL is generated from its sources by the
-    /// refresh coordinator rather than a single editable statement.</summary>
-    public bool CanEditSql => !IsRoot;
+    /// <summary>True when the selected query is built from other queries — the composed root
+    /// or a nested composing node — so it has no schema tables of its own and no single
+    /// editable SQL statement.</summary>
+    public bool IsComposing => _model.IsComposing;
+
+    /// <summary>True for a leaf query: it is not the report root and not composing, so it owns
+    /// a database and schema tables. A Standard Report's single query is a leaf (the engine's
+    /// <c>isRoot</c> is false for it even though drawing workflows treat it as the report root).</summary>
+    public bool IsLeaf => !IsRoot && !IsComposing;
+
+    /// <summary>SQL is editable only for a leaf source: the composed root (even before it has
+    /// joins) and any composing node have no single editable statement.</summary>
+    public bool CanEditSql => IsLeaf;
 
     /// <summary>True when the selected query is a source query (a leaf), not the root.</summary>
     public bool IsNotRoot => !IsRoot;
+
+    /// <summary>True for a composing node that is not the root: nested authoring (adding a
+    /// child) is deferred, so the sidebar says so instead of offering it.</summary>
+    public bool IsComposingNonRoot => IsComposing && !IsRoot;
+
+    public bool ShowNestedAuthoringNote => IsComposingNonRoot;
 
     /// <summary>The queries a composed root can still add as inputs: every non-root query that
     /// is not already one of the root's upstream tables.</summary>
@@ -345,6 +361,23 @@ public sealed class QueryViewModel : ObservableObject
         _ = driver; // the model's driver token is authoritative; kept for symmetry
 
         await ReloadAsync();
+    }
+
+    /// <summary>Re-reads the selected query's schema via <c>describe?query</c>. A composing node
+    /// answers no schema tables (its inputs are other queries); a leaf answers its own.</summary>
+    public async Task ReloadSchemaAsync()
+    {
+        if (!HasDocument) return;
+        try
+        {
+            DescribeResult describe = await _engine.DescribeAsync(_handle, _queryId);
+            _schemaTables = describe.Tables;
+            OnPropertyChanged(nameof(SchemaTables));
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+        }
     }
 
     /// <summary>Re-reads the query model from the engine.  Call after `apply-connection`, too.</summary>
@@ -612,12 +645,16 @@ public sealed class QueryViewModel : ObservableObject
         OnPropertyChanged(nameof(ShowSourcesHint));
         OnPropertyChanged(nameof(ShowOneSourceHint));
         OnPropertyChanged(nameof(IsRoot));
+        OnPropertyChanged(nameof(IsComposing));
+        OnPropertyChanged(nameof(IsLeaf));
+        OnPropertyChanged(nameof(IsComposingNonRoot));
+        OnPropertyChanged(nameof(ShowNestedAuthoringNote));
         OnPropertyChanged(nameof(CanEditSql));
         OnPropertyChanged(nameof(IsNotRoot));
-        if (_model.IsRoot && _mode == QueryMode.Sql)
+        if ((_model.IsRoot || _model.IsComposing) && _mode == QueryMode.Sql)
         {
-            // Switching to the root while in SQL mode drops back to the visual designer,
-            // because the root has no single editable statement.
+            // Switching to the Result or a composing node while in SQL mode drops back to the
+            // visual designer, because it has no single editable statement.
             Mode = QueryMode.Designer;
             OnPropertyChanged(nameof(IsDesigner));
             OnPropertyChanged(nameof(IsSql));

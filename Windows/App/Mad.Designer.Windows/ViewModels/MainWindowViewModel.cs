@@ -100,7 +100,6 @@ public sealed class MainWindowViewModel : ObservableObject
             OnPropertyChanged(nameof(QueryVisible));
             OnPropertyChanged(nameof(DesignerVisible));
             OnPropertyChanged(nameof(ViewerVisible));
-            OnPropertyChanged(nameof(ShowSourceWorkspaceNotice));
         }
     }
 
@@ -126,12 +125,6 @@ public sealed class MainWindowViewModel : ObservableObject
     public bool QueryVisible => HasDocument && IsQuerySelected;
     public bool DesignerVisible => HasDocument && IsDesignerSelected;
     public bool ViewerVisible => HasDocument && IsViewerSelected;
-
-    /// <summary>True when a source is selected but the active workspace can only show the
-    /// Result: the shell then explains why the pane and the workspace disagree. Separate
-    /// per-source layouts are future work (MAD_COMPOSITION_NODE_VIEW.md).</summary>
-    public bool ShowSourceWorkspaceNotice
-        => HasDocument && Document.IsComposed && !Document.IsRootSelected && SelectedWorkspace != Workspace.Query;
 
     public ICommand OpenDocumentCommand { get; }
     public ICommand OpenAboutCommand { get; }
@@ -240,7 +233,6 @@ public sealed class MainWindowViewModel : ObservableObject
             OnPropertyChanged(nameof(QueryVisible));
             OnPropertyChanged(nameof(DesignerVisible));
             OnPropertyChanged(nameof(ViewerVisible));
-            OnPropertyChanged(nameof(ShowSourceWorkspaceNotice));
             SelectQueryCommand.RaiseCanExecuteChanged();
             SelectDesignerCommand.RaiseCanExecuteChanged();
             SelectViewerCommand.RaiseCanExecuteChanged();
@@ -249,21 +241,7 @@ public sealed class MainWindowViewModel : ObservableObject
             return;
         }
 
-        if (e.PropertyName is nameof(DocumentViewModel.SelectedQueryId)
-            or nameof(DocumentViewModel.IsRootSelected))
-        {
-            // Only Query can show a source's own definition today. Selecting one takes the user
-            // there; selecting the Result leaves the current workspace alone.
-            if (Document.IsComposed && !Document.IsRootSelected)
-            {
-                SelectedWorkspace = Workspace.Query;
-            }
-            OnPropertyChanged(nameof(ShowSourceWorkspaceNotice));
-        }
-
-        if (e.PropertyName == nameof(DocumentViewModel.IsComposed))
-        {
-            OnPropertyChanged(nameof(ShowSourceWorkspaceNotice));
-        }
+        // Selecting a node keeps the active workspace: Query, Designer, and Viewer all follow
+        // the one selection, so there is nothing to redirect the user to.
     }
 }

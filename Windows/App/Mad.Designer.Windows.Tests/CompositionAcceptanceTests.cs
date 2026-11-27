@@ -317,6 +317,9 @@ public sealed class CompositionAcceptanceTests
             long invQuery = afterInv.Queries.Single(q => q.Name == "invoices").Id;
             long rootQuery = afterInv.RootQuery;
             await engine.AddTableAsync(created.Handle, "invoices", invQuery);
+            // The root is "composing" only once it has an upstream table; that is the state in
+            // which the engine answers the SQL-editing rejection this test pins.
+            await engine.AddUpstreamAsync(created.Handle, invQuery);
 
             // A source query accepts SQL entry against its own schema.
             var validated = await engine.ValidateSqlAsync(created.Handle, "SELECT invoice_id, amount FROM invoices", invQuery);

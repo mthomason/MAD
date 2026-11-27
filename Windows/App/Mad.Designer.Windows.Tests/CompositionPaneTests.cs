@@ -86,9 +86,13 @@ public sealed class CompositionPaneTests
     }
 
     [Fact]
-    public void MainWindow_ExplainsWhyDesignerAndViewerShowTheResult()
+    public void MainWindow_HasNoInterimSourceWorkspaceNotice()
     {
-        XElement notice = Named(Window, "SourceWorkspaceNotice");
-        Assert.Contains("ShowSourceWorkspaceNotice", (string?)notice.Attribute("Visibility"));
+        // Every node is a report, so the shell no longer explains away a workspace that would
+        // show the Result for a source: the notice and its binding are gone.
+        Assert.DoesNotContain(Window.Descendants(),
+            e => (string?)e.Attribute(X + "Name") == "SourceWorkspaceNotice");
+        Assert.DoesNotContain(Window.Descendants(),
+            e => ((string?)e.Attribute("Visibility") ?? "").Contains("ShowSourceWorkspaceNotice"));
     }
 }

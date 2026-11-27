@@ -130,6 +130,14 @@ public partial class ViewerView : UserControl
             case nameof(ViewerViewModel.PreviewHtml):
                 ShowPreview(_viewer.PreviewHtml);
                 break;
+            case nameof(ViewerViewModel.IsRowGrid):
+                // The row grid is a WPF DataGrid; the WebView2 is a native surface that would
+                // paint above it, so hide the browser while the grid is shown.
+                if (_browser != null)
+                {
+                    _browser.Visibility = _viewer.IsRowGrid ? Visibility.Collapsed : Visibility.Visible;
+                }
+                break;
             case nameof(ViewerViewModel.Zoom) when _browser?.CoreWebView2 != null:
                 _browser.ZoomFactor = _viewer.Zoom;
                 break;
@@ -158,6 +166,14 @@ public partial class ViewerView : UserControl
             _pendingHtml = html;
             return;
         }
+
+        // The row grid owns the surface for a layout-less node; the HTML preview stays hidden.
+        if (_viewer is { IsRowGrid: true })
+        {
+            _browser.Visibility = Visibility.Collapsed;
+            return;
+        }
+        _browser.Visibility = Visibility.Visible;
 
         if (html == null)
         {

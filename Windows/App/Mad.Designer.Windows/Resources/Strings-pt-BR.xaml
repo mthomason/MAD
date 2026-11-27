@@ -38,6 +38,10 @@
   <sys:String x:Key="Viewer.Placeholder">Atualize para renderizar o relatório.</sys:String>
   <sys:String x:Key="Viewer.PreviewError">Não foi possível iniciar a pré-visualização do relatório: {0}</sys:String>
   <sys:String x:Key="Viewer.NotYetRefreshed">Ainda não atualizado. Clique em “Atualizar” para consultar o banco de dados e renderizar o relatório.</sys:String>
+  <sys:String x:Key="Viewer.NodeRows">Mostrando {0} linhas.</sys:String>
+  <sys:String x:Key="Viewer.NodeRows.Name">Linhas do relatório</sys:String>
+  <sys:String x:Key="Viewer.NodeNotRefreshed">Este relatório ainda não foi atualizado.</sys:String>
+  <sys:String x:Key="Viewer.JsonReportUnavailable">O relatório JSON completo não está disponível para uma fonte.</sys:String>
   <sys:String x:Key="Viewer.Status">Renderizado {0} de {1}.</sys:String>
   <sys:String x:Key="Viewer.Pages.One">1 página</sys:String>
   <sys:String x:Key="Viewer.Pages.Many">{0} páginas</sys:String>
@@ -368,6 +372,7 @@
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
   <sys:String x:Key="Query.SchemaEmpty">Esta origem não tem tabelas.</sys:String>
   <sys:String x:Key="Designer.FieldsEmpty">Crie a consulta para ver campos aqui.</sys:String>
+  <sys:String x:Key="Designer.AddElementsHint">Adicione elementos para criar este relatório.</sys:String>
   <sys:String x:Key="Query.Table.Tooltip">Arraste o cabeçalho para mover esta tabela.</sys:String>
   <sys:String x:Key="Designer.Band.Tooltip">Clique para selecionar esta faixa; arraste a borda inferior para redimensionar.</sys:String>
   <sys:String x:Key="Designer.Element.Tooltip">Arraste para mover, arraste uma alça para redimensionar ou clique duas vezes para editar.</sys:String>
@@ -393,6 +398,7 @@
   <sys:String x:Key="Query.Sources.Hint">Clique duas vezes em uma fonte para adicioná-la ao resultado.</sys:String>
   <sys:String x:Key="Query.Sources.Empty">Ainda não há fontes. Importe um relatório ou adicione uma fonte.</sys:String>
   <sys:String x:Key="Query.Sources.AllAdded">Todas as fontes foram adicionadas ao resultado.</sys:String>
+  <sys:String x:Key="Query.NestedAuthoring">Esta fonte já é uma composição; a edição aninhada não está disponível aqui.</sys:String>
   <sys:String x:Key="Query.Placeholder.Root">Adicione fontes ao resultado e junte-as aqui.</sys:String>
   <sys:String x:Key="Designer.ReportColumns">COLUNAS DO RELATÓRIO (ARRASTE PARA A TELA)</sys:String>
   <sys:String x:Key="Composition.Title">Composição</sys:String>
@@ -415,6 +421,5 @@
   <sys:String x:Key="Composition.Component.Root">{0} (Resultado)</sys:String>
   <sys:String x:Key="Composition.Role.Result">Resultado — o relatório que você projeta e visualiza.</sys:String>
   <sys:String x:Key="Composition.Role.Source">Fonte — esta consulta alimenta o resultado.</sys:String>
-  <sys:String x:Key="Composition.WorkspaceNotice">O Designer e o Visualizador mostram o relatório de resultado. Os layouts de fonte ainda não estão disponíveis.</sys:String>
   <sys:String x:Key="Composition.OneSource">Adicione outra fonte para combinar.</sys:String>
 </ResourceDictionary>

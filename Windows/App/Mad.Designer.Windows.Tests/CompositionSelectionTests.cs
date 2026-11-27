@@ -9,8 +9,9 @@ using Mad.Designer.Windows.ViewModels;
 namespace Mad.Designer.Windows.Tests;
 
 /// <summary>Selection is one document-level value: the Composition graph, the Component
-/// picker, and the Query workspace all follow it. A source is only displayable in Query, so
-/// selecting one moves there; Designer and Viewer explain that they still show the Result.</summary>
+/// picker, and every workspace follow it. Selecting a source keeps the active workspace and
+/// updates Query, Designer, and Viewer to that node; there is no interim notice and no forced
+/// switch to Query.</summary>
 [Collection("Engine")]
 public sealed class CompositionSelectionTests
 {
@@ -55,7 +56,7 @@ public sealed class CompositionSelectionTests
     }
 
     [Fact]
-    public async Task SelectingASource_SelectsTheQueryAndMovesToTheQueryWorkspace()
+    public async Task SelectingASource_KeepsTheWorkspaceAndEveryViewFollowsIt()
     {
         string invoices = CopyFixture("invoices.sqlite");
         string mad = Path.Combine(Path.GetTempPath(), $"mad-select-{Guid.NewGuid():N}.mad");
@@ -78,22 +79,28 @@ public sealed class CompositionSelectionTests
             Assert.True(window.Document.IsComposed);
             Assert.Equal(Workspace.Query, window.SelectedWorkspace);
             Assert.Equal(rootId, window.Document.SelectedQueryId);
-            Assert.False(window.ShowSourceWorkspaceNotice);
             Assert.True(window.ImportChildCommand.CanExecute(null));
             Assert.True(window.ConvertCommand.CanExecute(null));
 
-            // The graph and the picker share the one selection.
-            window.Document.Composition.Select(sourceId);
-            Assert.Equal(sourceId, window.Document.SelectedQueryId);
-            Assert.Equal(Workspace.Query, window.SelectedWorkspace);
-            Assert.False(window.ShowSourceWorkspaceNotice);
-
-            // A source cannot be shown by the Designer or Viewer, so the shell says so.
+            // The graph and the picker share the one selection; move to the Viewer and pick a
+            // source there. The workspace stays put, and the selection follows the node.
             window.SelectedWorkspace = Workspace.Viewer;
-            Assert.True(window.ShowSourceWorkspaceNotice);
+            window.Document.Composition.Select(sourceId);
+            await window.Document.SelectQueryAsync(sourceId);
 
-            window.Document.SelectedQueryId = rootId;
-            Assert.False(window.ShowSourceWorkspaceNotice);
+            Assert.Equal(sourceId, window.Document.SelectedQueryId);
+            Assert.Equal(Workspace.Viewer, window.SelectedWorkspace);
+            Assert.False(window.Document.IsRootSelected);
+            Assert.False(window.Document.Designer.SelectedNodeComposing);
+
+            // Selecting the Result returns every workspace to the Result without moving away.
+            window.Document.Composition.Select(rootId);
+            await window.Document.SelectQueryAsync(rootId);
+
+            Assert.Equal(rootId, window.Document.SelectedQueryId);
+            Assert.Equal(Workspace.Viewer, window.SelectedWorkspace);
+            Assert.True(window.Document.IsRootSelected);
+            Assert.True(window.Document.Designer.SelectedNodeComposing);
         }
         finally
         {

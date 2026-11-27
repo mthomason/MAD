@@ -277,15 +277,6 @@
                         </DockPanel>
                     </Border>
 
-                    <Border x:Name="SourceWorkspaceNotice" Grid.Row="1"
-                            Background="{DynamicResource LayerFillColorDefaultBrush}"
-                            BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}"
-                            BorderThickness="0,0,0,1" Padding="12,6"
-                            Visibility="{Binding ShowSourceWorkspaceNotice, Converter={StaticResource BoolToVis}}">
-                        <TextBlock Text="{infra:Loc Composition.WorkspaceNotice}"
-                                   Style="{StaticResource MAD.SecondaryText}" />
-                    </Border>
-
                     <Grid Grid.Row="2">
                         <views:QueryView Visibility="{Binding QueryVisible, Converter={StaticResource BoolToVis}}" />
                         <views:DesignerView Visibility="{Binding DesignerVisible, Converter={StaticResource BoolToVis}}" />

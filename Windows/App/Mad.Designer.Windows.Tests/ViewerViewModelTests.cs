@@ -151,7 +151,7 @@ public sealed class ViewerViewModelTests
     {
         var vm = new ViewerViewModel(new EngineService());
         string path = Path.Combine(Path.GetTempPath(), $"mad-viewer-failed-{Guid.NewGuid():N}.html");
-        await vm.LoadAsync(0, () =>
+        await vm.LoadAsync(0, 0,() =>
         {
             vm.ReportRefreshFailed("the database is unreachable");
             return Task.FromResult(false);
@@ -178,7 +178,7 @@ public sealed class ViewerViewModelTests
         // the PDF branch (the catalogue's first format) fails inside ApplyRenderedPaperAsync.
         string missing = Path.Combine(Path.GetTempPath(), $"mad-missing-{Guid.NewGuid():N}.exe");
         var vm = new ViewerViewModel(new EngineService(madExe: missing));
-        await vm.LoadAsync(0, () => Task.FromResult(true));
+        await vm.LoadAsync(0, 0,() => Task.FromResult(true));
         vm.SetRenderedHtml(BuildHtml(1), rowCount: 1);
 
         string existing = Path.Combine(Path.GetTempPath(), $"mad-viewer-existing-{Guid.NewGuid():N}.pdf");
@@ -209,7 +209,7 @@ public sealed class ViewerViewModelTests
     public async Task Print_WithARenderedPreview_RaisesAPrintRequest()
     {
         var vm = new ViewerViewModel(new EngineService());
-        await vm.LoadAsync(0, () => Task.FromResult(true));
+        await vm.LoadAsync(0, 0,() => Task.FromResult(true));
         vm.SetRenderedHtml(BuildHtml(2), rowCount: 10);
 
         int requests = 0;
@@ -224,7 +224,7 @@ public sealed class ViewerViewModelTests
     {
         var vm = new ViewerViewModel(new EngineService());
         int refreshes = 0;
-        await vm.LoadAsync(0, () =>
+        await vm.LoadAsync(0, 0,() =>
         {
             refreshes++;
             vm.SetRenderedHtml(BuildHtml(1), rowCount: 1);
@@ -239,6 +239,100 @@ public sealed class ViewerViewModelTests
 
         Assert.Equal(1, refreshes);
         Assert.Equal(1, requests);
+    }
+
+    [Fact]
+    public void AvailableExportFormats_DropsJsonReportOnlyForANonRootSource()
+    {
+        var vm = new ViewerViewModel(new EngineService());
+        Assert.Contains(vm.AvailableExportFormats, f => f.Format == "json-report");
+        Assert.Equal(7, vm.AvailableExportFormats.Count);
+
+        vm.IsNodeReportRoot = false;
+        Assert.DoesNotContain(vm.AvailableExportFormats, f => f.Format == "json-report");
+        Assert.Equal(6, vm.AvailableExportFormats.Count);
+
+        vm.IsNodeReportRoot = true;
+        Assert.Contains(vm.AvailableExportFormats, f => f.Format == "json-report");
+        Assert.Equal(7, vm.AvailableExportFormats.Count);
+    }
+
+    [Fact]
+    public void IsNodeReportRoot_ClampsTheSelectedIndexIntoTheShorterList()
+    {
+        var vm = new ViewerViewModel(new EngineService());
+        vm.SelectedFormatIndex = ViewerViewModel.ExportFormats.Count - 1; // the last, "text"
+        Assert.Equal(6, vm.SelectedFormatIndex);
+
+        vm.IsNodeReportRoot = false; // a source offers six formats
+
+        Assert.Equal(5, vm.SelectedFormatIndex);
+        Assert.True(vm.SelectedFormatIndex < vm.AvailableExportFormats.Count);
+        Assert.NotEqual("json-report", vm.SelectedFormat.Format);
+    }
+
+    [Fact]
+    public void SetNodeRows_ShowsTheGridAndReportsTheRowCount()
+    {
+        var vm = new ViewerViewModel(new EngineService());
+        var node = new NodeResult(7, "payments", 2,
+            new[]
+            {
+                new NodeResultColumn("payment_id", "Payment", "payments", "INTEGER"),
+                new NodeResultColumn("amount", "Amount", "payments", "REAL"),
+            },
+            new IReadOnlyList<object?>[]
+            {
+                new object?[] { 1m, 40m },
+                new object?[] { 2m, 60m },
+            });
+
+        vm.SetNodeRows(node);
+
+        Assert.True(vm.IsRowGrid);
+        Assert.Null(vm.PreviewHtml);
+        Assert.NotNull(vm.NodeRows);
+        Assert.Equal(2, vm.NodeRows!.Count);
+        Assert.Equal(2, vm.RowCount);
+        Assert.Equal(0, vm.PageCount);
+        Assert.Equal("Showing 2 rows.", vm.StatusText);
+
+        // The grid headers are the columns' display names, and each row maps positionally.
+        Assert.True(vm.NodeRows.Table.Columns.Contains("Amount"));
+        Assert.Equal(40m, vm.NodeRows[0]["Amount"]);
+        Assert.Equal(60m, vm.NodeRows[1]["Amount"]);
+    }
+
+    [Fact]
+    public void SettingRenderedHtml_ClearsARowGridFromThePreviousNode()
+    {
+        var vm = new ViewerViewModel(new EngineService());
+        vm.SetNodeRows(new NodeResult(7, "payments", 1,
+            new[] { new NodeResultColumn("a", "A", null, null) },
+            new IReadOnlyList<object?>[] { new object?[] { 1m } }));
+        Assert.True(vm.IsRowGrid);
+
+        vm.SetRenderedHtml(BuildHtml(1), rowCount: 1);
+
+        Assert.False(vm.IsRowGrid);
+        Assert.Null(vm.NodeRows);
+        Assert.NotNull(vm.PreviewHtml);
+    }
+
+    [Fact]
+    public async Task ChangingTheSelectedNode_ClearsThePreviousRender()
+    {
+        var vm = new ViewerViewModel(new EngineService());
+        await vm.LoadAsync(1, 5, () => Task.FromResult(true));
+        vm.SetRenderedHtml(BuildHtml(2), rowCount: 40);
+        Assert.NotNull(vm.PreviewHtml);
+
+        vm.QueryId = 6;
+
+        Assert.Null(vm.PreviewHtml);
+        Assert.Null(vm.NodeRows);
+        Assert.False(vm.IsRowGrid);
+        Assert.Equal(0, vm.PageCount);
     }
 
     private static string BuildHtml(int pages)

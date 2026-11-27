@@ -38,6 +38,10 @@
   <sys:String x:Key="Viewer.Placeholder">Actualice para generar el informe.</sys:String>
   <sys:String x:Key="Viewer.PreviewError">La vista previa del informe no pudo iniciarse: {0}</sys:String>
   <sys:String x:Key="Viewer.NotYetRefreshed">Aún no se ha actualizado. Haga clic en “Actualizar” para consultar la base de datos y generar el informe.</sys:String>
+  <sys:String x:Key="Viewer.NodeRows">Mostrando {0} filas.</sys:String>
+  <sys:String x:Key="Viewer.NodeRows.Name">Filas del informe</sys:String>
+  <sys:String x:Key="Viewer.NodeNotRefreshed">Este informe aún no se ha actualizado.</sys:String>
+  <sys:String x:Key="Viewer.JsonReportUnavailable">El informe JSON completo no está disponible para un origen.</sys:String>
   <sys:String x:Key="Viewer.Status">Se generó {0} a partir de {1}.</sys:String>
   <sys:String x:Key="Viewer.Pages.One">1 página</sys:String>
   <sys:String x:Key="Viewer.Pages.Many">{0} páginas</sys:String>
@@ -368,6 +372,7 @@
   <sys:String x:Key="Query.Badge.Filtered">WHERE</sys:String>
   <sys:String x:Key="Query.SchemaEmpty">Esta fuente no tiene tablas.</sys:String>
   <sys:String x:Key="Designer.FieldsEmpty">Cree la consulta para ver campos aquí.</sys:String>
+  <sys:String x:Key="Designer.AddElementsHint">Agregue elementos para diseñar este informe.</sys:String>
   <sys:String x:Key="Query.Table.Tooltip">Arrastre el encabezado para mover esta tabla.</sys:String>
   <sys:String x:Key="Designer.Band.Tooltip">Haga clic para seleccionar esta banda; arrastre su borde inferior para cambiar el tamaño.</sys:String>
   <sys:String x:Key="Designer.Element.Tooltip">Arrastre para mover, arrastre un controlador para cambiar el tamaño o haga doble clic para editar.</sys:String>
@@ -393,6 +398,7 @@
   <sys:String x:Key="Query.Sources.Hint">Haga doble clic en un origen para añadirlo al resultado.</sys:String>
   <sys:String x:Key="Query.Sources.Empty">Aún no hay orígenes. Importe un informe o añada un origen.</sys:String>
   <sys:String x:Key="Query.Sources.AllAdded">Todos los orígenes se han añadido al resultado.</sys:String>
+  <sys:String x:Key="Query.NestedAuthoring">Este origen es en sí mismo una composición; la edición anidada no está disponible aquí.</sys:String>
   <sys:String x:Key="Query.Placeholder.Root">Añada orígenes al resultado y únalos aquí.</sys:String>
   <sys:String x:Key="Designer.ReportColumns">COLUMNAS DEL INFORME (ARRASTRE AL LIENZO)</sys:String>
   <sys:String x:Key="Composition.Title">Composición</sys:String>
@@ -415,6 +421,5 @@
   <sys:String x:Key="Composition.Component.Root">{0} (Resultado)</sys:String>
   <sys:String x:Key="Composition.Role.Result">Resultado: el informe que diseña y visualiza.</sys:String>
   <sys:String x:Key="Composition.Role.Source">Origen: esta consulta alimenta el resultado.</sys:String>
-  <sys:String x:Key="Composition.WorkspaceNotice">El Diseñador y el Visor muestran el informe de resultado. Los diseños de origen aún no están disponibles.</sys:String>
   <sys:String x:Key="Composition.OneSource">Añada otro origen para combinar.</sys:String>
 </ResourceDictionary>
