@@ -22,6 +22,8 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
+import threading
 
 
 def repo_root():
@@ -67,6 +69,25 @@ class ServeClient:
             bufsize=1,
         )
         self.next_id = 0
+        # Drain stderr on a thread.  `mad serve` logs there (GNUstep on Linux can
+        # write a lot), and an unread 64 KB pipe would fill, blocking the child on
+        # write(2) while this side waits on stdout -- a deadlock, not a slow test.
+        self.stderr_lines = []
+        self.stderr_reader = threading.Thread(target=self._drain_stderr, daemon=True)
+        self.stderr_reader.start()
+
+    def _drain_stderr(self):
+        try:
+            for line in self.proc.stderr:
+                self.stderr_lines.append(line)
+                if len(self.stderr_lines) > 500:
+                    del self.stderr_lines[:250]
+        except Exception:
+            pass
+
+    def _stderr_text(self):
+        self.stderr_reader.join(timeout=2)
+        return "".join(self.stderr_lines)
 
     def request(self, method, params=None):
         self.next_id += 1
@@ -75,8 +96,7 @@ class ServeClient:
         self.proc.stdin.flush()
         line = self.proc.stdout.readline()
         if not line:
-            stderr = self.proc.stderr.read()
-            raise RuntimeError("mad serve exited early: " + stderr.strip())
+            raise RuntimeError("mad serve exited early: " + self._stderr_text().strip())
         return json.loads(line)
 
     def close(self):
@@ -88,7 +108,10 @@ class ServeClient:
             self.proc.stdin.close()
         except Exception:
             pass
-        self.proc.wait(timeout=30)
+        try:
+            self.proc.wait(timeout=30)
+        finally:
+            self.stderr_reader.join(timeout=2)
 
 
 def main():
@@ -118,6 +141,7 @@ def main():
         return error.get("message", "")
 
     client = ServeClient(argv, env)
+    workdir = None
     try:
         # --- engine-info advertises the node-scoped members -------------------------
         info = client.request("engine-info")
@@ -135,6 +159,88 @@ def main():
         before = client.request("document-info", {"handle": handle})
         check(ok(before) and result(before).get("composed") == False, "document-info: not composed before convert")
         check(len(result(before).get("queries", [])) == 1, "document-info: one query before convert")
+
+        # --- an ordinary (non-composed) report keeps its document layout ------------
+        # The document's own five structural sections are its layout.  A no-`query`
+        # call must not materialize per-query sections or treat the single query as a
+        # node: the report root is the document's default query when it has no root.
+        workdir = tempfile.mkdtemp(prefix="mad-serve-")
+        standard_path = os.path.join(workdir, "standard.mad")
+        shutil.copy(fixture, standard_path)
+        standard_open = client.request("open", {"path": standard_path})
+        check(ok(standard_open), "standard report: open a writable copy")
+        standard_handle = result(standard_open).get("handle")
+
+        standard_layout = client.request("layout-model", {"handle": standard_handle})
+        check(ok(standard_layout), "standard report: layout-model answers")
+        standard_sections = result(standard_layout).get("sections", [])
+        standard_elements = result(standard_layout).get("elements", [])
+        check(len(standard_sections) >= 5 and len(standard_elements) > 0,
+              "standard report: layout-model returns the document's sections and elements")
+
+        again = result(client.request("layout-model", {"handle": standard_handle}))
+        check([s["id"] for s in standard_sections] == [s["id"] for s in again.get("sections", [])],
+              "standard report: layout-model is stable (no new sections per call)")
+
+        standard_detail = None
+        original_detail_height = 0
+        for section in standard_sections:
+            if section.get("title") == "Report Detail":
+                standard_detail = section.get("id")
+                original_detail_height = section.get("height", 0)
+        check(standard_detail is not None, "standard report: has a document detail section")
+
+        element_count = len(standard_elements)
+        standard_add = client.request("add-element", {"handle": standard_handle,
+                                                       "section": standard_detail,
+                                                       "kind": "data-field"})
+        check(ok(standard_add) and len(result(standard_add).get("elements", [])) == element_count + 1,
+              "standard report: add-element edits the document detail")
+
+        standard_set = client.request("set-section", {"handle": standard_handle,
+                                                       "section": standard_detail,
+                                                       "height": 120})
+        detail_height = None
+        for section in result(standard_set).get("sections", []):
+            if section.get("id") == standard_detail:
+                detail_height = section.get("height")
+        check(ok(standard_set) and abs((detail_height or 0) - 120) < 0.5,
+              "standard report: set-section edits the document detail")
+
+        standard_refresh = client.request("refresh", {"handle": standard_handle})
+        check(ok(standard_refresh), "standard report: refresh")
+        standard_rows = result(standard_refresh).get("rowCount", 0)
+
+        standard_node = client.request("node-result", {"handle": standard_handle})
+        check(ok(standard_node) and result(standard_node).get("rowCount") == standard_rows,
+              "standard report: node-result (no query) reads the root result")
+
+        for standard_format in ("json", "csv", "text", "html"):
+            exported = client.request("export", {"handle": standard_handle, "format": standard_format})
+            check(ok(exported) and len(result(exported).get("data", "")) > 0,
+                  "standard report: export %s (no query) answers" % standard_format)
+        standard_report = client.request("export", {"handle": standard_handle, "format": "json-report"})
+        check(ok(standard_report), "standard report: json-report (no query) answers")
+
+        # Save and reopen: the document's own section ids survive (no spurious
+        # per-query sections).  The Apple CLI's `write` re-opens the source because
+        # its session document is a UIDocument, so only Linux's headless session
+        # carries the in-memory edit into the saved copy.
+        saved_path = os.path.join(workdir, "standard-saved.mad")
+        wrote = client.request("write", {"handle": standard_handle, "out": saved_path})
+        check(ok(wrote), "standard report: write")
+        reopened = client.request("open", {"path": saved_path})
+        check(ok(reopened), "standard report: reopen the saved copy")
+        reopened_layout = result(client.request("layout-model", {"handle": result(reopened).get("handle")}))
+        check([s["id"] for s in reopened_layout.get("sections", [])] == [s["id"] for s in standard_sections],
+              "standard report: save/reopen keeps the document's own section ids")
+        expected_elements = element_count + 1 if sys.platform.startswith("linux") else element_count
+        check(len(reopened_layout.get("elements", [])) == expected_elements,
+              "standard report: save/reopen keeps the document layout")
+        reopened_detail = next((s for s in reopened_layout.get("sections", []) if s.get("id") == standard_detail), {})
+        expected_height = 120 if sys.platform.startswith("linux") else original_detail_height
+        check(abs((reopened_detail.get("height") or 0) - expected_height) < 0.5,
+              "standard report: save/reopen keeps the document detail height")
 
         converted = client.request("convert", {"handle": handle, "childName": "invoices"})
         check(ok(converted), "convert to a composition")
@@ -243,6 +349,31 @@ def main():
         leaf_report = client.request("export", {"handle": handle, "query": leaf_id, "format": "json-report"})
         check(not ok(leaf_report), "export?query=leaf&format=json-report is refused")
 
+        # --- a node with no materialized layout exports without throwing ------------
+        # A fresh conversion: convert and refresh, then export the leaf BEFORE any
+        # scoped layout-model call has created its five sections.  The render must
+        # return an empty result or a clear error, never an engine exception.
+        layoutless_path = os.path.join(workdir, "layoutless.mad")
+        shutil.copy(fixture, layoutless_path)
+        layoutless_open = client.request("open", {"path": layoutless_path})
+        check(ok(layoutless_open), "layoutless node: open a fresh copy")
+        layoutless_handle = result(layoutless_open).get("handle")
+        layoutless_convert = client.request("convert", {"handle": layoutless_handle, "childName": "invoices"})
+        layoutless_leaf = 0
+        for q in result(layoutless_convert).get("queries", []):
+            if not q.get("isRoot"):
+                layoutless_leaf = q.get("id", 0)
+        check(ok(layoutless_convert) and layoutless_leaf > 0, "layoutless node: convert")
+        check(ok(client.request("refresh", {"handle": layoutless_handle})), "layoutless node: refresh")
+
+        layoutless_export = client.request("export", {"handle": layoutless_handle,
+                                                       "query": layoutless_leaf,
+                                                       "format": "html"})
+        check("engine error" not in error_message(layoutless_export),
+              "layoutless node: html export does not raise an engine exception")
+        check(ok(layoutless_export) or "not been refreshed" in error_message(layoutless_export),
+              "layoutless node: html export returns a result or a clear error")
+
         # --- unknown query ---------------------------------------------------------
         unknown = client.request("layout-model", {"handle": handle, "query": 987654321})
         check(not ok(unknown), "layout-model?query=unknown is refused")
@@ -252,6 +383,8 @@ def main():
         client.request("shutdown")
     finally:
         client.close()
+        if workdir is not None:
+            shutil.rmtree(workdir, ignore_errors=True)
 
     print("")
     print("MADSERVE %d passed, %d failed" % (passed, failed))
