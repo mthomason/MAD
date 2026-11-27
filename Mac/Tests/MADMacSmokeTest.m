@@ -3919,6 +3919,36 @@ int main(int argc, const char * argv[]) {
 				return 316;
 			}
 
+			// AppKit's stock Open Recent must not appear beside the app's icon-bearing one.
+			MADMacAppDelegate *dupDelegate = [[MADMacAppDelegate alloc] init];
+			[dupDelegate performSelector:NSSelectorFromString(@"buildMainMenu")];
+			NSMenu *dupFileMenu = nil;
+			for (NSMenuItem *top in [NSApp mainMenu].itemArray) {
+				if ([top.submenu.title isEqualToString:@"File"]) { dupFileMenu = top.submenu; break; }
+			}
+			NSMenuItem *ourRecent = [dupDelegate valueForKey:@"openRecentMenuItem"];
+			if (dupFileMenu == nil || ourRecent == nil || ourRecent.image == nil) {
+				fprintf(stderr, "FAIL: The app's Open Recent item is missing its icon\n");
+				return 320;
+			}
+			NSMenuItem *stockRecent = [[NSMenuItem alloc] initWithTitle:@"Open Recent" action:nil keyEquivalent:@""];
+			NSMenu *stockSubmenu = [[NSMenu alloc] initWithTitle:@"Open Recent"];
+			[stockSubmenu addItem:[[NSMenuItem alloc] initWithTitle:@"Clear Menu"
+															 action:@selector(clearRecentDocuments:)
+													  keyEquivalent:@""]];
+			stockRecent.submenu = stockSubmenu;
+			[dupFileMenu addItem:stockRecent];
+			[dupDelegate performSelector:NSSelectorFromString(@"removeStockOpenRecentMenu")];
+			NSUInteger recentItemCount = 0;
+			for (NSMenuItem *item in dupFileMenu.itemArray) {
+				if ([item.title isEqualToString:@"Open Recent"]) recentItemCount++;
+			}
+			if (recentItemCount != 1 || ![dupFileMenu.itemArray containsObject:ourRecent]) {
+				fprintf(stderr, "FAIL: The File menu has %lu Open Recent items, expected the app's one\n",
+						(unsigned long)recentItemCount);
+				return 321;
+			}
+
 			// 20g. Rename updates the file, the document, the window, and Open Recent.
 			[[NSUserDefaults standardUserDefaults] removeObjectForKey:tipKey];
 			NSError *renameError = nil;

@@ -29,6 +29,7 @@
 @property (nonatomic, strong, nullable) MADMacConnectionWindowController *connectionWindowController;
 @property (nonatomic, strong, readwrite) MADMacAboutWindowController *aboutWindowController;
 @property (nonatomic, strong, nullable) NSMenu *openRecentMenu;
+@property (nonatomic, strong, nullable) NSMenuItem *openRecentMenuItem;
 
 @end
 
@@ -61,6 +62,9 @@ static NSMenuItem *MADAddMenuItem(NSMenu *menu, NSString *title, SEL action, NSS
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *) __unused notification {
+	// NSDocumentController adds its own Open Recent menu to the File menu at launch;
+	// this app ships an icon-bearing one, so drop the stock duplicate.
+	[self removeStockOpenRecentMenu];
 	[NSApp activateIgnoringOtherApps:YES];
 	if ([NSDocumentController sharedDocumentController].documents.count == 0) {
 		[[NSDocumentController sharedDocumentController] openDocument:nil];
@@ -113,9 +117,14 @@ static NSMenuItem *MADAddMenuItem(NSMenu *menu, NSString *title, SEL action, NSS
 	NSMenuItem *openRecentItem = [[NSMenuItem alloc] initWithTitle:NSLocalizedString(@"Open Recent", @"File submenu title for recently opened reports.") action:nil keyEquivalent:@""];
 	NSMenu *openRecent = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Open Recent", @"File submenu title for recently opened reports.")];
 	self.openRecentMenu = openRecent;
+	self.openRecentMenuItem = openRecentItem;
 	openRecentItem.submenu = openRecent;
 	MADSetMenuSymbol(openRecentItem, @"clock.arrow.circlepath");
 	[fileMenu addItem:openRecentItem];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(fileMenuDidAddItem:)
+												 name:NSMenuDidAddItemNotification
+											   object:fileMenu];
 	[fileMenu addItem:[NSMenuItem separatorItem]];
 	NSMenuItem *saveItem = MADAddMenuItem(fileMenu, NSLocalizedString(@"Save", @"File menu item that saves the report."), @selector(saveDocument:), @"s", nil);
 	MADSetMenuSymbol(saveItem, @"square.and.arrow.down");
@@ -314,6 +323,14 @@ static NSMenuItem *MADAddMenuItem(NSMenu *menu, NSString *title, SEL action, NSS
 		NSMenuItem *item = MADAddMenuItem(menu, title, @selector(openRecentDocument:), @"", self);
 		item.representedObject = url;
 		item.toolTip = url.path;
+		NSString *filePath = url.path;
+		if (filePath.length > 0) {
+			NSImage *icon = [[NSWorkspace sharedWorkspace] iconForFile:filePath];
+			if (icon != nil) {
+				icon.size = NSMakeSize(16.0, 16.0);
+				item.image = icon;
+			}
+		}
 	}
 	if (count == 0) {
 		NSMenuItem *empty = MADAddMenuItem(menu, NSLocalizedString(@"No Recent Reports", @"Open Recent submenu placeholder when there are no recent reports."), NULL, @"", nil);
@@ -325,9 +342,48 @@ static NSMenuItem *MADAddMenuItem(NSMenu *menu, NSString *title, SEL action, NSS
 }
 
 - (void)menuNeedsUpdate:(NSMenu *)menu {
-	if (menu == self.openRecentMenu || [menu.title isEqualToString:NSLocalizedString(@"File", @"File menu title.")]) {
+	if (menu == self.openRecentMenu) {
+		return;
+	}
+	if (menu == self.openRecentMenuItem.menu ||
+		[menu.title isEqualToString:NSLocalizedString(@"File", @"File menu title.")]) {
+		[self removeStockOpenRecentMenu];
 		[self rebuildOpenRecentMenu];
 	}
+}
+
+/// Removes the stock NSDocumentController Open Recent item, leaving the app's own
+/// icon-bearing one.  The stock submenu is recognized by its private recent-item
+/// action (or Clear Menu action), so a localized title difference does not defeat it.
+- (void)removeStockOpenRecentMenu {
+	NSMenuItem *ours = self.openRecentMenuItem;
+	NSMenu *fileMenu = ours.menu;
+	if (fileMenu == nil) return;
+	NSArray<NSMenuItem *> *items = [fileMenu.itemArray copy];
+	for (NSMenuItem *item in items) {
+		if (item == ours || item.submenu == nil) continue;
+		NSString *itemTitle = item.title ?: @"";
+		NSString *itemSubmenuTitle = item.submenu.title ?: @"";
+		NSString *ourTitle = ours.title ?: @"";
+		NSString *ourSubmenuTitle = ours.submenu.title ?: @"";
+		BOOL stock = ([itemTitle isEqualToString:ourTitle] ||
+					  [itemSubmenuTitle isEqualToString:ourSubmenuTitle]);
+		for (NSMenuItem *child in item.submenu.itemArray) {
+			SEL action = child.action;
+			if (action == NSSelectorFromString(@"_openRecentDocument:") ||
+				action == @selector(clearRecentDocuments:)) {
+				stock = YES;
+				break;
+			}
+		}
+		if (stock) [fileMenu removeItem:item];
+	}
+}
+
+- (void)fileMenuDidAddItem:(NSNotification *) __unused note {
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self removeStockOpenRecentMenu];
+	});
 }
 
 - (void)openRecentDocument:(NSMenuItem *)sender {
