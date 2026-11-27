@@ -11,6 +11,7 @@
 
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqStoreContext.h>
+#import <MAD/MADocumentSectionType.h>
 
 @class RptqDocument, MADDatabase, RptqDocumentSection, RptqDatabaseSchemaTable, RptqQueryField;
 
@@ -53,6 +54,14 @@
 	/// headers, detail, group footers, page footer, report footer.  The root's structural
 	/// sections are the document's five; any other node's are its `hasLayoutSections`.
 	- (NSArray<RptqDocumentSection *> *)orderedLayoutSectionsForDocument:(RptqDocument *)document;
+
+	/// One band for a render walk scoped to this query: a structural band from this query's
+	/// `hasLayoutSections` (report/page header and footer, detail), or the group header or
+	/// footer at `level` from this query's own groups.  Answers nil when this query has no
+	/// such band.  The caller uses this only for a non-root node; the report root keeps the
+	/// document's own five sections.
+	- (nullable RptqDocumentSection *)layoutSectionForType:(MADDocumentSectionType)type
+													level:(NSUInteger)level;
 
 	/// Lazily creates the five structural sections (owned via `ownerQuery`) when the query
 	/// has none -- the first scoped layout write to a migrated revision-3 leaf.  A query

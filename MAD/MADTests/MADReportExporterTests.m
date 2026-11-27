@@ -47,6 +47,9 @@
 #import <MAD/RptqDatabaseSchemaField.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDocumentElementLabelDataField.h>
+#import <MAD/RptqDocumentElementLabel.h>
+#import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/MADDocumentObjectType.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqQueryTable+Extras.h>
 #import <MAD/RptqObject.h>
@@ -2370,6 +2373,67 @@ static MADHeadlessDocument *MADNestedCompositionRefreshedDocument(NSString **out
 	XCTAssertNotNil(leafLayout.detail, @"the leaf's layout reads the leaf's detail section");
 	XCTAssertNotEqualObjects(rootLayout.detail.identifierObject, leafLayout.detail.identifierObject,
 							 @"root and leaf layouts are distinct");
+}
+
+/// A non-root node with an authored layout renders its own bands: the page walk draws the
+/// leaf's detail band and fills it with the leaf's elements, not the root's (empty) one.
+- (void)testNodeScopedHTMLRendersTheNodeLayout {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[ @{ @"name": @"a", @"file": @"a.sqlite", @"rows": @[ @[@1, @10], @[@2, @20] ] } ];
+	NSArray *composers = @[ @{ @"name": @"root", @"children": @[ @"a" ], @"links": @[], @"outputs": @[ @[ @"a", @"id", @"a_id" ] ] } ];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	// Author the leaf's own layout: its five bands, a static label, and a data field bound
+	// to the leaf's `value` column.
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *leaf = MADCompositionQueryNamed(model, @"a");
+	XCTAssertNotNil(leaf);
+	if (leaf == nil) return;
+
+	NSArray<RptqDocumentSection *> *sections = [RptqDocumentSection createStructuralSectionsForQuery: leaf
+																		managedObjectContext: document.storeContext];
+	RptqDocumentSection *detail = nil;
+	for (RptqDocumentSection *section in sections) {
+		if (section.type == MADDocumentSectionTypeBody) { detail = section; break; }
+	}
+	XCTAssertNotNil(detail, @"the leaf has a detail band");
+	if (detail == nil) return;
+
+	RptqDocumentElementLabel *label =
+		(RptqDocumentElementLabel *)[document.storeContext insertObjectForEntity: NSStringFromClass([RptqDocumentElementLabel class]) identifier: 0];
+	label.type = MADPrintPageElementTypeLabelStatic;
+	label.text = @"NODE LABEL";
+	[label setSizeWidth: 120.0f height: 20.0f];
+	[detail addDocumentObject: label withDropPoint: CGPointMake(12.0f, 6.0f) managedObjectContext: document.storeContext];
+
+	RptqQueryField *valueField = MADCompositionFieldNamed(leaf, @"value");
+	XCTAssertNotNil(valueField, @"the leaf's value field is present");
+	if (valueField != nil) {
+		RptqDocumentElementLabelDataField *dataField =
+			(RptqDocumentElementLabelDataField *)[document.storeContext insertObjectForEntity: NSStringFromClass([RptqDocumentElementLabelDataField class]) identifier: 0];
+		dataField.type = MADPrintPageElementTypeLabelDynamic;
+		dataField.referencesQueryField = valueField;
+		[dataField setSizeWidth: 120.0f height: 20.0f];
+		[detail addDocumentObject: dataField withDropPoint: CGPointMake(12.0f, 30.0f) managedObjectContext: document.storeContext];
+	}
+
+	NSError *error = nil;
+	XCTAssertTrue([document.storeContext saveComposed: &error], @"%@", error);
+	XCTAssertEqual(MADCompositionRunRefresh(document).errors.count, (NSUInteger)0);
+
+	NSURL *url = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"leaf.html"]];
+	MADReportExporterHTML *exporter = [[MADReportExporterHTML alloc] init];
+	XCTAssertTrue([exporter exportDocument: document query: leaf toURL: url options: MADReportExportOptionsNone error: &error],
+				  @"%@", error);
+
+	NSString *html = [NSString stringWithContentsOfURL: url encoding: NSUTF8StringEncoding error: NULL];
+	XCTAssertTrue([html containsString: @"NODE LABEL"], @"the leaf's HTML renders its own static label");
+	XCTAssertTrue([html containsString: @"class=\"line\""], @"the leaf's HTML has rendered lines");
 }
 
 @end

@@ -33,6 +33,8 @@
 #import "RptqDocumentSection.h"
 #import "RptqDocumentSection+Extras.h"
 #import "RptqDocumentSectionRows.h"
+#import "RptqQuery.h"
+#import "RptqQuery+Extras.h"
 
 #import <MADFoundation/madlog.h>
 
@@ -180,13 +182,32 @@ static inline CGRect SectionBounds(CGRect pageRect, CGFloat sectionHeight,
 	CGFloat originY = pageRect.origin.y;
 	NSUInteger offsetElement = 0;
 
-	RptqDocument *document = (reportFormatter.layout).activeDocumentModel;
+	id <MADDocumentRenderProtocol> renderDocument = reportFormatter.layout;
+	RptqDocument *document = renderDocument.activeDocumentModel;
+
+	// The formatter lays out the render node's bands, but `documentSectionForType:` always
+	// answers the document's (root) sections.  When the walk is scoped to a non-root node,
+	// resolve that node's own band instead, so its elements fill the bands drawn for it.
+	int64_t renderQueryIdentifier = [renderDocument respondsToSelector: @selector(renderQueryIdentifier)]
+		? renderDocument.renderQueryIdentifier : 0;
+	RptqQuery *renderQuery = renderQueryIdentifier != 0
+		? (RptqQuery *)[renderDocument.storeContext objectForEntity: NSStringFromClass([RptqQuery class])
+														 identifier: renderQueryIdentifier]
+		: nil;
+	BOOL nodeScoped = renderQuery != nil && ![renderQuery isLayoutRootInDocument: document];
+
 	NSEnumerator *layoutEnumerator = [reportFormatter layoutEnumerator:pageIndex];
 	MADReportPageRepresentation *pageRepresentation = [[MADReportPageRepresentation alloc] initWithNumberOfSections:0];
 
 	for (MADSectionRepresentation *pageSection in layoutEnumerator) {
-		RptqDocumentSection *documentSection = [document documentSectionForType: pageSection.sectionType
-																	   andLevel: pageSection.groupLevel];
+		RptqDocumentSection *documentSection = nodeScoped
+			? [renderQuery layoutSectionForType: pageSection.sectionType level: pageSection.groupLevel]
+			: nil;
+		if (documentSection == nil) {
+			// The root, a Standard Report, or a node band it does not own.
+			documentSection = [document documentSectionForType: pageSection.sectionType
+													  andLevel: pageSection.groupLevel];
+		}
 
 		NSNumber *sectionIdentifier = @(documentSection.identifier);
 		CGRect rect = SectionBounds(pageRect, HeightWithVisibility([reportFormatter heightSection:sectionIdentifier], documentSection.visibility), documentSection.visibility, pageSection.sectionType, reportFormatter.numberOfPages, pageIndex, originY);

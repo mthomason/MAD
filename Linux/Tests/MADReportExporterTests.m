@@ -37,6 +37,10 @@
 #import <MAD/MADQueryFull.h>
 #import <MAD/MADPredicateOperator.h>
 #import <MAD/RptqDocumentElementLabelDataField.h>
+#import <MAD/RptqDocumentElementLabel.h>
+#import <MAD/RptqDocumentElement+Extras.h>
+#import <MAD/RptqDocumentSection+Extras.h>
+#import <MAD/MADDocumentObjectType.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqQueryField+Extras.h>
 #import <MAD/RptqQueryTable+Extras.h>
@@ -1316,6 +1320,79 @@ static void testComposedMixedNodeIsRejected(void) {
 	MAD_PASS(error != nil && [error.localizedDescription rangeOfString: @"root"].location != NSNotFound, "the error names the offending node");
 }
 
+// A non-root node with an authored layout renders its OWN bands: the page walk draws the
+// leaf's detail band and fills it with the leaf's elements, not the root's (empty) one.
+static void testNodeScopedHTMLRendersTheNodeLayout(void) {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[ @{ @"name": @"a", @"file": @"a.sqlite", @"rows": @[ @[@1, @10], @[@2, @20] ] } ];
+	NSArray *composers = @[ @{ @"name": @"root", @"children": @[ @"a" ], @"links": @[], @"outputs": @[ @[ @"a", @"id", @"a_id" ] ] } ];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	MAD_NEED(document != nil, "the composed document opened");
+	if (document == nil) return;
+
+	// Author the leaf's own layout: its five bands, a static label, and a data field bound
+	// to the leaf's `value` column.
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	RptqQuery *leaf = nil;
+	for (RptqDatabase *database in model.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			if ([query.name isEqualToString: @"a"]) { leaf = query; break; }
+		}
+		if (leaf != nil) break;
+	}
+	MAD_NEED(leaf != nil, "the leaf query is present");
+	if (leaf == nil) return;
+
+	NSArray<RptqDocumentSection *> *sections = [RptqDocumentSection createStructuralSectionsForQuery: leaf
+																		managedObjectContext: document.storeContext];
+	RptqDocumentSection *detail = nil;
+	for (RptqDocumentSection *section in sections) {
+		if (section.type == MADDocumentSectionTypeBody) { detail = section; break; }
+	}
+	MAD_NEED(detail != nil, "the leaf has a detail band");
+	if (detail == nil) return;
+
+	RptqDocumentElementLabel *label =
+		(RptqDocumentElementLabel *)[document.storeContext insertObjectForEntity: NSStringFromClass([RptqDocumentElementLabel class]) identifier: 0];
+	label.type = MADPrintPageElementTypeLabelStatic;
+	label.text = @"NODE LABEL";
+	[label setSizeWidth: 120.0f height: 20.0f];
+	[detail addDocumentObject: label withDropPoint: CGPointMake(12.0f, 6.0f) managedObjectContext: document.storeContext];
+
+	RptqQueryField *valueField = nil;
+	for (RptqQueryTable *table in leaf.hasQueryTables) {
+		for (RptqQueryField *field in table.hasQueryFields) {
+			if ([field.databaseSchemaField.name isEqualToString: @"value"]) { valueField = field; break; }
+		}
+		if (valueField != nil) break;
+	}
+	MAD_NEED(valueField != nil, "the leaf's value field is present");
+	if (valueField != nil) {
+		RptqDocumentElementLabelDataField *dataField =
+			(RptqDocumentElementLabelDataField *)[document.storeContext insertObjectForEntity: NSStringFromClass([RptqDocumentElementLabelDataField class]) identifier: 0];
+		dataField.type = MADPrintPageElementTypeLabelDynamic;
+		dataField.referencesQueryField = valueField;
+		[dataField setSizeWidth: 120.0f height: 20.0f];
+		[detail addDocumentObject: dataField withDropPoint: CGPointMake(12.0f, 30.0f) managedObjectContext: document.storeContext];
+	}
+
+	NSError *error = nil;
+	MAD_PASS([document.storeContext saveComposed: &error], "the authored leaf layout saved");
+	MAD_PASS(MADCompositionRunRefresh(document).errors.count == 0, "the composition refreshed");
+
+	NSURL *url = [NSURL fileURLWithPath: [directory stringByAppendingPathComponent: @"leaf.html"]];
+	MADReportExporterHTML *exporter = [[MADReportExporterHTML alloc] init];
+	MAD_PASS([exporter exportDocument: document query: leaf toURL: url options: MADReportExportOptionsNone error: &error],
+			 "the leaf exports its HTML");
+
+	NSString *html = [NSString stringWithContentsOfURL: url encoding: NSUTF8StringEncoding error: NULL];
+	MAD_PASS([html containsString: @"NODE LABEL"], "the leaf's HTML renders its own static label");
+	MAD_PASS([html containsString: @"class=\"line\""], "the leaf's HTML has rendered lines");
+}
+
 MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testTheFormatsAreRegistered),
 	MAD_TEST(testTheRenderSideFormatsRegisterHere),
@@ -1342,4 +1419,5 @@ MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testComposedSharedChildRunsOnce),
 	MAD_TEST(testComposedRootWithMoreThanTenChildrenIsRejected),
 	MAD_TEST(testComposedMixedNodeIsRejected),
-	MAD_TEST(testCompositionEmptyExpressionKeepsKnownType));
+	MAD_TEST(testCompositionEmptyExpressionKeepsKnownType),
+	MAD_TEST(testNodeScopedHTMLRendersTheNodeLayout));

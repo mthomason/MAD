@@ -169,6 +169,31 @@ static inline unsigned long MADSectionCountWithGroupCount(unsigned long groupCou
 	return sections;
 }
 
+- (RptqDocumentSection *)layoutSectionForType:(MADDocumentSectionType)type level:(NSUInteger)level {
+	// A non-root node's bands are its own `hasLayoutSections`; its group headers and footers
+	// live on the query's groups (`group.hasSection`), the same set the ordered walk reads.
+	switch (type) {
+		case MADDocumentSectionTypeReportHeader:
+		case MADDocumentSectionTypeReportFooter:
+		case MADDocumentSectionTypePageHeader:
+		case MADDocumentSectionTypePageFooter:
+		case MADDocumentSectionTypeBody:
+			for (RptqDocumentSection *section in self.hasLayoutSections) {
+				if (section.type == type) return section;
+			}
+			return nil;
+
+		case MADDocumentSectionTypeGroupHeader:
+			return [RptqDocumentSection groupHeaderForLevel: level query: self];
+
+		case MADDocumentSectionTypeGroupFooter:
+			return [RptqDocumentSection groupFooterForLevel: level query: self];
+
+		default:
+			return nil;
+	}
+}
+
 - (void)ensureStructuralSectionsInContext:(RptqStoreContext *)context {
 	RptqDocument *document = [RptqDocument newDocumentReadFromManagedObjectContext: context];
 	if ([self isLayoutRootInDocument: document]) return; // the root's sections are the document's

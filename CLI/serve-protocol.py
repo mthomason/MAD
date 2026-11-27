@@ -349,6 +349,39 @@ def main():
         leaf_report = client.request("export", {"handle": handle, "query": leaf_id, "format": "json-report"})
         check(not ok(leaf_report), "export?query=leaf&format=json-report is refused")
 
+        # --- a node WITH an authored layout renders its own bands -------------------
+        # Materialise the leaf's five sections, author a static label in its detail band,
+        # then export the leaf's HTML: it must contain a rendered line, not the root's
+        # (empty) detail band.
+        leaf_layout = client.request("layout-model", {"handle": handle, "query": leaf_id})
+        check(ok(leaf_layout), "leaf layout-model?query materialises the leaf's bands")
+        leaf_body = 0
+        for section in result(leaf_layout).get("sections", []):
+            if section.get("type") == 5:  # MADDocumentSectionTypeBody
+                leaf_body = section.get("id", 0)
+                break
+        check(leaf_body > 0, "the leaf has a detail band")
+
+        added = client.request("add-element", {"handle": handle, "query": leaf_id,
+                                               "kind": "label", "section": leaf_body,
+                                               "x": 16, "y": 10})
+        check(ok(added), "add a label to the leaf's detail band")
+        leaf_element = 0
+        for element in result(added).get("elements", []):
+            leaf_element = max(leaf_element, element.get("id", 0))
+        check(leaf_element > 0, "the added label has an id")
+
+        content = client.request("set-element-content", {"handle": handle, "query": leaf_id,
+                                                         "element": leaf_element,
+                                                         "content": {"text": "NODE LABEL"}})
+        check(ok(content), "set the leaf label's text")
+
+        leaf_layout_html = client.request("export", {"handle": handle, "query": leaf_id, "format": "html"})
+        check(ok(leaf_layout_html), "export?query=leaf&format=html after authoring answers")
+        leaf_layout_data = result(leaf_layout_html).get("data", "")
+        check("class=\"line\"" in leaf_layout_data, "the leaf's HTML has rendered lines")
+        check("NODE LABEL" in leaf_layout_data, "the leaf's HTML renders its own label")
+
         # --- a node with no materialized layout exports without throwing ------------
         # A fresh conversion: convert and refresh, then export the leaf BEFORE any
         # scoped layout-model call has created its five sections.  The render must
