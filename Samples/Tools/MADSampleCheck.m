@@ -213,19 +213,16 @@ static BOOL SampleRefresh(MADMacDocument *document,
 }
 
 static void SampleClearKeychainForConnection(NSString *connectionString) {
-	NSArray<NSString *> *bases = @[connectionString ?: @"",
-								   @"PostgreSQL",
-								   @"MySQL"];
-	for (NSString *base in bases) {
-		if (base.length == 0) continue;
-		for (NSString *prefix in @[@"u:", @"p:"]) {
-			NSString *service = [prefix stringByAppendingString:base];
-			NSDictionary *query = @{
-				(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
-				(__bridge id)kSecAttrService : service
-			};
-			SecItemDelete((__bridge CFDictionaryRef)query);
-		}
+	if (connectionString.length == 0) return;
+	// Only this sample's key: the app also probes a driver-identifier fallback, but
+	// deleting that would remove credentials the user saved for other servers.
+	for (NSString *prefix in @[@"u:", @"p:"]) {
+		NSString *service = [prefix stringByAppendingString:connectionString];
+		NSDictionary *query = @{
+			(__bridge id)kSecClass : (__bridge id)kSecClassGenericPassword,
+			(__bridge id)kSecAttrService : service
+		};
+		SecItemDelete((__bridge CFDictionaryRef)query);
 	}
 }
 
