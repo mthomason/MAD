@@ -2820,8 +2820,73 @@ int main(int argc, const char * argv[]) {
 					return 274;
 				}
 			}
+			// A Standard Report is a leaf: its Designer keeps the leaf caption and its own
+			// query fields, and a bound field renders the report's own value.
+			MADMacDesignerViewController *standardDesigner =
+				[[MADMacDesignerViewController alloc] initWithDocument:standardDoc];
+			(void)standardDesigner.view;
+			[standardDesigner reloadFromDocument];
+			if (![standardDesigner.fieldsHeaderLabel.stringValue containsString:@"QUERY FIELDS"] ||
+				standardDesigner.displayedQueryFields.count == 0) {
+				fprintf(stderr, "FAIL: A Standard Report's Designer lost its leaf field list\n");
+				return 280;
+			}
+			RptqQueryField *standardAmountField = nil;
+			for (RptqQueryTable *table in standardDoc.rptqQuery.hasQueryTables) {
+				for (RptqQueryField *field in table.hasQueryFields) {
+					if ([field.databaseSchemaField.name isEqualToString:@"amount"]) {
+						standardAmountField = field;
+						break;
+					}
+				}
+			}
+			if (standardAmountField == nil ||
+				[standardDesigner addDataField:standardAmountField
+									 inSection:standardDoc.rptqDocument.hasDetailSection
+									   atPoint:NSMakePoint(12.0, 6.0)] == nil) {
+				fprintf(stderr, "FAIL: Could not bind a data field on the Standard Report\n");
+				return 281;
+			}
+			[standardDoc notifyDocumentMutated];
+
 			MADMacViewerViewController *standardViewer = [[MADMacViewerViewController alloc] initWithDocument:standardDoc];
 			(void)standardViewer.view;
+			[standardViewer refreshReportAction:nil];
+			NSDate *standardDeadline = [NSDate dateWithTimeIntervalSinceNow:20.0];
+			while ([standardDoc.headlessDocument.dataTable numberOfRows] != 1 &&
+				   standardViewer.lastRefreshError == nil && standardDeadline.timeIntervalSinceNow > 0) {
+				[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+										 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+			}
+			if ([standardDoc.headlessDocument.dataTable numberOfRows] != 1 ||
+				standardViewer.lastRefreshError != nil) {
+				fprintf(stderr, "FAIL: The Standard Report refresh failed: %s\n",
+						standardViewer.lastRefreshError.description.UTF8String);
+				return 282;
+			}
+			if ([standardViewer isShowingRowGrid] || standardViewer.pdfView.document.pageCount == 0) {
+				fprintf(stderr, "FAIL: The Standard Report did not render its own PDF\n");
+				return 283;
+			}
+			Class<MADReportExporting> standardHTMLClass = [MADReportExporterRegistry exporterClassForFormat:@"html"];
+			id<MADReportExporting> standardHTMLExporter = [[(Class)standardHTMLClass alloc] init];
+			NSURL *standardHTMLURL = [NSURL fileURLWithPath:[nodeDir stringByAppendingPathComponent:@"standard.html"]];
+			if (![standardHTMLExporter exportDocument:standardDoc.headlessDocument
+												query:standardDoc.selectedQuery
+												toURL:standardHTMLURL
+											  options:MADReportExportOptionsNone
+												error:&err]) {
+				fprintf(stderr, "FAIL: The Standard Report HTML export failed: %s\n", err.localizedDescription.UTF8String);
+				return 284;
+			}
+			NSString *standardHTML = [NSString stringWithContentsOfURL:standardHTMLURL
+															  encoding:NSUTF8StringEncoding
+																 error:NULL];
+			if (![standardHTML containsString:@"100"]) {
+				fprintf(stderr, "FAIL: The Standard Report did not render its bound value\n");
+				return 285;
+			}
+
 			NSSavePanel *standardExportPanel = [standardViewer configureExportSavePanel:[NSSavePanel savePanel]];
 			[sRetainedPanels addObject:standardExportPanel];
 			BOOL standardOffersJSONReport = NO;

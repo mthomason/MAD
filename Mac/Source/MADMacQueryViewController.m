@@ -2851,9 +2851,10 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 - (NSString *)generatedSQLString {
 	RptqQuery *query = self.selectedQuery;
-	if (query == nil || [query isComposing]) {
-		// A composing node is compiled from its sources by the refresh coordinator;
-		// there is no single source statement to show.
+	if (query == nil || _editingRoot || _editingComposingNode || [query isComposing]) {
+		// A composing node (including an empty root, which is not `isComposing`) is
+		// compiled from its sources by the refresh coordinator; there is no single
+		// source statement to show.
 		return @"";
 	}
 	[_document.headlessDocument invalidateQueryAndModelCaches];
@@ -2911,7 +2912,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 - (void)validateSQLAction:(id) __unused sender {
 	RptqQuery *selected = self.selectedQuery;
-	if (selected != nil && [selected isComposing]) {
+	if (_editingRoot || _editingComposingNode || (selected != nil && [selected isComposing])) {
 		_sqlStatusLabel.textColor = [NSColor systemRedColor];
 		_sqlStatusLabel.stringValue = NSLocalizedString(@"SQL editing is not available for a composed report. Design it from its sources.", @"Tooltip on the disabled SQL segment for a composed node.");
 		return;
@@ -2950,7 +2951,7 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 
 - (void)compileAndApplySQL:(id) __unused sender {
 	RptqQuery *selectedQuery = self.selectedQuery;
-	if (selectedQuery != nil && [selectedQuery isComposing]) {
+	if (_editingRoot || _editingComposingNode || (selectedQuery != nil && [selectedQuery isComposing])) {
 		_sqlStatusLabel.textColor = [NSColor systemRedColor];
 		_sqlStatusLabel.stringValue = NSLocalizedString(@"SQL editing is not available for a composed report. Design it from its sources.", @"Tooltip on the disabled SQL segment for a composed node.");
 		return;
