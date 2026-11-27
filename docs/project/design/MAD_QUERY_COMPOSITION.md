@@ -663,10 +663,11 @@ Standard Report keep the document path. The engine, store, import, and serve cod
 unchanged (`253847b04` plus this slice).
 
 - **Selection model.** `MADMacDocument.selectedQuery` is the one selection. A custom setter
-  posts `MADMacDocumentDidSelectQueryNotification` (selection is not a mutation: no dirty
-  flag, no save, no workspace switch) and bumps `selectionVersion`. Selecting a non-root
-  query with no structural bands calls `ensureStructuralSectionsInContext:` once, persists
-  that real store mutation (without the mutate notification), and rebuilds the
+  posts `MADMacDocumentDidSelectQueryNotification` and bumps `selectionVersion`; it never
+  changes the active workspace. Selecting a non-root query with no structural bands calls
+  `ensureStructuralSectionsInContext:` once and persists that real store mutation (without
+  the mutate notification) -- the one dirty/save side effect of a selection, and it happens
+  only the first time a legacy leaf is opened. The setter then rebuilds the
   `MADSectionsLayout` snapshot for the selected query. `orderedSections` is now
   `[selectedQuery orderedLayoutSectionsForDocument:]`, so the canvas, band table, minimap,
   inspector, and drag/drop follow the selection in one place; the report root still returns
@@ -730,6 +731,10 @@ belongs to its own change.
 
 **Deferred / recorded.** Direct nested-composer authoring (adding upstream children to a
 non-root composer), per-node paper size, `json-report` node scoping, an optional sidebar
-node list, and node-scoped selection of a source's connection sheet. The audit's one
-pre-existing over-baseline occurrence (`MADDataStructures/Source/MTGraph.m`,
-`nonliteral-key: TextCycleEncountered`, now 2 vs baseline 1) is untouched.
+node list, and node-scoped selection of a source's connection sheet. `audit.py` still exits 1, entirely
+on pre-existing base findings this slice leaves alone: six findings absent from the
+baseline (five in `MAD/Source` -- three multi-argument `format-no-positional` errors and
+two `raw-ui-literal`s in `MADArchiveManager` -- plus
+`Mac/Source/MADMacQueryViewController.m`'s `stringValue = source`), and one over-baseline
+occurrence in `MADDataStructures/Source/MTGraph.m` (`nonliteral-key:
+TextCycleEncountered`, 2 vs baseline 1).

@@ -17,8 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSNotificationName const MADMacDocumentDidMutateNotification;
 extern NSNotificationName const MADMacDocumentDidRefreshNotification;
 
-/// Posted when `selectedQuery` changes.  Selection is not a document mutation: it does
-/// not mark the document dirty, save it, or change the active workspace.
+/// Posted when `selectedQuery` changes.  Selection does not change the active workspace.
+/// Selecting a legacy leaf for the first time materializes its five structural bands --
+/// a real store mutation that is saved; selection itself has no other side effect.
 extern NSNotificationName const MADMacDocumentDidSelectQueryNotification;
 
 @class MADCredential, MADDatabaseConnection;

@@ -193,9 +193,10 @@ NSNotificationName const MADMacDocumentDidSelectQueryNotification = @"MADMacDocu
 - (BOOL)queryShowsReportColumns:(nullable RptqQuery *)query {
 	RptqQuery *node = query ?: self.selectedQuery;
 	if (node == nil) return NO;
-	// `isComposing` is upstream-table based, so an empty Result reads as a leaf; the root
-	// identity covers that case (the Windows SelectedNodeShowsColumns rule).
-	return [self queryIsReportRoot:node] || [node isComposing];
+	// `isComposing` is upstream-table based, so an empty Result reads as a leaf; a
+	// composition's root identity covers that case.  A Standard Report's single query is
+	// also the layout root, but it is a leaf: its fields carry no output keys.
+	return (self.isComposed && [self queryIsReportRoot:node]) || [node isComposing];
 }
 
 - (nullable MADDataResult *)resultForQuery:(nullable RptqQuery *)query {

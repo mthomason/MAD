@@ -43,6 +43,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// "QUERY FIELDS" for a leaf.
 @property (nonatomic, strong, readonly) NSTextField *fieldsHeaderLabel;
 
+/// The query-field list currently shown for the selected node (the search filter applied).
+@property (nonatomic, copy, readonly) NSArray<RptqQueryField *> *displayedQueryFields;
+
 @property (nonatomic, assign, readonly) CGFloat leftSidebarWidth;
 @property (nonatomic, assign, readonly) CGFloat rightInspectorWidth;
 

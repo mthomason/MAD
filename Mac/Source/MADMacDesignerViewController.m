@@ -1141,6 +1141,10 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 }
 #pragma mark - Reloading & Query Field Browser
 
+- (NSArray<RptqQueryField *> *)displayedQueryFields {
+	return _filteredQueryFields ?: @[];
+}
+
 - (NSArray<RptqQueryField *> *)allQueryFields {
 	MADMacDocument *doc = self.madDocument;
 	RptqQuery *q = doc.selectedQuery;
