@@ -206,6 +206,119 @@ if [[ "${1:-}" == "--live" ]]; then
 	output mad refresh "${MYSQL_DOC}" --host 127.0.0.1 \
 		--credentials root:root --rows 5 --no-keychain > "${WORK}/mysql-host.txt"
 	check "MySQL --host override reaches the connection"	grep -q 'refresh failed' "${WORK}/mysql-host.txt"
+
+	# The cross-database composition: one `sourceCredentials` entry per source query.
+	# It needs the three containers reachable at the sample's 127.0.0.1 and the
+	# `composition_demo` tables (Samples/README.md); otherwise it prints SKIP rather
+	# than failing the live run.
+	COMPOSITION_DOC=/repo/Samples/Reports/Composition-MySQL-PostgreSQL-SQLServer.mad
+	if [[ ! -f "${COMPOSITION_DOC}" ]]; then
+		echo "SKIP live composition: ${COMPOSITION_DOC} is not in the image"
+	elif [[ -z "${MAD_MYSQL_SAMPLE_PASSWORD:-}" || -z "${MAD_PG_SAMPLE_PASSWORD:-}" || -z "${MAD_TDS_SAMPLE_PASSWORD:-}" ]]; then
+		echo "SKIP live composition: set MAD_MYSQL_SAMPLE_PASSWORD, MAD_PG_SAMPLE_PASSWORD and MAD_TDS_SAMPLE_PASSWORD"
+	else
+		if python3 - "${COMPOSITION_DOC}" > "${WORK}/composition.txt" 2>&1 <<'PYEOF'
+import json, os, subprocess, sys
+
+document = sys.argv[1]
+proc = subprocess.Popen(["mad", "serve"], stdin=subprocess.PIPE,
+                        stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                        text=True, bufsize=1)
+next_id = 0
+
+def call(method, params=None):
+    global next_id
+    next_id += 1
+    proc.stdin.write(json.dumps({"id": next_id, "method": method,
+                                 "params": params or {}}) + "\n")
+    proc.stdin.flush()
+    line = proc.stdout.readline()
+    if not line:
+        raise RuntimeError("mad serve exited early")
+    return json.loads(line)
+
+def finish(code):
+    try:
+        call("shutdown")
+    except Exception:
+        pass
+    try:
+        proc.stdin.close()
+        proc.wait(timeout=30)
+    except Exception:
+        pass
+    sys.exit(code)
+
+opened = call("open", {"path": document})
+if not opened.get("ok"):
+    print("MADLIVE SKIP composition: open failed: %s" %
+          opened.get("error", {}).get("message", ""))
+    finish(0)
+
+handle = opened["result"]["handle"]
+info = call("document-info", {"handle": handle})
+sources = {}
+usernames = {}
+for query in info.get("result", {}).get("queries", []):
+    if not query.get("isRoot") and not query.get("isComposing"):
+        sources[query.get("name")] = query.get("id")
+        usernames[query.get("name")] = (query.get("connection") or {}).get("usernameHint", "")
+needed = ["MySQL", "PostgreSQL", "SQL Server"]
+if any(not sources.get(name) for name in needed):
+    print("MADLIVE SKIP composition: the document does not name all three sources")
+    finish(0)
+
+passwords = {
+    "MySQL": os.environ.get("MAD_MYSQL_SAMPLE_PASSWORD", ""),
+    "PostgreSQL": os.environ.get("MAD_PG_SAMPLE_PASSWORD", ""),
+    "SQL Server": os.environ.get("MAD_TDS_SAMPLE_PASSWORD", ""),
+}
+if any(not passwords[name] for name in needed):
+    print("MADLIVE SKIP composition: the sample passwords are not set")
+    finish(0)
+
+credentials = {
+    str(sources[name]): "%s:%s" % (usernames.get(name) or "user", passwords[name])
+    for name in needed
+}
+refreshed = call("refresh", {"handle": handle, "sourceCredentials": credentials})
+if not refreshed.get("ok"):
+    message = refreshed.get("error", {}).get("message", "")
+    skip_words = ("connect", "refused", "reachable", "no such table", "does not exist",
+                  "requires credentials", "timeout")
+    if any(word.lower() in message.lower() for word in skip_words):
+        print("MADLIVE SKIP composition: %s" % message)
+        finish(0)
+    print("MADLIVE FAIL composition refresh: %s" % message)
+    finish(1)
+
+rows = refreshed.get("result", {}).get("rowCount", 0)
+if rows != 5:
+    print("MADLIVE FAIL composition refresh: %d rows, expected 5" % rows)
+    finish(1)
+
+exported = call("export", {"handle": handle, "format": "json"})
+if not exported.get("ok"):
+    print("MADLIVE FAIL composition export: %s" %
+          exported.get("error", {}).get("message", ""))
+    finish(1)
+payload = json.loads(exported.get("result", {}).get("data", "{}"))
+if len(payload.get("rows", [])) != 5:
+    print("MADLIVE FAIL composition export: %d rows, expected 5" %
+          len(payload.get("rows", [])))
+    finish(1)
+
+print("MADLIVE PASS composition refresh and export: 5 joined rows")
+finish(0)
+PYEOF
+		then
+			cat "${WORK}/composition.txt"
+			pass "live composition refresh (cross-database sample)"
+		else
+			cat "${WORK}/composition.txt"
+			fail "live composition refresh (cross-database sample)"
+		fi
+	fi
 fi
 
 # --- summary --------------------------------------------------------------

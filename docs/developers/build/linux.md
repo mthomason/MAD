@@ -470,6 +470,24 @@ freetds). The live suites agree — `MADMySQLLiveTests` 44/44 and
 `MADTdsClientLiveTests` 29/29 in the same image — and the ctest run is 117
 executables, 1153 tests, 6 needs, all green.
 
+**Per-source composition credentials (2026-11-27).** The headless engine has no
+prompt and no password store: a composition's credentials are the caller's. `mad
+serve`'s `refresh` accepts `sourceCredentials`, an object keyed by the decimal query
+id (`{ "2": "user:password" }`), and the CLI hands that map to
+`MADOperationRefreshComposed.credentialsByQueryIdentifier`. The connection-string map
+remains the next fallback, then a single `credentials`, so older callers and a
+Standard Report are unchanged. A source that fails answers `error.source` with its
+name, query id and connection string. `document-info` exposes each **non-root,
+non-composing leaf's** connection (`driver`, `file` or `host`/`port`/`database`
+[/`server`], `requiresCredentials`, `usernameHint`, `connectionString`); a Linux
+script, `mad-action` client or other headless caller reads that and supplies the
+passwords itself. The macOS and Windows apps are the prompters; the headless image
+ships neither a prompt nor Apple's Keychain, and the CLI's `--no-keychain` is the
+default. `Linux/verify-cli.sh --live` refreshes the cross-database sample through
+`mad serve` when the three containers are reachable and the sample passwords are in
+`MAD_MYSQL_SAMPLE_PASSWORD`, `MAD_PG_SAMPLE_PASSWORD` and
+`MAD_TDS_SAMPLE_PASSWORD`; otherwise that check prints SKIP.
+
 Two things had to be settled to get there, both recorded in `Linux/README.md`:
 
 1. **The document question (§5.1, §9 Phase D).** `MADocument` is a `UIDocument`,

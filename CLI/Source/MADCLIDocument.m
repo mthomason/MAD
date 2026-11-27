@@ -134,9 +134,11 @@ static NSError *MADCLIDocumentError(NSString *message) {
 	// thin adapter over the shared engine work.
 	if ([MADOperationRefresh documentUsesComposedRefresh: document]) {
 		MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
-		// Each named source resolves its own credential by connection string; the
-		// single credential stays as the fallback for sources the map omits, so an
-		// older one-credential caller keeps working.
+		// The caller's map is keyed by query id, so pass it as-is and keep a resolved
+		// connection-string map for callers and tests that use that shape.  The query-id
+		// map is preferred, which is what lets two sources on one connection string hold
+		// different credentials; the single credential stays the last fallback.
+		refresh.credentialsByQueryIdentifier = sourceCredentials;
 		refresh.credentialsByConnectionString = [self credentialsByConnectionStringForSources: sourceCredentials];
 		if (credentials != nil) {
 			MADCLICredentialsOperation *holder = [[MADCLICredentialsOperation alloc] init];

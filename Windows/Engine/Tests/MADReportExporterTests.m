@@ -722,6 +722,18 @@ static void testFailedFirstRefreshThenRetryPublishes(void) {
 // chain, their committed .maddb files are attached read-only, and the root
 // join is materialized into a fresh result read back through MADDataResult.
 
+/// Deletes one file by path.  Windows' compat `unistd.h` maps `close` to `_close`,
+/// so the test declares only the delete call and never includes that header.
+static int MADCompositionDeleteFile(NSString *path) {
+#if defined(_WIN32)
+	extern int _unlink(const char *);
+	return _unlink(path.UTF8String);
+#else
+	extern int unlink(const char *);
+	return unlink(path.UTF8String);
+#endif
+}
+
 /// Write a schema and rows into a SQLite file using the engine's driver.
 static BOOL MADCompositionCreateSource(NSURL *url, NSArray<NSString *> *statements) {
 	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: url];
@@ -729,6 +741,7 @@ static BOOL MADCompositionCreateSource(NSURL *url, NSArray<NSString *> *statemen
 	database.databaseConnection = connection;
 	[database openDatabase];
 	NSError *error = nil;
+	BOOL success = YES;
 	for (NSString *statement in statements) {
 		if (![database executeSQL: statement
 						fieldKeys: @[]
@@ -738,10 +751,13 @@ static BOOL MADCompositionCreateSource(NSURL *url, NSArray<NSString *> *statemen
 				   returnsResults: NO
 				   binaryBindings: nil
 						withError: &error]) {
-			return NO;
+			success = NO;
+			break;
 		}
 	}
-	return YES;
+	// Close explicitly so the setup never leaves the source file open for the test.
+	[database closeConnection: nil];
+	return success;
 }
 
 /// A document whose imported schema has one table; add a one-table query whose
@@ -1210,10 +1226,62 @@ static MADOperationRefreshComposed *MADCompositionRunRefreshWithCredentials(MADH
 	return refresh;
 }
 
-// The composed refresh takes one credential per source, keyed by that source's
-// connection string, and a source that fails names itself — name, query id and
-// connection string — which is what the serve error and the WPF prompt rely on.
-// The sources are SQLite, so no live server is needed to pin the contract.
+/// The same credentials keyed by leaf query id — the map `mad serve` now supplies, and
+/// the one that can distinguish two sources on an identical connection string.
+static NSDictionary<NSNumber *, MADCredential *> *MADCompositionCredentialsByQueryIdentifier(MADHeadlessDocument *document) {
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	NSMutableDictionary<NSNumber *, MADCredential *> *map = [NSMutableDictionary dictionary];
+	for (RptqDatabase *database in model.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			if (query.hasQueryTables.anyObject.upstreamQuery != nil) continue;
+			map[@(query.identifier)] = [[MADCredential alloc] initWithUsername: @"user" andPassword: @"pass"];
+		}
+	}
+	return map;
+}
+
+static MADOperationRefreshComposed *MADCompositionRunRefreshWithQueryCredentials(MADHeadlessDocument *document,
+																			  NSDictionary<NSNumber *, MADCredential *> *credentials) {
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	refresh.credentialsByQueryIdentifier = credentials;
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: refresh];
+	while (queue.operationCount > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+	}
+	return refresh;
+}
+
+// The query-id map is what lets two sources on one connection string carry different
+// credentials; the connection-string map remains the next fallback, then the single
+// credential.  This pins the precedence without a live server.
+static void testComposedCredentialMapPrefersQueryIdentifier(void) {
+	NSURL *placeholder = [NSURL fileURLWithPath: [NSTemporaryDirectory() stringByAppendingPathComponent: @"mad-credential-map.mad"]];
+	MADHeadlessDocument *document = [[MADHeadlessDocument alloc] initWithFileURL: placeholder];
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	MADCredential *first = [[MADCredential alloc] initWithUsername: @"first" andPassword: @"one"];
+	MADCredential *second = [[MADCredential alloc] initWithUsername: @"second" andPassword: @"two"];
+	MADCredential *shared = [[MADCredential alloc] initWithUsername: @"shared" andPassword: @"same"];
+	MADCredential *fallback = [[MADCredential alloc] initWithUsername: @"fallback" andPassword: @"fb"];
+	NSString *connectionString = @"(PostgreSQL)[127.0.0.1:5432]chinook";
+	refresh.credentialsByQueryIdentifier = @{ @(10): first, @(11): second };
+	refresh.credentialsByConnectionString = @{ connectionString: shared };
+
+	MAD_PASS([[refresh credentialForQueryIdentifier: 10 connectionString: connectionString fallbackCredential: fallback].username isEqualToString: @"first"],
+			 "two query ids sharing one connection string keep different credentials (first)");
+	MAD_PASS([[refresh credentialForQueryIdentifier: 11 connectionString: connectionString fallbackCredential: fallback].username isEqualToString: @"second"],
+			 "two query ids sharing one connection string keep different credentials (second)");
+	MAD_PASS([[refresh credentialForQueryIdentifier: 12 connectionString: connectionString fallbackCredential: fallback].username isEqualToString: @"shared"],
+			 "a query not in the id map falls back to the connection-string entry");
+	MAD_PASS([[refresh credentialForQueryIdentifier: 12 connectionString: @"(MySQL)[host:3306]other" fallbackCredential: fallback].username isEqualToString: @"fallback"],
+			 "a query with no map entry falls back to the single credential");
+}
+
+// The composed refresh takes one credential per source, keyed by that source's query
+// id (the map `mad serve` supplies), and a source that fails names itself — name,
+// query id and connection string — which is what the serve error and the WPF prompt
+// rely on.  The sources are SQLite, so no live server is needed to pin the contract.
 static void testComposedRefreshUsesPerSourceCredentialsAndNamesTheFailingSource(void) {
 	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
 	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
@@ -1232,10 +1300,16 @@ static void testComposedRefreshUsesPerSourceCredentialsAndNamesTheFailingSource(
 	MAD_NEED(document != nil, "the two-source composition opened");
 	if (document == nil) return;
 
-	NSDictionary<NSString *, MADCredential *> *credentials = MADCompositionCredentialsMap(document);
-	MAD_PASS(credentials.count == 2, "each source has its own connection-string credential");
+	// The older connection-string map still refreshes, for callers that have not moved.
+	NSDictionary<NSString *, MADCredential *> *legacy = MADCompositionCredentialsMap(document);
+	MAD_PASS(legacy.count == 2, "each source has its own connection-string credential");
+	MAD_PASS(MADCompositionRunRefreshWithCredentials(document, legacy).errors.count == 0,
+			 "the connection-string credential map still refreshes the composition");
 
-	MADOperationRefreshComposed *refresh = MADCompositionRunRefreshWithCredentials(document, credentials);
+	NSDictionary<NSNumber *, MADCredential *> *credentials = MADCompositionCredentialsByQueryIdentifier(document);
+	MAD_PASS(credentials.count == 2, "each source has its own query-id credential");
+
+	MADOperationRefreshComposed *refresh = MADCompositionRunRefreshWithQueryCredentials(document, credentials);
 	MAD_PASS(refresh.errors.count == 0, "the per-source credentials refresh the composition");
 	MAD_PASS(document.currentResult.numberOfRows == 1, "the join produced its row");
 
@@ -1259,7 +1333,7 @@ static void testComposedRefreshUsesPerSourceCredentialsAndNamesTheFailingSource(
 	bCredentialRow.host = @"/no-such-directory/ghost.sqlite";
 	bCredentialRow.dbname = @"ghost.sqlite";
 	[document.storeContext saveComposed: NULL];
-	MADOperationRefreshComposed *failed = MADCompositionRunRefreshWithCredentials(document, credentials);
+	MADOperationRefreshComposed *failed = MADCompositionRunRefreshWithQueryCredentials(document, credentials);
 	MAD_PASS(failed.errors.count == 1, "the broken source fails the refresh");
 	NSError *sourceError = failed.errors.firstObject;
 	MAD_PASS([sourceError.userInfo[MADOperationRefreshSourceNameKey] isEqualToString: @"b"],
@@ -1270,6 +1344,47 @@ static void testComposedRefreshUsesPerSourceCredentialsAndNamesTheFailingSource(
 	NSString *connectionString = sourceError.userInfo[MADOperationRefreshSourceConnectionStringKey];
 	MAD_PASS([connectionString containsString: @"ghost.sqlite"],
 			 "the error carries the failing source's connection string");
+}
+
+// The composed refresh closes each leaf's SQLite handle after its query, so the source
+// file is not left locked.  The file can be deleted, recreated, and picked up again by
+// the next refresh — the behavior the impossible-path test used to work around.
+static void testComposedRefreshClosesAndReopensSqliteSources(void) {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[
+		@{ @"name": @"a", @"file": @"a.sqlite", @"rows": @[ @[@1, @10] ] },
+		@{ @"name": @"b", @"file": @"b.sqlite", @"rows": @[ @[@1, @20] ] },
+	];
+	NSArray *composers = @[
+		@{ @"name": @"root", @"children": @[ @"a", @"b" ],
+		   @"links": @[ @[ @"a", @"id", @"b", @"id" ] ],
+		   @"outputs": @[ @[ @"a", @"id", @"a_id" ], @[ @"b", @"value", @"b_value" ] ] },
+	];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	MAD_NEED(document != nil, "the composition opened");
+	if (document == nil) return;
+
+	MAD_PASS(MADCompositionRunRefresh(document).errors.count == 0, "the first refresh closes its sources");
+	MAD_PASS(document.currentResult.numberOfRows == 1, "the first refresh joined its row");
+
+	NSString *bPath = [directory stringByAppendingPathComponent: @"b.sqlite"];
+	int removeResult = MADCompositionDeleteFile(bPath);
+	MAD_PASS(removeResult == 0,
+			 "the refreshed source file is closed and can be removed (result %d)", removeResult);
+	MAD_PASS(![[NSFileManager defaultManager] fileExistsAtPath: bPath],
+			 "the source file is gone after the remove");
+
+	NSURL *bURL = [NSURL fileURLWithPath: bPath];
+
+	MAD_PASS(MADCompositionCreateSource(bURL, @[ @"CREATE TABLE b (id INTEGER, value REAL);",
+												 @"INSERT INTO b VALUES (1, 20);"]),
+			 "the source can be recreated after the close");
+	MADOperationRefreshComposed *again = MADCompositionRunRefresh(document);
+	MAD_PASS(again.errors.count == 0, "the recreated source refreshes through a new connection");
+	MAD_PASS(document.currentResult.numberOfRows == 1, "the second refresh joined its row");
 }
 
 static void testComposedThreeLeafRootJoinsAllThree(void) {
@@ -1515,5 +1630,7 @@ MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testComposedRootWithMoreThanTenChildrenIsRejected),
 	MAD_TEST(testComposedMixedNodeIsRejected),
 	MAD_TEST(testCompositionEmptyExpressionKeepsKnownType),
+	MAD_TEST(testComposedCredentialMapPrefersQueryIdentifier),
 	MAD_TEST(testComposedRefreshUsesPerSourceCredentialsAndNamesTheFailingSource),
+	MAD_TEST(testComposedRefreshClosesAndReopensSqliteSources),
 	MAD_TEST(testNodeScopedHTMLRendersTheNodeLayout));

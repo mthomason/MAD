@@ -58,9 +58,24 @@ extern NSString * const MADOperationRefreshSourceQueryIdentifierKey;
 	@property (nonatomic, readonly, copy) NSArray<NSString *> *executedNodeNames;
 
 	/// Credentials for each leaf source, keyed by its connection string.  A source
-	/// not named here falls back to the credential a dependency supplied, so a
-	/// single-credential caller (the pre-composition path) keeps working.
+	/// not named here falls back to `credentialsByQueryIdentifier`, then to the
+	/// credential a dependency supplied, so a single-credential caller (the
+	/// pre-composition path) keeps working.
 	@property (nonatomic, copy) NSDictionary<NSString *, MADCredential *> *credentialsByConnectionString;
+
+	/// Credentials keyed by `RptqQuery.identifier`.  Preferred over the
+	/// connection-string map, so two sources that share one connection string can
+	/// still hold different credentials.  Both maps are optional; the leaf refresh
+	/// consults the query id first, then the connection string, then the single
+	/// dependency credential.
+	@property (nonatomic, copy) NSDictionary<NSNumber *, MADCredential *> *credentialsByQueryIdentifier;
+
+	/// The credential this operation would give one source: the query-id entry first,
+	/// then the connection-string entry, then `fallbackCredential`.  Public so the
+	/// serve adapter and the tests can pin the precedence.
+	- (nullable MADCredential *)credentialForQueryIdentifier:(int64_t)queryIdentifier
+											connectionString:(nullable NSString *)connectionString
+										  fallbackCredential:(nullable MADCredential *)fallbackCredential;
 
 @end
 

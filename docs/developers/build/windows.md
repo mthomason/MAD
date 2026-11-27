@@ -401,20 +401,23 @@ existing `credentials` (`user:password`) string. They reuse the engine's
 one credential per source, so the contract is query-scoped:
 
 - `document-info` lists each query as `{ "id", "name", "isRoot", "isComposing" }` and,
-  when the query has a source database, a `"connection"` object:
+  **only for a non-root, non-composing leaf**, a `"connection"` object:
   `{ "driver", "file" | "host"/"port"/"database"[/"server"], "requiresCredentials",
-  "usernameHint", "connectionString" }`.  `usernameHint` is the non-secret account name
-  the document records; a password is never in the document.
+  "usernameHint", "connectionString" }`.  The root and a composing node omit
+  `"connection"` even when their `inDatabase` names a database, because they do not
+  connect with it.  `usernameHint` is the non-secret account name the document records;
+  a password is never in the document.
 - `apply-connection` gains an optional `"query"` (a `RptqQuery.identifier`).  With it,
   only that source's persisted connection changes; omitting it keeps the
   document-level reconnect a Standard Report uses (`MADHeadlessDocument`'s
   `applyDatabaseConnection:forQueryIdentifier:error:`).
 - `refresh` gains `"sourceCredentials"`, an object keyed by the decimal query id whose
-  value is that source's `"user:password"`.  The serve layer resolves each query id to
-  the engine's `MADDatabaseConnection.connectionString` and hands
-  `MADOperationRefreshComposed.credentialsByConnectionString` the map.  The single
-  `"credentials"` member remains the fallback for any source the map omits, which is
-  how a Standard Report and an older caller keep working.
+  value is that source's `"user:password"`.  The serve layer hands the map to
+  `MADOperationRefreshComposed.credentialsByQueryIdentifier` and keeps a resolved
+  connection-string map as the next fallback, so two sources on one connection string
+  can hold different credentials.  The single `"credentials"` member remains the last
+  fallback for any source the maps omit, which is how a Standard Report and an older
+  caller keep working.
 - A composed refresh that fails on one source answers
   `{ "ok": false, "error": { "code": 4, "message": "…", "source": { "name",
   "queryId", "connectionString" } } }`.  The WPF app matches `queryId` to its query
@@ -424,7 +427,9 @@ The Windows app stores each source's password in Windows Credential Manager unde
 `MAD/<driver>:<host>:<port>/<database>` (`WindowsCredentialStore`), the same key its
 connection window uses.  Inspect entries with `cmdkey /list:MAD/mysql:127.0.0.1:13306/employees`
 and delete one with `cmdkey /delete:MAD/mysql:127.0.0.1:13306/employees`; no plaintext
-file exists.
+file exists.  A headless caller (`mad serve` scripts, the Linux image, `mad-action`)
+has no prompt or credential store: it supplies `sourceCredentials` itself, reading the
+per-leaf `connection` from `document-info` when it needs the source's identity.
 
 `export` is the export seam (`MADReportExporting` / `MADReportExporterRegistry`), not a
 new schema: `format: "json"` returns the exact `mad.report/1` bytes `mad export

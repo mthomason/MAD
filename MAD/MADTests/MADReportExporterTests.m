@@ -29,6 +29,10 @@
 #import <MAD/MADReportExporterText.h>
 #import <MAD/MADReportExportSource.h>
 #import <MAD/MADReportPageBuilder.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseCredentals.h>
+#import <MADFoundation/MADCredential.h>
 
 #import <MAD/MADPredicateOperator.h>
 #import <MAD/MADQueryFull.h>
@@ -693,12 +697,25 @@ static NSString *MADReportExporterSHA256(NSData *data) {
 
 #pragma mark - Composition
 
+/// Deletes one file by path.  Windows' compat `unistd.h` maps `close` to `_close`,
+/// so the test declares only the delete call and never includes that header.
+static int MADCompositionDeleteFile(NSString *path) {
+#if defined(_WIN32)
+	extern int _unlink(const char *);
+	return _unlink(path.UTF8String);
+#else
+	extern int unlink(const char *);
+	return unlink(path.UTF8String);
+#endif
+}
+
 static BOOL MADCompositionCreateSource(NSURL *url, NSArray<NSString *> *statements) {
 	MADDatabaseConnectionSqlite3 *connection = [[MADDatabaseConnectionSqlite3 alloc] initWithUrl: url];
 	MADDatabaseSqlite3 *database = [[MADDatabaseSqlite3 alloc] init];
 	database.databaseConnection = connection;
 	[database openDatabase];
 	NSError *error = nil;
+	BOOL success = YES;
 	for (NSString *statement in statements) {
 		if (![database executeSQL: statement
 						fieldKeys: @[]
@@ -708,10 +725,13 @@ static BOOL MADCompositionCreateSource(NSURL *url, NSArray<NSString *> *statemen
 				   returnsResults: NO
 				   binaryBindings: nil
 						withError: &error]) {
-			return NO;
+			success = NO;
+			break;
 		}
 	}
-	return YES;
+	// Close explicitly so the setup never leaves the source file open for the test.
+	[database closeConnection: nil];
+	return success;
 }
 
 static BOOL MADCompositionAddQuery(MADHeadlessDocument *document,
@@ -1590,6 +1610,61 @@ static double MADCompositionValue(MADDataTableFast *table, NSUInteger row, NSStr
 
 #pragma mark - General N-node composition
 
+/// The connection-string → credential map the composed refresh still accepts, built
+/// the way the older callers do: one entry per source database.
+static NSDictionary<NSString *, MADCredential *> *MADCompositionCredentialsMap(MADHeadlessDocument *document) {
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	NSMutableDictionary<NSString *, MADCredential *> *map = [NSMutableDictionary dictionary];
+	for (RptqDatabase *database in model.hasDatabaseSchemas) {
+		if (database.ownedByUser == nil) continue;
+		MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: database.ownedByUser
+																			documentURL: document.fileURL];
+		if (connection.connectionString.length > 0) {
+			map[connection.connectionString] = [[MADCredential alloc] initWithUsername: @"user" andPassword: @"pass"];
+		}
+	}
+	return map;
+}
+
+static MADOperationRefreshComposed *MADCompositionRunRefreshWithCredentials(MADHeadlessDocument *document,
+																		 NSDictionary<NSString *, MADCredential *> *credentials) {
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	refresh.credentialsByConnectionString = credentials;
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: refresh];
+	while (queue.operationCount > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+	}
+	return refresh;
+}
+
+/// The same credentials keyed by leaf query id, the map `mad serve` supplies.
+static NSDictionary<NSNumber *, MADCredential *> *MADCompositionCredentialsByQueryIdentifier(MADHeadlessDocument *document) {
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	NSMutableDictionary<NSNumber *, MADCredential *> *map = [NSMutableDictionary dictionary];
+	for (RptqDatabase *database in model.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			if (query.hasQueryTables.anyObject.upstreamQuery != nil) continue;
+			map[@(query.identifier)] = [[MADCredential alloc] initWithUsername: @"user" andPassword: @"pass"];
+		}
+	}
+	return map;
+}
+
+static MADOperationRefreshComposed *MADCompositionRunRefreshWithQueryCredentials(MADHeadlessDocument *document,
+																			  NSDictionary<NSNumber *, MADCredential *> *credentials) {
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	refresh.credentialsByQueryIdentifier = credentials;
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: refresh];
+	while (queue.operationCount > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+	}
+	return refresh;
+}
+
 /// Runs a composed refresh to completion and returns the operation, for its errors
 /// and its executed-node order.
 static MADOperationRefreshComposed *MADCompositionRunRefresh(MADHeadlessDocument *document) {
@@ -1789,6 +1864,119 @@ static MADHeadlessDocument *MADCompositionGraphDocument(NSString *directory,
 	MADHeadlessDocument *result = [MADHeadlessDocument documentWithContentsOfURL: madURL error: &error];
 	if (result == nil && outError) *outError = error.description;
 	return result;
+}
+
+- (void)testComposedCredentialMapPrefersQueryIdentifier {
+	NSURL *placeholder = [NSURL fileURLWithPath: [NSTemporaryDirectory() stringByAppendingPathComponent: @"mad-credential-map.mad"]];
+	MADHeadlessDocument *document = [[MADHeadlessDocument alloc] initWithFileURL: placeholder];
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	MADCredential *first = [[MADCredential alloc] initWithUsername: @"first" andPassword: @"one"];
+	MADCredential *second = [[MADCredential alloc] initWithUsername: @"second" andPassword: @"two"];
+	MADCredential *shared = [[MADCredential alloc] initWithUsername: @"shared" andPassword: @"same"];
+	MADCredential *fallback = [[MADCredential alloc] initWithUsername: @"fallback" andPassword: @"fb"];
+	NSString *connectionString = @"(PostgreSQL)[127.0.0.1:5432]chinook";
+	refresh.credentialsByQueryIdentifier = @{ @(10): first, @(11): second };
+	refresh.credentialsByConnectionString = @{ connectionString: shared };
+
+	XCTAssertEqualObjects([refresh credentialForQueryIdentifier: 10 connectionString: connectionString fallbackCredential: fallback].username, @"first",
+						  @"two query ids sharing one connection string keep different credentials (first)");
+	XCTAssertEqualObjects([refresh credentialForQueryIdentifier: 11 connectionString: connectionString fallbackCredential: fallback].username, @"second",
+						  @"two query ids sharing one connection string keep different credentials (second)");
+	XCTAssertEqualObjects([refresh credentialForQueryIdentifier: 12 connectionString: connectionString fallbackCredential: fallback].username, @"shared",
+						  @"a query not in the id map falls back to the connection-string entry");
+	XCTAssertEqualObjects([refresh credentialForQueryIdentifier: 12 connectionString: @"(MySQL)[host:3306]other" fallbackCredential: fallback].username, @"fallback",
+						  @"a query with no map entry falls back to the single credential");
+}
+
+- (void)testComposedRefreshUsesPerSourceCredentialsAndNamesTheFailingSource {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[
+		@{ @"name": @"a", @"file": @"a.sqlite", @"rows": @[ @[@1, @10] ] },
+		@{ @"name": @"b", @"file": @"b.sqlite", @"rows": @[ @[@1, @20] ] },
+	];
+	NSArray *composers = @[
+		@{ @"name": @"root", @"children": @[ @"a", @"b" ],
+		   @"links": @[ @[ @"a", @"id", @"b", @"id" ] ],
+		   @"outputs": @[ @[ @"a", @"id", @"a_id" ], @[ @"b", @"value", @"b_value" ] ] },
+	];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	NSDictionary<NSString *, MADCredential *> *legacy = MADCompositionCredentialsMap(document);
+	XCTAssertEqual(legacy.count, (NSUInteger)2);
+	XCTAssertEqual(MADCompositionRunRefreshWithCredentials(document, legacy).errors.count, (NSUInteger)0,
+				   @"the connection-string credential map still refreshes the composition");
+
+	NSDictionary<NSNumber *, MADCredential *> *credentials = MADCompositionCredentialsByQueryIdentifier(document);
+	XCTAssertEqual(credentials.count, (NSUInteger)2);
+
+	MADOperationRefreshComposed *refresh = MADCompositionRunRefreshWithQueryCredentials(document, credentials);
+	XCTAssertEqual(refresh.errors.count, (NSUInteger)0, @"%@", refresh.errors.firstObject);
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)1);
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	int64_t bIdentifier = 0;
+	RptqDatabaseCredentals *bCredentialRow = nil;
+	for (RptqDatabase *database in model.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			if ([query.name isEqualToString: @"b"]) {
+				bIdentifier = query.identifier;
+				bCredentialRow = query.inDatabase.ownedByUser;
+			}
+		}
+	}
+	XCTAssertNotEqual(bIdentifier, 0);
+	XCTAssertNotNil(bCredentialRow);
+
+	bCredentialRow.host = @"/no-such-directory/ghost.sqlite";
+	bCredentialRow.dbname = @"ghost.sqlite";
+	[document.storeContext saveComposed: NULL];
+	MADOperationRefreshComposed *failed = MADCompositionRunRefreshWithQueryCredentials(document, credentials);
+	XCTAssertEqual(failed.errors.count, (NSUInteger)1);
+	NSError *sourceError = failed.errors.firstObject;
+	XCTAssertEqualObjects(sourceError.userInfo[MADOperationRefreshSourceNameKey], @"b");
+	XCTAssertEqual([sourceError.userInfo[MADOperationRefreshSourceQueryIdentifierKey] longLongValue], bIdentifier);
+	XCTAssertTrue([sourceError.userInfo[MADOperationRefreshSourceConnectionStringKey] containsString: @"ghost.sqlite"]);
+}
+
+- (void)testComposedRefreshClosesAndReopensSqliteSources {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[
+		@{ @"name": @"a", @"file": @"a.sqlite", @"rows": @[ @[@1, @10] ] },
+		@{ @"name": @"b", @"file": @"b.sqlite", @"rows": @[ @[@1, @20] ] },
+	];
+	NSArray *composers = @[
+		@{ @"name": @"root", @"children": @[ @"a", @"b" ],
+		   @"links": @[ @[ @"a", @"id", @"b", @"id" ] ],
+		   @"outputs": @[ @[ @"a", @"id", @"a_id" ], @[ @"b", @"value", @"b_value" ] ] },
+	];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	XCTAssertNotNil(document, @"%@", errorDescription);
+	if (document == nil) return;
+
+	XCTAssertEqual(MADCompositionRunRefresh(document).errors.count, (NSUInteger)0);
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)1);
+
+	NSString *bPath = [directory stringByAppendingPathComponent: @"b.sqlite"];
+	int removeResult = MADCompositionDeleteFile(bPath);
+	XCTAssertEqual(removeResult, 0,
+				   @"the refreshed source file is closed and can be removed (result %d)", removeResult);
+	XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath: bPath]);
+
+	NSURL *bURL = [NSURL fileURLWithPath: bPath];
+
+	XCTAssertTrue(MADCompositionCreateSource(bURL, @[ @"CREATE TABLE b (id INTEGER, value REAL);",
+													 @"INSERT INTO b VALUES (1, 20);"]));
+	MADOperationRefreshComposed *again = MADCompositionRunRefresh(document);
+	XCTAssertEqual(again.errors.count, (NSUInteger)0, @"%@", again.errors.firstObject);
+	XCTAssertEqual(document.currentResult.numberOfRows, (NSUInteger)1);
 }
 
 - (void)testComposedThreeLeafRootJoinsAllThree {

@@ -151,6 +151,11 @@ extern NSNotificationName const MADMacDocumentDidSelectQueryNotification;
 /// SQLite and other credential-free sources are omitted.
 - (NSDictionary<NSString *, MADCredential *> *)resolvedCredentialsByConnectionStringForSources;
 
+/// The same credentials keyed by `RptqQuery.identifier`, so two sources that share a
+/// connection string can still carry different credentials.  The composed refresh
+/// prefers this map and keeps the connection-string map as its fallback.
+- (NSDictionary<NSNumber *, MADCredential *> *)resolvedCredentialsByQueryIdentifierForSources;
+
 /// The leaf source queries whose connections require credentials, in document order.
 - (NSArray<RptqQuery *> *)sourceQueriesRequiringCredentials;
 

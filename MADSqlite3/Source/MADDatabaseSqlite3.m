@@ -345,6 +345,15 @@ static void MADDatabaseSqlite3ParseTypeWidthScale(NSString *typeText, int64_t *o
 	_isOpen = NO;
 }
 
+/// SQLite owns one connection in this object, and `-executeSQL:`/`-connectWithConnection:`
+/// reopen it on demand, so closing after a query is safe.  This is what the composed
+/// refresh relies on after each leaf: without it the source file stays open until the
+/// plan deallocs, which locks the file on Windows and keeps the handle alive elsewhere.
+/// Idempotent: a second close sees no database and does nothing.
+- (void)closeConnection:(id)__unused process {
+	[self closeDatabaseConnectionIfOpen];
+}
+
 - (void)dealloc {
 	
 	if (_bulkStatement != NULL && sqlite3_clear_bindings(_bulkStatement) && sqlite3_finalize(_bulkStatement)) {

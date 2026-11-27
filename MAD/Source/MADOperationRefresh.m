@@ -590,18 +590,32 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 	return ordered;
 }
 
+- (nullable MADCredential *)credentialForQueryIdentifier:(int64_t)queryIdentifier
+										   connectionString:(nullable NSString *)connectionString
+										 fallbackCredential:(nullable MADCredential *)fallbackCredential {
+	if (queryIdentifier != 0) {
+		MADCredential *byQuery = self.credentialsByQueryIdentifier[@(queryIdentifier)];
+		if (byQuery != nil) return byQuery;
+	}
+	if (connectionString.length > 0) {
+		MADCredential *byConnection = self.credentialsByConnectionString[connectionString];
+		if (byConnection != nil) return byConnection;
+	}
+	return fallbackCredential;
+}
+
 - (nullable MADDataResult *)refreshLeafNode:(MADComposedNodePlan *)plan
 								credentials:(MADCredential *)credentials
 							 cacheDirectory:(NSURL *)cacheDirectory {
 	MADDatabase *database = plan.database;
 	MADDatabaseConnection *leafConnection = database.databaseConnection;
 	NSString *connectionString = leafConnection.connectionString;
-	// Each source resolves its own credential first; a caller that supplied only one
-	// credential (the pre-composition path) still refreshes every source with it.
-	MADCredential *leafCredentials = connectionString.length > 0
-		? self.credentialsByConnectionString[connectionString]
-		: nil;
-	if (leafCredentials == nil) leafCredentials = credentials;
+	// Each source resolves its own credential first — by query id, so two sources on
+	// one connection string can hold different credentials, then by connection string,
+	// then the single credential a legacy caller supplied.
+	MADCredential *leafCredentials = [self credentialForQueryIdentifier: plan.identifier
+													   connectionString: connectionString
+													 fallbackCredential: credentials];
 	BOOL hasCredentials = (leafCredentials.username.length > 0 || leafCredentials.password.length > 0);
 	if ([leafConnection requiresCredentials] && !hasCredentials) {
 		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];

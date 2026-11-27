@@ -9,7 +9,9 @@
 #  root over one leaf), then walks the scoped methods: describe, layout-model and the
 #  nine mutations, query-model, node-result, and export with `query`, before and after
 #  a refresh, plus the error answers (unknown query, SQL editing on a composed node,
-#  and a non-root json-report).
+#  and a non-root json-report).  It also builds a two-source SQLite composition and
+#  refreshes it with one `sourceCredentials` entry per leaf, then breaks one source and
+#  asserts the source-scoped error.
 #
 #  Runs on Linux (where `mad` is on PATH, inside the runtime image) and on macOS
 #  (where the simulator binary is spawned through `xcrun simctl spawn booted`).
@@ -234,11 +236,14 @@ def main():
         reopened_layout = result(client.request("layout-model", {"handle": result(reopened).get("handle")}))
         check([s["id"] for s in reopened_layout.get("sections", [])] == [s["id"] for s in standard_sections],
               "standard report: save/reopen keeps the document's own section ids")
-        expected_elements = element_count + 1 if sys.platform.startswith("linux") else element_count
+        # Linux and Windows run the headless document, whose session edits are in the
+        # store that `write` serializes; macOS's UIDocument re-opens its source.
+        headless_session = sys.platform.startswith("linux") or sys.platform.startswith("win")
+        expected_elements = element_count + 1 if headless_session else element_count
         check(len(reopened_layout.get("elements", [])) == expected_elements,
               "standard report: save/reopen keeps the document layout")
         reopened_detail = next((s for s in reopened_layout.get("sections", []) if s.get("id") == standard_detail), {})
-        expected_height = 120 if sys.platform.startswith("linux") else original_detail_height
+        expected_height = 120 if headless_session else original_detail_height
         check(abs((reopened_detail.get("height") or 0) - expected_height) < 0.5,
               "standard report: save/reopen keeps the document detail height")
 
@@ -406,6 +411,92 @@ def main():
               "layoutless node: html export does not raise an engine exception")
         check(ok(layoutless_export) or "not been refreshed" in error_message(layoutless_export),
               "layoutless node: html export returns a result or a clear error")
+
+        # --- per-source credentials on a two-source composition ---------------------
+        # Two SQLite sources carry one credential each in `sourceCredentials`, keyed by
+        # query id.  The sources need no real password, so this pins the map, the join,
+        # and the source-scoped error without a live server.
+        sample_sqlite = os.path.join(repo_root(), "MADDesigner", "Resources", "Assets",
+                                     "Samples.xcassets", "Data", "chinook.dataset", "chinook.sqlite3")
+        if os.path.exists(sample_sqlite):
+            two_path = os.path.join(workdir, "two-source.mad")
+            two_open = client.request("create-empty", {"path": two_path})
+            check(ok(two_open), "two-source: create-empty")
+            two_handle = result(two_open).get("handle")
+            two_root = client.request("add-root", {"handle": two_handle, "name": "root"})
+            check(ok(two_root), "two-source: add-root")
+            root_query = result(two_root).get("rootQuery", 0)
+
+            a_sqlite = os.path.join(workdir, "a.sqlite3")
+            b_sqlite = os.path.join(workdir, "b.sqlite3")
+            shutil.copyfile(sample_sqlite, a_sqlite)
+            shutil.copyfile(sample_sqlite, b_sqlite)
+            a_source = client.request("add-source", {"handle": two_handle, "name": "a",
+                                                      "driver": "sqlite3", "file": a_sqlite})
+            b_source = client.request("add-source", {"handle": two_handle, "name": "b",
+                                                      "driver": "sqlite3", "file": b_sqlite})
+            check(ok(a_source) and ok(b_source), "two-source: add two SQLite sources")
+            a_query = next((q["id"] for q in result(a_source).get("queries", []) if q.get("name") == "a"), 0)
+            b_query = next((q["id"] for q in result(b_source).get("queries", []) if q.get("name") == "b"), 0)
+            check(a_query > 0 and b_query > 0, "two-source: names both source queries")
+
+            check(ok(client.request("add-table", {"handle": two_handle, "table": "Album", "query": a_query})),
+                  "two-source: add a table to a")
+            check(ok(client.request("add-table", {"handle": two_handle, "table": "Album", "query": b_query})),
+                  "two-source: add a table to b")
+            check(ok(client.request("add-upstream", {"handle": two_handle, "query": a_query})),
+                  "two-source: a feeds the root")
+            check(ok(client.request("add-upstream", {"handle": two_handle, "query": b_query})),
+                  "two-source: b feeds the root")
+
+            # `query-model` without `query` is the document's main query (a source in
+            # a composition); the composed root is addressed explicitly.
+            root_model = client.request("query-model", {"handle": two_handle, "query": root_query})
+
+            def field_on(upstream, name):
+                for table in result(root_model).get("tables", []):
+                    if table.get("upstreamQuery") == upstream:
+                        for field in table.get("fields", []):
+                            if field.get("name") == name:
+                                return field.get("id", 0)
+                return 0
+
+            a_album = field_on(a_query, "AlbumId")
+            b_album = field_on(b_query, "AlbumId")
+            b_title = field_on(b_query, "Title")
+            if not (a_album > 0 and b_album > 0 and b_title > 0):
+                print("DIAG two-source root model: " +
+                      json.dumps(result(root_model))[:4000])
+            check(a_album > 0 and b_album > 0 and b_title > 0,
+                  "two-source: finds the join and output fields")
+            check(ok(client.request("add-link", {"handle": two_handle, "query": root_query,
+                                                  "leftField": a_album, "rightField": b_album})),
+                  "two-source: joins the two sources")
+            check(ok(client.request("set-root-outputs", {"handle": two_handle, "outputs": [
+                      {"field": a_album, "key": "a_id"},
+                      {"field": b_title, "key": "b_title"}]})),
+                  "two-source: sets the root outputs")
+
+            credentials = {str(a_query): "a:one", str(b_query): "b:two"}
+            two_refresh = client.request("refresh", {"handle": two_handle, "sourceCredentials": credentials})
+            check(ok(two_refresh), "two-source: refresh with two source credentials")
+            check(result(two_refresh).get("rowCount") == 347,
+                  "two-source: the joined Album result has 347 rows")
+
+            # With the SQLite handle closed after the refresh, the source file is free
+            # to be rewritten; the next refresh must fail on that source and name it.
+            with open(b_sqlite, "w") as broken:
+                broken.write("this is not a SQLite database")
+            source_failure = client.request("refresh", {"handle": two_handle,
+                                                         "sourceCredentials": credentials})
+            check(not ok(source_failure), "two-source: a broken source fails the refresh")
+            source = source_failure.get("error", {}).get("source", {})
+            check(source.get("name") == "b", "two-source: the error names the source")
+            check(source.get("queryId") == b_query, "two-source: the error carries the query id")
+            check("b.sqlite3" in source.get("connectionString", ""),
+                  "two-source: the error carries the source connection string")
+        else:
+            print("SKIP two-source credentials (chinook sample database not found)")
 
         # --- unknown query ---------------------------------------------------------
         unknown = client.request("layout-model", {"handle": handle, "query": 987654321})

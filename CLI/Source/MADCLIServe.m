@@ -1660,13 +1660,19 @@ static NSDictionary *MADCLIServeSourceConnectionDict(id <MADDocumentDataProtocol
 static NSDictionary *MADCLIServeDocumentInfoQuery(id <MADDocumentDataProtocol> document,
 												  RptqQuery *query,
 												  BOOL isRoot) {
+	BOOL isComposing = query.hasQueryTables.anyObject.upstreamQuery != nil;
 	NSMutableDictionary *entry = [NSMutableDictionary dictionary];
 	entry[@"id"] = @(query.identifier);
 	entry[@"name"] = query.name ?: @"";
 	entry[@"isRoot"] = @(isRoot);
-	entry[@"isComposing"] = query.hasQueryTables.anyObject.upstreamQuery != nil ? @YES : @NO;
-	NSDictionary *connection = MADCLIServeSourceConnectionDict(document, query);
-	if (connection != nil) entry[@"connection"] = connection;
+	entry[@"isComposing"] = isComposing ? @YES : @NO;
+	// Only a real source leaf has a connection to configure or prompt for.  A
+	// composing node's `inDatabase` names its first source's database but this node
+	// does not connect with it, and the root is never a source.
+	if (!isRoot && !isComposing) {
+		NSDictionary *connection = MADCLIServeSourceConnectionDict(document, query);
+		if (connection != nil) entry[@"connection"] = connection;
+	}
 	return entry;
 }
 

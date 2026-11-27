@@ -906,6 +906,17 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	return byKey;
 }
 
+- (NSDictionary<NSNumber *, MADCredential *> *)resolvedCredentialsByQueryIdentifierForSources {
+	NSMutableDictionary<NSNumber *, MADCredential *> *byIdentifier = [NSMutableDictionary dictionary];
+	for (RptqQuery *source in [self sourceQueriesRequiringCredentials]) {
+		MADCredential *credential = [self resolvedCredentialsForQuery:source];
+		if (credential != nil) {
+			byIdentifier[@(source.identifier)] = credential;
+		}
+	}
+	return byIdentifier;
+}
+
 #pragma mark - Refresh & Export
 
 - (void)refreshDataWithPassword:(nullable NSString *)passwordOverride
@@ -1043,6 +1054,9 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 		[[MADOperationRefreshComposed alloc] initWithDocument:doc];
 	// Each source carries its own credential; no single credential is handed to every
 	// source, so two sources on different servers (or different logins) both connect.
+	// The query-id map is preferred, so even two sources on one connection string can
+	// carry different credentials; the connection-string map stays for older callers.
+	refreshOp.credentialsByQueryIdentifier = [self resolvedCredentialsByQueryIdentifierForSources];
 	refreshOp.credentialsByConnectionString = [self resolvedCredentialsByConnectionStringForSources];
 
 	__weak typeof(self) weakSelf = self;
