@@ -413,7 +413,18 @@ typedef NS_ENUM(NSInteger, MADMacDatabaseKind) {
 		_databaseField.stringValue = dbname ?: @"";
 
 		MADCredential *resolved = [document resolvedCredentialsForDatabaseConnection:conn];
-		_usernameField.stringValue = resolved.username ?: @"";
+		// A sample can carry a non-secret username hint.  The store has no username
+		// column; `domain` is the one credential attribute PostgreSQL and MySQL never
+		// read (it is a SQL Server login domain), so a document may write the account
+		// name there and a first-run sheet still shows who to connect as.  A real
+		// Keychain username always wins.
+		NSString *usernameHint = nil;
+		if (dbType == MADDatabaseTypePostgres || dbType == MADDatabaseTypeMySQL) {
+			usernameHint = credRow.domain;
+		}
+		_usernameField.stringValue = resolved.username.length > 0
+			? resolved.username
+			: (usernameHint ?: @"");
 		_passwordField.stringValue = resolved.password ?: @"";
 	}
 }

@@ -23,6 +23,7 @@
 
 static const CGFloat kViewerTopToolbarHeight = 44.0;
 static const CGFloat kViewerBottomStatusBarHeight = 34.0;
+static const CGFloat kViewerTipBarHeight = 30.0;
 
 /// An SF Symbol image, or an invisible placeholder so the control keeps its geometry if
 /// the symbol is unavailable.
@@ -108,6 +109,34 @@ static NSImage *MADViewerSymbolImage(NSString *name, NSString * _Nullable descri
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[_tipBar removeObserver:self forKeyPath:@"hidden" context:NULL];
+}
+
+- (void)updateViewerContentFrames {
+	if (self.view == nil) return;
+	CGFloat width = NSWidth(self.view.bounds);
+	CGFloat height = NSHeight(self.view.bounds);
+	CGFloat tipHeight = (_tipBar != nil && !_tipBar.hidden) ? kViewerTipBarHeight : 0.0;
+	NSRect content = NSMakeRect(0.0,
+								kViewerBottomStatusBarHeight,
+								width,
+								height - kViewerTopToolbarHeight - kViewerBottomStatusBarHeight - tipHeight);
+	if (_pdfView != nil) _pdfView.frame = content;
+	if (_rowGridScrollView != nil) _rowGridScrollView.frame = content;
+}
+
+- (void)viewDidLayout {
+	[super viewDidLayout];
+	[self updateViewerContentFrames];
+}
+
+- (void)observeValueForKeyPath:(nullable NSString *)keyPath
+					  ofObject:(nullable id)object
+						change:(nullable NSDictionary<NSKeyValueChangeKey, id> *)__unused change
+					   context:(nullable void *)__unused context {
+	if (object == _tipBar && [keyPath isEqualToString:@"hidden"]) {
+		[self updateViewerContentFrames];
+	}
 }
 
 - (void)loadView {
@@ -347,11 +376,20 @@ static NSImage *MADViewerSymbolImage(NSString *name, NSString * _Nullable descri
 
 	_tipBar = [MADMacTipBar tipBarWithIdentifier:@"viewer"
 											text:NSLocalizedString(@"Start here: press Refresh to run the query. Use the bottom bar to zoom, page through, or change the paper size.", @"First-run tip in the viewer workspace.")];
-	_tipBar.frame = NSMakeRect(0.0, 740.0 - kViewerTopToolbarHeight - 30.0, 1180.0, 30.0);
+	_tipBar.frame = NSMakeRect(0.0, 740.0 - kViewerTopToolbarHeight - kViewerTipBarHeight, 1180.0, kViewerTipBarHeight);
 	_tipBar.autoresizingMask = NSViewWidthSizable | NSViewMinYMargin;
 	[root addSubview:_tipBar];
 
 	self.view = root;
+
+	// The tip bar occupies the top strip of the workspace.  A paged PDF has its own
+	// top margin, but the row grid's header is hard against its top edge; keep the
+	// content frame below the tip so the header is never drawn under the tip text.
+	[self updateViewerContentFrames];
+	[_tipBar addObserver:self
+			  forKeyPath:@"hidden"
+				 options:NSKeyValueObservingOptionNew
+				 context:NULL];
 }
 
 - (void)viewDidLoad {
@@ -777,18 +815,26 @@ static NSImage *MADViewerSymbolImage(NSString *name, NSString * _Nullable descri
 	while (_rowGridView.numberOfColumns > 0) {
 		[_rowGridView removeTableColumn:_rowGridView.tableColumns.lastObject];
 	}
+	NSMutableSet<NSString *> *usedTitles = [NSMutableSet setWithCapacity:keys.count];
 	NSUInteger index = 0;
 	for (NSString *key in keys) {
 		// The logical field key is the readable column name (an output key for a composed
 		// node, "<alias>.<field>" for a leaf); the column's SQL expression is not.
+		// A leaf's key reaches here quoted for SQLite ("Artist0"."ArtistId"); show the
+		// field name, keeping the qualified form only when two columns would collide.
 		NSString *title = key;
 		if (title.length == 0) {
 			title = [NSString localizedStringWithFormat:
 				NSLocalizedString(@"Column %lu", @"Fallback row-grid column header when the result carries no column name. %lu is the column number."),
 				(unsigned long)(index + 1)];
 		}
+		NSString *unquoted = [title stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+		NSArray<NSString *> *qualified = [unquoted componentsSeparatedByString:@"."];
+		NSString *shortTitle = qualified.count > 1 ? qualified.lastObject : unquoted;
+		NSString *displayTitle = [usedTitles containsObject:shortTitle] ? unquoted : shortTitle;
+		[usedTitles addObject:displayTitle];
 		NSTableColumn *tableColumn = [[NSTableColumn alloc] initWithIdentifier:key];
-		tableColumn.title = title;
+		tableColumn.title = displayTitle;
 		tableColumn.width = 120.0;
 		tableColumn.minWidth = 60.0;
 		[_rowGridView addTableColumn:tableColumn];
