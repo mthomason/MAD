@@ -38,6 +38,8 @@
 #import <MADSqlite3/MADDatabaseConnectionSqlite3.h>
 #import <MADSqlite3/MADArrayCaching.h>
 #import <MADMySQL/MADDatabaseConnectionMySql.h>
+#import <MADPostgres/MADDatabaseConnectionPostgres.h>
+#import <MADTdsClient/MADDatabaseConnectionSQLServer.h>
 #import <MADFoundation/MADCredential.h>
 #import <MADBarcodes/MADBarcodes.h>
 #import <Quartz/Quartz.h>
@@ -632,6 +634,491 @@ static int MADSmokeWriteNodeScreenshots(NSString *directory) {
 	return 0;
 }
 
+static NSString *MADSmokeStringForValue(id value) {
+	if (value == nil || value == [NSNull null]) return @"";
+	return [value isKindOfClass:[NSString class]] ? value : [value description];
+}
+
+// Builds one Standard Report through the app's own document/controller path against a
+// live server: create the document (schema import), add a table, author a label + a
+// bound data field, refresh, export PDF/HTML, and save.  Prints the Designer evidence
+// (field count, caption, filter, table/alias case) and whether the bound value rendered.
+static BOOL MADSmokeWriteLiveReport(NSString *name,
+									NSString *tableName,
+									NSString *boundFieldName,
+									MADDatabaseConnection *connection,
+									MADCredential *credential,
+									NSString *directory,
+									NSString **outError) {
+	NSString *madPath = [directory stringByAppendingPathComponent:[name stringByAppendingPathExtension:@"mad"]];
+	NSURL *madURL = [NSURL fileURLWithPath:madPath];
+	NSError *error = nil;
+	MADHeadlessDocument *headless = [MADHeadlessDocument createDocumentAtURL:madURL
+													   withDatabaseConnection:connection
+																  credentials:credential
+																		error:&error];
+	if (headless == nil) {
+		if (outError != NULL) {
+			*outError = [NSString stringWithFormat:@"connect/create failed: %@ [%@ %ld]",
+						 error.localizedDescription ?: @"?", error.domain ?: @"?", (long)error.code];
+		}
+		return NO;
+	}
+
+	MADMacDocument *doc = [[MADMacDocument alloc] init];
+	doc.fileURL = madURL;
+	[doc adoptHeadlessDocument:headless];
+	doc.sessionCredentials = credential;
+	[doc makeWindowControllers];
+	MADMacWindowController *wc = doc.windowControllers.firstObject;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabQuery];
+	MADMacQueryViewController *qvc = wc.queryViewController;
+
+	RptqQuery *query = doc.reportQuery;
+	if (query == nil) {
+		if (outError != NULL) *outError = @"the created document has no query";
+		return NO;
+	}
+	[doc renameQuery:query to:name];
+	doc.selectedQuery = query;
+	[qvc reloadFromDocument];
+
+	RptqDatabaseSchemaTable *schemaTable = nil;
+	for (RptqDatabaseSchemaTable *candidate in query.inDatabase.hasTables) {
+		if (candidate.name.length == 0) continue;
+		if ([candidate.name caseInsensitiveCompare:tableName] == NSOrderedSame ||
+			[[candidate.name lowercaseString] hasSuffix:[tableName lowercaseString]]) {
+			schemaTable = candidate;
+			break;
+		}
+	}
+	if (schemaTable == nil) {
+		NSMutableString *names = [[NSMutableString alloc] init];
+		for (RptqDatabaseSchemaTable *candidate in query.inDatabase.hasTables) {
+			[names appendFormat:@" %@", candidate.name];
+		}
+		if (outError != NULL) {
+			*outError = [NSString stringWithFormat:@"table '%@' not found; schema tables:%@", tableName, names];
+		}
+		return NO;
+	}
+	if ([qvc addSchemaTableToQuery:schemaTable] == nil) {
+		if (outError != NULL) *outError = [NSString stringWithFormat:@"could not add table '%@'", schemaTable.name];
+		return NO;
+	}
+	[doc notifyDocumentMutated];
+
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+	MADMacDesignerViewController *designer = wc.designerViewController;
+	[designer reloadFromDocument];
+
+	RptqQueryTable *queryTable = query.hasQueryTables.anyObject;
+	RptqQueryField *bound = nil;
+	for (RptqQueryField *field in queryTable.hasQueryFields) {
+		if ([field.databaseSchemaField.name caseInsensitiveCompare:boundFieldName] == NSOrderedSame) {
+			bound = field;
+			break;
+		}
+	}
+	if (bound == nil) bound = queryTable.hasQueryFields.anyObject;
+
+	RptqDocumentSection *detail = nil;
+	for (RptqDocumentSection *section in [doc orderedSections]) {
+		if ((MADDocumentSectionType)section.type == MADDocumentSectionTypeBody) {
+			detail = section;
+			break;
+		}
+	}
+	if (detail == nil || bound == nil) {
+		if (outError != NULL) *outError = @"no detail band or no bindable field";
+		return NO;
+	}
+	RptqDocumentElementLabel *label = [designer addStaticLabelInSection:detail atPoint:NSMakePoint(12.0, 6.0)];
+	label.text = [NSString stringWithFormat:@"%@ Test", name];
+	[designer addDataField:bound inSection:detail atPoint:NSMakePoint(12.0, 32.0)];
+	[doc notifyDocumentMutated];
+
+	[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+	[NSApp activateIgnoringOtherApps:YES];
+	[wc.window makeKeyAndOrderFront:nil];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+	MADSmokeWriteWindowSnapshots(wc.window, directory, [name stringByAppendingString:@"-Designer"]);
+
+	MADMacViewerViewController *viewer = wc.viewerViewController;
+	(void)viewer.view;
+	[viewer refreshReportAction:nil];
+	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:90.0];
+	while (!headless.refreshed && viewer.lastRefreshError == nil && deadline.timeIntervalSinceNow > 0) {
+		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+								 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.05]];
+	}
+	if (!headless.refreshed || viewer.lastRefreshError != nil) {
+		if (outError != NULL) {
+			*outError = [NSString stringWithFormat:@"refresh failed: %@",
+						 viewer.lastRefreshError.localizedDescription ?: @"not refreshed"];
+		}
+		[headless writeToURL:madURL reproducible:NO error:NULL];
+		return NO;
+	}
+
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[viewer reloadPreview];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+	MADSmokeWriteWindowSnapshots(wc.window, directory, [name stringByAppendingString:@"-Viewer"]);
+
+	NSUInteger rows = [headless.dataTable numberOfRows];
+	NSString *expectedValue = nil;
+	NSUInteger scan = MIN(rows, 5);
+	for (NSUInteger r = 1; r <= scan && expectedValue.length == 0; r++) {
+		NSDictionary *row = [headless.dataTable dataForRow:r error:NULL];
+		for (NSString *key in row) {
+			if ([key rangeOfString:bound.databaseSchemaField.name options:NSCaseInsensitiveSearch].location != NSNotFound) {
+				expectedValue = MADSmokeStringForValue(row[key]);
+				if (expectedValue.length > 0) break;
+			}
+		}
+	}
+
+	NSURL *pdfURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:
+											[name stringByAppendingPathExtension:@"pdf"]]];
+	Class<MADReportExporting> pdfClass = [MADReportExporterRegistry exporterClassForFormat:@"pdf"];
+	id<MADReportExporting> pdfExporter = [[(Class)pdfClass alloc] init];
+	NSError *exportError = nil;
+	BOOL pdfOK = [pdfExporter exportDocument:headless toURL:pdfURL options:MADReportExportOptionsNone error:&exportError];
+
+	NSURL *htmlURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:
+											 [name stringByAppendingPathExtension:@"html"]]];
+	Class<MADReportExporting> htmlClass = [MADReportExporterRegistry exporterClassForFormat:@"html"];
+	id<MADReportExporting> htmlExporter = [[(Class)htmlClass alloc] init];
+	BOOL htmlOK = [htmlExporter exportDocument:headless toURL:htmlURL options:MADReportExportOptionsNone error:&exportError];
+	NSString *html = htmlOK ? [NSString stringWithContentsOfURL:htmlURL encoding:NSUTF8StringEncoding error:NULL] : nil;
+	BOOL rendered = expectedValue.length > 0 && html != nil && [html containsString:expectedValue];
+
+	NSMutableString *tableEvidence = [[NSMutableString alloc] init];
+	NSUInteger totalFields = 0;
+	for (RptqQueryTable *table in query.hasQueryTables) {
+		totalFields += table.hasQueryFields.count;
+		[tableEvidence appendFormat:@" %@(alias=%@,queryAlias=%@)",
+			table.databaseSchemaTable.name, table.alias ?: @"nil", [table queryAlias]];
+	}
+
+	[headless writeToURL:madURL reproducible:NO error:NULL];
+	printf("LIVE %s: mad=%s pdf=%s html=%s fields=%lu tableRows=%ld caption='%s' search='%s' "
+		   "isComposed=%d showsColumns=%d queryTables=%lu totalQueryFields=%lu tables:%s "
+		   "bound=%s rows=%lu valueRendered=%d expected='%s' documentType='%s'\n",
+		   name.UTF8String,
+		   madPath.UTF8String,
+		   pdfOK ? pdfURL.path.UTF8String : "<failed>",
+		   htmlOK ? htmlURL.path.UTF8String : "<failed>",
+		   (unsigned long)designer.displayedQueryFields.count,
+		   (long)designer.queryFieldsTableView.numberOfRows,
+		   designer.fieldsHeaderLabel.stringValue.UTF8String ?: "",
+		   designer.queryFieldsSearchField.stringValue.UTF8String ?: "",
+		   doc.isComposed,
+		   [doc queryShowsReportColumns:query],
+		   (unsigned long)query.hasQueryTables.count,
+		   (unsigned long)totalFields,
+		   tableEvidence.UTF8String ?: "",
+		   ([NSString stringWithFormat:@"%@.%@", [bound.inQueryTable queryAlias], bound.databaseSchemaField.name]).UTF8String,
+		   (unsigned long)rows,
+		   rendered,
+		   expectedValue.UTF8String ?: "",
+		   wc.documentTypeLabel.stringValue.UTF8String ?: "");
+	if (!pdfOK || !htmlOK) {
+		if (outError != NULL) {
+			*outError = [NSString stringWithFormat:@"export failed: %@", exportError.localizedDescription ?: @"?"];
+		}
+		return NO;
+	}
+	return YES;
+}
+
+// Creates a live Standard Report whose query has a table but no authored layout, so it
+// can be imported as the layout-less source of a composition.
+static BOOL MADSmokeWriteLiveQueryOnlyReport(NSString *name,
+											 NSString *tableName,
+											 MADDatabaseConnection *connection,
+											 MADCredential *credential,
+											 NSString *directory,
+											 NSString **outError) {
+	NSString *madPath = [directory stringByAppendingPathComponent:[name stringByAppendingPathExtension:@"mad"]];
+	NSURL *madURL = [NSURL fileURLWithPath:madPath];
+	NSError *error = nil;
+	MADHeadlessDocument *headless = [MADHeadlessDocument createDocumentAtURL:madURL
+													   withDatabaseConnection:connection
+																  credentials:credential
+																		error:&error];
+	if (headless == nil) {
+		if (outError != NULL) *outError = error.localizedDescription ?: @"create failed";
+		return NO;
+	}
+	MADMacDocument *doc = [[MADMacDocument alloc] init];
+	doc.fileURL = madURL;
+	[doc adoptHeadlessDocument:headless];
+	doc.sessionCredentials = credential;
+	[doc makeWindowControllers];
+	MADMacWindowController *wc = doc.windowControllers.firstObject;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabQuery];
+	MADMacQueryViewController *qvc = wc.queryViewController;
+	RptqQuery *query = doc.reportQuery;
+	if (query == nil) {
+		if (outError != NULL) *outError = @"no query";
+		return NO;
+	}
+	[doc renameQuery:query to:name];
+	doc.selectedQuery = query;
+	[qvc reloadFromDocument];
+	RptqDatabaseSchemaTable *schemaTable = nil;
+	for (RptqDatabaseSchemaTable *candidate in query.inDatabase.hasTables) {
+		if ([candidate.name caseInsensitiveCompare:tableName] == NSOrderedSame ||
+			[[candidate.name lowercaseString] hasSuffix:[tableName lowercaseString]]) {
+			schemaTable = candidate;
+			break;
+		}
+	}
+	if (schemaTable == nil || [qvc addSchemaTableToQuery:schemaTable] == nil) {
+		if (outError != NULL) *outError = [NSString stringWithFormat:@"table '%@' not found or not addable", tableName];
+		return NO;
+	}
+	[doc notifyDocumentMutated];
+	if (![headless writeToURL:madURL reproducible:NO error:&error]) {
+		if (outError != NULL) *outError = error.localizedDescription ?: @"save failed";
+		return NO;
+	}
+	[wc.window orderOut:nil];
+	printf("LIVE query-only source: mad=%s table=%s\n", madPath.UTF8String, tableName.UTF8String);
+	return YES;
+}
+
+// Builds a two-source composition from live PostgreSQL reports (Album and a query-only
+// Artist) joined on ArtistId, then exercises every node's Designer/Viewer.
+static int MADSmokeWriteLiveComposition(NSString *directory) {
+	NSFileManager *fm = [NSFileManager defaultManager];
+	[fm createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+
+	NSString *albumPath = [directory stringByAppendingPathComponent:@"PostgreSQL-chinook.mad"];
+	NSString *artistPath = [directory stringByAppendingPathComponent:@"PostgreSQL-artist.mad"];
+	NSString *compositionPath = [directory stringByAppendingPathComponent:@"Composition-Postgres-AlbumArtist.mad"];
+	MADDatabaseConnectionPostgres *postgres = [[MADDatabaseConnectionPostgres alloc] initWithHost:@"127.0.0.1"
+																						 database:@"chinook"
+																						  andPort:5432];
+	MADCredential *credential = [[MADCredential alloc] initWithUsername:@"mad" andPassword:@"mad_test_pw"];
+	NSString *errorText = nil;
+
+	if (![fm fileExistsAtPath:albumPath]) {
+		printf("LIVE composition FAILED: run --write-live-reports first (%s missing)\n", albumPath.UTF8String);
+		return 1;
+	}
+	if (![fm fileExistsAtPath:artistPath] &&
+		!MADSmokeWriteLiveQueryOnlyReport(@"PostgreSQL-artist", @"Artist", postgres, credential, directory, &errorText)) {
+		printf("LIVE composition FAILED creating Artist source: %s\n", errorText.UTF8String ?: "?");
+		return 1;
+	}
+
+	NSURL *compositionURL = [NSURL fileURLWithPath:compositionPath];
+	[fm removeItemAtURL:compositionURL error:NULL];
+	NSError *error = nil;
+	MADHeadlessDocument *empty = [MADHeadlessDocument createEmptyDocumentAtURL:compositionURL error:&error];
+	if (empty == nil) {
+		printf("LIVE composition FAILED creating the document: %s\n", error.localizedDescription.UTF8String);
+		return 1;
+	}
+	MADMacDocument *composition = [[MADMacDocument alloc] init];
+	composition.fileURL = compositionURL;
+	[composition adoptHeadlessDocument:empty];
+	composition.sessionCredentials = credential;
+	RptqQuery *root = [composition addRootQueryNamed:@"Result" error:&error];
+	RptqQuery *albumChild = [composition importChildFromURL:[NSURL fileURLWithPath:albumPath] name:@"Album" error:&error];
+	RptqQuery *artistChild = [composition importChildFromURL:[NSURL fileURLWithPath:artistPath] name:@"Artist" error:&error];
+	if (root == nil || albumChild == nil || artistChild == nil ||
+		[composition addChildQuery:albumChild error:&error] == nil ||
+		[composition addChildQuery:artistChild error:&error] == nil) {
+		printf("LIVE composition FAILED importing children: %s\n", error.localizedDescription.UTF8String);
+		return 1;
+	}
+
+	composition.selectedQuery = root;
+	[composition makeWindowControllers];
+	MADMacWindowController *wc = composition.windowControllers.firstObject;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabQuery];
+	MADMacQueryViewController *qvc = wc.queryViewController;
+	[qvc reloadFromDocument];
+	RptqQueryTable *rootAlbum = [qvc addUpstreamQueryToRoot:albumChild];
+	RptqQueryTable *rootArtist = [qvc addUpstreamQueryToRoot:artistChild];
+	if (rootAlbum == nil || rootArtist == nil) {
+		printf("LIVE composition FAILED adding upstream tables\n");
+		return 1;
+	}
+	RptqQueryField *(^fieldInTable)(RptqQueryTable *, NSString *) = ^RptqQueryField *(RptqQueryTable *table, NSString *name) {
+		for (RptqQueryField *field in table.hasQueryFields) {
+			if ([field.databaseSchemaField.name caseInsensitiveCompare:name] == NSOrderedSame) return field;
+		}
+		return (RptqQueryField *)nil;
+	};
+	// This PostgreSQL Chinook build names its columns in snake_case.
+	RptqQueryField *albumKey = fieldInTable(rootAlbum, @"artist_id");
+	RptqQueryField *artistKey = fieldInTable(rootArtist, @"artist_id");
+	RptqQueryField *albumTitle = fieldInTable(rootAlbum, @"title");
+	RptqQueryField *artistName = fieldInTable(rootArtist, @"name");
+	if (albumKey == nil || artistKey == nil || albumTitle == nil || artistName == nil) {
+		NSMutableString *diagnostics = [[NSMutableString alloc] init];
+		[diagnostics appendFormat:@" albumChild tables=%lu fields:", (unsigned long)albumChild.hasQueryTables.count];
+		for (RptqQueryTable *table in albumChild.hasQueryTables) {
+			for (RptqQueryField *field in table.hasQueryFields) {
+				[diagnostics appendFormat:@" %@", field.databaseSchemaField.name ?: @"(nil)"];
+			}
+		}
+		[diagnostics appendFormat:@" | artistChild tables=%lu fields:", (unsigned long)artistChild.hasQueryTables.count];
+		for (RptqQueryTable *table in artistChild.hasQueryTables) {
+			for (RptqQueryField *field in table.hasQueryFields) {
+				[diagnostics appendFormat:@" %@", field.databaseSchemaField.name ?: @"(nil)"];
+			}
+		}
+		[diagnostics appendFormat:@" | rootAlbum fields:"];
+		for (RptqQueryField *field in rootAlbum.hasQueryFields) {
+			[diagnostics appendFormat:@" %@", field.databaseSchemaField.name ?: @"(nil)"];
+		}
+		[diagnostics appendFormat:@" | rootArtist fields:"];
+		for (RptqQueryField *field in rootArtist.hasQueryFields) {
+			[diagnostics appendFormat:@" %@", field.databaseSchemaField.name ?: @"(nil)"];
+		}
+		printf("LIVE composition FAILED: expected Album/Artist fields are missing:%s\n", diagnostics.UTF8String);
+		return 1;
+	}
+	[qvc connectQueryField:albumKey toQueryField:artistKey];
+	albumTitle.outputKey = @"album_title";
+	albumTitle.outputIndex = 0;
+	artistName.outputKey = @"artist_name";
+	artistName.outputIndex = 1;
+	[composition notifyDocumentMutated];
+
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+	MADMacDesignerViewController *designer = wc.designerViewController;
+	[designer reloadFromDocument];
+	RptqDocumentSection *detail = nil;
+	for (RptqDocumentSection *section in [composition orderedSections]) {
+		if ((MADDocumentSectionType)section.type == MADDocumentSectionTypeBody) { detail = section; break; }
+	}
+	if (detail != nil) {
+		RptqDocumentElementLabel *label = [designer addStaticLabelInSection:detail atPoint:NSMakePoint(12.0, 6.0)];
+		label.text = @"Album / Artist";
+		[designer addDataField:albumTitle inSection:detail atPoint:NSMakePoint(12.0, 32.0)];
+		[designer addDataField:artistName inSection:detail atPoint:NSMakePoint(12.0, 56.0)];
+		[composition notifyDocumentMutated];
+	}
+
+	[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+	[NSApp activateIgnoringOtherApps:YES];
+	[wc.window makeKeyAndOrderFront:nil];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+	MADSmokeWriteWindowSnapshots(wc.window, directory, @"Composition-Result-Designer");
+
+	MADMacViewerViewController *viewer = wc.viewerViewController;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[viewer refreshReportAction:nil];
+	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:90.0];
+	while (!composition.headlessDocument.refreshed && viewer.lastRefreshError == nil && deadline.timeIntervalSinceNow > 0) {
+		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+								 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.05]];
+	}
+	if (!composition.headlessDocument.refreshed || viewer.lastRefreshError != nil) {
+		printf("LIVE composition FAILED refreshing: %s\n", viewer.lastRefreshError.description.UTF8String ?: "not refreshed");
+		return 1;
+	}
+	NSUInteger resultRows = [composition.headlessDocument.dataTable numberOfRows];
+	[viewer reloadPreview];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+	MADSmokeWriteWindowSnapshots(wc.window, directory, @"Composition-Result-Viewer");
+
+	// Album: a source with its own layout.
+	composition.selectedQuery = albumChild;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+	MADSmokeWriteWindowSnapshots(wc.window, directory, @"Composition-Album-Designer");
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+	MADSmokeWriteWindowSnapshots(wc.window, directory, @"Composition-Album-Viewer");
+	BOOL albumGrid = viewer.isShowingRowGrid;
+	NSInteger albumRows = viewer.rowGridView.numberOfRows;
+
+	// Artist: the layout-less source -> Designer empty-state, Viewer row grid.
+	composition.selectedQuery = artistChild;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+	MADSmokeWriteWindowSnapshots(wc.window, directory, @"Composition-Artist-Designer");
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+	MADSmokeWriteWindowSnapshots(wc.window, directory, @"Composition-Artist-Viewer");
+	BOOL artistGrid = viewer.isShowingRowGrid;
+	NSInteger artistRows = viewer.rowGridView.numberOfRows;
+
+	// Result again.
+	composition.selectedQuery = root;
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabDesigner];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.3]];
+	MADSmokeWriteWindowSnapshots(wc.window, directory, @"Composition-Result-Again-Designer");
+	[wc switchToWorkspaceTab:MADMacWorkspaceTabViewer];
+	[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+	MADSmokeWriteWindowSnapshots(wc.window, directory, @"Composition-Result-Again-Viewer");
+	BOOL resultGrid = viewer.isShowingRowGrid;
+
+	Class<MADReportExporting> pdfClass = [MADReportExporterRegistry exporterClassForFormat:@"pdf"];
+	id<MADReportExporting> pdfExporter = [[(Class)pdfClass alloc] init];
+	NSURL *pdfURL = [NSURL fileURLWithPath:[directory stringByAppendingPathComponent:@"Composition-Postgres-AlbumArtist.pdf"]];
+	BOOL pdfOK = [pdfExporter exportDocument:composition.headlessDocument
+									   toURL:pdfURL
+									 options:MADReportExportOptionsNone
+									   error:&error];
+	[composition notifyDocumentMutated];
+	BOOL saved = [composition.headlessDocument writeToURL:compositionURL reproducible:NO error:&error];
+	[wc.window orderOut:nil];
+
+	printf("LIVE composition: mad=%s pdf=%s saved=%d resultRows=%lu "
+		   "albumGrid=%d albumRows=%ld artistGrid=%d artistRows=%ld resultGrid=%d sources=%lu\n",
+		   compositionPath.UTF8String,
+		   pdfOK ? pdfURL.path.UTF8String : "<failed>",
+		   saved,
+		   (unsigned long)resultRows,
+		   albumGrid, (long)albumRows,
+		   artistGrid, (long)artistRows,
+		   resultGrid,
+		   (unsigned long)[composition allQueries].count - 1);
+	return (saved && pdfOK && artistGrid && !albumGrid && !resultGrid) ? 0 : 1;
+}
+
+static int MADSmokeWriteLiveReports(NSString *directory) {
+	NSFileManager *fm = [NSFileManager defaultManager];
+	[fm createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:NULL];
+
+	MADDatabaseConnection *mysql = [[MADDatabaseConnectionMySql alloc] initWithHost:@"127.0.0.1"
+																		   database:@"employees"
+																			andPort:13306];
+	MADDatabaseConnection *postgres = [[MADDatabaseConnectionPostgres alloc] initWithHost:@"127.0.0.1"
+																				 database:@"chinook"
+																				  andPort:5432];
+	MADDatabaseConnection *sqlServer = [[MADDatabaseConnectionSQLServer alloc] initWithHost:@"127.0.0.1"
+																					 server:@"127.0.0.1"
+																				   database:@"AdventureWorksLT2022"
+																					andPort:1433];
+	MADCredential *mysqlCredential = [[MADCredential alloc] initWithUsername:@"root" andPassword:@"root"];
+	MADCredential *postgresCredential = [[MADCredential alloc] initWithUsername:@"mad" andPassword:@"mad_test_pw"];
+	MADCredential *sqlServerCredential = [[MADCredential alloc] initWithUsername:@"sa" andPassword:@"Root1@Root2"];
+
+	NSString *mysqlError = nil, *postgresError = nil, *sqlServerError = nil;
+	BOOL mysqlOK = MADSmokeWriteLiveReport(@"MySQL-employees", @"employees", @"first_name",
+										   mysql, mysqlCredential, directory, &mysqlError);
+	BOOL postgresOK = MADSmokeWriteLiveReport(@"PostgreSQL-chinook", @"Album", @"Title",
+											  postgres, postgresCredential, directory, &postgresError);
+	BOOL sqlServerOK = MADSmokeWriteLiveReport(@"SQLServer-AdventureWorksLT", @"Customer", @"CompanyName",
+											   sqlServer, sqlServerCredential, directory, &sqlServerError);
+	if (!mysqlOK) printf("LIVE MySQL FAILED: %s\n", mysqlError.UTF8String ?: "?");
+	if (!postgresOK) printf("LIVE PostgreSQL FAILED: %s\n", postgresError.UTF8String ?: "?");
+	if (!sqlServerOK) printf("LIVE SQL Server FAILED: %s\n", sqlServerError.UTF8String ?: "?");
+	printf("LIVE SUMMARY: mysql=%d postgres=%d sqlserver=%d directory=%s\n",
+		   mysqlOK, postgresOK, sqlServerOK, directory.UTF8String);
+	return (mysqlOK && postgresOK && sqlServerOK) ? 0 : 1;
+}
+
 int main(int argc, const char * argv[]) {
 	sRetainedPanels = [[NSMutableArray alloc] init];
 	@autoreleasepool {
@@ -641,6 +1128,23 @@ int main(int argc, const char * argv[]) {
 		if (argc >= 3 && strcmp(argv[1], "--write-node-screenshots") == 0) {
 			return MADSmokeWriteNodeScreenshots([NSString stringWithUTF8String:argv[2]]);
 		}
+		if (argc >= 2 && strcmp(argv[1], "--write-live-reports") == 0) {
+			NSString *liveDirectory = argc >= 3
+				? [NSString stringWithUTF8String:argv[2]]
+				: [NSHomeDirectory() stringByAppendingPathComponent:@"MAD-TestReports"];
+			return MADSmokeWriteLiveReports(liveDirectory);
+		}
+		if (argc >= 2 && strcmp(argv[1], "--write-live-composition") == 0) {
+			NSString *compositionDirectory = argc >= 3
+				? [NSString stringWithUTF8String:argv[2]]
+				: [NSHomeDirectory() stringByAppendingPathComponent:@"MAD-TestReports"];
+			return MADSmokeWriteLiveComposition(compositionDirectory);
+		}
+		// The app installs this controller in -applicationWillFinishLaunching; the smoke
+		// path opens documents before that, so install it first (a document opened
+		// earlier would otherwise create the base NSDocumentController).
+		(void)[[MADMacDocumentController alloc] init];
+
 		if (argc < 2) {
 			fprintf(stderr, "Usage: mad-mac-smoke-test <path-to-MAD Designer.app>\n");
 			return 1;
@@ -675,6 +1179,86 @@ int main(int argc, const char * argv[]) {
 		NSURL *installedChinook = [supportDir URLByAppendingPathComponent:@"chinook.sqlite3"];
 		[fm removeItemAtURL:installedChinook error:NULL];
 		[fm copyItemAtURL:[NSURL fileURLWithPath:sampleChinookPath] toURL:installedChinook error:NULL];
+
+		// 0. The app's bundled London.mad sample keeps a Standard Report's field list.
+		// Its single query is the layout root but is a leaf: it carries no output keys,
+		// so a root/leaf misclassification empties the Designer's field list.
+		{
+			// The bundled London sample is a legacy store: the converter finds MAD.momd in
+			// this process's bundle, which for the bare smoke binary is its own directory.
+			// Copy the app bundle's compiled model there so the real conversion path runs.
+			NSString *modelSource = [appPath stringByAppendingPathComponent:@"Contents/Resources/MAD.momd"];
+			NSString *modelDirectory = [[NSBundle mainBundle] resourcePath] ?: [appPath stringByDeletingLastPathComponent];
+			NSString *modelDestination = [modelDirectory stringByAppendingPathComponent:@"MAD.momd"];
+			if ([fm fileExistsAtPath:modelSource] && ![fm fileExistsAtPath:modelDestination]) {
+				[fm copyItemAtPath:modelSource toPath:modelDestination error:NULL];
+			}
+
+			NSString *bundledLondonPath = [repoRoot stringByAppendingPathComponent:
+				@"MADDesigner/Resources/Assets/Samples.xcassets/Reports/London.dataset/London.mad"];
+			NSError *bundledLondonError = nil;
+			MADMacDocument *bundledLondon = [[MADMacDocument alloc] initWithContentsOfURL:[NSURL fileURLWithPath:bundledLondonPath]
+																				  ofType:@"com.thomason.mad"
+																				   error:&bundledLondonError];
+			if (bundledLondon == nil) {
+				fprintf(stderr, "FAIL: Could not open bundled London.mad: %s\n", bundledLondonError.localizedDescription.UTF8String);
+				return 290;
+			}
+			// A standalone Designer keeps NSDocumentController out of this early check: the
+			// GUI launch section below asserts the app's own document controller is shared.
+			MADMacDesignerViewController *bundledLondonDesigner =
+				[[MADMacDesignerViewController alloc] initWithDocument:bundledLondon];
+			(void)bundledLondonDesigner.view;
+			[bundledLondonDesigner reloadFromDocument];
+
+			RptqQuery *bundledQuery = bundledLondon.selectedQuery;
+			NSUInteger bundledTotalFields = 0;
+			NSMutableString *bundledTables = [[NSMutableString alloc] init];
+			for (RptqQueryTable *table in bundledQuery.hasQueryTables) {
+				bundledTotalFields += table.hasQueryFields.count;
+				[bundledTables appendFormat:@" %@(alias=%@,queryAlias=%@)",
+					table.databaseSchemaTable.name, table.alias ?: @"nil", [table queryAlias]];
+			}
+			NSUInteger bundledSchemaTables = bundledQuery.inDatabase.hasTables.count;
+			NSUInteger bundledSchemaFields = 0;
+			for (RptqDatabaseSchemaTable *schemaTable in bundledQuery.inDatabase.hasTables) {
+				bundledSchemaFields += schemaTable.hasFields.count;
+			}
+			NSString *bundledDocumentType = bundledLondon.isComposed
+				? @"Composition Report"
+				: @"Standard Report";
+			if (bundledLondon.isComposed ||
+				bundledLondonDesigner.displayedQueryFields.count == 0 ||
+				![bundledLondonDesigner.fieldsHeaderLabel.stringValue containsString:@"QUERY FIELDS"] ||
+				bundledLondonDesigner.queryFieldsTableView.numberOfRows <= 0) {
+				fprintf(stderr,
+					"FAIL: Bundled London.mad field list: isComposed=%d selected='%s' showsColumns=%d "
+					"schemaTables=%lu schemaFields=%lu queryTables=%lu totalQueryFields=%lu "
+					"caption='%s' displayed=%lu tableRows=%ld search='%s' "
+					"documentType='%s' tables:%s\n",
+					bundledLondon.isComposed,
+					bundledQuery.name.UTF8String ?: "",
+					[bundledLondon queryShowsReportColumns:bundledQuery],
+					(unsigned long)bundledSchemaTables,
+					(unsigned long)bundledSchemaFields,
+					(unsigned long)bundledQuery.hasQueryTables.count,
+					(unsigned long)bundledTotalFields,
+					bundledLondonDesigner.fieldsHeaderLabel.stringValue.UTF8String ?: "",
+					(unsigned long)bundledLondonDesigner.displayedQueryFields.count,
+					(long)bundledLondonDesigner.queryFieldsTableView.numberOfRows,
+					bundledLondonDesigner.queryFieldsSearchField.stringValue.UTF8String ?: "",
+					bundledDocumentType.UTF8String ?: "",
+					bundledTables.UTF8String ?: "");
+				return 290;
+			}
+			printf("PASS: Bundled London.mad Standard Report field list (%lu query fields across %lu query tables; %lu schema tables / %lu schema fields; caption '%s', table rows %ld)\n",
+				   (unsigned long)bundledTotalFields,
+				   (unsigned long)bundledQuery.hasQueryTables.count,
+				   (unsigned long)bundledSchemaTables,
+				   (unsigned long)bundledSchemaFields,
+				   bundledLondonDesigner.fieldsHeaderLabel.stringValue.UTF8String ?: "",
+				   (long)bundledLondonDesigner.queryFieldsTableView.numberOfRows);
+		}
 
 		// 1. Open and refresh London.mad, export all formats
 		NSError *err = nil;
@@ -2659,6 +3243,9 @@ int main(int argc, const char * argv[]) {
 				return 259;
 			}
 
+			// A filter typed for one node must not blank the next node's field list.
+			nodeDVC.queryFieldsSearchField.stringValue = @"nomatch";
+
 			// A source with no elements (invoices, untouched until now) is a row grid.
 			NSInteger invoicesIndex = pickerIndexForQuery(nodeInvoices);
 			if (invoicesIndex < 0) {
@@ -2674,6 +3261,13 @@ int main(int argc, const char * argv[]) {
 			if (nodeViewer.pdfView.document != nil) {
 				fprintf(stderr, "FAIL: The previous node's PDF was not cleared when a source was selected\n");
 				return 262;
+			}
+			if (nodeDVC.queryFieldsSearchField.stringValue.length != 0 ||
+				nodeDVC.displayedQueryFields.count == 0) {
+				fprintf(stderr, "FAIL: Changing nodes did not clear the field-list filter (search='%s', fields=%lu)\n",
+						nodeDVC.queryFieldsSearchField.stringValue.UTF8String ?: "",
+						(unsigned long)nodeDVC.displayedQueryFields.count);
+				return 291;
 			}
 			// The grid cells resolve against the node result's row ids, not blanks.
 			NSString *gridFirstValue = [nodeViewer gridValueAtRow:0 columnIndex:0];
@@ -2854,6 +3448,12 @@ int main(int argc, const char * argv[]) {
 			[standardViewer refreshReportAction:nil];
 			NSDate *standardDeadline = [NSDate dateWithTimeIntervalSinceNow:20.0];
 			while ([standardDoc.headlessDocument.dataTable numberOfRows] != 1 &&
+				   standardViewer.lastRefreshError == nil && standardDeadline.timeIntervalSinceNow > 0) {
+				[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+										 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+			}
+			// Rows publish before the Viewer's refresh-completion render; wait for it.
+			while (standardViewer.pdfView.document.pageCount == 0 &&
 				   standardViewer.lastRefreshError == nil && standardDeadline.timeIntervalSinceNow > 0) {
 				[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
 										 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
