@@ -50,8 +50,10 @@ static NSString *MADTipDefaultsKey(NSString *identifier) {
 		_textLabel.accessibilityLabel = text;
 		_textLabel.translatesAutoresizingMaskIntoConstraints = NO;
 
-		_dismissButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"xmark.circle.fill"
-															accessibilityDescription:NSLocalizedString(@"Dismiss Tip", @"Accessibility description for the tip's close button.")]
+		NSImage *closeImage = [NSImage imageWithSystemSymbolName:@"xmark.circle.fill"
+										 accessibilityDescription:NSLocalizedString(@"Dismiss Tip", @"Accessibility description for the tip's close button.")];
+		if (closeImage == nil) closeImage = [[NSImage alloc] initWithSize:NSMakeSize(10.0, 10.0)];
+		_dismissButton = [NSButton buttonWithImage:closeImage
 											target:self
 											action:@selector(dismissTip:)];
 		_dismissButton.bordered = NO;

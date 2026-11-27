@@ -471,12 +471,13 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 
 - (void)noteRecentDocumentURL:(nullable NSURL *)url {
 	if (url == nil || !url.isFileURL) return;
-	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:url];
+	NSURL *recentURL = url;
+	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:recentURL];
 }
 
 /// Keeps the window title bar and its proxy icon in step with the document's file URL.
 - (void)updateWindowRepresentations {
-	NSURL *url = self.fileURL;
+	NSURL * _Nullable url = self.fileURL;
 	NSString *title = self.displayName;
 	for (NSWindowController *controller in self.windowControllers) {
 		NSWindow *window = controller.window;
@@ -511,7 +512,8 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	if ([newURL isEqual:oldURL]) {
 		return YES;
 	}
-	if ([[NSFileManager defaultManager] fileExistsAtPath:newURL.path]) {
+	NSString *destinationPath = newURL.path;
+	if (destinationPath.length > 0 && [[NSFileManager defaultManager] fileExistsAtPath:destinationPath]) {
 		if (outError != NULL) {
 			*outError = [NSError errorWithDomain:@"MADMacDocument"
 											code:14
@@ -531,7 +533,8 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 	// Write the current contents at the new location first; only then remove the old
 	// file, so a failed write leaves the document exactly where it was.
 	NSError *writeError = nil;
-	if (![self writeToURL:newURL ofType:self.fileType forSaveOperation:NSSaveOperation originalContentsURL:nil error:&writeError]) {
+	NSString *fileType = self.fileType ?: @"";
+	if (![self writeToURL:newURL ofType:fileType forSaveOperation:NSSaveOperation originalContentsURL:nil error:&writeError]) {
 		if (outError != NULL) *outError = writeError;
 		return NO;
 	}
@@ -735,14 +738,17 @@ originalContentsURL:(NSURL *) __unused absoluteOriginalContentsURL
 
 	RptqDatabaseCredentals *credRow = self.rptqDatabase.ownedByUser;
 	NSMutableArray<NSString *> *candidateKeys = [[NSMutableArray alloc] init];
-	if (conn.connectionString.length > 0) {
-		[candidateKeys addObject:conn.connectionString];
+	NSString *connectionString = conn.connectionString;
+	if (connectionString.length > 0) {
+		[candidateKeys addObject:connectionString];
 	}
-	if (credRow.key.length > 0 && ![candidateKeys containsObject:credRow.key]) {
-		[candidateKeys addObject:credRow.key];
+	NSString *credentialKey = credRow.key;
+	if (credentialKey.length > 0 && ![candidateKeys containsObject:credentialKey]) {
+		[candidateKeys addObject:credentialKey];
 	}
-	if (conn.identifier.length > 0 && ![candidateKeys containsObject:conn.identifier]) {
-		[candidateKeys addObject:conn.identifier];
+	NSString *connectionIdentifier = conn.identifier;
+	if (connectionIdentifier.length > 0 && ![candidateKeys containsObject:connectionIdentifier]) {
+		[candidateKeys addObject:connectionIdentifier];
 	}
 
 	for (NSString *key in candidateKeys) {

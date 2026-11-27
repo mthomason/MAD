@@ -1347,8 +1347,10 @@ static NSString *ShortBadgeTitleForLinkType(MADLinkType type) {
 										   items:@[outputs, filters, groups, [NSMenuItem separatorItem], rename, arrange]
 										 toolTip:NSLocalizedString(@"Actions for the selected query: outputs, filters, groupings, name, and layout.", @"Tooltip for the query actions menu.")];
 
-	_connectionButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
-															accessibilityDescription:NSLocalizedString(@"Database Connection", @"Accessibility description for the connection button icon.")]
+	NSImage *connectionImage = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2"
+										  accessibilityDescription:NSLocalizedString(@"Database Connection", @"Accessibility description for the connection button icon.")];
+	if (connectionImage == nil) connectionImage = [[NSImage alloc] initWithSize:NSMakeSize(16.0, 16.0)];
+	_connectionButton = [NSButton buttonWithImage:connectionImage
 										   target:self
 										   action:@selector(editDatabaseConnectionAction:)];
 	_connectionButton.bezelStyle = NSBezelStyleTexturedRounded;

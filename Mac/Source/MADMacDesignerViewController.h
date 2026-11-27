@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	MADMacPaletteElementKindLineRule = 6
 };
 
-@interface MADMacDesignerViewController : NSViewController
+@interface MADMacDesignerViewController : NSViewController <NSMenuItemValidation>
 
 @property (nonatomic, weak, readonly, nullable) MADMacDocument *madDocument;
 @property (nonatomic, strong, readonly) MADMacDesignerCanvasView *canvasView;

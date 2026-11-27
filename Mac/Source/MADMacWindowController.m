@@ -215,9 +215,9 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 		popup.lastItem.representedObject = query;
 	}
 	RptqQuery *selected = doc.selectedQuery;
-	for (NSInteger i = 0; i < popup.numberOfItems; i++) {
+	for (NSUInteger i = 0; i < popup.numberOfItems; i++) {
 		if (popup.itemArray[i].representedObject == selected) {
-			[popup selectItemAtIndex:i];
+			[popup selectItemAtIndex:(NSInteger)i];
 			break;
 		}
 	}
@@ -292,8 +292,9 @@ static NSToolbarItemIdentifier const kToolbarItemNodePicker = @"MADToolbarNodePi
 		}
 	};
 
-	if (self.window != nil && self.window.isVisible) {
-		[self.window beginSheet:connWC.window completionHandler:^(NSModalResponse __unused returnCode) {
+	NSWindow *sheetWindow = connWC.window;
+	if (self.window != nil && self.window.isVisible && sheetWindow != nil) {
+		[self.window beginSheet:sheetWindow completionHandler:^(NSModalResponse __unused returnCode) {
 			weakSelf.activeConnectionSheetController = nil;
 		}];
 	}

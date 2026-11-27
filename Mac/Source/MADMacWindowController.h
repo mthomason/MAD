@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, MADMacWorkspaceTab) {
 	MADMacWorkspaceTabViewer = 2,
 };
 
-@interface MADMacWindowController : NSWindowController <NSToolbarDelegate>
+@interface MADMacWindowController : NSWindowController <NSToolbarDelegate, NSMenuItemValidation>
 
 @property (nonatomic, weak, readonly, nullable) MADMacDocument *madDocument;
 @property (nonatomic, strong, readonly) MADMacQueryViewController *queryViewController;

@@ -24,6 +24,13 @@
 static const CGFloat kViewerTopToolbarHeight = 44.0;
 static const CGFloat kViewerBottomStatusBarHeight = 34.0;
 
+/// An SF Symbol image, or an invisible placeholder so the control keeps its geometry if
+/// the symbol is unavailable.
+static NSImage *MADViewerSymbolImage(NSString *name, NSString * _Nullable description) {
+	NSImage *image = [NSImage imageWithSystemSymbolName:name accessibilityDescription:description];
+	return image ?: [[NSImage alloc] initWithSize:NSMakeSize(14.0, 14.0)];
+}
+
 @interface MADMacViewerViewController () <NSTableViewDataSource, NSTableViewDelegate>
 
 @property (nonatomic, strong, readwrite) NSButton *refreshButton;
@@ -121,8 +128,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 34.0;
 	_refreshButton = [NSButton buttonWithTitle:NSLocalizedString(@"Refresh", @"Viewer button that re-runs the query and re-renders the report.")
 										target:self
 										action:@selector(refreshReportAction:)];
-	_refreshButton.image = [NSImage imageWithSystemSymbolName:@"arrow.clockwise"
-									 accessibilityDescription:NSLocalizedString(@"Refresh Report", @"Accessibility description for the refresh button icon.")];
+	_refreshButton.image = MADViewerSymbolImage(@"arrow.clockwise", NSLocalizedString(@"Refresh Report", @"Accessibility description for the refresh button icon."));
 	_refreshButton.imagePosition = NSImageLeft;
 	_refreshButton.bezelStyle = NSBezelStyleRounded;
 	_refreshButton.bezelColor = [NSColor controlAccentColor];
@@ -132,8 +138,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 34.0;
 	_printButton = [NSButton buttonWithTitle:NSLocalizedString(@"Print…", @"Viewer button that prints the rendered report.")
 									  target:self
 									  action:@selector(printReportAction:)];
-	_printButton.image = [NSImage imageWithSystemSymbolName:@"printer"
-								   accessibilityDescription:NSLocalizedString(@"Print Report", @"Accessibility description for the print button icon.")];
+	_printButton.image = MADViewerSymbolImage(@"printer", NSLocalizedString(@"Print Report", @"Accessibility description for the print button icon."));
 	_printButton.imagePosition = NSImageLeft;
 	_printButton.bezelStyle = NSBezelStyleRounded;
 	_printButton.toolTip = NSLocalizedString(@"Print the rendered report (⌘P).", @"Tooltip for the viewer print button.");
@@ -142,15 +147,13 @@ static const CGFloat kViewerBottomStatusBarHeight = 34.0;
 	_exportButton = [NSButton buttonWithTitle:NSLocalizedString(@"Export…", @"Viewer button that exports the rendered report.")
 									   target:self
 									   action:@selector(exportReportAction:)];
-	_exportButton.image = [NSImage imageWithSystemSymbolName:@"square.and.arrow.up"
-									accessibilityDescription:NSLocalizedString(@"Export Report", @"Accessibility description for the export button icon.")];
+	_exportButton.image = MADViewerSymbolImage(@"square.and.arrow.up", NSLocalizedString(@"Export Report", @"Accessibility description for the export button icon."));
 	_exportButton.imagePosition = NSImageLeft;
 	_exportButton.bezelStyle = NSBezelStyleRounded;
 	_exportButton.toolTip = NSLocalizedString(@"Export the report as PDF, HTML, CSV, JSON, or text (⌘E).", @"Tooltip for the viewer export button.");
 	_exportButton.accessibilityLabel = NSLocalizedString(@"Export Report", @"Accessibility label for the viewer export button.");
 
-	_connectionButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"ellipsis.circle"
-														 accessibilityDescription:NSLocalizedString(@"More", @"Accessibility description for the viewer overflow button.")]
+	_connectionButton = [NSButton buttonWithImage:MADViewerSymbolImage(@"ellipsis.circle", NSLocalizedString(@"More", @"Accessibility description for the viewer overflow button."))
 										   target:self
 										   action:@selector(showOverflowMenu:)];
 	_connectionButton.bezelStyle = NSBezelStyleRounded;
@@ -236,8 +239,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 34.0;
 	_statusLabel.lineBreakMode = NSLineBreakByTruncatingTail;
 	_statusLabel.accessibilityLabel = NSLocalizedString(@"Report Status", @"Accessibility label for the viewer status line.");
 
-	_zoomOutButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"minus.magnifyingglass"
-														 accessibilityDescription:NSLocalizedString(@"Zoom Out", @"Accessibility description for the zoom-out icon.")]
+	_zoomOutButton = [NSButton buttonWithImage:MADViewerSymbolImage(@"minus.magnifyingglass", NSLocalizedString(@"Zoom Out", @"Accessibility description for the zoom-out icon."))
 										target:self
 										action:@selector(zoomOutAction:)];
 	_zoomOutButton.bezelStyle = NSBezelStyleRounded;
@@ -254,8 +256,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 34.0;
 	_zoomLabelButton.toolTip = NSLocalizedString(@"Reset Zoom to 100% (Actual Page Size)", @"Tooltip for the zoom percentage button.");
 	_zoomLabelButton.accessibilityLabel = NSLocalizedString(@"Reset Zoom", @"Accessibility label for the zoom percentage button.");
 
-	_zoomInButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"plus.magnifyingglass"
-														accessibilityDescription:NSLocalizedString(@"Zoom In", @"Accessibility description for the zoom-in icon.")]
+	_zoomInButton = [NSButton buttonWithImage:MADViewerSymbolImage(@"plus.magnifyingglass", NSLocalizedString(@"Zoom In", @"Accessibility description for the zoom-in icon."))
 									   target:self
 									   action:@selector(zoomInAction:)];
 	_zoomInButton.bezelStyle = NSBezelStyleRounded;
@@ -263,8 +264,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 34.0;
 	_zoomInButton.toolTip = NSLocalizedString(@"Zoom In", @"Tooltip for the zoom-in button.");
 	_zoomInButton.accessibilityLabel = NSLocalizedString(@"Zoom In", @"Accessibility label for the zoom-in button.");
 
-	_prevPageButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"chevron.left"
-														  accessibilityDescription:NSLocalizedString(@"Previous Page", @"Accessibility description for the previous-page icon.")]
+	_prevPageButton = [NSButton buttonWithImage:MADViewerSymbolImage(@"chevron.left", NSLocalizedString(@"Previous Page", @"Accessibility description for the previous-page icon."))
 										 target:self
 										 action:@selector(previousPageAction:)];
 	_prevPageButton.bezelStyle = NSBezelStyleRounded;
@@ -278,8 +278,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 34.0;
 	_pageNumberLabel.alignment = NSTextAlignmentCenter;
 	_pageNumberLabel.accessibilityLabel = NSLocalizedString(@"Page Number", @"Accessibility label for the viewer page-number label.");
 
-	_nextPageButton = [NSButton buttonWithImage:[NSImage imageWithSystemSymbolName:@"chevron.right"
-														  accessibilityDescription:NSLocalizedString(@"Next Page", @"Accessibility description for the next-page icon.")]
+	_nextPageButton = [NSButton buttonWithImage:MADViewerSymbolImage(@"chevron.right", NSLocalizedString(@"Next Page", @"Accessibility description for the next-page icon."))
 										 target:self
 										 action:@selector(nextPageAction:)];
 	_nextPageButton.bezelStyle = NSBezelStyleRounded;
@@ -531,7 +530,7 @@ static const CGFloat kViewerBottomStatusBarHeight = 34.0;
 	connection.target = self;
 	connection.toolTip = NSLocalizedString(@"Edit the database connection settings.", @"Tooltip for the viewer connection menu item.");
 	if (@available(macOS 11.0, *)) {
-		connection.image = [NSImage imageWithSystemSymbolName:@"cylinder.split.1x2" accessibilityDescription:nil];
+		connection.image = MADViewerSymbolImage(@"cylinder.split.1x2", nil);
 	}
 	[menu addItem:connection];
 	[menu addItem:[NSMenuItem separatorItem]];

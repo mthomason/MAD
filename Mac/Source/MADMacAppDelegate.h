@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MADMacAppDelegate : NSObject <NSApplicationDelegate>
+@interface MADMacAppDelegate : NSObject <NSApplicationDelegate, NSMenuItemValidation>
 
 @property (nonatomic, strong, readonly) MADMacAboutWindowController *aboutWindowController;
 

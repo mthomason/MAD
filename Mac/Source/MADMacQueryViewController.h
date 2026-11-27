@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, MADMacQueryWorkspaceMode) {
 	MADMacQueryWorkspaceModeSQL = 1,
 };
 
-@interface MADMacQueryViewController : NSViewController
+@interface MADMacQueryViewController : NSViewController <NSMenuItemValidation>
 
 @property (nonatomic, weak, nullable) MADMacDocument *document;
 @property (nonatomic, assign, readonly) MADMacQueryWorkspaceMode workspaceMode;

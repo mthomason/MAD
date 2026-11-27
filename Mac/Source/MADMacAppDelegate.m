@@ -137,13 +137,13 @@ static NSMenuItem *MADAddMenuItem(NSMenu *menu, NSString *title, SEL action, NSS
 	NSMenuItem *editMenuItem = [[NSMenuItem alloc] init];
 	[menubar addItem:editMenuItem];
 	NSMenu *editMenu = [[NSMenu alloc] initWithTitle:NSLocalizedString(@"Edit", @"Edit menu title.")];
-	MADAddMenuItem(editMenu, NSLocalizedString(@"Undo", @"Edit menu item that undoes the last change."), @selector(undo:), @"z", nil);
-	MADAddMenuItem(editMenu, NSLocalizedString(@"Redo", @"Edit menu item that redoes the last undone change."), @selector(redo:), @"Z", nil);
+	MADAddMenuItem(editMenu, NSLocalizedString(@"Undo", @"Edit menu item that undoes the last change."), NSSelectorFromString(@"undo:"), @"z", nil);
+	MADAddMenuItem(editMenu, NSLocalizedString(@"Redo", @"Edit menu item that redoes the last undone change."), NSSelectorFromString(@"redo:"), @"Z", nil);
 	[editMenu addItem:[NSMenuItem separatorItem]];
 	MADAddMenuItem(editMenu, NSLocalizedString(@"Cut", @"Edit menu item that cuts the selection."), @selector(cut:), @"x", nil);
 	MADAddMenuItem(editMenu, NSLocalizedString(@"Copy", @"Edit menu item that copies the selection."), @selector(copy:), @"c", nil);
 	MADAddMenuItem(editMenu, NSLocalizedString(@"Paste", @"Edit menu item that pastes the clipboard."), @selector(paste:), @"v", nil);
-	MADAddMenuItem(editMenu, NSLocalizedString(@"Duplicate", @"Edit menu item that duplicates the selection."), @selector(duplicate:), @"d", nil);
+	MADAddMenuItem(editMenu, NSLocalizedString(@"Duplicate", @"Edit menu item that duplicates the selection."), NSSelectorFromString(@"duplicate:"), @"d", nil);
 	MADAddMenuItem(editMenu, NSLocalizedString(@"Delete", @"Edit menu item that deletes the selection."), @selector(delete:), @"", nil);
 	MADAddMenuItem(editMenu, NSLocalizedString(@"Select All", @"Edit menu item that selects everything."), @selector(selectAll:), @"a", nil);
 	[editMenuItem setSubmenu:editMenu];
@@ -498,8 +498,10 @@ static NSMenuItem *MADAddMenuItem(NSMenu *menu, NSString *title, SEL action, NSS
 		return document != nil && !document.isComposed;
 	}
 	if (action == @selector(openRecentDocument:)) {
-		NSURL *url = menuItem.representedObject;
-		return [url isKindOfClass:[NSURL class]] && [[NSFileManager defaultManager] fileExistsAtPath:url.path];
+		id object = menuItem.representedObject;
+		if (![object isKindOfClass:[NSURL class]]) return NO;
+		NSString *path = ((NSURL *)object).path;
+		return path.length > 0 && [[NSFileManager defaultManager] fileExistsAtPath:path];
 	}
 	if (action == @selector(showQueryWorkspace:) ||
 		action == @selector(showDesignerWorkspace:) ||

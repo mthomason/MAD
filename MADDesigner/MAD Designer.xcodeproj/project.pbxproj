@@ -726,6 +726,7 @@
 		4C1C0C4A2EA1000000000004 /* NOTICE in Resources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000019 /* NOTICE */; };
 		4C9A00202EA0000000000002 /* MADMacConnectionWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000004 /* MADMacConnectionWindowController.m */; };
 		4C9A00202EA0000000000003 /* MADMacDesignerCanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000006 /* MADMacDesignerCanvasView.m */; };
+		4C9A00202EA0000000000012 /* MADMacTipBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA000000000001C /* MADMacTipBar.m */; };
 		4C9A00202EA0000000000004 /* MADMacDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000008 /* MADMacDesignerViewController.m */; };
 		4C9A00202EA0000000000005 /* MADMacDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA000000000000A /* MADMacDocument.m */; };
 		4C9A00202EA0000000000010 /* MADMacDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A00102EA0000000000015 /* MADMacDocumentController.m */; };
@@ -1575,6 +1576,8 @@
 		4C9A00102EA0000000000004 /* MADMacConnectionWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacConnectionWindowController.m; sourceTree = "<group>"; };
 		4C9A00102EA0000000000005 /* MADMacDesignerCanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacDesignerCanvasView.h; sourceTree = "<group>"; };
 		4C9A00102EA0000000000006 /* MADMacDesignerCanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacDesignerCanvasView.m; sourceTree = "<group>"; };
+		4C9A00102EA000000000001B /* MADMacTipBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacTipBar.h; sourceTree = "<group>"; };
+		4C9A00102EA000000000001C /* MADMacTipBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacTipBar.m; sourceTree = "<group>"; };
 		4C9A00102EA0000000000007 /* MADMacDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacDesignerViewController.h; sourceTree = "<group>"; };
 		4C9A00102EA0000000000008 /* MADMacDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MADMacDesignerViewController.m; sourceTree = "<group>"; };
 		4C9A00102EA0000000000009 /* MADMacDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MADMacDocument.h; sourceTree = "<group>"; };
@@ -2726,6 +2729,8 @@
 				4C9A00102EA0000000000015 /* MADMacDocumentController.m */,
 				4C9A00102EA000000000000B /* MADMacQueryViewController.h */,
 				4C9A00102EA000000000000C /* MADMacQueryViewController.m */,
+				4C9A00102EA000000000001B /* MADMacTipBar.h */,
+				4C9A00102EA000000000001C /* MADMacTipBar.m */,
 				4C9A00102EA000000000000D /* MADMacViewerViewController.h */,
 				4C9A00102EA000000000000E /* MADMacViewerViewController.m */,
 				4C9A00102EA000000000000F /* MADMacWindowController.h */,
@@ -3735,6 +3740,7 @@
 				4C9A00202EA0000000000005 /* MADMacDocument.m in Sources */,
 				4C9A00202EA0000000000010 /* MADMacDocumentController.m in Sources */,
 				4C9A00202EA0000000000006 /* MADMacQueryViewController.m in Sources */,
+				4C9A00202EA0000000000012 /* MADMacTipBar.m in Sources */,
 				4C9A00202EA0000000000007 /* MADMacViewerViewController.m in Sources */,
 				4C9A00202EA0000000000008 /* MADMacWindowController.m in Sources */,
 				4C9A00202EA0000000000009 /* main.m in Sources */,

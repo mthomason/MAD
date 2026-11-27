@@ -398,7 +398,8 @@ static __weak MADMacDocument *sElementClipboardDocument = nil;
 	_zoomPercentButton.toolTip = NSLocalizedString(@"Click to reset zoom to 100%.", @"Tooltip for the zoom percentage button.");
 	_zoomPercentButton.accessibilityLabel = NSLocalizedString(@"Reset Canvas Zoom", @"Accessibility label for the zoom percentage button.");
 
-	NSStackView *leftStack = [NSStackView stackViewWithViews:@[_insertPopUpButton]];
+	NSPopUpButton *insertButton = _insertPopUpButton;
+	NSStackView *leftStack = [NSStackView stackViewWithViews:@[insertButton]];
 	leftStack.orientation = NSUserInterfaceLayoutOrientationHorizontal;
 	leftStack.spacing = 8.0;
 	leftStack.alignment = NSLayoutAttributeCenterY;
@@ -2693,7 +2694,8 @@ static __weak MADMacDocument *sElementClipboardDocument = nil;
 }
 
 - (BOOL)canPasteElements {
-	return sElementClipboard.count > 0 && sElementClipboardDocument == self.madDocument && sElementClipboardDocument != nil;
+	MADMacDocument *clipboardDocument = sElementClipboardDocument;
+	return sElementClipboard.count > 0 && clipboardDocument != nil && clipboardDocument == self.madDocument;
 }
 
 - (void)pasteElementsAction:(__unused id)sender {
