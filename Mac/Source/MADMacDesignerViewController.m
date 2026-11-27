@@ -109,9 +109,10 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 @property (nonatomic, strong) NSTableView *sectionsTableView;
 @property (nonatomic, strong, readwrite) NSTextField *fieldsHeaderLabel;
 @property (nonatomic, strong) NSTextField *emptyLayoutHintLabel;
-@property (nonatomic, strong) NSSearchField *queryFieldsSearchField;
-@property (nonatomic, strong) NSTableView *queryFieldsTableView;
+@property (nonatomic, strong, readwrite) NSSearchField *queryFieldsSearchField;
+@property (nonatomic, strong, readwrite) NSTableView *queryFieldsTableView;
 @property (nonatomic, strong) NSArray<RptqQueryField *> *filteredQueryFields;
+@property (nonatomic, assign) int64_t loadedQueryIdentifier;
 
 // Center canvas controls
 @property (nonatomic, strong, readwrite) MADMacDesignerCanvasView *canvasView;
@@ -1224,6 +1225,8 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 	BOOL wasUpdating = _isUpdatingInspector;
 	_isUpdatingInspector = YES;
 	[_sectionsTableView reloadData];
+	// Element insertion/removal runs through here; keep the empty-layout hint current.
+	_emptyLayoutHintLabel.hidden = ([self selectedNodeElementCount] > 0);
 	RptqDocumentSection *sec = _canvasView.selectedSection;
 	NSArray<RptqDocumentSection *> *sections = [_canvasView orderedSections];
 	if (sec) {
@@ -1254,6 +1257,13 @@ typedef NS_ENUM(NSInteger, MADMacPaletteElementKind) {
 		? NSLocalizedString(@"REPORT COLUMNS (DRAG TO CANVAS)", @"Designer sidebar heading for a Result's or a composing node's report columns.")
 		: NSLocalizedString(@"QUERY FIELDS (DRAG TO CANVAS)", @"Designer sidebar heading for the query field list.");
 	_emptyLayoutHintLabel.hidden = ([self selectedNodeElementCount] > 0);
+
+	// A filter typed for one node must not blank the next node's field list.
+	int64_t queryIdentifier = doc.selectedQuery != nil ? doc.selectedQuery.identifier : 0;
+	if (queryIdentifier != self.loadedQueryIdentifier) {
+		self.loadedQueryIdentifier = queryIdentifier;
+		_queryFieldsSearchField.stringValue = @"";
+	}
 
 	[self rebuildQueryFieldAndScopePopups];
 	[self rebuildFilteredQueryFields];

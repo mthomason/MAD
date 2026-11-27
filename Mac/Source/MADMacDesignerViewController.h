@@ -46,6 +46,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// The query-field list currently shown for the selected node (the search filter applied).
 @property (nonatomic, copy, readonly) NSArray<RptqQueryField *> *displayedQueryFields;
 
+/// The visible query-field table (its row count is the filtered list's count).
+@property (nonatomic, strong, readonly) NSTableView *queryFieldsTableView;
+
+/// The field-list search field (a non-empty filter narrows the visible list).
+@property (nonatomic, strong, readonly) NSSearchField *queryFieldsSearchField;
+
 @property (nonatomic, assign, readonly) CGFloat leftSidebarWidth;
 @property (nonatomic, assign, readonly) CGFloat rightInspectorWidth;
 
