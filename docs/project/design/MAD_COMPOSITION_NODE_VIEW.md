@@ -173,6 +173,21 @@ leaves the document unchanged.
   is **not** node-scoped yet: `export?query=<non-root>&format=json-report` errors rather than
   writing the root's rows. Omitted `query` → the root. `engine-info` advertises `node-result`
   in its `capabilities`.
+- **`document-info`** adds `isComposing` to each query and, for a leaf with a source database,
+  a `connection` object: `{ "driver", "file" | "host"/"port"/"database"[/"server"],
+  "requiresCredentials", "usernameHint", "connectionString" }`. The hint is the non-secret
+  account name from the credential row's `domain`; the document never carries a password.
+- **`refresh`** gains optional `sourceCredentials`, an object keyed by the decimal query id
+  whose value is that source's `"user:password"`. The serve layer maps each query id to its
+  engine connection string and passes
+  `MADOperationRefreshComposed.credentialsByConnectionString`; the single `credentials`
+  member stays the fallback for any source the map omits, so a Standard Report is unchanged.
+  A composed refresh that fails on one source answers
+  `{ "ok": false, "error": { "code": 4, "message": "…", "source": { "name", "queryId",
+  "connectionString" } } }`.
+- **`apply-connection`** gains optional `query`: it edits only that source's persisted
+  connection and leaves its siblings untouched. Omitted `query` keeps the document-level
+  reconnect a Standard Report uses.
 
 ### 3.5 Windows UI follow-up
 

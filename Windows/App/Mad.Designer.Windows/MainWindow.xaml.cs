@@ -32,7 +32,9 @@ public partial class MainWindow : Window
             recentFiles: _recentFiles.Get(),
             saveAsPath: ShowSaveDocumentDialog,
             credentials: _credentials,
-            persistRecent: _recentFiles.Add);
+            persistRecent: _recentFiles.Add,
+            sourceCredentialPrompt: PromptForSourceCredential,
+            editSourceConnection: () => _ = OpenSourceConnectionWindowAsync());
         DataContext = _viewModel;
         _viewModel.Document.PropertyChanged += OnDocumentPropertyChanged;
         _viewModel.Document.Composition.PropertyChanged += OnCompositionPropertyChanged;
@@ -200,11 +202,63 @@ public partial class MainWindow : Window
                 if (window.ViewModel.Submitted && window.ViewModel.ResultSpec is ConnectionSpec spec)
                 {
                     await _viewModel.Document.ApplyConnectionAsync(spec);
+                    // The edit sheet's checkbox was previously ignored; honor it only
+                    // after the reconnect and refresh proved the credential works.
+                    if (!_viewModel.Document.HasError && window.ViewModel.SaveCredentials
+                        && spec.CredentialKey is string key)
+                    {
+                        _credentials.Save(key, spec.Username ?? "", spec.Password ?? "");
+                    }
                 }
             }
             else if (window.ViewModel.Created is OpenResult created && window.ViewModel.CreatePath is string path)
             {
                 await _viewModel.AdoptCreatedAsync(created, path);
+            }
+        }
+        catch (Exception exception)
+        {
+            _viewModel.Document.ReportFailure(exception.Message);
+        }
+    }
+
+    /// <summary>Prompts for one composition source's password.  Host, port, database and
+    /// the username hint are prefilled and the password is empty; the status line names
+    /// the source.  Answers null when the user cancels.</summary>
+    private Task<SourceCredentialResult?> PromptForSourceCredential(SourceCredentialPrompt prompt)
+    {
+        var window = new ConnectionWindow(_engine, _credentials, isEdit: true, prompt.Initial,
+            statusPrompt: prompt.Message, prefillStoredCredentials: false) { Owner = this };
+        window.ShowDialog();
+        if (!window.ViewModel.Submitted || window.ViewModel.ResultSpec is not ConnectionSpec spec)
+        {
+            return Task.FromResult<SourceCredentialResult?>(null);
+        }
+        return Task.FromResult<SourceCredentialResult?>(
+            new SourceCredentialResult(spec, window.ViewModel.SaveCredentials));
+    }
+
+    /// <summary>Per-source "Connection…": edits the selected source's connection only,
+    /// then reloads and refreshes through the per-source credential path.</summary>
+    private async Task OpenSourceConnectionWindowAsync()
+    {
+        QueryInfo? source = _viewModel.Document.SelectedSourceQuery;
+        if (source == null) return;
+
+        try
+        {
+            ConnectionSpec? initial = await _viewModel.Document.GetSourceConnectionAsync(source.Id);
+            if (initial == null) return;
+
+            string prompt = Localizer.Format("Document.SourceConnection.Prompt", source.Name);
+            var window = new ConnectionWindow(_engine, _credentials, isEdit: true, initial,
+                statusPrompt: prompt) { Owner = this };
+            window.ShowDialog();
+
+            if (window.ViewModel.Submitted && window.ViewModel.ResultSpec is ConnectionSpec spec)
+            {
+                await _viewModel.Document.ApplySourceConnectionAsync(
+                    source.Id, spec, window.ViewModel.SaveCredentials);
             }
         }
         catch (Exception exception)

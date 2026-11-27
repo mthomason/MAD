@@ -337,6 +337,11 @@
   <sys:String x:Key="Document.ImportFailed">Import failed.</sys:String>
   <sys:String x:Key="Document.SourceAdded">Added the source query.</sys:String>
   <sys:String x:Key="Document.SourceAddFailed">Could not add the source.</sys:String>
+  <sys:String x:Key="Document.SourceCredentials.Prompt">Geben Sie das Kennwort für die Quelle „{0}“ ein.</sys:String>
+  <sys:String x:Key="Document.RefreshCancelled">Aktualisierung abgebrochen.</sys:String>
+  <sys:String x:Key="Document.SourceConnection.Prompt">Verbindungseinstellungen für die Quelle „{0}“.</sys:String>
+  <sys:String x:Key="Document.SourceConnectionUpdated">Verbindung der Quelle „{0}“ aktualisiert.</sys:String>
+  <sys:String x:Key="Document.SourceConnectionFailed">Die Quellverbindung konnte nicht aktualisiert werden.</sys:String>
 
   <sys:String x:Key="Dialog.OpenMadFilter">MAD-Dokumente (*.mad)|*.mad|Alle Dateien (*.*)|*.*</sys:String>
   <sys:String x:Key="Dialog.SaveMadFilter">MAD-Dokumente (*.mad)|*.mad</sys:String>
@@ -422,4 +427,7 @@
   <sys:String x:Key="Composition.Role.Result">Ergebnis — der Bericht, den Sie gestalten und anzeigen.</sys:String>
   <sys:String x:Key="Composition.Role.Source">Quelle — diese Abfrage speist das Ergebnis.</sys:String>
   <sys:String x:Key="Composition.OneSource">Fügen Sie eine weitere Quelle zum Kombinieren hinzu.</sys:String>
+  <sys:String x:Key="Composition.EditConnection">Verbindung…</sys:String>
+  <sys:String x:Key="Composition.EditConnection.Tooltip">Datenbankverbindung der ausgewählten Quelle bearbeiten.</sys:String>
+  <sys:String x:Key="Composition.EditConnection.Name">Quellverbindung bearbeiten</sys:String>
 </ResourceDictionary>

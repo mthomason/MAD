@@ -16,9 +16,13 @@
 #import <MAD/MADOperationRefreshInitalizeMainDataTable.h>
 
 #import <MAD/MADConstants.h>
+#import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADOperationHoldsCredentialsProtocol.h>
+#import <MAD/RptqDatabase.h>
 #import <MAD/RptqDocument.h>
+#import <MAD/RptqDocument+Extras.h>
+#import <MAD/RptqQuery.h>
 
 #import <MADFoundation/MADOperation.h>
 #import <MADFoundation/MADOperationQueue.h>
@@ -113,6 +117,12 @@ static NSError *MADCLIDocumentError(NSString *message) {
 #pragma mark - Refresh
 
 - (BOOL)refreshWithCredentials:(MADCredential *)credentials error:(NSError **)error {
+	return [self refreshWithCredentials: credentials sourceCredentials: nil error: error];
+}
+
+- (BOOL)refreshWithCredentials:(MADCredential *)credentials
+			sourceCredentials:(NSDictionary<NSNumber *, MADCredential *> *)sourceCredentials
+						 error:(NSError **)error {
 
 	id <MADDocumentDataProtocol> document = self.document;
 	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
@@ -124,6 +134,10 @@ static NSError *MADCLIDocumentError(NSString *message) {
 	// thin adapter over the shared engine work.
 	if ([MADOperationRefresh documentUsesComposedRefresh: document]) {
 		MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+		// Each named source resolves its own credential by connection string; the
+		// single credential stays as the fallback for sources the map omits, so an
+		// older one-credential caller keeps working.
+		refresh.credentialsByConnectionString = [self credentialsByConnectionStringForSources: sourceCredentials];
 		if (credentials != nil) {
 			MADCLICredentialsOperation *holder = [[MADCLICredentialsOperation alloc] init];
 			holder.credentials = credentials;
@@ -182,6 +196,34 @@ static NSError *MADCLIDocumentError(NSString *message) {
 		return NO;
 	}
 	return YES;
+}
+
+/// Maps the query-id credentials a caller supplied to the connection strings the
+/// engine's composed refresh is keyed by.  A query the document does not contain, or
+/// one with no source database, is skipped: the engine reports the source that fails.
+- (NSDictionary<NSString *, MADCredential *> *)credentialsByConnectionStringForSources:
+		(NSDictionary<NSNumber *, MADCredential *> *)sourceCredentials {
+	if (sourceCredentials.count == 0) return @{};
+
+	id <MADDocumentDataProtocol> document = self.document;
+	NSURL *documentURL = [document respondsToSelector: @selector(fileURL)] ? [(id)document fileURL] : nil;
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+
+	NSMutableDictionary<NSString *, MADCredential *> *byConnectionString = [NSMutableDictionary dictionary];
+	for (RptqDatabase *database in model.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			MADCredential *credential = sourceCredentials[@(query.identifier)];
+			if (credential == nil) continue;
+			RptqDatabase *queryDatabase = query.inDatabase;
+			if (queryDatabase.ownedByUser == nil) continue;
+			NSObject <MADConnectionsPropertiesProtocol> *user =
+				(NSObject <MADConnectionsPropertiesProtocol> *)queryDatabase.ownedByUser;
+			MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: user documentURL: documentURL];
+			NSString *key = connection.connectionString;
+			if (key.length > 0) byConnectionString[key] = credential;
+		}
+	}
+	return byConnectionString;
 }
 
 @end

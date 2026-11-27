@@ -337,6 +337,11 @@
   <sys:String x:Key="Document.ImportFailed">Import failed.</sys:String>
   <sys:String x:Key="Document.SourceAdded">Added the source query.</sys:String>
   <sys:String x:Key="Document.SourceAddFailed">Could not add the source.</sys:String>
+  <sys:String x:Key="Document.SourceCredentials.Prompt">「{0}」ソースのパスワードを入力してください。</sys:String>
+  <sys:String x:Key="Document.RefreshCancelled">更新はキャンセルされました。</sys:String>
+  <sys:String x:Key="Document.SourceConnection.Prompt">「{0}」ソースの接続設定。</sys:String>
+  <sys:String x:Key="Document.SourceConnectionUpdated">「{0}」ソースの接続を更新しました。</sys:String>
+  <sys:String x:Key="Document.SourceConnectionFailed">ソースの接続を更新できませんでした。</sys:String>
 
   <sys:String x:Key="Dialog.OpenMadFilter">MAD ドキュメント (*.mad)|*.mad|すべてのファイル (*.*)|*.*</sys:String>
   <sys:String x:Key="Dialog.SaveMadFilter">MAD ドキュメント (*.mad)|*.mad</sys:String>
@@ -422,4 +427,7 @@
   <sys:String x:Key="Composition.Role.Result">結果 — デザインして表示するレポート。</sys:String>
   <sys:String x:Key="Composition.Role.Source">ソース — このクエリは結果にデータを渡します。</sys:String>
   <sys:String x:Key="Composition.OneSource">結合するソースをもう 1 つ追加してください。</sys:String>
+  <sys:String x:Key="Composition.EditConnection">接続…</sys:String>
+  <sys:String x:Key="Composition.EditConnection.Tooltip">選択したソースのデータベース接続を編集します。</sys:String>
+  <sys:String x:Key="Composition.EditConnection.Name">ソース接続の編集</sys:String>
 </ResourceDictionary>

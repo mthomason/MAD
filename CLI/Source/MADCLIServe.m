@@ -35,15 +35,18 @@
 #import "MADCLI.h"
 #import "MADCLIDocument.h"
 
+#import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADDocumentRenderProtocol.h>
 #import <MAD/MADHeadlessDocument.h>
+#import <MAD/MADOperationRefresh.h>
 #import <MAD/MADQueryFull.h>
 #import <MAD/MADReportExporting.h>
 #import <MAD/MADReportExporterRegistry.h>
 #import <MAD/MADReportExportSource.h>
 #import <MAD/RptqDocument.h>
 #import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseCredentals.h>
 #import <MAD/RptqDatabaseSchemaTable.h>
 #import <MAD/RptqDatabaseSchemaTable+Extras.h>
 #import <MAD/RptqDatabaseSchemaField+Extras.h>
@@ -285,6 +288,35 @@ static MADCredential *MADCLIServeCredential(NSString *credentials, NSError **err
 	return [[MADCredential alloc]
 			initWithUsername: [credentials substringToIndex: colon.location]
 			andPassword: [credentials substringFromIndex: colon.location + 1]];
+}
+
+/// Parses `sourceCredentials`, an object keyed by a query id (as a decimal string)
+/// whose value is that source's `user:password`.  It is the per-source form of
+/// `refresh`; the single `credentials` member stays the fallback.  Answers nil with
+/// no error when the member is absent, and nil with a usage error when it is malformed.
+static NSDictionary<NSNumber *, MADCredential *> *MADCLIServeSourceCredentials(NSDictionary *params, NSError **error) {
+	id raw = params[@"sourceCredentials"];
+	if (raw == nil) return nil;
+	if (![raw isKindOfClass: [NSDictionary class]]) {
+		if (error) *error = MADCLIServeUsageError(@"sourceCredentials must be an object keyed by query id.");
+		return nil;
+	}
+	NSMutableDictionary<NSNumber *, MADCredential *> *credentials = [NSMutableDictionary dictionary];
+	for (id key in (NSDictionary *)raw) {
+		if (![key isKindOfClass: [NSString class]] || [(NSString *)key longLongValue] <= 0) {
+			if (error) *error = MADCLIServeUsageError(@"sourceCredentials keys must be decimal query ids.");
+			return nil;
+		}
+		id value = ((NSDictionary *)raw)[key];
+		if (![value isKindOfClass: [NSString class]]) {
+			if (error) *error = MADCLIServeUsageError(@"sourceCredentials values must be user:password strings.");
+			return nil;
+		}
+		MADCredential *credential = MADCLIServeCredential(value, error);
+		if (credential == nil) return nil;
+		credentials[@([(NSString *)key longLongValue])] = credential;
+	}
+	return credentials;
 }
 
 /// Maps the connection window's wire driver token to a MADDatabaseType.  "sqlserver"
@@ -658,7 +690,23 @@ static void MADCLIServeApplyConnection(NSDictionary *params, NSMutableDictionary
 	[database closeConnection: dbHandle];
 
 	id <MADDocumentDataProtocol> document = entry.document.document;
-	if ([document isKindOfClass: [MADHeadlessDocument class]]) {
+	// A composed source edits only its own database row; omitting `query` (a Standard
+	// Report) reconnects the document as before.
+	int64_t queryIdentifier = [params[@"query"] isKindOfClass: [NSNumber class]]
+		? [params[@"query"] longLongValue] : 0;
+	if (queryIdentifier > 0) {
+		if (![document isKindOfClass: [MADHeadlessDocument class]]) {
+			MADCLIServeWriteError(requestID, MADCLIExitUsage, @"query-scoped apply-connection requires a headless document.");
+			return;
+		}
+		NSError *applyError = nil;
+		if (![(MADHeadlessDocument *)document applyDatabaseConnection: connection
+												  forQueryIdentifier: queryIdentifier
+																error: &applyError]) {
+			MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(applyError));
+			return;
+		}
+	} else if ([document isKindOfClass: [MADHeadlessDocument class]]) {
 		[(MADHeadlessDocument *)document applyDatabaseConnection: connection];
 	} else {
 		[document updateDatabaseWithConnection: connection];
@@ -762,6 +810,33 @@ static void MADCLIServeQuery(NSDictionary *params, NSMutableDictionary <NSNumber
 	MADCLIServeWriteResult(requestID, @{ @"sql": MADCLIServeGeneratedSQLForQuery(document, MADCLIServeReportQuery(document)) });
 }
 
+/// A failed refresh, with the source that failed when the engine named one.  The
+/// engine puts the leaf query's name, identifier and connection string in the
+/// error's userInfo, which is what lets the WPF app prompt for that one source
+/// instead of guessing.
+static void MADCLIServeWriteRefreshError(id requestID, NSInteger code, NSError *error) {
+	NSMutableDictionary *errorObject = [NSMutableDictionary dictionary];
+	errorObject[@"code"] = @(code);
+	errorObject[@"message"] = MADCLIDescriptionForError(error) ?: @"error";
+
+	id name = error.userInfo[MADOperationRefreshSourceNameKey];
+	id queryIdentifier = error.userInfo[MADOperationRefreshSourceQueryIdentifierKey];
+	id connectionString = error.userInfo[MADOperationRefreshSourceConnectionStringKey];
+	if (name != nil || queryIdentifier != nil || connectionString != nil) {
+		NSMutableDictionary *source = [NSMutableDictionary dictionary];
+		if ([name isKindOfClass: [NSString class]]) source[@"name"] = name;
+		if ([queryIdentifier isKindOfClass: [NSNumber class]]) source[@"queryId"] = queryIdentifier;
+		if ([connectionString isKindOfClass: [NSString class]]) source[@"connectionString"] = connectionString;
+		errorObject[@"source"] = source;
+	}
+
+	NSMutableDictionary *response = [NSMutableDictionary dictionary];
+	response[@"id"] = requestID ?: [NSNull null];
+	response[@"ok"] = @NO;
+	response[@"error"] = errorObject;
+	MADCLIServeWrite(requestID, response);
+}
+
 static void MADCLIServeRefresh(NSDictionary *params, NSMutableDictionary <NSNumber *, MADCLIServeDocument *> *documents, id requestID) {
 	MADCLIServeDocument *entry = MADCLIServeLookup(params, documents, requestID);
 	if (entry == nil) return;
@@ -785,9 +860,15 @@ static void MADCLIServeRefresh(NSDictionary *params, NSMutableDictionary <NSNumb
 		}
 	}
 
+	NSDictionary<NSNumber *, MADCredential *> *sourceCredentials = MADCLIServeSourceCredentials(params, &error);
+	if (sourceCredentials == nil && error != nil) {
+		MADCLIServeWriteError(requestID, MADCLIExitUsage, MADCLIDescriptionForError(error));
+		return;
+	}
+
 	NSDate *started = [NSDate date];
-	if (![entry.document refreshWithCredentials: credentials error: &error]) {
-		MADCLIServeWriteError(requestID, MADCLIExitQueryFailed, MADCLIDescriptionForError(error));
+	if (![entry.document refreshWithCredentials: credentials sourceCredentials: sourceCredentials error: &error]) {
+		MADCLIServeWriteRefreshError(requestID, MADCLIExitQueryFailed, error);
 		return;
 	}
 	NSTimeInterval elapsed = -[started timeIntervalSinceNow];
@@ -1536,6 +1617,59 @@ static void MADCLIServeRemoveGroup(NSDictionary *params, NSMutableDictionary <NS
 
 #pragma mark - Composition authoring (Phase 6g)
 
+/// The source connection a query's persisted credential row describes, in the same
+/// wire shape `connection` uses, plus `requiresCredentials` and the stored username
+/// hint.  Answers nil for a query with no source database (a composing node), so a
+/// client prompts only for real leaves.
+static NSDictionary *MADCLIServeSourceConnectionDict(id <MADDocumentDataProtocol> document, RptqQuery *query) {
+	RptqDatabase *database = query.inDatabase;
+	RptqDatabaseCredentals *credRow = database.ownedByUser;
+	if (credRow == nil) return nil;
+
+	NSURL *documentURL = [document respondsToSelector: @selector(fileURL)] ? [(id)document fileURL] : nil;
+	MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: credRow documentURL: documentURL];
+	if (connection == nil) return nil;
+
+	MADDatabaseType type = connection.databaseType;
+	NSMutableDictionary *result = [NSMutableDictionary dictionary];
+	result[@"driver"] = MADCLIServeTokenForDatabaseType(type);
+	result[@"connectionString"] = connection.connectionString ?: @"";
+	result[@"requiresCredentials"] = @([connection requiresCredentials]);
+	if (credRow.domain.length > 0) result[@"usernameHint"] = credRow.domain;
+
+	if (type == MADDatabaseTypeSqlite3) {
+		if ([connection conformsToProtocol: @protocol(MADDatabaseConnectionsPropertiesURL)]) {
+			NSURL *databaseURL = ((id <MADDatabaseConnectionsPropertiesURL>)connection).databaseUrl;
+			result[@"file"] = databaseURL.path ?: @"";
+		}
+	} else if ([connection conformsToProtocol: @protocol(MADConnectionsPropertiesProtocol)]) {
+		id <MADConnectionsPropertiesProtocol> serverConnection = (id <MADConnectionsPropertiesProtocol>)connection;
+		result[@"host"] = serverConnection.host ?: @"";
+		result[@"port"] = @(serverConnection.port);
+		result[@"database"] = serverConnection.database ?: @"";
+		if (type == MADDatabaseTypeTDS) {
+			result[@"server"] = serverConnection.server ?: @"";
+		}
+	}
+	return result;
+}
+
+/// One query in document-info: its identity, whether it is the root or a composer,
+/// and, for a leaf, the source connection a client may need to configure or prompt
+/// for.  A Standard Report's single query carries its connection here too.
+static NSDictionary *MADCLIServeDocumentInfoQuery(id <MADDocumentDataProtocol> document,
+												  RptqQuery *query,
+												  BOOL isRoot) {
+	NSMutableDictionary *entry = [NSMutableDictionary dictionary];
+	entry[@"id"] = @(query.identifier);
+	entry[@"name"] = query.name ?: @"";
+	entry[@"isRoot"] = @(isRoot);
+	entry[@"isComposing"] = query.hasQueryTables.anyObject.upstreamQuery != nil ? @YES : @NO;
+	NSDictionary *connection = MADCLIServeSourceConnectionDict(document, query);
+	if (connection != nil) entry[@"connection"] = connection;
+	return entry;
+}
+
 /// The document's type and its queries, in authoring order (the composed root first,
 /// then each source).  A single-query document reports `composed == false` and one
 /// query; an empty document reports no queries.
@@ -1544,17 +1678,17 @@ static NSDictionary *MADCLIServeDocumentInfoDict(id <MADDocumentDataProtocol> do
 	RptqQuery *root = model.rootQuery;
 	NSMutableArray <NSDictionary *> *queries = [NSMutableArray array];
 	if (root != nil) {
-		[queries addObject: @{ @"id": @(root.identifier), @"name": root.name ?: @"", @"isRoot": @YES }];
+		[queries addObject: MADCLIServeDocumentInfoQuery(document, root, YES)];
 	}
 	for (RptqDatabase *database in model.hasDatabaseSchemas) {
 		for (RptqQuery *query in database.hasQueries) {
 			if (query == root) continue;
-			[queries addObject: @{ @"id": @(query.identifier), @"name": query.name ?: @"", @"isRoot": @NO }];
+			[queries addObject: MADCLIServeDocumentInfoQuery(document, query, NO)];
 		}
 	}
 	if (queries.count == 0) {
 		RptqQuery *single = model.defaultDatabase.defaultQuery;
-		if (single != nil) [queries addObject: @{ @"id": @(single.identifier), @"name": single.name ?: @"", @"isRoot": @NO }];
+		if (single != nil) [queries addObject: MADCLIServeDocumentInfoQuery(document, single, NO)];
 	}
 	return @{
 		@"composed": (root != nil ? @YES : @NO),

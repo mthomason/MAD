@@ -271,6 +271,15 @@
                                       DisplayMemberPath="Display"
                                       ToolTip="{infra:Loc Composition.SelectComponent.Tooltip}"
                                       AutomationProperties.Name="{infra:Loc Composition.SelectComponent.Name}" />
+                            <Button DockPanel.Dock="Left" Style="{StaticResource MAD.CommandButton}" Margin="12,0,0,0"
+                                    Command="{Binding EditSourceConnectionCommand}"
+                                    ToolTip="{infra:Loc Composition.EditConnection.Tooltip}"
+                                    AutomationProperties.Name="{infra:Loc Composition.EditConnection.Name}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE713;" Style="{StaticResource MAD.CommandIcon}" />
+                                    <TextBlock Text="{infra:Loc Composition.EditConnection}" Style="{StaticResource MAD.CommandLabel}" />
+                                </StackPanel>
+                            </Button>
                             <TextBlock Text="{Binding Document.SelectedQueryHint}" Style="{StaticResource MAD.SecondaryText}"
                                        VerticalAlignment="Center" Margin="12,0,0,0"
                                        TextTrimming="CharacterEllipsis" />

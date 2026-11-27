@@ -450,6 +450,111 @@ public sealed class MadEngineClientTests
 		}
 	}
 
+	/// <summary>A composition refresh carries one credential per source query, and a
+	/// source that fails is named in the error with its query id and connection string.
+	/// The SQLite sources need no real password, which lets the contract be exercised
+	/// without a server; the credential map and the error identity are the point.</summary>
+	[Fact]
+	public void CompositionRefresh_AcceptsPerSourceCredentials_AndNamesAFailingSource()
+	{
+		var client = StartClient();
+		client.Start();
+
+		string invoices = CopyFixtureToTemp("invoices.sqlite");
+		string payments = CopyFixtureToTemp("payments.sqlite");
+		string mad = Path.Combine(Path.GetTempPath(), $"mad-source-credentials-{Guid.NewGuid():N}.mad");
+		try
+		{
+			int handle = client.CallOk("create-empty", Dict("path", mad)).GetProperty("handle").GetInt32();
+			client.CallOk("add-root", Dict("handle", handle, "name", "root"));
+			client.CallOk("add-source", Dict("handle", handle, "name", "invoices", "driver", "sqlite3", "file", invoices));
+			JsonElement info = client.CallOk("add-source",
+				Dict("handle", handle, "name", "payments", "driver", "sqlite3", "file", payments));
+
+			long invoicesQuery = QueryId(info, "invoices");
+			long paymentsQuery = QueryId(info, "payments");
+			long rootQuery = info.GetProperty("rootQuery").GetInt64();
+			client.CallOk("add-table", Dict("handle", handle, "table", "invoices", "query", invoicesQuery));
+			client.CallOk("add-table", Dict("handle", handle, "table", "payments", "query", paymentsQuery));
+			client.CallOk("add-upstream", Dict("handle", handle, "query", invoicesQuery));
+			client.CallOk("add-upstream", Dict("handle", handle, "query", paymentsQuery));
+
+			JsonElement rootModel = client.CallOk("query-model", Dict("handle", handle, "query", rootQuery));
+			long invInvoiceId = FieldOn(rootModel, invoicesQuery, "invoice_id");
+			long invAmount = FieldOn(rootModel, invoicesQuery, "amount");
+			long payInvoiceId = FieldOn(rootModel, paymentsQuery, "invoice_id");
+			long payAmount = FieldOn(rootModel, paymentsQuery, "amount");
+			client.CallOk("add-link", Dict("handle", handle, "leftField", invInvoiceId,
+				"rightField", payInvoiceId, "query", rootQuery));
+			client.CallOk("set-root-outputs", Dict("handle", handle, "outputs", new object[]
+			{
+				new Dictionary<string, object?> { ["field"] = invInvoiceId, ["key"] = "invoice_id" },
+				new Dictionary<string, object?> { ["field"] = invAmount, ["key"] = "invoice_amount" },
+				new Dictionary<string, object?> { ["field"] = payAmount, ["key"] = "payment_amount" },
+			}));
+
+			// document-info exposes each source's own connection.
+			JsonElement documentInfo = client.CallOk("document-info", Dict("handle", handle));
+			var sources = documentInfo.GetProperty("queries").EnumerateArray()
+				.Where(q => !q.GetProperty("isRoot").GetBoolean()).ToList();
+			Assert.Equal(2, sources.Count);
+			Assert.All(sources, q =>
+			{
+				JsonElement connection = q.GetProperty("connection");
+				Assert.Equal("sqlite3", connection.GetProperty("driver").GetString());
+				Assert.False(connection.GetProperty("requiresCredentials").GetBoolean());
+				Assert.False(string.IsNullOrEmpty(connection.GetProperty("file").GetString()));
+				Assert.False(string.IsNullOrEmpty(connection.GetProperty("connectionString").GetString()));
+			});
+
+			// A per-source credential map is accepted for both sources.
+			var perSource = new Dictionary<string, object?>
+			{
+				[invoicesQuery.ToString()] = "inv:one",
+				[paymentsQuery.ToString()] = "pay:two",
+			};
+			var refreshed = client.CallOk("refresh", Dict("handle", handle, "sourceCredentials", perSource));
+			Assert.Equal(4, refreshed.GetProperty("rowCount").GetInt32());
+
+			// Break one source: the error names it, its query id and its connection string.
+			File.WriteAllText(payments, "this is not a SQLite database");
+			var failed = client.Call("refresh", Dict("handle", handle, "sourceCredentials", perSource));
+			Assert.False(failed.Ok);
+			Assert.NotNull(failed.Error);
+			Assert.NotNull(failed.Error!.Source);
+			Assert.Equal("payments", failed.Error.Source!.Name);
+			Assert.Equal(paymentsQuery, failed.Error.Source.QueryId);
+			Assert.Contains(Path.GetFileName(payments), failed.Error.Source.ConnectionString);
+		}
+		finally
+		{
+			client.Dispose();
+			if (File.Exists(invoices)) File.Delete(invoices);
+			if (File.Exists(payments)) File.Delete(payments);
+			if (File.Exists(mad)) File.Delete(mad);
+		}
+	}
+
+	private static string CopyFixtureToTemp(string name)
+	{
+		string source = Path.Combine(RepoRoot(), "Windows", "App", "Mad.Designer.Windows.Tests", "Fixtures", name);
+		string temp = Path.Combine(Path.GetTempPath(), $"mad-source-cred-{Guid.NewGuid():N}-{name}");
+		File.Copy(source, temp);
+		return temp;
+	}
+
+	private static long QueryId(JsonElement info, string name)
+		=> info.GetProperty("queries").EnumerateArray()
+			.Single(q => q.GetProperty("name").GetString() == name)
+			.GetProperty("id").GetInt64();
+
+	private static long FieldOn(JsonElement root, long upstreamQuery, string name)
+		=> root.GetProperty("tables").EnumerateArray()
+			.Single(t => t.GetProperty("upstreamQuery").GetInt64() == upstreamQuery)
+			.GetProperty("fields").EnumerateArray()
+			.Single(f => f.GetProperty("name").GetString() == name)
+			.GetProperty("id").GetInt64();
+
 	[Fact]
 	public void Shutdown_ExitsCleanly_WithNoOrphanProcess()
 	{

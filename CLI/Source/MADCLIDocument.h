@@ -40,6 +40,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// formatter, then execute the query into the row cache.
 - (BOOL)refreshWithCredentials:(MADCredential *)credentials error:(NSError * _Nullable __autoreleasing *)error;
 
+/// The same refresh, with per-source credentials for a composed document.  The map
+/// is keyed by `RptqQuery.identifier`; each named source resolves its own credential
+/// and `credentials` remains the fallback for a source the map does not name.  A
+/// Standard Report ignores the map and uses `credentials` as before.
+- (BOOL)refreshWithCredentials:(MADCredential *)credentials
+			sourceCredentials:(NSDictionary<NSNumber *, MADCredential *> *)sourceCredentials
+						 error:(NSError * _Nullable __autoreleasing *)error;
+
 @end
 
 NS_ASSUME_NONNULL_END

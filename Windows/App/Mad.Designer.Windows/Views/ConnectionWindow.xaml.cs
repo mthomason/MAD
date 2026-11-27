@@ -15,11 +15,20 @@ public partial class ConnectionWindow : Window
 {
     public ConnectionWindowViewModel ViewModel { get; }
 
-    public ConnectionWindow(EngineService engine, ICredentialStore credentials, bool isEdit, ConnectionSpec? initial = null)
+    public ConnectionWindow(EngineService engine, ICredentialStore credentials, bool isEdit, ConnectionSpec? initial = null,
+        string? statusPrompt = null, bool prefillStoredCredentials = true)
     {
         InitializeComponent();
-        ViewModel = new ConnectionWindowViewModel(engine, credentials, isEdit, initial, createPath: ShowCreateSaveDialog, requestClose: () => DialogResult = true);
+        ViewModel = new ConnectionWindowViewModel(engine, credentials, isEdit, initial,
+            createPath: ShowCreateSaveDialog, requestClose: () => DialogResult = true,
+            statusPrompt: statusPrompt, prefillStoredCredentials: prefillStoredCredentials);
         DataContext = ViewModel;
+        // A PasswordBox cannot bind Password, so a saved password the view model
+        // prefilled (edit mode) has to be copied into the box here.
+        if (!string.IsNullOrEmpty(ViewModel.Password))
+        {
+            PasswordBox.Password = ViewModel.Password;
+        }
         WindowSizing.FitToWorkArea(this);
 
         Title = Localizer.Get(isEdit ? "Connection.Title.Edit" : "Connection.Title.Create");

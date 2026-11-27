@@ -369,7 +369,7 @@ unknown method, a missing parameter and an unexpected engine exception all answe
 | `test-connection` | `driver` + connection fields, optional `credentials` | `tableCount` |
 | `describe` | `handle` | `driver`, `columns` (key/name/table/type), `tables` (name + fields) |
 | `connection` | `handle` | `driver` + `file`/`host`/`port`/`database`/`server` |
-| `apply-connection` | `handle`, `driver` + connection fields, optional `credentials` | `{}` |
+| `apply-connection` | `handle`, `driver` + connection fields, optional `credentials`/`query` | `{}` |
 | `query` | `handle` | `sql` |
 | `query-model` | `handle` | `driver` token, `sql`, `sqlSourceText`, `tables`/`links`/`predicates`/`groups` (with store identifiers) |
 | `add-table` | `handle`, `table` (schema name) | the full `query-model` |
@@ -384,7 +384,7 @@ unknown method, a missing parameter and an unexpected engine exception all answe
 | `remove-group` | `handle`, `group` | the full `query-model` |
 | `validate-sql` | `handle`, `sql` | `tables`, `links`, `predicates`, `groups` (the plan's counts) |
 | `apply-sql` | `handle`, `sql` | `tables`, `links`, `predicates`, `groups` |
-| `refresh` | `handle`, optional `rows`/`credentials` | `rowCount`, `elapsed` |
+| `refresh` | `handle`, optional `rows`/`credentials`/`sourceCredentials` | `rowCount`, `elapsed` |
 | `export` | `handle`, `format`, optional `path`/`deterministic` | `format` + `data` (the exporter's bytes) or `path` + `bytes` |
 | `write` | `handle`, `out`, optional `reproducible` | `path`, `bytes` — serializes the live document |
 | `shutdown` | — | `{}`, then the process exits 0 |
@@ -396,6 +396,35 @@ driver-specific fields: SQLite takes `file`; the server drivers take
 existing `credentials` (`user:password`) string. They reuse the engine's
 `createDocumentAtURL:`, `MADDatabase` (connect/getTables/close) and
 `applyDatabaseConnection:` — the same calls the Mac's connection window makes.
+
+**Composition sources (per-source credentials and connections).**  A composition has
+one credential per source, so the contract is query-scoped:
+
+- `document-info` lists each query as `{ "id", "name", "isRoot", "isComposing" }` and,
+  when the query has a source database, a `"connection"` object:
+  `{ "driver", "file" | "host"/"port"/"database"[/"server"], "requiresCredentials",
+  "usernameHint", "connectionString" }`.  `usernameHint` is the non-secret account name
+  the document records; a password is never in the document.
+- `apply-connection` gains an optional `"query"` (a `RptqQuery.identifier`).  With it,
+  only that source's persisted connection changes; omitting it keeps the
+  document-level reconnect a Standard Report uses (`MADHeadlessDocument`'s
+  `applyDatabaseConnection:forQueryIdentifier:error:`).
+- `refresh` gains `"sourceCredentials"`, an object keyed by the decimal query id whose
+  value is that source's `"user:password"`.  The serve layer resolves each query id to
+  the engine's `MADDatabaseConnection.connectionString` and hands
+  `MADOperationRefreshComposed.credentialsByConnectionString` the map.  The single
+  `"credentials"` member remains the fallback for any source the map omits, which is
+  how a Standard Report and an older caller keep working.
+- A composed refresh that fails on one source answers
+  `{ "ok": false, "error": { "code": 4, "message": "…", "source": { "name",
+  "queryId", "connectionString" } } }`.  The WPF app matches `queryId` to its query
+  list, opens the connection sheet for that source first, and retries once.
+
+The Windows app stores each source's password in Windows Credential Manager under
+`MAD/<driver>:<host>:<port>/<database>` (`WindowsCredentialStore`), the same key its
+connection window uses.  Inspect entries with `cmdkey /list:MAD/mysql:127.0.0.1:13306/employees`
+and delete one with `cmdkey /delete:MAD/mysql:127.0.0.1:13306/employees`; no plaintext
+file exists.
 
 `export` is the export seam (`MADReportExporting` / `MADReportExporterRegistry`), not a
 new schema: `format: "json"` returns the exact `mad.report/1` bytes `mad export

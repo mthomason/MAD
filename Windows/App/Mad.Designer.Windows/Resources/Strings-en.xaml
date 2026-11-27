@@ -343,6 +343,11 @@
   <sys:String x:Key="Document.ImportFailed">Import failed.</sys:String>
   <sys:String x:Key="Document.SourceAdded">Added the source query.</sys:String>
   <sys:String x:Key="Document.SourceAddFailed">Could not add the source.</sys:String>
+  <sys:String x:Key="Document.SourceCredentials.Prompt">Enter the password for the '{0}' source.</sys:String>
+  <sys:String x:Key="Document.RefreshCancelled">Refresh cancelled.</sys:String>
+  <sys:String x:Key="Document.SourceConnection.Prompt">Connection settings for the '{0}' source.</sys:String>
+  <sys:String x:Key="Document.SourceConnectionUpdated">Updated the '{0}' source connection.</sys:String>
+  <sys:String x:Key="Document.SourceConnectionFailed">Could not update the source connection.</sys:String>
   <sys:String x:Key="Dialog.OpenMadFilter">MAD documents (*.mad)|*.mad|All files (*.*)|*.*</sys:String>
   <sys:String x:Key="Dialog.SaveMadFilter">MAD documents (*.mad)|*.mad</sys:String>
   <sys:String x:Key="Dialog.ReportFilter">Report (*.{0})|*.{0}|All files (*.*)|*.*</sys:String>
@@ -421,4 +426,7 @@
   <sys:String x:Key="Composition.Role.Result">Result — the report you design and view.</sys:String>
   <sys:String x:Key="Composition.Role.Source">Source — this query feeds the Result.</sys:String>
   <sys:String x:Key="Composition.OneSource">Add another source to combine.</sys:String>
+  <sys:String x:Key="Composition.EditConnection">Connection…</sys:String>
+  <sys:String x:Key="Composition.EditConnection.Tooltip">Edit the selected source's database connection.</sys:String>
+  <sys:String x:Key="Composition.EditConnection.Name">Edit source connection</sys:String>
 </ResourceDictionary>

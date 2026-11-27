@@ -26,6 +26,7 @@ public sealed class MainWindowViewModel : ObservableObject
     private readonly Action? _openAbout;
     private readonly Action? _newDocument;
     private readonly Action? _editConnection;
+    private readonly Action? _editSourceConnection;
     private readonly Action? _newComposition;
     private readonly Action? _importChild;
     private readonly Action<string>? _persistRecent;
@@ -42,15 +43,18 @@ public sealed class MainWindowViewModel : ObservableObject
         IReadOnlyList<string>? recentFiles = null,
         Func<string?>? saveAsPath = null,
         ICredentialStore? credentials = null,
-        Action<string>? persistRecent = null)
+        Action<string>? persistRecent = null,
+        Func<SourceCredentialPrompt, Task<SourceCredentialResult?>>? sourceCredentialPrompt = null,
+        Action? editSourceConnection = null)
     {
         _openAbout = openAbout;
         _newDocument = newDocument;
         _editConnection = editConnection;
+        _editSourceConnection = editSourceConnection;
         _newComposition = newComposition;
         _importChild = importChild;
         _persistRecent = persistRecent;
-        Document = new DocumentViewModel(engine, exportPath, saveAsPath, credentials);
+        Document = new DocumentViewModel(engine, exportPath, saveAsPath, credentials, sourceCredentialPrompt);
         RecentFiles = new ObservableCollection<string>(NormalizeRecent(recentFiles));
         Document.PropertyChanged += OnDocumentChanged;
 
@@ -59,6 +63,7 @@ public sealed class MainWindowViewModel : ObservableObject
         NewDocumentCommand = new RelayCommand(() => _newDocument?.Invoke());
         NewCompositionCommand = new RelayCommand(() => _newComposition?.Invoke());
         EditConnectionCommand = new RelayCommand(() => _editConnection?.Invoke());
+        EditSourceConnectionCommand = new RelayCommand(() => _editSourceConnection?.Invoke(), () => Document.CanEditSourceConnection);
         ConvertCommand = new AsyncRelayCommand(() => Document.ConvertToCompositionAsync(), () => HasDocument);
         ImportChildCommand = new RelayCommand(() => _importChild?.Invoke(), () => HasDocument);
         OpenRecentCommand = new AsyncRelayCommand<string?>(path => OpenPathAsync(path!));
@@ -131,6 +136,7 @@ public sealed class MainWindowViewModel : ObservableObject
     public ICommand NewDocumentCommand { get; }
     public ICommand NewCompositionCommand { get; }
     public ICommand EditConnectionCommand { get; }
+    public RelayCommand EditSourceConnectionCommand { get; }
     public AsyncRelayCommand ConvertCommand { get; }
     public RelayCommand ImportChildCommand { get; }
     public AsyncRelayCommand<string?> OpenRecentCommand { get; }
@@ -238,6 +244,13 @@ public sealed class MainWindowViewModel : ObservableObject
             SelectViewerCommand.RaiseCanExecuteChanged();
             ConvertCommand.RaiseCanExecuteChanged();
             ImportChildCommand.RaiseCanExecuteChanged();
+            EditSourceConnectionCommand.RaiseCanExecuteChanged();
+            return;
+        }
+
+        if (e.PropertyName == nameof(DocumentViewModel.CanEditSourceConnection))
+        {
+            EditSourceConnectionCommand.RaiseCanExecuteChanged();
             return;
         }
 

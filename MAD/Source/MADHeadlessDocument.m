@@ -414,40 +414,90 @@
 
 	RptqDocument *docModel = self.activeDocumentModel;
 	RptqDatabase *rptqDB = docModel.defaultDatabase ?: docModel.hasDatabaseSchemas.anyObject;
-	if (rptqDB != nil) {
-		RptqDatabaseCredentals *credentals = rptqDB.ownedByUser;
-		if (credentals == nil && self.storeContext != nil) {
-			credentals = [RptqDatabaseCredentals newDatabaseCredental: self.storeContext];
-			rptqDB.ownedByUser = credentals;
+	[self applyDatabaseConnection: databaseConnection toDatabase: rptqDB];
+}
+
+- (BOOL)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection
+             forQueryIdentifier:(int64_t)queryIdentifier
+                           error:(NSError * _Nullable __autoreleasing *)error {
+	if (databaseConnection == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: @"MADHeadlessDocument"
+										 code: 20
+									 userInfo: @{ NSLocalizedDescriptionKey: NSLocalizedString(@"A database connection is required.", @"Error when a query connection is applied without one.") }];
 		}
-		rptqDB.databaseDriverTypeEnum = databaseConnection.databaseType;
-		if (credentals != nil) {
-			credentals.driverID = [databaseConnection.identifier copy];
-			credentals.key = [databaseConnection.connectionString copy];
-			switch (databaseConnection.databaseType) {
-				case MADDatabaseTypeSqlite3: {
-					NSURL *sqliteURL = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl;
-					credentals.dbname = [sqliteURL.path.lastPathComponent copy];
-					credentals.host = [sqliteURL.path copy];
-					credentals.server = nil;
-					credentals.port = 0;
-					break;
-				}
-				case MADDatabaseTypeMySQL:
-				case MADDatabaseTypePostgres:
-				case MADDatabaseTypeTDS: {
-					MADDatabaseConnection <MADConnectionsPropertiesProtocol> *conn =
-						(MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)databaseConnection;
-					credentals.port = conn.port;
-					credentals.host = conn.host.length > 0 ? [conn.host copy] : [conn.server copy];
-					credentals.server = [conn.server copy];
-					credentals.dbname = [conn.database copy];
-					break;
-				}
-				default:
-					break;
+		return NO;
+	}
+
+	RptqDocument *docModel = self.activeDocumentModel;
+	RptqQuery *query = nil;
+	for (RptqDatabase *database in docModel.hasDatabaseSchemas) {
+		for (RptqQuery *candidate in database.hasQueries) {
+			if (candidate.identifier == queryIdentifier) {
+				query = candidate;
+				break;
 			}
 		}
+		if (query != nil) break;
+	}
+	RptqDatabase *rptqDB = query.inDatabase;
+	if (query == nil || rptqDB == nil) {
+		if (error != NULL) {
+			*error = [NSError errorWithDomain: @"MADHeadlessDocument"
+										 code: 21
+									 userInfo: @{ NSLocalizedDescriptionKey: [NSString stringWithFormat:
+										 NSLocalizedString(@"No source database for query %lld.", @"Error when a query-scoped connection names an unknown or connection-less query."),
+										 (long long)queryIdentifier] }];
+		}
+		return NO;
+	}
+
+	[self applyDatabaseConnection: databaseConnection toDatabase: rptqDB];
+	[self invalidateQueryAndModelCaches];
+	return YES;
+}
+
+/// Writes `databaseConnection` over one database's persisted credential row, creating
+/// the row when the database has none.  Shared by the document-level reconnect and the
+/// per-source reconnect so the two cannot describe a connection differently.
+- (void)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection
+					 toDatabase:(RptqDatabase *)rptqDB {
+	if (databaseConnection == nil || rptqDB == nil) {
+		return;
+	}
+	RptqDatabaseCredentals *credentals = rptqDB.ownedByUser;
+	if (credentals == nil && self.storeContext != nil) {
+		credentals = [RptqDatabaseCredentals newDatabaseCredental: self.storeContext];
+		rptqDB.ownedByUser = credentals;
+	}
+	rptqDB.databaseDriverTypeEnum = databaseConnection.databaseType;
+	if (credentals == nil) {
+		return;
+	}
+	credentals.driverID = [databaseConnection.identifier copy];
+	credentals.key = [databaseConnection.connectionString copy];
+	switch (databaseConnection.databaseType) {
+		case MADDatabaseTypeSqlite3: {
+			NSURL *sqliteURL = ((id <MADDatabaseConnectionsPropertiesURL>)databaseConnection).databaseUrl;
+			credentals.dbname = [sqliteURL.path.lastPathComponent copy];
+			credentals.host = [sqliteURL.path copy];
+			credentals.server = nil;
+			credentals.port = 0;
+			break;
+		}
+		case MADDatabaseTypeMySQL:
+		case MADDatabaseTypePostgres:
+		case MADDatabaseTypeTDS: {
+			MADDatabaseConnection <MADConnectionsPropertiesProtocol> *conn =
+				(MADDatabaseConnection <MADConnectionsPropertiesProtocol> *)databaseConnection;
+			credentals.port = conn.port;
+			credentals.host = conn.host.length > 0 ? [conn.host copy] : [conn.server copy];
+			credentals.server = [conn.server copy];
+			credentals.dbname = [conn.database copy];
+			break;
+		}
+		default:
+			break;
 	}
 }
 

@@ -337,6 +337,11 @@
   <sys:String x:Key="Document.ImportFailed">Import failed.</sys:String>
   <sys:String x:Key="Document.SourceAdded">Added the source query.</sys:String>
   <sys:String x:Key="Document.SourceAddFailed">Could not add the source.</sys:String>
+  <sys:String x:Key="Document.SourceCredentials.Prompt">Digite a senha da fonte '{0}'.</sys:String>
+  <sys:String x:Key="Document.RefreshCancelled">Atualização cancelada.</sys:String>
+  <sys:String x:Key="Document.SourceConnection.Prompt">Configurações de conexão da fonte '{0}'.</sys:String>
+  <sys:String x:Key="Document.SourceConnectionUpdated">Conexão da fonte '{0}' atualizada.</sys:String>
+  <sys:String x:Key="Document.SourceConnectionFailed">Não foi possível atualizar a conexão da fonte.</sys:String>
 
   <sys:String x:Key="Dialog.OpenMadFilter">Documentos MAD (*.mad)|*.mad|Todos os arquivos (*.*)|*.*</sys:String>
   <sys:String x:Key="Dialog.SaveMadFilter">Documentos MAD (*.mad)|*.mad</sys:String>
@@ -422,4 +427,7 @@
   <sys:String x:Key="Composition.Role.Result">Resultado — o relatório que você projeta e visualiza.</sys:String>
   <sys:String x:Key="Composition.Role.Source">Fonte — esta consulta alimenta o resultado.</sys:String>
   <sys:String x:Key="Composition.OneSource">Adicione outra fonte para combinar.</sys:String>
+  <sys:String x:Key="Composition.EditConnection">Conexão…</sys:String>
+  <sys:String x:Key="Composition.EditConnection.Tooltip">Editar a conexão de banco de dados da fonte selecionada.</sys:String>
+  <sys:String x:Key="Composition.EditConnection.Name">Editar a conexão da fonte</sys:String>
 </ResourceDictionary>

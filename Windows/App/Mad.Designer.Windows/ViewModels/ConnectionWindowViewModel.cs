@@ -29,13 +29,20 @@ public sealed class ConnectionWindowViewModel : ObservableObject
     private string _statusText = "";
     private bool _isBusy;
 
+    /// <param name="statusPrompt">Replaces the default status line; a composition source
+    /// prompt uses it to name the source being asked about.</param>
+    /// <param name="prefillStoredCredentials">When true (an edit), the saved username and
+    /// password are prefilled; a first-run source prompt passes false so the password is
+    /// empty and the user chooses whether to reuse the stored one.</param>
     public ConnectionWindowViewModel(
         EngineService engine,
         ICredentialStore credentials,
         bool isEdit,
         ConnectionSpec? initial = null,
         Func<string?>? createPath = null,
-        Action? requestClose = null)
+        Action? requestClose = null,
+        string? statusPrompt = null,
+        bool prefillStoredCredentials = true)
     {
         _engine = engine ?? throw new ArgumentNullException(nameof(engine));
         _credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
@@ -52,14 +59,17 @@ public sealed class ConnectionWindowViewModel : ObservableObject
         Username = initial?.Username ?? "";
         Password = initial?.Password ?? "";
 
-        if (initial?.CredentialKey is string key &&
-            _credentials.TryRead(key, out string? savedUser, out string? savedPass))
+        if (prefillStoredCredentials
+            && initial?.CredentialKey is string key
+            && _credentials.TryRead(key, out string? savedUser, out string? savedPass))
         {
             if (string.IsNullOrEmpty(Username)) Username = savedUser;
             if (string.IsNullOrEmpty(Password)) Password = savedPass;
         }
 
-        StatusText = Localizer.Get(isEdit ? "Connection.StatusEdit" : "Connection.StatusCreate");
+        StatusText = string.IsNullOrWhiteSpace(statusPrompt)
+            ? Localizer.Get(isEdit ? "Connection.StatusEdit" : "Connection.StatusCreate")
+            : statusPrompt;
 
         TestConnectionCommand = new AsyncRelayCommand(TestConnectionAsync, () => !IsBusy);
         SubmitCommand = new AsyncRelayCommand(SubmitAsync, () => !IsBusy);

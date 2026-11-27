@@ -20,6 +20,7 @@ public sealed class DocumentViewModel : ObservableObject
     private readonly Func<string, string?>? _exportPath;
     private readonly Func<string?>? _saveAsPath;
     private readonly ICredentialStore? _credentials;
+    private readonly SourceCredentialCollector _sourceCredentials;
     private int _handle = -1;
     private string? _filePath;
     private ConnectionSpec? _connection;
@@ -44,12 +45,15 @@ public sealed class DocumentViewModel : ObservableObject
     private int _rowCount;
     private DataView? _dataView;
 
-    public DocumentViewModel(EngineService engine, Func<string, string?>? exportPath = null, Func<string?>? saveAsPath = null, ICredentialStore? credentials = null)
+    public DocumentViewModel(EngineService engine, Func<string, string?>? exportPath = null, Func<string?>? saveAsPath = null,
+        ICredentialStore? credentials = null,
+        Func<SourceCredentialPrompt, Task<SourceCredentialResult?>>? sourceCredentialPrompt = null)
     {
         _engine = engine ?? throw new ArgumentNullException(nameof(engine));
         _exportPath = exportPath;
         _saveAsPath = saveAsPath;
         _credentials = credentials;
+        _sourceCredentials = new SourceCredentialCollector(credentials, sourceCredentialPrompt);
         RefreshCommand = new AsyncRelayCommand(async () => { await RefreshAsync(); }, () => HasDocument);
         ExportCsvCommand = new AsyncRelayCommand(() => ExportAsync("csv"), () => HasDocument);
         ExportJsonCommand = new AsyncRelayCommand(() => ExportAsync("json"), () => HasDocument);
@@ -193,6 +197,8 @@ public sealed class DocumentViewModel : ObservableObject
                 OnPropertyChanged(nameof(SelectedQueryName));
                 OnPropertyChanged(nameof(IsRootSelected));
                 OnPropertyChanged(nameof(SelectedQueryHint));
+                OnPropertyChanged(nameof(SelectedSourceQuery));
+                OnPropertyChanged(nameof(CanEditSourceConnection));
                 UpdateSelectedNodeState();
                 if (!_suppressSelectionReload && HasDocument)
                 {
@@ -273,6 +279,17 @@ public sealed class DocumentViewModel : ObservableObject
     /// Standard Report's single query).</summary>
     public bool IsRootSelected
         => !IsComposed || (_queries.FirstOrDefault(q => q.Id == _selectedQueryId)?.IsRoot ?? false);
+
+    /// <summary>The selected source query, or null when the Result (or a Standard Report)
+    /// is selected.  Its connection is what the per-source "Connection…" action edits.</summary>
+    public QueryInfo? SelectedSourceQuery
+        => IsComposed && !IsRootSelected
+            ? _queries.FirstOrDefault(q => q.Id == _selectedQueryId && !q.IsRoot && !q.IsComposing)
+            : null;
+
+    /// <summary>True when the per-source connection action can run: a source with a
+    /// database connection is selected.</summary>
+    public bool CanEditSourceConnection => SelectedSourceQuery?.Connection != null;
 
     /// <summary>The Component picker's choices: the root is marked Result so its special role
     /// stays visible when the graph is collapsed.</summary>
@@ -403,7 +420,8 @@ public sealed class DocumentViewModel : ObservableObject
 
     /// <summary>Runs the query, refreshes the rows and renders the Viewer's preview. Answers
     /// whether the refresh succeeded, so Export/Print can stop instead of exporting stale data
-    /// over a red status line.</summary>
+    /// over a red status line. A Composition Report resolves one credential per source and
+    /// prompts for any missing one; a Standard Report keeps the single document credential.</summary>
     public async Task<bool> RefreshAsync()
     {
         if (!HasDocument) return false;
@@ -413,8 +431,11 @@ public sealed class DocumentViewModel : ObservableObject
         Viewer.BeginRefresh();
         try
         {
-            var refresh = await _engine.RefreshAsync(_handle, credentials: ResolveCredentials(_connection, _credentials));
-            RowCount = refresh.RowCount;
+            bool refreshed = IsComposed ? await RefreshComposedAsync() : await RefreshStandardAsync();
+            if (!refreshed) return false;
+
+            // The refresh proved each prompted credential works, so it may be saved now.
+            _sourceCredentials.CommitPendingSaves();
 
             string json = await _engine.ExportAsync(_handle, "json");
             DataView = MadReport.Parse(json).ToDataTable().DefaultView;
@@ -431,11 +452,12 @@ public sealed class DocumentViewModel : ObservableObject
             await Viewer.RenderAsync(Designer.Elements.Count > 0);
             _hasRefreshed = true;
 
-            StatusText = Localizer.Format("Document.RenderedRows", refresh.RowCount);
+            StatusText = Localizer.Format("Document.RenderedRows", RowCount);
             return true;
         }
         catch (Exception exception)
         {
+            _sourceCredentials.DiscardPendingSaves();
             ErrorText = exception.Message;
             StatusText = Localizer.Get("Document.RefreshFailed");
             Viewer.ReportRefreshFailed(exception.Message);
@@ -444,6 +466,48 @@ public sealed class DocumentViewModel : ObservableObject
         finally
         {
             IsBusy = false;
+        }
+    }
+
+    /// <summary>The ordinary report: the one credential the document connection resolves.</summary>
+    private async Task<bool> RefreshStandardAsync()
+    {
+        var refresh = await _engine.RefreshAsync(_handle, credentials: ResolveCredentials(_connection, _credentials));
+        RowCount = refresh.RowCount;
+        return true;
+    }
+
+    /// <summary>The composition: one credential per credential-taking source, from the
+    /// session or Credential Manager, prompting for each missing one before the engine
+    /// runs. A refresh the engine fails on a named source (a rejected password) asks for
+    /// that source and retries once. Answers false when the user cancels a sheet.</summary>
+    private async Task<bool> RefreshComposedAsync()
+    {
+        Dictionary<long, string>? credentials = await _sourceCredentials.CollectAsync(Queries);
+        if (credentials == null)
+        {
+            StatusText = Localizer.Get("Document.RefreshCancelled");
+            return false;
+        }
+
+        try
+        {
+            var refresh = await _engine.RefreshAsync(_handle, sourceCredentials: credentials);
+            RowCount = refresh.RowCount;
+            return true;
+        }
+        catch (Mad.Client.MadEngineException exception)
+            when (exception.SourceInfo is { QueryId: > 0 } source && _sourceCredentials.CanPrompt)
+        {
+            QueryInfo? query = Queries.FirstOrDefault(q => q.Id == source.QueryId);
+            if (query == null) throw;
+            string? credential = await _sourceCredentials.PromptForSourceAsync(query);
+            if (credential == null) throw;
+            credentials[query.Id] = credential;
+
+            var refresh = await _engine.RefreshAsync(_handle, sourceCredentials: credentials);
+            RowCount = refresh.RowCount;
+            return true;
         }
     }
 
@@ -474,6 +538,8 @@ public sealed class DocumentViewModel : ObservableObject
         OnPropertyChanged(nameof(DocumentTypeTooltip));
         OnPropertyChanged(nameof(IsRootSelected));
         OnPropertyChanged(nameof(SelectedQueryHint));
+        OnPropertyChanged(nameof(SelectedSourceQuery));
+        OnPropertyChanged(nameof(CanEditSourceConnection));
     }
 
     private static IReadOnlyList<QueryOption> BuildComponentOptions(IReadOnlyList<QueryInfo> queries)
@@ -686,6 +752,66 @@ public sealed class DocumentViewModel : ObservableObject
     {
         if (!HasDocument) return null;
         return await _engine.ConnectionAsync(_handle);
+    }
+
+    /// <summary>The selected source's connection, with its saved username and password
+    /// when Credential Manager has them — the starting state of a per-source edit.</summary>
+    public Task<ConnectionSpec?> GetSourceConnectionAsync(long queryId)
+    {
+        QueryInfo? query = Queries.FirstOrDefault(q => q.Id == queryId);
+        if (query?.Connection == null) return Task.FromResult<ConnectionSpec?>(null);
+
+        ConnectionSpec spec = query.Connection.ToSpec();
+        if (spec.CredentialKey is string key
+            && _credentials != null
+            && _credentials.TryRead(key, out string user, out string password))
+        {
+            if (!string.IsNullOrEmpty(user)) spec = spec with { Username = user };
+            if (!string.IsNullOrEmpty(password)) spec = spec with { Password = password };
+        }
+        return Task.FromResult<ConnectionSpec?>(spec);
+    }
+
+    /// <summary>Applies a connection to one source and refreshes.  Other sources keep
+    /// their connections; the credential entered is remembered (and saved when asked)
+    /// so this source is not prompted again this session.</summary>
+    public async Task ApplySourceConnectionAsync(long queryId, ConnectionSpec spec, bool saveCredentials = false)
+    {
+        if (!HasDocument) return;
+
+        IsBusy = true;
+        ErrorText = null;
+        try
+        {
+            await _engine.ApplyConnectionAsync(_handle, spec, queryId);
+            _sourceCredentials.Remember(queryId, spec.Username, spec.Password);
+            if (saveCredentials && spec.CredentialKey is string key)
+            {
+                _credentials?.Save(key, spec.Username ?? "", spec.Password ?? "");
+            }
+
+            DocumentInfo info = await _engine.DocumentInfoAsync(_handle);
+            ApplyDocumentInfo(info);
+            await LoadCompositionAsync(info);
+            // The source's schema and model changed, so reload the selected node and then
+            // refresh through the per-source credential path.
+            await SelectAndReloadAsync(SelectedQueryId);
+
+            string name = Queries.FirstOrDefault(q => q.Id == queryId)?.Name ?? "";
+            if (await RefreshAsync())
+            {
+                StatusText = Localizer.Format("Document.SourceConnectionUpdated", name);
+            }
+        }
+        catch (Exception exception)
+        {
+            ErrorText = exception.Message;
+            StatusText = Localizer.Get("Document.SourceConnectionFailed");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     /// <summary>Exports the current report to the destination chosen by the injected path

@@ -412,11 +412,22 @@ public sealed class EngineService : IAsyncDisposable
         return LayoutModel.Parse(result);
     }
 
-    public async Task<RefreshResult> RefreshAsync(int handle, int? rows = null, string? credentials = null)
+    /// <summary>Refreshes the document.  A composed document may name one credential per
+    /// source query in <paramref name="sourceCredentials"/> (query id → `user:password`);
+    /// <paramref name="credentials"/> stays the single-credential fallback, and is the
+    /// only form a Standard Report uses.</summary>
+    public async Task<RefreshResult> RefreshAsync(int handle, int? rows = null, string? credentials = null,
+        IReadOnlyDictionary<long, string>? sourceCredentials = null)
     {
         var parameters = new Dictionary<string, object?> { ["handle"] = handle };
         if (rows is int rowCount) parameters["rows"] = rowCount;
         if (credentials != null) parameters["credentials"] = credentials;
+        if (sourceCredentials is { Count: > 0 })
+        {
+            parameters["sourceCredentials"] = sourceCredentials.ToDictionary(
+                pair => pair.Key.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                pair => (object?)pair.Value);
+        }
 
         var result = await CallAsync("refresh", parameters).ConfigureAwait(false);
         return new RefreshResult(
@@ -495,10 +506,13 @@ public sealed class EngineService : IAsyncDisposable
         return new ConnectionSpec(driver, file, host, port, database, server, null, null);
     }
 
-    public async Task ApplyConnectionAsync(int handle, ConnectionSpec spec)
+    /// <summary>Applies a connection.  With <paramref name="query"/> it edits only that
+    /// source query's database, which is how a composition reconnects one source.</summary>
+    public async Task ApplyConnectionAsync(int handle, ConnectionSpec spec, long? query = null)
     {
         var parameters = ConnectionParams(spec);
         parameters["handle"] = handle;
+        if (query is long queryId) parameters["query"] = queryId;
         await CallAsync("apply-connection", parameters).ConfigureAwait(false);
     }
 

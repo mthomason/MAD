@@ -61,6 +61,7 @@ static NSString * const MADOperationRefreshErrorDomain = @"com.everydayapps.oper
 
 NSString * const MADOperationRefreshSourceNameKey = @"MADOperationRefreshSourceName";
 NSString * const MADOperationRefreshSourceConnectionStringKey = @"MADOperationRefreshSourceConnectionString";
+NSString * const MADOperationRefreshSourceQueryIdentifierKey = @"MADOperationRefreshSourceQueryIdentifier";
 
 static const short errCache = 2;
 static const short errMissingCredentials = 3;
@@ -608,6 +609,7 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 			NSLocalizedString(@"The source '%@' requires credentials and none were supplied.", @"Missing credentials for a source."), plan.name];
 		if (plan.name.length > 0) userInfo[MADOperationRefreshSourceNameKey] = plan.name;
 		if (connectionString.length > 0) userInfo[MADOperationRefreshSourceConnectionStringKey] = connectionString;
+		userInfo[MADOperationRefreshSourceQueryIdentifierKey] = @(plan.identifier);
 		[self finishWithError:[NSError errorWithDomain: MADOperationRefreshErrorDomain
 												 code: errMissingCredentials
 											 userInfo: userInfo]];
@@ -623,6 +625,7 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 			plan.name, connectError.localizedDescription];
 		if (plan.name.length > 0) userInfo[MADOperationRefreshSourceNameKey] = plan.name;
 		if (connectionString.length > 0) userInfo[MADOperationRefreshSourceConnectionStringKey] = connectionString;
+		userInfo[MADOperationRefreshSourceQueryIdentifierKey] = @(plan.identifier);
 		NSError *sourceError = [NSError errorWithDomain: MADOperationRefreshErrorDomain
 												   code: errExecute
 											   userInfo: userInfo];
@@ -654,6 +657,7 @@ static void MADOperationRefreshRunOnMain(dispatch_block_t block) {
 			plan.name, (executeError.localizedDescription ?: NSLocalizedString(@"the query reported no error", @"No driver error."))];
 		if (plan.name.length > 0) userInfo[MADOperationRefreshSourceNameKey] = plan.name;
 		if (connectionString.length > 0) userInfo[MADOperationRefreshSourceConnectionStringKey] = connectionString;
+		userInfo[MADOperationRefreshSourceQueryIdentifierKey] = @(plan.identifier);
 		[self finishWithError:[NSError errorWithDomain: MADOperationRefreshErrorDomain
 												 code: errExecute
 											 userInfo: userInfo]];

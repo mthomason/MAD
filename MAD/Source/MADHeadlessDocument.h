@@ -98,6 +98,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// the active `database` instance to reflect `databaseConnection`.
 - (void)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection;
 
+/// Updates only one query's source database, leaving the document-level connection
+/// and every sibling source untouched — how a composition edits the connection of a
+/// single source.  Answers NO, with `error`, when the query does not exist or has no
+/// source database.
+- (BOOL)applyDatabaseConnection:(MADDatabaseConnection *)databaseConnection
+             forQueryIdentifier:(int64_t)queryIdentifier
+                           error:(NSError * _Nullable __autoreleasing *)error;
+
 /// The publication's commit point: writes the staged column map over the
 /// document's stable one.  Overridable so a test can fail a publication after the
 /// rows are staged.

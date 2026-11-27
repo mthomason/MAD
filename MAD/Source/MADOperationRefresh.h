@@ -24,6 +24,11 @@ extern NSString * const MADOperationRefreshSourceNameKey;
 /// `MADOperationRefreshComposed.credentialsByConnectionString` is keyed by.
 extern NSString * const MADOperationRefreshSourceConnectionStringKey;
 
+/// The failing source's `RptqQuery.identifier`, so a caller that can prompt for one
+/// source (the WPF app and the `mad serve` client) names it without matching the
+/// connection string back to a query.
+extern NSString * const MADOperationRefreshSourceQueryIdentifierKey;
+
 @interface MADOperationRefresh : MADOperation
 
 	- (instancetype)initWithDocument:(id <MADDocumentDataProtocol>)document;

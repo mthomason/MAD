@@ -17,6 +17,7 @@
 
 #import "MADTestSupport.h"
 
+#import <MAD/MADDatabaseConnection+Constructor.h>
 #import <MAD/MADDocumentDataProtocol.h>
 #import <MAD/MADHeadlessDocument.h>
 #import <MAD/MADReportFormatter.h>
@@ -47,6 +48,9 @@
 #import <MADFoundation/MADDataColumn.h>
 #import <MAD/RptqDocument+Extras.h>
 #import <MAD/RptqDatabase+Extras.h>
+#import <MAD/RptqDatabase.h>
+#import <MAD/RptqDatabaseCredentals.h>
+#import <MADFoundation/MADCredential.h>
 #import <MAD/RptqQuery.h>
 #import <MAD/RptqQueryTable.h>
 #import <MAD/RptqQueryField.h>
@@ -1177,6 +1181,97 @@ static MADHeadlessDocument *MADCompositionGraphDocument(NSString *directory,
 	return result;
 }
 
+/// The connection-string → credential map the composed refresh is keyed by, built the
+/// way the CLI does: one entry per source database, from its persisted credential row.
+static NSDictionary<NSString *, MADCredential *> *MADCompositionCredentialsMap(MADHeadlessDocument *document) {
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	NSMutableDictionary<NSString *, MADCredential *> *map = [NSMutableDictionary dictionary];
+	for (RptqDatabase *database in model.hasDatabaseSchemas) {
+		if (database.ownedByUser == nil) continue;
+		MADDatabaseConnection *connection = [MADDatabaseConnection newDatabaseConnection: database.ownedByUser
+																			documentURL: document.fileURL];
+		if (connection.connectionString.length > 0) {
+			map[connection.connectionString] = [[MADCredential alloc] initWithUsername: @"user" andPassword: @"pass"];
+		}
+	}
+	return map;
+}
+
+static MADOperationRefreshComposed *MADCompositionRunRefreshWithCredentials(MADHeadlessDocument *document,
+																		 NSDictionary<NSString *, MADCredential *> *credentials) {
+	MADOperationRefreshComposed *refresh = [[MADOperationRefreshComposed alloc] initWithDocument: document];
+	refresh.credentialsByConnectionString = credentials;
+	MADOperationQueue *queue = [[MADOperationQueue alloc] init];
+	queue.maxConcurrentOperationCount = 1;
+	[queue addOperation: refresh];
+	while (queue.operationCount > 0) {
+		[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate: [NSDate dateWithTimeIntervalSinceNow: 0.05]];
+	}
+	return refresh;
+}
+
+// The composed refresh takes one credential per source, keyed by that source's
+// connection string, and a source that fails names itself — name, query id and
+// connection string — which is what the serve error and the WPF prompt rely on.
+// The sources are SQLite, so no live server is needed to pin the contract.
+static void testComposedRefreshUsesPerSourceCredentialsAndNamesTheFailingSource(void) {
+	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
+	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
+	NSArray *leaves = @[
+		@{ @"name": @"a", @"file": @"a.sqlite", @"rows": @[ @[@1, @10] ] },
+		@{ @"name": @"b", @"file": @"b.sqlite", @"rows": @[ @[@1, @20] ] },
+	];
+	NSArray *composers = @[
+		@{ @"name": @"root", @"children": @[ @"a", @"b" ],
+		   @"links": @[ @[ @"a", @"id", @"b", @"id" ] ],
+		   @"outputs": @[ @[ @"a", @"id", @"a_id" ], @[ @"b", @"value", @"b_value" ] ] },
+	];
+
+	NSString *errorDescription = nil;
+	MADHeadlessDocument *document = MADCompositionGraphDocument(directory, leaves, composers, @"root", &errorDescription);
+	MAD_NEED(document != nil, "the two-source composition opened");
+	if (document == nil) return;
+
+	NSDictionary<NSString *, MADCredential *> *credentials = MADCompositionCredentialsMap(document);
+	MAD_PASS(credentials.count == 2, "each source has its own connection-string credential");
+
+	MADOperationRefreshComposed *refresh = MADCompositionRunRefreshWithCredentials(document, credentials);
+	MAD_PASS(refresh.errors.count == 0, "the per-source credentials refresh the composition");
+	MAD_PASS(document.currentResult.numberOfRows == 1, "the join produced its row");
+
+	RptqDocument *model = [RptqDocument newDocumentReadFromManagedObjectContext: document.storeContext];
+	int64_t bIdentifier = 0;
+	RptqDatabaseCredentals *bCredentialRow = nil;
+	for (RptqDatabase *database in model.hasDatabaseSchemas) {
+		for (RptqQuery *query in database.hasQueries) {
+			if ([query.name isEqualToString: @"b"]) {
+				bIdentifier = query.identifier;
+				bCredentialRow = query.inDatabase.ownedByUser;
+			}
+		}
+	}
+	MAD_PASS(bIdentifier != 0, "the b source has a query id");
+
+	// Point one source at an impossible path: the next refresh must fail on it and name
+	// it.  A path that does not resolve to a readable sibling keeps the test independent
+	// of whether the first refresh still holds the source file open.
+	MAD_PASS(bCredentialRow != nil, "the b source has a credential row");
+	bCredentialRow.host = @"/no-such-directory/ghost.sqlite";
+	bCredentialRow.dbname = @"ghost.sqlite";
+	[document.storeContext saveComposed: NULL];
+	MADOperationRefreshComposed *failed = MADCompositionRunRefreshWithCredentials(document, credentials);
+	MAD_PASS(failed.errors.count == 1, "the broken source fails the refresh");
+	NSError *sourceError = failed.errors.firstObject;
+	MAD_PASS([sourceError.userInfo[MADOperationRefreshSourceNameKey] isEqualToString: @"b"],
+			 "the error names the failing source");
+	NSNumber *queryIdentifier = sourceError.userInfo[MADOperationRefreshSourceQueryIdentifierKey];
+	MAD_PASS(queryIdentifier != nil && [queryIdentifier longLongValue] == bIdentifier,
+			 "the error carries the failing source's query id");
+	NSString *connectionString = sourceError.userInfo[MADOperationRefreshSourceConnectionStringKey];
+	MAD_PASS([connectionString containsString: @"ghost.sqlite"],
+			 "the error carries the failing source's connection string");
+}
+
 static void testComposedThreeLeafRootJoinsAllThree(void) {
 	NSString *directory = [NSTemporaryDirectory() stringByAppendingPathComponent: [[NSUUID UUID] UUIDString]];
 	[[NSFileManager defaultManager] createDirectoryAtPath: directory withIntermediateDirectories: YES attributes: NULL error: NULL];
@@ -1420,4 +1515,5 @@ MAD_TEST_MAIN("MADReportExporterTests",
 	MAD_TEST(testComposedRootWithMoreThanTenChildrenIsRejected),
 	MAD_TEST(testComposedMixedNodeIsRejected),
 	MAD_TEST(testCompositionEmptyExpressionKeepsKnownType),
+	MAD_TEST(testComposedRefreshUsesPerSourceCredentialsAndNamesTheFailingSource),
 	MAD_TEST(testNodeScopedHTMLRendersTheNodeLayout));

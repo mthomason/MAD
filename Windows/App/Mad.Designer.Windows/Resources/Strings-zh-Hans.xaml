@@ -337,6 +337,11 @@
   <sys:String x:Key="Document.ImportFailed">Import failed.</sys:String>
   <sys:String x:Key="Document.SourceAdded">Added the source query.</sys:String>
   <sys:String x:Key="Document.SourceAddFailed">Could not add the source.</sys:String>
+  <sys:String x:Key="Document.SourceCredentials.Prompt">请输入“{0}”源的密码。</sys:String>
+  <sys:String x:Key="Document.RefreshCancelled">刷新已取消。</sys:String>
+  <sys:String x:Key="Document.SourceConnection.Prompt">“{0}”源的连接设置。</sys:String>
+  <sys:String x:Key="Document.SourceConnectionUpdated">已更新“{0}”源的连接。</sys:String>
+  <sys:String x:Key="Document.SourceConnectionFailed">无法更新源连接。</sys:String>
 
   <sys:String x:Key="Dialog.OpenMadFilter">MAD 文档 (*.mad)|*.mad|所有文件 (*.*)|*.*</sys:String>
   <sys:String x:Key="Dialog.SaveMadFilter">MAD 文档 (*.mad)|*.mad</sys:String>
@@ -422,4 +427,7 @@
   <sys:String x:Key="Composition.Role.Result">结果 — 您设计和查看的报表。</sys:String>
   <sys:String x:Key="Composition.Role.Source">源 — 此查询提供给结果。</sys:String>
   <sys:String x:Key="Composition.OneSource">再添加一个源以进行组合。</sys:String>
+  <sys:String x:Key="Composition.EditConnection">连接…</sys:String>
+  <sys:String x:Key="Composition.EditConnection.Tooltip">编辑所选源的数据库连接。</sys:String>
+  <sys:String x:Key="Composition.EditConnection.Name">编辑源连接</sys:String>
 </ResourceDictionary>

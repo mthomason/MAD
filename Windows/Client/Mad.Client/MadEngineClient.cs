@@ -28,11 +28,24 @@ public sealed record EngineInfo(
 	bool? SourceDirty,
 	IReadOnlyList<string> Capabilities);
 
+/// <summary>The source a failed composition refresh named: its leaf query, the name
+/// the engine reports, and the connection string the credential map is keyed by.
+/// Null on every error that is not a named source.</summary>
+public sealed class MadEngineErrorSource
+{
+	public string Name { get; set; } = "";
+	public long QueryId { get; set; }
+	public string ConnectionString { get; set; } = "";
+}
+
 /// <summary>The `error` member of a failed response.</summary>
 public sealed class MadEngineError
 {
 	public int Code { get; set; }
 	public string Message { get; set; } = "";
+
+	/// <summary>The failing composition source, when `refresh` reported one.</summary>
+	public MadEngineErrorSource? Source { get; set; }
 }
 
 /// <summary>One parsed response line from `mad serve`.</summary>
@@ -58,6 +71,19 @@ public sealed class MadEngineResponse
 				Code = error.GetProperty("code").GetInt32(),
 				Message = error.GetProperty("message").GetString() ?? "",
 			};
+			if (error.TryGetProperty("source", out var source) && source.ValueKind == JsonValueKind.Object)
+			{
+				response.Error.Source = new MadEngineErrorSource
+				{
+					Name = source.TryGetProperty("name", out var name) && name.ValueKind == JsonValueKind.String
+						? name.GetString() ?? "" : "",
+					QueryId = source.TryGetProperty("queryId", out var queryId) && queryId.ValueKind == JsonValueKind.Number
+						? queryId.GetInt64() : 0,
+					ConnectionString = source.TryGetProperty("connectionString", out var connectionString)
+						&& connectionString.ValueKind == JsonValueKind.String
+						? connectionString.GetString() ?? "" : "",
+				};
+			}
 		}
 		return response;
 	}
@@ -67,19 +93,26 @@ public sealed class MadEngineResponse
 	{
 		if (!Ok)
 		{
-			throw new MadEngineException(Error?.Code ?? -1, Error?.Message ?? "the engine reported an error");
+			throw new MadEngineException(Error?.Code ?? -1, Error?.Message ?? "the engine reported an error", Error?.Source);
 		}
 	}
 }
 
-/// <summary>A non-`ok` response, carrying the engine's error code (the CLI exit code).</summary>
+/// <summary>A non-`ok` response, carrying the engine's error code (the CLI exit code)
+/// and, for a composition refresh that failed on one source, that source's identity.</summary>
 public sealed class MadEngineException : Exception
 {
 	public int Code { get; }
 
-	public MadEngineException(int code, string message) : base(message)
+	/// <summary>The failing composition source, or null when the error was not
+	/// source-scoped.  Named `SourceInfo` because <see cref="Exception.Source"/> is the
+	/// runtime's assembly name and must not be shadowed.</summary>
+	public MadEngineErrorSource? SourceInfo { get; }
+
+	public MadEngineException(int code, string message, MadEngineErrorSource? source = null) : base(message)
 	{
 		Code = code;
+		SourceInfo = source;
 	}
 }
 
