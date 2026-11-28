@@ -94,7 +94,7 @@ assemble_app_bundle() {
 	# generic, and the built plist -- not the source -- carries the release numbers.
 	local app_version app_build
 	app_version="$(python3 -I "${REPO_ROOT}/scripts/dev/versions.py" --repo "${REPO_ROOT}" read macos_app_version)"
-	app_build="$(python3 -I "${REPO_ROOT}/scripts/dev/versions.py" --repo "${REPO_ROOT}" read macos_build)"
+	app_build="$(git -C "${REPO_ROOT}" rev-list --count HEAD 2>/dev/null || echo 0)"
 	/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${app_version}" "${CONTENTS_DIR}/Info.plist"
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${app_build}" "${CONTENTS_DIR}/Info.plist"
 

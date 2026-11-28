@@ -125,7 +125,7 @@ compile_tool() {
 	"${REPO_ROOT}/scripts/dev/build-info.sh" --format plist \
 		--output "${BUILD_DIR}/MADBuildInfo.plist" \
 		--app-version "$(python3 -I "${REPO_ROOT}/scripts/dev/versions.py" read macos_app_version)" \
-		--app-build "$(python3 -I "${REPO_ROOT}/scripts/dev/versions.py" read macos_build)"
+		--app-build "$(git -C "${REPO_ROOT}" rev-list --count HEAD 2>/dev/null || echo 0)"
 
 	sign_tool
 }
