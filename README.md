@@ -16,6 +16,19 @@ A **Composition Report** extends that model across databases. The document holds
 
 The repository is one self-contained project: the iPad/iPhone apps, the native macOS (`AppKit`) desktop app (`Mac/`), the native Windows (WPF) app (`Windows/`), fourteen frameworks (twelve multiplatform across iOS, iOS Simulator, and native macOS; twelve headless on Linux), the headless Linux build and test suite (130 suites, 1,313 tests), the `mad` command-line tool, and the build system (`Compressor`) that compiles the third-party C libraries from pinned sources. The code is published under the MIT licence; the `.mad` format is an open specification (see [`docs/`](docs/)), though the project's names and app artwork are not covered by the licence grant (see [`NOTICE`](NOTICE)).
 
+## Repository layout
+
+This is the current layout, and nothing has moved. The top-level entries group by role:
+
+* **Applications** — `MADDesigner/` (the iOS app and its targets), `Mac/` (the native `AppKit` app), `Windows/` (the native WPF app).
+* **Frameworks** — the fourteen `MAD*` directories: `MADFoundation`, `MADAPI`, `MAD`, `MADCocoaExtensions`, `MADDataStructures`, `MADFileManager`, `MADExplorer`, `MADMySQL`, `MADTdsClient`, `MADPostgres`, `MADSqlite3`, `MADTds`, `MADBarcodes`, and `MADFeedback`.
+* **Headless engine** — `Linux/`, `CLI/`, and `Windows/Engine/`.
+* **Build and vendored libraries** — `Compressor/` and `ThirdParty/`.
+* **Samples, assets, and data** — `Samples/`, `StaticResources/`, `TestDatabase/`, and `translations/`.
+* **Tooling and satellites** — `scripts/`, `satellites/`, and `Scrimpter/`.
+* **Workspaces** — `Reports.xcworkspace` and `Scrimpter.xcworkspace`.
+* **Documentation** — `docs/` (the specification, guides, and internal records).
+
 > **New in 0.8: Composition Reports.** Combine existing reports into one document on macOS and Windows; every source keeps its layout and data. See [the composition guide](docs/composition.md) and the [sample reports](Samples/README.md). Composition is included in the published 0.8.0 download below.
 
 > **Try MAD Designer on macOS (macOS 12.0+, Apple Silicon) — published 0.8.0:**

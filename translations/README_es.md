@@ -16,6 +16,19 @@ Un **Informe de composición** extiende ese modelo a través de las bases de dat
 
 El repositorio es un único proyecto autocontenido: las aplicaciones para iPad/iPhone, la aplicación de escritorio nativa para macOS (`AppKit`) (`Mac/`), la aplicación nativa para Windows (WPF) (`Windows/`), catorce frameworks (doce multiplataforma entre iOS, el Simulador de iOS y macOS nativo; doce sin interfaz gráfica en Linux), la compilación y la suite de pruebas de Linux sin interfaz gráfica (130 suites, 1 313 pruebas), la herramienta de línea de comandos `mad` y el sistema de compilación (`Compressor`) que compila las bibliotecas C de terceros desde fuentes fijadas. El código se publica bajo la licencia MIT; el formato `.mad` es una especificación abierta (consulte [`docs/`](../docs/es/)), aunque los nombres y el arte de las aplicaciones del proyecto no están cubiertos por la concesión de la licencia (consulte [`NOTICE`](https://github.com/mthomason/MAD/blob/master/NOTICE)).
 
+## Estructura del repositorio
+
+Esta es la estructura actual y nada se ha movido. Las entradas de nivel superior se agrupan por función:
+
+* **Aplicaciones** — `MADDesigner/` (la app iOS y sus destinos), `Mac/` (la app nativa `AppKit`), `Windows/` (la app nativa WPF).
+* **Frameworks** — los catorce directorios `MAD*`: `MADFoundation`, `MADAPI`, `MAD`, `MADCocoaExtensions`, `MADDataStructures`, `MADFileManager`, `MADExplorer`, `MADMySQL`, `MADTdsClient`, `MADPostgres`, `MADSqlite3`, `MADTds`, `MADBarcodes` y `MADFeedback`.
+* **Motor sin interfaz gráfica** — `Linux/`, `CLI/` y `Windows/Engine/`.
+* **Compilación y bibliotecas incluidas** — `Compressor/` y `ThirdParty/`.
+* **Ejemplos, recursos y datos** — `Samples/`, `StaticResources/`, `TestDatabase/` y `translations/`.
+* **Herramientas y satélites** — `scripts/`, `satellites/` y `Scrimpter/`.
+* **Workspaces** — `Reports.xcworkspace` y `Scrimpter.xcworkspace`.
+* **Documentación** — `docs/` (la especificación, las guías y los registros internos).
+
 > **Novedad en 0.8: Informes de composición.** Combine informes existentes en un solo documento en macOS y Windows; cada origen conserva su diseño y sus datos. Consulte [la guía de composición](../docs/es/composition.md) y los [informes de muestra](../Samples/README.md). La composición está incluida en la descarga publicada 0.8.0 de abajo.
 
 > **Pruebe MAD Designer en macOS (macOS 12.0+, Apple Silicon) — publicado 0.8.0:**
