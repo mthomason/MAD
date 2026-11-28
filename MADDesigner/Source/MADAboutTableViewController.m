@@ -238,7 +238,7 @@ static NSString * const MADIdentifierAboutViewController = @"MADIdentifierAboutV
 		}
 		return [[NSString alloc] initWithFormat: @"%@ · %@", revision, commit];
 	}
-	return [[NSString alloc] initWithFormat:NSLocalizedString(@"r%@", @"r%@"), [AppDelegate bundleGitCommitCount] ?: @"unknown"];
+	return @"unknown";
 }
 
 - (IBAction)cancel:(id)sender {

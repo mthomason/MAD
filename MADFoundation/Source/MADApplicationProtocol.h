@@ -20,7 +20,6 @@
 	+ (NSString *)bundleDisplayName;
 	+ (NSString *)bundleVersion;
 	+ (NSString *)bundleVersionShortString;
-	+ (NSString *)bundleGitCommitCount;
 	- (NSString *)ubiquityIdentifier;
 	- (NSString *)groupIdentifier;
 	- (NSString *)applicationIdentifier;

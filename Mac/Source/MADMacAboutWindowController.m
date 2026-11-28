@@ -135,8 +135,7 @@ static NSString * const kMADGitHubRepositoryURL = @"https://github.com/mthomason
 	if ([revision isKindOfClass:[NSString class]] && revision.length > 0) {
 		return revision;
 	}
-	NSString *commitCount = [[self metaDictionaryForBundle:bundle][@"MADGitCommitCount"] description];
-	return [NSString stringWithFormat:@"r%@", commitCount.length > 0 ? commitCount : @"unknown"];
+	return @"unknown";
 }
 
 /// The short source commit, starred when the tree was dirty at build time.
