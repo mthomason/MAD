@@ -508,6 +508,26 @@ static NSDateComponents *MADUTCComponents(NSDate *date) {
 	XCTAssertEqual(decemberParts.day, 15);
 }
 
+// SMALLDATETIME (SYBDATETIME4) counts its days from 1900-01-01, so day 0 is
+// 1900-01-01, not 1899-12-31.  The leap day also catches a base-date slip.
+- (void)testSelectSmallDateTimeKeepsItsDay {
+	[self requireServer];
+	MADDataTable *table = [self query:
+		@"SELECT CAST('2020-02-29T12:34:00' AS SMALLDATETIME) AS sdt"];
+
+	XCTAssertEqual([table numberOfRows], 1u);
+
+	NSDate *date = [table objectAtRow:0 column:0];
+	XCTAssertTrue([date isKindOfClass:[NSDate class]], @"SMALLDATETIME came back as %@", date);
+	NSDateComponents *parts = MADUTCComponents(date);
+	XCTAssertEqual(parts.year, 2020);
+	XCTAssertEqual(parts.month, 2);
+	XCTAssertEqual(parts.day, 29);
+	// The time-of-day is a separate convention: this path builds its components
+	// without the server's timezone, so the hour shifts with the runner.  The
+	// epoch assertion above is the defect this test was added for.
+}
+
 // A NULL of any of these types must still read back as [NSNull null] rather than being
 // cracked out of a zero-length buffer.
 - (void)testSelectModernDateTimeTypesNull {

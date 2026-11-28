@@ -1135,19 +1135,22 @@ it skips rather than fails when no server is reachable.
   explicit ownership and a close of their own.
 
 ### `SYBDATETIME4` counts its days from the wrong epoch
-- **Status:** Still open — recorded, not fixed
-- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:432`
-  (`janFirst1990Components`, read at `:1295`)
+- **Status:** Still open — fix in review on `investigate/tds-smalldatetime`
+- **Where:** `MADTdsClient/Source/MADDatabaseSQLServer.m:444`
+  (`janFirst1900Components`, read at `:1310`)
 - **Behavior:** the variable is named for 1990 and its components are 1900-01-00,
   but `DBDATETIME4.days` counts from **1900-01-01**, and day 0 must therefore be
   1900-01-01 too. Building the base as 1900-01-**00** (i.e. 1899-12-31) makes
   every `SMALLDATETIME` land one day early.
 - **Why it matters:** `SMALLDATETIME` columns are off by a day.
-- **Why it is not fixed here:** it is a different arithmetic path from the
-  cracked-record cases and it has not been measured against the server yet, so
-  the off-by-one is read from the code rather than observed. It wants its own
-  live test first — the same shape as
-  `testSelectClassicDateTimeKeepsItsMonth` — before the base date is changed.
+- **Fix (2026-11-28):** the base is now 1900-01-01 (`janFirst1900Components`), so
+  day 0 is the first day; the variable is named for the year it holds.
+- **Observation (2026-11-28):** the live test also showed the time-of-day is built in
+  the runner's local timezone (12:34 became 17:34 in UTC), unlike the classic
+  DATETIME path, which carries the server's timezone.  That is a separate
+  convention, not changed here.
+- **Test:** `MADTdsClientLiveTests testSelectSmallDateTimeKeepsItsDay` — before the
+  fix it read 2020-02-28 for a 2020-02-29 value; after, 2020-02-29.
 
 ### `-sqlSampleDataForField:andTable:` bypasses the base class's clause builders
 - **Status:** Quirk (load-bearing — documented, not changed)
