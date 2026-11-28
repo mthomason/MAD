@@ -2765,11 +2765,11 @@
 			buildConfigurationList = 4C0E7858163B5AEC003B951E /* Build configuration list for PBXNativeTarget "MAD Viewer" */;
 			buildPhases = (
 				4CDA7B0600000000000000B4 /* Ensure Libraries (Compressor) */,
-				4CF3B6EC18046614004BE0AC /* ShellScript */,
 				4C0E7720163B5AEC003B951E /* Sources */,
 				4C0E779E163B5AEC003B951E /* Frameworks */,
 				4C0E77AF163B5AEC003B951E /* Resources */,
 				4C3DCBD91BCA00F500ABE231 /* Embed Frameworks */,
+				4CF3B6EC18046614004BE0AC /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2785,13 +2785,13 @@
 			buildConfigurationList = 4C384E4814B29789007B4F48 /* Build configuration list for PBXNativeTarget "MAD Designer" */;
 			buildPhases = (
 				4CDA7B0500000000000000B3 /* Ensure Libraries (Compressor) */,
-				4C13394018026433004F61CA /* Run Script */,
 				4C384E2014B29789007B4F48 /* Sources */,
 				4C384E2214B29789007B4F48 /* Resources */,
 				4C384E2114B29789007B4F48 /* Frameworks */,
 				4CF46F4F1AC6411D007C0A82 /* Embed Foundation Extensions */,
 				4C744F181CE9BFCD00243830 /* CopyFiles */,
 				4C29162B24AC75E400EC794B /* Embed Frameworks */,
+				4C13394018026433004F61CA /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -2847,6 +2847,7 @@
 				4C9A00052EA0000000000001 /* Frameworks */,
 				4C9A00062EA0000000000001 /* Resources */,
 				4C9A00072EA0000000000001 /* Embed Frameworks */,
+				4C9A00092EA0000000000001 /* Build Identity */,
 			);
 			buildRules = (
 			);
@@ -3178,6 +3179,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "set -euo pipefail\n\"${SRCROOT}/../Compressor/build.sh\" --platforms macosx --all\n";
+		};
+		4C9A00092EA0000000000001 /* Build Identity */ = {
+			alwaysOutOfDate = 1;
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Identity";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PROJECT_DIR}/buildcounter.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
