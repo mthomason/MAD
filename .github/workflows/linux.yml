@@ -42,6 +42,15 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # The Docker context excludes .git, so the image cannot derive its own
+      # identity.  Pass the commit and count in; BuildInfo writes them beside
+      # mad and verify-cli.sh asserts the result.
+      - name: Compute the build identity
+        id: build_identity
+        run: |
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "count=$(git rev-list --count HEAD)" >> "$GITHUB_OUTPUT"
+
       # Pure Python on purpose: the localization audit needs no Xcode, so the
       # Linux gate can catch new unwrapped strings before the container build.
       - name: Test the localization audit
@@ -85,6 +94,10 @@ jobs:
           cache-from: type=gha,scope=mad-linux
           cache-to: type=gha,mode=max,scope=mad-linux
           load: true
+          build-args: |
+            MAD_SOURCE_COMMIT=${{ steps.build_identity.outputs.commit }}
+            MAD_BUILD_NUMBER=${{ steps.build_identity.outputs.count }}
+            MAD_SOURCE_DIRTY=false
 
       - name: Run the Linux suites
         run: ./Linux/build.sh --test

@@ -90,6 +90,28 @@ check_absent  "no git in the image"	git
 check "no build tree in the image"	[ ! -d /src ]
 check "sample database installed"	[ -f "${SAMPLE_DB}" ]
 
+# --- the build identity ----------------------------------------------------
+# MADBuildInfo.plist must ride beside mad: without it `mad version` answers null
+# for the engine version, revision, and source commit, which is a broken release
+# artifact even though every other verb still works.
+expected_engine="$(awk -F': *' '$1 == "engine_version" { gsub(/"/, "", $2); print $2; exit }' /repo/Versions.yml)"
+version_json="$(mad version --json 2>/dev/null)"
+if [[ -n "${expected_engine}" ]] && printf '%s' "${version_json}" | python3 -c '
+import json, re, sys
+info = json.load(sys.stdin)
+commit = info.get("sourceCommit") or ""
+revision = info.get("engineRevision") or ""
+ok = (info.get("engineVersion") == sys.argv[1]
+      and re.match(r"^r[0-9]+$", revision)
+      and re.match(r"^[0-9a-f]{40}$", commit)
+      and info.get("sourceDirty") is False)
+sys.exit(0 if ok else 1)
+' "${expected_engine}"; then
+	pass "version identity (${expected_engine})"
+else
+	fail "version identity (${version_json})"
+fi
+
 # --- help, inspect, schema, query -----------------------------------------
 
 output mad help > "${WORK}/help.txt"

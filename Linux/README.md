@@ -545,6 +545,10 @@ The image carries:
 
 * `/usr/local/bin/mad`, the CMake install rule's stable path (the binary is no
   longer reachable only at `Linux/build/mad`);
+* `/usr/local/bin/MADBuildInfo.plist`, the generated identity `mad version`
+  reports — the engine version, revision, and source commit. The build gets
+  those from the commit/count/dirty build args, because the Docker context has
+  no `.git`;
 * the shared objects the binary links — GNUstep Base, libobjc2, libdispatch
   and libBlocksRuntime — plus GNUstep's runtime directories and config. The
   other C libraries (sqlite3, freetds, openssl, zlib, bzip2, libarchive,

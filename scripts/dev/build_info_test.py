@@ -58,11 +58,12 @@ class BuildInfoTest(unittest.TestCase):
 			 "-c", "user.name=T", "commit", "-qm", "base"], check=True)
 		return manifest
 
-	def run_script(self, manifest, output, fmt, app_version="0.8.0", app_build="7"):
+	def run_script(self, manifest, output, fmt, app_version="0.8.0",
+				   app_build="7", extra=()):
 		return subprocess.run(
 			[str(SCRIPT), "--manifest", str(manifest), "--output", str(output),
 			 "--format", fmt, "--app-version", app_version,
-			 "--app-build", app_build],
+			 "--app-build", app_build, *extra],
 			capture_output=True, text=True, cwd=str(self.root))
 
 	def test_plist_contains_identity_from_manifest(self):
@@ -117,6 +118,41 @@ class BuildInfoTest(unittest.TestCase):
 		self.assertEqual(values["MADBuildNumber"], "0")
 		self.assertEqual(values["MADEngineRevision"], "r0")
 		self.assertFalse(values["MADSourceDirty"])
+
+	def test_overrides_supply_identity_without_git(self):
+		manifest = self.write("Versions.yml", MANIFEST)
+		output = self.root / "identity.plist"
+		commit = "0123456789abcdef0123456789abcdef01234567"
+		result = self.run_script(
+			manifest, output, "plist", extra=(
+				"--commit", commit, "--build-number", "5163",
+				"--dirty", "false"))
+		self.assertEqual(result.returncode, 0, result.stderr)
+		values = plistlib.loads(output.read_bytes())
+		self.assertEqual(values["MADBuildNumber"], "5163")
+		self.assertEqual(values["MADEngineRevision"], "r5163")
+		self.assertEqual(values["MADSourceCommit"], commit)
+		self.assertEqual(values["MADSourceCommitShort"], commit[:8])
+		self.assertFalse(values["MADSourceDirty"])
+
+	def test_dirty_override_is_marked(self):
+		manifest = self.write("Versions.yml", MANIFEST)
+		output = self.root / "identity.plist"
+		result = self.run_script(
+			manifest, output, "plist",
+			extra=("--commit", "unknown", "--build-number", "0",
+				   "--dirty", "true"))
+		self.assertEqual(result.returncode, 0, result.stderr)
+		values = plistlib.loads(output.read_bytes())
+		self.assertTrue(values["MADSourceDirty"])
+
+	def test_build_number_rejects_non_numeric(self):
+		manifest = self.write("Versions.yml", MANIFEST)
+		output = self.root / "identity.plist"
+		result = self.run_script(
+			manifest, output, "plist", extra=("--build-number", "nope"))
+		self.assertNotEqual(result.returncode, 0)
+		self.assertIn("--build-number", result.stderr)
 
 
 if __name__ == "__main__":
