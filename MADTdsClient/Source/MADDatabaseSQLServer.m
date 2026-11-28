@@ -441,15 +441,15 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 		NSCalendar *gregorian = [[NSCalendar alloc]
 								 initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
 		
-		NSDateComponents *janFirst1990Components = [[NSDateComponents alloc] init];
-		janFirst1990Components.year =    1900;
-		janFirst1990Components.month =   1;
-		janFirst1990Components.day =     0;
-		janFirst1990Components.hour =    0;
-		janFirst1990Components.minute =  0;
-		janFirst1990Components.second =  0;
-		
-		NSDate *janFirst1990 = [gregorian dateFromComponents:janFirst1990Components];
+		NSDateComponents *janFirst1900Components = [[NSDateComponents alloc] init];
+		janFirst1900Components.year =    1900;
+		janFirst1900Components.month =   1;
+		janFirst1900Components.day =     1;
+		janFirst1900Components.hour =    0;
+		janFirst1900Components.minute =  0;
+		janFirst1900Components.second =  0;
+
+		NSDate *janFirst1900 = [gregorian dateFromComponents:janFirst1900Components];
 		
 		RETCODE success = FAIL;
 		
@@ -1307,7 +1307,7 @@ int err_handler(DBPROCESS *__unused dbproc, int severity, int dberr, int oserr, 
 										NSDateComponents *offsetCompsDays = [[NSDateComponents alloc] init];
 										offsetCompsDays.day = smallDate.days;
 										
-										NSDate *object = [gregorian dateByAddingComponents:offsetCompsDays toDate:janFirst1990 options:0];
+										NSDate *object = [gregorian dateByAddingComponents:offsetCompsDays toDate:janFirst1900 options:0];
 										
 										
 										NSDateComponents *smallDaysComponentsPart1 = [gregorian components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay)
