@@ -11,6 +11,8 @@
 #import <MADFoundation/MADURLFactory.h>
 
 #import <Foundation/NSException.h>
+#import <Foundation/NSError.h>
+#import <Foundation/FoundationErrors.h>
 #import <Foundation/NSFileManager.h>
 #import <Foundation/NSFileCoordinator.h>
 #import <Foundation/NSBundle.h>
@@ -472,11 +474,25 @@ static NSString * const MADPathComponentData       = @"Data";
 }
 
 + (void)removeFileAtURL:(NSURL *)url completion:(void (^)(NSError *error))completion {
-	NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
-	
-	// `url` may be a security scoped resource.
+	// A missing URL never reaches the coordinator's accessor, so the completion
+	// would never fire and a caller waiting on it (MADOperationDeleteFile) would
+	// hang.  Answer the error directly; the same guard covers the nil URL.
 	BOOL successfulSecurityScopedResourceAccess = [url startAccessingSecurityScopedResource];
-	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	if (url == nil || ![fileManager fileExistsAtPath:(url.path ?: @"")]) {
+		if (successfulSecurityScopedResourceAccess) [url stopAccessingSecurityScopedResource];
+		NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+		userInfo[NSLocalizedDescriptionKey] = NSLocalizedString(@"The file does not exist.", @"Error when a file to remove is missing.");
+		if (url != nil) userInfo[NSURLErrorKey] = url;
+		NSError *error = [NSError errorWithDomain:NSCocoaErrorDomain
+											code:NSFileNoSuchFileError
+										userInfo:userInfo];
+		if (completion != nil) completion(error);
+		return;
+	}
+
+	NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
+
 	NSFileAccessIntent *writing = [NSFileAccessIntent writingIntentWithURL: url
 																   options: NSFileCoordinatorWritingForDeleting];
 	NSArray *intents = [[NSArray alloc] initWithObjects:writing, nil];
@@ -488,7 +504,6 @@ static NSString * const MADPathComponentData       = @"Data";
 			if (completion != nil) completion(accessError);
 			return;
 		}
-		NSFileManager *fileManager = [[NSFileManager alloc] init];
 		NSError *error = nil;
 		BOOL successfulDelete = [fileManager removeItemAtURL:writing.URL error:&error];
 		if (error != nil) {

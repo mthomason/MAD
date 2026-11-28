@@ -72,8 +72,43 @@ static void testRemoveContentsOfDirectoryAlsoRemovesDirectory(void) {
 	MAD_PASS(![[NSFileManager defaultManager] fileExistsAtPath:directory.path], "the directory itself is gone");
 }
 
+static void testRemoveMissingFileReportsAnError(void) {
+	// A missing file never reaches the coordinator's accessor; the helper must
+	// answer the error rather than leave the completion uncalled.
+	NSURL *url = [uniqueTempDirectoryURL() URLByAppendingPathComponent:@"missing.mad"];
+	__block BOOL called = NO;
+	__block NSError *error = nil;
+
+	[MADFileUtilities removeFileAtURL:url completion:^(NSError *e) {
+		called = YES;
+		error = [e retain];
+	}];
+
+	MAD_PASS(called, "the completion is called");
+	MAD_PASS(error != nil, "an error is reported");
+	MAD_PASS([error.domain isEqualToString:NSCocoaErrorDomain], "the domain is Cocoa");
+	MAD_PASS(error.code == NSFileNoSuchFileError, "the code is no-such-file");
+	[error release];
+}
+
+static void testRemoveNilFileReportsAnError(void) {
+	__block BOOL called = NO;
+	__block NSError *error = nil;
+
+	[MADFileUtilities removeFileAtURL:nil completion:^(NSError *e) {
+		called = YES;
+		error = [e retain];
+	}];
+
+	MAD_PASS(called, "the completion is called");
+	MAD_PASS(error != nil, "an error is reported");
+	[error release];
+}
+
 MAD_TEST_MAIN("MADFileUtilitiesTests",
 	MAD_TEST(testQueueIsSingleton),
 	MAD_TEST(testCreateDirectoryForUrlIfItDoesNotExist),
 	MAD_TEST(testContentsOfDirectoryFiltersByExtension),
-	MAD_TEST(testRemoveContentsOfDirectoryAlsoRemovesDirectory));
+	MAD_TEST(testRemoveContentsOfDirectoryAlsoRemovesDirectory),
+	MAD_TEST(testRemoveMissingFileReportsAnError),
+	MAD_TEST(testRemoveNilFileReportsAnError));
