@@ -16,6 +16,19 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 
 本仓库是一个自包含项目：iPad/iPhone 应用、原生 macOS（`AppKit`）桌面应用（`Mac/`）、原生 Windows（WPF）应用（`Windows/`）、十四个框架（其中十二个跨 iOS、iOS 模拟器和原生 macOS 多平台；十二个在 Linux 上无头运行）、无头 Linux 构建与测试套件（130 个套件，1,313 个测试）、`mad` 命令行工具，以及从固定源码编译第三方 C 库的构建系统（`Compressor`）。代码以 MIT 许可证发布；`.mad` 格式是开放规范（参见 [`docs/`](../docs/zh/)），但项目名称和应用美术资源不在许可证授权范围内（参见 [`NOTICE`](../NOTICE)）。
 
+## 仓库布局
+
+这是当前的布局，没有移动任何内容。顶层条目按角色分组：
+
+* **应用** — `MADDesigner/`（iOS 应用及其目标）、`Mac/`（原生 `AppKit` 应用）、`Windows/`（原生 WPF 应用）。
+* **框架** — 十四个 `MAD*` 目录：`MADFoundation`、`MADAPI`、`MAD`、`MADCocoaExtensions`、`MADDataStructures`、`MADFileManager`、`MADExplorer`、`MADMySQL`、`MADTdsClient`、`MADPostgres`、`MADSqlite3`、`MADTds`、`MADBarcodes` 和 `MADFeedback`。
+* **无头引擎** — `Linux/`、`CLI/` 和 `Windows/Engine/`。
+* **构建与随附库** — `Compressor/` 和 `ThirdParty/`。
+* **示例、资源与数据** — `Samples/`、`StaticResources/`、`TestDatabase/` 和 `translations/`。
+* **工具与卫星仓库** — `scripts/`、`satellites/` 和 `Scrimpter/`。
+* **工作区** — `Reports.xcworkspace` 和 `Scrimpter.xcworkspace`。
+* **文档** — `docs/`（规范、指南和内部记录）。
+
 > **0.8 新增：组合报表。** 在 macOS 和 Windows 上把现有报表合并到一个文档；每个源保留自己的布局和数据。参见[组合指南](../docs/zh/composition.md)和[示例报表](../Samples/README.md)。组合功能已包含在下文的 0.8.0 已发布下载中。
 
 > **在 macOS 上试用 MAD Designer（macOS 12.0+，Apple Silicon）——已发布 0.8.0：**

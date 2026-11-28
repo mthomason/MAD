@@ -16,6 +16,19 @@ Ein **Kompositionsbericht** erweitert dieses Modell auf mehrere Datenbanken. Das
 
 Das Repository ist ein einziges, in sich geschlossenes Projekt: die iPad-/iPhone-Apps, die native macOS-Desktopanwendung (`AppKit`, `Mac/`), die native Windows-Anwendung (WPF, `Windows/`), vierzehn Frameworks (zwölf multiplattformfähig für iOS, iOS-Simulator und natives macOS; zwölf headless unter Linux), der headless Linux-Build und seine Testsuite (130 Suiten, 1.313 Tests), das Kommandozeilenwerkzeug `mad` und das Buildsystem (`Compressor`), das die C-Bibliotheken von Drittanbietern aus fixierten Quellen kompiliert. Der Code wird unter der MIT-Lizenz veröffentlicht; das `.mad`-Format ist eine offene Spezifikation (siehe [`docs/`](../docs/de/)), die Namen und das App-Artwork des Projekts sind jedoch nicht von der Lizenzgewährung abgedeckt (siehe [`NOTICE`](../NOTICE)).
 
+## Repository-Aufbau
+
+Dies ist der aktuelle Aufbau; nichts wurde verschoben. Die Einträge auf oberster Ebene gruppieren sich nach Rolle:
+
+* **Anwendungen** — `MADDesigner/` (die iOS-App und ihre Targets), `Mac/` (die native `AppKit`-App), `Windows/` (die native WPF-App).
+* **Frameworks** — die vierzehn `MAD*`-Verzeichnisse: `MADFoundation`, `MADAPI`, `MAD`, `MADCocoaExtensions`, `MADDataStructures`, `MADFileManager`, `MADExplorer`, `MADMySQL`, `MADTdsClient`, `MADPostgres`, `MADSqlite3`, `MADTds`, `MADBarcodes` und `MADFeedback`.
+* **Headless-Engine** — `Linux/`, `CLI/` und `Windows/Engine/`.
+* **Build und eingebundene Bibliotheken** — `Compressor/` und `ThirdParty/`.
+* **Beispiele, Assets und Daten** — `Samples/`, `StaticResources/`, `TestDatabase/` und `translations/`.
+* **Werkzeuge und Satelliten** — `scripts/`, `satellites/` und `Scrimpter/`.
+* **Workspaces** — `Reports.xcworkspace` und `Scrimpter.xcworkspace`.
+* **Dokumentation** — `docs/` (die Spezifikation, die Anleitungen und die internen Aufzeichnungen).
+
 > **Neu in 0.8: Kompositionsberichte.** Kombinieren Sie vorhandene Berichte unter macOS und Windows in einem Dokument; jede Quelle behält ihr Layout und ihre Daten. Siehe [die Kompositionsanleitung](../docs/de/composition.md) und die [Beispielberichte](../Samples/README.md). Komposition ist im unten veröffentlichten 0.8.0-Download enthalten.
 
 > **MAD Designer unter macOS ausprobieren (macOS 12.0+, Apple Silicon) — veröffentlicht 0.8.0:**

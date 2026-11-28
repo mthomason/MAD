@@ -16,6 +16,19 @@ Um **Relatório de Composição** estende esse modelo entre bancos de dados. O d
 
 O repositório é um projeto único e autocontido: os aplicativos para iPad/iPhone, o aplicativo desktop nativo para macOS (`AppKit`) (`Mac/`), o aplicativo nativo para Windows (WPF) (`Windows/`), quatorze frameworks (doze multiplataforma para iOS, Simulador do iOS e macOS nativo; doze headless no Linux), o build e a suíte de testes headless para Linux (130 suítes, 1.313 testes), a ferramenta de linha de comando `mad` e o sistema de build (`Compressor`) que compila as bibliotecas C de terceiros a partir de códigos-fonte com versões fixadas. O código é publicado sob a licença MIT; o formato `.mad` é uma especificação aberta (consulte [`docs/`](../docs/pt-br/)), embora os nomes do projeto e a arte visual dos aplicativos não façam parte da concessão da licença (consulte [`NOTICE`](../NOTICE)).
 
+## Estrutura do repositório
+
+Este é o layout atual, e nada foi movido. As entradas de nível superior se agrupam por função:
+
+* **Aplicativos** — `MADDesigner/` (o app iOS e seus alvos), `Mac/` (o app nativo `AppKit`), `Windows/` (o app nativo WPF).
+* **Frameworks** — os quatorze diretórios `MAD*`: `MADFoundation`, `MADAPI`, `MAD`, `MADCocoaExtensions`, `MADDataStructures`, `MADFileManager`, `MADExplorer`, `MADMySQL`, `MADTdsClient`, `MADPostgres`, `MADSqlite3`, `MADTds`, `MADBarcodes` e `MADFeedback`.
+* **Motor headless** — `Linux/`, `CLI/` e `Windows/Engine/`.
+* **Build e bibliotecas incorporadas** — `Compressor/` e `ThirdParty/`.
+* **Amostras, recursos e dados** — `Samples/`, `StaticResources/`, `TestDatabase/` e `translations/`.
+* **Ferramentas e satélites** — `scripts/`, `satellites/` e `Scrimpter/`.
+* **Workspaces** — `Reports.xcworkspace` e `Scrimpter.xcworkspace`.
+* **Documentação** — `docs/` (a especificação, os guias e os registros internos).
+
 > **Novidade na 0.8: Relatórios de Composição.** Combine relatórios existentes em um único documento no macOS e no Windows; cada fonte mantém seu layout e seus dados. Consulte [o guia de composição](../docs/pt-br/composition.md) e os [relatórios de exemplo](../Samples/README.md). A composição está incluída no download 0.8.0 publicado abaixo.
 
 > **Experimente o MAD Designer no macOS (macOS 12.0+, Apple Silicon) — publicado 0.8.0:**

@@ -16,6 +16,19 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 
 本リポジトリは自己完結した単一プロジェクトです。iPad/iPhoneアプリ、ネイティブmacOS（`AppKit`）デスクトップアプリ（`Mac/`）、ネイティブWindows（WPF）アプリ（`Windows/`）、14個のフレームワーク（うち12個はiOS、iOSシミュレータ、ネイティブmacOS対応のマルチプラットフォーム、12個はLinux上でヘッドレス動作）、ヘッドレスLinuxビルドおよびテストスイート（130スイート、1,313テスト）、`mad`コマンドラインツール、およびピン留めされたソースからサードパーティ製Cライブラリをコンパイルするビルドシステム（`Compressor`）を含んでいます。コードはMITライセンスの下で公開されており、`.mad`フォーマットはオープン仕様です（[`docs/`](../docs/ja/)を参照）。ただし、プロジェクト名およびアプリのアートワークはライセンス供与の対象外です（[`NOTICE`](../NOTICE)を参照）。
 
+## リポジトリのレイアウト
+
+これが現在のレイアウトであり、何も移動していません。トップレベルの項目は役割ごとに分類されます。
+
+* **アプリケーション** — `MADDesigner/`（iOSアプリとそのターゲット）、`Mac/`（ネイティブ`AppKit`アプリ）、`Windows/`（ネイティブWPFアプリ）。
+* **フレームワーク** — 14個の`MAD*`ディレクトリ：`MADFoundation`、`MADAPI`、`MAD`、`MADCocoaExtensions`、`MADDataStructures`、`MADFileManager`、`MADExplorer`、`MADMySQL`、`MADTdsClient`、`MADPostgres`、`MADSqlite3`、`MADTds`、`MADBarcodes`、`MADFeedback`。
+* **ヘッドレスエンジン** — `Linux/`、`CLI/`、`Windows/Engine/`。
+* **ビルドとベンダーライブラリ** — `Compressor/`、`ThirdParty/`。
+* **サンプル、アセット、データ** — `Samples/`、`StaticResources/`、`TestDatabase/`、`translations/`。
+* **ツールとサテライト** — `scripts/`、`satellites/`、`Scrimpter/`。
+* **ワークスペース** — `Reports.xcworkspace`、`Scrimpter.xcworkspace`。
+* **ドキュメント** — `docs/`（仕様、ガイド、内部記録）。
+
 > **0.8の新機能：コンポジションレポート。** macOSとWindowsで既存のレポートを1つのドキュメントに統合できます。各ソースは自身のレイアウトとデータを保持します。[コンポジションガイド](../docs/ja/composition.md)と[サンプルレポート](../Samples/README.md)を参照してください。コンポジションは下記の公開済み0.8.0ダウンロードに含まれています。
 
 > **macOSでMAD Designerを試す（macOS 12.0以降、Apple Silicon）——公開済み0.8.0：**
