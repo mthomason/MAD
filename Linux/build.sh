@@ -113,14 +113,18 @@ build_runtime_image() { # build the runtime stage: the `mad` deliverable
 }
 
 run_verify() { # build the runtime image, then run the CLI end-to-end checks in it
-	local db args=()
+	local db args=() expected_revision
 	db="$(docker_bin)"
 	build_runtime_image
-	log "verify ${RUNTIME_IMAGE}"
+	# The image's revision is the host's commit count.  Assert it exactly so a
+	# shallow checkout (which counts 1) cannot pass as a release image.
+	expected_revision="r$(git -C "${REPO_ROOT}" rev-list --count HEAD 2>/dev/null || echo 0)"
+	log "verify ${RUNTIME_IMAGE} (${expected_revision})"
 	args=(run --rm)
 	if [[ -n "${PLATFORM}" ]]; then args+=(--platform "${PLATFORM}"); fi
 	# The repo is mounted read-only: the verification writes only to /tmp.
 	"${db}" "${args[@]}" --entrypoint bash \
+		-e "MAD_EXPECTED_REVISION=${expected_revision}" \
 		-v "${REPO_ROOT}:/repo:ro" \
 		"${RUNTIME_IMAGE}" /repo/Linux/verify-cli.sh
 }
