@@ -1287,3 +1287,136 @@ language set in CI. The translations are machine-assisted and unreviewed (D14):
 the iOS and Mac About screens carry a notice and point at the issue tracker. No
 screenshot, VoiceOver, Dynamic Type, or truncation pass was run, and the
 PDF/document page-count plurals remain. See the plan's Phase 3 and 4 status.
+
+---
+
+## 20. The 2026-11-28 backlog review
+
+**Status:** Open — queued by the documentation pass of 2026-11-28. **Not started until the
+user asks for an item by number.** The order is by value.
+
+The pass recorded two policies that the items below apply:
+[`MAD_LAYERING_AND_DEAD_CODE.md`](../design/MAD_LAYERING_AND_DEAD_CODE.md) (item 5) and
+[`MAD_ERROR_AND_NULLABILITY.md`](../design/MAD_ERROR_AND_NULLABILITY.md) (item 6). The
+register entries are linked, not restated.
+
+### 20.1 CI determinism
+
+Two intermittent failures make a green `master` look red: the macOS advisory gate's
+`MAD/MADTests/MADDocumentTests.m:545`
+(`-testOpenAndCloseMoveThroughTheUIDocumentStateMachine`) times out its 20-second open
+expectation while the fixture's `writer` and its `RptqStoreContext` are still alive, and the
+macOS smoke suite's `MADSmokeRefreshComposed` (`Mac/Tests/MADMacSmokeTest.m:77`) waits on a
+row count rather than refresh completion, so it can overlap a composed refresh with the next
+one. Close and release the fixture's writer and context before the second document opens the
+same URL; make the smoke helper wait for the refresh to finish. Then loop the test and the
+authored-composition block rather than trusting one rerun.
+
+**Files:** `MAD/MADTests/MADDocumentTests.m`, `Mac/Tests/MADMacSmokeTest.m`,
+`Mac/Source/MADMacViewerViewController.m` (the in-flight refresh state if the Viewer's
+button is to be disabled).
+
+**Acceptance:** the `MADDocumentTests` open test passes in a loop of at least 20 runs on the
+hosted macOS runner, and the smoke suite's composed-refresh block passes in a loop; no
+production refresh behaviour changes.
+
+**Register:** [`BUGS.md` — `MADDocumentTests` can time out opening a document on the macOS
+runner](BUGS.md#maddocumenttests-can-time-out-opening-a-document-on-the-macos-runner) ·
+[`BUGS.md` — the macOS smoke suite can overlap a composed refresh with the next
+one](BUGS.md#the-macos-smoke-suite-can-overlap-a-composed-refresh-with-the-next-one).
+
+### 20.2 MySQL double close
+
+`-closeConnection:` and `-dealloc` both call `mysql_close` on the same handle; the second
+call is a double free. Make the close idempotent: NULL the connection's handle after
+`mysql_close`, and guard both `-closeConnection:` and `-dealloc` on a non-NULL handle. This
+is Objective-C ownership bookkeeping at two sites; it needs no rebuild of the MySQL client.
+
+**Files:** `MADMySQL/Source/MADDatabaseMySQL.m:397-403`,
+`MADMySQL/Source/MADMySQLConnection.m:79-85`.
+
+**Acceptance:** a live test closes the connection, then releases it, with no double free
+(and the import path's explicit close still works); the `MADMySQL` live suite stays green.
+
+**Register:** [`BUGS.md` — `MADDatabaseMySQL -closeConnection:` and `MADMySQLConnection
+-dealloc` both `mysql_close` the
+handle](BUGS.md#maddatabasemysql--closeconnection-and-madmysqlconnection--dealloc-both-mysql_close-the-handle)
+(the fix sketch is in that entry).
+
+### 20.3 `BDHost +addressForHostname:` IPv6-only guard
+
+The guard is `addresses.class > 0`, which is always true, so an IPv6-only hostname
+subscripts an empty array and throws instead of reporting a failed lookup. Test
+`addresses.count > 0` and answer nil when the name resolves to no IPv4 address.
+
+**Files:** `MADFoundation/Source/BDHost.m:27`.
+
+**Acceptance:** an empty resolution answers nil; `BDHostTests testLocalhostResolvesToLoopback`
+stays green; a test covers the empty path through a testable seam (the offline fixture
+cannot resolve IPv6-only deterministically).
+
+**Register:** [`BUGS.md` — `BDHost +addressForHostname:` crashes when the name resolves to
+no IPv4
+address](BUGS.md#bdhost-addressforhostname-crashes-when-the-name-resolves-to-no-ipv4-address).
+
+### 20.4 `RptqStoreContext -setRelationship:value:onObject:` inverse maintenance
+
+Unlink the old target on a to-one replace and clear, and on a to-many replace: remove the
+object from the previous target's inverse collection, clear the previous inverse reference,
+and mark the previous target dirty. Add four characterization tests — to-one replace, to-one
+clear, to-many replace, to-many removal. The drag-and-drop "an element must live somewhere"
+policy stays in the UI and is not changed.
+
+**Files:** `MAD/Source/rptq/store/RptqStoreContext.m:324-363`.
+
+**Acceptance:** the four tests pass, each asserting the old target no longer lists the moved
+or cleared object; the `MAD` suite stays green.
+
+**Register:** [`BUGS.md` — `RptqStoreContext -setRelationship:value:onObject:` does not
+unlink old inverse targets when replacing or clearing a
+relationship](BUGS.md#rptqstorecontext--setrelationshipvalueonobject-does-not-unlink-old-inverse-targets-when-replacing-or-clearing-a-relationship).
+
+### 20.5 Dead-code pass
+
+Apply the rule and the inventory in
+[`MAD_LAYERING_AND_DEAD_CODE.md`](../design/MAD_LAYERING_AND_DEAD_CODE.md) §4: each item is
+wired with a test that fails until it is wired, or deleted in a dedicated, behaviour-free
+commit. The inventory is `MADQueryFullTableEnumerator`, `MADDatabaseResultValue`,
+`MADReportFormatterCache`, `MADArrayCachingEnumerator`, and the vestigial `MADModel*`
+surface in `model-layer.md` §7B.
+
+**Files:** those named in the record's §4.1 table, plus the owning project file only when a
+deletion requires removing the file reference from a target.
+
+**Acceptance:** no inventory item remains in no target with no caller; every deletion is
+its own behaviour-free commit; the MAD and MADSqlite3 suites and `./Linux/build.sh` stay
+green.
+
+**Register:** the per-item `BUGS.md` entries linked from the record.
+
+### 20.6 Nullability and error adoption at the driver boundary
+
+Apply
+[`MAD_ERROR_AND_NULLABILITY.md`](../design/MAD_ERROR_AND_NULLABILITY.md) §1 to the public
+headers, in its §4 order: `MADDatabase` and the three drivers at the wire boundary, then
+`MADFoundation`, then `MADFileManager`, then the application targets. Fix the known
+violations when the owning code is next touched; do not sweep implementation files or
+private methods.
+
+**Files:** the public headers of `MAD` (`MADDatabase`, `MADQueryFull`, `MADDataTable`,
+`MADElementStylizedText`), `MADMySQL`, `MADTdsClient`, `MADPostgres`, `MADFoundation`, and
+`MADFileManager`.
+
+**Acceptance:** every public entry point in the adopted layer declares one of the three
+outcomes and matches it; the fourteen analyzer sites are resolved or made honest; each
+changed contract has a test; the Apple suites and `./Linux/build.sh` stay green.
+
+**Register:** the four violation entries linked from the record's §5, under
+[`BUGS.md` — nullability and error reporting are not uniform across the
+program](BUGS.md#nullability-and-error-reporting-are-not-uniform-across-the-program).
+
+### 20.7 Repository map
+
+Added to `README.md` and the five translations in this pass (2026-11-28): one **Repository
+layout** section grouping the top-level entries. Done — kept here for the record, not a
+follow-up.
