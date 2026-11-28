@@ -46,6 +46,13 @@
 #import <Quartz/Quartz.h>
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
+// The document's serial refresh queue is private to MADMacDocument.  The smoke test
+// uses it to wait for a refresh to finish, not merely for its first visible effect;
+// the queue is the only signal that the source connections have closed.
+@interface MADMacDocument (MADSmokeRefreshQueue)
+@property (nonatomic, readonly) MADOperationQueue *refreshQueue;
+@end
+
 @interface MADSmokeDesignerHost : NSObject <MADocumentDesignerProtocol>
 @property (strong, null_resettable) NSUndoManager *undoManager;
 @property (nonatomic, strong, readwrite, null_resettable) RptqStoreContext *managedObjectContext;
@@ -72,8 +79,26 @@
 
 @end
 
-// Refreshes a composed document through the Viewer's own action and waits for the
-// expected row count (or a refresh error).
+// The Viewer's refresh action returns immediately, and a row count or an error can
+// become visible before the refresh operation has closed its source connections.  A
+// following mutation or refresh then races that teardown -- the composed smoke block,
+// and the empty-payments step, are the reported cases.  Drain the serial refresh queue
+// and give the main-queue completion one turn before the caller touches the sources.
+static BOOL MADSmokeDrainRefreshQueue(MADMacDocument *doc, NSTimeInterval timeout) {
+	MADOperationQueue *queue = doc.refreshQueue;
+	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:timeout];
+	while (queue.operationCount > 0 && deadline.timeIntervalSinceNow > 0) {
+		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+								 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+	}
+	[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+							 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+	return queue.operationCount == 0;
+}
+
+// Refreshes a composed document through the Viewer's own action, waits for the
+// expected row count (or a refresh error), then waits for the refresh operation itself
+// to finish before returning.
 static BOOL MADSmokeRefreshComposed(MADMacDocument *doc, MADMacViewerViewController *viewer, NSUInteger expectedRows) {
 	[viewer refreshReportAction:nil];
 	NSDate *deadline = [NSDate dateWithTimeIntervalSinceNow:30.0];
@@ -81,7 +106,11 @@ static BOOL MADSmokeRefreshComposed(MADMacDocument *doc, MADMacViewerViewControl
 		   viewer.lastRefreshError == nil && deadline.timeIntervalSinceNow > 0) {
 		[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
 	}
-	return [doc.headlessDocument.dataTable numberOfRows] == expectedRows && viewer.lastRefreshError == nil;
+	BOOL matched = [doc.headlessDocument.dataTable numberOfRows] == expectedRows && viewer.lastRefreshError == nil;
+	if (!MADSmokeDrainRefreshQueue(doc, 30.0)) {
+		return NO;
+	}
+	return matched;
 }
 
 static BOOL RunRefreshSynchronous(MADHeadlessDocument *doc) {
@@ -2538,6 +2567,10 @@ int main(int argc, const char * argv[]) {
 					composedViewer.lastRefreshError.description.UTF8String);
 			return 105;
 		}
+		if (!MADSmokeDrainRefreshQueue(composedDoc, 20.0)) {
+			fprintf(stderr, "FAIL: The failed composed refresh did not finish before the payments source was restored\n");
+			return 111;
+		}
 		if ([composedDoc.headlessDocument.dataTable numberOfRows] != 4) {
 			fprintf(stderr, "FAIL: Failed composed refresh discarded the previous readable report (%lu rows, expected 4)\n",
 					(unsigned long)[composedDoc.headlessDocument.dataTable numberOfRows]);
@@ -2561,6 +2594,10 @@ int main(int argc, const char * argv[]) {
 		while ([composedDoc.headlessDocument.dataTable numberOfRows] != 3 &&
 			   composedDeadline.timeIntervalSinceNow > 0) {
 			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.02]];
+		}
+		if (!MADSmokeDrainRefreshQueue(composedDoc, 20.0)) {
+			fprintf(stderr, "FAIL: The empty-payments refresh did not finish\n");
+			return 112;
 		}
 		if (composedViewer.lastRefreshError != nil || [composedDoc.headlessDocument.dataTable numberOfRows] != 3) {
 			fprintf(stderr, "FAIL: Empty-payments refresh did not yield 3 invoices: %s\n",

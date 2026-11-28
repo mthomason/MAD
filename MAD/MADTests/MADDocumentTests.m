@@ -566,6 +566,15 @@
 								  error:&error],
 				  @"the fixture document did not save: %@", error);
 
+	// Release the fixture writer before another document opens the same URL.  The
+	// writer's store context and document store stay open otherwise, so the reader
+	// opens a second context over the same SQLite file and the open can block until
+	// the expectation times out.  The writer was never opened through UIDocument, so
+	// -closeWithCompletionHandler: closes its store and returns immediately.
+	[writer closeWithCompletionHandler:nil];
+	context = nil;
+	writer = nil;
+
 	// Open it the way the app does.
 	MADocument *document = [[MADocument alloc] initWithFileURL:documentURL];
 	XCTestExpectation *opened = [self expectationWithDescription:@"open"];
