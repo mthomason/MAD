@@ -24,10 +24,10 @@ Esta es la estructura actual y nada se ha movido. Las entradas de nivel superior
 * **Frameworks** — los catorce directorios `MAD*`: `MADFoundation`, `MADAPI`, `MAD`, `MADCocoaExtensions`, `MADDataStructures`, `MADFileManager`, `MADExplorer`, `MADMySQL`, `MADTdsClient`, `MADPostgres`, `MADSqlite3`, `MADTds`, `MADBarcodes` y `MADFeedback`.
 * **Motor sin interfaz gráfica** — `Linux/`, `CLI/` y `Windows/Engine/`.
 * **Compilación y bibliotecas incluidas** — `Compressor/` y `ThirdParty/`.
-* **Ejemplos, recursos y datos** — `Samples/`, `StaticResources/`, `TestDatabase/` y `translations/`.
+* **Ejemplos, recursos y datos** — `Samples/`, `StaticResources/` y `TestDatabase/`.
 * **Herramientas y satélites** — `scripts/`, `satellites/` y `Scrimpter/`.
 * **Workspaces** — `Reports.xcworkspace` y `Scrimpter.xcworkspace`.
-* **Documentación** — `docs/` (la especificación, las guías y los registros internos).
+* **Documentación** — `docs/` (la especificación, las guías y los registros internos) y `translations/` (los documentos raíz traducidos).
 
 > **Novedad en 0.8: Informes de composición.** Combine informes existentes en un solo documento en macOS y Windows; cada origen conserva su diseño y sus datos. Consulte [la guía de composición](../docs/es/composition.md) y los [informes de muestra](../Samples/README.md). La composición está incluida en la descarga publicada 0.8.0 de abajo.
 

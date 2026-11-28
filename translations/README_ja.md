@@ -24,10 +24,10 @@ MADは、アドホッククエリ、レポーティング、およびレポー�
 * **フレームワーク** — 14個の`MAD*`ディレクトリ：`MADFoundation`、`MADAPI`、`MAD`、`MADCocoaExtensions`、`MADDataStructures`、`MADFileManager`、`MADExplorer`、`MADMySQL`、`MADTdsClient`、`MADPostgres`、`MADSqlite3`、`MADTds`、`MADBarcodes`、`MADFeedback`。
 * **ヘッドレスエンジン** — `Linux/`、`CLI/`、`Windows/Engine/`。
 * **ビルドとベンダーライブラリ** — `Compressor/`、`ThirdParty/`。
-* **サンプル、アセット、データ** — `Samples/`、`StaticResources/`、`TestDatabase/`、`translations/`。
+* **サンプル、アセット、データ** — `Samples/`、`StaticResources/`、`TestDatabase/`。
 * **ツールとサテライト** — `scripts/`、`satellites/`、`Scrimpter/`。
 * **ワークスペース** — `Reports.xcworkspace`、`Scrimpter.xcworkspace`。
-* **ドキュメント** — `docs/`（仕様、ガイド、内部記録）。
+* **ドキュメント** — `docs/`（仕様、ガイド、内部記録）と `translations/`（翻訳されたルート文書）。
 
 > **0.8の新機能：コンポジションレポート。** macOSとWindowsで既存のレポートを1つのドキュメントに統合できます。各ソースは自身のレイアウトとデータを保持します。[コンポジションガイド](../docs/ja/composition.md)と[サンプルレポート](../Samples/README.md)を参照してください。コンポジションは下記の公開済み0.8.0ダウンロードに含まれています。
 

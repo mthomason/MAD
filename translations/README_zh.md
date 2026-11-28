@@ -24,10 +24,10 @@ MAD 是一个用 Objective-C 从零构建的关系型报表平台，用于即席
 * **框架** — 十四个 `MAD*` 目录：`MADFoundation`、`MADAPI`、`MAD`、`MADCocoaExtensions`、`MADDataStructures`、`MADFileManager`、`MADExplorer`、`MADMySQL`、`MADTdsClient`、`MADPostgres`、`MADSqlite3`、`MADTds`、`MADBarcodes` 和 `MADFeedback`。
 * **无头引擎** — `Linux/`、`CLI/` 和 `Windows/Engine/`。
 * **构建与随附库** — `Compressor/` 和 `ThirdParty/`。
-* **示例、资源与数据** — `Samples/`、`StaticResources/`、`TestDatabase/` 和 `translations/`。
+* **示例、资源与数据** — `Samples/`、`StaticResources/` 和 `TestDatabase/`。
 * **工具与卫星仓库** — `scripts/`、`satellites/` 和 `Scrimpter/`。
 * **工作区** — `Reports.xcworkspace` 和 `Scrimpter.xcworkspace`。
-* **文档** — `docs/`（规范、指南和内部记录）。
+* **文档** — `docs/`（规范、指南和内部记录）和 `translations/`（翻译的根文档）。
 
 > **0.8 新增：组合报表。** 在 macOS 和 Windows 上把现有报表合并到一个文档；每个源保留自己的布局和数据。参见[组合指南](../docs/zh/composition.md)和[示例报表](../Samples/README.md)。组合功能已包含在下文的 0.8.0 已发布下载中。
 

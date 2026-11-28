@@ -1403,9 +1403,9 @@ headers, in its §4 order: `MADDatabase` and the three drivers at the wire bound
 violations when the owning code is next touched; do not sweep implementation files or
 private methods.
 
-**Files:** the public headers of `MAD` (`MADDatabase`, `MADQueryFull`, `MADDataTable`,
-`MADElementStylizedText`), `MADMySQL`, `MADTdsClient`, `MADPostgres`, `MADFoundation`, and
-`MADFileManager`.
+**Files:** the public headers of `MADAPI` (`MADDatabase`), `MAD` (`MADQueryFull`,
+`MADElementStylizedText`), `MADFoundation` (`MADDataTable`), `MADMySQL`, `MADTdsClient`,
+`MADPostgres`, and `MADFileManager`.
 
 **Acceptance:** every public entry point in the adopted layer declares one of the three
 outcomes and matches it; the fourteen analyzer sites are resolved or made honest; each
