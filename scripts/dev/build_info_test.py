@@ -23,13 +23,11 @@ next_tag: "v0.8.0"
 published_release: "0.7.0"
 published_tag: "v0.7.0"
 macos_app_version: "0.8.0"
-macos_build: "7"
 windows_app_version: "0.8.0"
-windows_build: "7"
 ios_app_version: "9.0"
-ios_build: "4433"
+ios_build_floor: "0"
 engine_version: "9.0"
-engine_revision: "r4433"
+published_engine_revision: "r4433"
 container_major: "1"
 container_minor: "0"
 store_revision: "2"
@@ -75,8 +73,9 @@ class BuildInfoTest(unittest.TestCase):
 		values = plistlib.loads(output.read_bytes())
 		self.assertEqual(values["MADAppVersion"], "0.8.0")
 		self.assertEqual(values["MADAppBuild"], "7")
+		self.assertEqual(values["MADBuildNumber"], "1")
 		self.assertEqual(values["MADEngineVersion"], "9.0")
-		self.assertEqual(values["MADEngineRevision"], "r4433")
+		self.assertEqual(values["MADEngineRevision"], "r1")
 		self.assertEqual(values["MADContainerFormat"], "1.0")
 		self.assertEqual(values["MADStoreRevision"], "2")
 		self.assertEqual(values["MADServeProtocolVersion"], "1")
@@ -91,7 +90,9 @@ class BuildInfoTest(unittest.TestCase):
 		self.assertEqual(result.returncode, 0, result.stderr)
 		values = json.loads(output.read_text(encoding="utf-8"))
 		self.assertEqual(values["MADAppVersion"], "0.8.0")
+		self.assertEqual(values["MADBuildNumber"], "1")
 		self.assertEqual(values["MADEngineVersion"], "9.0")
+		self.assertEqual(values["MADEngineRevision"], "r1")
 		self.assertEqual(values["MADContainerFormat"], "1.0")
 		self.assertIs(values["MADSourceDirty"], False)
 		self.assertEqual(len(values["MADSourceCommit"]), 40)
@@ -113,6 +114,8 @@ class BuildInfoTest(unittest.TestCase):
 		values = plistlib.loads(output.read_bytes())
 		self.assertEqual(values["MADSourceCommit"], "unknown")
 		self.assertEqual(values["MADSourceCommitShort"], "unknown")
+		self.assertEqual(values["MADBuildNumber"], "0")
+		self.assertEqual(values["MADEngineRevision"], "r0")
 		self.assertFalse(values["MADSourceDirty"])
 
 

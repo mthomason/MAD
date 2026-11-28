@@ -7,9 +7,11 @@
 #    build-info.sh --output PATH [--format plist|json] [--manifest PATH]
 #                  [--app-version V] [--app-build N]
 #
-#  The output is a build product: it is never a tracked plist, and the script
-#  writes nothing except the requested file.  Read it with
-#  MADCLIBuildInfo(), AppDelegate +buildInfoForBundle:, or Windows BuildInfo.
+#  The app version comes from Versions.yml.  The build number is the git commit
+#  count at build time; MADEngineRevision is that number as rNNNN.  The output is
+#  a build product: it is never a tracked plist, and the script writes nothing
+#  except the requested file.  Read it with MADCLIBuildInfo(), AppDelegate
+#  +buildInfoForBundle:, or Windows BuildInfo.
 
 set -euo pipefail
 
@@ -57,12 +59,17 @@ value() {
 }
 
 app_version="${app_version:-$(value macos_app_version)}"
-app_build="${app_build:-$(value macos_build)}"
 engine_version="$(value engine_version)"
-engine_revision="$(value engine_revision)"
 container_format="$(value container_major).$(value container_minor)"
 store_revision="$(value store_revision)"
 protocol_version="$(value serve_protocol_version)"
+
+build_number="$(git -C "$manifest_root" rev-list --count HEAD 2>/dev/null || echo 0)"
+if ! [[ "$build_number" =~ ^[0-9]+$ ]]; then
+	build_number=0
+fi
+engine_revision="r${build_number}"
+app_build="${app_build:-${build_number}}"
 
 commit="$(git -C "$manifest_root" rev-parse HEAD 2>/dev/null || echo unknown)"
 if [[ "$commit" == "unknown" ]]; then
@@ -94,6 +101,8 @@ if [[ "$format" == "plist" ]]; then
 	<string>${app_version}</string>
 	<key>MADAppBuild</key>
 	<string>${app_build}</string>
+	<key>MADBuildNumber</key>
+	<string>${build_number}</string>
 	<key>MADEngineVersion</key>
 	<string>${engine_version}</string>
 	<key>MADEngineRevision</key>
@@ -120,6 +129,7 @@ elif [[ "$format" == "json" ]]; then
 {
 	"MADAppVersion": "${app_version}",
 	"MADAppBuild": "${app_build}",
+	"MADBuildNumber": "${build_number}",
 	"MADEngineVersion": "${engine_version}",
 	"MADEngineRevision": "${engine_revision}",
 	"MADSourceCommit": "${commit}",
