@@ -23,13 +23,11 @@ next_tag: "v0.8.0"
 published_release: "0.7.0"
 published_tag: "v0.7.0"
 macos_app_version: "0.8.0"
-macos_build: "5000"
 windows_app_version: "0.8.0"
-windows_build: "5000"
 ios_app_version: "9.0"
-ios_build: "4433"
+ios_build_floor: "0"
 engine_version: "9.0"
-engine_revision: "r4433"
+published_engine_revision: "r4433"
 container_major: "1"
 container_minor: "0"
 store_revision: "2"
@@ -68,7 +66,6 @@ class VersionsTest(unittest.TestCase):
 			'<plist version="1.0"><dict>',
 			"<key>CFBundleShortVersionString</key><string>9.0</string>",
 			"<key>MADRevision</key><string>4230</string>",
-			"<key>MADGitCommitCount</key><string>4433</string>",
 			"</dict></plist>",
 			"",
 		]))
@@ -112,7 +109,6 @@ class VersionsTest(unittest.TestCase):
 			'<plist version="1.0"><dict>',
 			"<key>CFBundleShortVersionString</key><string>9.1</string>",
 			"<key>MADRevision</key><string>4230</string>",
-			"<key>MADGitCommitCount</key><string>4433</string>",
 			"</dict></plist>",
 			"",
 		]))
@@ -139,6 +135,40 @@ class VersionsTest(unittest.TestCase):
 				   "[x](https://github.com/mthomason/MAD/releases/download/v0.9.0/a.zip)\n")
 		problems = versions.check(str(self.root))
 		self.assertTrue(any("README.md" in problem for problem in problems), problems)
+
+	def test_check_rejects_manifest_build_literal(self):
+		self.make_repo()
+		self.write("Versions.yml", MANIFEST + 'macos_build: "5000"\n')
+		problems = versions.check(str(self.root))
+		self.assertTrue(any("macos_build" in problem for problem in problems), problems)
+
+	def test_check_rejects_meta_commit_count(self):
+		self.make_repo()
+		self.write("MADDesigner/Resources/Assets/MADMeta.plist", "\n".join([
+			'<?xml version="1.0" encoding="UTF-8"?>',
+			'<plist version="1.0"><dict>',
+			"<key>CFBundleShortVersionString</key><string>9.0</string>",
+			"<key>MADGitCommitCount</key><string>4433</string>",
+			"</dict></plist>",
+			"",
+		]))
+		problems = versions.check(str(self.root))
+		self.assertTrue(any("MADGitCommitCount" in problem for problem in problems), problems)
+
+	def test_check_validates_ios_build_floor(self):
+		self.make_repo()
+		self.write("Versions.yml", MANIFEST.replace('ios_build_floor: "0"', 'ios_build_floor: "abc"'))
+		problems = versions.check(str(self.root))
+		self.assertTrue(any("ios_build_floor" in problem for problem in problems), problems)
+
+	def test_check_validates_published_engine_revision(self):
+		self.make_repo()
+		self.write("Versions.yml",
+				   MANIFEST.replace('published_engine_revision: "r4433"',
+									'published_engine_revision: "4433"'))
+		problems = versions.check(str(self.root))
+		self.assertTrue(any("published_engine_revision" in problem for problem in problems),
+						problems)
 
 	def test_check_passes_on_agreement(self):
 		self.make_repo()

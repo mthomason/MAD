@@ -68,9 +68,11 @@ that isn't either fixed or recorded is a failing change.
 ## Versions and build identity
 
 `Versions.yml` at the repository root is the one checked-in statement of intended
-versions: the next release, the published release, each desktop app's version and
-build, the iOS line, and the engine's version and revision. Change it there, not in
-the copies.
+versions: the next release, the published release, each app's semantic version, the
+iOS line, and the published engine's version and revision. Build numbers are not
+stored there — they are the git commit count at build time, so a merge advances the
+number automatically and nothing is edited per commit or push. Only
+`ios_build_floor` is manual, and only at an App Store submission.
 
 * `python3 -I scripts/dev/versions.py check` must pass before a release pull
   request. It holds `docs/_data/versions.yml`, `MADMeta.plist`, the container and

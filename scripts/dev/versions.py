@@ -26,13 +26,11 @@ MANIFEST_KEYS = (
 	"published_release",
 	"published_tag",
 	"macos_app_version",
-	"macos_build",
 	"windows_app_version",
-	"windows_build",
 	"ios_app_version",
-	"ios_build",
+	"ios_build_floor",
 	"engine_version",
-	"engine_revision",
+	"published_engine_revision",
 	"container_major",
 	"container_minor",
 	"store_revision",
@@ -85,12 +83,11 @@ def _short_release(value):
 def docs_projection(manifest):
 	tag = manifest["published_tag"]
 	# The docs site describes the published download.  When the manifest carries
-	# the published engine values separately (the next build is ahead of the last
-	# release), project those; otherwise the current engine is the published one.
+	# the published engine version separately (the next build is ahead of the last
+	# release), project it; the revision is always the published release's record.
 	engine_version = manifest.get("published_engine_version",
 								  manifest["engine_version"])
-	engine_revision = manifest.get("published_engine_revision",
-								   manifest["engine_revision"])
+	engine_revision = manifest["published_engine_revision"]
 	return {
 		"engine_version": engine_version,
 		"engine_revision": engine_revision,
@@ -154,6 +151,20 @@ def check(repo_root):
 	problems = []
 	manifest = load_manifest(repo_root)
 
+	for key in ("macos_build", "windows_build", "ios_build", "engine_revision"):
+		if key in manifest:
+			problems.append(
+				"Versions.yml: %s is a build literal; build numbers are derived "
+				"from git" % key)
+	if not re.match(r"^\d+$", manifest["ios_build_floor"]):
+		problems.append(
+			"Versions.yml: ios_build_floor is %r, expected an integer"
+			% manifest["ios_build_floor"])
+	if not re.match(r"^r\d+$", manifest["published_engine_revision"]):
+		problems.append(
+			"Versions.yml: published_engine_revision is %r, expected r<N>"
+			% manifest["published_engine_revision"])
+
 	docs_path = os.path.join(repo_root, "docs", "_data", "versions.yml")
 	if os.path.exists(docs_path):
 		docs = parse_flat_yaml(docs_path)
@@ -167,18 +178,16 @@ def check(repo_root):
 							 "MADMeta.plist")
 	if os.path.exists(meta_path):
 		engine_version = _plist_value(meta_path, "CFBundleShortVersionString")
-		# MADRevision is a separate identifier; the engine's advertised rNNNN is
-		# MADGitCommitCount, which is what About renders and the manifest names.
-		engine_revision = _plist_value(meta_path, "MADGitCommitCount")
-		expected_revision = manifest["engine_revision"].lstrip("r")
+		# MADRevision is a separate legacy identifier; the advertised rNNNN is
+		# generated per build, so MADMeta must not carry a commit count.
 		if engine_version != manifest["engine_version"]:
 			problems.append(
 				"MADDesigner/Resources/Assets/MADMeta.plist: engine version is %r, "
 				"expected %r" % (engine_version, manifest["engine_version"]))
-		if str(engine_revision) != expected_revision:
+		if _plist_value(meta_path, "MADGitCommitCount") is not None:
 			problems.append(
-				"MADDesigner/Resources/Assets/MADMeta.plist: revision is %r, "
-				"expected %r" % (engine_revision, expected_revision))
+				"MADDesigner/Resources/Assets/MADMeta.plist: MADGitCommitCount is a "
+				"stale build-time value; remove it")
 
 	constants_path = os.path.join(repo_root, "MAD", "Source", "MADConstants.m")
 	if os.path.exists(constants_path):
