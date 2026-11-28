@@ -1312,13 +1312,13 @@ one. Close and release the fixture's writer and context before the second docume
 same URL; make the smoke helper wait for the refresh to finish. Then loop the test and the
 authored-composition block rather than trusting one rerun.
 
-**Files:** `MAD/MADTests/MADDocumentTests.m`, `Mac/Tests/MADMacSmokeTest.m`,
-`Mac/Source/MADMacViewerViewController.m` (the in-flight refresh state if the Viewer's
-button is to be disabled).
+**Files:** `MAD/MADTests/MADDocumentTests.m`, `Mac/Tests/MADMacSmokeTest.m`; the Viewer's
+in-flight refresh state (`Mac/Source/MADMacViewerViewController.m`) only if the button is to
+be disabled, which is a separate, tested change.
 
 **Acceptance:** the `MADDocumentTests` open test passes in a loop of at least 20 runs on the
-hosted macOS runner, and the smoke suite's composed-refresh block passes in a loop; no
-production refresh behaviour changes.
+hosted macOS runner, and the smoke suite's composed-refresh block passes in a loop. The
+test-side waits change; production refresh behaviour does not.
 
 **Register:** [`BUGS.md` — `MADDocumentTests` can time out opening a document on the macOS
 runner](BUGS.md#maddocumenttests-can-time-out-opening-a-document-on-the-macos-runner) ·
