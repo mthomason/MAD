@@ -55,48 +55,29 @@ showing old rows.
 each of the three live test servers: MySQL `employees`, PostgreSQL `chinook` and
 SQL Server `AdventureWorksLT2022`.  The three databases share no key of their
 own, so the sample uses a purpose-built `composition_demo` table with the same
-`demo_id` values in each.  Create it once:
+`demo_id` values in each.
 
-```sql
--- MySQL, database employees
-CREATE TABLE composition_demo (
-	demo_id INT NOT NULL PRIMARY KEY,
-	label   VARCHAR(64) NOT NULL,
-	amount  DECIMAL(10,2) NOT NULL
-);
-INSERT INTO composition_demo (demo_id, label, amount) VALUES
-	(1, 'MySQL / North',   101.50),
-	(2, 'MySQL / South',   102.50),
-	(3, 'MySQL / East',    103.50),
-	(4, 'MySQL / West',    104.50),
-	(5, 'MySQL / Central', 105.50);
+Stand the three servers up and seed that table with one idempotent script
+(macOS, Linux, and Git Bash on Windows):
 
--- PostgreSQL, database chinook
-CREATE TABLE public.composition_demo (
-	demo_id INT NOT NULL PRIMARY KEY,
-	label   VARCHAR(64) NOT NULL,
-	amount  NUMERIC(10,2) NOT NULL
-);
-INSERT INTO public.composition_demo (demo_id, label, amount) VALUES
-	(1, 'Postgres / North',   201.00),
-	(2, 'Postgres / South',   202.00),
-	(3, 'Postgres / East',    203.00),
-	(4, 'Postgres / West',    204.00),
-	(5, 'Postgres / Central', 205.00);
-
--- SQL Server, database AdventureWorksLT2022
-CREATE TABLE dbo.composition_demo (
-	demo_id INT NOT NULL PRIMARY KEY,
-	label   VARCHAR(64) NOT NULL,
-	amount  DECIMAL(10,2) NOT NULL
-);
-INSERT INTO dbo.composition_demo (demo_id, label, amount) VALUES
-	(1, 'SQL Server / North',   301.75),
-	(2, 'SQL Server / South',   302.75),
-	(3, 'SQL Server / East',    303.75),
-	(4, 'SQL Server / West',    304.75),
-	(5, 'SQL Server / Central', 305.75);
+```sh
+./Samples/setup-databases.sh up       # start the servers and seed composition_demo
+./Samples/setup-databases.sh status   # containers and seeded row counts
+./Samples/setup-databases.sh down     # stop them (the volumes keep the data)
 ```
+
+On Windows PowerShell:
+
+```powershell
+.\Samples\setup-databases.ps1 -Action up
+.\Samples\setup-databases.ps1 -Action status
+```
+
+The script calls `TestDatabase/test-databases.sh up` for the three pinned
+containers, then creates and seeds `composition_demo` in each server.  It uses
+the public local test-database logins (`root` / `mad` / `sa`); see
+`TestDatabase/README.md` and `docs/project/build/DEVELOPER.md`.  To print the
+same SQL without Docker, run `./Samples/setup-databases.sh sql`.
 
 The sample stores the host, port, database and a non-secret username hint for
 each source (`root`, `mad`, `sa`); it stores **no password** — the portable
@@ -185,6 +166,7 @@ MAD_PG_SAMPLE_PASSWORD='<the test password>' \
 	MADDesigner/Resources/Assets/Samples.xcassets/Data/chinook.dataset/chinook.sqlite3 postgres
 
 # Cross-database composition: needs the three demo tables and the three passwords.
+# Run ./Samples/setup-databases.sh up first (or use the SQL it prints).
 MAD_MYSQL_SAMPLE_PASSWORD='<mysql>' \
 MAD_PG_SAMPLE_PASSWORD='<postgres>' \
 MAD_TDS_SAMPLE_PASSWORD='<sql server>' \

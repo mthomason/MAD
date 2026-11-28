@@ -16,7 +16,8 @@
     "crossDatabase": {
       "table": "composition_demo(demo_id, label, amount)",
       "rows": 5,
-      "setupSQL": "Samples/README.md, 'First run: the cross-database composition sample'",
+      "setupScript": "Samples/setup-databases.sh up (Samples/setup-databases.ps1 -Action up on Windows)",
+      "setupSQL": "Samples/README.md, 'First run: the cross-database composition sample'; ./Samples/setup-databases.sh sql prints it",
       "credentialsDocument": "docs/zh/project/TEST-DB-INFO.md",
       "sources": [
         { "driver": "MySQL", "host": "127.0.0.1", "port": 13306, "database": "employees", "usernameHint": "root", "password": null },

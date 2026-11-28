@@ -60,6 +60,13 @@ TestDatabase/test-databases.sh download   # fetch + verify datasets, no Docker
 TestDatabase/test-databases.sh up         # create/start all three, load data
 ```
 
+**Sample composition data.** The cross-database sample report needs one extra
+table, `composition_demo`, in each server. `Samples/setup-databases.sh up`
+(or `Samples/setup-databases.ps1 -Action up` on Windows) runs the `up` above
+and seeds that table; `status` reports the row counts, and
+`./Samples/setup-databases.sh sql` prints the SQL without Docker. See
+[`Samples/README.md`](../Samples/README.md).
+
 On Windows:
 
 ```powershell
