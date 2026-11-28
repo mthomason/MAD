@@ -32466,6 +32466,10 @@
         }
       }
     },
+    "The file does not exist.": {
+      "comment": "Error when a file to remove is missing.",
+      "extractionState": "manual"
+    },
     "The font family for the selected elements.": {
       "comment": "Tooltip for the font family popup.",
       "extractionState": "manual",
